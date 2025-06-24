@@ -1179,6 +1179,8 @@ void systemShutdown()
 
 bool frontendInitialise(const char *ResourceFile)
 {
+	frontendIsShuttingDown();
+
 	debug(LOG_WZ, "== Initializing frontend == : %s", ResourceFile);
 
 	if (!InitialiseGlobals())				// Initialise all globals and statics everywhere.

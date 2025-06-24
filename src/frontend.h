@@ -85,6 +85,8 @@ void frontendIsShuttingDown();
 
 void notifyAboutMissingVideos();
 
+std::shared_ptr<IMAGEFILE> getFlagsImages();
+
 void addTopForm(bool wide);
 void addBottomForm(bool wide = false);
 W_FORM *addBackdrop();

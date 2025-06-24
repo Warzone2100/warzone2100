@@ -2741,6 +2741,25 @@ private:
 	std::shared_ptr<W_LABEL> label;
 };
 
+std::shared_ptr<IMAGEFILE> getFlagsImages()
+{
+	if (pFlagsImages == nullptr)
+	{
+		pFlagsImages.reset(iV_LoadImageFile("images/flags.img"));
+		if (pFlagsImages == nullptr)
+		{
+			std::string errorMessage = astringf(_("Unable to load: %s."), "flags.img");
+			if (!getLoadedMods().empty())
+			{
+				errorMessage += " ";
+				errorMessage += _("Please remove all incompatible mods.");
+			}
+			debug(LOG_FATAL, "%s", errorMessage.c_str());
+		}
+	}
+	return pFlagsImages;
+}
+
 static std::shared_ptr<WIDGET> makeLanguageDropdown()
 {
 	const std::map<WzString, const char *> iconsMap = {
@@ -2788,26 +2807,11 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 		{"zh_TW", "flag-TW.png"},
 	};
 
-	if (pFlagsImages == nullptr)
-	{
-		pFlagsImages.reset(iV_LoadImageFile("images/flags.img"));
-		if (pFlagsImages == nullptr)
-		{
-			std::string errorMessage = astringf(_("Unable to load: %s."), "flags.img");
-			if (!getLoadedMods().empty())
-			{
-				errorMessage += " ";
-				errorMessage += _("Please remove all incompatible mods.");
-			}
-			debug(LOG_FATAL, "%s", errorMessage.c_str());
-		}
-	}
-
 	auto dropdown = std::make_shared<DropdownWidget>();
 	dropdown->id = FRONTEND_LANGUAGE_R;
 	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
 	// NOTE: By capturing a copy of pFlagsImages in the onDelete handler, we ensure it stays around until the DropdownWidget is deleted
-	std::shared_ptr<IMAGEFILE> flagsImagesCopy = pFlagsImages;
+	std::shared_ptr<IMAGEFILE> flagsImagesCopy = getFlagsImages();
 	dropdown->setOnDelete([flagsImagesCopy](WIDGET *psWidget) mutable {
 		flagsImagesCopy.reset();
 	});
@@ -2819,7 +2823,7 @@ static std::shared_ptr<WIDGET> makeLanguageDropdown()
 		auto mapIcon = iconsMap.find(locale.code);
 		if (mapIcon != iconsMap.end())
 		{
-			icon = (pFlagsImages) ? pFlagsImages->find(mapIcon->second) : nullptr;
+			icon = (flagsImagesCopy) ? flagsImagesCopy->find(mapIcon->second) : nullptr;
 		}
 		auto option = ImageDropdownItem::make(icon, locale.name);
 		dropdown->addItem(option);
