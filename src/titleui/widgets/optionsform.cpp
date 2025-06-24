@@ -714,11 +714,13 @@ OptionInfo& OptionInfo::addAvailabilityCondition(const OptionAvailabilityConditi
 
 WzString OptionInfo::getTranslatedDisplayName() const
 {
+	if (displayName.isEmpty()) { return {}; }
 	return gettext(displayName.toUtf8().c_str());
 }
 
 WzString OptionInfo::getTranslatedHelpDescription() const
 {
+	if (helpDescription.isEmpty()) { return {}; }
 	return gettext(helpDescription.toUtf8().c_str());
 }
 
@@ -774,11 +776,13 @@ const WzString& OptionsSection::sectionId() const
 
 WzString OptionsSection::getTranslatedDisplayName() const
 {
+	if (displayName.isEmpty()) { return {}; }
 	return gettext(displayName.toUtf8().c_str());
 }
 
 WzString OptionsSection::getTranslatedHelpDescription() const
 {
+	if (helpDescription.isEmpty()) { return {}; }
 	return gettext(helpDescription.toUtf8().c_str());
 }
 
