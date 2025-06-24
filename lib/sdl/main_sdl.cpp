@@ -162,7 +162,9 @@ bool get_scrap(char **dst);
 #define DOUBLE_CLICK_INTERVAL 250
 
 /* The current state of the keyboard */
-static INPUT_STATE aKeyState[KEY_MAXSCAN];		// NOTE: SDL_NUM_SCANCODES is the max, but KEY_MAXSCAN is our limit
+// NOTE: SDL_NUM_SCANCODES is the max, but KEY_MAXSCAN is our limit
+static INPUT_STATE aKeyState[KEY_MAXSCAN];		// the logical key state (impacted by attempts to clear input)
+static INPUT_STATE actualKeyState[KEY_MAXSCAN];	// the underlying key state (ignoring any attempts to clear input)
 
 /* The current location of the mouse */
 static Uint16 mouseXPos = 0;
@@ -1366,6 +1368,7 @@ void inputInitialise(void)
 	for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
 	{
 		aKeyState[i].state = KEY_UP;
+		actualKeyState[i].state = KEY_UP;
 	}
 
 	for (unsigned int i = 0; i < MOUSE_END; i++)
@@ -1434,12 +1437,14 @@ void inputNewFrame(void)
 		if (aKeyState[i].state == KEY_PRESSED)
 		{
 			aKeyState[i].state = KEY_DOWN;
+			actualKeyState[i].state = KEY_DOWN;
 			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 		else if (aKeyState[i].state == KEY_RELEASED  ||
 		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
+			actualKeyState[i].state = KEY_UP;
 			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 	}
@@ -1471,11 +1476,35 @@ void inputLoseFocus(void)
 	for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
 	{
 		aKeyState[i].state = KEY_UP;
+		// Do *NOT* clear actualKeyState here!
 	}
 	for (unsigned int i = 0; i < MOUSE_END; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
+}
+
+static void restoreKeyDownState(KEY_CODE code)
+{
+	if (actualKeyState[code].state != KEY_UP)
+	{
+		aKeyState[code] = actualKeyState[code];
+	}
+}
+
+void inputRestoreMetaKeyState()
+{
+	restoreKeyDownState(KEY_RALT);
+	restoreKeyDownState(KEY_LALT);
+
+	restoreKeyDownState(KEY_RCTRL);
+	restoreKeyDownState(KEY_LCTRL);
+
+	restoreKeyDownState(KEY_RSHIFT);
+	restoreKeyDownState(KEY_LSHIFT);
+
+	restoreKeyDownState(KEY_RMETA);
+	restoreKeyDownState(KEY_LMETA);
 }
 
 /* This returns true if the key is currently depressed */
@@ -1664,6 +1693,8 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 			// whether double key press or not
 			aKeyState[code].state = KEY_PRESSED;
 			aKeyState[code].lastdown = 0;
+			actualKeyState[code].state = KEY_PRESSED;
+			actualKeyState[code].lastdown = 0;
 		}
 		break;
 	}
@@ -1677,6 +1708,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		{
 			break;
 		}
+		actualKeyState[code].state = KEY_UP;
 		if (aKeyState[code].state == KEY_PRESSED)
 		{
 			aKeyState[code].state = KEY_PRESSRELEASE;
