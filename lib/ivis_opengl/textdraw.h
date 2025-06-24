@@ -26,6 +26,7 @@
 
 #include "lib/framework/vector.h"
 #include "lib/framework/wzstring.h"
+#include "lib/framework/geometry.h"
 #include "gfx_api.h"
 #include "pietypes.h"
 
@@ -60,6 +61,7 @@ public:
 	void render(Vector2f position, PIELIGHT colour, float rotation = 0.0f, int maxWidth = -1, int maxHeight = -1);
 	void render(float x, float y, PIELIGHT colour, float rotation = 0.0f, int maxWidth = -1, int maxHeight = -1) { render(Vector2f{x,y}, colour, rotation, maxWidth, maxHeight); }
 	void renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColour);
+	void renderClipped(Vector2f position, PIELIGHT colour, WzRect screenClippingRect, int maxWidth = -1, int maxHeight = -1);
 	int aboveBase(); // (in points)
 	int belowBase(); // (in points)
 	int lineSize(); // (in points)
