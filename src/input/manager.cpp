@@ -30,7 +30,6 @@
 #include "mapping.h"
 
 #include "../keybind.h"
-#include "../keyedit.h"
 #include "../display3d.h"   // For playerPos
 #include "../main.h"        // For KeyMapPath
 #include "lib/netplay/nettypes.h"	// For NETisReplay()
@@ -229,9 +228,9 @@ void InputManager::updateMapMarkers()
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in processMappings */
-static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
+static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping, bool bypassActiveContextCheck = false)
 {
-	if (!inputManager.contexts().isActive(mapping.info.context))
+	if (!bypassActiveContextCheck && !inputManager.contexts().isActive(mapping.info.context))
 	{
 		return true;
 	}
@@ -299,4 +298,37 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 			consumedInputs.insert(keyToProcess.keys.input);
 		}
 	}
+}
+
+nonstd::optional<std::reference_wrapper<const KeyMapping>> InputManager::findCurrentMapping(const bool bAllowMouseWheelEvents, bool filterHidden)
+{
+	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
+	if (mappingsSortRequired())
+	{
+		keyMappings.sort(contextManager);
+		contextManager.clearDirty();
+		bMappingsSortOrderDirty = false;
+	}
+
+	/* Run through all sorted mappings */
+	for (const KeyMapping& keyToProcess : keyMappings)
+	{
+		/* Skip inappropriate ones when necessary */
+		if (isIgnoredMapping(*this, bAllowMouseWheelEvents, keyToProcess, true))
+		{
+			continue;
+		}
+		if (filterHidden && keyToProcess.info.type == KeyMappingType::HIDDEN)
+		{
+			continue;
+		}
+
+		/* Execute the action if mapping was hit */
+		if (keyToProcess.isActivated())
+		{
+			return keyToProcess;
+		}
+	}
+
+	return nullopt;
 }

@@ -51,7 +51,8 @@ public:
 	virtual void update(bool force = false) = 0;
 	virtual void informAvailable(bool isAvailable) = 0;
 	virtual void addOnChangeHandler(std::function<void(WIDGET&)> handler) = 0;
-	virtual void addCloseFormManagedPopoversHandler(std::function<void(WIDGET&)> handler) = 0;
+	virtual void addStartingCapturedEditingHandler(std::function<void(WIDGET&)> handler) { }
+	virtual void addEndingCapturedEditingHandler(std::function<void(WIDGET&)> handler) { }
 	virtual optional<OptionChoiceHelpDescription> getHelpDescriptionForCurrentValue() { return nullopt; }
 	virtual optional<std::vector<OptionChoiceHelpDescription>> getHelpDescriptions() { return nullopt; }
 };
@@ -75,9 +76,6 @@ public:
 	void update(bool force) override;
 	void informAvailable(bool isAvailable) override;
 	void addOnChangeHandler(std::function<void(WIDGET&)> handler) override;
-	void addCloseFormManagedPopoversHandler(std::function<void(WIDGET&)> handler) override;
-	optional<OptionChoiceHelpDescription> getHelpDescriptionForCurrentValue() override;
-	optional<std::vector<OptionChoiceHelpDescription>> getHelpDescriptions() override;
 
 	int32_t currentValue() const;
 
@@ -118,6 +116,7 @@ public:
 	static std::shared_ptr<WzOptionsChoiceWidget> make(iV_fonts desiredFontID);
 
 	void setString(WzString string) override;
+	void setIcon(const AtlasImageDef *icon);
 	void setDisabled(bool value);
 	bool getIsDisabled() const;
 	void setDisplayHighlighted(bool highlighted);
@@ -135,17 +134,22 @@ protected:
 	void display(int xOffset, int yOffset) override;
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
+	void geometryChanged() override;
+	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
 private:
-	void cacheIdealTextSize();
+	void recalcIconDrawSize();
+	WzSize scaleIconSizeFor(optional<int> width, optional<int> height);
 private:
 	WzString text;
 	WzCachedText wzText;
 	iV_fonts FontID;
+	const AtlasImageDef *icon = nullptr;
+	int iconDrawWidth = 0;
+	int iconDrawHeight = 0;
 	PIELIGHT highlightBackgroundColor;
-	int32_t cachedIdealTextWidth = 0;
-	int32_t cachedIdealTextLineSize = 0;
 	int lastWidgetWidth = 0;
 	int horizontalPadding = 10;
+	int iconPaddingAfter = 5;
 	int verticalPadding = 5;
 	bool isHighlighted = false;
 	bool forceDisplayHighlight = false;
@@ -196,6 +200,7 @@ private:
 	int calculateCurrentUsedWidth() const;
 private:
 	std::shared_ptr<WzOptionsChoiceWidget> currentOptionChoiceDisplayWidg;
+	int32_t paddingLeft = 4;
 	bool isHighlighted = false;
 };
 
@@ -208,6 +213,7 @@ public:
 	WzString helpDescription;
 	T value;
 	bool disabled = false;
+	AtlasImageDef *icon = nullptr;
 
 	inline bool operator== (const OptionChoice& b) const
 	{
@@ -220,6 +226,20 @@ struct OptionChoices
 {
 	std::vector<OptionChoice<T>> choices;
 	size_t currentIdx = 0;
+
+public:
+	inline bool setCurrentIdxForValue(const T& value)
+	{
+		auto it = std::find_if(choices.begin(), choices.end(), [value](const OptionChoice<T>& choice) -> bool {
+			return choice.value == value;
+		});
+		if (it == choices.end())
+		{
+			return false;
+		}
+		currentIdx = it - choices.begin();
+		return true;
+	}
 };
 
 // OptionsDropdown<T>
@@ -280,6 +300,15 @@ public:
 			if (result)
 			{
 				strongSelf->current.currentIdx = newIndex;
+				if (strongSelf->needsStateUpdates)
+				{
+					widgScheduleTask([strongSelf]() { strongSelf->update(false); });
+				}
+			}
+			else
+			{
+				strongSelf->current.choices[newIndex].disabled = true;
+				std::dynamic_pointer_cast<WzOptionsChoiceWidget>(newSelectedWidget)->setDisabled(true);
 			}
 			return result;
 		});
@@ -318,10 +347,15 @@ public:
 		setOnChange(handler);
 	}
 
-	void addCloseFormManagedPopoversHandler(std::function<void(WIDGET&)> handler) override
+	void addStartingCapturedEditingHandler(std::function<void(WIDGET&)> handler) override
 	{
-		// Since dropdowns create a popover, add this to the onOpen handler
+		// Since dropdowns create an overlay screen, add this to the onOpen handler
 		setOnOpen(handler);
+	}
+
+	void addEndingCapturedEditingHandler(std::function<void(WIDGET&)> handler) override
+	{
+		setOnClose(handler);
 	}
 
 	optional<OptionChoiceHelpDescription> getHelpDescriptionForCurrentValue() override
@@ -360,6 +394,7 @@ private:
 		{
 			auto item = WzOptionsChoiceWidget::make(font_regular);
 			item->setString(option.displayName);
+			item->setIcon(option.icon);
 			item->setDisabled(option.disabled);
 			item->setGeometry(0, 0, item->idealWidth(), item->idealHeight());
 			maxItemHeight = std::max(maxItemHeight, item->idealHeight());
@@ -447,6 +482,8 @@ protected:
 public:
 	static std::shared_ptr<OptionsForm> make();
 
+	void addSection(const OptionsSection& optionsSection, bool bottomBorder = false);
+
 	// Add an option to the options form, along with an associated widget used to change its value
 	template<typename T>
 	std::enable_if_t<std::is_base_of<OptionValueChangerInterface, T>::value && std::is_base_of<WIDGET, T>::value> addOption(const OptionInfo& optionInfo, const std::shared_ptr<T>& optionValueChangerWidget, bool bottomBorder = false, int16_t indentLevel = 0)
@@ -454,12 +491,23 @@ public:
 		addOptionInternal(optionInfo, optionValueChangerWidget, bottomBorder, indentLevel);
 	}
 
-	void refreshOptions();
+	void refreshOptions(bool forceRowLayoutUpdates = false);
+	void refreshOptionsLayoutCalc();
 	void refreshOptionAvailability();
+
+	bool jumpToSectionId(const WzString& sectionId);
+	bool jumpToOptionId(const WzString& optionId);
+
+	size_t numSections() const;
+	std::vector<OptionsSection> getSectionInfos() const;
+
+	void setMaxListWidth(int32_t maxListWidth);
+	void setRefreshOptionsOnScreenSizeChange(bool enabled);
 
 	// WIDGET overrides
 	int32_t idealWidth() override;
 	int32_t idealHeight() override;
+	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
 protected:
 	void run(W_CONTEXT *psContext) override;
 	void geometryChanged() override;
@@ -472,7 +520,10 @@ private:
 	void refreshOptionsInternal(const std::unordered_set<WzString>& except);
 	void openHelpPopover(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, const std::shared_ptr<WIDGET>& parent);
 	void closeHelpPopover();
+	void handleStartedRowEditing(const WzString& optionId);
+	void handleEndedRowEditing(const WzString& optionId);
 	void handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget);
+	bool jumpToItemIdx(size_t idx, bool flash);
 private:
 	struct OptionDetails
 	{
@@ -483,13 +534,27 @@ private:
 	};
 	std::unordered_map<WzString, OptionDetails> optionDetailsMap; // maps optionId -> option info and widgets
 
+	struct SectionDetails
+	{
+		OptionsSection info;
+		std::shared_ptr<WIDGET> optionSectionWidget;
+		size_t idxInOptionsList;
+	};
+	std::unordered_map<WzString, SectionDetails> sectionDetailsMap; // maps sectionId -> index in scrollable list widget
+	std::vector<WzString> orderedSectionIds;
+
 	WzString lastConfiguredTranslationLocale; // cached so we can check if this was updated and we need to potentially update translated strings for everything
 	std::shared_ptr<ScrollableListWidget> optionsList;
 
 	optional<Vector2i> mouseOverFormPosThisFrame = nullopt;
 	std::shared_ptr<WIDGET> priorMouseOverRowWidget;
 
+	std::shared_ptr<WIDGET> capturedEditingRowWidget;
+
 	std::shared_ptr<PopoverWidget> currentHelpPopoverWidget;
+
+	int32_t maxListWidth = 0;
+	bool refreshOptionsOnScreenSizeChange = false;
 
 	bool isInRefreshOptionsInternal = false;
 };

@@ -1295,7 +1295,6 @@ private:
 		attach(contextLabel);
 
 		auto dropdown = std::make_shared<DropdownWidget>();
-		dropdown->id = FRONTEND_TERRAIN_QUALITY_R;
 		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
 		attach(dropdown);
 		for (const auto& option : dropDownChoices)

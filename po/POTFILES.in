@@ -457,7 +457,6 @@ src/intelmap.cpp
 src/intimage.cpp
 src/intorder.cpp
 src/keybind.cpp
-src/keyedit.cpp
 src/levels.cpp
 src/lighting.cpp
 src/loadsave.cpp

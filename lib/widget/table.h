@@ -114,6 +114,7 @@ public:
 	// See: ``TableRow``
 	void addRow(const std::shared_ptr<TableRow> &row);
 	void clearRows();
+	const std::vector<std::shared_ptr<TableRow>>& getRows() const { return rows; }
 
 	// Show / hide header
 	void setHeaderVisible(bool visible);

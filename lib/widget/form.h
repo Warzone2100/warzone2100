@@ -153,7 +153,7 @@ public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 125);
 	std::function<void ()> onClickedFunc;
 	std::function<void ()> onCancelPressed;
-private:
+protected:
 	std::weak_ptr<WIDGET> cutoutWidget;
 };
 
