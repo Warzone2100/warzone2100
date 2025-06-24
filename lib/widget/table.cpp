@@ -95,6 +95,11 @@ void TableRow::setDrawBorder(optional<PIELIGHT> newBorderColor)
 	borderColor = newBorderColor;
 }
 
+void TableRow::setBackgroundColor(optional<PIELIGHT> newBackgroundColor)
+{
+	backgroundColor = newBackgroundColor;
+}
+
 // Set whether row is "disabled"
 void TableRow::setDisabled(bool disabled)
 {
@@ -124,13 +129,19 @@ void TableRow::display(int xOffset, int yOffset)
 	int x1 = x0 + width();
 	int y1 = y0 + height();
 
+	if (highlightsOnMouseOver && isMouseOverRowOrChildren() && !disabledRow)
+	{
+		iV_TransBoxFill(x0, y0, x1, y1);
+	}
+	else if (backgroundColor.has_value())
+	{
+		pie_UniTransBoxFill(x0, y0, x1, y1, backgroundColor.value());
+	}
+
 	if (borderColor.has_value())
 	{
 		iV_Box(x0, y0, x1, y1, borderColor.value());
 	}
-
-	if (!highlightsOnMouseOver || !isMouseOverRowOrChildren() || disabledRow) { return; }
-	iV_TransBoxFill(x0, y0, x1, y1);
 }
 
 void TableRow::displayRecursive(WidgetGraphicsContext const& context)
