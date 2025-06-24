@@ -31,7 +31,6 @@
 
 #include "../keybind.h"
 #include "../display3d.h"   // For playerPos
-#include "../main.h"        // For KeyMapPath
 #include "lib/netplay/nettypes.h"	// For NETisReplay()
 
 
@@ -65,6 +64,15 @@ void InputManager::shutdown()
 	keyMappings.clear();
 }
 
+void InputManager::setKeyMapJsonPath(const std::string& path)
+{
+	if (path == currentKeyMapJsonPath)
+	{
+		return;
+	}
+	currentKeyMapJsonPath = path;
+}
+
 bool InputManager::mappingsSortRequired() const
 {
 	return bMappingsSortOrderDirty || contextManager.isDirty() || keyMappings.isDirty();
@@ -85,7 +93,7 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 	// load the mappings.
 	if (!bForceDefaults)
 	{
-		if (keyMappings.load(KeyMapPath, keyFuncConfig))
+		if (keyMappings.load(currentKeyMapJsonPath.c_str(), keyFuncConfig))
 		{
 			debug(LOG_WZ, "Loaded key map successfully");
 		}
@@ -111,7 +119,13 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 		}
 	}
 
-	keyMappings.save(KeyMapPath);
+	keyMappings.save(currentKeyMapJsonPath.c_str());
+}
+
+void InputManager::saveMappings()
+{
+	debug(LOG_WZ, "Saving: %s", currentKeyMapJsonPath.c_str());
+	keyMappings.save(currentKeyMapJsonPath.c_str());
 }
 
 bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)

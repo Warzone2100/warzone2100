@@ -185,7 +185,6 @@ char    ReplayPath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
-char	KeyMapPath[PATH_MAX];
 char	FavoriteStructuresPath[PATH_MAX];
 static uint32_t forcedAutosaveTime = 0;
 // Start game in title mode:
@@ -1896,7 +1895,7 @@ int realmain(int argc, char *argv[])
 	ActivityManager::instance().initialize();
 
 	/* Put in the writedir root */
-	sstrcpy(KeyMapPath, "keymap.json");
+	gInputManager.setKeyMapJsonPath("keymap.json");
 	sstrcpy(FavoriteStructuresPath, "favoriteStructures.json");
 
 	// initialise all the command line states
