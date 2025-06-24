@@ -901,6 +901,20 @@ void KeyOptionsForm::run(W_CONTEXT *psContext)
 	OptionsForm::run(psContext);
 }
 
+static WzString mouseKeyCodeToWzString(MOUSE_KEY_CODE code)
+{
+	char asciiSub[20] = "\0";
+	mouseKeyCodeToString(code, (char*)&asciiSub, 20);
+	return WzString(asciiSub);
+}
+
+OptionInfo::AvailabilityResult MouseDragToRotateIsBound(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = getRotateMouseKey().has_value();
+	return result;
+}
+
 // MARK: -
 
 std::shared_ptr<OptionsForm> makeControlsOptionsForm()
@@ -909,6 +923,25 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 
 	// Mouse:
 	result->addSection(OptionsSection(N_("Mouse"), ""), true);
+	{
+		auto optionInfo = OptionInfo("controls.mouse.rightClickOrders", N_("Right-Click Orders"), N_("By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), _("Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"), false },
+					{ _("On"), _("Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"), true },
+				};
+				result.setCurrentIdxForValue(getRightClickOrders());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				setRightClickOrders(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
 	{
 		auto optionInfo = OptionInfo("controls.mouse.trapCursor", N_("Trap Cursor"), N_(""));
 		auto valueChanger = OptionsDropdown<TrapCursorMode>::make(
@@ -924,63 +957,6 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 			},
 			[](const auto& newValue) -> bool {
 				war_SetTrapCursor(newValue);
-				return true;
-			}, true
-		);
-		result->addOption(optionInfo, valueChanger, true);
-	}
-	{
-		auto optionInfo = OptionInfo("controls.mouse.reverseRotation", N_("Reverse Rotation"), N_(""));
-		auto valueChanger = OptionsDropdown<bool>::make(
-			[]() {
-				OptionChoices<bool> result;
-				result.choices = {
-					{ _("Off"), "", false },
-					{ _("On"), "", true },
-				};
-				result.setCurrentIdxForValue(getInvertMouseStatus());
-				return result;
-			},
-			[](const auto& newValue) -> bool {
-				setInvertMouseStatus(newValue);
-				return true;
-			}, true
-		);
-		result->addOption(optionInfo, valueChanger, true);
-	}
-	{
-		auto optionInfo = OptionInfo("controls.mouse.rightClickOrders", N_("Right-click Orders"), N_("By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, you may want to toggle this to On."));
-		auto valueChanger = OptionsDropdown<bool>::make(
-			[]() {
-				OptionChoices<bool> result;
-				result.choices = {
-					{ _("Off"), "", false },
-					{ _("On"), "", true },
-				};
-				result.setCurrentIdxForValue(getRightClickOrders());
-				return result;
-			},
-			[](const auto& newValue) -> bool {
-				setRightClickOrders(newValue);
-				return true;
-			}, true
-		);
-		result->addOption(optionInfo, valueChanger, true);
-	}
-	{
-		auto optionInfo = OptionInfo("controls.mouse.rotateScreen", N_("Rotate Screen"), N_(""));
-		auto valueChanger = OptionsDropdown<bool>::make(
-			[]() {
-				OptionChoices<bool> result;
-				result.choices = {
-					{ _("Middle Mouse"), "", true },
-					{ _("Right Mouse"), "", false },
-				};
-				result.setCurrentIdxForValue(getMiddleClickRotate());
-				return result;
-			},
-			[](const auto& newValue) -> bool {
-				setMiddleClickRotate(newValue);
 				return true;
 			}, true
 		);
@@ -1061,6 +1037,64 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 			[](int32_t newValue) {
 				war_SetMapZoomRate(newValue);
 			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.mouse.rotateCamera", N_("Mouse Rotate"), N_(""));
+		auto valueChanger = OptionsDropdown<optional<MOUSE_KEY_CODE>>::make(
+			[]() {
+				OptionChoices<optional<MOUSE_KEY_CODE>> result;
+				result.choices = {
+					{ _("Disabled"), "", nullopt },
+					{ mouseKeyCodeToWzString(MOUSE_MMB), "", MOUSE_MMB },
+					{ mouseKeyCodeToWzString(MOUSE_RMB), "", MOUSE_RMB, getRightClickOrders() },
+				};
+				result.setCurrentIdxForValue(getRotateMouseKey());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				return setRotateMouseKey(newValue);
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.mouse.reverseRotation", N_("Reverse Rotation"), N_(""));
+		optionInfo.addAvailabilityCondition(MouseDragToRotateIsBound);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(getInvertMouseStatus());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				setInvertMouseStatus(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.mouse.panCamera", N_("Mouse Pan"), N_(""));
+		auto valueChanger = OptionsDropdown<optional<MOUSE_KEY_CODE>>::make(
+			[]() {
+				OptionChoices<optional<MOUSE_KEY_CODE>> result;
+				result.choices = {
+					{ _("Edge Scrolling"), "", nullopt },
+					{ mouseKeyCodeToWzString(MOUSE_MMB), "", MOUSE_MMB },
+					{ mouseKeyCodeToWzString(MOUSE_RMB), "", MOUSE_RMB, getRightClickOrders() },
+				};
+				result.setCurrentIdxForValue(getPanMouseKey());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				return setPanMouseKey(newValue);
+			}, true
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}

@@ -307,6 +307,23 @@ bool loadConfig()
 		return iniSectionGetString(iniGeneral, key, defaultValue);
 	};
 
+	auto iniGetMouseKeyCode = [&iniGeneral](const std::string& key, optional<MOUSE_KEY_CODE> defaultValue) -> optional<MOUSE_KEY_CODE> {
+		auto intVal = iniSectionGetInteger(iniGeneral, key);
+		if (!intVal.has_value())
+		{
+			return defaultValue;
+		}
+		if (intVal.value() >= MOUSE_LMB && intVal.value() <= MOUSE_X2) // deliberately exclude mouse MOUSE_WUP + MOUSE_WDN
+		{
+			return static_cast<MOUSE_KEY_CODE>(intVal.value());
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid MOUSE_KEY_CODE value: %d", intVal.value());
+			return defaultValue;
+		}
+	};
+
 	auto iniGetPlayerLeaveMode = [&iniGeneral](const std::string& key, PLAYER_LEAVE_MODE defaultValue) -> optional<PLAYER_LEAVE_MODE> {
 		auto intVal = iniSectionGetInteger(iniGeneral, key);
 		if (!intVal.has_value())
@@ -392,7 +409,21 @@ bool loadConfig()
 	war_setSoundEnabled(iniGetBool("sound", true).value());
 	setInvertMouseStatus(iniGetBool("mouseflip", true).value());
 	setRightClickOrders(iniGetBool("RightClickOrders", false).value());
-	setMiddleClickRotate(iniGetBool("MiddleClickRotate", false).value());
+	setPanMouseKey(iniGetMouseKeyCode("mouseKeyPan", getPanMouseKey()));
+	if (!createdConfigFile && configVersion < 3)
+	{
+		// Upgrade old MiddleClickRotate value
+		auto oldMiddleClickRotateValue = iniGetBool("MiddleClickRotate", false).value();
+		if (!setRotateMouseKey((oldMiddleClickRotateValue) ? MOUSE_MMB : MOUSE_RMB) && !oldMiddleClickRotateValue)
+		{
+			// if unable to set (because of conflict, presumably with RightClickOrders), default to MMB
+			setRotateMouseKey(MOUSE_MMB);
+		}
+	}
+	else
+	{
+		setRotateMouseKey(iniGetMouseKeyCode("mouseKeyRotate", getRotateMouseKey()));
+	}
 	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
@@ -693,6 +724,14 @@ bool saveConfig()
 		}
 		iniGeneral.SetString(key, strVal);
 	};
+	auto iniSetMouseKeyOpt = [&iniGeneral](const std::string& key, optional<MOUSE_KEY_CODE> code) {
+		if (!code.has_value())
+		{
+			iniSectionSetInteger(iniGeneral, key, 0);
+			return;
+		}
+		iniSectionSetInteger(iniGeneral, key, static_cast<int>(code.value()));
+	};
 
 	// //////////////////////////
 	// voicevol, fxvol and cdvol
@@ -725,7 +764,8 @@ bool saveConfig()
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
-	iniSetInteger("MiddleClickRotate", (int)(getMiddleClickRotate()));
+	iniSetMouseKeyOpt("mouseKeyPan", getPanMouseKey());
+	iniSetMouseKeyOpt("mouseKeyRotate", getRotateMouseKey());
 	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
