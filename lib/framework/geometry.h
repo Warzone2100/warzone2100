@@ -161,17 +161,18 @@ public:
 	// Returns the y-coordinate of the rectangle's top edge. Equivalent to top().
 	int y(void) const { return top(); }
 
-	void setHeight(int height) { _bottomRight.y = y() + height; }
-	void setWidth(int width) { _bottomRight.x = x() + width; }
+	WzRect& setHeight(int height) { _bottomRight.y = y() + height; return *this; }
+	WzRect& setWidth(int width) { _bottomRight.x = x() + width; return *this; }
 	void setX(int x) { _topLeft.x = x; }
 	void setY(int y) { _topLeft.y = y; }
 
-	void translateBy(int x, int y)
+	WzRect& translateBy(int x, int y)
 	{
 		_topLeft.x += x;
 		_topLeft.y += y;
 		_bottomRight.x += x;
 		_bottomRight.y += y;
+		return *this;
 	}
 
 	bool intersects(const WzRect& other) const

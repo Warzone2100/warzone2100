@@ -1855,6 +1855,47 @@ inline void WzText::updateCacheIfNecessary()
 	}
 }
 
+void WzText::renderClipped(Vector2f position, PIELIGHT colour, WzRect screenClippingRect, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	updateCacheIfNecessary();
+
+	if (texture == nullptr)
+	{
+		// A texture will not always be created. (For example, if the rendered text is empty.)
+		// No need to render if there's nothing to render.
+		return;
+	}
+
+	Vector2f visualOrigin(position.x, position.y + mPtsAboveBase);
+	int logicalDisplayWidth = dimensions.x / mRenderingHorizScaleFactor;
+	int logicalDisplayHeight = dimensions.y / mRenderingVertScaleFactor;
+	if (maxWidth > 0)
+	{
+		logicalDisplayWidth = std::min<int>(logicalDisplayWidth, maxWidth);
+	}
+	WzRect screenDrawRect(visualOrigin.x, visualOrigin.y, logicalDisplayWidth, logicalDisplayHeight); // screen coordinates
+	WzRect clippingRect = screenDrawRect.intersectionWith(screenClippingRect.setWidth(screenClippingRect.width() - 1).setHeight(screenClippingRect.height() - 1));
+	if (clippingRect.width() <= 0 || clippingRect.height() <= 0)
+	{
+		return;
+	}
+	clippingRect.translateBy(-visualOrigin.x, -visualOrigin.y); // translate to 0,0 origin
+
+	WzRect clippingRectInPixels(
+		clippingRect.left() * mRenderingHorizScaleFactor,
+		clippingRect.top() * mRenderingVertScaleFactor,
+		clippingRect.width() * mRenderingHorizScaleFactor,
+		clippingRect.height() * mRenderingVertScaleFactor
+	);
+
+	Vector2f logicalDrawSize(
+		std::min(logicalDisplayWidth, clippingRect.width()),
+		std::min(logicalDisplayHeight, clippingRect.height())
+	);
+
+	iV_DrawImageTextClipped(*texture, dimensions, position + Vector2f(clippingRect.x(), clippingRect.y()), Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), logicalDrawSize, 0.f, colour, clippingRectInPixels);
+}
+
 void WzText::render(Vector2f position, PIELIGHT colour, float rotation, int maxWidth, int maxHeight)
 {
 	updateCacheIfNecessary();
