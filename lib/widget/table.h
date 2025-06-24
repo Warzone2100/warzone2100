@@ -53,6 +53,9 @@ public:
 	// Set whether the row draws an outer border
 	void setDrawBorder(optional<PIELIGHT> borderColor);
 
+	// Set a background color for the row
+	void setBackgroundColor(optional<PIELIGHT> backgroundColor);
+
 	// Set whether row is "disabled"
 	void setDisabled(bool disabled);
 	// Set row disable overlay color
@@ -76,6 +79,7 @@ private:
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
 	optional<PIELIGHT> borderColor = nullopt;
+	optional<PIELIGHT> backgroundColor = nullopt;
 	PIELIGHT disabledColor;
 };
 
