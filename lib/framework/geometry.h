@@ -210,4 +210,27 @@ private:
 	glm::ivec2 _bottomRight;
 };
 
+class WzClippingRectF
+{
+public:
+	WzClippingRectF(float x, float y, float width, float height)
+	: _topLeft(x, y)
+	, _width(width)
+	, _height(height)
+	{ }
+public:
+	// Returns the x-coordinate of the rectangle's left edge. Equivalent to left().
+	float x() const { return _topLeft.x; }
+
+	// Returns the y-coordinate of the rectangle's top edge. Equivalent to top().
+	float y() const { return _topLeft.y; }
+
+	float width() const { return _width; }
+	float height() const { return _height; }
+private:
+	glm::vec2 _topLeft;
+	float _width;
+	float _height;
+};
+
 #endif // _LIB_FRAMEWORK_GEOMETRY_H

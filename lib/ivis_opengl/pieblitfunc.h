@@ -242,7 +242,7 @@ private:
 
 void iV_DrawImageAnisotropic(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
 void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
-void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect);
+void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, const WzClippingRectF& clippingRect);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr, uint8_t alpha = 255);
 void iV_DrawImageTint(IMAGEFILE *ImageFile, UWORD ID, float x, float y, PIELIGHT color, optional<Vector2f> size = nullopt, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), uint8_t alpha = 255);
