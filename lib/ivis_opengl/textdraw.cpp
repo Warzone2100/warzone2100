@@ -1881,7 +1881,7 @@ void WzText::renderClipped(Vector2f position, PIELIGHT colour, WzRect screenClip
 	}
 	clippingRect.translateBy(-visualOrigin.x, -visualOrigin.y); // translate to 0,0 origin
 
-	WzRect clippingRectInPixels(
+	WzClippingRectF clippingRectInPixels(
 		clippingRect.left() * mRenderingHorizScaleFactor,
 		clippingRect.top() * mRenderingVertScaleFactor,
 		clippingRect.width() * mRenderingHorizScaleFactor,
@@ -1918,9 +1918,11 @@ void WzText::render(Vector2f position, PIELIGHT colour, float rotation, int maxW
 	}
 	else
 	{
-		WzRect clippingRectInPixels;
-		clippingRectInPixels.setWidth((maxWidth > 0) ? static_cast<int>((float)maxWidth * mRenderingHorizScaleFactor) : dimensions.x);
-		clippingRectInPixels.setHeight((maxHeight > 0) ? static_cast<int>((float)maxHeight * mRenderingVertScaleFactor) : dimensions.y);
+		WzClippingRectF clippingRectInPixels(
+			0.f, 0.f,
+			(maxWidth > 0) ? ((float)maxWidth * mRenderingHorizScaleFactor) : dimensions.x,
+			(maxHeight > 0) ? ((float)maxHeight * mRenderingVertScaleFactor) : dimensions.y
+		);
 		iV_DrawImageTextClipped(*texture, dimensions, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f((maxWidth > 0) ? maxWidth : dimensions.x / mRenderingHorizScaleFactor, (maxHeight > 0) ? maxHeight : dimensions.y / mRenderingVertScaleFactor), rotation, colour, clippingRectInPixels);
 	}
 }
