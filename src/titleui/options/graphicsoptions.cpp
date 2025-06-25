@@ -347,9 +347,9 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	{
 		// TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
 		std::string lodDistanceString = N_("LOD Distance");
-		lodDistanceString += "*"; // takes effect on game restart
 		auto optionInfo = OptionInfo("gfx.lodDistance", lodDistanceString.c_str(), N_("How level of detail (in textures) is preserved as distance increases."));
 		optionInfo.addAvailabilityCondition(IsNotInGame);
+		optionInfo.setRequiresRestart(true);
 		auto valueChanger = OptionsDropdown<int>::make(
 			[]() {
 				OptionChoices<int> result;
@@ -377,10 +377,9 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	// Advanced:
 	result->addSection(OptionsSection(N_("Advanced"), ""), true);
 	{
-		std::string graphicsBackendString = N_("Graphics Backend");
-		graphicsBackendString += "*"; // takes effect on game restart
-		auto optionInfo = OptionInfo("gfx.backend", graphicsBackendString.c_str(), "");
+		auto optionInfo = OptionInfo("gfx.backend", N_("Graphics Backend"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
+		optionInfo.setRequiresRestart(true);
 		auto valueChanger = OptionsDropdown<video_backend>::make(
 			[]() {
 				const std::vector<video_backend> availableBackends = wzAvailableGfxBackends();
@@ -406,10 +405,9 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		std::string antialiasingString = N_("Antialiasing");
-		antialiasingString += "*"; // takes effect on game restart
-		auto optionInfo = OptionInfo("gfx.antialiasing", antialiasingString.c_str(), "");
+		auto optionInfo = OptionInfo("gfx.antialiasing", N_("Antialiasing"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
+		optionInfo.setRequiresRestart(true);
 		auto valueChanger = OptionsDropdown<int>::make(
 			[]() {
 				const auto maxAA = pie_GetMaxAntialiasing();

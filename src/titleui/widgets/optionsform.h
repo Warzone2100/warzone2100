@@ -435,16 +435,19 @@ public:
 	OptionInfo(const WzString& optionId, const WzString& displayName, const WzString& helpDescription);
 public:
 	OptionInfo& addAvailabilityCondition(const OptionAvailabilityCondition& condition);
+	OptionInfo& setRequiresRestart(bool restartRequired);
 	WzString getTranslatedDisplayName() const;
 	WzString getTranslatedHelpDescription() const;
 	bool isAvailable() const;
 	std::vector<AvailabilityResult> getAvailabilityResults() const;
+	bool requiresRestart() const;
 public:
 	WzString optionId;
 private:
 	WzString displayName;
 	WzString helpDescription;
 	std::vector<OptionAvailabilityCondition> availabilityConditions;
+	bool bRequiresRestart = false;
 };
 
 // OptionAvailabilityConditions
@@ -494,6 +497,8 @@ public:
 	void refreshOptions(bool forceRowLayoutUpdates = false);
 	void refreshOptionsLayoutCalc();
 	void refreshOptionAvailability();
+
+	bool hasOptionsThatRequireRestart() const;
 
 	bool jumpToSectionId(const WzString& sectionId);
 	bool jumpToOptionId(const WzString& optionId);
