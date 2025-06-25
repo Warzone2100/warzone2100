@@ -413,7 +413,7 @@ void sendPlayerGameTime()
 
 	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
-		if (!myResponsibility(player) || !isHumanPlayer(player))
+		if (!myResponsibility(player))
 		{
 			continue;
 		}
