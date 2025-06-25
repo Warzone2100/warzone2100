@@ -1,0 +1,8 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "CM31_BASE1": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 1856, "y": 6848, "z": 0 },
+        "CM31_TAR_UPLINK": { "audio": "pcv448.ogg", "message": "MISSIONTARGET_MSG", "type": 0, "x": 768, "y": 6848, "z": 0 },
+        "CM31_HIDE_LOC": { "audio": "pcv448.ogg", "message": "MISSIONTARGET_MSG", "type": 2, "x": 6464, "y": 1600, "z": 0 }
+    }
+}

@@ -54,6 +54,10 @@ struct ParagraphTextStyle
 class WzCachedText
 {
 public:
+	WzCachedText(uint32_t cacheDurationMs = 100):
+		font(font_regular),
+		cacheDurationMs(cacheDurationMs)
+	{}
 	WzCachedText(WzString text, iV_fonts font, uint32_t cacheDurationMs = 100):
 		text(text),
 		font(font),
@@ -67,6 +71,23 @@ public:
 			cachedText = nullptr;
 		}
 	}
+
+	void setText(const WzString &_text, iV_fonts _fontID)
+	{
+		if (text == _text && font == _fontID)
+		{
+			return;
+		}
+		text = _text;
+		font = _fontID;
+		if (cachedText)
+		{
+			cachedText->setText(text, font);
+		}
+	}
+
+	inline const WzString& getText() const { return text; }
+	inline iV_fonts getFontID() const { return font; }
 
 	WzText *operator ->()
 	{
@@ -101,7 +122,7 @@ class Paragraph : public WIDGET
 public:
 	Paragraph(): WIDGET() {}
 
-	void addText(std::string const &text);
+	void addText(const WzString &text);
 	void addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase);
 
 	void setFont(iV_fonts font)

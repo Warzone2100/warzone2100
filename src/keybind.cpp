@@ -76,6 +76,7 @@
 #include "loadsave.h"
 #include "game.h"
 #include "droid.h"
+#include "move.h"
 #include "spectatorwidgets.h"
 #include "campaigninfo.h"
 
@@ -123,6 +124,22 @@ bool runningMultiplayer()
 static void noMPCheatMsg()
 {
 	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+}
+
+bool shouldTrapCursor()
+{
+	auto result = war_GetTrapCursor();
+	switch (result)
+	{
+		case TrapCursorMode::Disabled:
+			return false;
+		case TrapCursorMode::Enabled:
+			return true;
+		case TrapCursorMode::Automatic:
+			// automatic mode - if in fullscreen mode (including desktop full), or maximized, trap the cursor
+			return (wzIsFullscreen() || wzIsMaximized());
+	}
+	return false; // silence compiler warning
 }
 
 // --------------------------------------------------------------------------
@@ -463,7 +480,7 @@ void kf_MakeMeHero()
 	{
 		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
-			psDroid->experience = 8 * 65536 * 128;
+			psDroid->experience = 16 * 65536 * 128;
 		}
 		else if (psDroid->selected)
 		{
@@ -1041,7 +1058,7 @@ void	kf_PitchForward()
 /* Resets pitch to default */
 void	kf_ResetPitch()
 {
-	playerPos.r.x = DEG(360 - 20);
+	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH);
 	setViewDistance(STARTDISTANCE);
 }
 
@@ -1340,12 +1357,34 @@ MappableFunction kf_ScrollCamera(const int horizontal, const int vertical)
 	};
 }
 
+static TrapCursorMode oldTrapCursorEnabledValue = TrapCursorMode::Enabled;
 void kf_toggleTrapCursor()
 {
-	bool trap = !war_GetTrapCursor();
-	war_SetTrapCursor(trap);
-	(trap ? wzGrabMouse : wzReleaseMouse)();
-	std::string msg = astringf(_("Trap cursor %s"), trap ? "ON" : "OFF");
+	auto value = war_GetTrapCursor();
+	if (value == TrapCursorMode::Disabled)
+	{
+		value = oldTrapCursorEnabledValue;
+	}
+	else if (value == TrapCursorMode::Automatic && !shouldTrapCursor())
+	{
+		// set to auto, but will not automatically trap the cursor - toggle to enabled
+		value = TrapCursorMode::Enabled;
+	}
+	else
+	{
+		oldTrapCursorEnabledValue = value;
+		value = TrapCursorMode::Disabled;
+	}
+	war_SetTrapCursor(value);
+	(shouldTrapCursor() ? wzGrabMouse : wzReleaseMouse)();
+	const char* pValueStr = "";
+	switch (value)
+	{
+		case TrapCursorMode::Disabled: pValueStr = "OFF"; break;
+		case TrapCursorMode::Enabled: pValueStr = "ON"; break;
+		case TrapCursorMode::Automatic: pValueStr = "AUTO"; break;
+	}
+	std::string msg = astringf(_("Trap cursor %s"), pValueStr);
 	addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -1370,7 +1409,7 @@ void	kf_TogglePauseMode()
 		setScrollPause(true);
 
 		// If cursor trapping is enabled allow the cursor to leave the window
-		if (war_GetTrapCursor())
+		if (shouldTrapCursor())
 		{
 			wzReleaseMouse();
 		}
@@ -1451,7 +1490,7 @@ void	kf_TogglePauseMode()
 		setScrollPause(false);
 
 		// Re-enable cursor trapping if it is enabled
-		if (war_GetTrapCursor())
+		if (shouldTrapCursor())
 		{
 			wzGrabMouse();
 		}
@@ -1485,6 +1524,10 @@ void	kf_FinishAllResearch()
 	{
 		if (!IsResearchCompleted(&asPlayerResList[selectedPlayer][j]))
 		{
+			if (asResearch[j].excludeFromCheats)
+			{
+				continue;
+			}
 			if (bMultiMessages)
 			{
 				SendResearch(selectedPlayer, j, false);
@@ -2185,7 +2228,18 @@ void	kf_CentreOnBase()
 // --------------------------------------------------------------------------
 void kf_ToggleFormationSpeedLimiting()
 {
-	addConsoleMessage(_("Formation speed limiting has been removed from the game due to bugs."), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+	bool resultingValue = false;
+	if (moveToggleFormationSpeedLimiting(selectedPlayer, &resultingValue))
+	{
+		if (resultingValue)
+		{
+			addConsoleMessage(_("Formation speed limiting ON"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			addConsoleMessage(_("Formation speed limiting OFF"),LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -2549,6 +2603,10 @@ void kf_QuickSave()
 	{
 		console(_("QuickSave not allowed in Autosaves-Only mode"));
 		return;
+	}
+	if (NETisReplay())
+	{
+		return; // Bail out if we're running a replay
 	}
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;

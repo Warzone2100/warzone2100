@@ -33,6 +33,7 @@
 
 #include "action.h"
 #include "combat.h"
+#include "formation.h"
 #include "geometry.h"
 #include "mission.h"
 #include "projectile.h"
@@ -637,6 +638,10 @@ void actionSanity(DROID *psDroid)
 		bDirect = proj_Direct(psDroid->getWeaponStats(i));
 		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
 		{
+			if (psDroid->action == DACTION_DROIDREPAIR)
+			{
+				droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
+			}
 			syncDebugObject(psDroid->psActionTarget[i], '-');
 			setDroidActionTarget(psDroid, nullptr, i);
 			if (i == 0)
@@ -742,22 +747,25 @@ void actionUpdateDroid(DROID *psDroid)
 					if (psDroid->asWeaps[i].nStat > 0
 					    && psWeapStats->rotate
 						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
-						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick
-						// (aiUpdateDroid would have set an attack target if one was available)
-						&& psDroid->lastCheckNearestTarget[i] != gameTime
+						&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
+						// don't bother doing this costly calculation again if aiUpdateDroid already checked this tick and failed
+						&& psDroid->lastCheckNearestTargetFailed[i] != gameTime
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
-						{
-							psDroid->action = DACTION_ATTACK;
-							setDroidActionTarget(psDroid, psTemp, i);
-						}
+						psDroid->action = DACTION_ATTACK;
+						setDroidActionTarget(psDroid, psTemp, i);
 					}
 				}
 			}
 		}
 		break;
 	case DACTION_WAITDURINGREPAIR:
+		// don't want to be in a formation for this move
+		if (psDroid->sMove.psFormation != nullptr)
+		{
+			formationLeave(psDroid->sMove.psFormation, psDroid);
+			psDroid->sMove.psFormation = nullptr;
+		}
 		// Check that repair facility still exists
 		if (!order->psObj)
 		{
@@ -844,13 +852,11 @@ void actionUpdateDroid(DROID *psDroid)
 					    && psWeapStats->rotate
 					    && psWeapStats->fireOnMove
 						&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
+						&& (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
 					    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0)
 					{
-						if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ALWAYS)
-						{
-							psDroid->action = DACTION_MOVEFIRE;
-							setDroidActionTarget(psDroid, psTemp, i);
-						}
+						psDroid->action = DACTION_MOVEFIRE;
+						setDroidActionTarget(psDroid, psTemp, i);
 					}
 				}
 			}
@@ -1019,6 +1025,16 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_ATTACK;
 		}
 
+		if (psDroid->action == DACTION_ATTACK)
+		{
+			// don't wan't formations for this one
+			if (psDroid->sMove.psFormation)
+			{
+				formationLeave(psDroid->sMove.psFormation, psDroid);
+				psDroid->sMove.psFormation = nullptr;
+			}
+		}
+
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if (electronicDroid(psDroid) && psDroid->player == psDroid->psActionTarget[0]->player)
 		{
@@ -1126,6 +1142,14 @@ void actionUpdateDroid(DROID *psDroid)
 					else if (!psWeapStats->rotate ||
 					         actionTargetTurret(psDroid, psActionTarget, &psDroid->asWeaps[i]))
 					{
+						// Prevents artillery units attached to a leader sometimes not stopping.
+						if (!psDroid->isVtol() &&
+							!proj_Direct(psWeapStats) &&
+							psDroid->order.type == DORDER_FIRESUPPORT &&
+							!DROID_STOPPED(psDroid))
+						{
+							moveStopDroid(psDroid);
+						}
 						/* In range - fire !!! */
 						combFire(&psDroid->asWeaps[i], psDroid, psActionTarget, i);
 					}
@@ -1293,6 +1317,13 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 	case DACTION_MOVETOATTACK:
+		// don't wan't formations for this one
+		if (psDroid->sMove.psFormation)
+		{
+			formationLeave(psDroid->sMove.psFormation, psDroid);
+			psDroid->sMove.psFormation = nullptr;
+		}
+
 		// send vtols back to rearm
 		if (psDroid->isVtol() && vtolEmpty(psDroid))
 		{
@@ -1518,6 +1549,13 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		} // End of check for whether the droid can still succesfully build the ordered structure
 
+		// The droid cannot be in a formation
+		if (psDroid->sMove.psFormation != nullptr)
+		{
+			formationLeave(psDroid->sMove.psFormation, psDroid);
+			psDroid->sMove.psFormation = nullptr;
+		}
+
 		// The droid can still build or help with a build, and is moving to a location to do so - are we there yet, are we there yet, are we there yet?
 		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
@@ -1693,6 +1731,12 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
+		// The droid cannot be in a formation
+		if (psDroid->sMove.psFormation != nullptr)
+		{
+			formationLeave(psDroid->sMove.psFormation, psDroid);
+			psDroid->sMove.psFormation = nullptr;
+		}
 		if (DROID_STOPPED(psDroid) &&
 		    !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
@@ -1766,6 +1810,14 @@ void actionUpdateDroid(DROID *psDroid)
 				}
 			}
 		}
+
+		// The droid cannot be in a formation
+		if (psDroid->sMove.psFormation != nullptr)
+		{
+			formationLeave(psDroid->sMove.psFormation, psDroid);
+			psDroid->sMove.psFormation = nullptr;
+		}
+
 		// see if the droid is at the edge of what it is moving to
 		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
 		{
@@ -1861,6 +1913,12 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DACTION_MOVETOREPAIRPOINT:
+		// don't want to be in a formation for this move
+		if (psDroid->sMove.psFormation != nullptr)
+		{
+			formationLeave(psDroid->sMove.psFormation, psDroid);
+			psDroid->sMove.psFormation = nullptr;
+		}
 		if (psDroid->order.rtrType == RTR_TYPE_REPAIR_FACILITY)
 		{
 			/* moving from front to rear of repair facility or rearm pad */
@@ -2028,6 +2086,7 @@ void actionUpdateDroid(DROID *psDroid)
 				actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 				droidStartAction(psDroid);
 				psDroid->action = DACTION_DROIDREPAIR;
+				droidRepairStarted((DROID *)psDroid->psActionTarget[0], psDroid);
 			}
 			if (DROID_STOPPED(psDroid))
 			{
@@ -2046,7 +2105,7 @@ void actionUpdateDroid(DROID *psDroid)
 				psDroid->action = DACTION_NONE;
 				break;
 			}
-			
+
 			// If not doing self-repair (psActionTarget[0] is repair target)
 			if (psDroid->psActionTarget[0] != psDroid)
 			{
@@ -2069,6 +2128,7 @@ void actionUpdateDroid(DROID *psDroid)
 							&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
 						    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0 && psTemp)
 						{
+							droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 							psDroid->action = DACTION_ATTACK;
 							setDroidActionTarget(psDroid, psTemp, 0);
 							break;
@@ -2086,6 +2146,7 @@ void actionUpdateDroid(DROID *psDroid)
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 			if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE * REPAIR_RANGE)
 			{
+				droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 				if (order->type == DORDER_DROIDREPAIR)
 				{
 					// damaged droid has moved off - follow if we're not holding position!
@@ -2102,6 +2163,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				if (!droidUpdateDroidRepair(psDroid))
 				{
+					droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 					psDroid->action = DACTION_NONE;
 					moveStopDroid(psDroid);
 					//if the order is RTR then resubmit order so that the unit will go to repair facility point
@@ -2242,6 +2304,9 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
 	objTrace(psDroid->id, "base set action to %s (was %s)", getDroidActionName(psAction->action), getDroidActionName(psDroid->action));
+
+	DROID_ACTION priorDroidAction = psDroid->action;
+	BASE_OBJECT* priorActionTarget0 = psDroid->psActionTarget[0];
 
 	DROID_ORDER_DATA *order = &psDroid->order;
 	bool hasValidWeapon = false;
@@ -2441,7 +2506,15 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
-		moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+		// Move a droid in a tile if it has never been moved before
+		if (psDroid->actionPos == psDroid->pos.xy())
+		{
+			actionRemoveDroidsFromBuildPos(psDroid->player, psDroid->actionPos, order->direction, order->psStats);
+		}
+		else
+		{
+			moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+		}
 		break;
 	case DACTION_DEMOLISH:
 		ASSERT_OR_RETURN(, order->type == DORDER_DEMOLISH, "cannot start demolish action without a demolish order");
@@ -2549,6 +2622,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				psDroid->action = DACTION_MOVETODROIDREPAIR;
 				moveDroidTo(psDroid, psAction->x, psAction->y);
 			}
+			if (psDroid->action == DACTION_DROIDREPAIR && priorDroidAction != DACTION_DROIDREPAIR)
+			{
+				droidRepairStarted(castDroid(psDroid->psActionTarget[0]), psDroid);
+			}
 			break;
 		}
 	case DACTION_RESTORE:
@@ -2568,6 +2645,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	default:
 		ASSERT(!"unknown action", "actionUnitBase: unknown action");
 		break;
+	}
+	if (priorDroidAction == DACTION_DROIDREPAIR && psDroid->action != DACTION_DROIDREPAIR)
+	{
+		droidRepairStopped(castDroid(priorActionTarget0), psDroid);
 	}
 	syncDebugDroid(psDroid, '+');
 	CHECK_DROID(psDroid);

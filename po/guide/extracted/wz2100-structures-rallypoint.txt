@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Rally Point")
+_("When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point.")
+_("By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it.")
+_("Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path.")

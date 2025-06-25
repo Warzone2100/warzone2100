@@ -26,8 +26,6 @@
 #include "slider.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
-static bool DragEnabled = true;
-
 enum SliderState
 {
 	// Slider is being dragged
@@ -39,11 +37,6 @@ enum SliderState
 	// Slider is disabled
 	SLD_DISABLED = 1 << 2
 };
-
-void sliderEnableDrag(bool Enable)
-{
-	DragEnabled = Enable;
-}
 
 W_SLDINIT::W_SLDINIT()
 	: orientation(WSLD_LEFT)
@@ -110,7 +103,7 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 
 void W_SLIDER::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	if (isEnabled() && DragEnabled)
+	if (isEnabled())
 	{
 		dirty = true;
 		state |= SLD_DRAG;
@@ -191,7 +184,10 @@ bool W_SLIDER::capturesMouseDrag(WIDGET_KEY)
 
 void W_SLIDER::mouseDragged(WIDGET_KEY, W_CONTEXT *, W_CONTEXT *psContext)
 {
-	updateSliderFromMousePosition(psContext);
+	if (isEnabled())
+	{
+		updateSliderFromMousePosition(psContext);
+	}
 }
 
 void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)

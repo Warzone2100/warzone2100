@@ -1,0 +1,25 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::factory",
+	"title": "Factory",
+	"visual": {
+		"stat": {
+			"id": "A0LightFactory"
+		}
+	},
+	"contents": [
+		"A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production.",
+		"",
+		"When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point.",
+		"",
+		"Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
+	],
+	"links": [
+		"wz2100::structures::rallypoint",
+		"wz2100::units::designing",
+		"wz2100::units::building",
+		"wz2100::unitorders",
+		"wz2100::structures::modules",
+		"wz2100::structures::building"
+	]
+}

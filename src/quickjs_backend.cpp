@@ -85,17 +85,31 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
+#if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-mismatch"
+#endif
 MSVC_PRAGMA(warning( push ))
 MSVC_PRAGMA(warning( disable : 4191 )) // disable "warning C4191: 'type cast': unsafe conversion from 'JSCFunctionMagic (__cdecl *)' to 'JSCFunction (__cdecl *)'"
 #include "quickjs.h"
 #include "quickjs-debugger.h"
 #include "quickjs-limitedcontext.h"
 MSVC_PRAGMA(warning( pop ))
+#if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
+#pragma clang diagnostic pop
+#endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic pop
 #endif
 #include "3rdparty/gsl_finally.h"
 #include <utility>
+
+// QuickJS-NG / QuickJS compat
+#if defined(QUICKJS_NG)
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(arr)
+#else
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(ctx, arr)
+#endif
 
 // Alternatives for C++ - can't use the JS_CFUNC_DEF / JS_CGETSET_DEF / etc defines
 // #define JS_CFUNC_DEF(name, length, func1) { name, JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE, JS_DEF_CFUNC, 0, .u = { .func = { length, JS_CFUNC_generic, { .generic = func1 } } } }
@@ -156,7 +170,6 @@ public:
 		ctxOptions.baseObjects = true;
 		ctxOptions.dateObject = true;
 		ctxOptions.eval = (game.type == LEVEL_TYPE::CAMPAIGN); // allow "eval" only for campaign (which currently has lots of implicit eval usage)
-		ctxOptions.stringNormalize = true;
 		ctxOptions.regExp = true;
 		ctxOptions.json = true;
 		ctxOptions.proxy = true;
@@ -164,6 +177,7 @@ public:
 		ctxOptions.typedArrays = true;
 		ctxOptions.promise = false; // disable promise, async, await
 		ctxOptions.bigInt = false;
+		ctxOptions.weakRef = false;
 		ctx = JS_NewLimitedContext(rt, &ctxOptions);
 		ASSERT(ctx != nullptr, "JS_NewContext failed?");
 
@@ -174,6 +188,8 @@ public:
 	virtual ~quickjs_scripting_instance()
 	{
 		engineToInstanceMap.erase(ctx);
+
+		debug(LOG_INFO, "Destroying [%d]:%s/%s", player(), scriptPath().c_str(), scriptName().c_str());
 
 		if (!(JS_IsUninitialized(compiledScriptObj)))
 		{
@@ -513,6 +529,12 @@ public:
 	//__
 	virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) override;
 
+	//__ ## eventDroidRankGained(droid, rankNum)
+	//__
+	//__ An event that is run whenever a droid gains a rank.
+	//__
+	virtual bool handle_eventDroidRankGained(const DROID *psDroid, int rankNum) override;
+
 	//__ ## eventAttacked(victim, attacker)
 	//__
 	//__ An event that is run when an object belonging to the script's controlling player is
@@ -794,6 +816,7 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 //;; * ```status``` The completeness status of the structure. It will be one of ```BEING_BUILT``` and ```BUILT```.
 //;; * ```type``` The type will always be ```STRUCTURE```.
 //;; * ```cost``` What it would cost to build this structure. (3.2+ only)
+//;; * ```direction``` The direction the structure is facing. (4.5+ only)
 //;; * ```stattype``` The stattype defines the type of structure. It will be one of ```HQ```, ```FACTORY```, ```POWER_GEN```,
 //;; ```RESOURCE_EXTRACTOR```, ```LASSAT```, ```DEFENSE```, ```WALL```, ```RESEARCH_LAB```, ```REPAIR_FACILITY```,
 //;; ```CYBORG_FACTORY```, ```VTOL_FACTORY```, ```REARM_PAD```, ```SAT_UPLINK```, ```GATE```, ```STRUCT_GENERIC```, and ```COMMAND_CONTROL```.
@@ -835,6 +858,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "status", JS_NewInt32(ctx, (int)psStruct->status), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewInt32(ctx, 100 * psStruct->body / MAX(1, psStruct->structureBody())), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "cost", JS_NewInt32(ctx, psStruct->pStructureType->powerToBuild), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "direction", JS_NewInt32(ctx, static_cast<int32_t>(UNDEG(psStruct->rot.direction))), JS_PROP_ENUMERABLE);
 	int stattype = 0;
 	switch (psStruct->pStructureType->type) // don't bleed our source insanities into the scripting world
 	{
@@ -1415,7 +1439,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		{
 			len = 0;
 
-			if (!JS_IsArray(ctx, arr))
+			if (!WZ_QJS_IsArray(ctx, arr))
 				return false;
 
 			JSValue len_val = JS_GetPropertyStr(ctx, arr, "length");
@@ -1590,7 +1614,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				wzapi::string_or_string_list strings;
 
 				JSValue list_or_string = argv[idx++];
-				if (JS_IsArray(ctx, list_or_string))
+				if (WZ_QJS_IsArray(ctx, list_or_string))
 				{
 					uint64_t length = 0;
 					if (QuickJS_GetArrayLength(ctx, list_or_string, length))
@@ -1702,6 +1726,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 //					UNBOX_SCRIPT_ASSERT(context, type != SCRIPT_POSITION, "Cannot assign a trigger to a position");
 					ASSERT(false, "Not currently handling triggered property - does anything use this?");
 				}
+				JS_FreeValue(ctx, triggered);
 
 				if (type == SCRIPT_RADIUS)
 				{
@@ -2097,13 +2122,13 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		template<size_t N>
 		struct Apply {
 			template<typename F, typename T, typename... A>
-			static inline auto apply(F && f, T && t, A &&... a)
-				-> decltype(Apply<N-1>::apply(
+			static inline auto applyAndCallF(F && f, T && t, A &&... a)
+				-> decltype(Apply<N-1>::applyAndCallF(
 					::std::forward<F>(f), ::std::forward<T>(t),
 					::std::get<N-1>(::std::forward<T>(t)), ::std::forward<A>(a)...
 				))
 			{
-				return Apply<N-1>::apply(::std::forward<F>(f), ::std::forward<T>(t),
+				return Apply<N-1>::applyAndCallF(::std::forward<F>(f), ::std::forward<T>(t),
 					::std::get<N-1>(::std::forward<T>(t)), ::std::forward<A>(a)...
 				);
 			}
@@ -2112,7 +2137,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		template<>
 		struct Apply<0> {
 			template<typename F, typename T, typename... A>
-			static inline auto apply(F && f, T &&, A &&... a)
+			static inline auto applyAndCallF(F && f, T &&, A &&... a)
 				-> decltype(::std::forward<F>(f)(::std::forward<A>(a)...))
 			{
 				return ::std::forward<F>(f)(::std::forward<A>(a)...);
@@ -2120,14 +2145,14 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		};
 
 		template<typename F, typename T>
-		inline auto apply(F && f, T && t)
+		inline auto applyAndCallF(F && f, T && t)
 			-> decltype(Apply< ::std::tuple_size<
 				typename ::std::decay<T>::type
-			>::value>::apply(::std::forward<F>(f), ::std::forward<T>(t)))
+			>::value>::applyAndCallF(::std::forward<F>(f), ::std::forward<T>(t)))
 		{
 			return Apply< ::std::tuple_size<
 				typename ::std::decay<T>::type
-			>::value>::apply(::std::forward<F>(f), ::std::forward<T>(t));
+			>::value>::applyAndCallF(::std::forward<F>(f), ::std::forward<T>(t));
 		}
 
 		template<typename...T> struct UnboxTupleIndex;
@@ -2180,7 +2205,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		{
 			size_t idx WZ_DECL_UNUSED = 0; // unused when Args... is empty
 			quickjs_execution_context execution_context(context);
-			return box(apply(f, UnboxTuple<Args...>(execution_context, idx, context, argc, argv, wrappedFunctionName)()), context);
+			return box(applyAndCallF(f, UnboxTuple<Args...>(execution_context, idx, context, argc, argv, wrappedFunctionName)()), context);
 		}
 
 		template<typename R, typename...Args>
@@ -2465,8 +2490,8 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	int player = QuickJS_GetInt32(ctx, global_obj, "me");
 
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
-	JS_FreeValue(ctx, funcObj);
 
 	std::string stringArg;
 	BASE_OBJECT *psObj = nullptr;
@@ -2544,8 +2569,8 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
-	JS_FreeValue(ctx, funcObj);
 
 	int32_t ms = 0;
 	if (argc > 1)
@@ -3003,6 +3028,7 @@ IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, optional<const DROID 
 IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventStructureUpgradeStarted, const STRUCTURE *)
+IMPL_EVENT_HANDLER(eventDroidRankGained, const DROID *, int)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
 IMPL_EVENT_HANDLER(eventDestroyed, const BASE_OBJECT *)
@@ -3141,6 +3167,7 @@ IMPL_JS_FUNC(showReticuleWidget, wzapi::showReticuleWidget)
 IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
+IMPL_JS_FUNC(addGuideTopic, wzapi::addGuideTopic)
 
 //-- ## removeReticuleButton(buttonId)
 //--
@@ -3486,6 +3513,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(centreView, 2); // WZAPI
 	JS_REGISTER_FUNC2(playSound, 1, 4); // WZAPI
 	JS_REGISTER_FUNC2(gameOverMessage, 1, 3); // WZAPI
+	JS_REGISTER_FUNC2(addGuideTopic, 1, 3); // WZAPI
 
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI
@@ -3561,7 +3589,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		return;
 	}
 
-	if (JS_IsArray(v.ctx, v.value))
+	if (WZ_QJS_IsArray(v.ctx, v.value))
 	{
 		j = nlohmann::json::array();
 		uint64_t length = 0;

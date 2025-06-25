@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sound/sounddefs.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -59,7 +60,7 @@ struct WARZONE_GLOBALS
 	int antialiasing = 0;
 	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
-	bool trapCursor = false;
+	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -74,6 +75,7 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	int autoDesyncKickSeconds = 10;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -96,11 +98,15 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
-	// groups UI
+	// UI config
 	bool groupsMenuEnabled = true;
+	uint8_t optionsButtonVisibility = 100;
 
 	// run-time only settings (not persisted to config!)
 	bool allowVulkanImplicitLayers = false;
+
+	// Connection provider used for hosting games
+	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -193,13 +199,13 @@ int war_getAntialiasing()
 	return warGlobs.antialiasing;
 }
 
-void war_SetTrapCursor(bool b)
+void war_SetTrapCursor(TrapCursorMode v)
 {
-	warGlobs.trapCursor = b;
-	ActivityManager::instance().changedSetting("trapCursor", std::to_string(b));
+	warGlobs.trapCursor = v;
+	ActivityManager::instance().changedSetting("trapCursor", std::to_string(static_cast<int>(v)));
 }
 
-bool war_GetTrapCursor()
+TrapCursorMode war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
 }
@@ -486,6 +492,21 @@ void war_setAutoLagKickSeconds(int seconds)
 	warGlobs.autoLagKickSeconds = seconds;
 }
 
+int war_getAutoDesyncKickSeconds()
+{
+	return warGlobs.autoDesyncKickSeconds;
+}
+
+void war_setAutoDesyncKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 10);
+	}
+	warGlobs.autoDesyncKickSeconds = seconds;
+}
+
 bool war_getDisableReplayRecording()
 {
 	return warGlobs.disableReplayRecording;
@@ -682,7 +703,64 @@ void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed) // not persisted 
 	warGlobs.allowVulkanImplicitLayers = allowed;
 }
 
+uint8_t war_getOptionsButtonVisibility()
+{
+	return warGlobs.optionsButtonVisibility;
+}
+
+void war_setOptionsButtonVisibility(uint8_t val)
+{
+	val = std::min<uint8_t>(val, 100);
+	if (val > 0)
+	{
+		val = std::max<uint8_t>(val, 50);
+	}
+	warGlobs.optionsButtonVisibility = val;
+}
+
 bool war_getAllowVulkanImplicitLayers()
 {
 	return warGlobs.allowVulkanImplicitLayers;
+}
+
+void war_setHostConnectionProvider(ConnectionProviderType pt)
+{
+	warGlobs.hostProviderType = pt;
+}
+
+ConnectionProviderType war_getHostConnectionProvider()
+{
+	return warGlobs.hostProviderType;
+}
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt)
+{
+	if (strcasecmp(str, "tcp") == 0)
+	{
+		pt = ConnectionProviderType::TCP_DIRECT;
+		return true;
+	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (strcasecmp(str, "gns") == 0)
+	{
+		pt = ConnectionProviderType::GNS_DIRECT;
+		return true;
+	}
+#endif
+	return false;
+}
+
+std::string to_string(ConnectionProviderType pt)
+{
+	switch (pt)
+	{
+	case ConnectionProviderType::TCP_DIRECT:
+		return "tcp";
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case ConnectionProviderType::GNS_DIRECT:
+		return "gns";
+#endif
+	}
+	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
+	return {};
 }

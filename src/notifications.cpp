@@ -211,9 +211,14 @@ bool WZ_Notification_Preferences::removeNotificationPreferencesIf(const std::fun
 
 bool WZ_Notification_Preferences::savePreferences()
 {
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString;
+	try {
+		jsonString = mRoot.dump(4);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", mFilename.c_str(), e.what());
+		return false;
+	}
 	saveFile(mFilename.c_str(), jsonString.c_str(), jsonString.size());
 	return true;
 }

@@ -1,0 +1,23 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::missiontimer",
+	"title": "Using the Mission Timer",
+	"sort": "07",
+	"applicableModes": ["campaign"],
+	"visual": {
+		"imagePath": "../../../images/intfac/image_mission_clock.png"
+	},
+	"contents": [
+		"Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much.",
+		"",
+		"There are always smart ways to make use of extra time to prepare for battles ahead.",
+		"",
+		"Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste.",
+		"",
+		"(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
+	],
+	"links": [
+		"wz2100::structures::researchfacility",
+		"wz2100::unitorders::recycling"
+	]
+}

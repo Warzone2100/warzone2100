@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -83,7 +83,9 @@
 #include "notifications.h"
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
+#include "screens/guidescreen.h"
 #include "hci/quickchat.h"
+#include "warzoneconfig.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -203,7 +205,7 @@ std::vector<DROID_TEMPLATE *>   apsTemplateList;
 std::list<DROID_TEMPLATE>       localTemplates;
 
 /* Store a list of Feature pointers for features to be placed on the map */
-static FEATURE_STATS	**apsFeatureList;
+static FEATURE_STATS	**apsFeatureStatsList;
 
 /* Store a list of component stats pointers for the design screen */
 UDWORD			numComponent;
@@ -276,6 +278,31 @@ static void processProximityButtons(UDWORD id);
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
 
+// In-Game Options button Widget
+
+class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
+{
+protected:
+	W_INGAMEOPTIONS_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+
+	int getMarginX() const { return marginX; }
+	int getMarginTop() const { return marginTop; }
+
+private:
+	uint8_t currentAlphaValue() const;
+	bool isHighlighted() const;
+
+private:
+	int marginX = 16;
+	int marginTop = 18;
+};
 
 /***************************GAME CODE ****************************/
 
@@ -356,6 +383,12 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 			return partX + partY <= 1.f;
 		});
 	}
+}
+
+optional<std::string> getReticuleButtonDisplayFilename(int ButId)
+{
+	ASSERT_OR_RETURN(nullopt, (ButId >= 0) && (ButId < NUMRETBUTS), "Invalid ButId: %d", ButId);
+	return retbutstats[ButId].filename.toUtf8();
 }
 
 void setReticuleStats(int ButId, std::string tip, std::string filename, std::string filenameDown, const playerCallbackFunc& callbackFunc)
@@ -856,9 +889,11 @@ bool createReplayControllerOverlay()
 
 	// Position the Replay Controller form
 	replayControllerForm->setCalcLayout([](WIDGET *psWidget) {
-		int x0 = screenWidth - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
+		auto psOptionsButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(widgFormGetFromID(psWScreen->psForm, IDRET_OPTIONS));
+		bool visibleOptionsbutton = (psOptionsButton != nullptr && psOptionsButton->visible());
+		int x0 = screenWidth - (visibleOptionsbutton ? psOptionsButton->getMarginX() + psOptionsButton->width() : 0) - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
 		int y0 = 0;
-		psWidget->move(x0, y0);
+		psWidget->move(std::max<int>(0, x0), y0);
 	});
 
 	widgRegisterOverlayScreenOnTopOfScreen(replayOverlayScreen, psWScreen);
@@ -885,7 +920,7 @@ bool intInitialise()
 	apsTemplateList.clear();
 
 	/* Create storage for the feature list */
-	apsFeatureList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) * MAXFEATURES);
+	apsFeatureStatsList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) * MAXFEATURES);
 
 	/* Create storage for the component list */
 	apsComponentList = (COMPONENT_STATS **)malloc(sizeof(COMPONENT_STATS *) * MAXCOMPONENT);
@@ -975,14 +1010,14 @@ void interfaceShutDown()
 
 	free(apsStructStatsList);
 	apsTemplateList.clear();
-	free(apsFeatureList);
+	free(apsFeatureStatsList);
 	free(apsComponentList);
 	free(apsExtraSysList);
 	psSelectedBuilder = nullptr;
 
 	psWScreen = nullptr;
 	apsStructStatsList = nullptr;
-	apsFeatureList = nullptr;
+	apsFeatureStatsList = nullptr;
 	apsComponentList = nullptr;
 	apsExtraSysList = nullptr;
 
@@ -995,6 +1030,7 @@ void interfaceShutDown()
 	}
 
 	shutdownChatScreen();
+	closeGuideScreen();
 	ChatDialogUp = false;
 
 	bAllowOtherKeyPresses = true;
@@ -1018,6 +1054,16 @@ bool intIsRefreshing()
 void intRefreshGroupsUI()
 {
 	IntGroupsRefreshPending = true;
+}
+
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj)
+{
+	if (psSelectedBuilder == psObj)
+	{
+		debug(LOG_INFO, "Selected builder removed");
+		psSelectedBuilder = nullptr;
+	}
+	// intDoScreenRefresh handles refreshing the backing stores for any open interfaceController
 }
 
 bool intAddRadarWidget()
@@ -1188,6 +1234,8 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 		}
 	}
 
+	auto startingIntMode = intMode;
+
 	switch (intMode)
 	{
 	case INT_DESIGN:
@@ -1228,7 +1276,10 @@ void intResetScreen(bool NoAnim, bool skipMissionResultScreen /*= false*/)
 	{
 		intRemoveMissionResultNoAnim();
 	}
-	intRemoveDesign();
+	if (startingIntMode == INT_DESIGN)
+	{
+		intRemoveDesign();
+	}
 	intHidePowerBar();
 
 	if (interfaceController)
@@ -1280,9 +1331,9 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 	case OBJ_FEATURE:
 		for (unsigned i = 0, end = std::min<unsigned>(asFeatureStats.size(), MAXFEATURES); i < end; ++i)
 		{
-			apsFeatureList[i] = &asFeatureStats[i];
+			apsFeatureStatsList[i] = &asFeatureStats[i];
 		}
-		ppsStatsList = (BASE_STATS **)apsFeatureList;
+		ppsStatsList = (BASE_STATS **)apsFeatureStatsList;
 		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(asFeatureStats.size(), MAXFEATURES));
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
@@ -1700,7 +1751,6 @@ INT_RETVAL intRunWidgets()
 
 						if (psBuilding->type == REF_DEMOLISH)
 						{
-							STRUCTURE tmp(0, selectedPlayer);
 							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
@@ -1719,6 +1769,7 @@ INT_RETVAL intRunWidgets()
 						{
 							STRUCTURE tmp(generateNewObjectId(), selectedPlayer);
 							STRUCTURE *psStructure = &tmp;
+							tmp.state = SAS_NORMAL;
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
 							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
 
@@ -2135,9 +2186,152 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
+// MARK: W_INGAMEOPTIONS_BUTTON
+
+std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
+{
+	class make_shared_enabler: public W_INGAMEOPTIONS_BUTTON {};
+	auto widget = std::make_shared<make_shared_enabler>();
+	widget->initialize();
+	return widget;
+}
+
+void W_INGAMEOPTIONS_BUTTON::initialize()
+{
+	id = IDRET_OPTIONS;
+	setGeometry(0, 0, RET_BUTWIDTH, RET_BUTHEIGHT);
+}
+
+uint8_t W_INGAMEOPTIONS_BUTTON::currentAlphaValue() const
+{
+	uint32_t alphaPercentage = war_getOptionsButtonVisibility();
+
+	if (isHighlighted())
+	{
+		alphaPercentage = 100;
+	}
+
+	return static_cast<uint8_t>((alphaPercentage * 255) / 100);
+}
+
+bool W_INGAMEOPTIONS_BUTTON::isHighlighted() const
+{
+	return ((getState() & WBUT_HIGHLIGHT) != 0) || InGameOpUp;
+}
+
+void W_INGAMEOPTIONS_BUTTON::display(int xOffset, int yOffset)
+{
+	const int x0 = xOffset + x();
+	const int y0 = yOffset + y();
+	bool butDisabled = getState() & WBUT_DISABLE;
+
+	uint8_t alphaValue = currentAlphaValue();
+
+	if (butDisabled)
+	{
+		iV_DrawImageTint(IntImages, IMAGE_RETICULE_GREY, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+		return;
+	}
+
+	bool Down = getState() & (WBUT_DOWN | WBUT_CLICKLOCK);
+	if (Down)
+	{
+		iV_DrawImageTint(IntImages, IMAGE_INGAMEOPTIONS_DOWN, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+	else
+	{
+		iV_DrawImageTint(IntImages, IMAGE_INGAMEOPTIONS_UP, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+
+	if (isHighlighted())
+	{
+		iV_DrawImageTint(IntImages, IMAGE_RETICULE_HILIGHT, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+}
+
+std::string W_INGAMEOPTIONS_BUTTON::getTip()
+{
+	if (!InGameOpUp)
+	{
+		return  _("Open In-Game Options");
+	}
+	else
+	{
+		return  _("Close In-Game Options");
+	}
+}
+
+bool intAddInGameOptionsButton()
+{
+	bool hiddenOptionsButton = war_getOptionsButtonVisibility() == 0;
+
+	auto psExistingBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
+	if (psExistingBut != nullptr)
+	{
+		bool oldButtonHiddenStatus = !psExistingBut->visible();
+		psExistingBut->show(!hiddenOptionsButton);
+
+		// Trigger Re-position of the Replay Controller form
+		if (replayOverlayScreen && (oldButtonHiddenStatus != hiddenOptionsButton))
+		{
+			replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
+		}
+		return false;
+	}
+
+	auto button = W_INGAMEOPTIONS_BUTTON::make();
+	if (!button)
+	{
+		debug(LOG_ERROR, "Failed to create in game options button");
+	}
+	else
+	{
+		psWScreen->psForm->attach(button);
+		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
+		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psIngameOptButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(psWidget->shared_from_this());
+			ASSERT_OR_RETURN(, psIngameOptButton != nullptr, "Wrong button type?");
+			int w = psWidget->width();
+			int h = psWidget->height();
+			int x0 = screenWidth - (w + psIngameOptButton->getMarginX());
+			int y0 = psIngameOptButton->getMarginTop();
+			psWidget->setGeometry(x0, y0, w, h);
+		}));
+		button->addOnClickHandler([](W_BUTTON&) {
+			widgScheduleTask([](){
+				kf_addInGameOptions();
+			});
+		});
+
+		if (hiddenOptionsButton)
+		{
+			button->hide();
+		}
+	}
+
+	// Trigger Re-position of the Replay Controller form
+	if (replayOverlayScreen)
+	{
+		replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
+	}
+
+	return true;
+}
+
+void intHideInGameOptionsButton()
+{
+	auto psOptionsBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
+	if (psOptionsBut != nullptr)
+	{
+		psOptionsBut->hide();
+	}
+}
+
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule()
 {
+	intAddInGameOptionsButton();
+
 	if (ReticuleUp)
 	{
 		return true; // all fine

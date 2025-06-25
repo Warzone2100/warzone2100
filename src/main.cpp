@@ -198,6 +198,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 static bool ignoredSIGPIPE = false;
 #endif
 
+static void stopGameLoop();
 
 #if defined(WZ_OS_WIN)
 
@@ -334,73 +335,8 @@ static bool isPortableMode()
 	return _isPortableMode;
 }
 
-/*!
- * Retrieves the current working directory and copies it into the provided output buffer
- * \param[out] dest the output buffer to put the current working directory in
- * \param size the size (in bytes) of \c dest
- * \return true on success, false if an error occurred (and dest doesn't contain a valid directory)
- */
-#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
-static bool getCurrentDir(char *const dest, size_t const size)
-{
-#if defined(WZ_OS_UNIX)
-	if (getcwd(dest, size) == nullptr)
-	{
-		if (errno == ERANGE)
-		{
-			debug(LOG_ERROR, "The buffer to contain our current directory is too small (%u bytes and more needed)", (unsigned int)size);
-		}
-		else
-		{
-			debug(LOG_ERROR, "getcwd failed: %s", strerror(errno));
-		}
-
-		return false;
-	}
-#elif defined(WZ_OS_WIN)
-	wchar_t tmpWStr[PATH_MAX];
-	const int len = GetCurrentDirectoryW(PATH_MAX, tmpWStr);
-
-	if (len == 0)
-	{
-		// Retrieve Windows' error number
-		const DWORD err = GetLastError();
-		char *err_string = NULL;
-
-		// Retrieve a string describing the error number (uses LocalAlloc() to allocate memory for err_string)
-		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char *)&err_string, 0, NULL);
-
-		// Print an error message with the above description
-		debug(LOG_ERROR, "GetCurrentDirectory failed (error code: %lu): %s", err, err_string);
-
-		// Free our chunk of memory FormatMessageA gave us
-		LocalFree(err_string);
-
-		return false;
-	}
-	else if (len > size)
-	{
-		debug(LOG_ERROR, "The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
-
-		return false;
-	}
-	if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, dest, size, NULL, NULL) == 0)
-	{
-		dest[0] = '\0';
-		debug(LOG_ERROR, "Encoding conversion error.");
-		return false;
-	}
-#else
-# error "Provide an implementation here to copy the current working directory in 'dest', which is 'size' bytes large."
-#endif
-
-	// If we got here everything went well
-	return true;
-}
-#endif
-
 #if defined(WZ_OS_WIN)
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) || !defined(WZ_PHYSFS_2_1_OR_GREATER)
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 static bool win_wcharConvToUtf8(wchar_t *pwStr, std::string &outputUtf8)
 {
 	std::vector<char> utf8Buffer;
@@ -420,106 +356,6 @@ static bool win_wcharConvToUtf8(wchar_t *pwStr, std::string &outputUtf8)
 	return true;
 }
 #endif
-#endif
-
-
-// Fallback method for earlier PhysFS verions that do not support PHYSFS_getPrefDir
-// Importantly, this creates the folders if they do not exist
-#if !defined(WZ_PHYSFS_2_1_OR_GREATER)
-static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
-{
-	WzString basePath;
-	WzString appendPath;
-	char tmpstr[PATH_MAX] = { '\0' };
-	const size_t size = sizeof(tmpstr);
-#if defined(WZ_OS_WIN)
-	wchar_t tmpWStr[MAX_PATH];
-
-	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
-	{
-		std::string utf8Path;
-		if (!win_wcharConvToUtf8(tmpWStr, utf8Path))
-		{
-			debug(LOG_FATAL, "Config directory encoding conversion error.");
-			exit(1);
-		}
-		basePath = WzString::fromUtf8(utf8Path);
-
-		appendPath = WzString();
-		// Must append org\app to APPDATA path
-		appendPath += org;
-		appendPath += PHYSFS_getDirSeparator();
-		appendPath += app;
-	}
-	else
-#elif defined(WZ_OS_MAC)
-	if (cocoaGetApplicationSupportDir(tmpstr, size))
-	{
-		basePath = WzString::fromUtf8(tmpstr);
-		appendPath = WzString::fromUtf8(app);
-	}
-	else
-#elif defined(WZ_OS_UNIX)
-	// Following PhysFS, use XDG's base directory spec, even if not on Linux.
-	// Reference: https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-	const char *envPath = getenv("XDG_DATA_HOME");
-	if (envPath == nullptr)
-	{
-		// XDG_DATA_HOME isn't defined
-		// Use HOME, and append ".local/share/" to match XDG's base directory spec
-		envPath = getenv("HOME");
-
-		if (envPath == nullptr)
-		{
-			// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() if HOME isn't defined
-			debug(LOG_INFO, "HOME environment variable isn't defined - falling back to PHYSFS_getUserDir()");
-			envPath = PHYSFS_getUserDir();
-		}
-
-		appendPath = WzString(".local") + PHYSFS_getDirSeparator() + "share";
-	}
-
-	if (envPath != nullptr)
-	{
-		basePath = WzString::fromUtf8(envPath);
-
-		if (!appendPath.isEmpty())
-		{
-			appendPath += PHYSFS_getDirSeparator();
-		}
-		appendPath += app;
-	}
-	else
-#else
-	// On PhysFS < 2.1, fall-back to using PHYSFS_getUserDir() for other OSes
-	if (PHYSFS_getUserDir())
-	{
-		basePath = WzString::fromUtf8(PHYSFS_getUserDir());
-		appendPath = WzString::fromUtf8(app);
-	}
-	else
-#endif
-	if (getCurrentDir(tmpstr, size))
-	{
-		basePath = WzString::fromUtf8(tmpstr);
-		appendPath = WzString::fromUtf8(app);
-	}
-	else
-	{
-		debug(LOG_FATAL, "Can't get home / prefs directory?");
-		abort();
-	}
-
-	// Create the folders within the basePath if they don't exist
-	if (!WZ_PHYSFS_createPlatformPrefDir(basePath, appendPath))
-	{
-		debug(LOG_FATAL, "Failed to create platform config dir: %s/%s",
-			  basePath.toUtf8().c_str(), appendPath.toUtf8().c_str());
-		exit(1);
-	}
-
-	return (basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator()).toUtf8();
-}
 #endif
 
 // Retrieves the appropriate storage directory for application-created files / prefs
@@ -608,7 +444,6 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 #endif // WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 #endif // defined(WZ_OS_WIN)
 
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	const char * prefsDir = PHYSFS_getPrefDir(org, app.c_str());
 	if (prefsDir == nullptr)
 	{
@@ -616,16 +451,6 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 		exit(1);
 	}
 	return std::string(prefsDir) + PHYSFS_getDirSeparator();
-#else
-	// PHYSFS_getPrefDir is not available - use fallback method (which requires OS-specific code)
-	std::string prefDir = getPlatformPrefDir_Fallback(org, app.c_str());
-	if (prefDir.empty())
-	{
-		debug(LOG_FATAL, "Failed to obtain prefs directory (fallback)");
-		exit(1);
-	}
-	return prefDir;
-#endif // defined(WZ_PHYSFS_2_1_OR_GREATER)
 }
 
 bool endsWith (std::string const &fullString, std::string const &endString) {
@@ -704,7 +529,6 @@ static void initialize_PhysicsFS(const char *argv_0)
 static void check_Physfs()
 {
 	const PHYSFS_ArchiveInfo **i;
-	bool zipfound = false;
 	PHYSFS_Version compiled;
 	PHYSFS_Version linked;
 
@@ -715,21 +539,43 @@ static void check_Physfs()
 	      compiled.major, compiled.minor, compiled.patch);
 	debug(LOG_WZ, "Linked against PhysFS version: %d.%d.%d",
 	      linked.major, linked.minor, linked.patch);
-	if (linked.major < 2)
+	if ((linked.major < 2) || (linked.major == 2 && linked.minor < 1))
 	{
-		debug(LOG_FATAL, "At least version 2 of PhysicsFS required!");
+		debug(LOG_FATAL, "At least version 2.1 of PhysicsFS required!");
 		exit(-1);
 	}
-	if (linked.major == 2 && linked.minor == 0 && linked.patch == 2)
-	{
-		debug(LOG_ERROR, "You have PhysicsFS 2.0.2, which is buggy. You may experience random errors/crashes due to spuriously missing files.");
-		debug(LOG_ERROR, "Please upgrade/downgrade PhysicsFS to a different version, such as 2.0.3 or 2.0.1.");
-	}
 
+	// Disable support for non-zip archive types
+	std::vector<std::string> archiveExtsToRemove;
 	for (i = PHYSFS_supportedArchiveTypes(); *i != nullptr; i++)
 	{
+		if ((*i)->extension == nullptr)
+		{
+			continue;
+		}
+		if (strcasecmp("zip", (*i)->extension) != 0)
+		{
+			archiveExtsToRemove.push_back((*i)->extension);
+		}
+	}
+	for (const auto& archiveExt : archiveExtsToRemove)
+	{
+		if (PHYSFS_deregisterArchiver(archiveExt.c_str()) == 0)
+		{
+			debug(LOG_WZ, "[**] Failed to unregister archive: [%s]", archiveExt.c_str());
+		}
+	}
+
+	// Check for "zip" archive support
+	bool zipfound = false;
+	for (i = PHYSFS_supportedArchiveTypes(); *i != nullptr; i++)
+	{
+		if ((*i)->extension == nullptr)
+		{
+			continue;
+		}
 		debug(LOG_WZ, "[**] Supported archive(s): [%s], which is [%s].", (*i)->extension, (*i)->description);
-		if (!strncasecmp("zip", (*i)->extension, 3) && !zipfound)
+		if (strcasecmp("zip", (*i)->extension) == 0)
 		{
 			zipfound = true;
 		}
@@ -945,8 +791,15 @@ static void setCDAudioForCurrentGameMode()
  * Preparations before entering the game loop
  * Would start the timer in an event based mainloop
  */
-static void startGameLoop()
+static bool startGameLoop()
 {
+	if (runningMultiplayer())
+	{
+		// Adjust connected timeouts for clients (which is typically larger than the value of timeout when
+		// waiting in a lobby room).
+		NETadjustConnectedTimeoutForClients();
+	}
+
 	SetGameMode(GS_NORMAL);
 	initLoadingScreen(true);
 
@@ -958,16 +811,26 @@ static void startGameLoop()
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
 	{
-		debug(LOG_FATAL, "Shutting down after failure");
-		wzQuit(EXIT_FAILURE);
-		return;
+		debug(LOG_ERROR, "Failed to load level data / map: %s %s", aLevelName, (!game.hash.isZero()) ? game.hash.toString().c_str() : "");
+		if (bMultiPlayer)
+		{
+			multiGameShutdown();
+		}
+		levReleaseAll();
+		closeLoadingScreen();
+		cdAudio_SetGameMode(MusicGameMode::MENUS);
+		stopGameLoop();
+		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		startTitleLoop(); // Restart into titleloop
+		gameLoopStatus = GAMECODE_CONTINUE;
+		return false;
 	}
 
 	screen_StopBackDrop();
 	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
-	if (war_GetTrapCursor())
+	if (shouldTrapCursor())
 	{
 		wzGrabMouse();
 	}
@@ -1037,6 +900,8 @@ static void startGameLoop()
 			setMaxFastForwardTicks(10, false);
 		}
 	}
+
+	return true;
 }
 
 
@@ -1048,7 +913,8 @@ static void stopGameLoop()
 {
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
 
-	NETreplaySaveStop();
+	WZGameReplayOptionsHandler replayOptions;
+	NETreplaySaveStop(replayOptions);
 	NETshutdownReplay();
 
 	if (gameLoopStatus != GAMECODE_NEWLEVEL)
@@ -1077,7 +943,7 @@ static void stopGameLoop()
 	}
 
 	// Disable cursor trapping
-	if (war_GetTrapCursor())
+	if (shouldTrapCursor())
 	{
 		wzReleaseMouse();
 	}
@@ -1107,7 +973,7 @@ static bool initSaveGameLoad()
 	initLoadingScreen(true);
 
 	// load up a save game
-	if (!loadGameInit(saveGameName))
+	if (!loadGameInit(GameLoadDetails::makeUserSaveGameLoad(saveGameName)))
 	{
 		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
 		debug(LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
@@ -1131,7 +997,7 @@ static bool initSaveGameLoad()
 	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
-	if (war_GetTrapCursor())
+	if (shouldTrapCursor())
 	{
 		wzGrabMouse();
 	}
@@ -1170,8 +1036,14 @@ static void runGameLoop()
 	case GAMECODE_NEWLEVEL:
 		debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
 		stopGameLoop();
-		startGameLoop(); // Restart gameloop
-		gameLoopStatus = GAMECODE_CONTINUE;
+		if (startGameLoop()) // Restart gameloop
+		{
+			gameLoopStatus = GAMECODE_CONTINUE;
+		}
+		else
+		{
+			debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
+		}
 		return;
 	default:
 		// ignore other values, and proceed with gameLoop
@@ -1240,8 +1112,14 @@ static void runTitleLoop()
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
 			stopTitleLoop();
-			startGameLoop(); // Restart into gameloop
-			closeLoadingScreen();
+			if (startGameLoop()) // Restart into gameloop
+			{
+				closeLoadingScreen();
+			}
+			else
+			{
+				debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
+			}
 			return;
 		default:
 			// ignore unexpected value
@@ -1333,6 +1211,7 @@ void mainLoop()
 
 	wzApplyCursor();
 	runNotifications();
+	wz_command_interface_process_queued_status_output();
 #if defined(ENABLE_DISCORD)
 	discordRPCPerFrame();
 #endif
@@ -1876,9 +1755,8 @@ int realmain(int argc, char *argv[])
 	debug_init();
 #if defined(__EMSCRIPTEN__)
 	debug_register_callback(debug_callback_emscripten_log, nullptr, nullptr, nullptr);
-#else
-	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
 #endif
+	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
 #if defined(_WIN32) && defined(DEBUG_INSANE)
 	debug_register_callback(debug_callback_win32debug, NULL, NULL, NULL);
 #endif // WZ_OS_WIN && DEBUG_INSANE
@@ -1957,7 +1835,7 @@ int realmain(int argc, char *argv[])
 	make_dir(MultiCustomMapsPath, "maps", nullptr); // needed to prevent crashes when getting map
 
 	PHYSFS_mkdir(version_getVersionedModsFolderPath("autoload").c_str());	// mods that are automatically loaded
-	PHYSFS_mkdir(version_getVersionedModsFolderPath("campaign").c_str());	// campaign only mods activated with --mod_ca=example.wz
+	PHYSFS_mkdir("mods/campaign");	// campaign only mods - no longer versioned because of new campaign mod packaging and selector
 	PHYSFS_mkdir("mods/downloads");	// mod download directory - NOT currently versioned
 	PHYSFS_mkdir(version_getVersionedModsFolderPath("global").c_str());	// global mods activated with --mod=example.wz
 	PHYSFS_mkdir(version_getVersionedModsFolderPath("multiplay").c_str());	// multiplay only mods activated with --mod_mp=example.wz
@@ -2059,21 +1937,15 @@ int realmain(int argc, char *argv[])
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
 		std::string modtocheck;
-#if defined WZ_PHYSFS_2_1_OR_GREATER
 		PHYSFS_Stat metaData;
-#endif
 
 		// check whether given global mods are regular files
 		auto globalModsPath = version_getVersionedModsFolderPath("global");
 		for (auto iterator = global_mods.begin(); iterator != global_mods.end();)
 		{
 			modtocheck = globalModsPath + "/" + *iterator;
-#if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
-#elif defined WZ_PHYSFS_2_1_OR_GREATER
 			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
-#endif
 			{
 				debug(LOG_ERROR, "The global mod \"%s\" you have specified doesn't exist!", iterator->c_str());
 				global_mods.erase(iterator);
@@ -2090,12 +1962,8 @@ int realmain(int argc, char *argv[])
 		for (auto iterator = campaign_mods.begin(); iterator != campaign_mods.end();)
 		{
 			modtocheck = campaignModsPath + "/" + *iterator;
-#if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
-#elif defined WZ_PHYSFS_2_1_OR_GREATER
 			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
-#endif
 			{
 				debug(LOG_ERROR, "The campaign mod \"%s\" you have specified doesn't exist!", iterator->c_str());
 				campaign_mods.erase(iterator);
@@ -2112,12 +1980,8 @@ int realmain(int argc, char *argv[])
 		for (auto iterator = multiplay_mods.begin(); iterator != multiplay_mods.end();)
 		{
 			modtocheck = multiplayModsPath + "/" + *iterator;
-#if defined WZ_PHYSFS_2_0_OR_GREATER
-			if (!PHYSFS_exists(modtocheck.c_str()) || WZ_PHYSFS_isDirectory(modtocheck.c_str()))
-#elif defined WZ_PHYSFS_2_1_OR_GREATER
 			PHYSFS_stat(modtocheck.c_str(), &metaData);
 			if (metaData.filetype != PHYSFS_FILETYPE_REGULAR)
-#endif
 			{
 				debug(LOG_ERROR, "The multiplay mod \"%s\" you have specified doesn't exist!", iterator->c_str());
 				multiplay_mods.erase(iterator);
@@ -2213,6 +2077,7 @@ int realmain(int argc, char *argv[])
 	switch (GetGameMode())
 	{
 	case GS_TITLE_SCREEN:
+		// The usual case (unless command-line flags specify otherwise): Load into the title menu
 		startTitleLoop(true);
 		break;
 	case GS_SAVEGAMELOAD:
@@ -2223,7 +2088,12 @@ int realmain(int argc, char *argv[])
 		initSaveGameLoad();
 		break;
 	case GS_NORMAL:
-		startGameLoop();
+		if (!startGameLoop())
+		{
+			// Attempted to load straight into a game from the command-line, but starting the game loop (loading the map, etc) failed
+			// Treat this as a failure and queue an exit
+			wzQuit(EXIT_FAILURE);
+		}
 		break;
 	default:
 		debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");

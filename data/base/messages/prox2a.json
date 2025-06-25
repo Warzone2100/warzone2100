@@ -1,0 +1,7 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C2A_BASE1": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 13120, "y": 9792, "z": 256 },
+        "C2A_BASE2": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 10816, "y": 9920, "z": 64 }
+    }
+}

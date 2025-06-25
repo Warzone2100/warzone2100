@@ -109,10 +109,10 @@ typedef std::function<void* ()> WIDGET_INITIALIZE_PUSERDATA_FUNC;
 
 struct Padding
 {
-	uint32_t top;
-	uint32_t right;
-	uint32_t bottom;
-	uint32_t left;
+	uint32_t top = 0;
+	uint32_t right = 0;
+	uint32_t bottom = 0;
+	uint32_t left = 0;
 };
 
 /** The basic initialisation structure */
@@ -237,6 +237,7 @@ void widgReset();
 void widgShutDown();
 
 /** Used by the notifications system to register forms that are "over the top", and may consume click / mouse-over events */
+bool isRegisteredOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder);
 void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen);
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
@@ -385,9 +386,6 @@ SWORD WidgGetClickedAudioID();
 
 // error ID
 SWORD WidgGetErrorAudioID();
-
-/** Enable or disable all sliders. */
-void sliderEnableDrag(bool Enable);
 
 void setWidgetsStatus(bool var);
 bool getWidgetsStatus();

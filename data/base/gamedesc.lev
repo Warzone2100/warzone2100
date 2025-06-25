@@ -298,16 +298,14 @@ dataset		CAM_3
 game		"wrf/cam3/cam3a-b.gam"
 data		"wrf/cam3/cam3ab.wrf"
 
-/* This level CUT
-between		SUB_3_3S
-dataset		CAM_3
-data		"wrf/cam3/sub3-3s.wrf"
-
-miss_keep	SUB_3_3
-dataset		CAM_3
-game		"wrf/cam3/sub3-3.gam"
-data		"wrf/cam3/sub3-3.wrf"
-*/
+between     SUB_3_3S
+dataset     CAM_3
+data        "wrf/cam3/sub3-3s.wrf"
+ 
+miss_keep   SUB_3_3
+dataset     CAM_3
+game        "wrf/cam3/sub3-3.gam"
+data        "wrf/cam3/sub3-3.wrf"
 
 expand_limbo	CAM3C
 dataset		CAM_3

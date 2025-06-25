@@ -70,6 +70,7 @@ UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
 static std::unordered_map<WzString, COMPONENT_STATS *> lookupCompStatPtr;
+static size_t statModelLoadingFailures = 0;
 
 static bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model);
 static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString &szWavName, int *piWavID);
@@ -118,9 +119,15 @@ bool statsShutDown()
 	deallocPropulsionTypes();
 	deallocTerrainTable();
 
+	statModelLoadingFailures = 0;
+
 	return true;
 }
 
+size_t getStatModelLoadingFailures()
+{
+	return statModelLoadingFailures;
+}
 
 /*******************************************************************************
 *		Allocate stats functions
@@ -254,6 +261,10 @@ static iIMDBaseShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzS
 		WzString filename = json_variant(value).toWzString();
 		deprecatedModelUpgrade(filename); // FUTURE TODO: Use output of this to auto-upgrade old model references? (Check for empty string)
 		retval = modelGet(filename);
+		if (retval == nullptr)
+		{
+			++statModelLoadingFailures;
+		}
 		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
 		       filename.toUtf8().c_str(), getStatsName(psStats), json.fileName().toUtf8().c_str());
 	}
@@ -709,6 +720,13 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.maxDroids = ini.value("maxDroids").toInt();
 		psStats->base.maxDroidsMult = ini.value("maxDroidsMult").toInt();
+		psStats->shield.initialShieldPointsPercent = ini.value("initialShieldPointsPercent").toInt();
+		psStats->shield.additiveShieldPointsPercent = ini.value("additiveShieldPointsPercent").toInt();
+		psStats->shield.initialShieldRegenTime = ini.value("initialShieldRegenTime").toInt();
+		psStats->shield.shieldRegenTimeDec = ini.value("shieldRegenTimeDec").toInt();
+		psStats->shield.initialShieldInterruptRegenTime = ini.value("initialShieldInterruptRegenTime").toInt();
+		psStats->shield.shieldInterruptRegenTimeDec = ini.value("shieldInterruptRegenTimeDec").toInt();
+		psStats->shield.shieldPointsPerStep = ini.value("shieldPointsPerStep").toInt();
 		auto rankNames = ini.json("ranks");
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)

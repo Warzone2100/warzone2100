@@ -13,6 +13,8 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Various Authors, See: https://github.com/HowardHinnant/date/blob/master/include/date/date.h
 3rdparty/discord-rpc/*
 	- MIT, Copyright 2017 Discord, Inc.
+3rdparty/expected/*
+	- CC0 1.0 Universal, Written in 2017 by Sy Brand (tartanllama@gmail.com, @TartanLlama)
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
 3rdparty/LRUCache11/*
@@ -23,8 +25,8 @@ data/base/texpages/page-25-sky-urban.png
 	- BSD, Copyright (c) 1998-2010, Brian Gladman, Worcester, UK. (https://github.com/BrianGladman/sha)
 3rdparty/inih/*
 	- BSD, Copyright (C) 2009-2020, Ben Hoyt (https://github.com/benhoyt/inih)
-3rdparty/miniupnp/*
-	- BSD, Copyright (c) 2005-2017, Thomas BERNARD (http://miniupnp.free.fr)
+3rdparty/libplum/*
+	- MPL 2.0, Copyright (c) 2020-2021, Paul-Louis Ageneau (https://github.com/paullouisageneau/libplum)
 3rdparty/optional-lite/*
 	- Boost Software License 1.0, Copyright (c) 2014-2018 Martin Moene (https://github.com/martinmoene/optional-lite)
 3rdparty/quickjs/*
@@ -63,6 +65,18 @@ data/base/images/frontend/image_info_circle.png
 data/base/images/frontend/image_check_square_fill.png
 data/base/images/frontend/image_check_square_empty.png
 data/base/images/frontend/image_arrow_undo.png
+data/base/images/frontend/image_sidebar_list.png
+data/base/images/frontend/image_caret_down_fill.png
+data/base/images/frontend/image_eye.png
+data/base/images/frontend/image_gear.png
+data/base/images/frontend/image_globe.png
+data/base/images/frontend/image_lock.png
+data/base/images/frontend/image_pencil_square.png
+data/base/images/frontend/image_profile_edit.png
+data/base/images/frontend/image_profile_template.png
+data/base/images/frontend/image_star_fill.png
+data/base/images/frontend/image_unlock.png
+data/base/images/intfac/image_sidebar_list.png
 	- MIT License - Copyright (c) 2019-2024 The Bootstrap Authors (https://github.com/twbs/icons/blob/main/LICENSE)
 data/base/images/intfac/image_volume_mute.png
 data/base/images/intfac/image_volume_up.png
@@ -93,6 +107,8 @@ lib/ivis_opengl/3rdparty/vk_mem_alloc.h
 	- MIT License, Copyright (c) 2017-2020 Advanced Micro Devices, Inc. (https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator)
 lib/ivis_opengl/3rdparty/vkh_*.*
 	- MIT License, Copyright (c) 2019-2020 past-due (https://github.com/past-due/vulkan-helpers)
+lib/netplay/3rdparty/miniupnp/*
+	- BSD, Copyright (c) 2005-2024, Thomas BERNARD (https://github.com/miniupnp/miniupnp)
 lib/sound/3rdparty/opusfile/*
 	- BSD 3-Clause License, Copyright (c) 1994-2020 Xiph.Org Foundation and contributors (https://github.com/xiph/opusfile)
 src/3rdparty/gsl_finally.h

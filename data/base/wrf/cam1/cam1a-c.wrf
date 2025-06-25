@@ -6,8 +6,8 @@
 /* Directory for Proximity messages and mission briefs */
 directory	"messages"
 
-file		SMSG		"brief1a-c.txt"
-file		SMSG		"prox1a-c.txt"
+file		FLIC		"brief1a-c.json"
+file		PROX		"prox1a-c.json"
 
 directory "script"
 file JAVASCRIPT "rules.js"

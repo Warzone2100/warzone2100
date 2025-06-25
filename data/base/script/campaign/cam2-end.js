@@ -51,7 +51,7 @@ function checkEnemyVtolArea()
 
 	for (let i = 0, l = vtols.length; i < l; ++i)
 	{
-		if ((vtols[i].weapons[0].armed < 20) || (vtols[i].health < 60))
+		if (camVtolCanDisappear(vtols[i]))
 		{
 			camSafeRemoveObject(vtols[i], false);
 		}
@@ -84,39 +84,6 @@ function eventTransporterLaunch(transporter)
 	}
 }
 
-//Return randomly selected droid templates.
-function randomTemplates(list, transporterAmount, useWhirlwinds)
-{
-	const WHIRLWIND_AMOUNT = 2;
-	const droids = [];
-	let size;
-
-	if (camDef(transporterAmount) && transporterAmount)
-	{
-		size = 8 + camRand(3);
-	}
-	else
-	{
-		size = (difficulty === INSANE) ? (15 + camRand(3)) : (18 + camRand(8));
-	}
-
-	for (let i = 0; i < size; ++i)
-	{
-		droids.push(list[camRand(list.length)]);
-	}
-
-	if (useWhirlwinds)
-	{
-		// Include Whirlwinds for ground reinforcements.
-		for (let i = 0; i < WHIRLWIND_AMOUNT; ++i)
-		{
-			droids.push(cTempl.cowwt);
-		}
-	}
-
-	return droids;
-}
-
 //Attack every 30 seconds.
 function vtolAttack()
 {
@@ -128,7 +95,7 @@ function vtolAttack()
 		mis_Labels.vtolSpawnPos5
 	];
 
-	if (difficulty === INSANE)
+	if (difficulty >= INSANE)
 	{
 		vtolPositions = undefined; //to randomize the spawns each time
 	}
@@ -140,7 +107,7 @@ function vtolAttack()
 	}
 	else
 	{
-		list = [ cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt ];
+		list = [ cTempl.commorv, cTempl.commorv, cTempl.comhvat, cTempl.commorvt, cTempl.comacv ];
 	}
 
 	const extras = {
@@ -163,13 +130,14 @@ function cyborgAttack()
 	{
 		list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.comhltat, cTempl.cohhpv];
 	}
-
-	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(mis_Labels.southCyborgAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
-		data: { regroup: false, count: -1 }
-	});
+	const extraUnits = [cTempl.cowwt, cTempl.cowwt];
+	const units = {units: list, appended: extraUnits};
+	const limits = {minimum: (difficulty >= INSANE) ? 15 : 18, maxRandom: (difficulty >= INSANE) ? 2 : 7};
+	const location = camMakePos(mis_Labels.southCyborgAssembly);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
-function cyborgAttackRandom()
+function hardCyborgAttackRandom()
 {
 	let list = []; //favor cannon cyborg
 	if (camClassicMode())
@@ -180,53 +148,53 @@ function cyborgAttackRandom()
 	{
 		list = [cTempl.cocybtk, cTempl.cocybag, cTempl.cocybsn, cTempl.cocybsn, cTempl.comrotm];
 	}
-
-	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(camGenerateRandomMapEdgeCoordinate(mis_Labels.startPos)), randomTemplates(list, false, true).concat(cTempl.comsens), CAM_REINFORCE_GROUND, {
-		data: { regroup: false, count: -1 }
-	});
+	const extraUnits = [cTempl.cowwt, cTempl.cowwt, cTempl.comsens];
+	const units = {units: list, appended: extraUnits};
+	const limits = {minimum: (difficulty >= INSANE) ? 15 : 18, maxRandom: (difficulty >= INSANE) ? 2 : 7};
+	const location = camMakePos(camGenerateRandomMapEdgeCoordinate(mis_Labels.startPos));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
 //North road attacker consisting of powerful weaponry.
 function tankAttack()
 {
+	const extraUnits = [cTempl.cowwt, cTempl.cowwt];
 	const list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt];
 	if (getMissionTime() < (60 * 22))
 	{
 		list.push(cTempl.cohbbt);
 	}
-
-	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(mis_Labels.northTankAssembly), randomTemplates(list, false, true), CAM_REINFORCE_GROUND, {
-		data: { regroup: false, count: -1, },
-	});
+	const units = {units: list, appended: extraUnits};
+	const limits = {minimum: (difficulty >= INSANE) ? 15 : 18, maxRandom: (difficulty >= INSANE) ? 2 : 7};
+	const location = camMakePos(mis_Labels.northTankAssembly);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
-function tankAttackWest()
+function hardTankAttackWest()
 {
+	const extraUnits = [cTempl.cowwt, cTempl.cowwt];
 	const list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt];
 	if (getMissionTime() < (60 * 22))
 	{
 		list.push(cTempl.cohbbt);
 	}
-
-	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(mis_Labels.westTankAssembly), randomTemplates(list, true, true), CAM_REINFORCE_GROUND, {
-		data: { regroup: false, count: -1, },
-	});
+	const units = {units: list, appended: extraUnits};
+	const limits = {minimum: 8, maxRandom: 2};
+	const location = camMakePos(mis_Labels.westTankAssembly);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
-function transporterAttack()
+function insaneTransporterAttack()
 {
-	const droids = [cTempl.cohact, cTempl.comhltat, cTempl.cohhpv];
+	const DISTANCE_FROM_POS = 10;
+	const units = [cTempl.cohact, cTempl.comhltat, cTempl.cohhpv];
 	if (getMissionTime() < (60 * 22))
 	{
-		droids.push(cTempl.cohbbt);
+		units.push(cTempl.cohbbt);
 	}
-
-	camSendReinforcement(CAM_THE_COLLECTIVE, camMakePos(camGenerateRandomMapCoordinate(mis_Labels.startPos, 10, 1)), randomTemplates(droids, true, false),
-		CAM_REINFORCE_TRANSPORT, {
-			entry: camGenerateRandomMapEdgeCoordinate(),
-			exit: camGenerateRandomMapEdgeCoordinate()
-		}
-	);
+	const limits = {minimum: 8, maxRandom: 2};
+	const location = camMakePos(camGenerateRandomMapCoordinate(mis_Labels.startPos, CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS));
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
 //NOTE: this is only called once from the library's eventMissionTimeout().
@@ -251,7 +219,7 @@ function checkIfLaunched()
 //Everything in this level mostly just requeues itself until the mission ends.
 function eventStartLevel()
 {
-	if (difficulty === HARD || difficulty === INSANE)
+	if (difficulty >= INSANE)
 	{
 		camSetExtraObjectiveMessage(_("Send off at least one transporter with a truck and survive The Collective assault until the timer ends"));
 	}
@@ -260,7 +228,7 @@ function eventStartLevel()
 		camSetExtraObjectiveMessage(_("Send off as many transporters as you can and bring at least one truck"));
 	}
 
-	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, "CAM_3A", {
+	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, cam_levels.gamma1, {
 		reinforcements: camMinutesToSeconds(7), //Duration the transport "leaves" map.
 		callback: "checkIfLaunched"
 	});
@@ -284,15 +252,15 @@ function eventStartLevel()
 	camPlayVideos([{video: "MB2_DII_MSG", type: CAMP_MSG}, {video: "MB2_DII_MSG2", type: MISS_MSG}]);
 
 	queue("vtolAttack", camSecondsToMilliseconds(30));
-	if (difficulty === INSANE)
+	if (difficulty >= INSANE)
 	{
 		setPower(playerPower(CAM_HUMAN_PLAYER) + 12000);
-		setTimer("transporterAttack", camMinutesToMilliseconds(5));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5));
 	}
 	if (difficulty >= HARD)
 	{
-		setTimer("tankAttackWest", camChangeOnDiff(camMinutesToMilliseconds(7)));
-		setTimer("cyborgAttackRandom", camChangeOnDiff(camMinutesToMilliseconds(6)));
+		setTimer("hardTankAttackWest", camChangeOnDiff(camMinutesToMilliseconds(7)));
+		setTimer("hardCyborgAttackRandom", camChangeOnDiff(camMinutesToMilliseconds(6)));
 	}
 	setTimer("cyborgAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	setTimer("tankAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));

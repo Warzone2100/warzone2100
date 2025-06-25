@@ -18,11 +18,17 @@ concurrency:
 
 jobs:
   crowdin-download-translations:
+    if: github.repository == 'Warzone2100/warzone2100'
     permissions:
       contents: read
     runs-on: ubuntu-latest
     environment: crowdin_sync
     steps:
+      - name: Install gettext
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: sudo apt-get -y install gettext
+
       # Get a token using a GitHub App that has appropriate permissions *and* will trigger subsequent CI workflows
       # (Since we want to run normal CI passes to catch translation string format errors that break builds)
       - name: Get GH App Token
@@ -58,7 +64,7 @@ jobs:
           git checkout -qf master
 
       - name: Download Translations from Crowdin
-        uses: crowdin/github-action@v1
+        uses: crowdin/github-action@v2
         with:
           config: 'crowdin.yml'
           upload_sources: false
@@ -73,6 +79,44 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ vars.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: Fixup ownership
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          sudo chown -R $(whoami) ./po
+          cd po
+          ls -al
+
+      - name: Cleanup .po files
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          # 1.) Cleanup downloaded po (fixing up potential formatting differences and removing comments)
+          # For warzone2100.pot:
+          find po -name '*.po' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/cleanup-downloaded-po.sh 'po/warzone2100.pot' '{}' ';'
+          # For warzone2100_guide.pot:
+          find po/guide -name '*.po' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/cleanup-downloaded-po.sh 'po/guide/warzone2100_guide.pot' '{}' ';'
+
+          # 2.) Cleanup untranslated .po files
+          # For warzone2100.pot:
+          find po -name '*.po' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/check_po_base_unchanged.sh 'po/warzone2100.pot' '{}' ';' | xargs -r0 -I {} rm -v "{}"
+          # For warzone2100_guide.pot:
+          find po/guide -name '*.po' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/check_po_base_unchanged.sh 'po/guide/warzone2100_guide.pot' '{}' ';' | xargs -r0 -I {} rm -v "{}"
+
+      - name: Cleanup .isl files
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          # Cleanup untranslated .isl files
+          find pkg/win_installer/i18n -name '*.isl' ! -name 'win_installer_base.isl' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/check_isl_base_unchanged.sh 'pkg/win_installer/i18n/win_installer_base.isl' '{}' ';' | xargs -r0 -I {} rm -v "{}"
 
       - name: Publish any changes to translations to l10n_master branch
         if: success() && (github.repository == 'Warzone2100/warzone2100')
@@ -89,7 +133,7 @@ jobs:
           echo "::endgroup::"
           # Add untracked (new) files:
           echo "::group::Add untracked files"
-          git ls-files --others --exclude-standard | xargs -0 git add
+          git ls-files -z --others --exclude-standard | xargs -0 git add
           echo "::endgroup::"
           echo "Debug output:"
           git status

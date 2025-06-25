@@ -4,29 +4,32 @@ This section describes global variables (or 'globals' for short) that are
 available from all scripts. You typically cannot write to these variables,
 they are read-only.
 
-* ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
+* ```derrickPositions``` A set of derrick starting positions on the current map. Each item in the set is an
 object containing the x and y variables for a derrick.
 * ```startPositions``` An array of player start positions on the current map. Each item in the array is an
 object containing the x and y variables for a player start position.
 * ```version``` Current version of the game, set in *major.minor* format.
 * ```selectedPlayer``` The player controlled by the client on which the script runs.
 * ```gameTime``` The current game time. Updated before every invokation of a script.
-* ```modList``` The current loaded mods.
+* ```modList``` An array of the current loaded mods (mod names).
 * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
-```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
+```SUPEREASY``` (campaign only), ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
 * ```mapName``` The name of the current map.
 * ```tilesetType``` The area name of the map.
 * ```baseType``` The type of base that the game starts with. It will be one of ```CAMP_CLEAN```, ```CAMP_BASE``` or ```CAMP_WALLS```.
 * ```alliancesType``` The type of alliances permitted in this game. It will be one of ```NO_ALLIANCES```, ```ALLIANCES```, ```ALLIANCES_UNSHARED``` or ```ALLIANCES_TEAMS```.
 * ```powerType``` The power level set for this game.
 * ```maxPlayers``` The number of active players in this game.
-* ```scavengers``` Whether or not scavengers are activated in this game.
+* ```scavengers``` Whether or not scavengers are activated in this game, and, if so, which type.
 * ```mapWidth``` Width of map in tiles.
 * ```mapHeight``` Height of map in tiles.
 * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
 * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
-* `challenge` If the current game is a challenge. (4.1.4+ only)
-* `idleTime` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
+* ```challenge``` If the current game is a challenge. (4.1.4+ only)
+* ```idleTime``` The amount of game time without active play before a player should be considered "inactive". (0 = disable activity alerts / AFK check) (4.2.0+ only)
+* ```gameTimeLimit``` The game time limit (match will automatically end if it reaches this duration). (0 = disable limit) (4.4.0+ only)
+* ```playerLeaveMode``` The mode used to handle human players leaving a multiplayer game in progress. (0 = destroy resources, 1 = split resources with team) (4.4.0+ only)
+* ```tweakOptions``` The tweakOptions offered by the current mod / mode, as configured by the user. (4.5.0+ only)
 * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
 be undefined.
 * ```me``` The player the script is currently running as.

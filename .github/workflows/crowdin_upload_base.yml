@@ -8,7 +8,9 @@ on:
     paths:
       # Should match the source paths in crowdin.yml
       - 'po/warzone2100.pot'
+      - 'po/guide/warzone2100_guide.pot'
       - 'pkg/nsis/i18n/win_installer_base.nsh'
+      - 'pkg/win_installer/i18n/win_installer_base.isl'
   workflow_dispatch:
 
 concurrency:
@@ -27,7 +29,7 @@ jobs:
           ref: 'master'
 
       - name: Crowdin Action
-        uses: crowdin/github-action@v1
+        uses: crowdin/github-action@v2
         with:
           config: 'crowdin.yml'
           upload_sources: true

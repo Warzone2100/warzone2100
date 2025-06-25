@@ -73,13 +73,13 @@ camAreaEvent("NPSensorRemove", function(droid)
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_1S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha3.pre);
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(1)));
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_6, true);
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 	setAlliance(CAM_SCAV_6, CAM_SCAV_7, true);
@@ -103,7 +103,7 @@ function eventStartLevel()
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
 		}
-		else if (difficulty === INSANE)
+		else if (difficulty >= INSANE)
 		{
 			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);
@@ -134,7 +134,7 @@ function eventStartLevel()
 		},
 		"base3group": {
 			cleanup: "enemybase3",
-			detectMsg: "C1B_OBJ1",
+			detectMsg: "C1B_BASE3",
 			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
 			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated,
 		},

@@ -240,13 +240,26 @@ static std::string strAsciiToLower(const std::string& str)
 	return result;
 }
 
+constexpr uint32_t MaxBinaryLevFileSize = 2 * 1024 * 1024;
+
 optional<LevelDetails> loadLevelDetails_LEV(const std::string& levelFile, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	// 1.) Load file
 	std::vector<char> fileData;
-	if (!mapIO.loadFullFile(levelFile, fileData))
+	auto loadFileResult = mapIO.loadFullFile(levelFile, fileData, MaxBinaryLevFileSize, false);
+	switch (loadFileResult)
 	{
-		return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::SUCCESS:
+			break;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN:
+			return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_READ:
+			// file exists but can't be read
+			debug(pCustomLogger, LOG_ERROR, "Failed to read file: %s", levelFile.c_str());
+			return nullopt;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			debug(pCustomLogger, LOG_ERROR, "File is too large: %s", levelFile.c_str());
+			return nullopt;
 	}
 	if (fileData.empty())
 	{
@@ -1115,7 +1128,7 @@ MapPackage::MapPackage()
 // The default StdIOProvider will assume pathToMapPackage is a path to an extracted map package (i.e. standard filesystem I/O)
 //
 // To load from an archive (.zip/.wz), create a custom implementation of WzMap::IOProvider that supports compressed archive files that you initialize with the path to the zip. An example of this (which uses libzip) is available in `plugins/ZipIOProvider`. You would then set `pathToMapPackage` to be the root path inside the zip. (In the case of plugins\ZipIOProvider, literally `/`).
-std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger /*= nullptr*/, std::shared_ptr<IOProvider> pMapIO /*= std::make_shared<StdIOProvider>()*/)
+std::shared_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger /*= nullptr*/, std::shared_ptr<IOProvider> pMapIO /*= std::make_shared<StdIOProvider>()*/)
 {
 	LoggingProtocol* pCustomLogger = logger.get();
 	if (!pMapIO)
@@ -1123,6 +1136,8 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		debug(pCustomLogger, LOG_ERROR, "Null IOProvider");
 		return nullptr;
 	}
+
+	class make_shared_enabler: public MapPackage {};
 
 	IOProvider& mapIO = *pMapIO;
 
@@ -1152,13 +1167,12 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		if (loadedLevelDetails.has_value())
 		{
 			// Successfully found a level.json file inside the enumerated map folder
-			std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+			std::shared_ptr<MapPackage> result = std::make_shared<make_shared_enabler>();
 			result->m_levelDetails = loadedLevelDetails.value();
 			result->m_loadedLevelFormat = LevelFormat::JSON;
 			result->m_mapType = result->m_levelDetails.type;
 			result->m_pathToMapPackage = pathToMapPackage;
 			result->m_mapIO = pMapIO;
-			result->loadGamInfo();
 			return result;
 		}
 	}
@@ -1168,7 +1182,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 	if (loadedFlatLevelDetails.has_value())
 	{
 		// Successfully found a level.json file inside the root folder
-		std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+		std::shared_ptr<MapPackage> result = std::make_shared<make_shared_enabler>();
 		result->m_levelDetails = loadedFlatLevelDetails.value();
 		result->m_levelDetails.mapFolderPath.clear();
 		result->m_loadedLevelFormat = LevelFormat::JSON;
@@ -1176,7 +1190,6 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 		result->m_pathToMapPackage = pathToMapPackage;
 		result->m_mapIO = pMapIO;
 		result->m_flatMapPackage = true;
-		result->loadGamInfo();
 		return result;
 	}
 
@@ -1226,7 +1239,7 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			});
 
 			// Successfully loaded level details from a .lev file in the root
-			std::unique_ptr<MapPackage> result = std::unique_ptr<MapPackage>(new MapPackage());
+			std::shared_ptr<MapPackage> result = std::make_shared<make_shared_enabler>();
 			result->m_levelDetails = loadedLevelDetails.value();
 			result->m_loadedLevelFormat = LevelFormat::LEV;
 			result->m_mapType = result->m_levelDetails.type;
@@ -1236,7 +1249,6 @@ std::unique_ptr<MapPackage> MapPackage::loadPackage(const std::string& pathToMap
 			{
 				result->m_originalGenerator = originalGenerator;
 			}
-			result->loadGamInfo();
 
 			if (idx < rootLevFiles.size() - 1)
 			{
@@ -1259,11 +1271,20 @@ MapPackage::MapPackage(const LevelDetails& levelDetails, WzMap::MapType mapType,
 static bool copyFile_IOProviders(const std::string& readPath, const std::string& writePath, std::shared_ptr<IOProvider> readIO, std::shared_ptr<IOProvider> writeIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	std::vector<char> fileContents;
-	if (!readIO->loadFullFile(readPath, fileContents))
+	auto loadFileResult = readIO->loadFullFile(readPath, fileContents, std::numeric_limits<uint32_t>::max(), false);
+	switch (loadFileResult)
 	{
-		// Failed reading file
-		debug(pCustomLogger, LOG_ERROR, "copyFile: Failed reading file from source: %s", readPath.c_str());
-		return false;
+		case WzMap::IOProvider::LoadFullFileResult::SUCCESS:
+			break;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN:
+			debug(pCustomLogger, LOG_ERROR, "copyFile: Failed opening file from source: %s", readPath.c_str());
+			return false;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_READ:
+			debug(pCustomLogger, LOG_ERROR, "copyFile: Failed reading file from source: %s", readPath.c_str());
+			return false;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			debug(pCustomLogger, LOG_ERROR, "copyFile: Failed reading file from source (too large): %s", readPath.c_str());
+			return false;
 	}
 	// get the directory this file should be in and ensure it is created
 	std::string writePathDirName = writeIO->pathDirName(writePath);
@@ -1448,6 +1469,8 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 	}
 
 	// 5.) Output the level info file
+	LevelDetails outputLevelDetails = m_levelDetails;
+	outputLevelDetails.mapFolderPath = mapFolderPath;
 	std::string fullPathToOutputLevelDetailsFolder = exportIO->pathJoin(basePath, levelFileOutputFolder);
 	if (!fullPathToOutputLevelDetailsFolder.empty())
 	{
@@ -1457,14 +1480,20 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 			// for now, treat this as non-fatal...
 		}
 	}
-	if (!exportLevelDetails(m_levelDetails, levelFormat, fullPathToOutputLevelDetailsFolder, *exportIO, pCustomLogger))
+	if (!exportLevelDetails(outputLevelDetails, levelFormat, fullPathToOutputLevelDetailsFolder, *exportIO, pCustomLogger))
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to export level details");
 		return false;
 	}
 
 	// 6.) Load the map data
-	auto pLoadedMap = loadMap(0, logger);
+	uint32_t seed = 0;
+	if (m_loadedMap)
+	{
+		// if already loaded a script map with a seed, use the same seed
+		seed = m_loadedMap->scriptGeneratedMapSeed().value_or(seed);
+	}
+	auto pLoadedMap = loadMap(seed, logger);
 	if (pLoadedMap == nullptr)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map for conversion");
@@ -1490,7 +1519,7 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map data for conversion");
 		return false;
 	}
-	writeGamFileForMapExport(fullPathToOutputMapFolder, levelFormat, m_gamInfo, *(pMapData.get()), *exportIO, pCustomLogger);
+	writeGamFileForMapExport(fullPathToOutputMapFolder, levelFormat, getGamInfo(), *(pMapData.get()), *exportIO, pCustomLogger);
 
 	// 9.) Output the map into the map folder
 	if (pLoadedMap->wasScriptGenerated() && !(mapOutputFormat == WzMap::OutputFormat::VER1_BINARY_OLD || mapOutputFormat == WzMap::OutputFormat::VER2))
@@ -1505,7 +1534,12 @@ bool MapPackage::exportMapPackageFiles(std::string basePath, LevelFormat levelFo
 			debug(pCustomLogger, LOG_ERROR, "Failed to script contents from source map");
 			return false;
 		}
-		if (!exportIO->writeFullFile(gameJSOutputPath, pScriptData->data(), static_cast<uint32_t>(pScriptData->size())))
+		size_t gameJSFileSize = pScriptData->size();
+		if (gameJSFileSize > 0 && (pScriptData->back() == 0))
+		{
+			--gameJSFileSize; // do not write out the extra null terminator added when loading the script contents
+		}
+		if (!exportIO->writeFullFile(gameJSOutputPath, pScriptData->data(), static_cast<uint32_t>(gameJSFileSize)))
 		{
 			// Failed writing file
 			debug(pCustomLogger, LOG_ERROR, "Failed writing game.js to destination: %s", gameJSOutputPath.c_str());
@@ -1558,6 +1592,28 @@ void MapPackage::updateLevelDetails(const LevelDetails& newLevelDetails)
 optional<LevelFormat> MapPackage::loadedLevelDetailsFormat() const
 {
 	return m_loadedLevelFormat;
+}
+
+bool MapPackage::isScriptGeneratedMap() const
+{
+	if (m_loadedMap)
+	{
+		// get this from the loaded map
+		return m_loadedMap->wasScriptGenerated();
+	}
+
+	// No map is loaded yet - verify this was instantiated with a map IO provider
+	if (!m_mapIO)
+	{
+		// Should not happen
+		debug(m_logger.get(), LOG_ERROR, "Missing IOProvider - no map can be loaded");
+		return false;
+	}
+
+	// Instead of calling Map::loadFromPath (like MapPackage::loadMap does), which would load and run the map script (if present), check for existence of the game.js file
+	std::string fullPathToMapFolder = m_mapIO->pathJoin(m_pathToMapPackage, m_levelDetails.mapFolderPath);
+	std::string gameJSPath = m_mapIO->pathJoin(fullPathToMapFolder, "game.js");
+	return m_mapIO->fileExists(gameJSPath);
 }
 
 // Get the map data
@@ -1909,11 +1965,17 @@ std::string MapPackage::to_string(MapPackage::ModTypes modType)
 	return "";	// silence warning
 }
 
-bool MapPackage::loadGamInfo()
+const GamInfo& MapPackage::getGamInfo()
 {
+	if (m_gamInfo.has_value())
+	{
+		return m_gamInfo.value();
+	}
+
 	if (!m_mapIO)
 	{
-		return false;
+		m_gamInfo = GamInfo();
+		return m_gamInfo.value();
 	}
 
 	std::string fullPathToMapFolder = m_mapIO->pathJoin(m_pathToMapPackage, m_levelDetails.mapFolderPath);
@@ -1925,23 +1987,23 @@ bool MapPackage::loadGamInfo()
 	}
 	if (!loadedGamInfo.has_value())
 	{
-		return false;
+		loadedGamInfo = GamInfo();
 	}
 
-	m_gamInfo = loadedGamInfo.value();
-	return true;
+	m_gamInfo = loadedGamInfo;
+	return m_gamInfo.value();
 }
 
 // Extract various map stats / info
-optional<MapStats> MapPackage::calculateMapStats()
+optional<MapStats> MapPackage::calculateMapStats(uint32_t mapSeed)
 {
-	return calculateMapStats(MapStatsConfiguration(m_mapType));
+	return calculateMapStats(MapStatsConfiguration(m_mapType), mapSeed);
 }
 
-optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig)
+optional<MapStats> MapPackage::calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed)
 {
 	LoggingProtocol* pCustomLogger = m_logger.get();
-	auto pLoadedMap = loadMap(0, m_logger);
+	auto pLoadedMap = loadMap(mapSeed, m_logger);
 	if (pLoadedMap == nullptr)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Failed to load map");

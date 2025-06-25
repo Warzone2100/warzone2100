@@ -40,7 +40,13 @@ public:
 	virtual ~WzMultiplayerOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
-	void frontendMultiMessages(bool running);
+
+	enum class MultiMessagesResult
+	{
+		Continue,
+		StoppedJoining
+	};
+	MultiMessagesResult frontendMultiMessages(bool running);
 
 	void openDifficultyChooser(uint32_t playerIndex);
 	void closeDifficultyChooser();
@@ -64,15 +70,21 @@ public:
 	void openColourChooser(uint32_t playerIndex);
 	void closeColourChooser();
 
+	void openMapChooser();
+
 	void closeAllChoosers();
 
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 
 	void updatePlayers();
+	void updateGameOptions();
 
 	int playerRowY0(uint32_t row) const;
 
 	std::shared_ptr<WzTitleUI> getParentTitleUI();
+
+	bool getOption_SpectatorHost();
+	void setOption_SpectatorHost(bool value);
 
 private:
 	/**
@@ -93,6 +105,8 @@ private:
 	 */
 	void addPlayerBox(bool addPlayerEntries);
 
+	void addGameOptions();
+
 	/**
 	 * Starts hosting. Used as an action for "Host Game" button. Another place where this is used is for
 	 * activating the host immediately when entering the multiplayer menu with a challenge active.
@@ -101,9 +115,13 @@ private:
 
 	void processMultiopWidgets(UDWORD button);
 
+	void handleKickRedirect(uint8_t kickerPlayerIdx, const std::string& redirectString);
+
 	std::shared_ptr<W_SCREEN> psInlineChooserOverlayScreen = nullptr;
 	std::shared_ptr<WzTitleUI> parent;
 	std::vector<std::shared_ptr<WIDGET>> playerRows;
+	std::shared_ptr<WIDGET> multiLobbyOptionsForm;
+	std::shared_ptr<W_BUTTON> startHostingButton;
 	bool performedFirstStart = false;
 
 	int8_t inlineChooserUp;

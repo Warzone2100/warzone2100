@@ -95,11 +95,18 @@ namespace gfx_api
 		virtual ~abstract_texture() {};
 	};
 
+	struct texture2dDimensions
+	{
+		size_t width = 0;
+		size_t height = 0;
+	};
+
 	struct texture : abstract_texture
 	{
 		virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) = 0;
 		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) = 0;
 		virtual unsigned id() = 0;
+		virtual texture2dDimensions get_dimensions() const = 0;
 		bool isArray() const { return false; }
 
 		texture( const texture& other ) = delete; // non construction-copyable
@@ -774,6 +781,7 @@ namespace gfx_api
 		int normalMap;
 		int specularMap;
 		int hasTangents;
+		int shieldEffect;
 	};
 
 	// interleaved vertex data
@@ -836,6 +844,8 @@ namespace gfx_api
 	using Draw3DShapeNoLightAlphaNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ALPHA, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 	using Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_ADDITIVE, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
+	using Draw3DShapePremulNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_PREMULTIPLIED, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
+	using Draw3DShapeNoLightPremulNoDepthWRT_Instanced = Draw3DShapeInstanced<REND_PREMULTIPLIED, SHADER_NOLIGHT_INSTANCED, DEPTH_CMP_LEQ_WRT_OFF>;
 
 	struct Draw3DShapeInstancedDepthOnlyGlobalUniforms
 	{
@@ -1092,9 +1102,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_WATER_HIGH>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
-		glm::mat4 ModelUV1Matrix;
-		glm::mat4 ModelUV2Matrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
@@ -1102,6 +1112,8 @@ namespace gfx_api
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
@@ -1116,7 +1128,8 @@ namespace gfx_api
 		texture_description<0, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // textures
 		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // normal maps
 		texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // specular maps
-		texture_description<3, sampler_type::bilinear> // lightmap
+		texture_description<3, sampler_type::bilinear>, // lightmap
+		texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
 	>, SHADER_WATER_HIGH>;
 
 	template<>

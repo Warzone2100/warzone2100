@@ -1,0 +1,18 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C1C_BASE1": { "audio": "pcv390.ogg", "message": "BARBASE_MSG", "type": 0, "x": 10304, "y": 15424, "z": 0 },
+        "C1C_BASE2": { "audio": "pcv389.ogg", "message": "BARBASE_MSG", "type": 0, "x": 12736, "y": 14016, "z": 0 },
+        "C1C_BASE3": { "audio": "pcv389.ogg", "message": "BARBASE_MSG", "type": 0, "x": 8512, "y": 704, "z": 0 },
+        "C1C_BASE4": { "audio": "pcv390.ogg", "message": "BARBASE_MSG", "type": 0, "x": 9024, "y": 3648, "z": 0 },
+        "C1C_BASE5": { "audio": "pcv389.ogg", "message": "BARBASE_MSG", "type": 0, "x": 8512, "y": 6976, "z": 0 },
+        "C1C_BASE6": { "audio": "pcv389.ogg", "message": "BARBASE_MSG", "type": 0, "x": 13376, "y": 13504, "z": 0 },
+        "C1C_BASE7": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 11840, "y": 9792, "z": 0 },
+        "C1C_BASE8": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 14272, "y": 3264, "z": 0 },
+        "C1C_BASE9": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 11712, "y": 2752, "z": 0 },
+        "C1C_BASE10": { "audio": "pcv393.ogg", "message": "ENEMYBASE_MSG", "type": 0, "x": 9408, "y": 7104, "z": 0 },
+        "C1C_OBJ1": { "audio": "pcv378.ogg", "message": "RUINS_MSG", "type": 0, "x": 6848, "y": 13888, "z": 0 },
+        "C1C_LZ1": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 13632, "y": 5056, "z": 0 },
+        "C1C_LZ2": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 8768, "y": 10048, "z": 0 }
+    }
+}

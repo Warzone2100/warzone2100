@@ -31,6 +31,7 @@
 #include "lib/widget/button.h"
 #include <functional>
 #include <vector>
+#include <set>
 #include "lib/framework/wzstring.h"
 #include "titleui/multiplayer.h"
 #include "faction.h"
@@ -40,6 +41,7 @@
 #define AI_OPEN           -2
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
+#define DEFAULT_SKIRMISH_AI_SCRIPT_NAME "nexus.js"
 
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
@@ -66,6 +68,54 @@ const char *getAIName(int player);	///< only run this -after- readAIs() is calle
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
 
+struct AIDATA
+{
+	AIDATA() : name{0}, js{0}, tip{0}, difficultyTips{0}, assigned(0) {}
+	char name[MAX_LEN_AI_NAME];
+	char js[MAX_LEN_AI_NAME];
+	char tip[255 + 128];            ///< may contain optional AI tournament data
+	char difficultyTips[5][255];    ///< optional difficulty level info
+	int assigned;                   ///< How many AIs have we assigned of this type
+};
+const std::vector<AIDATA>& getAIData();
+
+struct MultiplayOptionsLocked
+{
+	bool scavengers;
+	bool alliances;
+	bool teams;
+	bool power;
+	bool difficulty;
+	bool ai;
+	bool position;
+	bool bases;
+	bool spectators;
+};
+const MultiplayOptionsLocked& getLockedOptions();
+
+const char* getDifficultyListStr(size_t idx);
+size_t getDifficultyListCount();
+int difficultyIcon(int difficulty);
+
+std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t player);
+
+bool isHostOrAdmin();
+bool isPlayerHostOrAdmin(uint32_t playerIdx);
+bool isSpectatorOnlySlot(UDWORD playerIdx);
+
+void printBlindModeHelpMessagesToConsole();
+
+/**
+ * Checks if all players are on the same team. If so, return that team; if not, return -1;
+ * if there are no players, return team MAX_PLAYERS.
+ */
+int allPlayersOnSameTeam(int except);
+
+bool multiplayPlayersReady();
+bool multiplayIsStartingGame();
+
+bool sendReadyRequest(UBYTE player, bool bReady);
+
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
@@ -85,10 +135,15 @@ std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, U
 std::shared_ptr<WzMultiButton> makeMultiBut(UDWORD id, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc, uint8_t alpha = 255);
 
 AtlasImage mpwidgetGetFrontHighlightImage(AtlasImage image);
-bool changeColour(unsigned player, int col, bool isHost);
+bool changeColour(unsigned player, int col, uint32_t responsibleIdx);
 
 extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
+extern std::string defaultSkirmishAI;
+
+void frontendCycleAIs();
+void setDefaultSkirmishAI(const std::string& name);
+std::string getDefaultSkirmishAI(const bool& displayNameOnly=false);
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer = false);
 void displayKickReasonPopup(const std::string &reason);
@@ -103,11 +158,17 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions);
+
+void multiLobbyRandomizeOptions();
+
 bool SendColourRequest(UBYTE player, UBYTE col);
 
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
+
+bool autoBalancePlayersCmd();
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
@@ -171,7 +232,8 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_PLAYERSW		298
 #define MULTIOP_PLAYERS_TABS	10232
 #define MULTIOP_PLAYERS_TABS_H	24
-#define MULTIOP_PLAYERSH		(380 + MULTIOP_PLAYERS_TABS_H + 1)
+#define MULTIOP_PLAYERSH		(384 + MULTIOP_PLAYERS_TABS_H + 1)
+#define MULTIOP_BLIND_WAITING_ROOM	10233
 
 #define MULTIOP_ROW_WIDTH		298
 
@@ -206,19 +268,16 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_OPTIONSW		284
 #define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
 
-#define MULTIOP_EDITBOXW		196
+#define MULTIOP_EDITBOXW		201
 #define	MULTIOP_EDITBOXH		30
 
-#define	MULTIOP_BLUEFORMW		226
+#define MULTIOP_SEARCHBOXH		15
 
-#define	MROW1					4
-#define	MROW2					MROW1+MULTIOP_EDITBOXH
-#define	MROW3					MROW2+MULTIOP_EDITBOXH
-#define	MROW4					MROW3+MULTIOP_EDITBOXH
-#define MROW5					MROW4+38
-#define	MROW6					MROW5+29
+#define	MULTIOP_BLUEFORMW		231
 
-#define MCOL0					50
+#define	MROW1					6
+
+#define MCOL0					45
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
 #define MCOL2					(MCOL1+38)
 #define MCOL3					(MCOL2+38)
@@ -226,17 +285,9 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 
 #define MULTIOP_PNAME_ICON		10252
 #define MULTIOP_PNAME			10253
-#define MULTIOP_GNAME_ICON		10254
-#define MULTIOP_GNAME			10255
-#define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
-#define MULTIOP_MAP_MOD			21013	// Warning, do not use sequential numbers until code is fixed.
-#define MULTIOP_MAP_RANDOM      21014
 
 #define MULTIOP_REFRESH			10275
-
-#define MULTIOP_HOST			10276
-#define MULTIOP_HOSTX			5
 
 #define MULTIOP_FILTER_TOGGLE   30277
 
@@ -264,26 +315,6 @@ void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
 #define MULTIOP_COLCHOOSER_FORM         10280
 #define MULTIOP_COLCHOOSER              102711 //10281
 #define MULTIOP_COLCHOOSER_END          102742 //10288
-
-#define MULTIOP_LIMIT			10292	// 2 for this (+label)
-#define MULTIOP_GAMETYPE		10294
-#define MULTIOP_POWER			10296
-#define MULTIOP_ALLIANCES		10298
-#define MULTIOP_RANDOM			10299
-#define MULTIOP_BASETYPE		10300
-#define MULTIOP_TECHLEVEL		10301
-
-#define MULTIOP_MAP_PREVIEW 920000
-
-#define MULTIOP_PASSWORD	920010
-#define MULTIOP_PASSWORD_BUT 920012
-#define MULTIOP_PASSWORD_EDIT 920013
-
-#define MULTIOP_NO_SOMETHING            10331
-#define MULTIOP_NO_SOMETHINGX           3
-#define MULTIOP_NO_SOMETHINGY           MROW5
-#define MULTIOP_ICON_LIMITS_X2		41
-#define MULTIOP_ICON_LIMITS_Y2		182
 
 #define MULTIOP_COLOUR_START		10332
 #define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)

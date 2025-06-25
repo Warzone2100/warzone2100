@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Experience & Ranks")
+_("Units gain experience when they successfully dispatch enemies.")
+_("A higher experience level means that a unit is more accurate, moves faster, and takes less damage.")
+_("An icon displaying a unit’s rank is displayed next to the unit’s health bar.")
+_("Units with higher experience levels can make all the difference in battle!")

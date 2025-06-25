@@ -1,0 +1,17 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB1A-C_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["TRANS_MSG1", "CAM1A-C_MSG5", "CAM1A-C_MSG6"], "video": "cam1/cam1acp.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam1/map1a_c.ogg" }
+            ]
+        },
+        "MB1A-C_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+                { "loop": 0, "subtitles": ["CAM1A-C_MSG1", "CAM1A-C_MSG2", "CAM1A-C_MSG3"], "video": "cam1/cam1ac.ogg" }
+            ]
+        }
+    }
+}

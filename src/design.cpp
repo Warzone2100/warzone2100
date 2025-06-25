@@ -2839,6 +2839,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		return false;
 	}
 
+	const bool isVtolTemplate = checkTemplateIsVtol(psTempl);
+
 	// Check the weapons
 	for (int i = 0; i < psTempl->numWeaps; i++)
 	{
@@ -2853,10 +2855,17 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 			debug(level, "No weapon given for weapon droid, or wrong weapon size");
 			return false;
 		}
-		if (checkTemplateIsVtol(psTempl)
-		    && psTempl->getWeaponStats(i)->vtolAttackRuns <= 0)
+		if (isVtolTemplate)
 		{
-			debug(level, "VTOL with non-VTOL turret, not possible");
+			if (psTempl->getWeaponStats(i)->vtolAttackRuns <= 0)
+			{
+				debug(level, "VTOL with non-VTOL turret, not possible");
+				return false;
+			}
+		}
+		else if (psTempl->getWeaponStats(i)->vtolAttackRuns > 0)
+		{
+			debug(level, "Non-VTOL with VTOL turret, not possible");
 			return false;
 		}
 	}
@@ -2885,7 +2894,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	//can only have a VTOL weapon on a VTOL propulsion
-	if (checkTemplateIsVtol(psTempl) && !isTransporter(psTempl) && psTempl->numWeaps == 0)
+	if (isVtolTemplate && !isTransporter(psTempl) && psTempl->numWeaps == 0)
 	{
 		debug(level, "VTOL with system turret, not possible");
 		return false;

@@ -4,9 +4,6 @@
 [submodule "3rdparty/glm"]
 	path = 3rdparty/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "3rdparty/miniupnp"]
-	path = 3rdparty/miniupnp
-	url = https://github.com/miniupnp/miniupnp.git
 [submodule "3rdparty/utfcpp"]
 	path = 3rdparty/utfcpp
 	url = https://github.com/nemtrif/utfcpp.git
@@ -65,3 +62,27 @@
 [submodule "data/terrain_overrides/high"]
 	path = data/terrain_overrides/high
 	url = https://github.com/Warzone2100/data-terrain-high.git
+[submodule "data/mods/campaign/reclamation"]
+	path = data/mods/campaign/reclamation
+	url = https://github.com/Warzone2100/reclamation.git
+[submodule "data/mods/campaign/fractured-kingdom"]
+	path = data/mods/campaign/fractured-kingdom
+	url = https://github.com/Warzone2100/fractured-kingdom.git
+[submodule "3rdparty/libplum"]
+	path = 3rdparty/libplum
+	url = https://github.com/paullouisageneau/libplum.git
+[submodule "lib/netplay/3rdparty/miniupnp"]
+	path = lib/netplay/3rdparty/miniupnp
+	url = https://github.com/miniupnp/miniupnp.git
+[submodule "3rdparty/expected"]
+	path = 3rdparty/expected
+	url = https://github.com/TartanLlama/expected.git
+[submodule "3rdparty/GameNetworkingSockets"]
+	path = 3rdparty/GameNetworkingSockets
+	url = https://github.com/Warzone2100/GameNetworkingSockets.git
+[submodule "pkg/win_installer/innohelperscripts"]
+	path = pkg/win_installer/innohelperscripts
+	url = https://github.com/past-due/innohelperscripts.git
+[submodule "pkg/win_installer/resources"]
+	path = pkg/win_installer/resources
+	url = https://github.com/Warzone2100/win_installer_resources.git

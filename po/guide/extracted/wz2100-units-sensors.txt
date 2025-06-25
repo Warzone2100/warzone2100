@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Sensors")
+_("Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery.")
+_("Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades).")
+_("However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets).")

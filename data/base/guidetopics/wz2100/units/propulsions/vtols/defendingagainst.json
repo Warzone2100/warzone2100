@@ -1,0 +1,43 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::vtols::defendingagainst",
+	"title": "Defending Against VTOLs",
+	"sort": "05",
+	"visual": [
+		{
+			"droidTemplate": {
+				"body": "Body2SUP",
+				"name": "Cluster Bomb Leopard V-Tol",
+				"propulsion": "V-Tol",
+				"type": "DROID",
+				"weapons": [
+					"Bomb1-VTOL-LtHE"
+				]
+			}
+		},
+		{
+			"stat": {
+				"id": "AASite-QuadMg1"
+			}
+		}
+	],
+	"contents": [
+		"What's that in the sky? ... It's a VTOL unit",
+		"",
+		"Since VTOLs are not ground-based units, most ground weapons cannot hit them.",
+		"",
+		"They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons.",
+		"",
+		"There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod.",
+		"",
+		"(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)",
+		"",
+		"In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+	],
+	"links": [
+		"wz2100::weapons::antiair",
+		"wz2100::units::propulsions::vtols::attacking",
+		"wz2100::units::propulsions::vtols::weapons",
+		"wz2100::units::propulsions::vtols"
+	]
+}

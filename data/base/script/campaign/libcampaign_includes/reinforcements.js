@@ -6,6 +6,7 @@
 //;; ## camSendReinforcement(playerId, position, templates, kind[, data])
 //;;
 //;; Give a single bunch of droids (template list) for a player at a position label. Kind can be one of:
+//;; * `CAM_REINFORCE_NONE` Reinforcements are skipped this call.
 //;; * `CAM_REINFORCE_GROUND` Reinforcements magically appear on the ground.
 //;; * `CAM_REINFORCE_TRANSPORT` Reinforcements are unloaded from a transporter.
 //;;   **NOTE:** the game engine doesn't seem to support two simultaneous incoming transporters for the same player.
@@ -45,6 +46,10 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 	}
 	switch (kind)
 	{
+		case CAM_REINFORCE_NONE:
+		{
+			break; // Do nothing.
+		}
 		case CAM_REINFORCE_GROUND:
 		{
 			const droids = [];
@@ -80,6 +85,86 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 	}
 }
 
+//;; ## camSendGenericSpawn(kind, player, condition, position, unitList, minimumUnits, maxRandoms)
+//;;
+//;; A simple means to send a group of units, either by spawn or transporter, on a simple attack order.
+//;; Creating VTOLs this way isn't advised as they won't automatically retreat to a removal zone. However,
+//;; for maps with VTOL Rearming Pads present, it could be ok as long as the mission script is careful.
+//;; `kind`: Works similar to `camSendReinforcement()`.
+//;; `player`: The player that will own these units.
+//;; `condition`: Works similar to `camReinforcementConditionPasses()`.
+//;; `position`: An object that contains coordinate data, such as {x: x, y: y}, to tell where units will appear.
+//;;   May be a label or even an array of labels or objects containing coordinates, and if so, will be randomly selected.
+//;; `unitList`: An array of units that will randomly be chosen from, or, a single template.
+//;; May also be an object like so: {units: array_of_units|single_template, appended: array_of_units|single_template}.
+//;; `appended` will always additionally be added to the randomly selected units.
+//;; `minimumUnits`: The absolute minimum units this spawn will create.
+//;; `maxRandoms`: How many units will randomly be added to the minimumUnits.
+//;;
+//;; @param {number} type
+//;; @param {number} player
+//;; @param {number} condition
+//;; @param {object} position
+//;; @param {array} unitList
+//;; @param {number} minimumUnits
+//;; @param {number} maxRandoms
+//;; @returns {boolean}
+//;;
+function camSendGenericSpawn(kind, player, condition, position, unitList, minimumUnits, maxRandoms)
+{
+	if (camDef(condition) && !camReinforcementConditionPasses(condition, player))
+	{
+		return false;
+	}
+	let maxSpawns = minimumUnits;
+	if (camDef(maxRandoms) && ((maxRandoms + 1) > 1))
+	{
+		 maxSpawns += camRand(maxRandoms + 1);
+	}
+	let realPosition;
+	if (position instanceof Array)
+	{
+		realPosition = position[camRand(position.length)];
+	}
+	else
+	{
+		realPosition = position;
+	}
+	let droids = [];
+	const __UNITS_ARE_OBJ = (unitList instanceof Object); // Note: Arrays are "Objects" too.
+	const __UNITS_ARE_ARRAY = (unitList instanceof Array); // So check if actually Array.
+	const realUnitList = (!__UNITS_ARE_ARRAY && __UNITS_ARE_OBJ && camDef(unitList.units)) ? unitList.units : unitList;
+	for (let i = 0; i < maxSpawns; ++i)
+	{
+		if (__UNITS_ARE_ARRAY || (!__UNITS_ARE_ARRAY && __UNITS_ARE_OBJ && (realUnitList instanceof Array)))
+		{
+			droids.push(realUnitList[camRand(realUnitList.length)]);
+		}
+		else
+		{
+			droids.push(realUnitList);
+		}
+	}
+	if (!__UNITS_ARE_ARRAY && __UNITS_ARE_OBJ && camDef(unitList.appended))
+	{
+		if (unitList.appended instanceof Array)
+		{
+			droids = droids.concat(unitList.appended);
+		}
+		else
+		{
+			droids.push(unitList.appended);
+		}
+	}
+	camSendReinforcement(player, camMakePos(realPosition), droids, kind, {
+		data: {regroup: false, repair: 66, count: -1},
+		entry: camGenerateRandomMapEdgeCoordinate(), // These three below only get used for transporters.
+		exit: camGenerateRandomMapEdgeCoordinate(),
+		ignoreBlipRemoval: true
+	});
+	return true;
+}
+
 //;; ## camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 //;;
 //;; Periodically brings reinforcements to an enemy base, until the base is eliminated.
@@ -106,4 +191,53 @@ function camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 	bi.reinforce_interval = interval;
 	bi.reinforce_callback = callbackName;
 	bi.reinforce_data = data;
+}
+
+//;; ## camReinforcementConditionPasses(condition, player)
+//;;
+//;; Determines if a generic reinforcement condition will allow a spawn to proceed.
+//;; `condition`: Basic conditions to not spawn anything, can be one of:
+//;;   * `CAM_REINFORCE_CONDITION_NONE` or `undefined`: Do not use a condition, will always attempt a spawn.
+//;;   * `CAM_REINFORCE_CONDITION_BASES`: Do not spawn if all bases are eliminated.
+//;;   * `CAM_REINFORCE_CONDITION_UNITS`: Do not spawn if `player` has zero units.
+//;;   * An `Object` {condition: `CAM_REINFORCE_CONDITION_OBJECT`, object: `label_of_object`} or `label`: spawns only if object is alive.
+//;;   * `CAM_REINFORCE_CONDITION_ARTIFACTS`: Do not spawn if the player has picked up all artifacts.
+//;; `player`: The player to check conditions for. Doesn't need to be specified except for the units condition.
+//;;
+//;; @param {Number|Object} condition
+//;; @param {Number} player
+//;; @returns {Boolean}
+//;;
+function camReinforcementConditionPasses(condition, player)
+{
+	if (!camDef(condition))
+	{
+		return true; // undefined is treated as CAM_REINFORCE_CONDITION_NONE.
+	}
+	if (!camDef(player))
+	{
+		player = CAM_HUMAN_PLAYER;
+	}
+	let conditionObject = condition; // Can be a String directly for example.
+	let realCondition = condition;
+	let shouldSpawn = false;
+	if (camIsString(condition))
+	{
+		realCondition = CAM_REINFORCE_CONDITION_OBJECT;
+	}
+	if (condition instanceof Object)
+	{
+		realCondition = condition.condition;
+		conditionObject = condition.object;
+	}
+	switch (realCondition)
+	{
+		case CAM_REINFORCE_CONDITION_NONE: shouldSpawn = true; break;
+		case CAM_REINFORCE_CONDITION_BASES: shouldSpawn = !camAllEnemyBasesEliminated(); break;
+		case CAM_REINFORCE_CONDITION_UNITS: shouldSpawn = (countDroid(DROID_ANY, player) > 0); break;
+		case CAM_REINFORCE_CONDITION_OBJECT: shouldSpawn = (getObject(conditionObject) !== null); break;
+		case CAM_REINFORCE_CONDITION_ARTIFACTS: shouldSpawn = !camAllArtifactsPickedUp(); break;
+		default: camDebug("Unknown generic spawn condition: " + condition);
+	}
+	return shouldSpawn;
 }

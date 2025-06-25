@@ -1,5 +1,4 @@
 function setupComponents(player)	// inside hackNetOff()
 {
-	// enable cyborgs components that can't be enabled with research
-	makeComponentAvailable("CyborgSpade", player);
+	// Use makeComponentAvailable() here to enable components at the start of a match.
 }

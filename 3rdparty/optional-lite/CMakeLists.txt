@@ -1,6 +1,6 @@
 # A very simple version of: https://github.com/martinmoene/optional-lite/blob/master/CMakeLists.txt
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.24)
 
 project(
     optional_lite

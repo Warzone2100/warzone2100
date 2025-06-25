@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.30)
 
 # Optional input defines:
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
@@ -10,17 +10,14 @@ cmake_minimum_required(VERSION 3.5)
 
 ########################################################
 
-# To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "9de2e978bdfec6bb7852cc1d6ecf375c923c485c")
-
-# WZ minimum supported macOS deployment target (< 10.9 is untested)
-set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.9")
+# WZ minimum supported macOS deployment target (< 10.14 is untested, and may require earlier vcpkg baseline)
+set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.14")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.3.268.1")
-set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.dmg")
+set(VULKAN_SDK_VERSION "1.3.296.0")
+set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.zip")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "900c019ffac72564d7c4e9e52dd08ef7d4eb2b4425084fd4d2c3e35b36958646")
+set(VULKAN_SDK_DL_SHA256 "393fd11f65a4001f12fd34fdd009c38045220ca3f735bc686d97822152b0f33c")
 
 ########################################################
 
@@ -73,7 +70,7 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 				-DURL=${VULKAN_SDK_DL_URL}
 				-DEXPECTED_SHA256=${VULKAN_SDK_DL_SHA256}
 				-DOUT_DIR=${_vulkan_sdk_out_dir}
-				-P ${_repoBase}/macosx/configs/FetchPrebuilt.cmake
+				-P ${_repoBase}/platforms/macos/cmake/FetchPrebuilt.cmake
 		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 		RESULT_VARIABLE _exstatus
 	)
@@ -147,7 +144,7 @@ endif()
 if((NOT DEFINED SKIP_VCPKG_BUILD) OR NOT SKIP_VCPKG_BUILD)
 
 ########################################################
-## 1-a.) Download vcpkg, pin to commit
+## 2-a.) Download vcpkg, pin to commit
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Download vcpkg...")
@@ -177,98 +174,27 @@ else()
 endif()
 
 execute_process(
-	COMMAND ${GIT_EXECUTABLE} reset --hard "${VCPKG_COMMIT_SHA}"
+	COMMAND ${GIT_EXECUTABLE} reset --hard origin/master
 	WORKING_DIRECTORY "vcpkg"
 	RESULT_VARIABLE _exstatus
 )
 if(NOT _exstatus EQUAL 0)
-	message(FATAL_ERROR "Failed to pin vcpkg to specific commit: ${VCPKG_COMMIT_SHA}")
+	message(FATAL_ERROR "Failed reset vcpkg to latest origin/master")
 endif()
 
 ########################################################
-## 1-b.) Detect which version of AppleClang will be used (if --allowAppleClang is specified)
+## 2-b.) Bootstrap vcpkg
 
-# Make a new temp directory
-execute_process(
-    COMMAND ${CMAKE_COMMAND} -E make_directory temp_compiler_detection
-    WORKING_DIRECTORY .
-)
-
-# Generate a basic CMake project file that just outputs the desired variables
-file(WRITE "temp_compiler_detection/CMakeLists.txt" "\
-cmake_minimum_required(VERSION 3.5)
-project(detect_compiler CXX)
-cmake_policy(SET CMP0025 NEW)
-
-message(STATUS \"CMAKE_CXX_COMPILER_ID=\${CMAKE_CXX_COMPILER_ID}\")
-message(STATUS \"CMAKE_CXX_COMPILER_VERSION=\${CMAKE_CXX_COMPILER_VERSION}\")
-")
-
-set(_old_env_CXX "$ENV{CXX}")
-set(ENV{CXX} "clang++") # matching behavior of --allowAppleClang in vcpkg's scripts/bootstrap.sh
-
-# Run a simple CMake configure, which will output according to the script above
-execute_process(
-    COMMAND ${CMAKE_COMMAND} .
-    OUTPUT_VARIABLE _detection_output
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    WORKING_DIRECTORY temp_compiler_detection
-)
-
-set(ENV{CXX} "${_old_env_CXX}")
-unset(_old_env_CXX)
-
-# Remove the temp directory
-execute_process(
-    COMMAND ${CMAKE_COMMAND} -E remove_directory temp_compiler_detection
-    WORKING_DIRECTORY .
-)
-
-if(_detection_output MATCHES "CMAKE_CXX_COMPILER_ID=([^\n]*)\n")
-	set(_detected_cxx_compiler_id "${CMAKE_MATCH_1}")
-endif()
-
-if(_detection_output MATCHES "CMAKE_CXX_COMPILER_VERSION=([^\n]*)\n")
-	set(_detected_cxx_compiler_version "${CMAKE_MATCH_1}")
-endif()
-
-unset(_detection_output)
-
-########################################################
-## 1-c.) Determine if --allowAppleClang can be specified
-
-set(_vcpkg_useAppleClang FALSE)
-if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREATER_EQUAL "19.0"))
-	# macOS 10.15+ (Darwin 19.0.0+) supports the --allowAppleClang flag on bootstrap-vcpkg.sh
-	# if AppleClang >= 11.0 (Xcode 11.0+) is detected
-	if((_detected_cxx_compiler_id MATCHES "^AppleClang") AND (_detected_cxx_compiler_version VERSION_GREATER_EQUAL "11.0"))
-		set(_vcpkg_useAppleClang TRUE)
-	endif()
-endif()
-
-set(_vcpkg_bootstrap_additional_params "")
-if(_vcpkg_useAppleClang)
-	set(_vcpkg_bootstrap_additional_params "--allowAppleClang")
-endif()
-
-########################################################
-## 1-d.) Build vcpkg
-
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Build vcpkg...")
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Bootstrap vcpkg...")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "./bootstrap-vcpkg.sh")
 
 execute_process(
-	COMMAND ${CMAKE_COMMAND} -E env --unset=MACOSX_DEPLOYMENT_TARGET ./bootstrap-vcpkg.sh ${_vcpkg_bootstrap_additional_params}
+	COMMAND ${CMAKE_COMMAND} -E env --unset=MACOSX_DEPLOYMENT_TARGET ./bootstrap-vcpkg.sh
 	WORKING_DIRECTORY "vcpkg"
 	RESULT_VARIABLE _exstatus
 )
 if(NOT _exstatus EQUAL 0)
-	if(_vcpkg_useAppleClang)
-		message(FATAL_ERROR "vcpkg bootstrap failed - please see error output above for resolution")
-	else()
-		# vcpkg requires modern gcc to compile itself on macOS < 10.15 (or Xcode < 11.0)
-		message(FATAL_ERROR "vcpkg bootstrap failed - please see error output above for resolution (suggestion: brew install gcc)")
-	endif()
+	message(FATAL_ERROR "vcpkg bootstrap failed - please see error output above for resolution")
 endif()
 
 if(DEFINED VCPKG_BUILD_TYPE)
@@ -308,7 +234,7 @@ if(DEFINED ONLY_BUILD_VCPKG AND ONLY_BUILD_VCPKG)
 endif()
 
 ########################################################
-## 1-e.) Download & build WZ macOS dependencies
+## 2-c.) Download & build WZ macOS dependencies
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install dependencies...")
@@ -358,11 +284,12 @@ endif()
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to generate Xcode project)...")
 string(REPLACE ";" " " _debug_output_args "${_additional_configure_arguments}")
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 		"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}"
+		"-DENABLE_GNS_NETWORK_BACKEND:BOOL=ON"
 		${_additional_configure_arguments}
 		-G Xcode
 		-B .

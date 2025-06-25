@@ -233,6 +233,12 @@ void proj_AddActiveProjectile(PROJECTILE* p)
 void
 proj_FreeAllProjectiles()
 {
+	for (const auto* p : psProjectileList)
+	{
+		// Make sure to get rid of some final references in the sound code to this object first
+		audio_RemoveObj(p);
+	}
+
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
 
@@ -311,7 +317,6 @@ DROID *getDesignatorAttackingObject(int player, BASE_OBJECT *target)
 		: nullptr;
 }
 
-
 // update the source experience after a target is damaged/destroyed
 static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 {
@@ -336,14 +341,14 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
 
-		psDroid->experience += experienceInc;
+		droidIncreaseExperience(psDroid, experienceInc);
+
 		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-		if (psSensor
-		    && psSensor->type == OBJ_DROID)
+		if (psSensor && psSensor->type == OBJ_DROID)
 		{
-			((DROID *)psSensor)->experience += experienceInc;
+			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)
@@ -354,7 +359,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		if (psDroid != nullptr)
 		{
-			psDroid->experience += experienceInc;
+			droidIncreaseExperience(psDroid, experienceInc);
 		}
 	}
 }
@@ -551,15 +556,16 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	proj.state = PROJ_INFLIGHT;
 
 	// If droid or structure, set muzzle pitch.
+	// Don't allow pitching the muzzle above outside the weapon's limits.
 	if (psAttacker != nullptr && weapon_slot >= 0)
 	{
 		if (psAttacker->type == OBJ_DROID)
 		{
-			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = proj.rot.pitch;
+			((DROID *)psAttacker)->asWeaps[weapon_slot].rot.pitch = (uint16_t)clip(angleDelta(proj.rot.pitch), (int32_t)DEG(psStats->minElevation), (int32_t)DEG(psStats->maxElevation));
 		}
 		else if (psAttacker->type == OBJ_STRUCTURE)
 		{
-			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = proj.rot.pitch;
+			((STRUCTURE *)psAttacker)->asWeaps[weapon_slot].rot.pitch = (uint16_t)clip(angleDelta(proj.rot.pitch), (int32_t)DEG(psStats->minElevation), (int32_t)DEG(psStats->maxElevation));
 		}
 	}
 
@@ -1465,6 +1471,10 @@ void proj_UpdateAll()
 		}
 		auto it = globalProjectileStorage.find(*p);
 		ASSERT(it != globalProjectileStorage.end(), "Invalid projectile, not found in global storage");
+
+		// Make sure to get rid of some final references in the sound code to this object first
+		audio_RemoveObj(p);
+
 		globalProjectileStorage.erase(it);
 		return true;
 	}), psProjectileList.end());
@@ -1676,7 +1686,7 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:

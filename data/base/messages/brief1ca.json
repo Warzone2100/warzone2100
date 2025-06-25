@@ -1,0 +1,12 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB1CA_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": "TRANS_MSG1", "video": "brfcom.ogg" },
+                { "loop": 0, "subtitles": ["CAM1CA_MSG1", "CAM1CA_MSG2", "CAM1CA_MSG3"], "video": "cam1/cam1ca.ogg" },
+                { "loop": 1, "subtitles": ["SUP_MSG1", "SUP_MSG2", "SUP_MSG3"], "video": "cam1/cam1capl.ogg" }
+            ]
+        }
+    }
+}

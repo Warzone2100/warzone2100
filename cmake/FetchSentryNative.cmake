@@ -76,6 +76,10 @@ if(CMAKE_CXX_STANDARD)
 	set(_old_CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD}")
 	unset(CMAKE_CXX_STANDARD) # Allow sentry-native to set its desired default
 endif()
+if(CMAKE_CXX_EXTENSIONS)
+	set(_old_CMAKE_CXX_EXTENSIONS "${CMAKE_CXX_EXTENSIONS}")
+	unset(CMAKE_CXX_EXTENSIONS) # Allow sentry-native to set its desired default
+endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin|Linux" AND NOT DEFINED SENTRY_BACKEND)
 	set(SENTRY_BACKEND "breakpad" CACHE STRING
 	"The sentry backend responsible for reporting crashes, can be either 'none', 'inproc', 'breakpad' or 'crashpad'." FORCE)
@@ -84,8 +88,57 @@ if(NOT sentrynative_POPULATED)
 	FetchContent_Populate(sentrynative)
 	add_subdirectory("${sentrynative_SOURCE_DIR}" "${sentrynative_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif()
-message(STATUS "Enabling crash-handling backend: sentry-native ($CACHE{SENTRY_BACKEND})")
+message(STATUS "Enabling crash-handling backend: sentry-native ($CACHE{SENTRY_BACKEND}) for (${CMAKE_SYSTEM_NAME}:${CMAKE_SYSTEM_PROCESSOR})")
+
+####################
+# Silencing warnings
+
+if(NOT MSVC)
+
+	include(CheckCompilerFlagsOutput)
+
+	set(_supported_sentry_c_compiler_flags "")
+	set(_supported_sentry_cxx_compiler_flags "")
+
+	# -Wshadow					(GCC 3.4+, Clang 3.2+)
+	check_compiler_flags_output("-Werror -Wno-shadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-shadow" OUTPUT_VARIABLE _supported_sentry_c_compiler_flags APPEND)
+	check_compiler_flags_output("-Werror -Wno-shadow -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-shadow" OUTPUT_VARIABLE _supported_sentry_cxx_compiler_flags APPEND)
+
+	# -Wunused-but-set-variable
+	check_compiler_flags_output("-Werror -Wno-unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-unused-but-set-variable" OUTPUT_VARIABLE _supported_sentry_c_compiler_flags APPEND)
+	check_compiler_flags_output("-Werror -Wno-unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-but-set-variable" OUTPUT_VARIABLE _supported_sentry_cxx_compiler_flags APPEND)
+
+	# -Wconditional-uninitialized
+	check_compiler_flags_output("-Werror -Wno-conditional-uninitialized -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-conditional-uninitialized" OUTPUT_VARIABLE _supported_sentry_c_compiler_flags APPEND)
+	check_compiler_flags_output("-Werror -Wno-conditional-uninitialized -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-conditional-uninitialized" OUTPUT_VARIABLE _supported_sentry_cxx_compiler_flags APPEND)
+
+	# -Wassign-enum
+	check_compiler_flags_output("-Werror -Wno-assign-enum -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-assign-enum" OUTPUT_VARIABLE _supported_sentry_c_compiler_flags APPEND)
+	check_compiler_flags_output("-Werror -Wno-assign-enum -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-assign-enum" OUTPUT_VARIABLE _supported_sentry_cxx_compiler_flags APPEND)
+
+	# -Wunknown-pragmas (caused by breakpad header)
+	check_compiler_flags_output("-Werror -Wno-unknown-pragmas -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-unknown-pragmas" OUTPUT_VARIABLE _supported_sentry_c_compiler_flags APPEND)
+	check_compiler_flags_output("-Werror -Wno-unknown-pragmas -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unknown-pragmas" OUTPUT_VARIABLE _supported_sentry_cxx_compiler_flags APPEND)
+
+	if (NOT _supported_sentry_c_compiler_flags STREQUAL "")
+		string(REPLACE " " ";" _supported_sentry_c_compiler_flags "${_supported_sentry_c_compiler_flags}")
+	endif()
+	if (NOT _supported_sentry_cxx_compiler_flags STREQUAL "")
+		string(REPLACE " " ";" _supported_sentry_cxx_compiler_flags "${_supported_sentry_cxx_compiler_flags}")
+	endif()
+
+	if(TARGET sentry)
+		target_compile_options(sentry PRIVATE "$<$<COMPILE_LANGUAGE:C>:${_supported_sentry_c_compiler_flags}>")
+		target_compile_options(sentry PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${_supported_sentry_cxx_compiler_flags}>")
+	endif()
+
+endif()
+
+####################
 
 if(_old_CMAKE_CXX_STANDARD)
 	set(CMAKE_CXX_STANDARD "${_old_CMAKE_CXX_STANDARD}")
+endif()
+if(_old_CMAKE_CXX_EXTENSIONS)
+	set(CMAKE_CXX_EXTENSIONS "${_old_CMAKE_CXX_EXTENSIONS}")
 endif()

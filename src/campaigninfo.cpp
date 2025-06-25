@@ -181,3 +181,23 @@ bool getCamTweakOption_AutosavesOnly()
 	}
 	return val.get<bool>();
 }
+
+bool getCamTweakOption_PS1Modifiers()
+{
+	auto val = getCamTweakOptionsValue("ps1Modifiers", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}
+
+bool getCamTweakOption_FastExp()
+{
+	auto val = getCamTweakOptionsValue("fastExp", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}

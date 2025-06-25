@@ -3,31 +3,20 @@ name: warzone2100 # no spaces, all lower-case
 adopt-info: warzone2100 # specify the *part* name
 confinement: strict
 grade: stable
-base: core22
+base: core24
 
 # Enable LZO compression for the snap
 compression: lzo
 
-# Limit architectures to those supported by the gnome extension (and future core20)
-# NOTE: Specify these as separate build-on lines to ensure separate architecture builds that each support a single architecture
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
-
-layout:
-  /usr/share/vulkan:
-    symlink: $SNAP/usr/share/vulkan
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_intel.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_intel.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_radeon.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_radeon.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_broadcom.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_broadcom.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_freedreno.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_freedreno.so
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_lvp.so:
-    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libvulkan_lvp.so
+# Limit architectures to those supported by the gnome extension
+# NOTE: Ensure separate architecture builds that each support a single architecture
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
 
 plugs:
   wz2100-sequences:
@@ -60,8 +49,8 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.28.4/SDL2-2.28.4.tar.gz
-    source-checksum: sha512/16950ccedcfdef42ee6eba1a6bf09ed7231ea0205fe8600388de2aed1aba94da2e5450d16e9732dce9f12569a238730b3727bf64b8699f1fed4cb3c5c94c3eaa
+    source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.8/SDL2-2.32.8.tar.gz
+    source-checksum: sha512/484c33638e7bd1002815bb1f6a47a292d1eaf0b963598dde65f4a3e077dfe75ee35b9ea4b3b767365b3ef4f613c4d69ce55b5e96675de562994344e83a978272
     plugin: cmake
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
@@ -110,7 +99,7 @@ parts:
     - fcitx-libs
     - libdrm2
     - libgbm1
-    - libegl1-mesa
+    - libegl1
     - libgl1
     - libgles2
     - libibus-1.0-5
@@ -166,7 +155,7 @@ parts:
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       set +u
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
-      cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
+      cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G"Ninja"
       cmake --build . -- -j$CRAFT_PARALLEL_BUILD_COUNT
       DESTDIR=$CRAFT_PART_INSTALL cmake --build . -- install
 
@@ -195,10 +184,18 @@ parts:
       - libgnutls28-dev
       - libsodium-dev
       - libsqlite3-dev
+      - libprotobuf-dev
+      - protobuf-compiler
+      - libzip-dev
       - ninja-build
       - unzip
       - wget
       - zip
+      # Required because of broken CMake config files for libzip-dev 1.7.3:
+      - zipcmp
+      - zipmerge
+      - ziptool
+      #
     stage-packages:
       #- libfontconfig1
       - libfreetype6
@@ -217,10 +214,20 @@ parts:
       - libcurl3-gnutls
       - libsodium23
       - libsqlite3-0
+      - libzip4t64
       - libglu1-mesa
-      - mesa-vulkan-drivers
+      # - mesa-vulkan-drivers # provided by gpu-2404 / mesa-2404
       - unzip
       - zip
+
+  gpu-2404:
+    after: [warzone2100]
+    source: https://github.com/canonical/gpu-snap.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
+    # Note: No "prime" part here, as we only use this for cleanup, and rely on the gnome extension to properly stage and setup the gpu-2404-wrapper and the command-chain
 
   # This part removes all the files in this snap which already exist in
   # connected content and base snaps. Since these files will be available
@@ -233,14 +240,15 @@ parts:
     after:  # Make this part run last; list all your other parts here
       - sdl
       - warzone2100
+      - gpu-2404
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
-      - core22
+      - core24
       - gtk-common-themes
-      - gnome-42-2204
+      - gnome-46-2404
     override-prime: |
       set -eux
-      for snap in "core22" "gtk-common-themes" "gnome-42-2204"; do  # List all content-snaps and base snaps you're using here
+      for snap in "core24" "gtk-common-themes" "gnome-46-2404"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       # The following is required while using core18 + gnome-3-34

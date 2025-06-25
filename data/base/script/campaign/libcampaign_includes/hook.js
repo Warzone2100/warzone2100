@@ -40,7 +40,6 @@ function __camPreHookEvent(eventname, hookcode)
 	{
 		__camOriginalEvents[eventname] = __camGlobalContext()[eventname];
 	}
-
 	__camGlobalContext()[eventname] = function()
 	{
 		// Don't trigger hooks after level end.

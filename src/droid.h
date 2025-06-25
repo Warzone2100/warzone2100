@@ -113,10 +113,22 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
+
+/* Update droid shields. */
+void droidUpdateShields(DROID *psDroid);
+
+/* Calculate the droid's shield regeneration step time */
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid);
+
+/* Calculate the droid's shield interruption time */
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid);
+
+/* Get droid maximum shield points */
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
@@ -185,6 +197,9 @@ unsigned int getDroidLevel(const DROID *psDroid);
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
 UDWORD getDroidEffectiveLevel(const DROID *psDroid);
 const char *getDroidLevelName(const DROID *psDroid);
+// Increase the experience of a droid (and handle events, if needed).
+void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
+void giveExperienceForSquish(DROID *psDroid);
 
 // Get a droid's name.
 const char *droidGetName(const DROID *psDroid);
@@ -249,6 +264,8 @@ UWORD   getNumAttackRuns(const DROID *psDroid, int weapon_slot);
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad);
 // true if a vtol is waiting to be rearmed by a particular rearm pad
 bool vtolReadyToRearm(const DROID *psDroid, const STRUCTURE *psStruct);
+// Fill all the weapons on a VTOL droid.
+void fillVtolDroid(DROID *psDroid);
 
 // see if there are any other vtols attacking the same target
 // but still rearming
@@ -407,7 +424,6 @@ void cancelBuild(DROID *psDroid);
 #define syncDebugDroid(psDroid, ch) _syncDebugDroid(__FUNCTION__, psDroid, ch)
 void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
 
-
 // True iff object is a droid.
 static inline bool isDroid(SIMPLE_OBJECT const *psObject)
 {
@@ -423,6 +439,9 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 {
 	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
+
+void droidRepairStarted(DROID *psDroid, BASE_OBJECT const *psRepairer);
+void droidRepairStopped(DROID *psDroid, BASE_OBJECT const *psFormerRepairer);
 
 /** \brief sends droid to delivery point, or back to commander. psRepairFac maybe nullptr when
  * repairs were made by a mobile repair turret

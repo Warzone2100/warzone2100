@@ -69,12 +69,13 @@ jobs:
       if: (github.event.action != 'deleted')
       id: download
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ github.token }}
         SF_FILE_PATH: ${{ steps.settings.outputs.SF_FILE_PATH }}
+        RELEASE_TAG: ${{ github.event.release.tag_name }}
       working-directory: '${{ github.workspace }}/release_assets/${{ steps.settings.outputs.SF_FILE_PATH }}'
       run: |
         # Download all release assets
-        echo "${RELEASE_CONTEXT}" | jq -r '.assets[] | "\(.name)\n\(.url)"' | xargs -r -n2 sh -c 'curl -H "Accept: application/octet-stream" -H "Authorization: token ${GITHUB_TOKEN}" -Lf -o "$1" "$2"' sh
+        gh release --repo "${GITHUB_REPOSITORY}" download "${RELEASE_TAG}"
         # Output list of downloaded files
         ls -al
         echo "Done."

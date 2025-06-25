@@ -26,6 +26,37 @@ const mis_scavengerResClassic = [
 	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage01"
 ];
 
+function activateLZDefenders()
+{
+	if (camClassicMode())
+	{
+		return;
+	}
+	camManageGroup(camMakeGroup("PatrolForce"), CAM_ORDER_PATROL, {
+		pos: [
+			camMakePos("PatrolPos1"),
+			camMakePos("PatrolPos2"),
+			camMakePos("PatrolPos3"),
+			camMakePos("PatrolPos4")
+		],
+		interval: camSecondsToMilliseconds(30),
+		regroup: false,
+	});
+}
+
+function activateScavBaseDefenders()
+{
+	if (camClassicMode())
+	{
+		return;
+	}
+	camManageGroup(camMakeGroup("DefendForce"), CAM_ORDER_DEFEND, {
+		pos: camMakePos("defensePos"),
+		radius: 16,
+		regroup: false
+	});
+}
+
 function sendRocketForce()
 {
 	camManageGroup(camMakeGroup("RocketForce"), CAM_ORDER_ATTACK, {
@@ -130,26 +161,23 @@ function getDroidsForNPLZ(args)
 {
 	const scouts = [ cTempl.nppod, cTempl.nphmg ];
 	const heavies = [ cTempl.npslc, cTempl.npsmct ];
-	const USE_ARTILLERY = (camRand(100) < 50);
 	const list = [];
+	const LIMIT = ((difficulty >= INSANE) ? 10 : 8);
 	let numScouts = camRand(5) + 1;
 	let heavy = heavies[camRand(heavies.length)];
+	let loopRuns = 0;
 
-	if (USE_ARTILLERY)
+	if (camRand(100) < 50)
 	{
-		list[list.length] = cTempl.npsens; //sensor will count towards scout total
+		list.push(cTempl.npsens); //sensor will count towards scout total
 		numScouts -= 1;
 		heavy = cTempl.npmor;
 	}
 
-	for (let i = 0; i < numScouts; ++i)
+	while (list.length < LIMIT)
 	{
-		list[list.length] = scouts[camRand(scouts.length)];
-	}
-
-	for (let a = numScouts; a < 8; ++a)
-	{
-		list[list.length] = heavy;
+		list.push((loopRuns < numScouts) ? scouts[camRand(scouts.length)] : heavy);
+		++loopRuns;
 	}
 
 	return list;
@@ -162,12 +190,15 @@ camAreaEvent("NPLZ1Trigger", function()
 	camPlayVideos({video: "MB1C4_MSG", type: MISS_MSG});
 	camDetectEnemyBase("NPLZ1Group");
 
-	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
+	camSetBaseReinforcements("NPLZ1Group", camChangeOnDiff(camMinutesToMilliseconds((difficulty >= INSANE) ? 4.5 : 5)), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
-			exit: { x: 126, y: 36 }
+			exit: { x: 126, y: 36 },
+			posLZ: camMakePos("EastNPLZ")
 		}
 	);
+
+	camCallOnce("activateLZDefenders");
 });
 
 camAreaEvent("NPLZ2Trigger", function()
@@ -179,20 +210,29 @@ camAreaEvent("NPLZ2Trigger", function()
 	camSetBaseReinforcements("NPLZ2Group", camChangeOnDiff(camMinutesToMilliseconds(5)), "getDroidsForNPLZ",
 		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
-			exit: { x: 126, y: 36 }
+			exit: { x: 126, y: 36 },
+			posLZ: camMakePos("WestNPLZ")
 		}
 	);
 });
 
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.npsmct, cTempl.nppod];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = ["reinforceNorth", "reinforceSouthEast"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1CA");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.alpha7);
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 
@@ -217,6 +257,22 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
+
+		if (camAllowInsaneSpawns())
+		{
+			addDroid(CAM_NEW_PARADIGM, 90, 107, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 89, 107, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 88, 107, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 90, 110, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 89, 110, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 88, 110, "MRP Bug Wheels", tBody.tank.bug, tProp.tank.wheels, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 114, 25, "MRP Scorpion Halftracks", tBody.tank.scorpion, tProp.tank.halfTracks, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 114, 26, "MRP Scorpion Halftracks", tBody.tank.scorpion, tProp.tank.halfTracks, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 114, 27, "MRP Scorpion Halftracks", tBody.tank.scorpion, tProp.tank.halfTracks, "", "", tWeap.tank.miniRocketPod);
+			addDroid(CAM_NEW_PARADIGM, 116, 25, "Lancer Scorpion Halftracks", tBody.tank.scorpion, tProp.tank.halfTracks, "", "", tWeap.tank.lancer);
+			addDroid(CAM_NEW_PARADIGM, 116, 26, "Lancer Scorpion Halftracks", tBody.tank.scorpion, tProp.tank.halfTracks, "", "", tWeap.tank.lancer);
+			addDroid(CAM_NEW_PARADIGM, 116, 27, "Lancer Scorpion Halftracks", tBody.tank.scorpion, tProp.tank.halfTracks, "", "", tWeap.tank.lancer);
+		}
 
 		camSetArtifacts({
 			"ScavSouthFactory": { tech: ["R-Wpn-Rocket05-MiniPod", "R-Wpn-Cannon2Mk1"] },
@@ -305,40 +361,40 @@ function eventStartLevel()
 			assembly: "ScavSouthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty >= INSANE) ? 20 : 25)),
 			templates: (!camClassicMode()) ? [ cTempl.buscan, cTempl.rbjeep8, cTempl.trikeheavy, cTempl.buggyheavy ] : [ cTempl.buscan, cTempl.rbjeep, cTempl.trike, cTempl.buggy ]
 		},
 		"ScavCentralFactory": {
 			assembly: "ScavCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty >= INSANE) ? 20 : 25)),
 			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeepheavy, cTempl.blokeheavy ] : [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeep, cTempl.bloke ]
 		},
 		"ScavNorthFactory": {
 			assembly: "ScavNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty >= INSANE) ? 15 : 20)),
 			templates: (!camClassicMode()) ? [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trikeheavy ] : [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trike ]
 		},
 		"NPCentralFactory": {
 			assembly: "NPCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty >= INSANE) ? 40 : 60)),
 			data: {
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
-			templates: [ cTempl.npmor, cTempl.npsens, cTempl.npslc ]
+			templates: (difficulty >= INSANE) ? [ cTempl.npmor, cTempl.npsens, cTempl.npsmc ] : [ cTempl.npmor, cTempl.npsens, cTempl.npslc ]
 		},
 		"NPNorthFactory": {
 			assembly: "NPNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds((difficulty >= INSANE) ? 40 : 50)),
 			data: {
 				regroup: false,
 				repair: 66,
@@ -360,4 +416,9 @@ function eventStartLevel()
 	queue("sendTankScoutForce", camSecondsToMilliseconds(30));
 	queue("sendTankForce", camSecondsToMilliseconds(100)); // in wzcam it moves back and then forward
 	queue("enableNPFactory", camMinutesToMilliseconds(5));
+	queue("activateScavBaseDefenders", camSecondsToMilliseconds(3));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4));
+	}
 }

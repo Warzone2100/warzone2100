@@ -3,12 +3,25 @@
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
 #define WZ_MIP_LOAD_BIAS 0.f
+#define WZ_SHADOW_MODE 1
+#define WZ_SHADOW_FILTER_SIZE 3
+#define WZ_SHADOW_CASCADES_COUNT 3
 //
+
+#define WZ_MAX_SHADOW_CASCADES 3
 
 uniform sampler2DArray tex;
 uniform sampler2DArray tex_nm;
 uniform sampler2DArray tex_sm;
 uniform sampler2D lightmap_tex;
+
+// shadow map
+uniform sampler2DArrayShadow shadowMap;
+
+uniform mat4 ViewMatrix;
+uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+uniform vec4 ShadowMapCascadeSplits;
+uniform int ShadowMapSize;
 
 // light colors/intensity:
 uniform vec4 emissiveLight;
@@ -20,6 +33,8 @@ uniform vec4 fogColor;
 uniform int fogEnabled; // whether fog is enabled
 uniform float fogEnd;
 uniform float fogStart;
+
+uniform float timeSec;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -33,17 +48,25 @@ uniform float fogStart;
 FRAGMENT_INPUT vec4 uv1_uv2;
 FRAGMENT_INPUT vec2 uvLightmap;
 FRAGMENT_INPUT float depth;
-FRAGMENT_INPUT float depth2;
 FRAGMENT_INPUT float vertexDistance;
 // light in modelSpace:
 FRAGMENT_INPUT vec3 lightDir;
+FRAGMENT_INPUT vec3 eyeVec;
 FRAGMENT_INPUT vec3 halfVec;
+FRAGMENT_INPUT float fresnel;
+FRAGMENT_INPUT float fresnel_alpha;
+
+// For Shadows
+FRAGMENT_INPUT vec3 fragPos;
+//FRAGMENT_INPUT vec3 fragNormal;
 
 #ifdef NEWGL
 out vec4 FragColor;
 #else
 #define FragColor gl_FragColor
 #endif
+
+#include "terrain_combined_frag.glsl"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
@@ -54,46 +77,60 @@ vec4 main_bumpMapping()
 	vec2 uv1 = uv1_uv2.xy;
 	vec2 uv2 = uv1_uv2.zw;
 
-	vec3 N1 = texture2DArray(tex_nm, vec3(uv2, 0.f), WZ_MIP_LOAD_BIAS).xzy; // y is up in modelSpace
-	vec3 N2 = texture2DArray(tex_nm, vec3(uv1, 1.f), WZ_MIP_LOAD_BIAS).xzy;
-	//use overlay blending to mix normal maps properly
-	bvec3 computedN_select = lessThan(N1, vec3(0.5));
-	vec3 computedN_multiply = 2.f * N1 * N2;
-	vec3 computedN_screen = vec3(1.f) - 2.f * (vec3(1.f) - N1) * (vec3(1.f) - N2);
-	vec3 N = mix(computedN_screen, computedN_multiply, vec3(computedN_select));
+	vec3 N1 = texture2DArray(tex_nm, vec3(vec2(uv1.x, uv1.y+timeSec*0.04), 0.0), WZ_MIP_LOAD_BIAS).xzy * vec3( 2.0, 2.0, 2.0) + vec3(-1.0, 0.0, -1.0); // y is up in modelSpace
+	vec3 N2 = texture2DArray(tex_nm, vec3(vec2(uv2.x+timeSec*0.02, uv2.y), 1.0), WZ_MIP_LOAD_BIAS).xzy * vec3(-2.0, 2.0,-2.0) + vec3( 1.0, -1.0, 1.0);
+	vec3 N3 = texture2DArray(tex_nm, vec3(vec2(uv1.x+timeSec*0.05, uv1.y), 0.0), WZ_MIP_LOAD_BIAS).xzy * 2.0 - 1.0;
+	vec3 N4 = texture2DArray(tex_nm, vec3(vec2(uv2.x, uv2.y+timeSec*0.03), 1.0), WZ_MIP_LOAD_BIAS).xzy * 2.0 - 1.0;
 
-	N = mix(normalize(N * 2.f - 1.f), vec3(0.f,1.f,0.f), vec3(float(N == vec3(0.f,0.f,0.f))));
+	//use RNM blending to mix normal maps properly, see https://blog.selfshadow.com/publications/blending-in-detail/
+	vec3 RNM = normalize(N1 * dot(N1,N2) - N2*N1.y);
+	vec3 Na = mix(N3, N4, 0.5); //more waves to mix
+	vec3 N = mix(RNM, Na, 0.5);
+	N = normalize(vec3(N.x, N.y * 5.0, N.z)); // 5 is a strength
 
-	float lambertTerm = max(dot(N, lightDir), 0.0); // diffuse lighting
+	// Textures
+	float d = mix(depth * 0.1, depth, 0.5);
+	float noise = texture2DArray(tex, vec3(uv1, 0.0), WZ_MIP_LOAD_BIAS).r * texture2DArray(tex, vec3(uv2, 1.0), WZ_MIP_LOAD_BIAS).r;
+	float foam = texture2DArray(tex_sm, vec3(vec2(uv1.x, uv1.y), 0.0), WZ_MIP_LOAD_BIAS).r;
+	foam *= texture2DArray(tex_sm, vec3(vec2(uv2.x, uv2.y), 1.0), WZ_MIP_LOAD_BIAS).r;
+	foam = (foam+pow(length(N.xz),2.5)*1000.0)*d*d ;
+	foam = clamp(foam, 0.0, 0.2);
+	vec3 waterColor = vec3(0.18,0.33,0.42);
 
-	// Gaussian specular term computation
-	float gloss = texture2DArray(tex_sm, vec3(uv1, 0.f), WZ_MIP_LOAD_BIAS).r * texture2DArray(tex_sm, vec3(uv2, 1.f), WZ_MIP_LOAD_BIAS).r;
-	vec3 H = normalize(halfVec);
-	float exponent = acos(dot(H, N)) / (gloss + 0.05);
-	float gaussianTerm = exp(-(exponent * exponent));
+	// Light
+	float visibility = getShadowVisibility();
+	float lambertTerm = max(dot(N, lightDir), 0.0);
+	float blinnTerm = pow(max(dot(N, halfVec), 0.0), 128.0);
+	vec3 reflectLight = reflect(-lightDir, N);
+	float r = pow(max(dot(reflectLight, halfVec), 0.0), 14.0);
+	blinnTerm = blinnTerm + r;
 
-	vec4 fragColor = (texture2DArray(tex, vec3(uv1, 0.f), WZ_MIP_LOAD_BIAS)+texture2DArray(tex, vec3(uv2, 1.f), WZ_MIP_LOAD_BIAS)) * (gloss+vec4(0.08,0.13,0.15,1.0));
-	fragColor = fragColor*(ambientLight+diffuseLight*lambertTerm) + specularLight*(1.0-gloss)*gaussianTerm*vec4(1.0,0.843,0.686,1.0);
-	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
-	vec4 color = fragColor * vec4(vec3(lightmap_vec4.a), 1.f); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
-	color.rgb = blendAddEffectLighting(color.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
-	return color;
+	vec4 ambientColor = vec4(ambientLight.rgb * foam, 0.15);
+	vec4 diffuseColor = vec4(diffuseLight.rgb * lambertTerm * waterColor+noise*noise*0.5, 0.35);
+	vec4 specColor = vec4(specularLight.rgb * blinnTerm*0.35, fresnel_alpha);
+
+	vec4 finalColor = vec4(0.0);
+	finalColor.rgb = ambientColor.rgb + ((diffuseColor.rgb + specColor.rgb) * visibility);
+	finalColor.rgb = mix(finalColor.rgb, (finalColor.rgb+vec3(1.0,0.8,0.63))*0.5, fresnel);
+	finalColor.a = (ambientColor.a + diffuseColor.a + specColor.a) * (1.0-depth);
+
+	vec4 lightmap = texture(lightmap_tex, uvLightmap, 0.0);
+	finalColor.rgb *= vec3(lightmap.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
+	finalColor.rgb = blendAddEffectLighting(finalColor.rgb, (lightmap.rgb / 1.5f)); // additive color (from environmental point lights / effects)
+
+	return finalColor;
 }
 
 void main()
 {
 	vec4 fragColor = main_bumpMapping();
-	fragColor = mix(fragColor, fragColor-depth*0.0007, depth*0.0009);
-	fragColor.a = mix(0.25, 1.0, depth2*0.005);
 
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
-
-		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
+		fragColor = mix(vec4(fragColor.rgb,fragColor.a), vec4(fogColor.rgb,fragColor.a), fogFactor);
 	}
 
 	FragColor = fragColor;

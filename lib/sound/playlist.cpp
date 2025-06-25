@@ -236,9 +236,7 @@ void WZ_Playlist_Preferences::clearAllPreferences()
 
 bool WZ_Playlist_Preferences::savePreferences()
 {
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString = mRoot.dump(4);
 #if SIZE_MAX >= UDWORD_MAX
 	ASSERT_OR_RETURN(false, jsonString.size() <= static_cast<size_t>(std::numeric_limits<UDWORD>::max()), "jsonString.size (%zu) exceeds UDWORD::max", jsonString.size());
 #endif
@@ -513,7 +511,7 @@ bool PlayList_Read(const char *path)
 	char *data = nullptr;
 	std::string albumsPath = astringf("%s/albums", path);
 
-	WZ_PHYSFS_enumerateFiles(albumsPath.c_str(), [&](const char *i) -> bool {
+	WZ_PHYSFS_enumerateFolders(albumsPath.c_str(), [&](const char *i) -> bool {
 		std::string albumDir = albumsPath + "/" + i;
 		std::string str = albumDir + "/album.json";
 		if (!PHYSFS_exists(str.c_str()))

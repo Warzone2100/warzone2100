@@ -45,3 +45,6 @@ void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(printf, 1,
 #endif
 
 void wz_command_interface_output_str(const char *str);
+
+void wz_command_interface_output_room_status_json(bool queued = false);
+void wz_command_interface_process_queued_status_output();

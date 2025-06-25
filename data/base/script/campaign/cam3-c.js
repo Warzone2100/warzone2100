@@ -27,6 +27,7 @@ const mis_nexusResClassic = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06", "R-Sys-NEXUSsensor",
 ];
+const mis_vtolAppearPositions = ["vtolSpawnPos1", "vtolSpawnPos2"];
 var reunited;
 var betaUnitIds;
 var truckLocCounter;
@@ -34,6 +35,48 @@ var truckLocCounter;
 camAreaEvent("gammaBaseTrigger", function(droid) {
 	discoverGammaBase();
 });
+
+//Remove Nexus VTOL droids.
+camAreaEvent("vtolRemoveZone", function(droid)
+{
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
+	{
+		camSafeRemoveObject(droid, false);
+	}
+	resetLabel("vtolRemoveZone", CAM_NEXUS);
+});
+
+function insaneWave2()
+{
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
+	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+}
+
+function insaneWave3()
+{
+	const list = [cTempl.nxlpulsev, cTempl.nxlpulsev];
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+}
+
+function insaneVtolAttack()
+{
+	if (camClassicMode())
+	{
+		const list = [cTempl.nxlpulsev, cTempl.nxmheapv];
+		const ext = {limit: [5, 5], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+	}
+	else
+	{
+		const list = [cTempl.nxmheapv, cTempl.nxmtherv];
+		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+		queue("insaneWave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("insaneWave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
+}
 
 function setupPatrolGroups()
 {
@@ -106,6 +149,14 @@ function truckDefense()
 	camQueueBuilding(CAM_NEXUS, list[camRand(list.length)], position);
 }
 
+function insaneReinforcementSpawn()
+{
+	const units = {units: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmangel], appended: cTempl.nxmsens};
+	const limits = {minimum: 4, maxRandom: 4};
+	const location = ["southSpawnPos", "eastSpawnPos"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
 function discoverGammaBase()
 {
 	reunited = true;
@@ -113,7 +164,7 @@ function discoverGammaBase()
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(90)));
+	camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds(90)));
 	setPower(playerPower(CAM_HUMAN_PLAYER) + camChangeOnDiff(10000));
 
 	playSound(cam_sounds.powerTransferred);
@@ -128,6 +179,11 @@ function discoverGammaBase()
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	truckDefense();
 	enableAllFactories();
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(6.5));
+		queue("insaneVtolAttack", camMinutesToMilliseconds(10));
+	}
 }
 
 function findBetaUnitIds()
@@ -187,7 +243,7 @@ function eventStartLevel()
 
 	findBetaUnitIds();
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D1", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma7, {
 		callback: "betaAlive"
 	});
 
@@ -301,7 +357,7 @@ function eventStartLevel()
 	if (difficulty >= HARD)
 	{
 		addDroid(CAM_NEXUS, 31, 185, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
-		camManageTrucks(CAM_NEXUS);
+		camManageTrucks(CAM_NEXUS, false);
 	}
 
 	camPlayVideos([{video: "MB3_C_MSG", type: CAMP_MSG}, {video: "MB3_C_MSG2", type: MISS_MSG}]);

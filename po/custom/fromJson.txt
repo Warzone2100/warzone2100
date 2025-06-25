@@ -41,27 +41,21 @@ _("76mm twin-barrel automatic-cannon")
 _("AA accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-ROF02.name
 _("AA Ammunition Hopper Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-ROF03.name
 _("AA Ammunition Hopper Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-ROF01.name
 _("AA Ammunition Hopper")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-ROF05.name
 _("AA Chainfeed Loader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-ROF06.name
 _("AA Chainfeed Loader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-ROF04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-ROF04.name
 _("AA Chainfeed Loader")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-AASite-QuadBof.name
@@ -91,27 +85,21 @@ _("AA Flak damage +25%")
 _("AA Flak Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Damage02.name
 _("AA HE Flak Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Damage03.name
 _("AA HE Flak Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Damage01.name
 _("AA HE Flak")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Damage05.name
 _("AA HEAP Flak Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Damage06.name
 _("AA HEAP Flak Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Damage04.name
 _("AA HEAP Flak")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_AAROF1.text[2]
@@ -139,15 +127,12 @@ _("AA Site with Tornado Flak Turret")
 _("AA Site with Whirlwind Gun Turret")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Accuracy02.name
 _("AA Target Acquisition Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Accuracy03.name
 _("AA Target Prediction Computer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
 _("AA Thermal Imaging Sensor")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-AASite-QuadBof02.name
@@ -172,21 +157,18 @@ _("AA Upgrade")
 _("Adaptive AI with multiple personalities")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials08.name
 _("Advanced Base Structure Materials Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials09.name
 _("Advanced Base Structure Materials Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_ST_MAT7.text[1]
 // data/base/stats/research.json: $.R-Struc-Materials07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials07.name
-// ... + 2 refs
+// data/mp/messages/resmessages3.json: $.RES_ST_MAT7.text[1]
+// data/mp/stats/research.json: $.R-Struc-Materials03.name
 _("Advanced Base Structure Materials")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb-Damage03.name
 _("Advanced Bomb Warhead")  
 // TRANSLATORS: 
@@ -198,7 +180,6 @@ _("Advanced Cyborg Production")
 _("Advanced Engineering Techniques")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Engineering03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Engineering03.name
 // data/mp/stats/research.json: $.R-Sys-Engineering03.name
 _("Advanced Engineering")  
 // TRANSLATORS: 
@@ -213,32 +194,26 @@ _("Advanced fire detection systems")
 _("Advanced Manufacturing")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-ROF02.name
 _("Advanced Missile Allocation System Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-ROF03.name
 _("Advanced Missile Allocation System Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-ROF01.name
 _("Advanced Missile Allocation System")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-Damage02.name
 _("Advanced Missile Warhead Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-Damage03.name
 _("Advanced Missile Warhead Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-Damage01.name
 _("Advanced Missile Warhead")  
 // TRANSLATORS: 
@@ -250,7 +225,6 @@ _("Advanced Repair Facility")
 _("Advanced repair techniques")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.ADVANCEDRESEARCH.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.ADVANCEDRESEARCH.name
 _("ADVANCED RESEARCH")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_VS3.text[1]
@@ -504,17 +478,13 @@ _("Alpha")
 _("Amphibious hover propulsion")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-MdArtMissile.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-MdArtMissile.name
 _("Angel Missile Battery")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.Emplacement-MdART-pit.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Emplacement-MdART-pit.name
 _("Angel Missile Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MdArtMissile.name
 // data/base/stats/weapons.json: $.Missile-MdArt.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MdArtMissile.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Missile-MdArt.name
 _("Angel Missile")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_AT.text[1]
@@ -526,49 +496,41 @@ _("Anti-tank missile")
 _("Anti-tank rocket")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage03.name
 _("APDSB MG Bullets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage04.name
 _("APDSB MG Bullets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage02.name
 _("APDSB MG Bullets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 _("APFSDS Cannon Rounds Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 _("APFSDS Cannon Rounds Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 _("APFSDS Cannon Rounds")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HvyArtMissile.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-HvyArtMissile.name
 // data/mp/stats/research.json: $.R-Defense-HvyArtMissile.name
 _("Archangel Missile Battery")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.Emplacement-HvART-pit.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Emplacement-HvART-pit.name
 // data/mp/stats/structure.json: $.Emplacement-HvART-pit.name
 _("Archangel Missile Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-HvArtMissile.name
 // data/base/stats/weapons.json: $.Missile-HvyArt.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-HvArtMissile.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-HvArtMissile.name
+// data/mp/stats/weapons.json: $.Missile-HvyArt.name
 _("Archangel Missile")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
@@ -878,18 +840,16 @@ _("Artillery battery firing Firestorm Missiles")
 _("Artillery battery firing Novastorm Missiles")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotCannon.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-RotCannon.name
 _("Assault Cannon Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.Tower-VulcanCan.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Tower-VulcanCan.name
 // data/mp/stats/structure.json: $.Tower-VulcanCan.name
 _("Assault Cannon Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Wall-VulcanCan.name
 // data/base/stats/structure.json: $.Wall-VulcanCan.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Wall-VulcanCan.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Wall-VulcanCan.name
+// data/mp/stats/structure.json: $.Wall-VulcanCan.name
 _("Assault Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -897,33 +857,28 @@ _("Assault Cannon Mantis Hover")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon5.name
 // data/base/stats/weapons.json: $.Cannon5VulcanMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon5.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Cannon5.name
+// data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 _("Assault Cannon")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
 // data/base/stats/structure.json: $.Pillbox-RotMG.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Pillbox-RotMG.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Pillbox-RotMG.name
 _("Assault Gun Bunker")  
 // TRANSLATORS: 
 // data/mp/stats/structure.json: $.Tower-RotMg.name
 _("Assault Gun Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.Tower-RotMg.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Tower-RotMg.name
 _("Assault Gun Guard Tower 2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotMG.name
 // data/base/stats/structure.json: $.GuardTower-RotMg.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-RotMG.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.GuardTower-RotMg.name
 _("Assault Gun Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Wall-RotMg.name
 // data/base/stats/structure.json: $.Wall-RotMg.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Wall-RotMg.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Wall-RotMg.name
+// data/mp/stats/structure.json: $.Wall-RotMg.name
 _("Assault Gun Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
@@ -933,7 +888,6 @@ _("Assault Gun Python Half Track")
 _("Assault Gun Python Hover")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 // data/mp/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 _("Assault Gun Python Tracks")  
 // TRANSLATORS: 
@@ -942,14 +896,14 @@ _("Assault Gun Tower")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG4.name
 // data/base/stats/weapons.json: $.MG4ROTARYMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG4.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-MG4.name
+// data/mp/stats/weapons.json: $.MG4ROTARYMk1.name
 _("Assault Gun")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
 // data/base/stats/templates.json: $.Cyb-RotMG-GROUND.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.Cyb-RotMG-GROUND.name
+// data/mp/stats/templates.json: $.CyborgRotMgGround.name
 _("Assault Gunner Cyborg")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_ST_VP.text[2]
@@ -985,17 +939,15 @@ _("Autoloader increases reload rate")
 _("Automated Cyborg Production")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Factory-Upgrade02.name
 _("Automated Factory Production Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Factory-Upgrade03.name
 _("Automated Factory Production Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_FU1.text[1]
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade-AI.name
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade01.name
-// ... + 3 refs
+// data/mp/messages/resmessages1.json: $.RES_ST_FU1.text[1]
 _("Automated Factory Production")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Struc-Factory-Upgrade01.name
@@ -1006,32 +958,27 @@ _("Automated Manufacturing")
 _("Automated reload system")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RprFac-Upgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RprFac-Upgrade02.name
 _("Automated Repair Facility Upgrade Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RprFac-Upgrade03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RprFac-Upgrade03.name
 _("Automated Repair Facility Upgrade Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
 // data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
 _("Automated Repair Facility")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
 // data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
 _("Automated VTOL Rearming Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 // data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.name
 _("Automated VTOL Rearming Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
 // data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad-Upgrade01.name
-// ... + 2 refs
+// data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[1]
+// data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade01.name
 _("Automated VTOL Rearming")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[1]
@@ -1078,14 +1025,14 @@ _("Avenger Hardpoint")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-SamSite1.name
 // data/base/stats/structure.json: $.P0-AASite-SAM1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-SamSite1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-SamSite1.name
+// data/mp/stats/structure.json: $.P0-AASite-SAM1.name
 _("Avenger SAM Site")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-LtSAM.name
 // data/base/stats/weapons.json: $.Missile-LtSAM.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-LtSAM.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Missile-LtSAM.name
+// data/mp/stats/weapons.json: $.Missile-LtSAM.name
 _("Avenger SAM")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B05.text[3]
@@ -1135,11 +1082,11 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-_("Best Targets: Base structures")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 _("Best Targets: Base Structures")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+_("Best Targets: Base structures")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -1149,17 +1096,17 @@ _("Best Targets: Base Structures, bunkers")
 // data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 _("Best Targets: Base structures, emplacements, cyborgs")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
-// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-// ... + 7 refs
-_("Best Targets: Base structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
 // ... + 4 refs
 _("Best Targets: Base Structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
+// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+// ... + 7 refs
+_("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -1293,18 +1240,16 @@ _("Bomb turret explodes in proximity to enemy")
 _("Bomb Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraHvyMortarHalftrack.name
 // data/mp/stats/templates.json: $.CobraHvyMortarHalftrack.name
 _("Bombard Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HvyMor.name
 // data/base/stats/structure.json: $.Emplacement-MortarPit02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-HvyMor.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-HvyMor.name
+// data/mp/stats/structure.json: $.Emplacement-MortarPit02.name
 _("Bombard Pit")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Mortar2Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Mortar2Mk1.name
 // data/mp/stats/weapons.json: $.Mortar2Mk1.name
 _("Bombard")  
 // TRANSLATORS: 
@@ -1316,12 +1261,10 @@ _("Bonded metallic laminates formed into walls and defenses")
 _("BoneCrusher!")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body4ABT.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body4ABT.name
 // data/mp/stats/body.json: $.Body4ABT.name
 _("Bug")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BarbarianBuggy.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BarbarianBuggy.name
 // data/mp/stats/templates.json: $.BarbarianBuggy.name
 _("Buggy")  
 // TRANSLATORS: 
@@ -1345,7 +1288,6 @@ _("Bunker Buster Mantis Tracks")
 _("Bunker buster missile")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket03-HvAT.name
 _("Bunker Buster Rocket")  
 // TRANSLATORS: 
@@ -1359,11 +1301,9 @@ _("Bunker Buster Scorpion Tracks")
 _("Bunker Buster Scorpion VTOL")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperBBWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperBBWheels.name
 _("Bunker Buster Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-BB.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-BB.name
 // data/mp/stats/weapons.json: $.Rocket-BB.name
 _("Bunker Buster")  
 // TRANSLATORS: 
@@ -1377,17 +1317,14 @@ _("Burns oil more efficiently")
 _("Cannon accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 _("Cannon Autoloader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 _("Cannon Autoloader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF01.name
 _("Cannon Autoloader")  
 // TRANSLATORS: 
@@ -1398,7 +1335,6 @@ _("Cannon Autoloader")
 _("Cannon damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaFireCan.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BabaFireCan.name
 // data/mp/stats/templates.json: $.BabaFireCan.name
 _("Cannon Fire Truck")  
 // TRANSLATORS: 
@@ -1408,27 +1344,22 @@ _("Cannon Fire Truck")
 _("Cannon Fortress")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
 _("Cannon Laser Designator")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
 _("Cannon Laser Rangefinder")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-ROF05.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF05.name
 _("Cannon Rapid Loader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-ROF06.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF06.name
 _("Cannon Rapid Loader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-ROF04.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF04.name
 _("Cannon Rapid Loader")  
 // TRANSLATORS: 
@@ -1438,7 +1369,6 @@ _("Cannon Rapid Loader")
 _("Cannon reload time -10%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CannonTower.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0CannonTower.name
 // data/mp/stats/structure.json: $.A0CannonTower.name
 _("Cannon Tower")  
 // TRANSLATORS: 
@@ -1460,12 +1390,11 @@ _("CB Sensor Improved")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-CBSensor-Tower01.name
 // data/base/stats/structure.json: $.Sys-CB-Tower01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-CBSensor-Tower01.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Sys-CBSensor-Tower01.name
+// data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 _("CB Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-CBSensor-Turret01.name
 // data/mp/stats/research.json: $.R-Sys-CBSensor-Turret01.name
 _("CB Turret")  
 // TRANSLATORS: 
@@ -1478,12 +1407,10 @@ _("Chainfeed loader eradicates jams and improves performance")
 _("Chaingun mechanism replaces belt-feed")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-MG-ROF01.name
 _("Chaingun Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BaBaCivilian.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BaBaCivilian.name
 // data/mp/stats/templates.json: $.BaBaCivilian.name
 _("Civilian")  
 // TRANSLATORS: 
@@ -1491,25 +1418,21 @@ _("Civilian")
 _("Cluster Bomb Bay")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb01.name
 _("Cluster Bombs Bay")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0CobraFlameTracks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0CobraFlameTracks.name
 _("Cobra Flamer Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0CobraMedCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0CobraMedCnTrks.name
 _("Cobra Medium Cannon Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraSpadeTracks.name
 // data/base/stats/templates.json: $.P0CobraSpadeTracks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraSpadeTracks.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.CobraSpadeTracks.name
+// data/mp/stats/templates.json: $.P0CobraSpadeTracks.name
 _("Cobra Truck")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body5REC.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body5REC.name
 // data/mp/multiplay/skirmish/Cobra.json: $.AI.name
 // data/mp/stats/body.json: $.Body5REC.name
 _("Cobra")  
@@ -1519,11 +1442,10 @@ _("Cobra")
 _("Collapsing Plutonium kinetic energy bullets")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CommandCentreCO.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0CommandCentreCO.name
+// data/mp/stats/structure.json: $.A0CommandCentreCO.name
 _("Collective Command Center")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.CollectiveCWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.CollectiveCWall.name
 // data/mp/stats/structure.json: $.CollectiveCWall.name
 _("Collective CWall")  
 // TRANSLATORS: 
@@ -1540,7 +1462,6 @@ _("Collective Light Body")
 _("Collective Medium Body")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.CollectiveWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.CollectiveWall.name
 // data/mp/stats/structure.json: $.CollectiveWall.name
 _("Collective Wall")  
 // TRANSLATORS: 
@@ -1555,22 +1476,18 @@ _("Combat engineer with construction ability")
 _("Combines standard, counter battery and VTOL sensors")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CommandCentre.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0CommandCentre.name
 // data/mp/stats/structure.json: $.A0CommandCentre.name
 _("Command Center")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ComDroidControl.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0ComDroidControl.name
 // data/mp/stats/structure.json: $.A0ComDroidControl.name
 _("Command Relay Center")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-CommandRelay.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-CommandRelay.name
 // data/mp/stats/research.json: $.R-Struc-CommandRelay.name
 _("Command Relay Post")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraComHalftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraComHalftrack.name
 // data/mp/stats/templates.json: $.CobraComHalftrack.name
 _("Command Turret Cobra Half-tracks")  
 // TRANSLATORS: 
@@ -1582,8 +1499,8 @@ _("Command Turret Mantis Tracks")
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0PythonComTracks.name
 // data/base/stats/templates.json: $.PythonComTracks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0PythonComTracks.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.P0PythonComTracks.name
+// data/mp/stats/templates.json: $.PythonComTracks.name
 _("Command Turret Python Tracks")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.Scorp-Trk-Com.name
@@ -1598,7 +1515,7 @@ _("Command Turret Viper Tracks")
 // data/base/stats/brain.json: $.CommandBrain01.name
 // data/base/stats/research.json: $.R-Comp-CommandTurret01.name
 // data/base/stats/weapons.json: $.CommandTurret1.name
-// ... + 6 refs
+// ... + 3 refs
 _("Command Turret")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[2]
@@ -1611,17 +1528,14 @@ _("Commander leads groups acts as factory delivery point")
 _("Complete battlefield visibility")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals02.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals02.name
 _("Composite Alloys Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals03.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals03.name
 _("Composite Alloys Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals01.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals01.name
 _("Composite Alloys")  
 // TRANSLATORS: 
@@ -1662,7 +1576,6 @@ _("Construction speed +10%")
 _("Construction speed +20%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Spade1Mk1.name
 // data/mp/stats/research.json: $.R-Sys-Spade1Mk1.name
 _("Construction Unit")  
 // TRANSLATORS: 
@@ -1691,43 +1604,36 @@ _("Crane1")
 _("Crane2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals02.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals02.name
 _("Cyborg Composite Alloys Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals03.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals03.name
 _("Cyborg Composite Alloys Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals01.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals01.name
 _("Cyborg Composite Alloys")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals05.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals05.name
 _("Cyborg Dense Composite Alloys Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals06.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals06.name
 _("Cyborg Dense Composite Alloys Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals04.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals04.name
 _("Cyborg Dense Composite Alloys")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[1]
 // data/base/stats/research.json: $.R-Struc-Factory-Cyborg.name
 // data/base/stats/structure.json: $.A0CyborgFactory.name
-// ... + 5 refs
+// ... + 3 refs
 _("Cyborg Factory")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.CyborgFlamer01.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.CyborgFlamer01.name
 // data/mp/stats/weapons.json: $.CyborgFlamer01.name
 _("Cyborg Flamer")  
 // TRANSLATORS: 
@@ -1735,27 +1641,22 @@ _("Cyborg Flamer")
 _("Cyborg Heavy Body")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Armor-Heat05.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat05.name
 _("Cyborg High Intensity Thermal Armor Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Armor-Heat06.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat06.name
 _("Cyborg High Intensity Thermal Armor Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Armor-Heat04.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat04.name
 _("Cyborg High Intensity Thermal Armor")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.CyborgRocket.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.CyborgRocket.name
 // data/mp/stats/weapons.json: $.CyborgRocket.name
 _("Cyborg Lancer")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.CyborgLightBody.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.CyborgLightBody.name
 // data/mp/stats/body.json: $.CyborgLightBody.name
 _("Cyborg Light Body")  
 // TRANSLATORS: 
@@ -1773,7 +1674,6 @@ _("Cyborg Production Improved")
 // TRANSLATORS: 
 // data/base/stats/propulsion.json: $.CyborgLegs02.name
 // data/base/stats/research.json: $.R-Cyborg-Legs02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Legs02.name
 _("Cyborg Propulsion II")  
 // TRANSLATORS: 
 // data/base/stats/propulsion.json: $.CyborgLegs03.name
@@ -1787,22 +1687,18 @@ _("Cyborg Propulsion Improved")
 // TRANSLATORS: 
 // data/base/stats/propulsion.json: $.CyborgLegs.name
 // data/base/stats/research.json: $.R-Cyborg-Legs01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Legs01.name
 // data/mp/stats/propulsion.json: $.CyborgLegs.name
 _("Cyborg Propulsion")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals08.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals08.name
 _("Cyborg Superdense Composite Alloys Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals09.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals09.name
 _("Cyborg Superdense Composite Alloys Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Metals07.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals07.name
 _("Cyborg Superdense Composite Alloys")  
 // TRANSLATORS: 
@@ -1825,17 +1721,14 @@ _("Cyborg Tank Killer")
 _("Cyborg Thermal Armor Improved")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Armor-Heat02.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat02.name
 _("Cyborg Thermal Armor Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Armor-Heat03.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat03.name
 _("Cyborg Thermal Armor Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 _("Cyborg Thermal Armor")  
 // TRANSLATORS: 
@@ -1855,34 +1748,27 @@ _("Cyborgs can now be researched")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-AASite-QuadBof.name
 // data/base/stats/structure.json: $.AASite-QuadBof.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-AASite-QuadBof.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.AASite-QuadBof.name
 _("Cyclone AA Flak Site")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0cam3PyFlakHT.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0cam3PyFlakHT.name
 _("Cyclone AA Python Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun02.name
 // data/base/stats/weapons.json: $.AAGun2Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun02.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.AAGun2Mk1.name
 _("Cyclone Flak Turret")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade05.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade05.name
 _("Dedicated Synaptic Link Data Analysis Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade06.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade06.name
 _("Dedicated Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_RU4.text[1]
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade04.name
-// ... + 2 refs
+// data/mp/messages/resmessages2.json: $.RES_ST_RU4.text[1]
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade04.name
 _("Dedicated Synaptic Link Data Analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_DF_WU1.text[0]
@@ -1916,22 +1802,18 @@ _("Defensive Strength: Low")
 _("Defensive Strength: Medium")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ADemolishStructure.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0ADemolishStructure.name
 // data/mp/stats/structure.json: $.A0ADemolishStructure.name
 _("Demolish Structure")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals05.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals05.name
 _("Dense Composite Alloys Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals06.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals06.name
 _("Dense Composite Alloys Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals04.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals04.name
 _("Dense Composite Alloys")  
 // TRANSLATORS: 
@@ -1940,14 +1822,14 @@ _("Dense Composite Alloys")
 _("Depleted uranium kinetic energy bullets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage09.name
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage09.name
 _("Depleted Uranium MG Bullets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage10.name
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage10.name
 _("Depleted Uranium MG Bullets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage08.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage08.name
 _("Depleted Uranium MG Bullets")  
 // TRANSLATORS: 
@@ -1970,7 +1852,6 @@ _("Directs and collates information for command turrets")
 _("Does not offer sensor targeting")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.WreckedTransporter.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.WreckedTransporter.name
 // data/mp/stats/structure.json: $.WreckedTransporter.name
 _("Downed Transport")  
 // TRANSLATORS: 
@@ -2059,7 +1940,6 @@ _("Enables self-repair")
 _("Enemy")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Engineering01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Engineering01.name
 // data/mp/stats/research.json: $.R-Sys-Engineering01.name
 _("Engineering")  
 // TRANSLATORS: 
@@ -2102,8 +1982,8 @@ _("Factory module enables medium and large bodies")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Factory-Module.name
 // data/base/stats/structure.json: $.A0FacMod1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Factory-Module.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Struc-Factory-Module.name
+// data/mp/stats/structure.json: $.A0FacMod1.name
 _("Factory Module")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -2120,7 +2000,6 @@ _("Factory output speed +60%")
 _("Factory production rate +60%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0LightFactory.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0LightFactory.name
 // data/mp/stats/structure.json: $.A0LightFactory.name
 _("Factory")  
 // TRANSLATORS: 
@@ -2128,15 +2007,12 @@ _("Factory")
 _("Farther range compared to other sensors")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 _("Fast Fire Mini-Rockets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 _("Fast Fire Mini-Rockets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 _("Fast Fire Mini-Rockets")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
@@ -2144,7 +2020,6 @@ _("Fast Fire Mini-Rockets")
 _("Fast firing light anti-vehicle rockets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 _("Fast Loader")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B08.text[2]
@@ -2170,7 +2045,6 @@ _("Faster than Viper")
 _("Fin-stabilization improves flight trajectory")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaFireTruck.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BabaFireTruck.name
 // data/mp/stats/templates.json: $.BabaFireTruck.name
 _("Fire Truck")  
 // TRANSLATORS: 
@@ -2193,28 +2067,24 @@ _("Fires salvoes of mini-rockets")
 _("Flame-thrower firing Propylene Oxide gel")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-ROF02.name
 _("Flamer Autoloader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 _("Flamer Autoloader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 _("Flamer Autoloader")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Pillbox05.name
 // data/base/stats/structure.json: $.PillBox5.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Pillbox05.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Pillbox05.name
+// data/mp/stats/structure.json: $.PillBox5.name
 _("Flamer Bunker")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraFlameTracks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraFlameTracks.name
 // data/mp/stats/templates.json: $.CobraFlameTracks.name
 // data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 _("Flamer Cobra Tracks")  
@@ -2222,7 +2092,7 @@ _("Flamer Cobra Tracks")
 // data/base/stats/research.json: $.R-Cyborg-Wpn-Flamer.name
 // data/base/stats/templates.json: $.Cyb-Flamer-GROUND.name
 // data/base/stats/templates.json: $.CyborgFlamer01Grd.name
-// ... + 5 refs
+// ... + 2 refs
 _("Flamer Cyborg")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
@@ -2236,12 +2106,10 @@ _("Flamer Fast Loader")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower04.name
 // data/base/stats/structure.json: $.GuardTower4.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.GuardTower4.name
 // data/mp/stats/structure.json: $.GuardTower4.name
 _("Flamer Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.WallTower05.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.WallTower05.name
 // data/mp/stats/structure.json: $.WallTower05.name
 _("Flamer Hardpoint")  
 // TRANSLATORS: 
@@ -2262,56 +2130,50 @@ _("Flamer Upgrade")
 _("Flamer Viper Half-Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperFlameWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperFlameWheels.name
 // data/mp/stats/templates.json: $.ViperFlameWheels.name
 _("Flamer Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer01Mk1.name
 // data/base/stats/weapons.json: $.Flame1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer01Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Flamer01Mk1.name
+// data/mp/stats/weapons.json: $.Flame1Mk1.name
 _("Flamer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-PrisLas.name
 // data/base/stats/structure.json: $.Emplacement-PrisLas.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-PrisLas.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-PrisLas.name
+// data/mp/stats/structure.json: $.Emplacement-PrisLas.name
 _("Flashlight Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
 // data/base/stats/templates.json: $.Cyb-Laser1-GROUND.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.Cyb-Laser1-GROUND.name
+// data/mp/stats/templates.json: $.MP-Cyb-Laser1-GRD.name
 _("Flashlight Gunner Cyborg")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower-PulseLas.name
 // data/base/stats/structure.json: $.WallTower-PulseLas.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower-PulseLas.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.WallTower-PulseLas.name
 _("Flashlight Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.RetreHoverFlashLight.name
 _("Flashlight Retribution Hover")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Laser3BEAMMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Laser3BEAMMk1.name
 // data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 _("Flashlight")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine02.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine02.name
 _("Fuel Injection Engine Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine03.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine03.name
 _("Fuel Injection Engine Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_EN1.text[1]
 // data/base/stats/research.json: $.R-Vehicle-Engine01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine01.name
-// ... + 2 refs
+// data/mp/messages/resmessages1.json: $.RES_V_EN1.text[1]
+// data/mp/stats/research.json: $.R-Vehicle-Engine01.name
 _("Fuel Injection Engine")  
 // TRANSLATORS: 
 // data/base/campaigns/gamma.json: $.name
@@ -2325,19 +2187,17 @@ _("Gamma")
 _("Gas turbine boosts power output")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine08.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine08.name
 _("Gas Turbine Engine Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine09.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine09.name
 _("Gas Turbine Engine Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_V_EN7.text[1]
 // data/base/stats/research.json: $.R-Vehicle-Engine07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine07.name
-// ... + 2 refs
+// data/mp/messages/resmessages3.json: $.RES_V_EN7.text[1]
+// data/mp/stats/research.json: $.R-Vehicle-Engine07.name
 _("Gas Turbine Engine")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Struc-Power-Upgrade01b.name
@@ -2347,20 +2207,19 @@ _("Gas Turbine Generator Mk2")
 _("Gas Turbine Generator Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Power-Upgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Power-Upgrade01.name
 // data/mp/stats/research.json: $.R-Struc-Power-Upgrade01.name
 _("Gas Turbine Generator")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Rail3.name
 // data/base/stats/structure.json: $.Emplacement-Rail3.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Rail3.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Rail3.name
+// data/mp/stats/structure.json: $.Emplacement-Rail3.name
 _("Gauss Cannon Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower-Rail3.name
 // data/base/stats/structure.json: $.WallTower-Rail3.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower-Rail3.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower-Rail3.name
+// data/mp/stats/structure.json: $.WallTower-Rail3.name
 _("Gauss Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.PythonGaussTracks.name
@@ -2371,8 +2230,8 @@ _("Gauss Cannon Wyvern Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RailGun03.name
 // data/base/stats/weapons.json: $.RailGun3Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RailGun03.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-RailGun03.name
+// data/mp/stats/weapons.json: $.RailGun3Mk1.name
 _("Gauss Cannon")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_LAS1.text[1]
@@ -2423,21 +2282,18 @@ _("Grenadier Cyborg")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HvyHowitzer.name
 // data/base/stats/structure.json: $.Emplacement-Howitzer150.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-HvyHowitzer.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-HvyHowitzer.name
+// data/mp/stats/structure.json: $.Emplacement-Howitzer150.name
 _("Ground Shaker Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Howitzer150Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Howitzer150Mk1.name
 // data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 _("Ground Shaker")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Halftracks02.name
 _("Half-tracked Propulsion II")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
 // data/mp/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
 _("Half-tracked Propulsion")  
 // TRANSLATORS: 
@@ -2452,7 +2308,6 @@ _("Half-tracks III")
 _("Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0HardcreteMk1CWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0HardcreteMk1CWall.name
 // data/mp/stats/structure.json: $.A0HardcreteMk1CWall.name
 _("Hardcrete Corner Wall")  
 // TRANSLATORS: 
@@ -2461,27 +2316,23 @@ _("Hardcrete Corner Wall")
 _("Hardcrete Gate")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0HardcreteMk1Wall.name
 // data/mp/stats/structure.json: $.A0HardcreteMk1Wall.name
 _("Hardcrete Wall")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HardcreteWall.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-HardcreteWall.name
 // data/mp/stats/research.json: $.R-Defense-HardcreteWall.name
 _("Hardcrete")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials05.name
 _("Hardened Base Structure Materials Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials06.name
 _("Hardened Base Structure Materials Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
 // data/base/stats/research.json: $.R-Struc-Materials04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials04.name
-// ... + 2 refs
+// data/mp/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
+// data/mp/stats/research.json: $.R-Struc-Materials02.name
 _("Hardened Base Structure Materials")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
@@ -2495,29 +2346,25 @@ _("Hardened Flamer Guard Tower")
 _("Hardened Heavy Machinegun Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage01.name
 _("Hardened MG Bullets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Rail-Damage02.name
 _("Hardened Rail Dart Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Rail-Damage03.name
 _("Hardened Rail Dart Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Rail-Damage01.name
 _("Hardened Rail Dart")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Sensor-Tower02.name
 // data/base/stats/sensor.json: $.SensorTower2Mk1.name
 // data/base/stats/structure.json: $.Sys-SensoTower02.name
-// ... + 5 refs
+// ... + 3 refs
 _("Hardened Sensor Tower")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
@@ -2539,49 +2386,39 @@ _("Hardpoint Vindicator SAM Site Available")
 _("Hardpoint Whirlwind AA Gun Available")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb-Damage01.name
 _("HE Bomb Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
 _("HE Howitzer Shells Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage03.name
 _("HE Howitzer Shells Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage01.name
 _("HE Howitzer Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 _("HE Mini-Rockets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 _("HE Mini-Rockets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 _("HE Mini-Rockets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage02.name
 _("HE Mortar Shells Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage03.name
 _("HE Mortar Shells Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage01.name
 _("HE Mortar Shells")  
 // TRANSLATORS: 
@@ -2601,64 +2438,51 @@ _("Heap Bomb Bay Mantis VTOL")
 _("Heap Bomb Bay Retribution VTOL")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb02.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb02.name
 _("HEAP Bomb Bay")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
 _("HEAP Howitzer Shells Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage06.name
 _("HEAP Howitzer Shells Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage04.name
 _("HEAP Howitzer Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Damage05.name
 _("HEAP Mini-Rockets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Damage06.name
 _("HEAP Mini-Rockets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Damage04.name
 _("HEAP Mini-Rockets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage05.name
 _("HEAP Mortar Shells Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage06.name
 _("HEAP Mortar Shells Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage04.name
 _("HEAP Mortar Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage02.name
 _("HEAT Cannon Shells Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 _("HEAT Cannon Shells Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 _("HEAT Cannon Shells")  
 // TRANSLATORS: 
@@ -2669,17 +2493,14 @@ _("HEAT Cannon Shells")
 _("Heat resistant armored layers")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage05.name
 _("HEAT Rocket Warhead Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage06.name
 _("HEAT Rocket Warhead Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage04.name
 _("HEAT Rocket Warhead")  
 // TRANSLATORS: 
@@ -2694,22 +2515,18 @@ _("Heat-resistant armored layers")
 _("Heavy anti-tank rocket")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body12.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body12.name
 // data/mp/stats/research.json: $.R-Vehicle-Body12.name
 _("Heavy Body - Mantis")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body11.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body11.name
 // data/mp/stats/research.json: $.R-Vehicle-Body11.name
 _("Heavy Body - Python")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body09.name
 // data/mp/stats/research.json: $.R-Vehicle-Body09.name
 _("Heavy Body - Tiger")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body10.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body10.name
 // data/mp/stats/research.json: $.R-Vehicle-Body10.name
 _("Heavy Body - Vengeance")  
 // TRANSLATORS: 
@@ -2724,7 +2541,6 @@ _("Heavy body increases armor and body points")
 _("Heavy Cannon Cobra Hover")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraHvyCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraHvyCnTrks.name
 // data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 _("Heavy Cannon Cobra Tracks")  
 // TRANSLATORS: 
@@ -2734,8 +2550,8 @@ _("Heavy Cannon firing 120 mm rounds")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower04.name
 // data/base/stats/structure.json: $.WallTower04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower04.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower04.name
+// data/mp/stats/structure.json: $.WallTower04.name
 _("Heavy Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.MantisTrkHC.name
@@ -2745,9 +2561,9 @@ _("Heavy Cannon Mantis Tracks")
 _("Heavy Cannon Python Hover")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.PythonHvyCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.PythonHvyCnTrks.name
 // data/mp/stats/templates.json: $.A-Python-Trk-HC.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.P0PythonHvyCnTrks.name
+// ... + 2 refs
 _("Heavy Cannon Python Tracks")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.H-Scorp-Trk-HC.name
@@ -2758,8 +2574,8 @@ _("Heavy Cannon Tiger Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon3Mk1.name
 // data/base/stats/weapons.json: $.Cannon375mmMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon3Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Cannon3Mk1.name
+// data/mp/stats/weapons.json: $.Cannon375mmMk1.name
 _("Heavy Cannon")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_FLAME2.text[1]
@@ -2767,23 +2583,20 @@ _("Heavy Cannon")
 _("Heavy Flame-thrower firing Propylene Oxide gel")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flame2.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flame2.name
 // data/mp/stats/research.json: $.R-Wpn-Flame2.name
 _("Heavy Flamer - Inferno")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-Cannon.name
 // data/base/stats/templates.json: $.Cyb-Cannon-GROUND.name
 // data/base/stats/templates.json: $.CyborgCannon01Grd.name
-// ... + 5 refs
+// ... + 2 refs
 _("Heavy Gunner Cyborg")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.CyborgCannon.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.CyborgCannon.name
 // data/mp/stats/weapons.json: $.CyborgCannon.name
 _("Heavy Gunner")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-HvyHowitzer.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-HvyHowitzer.name
 // data/mp/stats/research.json: $.R-Wpn-HvyHowitzer.name
 _("Heavy Howitzer - Ground Shaker")  
 // TRANSLATORS: 
@@ -2804,13 +2617,13 @@ _("Heavy Laser")
 // data/base/stats/research.json: $.R-Defense-Pillbox01.name
 // data/base/stats/structure.json: $.PillBox1.name
 // data/base/stats/weapons.json: $.MG3-Pillbox.name
-// ... + 6 refs
+// ... + 3 refs
 _("Heavy Machinegun Bunker")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraHMGHalfTrack.name
 // data/base/stats/templates.json: $.P0CobraHvyMGHtrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraHMGHalfTrack.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.CobraHMGHalfTrack.name
+// data/mp/stats/templates.json: $.P0CobraHvyMGHtrack.name
 _("Heavy Machinegun Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.A-Cobra-Hover-HMG.name
@@ -2825,14 +2638,14 @@ _("Heavy Machinegun Cobra Wheels")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower03.name
 // data/base/stats/structure.json: $.GuardTower1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Tower01.name
-// ... + 4 refs
+// data/mp/stats/research.json: $.R-Defense-Tower01.name
+// data/mp/stats/structure.json: $.GuardTower1.name
 _("Heavy Machinegun Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower01.name
 // data/base/stats/structure.json: $.WallTower01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower01.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower01.name
+// data/mp/stats/structure.json: $.WallTower01.name
 _("Heavy Machinegun Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -2846,12 +2659,10 @@ _("Heavy Machinegun Scorpion Tracks")
 _("Heavy Machinegun Tower")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperHMGHalftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperHMGHalftrack.name
 // data/mp/stats/templates.json: $.ViperHMGHalftrack.name
 _("Heavy Machinegun Viper Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperHMGTracks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperHMGTracks.name
 // data/mp/stats/templates.json: $.A-Viper-Trk-HMG.name
 // data/mp/stats/templates.json: $.ViperHMGTracks.name
 _("Heavy Machinegun Viper Tracks")  
@@ -2862,12 +2673,11 @@ _("Heavy Machinegun Viper Wheels")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG3Mk1.name
 // data/base/stats/weapons.json: $.MG3Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG3Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-MG3Mk1.name
+// data/mp/stats/weapons.json: $.MG3Mk1.name
 _("Heavy Machinegun")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar02Hvy.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar02Hvy.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar02Hvy.name
 _("Heavy Mortar - Bombard")  
 // TRANSLATORS: 
@@ -2926,12 +2736,11 @@ _("Helicopter")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotHow.name
 // data/base/stats/structure.json: $.Emplacement-RotHow.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-RotHow.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-RotHow.name
+// data/mp/stats/structure.json: $.Emplacement-RotHow.name
 _("Hellstorm Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Howitzer03-Rot.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Howitzer03-Rot.name
 // data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 _("Hellstorm")  
 // TRANSLATORS: 
@@ -2939,32 +2748,26 @@ _("Hellstorm")
 _("Hero and Special rank units are protected")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage08.name
 _("HESH Rocket Warhead Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage09.name
 _("HESH Rocket Warhead Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage07.name
 _("HESH Rocket Warhead")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-Damage02.name
 _("Hi-Energy Laser Emitter Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-Damage03.name
 _("Hi-Energy Laser Emitter Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-Damage01.name
 _("Hi-Energy Laser Emitter")  
 // TRANSLATORS: 
@@ -3028,17 +2831,14 @@ _("High Explosive shells")
 _("High Explosive Squash Head warhead")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Armor-Heat05.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat05.name
 _("High Intensity Thermal Armor Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Armor-Heat06.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat06.name
 _("High Intensity Thermal Armor Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Armor-Heat04.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat04.name
 _("High Intensity Thermal Armor")  
 // TRANSLATORS: 
@@ -3055,17 +2855,14 @@ _("High power costs and slower to produce than Cobra")
 _("High power costs and slower to produce than Viper")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 _("High Temperature Flamer Gel Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 _("High Temperature Flamer Gel Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 _("High Temperature Flamer Gel")  
 // TRANSLATORS: 
@@ -3084,7 +2881,6 @@ _("High-pressure gas throws the flamer gel further")
 _("High-tensile concrete reinforced with boron")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.PillBox3.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.PillBox3.name
 // data/mp/stats/structure.json: $.PillBox3.name
 _("HMG Bunker")  
 // TRANSLATORS: 
@@ -3098,11 +2894,9 @@ _("Hover II")
 _("Hover III")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Hover02.name
 _("Hover Propulsion II")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Hover.name
 // data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
 _("Hover Propulsion")  
 // TRANSLATORS: 
@@ -3116,17 +2910,14 @@ _("Hover")
 _("Howitzer accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 _("Howitzer Autoloader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 _("Howitzer Autoloader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 _("Howitzer Autoloader")  
 // TRANSLATORS: 
@@ -3137,8 +2928,8 @@ _("Howitzer damage +25%")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Howitzer.name
 // data/base/stats/structure.json: $.Emplacement-Howitzer105.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Howitzer.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Howitzer.name
+// data/mp/stats/structure.json: $.Emplacement-Howitzer105.name
 _("Howitzer Emplacement")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
@@ -3157,59 +2948,54 @@ _("Howitzer Upgrade")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-HowitzerMk1.name
 // data/base/stats/weapons.json: $.Howitzer105Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-HowitzerMk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
+// data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 _("Howitzer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
 // data/base/stats/structure.json: $.AASite-QuadMg1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-AASite-QuadMg1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-AASite-QuadMg1.name
+// data/mp/stats/structure.json: $.AASite-QuadMg1.name
 _("Hurricane AA Site")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun03.name
 // data/base/stats/weapons.json: $.QuadMg1AAGun.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun03.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-AAGun03.name
+// data/mp/stats/weapons.json: $.QuadMg1AAGun.name
 _("Hurricane AA Turret")  
 // TRANSLATORS: 
 // data/base/stats/features.json: $.BarbHUT.name
 _("Hut")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 _("HVAPFSDS Cannon Rounds Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 _("HVAPFSDS Cannon Rounds Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 _("HVAPFSDS Cannon Rounds")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 _("HVC Python Tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
 _("Hyper Fire Chaingun Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 // data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
+// data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 _("Hyper Velocity Cannon Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 // data/base/stats/structure.json: $.WallTower-HPVcannon.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
+// data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 _("Hyper Velocity Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.PythonHoverHVC.name
@@ -3220,8 +3006,8 @@ _("Hyper Velocity Cannon Python Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
 // data/base/stats/weapons.json: $.Cannon4AUTOMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon4AMk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Cannon4AMk1.name
+// data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
 _("Hyper Velocity Cannon")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
@@ -3240,7 +3026,6 @@ _("Immense damage infliction capability")
 _("Improved armor-piercing dart")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb-Damage02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb-Damage02.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb-Damage02.name
 _("Improved Bomb Warhead")  
 // TRANSLATORS: 
@@ -3259,7 +3044,6 @@ _("Improved Energizer reduces laser recharge time")
 _("Improved Engineering Techniques")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Engineering02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Engineering02.name
 // data/mp/stats/research.json: $.R-Sys-Engineering02.name
 _("Improved Engineering")  
 // TRANSLATORS: 
@@ -3270,17 +3054,14 @@ _("Improved Engineering")
 _("Improved fire detection systems")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade02.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade02.name
 _("Improved Hardcrete Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade03.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade03.name
 _("Improved Hardcrete Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade01.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade01.name
 _("Improved Hardcrete")  
 // TRANSLATORS: 
@@ -3289,7 +3070,6 @@ _("Improved Hardcrete")
 _("Improved high explosive shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-Accuracy01.name
 _("Improved Laser Focusing")  
 // TRANSLATORS: 
@@ -3306,7 +3086,6 @@ _("Improved NEXUS resistance circuitry")
 _("Improved Power Generator Performance")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
 _("Improved Rocket Wire Guidance")  
 // TRANSLATORS: 
@@ -3609,11 +3388,9 @@ _("Inferno Cobra Hover")
 // data/base/stats/research.json: $.R-Defense-HvyFlamer.name
 // data/base/stats/structure.json: $.Tower-Projector.name
 // data/base/stats/weapons.json: $.Flame2-Emplacement.name
-// ... + 2 refs
 _("Inferno Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.WallTower-Projector.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.WallTower-Projector.name
 // data/mp/stats/structure.json: $.WallTower-Projector.name
 _("Inferno Hardpoint")  
 // TRANSLATORS: 
@@ -3621,7 +3398,6 @@ _("Inferno Hardpoint")
 _("Inferno Python Hover")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Flame2.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Flame2.name
 // data/mp/stats/weapons.json: $.Flame2.name
 _("Inferno")  
 // TRANSLATORS: 
@@ -3640,7 +3416,6 @@ _("Jammer Tower")
 _("Jammer Turret")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaJeep.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BabaJeep.name
 // data/mp/stats/templates.json: $.BabaJeep.name
 _("Jeep")  
 // TRANSLATORS: 
@@ -3678,20 +3453,18 @@ _("Kinetic Armor +35%, Body Points +35%")
 _("Laminated alloys bonded with energy-deflecting optic bundles")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket01-LtAT.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket01-LtAT.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket01-LtAT.name
 _("Lancer AT Rocket")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Pillbox06.name
 // data/base/stats/structure.json: $.PillBox6.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Pillbox06.name
-// ... + 2 refs
+// data/mp/stats/structure.json: $.PillBox6.name
 _("Lancer Bunker")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraLtA-Thalftrack.name
 // data/base/stats/templates.json: $.P0CobraLtATRktHtrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraLtA-Thalftrack.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.CobraLtA-Thalftrack.name
+// data/mp/stats/templates.json: $.P0CobraLtATRktHtrack.name
 _("Lancer Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.CobraTrkLancer.name
@@ -3700,13 +3473,13 @@ _("Lancer Cobra Tracks")
 // data/base/stats/research.json: $.R-Cyborg-Wpn-Rocket.name
 // data/base/stats/templates.json: $.Cyb-Rocket-GROUND.name
 // data/base/stats/templates.json: $.CyborgRkt01Ground.name
-// ... + 5 refs
+// ... + 2 refs
 _("Lancer Cyborg")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower06.name
 // data/base/stats/structure.json: $.WallTower06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower06.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower06.name
+// data/mp/stats/structure.json: $.WallTower06.name
 _("Lancer Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -3722,7 +3495,6 @@ _("Lancer Scorpion Tracks")
 _("Lancer Scorpion VTOL")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.GuardTower5.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.GuardTower5.name
 // data/mp/stats/research.json: $.R-Defense-Pillbox06.name
 // data/mp/stats/structure.json: $.GuardTower5.name
 _("Lancer Tower")  
@@ -3731,12 +3503,10 @@ _("Lancer Tower")
 _("Lancer Viper Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperLtA-Twheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperLtA-Twheels.name
 // data/mp/stats/templates.json: $.ViperLtA-Twheels.name
 _("Lancer Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-LtA-T.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-LtA-T.name
 // data/mp/stats/weapons.json: $.Rocket-LtA-T.name
 _("Lancer")  
 // TRANSLATORS: 
@@ -3744,7 +3514,6 @@ _("Lancer")
 _("Large Super Heavy Body")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Laser01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Laser01.name
 // data/mp/stats/research.json: $.R-Wpn-Laser01.name
 _("Laser - Flashlight")  
 // TRANSLATORS: 
@@ -3782,7 +3551,6 @@ _("Laser Upgrade")
 _("Laseropticslab")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.LasSat.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.LasSat.name
 _("LasSat")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -3798,7 +3566,6 @@ _("Layered composite alloys and energy-absorbing fibres")
 _("Layered dense composite alloys and energy-absorbing fibres")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body2SUP.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body2SUP.name
 // data/mp/stats/body.json: $.Body2SUP.name
 _("Leopard")  
 // TRANSLATORS: 
@@ -3807,22 +3574,18 @@ _("Leopard")
 _("Less armor and body points than Python")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body04.name
 // data/mp/stats/research.json: $.R-Vehicle-Body04.name
 _("Light Body - Bug")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body02.name
 // data/mp/stats/research.json: $.R-Vehicle-Body02.name
 _("Light Body - Leopard")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body03.name
 // data/mp/stats/research.json: $.R-Vehicle-Body03.name
 _("Light Body - Retaliation")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body01.name
 // data/mp/stats/research.json: $.R-Vehicle-Body01.name
 _("Light Body - Viper")  
 // TRANSLATORS: 
@@ -3832,12 +3595,11 @@ _("Light body vulnerable to heavy weapons")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Pillbox04.name
 // data/base/stats/structure.json: $.PillBox4.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Pillbox04.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-Pillbox04.name
+// data/mp/stats/structure.json: $.PillBox4.name
 _("Light Cannon Bunker")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraLtCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraLtCnTrks.name
 // data/mp/stats/templates.json: $.CobraLtCnTrks.name
 _("Light Cannon Cobra Tracks")  
 // TRANSLATORS: 
@@ -3847,12 +3609,11 @@ _("Light Cannon firing 40mm rounds")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower02.name
 // data/base/stats/structure.json: $.WallTower02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower02.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower02.name
+// data/mp/stats/structure.json: $.WallTower02.name
 _("Light Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.PythonLtCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.PythonLtCnTrks.name
 // data/mp/stats/templates.json: $.PythonLtCnTrks.name
 _("Light Cannon Python Tracks")  
 // TRANSLATORS: 
@@ -3860,23 +3621,20 @@ _("Light Cannon Python Tracks")
 _("Light Cannon Viper Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperLtCannonTracks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperLtCannonTracks.name
 // data/mp/stats/templates.json: $.ViperLtCannonTracks.name
 _("Light Cannon Viper Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperLtCannonWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperLtCannonWheels.name
 // data/mp/stats/templates.json: $.ViperLtCannonWheels.name
 _("Light Cannon Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon1Mk1.name
 // data/base/stats/weapons.json: $.Cannon1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon1Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Cannon1Mk1.name
+// data/mp/stats/weapons.json: $.Cannon1Mk1.name
 _("Light Cannon")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.LookOutTower.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.LookOutTower.name
 // data/mp/stats/structure.json: $.LookOutTower.name
 _("Look-Out Tower")  
 // TRANSLATORS: 
@@ -3891,11 +3649,9 @@ _("Low power cost and low production times")
 _("Low yield thermonuclear warhead")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-TUTMG.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-TUTMG.name
 _("Machinegun Artifact")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG1-Pillbox.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.MG1-Pillbox.name
 // data/mp/stats/weapons.json: $.MG1-Pillbox.name
 _("Machinegun Bunker")  
 // TRANSLATORS: 
@@ -3930,24 +3686,23 @@ _("Machinegun Viper Tracks")
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperLtMGWheels.name
 // data/base/stats/templates.json: $.ViperMG01Wheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperLtMGWheels.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.A-Viper-Wheels-MG.name
+// data/mp/stats/templates.json: $.ViperMG01Wheels.name
 _("Machinegun Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG1Mk1.name
 // data/base/stats/weapons.json: $.MG1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG1Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-MG1Mk1.name
+// data/mp/stats/weapons.json: $.MG1Mk1.name
 _("Machinegun")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
 // data/base/stats/templates.json: $.Cyb-Chain-GROUND.name
 // data/base/stats/templates.json: $.CyborgChain01Ground.name
-// ... + 5 refs
+// ... + 2 refs
 _("Machinegunner Cyborg")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.CyborgChaingun.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.CyborgChaingun.name
 // data/mp/stats/weapons.json: $.CyborgChaingun.name
 _("Machinegunner")  
 // TRANSLATORS: 
@@ -3956,7 +3711,6 @@ _("Machinegunner")
 _("Makes excellent scout vehicle")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body12SUP.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body12SUP.name
 // data/mp/stats/body.json: $.Body12SUP.name
 _("Mantis")  
 // TRANSLATORS: 
@@ -4001,22 +3755,18 @@ _("Mechanic Cyborg")
 _("Mechanic with repair ability")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body05.name
 // data/mp/stats/research.json: $.R-Vehicle-Body05.name
 _("Medium Body - Cobra")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body06.name
 // data/mp/stats/research.json: $.R-Vehicle-Body06.name
 _("Medium Body - Panther")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body07.name
 // data/mp/stats/research.json: $.R-Vehicle-Body07.name
 _("Medium Body - Retribution")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Body08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Body08.name
 // data/mp/stats/research.json: $.R-Vehicle-Body08.name
 _("Medium Body - Scorpion")  
 // TRANSLATORS: 
@@ -4031,7 +3781,6 @@ _("Medium Cannon Cobra Half Track")
 _("Medium Cannon Cobra Hover")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraMedCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraMedCnTrks.name
 // data/mp/stats/templates.json: $.CobraMedCnTrks.name
 // data/mp/stats/templates.json: $.P0CobraMedCnTrks.name
 _("Medium Cannon Cobra Tracks")  
@@ -4042,15 +3791,14 @@ _("Medium Cannon firing 76mm rounds")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower03.name
 // data/base/stats/structure.json: $.WallTower03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower03.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower03.name
+// data/mp/stats/structure.json: $.WallTower03.name
 _("Medium Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.A-Python-Hover-MC.name
 _("Medium Cannon Python Hover")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.PythonMedCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.PythonMedCnTrks.name
 // data/mp/stats/templates.json: $.PythonMedCanTracks.name
 // data/mp/stats/templates.json: $.PythonMedCnTrks.name
 _("Medium Cannon Python Tracks")  
@@ -4062,14 +3810,13 @@ _("Medium Cannon Scorpion Hover")
 _("Medium Cannon Scorpion Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperMedCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperMedCnTrks.name
 // data/mp/stats/templates.json: $.ViperMedCnTrks.name
 _("Medium Cannon Viper Tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon2Mk1.name
 // data/base/stats/weapons.json: $.Cannon2A-TMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Cannon2Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Cannon2Mk1.name
+// data/mp/stats/weapons.json: $.Cannon2A-TMk1.name
 _("Medium Cannon")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
@@ -4096,23 +3843,19 @@ _("Mini-Rocket Array Viper Wheels")
 _("Mini-Rocket Array")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraMRLHalftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraMRLHalftrack.name
 _("Mini-Rocket Artillery Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperMRLWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperMRLWheels.name
 _("Mini-Rocket Artillery Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 // data/base/stats/weapons.json: $.Rocket-MRL.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket02-MRL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-MRL.name
 _("Mini-Rocket Artillery")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-MRL.name
 // data/base/stats/structure.json: $.Emplacement-MRL-pit.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-MRL.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-MRL.name
+// data/mp/stats/structure.json: $.Emplacement-MRL-pit.name
 _("Mini-Rocket Battery")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.CobraPODHTracks.name
@@ -4123,14 +3866,12 @@ _("Mini-Rocket Cobra Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower06.name
 // data/base/stats/structure.json: $.GuardTower6.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Tower06.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.GuardTower6.name
 _("Mini-Rocket Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
 // data/base/stats/weapons.json: $.Rocket-Pod.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
+// data/mp/stats/weapons.json: $.Rocket-Pod.name
 _("Mini-Rocket Pod")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Tower06.name
@@ -4147,7 +3888,6 @@ _("Mini-Rocket Upgrade")
 _("Mini-Rocket Viper Half Track")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperPODWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperPODWheels.name
 // data/mp/stats/templates.json: $.ViperPODWheels.name
 _("Mini-Rocket Viper Wheels")  
 // TRANSLATORS: 
@@ -4175,12 +3915,10 @@ _("Missile Fortress")
 _("Missile reload time -15%")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NX-CruiseSite.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.NX-CruiseSite.name
 // data/mp/stats/structure.json: $.NX-CruiseSite.name
 _("Missile Silo")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Comp-MissileCodes01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Comp-MissileCodes01.name
 _("Missile Targeting Codes")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[0]
@@ -4194,7 +3932,6 @@ _("Missile Upgrade")
 _("Missiles detect and lock-on to targets while loading")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-MobileRepairTurret01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-MobileRepairTurret01.name
 // data/mp/stats/research.json: $.R-Sys-MobileRepairTurret01.name
 _("Mobile Repair Turret")  
 // TRANSLATORS: 
@@ -4214,22 +3951,18 @@ _("More armor and body points than Vengeance")
 _("Mortar accuracy +10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 _("Mortar Autoloader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF03.name
 _("Mortar Autoloader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF01.name
 _("Mortar Autoloader")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraMortarHalfTrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraMortarHalfTrack.name
 // data/mp/stats/templates.json: $.CobraMortarHalfTrack.name
 _("Mortar Cobra Half-tracks")  
 // TRANSLATORS: 
@@ -4239,14 +3972,13 @@ _("Mortar Cobra Half-tracks")
 _("Mortar damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 _("Mortar Fast Loader")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-MortarPit.name
 // data/base/stats/structure.json: $.Emplacement-MortarPit01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-MortarPit.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-MortarPit.name
+// data/mp/stats/structure.json: $.Emplacement-MortarPit01.name
 _("Mortar Pit")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -4255,7 +3987,6 @@ _("Mortar Pit")
 _("Mortar reload time -10%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Acc01.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc01.name
 _("Mortar Targeting Computer")  
 // TRANSLATORS: 
@@ -4267,8 +3998,8 @@ _("Mortar Upgrade")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar01Lt.name
 // data/base/stats/weapons.json: $.Mortar1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar01Lt.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Mortar01Lt.name
+// data/mp/stats/weapons.json: $.Mortar1Mk1.name
 _("Mortar")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG1-Tower.name
@@ -4302,8 +4033,8 @@ _("Needle Gun Tiger Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-GuardTower-Rail1.name
 // data/base/stats/structure.json: $.GuardTower-Rail1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-GuardTower-Rail1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-GuardTower-Rail1.name
+// data/mp/stats/structure.json: $.GuardTower-Rail1.name
 _("Needle Gun Tower")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.A-Veng-Trk-Needle.name
@@ -4311,30 +4042,28 @@ _("Needle Gun Vengeance Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RailGun01.name
 // data/base/stats/weapons.json: $.RailGun1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RailGun01.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-RailGun01.name
+// data/mp/stats/weapons.json: $.RailGun1Mk1.name
 _("Needle Gun")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-Rail1.name
 // data/base/stats/templates.json: $.Cyb-Rail1-GROUND.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Wpn-Rail1.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.Cyb-Rail1-GROUND.name
+// data/mp/stats/templates.json: $.MP-Cyb-Needle-GRD.name
 _("Needle Gunner Cyborg")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade08.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade08.name
 _("Neural Synapse Research Brain Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade09.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade09.name
 _("Neural Synapse Research Brain Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_ST_RU7.text[1]
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade07.name
-// ... + 2 refs
+// data/mp/messages/resmessages3.json: $.RES_ST_RU7.text[1]
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade07.name
 _("Neural Synapse Research Brain")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_AA1.text[0]
@@ -4437,7 +4166,7 @@ _("New Laser Weapon Available")
 _("New Missile Turret Available")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CommandCentreNP.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0CommandCentreNP.name
+// data/mp/stats/structure.json: $.A0CommandCentreNP.name
 _("New Paradigm Command Center")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B12.text[0]
@@ -4534,15 +4263,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
-// TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]
@@ -4569,7 +4298,6 @@ _("New VTOL Missile Launcher")
 _("New Weapon Turret Available")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSCWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.NEXUSCWall.name
 // data/mp/stats/structure.json: $.NEXUSCWall.name
 _("NEXUS CWall")  
 // TRANSLATORS: 
@@ -4585,7 +4313,6 @@ _("NEXUS Immunization System")
 _("NEXUS Intruder Program analyzed")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Resistance.name
 _("NEXUS Intruder Program")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_V_B03.text[0]
@@ -4605,27 +4332,22 @@ _("Nexus Link Turret")
 _("NEXUS Medium Body")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NX-ANTI-SATSite.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.NX-ANTI-SATSite.name
 // data/mp/stats/structure.json: $.NX-ANTI-SATSite.name
 _("Nexus Missile Silo")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
 _("NEXUS Resistance Circuits Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
 _("NEXUS Resistance Circuits")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 _("Nexus Resistance Circuits")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.NEXUSWall.name
 // data/mp/stats/structure.json: $.NEXUSWall.name
 _("NEXUS Wall")  
 // TRANSLATORS: 
@@ -4645,7 +4367,6 @@ _("NullBot")
 _("Objects become difficult to locate near it")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ResourceExtractor.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0ResourceExtractor.name
 // data/mp/stats/structure.json: $.A0ResourceExtractor.name
 _("Oil Derrick")  
 // TRANSLATORS: 
@@ -4696,18 +4417,16 @@ _("Original Campaign")
 _("Original Skirmish")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body6SUPP.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body6SUPP.name
 // data/mp/stats/body.json: $.Body6SUPP.name
 _("Panther")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotMor.name
 // data/base/stats/structure.json: $.Emplacement-RotMor.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-RotMor.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-RotMor.name
+// data/mp/stats/structure.json: $.Emplacement-RotMor.name
 _("Pepperpot Pit")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Mortar3ROTARYMk1.name
 // data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 _("Pepperpot")  
 // TRANSLATORS: 
@@ -4715,27 +4434,22 @@ _("Pepperpot")
 _("Phosphor Bomb Bay Mantis VTOL")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb03.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb03.name
 _("Phosphor Bomb Bay")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaPickUp.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BabaPickUp.name
 // data/mp/stats/templates.json: $.BabaPickUp.name
 _("Pick-Up Truck")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade08.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade08.name
 _("Plascrete Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade09.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade09.name
 _("Plascrete Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade07.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade07.name
 _("Plascrete")  
 // TRANSLATORS: 
@@ -4796,7 +4510,6 @@ _("Power cost and production time similar to Viper")
 _("Power cost and production time the same as Python")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0PowerGenerator.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0PowerGenerator.name
 // data/mp/stats/structure.json: $.A0PowerGenerator.name
 _("Power Generator")  
 // TRANSLATORS: 
@@ -4806,8 +4519,8 @@ _("Power Module Available")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-PowerModuleMk1.name
 // data/base/stats/structure.json: $.A0PowMod1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-PowerModuleMk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Struc-PowerModuleMk1.name
+// data/mp/stats/structure.json: $.A0PowMod1.name
 _("Power Module")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -4870,8 +4583,7 @@ _("Prototypical AI focusing on rockets/missiles")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-PulseLas.name
 // data/base/stats/structure.json: $.Emplacement-PulseLaser.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-PulseLas.name
-// ... + 2 refs
+// data/mp/stats/structure.json: $.Emplacement-PulseLaser.name
 _("Pulse Laser Emplacement")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-WallTower-PulseLas.name
@@ -4905,16 +4617,14 @@ _("Pulse Laser Wyvern Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Laser02.name
 // data/base/stats/weapons.json: $.Laser2PULSEMk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Laser02.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Laser02.name
+// data/mp/stats/weapons.json: $.Laser2PULSEMk1.name
 _("Pulse Laser")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0PythonHvyCnTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0PythonHvyCnTrks.name
 _("Python Heavy Cannon Tracks")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body11ABT.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body11ABT.name
 // data/mp/stats/body.json: $.Body11ABT.name
 _("Python")  
 // TRANSLATORS: 
@@ -4953,7 +4663,6 @@ _("Rail Gun accuracy +10%")
 _("Rail Gun damage +25%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Rail2.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-Rail2.name
 // data/mp/stats/research.json: $.R-Defense-Rail2.name
 _("Rail Gun Emplacement")  
 // TRANSLATORS: 
@@ -4963,8 +4672,8 @@ _("Rail gun firing armor-piercing darts")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower-Rail2.name
 // data/base/stats/structure.json: $.WallTower-Rail2.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower-Rail2.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower-Rail2.name
+// data/mp/stats/structure.json: $.WallTower-Rail2.name
 _("Rail Gun Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
@@ -4975,17 +4684,14 @@ _("Rail Gun Mantis Tracks")
 _("Rail Gun reload time -15%")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Rail-ROF02.name
 _("Rail Gun ROF Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Rail-ROF03.name
 _("Rail Gun ROF Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Rail-ROF01.name
 _("Rail Gun ROF")  
 // TRANSLATORS: 
@@ -5000,20 +4706,18 @@ _("Rail Gun Upgrade")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RailGun02.name
 // data/base/stats/weapons.json: $.RailGun2Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RailGun02.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-RailGun02.name
+// data/mp/stats/weapons.json: $.RailGun2Mk1.name
 _("Rail Gun")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 _("Rail Target Prediction Computer")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.Emplacement-Rail2.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Emplacement-Rail2.name
 // data/mp/stats/structure.json: $.Emplacement-Rail2.name
 _("Railgun Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-ROF02.name
 _("Rapid Fire Chaingun Upgrade")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-MG-ROF02.name
@@ -5053,17 +4757,15 @@ _("Reduces rearming time")
 _("Refuels, rearms and repairs VTOLs")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials02.name
 _("Reinforced Base Structure Materials Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials03.name
 _("Reinforced Base Structure Materials Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[1]
 // data/base/stats/research.json: $.R-Struc-Materials01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Materials01.name
-// ... + 2 refs
+// data/mp/messages/resmessages1.json: $.RES_ST_MAT1.text[1]
+// data/mp/stats/research.json: $.R-Struc-Materials01.name
 _("Reinforced Base Structure Materials")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -5088,8 +4790,8 @@ _("Repair Facility Improved")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RepairFacility.name
 // data/base/stats/structure.json: $.A0RepairCentre3.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RepairFacility.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Struc-RepairFacility.name
+// data/mp/stats/structure.json: $.A0RepairCentre3.name
 _("Repair Facility")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.ScorpRepairTrk.name
@@ -5102,7 +4804,6 @@ _("Repair Scorpion Tracks")
 _("Repair Speed +100%")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0CobraRepairTrks.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0CobraRepairTrks.name
 // data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 _("Repair Turret Cobra Tracks")  
 // TRANSLATORS: 
@@ -5113,16 +4814,13 @@ _("Repair Turret Mantis Tracks")
 _("Repair Turret Viper Half-track")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperRepairHalftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperRepairHalftrack.name
 _("Repair Turret Viper Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperRepairWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperRepairWheels.name
 // data/mp/stats/templates.json: $.ViperRepairWheels.name
 _("Repair Turret Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/repair.json: $.LightRepair1.name
-// data/mods/campaign/wz2100_camclassic/stats/repair.json: $.LightRepair1.name
 // data/mp/stats/repair.json: $.LightRepair1.name
 _("Repair Turret")  
 // TRANSLATORS: 
@@ -5160,7 +4858,6 @@ _("Requires heavy VTOL factory to produce")
 _("Research Breakthrough Improves Construction Rates")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ResearchFacility.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0ResearchFacility.name
 // data/mp/stats/structure.json: $.A0ResearchFacility.name
 _("Research Facility")  
 // TRANSLATORS: 
@@ -5184,8 +4881,8 @@ _("Research module expands research facilities")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Module.name
 // data/base/stats/structure.json: $.A0ResearchModule1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Module.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Struc-Research-Module.name
+// data/mp/stats/structure.json: $.A0ResearchModule1.name
 _("Research Module")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[2]
@@ -5199,25 +4896,26 @@ _("Research speed +30%")
 _("Research speed +85%")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body3MBT.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body3MBT.name
 // data/mp/stats/body.json: $.Body3MBT.name
 _("Retaliation")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body7ABT.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body7ABT.name
 // data/mp/stats/body.json: $.Body7ABT.name
 _("Retribution")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-IDFRocket.name
 // data/base/stats/structure.json: $.Emplacement-Rocket06-IDF.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-IDFRocket.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-IDFRocket.name
+// data/mp/stats/structure.json: $.Emplacement-Rocket06-IDF.name
 _("Ripple Rocket Battery")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-RocketSlow-ROFRR01.name
+_("Ripple Rocket Rapid Loader")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket06-IDF.name
 // data/base/stats/weapons.json: $.Rocket-IDF.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket06-IDF.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Rocket06-IDF.name
+// data/mp/stats/weapons.json: $.Rocket-IDF.name
 _("Ripple Rockets")  
 // TRANSLATORS: 
 // data/base/messages/resmessages23.json: $.RES_W_MG_ROF3.text[1]
@@ -5229,15 +4927,12 @@ _("Robotic advances make new chaingun upgrade available")
 _("Robotic Cyborg Production")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Factory-Upgrade05.name
 _("Robotic Factory Production Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Factory-Upgrade06.name
 _("Robotic Factory Production Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Factory-Upgrade04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 _("Robotic Factory Production")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[1]
@@ -5250,15 +4945,12 @@ _("Robotic loading system feeds rounds into breech")
 _("Robotic Manufacturing")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
 _("Robotic Repair Facility Upgrade Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 _("Robotic Repair Facility Upgrade Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 _("Robotic Repair Facility Upgrade")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
@@ -5269,19 +4961,17 @@ _("Robotic Repair Facility")
 _("Robotic VTOL Production")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
 // data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade05.name
 _("Robotic VTOL Rearming Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 // data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade06.name
 _("Robotic VTOL Rearming Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_ST_VPU4.text[1]
 // data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad-Upgrade04.name
-// ... + 2 refs
+// data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[1]
+// data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade04.name
 _("Robotic VTOL Rearming")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
@@ -5296,22 +4986,18 @@ _("Rocket accuracy +10%")
 _("Rocket artillery; can be assigned to a sensor")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 _("Rocket Autoloader Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 _("Rocket Autoloader Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 _("Rocket Autoloader")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BarbarianRKBuggy.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BarbarianRKBuggy.name
 // data/mp/stats/templates.json: $.BarbarianRKBuggy.name
 _("Rocket Buggy")  
 // TRANSLATORS: 
@@ -5327,12 +5013,10 @@ _("Rocket damage +25%")
 _("Rocket detects and locks on to engine emissions")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaRKJeep.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BabaRKJeep.name
 // data/mp/stats/templates.json: $.BabaRKJeep.name
 _("Rocket Jeep")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Accuracy02.name
 // data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
 _("Rocket Laser Designator")  
 // TRANSLATORS: 
@@ -5361,7 +5045,6 @@ _("Rocket tracks the laser designator to the target")
 _("Rocket Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 _("Rotary Howitzer - Hellstorm")  
 // TRANSLATORS: 
@@ -5370,7 +5053,6 @@ _("Rotary Howitzer - Hellstorm")
 _("Rotary MG Bunker")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar3.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar3.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar3.name
 _("Rotary Mortar - Pepperpot")  
 // TRANSLATORS: 
@@ -5393,12 +5075,10 @@ _("SAM site with Vindicator missiles")
 _("Satellite Uplink Center")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaRocketPitAT.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaRocketPitAT.name
 // data/mp/stats/structure.json: $.A0BaBaRocketPitAT.name
 _("Scavenger AT-Rocket Pit")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaBunker.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaBunker.name
 // data/mp/stats/structure.json: $.A0BaBaBunker.name
 _("Scavenger Bunker")  
 // TRANSLATORS: 
@@ -5406,27 +5086,22 @@ _("Scavenger Bunker")
 _("Scavenger Chopper Factory")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BabaCornerWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BabaCornerWall.name
 // data/mp/stats/structure.json: $.A0BabaCornerWall.name
 _("Scavenger CornerWall")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaFactory.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaFactory.name
 // data/mp/stats/structure.json: $.A0BaBaFactory.name
 _("Scavenger Factory")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaFlameTower.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaFlameTower.name
 // data/mp/stats/structure.json: $.A0BaBaFlameTower.name
 _("Scavenger Flame Tower")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaGunTower.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaGunTower.name
 // data/mp/stats/structure.json: $.A0BaBaGunTower.name
 _("Scavenger Gun Tower")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaHorizontalWall.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaHorizontalWall.name
 // data/mp/stats/structure.json: $.A0BaBaHorizontalWall.name
 _("Scavenger Horizontal Wall")  
 // TRANSLATORS: 
@@ -5437,7 +5112,6 @@ _("Scavenger MG tower")
 _("Scavenger Mounted MG")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaPowerGenerator.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaPowerGenerator.name
 // data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 _("Scavenger Power Generator")  
 // TRANSLATORS: 
@@ -5445,12 +5119,10 @@ _("Scavenger Power Generator")
 _("Scavenger Repair Center")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0BaBaRocketPit.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.A0BaBaRocketPit.name
 // data/mp/stats/structure.json: $.A0BaBaRocketPit.name
 _("Scavenger Rocket Pit")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BaBaPeople.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BaBaPeople.name
 // data/mp/stats/templates.json: $.BaBaPeople.name
 _("Scavenger")  
 // TRANSLATORS: 
@@ -5458,19 +5130,17 @@ _("Scavenger")
 _("scavengernexuslinkturret")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaBusCan.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BabaBusCan.name
 // data/mp/stats/templates.json: $.BabaBusCan.name
 _("School Bus")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body8MBT.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body8MBT.name
 // data/mp/stats/body.json: $.Body8MBT.name
 _("Scorpion")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
 // data/base/stats/templates.json: $.Cyb-Atmiss-GROUND.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
-// ... + 3 refs
+// data/mp/stats/templates.json: $.Cyb-Atmiss-GROUND.name
+// data/mp/stats/templates.json: $.MP-Cyb-ATmiss-GRD.name
 _("Scourge Cyborg")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.Scourge-Mantis-H.name
@@ -5481,14 +5151,14 @@ _("Scourge Mantis Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower-A-Tmiss.name
 // data/base/stats/structure.json: $.WallTower-Atmiss.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower-A-Tmiss.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower-A-Tmiss.name
+// data/mp/stats/structure.json: $.WallTower-Atmiss.name
 _("Scourge Missile Hardpoint")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-GuardTower-ATMiss.name
 // data/base/stats/structure.json: $.GuardTower-ATMiss.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-GuardTower-ATMiss.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-GuardTower-ATMiss.name
+// data/mp/stats/structure.json: $.GuardTower-ATMiss.name
 _("Scourge Missile Tower")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.WyvernScourgeTracks.name
@@ -5496,8 +5166,8 @@ _("Scourge Missile Wyvern Tracks")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile2A-T.name
 // data/base/stats/weapons.json: $.Missile-A-T.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile2A-T.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Missile2A-T.name
+// data/mp/stats/weapons.json: $.Missile-A-T.name
 _("Scourge Missile")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.PythonScourgeTracks.name
@@ -5508,20 +5178,16 @@ _("Scourge Retaliation VTOL")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-SpyTurret.name
 // data/base/stats/weapons.json: $.SpyTurret01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-SpyTurret.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.SpyTurret01.name
 _("Scrambler Turret")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 _("Sea map AI, based on NullBot")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
 _("Search & Destroy Missiles")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Comp-MissileCodes02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Comp-MissileCodes02.name
 _("Second Level Missile Targeting Codes")  
 // TRANSLATORS: 
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[3]
@@ -5545,7 +5211,6 @@ _("Self-Replicating Manufacturing")
 _("SemperFi")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraSensorHalftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.CobraSensorHalftrack.name
 _("Sensor Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[2]
@@ -5563,21 +5228,20 @@ _("Sensor Range +25%")
 // data/base/stats/research.json: $.R-Sys-Sensor-Tower01.name
 // data/base/stats/sensor.json: $.SensorTower1Mk1.name
 // data/base/stats/structure.json: $.Sys-SensoTower01.name
-// ... + 4 refs
+// ... + 2 refs
 _("Sensor Tower")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.CobraSensorHalftrack.name
 _("Sensor Turret Cobra Half-tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperSensorWheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperSensorWheels.name
 // data/mp/stats/templates.json: $.ViperSensorWheels.name
 _("Sensor Turret Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Sensor-Turret01.name
 // data/base/stats/sensor.json: $.SensorTurret1Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Sensor-Turret01.name
-// ... + 2 refs
+// data/mp/stats/research.json: $.R-Sys-Sensor-Turret01.name
+// data/mp/stats/sensor.json: $.SensorTurret1Mk1.name
 _("Sensor Turret")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
@@ -5587,7 +5251,6 @@ _("Sensor Upgrade Mk2")
 _("Sensor Upgrade Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 // data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 _("Sensor Upgrade")  
 // TRANSLATORS: 
@@ -5654,11 +5317,9 @@ _("Speed: Slow")
 _("Speed: VTOL")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
 _("Stabilized Mini-Rockets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
 _("Stabilized Mini-Rockets")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
@@ -5774,17 +5435,14 @@ _("Super Transport")
 _("Superbomb turret explodes in proximity to enemy")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade05.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade05.name
 _("Supercrete Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade06.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade06.name
 _("Supercrete Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallUpgrade04.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade04.name
 _("Supercrete")  
 // TRANSLATORS: 
@@ -5795,32 +5453,26 @@ _("Supercrete")
 _("Superdense composite alloys and energy-absorbing fibres")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals08.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals08.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals08.name
 _("Superdense Composite Alloys Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals09.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals09.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals09.name
 _("Superdense Composite Alloys Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Metals07.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals07.name
 _("Superdense Composite Alloys")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 _("Superhot Flamer Gel Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 _("Superhot Flamer Gel Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 _("Superhot Flamer Gel")  
 // TRANSLATORS: 
@@ -5855,23 +5507,20 @@ _("Surface-to-air missile")
 _("Synaptic Link allows humans to interface directly with computers")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade02.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade02.name
 _("Synaptic Link Data Analysis Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade03.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Research-Upgrade01.name
-// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-_("Synaptic Link Data Analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 _("Synaptic link data analysis")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+_("Synaptic Link Data Analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -5885,7 +5534,6 @@ _("Synaptic Link Scrambler technology")
 _("Synaptic Link technology breakthrough")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Comp-SynapticLink.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Comp-SynapticLink.name
 _("Synaptic Link")  
 // TRANSLATORS: 
 // data/base/messages/messages.json: $.MSG5.text[0]
@@ -5897,14 +5545,14 @@ _("Tank Killer Cyborg")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-HvyA-Trocket.name
 // data/base/stats/structure.json: $.Emplacement-HvyATrocket.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-HvyA-Trocket.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-HvyA-Trocket.name
+// data/mp/stats/structure.json: $.Emplacement-HvyATrocket.name
 _("Tank Killer Emplacement")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallTower-HvyA-Trocket.name
 // data/base/stats/structure.json: $.WallTower-HvATrocket.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-WallTower-HvyA-Trocket.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-WallTower-HvyA-Trocket.name
+// data/mp/stats/structure.json: $.WallTower-HvATrocket.name
 _("Tank Killer Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.TK-Mantis-H.name
@@ -5914,13 +5562,11 @@ _("Tank Killer Mantis Hover")
 _("Tank Killer Mantis Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.P0cam3PyHvyATTrk.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.P0cam3PyHvyATTrk.name
 // data/mp/stats/templates.json: $.P0cam3PyHvyATTrk.name
 // data/mp/stats/templates.json: $.PythonTKTracks.name
 _("Tank Killer Python Tracks")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rocket07-Tank-Killer.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rocket07-Tank-Killer.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket07-Tank-Killer.name
 _("Tank Killer Rocket")  
 // TRANSLATORS: 
@@ -5928,42 +5574,35 @@ _("Tank Killer Rocket")
 _("Tank Killer Vengeance Tracks")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-HvyA-T.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-HvyA-T.name
 // data/mp/stats/weapons.json: $.Rocket-HvyA-T.name
 _("Tank Killer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-TankTrap01.name
 // data/base/stats/structure.json: $.A0TankTrap.name
 // data/base/stats/structure.json: $.TankTrapC.name
-// ... + 6 refs
+// ... + 3 refs
 _("Tank Traps")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
 _("Target Acquisition Artillery Shells Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 _("Target Acquisition Artillery Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 _("Target Acquisition Mortar Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 _("Target Prediction Artillery Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 _("Target Prediction Computer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
 // data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy01.name
 _("Target Prediction Missiles")  
 // TRANSLATORS: 
@@ -5997,32 +5636,26 @@ _("Thermal Armor +45%")
 _("Thermal Armor increased")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Armor-Heat02.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat02.name
 _("Thermal Armor Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Armor-Heat03.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat03.name
 _("Thermal Armor Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Armor-Heat01.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat01.name
 _("Thermal Armor")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Mortar-Acc02.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc02.name
 _("Thermal Imaging Mortar Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-RocketSlow-Accuracy03.name
 // data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy02.name
 _("Thermal Imaging Rockets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Bomb04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Bomb04.name
 // data/mp/stats/research.json: $.R-Wpn-Bomb04.name
 _("Thermite Bomb Bay")  
 // TRANSLATORS: 
@@ -6034,26 +5667,21 @@ _("Thermite Cyborg")
 _("Thermite Flamer Cyborg")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-ROF02.name
 _("Thermopole Energizer Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-ROF03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-ROF03.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-ROF03.name
 _("Thermopole Energizer Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Energy-ROF01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Energy-ROF01.name
 // data/mp/stats/research.json: $.R-Wpn-Energy-ROF01.name
 _("Thermopole Energizer")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Comp-MissileCodes03.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Comp-MissileCodes03.name
 _("Third Level Missile Firing Codes")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body9REC.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body9REC.name
 // data/mp/stats/body.json: $.Body9REC.name
 _("Tiger")  
 // TRANSLATORS: 
@@ -6068,11 +5696,9 @@ _("Titanium-reinforced concrete")
 _("Tower wars AI, based on NullBot")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Tracks02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Tracks02.name
 _("Tracked Propulsion II")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Tracks.name
 // data/mp/stats/research.json: $.R-Vehicle-Prop-Tracks.name
 _("Tracked Propulsion")  
 // TRANSLATORS: 
@@ -6091,16 +5717,13 @@ _("Tracks III")
 _("Tracks")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.TransporterBody.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.TransporterBody.name
 // data/mp/stats/body.json: $.TransporterBody.name
 _("Transport Body")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.Transporter.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.Transporter.name
 _("Transport")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BarbarianTrike.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.BarbarianTrike.name
 // data/mp/stats/templates.json: $.BarbarianTrike.name
 _("Trike")  
 // TRANSLATORS: 
@@ -6116,7 +5739,7 @@ _("Truck Scorpion Hover")
 // data/base/stats/construction.json: $.Spade1Mk1.name
 // data/base/stats/templates.json: $.ConstructionDroid.name
 // data/base/stats/templates.json: $.ConstructorDroid.name
-// ... + 9 refs
+// ... + 5 refs
 _("Truck")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_MG_D5.text[1]
@@ -6124,34 +5747,29 @@ _("Truck")
 _("Tungsten-tipped armor-piercing bullets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage06.name
 _("Tungsten-Tipped MG Bullets Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage07.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage07.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage07.name
 _("Tungsten-Tipped MG Bullets Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage05.name
 _("Tungsten-Tipped MG Bullets")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine05.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine05.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine05.name
 _("Turbo-Charged Engine Mk2")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Engine06.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine06.name
 // data/mp/stats/research.json: $.R-Vehicle-Engine06.name
 _("Turbo-Charged Engine Mk3")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_V_EN4.text[1]
 // data/base/stats/research.json: $.R-Vehicle-Engine04.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Engine04.name
-// ... + 2 refs
+// data/mp/messages/resmessages2.json: $.RES_V_EN4.text[1]
+// data/mp/stats/research.json: $.R-Vehicle-Engine04.name
 _("Turbo-Charged Engine")  
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/nb_turtle.json: $.AI.name
@@ -6186,13 +5804,12 @@ _("Twin Assault Gun")
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.PillBox2.name
 // data/base/stats/weapons.json: $.MG2-Pillbox.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.PillBox2.name
-// ... + 3 refs
+// data/mp/stats/structure.json: $.PillBox2.name
+// data/mp/stats/weapons.json: $.MG2-Pillbox.name
 _("Twin Machinegun Bunker")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Tower02.name
 // data/base/stats/structure.json: $.GuardTower2.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.GuardTower2.name
 // data/mp/stats/structure.json: $.GuardTower2.name
 _("Twin Machinegun Guard Tower")  
 // TRANSLATORS: 
@@ -6200,7 +5817,6 @@ _("Twin Machinegun Guard Tower")
 _("Twin Machinegun Tower")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperMG02Halftrack.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperMG02Halftrack.name
 // data/mp/stats/templates.json: $.ViperMG02Halftrack.name
 _("Twin Machinegun Viper Half-tracks")  
 // TRANSLATORS: 
@@ -6208,15 +5824,14 @@ _("Twin Machinegun Viper Half-tracks")
 _("Twin Machinegun Viper Tracks")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.ViperMG02Wheels.name
-// data/mods/campaign/wz2100_camclassic/stats/templates.json: $.ViperMG02Wheels.name
 // data/mp/stats/templates.json: $.A-Viper-Wheels-TMG.name
 // data/mp/stats/templates.json: $.ViperMG02Wheels.name
 _("Twin Machinegun Viper Wheels")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG2Mk1.name
 // data/base/stats/weapons.json: $.MG2Mk1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-MG2Mk1.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-MG2Mk1.name
+// data/mp/stats/weapons.json: $.MG2Mk1.name
 _("Twin Machinegun")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_AALAS.text[1]
@@ -6228,15 +5843,6 @@ _("Twin Multi-barrel, rapid-fire machinegun")
 // TRANSLATORS: 
 // data/mp/challenges/two-faced.json: $.challenge.name
 _("Two-faced")  
-// TRANSLATORS: 
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.CAM2RESEARCH-UNDO-Rockets.name
-_("Undo additional rocket upgrades for true classic")  
-// TRANSLATORS: 
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.CAM3RESEARCH-UNDO.name
-_("Undo Alpha and Beta campaign research to match Original Gamma tree")  
-// TRANSLATORS: 
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.CAM2RESEARCH-UNDO.name
-_("Undo Alpha campaign research to match Original Beta tree")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-Range01-ScavReduce-Undo.name
 _("Undo Reduce Scavenger Flamer Range")  
@@ -6292,7 +5898,6 @@ _("Vapor Turbine Generator Mk2")
 _("Vapor Turbine Generator Mk3")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Power-Upgrade02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-Power-Upgrade02.name
 // data/mp/stats/research.json: $.R-Struc-Power-Upgrade02.name
 _("Vapor Turbine Generator")  
 // TRANSLATORS: 
@@ -6351,7 +5956,6 @@ _("Vengeance Tracks Gauss Scourge")
 _("Vengeance Tracks Rail Gun")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body10MBT.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body10MBT.name
 // data/mp/stats/body.json: $.Body10MBT.name
 _("Vengeance")  
 // TRANSLATORS: 
@@ -6381,28 +5985,25 @@ _("Vindicator Hardpoint")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-SamSite2.name
 // data/base/stats/structure.json: $.P0-AASite-SAM2.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-SamSite2.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-SamSite2.name
+// data/mp/stats/structure.json: $.P0-AASite-SAM2.name
 _("Vindicator SAM Site")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Missile-HvSAM.name
 // data/base/stats/weapons.json: $.Missile-HvySAM.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-Missile-HvSAM.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-Missile-HvSAM.name
+// data/mp/stats/weapons.json: $.Missile-HvySAM.name
 _("Vindicator SAM")  
 // TRANSLATORS: 
 // data/base/stats/body.json: $.Body1REC.name
-// data/mods/campaign/wz2100_camclassic/stats/body.json: $.Body1REC.name
 // data/mp/stats/body.json: $.Body1REC.name
 _("Viper")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
 // data/mp/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
 _("VTOL Assault Cannon")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG4ROTARY-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.MG4ROTARY-VTOL.name
 // data/mp/stats/weapons.json: $.MG4ROTARY-VTOL.name
 _("VTOL Assault Gun")  
 // TRANSLATORS: 
@@ -6416,12 +6017,10 @@ _("VTOL Bunker Buster Bug VTOL")
 _("VTOL Bunker Buster Scorpion VTOL")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-VTOL-BB.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-VTOL-BB.name
 // data/mp/stats/weapons.json: $.Rocket-VTOL-BB.name
 _("VTOL Bunker Buster")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Cannon1-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Cannon1-VTOL.name
 // data/mp/stats/weapons.json: $.Cannon1-VTOL.name
 _("VTOL Cannon")  
 // TRANSLATORS: 
@@ -6445,8 +6044,8 @@ _("VTOL CB Tower detects enemy indirect fire batteries")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-VTOLCBS-Tower01.name
 // data/base/stats/structure.json: $.Sys-VTOL-CB-Tower01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-VTOLCBS-Tower01.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Sys-VTOLCBS-Tower01.name
+// data/mp/stats/structure.json: $.Sys-VTOL-CB-Tower01.name
 _("VTOL CB Tower")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[1]
@@ -6454,7 +6053,6 @@ _("VTOL CB Tower")
 _("VTOL CB turret detects enemy indirect fire batteries")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-VTOLCBS-Turret01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-VTOLCBS-Turret01.name
 // data/mp/stats/research.json: $.R-Sys-VTOLCBS-Turret01.name
 _("VTOL CB Turret")  
 // TRANSLATORS: 
@@ -6468,7 +6066,6 @@ _("VTOL Cluster Bomb Bay Scorpion VTOL")
 _("VTOL Cluster Bomb Bay")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
 _("VTOL Cluster Bombs Bay")  
 // TRANSLATORS: 
 // data/mp/stats/weapons.json: $.Bomb6-VTOL-EMP.name
@@ -6480,17 +6077,15 @@ _("VTOL factory enables VTOL production")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-VTOLFactory.name
 // data/base/stats/structure.json: $.A0VTolFactory1.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLFactory.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Struc-VTOLFactory.name
+// data/mp/stats/structure.json: $.A0VTolFactory1.name
 _("VTOL Factory")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Laser3BEAM-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Laser3BEAM-VTOL.name
 // data/mp/stats/weapons.json: $.Laser3BEAM-VTOL.name
 _("VTOL Flashlight")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
 // data/mp/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
 _("VTOL Heap Bomb Bay")  
 // TRANSLATORS: 
@@ -6501,7 +6096,6 @@ _("VTOL Heavy Cannon")
 _("VTOL Heavy Laser")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG3-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.MG3-VTOL.name
 // data/mp/stats/weapons.json: $.MG3-VTOL.name
 _("VTOL Heavy Machinegun")  
 // TRANSLATORS: 
@@ -6515,7 +6109,6 @@ _("VTOL Hyper Velocity Cannon Mantis VTOL")
 _("VTOL Hyper Velocity Cannon Scorpion VTOL")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Cannon4AUTO-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 // data/mp/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 _("VTOL Hyper Velocity Cannon")  
 // TRANSLATORS: 
@@ -6535,7 +6128,6 @@ _("VTOL Lancer Mantis VTOL")
 _("VTOL Lancer Scorpion VTOL")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
 // data/mp/stats/weapons.json: $.Rocket-VTOL-LtA-T.name
 _("VTOL Lancer")  
 // TRANSLATORS: 
@@ -6543,7 +6135,6 @@ _("VTOL Lancer")
 _("VTOL Machinegun Scav")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG1-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.MG1-VTOL.name
 // data/mp/stats/weapons.json: $.MG1-VTOL.name
 _("VTOL Machinegun")  
 // TRANSLATORS: 
@@ -6553,17 +6144,14 @@ _("VTOL Mini-Rocket AA")
 // data/mp/stats/weapons.json: $.Rocket-VTOL-Pod-SCAVS.name
 _("VTOL Mini-Rocket Scav")  
 // TRANSLATORS: 
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-VTOL-Pod.name
 // data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name
 _("VTOL Mini-Rocket")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.RailGun1-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.RailGun1-VTOL.name
 // data/mp/stats/weapons.json: $.RailGun1-VTOL.name
 _("VTOL Needle Gun")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
 // data/mp/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
 _("VTOL Phosphor Bomb Bay")  
 // TRANSLATORS: 
@@ -6571,34 +6159,29 @@ _("VTOL Phosphor Bomb Bay")
 _("VTOL Plasmite Bomb Bay")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-VTOL02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-VTOL02.name
 _("VTOL Propulsion II")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-VTOL.name
 // data/mp/stats/research.json: $.R-Vehicle-Prop-VTOL.name
 _("VTOL Propulsion")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Laser2PULSE-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Laser2PULSE-VTOL.name
 // data/mp/stats/weapons.json: $.Laser2PULSE-VTOL.name
 _("VTOL Pulse Laser")  
 // TRANSLATORS: 
 // data/base/stats/sensor.json: $.Sys-VTOLRadarTower01.name
 // data/base/stats/structure.json: $.Sys-VTOL-RadarTower01.name
-// data/mods/campaign/wz2100_camclassic/stats/structure.json: $.Sys-VTOL-RadarTower01.name
 // data/mp/stats/sensor.json: $.Sys-VTOLRadarTower01.name
 _("VTOL Radar Tower")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.RailGun2-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.RailGun2-VTOL.name
 // data/mp/stats/weapons.json: $.RailGun2-VTOL.name
 _("VTOL Rail Gun")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-VTOLPad.name
 // data/base/stats/structure.json: $.A0VtolPad.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Struc-VTOLPad.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Struc-VTOLPad.name
+// data/mp/stats/structure.json: $.A0VtolPad.name
 _("VTOL Rearming Pad")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_ST_VF.text[2]
@@ -6612,7 +6195,6 @@ _("VTOL rearming pads required to keep VTOLs flying")
 _("VTOL Rearming Times Reduced")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Missile-VTOL-AT.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Missile-VTOL-AT.name
 // data/mp/stats/weapons.json: $.Missile-VTOL-AT.name
 _("VTOL Scourge Missile")  
 // TRANSLATORS: 
@@ -6627,7 +6209,6 @@ _("VTOL Strike Improved")
 _("VTOL Strike Tower detects approaching enemies")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-VTOLStrike-Tower01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-VTOLStrike-Tower01.name
 // data/mp/stats/research.json: $.R-Sys-VTOLStrike-Tower01.name
 // data/mp/stats/structure.json: $.Sys-VTOL-RadarTower01.name
 _("VTOL Strike Tower")  
@@ -6638,25 +6219,22 @@ _("VTOL Strike turret used to spot targets")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-VTOLStrike-Turret01.name
 // data/base/stats/sensor.json: $.Sys-VstrikeTurret01.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Sys-VTOLStrike-Turret01.name
-// ... + 2 refs
+// data/mp/stats/research.json: $.R-Sys-VTOLStrike-Turret01.name
+// data/mp/stats/sensor.json: $.Sys-VstrikeTurret01.name
 _("VTOL Strike Turret")  
 // TRANSLATORS: 
 // data/mp/stats/weapons.json: $.Rocket-VTOL-Sunburst.name
 _("VTOL Sunburst AA")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
 // data/mp/stats/weapons.json: $.Rocket-VTOL-HvyA-T.name
 _("VTOL Tank Killer")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
 // data/mp/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
 _("VTOL Thermite Bomb Bay")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.MG2-VTOL.name
-// data/mods/campaign/wz2100_camclassic/stats/weapons.json: $.MG2-VTOL.name
 // data/mp/stats/weapons.json: $.MG2-VTOL.name
 _("VTOL Twin Machinegun")  
 // TRANSLATORS: 
@@ -6683,13 +6261,12 @@ _("Warehouse")
 _("Weapon Research Completed")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Wheels02.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Wheels02.name
 _("Wheeled Propulsion II")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_P_W1.text[1]
 // data/base/stats/research.json: $.R-Vehicle-Prop-Wheels.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Vehicle-Prop-Wheels.name
-// ... + 2 refs
+// data/mp/messages/resmessages1.json: $.RES_V_P_W1.text[1]
+// data/mp/stats/research.json: $.R-Vehicle-Prop-Wheels.name
 _("Wheeled Propulsion")  
 // TRANSLATORS: 
 // data/base/stats/propulsion.json: $.wheeled02.name
@@ -6704,14 +6281,14 @@ _("Wheels")
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-AASite-QuadRotMg.name
 // data/base/stats/structure.json: $.AASite-QuadRotMg.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Defense-AASite-QuadRotMg.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Defense-AASite-QuadRotMg.name
+// data/mp/stats/structure.json: $.AASite-QuadRotMg.name
 _("Whirlwind AA Site")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-AAGun04.name
 // data/base/stats/weapons.json: $.QuadRotAAGun.name
-// data/mods/campaign/wz2100_camclassic/stats/research.json: $.R-Wpn-AAGun04.name
-// ... + 3 refs
+// data/mp/stats/research.json: $.R-Wpn-AAGun04.name
+// data/mp/stats/weapons.json: $.QuadRotAAGun.name
 _("Whirlwind AA Turret")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-WallTower-QuadRotAA.name
@@ -6746,54 +6323,54 @@ _("Wyvern")
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[6]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[6]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[6]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[6]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[6]
 NP_("rank", "Elite")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[1]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[1]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[1]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[1]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[1]
 NP_("rank", "Green")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[8]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[8]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[8]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[8]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[8]
 NP_("rank", "Hero")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[4]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[4]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[4]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[4]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[4]
 NP_("rank", "Professional")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[3]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[3]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[3]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[3]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[3]
 NP_("rank", "Regular")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[0]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[0]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[0]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[0]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[0]
 NP_("rank", "Rookie")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[7]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[7]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[7]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[7]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[7]
 NP_("rank", "Special")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[2]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[2]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[2]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[2]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[2]
 NP_("rank", "Trained")  
 // TRANSLATORS: 
 // data/base/stats/brain.json: $.CommandBrain01.ranks[5]
 // data/base/stats/brain.json: $.ZNULLBRAIN.ranks[5]
-// data/mods/campaign/wz2100_camclassic/stats/brain.json: $.CommandBrain01.ranks[5]
-// ... + 3 refs
+// data/mp/stats/brain.json: $.CommandBrain01.ranks[5]
+// data/mp/stats/brain.json: $.ZNULLBRAIN.ranks[5]
 NP_("rank", "Veteran")  

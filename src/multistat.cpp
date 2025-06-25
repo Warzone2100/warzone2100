@@ -40,6 +40,7 @@
 #include "multistat.h"
 #include "urlrequest.h"
 #include "stdinreader.h"
+#include "multilobbycommands.h"
 
 #include <utility>
 #include <memory>
@@ -51,6 +52,11 @@
 // ////////////////////////////////////////////////////////////////////////////
 static PLAYERSTATS playerStats[MAX_CONNECTED_PLAYERS];
 
+static PLAYERSTATS zeroStats;
+static EcKey blindIdentity; // a freshly-generated identity used for the local client in the current blind room
+
+static EcKey hostVerifiedJoinIdentities[MAX_CONNECTED_PLAYERS];
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
@@ -59,21 +65,109 @@ PLAYERSTATS const &getMultiStats(UDWORD player)
 	return playerStats[player];
 }
 
-static void NETauto(PLAYERSTATS::Autorating &ar)
+bool generateBlindIdentity()
 {
-	NETauto(ar.valid);
+	blindIdentity = EcKey::generate();	// Generate new identity
+	ASSERT(!blindIdentity.empty(), "Failed to generate new blind identity");
+	return !blindIdentity.empty();
+}
+
+const EcKey& getLocalSharedIdentity()
+{
+	if (NetPlay.isHost && realSelectedPlayer >= MAX_PLAYER_SLOTS)
+	{
+		// If spectator host, send real identity
+		return playerStats[realSelectedPlayer].identity;
+	}
+
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// In blind mode, share the blind identity
+		return blindIdentity;
+	}
+	else
+	{
+		// In regular mode, share the actual identity
+		return playerStats[realSelectedPlayer].identity;
+	}
+}
+
+const EcKey& getVerifiedJoinIdentity(UDWORD player)
+{
+	ASSERT(player < MAX_CONNECTED_PLAYERS, "Invalid player: %u", player);
+	if (NetPlay.isHost)
+	{
+		return hostVerifiedJoinIdentities[player];
+	}
+	else
+	{
+		if (game.blindMode == BLIND_MODE::NONE && ingame.VerifiedIdentity[player])
+		{
+			return playerStats[player].identity;
+		}
+		else
+		{
+			return hostVerifiedJoinIdentities[player];
+		}
+	}
+}
+
+// In blind games, it returns the verified join identity (if executed on the host, or on all clients after the game has ended)
+// In regular games, it returns the current player identity
+TrueIdentity getTruePlayerIdentity(UDWORD player)
+{
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// In blind games, always output the join identity (since the internal shared identity is a random one)
+		return {hostVerifiedJoinIdentities[player], (!hostVerifiedJoinIdentities[player].empty()) ? true : false};
+	}
+	else
+	{
+		// Otherwise, always return the *current* player identity (which may differ from the identity used to join the game if the player switched to a different profile)
+		return {playerStats[player].identity, ingame.VerifiedIdentity[player]};
+	}
+}
+
+// Should be used when a player identity is to be output (in logs, or otherwise accessible to the user)
+const EcKey& getOutputPlayerIdentity(UDWORD player)
+{
+	return getTruePlayerIdentity(player).identity;
+}
+
+template <typename SerdeContext>
+static void NETAutorating(SerdeContext& c, PLAYERSTATS::Autorating &ar)
+{
+	static_assert(std::is_same<SerdeContext, MessageReader>::value || std::is_same<SerdeContext, MessageWriter>::value,
+		"SerdeContext is expected to be either MessageReader or MessageWriter");
+
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		bool tmp = false; // no valid autorating in blind mode
+		NETbool(c, tmp); // ar.valid
+		return;
+	}
+	NETbool(c, ar.valid);
 	if (ar.valid)
 	{
-		NETauto(ar.dummy);
-		NETauto(ar.star);
-		NETauto(ar.medal);
-		NETauto(ar.level);
-		NETauto(ar.elo);
-		NETauto(ar.autohoster);
-		NETauto(ar.details);
-		NETauto(ar.altName);
-		NETauto(ar.altNameTextColorOverride);
-		NETauto(ar.eloTextColorOverride);
+		NETbool(c, ar.dummy);
+		for (int i = 0; i < ARRAY_SIZE(ar.star); ++i)
+		{
+			NETuint8_t(c, ar.star[i]);
+		}
+		NETuint8_t(c, ar.medal);
+		NETuint8_t(c, ar.level);
+		NETstring(c, ar.elo);
+		NETbool(c, ar.autohoster);
+		NETstring(c, ar.details);
+		NETstring(c, ar.altName);
+		for (int i = 0; i < ARRAY_SIZE(ar.altNameTextColorOverride); ++i)
+		{
+			NETuint8_t(c, ar.altNameTextColorOverride[i]);
+		}
+		for (int i = 0; i < ARRAY_SIZE(ar.eloTextColorOverride); ++i)
+		{
+			NETuint8_t(c, ar.eloTextColorOverride[i]);
+		}
 	}
 }
 
@@ -118,8 +212,14 @@ void lookupRatingAsync(uint32_t playerIndex)
 		return;
 	}
 
-	auto hash = playerStats[playerIndex].identity.publicHashString();
-	auto key = playerStats[playerIndex].identity.publicKeyHexString();
+	if (!NetPlay.isHost && game.blindMode != BLIND_MODE::NONE)
+	{
+		return;
+	}
+
+	auto trueIdentity = getTruePlayerIdentity(playerIndex);
+	auto hash = trueIdentity.identity.publicHashString();
+	auto key = trueIdentity.identity.publicKeyHexString();
 	if (hash.empty() || key.empty())
 	{
 		return;
@@ -142,7 +242,7 @@ void lookupRatingAsync(uint32_t playerIndex)
 	req.setRequestHeader("WZ-Player-Hash", hash);
 	req.setRequestHeader("WZ-Player-Key", key);
 	req.setRequestHeader("WZ-Locale", getLanguage());
-	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, NetPlay.players[playerIndex].name, hash.c_str());
+	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, getPlayerName(playerIndex), hash.c_str());
 	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
 		long httpStatusCode = response.httpStatusCode();
 		std::string urlCopy = url;
@@ -197,7 +297,7 @@ static bool generateSessionKeysWithPlayer(uint32_t playerIndex)
 	}
 
 	// generate session keys
-	auto& localIdentity = playerStats[realSelectedPlayer].identity;
+	auto& localIdentity = getLocalSharedIdentity();
 	try {
 		NETsetSessionKeys(playerIndex, SessionKeys(localIdentity, realSelectedPlayer, playerStats[playerIndex].identity, playerIndex));
 	}
@@ -215,6 +315,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 		return false;
 	}
 	std::swap(playerStats[playerIndexA], playerStats[playerIndexB]);
+	std::swap(hostVerifiedJoinIdentities[playerIndexA], hostVerifiedJoinIdentities[playerIndexB]);
 
 	// NOTE: We can't just swap session keys - we have to re-generate to be sure they are correct
 	// (since client / server determinism can also be based on the playerIdx relative to the realSelectedPlayer - see SessionKeys constructor)
@@ -224,7 +325,7 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 			generateSessionKeysWithPlayer(playerIndexA);
 		}
 		catch (const std::invalid_argument& e) {
-			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, NetPlay.players[playerIndexA].name, e.what());
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexA, getPlayerName(playerIndexA), e.what());
 		}
 	}
 	if (playerIndexB != realSelectedPlayer && (playerIndexB < MAX_PLAYERS || playerIndexB == NetPlay.hostPlayer))
@@ -233,14 +334,16 @@ bool swapPlayerMultiStatsLocal(uint32_t playerIndexA, uint32_t playerIndexB)
 			generateSessionKeysWithPlayer(playerIndexB);
 		}
 		catch (const std::invalid_argument& e) {
-			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexB, NetPlay.players[playerIndexB].name, e.what());
+			debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\"), with error: %s", realSelectedPlayer, playerIndexB, getPlayerName(playerIndexB), e.what());
 		}
 	}
 	return true;
 }
 
-bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
+static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex = nullopt, bool sendHostVerifiedJoinIdentity = false)
 {
+	ASSERT(NetPlay.isHost || playerIndex == realSelectedPlayer, "Huh?");
+
 	NETQUEUE queue;
 	if (!recipientPlayerIndex.has_value())
 	{
@@ -251,30 +354,76 @@ bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerInde
 		queue = NETnetQueue(recipientPlayerIndex.value());
 	}
 	// Now send it to all other players
-	NETbeginEncode(queue, NET_PLAYER_STATS);
+	auto w = NETbeginEncode(queue, NET_PLAYER_STATS);
 	// Send the ID of the player's stats we're updating
-	NETuint32_t(&playerIndex);
+	NETuint32_t(w, playerIndex);
 
-	NETauto(playerStats[playerIndex].autorating);
+	NETAutorating(w, playerStats[playerIndex].autorating);
 
-	// Send over the actual stats
-	NETuint32_t(&playerStats[playerIndex].played);
-	NETuint32_t(&playerStats[playerIndex].wins);
-	NETuint32_t(&playerStats[playerIndex].losses);
-	NETuint32_t(&playerStats[playerIndex].totalKills);
-	NETuint32_t(&playerStats[playerIndex].totalScore);
-	NETuint32_t(&playerStats[playerIndex].recentKills);
-	NETuint32_t(&playerStats[playerIndex].recentScore);
-
-	EcKey::Key identity;
-	if (!playerStats[playerIndex].identity.empty())
+	PLAYERSTATS* pStatsToSend = &playerStats[playerIndex];
+	if (game.blindMode != BLIND_MODE::NONE)
 	{
-		identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+		// In blind mode, always send zeroed stats
+		pStatsToSend = &zeroStats;
 	}
-	NETbytes(&identity);
-	NETend();
+
+	NETuint32_t(w, pStatsToSend->played);
+	NETuint32_t(w, pStatsToSend->wins);
+	NETuint32_t(w, pStatsToSend->losses);
+	NETuint32_t(w, pStatsToSend->totalKills);
+	NETuint32_t(w, pStatsToSend->totalScore);
+
+	EcKey::Key identityPublicKey;
+	bool isHostVerifiedIdentity = false;
+	// Choose the identity to send
+	if (!sendHostVerifiedJoinIdentity || !NetPlay.isHost)
+	{
+		if (playerIndex == realSelectedPlayer)
+		{
+			// Local client sending its own identity
+			const auto& identity = getLocalSharedIdentity();
+			if (!identity.empty())
+			{
+				identityPublicKey = identity.toBytes(EcKey::Public);
+			}
+		}
+		else
+		{
+			// Host sending other player details - relay client provided details
+			if (!playerStats[playerIndex].identity.empty())
+			{
+				identityPublicKey = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+			}
+		}
+	}
+	else
+	{
+		// Once game has begun or ended (depending on settings), if we're the host, send the hostVerifiedJoinIdentity
+		ASSERT(NetPlay.isHost && !isBlindPlayerInfoState(), "Not time to send host verified identity yet?");
+		isHostVerifiedIdentity = true;
+		if (!hostVerifiedJoinIdentities[playerIndex].empty())
+		{
+			identityPublicKey = hostVerifiedJoinIdentities[playerIndex].toBytes(EcKey::Public);
+		}
+	}
+
+	NETbool(w, isHostVerifiedIdentity);
+	NETbytes(w, identityPublicKey);
+	NETend(w);
 
 	return true;
+}
+
+bool sendMultiStats(uint32_t playerIndex, optional<uint32_t> recipientPlayerIndex /*= nullopt*/)
+{
+	return sendMultiStatsInternal(playerIndex, recipientPlayerIndex, false);
+}
+
+bool sendMultiStatsHostVerifiedIdentities(uint32_t playerIndex)
+{
+	ASSERT_HOST_ONLY(return false);
+	ASSERT_OR_RETURN(false, !isBlindPlayerInfoState(), "Not time to send host verified identities yet");
+	return sendMultiStatsInternal(playerIndex, nullopt, true);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -298,7 +447,7 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		{
 			// need to clear and re-generate any session keys for communication between us and other players
 			NETclearSessionKeys();
-			auto& localIdentity = playerStats[realSelectedPlayer].identity;
+			auto& localIdentity = getLocalSharedIdentity();
 			if (localIdentity.hasPrivate())
 			{
 				for (uint8_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
@@ -331,8 +480,23 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 	return true;
 }
 
+bool clearPlayerMultiStats(uint32_t playerIndex)
+{
+	setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+	if (NetPlay.isHost)
+	{
+		hostVerifiedJoinIdentities[playerIndex].clear();
+	}
+	return true;
+}
+
 bool sendMultiStatsScoreUpdates(uint32_t playerIndex)
 {
+	if (game.blindMode != BLIND_MODE::NONE)
+	{
+		// No-op if in blind mode
+		return false;
+	}
 	if (NetPlay.isHost || playerIndex == realSelectedPlayer)
 	{
 		return sendMultiStats(playerIndex);
@@ -340,85 +504,64 @@ bool sendMultiStatsScoreUpdates(uint32_t playerIndex)
 	return false;
 }
 
-bool recvMultiStats(NETQUEUE queue)
+bool multiStatsSetIdentity(uint32_t playerIndex, const EcKey::Key &identity, bool verifiedFromJoin = false)
 {
-	uint32_t playerIndex;
+	EcKey::Key prevIdentity;
 
-	NETbeginDecode(queue, NET_PLAYER_STATS);
-	// Retrieve the ID number of the player for which we need to
-	// update the stats
-	NETuint32_t(&playerIndex);
-
-	if (playerIndex >= MAX_CONNECTED_PLAYERS)
+	if (!playerStats[playerIndex].identity.empty())
 	{
-		NETend();
-		return false;
+		prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
 	}
 
-
-	if (playerIndex != queue.index && queue.index != NetPlay.hostPlayer)
+	// If game hasn't actually started, process potential identity changes
+	if (!ingame.TimeEveryoneIsInGame.has_value())
 	{
-		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
-		NETend();
-		return false;
-	}
-
-	PLAYERSTATS::Autorating receivedAutorating;
-	NETauto(receivedAutorating);
-	bool processAutoratingData = false;
-
-	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
-	if (!myResponsibility(playerIndex))
-	{
-		// Retrieve the actual stats
-		NETuint32_t(&playerStats[playerIndex].played);
-		NETuint32_t(&playerStats[playerIndex].wins);
-		NETuint32_t(&playerStats[playerIndex].losses);
-		NETuint32_t(&playerStats[playerIndex].totalKills);
-		NETuint32_t(&playerStats[playerIndex].totalScore);
-		NETuint32_t(&playerStats[playerIndex].recentKills);
-		NETuint32_t(&playerStats[playerIndex].recentScore);
-
-		EcKey::Key identity;
-		NETbytes(&identity);
-		EcKey::Key prevIdentity;
-		if (!playerStats[playerIndex].identity.empty())
+		playerStats[playerIndex].identity.clear();
+		if (!identity.empty())
 		{
-			prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
-		}
-
-		// If game hasn't actually started, process potential identity changes
-		if (!ingame.TimeEveryoneIsInGame.has_value())
-		{
-			playerStats[playerIndex].identity.clear();
-			if (!identity.empty())
+			if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
 			{
-				if (!playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public))
+				debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress);
+			}
+		}
+		else
+		{
+			debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress);
+		}
+		if ((identity != prevIdentity) || identity.empty())
+		{
+			if (GetGameMode() == GS_NORMAL)
+			{
+				debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress);
+			}
+
+			ingame.PingTimes[playerIndex] = PING_LIMIT;
+
+			if (verifiedFromJoin && !identity.empty())
+			{
+				// Record that the identity has been verified
+				ingame.VerifiedIdentity[playerIndex] = true;
+				if (NetPlay.isHost)
 				{
-					debug(LOG_INFO, "Player sent invalid identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
+					NetPlay.players[playerIndex].isAdmin = identityMatchesAdmin(playerStats[playerIndex].identity);
+					// Do not broadcast player info here, as it's assumed caller will do it
 				}
+
+				// Store the verified join identity
+				hostVerifiedJoinIdentities[playerIndex].fromBytes(identity, EcKey::Public);
+
+				// Do *not* output to stdinterface here - the join event is still being processed
 			}
 			else
 			{
-				debug(LOG_INFO, "Player sent empty identity: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-			}
-			if ((identity != prevIdentity) || identity.empty())
-			{
-				if (GetGameMode() == GS_NORMAL)
-				{
-					debug(LOG_INFO, "Unexpected identity change after NET_FIREUP for: (player: %u, name: \"%s\", IP: %s)", playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress);
-				}
-
-				ingame.PingTimes[playerIndex] = PING_LIMIT;
 				ingame.VerifiedIdentity[playerIndex] = false;
-
-				if (!ingame.muteChat[playerIndex])
+				if (NetPlay.isHost)
 				{
-					// check if the new identity was previously muted
-					auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
-					if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
+					// when verified identity is cleared, so is admin status (until new identity is verified)
+					if (NetPlay.players[playerIndex].isAdmin)
 					{
-						ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
+						NetPlay.players[playerIndex].isAdmin = false;
+						NETBroadcastPlayerInfo(playerIndex);
 					}
 				}
 
@@ -427,7 +570,7 @@ bool recvMultiStats(NETQUEUE queue)
 				{
 					std::string senderPublicKeyB64 = base64Encode(playerStats[playerIndex].identity.toBytes(EcKey::Public));
 					std::string senderIdentityHash = playerStats[playerIndex].identity.publicHashString();
-					std::string sendername = NetPlay.players[playerIndex].name;
+					std::string sendername = getPlayerName(playerIndex);
 					std::string senderNameB64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
 					wz_command_interface_output("WZEVENT: player identity UNVERIFIED: %" PRIu32 " %s %s %s %s\n", playerIndex, senderPublicKeyB64.c_str(), senderIdentityHash.c_str(), senderNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
 				}
@@ -435,39 +578,120 @@ bool recvMultiStats(NETQUEUE queue)
 				{
 					wz_command_interface_output("WZEVENT: player identity EMPTY: %" PRIu32 "\n", playerIndex);
 				}
+			}
 
-				if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
+			if (!ingame.muteChat[playerIndex])
+			{
+				// check if the new identity was previously muted
+				auto playerOptions = getStoredPlayerOptions(NetPlay.players[playerIndex].name, playerStats[playerIndex].identity);
+				if (playerOptions.has_value() && playerOptions.value().mutedTime.has_value())
 				{
-					if (!playerStats[playerIndex].identity.empty())
-					{
-						// generate session keys
-						try {
-							generateSessionKeysWithPlayer(playerIndex);
-						}
-						catch (const std::invalid_argument& e) {
-							debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, NetPlay.players[playerIndex].name, NetPlay.players[playerIndex].IPtextAddress, e.what());
-						}
+					ingame.muteChat[playerIndex] = (playerOptions.value().mutedTime.value().time_since_epoch().count() > 0);
+				}
+			}
+
+			if (playerIndex < MAX_PLAYERS || playerIndex == NetPlay.hostPlayer)
+			{
+				if (!playerStats[playerIndex].identity.empty())
+				{
+					// generate session keys
+					try {
+						generateSessionKeysWithPlayer(playerIndex);
 					}
-					else
-					{
-						NETclearSessionKeys(playerIndex);
+					catch (const std::invalid_argument& e) {
+						debug(LOG_INFO, "Cannot create session keys: (self: %u), (other: %u, name: \"%s\", IP: %s), with error: %s", realSelectedPlayer, playerIndex, getPlayerName(playerIndex), NetPlay.players[playerIndex].IPtextAddress, e.what());
 					}
 				}
-
-				processAutoratingData = true;
+				else
+				{
+					NETclearSessionKeys(playerIndex);
+				}
 			}
+
+			return true;
 		}
-		else
+	}
+	else
+	{
+		// Changing an identity should not happen once a game starts
+		if ((identity != prevIdentity) || identity.empty())
 		{
-			// Changing an identity should not happen once a game starts
-			if ((identity != prevIdentity) || identity.empty())
+			if (!ingame.endTime.has_value())
 			{
 				ASSERT(false, "Cannot change identity for player %u after game has started", playerIndex);
 			}
 		}
 	}
+
+	return false;
+}
+
+bool recvMultiStats(NETQUEUE queue)
+{
+	uint32_t playerIndex;
+
+	auto r = NETbeginDecode(queue, NET_PLAYER_STATS);
+	// Retrieve the ID number of the player for which we need to
+	// update the stats
+	NETuint32_t(r, playerIndex);
+
+	if (playerIndex >= MAX_CONNECTED_PLAYERS)
+	{
+		NETend(r);
+		return false;
+	}
+
+
+	if (playerIndex != queue.index && queue.index != NetPlay.hostPlayer)
+	{
+		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
+		NETend(r);
+		return false;
+	}
+
+	PLAYERSTATS::Autorating receivedAutorating;
+	NETAutorating(r, receivedAutorating);
+	bool processAutoratingData = false;
+
+	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
+	if (!myResponsibility(playerIndex))
+	{
+		// Retrieve the actual stats
+		NETuint32_t(r, playerStats[playerIndex].played);
+		NETuint32_t(r, playerStats[playerIndex].wins);
+		NETuint32_t(r, playerStats[playerIndex].losses);
+		NETuint32_t(r, playerStats[playerIndex].totalKills);
+		NETuint32_t(r, playerStats[playerIndex].totalScore);
+
+		EcKey::Key identity;
+		bool isHostVerifiedIdentity = false;
+		NETbool(r, isHostVerifiedIdentity);
+		NETbytes(r, identity);
+		NETend(r);
+
+		if (!isHostVerifiedIdentity)
+		{
+			if (multiStatsSetIdentity(playerIndex, identity, false))
+			{
+				// if identity changed, process autorating data
+				processAutoratingData = true;
+			}
+		}
+		else
+		{
+			if (queue.index == NetPlay.hostPlayer)
+			{
+				hostVerifiedJoinIdentities[playerIndex].clear();
+				if (!identity.empty() && !hostVerifiedJoinIdentities[playerIndex].fromBytes(identity, EcKey::Public))
+				{
+					debug(LOG_INFO, "Host sent invalid host-verified join identity for: (player: %u, name: \"%s\")", playerIndex, getPlayerName(playerIndex));
+				}
+			}
+		}
+	}
 	else
 	{
+		NETend(r);
 		processAutoratingData = true;
 	}
 
@@ -486,8 +710,32 @@ bool recvMultiStats(NETQUEUE queue)
 		}
 	}
 
-	NETend();
 	return true;
+}
+
+void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Key &identity)
+{
+	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, playerIndex != NetPlay.hostPlayer, "playerIndex is hostPlayer? (%" PRIu32 ")", NetPlay.hostPlayer);
+	if (multiStatsSetIdentity(playerIndex, identity, true))
+	{
+		if (!playerStats[playerIndex].identity.empty())
+		{
+			// might need to trigger autorating lookup (if enabled)
+			if (getAutoratingEnable())
+			{
+				playerStats[playerIndex].autorating.valid = false;
+				playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
+				lookupRatingAsync(playerIndex);
+			}
+		}
+	}
+}
+
+void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity)
+{
+	ASSERT_OR_RETURN(, NetPlay.isHost || NetPlay.isHostAlive, "Unexpected state when called");
+	hostVerifiedJoinIdentities[NetPlay.hostPlayer].fromBytes(identity, EcKey::Public);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1258,6 +1506,8 @@ void resetRecentScoreData()
 		playerStats[i].recentResearchPotential = 0;
 		playerStats[i].identity.clear();
 		playerStats[i].autorating = PLAYERSTATS::Autorating();
+
+		hostVerifiedJoinIdentities[i].clear();
 	}
 }
 
@@ -1374,6 +1624,29 @@ bool loadMultiStatsFromJSON(const nlohmann::json& json)
 	for (size_t idx = 0; idx < json.size(); idx++)
 	{
 		playerStats[idx] = json.at(idx).get<PLAYERSTATS>();
+	}
+
+	return true;
+}
+
+bool updateMultiStatsIdentitiesInJSON(nlohmann::json& json, bool useVerifiedJoinIdentity)
+{
+	if (!json.is_array())
+	{
+		debug(LOG_ERROR, "Expecting an array");
+		return false;
+	}
+	if (json.size() > MAX_CONNECTED_PLAYERS)
+	{
+		debug(LOG_ERROR, "Array size is too large: %zu", json.size());
+		return false;
+	}
+
+	for (size_t idx = 0; idx < json.size(); idx++)
+	{
+		auto stats = json.at(idx).get<PLAYERSTATS>();
+		stats.identity = (useVerifiedJoinIdentity) ? getVerifiedJoinIdentity(idx) : playerStats[idx].identity;
+		json[idx] = stats;
 	}
 
 	return true;

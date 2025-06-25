@@ -345,6 +345,7 @@ typedef enum
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
 	CLI_GAMEPORT,
+	CLI_NET_PORTMAPPING,
 	CLI_WZ_CRASH_RPT,
 	CLI_WZ_DEBUG_CRASH_HANDLER,
 	CLI_STREAMER_SPECTATOR,
@@ -363,9 +364,11 @@ typedef enum
 	CLI_ALLOW_VULKAN_IMPLICIT_LAYERS,
 	CLI_HOST_CHAT_CONFIG,
 	CLI_HOST_ASYNC_JOIN_APPROVAL,
+	CLI_AUTOHOST_START_NOT_READY,
 #if defined(__EMSCRIPTEN__)
 	CLI_VIDEOURL,
 #endif
+	CLI_HOST_CONNECTION_PROVIDER,
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -437,6 +440,7 @@ static const struct poptOption *getOptionsTable()
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
+		{ "portmapping", POPT_ARG_STRING, CLI_NET_PORTMAPPING,   N_("Enable / disable port mapping when hosting"), N_("[1, true, 0, false]") },
 		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
 		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
@@ -455,9 +459,11 @@ static const struct poptOption *getOptionsTable()
 		{ "allow-vulkan-implicit-layers", POPT_ARG_NONE, CLI_ALLOW_VULKAN_IMPLICIT_LAYERS, N_("Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"), nullptr },
 		{ "host-chat-config", POPT_ARG_STRING, CLI_HOST_CHAT_CONFIG, N_("Set the default hosting chat configuration / permissions"), "[allow,quickchat]" },
 		{ "async-join-approve", POPT_ARG_NONE, CLI_HOST_ASYNC_JOIN_APPROVAL, N_("Enable async join approval (for connecting clients)"), nullptr },
+		{ "autohost-not-ready", POPT_ARG_NONE, CLI_AUTOHOST_START_NOT_READY, N_("Starts the host (autohost) as not ready, even if it's a spectator host"), nullptr },
 #if defined(__EMSCRIPTEN__)
 		{ "videourl", POPT_ARG_STRING, CLI_VIDEOURL,   N_("Base URL for on-demand video downloads"), N_("Base video URL") },
 #endif
+		{ "host-connection-provider", POPT_ARG_STRING, CLI_HOST_CONNECTION_PROVIDER, N_("Specify connection provider type to use when hosting game sessions"), "[tcp]" },
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -498,10 +504,6 @@ bool ParseCommandLineDebugFlags(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, debugOptionsTable, 0);
 	int iOption;
-
-#if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch("all");
-#endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
@@ -595,10 +597,6 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 {
 	poptContext poptCon = poptGetContext(nullptr, argc, argv, getOptionsTable(), 0);
 	int iOption;
-
-#if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch("all");
-#endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
@@ -709,6 +707,24 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 	}
 
 	return ParseCLIEarlyResult::OK_CONTINUE;
+}
+
+optional<bool> cliOptValueToBool(const char *token)
+{
+	if (token == nullptr)
+	{
+		return nullopt;
+	}
+
+	if (strcmp(token, "1") == 0 || strcmp(token, "true") == 0)
+	{
+		return true;
+	}
+	if (strcmp(token, "0") == 0 || strcmp(token, "false") == 0)
+	{
+		return false;
+	}
+	return nullopt;
 }
 
 //! second half of parsing the commandline
@@ -1090,6 +1106,25 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			debug(LOG_INFO, "Games will be hosted on port [%d]", NETgetGameserverPort());
 			break;
 
+		case CLI_NET_PORTMAPPING:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("No value for portmapping option");
+				}
+				auto optValue = cliOptValueToBool(token);
+				if (optValue.has_value())
+				{
+					NetPlay.isPortMappingEnabled = optValue.value();
+				}
+				else
+				{
+					qFatal("Invalid value for portmapping option");
+				}
+			}
+			break;
+
 		case CLI_STREAMER_SPECTATOR:
 			wz_streamer_spectator_mode = true;
 			break;
@@ -1314,6 +1349,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			NETsetAsyncJoinApprovalRequired(true);
 			break;
 
+		case CLI_AUTOHOST_START_NOT_READY:
+			setHostLaunchStartNotReady(true);
+			break;
+
 #if defined(__EMSCRIPTEN__)
 		case CLI_VIDEOURL:
 			token = poptGetOptArg(poptCon);
@@ -1325,6 +1364,20 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			debug(LOG_INFO, "Using \"%s\" as base video URL.", token);
 			break;
 #endif
+
+		case CLI_HOST_CONNECTION_PROVIDER:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Missing value for the host connection provider argument");
+			}
+			ConnectionProviderType pt;
+			if (!net_backend_from_str(token, pt))
+			{
+				qFatal("Unsupported / invalid network backend");
+			}
+			war_setHostConnectionProvider(pt);
+			break;
 
 		} // switch (option)
 	} // while

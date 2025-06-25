@@ -88,12 +88,14 @@ struct ImdObject
 		return ptr == nullptr;
 	}
 
-	void *ptr;
+	const void *ptr;
 	ImdType type;
 
 private:
-	ImdObject(void *ptr, ImdType type) : ptr(ptr), type(type) {}
+	ImdObject(const void *ptr, ImdType type) : ptr(ptr), type(type) {}
 };
+
+ImdObject getResearchObjectImage(RESEARCH *research);
 
 // Set audio IDs for form opening/closing anims.
 void SetFormAudioIDs(int OpenID, int CloseID);
@@ -268,10 +270,10 @@ iIMDBaseShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
 bool StatIsFeature(BASE_STATS const *Stat);
 
-COMPONENT_TYPE StatIsComponent(BASE_STATS *Stat);
-bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD);
+COMPONENT_TYPE StatIsComponent(const BASE_STATS *Stat);
+bool StatGetComponentIMD(const BASE_STATS *Stat, SDWORD compID, const iIMDShape **CompIMD, const iIMDShape **MountIMD);
 
-bool StatIsResearch(BASE_STATS *Stat);
+bool StatIsResearch(const BASE_STATS *Stat);
 
 // Widget callback function to play an audio track.
 void WidgetAudioCallback(int AudioID);

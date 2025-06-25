@@ -1,0 +1,45 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::modules",
+	"title": "Structure Modules",
+	"visual": [
+		{
+			"stat": { 
+				"id": "A0PowMod1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "A0FacMod1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "A0ResearchModule1",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules.",
+		"",
+		"Once researched, you can access these modules from the Build menu to apply them to the structures in question.",
+		"",
+		"Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction.",
+		"",
+		"Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete.",
+		"",
+		"Upgrade Effects:",
+		"- Power Generator modules increase the rate of power generation",
+		"- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units",
+		"- Research Facility modules decrease the time needed to complete assigned research projects"
+	],
+	"links": [
+		"wz2100::structures::powergenerator",
+		"wz2100::structures::factory",
+		"wz2100::structures::vtolfactory",
+		"wz2100::structures::researchfacility"
+	]
+}

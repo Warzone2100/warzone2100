@@ -21,6 +21,9 @@
 #define _LIB_FRAMEWORK_WZPATHS_H
 
 #include <string>
+#include <vector>
+
+std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const std::string& delimiters);
 
 std::string getWZInstallPrefix();
 
@@ -49,6 +52,9 @@ public:
 
 	// Returns the file's path. Does *not* include the file name.
 	std::string path() const;
+
+	// Returns the path components as a vector
+	std::vector<std::string> pathComponents() const;
 
 private:
 	std::string file;

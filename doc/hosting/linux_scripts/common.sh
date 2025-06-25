@@ -1,12 +1,12 @@
-#!/bin/bash -e
+#!/bin/bash
 
 function check {
   if [ ! $(command -v netstat) ] && [ ! $(command -v ss) ]; then
     echo "[ERROR] netstat or ss is required to check for available ports"
     exit 1
   fi
-  if [ ! $(command -v $wz2100cmd) ]; then
-    echo "[ERROR] Cannot execute \"$wz2100cmd\"."
+  if [ ! -v wz2100cmd ]; then
+    echo "[ERROR] wz2100cmd variable is not set."
     exit 1
   fi
   if [ "$players" == "" ] || [ ! $players -gt 0 ]; then
@@ -76,5 +76,5 @@ function run_host {
     configdir="--configdir=$cfgdir"
   fi
   # Run game
-  $wz2100cmd $configdir --autohost=$hostfile --gameport=$port --startplayers=$players --enablelobbyslashcmd $admcmd --headless --nosound
+  exec $wz2100cmd $configdir --autohost=$hostfile --gameport=$port --startplayers=$players --enablelobbyslashcmd $admcmd --headless --nosound
 }

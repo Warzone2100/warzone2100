@@ -33,6 +33,9 @@
 #include "activity.h"
 #include "modding.h"
 
+#include <chrono>
+#include <thread>
+
 /* Crash-handling providers */
 
 #if defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
@@ -437,7 +440,7 @@ bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::jso
 #endif
 }
 
-bool crashHandlingProviderCaptureException(const std::string& errorMessage, bool captureStackTrace)
+bool crashHandlingProviderCaptureException(const char* type, const char* value, const std::string& description, bool captureStackTrace, bool handled, const nlohmann::json *additionalData)
 {
 #if !defined(WZ_CRASHHANDLING_PROVIDER)
 	return false;
@@ -446,11 +449,32 @@ bool crashHandlingProviderCaptureException(const std::string& errorMessage, bool
 	if (!enabledSentryProvider) { return false; }
 
 	sentry_value_t event = sentry_value_new_event();
-	sentry_value_t exc = sentry_value_new_exception("Exception", errorMessage.c_str());
+	sentry_value_t exc = sentry_value_new_exception(type, value);
 	if (captureStackTrace)
 	{
 		sentry_value_set_stacktrace(exc, NULL, 0);
 	}
+	sentry_value_t mechanism = sentry_value_new_object();
+	sentry_value_set_by_key(mechanism, "type", sentry_value_new_string("generic"));
+	if (!description.empty())
+	{
+		sentry_value_set_by_key(mechanism, "description", sentry_value_new_string_n(description.c_str(), description.size()));
+	}
+	sentry_value_set_by_key(mechanism, "handled", sentry_value_new_bool(handled));
+	if (additionalData != nullptr)
+	{
+		sentry_value_t additionalDataVal = mapJsonObjectToSentryValue(*additionalData);
+		if (sentry_value_get_type(additionalDataVal) == SENTRY_VALUE_TYPE_OBJECT)
+		{
+			sentry_value_set_by_key(mechanism, "data", additionalDataVal);
+		}
+		else
+		{
+			sentry_value_decref(additionalDataVal);
+		}
+	}
+	sentry_value_set_by_key(exc, "mechanism", mechanism);
+
 	sentry_event_add_exception(event, exc);
 	auto event_id = sentry_capture_event(event);
 	return !sentry_uuid_is_nil(&event_id);
@@ -494,6 +518,10 @@ bool crashHandlingProviderTestCrash()
 #elif defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
 	// Sentry crash-handling provider
 	if (!enabledSentryProvider) { return false; }
+	// test reporting exceptions
+	crashHandlingProviderCaptureException(__FUNCTION__, "testexception", "Test crash initiated", false, true);
+	std::this_thread::sleep_for(std::chrono::seconds(5)); // (hopefully enough time for the exception to be sent in the background...)
+	// trigger an actual crash
 # if defined(WZ_OS_WIN)
 	RaiseException(0xE000DEAD, EXCEPTION_NONCONTINUABLE, 0, 0);
 	return false;

@@ -1,0 +1,18 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units",
+	"title": "Units",
+	"sort": "2",
+	"contents": [
+		"You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory.",
+		"",
+		"This aspect of the game is what makes Warzone 2100 unique in its own way.",
+		"",
+		"To be able to design units, a Command Center is required."
+	],
+	"links": [
+		"wz2100::structures::hq",
+		"wz2100::units::designing",
+		"wz2100::units::building"
+	]
+}

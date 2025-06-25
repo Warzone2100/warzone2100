@@ -79,6 +79,7 @@
 #include "lighting.h"
 #include "texture.h"
 #include "warzoneconfig.h"
+#include "component.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -302,7 +303,7 @@ static nlohmann::ordered_json fillPlayerModel(int i)
 	nlohmann::ordered_json result = nlohmann::ordered_json::object();
 	result["playerStats score"] = getMultiPlayRecentScore(i);
 	result["playerStats kills"] = getMultiPlayUnitsKilled(i);
-	result["NetPlay.players.name"] = NetPlay.players[i].name;
+	result["NetPlay.players.name"] = getPlayerName(i, true);;
 	result["NetPlay.players.position"] = NetPlay.players[i].position;
 	result["NetPlay.players.colour"] = NetPlay.players[i].colour;
 	result["NetPlay.players.allocated"] = NetPlay.players[i].allocated;
@@ -905,6 +906,210 @@ public:
 
 // MARK: - WzGraphicsPanel
 
+static bool debugReloadSelectedObjectDisplayModels()
+{
+	// Build a list of the models for selected objects
+	std::unordered_set<iIMDBaseShape*> selectedObjectBaseModels;
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		return false;
+	}
+
+	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
+	{
+		if (psDroid->selected)
+		{
+			int bodyStat = psDroid->asBits[COMP_BODY];
+			int propStat = psDroid->asBits[COMP_PROPULSION];
+
+			iIMDBaseShape *psLeftPropulsion = asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + LEFT_PROP];
+			selectedObjectBaseModels.insert(psLeftPropulsion);
+			iIMDBaseShape *psRightPropulsion = asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + RIGHT_PROP];
+			selectedObjectBaseModels.insert(psRightPropulsion);
+
+			/* Render animation effects based on movement or lack thereof, if any */
+			const auto* bodyStats = psDroid->getBodyStats();
+			iIMDBaseShape *psBaseShapeBody = bodyStats->pIMD;
+			selectedObjectBaseModels.insert(psBaseShapeBody);
+			iIMDBaseShape* psMoveAnim = bodyStats->ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
+			selectedObjectBaseModels.insert(psMoveAnim);
+			iIMDBaseShape* psStillAnim = bodyStats->ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
+			selectedObjectBaseModels.insert(psStillAnim);
+
+			switch (psDroid->droidType)
+			{
+			case DROID_DEFAULT:
+			case DROID_TRANSPORTER:
+			case DROID_SUPERTRANSPORTER:
+			case DROID_CYBORG:
+			case DROID_CYBORG_SUPER:
+			case DROID_WEAPON:
+			case DROID_COMMAND:		// command droids have a weapon to store all the graphics
+				/*	Get the mounting graphic - we've already moved to the right position
+				Allegedly - all droids will have a mount graphic so this shouldn't
+				fall on it's arse......*/
+				/* Double check that the weapon droid actually has any */
+				for (unsigned i = 0; i < psDroid->numWeaps; i++)
+				{
+					if ((psDroid->asWeaps[i].nStat > 0 || psDroid->droidType == DROID_DEFAULT))
+					{
+						/* Get the mount graphic */
+						iIMDBaseShape *psMountShape = WEAPON_MOUNT_IMD(psDroid, i);
+						selectedObjectBaseModels.insert(psMountShape);
+
+						/* Get the weapon (gun?) graphic */
+						iIMDBaseShape *psWeaponShape = WEAPON_IMD(psDroid, i);
+						selectedObjectBaseModels.insert(psWeaponShape);
+					}
+				}
+				break;
+
+			case DROID_SENSOR:
+			case DROID_CONSTRUCT:
+			case DROID_CYBORG_CONSTRUCT:
+			case DROID_ECM:
+			case DROID_REPAIR:
+			case DROID_CYBORG_REPAIR:
+			{
+				iIMDBaseShape *psBaseShape = nullptr;
+				iIMDBaseShape *psBaseMountShape = nullptr;
+
+				switch (psDroid->droidType)
+				{
+				default:
+					ASSERT(false, "Bad component type");
+					break;
+				case DROID_SENSOR:
+					psBaseMountShape = SENSOR_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the sensor graphic, assuming it's there */
+					psBaseShape = SENSOR_IMD(psDroid, psDroid->player);
+					break;
+				case DROID_CONSTRUCT:
+				case DROID_CYBORG_CONSTRUCT:
+					psBaseMountShape = CONSTRUCT_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the construct graphic assuming it's there */
+					psBaseShape = CONSTRUCT_IMD(psDroid, psDroid->player);
+					break;
+				case DROID_ECM:
+					psBaseMountShape = ECM_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the ECM graphic assuming it's there.... */
+					psBaseShape = ECM_IMD(psDroid, psDroid->player);
+					break;
+				case DROID_REPAIR:
+				case DROID_CYBORG_REPAIR:
+					psBaseMountShape = REPAIR_MOUNT_IMD(psDroid, psDroid->player);
+					/* Get the Repair graphic assuming it's there.... */
+					psBaseShape = REPAIR_IMD(psDroid, psDroid->player);
+					break;
+				}
+
+				selectedObjectBaseModels.insert(psBaseMountShape);
+				selectedObjectBaseModels.insert(psBaseShape);
+				break;
+			}
+			case DROID_PERSON:
+				// no extra mounts for people
+				break;
+			default:
+				ASSERT(!"invalid droid type", "Whoa! Weirdy type of droid found in drawComponentObject!!!");
+				break;
+			}
+		}
+	}
+
+	auto addFactionModelIfPresent = [&selectedObjectBaseModels](const FACTION *faction, iIMDBaseShape* baseShape) {
+		if (!baseShape) { return; }
+		const WzString& modelName = baseShape->displayModel()->modelName;
+		auto factionModelName = getFactionModelName(faction, modelName);
+		if (factionModelName.has_value())
+		{
+			// Need to add the faction model as well
+			auto factionBaseModel = modelGet(factionModelName.value());
+			selectedObjectBaseModels.insert(factionBaseModel);
+		}
+	};
+
+	for (const STRUCTURE* psStructure : apsStructLists[selectedPlayer])
+	{
+		if (psStructure->selected)
+		{
+			const bool defensive = (psStructure->pStructureType->type == REF_DEFENSE);
+			const bool walltype = (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
+								   || psStructure->pStructureType->type == REF_GATE);
+			const FACTION *faction = getPlayerFaction(psStructure->player);
+
+			selectedObjectBaseModels.insert(psStructure->sDisplay.imd);
+			addFactionModelIfPresent(faction, psStructure->sDisplay.imd);
+
+			// Structure base
+			if (!defensive && !walltype)
+			{
+				if (psStructure->pStructureType->pBaseIMD != nullptr)
+				{
+					selectedObjectBaseModels.insert(psStructure->pStructureType->pBaseIMD );
+					addFactionModelIfPresent(faction, psStructure->pStructureType->pBaseIMD);
+				}
+			}
+
+			// Structure turrets
+			if (!walltype)
+			{
+				iIMDBaseShape *mountImd[MAX_WEAPONS] = { nullptr };
+				iIMDBaseShape *weaponImd[MAX_WEAPONS] = { nullptr };
+				iIMDBaseShape *flashImd[MAX_WEAPONS] = { nullptr };
+				for (int i = 0; i < MAX(1, psStructure->numWeaps); i++)
+				{
+					if (psStructure->asWeaps[i].nStat > 0)
+					{
+						const int nWeaponStat = psStructure->asWeaps[i].nStat;
+
+						weaponImd[i] = asWeaponStats[nWeaponStat].pIMD;
+						mountImd[i] = asWeaponStats[nWeaponStat].pMountGraphic;
+						flashImd[i] = asWeaponStats[nWeaponStat].pMuzzleGraphic;
+					}
+				}
+				// check for ECM
+				if (weaponImd[0] == nullptr && psStructure->pStructureType->pECM != nullptr)
+				{
+					weaponImd[0] = psStructure->pStructureType->pECM->pIMD;
+					mountImd[0] = psStructure->pStructureType->pECM->pMountGraphic;
+					flashImd[0] = nullptr;
+				}
+				// check for sensor (or repair center)
+				if (weaponImd[0] == nullptr && psStructure->pStructureType->pSensor != nullptr)
+				{
+					weaponImd[0] = psStructure->pStructureType->pSensor->pIMD;
+					mountImd[0] = psStructure->pStructureType->pSensor->pMountGraphic;
+					flashImd[0] = nullptr;
+				}
+
+				for (int i = 0; i < psStructure->numWeaps || i == 0; i++)
+				{
+					if (weaponImd[i] != nullptr)
+					{
+						selectedObjectBaseModels.insert(weaponImd[i]);
+						selectedObjectBaseModels.insert(mountImd[i]);
+						selectedObjectBaseModels.insert(flashImd[i]);
+					}
+				}
+			}
+		}
+	}
+
+	for (auto baseModel : selectedObjectBaseModels)
+	{
+		if (baseModel == nullptr)
+		{
+			continue;
+		}
+
+		debug(LOG_INFO, "Reloading: %s", baseModel->filename.toUtf8().c_str());
+		debugReloadDisplayModelsForBaseModel(*baseModel);
+	}
+
+	return true;
+}
+
 class WzGraphicsPanel : public W_FORM
 {
 public:
@@ -918,26 +1123,40 @@ public:
 	{
 		auto panel = std::make_shared<WzGraphicsPanel>();
 
-		auto prevButton = panel->createButton(0, "Reload terrain & water textures", [](){
+		auto texturesLabel = panel->createLabel(0, font_regular_bold, "Textures:");
+		auto prevButton = panel->createButton(0, "Reload Terrain & Water", [](){
 			loadTerrainTextures(currentMapTileset);
 			debug(LOG_INFO, "Done");
-		});
-		prevButton = panel->createButton(0, "Reload decals", [](){
+		}, texturesLabel);
+		prevButton = panel->createButton(0, "Reload Decals", [](){
 			reloadTileTextures();
 			debug(LOG_INFO, "Done");
 		}, prevButton);
-		prevButton = panel->createButton(0, "Reload model textures", [](){
+		prevButton = panel->createButton(0, "Reload Object Textures", [](){
 			debug(LOG_INFO, "Reloading all model textures");
 			modelReloadAllModelTextures();
 			debug(LOG_INFO, "Done");
 		}, prevButton);
 
-		prevButton = panel->createButton(1, "Recompile All Shaders", [](){
+		auto modelsLabel = panel->createLabel(1, font_regular_bold, "Objects:");
+		prevButton = panel->createButton(1, "Reload Selected Models", [](){
+			debug(LOG_INFO, "Reloading selected object display models");
+			debugReloadSelectedObjectDisplayModels();
+			debug(LOG_INFO, "Done");
+		}, modelsLabel);
+		prevButton = panel->createButton(1, "Reload All Models", [](){
+			debug(LOG_INFO, "Reloading all object display models");
+			debugReloadAllDisplayModels();
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+
+		auto shadersLabel = panel->createLabel(2, font_regular_bold, "Shaders:");
+		prevButton = panel->createButton(2, "Recompile All", [](){
 			debug(LOG_INFO, "Recompiling all shader pipelines");
 			gfx_api::context::get().debugRecompileAllPipelines();
 			debug(LOG_INFO, "Done");
-		});
-		prevButton =panel->createButton(1, "Recompile terrainCombined", [](){
+		}, shadersLabel);
+		prevButton =panel->createButton(2, "Recompile terrainCombined", [](){
 			debug(LOG_INFO, "Recompiling terrainCombined");
 			switch (getTerrainShaderQuality())
 			{
@@ -955,7 +1174,7 @@ public:
 			}
 			debug(LOG_INFO, "Done");
 		}, prevButton);
-		prevButton = panel->createButton(1, "Recompile water", [](){
+		prevButton = panel->createButton(2, "Recompile water", [](){
 			debug(LOG_INFO, "Recompiling water");
 			switch (getTerrainShaderQuality())
 			{
@@ -974,14 +1193,17 @@ public:
 			debug(LOG_INFO, "Done");
 		}, prevButton);
 
-		prevButton = panel->createButton(2, "Rotate sun", [](){
+		auto miscLabel = panel->createLabel(3, font_regular_bold, "Other:");
+		prevButton = panel->createButton(3, "Rotate sun", [](){
 			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
-		});
+		}, miscLabel);
 
-		auto dropdownWidget = panel->makeTerrainQualityDropdown(3);
+		auto dropdownWidget = panel->makeTerrainQualityDropdown(4);
 
+#if defined(DEBUG)
+		// Ideally, the fallback terrain renderer will be removed soon - so don't even offer this toggle outside of debug builds
 		auto pWeakTerrainQualityDropdown = std::weak_ptr<DropdownWidget>(dropdownWidget);
 		prevButton = panel->createButton(3, "Toggle Old / New Shaders", [pWeakTerrainQualityDropdown](){
 			if (debugToggleTerrainShaderType())
@@ -995,14 +1217,17 @@ public:
 				}
 			}
 		}, dropdownWidget);
+#else
+		(void)dropdownWidget;
+#endif
 
-		auto shadowsLabel = panel->createLabel(4, font_regular_bold, "Shadow Mapping:");
-		auto shadowFilterDropdownWidget = panel->makeShadowFilterSizeDropdown(4, shadowsLabel);
-		panel->makeShadowMapResolutionDropdown(4, shadowFilterDropdownWidget);
+		auto shadowsLabel = panel->createLabel(5, font_regular_bold, "Shadow Mapping:");
+		auto shadowFilterDropdownWidget = panel->makeShadowFilterSizeDropdown(5, shadowsLabel);
+		panel->makeShadowMapResolutionDropdown(5, shadowFilterDropdownWidget);
 
-		panel->makeShadowCascadesDropdown(5, shadowsLabel);
+		panel->makeShadowCascadesDropdown(6, shadowsLabel);
 
-		auto shadowModeDropdownWidget = panel->makeShadowModeDropdown(6);
+		auto shadowModeDropdownWidget = panel->makeShadowModeDropdown(7);
 
 		return panel;
 	}
@@ -2560,7 +2785,6 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	// Add tabs
 	result->pageTabs = std::make_shared<NoBackgroundTabWidget>(0);
 	result->attach(result->pageTabs);
-	result->pageTabs->id = MULTIOP_TECHLEVEL;
 	result->pageTabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Main, "Main");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Selected, "Selected");

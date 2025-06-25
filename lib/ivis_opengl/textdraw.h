@@ -149,6 +149,16 @@ void iV_SetTextColour(PIELIGHT colour);
 
 optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID);
 
+struct WzTextRun
+{
+	size_t startOffset;
+	size_t endOffset;
+	bool rightToLeft;
+};
+std::vector<WzTextRun> iV_SplitTextParagraphIntoRuns(const WzString& string, iV_fonts fontID);
+// Note: Is intended to be used *only* with text runs produced by iV_SplitTextParagraphIntoRuns() - rightToLeft must be properly supplied
+size_t iV_GetMaxTextRunLenForWidth(const WzString& textRun, iV_fonts fontID, uint32_t maxWidthInPoints, bool rightToLeft = false);
+
 /// Valid values for "Justify" argument of iV_FormatText().
 enum
 {

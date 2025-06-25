@@ -51,12 +51,13 @@ static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
-static const uint32_t currentReplayFormatVer = 2;
+static const uint32_t currentReplayFormatVer = 3;
 static const size_t DefaultReplayBufferSize = 32768;
 static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
 
 typedef std::vector<uint8_t> SerializedNetMessagesBuffer;
 static moodycamel::BlockingReaderWriterQueue<SerializedNetMessagesBuffer> serializedBufferWriteQueue(256);
+static nlohmann::json queuedSaveSettings;
 static SerializedNetMessagesBuffer latestWriteBuffer;
 static size_t minBufferSizeToQueue = DefaultReplayBufferSize;
 static WZ_THREAD *saveThread = nullptr;
@@ -81,6 +82,37 @@ static int replaySaveThreadFunc(void *data)
 		WZ_PHYSFS_writeBytes(pSaveHandle, item.data(), item.size());
 	}
 	return 0;
+}
+
+static bool NETreplaySaveWritePreamble(const nlohmann::json& settings, ReplayOptionsHandler const &optionsHandler)
+{
+	if (!replaySaveHandle)
+	{
+		return false;
+	}
+
+	auto data = settings.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
+	PHYSFS_writeUBE32(replaySaveHandle, data.size());
+	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
+
+	// Save extra map data (if present)
+	ReplayOptionsHandler::EmbeddedMapData embeddedMapData;
+	if (!optionsHandler.saveMap(embeddedMapData))
+	{
+		// Failed to save map data - just empty it out for now
+		embeddedMapData.mapBinaryData.clear();
+	}
+	PHYSFS_writeUBE32(replaySaveHandle, embeddedMapData.dataVersion);
+#if SIZE_MAX > UINT32_MAX
+	ASSERT_OR_RETURN(false, embeddedMapData.mapBinaryData.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Embedded map data is way too big");
+#endif
+	PHYSFS_writeUBE32(replaySaveHandle, static_cast<uint32_t>(embeddedMapData.mapBinaryData.size()));
+	if (!embeddedMapData.mapBinaryData.empty())
+	{
+		WZ_PHYSFS_writeBytes(replaySaveHandle, embeddedMapData.mapBinaryData.data(), static_cast<uint32_t>(embeddedMapData.mapBinaryData.size()));
+	}
+
+	return true;
 }
 
 bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename)
@@ -147,27 +179,6 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	optionsHandler.saveOptions(gameOptions);
 	settings["gameOptions"] = gameOptions;
 
-	auto data = settings.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
-	PHYSFS_writeUBE32(replaySaveHandle, data.size());
-	WZ_PHYSFS_writeBytes(replaySaveHandle, data.data(), data.size());
-
-	// Save extra map data (if present)
-	ReplayOptionsHandler::EmbeddedMapData embeddedMapData;
-	if (!optionsHandler.saveMap(embeddedMapData))
-	{
-		// Failed to save map data - just empty it out for now
-		embeddedMapData.mapBinaryData.clear();
-	}
-	PHYSFS_writeUBE32(replaySaveHandle, embeddedMapData.dataVersion);
-#if SIZE_MAX > UINT32_MAX
-	ASSERT_OR_RETURN(false, embeddedMapData.mapBinaryData.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Embedded map data is way too big");
-#endif
-	PHYSFS_writeUBE32(replaySaveHandle, static_cast<uint32_t>(embeddedMapData.mapBinaryData.size()));
-	if (!embeddedMapData.mapBinaryData.empty())
-	{
-		WZ_PHYSFS_writeBytes(replaySaveHandle, embeddedMapData.mapBinaryData.data(), static_cast<uint32_t>(embeddedMapData.mapBinaryData.size()));
-	}
-
 	// determine best buffer size
 	size_t desiredBufferSize = optionsHandler.desiredBufferSize();
 	if (desiredBufferSize == 0)
@@ -191,11 +202,18 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	latestWriteBuffer.reserve(minBufferSizeToQueue);
 	if (desiredBufferSize != std::numeric_limits<size_t>::max())
 	{
+		// Write the preamble immediately (settings, etc)
+		NETreplaySaveWritePreamble(settings, optionsHandler);
+
+		// use a background thread
 		saveThread = wzThreadCreate(replaySaveThreadFunc, replaySaveHandle, "replaySaveThread");
 		wzThreadStart(saveThread);
 	}
 	else
 	{
+		// Do not immediately write settings out - instead, queue them for later writing
+		queuedSaveSettings = std::move(settings);
+
 		// don't use a background thread
 		saveThread = nullptr;
 	}
@@ -203,7 +221,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	return true;
 }
 
-bool NETreplaySaveStop()
+bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)
 {
 	if (!replaySaveHandle)
 	{
@@ -211,7 +229,7 @@ bool NETreplaySaveStop()
 	}
 
 	// v2: Append the "REPLAY_ENDED" message (from hostPlayer)
-	auto replayEndedMessage = NetMessage(REPLAY_ENDED);
+	auto replayEndedMessage = NetMessageBuilder(REPLAY_ENDED, 0).build();
 	latestWriteBuffer.push_back(NetPlay.hostPlayer);
 	replayEndedMessage.rawDataAppendToVector(latestWriteBuffer);
 
@@ -233,6 +251,12 @@ bool NETreplaySaveStop()
 	}
 	else
 	{
+		// update the queued settings (ex. might have revealed player identities in a blind game)
+		optionsHandler.optionsUpdatePlayerInfo(queuedSaveSettings.at("gameOptions"));
+
+		// write the preamble
+		NETreplaySaveWritePreamble(queuedSaveSettings, optionsHandler);
+
 		// do the writing now on the main thread
 		replaySaveThreadFunc(replaySaveHandle);
 	}
@@ -265,7 +289,7 @@ void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player)
 		return;
 	}
 
-	if (message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE)
+	if (message->type() > GAME_MIN_TYPE && message->type() < GAME_MAX_TYPE)
 	{
 		latestWriteBuffer.push_back(player);
 		message->rawDataAppendToVector(latestWriteBuffer);
@@ -404,29 +428,30 @@ bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &play
 	uint8_t type;
 	WZ_PHYSFS_readBytes(replayLoadHandle, &type, 1);
 
-	uint32_t len = 0;
-	uint8_t b;
-	unsigned n = 0;
-	bool rd;
-	do
-	{
-		rd = WZ_PHYSFS_readBytes(replayLoadHandle, &b, 1);
-	} while (decode_uint32_t(b, len, n++));
-
+	uint8_t b[2];
+	bool rd = WZ_PHYSFS_readBytes(replayLoadHandle, &b, 2);
 	if (!rd)
 	{
 		return false;
 	}
+	uint16_t len = 0;
+	// Load payload length from uint16_t (network byte order) starting at the second byte of the data buffer.
+	wz_ntohs_load_unaligned(len, b);
 
-	message = std::make_unique<NetMessage>(type);
-	message->data.resize(len);
-	size_t messageRead = WZ_PHYSFS_readBytes(replayLoadHandle, message->data.data(), message->data.size());
-	if (messageRead != message->data.size())
+	std::vector<uint8_t> replayData(len);
+	size_t messageRead = WZ_PHYSFS_readBytes(replayLoadHandle, replayData.data(), len);
+
+	if (messageRead != len)
 	{
 		return false;
 	}
 
-	return (message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE) || message->type == REPLAY_ENDED;
+	NetMessageBuilder msgBuilder(type, len);
+	msgBuilder.append(replayData.data(), len);
+
+	message = std::make_unique<NetMessage>(msgBuilder.build());
+
+	return (message->type() > GAME_MIN_TYPE && message->type() < GAME_MAX_TYPE) || message->type() == REPLAY_ENDED;
 }
 
 bool NETreplayLoadStop()

@@ -135,7 +135,10 @@ function destroyPlayerVtols()
 
 function activateNexus()
 {
-	camSetExtraObjectiveMessage(_("Destroy the Nexus HQ to disable the Nexus Intruder Program"));
+	const HINT_TIP = _("Destroy the Nexus HQ to disable the Nexus Intruder Program");
+	const HINT_TIP_WARN = _("Warning: HQ shielded against VTOL attacks");
+	const objectiveMessages = [HINT_TIP, HINT_TIP_WARN];
+	camSetExtraObjectiveMessage(objectiveMessages);
 	playSound(cam_sounds.nexus.synapticLinksActivated);
 	camSetNexusState(true);
 	setTimer("nexusHackFeature", camSecondsToMilliseconds((difficulty <= EASY) ? 20 : 10));
@@ -144,7 +147,7 @@ function activateNexus()
 
 function camEnemyBaseDetected_NX_SWBase()
 {
-	if (camClassicMode())
+	if (camDef(tweakOptions.gammaEndBonus) && !tweakOptions.gammaEndBonus)
 	{
 		return;
 	}
@@ -166,6 +169,7 @@ function setupNexusPatrols()
 			"SWPatrolPos2",
 			"SWPatrolPos3"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		repair: 45,
@@ -177,6 +181,7 @@ function setupNexusPatrols()
 			"NEPatrolPos1",
 			"NEPatrolPos2"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(30),
 		regroup: false,
 		repair: 45,
@@ -188,6 +193,7 @@ function setupNexusPatrols()
 			"SEPatrolPos1",
 			"SEPatrolPos2"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(20),
 		regroup: false,
 		repair: 45,
@@ -200,6 +206,7 @@ function setupNexusPatrols()
 			"NWPatrolPos2",
 			"NWPatrolPos3"
 		],
+		reactToAttack: true,
 		interval: camSecondsToMilliseconds(35),
 		regroup: false,
 		repair: 45,
@@ -264,7 +271,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
-	setMissionTime(-1); //Infinite time
+	camSetMissionTimer(-1); //Infinite time
 
 	if (camClassicMode())
 	{
@@ -274,14 +281,14 @@ function eventStartLevel()
 	{
 		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 
-		if (difficulty === INSANE)
+		if (difficulty >= INSANE)
 		{
 			completeResearch("R-Defense-WallUpgrade13", CAM_NEXUS);
 		}
 	}
 
 	setupNexusPatrols();
-	camManageTrucks(CAM_NEXUS);
+	camManageTrucks(CAM_NEXUS, false);
 
 	camSetArtifacts({
 		"NX-NWCyborgFactory": { tech: "R-Wpn-RailGun03" },
@@ -388,6 +395,7 @@ function eventStartLevel()
 					camMakePos("NEPatrolPos1"),
 					camMakePos("NEPatrolPos2")
 				],
+				reactToAttack: true,
 				interval: camSecondsToMilliseconds(90),
 				regroup: false,
 				repair: 45,
@@ -429,6 +437,7 @@ function eventStartLevel()
 					camMakePos("SEPatrolPos1"),
 					camMakePos("NEPatrolPos1")
 				],
+				reactToAttack: true,
 				interval: camSecondsToMilliseconds(90),
 				regroup: false,
 				repair: 45,

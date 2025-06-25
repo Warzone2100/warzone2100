@@ -67,9 +67,23 @@ void ClipRectWidget::displayRecursive(const WidgetGraphicsContext &context)
 	}
 }
 
-void ClipRectWidget::setTopOffset(uint16_t value)
+bool ClipRectWidget::isChildVisible(const std::shared_ptr<WIDGET>& child)
 {
+	ASSERT_OR_RETURN(false, child->parent() == shared_from_this(), "Not a child of this widget?");
+	WidgetGraphicsContext childrenContext = WidgetGraphicsContext()
+		.translatedBy(screenPosX(), screenPosY())
+		.clippedBy(WzRect(offset.x, offset.y, width(), height()));
+	return childrenContext.clipContains(child->geometry());
+}
+
+bool ClipRectWidget::setTopOffset(uint16_t value)
+{
+	if (value == offset.y)
+	{
+		return false;
+	}
 	offset.y = value;
+	return true;
 }
 
 uint16_t ClipRectWidget::getTopOffset()
@@ -77,9 +91,14 @@ uint16_t ClipRectWidget::getTopOffset()
 	return offset.y;
 }
 
-void ClipRectWidget::setLeftOffset(uint16_t value)
+bool ClipRectWidget::setLeftOffset(uint16_t value)
 {
+	if (value == offset.x)
+	{
+		return false;
+	}
 	offset.x = value;
+	return true;
 }
 
 int ClipRectWidget::parentRelativeXOffset(int coord) const

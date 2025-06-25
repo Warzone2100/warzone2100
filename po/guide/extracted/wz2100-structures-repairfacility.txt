@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Repair Facility")
+_("Building a Repair Facility creates a fixed structure to which units can retreat to be repaired.")
+_("Repair Facilities can repair units faster than mobile units with repair turrets.")

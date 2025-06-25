@@ -1114,6 +1114,7 @@ bool writeMapStructureInitJSON(const std::vector<Structure>& structures, MapType
 		{
 			pStructuresRoot->push_back(std::move(structureObj));
 		}
+		++counter;
 	}
 
 	// write out to file
@@ -1459,6 +1460,7 @@ bool writeMapDroidInitJSON(const std::vector<Droid>& droids, MapType mapType, co
 		{
 			pDroidsRoot->push_back(std::move(droidObj));
 		}
+		++counter;
 	}
 
 	// write out to file
@@ -1860,6 +1862,7 @@ bool writeMapFeatureInitJSON(const std::vector<Feature>& features, MapType mapTy
 		{
 			pFeaturesRoot->push_back(std::move(featureObj));
 		}
+		++counter;
 	}
 
 	// write out to file
@@ -1904,6 +1907,8 @@ Map::Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlaye
 , m_mapIO(std::move(mapIO))
 { }
 
+constexpr uint32_t MaxGameJSFileSize = 1 * 1024 * 1024;
+
 // Load a map from a specified folder path + mapType + maxPlayers + random seed (only used for script-generated maps), optionally supplying:
 // - a logger
 // - a WzMap::IOProvider
@@ -1918,24 +1923,43 @@ std::shared_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 	std::vector<char> fileData;
 	// First, check for new game.js format
 	std::string gameJSPath = mapIO->pathJoin(mapFolderPath, "game.js");
-	if (mapIO->loadFullFile(gameJSPath, fileData))
+	auto gameJSLoadResult = mapIO->loadFullFile(gameJSPath, fileData, MaxGameJSFileSize, true);
+	switch (gameJSLoadResult)
 	{
-		debug(logger.get(), LOG_INFO, "Loading: %s", gameJSPath.c_str());
-		// Load script map, which actually loads everything
-		auto result = runMapScript(fileData, gameJSPath, seed, false, logger.get());
-		if (result)
+		case WzMap::IOProvider::LoadFullFileResult::SUCCESS:
 		{
-			result->m_mapFolderPath = mapFolderPath;
-			result->m_mapType = mapType;
-			result->m_mapMaxPlayers = mapMaxPlayers;
-			result->m_mapIO = std::move(mapIO);
-			result->m_logger = std::move(logger);
-			result->m_terrainTypes.reset(); // clear this so the ttypes.ttp file is loaded on-demand
-			result->m_scriptGeneratedMapSeed = seed;
-			result->m_wasScriptGenerated = true;
-			result->m_mapScriptContents = std::make_shared<std::vector<char>>(std::move(fileData));
+			if (MaxGameJSFileSize < fileData.size()) // double-check (in case mapIO doesn't handle maxFileSize)
+			{
+				debug(logger.get(), LOG_ERROR, "game.js file is too large: %s", gameJSPath.c_str());
+				return nullptr;
+			}
+
+			debug(logger.get(), LOG_INFO, "Loading: %s", gameJSPath.c_str());
+			// Load script map, which actually loads everything
+			auto result = runMapScript(fileData, gameJSPath, seed, false, logger.get());
+			if (result)
+			{
+				result->m_mapFolderPath = mapFolderPath;
+				result->m_mapType = mapType;
+				result->m_mapMaxPlayers = mapMaxPlayers;
+				result->m_mapIO = std::move(mapIO);
+				result->m_logger = std::move(logger);
+				result->m_terrainTypes.reset(); // clear this so the ttypes.ttp file is loaded on-demand
+				result->m_scriptGeneratedMapSeed = seed;
+				result->m_wasScriptGenerated = true;
+				result->m_mapScriptContents = std::make_shared<std::vector<char>>(std::move(fileData));
+			}
+			return result;
 		}
-		return result;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN:
+			// unable to open game.js file - fallback to lazy-loading regular map
+			break;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_READ:
+			debug(logger.get(), LOG_ERROR, "Failed to read game.js file: %s", gameJSPath.c_str());
+			return nullptr;
+		case WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			debug(logger.get(), LOG_ERROR, "game.js file is too large: %s", gameJSPath.c_str());
+			return nullptr;
 	}
 
 	// Otherwise, construct a lazy-loading Map

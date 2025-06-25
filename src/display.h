@@ -69,6 +69,9 @@ bool	getDrawShadows();
 bool	getCameraAccel();
 void	setCameraAccel(bool val);
 
+void	setEdgeScrollOutsideWindowBounds(bool val);
+bool	getEdgeScrollOutsideWindowBounds();
+
 /* Do the 3D display */
 void displayWorld();
 
@@ -182,7 +185,8 @@ extern void shakeStop();
 // reset the input state
 void resetInput();
 
-bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos);
+bool CheckInScrollLimits(const int &xPos, const int &yPos);
+bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos);
 bool CheckScrollLimits();
 
 BASE_OBJECT	*mouseTarget();

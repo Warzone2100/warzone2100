@@ -114,6 +114,18 @@ public:
 		bool IPv6 = false;
 		unsigned int ipv4_port;
 		unsigned int ipv6_port;
+		enum class IPType
+		{
+			IPv4,
+			IPv6
+		};
+		struct KnownExternalAddress
+		{
+			std::string ipAddress;
+			unsigned int port;
+			IPType type;
+		};
+		std::vector<KnownExternalAddress> knownExternalAddresses;
 	};
 	struct MultiplayerGameInfo : public SkirmishGameInfo {
 		// host information
@@ -156,6 +168,7 @@ public:
 	static std::string getTeamDescription(const ActivitySink::SkirmishGameInfo& info);
 };
 
+std::string to_string(const ActivitySink::GameMode& mode);
 std::string to_string(const ActivitySink::GameEndReason& reason);
 std::string to_string(const END_GAME_STATS_DATA& stats);
 
@@ -166,6 +179,14 @@ public:
 	virtual ~ActivityDBProtocol();
 public:
 	virtual std::string getFirstLaunchDate() const = 0;
+
+	struct GuideTopicPrefs
+	{
+		optional<std::string> lastReadVersion;
+		bool bookmarked = false;
+	};
+	virtual optional<GuideTopicPrefs> getGuideTopicPrefs(const std::string& topicIdentifier) const = 0;
+	virtual bool setGuideTopicPrefs(const std::string& topicIdentifier, const GuideTopicPrefs& prefs) = 0;
 };
 
 // ActivityManager accepts numerous event callbacks from the core game and synthesizes

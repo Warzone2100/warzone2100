@@ -18,6 +18,37 @@ files:
         fi: fi # Finnish
         ga-IE: ga # Irish
         hu: hu # Hungarian
+        id: id # Indonesian
+        it: it # Italian
+        ko: ko # Korean
+        lt: lt # Lithuanian
+        nl: nl # Dutch
+        pl: pl # Polish
+        pt-PT: pt # Portuguese
+        ru: ru # Russian
+        sk: sk # Slovak
+        sl: sl # Slovenian
+        tr: tr # Turkish
+        hr: hr # Croatian
+        eo: eo # Esperanto
+        la-LA: la # Latin
+        nb: nb # Norwegian Bokmal
+  - source: /po/guide/warzone2100_guide.pot
+    translation: /po/guide/%locale_with_underscore%.po
+    languages_mapping:
+      locale_with_underscore:
+        ro: ro # Romanian
+        fr: fr # French
+        es-ES: es # Spanish
+        cs: cs # Czech
+        da: da # Danish
+        de: de # German
+        el: el # Greek
+        fy-NL: fy # Frisian
+        fi: fi # Finnish
+        ga-IE: ga # Irish
+        hu: hu # Hungarian
+        id: id # Indonesian
         it: it # Italian
         ko: ko # Korean
         lt: lt # Lithuanian
@@ -34,3 +65,6 @@ files:
         nb: nb # Norwegian Bokmal
   - source: /pkg/nsis/i18n/win_installer_base.nsh
     translation: /pkg/nsis/i18n/win_installer-%locale_with_underscore%.nsh
+  - source: /pkg/win_installer/i18n/win_installer_base.isl
+    translation: /pkg/win_installer/i18n/win_installer_%locale_with_underscore%.isl
+    type: ini

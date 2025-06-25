@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Attack Range")
+_("You can use the Unit Orders menu to configure unit \"Attack Range\".")
+_("- Optimum Range: Fires at the most accurate range")
+_("- Short Range: Moves to short range and attacks")
+_("- Long Range: Attacks at long range (default)")

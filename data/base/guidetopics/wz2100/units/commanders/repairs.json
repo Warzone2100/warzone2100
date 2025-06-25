@@ -1,0 +1,26 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::commanders::repairs",
+	"title": "Going for repairs, BRB",
+	"sort": "04",
+	"visual": {
+		"droidTemplate": {
+			"body": "Body8MBT",
+			"brain": "CommandBrain01",
+			"name": "Command Turret Scorpion Half-tracks",
+			"propulsion": "HalfTrack",
+			"type": "DROID_COMMAND",
+			"weapons": [
+				"CommandTurret1"
+			]
+		}
+	},
+	"contents": [
+		"A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group.",
+		"",
+		"When it is done repairing, it will return to its Commander."
+	],
+	"links": [
+		"wz2100::units::commanders"
+	]
+}

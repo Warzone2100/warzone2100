@@ -26,6 +26,9 @@
 #ifndef __INCLUDED_SRC_FREND_H__
 #define __INCLUDED_SRC_FREND_H__
 
+// NOTES:
+// - This corresponds to the order in: data/base/images/frontend.img
+// - New entries should always be added to the end
 enum
 {
 	IMAGE_FE_LOGO,
@@ -264,7 +267,18 @@ enum
 	IMAGE_INFO_CIRCLE,
 	IMAGE_CHECK_SQUARE_FILL,
 	IMAGE_CHECK_SQUARE_EMPTY,
-	IMAGE_ARROW_UNDO
+	IMAGE_ARROW_UNDO,
+	IMAGE_FE_SIDEBAR_LIST,
+	IMAGE_GEAR,
+	IMAGE_EYE,
+	IMAGE_GLOBE,
+	IMAGE_LOCK,
+	IMAGE_UNLOCK,
+	IMAGE_CARET_DOWN_FILL,
+	IMAGE_STAR_FILL,
+	IMAGE_PROFILE_TEMPLATE,
+	IMAGE_PROFILE_EDIT,
+	IMAGE_PENCIL_SQUARE
 };
 
 #endif //__INCLUDED_SRC_FREND_H__

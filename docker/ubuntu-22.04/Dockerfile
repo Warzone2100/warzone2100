@@ -2,6 +2,9 @@ FROM ubuntu:22.04
 
 RUN cat /etc/lsb-release
 
+# Default to Azure mirror (what GitHub Actions ubuntu runners use)
+RUN sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//http:\/\/azure.archive.ubuntu.com\/ubuntu\//' /etc/apt/sources.list
+
 RUN mkdir -p /scripts
 COPY get-dependencies_linux.sh /scripts
 RUN chmod +x /scripts/get-dependencies_linux.sh
@@ -13,7 +16,7 @@ RUN apt-get -u update \
 
 # Install Vulkan SDK
 ADD https://packages.lunarg.com/lunarg-signing-key-pub.asc /tmp
-ADD https://packages.lunarg.com/vulkan/1.3.268/lunarg-vulkan-1.3.268-jammy.list /etc/apt/sources.list.d
+ADD https://packages.lunarg.com/vulkan/1.3.296/lunarg-vulkan-1.3.296-jammy.list /etc/apt/sources.list.d
 RUN apt-key add /tmp/lunarg-signing-key-pub.asc
 RUN apt-get -u update \
  && DEBIAN_FRONTEND=noninteractive apt-get -y install vulkan-sdk \

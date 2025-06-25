@@ -32,6 +32,8 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/netplay/connection_provider_registry.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/sound/tracklib.h"
 #include "lib/widget/button.h"
@@ -530,7 +532,7 @@ bool runSinglePlayerMenu()
 void startMultiPlayerMenu()
 {
 	closeMissingVideosNotification();
-	
+
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
@@ -568,20 +570,21 @@ bool runMultiPlayerMenu()
 		switch (id)
 		{
 		case FRONTEND_HOST:
+			// First of all, make sure we've reset any prior networking state
+			NETshutdown();
 			// don't pretend we are running a network game. Really do it!
 			NetPlay.bComms = true; // use network = true
-			NetPlay.isUPNP_CONFIGURED = false;
-			NetPlay.isUPNP_ERROR = false;
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			bMultiPlayer = true;
 			bMultiMessages = true;
-			NETinit(true);
-			NETdiscoverUPnPDevices();
+			NETinit(war_getHostConnectionProvider());
+			NETinitPortMapping();
 			game.type = LEVEL_TYPE::SKIRMISH;		// needed?
 			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 			break;
 		case FRONTEND_JOIN:
-			NETinit(true);
+			// Don't call `NETinit()` just yet.
+			// It will be called automatically during join attempts.
 			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 			if (getLobbyError() != ERROR_INVALID)
 			{
@@ -626,8 +629,6 @@ bool runMultiPlayerMenu()
 // Options Menu
 void startOptionsMenu()
 {
-	sliderEnableDrag(true);
-
 	addBackdrop();
 	addTopForm(false);
 	addBottomForm();
@@ -1064,6 +1065,53 @@ static std::shared_ptr<WIDGET> makeShadowFilterSizeDropdown()
 	return Margin(0, 10).wrap(dropdown);
 }
 
+static std::shared_ptr<WIDGET> makeOptionsButtonDropdown()
+{
+	std::vector<std::tuple<WzString, uint8_t>> dropDownChoices = {
+		{WzString::fromUtf8(_("On")), 100},
+		{WzString::fromUtf8(_("Opacity: 50%")), 50},
+		{WzString::fromUtf8(_("Off")), 0}
+	};
+
+	// If current value (from config) is not one of the presets in dropDownChoices, add a "Custom" entry
+	size_t currentSettingIdx = 0;
+	uint8_t currValue = war_getOptionsButtonVisibility();
+	auto it = std::find_if(dropDownChoices.begin(), dropDownChoices.end(), [currValue](const std::tuple<WzString, uint8_t>& item) -> bool {
+		return std::get<1>(item) == currValue;
+	});
+	if (it != dropDownChoices.end())
+	{
+		currentSettingIdx = it - dropDownChoices.begin();
+	}
+	else
+	{
+		dropDownChoices.push_back({WzString::fromUtf8(astringf("(Custom: %u)", currValue)), currValue});
+		currentSettingIdx = dropDownChoices.size() - 1;
+	}
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_INGAMEOPTIONS_BUTTON_DROPDOWN;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
+	const auto paddingSize = 10;
+
+	for (const auto& option : dropDownChoices)
+	{
+		auto item = makeTextButton(0, std::get<0>(option).toUtf8(), 0);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
+	}
+
+	dropdown->setSelectedIndex(currentSettingIdx);
+
+	dropdown->setCanChange([dropDownChoices](DropdownWidget &widget, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget) -> bool {
+		ASSERT_OR_RETURN(false, newIndex < dropDownChoices.size(), "Invalid index");
+		auto newValue = std::get<1>(dropDownChoices.at(newIndex));
+		war_setOptionsButtonVisibility(newValue);
+		return true;
+	});
+
+	return Margin(0, 10).wrap(dropdown);
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
 void startGraphicsOptionsMenu()
@@ -1163,6 +1211,11 @@ void startGraphicsOptionsMenu()
 	// groups menu
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GROUPS, _("Groups Menu"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GROUPS_R, graphicsOptionsGroupsMenuEnabled(), WBUT_SECONDARY)));
+	row.start++;
+
+	// In-Game Options button
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_INGAMEOPTIONS_BUTTON, _("Options Button"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, makeOptionsButtonDropdown());
 	row.start++;
 
 	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
@@ -2223,6 +2276,7 @@ void seqVsyncMode()
 	{
 		// succeeded changing vsync mode
 		saveCurrentSwapMode(currentVsyncMode);
+		wzPostChangedSwapInterval();
 	}
 }
 
@@ -2363,7 +2417,13 @@ char const *mouseOptionsMflipString()
 
 char const *mouseOptionsTrapString()
 {
-	return war_GetTrapCursor() ? _("On") : _("Off");
+	switch (war_GetTrapCursor())
+	{
+		case TrapCursorMode::Disabled: return _("Off");
+		case TrapCursorMode::Enabled: return _("On");
+		case TrapCursorMode::Automatic: return _("Auto");
+	}
+	return "n/a"; // silence compiler warning
 }
 
 char const *mouseOptionsMbuttonsString()
@@ -2505,7 +2565,7 @@ bool runMouseOptionsMenu()
 		break;
 	case FRONTEND_TRAP:
 	case FRONTEND_TRAP_R:
-		war_SetTrapCursor(!war_GetTrapCursor());
+		war_SetTrapCursor(static_cast<TrapCursorMode>(seqCycle(static_cast<int>(war_GetTrapCursor()), static_cast<int>(TrapCursorMode::Disabled), 1, static_cast<int>(TrapCursorMode::Automatic))));
 		widgSetString(psWScreen, FRONTEND_TRAP_R, mouseOptionsTrapString());
 		break;
 
@@ -3285,9 +3345,9 @@ static std::shared_ptr<WIDGET> makePlayerLeaveModeMPDropdown()
 	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
-char const *multiplayOptionsUPnPString()
+char const *multiplayOptionsPortMappingString()
 {
-	return NetPlay.isUPNP ? _("On") : _("Off");
+	return NetPlay.isPortMappingEnabled ? _("On") : _("Off");
 }
 
 char const *multiplayOptionsHostingChatDefaultString()
@@ -3305,8 +3365,20 @@ void startMultiplayOptionsMenu()
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
+	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y - 14, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	label->setFontColour(WZCOL_TEXT_BRIGHT);
+	label->setString(_("* Takes effect on game restart"));
+	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
+
 	auto grid = std::make_shared<GridLayout>();
 	grid_allocation::slot row(0);
+
+	// Default AI
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_HOST_DEFAULT_AI, _("Default AI*"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_HOST_DEFAULT_AI_R, getDefaultSkirmishAI(true).c_str(), WBUT_SECONDARY)));
+	row.start++;
 
 	// "Hosting Options" title
 	grid->place({0, 2}, row, addMargin(makeTextButton(FRONTEND_FX, _("Hosting Options:"), WBUT_DISABLE)));
@@ -3317,9 +3389,11 @@ void startMultiplayOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GAME_PORT_R, std::to_string(NETgetGameserverPort()), WBUT_DISABLE))); // FUTURE TODO: Make this an input field or similar and allow editing (although reject ports <= 1024)
 	row.start++;
 
-	// Enable UPnP
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_UPNP, _("Enable UPnP"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_UPNP_R, multiplayOptionsUPnPString(), WBUT_SECONDARY)));
+	// Port Mapping
+	auto portMappingTitle = makeTextButton(FRONTEND_PORT_MAPPING, _("Port Mapping"), WBUT_SECONDARY);
+	portMappingTitle->setTip(_("Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."));
+	grid->place({0}, row, addMargin(portMappingTitle));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString(), WBUT_SECONDARY)));
 	row.start++;
 
 	// Chat
@@ -3387,15 +3461,20 @@ bool runMultiplayOptionsMenu()
 
 	switch (id)
 	{
-	case FRONTEND_UPNP:
-	case FRONTEND_UPNP_R:
-		NetPlay.isUPNP = !NetPlay.isUPNP;
-		widgSetString(psWScreen, FRONTEND_UPNP_R, multiplayOptionsUPnPString());
+	case FRONTEND_PORT_MAPPING:
+	case FRONTEND_PORT_MAPPING_R:
+		NetPlay.isPortMappingEnabled = !NetPlay.isPortMappingEnabled;
+		widgSetString(psWScreen, FRONTEND_PORT_MAPPING_R, multiplayOptionsPortMappingString());
 		break;
 	case FRONTEND_HOST_CHATDEFAULT:
 	case FRONTEND_HOST_CHATDEFAULT_R:
 		NETsetDefaultMPHostFreeChatPreference(!NETgetDefaultMPHostFreeChatPreference());
 		widgSetString(psWScreen, FRONTEND_HOST_CHATDEFAULT_R, multiplayOptionsHostingChatDefaultString());
+		break;
+	case FRONTEND_HOST_DEFAULT_AI:
+	case FRONTEND_HOST_DEFAULT_AI_R:
+		frontendCycleAIs();
+		widgSetString(psWScreen, FRONTEND_HOST_DEFAULT_AI_R, getDefaultSkirmishAI(true).c_str());
 		break;
 	case FRONTEND_AUTORATING:
 	case FRONTEND_AUTORATING_R:
@@ -3916,11 +3995,12 @@ static std::shared_ptr<W_SLIDER> makeFESlider(UDWORD id, UDWORD parent, UDWORD s
 	return slider;
 }
 
-void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+std::shared_ptr<W_SLIDER> addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
 	auto slider = makeFESlider(id, parent, stops, pos);
 	slider->move(x, y);
 	widgGetFromID(psWScreen, parent)->attach(slider);
+	return slider;
 }
 
 // ////////////////////////////////////////////////////////////////////////////

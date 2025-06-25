@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Repairing Units")
+_("You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units.")
+_("You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level.")
+_("Retreating and repairing units is often far preferable to losing experienced units on the battlefield.")

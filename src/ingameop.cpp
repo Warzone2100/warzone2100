@@ -52,6 +52,7 @@
 #include "campaigninfo.h"
 #include "hci/groups.h"
 #include "screens/netpregamescreen.h"
+#include "screens/guidescreen.h"
 
 bool hostQuitConfirmation = true;
 
@@ -237,6 +238,13 @@ static bool _intAddInGameOptions()
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 	row++;
 
+	if (hasGameGuideTopics())
+	{
+		// add "View Guide"
+		addIGTextButton(INTINGAMEOP_OPENGAMEGUIDE, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("View Guide"), OPALIGN);
+		row++;
+	}
+
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Options"), OPALIGN);
 	row++;
@@ -293,7 +301,6 @@ static bool _intAddInGameOptions()
 
 bool intAddInGameOptions()
 {
-	sliderEnableDrag(true);
 	return _intAddInGameOptions();
 }
 
@@ -877,6 +884,13 @@ static bool startIGMouseOptionsMenu()
 	return true;
 }
 
+// Cycle through options as in program seq(1) from coreutils
+// The T cast is to cycle through enums.
+template <typename T> static T seqCycleForwards(T value, T min, int inc, T max)
+{
+	return value < max ? T(value + inc) : min;  // Cycle forwards.
+}
+
 static bool runIGMouseOptionsMenu(UDWORD id)
 {
 	switch (id)
@@ -889,7 +903,7 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 
 	case INTINGAMEOP_TRAP:
 	case INTINGAMEOP_TRAP_R:
-		war_SetTrapCursor(!war_GetTrapCursor());
+		war_SetTrapCursor(static_cast<TrapCursorMode>(seqCycleForwards(static_cast<int>(war_GetTrapCursor()), static_cast<int>(TrapCursorMode::Disabled), 1, static_cast<int>(TrapCursorMode::Automatic))));
 		widgSetString(psWScreen, INTINGAMEOP_TRAP_R, mouseOptionsTrapString());
 		break;
 
@@ -994,6 +1008,11 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_POPUP_QUIT:
 	case INTINGAMEOP_QUIT:		//quit was confirmed.
 		intCloseInGameOptions(false, false);
+		break;
+
+	case INTINGAMEOP_OPENGAMEGUIDE:
+		intCloseInGameOptions(false, false);
+		showGuideScreen([]() { /* no=op on close func */ }, true);
 		break;
 
 	case INTINGAMEOP_OPTIONS:			//game options  was pressed

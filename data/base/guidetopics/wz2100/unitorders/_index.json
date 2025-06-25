@@ -1,0 +1,13 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::unitorders",
+	"title": "Unit Orders",
+	"sort": "3",
+	"contents": [
+		"Right-click a unit or group of units to show their current Unit Orders.",
+		"",
+		"The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health.",
+		"",
+		"Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
+	]
+}

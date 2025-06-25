@@ -99,6 +99,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true" : "false");
 
 	ingame.LagCounter[player] = 0;
+	ingame.DesyncCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
 	ingame.hostChatPermissions[player] = false;
@@ -332,6 +333,7 @@ void handlePlayerLeftInGame(UDWORD player)
 	debug(LOG_NET, "R.I.P. %s (%u).", getPlayerName(player), player);
 
 	ingame.LagCounter[player] = 0;
+	ingame.DesyncCounter[player] = 0;
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
@@ -396,9 +398,9 @@ static void sendPlayerLeft(uint32_t playerIndex)
 
 	uint32_t forcedPlayerIndex = whosResponsible(playerIndex);
 	NETQUEUE(*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer ? NETgameQueueForced : NETgameQueue;
-	NETbeginEncode(netQueueType(forcedPlayerIndex), GAME_PLAYER_LEFT);
-	NETuint32_t(&playerIndex);
-	NETend();
+	auto w = NETbeginEncode(netQueueType(forcedPlayerIndex), GAME_PLAYER_LEFT);
+	NETuint32_t(w, playerIndex);
+	NETend(w);
 }
 
 static void addConsolePlayerLeftMessage(unsigned playerIndex)
@@ -415,6 +417,11 @@ static void addConsolePlayerJoinMessage(unsigned playerIndex)
 	if (selectedPlayer != playerIndex)
 	{
 		std::string msg = astringf(_("%s joined the Game"), getPlayerName(playerIndex));
+		if ((game.blindMode != BLIND_MODE::NONE) && NetPlay.isHost && (NetPlay.hostPlayer >= MAX_PLAYER_SLOTS))
+		{
+			msg += " ";
+			msg += astringf(_("(codename: %s)"), getPlayerGenericName(playerIndex));
+		}
 		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
@@ -422,9 +429,9 @@ static void addConsolePlayerJoinMessage(unsigned playerIndex)
 void recvPlayerLeft(NETQUEUE queue)
 {
 	uint32_t playerIndex = 0;
-	NETbeginDecode(queue, GAME_PLAYER_LEFT);
-	NETuint32_t(&playerIndex);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_PLAYER_LEFT);
+	NETuint32_t(r, playerIndex);
+	NETend(r);
 
 	addConsolePlayerLeftMessage(playerIndex);
 
@@ -438,7 +445,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	turnOffMultiMsg(false);
 	if (!ingame.TimeEveryoneIsInGame.has_value()) // If game hasn't actually started
 	{
-		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+		clearPlayerMultiStats(playerIndex); // local only
 	}
 	NetPlay.players[playerIndex].allocated = false;
 
@@ -446,7 +453,16 @@ void recvPlayerLeft(NETQUEUE queue)
 	cancelOrDismissKickVote(playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
+
+	// fire script callback to reassign skirmish players.
+	if (GetGameMode() == GS_NORMAL)
+	{
+		triggerEventPlayerLeft(playerIndex);
+	}
+
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+
+	wz_command_interface_output_room_status_json();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -463,6 +479,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	{
 		multiClearHostRequestMoveToPlayer(playerIndex);
 		multiSyncResetPlayerChallenge(playerIndex);
+		resetMultiOptionPrefValues(playerIndex);
 	}
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
@@ -472,19 +489,20 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (wz_command_interface_enabled())
 	{
-		std::string playerPublicKeyB64 = base64Encode(getMultiStats(playerIndex).identity.toBytes(EcKey::Public));
-		std::string playerIdentityHash = getMultiStats(playerIndex).identity.publicHashString();
+		const auto& identity = getOutputPlayerIdentity(playerIndex);
+		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[playerIndex]) ? "V" : "?";
-		std::string playerName = NetPlay.players[playerIndex].name;
+		std::string playerName = getPlayerName(playerIndex);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
-		wz_command_interface_output("WZEVENT: playerLeft: %" PRIu32 " %" PRIu32 "%s %s %s %s %s\n", playerIndex, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
+		wz_command_interface_output("WZEVENT: playerLeft: %" PRIu32 " %" PRIu32 " %s %s %s %s %s\n", playerIndex, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[playerIndex].IPtextAddress);
 	}
 
 	if (ingame.localJoiningInProgress)
 	{
 		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(playerIndex, false);
-		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
+		clearPlayerMultiStats(playerIndex); // local only
 		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
@@ -493,9 +511,9 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 		if (bDisplayMultiJoiningStatus) // if still waiting for players to load *or* waiting for game to start...
 		{
-			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-			NETuint32_t(&playerIndex);
-			NETend();
+			auto w = NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+			NETuint32_t(w, playerIndex);
+			NETend(w);
 			// only set ingame.JoiningInProgress[player_id] to false
 			// when the game starts, it will handle the GAME_PLAYER_LEFT message in their queue properly
 			ingame.JoiningInProgress[playerIndex] = false;
@@ -515,13 +533,10 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))
 	{
-		audio_QueueTrack(ID_CLAN_EXIT);
-	}
-
-	// fire script callback to reassign skirmish players.
-	if (GetGameMode() == GS_NORMAL)
-	{
-		triggerEventPlayerLeft(playerIndex);
+		if (playerIndex < MAX_PLAYERS) // only play audio when *player* slots drop (ignore spectator slots)
+		{
+			audio_QueueTrack(ID_CLAN_EXIT);
+		}
 	}
 
 	netPlayersUpdated = true;
@@ -530,7 +545,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 // ////////////////////////////////////////////////////////////////////////////
 // A Remote Player has joined the game.
-bool MultiPlayerJoin(UDWORD playerIndex)
+bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdentity)
 {
 	if (widgGetFromID(psWScreen, IDRET_FORM))	// if ingame.
 	{
@@ -557,6 +572,10 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
+		if (verifiedJoinIdentity.has_value())
+		{
+			multiStatsSetVerifiedIdentityFromJoin(playerIndex, verifiedJoinIdentity.value());
+		}
 		sendOptions();
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
@@ -589,12 +608,12 @@ bool sendDataCheck()
 {
 	int i = 0;
 
-	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK);		// only need to send to HOST
+	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK);		// only need to send to HOST
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
-		NETuint32_t(&DataHash[i]);
+		NETuint32_t(w, DataHash[i]);
 	}
-	NETend();
+	NETend(w);
 	debug(LOG_NET, "sent hash to host");
 	return true;
 }
@@ -611,12 +630,12 @@ bool recvDataCheck(NETQUEUE queue)
 		return false;
 	}
 
-	NETbeginDecode(queue, NET_DATA_CHECK);
+	auto r = NETbeginDecode(queue, NET_DATA_CHECK);
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
-		NETuint32_t(&tempBuffer[i]);
+		NETuint32_t(r, tempBuffer[i]);
 	}
-	NETend();
+	NETend(r);
 
 	if (player >= MAX_CONNECTED_PLAYERS) // invalid player number.
 	{
@@ -663,10 +682,12 @@ bool recvDataCheck(NETQUEUE queue)
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
 {
+	ASSERT_HOST_ONLY(return);
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.LagCounter[player] = 0;
+	ingame.DesyncCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.PendingDisconnect[player] = false;

@@ -35,6 +35,10 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
+#if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-function-type-mismatch"
+#endif
 #if defined(_MSC_VER)
 __pragma(warning( push ))
 __pragma(warning( disable : 4191 )) // disable "warning C4191: 'type cast': unsafe conversion from 'JSCFunctionMagic (__cdecl *)' to 'JSCFunction (__cdecl *)'"
@@ -43,6 +47,9 @@ __pragma(warning( disable : 4191 )) // disable "warning C4191: 'type cast': unsa
 #include "quickjs-limitedcontext.h"
 #if defined(_MSC_VER)
 __pragma(warning( pop ))
+#endif
+#if defined(__clang__) && defined(__clang_major__) && __clang_major__ >= 19
+#pragma clang diagnostic pop
 #endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic pop
@@ -68,11 +75,18 @@ namespace WzMap {
 			return JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
 			} } while (0)
 
+// QuickJS-NG / QuickJS compat
+#if defined(QUICKJS_NG)
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(arr)
+#else
+# define WZ_QJS_IsArray(ctx, arr) JS_IsArray(ctx, arr)
+#endif
+
 bool QuickJS_GetArrayLength(JSContext* ctx, JSValueConst arr, uint64_t& len)
 {
 	len = 0;
 
-	if (!JS_IsArray(ctx, arr))
+	if (!WZ_QJS_IsArray(ctx, arr))
 		return false;
 
 	JSValue len_val = JS_GetPropertyStr(ctx, arr, "length");
@@ -262,11 +276,11 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 	auto features = argv[6];
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_mapWidth), "mapWidth must be number");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_mapHeight), "mapHeight must be number");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, texture), "texture must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, height), "height must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, structures), "structures must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, droids), "droids must be array");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, features), "features must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, texture), "texture must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, height), "height must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, structures), "structures must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, droids), "droids must be array");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, features), "features must be array");
 	auto mapData = data.map->mapData();
 	mapData->width = JSValueToInt32(ctx, jsVal_mapWidth);
 	mapData->height = JSValueToInt32(ctx, jsVal_mapHeight);
@@ -280,16 +294,25 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == ((uint64_t)mapData->width * (uint64_t)mapData->height)), "texture array length must equal (mapWidth * mapHeight); actual length is: %" PRIu64"", arrayLen);
 	bGotArrayLength = QuickJS_GetArrayLength(ctx, height, arrayLen);
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen == ((uint64_t)mapData->width * (uint64_t)mapData->height)), "height array length must equal (mapWidth * mapHeight); actual length is: %" PRIu64"", arrayLen);
+	uint32_t textureUint32 = 0;
+	uint32_t tileHeightUint32 = 0;
 	for (uint32_t n = 0; n < N; ++n)
 	{
 		JSValue textureVal = JS_GetPropertyUint32(ctx, texture, n);
 		auto free_texture_ref = gsl::finally([ctx, textureVal] { JS_FreeValue(ctx, textureVal); });
 		JSValue heightVal = JS_GetPropertyUint32(ctx, height, n);
 		auto free_height_ref = gsl::finally([ctx, heightVal] { JS_FreeValue(ctx, heightVal); });
-		uint32_t textureUint32 = JSValueToUint32(ctx, textureVal);
+		textureUint32 = JSValueToUint32(ctx, textureVal);
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, textureUint32 <= (uint32_t)std::numeric_limits<uint16_t>::max(), "texture value exceeds uint16::max: %" PRIu32 "", textureUint32);
 		mapData->mMapTiles[n].texture = static_cast<uint16_t>(textureUint32);
-		mapData->mMapTiles[n].height = JSValueToUint32(ctx, heightVal);
+		tileHeightUint32 = JSValueToUint32(ctx, heightVal);
+		if (tileHeightUint32 > TILE_MAX_HEIGHT)
+		{
+			// treat as non-fatal error (to support older script maps) - log and cap at TILE_MAX_HEIGHT
+			debug(pCustomLogger, LOG_ERROR, "tile height (%" PRIu32 ") exceeds TILE_MAX_HEIGHT (%" PRIu32 ")", tileHeightUint32, TILE_MAX_HEIGHT);
+			tileHeightUint32 = TILE_MAX_HEIGHT;
+		}
+		mapData->mMapTiles[n].height = static_cast<uint16_t>(tileHeightUint32);
 	}
 	bGotArrayLength = QuickJS_GetArrayLength(ctx, structures, arrayLen);
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, bGotArrayLength && (arrayLen <= (uint64_t)std::numeric_limits<uint16_t>::max()), "structures array length must be <= uint16::max; actual length is: %" PRIu64"", arrayLen);
@@ -303,7 +326,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		sd.name = QuickJS_GetStdString(ctx, structure, "name");
 		JSValue position = JS_GetPropertyStr(ctx, structure, "position");
 		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
+		if (WZ_QJS_IsArray(ctx, position))
 		{
 			// [x, y]
 			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
@@ -316,7 +339,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 			JS_FreeValue(ctx, yVal);
 		}
 		auto direction = QuickJS_GetInt32(ctx, structure, "direction");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction < static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for structure", direction);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction <= static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for structure", direction);
 		sd.direction = static_cast<uint16_t>(direction);
 		auto modules = QuickJS_GetUint32(ctx, structure, "modules");
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, modules < static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()), "Invalid modules (%" PRIu32 ") for structure", modules);
@@ -338,7 +361,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		sd.name = QuickJS_GetStdString(ctx, droid, "name");
 		JSValue position = JS_GetPropertyStr(ctx, droid, "position");
 		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
+		if (WZ_QJS_IsArray(ctx, position))
 		{
 			// [x, y]
 			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
@@ -351,7 +374,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 			JS_FreeValue(ctx, yVal);
 		}
 		auto direction = QuickJS_GetInt32(ctx, droid, "direction");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction < static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for droid", direction);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction <= static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for droid", direction);
 		sd.direction = static_cast<uint16_t>(direction);
 		auto player = QuickJS_GetInt32(ctx, droid, "player");
 		SCRIPT_ASSERT_AND_RETURNERROR(ctx, sd.player >= -1 && sd.player < MAX_PLAYERS, "Invalid player (%d) for droid", (int)sd.player);
@@ -370,7 +393,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 		sd.name = QuickJS_GetStdString(ctx, feature, "name");
 		JSValue position = JS_GetPropertyStr(ctx, feature, "position");
 		auto free_position_ref = gsl::finally([ctx, position] { JS_FreeValue(ctx, position); });
-		if (JS_IsArray(ctx, position))
+		if (WZ_QJS_IsArray(ctx, position))
 		{
 			// [x, y]
 			bGotArrayLength = QuickJS_GetArrayLength(ctx, position, arrayLen);
@@ -383,7 +406,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 			JS_FreeValue(ctx, yVal);
 		}
 		auto direction = QuickJS_GetInt32(ctx, feature, "direction");
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction < static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for feature", direction);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, direction >= 0 && direction <= static_cast<int32_t>(std::numeric_limits<uint16_t>::max()), "Invalid direction (%d) for feature", direction);
 		sd.direction = static_cast<uint16_t>(direction);
 		mapFeatures->push_back(std::move(sd));
 	}
@@ -391,7 +414,8 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 }
 
 //MAP-- ## generateFractalValueNoise(width, height, range, crispness, scale, normalizeToRange = 0,
-//MAP--                              [[x1, y1, x2, y2, (x, y, layerIdx, layerRange) => value], ...] = [])
+//MAP--                              [[x1, y1, x2, y2, (x, y, layerIdx, layerRange) => value], ...] = [],
+//MAP--                              rowMajorOrder = false)
 //MAP--
 //MAP-- A fast (native) fractal value noise generator, a cheaper version of Perlin noise.
 //MAP-- Such noise can aid random map generation in a variety of ways, most prominently
@@ -402,6 +426,10 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 //MAP-- is a sum of white noise layers with exponentially increasing resolution
 //MAP-- and exponentially decreasing range, interpolated linearly when stretched
 //MAP-- to the original (`width` x `height`) rectangle.
+//MAP--
+//MAP-- IMPORTANT: The noise is returned in column-major order by default. If you wish
+//MAP-- to customize this you must supply all arguments including the last optional
+//MAP-- argument (`rowMajorOrder`).
 //MAP--
 //MAP-- `range` is the range of the first layer. In other words, the first layer of noise
 //MAP-- will have values populated via `gameRand(range)`.
@@ -421,7 +449,7 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 //MAP-- `normalizedRange` is unset or set to 0, normalization is not performed.
 //MAP-- Specifying this parameter yields much better performance than manual normalization.
 //MAP--
-//MAP-- The last optional argument allows finer control over certain areas of the map.
+//MAP-- The second-to-last optional argument allows finer control over certain areas of the map.
 //MAP-- Each element specifies such "rigged" rectangle [x1, x2] x [y1, y2] and the callback
 //MAP-- that determines the value of each noise layer within that rectangle.
 //MAP-- That value has to be within range [0, layerRange).
@@ -434,12 +462,15 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 //MAP-- be flat; an arbitrary function of `x` and `y` can be provided.
 //MAP-- The callback shall not be stored for later use or called after
 //MAP-- `generateFractalValueNoise` returns.
+//MAP--
+//MAP-- `rowMajorOrder` is an optional argument that specifies whether the results should be
+//MAP-- returned in column-major order (`false`, the default) or row-major order (`true`).
 static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	MAPSCRIPT_GET_CONTEXT_DATA()//;
 	auto pCustomLogger = data.pCustomLogger;
 
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc >= 5 && argc <= 7, "Must have 5 to 7 parameters");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc >= 5 && argc <= 8, "Must have 5 to 8 parameters");
 	JSValue jsVal_width = argv[0];
 	JSValue jsVal_height = argv[1];
 	JSValue jsVal_range = argv[2];
@@ -488,11 +519,11 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	};
 
 	std::vector<RiggedRegion> riggedRegions;
-	if (argc == 7)
+	if (argc >= 7)
 	{
 		// Unwrap JS regions for faster lookup.
 		JSValue jsVal_riggedRegions = argv[6];
-		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegions), "width must be array");
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, jsVal_riggedRegions), "width must be array");
 
 		uint64_t regionsArrayLength = 0;
 		bool bGotRegionsArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegions, regionsArrayLength);
@@ -515,7 +546,7 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		{
 			JSValue jsVal_riggedRegion = JS_GetPropertyUint32(ctx, jsVal_riggedRegions, i);
 			auto free_riggedRegion_ref = gsl::finally([ctx, jsVal_riggedRegion] { JS_FreeValue(ctx, jsVal_riggedRegion); });
-			SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, jsVal_riggedRegion),
+			SCRIPT_ASSERT_AND_RETURNERROR(ctx, WZ_QJS_IsArray(ctx, jsVal_riggedRegion),
 			                              "riggedRegion %" PRIu32 " must be array", i);
 			uint64_t regionArrayLength = 0;
 			bool bGotRegionArrayLength = QuickJS_GetArrayLength(ctx, jsVal_riggedRegion, regionArrayLength);
@@ -555,6 +586,15 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		};
 	}
 
+	bool returnRowMajorOrder = false;
+	if (argc >= 8) {
+		JSValue jsVal_rowMajorOrder = argv[7];
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsBool(jsVal_rowMajorOrder), "rowMajorOrder must be bool");
+		int result = JS_ToBool(ctx, jsVal_rowMajorOrder);
+		SCRIPT_ASSERT_AND_RETURNERROR(ctx, result >= 0, "JS_ToBool failed - rowMajorOrder must be a valid bool");
+		returnRowMajorOrder = result != 0;
+	}
+
 	uint32_t size = width * height;
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, size <= UINT16_MAX,
 	                              "Requested data too large to fit into Array");
@@ -577,6 +617,10 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 	{
 		layerScale /= 2;
 		layerRange = layerRange * crispness / 10;
+		if (layerRange == 0)
+		{
+			break;
+		}
 		++layerIdx;
 
 		uint32_t layerWidth = width / layerScale + 1;
@@ -624,20 +668,31 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 		}
 
 
-		for (uint32_t x = 0; x < layerWidth - 1; ++x)
+		for (uint32_t x = 0; x < layerWidth; ++x)
 		{
-			for (uint32_t y = 0; y < layerHeight - 1; ++y)
+			uint32_t mapX = x * layerScale;
+			if (mapX >= width)
 			{
-				uint32_t mapX = x * layerScale, mapY = y * layerScale;
+				continue;
+			}
+			for (uint32_t y = 0; y < layerHeight; ++y)
+			{
+				uint32_t mapY = y * layerScale;
+				if (mapY >= height)
+				{
+					continue;
+				}
 
 				uint32_t tl = layerData[x * layerHeight + y];
 				uint32_t tr = layerData[(x + 1) * layerHeight + y];
 				uint32_t bl = layerData[x * layerHeight + (y + 1)];
 				uint32_t br = layerData[(x + 1) * layerHeight + (y + 1)];
 
-				for (uint32_t innerX = 0; innerX < layerScale; ++innerX)
+				uint32_t innerXEnd = std::min<uint32_t>(layerScale, width - mapX);
+				uint32_t innerYEnd = std::min<uint32_t>(layerScale, height - mapY);
+				for (uint32_t innerX = 0; innerX < innerXEnd; ++innerX)
 				{
-					for (uint32_t innerY = 0; innerY < layerScale; ++innerY)
+					for (uint32_t innerY = 0; innerY < innerYEnd; ++innerY)
 					{
 						// Interpolation.
 						noiseData[(mapX + innerX) * height + (mapY + innerY)] += (
@@ -667,11 +722,38 @@ static JSValue runMap_generateFractalValueNoise(JSContext *ctx, JSValueConst thi
 			});
 	}
 
+	if (returnRowMajorOrder)
+	{
+		// convert noiseData from column-major order to row-major order
+		std::vector<uint32_t> noiseDataRowOrder(size, 0);
+		for (uint32_t x = 0; x < width; ++x)
+		{
+			for (uint32_t y = 0; y < height; ++y)
+			{
+				noiseDataRowOrder[y * width + x] = noiseData[x * height + y];
+			}
+		}
+		noiseData = std::move(noiseDataRowOrder);
+		noiseDataRowOrder.clear();
+	}
+
+#if defined(QUICKJS_NG)
+	std::vector<JSValue> uint_jsvals;
+	uint_jsvals.resize(size);
+	for (uint32_t i = 0; i < size; ++i)
+	{
+		uint_jsvals[i] = JS_NewUint32(ctx, noiseData[i]);
+	}
+	JSValue retVal = JS_NewArrayFrom(ctx, static_cast<int>(size), uint_jsvals.data());
+	// JS_NewArrayFrom takes ownership of the JSValues - just clear the vector
+	uint_jsvals.clear();
+#else
 	JSValue retVal = JS_NewArray(ctx);
 	for (uint32_t i = 0; i < size; ++i)
 	{
 		JS_SetPropertyUint32(ctx, retVal, i, JS_NewUint32(ctx, noiseData[i]));
 	}
+#endif
 	return retVal;
 }
 
@@ -696,6 +778,12 @@ static void QJSRuntimeFree_LeakHandler_Warning(const char* msg)
 	debug(pRuntimeFree_CustomLogger, LOG_WARNING, "QuickJS FreeRuntime leak: %s", msg);
 }
 
+#if defined(__has_feature)
+  #define QUICKJS_HAS_FEATURE(x) __has_feature(x)
+#else
+  #define QUICKJS_HAS_FEATURE(x) 0
+#endif
+
 std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std::string &path, uint32_t seed, bool preview, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	ScriptMapData data;
@@ -717,7 +805,6 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	ctxOptions.baseObjects = true;
 	ctxOptions.dateObject = false;
 	ctxOptions.eval = false;
-	ctxOptions.stringNormalize = false;
 	ctxOptions.regExp = false;
 	ctxOptions.json = false;
 	ctxOptions.proxy = false;
@@ -725,6 +812,7 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	ctxOptions.typedArrays = false;
 	ctxOptions.promise = false;
 	ctxOptions.bigInt = false;
+	ctxOptions.weakRef = false;
 	JSContext *ctx = JS_NewLimitedContext(rt, &ctxOptions);
 	if (ctx == nullptr)
 	{
@@ -776,7 +864,12 @@ std::shared_ptr<Map> runMapScript(const std::vector<char>& fileBuffer, const std
 	JS_SetPropertyFunctionList(ctx, global_obj, js_builtin_mapFuncs, sizeof(js_builtin_mapFuncs) / sizeof(js_builtin_mapFuncs[0]));
 
 	// configure limitations on runtime
+#if defined(__SANITIZE_ADDRESS__) || QUICKJS_HAS_FEATURE(address_sanitizer)
+	#pragma message("wzmaplib: Map script stack size limit disabled due to Address Sanitizer")
+	JS_SetMaxStackSize(rt, 0);
+#else
 	JS_SetMaxStackSize(rt, 512*1024);
+#endif
 	JS_SetMemoryLimit(rt, 100*1024*1024); // 100MiB better be enough...
 
 	// install interrupt handler to prevent endless script execution (due to bugs or otherwise)

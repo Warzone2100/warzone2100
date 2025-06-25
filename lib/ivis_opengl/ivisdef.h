@@ -83,7 +83,7 @@ struct ANIMFRAME
 
 struct iIMDPoly
 {
-	std::vector<Vector2f> texCoord;
+	std::array<Vector2f, 3> texCoord;
 	Vector2f texAnim = Vector2f(0.f, 0.f);
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
@@ -123,7 +123,7 @@ struct iIMDShape;
 
 struct iIMDBaseShape
 {
-	iIMDBaseShape(std::unique_ptr<iIMDShape> baseModel);
+	iIMDBaseShape(std::unique_ptr<iIMDShape> baseModel, const WzString &path, const WzString &filename);
 
 	~iIMDBaseShape();
 
@@ -138,11 +138,23 @@ struct iIMDBaseShape
 
 	std::vector<Vector3i> connectors; // used by: muzzle base location, fire line, actionVisibleTarget, etc)
 
+	const WzString path;
+	const WzString filename;
+
 	// the display shape used for rendering (*NOT* for any game state calculations!)
-	inline iIMDShape* displayModel() { return m_displayModel.get(); }
+	inline const iIMDShape* displayModel() const { return m_displayModel.get(); }
 protected:
 	friend bool tryLoad(const WzString &path, const WzString &filename);
+	friend void modelUpdateTilesetIdx(size_t tilesetIdx);
+	friend void modelReloadAllModelTextures();
+	friend bool debugReloadDisplayModelsForBaseModel(iIMDBaseShape& baseModel);
+	friend void debugReloadAllDisplayModels();
+
 	void replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayModel);
+	bool debugReloadDisplayModel(); // not to be called normally at runtime - intended for the script / graphics debugger panel
+	inline iIMDShape* mutableDisplayModel() { return m_displayModel.get(); }
+private:
+	bool debugReloadDisplayModelInternal(bool recurseAnimPie);
 private:
 	std::unique_ptr<iIMDShape> m_displayModel = nullptr;  // the display shape used for rendering (*NOT* for any game state calculations!)
 };
@@ -168,6 +180,7 @@ struct TilesetTextureFiles
 // NOTE: Do *NOT* use any data from iIMDShape in game state calculations - instead, use the data in an iIMDBaseShape
 struct iIMDShape
 {
+	iIMDShape& operator=(iIMDShape&& other) noexcept;
 	~iIMDShape();
 
 	Vector3i min = Vector3i(0, 0, 0);
@@ -200,7 +213,7 @@ struct iIMDShape
 	std::vector<iIMDPoly> *pShadowPolys = nullptr;
 
 	// The new rendering data
-	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
+	std::array<gfx_api::buffer*, VBO_COUNT> buffers = { };
 	uint16_t vertexCount = 0;
 
 	// object animation (animating a level, rather than its texture)
@@ -210,7 +223,7 @@ struct iIMDShape
 	// more object animation, but these are only set for the first level
 	int objanimtime = 0; ///< total time to render all animation frames
 	int objanimcycles = 0; ///< Number of cycles to render, zero means infinitely many
-	iIMDBaseShape *objanimpie[ANIM_EVENT_COUNT] = { nullptr }; // non-owned pointer to loaded base shape
+	std::array<iIMDBaseShape*, ANIM_EVENT_COUNT> objanimpie = { }; // non-owned pointer to loaded base shape
 
 	int interpolate = 1; // if the model wants to be interpolated
 
@@ -221,15 +234,21 @@ struct iIMDShape
 
 	std::unique_ptr<iIMDShape> next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 
+public:
+	PIELIGHT getTeamColourForModel(int team) const;
+
 protected:
 	friend void modelUpdateTilesetIdx(size_t tilesetIdx);
 	void reloadTexturesIfLoaded();
 
 private:
+	void freeInternalResources();
+
+private:
 	std::unique_ptr<iIMDShapeTextures> m_textures = std::make_unique<iIMDShapeTextures>();
 };
 
-inline iIMDShape *safeGetDisplayModelFromBase(iIMDBaseShape* pBaseIMD)
+inline const iIMDShape *safeGetDisplayModelFromBase(iIMDBaseShape* pBaseIMD)
 {
 	return ((pBaseIMD) ? pBaseIMD->displayModel() : nullptr);
 }
@@ -267,6 +286,8 @@ struct IMAGEFILE
 
 	~IMAGEFILE(); // Defined in bitimage.cpp.
 	AtlasImageDef* find(WzString const &name);  // Defined in bitimage.cpp.
+
+	inline size_t numImages() const { return imageDefs.size(); }
 
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<AtlasImageDef> imageDefs;  /// Stored images.

@@ -43,58 +43,25 @@ var videoInfo; //holds some info about when to play a video.
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (droid.player !== CAM_HUMAN_PLAYER)
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
 	{
-		if (isVTOL(droid))
-		{
-			camSafeRemoveObject(droid, false);
-		}
+		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
-
-//Return a random assortment of droids with the given templates.
-function randomTemplates(list)
-{
-	const extras = [cTempl.nxmsens, cTempl.nxmsamh];
-	const droids = [];
-	const SIZE = 12 + camRand(4); //Max of 15.
-
-	for (let i = 0; i < SIZE; ++i)
-	{
-		droids.push(list[camRand(list.length)]);
-	}
-
-	//Sensor and vindicator hovers.
-	for (let i = 0; i < 4; ++i)
-	{
-		droids.push(extras[camRand(extras.length)]);
-	}
-
-	return droids;
-}
 
 function wave2()
 {
 	const list = [cTempl.nxlpulsev, cTempl.nxlpulsev];
-	const ext = {
-		limit: [4, 4], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+	const ext = {limit: [4, 4], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
 }
 
 function wave3()
 {
 	const list = [cTempl.nxlpulsev, cTempl.nxmheapv];
-	const ext = {
-		limit: [4, 4], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+	const ext = {limit: [4, 4], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
 }
 
 //Setup Nexus VTOL hit and runners. Choose a random spawn point for the VTOLs.
@@ -102,18 +69,15 @@ function vtolAttack()
 {
 	if (camClassicMode())
 	{
-		const list = [cTempl.nxmheapv, cTempl.nxlpulsev];
-		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined);
+		const list = [cTempl.nxlpulsev, cTempl.nxmheapv, cTempl.nxmheapv, cTempl.nxlpulsev];
+		const ext = {limit: [2, 5, 5, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmtherv];
-		const ext = {
-			limit: [4, 4], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
+		const ext = {limit: [4, 4], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, mis_vtolPositions, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), undefined, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
@@ -122,33 +86,84 @@ function vtolAttack()
 //Chose a random spawn point to send ground reinforcements.
 function phantomFactorySpawn()
 {
-	let list;
-	let chosenFactory;
+	if (winFlag)
+	{
+		return;
+	}
+
+	let units;
+	let location;
+	const extraUnits = [cTempl.nxmsens, cTempl.nxmsens, cTempl.nxmsamh, cTempl.nxmsamh];
+	const UNIT_LIMIT_FOR_SPAWN = 40;
+	const ALLOW_INSANE_SPAWNS = camAllowInsaneSpawns();
 
 	switch (camRand(3))
 	{
 		case 0:
-			list = [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
-			chosenFactory = "phantomFacWest";
+			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh], appended: extraUnits};
+			location = "phantomFacWest";
 			break;
 		case 1:
-			list = [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
-			chosenFactory = "phantomFacEast";
+			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh], appended: extraUnits};
+			location = "phantomFacEast";
 			break;
 		case 2:
-			list = [cTempl.nxcylas, cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
-			chosenFactory = "phantomFacMiddle";
+			units = {units: [cTempl.nxcylas, cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh], appended: extraUnits};
+			location = "phantomFacMiddle";
 			break;
 		default:
-			list = [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh];
-			chosenFactory = "phantomFacWest";
+			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh], appended: extraUnits};
+			location = "phantomFacWest";
+	}
+	if ((difficulty >= INSANE) || ALLOW_INSANE_SPAWNS)
+	{
+		if (ALLOW_INSANE_SPAWNS && (camRand(100) < 20))
+		{
+			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh], appended: extraUnits};
+			location = "phantomFacSouth";
+		}
+		units.units.push(cTempl.nxmangel); //Insane adds Angel units as a possibility.
 	}
 
-	if (countDroid(DROID_ANY, CAM_NEXUS) < 80)
+	if (countDroid(DROID_ANY, CAM_NEXUS) < UNIT_LIMIT_FOR_SPAWN)
 	{
-		camSendReinforcement(CAM_NEXUS, camMakePos(chosenFactory), randomTemplates(list), CAM_REINFORCE_GROUND, {
-			data: { regroup: false, count: -1, },
-		});
+		const limits = {minimum: 12, maxRandom: 3};
+		camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+	}
+}
+
+function insaneTransporterAttack()
+{
+	if (winFlag)
+	{
+		return;
+	}
+	const DISTANCE_FROM_POS = 25;
+	const SCAN_RADIUS = 2;
+	const units = [cTempl.nxhgauss, cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmpulseh, cTempl.nxmscouh];
+	const limits = {minimum: 10, maxRandom: 0};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS, SCAN_RADIUS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+}
+
+// Explode trucks to significantly reduce chances of gaming the lassat.
+function destroyTrucksInBlastZone()
+{
+	const IGNORE_LIMIT = 240;
+	if (Math.floor(mapLimit) > IGNORE_LIMIT)
+	{
+		// Lassat is only a few tiles away from the silos and player doesn't have much room left.
+		removeTimer("destroyTrucksInBlastZone");
+		return;
+	}
+	const objects = enumArea(0, MIS_Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false);
+	for (let i = 0, len = objects.length; i < len; ++i)
+	{
+		const obj = objects[i];
+		if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
+		{
+			camSafeRemoveObject(obj, true);
+		}
 	}
 }
 
@@ -158,7 +173,7 @@ function vaporizeTarget()
 {
 	let target;
 	const targets = enumArea(0, MIS_Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
-		obj.type === DROID || obj.type === STRUCTURE
+		(obj.type === DROID && obj.droidType !== DROID_CONSTRUCT) || obj.type === STRUCTURE
 	));
 
 	if (!targets.length)
@@ -176,9 +191,10 @@ function vaporizeTarget()
 	}
 	else
 	{
-		const dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
-		const vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
-		const st = targets.filter((obj) => (obj.type === STRUCTURE));
+		const MIN_DROID_COST = 150;
+		const dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj) && (obj.cost >= MIN_DROID_COST || obj.experience > 0)));
+		const vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj) && (obj.cost >= MIN_DROID_COST || obj.experience > 0)));
+		const st = targets.filter((obj) => (obj.type === STRUCTURE && obj.stattype !== WALL && obj.status === BUILT));
 
 		if (dr.length)
 		{
@@ -188,9 +204,14 @@ function vaporizeTarget()
 		{
 			target = vt[0]; //don't care about VTOLs as much
 		}
-		if (st.length && !camRand(2)) //chance to focus on a structure
+		if (st.length && (!camDef(target) || !camRand(2))) //chance to focus on a structure
 		{
 			target = st[0];
+		}
+		// Choose something less specific if the above rules can't be satisfied.
+		if (!camDef(target))
+		{
+			target = targets[camRand(targets.length)];
 		}
 	}
 
@@ -314,17 +335,22 @@ function checkTime()
 		camPlayVideos({video: "MB3_AD2_MSG2", type: CAMP_MSG});
 		if (camClassicMode() && tweakOptions.camClassic_balance32)
 		{
-			setMissionTime(camMinutesToSeconds(80)); // To accommodate the research bug of 3.2 balance.
+			camSetMissionTimer(camMinutesToSeconds(80)); // To accommodate the research bug of 3.2 balance.
 		}
 		else
 		{
-			setMissionTime(camHoursToSeconds(1));
+			camSetMissionTimer(camHoursToSeconds(1));
 		}
 
 		phantomFactorySpawn();
 		queue("vaporizeTarget", camSecondsToMilliseconds(2));
+		setTimer("destroyTrucksInBlastZone", camSecondsToMilliseconds(9));
 		setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
 		setTimer("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
+		if (camAllowInsaneSpawns())
+		{
+			setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
+		}
 		removeTimer("checkTime");
 	}
 }
@@ -359,7 +385,7 @@ function eventStartLevel()
 		{played: false, video: "MB3_AD2_MSG6", type: CAMP_MSG, res: mis_researchTargets.missileCode3},
 	];
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_3_4S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gammaEnd.pre, {
 		callback: "checkMissileSilos"
 	});
 

@@ -27,6 +27,7 @@
 #include "widget.h"
 #include "scrollbar.h"
 #include "cliprect.h"
+#include "lib/ivis_opengl/pietypes.h"
 
 class ScrollableListWidget : public WIDGET
 {
@@ -44,16 +45,21 @@ public:
 	}
 
 	void run(W_CONTEXT *psContext) override;
-	void addItem(const std::shared_ptr<WIDGET> &widget);
+	size_t addItem(const std::shared_ptr<WIDGET> &widget);
 	size_t numItems() const;
+	std::shared_ptr<WIDGET> getItemAtIdx(size_t itemNum) const;
+	const std::vector<std::shared_ptr<WIDGET>>& getItems() const;
 	void clear();
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void enableScroll();
 	void disableScroll();
 	void setStickToBottom(bool value);
 	void setPadding(Padding const &rect);
+	const Padding& getPadding() const;
+	void setDrawRowLines(bool bEnabled);
 	void setSnapOffset(bool value);
 	void setBackgroundColor(PIELIGHT const &color);
+	void setBorderColor(PIELIGHT const &color);
 	void setItemSpacing(uint32_t value);
 	uint32_t getItemSpacing() const { return itemSpacing; }
 	uint32_t calculateListViewHeight() const;
@@ -66,10 +72,15 @@ public:
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
 	void scrollToItem(size_t itemNum);
+	void scrollEnsureItemVisible(size_t itemNum);
+	bool isItemVisible(size_t itemNum);
 	int32_t getCurrentYPosOfItem(size_t itemNum);
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
 	void setListTransparentToMouse(bool hasMouseTransparency);
+	void setLayoutDirty();
+	std::shared_ptr<WIDGET> getItemAtYPos(int32_t yPos);
+	optional<size_t> getItemIdxAtYPos(int32_t yPos);
 
 protected:
 	void geometryChanged() override;
@@ -82,9 +93,14 @@ private:
 	bool layoutDirty = false;
 	Padding padding = {0, 0, 0, 0};
 	PIELIGHT backgroundColor;
+	PIELIGHT borderColor;
 	uint32_t itemSpacing = 0;
 	int scrollbarWidth = 0;
 	bool expandWidthWhenScrollbarInvisible = true;
+	bool drawRowLines = false;
+	PIELIGHT rowLinesColor;
+	size_t topVisibleItemIdx = 0;
+	std::vector<PIERECT_DrawRequest> lineDraws;
 
 	uint32_t snappedOffset();
 	void updateLayout();

@@ -1,0 +1,723 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: warzone2100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2024-06-12 03:55+0000\n"
+"PO-Revision-Date: 2024-06-28 02:18\n"
+"Last-Translator: \n"
+"Language-Team: Czech\n"
+"Language: cs_CZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
+"X-Crowdin-Language: cs\n"
+"X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
+"X-Crowdin-File-ID: 360\n"
+
+msgid "Artifacts"
+msgstr "Artefakty"
+
+msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
+msgstr "Při procházení kampaní budeš sbírat artefakty z nepřátelských základen a určitých jednotek."
+
+msgid "These will unlock valuable technologies that you can research in a Research Facility."
+msgstr "Ty odemknou cenné technologie, které můžeš vyzkoumat ve výzkumném zařízení."
+
+msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
+msgstr "Artefakty jsou malé bílé krabice se zeleným indikátorem nad sebou, a lze je sebrat tím že se k nim přiblížíš jakoukoli jednotkou."
+
+msgid "All artifacts must be picked up as part of each level's victory conditions."
+msgstr "Všechny artefakty musí být sebrány aby bylo možné úspěšně dokončit misi."
+
+msgid "Backstory"
+msgstr "Historie"
+
+msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
+msgstr "Koncem 21. století NASDA (Severoamerická strategická obranná agentura) vyvinula a rozmístila rozsáhlý systém protiraketové obrany, včetně sítě satelitů nesoucích jaderné zbraně a pozemních odpalovacích zařízení."
+
+msgid "However, during a routine maintenance check, something went terribly wrong..."
+msgstr "Avšak během rutinní údržbové kontroly se něco strašlivě pokazilo..."
+
+msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
+msgstr "Kolaps byl rychlý. Po technické chybě v satelitním obranném systému byly na velká města po celém světě vypáleny jaderné hlavice."
+
+msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
+msgstr "O pár minut pozdějí vystřelily pozemní sila v reakci na odpálení. Miliony lidí zemřely v jaderné bouři co zničila největší světová města. Miliardy dalších zemřely později na jaderné zamoření a epidemie, čímž byl zničen zbytek lidské civilizace."
+
+msgid "Less than a million people survived the Collapse."
+msgstr "Kolaps přežil méně než milion lidí."
+
+msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
+msgstr "Země se rozpadla do stovek malých banditích skupin bojujících o zbytky surovin bývalé civilizace. Jen hrstka těchto skupin přišla s plánem se pokusit o vybudování nového světa z popela starého."
+
+msgid "## Present Day:"
+msgstr "## Současnost:"
+
+msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
+msgstr "Hráč (nazývaný \"Velitel\") je součástí skupiny přeživších, kteří hledali útočiště ve vojenské základně ve Skalnatých horách."
+
+msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
+msgstr "Rozhodli se přestat schovávat v základně a dali si za cíl obnovit svět. Pojmenovali se \"Projekt\"."
+
+msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
+msgstr "Projekt vyslal tři týmy které mají za úkol nalézt a získat artefakty, čímž se umožní výzkum a použití technologií z dob před Kolapsem."
+
+msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
+msgstr "- Tým Alfa je odeslán na poušť Arizonu, jihovýchodně od velitelství Projektu"
+
+msgid "- Beta team is sent to the remains of Chicago"
+msgstr "- Tým Beta je vyslán do ruin Chicaga"
+
+msgid "- Gamma team is sent into the northern Rockies in Colorado"
+msgstr "- Tým Gama je poslán do severní části Skalnatých hor v Coloradu"
+
+msgid "Command Panel"
+msgstr "Příkazový Panel"
+
+msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
+msgstr "Je šest příkazových rozhraní k ovládání hry, plus tlačítko uprostřed. Stisknutím příslušného tlačítka otevřete příkazové rozhraní."
+
+msgid "The middle / central button closes any open command interface."
+msgstr "Prostřední tlačítko zavře jakékoli otevřené příkazové rozhraní."
+
+msgid "Intelligence Display"
+msgstr "Zpravodajské okno"
+
+msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
+msgstr "Zpravodajské okno je místo, kde můžeš najít aktuální cíle mise, příhrát brífinky a přečíst si více informací o dokončených výzkumných projektech."
+
+msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
+msgstr "Když otevřeš Zpravodajský displej, tak se na spodní části obrazovky zobrazí dva řádky ikonek."
+
+msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
+msgstr "Kliknutím na ikonku se uprostřed obrazovky zobrazí informace o daném cíli či výzkumu."
+
+msgid "Using the Mission Timer"
+msgstr "Časovač misí"
+
+msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
+msgstr "Častokrát budeš v časové tísni. Někdy si budeš přát abys měl více času. Jindy ti zase bude připadat že času máš až příliš."
+
+msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
+msgstr "Vždy existují způsoby jak chytře využít přebývající čas k přípravě na nadcházející bitvy."
+
+msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
+msgstr "Můžeš ho využít k výzkumu, výstavbě obrany, recyklování a nahrazování jednotek verzemi s lepšími technologiemi... neplýtvej časem."
+
+msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
+msgstr "(Pokud sis nevypnul v nastaveních Bonus Energie z časovače, nemusíš čekat s dokončením mise než dojde časovač protože nechceš přijít o energii. Automaticky získáš energii kterou bys získal pokud bys nechal časovač doběhnout.)"
+
+msgid "Power"
+msgstr "Energie"
+
+msgid "In Warzone 2100, power is your key resource."
+msgstr "Energie je v této hře jediný zdroj."
+
+msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
+msgstr "Energie je potřeba ke stavbě struktur, výrobě jednotek, a k výzkumu vylepšení a nových technologií."
+
+msgid "Power is generated by Power Generators that are fed by Oil Derricks."
+msgstr "Energie se vyrábí v generátorech energie které přeměňují v elektřinu ropu z ropných vrtů."
+
+msgid "Researching Technology"
+msgstr "Výzkum"
+
+msgid "Researching technologies is accomplished using Research Facilities."
+msgstr "Výzkum je realizován ve Výzkumných střediskách."
+
+msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
+msgstr "Když klikneš na výzkumné středisko, všechny dostupné výzkumné projekty se zobrazí na levé straně obrazovky."
+
+msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
+msgstr "K dokončení výzkumu technologíí je potřeba čas a energie. Investice energie je nevratná."
+
+msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
+msgstr "Pokrok ve výzkumu se ale neztratí, a to i když přijdeš o dané výzkumné středisko. Mužeš ve výzkumu pokračovat v jiném středisku přesně kde byl výzkum přerušen."
+
+msgid "Completing research of a new technology may:"
+msgstr "Dokončení výzkumu technologie může:"
+
+msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
+msgstr "- Zpřístupnit nové zbraně, struktury, těla jednotek, pojony, apod."
+
+msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
+msgstr "- Vylepšit již existující zbraně, struktury, těla jednotek, apod."
+
+msgid "- Enable the research of additional technologies"
+msgstr "- Umožnit výzkum dalších technologií"
+
+msgid "General"
+msgstr "Obecné"
+
+msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
+msgstr "Ve hře Warzone 2100 velíš jednotkám \"Projektu\" v bitvě za obnovu světa, kde bylo lidstvo téměř zničeno jadernými zbraněmi."
+
+msgid "This guide will help walk you through key facets of the game."
+msgstr "Tento průvodce ti pomůže s klíčovými aspekty hry."
+
+msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
+msgstr "(Pokud hraješ kampaň, tak se ti během hraní budou objevovat nové kapitoly v tomto průvodci.)"
+
+msgid "Building Structures"
+msgstr "Budování staveb"
+
+msgid "Click the \"Build\" button on the Command Panel."
+msgstr "Klikni na ikonku \"Stavět\" na Příkazovém panelu."
+
+msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
+msgstr "Tím na levé straně obrazovky zobrazíš nabídku staveb které můžeš postavit."
+
+msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
+msgstr "Kliknutím na ikonku vybereš co chceš postavit. V herním světě se objeví silueta dané stavby - na tom místě se bude stavět jakmile potvrdíš výstavbu."
+
+msgid "Move the silhouette by moving the input device."
+msgstr "Se siluetou se dá hýbat pomocí vstupního zařízení (např. počítačová myš)."
+
+msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
+msgstr "- Pokud je možné stavbu na daném místě postavit tak se silueta zbarví zeleně."
+
+msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
+msgstr "- Pokud to možné není, tak bude silueta červená."
+
+msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
+msgstr "Jakmile sis vybral vhodné místo, potvrď stavbu kliknutím levého tlačítka myši. Nejbližší konstruktérská jednotka přijede a začne stavět."
+
+msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
+msgstr "Můžeš říct dalším konstruktérským jednotkám aby se stavbou pomohly (a tím ji urychlily), tím že je vybereš a poté klikneš na rozestavěnou strukturu."
+
+msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+msgstr "Tip: Chceš-li zdi (jakmile budou přístupné), můžeš kliknout, podržet a poté posunout kurzor abys udělal řadu."
+
+msgid "Demolishing Structures"
+msgstr "Rozebírání staveb"
+
+msgid "Demolishing a building is almost as simple as building one."
+msgstr "Rozebrání stavby je stejně lehké jako postavit ji."
+
+msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
+msgstr "V nabídce výběru struktur klikni na \"Rozebrat stavbu\" a poté na stavbu co chceš rozebrat."
+
+msgid "A unit will move to the building and destroy it."
+msgstr "Ke stavbě přijede konstruktérská jednotka a rozebere ji."
+
+msgid "Demolished structures return half the power used to build the structure."
+msgstr "Rozebrání struktury ti vratí polovinu energie spotřebované na její postavení."
+
+msgid "Factory"
+msgstr "Továrna"
+
+msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "Továrna vyrábí jednotky. Každá továrna muže vyrábět jen jednu jednotku najednou, ale můžeš do fronty zařadit další jednotky."
+
+msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
+msgstr "Když je jednotka vyrobena, obdrží rozkazy továrny a zamíří ke Shromažďovacímu bodu továrny."
+
+msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
+msgstr "Poznámka: Základní továrna je schopna vyrábět pouze jednotky s lehkými těly. Tovární moduly musí být vyzkoumány a postaveny k vylepšení výrobních schopností továrny."
+
+msgid "Command Center"
+msgstr "Velitelské Centrum"
+
+msgid "The Command Center is the headquarters of your base."
+msgstr "Velitelské středisko je ústředí tvojí základny."
+
+msgid "It provides access to the mini-map / radar, and the ability to design units."
+msgstr "Poskytuje minimapu a umožnuje navrhování šablon jednotek."
+
+msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
+msgstr "Velitelské středisko můžeš postavit kliknutím na tlačítko \"Stavět\" na Příkazovém panelu a vybráním Velitelského střediska."
+
+msgid "Then, click where you want your builders to construct it."
+msgstr "Poté klikni na místo kde ho chceš postavit."
+
+msgid "Structure Modules"
+msgstr "Moduly budov"
+
+msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
+msgstr "Generátory, Továrny, a Výzkumná střediska mohou být vylepšena moduly."
+
+msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
+msgstr "Po jejich výzkumu je najdeš v menu Staveb a mužeš je postavit na již exisujících budovách."
+
+msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
+msgstr "Nebo můžeš vybrat konstruktérskou jednotku a kliknutím na budovu tím automaticky zahájíš stavbu modulu."
+
+msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
+msgstr "Poznámka: Budova nemůže fungovat zatímco se na ní staví modul."
+
+msgid "Upgrade Effects:"
+msgstr "Efekty modulů:"
+
+msgid "- Power Generator modules increase the rate of power generation"
+msgstr "- Moduly pro generátory zvyšují množství vyráběné energie"
+
+msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
+msgstr "- Moduly pro továrny umožní produkci středních a těžkých tanků, a zároveň urychlí produkci jednotek"
+
+msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
+msgstr "- Moduly na výzkumná střediska snižují čas potřebný k výzkumu technologií"
+
+msgid "Oil Derrick"
+msgstr "Ropný vrt"
+
+msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
+msgstr "Ropný vrt lze postavit vybráním konstruktérské jednotky a kliknutím na volný zdroj ropy."
+
+msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
+msgstr "Zničení ropného vrtu na chvíli znemožní postavení nového dokud požár neskončí."
+
+msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
+msgstr "Aby byl ropný vrt využitý, musí být postaven generátor energie."
+
+msgid "Power Generator"
+msgstr "Generátor energie"
+
+msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
+msgstr "Každý generátor je schopný využít až čtyři ropné vrty. Například pokud máš 10 ropných vrtů, potřebuješ 3 generátory aby byly všechny vrty využity a aby nedocházelo ke ztrátě energie."
+
+msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
+msgstr "Na rozdíl od ropných vrtů mohou být generátory postaveny kdekoli. Pamatuj ale že generátory samotné energii nevyrábí."
+
+msgid "Rally Point"
+msgstr "Shromažďovací bod"
+
+msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
+msgstr "Jednotky vyrobené továrnou se objeví u továrny a poté zamíří ke shromažďovacímu bodu továrny."
+
+msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
+msgstr "Když je továrna postavena tak je Shromažďovací bod umístěn automaticky vedle továrny. Kliknutím na Shromažďovací bod ho můžeš posunout na jiné místo."
+
+msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
+msgstr "Poznámka: Přesunutí shromažďovacího bodu nezmění cíle již vyrobených jednotek."
+
+msgid "Repair Facility"
+msgstr "Opravovací stanice"
+
+msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
+msgstr "K opravovací stanici lze stáhnout poškozené jednotky a nechat je opravit."
+
+msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
+msgstr "Opravovací stanice opravují rychleji než mobilní opravárenské věže."
+
+msgid "Research Facility"
+msgstr "Výzkumné středisko"
+
+msgid "Research Facilities are required in order to research new technologies."
+msgstr "Výzkumná střediska jsou potřebak výzkumu nových technologií."
+
+msgid "Each Research Facility can research one technology at a time."
+msgstr "Každé výzkumné zařízení je schopno zkoumat jen jednu technologii najednou."
+
+msgid "VTOL Factory"
+msgstr "Továrna na VTOLy"
+
+msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
+msgstr "Továrna na VTOLy vyrabí jednotky s VTOL pohonem (tedy vzdušné jednotky)."
+
+msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "Každá továrna na VTOLy muže vyrábět jen jednu jednotku najednou, ale do fronty můžeš zařadit více jednotek."
+
+msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+msgstr "Jakmile se vyrobí jednotka tak odletí na Shromažďovací bod."
+
+msgid "Structures"
+msgstr "Budovy"
+
+msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
+msgstr "Budovy jsou naprosto nezbytné v této hře - od továren co vyrábí jednotky po výzkumná střediska která zkoumají nové technologie."
+
+msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
+msgstr "Budovy lze postavit konstruktérskými jednotkami."
+
+msgid "Attack Range"
+msgstr "Útočná vzdálenost"
+
+msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
+msgstr "V menu jednotky můžeš nastavit tři různé útočné vzdálenosti."
+
+msgid "- Optimum Range: Fires at the most accurate range"
+msgstr "- Optimální vzálenost: Bude střílet ve vzdálenosti kde je nejpřesnější"
+
+msgid "- Short Range: Moves to short range and attacks"
+msgstr "- Krátká vzdálenost: Útočí z blízké vzdálenosti"
+
+msgid "- Long Range: Attacks at long range (default)"
+msgstr "- Velká vzdálenost: Útočí z největší možné vzdálenosti (výchozí)"
+
+msgid "Firing Mode"
+msgstr "Útocný režim"
+
+msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
+msgstr "V menu jednotky můžeš nastavit tři různé útočné režimy."
+
+msgid "- Fire At Will: Fires at any enemy (default)"
+msgstr "- Pal dle libosti: Střílí na všechny nepřátelské jednotky (výchozí)"
+
+msgid "- Return Fire: Only fire if fired at"
+msgstr "- Opětuj palbu: Jednotka bude střílet pouze pokud ji nejdřív něco trefí"
+
+msgid "- Do Not Fire: Units will not fire"
+msgstr "- Nestřílej: Jednotka nebude střílet vůbec dokud nedostane přímý rozkaz"
+
+msgid "Movement"
+msgstr "Pohyb"
+
+msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
+msgstr "V menu jednotky můžeš nastavit různé režimy pohybu."
+
+msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
+msgstr "- Patrolovat: Jednotka se bude pohybovat mezi dvěma body - mezi svou nynější polohou a místem na které klikneš po vybrání režimu Patrolovat"
+
+msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
+msgstr "- Kroužit (pouze VTOLy): Jednotky budou kroužit okolo bodu na který klikneš poté co vybereš režim Kroužit"
+
+msgid "- Pursue: Pursue enemy"
+msgstr "- Pronásledovat: Pronásleduje nepřátele"
+
+msgid "- Guard: Stay near an area or structure. (default)"
+msgstr "- Strážit: Zůstávej téměř na místě (výchozí)"
+
+msgid "- Hold Position: Do not move under any circumstances"
+msgstr "- Drž pozici: Za žádných okolností se nehni"
+
+msgid "Recycling"
+msgstr "Recyklování"
+
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it."
+msgstr "Jednotka poslaná na recyklaci zamíří k nejbližší továrně nebo opravovací stanici a zničí ji."
+
+msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
+msgstr "Polovina energie spotřebovaná na výrobu jednotky bude vrácena. Pokud je jednotka poškozená, bude vráceno méně energie."
+
+msgid "The unit’s experience level will be placed in the next unit that is manufactured."
+msgstr "Zkušenosti recyklované jednotky se přesunou na první další jednotku kterou vyrobíš."
+
+msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
+msgstr "Příkaz k recyklacy vydáš skrze příkazové menu jednotky nebo pomocí klávesové zkratky pro recyklaci."
+
+msgid "Retreating"
+msgstr "Ustupování"
+
+msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
+msgstr "Ztráta jednotek, obvzlášť těch s hodně zkuženostmi, může mít velký dopad na tvoji schopnost vést efektivní boj."
+
+msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
+msgstr "V příkazovém panelu jednotky můžeš nastavit při jakém stavu života by měla ustoupit z frontové linie."
+
+msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
+msgstr "- Na život a na smrt: Jednotka neustoupí dokud jí to nebude přikázáno (výchozí)"
+
+msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
+msgstr "- Ustoupit při středním poškození: Jednotka ustoupí když její ukazatel života zežloutne"
+
+msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
+msgstr "- Ustoupit při těžkém poškození: Jednotka se stáhne když její ukazatel života zčervená"
+
+msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
+msgstr "Jednotky ustoupí k nejbližší opravovací staniic, jednotce s opravovací věží, k velitelství, nebo k přistávací zóně."
+
+msgid "Return To"
+msgstr "Příkaz Vrať se"
+
+msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
+msgstr "Skrze Příkazový panel jednotky jí můžeš dát rozkaz aby se vrátila na určité místo."
+
+msgid "- Return for Repair: Unit will return to a Repair Facility"
+msgstr "- Vrať se k opravě: Jednotka se vrátí k nejbližší opravovací stanici nebo jednotce"
+
+msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
+msgstr "- Vrať se na velitelství: Vrátí se zpátky k velitelství nebo k přistávací zóně (kampaň)"
+
+msgid "- Go To Transport: Unit will go to and board transport"
+msgstr "- Běž k transportu: Jednotka zamíří k nejbližšímu transportu a nastup do něj"
+
+msgid "Unit Orders"
+msgstr "Příkazový panel"
+
+msgid "Right-click a unit or group of units to show their current Unit Orders."
+msgstr "Kliknutím pravým tlačítkem na jednotku zobrazí na levé straně obrazovky příkazový panel dané jednotky."
+
+msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
+msgstr "Skrze příkazový panel můžeš jednotkám nařídit různé věci, například aby patrolovaly nebo se stáhly když mají málo života."
+
+msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
+msgstr "Kliknutím pravým tlačítkem na továrnu ti umožní nastavit výchozí příkazy pro všechny budoucí jednotky vyrobené v této továrně."
+
+msgid "Building Units"
+msgstr "Výroba jednotek"
+
+msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
+msgstr "Abys vyrobil jednotky, potřebuješ továrnu. Vyber jednu kliknutím na ní nebo kliknutím na tlačítko Výroba - tím otevřeš panel na levé straně obrazovky."
+
+msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+msgstr "Panel výroby zobrazuje šablony jednotek které jsou vyrobitelné právě vybranou továrnou. Je možné že továrny nebudou moci vyrobit jednotky s pokročilejšími těly dokud na nich nepostavíš moduly."
+
+msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
+msgstr "K vybrání jiné továrny stačí kliknout buď na příslušné tlačítko na panelo dole uprostřed obrazovky, nebo klikni na budovu továrny."
+
+msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
+msgstr "Jednotku vyrobíš kliknutím na příslušnou šablonu v panelu výroby. Můžeš naplánovat několik stejných jednotek opakovaným klikáním na šablonu."
+
+msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgstr "Jednotka co se právě vyrábí se ukáže v přehledu továren nad továrnou co ji vyrábí. Pokud je ukazatel průběhu výroby zelený, znamená to že není dostatek energie a továrna čeká. Pokud je žlutý, znamená to že se jedontka vyrábí."
+
+msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
+msgstr "Jakmile továrna vyrobí jednotku tak jí pošle na shromažďovací bod továrny."
+
+msgid "Attaching Units"
+msgstr "Přiřazování jednotek"
+
+msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
+msgstr "Abys přiřadil jednotku k veliteli, klikni na jednotku a poté na velitele ke kterému chceš jednotku přiřadit. U jednotky se zobrazí ukazatel toho že je přiřazená."
+
+msgid "## Limits:"
+msgstr "## Limity:"
+
+msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
+msgstr "Velitelé mají limit na počet přímých bojových jednotek (např. artilerie se do limitu nepočítá) který je daný jejich úrovní zkušeností. Úrovně velitelé získávají když zabijí 2 nepřátele, poté 4, 8, 16, 32, 64 atd."
+
+msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
+msgstr "Každá úroveň zkušeností umožní veliteli ovládat dvě další bojové jednotky. Nepřímých bojových jednotek může mít velitel neomezeně."
+
+msgid "Detaching Units"
+msgstr "Odebírání jednotek"
+
+msgid "To detach a unit from a Commander:"
+msgstr "K odebrání jednotky od velitele udělej toto:"
+
+msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
+msgstr "1. Klikni na jednotku pravým tlačítkem (nebo podrž Shift a klikni levým tlačítkem), čímž vybereš jen tuto jednotku (místo celé skupiny velitele)"
+
+msgid "2. Give the unit a new order (eg. move)"
+msgstr "2. Dej jednotce nový rozkaz (například ať se pohne)"
+
+msgid "Going for repairs, BRB"
+msgstr "Stahování se k opravě"
+
+msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
+msgstr "Jednotka co se stáhne z bitvy k opravovací stanici zůstane přiřazená ke skupině svého velitele."
+
+msgid "When it is done repairing, it will return to its Commander."
+msgstr "Jakmile je opravena tak se vrátí ke svému veliteli."
+
+msgid "Targeting"
+msgstr "Zaměřování"
+
+msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
+msgstr "Když si veliteli přikážeš aby zaútočil na nepřátelskou jednotku, všechny jednotky k němu přiřazené se přesunou tak aby na tu jednotku mohly útočit."
+
+msgid "The attached units will have greater accuracy when firing."
+msgstr "Budou také přesnější."
+
+msgid "Commanders"
+msgstr "Velitelé"
+
+msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
+msgstr "Velitelé se používají podobně jako senzory, ale je možné k nim přiřadit jakoukoli jednotku, ne jen artilerii."
+
+msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
+msgstr "Velitelé zlepšují přesnost, odolnost, a rychlost všech jednotek k nim přiřazených. Tyto bonusy se zvyšují s úrovní velitele."
+
+msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
+msgstr "Velitel na první úrovní může ovládat jen 6 jednotek (mimo artilerie). Tento limit se s každou úrovní zvýší o 2, přičemž velitelé úrovně získávají rychle."
+
+msgid "Designing Units"
+msgstr "Navrhování šablon jednotek"
+
+msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
+msgstr "Klíčovým aspektem Warzone 2100 je navrhování jednotek. Pokud chceš dosáhnout vítězství tak budeš muset najít nejlepší kombinace."
+
+msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
+msgstr "Abys mohl začít navrhovat jednotky, klikni na tlačítko Šablony v panelu příkazů. Dva sloupce se objeví na levé straně obrazovky."
+
+msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
+msgstr "K vytvoření šablony klikni na \"prázdné\" zelené tělo v levém horním rohu. K upravení již existující šablony klikni na ní."
+
+msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
+msgstr "Vytvoření nové šablony je jednoduchý proces zahrnující tři kroky: výběr těla, pohonu a zbraně/věže. Tyto tři části tvoří jednotku."
+
+msgid "Once you have designed a unit, you will need a Factory to build it."
+msgstr "Jakmile je šablona vytvořena, bude potřeba továrna aby ji vyrobila."
+
+msgid "Experience & Ranks"
+msgstr "Zkušenosti a úrovně"
+
+msgid "Units gain experience when they successfully dispatch enemies."
+msgstr "Jednotky získávají zkušenosti když zničí nepřátele."
+
+msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
+msgstr "Jednotky s vyšší úrovní jsou přesnější, rychlejší a odolnější."
+
+msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
+msgstr "Vedle života jednotky je ukazatel její úrovně."
+
+msgid "Units with higher experience levels can make all the difference in battle!"
+msgstr "Zkušenost jednotek může být rozhodující faktor bitvy!"
+
+msgid "Repairing Units"
+msgstr "Opravování jednotek"
+
+msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
+msgstr "Můžeš navrhnout jednotku s opravovací věží místo zbraně a nechat ji opravovat ostatní jednotky."
+
+msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
+msgstr "Také je múžeš nechat mimo přední linii a využít možnosti ústupu v nastavení jednotek k automatickému ústupu k opravě při určitém poškození."
+
+msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
+msgstr "Opraení jednotek je téměř vždy lepší než je ztratit."
+
+msgid "CB Sensors"
+msgstr "PB Senzory"
+
+msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
+msgstr "Protibateriové (PB) senzory výrazně změní bojiště tím že umožní artilerii pálit přímo na nepřátelskou artilerii - pokud je tedy v dosahu."
+
+msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
+msgstr "Poloha nalezených nepřátelských baterií bude označena červeně."
+
+msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
+msgstr "Artilerie preferuje střelbu po nepřátelkské artilerii místo na ostatní cíle."
+
+msgid "Un-Assigning"
+msgstr "Zrušení přiřazení"
+
+msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
+msgstr "Abys zrušil přiřazení jednotky k senzoru tak je nejjednodušší kliknout na jednoku pravým tlačítkem a nařídit jí aby se pohnula."
+
+msgid "Multiple units can be selected by holding CTRL while clicking."
+msgstr "Více jednotek najednou lze vybrat držením klávesy CTRL při klikání."
+
+msgid "Using Sensors"
+msgstr "Využívání radaru"
+
+msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
+msgstr "S bateriemi artilerie je to nejjednodušší. Stačí postavit radarovou věž a pokud je nějaká nepřátelská jednotka v dosahu tak na ni baterie vystřelí."
+
+msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
+msgstr "Tanková artilerie ovšem musí být přířazena k radaru aby fungovala. Toho dosáhneš vybráním daných jednotek a následným kliknutím na radar."
+
+msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
+msgstr "Jakmile je artilerie přiřazena tak jí daný radar bude automaticky vybírat cíle ve svém dosahu."
+
+msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
+msgstr "Pokud je artilerie přiřazena k radarovému tanku, tak tento radar může cíleně označít nepřátelské jednotky. Všechny tankové artilerie přiřazené k tomuto senzory na cíl zaútočí."
+
+msgid "Sensors"
+msgstr "Senzory"
+
+msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
+msgstr "Radary sice mohou sloužit průzkumu a sledování, mají ale ještě důležitější fuknci: být očima artilerie."
+
+msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
+msgstr "Artilerie sama o sobě nemůže střílet dále než vidí (což bez vylepšení činí 8 políček)."
+
+msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr "I nejjednodušší artilerie má ovšem dosah 18 políček. K využití tohoto dosahu budeš muset postavit či vyrobit postavit radary (buďto věže nebo tanky s radarem)."
+
+msgid "Attacking"
+msgstr "Útočení"
+
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr "Útočení s VTOLem je stejné jako s pozemními jednotkami - stačí jednotku vybrat a kliknout na nepřítele."
+
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr "Rozdíl je ovšem v tom že VTOLy mají omezený počet nábojů - to je indikováno bíle pod životem jednotky."
+
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr "Narozdíl od pozemních jednotek, které přebíjí automaticky, s sebou mají VTOLy omezený počet nábojů. Jakmile jim dojdou tak nemůžou útočit dokud nepřebijou."
+
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr "VTOL bez nábojů si automaticky najde volnou přezbrojovací plochu kde se opraví a přebije (a poté bude automaticky pokračovat v útočení), a nebo mu můžeš ručně přikázat aby přebil tím, že ho vybereš a klikneš na přezbrojovací plochu."
+
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr "Na rozdíl od pozemních jednotek které obvykle útočí samy od sebe, VTOLy na nic nezaútočí. Pokud ovšem klikneš s klávesou ALT na nějaké místo, tak tím VTOLům nařídíš aby hlídkovaliymezi tímto místem a místem kde se právě nachází a zároveň zaútočí na všechno v dosahu."
+
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr "VTOLy také mohou být přiřazeny k VTOL radarům a VTOL PB senzorům, a budou se chovat podobně jako pozemní jednotky přiřazené k normálním radarům a PB senzorům."
+
+msgid "Defending Against VTOLs"
+msgstr "Obrana proti VTOLům"
+
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr "Co je to tam na obloze?... Vzdušná jednotka VTOL!"
+
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr "Vzhledem k tomu že VTOLy nejsou pozamní jednotky, tak je většina zbraní určených k boji na zemi nezasáhne."
+
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr "Zasáhnout je mohou pouze protivzdušné (často zkracováno PV) nebo univerzální zbraně (mohou střílet na pozemní i vzdušné jednotky)."
+
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr "Je pouze několik univerzálních zbraní: kulomety, lasery, a miniraketomet."
+
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr "(všechny rakety a střely jsou také univerzální, ale pouze jejich verze pro kyborgy a VTOLy.)"
+
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr "Univerzální zbraně navíc nepoškozují VTOLy tolik jako protivzdušné zbraně, takže není dobré na ně spoléhat a vždycky mít i protivzdušné zbraně."
+
+msgid "Designing VTOLs"
+msgstr "Vytváření šablon VTOLů"
+
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr "Šablony VTOLů se dělají podobně jako šablony pozemních jednotek."
+
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr "Při výběru pohonu jednotky stačí vybrat pohon VTOL."
+
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr "Poté si budeš moci vybrat ze zbraní pro VTOLy."
+
+msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
+msgstr "Pamatuj: K výrobě VTOLů budeš potřebovat továrnu na VTOLy."
+
+msgid "Weapons"
+msgstr "Zbraně"
+
+msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
+msgstr "Většina zbraní má svojí verzi pro použití na VTOLech. Tyto verze dělají dvakrát tolik poškození jako pozemní verze, mají ale omezený počet nábojů."
+
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr "Tyto verze budou přístupné automaticky po vyzkoumání jejich pozemních verzí."
+
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr "VTOLy také mohou používat bomby. Bomby jsou ekvivalent artilerie a jsou velmi silné."
+
+msgid "VTOLs"
+msgstr "VTOLy"
+
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr "VTOLy (z anglického Vertical Take-Off and Landing, Svislý vzlet a přistání) jsou hlavní nástroj používaný k získání kontroly nad vzdušným prostorem."
+
+msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
+msgstr "K výrobě VTOLů musíš nejdřív vyzkoumat technologie \"Pohon VTOL\" a \"Továrna na VTOLy\"."
+
+msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
+msgstr "Také bys měl vyzkoumat a postavit několik Přezbrojovacích ploch pro VTOLy aby mohly přebíjet."
+
+msgid "Weapon Selection"
+msgstr "Výběr zbraní"
+
+msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
+msgstr "Postupem času budeš mít k dispozici více druhů zbraní, a zjistíš že některé fungují mnohem lépe proti určitým typům nepřátel nebo struktur než jiné zbraně."
+
+msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
+msgstr "Když dokončíš výzkum zbraně, tak se ti ve Zpravodajském panelu zobrazí zpráva s informacemi o dané zbrani."
+
+msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
+msgstr "Je dobrý nápad experimentovat s různými typy zbraní. Pokud máš v boji problémy a tvoje armáda se už dlouhou dobu skládá ze stejných typů zbraní, tak je dobrý čas zkusit nové kombinace a lepší verze zbraní!"
+
+msgid "Units"
+msgstr "Jednotky"
+
+msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
+msgstr "K přemožení nepřátle budeš muset navrhnout a vyrobit jednotky."
+
+msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
+msgstr "Tento aspekt hry je to, co děla Warzone 2100 unikátní hrou."
+
+msgid "To be able to design units, a Command Center is required."
+msgstr "K vytvoření šablon jednotek je potřeba Velitelství."

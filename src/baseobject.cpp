@@ -45,6 +45,15 @@ static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
+	if (t1 == t2)
+	{
+		// spacetime overlap
+#ifdef DEBUG
+		ASSERT(t1 != t2, "Spacetime overlap!");
+#endif
+		// just return v2 (the current rotation)
+		return v2;
+	}
 	//return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
 	return Rotation(interpolateAngle(v1.direction, v2.direction, t1, t2, t),
 	                interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
@@ -55,7 +64,7 @@ Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint
 static Spacetime interpolateSpacetime(Spacetime st1, Spacetime st2, uint32_t t)
 {
 	// Cyp says this should never happen, #3037 and #3238 say it does though.
-	ASSERT_OR_RETURN(st1, st1.time != st2.time, "Spacetime overlap!");
+	ASSERT_OR_RETURN(st2, st1.time != st2.time, "Spacetime overlap!");
 	return Spacetime(interpolatePos(st1.pos, st2.pos, st1.time, st2.time, t), interpolateRot(st1.rot, st2.rot, st1.time, st2.time, t), t);
 }
 
@@ -85,9 +94,6 @@ SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 SIMPLE_OBJECT::~SIMPLE_OBJECT()
 {
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-
 	const_cast<OBJECT_TYPE volatile &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
 	const_cast<UBYTE volatile &>(player) += 100;                                  // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
 }
@@ -227,4 +233,22 @@ StructureBounds getStructureBounds(BASE_STATS const *stats, Vector2i pos, uint16
 	}
 
 	return StructureBounds(map_coord(pos), Vector2i(1, 1));  // Default to a 1×1 tile.
+}
+
+// Reset animation state so some units don't walk in place in the menu sometimes.
+void resetObjectAnimationState(BASE_OBJECT *psObj)
+{
+	if (psObj == nullptr)
+	{
+		return;
+	}
+	if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE)
+	{
+		psObj->timeAnimationStarted = 0;
+		psObj->animationEvent = ANIM_EVENT_NONE;
+	}
+	else
+	{
+		debug(LOG_WARNING, "Tried resetting animation state on unknown object type");
+	}
 }

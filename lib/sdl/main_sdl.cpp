@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
 // At this time, we only have 1 window.
 static SDL_Window *WZwindow = nullptr;
-static optional<video_backend> WZbackend = video_backend::opengl;
+static optional<video_backend> WZbackend = video_backend::vulkan;
 
 #if defined(WZ_OS_MAC) || defined(WZ_OS_WIN) || defined(__EMSCRIPTEN__)
 // on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
@@ -169,6 +169,7 @@ static Uint16 mouseXPos = 0;
 static Uint16 mouseYPos = 0;
 static Vector2i mouseWheelSpeed;
 static bool mouseInWindow = true;
+static bool windowHasFocus = true;
 
 /* How far the mouse has to move to start a drag */
 #define DRAG_THRESHOLD	5
@@ -392,104 +393,115 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
 }
 
-static std::vector<video_backend>& sortGfxBackendsForCurrentSystem(std::vector<video_backend>& backends)
-{
-#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
-	// On ARM-based Windows, DirectX should be first (for compatibility)
-	std::stable_sort(backends.begin(), backends.end(), [](video_backend a, video_backend b) -> bool {
-		if (a == b) { return false; }
-		if (a == video_backend::directx) { return true; }
-		return false;
-	});
-#else
-	// currently, no-op
-#endif
-	return backends;
-}
-
 std::vector<video_backend> wzAvailableGfxBackends()
 {
 	std::vector<video_backend> availableBackends;
-#if !defined(__EMSCRIPTEN__)
+#if defined(__EMSCRIPTEN__)
+// EMSCRIPTEN:
+	// - Only supports OpenGL ES (WebGL) backend
+	availableBackends.push_back(video_backend::opengles);
+#elif defined(WZ_OS_WIN)
+// WINDOWS:
+# if defined(_M_X64) || defined(_M_IX86)
+	// [X86, X64 Builds]
+	// - Order is: Vulkan, OpenGL, DirectX, OpenGL ES
+#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#   endif
 	availableBackends.push_back(video_backend::opengl);
-#endif
-#if !defined(WZ_OS_MAC) // OpenGL ES is not supported on macOS, and WZ doesn't currently ship with an OpenGL ES library on macOS
+#   if defined(WZ_BACKEND_DIRECTX)
+	availableBackends.push_back(video_backend::directx);
+#   endif
+	availableBackends.push_back(video_backend::opengles);
+# else // !(defined(_M_X64) || defined(_M_IX86) // ARM, ARM64, etc
+	// [Other Builds: ARM64, etc]
+	// For newer architectures (example: ARM64):
+	// - The assumption is that OpenGL is least likely to have native / good drivers (probably using a compatibility layer, if anything)
+	// - But many ARM64 devices are shipping with native Vulkan drivers
+	// - Order is: Vulkan, DirectX, OpenGL, OpenGL ES
+#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#   endif
+#   if defined(WZ_BACKEND_DIRECTX)
+	availableBackends.push_back(video_backend::directx);
+#   endif
+	availableBackends.push_back(video_backend::opengl);
+	availableBackends.push_back(video_backend::opengles);
+# endif // (defined(_M_X64) || defined(_M_IX86)
+#elif defined(WZ_OS_MAC)
+// MACOS:
+	// - Order is: Vulkan, OpenGL
+#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#   endif
+	availableBackends.push_back(video_backend::opengl);
+#elif defined(WZ_OS_UNIX)
+// LINUX / UNIX:
+	// We'd *like* to default to Vulkan first here,
+	// But an SDL2 bug (fixed in SDL3) may cause attempts to show a message box (which can happen when Vulkan fails) on X11 to crash.
+	// So for now, the order is still: OpenGL, OpenGL ES, Vulkan
+	// FUTURE TODO: Once ported to SDL3, switch this to: Vulkan, OpenGL, OpenGL ES (?)
+	availableBackends.push_back(video_backend::opengl);
+	availableBackends.push_back(video_backend::opengles);
+#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#   endif
+#else
+// Anything else:
+	// Default to offering Vulkan, OpenGL, OpenGL ES
+#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#   endif
+	availableBackends.push_back(video_backend::opengl);
 	availableBackends.push_back(video_backend::opengles);
 #endif
-#if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
-	availableBackends.push_back(video_backend::vulkan);
-#endif
-#if defined(WZ_BACKEND_DIRECTX)
-	availableBackends.push_back(video_backend::directx);
-#endif
-	sortGfxBackendsForCurrentSystem(availableBackends);
 	return availableBackends;
 }
 
 video_backend wzGetDefaultGfxBackendForCurrentSystem()
 {
-	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
-
-#if defined(__EMSCRIPTEN__)
-	// For Emscripten, OpenGLES (WebGL) should be the default
-	return video_backend::opengles;
-#elif defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
-	// On ARM-based Windows, DirectX should be the default (for compatibility)
-	return video_backend::directx;
-#else
-	// Future TODO examples:
-	//	- Default to Vulkan backend on macOS versions > 10.??, to use Metal via MoltenVK (needs testing - and may require exclusions depending on hardware?)
-	//	- Default to DirectX (via LibANGLE) backend on Windows, depending on Windows version (and possibly hardware? / DirectX-level support?)
-	//	- Check if Vulkan appears to be properly supported on a Windows / Linux system, and default to Vulkan backend?
-
-	// For now, default to OpenGL (which automatically falls back to OpenGL ES if needed)
-	return video_backend::opengl;
-#endif
+	auto availableBackends = wzAvailableGfxBackends();
+	ASSERT_OR_RETURN(video_backend::opengl, !availableBackends.empty(), "Available backends list is empty?");
+	return availableBackends.front();
 }
 
 static video_backend wzGetNextFallbackGfxBackendForCurrentSystem(const video_backend& current_failed_backend)
 {
 	video_backend next_backend;
-#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX)
-	switch (current_failed_backend)
-	{
-		case video_backend::opengl:
-			// offer DirectX as a fallback option if OpenGL failed
-			next_backend = video_backend::directx;
-			break;
-#if (defined(_M_ARM64) || defined(_M_ARM))
-		case video_backend::directx:
-			// since DirectX is the default on ARM-based Windows, offer OpenGL as an alternative
-			next_backend = video_backend::opengl;
-			break;
-#endif
-		default:
-			// offer usual default
-			next_backend = wzGetDefaultGfxBackendForCurrentSystem();
-			break;
-	}
-#elif defined(WZ_OS_MAC)
-	switch (current_failed_backend)
-	{
-		case video_backend::opengl:
-			// offer Vulkan (which uses Vulkan -> Metal) as a fallback option if OpenGL failed
-			next_backend = video_backend::vulkan;
-			break;
-		default:
-			// offer usual default
-			next_backend = wzGetDefaultGfxBackendForCurrentSystem();
-			break;
-	}
-#else
-	next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+
+	// get sorted list of backends
+	auto sortedBackends = wzAvailableGfxBackends();
+#if defined(WZ_OS_WIN)
+	// Never offer OpenGL ES as a fallback option on Windows
+	sortedBackends.erase(std::remove(sortedBackends.begin(), sortedBackends.end(), video_backend::opengles), sortedBackends.end());
 #endif
 
-	// sanity-check: verify that next_backend is in available backends
-	const auto available = wzAvailableGfxBackends();
-	if (std::find(available.begin(), available.end(), next_backend) == available.end())
+	if (sortedBackends.empty())
 	{
-		// next_backend does not exist in the list of available backends, so default to wzGetDefaultGfxBackendForCurrentSystem()
-		next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+		// nothing to do - return the default
+		return wzGetDefaultGfxBackendForCurrentSystem();
+	}
+
+	// find the position of the current backend in the sorted list
+	auto it = std::find(sortedBackends.begin(), sortedBackends.end(), current_failed_backend);
+	if (it != sortedBackends.end())
+	{
+		auto it_next = it + 1;
+		if (it_next != sortedBackends.end())
+		{
+			next_backend = *it_next;
+		}
+		else
+		{
+			// loop back to the first
+			next_backend = sortedBackends.front();
+		}
+	}
+	else
+	{
+		debug(LOG_INFO, "Current failed backend is not in the available backends list: %s", to_display_string(current_failed_backend).c_str());
+		// use the first backend
+		next_backend = sortedBackends.front();
 	}
 
 	return next_backend;
@@ -770,6 +782,39 @@ WINDOW_MODE wzGetToggleFullscreenMode()
 	return altEnterToggleFullscreenMode;
 }
 
+void wzPostChangedSwapInterval()
+{
+#ifdef WZ_OS_MAC
+	if (WZbackend == video_backend::vulkan)
+	{
+		// If using Vulkan backend (and, thus, MoltenVK),
+		// Workaround MoltenVK issue (doesn't seem to fully accept the recreated swapchain until window resize event?)
+		// - Trigger a window resize event (regardless of current window mode)
+		auto currentMode = wzGetCurrentWindowMode();
+		switch (currentMode)
+		{
+			case WINDOW_MODE::desktop_fullscreen:
+			case WINDOW_MODE::fullscreen:
+				if (wzChangeWindowMode(WINDOW_MODE::windowed))
+				{
+					wzChangeWindowMode(currentMode);
+				}
+				break;
+			case WINDOW_MODE::windowed:
+				int currWidth = 0, currHeight = 0;
+				SDL_GetWindowSize(WZwindow, &currWidth, &currHeight);
+
+				// set one bigger than current size
+				SDL_SetWindowSize(WZwindow, currWidth+1, currHeight+1);
+
+				// restore the old windowed size
+				SDL_SetWindowSize(WZwindow, currWidth, currHeight);
+				break;
+		}
+	}
+#endif
+}
+
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 {
 	auto previousMode = wzGetCurrentWindowMode();
@@ -901,6 +946,11 @@ bool wzIsMaximized()
 		return true;
 	}
 	return false;
+}
+
+bool wzWindowHasFocus()
+{
+	return windowHasFocus;
 }
 
 void wzQuit(int exitCode)
@@ -2662,7 +2712,7 @@ static bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
 	return true;
 }
 
-void wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLES, bool useOpenGLESLibrary)
+bool wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLES, bool useOpenGLESLibrary)
 {
 	// Set OpenGL attributes before creating the SDL Window
 
@@ -2695,10 +2745,11 @@ void wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLE
 	if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
 	{
 		// Failed to configure OpenGL context request
-		debug(LOG_FATAL, "Failed to configure OpenGL context request");
-		SDL_Quit();
-		exit(EXIT_FAILURE);
+		debug(LOG_INFO, "Failed to configure initial OpenGL context request");
+		return false;
 	}
+
+	return true;
 }
 
 void wzSDLPreWindowCreate_InitVulkanLibrary()
@@ -2716,8 +2767,32 @@ void wzSDLPreWindowCreate_InitVulkanLibrary()
 #endif
 }
 
-// This stage, we handle display mode setting
-optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoWindow(const video_backend& backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, bool highDPI)
+class WzInitializeBackendError : public std::runtime_error
+{
+public:
+	WzInitializeBackendError(const std::string& what_arg)
+	: std::runtime_error(what_arg)
+	{ }
+};
+
+class WzCreateWindowError : public WzInitializeBackendError
+{
+public:
+	WzCreateWindowError(const std::string& what_arg)
+	: WzInitializeBackendError(what_arg)
+	{ }
+};
+
+class WzInitializeGraphicsContextError : public WzInitializeBackendError
+{
+public:
+	WzInitializeGraphicsContextError(const std::string& what_arg)
+	: WzInitializeBackendError(what_arg)
+	{ }
+};
+
+// May throw a WzInitializeBackendError
+optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoWindow(const video_backend& backend, int antialiasing, WINDOW_MODE fullscreen, bool highDPI)
 {
 	const bool useOpenGLES = (backend == video_backend::opengles)
 #if defined(WZ_BACKEND_DIRECTX)
@@ -2750,7 +2825,10 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 
 	if (usesSDLBackend_OpenGL)
 	{
-		wzSDLPreWindowCreate_InitOpenGLAttributes(antialiasing, useOpenGLES, useOpenGLESLibrary);
+		if (!wzSDLPreWindowCreate_InitOpenGLAttributes(antialiasing, useOpenGLES, useOpenGLESLibrary))
+		{
+			throw WzCreateWindowError("Failed to preinitialize the window OpenGL attributes");
+		}
 	}
 	else if (backend == video_backend::vulkan)
 	{
@@ -2961,18 +3039,8 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	if (!WZwindow)
 	{
 		std::string createWindowErrorStr = SDL_GetError();
-		video_backend defaultBackend = wzGetNextFallbackGfxBackendForCurrentSystem(backend);
-		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend, "window", createWindowErrorStr))
-		{
-			resetGfxBackend(defaultBackend);
-			return nullopt; // must return so new configuration will be saved
-		}
-		else
-		{
-			debug(LOG_FATAL, "Can't create a window, because: %s", createWindowErrorStr.c_str());
-		}
-		SDL_Quit();
-		exit(EXIT_FAILURE);
+		debug(LOG_INFO, "Failed to create a window, because: %s", createWindowErrorStr.c_str());
+		throw WzCreateWindowError(createWindowErrorStr);
 	}
 
 	// Always set the fullscreen mode (so switching works to the desired mode, even if we don't start in fullscreen mode)
@@ -3132,6 +3200,222 @@ bool wzMainScreenSetup_VerifyWindow()
 	return true;
 }
 
+#if defined(WZ_OS_WIN)
+class ScopedWindowsProcessAffinityMaskChanger
+{
+public:
+	ScopedWindowsProcessAffinityMaskChanger(optional<video_backend> backend);
+	~ScopedWindowsProcessAffinityMaskChanger();
+	void restore();
+private:
+	DWORD_PTR originalProcessAffinityMask = 0;
+	DWORD_PTR systemAffinityMask = 0;
+	bool restoreAffinityMask = false;
+};
+
+ScopedWindowsProcessAffinityMaskChanger::ScopedWindowsProcessAffinityMaskChanger(optional<video_backend> backend)
+{
+	// Windows: Workaround for Nvidia "threaded optimization"
+	// Set the process affinity mask to 1 before creating the window and initializing OpenGL
+	// This may disable Nvidia's "threaded optimization" feature, which can cause issues with WZ in OpenGL mode
+	// NOTE: Must restore the affinity mask afterwards! (See restore() and the destructor)
+
+	if (backend.has_value() && (backend.value() == video_backend::opengl)) // only do this for OpenGL mode, for now
+	{
+		if (::GetProcessAffinityMask(::GetCurrentProcess(), &originalProcessAffinityMask, &systemAffinityMask) != 0)
+		{
+			if (::SetProcessAffinityMask(::GetCurrentProcess(), 1) != 0)
+			{
+				restoreAffinityMask = true;
+			}
+			else
+			{
+				debug(LOG_INFO, "Failed to set process affinity mask");
+			}
+		}
+		else
+		{
+			// Failed to get the current process affinity mask
+			debug(LOG_INFO, "Failed to get current process affinity mask");
+		}
+	}
+}
+
+void ScopedWindowsProcessAffinityMaskChanger::restore()
+{
+	if (restoreAffinityMask)
+	{
+		// restore process affinity mask
+		if (::SetProcessAffinityMask(::GetCurrentProcess(), originalProcessAffinityMask) != 0)
+		{
+			debug(LOG_WZ, "Restored process affinity mask");
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to restore process affinity mask");
+		}
+		restoreAffinityMask = false;
+	}
+}
+
+ScopedWindowsProcessAffinityMaskChanger::~ScopedWindowsProcessAffinityMaskChanger()
+{
+	restore();
+}
+#endif // WZ_OS_WIN
+
+// Note: May throw a WzInitializeBackendError
+static bool wzAttemptInitializeBackend(optional<video_backend> backend, int32_t antialiasing, WINDOW_MODE fullscreen, gfx_api::context::swap_interval_mode swapMode, optional<float> lodDistanceBias, uint32_t depthMapResolution)
+{
+	bool highDPI = true;
+
+	if (backend.has_value())
+	{
+		debug(LOG_INFO, "Attempting to initialize backend: %s", to_display_string(backend.value()).c_str());
+	}
+	else
+	{
+		debug(LOG_INFO, "Attempting to initialize backend: (headless)");
+	}
+
+#if defined(WZ_OS_WIN)
+	// Windows: Workaround for Nvidia "threaded optimization"
+	ScopedWindowsProcessAffinityMaskChanger win_scoped_process_affinity_changer(backend);
+#endif
+
+
+#if defined(__EMSCRIPTEN__)
+	wzemscripten_startup_ensure_canvas_displayed();
+#endif
+
+	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
+
+	if (backend.has_value())
+	{
+		auto result = wzMainScreenSetup_CreateVideoWindow(backend.value(), antialiasing, fullscreen, highDPI); // may throw, caller of wzAttemptInitializeBackend is expected to handle
+		if (!result.has_value())
+		{
+			return false;
+		}
+		sdl_impl_config = result.value();
+	}
+
+	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+
+	gfx_api::backend_type gfxapi_backend = gfx_api::backend_type::null_backend;
+	if (backend.has_value())
+	{
+		if (backend.value() == video_backend::vulkan)
+		{
+			gfxapi_backend = gfx_api::backend_type::vulkan_backend;
+		}
+		else
+		{
+			gfxapi_backend = gfx_api::backend_type::opengl_backend;
+		}
+	}
+
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, swapMode, lodDistanceBias, depthMapResolution, gfxapi_backend))
+	{
+		// Failed to initialize desired backend / renderer settings
+		if (backend.has_value())
+		{
+			// Destroy the window
+			if (WZwindow != nullptr)
+			{
+				SDL_DestroyWindow(WZwindow);
+				WZwindow = nullptr;
+			}
+			throw WzInitializeGraphicsContextError("Failed to initialize gfx_api::context");
+		}
+		else
+		{
+			// headless mode failed in gfx_api::context::initialize??
+			debug(LOG_FATAL, "gfx_api::context::get().initialize failed for headless-mode backend?");
+		}
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+
+	if (backend.has_value())
+	{
+		wzMainScreenSetup_VerifyWindow();
+
+#if defined(__EMSCRIPTEN__)
+		// Catch the full screen change events
+		// - If user-initiated (i.e. by pressing ESC or similar to exit fullscreen), SDL does not currently expose this event
+		// - SDL itself sets a fullscreenchange callback on the document, which must remain for SDL functionality - fortunately, emscripten lets us set one on the canvas element itself
+		emscripten_set_fullscreenchange_callback("#canvas", nullptr, 0, wz_emscripten_fullscreenchange_callback);
+
+		auto mode = wzGetCurrentWindowMode();
+		if (mode == WINDOW_MODE::windowed)
+		{
+			// Enable "soft fullscreen" - where the canvas automatically fills the window
+			wz_emscripten_enable_soft_fullscreen();
+		}
+#endif
+	}
+
+#if defined(WZ_OS_WIN)
+	win_scoped_process_affinity_changer.restore();
+#endif
+
+	if (backend.has_value())
+	{
+		/* initialise all cursors */
+		if (war_GetColouredCursor())
+		{
+			sdlInitColoredCursors();
+		}
+		else
+		{
+			sdlInitCursors();
+		}
+	}
+
+#if defined(WZ_OS_MAC)
+	if (backend.has_value())
+	{
+		cocoaSetupWZMenus();
+	}
+#endif
+
+	return true;
+}
+
+void failedToInitializeAnyGraphicsBackendMessage_internal(const std::vector<std::string>& additionalErrorDetails)
+{
+	const SDL_MessageBoxButtonData buttons[] = {
+	   { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, _("Close") }
+	};
+	std::string titleString = std::string(_("Warzone 2100: Failed to initialize graphics"));
+	std::string messageString = std::string(_("Failed to initialize graphics for all backends.")) + "\n\n";
+	if (!additionalErrorDetails.empty())
+	{
+		messageString += std::string(_("Error Details:")) + "\n";
+		for (const auto& errStr : additionalErrorDetails)
+		{
+			messageString += errStr + "\n";
+		}
+		messageString += "\n\n";
+	}
+	messageString += _("Please update and/or reinstall your graphics drivers, and check your system settings.");
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_ERROR, /* .flags */
+		WZwindow, /* .window */
+		titleString.c_str(), /* .title */
+		messageString.c_str(), /* .message */
+		SDL_arraysize(buttons), /* .numbuttons */
+		buttons, /* .buttons */
+		nullptr /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		// error displaying message box
+		debug(LOG_FATAL, "Failed to display message box");
+	}
+}
+
 bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, int lodDistanceBiasPercentage, uint32_t depthMapResolution, bool highDPI)
 {
 	// Output linked SDL version
@@ -3196,87 +3480,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 			break;
 	}
 
-	WZbackend = backend;
-
-#if defined(WZ_OS_WIN)
-	// Windows: Workaround for Nvidia "threaded optimization"
-	// Set the process affinity mask to 1 before creating the window and initializing OpenGL
-	// This disables Nvidia's "threaded optimization" feature, which can cause issues with WZ in OpenGL mode
-	// NOTE: Must restore the affinity mask afterwards! (See below)
-	DWORD_PTR originalProcessAffinityMask = 0;
-	DWORD_PTR systemAffinityMask = 0;
-	bool restoreAffinityMask = false;
-
-	if (backend.has_value() && (backend.value() == video_backend::opengl)) // only do this for OpenGL mode, for now
-	{
-		if (::GetProcessAffinityMask(::GetCurrentProcess(), &originalProcessAffinityMask, &systemAffinityMask) != 0)
-		{
-			if (::SetProcessAffinityMask(::GetCurrentProcess(), 1) != 0)
-			{
-				restoreAffinityMask = true;
-			}
-			else
-			{
-				debug(LOG_INFO, "Failed to set process affinity mask");
-			}
-		}
-		else
-		{
-			// Failed to get the current process affinity mask
-			debug(LOG_INFO, "Failed to get current process affinity mask");
-		}
-	}
-#endif
-
-#if defined(__EMSCRIPTEN__)
-	wzemscripten_startup_ensure_canvas_displayed();
-#endif
-
-	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
-
-	if (backend.has_value())
-	{
-		auto result = wzMainScreenSetup_CreateVideoWindow(backend.value(), antialiasing, fullscreen, vsync, highDPI);
-		if (!result.has_value())
-		{
-			return false; // must return so new configuration will be saved
-		}
-		sdl_impl_config = result.value();
-
-		/* initialise all cursors */
-		if (war_GetColouredCursor())
-		{
-			sdlInitColoredCursors();
-		}
-		else
-		{
-			sdlInitCursors();
-		}
-	}
-
-	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
-
-#if defined(WZ_OS_MAC)
-	if (backend.has_value())
-	{
-		cocoaSetupWZMenus();
-	}
-#endif
-
-	const auto vsyncMode = to_swap_mode(vsync);
-
-	gfx_api::backend_type gfxapi_backend = gfx_api::backend_type::null_backend;
-	if (backend.has_value())
-	{
-		if (backend.value() == video_backend::vulkan)
-		{
-			gfxapi_backend = gfx_api::backend_type::vulkan_backend;
-		}
-		else
-		{
-			gfxapi_backend = gfx_api::backend_type::opengl_backend;
-		}
-	}
+	const auto swapMode = to_swap_mode(vsync);
 
 	optional<float> lodDistanceBias = nullopt;
 	if (lodDistanceBiasPercentage != 0)
@@ -3284,64 +3488,53 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		lodDistanceBias = static_cast<float>(lodDistanceBiasPercentage) / 100.f;
 	}
 
-	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, vsyncMode, lodDistanceBias, depthMapResolution, gfxapi_backend))
-	{
-		// Failed to initialize desired backend / renderer settings
-		if (backend.has_value())
+	auto availableBackends = wzAvailableGfxBackends();
+	optional<video_backend> requestedBackend = backend;
+	std::vector<std::string> backendInitErrors;
+	do {
+		bool success = false;
+		WZbackend = backend; // various other functions might need this before the call to wzAttemptInitializeBackend returns
+		try {
+			success = wzAttemptInitializeBackend(backend, antialiasing, fullscreen, swapMode, lodDistanceBias, depthMapResolution);
+		}
+		catch (const WzInitializeBackendError& e)
 		{
-			video_backend defaultBackend = wzGetNextFallbackGfxBackendForCurrentSystem(backend.value());
-			if ((backend.value() != defaultBackend) && shouldResetGfxBackendPrompt(backend.value(), defaultBackend))
+			if (backend.has_value())
 			{
-				resetGfxBackend(defaultBackend);
-				return false; // must return so new configuration will be saved
+				backendInitErrors.push_back(astringf("[%s]: %s", to_display_string(backend.value()).c_str(), e.what()));
 			}
-			else
-			{
-				debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend.value()).c_str());
-			}
+		}
+		if (success)
+		{
+			break;
 		}
 		else
 		{
-			// headless mode failed in gfx_api::context::initialize??
-			debug(LOG_FATAL, "gfx_api::context::get().initialize failed for headless-mode backend?");
-		}
-		SDL_Quit();
-		exit(EXIT_FAILURE);
-	}
+			if (!backend.has_value())
+			{
+				// if the null backend, and initialization failed, return false
+				return false;
+			}
 
-	if (backend.has_value())
+			availableBackends.erase(std::remove_if(availableBackends.begin(), availableBackends.end(), [&backend](video_backend a) { return a == backend.value(); }), availableBackends.end());
+			if (availableBackends.empty())
+			{
+				// No more backends to try :(
+				failedToInitializeAnyGraphicsBackendMessage_internal(backendInitErrors);
+				WZbackend = nullopt;
+				return false;
+			}
+			// Try with a new backend (first in the current list)
+			backend = availableBackends.front();
+		}
+	} while (backend.has_value());
+
+	if (requestedBackend.has_value() && backend.has_value() && (requestedBackend.value() != backend.value()))
 	{
-		wzMainScreenSetup_VerifyWindow();
-
-#if defined(__EMSCRIPTEN__)
-		// Catch the full screen change events
-		// - If user-initiated (i.e. by pressing ESC or similar to exit fullscreen), SDL does not currently expose this event
-		// - SDL itself sets a fullscreenchange callback on the document, which must remain for SDL functionality - fortunately, emscripten lets us set one on the canvas element itself
-		emscripten_set_fullscreenchange_callback("#canvas", nullptr, 0, wz_emscripten_fullscreenchange_callback);
-
-		auto mode = wzGetCurrentWindowMode();
-		if (mode == WINDOW_MODE::windowed)
-		{
-			// Enable "soft fullscreen" - where the canvas automatically fills the window
-			wz_emscripten_enable_soft_fullscreen();
-		}
-#endif
+		// ended up choosing a different backend at runtime - persist the new setting
+		resetGfxBackend(backend.value(), false);
+		saveGfxConfig(); // must force-persist the new value before returning!
 	}
-
-#if defined(WZ_OS_WIN)
-	if (restoreAffinityMask)
-	{
-		// restore process affinity mask
-		if (::SetProcessAffinityMask(::GetCurrentProcess(), originalProcessAffinityMask) != 0)
-		{
-			debug(LOG_WZ, "Restored process affinity mask");
-		}
-		else
-		{
-			debug(LOG_ERROR, "Failed to restore process affinity mask");
-		}
-	}
-#endif
 
 	return true;
 }
@@ -3588,19 +3781,21 @@ static void handleActiveEvent(SDL_Event *event)
 			}
 			break;
 		case SDL_WINDOWEVENT_ENTER:
+			mouseInWindow = true;
 			debug(LOG_WZ, "Mouse entered window %d", event->window.windowID);
 			wzQueueRefreshCursor();
 			break;
 		case SDL_WINDOWEVENT_LEAVE:
+			mouseInWindow = false;
 			debug(LOG_WZ, "Mouse left window %d", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
-			mouseInWindow = SDL_TRUE;
+			windowHasFocus = true;
 			wzQueueRefreshCursor();
 			debug(LOG_WZ, "Window %d gained keyboard focus", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
-			mouseInWindow = SDL_FALSE;
+			windowHasFocus = false;
 			debug(LOG_WZ, "Window %d lost keyboard focus", event->window.windowID);
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
@@ -3783,6 +3978,17 @@ uint64_t wzGetCurrentSystemRAM()
 {
 	int value = SDL_GetSystemRAM();
 	return (value > 0) ? static_cast<uint64_t>(value) : 0;
+}
+
+uint32_t wzGetLogicalCPUCount()
+{
+	auto result = SDL_GetCPUCount();
+	if (result <= 0)
+	{
+		debug(LOG_ERROR, "Failed to get logical CPU count - defaulting to 1");
+		result = 1;
+	}
+	return static_cast<uint32_t>(result);
 }
 
 // MARK: - Emscripten-specific functions

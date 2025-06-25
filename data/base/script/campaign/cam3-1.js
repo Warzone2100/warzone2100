@@ -26,18 +26,15 @@ const mis_nexusResClassic = [
 ];
 var launchInfo;
 var detonateInfo;
+var allInValley;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (droid.player !== CAM_HUMAN_PLAYER)
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
 	{
-		if (isVTOL(droid))
-		{
-			camSafeRemoveObject(droid, false);
-		}
+		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
@@ -72,43 +69,35 @@ camAreaEvent("hillTriggerZone", function(droid)
 
 function wave2()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXCommandCenter");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
-	const ext = {
-		limit: [2, 2], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 }
 
 function wave3()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXCommandCenter");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 }
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxmtherv];
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
+		const ext = {limit: [2, 3], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmtherv, cTempl.nxmtherv];
-		const ext = {
-			limit: [2, 2], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
@@ -145,6 +134,23 @@ function hoverAttack()
 		morale: 90,
 		fallback: camMakePos("swRetreat")
 	});
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxmrailh];
+	const limits = {minimum: 8, maxRandom: 4};
+	const location = ["northWestSpawnPos", "northEastSpawnPos"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 30;
+	const units = [cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmrailh];
+	const limits = {minimum: 5, maxRandom: 5};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
 //Setup next mission part if all missile silos are destroyed (setupNextMission()).
@@ -213,19 +219,29 @@ function setupNextMission()
 		camPlayVideos([cam_sounds.missile.launch.missileLaunchAborted, {video: "MB3_1B_MSG", type: CAMP_MSG}, {video: "MB3_1B_MSG2", type: MISS_MSG}]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
-		setMissionTime(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 25 : 30)));
+		camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 25 : 30)));
 
 		hackRemoveMessage("CM31_TAR_UPLINK", PROX_MSG, CAM_HUMAN_PLAYER);
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);
 
 		setReinforcementTime(-1);
 		removeTimer("setupNextMission");
+		if (camAllowInsaneSpawns())
+		{
+			queue("insaneReinforcementSpawn", camSecondsToMilliseconds(5));
+			setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
+		}
 	}
 }
 
 //Play countdown sounds. Elements are shifted out of the missile launch/detonation arrays as they play.
 function getCountdown()
 {
+	if (camDef(tweakOptions.infiniteTime) && tweakOptions.infiniteTime)
+	{
+		return; //Skip this with infinite time as a little optimization.
+	}
+
 	const ACCEPTABLE_TIME_DIFF = 2;
 	const SILOS_DESTROYED = missileSilosDestroyed();
 	const countdownObject = SILOS_DESTROYED ? detonateInfo : launchInfo;
@@ -273,6 +289,10 @@ function unitsInValley()
 	{
 		return;
 	}
+	if (allInValley)
+	{
+		return true;
+	}
 
 	const safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false).filter((obj) => (
 		obj.type === DROID
@@ -285,6 +305,7 @@ function unitsInValley()
 	{
 		if (nukeAndCountSurvivors())
 		{
+			allInValley = true;
 			return true;
 		}
 		else
@@ -302,6 +323,7 @@ function eventStartLevel()
 	const lz = getObject("landingZone");
 	const tEnt = getObject("transporterEntry");
 	const tExt = getObject("transporterExit");
+	allInValley = false;
 
 	//Time is in seconds.
 	launchInfo = [
@@ -338,8 +360,9 @@ function eventStartLevel()
 		{sound: cam_sounds.missile.countdown, time: 10},
 	];
 
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_3B", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.gamma3, {
 		area: "RTLZ",
+		playLzReminder: false,
 		reinforcements: camMinutesToSeconds(3),
 		callback: "unitsInValley"
 	});
@@ -434,4 +457,8 @@ function eventStartLevel()
 	queue("hoverAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
+	}
 }

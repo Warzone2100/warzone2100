@@ -27,6 +27,7 @@ const mis_nexusResClassic = [
 	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 	"R-Sys-NEXUSsensor",
 ];
+const mis_vtolSpawnPositions = ["vtolSpawnPos1", "vtolSpawnPos2"];
 var capturedSilos; // victory flag letting us know if we captured any silos.
 var mapLimit; //LasSat slowly creeps toward missile silos.
 var truckLocCounter;
@@ -60,6 +61,49 @@ camAreaEvent("NWDefenseZone", function(droid) {
 		regroup: true
 	});
 });
+
+//Remove Nexus VTOL droids.
+camAreaEvent("vtolRemoveZone", function(droid)
+{
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
+	{
+		camSafeRemoveObject(droid, false);
+	}
+	resetLabel("vtolRemoveZone", CAM_NEXUS);
+});
+
+function insaneWave2()
+{
+	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, mis_vtolSpawnPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+}
+
+function insaneWave3()
+{
+	const list = [cTempl.nxmtherv, cTempl.nxmtherv];
+	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, mis_vtolSpawnPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+}
+
+//Setup Nexus VTOL hit and runners. Choose a random spawn point for the VTOLs.
+function insaneVtolAttack()
+{
+	if (camClassicMode())
+	{
+		const list = [cTempl.nxmtherv, cTempl.nxmheapv];
+		const ext = {limit: [5, 5], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, mis_vtolSpawnPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+	}
+	else
+	{
+		const list = [cTempl.nxmheapv, cTempl.nxmheapv];
+		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, mis_vtolSpawnPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+		queue("insaneWave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("insaneWave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
+}
 
 function setupGroups()
 {
@@ -117,13 +161,43 @@ function truckDefense()
 	camQueueBuilding(CAM_NEXUS, list[camRand(list.length)], position);
 }
 
+function insaneReinforcementSpawn()
+{
+	const units = {units: [cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmangel], appended: cTempl.nxmsens};
+	const limits = {minimum: 8, maxRandom: 2};
+	const location = camMakePos("southSpawnPos");
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const units = {units: cTempl.nxmangel, appended: cTempl.nxmsens};
+	const limits = {minimum: 9, maxRandom: 0};
+	const location = camMakePos("lzReinforcementPos");
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+// Explode trucks to significantly reduce chances of gaming the lassat.
+function destroyTrucksInBlastZone()
+{
+	const objects = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false);
+	for (let i = 0, len = objects.length; i < len; ++i)
+	{
+		const obj = objects[i];
+		if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
+		{
+			camSafeRemoveObject(obj, true);
+		}
+	}
+}
+
 //Choose a target to fire the LasSat at. Automatically increases the limits
 //when no target is found in the area.
 function vaporizeTarget()
 {
 	let target;
 	const targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter((obj) => (
-		obj.type === DROID || obj.type === STRUCTURE
+		(obj.type === DROID && obj.droidType !== DROID_CONSTRUCT) || obj.type === STRUCTURE
 	));
 
 	if (!targets.length)
@@ -136,9 +210,10 @@ function vaporizeTarget()
 	}
 	else
 	{
-		const dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj)));
-		const vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj)));
-		const st = targets.filter((obj) => (obj.type === STRUCTURE));
+		const MIN_DROID_COST = 150;
+		const dr = targets.filter((obj) => (obj.type === DROID && !isVTOL(obj) && (obj.cost >= MIN_DROID_COST || obj.experience > 0)));
+		const vt = targets.filter((obj) => (obj.type === DROID && isVTOL(obj) && (obj.cost >= MIN_DROID_COST || obj.experience > 0)));
+		const st = targets.filter((obj) => (obj.type === STRUCTURE && obj.stattype !== WALL && obj.status === BUILT));
 
 		if (dr.length)
 		{
@@ -148,9 +223,14 @@ function vaporizeTarget()
 		{
 			target = vt[0]; //don't care about VTOLs as much
 		}
-		if (st.length && !camRand(2)) //chance to focus on a structure
+		if (st.length && (!camDef(target) || !camRand(2))) //chance to focus on a structure
 		{
 			target = st[0];
+		}
+		// Choose something less specific if the above rules can't be satisfied.
+		if (!camDef(target))
+		{
+			target = targets[camRand(targets.length)];
 		}
 	}
 
@@ -271,14 +351,14 @@ function eventStartLevel()
 	const lz2 = getObject("landingZone2"); //LZ for cam3-4s.
 	mapLimit = 1.0;
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma8, {
 		callback: "checkMissileSilos"
 	});
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, CAM_NEXUS);
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(2)));
 
 	if (camClassicMode())
 	{
@@ -373,7 +453,7 @@ function eventStartLevel()
 	if (difficulty >= HARD)
 	{
 		addDroid(CAM_NEXUS, 15, 234, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
-		camManageTrucks(CAM_NEXUS);
+		camManageTrucks(CAM_NEXUS, false);
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 
@@ -387,5 +467,12 @@ function eventStartLevel()
 	queue("setupGroups", camSecondsToMilliseconds(5));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 
+	setTimer("destroyTrucksInBlastZone", camSecondsToMilliseconds(9));
 	setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
+	if (camAllowInsaneSpawns())
+	{
+		queue("insaneVtolAttack", camMinutesToMilliseconds(7));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
+	}
 }

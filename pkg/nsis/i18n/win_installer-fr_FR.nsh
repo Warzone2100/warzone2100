@@ -39,7 +39,7 @@ ${LangFileString} DESC_SecNLS_WinFonts "Inclure le dossier des polices Windows d
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Microsoft Runtime importantes"
 ${LangFileString} DESC_SecMSSysLibraries "Téléchargez et installez (ou mettez à jour) les bibliothèques système redistribuables Visual C++ de Microsoft, dont certains composants peuvent avoir besoin pour fonctionner."
 
-${LangFileString} DLTEXT_Downloading "En téléchargement"
+${LangFileString} DLTEXT_Downloading "Téléchargement en cours"
 ${LangFileString} DLTEXT_SysLibDLFailed "Échec du téléchargement de la bibliothèque système"
 ${LangFileString} DLTEXT_VideosDLFailed "Le téléchargement des vidéos a échoué"
 

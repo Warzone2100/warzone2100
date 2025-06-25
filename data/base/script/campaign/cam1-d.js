@@ -58,6 +58,7 @@ function transportBaseSetup()
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(camMinutesToMilliseconds(10)), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 2, y: 2 },
 		exit: { x: 2, y: 2 },
+		posLZ: camMakePos("NPLZ1"),
 		data: {
 			regroup: false,
 			count: -1,
@@ -66,13 +67,30 @@ function transportBaseSetup()
 	});
 }
 
+function insaneReinforcementSpawn()
+{
+	const DISTANCE_FROM_POS = 30;
+	const units = [cTempl.nphmgh, cTempl.npltath, cTempl.nphch];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
+}
+
 function getDroidsForNPLZ()
 {
-	const LIM = 8; //Last alpha mission always has 8 transport units
+	let lim = 8;
+	if (difficulty === HARD)
+	{
+		lim = 9;
+	}
+	else if (difficulty >= INSANE)
+	{
+		lim = 10;
+	}
 	const templates = [ cTempl.nphct, cTempl.nphct, cTempl.npmorb, cTempl.npmorb, cTempl.npsbb ];
 
 	const droids = [];
-	for (let i = 0; i < LIM; ++i)
+	for (let i = 0; i < lim; ++i)
 	{
 		droids.push(templates[camRand(templates.length)]);
 	}
@@ -149,7 +167,7 @@ function setupPatrols()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1END", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alphaEnd, {
 		area: "RTLZ",
 		message: "C1D_LZ",
 		reinforcements: camMinutesToSeconds(2),
@@ -200,7 +218,7 @@ function eventStartLevel()
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NPLZGroup": {
-			cleanup: "NPLZ1",
+			cleanup: "NPLZBaseCleanup",
 			detectMsg: "C1D_LZ2",
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 			player: CAM_NEW_PARADIGM // required for LZ-type bases
@@ -293,4 +311,8 @@ function eventStartLevel()
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("setupPatrols", camMinutesToMilliseconds(2.5));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(7.5));
+	}
 }

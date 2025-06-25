@@ -30,6 +30,51 @@
             "id": "autosavesOnly",
             "default": false,
             "userEditable": true
+        },
+        {
+            "id": "ps1Modifiers",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "infiniteTime",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "victoryHints",
+            "default": true,
+            "userEditable": true
+        },
+        {
+            "id": "gammaEndBonus",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "gammaBonusLevel",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "insanePlus",
+            "default": true,
+            "userEditable": true
+        },
+        {
+            "id": "insanePlusLowDiff",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "fastExp",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "towerWars",
+            "default": false,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [
@@ -47,7 +92,7 @@
         {
             "id": "camClassic_slowProduction",
             "type": "bool",
-            "default": true,
+            "default": false,
             "displayName": {
                 "en": "Slow Factory Production"
             },

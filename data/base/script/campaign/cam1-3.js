@@ -65,9 +65,10 @@ function enableNP(args)
 		camEnableFactory("ScavFactorySouth");
 	}
 
-	if (difficulty === INSANE)
+	if (camAllowInsaneSpawns())
 	{
-		queue("NPReinforce", camSecondsToMilliseconds(10));
+		queue("insaneReinforcementSpawn", camSecondsToMilliseconds(10));
+		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(180));
 	}
 
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
@@ -90,27 +91,13 @@ function enableNP(args)
 	camPlayVideos([cam_sounds.incoming.incomingTransmission, {video: "SB1_3_MSG4", type: MISS_MSG}]);
 }
 
-function NPReinforce()
+function insaneReinforcementSpawn()
 {
-	if (getObject("NPHQ") !== null)
-	{
-		const list = [];
-		const COUNT = 5 + camRand(5);
-		const scouts = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
-
-		for (let i = 0; i < COUNT; ++i)
-		{
-			list.push(scouts[camRand(scouts.length)]);
-		}
-		camSendReinforcement(CAM_NEW_PARADIGM, camMakePos("NPReinforcementPos"), list, CAM_REINFORCE_GROUND, {
-			data: {
-				regroup: false,
-				repair: 66,
-				count: -1,
-			},
-		});
-		queue("NPReinforce", camSecondsToMilliseconds(180));
-	}
+	const units = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
+	const limits = {minimum: 5, maxRandom: 5};
+	const condition = {condition: CAM_REINFORCE_CONDITION_OBJECT, object: "NPHQ"};
+	const location = camMakePos("NPReinforcementPos");
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, condition, location, units, limits.minimum, limits.maxRandom);
 }
 
 function sendScouts()
@@ -150,7 +137,7 @@ function eventAttacked(victim, attacker) {
 function enableReinforcements()
 {
 	playSound(cam_sounds.reinforcementsAreAvailable);
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha6, {
 		area: "RTLZ",
 		message: "C1-3_LZ",
 		reinforcements: camMinutesToSeconds(2), // changes!
@@ -229,7 +216,7 @@ function blowupSouthScavengerBase()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_1C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha6, {
 		area: "RTLZ",
 		message: "C1-3_LZ",
 		reinforcements: -1, // will override later
@@ -313,7 +300,7 @@ function eventStartLevel()
 			},
 			"ScavBaseGroupSouth": {
 				cleanup: "SouthScavBase",
-				detectMsg: "C1-3_OBJ2",
+				detectMsg: "C1-3_BASE3",
 				detectSnd: cam_sounds.baseDetection.scavengerBaseDetected,
 				eliminateSnd: cam_sounds.baseElimination.scavengerBaseEradicated
 			},

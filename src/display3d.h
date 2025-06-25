@@ -63,6 +63,7 @@ extern bool showORDERS;
 extern int BlueprintTrackAnimationSpeed;
 
 float getViewDistance();
+bool getIsCloseDistance();
 void setViewDistance(float dist);
 extern bool	radarOnScreen;
 extern bool	radarPermitted;
@@ -138,7 +139,7 @@ extern bool CauseCrash;
 extern bool tuiTargetOrigin;
 
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
-bool drawShape(iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
+bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
 
 int calculateCameraHeightAt(int tileX, int tileY);
 

@@ -160,7 +160,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->psStats->armourValue, damage);
 
-	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
+	relativeDamage = objDamage(psFeature, nullptr, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0)
@@ -358,10 +358,7 @@ FEATURE::FEATURE(uint32_t id, FEATURE_STATS const *psStats)
 
 /* Release the resources associated with a feature */
 FEATURE::~FEATURE()
-{
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-}
+{}
 
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)
 {

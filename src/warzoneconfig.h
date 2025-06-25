@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2024  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "lib/sound/sounddefs.h"
 #include "multiplaydefs.h"
 #include <string>
+#include <stdint.h>
 
 #define	CAMERASPEED_MAX		(5000)
 #define	CAMERASPEED_MIN		(100)
@@ -62,6 +63,13 @@ enum class JS_BACKEND
 bool js_backend_from_str(const char *str, JS_BACKEND &output_backend);
 std::string to_string(JS_BACKEND backend);
 
+enum class TrapCursorMode : uint8_t
+{
+	Disabled = 0,
+	Enabled,
+	Automatic
+};
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -76,8 +84,8 @@ void war_setWindowMode(WINDOW_MODE);
 WINDOW_MODE war_getWindowMode();
 void war_setAntialiasing(int);
 int war_getAntialiasing();
-void war_SetTrapCursor(bool b);
-bool war_GetTrapCursor();
+void war_SetTrapCursor(TrapCursorMode v);
+TrapCursorMode war_GetTrapCursor();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(int value);
@@ -132,6 +140,8 @@ bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
 int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
+int war_getAutoDesyncKickSeconds();
+void war_setAutoDesyncKickSeconds(int seconds);
 bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
 int war_getMaxReplaysSaved();
@@ -167,9 +177,19 @@ void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
+uint8_t war_getOptionsButtonVisibility();
+void war_setOptionsButtonVisibility(uint8_t val);
 
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
+
+enum class ConnectionProviderType : uint8_t;
+
+void war_setHostConnectionProvider(ConnectionProviderType pt);
+ConnectionProviderType war_getHostConnectionProvider();
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt);
+std::string to_string(ConnectionProviderType pt);
 
 /**
  * Enable or disable sound initialization

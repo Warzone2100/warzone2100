@@ -101,6 +101,13 @@ static const CURSOR arnMPointers[POSSIBLE_TARGETS][POSSIBLE_SELECTIONS] =
 int scrollDirLeftRight = 0;
 int scrollDirUpDown = 0;
 
+#if defined(__EMSCRIPTEN__)
+// For Emscripten, default "Edge Scroll Outside Window" to false, to better handle various combined touch + mouse/trackpad devices
+# define DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW false
+#else
+# define DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW true
+#endif
+
 static bool	buildingDamaged(STRUCTURE *psStructure);
 static bool	repairDroidSelected(UDWORD player);
 static bool vtolDroidSelected(UDWORD player);
@@ -110,6 +117,7 @@ static bool bInvertMouse = true;
 static bool bRightClickOrders = false;
 static bool bMiddleClickRotate = false;
 static bool bDrawShadows = true;
+static bool bEdgeScrollOutsideWindowBounds = DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
 static void	dealWithLMB();
 static void	dealWithLMBDClick();
@@ -326,6 +334,16 @@ void	setDrawShadows(bool val)
 {
 	bDrawShadows = val;
 	pie_setShadows(val);
+}
+
+void setEdgeScrollOutsideWindowBounds(bool val)
+{
+	bEdgeScrollOutsideWindowBounds = val;
+}
+
+bool getEdgeScrollOutsideWindowBounds()
+{
+	return bEdgeScrollOutsideWindowBounds;
 }
 
 // reset the input state
@@ -961,6 +979,11 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	*y += *dydt * dt;
 }
 
+static inline bool shouldProcessEdgeScroll()
+{
+	return wzMouseInWindow() || (bEdgeScrollOutsideWindowBounds && wzWindowHasFocus());
+}
+
 static void handleCameraScrolling()
 {
 	SDWORD	xDif, yDif;
@@ -981,14 +1004,14 @@ static void handleCameraScrolling()
 		return;
 	}
 
-	if (wzMouseInWindow())
+	if (shouldProcessEdgeScroll())
 	{
 		if (mouseY() < BOUNDARY_Y)
 		{
 			scrollDirUpDown++;
 			wzSetCursor(CURSOR_UARROW);
 		}
-		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
+		if (mouseY() >= (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			scrollDirUpDown--;
 			wzSetCursor(CURSOR_DARROW);
@@ -998,7 +1021,7 @@ static void handleCameraScrolling()
 			wzSetCursor(CURSOR_LARROW);
 			scrollDirLeftRight--;
 		}
-		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
+		if (mouseX() >= (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
 			wzSetCursor(CURSOR_RARROW);
 			scrollDirLeftRight++;
@@ -1059,10 +1082,26 @@ void resetScroll()
 	scrollDirUpDown = 0;
 }
 
+// Checks if coordinate is inside scroll limits, returns false if not.
+bool CheckInScrollLimits(const int &xPos, const int &yPos)
+{
+	int minX = world_coord(scrollMinX);
+	int maxX = world_coord(scrollMaxX - 1);
+	int minY = world_coord(scrollMinY);
+	int maxY = world_coord(scrollMaxY - 1);
+
+	if ((xPos < minX) || (xPos >= maxX) || (yPos < minY) || (yPos >= maxY))
+	{
+		return false;
+	}
+
+	return true;
+}
+
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
 //
-bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos)
+bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 {
 	bool EdgeHit = false;
 	SDWORD	minX, minY, maxX, maxY;
@@ -1105,7 +1144,7 @@ bool CheckScrollLimits()
 {
 	SDWORD xp = playerPos.p.x;
 	SDWORD zp = playerPos.p.z;
-	bool ret = CheckInScrollLimits(&xp, &zp);
+	bool ret = CheckInScrollLimitsCamera(&xp, &zp);
 
 	playerPos.p.x = xp;
 	playerPos.p.z = zp;
@@ -1705,13 +1744,13 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 {
 	bool ownStruct = (psStructure->player == selectedPlayer);
 	const bool isSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
-	
+
 	if (isSpectator)
 	{
 		printStructureInfo(psStructure);
 		return;
 	}
-	
+
 	if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
 		/* We've clicked on an enemy building */

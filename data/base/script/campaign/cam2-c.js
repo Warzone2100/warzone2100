@@ -15,7 +15,7 @@ const mis_collectiveRes = [
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01", "R-Wpn-Howitzer-ROF01",
 	"R-Wpn-Howitzer-Damage07", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
-	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF02",
+	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage02", "R-Wpn-AAGun-ROF02",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade01"
 ];
 const mis_collectiveResClassic = [
@@ -37,7 +37,7 @@ function videoTrigger()
 {
 	camSetExtraObjectiveMessage(_("Rescue the civilians from The Collective before too many are captured"));
 
-	setMissionTime(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
+	camSetMissionTimer(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
 	setTimer("civilianOrders", camSecondsToMilliseconds(2));
 	setTimer("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
 
@@ -76,6 +76,23 @@ function camEnemyBaseDetected_COAirBase()
 function camEnemyBaseEliminated_COAirBase()
 {
 	camCallOnce("videoTrigger");
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.comatt, cTempl.comit, cTempl.cohct, cTempl.commrl, cTempl.comhpv, cTempl.npcybc];
+	const limits = {minimum: 8, maxRandom: 8};
+	const location = camMakePos(getObject("southWestSpawnPos"));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_UNITS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 40;
+	const units = [cTempl.cohct, cTempl.commrl, cTempl.comhpv, cTempl.comtathh];
+	const limits = {minimum: 10, maxRandom: 0};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
 
 function enableFactories()
@@ -224,10 +241,11 @@ function civilianOrders()
 //Capture civilans.
 function eventTransporterLanded(transport)
 {
+	const SCAN_RADIUS = 4;
 	const position = getObject("COTransportPos");
-	const civs = enumRange(position.x, position.y, 15, CAM_SCAV_7, false);
+	const civs = enumRange(position.x, position.y, SCAN_RADIUS, CAM_SCAV_7, false);
 
-	if (civs.length)
+	if ((civs.length > 0) && (camDist(transport, position) <= SCAN_RADIUS))
 	{
 		playSound(cam_sounds.enemyEscaping);
 		capturedCivCount += civs.length - 1;
@@ -283,7 +301,7 @@ function extraVictoryCondition()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_5S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.beta6.pre, {
 		callback: "extraVictoryCondition"
 	});
 
@@ -326,7 +344,7 @@ function eventStartLevel()
 		});
 	}
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(CAM_THE_COLLECTIVE, CAM_SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, CAM_SCAV_7, true);
@@ -409,7 +427,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [cTempl.commorv, cTempl.colagv]
+			templates: (!camClassicMode()) ? [cTempl.commorv, cTempl.comhcv, cTempl.commorv, cTempl.colpbv] : [cTempl.commorv, cTempl.colagv]
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
@@ -419,7 +437,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: [cTempl.colagv, cTempl.commorv]
+			templates: (!camClassicMode()) ? [cTempl.colagv, cTempl.commorv, cTempl.colatv, cTempl.commorv] : [cTempl.colagv, cTempl.commorv]
 		},
 	});
 
@@ -435,6 +453,11 @@ function eventStartLevel()
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
+	}
 
 	truckDefense();
 }

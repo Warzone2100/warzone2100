@@ -36,6 +36,7 @@
 #include "projectile.h"
 #include "objmem.h"
 #include "order.h"
+#include "visibility.h"
 
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
@@ -48,6 +49,7 @@
 #define	WEIGHT_HEALTH_STRUCT		(WEIGHT_DIST_TILE * 7)
 
 #define	WEIGHT_NOT_VISIBLE_F		10						//We really don't like objects we can't see
+#define WEIGHT_NOT_LOS_VISIBLE_F	4
 
 #define	WEIGHT_SERVICE_DROIDS		(WEIGHT_DIST_TILE_DROID * 5)		//We don't want them to be repairing droids or structures while we are after them
 #define	WEIGHT_WEAPON_DROIDS		(WEIGHT_DIST_TILE_DROID * 4)		//We prefer to go after anything that has a gun and can hurt us
@@ -487,6 +489,11 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		return 1;
 	}
 
+	if (bDirect && !lineOfFire(psAttacker, psTarget, weapon_slot, false))
+	{
+		attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain
+	}
+
 	/* We prefer objects we can see and can attack immediately */
 	if (!visibleObject((BASE_OBJECT *)psAttacker, psTarget, true))
 	{
@@ -575,7 +582,6 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		return failure;
 	}
 
-	psDroid->lastCheckNearestTarget[weapon_slot] = gameTime;
 	if (lastGameTimeCheckedNeartestTargets != gameTime)
 	{
 		lastGameTimeCheckedNeartestTargets = gameTime;
@@ -747,6 +753,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 		return bestMod;
 	}
 
+	psDroid->lastCheckNearestTargetFailed[weapon_slot] = gameTime;
 	return failure;
 }
 

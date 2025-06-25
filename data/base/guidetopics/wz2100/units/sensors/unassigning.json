@@ -1,0 +1,29 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::sensors::unassigning",
+	"title": "Un-Assigning",
+	"sort": "02",
+	"visual": [
+		{
+			"droidTemplate": {
+				"body": "Body1REC",
+				"name": "Sensor Turret Viper Wheels",
+				"propulsion": "wheeled01",
+				"type": "SENSOR",
+				"sensor": "SensorTurret1Mk1"
+			}
+		},
+		{
+			"stat": "Sys-SensoTower01"
+		}
+	],
+	"contents": [
+		"To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere.",
+		"",
+		"Multiple units can be selected by holding CTRL while clicking."
+	],
+	"links": [
+		"wz2100::units::sensors",
+		"wz2100::units::commanders"
+	]
+}

@@ -1,0 +1,33 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::sensors",
+	"title": "Sensors",
+	"sort": "07",
+	"visual": [
+		{
+			"droidTemplate": {
+				"body": "Body1REC",
+				"name": "Sensor Turret Viper Wheels",
+				"propulsion": "wheeled01",
+				"type": "SENSOR",
+				"sensor": "SensorTurret1Mk1"
+			}
+		},
+		{
+			"stat": "Sys-SensoTower01"
+		}
+	],
+	"contents": [
+		"Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery.",
+		"",
+		"Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades).",
+		"",
+		"However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+	],
+	"links": [
+		"wz2100::units::sensors::using",
+		"wz2100::units::sensors::unassigning",
+		"wz2100::units::sensors::cb",
+		"wz2100::units::commanders"
+	]
+}

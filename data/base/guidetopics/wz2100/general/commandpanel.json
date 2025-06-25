@@ -1,0 +1,42 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::commandpanel",
+	"title": "Command Panel",
+	"sort": "02",
+	"visual": [
+		{
+			"retButId": "CANCEL"
+		},
+		{
+			"retButId": "FACTORY"
+		},
+		{
+			"retButId": "RESEARCH"
+		},
+		{
+			"retButId": "BUILD"
+		},
+		{
+			"retButId": "DESIGN"
+		},
+		{
+			"retButId": "INTELMAP"
+		},
+		{
+			"retButId": "COMMAND"
+		}
+	],
+	"contents": [
+		"There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button.",
+		"",
+		"The middle / central button closes any open command interface."
+	],
+	"links": [
+		"wz2100::units::building",
+		"wz2100::general::researching",
+		"wz2100::structures::building",
+		"wz2100::units::designing",
+		"wz2100::general::intelmap",
+		"wz2100::units::commanders"
+	]
+}

@@ -1,0 +1,28 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::researching",
+	"title": "Researching Technology",
+	"sort": "06",
+	"visual": {
+		"retButId": "RESEARCH"
+	},
+	"contents": [
+		"Researching technologies is accomplished using Research Facilities.",
+		"",
+		"When a Research Facility is selected, all available options are displayed on the left side of the screen.",
+		"",
+		"Each research project requires a certain amount of power and time to complete. The power investment is non-refundable.",
+		"",
+		"But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility.",
+		"",
+		"Completing research of a new technology may:",
+		"- Make available new weapons, structures, unit bodies, propulsion, etc",
+		"- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc",
+		"- Enable the research of additional technologies"
+	],
+	"links": [
+		"wz2100::structures::researchfacility",
+		"wz2100::general::artifacts",
+		"wz2100::general::commandpanel"
+	]
+}

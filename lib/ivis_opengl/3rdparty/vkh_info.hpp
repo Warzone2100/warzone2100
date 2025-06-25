@@ -1,8 +1,8 @@
 //
 // VkhInfo
-// Version: 1.3.2
+// Version: 1.3.3
 //
-// Copyright (c) 2019-2021 past-due
+// Copyright (c) 2019-2024 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -47,6 +47,11 @@ class VkhInfo
 {
 public:
 	typedef std::function<void (const std::string& output)> outputHandlerFuncType;
+#if VK_HEADER_VERSION >= 301
+	using DispatchLoaderDynamic = vk::detail::DispatchLoaderDynamic;
+#else
+	using DispatchLoaderDynamic = vk::DispatchLoaderDynamic;
+#endif
 
 	VkhInfo() {}
 	VkhInfo(const outputHandlerFuncType& outputHandler);
@@ -58,10 +63,10 @@ public:
 	void Output_GlobalInstanceExtensions(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	void Output_InstanceLayerProperties(PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 
-	void Output_SurfaceInformation(const vk::PhysicalDevice& physicalDevice, const vk::SurfaceKHR& surface, const vk::DispatchLoaderDynamic& vkDynLoader);
+	void Output_SurfaceInformation(const vk::PhysicalDevice& physicalDevice, const vk::SurfaceKHR& surface, const VkhInfo::DispatchLoaderDynamic& vkDynLoader);
 
 	// If `getProperties2` is true, the instance `inst` *must* have been created with the "VK_KHR_get_physical_device_properties2" extension enabled
-	void Output_PhysicalDevices(const vk::Instance& inst, const vk::ApplicationInfo& appInfo, std::vector<const char*> instanceExtensions, const vk::DispatchLoaderDynamic& vkDynLoader);
+	void Output_PhysicalDevices(const vk::Instance& inst, const vk::ApplicationInfo& appInfo, std::vector<const char*> instanceExtensions, const VkhInfo::DispatchLoaderDynamic& vkDynLoader);
 
 public:
 

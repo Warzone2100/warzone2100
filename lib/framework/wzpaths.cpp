@@ -24,8 +24,7 @@
 #include <vector>
 #include <algorithm>
 
-#ifdef WZ_BINDIR
-static std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const std::string& delimiters)
+std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const std::string& delimiters)
 {
 	std::vector<std::string> v;
 
@@ -43,7 +42,6 @@ static std::vector<std::string> splitAtAnyDelimiter(const std::string& s, const 
 
 	return v;
 }
-#endif
 
 std::string getWZInstallPrefix()
 {
@@ -134,4 +132,10 @@ std::string WzPathInfo::path() const
 		return ".";
 	}
 	return file.substr(0, std::max<size_t>(lastSlashPos, (size_t)1));
+}
+
+// Returns the path components as a vector
+std::vector<std::string> WzPathInfo::pathComponents() const
+{
+	return splitAtAnyDelimiter(file, "/");
 }

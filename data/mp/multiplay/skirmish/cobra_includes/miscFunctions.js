@@ -395,6 +395,7 @@ function initCobraVars()
 {
 	let isHoverMap = checkIfSeaMap();
 
+	initCobraGroups();
 	lastMsg = "eventStartLevel";
 	lastMsgThrottle = 0;
 	currently_dead = false;

@@ -27,6 +27,10 @@ const mis_newParadigmResClassic = [
 const mis_scavengerResClassic = [
 	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02"
 ];
+var npAttacked;
+var destroyedCount;
+var baseDefendersLightGroup;
+var baseDefendersMediumGroup;
 
 //Pursue player when nearby but do not go too far away from defense zone.
 function camEnemyBaseDetected_NPBaseGroup()
@@ -37,6 +41,12 @@ function camEnemyBaseDetected_NPBaseGroup()
 function enableSouthScavFactory()
 {
 	camEnableFactory("SouthScavFactory");
+}
+
+function activateNPFactories()
+{
+	camEnableFactory("HeavyNPFactory");
+	camEnableFactory("MediumNPFactory");
 }
 
 camAreaEvent("NorthScavFactoryTrigger", function()
@@ -64,36 +74,108 @@ camAreaEvent("LandingZoneTrigger", function()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// Give extra 40 minutes.
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 30 : 40)) + getMissionTime());
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
+	camSetMissionTimer(camChangeOnDiff(camMinutesToSeconds((tweakOptions.classicTimers) ? 30 : 40)) + getMissionTime());
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha9.pre, {
 		area: "RTLZ",
 		message: "C1-4_LZ",
 		reinforcements: camMinutesToSeconds(1.5), // changes!
 		retlz: true
 	});
+
 	// enables all factories
 	camEnableFactory("SouthScavFactory");
 	camEnableFactory("NorthScavFactory");
-	camEnableFactory("HeavyNPFactory");
-	camEnableFactory("MediumNPFactory");
+	activateNPFactories();
 	buildDefenses();
+	if (!npAttacked)
+	{
+		setupBaseDefenders(true);
+	}
+
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
+	}
 });
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.nppod, cTempl.npltat, cTempl.npsmct, cTempl.npsmct, cTempl.npmmct];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = ["insaneSpawnPos1", "insaneSpawnPos2", "insaneSpawnPos3", "insaneSpawnPos4"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 5;
+	const units = [cTempl.npmorb, cTempl.npmorb, cTempl.npmorb, cTempl.npsmct];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = camGenerateRandomMapCoordinate(getObject("StartPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
+}
+
+function setupBaseDefenders(shouldDefend)
+{
+	const ORDER_STATE = (shouldDefend) ? CAM_ORDER_DEFEND : CAM_ORDER_ATTACK;
+	camManageGroup(baseDefendersLightGroup, ORDER_STATE, {
+		pos: camMakePos("nearSensor"),
+		radius: 10,
+	});
+	camManageGroup(baseDefendersMediumGroup, ORDER_STATE, {
+		pos: camMakePos("nearSensor"),
+		radius: 10,
+	});
+}
 
 function NPBaseDetect()
 {
-	// Send tanks
-	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("nearSensor"),
-		radius: 10,
-	});
+	queue("activateNPFactories", camChangeOnDiff(camMinutesToMilliseconds(3)));
+}
 
-	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_ATTACK, {
-		pos: camMakePos("nearSensor"),
-		radius: 10,
-	});
+function switchBaseDefenderOrders()
+{
+	setupBaseDefenders(false); //Now they will attack indefinitely.
+}
 
-	camEnableFactory("HeavyNPFactory");
-	camEnableFactory("MediumNPFactory");
+// Destroying too many New Paradigm units/structures will set the base defenders into attack mode.
+function eventDestroyed(obj)
+{
+	if ((obj.type === DROID || obj.type === STRUCTURE) && obj.player === CAM_NEW_PARADIGM)
+	{
+		const MIN_DESTROYED_OBJECTS = 3;
+		destroyedCount += 1;
+
+		if (destroyedCount >= MIN_DESTROYED_OBJECTS)
+		{
+			camCallOnce("switchBaseDefenderOrders");
+		}
+	}
+}
+
+// Harming the NP will cause the base groups to defend the front of the base, and queue
+// factory production shortly after.
+function eventAttacked(victim, attacker)
+{
+	if (npAttacked || !victim || !attacker)
+	{
+		return;
+	}
+	if ((attacker.player === CAM_HUMAN_PLAYER && victim.player === CAM_NEW_PARADIGM) ||
+		(attacker.player === CAM_NEW_PARADIGM && victim.player === CAM_HUMAN_PLAYER))
+	{
+		const ARTY_IGNORE_DIST = 9;
+		if ((attacker.player === CAM_NEW_PARADIGM) &&
+			(attacker.hasIndirect || attacker.isCB) &&
+			(camDist(victim.x, victim.y, attacker.x, attack.y) >= ARTY_IGNORE_DIST))
+		{
+			return;
+		}
+		npAttacked = true;
+		setupBaseDefenders(true);
+		queue("activateNPFactories", camMinutesToMilliseconds(1.5));
+	}
 }
 
 function buildDefenses()
@@ -115,7 +197,7 @@ function buildDefenses()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.alpha9.pre, {
 		area: "RTLZ",
 		message: "C1-4_LZ",
 		reinforcements: -1, // will override later
@@ -131,6 +213,11 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tEnt.x, tEnt.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(tExt.x, tExt.y, CAM_HUMAN_PLAYER);
+
+	npAttacked = false;
+	destroyedCount = 0;
+	baseDefendersLightGroup = camMakeGroup("AttackGroupLight");
+	baseDefendersMediumGroup = camMakeGroup("AttackGroupMedium");
 
 	if (camClassicMode())
 	{
@@ -153,9 +240,10 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.npmor, cTempl.npmorb, CAM_NEW_PARADIGM);
 
 		camSetArtifacts({
-			"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
+			"NPCommandCenter": { tech: "R-Vehicle-Metals02" },
 			"NPResearchFacility": { tech: "R-Wpn-MG-Damage04" },
 			"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
 			"HeavyNPFactory": { tech: "R-Wpn-Rocket-Damage02" },
@@ -222,7 +310,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
+			templates: (!camClassicMode()) ? [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmorb ] : [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
 		},
 	});
 

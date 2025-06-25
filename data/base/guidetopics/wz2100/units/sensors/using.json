@@ -1,0 +1,34 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::sensors::using",
+	"title": "Using Sensors",
+	"sort": "01",
+	"visual": [
+		{
+			"droidTemplate": {
+				"body": "Body1REC",
+				"name": "Sensor Turret Viper Wheels",
+				"propulsion": "wheeled01",
+				"type": "SENSOR",
+				"sensor": "SensorTurret1Mk1"
+			}
+		},
+		{
+			"stat": "Sys-SensoTower01"
+		}
+	],
+	"contents": [
+		"Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it.",
+		"",
+		"An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor.",
+		"",
+		"Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically.",
+		"",
+		"If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
+	],
+	"links": [
+		"wz2100::units::sensors::unassigning",
+		"wz2100::units::sensors",
+		"wz2100::units::commanders"
+	]
+}

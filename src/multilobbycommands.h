@@ -35,21 +35,24 @@ public:
 	virtual ~HostLobbyOperationsInterface();
 
 public:
-	virtual bool changeTeam(uint32_t player, uint8_t team) = 0;
-	virtual bool changePosition(uint32_t player, uint8_t position) = 0;
+	virtual bool changeTeam(uint32_t player, uint8_t team, uint32_t responsibleIdx) = 0;
+	virtual bool changePosition(uint32_t player, uint8_t position, uint32_t responsibleIdx) = 0;
 	virtual bool changeBase(uint8_t baseValue) = 0;
 	virtual bool changeAlliances(uint8_t allianceValue) = 0;
 	virtual bool changeScavengers(uint8_t scavsValue) = 0;
-	virtual bool kickPlayer(uint32_t player_id, const char *reason, bool ban) = 0;
+	virtual bool kickPlayer(uint32_t player_id, const char *reason, bool ban, uint32_t requester_id) = 0;
 	virtual bool changeHostChatPermissions(uint32_t player_id, bool freeChatEnabled) = 0;
 	virtual bool movePlayerToSpectators(uint32_t player_id) = 0;
 	virtual bool requestMoveSpectatorToPlayers(uint32_t player_id) = 0;
+	virtual bool autoBalancePlayers(uint32_t responsibleIdx) = 0;
 	virtual void quitGame(int exitCode) = 0;
 };
 
 void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_prefix, optional<std::string> _senderhash = nullopt, optional<std::string> _senderPublicKeyB64 = nullopt);
 
 bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyOperationsInterface& cmdInterface);
+
+bool identityMatchesAdmin(const EcKey& identity);
 
 bool addLobbyAdminIdentityHash(const std::string& playerIdentityHash);
 bool removeLobbyAdminIdentityHash(const std::string& playerIdentityHash);

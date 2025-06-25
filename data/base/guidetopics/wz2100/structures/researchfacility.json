@@ -1,0 +1,21 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::structures::researchfacility",
+	"title": "Research Facility",
+	"visual": {
+		"stat": {
+			"id": "A0ResearchFacility"
+		}
+	},
+	"contents": [
+		"Research Facilities are required in order to research new technologies.",
+		"",
+		"Each Research Facility can research one technology at a time."
+	],
+	"links": [
+		"wz2100::general::researching",
+		"wz2100::structures::building",
+		"wz2100::units::modules",
+		"wz2100::weapons"
+	]
+}

@@ -120,6 +120,10 @@ struct DROID : public BASE_OBJECT
 	bool isAttacking() const;
 	// true if a vtol droid currently returning to be rearmed
 	bool isVtolRearming() const;
+	// true if a droid is retreating for repair
+	bool isRetreatingForRepair() const;
+	// true if a droid is returning to base
+	bool isReturningToBase() const;
 
 	// Helper functions to get various droid stats.
 	BODY_STATS* getBodyStats() const;
@@ -146,6 +150,9 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependent on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
+	SDWORD          shieldPoints;                   ///< Shield points of droid, which will be drained instead of health (default: -1 if no shields)
+	UDWORD          shieldRegenTime;                ///< How long should it be before the next regeneration step
+	UDWORD          shieldInterruptRegenTime;       ///< Standby time in case the shield was destroyed to begin regenerating again
 	uint32_t        kills;
 	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 	SWORD           resistance;                     ///< used in Electronic Warfare
@@ -178,7 +185,7 @@ struct DROID : public BASE_OBJECT
 	DROID_ACTION    action;
 	Vector2i        actionPos;
 	BASE_OBJECT    *psActionTarget[MAX_WEAPONS] = {}; ///< Action target object
-	UDWORD			lastCheckNearestTarget[MAX_WEAPONS] = {};	///< Set to the last gameTime that aiBestNearestTarget was called on for each weapon slot for this droid - compare only == / != gameTime
+	UDWORD			lastCheckNearestTargetFailed[MAX_WEAPONS] = {};	///< Set to the last gameTime that aiBestNearestTarget was called on for each weapon slot for this droid (and failed) - compare only == / != gameTime
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
 	UDWORD          expectedDamageDirect;                 ///< Expected damage to be caused by all currently incoming direct projectiles. This info is shared between all players,
@@ -192,6 +199,8 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	SDWORD          iAudioID;
 	int32_t			heightAboveMap;					///< Current calculated height above the terrain (set for VTOL-propulsion units)
+	/* repair data */
+	uint16_t		underRepair;					///< Number of other droids / structures currently repairing this unit (does not include self-repair tech)
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

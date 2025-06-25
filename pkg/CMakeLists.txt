@@ -1,4 +1,9 @@
 #########################
+# Appstream
+
+add_subdirectory(appstream)
+
+#########################
 # Generator-specific components
 
 install(FILES
@@ -383,8 +388,8 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/data/sequences.wz")
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/build_tools/autorevision.cache")
 
 # The macosx build directories
-list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/build/")
-list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/external/.*/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/platforms/macos/build/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/platforms/macos/external/.*/")
 
 # Ignore in-source vcpkg directory
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/vcpkg/")

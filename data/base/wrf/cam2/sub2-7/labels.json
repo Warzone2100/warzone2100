@@ -55,6 +55,30 @@
 		"label": "buildPos2",
 		"pos": [2688, 512]
 	},
+	"position_14": {
+		"label": "vtolAppearPos1",
+		"pos": [7808, 6784]
+	},
+	"position_15": {
+		"label": "vtolAppearPos2",
+		"pos": [6400, 128]
+	},
+	"position_16": {
+		"label": "insaneSpawnPos1",
+		"pos": [4864, 7808]
+	},
+	"position_17": {
+		"label": "insaneSpawnPos2",
+		"pos": [7808, 4736]
+	},
+	"position_18": {
+		"label": "insaneSpawnPos3",
+		"pos": [6784, 256]
+	},
+	"position_19": {
+		"label": "insaneSpawnPos4",
+		"pos": [256, 256]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -154,5 +178,12 @@
 		"id": 107,
 		"player": 2,
 		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 2,
+		"pos": [7936, 2560],
+		"radius": 300
 	}
 }

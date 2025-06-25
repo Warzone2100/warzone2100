@@ -25,6 +25,7 @@
 #define __INCLUDED_MOVEDEF_H__
 
 #include "lib/framework/vector.h"
+#include "formationdef.h"
 
 #include <vector>
 
@@ -58,8 +59,10 @@ struct MOVE_CONTROL
 	uint16_t lastBump = 0;                ///< Time of last bump with a droid - relative to bumpTime
 	uint16_t pauseTime = 0;               ///< When MOVEPAUSE started - relative to bumpTime
 	Position bumpPos = Position(0, 0, 0); ///< Position of last bump
-
+	unsigned tolerance = 0;               ///< Increases until unit gives up and goes to the next waypoint, if close enough
 	unsigned shuffleStart = 0;            ///< When a shuffle started
+
+	FORMATION *psFormation = nullptr;     ///< formation the droid is currently a member of
 
 	int iVertSpeed = 0;                   ///< VTOL movement
 };

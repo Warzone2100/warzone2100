@@ -216,6 +216,12 @@ bool iV_Image::expand_channels_towards_rgba()
 	const size_t numPixels = static_cast<size_t>(m_height) * static_cast<size_t>(m_width);
 	m_channels = originalChannels + 1;
 	m_bmp = (unsigned char *)malloc(numPixels * m_channels);
+	if (!m_bmp)
+	{
+		m_bmp = originalBmpData;
+		m_channels = originalChannels;
+		return false;
+	}
 	switch (originalChannels)
 	{
 		case 1:
@@ -350,6 +356,10 @@ bool iV_Image::resizeInternal(const iV_Image& source, int output_w, int output_h
 	}
 
 	unsigned char *output_pixels = (unsigned char *)malloc(static_cast<size_t>(output_w) * static_cast<size_t>(output_h) * source.m_channels);
+	if (!output_pixels)
+	{
+		return false;
+	}
 	stbir_resize_uint8_generic(source.m_bmp, source.m_width, source.m_height, 0,
 							   output_pixels, output_w, output_h, 0,
 							   source.m_channels, alphaChannel, flags,
@@ -387,11 +397,12 @@ bool iV_Image::resizedFromOther(const iV_Image& other, int output_w, int output_
 	return resizeInternal(other, output_w, output_h, alphaChannelOverride);
 }
 
+// If resizing succeeds (or is not required), returns true. Returns false if resizing failed (memory allocation failure).
 bool iV_Image::scale_image_max_size(int maxWidth, int maxHeight)
 {
 	if ((maxWidth <= 0 || m_width <= maxWidth) && (maxHeight <= 0 || m_height <= maxHeight))
 	{
-		return false;
+		return true;
 	}
 
 	double scalingRatio;

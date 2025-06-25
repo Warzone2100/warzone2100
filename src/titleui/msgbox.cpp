@@ -74,7 +74,7 @@ void WzMsgBoxTitleUI::start()
 		paragraph->setFontColour(WZCOL_TEXT_BRIGHT);
 		paragraph->setLineSpacing(5);
 		paragraph->setFont(font_regular);
-		paragraph->addText(text.toUtf8());
+		paragraph->addText(text);
 		psBotForm->attach(paragraph);
 	}
 	else

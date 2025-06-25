@@ -1,0 +1,11 @@
+{
+    "type": "wz2100.proxmsgs.v1",
+    "msgs": {
+        "C1CA_OBJ1": { "audio": "pcv448.ogg", "message": "RUINS_MSG", "type": 2, "x": 9408, "y": 6848, "z": 0 },
+        "C1CA_LZ1": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 10560, "y": 8384, "z": 0 },
+        "C1CA_LZ2": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 7232, "y": 6336, "z": 0 },
+        "C1CA_LZ3": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 6208, "y": 6848, "z": 0 },
+        "C1CA_LZ4": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 7872, "y": 4672, "z": 0 },
+        "C1CA_LZ5": { "audio": "pcv396.ogg", "message": "LZ_MSG3", "type": 0, "x": 6848, "y": 3520, "z": 0 }
+    }
+}

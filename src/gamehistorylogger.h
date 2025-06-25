@@ -64,6 +64,7 @@ public:
 		int32_t team;
 		int32_t colour;
 		FactionID faction;
+		std::string publicKey;
 	};
 
 	struct GameFrame
@@ -79,7 +80,7 @@ public:
 			uint32_t structs = 0;
 			uint32_t researchComplete = 0;
 			uint32_t power = 0;
-			uint32_t score = 0;
+			int32_t  score = 0;
 			uint32_t hp = 0;
 			uint32_t summExp = 0;
 			uint32_t oilRigs = 0;

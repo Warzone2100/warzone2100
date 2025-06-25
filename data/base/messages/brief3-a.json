@@ -1,0 +1,16 @@
+{
+    "type": "wz2100.briefs.v1",
+    "briefs": {
+        "MB3A_MSG": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3_MSG1", "CAM3_MSG2", "CAM3_MSG3"], "video": "cam3/cam3intp.ogg" },
+                { "loop": 0, "subtitles": "", "video": "cam3/cam3int.ogg" }
+            ]
+        },
+        "MB3A_MSG2": {
+            "sequences": [
+                { "loop": 0, "subtitles": ["CAM3A_MSG1", "CAM3A_MSG2", "CAM3A_MSG3"], "video": "cam3/cam3intb.ogg" }
+            ]
+        }
+    }
+}

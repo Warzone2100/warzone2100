@@ -145,38 +145,6 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour);
 void pie_BoxFillf(float x0, float y0, float x1, float y1, PIELIGHT colour);
 void pie_BoxFill_alpha(int x0, int y0, int x1, int y1, PIELIGHT colour);
-struct PIERECT_DrawRequest
-{
-	PIERECT_DrawRequest(int x0, int y0, int x1, int y1, PIELIGHT color)
-	: x0(x0)
-	, y0(y0)
-	, x1(x1)
-	, y1(y1)
-	, color(color)
-	{ }
-
-	int x0;
-	int y0;
-	int x1;
-	int y1;
-	PIELIGHT color;
-};
-struct PIERECT_DrawRequest_f
-{
-	PIERECT_DrawRequest_f(float x0, float y0, float x1, float y1, PIELIGHT color)
-	: x0(x0)
-	, y0(y0)
-	, x1(x1)
-	, y1(y1)
-	, color(color)
-	{ }
-
-	float x0;
-	float y0;
-	float x1;
-	float y1;
-	PIELIGHT color;
-};
 void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects);
 class BatchedMultiRectRenderer
 {
@@ -296,6 +264,8 @@ static inline void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned id
 
 void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
+
+bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
 
 bool pie_InitRadar();
 bool pie_ShutdownRadar();

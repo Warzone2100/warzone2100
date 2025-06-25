@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Research Facility")
+_("Research Facilities are required in order to research new technologies.")
+_("Each Research Facility can research one technology at a time.")

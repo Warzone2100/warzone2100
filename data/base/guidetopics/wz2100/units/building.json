@@ -1,0 +1,30 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::building",
+	"title": "Building Units",
+	"sort": "02",
+	"visual": {
+		"retButId": "FACTORY"
+	},
+	"contents": [
+		"To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen.",
+		"",
+		"The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules).",
+		"",
+		"To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen.",
+		"",
+		"To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button.",
+		"",
+		"While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built.",
+		"",
+		"When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
+	],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::structures::factory",
+		"wz2100::structures::vtolfactory",
+		"wz2100::general::commandpanel",
+		"wz2100::structures::modules",
+		"wz2100::structures::rallypoint"
+	]
+}

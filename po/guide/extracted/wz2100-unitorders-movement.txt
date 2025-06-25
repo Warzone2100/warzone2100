@@ -1,0 +1,9 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Movement")
+_("You can use the Unit Orders menu to configure unit \"Movement\".")
+_("- Patrol: Move between two points. Just click a point on the map after selecting it")
+_("- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it")
+_("- Pursue: Pursue enemy")
+_("- Guard: Stay near an area or structure. (default)")
+_("- Hold Position: Do not move under any circumstances")
