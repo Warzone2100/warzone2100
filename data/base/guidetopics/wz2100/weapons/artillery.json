@@ -1,0 +1,70 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::artillery",
+	"title": "Artillery",
+	"sort": "03",
+	"visual": [
+		{
+			"stat": {
+				"id": "Mortar1Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Mortar-Incendiary",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Mortar2Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Mortar3ROTARYMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Howitzer105Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Rocket-MRL",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Rocket-MRL-Hvy",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Rocket-IDF",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Artillery weapons are devastating against infantry and most structures.",
+		"",
+		"However, Artillery weapons are less effective against bunkers and tracked vehicles.",
+		"",
+		"Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own.",
+		"",
+		"Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::units::propulsions::cyborg",
+		"wz2100::units::propulsions::tracks"
+	]
+}

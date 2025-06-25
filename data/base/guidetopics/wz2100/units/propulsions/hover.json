@@ -1,0 +1,26 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::hover",
+	"title": "Hover",
+	"sort": "05",
+	"visual": {
+		"stat": {
+			"id": "hover01"
+		}
+	},
+	"contents": [
+		"Hover is a fast, amphibious propulsion for vehicles.",
+		"",
+		"Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes.",
+		"",
+		"However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage.",
+		"",
+		"Hover's high speeds and ability to traverse water make it perfect for hit-and-run attack vehicles.",
+		"",
+		"Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
+		],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::units::propulsions"
+	]
+}

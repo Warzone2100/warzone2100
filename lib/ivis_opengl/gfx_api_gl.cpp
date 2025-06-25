@@ -44,7 +44,8 @@
 #include <limits>
 #include <typeindex>
 #include <sstream>
-#include "3rdparty/fmt/include/fmt/format.h"
+#include <fmt/format.h>
+#include <fmt/xchar.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -835,7 +836,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents"
+			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4},
@@ -860,7 +861,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
+			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4}
@@ -903,11 +904,15 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
 			"tex1", "tex2", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex", "tex_nm", "tex_sm", "lightmap_tex" } }),
+			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
+			"tex", "tex_nm", "tex_sm", "lightmap_tex"
+		},
+		{
+			{"shadowMap", 4}
+		} }),
 	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -2123,6 +2128,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(24, cbuf.normalMap);
 	setUniforms(25, cbuf.specularMap);
 	setUniforms(26, cbuf.hasTangents);
+	setUniforms(27, cbuf.shieldEffect);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
@@ -2256,9 +2262,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ViewMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
 	setUniforms(i++, cbuf.emissiveLight);
@@ -2266,6 +2272,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.diffuseLight);
 	setUniforms(i++, cbuf.specularLight);
 	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
+	setUniforms(i++, cbuf.ShadowMapSize);
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);

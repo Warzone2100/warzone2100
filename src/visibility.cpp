@@ -117,19 +117,16 @@ void visUpdateLevel()
 	visLevelDec = gameTimeAdjustedAverage(VIS_LEVEL_DEC);
 }
 
-static inline void updateTileVis(MAPTILE *psTile)
+static inline void updateTileVis(MAPTILE *psTile, int player)
 {
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	/// The definition of whether a player can see something on a given tile or not
+	if (psTile->watchers[player] > 0 || (psTile->sensors[player] > 0 && !(psTile->jammerBits & ~alliancebits[player])))
 	{
-		/// The definition of whether a player can see something on a given tile or not
-		if (psTile->watchers[i] > 0 || (psTile->sensors[i] > 0 && !(psTile->jammerBits & ~alliancebits[i])))
-		{
-			psTile->sensorBits |= (1 << i);         // mark it as being seen
-		}
-		else
-		{
-			psTile->sensorBits &= ~(1 << i);        // mark as hidden
-		}
+		psTile->sensorBits |= (1 << player);         // mark it as being seen
+	}
+	else
+	{
+		psTile->sensorBits &= ~(1 << player);        // mark as hidden
 	}
 }
 
@@ -150,12 +147,12 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 		}
 		MAPTILE *psTile = mapTile(mapX, mapY);
 		psTile->tileExploredBits |= alliancebits[player];
-		uint8_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
-		if (visionType[player] < UBYTE_MAX)
+		uint16_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
+		if (visionType[player] < UINT16_MAX)
 		{
 			TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(radar)};
 			visionType[player]++;          // we observe this tile
-			updateTileVis(psTile);
+			updateTileVis(psTile, player);
 			psSpot->watchedTiles[psSpot->numWatchedTiles++] = tilePos;    // record having seen it
 		}
 	}
@@ -218,10 +215,10 @@ SPOTTER::~SPOTTER()
 	{
 		const TILEPOS tilePos = watchedTiles[i];
 		MAPTILE *psTile = mapTile(tilePos.x, tilePos.y);
-		uint8_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
+		uint16_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
 		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)tilePos.x, (int)tilePos.y);
 		visionType[player]--;
-		updateTileVis(psTile);
+		updateTileVis(psTile, player);
 	}
 	free(watchedTiles);
 }
@@ -236,9 +233,9 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 	const int ydiff = map_coord(psObj->pos.y) - mapY;
 	const int distSq = xdiff * xdiff + ydiff * ydiff;
 	const bool inRange = (distSq < 16);
-	uint8_t *visionType = inRange ? psTile->watchers : psTile->sensors;
+	uint16_t *visionType = inRange ? psTile->watchers : psTile->sensors;
 
-	if (visionType[rayPlayer] < UBYTE_MAX)
+	if (visionType[rayPlayer] < UINT16_MAX)
 	{
 		TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(inRange)};
 
@@ -248,7 +245,7 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 			psTile->jammers[rayPlayer]++;
 			psTile->jammerBits |= (1 << rayPlayer); // mark it as being jammed
 		}
-		updateTileVis(psTile);
+		updateTileVis(psTile, rayPlayer);
 		watchedTiles.push_back(tilePos);  // record having seen it
 	}
 }
@@ -402,7 +399,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
-			uint8_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
+			uint16_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
 			if (visionType[psObj->player] == 0 && game.type == LEVEL_TYPE::CAMPAIGN)	// hack
 			{
 				continue;
@@ -419,7 +416,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 					psTile->jammerBits &= ~(1 << psObj->player);
 				}
 			}
-			updateTileVis(psTile);
+			updateTileVis(psTile, psObj->player);
 		}
 	}
 	psObj->watchedTiles.clear();

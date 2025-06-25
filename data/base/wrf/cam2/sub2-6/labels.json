@@ -67,6 +67,22 @@
 		"label": "buildPos2",
 		"pos": [5804, 512]
 	},
+	"position_17": {
+		"label": "southEastSpawn",
+		"pos": [6272, 7808]
+	},
+	"position_18": {
+		"label": "vtolAppearPos1",
+		"pos": [896, 256]
+	},
+	"position_19": {
+		"label": "vtolAppearPos2",
+		"pos": [7808, 4992]
+	},
+	"position_20": {
+		"label": "vtolAppearPos3",
+		"pos": [6144, 256]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -190,5 +206,12 @@
 		"id": 262,
 		"player": 2,
 		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 2,
+		"pos": [4224, 256],
+		"radius": 300
 	}
 }

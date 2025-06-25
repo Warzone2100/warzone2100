@@ -1,0 +1,33 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::tracks",
+	"title": "Tracks",
+	"sort": "04",
+	"visual": {
+		"stat": {
+			"id": "tracked01"
+		}
+	},
+	"contents": [
+		"Tracks are a highly-armored propulsion for vehicles.",
+		"",
+		"They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage.",
+		"",
+		"However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons.",
+		"",
+		"Additionally, Tracks come with a hefty penalty to their maximum speed.",
+		"",
+		"Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines.",
+		"",
+		"Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
+		],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::units::propulsions",
+		"wz2100::units::propulsions::wheels",
+		"wz2100::units::propulsions::halftracks",
+		"wz2100::weapons::antitank",
+		"wz2100::weapons::antipersonnel",
+		"wz2100::weapons::artillery"
+	]
+}

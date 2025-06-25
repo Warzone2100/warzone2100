@@ -1726,12 +1726,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, startPos.x, startPos.y);
 			}
-			else
-			{
-				// haven't got an LZ set up so don't do anything
-				actionDroid(psDroid, DACTION_NONE);
-				psDroid->order = DroidOrder(DORDER_NONE);
-			}
 		}
 		break;
 	case DORDER_RTR_SPECIFIED:
@@ -3351,24 +3345,24 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 				if (result.type == RTR_TYPE_REPAIR_FACILITY)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_FACILITY but target is null");
-					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
+					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeQueue);
 					return;
 				}
 				else if (result.type == RTR_TYPE_HQ)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_TYPE_HQ but target is null");
-					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+					orderDroid(psDroid, DORDER_RTB, ModeQueue);
 					return;
 				}
 				else if (result.type == RTR_TYPE_NO_RESULT)
 				{
-					orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+					orderDroid(psDroid, DORDER_RTB, ModeQueue);
 					return;
 				}
 				else if (result.type == RTR_TYPE_DROID)
 				{
 					ASSERT(result.psObj != nullptr, "RTR_DROID but target is null");
-					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeImmediate);
+					orderDroidObj(psDroid, DORDER_RTR, result.psObj, ModeQueue);
 				}
 
 			}

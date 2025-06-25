@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "3207386cc93121b907a8c5498a43b7a312f4f55d",
+	"builtin-baseline": "984f9232b2fe0eb94f5e9f161d6c632c581fff0c",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -41,10 +41,17 @@
 		"sqlite3",
 		"libsodium",
 		{
+			"name": "libzip",
+			"default-features": false,
+			"features": [
+				"bzip2"
+			]
+		},
+		{
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"winssl",
+				"schannel",
 				"ssl"
 			],
 			"platform": "windows | mingw"
@@ -73,7 +80,14 @@
 		{
 			"name": "basisu",
 			"host": true
+		},
+		{
+			"name": "protobuf",
+			"platform": "!emscripten"
 		}
+	],
+	"overrides": [
+		{ "name": "openal-soft", "version": "1.24.3" }
 	],
 	"default-features": [
 		"vulkan"

@@ -364,9 +364,11 @@ typedef enum
 	CLI_ALLOW_VULKAN_IMPLICIT_LAYERS,
 	CLI_HOST_CHAT_CONFIG,
 	CLI_HOST_ASYNC_JOIN_APPROVAL,
+	CLI_AUTOHOST_START_NOT_READY,
 #if defined(__EMSCRIPTEN__)
 	CLI_VIDEOURL,
 #endif
+	CLI_HOST_CONNECTION_PROVIDER,
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -457,9 +459,11 @@ static const struct poptOption *getOptionsTable()
 		{ "allow-vulkan-implicit-layers", POPT_ARG_NONE, CLI_ALLOW_VULKAN_IMPLICIT_LAYERS, N_("Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"), nullptr },
 		{ "host-chat-config", POPT_ARG_STRING, CLI_HOST_CHAT_CONFIG, N_("Set the default hosting chat configuration / permissions"), "[allow,quickchat]" },
 		{ "async-join-approve", POPT_ARG_NONE, CLI_HOST_ASYNC_JOIN_APPROVAL, N_("Enable async join approval (for connecting clients)"), nullptr },
+		{ "autohost-not-ready", POPT_ARG_NONE, CLI_AUTOHOST_START_NOT_READY, N_("Starts the host (autohost) as not ready, even if it's a spectator host"), nullptr },
 #if defined(__EMSCRIPTEN__)
 		{ "videourl", POPT_ARG_STRING, CLI_VIDEOURL,   N_("Base URL for on-demand video downloads"), N_("Base video URL") },
 #endif
+		{ "host-connection-provider", POPT_ARG_STRING, CLI_HOST_CONNECTION_PROVIDER, N_("Specify connection provider type to use when hosting game sessions"), "[tcp]" },
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -1345,6 +1349,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			NETsetAsyncJoinApprovalRequired(true);
 			break;
 
+		case CLI_AUTOHOST_START_NOT_READY:
+			setHostLaunchStartNotReady(true);
+			break;
+
 #if defined(__EMSCRIPTEN__)
 		case CLI_VIDEOURL:
 			token = poptGetOptArg(poptCon);
@@ -1356,6 +1364,20 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			debug(LOG_INFO, "Using \"%s\" as base video URL.", token);
 			break;
 #endif
+
+		case CLI_HOST_CONNECTION_PROVIDER:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Missing value for the host connection provider argument");
+			}
+			ConnectionProviderType pt;
+			if (!net_backend_from_str(token, pt))
+			{
+				qFatal("Unsupported / invalid network backend");
+			}
+			war_setHostConnectionProvider(pt);
+			break;
 
 		} // switch (option)
 	} // while

@@ -496,6 +496,10 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				{
 				case KEY_V:
 					aText = wzGetSelection();
+					// remove any \r, \n chars
+					aText.replace(WzUniCodepoint::fromASCII('\r'), "");
+					aText.replace(WzUniCodepoint::fromASCII('\n'), "");
+					// truncate if too long
 					if (aText.length() >= maxStringSize)
 					{
 						aText.truncate(maxStringSize);
@@ -612,6 +616,10 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 
 		/* Calculate how much of the string can appear in the box */
 		fitStringEnd();
+		if (printStart > 0)
+		{
+			insPos = aText.length();
+		}
 
 		/* Clear the input buffer */
 		inputClearBuffer();
@@ -750,6 +758,10 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	else
 	{
 		displayCache.wzDisplayedText.setText(displayedText, FontID);
+	}
+	if (state & WEDBS_DISABLE)
+	{
+		displayedTextColor = WZCOL_TEXT_DARK;
 	}
 
 	int lineSize = displayCache.wzDisplayedText.lineSize();

@@ -301,7 +301,6 @@ static bool _intAddInGameOptions()
 
 bool intAddInGameOptions()
 {
-	sliderEnableDrag(true);
 	return _intAddInGameOptions();
 }
 
@@ -924,6 +923,13 @@ bool isQuickLoadConfirmationFormOpen()
 	return dynamic_cast<IntFormAnimatedQuickLoad*>(widgGetFromID(psWScreen, INTINGAMEOP)) != nullptr;
 }
 
+// Cycle through options as in program seq(1) from coreutils
+// The T cast is to cycle through enums.
+template <typename T> static T seqCycleForwards(T value, T min, int inc, T max)
+{
+	return value < max ? T(value + inc) : min;  // Cycle forwards.
+}
+
 static bool runIGMouseOptionsMenu(UDWORD id)
 {
 	switch (id)
@@ -936,7 +942,7 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 
 	case INTINGAMEOP_TRAP:
 	case INTINGAMEOP_TRAP_R:
-		war_SetTrapCursor(!war_GetTrapCursor());
+		war_SetTrapCursor(static_cast<TrapCursorMode>(seqCycleForwards(static_cast<int>(war_GetTrapCursor()), static_cast<int>(TrapCursorMode::Disabled), 1, static_cast<int>(TrapCursorMode::Automatic))));
 		widgSetString(psWScreen, INTINGAMEOP_TRAP_R, mouseOptionsTrapString());
 		break;
 

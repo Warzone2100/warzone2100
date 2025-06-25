@@ -151,12 +151,12 @@ static UBYTE   bPlayCountDown;
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
 static void resetHomeStructureObjects();
-static bool startMissionOffClear(const char *pGame);
-static bool startMissionOffKeep(const char *pGame);
-static bool startMissionCampaignStart(const char *pGame);
-static bool startMissionCampaignChange(const char *pGame);
-static bool startMissionCampaignExpand(const char *pGame);
-static bool startMissionCampaignExpandLimbo(const char *pGame);
+static bool startMissionOffClear(const GameLoadDetails& gameToLoad);
+static bool startMissionOffKeep(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignStart(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignChange(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad);
 static bool startMissionBetween();
 static void endMissionCamChange();
 static void endMissionOffClear();
@@ -408,7 +408,7 @@ void setMissionCountDown()
 }
 
 
-bool startMission(LEVEL_TYPE missionType, const char *pGame)
+bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 {
 	bool	loaded = true;
 
@@ -437,7 +437,7 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 	//load the game file for all types of mission except a Between Mission
 	if (missionType != LEVEL_TYPE::LDS_BETWEEN)
 	{
-		loadGameInit(pGame);
+		loadGameInit(gameDetails);
 	}
 
 	//all proximity messages are removed between missions now
@@ -446,14 +446,14 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 	switch (missionType)
 	{
 	case LEVEL_TYPE::LDS_CAMSTART:
-		if (!startMissionCampaignStart(pGame))
+		if (!startMissionCampaignStart(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MKEEP:
 	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
-		if (!startMissionOffKeep(pGame))
+		if (!startMissionOffKeep(gameDetails))
 		{
 			loaded = false;
 		}
@@ -466,25 +466,25 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 		}
 		break;
 	case LEVEL_TYPE::LDS_CAMCHANGE:
-		if (!startMissionCampaignChange(pGame))
+		if (!startMissionCampaignChange(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND:
-		if (!startMissionCampaignExpand(pGame))
+		if (!startMissionCampaignExpand(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
-		if (!startMissionCampaignExpandLimbo(pGame))
+		if (!startMissionCampaignExpandLimbo(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MCLEAR:
-		if (!startMissionOffClear(pGame))
+		if (!startMissionOffClear(gameDetails))
 		{
 			loaded = false;
 		}
@@ -498,7 +498,7 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 
 	if (!loaded)
 	{
-		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, pGame);
+		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, gameDetails.filePath.c_str());
 		return false;
 	}
 
@@ -1151,14 +1151,14 @@ void saveCampaignData()
 
 
 //start an off world mission - clearing the object lists
-bool startMissionOffClear(const char *pGame)
+bool startMissionOffClear(const GameLoadDetails& gameToLoad)
 {
-	debug(LOG_SAVE, "called for %s", pGame);
+	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(pGame, !KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1172,13 +1172,13 @@ bool startMissionOffClear(const char *pGame)
 }
 
 //start an off world mission - keeping the object lists
-bool startMissionOffKeep(const char *pGame)
+bool startMissionOffKeep(const GameLoadDetails& gameToLoad)
 {
-	debug(LOG_SAVE, "called for %s", pGame);
+	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(pGame, !KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1191,9 +1191,9 @@ bool startMissionOffKeep(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignStart(const char *pGame)
+bool startMissionCampaignStart(const GameLoadDetails& gameToLoad)
 {
-	debug(LOG_SAVE, "called for %s", pGame);
+	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1202,7 +1202,7 @@ bool startMissionCampaignStart(const char *pGame)
 	clearCampaignUnits();
 
 	// Load in the new game details
-	if (!loadGame(pGame, !KEEPOBJECTS, FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, FREEMEM))
 	{
 		return false;
 	}
@@ -1212,7 +1212,7 @@ bool startMissionCampaignStart(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignChange(const char *pGame)
+bool startMissionCampaignChange(const GameLoadDetails& gameToLoad)
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1229,7 +1229,7 @@ bool startMissionCampaignChange(const char *pGame)
 	saveCampaignData();
 
 	//load in the new game details
-	if (!loadGame(pGame, !KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1239,10 +1239,10 @@ bool startMissionCampaignChange(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignExpand(const char *pGame)
+bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad)
 {
 	//load in the new game details
-	if (!loadGame(pGame, KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1251,12 +1251,12 @@ bool startMissionCampaignExpand(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignExpandLimbo(const char *pGame)
+bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad)
 {
 	saveMissionLimboData();
 
 	//load in the new game details
-	if (!loadGame(pGame, KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}

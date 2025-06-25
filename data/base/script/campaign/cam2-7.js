@@ -26,6 +26,16 @@ const mis_collectiveResClassic = [
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
 	"R-Wpn-RocketSlow-ROF03"
 ];
+const mis_vtolAppearPositions = ["vtolAppearPos1", "vtolAppearPos2"];
+
+camAreaEvent("vtolRemoveZone", function(droid)
+{
+	if ((droid.player !== CAM_HUMAN_PLAYER) && camVtolCanDisappear(droid))
+	{
+		camSafeRemoveObject(droid, false);
+	}
+	resetLabel("vtolRemoveZone", CAM_THE_COLLECTIVE);
+});
 
 function camEnemyBaseDetected_COBase1()
 {
@@ -109,6 +119,65 @@ function truckDefense()
 	camQueueBuilding(CAM_THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
 }
 
+function insaneWave2()
+{
+	const list = [cTempl.colhvat, cTempl.colhvat];
+	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_THE_COLLECTIVE, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+}
+
+function insaneWave3()
+{
+	const list = [cTempl.commorv, cTempl.comacv];
+	const ext = {limit: [2, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_THE_COLLECTIVE, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+}
+
+function insaneVtolAttack()
+{
+	if (camClassicMode())
+	{
+		const list = [cTempl.colhvat, cTempl.commorvt];
+		const ext = {limit: [4, 5], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_THE_COLLECTIVE, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+	}
+	else
+	{
+		const list = [cTempl.commorvt, cTempl.commorvt];
+		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_THE_COLLECTIVE, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+		queue("insaneWave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
+		queue("insaneWave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
+	}
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.cohhvch, cTempl.comagh, cTempl.cohach, cTempl.comltath];
+	const limits = {minimum: 4, maxRandom: 4};
+	const location = ["insaneSpawnPos1", "insaneSpawnPos2", "insaneSpawnPos3", "insaneSpawnPos4"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 30;
+	const units = [cTempl.cohact, cTempl.comrotmh, cTempl.cohhpv, cTempl.comhltat];
+	const limits = {minimum: 4, maxRandom: 4};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneSetupSpawns()
+{
+	if (camAllowInsaneSpawns())
+	{
+		queue("insaneVtolAttack", camMinutesToMilliseconds(2));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4.5));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5.5));
+	}
+}
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta10.pre, {
@@ -144,6 +213,7 @@ function eventStartLevel()
 		camUpgradeOnMapTemplates(cTempl.npcybc, cTempl.cocybsn, CAM_THE_COLLECTIVE);
 		camUpgradeOnMapTemplates(cTempl.npcybr, cTempl.cocybtk, CAM_THE_COLLECTIVE);
 		camUpgradeOnMapTemplates(cTempl.npcybm, cTempl.cocybag, CAM_THE_COLLECTIVE);
+		camUpgradeOnMapTemplates(cTempl.colatv, cTempl.colhvat, CAM_THE_COLLECTIVE);
 
 		camSetArtifacts({
 			"COHeavyFac-Arti-b2": { tech: ["R-Wpn-Cannon5", "R-Wpn-MG-Damage08"] },
@@ -190,7 +260,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [cTempl.comagt, cTempl.cohact, cTempl.cohhpv, cTempl.comtath]
+			templates: (!camClassicMode()) ? [cTempl.comagt, cTempl.cohact, cTempl.cohhpv, cTempl.comhltat] : [cTempl.comagt, cTempl.cohact, cTempl.cohhpv, cTempl.comtath]
 		},
 		"COCyborgFac-b2": {
 			assembly: "base2CybAssembly",
@@ -271,4 +341,5 @@ function eventStartLevel()
 	queue("baseThreeVtolAttack", camChangeOnDiff(camSecondsToMilliseconds(90)));
 	queue("baseFourVtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 	queue("enableFactoriesAndHovers", camSecondsToMilliseconds(90));
+	queue("insaneSetupSpawns", camMinutesToMilliseconds(7));
 }

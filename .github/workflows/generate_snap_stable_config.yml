@@ -38,7 +38,7 @@ jobs:
     name: 'Generate Snap Stable Config'
     permissions:
       contents: read
-    runs-on: ubuntu-20.04 # Use instead of ubuntu-latest until https://github.com/snapcore/action-build/issues/42 is resolved
+    runs-on: ubuntu-latest
     steps:
       - name: Generate Config
         id: config

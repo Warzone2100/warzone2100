@@ -127,13 +127,6 @@ void WzMultiLimitTitleUI::start()
 	if (challengeActive)
 	{
 		resetLimits();
-		// turn off the sliders
-		sliderEnableDrag(false);
-	}
-	else
-	{
-		//enable the sliders
-		sliderEnableDrag(true);
 	}
 
 	// TRANSLATORS: Sidetext of structure limits screen
@@ -180,6 +173,10 @@ void WzMultiLimitTitleUI::start()
 	            iV_GetImageWidth(FrontImages, IMAGE_NO),
 	            iV_GetImageHeight(FrontImages, IMAGE_NO),
 	            _("Apply Defaults and Return To Previous Screen"), IMAGE_NO, IMAGE_NO, true);
+	if (challengeActive)
+	{
+		widgSetButtonState(psWScreen, IDLIMITS_RETURN, WBUT_DISABLE);
+	}
 
 	// ok button
 	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_OK,
@@ -220,9 +217,13 @@ void WzMultiLimitTitleUI::start()
 			limitsList->addWidgetToLayout(button);
 			++limitsButtonId;
 
-			addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
+			auto slider = addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
 			            asStructureStats[i].maxLimit,
 			            asStructureStats[i].upgrade[0].limit);
+			if (challengeActive)
+			{
+				slider->disable();
+			}
 			++limitsButtonId;
 		}
 	}
@@ -238,10 +239,13 @@ TITLECODE WzMultiLimitTitleUI::run()
 	// sliders
 	if ((id > IDLIMITS_ENTRIES_START)  && (id < IDLIMITS_ENTRIES_END))
 	{
-		unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
-		if (statid)
+		if (!challengeActive)
 		{
-			asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
+			if (statid)
+			{
+				asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			}
 		}
 	}
 	else
@@ -258,6 +262,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 			widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, WBUT_DISABLE);
 			break;
 		case IDLIMITS_RETURN:
+			if (challengeActive)
+			{
+				changeTitleUI(parent);
+				break;
+			}
 			// reset the sliders..
 			resetLimits();
 			// free limiter structure
@@ -288,6 +297,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 
 			break;
 		case IDLIMITS_OK:
+			if (challengeActive)
+			{
+				changeTitleUI(parent);
+				break;
+			}
 			if (!challengeActive && widgGetButtonState(psWScreen, IDLIMITS_FORCE))
 			{
 				ingame.flags |= MPFLAGS_FORCELIMITS;

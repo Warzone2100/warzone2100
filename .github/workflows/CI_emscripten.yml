@@ -47,6 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WZ_WASM_ARCH: '${{ matrix.arch }}'
+      VCPKG_DEFAULT_HOST_TRIPLET: 'x64-linux' # based on the runs-on line above
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     outputs:
       # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it

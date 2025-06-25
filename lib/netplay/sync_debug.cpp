@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024  Warzone 2100 Project
+	Copyright (C) 2024-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,9 +29,9 @@
 #include "lib/framework/debug.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/byteorder_funcs_wrapper.h"
 #include "nettypes.h"
 #include "netplay.h"
-#include "netsocket.h" // solely to bring in `htonl` function
 
 #include <physfs.h>
 
@@ -40,6 +42,7 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <array>
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -76,7 +79,7 @@ struct SyncDebugValueChange : public SyncDebugEntry
 		variableName = vn;
 		newValue = nv;
 		id = i;
-		uint32_t valueBytes = htonl(newValue);
+		uint32_t valueBytes = wz_htonl(newValue);
 		crc = wz::crc_update(crc, function, strlen(function) + 1);
 		crc = wz::crc_update(crc, variableName, strlen(variableName) + 1);
 		crc = wz::crc_update(crc, &valueBytes, 4);
@@ -105,7 +108,7 @@ struct SyncDebugIntList : public SyncDebugEntry
 		numInts = std::min(num, ARRAY_SIZE(valueBytes));
 		for (unsigned n = 0; n < numInts; ++n)
 		{
-			valueBytes[n] = htonl(ints[n]);
+			valueBytes[n] = wz_htonl(ints[n]);
 		}
 		crc = wz::crc_update(crc, valueBytes, 4 * numInts);
 	}
@@ -228,6 +231,7 @@ struct SyncDebugLog
 		char const* charPtr = chars.empty() ? nullptr : &chars[0];
 		int const* intPtr = ints.empty() ? nullptr : &ints[0];
 
+		int printRes = 0;
 		int index = 0;
 		for (size_t n = 0; n < log.size() && (size_t)index < bufSize; ++n)
 		{
@@ -235,18 +239,19 @@ struct SyncDebugLog
 			switch (type)
 			{
 			case 's':
-				index += stringPtr++->snprint(buf + index, bufSize - index, charPtr);
+				printRes = stringPtr++->snprint(buf + index, bufSize - index, charPtr);
 				break;
 			case 'v':
-				index += valueChangePtr++->snprint(buf + index, bufSize - index);
+				printRes = valueChangePtr++->snprint(buf + index, bufSize - index);
 				break;
 			case 'i':
-				index += intListPtr++->snprint(buf + index, bufSize - index, intPtr);
+				printRes = intListPtr++->snprint(buf + index, bufSize - index, intPtr);
 				break;
 			default:
 				abort();
 				break;
 			}
+			index += std::max<int>(printRes, 0);
 		}
 		return index;
 	}
@@ -297,6 +302,229 @@ static uint32_t syncDebugExtraGameTime;
 static uint32_t syncDebugExtraCrc;
 
 static uint32_t syncDebugNumDumps = 0;
+constexpr uint32_t MaxPlayerSyncDebugDumps = 2;
+
+// 5 MiB seems to be a reasonable size limit (at the moment)
+// - If other limits are raised (map size, unit cap, player limit) this may need to be adjusted
+//   to receive a complete desync log in late-game / high complexity game tick situations
+constexpr size_t MaxDesyncLogSize = 5000000;
+constexpr uint32_t NetMessageOverheadMax = 1 + 4; // 1 byte for message type, 4 bytes for max uint32_t
+constexpr uint32_t MAX_DESYNC_LOG_TRANSFER_PACKET = MaxMsgSize - NetMessageOverheadMax - 8; // - overhead
+class DesyncLogOutputter
+{
+public:
+	DesyncLogOutputter();
+	static std::string getFilename(uint32_t time, unsigned player);
+	void expectDesyncLog(uint32_t time);
+	void willLogLocalDesyncLog(uint32_t time);
+	bool canWriteLogFor(uint32_t time, unsigned player);
+	bool alreadyWroteLogFor(uint32_t time, unsigned player);
+	bool write(uint32_t time, unsigned player, const uint8_t* buf, size_t bufLen);
+	bool closeEOF(uint32_t time, unsigned player);
+	void clear();
+private:
+	struct PlayerDesyncLogOutput
+	{
+	public:
+		void setExpectDesyncLog(uint32_t time);
+		bool canWriteLogFor(uint32_t time);
+		bool alreadyWroteLogFor(uint32_t time);
+		bool write(uint32_t time, unsigned player, const uint8_t* buf, size_t bufLen);
+		bool closeEOF(uint32_t time, unsigned player);
+		void clear();
+	private:
+		struct LogOutputter
+		{
+		public:
+			~LogOutputter();
+		public:
+			bool write(uint32_t time, unsigned player, const uint8_t* buf, size_t bufLen);
+			bool closeEOF();
+			bool getNoFurtherWrites() const { return noFurtherWrites; }
+			size_t getWrittenSize() const { return writtenSize; }
+		private:
+			PHYSFS_file* fp = nullptr;
+			bool noFurtherWrites = false;
+			size_t writtenSize = 0;
+		};
+		typedef std::unordered_map<uint32_t, LogOutputter> DesyncOutputs;
+		DesyncOutputs outputs;
+	};
+	std::array<PlayerDesyncLogOutput, MAX_GAMEQUEUE_SLOTS> players;
+};
+
+static DesyncLogOutputter playerDesyncLogOutput;
+
+static std::vector<uint8_t> debugSyncTmpBuf;
+constexpr size_t kDefaultDebugSyncBufferSize = 4000000;
+static_assert(kDefaultDebugSyncBufferSize < MaxDesyncLogSize, "");
+constexpr size_t kMaxDebugSyncBufferSize = MaxDesyncLogSize;
+static size_t targetDebugSyncTmpBufSize = kDefaultDebugSyncBufferSize;
+
+// MARK: - DesyncLogOutputter
+
+DesyncLogOutputter::DesyncLogOutputter()
+{ }
+
+std::string DesyncLogOutputter::getFilename(uint32_t time, unsigned int player)
+{
+	return astringf("logs/desync%u_p%u.txt", time, player);
+}
+
+void DesyncLogOutputter::expectDesyncLog(uint32_t time)
+{
+	for (auto& a : players)
+	{
+		a.setExpectDesyncLog(time);
+	}
+}
+
+void DesyncLogOutputter::willLogLocalDesyncLog(uint32_t time)
+{
+	if (selectedPlayer < players.size())
+	{
+		players[selectedPlayer].setExpectDesyncLog(time);
+	}
+}
+
+bool DesyncLogOutputter::canWriteLogFor(uint32_t time, unsigned player)
+{
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
+	return players[player].canWriteLogFor(time);
+}
+
+bool DesyncLogOutputter::alreadyWroteLogFor(uint32_t time, unsigned player)
+{
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
+	return players[player].alreadyWroteLogFor(time);
+}
+
+bool DesyncLogOutputter::write(uint32_t time, unsigned player, const uint8_t* buf, size_t bufLen)
+{
+	ASSERT_OR_RETURN(false, player < players.size(), "Invalid player idx: %u", player);
+	return players[player].write(time, player, buf, bufLen);
+}
+
+bool DesyncLogOutputter::closeEOF(uint32_t time, unsigned player)
+{
+	return players[player].closeEOF(time, player);
+}
+
+void DesyncLogOutputter::clear()
+{
+	for (auto& a : players)
+	{
+		a.clear();
+	}
+}
+
+void DesyncLogOutputter::PlayerDesyncLogOutput::setExpectDesyncLog(uint32_t time)
+{
+	outputs.insert(DesyncOutputs::value_type(time, {}));
+}
+
+bool DesyncLogOutputter::PlayerDesyncLogOutput::canWriteLogFor(uint32_t time)
+{
+	return outputs.count(time) > 0 || outputs.size() < MaxPlayerSyncDebugDumps;
+}
+
+bool DesyncLogOutputter::PlayerDesyncLogOutput::alreadyWroteLogFor(uint32_t time)
+{
+	auto it = outputs.find(time);
+	if (it == outputs.end())
+	{
+		return false;
+	}
+	return it->second.getNoFurtherWrites();
+}
+
+bool DesyncLogOutputter::PlayerDesyncLogOutput::write(uint32_t time, unsigned player, const uint8_t *buf, size_t bufLen)
+{
+	auto it = outputs.find(time);
+	if (it == outputs.end())
+	{
+		if (outputs.size() >= MaxPlayerSyncDebugDumps)
+		{
+			return false;
+		}
+		it = outputs.insert(DesyncOutputs::value_type(time, {})).first;
+	}
+	return it->second.write(time, player, buf, bufLen);
+}
+
+bool DesyncLogOutputter::PlayerDesyncLogOutput::closeEOF(uint32_t time, unsigned player)
+{
+	auto it = outputs.find(time);
+	if (it == outputs.end())
+	{
+		return false;
+	}
+	return it->second.closeEOF();
+}
+
+void DesyncLogOutputter::PlayerDesyncLogOutput::clear()
+{
+	outputs.clear();
+}
+
+DesyncLogOutputter::PlayerDesyncLogOutput::LogOutputter::~LogOutputter()
+{
+	closeEOF();
+}
+
+bool DesyncLogOutputter::PlayerDesyncLogOutput::LogOutputter::closeEOF()
+{
+	if (fp == nullptr)
+	{
+		return false;
+	}
+	PHYSFS_close(fp);
+	fp = nullptr;
+	noFurtherWrites = true;
+	return true;
+}
+
+bool DesyncLogOutputter::PlayerDesyncLogOutput::LogOutputter::write(uint32_t time, unsigned int player, const uint8_t *buf, size_t bufLen)
+{
+	bool retVal = true;
+
+	if (noFurtherWrites)
+	{
+		return false;
+	}
+	size_t bytesToWrite = bufLen;
+	if (bytesToWrite > MaxDesyncLogSize - writtenSize)
+	{
+		// truncate - and further attempts to write data will fail
+		bytesToWrite = MaxDesyncLogSize - writtenSize;
+		retVal = false;
+	}
+	if (bytesToWrite > 0)
+	{
+		// Open file if not already open
+		if (!fp)
+		{
+			auto fname = DesyncLogOutputter::getFilename(time, player);
+			fp = openSaveFile(fname.c_str());
+			if (!fp)
+			{
+				debug(LOG_ERROR, "Failed to open file for writing: %s", fname.c_str());
+				noFurtherWrites = true; // don't repeatedly try to open the file if the first attempt fails
+				return false;
+			}
+			WZ_PHYSFS_SETBUFFER(fp, 1024 * 1024)
+		}
+
+		// Write to file
+		ASSERT(bytesToWrite <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "bytesToWrite (%zu) exceeds PHYSFS_uint32::max", bytesToWrite);
+		WZ_PHYSFS_writeBytes(fp, buf, static_cast<PHYSFS_uint32>(bytesToWrite));
+
+		writtenSize += bytesToWrite;
+	}
+	return retVal;
+}
+
+// MARK: -
 
 void _syncDebug(const char* function, const char* str, ...)
 {
@@ -382,6 +610,11 @@ void resetSyncDebug()
 	syncDebugNext = 0;
 
 	syncDebugNumDumps = 0;
+	playerDesyncLogOutput.clear();
+
+	debugSyncTmpBuf.clear();
+	debugSyncTmpBuf.shrink_to_fit();
+	targetDebugSyncTmpBufSize = kDefaultDebugSyncBufferSize;
 }
 
 GameCrcType nextDebugSync()
@@ -398,56 +631,77 @@ GameCrcType nextDebugSync()
 	return (GameCrcType)ret;
 }
 
-static void dumpDebugSyncImpl(uint8_t* buf, size_t bufLen, const char* fname)
+static void dbgOutputDumpedSyncLog(uint32_t time, uint32_t player, bool partial = false, bool syncError = true)
 {
-	PHYSFS_file* fp = openSaveFile(fname);
-	if (!fp)
-	{
-		debug(LOG_ERROR, "Failed to open file for writing: %s", fname);
-		return;
-	}
-	ASSERT(bufLen <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "bufLen (%zu) exceeds PHYSFS_uint32::max", bufLen);
-	WZ_PHYSFS_writeBytes(fp, buf, static_cast<PHYSFS_uint32>(bufLen));
-	PHYSFS_close(fp);
-}
-
-static void dumpDebugSync(uint8_t* buf, size_t bufLen, uint32_t time, unsigned player, bool syncError = true)
-{
-	char fname[100];
-	ssprintf(fname, "logs/desync%u_p%u.txt", time, player);
-
-	dumpDebugSyncImpl(buf, bufLen, fname);
-
+	auto fname = DesyncLogOutputter::getFilename(time, player);
 	bool isSpectator = player < NetPlay.players.size() && NetPlay.players[player].isSpectator;
 	std::string typeDescription = (syncError) ? "sync error" : "sync log";
 	std::string playerDescription = (isSpectator) ? "spectator" : "player";
-	debug(LOG_ERROR, "Dumped %s %u's %s at gameTime %u to file: %s%s", playerDescription.c_str(), player, typeDescription.c_str(), time, WZ_PHYSFS_getRealDir_String(fname).c_str(), fname);
+	debug(LOG_ERROR, "Dumped %s %u's %s%s at gameTime %u to file: %s%s", playerDescription.c_str(), player, (partial) ? "<partial> " : "", typeDescription.c_str(), time, WZ_PHYSFS_getRealDir_String(fname.c_str()).c_str(), fname.c_str());
+}
+
+static void dumpLocalPlayerDebugSync(const uint8_t* buf, size_t bufLen, uint32_t time, bool syncError = true)
+{
+	playerDesyncLogOutput.write(time, selectedPlayer, buf, bufLen);
+	playerDesyncLogOutput.closeEOF(time, selectedPlayer);
+	dbgOutputDumpedSyncLog(time, selectedPlayer, false, syncError);
 }
 
 static void sendDebugSync(uint8_t* buf, uint32_t bufLen, uint32_t time)
 {
 	// Save our own, before sending, so that if we have 2 clients running on the same computer, to guarantee that it is done saving before the other client saves on top.
-	dumpDebugSync(buf, bufLen, time, selectedPlayer);
+	dumpLocalPlayerDebugSync(buf, bufLen, time);
 
-	NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
-	NETuint32_t(&time);
-	NETuint32_t(&bufLen);
-	NETbin(buf, bufLen);
-	NETend();
+	// Send multiple messages, of max MAX_DESYNC_LOG_TRANSFER_PACKET bytes of log data, until the full desync log is sent
+	uint32_t bytesWritten = 0;
+	uint32_t bytesToWrite = 0;
+	size_t numMessages = 0;
+	while (bytesWritten < bufLen)
+	{
+		bytesToWrite = std::min<uint32_t>(MAX_DESYNC_LOG_TRANSFER_PACKET, bufLen - bytesWritten);
+		auto w = NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
+		NETuint32_t(w, time);
+		NETuint32_t(w, bytesToWrite);
+		NETbin(w, buf + bytesWritten, bytesToWrite);
+		NETend(w);
+		bytesWritten += bytesToWrite;
+		numMessages++;
+	}
+	// plus one 0-length buffer packet to signify EOF
+	bytesToWrite = 0;
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_DEBUG_SYNC);
+	NETuint32_t(w, time);
+	NETuint32_t(w, bytesToWrite);
+	NETend(w);
+	numMessages++;
+
+	debug(LOG_INFO, "Broadcast sync log (time: %" PRIu32 ", size: %" PRIu32 ") in %zu messages", time, bufLen, numMessages);
 }
-
-static uint8_t debugSyncTmpBuf[2000000];
 
 static size_t dumpLocalDebugSyncLog(unsigned logIndex)
 {
+	if (debugSyncTmpBuf.size() < targetDebugSyncTmpBufSize)
+	{
+		debugSyncTmpBuf.clear();
+		debugSyncTmpBuf.resize(targetDebugSyncTmpBufSize);
+	}
+	const size_t bufSizeLimit = debugSyncTmpBuf.size();
 	size_t bufIndex = 0;
+	auto enforceLimit = [&bufIndex, &bufSizeLimit]() {
+		if (bufIndex > bufSizeLimit)
+		{
+			bufIndex = bufSizeLimit;
+			// grow buffer slightly for next debug sync log send (up to max)
+			targetDebugSyncTmpBufSize = std::min<size_t>(targetDebugSyncTmpBufSize + 500000, kMaxDebugSyncBufferSize);
+		}
+	};
 	// Dump our version, and also erase it, so we only dump it at most once.
-	bufIndex += snprintf((char*)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== BEGIN gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
-	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	bufIndex += syncDebugLog[logIndex].snprint((char*)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex);
-	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	bufIndex += snprintf((char*)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
-	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += snprintf((char*)debugSyncTmpBuf.data() + bufIndex, bufSizeLimit - bufIndex, "===== BEGIN gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	enforceLimit();  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += syncDebugLog[logIndex].snprint((char*)debugSyncTmpBuf.data() + bufIndex, bufSizeLimit - bufIndex);
+	enforceLimit();  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
+	bufIndex += snprintf((char*)debugSyncTmpBuf.data() + bufIndex, bufSizeLimit - bufIndex, "===== END gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	enforceLimit();  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 
 	return bufIndex;
 }
@@ -475,23 +729,59 @@ static size_t dumpLocalDebugSyncLogByTime(uint32_t time)
 
 void recvDebugSync(NETQUEUE queue)
 {
+	ASSERT_OR_RETURN(, queue.index < MAX_CONNECTED_PLAYERS, "Invalid queue.index: %" PRIu8, queue.index);
+	unsigned player = queue.index;
+
 	uint32_t time = 0;
 	uint32_t bufLen = 0;
 
-	NETbeginDecode(queue, NET_DEBUG_SYNC);
-	NETuint32_t(&time);
-	NETuint32_t(&bufLen);
-	bufLen = MIN(bufLen, ARRAY_SIZE(debugSyncTmpBuf));
-	NETbin(debugSyncTmpBuf, bufLen);
-	NETend();
+	uint8_t recvBuff[MAX_DESYNC_LOG_TRANSFER_PACKET] = {};
 
-	dumpDebugSync(debugSyncTmpBuf, bufLen, time, queue.index);
+	// Receive a message of desync data (the next chunk of a desync log)
+	auto r = NETbeginDecode(queue, NET_DEBUG_SYNC);
+	NETuint32_t(r, time);
+	NETuint32_t(r, bufLen);
+	if (!playerDesyncLogOutput.canWriteLogFor(time, player))
+	{
+		NETend(r);
+		return;
+	}
+	if (bufLen > MAX_DESYNC_LOG_TRANSFER_PACKET)
+	{
+		// invalid packet - terminate
+		if (playerDesyncLogOutput.closeEOF(time, player))
+		{
+			dbgOutputDumpedSyncLog(time, player, true);
+		}
+		NETend(r);
+		return;
+	}
+	NETbin(r, recvBuff, bufLen);
+	NETend(r);
 
-	// Also dump the debug sync log for this local client (if possible)
-	bufLen = dumpLocalDebugSyncLogByTime(time);
 	if (bufLen > 0)
 	{
-		dumpDebugSync(debugSyncTmpBuf, bufLen, time, selectedPlayer, false);
+		playerDesyncLogOutput.write(time, player, recvBuff, bufLen);
+	}
+	else
+	{
+		// 0-length buffer packet considered EOF
+		if (playerDesyncLogOutput.closeEOF(time, player))
+		{
+			dbgOutputDumpedSyncLog(time, player, false);
+		}
+	}
+
+	// Also dump the debug sync log for this local client (if possible & needed)
+	if (!playerDesyncLogOutput.alreadyWroteLogFor(time, selectedPlayer))
+	{
+		debug(LOG_INFO, "Dumping local debug sync log in response to received for gameTime: %" PRIu32, time);
+		bufLen = dumpLocalDebugSyncLogByTime(time);
+		if (bufLen > 0)
+		{
+			playerDesyncLogOutput.willLogLocalDesyncLog(time);
+			dumpLocalPlayerDebugSync(debugSyncTmpBuf.data(), bufLen, time, false);
+		}
 	}
 }
 
@@ -519,7 +809,15 @@ void debugVerboseLogSyncIfNeeded()
 	{
 		char fname[100];
 		ssprintf(fname, "logs/sync%u_p%u.txt", gameTime, selectedPlayer);
-		dumpDebugSyncImpl(debugSyncTmpBuf, bufLen, fname);
+		PHYSFS_file* fp = openSaveFile(fname);
+		if (!fp)
+		{
+			debug(LOG_ERROR, "Failed to open file for writing: %s", fname);
+			return;
+		}
+		ASSERT(bufLen <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "bufLen (%zu) exceeds PHYSFS_uint32::max", bufLen);
+		WZ_PHYSFS_writeBytes(fp, debugSyncTmpBuf.data(), static_cast<PHYSFS_uint32>(bufLen));
+		PHYSFS_close(fp);
 	}
 }
 
@@ -560,11 +858,13 @@ bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 		return false;                                   // Couldn't check. May have dumped already, or MAX_SYNC_HISTORY isn't big enough compared to the maximum latency.
 	}
 
-	size_t bufIndex = dumpLocalDebugSyncLog(logIndex);
-	if (syncDebugNumDumps < 2)
+	if (syncDebugNumDumps < MaxPlayerSyncDebugDumps)
 	{
+		size_t bufIndex = dumpLocalDebugSyncLog(logIndex);
 		++syncDebugNumDumps;
-		sendDebugSync(debugSyncTmpBuf, static_cast<uint32_t>(bufIndex), syncDebugLog[logIndex].getGameTime());
+		auto problemGameTime = syncDebugLog[logIndex].getGameTime();
+		playerDesyncLogOutput.expectDesyncLog(problemGameTime);
+		sendDebugSync(debugSyncTmpBuf.data(), static_cast<uint32_t>(bufIndex), problemGameTime);
 	}
 
 	// Backup correct CRC for checking against remaining players, even though we erased the logs (which were dumped already).

@@ -203,7 +203,7 @@ enum  				  // Reticule button indecies.
 /* maximum array sizes */
 #define	MAXSTRUCTURES	65535	//bumped up from 80.  NOTE: was used for max # in build menus.
 #define	MAXRESEARCH		65535	//was 80 topic displayed   "           "
-#define	MAXFEATURES		80
+#define	MAXFEATURES		200		//was 80.
 #define	MAXCOMPONENT	200
 #define	MAXEXTRASYS		80
 
@@ -267,6 +267,8 @@ extern iIMDShape	*pNewDesignIMD;
 
 /* Initialise the in game interface */
 bool intInitialise();
+
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj);
 
 bool intAddRadarWidget();
 

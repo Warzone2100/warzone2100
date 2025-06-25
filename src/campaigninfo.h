@@ -58,5 +58,6 @@ const std::unordered_map<std::string, nlohmann::json>& getCamTweakOptions();
 nlohmann::json getCamTweakOptionsValue(const std::string& identifier, nlohmann::json defaultValue);
 bool getCamTweakOption_AutosavesOnly();
 bool getCamTweakOption_PS1Modifiers();
+bool getCamTweakOption_FastExp();
 
 #endif // __INCLUDED_SRC_CAMPAIGNINFO_H__

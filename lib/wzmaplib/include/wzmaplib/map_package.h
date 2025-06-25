@@ -103,7 +103,7 @@ bool exportLevelDetails(const LevelDetails& details, LevelFormat format, const s
 
 class MapPackage
 {
-private:
+protected:
 	// Construct an empty Map Package, for modification
 	MapPackage();
 
@@ -115,7 +115,7 @@ public:
 	// The default StdIOProvider will assume pathToMapPackage is a path to an extracted map package (i.e. standard filesystem I/O)
 	//
 	// To load from an archive (.zip/.wz), create a custom implementation of WzMap::IOProvider that supports compressed archive files that you initialize with the path to the zip. An example of this (which uses libzip) is available in `plugins/ZipIOProvider`. You would then set `pathToMapPackage` to be the root path inside the zip. (In the case of plugins\ZipIOProvider, literally "/" or "").
-	static std::unique_ptr<MapPackage> loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
+	static std::shared_ptr<MapPackage> loadPackage(const std::string& pathToMapPackage, std::shared_ptr<LoggingProtocol> logger = nullptr, std::shared_ptr<IOProvider> mapIO = std::make_shared<StdIOProvider>());
 
 	// Construct a new MapPackage object (which can then be exported)
 	MapPackage(const LevelDetails& levelDetails, MapType mapType, std::shared_ptr<Map> map);
@@ -136,6 +136,9 @@ public:
 	// Get the loaded level details format
 	// Note: Returns a value only if the MapPackage was loaded (i.e. via loadPackage)
 	optional<LevelFormat> loadedLevelDetailsFormat() const;
+
+	// Get whether this appears to be a script-generated map (does not load the map, merely checks if there's a game.js that would load)
+	bool isScriptGeneratedMap() const;
 
 	// Get the map data
 	// Returns nullptr if the loading failed
@@ -174,17 +177,16 @@ public:
 	bool modTypesEnumerate(std::function<void (ModTypes modType)> func);
 
 	// Extract various map stats / info
-	optional<MapStats> calculateMapStats();
-	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig);
+	optional<MapStats> calculateMapStats(uint32_t mapSeed);
+	optional<MapStats> calculateMapStats(MapStatsConfiguration statsConfig, uint32_t mapSeed);
 
-private:
-	bool loadGamInfo();
+	const GamInfo& getGamInfo();
 
 private:
 	std::string m_pathToMapPackage;
 	optional<LevelFormat> m_loadedLevelFormat;
 	LevelDetails m_levelDetails;
-	GamInfo	m_gamInfo;
+	optional<GamInfo> m_gamInfo;
 	MapType m_mapType;
 	optional<MapPackageType> m_packageType;
 	bool m_flatMapPackage = false;

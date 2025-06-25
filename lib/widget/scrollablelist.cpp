@@ -35,6 +35,7 @@ void ScrollableListWidget::initialize()
 	scrollbarWidth = SCROLLBAR_WIDTH;
 	backgroundColor.rgba = 0;
 	borderColor.rgba = 0;
+	rowLinesColor = pal_RGBA(0,0,0,255);
 }
 
 void ScrollableListWidget::geometryChanged()
@@ -57,8 +58,10 @@ void ScrollableListWidget::run(W_CONTEXT *psContext)
  */
 uint32_t ScrollableListWidget::snappedOffset()
 {
-	for (auto child : listView->children())
+	const auto& items = listView->children();
+	for (size_t idx = 0; idx < items.size(); ++idx)
 	{
+		const auto& child = items[idx];
 		if (child->geometry().bottom() < scrollBar->position())
 		{
 			continue;
@@ -70,11 +73,13 @@ uint32_t ScrollableListWidget::snappedOffset()
 			const auto y = child->y() + childOffset;
 			if (y >= scrollBar->position())
 			{
+				topVisibleItemIdx = idx;
 				return y;
 			}
 		}
 	}
 
+	topVisibleItemIdx = 0;
 	return 0;
 }
 
@@ -95,13 +100,15 @@ int32_t ScrollableListWidget::getCurrentYPosOfItem(size_t itemNum)
 {
 	int currTopOffset = listView->getTopOffset();
 	auto itemYPos = getScrollPositionForItem(itemNum);
-	return itemYPos - currTopOffset;
+	return (itemYPos - currTopOffset) + listView->y();
 }
 
-void ScrollableListWidget::addItem(const std::shared_ptr<WIDGET> &item)
+size_t ScrollableListWidget::addItem(const std::shared_ptr<WIDGET> &item)
 {
+	size_t newItemIdx = listView->children().size();
 	listView->attach(item);
 	layoutDirty = true;
+	return newItemIdx;
 }
 
 void ScrollableListWidget::clear()
@@ -110,11 +117,23 @@ void ScrollableListWidget::clear()
 	layoutDirty = true;
 	updateLayout();
 	listView->setTopOffset(0);
+	topVisibleItemIdx = 0;
 }
 
 size_t ScrollableListWidget::numItems() const
 {
 	return listView->children().size();
+}
+
+std::shared_ptr<WIDGET> ScrollableListWidget::getItemAtIdx(size_t itemNum) const
+{
+	ASSERT_OR_RETURN(nullptr, itemNum < listView->children().size(), "itemNum out of bounds - number of items: %zu", listView->children().size());
+	return listView->children()[itemNum];
+}
+
+const std::vector<std::shared_ptr<WIDGET>>& ScrollableListWidget::getItems() const
+{
+	return listView->children();
 }
 
 void ScrollableListWidget::updateLayout()
@@ -150,6 +169,10 @@ void ScrollableListWidget::resizeChildren(uint32_t width)
 	auto nextOffset = 0;
 	for (auto& child : listView->children())
 	{
+		if (!child->visible())
+		{
+			continue;
+		}
 		child->setGeometry(0, nextOffset, width, child->height());
 		scrollableHeight = nextOffset + child->height();
 		nextOffset = scrollableHeight + itemSpacing;
@@ -193,6 +216,16 @@ void ScrollableListWidget::setPadding(Padding const &rect)
 {
 	padding = rect;
 	layoutDirty = true;
+}
+
+const Padding& ScrollableListWidget::getPadding() const
+{
+	return padding;
+}
+
+void ScrollableListWidget::setDrawRowLines(bool bEnabled)
+{
+	drawRowLines = bEnabled;
 }
 
 void ScrollableListWidget::setBackgroundColor(PIELIGHT const &color)
@@ -242,6 +275,45 @@ void ScrollableListWidget::displayRecursive(WidgetGraphicsContext const& context
 {
 	updateLayout();
 	WIDGET::displayRecursive(context);
+
+	// *after* displaying all children, draw the row lines (if desired)
+	if (!drawRowLines || itemSpacing == 0)
+	{
+		return;
+	}
+
+	if (!context.clipContains(geometry())) {
+		return;
+	}
+
+	lineDraws.clear();
+
+	int xOffset = context.getXOffset();
+	int yOffset = context.getYOffset();
+
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset + listView->y();
+	int x1 = x0 + listView->width();
+	int y1 = y0 + listView->height();
+
+	int listViewTopOffset = listView->getTopOffset();
+	for (auto& child : listView->children())
+	{
+		int childY = child->y();
+		if (childY < listViewTopOffset)
+		{
+			continue;
+		}
+		int childDisplayY0 = childY - static_cast<int>(listViewTopOffset);
+		int rowLineY0 = y0 + childDisplayY0 - itemSpacing;
+		if (rowLineY0 > y1 || rowLineY0 < y0)
+		{
+			continue;
+		}
+		lineDraws.emplace_back(x0, rowLineY0, x1, rowLineY0 + itemSpacing, rowLinesColor);
+	}
+
+	pie_DrawMultiRect(lineDraws);
 }
 
 int ScrollableListWidget::getScrollbarWidth() const
@@ -333,6 +405,51 @@ void ScrollableListWidget::scrollEnsureItemVisible(size_t itemNum)
 void ScrollableListWidget::setListTransparentToMouse(bool hasMouseTransparency)
 {
 	listView->setTransparentToMouse(hasMouseTransparency);
+}
+
+void ScrollableListWidget::setLayoutDirty()
+{
+	layoutDirty = true;
+}
+
+// yPos is widget coordinates
+std::shared_ptr<WIDGET> ScrollableListWidget::getItemAtYPos(int32_t yPos)
+{
+	auto itemIdx = getItemIdxAtYPos(yPos);
+	if (!itemIdx.has_value())
+	{
+		return nullptr;
+	}
+	const auto& items = listView->children();
+	return items[itemIdx.value()];
+}
+
+// yPos is widget coordinates
+optional<size_t> ScrollableListWidget::getItemIdxAtYPos(int32_t yPos)
+{
+	auto listViewY0 = listView->y();
+	auto listViewHeight = listView->height();
+	auto listViewY1 = listViewY0 + listViewHeight;
+	if (yPos < listViewY0 || yPos > listViewY1)
+	{
+		return nullopt;
+	}
+	const auto& items = listView->children();
+	for (size_t idx = topVisibleItemIdx; idx < items.size(); ++idx)
+	{
+		auto itemCurrentY0 = getCurrentYPosOfItem(idx);
+		if (itemCurrentY0 >= listViewHeight)
+		{
+			break;
+		}
+		const auto& itemWidget = items[idx];
+		auto itemCurrentY1 = itemCurrentY0 + itemWidget->height();
+		if (yPos >= itemCurrentY0 && yPos < itemCurrentY1)
+		{
+			return idx;
+		}
+	}
+	return nullopt;
 }
 
 // MARK: - ClickableScrollableList

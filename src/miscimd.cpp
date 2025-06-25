@@ -127,7 +127,7 @@ iIMDBaseShape	*getImdFromIndex(UDWORD	index)
 	return (miscImds[index].pImd);
 }
 // DISPLAY-ONLY
-iIMDShape *getDisplayImdFromIndex(UDWORD index)
+const iIMDShape *getDisplayImdFromIndex(UDWORD index)
 {
 	iIMDBaseShape *pBaseIMD = getImdFromIndex(index);
 	return ((pBaseIMD) ? pBaseIMD->displayModel() : nullptr);
@@ -135,7 +135,7 @@ iIMDShape *getDisplayImdFromIndex(UDWORD index)
 // -------------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------------
-iIMDBaseShape	*getRandomDebrisImd()
+const iIMDBaseShape	*getRandomDebrisImd()
 {
 	iIMDBaseShape *DebrisIMD = getImdFromIndex(MI_DEBRIS0 + rand() % ((MI_DEBRIS4 - MI_DEBRIS0) + 1));
 

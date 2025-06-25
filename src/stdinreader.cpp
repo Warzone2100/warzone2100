@@ -21,12 +21,15 @@
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
+#include "lib/framework/wzpaths.h"
 #include "lib/netplay/netpermissions.h"
 #include "multiint.h"
 #include "multistat.h"
+#include "multiplay.h"
 #include "multilobbycommands.h"
 #include "clparse.h"
 #include "main.h"
+#include "multivote.h"
 
 #include <string>
 #include <atomic>
@@ -89,8 +92,9 @@ wzAsyncExecOnMainThread([]{ \
 
 static WZ_Command_Interface wz_cmd_interface = WZ_Command_Interface::None;
 static std::string wz_cmd_interface_param;
+static bool hasQueuedRoomStatusJSONOutput = false;
 
-WZ_Command_Interface wz_command_interface()
+inline WZ_Command_Interface wz_command_interface()
 {
 	return wz_cmd_interface;
 }
@@ -467,6 +471,24 @@ int cmdOutputThreadFunc(void *)
 	return 0;
 }
 
+static bool checkPlayerIdentityMatchesString(const EcKey& identity, const std::string& playerIdentityStrCopy)
+{
+	if (identity.empty())
+	{
+		return (playerIdentityStrCopy == "0"); // special case for empty identity, in case that happens...
+	}
+
+	// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
+	std::string checkIdentityHash = identity.publicHashString();
+	std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+	if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 static bool applyToActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::function<void (uint32_t playerIdx)>& func)
 {
 	bool foundActivePlayer = false;
@@ -477,29 +499,10 @@ static bool applyToActivePlayerWithIdentity(const std::string& playerIdentityStr
 			continue;
 		}
 
-		bool matchingPlayer = false;
-		auto& identity = getMultiStats(i).identity;
-		if (identity.empty())
+		bool matchingPlayer = checkPlayerIdentityMatchesString(getMultiStats(i).identity, playerIdentityStrCopy);
+		if (!matchingPlayer && game.blindMode != BLIND_MODE::NONE)
 		{
-			if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
-			{
-				matchingPlayer = true;
-			}
-			else
-			{
-				continue;
-			}
-		}
-
-		if (!matchingPlayer)
-		{
-			// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
-			std::string checkIdentityHash = identity.publicHashString();
-			std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-			if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
-			{
-				matchingPlayer = true;
-			}
+			matchingPlayer = checkPlayerIdentityMatchesString(getVerifiedJoinIdentity(i), playerIdentityStrCopy);
 		}
 
 		if (matchingPlayer)
@@ -574,10 +577,11 @@ static bool changeHostChatPermissionsForActivePlayerWithIdentity(const std::stri
 		}
 		displayRoomSystemMessage(msg.c_str());
 
-		std::string playerPublicKeyB64 = base64Encode(getMultiStats(i).identity.toBytes(EcKey::Public));
-		std::string playerIdentityHash = getMultiStats(i).identity.publicHashString();
+		const auto& identity = getOutputPlayerIdentity(i);
+		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+		std::string playerIdentityHash = identity.publicHashString();
 		std::string playerVerifiedStatus = (ingame.VerifiedIdentity[i]) ? "V" : "?";
-		std::string playerName = NetPlay.players[i].name;
+		std::string playerName = getPlayerName(i);
 		std::string playerNameB64 = base64Encode(std::vector<unsigned char>(playerName.begin(), playerName.end()));
 		wz_command_interface_output("WZEVENT: hostChatPermissions=%s: %" PRIu32 " %" PRIu32 " %s %s %s %s %s\n", (freeChatEnabled) ? "Y" : "N", i, gameTime, playerPublicKeyB64.c_str(), playerIdentityHash.c_str(), playerVerifiedStatus.c_str(), playerNameB64.c_str(), NetPlay.players[i].IPtextAddress);
 	});
@@ -602,6 +606,76 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
 		auto KickMessage = astringf("Player %s was kicked by the administrator.", playerNameStr.c_str());
 		sendRoomSystemMessage(KickMessage.c_str());
+	});
+}
+
+static bool redirectActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& redirectStrCopy)
+{
+	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress && !ingame.TimeEveryoneIsInGame.has_value(), "Game must not have started yet!");
+
+	// Parse the redirect string:
+	// <tcp/gns>:<new_port>:<0/1=spectator>:<optional:gamepassword>
+
+	JoinConnectionDescription::JoinConnectionType connectionType;
+	uint16_t newPort = 0;
+	bool asSpectator = false;
+
+	auto redirectComponents = splitAtAnyDelimiter(redirectStrCopy, ":");
+	ASSERT_OR_RETURN(false, redirectComponents.size() >= 3, "Invalid redirect string");
+
+	auto optConnectionType = JoinConnectionDescription::connectiontype_from_string(redirectComponents[0]);
+	ASSERT_OR_RETURN(false, optConnectionType.has_value(), "Unrecognized / unsupported connection type: \"%s\"", redirectComponents[0].c_str());
+	connectionType = optConnectionType.value();
+
+	try {
+		auto portNumber = std::stoul(redirectComponents[1], nullptr, 10);
+		ASSERT_OR_RETURN(false, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
+		newPort = static_cast<uint16_t>(portNumber);
+	}
+	catch (const std::exception& e) {
+		ASSERT_OR_RETURN(false, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
+	}
+
+	ASSERT_OR_RETURN(false, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
+
+	try {
+		auto specValue = std::stoul(redirectComponents[2], nullptr, 10);
+		asSpectator = specValue != 0;
+	}
+	catch (const std::exception& e) {
+		ASSERT_OR_RETURN(false, false, "Invalid spec value specified: \"%s\"", redirectComponents[2].c_str());
+	}
+
+	std::string gamePassword;
+	for (size_t i = 3; i < redirectComponents.size(); ++i)
+	{
+		if (!gamePassword.empty())
+		{
+			gamePassword.push_back(':');
+		}
+		gamePassword += redirectComponents[i];
+	}
+
+	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
+		if (i == NetPlay.hostPlayer)
+		{
+			wz_command_interface_output("WZCMD error: Can't redirect host!\n");
+			return;
+		}
+		kickRedirectPlayer(i, connectionType, newPort, asSpectator, gamePassword);
+	});
+}
+
+static bool chatActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& chatmsgstr)
+{
+	if (!NetPlay.isHostAlive)
+	{
+		// can't send this message when the host isn't alive
+		wz_command_interface_output("WZCMD error: Failed to send chat direct message because host isn't yet hosting!\n");
+	}
+
+	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
+		sendRoomSystemMessageToSingleReceiver(chatmsgstr.c_str(), i);
 	});
 }
 
@@ -757,6 +831,35 @@ int cmdInputThreadFunc(void *)
 					if (!foundActivePlayer)
 					{
 						wz_command_interface_output("WZCMD info: kick identity %s: failed to find currently-connected player with matching public key or hash\n", playerIdentityStrCopy.c_str());
+					}
+				});
+			}
+		}
+		else if(!strncmpl(line, "redirect identity "))
+		{
+			// redirect identity <identity> <tcp/gns>:<new_port>:<0/1=spectator>:<optional:gamepassword>
+			char playeridentitystring[1024] = {0};
+			char redirectstr[1024] = {0};
+			int r = sscanf(line, "redirect identity %1023s %1023[^\n]s", playeridentitystring, redirectstr);
+			if (r != 2)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get player public key or hash, and/or redirect str!\n");
+			}
+			else
+			{
+				std::string playerIdentityStrCopy(playeridentitystring);
+				std::string redirectStrCopy = redirectstr;
+				wzAsyncExecOnMainThread([playerIdentityStrCopy, redirectStrCopy] {
+					if (!ingame.localJoiningInProgress || ingame.TimeEveryoneIsInGame.has_value())
+					{
+						// can't redirect once game has fired up - only in lobby
+						wz_command_interface_output("WZCMD error: Failed to execute redirect command - must be in lobby\n");
+						return;
+					}
+					bool foundActivePlayer = redirectActivePlayerWithIdentity(playerIdentityStrCopy, redirectStrCopy);
+					if (!foundActivePlayer)
+					{
+						wz_command_interface_output("WZCMD info: redirect identity %s: failed to find currently-connected player with matching public key or hash\n", playerIdentityStrCopy.c_str());
 					}
 				});
 			}
@@ -951,52 +1054,7 @@ int cmdInputThreadFunc(void *)
 				std::string playerIdentityStrCopy(playeridentitystring);
 				std::string chatmsgstr(chatmsg);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, chatmsgstr] {
-					if (!NetPlay.isHostAlive)
-					{
-						// can't send this message when the host isn't alive
-						wz_command_interface_output("WZCMD error: Failed to send chat direct message because host isn't yet hosting!\n");
-					}
-
-					bool foundActivePlayer = false;
-					for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-					{
-						auto player = NetPlay.players[i];
-						if (!isHumanPlayer(i))
-						{
-							continue;
-						}
-
-						bool msgThisPlayer = false;
-						auto& identity = getMultiStats(i).identity;
-						if (identity.empty())
-						{
-							if (playerIdentityStrCopy == "0") // special case for empty identity, in case that happens...
-							{
-								msgThisPlayer = true;
-							}
-							else
-							{
-								continue;
-							}
-						}
-
-						if (!msgThisPlayer)
-						{
-							// Check playerIdentityStrCopy versus both the (b64) public key and the public hash
-							std::string checkIdentityHash = identity.publicHashString();
-							std::string checkPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-							if (playerIdentityStrCopy == checkPublicKeyB64 || playerIdentityStrCopy == checkIdentityHash)
-							{
-								msgThisPlayer = true;
-							}
-						}
-
-						if (msgThisPlayer)
-						{
-							sendRoomSystemMessageToSingleReceiver(chatmsgstr.c_str(), i);
-							foundActivePlayer = true;
-						}
-					}
+					bool foundActivePlayer = chatActivePlayerWithIdentity(playerIdentityStrCopy, chatmsgstr);
 					if (!foundActivePlayer)
 					{
 						wz_command_interface_output("WZCMD info: chat direct %s: failed to find currently-connected player with matching public key or hash\n", playerIdentityStrCopy.c_str());
@@ -1067,6 +1125,43 @@ int cmdInputThreadFunc(void *)
 			wzAsyncExecOnMainThread([] {
 				wz_command_interface_output_room_status_json();
 			});
+		}
+		else if(!strncmpl(line, "set host ready "))
+		{
+			unsigned hostReadyVal = 0;
+			int r = sscanf(line, "set host ready %u", &hostReadyVal);
+			if (r != 1)
+			{
+				wz_command_interface_output_onmainthread("WZCMD error: Failed to get host ready value!\n");
+			}
+			else
+			{
+				bool hostReady = false;
+				if (hostReadyVal == 1 || hostReadyVal == 0)
+				{
+					hostReady = static_cast<bool>(hostReadyVal);
+				}
+				else
+				{
+					wz_command_interface_output_onmainthread("WZCMD error: Unsupported set host ready value!\n");
+					continue;
+				}
+
+				wzAsyncExecOnMainThread([hostReady] {
+					if (!NetPlay.isHostAlive)
+					{
+						wz_command_interface_output("WZCMD error: Unable to change host ready status because host isn't yet hosting!\n");
+						return;
+					}
+					if (!NetPlay.isHost)
+					{
+						wz_command_interface_output("WZCMD error: Unable to change host ready status when not the host!\n");
+						return;
+					}
+
+					sendReadyRequest(selectedPlayer, hostReady);
+				});
+			}
 		}
 		else if(!strncmpl(line, "shutdown now"))
 		{
@@ -1496,7 +1591,7 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 		}
 	}
 
-	const auto& identity = getMultiStats(player).identity;
+	const auto& identity = (game.blindMode != BLIND_MODE::NONE) ? getVerifiedJoinIdentity(player) : getMultiStats(player).identity;
 	if (!identity.empty())
 	{
 		j["pk"] = base64Encode(identity.toBytes(EcKey::Public));
@@ -1522,12 +1617,24 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 	{
 		j["host"] = 1;
 	}
+
+	if (!gameHasFiredUp)
+	{
+		// in lobby, output player multiopt prefs
+		j["prefs"] = getMultiOptionPrefValuesJSON(player);
+	}
 }
 
-void wz_command_interface_output_room_status_json()
+void wz_command_interface_output_room_status_json(bool queued)
 {
 	if (!wz_command_interface_enabled())
 	{
+		return;
+	}
+
+	if (queued)
+	{
+		hasQueuedRoomStatusJSONOutput = true;
 		return;
 	}
 
@@ -1561,6 +1668,7 @@ void wz_command_interface_output_room_status_json()
 		}
 	}
 	data["map"] = game.map;
+	data["blind"] = static_cast<uint8_t>(game.blindMode);
 
 	root["data"] = std::move(data);
 
@@ -1658,4 +1766,20 @@ void wz_command_interface_output_room_status_json()
 	std::string statusJSONStr = std::string("__WZROOMSTATUS__") + root.dump(-1, ' ', false, nlohmann::ordered_json::error_handler_t::replace) + "__ENDWZROOMSTATUS__";
 	statusJSONStr.append("\n");
 	wz_command_interface_output_str(statusJSONStr.c_str());
+
+	hasQueuedRoomStatusJSONOutput = false;
+}
+
+void wz_command_interface_process_queued_status_output()
+{
+	if (!wz_command_interface_enabled())
+	{
+		return;
+	}
+
+	if (hasQueuedRoomStatusJSONOutput)
+	{
+		wz_command_interface_output_room_status_json(false);
+		hasQueuedRoomStatusJSONOutput = false;
+	}
 }

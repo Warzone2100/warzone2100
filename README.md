@@ -41,8 +41,8 @@ Latest development builds
  [![macOS Build Status](https://img.shields.io/github/actions/workflow/status/Warzone2100/warzone2100/CI_macos.yml?branch=master&label=macOS&logo=apple)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
  [![Ubuntu Build Status](https://img.shields.io/github/actions/workflow/status/Warzone2100/warzone2100/CI_ubuntu.yml?branch=master&label=Ubuntu&logo=ubuntu&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
  [![Fedora Build Status](https://img.shields.io/github/actions/workflow/status/Warzone2100/warzone2100/CI_fedora.yml?branch=master&label=Fedora&logo=fedora&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
+ [![WebAssembly Build Status](https://img.shields.io/github/actions/workflow/status/Warzone2100/warzone2100/CI_emscripten.yml?branch=master&label=WebASM&logo=webassembly&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AEmscripten+branch%3Amaster+event%3Apush)
  [![FreeBSD Build Status](https://img.shields.io/cirrus/github/Warzone2100/warzone2100/master?label=FreeBSD&logo=FreeBSD)](https://cirrus-ci.com/github/Warzone2100/warzone2100/master)
- [![Drone Cloud CI ARM64 Build Status](https://img.shields.io/drone/build/Warzone2100/warzone2100/master?label=ARM64%20Linux)](https://cloud.drone.io/Warzone2100/warzone2100)
  [![Packaging status](https://repology.org/badge/tiny-repos/warzone2100.svg)](https://repology.org/project/warzone2100/versions)
 
 ### Windows
@@ -51,7 +51,7 @@ How to get the latest Windows development builds:
 1. View the **[latest successful Windows builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush+is%3Asuccess)**.
 2. Select the latest workflow run in the table / list.
    This should display a list of **Artifacts** from the run.
-3. Download the `warzone2100_win_x86_portable` or `warzone2100_win_x86_installer` artifact (depending on whether you want the portable build or the full / regular installer).
+3. Download the `warzone2100_win_installer` artifact.
 > Note: A free GitHub account is currently required to download the artifacts.
 
 ### macOS
@@ -70,8 +70,8 @@ How to get the latest Ubuntu development builds:
 2. Select the latest workflow run in the table / list.
    This should display a list of **Artifacts** from the run.
 3. Download the appropriate `warzone2100_ubuntu<version>_amd64_deb` artifact.
-   - If you are running Ubuntu 20.04: `warzone2100_ubuntu20.04_amd64_deb`
    - If you are running Ubuntu 22.04: `warzone2100_ubuntu22.04_amd64_deb`
+   - If you are running Ubuntu 24.04: `warzone2100_ubuntu24.04_amd64_deb`
 > Note: A free GitHub account is currently required to download the artifacts.
 4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu<version>_amd64.deb`) to your Desktop.
 5. Execute the following commands in Terminal:
@@ -113,9 +113,9 @@ those bugs more quickly, we require that you follow these rules:
       occurred.
    3. Try to reproduce the bug and add a description of the process to your bug
       report.
-   4. You may even upload save files. These consist of one or two file(s) and
-      one folder. All two/three are named after your savegame (e.g.
-      MySaveGame.es, MySaveGame.gam and the folder MySaveGame).
+   4. You may even upload save files. These consist of one file and
+      one folder. Both are named after your savegame (e.g. MySaveGame.gam and
+      the folder MySaveGame).
    5. Bug reports are not submit-and-forget. It may be that you forgot some
       information or forgot to upload a file. So it is also in your interest to
       watch the bug-report after it has been submitted. Additionally, you can enable
@@ -128,6 +128,12 @@ Warzone 2100 uses its own subdirectory in a user's home directory to save
 configuration data, save files and certain other things. Additionally you can
 use this directory to place custom maps and mods so the game can find them. The
 location of this directory depends on the operating system.
+
+> [!TIP]
+> The easy way to find the configuration directory is to:
+> 1. Launch Warzone 2100
+> 2. Click "Options"
+> 3. Click the small "Open Configuration Directory" link in the bottom-left
 
 ### Warzone 2100 directory under GNU/Linux
 
@@ -147,8 +153,7 @@ However, you can still access it by typing the path into your address bar.
 The directory `Warzone 2100 Project\Warzone 2100 <version>` is located under the
 `%APPDATA%` folder.
 
-Typical `%APPDATA%` paths:
-- Windows XP: `\Documents and Settings\$USER$\Application Data`
+Typical `%APPDATA%` path:
 - Windows Vista+: `\Users\$USER$\AppData\Roaming`
 
 Hence, the default path for the Warzone 2100 configuration data on Windows Vista+ would be:
@@ -309,7 +314,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * Archiving tools (ex. zip, p7zip)
    * Various libraries:
       * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.20)_
-      * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.0.3-3 _(strongly recommended: ≥ 3.0.2)_
+      * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.1 _(strongly recommended: ≥ 3.0.2)_
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
@@ -322,6 +327,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
       * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
       * [SQLite](https://www.sqlite.org/index.html) ≥ 3.14
+      * [libzip](https://github.com/nih-at/libzip) _(strongly recommended: ≥ 1.10.1)_
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
@@ -335,11 +341,11 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       sudo ./get-dependencies_linux.sh ubuntu build-dependencies
       ```
 * **Building from the command-line:**
-   1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
+   1. Starting from the _parent_ directory of the warzone2100 repository, create an [out-of-source](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Getting%20Started.html#directory-structure) build directory:
       ```shell
       mkdir build
       ```
-   2. Change directory into the sibling `build` directory:
+   2. Change directory into the `build` directory:
       ```shell
       cd build
       ```
@@ -348,7 +354,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
       ```
       > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
-      > - The `../warzone2100` path at the end should point to the warzone2100 source directory.
+      > - The `../warzone2100` path at the end should point to the warzone2100 repo directory. This example assumes that the repo directory and the build directory are siblings, and that the repo was cloned into a directory named `warzone2100`.
    4. Run CMake build:
       ```shell
       cmake --build . --target install
@@ -357,10 +363,10 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
 ### Windows using MSVC
 
 * Prerequisites
-   * **Visual Studio 2022** (Visual Studio 2017-2019 may work, but 2022+ is strongly encouraged)
+   * **Visual Studio 2022** (Visual Studio 2019 may work, but 2022+ is strongly encouraged)
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
-   * **CMake 3.20+** (https://cmake.org/)
+   * **CMake 3.24+** (https://cmake.org/)
    * **Git** (if not building from a release source archive)
    * **7-Zip** (https://www.7-zip.org)
    * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
@@ -373,7 +379,6 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * Configure
       * Visual Studio 2022: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 17 2022"`
       * Visual Studio 2019: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 16 2019"`
-      * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
    * Build
       * Release: `cmake --build build --config Release`
       * Debug: `cmake --build build --config Debug`
@@ -399,3 +404,8 @@ Warzone 2100 is free software; you can redistribute it and/or modify it under th
 [![SPDX-License-Identifier: GPL-2.0-or-later](https://img.shields.io/static/v1?label=SPDX-License-Identifier&message=GPL-2.0-or-later&color=blue&logo=open-source-initiative&logoColor=white&logoWidth=10&style=flat-square)](COPYING)
 
 More information: [COPYING.README](COPYING.README), [COPYING.NONGPL](COPYING.NONGPL)
+
+Special thanks
+-------------------
+
+Free code signing for Windows provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).

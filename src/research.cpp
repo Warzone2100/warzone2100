@@ -51,6 +51,7 @@
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
 optional<ResearchUpgradeCalculationMode> researchUpgradeCalcMode;
+std::unordered_map<WzString, std::vector<size_t>> resCategories;
 nlohmann::json cachedStatsObject = nlohmann::json(nullptr);
 std::vector<wzapi::PerPlayerUpgrades> cachedPerPlayerUpgrades;
 
@@ -110,6 +111,7 @@ bool researchInitVars()
 	CBResFacilityOwner = -1;
 	asResearch.clear();
 	researchUpgradeCalcMode = nullopt;
+	resCategories.clear();
 	cachedStatsObject = nlohmann::json(nullptr);
 	cachedPerPlayerUpgrades.clear();
 	playerUpgradeCounts = std::vector<PlayerUpgradeCounts>(MAX_PLAYERS);
@@ -251,6 +253,31 @@ public:
 	}
 };
 
+static bool isResAPrereqForResB(size_t resAIndex, size_t resBIndex)
+{
+	if (resAIndex == resBIndex)
+	{
+		return false;
+	}
+	const RESEARCH *resB = &asResearch[resBIndex];
+	std::deque<const RESEARCH *> stack = {resB};
+	while (!stack.empty())
+	{
+		const RESEARCH *pCurr = stack.back();
+		stack.pop_back();
+		for (auto prereqIndex: pCurr->pPRList)
+		{
+			if (prereqIndex == resAIndex)
+			{
+				return true;
+			}
+			auto prereq = &asResearch[prereqIndex];
+			stack.push_back(prereq);
+		}
+	}
+	return false;
+}
+
 static optional<ResearchUpgradeCalculationMode> resCalcModeStringToValue(const WzString& calcModeStr)
 {
 	if (calcModeStr.compare("compat") == 0)
@@ -335,6 +362,7 @@ bool loadResearch(WzConfig &ini)
 		RESEARCH research;
 		research.index = inc;
 		research.name = ini.string("name");
+		research.category = ini.string("category");
 		research.id = list[inc];
 
 		//check the name hasn't been used already
@@ -585,6 +613,33 @@ bool loadResearch(WzConfig &ini)
 			debug(LOG_ERROR, "\t-> %s", research->id.toUtf8().c_str());
 		}
 		return false;
+	}
+
+	// populate research category info
+	resCategories.clear(); // must clear because we re-process the entire asResearch list if loading more than one research file
+	for (size_t inc = 0; inc < asResearch.size(); inc++)
+	{
+		const auto& cat = asResearch[inc].category;
+		if (cat.isEmpty())
+		{
+			continue;
+		}
+		resCategories[cat].push_back(inc);
+	}
+	for (auto& cat : resCategories)
+	{
+		auto& membersOfCategory = cat.second;
+		std::stable_sort(membersOfCategory.begin(), membersOfCategory.end(), [](size_t idxA, size_t idxB) -> bool {
+			return isResAPrereqForResB(idxA, idxB);
+		});
+		uint16_t prog = 1;
+		size_t categorySize = membersOfCategory.size();
+		for (const auto& inc : membersOfCategory)
+		{
+			asResearch[inc].categoryProgress = prog;
+			asResearch[inc].categoryMax = categorySize;
+			prog++;
+		}
 	}
 
 	// If the first research json file does not explicitly set calculationMode, default to compat
@@ -1190,6 +1245,7 @@ void ResearchRelease()
 {
 	asResearch.clear();
 	researchUpgradeCalcMode = nullopt;
+	resCategories.clear();
 	for (auto &i : asPlayerResList)
 	{
 		i.clear();

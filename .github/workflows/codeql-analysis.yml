@@ -28,6 +28,7 @@ jobs:
     name: Analyze (${{ matrix.language }})
     env:
       WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES: ON
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5 # Fix compatibility with CMake 4.0+ (Ubuntu's openal-soft package config specifies min CMake < 3.5)
 
     steps:
     - name: Checkout repository

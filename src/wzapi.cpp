@@ -2146,8 +2146,8 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 	SCRIPT_ASSERT(false, context, _x <= mapWidth, "Beacon x value %d is greater than mapWidth %d", _x, (int)mapWidth);
 	SCRIPT_ASSERT(false, context, _y <= mapHeight, "Beacon y value %d is greater than mapHeight %d", _y, (int)mapHeight);
 
-	int x = world_coord(_x);
-	int y = world_coord(_y);
+	int x = world_coord(_x) + (TILE_UNITS / 2);
+	int y = world_coord(_y) + (TILE_UNITS / 2);
 
 	std::string message;
 	if (_message.has_value())
@@ -3265,12 +3265,12 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 	{
 		return false;
 	}
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-	NETuint8_t(&giftType);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint32_t(&object_id);
-	NETend();
+	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+	NETuint8_t(w, giftType);
+	NETuint8_t(w, from);
+	NETuint8_t(w, to);
+	NETuint32_t(w, object_id);
+	NETend(w);
 	return true;
 }
 
@@ -4685,7 +4685,15 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
-		vector["name"] = NetPlay.players[i].name;
+		if (game.blindMode >= BLIND_MODE::BLIND_GAME)
+		{
+			// to ensure the "name" field exposed to api is consistent across blind games _and_ replays of those games, always set it to the generic name if in blind mode
+			vector["name"] = getPlayerGenericName(i);
+		}
+		else
+		{
+			vector["name"] = NetPlay.players[i].name;
+		}
 		vector["difficulty"] = static_cast<int8_t>(NetPlay.players[i].difficulty);
 		vector["faction"] = NetPlay.players[i].faction;
 		vector["colour"] = NetPlay.players[i].colour;

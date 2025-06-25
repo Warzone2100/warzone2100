@@ -4,18 +4,32 @@
 		"droidType": "DROID_COMMAND",
 		"hitpoints": 500,
 		"id": "CommandBrain01",
-		"maxDroids": 6,
-		"maxDroidsMult": 2,
+		"maxDroids": 12,
+		"maxDroidsMult": 6,
 		"name": "Command Turret",
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 12, 24, 36, 48, 60, 72, 84, 96 ],
-		"turret": "CommandTurret1"
+		"turret": "CommandTurret1",
+		"initialShieldPointsPercent": 25,
+		"additiveShieldPointsPercent": 10,
+		"initialShieldRegenTime": 32,
+		"shieldRegenTimeDec": 2,
+		"initialShieldInterruptRegenTime": 2000,
+		"shieldInterruptRegenTimeDec": 100,
+		"shieldPointsPerStep": 4
 	},
 	"ZNULLBRAIN": {
 		"id": "ZNULLBRAIN",
 		"name": "Z NULL BRAIN",
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 2, 4, 6, 8, 10, 12, 14, 16 ],
-		"turret": "ZNULLWEAPON"
+		"turret": "ZNULLWEAPON",
+		"initialShieldPointsPercent": 25,
+		"additiveShieldPointsPercent": 10,
+		"initialShieldRegenTime": 32,
+		"shieldRegenTimeDec": 2,
+		"initialShieldInterruptRegenTime": 2000,
+		"shieldInterruptRegenTimeDec": 100,
+		"shieldPointsPerStep": 4
 	}
 }

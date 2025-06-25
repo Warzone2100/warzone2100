@@ -27,6 +27,7 @@
 
 #include <limits>
 #include <cstdint>
+#include <cstring>
 
 // See comments in netqueue.h.
 
@@ -37,7 +38,7 @@
 // ASSERT(0xFFFFFFFF == 255*(1 + a[0]*(1 + a[1]*(1 + a[2]*(1 + a[3]*(1 + a[4]))))), "Maximum encodable value not 0xFFFFFFFF.");
 
 //static const unsigned table_uint32_t_a[5] = {14, 127, 74, 127, 0}, table_uint32_t_m[5] = {1, 14, 1778, 131572, 16709644};  // <242: 1 byte, <2048: 2 bytes, <325644: 3 bytes, <17298432: 4 bytes, <4294967296: 5 bytes
-static const unsigned table_uint32_t_a[5] = {78, 95, 32, 70, 0}, table_uint32_t_m[5] = {1, 78, 7410, 237120, 16598400};  // <178: 1 byte, <12736: 2 bytes, <1672576: 3 bytes, <45776896: 4 bytes, <4294967296: 5 bytes
+constexpr unsigned table_uint32_t_a[5] = {78, 95, 32, 70, 0}, table_uint32_t_m[5] = {1, 78, 7410, 237120, 16598400};  // <178: 1 byte, <12736: 2 bytes, <1672576: 3 bytes, <45776896: 4 bytes, <4294967296: 5 bytes
 //static const unsigned table_uint32_t_a[5] = {78, 95, 71, 31, 0}, table_uint32_t_m[5] = {1, 78, 7410, 526110, 16309410};  // <178: 1 byte, <12736: 2 bytes, <1383586: 3 bytes, <119758336: 4 bytes, <4294967296: 5 bytes
 //static const unsigned table_uint32_t_a[5] = {104, 71, 19, 119, 0}, table_uint32_t_m[5] = {1, 104, 7384, 140296, 16695224};  // <152: 1 byte, <19392: 2 bytes, <1769400: 3 bytes, <20989952: 4 bytes, <4294967296: 5 bytes
 //static const unsigned table_uint32_t_a[5] = {104, 71, 20, 113, 0}, table_uint32_t_m[5] = {1, 104, 7384, 147680, 16687840};  // <152: 1 byte, <19392: 2 bytes, <1762016: 3 bytes, <22880256: 4 bytes, <4294967296: 5 bytes
@@ -53,6 +54,8 @@ static const unsigned table_uint32_t_a[5] = {78, 95, 32, 70, 0}, table_uint32_t_
 //static const unsigned table_uint32_t_a[5] = {104, 71, 120, 18, 0}, table_uint32_t_m[5] = {1, 104, 7384, 886080, 15949440};  // <152: 1 byte, <19392: 2 bytes, <1023616: 3 bytes, <211910656: 4 bytes, <4294967296: 5 bytes
 
 //static const unsigned table_uint32_t_m[5] = {1, a[0], a[0]*a[1], a[0]*a[1]*a[2], a[0]*a[1]*a[2]*a[3]};
+
+static_assert(0xFFFFFFFF == 255*(1 + table_uint32_t_a[0]*(1 + table_uint32_t_a[1]*(1 + table_uint32_t_a[2]*(1 + table_uint32_t_a[3]*(1 + table_uint32_t_a[4]))))), "Maximum encodable value not 0xFFFFFFFF.");
 
 unsigned encodedlength_uint32_t(uint32_t v)
 {
@@ -104,77 +107,69 @@ bool decode_uint32_t(uint8_t b, uint32_t &v, unsigned n)
 	return !isLastByte;
 }
 
-uint8_t *NetMessage::rawDataDup() const
+NetMessage::NetMessage(std::vector<uint8_t>&& data)
+	: data_(std::move(data))
+{}
+
+uint8_t NetMessage::type() const
 {
-#if SIZE_MAX > UINT32_MAX
-	ASSERT_OR_RETURN(nullptr, data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Trying to duplicate a very large packet (%zu bytes). (Message type: %" PRIu8 ")", data.size(), type);
-#endif
-	uint32_t dataSizeU32 = static_cast<uint32_t>(data.size());
-	unsigned encodedLengthOfSize = encodedlength_uint32_t(dataSizeU32);
-
-	uint8_t *ret = new uint8_t[1 + encodedLengthOfSize + dataSizeU32];
-
-	ret[0] = type;
-	uint32_t len = dataSizeU32;
-	for (unsigned n = 0; n < encodedLengthOfSize; ++n)
-	{
-		encode_uint32_t(ret[n + 1], len, n);
-	}
-
-	std::copy(data.begin(), data.begin() + dataSizeU32, ret + 1 + encodedLengthOfSize);
-	return ret;
+	ASSERT_OR_RETURN(0, !data_.empty(), "Invalid message data");
+	return data_[0];
 }
 
-bool NetMessage::tryFromRawData(const uint8_t* buffer, size_t bufferLen, NetMessage& output)
+const std::vector<uint8_t>& NetMessage::rawData() const
 {
-	if (bufferLen == 0) { return false; }
+	return data_;
+}
+
+const uint8_t* NetMessage::payload() const
+{
+	ASSERT_OR_RETURN(nullptr, !data_.empty() && data_.size() >= HEADER_LENGTH, "Invalid message data");
+	return &data_[HEADER_LENGTH];
+}
+
+size_t NetMessage::payloadSize() const
+{
+	ASSERT_OR_RETURN(0, data_.size() >= HEADER_LENGTH, "Invalid message data");
+	return data_.size() - HEADER_LENGTH;
+}
+
+optional<NetMessage> NetMessage::tryFromRawData(const uint8_t* buffer, size_t bufferLen)
+{
+	if (bufferLen < NetMessage::HEADER_LENGTH) { return nullopt; }
+
 	uint8_t type = buffer[0];
+	uint16_t len = 0;
+	// Load payload length from uint16_t (network byte order) starting at the second byte of the data buffer.
+	wz_ntohs_load_unaligned(len, &buffer[1]);
 
-	uint32_t len = 0;
-	bool moreBytes = true;
-	unsigned n;
-	for (n = 0; moreBytes && bufferLen > 1 + n; ++n)
+	if (bufferLen - HEADER_LENGTH < len)
 	{
-		moreBytes = decode_uint32_t(buffer[1 + n], len, n);
-	}
-	unsigned headerLen = 1 + n;
-
-	ASSERT(len < 40000000, "Trying to parse a very large packet (%u bytes)", len);
-	if (bufferLen - headerLen < len)
-	{
-		return false;  // Don't have a whole message ready yet.
+		return nullopt;  // Don't have a whole message ready yet.
 	}
 
-	output = NetMessage(type);
-	output.data.assign(buffer + headerLen, buffer + headerLen + len);
-	return true;
+	NetMessageBuilder msg(type, len);
+	msg.append(&buffer[HEADER_LENGTH], len);
+	return optional<NetMessage>{msg.build()};
 }
 
-void NetMessage::rawDataAppendToVector(std::vector<uint8_t> &output) const
+void NetMessage::rawDataAppendToVector(std::vector<uint8_t>& output) const
 {
-#if SIZE_MAX > UINT32_MAX
-	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Trying to duplicate a very large packet (%zu bytes).", data.size());
-#endif
-	uint32_t dataSizeU32 = static_cast<uint32_t>(data.size());
-
-	unsigned encodedLengthOfSize = encodedlength_uint32_t(dataSizeU32);
-
-	output.push_back(type);
-	uint32_t len = dataSizeU32;
-	for (unsigned n = 0; n < encodedLengthOfSize; ++n)
-	{
-		uint8_t b;
-		encode_uint32_t(b, len, n);
-		output.push_back(b);
-	}
-
-	output.insert(output.end(), data.begin(), data.end());
+	const size_t oldLen = output.size();
+	output.resize(output.size() + data_.size());
+	std::memcpy(&output[oldLen], data_.data(), data_.size());
 }
 
-size_t NetMessage::rawLen() const
+NetMessageBuilder::NetMessageBuilder(uint8_t type, size_t reservedCapacity /* = 16 */)
 {
-	return 1 + static_cast<size_t>(encodedlength_uint32_t(static_cast<uint32_t>(data.size()))) + data.size();
+	data_.reserve(reservedCapacity + NetMessage::HEADER_LENGTH);
+	data_.resize(NetMessage::HEADER_LENGTH);
+	data_[0] = type;
 }
+
+NetMessageBuilder::NetMessageBuilder(std::vector<uint8_t>&& rawData)
+	: data_(std::move(rawData))
+{}
 
 NetQueue::NetQueue()
 	: canGetMessagesForNet(true)
@@ -195,32 +190,27 @@ void NetQueue::writeRawData(const uint8_t *netData, size_t netLen)
 	buffer.insert(buffer.end(), netData, netData + netLen);
 
 	// Extract the messages.
-	while (buffer.size() - used > 1)
+	while (buffer.size() - used >= NetMessage::HEADER_LENGTH)
 	{
 		uint8_t type = buffer[used];
+		uint16_t len = 0;
+		// Load payload length from uint16_t (network byte order) starting at the second byte of the data buffer.
+		wz_ntohs_load_unaligned(len, &buffer[used + 1]);
 
-		uint32_t len = 0;
-		bool moreBytes = true;
-		unsigned n;
-		for (n = 0; moreBytes && buffer.size() - used > 1 + n; ++n)
-		{
-			moreBytes = decode_uint32_t(buffer[used + 1 + n], len, n);
-		}
-		unsigned headerLen = 1 + n;
-
-		ASSERT(len < 40000000, "Trying to write a very large packet (%u bytes) to the queue.", len);
-		if (buffer.size() - used - headerLen < len)
+		if (buffer.size() - used - NetMessage::HEADER_LENGTH < len)
 		{
 			break;  // Don't have a whole message ready yet.
 		}
 
-		messages.push_front(NetMessage(type));
-		messages.front().data.assign(buffer.begin() + used + headerLen, buffer.begin() + used + headerLen + len);
+		NetMessageBuilder msg(type, len);
+		msg.append(buffer.data() + used + NetMessage::HEADER_LENGTH, len);
+		messages.emplace_front(msg.build());
+
 		if (type == GAME_GAME_TIME)
 		{
 			++pendingGameTimeUpdateMessages;
 		}
-		used += headerLen + len;
+		used += NetMessage::HEADER_LENGTH + len;
 	}
 
 	// Recycle old data.
@@ -265,7 +255,7 @@ void NetQueue::popMessageForNet()
 	ASSERT(canGetMessagesForNet, "Wrong NetQueue type for popMessageForNet.");
 	ASSERT(dataPos != messages.begin(), "No message to pop!");
 
-	if (messagePos != messages.begin() && internal_getMessageForNet().type == GAME_GAME_TIME)
+	if (messagePos != messages.begin() && internal_getMessageForNet().type() == GAME_GAME_TIME)
 	{
 		if (pendingGameTimeUpdateMessages > 0)
 		{
@@ -280,13 +270,13 @@ void NetQueue::popMessageForNet()
 	popOldMessages();
 }
 
-void NetQueue::pushMessage(const NetMessage &message)
+void NetQueue::pushMessage(NetMessage&& message)
 {
-	if (message.type == GAME_GAME_TIME)
+	if (message.type() == GAME_GAME_TIME)
 	{
 		++pendingGameTimeUpdateMessages;
 	}
-	messages.push_front(message);
+	messages.emplace_front(std::move(message));
 }
 
 void NetQueue::setWillNeverGetMessages()
@@ -320,7 +310,7 @@ bool NetQueue::replaceCurrentWithDecrypted(NetMessage &&decryptedMessage)
 	ASSERT_OR_RETURN(false, messagePos != messages.begin(), "No message to get!");
 
 	NetMessage& currentMessage = internal_getMessage();
-	ASSERT_OR_RETURN(false, currentMessage.type == NET_SECURED_NET_MESSAGE, "Current message is not a secured message!");
+	ASSERT_OR_RETURN(false, currentMessage.type() == NET_SECURED_NET_MESSAGE, "Current message is not a secured message!");
 
 	currentMessage = std::move(decryptedMessage);
 	bCurrentMessageWasDecrypted = true;
@@ -332,7 +322,7 @@ void NetQueue::popMessage()
 	ASSERT(canGetMessages, "Wrong NetQueue type for popMessage.");
 	ASSERT(messagePos != messages.begin(), "No message to pop!");
 
-	if (messagePos != messages.begin() && internal_getConstMessage().type == GAME_GAME_TIME)
+	if (messagePos != messages.begin() && internal_getConstMessage().type() == GAME_GAME_TIME)
 	{
 		if (pendingGameTimeUpdateMessages > 0)
 		{

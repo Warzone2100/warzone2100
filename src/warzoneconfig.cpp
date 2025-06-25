@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sound/sounddefs.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -59,7 +60,7 @@ struct WARZONE_GLOBALS
 	int antialiasing = 0;
 	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
-	bool trapCursor = false;
+	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -103,6 +104,9 @@ struct WARZONE_GLOBALS
 
 	// run-time only settings (not persisted to config!)
 	bool allowVulkanImplicitLayers = false;
+
+	// Connection provider used for hosting games
+	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -195,13 +199,13 @@ int war_getAntialiasing()
 	return warGlobs.antialiasing;
 }
 
-void war_SetTrapCursor(bool b)
+void war_SetTrapCursor(TrapCursorMode v)
 {
-	warGlobs.trapCursor = b;
-	ActivityManager::instance().changedSetting("trapCursor", std::to_string(b));
+	warGlobs.trapCursor = v;
+	ActivityManager::instance().changedSetting("trapCursor", std::to_string(static_cast<int>(v)));
 }
 
-bool war_GetTrapCursor()
+TrapCursorMode war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
 }
@@ -717,4 +721,46 @@ void war_setOptionsButtonVisibility(uint8_t val)
 bool war_getAllowVulkanImplicitLayers()
 {
 	return warGlobs.allowVulkanImplicitLayers;
+}
+
+void war_setHostConnectionProvider(ConnectionProviderType pt)
+{
+	warGlobs.hostProviderType = pt;
+}
+
+ConnectionProviderType war_getHostConnectionProvider()
+{
+	return warGlobs.hostProviderType;
+}
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt)
+{
+	if (strcasecmp(str, "tcp") == 0)
+	{
+		pt = ConnectionProviderType::TCP_DIRECT;
+		return true;
+	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (strcasecmp(str, "gns") == 0)
+	{
+		pt = ConnectionProviderType::GNS_DIRECT;
+		return true;
+	}
+#endif
+	return false;
+}
+
+std::string to_string(ConnectionProviderType pt)
+{
+	switch (pt)
+	{
+	case ConnectionProviderType::TCP_DIRECT:
+		return "tcp";
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case ConnectionProviderType::GNS_DIRECT:
+		return "gns";
+#endif
+	}
+	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
+	return {};
 }

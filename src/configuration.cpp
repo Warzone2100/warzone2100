@@ -27,6 +27,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/sound/sounddefs.h"
@@ -68,7 +69,7 @@
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 #define BASECONFVERSION		1
-#define CURRCONFVERSION		2
+#define CURRCONFVERSION		3
 
 static const char *fileName = "config";
 
@@ -87,7 +88,6 @@ static inline std::string WZ_PHYSFS_getRealPath(const char *filename)
 
 static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
 {
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	PHYSFS_Stat metaData = {};
 	if (PHYSFS_stat(filename, &metaData) == 0)
 	{
@@ -99,9 +99,6 @@ static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
 		return nullopt;
 	}
 	return static_cast<uint64_t>(metaData.filesize);
-#else
-	return nullopt;
-#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -329,6 +326,8 @@ bool loadConfig()
 
 	ActivityManager::instance().beginLoadingSettings();
 
+	auto configVersion = iniGetInteger("configVersion", BASECONFVERSION).value();
+
 	if (auto value = iniGetIntegerOpt("voicevol"))
 	{
 		sound_SetUIVolume(static_cast<float>(value.value()) / 100.0f);
@@ -394,6 +393,7 @@ bool loadConfig()
 	setInvertMouseStatus(iniGetBool("mouseflip", true).value());
 	setRightClickOrders(iniGetBool("RightClickOrders", false).value());
 	setMiddleClickRotate(iniGetBool("MiddleClickRotate", false).value());
+	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
 		war_setCursorScale(value.value());
@@ -431,7 +431,7 @@ bool loadConfig()
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
-	if (!createdConfigFile && iniGetInteger("configVersion", BASECONFVERSION).value() < CURRCONFVERSION)
+	if (!createdConfigFile && configVersion < 2)
 	{
 		int level = (int)getDifficultyLevel() + 1;
 		if (level > static_cast<int>(AIDifficulty::INSANE))
@@ -487,7 +487,22 @@ bool loadConfig()
 			war_setWindowMode(static_cast<WINDOW_MODE>(fullscreenmode_int));
 		}
 	}
-	war_SetTrapCursor(iniGetBool("trapCursor", false).value());
+	if (!createdConfigFile && configVersion < 3)
+	{
+		// Upgrade old bool value to TrapCursorMode
+		// - map true -> Enabled and upgrade false -> Automatic
+		auto oldBoolValue = iniGetBool("trapCursor", false).value();
+		war_SetTrapCursor((oldBoolValue) ? TrapCursorMode::Enabled : TrapCursorMode::Automatic);
+	}
+	else
+	{
+		auto intTrapCursorValue = iniGetInteger("trapCursor", static_cast<int>(TrapCursorMode::Automatic)).value();
+		if (intTrapCursorValue < static_cast<int>(TrapCursorMode::Disabled) || intTrapCursorValue > static_cast<int>(TrapCursorMode::Automatic))
+		{
+			intTrapCursorValue = static_cast<int>(TrapCursorMode::Automatic);
+		}
+		war_SetTrapCursor(static_cast<TrapCursorMode>(intTrapCursorValue));
+	}
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -622,6 +637,23 @@ bool loadConfig()
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
 
+	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
+	setDefaultSkirmishAI(defAI);
+
+	auto hostConnProvider = war_getHostConnectionProvider();
+	if (iniGeneral.has("hostConnectionProvider"))
+	{
+		std::string netBackend = iniGetString("hostConnectionProvider", "tcp").value();
+		if (!net_backend_from_str(netBackend.c_str(), hostConnProvider))
+		{
+			hostConnProvider = ConnectionProviderType::TCP_DIRECT; // fall back to using TCP_DIRECT
+			const auto defConnProviderStr = to_string(hostConnProvider);
+			debug(LOG_WARNING, "Unsupported / invalid network backend: %s; defaulting to: %s",
+				netBackend.c_str(), defConnProviderStr.c_str());
+		}
+		war_setHostConnectionProvider(hostConnProvider);
+	}
+
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -694,6 +726,7 @@ bool saveConfig()
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
 	iniSetInteger("MiddleClickRotate", (int)(getMiddleClickRotate()));
+	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
 	iniSetInteger("showFPS", (int)showFPS);
@@ -705,7 +738,7 @@ bool saveConfig()
 	iniSetInteger("subtitles", (int)(seq_GetSubtitles()));		// subtitles
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
-	iniSetBool("trapCursor", war_GetTrapCursor());
+	iniSetInteger("trapCursor", (int)war_GetTrapCursor());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
@@ -787,6 +820,7 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
@@ -912,6 +946,7 @@ bool reloadMPConfig()
 	game.inactivityMinutes = war_getMPInactivityMinutes();
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+	game.blindMode = BLIND_MODE::NONE;
 
 	// restore group menus enabled setting (as tutorial may override it)
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());

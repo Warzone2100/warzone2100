@@ -7,14 +7,14 @@ freebsd_build_task:
   freebsd_instance:
     # See the list of available FreeBSD image families here: https://cirrus-ci.org/guide/FreeBSD/
     matrix:
-      - image_family: freebsd-14-1 # FreeBSD 14.1-RELEASE
+      - image_family: freebsd-14-2 # FreeBSD 14.2-RELEASE
 #    cpu: 4
 #    memory: 8G
 
   install_script:
     - pkg update -f
     - pkg clean -a -y
-    - pkg install -y git cmake ninja 7-zip gettext pkgconf png sdl2 openal-soft physfs libvorbis libogg opus libtheora freetype2 fribidi harfbuzz curl libsodium sqlite3 rubygem-asciidoctor
+    - pkg install -y git cmake ninja 7-zip gettext pkgconf png sdl2 openal-soft physfs libvorbis libogg opus libtheora freetype2 fribidi harfbuzz curl libsodium sqlite3 libzip rubygem-asciidoctor
 
   init_git_submodules_script: git submodule update --init --recursive
 
