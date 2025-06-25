@@ -774,6 +774,12 @@ OptionInfo& OptionInfo::addAvailabilityCondition(const OptionAvailabilityConditi
 	return *this;
 }
 
+OptionInfo& OptionInfo::setRequiresRestart(bool val)
+{
+	bRequiresRestart = val;
+	return *this;
+}
+
 WzString OptionInfo::getTranslatedDisplayName() const
 {
 	if (displayName.isEmpty()) { return {}; }
@@ -802,6 +808,11 @@ std::vector<OptionInfo::AvailabilityResult> OptionInfo::getAvailabilityResults()
 		result.push_back(condition(*this));
 	}
 	return result;
+}
+
+bool OptionInfo::requiresRestart() const
+{
+	return bRequiresRestart;
 }
 
 // MARK: - OptionAvailabilityConditions
@@ -1400,6 +1411,20 @@ bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::ve
 
 			wroteALine = true;
 		}
+
+		if (optionInfo.requiresRestart())
+		{
+			if (wroteALine)
+			{
+				paragraph->addText("\n \n");
+			}
+
+			paragraph->setFont(font_bar); // font_small_bold
+			paragraph->addText(WzString("* ") + _("Takes effect on game restart"));
+			wroteALine = true;
+
+			paragraph->setFont(font_small);
+		}
 	}
 	else
 	{
@@ -1522,6 +1547,18 @@ void OptionsForm::display(int xOffset, int yOffset)
 	// no-op
 }
 
+bool OptionsForm::hasOptionsThatRequireRestart() const
+{
+	for (auto& i : optionDetailsMap)
+	{
+		if (i.second.info.requiresRestart())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool OptionsForm::jumpToSectionId(const WzString& sectionId)
 {
 	auto it = sectionDetailsMap.find(sectionId);
@@ -1614,13 +1651,23 @@ void OptionsForm::addSection(const OptionsSection& optionsSection, bool bottomBo
 	insertResult.first->second.idxInOptionsList = itemListIdx;
 }
 
+static WzString getOptionInfoTranslatedDisplayName(const OptionInfo& optionInfo)
+{
+	WzString result = optionInfo.getTranslatedDisplayName();
+	if (optionInfo.requiresRestart())
+	{
+		result.append("*");
+	}
+	return result;
+}
+
 void OptionsForm::addOptionInternal(const OptionInfo& optionInfo, const std::shared_ptr<WIDGET>& optionValueChangerWidget, bool bottomBorder /*= false*/, int16_t indentLevel /*= 0*/)
 {
 	auto pWeakOptionsForm = std::weak_ptr<OptionsForm>(std::dynamic_pointer_cast<OptionsForm>(shared_from_this()));
 
 	// Create left side widget for displaying the Option label / display name
 	auto optionLabelWidget = WzOptionsLabelWidget::make(font_regular);
-	optionLabelWidget->setString(optionInfo.getTranslatedDisplayName());
+	optionLabelWidget->setString(getOptionInfoTranslatedDisplayName(optionInfo));
 	optionLabelWidget->setPadding(4, 8);
 	optionLabelWidget->setTextAlignment(WLAB_ALIGNLEFT);
 	optionLabelWidget->setGeometry(0, 0, optionLabelWidget->idealWidth(), optionLabelWidget->idealHeight());
@@ -1836,7 +1883,7 @@ void OptionsForm::refreshOptionsInternal(const std::unordered_set<WzString>& exc
 		auto pOptionLabel = std::dynamic_pointer_cast<WzOptionsLabelWidget>(i.second.optionLabelWidget);
 		if (pOptionLabel && forceUpdate)
 		{
-			pOptionLabel->setString(i.second.info.getTranslatedDisplayName());
+			pOptionLabel->setString(getOptionInfoTranslatedDisplayName(i.second.info));
 		}
 		if (except.count(i.first))
 		{
