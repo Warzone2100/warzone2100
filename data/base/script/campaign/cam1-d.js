@@ -58,12 +58,22 @@ function transportBaseSetup()
 	camSetBaseReinforcements("NPLZGroup", camChangeOnDiff(camMinutesToMilliseconds(10)), "getDroidsForNPLZ", CAM_REINFORCE_TRANSPORT, {
 		entry: { x: 2, y: 2 },
 		exit: { x: 2, y: 2 },
+		posLZ: camMakePos("NPLZ1"),
 		data: {
 			regroup: false,
 			count: -1,
 			repair: 40,
 		},
 	});
+}
+
+function insaneReinforcementSpawn()
+{
+	const DISTANCE_FROM_POS = 30;
+	const units = [cTempl.nphmgh, cTempl.npltath, cTempl.nphch];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
 }
 
 function getDroidsForNPLZ()
@@ -208,7 +218,7 @@ function eventStartLevel()
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 		},
 		"NPLZGroup": {
-			cleanup: "NPLZ1",
+			cleanup: "NPLZBaseCleanup",
 			detectMsg: "C1D_LZ2",
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 			player: CAM_NEW_PARADIGM // required for LZ-type bases
@@ -301,4 +311,8 @@ function eventStartLevel()
 	hackAddMessage("C1D_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false);
 
 	queue("setupPatrols", camMinutesToMilliseconds(2.5));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(7.5));
+	}
 }

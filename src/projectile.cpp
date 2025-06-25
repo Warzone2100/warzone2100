@@ -346,8 +346,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-		if (psSensor
-		    && psSensor->type == OBJ_DROID)
+		if (psSensor && psSensor->type == OBJ_DROID)
 		{
 			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
@@ -360,7 +359,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		if (psDroid != nullptr)
 		{
-			psDroid->experience += experienceInc;
+			droidIncreaseExperience(psDroid, experienceInc);
 		}
 	}
 }
@@ -1687,7 +1686,7 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:

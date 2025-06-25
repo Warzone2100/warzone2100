@@ -57,7 +57,7 @@ jobs:
         CXX: ${{ matrix.cxx }}
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" alpine cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=OFF -DWZ_FINDSDL2_NOCONFIG:BOOL=ON "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" alpine cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=OFF -DWZ_FINDSDL2_NOCONFIG:BOOL=ON -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'

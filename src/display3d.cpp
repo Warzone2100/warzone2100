@@ -183,6 +183,7 @@ iView	playerPos;
 
 /// How far away are we from the terrain
 static float distance;
+static bool bIsCloseDistance = false;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES + 1][VISIBLE_XTILES + 1];
@@ -593,7 +594,7 @@ float interpolateAngleDegrees(int a, int b, float t)
 	return a + d * t;
 }
 
-bool drawShape(iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
+bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth)
 {
 	glm::mat4 modifiedModelMatrix = modelMatrix;
 	int animFrame = 0; // for texture animation
@@ -1240,7 +1241,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 				/* Get a pointer to the tile at this location */
 				MAPTILE *psTile = mapTile(tileX + j, tileZ + i);
 
-				result += psTile->height;
+				result += std::max(psTile->height, psTile->waterLevel);
 				numTilesAveraged++;
 			}
 		}
@@ -1388,8 +1389,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				Vector2i screen(0, 0);
 				Position pos;
 
-				pos.x = world_coord(j);
-				pos.z = -world_coord(i);
+				pos.x = world_coord(j) - (playerPos.p.x % TILE_WIDTH);
+				pos.z = -world_coord(i) + (playerPos.p.z % TILE_HEIGHT);
 				pos.y = 0;
 
 				if (tileOnMap(playerXTile + j, playerZTile + i))
@@ -1528,7 +1529,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	// prepare for the water and the lightmap
 	pie_SetFogStatus(true);
 	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
+	drawWater(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
@@ -1777,6 +1778,12 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
 	const iIMDShape * pIMD = (psBStats != nullptr && psBStats->pIMD != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
+	if (psDroid->heightAboveMap > 0)
+	{
+		// clipShapeOnScreen is noticeably insufficient if it's a flying unit - we have to care about both shadows and the unit itself...
+		// HACK: boost the overdrawScreenPoints by a factor based on the heightAboveMap
+		overdrawScreenPoints *= std::max<int>(1, (psDroid->heightAboveMap / 20));
+	}
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
 
@@ -1784,10 +1791,18 @@ bool clipStructureOnScreen(STRUCTURE *psStructure)
 {
 	StructureBounds b = getStructureBounds(psStructure);
 	assert(b.size.x != 0 && b.size.y != 0);
-	for (int breadth = 0; breadth < b.size.y + 2; ++breadth) // +2 to make room for shadows on the terrain
+	// +4 to make room for shadows on the terrain
+	int start = -2;
+	int endB = (b.size.y + 2) - 1;
+	int endW = (b.size.x + 2) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
 	{
-		for (int width = 0; width < b.size.x + 2; ++width)
+		for (int width = start; width <= endW; ++width)
 		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
 			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
 			{
 				return true;
@@ -1859,7 +1874,7 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix, const glm
 {
 	WEAPON_STATS	*psStats;
 	Vector3i			dv;
-	iIMDShape		*pIMD;
+	const iIMDShape	*pIMD;
 	Spacetime       st;
 
 	psStats = psCurr->psWStats;
@@ -2006,7 +2021,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 		for (BASE_OBJECT* obj : apsStructLists[aPlayer])
 		{
 			/* Worth rendering the structure? */
-			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+				|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 			{
 				continue;
 			}
@@ -2027,7 +2043,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	for (BASE_OBJECT* obj : psDestroyedObj)
 	{
 		/* Worth rendering the structure? */
-		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+			|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			continue;
 		}
@@ -2274,6 +2291,32 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 	}
 }
 
+bool clipFeatureOnScreen(FEATURE *psFeature)
+{
+	StructureBounds b = getStructureBounds(psFeature);
+	assert(b.size.x != 0 && b.size.y != 0);
+	int overdrawTiles = (b.size.x < 2 && b.size.y < 2) ? 1 : 2; // make room for shadows on the terrain
+	int start = -overdrawTiles;
+	int endB = (b.size.y + overdrawTiles) - 1;
+	int endW = (b.size.x + overdrawTiles) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
+	{
+		for (int width = start; width <= endW; ++width)
+		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
+			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 /// Draw the features
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -2285,10 +2328,13 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	{
 		if (obj->type == OBJ_FEATURE
 			&& (obj->died == 0 || obj->died > graphicsTime)
-			&& clipXY(obj->pos.x, obj->pos.y))
+			&& quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			FEATURE* psFeature = castFeature(obj);
-			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			if (clipFeatureOnScreen(psFeature))
+			{
+				renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			}
 		}
 	}
 
@@ -2432,10 +2478,16 @@ float getViewDistance()
 	return distance;
 }
 
+bool getIsCloseDistance()
+{
+	return bIsCloseDistance;
+}
+
 /// Set the distance at which the player views the world
 void setViewDistance(float dist)
 {
 	distance = dist;
+	bIsCloseDistance = (distance < 750.f);
 	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
 }
 
@@ -2508,7 +2560,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	iIMDBaseShape *imd = psFeature->sDisplay.imd;
 	if (imd)
 	{
-		iIMDShape *strImd = imd->displayModel();
+		const iIMDShape *strImd = imd->displayModel();
 
 		float stretchDepth = 0.f;
 		if (!(strImd->flags & iV_IMD_NOSTRETCH))
@@ -2533,7 +2585,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	Vector3i                dv(0, 0, 0);
 	VIEW_PROXIMITY	*pViewProximity = nullptr;
 	SDWORD			x, y, r;
-	iIMDShape		*proxImd = nullptr;
+	const iIMDShape	*proxImd = nullptr;
 
 	//store the frame number for when deciding what has been clicked on
 	psProxDisp->frameNumber = currentGameFrame;
@@ -2654,7 +2706,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 	}
 }
 
-static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
+static void renderStructureTurrets(STRUCTURE *psStructure, const iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag,
 	const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
 {
 	iIMDBaseShape *mountImd[MAX_WEAPONS] = { nullptr };
@@ -2719,7 +2771,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			int recoilValue = noRecoil ? 0 : getRecoil(psStructure->asWeaps[i]);
 			if (mountImd[i] != nullptr)
 			{
-				iIMDShape *pMountDisplayIMD = mountImd[i]->displayModel();
+				const iIMDShape *pMountDisplayIMD = mountImd[i]->displayModel();
 				matrix *= glm::translate(glm::vec3(0.f, 0.f, recoilValue / 3.f));
 				int animFrame = 0;
 				if (pMountDisplayIMD->numFrames > 0)	// Calculate an animation frame
@@ -2735,7 +2787,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			matrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 			matrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
-			iIMDShape *pWeaponDisplayIMD = weaponImd[i]->displayModel();
+			const iIMDShape *pWeaponDisplayIMD = weaponImd[i]->displayModel();
 			pie_Draw3DShape(pWeaponDisplayIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, -heightAboveTerrain);
 			if (psStructure->status == SS_BUILT && psStructure->visibleForLocalDisplay() > (UBYTE_MAX / 2))
 			{
@@ -2752,7 +2804,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 						if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
 						{
-							iIMDShape	*pRepImd = getDisplayImdFromIndex(MI_FLAME);
+							const iIMDShape	*pRepImd = getDisplayImdFromIndex(MI_FLAME);
 
 							matrix *= glm::translate(glm::vec3(pWeaponDisplayIMD->connectors[0].x, pWeaponDisplayIMD->connectors[0].z - 12, pWeaponDisplayIMD->connectors[0].y)) *
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
@@ -2764,7 +2816,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				}
 				else // we have a weapon so we draw a muzzle flash
 				{
-					iIMDShape *pFlashDisplayIMD = (flashImd[i]) ? flashImd[i]->displayModel() : nullptr;
+					const iIMDShape *pFlashDisplayIMD = (flashImd[i]) ? flashImd[i]->displayModel() : nullptr;
 					drawMuzzleFlash(psStructure->asWeaps[i], pWeaponDisplayIMD, pFlashDisplayIMD, buildingBrightness, pieFlag, pieFlagData, modelMatrix * matrix, viewMatrix, heightAboveTerrain, colour);
 				}
 			}
@@ -2783,7 +2835,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 				if (flashImd[i] != nullptr)
 				{
 					rot = psStructure->asWeaps[i].rot; // Snap rotation so the muzzle graphic appears where it should, see aiUpdateStructure().
-					iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
+					const iIMDShape *pFlashDisplayIMD = flashImd[i]->displayModel();
 					glm::mat4 matrix(1.f);
 					// horrendous hack
 					if (strImd->max.y > 80) // babatower
@@ -2834,7 +2886,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 			default:
 				for (size_t cIdx = 1; cIdx < psStructure->sDisplay.imd->displayModel()->connectors.size(); cIdx++)
 				{
-					iIMDShape *lImd = getDisplayImdFromIndex(MI_LANDING);
+					const iIMDShape *lImd = getDisplayImdFromIndex(MI_LANDING);
 					pie_Draw3DShape(lImd, getModularScaledGraphicsTime(lImd->animInterval, lImd->numFrames), colour, buildingBrightness, 0, 0,
 									modelMatrix * glm::translate(glm::vec3(psStructure->sDisplay.imd->displayModel()->connectors[cIdx].xzy())), viewMatrix);
 				}
@@ -2853,7 +2905,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	bool bHitByElectronic = false;
 	bool defensive = false;
 	const FACTION *faction = getPlayerFaction(psStructure->player);
-	iIMDShape *strImd = getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel());
+	const iIMDShape *strImd = getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel());
 	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
@@ -2939,7 +2991,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
-			iIMDBaseShape *imd = psStructure->prebuiltImd;
+			const iIMDBaseShape *imd = psStructure->prebuiltImd;
 			if (imd)
 			{
 				pie_Draw3DShape(getFactionDisplayIMD(faction, imd->displayModel()), 0, colour, buildingBrightness, pie_SHADOW, 0,
@@ -3432,6 +3484,18 @@ bool	eitherSelected(DROID *psDroid)
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
 	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+	UDWORD shields = 0;
+
+	if (psDroid->shieldPoints >= 0)
+	{
+		int maxShieldPoints = droidGetMaxShieldPoints(psDroid);
+
+		if (maxShieldPoints > 0)
+		{
+			shields = PERCENT(psDroid->shieldPoints, maxShieldPoints);
+			shields = static_cast<UDWORD>((float)psDroid->shieldPoints / (float)maxShieldPoints * (float)psDroid->sDisplay.screenR);
+		}
+	}
 
 	PIELIGHT powerCol = WZCOL_BLACK;
 	PIELIGHT powerColShadow = WZCOL_BLACK;
@@ -3472,6 +3536,18 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_LBLUE),
+	rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 2,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_BLACK),
+	rectGroup);
 }
 
 static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
@@ -3918,8 +3994,8 @@ void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tile
 				/* We've got a match for our mouse coords */
 				if (inQuad(&screenCoord, &quad))
 				{
-					outMousePos.x = playerPos.p.x + world_coord(j);
-					outMousePos.y = playerPos.p.z + world_coord(i);
+					outMousePos.x = playerPos.p.x + (world_coord(j) - (playerPos.p.x % TILE_WIDTH));
+					outMousePos.y = playerPos.p.z + (world_coord(i) - (playerPos.p.z % TILE_HEIGHT));
 					outMousePos += positionInQuad(screenCoord, quad);
 					if (outMousePos.x < 0)
 					{
@@ -4221,7 +4297,7 @@ static void structureEffectsPlayer(UDWORD player)
 					bFXSize = 30;
 				}
 				/* Then it's repairing...? */
-				iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+				const iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
 				radius = pDisplayModel->radius;
 				xDif = iSinSR(effectTime, 720, radius);
 				yDif = iCosSR(effectTime, 720, radius);
@@ -4497,7 +4573,7 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	{
 		return;
 	}
-	iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+	const iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
 
 	auto deltaPlayer = Vector3f(0,0,0);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;

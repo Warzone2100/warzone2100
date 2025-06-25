@@ -69,6 +69,9 @@ bool	getDrawShadows();
 bool	getCameraAccel();
 void	setCameraAccel(bool val);
 
+void	setEdgeScrollOutsideWindowBounds(bool val);
+bool	getEdgeScrollOutsideWindowBounds();
+
 /* Do the 3D display */
 void displayWorld();
 

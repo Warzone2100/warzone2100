@@ -52,7 +52,8 @@ enum LOBBY_ERROR_TYPES
 	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
-	ERROR_UNKNOWNFILEISSUE
+	ERROR_UNKNOWNFILEISSUE,
+	ERROR_REDIRECT
 };
 
 enum CONNECTION_STATUS
@@ -158,7 +159,7 @@ enum SYNC_OPT_TYPES
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
-#define MaxMsgSize		16384		// max size of a message in bytes.
+#define MaxMsgSize		32768		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define extra_string_size	157		// extra 199 char for future use
 #define map_string_size		40
@@ -167,6 +168,8 @@ enum SYNC_OPT_TYPES
 #define password_string_size 64		// longer passwords slow down the join code
 
 #define MAX_NET_TRANSFERRABLE_FILE_SIZE	0x8000000
+
+static_assert(MaxMsgSize <= UINT16_MAX, "NetMessage/NetMessageBuilder encodes message length as a uint16_t");
 
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 {
@@ -353,11 +356,12 @@ extern PortMappingAsyncRequestHandle ipv4MappingRequest;
 		failAction; \
 	}
 
+enum class ConnectionProviderType : uint8_t;
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
-int NETinit(bool bFirstCall);
-WZ_DECL_NONNULL(2) bool NETsend(NETQUEUE queue, NetMessage const *message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+int NETinit(ConnectionProviderType pt);
+bool NETsend(NETQUEUE queue, NetMessage const& message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 void NETsendProcessDelayedActions();
 WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        ///< recv a message from the net queues if possible.
 WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       ///< recv a message from the game queues which is sceduled to execute by time, if possible.
@@ -445,9 +449,11 @@ bool NEThaltJoining();				// stop new players joining this game
 bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
 bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
-struct Socket;
-struct SocketSet;
-bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char *playername, NETQUEUE joiningQUEUEInfo, Socket **client_joining_socket, SocketSet **client_joining_socket_set);
+
+class IClientConnection;
+class IConnectionPollGroup;
+
+bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char* playername, NETQUEUE joiningQUEUEInfo, IClientConnection** client_joining_socket, IConnectionPollGroup** client_joining_socket_set);
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
@@ -465,11 +471,13 @@ void NETsetDefaultMPHostFreeChatPreference(bool enabled);
 bool NETgetDefaultMPHostFreeChatPreference();
 void NETsetEnableTCPNoDelay(bool enabled);
 bool NETgetEnableTCPNoDelay();
-uint32_t NETgetJoinConnectionNETPINGChallengeSize();
+uint32_t NETgetJoinConnectionNETPINGChallengeFromHostSize();
+uint32_t NETgetJoinConnectionNETPINGChallengeFromClientSize();
 
 void NETsetGamePassword(const char *password);
 void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
+void NETSendAllPlayerInfoTo(unsigned to);
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 uint32_t NETGetMajorVersion();
 uint32_t NETGetMinorVersion();
@@ -488,6 +496,9 @@ bool NET_getLobbyDisabled();
 const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
 uint32_t NET_getCurrentHostedLobbyGameId();
+
+// If a client, retrieve the current host's address
+optional<std::string> NET_getCurrentHostTextAddress();
 
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);
@@ -554,5 +565,13 @@ private:
 };
 
 void NETacceptIncomingConnections();
+/// <summary>
+/// Increase the connected timeout for all player connection objects when transitioning
+/// from the lobby room to the main game loop.
+///
+/// Currently, this will set timeout value to 60 seconds, so that automatic lag-kick mechanism
+/// would be able to close stalled connections.
+/// </summary>
+void NETadjustConnectedTimeoutForClients();
 
 #endif

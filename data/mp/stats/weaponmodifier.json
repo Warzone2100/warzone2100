@@ -4,6 +4,7 @@
 		"Hover": 120,
 		"Legged": 65,
 		"Lift": 40,
+		"Propellor": 105,
 		"Tracked": 105,
 		"Wheeled": 125
 	},
@@ -12,6 +13,7 @@
 		"Hover": 110,
 		"Legged": 150,
 		"Lift": 60,
+		"Propellor": 50,
 		"Tracked": 40,
 		"Wheeled": 100
 	},
@@ -20,6 +22,7 @@
 		"Hover": 90,
 		"Legged": 30,
 		"Lift": 80,
+		"Propellor": 120,
 		"Tracked": 120,
 		"Wheeled": 130
 	},
@@ -28,6 +31,7 @@
 		"Hover": 110,
 		"Legged": 130,
 		"Lift": 25,
+		"Propellor": 65,
 		"Tracked": 30,
 		"Wheeled": 90
 	},
@@ -36,6 +40,7 @@
 		"Hover": 20,
 		"Legged": 30,
 		"Lift": 30,
+		"Propellor": 50,
 		"Tracked": 50,
 		"Wheeled": 30
 	},
@@ -44,6 +49,7 @@
 		"Hover": 130,
 		"Legged": 130,
 		"Lift": 25,
+		"Propellor": 90,
 		"Tracked": 90,
 		"Wheeled": 110
 	}

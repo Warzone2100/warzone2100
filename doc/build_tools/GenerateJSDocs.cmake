@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.30)
 
 # A cross-platform script to support JS doc generation
 #

@@ -79,13 +79,23 @@ public:
 
 public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) = 0;
-	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) = 0;
+	enum class LoadFullFileResult
+	{
+		SUCCESS = 0,
+		FAILURE_OPEN,
+		FAILURE_READ,
+		FAILURE_EXCEEDS_MAXFILESIZE
+	};
+	virtual LoadFullFileResult loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize = 0, bool appendNullCharacter = false) = 0;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) = 0;
 
 	// Creates a directory (and any required parent directories) and returns true on success (or if the directory already exists)
 	virtual bool makeDirectory(const std::string& directoryPath) = 0;
 
 	virtual const char* pathSeparator() const = 0;
+
+	// Check if a file exists at a path
+	virtual bool fileExists(const std::string& filePath) = 0;
 
 	// enumFunc receives each enumerated file, and returns true to continue enumeration, or false to shortcut / stop enumeration
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc);
@@ -108,11 +118,17 @@ class StdIOProvider : public IOProvider
 {
 public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) override;
-	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
+	virtual IOProvider::LoadFullFileResult loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize = 0, bool appendNullCharacter = false) override;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 	virtual bool makeDirectory(const std::string& directoryPath) override;
 
 	virtual const char* pathSeparator() const override;
+
+	virtual bool fileExists(const std::string& filePath) override;
+
+	// Check if a folder exists at a path
+	// NOTE: dirPath should *not* contain a trailing pathSeparator (or this may always return false)
+	bool folderExists(const std::string& dirPath);
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;

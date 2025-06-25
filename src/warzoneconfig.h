@@ -29,6 +29,7 @@
 #include "lib/sound/sounddefs.h"
 #include "multiplaydefs.h"
 #include <string>
+#include <stdint.h>
 
 #define	CAMERASPEED_MAX		(5000)
 #define	CAMERASPEED_MIN		(100)
@@ -62,6 +63,13 @@ enum class JS_BACKEND
 bool js_backend_from_str(const char *str, JS_BACKEND &output_backend);
 std::string to_string(JS_BACKEND backend);
 
+enum class TrapCursorMode : uint8_t
+{
+	Disabled = 0,
+	Enabled,
+	Automatic
+};
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -76,8 +84,8 @@ void war_setWindowMode(WINDOW_MODE);
 WINDOW_MODE war_getWindowMode();
 void war_setAntialiasing(int);
 int war_getAntialiasing();
-void war_SetTrapCursor(bool b);
-bool war_GetTrapCursor();
+void war_SetTrapCursor(TrapCursorMode v);
+TrapCursorMode war_GetTrapCursor();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(int value);
@@ -174,6 +182,14 @@ void war_setOptionsButtonVisibility(uint8_t val);
 
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
+
+enum class ConnectionProviderType : uint8_t;
+
+void war_setHostConnectionProvider(ConnectionProviderType pt);
+ConnectionProviderType war_getHostConnectionProvider();
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt);
+std::string to_string(ConnectionProviderType pt);
 
 /**
  * Enable or disable sound initialization

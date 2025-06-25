@@ -113,10 +113,22 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
+
+/* Update droid shields. */
+void droidUpdateShields(DROID *psDroid);
+
+/* Calculate the droid's shield regeneration step time */
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid);
+
+/* Calculate the droid's shield interruption time */
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid);
+
+/* Get droid maximum shield points */
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
@@ -427,6 +439,9 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 {
 	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
+
+void droidRepairStarted(DROID *psDroid, BASE_OBJECT const *psRepairer);
+void droidRepairStopped(DROID *psDroid, BASE_OBJECT const *psFormerRepairer);
 
 /** \brief sends droid to delivery point, or back to commander. psRepairFac maybe nullptr when
  * repairs were made by a mobile repair turret

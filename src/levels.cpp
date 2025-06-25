@@ -296,6 +296,19 @@ LEVEL_DATASET* levFindBaseTileset(MAP_TILESET tileset)
 
 bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName)
 {
+	WzMapPhysFSIO mapIO(mountPoint);
+	auto levelDetails = WzMap::loadLevelDetails_JSON(filename, mapIO);
+	if (!levelDetails.has_value())
+	{
+		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
+		return false;
+	}
+
+	return levAddWzMap(levelDetails.value(), pathMode, realFileName);
+}
+
+bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName)
+{
 	// start a new level data set
 	LEVEL_DATASET *psDataSet = new LEVEL_DATASET();
 	if (!psDataSet)
@@ -311,63 +324,56 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 	psDataSet->realFileName = realFileName != nullptr ? strdup(realFileName) : nullptr;
 	psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
 
-	WzMapPhysFSIO mapIO(mountPoint);
-	auto levelDetails = WzMap::loadLevelDetails_JSON(filename, mapIO);
-	if (!levelDetails.has_value())
-	{
-		debug(LOG_ERROR, "Level File JSON load error: Failed to load JSON: %s", filename.c_str());
-		delete psDataSet;
-		return false;
-	}
+	WzMapPhysFSIO mapIO;
 
-	const auto& mapFolderPath = levelDetails.value().mapFolderPath;
+	const auto& mapFolderPath = levelDetails.mapFolderPath;
 	std::string customMountPoint;
 	if (mapFolderPath.empty())
 	{
 		// support "flattened" plain maps
 		// must be mounted within the virtual filesystem at the appropriate location (not at the root)
-		if (levelDetails.value().name.empty())
+		if (levelDetails.name.empty())
 		{
-			debug(LOG_ERROR, "Level File JSON load error: Map has empty name??: %s", filename.c_str());
+			debug(LOG_ERROR, "Level File map load error: Map has empty name??: %s", (realFileName) ? realFileName : "");
 			delete psDataSet;
 			return false;
 		}
-		switch (levelDetails.value().type)
+		switch (levelDetails.type)
 		{
 			case WzMap::MapType::CAMPAIGN:
 			case WzMap::MapType::SAVEGAME:
 				// FUTURE TODO: Support other map types
-				debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+				debug(LOG_ERROR, "Level File map load error: Unsupported map type: %d", (int)levelDetails.type);
 				delete psDataSet;
 				return false;
 			case WzMap::MapType::SKIRMISH:
-				customMountPoint = std::string("multiplay/maps/") + levelDetails.value().name;
+				customMountPoint = std::string("multiplay/maps/") + levelDetails.name;
 				break;
 		}
 	}
 
-	switch (levelDetails.value().type)
+	switch (levelDetails.type)
 	{
 		case WzMap::MapType::CAMPAIGN:
 		case WzMap::MapType::SAVEGAME:
 			// FUTURE TODO: Support other map types
-			debug(LOG_ERROR, "Level File JSON load error: Unsupported map type: %d", (int)levelDetails.value().type);
+			debug(LOG_ERROR, "Level File map load error: Unsupported map type: %d", (int)levelDetails.type);
 			delete psDataSet;
 			return false;
 		case WzMap::MapType::SKIRMISH:
 			psDataSet->type = LEVEL_TYPE::SKIRMISH;
 			break;
 	}
-	psDataSet->players = static_cast<SWORD>(levelDetails.value().players);
-	psDataSet->pName = levelDetails.value().name;
-	psDataSet->pAuthor = levelDetails.value().author;
-	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.value().gamFilePath());
+	psDataSet->players = static_cast<SWORD>(levelDetails.players);
+	psDataSet->pName = levelDetails.name;
+	psDataSet->pAuthor = levelDetails.author;
+	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.gamFilePath());
 	psDataSet->apDataFiles[0] = gamFilePath;
 	psDataSet->game = 0;
-	psDataSet->psBaseData = levFindBaseTileset(levelDetails.value().tileset);
+	psDataSet->psBaseData = levFindBaseTileset(levelDetails.tileset);
 	if (psDataSet->psBaseData == nullptr)
 	{
-		debug(LOG_ERROR, "Level File JSON load error: Failed to find base tileset for: %d", (int)levelDetails.value().tileset);
+		debug(LOG_ERROR, "Level File map load error: Failed to find base tileset for: %d", (int)levelDetails.tileset);
 		delete psDataSet;
 		return false;
 	}
@@ -733,13 +739,16 @@ bool levReleaseMissionData()
 
 
 // free the currently loaded dataset
-bool levReleaseAll()
+bool levReleaseAll(bool forceOnError)
 {
 	// clear out old effect data first
 	initEffectsSystem();
 
 	// release old data if any was loaded
-	if (psCurrLevel != nullptr)
+	bool didLoadLevel = (psCurrLevel != nullptr);
+	bool didLoadBaseLevel = (psBaseData != nullptr);
+
+	if (didLoadLevel)
 	{
 		resDoResLoadCallback();		// do callback.
 
@@ -748,11 +757,14 @@ bool levReleaseAll()
 			debug(LOG_ERROR, "Failed to unload mission data");
 			return false;
 		}
+	}
 
+	if (didLoadLevel || didLoadBaseLevel || forceOnError)
+	{
 		resDoResLoadCallback();		// do callback.
 
-		// release the game data
-		if (psCurrLevel->psBaseData != nullptr)
+		// release the base game data
+		if (psBaseData != nullptr || (psCurrLevel != nullptr && psCurrLevel->psBaseData != nullptr))
 		{
 			if (!stageTwoShutDown())
 			{
@@ -761,9 +773,20 @@ bool levReleaseAll()
 			}
 		}
 
-
-		if (psCurrLevel->psBaseData)
+		if (psBaseData)
 		{
+			for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
+			{
+				if (!psBaseData->apDataFiles[i].empty())
+				{
+					resReleaseBlockData(i);
+				}
+			}
+		}
+
+		if (psCurrLevel && psCurrLevel->psBaseData && psCurrLevel->psBaseData != psBaseData) // can this even happen?
+		{
+			debug(LOG_INFO, "psCurrLevel->psBaseData != psBaseData");
 			for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
 			{
 				if (!psCurrLevel->psBaseData->apDataFiles[i].empty())
@@ -773,8 +796,12 @@ bool levReleaseAll()
 			}
 		}
 
+		psBaseData = nullptr;
 		psCurrLevel = nullptr;
+	}
 
+	if (didLoadLevel || didLoadBaseLevel || forceOnError)
+	{
 		if (!stageOneShutDown())
 		{
 			debug(LOG_ERROR, "Failed stage one shutdown");
@@ -824,6 +851,15 @@ static bool levLoadSingleWRF(const char *name)
 const char *getLevelName()
 {
 	return currentLevelName;
+}
+
+static GameLoadDetails levConstructGameLoadDetails(LEVEL_DATASET* psNewLevel, SWORD scenarioIndex)
+{
+	if (psNewLevel->realFileName != nullptr)
+	{
+		return GameLoadDetails::makeMapPackageLoad(psNewLevel->realFileName);
+	}
+	return GameLoadDetails::makeLevelFileLoad(psNewLevel->apDataFiles[scenarioIndex]);
 }
 
 // load up the data for a level
@@ -917,7 +953,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName, psNewLevel->customMountPoint))
+	if (!rebuildSearchPath(psNewLevel->dataDir, true))
 	{
 		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;
@@ -1041,7 +1077,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			debug(LOG_NEVER, "Loading savegame: %s", pSaveName);
-			if (!loadGame(pSaveName, false, true, true))
+			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
 			{
 				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
@@ -1051,7 +1087,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
-			if (!startMission((LEVEL_TYPE)psNewLevel->type, nullptr))
+			if (!startMission((LEVEL_TYPE)psNewLevel->type, GameLoadDetails::makeLevelFileLoad("")))
 			{
 				debug(LOG_ERROR, "Failed startMission(%d)!", static_cast<int8_t>(psNewLevel->type));
 				return false;
@@ -1074,7 +1110,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			debug(LOG_NEVER, "loading savegame: %s", pSaveName);
-			if (!loadGame(pSaveName, false, true, true))
+			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
 			{
 				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
@@ -1119,7 +1155,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				}
 
 				debug(LOG_NEVER, "Loading save game %s", pSaveName);
-				if (!loadGame(pSaveName, false, true, true))
+				if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
 				{
 					debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 					return false;
@@ -1135,7 +1171,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				case LEVEL_TYPE::LDS_COMPLETE:
 				case LEVEL_TYPE::LDS_CAMSTART:
 					debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1143,7 +1179,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_BETWEEN:
 					debug(LOG_WZ, "LDS_BETWEEN");
-					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1152,7 +1188,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 				case LEVEL_TYPE::LDS_MKEEP:
 					debug(LOG_WZ, "LDS_MKEEP");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_MKEEP, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1160,7 +1196,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_CAMCHANGE:
 					debug(LOG_WZ, "LDS_CAMCHANGE");
-					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1169,7 +1205,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 				case LEVEL_TYPE::LDS_EXPAND:
 					debug(LOG_WZ, "LDS_EXPAND");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_EXPAND, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1177,7 +1213,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_EXPAND_LIMBO:
 					debug(LOG_WZ, "LDS_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1186,7 +1222,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 				case LEVEL_TYPE::LDS_MCLEAR:
 					debug(LOG_WZ, "LDS_MCLEAR");
-					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1194,7 +1230,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					break;
 				case LEVEL_TYPE::LDS_MKEEP_LIMBO:
 					debug(LOG_WZ, "LDS_MKEEP_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i].c_str());
 						return false;
@@ -1203,7 +1239,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				default:
 					ASSERT(psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START, "Unexpected mission type");
 					debug(LOG_WZ, "default (MULTIPLAYER)");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, psNewLevel->apDataFiles[i].c_str()))
+					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
 					{
 						debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 						return false;

@@ -1545,12 +1545,6 @@ bool initTerrain()
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain()
 {
-	if (!sectors)
-	{
-		// This happens in some cases when loading a savegame from level init
-		debug(LOG_ERROR, "Trying to shutdown terrain when we did not need to!");
-		return;
-	}
 	delete geometryVBO;
 	geometryVBO = nullptr;
 	delete geometryIndexVBO;
@@ -1568,17 +1562,20 @@ void shutdownTerrain()
 	delete terrainDecalVBO;
 	terrainDecalVBO = nullptr;
 
-	for (int x = 0; x < xSectors; x++)
+	if (sectors)
 	{
-		for (int y = 0; y < ySectors; y++)
+		for (int x = 0; x < xSectors; x++)
 		{
-			sectors[x * ySectors + y].textureOffset = nullptr;
-			sectors[x * ySectors + y].textureSize = nullptr;
-			sectors[x * ySectors + y].textureIndexOffset = nullptr;
-			sectors[x * ySectors + y].textureIndexSize = nullptr;
+			for (int y = 0; y < ySectors; y++)
+			{
+				sectors[x * ySectors + y].textureOffset = nullptr;
+				sectors[x * ySectors + y].textureSize = nullptr;
+				sectors[x * ySectors + y].textureIndexOffset = nullptr;
+				sectors[x * ySectors + y].textureIndexSize = nullptr;
+			}
 		}
+		sectors = nullptr;
 	}
-	sectors = nullptr;
 	delete lightmap_texture;
 	lightmap_texture = nullptr;
 	lightmapPixmap = nullptr;
@@ -2125,7 +2122,7 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 }
 
 template<typename PSO>
-void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	if (!waterIndexVBO)
 	{
@@ -2136,8 +2133,6 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cam
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
-	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
-	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto &renderState = getCurrentRenderState();
 
 	ASSERT_OR_RETURN(, waterTexturesHigh.tex, "Failed to load water textures");
@@ -2147,13 +2142,14 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const Vector3f &cam
 		waterTexturesHigh.tex,
 		waterTexturesHigh.tex_nm,
 		waterTexturesHigh.tex_sm,
-		lightmap_texture);
+		lightmap_texture,
+		gfx_api::context::get().getDepthTexture());
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
-		ModelViewProjection, lightmapValues.ModelUVLightmap, ModelUV1, ModelUV2,
+		ModelViewProjection, viewMatrix, lightmapValues.ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		getFogColorVec4(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
 		waterOffset*10
 	});
 
@@ -2242,7 +2238,7 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 
 #include <lib/ivis_opengl/pieblitfunc.h>
 
-void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
+void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades)
 {
 	switch (terrainShaderQuality)
 	{
@@ -2253,7 +2249,7 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 			drawWaterNormalImpl<gfx_api::WaterPSO>(ModelViewProjection, cameraPos, sunPos);
 			return;
 		case TerrainShaderQuality::NORMAL_MAPPING:
-			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, cameraPos, sunPos);
+			drawWaterHighImpl<gfx_api::WaterHighPSO>(ModelViewProjection, viewMatrix, cameraPos, sunPos, shadowCascades);
 			return;
 		case TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT:
 			// should not happen
@@ -2414,9 +2410,9 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 	// Based on system properties, determine a reasonable default (for performance reasons)
 	// (Uses a heuristic based on system RAM, graphics renderer, and estimated VRAM)
 
-	// If <= 4 GiB system RAM, default to medium ("normal")
+	// If <= 8 GiB system RAM, default to medium ("normal")
 	auto systemRAMinMiB = wzGetCurrentSystemRAM();
-	if (systemRAMinMiB <= 4096)
+	if (systemRAMinMiB <= 8192)
 	{
 		debug(LOG_INFO, "Due to system RAM (%" PRIu64 " MiB), defaulting to terrain quality: Normal", systemRAMinMiB);
 		return TerrainShaderQuality::MEDIUM;

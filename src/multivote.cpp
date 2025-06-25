@@ -20,6 +20,7 @@
 #include "multivote.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 
@@ -27,8 +28,14 @@
 #include "multiint.h"
 #include "notifications.h"
 #include "hci/teamstrategy.h"
+#include "ai.h"
+#include "wzjsonhelpers.h"
+#include "main.h"
+#include "stdinreader.h"
 
 #include <array>
+#include <unordered_map>
+#include <unordered_set>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -42,10 +49,81 @@ using nonstd::nullopt;
 
 static uint8_t playerVotes[MAX_PLAYERS];
 
+struct PlayerPreferences
+{
+public:
+	struct BuiltinPreferences
+	{
+		std::set<ScavType> scavengers;
+		std::set<AllianceType> alliances;
+		std::set<PowerSetting> power;
+		std::set<CampType> base;
+		std::set<TechLevel> techLevel;
+		uint8_t minPlayers;
+		uint8_t maxPlayers;
+
+	private:
+		auto tied() const
+		{
+			return std::tie(scavengers, alliances, power, base, techLevel, minPlayers, maxPlayers);
+		}
+
+	public:
+		BuiltinPreferences();
+		void reset();
+
+		bool operator==(const BuiltinPreferences& o) const
+		{
+			return tied() == o.tied();
+		}
+	};
+
+public:
+	void reset()
+	{
+		builtinPreferences.reset();
+	}
+	void setAllBuiltin(bool pref);
+
+	nlohmann::json prefValuesToJSON();
+	bool setPrefValuesFromJSON(const nlohmann::json& j);
+	BuiltinPreferences& getBuiltinPreferences() { return builtinPreferences; }
+	bool setBuiltinPreferences(BuiltinPreferences&& newPrefs);
+
+	// returns "true" if preference value changed, false if unchanged
+	bool setPrefValue(ScavType val, bool pref);
+	bool setPrefValue(AllianceType val, bool pref);
+	bool setPrefValue(PowerSetting val, bool pref);
+	bool setPrefValue(CampType val, bool pref);
+	bool setPrefValue(TechLevel val, bool pref);
+
+	// returns the value for the specified preference
+	bool getPrefValue(ScavType val) const;
+	bool getPrefValue(AllianceType val) const;
+	bool getPrefValue(PowerSetting val) const;
+	bool getPrefValue(CampType val) const;
+	bool getPrefValue(TechLevel val) const;
+
+private:
+	template<typename T = uint8_t>
+	void setAllPrefValues(T maxVal, bool pref, T minVal = static_cast<T>(0))
+	{
+		for (uint8_t i = minVal; i <= maxVal; ++i)
+		{
+			setPrefValue(static_cast<T>(i), pref);
+		};
+	}
+private:
+	BuiltinPreferences builtinPreferences;
+};
+
+static std::array<PlayerPreferences, MAX_CONNECTED_PLAYERS> playerPreferences;
+
 enum class NetVoteType
 {
 	LOBBY_SETTING_CHANGE,
-	KICK_PLAYER
+	KICK_PLAYER,
+	LOBBY_OPTION_PREFERENCES_BUILTIN,
 };
 
 struct PendingVoteKick
@@ -92,6 +170,567 @@ constexpr uint32_t MIN_INTERVAL_BETWEEN_PLAYER_KICK_VOTES_MS = 60000;
 static std::array<optional<uint32_t>, MAX_PLAYERS> lastKickVoteForEachPlayer;
 
 static bool handleVoteKickResult(PendingVoteKick& pendingVote);
+static void sendPlayerMultiOptPreferencesBuiltin(uint32_t playerIdx);
+
+// MARK: - PlayerPreferences
+
+PlayerPreferences::BuiltinPreferences::BuiltinPreferences()
+{
+	minPlayers = 2;
+	maxPlayers = MAX_PLAYERS_IN_GUI;
+}
+
+void PlayerPreferences::BuiltinPreferences::reset()
+{
+	scavengers.clear();
+	alliances.clear();
+	power.clear();
+	base.clear();
+	techLevel.clear();
+	minPlayers = 2;
+	maxPlayers = MAX_PLAYERS_IN_GUI;
+}
+
+template<typename T = uint8_t>
+static bool validateNumToScavTypeEnum(T val)
+{
+	return val <= static_cast<T>(SCAV_TYPE_MAX);
+}
+
+template<typename T = uint8_t>
+static bool validateNumToAlliancesTypeEnum(T val)
+{
+	return val <= static_cast<T>(ALLIANCE_TYPE_MAX);
+}
+
+template<typename T = uint8_t>
+static bool validateNumToPowerSettingEnum(T val)
+{
+	return val <= static_cast<T>(POWER_SETTING_MAX);
+}
+
+template<typename T = uint8_t>
+static bool validateNumToCampTypeEnum(T val)
+{
+	return val <= static_cast<T>(CAMP_TYPE_MAX);
+}
+
+template<typename T = uint8_t>
+static bool validateNumToTechLevelEnum(T val)
+{
+	return val >= static_cast<uint8_t>(TECH_LEVEL_MIN) && val <= static_cast<uint8_t>(TECH_LEVEL_MAX);
+}
+
+static bool validateMinMaxPlayersPrefValue(uint8_t val)
+{
+	return val >= 2 && val <= MAX_PLAYERS_IN_GUI;
+}
+
+static uint8_t clampMinMaxPlayersPrefValue(uint8_t val)
+{
+	return std::min<uint8_t>(std::max<uint8_t>(val, 2), MAX_PLAYERS_IN_GUI);
+}
+
+inline void to_json(nlohmann::json& j, const PlayerPreferences::BuiltinPreferences& builtinPreferences) {
+	j = nlohmann::json::object();
+	if (!builtinPreferences.scavengers.empty())
+	{
+		j["scavs"] = builtinPreferences.scavengers;
+	}
+	if (!builtinPreferences.alliances.empty())
+	{
+		j["allies"] = builtinPreferences.alliances;
+	}
+	if (!builtinPreferences.power.empty())
+	{
+		j["power"] = builtinPreferences.power;
+	}
+	if (!builtinPreferences.base.empty())
+	{
+		j["base"] = builtinPreferences.base;
+	}
+	if (!builtinPreferences.techLevel.empty())
+	{
+		j["tech"] = builtinPreferences.techLevel;
+	}
+	auto playersObj = nlohmann::json::object();
+	playersObj["min"] = builtinPreferences.minPlayers;
+	playersObj["max"] = builtinPreferences.maxPlayers;
+	j["players"] = std::move(playersObj);
+}
+
+template<typename T>
+std::set<T> setUint8ToSetEnumT(std::set<uint8_t>&& val, std::function<bool (uint8_t)> validateValueFunc)
+{
+	auto result = std::set<T>();
+	for (auto it = val.begin(); it != val.end(); ++it)
+	{
+		if (!validateValueFunc(*it))
+		{
+			continue;
+		}
+		else
+		{
+			result.insert(static_cast<T>(*it));
+		}
+	}
+	return result;
+}
+
+inline void from_json(const nlohmann::json& j, PlayerPreferences::BuiltinPreferences& builtinPreferences) {
+	auto it = j.find("scavs");
+	if (it != j.end())
+	{
+		builtinPreferences.scavengers = setUint8ToSetEnumT<ScavType>(it->get<std::set<uint8_t>>(), validateNumToScavTypeEnum<uint8_t>);
+	}
+	it = j.find("allies");
+	if (it != j.end())
+	{
+		builtinPreferences.alliances = setUint8ToSetEnumT<AllianceType>(it->get<std::set<uint8_t>>(), validateNumToAlliancesTypeEnum<uint8_t>);
+	}
+	it = j.find("power");
+	if (it != j.end())
+	{
+		builtinPreferences.power = setUint8ToSetEnumT<PowerSetting>(it->get<std::set<uint8_t>>(), validateNumToPowerSettingEnum<uint8_t>);
+	}
+	it = j.find("base");
+	if (it != j.end())
+	{
+		builtinPreferences.base = setUint8ToSetEnumT<CampType>(it->get<std::set<uint8_t>>(), validateNumToCampTypeEnum<uint8_t>);
+	}
+	it = j.find("tech");
+	if (it != j.end())
+	{
+		builtinPreferences.techLevel = setUint8ToSetEnumT<TechLevel>(it->get<std::set<uint8_t>>(), validateNumToTechLevelEnum<uint8_t>);
+	}
+	it = j.find("players");
+	if (it != j.end())
+	{
+		const auto& playersObj = it.value();
+		auto players_it = playersObj.find("min");
+		if (players_it != playersObj.end())
+		{
+			builtinPreferences.minPlayers = clampMinMaxPlayersPrefValue(players_it->get<uint8_t>());
+		}
+		players_it = playersObj.find("max");
+		if (players_it != playersObj.end())
+		{
+			builtinPreferences.maxPlayers = clampMinMaxPlayersPrefValue(players_it->get<uint8_t>());
+		}
+	}
+}
+
+nlohmann::json PlayerPreferences::prefValuesToJSON()
+{
+	nlohmann::json result = nlohmann::json(builtinPreferences);
+	return result;
+}
+
+bool PlayerPreferences::setPrefValuesFromJSON(const nlohmann::json& j)
+{
+	try {
+		builtinPreferences = j.get<PlayerPreferences::BuiltinPreferences>();
+	}
+	catch (nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "Failed to load pref json with error: %s", e.what());
+		return false;
+	}
+	return true;
+}
+
+bool PlayerPreferences::setBuiltinPreferences(BuiltinPreferences&& newPrefs)
+{
+	if (builtinPreferences == newPrefs)
+	{
+		// no change
+		return false;
+	}
+	builtinPreferences = std::move(newPrefs);
+	return true;
+}
+
+bool PlayerPreferences::getPrefValue(ScavType val) const
+{
+	return builtinPreferences.scavengers.count(val) != 0;
+}
+
+bool PlayerPreferences::setPrefValue(ScavType val, bool pref)
+{
+	if (pref)
+	{
+		return builtinPreferences.scavengers.insert(val).second;
+	}
+	return builtinPreferences.scavengers.erase(val) != 0;
+}
+
+bool PlayerPreferences::getPrefValue(AllianceType val) const
+{
+	return builtinPreferences.alliances.count(val) != 0;
+}
+
+bool PlayerPreferences::setPrefValue(AllianceType val, bool pref)
+{
+	if (pref)
+	{
+		return builtinPreferences.alliances.insert(val).second;;
+	}
+	return builtinPreferences.alliances.erase(val) != 0;
+}
+
+bool PlayerPreferences::getPrefValue(PowerSetting val) const
+{
+	return builtinPreferences.power.count(val) != 0;
+}
+
+bool PlayerPreferences::setPrefValue(PowerSetting val, bool pref)
+{
+	if (pref)
+	{
+		return builtinPreferences.power.insert(val).second;
+	}
+	return builtinPreferences.power.erase(val) != 0;
+}
+
+bool PlayerPreferences::getPrefValue(CampType val) const
+{
+	return builtinPreferences.base.count(val) != 0;
+}
+
+bool PlayerPreferences::setPrefValue(CampType val, bool pref)
+{
+	if (pref)
+	{
+		return builtinPreferences.base.insert(val).second;
+	}
+	return builtinPreferences.base.erase(val) != 0;
+}
+
+bool PlayerPreferences::getPrefValue(TechLevel val) const
+{
+	return builtinPreferences.techLevel.count(val) != 0;
+}
+
+bool PlayerPreferences::setPrefValue(TechLevel val, bool pref)
+{
+	if (pref)
+	{
+		return builtinPreferences.techLevel.insert(val).second;
+	}
+	return builtinPreferences.techLevel.erase(val) != 0;
+}
+
+void PlayerPreferences::setAllBuiltin(bool pref)
+{
+	setAllPrefValues<ScavType>(SCAV_TYPE_MAX, pref);
+	setAllPrefValues<AllianceType>(ALLIANCE_TYPE_MAX, pref);
+	setAllPrefValues<PowerSetting>(POWER_SETTING_MAX, pref);
+	setAllPrefValues<CampType>(CAMP_TYPE_MAX, pref);
+	setAllPrefValues<TechLevel>(TECH_LEVEL_MAX, pref, TECH_LEVEL_MIN);
+}
+
+void loadMultiOptionPrefValues(const char *sPlayerName, uint32_t playerIndex)
+{
+	ASSERT_OR_RETURN(, playerIndex < playerPreferences.size(), "Invalid player idx: %" PRIu32, playerIndex);
+	playerPreferences[playerIndex].reset();
+
+	// Stored alongside the profile, with the same filename but different extension
+	WzString fileName = WzString(MultiPlayersPath) + sPlayerName + WzString(".multiprefs");
+	auto result = wzLoadJsonObjectFromFile(fileName.toUtf8(), true);
+	if (!result.has_value())
+	{
+		return;
+	}
+
+	// Load last used prefs set
+	const auto& rootObj = result.value();
+	auto it = rootObj.find("last");
+	if (it != rootObj.end())
+	{
+		playerPreferences[playerIndex].setPrefValuesFromJSON(it.value());
+	}
+}
+
+bool saveMultiOptionPrefValues(const char *sPlayerName, uint32_t playerIndex)
+{
+	ASSERT_OR_RETURN(false, playerIndex < playerPreferences.size(), "Invalid player idx: %" PRIu32, playerIndex);
+
+	// Stored alongside the profile, with the same filename but different extension
+	WzString fileName = WzString(MultiPlayersPath) + sPlayerName + ".multiprefs";
+
+	nlohmann::json rootObj = nlohmann::json::object();
+	// Load existing file (to preserve any future saved pref sets)
+	auto result = wzLoadJsonObjectFromFile(fileName.toUtf8(), true);
+	if (result.has_value())
+	{
+		rootObj = std::move(result.value());
+	}
+	rootObj["last"] = playerPreferences[playerIndex].prefValuesToJSON();
+
+	auto dumpedJSON = rootObj.dump(4);
+	return saveFile(fileName.toUtf8().c_str(), dumpedJSON.data(), dumpedJSON.size());
+}
+
+nlohmann::json getMultiOptionPrefValuesJSON(uint32_t playerIndex)
+{
+	ASSERT_OR_RETURN({}, playerIndex < playerPreferences.size(), "Invalid player idx: %" PRIu32, playerIndex);
+	return playerPreferences[playerIndex].prefValuesToJSON();
+}
+
+void resetMultiOptionPrefValues(uint32_t player)
+{
+	ASSERT_OR_RETURN(, player < playerPreferences.size(), "Invalid player idx: %" PRIu32, player);
+	playerPreferences[player].reset();
+
+	if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost && player == selectedPlayer)
+	{
+		// Notify host of change
+		sendPlayerMultiOptPreferencesBuiltin(selectedPlayer);
+	}
+}
+
+void resetAllMultiOptionPrefValues()
+{
+	for (auto& pref : playerPreferences)
+	{
+		pref.reset();
+	}
+}
+
+void multiOptionPrefValuesSwap(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	if (!NetPlay.isHost) { return; }
+	std::swap(playerPreferences[playerIndexA], playerPreferences[playerIndexB]);
+}
+
+void sendPlayerMultiOptPreferencesBuiltin()
+{
+	sendPlayerMultiOptPreferencesBuiltin(selectedPlayer);
+}
+
+template <typename T>
+void setMultiOptionPrefValueT(T val, bool pref)
+{
+	auto& myPrefs = playerPreferences[selectedPlayer];
+	if (myPrefs.setPrefValue(val, pref))
+	{
+		if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost)
+		{
+			// Notify host of change
+			sendPlayerMultiOptPreferencesBuiltin(selectedPlayer);
+		}
+	}
+}
+
+void setMultiOptionPrefValue(ScavType val, bool pref)
+{
+	setMultiOptionPrefValueT(val, pref);
+}
+
+void setMultiOptionPrefValue(AllianceType val, bool pref)
+{
+	setMultiOptionPrefValueT(val, pref);
+}
+
+void setMultiOptionPrefValue(PowerSetting val, bool pref)
+{
+	setMultiOptionPrefValueT(val, pref);
+}
+
+void setMultiOptionPrefValue(CampType val, bool pref)
+{
+	setMultiOptionPrefValueT(val, pref);
+}
+
+void setMultiOptionPrefValue(TechLevel val, bool pref)
+{
+	setMultiOptionPrefValueT(val, pref);
+}
+
+void setMultiOptionBuiltinPrefValues(bool pref)
+{
+	auto& myPrefs = playerPreferences[selectedPlayer];
+	myPrefs.setAllBuiltin(pref);
+
+	if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost)
+	{
+		// Notify host of change
+		sendPlayerMultiOptPreferencesBuiltin(selectedPlayer);
+	}
+}
+
+template <typename T>
+bool getMultiOptionPrefValueT(T val)
+{
+	const auto& myPrefs = playerPreferences[selectedPlayer];
+	return myPrefs.getPrefValue(val);
+}
+
+bool getMultiOptionPrefValue(ScavType val)
+{
+	return getMultiOptionPrefValueT(val);
+}
+
+bool getMultiOptionPrefValue(AllianceType val)
+{
+	return getMultiOptionPrefValueT(val);
+}
+
+bool getMultiOptionPrefValue(PowerSetting val)
+{
+	return getMultiOptionPrefValueT(val);
+}
+
+bool getMultiOptionPrefValue(CampType val)
+{
+	return getMultiOptionPrefValueT(val);
+}
+
+bool getMultiOptionPrefValue(TechLevel val)
+{
+	return getMultiOptionPrefValueT(val);
+}
+
+template <typename T>
+size_t getMultiOptionPrefValueTotalT(T val, bool playersOnly)
+{
+	size_t result = 0;
+	for (size_t idx = 0; idx < playerPreferences.size(); ++idx)
+	{
+		if (playersOnly && idx >= MAX_PLAYERS) { break; }
+		const auto& prefs = playerPreferences[idx];
+		if (prefs.getPrefValue(val)) { ++result; }
+	}
+	return result;
+}
+
+size_t getMultiOptionPrefValueTotal(ScavType val, bool playersOnly)
+{
+	return getMultiOptionPrefValueTotalT(val, playersOnly);
+}
+
+size_t getMultiOptionPrefValueTotal(AllianceType val, bool playersOnly)
+{
+	return getMultiOptionPrefValueTotalT(val, playersOnly);
+}
+
+size_t getMultiOptionPrefValueTotal(PowerSetting val, bool playersOnly)
+{
+	return getMultiOptionPrefValueTotalT(val, playersOnly);
+}
+
+size_t getMultiOptionPrefValueTotal(CampType val, bool playersOnly)
+{
+	return getMultiOptionPrefValueTotalT(val, playersOnly);
+}
+
+size_t getMultiOptionPrefValueTotal(TechLevel val, bool playersOnly)
+{
+	return getMultiOptionPrefValueTotalT(val, playersOnly);
+}
+
+static constexpr uint32_t MaxSupportedSetMembers = static_cast<uint32_t>(std::numeric_limits<uint8_t>::max());
+
+template<typename T>
+bool NETEnumTSet_uint8(MessageReader& r, std::set<T>& val, std::function<bool(uint8_t)> validateValueFunc = nullptr)
+{
+	bool retVal = true;
+	uint32_t numElements = 0;
+
+	val.clear();
+
+	NETuint32_t(r, numElements);
+
+	if (numElements > MaxSupportedSetMembers)
+	{
+		debug(LOG_NET, "Invalid number of set members: %" PRIu32, numElements);
+		// will skip extras in the loop, set return value to false
+		retVal = false;
+	}
+	for (uint32_t i = 0; i < numElements; ++i)
+	{
+		uint8_t el = 0;
+		NETuint8_t(r, el);
+		if (i < numElements)
+		{
+			if (validateValueFunc)
+			{
+				if (!validateValueFunc(el))
+				{
+					retVal = false;
+					continue;
+				}
+			}
+			val.insert(static_cast<T>(el));
+		}
+	}
+	return retVal;
+}
+
+template<typename T>
+bool NETEnumTSet_uint8(MessageWriter& w, std::set<T>& val, std::function<bool(uint8_t)> validateValueFunc = nullptr)
+{
+	bool retVal = true;
+	uint32_t numElements = 0;
+
+
+#if SIZE_MAX > UINT32_MAX
+	if (val.size() > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
+	{
+		numElements = 0;
+		NETuint32_t(w, numElements);
+		return false;
+	}
+#endif
+	numElements = static_cast<uint32_t>(val.size());
+	if (numElements > MaxSupportedSetMembers)
+	{
+		ASSERT(false, "Invalid number of set members: %" PRIu32, numElements);
+		numElements = MaxSupportedSetMembers;
+	}
+
+	NETuint32_t(w, numElements);
+
+	size_t i = 0;
+	for (auto el : val)
+	{
+		if (i >= numElements)
+		{
+			break;
+		}
+		uint8_t el_uint8 = static_cast<uint8_t>(el);
+		NETuint8_t(w, el_uint8);
+		++i;
+	}
+	return retVal;
+}
+
+template <typename SerdeContext>
+bool NETbuiltinPlayerPreferences(SerdeContext& c, PlayerPreferences::BuiltinPreferences& builtinPrefs)
+{
+	static_assert(std::is_same<SerdeContext, MessageReader>::value || std::is_same<SerdeContext, MessageWriter>::value,
+		"SerdeContext is expected to be either MessageReader or MessageWriter");
+
+	bool retSuccess = true;
+	retSuccess = NETEnumTSet_uint8<ScavType>(c, builtinPrefs.scavengers, validateNumToScavTypeEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<AllianceType>(c, builtinPrefs.alliances, validateNumToAlliancesTypeEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<PowerSetting>(c, builtinPrefs.power, validateNumToPowerSettingEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<CampType>(c, builtinPrefs.base, validateNumToCampTypeEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<TechLevel>(c, builtinPrefs.techLevel, validateNumToTechLevelEnum<uint8_t>) && retSuccess;
+	NETuint8_t(c, builtinPrefs.minPlayers);
+	NETuint8_t(c, builtinPrefs.maxPlayers);
+	if (!validateMinMaxPlayersPrefValue(builtinPrefs.minPlayers))
+	{
+		builtinPrefs.minPlayers = 2;
+		retSuccess = false;
+	}
+	if (!validateMinMaxPlayersPrefValue(builtinPrefs.maxPlayers))
+	{
+		builtinPrefs.maxPlayers = MAX_PLAYERS_IN_GUI;
+		retSuccess = false;
+	}
+	return retSuccess;
+}
 
 // MARK: -
 
@@ -120,14 +759,12 @@ void resetLobbyChangePlayerVote(uint32_t player)
 
 void sendLobbyChangeVoteData(uint8_t currentVote)
 {
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
-	NETuint32_t(&selectedPlayer);
-	uint32_t voteID = 0;
-	NETuint32_t(&voteID);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
+	NETuint32_t(w, selectedPlayer);
 	uint8_t voteType = static_cast<uint8_t>(NetVoteType::LOBBY_SETTING_CHANGE);
-	NETuint8_t(&voteType);
-	NETuint8_t(&currentVote);
-	NETend();
+	NETuint8_t(w, voteType);
+	NETuint8_t(w, currentVote);
+	NETend(w);
 }
 
 uint8_t getLobbyChangeVoteTotal()
@@ -158,6 +795,8 @@ uint8_t getLobbyChangeVoteTotal()
 
 static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 {
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid sender: %" PRIu32, player);
+
 	playerVotes[player] = (newVote == 1) ? 1 : 0;
 
 	debug(LOG_NET, "total votes: %d/%d", static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
@@ -165,20 +804,20 @@ static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 	// there is no "votes" that disallows map change so assume they are all allowing
 	if(newVote == 1) {
 		char msg[128] = {0};
-		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), NetPlay.players[player].name, player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), getPlayerName(player), player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
 		sendRoomSystemMessage(msg);
 	}
 }
 
 void sendPlayerKickedVote(uint32_t voteID, uint8_t newVote)
 {
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
-	NETuint32_t(&selectedPlayer);
-	NETuint32_t(&voteID);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
+	NETuint32_t(w, selectedPlayer);
 	uint8_t voteType = static_cast<uint8_t>(NetVoteType::KICK_PLAYER);
-	NETuint8_t(&voteType);
-	NETuint8_t(&newVote);
-	NETend();
+	NETuint8_t(w, voteType);
+	NETuint32_t(w, voteID);
+	NETuint8_t(w, newVote);
+	NETend(w);
 }
 
 static void recvPlayerKickVote(uint32_t voteID, uint32_t sender, uint8_t newVote)
@@ -228,26 +867,88 @@ static void recvPlayerKickVote(uint32_t voteID, uint32_t sender, uint8_t newVote
 	}
 }
 
-bool recvVote(NETQUEUE queue)
+static void sendPlayerMultiOptPreferencesBuiltin(uint32_t playerIdx)
 {
-	ASSERT_HOST_ONLY(return true);
+	ASSERT_OR_RETURN(, playerIdx < MAX_CONNECTED_PLAYERS, "Invalid player idx: %" PRIu32, playerIdx);
+	ASSERT_OR_RETURN(, whosResponsible(playerIdx) == selectedPlayer || NetPlay.isHost, "Sending unexpected player prefs: %" PRIu32, playerIdx);
+	ASSERT_OR_RETURN(, GetGameMode() != GS_NORMAL, "Trying to send multiopt preferences after game started?");
+
+	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_VOTE);
+	NETuint32_t(w, selectedPlayer);
+	uint8_t voteType = static_cast<uint8_t>(NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN);
+	NETuint8_t(w, voteType);
+	NETbuiltinPlayerPreferences(w, playerPreferences[playerIdx].getBuiltinPreferences());
+	NETend(w);
+}
+
+bool recvPlayerMultiOptPreferencesBuiltin(int32_t sender, PlayerPreferences::BuiltinPreferences&& builtinPreferences)
+{
+	ASSERT_OR_RETURN(false, sender < MAX_CONNECTED_PLAYERS, "Invalid sender: %" PRIu32, sender);
+	auto prefsChanged = playerPreferences[sender].setBuiltinPreferences(std::move(builtinPreferences));
+	if (prefsChanged)
+	{
+		wz_command_interface_output_room_status_json(true);
+	}
+	return prefsChanged;
+}
+
+bool recvVote(NETQUEUE queue, bool inLobby)
+{
+	ASSERT_HOST_ONLY(return false);
 
 	uint32_t player = MAX_PLAYERS;
 	uint32_t voteID = 0;
 	uint8_t voteType = 0;
 	uint8_t newVote = 0;
+	PlayerPreferences::BuiltinPreferences builtinPreferences;
+	bool senderIsSpectator = (queue.index < NetPlay.players.size()) ? NetPlay.players[queue.index].isSpectator : true;
+	bool validPrefs = false;
 
-	NETbeginDecode(queue, NET_VOTE);
-	NETuint32_t(&player);
-	NETuint32_t(&voteID);
-	NETuint8_t(&voteType);
-	NETuint8_t(&newVote);
-	NETend();
+	auto r = NETbeginDecode(queue, NET_VOTE);
+	NETuint32_t(r, player);
+	NETuint8_t(r, voteType);
 
-	if (player >= MAX_PLAYERS)
+	switch (static_cast<NetVoteType>(voteType))
 	{
-		debug(LOG_ERROR, "Invalid NET_VOTE from player %d: player id = %d", queue.index, static_cast<int>(player));
-		return false;
+		case NetVoteType::LOBBY_SETTING_CHANGE:
+			NETuint8_t(r, newVote);
+			break;
+		case NetVoteType::KICK_PLAYER:
+			NETuint32_t(r, voteID);
+			NETuint8_t(r, newVote);
+			break;
+		case NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN:
+			if (inLobby)
+			{
+				validPrefs = NETbuiltinPlayerPreferences(r, builtinPreferences);
+			}
+			break;
+	}
+
+	NETend(r);
+
+	switch (static_cast<NetVoteType>(voteType))
+	{
+		case NetVoteType::LOBBY_SETTING_CHANGE:
+		case NetVoteType::KICK_PLAYER:
+			if (senderIsSpectator)
+			{
+				// Silently ignore LOBBY_SETTING_CHANGE and KICK_PLAYER votes from spectators
+				return false;
+			}
+			if (player >= MAX_PLAYERS)
+			{
+				debug(LOG_NET, "Invalid NET_VOTE from player %d: player id = %d", queue.index, static_cast<int>(player));
+				return false;
+			}
+			break;
+		case NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN:
+			if (!inLobby || player >= MAX_CONNECTED_PLAYERS)
+			{
+				debug(LOG_NET, "Invalid NET_VOTE from player %d: player id = %d", queue.index, static_cast<int>(player));
+				return false;
+			}
+			break;
 	}
 
 	if (whosResponsible(player) != queue.index)
@@ -264,6 +965,13 @@ bool recvVote(NETQUEUE queue)
 		case NetVoteType::KICK_PLAYER:
 			recvPlayerKickVote(voteID, player, newVote);
 			return true;
+		case NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN:
+			if (!validPrefs)
+			{
+				debug(LOG_NET, "Invalid NET_VOTE from player %d: (for player id = %d)", queue.index, static_cast<int>(player));
+				return false;
+			}
+			return recvPlayerMultiOptPreferencesBuiltin(player, std::move(builtinPreferences));
 	}
 
 	return false;
@@ -376,13 +1084,13 @@ static bool sendVoteRequest(NetVoteType type, uint32_t voteID = 0, uint32_t targ
 	ASSERT_HOST_ONLY(return false);
 
 	//setup a vote popup for the clients
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
-	NETuint32_t(&selectedPlayer);
-	NETuint32_t(&targetPlayer);
-	NETuint32_t(&voteID);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
+	NETuint32_t(w, selectedPlayer);
+	NETuint32_t(w, targetPlayer);
+	NETuint32_t(w, voteID);
 	uint8_t voteType = static_cast<uint8_t>(type);
-	NETuint8_t(&voteType);
-	NETend();
+	NETuint8_t(w, voteType);
+	NETend(w);
 
 	return true;
 }
@@ -393,12 +1101,12 @@ bool recvVoteRequest(NETQUEUE queue)
 	uint32_t targetPlayer = MAX_PLAYERS;
 	uint32_t voteID = 0;
 	uint8_t voteType = 0;
-	NETbeginDecode(queue, NET_VOTE_REQUEST);
-	NETuint32_t(&sender);
-	NETuint32_t(&targetPlayer);
-	NETuint32_t(&voteID);
-	NETuint8_t(&voteType);
-	NETend();
+	auto r = NETbeginDecode(queue, NET_VOTE_REQUEST);
+	NETuint32_t(r, sender);
+	NETuint32_t(r, targetPlayer);
+	NETuint32_t(r, voteID);
+	NETuint8_t(r, voteType);
+	NETend(r);
 
 	if (sender >= MAX_PLAYERS)
 	{
@@ -420,6 +1128,8 @@ bool recvVoteRequest(NETQUEUE queue)
 		case NetVoteType::KICK_PLAYER:
 			setupKickVoteChoice(voteID, targetPlayer);
 			return true;
+		case NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN:
+			return false;
 	}
 
 	return false;

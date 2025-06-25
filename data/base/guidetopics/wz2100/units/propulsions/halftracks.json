@@ -1,0 +1,29 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::halftracks",
+	"title": "Half-tracks",
+	"sort": "03",
+	"visual": {
+		"stat": {
+			"id": "HalfTrack"
+		}
+	},
+	"contents": [
+		"Half-tracks are a hybrid propulsion between Wheels and Tracks.",
+		"",
+		"They have a moderate cost and speed, and provide a moderate amount of hitpoints.",
+		"",
+		"They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons.",
+		"",
+		"Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
+		],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::units::propulsions",
+		"wz2100::units::propulsions::wheels",
+		"wz2100::units::propulsions::tracks",
+		"wz2100::weapons::antitank",
+		"wz2100::weapons::antipersonnel",
+		"wz2100::weapons::artillery"
+	]
+}

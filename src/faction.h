@@ -43,8 +43,9 @@ struct FACTION {
 
 void reinitFactionsMapping();
 
+optional<WzString> getFactionModelName(const FACTION *faction, const WzString& normalFactionName);
 optional<WzString> getFactionModelName(const FactionID faction, const WzString& normalFactionName);
-iIMDShape* getFactionDisplayIMD(const FACTION *faction, iIMDShape* imd); // DISPLAY ONLY
+const iIMDShape* getFactionDisplayIMD(const FACTION *faction, const iIMDShape* imd); // DISPLAY ONLY
 
 const FACTION* getPlayerFaction(uint8_t player);
 const FACTION* getFactionByID(FactionID faction);

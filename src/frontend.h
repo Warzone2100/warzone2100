@@ -94,7 +94,7 @@ W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *t
 std::shared_ptr<W_LABEL> addSideText(WIDGET* psParent, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &screen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
-void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
+std::shared_ptr<W_SLIDER> addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
@@ -383,6 +383,8 @@ enum
 	FRONTEND_PORT_MAPPING_R,
 	FRONTEND_HOST_CHATDEFAULT,
 	FRONTEND_HOST_CHATDEFAULT_R,
+	FRONTEND_HOST_DEFAULT_AI,
+	FRONTEND_HOST_DEFAULT_AI_R,
 	FRONTEND_INACTIVITY_TIMEOUT,
 	FRONTEND_INACTIVITY_TIMEOUT_DROPDOWN,
 	FRONTEND_GAME_TIME_LIMIT,

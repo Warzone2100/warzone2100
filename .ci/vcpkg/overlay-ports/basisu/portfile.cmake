@@ -1,12 +1,15 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO BinomialLLC/basis_universal
-    REF ad9386a4a1cf2a248f7bbd45f543a7448db15267 # post-1.16.4, including fixes
-    SHA512 4922af3a8d42d8c1ab551853d0ab97c0733a869cd99e95ef7a03620da023da48070a1255dcd68f6a384ee7787b5bd5dffe2cd510b2986e2a0e7181929f6ecc64
+    REF df079eca71cf83481c45059dce2165348dc1a5ea # 1.50+, including fixes
+    SHA512 fc8a8c5df71b82689a6322e5d0251c469f7a7a1c1afa9c3b4217ac0ec46e7090bcc2f9a2ec5a5a36349709cc4a7718d3e679b14424d5e2ace87abbe3fa25ba81
     HEAD_REF master
     PATCHES
-        001-mingw.patch
-        002-gha-msvc-workaround.patch
+        # Remove once https://github.com/BinomialLLC/basis_universal/pull/383 merged
+        0001-cmake.patch
+        # Additional WZ patches
+        0002-mingw.patch
+        0003-gha-msvc-workaround.patch
 )
 
 set(_additional_options)
@@ -19,18 +22,20 @@ vcpkg_cmake_configure(
     OPTIONS
         -DZSTD=ON
         ${_additional_options}
+        -DEXAMPLES=OFF
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.31
+    MAYBE_UNUSED_VARIABLES
+        CMAKE_POLICY_VERSION_MINIMUM
 )
 
 vcpkg_cmake_install()
+vcpkg_copy_pdbs()
 
-file(INSTALL ${SOURCE_PATH}/LICENSE DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT} RENAME copyright)
-vcpkg_copy_tools(TOOL_NAMES basisu AUTO_CLEAN)
-
-# Remove unnecessary files
-file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug)
-
+vcpkg_copy_tools(TOOL_NAMES "basisu" AUTO_CLEAN)
 set(VCPKG_POLICY_EMPTY_INCLUDE_FOLDER enabled)
 
-file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/bin ${CURRENT_PACKAGES_DIR}/debug/bin)
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 
-vcpkg_copy_pdbs()
+#vcpkg_cmake_config_fixup(PACKAGE_NAME basisu CONFIG_PATH lib/cmake/basisu)
+
+vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")

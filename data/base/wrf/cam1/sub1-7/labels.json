@@ -59,6 +59,10 @@
 		"label": "NPWayPoint",
 		"pos": [5760, 968]
 	},
+	"position_16": {
+		"label": "westSpawnPos",
+		"pos": [256, 2688]
+	},
 
 	"area_0": {
 		"label": "RTLZ",

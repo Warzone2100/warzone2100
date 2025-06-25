@@ -60,8 +60,10 @@ using nonstd::nullopt;
 #define pie_PREMULTIPLIED       0x200
 #define pie_NODEPTHWRITE        0x400
 #define pie_FORCELIGHT          0x800
+#define pie_SHIELD              0x1000
 
 #define pie_RAISE_SCALE			256
+#define pie_SHIELD_FACTOR		1.125f
 
 enum LIGHTING_TYPE
 {
@@ -274,6 +276,39 @@ union PIELIGHT
         PIELIGHTBYTES byte;
         UDWORD rgba;
         UBYTE vector[4];
+};
+
+struct PIERECT_DrawRequest
+{
+	PIERECT_DrawRequest(int x0, int y0, int x1, int y1, PIELIGHT color)
+	: x0(x0)
+	, y0(y0)
+	, x1(x1)
+	, y1(y1)
+	, color(color)
+	{ }
+
+	int x0;
+	int y0;
+	int x1;
+	int y1;
+	PIELIGHT color;
+};
+struct PIERECT_DrawRequest_f
+{
+	PIERECT_DrawRequest_f(float x0, float y0, float x1, float y1, PIELIGHT color)
+	: x0(x0)
+	, y0(y0)
+	, x1(x1)
+	, y1(y1)
+	, color(color)
+	{ }
+
+	float x0;
+	float y0;
+	float x1;
+	float y1;
+	PIELIGHT color;
 };
 
 #endif // _pieTypes_h

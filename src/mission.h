@@ -53,7 +53,8 @@ void releaseMission();
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
-bool startMission(LEVEL_TYPE missionType, const char *pGame);
+struct GameLoadDetails;
+bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails);
 void endMission();
 
 /** Initialise the mission stuff for a save game. */
