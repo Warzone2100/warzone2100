@@ -803,15 +803,7 @@ bool isHumanPlayer(int player)
 	{
 		return false;	// obvious, really
 	}
-	const auto& p = NetPlay.players[player];
-	return p.allocated && p.difficulty == AIDifficulty::HUMAN;
-}
-
-// Returns true if this player slot is not occupied by either player or a bot
-bool isClosedPlayerSlot(int player)
-{
-	const auto& p = NetPlay.players[player];
-	return p.allocated == false && p.difficulty == AIDifficulty::DISABLED;
+	return NetPlay.players[player].allocated;
 }
 
 // Clear player name data after game quit.
@@ -841,7 +833,7 @@ int whosResponsible(int player)
 //returns true if selected player is responsible for 'player'
 bool myResponsibility(int player)
 {
-	return !isClosedPlayerSlot(player) && (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer);
+	return (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer);
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'

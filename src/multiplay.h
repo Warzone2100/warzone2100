@@ -246,7 +246,6 @@ bool setPlayerName(int player, const char *sName);
 void clearPlayerName(unsigned int player);
 const char *getPlayerColourName(int player);
 bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
-bool isClosedPlayerSlot(int player); // Returns true if this player slot is not occupied by either player or a bot
 bool myResponsibility(int player);
 bool responsibleFor(int player, int playerinquestion);
 int whosResponsible(int player);
