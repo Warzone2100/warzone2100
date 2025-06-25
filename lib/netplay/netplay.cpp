@@ -4462,6 +4462,24 @@ static void NETallowJoining()
 					NETuint8_t(w, rejected);
 					uint16_t maxrejectlen = std::min<uint16_t>(MAX_JOIN_REJECT_REASON, tmp_connectState[i].asyncJoinRejectCustomMessage.size() + 1);
 					NETstring(w, tmp_connectState[i].asyncJoinRejectCustomMessage.c_str(), maxrejectlen);
+
+					if (rejected == ERROR_REDIRECT)
+					{
+						// construct + send encrypted client challenge response
+						const TmpSocketInfo::ReceivedJoinInfo& joinRequestInfo = tmp_connectState[i].receivedJoinInfo;
+						std::vector<uint8_t> encryptedHostChallengeResponse;
+						if (!joinRequestInfo.challengeForHost.empty())
+						{
+							EcKey::Sig hostChallengeResponse = getLocalSharedIdentity().sign(joinRequestInfo.challengeForHost.data(), joinRequestInfo.challengeForHost.size());
+							encryptedHostChallengeResponse = joinRequestInfo.connectionAuthSessionKeys->encryptMessageForOther(&hostChallengeResponse[0], hostChallengeResponse.size());
+							if (encryptedHostChallengeResponse.empty())
+							{
+								debug(LOG_INFO, "Failed to encrypt response?");
+							}
+						}
+						NETbytes(w, encryptedHostChallengeResponse);
+					}
+
 					NETend(w);
 					NETflush();
 					auto tmpQueue = NETnetTmpQueue(i);

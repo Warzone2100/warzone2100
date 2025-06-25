@@ -358,6 +358,10 @@ struct KickRedirectInfo
 	optional<std::string> gamePassword = nullopt;
 	bool asSpectator = false;
 };
+void to_json(nlohmann::json& j, const KickRedirectInfo& v);
+void from_json(const nlohmann::json& j, KickRedirectInfo& v);
+optional<KickRedirectInfo> parseKickRedirectInfo(const std::string& redirectJSONString, const std::string& currHostAddress);
+
 bool kickRedirectPlayer(uint32_t player_id, const KickRedirectInfo& redirectInfo);
 bool kickRedirectPlayer(uint32_t player_id, JoinConnectionDescription::JoinConnectionType connectionType, uint16_t newPort, bool asSpectator, optional<std::string> gamePassword);
 

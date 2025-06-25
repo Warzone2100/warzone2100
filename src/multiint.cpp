@@ -6515,6 +6515,35 @@ static int getBoundedMinAutostartPlayerCount()
 	return minAutoStartPlayerCount;
 }
 
+optional<KickRedirectInfo> parseKickRedirectInfo(const std::string& redirectString, const std::string& currHostAddress)
+{
+	// Parse the redirect string (should be a valid json object containing an array of connection descriptions and other connection options)
+	KickRedirectInfo redirectInfo;
+	try {
+		auto obj = nlohmann::json::parse(redirectString);
+		redirectInfo = obj.get<KickRedirectInfo>();
+	}
+	catch (const std::exception&) {
+		debug(LOG_ERROR, "Invalid redirect string - could not be processed: %s", redirectString.c_str());
+		return nullopt;
+	}
+
+	// Process & verify the connection descriptions
+	for (auto& conn : redirectInfo.connList)
+	{
+		if (conn.host.empty() || conn.host == "=")
+		{
+			// replace with the same host's address
+			conn.host = currHostAddress;
+		}
+	}
+	redirectInfo.connList.erase(std::remove_if(redirectInfo.connList.begin(), redirectInfo.connList.end(), [&currHostAddress](const JoinConnectionDescription& desc) {
+		return desc.host != currHostAddress || desc.port <= 1024;
+	}), redirectInfo.connList.end());
+
+	return redirectInfo;
+}
+
 void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, const std::string& redirectString)
 {
 	ASSERT_OR_RETURN(, !NetPlay.isHost, "Host shouldn't be processing kick redirect");
@@ -6537,30 +6566,13 @@ void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, co
 	}
 
 	// Parse the redirect string (should be a valid json object containing an array of connection descriptions and other connection options)
-	KickRedirectInfo redirectInfo;
-	try {
-		auto obj = nlohmann::json::parse(redirectString);
-		redirectInfo = obj.get<KickRedirectInfo>();
-	}
-	catch (const std::exception&) {
-		debug(LOG_ERROR, "Invalid redirect string - could not be processed: %s", redirectString.c_str());
+	auto redirectInfo = parseKickRedirectInfo(redirectString, optCurrHostAddress.value());
+	if (!redirectInfo.has_value())
+	{
 		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent));
 		return;
 	}
-
-	// Process & verify the connection descriptions
-	for (auto& conn : redirectInfo.connList)
-	{
-		if (conn.host.empty() || conn.host == "=")
-		{
-			// replace with the same host's address
-			conn.host = optCurrHostAddress.value();
-		}
-	}
-	redirectInfo.connList.erase(std::remove_if(redirectInfo.connList.begin(), redirectInfo.connList.end(), [&optCurrHostAddress](const JoinConnectionDescription& desc) {
-		return desc.host != optCurrHostAddress.value() || desc.port <= 1024;
-	}), redirectInfo.connList.end());
-	if (redirectInfo.connList.empty())
+	if (redirectInfo->connList.empty())
 	{
 		// No valid connection descriptions!
 		debug(LOG_ERROR, "No valid connection descriptions in redirect: %s", redirectString.c_str());
@@ -6574,8 +6586,8 @@ void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, co
 	// Attempt a redirect join
 	ExpectedHostProperties expectedHostProps;
 	expectedHostProps.hostPublicKey = hostPublicKey;
-	expectedHostProps.gamePassword = redirectInfo.gamePassword;
-	if (!startJoinRedirectAttempt(sPlayer, redirectInfo.connList, redirectInfo.asSpectator, expectedHostProps))
+	expectedHostProps.gamePassword = redirectInfo->gamePassword;
+	if (!startJoinRedirectAttempt(sPlayer, redirectInfo->connList, redirectInfo->asSpectator, expectedHostProps))
 	{
 		// Display a message box about being kicked, and unable to rejoin
 		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process repeated or invalid redirects")), parent));
