@@ -609,10 +609,8 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 	});
 }
 
-static bool redirectActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& redirectStrCopy)
+static optional<KickRedirectInfo> parseCmdInterfaceRedirectStringToRedirectInfo(const std::string& redirectStrCopy)
 {
-	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress && !ingame.TimeEveryoneIsInGame.has_value(), "Game must not have started yet!");
-
 	// Parse the redirect string:
 	// <tcp/gns>:<new_port>:<0/1=spectator>:<optional:gamepassword>
 
@@ -621,29 +619,29 @@ static bool redirectActivePlayerWithIdentity(const std::string& playerIdentitySt
 	bool asSpectator = false;
 
 	auto redirectComponents = splitAtAnyDelimiter(redirectStrCopy, ":");
-	ASSERT_OR_RETURN(false, redirectComponents.size() >= 3, "Invalid redirect string");
+	ASSERT_OR_RETURN(nullopt, redirectComponents.size() >= 3, "Invalid redirect string");
 
 	auto optConnectionType = JoinConnectionDescription::connectiontype_from_string(redirectComponents[0]);
-	ASSERT_OR_RETURN(false, optConnectionType.has_value(), "Unrecognized / unsupported connection type: \"%s\"", redirectComponents[0].c_str());
+	ASSERT_OR_RETURN(nullopt, optConnectionType.has_value(), "Unrecognized / unsupported connection type: \"%s\"", redirectComponents[0].c_str());
 	connectionType = optConnectionType.value();
 
 	try {
 		auto portNumber = std::stoul(redirectComponents[1], nullptr, 10);
-		ASSERT_OR_RETURN(false, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
+		ASSERT_OR_RETURN(nullopt, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
 		newPort = static_cast<uint16_t>(portNumber);
 	}
 	catch (const std::exception& e) {
-		ASSERT_OR_RETURN(false, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
+		ASSERT_OR_RETURN(nullopt, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
 	}
 
-	ASSERT_OR_RETURN(false, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
+	ASSERT_OR_RETURN(nullopt, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
 
 	try {
 		auto specValue = std::stoul(redirectComponents[2], nullptr, 10);
 		asSpectator = specValue != 0;
 	}
 	catch (const std::exception& e) {
-		ASSERT_OR_RETURN(false, false, "Invalid spec value specified: \"%s\"", redirectComponents[2].c_str());
+		ASSERT_OR_RETURN(nullopt, false, "Invalid spec value specified: \"%s\"", redirectComponents[2].c_str());
 	}
 
 	std::string gamePassword;
@@ -656,13 +654,31 @@ static bool redirectActivePlayerWithIdentity(const std::string& playerIdentitySt
 		gamePassword += redirectComponents[i];
 	}
 
+	KickRedirectInfo redirectInfo;
+	redirectInfo.connList.push_back(JoinConnectionDescription(connectionType, "=", newPort)); // special "=" value is treated as "same address" on the client side
+	redirectInfo.gamePassword = gamePassword;
+	redirectInfo.asSpectator = asSpectator;
+	return redirectInfo;
+}
+
+static bool redirectActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& redirectStrCopy)
+{
+	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress && !ingame.TimeEveryoneIsInGame.has_value(), "Game must not have started yet!");
+
+	// Parse the redirect string:
+	auto redirectInfoOpt = parseCmdInterfaceRedirectStringToRedirectInfo(redirectStrCopy);
+	if (!redirectInfoOpt.has_value())
+	{
+		return false;
+	}
+
 	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
 		if (i == NetPlay.hostPlayer)
 		{
 			wz_command_interface_output("WZCMD error: Can't redirect host!\n");
 			return;
 		}
-		kickRedirectPlayer(i, connectionType, newPort, asSpectator, gamePassword);
+		kickRedirectPlayer(i, redirectInfoOpt.value());
 	});
 }
 
@@ -1094,7 +1110,40 @@ int cmdInputThreadFunc(void *)
 					std::string uniqueJoinIDCopy(uniqueJoinID);
 					std::string rejectionMessageCopy(rejectionMessage);
 					convertEscapedNewlines(rejectionMessageCopy);
-					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason, rejectionMessageCopy] {
+					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason, rejectionMessageCopy]() mutable {
+
+						if (rejectionReason == ERROR_REDIRECT)
+						{
+							// Parse the rejection message as a cmdinterface redirect string
+							auto redirectInfoOpt = parseCmdInterfaceRedirectStringToRedirectInfo(rejectionMessageCopy);
+							if (redirectInfoOpt.has_value())
+							{
+								// Convert it to json redirect string
+								std::string redirectStr;
+								try {
+									nlohmann::json obj = redirectInfoOpt.value();
+									redirectStr = obj.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
+								}
+								catch (const std::exception& e) {
+									debug(LOG_ERROR, "Failed to encode redirect string with error: %s", e.what());
+									redirectStr.clear();
+								}
+
+								if (!redirectStr.empty() && redirectStr.size() <= MAX_KICK_REASON)
+								{
+									rejectionMessageCopy = redirectStr;
+								}
+								else
+								{
+									wz_command_interface_output("WZCMD error: Encoded redirect string invalid length - redirect failed\n");
+								}
+							}
+							else
+							{
+								wz_command_interface_output("WZCMD error: Failed to parse redirect string\n");
+							}
+						}
+
 						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, static_cast<LOBBY_ERROR_TYPES>(rejectionReason), rejectionMessageCopy))
 						{
 							wz_command_interface_output("WZCMD info: Could not find currently-waiting join with specified uniqueJoinID\n");
