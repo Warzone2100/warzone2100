@@ -486,16 +486,8 @@ protected:
 		cdAudio_RegisterForEvents(std::static_pointer_cast<CDAudioEventSink>(musicManagerAudioEventSink));
 	}
 
-	virtual int32_t idealWidth() override
-	{
-		return std::max<int32_t>(table->idealWidth(), trackDetailsBox->idealWidth());
-	}
-
-	virtual int32_t idealHeight() override
-	{
-		return trackDetailsBox->idealHeight() + 400;
-	}
-
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
 	virtual void geometryChanged() override;
 	virtual void display(int xOffset, int yOffset) override;
 
@@ -528,7 +520,9 @@ private:
 	std::shared_ptr<ScrollableTableWidget> table;
 	std::shared_ptr<TrackDetailsForm> trackDetailsBox;
 	std::shared_ptr<MusicManager_CDAudioEventSink> musicManagerAudioEventSink;
+	int32_t minDesiredTableWidth = 0;
 	bool ingame;
+	const int32_t tablePaddingX = 6;
 };
 
 MusicManagerForm::~MusicManagerForm()
@@ -558,13 +552,23 @@ void MusicManagerForm::geometryChanged()
 	int trackDetailsBoxY0 = h - trackDetailsBoxHeight;
 	trackDetailsBox->setGeometry(0, trackDetailsBoxY0, w, trackDetailsBoxHeight);
 
-	int tracksTableX0 = 6;
+	int tracksTableX0 = tablePaddingX;
 	int tracksTableY0 = 0;
 	int tracksTableHeight = trackDetailsBoxY0 - tracksTableY0 - 5;
-	int tracksTableWidth = w - 12;
+	int tracksTableWidth = w - (tablePaddingX * 2);
 	table->setGeometry(tracksTableX0, tracksTableY0, tracksTableWidth, tracksTableHeight);
 
 	table->setMinimumColumnWidths(table->getMinimumColumnWidths());
+}
+
+int32_t MusicManagerForm::idealWidth()
+{
+	return std::max<int32_t>(table->idealWidth(), (minDesiredTableWidth + (tablePaddingX * 2) + 100));
+}
+
+int32_t MusicManagerForm::idealHeight()
+{
+	return trackDetailsBox->idealHeight() + 400;
 }
 
 void MusicManagerForm::display(int xOffset, int yOffset)
@@ -624,7 +628,7 @@ void MusicManagerForm::addTrackList(WIDGET* parent)
 {
 	// Create column headers for tracks listing
 	std::vector<TableColumn> columns;
-	columns.push_back({createColumnHeaderLabel(_("Title"), 0), TableColumn::ResizeBehavior::FIXED_WIDTH});
+	columns.push_back({createColumnHeaderLabel(_("Title"), 0), TableColumn::ResizeBehavior::RESIZABLE_AUTOEXPAND});
 	columns.push_back({createColumnHeaderLabel(_("Album"), 0), TableColumn::ResizeBehavior::RESIZABLE_AUTOEXPAND});
 
 	for (int musicModeIdx = 0; musicModeIdx < NUM_MUSICGAMEMODES; musicModeIdx++)
@@ -644,6 +648,8 @@ void MusicManagerForm::addTrackList(WIDGET* parent)
 	{
 		minimumColumnWidths.push_back(static_cast<size_t>(std::max<int>(columns[i].columnWidget->idealWidth(), 0)));
 	}
+	minDesiredTableWidth = std::accumulate(minimumColumnWidths.begin(), minimumColumnWidths.end(), 0);
+	minDesiredTableWidth += (W_TRACK_COL_PADDING * 2) + (W_TRACK_COL_PADDING * 2 * (int)minimumColumnWidths.size());
 
 	// Create table
 	table = ScrollableTableWidget::make(columns, maxIdealColumnHeight);

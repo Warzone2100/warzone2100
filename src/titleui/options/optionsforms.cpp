@@ -1033,14 +1033,18 @@ void OptionsBrowserForm::display(int xOffset, int yOffset)
 	}
 }
 
+#define MIN_IDEAL_OPTIONS_BROWSER_FORM_WIDTH 640
+#define MIN_IDEAL_OPTIONS_BROWSER_FORM_HEIGHT 640
+
 int32_t OptionsBrowserForm::idealWidth()
 {
-	return maxOptionsFormWidth;
+	return std::max(maxOptionsFormWidth, MIN_IDEAL_OPTIONS_BROWSER_FORM_WIDTH);
 }
 
 int32_t OptionsBrowserForm::idealHeight()
 {
-	return (topPadding + bottomPadding) + optionsFormSwitcher->idealHeight() + paddingBeforeOptionsForm + 300;
+	int minCalculatedIdealHeight = (topPadding + bottomPadding) + optionsFormSwitcher->idealHeight() + paddingBeforeOptionsForm + 300;
+	return std::max(minCalculatedIdealHeight, MIN_IDEAL_OPTIONS_BROWSER_FORM_HEIGHT);
 }
 
 bool OptionsBrowserForm::switchToOptionsForm(OptionsBrowserForm::Modes mode)

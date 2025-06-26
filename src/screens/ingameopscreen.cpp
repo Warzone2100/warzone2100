@@ -427,9 +427,6 @@ void WzInGameOptionsScreen_CLICKFORM::initialize(const std::shared_ptr<WIDGET>& 
 	recalcLayout();
 }
 
-#define MIN_IDEAL_INGAMEOP_FORM_WIDTH 640
-#define MIN_IDEAL_INGAMEOP_FORM_HEIGHT 640
-
 void WzInGameOptionsScreen_CLICKFORM::recalcLayout()
 {
 	int w = width();
@@ -439,8 +436,8 @@ void WzInGameOptionsScreen_CLICKFORM::recalcLayout()
 	int maxFormHeight = h - (edgeMargin * 2);
 
 	// ensure displayForm is centered
-	int displayFormWidth = std::min(maxFormWidth, std::max(wrapperForm->idealWidth(), MIN_IDEAL_INGAMEOP_FORM_WIDTH));
-	int displayFormHeight = std::min(maxFormHeight, std::max(wrapperForm->idealHeight(), MIN_IDEAL_INGAMEOP_FORM_HEIGHT));
+	int displayFormWidth = std::min(maxFormWidth, wrapperForm->idealWidth());
+	int displayFormHeight = std::min(maxFormHeight, wrapperForm->idealHeight());
 
 	int x0 = (w - displayFormWidth) / 2;
 	int y0 = (h - displayFormHeight) / 2;
