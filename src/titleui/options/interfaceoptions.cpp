@@ -91,7 +91,7 @@ static std::map<WzString, const char *> languageIconsMap()
 	return iconsMap;
 }
 
-std::shared_ptr<OptionsForm> makeInterfaceOptionsForm()
+std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()> languageDidChangeHandler)
 {
 	auto result = OptionsForm::make();
 	result->setRefreshOptionsOnScreenSizeChange(true);
@@ -130,13 +130,18 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm()
 				result.setCurrentIdxForValue(currentCode);
 				return result;
 			},
-			[](const auto& newValue) -> bool {
+			[languageDidChangeHandler](const auto& newValue) -> bool {
 				if (!setLanguage(newValue.toUtf8().c_str()))
 				{
 					return false;
 				}
 				// hack to update translations of AI names and tooltips
 				readAIs();
+				// call the language change handler
+				if (languageDidChangeHandler)
+				{
+					languageDidChangeHandler();
+				}
 				return true;
 			}, false
 		);

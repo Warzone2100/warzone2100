@@ -28,7 +28,7 @@
 #include <vector>
 #include <functional>
 
-std::shared_ptr<OptionsForm> makeInterfaceOptionsForm();
+std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()> languageDidChangeHandler = nullptr);
 std::shared_ptr<OptionsForm> makeDefaultsOptionsForm();
 std::shared_ptr<OptionsForm> makeGraphicsOptionsForm();
 std::shared_ptr<OptionsForm> makeAudioOptionsForm();
@@ -57,6 +57,7 @@ public:
 	void addOptionsForm(Modes mode, const CreateOptionsFormFunc& createFormFunc, const WzString& untranslatedTitle);
 	void showOpenConfigDirLink(bool show);
 	bool switchToOptionsForm(Modes mode);
+	void informLanguageDidChange();
 
 protected:
 	virtual void geometryChanged() override;

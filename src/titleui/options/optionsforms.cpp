@@ -287,6 +287,7 @@ public:
 	void setItemSpacing(int32_t itemSpacing);
 	void setVerticalOuterPadding(int32_t padding);
 	void setBackgroundColor(optional<PIELIGHT> bckColor);
+	void informLanguageDidChange();
 protected:
 	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	virtual void geometryChanged() override;
@@ -438,6 +439,16 @@ void HorizontalButtonsWidget::addButton(WzString untranslatedTitle)
 
 	clipContainer->attach(but);
 	optionsTitles.emplace_back(but);
+	layoutDirty = true;
+}
+
+void HorizontalButtonsWidget::informLanguageDidChange()
+{
+	// Must re-set all of the button text strings, and recalculate layout
+	for (size_t i = 0; i < optionsFormUntranslatedTitles.size(); ++i)
+	{
+		optionsTitles[i]->setString(gettext(optionsFormUntranslatedTitles[i].toUtf8().c_str()));
+	}
 	layoutDirty = true;
 }
 
@@ -1060,6 +1071,21 @@ bool OptionsBrowserForm::switchToOptionsForm(OptionsBrowserForm::Modes mode)
 	return true;
 }
 
+void OptionsBrowserForm::informLanguageDidChange()
+{
+	// Refresh switchers
+	auto switcher = std::static_pointer_cast<HorizontalButtonsWidget>(optionsFormSwitcher);
+	switcher->informLanguageDidChange();
+	auto sectionSwitcher = std::static_pointer_cast<HorizontalButtonsWidget>(optionsFormSectionSwitcher);
+	sectionSwitcher->informLanguageDidChange();
+
+	// Refresh open configuration directory link text
+	openConfigurationDirectoryLink->setString(_("Open Configuration Directory"));
+
+	// Trigger layout recalc
+	geometryChanged();
+}
+
 // MARK: -
 
 std::shared_ptr<OptionsBrowserForm> createOptionsBrowser(bool inGame, const std::shared_ptr<WIDGET>& optionalBackButton)
@@ -1067,7 +1093,18 @@ std::shared_ptr<OptionsBrowserForm> createOptionsBrowser(bool inGame, const std:
 	auto result = OptionsBrowserForm::make(optionalBackButton);
 	result->showOpenConfigDirLink(!inGame);
 
-	result->addOptionsForm(OptionsBrowserForm::Modes::Interface, makeInterfaceOptionsForm, N_("Interface"));
+	auto weakOptionsBrowserForm = std::weak_ptr<OptionsBrowserForm>(result);
+	auto informOnLanguageChangeHandler = [weakOptionsBrowserForm]() {
+		auto strongOptionsBrowserForm = weakOptionsBrowserForm.lock();
+		ASSERT_OR_RETURN(, strongOptionsBrowserForm != nullptr, "No parent?");
+		strongOptionsBrowserForm->informLanguageDidChange();
+	};
+
+	result->addOptionsForm(
+		OptionsBrowserForm::Modes::Interface,
+		[informOnLanguageChangeHandler]() { return makeInterfaceOptionsForm(informOnLanguageChangeHandler); },
+		N_("Interface")
+	);
 	if (!inGame)
 	{
 		result->addOptionsForm(OptionsBrowserForm::Modes::Defaults, makeDefaultsOptionsForm, N_("Defaults"));
