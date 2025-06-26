@@ -214,6 +214,7 @@ parts:
       - libcurl3-gnutls
       - libsodium23
       - libsqlite3-0
+      - libprotobuf32t64
       - libzip4t64
       - libglu1-mesa
       # - mesa-vulkan-drivers # provided by gpu-2404 / mesa-2404
