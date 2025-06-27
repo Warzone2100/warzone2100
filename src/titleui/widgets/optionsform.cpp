@@ -1314,6 +1314,15 @@ std::shared_ptr<OptionsForm> OptionsForm::make()
 OptionsForm::OptionsForm()
 { }
 
+OptionsForm::~OptionsForm()
+{
+	if (currentHelpPopoverWidget)
+	{
+		currentHelpPopoverWidget->close();
+		currentHelpPopoverWidget.reset();
+	}
+}
+
 void OptionsForm::initialize()
 {
 	optionsList = ScrollableListWidget::make();
@@ -1827,6 +1836,10 @@ void OptionsForm::handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget)
 					}
 				}
 				openHelpPopover(it->second.info, choiceHelpDescriptions, wrappedOptionValueChangerWidget);
+			}
+			else
+			{
+				closeHelpPopover();
 			}
 		}
 		else

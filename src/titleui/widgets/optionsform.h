@@ -485,6 +485,8 @@ protected:
 public:
 	static std::shared_ptr<OptionsForm> make();
 
+	virtual ~OptionsForm();
+
 	void addSection(const OptionsSection& optionsSection, bool bottomBorder = false);
 
 	// Add an option to the options form, along with an associated widget used to change its value
