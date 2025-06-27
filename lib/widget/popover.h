@@ -62,6 +62,7 @@ public:
 
 private:
 	void open(const std::shared_ptr<WIDGET>& parent);
+	void closeImpl();
 	void repositionOnScreenRelativeToParent(const std::shared_ptr<WIDGET>& parent);
 
 private:

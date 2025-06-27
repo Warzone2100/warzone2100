@@ -152,7 +152,7 @@ void PopoverWidget::open(const std::shared_ptr<WIDGET>& parent)
 	});
 }
 
-void PopoverWidget::close()
+void PopoverWidget::closeImpl()
 {
 	auto strongOverlay = overlayScreen.lock();
 	if (strongOverlay == nullptr)
@@ -165,6 +165,16 @@ void PopoverWidget::close()
 	{
 		onCloseHandler();
 	}
+}
+
+void PopoverWidget::close()
+{
+	// because open() uses widgScheduleTask to actually create the overlay screen,
+	// widgScheduleTask must also be used to close it (otherwise, overlayScreen might be accessed before the scheduled open task creates it)
+	std::shared_ptr<PopoverWidget> popoverWidget(std::dynamic_pointer_cast<PopoverWidget>(shared_from_this()));
+	widgScheduleTask([popoverWidget]() {
+		popoverWidget->closeImpl();
+	});
 }
 
 void PopoverWidget::display(int xOffset, int yOffset)
