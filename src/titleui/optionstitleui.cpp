@@ -163,7 +163,7 @@ void TitleFormSideText::display(int xOffset, int yOffset)
 		maxTextDisplayableHeight -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
 	}
 
-	int textX0 = x0 + (w - wzText.lineSize()) / 2 - float(wzText.aboveBase());
+	int textX0 = static_cast<int>(x0 + (w - wzText.lineSize()) / 2 - float(wzText.aboveBase()));
 	int textY0 = y0 + std::min(wzText.width(), availableButtonTextHeight);
 
 	wzText.render(textX0 + 2, textY0 + 2, WZCOL_GREY, 270.f, maxTextDisplayableHeight);

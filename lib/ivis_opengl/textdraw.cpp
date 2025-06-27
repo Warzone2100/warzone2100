@@ -1867,19 +1867,19 @@ void WzText::renderClipped(Vector2f position, PIELIGHT colour, WzRect screenClip
 	}
 
 	Vector2f visualOrigin(position.x, position.y + mPtsAboveBase);
-	int logicalDisplayWidth = dimensions.x / mRenderingHorizScaleFactor;
-	int logicalDisplayHeight = dimensions.y / mRenderingVertScaleFactor;
+	int logicalDisplayWidth = static_cast<int>(dimensions.x / mRenderingHorizScaleFactor);
+	int logicalDisplayHeight = static_cast<int>(dimensions.y / mRenderingVertScaleFactor);
 	if (maxWidth > 0)
 	{
 		logicalDisplayWidth = std::min<int>(logicalDisplayWidth, maxWidth);
 	}
-	WzRect screenDrawRect(visualOrigin.x, visualOrigin.y, logicalDisplayWidth, logicalDisplayHeight); // screen coordinates
+	WzRect screenDrawRect(static_cast<int>(visualOrigin.x), static_cast<int>(visualOrigin.y), logicalDisplayWidth, logicalDisplayHeight); // screen coordinates
 	WzRect clippingRect = screenDrawRect.intersectionWith(screenClippingRect.setWidth(screenClippingRect.width() - 1).setHeight(screenClippingRect.height() - 1));
 	if (clippingRect.width() <= 0 || clippingRect.height() <= 0)
 	{
 		return;
 	}
-	clippingRect.translateBy(-visualOrigin.x, -visualOrigin.y); // translate to 0,0 origin
+	clippingRect.translateBy(static_cast<int>(-visualOrigin.x), static_cast<int>(-visualOrigin.y)); // translate to 0,0 origin
 
 	WzClippingRectF clippingRectInPixels(
 		clippingRect.left() * mRenderingHorizScaleFactor,
