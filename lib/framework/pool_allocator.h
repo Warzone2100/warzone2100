@@ -49,8 +49,7 @@ public:
 	template <typename U>
 	struct rebind { using other = PoolAllocator<U, PoolT>; };
 
-	PoolAllocator() noexcept : pool_(defaultMemoryPool()) {}
-
+	explicit PoolAllocator() noexcept : pool_(defaultMemoryPool()) {}
 	explicit PoolAllocator(PoolT& pool) noexcept : pool_(pool) {}
 
 	PoolAllocator(const PoolAllocator& other) noexcept

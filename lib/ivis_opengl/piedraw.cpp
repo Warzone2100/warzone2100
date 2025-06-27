@@ -26,6 +26,7 @@
 
 #include "lib/ivis_opengl/piedraw.h"
 #include "lib/framework/frame.h"
+#include "lib/framework/pool_allocator.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -967,7 +968,13 @@ public:
 	typedef std::vector<Pair> PairVector;
 	typedef typename PairVector::iterator iterator;
 	typedef typename PairVector::const_iterator const_iterator;
+	using ValueAllocator = typename Value::allocator_type;
 public:
+
+	explicit InsertionOrderMap(const ValueAllocator& alloc)
+		: allocator(alloc)
+	{}
+
 	Value& operator[](const Key& k)
 	{
 		auto it = keyToValuesIdxMap.find(k);
@@ -976,7 +983,7 @@ public:
 			return values[it->second].second;
 		}
 		auto idx = values.size();
-		values.push_back(Pair(k, {}));
+		values.emplace_back(k, allocator);
 		keyToValuesIdxMap[k] = idx;
 		return values[idx].second;
 	}
@@ -992,11 +999,15 @@ public:
 private:
 	PairVector values;
 	std::unordered_map<Key, size_t> keyToValuesIdxMap;
+	const ValueAllocator& allocator;
 };
 
 class InstancedMeshRenderer
 {
 public:
+
+	InstancedMeshRenderer();
+
 	// Queues a mesh for drawing
 	bool Draw3DShape(const iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth);
 
@@ -1032,17 +1043,28 @@ public:
 private:
 	bool useInstancedRendering = false;
 
+	static inline constexpr MemoryPoolOptions memPoolOpts {
+		32, // minimal_supported_block_size
+		65536, // largest_required_block_size
+		512, // required_capacity_for_smallest_sub_pool
+		8 // minimal_required_capacity
+	};
+
+	MemoryPool memoryPool{ memPoolOpts };
+	PoolAllocator<SHAPE> poolAllocator;
+
+	using ShapeVector = std::vector<SHAPE, PoolAllocator<SHAPE>>;
 	typedef templatedState MeshInstanceKey;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
-	InsertionOrderMap<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
-	InsertionOrderMap<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshesNoDepthWrite;
-	InsertionOrderMap<MeshInstanceKey, std::vector<SHAPE>> instanceAdditiveMeshes;
+	std::unordered_map<MeshInstanceKey, ShapeVector, std::hash<MeshInstanceKey>, std::equal_to<MeshInstanceKey>, PoolAllocator<std::pair<const MeshInstanceKey, ShapeVector>>> instanceMeshes;
+	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceTranslucentMeshes;
+	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceTranslucentMeshesNoDepthWrite;
+	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceAdditiveMeshes;
 	size_t instancesCount = 0;
 	size_t translucentInstancesCount = 0;
 	size_t additiveInstancesCount = 0;
 
-	std::vector<SHAPE> tshapes;
-	std::vector<SHAPE> shapes;
+	ShapeVector tshapes;
+	ShapeVector shapes;
 
 	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData> instancesData;
 	std::vector<gfx_api::buffer*> instanceDataBuffers;
@@ -1069,6 +1091,17 @@ private:
 	size_t startIdxTranslucentNoDepthWriteDrawCalls = 0;
 	size_t startIdxAdditiveDrawCalls = 0;
 };
+
+InstancedMeshRenderer::InstancedMeshRenderer()
+	: poolAllocator(memoryPool),
+	instanceMeshes(poolAllocator),
+	instanceTranslucentMeshes(poolAllocator),
+	instanceTranslucentMeshesNoDepthWrite(poolAllocator),
+	instanceAdditiveMeshes(poolAllocator),
+	tshapes(poolAllocator),
+	shapes(poolAllocator)
+{
+}
 
 bool InstancedMeshRenderer::initialize()
 {
@@ -1230,7 +1263,8 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 		}
 		if (useInstancedRendering)
 		{
-			instanceMeshes[currentState].push_back(tshape);
+			auto [it, _] = instanceMeshes.try_emplace(currentState, poolAllocator);
+			it->second.push_back(tshape);
 		}
 		else
 		{
