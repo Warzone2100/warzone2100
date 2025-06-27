@@ -54,7 +54,7 @@ unset(CURL_OPENSSL_REQUIRES_CALLBACKS)
 find_program(CURL_CONFIG_EXECUTABLE NAMES curl-config)
 if(CURL_CONFIG_EXECUTABLE)
 	set(_min_curl_version_for_ssl_backends "7.58.0")
-	if ((CURL_VERSION_STRING VERSION_EQUAL "${_min_curl_version_for_ssl_backends}") OR (CURL_VERSION_STRING VERSION_GREATER "${_min_curl_version_for_ssl_backends}"))
+	if (CURL_VERSION_STRING VERSION_GREATER_EQUAL "${_min_curl_version_for_ssl_backends}")
 
 		execute_process(COMMAND ${CURL_CONFIG_EXECUTABLE} --ssl-backends
 						RESULT_VARIABLE _result_ssl_backends
