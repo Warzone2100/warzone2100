@@ -328,6 +328,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
       * [SQLite](https://www.sqlite.org/index.html) ≥ 3.14
       * [libzip](https://github.com/nih-at/libzip) _(strongly recommended: ≥ 1.10.1)_
+      * [libprotobuf](https://github.com/protocolbuffers/protobuf) (if compiling with GNS support)
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
