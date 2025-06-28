@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-04 02:29\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-05-27 02:39\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -4925,11 +4925,11 @@ msgstr "La millora de l'òptica del làser redueix la dispersió de la llum"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplaçament d'incendiari Howitzer 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Emplaçament de Howitzer incendiari"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Emplaçament de howitzer incendiari"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Emplaçament de Howitzer incendiari"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "El howitzer incendiari es pot d'assignar a un sensor"
@@ -6409,10 +6409,10 @@ msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7308,6 +7308,9 @@ msgstr "Restableix les configuracions / permisos del xat hostatjat"
 
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Habilitar l'aprovació d'unió asíncrona (pels clients que s'estiguin connectant)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Comença l'hostatge (autohost) en espera, encara que sigui un hoste espectador"
 
 msgid "Base URL for on-demand video downloads"
 msgstr "URL de base per les descàrregues a la demanda"
@@ -9845,6 +9848,18 @@ msgstr "Posi la contrasenya aquí"
 msgid "Select Player Name"
 msgstr "Selecciona el nom del jugador"
 
+msgid "Blind Game:"
+msgstr "Joc a cegues:"
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "- Els noms dels jugadors no seran visibles pels altres jugadors (fins que la partida acabi)"
+
+msgid "Blind Lobby:"
+msgstr "Lobby a cegues:"
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "- Els noms dels jugadors no seran visibles pels altres jugadors (fins que la partida comenci)"
+
 msgid "Alliances"
 msgstr "Aliances"
 
@@ -9856,6 +9871,21 @@ msgstr "Mostra el mapa"
 
 msgid "Click to see Map"
 msgstr "Feu clic per veure el mapa"
+
+msgid "Tech"
+msgstr "Tecnologia"
+
+msgid "Technology Level 1"
+msgstr "Nivell de tecnologia 1"
+
+msgid "Technology Level 2"
+msgstr "Nivell de tecnologia 2"
+
+msgid "Technology Level 3"
+msgstr "Nivell de tecnologia 3"
+
+msgid "Technology Level 4"
+msgstr "Nivell de tecnologia 4"
 
 msgid "Show Structure Limits"
 msgstr "Mostra els límits d'estructures"
@@ -9872,21 +9902,6 @@ msgid ""
 msgstr ""
 "Opcions de joc aleatòries\n"
 "Poden ser bloquejades per votació dels jugadors"
-
-msgid "Tech"
-msgstr "Tecnologia"
-
-msgid "Technology Level 1"
-msgstr "Nivell de tecnologia 1"
-
-msgid "Technology Level 2"
-msgstr "Nivell de tecnologia 2"
-
-msgid "Technology Level 3"
-msgstr "Nivell de tecnologia 3"
-
-msgid "Technology Level 4"
-msgstr "Nivell de tecnologia 4"
 
 msgid "Start Hosting Game"
 msgstr "Comença a hostatjar la partida"
@@ -10031,6 +10046,13 @@ msgstr "Voldríeu intercanviar aquest espectador amb un jugador?"
 msgid "Yes, select Player slot"
 msgstr "Sí, selecciona un lloc per jugar"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr "INSTRUCCIONS DEL LOBBY A CEGUES:"
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr "Se us ha assignat el nom de codi: \"%s\""
+
 msgid "Joined:"
 msgstr "S'ha unit:"
 
@@ -10048,64 +10070,6 @@ msgstr "Activa l'accés als espectadors"
 
 msgid "Lock Teams"
 msgstr "Bloquejar els equips"
-
-msgid "Choose Team"
-msgstr "Escolliu equip"
-
-msgid "Teams locked"
-msgstr "Equips bloquejats"
-
-msgid "Click to change player colour"
-msgstr "Feu clic per canviar el color del jugador"
-
-msgid "Click to change player position"
-msgstr "Feu clic per canviar la posició del jugador"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Cliqui per modificar la IA, feu clic dret per distribuir l'elecció"
-
-msgid "Click to close spectator slot"
-msgstr "Cliqui per tancar el lloc d'espectador"
-
-msgid "Player ID: "
-msgstr "ID del jugador: "
-
-msgid "(none)"
-msgstr "(cap)"
-
-msgid "Alt Name:"
-msgstr "Nom alternatiu:"
-
-msgid "Player rating:"
-msgstr "Qualificació del jugador:"
-
-msgid "Host provided"
-msgstr "Hoste proveït"
-
-#, c-format
-msgid "From: %s"
-msgstr "De: %s"
-
-msgid "Click to change difficulty"
-msgstr "Feu clic per canviar la dificultat"
-
-msgid "Waiting for player"
-msgstr "S'està esperant el jugador"
-
-msgid "Player is ready"
-msgstr "El jugador està preparat"
-
-msgid "Player is downloading"
-msgstr "El jugador està descarregant"
-
-msgid "Click when ready"
-msgstr "Feu clic quan estigueu preparat"
-
-msgid "Waiting for download"
-msgstr "Esperant la descàrrega"
-
-msgid "READY?"
-msgstr "PREPARAT?"
 
 msgid "For Spectator:"
 msgstr "Per l'espectador:"
@@ -10250,6 +10214,21 @@ msgstr "Mapatge de ports creant-se..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mapatge de ports desactivat per l'usuari. L'autoconfiguració del port %d no és possible."
 
+msgid "BLIND GAME NOTICE:"
+msgstr "INSTRUCCIONS DE LA PARTIDA A CEGUES:"
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "Els noms dels jugadors no seran visibles pels altres jugadors (fins que la partida acabi)"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "Els noms dels jugadors no seran visibles pels altres jugadors (fins que la partida comenci)"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr "IMPORTANT: L'hoste és un jugador, i pot veure i configurar els altres jugadors (!)"
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr "L'hoste és un espectador, pot veure les identitats dels jugadors i configurar els jugadors / equips"
+
 msgid "Failed to load challenge:"
 msgstr "No s'ha pogut carregar el repte:"
 
@@ -10268,20 +10247,6 @@ msgstr "Tancat"
 
 msgid "Open"
 msgstr "Obert"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "S'està enviant el mapa: %u%%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Mapa: %u%% descarregat"
-
-msgid "HOST"
-msgstr "AMFITRIÓ"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "La versió de Warzone 2100 usada per desar aquest fitxer no correspon a la que està utilitzant."
@@ -10310,6 +10275,10 @@ msgstr "%s ha deixat la partida"
 #, c-format
 msgid "%s joined the Game"
 msgstr "%s s'ha unit a la partida"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr "(nom de codi: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10370,6 +10339,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d jugador"
 msgstr[1] "%d jugadors"
+
+msgid "Ping"
+msgstr "Ping"
 
 msgid "Structs"
 msgstr "Estructures"
@@ -10914,6 +10886,18 @@ msgstr "Resposta invàlida de l'hoste"
 msgid "Requesting to join game"
 msgstr "Demanant a unir-se a la partida"
 
+msgid "Invalid host establishing data"
+msgstr "Hoste invàlid establint dades"
+
+msgid "Invalid host identity"
+msgstr "Identitat invàlida d'hoste"
+
+msgid "Failed to establish session keys with host"
+msgstr "No s'ha pogut establir una sessió de claus amb l'hoste"
+
+msgid "Failure to generate valid response"
+msgstr "S'ha fallat per generar una resposta vàlida"
+
 msgid "Kick Spectator"
 msgstr "Expulsar espectador"
 
@@ -11345,6 +11329,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Adreça IP o nom de la màquina"
+
+msgid "Host:"
+msgstr "Hoste:"
+
+msgid "NOTE: Host is also a player."
+msgstr "NOTA: l'hoste també és un jugador."
+
+msgid "Player ID: "
+msgstr "ID del jugador: "
+
+msgid "(none)"
+msgstr "(cap)"
+
+msgid "You:"
+msgstr "Tu:"
+
+msgid "Waiting for host to configure teams"
+msgstr "Esperant l'hoste per configurar els equips"
+
+msgid "Waiting for players"
+msgstr "Esperant els jugadors"
+
+msgid "Downloading map / mods"
+msgstr "Descarregant mapa / mods"
+
+msgid "Waiting for you to check ready"
+msgstr "Esperant que marquis preparat"
+
+msgid "Waiting for host to start game"
+msgstr "Esperant l'hoste per començar la partida"
+
+msgid "Waiting for spectators"
+msgstr "Esperant els espectadors"
+
+msgid "Players ready & waiting for match:"
+msgstr "Jugadors llestos i esperant per la partida:"
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr "Jugadors: (%zu llestos, %zu esperant)"
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr "Bots IA: %zu"
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr "Espectadors: (%zu llestos, %zu esperant)"
+
+#, c-format
+msgid "Host: %s"
+msgstr "Hoste: %s"
+
+msgid "ready"
+msgstr "preparat"
+
+msgid "not ready"
+msgstr "esperant"
+
+msgid "Blind Waiting Room"
+msgstr "Sala d'espera a cegues"
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "S'està enviant el mapa: %u%%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Mapa: %u%% descarregat"
+
+msgid "HOST"
+msgstr "AMFITRIÓ"
+
+msgid "Choose Team"
+msgstr "Escolliu equip"
+
+msgid "Teams locked"
+msgstr "Equips bloquejats"
+
+msgid "Click to change player colour"
+msgstr "Feu clic per canviar el color del jugador"
+
+msgid "Click to change player position"
+msgstr "Feu clic per canviar la posició del jugador"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Cliqui per modificar la IA, feu clic dret per distribuir l'elecció"
+
+msgid "Click to close spectator slot"
+msgstr "Cliqui per tancar el lloc d'espectador"
+
+msgid "Alt Name:"
+msgstr "Nom alternatiu:"
+
+msgid "Player rating:"
+msgstr "Qualificació del jugador:"
+
+msgid "Host provided"
+msgstr "Hoste proveït"
+
+#, c-format
+msgid "From: %s"
+msgstr "De: %s"
+
+msgid "Click to change difficulty"
+msgstr "Feu clic per canviar la dificultat"
+
+msgid "Waiting for player"
+msgstr "S'està esperant el jugador"
+
+msgid "Player is ready"
+msgstr "El jugador està preparat"
+
+msgid "Player is downloading"
+msgstr "El jugador està descarregant"
+
+msgid "Click when ready"
+msgstr "Feu clic quan estigueu preparat"
+
+msgid "Waiting for download"
+msgstr "Esperant la descàrrega"
+
+msgid "READY?"
+msgstr "PREPARAT?"
 
 msgid "Launch Transport"
 msgstr "Inicia el transport"

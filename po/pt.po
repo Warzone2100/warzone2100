@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-03-01 17:13+0000\n"
+"PO-Revision-Date: 2025-03-01 20:57\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -4925,11 +4925,11 @@ msgstr "Melhorias em lentes para laser reduzem dispersão da luz"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Plataforma de Obus Incendiário 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Plataforma de Obus Incendiário"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Armação de howitzer Incendiário"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Plataforma de Obus Incendiário"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Howitzer Incendiário, pode ser atribuído a um sensor"
@@ -6409,11 +6409,11 @@ msgstr "Análise de Dados por Ligação Sináptica Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Análise de Dados por Ligação Sináptica Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Análise de Dados por Ligação Sináptica"
-
 msgid "Synaptic link data analysis"
 msgstr "Análise de Data Por Sinapse Neural"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Análise de Dados por Ligação Sináptica"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Tecnologia para Gerador de Interferência de Ligações Sinápticas"
@@ -7309,6 +7309,9 @@ msgstr ""
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
@@ -7733,7 +7736,7 @@ msgid "Shadow filtering not available on this system."
 msgstr ""
 
 msgid "Opacity: 50%"
-msgstr ""
+msgstr "Opacidade: 50%"
 
 msgid "* Takes effect on game restart"
 msgstr "* Tem efeito quando o jogo for reiniciado"
@@ -7781,7 +7784,7 @@ msgid "Groups Menu"
 msgstr "Menu de grupos"
 
 msgid "Options Button"
-msgstr ""
+msgstr "Botão de opções"
 
 msgid "GRAPHICS OPTIONS"
 msgstr "OPÇÕES DE GRÁFICOS"
@@ -8097,10 +8100,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Jogador %u está a fazer batota (menu debug) para obter uma nova unidade."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Abrir opções no jogo"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Fechar opções no jogo"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Esconder Tecnologia Obsoleta"
@@ -8263,26 +8266,26 @@ msgid "End-Game"
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Anfitrião"
 
 msgid "Admin"
-msgstr ""
+msgstr "Administrador"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) mudou a equipa do jogador (%s) para: %d"
 
 #, c-format
 msgid "%s (%s) changed position of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) mudou a posição do jogador (%s) para: %d"
 
 #, c-format
 msgid "%s (%s) changed color of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) mudou a cor do jogador (%s) para: %s"
 
 #, c-format
 msgid "%s (%s) changed faction of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) mudou a fação do jogador (%s) para: %s"
 
 msgid "Can someone please transfer me some units?"
 msgstr ""
@@ -8501,7 +8504,7 @@ msgid "Map Downloaded"
 msgstr ""
 
 msgid "Admin modified a setting"
-msgstr ""
+msgstr "O administrador alterou uma configuração"
 
 msgid "Bot Allies"
 msgstr ""
@@ -9845,6 +9848,18 @@ msgstr "Insira a palavra passe aqui"
 msgid "Select Player Name"
 msgstr "Selecionar Nome de Jogador"
 
+msgid "Blind Game:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Blind Lobby:"
+msgstr ""
+
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
 msgid "Alliances"
 msgstr "Alianças"
 
@@ -9856,6 +9871,21 @@ msgstr "Pré-visualizar o mapa"
 
 msgid "Click to see Map"
 msgstr "Clica para ver o mapa"
+
+msgid "Tech"
+msgstr "Tecnologia"
+
+msgid "Technology Level 1"
+msgstr "Nível Tecnológico 1"
+
+msgid "Technology Level 2"
+msgstr "Nível Tecnológico 2"
+
+msgid "Technology Level 3"
+msgstr "Nível Tecnológico 3"
+
+msgid "Technology Level 4"
+msgstr "Nível Tecnológico 4"
 
 msgid "Show Structure Limits"
 msgstr "Mostrar Limites de Estrutura"
@@ -9872,21 +9902,6 @@ msgid ""
 msgstr ""
 "Opções de Jogo Aleatório\n"
 "Pode ser bloqueada pelos votos dos jogadores"
-
-msgid "Tech"
-msgstr "Tecnologia"
-
-msgid "Technology Level 1"
-msgstr "Nível Tecnológico 1"
-
-msgid "Technology Level 2"
-msgstr "Nível Tecnológico 2"
-
-msgid "Technology Level 3"
-msgstr "Nível Tecnológico 3"
-
-msgid "Technology Level 4"
-msgstr "Nível Tecnológico 4"
 
 msgid "Start Hosting Game"
 msgstr "Iniciar Servidor de Jogo"
@@ -10031,6 +10046,13 @@ msgstr "Gostaria de trocar este Espectador por um Jogador?"
 msgid "Yes, select Player slot"
 msgstr "Sim, selecione a posição do jogador"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "Entrou:"
 
@@ -10048,64 +10070,6 @@ msgstr "Permitir Entrada de Espectador"
 
 msgid "Lock Teams"
 msgstr "Fixar Equipas"
-
-msgid "Choose Team"
-msgstr "Escolher Equipa"
-
-msgid "Teams locked"
-msgstr "Equipas Fixas"
-
-msgid "Click to change player colour"
-msgstr "Clique para mudar a cor do jogador"
-
-msgid "Click to change player position"
-msgstr "Clique para mudar a posição do jogador"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a escolha"
-
-msgid "Click to close spectator slot"
-msgstr "Clique para fechar a posição do espectador"
-
-msgid "Player ID: "
-msgstr "ID Jogador:"
-
-msgid "(none)"
-msgstr "(vazio)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Clique para mudar o nível de dificuldade"
-
-msgid "Waiting for player"
-msgstr "À espera de outros jogadores"
-
-msgid "Player is ready"
-msgstr "Jogador está pronto"
-
-msgid "Player is downloading"
-msgstr "O Jogador está a descarregar"
-
-msgid "Click when ready"
-msgstr "Clica quando estiveres pronto"
-
-msgid "Waiting for download"
-msgstr "À espera para descarregar"
-
-msgid "READY?"
-msgstr "PRONTO?"
 
 msgid "For Spectator:"
 msgstr "Para Espectador:"
@@ -10250,6 +10214,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10268,20 +10247,6 @@ msgstr "Fechado"
 
 msgid "Open"
 msgstr "Aberto"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "A enviar mapa: %u%%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Mapa:  %u%% descarregado"
-
-msgid "HOST"
-msgstr "CRIADOR"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "A versão de Warzone 2100 usada para salvar este arquivo de replay não corresponde à versão em execução atual."
@@ -10309,6 +10274,10 @@ msgstr "%s abandonou o Jogo"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10370,6 +10339,9 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d jogador"
 msgstr[1] "%d jogadores"
+
+msgid "Ping"
+msgstr "Ping"
 
 msgid "Structs"
 msgstr "Estruturas"
@@ -10870,30 +10842,30 @@ msgid "Synchronizing data with host ..."
 msgstr ""
 
 msgid "Waiting for correct join password"
-msgstr ""
+msgstr "A aguardar a palavra-passe de acesso correta"
 
 msgid "Attempting to connect"
-msgstr ""
+msgstr "A tentar conectar"
 
 msgid "Establishing connection handshake"
-msgstr ""
+msgstr "Estabelecer o handshake da ligação"
 
 msgid "Coordinating join with host"
-msgstr ""
+msgstr "A coordenar juntar-se ao anfitrião"
 
 msgid "Join attempt failed"
-msgstr ""
+msgstr "A tentativa de juntar-se falhou"
 
 msgid "Host did not respond before timeout"
 msgstr ""
 
 #, c-format
 msgid "Failed at: [%s] - %s"
-msgstr ""
+msgstr "Falha em: [%s] - %s"
 
 #, c-format
 msgid "Failed at: [%s]"
-msgstr ""
+msgstr "Falha em: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
@@ -10912,6 +10884,18 @@ msgid "Invalid host response"
 msgstr ""
 
 msgid "Requesting to join game"
+msgstr ""
+
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
 msgstr ""
 
 msgid "Kick Spectator"
@@ -11345,6 +11329,130 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Endereço IP ou nome do Computador"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "ID Jogador:"
+
+msgid "(none)"
+msgstr "(vazio)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "A enviar mapa: %u%%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Mapa:  %u%% descarregado"
+
+msgid "HOST"
+msgstr "CRIADOR"
+
+msgid "Choose Team"
+msgstr "Escolher Equipa"
+
+msgid "Teams locked"
+msgstr "Equipas Fixas"
+
+msgid "Click to change player colour"
+msgstr "Clique para mudar a cor do jogador"
+
+msgid "Click to change player position"
+msgstr "Clique para mudar a posição do jogador"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a escolha"
+
+msgid "Click to close spectator slot"
+msgstr "Clique para fechar a posição do espectador"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Clique para mudar o nível de dificuldade"
+
+msgid "Waiting for player"
+msgstr "À espera de outros jogadores"
+
+msgid "Player is ready"
+msgstr "Jogador está pronto"
+
+msgid "Player is downloading"
+msgstr "O Jogador está a descarregar"
+
+msgid "Click when ready"
+msgstr "Clica quando estiveres pronto"
+
+msgid "Waiting for download"
+msgstr "À espera para descarregar"
+
+msgid "READY?"
+msgstr "PRONTO?"
 
 msgid "Launch Transport"
 msgstr "Descolar Transporte"
