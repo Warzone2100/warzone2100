@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100_guide\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-12 03:55+0000\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -266,6 +266,24 @@ msgstr ""
 
 #: po/guide/extracted/wz2100-structures-building.txt:12
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-structures-cyborgfactory.txt:3
+msgid "Cyborg Factory"
+msgstr ""
+
+#: po/guide/extracted/wz2100-structures-cyborgfactory.txt:4
+msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
+msgstr ""
+
+#: po/guide/extracted/wz2100-structures-cyborgfactory.txt:5
+msgid "Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr ""
+
+#: po/guide/extracted/wz2100-structures-cyborgfactory.txt:6
+msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
 msgstr ""
 
 #. TRANSLATORS:
@@ -810,6 +828,313 @@ msgstr ""
 
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-cyborg.txt:3
+msgid "Cyborgs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-cyborg.txt:4
+msgid "Cyborgs are your main infantry units."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-cyborg.txt:5
+msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-cyborg.txt:6
+msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-cyborg.txt:7
+msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-halftracks.txt:3
+msgid "Half-tracks"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-halftracks.txt:4
+msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-halftracks.txt:5
+msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-halftracks.txt:6
+msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-halftracks.txt:7
+msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-hover.txt:3
+msgid "Hover"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-hover.txt:4
+msgid "Hover is a fast, amphibious propulsion for vehicles."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-hover.txt:5
+msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-hover.txt:6
+msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-hover.txt:7
+msgid "Hover's high speeds and ability to traverse water make it perfect for hit-and-run attack vehicles."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-hover.txt:8
+msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:3
+msgid "Tracks"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:4
+msgid "Tracks are a highly-armored propulsion for vehicles."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:5
+msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:6
+msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:7
+msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:8
+msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-tracks.txt:9
+msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:3
+msgid "Attacking with VTOLs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:4
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:4
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:5
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:5
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:6
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:6
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:7
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:7
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:8
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:8
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-attacking.txt:9
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:9
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defending.txt:3
+msgid "Defending with VTOLs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defending.txt:4
+msgid "VTOL units may also be used to defend areas of the map."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defending.txt:5
+msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defending.txt:6
+msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:3
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:3
+msgid "Defending Against VTOLs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:4
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:4
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:5
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:5
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:6
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:6
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:7
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:7
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:8
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:8
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-defendingagainst.txt:9
+#: po/guide/extracted/wz2100-units-vtols-defending.txt:9
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-vtols-using.txt:3
+msgid "Using VTOLs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-using.txt:4
+#: po/guide/extracted/wz2100-units-vtols-designing.txt:4
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-using.txt:5
+#: po/guide/extracted/wz2100-units-vtols-designing.txt:5
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-using.txt:6
+#: po/guide/extracted/wz2100-units-vtols-designing.txt:6
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-using.txt:7
+msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-using.txt:8
+msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-vtols-weapons.txt:3
+msgid "VTOL Weapons"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-weapons.txt:4
+msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-weapons.txt:5
+#: po/guide/extracted/wz2100-units-vtols-weapons.txt:5
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols-weapons.txt:6
+#: po/guide/extracted/wz2100-units-vtols-weapons.txt:6
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-vtols.txt:3
+msgid "VTOL"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols.txt:4
+#: po/guide/extracted/wz2100-units-vtols.txt:4
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols.txt:5
+msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols.txt:6
+msgid "Additionally, they cannot be targeted by most weapons while airborne."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-vtols.txt:7
+msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions-wheels.txt:3
+msgid "Wheels"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-wheels.txt:4
+msgid "Wheels are the most basic vehicle propulsion."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-wheels.txt:5
+msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-wheels.txt:6
+msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions-wheels.txt:7
+msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-units-propulsions.txt:3
+msgid "Propulsions"
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions.txt:4
+msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions.txt:5
+msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions.txt:6
+msgid "Additionally, you can find descriptions of each propulsion in this guide."
+msgstr ""
+
+#: po/guide/extracted/wz2100-units-propulsions.txt:7
+msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
 #: po/guide/extracted/wz2100-units-repairing.txt:3
 msgid "Repairing Units"
 msgstr ""
@@ -900,80 +1225,40 @@ msgstr ""
 
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:3
-msgid "Attacking"
+#: po/guide/extracted/wz2100-units-thermaldamage.txt:3
+msgid "Kinetic & Thermal Damage"
 msgstr ""
 
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:4
-msgid "To attack with a VTOL, select it and click an enemy like normal."
+#: po/guide/extracted/wz2100-units-thermaldamage.txt:4
+msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
 msgstr ""
 
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:5
-msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+#: po/guide/extracted/wz2100-units-thermaldamage.txt:5
+msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
 msgstr ""
 
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:6
-msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+#: po/guide/extracted/wz2100-units-thermaldamage.txt:6
+msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
 msgstr ""
 
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:7
-msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+#: po/guide/extracted/wz2100-units-thermaldamage.txt:7
+msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
 msgstr ""
 
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:8
-msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-attacking.txt:9
-msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+#: po/guide/extracted/wz2100-units-thermaldamage.txt:8
+msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
 msgstr ""
 
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:3
-msgid "Defending Against VTOLs"
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:4
-msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:5
-msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:6
-msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:7
-msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:8
-msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-defending.txt:9
-msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+#: po/guide/extracted/wz2100-units-vtols-attacking.txt:3
+msgid "Attacking"
 msgstr ""
 
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
 #: po/guide/extracted/wz2100-units-vtols-designing.txt:3
 msgid "Designing VTOLs"
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-designing.txt:4
-msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-designing.txt:5
-msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-designing.txt:6
-msgid "You will then be able to select from the available VTOL Weapons."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-vtols-designing.txt:7
@@ -983,6 +1268,7 @@ msgstr ""
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
 #: po/guide/extracted/wz2100-units-vtols-weapons.txt:3
+#: po/guide/extracted/wz2100-weapons.txt:3
 msgid "Weapons"
 msgstr ""
 
@@ -990,22 +1276,10 @@ msgstr ""
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
 msgstr ""
 
-#: po/guide/extracted/wz2100-units-vtols-weapons.txt:5
-msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols-weapons.txt:6
-msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
-
 #. TRANSLATORS:
 #. The guide topic title - please maintain original capitalization
 #: po/guide/extracted/wz2100-units-vtols.txt:3
 msgid "VTOLs"
-msgstr ""
-
-#: po/guide/extracted/wz2100-units-vtols.txt:4
-msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-vtols.txt:5
@@ -1023,14 +1297,17 @@ msgid "Weapon Selection"
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-weaponselection.txt:4
+#: po/guide/extracted/wz2100-weapons.txt:4
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-weaponselection.txt:5
+#: po/guide/extracted/wz2100-weapons.txt:5
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
 msgstr ""
 
 #: po/guide/extracted/wz2100-units-weaponselection.txt:6
+#: po/guide/extracted/wz2100-weapons.txt:6
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
 msgstr ""
 
@@ -1050,4 +1327,192 @@ msgstr ""
 
 #: po/guide/extracted/wz2100-units.txt:6
 msgid "To be able to design units, a Command Center is required."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-allrounder.txt:3
+msgid "All-Rounder"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-allrounder.txt:4
+msgid "\"All-Rounder\" weapons are effective against vehicles and most structures."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-allrounder.txt:5
+msgid "However, All-Rounder weapons are less effective against bunkers and infantry."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-allrounder.txt:6
+msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-antiair.txt:3
+msgid "Anti-Air"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antiair.txt:4
+msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antiair.txt:5
+msgid "However, AA weapons are incapable of attacking structures or units on the ground."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antiair.txt:6
+msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-antipersonnel.txt:3
+msgid "Anti-Personnel"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antipersonnel.txt:4
+msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antipersonnel.txt:5
+msgid "However, these weapons are less effective against structures and heavily armored targets."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-antitank.txt:3
+msgid "Anti-Tank"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antitank.txt:4
+msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antitank.txt:5
+msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-antitank.txt:6
+msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-artillery.txt:3
+msgid "Artillery"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-artillery.txt:4
+msgid "Artillery weapons are devastating against infantry and most structures."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-artillery.txt:5
+msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-artillery.txt:6
+msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-artillery.txt:7
+msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-bombs-explosive.txt:3
+msgid "High-Explosive Bombs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-explosive.txt:4
+msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-explosive.txt:5
+msgid "These bombs explode on impact, damaging everything caught in the blast."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-explosive.txt:6
+msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-explosive.txt:7
+msgid "Just make sure your own units and structures aren't caught in the blast!"
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-bombs-incendiary.txt:3
+msgid "Incendiary Bombs"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-incendiary.txt:4
+msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-incendiary.txt:5
+msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-incendiary.txt:6
+msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs-incendiary.txt:7
+msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-bombs.txt:3
+msgid "Bomb Bays"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs.txt:4
+msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs.txt:5
+msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bombs.txt:6
+msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-bunkerbuster.txt:3
+msgid "Bunker Buster"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bunkerbuster.txt:4
+msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-bunkerbuster.txt:5
+msgid "However, the Bunker Buster is extremely weak against any non-structure target."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-weapons-flamer.txt:3
+msgid "Flamer"
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-flamer.txt:4
+msgid "Incendiary \"Flamer\" weapons are effective against both vehicles and infantry."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-flamer.txt:5
+msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-flamer.txt:6
+msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
+msgstr ""
+
+#: po/guide/extracted/wz2100-weapons-flamer.txt:7
+msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
 msgstr ""

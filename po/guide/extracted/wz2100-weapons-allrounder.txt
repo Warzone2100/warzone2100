@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("All-Rounder")
+_("\"All-Rounder\" weapons are effective against vehicles and most structures.")
+_("However, All-Rounder weapons are less effective against bunkers and infantry.")
+_("All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values.")

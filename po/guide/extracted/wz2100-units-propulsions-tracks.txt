@@ -1,0 +1,9 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Tracks")
+_("Tracks are a highly-armored propulsion for vehicles.")
+_("They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage.")
+_("However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons.")
+_("Additionally, Tracks come with a hefty penalty to their maximum speed.")
+_("Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines.")
+_("Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult.")

@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Artillery")
+_("Artillery weapons are devastating against infantry and most structures.")
+_("However, Artillery weapons are less effective against bunkers and tracked vehicles.")
+_("Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own.")
+_("Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation.")
