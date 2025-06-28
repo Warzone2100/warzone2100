@@ -195,7 +195,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 
 	result->addSection(OptionsSection(N_("Game UI"), ""), true);
 	{
-		auto optionInfo = OptionInfo("interface.game.showFPS", N_("Show FPS"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.showFPS", N_("Show FPS"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -214,7 +214,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.game.showCounts", N_("Show Unit Counts"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.showCounts", N_("Show Unit Counts"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -233,7 +233,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.game.groupsMenu", N_("Groups Menu"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.groupsMenu", N_("Groups Menu"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -253,7 +253,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.game.optionsButton", N_("Options Button"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.optionsButton", N_("Options Button"), "");
 		auto valueChanger = OptionsDropdown<uint8_t>::make(
 			[]() {
 				OptionChoices<uint8_t> result;
@@ -282,7 +282,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 
 	result->addSection(OptionsSection(N_("Radar"), ""), true);
 	{
-		auto optionInfo = OptionInfo("interface.game.rotateRadar", N_("Radar Orientation"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.rotateRadar", N_("Radar Orientation"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -301,7 +301,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.game.radarJump", N_("Radar Jump"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.radarJump", N_("Radar Jump"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -320,7 +320,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.game.radarZoom", N_("Radar Zoom"), N_(""));
+		auto optionInfo = OptionInfo("interface.game.radarZoom", N_("Radar Zoom"), "");
 		auto valueChanger = OptionsSlider::make(MIN_RADARZOOM, MAX_RADARZOOM, RADARZOOM_STEP,
 			[]() { return war_GetRadarZoom(); },
 			[](int32_t newValue) {
@@ -332,7 +332,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 
 	result->addSection(OptionsSection(N_("Video Playback"), ""), true);
 	{
-		auto optionInfo = OptionInfo("interface.video.videoSize", N_("Video Size"), N_(""));
+		auto optionInfo = OptionInfo("interface.video.videoSize", N_("Video Size"), "");
 		auto valueChanger = OptionsDropdown<FMV_MODE>::make(
 			[]() {
 				OptionChoices<FMV_MODE> result;
@@ -352,7 +352,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.video.scanlines", N_("Scanlines"), N_(""));
+		auto optionInfo = OptionInfo("interface.video.scanlines", N_("Scanlines"), "");
 		auto valueChanger = OptionsDropdown<SCANLINE_MODE>::make(
 			[]() {
 				OptionChoices<SCANLINE_MODE> result;
@@ -372,7 +372,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.video.subtitles", N_("Subtitles"), N_(""));
+		auto optionInfo = OptionInfo("interface.video.subtitles", N_("Subtitles"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;

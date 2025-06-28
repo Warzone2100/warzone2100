@@ -273,7 +273,7 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm()
 	// Volume:
 	result->addSection(OptionsSection(N_("Volume"), ""), true);
 	{
-		auto optionInfo = OptionInfo("audio.voiceVol", N_("Voice Volume"), N_(""));
+		auto optionInfo = OptionInfo("audio.voiceVol", N_("Voice Volume"), "");
 		auto valueChanger = OptionsSlider::make(0, AUDIO_VOL_MAX, 1,
 			[]() { return static_cast<int32_t>(sound_GetUIVolume() * 100.0f); },
 			[](int32_t newValue) {
@@ -283,7 +283,7 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("audio.fxVol", N_("FX Volume"), N_(""));
+		auto optionInfo = OptionInfo("audio.fxVol", N_("FX Volume"), "");
 		auto valueChanger = OptionsSlider::make(0, AUDIO_VOL_MAX, 1,
 			[]() { return static_cast<int32_t>(sound_GetEffectsVolume() * 100.0f); },
 			[](int32_t newValue) {
@@ -293,7 +293,7 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("audio.musicVol", N_("Music Volume"), N_(""));
+		auto optionInfo = OptionInfo("audio.musicVol", N_("Music Volume"), "");
 		auto valueChanger = OptionsSlider::make(0, AUDIO_VOL_MAX, 1,
 			[]() { return static_cast<int32_t>(sound_GetMusicVolume() * 100.0f); },
 			[](int32_t newValue) {
@@ -359,7 +359,7 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("interface.video.subtitles", N_("Subtitles"), N_(""));
+		auto optionInfo = OptionInfo("interface.video.subtitles", N_("Subtitles"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -381,7 +381,7 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm()
 	// Music:
 	result->addSection(OptionsSection(N_("Music"), ""), true);
 	{
-		auto optionInfo = OptionInfo("audio.music.manager", N_("Music Manager"), N_(""));
+		auto optionInfo = OptionInfo("audio.music.manager", N_("Music Manager"), "");
 		auto valueChanger = OptionsButton::make(
 			[](OptionsButton& but) {
 				but.setString(_("Open Music Manager"));

@@ -181,7 +181,7 @@ std::shared_ptr<OptionsForm> makeWindowOptionsForm()
 
 	result->addSection(OptionsSection(N_("Window"), ""), true);
 	{
-		auto optionInfo = OptionInfo("window.mode", N_("Window Mode"), N_(""));
+		auto optionInfo = OptionInfo("window.mode", N_("Window Mode"), "");
 		auto valueChanger = OptionsDropdown<WINDOW_MODE>::make(
 			[]() {
 				OptionChoices<WINDOW_MODE> result;
@@ -215,7 +215,7 @@ std::shared_ptr<OptionsForm> makeWindowOptionsForm()
 	}
 	auto screenResolutionsModel = std::make_shared<ScreenResolutionsModel>();
 	{
-		auto optionInfo = OptionInfo("window.resolution", N_("Resolution"), N_(""));
+		auto optionInfo = OptionInfo("window.resolution", N_("Resolution"), "");
 		optionInfo.addAvailabilityCondition(IsInFullscreenMode);
 		auto valueChanger = OptionsDropdown<size_t>::make(
 			[screenResolutionsModel]() {
