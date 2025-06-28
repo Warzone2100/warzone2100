@@ -87,7 +87,8 @@
 		}
 	],
 	"overrides": [
-		{ "name": "openal-soft", "version": "1.24.3" }
+		{ "name": "openal-soft", "version": "1.24.3" },
+		{ "name": "sqlite3", "version": "3.49.2" }
 	],
 	"default-features": [
 		"vulkan"
