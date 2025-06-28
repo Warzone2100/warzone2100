@@ -300,7 +300,7 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("defaults.multiplayer.defaultAI", N_("Default AI"), N_(""));
+		auto optionInfo = OptionInfo("defaults.multiplayer.defaultAI", N_("Default AI"), "");
 		optionInfo.setRequiresRestart(true);
 		auto valueChanger = OptionsDropdown<WzString>::make(
 			[]() {

@@ -974,7 +974,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.mouse.trapCursor", N_("Trap Cursor"), N_(""));
+		auto optionInfo = OptionInfo("controls.mouse.trapCursor", N_("Trap Cursor"), "");
 		auto valueChanger = OptionsDropdown<TrapCursorMode>::make(
 			[]() {
 				OptionChoices<TrapCursorMode> result;
@@ -994,7 +994,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.mouse.coloredCursors", N_("Colored Cursors"), N_(""));
+		auto optionInfo = OptionInfo("controls.mouse.coloredCursors", N_("Colored Cursors"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -1013,7 +1013,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.mouse.cursorSize", N_("Cursor Size"), N_(""));
+		auto optionInfo = OptionInfo("controls.mouse.cursorSize", N_("Cursor Size"), "");
 		auto valueChanger = OptionsDropdown<unsigned int>::make(
 			[]() {
 				OptionChoices<unsigned int> result;
@@ -1042,7 +1042,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 	// Camera:
 	result->addSection(OptionsSection(N_("Camera"), ""), true);
 	{
-		auto optionInfo = OptionInfo("controls.camMoveSpeed", N_("Camera Speed"), N_(""));
+		auto optionInfo = OptionInfo("controls.camMoveSpeed", N_("Camera Speed"), "");
 		auto valueChanger = OptionsSlider::make(CAMERASPEED_MIN, CAMERASPEED_MAX, CAMERASPEED_STEP,
 			[]() { return war_GetCameraSpeed(); },
 			[](int32_t newValue) {
@@ -1052,7 +1052,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.camStartZoom", N_("Camera Starting Zoom"), N_(""));
+		auto optionInfo = OptionInfo("controls.camStartZoom", N_("Camera Starting Zoom"), "");
 		auto valueChanger = OptionsSlider::make(MINDISTANCE_CONFIG, MAXDISTANCE, MAP_ZOOM_CONFIG_STEP,
 			[]() { return war_GetMapZoom(); },
 			[](int32_t newValue) {
@@ -1062,7 +1062,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.camZomRate", N_("Camera Zoom Rate"), N_(""));
+		auto optionInfo = OptionInfo("controls.camZomRate", N_("Camera Zoom Rate"), "");
 		auto valueChanger = OptionsSlider::make(MAP_ZOOM_RATE_MIN, MAP_ZOOM_RATE_MAX, MAP_ZOOM_RATE_STEP,
 			[]() { return war_GetMapZoomRate(); },
 			[](int32_t newValue) {
@@ -1072,7 +1072,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.mouse.rotateCamera", N_("Mouse Rotate"), N_(""));
+		auto optionInfo = OptionInfo("controls.mouse.rotateCamera", N_("Mouse Rotate"), "");
 		auto valueChanger = OptionsDropdown<optional<MOUSE_KEY_CODE>>::make(
 			[]() {
 				OptionChoices<optional<MOUSE_KEY_CODE>> result;
@@ -1091,7 +1091,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.mouse.reverseRotation", N_("Reverse Rotation"), N_(""));
+		auto optionInfo = OptionInfo("controls.mouse.reverseRotation", N_("Reverse Rotation"), "");
 		optionInfo.addAvailabilityCondition(MouseDragToRotateIsBound);
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
@@ -1111,7 +1111,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true, 1);
 	}
 	{
-		auto optionInfo = OptionInfo("controls.mouse.panCamera", N_("Mouse Pan"), N_(""));
+		auto optionInfo = OptionInfo("controls.mouse.panCamera", N_("Mouse Pan"), "");
 		auto valueChanger = OptionsDropdown<optional<MOUSE_KEY_CODE>>::make(
 			[]() {
 				OptionChoices<optional<MOUSE_KEY_CODE>> result;
@@ -1134,7 +1134,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 
 	result->addSection(OptionsSection(N_("Reset"), ""), true);
 	{
-		auto optionInfo = OptionInfo("controls.keys.resetKeymappings", N_("Reset Keys to:"), N_(""));
+		auto optionInfo = OptionInfo("controls.keys.resetKeymappings", N_("Reset Keys to:"), "");
 		auto valueChanger = OptionsDropdown<WzString>::make(
 			[]() {
 				OptionChoices<WzString> result;

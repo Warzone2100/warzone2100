@@ -75,7 +75,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	// Terrain:
 	result->addSection(OptionsSection(N_("Terrain"), ""), true);
 	{
-		auto optionInfo = OptionInfo("gfx.terrainAppearance", N_("Terrain Appearance"), N_(""));
+		auto optionInfo = OptionInfo("gfx.terrainAppearance", N_("Terrain Appearance"), "");
 		auto valueChanger = OptionsDropdown<TerrainShaderQuality>::make(
 			[]() {
 				OptionChoices<TerrainShaderQuality> result;
@@ -132,7 +132,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	// Shadows:
 	result->addSection(OptionsSection(N_("Shadows"), ""), true);
 	{
-		auto optionInfo = OptionInfo("gfx.drawShadows", N_("Draw Shadows"), N_(""));
+		auto optionInfo = OptionInfo("gfx.drawShadows", N_("Draw Shadows"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -229,7 +229,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	// Lighting:
 	result->addSection(OptionsSection(N_("Lighting"), ""), true);
 	{
-		auto optionInfo = OptionInfo("gfx.pointLights", N_("Point Lights"), N_(""));
+		auto optionInfo = OptionInfo("gfx.pointLights", N_("Point Lights"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
 		optionInfo.addAvailabilityCondition(PerPixelLightingAvailable);
 		auto valueChanger = OptionsDropdown<bool>::make(
@@ -268,7 +268,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 	// Effects:
 	result->addSection(OptionsSection(N_("Effects"), ""), true);
 	{
-		auto optionInfo = OptionInfo("gfx.fog", N_("Fog"), N_(""));
+		auto optionInfo = OptionInfo("gfx.fog", N_("Fog"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -295,7 +295,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("gfx.screenShake", N_("Screen Shake"), N_(""));
+		auto optionInfo = OptionInfo("gfx.screenShake", N_("Screen Shake"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[]() {
 				OptionChoices<bool> result;
@@ -435,7 +435,7 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
-		auto optionInfo = OptionInfo("gfx.vsync", N_("Vertical Sync"), N_(""));
+		auto optionInfo = OptionInfo("gfx.vsync", N_("Vertical Sync"), "");
 		auto valueChanger = OptionsDropdown<gfx_api::context::swap_interval_mode>::make(
 			[]() {
 				OptionChoices<gfx_api::context::swap_interval_mode> result;

@@ -121,7 +121,7 @@ std::shared_ptr<OptionsForm> HostingAdvancedOptionsForm::makeHostOptionsForm()
 	auto weakMultiOptionsTitleUI = multiOptionsTitleUI;
 	auto result = OptionsForm::make();
 	{
-		auto optionInfo = OptionInfo("mp.hostRole", N_("Host Role"), N_(""));
+		auto optionInfo = OptionInfo("mp.hostRole", N_("Host Role"), "");
 		auto valueChanger = OptionsDropdown<bool>::make(
 			[weakMultiOptionsTitleUI]() {
 				OptionChoices<bool> result;
