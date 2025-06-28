@@ -3,47 +3,12 @@
 # This file is distributed under the same license as the warzone2100 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: src/titleui/options/audiooptions.cpp:276
-#: src/titleui/options/audiooptions.cpp:286
-#: src/titleui/options/audiooptions.cpp:296
-#: src/titleui/options/audiooptions.cpp:362
-#: src/titleui/options/audiooptions.cpp:384
-#: src/titleui/options/controlsoptions.cpp:977
-#: src/titleui/options/controlsoptions.cpp:997
-#: src/titleui/options/controlsoptions.cpp:1016
-#: src/titleui/options/controlsoptions.cpp:1045
-#: src/titleui/options/controlsoptions.cpp:1055
-#: src/titleui/options/controlsoptions.cpp:1065
-#: src/titleui/options/controlsoptions.cpp:1075
-#: src/titleui/options/controlsoptions.cpp:1094
-#: src/titleui/options/controlsoptions.cpp:1114
-#: src/titleui/options/controlsoptions.cpp:1137
-#: src/titleui/options/defaultsoptions.cpp:303
-#: src/titleui/options/graphicsoptions.cpp:78
-#: src/titleui/options/graphicsoptions.cpp:135
-#: src/titleui/options/graphicsoptions.cpp:232
-#: src/titleui/options/graphicsoptions.cpp:271
-#: src/titleui/options/graphicsoptions.cpp:298
-#: src/titleui/options/graphicsoptions.cpp:438
-#: src/titleui/options/interfaceoptions.cpp:198
-#: src/titleui/options/interfaceoptions.cpp:217
-#: src/titleui/options/interfaceoptions.cpp:236
-#: src/titleui/options/interfaceoptions.cpp:256
-#: src/titleui/options/interfaceoptions.cpp:285
-#: src/titleui/options/interfaceoptions.cpp:304
-#: src/titleui/options/interfaceoptions.cpp:323
-#: src/titleui/options/interfaceoptions.cpp:335
-#: src/titleui/options/interfaceoptions.cpp:355
-#: src/titleui/options/interfaceoptions.cpp:375
-#: src/titleui/options/windowoptions.cpp:184
-#: src/titleui/options/windowoptions.cpp:218
-#: src/titleui/widgets/starthostingbutton.cpp:124
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"POT-Creation-Date: 2025-06-28 21:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
