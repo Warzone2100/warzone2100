@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1796,11 +1796,14 @@ msgstr "Hancurkan silo-silo rudal"
 msgid "Rescue Alpha team from Nexus"
 msgstr "Selamatkan Tim Alpha dari Nexus"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Hancurkan markas Nexus untuk mematikan Program Penyusup Nexus"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Peringatan: Markas terlindungi dari serangan VTOL"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Riset sirkuit resistansi dan terus bertahan dalam serbuan dari Nexus"
@@ -1817,8 +1820,8 @@ msgstr "Satukan kembali bagian dari Tim Beta dengan pangkalan Tim Gamma"
 msgid "Return to LZ"
 msgstr "Kembali ke zona pendaratan/LZ"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "Petunjuk kesulitan Berat / Gila:"
+msgid "Insane difficulty hint:"
+msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Perkuat markas di seluruh peta untuk melindungi diri dari Kolektif"
@@ -2940,21 +2943,25 @@ msgid "System locale"
 msgstr "Sistem lokal"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Gagal membuat pemetaan port"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Konfigurasikan router/firewall Anda secara manual untuk membuka port %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "Pemetaan Port membuka port eksternal: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "IP eksternal Anda adalah: %s"
 
 msgid "Failed to create port mapping (timeout)"
+msgstr "Gagal membuat pemetaan port (waktu habis)"
+
+#, c-format
+msgid "Using %s network backend."
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -2971,6 +2978,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Kesalahan dalam menyambungkan ke lobby server: %s.\n"
+"Pastikan port %d dapat menerima sambungan masuk.\n"
+"Jika Anda menggunakan sebuah router harap disetel untuk menggunakan UPnP\n"
+" atau untuk mem-forward port ke sistem Anda."
 
 msgid "Failed to get a lobby response!"
 msgstr "Gagal mendapatkan respons dari lobi!"
@@ -2987,6 +2998,18 @@ msgstr "Format Tayangan Ulang Tidak Didukung"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Tidak dapat memuat tayangan ulang: File tayangan ulang tidak lengkap atau rusak."
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr ""
 
 msgid "Menu"
 msgstr "Menu"
@@ -3280,7 +3303,7 @@ msgid "Armed with Cyborg Flamer"
 msgstr "Dipersenjatai dengan Penyembur Api Cyborg"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "Dipersenjatai dengan meriam velositas hiper"
 
 msgid "Armed with Cyborg Machinegun"
 msgstr "Dipersenjatai dengan Senapan Mesin Cyborg"
@@ -3295,12 +3318,12 @@ msgid "Armed with Cyborg Scourge Missile Launcher"
 msgstr "Dipersenjatai dengan Peluncur Rudal \"Scourge\" Cyborg"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
-
-msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "Dipersenjatai dengan Roket Pembunuh Tank"
 
 msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Dipersenjatai dengan Penyembur Api Termit Cyborg"
+
+msgid "Armed with Cyborg Thermite flamer"
 msgstr "Dipersenjatai dengan Penyembur Api Termit Cyborg"
 
 msgid "Armed with Flashlight Laser"
@@ -3439,6 +3462,9 @@ msgstr "Emplasemen lapis baja dengan Meriam Gauss"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Emplasemen lapis baja dengan Laser Berat"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Emplasemen lapis baja dengan penyembur api plasmit"
@@ -3668,6 +3694,9 @@ msgstr "Daya rusak bom: +10%"
 msgid "Bomb damage +25%"
 msgstr "Daya rusak bom: +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Peningkatan Bom"
 
@@ -3691,6 +3720,9 @@ msgstr "Bug"
 
 msgid "Buggy"
 msgstr "Buggy"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistem diagnosis dan perbaikan terintegrasi"
@@ -3732,6 +3764,9 @@ msgstr "Membakar minyak dengan lebih efisien"
 msgid "Cannon accuracy +10%"
 msgstr "Akurasi Meriam +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Pengisi Otomatis Meriam Mk2"
 
@@ -3744,6 +3779,9 @@ msgstr "Pengisi Otomatis Meriam"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Daya rusak meriam +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Cannon Fire Truck"
@@ -3769,6 +3807,9 @@ msgstr "Pengisi Cepat Meriam"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Waktu isi ulang meriam -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Menara dengan Meriam"
@@ -3875,6 +3916,12 @@ msgstr "Komandan memimpin grup dan sebagai point pengantaran pabrik"
 msgid "Complete battlefield visibility"
 msgstr "Penglihatan medan tempur sempurna"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Aloi Komposit Mk2"
 
@@ -3933,6 +3980,15 @@ msgstr "Crane1"
 
 msgid "Crane2"
 msgstr "Crane2"
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Aloi Komposit Cyborg Mk2"
@@ -3998,6 +4054,12 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr "Armor Termal Superpadat Cyborg"
 
 msgid "Cyborg Tank Killer"
+msgstr "Cyborg Pembunuh Tank"
+
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
 msgstr ""
 
 msgid "Cyborg Thermal Armor Mk2"
@@ -4009,8 +4071,11 @@ msgstr "Armor Termal Cyborg Mk3"
 msgid "Cyborg Thermal Armor"
 msgstr "Armor Termal Cyborg"
 
-msgid "Cyborg Thermite"
+msgid "Cyborg Thermal"
 msgstr ""
+
+msgid "Cyborg Thermite"
+msgstr "Cyborg Termit"
 
 msgid "Cyborg Transport Available"
 msgstr "Transporter Cyborg Tersedia"
@@ -4055,7 +4120,7 @@ msgid "Depleted uranium kinetic energy bullets"
 msgstr "Peluru Energi Kinetik Uranium Terdeplesi"
 
 msgid "Depleted Uranium MG Bullets Mk3"
-msgstr ""
+msgstr "Peluru Senapan Mesin Uranium Terdeplesi"
 
 msgid "Depleted Uranium MG Bullets"
 msgstr "Peluru Senapan Mesin Uranium Terdeplesi"
@@ -4135,6 +4200,9 @@ msgstr "Menyediakan perbaikan otomatis"
 msgid "Enemy"
 msgstr "Musuh"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Keinsinyuran"
 
@@ -4207,6 +4275,9 @@ msgstr "Stabilisasi dengan sirip memperbaiki jalur penerbangan"
 msgid "Fire Truck"
 msgstr "Truk Pemadam Kebakaran"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Menembak Rudal Pulsa Elektromagnetik"
 
@@ -4241,12 +4312,18 @@ msgstr "Flamer Cobra Tracks"
 msgid "Flamer damage +25%"
 msgstr "Daya rusak penyembur api +25%"
 
-msgid "Flamer Fast Loader"
+msgid "Flamer Damage"
 msgstr ""
+
+msgid "Flamer Fast Loader"
+msgstr "Penyembur Api Cepat"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Waktu isi penyembur api -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Flamer Viper Half-Tracks"
@@ -4797,6 +4874,15 @@ msgstr "Pengisi Otomatis Howitzer"
 msgid "Howitzer damage +25%"
 msgstr "Daya rusak howitzer +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Pengisi Cepat Howitzer"
 
@@ -4806,6 +4892,15 @@ msgstr "Waktu isi howitzer -10%"
 
 msgid "Howitzer"
 msgstr "Howitzer"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "Situs Anti-Pesawat \"Hurricane\""
@@ -4870,6 +4965,9 @@ msgstr "Keinsinyuran Lanjutan"
 msgid "Improved fire detection systems"
 msgstr "Sistem pendeteksi tembakan yang ditingkatkan"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Hardcrete Ditingkatkan Mk2"
 
@@ -4921,10 +5019,10 @@ msgstr "Peningkatan dalam bidang optik laser mengurangi pembiasan cahaya"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplasemen Howitzer Pembakar 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Emplasemen Howitzer Pembakar"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Emplasemen Howitzer Pembakar"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5129,9 +5227,15 @@ msgstr "Senapan Laser Anti-Pesawat Tersedia"
 msgid "Laser accuracy +10%"
 msgstr "Akurasi Laser +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Daya rusak laser +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Designator laser menandakan dan mengarahkan peluru ke target"
@@ -5139,6 +5243,9 @@ msgstr "Designator laser menandakan dan mengarahkan peluru ke target"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Waktu isi ulang laser -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Pusat Komando Satelit Laser"
@@ -5316,6 +5423,12 @@ msgstr "Meriam Sedang"
 msgid "Medium Super Heavy Body"
 msgstr "Badan Super Berat Sedang"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Titik kuat berlapis baja dengan pod roket mini"
 
@@ -5371,6 +5484,9 @@ msgstr "Mini-Rocket Viper Wheels"
 msgid "Missile accuracy +10%"
 msgstr "Akurasi Rudal +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "Rudal mengarahkan diri ke target secara aktif"
 
@@ -5378,12 +5494,18 @@ msgstr "Rudal mengarahkan diri ke target secara aktif"
 msgid "Missile damage +25%"
 msgstr "Daya rusak rudal +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Benteng Rudal"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Waktu isi ulang rudal -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Peningkatan Rudal"
@@ -5404,6 +5526,9 @@ msgstr "Armor dan Body Point lebih baik dari Vengeance"
 msgid "Mortar accuracy +10%"
 msgstr "Akurasi mortir +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Pengisi Otomatis Mortir Mk2"
 
@@ -5420,6 +5545,9 @@ msgstr "Mortar Cobra Half-tracks"
 msgid "Mortar damage +25%"
 msgstr "Daya rusak mortir +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Pengisi Cepat Mortir"
 
@@ -5429,6 +5557,9 @@ msgstr "Parit dengan Mortir"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Waktu isi mortir -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Komputer Penargetan Mortir"
@@ -5562,10 +5693,10 @@ msgstr "Struktur Sistem Baru Tersedia"
 msgid "New Systems Tower Available"
 msgstr "Menara Sistem Baru Tersedia"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Turet Sistem Baru Tersedia Untuk Desain"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Turet Sistem Baru Tersedia Untuk Desain"
 
 msgid "New Thermal Emissions detection"
@@ -5664,6 +5795,12 @@ msgstr "Skirmish Original"
 msgid "Panther"
 msgstr "Panther"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Parit dengan Mortir \"Pepperpot\""
 
@@ -5753,6 +5890,9 @@ msgstr "Output daya +25%"
 msgid "Power Research Completed"
 msgstr "Riset Daya Selesai"
 
+msgid "Power"
+msgstr "Daya"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Senjata pulsa elektromagnet kuat"
 
@@ -5761,6 +5901,9 @@ msgstr "Powerlab"
 
 msgid "Produces Cyborgs"
 msgstr "Memproduksi Cyborg"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Unit berpangkat Profesional dan Reguler dilindungi"
@@ -5834,6 +5977,12 @@ msgstr "Menara Detektor Radar"
 msgid "Radar Detector"
 msgstr "Detektor Radar"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Akurasi Senapan Rel +10%"
@@ -5876,6 +6025,9 @@ msgstr "Peningkatkan Senapan Rel"
 msgid "Rail Gun"
 msgstr "Senapan Rel"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Komputer Prediksi Target Senapan Rel"
 
@@ -5906,6 +6058,12 @@ msgstr "Mengurangi kemungkinan pengambilan alih oleh NEXUS"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Menyiapkan dan memperbaiki unit VTOL"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Material Struktur Markas Diperkuat Mk2"
@@ -5985,6 +6143,9 @@ msgstr "Kecepatan Riset +30%"
 msgid "Research speed +85%"
 msgstr "Kecepatan Riset +85%"
 
+msgid "Research"
+msgstr "Riset"
+
 msgid "Retaliation"
 msgstr "Retaliation"
 
@@ -5995,7 +6156,7 @@ msgid "Ripple Rocket Battery"
 msgstr "Baterai Roket \"Ripple\""
 
 msgid "Ripple Rocket Rapid Loader"
-msgstr ""
+msgstr "Pengisi Cepat Roket Riak"
 
 msgid "Ripple Rockets"
 msgstr "Roket \"Ripple\""
@@ -6043,6 +6204,9 @@ msgstr "Penyiapan VTOL Robotik"
 msgid "Rocket accuracy +10%"
 msgstr "Akurasi roket +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artileri roket, dapat ditugaskan ke sebuah sensor"
 
@@ -6061,6 +6225,9 @@ msgstr "Buggy Roket"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Daya rusak roket +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Roket mendeteksi dan mengunci ke emisi mesin target"
@@ -6083,6 +6250,9 @@ msgstr "Pengisi Cepat Roket"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Waktu isi ulang roket -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Roket mengikuti designator laser ke arah target"
@@ -6240,6 +6410,9 @@ msgstr "Peningkatan Sensor Mk3"
 msgid "Sensor Upgrade"
 msgstr "Peningkatan Sensor"
 
+msgid "Sensor"
+msgstr ""
+
 msgid "Sensors Improved"
 msgstr "Sensor Ditingkatkan"
 
@@ -6265,7 +6438,7 @@ msgid "Smashedwall"
 msgstr "Dinding rusak"
 
 msgid "Sniper Cyborg"
-msgstr ""
+msgstr "Cyborg Penembak Jitu"
 
 msgid "Speed: Fast"
 msgstr "Kecepatan: Cepat"
@@ -6405,10 +6578,10 @@ msgstr "Analisis Data Tautan Sinapsis Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analisis Data Tautan Sinapsis Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Analisis Data Tautan Sinapsis"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Analisis Data Tautan Sinapsis"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6423,8 +6596,11 @@ msgstr "Tautan Sinapsis"
 msgid "Systems Research Completed"
 msgstr "Riset Sistem Selesai"
 
-msgid "Tank Killer Cyborg"
+msgid "Tank Alloys"
 msgstr ""
+
+msgid "Tank Killer Cyborg"
+msgstr "Cyborg Pembunuh Tank"
 
 msgid "Tank Killer Emplacement"
 msgstr "Emplasemen Roket Pembunuh Tank"
@@ -6449,6 +6625,9 @@ msgstr "Tank Killer Vengeance Tracks"
 
 msgid "Tank Killer"
 msgstr "Roket Pembunuh Tank"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Ranjau Tank"
@@ -6493,6 +6672,12 @@ msgstr "Armor Termal +40%"
 msgid "Thermal Armor +45%"
 msgstr "Armor Termal +45%"
 
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Thermal Armor Mk2"
 msgstr "Armor Termal Mk2"
 
@@ -6512,7 +6697,7 @@ msgid "Thermite Bomb Bay"
 msgstr "Bom Termit"
 
 msgid "Thermite Cyborg"
-msgstr ""
+msgstr "Cybord Termit"
 
 msgid "Thermite Flamer Cyborg"
 msgstr "Cyborg Penyembur Api Termit"
@@ -6537,6 +6722,9 @@ msgstr "Beton yang diperkuat dengan titanium"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "Kecerdasan buatan untuk pertempuran benteng, didasarkan atas NullBot"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "Propulsi Roda Rantai"
@@ -6804,7 +6992,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "Bom HEAP VTOL"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "VTOL Meriam Berat"
 
 msgid "VTOL Heavy Laser"
 msgstr "Laser Berat VTOL"
@@ -6849,7 +7037,7 @@ msgid "VTOL Machinegun"
 msgstr "Senapan Mesin VTOL"
 
 msgid "VTOL Mini-Rocket AA"
-msgstr ""
+msgstr "VTOL Roket Mini"
 
 msgid "VTOL Mini-Rocket Scav"
 msgstr "VTOL Mini-Rocket Scav"
@@ -6859,6 +7047,9 @@ msgstr "Roket Mini VTOL"
 
 msgid "VTOL Needle Gun"
 msgstr "Meriam Jarum VTOL"
+
+msgid "VTOL Particle Gun"
+msgstr ""
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Bom Fosfor VTOL"
@@ -6883,6 +7074,9 @@ msgstr "Landasan Penyiapan VTOL"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Landasan penyiapan VTOL diperlukan agar VTOL tetap layak terbang"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "Rudal \"Scourge\" VTOL"
@@ -7240,10 +7434,10 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Aktifkan / nonaktifkan pemetaan port saat hosting"
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, benar, 0, salah]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Nyalakan perintah garis miring lobi (untuk menyambungkan klien)"
@@ -7294,21 +7488,27 @@ msgid "number of minutes"
 msgstr "jumlah menit"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Ubah peta spekular .png menjadi luma, saluran tunggal, skala abu-abu .png (dan keluar)"
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Izinkan lapisan implisit Vulkan (yang mungkin dinonaktifkan secara default karena potensi kerusakan atau bug)"
 
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "Tetapkan konfigurasi / izin obrolan hosting default"
 
 msgid "Enable async join approval (for connecting clients)"
-msgstr ""
+msgstr "Aktifkan persetujuan penggabungan asinkron (untuk menghubungkan klien)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Memulai host (autohost) sebagai tidak siap, meskipun itu host penonton"
 
 msgid "Base URL for on-demand video downloads"
-msgstr ""
+msgstr "URL dasar untuk unduhan video sesuai permintaan"
 
 msgid "Base video URL"
+msgstr "URL video dasar"
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7603,327 +7803,10 @@ msgstr "Tonton Tayangan Ulang"
 
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "Port TCP %d harus dibuka di firewall atau router Anda untuk meng-hosting permainan!"
 
 msgid "Load Multiplayer Replay"
 msgstr "Muat Tayangan Ulang Multipemain"
-
-msgid "Game Options"
-msgstr "Pengaturan Permainan"
-
-msgid "Graphics Options"
-msgstr "Opsi Grafik"
-
-msgid "Video Options"
-msgstr "Opsi Video"
-
-msgid "Audio / Zoom Options"
-msgstr "Opsi Audio / Perbesaran"
-
-msgid "Mouse Options"
-msgstr "Opsi Tetikus"
-
-msgid "Key Mappings"
-msgstr "Pemetaan Kunci"
-
-msgid "Music Manager"
-msgstr "Manajer Musik"
-
-msgid "Multiplay Options"
-msgstr "Pengaturan Multipemain"
-
-msgid "OPTIONS"
-msgstr "OPSI"
-
-msgid "Open Configuration Directory"
-msgstr "Buka Direktori Konfigurasi"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "Gagal membuka direktori konfigurasi dalam pencari file default."
-
-msgid "Configuration directory is reported as:"
-msgstr "Konfigurasi direktori dilaporkan sebagai:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Jika program berjalan di dalam kontainer / lingkungan terisolasi, ini mungkin berbeda dari jalur asli di disk."
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Harap melihat file dokumentasi untuk informasi lebih lanjut mengenai cara mencarinya."
-
-msgid "Failed to open configuration directory"
-msgstr "Gagal membuka konfigurasi direktori"
-
-msgid "1×"
-msgstr "1×"
-
-msgid "2×"
-msgstr "2×"
-
-msgid "Fullscreen"
-msgstr "Layar penuh"
-
-msgid "Unsupported"
-msgstr "Tidak Didukung"
-
-msgid "Off"
-msgstr "Mati"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Hitam"
-
-msgid "On"
-msgstr "Nyala"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "Berotasi"
-
-msgid "Fixed"
-msgstr "Tetap"
-
-msgid "Instant"
-msgstr "Instan"
-
-msgid "Tracked"
-msgstr "Terlacak"
-
-msgid "High"
-msgstr "Tinggi"
-
-msgid "Default"
-msgstr "Default"
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr ""
-
-msgid "High Quality"
-msgstr ""
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* Efek dapat terlihat setelah memulai ulang permainan"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "Bayangan"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr "Jarak tingkat detail (LOD)"
-
-msgid "Fog"
-msgstr "Kabut"
-
-msgid "Radar"
-msgstr "Radar"
-
-msgid "Radar Jump"
-msgstr "Lompatan Radar"
-
-msgid "Video Playback"
-msgstr "Pemutaran Video"
-
-msgid "Scanlines"
-msgstr "Garis Pindai"
-
-msgid "Screen Shake"
-msgstr "Getaran Layar"
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "OPSI GRAFIK"
-
-msgid "Disabled"
-msgstr "Mati"
-
-msgid "Enabled"
-msgstr "Aktif"
-
-msgid "Auto"
-msgstr "Otomatis"
-
-msgid "Voice Volume"
-msgstr "Volume Suara"
-
-msgid "FX Volume"
-msgstr "Volume Efek Suara"
-
-msgid "Music Volume"
-msgstr "Volume Musik"
-
-msgid "Subtitles"
-msgstr "Teks Terjemahan"
-
-msgid "HRTF"
-msgstr "HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "HRTF tidak didukung di perangkat / sistem / perpustakaan OpenAL Anda"
-
-msgid "Map Zoom"
-msgstr "Perbesaran Peta"
-
-msgid "Map Zoom Rate"
-msgstr "Kecepatan Perbesaran Peta"
-
-msgid "Radar Zoom"
-msgstr "Perbesaran Radar"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "OPSI AUDIO / PERBESARAN"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"Dalam modus desktop penuh, resolusi menyesuaikan dengan desktop\n"
-"(atau yang dibolehkan manajer jendela)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Anda dapat mengubah resolusi dengan mengatur ukuran jendela secara manual. (Cobalah menyeret ujung / sudut jendela.)"
-
-msgid "Graphics Mode"
-msgstr "Modus Grafik"
-
-msgid "Resolution"
-msgstr "Resolusi"
-
-msgid "Display Scale"
-msgstr "Skala Tampilan"
-
-msgid "Adaptive"
-msgstr "Adaptif"
-
-msgid "Windowed"
-msgstr "Modus jendela"
-
-msgid "Desktop Full"
-msgstr "Desktop Penuh"
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "Ukuran Tekstur"
-
-msgid "Vertical sync"
-msgstr "Sinkronisasi Vertikal"
-
-msgid "Antialiasing*"
-msgstr "Antialiasing*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Peringatan: Antialiasing dapat menyebabkan crash, terutama jika nilai yang disetel > 16"
-
-msgid "Graphics Backend*"
-msgstr "Back-end Grafis*"
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "OPSI VIDEO"
-
-msgid "Unable to change Vertical Sync"
-msgstr "Tidak dapat mengganti Sinkronisasi Vertikal / Vsync"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"Warzone gagal mengganti Sinkronisasi Vertikal / Vsync.\n"
-"Sistem / Driver Anda mungkin tidak mendukung modus lain."
-
-msgid "Middle Mouse"
-msgstr "Tetikus Tengah"
-
-msgid "Right Mouse"
-msgstr "Tetikus Kanan"
-
-msgid "Reverse Rotation"
-msgstr "Rotasi Terbalik"
-
-msgid "Trap Cursor"
-msgstr "Kursor Jebak"
-
-msgid "Switch Mouse Buttons"
-msgstr "Tukar Tombol Tetikus"
-
-msgid "Rotate Screen"
-msgstr "Putar Layar"
-
-msgid "Colored Cursors"
-msgstr "Kursor Berwarna"
-
-msgid "Cursor Size"
-msgstr "Ukuran Kursor"
-
-msgid "MOUSE OPTIONS"
-msgstr "OPSI TETIKUS"
-
-msgid "Super Easy"
-msgstr "Super Mudah"
-
-msgid "Easy"
-msgstr "Mudah"
-
-msgid "Hard"
-msgstr "Sulit"
-
-msgid "Insane"
-msgstr "Gila"
 
 #, c-format
 msgid "Unable to load: %s."
@@ -7931,100 +7814,6 @@ msgstr "Tidak dapat memuat: %s."
 
 msgid "Please remove all incompatible mods."
 msgstr "Silakan mencopot mod yang tidak kompatibel."
-
-msgid "GAME OPTIONS"
-msgstr "PILIHAN PERMAINAN"
-
-msgid "Language"
-msgstr "Bahasa"
-
-msgid "Unit Colour:"
-msgstr "Warna Unit:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Skirmish/Multipemain"
-
-msgid "Campaign Difficulty"
-msgstr "Tingkat Kesulitan Kampanye"
-
-msgid "Camera Speed"
-msgstr "Kecepatan Kamera"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "Bantu kami meningkatkan pengalihbahasaan Warzone 2100: %s"
-
-msgid "Click to open webpage."
-msgstr "Klik untuk membuka laman."
-
-msgid "Insane Difficulty"
-msgstr "Tingkat Kesulitan Gila"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "Tingkat kesulitan ini diperuntukkan untuk pemain yang sudah berpengalaman!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u menit"
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u detik"
-
-msgid "None"
-msgstr "Tidak ada"
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr "Pengaturan Penyelenggaraan:"
-
-msgid "Game Port"
-msgstr "Port Permainan"
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr "Batas Waktu Tidak Aktif"
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr "Slot Penonton"
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr "Aktifkan Rating"
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "PENGATURAN MULTIPEMAIN"
 
 msgid "Mod: "
 msgstr "Mod:"
@@ -8087,10 +7876,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Pemain %u memunculkan unit baru melalui menu debug."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Buka Opsi Dalam Permainan"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Tutup Opsi Dalam Permainan"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Menyembunyikan Teknologi Lawas"
@@ -8120,52 +7909,52 @@ msgstr ""
 "Klik Kanan untuk mencopot status Favorit"
 
 msgid "New Joins"
-msgstr ""
+msgstr "Baru Bergabung"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Refresh"
 
 msgid "Host Chat Options"
-msgstr ""
+msgstr "Opsi Obrolan Penyelenggara"
 
 msgid "Global Options:"
-msgstr ""
+msgstr "Opsi Global:"
 
 msgid "Enable All"
-msgstr ""
+msgstr "Aktifkan Semua"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Nonaktifkan Semua"
 
 msgid "Chat Options"
-msgstr ""
+msgstr "Opsi Chat"
 
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "Bisukan atau konfigurasi obrolan bebas pemain."
 
 msgid "The host has globally muted 1+ players."
-msgstr ""
+msgstr "Penyelenggara telah membisukan secara global 1+ pemain."
 
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "Pilih / Tunjuk Jumlah Grup "
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Grup %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Pilih Unit dalam Grup %u"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Tunjuk Unit Terpilih di Grup %u"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
-msgstr ""
+msgstr "Pusatkan Kamera di Grup ini dengan mengeklik atau mengetuk dua kali"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
 msgstr ""
@@ -8201,10 +7990,10 @@ msgid "Progress Bar"
 msgstr "Batang Progres"
 
 msgid "To:"
-msgstr ""
+msgstr "Kepada:"
 
 msgid "All"
-msgstr ""
+msgstr "Semua"
 
 msgid "Team"
 msgstr "Tim"
@@ -8232,13 +8021,13 @@ msgid "Requests"
 msgstr ""
 
 msgid "Notices"
-msgstr ""
+msgstr "Pemberitahuan"
 
 msgid "Reactions"
 msgstr ""
 
 msgid "Taunts"
-msgstr ""
+msgstr "Ejek"
 
 msgid "Coordination"
 msgstr ""
@@ -8247,16 +8036,16 @@ msgid "Suggestions"
 msgstr ""
 
 msgid "Cheats"
-msgstr ""
+msgstr "Curang"
 
 msgid "End-Game"
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8341,7 +8130,7 @@ msgid "Almost ready"
 msgstr ""
 
 msgid "Ready"
-msgstr ""
+msgstr "Siap"
 
 msgid "Be right back"
 msgstr ""
@@ -8350,19 +8139,19 @@ msgid "I'm back"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Ya"
 
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Mungkin"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Belum"
 
 msgid "Soon"
-msgstr ""
+msgstr "Segera"
 
 msgid "Thank you"
 msgstr ""
@@ -8374,7 +8163,7 @@ msgid "Well-played"
 msgstr ""
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
 msgstr ""
@@ -8509,10 +8298,10 @@ msgid "Ally progress"
 msgstr "Progres sekutu"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tank"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cyborg"
 
 msgid "No teammates."
 msgstr ""
@@ -8524,7 +8313,7 @@ msgid "Weapons:"
 msgstr ""
 
 msgid "Units:"
-msgstr ""
+msgstr "Unit:"
 
 msgid "Resume Game"
 msgstr "Lanjutkan permainan"
@@ -8534,15 +8323,6 @@ msgstr "PERINGATAN: Anda adalah penyelenggara permainan. Jika Anda keluar, perma
 
 msgid "Host Quit"
 msgstr "Penyelenggara Keluar"
-
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Menu Interaksi Taktis (Ikon Asal Target): Tunjukkan"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Menu Interaksi Taktis (Ikon Asal Target): Sembunyikan"
-
-msgid "Go Back"
-msgstr "Kembali"
 
 msgid "View Guide"
 msgstr ""
@@ -8576,15 +8356,6 @@ msgstr "Permainan tidak dapat berlanjut tanpa si penyelenggara."
 
 msgid "-->  QUIT  <--"
 msgstr "--> KELUAR <--"
-
-msgid "Audio Options"
-msgstr "Opsi Audio"
-
-msgid "View Key Mappings"
-msgstr "Tunjukkan Pemetaan Kunci"
-
-msgid "Shake"
-msgstr "Getar"
 
 msgid "Save Campaign Game"
 msgstr "Simpan Permainan Kampanye"
@@ -8629,17 +8400,20 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
-msgstr "Pintasan umum"
+msgid "Global Keys"
+msgstr ""
 
-msgid "Other Hotkeys"
-msgstr "Pintasan lain"
+msgid "Other Keys"
+msgstr ""
 
-msgid "Gameplay"
-msgstr "Cara bermain"
+msgid "Gameplay Keys"
+msgstr ""
 
-msgid "Debug"
-msgstr "Debug"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
+msgstr ""
 
 msgid "Debug (level editor)"
 msgstr "Debug (editor level)"
@@ -8649,9 +8423,6 @@ msgstr "Debug (pilihan)"
 
 msgid "Manufacture"
 msgstr "Produksi"
-
-msgid "Research"
-msgstr "Riset"
 
 msgid "Build"
 msgstr "Konstruksi"
@@ -9017,8 +8788,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Pilih Semua Unit Rusak Berat"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "Pilih semua unit tempur darat dengan kesehatan >50% dan tanpa Grup."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr ""
 
 msgid "Select all Half-tracks"
 msgstr "Pilih Semua Half-track"
@@ -9187,9 +8958,6 @@ msgstr "Alihkan ke layar penuh"
 
 msgid "Waiting for Power"
 msgstr "Menunggu untuk Daya"
-
-msgid "Power"
-msgstr "Daya"
 
 msgid "Power Per Second"
 msgstr "Daya Per Detik"
@@ -9652,21 +9420,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr "File SimpanCepat belum ada"
 
-msgid "<not bound>"
-msgstr "<not bound>"
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "PEMETAAN KUNCI"
-
-msgid "Return To Previous Screen"
-msgstr "Kembali Ke Layar Sebelumnya"
-
-msgid "Select Default"
-msgstr "Pilih Default"
-
 msgid "Parent directory"
 msgstr "Direktori induk"
 
@@ -9687,8 +9440,14 @@ msgstr "Simpan Otomatis %s"
 msgid "AutoSave %s failed"
 msgstr "Simpan Otomatis %s gagal"
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Tidak dapat menyimpan permainan!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Muat Transporter"
@@ -9767,8 +9526,20 @@ msgstr "%s Membentuk Aliansi Dengan %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Anda Menemukan Cetak Biru Untuk %s"
 
+msgid "Super Easy"
+msgstr "Super Mudah"
+
+msgid "Easy"
+msgstr "Mudah"
+
 msgid "Medium"
 msgstr "Medium"
+
+msgid "Hard"
+msgstr "Sulit"
+
+msgid "Insane"
+msgstr "Gila"
 
 msgid "Commander"
 msgstr "Komandan"
@@ -9783,103 +9554,32 @@ msgstr "DESKRIPSI KECERDASAN BUATAN TIDAK DITEMUKAN"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Turnamen kecerdasan buatan: %3.1f%% kemenangan, %3.1f%% kalah, %3.1f%% seri"
 
-msgid "Tanks disabled!!"
-msgstr "Tank dimatikan!!"
-
-msgid "Cyborgs disabled."
-msgstr "Cyborg dimatikan."
-
-msgid "VTOLs disabled."
-msgstr "VTOL dimatikan."
-
-msgid "Satellite Uplink disabled."
-msgstr "Pusat Komunikasi Satelit dimatikan."
-
-msgid "Laser Satellite disabled."
-msgstr "Laser Satelit dimatikan."
-
-msgid "Structure Limits Enforced."
-msgstr "Batas Jumlah Struktur Diterapkan."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Tidak cukup suara untuk mengacak atau mengubah peta."
-
-msgid "Select Game Name"
-msgstr "Pilih Nama Permainan"
-
-msgid "Game Name"
-msgstr "Nama Permainan"
-
-msgid "One-Player Skirmish"
-msgstr "Skirmish Satu Pemain"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Pilih Map\n"
-"Dapat diblokir oleh pemilihan dari pemain"
-
-msgid "Map-Mod!"
-msgstr "Map-Mod!"
-
-msgid "Random map!"
-msgstr "Peta acak!"
-
-msgid "Click to set Password"
-msgstr "Klik untuk menentukan kata sandi"
-
-msgid "Enter password here"
-msgstr "Masukkan kata sandi disini"
 
 msgid "Select Player Name"
 msgstr "Pilih Nama Pemain"
 
-msgid "Alliances"
-msgstr "Aliansi"
-
-msgid "Base"
-msgstr "Pangkalan"
-
-msgid "Map Preview"
-msgstr "Pratinjau Peta"
-
-msgid "Click to see Map"
-msgstr "Klik untuk melihat Peta"
-
-msgid "Show Structure Limits"
-msgstr "Tunjukkan Batas Jumlah Struktur"
-
-msgid "Set Structure Limits"
-msgstr "Tentukan Batas Jumlah Struktur"
-
-msgid "Random Game Options"
-msgstr "Pengaturan Permainan Acak"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
-"Pengaturan Permainan Acak\n"
-"Dapat diblokir oleh pemilihan dari pemain"
 
-msgid "Tech"
-msgstr "Teknologi"
+msgid "Blind Game:"
+msgstr ""
 
-msgid "Technology Level 1"
-msgstr "Teknologi tingkat 1"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
 
-msgid "Technology Level 2"
-msgstr "Teknologi tingkat 2"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "Teknologi tingkat 3"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
 
-msgid "Technology Level 4"
-msgstr "Teknologi tingkat 4"
+msgid "OPTIONS"
+msgstr "OPSI"
 
-msgid "Start Hosting Game"
-msgstr "Mulai Menyelenggarakan Permainan"
+msgid "Return To Previous Screen"
+msgstr "Kembali Ke Layar Sebelumnya"
 
 msgid "DIFFICULTY"
 msgstr "TINGKAT KESULITAN"
@@ -10021,6 +9721,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr "Ya, pilih slot Pemain"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "Tergabung:"
 
@@ -10039,63 +9746,8 @@ msgstr ""
 msgid "Lock Teams"
 msgstr "Kunci Tim"
 
-msgid "Choose Team"
-msgstr "Pilih Tim"
-
-msgid "Teams locked"
-msgstr "Tim terkunci"
-
-msgid "Click to change player colour"
-msgstr "Klik untuk mengganti warna pemain"
-
-msgid "Click to change player position"
-msgstr "Klik untuk mengganti posisi pemain"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke semua slot"
-
-msgid "Click to close spectator slot"
-msgstr "Klik untuk menutup slot penonton"
-
-msgid "Player ID: "
-msgstr "ID pemain: "
-
-msgid "(none)"
-msgstr "(tidak ada)"
-
-msgid "Alt Name:"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Player rating:"
-msgstr "Rating pemain:"
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Klik untuk mengubah tingkat kesulitan"
-
-msgid "Waiting for player"
-msgstr "Menunggu pemain"
-
-msgid "Player is ready"
-msgstr "Pemain Siap"
-
-msgid "Player is downloading"
-msgstr "Pemain sedang mengunduh"
-
-msgid "Click when ready"
-msgstr "Klik saat sudah siap"
-
-msgid "Waiting for download"
-msgstr "Menunggu untuk mengunduh"
-
-msgid "READY?"
-msgstr "SIAP?"
 
 msgid "For Spectator:"
 msgstr "Untuk Penonton:"
@@ -10159,22 +9811,6 @@ msgstr "Informasi lebih lanjut"
 msgid "Sorry! Failed to host the game."
 msgstr "Maaf! Gagal untuk menyelenggarakan permainan."
 
-msgid "Game Name Updated."
-msgstr "Nama Permainan Diperbarui."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** kata sandi [%s] sekarang diperlukan! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** kata sandi TIDAK diperlukan! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Ini adalah sebuah map-mod, ia dapat mengganti pengalaman bermain Anda!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "Ini adalah peta acak, ia dapat memberi variasi kepada pengalaman bermain anda!"
-
 msgid "Host is Starting Game"
 msgstr "Penyelenggara Memulai Permainan"
 
@@ -10195,6 +9831,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10240,6 +9885,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10258,20 +9918,6 @@ msgstr "Ditutup"
 
 msgid "Open"
 msgstr "Buka"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Mengirim Peta: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Peta: %u%% diunduh"
-
-msgid "HOST"
-msgstr "PENYELENGGARA"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Versi Warzone 2100 yang digunakan untuk menyimpan file tayangan ulang ini tidak sama dengan versi yang berjalan saat ini."
@@ -10299,6 +9945,10 @@ msgstr "%s meninggalkan permainan"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10360,8 +10010,14 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d pemain"
 
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Structs"
 msgstr "Struktur"
+
+msgid "Alliances"
+msgstr "Aliansi"
 
 msgid "Score"
 msgstr "Skor"
@@ -10418,25 +10074,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr "Batas-batas telah diatur ulang ke nilai default."
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10464,6 +10101,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10518,6 +10174,9 @@ msgstr "Oranye"
 
 msgid "Grey"
 msgstr "Abu-abu"
+
+msgid "Black"
+msgstr "Hitam"
 
 msgid "Red"
 msgstr "Merah"
@@ -10636,9 +10295,6 @@ msgstr "Tanggal"
 
 msgid "Title"
 msgstr "Judul"
-
-msgid "MUSIC MANAGER"
-msgstr "MANAJER MUSIK"
 
 msgid "Dismiss"
 msgstr "Abaikan"
@@ -10796,7 +10452,7 @@ msgid "Click/Tap and Hold"
 msgstr ""
 
 msgid "Other"
-msgstr ""
+msgstr "Lainnya"
 
 msgid "Interactions:"
 msgstr ""
@@ -10814,7 +10470,7 @@ msgid "Connecting to Game"
 msgstr ""
 
 msgid "Status:"
-msgstr ""
+msgstr "Status:"
 
 msgid "Cancel"
 msgstr "Batal"
@@ -10826,7 +10482,7 @@ msgid "Unable to Join Game"
 msgstr ""
 
 msgid "Error:"
-msgstr ""
+msgstr "Error:"
 
 msgid "Join Attempt Rejected"
 msgstr ""
@@ -10903,6 +10559,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -10955,13 +10623,13 @@ msgid "Current Power / Power Per Second"
 msgstr "Daya Sekarang / Daya Per Detik"
 
 msgid "PwrLost"
-msgstr ""
+msgstr "PwrLost"
 
 msgid "PwrWon"
-msgstr ""
+msgstr "PwrWon"
 
 msgid "Lab Use"
-msgstr ""
+msgstr "Penggunaan Lab"
 
 msgid "Kinetic Armor"
 msgstr "Armor Kinetik"
@@ -10970,31 +10638,31 @@ msgid "(Tanks / Cyborgs)"
 msgstr "(Tank / Cyborg)"
 
 msgid "Cannons"
-msgstr ""
+msgstr "Meriam"
 
 msgid "Mortars"
-msgstr ""
+msgstr "Mortar"
 
 msgid "Missiles"
 msgstr ""
 
 msgid "Rockets"
-msgstr ""
+msgstr "Roket"
 
 msgid "Energy"
-msgstr ""
+msgstr "Energi"
 
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 msgid "Flame"
-msgstr ""
+msgstr "Flame"
 
 msgid "Howitzers"
 msgstr ""
 
 msgid "MG"
-msgstr ""
+msgstr "Senapan Mesin"
 
 msgid "Machine Guns"
 msgstr ""
@@ -11003,7 +10671,7 @@ msgid "Electronic"
 msgstr ""
 
 msgid "A-A"
-msgstr ""
+msgstr "Anti Udara"
 
 msgid "Anti-Air"
 msgstr ""
@@ -11015,19 +10683,19 @@ msgid "Slow Rocket"
 msgstr ""
 
 msgid "Las-Sat"
-msgstr ""
+msgstr "Las-Sat"
 
 msgid "Laser Satellite"
 msgstr ""
 
 msgid "Bombs"
-msgstr ""
+msgstr "Bom"
 
 msgid "Command"
-msgstr ""
+msgstr "Perintah"
 
 msgid "EMP"
-msgstr ""
+msgstr "EMP"
 
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr "Tidak dapat membangun unit, Batas Unit Dicapai — Produksi Dihentikan"
@@ -11129,6 +10797,9 @@ msgstr "Penghargaan Fasilitas Perbaikan - Tidak Ada"
 msgid "Classic"
 msgstr ""
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr ""
 
@@ -11194,6 +10865,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "Tidak Didukung"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11250,6 +10972,9 @@ msgstr "Mencari"
 
 msgid "Connecting to the lobby server..."
 msgstr "Menghubungkan ke lobi server..."
+
+msgid "Game Name"
+msgstr "Nama Permainan"
 
 msgid "Map Name"
 msgstr "Nama Peta"
@@ -11321,6 +11046,460 @@ msgstr "Kata Sandi Salah!"
 msgid "Continue"
 msgstr "Lanjut"
 
+msgid "MUSIC MANAGER"
+msgstr "MANAJER MUSIK"
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "HRTF tidak didukung di perangkat / sistem / perpustakaan OpenAL Anda"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Volume Suara"
+
+msgid "FX Volume"
+msgstr "Volume Efek Suara"
+
+msgid "Music Volume"
+msgstr "Volume Musik"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Mati"
+
+msgid "Enabled"
+msgstr "Aktif"
+
+msgid "Auto"
+msgstr "Otomatis"
+
+msgid "Subtitles"
+msgstr "Teks Terjemahan"
+
+msgid "Off"
+msgstr "Mati"
+
+msgid "On"
+msgstr "Nyala"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "Manajer Musik"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "Kursor Jebak"
+
+msgid "Colored Cursors"
+msgstr "Kursor Berwarna"
+
+msgid "Cursor Size"
+msgstr "Ukuran Kursor"
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "Kecepatan Kamera"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Rotasi Terbalik"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr "Pemetaan Port"
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr "Gunakan PCP, NAT-PMP, atau UPnP untuk membantu mengonfigurasi router/firewallmu dan izinkan koneksi saat melakukan hosting."
+
+msgid "Chat"
+msgstr "Obrolan"
+
+msgid "Quick Chat Only"
+msgstr "Obrolan Cepat Saja"
+
+msgid "Allow All"
+msgstr "Izinkan Semua"
+
+msgid "Inactivity Timeout"
+msgstr "Batas Waktu Tidak Aktif"
+
+#, c-format
+msgid "%u minutes"
+msgstr "%u menit"
+
+msgid "Lag Kick"
+msgstr "Lag Kick"
+
+#, c-format
+msgid "%u seconds"
+msgstr "%u detik"
+
+msgid "Spectator Slots"
+msgstr "Slot Penonton"
+
+msgid "None"
+msgstr "Tidak ada"
+
+msgid "On Player Leave"
+msgstr "Saat Pemain Pergi"
+
+msgid "Distribute to Team"
+msgstr "Bagikan ke Tim"
+
+msgid "Destroy (Classic)"
+msgstr "Destroy (Klasik)"
+
+msgid "Game Time Limit"
+msgstr "Batas Waktu Game"
+
+#, c-format
+msgid "%s hours"
+msgstr "%s Jam"
+
+msgid "Enable Rating"
+msgstr "Aktifkan Rating"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr "Pemetaan bayangan tidak tersedia pada sistem ini."
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr "Kualitas sedang"
+
+msgid "High Quality"
+msgstr "Kualitas Tinggi"
+
+msgid "Shadows"
+msgstr "Bayangan"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "Resolusi Bayangan"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr "Tinggi"
+
+msgid "Shadow Filtering"
+msgstr "Penyaringan Bayangan"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr "Rendah"
+
+msgid "Ultra"
+msgstr "Ultra"
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr "Peta Cahaya"
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr "Kabut"
+
+msgid "Screen Shake"
+msgstr "Getaran Layar"
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr "Jarak tingkat detail (LOD)"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr "Default"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr "Adaptif"
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Bahasa"
+
+msgid "Display Scale"
+msgstr "Skala Tampilan"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr "Menu Grup"
+
+msgid "Options Button"
+msgstr "Tombol Opsi"
+
+msgid "Opacity: 50%"
+msgstr "Opasitas: 50%"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Tetap"
+
+msgid "Rotating"
+msgstr "Berotasi"
+
+msgid "Radar Jump"
+msgstr "Lompatan Radar"
+
+msgid "Instant"
+msgstr "Instan"
+
+msgid "Tracked"
+msgstr "Terlacak"
+
+msgid "Radar Zoom"
+msgstr "Perbesaran Radar"
+
+msgid "Video Playback"
+msgstr "Pemutaran Video"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1×"
+
+msgid "2×"
+msgstr "2×"
+
+msgid "Fullscreen"
+msgstr "Layar penuh"
+
+msgid "Scanlines"
+msgstr "Garis Pindai"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "Buka Direktori Konfigurasi"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "Gagal membuka direktori konfigurasi dalam pencari file default."
+
+msgid "Configuration directory is reported as:"
+msgstr "Konfigurasi direktori dilaporkan sebagai:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "Jika program berjalan di dalam kontainer / lingkungan terisolasi, ini mungkin berbeda dari jalur asli di disk."
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "Harap melihat file dokumentasi untuk informasi lebih lanjut mengenai cara mencarinya."
+
+msgid "Failed to open configuration directory"
+msgstr "Gagal membuka konfigurasi direktori"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+"Dalam modus desktop penuh, resolusi menyesuaikan dengan desktop\n"
+"(atau yang dibolehkan manajer jendela)."
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "Anda dapat mengubah resolusi dengan mengatur ukuran jendela secara manual. (Cobalah menyeret ujung / sudut jendela.)"
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Modus jendela"
+
+msgid "Desktop Full"
+msgstr "Desktop Penuh"
+
+msgid "Resolution"
+msgstr "Resolusi"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "Apakah jendela harus diminimalkan secara otomatis saat fokus hilang"
+
+msgid "On (Fullscreen)"
+msgstr "Aktif (Layar Penuh)"
+
 msgid "CONNECTION"
 msgstr "KONEKSI"
 
@@ -11332,6 +11511,303 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Alamat IP atau Nama Perangkat"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "ID pemain: "
+
+msgid "(none)"
+msgstr "(tidak ada)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Mengirim Peta: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Peta: %u%% diunduh"
+
+msgid "HOST"
+msgstr "PENYELENGGARA"
+
+msgid "Choose Team"
+msgstr "Pilih Tim"
+
+msgid "Teams locked"
+msgstr "Tim terkunci"
+
+msgid "Click to change player colour"
+msgstr "Klik untuk mengganti warna pemain"
+
+msgid "Click to change player position"
+msgstr "Klik untuk mengganti posisi pemain"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke semua slot"
+
+msgid "Click to close spectator slot"
+msgstr "Klik untuk menutup slot penonton"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "Rating pemain:"
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Klik untuk mengubah tingkat kesulitan"
+
+msgid "Waiting for player"
+msgstr "Menunggu pemain"
+
+msgid "Player is ready"
+msgstr "Pemain Siap"
+
+msgid "Player is downloading"
+msgstr "Pemain sedang mengunduh"
+
+msgid "Click when ready"
+msgstr "Klik saat sudah siap"
+
+msgid "Waiting for download"
+msgstr "Menunggu untuk mengunduh"
+
+msgid "READY?"
+msgstr "SIAP?"
+
+msgid "Tanks disabled!!"
+msgstr "Tank dimatikan!!"
+
+msgid "Cyborgs disabled."
+msgstr "Cyborg dimatikan."
+
+msgid "VTOLs disabled."
+msgstr "VTOL dimatikan."
+
+msgid "Satellite Uplink disabled."
+msgstr "Pusat Komunikasi Satelit dimatikan."
+
+msgid "Laser Satellite disabled."
+msgstr "Laser Satelit dimatikan."
+
+msgid "Structure Limits Enforced."
+msgstr "Batas Jumlah Struktur Diterapkan."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** kata sandi [%s] sekarang diperlukan! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** kata sandi TIDAK diperlukan! ***"
+
+msgid "Game Name Updated."
+msgstr "Nama Permainan Diperbarui."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Skirmish Satu Pemain"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Klik untuk melihat Peta"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Pilih Map\n"
+"Dapat diblokir oleh pemilihan dari pemain"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Pangkalan"
+
+msgid "Tech"
+msgstr "Teknologi"
+
+msgid "Technology Level 1"
+msgstr "Teknologi tingkat 1"
+
+msgid "Technology Level 2"
+msgstr "Teknologi tingkat 2"
+
+msgid "Technology Level 3"
+msgstr "Teknologi tingkat 3"
+
+msgid "Technology Level 4"
+msgstr "Teknologi tingkat 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Luncurkan Transporter"

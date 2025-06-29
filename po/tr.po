@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -324,7 +324,7 @@ msgid "IN-FLIGHT BRIEFING"
 msgstr "UÇUŞTA SUNUM"
 
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Takım Beta Dikey İniş ve Kalkış teknolojisini (DİvK)  araştırıyor."
+msgstr "Takım Beta Dikey İniş ve Kalkış teknolojisini (DİvK) araştırıyor."
 
 msgid "It's believed to be at a pre-Collapse airbase in this area."
 msgstr "Bu bölgede çökmek üzere olan bir Hava üssü olduğuna inanıyoruz."
@@ -336,7 +336,7 @@ msgid "BETA BASE MISSION: Hold at all costs"
 msgstr "BETA ÜSSÜ GÖREVİ: Ne pahasına olursa olsun üssü koru"
 
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Kolektif'ten kodlanmış veri akışı sinyalleri tespit ediyoruz."
+msgstr "Kolektiften kodlanmış veri akışı sinyalleri tespit ediyoruz."
 
 msgid "BETA BASE MISSION: Hold At All Costs"
 msgstr "BETA ÜSSÜ GÖREVİ: Ne Pahasına Olursa Olsun Üssü Koru"
@@ -351,7 +351,7 @@ msgid "TRANSPORT MISSION: Intercept convoy."
 msgstr "TAŞIMA GÖREVİ: Konvoyun yolunu kes."
 
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "Veri Kollektiften geliyor. Bu NEXUS Davetsiz misafir programının sonucu."
+msgstr "Veri Kolektiften geliyor. Bu NEXUS Davetsiz misafir programının sonucu."
 
 msgid "Before NEXUS switched itself off-line we accessed the following."
 msgstr "NEXUS çevrimdışı olmadan önce şunu ele geçirdik."
@@ -387,7 +387,7 @@ msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
 msgstr "TAŞIMA GÖREVİ: Sivilleri Toplama Kampından kurtar"
 
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Kollektif bu üste sivilleri topluyor ve onları öldürüyor."
+msgstr "Kolektif bu üste sivilleri topluyor ve onları öldürüyor."
 
 msgid "You are to rescue the civilians."
 msgstr "Git ve sivilleri kurtar."
@@ -408,13 +408,13 @@ msgid "The location of the enemy airbase is here; this is your primary objective
 msgstr "Düşman Havaalanı burada; bu birincil hedefin."
 
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Tüm Kollektif birliklerini öldür ve kalıntıları al."
+msgstr "Tüm Kolektif birliklerini öldür ve kalıntıları al."
 
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
 msgstr "İKİNCİL GÖREV: Düşman Taşıma Gemisini Düşür veya Yok Et"
 
 msgid "The Collective are rounding up all civilians in this area."
-msgstr "Kollektif bu bölgedeki tüm sivilleri topluyor."
+msgstr "Kolektif bu bölgedeki tüm sivilleri topluyor."
 
 msgid "They are then flying them to an unknown location."
 msgstr "Ardından bilinmeyen bir yere gönderiyor."
@@ -438,7 +438,7 @@ msgid "Proceed from the LZ to the reactor and destroy it."
 msgstr "İniş Alanından ilerle ve Reaktörü yok et."
 
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Kolektifin reaktörü çevrimiçi hale getirmesine izin verme."
+msgstr "Kolektifin reaktörü çevrim içi hale getirmesine izin verme."
 
 msgid "BETA BASE MISSION: Capture NASDA Central"
 msgstr "BETA ÜSSÜ GÖREVİ: KASSA Merkezini Al"
@@ -468,10 +468,10 @@ msgid "Destroy the site and return to your base."
 msgstr "Merkezi yok et ve üssüne geri dön."
 
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "TAŞIMA GÖREVİ: Düşman SAM Sitelerini Yoket"
+msgstr "TAŞIMA GÖREVİ: Düşman SAM Sitelerini Yok et"
 
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Eğer kaçacaksan, üssün etrafindaki karadan havaya uçaksavarları yoket."
+msgstr "Eğer kaçacaksan, üssün etrafındaki karadan havaya uçaksavarları yok et."
 
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
 msgstr "İniş Alanına uç, sonra karadan ilerleyerek SAM yerlerini yoket."
@@ -519,7 +519,7 @@ msgid "Congratulations on your successful evacuation of Beta Base."
 msgstr "Başarılı bir şekilde Beta Üssünü tahliye ettiğinizden dolayı sizi tebrik ederim komutanım."
 
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS Nükleer silahlara erişti ve Proje'yi yıkmayı amaç edindi."
+msgstr "NEXUS Nükleer silahlara erişti ve Projeyi yıkmayı amaç edindi."
 
 msgid "Take your forces to the Northern Sector"
 msgstr "Birliklerini Kuzey Bölgesine al"
@@ -534,7 +534,7 @@ msgid "TRANSPORT MISSION: Establish A Forward Base"
 msgstr "TAŞIMA GÖREVİ: Bir Yönlendirme Üssü Kur"
 
 msgid "Commander, the success of the Project lies with you."
-msgstr "Komutanım, Proje'nin başarısı size bağlı."
+msgstr "Komutanım, Projenin başarısı size bağlı."
 
 msgid "Secure an LZ, then establish a forward base."
 msgstr "İniş Alanının güvenliğini sağla ve bir yönlendirme üssü kur."
@@ -555,7 +555,7 @@ msgid "Coordinate Download Completed."
 msgstr "Koordinat İndirme Tamamlandı."
 
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "İniş Alanının güvenliğini sağla, sonra karadan ilerleyerek füze fırlatıcıları yoket."
+msgstr "İniş Alanının güvenliğini sağla, sonra karadan ilerleyerek füze fırlatıcıları yok et."
 
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
 msgstr "KUZEY BÖLGESİ GÖREVİ: Nükleer Saldırı"
@@ -564,7 +564,7 @@ msgid "All units must escape the area before the warhead detonates."
 msgstr "Bütün birimlerin savaşbaşlığı patlamadan önce bu bölgeden kaçmalılar."
 
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr "Havayolu ile kaçış mümkün değil. Karayoluyla kaçmalısınız."
+msgstr "Hava yolu ile kaçış mümkün değil. Kara yoluyla kaçmalısınız."
 
 msgid "The mountain range to the east should shield you from the blast."
 msgstr "Dağın etekleri sizi nükleer saldırıdan korumak için kalkan görevi görebilir."
@@ -597,7 +597,7 @@ msgid "Commander, we have defeated NEXUS."
 msgstr "Komutanım, NEXUS'u yendik."
 
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr "Ne yazık ki, NEXUS  sistemlerimizin performansını etkiledi. Bunu düzeltmeye çalışıyoruz."
+msgstr "Ne yazık ki, NEXUS sistemlerimizin performansını etkiledi. Bunu düzeltmeye çalışıyoruz."
 
 msgid "We are currently receiving this transmission."
 msgstr "Hala mesajlar alıyoruz."
@@ -621,7 +621,7 @@ msgid "Team Alpha power transfer in progress."
 msgstr "Alfa takımı güç aktarması devam ediyor."
 
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Komutanım, siz batı bölgesini terkettikten sonra bu kalıntıyı kurtardık."
+msgstr "Komutanım, siz batı bölgesini terk ettikten sonra bu kalıntıyı kurtardık."
 
 msgid "The benefits from researching it could be vast."
 msgstr "Bunu araştırmanın faydaları büyük olabilir."
@@ -1796,6 +1796,9 @@ msgstr "Tüm füze silolarını yok et"
 msgid "Rescue Alpha team from Nexus"
 msgstr "Alfa takımını Nexus'tan kurtar"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Nexus saldırgan yazılımını devre dışı bırakmak için Nexus karargahını imha et"
 
@@ -1817,8 +1820,8 @@ msgstr "Beta takımının bir parçasını Gamma takımı üssüyle bir araya ge
 msgid "Return to LZ"
 msgstr "İniş Bölgesine Geri Dön"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "Zor / Çılgın zorluk ipucu:"
+msgid "Insane difficulty hint:"
+msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Kendini Kolektif'ten korumak için harita boyunca güçlü bir üssü güçlendir"
@@ -2952,9 +2955,13 @@ msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Harici IP'niz: %s"
 
 msgid "Failed to create port mapping (timeout)"
+msgstr ""
+
+#, c-format
+msgid "Using %s network backend."
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -2971,6 +2978,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Bekleme odası sunucusuna ulaşmaya çalışırken hata: %s.\n"
+"İletişim noktasının (%d) gelen bağlantılara erişebilir olduğuna emin olun.\n"
+"Eğer bir yönlendirici kullanıyorsanız, UPnP'yi veya sisteminizin \n"
+"bağlantı noktasını kullanabilir hale getirin."
 
 msgid "Failed to get a lobby response!"
 msgstr "Bekleme odası cevabı alma başarısız!"
@@ -2987,6 +2998,18 @@ msgstr "Oyun tekrarı dosya biçimi desteklenmiyor"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Oyun tekrarı yüklenenemedi: Tekrar dosyası eksik veya bozulmuş."
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr ""
 
 msgid "Menu"
 msgstr "Menü"
@@ -3297,11 +3320,11 @@ msgstr "Sayborg Felaket Füzeli"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Sayborg Termik Alevi Atıcı"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr ""
 
 msgid "Armed with Flashlight Laser"
 msgstr "Flaşışığı Lazeri ile silahlandırılmış Sayborg"
@@ -3439,6 +3462,9 @@ msgstr "Zırhlandırılmış Gaus Top mevzisi"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Zırhlandırılmış Ağır Lazer koruma mevzi"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Zırhlandırılmış Plazmit Alevi atıcı mevzisi"
@@ -3668,6 +3694,9 @@ msgstr "Bomba hasarı +10%"
 msgid "Bomb damage +25%"
 msgstr "Bomba hasarı +%25"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Bomba Yükseltmesi"
 
@@ -3691,6 +3720,9 @@ msgstr "Böcek"
 
 msgid "Buggy"
 msgstr "Buggi"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Yerleşik tamir sistemlerini tanımlar"
@@ -3732,6 +3764,9 @@ msgstr "Petrolü daha etkili yakar"
 msgid "Cannon accuracy +10%"
 msgstr "Topçu hedef tutturması +%10"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Topçu Otomatik Yükleme Sistemi Kdm2"
 
@@ -3744,6 +3779,9 @@ msgstr "Topçu Otomatik Yükleme Sistemi"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Topçu hasarı +%25"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Topçu Kamyon"
@@ -3769,6 +3807,9 @@ msgstr "Topçu Hızlı Yükleme Sistemi"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Topçu yeniden yükleme süresi -%10"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Topçu Kulesi"
@@ -3875,6 +3916,12 @@ msgstr "Komutanlar bağlandıkları fabrika teslim noktasına gelen araçlara li
 msgid "Complete battlefield visibility"
 msgstr "Savaş alanını tam görmeni sağlar"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Kompozit Alaşımları Kdm2"
 
@@ -3933,6 +3980,15 @@ msgstr "Vinç1"
 
 msgid "Crane2"
 msgstr "Vinç2"
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Sayborg Kompozit Alaşımları Kdm2"
@@ -4000,6 +4056,12 @@ msgstr "Sayborg Süper Termal Zırhı"
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Sayborg Termal Zırhı Kdm2"
 
@@ -4008,6 +4070,9 @@ msgstr "Sayborg Termal Zırhı Kdm3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Sayborg Termal Zırhı"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4135,6 +4200,9 @@ msgstr "Otomatik tamiri etkinleştirir"
 msgid "Enemy"
 msgstr "Düşman"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Mühendislik"
 
@@ -4207,6 +4275,9 @@ msgstr "Sabit atış uçuş yörüngesi düzlüğünü arttırır"
 msgid "Fire Truck"
 msgstr "Ateş Kamyonu"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Elektro Manyetik Darbe Füzeleri Ateşler"
 
@@ -4241,12 +4312,18 @@ msgstr "Alev Atıcı Kobra Paletler"
 msgid "Flamer damage +25%"
 msgstr "Alev atıcı hasarı +%25"
 
-msgid "Flamer Fast Loader"
+msgid "Flamer Damage"
 msgstr ""
+
+msgid "Flamer Fast Loader"
+msgstr "Alev atıcı Hızlı Yükleme"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Alev atıcı yeniden yükleme süresi -%15"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Alev Atıcı Engerek Yarım Paletler"
@@ -4797,6 +4874,15 @@ msgstr "Obüs Otomatik Yükleyici"
 msgid "Howitzer damage +25%"
 msgstr "Obüs hasarı +%25"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Obüs Hızlı Yükleme Sistemi"
 
@@ -4806,6 +4892,15 @@ msgstr "Obüs yeniden yükleme süresi -%10"
 
 msgid "Howitzer"
 msgstr "Obüs"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "Kasırga AA Uçaksavar"
@@ -4870,6 +4965,9 @@ msgstr "Gelişmiş Mühendislik"
 msgid "Improved fire detection systems"
 msgstr "İyileştirilmiş ateş tespit sistemleri"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Geliştirilmiş Duvar Kdm2"
 
@@ -4921,11 +5019,11 @@ msgstr "Lazer optiklerindeki gelişmeler sayesinde ışınlardaki hafif dağılm
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Kundakçı Havan Mevzisi 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Kundakçı Havan Mevzi"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Kundakçı obüs mevzisi"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Kundakçı Havan Mevzi"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Kundakçı Obüs bir algılayıcıya bağlanabilir"
@@ -5129,9 +5227,15 @@ msgstr "Lazer AA Topu Kullanılabilir"
 msgid "Laser accuracy +10%"
 msgstr "Lazer hedef tutturması +%10"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Lazer hasarı +%25"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Lazer hedefleyici hedefi renklendirir ve kılavuzluk yapar"
@@ -5139,6 +5243,9 @@ msgstr "Lazer hedefleyici hedefi renklendirir ve kılavuzluk yapar"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Lazer yeniden yükleme süresi -%15"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Lazer Uydusu Komuta Merkezi"
@@ -5316,6 +5423,12 @@ msgstr "Orta Topçu"
 msgid "Medium Super Heavy Body"
 msgstr "Küçük Süper Ağır Gövde"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Zırhlı Mini Roket güçlü nokta"
 
@@ -5371,6 +5484,9 @@ msgstr "Mini Roket Engerek Tekerlekler"
 msgid "Missile accuracy +10%"
 msgstr "Füze hedef tutturması +%10"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "Füzeler hedefi izler ve ona yönelir"
 
@@ -5378,12 +5494,18 @@ msgstr "Füzeler hedefi izler ve ona yönelir"
 msgid "Missile damage +25%"
 msgstr "Füze hasarı +%25"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Füze Kalesi"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Füze yeniden yükleme süresi -%15"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Füze Yükseltmesi"
@@ -5404,6 +5526,9 @@ msgstr "İntikamdan daha fazla zırh ve beden puanına sahip"
 msgid "Mortar accuracy +10%"
 msgstr "Havan topu hedef tutturması +%10"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Havan Topu Otomatik Yükleme Sistemi Kdm2"
 
@@ -5420,6 +5545,9 @@ msgstr "Havan Topu Kobra Yarım Paletler"
 msgid "Mortar damage +25%"
 msgstr "Havan topu hasarı +%25"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Havan Hızlı Yükleyici"
 
@@ -5429,6 +5557,9 @@ msgstr "Havan Topu Kuyusu"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Havan topu yeniden yükleme süresi -%10"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Havan Topu Hedefleme Bilgisayarı"
@@ -5562,11 +5693,11 @@ msgstr "Yeni Sistem Binası Kullanılabilir"
 msgid "New Systems Tower Available"
 msgstr "Yeni Sistem Kulesi Kullanılabilir"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Yeni Sistem Tareti Tasarım için Hazır"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
 
 msgid "New Thermal Emissions detection"
 msgstr "Yeni Termal Emisyon Tespit Sistemi"
@@ -5664,6 +5795,12 @@ msgstr "Özgün Çatışma"
 msgid "Panther"
 msgstr "Panter"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Biberpot Kuyusu"
 
@@ -5753,6 +5890,9 @@ msgstr "Güç üretimi +%30"
 msgid "Power Research Completed"
 msgstr "Güç Araştırması Tamamlandı"
 
+msgid "Power"
+msgstr "Güç"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Güçlü elektromanyetik darbe silahı teknolojisini kullanır"
 
@@ -5761,6 +5901,9 @@ msgstr "GüçLab"
 
 msgid "Produces Cyborgs"
 msgstr "Sayborgları Üretir"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Profesyonel ve Normal seviye birimler korunur"
@@ -5834,6 +5977,12 @@ msgstr "Radar Tespit Edici Kule"
 msgid "Radar Detector"
 msgstr "Radar Tespit Edici"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Demir Topu hedef tutturması +%10"
@@ -5876,6 +6025,9 @@ msgstr "Demir Silahı Yükseltmesi"
 msgid "Rail Gun"
 msgstr "Demir Topu"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Demir Hedef Tahmin Bilgisayarı"
 
@@ -5906,6 +6058,12 @@ msgstr "NEXUS virüsü sistemlerimizden silindi"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "DİvKların yakıtlarını doldurur, mühimmatlarını yükler ve tamir eder"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Desteklenmiş Üs Binası Materyali Kdm2"
@@ -5985,6 +6143,9 @@ msgstr "Araştırma hızı +%30"
 msgid "Research speed +85%"
 msgstr "Araştırma hızı +%85"
 
+msgid "Research"
+msgstr "Araştırma"
+
 msgid "Retaliation"
 msgstr "İsyan"
 
@@ -6043,6 +6204,9 @@ msgstr "Robotik DİvK Silahlandırma"
 msgid "Rocket accuracy +10%"
 msgstr "Roket hedef tutturması +%10"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Roket Topçusu; bir algılayıcıya bağlanabilir"
 
@@ -6061,6 +6225,9 @@ msgstr "Roketli Buggi"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Roket hasarı +%25"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Roket araç emisyonlarını tespit edecek ve kilitlenecek"
@@ -6083,6 +6250,9 @@ msgstr "Roket Hızlı Yükleme Sistemi"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Roket yeniden yükleme süresi -%15"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Roket hedefi vurmak için lazer kullanacak"
@@ -6239,6 +6409,9 @@ msgstr "Algılayıcı Yükseltme Kdm3"
 
 msgid "Sensor Upgrade"
 msgstr "Algılayıcı Yükseltmesi"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "Algılayıcı Geliştirildi"
@@ -6405,11 +6578,11 @@ msgstr "Sinaptik Bağlantı Veri Analizi Kdm2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sinaptik Bağlantı Veri Analizi Kdm3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Sinaptik Bağlantı Veri Analizi"
-
 msgid "Synaptic link data analysis"
 msgstr "Sinaptik bağlantı veri analizi"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Sinaptik Bağlantı Veri Analizi"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Sinaptik Bağlantı Sinyal Bozucu teknolojisi"
@@ -6422,6 +6595,9 @@ msgstr "Sinaptik Bağlantı"
 
 msgid "Systems Research Completed"
 msgstr "Sistem Araştırması Tamamlandı"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr ""
@@ -6449,6 +6625,9 @@ msgstr "Tank Katili İntikam Paletler"
 
 msgid "Tank Killer"
 msgstr "Tank Katili"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Tank Tuzakları"
@@ -6492,6 +6671,12 @@ msgstr "Termal zırh +%40"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "Termal Zırh +%45"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
 
 msgid "Thermal Armor Mk2"
 msgstr "Termal Zırh Kdm2"
@@ -6537,6 +6722,9 @@ msgstr "Titanyum destekli duvar"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "Kule savaşları YZ, NullBot tabanlı"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "Palet Yürütücü"
@@ -6804,7 +6992,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "DİvK YPZD Bomba Demeti"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "DİvK Ağır Topu"
 
 msgid "VTOL Heavy Laser"
 msgstr "DİvK Ağır Lazeri"
@@ -6860,6 +7048,9 @@ msgstr "DİvK Mini Roketi"
 msgid "VTOL Needle Gun"
 msgstr "DİvK İğne Topu"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "DİvK Fosfor Bomba Demeti"
 
@@ -6883,6 +7074,9 @@ msgstr "DİvK Silahlandırma Rampası"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "DİvK Silahlandırma Rampaları, DİvK uçuşları için gereklidir"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "DİvK Felaket Füzesi"
@@ -7243,7 +7437,7 @@ msgid "Enable / disable port mapping when hosting"
 msgstr ""
 
 msgid "[1, true, 0, false]"
-msgstr ""
+msgstr "[1, doğru, 0, yanlış]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
 msgstr "Lobi 'bölü' komutlarını etkinleştir (istemcileri bağlamak için)"
@@ -7305,10 +7499,16 @@ msgstr "Varsayılan kurulum sohbeti yapılandırmasını / izinlerini ayarlama"
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Asenkron birleştirme onayını etkinleştir (istemcileri bağlamak için)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7614,421 +7814,12 @@ msgstr "Oyun kurmak için TCP portu %d güvenlik duvarınızda veya yönlendiric
 msgid "Load Multiplayer Replay"
 msgstr "Çoklu-oyuncu tekrarını görüntüle"
 
-msgid "Game Options"
-msgstr "Oyun Ayarları"
-
-msgid "Graphics Options"
-msgstr "Grafik Ayarları"
-
-msgid "Video Options"
-msgstr "Video Ayarları"
-
-msgid "Audio / Zoom Options"
-msgstr "Ses / Yakınlaştırma Seçenekleri"
-
-msgid "Mouse Options"
-msgstr "Fare Ayarları"
-
-msgid "Key Mappings"
-msgstr "Klavye Kısayolları"
-
-msgid "Music Manager"
-msgstr "Müzik Yöneticisi"
-
-msgid "Multiplay Options"
-msgstr "Çoklu-oyuncu Seçenekleri"
-
-msgid "OPTIONS"
-msgstr "AYARLAR"
-
-msgid "Open Configuration Directory"
-msgstr "Yapılandırma Dizinini Aç"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "Varsayılan dosya gezgininde yapılandırma dizini açılamadı."
-
-msgid "Configuration directory is reported as:"
-msgstr "Yapılandırma dizini şu şekilde bildirilmiştir:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Eğer konteyner/izole bir ortamda çalıştırılıyorsa, bu diskteki asıl dizinden farklılaşabilir."
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Manuel olarak tespit etme hakkında daha fazla bilgi için lütfen belgelendirmeyi okuyunuz."
-
-msgid "Failed to open configuration directory"
-msgstr "Yapılandırma dizini açılması başarısız"
-
-msgid "1×"
-msgstr "1×"
-
-msgid "2×"
-msgstr "2×"
-
-msgid "Fullscreen"
-msgstr "Tam Ekran"
-
-msgid "Unsupported"
-msgstr "Desteklenmiyor"
-
-msgid "Off"
-msgstr "Kapalı"
-
-msgid "50%"
-msgstr "%50"
-
-msgid "Black"
-msgstr "Siyah"
-
-msgid "On"
-msgstr "Açık"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "Dönüşlü"
-
-msgid "Fixed"
-msgstr "Sabit"
-
-msgid "Instant"
-msgstr "Anlık"
-
-msgid "Tracked"
-msgstr "İzleniyor"
-
-msgid "High"
-msgstr "Yüksek"
-
-msgid "Default"
-msgstr "Varsayılan"
-
-msgid "Terrain quality mode not available."
-msgstr "Arazi kalitesi modu mevcut değil."
-
-msgid "Medium Quality"
-msgstr "Orta Kalite"
-
-msgid "High Quality"
-msgstr "Yüksek Kalite"
-
-msgid "Shadow mapping not available on this system."
-msgstr "Gölge eşleme bu sistemde kullanılamaz."
-
-msgid "Low"
-msgstr "Düşük"
-
-msgid "Ultra"
-msgstr "Çok Yüksek"
-
-msgid "Shadow filtering not available on this system."
-msgstr "Gölge filtreleme bu sistemde kullanılamaz."
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* Ayarlar oyun tekrar başlatıldığında etkili olacaktır"
-
-msgid "Terrain Quality"
-msgstr "Arazi Kalitesi"
-
-msgid "Terrain Shading"
-msgstr "Arazi Gölgelendirme"
-
-msgid "Shadows"
-msgstr "Gölgeler"
-
-msgid "Shadow Resolution"
-msgstr "Gölge Çözünürlüğü"
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr "Detay Uzaklığı"
-
-msgid "Fog"
-msgstr "Sis"
-
-msgid "Radar"
-msgstr "Radar"
-
-msgid "Radar Jump"
-msgstr "Radar Zıplaması"
-
-msgid "Video Playback"
-msgstr "Video Oynatma"
-
-msgid "Scanlines"
-msgstr "Tarama Çizgileri"
-
-msgid "Screen Shake"
-msgstr "Ekran Sarsıntısı"
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "GRAFİK AYARLARI"
-
-msgid "Disabled"
-msgstr "Devre dışı"
-
-msgid "Enabled"
-msgstr "Etkin"
-
-msgid "Auto"
-msgstr "Otomatik"
-
-msgid "Voice Volume"
-msgstr "Ses Düzeyi"
-
-msgid "FX Volume"
-msgstr "Ses Efekti"
-
-msgid "Music Volume"
-msgstr "Müzik Sesi"
-
-msgid "Subtitles"
-msgstr "Altyazılar"
-
-msgid "HRTF"
-msgstr "HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "HRTF cihazda/sistemde/OpenAL Kütüphanesi'nde desteklenmiyor"
-
-msgid "Map Zoom"
-msgstr "Harita Yakınlaştırması"
-
-msgid "Map Zoom Rate"
-msgstr "Harita Yakınlaştırma Oranı"
-
-msgid "Radar Zoom"
-msgstr "Radar Yakınlaştırması"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "SES / YAKINLAŞTIRMA Seçenekleri"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir (veya pencere yöneticisinin çözünürlüğü ile)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Çözünürlüğü pencereyi normal şekilde boyutlandırarak değiştirebilirsiniz (Köşe/kenarı sürüklemeyi deneyin)."
-
-msgid "Graphics Mode"
-msgstr "Grafik Kipi"
-
-msgid "Resolution"
-msgstr "Çözünürlük"
-
-msgid "Display Scale"
-msgstr "Görüntü Ölçeği"
-
-msgid "Adaptive"
-msgstr "Uyarlanabilir"
-
-msgid "Windowed"
-msgstr "Pencere"
-
-msgid "Desktop Full"
-msgstr "Penceresiz Tam Ekran"
-
-msgid "On (Fullscreen)"
-msgstr "Açık (Tam Ekran)"
-
-msgid "Texture size"
-msgstr "Doku kalitesi"
-
-msgid "Vertical sync"
-msgstr "Dikey eşitleme"
-
-msgid "Antialiasing*"
-msgstr "Yaşarma Önleme*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Uyarı: Yaşarma önleme özellikle > 16 değerlerde çökmelere sebep olabilir"
-
-msgid "Graphics Backend*"
-msgstr "Grafik Altyapısı*"
-
-msgid "Min on Focus Loss"
-msgstr "Odak Kaybında Küçült"
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr "Odak kaybı durumunda pencerenin otomatik olarak simge durumuna küçültülmesi gerekip gerekmediği"
-
-msgid "Alt+Enter Toggle"
-msgstr "Alt+Enter Değişimi"
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr "Tuşlarla tam ekran modu geçişi yapmak için: Alt + Enter"
-
-msgid "VIDEO OPTIONS"
-msgstr "VİDEO AYARLARI"
-
-msgid "Unable to change Vertical Sync"
-msgstr "Dikey Senk. değiştirme başarısız"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"Warzone, dikey senkronizasyon modunu değiştiremedi.\n"
-"Sisteminiz/sürücüleriniz diğer modları desteklemiyor olabilir."
-
-msgid "Middle Mouse"
-msgstr "Orta Fare Tuşu"
-
-msgid "Right Mouse"
-msgstr "Sağ Fare Tuşu"
-
-msgid "Reverse Rotation"
-msgstr "Tersine Döndür"
-
-msgid "Trap Cursor"
-msgstr "İmleci Yakala"
-
-msgid "Switch Mouse Buttons"
-msgstr "Fare Tuşlarını Değiştir"
-
-msgid "Rotate Screen"
-msgstr "Ekranı Çevir"
-
-msgid "Colored Cursors"
-msgstr "Renkli İmleçler"
-
-msgid "Cursor Size"
-msgstr "İmleç Boyutu"
-
-msgid "MOUSE OPTIONS"
-msgstr "FARE AYARLARI"
-
-msgid "Super Easy"
-msgstr "Çok Kolay"
-
-msgid "Easy"
-msgstr "Kolay"
-
-msgid "Hard"
-msgstr "Zor"
-
-msgid "Insane"
-msgstr "Deli"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr "%s yüklenemedi."
 
 msgid "Please remove all incompatible mods."
 msgstr "Lütfen bütün uyumsuz modları kaldırınız."
-
-msgid "GAME OPTIONS"
-msgstr "OYUN AYARLARI"
-
-msgid "Language"
-msgstr "Lisan"
-
-msgid "Unit Colour:"
-msgstr "Birim Rengi:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Çatışma/Çok oyunculu"
-
-msgid "Campaign Difficulty"
-msgstr "Seferberlik Zorluğu"
-
-msgid "Camera Speed"
-msgstr "Kamera Hızı"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "Warzone 2100 çevirisinin geliştirilmesi için bize yardımcı olun: %s"
-
-msgid "Click to open webpage."
-msgstr "Web sayfasını açmak için tıkla."
-
-msgid "Insane Difficulty"
-msgstr "Çılgın seviyesi zorluk"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "Bu zorluk seviyesi çok tecrübeli oyuncular içindir!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u dakika"
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u saniye"
-
-msgid "None"
-msgstr "Hiçbiri"
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr "Oyun Seçenekleri:"
-
-msgid "Game Port"
-msgstr "Oyun Portu"
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr "Hareketsizlik için zaman aşımı"
-
-msgid "Lag Kick"
-msgstr "Gecikme Atması"
-
-msgid "Spectator Slots"
-msgstr "Gözlemci Yuvaları"
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr "Derecelendirmeyi Etkinleştir"
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "ÇOKLU-OYUNCU SEÇENEKLERİ"
 
 msgid "Mod: "
 msgstr "Mod: "
@@ -8091,10 +7882,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Oyuncu %u hile ile (debug menü) yeni birimini oluşturdu."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Oyun içi Ayarları Göster"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Oyun içi Ayarları Kapa"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Eski Teknoloji Gizleniyor"
@@ -8124,25 +7915,25 @@ msgstr ""
 "Favorilerden kaldırmak için sağ tıklayın"
 
 msgid "New Joins"
-msgstr ""
+msgstr "Yeni katılımlar"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Yenile"
 
 msgid "Host Chat Options"
-msgstr ""
+msgstr "Kurucu sohbet seçenekleri"
 
 msgid "Global Options:"
 msgstr ""
 
 msgid "Enable All"
-msgstr ""
+msgstr "Tümünü Etkinleştir"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Tümünü Devre Dışı Bırak"
 
 msgid "Chat Options"
-msgstr ""
+msgstr "Sohbet Seçenekleri"
 
 msgid "Mute or configure player free chat."
 msgstr ""
@@ -8151,18 +7942,18 @@ msgid "The host has globally muted 1+ players."
 msgstr ""
 
 msgid "Local"
-msgstr ""
+msgstr "Yerel"
 
 msgid "Select / Assign Group Number: "
 msgstr ""
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Grup %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "%u Grubundaki Birimleri Seç"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
@@ -8178,10 +7969,10 @@ msgid "Group buttons will glow red when units are lost (or taking lots of damage
 msgstr ""
 
 msgid "Unit Groups"
-msgstr ""
+msgstr "Birim Grupları"
 
 msgid "Select a Group"
-msgstr ""
+msgstr "Bir Grup Seçin"
 
 msgid "Assign Selected Units to a Group"
 msgstr ""
@@ -8205,62 +7996,62 @@ msgid "Progress Bar"
 msgstr "İlerleme Çubuğu"
 
 msgid "To:"
-msgstr ""
+msgstr "Kime:"
 
 msgid "All"
-msgstr ""
+msgstr "Tümü"
 
 msgid "Team"
 msgstr "Takım"
 
 msgid "Human Teammates"
-msgstr ""
+msgstr "İnsan Takım Arkadaşları"
 
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Bot takım arkadaşları"
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u oyuncular"
 
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Bir alıcı seçin"
 
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Hızlı Sohbet:"
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Lobi sohbeti"
 
 msgid "Requests"
-msgstr ""
+msgstr "İstekler"
 
 msgid "Notices"
-msgstr ""
+msgstr "Uyarılar"
 
 msgid "Reactions"
-msgstr ""
+msgstr "Tepkiler"
 
 msgid "Taunts"
-msgstr ""
+msgstr "Alaylar"
 
 msgid "Coordination"
-msgstr ""
+msgstr "Koordinasyon"
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Öneriler"
 
 msgid "Cheats"
-msgstr ""
+msgstr "Hileler"
 
 msgid "End-Game"
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Kurucu"
 
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8285,13 +8076,13 @@ msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr ""
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Üzgünüm, anlamıyorum. (Lütfen hızlı sohbet kullanın)"
 
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Daha fazla birim inşa etmeyi öneriyorum"
 
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Farklı birimler inşa etmeyi öneriyorum"
 
 msgid "I suggest: Checking the team strategy view"
 msgstr ""
@@ -8306,7 +8097,7 @@ msgid "I suggest: Building anti-air"
 msgstr ""
 
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "Birimlerini tamir etmeyi öneriyorum"
 
 msgid "I suggest: Building repair facilities"
 msgstr ""
@@ -8318,76 +8109,76 @@ msgid "I suggest: Capturing oil resources"
 msgstr ""
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Selam herkes!"
 
 msgid "Welcome!"
-msgstr ""
+msgstr "Hoş geldin!"
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "İzlemek istiyorum"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Oynamak istiyorum"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Takımları değiştirmek istiyorum"
 
 msgid "Please check Ready so we can start"
 msgstr ""
 
 msgid "Please wait"
-msgstr ""
+msgstr "Lütfen bekle"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "Hadi!"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Neredeyse hazır"
 
 msgid "Ready"
-msgstr ""
+msgstr "Hazır"
 
 msgid "Be right back"
-msgstr ""
+msgstr "Hemen döneceğim"
 
 msgid "I'm back"
-msgstr ""
+msgstr "Geldim"
 
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 msgid "No"
-msgstr ""
+msgstr "Hayır"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Belki"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Henüz değil"
 
 msgid "Soon"
-msgstr ""
+msgstr "Yakında"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Teşekkürler"
 
 msgid "No problem"
-msgstr ""
+msgstr "Sorun değil"
 
 msgid "Well-played"
-msgstr ""
+msgstr "İyi oynadın"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Üzgünüm, anlamıyorum. (Lütfen hızlı sohbet kullanın)"
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Hazır ol..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Buna pişman olacaksın"
 
 msgid "Barely a scratch!"
 msgstr ""
@@ -8405,16 +8196,16 @@ msgid "Focus attacks where marked"
 msgstr ""
 
 msgid "Retreat!"
-msgstr ""
+msgstr "Geri Çekilin!"
 
 msgid "I need help!"
-msgstr ""
+msgstr "Yardıma ihtiyacım var!"
 
 msgid "Left side"
-msgstr ""
+msgstr "Sol taraf"
 
 msgid "Right side"
-msgstr ""
+msgstr "Sağ taraf"
 
 msgid "Transfer Request: Units"
 msgstr ""
@@ -8426,13 +8217,13 @@ msgid "Attacking now!"
 msgstr ""
 
 msgid "On my way!"
-msgstr ""
+msgstr "Yoldayım!"
 
 msgid "They're coming!"
-msgstr ""
+msgstr "Geliyorlar!"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "Saldırıya uğruyorum!"
 
 msgid "I'm rushing oils"
 msgstr ""
@@ -8441,13 +8232,13 @@ msgid "They're rushing oils!"
 msgstr ""
 
 msgid "I don't have enough power"
-msgstr ""
+msgstr "Yeterli gücüm yok"
 
 msgid "Build more units"
-msgstr ""
+msgstr "Daha fazla birim inşa et"
 
 msgid "Build different units"
-msgstr ""
+msgstr "Farklı birimler inşa et"
 
 msgid "Check team strategy view"
 msgstr ""
@@ -8462,49 +8253,49 @@ msgid "Build anti-air"
 msgstr ""
 
 msgid "Repair your units"
-msgstr ""
+msgstr "Birimlerini tamir et"
 
 msgid "Build repair facilities"
 msgstr ""
 
 msgid "Build power generators"
-msgstr ""
+msgstr "Güç jeneratörleri inşa et"
 
 msgid "Capture oil resources"
 msgstr ""
 
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Bu iyi gitmedi..."
 
 msgid "I have another plan"
-msgstr ""
+msgstr "Başka bir planım var"
 
 msgid "Good game"
-msgstr ""
+msgstr "İyi oyundu"
 
 msgid "I give up"
-msgstr ""
+msgstr "Vaz geçiyorum"
 
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Üzgünüm, gitmem gerek"
 
 msgid "Message delivery failure - try again"
 msgstr "Mesaj iletim hatası - tekrar deneyin"
 
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Harita indirildi"
 
 msgid "Admin modified a setting"
 msgstr ""
 
 msgid "Bot Allies"
-msgstr ""
+msgstr "Bot düşmanlar"
 
 msgid "Human Allies"
-msgstr ""
+msgstr "İnsan Düşmanlar"
 
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
+msgstr "Aynı anda bir çok mesaj attın. Lütfen daha sonra tekrar dene."
 
 msgid "Research Progress"
 msgstr "Araştırma İlerlemesi"
@@ -8513,22 +8304,22 @@ msgid "Ally progress"
 msgstr "Müttefik ilerlemesi"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tanklar"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Sayborglar"
 
 msgid "No teammates."
-msgstr ""
+msgstr "Takım arkadaşı yok."
 
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "Öteki takımların planlamayı bitirmesi bekleniyor."
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Silahlar:"
 
 msgid "Units:"
-msgstr ""
+msgstr "Birimler:"
 
 msgid "Resume Game"
 msgstr "Oyuna Dön"
@@ -8539,17 +8330,8 @@ msgstr "UYARI: Kurucusunuz. Oyundan çıkarsanız, herkes için oyun biter!"
 msgid "Host Quit"
 msgstr "Kurucu Çıkışı"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Taktiksel Arayüz (Hedef Kaynak Simgesi): Göster"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Taktiksel Arayüz (Hedef Kaynak Simgesi): Gizle"
-
-msgid "Go Back"
-msgstr "Geri Dön"
-
 msgid "View Guide"
-msgstr ""
+msgstr "Rehberi görüntüle"
 
 msgid "Load Game"
 msgstr "Oyun Yükle"
@@ -8580,15 +8362,6 @@ msgstr "Oyun kurucu olmadan devam edemez."
 
 msgid "-->  QUIT  <--"
 msgstr "-->  ÇIKIŞ  <--"
-
-msgid "Audio Options"
-msgstr "Ses Ayarları"
-
-msgid "View Key Mappings"
-msgstr "Klavye Kısayollarını Göster"
-
-msgid "Shake"
-msgstr "Sarsılma"
 
 msgid "Save Campaign Game"
 msgstr "Seferberlik Oyununu Kaydet"
@@ -8625,25 +8398,28 @@ msgid "Please try removing any new mods - they may have issues or be incompatibl
 msgstr ""
 
 msgid "Loaded mod(s):"
-msgstr ""
+msgstr "İndirilmiş mod(lar):"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
 msgstr ""
 
 msgid "Error Loading Game Data"
+msgstr "Oyun verisi yüklemede hata"
+
+msgid "Global Keys"
 msgstr ""
 
-msgid "Global Hotkeys"
-msgstr "Genel klavye kısayolları"
+msgid "Other Keys"
+msgstr ""
 
-msgid "Other Hotkeys"
-msgstr "Diğer kısayollar"
+msgid "Gameplay Keys"
+msgstr ""
 
-msgid "Gameplay"
-msgstr "Oynanış"
+msgid "Radar Keys"
+msgstr ""
 
-msgid "Debug"
-msgstr "Hata-ayıklama"
+msgid "Debug Keys"
+msgstr ""
 
 msgid "Debug (level editor)"
 msgstr "Hata-ayıklama(bölüm editörü)"
@@ -8653,9 +8429,6 @@ msgstr "Hata-ayıklama (seçim)"
 
 msgid "Manufacture"
 msgstr "Üretim"
-
-msgid "Research"
-msgstr "Araştırma"
 
 msgid "Build"
 msgstr "İnşa"
@@ -9021,8 +8794,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Tüm Ağır Hasarlı Birimleri seç"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "Sağlığı >%50 olan savaş kara birimlerini seç ve grupları seçme."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr ""
 
 msgid "Select all Half-tracks"
 msgstr "Tüm Yarım Paletli Birimleri seç"
@@ -9191,9 +8964,6 @@ msgstr "Tam ekran"
 
 msgid "Waiting for Power"
 msgstr "Güç Bekliyor"
-
-msgid "Power"
-msgstr "Güç"
 
 msgid "Power Per Second"
 msgstr "Saniye Başına Güç"
@@ -9656,21 +9426,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr "HızlıKayıt dosyası henüz mevcut değil"
 
-msgid "<not bound>"
-msgstr "<atanmamış>"
-
-msgid "<Fixed Key>"
-msgstr "<Sabit Tuş>"
-
-msgid "KEY MAPPING"
-msgstr "KLAVYE KISAYOLLARI"
-
-msgid "Return To Previous Screen"
-msgstr "Bir Önceki Ekrana Dön"
-
-msgid "Select Default"
-msgstr "Varsayılanı Seç"
-
 msgid "Parent directory"
 msgstr "Üst dizin"
 
@@ -9691,8 +9446,14 @@ msgstr "Otokayıt %s"
 msgid "AutoSave %s failed"
 msgstr "OtoKayıt %s başarısız oldu"
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Oyun Kaydedilemedi!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Taşımaya Yükle"
@@ -9771,8 +9532,20 @@ msgstr "%s, %s ile İttifak Kurdu"
 msgid "You Discover Blueprints For %s"
 msgstr "%s Kalıntılarını Keşfettin"
 
+msgid "Super Easy"
+msgstr "Çok Kolay"
+
+msgid "Easy"
+msgstr "Kolay"
+
 msgid "Medium"
 msgstr "Orta"
+
+msgid "Hard"
+msgstr "Zor"
+
+msgid "Insane"
+msgstr "Deli"
 
 msgid "Commander"
 msgstr "Komutan"
@@ -9787,103 +9560,32 @@ msgstr "EKSİK YZ AÇIKLAMASI"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "YZ turnuvası: %%%3.1f kazanma, %%%3.1f kayıp, %%%3.1f beraberlik"
 
-msgid "Tanks disabled!!"
-msgstr "Tanklar Devre Dışı!!"
-
-msgid "Cyborgs disabled."
-msgstr "Sayborglar devre dışı."
-
-msgid "VTOLs disabled."
-msgstr "DİvKlar Devre Dışı."
-
-msgid "Satellite Uplink disabled."
-msgstr "Uydu Yer Üssü devre dışı."
-
-msgid "Laser Satellite disabled."
-msgstr "Lazer Uydusu devred dışı."
-
-msgid "Structure Limits Enforced."
-msgstr "Yapı Sınırları Zorlanmış."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Rastgeleştirmek ya da harita değişikliği için yeterli oy yok."
-
-msgid "Select Game Name"
-msgstr "Oyun İsmi Seç"
-
-msgid "Game Name"
-msgstr "Oyun İsmi"
-
-msgid "One-Player Skirmish"
-msgstr "Tek Kişilik Çatışma"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Harita Seç\n"
-"Oyuncuların oyları ile engellenebilir"
-
-msgid "Map-Mod!"
-msgstr "Harita Modu!"
-
-msgid "Random map!"
-msgstr "Rastgele harita!"
-
-msgid "Click to set Password"
-msgstr "Şifreyi ayarlamak için tıklayın"
-
-msgid "Enter password here"
-msgstr "Parolayı buraya girin"
 
 msgid "Select Player Name"
 msgstr "Oyuncu İsmi Seç"
 
-msgid "Alliances"
-msgstr "İttifaklar"
-
-msgid "Base"
-msgstr "Üs"
-
-msgid "Map Preview"
-msgstr "Harita Önizlemesi"
-
-msgid "Click to see Map"
-msgstr "Haritayı görmek için tıkla"
-
-msgid "Show Structure Limits"
-msgstr "Bina Limitlerini Göster"
-
-msgid "Set Structure Limits"
-msgstr "Bina Limitlerini Ayarla"
-
-msgid "Random Game Options"
-msgstr "Rastgele Oyun Seçenekleri"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
-"Rastgele Oyun Seçenekleri\n"
-"Oyuncuların oyları ile engellenebilir"
 
-msgid "Tech"
-msgstr "Tekn."
+msgid "Blind Game:"
+msgstr ""
 
-msgid "Technology Level 1"
-msgstr "Teknoloji Seviyesi 1"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "Oyuncu adları (oyun bitene kadar) görünür olmayacak"
 
-msgid "Technology Level 2"
-msgstr "Teknoloji Seviyesi 2"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "Teknoloji Seviyesi 3"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "Oyuncu adları (oyun başlayana kadar) görünür olmayacak"
 
-msgid "Technology Level 4"
-msgstr "Teknoloji Seviyesi 4"
+msgid "OPTIONS"
+msgstr "AYARLAR"
 
-msgid "Start Hosting Game"
-msgstr "Oyun Kurmayı Başlat"
+msgid "Return To Previous Screen"
+msgstr "Bir Önceki Ekrana Dön"
 
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
@@ -9941,10 +9643,10 @@ msgstr "Oyun kurucusu, sizi oyundan attı."
 
 #, c-format
 msgid "The host has banned %s from the game!"
-msgstr ""
+msgstr "Oyun kurucusu, %s kullanıcısını oyundan attı!"
 
 msgid "The host has banned you from the game."
-msgstr ""
+msgstr "Oyun kurucusu, sizi oyundan attı."
 
 #, c-format
 msgid "Failed to move %s to Spectators"
@@ -10025,6 +9727,13 @@ msgstr "Bu gözlemciyi, bir oyuncu ile değiştirmek ister misiniz?"
 msgid "Yes, select Player slot"
 msgstr "Evet, oyuncu slotunu seç"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "Katılanlar:"
 
@@ -10043,63 +9752,8 @@ msgstr "Gözlemci katılımını etkinleştir"
 msgid "Lock Teams"
 msgstr "Takımları Kilitle"
 
-msgid "Choose Team"
-msgstr "Takım Seç"
-
-msgid "Teams locked"
-msgstr "Takımlar kilitli"
-
-msgid "Click to change player colour"
-msgstr "Oyuncu renklerini değiştirmek için tıkla"
-
-msgid "Click to change player position"
-msgstr "Oyun konumunu değiştirmek için tıkla"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "YZ değiştirmek için tıklayın, seçimi dağıtmak için sağ tıklayın"
-
-msgid "Click to close spectator slot"
-msgstr "Gözlemci yuvasını kapatmak için tıkla"
-
-msgid "Player ID: "
-msgstr "Oyuncu Kimliği: "
-
-msgid "(none)"
-msgstr "(hiçbiri)"
-
-msgid "Alt Name:"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Player rating:"
-msgstr "Oyuncu puanı:"
-
-msgid "Host provided"
-msgstr "Sağlanan sunucu"
-
-#, c-format
-msgid "From: %s"
-msgstr "Kimden: %s"
-
-msgid "Click to change difficulty"
-msgstr "Zorluğu değiştirmek için tıkla"
-
-msgid "Waiting for player"
-msgstr "Diğer oyuncular bekleniyor"
-
-msgid "Player is ready"
-msgstr "Oyuncu hazır"
-
-msgid "Player is downloading"
-msgstr "Oyuncu indiriyor"
-
-msgid "Click when ready"
-msgstr "Hazırsan tıkla"
-
-msgid "Waiting for download"
-msgstr "İndirmek için bekliyor"
-
-msgid "READY?"
-msgstr "HAZIR MISIN?"
 
 msgid "For Spectator:"
 msgstr "Gözlemci için:"
@@ -10120,19 +9774,19 @@ msgid "Kicked from game"
 msgstr "Oyundan atıldınız"
 
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr ""
+msgstr "Kurucu, serbest sohbeti kapattı. Lütfen hızlı sohbeti kullanın."
 
 msgid "Quick Chat"
-msgstr ""
+msgstr "Hızlı Sohbet"
 
 msgid "Press the Tab key to open Quick Chat."
-msgstr ""
+msgstr "Hızlı sohbeti açmak için Tab tuşunu kullanın."
 
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr ""
+msgstr "Kurucu, serbest sohbeti kapattı. Lütfen hızlı sohbeti veya /hostmsg komutlarını kullanın."
 
 msgid "The host has enabled free chat for you."
-msgstr ""
+msgstr "Kurucu, senin için serbest sohbeti açtı."
 
 msgid "Copy Text to Clipboard"
 msgstr "Metni panoya kopyala"
@@ -10163,32 +9817,16 @@ msgstr "Daha fazla bilgi"
 msgid "Sorry! Failed to host the game."
 msgstr "Üzgünüm! Oyun kurulurken bir hata oldu."
 
-msgid "Game Name Updated."
-msgstr "Oyun Adı Güncellendi."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** şifre [%s] şimdi gerekli ! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** şifreye gerek yok! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Bu bir harita modu, oynama deneyiminizi değiştirebilir!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "Bu bir rastgele harita, oynama deneyiminizi değiştirebilir!"
-
 msgid "Host is Starting Game"
 msgstr "Kurucu Oyunu Başlatıyor"
 
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr ""
+msgstr "Kurucu: Serbest sohbet %s için açıldı"
 
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr ""
+msgstr "Kurucu: Serbest sohbet %s için kapatıldı"
 
 #, c-format
 msgid "Moving %s to Spectators!"
@@ -10201,6 +9839,15 @@ msgstr ""
 msgid "Disconnected from host:"
 msgstr ""
 
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
+msgstr ""
+
 msgid "Host supplied invalid options"
 msgstr "Kurucu, geçersiz seçenekler sundu"
 
@@ -10211,7 +9858,7 @@ msgid "You have been kicked: "
 msgstr "Atıldınız: "
 
 msgid "Connection lost:"
-msgstr ""
+msgstr "Bağlantı koptu:"
 
 msgid "No connection to host."
 msgstr "Sunucu ile bağlantı yok."
@@ -10244,6 +9891,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "Oyuncu adları (oyun bitene kadar) görünür olmayacak"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "Oyuncu adları (oyun başlayana kadar) görünür olmayacak"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10262,20 +9924,6 @@ msgstr "Kapalı"
 
 msgid "Open"
 msgstr "Açık"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Harita Gönderiliyor: %%%u "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Harita: %%%u indirildi"
-
-msgid "HOST"
-msgstr "KURUCU"
-
-msgid "Ping"
-msgstr "Gecikme"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Bu tekrar dosyasını kaydetmek için kullanılan Warzone 2100 sürümü, mevcut çalışan sürüm ile eşleşmiyor."
@@ -10303,7 +9951,11 @@ msgstr "%s Oyundan çıktı"
 
 #, c-format
 msgid "%s joined the Game"
-msgstr ""
+msgstr "%s oyuna katıldı"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr "(kod adı: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10365,8 +10017,14 @@ msgid_plural "%d players"
 msgstr[0] "%d oyuncu"
 msgstr[1] "%d oyuncu"
 
+msgid "Ping"
+msgstr "Gecikme"
+
 msgid "Structs"
 msgstr "Binlr"
+
+msgid "Alliances"
+msgstr "İttifaklar"
 
 msgid "Score"
 msgstr "Puan"
@@ -10420,26 +10078,7 @@ msgid "Players View"
 msgstr ""
 
 msgid "Team Strategy"
-msgstr ""
-
-#, c-format
-msgid "Changed structure limits [%d]:"
-msgstr "Yapı sınırları değiştirildi [%d]:"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr "[%d] Sınır [%s]: %u (varsayılan: %u)"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr "[%d] Sınır [%s]: %u (varsayılan: sınırsız)"
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] Sınır numStructureStats (%u) değerinden daha fazla: %u"
-
-msgid "Limits were reset to default."
-msgstr "Sınırlar varsayılana sıfırlandı."
+msgstr "Takım stratejisi"
 
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
@@ -10458,18 +10097,37 @@ msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "KURUCU oyun kodunu değiştirmiş ve güvenilemez!"
 
 msgid "The host has enabled free chat for everyone."
-msgstr ""
+msgstr "Kurucu, herkes için serbest sohbeti açtı."
 
 msgid "The host has muted free chat for everyone."
-msgstr ""
+msgstr "Kurucu, herkes için serbest sohbeti kapadı."
 
 #, c-format
 msgid "The host has enabled free chat for player: %s"
-msgstr ""
+msgstr "Kurucu, %s kullanıcısı için serbest sohbeti açtı"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr "Kurucu, %s kullanıcısı için serbest sohbeti kapadı"
+
+msgid "Limits set to default."
 msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr "[%d] Sınır [%s]: %u (varsayılan: %u)"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr "[%d] Sınır [%s]: %u (varsayılan: sınırsız)"
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
+msgstr "[%d] Sınır numStructureStats (%u) değerinden daha fazla: %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10523,6 +10181,9 @@ msgstr "Turuncu"
 
 msgid "Grey"
 msgstr "Gri"
+
+msgid "Black"
+msgstr "Siyah"
 
 msgid "Red"
 msgstr "Kırmızı"
@@ -10597,7 +10258,7 @@ msgstr ""
 
 #, c-format
 msgid "Vote To Kick: %s"
-msgstr ""
+msgstr "Atmak için oyla: %s"
 
 #, c-format
 msgid "Should player %s be kicked from the game?"
@@ -10641,9 +10302,6 @@ msgstr "Tarih"
 
 msgid "Title"
 msgstr "Başlık"
-
-msgid "MUSIC MANAGER"
-msgstr "MÜZİK YÖNETİCİSİ"
 
 msgid "Dismiss"
 msgstr "Kapat"
@@ -10777,13 +10435,13 @@ msgid "Did not send message - free chat is disabled by host. Please use Quick Ch
 msgstr ""
 
 msgid "See Also:"
-msgstr ""
+msgstr "Ayrıca Bkz:"
 
 msgid "Game Guide"
-msgstr ""
+msgstr "Oyun Rehberi"
 
 msgid "Toggle Sidebar"
-msgstr ""
+msgstr "Kenar Çubuğunu Aç/Kapat"
 
 msgid "Disable Topic Pop-ups"
 msgstr ""
@@ -10795,49 +10453,49 @@ msgid "Click/Tap"
 msgstr ""
 
 msgid "Right-Click"
-msgstr ""
+msgstr "Sağ Tık"
 
 msgid "Click/Tap and Hold"
 msgstr ""
 
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 msgid "Interactions:"
-msgstr ""
+msgstr "Etkileşimler:"
 
 msgid "Related Keymappings:"
 msgstr ""
 
 msgid "Enter password"
-msgstr ""
+msgstr "Parola girin"
 
 msgid "OK"
 msgstr "TAMAM"
 
 msgid "Connecting to Game"
-msgstr ""
+msgstr "Oyuna bağlanılıyor"
 
 msgid "Status:"
-msgstr ""
+msgstr "Durum:"
 
 msgid "Cancel"
 msgstr "İptal"
 
 msgid "Game requires a password to join"
-msgstr ""
+msgstr "Katılmak için parola gerekli"
 
 msgid "Unable to Join Game"
-msgstr ""
+msgstr "Oyuna Katılınamıyor"
 
 msgid "Error:"
-msgstr ""
+msgstr "Hata:"
 
 msgid "Join Attempt Rejected"
-msgstr ""
+msgstr "Katılma isteği reddedildi"
 
 msgid "Message from Host:"
-msgstr ""
+msgstr "Kurucu tarafından mesaj:"
 
 msgid "Game is full"
 msgstr "Oyun Dolu"
@@ -10846,7 +10504,7 @@ msgid "You were kicked!"
 msgstr "Oyundan atıldın!"
 
 msgid "Your game version does not match the host"
-msgstr ""
+msgstr "Oyun sürümün kurucu ile uyuşmuyor"
 
 msgid "The host rejected your connection due to invalid data"
 msgstr ""
@@ -10897,7 +10555,7 @@ msgid "Establishing connection with host"
 msgstr ""
 
 msgid "An internal error occurred"
-msgstr ""
+msgstr "Bir iç hata meydana geldi"
 
 msgid "Invalid host - disconnected"
 msgstr ""
@@ -10908,23 +10566,35 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
-msgid "Kick Spectator"
+msgid "Invalid host establishing data"
 msgstr ""
 
-msgid "Kick Player"
+msgid "Invalid host identity"
 msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
+msgid "Kick Spectator"
+msgstr "İzlemciyi At"
+
+msgid "Kick Player"
+msgstr "Oyuncuyu At"
 
 msgid "Loading Status:"
 msgstr ""
 
 msgid "TEAM STRATEGY"
-msgstr ""
+msgstr "TAKIM STRATEJİSİ"
 
 msgid "Game will start in ..."
-msgstr ""
+msgstr "Oyun ... içinde başlıyor"
 
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "Diğer oyuncular bekleniyor..."
 
 msgid "Team Planning"
 msgstr ""
@@ -10975,25 +10645,25 @@ msgid "(Tanks / Cyborgs)"
 msgstr "(Tanklar / Sayborglar)"
 
 msgid "Cannons"
-msgstr ""
+msgstr "Toplar"
 
 msgid "Mortars"
 msgstr ""
 
 msgid "Missiles"
-msgstr ""
+msgstr "Füzeler"
 
 msgid "Rockets"
-msgstr ""
+msgstr "Roketler"
 
 msgid "Energy"
-msgstr ""
+msgstr "Enerji"
 
 msgid "Gauss"
 msgstr ""
 
 msgid "Flame"
-msgstr ""
+msgstr "Alev"
 
 msgid "Howitzers"
 msgstr ""
@@ -11005,7 +10675,7 @@ msgid "Machine Guns"
 msgstr ""
 
 msgid "Electronic"
-msgstr ""
+msgstr "Elektronik"
 
 msgid "A-A"
 msgstr ""
@@ -11023,13 +10693,13 @@ msgid "Las-Sat"
 msgstr ""
 
 msgid "Laser Satellite"
-msgstr ""
+msgstr "Lazer Uydusu"
 
 msgid "Bombs"
-msgstr ""
+msgstr "Bombalar"
 
 msgid "Command"
-msgstr ""
+msgstr "Komut"
 
 msgid "EMP"
 msgstr ""
@@ -11134,25 +10804,28 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Tamir Tesisi Ödülü - Sıfır"
 
 msgid "Classic"
+msgstr "Klasik"
+
+msgid "Remastered (HQ)"
 msgstr ""
 
 msgid "Additional Campaigns"
 msgstr ""
 
 msgid "Start Game"
-msgstr ""
+msgstr "Oyunu Başlat"
 
 msgid "Tweak Options:"
 msgstr ""
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Varsayılanlara sıfırla"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
 msgstr ""
 
 msgid "Warzone 2100 Universe"
-msgstr ""
+msgstr "Warzone 2100 Evreni"
 
 msgid "WZ2100 Extended Universe"
 msgstr ""
@@ -11162,14 +10835,14 @@ msgstr ""
 
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "%s Gerektirir"
 
 msgid "Compatible"
-msgstr ""
+msgstr "Uyumlu"
 
 #, c-format
 msgid "Compatible %s"
-msgstr ""
+msgstr "%s uyumlu"
 
 msgid "Timer Power Bonus"
 msgstr ""
@@ -11201,6 +10874,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "Desteklenmiyor"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11226,10 +10950,10 @@ msgid "The remastered campaign experience"
 msgstr ""
 
 msgid "Difficulty:"
-msgstr ""
+msgstr "Zorluk:"
 
 msgid "Balance:"
-msgstr ""
+msgstr "Bakiye:"
 
 msgid "Start at:"
 msgstr ""
@@ -11257,6 +10981,9 @@ msgstr "Aranıyor"
 
 msgid "Connecting to the lobby server..."
 msgstr "Bekleme odası sunucusuna bağlanılıyor..."
+
+msgid "Game Name"
+msgstr "Oyun İsmi"
 
 msgid "Map Name"
 msgstr "Harita Adı"
@@ -11328,6 +11055,458 @@ msgstr "Geçersiz Şifre!"
 msgid "Continue"
 msgstr "Devam Et"
 
+msgid "MUSIC MANAGER"
+msgstr "MÜZİK YÖNETİCİSİ"
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "HRTF cihazda/sistemde/OpenAL Kütüphanesi'nde desteklenmiyor"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Ses Düzeyi"
+
+msgid "FX Volume"
+msgstr "Ses Efekti"
+
+msgid "Music Volume"
+msgstr "Müzik Sesi"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Devre dışı"
+
+msgid "Enabled"
+msgstr "Etkin"
+
+msgid "Auto"
+msgstr "Otomatik"
+
+msgid "Subtitles"
+msgstr "Altyazılar"
+
+msgid "Off"
+msgstr "Kapalı"
+
+msgid "On"
+msgstr "Açık"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "Müzik Yöneticisi"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "İmleci Yakala"
+
+msgid "Colored Cursors"
+msgstr "Renkli İmleçler"
+
+msgid "Cursor Size"
+msgstr "İmleç Boyutu"
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "Kamera Hızı"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Tersine Döndür"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr "Sohbet"
+
+msgid "Quick Chat Only"
+msgstr "Sadece Hızlı Sohbet"
+
+msgid "Allow All"
+msgstr "Tümüne izin ver"
+
+msgid "Inactivity Timeout"
+msgstr "Hareketsizlik için zaman aşımı"
+
+#, c-format
+msgid "%u minutes"
+msgstr "%u dakika"
+
+msgid "Lag Kick"
+msgstr "Gecikme Atması"
+
+#, c-format
+msgid "%u seconds"
+msgstr "%u saniye"
+
+msgid "Spectator Slots"
+msgstr "Gözlemci Yuvaları"
+
+msgid "None"
+msgstr "Hiçbiri"
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr "Yık (klasik)"
+
+msgid "Game Time Limit"
+msgstr ""
+
+#, c-format
+msgid "%s hours"
+msgstr "%s saat"
+
+msgid "Enable Rating"
+msgstr "Derecelendirmeyi Etkinleştir"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr "Gölge eşleme bu sistemde kullanılamaz."
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr "Orta Kalite"
+
+msgid "High Quality"
+msgstr "Yüksek Kalite"
+
+msgid "Shadows"
+msgstr "Gölgeler"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "Gölge Çözünürlüğü"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr "Yüksek"
+
+msgid "Shadow Filtering"
+msgstr "Gölge filtreleme"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr "Düşük"
+
+msgid "Ultra"
+msgstr "Çok Yüksek"
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr "Sis"
+
+msgid "Screen Shake"
+msgstr "Ekran Sarsıntısı"
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr "Detay Uzaklığı"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr "Varsayılan"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr "Uyarlanabilir"
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Lisan"
+
+msgid "Display Scale"
+msgstr "Görüntü Ölçeği"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr "Ayarlar Düğmesi"
+
+msgid "Opacity: 50%"
+msgstr "Şeffaflık: %50"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Sabit"
+
+msgid "Rotating"
+msgstr "Dönüşlü"
+
+msgid "Radar Jump"
+msgstr "Radar Zıplaması"
+
+msgid "Instant"
+msgstr "Anlık"
+
+msgid "Tracked"
+msgstr "İzleniyor"
+
+msgid "Radar Zoom"
+msgstr "Radar Yakınlaştırması"
+
+msgid "Video Playback"
+msgstr "Video Oynatma"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1×"
+
+msgid "2×"
+msgstr "2×"
+
+msgid "Fullscreen"
+msgstr "Tam Ekran"
+
+msgid "Scanlines"
+msgstr "Tarama Çizgileri"
+
+msgid "50%"
+msgstr "%50"
+
+msgid "Open Configuration Directory"
+msgstr "Yapılandırma Dizinini Aç"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "Varsayılan dosya gezgininde yapılandırma dizini açılamadı."
+
+msgid "Configuration directory is reported as:"
+msgstr "Yapılandırma dizini şu şekilde bildirilmiştir:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "Eğer konteyner/izole bir ortamda çalıştırılıyorsa, bu diskteki asıl dizinden farklılaşabilir."
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "Manuel olarak tespit etme hakkında daha fazla bilgi için lütfen belgelendirmeyi okuyunuz."
+
+msgid "Failed to open configuration directory"
+msgstr "Yapılandırma dizini açılması başarısız"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir (veya pencere yöneticisinin çözünürlüğü ile)."
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "Çözünürlüğü pencereyi normal şekilde boyutlandırarak değiştirebilirsiniz (Köşe/kenarı sürüklemeyi deneyin)."
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Pencere"
+
+msgid "Desktop Full"
+msgstr "Penceresiz Tam Ekran"
+
+msgid "Resolution"
+msgstr "Çözünürlük"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "Odak kaybı durumunda pencerenin otomatik olarak simge durumuna küçültülmesi gerekip gerekmediği"
+
+msgid "On (Fullscreen)"
+msgstr "Açık (Tam Ekran)"
+
 msgid "CONNECTION"
 msgstr "BAĞLANTI"
 
@@ -11339,6 +11518,303 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP Adresi veya Makine İsmi"
+
+msgid "Host:"
+msgstr "Kurucu:"
+
+msgid "NOTE: Host is also a player."
+msgstr "NOT: Kurucu da bir oyuncu."
+
+msgid "Player ID: "
+msgstr "Oyuncu Kimliği: "
+
+msgid "(none)"
+msgstr "(hiçbiri)"
+
+msgid "You:"
+msgstr "Sen:"
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr "Oyuncular bekleniyor"
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr "İzleyiciler bekleniyor"
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr "Kurucu: %s"
+
+msgid "ready"
+msgstr "hazır"
+
+msgid "not ready"
+msgstr "hazır değil"
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Harita Gönderiliyor: %%%u "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Harita: %%%u indirildi"
+
+msgid "HOST"
+msgstr "KURUCU"
+
+msgid "Choose Team"
+msgstr "Takım Seç"
+
+msgid "Teams locked"
+msgstr "Takımlar kilitli"
+
+msgid "Click to change player colour"
+msgstr "Oyuncu renklerini değiştirmek için tıkla"
+
+msgid "Click to change player position"
+msgstr "Oyun konumunu değiştirmek için tıkla"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "YZ değiştirmek için tıklayın, seçimi dağıtmak için sağ tıklayın"
+
+msgid "Click to close spectator slot"
+msgstr "Gözlemci yuvasını kapatmak için tıkla"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "Oyuncu puanı:"
+
+msgid "Host provided"
+msgstr "Sağlanan sunucu"
+
+#, c-format
+msgid "From: %s"
+msgstr "Kimden: %s"
+
+msgid "Click to change difficulty"
+msgstr "Zorluğu değiştirmek için tıkla"
+
+msgid "Waiting for player"
+msgstr "Diğer oyuncular bekleniyor"
+
+msgid "Player is ready"
+msgstr "Oyuncu hazır"
+
+msgid "Player is downloading"
+msgstr "Oyuncu indiriyor"
+
+msgid "Click when ready"
+msgstr "Hazırsan tıkla"
+
+msgid "Waiting for download"
+msgstr "İndirmek için bekliyor"
+
+msgid "READY?"
+msgstr "HAZIR MISIN?"
+
+msgid "Tanks disabled!!"
+msgstr "Tanklar Devre Dışı!!"
+
+msgid "Cyborgs disabled."
+msgstr "Sayborglar devre dışı."
+
+msgid "VTOLs disabled."
+msgstr "DİvKlar Devre Dışı."
+
+msgid "Satellite Uplink disabled."
+msgstr "Uydu Yer Üssü devre dışı."
+
+msgid "Laser Satellite disabled."
+msgstr "Lazer Uydusu devred dışı."
+
+msgid "Structure Limits Enforced."
+msgstr "Yapı Sınırları Zorlanmış."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** şifre [%s] şimdi gerekli ! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** şifreye gerek yok! ***"
+
+msgid "Game Name Updated."
+msgstr "Oyun Adı Güncellendi."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Tek Kişilik Çatışma"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Haritayı görmek için tıkla"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Harita Seç\n"
+"Oyuncuların oyları ile engellenebilir"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Üs"
+
+msgid "Tech"
+msgstr "Tekn."
+
+msgid "Technology Level 1"
+msgstr "Teknoloji Seviyesi 1"
+
+msgid "Technology Level 2"
+msgstr "Teknoloji Seviyesi 2"
+
+msgid "Technology Level 3"
+msgstr "Teknoloji Seviyesi 3"
+
+msgid "Technology Level 4"
+msgstr "Teknoloji Seviyesi 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Taşımayı Başlat"

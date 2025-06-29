@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -1796,6 +1796,9 @@ msgstr "摧毀導彈發射井"
 msgid "Rescue Alpha team from Nexus"
 msgstr "從 Nexus 營救阿爾發小組"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "摧毀 Nexus 總部以停用 Nexus 入侵者程式"
 
@@ -1817,8 +1820,8 @@ msgstr "將貝塔小組的一部分與伽碼中隊前哨基地重新集結"
 msgid "Return to LZ"
 msgstr "回到降落點"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "困難/瘋狂難度提示:"
+msgid "Insane difficulty hint:"
+msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "在整個地圖上鞏固一個強大的基地，以保護自己免受到聯合組織的傷害"
@@ -2957,6 +2960,10 @@ msgstr "您的連外IP地址為: %s"
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr "使用者端無法確認玩家交換索引"
 
@@ -2991,6 +2998,18 @@ msgstr "重播檔格式不支援"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "無法載入重播: 重播檔不完整或已損壞."
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr ""
 
 msgid "Menu"
 msgstr "功能表"
@@ -3301,10 +3320,10 @@ msgstr "裝備有天譴導彈發射器之生化人步兵"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "裝備有火箭(坦克殺手)的生化人步兵"
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
 msgid "Armed with Flashlight Laser"
@@ -3443,6 +3462,9 @@ msgstr "裝備有電磁加農砲之據點"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "裝備有高能雷射之據點"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "裝備有等離子火焰噴射之據點"
@@ -3672,6 +3694,9 @@ msgstr "炸彈傷害 +10%"
 msgid "Bomb damage +25%"
 msgstr "炸彈傷害 +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "炸彈升級"
 
@@ -3695,6 +3720,9 @@ msgstr "毒蟲"
 
 msgid "Buggy"
 msgstr "四輪馬車"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "內建診斷及修理系統"
@@ -3736,6 +3764,9 @@ msgstr "更有效率的燃燒石油"
 msgid "Cannon accuracy +10%"
 msgstr "加農砲系武器準確率 +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "加農砲自動裝填系統二型"
 
@@ -3748,6 +3779,9 @@ msgstr "加農砲自動裝填系統"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "加農砲系武器傷害 +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "加農砲消防車"
@@ -3773,6 +3807,9 @@ msgstr "加農砲高速裝填系統"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "加農砲裝填時間 -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "加農砲防衛塔"
@@ -3879,6 +3916,12 @@ msgstr "指揮官車可以統領部隊攻擊目標，回到修理工廠修理完
 msgid "Complete battlefield visibility"
 msgstr "可觀測到整個戰場"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "複合合金二型"
 
@@ -3937,6 +3980,15 @@ msgstr "起重機1"
 
 msgid "Crane2"
 msgstr "起重機2"
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "生化人複合合金二型"
@@ -4004,6 +4056,12 @@ msgstr "超緊密生化人熱能裝甲"
 msgid "Cyborg Tank Killer"
 msgstr "生化人步兵(坦克殺手火箭)"
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "生化人熱能裝甲二型"
 
@@ -4012,6 +4070,9 @@ msgstr "生化人熱能裝甲三型"
 
 msgid "Cyborg Thermal Armor"
 msgstr "生化人熱能裝甲"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr "生化人熱能裝甲"
@@ -4139,6 +4200,9 @@ msgstr "可使裝備進行自行修理"
 msgid "Enemy"
 msgstr "敵軍"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "初階工程科技"
 
@@ -4211,6 +4275,9 @@ msgstr "尾翼穩定裝置改善了飛行的軌跡"
 msgid "Fire Truck"
 msgstr "消防車"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "發射電磁脈衝導彈"
 
@@ -4245,12 +4312,18 @@ msgstr "履帶眼鏡蛇坦克(火焰噴射)"
 msgid "Flamer damage +25%"
 msgstr "火焰傷害 +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr "迫擊砲快速裝填系統"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "火焰裝填時間 -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "半履帶響尾蛇坦克(火焰噴射)"
@@ -4801,6 +4874,15 @@ msgstr "榴彈砲自動裝填器"
 msgid "Howitzer damage +25%"
 msgstr "榴彈炮傷害 +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "迫擊砲快速裝填系統"
 
@@ -4810,6 +4892,15 @@ msgstr "榴彈炮裝填時間 -10%"
 
 msgid "Howitzer"
 msgstr "榴彈砲"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "颶風級高射砲"
@@ -4874,6 +4965,9 @@ msgstr "中階工程科技"
 msgid "Improved fire detection systems"
 msgstr "改善的火焰偵測系統"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "改良鈦鋼筋牆二型"
 
@@ -4925,11 +5019,11 @@ msgstr "改善雷射系統的光學結構使之不易發散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃燒榴彈炮陣地 二型"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "燃燒榴彈炮陣地"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "燃燒榴彈砲砲台"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "燃燒榴彈炮陣地"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "燃燒榴彈砲可以指派給一座雷達"
@@ -5133,9 +5227,15 @@ msgstr "可使用防空雷射武器"
 msgid "Laser accuracy +10%"
 msgstr "雷射武器準確率 +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "雷射武器傷害 +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "雷射指向器提供武器導引指向目標功能"
@@ -5143,6 +5243,9 @@ msgstr "雷射指向器提供武器導引指向目標功能"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "雷射武器裝填時間 -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "雷射衛星指揮中心"
@@ -5320,6 +5423,12 @@ msgstr "中型加農砲"
 msgid "Medium Super Heavy Body"
 msgstr "中型超重量級車身"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "裝備有迷你火箭砲之據點"
 
@@ -5375,6 +5484,9 @@ msgstr "迷你火箭蝰蛇輪式"
 msgid "Missile accuracy +10%"
 msgstr "導彈準確率 10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "導彈主動搜索並導向目標"
 
@@ -5382,12 +5494,18 @@ msgstr "導彈主動搜索並導向目標"
 msgid "Missile damage +25%"
 msgstr "導彈傷害 +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "導彈堡壘"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "導彈裝填時間 -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "導彈升級"
@@ -5408,6 +5526,9 @@ msgstr "比復仇者強的防禦力及生命值"
 msgid "Mortar accuracy +10%"
 msgstr "迫擊砲準確率 +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "迫擊砲自動裝填系統二型"
 
@@ -5424,6 +5545,9 @@ msgstr "半履帶眼鏡蛇坦克(迫擊砲)"
 msgid "Mortar damage +25%"
 msgstr "迫擊砲傷害 +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "迫擊砲快速裝填系統"
 
@@ -5433,6 +5557,9 @@ msgstr "迫擊砲砲坑"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "迫擊砲裝填時間 -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "迫擊砲目標鎖定電腦"
@@ -5566,11 +5693,11 @@ msgstr "可建造新的系統建築"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系統防禦工事"
 
-msgid "New Systems Turret Available For Design"
-msgstr "可在設計功能中使用新的系統裝備"
-
 msgid "New Systems Turret Available for Design"
 msgstr "可搭載新的系統裝備"
+
+msgid "New Systems Turret Available For Design"
+msgstr "可在設計功能中使用新的系統裝備"
 
 msgid "New Thermal Emissions detection"
 msgstr "可偵測熱能放射"
@@ -5668,6 +5795,12 @@ msgstr "原始遭遇戰"
 msgid "Panther"
 msgstr "黑豹"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "旋轉迫擊砲砲坑"
 
@@ -5757,6 +5890,9 @@ msgstr "能源輸出 +30%"
 msgid "Power Research Completed"
 msgstr "能源科技研發完成"
 
+msgid "Power"
+msgstr "能源"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "強力的電磁脈衝武器"
 
@@ -5765,6 +5901,9 @@ msgstr "能源實驗室"
 
 msgid "Produces Cyborgs"
 msgstr "生產生化人步兵"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "專家和常規軍銜裝備受到保護"
@@ -5838,6 +5977,12 @@ msgstr "雷達探測塔"
 msgid "Radar Detector"
 msgstr "雷達探測器"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "軌道槍武器準確率 +10%"
@@ -5880,6 +6025,9 @@ msgstr "軌道槍系武器升級"
 msgid "Rail Gun"
 msgstr "軌道槍"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "軌道目標預測電腦"
 
@@ -5910,6 +6058,12 @@ msgstr "降低自身裝備被NEXUS 奪取的機會"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "重新加油、補充彈藥及修理VTOL"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "初階強化建材二型"
@@ -5989,6 +6143,9 @@ msgstr "研發速度 +30%"
 msgid "Research speed +85%"
 msgstr "研發速度 +85%"
 
+msgid "Research"
+msgstr "研發新科技"
+
 msgid "Retaliation"
 msgstr "報復者"
 
@@ -6047,6 +6204,9 @@ msgstr "中階自動化垂直起降補給"
 msgid "Rocket accuracy +10%"
 msgstr "火箭砲準確率 +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "火箭炮部隊，可指派給雷達導引"
 
@@ -6065,6 +6225,9 @@ msgstr "火箭四輪馬車"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "火箭砲傷害 +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "火箭會自動偵測與鎖定引擎發出的熱源"
@@ -6087,6 +6250,9 @@ msgstr "火箭砲高速裝填系統"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "火箭砲裝填時間 -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "火箭會跟隨雷射指向器的軌跡攻擊目標"
@@ -6243,6 +6409,9 @@ msgstr "雷達升級三型"
 
 msgid "Sensor Upgrade"
 msgstr "雷達升級"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "改善雷達"
@@ -6409,10 +6578,10 @@ msgstr "突觸連結資料分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突觸連結資料分析三型"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突觸連結資料分析"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突觸連結資料分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6426,6 +6595,9 @@ msgstr "突觸連結"
 
 msgid "Systems Research Completed"
 msgstr "系統科技研發完成"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr "超級生化人步兵(坦克殺手火箭)"
@@ -6453,6 +6625,9 @@ msgstr "履帶復仇者坦克(坦克殺手)"
 
 msgid "Tank Killer"
 msgstr "坦克殺手"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "坦克陷阱"
@@ -6496,6 +6671,12 @@ msgstr "熱能裝甲 +40%"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "熱能裝甲 +45%"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
 
 msgid "Thermal Armor Mk2"
 msgstr "熱能裝甲二型"
@@ -6541,6 +6722,9 @@ msgstr "鈦鋼筋強化混凝土打造"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "基於無生化人的人工智慧防衛塔攻擊戰"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "推進動力: 履帶"
@@ -6864,6 +7048,9 @@ msgstr "垂直起降迷你火箭"
 msgid "VTOL Needle Gun"
 msgstr "垂直起降(針刺砲)"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "垂直起降(燐光彈艙)"
 
@@ -6887,6 +7074,9 @@ msgstr "垂直起降補給點"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "要使垂直起降擁有持續攻擊的能力，需建造VTOL補給點"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "垂直起降(天譴導彈)"
@@ -7309,11 +7499,17 @@ msgstr "設定預設主持託管聊天參數設定/許可權"
 msgid "Enable async join approval (for connecting clients)"
 msgstr "開啟異步聯接批准 (用於連接用戶端)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr "點播影片下載的基礎網址 URL"
 
 msgid "Base video URL"
 msgstr "基礎影片網址 URL"
+
+msgid "Specify connection provider type to use when hosting game sessions"
+msgstr ""
 
 msgid "Commander needs a higher level to command more units"
 msgstr "指揮官需要更高的級別以指揮更多的裝備"
@@ -7612,419 +7808,12 @@ msgstr "必須在防火牆或路由器中打開 TCP 連接埠 %d 才能主持遊
 msgid "Load Multiplayer Replay"
 msgstr "載入多人遊戲重播"
 
-msgid "Game Options"
-msgstr "遊戲選項"
-
-msgid "Graphics Options"
-msgstr "圖形選項"
-
-msgid "Video Options"
-msgstr "顯示選項"
-
-msgid "Audio / Zoom Options"
-msgstr "音效/縮放 選項"
-
-msgid "Mouse Options"
-msgstr "滑鼠選項"
-
-msgid "Key Mappings"
-msgstr "鍵盤參數"
-
-msgid "Music Manager"
-msgstr "音樂管理"
-
-msgid "Multiplay Options"
-msgstr "多人遊戲選項"
-
-msgid "OPTIONS"
-msgstr "選項"
-
-msgid "Open Configuration Directory"
-msgstr "開啟參數設定目錄"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "無法在系統預設檔案瀏覽器中開啟設定目錄."
-
-msgid "Configuration directory is reported as:"
-msgstr "參數設定目錄為:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "如果在容器/隔離環境中執行，這可能與磁碟上的實際目錄路徑不同."
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "有關如何手動尋找它的更多資訊，請參閱說明文件."
-
-msgid "Failed to open configuration directory"
-msgstr "無法開啟參數設定目錄"
-
-msgid "1×"
-msgstr "一倍"
-
-msgid "2×"
-msgstr "二倍"
-
-msgid "Fullscreen"
-msgstr "全螢幕"
-
-msgid "Unsupported"
-msgstr "不支援"
-
-msgid "Off"
-msgstr "關閉"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "黑色"
-
-msgid "On"
-msgstr "開啟"
-
-msgid "Per Pixel"
-msgstr "每個像素"
-
-msgid "Lightmap"
-msgstr "地圖增亮"
-
-msgid "Rotating"
-msgstr "旋轉"
-
-msgid "Fixed"
-msgstr "固定"
-
-msgid "Instant"
-msgstr "即時"
-
-msgid "Tracked"
-msgstr "軌道"
-
-msgid "High"
-msgstr "高"
-
-msgid "Default"
-msgstr "預設"
-
-msgid "Terrain quality mode not available."
-msgstr "地形品質模式不可用."
-
-msgid "Medium Quality"
-msgstr "中等品質"
-
-msgid "High Quality"
-msgstr "高品質"
-
-msgid "Shadow mapping not available on this system."
-msgstr "陰影貼圖在此系統上不可用."
-
-msgid "Low"
-msgstr "低"
-
-msgid "Ultra"
-msgstr "極高"
-
-msgid "Shadow filtering not available on this system."
-msgstr "陰影過濾在此系統上不可用."
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "*重新啟動遊戲後生效"
-
-msgid "Terrain Quality"
-msgstr "地形品質"
-
-msgid "Terrain Shading"
-msgstr "地形陰影"
-
-msgid "Shadows"
-msgstr "陰影"
-
-msgid "Shadow Resolution"
-msgstr "陰影分辨率"
-
-msgid "Shadow Filtering"
-msgstr "陰影過濾"
-
-msgid "Per Pixel point lights"
-msgstr "每個像素點亮度"
-
-msgid "LOD Distance"
-msgstr "細節程度 距離"
-
-msgid "Fog"
-msgstr "模糊"
-
-msgid "Radar"
-msgstr "雷達"
-
-msgid "Radar Jump"
-msgstr "雷達跳躍"
-
-msgid "Video Playback"
-msgstr "播放影片"
-
-msgid "Scanlines"
-msgstr "掃描線"
-
-msgid "Screen Shake"
-msgstr "螢幕晃動"
-
-msgid "Groups Menu"
-msgstr "小組功能表"
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "圖形選項"
-
-msgid "Disabled"
-msgstr "已禁用"
-
-msgid "Enabled"
-msgstr "已啟用"
-
-msgid "Auto"
-msgstr "自動"
-
-msgid "Voice Volume"
-msgstr "語音音量"
-
-msgid "FX Volume"
-msgstr "音效音量"
-
-msgid "Music Volume"
-msgstr "背景音樂音量"
-
-msgid "Subtitles"
-msgstr "字幕"
-
-msgid "HRTF"
-msgstr "HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "您的設備/系統/OpenAL 程式庫不支援 HRTF"
-
-msgid "Map Zoom"
-msgstr "地圖縮放"
-
-msgid "Map Zoom Rate"
-msgstr "地圖縮放比例"
-
-msgid "Radar Zoom"
-msgstr "雷達縮放"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "音效/縮放 選項"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr "在桌面全螢幕模式下，解析度與桌面解析度相匹配\\n(或視窗管理員允許的內容)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "您可以通過正常調整視窗大小來更改解析度. (嘗試拖動角落/邊緣)"
-
-msgid "Graphics Mode"
-msgstr "螢幕選項"
-
-msgid "Resolution"
-msgstr "解析度"
-
-msgid "Display Scale"
-msgstr "顯示比例"
-
-msgid "Adaptive"
-msgstr "適用的"
-
-msgid "Windowed"
-msgstr "視窗模式"
-
-msgid "Desktop Full"
-msgstr "佈滿桌面"
-
-msgid "On (Fullscreen)"
-msgstr "開 (全螢幕)"
-
-msgid "Texture size"
-msgstr "貼圖精細度"
-
-msgid "Vertical sync"
-msgstr "垂直同步"
-
-msgid "Antialiasing*"
-msgstr "反鋸齒*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "警告: 抗鋸齒可能會導致崩潰，尤其是當值 > 16 時"
-
-msgid "Graphics Backend*"
-msgstr "影像後端處理"
-
-msgid "Min on Focus Loss"
-msgstr "失焦後最小化"
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr "視窗是否應不在焦點時自動最小化"
-
-msgid "Alt+Enter Toggle"
-msgstr "Alt+Enter 切換"
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr "切換全螢幕模式時使用的按鍵: Alt + Enter"
-
-msgid "VIDEO OPTIONS"
-msgstr "影像選項"
-
-msgid "Unable to change Vertical Sync"
-msgstr "無法更改垂直同步"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr "Warzone 無法更改垂直同步模式.\\n您的系統/驅動程式可能不支援其他模式."
-
-msgid "Middle Mouse"
-msgstr "滑鼠中鍵"
-
-msgid "Right Mouse"
-msgstr "滑鼠右鍵"
-
-msgid "Reverse Rotation"
-msgstr "反向旋轉"
-
-msgid "Trap Cursor"
-msgstr "捕捉滑鼠"
-
-msgid "Switch Mouse Buttons"
-msgstr "切換滑鼠按鍵"
-
-msgid "Rotate Screen"
-msgstr "旋轉螢幕"
-
-msgid "Colored Cursors"
-msgstr "游標顏色"
-
-msgid "Cursor Size"
-msgstr "游標大小"
-
-msgid "MOUSE OPTIONS"
-msgstr "滑鼠選項"
-
-msgid "Super Easy"
-msgstr "超級簡單"
-
-msgid "Easy"
-msgstr "容易"
-
-msgid "Hard"
-msgstr "困難"
-
-msgid "Insane"
-msgstr "瘋狂"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr "無法載入: %s."
 
 msgid "Please remove all incompatible mods."
 msgstr "請刪除所有不相容的遊戲模組."
-
-msgid "GAME OPTIONS"
-msgstr "遊戲選項"
-
-msgid "Language"
-msgstr "語言"
-
-msgid "Unit Colour:"
-msgstr "裝備單位顏色:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "遭遇戰/多人遊戲"
-
-msgid "Campaign Difficulty"
-msgstr "戰役難度"
-
-msgid "Camera Speed"
-msgstr "攝影速度"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "幫助我們改進 Warzone 2100 的翻譯: %s"
-
-msgid "Click to open webpage."
-msgstr "點擊打開網頁."
-
-msgid "Insane Difficulty"
-msgstr "瘋狂難度"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "這個難度是為非常有經驗的玩家準備的!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u 分鐘"
-
-#, c-format
-msgid "%s hours"
-msgstr "%s 小時"
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u 秒"
-
-msgid "None"
-msgstr "無"
-
-msgid "Distribute to Team"
-msgstr "分配到小組"
-
-msgid "Destroy (Classic)"
-msgstr "刪除 (經典)"
-
-msgid "Allow All"
-msgstr "全部允許"
-
-msgid "Quick Chat Only"
-msgstr "僅快速聊天"
-
-msgid "Hosting Options:"
-msgstr "主持遊戲選項:"
-
-msgid "Game Port"
-msgstr "遊戲埠位址"
-
-msgid "Port Mapping"
-msgstr "埠位址對應"
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr "使用PCP、NAT-PMP或UPnP 以協助您設定路由器/防火牆，以允許在主持遊戲時進行連接."
-
-msgid "Chat"
-msgstr "聊天"
-
-msgid "Inactivity Timeout"
-msgstr "不活躍超時"
-
-msgid "Lag Kick"
-msgstr "慢速延遲剔除"
-
-msgid "Spectator Slots"
-msgstr "旁觀位置"
-
-msgid "On Player Leave"
-msgstr "當玩家離開"
-
-msgid "Game Time Limit"
-msgstr "遊戲時間限定"
-
-msgid "Enable Rating"
-msgstr "啟用遊戲評級"
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "多人遊戲選項"
 
 msgid "Mod: "
 msgstr "模組: "
@@ -8531,15 +8320,6 @@ msgstr "警告: 您是主持人. 如果你退出，遊戲就結束疙屁了!"
 msgid "Host Quit"
 msgstr "主持離開"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "戰術使用者介面(目標原點圖示): 顯示"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "戰術使用者介面(目標原點圖示): 隱藏"
-
-msgid "Go Back"
-msgstr "返回"
-
 msgid "View Guide"
 msgstr "檢視遊戲指南"
 
@@ -8572,15 +8352,6 @@ msgstr "沒有主持遊戲無法繼續."
 
 msgid "-->  QUIT  <--"
 msgstr "--> 離開 <--"
-
-msgid "Audio Options"
-msgstr "音效選項"
-
-msgid "View Key Mappings"
-msgstr "檢視按鍵對應"
-
-msgid "Shake"
-msgstr "晃動"
 
 msgid "Save Campaign Game"
 msgstr "儲存戰役遊戲"
@@ -8625,17 +8396,20 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
-msgstr "全域熱鍵"
+msgid "Global Keys"
+msgstr ""
 
-msgid "Other Hotkeys"
-msgstr "其他熱鍵"
+msgid "Other Keys"
+msgstr ""
 
-msgid "Gameplay"
-msgstr "比賽"
+msgid "Gameplay Keys"
+msgstr ""
 
-msgid "Debug"
-msgstr "偵錯"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
+msgstr ""
 
 msgid "Debug (level editor)"
 msgstr "偵錯 (級別編輯器)"
@@ -8645,9 +8419,6 @@ msgstr "偵錯 (選擇)"
 
 msgid "Manufacture"
 msgstr "生產新裝備"
-
-msgid "Research"
-msgstr "研發新科技"
 
 msgid "Build"
 msgstr "建造"
@@ -9013,8 +8784,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "選擇所有重度損傷裝備"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "選擇所有生命值 >50% 且沒有團體的戰鬥地區裝備."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr ""
 
 msgid "Select all Half-tracks"
 msgstr "選擇所有半履帶裝備"
@@ -9183,9 +8954,6 @@ msgstr "切換全螢幕"
 
 msgid "Waiting for Power"
 msgstr "等待能源"
-
-msgid "Power"
-msgstr "能源"
 
 msgid "Power Per Second"
 msgstr "每秒能源輸出"
@@ -9648,21 +9416,6 @@ msgstr "僅自動儲存模式下不允許快速載入"
 msgid "QuickSave file does not exist yet"
 msgstr "快速儲存檔案還不存在"
 
-msgid "<not bound>"
-msgstr "<無綁定>"
-
-msgid "<Fixed Key>"
-msgstr "<固定鍵>"
-
-msgid "KEY MAPPING"
-msgstr "按鍵對應"
-
-msgid "Return To Previous Screen"
-msgstr "回到前一個畫面"
-
-msgid "Select Default"
-msgstr "選擇預設"
-
 msgid "Parent directory"
 msgstr "上層目錄"
 
@@ -9683,8 +9436,14 @@ msgstr "自動儲存 %s"
 msgid "AutoSave %s failed"
 msgstr "自動儲存 %s 失敗"
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "無法儲存遊戲!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "送上運輸艦"
@@ -9763,8 +9522,20 @@ msgstr "%s 與 %s 結盟"
 msgid "You Discover Blueprints For %s"
 msgstr "你發現一個用作於 %s 的藍圖"
 
+msgid "Super Easy"
+msgstr "超級簡單"
+
+msgid "Easy"
+msgstr "容易"
+
 msgid "Medium"
 msgstr "中等"
+
+msgid "Hard"
+msgstr "困難"
+
+msgid "Insane"
+msgstr "瘋狂"
 
 msgid "Commander"
 msgstr "指揮官"
@@ -9779,103 +9550,32 @@ msgstr "任務 人工智慧 描述"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "人工智慧錦標賽: %3.1f%% 獲勝，%3.1f%% 失敗，%3.1f%% 平手"
 
-msgid "Tanks disabled!!"
-msgstr "坦克已禁用!!"
-
-msgid "Cyborgs disabled."
-msgstr "生化人已禁用."
-
-msgid "VTOLs disabled."
-msgstr "垂直起降裝備已禁用."
-
-msgid "Satellite Uplink disabled."
-msgstr "衛星上傳連線已禁用."
-
-msgid "Laser Satellite disabled."
-msgstr "雷射衛星已禁用."
-
-msgid "Structure Limits Enforced."
-msgstr "強制實施建築限制."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "沒有足夠的票數來隨機或更改地圖."
-
-msgid "Select Game Name"
-msgstr "選擇遊戲名稱"
-
-msgid "Game Name"
-msgstr "遊戲名稱"
-
-msgid "One-Player Skirmish"
-msgstr "單人玩家遭遇戰"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"選擇地圖\n"
-"可以透過玩家投票來阻止"
-
-msgid "Map-Mod!"
-msgstr "地圖-模組!"
-
-msgid "Random map!"
-msgstr "隨機地圖!"
-
-msgid "Click to set Password"
-msgstr "點擊設定密碼"
-
-msgid "Enter password here"
-msgstr "在此輸入密碼"
 
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
-msgid "Alliances"
-msgstr "同盟"
-
-msgid "Base"
-msgstr "基地"
-
-msgid "Map Preview"
-msgstr "預覽地圖"
-
-msgid "Click to see Map"
-msgstr "按一下看地圖"
-
-msgid "Show Structure Limits"
-msgstr "顯示建築物數量限制"
-
-msgid "Set Structure Limits"
-msgstr "設定建築物數量限制"
-
-msgid "Random Game Options"
-msgstr "隨機遊戲選項"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
-"隨機遊戲選項\n"
-"可以透過玩家投票來阻止"
 
-msgid "Tech"
-msgstr "科技"
+msgid "Blind Game:"
+msgstr ""
 
-msgid "Technology Level 1"
-msgstr "科技級別 1"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
 
-msgid "Technology Level 2"
-msgstr "科技級別 2"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "科技級別 3"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
 
-msgid "Technology Level 4"
-msgstr "科技級別 4"
+msgid "OPTIONS"
+msgstr "選項"
 
-msgid "Start Hosting Game"
-msgstr "開始遊戲"
+msgid "Return To Previous Screen"
+msgstr "回到前一個畫面"
 
 msgid "DIFFICULTY"
 msgstr "難度"
@@ -10017,6 +9717,13 @@ msgstr "您想將此旁觀者與玩家交換嗎?"
 msgid "Yes, select Player slot"
 msgstr "是, 選擇玩家位置"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "已加入:"
 
@@ -10035,63 +9742,8 @@ msgstr "允許旁觀者加入"
 msgid "Lock Teams"
 msgstr "鎖定同盟"
 
-msgid "Choose Team"
-msgstr "選擇團隊"
-
-msgid "Teams locked"
-msgstr "同盟已鎖定"
-
-msgid "Click to change player colour"
-msgstr "點擊以變更玩家顏色"
-
-msgid "Click to change player position"
-msgstr "點擊以變更玩家位置"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "點選更改AI，右鍵分配選擇"
-
-msgid "Click to close spectator slot"
-msgstr "點擊關閉旁觀者位置"
-
-msgid "Player ID: "
-msgstr "玩家ID: "
-
-msgid "(none)"
-msgstr "(無)"
-
-msgid "Alt Name:"
-msgstr "自動評級提示名稱:"
-
-msgid "Player rating:"
-msgstr "玩家評分:"
-
-msgid "Host provided"
-msgstr "主持端提供"
-
-#, c-format
-msgid "From: %s"
-msgstr "從: %s"
-
-msgid "Click to change difficulty"
-msgstr "點擊更改難度"
-
-msgid "Waiting for player"
-msgstr "等待玩家"
-
-msgid "Player is ready"
-msgstr "玩家已就緒"
-
-msgid "Player is downloading"
-msgstr "玩家正在下載"
-
-msgid "Click when ready"
-msgstr "按一下開始"
-
-msgid "Waiting for download"
-msgstr "等待下載"
-
-msgid "READY?"
-msgstr "準備好了?"
+msgid "Lock Position"
+msgstr ""
 
 msgid "For Spectator:"
 msgstr "留給旁觀者:"
@@ -10155,22 +9807,6 @@ msgstr "更多資訊"
 msgid "Sorry! Failed to host the game."
 msgstr "抱歉! 主持遊戲失敗."
 
-msgid "Game Name Updated."
-msgstr "遊戲名稱更新."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** 需要密碼 [%s]! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** 不需要密碼! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "這是一個地圖模組，它可以改變你的遊戲體驗!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "這是一個隨機地圖，它可以改變您的遊戲體驗!"
-
 msgid "Host is Starting Game"
 msgstr "主持端已開始遊戲"
 
@@ -10192,6 +9828,15 @@ msgstr "要求 %s 變更為玩家..."
 
 msgid "Disconnected from host:"
 msgstr "已失去遊戲連線:"
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
+msgstr ""
 
 msgid "Host supplied invalid options"
 msgstr "主持端提供的選項無效"
@@ -10236,6 +9881,21 @@ msgstr "正在進行埠位址對應..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "使用者停用埠對應. 將不會自動設定埠 %d."
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10254,20 +9914,6 @@ msgstr "已關閉"
 
 msgid "Open"
 msgstr "開啟"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "地圖傳送: %u %%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "地圖: %u%% 已下載"
-
-msgid "HOST"
-msgstr "遊戲主持"
-
-msgid "Ping"
-msgstr "PING網路通信檢測"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "用於儲存此重播檔案的 Warzone 2100 版本與目前執行的版本不相容."
@@ -10296,6 +9942,10 @@ msgstr "%s 已離開遊戲"
 #, c-format
 msgid "%s joined the Game"
 msgstr "%s 已加入遊戲"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr ""
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10356,8 +10006,14 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d 玩家"
 
+msgid "Ping"
+msgstr "PING網路通信檢測"
+
 msgid "Structs"
 msgstr "建築"
+
+msgid "Alliances"
+msgstr "同盟"
 
 msgid "Score"
 msgstr "積分"
@@ -10414,25 +10070,6 @@ msgid "Team Strategy"
 msgstr "團隊戰略"
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr "變更建築限制 [%d]:"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr "[%d] 限制 [%s]: %u (預設: %u)"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr "[%d] 限制 [%s]: %u (預設: 無限制)"
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] 限制大於統計數字結構 (%u): %u"
-
-msgid "Limits were reset to default."
-msgstr "遊戲限制已重置到預設值."
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr "主持端初始化了 %u 限制，由於模組關係無法顯示它們"
 
@@ -10461,6 +10098,25 @@ msgstr "主持已開啟自由聊天功能給玩家: %s"
 #, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "主持已對玩家關閉自由聊天功能: %s"
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr "[%d] 限制 [%s]: %u (預設: %u)"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr "[%d] 限制 [%s]: %u (預設: 無限制)"
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
+msgstr "[%d] 限制大於統計數字結構 (%u): %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10514,6 +10170,9 @@ msgstr "橙色"
 
 msgid "Grey"
 msgstr "灰色"
+
+msgid "Black"
+msgstr "黑色"
 
 msgid "Red"
 msgstr "紅色"
@@ -10632,9 +10291,6 @@ msgstr "日期"
 
 msgid "Title"
 msgstr "標題"
-
-msgid "MUSIC MANAGER"
-msgstr "音樂管理"
 
 msgid "Dismiss"
 msgstr "解除"
@@ -10899,6 +10555,18 @@ msgstr "主持端回應無效"
 msgid "Requesting to join game"
 msgstr "請求加入遊戲"
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr "踢出旁觀者"
 
@@ -11125,6 +10793,9 @@ msgstr "修理工廠回饋 — 無"
 msgid "Classic"
 msgstr "經典"
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr "額外戰役"
 
@@ -11190,6 +10861,57 @@ msgstr "PS1 修改器"
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr "減少重量對車速的影響."
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "不支援"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "更輕鬆的遊戲體驗 - 比容易更容易"
 
@@ -11246,6 +10968,9 @@ msgstr "搜尋"
 
 msgid "Connecting to the lobby server..."
 msgstr "正在連線到遊戲大廳伺服器..."
+
+msgid "Game Name"
+msgstr "遊戲名稱"
 
 msgid "Map Name"
 msgstr "地圖名稱"
@@ -11317,6 +11042,458 @@ msgstr "密碼錯誤!"
 msgid "Continue"
 msgstr "繼續"
 
+msgid "MUSIC MANAGER"
+msgstr "音樂管理"
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "您的設備/系統/OpenAL 程式庫不支援 HRTF"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "語音音量"
+
+msgid "FX Volume"
+msgstr "音效音量"
+
+msgid "Music Volume"
+msgstr "背景音樂音量"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "已禁用"
+
+msgid "Enabled"
+msgstr "已啟用"
+
+msgid "Auto"
+msgstr "自動"
+
+msgid "Subtitles"
+msgstr "字幕"
+
+msgid "Off"
+msgstr "關閉"
+
+msgid "On"
+msgstr "開啟"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "音樂管理"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "捕捉滑鼠"
+
+msgid "Colored Cursors"
+msgstr "游標顏色"
+
+msgid "Cursor Size"
+msgstr "游標大小"
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "攝影速度"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "反向旋轉"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr "埠位址對應"
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr "使用PCP、NAT-PMP或UPnP 以協助您設定路由器/防火牆，以允許在主持遊戲時進行連接."
+
+msgid "Chat"
+msgstr "聊天"
+
+msgid "Quick Chat Only"
+msgstr "僅快速聊天"
+
+msgid "Allow All"
+msgstr "全部允許"
+
+msgid "Inactivity Timeout"
+msgstr "不活躍超時"
+
+#, c-format
+msgid "%u minutes"
+msgstr "%u 分鐘"
+
+msgid "Lag Kick"
+msgstr "慢速延遲剔除"
+
+#, c-format
+msgid "%u seconds"
+msgstr "%u 秒"
+
+msgid "Spectator Slots"
+msgstr "旁觀位置"
+
+msgid "None"
+msgstr "無"
+
+msgid "On Player Leave"
+msgstr "當玩家離開"
+
+msgid "Distribute to Team"
+msgstr "分配到小組"
+
+msgid "Destroy (Classic)"
+msgstr "刪除 (經典)"
+
+msgid "Game Time Limit"
+msgstr "遊戲時間限定"
+
+#, c-format
+msgid "%s hours"
+msgstr "%s 小時"
+
+msgid "Enable Rating"
+msgstr "啟用遊戲評級"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr "陰影貼圖在此系統上不可用."
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr "中等品質"
+
+msgid "High Quality"
+msgstr "高品質"
+
+msgid "Shadows"
+msgstr "陰影"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "陰影分辨率"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr "高"
+
+msgid "Shadow Filtering"
+msgstr "陰影過濾"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr "低"
+
+msgid "Ultra"
+msgstr "極高"
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr "地圖增亮"
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr "模糊"
+
+msgid "Screen Shake"
+msgstr "螢幕晃動"
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr "細節程度 距離"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr "預設"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr "適用的"
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "語言"
+
+msgid "Display Scale"
+msgstr "顯示比例"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr "小組功能表"
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr "雷達"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "固定"
+
+msgid "Rotating"
+msgstr "旋轉"
+
+msgid "Radar Jump"
+msgstr "雷達跳躍"
+
+msgid "Instant"
+msgstr "即時"
+
+msgid "Tracked"
+msgstr "軌道"
+
+msgid "Radar Zoom"
+msgstr "雷達縮放"
+
+msgid "Video Playback"
+msgstr "播放影片"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "一倍"
+
+msgid "2×"
+msgstr "二倍"
+
+msgid "Fullscreen"
+msgstr "全螢幕"
+
+msgid "Scanlines"
+msgstr "掃描線"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "開啟參數設定目錄"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "無法在系統預設檔案瀏覽器中開啟設定目錄."
+
+msgid "Configuration directory is reported as:"
+msgstr "參數設定目錄為:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "如果在容器/隔離環境中執行，這可能與磁碟上的實際目錄路徑不同."
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "有關如何手動尋找它的更多資訊，請參閱說明文件."
+
+msgid "Failed to open configuration directory"
+msgstr "無法開啟參數設定目錄"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr "在桌面全螢幕模式下，解析度與桌面解析度相匹配\\n(或視窗管理員允許的內容)."
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "您可以通過正常調整視窗大小來更改解析度. (嘗試拖動角落/邊緣)"
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "視窗模式"
+
+msgid "Desktop Full"
+msgstr "佈滿桌面"
+
+msgid "Resolution"
+msgstr "解析度"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "視窗是否應不在焦點時自動最小化"
+
+msgid "On (Fullscreen)"
+msgstr "開 (全螢幕)"
+
 msgid "CONNECTION"
 msgstr "連接"
 
@@ -11328,6 +11505,303 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP 位置或電腦名稱"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "玩家ID: "
+
+msgid "(none)"
+msgstr "(無)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "地圖傳送: %u %%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "地圖: %u%% 已下載"
+
+msgid "HOST"
+msgstr "遊戲主持"
+
+msgid "Choose Team"
+msgstr "選擇團隊"
+
+msgid "Teams locked"
+msgstr "同盟已鎖定"
+
+msgid "Click to change player colour"
+msgstr "點擊以變更玩家顏色"
+
+msgid "Click to change player position"
+msgstr "點擊以變更玩家位置"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "點選更改AI，右鍵分配選擇"
+
+msgid "Click to close spectator slot"
+msgstr "點擊關閉旁觀者位置"
+
+msgid "Alt Name:"
+msgstr "自動評級提示名稱:"
+
+msgid "Player rating:"
+msgstr "玩家評分:"
+
+msgid "Host provided"
+msgstr "主持端提供"
+
+#, c-format
+msgid "From: %s"
+msgstr "從: %s"
+
+msgid "Click to change difficulty"
+msgstr "點擊更改難度"
+
+msgid "Waiting for player"
+msgstr "等待玩家"
+
+msgid "Player is ready"
+msgstr "玩家已就緒"
+
+msgid "Player is downloading"
+msgstr "玩家正在下載"
+
+msgid "Click when ready"
+msgstr "按一下開始"
+
+msgid "Waiting for download"
+msgstr "等待下載"
+
+msgid "READY?"
+msgstr "準備好了?"
+
+msgid "Tanks disabled!!"
+msgstr "坦克已禁用!!"
+
+msgid "Cyborgs disabled."
+msgstr "生化人已禁用."
+
+msgid "VTOLs disabled."
+msgstr "垂直起降裝備已禁用."
+
+msgid "Satellite Uplink disabled."
+msgstr "衛星上傳連線已禁用."
+
+msgid "Laser Satellite disabled."
+msgstr "雷射衛星已禁用."
+
+msgid "Structure Limits Enforced."
+msgstr "強制實施建築限制."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** 需要密碼 [%s]! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** 不需要密碼! ***"
+
+msgid "Game Name Updated."
+msgstr "遊戲名稱更新."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "單人玩家遭遇戰"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "按一下看地圖"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"選擇地圖\n"
+"可以透過玩家投票來阻止"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "基地"
+
+msgid "Tech"
+msgstr "科技"
+
+msgid "Technology Level 1"
+msgstr "科技級別 1"
+
+msgid "Technology Level 2"
+msgstr "科技級別 2"
+
+msgid "Technology Level 3"
+msgstr "科技級別 3"
+
+msgid "Technology Level 4"
+msgstr "科技級別 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "發射運輸艦"

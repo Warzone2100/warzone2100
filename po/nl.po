@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -120,10 +120,10 @@ msgid "ALPHA BASE MISSION: Establish a Forward Base"
 msgstr "ALFA BASIS MISSIE: Bouw een vooruitgeschoven basis"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr ""
+msgstr "Bouw een vooruitgeschoven basis op het plateau en sla de New Paradigm af."
 
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Bouw verdedigingswerken totdat de groene doelstelling blip verdwijnt."
 
 msgid "ALPHA BASE MISSION: Counter Attack"
 msgstr "ALFA BASIS MISSIE: Tegenaanval"
@@ -156,10 +156,10 @@ msgid "The first two zones are now secure."
 msgstr "De eerste twee zones zijn veilig."
 
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "PROJECT TEAM UPDATES"
 
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "TEAM BETA UPDATE"
 
 msgid "We have recovered some artifacts."
 msgstr "We hebben wat artefacten verzameld."
@@ -168,7 +168,7 @@ msgid "There is a better equipped force operating in this area."
 msgstr "Er is een beter gewapende kracht bezig in dit gebied."
 
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "TEAM GAMMA UPDATE"
 
 msgid "Nothing to report."
 msgstr "Niks te melden."
@@ -399,7 +399,7 @@ msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
 msgstr "BETA BASIS MISSIE: Vernietig de vijandelijke luchtbasis en haal VTOL's op."
 
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Analyse van vluchtpaden wijst uit dat de Collective's VTOL's hier zijn ontstaan."
+msgstr "Analyse van vluchtpaden wijst uit dat de Collective zijn VTOL's hier vandaan komen."
 
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
 msgstr "BETA BASIS MISSIE: Vernietig vijandelijke luchtbasis en haal VTOL's op"
@@ -492,7 +492,7 @@ msgid "Once a safe haven is established, return to the LZ for further orders."
 msgstr "Zo gauw een veilige plek is gebouwd, ga dan terug naar LZ voor verdere orders."
 
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr ""
+msgstr "BETA BASIS MISSIE: Overleef en evacueer! Breng een vrachtwagen"
 
 msgid "Commander, we have grave news."
 msgstr "Commadant, wij hebben slecht nieuws."
@@ -573,10 +573,10 @@ msgid "The valley is your only chance of escape."
 msgstr "De vallei is je enige kans om te onstnappen."
 
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "EXPEDITIE TEAM UPDATE"
 
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Alle communicatie met het andere team is verloren na de nuclaire explosie."
+msgstr "Alle communicatie met het expeditie team is verloren na de nucleaire explosie."
 
 msgid "Their last transmission indicated they were heading back to base."
 msgstr "Hun laatste transmissie geeft aan dat ze op weg naar hun basis waren."
@@ -864,7 +864,7 @@ msgid "Demolish"
 msgstr "Slopen"
 
 msgid "Naval"
-msgstr ""
+msgstr "Marine"
 
 msgid "Repair Center"
 msgstr "Reparatiecentrum"
@@ -1764,10 +1764,10 @@ msgid "All rockets upgraded automatically"
 msgstr "Alle raketten automatisch verbeterd"
 
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Vernietig alle New Paradigm eenheden"
 
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Vernietig alle New Paradigm versterkingen"
 
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
 msgstr ""
@@ -1779,37 +1779,40 @@ msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr ""
 
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Stel de Uplink veilig van The Collective"
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Stuur tenminste één transport met een vrachtwagen en overleef de Collectieve aanval tot de timer eindigt"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr ""
+msgstr "Verzend zoveel mogelijk transporten als je kunt en breng tenminste één vrachtwagen"
 
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Verplaats alle eenheden naar de vallei"
 
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Vernietig de raket silo's"
 
 msgid "Rescue Alpha team from Nexus"
+msgstr "Red Alpha team van Nexus"
+
+msgid "Prevent any Nexus hover tanks from escaping the area"
 msgstr ""
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Waarschuwing: HK is beschermd tegen VTOL aanvallen"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr ""
 
 msgid "Build a forward base at the silos"
-msgstr ""
+msgstr "Bouw een vooruitgeschoven basis bij de silo's"
 
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Bescherm de raket silo's en doe onderzoek voor de raket codes"
 
 msgid "Reunite a part of Beta team with a Gamma team outpost"
 msgstr ""
@@ -1817,35 +1820,35 @@ msgstr ""
 msgid "Return to LZ"
 msgstr "Keer terug naar LZ"
 
-msgid "Hard / Insane difficulty hint:"
+msgid "Insane difficulty hint:"
 msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr ""
 
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Vernietig alle vijandelijke eenheden en gebouwen"
 
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefacten verzameld"
 
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Basis vernietigd"
 
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Resterende vijandelijke eenheden"
 
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Resterende vijandelijke gebouwen"
 
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Keer terug naar de LZ"
 
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Vernietig alle vijandelijke eenheden en basissen"
 
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Overleef totdat de timer nul bereikt"
 
 msgid "Manufacture (F1)"
 msgstr "Produceer (F1)"
@@ -1899,7 +1902,7 @@ msgid "The oil derrick is currently dormant. Build a power generator to convert 
 msgstr "De jaknikker is op dit moment slapend. Bouw een energiegenerator om de olie in energie om te zetten"
 
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Klik links op het knipperende bouwen pictogram"
 
 msgid "Now left click the power generator in the build menu on the left"
 msgstr "Klik nu links op de energiegenerator in het bouwmenu links"
@@ -2058,7 +2061,7 @@ msgid "Transmission from Beta Base"
 msgstr "Transmissie van Beta Basis"
 
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 msgid "Please assist!..."
 msgstr "Help alsjeblieft!..."
@@ -2571,7 +2574,7 @@ msgid "Midnight, April 10th, 2086"
 msgstr "Middernacht, 10de van April, 2086"
 
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "Rocky Mountains"
 
 msgid "Safety"
 msgstr "Veiligheid"
@@ -2841,10 +2844,10 @@ msgid "- unit building - research completion - construction of base structures (
 msgstr ""
 
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Ultieme Aaseters"
 
 msgid "Scavengers"
-msgstr ""
+msgstr "Aaseters"
 
 msgid "No Scavengers"
 msgstr "Geen Scavengers"
@@ -2957,6 +2960,10 @@ msgstr ""
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr ""
 
@@ -2986,6 +2993,18 @@ msgid "Replay File Format Unsupported"
 msgstr ""
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
 msgid "Menu"
@@ -3297,11 +3316,11 @@ msgstr "Gewapend met Cyborg Plaag Raketwerper"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Gepantserd met Cyborg Thermiet Vlammenwerper"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr ""
 
 msgid "Armed with Flashlight Laser"
 msgstr "Gewapend met Zaklamp-Laser"
@@ -3439,6 +3458,9 @@ msgstr "Gewapende vesting met Gauss kanon"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Gepantserde Vesting met Zware Laser"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Gepantserde vesting met Plasmite Vlammenwerper"
@@ -3580,7 +3602,7 @@ msgid "Average power costs and production times"
 msgstr "Gemiddelde energiekosten en productietijd"
 
 msgid "BaBaLegs"
-msgstr ""
+msgstr "Rocky Mountains"
 
 msgid "BaBaProp"
 msgstr ""
@@ -3668,6 +3690,9 @@ msgstr ""
 msgid "Bomb damage +25%"
 msgstr "Bom schade +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Bom verbetering"
 
@@ -3691,6 +3716,9 @@ msgstr "Kever"
 
 msgid "Buggy"
 msgstr "Terreinwagen"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Ingebouwde diagnostiek en repareer systemen"
@@ -3732,6 +3760,9 @@ msgstr "Verbrandt olie efficiënter"
 msgid "Cannon accuracy +10%"
 msgstr "Kanon precisie +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Kanon-autolader Mk2"
 
@@ -3744,6 +3775,9 @@ msgstr "Kanon-autolader"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Kanon schade +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Kanon Brandweerauto"
@@ -3769,6 +3803,9 @@ msgstr "Kanon-snellader"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Kanon Herlaadtijd -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Kanontoren"
@@ -3875,6 +3912,12 @@ msgstr "Commandant leidt groepen en fungeert als fabrieksafleverpunt"
 msgid "Complete battlefield visibility"
 msgstr "Volledige zichtbaarheid van het slagveld"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Legeringen Mk2"
 
@@ -3932,6 +3975,15 @@ msgid "Crane1"
 msgstr ""
 
 msgid "Crane2"
+msgstr ""
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
 msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
@@ -4000,6 +4052,12 @@ msgstr "Cyborg Superdichte Thermische Bepantsering"
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Cyborg-hitteschild Mk2"
 
@@ -4008,6 +4066,9 @@ msgstr "Cyborg-hitteschild Mk3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Cyborg-hitteschild"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4135,6 +4196,9 @@ msgstr "Maakt zelf-repareren mogelijk"
 msgid "Enemy"
 msgstr ""
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Genie"
 
@@ -4207,6 +4271,9 @@ msgstr "Vinstabilisatie verbetert vluchttraject"
 msgid "Fire Truck"
 msgstr "Brandweerauto"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Vuurt Elektronische Magnetische Puls Raketten"
 
@@ -4241,12 +4308,18 @@ msgstr "Vlammenwerper Cobra Banden"
 msgid "Flamer damage +25%"
 msgstr "Vlammenwerper schade +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr ""
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Vlammenwerper herlaadtijd -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Vlammewerper Adder Halfband"
@@ -4791,6 +4864,15 @@ msgstr "Houwitser-autolader"
 msgid "Howitzer damage +25%"
 msgstr "Houwitser schade +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Houwitser Snellader"
 
@@ -4800,6 +4882,15 @@ msgstr "Houwitser herlaadtijd -10%"
 
 msgid "Howitzer"
 msgstr "Houwitser"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "Orkaan AA Platform"
@@ -4864,6 +4955,9 @@ msgstr "Verbeterde genie"
 msgid "Improved fire detection systems"
 msgstr "Verbeterde lanceer detectie systemen"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Verbeterd Hardbeton Mk2"
 
@@ -4915,10 +5009,10 @@ msgstr "Verbetering in laser optiek reduceert lichtverlies"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Ontbrand Houwitser Emplacement"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Ontbrand Houwitser Emplacement"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5123,9 +5217,15 @@ msgstr "Laser AA-geweer beschikbaar"
 msgid "Laser accuracy +10%"
 msgstr "Laser precisie +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Laser schade +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Laser-bepaler markeert en geleid kogels naar het doel"
@@ -5133,6 +5233,9 @@ msgstr "Laser-bepaler markeert en geleid kogels naar het doel"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Laser herlaadtijd -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Laser Satelliet Commando Post"
@@ -5310,6 +5413,12 @@ msgstr "Gemiddeld kanon"
 msgid "Medium Super Heavy Body"
 msgstr "Gemiddelde Super Zware Carrosserie"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Gepantserde Mini-Raket vesting"
 
@@ -5365,6 +5474,9 @@ msgstr "Mini-Raket Adder Wielen"
 msgid "Missile accuracy +10%"
 msgstr "Raket precisie +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "Raket zoekt en vliegt op doelen in"
 
@@ -5372,12 +5484,18 @@ msgstr "Raket zoekt en vliegt op doelen in"
 msgid "Missile damage +25%"
 msgstr "Raket schade +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Raket Fort"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Raket Herlaadtijd -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Raket verbetering"
@@ -5398,6 +5516,9 @@ msgstr "Meer pantser en carrosseriepunten dan Wraak"
 msgid "Mortar accuracy +10%"
 msgstr "Mortier precisie +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Mortier-autolader Mk2"
 
@@ -5414,6 +5535,9 @@ msgstr "Mortier Cobra Halfband"
 msgid "Mortar damage +25%"
 msgstr "Mortier schade +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Snelle mortierlader"
 
@@ -5423,6 +5547,9 @@ msgstr "Mortier kuil"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Mortier Herlaadtijd -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Mortierdoelcomputer"
@@ -5556,11 +5683,11 @@ msgstr "Nieuwe systeemgebouw beschikbaar"
 msgid "New Systems Tower Available"
 msgstr "Nieuwe systeemtoren beschikbaar"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Nieuwe systeemkoepel beschikbaar voor ontwerp"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Nieuwe geschutstoren beschikbaar voor ontwerp"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Nieuwe systeemkoepel beschikbaar voor ontwerp"
 
 msgid "New Thermal Emissions detection"
 msgstr "Nieuwe thermale emissie detectie"
@@ -5658,6 +5785,12 @@ msgstr ""
 msgid "Panther"
 msgstr "Panter"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr ""
 
@@ -5747,6 +5880,9 @@ msgstr "Powerproductie +30%"
 msgid "Power Research Completed"
 msgstr "Energieonderzoek voltooid"
 
+msgid "Power"
+msgstr "Energie"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Sterk Elektronisch magnetisch puls wapen"
 
@@ -5755,6 +5891,9 @@ msgstr ""
 
 msgid "Produces Cyborgs"
 msgstr "Produceert Cyborgs"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr ""
@@ -5828,6 +5967,12 @@ msgstr "Radar Detector Toren"
 msgid "Radar Detector"
 msgstr ""
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Rail Gun precisie +10%"
@@ -5870,6 +6015,9 @@ msgstr "Railgun verbetering"
 msgid "Rail Gun"
 msgstr "Railgun"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Rail Doel Verwacht Computer"
 
@@ -5893,13 +6041,19 @@ msgid "Rearming speed +30%"
 msgstr "Herbewapeningssnelheid +30%"
 
 msgid "Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Verminder Aaseter vlammenwerper bereik"
 
 msgid "Reduced chance of NEXUS take-over"
 msgstr "Gereduceerde kans op NEXUS overname"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Hervult, herbewapend en repareert VTOL's"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Versterkte Materialen Voor Basis Gebouwen Mk2"
@@ -5979,6 +6133,9 @@ msgstr "Onderzoekssnelheid +30%"
 msgid "Research speed +85%"
 msgstr "Onderzoekssnelheid +85%"
 
+msgid "Research"
+msgstr "Onderzoek"
+
 msgid "Retaliation"
 msgstr "Wraak"
 
@@ -6037,6 +6194,9 @@ msgstr "Gerobotiseerde VTOL herbewapening"
 msgid "Rocket accuracy +10%"
 msgstr "Raket precisie +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Raketartillerie; kan worden toegewezen aan een sensor"
 
@@ -6055,6 +6215,9 @@ msgstr "Raketterreinwagen"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Raket schade +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Raket detecteert en pint vast op motor emissie's"
@@ -6077,6 +6240,9 @@ msgstr ""
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Raket herlaadtijd -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Raket volgt de laser aanduiding naar het doel"
@@ -6109,7 +6275,7 @@ msgid "Scavenger Bunker"
 msgstr "Aaseters bunker"
 
 msgid "Scavenger Chopper Factory"
-msgstr ""
+msgstr "Aaseter helikopter fabriek"
 
 msgid "Scavenger CornerWall"
 msgstr "Aaseters hoekmuur"
@@ -6127,16 +6293,16 @@ msgid "Scavenger Horizontal Wall"
 msgstr "Aaseters horizontale muur"
 
 msgid "Scavenger MG tower"
-msgstr ""
+msgstr "Aaseter MG toren"
 
 msgid "Scavenger Mounted MG"
-msgstr ""
+msgstr "Aaseter gemonteerd MG"
 
 msgid "Scavenger Power Generator"
 msgstr "Aaseters energiegenerator"
 
 msgid "Scavenger Repair Center"
-msgstr ""
+msgstr "Aaseter reparatiecentrum"
 
 msgid "Scavenger Rocket Pit"
 msgstr "Aaseters raketput"
@@ -6145,7 +6311,7 @@ msgid "Scavenger"
 msgstr "Aaseter"
 
 msgid "scavengernexuslinkturret"
-msgstr ""
+msgstr "Aaseter Nexus link geschutskoepel"
 
 msgid "School Bus"
 msgstr "Schoolbus"
@@ -6233,6 +6399,9 @@ msgstr "Sensor Verbetering Mk3"
 
 msgid "Sensor Upgrade"
 msgstr "Sensorverbetering"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "Sensoren verbeterd"
@@ -6399,11 +6568,11 @@ msgstr "Synaptische Link Gegevens Analyse Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Synaptische Link Gegevens Analyse Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Synaptische Link Gegevens Analyse"
-
 msgid "Synaptic link data analysis"
 msgstr "Synaptische Link dataverwerking"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Synaptische Link Gegevens Analyse"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Synaptsiche Link Verstoorder technologie"
@@ -6416,6 +6585,9 @@ msgstr "Synaptische Link"
 
 msgid "Systems Research Completed"
 msgstr "Systeemonderzoek voltooid"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr ""
@@ -6443,6 +6615,9 @@ msgstr "Tank Sloper Wraak Banden"
 
 msgid "Tank Killer"
 msgstr "Tank Sloper"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Tankval"
@@ -6487,6 +6662,12 @@ msgstr "Thermisch Pantser +40%"
 msgid "Thermal Armor +45%"
 msgstr "Thermisch Pantser +45%"
 
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Thermal Armor Mk2"
 msgstr "Hitteschild Mk2"
 
@@ -6530,6 +6711,9 @@ msgid "Titanium-reinforced concrete"
 msgstr "Titaniun-gewapend beton"
 
 msgid "Tower wars AI, based on NullBot"
+msgstr ""
+
+msgid "Tower Wars Buff"
 msgstr ""
 
 msgid "Tracked Propulsion"
@@ -6635,7 +6819,7 @@ msgid "Two-faced"
 msgstr ""
 
 msgid "Undo Reduce Scavenger Flamer Range"
-msgstr ""
+msgstr "Verminder Aaseter vlammenwerper bereik ongedaan maken"
 
 msgid "Unit Research Completed"
 msgstr "Eenheidonderzoek voltooid"
@@ -6738,10 +6922,10 @@ msgid "VTOL Assault Cannon"
 msgstr "VTOL Assault Kanon"
 
 msgid "VTOL Assault Gun"
-msgstr ""
+msgstr "VTOL Aanvalsgeweer"
 
 msgid "VTOL BaBa Rearming Pad"
-msgstr ""
+msgstr "VTOL BaBa Herbewapening Platform"
 
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "VTOL Bunker Beuker Insect VTOL"
@@ -6798,7 +6982,7 @@ msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL Heap Bommenluik"
 
 msgid "VTOL Heavy Cannon"
-msgstr ""
+msgstr "VTOL Zwaar Kanon"
 
 msgid "VTOL Heavy Laser"
 msgstr "VTOL Zware Laser"
@@ -6819,10 +7003,10 @@ msgid "VTOL Hyper Velocity Cannon"
 msgstr "VTOL Hyper Snelheids Kanon"
 
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL Lansier Insect VTOL"
@@ -6854,6 +7038,9 @@ msgstr "VTOL Mini-Raket"
 msgid "VTOL Needle Gun"
 msgstr "VTOL Naaldgeweer"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL Phosphor Bommenluik"
 
@@ -6878,6 +7065,9 @@ msgstr "VTOL Herbewapenings Platform"
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "VTOL herbewapeningsplatformen vereist om VTOL's vliegend te houden"
 
+msgid "VTOL Rearming"
+msgstr ""
+
 msgid "VTOL Scourge Missile"
 msgstr "VTOL Scourge Raket"
 
@@ -6900,13 +7090,13 @@ msgid "VTOL Tank Killer"
 msgstr "VTOL Tank Sloper"
 
 msgid "VTOL Thermite Bomb Bay"
-msgstr "VTOL Thermite Bommenluik"
+msgstr "VTOL Thermier Bommenruim"
 
 msgid "VTOL Twin Machinegun"
 msgstr "VTOL Dubbele Machinegeweer"
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "Wall"
 msgstr ""
@@ -7297,10 +7487,16 @@ msgstr ""
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7606,418 +7802,11 @@ msgstr ""
 msgid "Load Multiplayer Replay"
 msgstr ""
 
-msgid "Game Options"
-msgstr "Spelinstellingen"
-
-msgid "Graphics Options"
-msgstr "Beeldinstellingen"
-
-msgid "Video Options"
-msgstr "Video-instellingen"
-
-msgid "Audio / Zoom Options"
-msgstr ""
-
-msgid "Mouse Options"
-msgstr "Muisinstellingen"
-
-msgid "Key Mappings"
-msgstr "Sneltoetsen"
-
-msgid "Music Manager"
-msgstr ""
-
-msgid "Multiplay Options"
-msgstr ""
-
-msgid "OPTIONS"
-msgstr "OPTIES"
-
-msgid "Open Configuration Directory"
-msgstr ""
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
-
-msgid "Configuration directory is reported as:"
-msgstr ""
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
-
-msgid "Failed to open configuration directory"
-msgstr ""
-
-msgid "1×"
-msgstr ""
-
-msgid "2×"
-msgstr ""
-
-msgid "Fullscreen"
-msgstr "Volledig scherm"
-
-msgid "Unsupported"
-msgstr "Niet Ondersteund"
-
-msgid "Off"
-msgstr "Uit"
-
-msgid "50%"
-msgstr ""
-
-msgid "Black"
-msgstr "Zwart"
-
-msgid "On"
-msgstr "Aan"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "Roteren"
-
-msgid "Fixed"
-msgstr "Gefixeerd"
-
-msgid "Instant"
-msgstr ""
-
-msgid "Tracked"
-msgstr ""
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr "Gemiddelde kwaliteit"
-
-msgid "High Quality"
-msgstr "Hoge kwaliteit"
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* Gaat in na herstart"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "Schaduwen"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr ""
-
-msgid "Radar"
-msgstr ""
-
-msgid "Radar Jump"
-msgstr ""
-
-msgid "Video Playback"
-msgstr "Video afspelen"
-
-msgid "Scanlines"
-msgstr "Scanlijnen"
-
-msgid "Screen Shake"
-msgstr ""
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "GRAFISCHE INSTELLINGEN"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Voice Volume"
-msgstr "Stemvolume"
-
-msgid "FX Volume"
-msgstr "Effectenvolume"
-
-msgid "Music Volume"
-msgstr "Muziekvolume"
-
-msgid "Subtitles"
-msgstr "Ondertitels"
-
-msgid "HRTF"
-msgstr ""
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
-
-msgid "Map Zoom"
-msgstr ""
-
-msgid "Map Zoom Rate"
-msgstr ""
-
-msgid "Radar Zoom"
-msgstr ""
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
-
-msgid "Graphics Mode"
-msgstr ""
-
-msgid "Resolution"
-msgstr ""
-
-msgid "Display Scale"
-msgstr ""
-
-msgid "Adaptive"
-msgstr ""
-
-msgid "Windowed"
-msgstr "Venster"
-
-msgid "Desktop Full"
-msgstr ""
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "Structuurgrootte"
-
-msgid "Vertical sync"
-msgstr "Verticale synchronisatie"
-
-msgid "Antialiasing*"
-msgstr ""
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
-
-msgid "Graphics Backend*"
-msgstr ""
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "VIDEO INSTELLINGEN"
-
-msgid "Unable to change Vertical Sync"
-msgstr ""
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-
-msgid "Middle Mouse"
-msgstr "Middelste Muisknop"
-
-msgid "Right Mouse"
-msgstr "Rechtse Muisknop"
-
-msgid "Reverse Rotation"
-msgstr "Draai knoppen om"
-
-msgid "Trap Cursor"
-msgstr "Cursor opsluiten"
-
-msgid "Switch Mouse Buttons"
-msgstr "Verwissel Muis Knoppen"
-
-msgid "Rotate Screen"
-msgstr "Draai Scherm"
-
-msgid "Colored Cursors"
-msgstr ""
-
-msgid "Cursor Size"
-msgstr ""
-
-msgid "MOUSE OPTIONS"
-msgstr "MUIS INTELLINGEN"
-
-msgid "Super Easy"
-msgstr ""
-
-msgid "Easy"
-msgstr "Makkelijk"
-
-msgid "Hard"
-msgstr "Moeilijk"
-
-msgid "Insane"
-msgstr "Idioot"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr ""
 
 msgid "Please remove all incompatible mods."
-msgstr ""
-
-msgid "GAME OPTIONS"
-msgstr "SPELINSTELLINGEN"
-
-msgid "Language"
-msgstr "Taal"
-
-msgid "Unit Colour:"
-msgstr "Eenheid Kleur:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Oefenspel/Multiplayer"
-
-msgid "Campaign Difficulty"
-msgstr ""
-
-msgid "Camera Speed"
-msgstr ""
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
-
-msgid "Click to open webpage."
-msgstr ""
-
-msgid "Insane Difficulty"
-msgstr ""
-
-msgid "This difficulty is for very experienced players!"
-msgstr ""
-
-#, c-format
-msgid "%u minutes"
-msgstr ""
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr ""
-
-msgid "Game Port"
-msgstr ""
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr ""
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr ""
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
 msgstr ""
 
 msgid "Mod: "
@@ -8525,15 +8314,6 @@ msgstr "WAARSCHUWING: Jij bent de host. Als je het spel sluit, zal het spel stop
 msgid "Host Quit"
 msgstr ""
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Tactische UI (Target Origin Icon): Tonen"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Tactische UI (Target Origin Icon): Verbergen"
-
-msgid "Go Back"
-msgstr ""
-
 msgid "View Guide"
 msgstr ""
 
@@ -8566,15 +8346,6 @@ msgstr "Het spel kan niet verder zonder de host."
 
 msgid "-->  QUIT  <--"
 msgstr "-->  AFSLUITEN  <--"
-
-msgid "Audio Options"
-msgstr "Geluidsinstellingen"
-
-msgid "View Key Mappings"
-msgstr ""
-
-msgid "Shake"
-msgstr ""
 
 msgid "Save Campaign Game"
 msgstr "Opslaan Veldtocht"
@@ -8619,16 +8390,19 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
+msgid "Global Keys"
 msgstr ""
 
-msgid "Other Hotkeys"
+msgid "Other Keys"
 msgstr ""
 
-msgid "Gameplay"
+msgid "Gameplay Keys"
 msgstr ""
 
-msgid "Debug"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
 msgstr ""
 
 msgid "Debug (level editor)"
@@ -8639,9 +8413,6 @@ msgstr ""
 
 msgid "Manufacture"
 msgstr "Produceer"
-
-msgid "Research"
-msgstr "Onderzoek"
 
 msgid "Build"
 msgstr "Bouw"
@@ -9007,7 +8778,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Selecteer alle zwaarbeschadigde eenheden"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat Units with >50% HP and no group"
 msgstr ""
 
 msgid "Select all Half-tracks"
@@ -9098,7 +8869,7 @@ msgid "Select next Cyborg Factory"
 msgstr "Ga naar volgende cyborg-fabriek"
 
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Selecteer de volgende VTOL Fabriek"
 
 msgid "Jump to next Factory"
 msgstr ""
@@ -9113,7 +8884,7 @@ msgid "Jump to next Cyborg Factory"
 msgstr ""
 
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Ga naar de volgende VTOL Fabriek"
 
 msgid "Toggle Debug Mappings"
 msgstr "Schakel Debug Kaarten"
@@ -9177,9 +8948,6 @@ msgstr ""
 
 msgid "Waiting for Power"
 msgstr "Wachten op Power"
-
-msgid "Power"
-msgstr "Energie"
 
 msgid "Power Per Second"
 msgstr ""
@@ -9284,7 +9052,7 @@ msgid "Game Name: \"%s\" by %s"
 msgstr ""
 
 msgid "No:"
-msgstr ""
+msgstr "Nr:"
 
 msgid "Alliances:"
 msgstr ""
@@ -9340,7 +9108,7 @@ msgid "Assign Fire Support"
 msgstr "Vuursteun toewijzen"
 
 msgid "Assign VTOL Factory Production"
-msgstr "VTOL-fabrieksproductie toewijzen"
+msgstr "VTOL Fabrieksproductie toewijzen"
 
 msgid "Circle"
 msgstr "Cirkel"
@@ -9642,21 +9410,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
-msgid "<not bound>"
-msgstr ""
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "KERN KAARTEN"
-
-msgid "Return To Previous Screen"
-msgstr "Terug naar vorig scherm"
-
-msgid "Select Default"
-msgstr "Standaardwaarde instellen"
-
 msgid "Parent directory"
 msgstr ""
 
@@ -9677,8 +9430,14 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Kon het spel NIET opslaan!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Vervoer inladen"
@@ -9757,8 +9516,20 @@ msgstr "%s vormt een bondgenootschap met %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Je ontdekt blauwdrukken voor %s"
 
+msgid "Super Easy"
+msgstr ""
+
+msgid "Easy"
+msgstr "Makkelijk"
+
 msgid "Medium"
 msgstr "Gemiddeld"
+
+msgid "Hard"
+msgstr "Moeilijk"
+
+msgid "Insane"
+msgstr "Idioot"
 
 msgid "Commander"
 msgstr ""
@@ -9773,99 +9544,32 @@ msgstr ""
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-msgid "Tanks disabled!!"
-msgstr "Tanks gediskwalificeerd!!"
-
-msgid "Cyborgs disabled."
-msgstr "Cyborgs uitgeschakeld."
-
-msgid "VTOLs disabled."
-msgstr "VTOL gediskwalificeerd."
-
-msgid "Satellite Uplink disabled."
-msgstr ""
-
-msgid "Laser Satellite disabled."
-msgstr ""
-
-msgid "Structure Limits Enforced."
-msgstr ""
-
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
-
-msgid "Select Game Name"
-msgstr "Kies spelnaam"
-
-msgid "Game Name"
-msgstr ""
-
-msgid "One-Player Skirmish"
-msgstr "Enkele-speler Schermutseling"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-
-msgid "Map-Mod!"
-msgstr ""
-
-msgid "Random map!"
-msgstr ""
-
-msgid "Click to set Password"
-msgstr "Klik om wachtwoord intevullen"
-
-msgid "Enter password here"
-msgstr "Vul hier het wachtwoord in "
 
 msgid "Select Player Name"
 msgstr "Kies spelernaam"
 
-msgid "Alliances"
-msgstr "Bondgenootschappen toestaan"
-
-msgid "Base"
-msgstr "Basis"
-
-msgid "Map Preview"
-msgstr "Kaartvoorbeeld"
-
-msgid "Click to see Map"
-msgstr "Klik om kaart te zien"
-
-msgid "Show Structure Limits"
-msgstr "Gebouwen limiet laten zien"
-
-msgid "Set Structure Limits"
-msgstr "Gebouwlimiet instellen"
-
-msgid "Random Game Options"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Blind Game:"
 msgstr ""
 
-msgid "Tech"
+msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr ""
 
-msgid "Technology Level 1"
+msgid "Blind Lobby:"
 msgstr ""
 
-msgid "Technology Level 2"
+msgid "- Player names will not be visible to other players (until the game has started)"
 msgstr ""
 
-msgid "Technology Level 3"
-msgstr ""
+msgid "OPTIONS"
+msgstr "OPTIES"
 
-msgid "Technology Level 4"
-msgstr ""
-
-msgid "Start Hosting Game"
-msgstr "Optreden als gastheer"
+msgid "Return To Previous Screen"
+msgstr "Terug naar vorig scherm"
 
 msgid "DIFFICULTY"
 msgstr "MOEILIJKHEIDSGRAAD"
@@ -10007,6 +9711,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10025,63 +9736,8 @@ msgstr ""
 msgid "Lock Teams"
 msgstr ""
 
-msgid "Choose Team"
-msgstr "Kies Team"
-
-msgid "Teams locked"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Click to change player colour"
-msgstr "Klik om de speler-kleur te wijzigen"
-
-msgid "Click to change player position"
-msgstr "Klik om de speler positie te wijzigen"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr ""
-
-msgid "(none)"
-msgstr ""
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Klik om de AI moeilijksheidsgraad aan te passen"
-
-msgid "Waiting for player"
-msgstr "Op andere spelers wachten"
-
-msgid "Player is ready"
-msgstr "Speler is klaar"
-
-msgid "Player is downloading"
-msgstr ""
-
-msgid "Click when ready"
-msgstr "Klik zodra klaar"
-
-msgid "Waiting for download"
-msgstr ""
-
-msgid "READY?"
-msgstr "KLAAR?"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10145,22 +9801,6 @@ msgstr ""
 msgid "Sorry! Failed to host the game."
 msgstr "Sorry! Niet mogelijk om het spel te hosten."
 
-msgid "Game Name Updated."
-msgstr ""
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** wachtwoord [%s] is nu nodig! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** Er is GEEN wachtwoord nodig! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
-
 msgid "Host is Starting Game"
 msgstr "Gastheer start spel"
 
@@ -10181,6 +9821,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10226,6 +9875,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10243,20 +9907,6 @@ msgid "Closed"
 msgstr "Gesloten"
 
 msgid "Open"
-msgstr ""
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Stuurt Kaart: %u%%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Kaart: %u%% gedownload"
-
-msgid "HOST"
-msgstr ""
-
-msgid "Ping"
 msgstr ""
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
@@ -10285,6 +9935,10 @@ msgstr "%s heeft het spel verlaten"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10347,8 +10001,14 @@ msgid_plural "%d players"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Ping"
+msgstr ""
+
 msgid "Structs"
 msgstr "Gebouwen"
+
+msgid "Alliances"
+msgstr "Bondgenootschappen toestaan"
 
 msgid "Score"
 msgstr ""
@@ -10405,25 +10065,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10451,6 +10092,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10505,6 +10165,9 @@ msgstr "Oranje"
 
 msgid "Grey"
 msgstr "Grijs"
+
+msgid "Black"
+msgstr "Zwart"
 
 msgid "Red"
 msgstr "Rood"
@@ -10622,9 +10285,6 @@ msgid "Date"
 msgstr ""
 
 msgid "Title"
-msgstr ""
-
-msgid "MUSIC MANAGER"
 msgstr ""
 
 msgid "Dismiss"
@@ -10890,6 +10550,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11118,6 +10790,9 @@ msgstr "Reparatie-onderscheiding - Niets"
 msgid "Classic"
 msgstr ""
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr ""
 
@@ -11154,16 +10829,16 @@ msgid "Compatible %s"
 msgstr ""
 
 msgid "Timer Power Bonus"
-msgstr ""
+msgstr "Timer energie bonus"
 
 msgid "Grant power based on the remaining level timer, so there's no need to wait out the clock."
-msgstr ""
+msgstr "Verkrijg energie op basis van de resterende timer, er is dus geen noodzaak om de klok af te wachten."
 
 msgid "Classic Timers"
-msgstr ""
+msgstr "Klassieke Timers"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
-msgstr ""
+msgstr "Wijzig / schakel timers uit op specifieke levels, zoals de oorspronkelijke release. (Staat power-cheating toe.)"
 
 msgid "40 Unit Limit"
 msgstr ""
@@ -11182,6 +10857,57 @@ msgstr ""
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
+
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "Niet Ondersteund"
 
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
@@ -11239,6 +10965,9 @@ msgstr "Zoeken"
 
 msgid "Connecting to the lobby server..."
 msgstr "Verbinden met de lobby server..."
+
+msgid "Game Name"
+msgstr ""
 
 msgid "Map Name"
 msgstr ""
@@ -11310,6 +11039,458 @@ msgstr "Incorrect wachtwoord!"
 msgid "Continue"
 msgstr ""
 
+msgid "MUSIC MANAGER"
+msgstr ""
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr ""
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Stemvolume"
+
+msgid "FX Volume"
+msgstr "Effectenvolume"
+
+msgid "Music Volume"
+msgstr "Muziekvolume"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr ""
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Subtitles"
+msgstr "Ondertitels"
+
+msgid "Off"
+msgstr "Uit"
+
+msgid "On"
+msgstr "Aan"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr ""
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "Cursor opsluiten"
+
+msgid "Colored Cursors"
+msgstr ""
+
+msgid "Cursor Size"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr ""
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Draai knoppen om"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Quick Chat Only"
+msgstr ""
+
+msgid "Allow All"
+msgstr ""
+
+msgid "Inactivity Timeout"
+msgstr ""
+
+#, c-format
+msgid "%u minutes"
+msgstr ""
+
+msgid "Lag Kick"
+msgstr ""
+
+#, c-format
+msgid "%u seconds"
+msgstr ""
+
+msgid "Spectator Slots"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr ""
+
+msgid "Game Time Limit"
+msgstr ""
+
+#, c-format
+msgid "%s hours"
+msgstr ""
+
+msgid "Enable Rating"
+msgstr ""
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr ""
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr "Gemiddelde kwaliteit"
+
+msgid "High Quality"
+msgstr "Hoge kwaliteit"
+
+msgid "Shadows"
+msgstr "Schaduwen"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr ""
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Shadow Filtering"
+msgstr ""
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Ultra"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr ""
+
+msgid "Screen Shake"
+msgstr ""
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr ""
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Taal"
+
+msgid "Display Scale"
+msgstr ""
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr ""
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Gefixeerd"
+
+msgid "Rotating"
+msgstr "Roteren"
+
+msgid "Radar Jump"
+msgstr ""
+
+msgid "Instant"
+msgstr ""
+
+msgid "Tracked"
+msgstr ""
+
+msgid "Radar Zoom"
+msgstr ""
+
+msgid "Video Playback"
+msgstr "Video afspelen"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr ""
+
+msgid "2×"
+msgstr ""
+
+msgid "Fullscreen"
+msgstr "Volledig scherm"
+
+msgid "Scanlines"
+msgstr "Scanlijnen"
+
+msgid "50%"
+msgstr ""
+
+msgid "Open Configuration Directory"
+msgstr ""
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr ""
+
+msgid "Configuration directory is reported as:"
+msgstr ""
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr ""
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr ""
+
+msgid "Failed to open configuration directory"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr ""
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Venster"
+
+msgid "Desktop Full"
+msgstr ""
+
+msgid "Resolution"
+msgstr ""
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr ""
+
+msgid "On (Fullscreen)"
+msgstr ""
+
 msgid "CONNECTION"
 msgstr "VERBINDING"
 
@@ -11321,6 +11502,301 @@ msgstr ""
 
 msgid "IP Address or Machine Name"
 msgstr "IP-adres of computernaam"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr ""
+
+msgid "(none)"
+msgstr ""
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Stuurt Kaart: %u%%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Kaart: %u%% gedownload"
+
+msgid "HOST"
+msgstr ""
+
+msgid "Choose Team"
+msgstr "Kies Team"
+
+msgid "Teams locked"
+msgstr ""
+
+msgid "Click to change player colour"
+msgstr "Klik om de speler-kleur te wijzigen"
+
+msgid "Click to change player position"
+msgstr "Klik om de speler positie te wijzigen"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Klik om de AI moeilijksheidsgraad aan te passen"
+
+msgid "Waiting for player"
+msgstr "Op andere spelers wachten"
+
+msgid "Player is ready"
+msgstr "Speler is klaar"
+
+msgid "Player is downloading"
+msgstr ""
+
+msgid "Click when ready"
+msgstr "Klik zodra klaar"
+
+msgid "Waiting for download"
+msgstr ""
+
+msgid "READY?"
+msgstr "KLAAR?"
+
+msgid "Tanks disabled!!"
+msgstr "Tanks gediskwalificeerd!!"
+
+msgid "Cyborgs disabled."
+msgstr "Cyborgs uitgeschakeld."
+
+msgid "VTOLs disabled."
+msgstr "VTOL gediskwalificeerd."
+
+msgid "Satellite Uplink disabled."
+msgstr ""
+
+msgid "Laser Satellite disabled."
+msgstr ""
+
+msgid "Structure Limits Enforced."
+msgstr ""
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** wachtwoord [%s] is nu nodig! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** Er is GEEN wachtwoord nodig! ***"
+
+msgid "Game Name Updated."
+msgstr ""
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Enkele-speler Schermutseling"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Klik om kaart te zien"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Basis"
+
+msgid "Tech"
+msgstr ""
+
+msgid "Technology Level 1"
+msgstr ""
+
+msgid "Technology Level 2"
+msgstr ""
+
+msgid "Technology Level 3"
+msgstr ""
+
+msgid "Technology Level 4"
+msgstr ""
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Vervoer wegsturen"

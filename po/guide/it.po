@@ -5,191 +5,191 @@ msgstr ""
 "POT-Creation-Date: 2025-06-28 01:05+0000\n"
 "PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
-"Language-Team: Catalan\n"
-"Language: ca_ES\n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: warzone2100\n"
 "X-Crowdin-Project-ID: 354665\n"
-"X-Crowdin-Language: ca\n"
+"X-Crowdin-Language: it\n"
 "X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
 "X-Crowdin-File-ID: 360\n"
 
 msgid "Artifacts"
-msgstr "Artefactes"
+msgstr "Artefatti"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
-msgstr "Mentre progressa a través de la campanya, recollireu Artefactes des de les bases enemigues (i unitats enemigues específiques)."
+msgstr "Man mano che progredisci attraverso la campagna, raccoglierai degli Artefatti dalle basi nemiche (e da unità nemici specifiche)."
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr "Aquests desbloquejaran tecnologia valuosa que podeu recercar als Centres de Recerca."
+msgstr "Questi sbloccheranno tecnologie preziose che potrai ricercare in un Centro di Ricerca."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr "Els artefactes són unes petites caixes amb un indicador verd a sobre i es poden obtenir movent-hi una unitat prou a prop."
+msgstr "Gli artefatti sono piccole scatole bianche con un indicatore verde sopra, e possono essere raccolti muovendo qualsiasi unità abbastanza vicino."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr "Tots els artefactes s'han de recollir com a part de les condicions de victòria de cada nivell."
+msgstr "Tutti gli artefatti devono essere raccolti come parte delle condizioni di vittoria di ogni livello."
 
 msgid "Backstory"
-msgstr "Contextualització"
+msgstr "Retroscena"
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
-msgstr "A finals del s.XXI, la NASDA (Agència de Defensa Estratègica Nord-Americana) desenvolupà i desplegà un sistema massiu de defensa de míssils, amb una xarxa de satèl·lits amb l'arma nuclear i bases de tir terrestres."
+msgstr "Alla fine del 21° secolo, la NASDA (Agenzia di Difesa Strategica Nord Americana o North American Strategic Defense Agency) ha sviluppato e dispiegato un massiccio sistema di difesa missilistica, compresa una rete di satelliti dotati di armi nucleari e di siti di lancio a terra."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr "Tanmateix, durant una verificació rutinària, un desastre es produí..."
+msgstr "Tuttavia, durante un controllo di manutenzione ordinaria, qualcosa è andato terribilmente storto..."
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr "El Col·lapse fou breu però dur. Per un error tècnic al sistema de defensa per satèl·lit, els caps nuclears es dispararen contra les majors ciutats d'arreu del món."
+msgstr "Il collasso è arrivato veloce e con grande impatto. A seguito di un errore tecnico nel sistema di difesa satellitare, le testate nucleari sono state lanciate nelle principali città di tutto il mondo."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr "Minuts més tard, les bases terrestres respongueren disparant. Milions són els morts mentre que els incendis nuclears anihilaven les ciutats del món. Bilions més moriren mentre les epidèmies acabaven de liquidar el que restava de la civilització."
+msgstr ""
 
 msgid "Less than a million people survived the Collapse."
-msgstr "Menys d'un milió de persones han sobreviscut al Col·lapse."
+msgstr "Meno di un milione di persone sopravvissero al Collapse."
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr "La terra es trencà en centenars de petits grups de carronyaires lluitant entre ells pel que quedava de l'antiga civilització. Només uns pocs tingueren la visió per intentar reconstruir un món nou a partir de les cendres."
+msgstr ""
 
 msgid "## Present Day:"
-msgstr "## Present:"
+msgstr "## Oggi:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr "El jugador (dit \"Comandant\") forma part d'un grup de supervivents que han buscat refugi en una base militar a les Rocoses."
+msgstr ""
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr "Surten de la base amb l'objectiu de reconstruir el món, adoptant el nom de \"El Projecte\"."
+msgstr ""
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr "El Projecte envia tres equips per a recuperar artefactes, permetent així la recerca i l'aplicació de tecnologia del pre-Col·lapse."
+msgstr ""
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr "- L'equip Alfa és enviat en un indret erm de l'Arizona al sud-oest del QG del Projecte"
+msgstr ""
 
 msgid "- Beta team is sent to the remains of Chicago"
-msgstr "- S'ha enviat l'equip Beta a les restes de Chicago"
+msgstr ""
 
 msgid "- Gamma team is sent into the northern Rockies in Colorado"
-msgstr "- S'ha enviat l'equip Gamma al nord de les Rocoses, al Colorado"
+msgstr ""
 
 msgid "Command Panel"
-msgstr "Panell de control"
+msgstr "Pannello di comando"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr "Hi ha sis interfícies diferents al panell de comandes i un botó central. Obriu la interfície de comandes prement el botó adient."
+msgstr ""
 
 msgid "The middle / central button closes any open command interface."
-msgstr "El botó central tanca qualsevol interfície de comanda oberta."
+msgstr ""
 
 msgid "Intelligence Display"
-msgstr "Informe d'intel·ligència"
+msgstr ""
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr "L'informe d'intel·ligència és on podeu trobar els objectius actuals de la missió, revisioneu el brífing de la missió actual, i llegiu-ne més sobre els projectes de recerca completats."
+msgstr ""
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr "Quan obre l'informe d'intel·ligència, dues línies d'icones apareixen a baix de la pantalla."
+msgstr ""
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr "Seleccionar una icona mostra la informació sobre la recerca o l'objectiu de la missió al mig de la pantalla."
+msgstr ""
 
 msgid "Using the Mission Timer"
-msgstr "Ús de temporitzador de missió"
+msgstr ""
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr "Normalment, anireu a l'hora. A voltes, us trobareu necessitant més temps, altres vegades, pensareu que en teniu massa."
+msgstr ""
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr "Sempre hi ha maneres intel·ligents d'usar el temps de sobra per preparar-se a les properes batalles."
+msgstr ""
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr "Que sigui fer recerques noves, construir defenses o reciclar i reemplaçar unitats amb noves armes i tecnologies... No llencis el temps valuós per la finestra."
+msgstr ""
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
-msgstr "(Si teniu activat l'opció Bonus d'Energia del Temporitzador -activada per defecte- no us cal esperar el final del temporitzador per obtenir energia, se us donarà l'energia que haguéssiu guanyat si el temporitzador hagués seguit. Encara que la resta d'usos també s'apliquin!)"
+msgstr ""
 
 msgid "Power"
 msgstr "Energia"
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr "A Warzone 2100, l'energia és el recurs clau."
+msgstr "In Warzone 2100, l'energia è la tua risorsa chiave."
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
-msgstr "Gasteu energia per construir estructures, crear unitats i recercar millores / noves tecnologies."
+msgstr ""
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr "L'energia es genera amb generadors alimentats pels pous de petroli."
+msgstr ""
 
 msgid "Researching Technology"
-msgstr "Recerca de Tecnologies"
+msgstr "Ricerca tecnologia"
 
 msgid "Researching technologies is accomplished using Research Facilities."
-msgstr "La recerca de tecnologies es duu a terme amb els Centres de Recerca."
+msgstr ""
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
-msgstr "Quan es selecciona un Centre de Recerca, es mostren totes les opcions disponibles a l'esquerra de la pantalla."
+msgstr ""
 
 msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
-msgstr "Cada projecte de recerca necessita una certa quantitat d'energia i de temps per dur-se a terme. No es pot retornar la inversió d'energia."
+msgstr ""
 
 msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
-msgstr "Emperò, la progressió de la recerca no es perd mai, encara que es destrueixi un Centre de Recerca - el projecte només s'ha de reassignar a un altre centre."
+msgstr ""
 
 msgid "Completing research of a new technology may:"
-msgstr "Completar la recerca d'una nova tecnologia pot:"
+msgstr ""
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
-msgstr "- Desbloquejar noves armes, estructures, cossos d'unitats, propulsions, etc."
+msgstr ""
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
-msgstr "- Millorar l'efectivitat de les armes, estructures, cossos d'unitats, etc. existents"
+msgstr ""
 
 msgid "- Enable the research of additional technologies"
-msgstr "- Permetre la recerca d'altres tecnologies"
+msgstr ""
 
 msgid "General"
-msgstr "General"
+msgstr "Generale"
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
-msgstr "A Warzone 2100, dirigiu les forces del \"Projecte\" en una batalla per reconstruir el món després de la quasi destrucció de la humanitat pels míssils nuclears."
+msgstr "In Warzone 2100, comandi le forze di \"The Project\" in una battaglia per ricostruire il mondo dopo che l'umanità è quasi stata distrutta dai missili nucleari."
 
 msgid "This guide will help walk you through key facets of the game."
-msgstr "Aquesta guia us ajudarà a descobrir les facetes clau del joc."
+msgstr "Questa guida ti illustrerà gli aspetti chiave del gioco."
 
 msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
-msgstr "(Si jugueu en campanya, es poden desbloquejar nous tutorials a mesura que progresseu en el joc.)"
+msgstr "(Se stai giocando la campagna, nuovi argomenti della guida potrebbero essere sbloccati man mano che avanzi nel gioco.)"
 
 msgid "Building Structures"
-msgstr "Construcció d'estructures"
+msgstr ""
 
 msgid "Click the \"Build\" button on the Command Panel."
-msgstr "Cliqueu sobre el botó \"Construcció\" del Panell de Control."
+msgstr ""
 
 msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
-msgstr "Això obrirà el menú d'Estructures a l'esquerra de la pantalla, amb un botó per cada tipus d'estructura que pots construir."
+msgstr ""
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr "Seleccioni el botó de l'estructura desitjada. Una silueta apareixerà al món del joc - és on es posarà l'estructura un cop hàgiu confirmat."
+msgstr ""
 
 msgid "Move the silhouette by moving the input device."
-msgstr "Moveu la silueta desplaçant el dispositiu d'entrada."
+msgstr ""
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
-msgstr "- Si l'estructura es pot construir en un lloc, la silueta esdevindrà verda quan passeu sobre aquest."
+msgstr ""
 
 msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
-msgstr "- Si l'estructura no es pot construir en un lloc, la silueta esdevindrà vermella."
+msgstr ""
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr "Quan hàgiu escollit un lloc apropiat, seleccioneu per confirmar l'emplaçament de la construcció. Un camió anirà fins al lloc i començarà la construcció."
+msgstr ""
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr "Podeu ordenar a altres camions que ajudin (i construir més ràpidament) seleccionant-los i donant-los com a objectiu la construcció en curs."
+msgstr ""
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr "Consell: Per construir \"murs\" (un cop siguin desbloquejats), podeu clicar i arrossegar per dibuixar una línia de paret."
+msgstr ""
 
 msgid "Cyborg Factory"
 msgstr ""
@@ -204,370 +204,370 @@ msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders a
 msgstr ""
 
 msgid "Demolishing Structures"
-msgstr "Demolició d'estructures"
+msgstr ""
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr "Demolir una construcció és gairebé tan simple com construir-ne una."
+msgstr ""
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr "Seleccioni \"Demolir Estructura\" al menú Estructures i cliqui sobre una construcció per demolir-la."
+msgstr ""
 
 msgid "A unit will move to the building and destroy it."
-msgstr "Una unitat anirà fins a la construcció i la demolirà."
+msgstr ""
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr "Les estructures demolides retornen la meitat d'energia usada per construir-les."
+msgstr ""
 
 msgid "Factory"
-msgstr "Fàbrica"
+msgstr ""
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr "Una fàbrica s'utilitza per crear unitats. Cada fàbrica pot crear una unitat alhora però podeu posar en espera diverses unitats per produir."
+msgstr ""
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr "Quan una unitat és creada, rep les Ordres de la Unitat de la Fàbrica i va fins al Punt d'Agrupament de la Fàbrica."
+msgstr ""
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr "N. B.: la Fàbrica sola només pot crear unitats de cos lleuger. Els mòduls fabrils han de ser descoberts i construïts per millorar les capacitats de producció de les fàbriques."
+msgstr ""
 
 msgid "Command Center"
-msgstr "Centre de comandament"
+msgstr ""
 
 msgid "The Command Center is the headquarters of your base."
-msgstr "El centre de comandament és el quarter general de la vostra base."
+msgstr ""
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr "Dona accés al minimapa / radar, i l'habilitat de dissenyar unitats."
+msgstr ""
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr "Per construir un Centre de Comandament, feu clic sobre el botó \"Construcció\" del panell de comandes i seleccioni l'estructura del Centre de Comandament."
+msgstr ""
 
 msgid "Then, click where you want your builders to construct it."
-msgstr "Aleshores, feu clic on vulgueu que sia edificat pels constructors."
+msgstr ""
 
 msgid "Structure Modules"
-msgstr "Mòduls d'estructures"
+msgstr ""
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr "Els Generadors d'Energia, Fàbriques, i Centres de Recerca es poden millorar amb els seus mòduls respectius."
+msgstr ""
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr "Un cop recercats, podeu accedir als mòduls des del menú Construcció per aplicar-los a les estructures corresponents."
+msgstr ""
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr "Altrament, podeu seleccionar un Camió o Enginyer de Combat i clicar sobre l'estructura per començar-ne la construcció."
+msgstr ""
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr "N. B.: Mentre que una d'aquestes estructures s'està millorant, roman indisponible fins al final de la millora."
+msgstr ""
 
 msgid "Upgrade Effects:"
-msgstr "Efectes de la millora:"
+msgstr ""
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr "- El mòdul del Generador d'Energia n'augmenta la producció"
+msgstr ""
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr "- Els mòduls fabrils permeten la producció d'unitats Mitjanes i Pesades, com també rebaixen el temps necessari de producció"
+msgstr ""
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr "- Els mòduls del Centre de Recerca rebaixa el temps necessari per completar el projecte de recerca"
+msgstr ""
 
 msgid "Oil Derrick"
-msgstr "Pou de petroli"
+msgstr ""
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr "Un Pou de Petroli es pot construir seleccionant un Camió i donant-li un Jaciment de Petroli lliure com a objectiu."
+msgstr ""
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr "La destrucció d'un Pou de Petroli impedirà la construcció d'un altre al mateix lloc mentre aquest segueixi cremant."
+msgstr ""
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr "Per usar un Pou de Petroli i generar energia es necessita un Generador d'Energia."
+msgstr ""
 
 msgid "Power Generator"
-msgstr "Generació d'energia"
+msgstr ""
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr "Cada Generador d'Energia utilitza fins a 4 Pous de Petroli. Per tant, si teniu 10 Pous de Petroli, necessitareu 3 Generadors d'Energia per usar tots els Pous de Petroli i generar el màxim d'Energia."
+msgstr ""
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr "Mentre que els Pous de Petroli s'han de construir sobre Jaciments de Petroli, els Generadors d'Energia es poden construir on sigui. Però recorda que més generadors que 1 per cada 4 Pous de Petroli no produeixen més beneficis."
+msgstr ""
 
 msgid "Rally Point"
-msgstr "Punt d'agrupament"
+msgstr ""
 
 msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
-msgstr "Quan una fàbrica ha acabat de crear una unitat, la unitat apareixerà a prop de la fàbrica, i se li ordenarà que vagi al Punt d'Agrupament de la fàbrica."
+msgstr ""
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr "Per defecte, el punt d'agrupament és vora la Fàbrica. Clicar sobre aquest li permetrà moure'l."
+msgstr ""
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
-msgstr "N. B.: moure un punt d'agrupament mentre una unitat que s'hi desplaça no afecta el seu camí."
+msgstr ""
 
 msgid "Repair Facility"
-msgstr "Instal·lació de Reparació"
+msgstr ""
 
 msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
-msgstr "Construir una Instal·lació de Reparació crea una estructura fixa on les unitats es poden retirar per ser reparades."
+msgstr ""
 
 msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
-msgstr "Les Instal·lacions de Reparació poden reparar les unitats més ràpidament que les unitats mòbils amb torres de reparació."
+msgstr ""
 
 msgid "Research Facility"
-msgstr "Centre de recerca"
+msgstr ""
 
 msgid "Research Facilities are required in order to research new technologies."
-msgstr "Els centres de recerca són necessaris per recercar tecnologia nova."
+msgstr ""
 
 msgid "Each Research Facility can research one technology at a time."
-msgstr "Cada Centre de Recerca pot fer una recerca de tecnologia alhora."
+msgstr ""
 
 msgid "VTOL Factory"
-msgstr "Fàbrica VTOL"
+msgstr ""
 
 msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
-msgstr "Una fàbrica VTOL s'usa per crear unitats amb propulsió VTOL (i. e. unitats voladores)."
+msgstr ""
 
 msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr "Cada fàbrica VTOL pot construir una unitat alhora, en podeu, però, afegir diverses a la cua de la producció."
+msgstr ""
 
 msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
-msgstr "Quan una fàbrica VTOL ha acabat de crear una unitat, li ordenarà volar fins al Punt d'Agrupament."
+msgstr ""
 
 msgid "Structures"
-msgstr "Estructures"
+msgstr ""
 
 msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
-msgstr "Construir estructures és totalment vital a Warzone 2100 - des de les Fàbriques que construeixen les unitats, als Centres de Recerca que fan recerca en noves tecnologies."
+msgstr ""
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
-msgstr "La construcció pot ser duta a terme amb unitats amb Erugues com torretes i/o Enginyers de Combat."
+msgstr ""
 
 msgid "Attack Range"
-msgstr "Abast d'Atac"
+msgstr ""
 
 msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
-msgstr "Pot utilitzar el menú d'Ordres d'Unitats per configurar l'\"Abast d'Atac\" de la unitat."
+msgstr ""
 
 msgid "- Optimum Range: Fires at the most accurate range"
-msgstr "- Abast òptim: Dispara a l'abast més acurat"
+msgstr ""
 
 msgid "- Short Range: Moves to short range and attacks"
-msgstr "- Abast curt: Es mou a una distància curta i ataca"
+msgstr ""
 
 msgid "- Long Range: Attacks at long range (default)"
-msgstr "- Abast llarg: Ataca a llarga distància (per defecte)"
+msgstr ""
 
 msgid "Firing Mode"
-msgstr "Mode de tir"
+msgstr ""
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
-msgstr "Pot utilitzar el menú d'Ordres d'Unitats per configurar el \"Mode de Tir\" de la unitat."
+msgstr ""
 
 msgid "- Fire At Will: Fires at any enemy (default)"
-msgstr "- Foc a voluntat: Dispara contra qualsevol enemic (per defecte)"
+msgstr ""
 
 msgid "- Return Fire: Only fire if fired at"
-msgstr "- Retornar el foc: Només dispara si se li dispara"
+msgstr ""
 
 msgid "- Do Not Fire: Units will not fire"
-msgstr "- Alto el foc: Les unitats no dispararan"
+msgstr ""
 
 msgid "Movement"
-msgstr "Moviment"
+msgstr ""
 
 msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
-msgstr "Pot utilitzar el menú d'Ordres d'Unitats per configurar el \"Moviment\" de la unitat."
+msgstr ""
 
 msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
-msgstr "- Patrullar: Moure's entre dos punts. Cliqueu simplement sobre el mapa després de seleccionar-ho"
+msgstr ""
 
 msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
-msgstr "- Cercle: (Només VTOL) Es desplaça en cercle al voltant d'un punt. Només cal clicar sobre un lloc després d'haver-lo seleccionat"
+msgstr ""
 
 msgid "- Pursue: Pursue enemy"
-msgstr "- Perseguir: Persegueix l'enemic"
+msgstr ""
 
 msgid "- Guard: Stay near an area or structure. (default)"
-msgstr "- Protegir: Es manté vora una àrea o estructura. (per defecte)"
+msgstr ""
 
 msgid "- Hold Position: Do not move under any circumstances"
-msgstr "- Mantenir la posició: No es mou sota cap circumstància"
+msgstr ""
 
 msgid "Recycling"
-msgstr "Reciclatge"
+msgstr ""
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it."
-msgstr "Reciclar una unitat l'envia a la Fàbrica o Instal·lació de reparació més propera i la destrueix."
+msgstr ""
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
-msgstr "La meitat de l'energia usada per fabricar la unitat se us retorna (tot i que pot ser menor si la unitat està malmesa)."
+msgstr ""
 
 msgid "The unit’s experience level will be placed in the next unit that is manufactured."
-msgstr "El nivell d'experiència de la unitat es posarà a la pròxima unitat fabricada."
+msgstr ""
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
-msgstr "Podeu ordenar el reciclatge a les unitats seleccionades via el menú d'Ordres de la Unitat o amb la tecla \"Torna per ser reciclat\"."
+msgstr ""
 
 msgid "Retreating"
-msgstr "Retirar-se"
+msgstr ""
 
 msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
-msgstr "Perdre unitats (sobretot unitats amb graus d'experiència) poden ser un veritable cop a la capacitat d'una força per guanyar la batalla."
+msgstr ""
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
-msgstr "Podeu escollir al menú d'ordres de la unitat un \"Llindar de Retirada\", que farà que les unitats es retirin de la batalla quan els danys arribin al llindar de dany establert."
+msgstr ""
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
-msgstr "- Fes o mor: La seva unitat no es retirarà excepte si se li ordena (per defecte)"
+msgstr ""
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
-msgstr "- Retira amb desperfectes mitjans: la unitat es retirarà a danys mitjans (groc)"
+msgstr ""
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr "- Retira amb desperfectes elevats: la unitat es retirarà a danys elevats (vermell)"
+msgstr ""
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
-msgstr "Les unitats en retirada tornaran a la instal·lació de reparació més propera, unitat de reparació, al QG o a la LZ."
+msgstr ""
 
 msgid "Return To"
-msgstr "Tornar a"
+msgstr ""
 
 msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
-msgstr "Podeu utilitzar el menú d'Ordres de la Unitat per ordenar a les unitats tornar ràpidament a un lloc específic."
+msgstr ""
 
 msgid "- Return for Repair: Unit will return to a Repair Facility"
-msgstr "- Retorn per reparacions: La unitat anirà a un centre de reparació"
+msgstr ""
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr "- Retorn al QG: la unitat tornarà al Centre de Comandament o a la LZ (en campanya)"
+msgstr ""
 
 msgid "- Go To Transport: Unit will go to and board transport"
-msgstr "- Vés al transport: la unitat anirà i embarcarà al transport"
+msgstr ""
 
 msgid "Unit Orders"
-msgstr "Ordres de la Unitat"
+msgstr ""
 
 msgid "Right-click a unit or group of units to show their current Unit Orders."
-msgstr "Clic dret sobre una unitat o grup d'unitats mostra les seves ordres actuals."
+msgstr ""
 
 msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
-msgstr "El panell Ordres de les Unitats us permet personalitzar el comportament de les unitats, des de patrullar una àrea fins a retirar-se amb poca vida."
+msgstr ""
 
 msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
-msgstr "Clic dret sobre una fàbrica per a ajustar les ordres de les unitats produïdes per la fàbrica."
+msgstr ""
 
 msgid "Building Units"
-msgstr "Crear unitats"
+msgstr ""
 
 msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
-msgstr "Per crear unitats, pot seleccionar tant una fàbrica com el botó \"Fabricació\" al panell de Comandes - això obrirà el panell de fabricació a l'esquerra de la pantalla."
+msgstr ""
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
-msgstr "El panell de fabricació mostrarà els dissenys d'unitats construïbles en la fàbrica seleccionada. Les fàbriques poden estar limitades en produir certs tipus d'unitats (o només poder produir-les un com millorades amb mòduls)."
+msgstr ""
 
 msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
-msgstr "Per seleccionar una fàbrica diferent, tant pot clicar sobre la fàbrica al món del joc com pot clicar al botó apropiat al panell de les fàbriques al centre de baix de la pantalla."
+msgstr ""
 
 msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
-msgstr "Per crear una unitat en una fàbrica, cliqui sobre la unitat desitjada al panell de fabricació. Podeu afegir a la cua diverses unitats iguals clicant repetidament sobre el botó del disseny de la unitat."
+msgstr ""
 
 msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
-msgstr "Mentre una unitat es construeix, la unitat es mostrarà al panell de les fàbriques sota la fàbrica que l'està creant. Si la barra està verda, la fàbrica està guardant energia per construir la unitat. Si està groga, la unitat s'està creant."
+msgstr ""
 
 msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
-msgstr "Quan una fàbrica ha acabat de crear una unitat, li ordenarà que vagi al Punt d'Agrupament de la fàbrica."
+msgstr ""
 
 msgid "Attaching Units"
-msgstr "Lligar una unitat"
+msgstr ""
 
 msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
-msgstr "Per lligar una unitat a un comandant, seleccioni la unitat i cliqui sobre el comandant a qui la voleu lligar. Un símbol apareixerà vora la unitat per mostrar que és lligada."
+msgstr ""
 
 msgid "## Limits:"
-msgstr "## Límits:"
+msgstr ""
 
 msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
-msgstr "Els comandants tenen un límit al nombre d'unitats de tir directe (com les metralladores) que depèn del seu propi nivell d'experiència. Els nivells es guanyen pel comandant arribant a 2 morts, 4, 8, 16, 32, 64 i segueix."
+msgstr ""
 
 msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
-msgstr "Cada nivell d'experiència permet al comandant controlar 2 unitats més de tir directe. Tanmateix, un comandant pot controlar tantes unitats de tir indirecte com vulgui."
+msgstr ""
 
 msgid "Detaching Units"
-msgstr "Deslligar una unitat"
+msgstr ""
 
 msgid "To detach a unit from a Commander:"
-msgstr "Per deslligar una unitat d'un comandant:"
+msgstr ""
 
 msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
-msgstr "1. Feu clic dret sobre la unitat (o mantingui la tecla \"Shift\" mentre selecciona la unitat) per seleccionar només aquella unitat (en lloc de tot el grup del comandant)"
+msgstr ""
 
 msgid "2. Give the unit a new order (eg. move)"
-msgstr "2. Doni una nova ordre a la unitat (eg. moure's)"
+msgstr ""
 
 msgid "Going for repairs, BRB"
-msgstr "Reparant-se, BRB"
+msgstr ""
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
-msgstr "Una unitat que es retira de la batalla per reparar-se resta assignada al seu grup de comandant."
+msgstr ""
 
 msgid "When it is done repairing, it will return to its Commander."
-msgstr "Quan la reparació s'ha acabat, torna al seu comandant."
+msgstr ""
 
 msgid "Targeting"
-msgstr "Objectiu"
+msgstr ""
 
 msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
-msgstr "Quan selecciona un comandant i apunteu una unitat enemiga, qualsevol unitat lligada es mourà per atacar la unitat a la qual s'apunta."
+msgstr ""
 
 msgid "The attached units will have greater accuracy when firing."
-msgstr "Les unitats lligades tindran una millor precisió disparant."
+msgstr ""
 
 msgid "Commanders"
-msgstr "Comandants"
+msgstr ""
 
 msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
-msgstr "Les torretes de comandament s'utilitzen com sensors, excepte que poden manar qualsevol unitat atacant, i no només l'artilleria."
+msgstr ""
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr "Els comandants els donen un bonus de precisió, d'armadura i de velocitat de desplaçament, que incrementen segons el ranc del comandant."
+msgstr ""
 
 msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
-msgstr "Estan limitats a 6 unitats atacants no-artilleres que se'ls assignen al principi, però el límit augmenta de 2 cada cop que el comandant guanya un ranc, cosa que passa bastant ràpidament."
+msgstr ""
 
 msgid "Designing Units"
-msgstr "Disseny d'unitats"
+msgstr ""
 
 msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
-msgstr "Necessitareu dissenyar unitats noves si voleu superar els vostres enemics i tenir el dolç gust de la victòria. Aquest és un aspecte clau del gameplay de Warzone 2100."
+msgstr ""
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr "Per a dissenyar una unitat, seleccioni el botó de Disseny al Panell de Comandes. Això farà aparèixer dues columnes a l'esquerra de la pantalla."
+msgstr ""
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
-msgstr "Per crear un disseny, seleccioni el cos verd \"en blanc\" a dalt de tot a l'esquerra. Per editar un disseny existent, seleccioni'l simplement."
+msgstr ""
 
 msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
-msgstr "Dissenyar una nova unitat és un procés simple de tres parts: seleccionar un xassís, un sistema de propulsió i una torreta. Aquestes tres tries crearan una nova unitat."
+msgstr ""
 
 msgid "Once you have designed a unit, you will need a Factory to build it."
-msgstr "Un cop una unitat és dissenyada, necessiteu una fàbrica per construir-la."
+msgstr ""
 
 msgid "Experience & Ranks"
-msgstr "Experiència i Rancs"
+msgstr ""
 
 msgid "Units gain experience when they successfully dispatch enemies."
-msgstr "Les unitats guanyen experiència quan aconsegueixen derrotar enemics."
+msgstr ""
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
-msgstr "Una experiència més elevada significa una unitat més precisa, que es mou més ràpidament i pateix menys danys."
+msgstr ""
 
 msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
-msgstr "La icona que mostra el ranc d'una unitat es mostra al costat de la barra de vida de la unitat."
+msgstr ""
 
 msgid "Units with higher experience levels can make all the difference in battle!"
-msgstr "Les unitats amb nivells d'experiència més elevats poden fer tota la diferència en la batalla!"
+msgstr ""
 
 msgid "Cyborgs"
 msgstr ""
@@ -642,22 +642,22 @@ msgid "Attacking with VTOLs"
 msgstr ""
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr "Per atacar amb un VTOL, seleccioni'l i cliqui sobre un enemic com de costum."
+msgstr ""
 
 msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
-msgstr "Tanmateix, potser us heu adonat de la barra blanca de munició sota la de la seva vida quan comenceu a atacar."
+msgstr ""
 
 msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr "A diferència de les unitats terrestres, que recarreguen automàticament, els VTOL tenen munició limitada. Quan es queden sense munició, els VTOL no poden atacar fins que s'avituallin."
+msgstr ""
 
 msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr "Un VTOL sense munició trobarà automàticament una pista de rearmament VTOL i es repararà automàticament (i tornarà a la càrrega un cop plenament rearmat), o es pot rearmar manualment seleccionant-lo i clicant sobre la pista de rearmament."
+msgstr ""
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr "Al contrari que la resta d'unitats que ataquen l'objectiu més pròxim, els VTOL no ataquen res automàticament. Tanmateix, seleccionant un VTOL i fent alt+clic en una àrea, el VTOL patrullarà l'àrea entre la seva posició actual i el lloc on s'ha fet clic, atacant tot objectiu a proximitat."
+msgstr ""
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr "D'altra banda, els VTOL es poden assignar a torres d'atac VTOL i torres AB VTOL, que els faran funcionar similarment a l'artilleria assignada a torres de sensors."
+msgstr ""
 
 msgid "Defending with VTOLs"
 msgstr ""
@@ -672,37 +672,37 @@ msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, the
 msgstr ""
 
 msgid "Defending Against VTOLs"
-msgstr "Defensar-se dels VTOL"
+msgstr ""
 
 msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr "Què hi ha al cel...? És una unitat VTOL"
+msgstr ""
 
 msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr "Com que els VTOL no són unitats terrestres, la majoria d'armes terrestres no el poden tocar."
+msgstr ""
 
 msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr "Només poden ser tocats per armes antiaèries (sovint abreviades \"AA\") o versàtils (poden tocar en l'aire o a terra)."
+msgstr ""
 
 msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr "Només hi ha unes quantes armes versàtils: les metralladores, els làsers i els minicoets."
+msgstr ""
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr "(Els coets i míssils també són versàtils, però només quan estan muntats en un cíborg o VTOL.)"
+msgstr ""
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr "A més de ser rares, les armes versàtils no provoquen tants danys als VTOL com els AA, es recomana doncs tenir AA contra els VTOL."
+msgstr ""
 
 msgid "Using VTOLs"
 msgstr ""
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr "Dissenyar unitats VTOL és similar a dissenyar unitats terrestres."
+msgstr ""
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr "Quan escull la propulsió, només ha d'escollir propulsió \"VTOL\"."
+msgstr ""
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr "Aleshores podrà escollir entre les armes VTOL disponibles."
+msgstr ""
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
 msgstr ""
@@ -717,16 +717,16 @@ msgid "Most weapons have a VTOL equivalent, which does increased damage, but has
 msgstr ""
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr "No cal fer recerca separada de les armes ordinàries VTOL."
+msgstr ""
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr "A més de les versions VTOL de les armes terrestres, els VTOL poden utilitzar també armes de bomba. Aquestes armes són l'equivalent de l'artilleria, i són molt potents."
+msgstr ""
 
 msgid "VTOL"
 msgstr ""
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr "Les unitats VTOL (Vertical Take-Off and Landing) són els instruments aeris principals per dominar el cel."
+msgstr ""
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
 msgstr ""
@@ -768,64 +768,64 @@ msgid "Understanding the advantages and disadvantages of each propulsion is esse
 msgstr ""
 
 msgid "Repairing Units"
-msgstr "Reparar unitats"
+msgstr ""
 
 msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
-msgstr "Es poden dissenyar unitats amb torre de reparació en lloc d'una arma, i se li pot ordenar de reparar les altres unitats."
+msgstr ""
 
 msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
-msgstr "També es poden mantenir les unitats de reparació lluny de la batalla i usar les opcions de retirada perquè les unitats d'ofensiva es retirin a reparar-se a un cert grau de danys."
+msgstr ""
 
 msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
-msgstr "Retirar i reparar les unitats és molt més sovint preferible a perdre unitats amb experiència al camp de batalla."
+msgstr ""
 
 msgid "CB Sensors"
-msgstr "Sensors AB"
+msgstr ""
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
-msgstr "Els sensors anti-bateries (AB) modifiquen dràsticament el camp de batalla permetent a unitats d'artilleria atacar plataformes d'artilleria distants - mentre restin a l'abast."
+msgstr ""
 
 msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
-msgstr "Les estructures o unitats identificades es coloraran en vermell a la boira de guerra un cop un sensor AB detecti el tir d'artilleria de qualsevol enemic."
+msgstr ""
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr "Si estan actives, les unitats d'artilleria donen prioritat als objectius dels sensors AB sobre aquells obtinguts per sensors convencionals."
+msgstr ""
 
 msgid "Un-Assigning"
-msgstr "Deslligar"
+msgstr ""
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr "Per deslligar una unitat d'un sensor, la manera més fàcil és fer clic-dret sobre la unitat i a fer-la moure's on sigui."
+msgstr ""
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
-msgstr "Es poden seleccionar diverses unitats aguantant CTRL mentre es clica."
+msgstr ""
 
 msgid "Using Sensors"
-msgstr "Ús de Sensors"
+msgstr ""
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr "Les estructures d'artilleria són les més simples. Construïu simplement una torre de sensors, i si la torre apunta quelcom a l'abast de les estructures d'artilleria, aquestes dispararan."
+msgstr ""
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
-msgstr "Un tanc d'artilleria, tanmateix, ha d'estar específicament assignat a un sensor per funcionar. Seleccioni els tancs d'artilleria i cliqui sobre el sensor per assignar-los-hi."
+msgstr ""
 
 msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
-msgstr "Un cop s'assigna l'artilleria, si s'assigna a una torre sensor, la torre apuntarà els enemics que entrin a l'abast automàticament."
+msgstr ""
 
 msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
-msgstr "Si s'assigna a un tanc sensor, el sensor es pot utilitzar per atacar enemics seleccionant el sensor i apuntant l'enemic. Tota l'artilleria assignada al sensor atacarà l'objectiu."
+msgstr ""
 
 msgid "Sensors"
-msgstr "Sensors"
+msgstr ""
 
 msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
-msgstr "Els sensors es poden utilitzar per explorar i vigilar, però tenen un ús ben més important: localitzar l'artilleria."
+msgstr ""
 
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
-msgstr "Les armes d'artilleria, per se, no poden disparar més enllà de l'abast de llurs sensors (8 caselles sense millores)."
+msgstr ""
 
 msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr "Tanmateix, fins i tot l'arma d'artilleria més bàsica té un abast de 18 caselles. Per utilitzar-lo, heu de construir i desplegar sensors al camp de batalla (sia torres de sensors o tancs amb torretes de sensors)."
+msgstr ""
 
 msgid "Kinetic & Thermal Damage"
 msgstr ""
@@ -846,52 +846,52 @@ msgid "Note that all units have less thermal armor than kinetic armor. This mean
 msgstr ""
 
 msgid "Attacking"
-msgstr "Atacar"
+msgstr ""
 
 msgid "Designing VTOLs"
-msgstr "Dissenyar VTOL"
+msgstr ""
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr "N. B.: necessiteu una \"fàbrica VTOL\" per construir els dissenys d'unitat VTOL."
+msgstr ""
 
 msgid "Weapons"
-msgstr "Armes"
+msgstr ""
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr "La majoria d'armes tenen un equivalent VTOL, que fa com a mínim dos cops més de danys, però té munició limitada."
+msgstr ""
 
 msgid "VTOLs"
-msgstr "Els VTOL"
+msgstr ""
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr "Per produir unitats VTOL, cal haver descobert i recercat la \"Propulsió VTOL\" i la \"Fàbrica VTOL\"."
+msgstr ""
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr "També hauríeu de recercar i construir uns quants \"Pads de rearmament VTOL\", així, les unitats VTOL podran recarregar municions."
+msgstr ""
 
 msgid "Weapon Selection"
-msgstr "Selecció d'armes"
+msgstr ""
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr "A mesura que descobriu i recerqueu més armes, també descobrireu que hi ha armes que funcionen molt millor en unes ocasions i no en altres (o contra un tipus d'unitat o estructura enemiga)."
+msgstr ""
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr "Quan completeu una recerca d'una nova arma, un informe d'intel·ligència us proporcionarà informació sobre ella."
+msgstr ""
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr "Està al vostre avantatge experimentar amb diferents tipus d'armes. Si teniu problemes i no heu reavaluat la composició de les vostres forces des de fa temps, potser caldria considerar canviar les armes per unes de més fortes, o d'un nou tipus!"
+msgstr ""
 
 msgid "Units"
-msgstr "Unitats"
+msgstr ""
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr "Haureu de dissenyar i construir noves unitats si voleu vèncer els vostres enemics i obtenir el dolç gust de la victòria."
+msgstr ""
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr "Aquest aspecte del joc és el que fa únic Warzone 2100 a la seva manera."
+msgstr ""
 
 msgid "To be able to design units, a Command Center is required."
-msgstr "Per dissenyar unitats, es necessita un Centre de Comandament."
+msgstr ""
 
 msgid "All-Rounder"
 msgstr ""

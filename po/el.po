@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -1796,6 +1796,9 @@ msgstr ""
 msgid "Rescue Alpha team from Nexus"
 msgstr ""
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
 
@@ -1817,7 +1820,7 @@ msgstr ""
 msgid "Return to LZ"
 msgstr "Επιστροφή στη Ζώνη Προσγείωσης"
 
-msgid "Hard / Insane difficulty hint:"
+msgid "Insane difficulty hint:"
 msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
@@ -2957,6 +2960,10 @@ msgstr ""
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr ""
 
@@ -2986,6 +2993,18 @@ msgid "Replay File Format Unsupported"
 msgstr ""
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
 msgid "Menu"
@@ -3297,11 +3316,11 @@ msgstr "Εξοπλισμένο με Εκτοξευτή Πυραυλιδίου Μ
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Εξοπλισμένο με Ανθρωπομηχανή Φλογοβόλου Θερμίτη"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr ""
 
 msgid "Armed with Flashlight Laser"
 msgstr "Εξοπλισμένο με Φωτακτινιστή Αναλαμπής"
@@ -3439,6 +3458,9 @@ msgstr "Θωρακισμένη ενίσχυση με Όπλο Μαγνητιστ
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Θωρακισμένη ενίσχυση με Βαριά Φωτακτίνα"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Θωρακισμένη ενίσχυση με Φλογοβόλο Πλασμάτη"
@@ -3668,6 +3690,9 @@ msgstr ""
 msgid "Bomb damage +25%"
 msgstr "Καταστροφικότητα των βομβών +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Αναβάθμιση Βομβών"
 
@@ -3691,6 +3716,9 @@ msgstr "Μαμούνι"
 
 msgid "Buggy"
 msgstr "Μπάγκυ"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Ενσωματωμένα συστήματα διάγνωσης και επισκευής"
@@ -3732,6 +3760,9 @@ msgstr "Καταναλώνει το πετρέλαιο πιο αποδοτικά
 msgid "Cannon accuracy +10%"
 msgstr "Ακρίβεια των πυροβόλων +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Αυτόματος Γεμιστής Πυροβόλου Τύπος2"
 
@@ -3744,6 +3775,9 @@ msgstr "Αυτόματος Γεμιστής Πυροβόλου"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Καταστροφικότητα των πυροβόλων +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Πυροσβεστικό Φορτηγό Κανονιού"
@@ -3769,6 +3803,9 @@ msgstr "Ταχύρρυθμος Γεμιστής Πυροβόλου"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Χρόνος επαναγέμισης των πυροβόλων -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Πύργος Πυροβόλου"
@@ -3875,6 +3912,12 @@ msgstr "Διοικητής, ηγείται ομάδων, λειτουργεί ω
 msgid "Complete battlefield visibility"
 msgstr "Πλήρης ορατότητα του πεδίου μάχης"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Σύνθετα Κράματα Τύπος2"
 
@@ -3932,6 +3975,15 @@ msgid "Crane1"
 msgstr ""
 
 msgid "Crane2"
+msgstr ""
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
 msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
@@ -4000,6 +4052,12 @@ msgstr "Υπερσυμπυκνωμένη Θερμική Θωράκιση Ανθ�
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Θερμική Θωράκιση Ανθρωπομηχανής Τύπος2"
 
@@ -4008,6 +4066,9 @@ msgstr "Θερμική Θωράκιση Ανθρωπομηχανής Τύπος3
 
 msgid "Cyborg Thermal Armor"
 msgstr "Θερμική Θωράκιση Ανθρωπομηχανής"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4135,6 +4196,9 @@ msgstr "Δυνατότητα αυτεπισκευής"
 msgid "Enemy"
 msgstr "Εχθρός"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Μηχανική"
 
@@ -4207,6 +4271,9 @@ msgstr "Σταθεροποίηση πτερυγίου, βελτιώνει την
 msgid "Fire Truck"
 msgstr "Πυροσβεστικό Όχημα"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Βάλει Πυραυλίδια Ηλεκτρονικού Παλμού"
 
@@ -4241,12 +4308,18 @@ msgstr "Φλογοβόλο Κόμπρα Ερπύστριες"
 msgid "Flamer damage +25%"
 msgstr "Καταστροφικότητα των φλογοβόλων +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr ""
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Χρόνος επαναγέμισης των φλογοβόλων -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Φλογοβόλο Οχιά Ημιερπύστριες"
@@ -4797,6 +4870,15 @@ msgstr "Αυτόματος Γεμιστής Οβιδοβόλου"
 msgid "Howitzer damage +25%"
 msgstr "Καταστροφικότητα των οβιδιβόλων +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Γρήγορος Γεμιστής Οβιδοβόλου"
 
@@ -4806,6 +4888,15 @@ msgstr "Χρόνος επαναγέμισης των οβιδοβόλων -10%"
 
 msgid "Howitzer"
 msgstr "Οβιδοβόλο"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "Τυφώνας, Αντιαεροπορική Θέση"
@@ -4870,6 +4961,9 @@ msgstr "Βελτιωμένη Μηχανική"
 msgid "Improved fire detection systems"
 msgstr "Βελτιωμένα σύστημα εντοπισμού πυρών"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Βελτιωμένο Σκληροσκυρόδεμα Τύπος2"
 
@@ -4921,11 +5015,11 @@ msgstr "Βελτίωση στους οπτικούς φακούς, μειώνε�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Ένθεση Εμπρηστικού Οβιδοβόλου"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Ένθεση εμπρηστικού οβιδοβόλου"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Ένθεση Εμπρηστικού Οβιδοβόλου"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Εμπρηστικό οβιδοβόλο, μπορεί να ανατεθεί σε αισθητήρα"
@@ -5129,9 +5223,15 @@ msgstr "Διαθέσιμο Αντιαεροπορικό Όπλο Φωτακτί�
 msgid "Laser accuracy +10%"
 msgstr "Ακρίβεια των φωτακτινιστών +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Καταστροφικότητα των φωτακτινιστών +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Ο φωτακτινικός προσδιοριστής καθοδηγεί τα βλήματα στο στόχο"
@@ -5139,6 +5239,9 @@ msgstr "Ο φωτακτινικός προσδιοριστής καθοδηγε�
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Χρόνος επαναγέμισης των φωτακτινιστών -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Κέντρο Δι/σης Δορ/κού Φωτακτινιστή"
@@ -5316,6 +5419,12 @@ msgstr "Μεσαίο Πυροβόλο"
 msgid "Medium Super Heavy Body"
 msgstr "Μεσαίο Υπερβαρύ Αμάξωμα"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Θωρακισμένη ενίσχυση με Μικροπυραύλους"
 
@@ -5371,6 +5480,9 @@ msgstr "Μικροπύραυλοι Οχιά Τροχοί"
 msgid "Missile accuracy +10%"
 msgstr "Ακρίβεια των πυραυλιδίων +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "Το πυραυλίδιο αναζητά, ενεργά, το στόχο και κατευθύνεται σε αυτόν"
 
@@ -5378,12 +5490,18 @@ msgstr "Το πυραυλίδιο αναζητά, ενεργά, το στόχο 
 msgid "Missile damage +25%"
 msgstr "Καταστροφικότητα των πυραυλιδίων +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Φρούριο Πυραυλιδίων"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Χρόνος επαναγέμισης των πυραυλιδίων -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Πυραυλιδική Αναβάθμιση"
@@ -5404,6 +5522,9 @@ msgstr "Επιπλέον βαθμοί θωράκισης και αμαξώματ
 msgid "Mortar accuracy +10%"
 msgstr "Ακρίβεια των όλμων +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Αυτόματος Γεμιστής Όλμου Τύπος2"
 
@@ -5420,6 +5541,9 @@ msgstr "Όλμος Κόμπρα Ημιερπύστριες"
 msgid "Mortar damage +25%"
 msgstr "Καταστροφικότητα των όλμων +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Γρήγορος Γεμιστής Όλμου"
 
@@ -5429,6 +5553,9 @@ msgstr "Λάκκος Ολμοβόλου"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Χρόνος επαναγέμισης των όλμων -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Ολμικός Υπολογιστής Στόχευσης"
@@ -5562,10 +5689,10 @@ msgstr "Διαθέσιμη Νέα Δομή Συστημάτων"
 msgid "New Systems Tower Available"
 msgstr "Διαθέσιμος Νέος Πύργος Συστημάτων"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Νέος Πυργίσκος Συστημάτων Διαθέσιμος για Σύνθεση"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Νέος Πυργίσκος Συστημάτων Διαθέσιμος για Σύνθεση"
 
 msgid "New Thermal Emissions detection"
@@ -5664,6 +5791,12 @@ msgstr "Αρχική Μάχη για Έναν Παίχτη"
 msgid "Panther"
 msgstr "Πάνθηρας"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Λάκκος Μύλου"
 
@@ -5753,6 +5886,9 @@ msgstr "Παραγωγή ενέργειας +30%"
 msgid "Power Research Completed"
 msgstr "Ολοκληρώθηκε η Έρευνα Ενέργειας"
 
+msgid "Power"
+msgstr "Ισχύς"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Ισχυρό όπλο Ηλεκτρομαγνητικού Παλμού"
 
@@ -5761,6 +5897,9 @@ msgstr "ΕργαστήριοΙσχύος"
 
 msgid "Produces Cyborgs"
 msgstr "Παράγει Ανθρωπομηχανές"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr ""
@@ -5834,6 +5973,12 @@ msgstr "Πύργος Εντοπισμού Ραδιοεντοπιστών"
 msgid "Radar Detector"
 msgstr "Εντοπιστής Ραδιοεντοπιστών"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Ακρίβεια των Όπλων Ράγας +10%"
@@ -5876,6 +6021,9 @@ msgstr "Αναβάθμιση Όπλου Ράγας"
 msgid "Rail Gun"
 msgstr "Όπλο Ράγας"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Υπολογιστής Πρόβλεψης Στόχου Ράγας"
 
@@ -5906,6 +6054,12 @@ msgstr "Μειωμένες πιθανότητες να πάρει τον έλε�
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Ξαναγεμίζει με καύσιμα, επανεξοπλίζει και επιδιορθώνει αεροσκάφη"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Ενισχυμένα Υλικά Δομών Βάσης Τύπος2"
@@ -5985,6 +6139,9 @@ msgstr "Ταχύτητα της έρευνας +30%"
 msgid "Research speed +85%"
 msgstr "Ταχύτητα της έρευνας +85%"
 
+msgid "Research"
+msgstr "Έρευνα"
+
 msgid "Retaliation"
 msgstr "Αντίποινα"
 
@@ -6043,6 +6200,9 @@ msgstr "Ρομποτικός Επανεξοπλισμός Αεροσκαφών"
 msgid "Rocket accuracy +10%"
 msgstr "Ακρίβεια των πυραύλων +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Πυραυλικό πυροβολικό· μπορεί να ανατεθεί σε έναν αισθητήρα"
 
@@ -6061,6 +6221,9 @@ msgstr "Μπάγκυ Πυραύλου"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Καταστροφικότητα των πυραύλων +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Ο πύραυλος εντοπίζει και ακολουθεί την εξάτμιση της μηχανής"
@@ -6083,6 +6246,9 @@ msgstr ""
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Χρόνος επαναγέμισης των πυραύλων -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Ο πύραυλος ακολουθεί τον φωτακτινικό προσδιοριστή έως τον στόχο"
@@ -6239,6 +6405,9 @@ msgstr "Αναβάθμιση Αισθητήρων Τύπος3"
 
 msgid "Sensor Upgrade"
 msgstr "Αναβάθμιση Ανιχνευτών"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "Βελτιώθηκαν οι Αισθητήρες"
@@ -6405,11 +6574,11 @@ msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού Τύ
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού Τύπος3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού"
-
 msgid "Synaptic link data analysis"
 msgstr "Ανάλυση δεδομένων Συναπτικού Δεσμού"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Τεχνολογία Αποκωδικοποίησης Συναπτικού Δεσμού"
@@ -6422,6 +6591,9 @@ msgstr "Δεσμός Σύναψης"
 
 msgid "Systems Research Completed"
 msgstr "Ολοκληρώθηκε η Έρευνα Συστημάτων"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr ""
@@ -6449,6 +6621,9 @@ msgstr "Φονιάς Αρμάτων Οργή Ερπύστριες"
 
 msgid "Tank Killer"
 msgstr "Καταστροφέας Αρμάτων"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Παγίδες Αρμάτων Μάχης"
@@ -6493,6 +6668,12 @@ msgstr "Θερμική Θωράκιση +40%"
 msgid "Thermal Armor +45%"
 msgstr "Θερμική Θωράκιση +45%"
 
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Thermal Armor Mk2"
 msgstr "Θερμική Θωράκιση Τύπος2"
 
@@ -6536,6 +6717,9 @@ msgid "Titanium-reinforced concrete"
 msgstr "Σκυρόδεμα ενισχυμένο με Τιτάνιο"
 
 msgid "Tower wars AI, based on NullBot"
+msgstr ""
+
+msgid "Tower Wars Buff"
 msgstr ""
 
 msgid "Tracked Propulsion"
@@ -6860,6 +7044,9 @@ msgstr "Μικροπύραυλοι Αεροσκάφους"
 msgid "VTOL Needle Gun"
 msgstr "Όπλου Ακίδας Αεροσκάφους"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Πρόσδεση Βομβών Φωσφόρου Αεροσκάφους"
 
@@ -6883,6 +7070,9 @@ msgstr "Εναπόθεση Επανεξ/σμού Αερ/φών"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Εναποθέσεις επανεξοπλισμού αεροσκαφών, ώστε να δρουν τα αεροσκάφη"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "Αεροπορικό Πυραυλίδιο Μάστιγα"
@@ -7305,10 +7495,16 @@ msgstr ""
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7614,418 +7810,11 @@ msgstr ""
 msgid "Load Multiplayer Replay"
 msgstr ""
 
-msgid "Game Options"
-msgstr "παιχνίδι"
-
-msgid "Graphics Options"
-msgstr "γραφικά"
-
-msgid "Video Options"
-msgstr "βίντεο"
-
-msgid "Audio / Zoom Options"
-msgstr "Επιλογές Ήχου / Εστίασης"
-
-msgid "Mouse Options"
-msgstr "ποντίκι"
-
-msgid "Key Mappings"
-msgstr "πλήκτρα"
-
-msgid "Music Manager"
-msgstr ""
-
-msgid "Multiplay Options"
-msgstr ""
-
-msgid "OPTIONS"
-msgstr "ΕΠΙΛΟΓΕΣ"
-
-msgid "Open Configuration Directory"
-msgstr ""
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
-
-msgid "Configuration directory is reported as:"
-msgstr ""
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
-
-msgid "Failed to open configuration directory"
-msgstr ""
-
-msgid "1×"
-msgstr "1×"
-
-msgid "2×"
-msgstr "2×"
-
-msgid "Fullscreen"
-msgstr "πλήρης οθόνη"
-
-msgid "Unsupported"
-msgstr "μη υποστηριζόμενο"
-
-msgid "Off"
-msgstr "όχι"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Σκότος"
-
-msgid "On"
-msgstr "ναι"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "περιστρ/νος"
-
-msgid "Fixed"
-msgstr "σταθερός"
-
-msgid "Instant"
-msgstr "Ακαριαίο"
-
-msgid "Tracked"
-msgstr "Υπό Παρακολούθηση"
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr ""
-
-msgid "High Quality"
-msgstr ""
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* μετά από επανεκκίνηση του παιχνιδιού"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "σκιές"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr ""
-
-msgid "Radar"
-msgstr "υποχάρτης"
-
-msgid "Radar Jump"
-msgstr ""
-
-msgid "Video Playback"
-msgstr "αναπαραγωγή"
-
-msgid "Scanlines"
-msgstr "γραμμές σάρωσης"
-
-msgid "Screen Shake"
-msgstr ""
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "ΕΠΙΛΟΓΕΣ ΤΩΝ ΓΡΑΦΙΚΩΝ"
-
-msgid "Disabled"
-msgstr "Απενεργοποιημένο"
-
-msgid "Enabled"
-msgstr "Ενεργοποιημένο"
-
-msgid "Auto"
-msgstr "Αυτόματο"
-
-msgid "Voice Volume"
-msgstr "ένταση της φωνής"
-
-msgid "FX Volume"
-msgstr "ένταση των εφέ"
-
-msgid "Music Volume"
-msgstr "ένταση της μουσικής"
-
-msgid "Subtitles"
-msgstr "υπότιτλοι"
-
-msgid "HRTF"
-msgstr ""
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "Η Κεφαλής Σχετιζόμενη Λειτουργία Μεταφοράς (HRTF) δεν υποστηρίζεται από τη συσκευή σου, ή το σύστημά σου, ή την OpenAL βιβλιοθήκη σου"
-
-msgid "Map Zoom"
-msgstr "Εστίαση του Χάρτη"
-
-msgid "Map Zoom Rate"
-msgstr "Ποσοστό Εστίασης του Χάρτη"
-
-msgid "Radar Zoom"
-msgstr "Εστίαση του Αισθητήρα"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "ΗΧΟΣ / ΕΣΤΙΑΣΗ\\nΕΠΙΛΟΓΕΣ"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Μπορείς να μεταβάλεις την ανάλυση, αλλάζοντας το μέγεθος του παράθυρου «κανονικά». (Για παράδειγμα, «αρπάζοντας» και «τραβώντας» μια γωνία, ή μια πλευρά του.)"
-
-msgid "Graphics Mode"
-msgstr "Κατάσταση της Λειτουργίας των Γραφικών"
-
-msgid "Resolution"
-msgstr "Ανάλυση"
-
-msgid "Display Scale"
-msgstr "Κλίμακα Εμφάνισης"
-
-msgid "Adaptive"
-msgstr ""
-
-msgid "Windowed"
-msgstr "παράθυρο"
-
-msgid "Desktop Full"
-msgstr ""
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "μέγεθος υφασμάτων"
-
-msgid "Vertical sync"
-msgstr "κάθετος συγχ/μός"
-
-msgid "Antialiasing*"
-msgstr "Αντι-Σπασμωδική*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Προειδοποίηση: η Αντι-Σπασμωδική μπορεί να προκαλέσει κατάρρευση, ειδικά σε τιμές > 16"
-
-msgid "Graphics Backend*"
-msgstr ""
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "ΕΠΙΛΟΓΕΣ ΒΙΝΤΕΟΥ"
-
-msgid "Unable to change Vertical Sync"
-msgstr ""
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-
-msgid "Middle Mouse"
-msgstr "μεσαίο πλήκτρο"
-
-msgid "Right Mouse"
-msgstr "δεξί πλήκτρο"
-
-msgid "Reverse Rotation"
-msgstr "αντί/φη περιστροφή"
-
-msgid "Trap Cursor"
-msgstr "παγίδευση δείκτη"
-
-msgid "Switch Mouse Buttons"
-msgstr "εναλλαγή πλήκτρων"
-
-msgid "Rotate Screen"
-msgstr "περιστροφή οθόνης"
-
-msgid "Colored Cursors"
-msgstr "έγχρωμοι δείκτες"
-
-msgid "Cursor Size"
-msgstr ""
-
-msgid "MOUSE OPTIONS"
-msgstr "ΕΠΙΛΟΓΕΣ ΠΟΝΤΙΚΙΟΥ"
-
-msgid "Super Easy"
-msgstr ""
-
-msgid "Easy"
-msgstr "εύκολο"
-
-msgid "Hard"
-msgstr "δύσκολο"
-
-msgid "Insane"
-msgstr "εξωφρενικό"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr ""
 
 msgid "Please remove all incompatible mods."
-msgstr ""
-
-msgid "GAME OPTIONS"
-msgstr "ΕΠΙΛΟΓΕΣ ΠΑΙΧΝΙΔΙΟΥ"
-
-msgid "Language"
-msgstr "γλώσσα"
-
-msgid "Unit Colour:"
-msgstr "χρώμα μονάδας:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "ατομικό / ομαδικό"
-
-msgid "Campaign Difficulty"
-msgstr "δυσκολία εκστρατείας"
-
-msgid "Camera Speed"
-msgstr "Ταχύτητα της Κάμερας"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
-
-msgid "Click to open webpage."
-msgstr ""
-
-msgid "Insane Difficulty"
-msgstr ""
-
-msgid "This difficulty is for very experienced players!"
-msgstr ""
-
-#, c-format
-msgid "%u minutes"
-msgstr ""
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr ""
-
-msgid "Game Port"
-msgstr ""
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr ""
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr ""
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
 msgstr ""
 
 msgid "Mod: "
@@ -8537,15 +8326,6 @@ msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Είσαι ο οικοδεσπότης. Αν
 msgid "Host Quit"
 msgstr "Παραίτηση Οικοδεσπότη"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Τακτική Διεπαφή (Εικονίδιο Προέλευσης Στόχου): Εμφάνιση"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Τακτική Διεπαφή (Εικονίδιο Προέλευσης Στόχου): Απόκρυψη"
-
-msgid "Go Back"
-msgstr ""
-
 msgid "View Guide"
 msgstr ""
 
@@ -8578,15 +8358,6 @@ msgstr "Το παιχνίδι δεν μπορεί να συνεχιστεί χω
 
 msgid "-->  QUIT  <--"
 msgstr "-->  ΕΞΟΔΟΣ  <--"
-
-msgid "Audio Options"
-msgstr "ήχος"
-
-msgid "View Key Mappings"
-msgstr "Προβολή της Χάρτας των Πλήκτρων"
-
-msgid "Shake"
-msgstr ""
 
 msgid "Save Campaign Game"
 msgstr "Αποθήκευση Παιχνιδιού Εκστρατείας"
@@ -8631,16 +8402,19 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
+msgid "Global Keys"
 msgstr ""
 
-msgid "Other Hotkeys"
+msgid "Other Keys"
 msgstr ""
 
-msgid "Gameplay"
+msgid "Gameplay Keys"
 msgstr ""
 
-msgid "Debug"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
 msgstr ""
 
 msgid "Debug (level editor)"
@@ -8651,9 +8425,6 @@ msgstr ""
 
 msgid "Manufacture"
 msgstr "Παραγωγή"
-
-msgid "Research"
-msgstr "Έρευνα"
 
 msgid "Build"
 msgstr "Χτίσιμο"
@@ -9019,7 +8790,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Επιλογή όλων των Μονάδων με Πολλές Φθορές"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat Units with >50% HP and no group"
 msgstr ""
 
 msgid "Select all Half-tracks"
@@ -9189,9 +8960,6 @@ msgstr ""
 
 msgid "Waiting for Power"
 msgstr "Αναμονή για Ενέργεια"
-
-msgid "Power"
-msgstr "Ισχύς"
 
 msgid "Power Per Second"
 msgstr ""
@@ -9654,21 +9422,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
-msgid "<not bound>"
-msgstr ""
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "ΑΝΑΘΕΣΗ ΤΩΝ ΠΛΗΚΤΡΩΝ"
-
-msgid "Return To Previous Screen"
-msgstr "Επιστροφή στην Προηγούμενη Οθόνη"
-
-msgid "Select Default"
-msgstr "Επιλογή Προεπιλεγμένου"
-
 msgid "Parent directory"
 msgstr "Γονικός κατάλογος"
 
@@ -9689,8 +9442,14 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Αδυναμία αποθήκευσης του παιχνιδιού."
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Φόρτωση του Μεταφορέα"
@@ -9769,8 +9528,20 @@ msgstr "Ο %s Συμμάχησε με τον %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ανακάλυψες σχέδια για %s"
 
+msgid "Super Easy"
+msgstr ""
+
+msgid "Easy"
+msgstr "εύκολο"
+
 msgid "Medium"
 msgstr "μεσαίο"
+
+msgid "Hard"
+msgstr "δύσκολο"
+
+msgid "Insane"
+msgstr "εξωφρενικό"
 
 msgid "Commander"
 msgstr "Διοικητής"
@@ -9785,103 +9556,32 @@ msgstr "ΛΕΙΠΕΙ Η ΠΕΡΙΓΡΑΦΗ ΤΗΣ ΤΕΧΝΗΤΗΣ ΝΟΗΜΟΣ�
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Αγώνας Τεχνητών Νοημοσυνών: %3.1f%% νίκες, %3.1f%% ήττες, %3.1f%% ισοπαλίες"
 
-msgid "Tanks disabled!!"
-msgstr "Χωρίς άρματα."
-
-msgid "Cyborgs disabled."
-msgstr "Οι Ανθρωπομηχανές έχουν απενεργοποιηθεί."
-
-msgid "VTOLs disabled."
-msgstr "Απενεργοποιημένα τα αεροσκάφη."
-
-msgid "Satellite Uplink disabled."
-msgstr "Η Δορυφορική Σύνδεση είναι απενεργοποιημένη."
-
-msgid "Laser Satellite disabled."
-msgstr "Ο Δορυφόρος Φωτακτίνας είναι απενεργοποιημένος."
-
-msgid "Structure Limits Enforced."
-msgstr "Επιβλήθηκαν Περιορισμοί Δόμησης."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Ανεπαρκείς ψήφοι για την τυχαιοποίηση ή την αλλαγή του χάρτη."
-
-msgid "Select Game Name"
-msgstr "Επέλεξε ένα Όνομα για το Παιχνίδι"
-
-msgid "Game Name"
-msgstr "Όνομα του Παιχνιδιού"
-
-msgid "One-Player Skirmish"
-msgstr "Μάχη για Έναν Παίχτη"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Επιλογή Χάρτη\n"
-"Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
-
-msgid "Map-Mod!"
-msgstr "Διασκευή-Χάρτη!"
-
-msgid "Random map!"
-msgstr ""
-
-msgid "Click to set Password"
-msgstr "Κλίκαρε για να ορίσεις το Συνθηματικό"
-
-msgid "Enter password here"
-msgstr "Εισήγαγε εδώ τον κωδικό"
 
 msgid "Select Player Name"
 msgstr "Επέλεξε το Όνομα του Παίχτη"
 
-msgid "Alliances"
-msgstr "Συμμαχίες"
-
-msgid "Base"
-msgstr "Βάση"
-
-msgid "Map Preview"
-msgstr "Προεπισκόπηση"
-
-msgid "Click to see Map"
-msgstr "Κάνε κλικ για να δεις το Χάρτη"
-
-msgid "Show Structure Limits"
-msgstr "Εμφάνιση των Περιορισμών Δόμησης"
-
-msgid "Set Structure Limits"
-msgstr "Περιορισμοί Δόμησης"
-
-msgid "Random Game Options"
-msgstr "Επιλογές Τυχαίου Παιχνιδιού"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Επιλογές Τυχαίου Παιχνιδιού\n"
-"Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
-
-msgid "Tech"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
-msgid "Technology Level 1"
+msgid "Blind Game:"
 msgstr ""
 
-msgid "Technology Level 2"
+msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr ""
 
-msgid "Technology Level 3"
+msgid "Blind Lobby:"
 msgstr ""
 
-msgid "Technology Level 4"
+msgid "- Player names will not be visible to other players (until the game has started)"
 msgstr ""
 
-msgid "Start Hosting Game"
-msgstr "Φιλοξενία του Παιχνιδιού"
+msgid "OPTIONS"
+msgstr "ΕΠΙΛΟΓΕΣ"
+
+msgid "Return To Previous Screen"
+msgstr "Επιστροφή στην Προηγούμενη Οθόνη"
 
 msgid "DIFFICULTY"
 msgstr "ΔΥΣΚΟΛΙΑ"
@@ -10023,6 +9723,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10041,63 +9748,8 @@ msgstr ""
 msgid "Lock Teams"
 msgstr ""
 
-msgid "Choose Team"
-msgstr "Διάλεξε Ομάδα"
-
-msgid "Teams locked"
-msgstr "Κλειδωμένες οι Ομάδες"
-
-msgid "Click to change player colour"
-msgstr "Κλίκαρε για να αλλάξεις το χρώμα του παίχτη"
-
-msgid "Click to change player position"
-msgstr "Κλίκαρε για να αλλάξεις τη θέση του παίχτη"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Κλίκαρε για να επιλέξεις Τεχνητή Νοημοσύνη· δεξί κλικάρισμα για να διανείμεις την επιλογή"
-
-msgid "Click to close spectator slot"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Player ID: "
-msgstr "Ταυτότητα Παίκτη: "
-
-msgid "(none)"
-msgstr "(κανένα)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Κλίκαρε για να αλλάξεις την δυσκολία"
-
-msgid "Waiting for player"
-msgstr "Αναμονή για ένα παίχτη"
-
-msgid "Player is ready"
-msgstr "Ο παίχτης είναι έτοιμος"
-
-msgid "Player is downloading"
-msgstr "Ο παίχτης λαμβάνει αρχεία"
-
-msgid "Click when ready"
-msgstr "Όταν είσαι έτοιμος, κλίκαρε εδώ"
-
-msgid "Waiting for download"
-msgstr "Αναμονή για κατέβασμα αρχείων"
-
-msgid "READY?"
-msgstr "ΕΤΟΙΜΟΣ;"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10161,22 +9813,6 @@ msgstr ""
 msgid "Sorry! Failed to host the game."
 msgstr "Συγνώμη... Αδυναμία φιλοξενίας του παιχνιδιού."
 
-msgid "Game Name Updated."
-msgstr "Ενημερώθηκε το Όνομα του Παιχνιδιού."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** τώρα απαιτείται ο κωδικός πρόσβασης [%s] ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** ΔΕΝ απαιτείται κωδικός πρόσβασης ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Αυτή είναι μια διασκευή χάρτη· μπορεί να αλλάξει την αίσθηση του παιχνιδιού."
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
-
 msgid "Host is Starting Game"
 msgstr "Ο οικοδεσπότης Ξεκινά το Παιχνίδι"
 
@@ -10197,6 +9833,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10242,6 +9887,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10260,20 +9920,6 @@ msgstr "Κλεισμένο"
 
 msgid "Open"
 msgstr "Ανοιχτό"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Αποστέλνεται ο Χάρτης: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Χάρτης: λήφθηκαν %u%%"
-
-msgid "HOST"
-msgstr "ΟΙΚΟΔΕΣΠΟΤΗΣ"
-
-msgid "Ping"
-msgstr "Ανάκρουση"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
@@ -10301,6 +9947,10 @@ msgstr "Ο %s Έφυγε από το Παιχνίδι"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10363,8 +10013,14 @@ msgid_plural "%d players"
 msgstr[0] "%d παίχτης"
 msgstr[1] "%d παίχτες"
 
+msgid "Ping"
+msgstr "Ανάκρουση"
+
 msgid "Structs"
 msgstr "Χτίσματα"
+
+msgid "Alliances"
+msgstr "Συμμαχίες"
 
 msgid "Score"
 msgstr "Βαθμολογία"
@@ -10421,25 +10077,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10467,6 +10104,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10521,6 +10177,9 @@ msgstr "Πορτοκάλι"
 
 msgid "Grey"
 msgstr "Στάχτη"
+
+msgid "Black"
+msgstr "Σκότος"
 
 msgid "Red"
 msgstr "Αίμα"
@@ -10638,9 +10297,6 @@ msgid "Date"
 msgstr ""
 
 msgid "Title"
-msgstr ""
-
-msgid "MUSIC MANAGER"
 msgstr ""
 
 msgid "Dismiss"
@@ -10906,6 +10562,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11134,6 +10802,9 @@ msgstr "Βραβείο Εγκατάστασης Επισκευών - Τίποτ�
 msgid "Classic"
 msgstr ""
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr ""
 
@@ -11199,6 +10870,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "μη υποστηριζόμενο"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11255,6 +10977,9 @@ msgstr "Γίνεται Αναζήτηση"
 
 msgid "Connecting to the lobby server..."
 msgstr "Συνδέεται με τον εξυπηρετητή αναμονής..."
+
+msgid "Game Name"
+msgstr "Όνομα του Παιχνιδιού"
 
 msgid "Map Name"
 msgstr "Όνομα του Χάρτη"
@@ -11326,6 +11051,458 @@ msgstr "Εσφαλμένος Κωδικός"
 msgid "Continue"
 msgstr "Συνέχιση"
 
+msgid "MUSIC MANAGER"
+msgstr ""
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "Η Κεφαλής Σχετιζόμενη Λειτουργία Μεταφοράς (HRTF) δεν υποστηρίζεται από τη συσκευή σου, ή το σύστημά σου, ή την OpenAL βιβλιοθήκη σου"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "ένταση της φωνής"
+
+msgid "FX Volume"
+msgstr "ένταση των εφέ"
+
+msgid "Music Volume"
+msgstr "ένταση της μουσικής"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr ""
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Απενεργοποιημένο"
+
+msgid "Enabled"
+msgstr "Ενεργοποιημένο"
+
+msgid "Auto"
+msgstr "Αυτόματο"
+
+msgid "Subtitles"
+msgstr "υπότιτλοι"
+
+msgid "Off"
+msgstr "όχι"
+
+msgid "On"
+msgstr "ναι"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr ""
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "παγίδευση δείκτη"
+
+msgid "Colored Cursors"
+msgstr "έγχρωμοι δείκτες"
+
+msgid "Cursor Size"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "Ταχύτητα της Κάμερας"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "αντί/φη περιστροφή"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Quick Chat Only"
+msgstr ""
+
+msgid "Allow All"
+msgstr ""
+
+msgid "Inactivity Timeout"
+msgstr ""
+
+#, c-format
+msgid "%u minutes"
+msgstr ""
+
+msgid "Lag Kick"
+msgstr ""
+
+#, c-format
+msgid "%u seconds"
+msgstr ""
+
+msgid "Spectator Slots"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr ""
+
+msgid "Game Time Limit"
+msgstr ""
+
+#, c-format
+msgid "%s hours"
+msgstr ""
+
+msgid "Enable Rating"
+msgstr ""
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr ""
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr ""
+
+msgid "High Quality"
+msgstr ""
+
+msgid "Shadows"
+msgstr "σκιές"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr ""
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Shadow Filtering"
+msgstr ""
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Ultra"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr ""
+
+msgid "Screen Shake"
+msgstr ""
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr ""
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "γλώσσα"
+
+msgid "Display Scale"
+msgstr "Κλίμακα Εμφάνισης"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr "υποχάρτης"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "σταθερός"
+
+msgid "Rotating"
+msgstr "περιστρ/νος"
+
+msgid "Radar Jump"
+msgstr ""
+
+msgid "Instant"
+msgstr "Ακαριαίο"
+
+msgid "Tracked"
+msgstr "Υπό Παρακολούθηση"
+
+msgid "Radar Zoom"
+msgstr "Εστίαση του Αισθητήρα"
+
+msgid "Video Playback"
+msgstr "αναπαραγωγή"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1×"
+
+msgid "2×"
+msgstr "2×"
+
+msgid "Fullscreen"
+msgstr "πλήρης οθόνη"
+
+msgid "Scanlines"
+msgstr "γραμμές σάρωσης"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr ""
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr ""
+
+msgid "Configuration directory is reported as:"
+msgstr ""
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr ""
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr ""
+
+msgid "Failed to open configuration directory"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "Μπορείς να μεταβάλεις την ανάλυση, αλλάζοντας το μέγεθος του παράθυρου «κανονικά». (Για παράδειγμα, «αρπάζοντας» και «τραβώντας» μια γωνία, ή μια πλευρά του.)"
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "παράθυρο"
+
+msgid "Desktop Full"
+msgstr ""
+
+msgid "Resolution"
+msgstr "Ανάλυση"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr ""
+
+msgid "On (Fullscreen)"
+msgstr ""
+
 msgid "CONNECTION"
 msgstr "ΣΥΝΔΕΣΗ"
 
@@ -11337,6 +11514,303 @@ msgstr "διεύθυνση IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Διεύθυνση IP ή Όνομα Μηχανής"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "Ταυτότητα Παίκτη: "
+
+msgid "(none)"
+msgstr "(κανένα)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Αποστέλνεται ο Χάρτης: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Χάρτης: λήφθηκαν %u%%"
+
+msgid "HOST"
+msgstr "ΟΙΚΟΔΕΣΠΟΤΗΣ"
+
+msgid "Choose Team"
+msgstr "Διάλεξε Ομάδα"
+
+msgid "Teams locked"
+msgstr "Κλειδωμένες οι Ομάδες"
+
+msgid "Click to change player colour"
+msgstr "Κλίκαρε για να αλλάξεις το χρώμα του παίχτη"
+
+msgid "Click to change player position"
+msgstr "Κλίκαρε για να αλλάξεις τη θέση του παίχτη"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Κλίκαρε για να επιλέξεις Τεχνητή Νοημοσύνη· δεξί κλικάρισμα για να διανείμεις την επιλογή"
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Κλίκαρε για να αλλάξεις την δυσκολία"
+
+msgid "Waiting for player"
+msgstr "Αναμονή για ένα παίχτη"
+
+msgid "Player is ready"
+msgstr "Ο παίχτης είναι έτοιμος"
+
+msgid "Player is downloading"
+msgstr "Ο παίχτης λαμβάνει αρχεία"
+
+msgid "Click when ready"
+msgstr "Όταν είσαι έτοιμος, κλίκαρε εδώ"
+
+msgid "Waiting for download"
+msgstr "Αναμονή για κατέβασμα αρχείων"
+
+msgid "READY?"
+msgstr "ΕΤΟΙΜΟΣ;"
+
+msgid "Tanks disabled!!"
+msgstr "Χωρίς άρματα."
+
+msgid "Cyborgs disabled."
+msgstr "Οι Ανθρωπομηχανές έχουν απενεργοποιηθεί."
+
+msgid "VTOLs disabled."
+msgstr "Απενεργοποιημένα τα αεροσκάφη."
+
+msgid "Satellite Uplink disabled."
+msgstr "Η Δορυφορική Σύνδεση είναι απενεργοποιημένη."
+
+msgid "Laser Satellite disabled."
+msgstr "Ο Δορυφόρος Φωτακτίνας είναι απενεργοποιημένος."
+
+msgid "Structure Limits Enforced."
+msgstr "Επιβλήθηκαν Περιορισμοί Δόμησης."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** τώρα απαιτείται ο κωδικός πρόσβασης [%s] ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** ΔΕΝ απαιτείται κωδικός πρόσβασης ***"
+
+msgid "Game Name Updated."
+msgstr "Ενημερώθηκε το Όνομα του Παιχνιδιού."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Μάχη για Έναν Παίχτη"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Κάνε κλικ για να δεις το Χάρτη"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Επιλογή Χάρτη\n"
+"Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Βάση"
+
+msgid "Tech"
+msgstr ""
+
+msgid "Technology Level 1"
+msgstr ""
+
+msgid "Technology Level 2"
+msgstr ""
+
+msgid "Technology Level 3"
+msgstr ""
+
+msgid "Technology Level 4"
+msgstr ""
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Απογείωση Μεταφορέα"

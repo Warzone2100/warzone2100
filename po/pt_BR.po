@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-04 02:29\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -1796,6 +1796,9 @@ msgstr "Destrua os silos dos mísseis"
 msgid "Rescue Alpha team from Nexus"
 msgstr "Resgate o time Alfa do Nexus"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Destrua o QG do Nexus para desativar o Programa Intrusivo Nexus"
 
@@ -1817,8 +1820,8 @@ msgstr "Junte uma parte da equipe Beta com um posto avançado de time Gamma"
 msgid "Return to LZ"
 msgstr "Retorne à AP"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "Dica de dificuldade Difícil / Insana:"
+msgid "Insane difficulty hint:"
+msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Construa uma base fortificada ao longo do mapa para se proteger da Coletividade"
@@ -2957,6 +2960,10 @@ msgstr "Seu IP externo é: %s"
 msgid "Failed to create port mapping (timeout)"
 msgstr "Falha ao criar o mapeamento da porta (timeout)"
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr "O cliente não conseguiu confirmar a troca do índice do jogador"
 
@@ -2991,6 +2998,18 @@ msgstr "Formato de arquivo de replay não suportado"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Não foi possível carregar o replay: O arquivo de replay está incompleto ou corrompido."
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr ""
 
 msgid "Menu"
 msgstr "Menu"
@@ -3301,11 +3320,11 @@ msgstr "Armado com o Lançador de Mísseis Scourge"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Armado com foguetes destruidores de Tanques Ciborgue"
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr "Armado com Incendiário de Termite Ciborgue"
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Armado com Lança-Chamas de Termite"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr "Armado com Incendiário de Termite Ciborgue"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Armado com Laser Médio"
@@ -3443,6 +3462,9 @@ msgstr "Defesa Reforçada de Canhão Gauss"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Muro equipado com Laser Pesado"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Muro equipado com Incendiário Plasmite"
@@ -3672,6 +3694,9 @@ msgstr "Dano de bomba +10%"
 msgid "Bomb damage +25%"
 msgstr "Dano de bombas +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Melhoria de Bomba"
 
@@ -3695,6 +3720,9 @@ msgstr "Inseto"
 
 msgid "Buggy"
 msgstr "Buggy"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistemas de diagnóstico e reparo implantados"
@@ -3736,6 +3764,9 @@ msgstr "Queima petróleo com maior eficiência"
 msgid "Cannon accuracy +10%"
 msgstr "Precisão de canhões +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Carregamento Automático de Canhões Mk2"
 
@@ -3748,6 +3779,9 @@ msgstr "Carregamento Automático de Canhões"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Dano de canhões +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Canhão Caminhão de Bombeiros"
@@ -3773,6 +3807,9 @@ msgstr "Recarregamento Rápido de Canhões"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Recarga de canhões -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Torre de Canhão"
@@ -3879,6 +3916,12 @@ msgstr "O Comandante lidera e age como ponto de entrega de fábricas"
 msgid "Complete battlefield visibility"
 msgstr "Visibilidade completa do campo de batalha"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Ligas compostas Mk2"
 
@@ -3937,6 +3980,15 @@ msgstr "Guindaste1"
 
 msgid "Crane2"
 msgstr "Guindaste2"
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Ligas Compostas para Ciborgues Mk2"
@@ -4004,6 +4056,12 @@ msgstr "Armadura Térmica Ciborgue Superdensa"
 msgid "Cyborg Tank Killer"
 msgstr "Assassino de Tanque Ciborgue"
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Armadura Térmica Ciborgue Mk2"
 
@@ -4012,6 +4070,9 @@ msgstr "Armadura Térmica Ciborgue Mk3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Armadura Térmica Ciborgue"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr "Termite Ciborgue"
@@ -4139,6 +4200,9 @@ msgstr "Permite o auto-reparo"
 msgid "Enemy"
 msgstr "Inimigo"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Engenharia"
 
@@ -4211,6 +4275,9 @@ msgstr "Estabilização das barbatanas melhora a trajetória de vôo"
 msgid "Fire Truck"
 msgstr "Caminhão de Bombeiros"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Dispara Mísseis de Pulsos Eletromagnéticos"
 
@@ -4245,12 +4312,18 @@ msgstr "Tanque Incendiário Cobra"
 msgid "Flamer damage +25%"
 msgstr "Dano de incendiários +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr "Recarregamento Rápido de Incendiário"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Recarga de incendiário -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Híbrido Incendiário Víbora"
@@ -4801,6 +4874,15 @@ msgstr "Carregador Automático de Obus"
 msgid "Howitzer damage +25%"
 msgstr "Dano do Obus +10%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Carregador de Obus Rápido"
 
@@ -4810,6 +4892,15 @@ msgstr "Recarga de Obus -10%"
 
 msgid "Howitzer"
 msgstr "Obus"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "Defesa AA de Metralhadora Furacão"
@@ -4874,6 +4965,9 @@ msgstr "Engenharia Melhorada"
 msgid "Improved fire detection systems"
 msgstr "Sistemas de detecção de tiro atualizados"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Durocreto atualizado Mk2"
 
@@ -4925,10 +5019,10 @@ msgstr "Melhoria nas lentes reduz a dispersão da luz"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Defesa de Obus Incendiário 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Defesa de Obus Incendiário"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Defesa de Obus Incendiário"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5133,9 +5227,15 @@ msgstr "Arma AA a Laser Disponível"
 msgid "Laser accuracy +10%"
 msgstr "Precisão de laseres +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Dano de Laseres +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Designador a laser guia o tiro ao alvo"
@@ -5143,6 +5243,9 @@ msgstr "Designador a laser guia o tiro ao alvo"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Recarga de laseres -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Centro de Commando do Satélite Laser"
@@ -5320,6 +5423,12 @@ msgstr "Canhão Médio"
 msgid "Medium Super Heavy Body"
 msgstr "Super Chassis Médio"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Defesa Reforçada de Mini-Foguetes"
 
@@ -5375,6 +5484,9 @@ msgstr "4x4 Mini-Foguetes Víbora"
 msgid "Missile accuracy +10%"
 msgstr "Precisão de mísseis +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "O Míssil procura e segue o alvo"
 
@@ -5382,12 +5494,18 @@ msgstr "O Míssil procura e segue o alvo"
 msgid "Missile damage +25%"
 msgstr "Dano de mísseis +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Fortaleza de Mísseis"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Recarga de mísseis -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Melhoria de Míssil"
@@ -5408,6 +5526,9 @@ msgstr "Mais armadura e pontos de vida que o Vingança"
 msgid "Mortar accuracy +10%"
 msgstr "Precisão de morteiros +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Carregador de Morteiro Automático Mk2"
 
@@ -5424,6 +5545,9 @@ msgstr "Híbrido Morteiro Cobra"
 msgid "Mortar damage +25%"
 msgstr "Dano de morteiros +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Carregador de Morteiro Rápido"
 
@@ -5433,6 +5557,9 @@ msgstr "Vala de Morteiro"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Recarga de morteiros -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Computador de Alvo para Morteiros"
@@ -5566,10 +5693,10 @@ msgstr "Nova Estrutura de Sistemas Disponível"
 msgid "New Systems Tower Available"
 msgstr "Nova Torre de Sistemas Disponível"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Novo Torrete de Sistemas Disponível para Projetos"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Novo Torrete de Sistemas Disponível para Projetos"
 
 msgid "New Thermal Emissions detection"
@@ -5668,6 +5795,12 @@ msgstr "Partida Original"
 msgid "Panther"
 msgstr "Pantera"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Vala de Morteiro de Velocidade"
 
@@ -5757,6 +5890,9 @@ msgstr "Produção de energia +30%"
 msgid "Power Research Completed"
 msgstr "Pesquisa de Energia Concluída"
 
+msgid "Power"
+msgstr "Energia"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Arma potente de Pulsos EletroMagnéticos (PEM)"
 
@@ -5765,6 +5901,9 @@ msgstr "Labdeenergia"
 
 msgid "Produces Cyborgs"
 msgstr "Produz ciborgues"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Unidades Regulares e Profissionais são protegidas"
@@ -5838,6 +5977,12 @@ msgstr "Torre de Radar Detector"
 msgid "Radar Detector"
 msgstr "Detector de Radar"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Precisão do Canhão Elétrico +10%"
@@ -5880,6 +6025,9 @@ msgstr "Melhoria de Canhão Elétrico"
 msgid "Rail Gun"
 msgstr "Canhão Elétrico"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predição de Alvos"
 
@@ -5910,6 +6058,12 @@ msgstr "Reduzidas as chances de NEXUS se apoderar dos sistemas"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Reabastece, recarrega e repara VTOL's"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Materiais Base de Estruturas Reforçado Mk2"
@@ -5989,6 +6143,9 @@ msgstr "Velocidade de pesquisa +30%"
 msgid "Research speed +85%"
 msgstr "Velocidade de pesquisa +85%"
 
+msgid "Research"
+msgstr "Pesquisa"
+
 msgid "Retaliation"
 msgstr "Retaliação"
 
@@ -6047,6 +6204,9 @@ msgstr "Rearmamento Robótico de VTOL"
 msgid "Rocket accuracy +10%"
 msgstr "Precisão de foguetes +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artilharia de foguetes; pode ser designada a um sensor"
 
@@ -6065,6 +6225,9 @@ msgstr "Foguete Buggy"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Dano de foguetes +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "O foguete detecta e trava nas emissões dos motores"
@@ -6087,6 +6250,9 @@ msgstr "Carregador Rápido de Foguetes"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Recarga de foguetes -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "O foguete segue o designador laser até o alvo"
@@ -6243,6 +6409,9 @@ msgstr "Melhoria do Sensor Mk3"
 
 msgid "Sensor Upgrade"
 msgstr "Melhoria do Sensor"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "Sensores atualizados"
@@ -6409,11 +6578,11 @@ msgstr "Análise de Dados da Conexão Sináptica Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Análise de Dados da Conexão Sináptica Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Análise de Dados da Conexão Sináptica"
-
 msgid "Synaptic link data analysis"
 msgstr "Análise da conexão sináptica"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Análise de Dados da Conexão Sináptica"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Tecnologia de Interferência na Conexão Sináptica"
@@ -6426,6 +6595,9 @@ msgstr "Conexão Sináptica"
 
 msgid "Systems Research Completed"
 msgstr "Pesquisa de Sistemas Concluída"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr "Ciborgue Destruidor de Tanques"
@@ -6453,6 +6625,9 @@ msgstr "Tanque Destruidor de Tanques Vingança"
 
 msgid "Tank Killer"
 msgstr "Destruidor de Tanques"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Armadilhas de Tanques"
@@ -6496,6 +6671,12 @@ msgstr "Armadura Térmica +40%"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "Armadura Térmica +45%"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
 
 msgid "Thermal Armor Mk2"
 msgstr "Armadura Térmica Mk2"
@@ -6541,6 +6722,9 @@ msgstr "Concreto reforçado com titânio"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "IA de construção de torres, baseada no NullBot"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "Propulsão Tanque"
@@ -6864,6 +7048,9 @@ msgstr "Mini-Foguetes VTOL"
 msgid "VTOL Needle Gun"
 msgstr "Perfuratriz VTOL"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Bombas de Fósforo VTOL"
 
@@ -6887,6 +7074,9 @@ msgstr "Área de Rearmamento de VTOL"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Áreas de Rearmamento são necessárias para a manutenção dos VTOL's"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "Míssil VTOL Scouge"
@@ -7309,11 +7499,17 @@ msgstr "Definir as configurações / permissões padrão do anfitrião do bate-p
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Ativar aprovação para entrada async (para conectar jogadores)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr "URL base para downloads de vídeo sob demanda"
 
 msgid "Base video URL"
 msgstr "URL base do vídeo"
+
+msgid "Specify connection provider type to use when hosting game sessions"
+msgstr ""
 
 msgid "Commander needs a higher level to command more units"
 msgstr "O comandante precisa de um nível maior para comandar mais unidades"
@@ -7618,423 +7814,12 @@ msgstr "A porta TCP %d deve estar aberta no seu firewall ou roteador para hosped
 msgid "Load Multiplayer Replay"
 msgstr "Carregar Replay de Multijogador"
 
-msgid "Game Options"
-msgstr "Opções de Jogo"
-
-msgid "Graphics Options"
-msgstr "Opções Gráficas"
-
-msgid "Video Options"
-msgstr "Opções de Vídeo"
-
-msgid "Audio / Zoom Options"
-msgstr "Opções de Áudio / Zoom"
-
-msgid "Mouse Options"
-msgstr "Opções de Mouse"
-
-msgid "Key Mappings"
-msgstr "Configuração das Teclas"
-
-msgid "Music Manager"
-msgstr "Gerenciador de Música"
-
-msgid "Multiplay Options"
-msgstr "Opções de multijogador"
-
-msgid "OPTIONS"
-msgstr "OPÇÕES"
-
-msgid "Open Configuration Directory"
-msgstr "Abrir Diretório de Configuração"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "Falha ao abrir o diretório de configuração no gerenciador de arquivos padrão do sistema."
-
-msgid "Configuration directory is reported as:"
-msgstr "Diretório de configuração é reportado como:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Se estiver executando dentro de um contêiner / ambiente isolado, isso pode diferir do caminho real no disco."
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Por favor, consulte a documentação para obter mais informações sobre como localizá-la manualmente."
-
-msgid "Failed to open configuration directory"
-msgstr "Falha ao abrir o diretório de configurações"
-
-msgid "1×"
-msgstr "1x"
-
-msgid "2×"
-msgstr "2x"
-
-msgid "Fullscreen"
-msgstr "Tela Cheia"
-
-msgid "Unsupported"
-msgstr "Não suportado"
-
-msgid "Off"
-msgstr "Desligado"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Preto"
-
-msgid "On"
-msgstr "Ligado"
-
-msgid "Per Pixel"
-msgstr "Per Pixel"
-
-msgid "Lightmap"
-msgstr "Lightmap"
-
-msgid "Rotating"
-msgstr "Giratório"
-
-msgid "Fixed"
-msgstr "Fixo"
-
-msgid "Instant"
-msgstr "Instantâneo"
-
-msgid "Tracked"
-msgstr "Rastreado"
-
-msgid "High"
-msgstr "Alto"
-
-msgid "Default"
-msgstr "Padrão"
-
-msgid "Terrain quality mode not available."
-msgstr "Modo de qualidade do terreno não disponível."
-
-msgid "Medium Quality"
-msgstr "Qualidade Média"
-
-msgid "High Quality"
-msgstr "Alta qualidade"
-
-msgid "Shadow mapping not available on this system."
-msgstr "O mapeamento de sombra não está disponível neste sistema."
-
-msgid "Low"
-msgstr "Baixo"
-
-msgid "Ultra"
-msgstr "Ultra"
-
-msgid "Shadow filtering not available on this system."
-msgstr "A filtragem por sombra não está disponível neste sistema."
-
-msgid "Opacity: 50%"
-msgstr "Opacidade: 50%"
-
-msgid "* Takes effect on game restart"
-msgstr "* Precisa reiniciar o jogo"
-
-msgid "Terrain Quality"
-msgstr "Qualidade do Terreno"
-
-msgid "Terrain Shading"
-msgstr "Sombra do terreno"
-
-msgid "Shadows"
-msgstr "Sombras"
-
-msgid "Shadow Resolution"
-msgstr "Resolução de Sombra"
-
-msgid "Shadow Filtering"
-msgstr "Filtragem de Sombra"
-
-msgid "Per Pixel point lights"
-msgstr "Luzes por pixel"
-
-msgid "LOD Distance"
-msgstr "Distância do Nível de Detalhes"
-
-msgid "Fog"
-msgstr "Névoa"
-
-msgid "Radar"
-msgstr "Radar"
-
-msgid "Radar Jump"
-msgstr "Pulo Radar"
-
-msgid "Video Playback"
-msgstr "Tamanho de Vídeo"
-
-msgid "Scanlines"
-msgstr "Linhas de Varredura"
-
-msgid "Screen Shake"
-msgstr "Agitar Tela"
-
-msgid "Groups Menu"
-msgstr "Menu de Grupos"
-
-msgid "Options Button"
-msgstr "Botão de Opções"
-
-msgid "GRAPHICS OPTIONS"
-msgstr "OPÇÕES GRÁFICAS"
-
-msgid "Disabled"
-msgstr "Desativado"
-
-msgid "Enabled"
-msgstr "Ativado"
-
-msgid "Auto"
-msgstr "Automático"
-
-msgid "Voice Volume"
-msgstr "Volume da Voz"
-
-msgid "FX Volume"
-msgstr "Volume dos Sons"
-
-msgid "Music Volume"
-msgstr "Volume da Música"
-
-msgid "Subtitles"
-msgstr "Legendas"
-
-msgid "HRTF"
-msgstr "Áudio Binaural"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "O Áudio Binaural não é suportado no seu dispositivo / sistema / biblioteca OpenAL"
-
-msgid "Map Zoom"
-msgstr "Zoom do Mapa"
-
-msgid "Map Zoom Rate"
-msgstr "Taxa de Zoom do Mapa"
-
-msgid "Radar Zoom"
-msgstr "Zoom do Radar"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "OPÇÕES DE ÁUDIO / ZOOM"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"No modo Jane Sem Bordas, a resolução corresponde à do seu monitor \n"
-"(ou ao que o gerenciador de janela permite)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Você pode mudar a resolução alterando a janela normalmente. (Tente arrastar uma borda / canto.)"
-
-msgid "Graphics Mode"
-msgstr "Modo Gráfico"
-
-msgid "Resolution"
-msgstr "Resolução"
-
-msgid "Display Scale"
-msgstr "Proporção"
-
-msgid "Adaptive"
-msgstr "Adaptativo"
-
-msgid "Windowed"
-msgstr "Em Janela"
-
-msgid "Desktop Full"
-msgstr "Janela Sem Borda"
-
-msgid "On (Fullscreen)"
-msgstr "Ativado (Tela Cheia)"
-
-msgid "Texture size"
-msgstr "Tamanho da Textura"
-
-msgid "Vertical sync"
-msgstr "Sincronia Vertical"
-
-msgid "Antialiasing*"
-msgstr "AntiAlias*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Cuidado: Antialias pode travar, especialmente com valores acima de 16"
-
-msgid "Graphics Backend*"
-msgstr "Saída Gráfica*"
-
-msgid "Min on Focus Loss"
-msgstr "Min na Perda de Foco"
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr "Se a janela deve minimizar automaticamente na perda de foco"
-
-msgid "Alt+Enter Toggle"
-msgstr "Alt+Enter Alternar"
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr "O modo de tela cheia usado ao alternar com teclas: Alt + Enter"
-
-msgid "VIDEO OPTIONS"
-msgstr "OPÇÕES DE VÍDEO"
-
-msgid "Unable to change Vertical Sync"
-msgstr "Não é possível alterar a sincronização vertical"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"Warzone falhou ao alterar o modo de sincronização vertical.\n"
-"Seu sistema / drivers podem não suportar outros modos."
-
-msgid "Middle Mouse"
-msgstr "Botão do Meio"
-
-msgid "Right Mouse"
-msgstr "Botão Direito"
-
-msgid "Reverse Rotation"
-msgstr "Reverter Rotação"
-
-msgid "Trap Cursor"
-msgstr "Travar Cursor"
-
-msgid "Switch Mouse Buttons"
-msgstr "Inverter Botões do Mouse"
-
-msgid "Rotate Screen"
-msgstr "Girar a Tela"
-
-msgid "Colored Cursors"
-msgstr "Cursores Coloridos"
-
-msgid "Cursor Size"
-msgstr "Tamanho do Cursor"
-
-msgid "MOUSE OPTIONS"
-msgstr "OPÇÕES DE MOUSE"
-
-msgid "Super Easy"
-msgstr "Muito Fácil"
-
-msgid "Easy"
-msgstr "Fácil"
-
-msgid "Hard"
-msgstr "Difícil"
-
-msgid "Insane"
-msgstr "Insano"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr "Não foi possível carregar: %s."
 
 msgid "Please remove all incompatible mods."
 msgstr "Por favor, remova todos os mods incompatíveis."
-
-msgid "GAME OPTIONS"
-msgstr "OPÇÕES DE JOGO"
-
-msgid "Language"
-msgstr "Idioma"
-
-msgid "Unit Colour:"
-msgstr "Cor das Unidades:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Multiplayer/Versus IA"
-
-msgid "Campaign Difficulty"
-msgstr "Dificuldade da Campanha"
-
-msgid "Camera Speed"
-msgstr "Velocidade da Câmera"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "Ajude-nos a melhorar as traduções do Warzone 2100: %s"
-
-msgid "Click to open webpage."
-msgstr "Clique para abrir a página web."
-
-msgid "Insane Difficulty"
-msgstr "Dificuldade Insana"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "Esta dificuldade é para jogadores muito experientes!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u minutos"
-
-#, c-format
-msgid "%s hours"
-msgstr "%s horas"
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u segundos"
-
-msgid "None"
-msgstr "Nenhum"
-
-msgid "Distribute to Team"
-msgstr "Distribuir para a Equipe"
-
-msgid "Destroy (Classic)"
-msgstr "Destruir (Clássico)"
-
-msgid "Allow All"
-msgstr "Permitir tudo"
-
-msgid "Quick Chat Only"
-msgstr "Apenas Bate-papo Rápido"
-
-msgid "Hosting Options:"
-msgstr "Opções de hospedagem:"
-
-msgid "Game Port"
-msgstr "Porta do Jogo"
-
-msgid "Port Mapping"
-msgstr "Mapeamento de portas"
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr "Use PCP, NAT-PMP ou UPnP para ajudar a configurar seu roteador / firewall para permitir conexões durante a hospedagem."
-
-msgid "Chat"
-msgstr "Bate-papo"
-
-msgid "Inactivity Timeout"
-msgstr "Tempo de espera por inatividade"
-
-msgid "Lag Kick"
-msgstr "Lag Kick"
-
-msgid "Spectator Slots"
-msgstr "Espaços de Espectador"
-
-msgid "On Player Leave"
-msgstr "Quando o Player Deixar"
-
-msgid "Game Time Limit"
-msgstr "Tempo Limite de Jogo"
-
-msgid "Enable Rating"
-msgstr "Habilitar Avaliação"
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "Opções de multijogador"
 
 msgid "Mod: "
 msgstr "Mod:"
@@ -8545,15 +8330,6 @@ msgstr "ATENÇÃO: Você é o hospedeiro Se você sair, o jogo acaba para todos!
 msgid "Host Quit"
 msgstr "Hospedeiro Saiu"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
-
-msgid "Go Back"
-msgstr "Voltar"
-
 msgid "View Guide"
 msgstr "Ver Guia"
 
@@ -8586,15 +8362,6 @@ msgstr "O jogo não pode continuar sem o hosp."
 
 msgid "-->  QUIT  <--"
 msgstr "--> SAIR <--"
-
-msgid "Audio Options"
-msgstr "Opções de Áudio"
-
-msgid "View Key Mappings"
-msgstr "Ver o Mapeamento de Teclas"
-
-msgid "Shake"
-msgstr "Agitar"
 
 msgid "Save Campaign Game"
 msgstr "Salvar Jogo de Campanha"
@@ -8639,17 +8406,20 @@ msgstr "Arquivos do jogo base podem estar corrompidos ou desatualizados — por 
 msgid "Error Loading Game Data"
 msgstr "Erro ao carregar dados do jogo"
 
-msgid "Global Hotkeys"
-msgstr "Atalhos Globais"
+msgid "Global Keys"
+msgstr ""
 
-msgid "Other Hotkeys"
-msgstr "Outros Atalhos"
+msgid "Other Keys"
+msgstr ""
 
-msgid "Gameplay"
-msgstr "Jogabilidade"
+msgid "Gameplay Keys"
+msgstr ""
 
-msgid "Debug"
-msgstr "Depuração"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
+msgstr ""
 
 msgid "Debug (level editor)"
 msgstr "Debug (editor de nível)"
@@ -8659,9 +8429,6 @@ msgstr "Debug (seleção)"
 
 msgid "Manufacture"
 msgstr "Produção"
-
-msgid "Research"
-msgstr "Pesquisa"
 
 msgid "Build"
 msgstr "Construção"
@@ -9027,8 +8794,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Selecionar todas as unidades muito danificadas"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "Selecione todas as unidades de Combate em Terra com vida >50% e sem grupos."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr ""
 
 msgid "Select all Half-tracks"
 msgstr "Selecionar todas as unidades híbridas"
@@ -9197,9 +8964,6 @@ msgstr "Alternar Tela Cheia"
 
 msgid "Waiting for Power"
 msgstr "Esperando por Energia"
-
-msgid "Power"
-msgstr "Energia"
 
 msgid "Power Per Second"
 msgstr "Poder Por Segundo"
@@ -9662,21 +9426,6 @@ msgstr "Carregamento rápido não é permitido no modo Autosaves-Only"
 msgid "QuickSave file does not exist yet"
 msgstr "O arquivo de salvamento rápido ainda não existe"
 
-msgid "<not bound>"
-msgstr "<não vinculado>"
-
-msgid "<Fixed Key>"
-msgstr "<Tecla Fixa>"
-
-msgid "KEY MAPPING"
-msgstr "CONFIGURAÇÃO DAS TECLAS"
-
-msgid "Return To Previous Screen"
-msgstr "Return a Tela Anterior"
-
-msgid "Select Default"
-msgstr "Voltar ao Padrão"
-
 msgid "Parent directory"
 msgstr "Directório superior"
 
@@ -9697,8 +9446,14 @@ msgstr "Salvamento automático %s"
 msgid "AutoSave %s failed"
 msgstr "Salvamento automático %s falhou"
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Impossível salvar o jogo!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Carregar Transportes"
@@ -9777,8 +9532,20 @@ msgstr "%s formou uma alliança com %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Você descobre projetos para %s"
 
+msgid "Super Easy"
+msgstr "Muito Fácil"
+
+msgid "Easy"
+msgstr "Fácil"
+
 msgid "Medium"
 msgstr "Médio"
+
+msgid "Hard"
+msgstr "Difícil"
+
+msgid "Insane"
+msgstr "Insano"
 
 msgid "Commander"
 msgstr "Comandante"
@@ -9793,103 +9560,32 @@ msgstr "FALTA A DESCRIÇÃO DA IA"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Torneio de IA: %3.1f%% vitórias, %3.1f%% derrotas, %3.1f%% empates"
 
-msgid "Tanks disabled!!"
-msgstr "Tanques desativados!!"
-
-msgid "Cyborgs disabled."
-msgstr "Ciborgues desativados."
-
-msgid "VTOLs disabled."
-msgstr "VTOL's desativados."
-
-msgid "Satellite Uplink disabled."
-msgstr "Monitoramento Via Satélite desativado."
-
-msgid "Laser Satellite disabled."
-msgstr "Satélite Laser desativado."
-
-msgid "Structure Limits Enforced."
-msgstr "Impostos Limites de Estrutura."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Não há votos suficientes para randomizar ou mudar o mapa."
-
-msgid "Select Game Name"
-msgstr "Selecionar Nome do Jogo"
-
-msgid "Game Name"
-msgstr "Nome do Jogo"
-
-msgid "One-Player Skirmish"
-msgstr "Jogador vs. Computador"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Selecionar Mapa\n"
-"Pode ser bloqueado pelos votos dos jogadores"
-
-msgid "Map-Mod!"
-msgstr "Mod de Mapa!"
-
-msgid "Random map!"
-msgstr "Mapa aleatório!"
-
-msgid "Click to set Password"
-msgstr "Clique para definir uma senha"
-
-msgid "Enter password here"
-msgstr "Entre a senha aqui"
 
 msgid "Select Player Name"
 msgstr "Selecionar o Nome do Jogador"
 
-msgid "Alliances"
-msgstr "Alianças"
-
-msgid "Base"
-msgstr "Bases"
-
-msgid "Map Preview"
-msgstr "Previsualização do Mapa"
-
-msgid "Click to see Map"
-msgstr "Clique para ver o Mapa"
-
-msgid "Show Structure Limits"
-msgstr "Exibir Limites da Estrutura"
-
-msgid "Set Structure Limits"
-msgstr "Definir Limites da Estrutura"
-
-msgid "Random Game Options"
-msgstr "Opções de Jogo Aleatórias"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
-"Opções de Jogo Aleatórias\n"
-"Pode ser bloqueado pelos votos dos jogadores"
 
-msgid "Tech"
-msgstr "Tec."
+msgid "Blind Game:"
+msgstr ""
 
-msgid "Technology Level 1"
-msgstr "Tecnologia Nível 1"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
 
-msgid "Technology Level 2"
-msgstr "Tecnologia Nível 2"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "Tecnologia Nível 3"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
 
-msgid "Technology Level 4"
-msgstr "Tecnologia Nível 4"
+msgid "OPTIONS"
+msgstr "OPÇÕES"
 
-msgid "Start Hosting Game"
-msgstr "Iniciar Hospedagem de Jogo"
+msgid "Return To Previous Screen"
+msgstr "Return a Tela Anterior"
 
 msgid "DIFFICULTY"
 msgstr "Dificuldade"
@@ -10031,6 +9727,13 @@ msgstr "Gostaria de trocar este Espectador por um Player?"
 msgid "Yes, select Player slot"
 msgstr "Sim, selecione o espaço de Jogador"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "Entrou:"
 
@@ -10049,63 +9752,8 @@ msgstr "Habilitar Entrada de Espectador"
 msgid "Lock Teams"
 msgstr "Trancar equipes"
 
-msgid "Choose Team"
-msgstr "Escolher Time"
-
-msgid "Teams locked"
-msgstr "Times travados"
-
-msgid "Click to change player colour"
-msgstr "Clique para alterar as cor do jogador"
-
-msgid "Click to change player position"
-msgstr "Clique para alterar a posição do jogador"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a escolha"
-
-msgid "Click to close spectator slot"
-msgstr "Clique para fechar o espaço de espectador"
-
-msgid "Player ID: "
-msgstr "ID do Jogador: "
-
-msgid "(none)"
-msgstr "(nenhum)"
-
-msgid "Alt Name:"
-msgstr "Nome Alternativo:"
-
-msgid "Player rating:"
-msgstr "Classificação do jogador:"
-
-msgid "Host provided"
-msgstr "Anfitrião fornecido"
-
-#, c-format
-msgid "From: %s"
-msgstr "De: %s"
-
-msgid "Click to change difficulty"
-msgstr "Clique para ajustar a dificuldade"
-
-msgid "Waiting for player"
-msgstr "Aguardando jogador"
-
-msgid "Player is ready"
-msgstr "Jogador está pronto"
-
-msgid "Player is downloading"
-msgstr "Jogador está baixando"
-
-msgid "Click when ready"
-msgstr "Clique quando estiver pronto"
-
-msgid "Waiting for download"
-msgstr "Esperando pelo download"
-
-msgid "READY?"
-msgstr "PRONTO?"
+msgid "Lock Position"
+msgstr ""
 
 msgid "For Spectator:"
 msgstr "Para Espectador:"
@@ -10169,22 +9817,6 @@ msgstr "Mais informações"
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpe! Falha ao hospedar uma sessão."
 
-msgid "Game Name Updated."
-msgstr "Nome do Jogo Atualizado."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** senha [%s] agora é necessária! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** senhã NÃO é necessária ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Esse é um mod de para, pode mudar a sua experiência de jogo!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "Este é um mapa aleatório, o que ajuda a variar sua experiência de jogo!"
-
 msgid "Host is Starting Game"
 msgstr "O Hosp. iniciou o Jogo"
 
@@ -10206,6 +9838,15 @@ msgstr "Pedindo a %s para mover para Jogadores..."
 
 msgid "Disconnected from host:"
 msgstr "Desconectado do anfitrião:"
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
+msgstr ""
 
 msgid "Host supplied invalid options"
 msgstr "Opções de host fornecidas inválidas"
@@ -10250,6 +9891,21 @@ msgstr "Criação de mapeamento de portas em andamento..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mapeamento de portas desabilitado pelo usuário. Configuração automática da porta %d não vai acontecer."
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr "Falha ao carregar o desafio:"
 
@@ -10268,20 +9924,6 @@ msgstr "Fechado"
 
 msgid "Open"
 msgstr "Aberto"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Enviando mapa: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Mapa: %u%% baixado"
-
-msgid "HOST"
-msgstr "HOSPEDEIRO"
-
-msgid "Ping"
-msgstr "Latência"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "A versão de Warzone 2100 usada para salvar este arquivo de replay não corresponde à versão atual."
@@ -10310,6 +9952,10 @@ msgstr "%s saiu do jogo"
 #, c-format
 msgid "%s joined the Game"
 msgstr "%s entrou no Jogo"
+
+#, c-format
+msgid "(codename: %s)"
+msgstr ""
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10371,8 +10017,14 @@ msgid_plural "%d players"
 msgstr[0] "%d jogador"
 msgstr[1] "%d jogadores"
 
+msgid "Ping"
+msgstr "Latência"
+
 msgid "Structs"
 msgstr "Estruturas"
+
+msgid "Alliances"
+msgstr "Alianças"
 
 msgid "Score"
 msgstr "Pontuação"
@@ -10429,25 +10081,6 @@ msgid "Team Strategy"
 msgstr "Estratégia de Equipe"
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr "Limite de estrutura alterado [%d]:"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr "[%d] Limite [%s]: %u (padrão: %u)"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr "[%d] Limite [%s]: %u (padrão: ilimitado)"
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] O limite é maior que numStructureStats (%u): %u"
-
-msgid "Limits were reset to default."
-msgstr "Limites redefinidos para o padrão."
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr "Hospedar limites %u inicializados, incapaz de mostrá-lo por causa de mods"
 
@@ -10476,6 +10109,25 @@ msgstr "O anfitrião ativou o bate-papo gratuito para o jogador: %s"
 #, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "O anfitrião silenciou o bate-papo gratuito para o jogador: %s"
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr "[%d] Limite [%s]: %u (padrão: %u)"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr "[%d] Limite [%s]: %u (padrão: ilimitado)"
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
+msgstr "[%d] O limite é maior que numStructureStats (%u): %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10529,6 +10181,9 @@ msgstr "Laranja"
 
 msgid "Grey"
 msgstr "Cinza"
+
+msgid "Black"
+msgstr "Preto"
 
 msgid "Red"
 msgstr "Vermelho"
@@ -10647,9 +10302,6 @@ msgstr "Data"
 
 msgid "Title"
 msgstr "Titulo"
-
-msgid "MUSIC MANAGER"
-msgstr "GERENCIADOR DE MÚSICA"
 
 msgid "Dismiss"
 msgstr "Fechar"
@@ -10914,6 +10566,18 @@ msgstr "Resposta de host inválida"
 msgid "Requesting to join game"
 msgstr "Solicitando para entrar no jogo"
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr "Expulsar espectador"
 
@@ -11142,6 +10806,9 @@ msgstr "Prêmio - Centro de Reparos - Nada"
 msgid "Classic"
 msgstr "Clássico"
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr "Campanhas Adicionais"
 
@@ -11207,6 +10874,57 @@ msgstr "Modificadores PS1"
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr "Reduz o dano que o inimigo lida a um terço da atual dificuldade do modificador."
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "Não suportado"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Uma brincadeira mais tranquila — mais fácil do que fácil"
 
@@ -11263,6 +10981,9 @@ msgstr "Pesquisando"
 
 msgid "Connecting to the lobby server..."
 msgstr "Conectando-se ao servidor de lobby..."
+
+msgid "Game Name"
+msgstr "Nome do Jogo"
 
 msgid "Map Name"
 msgstr "Nome do Mapa"
@@ -11334,6 +11055,460 @@ msgstr "Senha Incorreta!"
 msgid "Continue"
 msgstr "Continuar"
 
+msgid "MUSIC MANAGER"
+msgstr "GERENCIADOR DE MÚSICA"
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "O Áudio Binaural não é suportado no seu dispositivo / sistema / biblioteca OpenAL"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Volume da Voz"
+
+msgid "FX Volume"
+msgstr "Volume dos Sons"
+
+msgid "Music Volume"
+msgstr "Volume da Música"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "Áudio Binaural"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Desativado"
+
+msgid "Enabled"
+msgstr "Ativado"
+
+msgid "Auto"
+msgstr "Automático"
+
+msgid "Subtitles"
+msgstr "Legendas"
+
+msgid "Off"
+msgstr "Desligado"
+
+msgid "On"
+msgstr "Ligado"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "Gerenciador de Música"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "Travar Cursor"
+
+msgid "Colored Cursors"
+msgstr "Cursores Coloridos"
+
+msgid "Cursor Size"
+msgstr "Tamanho do Cursor"
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "Velocidade da Câmera"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Reverter Rotação"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr "Mapeamento de portas"
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr "Use PCP, NAT-PMP ou UPnP para ajudar a configurar seu roteador / firewall para permitir conexões durante a hospedagem."
+
+msgid "Chat"
+msgstr "Bate-papo"
+
+msgid "Quick Chat Only"
+msgstr "Apenas Bate-papo Rápido"
+
+msgid "Allow All"
+msgstr "Permitir tudo"
+
+msgid "Inactivity Timeout"
+msgstr "Tempo de espera por inatividade"
+
+#, c-format
+msgid "%u minutes"
+msgstr "%u minutos"
+
+msgid "Lag Kick"
+msgstr "Lag Kick"
+
+#, c-format
+msgid "%u seconds"
+msgstr "%u segundos"
+
+msgid "Spectator Slots"
+msgstr "Espaços de Espectador"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "On Player Leave"
+msgstr "Quando o Player Deixar"
+
+msgid "Distribute to Team"
+msgstr "Distribuir para a Equipe"
+
+msgid "Destroy (Classic)"
+msgstr "Destruir (Clássico)"
+
+msgid "Game Time Limit"
+msgstr "Tempo Limite de Jogo"
+
+#, c-format
+msgid "%s hours"
+msgstr "%s horas"
+
+msgid "Enable Rating"
+msgstr "Habilitar Avaliação"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr "O mapeamento de sombra não está disponível neste sistema."
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr "Qualidade Média"
+
+msgid "High Quality"
+msgstr "Alta qualidade"
+
+msgid "Shadows"
+msgstr "Sombras"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "Resolução de Sombra"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr "Alto"
+
+msgid "Shadow Filtering"
+msgstr "Filtragem de Sombra"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr "Baixo"
+
+msgid "Ultra"
+msgstr "Ultra"
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr "Lightmap"
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr "Névoa"
+
+msgid "Screen Shake"
+msgstr "Agitar Tela"
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr "Distância do Nível de Detalhes"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr "Padrão"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr "Adaptativo"
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Display Scale"
+msgstr "Proporção"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr "Menu de Grupos"
+
+msgid "Options Button"
+msgstr "Botão de Opções"
+
+msgid "Opacity: 50%"
+msgstr "Opacidade: 50%"
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Fixo"
+
+msgid "Rotating"
+msgstr "Giratório"
+
+msgid "Radar Jump"
+msgstr "Pulo Radar"
+
+msgid "Instant"
+msgstr "Instantâneo"
+
+msgid "Tracked"
+msgstr "Rastreado"
+
+msgid "Radar Zoom"
+msgstr "Zoom do Radar"
+
+msgid "Video Playback"
+msgstr "Tamanho de Vídeo"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1x"
+
+msgid "2×"
+msgstr "2x"
+
+msgid "Fullscreen"
+msgstr "Tela Cheia"
+
+msgid "Scanlines"
+msgstr "Linhas de Varredura"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "Abrir Diretório de Configuração"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "Falha ao abrir o diretório de configuração no gerenciador de arquivos padrão do sistema."
+
+msgid "Configuration directory is reported as:"
+msgstr "Diretório de configuração é reportado como:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "Se estiver executando dentro de um contêiner / ambiente isolado, isso pode diferir do caminho real no disco."
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "Por favor, consulte a documentação para obter mais informações sobre como localizá-la manualmente."
+
+msgid "Failed to open configuration directory"
+msgstr "Falha ao abrir o diretório de configurações"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+"No modo Jane Sem Bordas, a resolução corresponde à do seu monitor \n"
+"(ou ao que o gerenciador de janela permite)."
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "Você pode mudar a resolução alterando a janela normalmente. (Tente arrastar uma borda / canto.)"
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Em Janela"
+
+msgid "Desktop Full"
+msgstr "Janela Sem Borda"
+
+msgid "Resolution"
+msgstr "Resolução"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "Se a janela deve minimizar automaticamente na perda de foco"
+
+msgid "On (Fullscreen)"
+msgstr "Ativado (Tela Cheia)"
+
 msgid "CONNECTION"
 msgstr "CONEXÃO"
 
@@ -11345,6 +11520,303 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Endereço IP ou Nome da Máquina"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "ID do Jogador: "
+
+msgid "(none)"
+msgstr "(nenhum)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Enviando mapa: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Mapa: %u%% baixado"
+
+msgid "HOST"
+msgstr "HOSPEDEIRO"
+
+msgid "Choose Team"
+msgstr "Escolher Time"
+
+msgid "Teams locked"
+msgstr "Times travados"
+
+msgid "Click to change player colour"
+msgstr "Clique para alterar as cor do jogador"
+
+msgid "Click to change player position"
+msgstr "Clique para alterar a posição do jogador"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a escolha"
+
+msgid "Click to close spectator slot"
+msgstr "Clique para fechar o espaço de espectador"
+
+msgid "Alt Name:"
+msgstr "Nome Alternativo:"
+
+msgid "Player rating:"
+msgstr "Classificação do jogador:"
+
+msgid "Host provided"
+msgstr "Anfitrião fornecido"
+
+#, c-format
+msgid "From: %s"
+msgstr "De: %s"
+
+msgid "Click to change difficulty"
+msgstr "Clique para ajustar a dificuldade"
+
+msgid "Waiting for player"
+msgstr "Aguardando jogador"
+
+msgid "Player is ready"
+msgstr "Jogador está pronto"
+
+msgid "Player is downloading"
+msgstr "Jogador está baixando"
+
+msgid "Click when ready"
+msgstr "Clique quando estiver pronto"
+
+msgid "Waiting for download"
+msgstr "Esperando pelo download"
+
+msgid "READY?"
+msgstr "PRONTO?"
+
+msgid "Tanks disabled!!"
+msgstr "Tanques desativados!!"
+
+msgid "Cyborgs disabled."
+msgstr "Ciborgues desativados."
+
+msgid "VTOLs disabled."
+msgstr "VTOL's desativados."
+
+msgid "Satellite Uplink disabled."
+msgstr "Monitoramento Via Satélite desativado."
+
+msgid "Laser Satellite disabled."
+msgstr "Satélite Laser desativado."
+
+msgid "Structure Limits Enforced."
+msgstr "Impostos Limites de Estrutura."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** senha [%s] agora é necessária! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** senhã NÃO é necessária ***"
+
+msgid "Game Name Updated."
+msgstr "Nome do Jogo Atualizado."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Jogador vs. Computador"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Clique para ver o Mapa"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Selecionar Mapa\n"
+"Pode ser bloqueado pelos votos dos jogadores"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Bases"
+
+msgid "Tech"
+msgstr "Tec."
+
+msgid "Technology Level 1"
+msgstr "Tecnologia Nível 1"
+
+msgid "Technology Level 2"
+msgstr "Tecnologia Nível 2"
+
+msgid "Technology Level 3"
+msgstr "Tecnologia Nível 3"
+
+msgid "Technology Level 4"
+msgstr "Tecnologia Nível 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Lançar Transporte"

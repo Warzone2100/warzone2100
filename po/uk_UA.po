@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -1796,11 +1796,14 @@ msgstr "Знищіть ракетні шахти"
 msgid "Rescue Alpha team from Nexus"
 msgstr "Команда спасения Альфа из Нексуса"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Знищіть КК НЕКСУСу, щоб вимкнути Вірусну Програму Nexus"
 
 msgid "Warning: HQ shielded against VTOL attacks"
-msgstr ""
+msgstr "Увага: Штаб-квартира захищена від атак ВЗІП"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
 msgstr "Дослідити схеми опору та пережити напад з Нексуса"
@@ -1817,8 +1820,8 @@ msgstr "Повторно об'єднати частину команди Бет�
 msgid "Return to LZ"
 msgstr "Повертайтесь до Зони Висадки"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "Підказка стосовно Важкого / Божевільного рівня складності:"
+msgid "Insane difficulty hint:"
+msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Зміцніть потужну базу поперек мапи аби захистити себе від Колективу"
@@ -2942,11 +2945,11 @@ msgid "System locale"
 msgstr "Мова локалізації системи"
 
 msgid "Failed to create port mapping"
-msgstr ""
+msgstr "Не вдалося прив'язати порт"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Налаштуйте маршрутизатор/брандмауер вручну для відкриття порту %d!"
 
 #, c-format
 msgid "Port mapping opened external port: %d"
@@ -2957,6 +2960,10 @@ msgid "Your external IP is: %s"
 msgstr "Ваша зовнішня IP-адреса: %s"
 
 msgid "Failed to create port mapping (timeout)"
+msgstr "Не вдалося прив'язати порт (вичерпано час очікування)"
+
+#, c-format
+msgid "Using %s network backend."
 msgstr ""
 
 msgid "Client failed to ack player index swap"
@@ -2973,6 +2980,9 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Помилка підключення до сервера лоббі: %s.\n"
+"Переконайтеся, що порт %d може приймати вхідні з'єднання.\n"
+"Якщо ви використовуєте маршрутизатор, налаштуйте його для увімкнення UPnP/NAT-PMP/PCP або для перенаправлення порту на вашу систему."
 
 msgid "Failed to get a lobby response!"
 msgstr "Не вдалося отримати відповідь у лобі!"
@@ -2989,6 +2999,18 @@ msgstr "Формат файлу повтору не підтримується"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Неможливо завантажити повтор: Файл повтору неповний або пошкоджений."
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr ""
 
 msgid "Menu"
 msgstr "Меню"
@@ -3299,11 +3321,11 @@ msgstr "Кіборг озброєний ПУ 'Батіг'"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr "Кіборг, озброєний Термічним Вогнеметом"
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Кіборг озброєний Термітним Вогнеметом"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr "Кіборг, озброєний Термічним Вогнеметом"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Кіборг озброєний лазером 'Спалах'"
@@ -3318,7 +3340,7 @@ msgid "Armed with hyper velocity cannon"
 msgstr "Кіборг озброєний гіпер-швидкісною гарматою"
 
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Озброєний гіпершвидкісною чотирьохствольною автоматичною гарматою"
 
 msgid "Armed with Lancer anti-tank missile"
 msgstr "Кіборг озброєний протитанковою пусковою установкою 'Спис'"
@@ -3441,6 +3463,9 @@ msgstr "Броньована вогнева позиція з Гарматою �
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Броньована вогнева позиція з Важким Лазером"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Броньована вогнева позиція з Плазмовим Вогнеметом"
@@ -3670,6 +3695,9 @@ msgstr "Сила бомб +10%"
 msgid "Bomb damage +25%"
 msgstr "Сила бомб +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Покращення Бомб"
 
@@ -3693,6 +3721,9 @@ msgstr "Жук"
 
 msgid "Buggy"
 msgstr "Баггі"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Вбудовані системи діагностики та ремонту"
@@ -3734,6 +3765,9 @@ msgstr "Ефективніше спалюється нафта"
 msgid "Cannon accuracy +10%"
 msgstr "Точність Гармати +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Автоматичний Зарядник Гармати Мк2"
 
@@ -3746,6 +3780,9 @@ msgstr "Автоматичний Зарядник Гармати"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Сила Гармати +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Гарматний пожежний автомобіль"
@@ -3771,6 +3808,9 @@ msgstr "Швидкий Зарядник Гармати"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Час перезарядки Гармати -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Гарматна Вежа"
@@ -3877,6 +3917,12 @@ msgstr "Командир спрямовує дії групи, служить м
 msgid "Complete battlefield visibility"
 msgstr "Повна видимість поля битви"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Композитний Сплав Мк2"
 
@@ -3935,6 +3981,15 @@ msgstr "Кран1"
 
 msgid "Crane2"
 msgstr "Кран2"
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Композитний Сплав для Кіборгів Мк2"
@@ -4002,6 +4057,12 @@ msgstr "Надщільна Термальна Броня Кіборгів"
 msgid "Cyborg Tank Killer"
 msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Термальна Броня Кіборгів Мк2"
 
@@ -4010,6 +4071,9 @@ msgstr "Термальна Броня Кіборгів Мк3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Термальна Броня Кіборгів"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr "Термічний вогнемет для Кіборгів"
@@ -4057,7 +4121,7 @@ msgid "Depleted uranium kinetic energy bullets"
 msgstr "Кулі з кінетичною енергією розщепленого урану"
 
 msgid "Depleted Uranium MG Bullets Mk3"
-msgstr ""
+msgstr "Кулі для кулемета зі збідненого урану Mk3"
 
 msgid "Depleted Uranium MG Bullets"
 msgstr "Кулеметні Кулі з Розщепленого Урану"
@@ -4111,7 +4175,7 @@ msgid "EMP Mortar"
 msgstr "ЕМІ Мортира"
 
 msgid "Enables Hardcrete gates"
-msgstr ""
+msgstr "Дозволяє будувати Залізобетонні Стіни"
 
 msgid "Enables Hardcrete walls"
 msgstr "Дозволяє будувати Залізобетонні Стіни"
@@ -4136,6 +4200,9 @@ msgstr "Дозволяє проводити саморемонт"
 
 msgid "Enemy"
 msgstr "Ворог"
+
+msgid "Engine"
+msgstr ""
 
 msgid "Engineering"
 msgstr "Інженіринг"
@@ -4209,6 +4276,9 @@ msgstr "Приєднання стабілізаторів покращує тр�
 msgid "Fire Truck"
 msgstr "Вогнева Вантажівка"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Стріляє Електромагнітними Імпульсними Ракетами "
 
@@ -4243,12 +4313,18 @@ msgstr "Гусенична Кобра з Вогнеметом"
 msgid "Flamer damage +25%"
 msgstr "Сила Вогнемету +25%"
 
-msgid "Flamer Fast Loader"
+msgid "Flamer Damage"
 msgstr ""
+
+msgid "Flamer Fast Loader"
+msgstr "Швидкий Зарядник Вогнемету"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Час перезарядки Вогнемета -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Напівгусенична Гадюка з Вогнеметом"
@@ -4663,13 +4739,13 @@ msgid "Heavy Repair Turret Cobra Hover"
 msgstr "Всюдихідна Кобра з Важкою Ремонтною Баштою"
 
 msgid "Heavy Rocket Array"
-msgstr ""
+msgstr "Важка Ракетна Система"
 
 msgid "Heavy Rocket Bastion"
 msgstr "Важкий Ракетний Бастіон"
 
 msgid "Heavy Rocket Battery"
-msgstr ""
+msgstr "Важка Ракетна Батарея"
 
 msgid "Heavy surface-to-air missile"
 msgstr "Важка ракета класу земля-повітря"
@@ -4799,6 +4875,15 @@ msgstr "Автоматичний Зарядник Гаубиці"
 msgid "Howitzer damage +25%"
 msgstr "Сила Гаубиці +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Швидкий Зарядник Гаубиці"
 
@@ -4808,6 +4893,15 @@ msgstr "Час перезарядки Гаубиці -10%"
 
 msgid "Howitzer"
 msgstr "Гаубиця"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "ПП Зенітна Установка 'Ураган'"
@@ -4872,6 +4966,9 @@ msgstr "Покращений Інженіринг"
 msgid "Improved fire detection systems"
 msgstr "Вдосконалені системи виявлення вогню"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Вдосконалений Залізобетон Мк2"
 
@@ -4923,11 +5020,11 @@ msgstr "Вдосконалення лазерної оптики зменшує 
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Вогнева Позиція Фугасної Гаубиці"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Вогнева Позиція Фугасної Гаубиці"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Вогнева позиція Фугасної Мортири"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Вогнева Позиція Фугасної Гаубиці"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Фугасна Мортира може бути закріплена за сенсором"
@@ -5131,9 +5228,15 @@ msgstr "Достуний Лазерний ПП Кулемет"
 msgid "Laser accuracy +10%"
 msgstr "Точність Лазерів +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Сила Лазерів +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Лазерний цілеказувач направляє та веде набої до цілі"
@@ -5141,6 +5244,9 @@ msgstr "Лазерний цілеказувач направляє та веде
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Час перезарядки Лазерів -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Командний Пункт Лезорного Супутника"
@@ -5318,6 +5424,12 @@ msgstr "Середня Гармата"
 msgid "Medium Super Heavy Body"
 msgstr "Середній Надважкий Корпус"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Позиція озброєна Міні-ракетами"
 
@@ -5373,6 +5485,9 @@ msgstr "Колісна Гадюка з Міні-ракетами"
 msgid "Missile accuracy +10%"
 msgstr "Точність Ракет +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "Ракета виявляє та наводиться на ціль"
 
@@ -5380,12 +5495,18 @@ msgstr "Ракета виявляє та наводиться на ціль"
 msgid "Missile damage +25%"
 msgstr "Сила Ракет +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Фортеця з Самонавідною Пусковою Установкою"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Час перезарядки Ракет -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Покращення Ракет"
@@ -5406,6 +5527,9 @@ msgstr "Вищі показники броні та міцності корпу�
 msgid "Mortar accuracy +10%"
 msgstr "Точність Мортири +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Автозярядник Мортири Мк2"
 
@@ -5422,6 +5546,9 @@ msgstr "Напівгусенична Кобра з Мортирою"
 msgid "Mortar damage +25%"
 msgstr "Сила Мортири +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Автозярядник Мортири Мк3"
 
@@ -5431,6 +5558,9 @@ msgstr "Батарея Мортири"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Час перезарядки Мортири -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Навідний Комп'ютер Мортири"
@@ -5448,7 +5578,7 @@ msgid "Multi-barrel, rapid-fire machinegun"
 msgstr "Бататоствольний швидкострільний кулемет"
 
 msgid "Must be built to produce commanders"
-msgstr ""
+msgstr "Необхідно побудувати для створення командирів"
 
 msgid "Nanolab"
 msgstr "Нанолабораторія"
@@ -5564,11 +5694,11 @@ msgstr "Доступна Нова Системна Будівля"
 msgid "New Systems Tower Available"
 msgstr "Доступна Нова Системна Вежа"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Нова Системна Башта Доступна для Конструювання"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Нова Системна Башта Доступна для Проектування"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Нова Системна Башта Доступна для Конструювання"
 
 msgid "New Thermal Emissions detection"
 msgstr "Нова Система Виявлення Термальної Емісії"
@@ -5666,6 +5796,12 @@ msgstr "Оригінальна Сутичка"
 msgid "Panther"
 msgstr "Пантера"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Батарея Мортири 'Перечниця'"
 
@@ -5755,6 +5891,9 @@ msgstr "Видобуток Енергії +30%"
 msgid "Power Research Completed"
 msgstr "Енергетичне Дослідження Завершено"
 
+msgid "Power"
+msgstr "Енергія"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Потужна електромагнітна імпульсна зброя"
 
@@ -5763,6 +5902,9 @@ msgstr "Електрична плита"
 
 msgid "Produces Cyborgs"
 msgstr "Виробляє Кіборгів"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Професійні та регулярні рангові блоки захищені"
@@ -5836,6 +5978,12 @@ msgstr "Вежа з Детектором Радарів"
 msgid "Radar Detector"
 msgstr "Детектор Радарів"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Точність Рейкових Гармат +10%"
@@ -5878,6 +6026,9 @@ msgstr "Покращення Рейкових Гармат"
 msgid "Rail Gun"
 msgstr "Рейлган"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Комп'ютерний Цілевказувач Рейлгану"
 
@@ -5908,6 +6059,12 @@ msgstr "Знижується шанс ураження вірусом НЕКСУ
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Дозаправляє, поповнює боєзапас та ремонтує ВЗІПи"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Армовані Матеріали Будівель Бази Мк2"
@@ -5987,6 +6144,9 @@ msgstr "Швидкість досліджень +30%"
 msgid "Research speed +85%"
 msgstr "Швидкість досліджень +85%"
 
+msgid "Research"
+msgstr "Дослідження"
+
 msgid "Retaliation"
 msgstr "Відплата"
 
@@ -5997,7 +6157,7 @@ msgid "Ripple Rocket Battery"
 msgstr "Ракетна Батарея 'Хвиля'"
 
 msgid "Ripple Rocket Rapid Loader"
-msgstr ""
+msgstr "Прискорювач перезаряджання Ракетної Батареї 'Хвиля'"
 
 msgid "Ripple Rockets"
 msgstr "ПУ 'Хвиля' "
@@ -6045,6 +6205,9 @@ msgstr "Роботизована перезарядка ВЗІПів"
 msgid "Rocket accuracy +10%"
 msgstr "Точність ракет +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Ракетна артилерія; може бути закріплена за сенсором"
 
@@ -6063,6 +6226,9 @@ msgstr "Ракетне Баггі"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Сила Ракет +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Ракета виявляє та наводиться на вихлопи двигуна"
@@ -6085,6 +6251,9 @@ msgstr "Швидкий Зарядник Гармати Мк2"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Сам перезарядки Ракет -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Ракети наводяться на ціль лазерним цілевказувачем"
@@ -6242,6 +6411,9 @@ msgstr "Покращення Сенсору Мк3"
 msgid "Sensor Upgrade"
 msgstr "Покращення Сенсору"
 
+msgid "Sensor"
+msgstr ""
+
 msgid "Sensors Improved"
 msgstr "Вдосконалення Сенсорів"
 
@@ -6297,7 +6469,7 @@ msgid "Steals technology from structures and takes control of weapons"
 msgstr "Краде технології з будівель та перебирає контроль над озброєнням"
 
 msgid "Steel Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Сталева Вартова Вежа з Важким Кулеметом"
 
 msgid "Steel tower with flamer"
 msgstr "Сталева вежа з Вогнеметом"
@@ -6407,11 +6579,11 @@ msgstr "Аналіз Даних Синаптичного Зв'язку Мк2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Аналіз Даних Синаптичного Зв'язку Мк3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Аналіз Даних Синаптичного Зв'язку"
-
 msgid "Synaptic link data analysis"
 msgstr "Аналіз даних Синаптичного Зв'язку"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Аналіз Даних Синаптичного Зв'язку"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Технологія Генератора Перешкод Синаптичного Зв'язку"
@@ -6424,6 +6596,9 @@ msgstr "Синаптичний Зв'язок"
 
 msgid "Systems Research Completed"
 msgstr "Розробка Систем Завершена"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
@@ -6451,6 +6626,9 @@ msgstr "Гусеничниа Помста з ПУ 'Вбивця Танків'"
 
 msgid "Tank Killer"
 msgstr "ПУ 'Вбивця Танків'"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Танкові Пастки"
@@ -6495,6 +6673,12 @@ msgstr "Термальна Броня +40%"
 msgid "Thermal Armor +45%"
 msgstr "Термальна Броня +45%"
 
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Thermal Armor Mk2"
 msgstr "Термальна Броня Мк2"
 
@@ -6532,13 +6716,16 @@ msgid "Tiger"
 msgstr "Тигр"
 
 msgid "Titanium-reinforced concrete gate"
-msgstr ""
+msgstr "Титаново-армовані бетонні ворота"
 
 msgid "Titanium-reinforced concrete"
 msgstr "Бетон армований титаном"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "Мапа моря AI, заснована на NullBot"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "Гусенична Ходова"
@@ -6862,6 +7049,9 @@ msgstr "ВЗІП установка Міні-ракет"
 msgid "VTOL Needle Gun"
 msgstr "ВЗІП Голкова Гармата"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "ВЗІП Відсік Фосфорних Бомб"
 
@@ -6885,6 +7075,9 @@ msgstr "ВЗІП Посадковий Майданчик"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Посадкові майданчики необхідні для обслуговування ВЗІПів"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "ВЗІП пускова установка типу Батіг"
@@ -7227,7 +7420,7 @@ msgid "autohost"
 msgstr "автопост"
 
 msgid "Query ratings from given server url, when hosting"
-msgstr ""
+msgstr "Запит рейтингів із заданого url сервера під час хостингу"
 
 msgid "autorating"
 msgstr "авторейтинг"
@@ -7242,7 +7435,7 @@ msgid "port"
 msgstr "порт"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr ""
+msgstr "Увімкнути / вимкнути мапування портів під час хостингу"
 
 msgid "[1, true, 0, false]"
 msgstr ""
@@ -7275,19 +7468,19 @@ msgid "startplayers"
 msgstr "Початківці"
 
 msgid "Game history log output mode(s)"
-msgstr ""
+msgstr "Журнал історії гри Режим(и) виводу"
 
 msgid "Game history log output key"
-msgstr ""
+msgstr "Журнал історії гри Ключ виводу"
 
 msgid "Game history log output naming"
-msgstr ""
+msgstr "Журнал історії гри Найменування виводу"
 
 msgid "Game history log frame interval"
-msgstr ""
+msgstr "Журнал історії гри Інтервал кадрів"
 
 msgid "interval in seconds"
-msgstr ""
+msgstr "інтервал в секундах"
 
 msgid "Multiplayer game time limit (in minutes)"
 msgstr "Ліміт часу багатокористувацької гри (у хвилинах)"
@@ -7299,18 +7492,24 @@ msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (an
 msgstr ""
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
-msgstr ""
+msgstr "Дозволити неявні шари Vulkan (які можуть бути вимкнені за замовчуванням через можливі збої або помилки)"
 
 msgid "Set the default hosting chat configuration / permissions"
-msgstr ""
+msgstr "Задати конфігурацію та або дозволи чату для хостингу за замовчуванням"
 
 msgid "Enable async join approval (for connecting clients)"
+msgstr "Увімкнути асинхронне схвалення приєднання (для клієнтів, що підключаються)"
+
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
 msgstr ""
 
 msgid "Base URL for on-demand video downloads"
-msgstr ""
+msgstr "Базова URL-адреса для завантаження відео на вимогу"
 
 msgid "Base video URL"
+msgstr "Базова URL-адреса відео"
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7412,7 +7611,7 @@ msgstr "%s - Гітпункти %d/%d - Досвід %.1f, %s, вбиває %d"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr ""
+msgstr "%s - Пошкодження %d/%d - ID %d - %s"
 
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
@@ -7623,327 +7822,10 @@ msgstr "Дивитись повтор"
 
 #, c-format
 msgid "TCP port %d must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP-порт %d має бути відкритий у вашому брандмауері або маршрутизаторі для хостингу ігор!"
 
 msgid "Load Multiplayer Replay"
 msgstr "Завантажити повтор мережевої гри"
-
-msgid "Game Options"
-msgstr "Ігрові Опції"
-
-msgid "Graphics Options"
-msgstr "Опції Графіки"
-
-msgid "Video Options"
-msgstr "Опції Відео"
-
-msgid "Audio / Zoom Options"
-msgstr "Аудіо / Масштаб"
-
-msgid "Mouse Options"
-msgstr "Опції Мишки"
-
-msgid "Key Mappings"
-msgstr "Призначення Клавіш"
-
-msgid "Music Manager"
-msgstr "Менеджер музики"
-
-msgid "Multiplay Options"
-msgstr "Опції мультиплеєру"
-
-msgid "OPTIONS"
-msgstr "ОПЦІЇ"
-
-msgid "Open Configuration Directory"
-msgstr "Визначте директорію конфігурації"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "Не вдалося відкрити каталог конфігурації у стандартному браузері файлів системи."
-
-msgid "Configuration directory is reported as:"
-msgstr "Каталог конфігурації повідомляється як:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Якщо працювати всередині контейнера / ізольованого середовища, це може відрізнятися від фактичного шляху на диску."
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Перегляньте документацію для отримання більш детальної інформації про її знаходження вручну."
-
-msgid "Failed to open configuration directory"
-msgstr "Не вдалося відкрити директорію конфігурації"
-
-msgid "1×"
-msgstr "1×"
-
-msgid "2×"
-msgstr "2×"
-
-msgid "Fullscreen"
-msgstr "Повний Екран"
-
-msgid "Unsupported"
-msgstr "Не підтримується"
-
-msgid "Off"
-msgstr "Вимкнено"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Чорний"
-
-msgid "On"
-msgstr "Ввімкнено"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "Обертання:"
-
-msgid "Fixed"
-msgstr "Виправлено"
-
-msgid "Instant"
-msgstr "Миттєво"
-
-msgid "Tracked"
-msgstr "Відстежується"
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr "За умовчанням"
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr "Середня якість"
-
-msgid "High Quality"
-msgstr "Висока якість"
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr "Низький"
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* Зміни всупають в силу після перезавантаження гри"
-
-msgid "Terrain Quality"
-msgstr "Якість Ландшафту"
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "Тіні"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr "Фільтрація Тіней"
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr "Туман"
-
-msgid "Radar"
-msgstr "Радар"
-
-msgid "Radar Jump"
-msgstr "Радарний стрибок"
-
-msgid "Video Playback"
-msgstr "Програвання Відео"
-
-msgid "Scanlines"
-msgstr "Рядки пікселів"
-
-msgid "Screen Shake"
-msgstr "Тремтіння екрану"
-
-msgid "Groups Menu"
-msgstr "Меню підрозділів"
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "ОПЦІЇ ГРАФІКИ"
-
-msgid "Disabled"
-msgstr "Вимкнено"
-
-msgid "Enabled"
-msgstr "Увімкнено"
-
-msgid "Auto"
-msgstr "Автоматично"
-
-msgid "Voice Volume"
-msgstr "Гучність Звуку"
-
-msgid "FX Volume"
-msgstr "Гучність Ефектів"
-
-msgid "Music Volume"
-msgstr "Гучність Музики"
-
-msgid "Subtitles"
-msgstr "Субтитри"
-
-msgid "HRTF"
-msgstr "ГРТФ"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "HRTF не підтримується на пристрої / системній / бібліотеці OpenAL"
-
-msgid "Map Zoom"
-msgstr "Збільшення мапи"
-
-msgid "Map Zoom Rate"
-msgstr "Віддалити мапу"
-
-msgid "Radar Zoom"
-msgstr "Радарне збільшення"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "АУДІО / ZOM ПАРАМЕТРИ"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"В повноекранному режимі Fullscreen розширення збігається з робочим столом \n"
-"(або в доступному режимі віконного менеджера)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Ви можете змінити роздільну здатність шляхом нормального зміни розміру вікна. (Спробуйте перетягування куту/краю.)"
-
-msgid "Graphics Mode"
-msgstr "Режим Графіки"
-
-msgid "Resolution"
-msgstr "Роздільна Здатність"
-
-msgid "Display Scale"
-msgstr "Відображення масштабу"
-
-msgid "Adaptive"
-msgstr "Адаптивний"
-
-msgid "Windowed"
-msgstr "Віконний Режим"
-
-msgid "Desktop Full"
-msgstr "Повний робочий стіл"
-
-msgid "On (Fullscreen)"
-msgstr "Ввімкнено (Повний екран)"
-
-msgid "Texture size"
-msgstr "Розмір Текстур"
-
-msgid "Vertical sync"
-msgstr "Верт. синхронізація"
-
-msgid "Antialiasing*"
-msgstr "Згладжування"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Попередження: згладжування може викликати збії, особливо зі значеннями > 16"
-
-msgid "Graphics Backend*"
-msgstr "Графічний інтерфейс програми*"
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "ОПЦІЇ ВІДЕО"
-
-msgid "Unable to change Vertical Sync"
-msgstr "Не вдалося змінити вертикальну синхронізацію"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"Не вдалося змінити режим вікна.\n"
-"Можливо, ваш системний / драйвера не підтримують інші режими."
-
-msgid "Middle Mouse"
-msgstr "Середня клавіша миші"
-
-msgid "Right Mouse"
-msgstr "Права миша"
-
-msgid "Reverse Rotation"
-msgstr "Зворотнє Обертання"
-
-msgid "Trap Cursor"
-msgstr "Зафіксувати Курсор"
-
-msgid "Switch Mouse Buttons"
-msgstr "Поміняти Призначення Кнопок Миші"
-
-msgid "Rotate Screen"
-msgstr "Обернути екран"
-
-msgid "Colored Cursors"
-msgstr "Кольорові курсори"
-
-msgid "Cursor Size"
-msgstr "Розмір Курсору"
-
-msgid "MOUSE OPTIONS"
-msgstr "ОПЦІЇ МИШКИ"
-
-msgid "Super Easy"
-msgstr "Надзвичайно Легко"
-
-msgid "Easy"
-msgstr "Легко"
-
-msgid "Hard"
-msgstr "Важко"
-
-msgid "Insane"
-msgstr "[Select_CString( CHARACTER.IsFemale, 'Божевільна', 'Божевільний' )]"
 
 #, c-format
 msgid "Unable to load: %s."
@@ -7951,100 +7833,6 @@ msgstr "Неможливо завантажити: %s."
 
 msgid "Please remove all incompatible mods."
 msgstr "Будь ласка, приберіть усі несумісні моди."
-
-msgid "GAME OPTIONS"
-msgstr "ІГРОВІ ОПЦІЇ"
-
-msgid "Language"
-msgstr "Мова"
-
-msgid "Unit Colour:"
-msgstr "Колір відділу:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Сутичка/Мультиплеєр"
-
-msgid "Campaign Difficulty"
-msgstr "Труднощі кампанії"
-
-msgid "Camera Speed"
-msgstr "Швидкість руху камери"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "Допоможіть нам покращити переклади Warzone 2100: %s"
-
-msgid "Click to open webpage."
-msgstr "Натисніть, щоб додати веб-сторінку"
-
-msgid "Insane Difficulty"
-msgstr "Складність"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "Ця складність для дуже досвідчених гравців!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u хвилин"
-
-#, c-format
-msgid "%s hours"
-msgstr "%s годин(и)"
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u секунд"
-
-msgid "None"
-msgstr "Пусто"
-
-msgid "Distribute to Team"
-msgstr "Розподілити поміж командою"
-
-msgid "Destroy (Classic)"
-msgstr "Зруйнувати (Класичний метод)"
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr "Тільки Швидкий Чат"
-
-msgid "Hosting Options:"
-msgstr "Опції хостингу:"
-
-msgid "Game Port"
-msgstr "Порт гри"
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr "Чат"
-
-msgid "Inactivity Timeout"
-msgstr "Час бездіяльності"
-
-msgid "Lag Kick"
-msgstr "Виключення через лаги"
-
-msgid "Spectator Slots"
-msgstr "Місця спостерігачів"
-
-msgid "On Player Leave"
-msgstr "При виході гравця"
-
-msgid "Game Time Limit"
-msgstr "Ліміт часу гри"
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "Опції мультиплеєру"
 
 msgid "Mod: "
 msgstr ", моди: "
@@ -8107,10 +7895,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Гравець %u за допомогою шахрайства (меню налагодження) здобув(ла) нову одиницю : ."
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Відкрити налаштування гри"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Закрити налаштування гри"
 
 msgid "Hiding Obsolete Tech"
 msgstr "Хідінг застаріла технології"
@@ -8140,22 +7928,22 @@ msgstr ""
 "натисніть правою кнопкою миші, щоб видалити з уподобань"
 
 msgid "New Joins"
-msgstr ""
+msgstr "Нові Підключення"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Оновити"
 
 msgid "Host Chat Options"
-msgstr ""
+msgstr "Параметри чату хосту"
 
 msgid "Global Options:"
-msgstr ""
+msgstr "Глобальні параметри:"
 
 msgid "Enable All"
-msgstr ""
+msgstr "Увімкнути Все"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Вимкнути Все"
 
 msgid "Chat Options"
 msgstr "Налаштування чату"
@@ -8167,10 +7955,10 @@ msgid "The host has globally muted 1+ players."
 msgstr ""
 
 msgid "Local"
-msgstr ""
+msgstr "Локальний"
 
 msgid "Select / Assign Group Number: "
-msgstr ""
+msgstr "Вибрати / Призначити номер групи: "
 
 #, c-format
 msgid "Group %u"
@@ -8237,10 +8025,10 @@ msgstr "Союзники-Боти"
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u гравці"
 
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Виберіть одержувача"
 
 msgid "Quick Chat:"
 msgstr "Швидкий чат:"
@@ -8252,7 +8040,7 @@ msgid "Requests"
 msgstr "Запити"
 
 msgid "Notices"
-msgstr ""
+msgstr "Примітки"
 
 msgid "Reactions"
 msgstr "Реакції"
@@ -8273,10 +8061,10 @@ msgid "End-Game"
 msgstr "Ендшпиль"
 
 msgid "Host"
-msgstr ""
+msgstr "Хост"
 
 msgid "Admin"
-msgstr ""
+msgstr "Адміністратор"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8406,7 +8194,7 @@ msgid "You're going to regret that"
 msgstr "Ви пожалкуєте про це"
 
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "Лише подряпина!"
 
 msgid "Attack now?"
 msgstr "Атакувати зараз?"
@@ -8555,20 +8343,11 @@ msgstr "ОБЕРЕЖНО: Ви хост. Якщо ви вийдете, гра з
 msgid "Host Quit"
 msgstr "Хост вийшов"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Тактичний інтерфейс (значок цільового джерела): Показати"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Тактичний інтерфейс (Ціль): Приховати"
-
-msgid "Go Back"
-msgstr "Повернутися"
-
 msgid "View Guide"
 msgstr "Переглянути Посібник"
 
 msgid "Load Game"
-msgstr "Завнтажити Гру"
+msgstr "Завантажити Гру"
 
 msgid "Save Game"
 msgstr "Зберегти Гру"
@@ -8596,15 +8375,6 @@ msgstr "Гра не може продовжуватись без хосту."
 
 msgid "-->  QUIT  <--"
 msgstr "-->  ВИХІД  <--"
-
-msgid "Audio Options"
-msgstr "Опції Звуку"
-
-msgid "View Key Mappings"
-msgstr "Показати прив'язку клавіш"
-
-msgid "Shake"
-msgstr "Двигтіння"
 
 msgid "Save Campaign Game"
 msgstr "Зберегти кампанію"
@@ -8649,17 +8419,20 @@ msgstr "Основні ігрові файли можуть бути пошко�
 msgid "Error Loading Game Data"
 msgstr "Помилка при завантаженні ігрових даних"
 
-msgid "Global Hotkeys"
-msgstr "Глобальні гарячі клавіші"
+msgid "Global Keys"
+msgstr ""
 
-msgid "Other Hotkeys"
-msgstr "Інші гарячі клавіші"
+msgid "Other Keys"
+msgstr ""
 
-msgid "Gameplay"
-msgstr "Геймплей"
+msgid "Gameplay Keys"
+msgstr ""
 
-msgid "Debug"
-msgstr "Режим відладки"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
+msgstr ""
 
 msgid "Debug (level editor)"
 msgstr "Відладка (редактор рівнів)"
@@ -8669,9 +8442,6 @@ msgstr "Відладка (вибір)"
 
 msgid "Manufacture"
 msgstr "Виробництво"
-
-msgid "Research"
-msgstr "Дослідження"
 
 msgid "Build"
 msgstr "Будівництво"
@@ -9037,8 +8807,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Обрати всі Підрозділи з Сильними Ушкодженнями"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "Обрати всіх бойових наземних юнітів із здоров'ям >50%, що не належать до груп."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr ""
 
 msgid "Select all Half-tracks"
 msgstr "Обрати всі Напівгусеничні Підрозділи"
@@ -9207,9 +8977,6 @@ msgstr "перемикання повноекранного режиму"
 
 msgid "Waiting for Power"
 msgstr "Очікування: "
-
-msgid "Power"
-msgstr "Енергія"
 
 msgid "Power Per Second"
 msgstr "Степля в секунду"
@@ -9672,21 +9439,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
-msgid "<not bound>"
-msgstr "<не пов'язаний>"
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "ПРИЗНАЧЕННЯ КЛАВІШ"
-
-msgid "Return To Previous Screen"
-msgstr "Повернутися До Попереднього Екрану"
-
-msgid "Select Default"
-msgstr "Обрати Замовчування"
-
 msgid "Parent directory"
 msgstr "Батьківський довідник"
 
@@ -9707,8 +9459,14 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Завантажити Транспорт"
@@ -9787,8 +9545,20 @@ msgstr "%s Сформував Союз З %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ви Знайшли Креслення Для %s"
 
+msgid "Super Easy"
+msgstr "Надзвичайно Легко"
+
+msgid "Easy"
+msgstr "Легко"
+
 msgid "Medium"
 msgstr "Середня"
+
+msgid "Hard"
+msgstr "Важко"
+
+msgid "Insane"
+msgstr "[Select_CString( CHARACTER.IsFemale, 'Божевільна', 'Божевільний' )]"
 
 msgid "Commander"
 msgstr "Командир"
@@ -9803,103 +9573,32 @@ msgstr "ОПИС МІСЦЯ ПРИСТРОЮ"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Турнір: %3.1f%% перемогла, %3.1f%% втрати, %3.1f%% нічиє"
 
-msgid "Tanks disabled!!"
-msgstr "Танки відключені!"
-
-msgid "Cyborgs disabled."
-msgstr "Кіборги виведено з ладу."
-
-msgid "VTOLs disabled."
-msgstr "ВЗІПи вимкнено."
-
-msgid "Satellite Uplink disabled."
-msgstr "Супутниковий зв'язок вимкнено."
-
-msgid "Laser Satellite disabled."
-msgstr "Лазерний супутник вимкнено."
-
-msgid "Structure Limits Enforced."
-msgstr "Обмеження структури дотримуються."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Недостатньо голосів для рандомізації чи зміни карти."
-
-msgid "Select Game Name"
-msgstr "Виберіть Ім’я Гри"
-
-msgid "Game Name"
-msgstr "Назва гри"
-
-msgid "One-Player Skirmish"
-msgstr "Сутичка для Одного Гравця"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Виберіть картку\n"
-"Може бути заблоковано голосами гравців"
-
-msgid "Map-Mod!"
-msgstr "Карта-Мод!"
-
-msgid "Random map!"
-msgstr "Випадкова картка!"
-
-msgid "Click to set Password"
-msgstr "Натисніть аби встановити Пароль"
-
-msgid "Enter password here"
-msgstr "Визначте Пароль"
 
 msgid "Select Player Name"
 msgstr "Виберіть Ім’я Гравця"
 
-msgid "Alliances"
-msgstr "Союзи"
-
-msgid "Base"
-msgstr "База"
-
-msgid "Map Preview"
-msgstr "Вигляд Мапи"
-
-msgid "Click to see Map"
-msgstr "Натисни, щоб побачити Мапу"
-
-msgid "Show Structure Limits"
-msgstr "Показати Межу Кількості Будівель"
-
-msgid "Set Structure Limits"
-msgstr "Встановити Межу Кількості Будівель"
-
-msgid "Random Game Options"
-msgstr "Варіанти випадкових ігор"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
-"Опції випадкової гри\n"
-"Може бути заблоковано голосами гравців"
 
-msgid "Tech"
-msgstr "Техніка"
+msgid "Blind Game:"
+msgstr ""
 
-msgid "Technology Level 1"
-msgstr "Технологія Рівень 1"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
 
-msgid "Technology Level 2"
-msgstr "Технологія Рівень 2"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "Технологія Рівень 3"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
 
-msgid "Technology Level 4"
-msgstr "Технологія Рівень 4"
+msgid "OPTIONS"
+msgstr "ОПЦІЇ"
 
-msgid "Start Hosting Game"
-msgstr "Створити Гру"
+msgid "Return To Previous Screen"
+msgstr "Повернутися До Попереднього Екрану"
 
 msgid "DIFFICULTY"
 msgstr "ДИФЕРЕНЦІАЦІЯ"
@@ -9917,7 +9616,7 @@ msgid "Starts with advantages"
 msgstr ""
 
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "ВИБРАТИ ШІ"
 
 msgid "Allow human players to join in this slot"
 msgstr ""
@@ -10041,6 +9740,13 @@ msgstr "Чи не хочете ви змінити цього спостеріг
 msgid "Yes, select Player slot"
 msgstr "Так, оберіть місце для гравця"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10059,63 +9765,8 @@ msgstr ""
 msgid "Lock Teams"
 msgstr ""
 
-msgid "Choose Team"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Teams locked"
-msgstr ""
-
-msgid "Click to change player colour"
-msgstr ""
-
-msgid "Click to change player position"
-msgstr ""
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Клацніть, щоб змінити AI, правий клік організувати вибір"
-
-msgid "Click to close spectator slot"
-msgstr "Натисніть, щоб закрити слот для глядачів"
-
-msgid "Player ID: "
-msgstr "ID Гравця"
-
-msgid "(none)"
-msgstr "(немає)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Натисніть, щоб змінити складність"
-
-msgid "Waiting for player"
-msgstr "Чекаємо гравців..."
-
-msgid "Player is ready"
-msgstr "Гравець готовий"
-
-msgid "Player is downloading"
-msgstr "Програвач завантажується"
-
-msgid "Click when ready"
-msgstr "Натисни, коли готовий"
-
-msgid "Waiting for download"
-msgstr "Очікування завантаження"
-
-msgid "READY?"
-msgstr "ГОТОВІ?"
 
 msgid "For Spectator:"
 msgstr "Для глядачів:"
@@ -10179,22 +9830,6 @@ msgstr ""
 msgid "Sorry! Failed to host the game."
 msgstr "Вибачте! Не далося створити гру."
 
-msgid "Game Name Updated."
-msgstr "Оновлено назву гри."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** Тепер потрібен пароль [%s]! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** пароль НЕ потрібен! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Це карта мод, вона може змінити ваш ігровий досвід!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "Це карта мод, вона може змінити ваш ігровий досвід!"
-
 msgid "Host is Starting Game"
 msgstr "Хост Починає Гру"
 
@@ -10215,6 +9850,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10260,6 +9904,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10278,20 +9937,6 @@ msgstr "Закрити"
 
 msgid "Open"
 msgstr "Відкрити"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Відправляється Карта: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Мапа: %u%% завантажена"
-
-msgid "HOST"
-msgstr "ХОСТ"
-
-msgid "Ping"
-msgstr "Пінг"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Версія Warzone 2100 служить для збереження цього файла повтору не відповідає поточній версії."
@@ -10319,6 +9964,10 @@ msgstr "%s покинув Гру"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10383,8 +10032,14 @@ msgstr[1] "%d гравці"
 msgstr[2] "%d гравці"
 msgstr[3] "%d гравці"
 
+msgid "Ping"
+msgstr "Пінг"
+
 msgid "Structs"
 msgstr "Будівлі"
+
+msgid "Alliances"
+msgstr "Союзи"
 
 msgid "Score"
 msgstr "Очки"
@@ -10441,25 +10096,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10487,6 +10123,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10541,6 +10196,9 @@ msgstr "Помаранчовий"
 
 msgid "Grey"
 msgstr "Сірий"
+
+msgid "Black"
+msgstr "Чорний"
 
 msgid "Red"
 msgstr "Червоний"
@@ -10658,9 +10316,6 @@ msgid "Date"
 msgstr ""
 
 msgid "Title"
-msgstr ""
-
-msgid "MUSIC MANAGER"
 msgstr ""
 
 msgid "Dismiss"
@@ -10926,6 +10581,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11108,7 +10775,7 @@ msgstr ""
 
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - З'єднано %u з %u - Пошкодження %d/%d"
 
 #, c-format
 msgid "ID %u - Multiplier: %u"
@@ -11156,6 +10823,9 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
 msgid "Classic"
+msgstr ""
+
+msgid "Remastered (HQ)"
 msgstr ""
 
 msgid "Additional Campaigns"
@@ -11223,6 +10893,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "Не підтримується"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11279,6 +11000,9 @@ msgstr "Пошук"
 
 msgid "Connecting to the lobby server..."
 msgstr "Підключення до POP3 сервера"
+
+msgid "Game Name"
+msgstr "Назва гри"
 
 msgid "Map Name"
 msgstr "Назва карти"
@@ -11350,6 +11074,460 @@ msgstr "Невірний Пароль!"
 msgid "Continue"
 msgstr ""
 
+msgid "MUSIC MANAGER"
+msgstr ""
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "HRTF не підтримується на пристрої / системній / бібліотеці OpenAL"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Гучність Звуку"
+
+msgid "FX Volume"
+msgstr "Гучність Ефектів"
+
+msgid "Music Volume"
+msgstr "Гучність Музики"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "ГРТФ"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Вимкнено"
+
+msgid "Enabled"
+msgstr "Увімкнено"
+
+msgid "Auto"
+msgstr "Автоматично"
+
+msgid "Subtitles"
+msgstr "Субтитри"
+
+msgid "Off"
+msgstr "Вимкнено"
+
+msgid "On"
+msgstr "Ввімкнено"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "Менеджер музики"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "Зафіксувати Курсор"
+
+msgid "Colored Cursors"
+msgstr "Кольорові курсори"
+
+msgid "Cursor Size"
+msgstr "Розмір Курсору"
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "Швидкість руху камери"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Зворотнє Обертання"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr "Мапування Портів"
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr "Чат"
+
+msgid "Quick Chat Only"
+msgstr "Тільки Швидкий Чат"
+
+msgid "Allow All"
+msgstr "Дозволити Все"
+
+msgid "Inactivity Timeout"
+msgstr "Час бездіяльності"
+
+#, c-format
+msgid "%u minutes"
+msgstr "%u хвилин"
+
+msgid "Lag Kick"
+msgstr "Виключення через лаги"
+
+#, c-format
+msgid "%u seconds"
+msgstr "%u секунд"
+
+msgid "Spectator Slots"
+msgstr "Місця спостерігачів"
+
+msgid "None"
+msgstr "Пусто"
+
+msgid "On Player Leave"
+msgstr "При виході гравця"
+
+msgid "Distribute to Team"
+msgstr "Розподілити поміж командою"
+
+msgid "Destroy (Classic)"
+msgstr "Зруйнувати (Класичний метод)"
+
+msgid "Game Time Limit"
+msgstr "Ліміт часу гри"
+
+#, c-format
+msgid "%s hours"
+msgstr "%s годин(и)"
+
+msgid "Enable Rating"
+msgstr "Увімкнути Рейтинг"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr "Тіньове картографування недоступне в цій системі."
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr "Середня якість"
+
+msgid "High Quality"
+msgstr "Висока якість"
+
+msgid "Shadows"
+msgstr "Тіні"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "Роздільна здатність тіней"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr "Високий"
+
+msgid "Shadow Filtering"
+msgstr "Фільтрація Тіней"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr "Низький"
+
+msgid "Ultra"
+msgstr "Ультра"
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr "Туман"
+
+msgid "Screen Shake"
+msgstr "Тремтіння екрану"
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr "Дистанція рівня деталізації LOD"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr "За умовчанням"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr "Адаптивний"
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Display Scale"
+msgstr "Відображення масштабу"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr "Меню підрозділів"
+
+msgid "Options Button"
+msgstr "Кнопка Параметри"
+
+msgid "Opacity: 50%"
+msgstr "Непрозорість: 50%"
+
+msgid "Radar"
+msgstr "Радар"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Виправлено"
+
+msgid "Rotating"
+msgstr "Обертання:"
+
+msgid "Radar Jump"
+msgstr "Радарний стрибок"
+
+msgid "Instant"
+msgstr "Миттєво"
+
+msgid "Tracked"
+msgstr "Відстежується"
+
+msgid "Radar Zoom"
+msgstr "Радарне збільшення"
+
+msgid "Video Playback"
+msgstr "Програвання Відео"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1×"
+
+msgid "2×"
+msgstr "2×"
+
+msgid "Fullscreen"
+msgstr "Повний Екран"
+
+msgid "Scanlines"
+msgstr "Рядки пікселів"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "Визначте директорію конфігурації"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "Не вдалося відкрити каталог конфігурації у стандартному браузері файлів системи."
+
+msgid "Configuration directory is reported as:"
+msgstr "Каталог конфігурації повідомляється як:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "Якщо працювати всередині контейнера / ізольованого середовища, це може відрізнятися від фактичного шляху на диску."
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "Перегляньте документацію для отримання більш детальної інформації про її знаходження вручну."
+
+msgid "Failed to open configuration directory"
+msgstr "Не вдалося відкрити директорію конфігурації"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+"В повноекранному режимі Fullscreen розширення збігається з робочим столом \n"
+"(або в доступному режимі віконного менеджера)."
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "Ви можете змінити роздільну здатність шляхом нормального зміни розміру вікна. (Спробуйте перетягування куту/краю.)"
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Віконний Режим"
+
+msgid "Desktop Full"
+msgstr "Повний робочий стіл"
+
+msgid "Resolution"
+msgstr "Роздільна Здатність"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "Чи слід автоматично мінімізувати вікно при втраті фокусу"
+
+msgid "On (Fullscreen)"
+msgstr "Ввімкнено (Повний екран)"
+
 msgid "CONNECTION"
 msgstr "З’ЄДНАННЯ"
 
@@ -11361,6 +11539,303 @@ msgstr ""
 
 msgid "IP Address or Machine Name"
 msgstr "IP Адреса або Ім’я Машини"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "ID Гравця"
+
+msgid "(none)"
+msgstr "(немає)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Відправляється Карта: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Мапа: %u%% завантажена"
+
+msgid "HOST"
+msgstr "ХОСТ"
+
+msgid "Choose Team"
+msgstr ""
+
+msgid "Teams locked"
+msgstr ""
+
+msgid "Click to change player colour"
+msgstr ""
+
+msgid "Click to change player position"
+msgstr ""
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Клацніть, щоб змінити AI, правий клік організувати вибір"
+
+msgid "Click to close spectator slot"
+msgstr "Натисніть, щоб закрити слот для глядачів"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr "Рейтинг Гравця:"
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Натисніть, щоб змінити складність"
+
+msgid "Waiting for player"
+msgstr "Чекаємо гравців..."
+
+msgid "Player is ready"
+msgstr "Гравець готовий"
+
+msgid "Player is downloading"
+msgstr "Програвач завантажується"
+
+msgid "Click when ready"
+msgstr "Натисни, коли готовий"
+
+msgid "Waiting for download"
+msgstr "Очікування завантаження"
+
+msgid "READY?"
+msgstr "ГОТОВІ?"
+
+msgid "Tanks disabled!!"
+msgstr "Танки відключені!"
+
+msgid "Cyborgs disabled."
+msgstr "Кіборги виведено з ладу."
+
+msgid "VTOLs disabled."
+msgstr "ВЗІПи вимкнено."
+
+msgid "Satellite Uplink disabled."
+msgstr "Супутниковий зв'язок вимкнено."
+
+msgid "Laser Satellite disabled."
+msgstr "Лазерний супутник вимкнено."
+
+msgid "Structure Limits Enforced."
+msgstr "Обмеження структури дотримуються."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** Тепер потрібен пароль [%s]! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** пароль НЕ потрібен! ***"
+
+msgid "Game Name Updated."
+msgstr "Оновлено назву гри."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Сутичка для Одного Гравця"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Натисни, щоб побачити Мапу"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Виберіть картку\n"
+"Може бути заблоковано голосами гравців"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "База"
+
+msgid "Tech"
+msgstr "Техніка"
+
+msgid "Technology Level 1"
+msgstr "Технологія Рівень 1"
+
+msgid "Technology Level 2"
+msgstr "Технологія Рівень 2"
+
+msgid "Technology Level 3"
+msgstr "Технологія Рівень 3"
+
+msgid "Technology Level 4"
+msgstr "Технологія Рівень 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Запустити Транспорт"

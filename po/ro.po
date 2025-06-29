@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -897,10 +897,10 @@ msgid "Tornado Flak Turret"
 msgstr "Turela Anti-Aeriană Tornadă"
 
 msgid "Proximity Bomb Turret"
-msgstr ""
+msgstr "Turelă de Bombă cu Proximitate"
 
 msgid "Proximity Superbomb Turret"
-msgstr ""
+msgstr "Turelă de Super-bombă cu Proximitate"
 
 msgid "Bunker Blaster Cyborg"
 msgstr "Cyborg cu Bunker Buster"
@@ -1796,6 +1796,9 @@ msgstr "Distruge silozurile rachetelor"
 msgid "Rescue Alpha team from Nexus"
 msgstr "Salvează echipa Alfa"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
 
@@ -1817,7 +1820,7 @@ msgstr ""
 msgid "Return to LZ"
 msgstr "Întoarce-te la ZA"
 
-msgid "Hard / Insane difficulty hint:"
+msgid "Insane difficulty hint:"
 msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
@@ -2957,6 +2960,10 @@ msgstr ""
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr ""
 
@@ -2986,6 +2993,18 @@ msgid "Replay File Format Unsupported"
 msgstr "Formatul fișierului de reluare nu este acceptat"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
 msgid "Menu"
@@ -3297,10 +3316,10 @@ msgstr ""
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
 
 msgid "Armed with Flashlight Laser"
@@ -3438,6 +3457,9 @@ msgid "Armored strongpoint with Gauss Cannon"
 msgstr "Punct fortificat blindat cu Tun Gauss"
 
 msgid "Armored strongpoint with Heavy Laser"
+msgstr ""
+
+msgid "Armored strongpoint with Particle Gun"
 msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
@@ -3668,6 +3690,9 @@ msgstr ""
 msgid "Bomb damage +25%"
 msgstr ""
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Îmbunătățire a bombelor"
 
@@ -3691,6 +3716,9 @@ msgstr "Gândac"
 
 msgid "Buggy"
 msgstr "ATV"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistem integrat de diagnosticare și reparații"
@@ -3723,7 +3751,7 @@ msgid "Bunker Buster Viper Wheels"
 msgstr "Rachete Anti-Buncăr pe şasiu Viperă cu Roți"
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Rachetă Anti-Buncăr"
 
 msgid "Burns oil more efficiently"
 msgstr "Combustibilul este consumat mai eficient"
@@ -3731,6 +3759,9 @@ msgstr "Combustibilul este consumat mai eficient"
 #, no-c-format
 msgid "Cannon accuracy +10%"
 msgstr "Precizia tunurilor +10%"
+
+msgid "Cannon Accuracy"
+msgstr ""
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Autoîncărcător pentru Tunuri Mk2"
@@ -3744,6 +3775,9 @@ msgstr "Autoîncărcător pentru tunuri"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Puterea tunurilor +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Mașină cu tun"
@@ -3769,6 +3803,9 @@ msgstr "Încărcător rapid pentru tunuri"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Timpii de reîncărcare a tunurilor -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Turn cu tun"
@@ -3875,6 +3912,12 @@ msgstr "Comandantul conduce batalioane, primește întăriri de la fabrici"
 msgid "Complete battlefield visibility"
 msgstr "Vizibilitate totală a câmpului de luptă"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Aliaje compozite Mk2"
 
@@ -3932,6 +3975,15 @@ msgid "Crane1"
 msgstr ""
 
 msgid "Crane2"
+msgstr ""
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
 msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
@@ -4000,6 +4052,12 @@ msgstr "Blindaj Termal Super-Dens pentru Cyborgi"
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Blindaj Termal pentru Cyborgi Mk2"
 
@@ -4008,6 +4066,9 @@ msgstr "Blindaj Termal pentru Cyborgi Mk3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Blindaj Termal pentru Cyborgi"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4135,6 +4196,9 @@ msgstr "Permite reparațiile automate"
 msgid "Enemy"
 msgstr "Inamic"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Inginerie"
 
@@ -4207,6 +4271,9 @@ msgstr "Stabilizarea prin eleroane îmbunătățește traiectoria de zbor"
 msgid "Fire Truck"
 msgstr "Mașină de pompieri"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Lansează Rachete cu Puls Electro Magnetic"
 
@@ -4241,12 +4308,18 @@ msgstr "Aruncător de flăcări Cobră Șenile"
 msgid "Flamer damage +25%"
 msgstr "Puterea aruncătoarelor de flăcări +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr ""
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Timpul de reîncărcare a aruncătoarelor de flăcări -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Aruncător de Flăcări pe şasiu Viperă Semi-şenilat"
@@ -4797,6 +4870,15 @@ msgstr "Autoîncărcător pentru howitzer"
 msgid "Howitzer damage +25%"
 msgstr "Putere howitzer +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Încărcător Rapid pentru Obuzier"
 
@@ -4806,6 +4888,15 @@ msgstr "Timp de încărcare howitzer -10%"
 
 msgid "Howitzer"
 msgstr "Obuzier"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "Amplasament AA Uragan"
@@ -4870,6 +4961,9 @@ msgstr "Inginerie îmbunătățită"
 msgid "Improved fire detection systems"
 msgstr "Sisteme de detecție a focului îmbunătățite"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Beton îmbunătățit Mk2"
 
@@ -4921,11 +5015,11 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Amplasament pentru howitzer incendiar"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Amplasament cu obuzier incendiar"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Amplasament pentru howitzer incendiar"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Obuzierul Incendiar poate fi atribuit unui senzor"
@@ -5129,9 +5223,15 @@ msgstr "Armă Laser AA Disponibilă"
 msgid "Laser accuracy +10%"
 msgstr "Precizie laser +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Putere laser +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Marcajul laser indică și ghidează proiectilele spre țintă"
@@ -5139,6 +5239,9 @@ msgstr "Marcajul laser indică și ghidează proiectilele spre țintă"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Timp de încărcare laser -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr ""
@@ -5316,6 +5419,12 @@ msgstr "Tun mediu"
 msgid "Medium Super Heavy Body"
 msgstr "Șasiu mediu, super-greu"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Montură ranforsată cu mini-rachete"
 
@@ -5371,6 +5480,9 @@ msgstr "Mini-rachete Viperă Roți"
 msgid "Missile accuracy +10%"
 msgstr "Precizia rachetelor +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr ""
 
@@ -5378,12 +5490,18 @@ msgstr ""
 msgid "Missile damage +25%"
 msgstr "Puterea rachetelor +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Fortăreață cu rachete"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Timp de încărcare rachete -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Îmbunătățire la rachete"
@@ -5404,6 +5522,9 @@ msgstr "Rezistență mai mare a blindajului și șasiului decât Răzbunarea"
 msgid "Mortar accuracy +10%"
 msgstr "Precizia mortierelor +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Autoîncărcător pentru Mortier Mk2"
 
@@ -5420,6 +5541,9 @@ msgstr "Mortier pe șasiu Cobră Semi-șenilat"
 msgid "Mortar damage +25%"
 msgstr "Pagubele mortierelor +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Încărcător Rapid pentru Mortier"
 
@@ -5429,6 +5553,9 @@ msgstr "Groapă de Mortier"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Timp de reîncărcare a mortierelor -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Computer de Țintire pentru Mortiere"
@@ -5562,10 +5689,10 @@ msgstr "Nouă clădire cu sisteme disponibilă"
 msgid "New Systems Tower Available"
 msgstr "Nou turn de sisteme disponibil"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Nouă Turelă Funcțională Disponibilă pentru Scheme"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Nouă Turelă Funcțională Disponibilă pentru Scheme"
 
 msgid "New Thermal Emissions detection"
@@ -5664,6 +5791,12 @@ msgstr "Încăierare Originală"
 msgid "Panther"
 msgstr "Panteră"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Groapă cu Piperniță"
 
@@ -5753,6 +5886,9 @@ msgstr "Generare de energie +30%"
 msgid "Power Research Completed"
 msgstr "Cercetare de alimentare completă"
 
+msgid "Power"
+msgstr "Energie"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr ""
 
@@ -5761,6 +5897,9 @@ msgstr ""
 
 msgid "Produces Cyborgs"
 msgstr "Produce Cyborgi"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Unitățile de rang prefesionist și regulat sunt protejate"
@@ -5834,6 +5973,12 @@ msgstr "Turn detector radar"
 msgid "Radar Detector"
 msgstr "Detector radar"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Precizie Tunuri Electromagnetice +10%"
@@ -5876,6 +6021,9 @@ msgstr "Îmbunătățire a Tunului Electromagnetic"
 msgid "Rail Gun"
 msgstr "Tun Electromagnetic"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr ""
 
@@ -5906,6 +6054,12 @@ msgstr "Reduce șansa de a fi preluat de NEXUS"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Realimentează, reîncarcă și repară DAV-urile"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Materiale ranforsate de construcție Mk2"
@@ -5985,6 +6139,9 @@ msgstr "Viteză de cercetare +30%"
 msgid "Research speed +85%"
 msgstr "Viteza de cercetare +85%"
 
+msgid "Research"
+msgstr "Cercetare"
+
 msgid "Retaliation"
 msgstr "Represiune"
 
@@ -6043,6 +6200,9 @@ msgstr "Reînarmare Robotizată a DAV-urilor"
 msgid "Rocket accuracy +10%"
 msgstr "Precizia rachetelor +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artilerie cu rachete; poate fi atașată unui senzor"
 
@@ -6061,6 +6221,9 @@ msgstr "ATV cu Rachete"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Puterea rachetelor +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr ""
@@ -6083,6 +6246,9 @@ msgstr ""
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Timpii de reîncărcare a rachetelor -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Racheta urmărește marcajul laser până la destinație"
@@ -6239,6 +6405,9 @@ msgstr ""
 
 msgid "Sensor Upgrade"
 msgstr "Îmbunătățire de Senzori"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "Senzorii îmbunătățiți"
@@ -6405,11 +6574,11 @@ msgstr "Analiza datelor prin legătura sinaptică Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analiza datelor prin legătura sinaptică Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Analiza datelor prin legătura sinaptică"
-
 msgid "Synaptic link data analysis"
 msgstr "Analiza datelor prin legătură sinaptică"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Analiza datelor prin legătura sinaptică"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr ""
@@ -6422,6 +6591,9 @@ msgstr "Legătura Sinaptică"
 
 msgid "Systems Research Completed"
 msgstr "Cercetare de sisteme completă"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr ""
@@ -6449,6 +6621,9 @@ msgstr ""
 
 msgid "Tank Killer"
 msgstr "Rachetă Tank Killer"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Capcane de tancuri"
@@ -6493,6 +6668,12 @@ msgstr "Blindaj Termal +40%"
 msgid "Thermal Armor +45%"
 msgstr "Blindaj Termal +45%"
 
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Thermal Armor Mk2"
 msgstr "Blindaj Termal Mk2"
 
@@ -6536,6 +6717,9 @@ msgid "Titanium-reinforced concrete"
 msgstr "Beton ranforsat cu titan"
 
 msgid "Tower wars AI, based on NullBot"
+msgstr ""
+
+msgid "Tower Wars Buff"
 msgstr ""
 
 msgid "Tracked Propulsion"
@@ -6860,6 +7044,9 @@ msgstr "Mini-rachetă DAV"
 msgid "VTOL Needle Gun"
 msgstr ""
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr ""
 
@@ -6883,6 +7070,9 @@ msgstr "Punct de reînarmare DAV"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Stațiile de reînarmare DAV sunt necesare pentru a menține DAV-urile în zbor"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "Rachetă Năpastă DAV"
@@ -7305,10 +7495,16 @@ msgstr ""
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7620,419 +7816,12 @@ msgstr ""
 msgid "Load Multiplayer Replay"
 msgstr "Încarcă o reluare Multiplayer"
 
-msgid "Game Options"
-msgstr "Opțiuni de joc"
-
-msgid "Graphics Options"
-msgstr "Setări de Grafică"
-
-msgid "Video Options"
-msgstr "Opțiuni video"
-
-msgid "Audio / Zoom Options"
-msgstr ""
-
-msgid "Mouse Options"
-msgstr "Opțiuni ale mouse-ului"
-
-msgid "Key Mappings"
-msgstr "Taste funcționale"
-
-msgid "Music Manager"
-msgstr "Manager Muzică"
-
-msgid "Multiplay Options"
-msgstr "Opțiuni Multiplayer"
-
-msgid "OPTIONS"
-msgstr "OPȚIUNI"
-
-msgid "Open Configuration Directory"
-msgstr ""
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
-
-msgid "Configuration directory is reported as:"
-msgstr ""
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
-
-msgid "Failed to open configuration directory"
-msgstr ""
-
-msgid "1×"
-msgstr "1x"
-
-msgid "2×"
-msgstr "2x"
-
-msgid "Fullscreen"
-msgstr "Tot ecranul"
-
-msgid "Unsupported"
-msgstr ""
-
-msgid "Off"
-msgstr "Dezactivat"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Negru"
-
-msgid "On"
-msgstr "Activat"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "Rotație"
-
-msgid "Fixed"
-msgstr "Fix"
-
-msgid "Instant"
-msgstr ""
-
-msgid "Tracked"
-msgstr ""
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr ""
-
-msgid "High Quality"
-msgstr ""
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* Are efect doar la repornirea jocului"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "Umbre"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr ""
-
-msgid "Radar"
-msgstr "Radar"
-
-msgid "Radar Jump"
-msgstr ""
-
-msgid "Video Playback"
-msgstr "Redare video"
-
-msgid "Scanlines"
-msgstr ""
-
-msgid "Screen Shake"
-msgstr ""
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "OPȚIUNI DE GRAFICĂ"
-
-msgid "Disabled"
-msgstr "Dezactivat"
-
-msgid "Enabled"
-msgstr "Activat"
-
-msgid "Auto"
-msgstr ""
-
-msgid "Voice Volume"
-msgstr "Volumul vocii"
-
-msgid "FX Volume"
-msgstr "Volumul efectelor"
-
-msgid "Music Volume"
-msgstr "Volumul muzicii"
-
-msgid "Subtitles"
-msgstr "Subtitrări"
-
-msgid "HRTF"
-msgstr "HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "HRTF nu este acceptat pe dispozitivul tau / sistemul tau / biblioteca OpenAL"
-
-msgid "Map Zoom"
-msgstr ""
-
-msgid "Map Zoom Rate"
-msgstr ""
-
-msgid "Radar Zoom"
-msgstr ""
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "SETĂRI AUDIO / ZOOM"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
-
-msgid "Graphics Mode"
-msgstr ""
-
-msgid "Resolution"
-msgstr "Rezoluție"
-
-msgid "Display Scale"
-msgstr ""
-
-msgid "Adaptive"
-msgstr ""
-
-msgid "Windowed"
-msgstr "În fereastră"
-
-msgid "Desktop Full"
-msgstr ""
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "Mărimea texturilor"
-
-msgid "Vertical sync"
-msgstr "Sincronizare verticală"
-
-msgid "Antialiasing*"
-msgstr "Antialiasing"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Atenție: Antialiasing-ul poate cauza probleme, mai ales cu valori > 16"
-
-msgid "Graphics Backend*"
-msgstr ""
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "OPȚIUNI VIDEO"
-
-msgid "Unable to change Vertical Sync"
-msgstr ""
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-
-msgid "Middle Mouse"
-msgstr ""
-
-msgid "Right Mouse"
-msgstr ""
-
-msgid "Reverse Rotation"
-msgstr "Inversează rotația"
-
-msgid "Trap Cursor"
-msgstr "Prinde cursorul"
-
-msgid "Switch Mouse Buttons"
-msgstr "Inversează butoanele mouse-ului"
-
-msgid "Rotate Screen"
-msgstr "Rotește ecranul"
-
-msgid "Colored Cursors"
-msgstr ""
-
-msgid "Cursor Size"
-msgstr ""
-
-msgid "MOUSE OPTIONS"
-msgstr "OPȚIUNI ALE MOUSE-ULUI"
-
-msgid "Super Easy"
-msgstr ""
-
-msgid "Easy"
-msgstr "Ușor"
-
-msgid "Hard"
-msgstr "Dificil"
-
-msgid "Insane"
-msgstr "Nebunesc"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr ""
 
 msgid "Please remove all incompatible mods."
 msgstr ""
-
-msgid "GAME OPTIONS"
-msgstr "OPȚIUNI DE JOC"
-
-msgid "Language"
-msgstr "Limbă"
-
-msgid "Unit Colour:"
-msgstr ""
-
-msgid "Skirmish/Multiplayer"
-msgstr "Joc individual/Multiplayer"
-
-msgid "Campaign Difficulty"
-msgstr "Dificultate campanie"
-
-msgid "Camera Speed"
-msgstr ""
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
-
-msgid "Click to open webpage."
-msgstr ""
-
-msgid "Insane Difficulty"
-msgstr "Dificultate nebunească"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "Acest nivel de dificultate este doar pentru jucătorii foarte experimentați!"
-
-#, c-format
-msgid "%u minutes"
-msgstr ""
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr ""
-
-msgid "Game Port"
-msgstr ""
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr ""
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr ""
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "OPȚIUNI MULTIPLAYER"
 
 msgid "Mod: "
 msgstr "Mod: "
@@ -8318,7 +8107,7 @@ msgid "I suggest: Capturing oil resources"
 msgstr "Sugerez: Să capturăm resurse de petrol"
 
 msgid "Hey everyone!"
-msgstr "Salut, toată lumea!"
+msgstr "Salutare tuturor!"
 
 msgid "Welcome!"
 msgstr "Bun venit!"
@@ -8539,15 +8328,6 @@ msgstr "AVERTISMENT: Tu ești gazda. Dacă renunți, jocul se termină pentru to
 msgid "Host Quit"
 msgstr "Gazda a Ieșit"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
-
-msgid "Go Back"
-msgstr "Înapoi"
-
 msgid "View Guide"
 msgstr ""
 
@@ -8580,15 +8360,6 @@ msgstr "Jocul nu poate continua fără gazdă."
 
 msgid "-->  QUIT  <--"
 msgstr "-->  IEȘIRE  <--"
-
-msgid "Audio Options"
-msgstr "Opțiuni audio"
-
-msgid "View Key Mappings"
-msgstr ""
-
-msgid "Shake"
-msgstr ""
 
 msgid "Save Campaign Game"
 msgstr ""
@@ -8633,16 +8404,19 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
+msgid "Global Keys"
 msgstr ""
 
-msgid "Other Hotkeys"
+msgid "Other Keys"
 msgstr ""
 
-msgid "Gameplay"
+msgid "Gameplay Keys"
 msgstr ""
 
-msgid "Debug"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
 msgstr ""
 
 msgid "Debug (level editor)"
@@ -8653,9 +8427,6 @@ msgstr ""
 
 msgid "Manufacture"
 msgstr "Producție"
-
-msgid "Research"
-msgstr "Cercetare"
 
 msgid "Build"
 msgstr "Construcție"
@@ -9021,7 +8792,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Selectează toate unitățile grav avariate"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat Units with >50% HP and no group"
 msgstr ""
 
 msgid "Select all Half-tracks"
@@ -9191,9 +8962,6 @@ msgstr ""
 
 msgid "Waiting for Power"
 msgstr ""
-
-msgid "Power"
-msgstr "Energie"
 
 msgid "Power Per Second"
 msgstr "Energie pe secundă"
@@ -9656,21 +9424,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
-msgid "<not bound>"
-msgstr ""
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "ASOCIEREA TASTELOR"
-
-msgid "Return To Previous Screen"
-msgstr "Întoarcere la ecranul precedent"
-
-msgid "Select Default"
-msgstr "Selectare implicită"
-
 msgid "Parent directory"
 msgstr "Director părinte"
 
@@ -9691,8 +9444,14 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Nu s-a putut salva jocul!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Încarcă Transportorul"
@@ -9771,8 +9530,20 @@ msgstr "%s a format o alianță cu %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Ai descoperit scheme pentru %s"
 
+msgid "Super Easy"
+msgstr ""
+
+msgid "Easy"
+msgstr "Ușor"
+
 msgid "Medium"
 msgstr ""
+
+msgid "Hard"
+msgstr "Dificil"
+
+msgid "Insane"
+msgstr "Nebunesc"
 
 msgid "Commander"
 msgstr "Comandant"
@@ -9787,101 +9558,32 @@ msgstr "LIPSĂ DESCRIERE IA"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-msgid "Tanks disabled!!"
-msgstr "Tancurile dezactivate!!"
-
-msgid "Cyborgs disabled."
-msgstr "Cyborgii dezactivați."
-
-msgid "VTOLs disabled."
-msgstr "DAV-urile dezactivate."
-
-msgid "Satellite Uplink disabled."
-msgstr "Legătură Satelit dezactivată."
-
-msgid "Laser Satellite disabled."
-msgstr "Satelit Laser dezactivat."
-
-msgid "Structure Limits Enforced."
-msgstr ""
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Nu sunt suficiente voturi pentru a alege aleator sau schimba harta."
-
-msgid "Select Game Name"
-msgstr "Selectează numele jocului"
-
-msgid "Game Name"
-msgstr "Numele Jocului"
-
-msgid "One-Player Skirmish"
-msgstr "Luptă individuală"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-
-msgid "Map-Mod!"
-msgstr "Hartă-modată!"
-
-msgid "Random map!"
-msgstr "Hartă aleatorie!"
-
-msgid "Click to set Password"
-msgstr "Click pentru a seta o parolă"
-
-msgid "Enter password here"
-msgstr "Introdu parola aici"
 
 msgid "Select Player Name"
 msgstr "Selectează numele jucătorului"
 
-msgid "Alliances"
-msgstr "Alianțe"
-
-msgid "Base"
-msgstr "Bază"
-
-msgid "Map Preview"
-msgstr "Vizionare Hartă"
-
-msgid "Click to see Map"
-msgstr "Click pentru a vedea Harta"
-
-msgid "Show Structure Limits"
-msgstr "Arată limitele pentru clădiri"
-
-msgid "Set Structure Limits"
-msgstr "Setează limitele pentru clădiri"
-
-msgid "Random Game Options"
-msgstr "Opțiuni de Joc Aleatoriu"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
-"Opțiuni de Joc Aleatoriu\n"
-"Pot fi blocate de voturile jucătorilor"
 
-msgid "Tech"
-msgstr "Tehnologie"
+msgid "Blind Game:"
+msgstr ""
 
-msgid "Technology Level 1"
-msgstr "Nivel Tehnologic 1"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr ""
 
-msgid "Technology Level 2"
-msgstr "Nivel Tehnologic 2"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "Nivel Tehnologic 3"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
 
-msgid "Technology Level 4"
-msgstr "Nivel Tehnologic 4"
+msgid "OPTIONS"
+msgstr "OPȚIUNI"
 
-msgid "Start Hosting Game"
-msgstr "Începe găzduirea jocului"
+msgid "Return To Previous Screen"
+msgstr "Întoarcere la ecranul precedent"
 
 msgid "DIFFICULTY"
 msgstr "DIFICULTATE"
@@ -10023,6 +9725,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10041,63 +9750,8 @@ msgstr ""
 msgid "Lock Teams"
 msgstr ""
 
-msgid "Choose Team"
-msgstr "Alege Echipa"
-
-msgid "Teams locked"
-msgstr "Echipe blocate"
-
-msgid "Click to change player colour"
-msgstr "Faceți clic pentru a schimba culoarea jucătorului"
-
-msgid "Click to change player position"
-msgstr "Faceți clic pentru a schimba poziția jucătorului"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Faceți clic pentru a schimba IA, click dreapta pentru a distribui alegerea"
-
-msgid "Click to close spectator slot"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Player ID: "
-msgstr "ID jucător: "
-
-msgid "(none)"
-msgstr "(niciunul)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Faceți clic pentru a schimba dificultatea"
-
-msgid "Waiting for player"
-msgstr "Aşteptare jucător"
-
-msgid "Player is ready"
-msgstr "Jucătorul este gata"
-
-msgid "Player is downloading"
-msgstr "Jucătorul descarcă"
-
-msgid "Click when ready"
-msgstr "Click când ești pregătit"
-
-msgid "Waiting for download"
-msgstr "Se așteaptă descărcarea"
-
-msgid "READY?"
-msgstr "PREGĂTIT?"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10161,22 +9815,6 @@ msgstr ""
 msgid "Sorry! Failed to host the game."
 msgstr "Scuze! Jocul nu s-a putut găzdui."
 
-msgid "Game Name Updated."
-msgstr "Nume Joc Actualizat."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** parola [%s] este de acum necesară! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** parola NU este necesară! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Aceasta este o hartă-modată, îți poate schimba experiența de joc!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
-
 msgid "Host is Starting Game"
 msgstr "Gazda Începe Jocul"
 
@@ -10197,6 +9835,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10242,6 +9889,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10260,20 +9922,6 @@ msgstr "Închis"
 
 msgid "Open"
 msgstr "Deschis"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Se trimite harta: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Harta: %u%% descărcată"
-
-msgid "HOST"
-msgstr "GAZDĂ"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
@@ -10301,6 +9949,10 @@ msgstr "%s a părăsit jocul"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10364,8 +10016,14 @@ msgstr[0] "%d jucător"
 msgstr[1] "%d jucători"
 msgstr[2] "%d jucători"
 
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Structs"
 msgstr "Clădiri"
+
+msgid "Alliances"
+msgstr "Alianțe"
 
 msgid "Score"
 msgstr "Scor"
@@ -10422,25 +10080,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10468,6 +10107,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10522,6 +10180,9 @@ msgstr "Portocaliu"
 
 msgid "Grey"
 msgstr "Gri"
+
+msgid "Black"
+msgstr "Negru"
 
 msgid "Red"
 msgstr "Roşu"
@@ -10640,9 +10301,6 @@ msgstr "Dată"
 
 msgid "Title"
 msgstr "Titlu"
-
-msgid "MUSIC MANAGER"
-msgstr "MANAGER MUZICĂ"
 
 msgid "Dismiss"
 msgstr "Revocă"
@@ -10907,6 +10565,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11135,87 +10805,141 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Răsplată de Reparații - Nimic"
 
 msgid "Classic"
+msgstr "Clasic"
+
+msgid "Remastered (HQ)"
 msgstr ""
 
 msgid "Additional Campaigns"
-msgstr ""
+msgstr "Campanii Adiționale"
 
 msgid "Start Game"
-msgstr ""
+msgstr "Începe jocul"
 
 msgid "Tweak Options:"
-msgstr ""
+msgstr "Modifică Opțiuni:"
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Resetare la Valorile Implicite"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
-msgstr ""
+msgstr "Comandă forțele Proiectului într-o luptă pentru a reconstrui lumea"
 
 msgid "Warzone 2100 Universe"
-msgstr ""
+msgstr "Universul Warzone 2100"
 
 msgid "WZ2100 Extended Universe"
-msgstr ""
+msgstr "Universul Extins WZ2100"
 
 msgid "Unique Universe"
-msgstr ""
+msgstr "Univers Unic"
 
 #, c-format
 msgid "Requires %s"
-msgstr ""
+msgstr "Necesită %s"
 
 msgid "Compatible"
-msgstr ""
+msgstr "Compatibil"
 
 #, c-format
 msgid "Compatible %s"
-msgstr ""
+msgstr "Compatibil %s"
 
 msgid "Timer Power Bonus"
-msgstr ""
+msgstr "Bonus Energie Cronometru"
 
 msgid "Grant power based on the remaining level timer, so there's no need to wait out the clock."
-msgstr ""
+msgstr "Acorda energie in funcție de timpul rămas după fiecare nivel, încât sa nu fie nevoie sa aștepți sa se termine timpul."
 
 msgid "Classic Timers"
-msgstr ""
+msgstr "Cronometru Clasic"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
-msgstr ""
+msgstr "Alterează / modifica cronometrul in anumite nivele, exact ca in versiunea originala (Permite trișarea energiei)"
 
 msgid "40 Unit Limit"
-msgstr ""
+msgstr "Limită de 40 Unități"
 
 msgid "Lower the player's unit limit to 40, matching the original PS1 release."
-msgstr ""
+msgstr "Redu limita de unități la 40, corespunzător versiunii originale de PS1."
 
 msgid "Autosaves-Only"
-msgstr ""
+msgstr "Doar Auto-Salvări"
 
 msgid "Disable the ability to manually save / quick-save, limit autosaves to the beginning of each level."
-msgstr ""
+msgstr "Dezactivează capabilitatea de a salva manual, limitează auto-salvările la începutul fiecărui nivel."
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "Modificatori PS1"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
+msgstr "Reduce daunele pe care inamicul le face pentru o treime din actuala dificultate de modificare."
+
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
 msgstr ""
 
 msgid "A more relaxed playthrough - easier than easy"
-msgstr ""
+msgstr "Un joc mai relaxat - mai ușor decât ușor"
 
 msgid "A slightly easier challenge than Normal"
-msgstr ""
+msgstr "O provocare mai ușoară decât Normală"
 
 msgid "A fun & challenging experience"
-msgstr ""
+msgstr "O experiență distractivă și provocatoare"
 
 msgid "A challenge for players who have beaten the game"
-msgstr ""
+msgstr "O provocare pentru jucătorii care au învins jocul"
 
 msgid "An unforgiving challenge for experienced players only"
-msgstr ""
+msgstr "O provocare care nu iartă, doar pentru jucătorii experimentați"
 
 msgid "\"Classic\" campaign balance"
 msgstr ""
@@ -11258,6 +10982,9 @@ msgstr "Căutare"
 
 msgid "Connecting to the lobby server..."
 msgstr "Conectare la server..."
+
+msgid "Game Name"
+msgstr "Numele Jocului"
 
 msgid "Map Name"
 msgstr "Nume Hartă"
@@ -11329,6 +11056,458 @@ msgstr "Parolă incorectă!"
 msgid "Continue"
 msgstr "Continuă"
 
+msgid "MUSIC MANAGER"
+msgstr "MANAGER MUZICĂ"
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "HRTF nu este acceptat pe dispozitivul tau / sistemul tau / biblioteca OpenAL"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Volumul vocii"
+
+msgid "FX Volume"
+msgstr "Volumul efectelor"
+
+msgid "Music Volume"
+msgstr "Volumul muzicii"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Dezactivat"
+
+msgid "Enabled"
+msgstr "Activat"
+
+msgid "Auto"
+msgstr ""
+
+msgid "Subtitles"
+msgstr "Subtitrări"
+
+msgid "Off"
+msgstr "Dezactivat"
+
+msgid "On"
+msgstr "Activat"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "Manager Muzică"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "Prinde cursorul"
+
+msgid "Colored Cursors"
+msgstr ""
+
+msgid "Cursor Size"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr ""
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Inversează rotația"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Quick Chat Only"
+msgstr ""
+
+msgid "Allow All"
+msgstr ""
+
+msgid "Inactivity Timeout"
+msgstr ""
+
+#, c-format
+msgid "%u minutes"
+msgstr ""
+
+msgid "Lag Kick"
+msgstr ""
+
+#, c-format
+msgid "%u seconds"
+msgstr ""
+
+msgid "Spectator Slots"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr ""
+
+msgid "Game Time Limit"
+msgstr ""
+
+#, c-format
+msgid "%s hours"
+msgstr ""
+
+msgid "Enable Rating"
+msgstr ""
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr ""
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr ""
+
+msgid "High Quality"
+msgstr ""
+
+msgid "Shadows"
+msgstr "Umbre"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr ""
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Shadow Filtering"
+msgstr ""
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Ultra"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr ""
+
+msgid "Screen Shake"
+msgstr ""
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr ""
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Limbă"
+
+msgid "Display Scale"
+msgstr ""
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Fix"
+
+msgid "Rotating"
+msgstr "Rotație"
+
+msgid "Radar Jump"
+msgstr ""
+
+msgid "Instant"
+msgstr ""
+
+msgid "Tracked"
+msgstr ""
+
+msgid "Radar Zoom"
+msgstr ""
+
+msgid "Video Playback"
+msgstr "Redare video"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1x"
+
+msgid "2×"
+msgstr "2x"
+
+msgid "Fullscreen"
+msgstr "Tot ecranul"
+
+msgid "Scanlines"
+msgstr ""
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr ""
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr ""
+
+msgid "Configuration directory is reported as:"
+msgstr ""
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr ""
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr ""
+
+msgid "Failed to open configuration directory"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr ""
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "În fereastră"
+
+msgid "Desktop Full"
+msgstr ""
+
+msgid "Resolution"
+msgstr "Rezoluție"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr ""
+
+msgid "On (Fullscreen)"
+msgstr ""
+
 msgid "CONNECTION"
 msgstr "CONEXIUNE"
 
@@ -11340,6 +11519,301 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "Adresă IP sau numele calculatorului"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "ID jucător: "
+
+msgid "(none)"
+msgstr "(niciunul)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Se trimite harta: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Harta: %u%% descărcată"
+
+msgid "HOST"
+msgstr "GAZDĂ"
+
+msgid "Choose Team"
+msgstr "Alege Echipa"
+
+msgid "Teams locked"
+msgstr "Echipe blocate"
+
+msgid "Click to change player colour"
+msgstr "Faceți clic pentru a schimba culoarea jucătorului"
+
+msgid "Click to change player position"
+msgstr "Faceți clic pentru a schimba poziția jucătorului"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Faceți clic pentru a schimba IA, click dreapta pentru a distribui alegerea"
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Faceți clic pentru a schimba dificultatea"
+
+msgid "Waiting for player"
+msgstr "Aşteptare jucător"
+
+msgid "Player is ready"
+msgstr "Jucătorul este gata"
+
+msgid "Player is downloading"
+msgstr "Jucătorul descarcă"
+
+msgid "Click when ready"
+msgstr "Click când ești pregătit"
+
+msgid "Waiting for download"
+msgstr "Se așteaptă descărcarea"
+
+msgid "READY?"
+msgstr "PREGĂTIT?"
+
+msgid "Tanks disabled!!"
+msgstr "Tancurile dezactivate!!"
+
+msgid "Cyborgs disabled."
+msgstr "Cyborgii dezactivați."
+
+msgid "VTOLs disabled."
+msgstr "DAV-urile dezactivate."
+
+msgid "Satellite Uplink disabled."
+msgstr "Legătură Satelit dezactivată."
+
+msgid "Laser Satellite disabled."
+msgstr "Satelit Laser dezactivat."
+
+msgid "Structure Limits Enforced."
+msgstr ""
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** parola [%s] este de acum necesară! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** parola NU este necesară! ***"
+
+msgid "Game Name Updated."
+msgstr "Nume Joc Actualizat."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Luptă individuală"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Click pentru a vedea Harta"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Bază"
+
+msgid "Tech"
+msgstr "Tehnologie"
+
+msgid "Technology Level 1"
+msgstr "Nivel Tehnologic 1"
+
+msgid "Technology Level 2"
+msgstr "Nivel Tehnologic 2"
+
+msgid "Technology Level 3"
+msgstr "Nivel Tehnologic 3"
+
+msgid "Technology Level 4"
+msgstr "Nivel Tehnologic 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Lansează transportorul"

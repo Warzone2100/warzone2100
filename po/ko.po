@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -1796,6 +1796,9 @@ msgstr "미사일 사일로를 파괴하세요."
 msgid "Rescue Alpha team from Nexus"
 msgstr "넥서스로부터 알파팀을 구출하세요."
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "넥서스 침입 방지 프로그램을 비활성화시키기 위해 넥서스 HQ를 파괴하시오."
 
@@ -1817,8 +1820,8 @@ msgstr "베타팀의 일부를 감마팀 전초기지와 재결합합니다."
 msgid "Return to LZ"
 msgstr "착륙 지점으로 돌아가십시오"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "Hard / Insane 난이도 힌트:"
+msgid "Insane difficulty hint:"
+msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Collective로부터 자신을 보호하기 위해 지도 전역에 견고한 기지를 구축하세요."
@@ -2957,6 +2960,10 @@ msgstr ""
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr ""
 
@@ -2986,6 +2993,18 @@ msgid "Replay File Format Unsupported"
 msgstr ""
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
 msgid "Menu"
@@ -3297,11 +3316,11 @@ msgstr "사이보그 스커지 미사일 발사기"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "사이보그용 써마이트 화염방사기로 무장"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr ""
 
 msgid "Armed with Flashlight Laser"
 msgstr "레이저 플래시라이트로 무장"
@@ -3439,6 +3458,9 @@ msgstr "가우스캐논을 장착한 장갑된 스트롱포인트"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "대형 레이저를 장착한 장갑된 스트롱포인트"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "플라즈마이트 화염방사기를 장착한 장갑된 스트롱포인트"
@@ -3668,6 +3690,9 @@ msgstr ""
 msgid "Bomb damage +25%"
 msgstr "폭탄 파괴력 +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "폭탄 개선"
 
@@ -3691,6 +3716,9 @@ msgstr "버그"
 
 msgid "Buggy"
 msgstr "사륜차"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "내장된 진단 및 수리 시스템"
@@ -3732,6 +3760,9 @@ msgstr "기름을 보다 효율적으로 태웁니다"
 msgid "Cannon accuracy +10%"
 msgstr "캐논 정확도 +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "캐논 자동 장전기 Mk 2"
 
@@ -3744,6 +3775,9 @@ msgstr "캐논 자동 장전기"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "캐논 파괴력 +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "캐논 소방차"
@@ -3769,6 +3803,9 @@ msgstr "고속 캐논 장전기"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "캐논 재장전 시간 소요 -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "캐논 타워"
@@ -3875,6 +3912,12 @@ msgstr "사령관이 그룹을 이끌며 공장 배달 지점으로도 처신합
 msgid "Complete battlefield visibility"
 msgstr "완벽한 전쟁터 가시성"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "복합 합금 Mk 2"
 
@@ -3932,6 +3975,15 @@ msgid "Crane1"
 msgstr ""
 
 msgid "Crane2"
+msgstr ""
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
 msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
@@ -4000,6 +4052,12 @@ msgstr "사이보그 초고밀도 내열성 장갑"
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "사이보그 내열성 갑옷 Mk 2"
 
@@ -4008,6 +4066,9 @@ msgstr "사이보그 내열성 갑옷 Mk 3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "사이보그 내열성 갑옷"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4135,6 +4196,9 @@ msgstr "자체 수리를 활성화합니다"
 msgid "Enemy"
 msgstr "적군"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "공학"
 
@@ -4207,6 +4271,9 @@ msgstr "날개안정덕분에 비행 탄도(궤도)가 향상되었습니다"
 msgid "Fire Truck"
 msgstr "소방차"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "전자 자성 펄스 미사일을 발사합니다"
 
@@ -4241,12 +4308,18 @@ msgstr "화염방사기 코브라 무한궤도"
 msgid "Flamer damage +25%"
 msgstr "화염방사기 파괴력 +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr ""
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "화염방사기 재장전 시간 소요 -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "화염방사기 바이퍼 반 무한궤도"
@@ -4791,6 +4864,15 @@ msgstr "곡사포 자동 장전기"
 msgid "Howitzer damage +25%"
 msgstr "곡사포 파괴력 +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "곡사포 고속 장전기"
 
@@ -4800,6 +4882,15 @@ msgstr "곡사포 재장전 시간 소요 -10%"
 
 msgid "Howitzer"
 msgstr "곡사포"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "허리케인 대공 발사 시설"
@@ -4864,6 +4955,9 @@ msgstr "개선된 공학"
 msgid "Improved fire detection systems"
 msgstr "사격 탐지 시스템이 향상되었습니다"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "개선된 하드크리트 Mk 2"
 
@@ -4915,11 +5009,11 @@ msgstr "레이저 광학의 개선이 빛의 분산을 줄입니다"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "방화용 곡사포 발사시설"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "방화용 곡사포 포대"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "방화용 곡사포 발사시설"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "방화용 곡사포는 센서에 할당될 수 있습니다"
@@ -5123,9 +5217,15 @@ msgstr "레이저 대공포가 사용 가능합니다"
 msgid "Laser accuracy +10%"
 msgstr "레이저 정확도 +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "레이저 파괴력 +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "레이저 조준기가 표적을 향해 탄환을 지도해줍니다"
@@ -5133,6 +5233,9 @@ msgstr "레이저 조준기가 표적을 향해 탄환을 지도해줍니다"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "레이저 재장전 시간 소요 -15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "레이저 위성 지휘 본부"
@@ -5310,6 +5413,12 @@ msgstr "중형 캐논"
 msgid "Medium Super Heavy Body"
 msgstr "중형 슈퍼 대형 차체"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "장갑된 미니 로케트 스트롱포인트"
 
@@ -5365,6 +5474,9 @@ msgstr "미니로케트 바이퍼 바퀴 추진"
 msgid "Missile accuracy +10%"
 msgstr "미사일 정확도 +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "미사일이 활동적으로 표적을 찾아내고 자동 추적합니다"
 
@@ -5372,12 +5484,18 @@ msgstr "미사일이 활동적으로 표적을 찾아내고 자동 추적합니�
 msgid "Missile damage +25%"
 msgstr "미사일 파괴력 +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "미사일 요새"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "미사일 재장전 시간 소요 -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "미사일 업그레이드"
@@ -5398,6 +5516,9 @@ msgstr "벤젼스보다 장갑과 보디포인트가 우수합니다"
 msgid "Mortar accuracy +10%"
 msgstr "박격포 정확도 +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "박격포 자동 장전기 Mk 2"
 
@@ -5414,6 +5535,9 @@ msgstr "박격포 코브라 반 무한궤도"
 msgid "Mortar damage +25%"
 msgstr "박격포 파괴력 +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "박격포 고속 장전기"
 
@@ -5423,6 +5547,9 @@ msgstr "박격포 구덩이"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "박격포 재장전 시간 소요 -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "박격포 겨낭(타겟팅) 컴퓨터"
@@ -5556,10 +5683,10 @@ msgstr "새로운 시스템 구조물이 사용 가능합니다"
 msgid "New Systems Tower Available"
 msgstr "새로운 시스템 탑이 사용 가능합니다"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "새로운 시스템 터릿이 디자인에 사용 가능합니다"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "새로운 시스템 터릿이 디자인에 사용 가능합니다"
 
 msgid "New Thermal Emissions detection"
@@ -5658,6 +5785,12 @@ msgstr ""
 msgid "Panther"
 msgstr "팬써"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "페퍼폿 구덩이"
 
@@ -5747,6 +5880,9 @@ msgstr "전력 생산 +30%"
 msgid "Power Research Completed"
 msgstr "파워 연구 완료"
 
+msgid "Power"
+msgstr "전력"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "강력한 전자 자성 펄스 무기"
 
@@ -5755,6 +5891,9 @@ msgstr ""
 
 msgid "Produces Cyborgs"
 msgstr "사이보그를 생산합니다"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr ""
@@ -5828,6 +5967,12 @@ msgstr "레이더 감지기 탑"
 msgid "Radar Detector"
 msgstr "레이더 감지기"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "레일건 정확도 +10%"
@@ -5870,6 +6015,9 @@ msgstr "레일건 업그레이드"
 msgid "Rail Gun"
 msgstr "레일건(Rail Gun)"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "레일 표적 예측 컴퓨터"
 
@@ -5900,6 +6048,12 @@ msgstr "넥서스가 우리를 장악할 가능성이 감소되었습니다"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "VTOL을 급유하며 재무장 및 수리합니다"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "보강된 기지 구조물 재료 Mk 2"
@@ -5979,6 +6133,9 @@ msgstr "연구 속도 +30%"
 msgid "Research speed +85%"
 msgstr "연구 속도 +85%"
 
+msgid "Research"
+msgstr "연구"
+
 msgid "Retaliation"
 msgstr "리탤리에이션"
 
@@ -6037,6 +6194,9 @@ msgstr "로봇식 VTOL 재무장"
 msgid "Rocket accuracy +10%"
 msgstr "로케트 정확도 +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "로케트 포병입니다. 센서에 할당할 수 있습니다"
 
@@ -6055,6 +6215,9 @@ msgstr "로케트 사륜차"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "로케트 파괴력 +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "로케트가 엔진 배기가스를 감지하고 자동추적합니다"
@@ -6077,6 +6240,9 @@ msgstr ""
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "로케트 재장전 시간 소요 -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "로케트가 레이저 추적기를 따라 타깃을 접근합니다"
@@ -6233,6 +6399,9 @@ msgstr "센서 업그레이드 Mk 3"
 
 msgid "Sensor Upgrade"
 msgstr "센서 업그레이드"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "센서가 개선되었습니다"
@@ -6399,10 +6568,10 @@ msgstr "시냅스 연결 데이터 분석 Mk 2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "시냅스 연결 데이터 분석 Mk 3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "시냅스 연결 데이터 분석"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "시냅스 연결 데이터 분석"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6416,6 +6585,9 @@ msgstr "시냅스 연결"
 
 msgid "Systems Research Completed"
 msgstr "시스템 연구 완료"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr ""
@@ -6443,6 +6615,9 @@ msgstr "탱크킬러 벤젼스 무한궤도"
 
 msgid "Tank Killer"
 msgstr "탱크킬러"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "탱크 트랩"
@@ -6487,6 +6662,12 @@ msgstr "내열성 장갑 +40%"
 msgid "Thermal Armor +45%"
 msgstr "내열설 장갑 +45%"
 
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Thermal Armor Mk2"
 msgstr "내열성 갑옷 Mk 2"
 
@@ -6530,6 +6711,9 @@ msgid "Titanium-reinforced concrete"
 msgstr "티타늄 철근콘크리트"
 
 msgid "Tower wars AI, based on NullBot"
+msgstr ""
+
+msgid "Tower Wars Buff"
 msgstr ""
 
 msgid "Tracked Propulsion"
@@ -6854,6 +7038,9 @@ msgstr "VTOL 미니로케트"
 msgid "VTOL Needle Gun"
 msgstr "VTOL 후장총"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL 형광체 폭탄 투하실"
 
@@ -6877,6 +7064,9 @@ msgstr "VTOL 재무장 패드"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "VTOL 재무장 패드가 VTOL 유닛의 연속비행을 유지하는 데 필요합니다"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "VTOL 스커지 미사일"
@@ -7299,10 +7489,16 @@ msgstr "기본 호스팅 채팅 환경 / 권한 들을 세팅해주세요."
 msgid "Enable async join approval (for connecting clients)"
 msgstr "비동기 join approval을 활성화시켜주세요.(클라이언트들의 연결을 위해서입니다.)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7602,418 +7798,11 @@ msgstr ""
 msgid "Load Multiplayer Replay"
 msgstr "멀티플레이 리플레이 불러오기"
 
-msgid "Game Options"
-msgstr "게임 옵션"
-
-msgid "Graphics Options"
-msgstr "그래픽 옵션"
-
-msgid "Video Options"
-msgstr "비디오 옵션"
-
-msgid "Audio / Zoom Options"
-msgstr ""
-
-msgid "Mouse Options"
-msgstr "마우스 옵션"
-
-msgid "Key Mappings"
-msgstr "키보드 매핑(Mapping)"
-
-msgid "Music Manager"
-msgstr "음악 관리자"
-
-msgid "Multiplay Options"
-msgstr ""
-
-msgid "OPTIONS"
-msgstr "옵션"
-
-msgid "Open Configuration Directory"
-msgstr "환경 설정 디렉토리 열기"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "시스템 기본 파일 브라우저에서 환경 설정 디렉토리를 열지 못했습니다."
-
-msgid "Configuration directory is reported as:"
-msgstr "환경 설정 디렉토리는 다음과 같이 보고됩니다:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
-
-msgid "Failed to open configuration directory"
-msgstr "환경 설정 디렉토리를 열지 못했습니다"
-
-msgid "1×"
-msgstr "1x"
-
-msgid "2×"
-msgstr "2x"
-
-msgid "Fullscreen"
-msgstr "전체 화면"
-
-msgid "Unsupported"
-msgstr ""
-
-msgid "Off"
-msgstr "꺼짐"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "검정색"
-
-msgid "On"
-msgstr "켜짐"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "회전식"
-
-msgid "Fixed"
-msgstr "고정식"
-
-msgid "Instant"
-msgstr ""
-
-msgid "Tracked"
-msgstr ""
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr ""
-
-msgid "High Quality"
-msgstr ""
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "*게임 재시작시 적용됩니다"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "그림자"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr ""
-
-msgid "Radar"
-msgstr "레이더"
-
-msgid "Radar Jump"
-msgstr ""
-
-msgid "Video Playback"
-msgstr "비디오 재생"
-
-msgid "Scanlines"
-msgstr ""
-
-msgid "Screen Shake"
-msgstr ""
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "그래픽 옵션"
-
-msgid "Disabled"
-msgstr "비활성화됨"
-
-msgid "Enabled"
-msgstr "활성화됨"
-
-msgid "Auto"
-msgstr "자동"
-
-msgid "Voice Volume"
-msgstr "음성 볼륨"
-
-msgid "FX Volume"
-msgstr "특수 효과음 볼륨 "
-
-msgid "Music Volume"
-msgstr "음악 볼륨"
-
-msgid "Subtitles"
-msgstr "자막"
-
-msgid "HRTF"
-msgstr ""
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
-
-msgid "Map Zoom"
-msgstr "맵 확대/축소"
-
-msgid "Map Zoom Rate"
-msgstr "맵 확대/축소 비율"
-
-msgid "Radar Zoom"
-msgstr "레이더 줌"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
-
-msgid "Graphics Mode"
-msgstr "그래픽 모드"
-
-msgid "Resolution"
-msgstr ""
-
-msgid "Display Scale"
-msgstr ""
-
-msgid "Adaptive"
-msgstr ""
-
-msgid "Windowed"
-msgstr "윈도우(창) 모드"
-
-msgid "Desktop Full"
-msgstr ""
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "텍스쳐 크기"
-
-msgid "Vertical sync"
-msgstr ""
-
-msgid "Antialiasing*"
-msgstr ""
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
-
-msgid "Graphics Backend*"
-msgstr ""
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "비디오 옵션"
-
-msgid "Unable to change Vertical Sync"
-msgstr ""
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-
-msgid "Middle Mouse"
-msgstr ""
-
-msgid "Right Mouse"
-msgstr "오른쪽 마우스"
-
-msgid "Reverse Rotation"
-msgstr "3D 회전방향 반전"
-
-msgid "Trap Cursor"
-msgstr "마우스 커서 가두기"
-
-msgid "Switch Mouse Buttons"
-msgstr "마우스 버튼 좌우 전환"
-
-msgid "Rotate Screen"
-msgstr "화면 회전"
-
-msgid "Colored Cursors"
-msgstr ""
-
-msgid "Cursor Size"
-msgstr ""
-
-msgid "MOUSE OPTIONS"
-msgstr "마우스 옵션"
-
-msgid "Super Easy"
-msgstr ""
-
-msgid "Easy"
-msgstr "낮음"
-
-msgid "Hard"
-msgstr "높음"
-
-msgid "Insane"
-msgstr ""
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr ""
 
 msgid "Please remove all incompatible mods."
-msgstr ""
-
-msgid "GAME OPTIONS"
-msgstr "게임 옵션"
-
-msgid "Language"
-msgstr "언어"
-
-msgid "Unit Colour:"
-msgstr ""
-
-msgid "Skirmish/Multiplayer"
-msgstr "소규모전투/멀티플레이"
-
-msgid "Campaign Difficulty"
-msgstr ""
-
-msgid "Camera Speed"
-msgstr "카메라 속도"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
-
-msgid "Click to open webpage."
-msgstr "웹 페이지를 열려면 클릭하시오."
-
-msgid "Insane Difficulty"
-msgstr "매우 어려움"
-
-msgid "This difficulty is for very experienced players!"
-msgstr ""
-
-#, c-format
-msgid "%u minutes"
-msgstr ""
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr "모두 허용"
-
-msgid "Quick Chat Only"
-msgstr "Quick Chat 전용"
-
-msgid "Hosting Options:"
-msgstr ""
-
-msgid "Game Port"
-msgstr ""
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr "채팅"
-
-msgid "Inactivity Timeout"
-msgstr ""
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr ""
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
 msgstr ""
 
 msgid "Mod: "
@@ -8521,15 +8310,6 @@ msgstr "경고: 당신이 호스트입니다. 당신이 게임을 퇴장하면, 
 msgid "Host Quit"
 msgstr ""
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
-
-msgid "Go Back"
-msgstr "뒤로 가기"
-
 msgid "View Guide"
 msgstr ""
 
@@ -8562,15 +8342,6 @@ msgstr "이 게임은 호스트 없이 계속할 수 없습니다."
 
 msgid "-->  QUIT  <--"
 msgstr "-->  종료  <--"
-
-msgid "Audio Options"
-msgstr "오디오 옵션"
-
-msgid "View Key Mappings"
-msgstr ""
-
-msgid "Shake"
-msgstr "흔들기"
 
 msgid "Save Campaign Game"
 msgstr "캠페인 게임 저장"
@@ -8615,17 +8386,20 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
+msgid "Global Keys"
 msgstr ""
 
-msgid "Other Hotkeys"
+msgid "Other Keys"
 msgstr ""
 
-msgid "Gameplay"
-msgstr "게임 플레이"
+msgid "Gameplay Keys"
+msgstr ""
 
-msgid "Debug"
-msgstr "디버그"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
+msgstr ""
 
 msgid "Debug (level editor)"
 msgstr ""
@@ -8635,9 +8409,6 @@ msgstr ""
 
 msgid "Manufacture"
 msgstr "생산"
-
-msgid "Research"
-msgstr "연구"
 
 msgid "Build"
 msgstr "건축"
@@ -9003,7 +8774,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "심하게 손상된 모든 유닛을 선택하기"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat Units with >50% HP and no group"
 msgstr ""
 
 msgid "Select all Half-tracks"
@@ -9173,9 +8944,6 @@ msgstr ""
 
 msgid "Waiting for Power"
 msgstr ""
-
-msgid "Power"
-msgstr "전력"
 
 msgid "Power Per Second"
 msgstr ""
@@ -9638,21 +9406,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
-msgid "<not bound>"
-msgstr ""
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "키보드 매핑"
-
-msgid "Return To Previous Screen"
-msgstr "이전 화면으로 돌아가기"
-
-msgid "Select Default"
-msgstr "기본으로 선택하기"
-
 msgid "Parent directory"
 msgstr "상위 디렉토리"
 
@@ -9673,8 +9426,14 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "게임을 저장할 수 없습니다!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "수송선에 싣기"
@@ -9753,8 +9512,20 @@ msgstr "%s가 %s와(과) 동맹을 맺었습니다"
 msgid "You Discover Blueprints For %s"
 msgstr "당신이 %s의 청사진을 발견하였습니다"
 
+msgid "Super Easy"
+msgstr ""
+
+msgid "Easy"
+msgstr "낮음"
+
 msgid "Medium"
 msgstr "중간"
+
+msgid "Hard"
+msgstr "높음"
+
+msgid "Insane"
+msgstr ""
 
 msgid "Commander"
 msgstr "사령관님"
@@ -9769,99 +9540,32 @@ msgstr ""
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-msgid "Tanks disabled!!"
-msgstr "탱크가 비활성화되었습니다!!"
-
-msgid "Cyborgs disabled."
-msgstr "사이보그가 비활성화되었습니다."
-
-msgid "VTOLs disabled."
-msgstr "VTOL이 비활성화되었습니다."
-
-msgid "Satellite Uplink disabled."
-msgstr ""
-
-msgid "Laser Satellite disabled."
-msgstr ""
-
-msgid "Structure Limits Enforced."
-msgstr ""
-
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
-
-msgid "Select Game Name"
-msgstr "게임 이름 선택"
-
-msgid "Game Name"
-msgstr "게임 이름"
-
-msgid "One-Player Skirmish"
-msgstr "싱글플레이어 스커미쉬"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-
-msgid "Map-Mod!"
-msgstr "맵-모드!"
-
-msgid "Random map!"
-msgstr "랜덤 맵!"
-
-msgid "Click to set Password"
-msgstr "클릭하여 비밀번호를 설정하십시오"
-
-msgid "Enter password here"
-msgstr "여기에 비밀번호를 입력하십시오"
 
 msgid "Select Player Name"
 msgstr "플레이어 이름 선택"
 
-msgid "Alliances"
-msgstr "동맹"
-
-msgid "Base"
-msgstr "기지"
-
-msgid "Map Preview"
-msgstr "맵 미리보기"
-
-msgid "Click to see Map"
-msgstr "맵을 보려면 클릭하십시오"
-
-msgid "Show Structure Limits"
-msgstr "구조물 제한 보기"
-
-msgid "Set Structure Limits"
-msgstr "구조물 제한 설정하기"
-
-msgid "Random Game Options"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
+msgid "Blind Game:"
 msgstr ""
 
-msgid "Tech"
+msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr ""
 
-msgid "Technology Level 1"
-msgstr "기술 수준 1"
+msgid "Blind Lobby:"
+msgstr ""
 
-msgid "Technology Level 2"
-msgstr "기술 수준 2"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr ""
 
-msgid "Technology Level 3"
-msgstr "기술 수준 3"
+msgid "OPTIONS"
+msgstr "옵션"
 
-msgid "Technology Level 4"
-msgstr "기술 수준 4"
-
-msgid "Start Hosting Game"
-msgstr "게임 호스팅을 시작하기"
+msgid "Return To Previous Screen"
+msgstr "이전 화면으로 돌아가기"
 
 msgid "DIFFICULTY"
 msgstr "난이도"
@@ -10003,6 +9707,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr "예, 플레이어 슬롯을 선택합니다"
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr "참여함:"
 
@@ -10021,63 +9732,8 @@ msgstr "관전자 참여 활성화"
 msgid "Lock Teams"
 msgstr "팀 잠금"
 
-msgid "Choose Team"
-msgstr "팀 선택"
-
-msgid "Teams locked"
-msgstr "팀 잠김"
-
-msgid "Click to change player colour"
-msgstr "플레이어의 색을 바꾸려면 클릭하십시오"
-
-msgid "Click to change player position"
-msgstr "플레이어 포지션을 변경하려면 클릭하십시오"
-
-msgid "Click to change AI, right click to distribute choice"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr "관전자 슬롯을 닫으려면 클릭하십시오"
-
-msgid "Player ID: "
-msgstr "플레이어 ID: "
-
-msgid "(none)"
-msgstr "(없음)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "난이도를 변경하려면 클릭하십시오"
-
-msgid "Waiting for player"
-msgstr "플레이어를 기다리고 있습니다"
-
-msgid "Player is ready"
-msgstr "플레이어 준비 완료"
-
-msgid "Player is downloading"
-msgstr "플레이어 다운로드 중"
-
-msgid "Click when ready"
-msgstr "준비되었을 때 클릭하십시오"
-
-msgid "Waiting for download"
-msgstr "다운로드 대기 중"
-
-msgid "READY?"
-msgstr "시작"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10141,22 +9797,6 @@ msgstr "더 많은 정보"
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-msgid "Game Name Updated."
-msgstr "게임 이름이 업데이트 되었습니다."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** 비밀번호가 요구되지 않습니다! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
-
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
@@ -10177,6 +9817,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10222,6 +9871,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10240,20 +9904,6 @@ msgstr "닫기"
 
 msgid "Open"
 msgstr "열기"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr ""
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr ""
-
-msgid "HOST"
-msgstr "호스트"
-
-msgid "Ping"
-msgstr "핑(Ping)"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
@@ -10281,6 +9931,10 @@ msgstr "%s가 게임을 퇴장하였습니다"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10342,8 +9996,14 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d 플레이어"
 
+msgid "Ping"
+msgstr "핑(Ping)"
+
 msgid "Structs"
 msgstr "구조물"
+
+msgid "Alliances"
+msgstr "동맹"
 
 msgid "Score"
 msgstr "점수"
@@ -10400,25 +10060,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10446,6 +10087,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10500,6 +10160,9 @@ msgstr "주황색"
 
 msgid "Grey"
 msgstr "회색"
+
+msgid "Black"
+msgstr "검정색"
 
 msgid "Red"
 msgstr "빨강색"
@@ -10618,9 +10281,6 @@ msgstr "날짜"
 
 msgid "Title"
 msgstr "제목"
-
-msgid "MUSIC MANAGER"
-msgstr "음악 관리자"
 
 msgid "Dismiss"
 msgstr ""
@@ -10885,6 +10545,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11111,6 +10783,9 @@ msgstr "수리 시설 상 - 없음"
 msgid "Classic"
 msgstr ""
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr ""
 
@@ -11176,6 +10851,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr ""
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11232,6 +10958,9 @@ msgstr "찾는 중"
 
 msgid "Connecting to the lobby server..."
 msgstr ""
+
+msgid "Game Name"
+msgstr "게임 이름"
 
 msgid "Map Name"
 msgstr "맵 이름"
@@ -11303,6 +11032,458 @@ msgstr "비밀번호가 틀립니다!"
 msgid "Continue"
 msgstr "계속하기"
 
+msgid "MUSIC MANAGER"
+msgstr "음악 관리자"
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr ""
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "음성 볼륨"
+
+msgid "FX Volume"
+msgstr "특수 효과음 볼륨 "
+
+msgid "Music Volume"
+msgstr "음악 볼륨"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr ""
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "비활성화됨"
+
+msgid "Enabled"
+msgstr "활성화됨"
+
+msgid "Auto"
+msgstr "자동"
+
+msgid "Subtitles"
+msgstr "자막"
+
+msgid "Off"
+msgstr "꺼짐"
+
+msgid "On"
+msgstr "켜짐"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "음악 관리자"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "마우스 커서 가두기"
+
+msgid "Colored Cursors"
+msgstr ""
+
+msgid "Cursor Size"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "카메라 속도"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "3D 회전방향 반전"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr "채팅"
+
+msgid "Quick Chat Only"
+msgstr "Quick Chat 전용"
+
+msgid "Allow All"
+msgstr "모두 허용"
+
+msgid "Inactivity Timeout"
+msgstr ""
+
+#, c-format
+msgid "%u minutes"
+msgstr ""
+
+msgid "Lag Kick"
+msgstr ""
+
+#, c-format
+msgid "%u seconds"
+msgstr ""
+
+msgid "Spectator Slots"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr ""
+
+msgid "Game Time Limit"
+msgstr ""
+
+#, c-format
+msgid "%s hours"
+msgstr ""
+
+msgid "Enable Rating"
+msgstr ""
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr ""
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr ""
+
+msgid "High Quality"
+msgstr ""
+
+msgid "Shadows"
+msgstr "그림자"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr ""
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Shadow Filtering"
+msgstr ""
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Ultra"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr ""
+
+msgid "Screen Shake"
+msgstr ""
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr ""
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "언어"
+
+msgid "Display Scale"
+msgstr ""
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr "레이더"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "고정식"
+
+msgid "Rotating"
+msgstr "회전식"
+
+msgid "Radar Jump"
+msgstr ""
+
+msgid "Instant"
+msgstr ""
+
+msgid "Tracked"
+msgstr ""
+
+msgid "Radar Zoom"
+msgstr "레이더 줌"
+
+msgid "Video Playback"
+msgstr "비디오 재생"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1x"
+
+msgid "2×"
+msgstr "2x"
+
+msgid "Fullscreen"
+msgstr "전체 화면"
+
+msgid "Scanlines"
+msgstr ""
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "환경 설정 디렉토리 열기"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "시스템 기본 파일 브라우저에서 환경 설정 디렉토리를 열지 못했습니다."
+
+msgid "Configuration directory is reported as:"
+msgstr "환경 설정 디렉토리는 다음과 같이 보고됩니다:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr ""
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr ""
+
+msgid "Failed to open configuration directory"
+msgstr "환경 설정 디렉토리를 열지 못했습니다"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr ""
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "윈도우(창) 모드"
+
+msgid "Desktop Full"
+msgstr ""
+
+msgid "Resolution"
+msgstr ""
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr ""
+
+msgid "On (Fullscreen)"
+msgstr ""
+
 msgid "CONNECTION"
 msgstr "연결"
 
@@ -11314,6 +11495,301 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP 주소 또는 컴퓨터 이름"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "플레이어 ID: "
+
+msgid "(none)"
+msgstr "(없음)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr ""
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr ""
+
+msgid "HOST"
+msgstr "호스트"
+
+msgid "Choose Team"
+msgstr "팀 선택"
+
+msgid "Teams locked"
+msgstr "팀 잠김"
+
+msgid "Click to change player colour"
+msgstr "플레이어의 색을 바꾸려면 클릭하십시오"
+
+msgid "Click to change player position"
+msgstr "플레이어 포지션을 변경하려면 클릭하십시오"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr "관전자 슬롯을 닫으려면 클릭하십시오"
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "난이도를 변경하려면 클릭하십시오"
+
+msgid "Waiting for player"
+msgstr "플레이어를 기다리고 있습니다"
+
+msgid "Player is ready"
+msgstr "플레이어 준비 완료"
+
+msgid "Player is downloading"
+msgstr "플레이어 다운로드 중"
+
+msgid "Click when ready"
+msgstr "준비되었을 때 클릭하십시오"
+
+msgid "Waiting for download"
+msgstr "다운로드 대기 중"
+
+msgid "READY?"
+msgstr "시작"
+
+msgid "Tanks disabled!!"
+msgstr "탱크가 비활성화되었습니다!!"
+
+msgid "Cyborgs disabled."
+msgstr "사이보그가 비활성화되었습니다."
+
+msgid "VTOLs disabled."
+msgstr "VTOL이 비활성화되었습니다."
+
+msgid "Satellite Uplink disabled."
+msgstr ""
+
+msgid "Laser Satellite disabled."
+msgstr ""
+
+msgid "Structure Limits Enforced."
+msgstr ""
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** 비밀번호가 요구되지 않습니다! ***"
+
+msgid "Game Name Updated."
+msgstr "게임 이름이 업데이트 되었습니다."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "싱글플레이어 스커미쉬"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "맵을 보려면 클릭하십시오"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "기지"
+
+msgid "Tech"
+msgstr ""
+
+msgid "Technology Level 1"
+msgstr "기술 수준 1"
+
+msgid "Technology Level 2"
+msgstr "기술 수준 2"
+
+msgid "Technology Level 3"
+msgstr "기술 수준 3"
+
+msgid "Technology Level 4"
+msgstr "기술 수준 4"
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "수송선 출발"

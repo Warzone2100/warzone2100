@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:07\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -1796,6 +1796,9 @@ msgstr ""
 msgid "Rescue Alpha team from Nexus"
 msgstr ""
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr ""
 
@@ -1817,7 +1820,7 @@ msgstr ""
 msgid "Return to LZ"
 msgstr "Vrnite se na PO"
 
-msgid "Hard / Insane difficulty hint:"
+msgid "Insane difficulty hint:"
 msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
@@ -2957,6 +2960,10 @@ msgstr ""
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr ""
 
@@ -2986,6 +2993,18 @@ msgid "Replay File Format Unsupported"
 msgstr ""
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
 msgid "Menu"
@@ -3297,11 +3316,11 @@ msgstr "Oborožen s kiborgovim izstreljevalcem izstrelka Poguba"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Oborožen s kiborgovim termitnim plamenometalcem"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr ""
 
 msgid "Armed with Flashlight Laser"
 msgstr "Oborožen z bliskovnim laserjem"
@@ -3439,6 +3458,9 @@ msgstr "Oklepna odporna točka z Gaussovim topom"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Oklepna odporna točka s težkim laserjem"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Oklepna odporna točka s plazmitnim plamenometalcem"
@@ -3668,6 +3690,9 @@ msgstr ""
 msgid "Bomb damage +25%"
 msgstr "Škoda bomb +25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "Nadgradnja bomb"
 
@@ -3691,6 +3716,9 @@ msgstr "Hrošč"
 
 msgid "Buggy"
 msgstr "Bugi"
+
+msgid "Buildings"
+msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Vgrajeni diagnostični in popravilni sistemi"
@@ -3732,6 +3760,9 @@ msgstr "Bolj učinkovito sežiga nafto"
 msgid "Cannon accuracy +10%"
 msgstr "Natančnost topa +10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Samopolnilec topa tip 2"
 
@@ -3744,6 +3775,9 @@ msgstr "Samopolnilec topa"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Škoda topa +25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "Gasilski avto s topom"
@@ -3769,6 +3803,9 @@ msgstr "Zelo hiter polnilec topa"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Čas ponovne polnitve topa -10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "Stolp s topom"
@@ -3875,6 +3912,12 @@ msgstr "Poveljnik vodi skupine, deluje kot dostavna točka tovarne"
 msgid "Complete battlefield visibility"
 msgstr "Popolna vidljivost bojišča"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "Sestavljene zlitine tip 2"
 
@@ -3932,6 +3975,15 @@ msgid "Crane1"
 msgstr ""
 
 msgid "Crane2"
+msgstr ""
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
 msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
@@ -4000,6 +4052,12 @@ msgstr "Supergosti toplotni oklep za kiborge"
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Kiborški toplotni oklep tip 2"
 
@@ -4008,6 +4066,9 @@ msgstr "Kiborški toplotni oklep tip 3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Kiborški toplotni oklep"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4135,6 +4196,9 @@ msgstr "Omogoči samopopravilo"
 msgid "Enemy"
 msgstr "Sovražnik"
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "Strojegradnja"
 
@@ -4207,6 +4271,9 @@ msgstr "Krilno uravnoteženje izboljša pot letenja"
 msgid "Fire Truck"
 msgstr "Gasilski avto"
 
+msgid "Fires beams of subatomic particle"
+msgstr ""
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Strelja elektronsko magnetno sunkovne izstrelke"
 
@@ -4241,12 +4308,18 @@ msgstr "Metalec ognja Kobra Gosenice"
 msgid "Flamer damage +25%"
 msgstr "Škoda plamenometalca +25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr ""
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Čas ponovne polnitve metalca plamenov -15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Metalec ognja Gad Polgosenice"
@@ -4797,6 +4870,15 @@ msgstr "Samopolnilec havbice"
 msgid "Howitzer damage +25%"
 msgstr "Škoda havbice +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "Hiter polnilec havbice"
 
@@ -4806,6 +4888,15 @@ msgstr "Čas ponovne polnitve havbice -10%"
 
 msgid "Howitzer"
 msgstr "Havbica"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "PZ mesto s Hurikanom"
@@ -4870,6 +4961,9 @@ msgstr "Izboljšana strojegradnja"
 msgid "Improved fire detection systems"
 msgstr "Izboljšani sistemi zaznave streljanja"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Izboljšan trdobeton tip 2"
 
@@ -4921,10 +5015,10 @@ msgstr "Izboljšanje v laserski optiki zmanjša razpršitev svetlobe"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Ploščad z zažigalno havbico"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Ploščad z zažigalno havbico"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5129,9 +5223,15 @@ msgstr "Laserska PZ puška na voljo"
 msgid "Laser accuracy +10%"
 msgstr "Natančnost laserja +10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Škoda laserja +25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Laserski označevalec obarva in vodi naboje do tarče"
@@ -5139,6 +5239,9 @@ msgstr "Laserski označevalec obarva in vodi naboje do tarče"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Čas ponovne polnitve laserja -10%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr "Poveljniška postaja laserskega satelita"
@@ -5316,6 +5419,12 @@ msgstr "Srednji top"
 msgid "Medium Super Heavy Body"
 msgstr "Srednje veliko super težko telo"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Oklepna odporna točka z mini-raketo"
 
@@ -5371,6 +5480,9 @@ msgstr "Mini-raketa Gad Kolesa"
 msgid "Missile accuracy +10%"
 msgstr "Natančnost izstrelkov +10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "Izstrelek dejavno išče in se usmerja na tarčo"
 
@@ -5378,12 +5490,18 @@ msgstr "Izstrelek dejavno išče in se usmerja na tarčo"
 msgid "Missile damage +25%"
 msgstr "Škoda izstrelkov +25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "Izstrelniška trdnjava"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "Čas ponovnega polnjenja izstrelkov -15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "Nadgradnja izstrelka"
@@ -5404,6 +5522,9 @@ msgstr "Več oklepa in telesnih točk kot pri Maščevanju"
 msgid "Mortar accuracy +10%"
 msgstr "Natančnost možnarja +10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Samopolnilec možnarja tip 2"
 
@@ -5420,6 +5541,9 @@ msgstr "Možnar Kobra Polgosenice"
 msgid "Mortar damage +25%"
 msgstr "Škoda možnarja +25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Hiter polnilec možnarja"
 
@@ -5429,6 +5553,9 @@ msgstr "Vkop z možnarjem"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Čas ponovne polnitve možnarja -10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "Računalnik za ciljanje možnarja"
@@ -5562,10 +5689,10 @@ msgstr "Nova sistemska zgradba na voljo"
 msgid "New Systems Tower Available"
 msgstr "Nov sistemski stolp na voljo"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
 msgid "New Thermal Emissions detection"
@@ -5664,6 +5791,12 @@ msgstr "Originalni spopad"
 msgid "Panther"
 msgstr "Panter"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "Vkop s Poprnico"
 
@@ -5753,6 +5886,9 @@ msgstr "Proizvodnja moči +30%"
 msgid "Power Research Completed"
 msgstr "Raziskava moči dokončana"
 
+msgid "Power"
+msgstr "Moč"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Močno elektronsko magnetno sunkovno orožje"
 
@@ -5761,6 +5897,9 @@ msgstr "Delavnica za moč"
 
 msgid "Produces Cyborgs"
 msgstr "Izdeluje kiborge"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr ""
@@ -5834,6 +5973,12 @@ msgstr "Radarski zaznavni stolp"
 msgid "Radar Detector"
 msgstr "Radarski zaznavalec"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Natančnost tirne puške +10%"
@@ -5876,6 +6021,9 @@ msgstr "Nadgradnja tirne puške"
 msgid "Rail Gun"
 msgstr "Tirna puška"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "Računalnik za predvidevanje tirne tarče"
 
@@ -5906,6 +6054,12 @@ msgstr "Zmanjšana verjetnost NEXUS-ovega prevzema"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Napolni z gorivom, ponovno oboroži in popravi NVP-je"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Okrepljene snovi baznih zgradb tip 2"
@@ -5985,6 +6139,9 @@ msgstr "Hitrost raziskav +30%"
 msgid "Research speed +85%"
 msgstr "Hitrost raziskav +85%"
 
+msgid "Research"
+msgstr "Razišči"
+
 msgid "Retaliation"
 msgstr "Povračilo"
 
@@ -6043,6 +6200,9 @@ msgstr "Robotska ponovna oborožitev NVP"
 msgid "Rocket accuracy +10%"
 msgstr "Natančnost raket +10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Raketno topništvo; se lahko dodeli senzorju"
 
@@ -6061,6 +6221,9 @@ msgstr "Raketni bugi"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "Škoda rakete +25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Raketa zazna in se usmeri na izpuste motorja"
@@ -6083,6 +6246,9 @@ msgstr ""
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "Čas ponovne polnitve raket -15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Raketa sledi laserskemu označevalcu do tarče"
@@ -6239,6 +6405,9 @@ msgstr "Nadgradnja senzorjev tip 3"
 
 msgid "Sensor Upgrade"
 msgstr "Nadgradnja senzorjev"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "Senzorji izboljšani"
@@ -6405,10 +6574,10 @@ msgstr "Sinaptično povezana analiza podatkov tip 2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sinaptično povezana analiza podatkov tip 3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Sinaptično povezana analiza podatkov"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Sinaptično povezana analiza podatkov"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6422,6 +6591,9 @@ msgstr "Sinaptična povezava"
 
 msgid "Systems Research Completed"
 msgstr "Sistemska raziskava dokončana"
+
+msgid "Tank Alloys"
+msgstr ""
 
 msgid "Tank Killer Cyborg"
 msgstr ""
@@ -6449,6 +6621,9 @@ msgstr "Morilec tankov Maščevanje Gosenice"
 
 msgid "Tank Killer"
 msgstr "Morilec tankov"
+
+msgid "Tank Thermal"
+msgstr ""
 
 msgid "Tank Traps"
 msgstr "Pasti za tanke"
@@ -6492,6 +6667,12 @@ msgstr "Toplotni oklep +40%"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "Toplotni oklep +45%"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
 
 msgid "Thermal Armor Mk2"
 msgstr "Toplotni oklep tip 2"
@@ -6537,6 +6718,9 @@ msgstr "Titansko-okrepljen beton"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "UI za stolpne vojne, ki temelji na NullBot-u"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "Gosenični pogon"
@@ -6860,6 +7044,9 @@ msgstr "NVP mini-raketa"
 msgid "VTOL Needle Gun"
 msgstr "NVP iglična puška"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "NVP predel za fosforne bombe"
 
@@ -6883,6 +7070,9 @@ msgstr "Ploščad za ponovno oborožitev NVP"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Ploščadi za ponovno oborožitev NVP potrebne za ohranitev letanja NVP-jev"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "NVP izstrelek Poguba"
@@ -7305,10 +7495,16 @@ msgstr ""
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7626,418 +7822,11 @@ msgstr ""
 msgid "Load Multiplayer Replay"
 msgstr ""
 
-msgid "Game Options"
-msgstr "Možnosti igre"
-
-msgid "Graphics Options"
-msgstr "Grafične možnosti"
-
-msgid "Video Options"
-msgstr "Video možnosti"
-
-msgid "Audio / Zoom Options"
-msgstr "Zvočne / bližinske možnosti"
-
-msgid "Mouse Options"
-msgstr "Možnosti miške"
-
-msgid "Key Mappings"
-msgstr "Vnosi tipk"
-
-msgid "Music Manager"
-msgstr ""
-
-msgid "Multiplay Options"
-msgstr ""
-
-msgid "OPTIONS"
-msgstr "MOŽNOSTI"
-
-msgid "Open Configuration Directory"
-msgstr ""
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
-
-msgid "Configuration directory is reported as:"
-msgstr ""
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
-
-msgid "Failed to open configuration directory"
-msgstr ""
-
-msgid "1×"
-msgstr "1x"
-
-msgid "2×"
-msgstr "2x"
-
-msgid "Fullscreen"
-msgstr "Cel zaslon"
-
-msgid "Unsupported"
-msgstr "Nepodprto"
-
-msgid "Off"
-msgstr "Izklopljeno"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Črna"
-
-msgid "On"
-msgstr "Vklopljeno"
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "Vrtljiv"
-
-msgid "Fixed"
-msgstr "Nepremičen"
-
-msgid "Instant"
-msgstr "Trenutek"
-
-msgid "Tracked"
-msgstr "Spremljano"
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr ""
-
-msgid "High Quality"
-msgstr ""
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* Začne delovati po ponovnem zagonu"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "Sence"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr ""
-
-msgid "Radar"
-msgstr "Radar"
-
-msgid "Radar Jump"
-msgstr "Radarski skok"
-
-msgid "Video Playback"
-msgstr "Igranje posnetkov"
-
-msgid "Scanlines"
-msgstr "Skenirne črte"
-
-msgid "Screen Shake"
-msgstr ""
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "GRAFIČNE NASTAVITVE"
-
-msgid "Disabled"
-msgstr "Onemogočeno"
-
-msgid "Enabled"
-msgstr "Omogočeno"
-
-msgid "Auto"
-msgstr "Samodejno"
-
-msgid "Voice Volume"
-msgstr "Glasnost glasov"
-
-msgid "FX Volume"
-msgstr "Glasnost učinkov"
-
-msgid "Music Volume"
-msgstr "Glasnost glasbe"
-
-msgid "Subtitles"
-msgstr "Podnapisi"
-
-msgid "HRTF"
-msgstr "HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "Vaša naprava / sistem / OpenAL knjižnica ne podpira HRTF"
-
-msgid "Map Zoom"
-msgstr "Povečava zemljevida"
-
-msgid "Map Zoom Rate"
-msgstr "Stopnja povečave zemljevida"
-
-msgid "Radar Zoom"
-msgstr "Radarsko bližanje"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "ZVOČNE / BLIŽINSKE NASTAVITVE"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Ločljivost lahko spremenite z navadno spremembo velikosti okna. (Poskusite potegniti kot / rob.)"
-
-msgid "Graphics Mode"
-msgstr "Grafični način"
-
-msgid "Resolution"
-msgstr "Ločljivost"
-
-msgid "Display Scale"
-msgstr "Prikaži merilo"
-
-msgid "Adaptive"
-msgstr ""
-
-msgid "Windowed"
-msgstr "Okensko"
-
-msgid "Desktop Full"
-msgstr ""
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "Velikost tekstur"
-
-msgid "Vertical sync"
-msgstr "Vertikalna sinhhronizacija"
-
-msgid "Antialiasing*"
-msgstr "Glajenje*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Opozorilo: Antialiasing lahko povzroči sesutja, še posebej z vrednostmi > 16"
-
-msgid "Graphics Backend*"
-msgstr ""
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "VIDEO NASTAVITVE"
-
-msgid "Unable to change Vertical Sync"
-msgstr ""
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-
-msgid "Middle Mouse"
-msgstr "Srednja miška"
-
-msgid "Right Mouse"
-msgstr "Desna miška"
-
-msgid "Reverse Rotation"
-msgstr "Obrni rotacijo"
-
-msgid "Trap Cursor"
-msgstr "Ujemi kazalec"
-
-msgid "Switch Mouse Buttons"
-msgstr "Zamenjaj miškina gumba"
-
-msgid "Rotate Screen"
-msgstr "Zavrti zaslon"
-
-msgid "Colored Cursors"
-msgstr "Barvni kazalci"
-
-msgid "Cursor Size"
-msgstr ""
-
-msgid "MOUSE OPTIONS"
-msgstr "MIŠKINE NASTAVITVE"
-
-msgid "Super Easy"
-msgstr ""
-
-msgid "Easy"
-msgstr "Lahka"
-
-msgid "Hard"
-msgstr "Težka"
-
-msgid "Insane"
-msgstr "Noro"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr ""
 
 msgid "Please remove all incompatible mods."
-msgstr ""
-
-msgid "GAME OPTIONS"
-msgstr "MOŽNOSTI IGRE"
-
-msgid "Language"
-msgstr "Jezik"
-
-msgid "Unit Colour:"
-msgstr "Barva enot:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Spopad/Večigralstvo"
-
-msgid "Campaign Difficulty"
-msgstr "Težavnost kampanje"
-
-msgid "Camera Speed"
-msgstr "Hitrost kamere"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
-
-msgid "Click to open webpage."
-msgstr ""
-
-msgid "Insane Difficulty"
-msgstr ""
-
-msgid "This difficulty is for very experienced players!"
-msgstr ""
-
-#, c-format
-msgid "%u minutes"
-msgstr ""
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr ""
-
-msgid "Game Port"
-msgstr ""
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr ""
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr ""
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
 msgstr ""
 
 msgid "Mod: "
@@ -8545,15 +8334,6 @@ msgstr "OPOZORILO: Ti si gostitelj. Če končaš, se igra preneha za vse!"
 msgid "Host Quit"
 msgstr "Gostitelj je končal"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Taktični UV (ikona tarčinega izvora): pokaži"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Taktični UV (ikona tarčinega izvora): skrij"
-
-msgid "Go Back"
-msgstr ""
-
 msgid "View Guide"
 msgstr ""
 
@@ -8586,15 +8366,6 @@ msgstr "Igra se ne more nadaljevati brez gostitelja."
 
 msgid "-->  QUIT  <--"
 msgstr "--> KONČAJ <--"
-
-msgid "Audio Options"
-msgstr "Zvočne možnosti"
-
-msgid "View Key Mappings"
-msgstr "Ogled vnosov tipk"
-
-msgid "Shake"
-msgstr ""
 
 msgid "Save Campaign Game"
 msgstr "Shrani kampanjsko igro"
@@ -8639,16 +8410,19 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
+msgid "Global Keys"
 msgstr ""
 
-msgid "Other Hotkeys"
+msgid "Other Keys"
 msgstr ""
 
-msgid "Gameplay"
+msgid "Gameplay Keys"
 msgstr ""
 
-msgid "Debug"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
 msgstr ""
 
 msgid "Debug (level editor)"
@@ -8659,9 +8433,6 @@ msgstr ""
 
 msgid "Manufacture"
 msgstr "Izdeluj"
-
-msgid "Research"
-msgstr "Razišči"
 
 msgid "Build"
 msgstr "Gradi"
@@ -9027,7 +8798,7 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Izberi vse težko poškodovane enote"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
+msgid "Select all Land Combat Units with >50% HP and no group"
 msgstr ""
 
 msgid "Select all Half-tracks"
@@ -9197,9 +8968,6 @@ msgstr ""
 
 msgid "Waiting for Power"
 msgstr "Čakanje na moč"
-
-msgid "Power"
-msgstr "Moč"
 
 msgid "Power Per Second"
 msgstr ""
@@ -9662,21 +9430,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr ""
 
-msgid "<not bound>"
-msgstr ""
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr "VNAŠANJE TIPK"
-
-msgid "Return To Previous Screen"
-msgstr "Vrni se na prejšnji zaslon"
-
-msgid "Select Default"
-msgstr "Izberi privzeto"
-
 msgid "Parent directory"
 msgstr ""
 
@@ -9697,8 +9450,14 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
 msgstr "Ni bilo mogoče shraniti igre!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr ""
 
 msgid "Load Transport"
 msgstr "Naloži prevoz"
@@ -9777,8 +9536,20 @@ msgstr "%s je sklenil zavezništvo z %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Odkrijete načrte za %s"
 
+msgid "Super Easy"
+msgstr ""
+
+msgid "Easy"
+msgstr "Lahka"
+
 msgid "Medium"
 msgstr "Srednje"
+
+msgid "Hard"
+msgstr "Težka"
+
+msgid "Insane"
+msgstr "Noro"
 
 msgid "Commander"
 msgstr "Poveljnik"
@@ -9793,101 +9564,32 @@ msgstr "MANJKA OPIS UI"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-msgid "Tanks disabled!!"
-msgstr "Tanki onemogočeni!!"
-
-msgid "Cyborgs disabled."
-msgstr "Kiborgi onemogočeni."
-
-msgid "VTOLs disabled."
-msgstr "NVP-ji onemogočeni."
-
-msgid "Satellite Uplink disabled."
-msgstr "Satelitska povezava onemogočena."
-
-msgid "Laser Satellite disabled."
-msgstr "Laserski satelit onemogočen."
-
-msgid "Structure Limits Enforced."
-msgstr "Omejitve zgradb uveljavljene."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Ni dovolj glasov za naključno menjavo ali sprembo zemljevida."
-
-msgid "Select Game Name"
-msgstr "Izberite ime igre"
-
-msgid "Game Name"
-msgstr "Ime igre"
-
-msgid "One-Player Skirmish"
-msgstr "Eno-igralski spopad"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Izberite zemljevid\n"
-"Lahko se blokira z glasovi igralcev"
-
-msgid "Map-Mod!"
-msgstr "Modifikacija zemljevida!"
-
-msgid "Random map!"
-msgstr ""
-
-msgid "Click to set Password"
-msgstr "Kliknite za nastavitev gesla"
-
-msgid "Enter password here"
-msgstr "Vnesite geslo tukaj"
 
 msgid "Select Player Name"
 msgstr "Izberite ime igralca"
 
-msgid "Alliances"
-msgstr "Zavezništva"
-
-msgid "Base"
-msgstr "Baza"
-
-msgid "Map Preview"
-msgstr "Predogled zemljevida"
-
-msgid "Click to see Map"
-msgstr "Kliknite za ogled zemljevida"
-
-msgid "Show Structure Limits"
-msgstr "Pokaži gradbene meje"
-
-msgid "Set Structure Limits"
-msgstr "Nastavi gradbene meje"
-
-msgid "Random Game Options"
-msgstr "Naključne možnosti za igro"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr "Naključne možnosti za igro se lahko blokira z glasovi igralcev"
-
-msgid "Tech"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
-msgid "Technology Level 1"
+msgid "Blind Game:"
 msgstr ""
 
-msgid "Technology Level 2"
+msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr ""
 
-msgid "Technology Level 3"
+msgid "Blind Lobby:"
 msgstr ""
 
-msgid "Technology Level 4"
+msgid "- Player names will not be visible to other players (until the game has started)"
 msgstr ""
 
-msgid "Start Hosting Game"
-msgstr "Začnite gostiti igro"
+msgid "OPTIONS"
+msgstr "MOŽNOSTI"
+
+msgid "Return To Previous Screen"
+msgstr "Vrni se na prejšnji zaslon"
 
 msgid "DIFFICULTY"
 msgstr "TEŽAVNOST"
@@ -10029,6 +9731,13 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
+msgid "BLIND LOBBY NOTICE:"
+msgstr ""
+
+#, c-format
+msgid "You have been assigned the codename: \"%s\""
+msgstr ""
+
 msgid "Joined:"
 msgstr ""
 
@@ -10047,63 +9756,8 @@ msgstr ""
 msgid "Lock Teams"
 msgstr ""
 
-msgid "Choose Team"
-msgstr "Izberi skupino"
-
-msgid "Teams locked"
-msgstr "Skupina zaklenjene"
-
-msgid "Click to change player colour"
-msgstr "Klikni za spremembo barve igralca"
-
-msgid "Click to change player position"
-msgstr "Klikni za spremembo položaja igralca"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Kliknite za spremembo UI, desno kliknite za delitev izbire"
-
-msgid "Click to close spectator slot"
+msgid "Lock Position"
 msgstr ""
-
-msgid "Player ID: "
-msgstr "Igralec: "
-
-msgid "(none)"
-msgstr "(brez)"
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
-msgstr ""
-
-#, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr "Kliknite za spremembo težavnosti"
-
-msgid "Waiting for player"
-msgstr "Čakanje na igralca"
-
-msgid "Player is ready"
-msgstr "Igralec je pripravljen"
-
-msgid "Player is downloading"
-msgstr "Igralec prenaša"
-
-msgid "Click when ready"
-msgstr "Kliknite, ko boste pripravljeni"
-
-msgid "Waiting for download"
-msgstr "Čakanje na prenos"
-
-msgid "READY?"
-msgstr "PRIPRAVLJENI?"
 
 msgid "For Spectator:"
 msgstr ""
@@ -10167,22 +9821,6 @@ msgstr ""
 msgid "Sorry! Failed to host the game."
 msgstr "Oprostite! Ni uspelo gostovati igre."
 
-msgid "Game Name Updated."
-msgstr "Ime igre posodobljeno."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** geslo [%s] je zdaj zahtevano! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** geslo NI zahtevano! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "To je modifikacija zemljevida, lahko spremeni vašo igralsko izkušnjo!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
-
 msgid "Host is Starting Game"
 msgstr "Gostitelj začenja igro"
 
@@ -10203,6 +9841,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10248,6 +9895,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10266,20 +9928,6 @@ msgstr "Zaprto"
 
 msgid "Open"
 msgstr "Odprto"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Pošiljam zemljevid: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Zemljevid: %u%% prejet"
-
-msgid "HOST"
-msgstr "GOSTITELJ"
-
-msgid "Ping"
-msgstr "Odzivni čas"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
@@ -10307,6 +9955,10 @@ msgstr "%s je zapustil igro"
 
 #, c-format
 msgid "%s joined the Game"
+msgstr ""
+
+#, c-format
+msgid "(codename: %s)"
 msgstr ""
 
 #, c-format
@@ -10371,8 +10023,14 @@ msgstr[1] "%d igralca"
 msgstr[2] "%d igralci"
 msgstr[3] "%d igralcev"
 
+msgid "Ping"
+msgstr "Odzivni čas"
+
 msgid "Structs"
 msgstr "Zgradbe"
+
+msgid "Alliances"
+msgstr "Zavezništva"
 
 msgid "Score"
 msgstr "Dosežene točke"
@@ -10429,25 +10087,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10475,6 +10114,25 @@ msgstr ""
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10529,6 +10187,9 @@ msgstr "Oranžna"
 
 msgid "Grey"
 msgstr "Siva"
+
+msgid "Black"
+msgstr "Črna"
 
 msgid "Red"
 msgstr "Rdeča"
@@ -10646,9 +10307,6 @@ msgid "Date"
 msgstr ""
 
 msgid "Title"
-msgstr ""
-
-msgid "MUSIC MANAGER"
 msgstr ""
 
 msgid "Dismiss"
@@ -10914,6 +10572,18 @@ msgstr ""
 msgid "Requesting to join game"
 msgstr ""
 
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
+msgstr ""
+
 msgid "Kick Spectator"
 msgstr ""
 
@@ -11146,6 +10816,9 @@ msgstr "Nagrada stavbe za popravila - nič"
 msgid "Classic"
 msgstr ""
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr ""
 
@@ -11211,6 +10884,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Insane Spawns"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Non-Insane Spawns"
+msgstr ""
+
+msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr "Nepodprto"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11267,6 +10991,9 @@ msgstr "Iskanje"
 
 msgid "Connecting to the lobby server..."
 msgstr "Povezovanje z vežinim strežnikom..."
+
+msgid "Game Name"
+msgstr "Ime igre"
 
 msgid "Map Name"
 msgstr "Ime zemljevida"
@@ -11338,6 +11065,458 @@ msgstr "Napačno geslo!"
 msgid "Continue"
 msgstr "Nadaljuj"
 
+msgid "MUSIC MANAGER"
+msgstr ""
+
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "Vaša naprava / sistem / OpenAL knjižnica ne podpira HRTF"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Voice Volume"
+msgstr "Glasnost glasov"
+
+msgid "FX Volume"
+msgstr "Glasnost učinkov"
+
+msgid "Music Volume"
+msgstr "Glasnost glasbe"
+
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "Onemogočeno"
+
+msgid "Enabled"
+msgstr "Omogočeno"
+
+msgid "Auto"
+msgstr "Samodejno"
+
+msgid "Subtitles"
+msgstr "Podnapisi"
+
+msgid "Off"
+msgstr "Izklopljeno"
+
+msgid "On"
+msgstr "Vklopljeno"
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr ""
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "Ujemi kazalec"
+
+msgid "Colored Cursors"
+msgstr "Barvni kazalci"
+
+msgid "Cursor Size"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "Hitrost kamere"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "Obrni rotacijo"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Quick Chat Only"
+msgstr ""
+
+msgid "Allow All"
+msgstr ""
+
+msgid "Inactivity Timeout"
+msgstr ""
+
+#, c-format
+msgid "%u minutes"
+msgstr ""
+
+msgid "Lag Kick"
+msgstr ""
+
+#, c-format
+msgid "%u seconds"
+msgstr ""
+
+msgid "Spectator Slots"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr ""
+
+msgid "Game Time Limit"
+msgstr ""
+
+#, c-format
+msgid "%s hours"
+msgstr ""
+
+msgid "Enable Rating"
+msgstr ""
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr ""
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr ""
+
+msgid "High Quality"
+msgstr ""
+
+msgid "Shadows"
+msgstr "Sence"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr ""
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Shadow Filtering"
+msgstr ""
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Ultra"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr ""
+
+msgid "Screen Shake"
+msgstr ""
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr ""
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "Jezik"
+
+msgid "Display Scale"
+msgstr "Prikaži merilo"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr "Radar"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "Nepremičen"
+
+msgid "Rotating"
+msgstr "Vrtljiv"
+
+msgid "Radar Jump"
+msgstr "Radarski skok"
+
+msgid "Instant"
+msgstr "Trenutek"
+
+msgid "Tracked"
+msgstr "Spremljano"
+
+msgid "Radar Zoom"
+msgstr "Radarsko bližanje"
+
+msgid "Video Playback"
+msgstr "Igranje posnetkov"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "1x"
+
+msgid "2×"
+msgstr "2x"
+
+msgid "Fullscreen"
+msgstr "Cel zaslon"
+
+msgid "Scanlines"
+msgstr "Skenirne črte"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr ""
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr ""
+
+msgid "Configuration directory is reported as:"
+msgstr ""
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr ""
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr ""
+
+msgid "Failed to open configuration directory"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid ""
+"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
+"(or what the window manager allows)."
+msgstr ""
+
+msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgstr "Ločljivost lahko spremenite z navadno spremembo velikosti okna. (Poskusite potegniti kot / rob.)"
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Okensko"
+
+msgid "Desktop Full"
+msgstr ""
+
+msgid "Resolution"
+msgstr "Ločljivost"
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr ""
+
+msgid "On (Fullscreen)"
+msgstr ""
+
 msgid "CONNECTION"
 msgstr "POVEZAVA"
 
@@ -11349,6 +11528,303 @@ msgstr "IP"
 
 msgid "IP Address or Machine Name"
 msgstr "IP naslov ali ime računalnika"
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr "Igralec: "
+
+msgid "(none)"
+msgstr "(brez)"
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
+
+#, c-format
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Blind Waiting Room"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Pošiljam zemljevid: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Zemljevid: %u%% prejet"
+
+msgid "HOST"
+msgstr "GOSTITELJ"
+
+msgid "Choose Team"
+msgstr "Izberi skupino"
+
+msgid "Teams locked"
+msgstr "Skupina zaklenjene"
+
+msgid "Click to change player colour"
+msgstr "Klikni za spremembo barve igralca"
+
+msgid "Click to change player position"
+msgstr "Klikni za spremembo položaja igralca"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Kliknite za spremembo UI, desno kliknite za delitev izbire"
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Alt Name:"
+msgstr ""
+
+msgid "Player rating:"
+msgstr ""
+
+msgid "Host provided"
+msgstr ""
+
+#, c-format
+msgid "From: %s"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr "Kliknite za spremembo težavnosti"
+
+msgid "Waiting for player"
+msgstr "Čakanje na igralca"
+
+msgid "Player is ready"
+msgstr "Igralec je pripravljen"
+
+msgid "Player is downloading"
+msgstr "Igralec prenaša"
+
+msgid "Click when ready"
+msgstr "Kliknite, ko boste pripravljeni"
+
+msgid "Waiting for download"
+msgstr "Čakanje na prenos"
+
+msgid "READY?"
+msgstr "PRIPRAVLJENI?"
+
+msgid "Tanks disabled!!"
+msgstr "Tanki onemogočeni!!"
+
+msgid "Cyborgs disabled."
+msgstr "Kiborgi onemogočeni."
+
+msgid "VTOLs disabled."
+msgstr "NVP-ji onemogočeni."
+
+msgid "Satellite Uplink disabled."
+msgstr "Satelitska povezava onemogočena."
+
+msgid "Laser Satellite disabled."
+msgstr "Laserski satelit onemogočen."
+
+msgid "Structure Limits Enforced."
+msgstr "Omejitve zgradb uveljavljene."
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** geslo [%s] je zdaj zahtevano! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** geslo NI zahtevano! ***"
+
+msgid "Game Name Updated."
+msgstr "Ime igre posodobljeno."
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr "Eno-igralski spopad"
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr "Kliknite za ogled zemljevida"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Izberite zemljevid\n"
+"Lahko se blokira z glasovi igralcev"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr "Baza"
+
+msgid "Tech"
+msgstr ""
+
+msgid "Technology Level 1"
+msgstr ""
+
+msgid "Technology Level 2"
+msgstr ""
+
+msgid "Technology Level 3"
+msgstr ""
+
+msgid "Technology Level 4"
+msgstr ""
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr "Odpošlji prevoz"
