@@ -271,7 +271,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MINIFY_HTML=0") # Disable MINIFY_HTML
 
 	# Stack and memory usage
-	target_link_options(warzone2100 PRIVATE "SHELL:-s TOTAL_STACK=10485760")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s STACK_SIZE=10485760")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s INITIAL_MEMORY=268435456") # 256 MB
 	target_link_options(warzone2100 PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
 	# NOTE: WZ's shell.html handles intelligently detecting and picking a maximum for the WebAssembly.Memory request
@@ -285,9 +285,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.50)
 		target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ENABLE_GET_PROC_ADDRESS=1")
 	endif()
-
-	# Display more information on linking issues
-	target_link_options(warzone2100 PRIVATE "SHELL:-s LLD_REPORT_UNDEFINED")
 
 	# Offscreen canvas and proxy to pthread support
 	# - not currently supported - seems to lead to eventual freezes in Firefox and flickering in Safari
