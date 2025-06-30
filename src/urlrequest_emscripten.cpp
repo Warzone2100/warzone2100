@@ -149,11 +149,6 @@ public:
 		// Always load to memory
 		attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
 
-		if (waitOnShutdown())
-		{
-			attr.attributes |= EMSCRIPTEN_FETCH_WAITABLE;
-		}
-
 		if (noProxy())
 		{
 			wzAsyncExecOnMainThread([]{
