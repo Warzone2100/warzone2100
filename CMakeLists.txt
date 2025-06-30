@@ -163,6 +163,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	#	- Fetch API [LINK - see src/CMakeLists.txt]
 
 	set(COMP_AND_LINK_FLAGS "-fwasm-exceptions")
+	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER_EQUAL 4.0.0)
+		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -sWASM_LEGACY_EXCEPTIONS")
+	endif()
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -fsanitize=address -fsanitize-recover=address")
 	endif()
@@ -177,6 +180,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	add_link_options(
 		"$<$<LINK_LANGUAGE:CXX,C>:-fwasm-exceptions>"
 	)
+	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER_EQUAL 4.0.0)
+		add_link_options(
+			"$<$<LINK_LANGUAGE:CXX,C>:-sWASM_LEGACY_EXCEPTIONS>"
+		)
+	endif()
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		add_link_options(
 			"$<$<LINK_LANGUAGE:CXX,C>:-fsanitize=address>"
