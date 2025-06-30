@@ -166,8 +166,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -fsanitize=address -fsanitize-recover=address")
 	endif()
-	#set(USE_FLAGS "-s USE_PTHREADS=1 -s USE_SDL=2 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1")
-	set(USE_FLAGS "-s USE_PTHREADS=1 -s USE_SDL=0 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1")
+	set(USE_FLAGS "-pthread --use-port=freetype --use-port=harfbuzz")
 
 	# Set various flags and executable settings
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMP_AND_LINK_FLAGS} ${USE_FLAGS}")
