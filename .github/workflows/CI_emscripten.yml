@@ -27,7 +27,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  EMSDK_VERSION: 3.1.61
+  EMSDK_VERSION: 4.0.10
   CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
 
 jobs:
