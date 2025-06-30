@@ -3,8 +3,8 @@
 ## Prerequisites:
 
 - **Git**
-- [**Emscripten 3.1.53+**](https://emscripten.org/docs/getting_started/downloads.html)
-- [**CMake 2.27+**](https://cmake.org/download/#latest)
+- [**Emscripten 3.1.58+**](https://emscripten.org/docs/getting_started/downloads.html)
+- [**CMake 3.27+**](https://cmake.org/download/#latest)
 - [**workbox-cli**](https://developer.chrome.com/docs/workbox/modules/workbox-cli) (to generate a service worker)
 - For language support: [_Gettext_](https://www.gnu.org/software/gettext/)
 - To generate documentation: [_Asciidoctor_](https://asciidoctor.org/)
