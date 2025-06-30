@@ -208,6 +208,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 			#"$<$<AND:$<LINK_LANGUAGE:CXX,C>,${debug_builds_only}>:-gsource-map>"
 		)
 	endif()
+
+	# Ensure FindThreads.cmake works
+	set(THREADS_PREFER_PTHREAD_FLAG ON)
 endif()
 
 INCLUDE(AddTargetLinkFlagsIfSupported)
