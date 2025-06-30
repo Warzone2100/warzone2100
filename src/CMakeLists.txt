@@ -259,6 +259,13 @@ set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 
+	# Enable STRICT + related
+	target_compile_options(warzone2100 PRIVATE "SHELL:-s STRICT")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s STRICT")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s AUTO_JS_LIBRARIES=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s AUTO_NATIVE_LIBRARIES=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s ALLOW_UNIMPLEMENTED_SYSCALLS")
+
 	# WZ requires WebGL 2
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_WEBGL_VERSION=2")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MAX_WEBGL_VERSION=2")
@@ -269,6 +276,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s ENVIRONMENT=web,worker") # Worker must also be enabled because multithreading is enabled
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MINIFY_HTML=0") # Disable MINIFY_HTML
+
+	# Specify properties set on incoming Module object (see shell.html, postjs.js, prejs.js)
+	target_link_options(warzone2100 PRIVATE "SHELL:-s INCOMING_MODULE_JS_API=[wasmMemory,arguments,preRun,postRun,print,printErr,canvas,setStatus,monitorRunDependencies,locateFile,onExit]")
 
 	# Stack and memory usage
 	target_link_options(warzone2100 PRIVATE "SHELL:-s STACK_SIZE=10485760")
