@@ -420,26 +420,26 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	{
 		// close the form.
 		// Start the window close animation.
-		IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEPOPUP);
+		IntFormAnimated *form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEPOPUP));
 		if (form)	// FIXME: we hijack this routine for the popup close.
 		{
 			form->closeAnimateDelete();
 			isInGamePopupUp = false;
 		}
-		form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP_POPUP_QUIT);
+		form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEOP_POPUP_QUIT));
 		if (form)
 		{
 			form->closeAnimateDelete();
 			isInGamePopupUp = false;
 		}
 
-		form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP);
+		form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEOP));
 		if (form)
 		{
 			form->closeAnimateDelete();
 			InGameOpUp = false;
 		}
-		form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP_QUIT);
+		form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEOP_QUIT));
 		if (form)
 		{
 			form->closeAnimateDelete();
