@@ -32,7 +32,7 @@ The scripts in this addon currently support importing and exporting the followin
 * PIE Events
 * PIE Levels
     * PIE Points
-    * PIE Polygons*
+    * PIE Polygons
         * PIE Textured Polygons
         * PIE Animated Polygons
     * PIE Connectors
@@ -40,8 +40,7 @@ The scripts in this addon currently support importing and exporting the followin
     * PIE Shadow Points
     * PIE Shadow Polygons
 
-*1: N-gons should not be used in exported meshes due to UV corruption. Quads will be triangulated correctly and are acceptable for export from Blender to PIE.
-*2: There may be some cases Blender will not interpret rotation keys in the same manner as the game.
+*1. There may be some cases Blender will not interpret rotation keys in the same manner as the game.
 
 ## Usage
 
@@ -66,7 +65,24 @@ The following panel can be found in the Object tab of the properties editor:
             * This type is used to define the generic values of a PIE model, such as its version, rendering flags, textures, and events.
         3. `Level`:
             * This type is used to define the mesh and animation properties which are specific to each level such as animation rate/cycles and texture animation data for particular sets of faces. These should always be mesh objects, and also should always be within the heirarchy of a `Root` PIE object.
+            * For PIE 4 models, levels can also override rendering flags and texture definitions.
         4. `Shadow`:
             * This type is used to define the shadow of a level. These should always be mesh objects, and should also be parented directly to a `Level` PIE object. The level's `Shadow Type` must be set to `Custom` in order to export PIE shadows.
         5. `Connector`:
             * This type is used to define the location of a connector on a level. These should be parented directly to a `Level` PIE object.
+
+The following sub-panel can be found under the **PIE Object** panel for `Root` and `Level` types.
+
+* PIE Texture Maps
+    * This feature is exclusive to the PIE 4 version.
+    * Contains a list where you can add texture map definitions, which are each comprised of 3 values.
+    1. `Slot`:
+        * Takes one of these values: `Base`, `Team`, `Spec`, `Norm`
+        * This determines which slot of the shader this texture map is being applied to.
+    2. `Tileset`:
+        * Takes one of these values: `Arizona`, `Urban`, `Rockies`
+        * This allows customization of materials depending on which map tileset a game is being played.
+        * `Arizona` is considered the default tileset. If a slot is defined for any tileset beside `Arizona`, there should be a `Arizona` tileset definition for that slot as well.
+    3. `Path`:
+        * This is where the file path (relative to the texpages folder in the game data) for the texture is defined.
+    * `Slot` and `Tileset` combinations must be unique. So the maximum number of unique texture slots that can be defined for a single PIE material is 12.

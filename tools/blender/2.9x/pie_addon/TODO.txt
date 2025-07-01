@@ -1,3 +1,2 @@
 - Figure out how to support the import/export of PIE normal data
-- Figure out why ngons cause corruption in the UV data
 - Adjust bone matrix transformations from animation to center on the level mesh

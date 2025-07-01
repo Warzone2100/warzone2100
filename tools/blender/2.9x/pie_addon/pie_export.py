@@ -25,6 +25,38 @@ import bmesh
 from .shared import getTexAnimGrp
 
 
+def adjustToIntUv(num):
+    result = num * 256
+    while result < 0:
+        result += 256
+    while result > 256:
+        result -= 256
+    return round(result)
+
+
+def getTypeNumMask(prop):
+    result = 0
+
+    if prop.adrOff:
+        result += 1
+    if prop.adrOn:
+        result += 2
+    if prop.pmr:
+        result += 4
+    if prop.roll:
+        result += 10
+    if prop.pitch:
+        result += 20
+    if prop.reserved:
+        result += 200
+    if prop.stretch:
+        result += 1000
+    if prop.tcMask:
+        result += 10000
+
+    return result
+
+
 class Exporter():
 
     def pie_export(self, scene, path, obs):
@@ -46,43 +78,37 @@ class Exporter():
 
             pieFile.write('PIE ' + version)
 
-            objType = 0
-
-            if obProp.adrOff:
-                objType += 1
-            if obProp.adrOn:
-                objType += 2
-            if obProp.pmr:
-                objType += 4
-            if obProp.roll:
-                objType += 10
-            if obProp.pitch:
-                objType += 20
-            if obProp.reserved:
-                objType += 200
-            if obProp.stretch:
-                objType += 1000
-            if obProp.tcMask:
-                objType += 10000
+            objType = getTypeNumMask(obProp)
 
             pieFile.write(
                 '\nTYPE {num}'.format(num=objType)
             )
 
-            if obProp.texture:
-                pieFile.write(
-                    '\nTEXTURE 0 {str} 0 0'.format(str=obProp.texture)
-                )
+            pieFile.write(
+                '\nINTERPOLATE {num}'.format(num=int(obProp.animInterpolate))
+            )
 
-            if obProp.normal:
-                pieFile.write(
-                    '\nNORMALMAP 0 {str}'.format(str=obProp.normal)
-                )
-
-            if obProp.specular:
-                pieFile.write(
-                    '\nSPECULARMAP 0 {str}'.format(str=obProp.specular)
-                )
+            if version in ['2', '3']:
+                if obProp.texture:
+                    pieFile.write(
+                        '\nTEXTURE 0 {str} 0 0'.format(str=obProp.texture)
+                    )
+                if obProp.normal:
+                    pieFile.write(
+                        '\nNORMALMAP 0 {str}'.format(str=obProp.normal)
+                    )
+                if obProp.specular:
+                    pieFile.write(
+                        '\nSPECULARMAP 0 {str}'.format(str=obProp.specular)
+                    )
+            else:
+                for txm in ob.pie_tex_maps:
+                    if txm.name:
+                        pieFile.write(
+                            '\n{} {} {}'.format(
+                                txm.slot, txm.tileset, txm.name
+                            )
+                        )
 
             if obProp.event1:
                 pieFile.write(
@@ -123,14 +149,9 @@ class Exporter():
                     childProp = child.pie_object_prop
 
                     depsgraph = bpy.context.evaluated_depsgraph_get()
-                    depOb = child.evaluated_get(depsgraph)
-                    evalMe = bpy.data.meshes.new_from_object(depOb)
-                    evalOb = bpy.data.objects.new(nameStr + ' eval', evalMe)
-                    bpy.context.collection.objects.link(evalOb)
-
-                    bpy.context.view_layer.objects.active = evalOb
-                    bpy.ops.object.mode_set(mode='EDIT', toggle=False)
-                    bm = bmesh.from_edit_mesh(evalMe)
+                    bm = bmesh.new(use_operators=True)
+                    bm.from_object(child, depsgraph)
+                    bmesh.ops.triangulate(bm, faces=bm.faces)
 
                     lvl += 1
 
@@ -141,6 +162,29 @@ class Exporter():
                     pieFile.write(
                         '\nLEVEL {num}'.format(num=lvl)
                     )
+
+                    if version not in ['2', '3']:
+
+                        if childProp.overrideFlags:
+                            childType = getTypeNumMask(childProp)
+
+                            pieFile.write(
+                                '\nTYPE {num}'.format(num=childType)
+                            )
+
+                        if childProp.overrideInterpolate:
+                            pieFile.write(
+                                '\nINTERPOLATE {num}'.format(num=int(childProp.animInterpolate))
+                            )
+
+                        for txm in child.pie_tex_maps:
+
+                            if txm.name:
+                                pieFile.write(
+                                    '\n{} {} {}'.format(
+                                        txm.slot, txm.tileset, txm.name
+                                    )
+                                )
 
                     if bm.verts:
                         print(
@@ -176,19 +220,25 @@ class Exporter():
 
                         faceStr += '\nPOLYGONS {num}'.format(num=len(bm.faces))
 
-                        def adjustToIntUv(num):
-                            result = num * 256
-                            while result < 0:
-                                result += 256
-                            while result > 256:
-                                result -= 256
-                            return round(result)
-                        
+                        if len(child.pie_tex_anim_grps):
+                            texAnimGrpLayer = getTexAnimGrp(bm)
+                        else:
+                            texAnimGrpLayer = None
+
                         for face in bm.faces:
+
+                            if texAnimGrpLayer:
+                                faceGrp = face[texAnimGrpLayer]
+                                if faceGrp >= 0 and faceGrp < len(child.pie_tex_anim_grps):
+                                    tag = child.pie_tex_anim_grps[face[texAnimGrpLayer]]
+                                else:
+                                    tag = None
+                            else:
+                                tag = None
 
                             uvLayer = bm.loops.layers.uv.verify()
                             uvOut = [[], [], []]
-                            
+
                             for ii, loop in enumerate(face.loops):
                                 uvOut[ii].append(round(loop[uvLayer].uv[0], 6))
                                 uvOut[ii].append(round(loop[uvLayer].uv[1], 6))
@@ -208,33 +258,35 @@ class Exporter():
                                 uvx3 = adjustToIntUv(uvx3)
                                 uvy3 = adjustToIntUv(uvy3)
 
-                            success = False
+                            if tag:
 
-                            for ii, tag in enumerate(child.pie_tex_anim_grps):
-                                layer = getTexAnimGrp(bm, str(ii))
-                                if face[layer] == 1:
-                                    success = True
-                                    faceStr += ('\n\t{type} 3 {v1} {v2} {v3} '
+                                if version == '2':
+                                    tagW = adjustToIntUv(tag.imageWidth)
+                                    tagH = adjustToIntUv(tag.imageHeight)
+                                else:
+                                    tagW = round(tag.imageWidth, 4)
+                                    tagH = round(tag.imageHeight, 4)
+
+                                faceStr += ('\n\t{type} 3 {v1} {v2} {v3} '
                                                 '{tagImg} {tagRate} {tagW} '
                                                 '{tagH} {uvx1} {uvy1} {uvx2} '
                                                 '{uvy2} {uvx3} {uvy3}').format(
                                         type=4200,
                                         v1=face.verts[0].index,
-                                        v2=face.verts[1].index,
-                                        v3=face.verts[2].index,
-                                        tagImg=tag.texAnimImages,
-                                        tagRate=tag.texAnimRate,
-                                        tagW=tag.texAnimWidth,
-                                        tagH=tag.texAnimHeight,
+                                        v2=face.verts[2].index,
+                                        v3=face.verts[1].index,
+                                        tagImg=tag.imageCount,
+                                        tagRate=tag.imageRate,
+                                        tagW=tagW,
+                                        tagH=tagH,
                                         uvx1=uvx1,
                                         uvy1=uvy1,
-                                        uvx2=uvx2,
-                                        uvy2=uvy2,
-                                        uvx3=uvx3,
-                                        uvy3=uvy3,
+                                        uvx2=uvx3,
+                                        uvy2=uvy3,
+                                        uvx3=uvx2,
+                                        uvy3=uvy2,
                                     )
-                                    break
-                            if success is False:
+                            else:
                                 faceStr += ('\n\t{type} 3 {v1} {v2} {v3} '
                                             '{uvx1} {uvy1} {uvx2} {uvy2} '
                                             '{uvx3} {uvy3}').format(
@@ -289,16 +341,13 @@ class Exporter():
                                 )
                             )
 
-                    if ob.animation_data:
-
+                    if ob.animation_data and ob.animation_data.action:
                         endFrame = 0
-
+                        cName = '["{name}"]'.format(name=child.name)
+                        pName = '["{name}"]'.format(name=child.parent)
+                        bName = '["{name}"]'.format(name=child.parent_bone)
                         success = False
                         for fcurve in ob.animation_data.action.fcurves:
-
-                            cName = '["{name}"]'.format(name=child.name)
-                            pName = '["{name}"]'.format(name=child.parent)
-                            bName = '["{name}"]'.format(name=child.parent_bone)
 
                             if (cName in fcurve.data_path or
                                     pName in fcurve.data_path or
@@ -453,9 +502,7 @@ class Exporter():
 
                         shBm.free()
 
-                    bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
-                    bpy.data.objects.remove(evalOb)
-
-                    pieFile.write('\n')
+                    # if child is not lvlObs[-1]:
+                    #     pieFile.write('\n')
 
             pieFile.close()
