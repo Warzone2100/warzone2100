@@ -154,12 +154,16 @@ const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulk
 	// avoid crashes / bugs caused by these layers
 	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_LAYER"), _vkl_env_text("1"), true}
-	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true} // RTSS
 	, {_vkl_env_text("DISABLE_VULKAN_OBS_CAPTURE"), _vkl_env_text("1"), true} // OBS
 	, {_vkl_env_text("DISABLE_VULKAN_OW_OBS_CAPTURE"), _vkl_env_text("1"), true} // OverWolf
 	, {_vkl_env_text("VK_LAYER_bandicam_helper_DEBUG_1"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
 	, {_vkl_env_text("DISABLE_GAMEPP_LAYER"), _vkl_env_text("1"), true} // Gamepp
+	, {_vkl_env_text("DISABLE_VK_LAYER_TENCENT_wegame_cross_overlay_1"), _vkl_env_text("1"), true} // wegame cross
+	, {_vkl_env_text("DISABLE_VK_LAYER_reshade_1"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VK_LAYER_GPUOpen_GRS"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VKBASALT"), _vkl_env_text("1"), true}
 };
 
 #if defined(VK_EXT_layer_settings)
