@@ -36,6 +36,8 @@ bool cocoaSetFileQuarantineAttribute(const char *path);
 
 bool cocoaTransformToBackgroundApplication();
 
+bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor);
+
 #endif // WZ_OS_MAC
 
 #endif // __INCLUDED_LIB_FRAMEWORK_COCOA_WRAPPER_H__
