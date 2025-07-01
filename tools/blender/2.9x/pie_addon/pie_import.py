@@ -40,23 +40,30 @@ def convertPolygonList(ls):
         out.append(float(ls[i]))
     return out
 
-def newTexAnimGroup(ob, poly):
+def newTexAnimGroup(ob, poly, intUV):
     ob.pie_tex_anim_grps.add()
-    ob.pie_tex_anim_grp_index = len(ob.pie_tex_anim_grps) - 1
-    grpII = ob.pie_tex_anim_grp_index
+    ob.pie_tex_anim_grps_index = len(ob.pie_tex_anim_grps) - 1
+    grpII = ob.pie_tex_anim_grps_index
     grpName = 'Texture Animation Group {n}'.format(n=grpII + 1)
 
     ob.pie_tex_anim_grps[grpII].name = grpName
-    ob.pie_tex_anim_grps[grpII].texAnimImages = int(poly[5])
-    ob.pie_tex_anim_grps[grpII].texAnimRate = int(poly[6])
-    ob.pie_tex_anim_grps[grpII].texAnimWidth = int(poly[7])
-    ob.pie_tex_anim_grps[grpII].texAnimHeight = int(poly[8])
+    ob.pie_tex_anim_grps[grpII].imageCount = int(poly[5])
+    ob.pie_tex_anim_grps[grpII].imageRate = int(poly[6])
+
+    if intUV:
+        ob.pie_tex_anim_grps[grpII].imageWidth = float(poly[7] / 256)
+        ob.pie_tex_anim_grps[grpII].imageHeight = float(poly[8] / 256)
+    else:
+        ob.pie_tex_anim_grps[grpII].imageWidth = float(poly[7])
+        ob.pie_tex_anim_grps[grpII].imageHeight = float(poly[8])
 
 
 class Importer():
 
+    tex_map_ordered = []
+
     headers = [
-        'PIE', 'TYPE', 'TEXTURE', 'NORMALMAP', 'SPECULARMAP', 'EVENT',
+        'PIE', 'TYPE', 'INTERPOLATE', 'TEXTURE', 'NORMALMAP', 'SPECULARMAP', 'TCMASK', 'EVENT',
         'LEVELS', 'LEVEL', 'POINTS', 'NORMALS', 'POLYGONS', 'CONNECTORS',
         'ANIMOBJECT', 'SHADOWPOINTS', 'SHADOWPOLYGONS',
     ]
@@ -67,9 +74,8 @@ class Importer():
         pie_info = {
             'PIE': 0,
             'TYPE': 0,
-            'TEXTURE': '',
-            'NORMALMAP': '',
-            'SPECULARMAP': '',
+            'INTERPOLATE': 0,
+            'TEXMAPS': [],
             'EVENT': [],
             'LEVELS': [],
         }
@@ -82,30 +88,51 @@ class Importer():
             if len(line) <= 1:
                 continue
 
-            ls = line.split()
+            if line.startswith('#'):
+                continue
+
+            comments = line.split('#')
+
+            ls = comments.pop(0).split()
             fl = ls[0]
+
+            for ii in range(len(comments)):
+                comments[ii] = comments[ii].strip()
 
             if fl in self.headers:
                 reading = fl
 
-                if fl in ['PIE', 'TYPE']:
-                    pie_info[fl] = ls[1]
+                if fl in ['PIE', 'TYPE', 'INTERPOLATE']:
 
-                elif fl in ['TEXTURE', 'NORMALMAP', 'SPECULARMAP']:
-                    pie_info[fl] = ls[2]
+                    if lvl < 0:
+                        pie_info[fl] = int(ls[1])
+                    else:
+                        pie_info['LEVELS'][lvl][reading] = int(ls[1])
+
+                elif fl in ['TEXTURE', 'TCMASK', 'NORMALMAP', 'SPECULARMAP']:
+                    tileset = ls[1]
+                    texname = ls[2]
+
+                    if lvl < 0:
+                        pie_info['TEXMAPS'].append((texname, tileset, fl))
+                    else:
+                        pie_info['LEVELS'][lvl]['TEXMAPS'].append((texname, tileset, fl))
 
                 elif fl == 'EVENT':
                     pie_info[fl].append([ls[1], ls[2]])
 
                 elif fl == 'LEVEL':
                     pie_info['LEVELS'].append({
-                      'POINTS': [],
-                      'NORMALS': [],
-                      'POLYGONS': [],
-                      'CONNECTORS': [],
-                      'ANIMOBJECT': [],
-                      'SHADOWPOINTS': [],
-                      'SHADOWPOLYGONS': [],
+                        'TYPE': None,
+                        'INTERPOLATE': None,
+                        'TEXMAPS': [],
+                        'POINTS': [],
+                        'NORMALS': [],
+                        'POLYGONS': [],
+                        'CONNECTORS': [],
+                        'ANIMOBJECT': [],
+                        'SHADOWPOINTS': [],
+                        'SHADOWPOLYGONS': [],
                     })
                     lvl += 1
 
@@ -116,6 +143,8 @@ class Importer():
 
             else:
 
+                result = None
+
                 if reading in ['POINTS', 'SHADOWPOINTS', 'CONNECTORS']:
                     li = convertStrListToFloatList(ls)
 
@@ -123,15 +152,18 @@ class Importer():
                         result = (li[0] * 0.01, li[1] * 0.01, li[2] * 0.01)
                     else:
                         result = (li[0] * 0.01, li[2] * 0.01, li[1] * 0.01)
+
                 elif reading == 'POLYGONS':
                     result = tuple(convertPolygonList(ls))
 
                 elif reading in [
                     'NORMALS', 'ANIMOBJECT', 'SHADOWPOLYGONS'
                 ]:
-                    result = tuple(convertStrListToIntList(ls))
+                    result = (*(list([int(ii)] for ii in ls[0:6]) + list([float(ii) for ii in ls[6:9]])),)
+                    result = (int(ls[0]), int(ls[1]), int(ls[2]), int(ls[3]), int(ls[4]), int(ls[5]), int(ls[6]), float(ls[7]), float(ls[8]), float(ls[9]))
 
-                pie_info['LEVELS'][lvl][reading].append(result)
+                if result is not None:
+                    pie_info['LEVELS'][lvl][reading].append(result)
 
         return pie_info
 
@@ -142,6 +174,8 @@ class Importer():
 
         armatureObject.pie_object_prop.pieType = 'ROOT'
         armatureObject.show_in_front = True
+
+        self.pie_loadProperties(pieParse, armatureObject)
 
         currentLvl = 0
 
@@ -177,6 +211,7 @@ class Importer():
             bpy.context.collection.objects.link(meshOb)
 
             meshOb.pie_object_prop.pieType = 'LEVEL'
+            self.pie_loadProperties(level, meshOb)
 
             bpy.context.view_layer.objects.active = meshOb
 
@@ -197,7 +232,6 @@ class Importer():
 
                 uvData = meshOb.data.uv_layers.active.data
 
-                n = 256
                 # m is for modifying the index taken as UV data
                 # depending on if the PIE polygon is animated.
                 m = 0
@@ -205,14 +239,14 @@ class Importer():
                     animatedPolygons.append(ii)
                     m = 4
 
-                if pieParse['PIE'] == '3':
+                if pieParse['PIE'] == 2:
+                    uvData[L + 0].uv = ((p[5 + m] / 256, (-p[6 + m] / 256) + 1))
+                    uvData[L + 1].uv = ((p[9 + m] / 256, (-p[10 + m] / 256) + 1))
+                    uvData[L + 2].uv = ((p[7 + m] / 256, (-p[8 + m] / 256) + 1))
+                else:
                     uvData[L + 0].uv = ((p[5 + m], -p[6 + m] + 1))
                     uvData[L + 1].uv = ((p[9 + m], -p[10 + m] + 1))
                     uvData[L + 2].uv = ((p[7 + m], -p[8 + m] + 1))
-                elif pieParse['PIE'] == '2':
-                    uvData[L + 0].uv = ((p[5 + m] / n, (-p[6 + m] / n) + 1))
-                    uvData[L + 1].uv = ((p[9 + m] / n, (-p[10 + m] / n) + 1))
-                    uvData[L + 2].uv = ((p[7 + m] / n, (-p[8 + m] / n) + 1))
 
             bpy.ops.object.mode_set(mode='EDIT', toggle=False)
             bm = bmesh.from_edit_mesh(mesh)
@@ -220,36 +254,40 @@ class Importer():
 
             for ii in animatedPolygons:
                 p = level['POLYGONS'][ii]
+                texAnimGrpLayer = getTexAnimGrp(bm)
 
                 if meshOb.pie_tex_anim_grps is None:
-                    newTexAnimGroup(meshOb, p)
-                    layer = getTexAnimGrp(
-                        bm, str(len(meshOb.pie_tex_anim_grps) - 1)
-                    )
+                    newTexAnimGroup(meshOb, p, pieParse['PIE'] == 2)
                     faces.ensure_lookup_table()
-                    faces[ii][layer] = 1
+                    faces[ii][texAnimGrpLayer] = 0
                 else:
                     success = False
-                    for jj, tAnimGp in enumerate(meshOb.pie_tex_anim_grps):
+                    for jj, tag in enumerate(meshOb.pie_tex_anim_grps):
 
-                        if (int(p[5]) == tAnimGp.texAnimImages and
-                                int(p[6]) == tAnimGp.texAnimRate and
-                                int(p[7]) == tAnimGp.texAnimWidth and
-                                int(p[8]) == tAnimGp.texAnimHeight):
+                        if pieParse['PIE'] == 2:
+                            tagIsEqual = (
+                                int(p[5]) == tag.imageCount and
+                                int(p[6]) == tag.imageRate and
+                                float(p[7] / 256) == tag.imageWidth and
+                                float(p[8] / 256) == tag.imageHeight
+                            )
+                        else:
+                            tagIsEqual = (
+                                int(p[5]) == tag.imageCount and
+                                int(p[6]) == tag.imageRate and
+                                float(p[7]) == tag.imageWidth and
+                                float(p[8]) == tag.imageHeight
+                            )
 
-                            layer = getTexAnimGrp(bm, str(jj))
-                            # faces.ensure_lookup_table()
-                            faces[ii][layer] = 1
+                        if tagIsEqual:
+                            faces[ii][texAnimGrpLayer] = jj
                             success = True
                             break
 
                     if success is False:
-                        newTexAnimGroup(meshOb, p)
-                        layer = getTexAnimGrp(
-                            bm, str(len(meshOb.pie_tex_anim_grps) - 1)
-                        )
+                        newTexAnimGroup(meshOb, p, pieParse['PIE'] == 2)
                         faces.ensure_lookup_table()
-                        faces[ii][layer] = 1
+                        faces[ii][texAnimGrpLayer] = len(meshOb.pie_tex_anim_grps) - 1
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
 
@@ -351,38 +389,72 @@ class Importer():
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
 
-            self.pie_loadProperties(pieParse, armatureObject)
+
+    def pie_loadTexMaps(self, pieParse, pieObject):
+
+        if pieParse.get('PIE', 0) in [2, 3]:
+            # only run this part of the code for a root object with version 2 or 3
+            objProp = pieObject.pie_object_prop
+            for pie_tex_map in pieParse['TEXMAPS']:
+
+                if pie_tex_map[2] == 'TEXTURE':
+                    objProp.texture = pie_tex_map[0]
+
+                elif pie_tex_map[2] == 'NORMALMAP':
+                    objProp.normal = pie_tex_map[0]
+
+                elif pie_tex_map[2] == 'SPECULARMAP':
+                    objProp.specular = pie_tex_map[0]
+
+        else:
+            if len(pieParse['TEXMAPS']):
+                for pie_tex_map in pieParse['TEXMAPS']:
+                    tex_map = pieObject.pie_tex_maps.add()
+                    tex_map.name, tex_map.tileset, tex_map.slot = pie_tex_map
 
     def pie_loadProperties(self, pieParse, pieObject):
-        objProp = pieObject.pie_object_prop
-
-        objProp.pieVersion = pieParse['PIE']
-        objProp.texture = pieParse['TEXTURE']
-        objProp.normal = pieParse['NORMALMAP']
-        objProp.specular = pieParse['SPECULARMAP']
-
-        for event in pieParse['EVENT']:
-            if event[0] == '1':
-                objProp.event1 = event[1]
-            elif event[0] == '2':
-                objProp.event2 = event[1]
-            elif event[0] == '3':
-                objProp.event3 = event[1]
 
         def getMaskArray(pieType, len):
-            flagsStr = str(bin(int(pieType, 16)))[2:][::-1].ljust(len, '0')
+            flagsStr = str(bin(int(str(pieType), 16)))[2:][::-1].ljust(len, '0')
             return [int(ii) for ii in flagsStr]
 
-        flags = getMaskArray(pieParse['TYPE'], 17)
+        objProp = pieObject.pie_object_prop
 
-        objProp.adrOff = flags[0]
-        objProp.adrOn = flags[1]
-        objProp.pmr = flags[2]
-        objProp.pitch = flags[4]
-        objProp.roll = flags[5]
-        objProp.reserved = flags[9]
-        objProp.stretch = flags[12]
-        objProp.tcMask = flags[16]
+        if pieParse.get('PIE', None) != None:
+            objProp.pieVersion = str(pieParse['PIE'])
+
+        if pieParse.get('EVENT', None) != None:
+            for event in pieParse['EVENT']:
+                if event[0] == '1':
+                    objProp.event1 = event[1]
+                elif event[0] == '2':
+                    objProp.event2 = event[1]
+                elif event[0] == '3':
+                    objProp.event3 = event[1]
+
+        if pieParse.get('TYPE', None) != None:
+            flags = getMaskArray(pieParse['TYPE'], 17)
+
+            if objProp.pieType == 'LEVEL':
+                objProp.overrideFlags = True
+
+            objProp.adrOff = flags[0]
+            objProp.adrOn = flags[1]
+            objProp.pmr = flags[2]
+            objProp.pitch = flags[4]
+            objProp.roll = flags[5]
+            objProp.reserved = flags[9]
+            objProp.stretch = flags[12]
+            objProp.tcMask = flags[16]
+
+        if pieParse.get('INTERPOLATE', None) != None:
+
+            if objProp.pieType == 'LEVEL':
+                objProp.overrideInterpolate = True
+
+            objProp.animInterpolate = bool(pieParse['INTERPOLATE'])
+
+        self.pie_loadTexMaps(pieParse, pieObject)
 
     def pie_import_quick(self, scene, pieDir, pieMesh):
         self.scene = scene
