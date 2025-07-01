@@ -96,7 +96,28 @@ void NETwzstring(MessageReader &r, WzString &str);
 void NETstring(MessageReader &r, char *str, uint16_t maxlen);
 void NETstring(MessageReader &r, std::string& s, uint32_t maxLen = 65536);
 void NETbin(MessageReader &r, uint8_t *str, uint32_t len);
-void NETbytes(MessageReader &r, std::vector<uint8_t>& vec, unsigned maxLen = 10000);
+template <typename VecT>
+void NETbytes(MessageReader& r, VecT& vec, unsigned maxLen = 10000)
+{
+	/*
+	 * Strings sent over the network are prefixed with their length, sent as an
+	 * unsigned 16-bit integer, not including \0 termination.
+	 */
+	static_assert(std::is_same<typename VecT::value_type, uint8_t>::value, "Expected vector<uint8_t> as the argument");
+
+	uint32_t len = 0;
+	NETuint32_t(r, len);
+	if (len > maxLen)
+	{
+		debug(LOG_ERROR, "NETbytes: Decoding packet, length %u truncated at %u", len, maxLen);
+	}
+	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
+	vec.clear();
+	if (r.valid())
+	{
+		r.bytesVector(vec, len);
+	}
+}
 void NETPosition(MessageReader& r, Position& pos);
 void NETRotation(MessageReader& r, Rotation& rot);
 void NETVector2i(MessageReader& r, Vector2i& vec);
@@ -128,7 +149,26 @@ void NETwzstring(MessageWriter& w, const WzString& str);
 void NETstring(MessageWriter& w, const char* str, uint16_t maxlen);
 void NETstring(MessageWriter& w, const std::string& s, uint32_t maxLen = 65536);
 void NETbin(MessageWriter& w, const uint8_t* str, uint32_t len);
-void NETbytes(MessageWriter& w, const std::vector<uint8_t>& vec, unsigned maxLen = 10000);
+template <typename VecT>
+void NETbytes(MessageWriter& w, const VecT& vec, unsigned maxLen = 10000)
+{
+	/*
+	 * Strings sent over the network are prefixed with their length, sent as an
+	 * unsigned 16-bit integer, not including \0 termination.
+	 */
+
+	static_assert(std::is_same<typename VecT::value_type, uint8_t>::value, "Expected vector<uint8_t> as the argument");
+
+	ASSERT(vec.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "vec.size() exceeds uint32_t max");
+	uint32_t len = static_cast<uint32_t>(std::min(vec.size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
+	if (len > maxLen)
+	{
+		debug(LOG_ERROR, "NETbytes: Encoding packet, length %u truncated at %u", len, maxLen);
+	}
+	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
+	NETuint32_t(w, len);
+	w.bytes(vec.data(), len);
+}
 void NETPosition(MessageWriter& w, const Position& pos);
 void NETRotation(MessageWriter& w, const Rotation& rot);
 void NETVector2i(MessageWriter& w, const Vector2i& vec);

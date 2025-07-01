@@ -25,6 +25,7 @@
 #define _NET_QUEUE_H_
 
 #include "lib/framework/frame.h"
+#include "lib/framework/pool_allocator.h"
 #include "lib/netplay/byteorder_funcs_wrapper.h"
 #include <vector>
 #include <list>
@@ -32,6 +33,9 @@
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
+
+using MsgDataAllocator = PoolAllocator<uint8_t, MemoryPool>;
+using NetMsgDataVector = std::vector<uint8_t, MsgDataAllocator>;
 
 // At game level:
 // There should be a NetQueue representing each client.
@@ -73,7 +77,7 @@ public:
 	NetMessage& operator=(const NetMessage&) = default;
 
 	uint8_t type() const;
-	const std::vector<uint8_t>& rawData() const;
+	const NetMsgDataVector& rawData() const;
 	/// Returns a pointer to the payload data (offset by `HEADER_LENGTH` from the beginning of the raw data).
 	const uint8_t* payload() const;
 	size_t payloadSize() const;
@@ -84,11 +88,11 @@ public:
 private:
 
 	// Meant to be executed only by NetMessageBuilder
-	explicit NetMessage(std::vector<uint8_t>&& data);
+	explicit NetMessage(NetMsgDataVector&& data);
 
 	friend class NetMessageBuilder;
 
-	std::vector<uint8_t> data_;
+	NetMsgDataVector data_;
 };
 
 /// <summary>
@@ -104,7 +108,7 @@ class NetMessageBuilder
 public:
 
 	explicit NetMessageBuilder(uint8_t type, size_t reservedCapacity = 16);
-	explicit NetMessageBuilder(std::vector<uint8_t>&& rawData);
+	explicit NetMessageBuilder(NetMsgDataVector&& rawData);
 
 	uint8_t type() const
 	{
@@ -140,7 +144,7 @@ public:
 	}
 
 private:
-	std::vector<uint8_t> data_;
+	NetMsgDataVector data_;
 };
 
 struct NETQUEUE
@@ -223,8 +227,11 @@ public:
 		}
 		index += numCopyBytes;
 	}
-	void bytesVector(std::vector<uint8_t> &vOut, size_t desiredBytes) const
+	template <typename VecT>
+	void bytesVector(VecT& vOut, size_t desiredBytes) const
 	{
+		static_assert(std::is_same<typename VecT::value_type, uint8_t>::value, "Expected vector<uint8_t> as the argument");
+
 		size_t numCopyBytes = (index >= msgData->size()) ? 0 : std::min<size_t>(msgData->size() - index, desiredBytes);
 		if (numCopyBytes > 0)
 		{
@@ -240,7 +247,7 @@ public:
 	}
 
 	NETQUEUE queueInfo;
-	const std::vector<uint8_t>* msgData;
+	const NetMsgDataVector* msgData;
 	mutable size_t index = NetMessage::HEADER_LENGTH;
 	uint8_t msgType;
 };
@@ -311,7 +318,8 @@ private:
 		return *i;
 	};
 
-	using List = std::list<NetMessage>;
+	using MsgAllocator = PoolAllocator<NetMessage, MemoryPool>;
+	using List = std::list<NetMessage, MsgAllocator>;
 	List::iterator                dataPos;                             ///< Last message which was sent over the network.
 	List::iterator                messagePos;                          ///< Last message which was popped.
 	List                          messages;                            ///< List of messages. Messages are added to the front and read from the back.
