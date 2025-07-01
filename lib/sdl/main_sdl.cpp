@@ -68,6 +68,7 @@
 #if defined(WZ_OS_MAC)
 #include "cocoa_sdl_helpers.h"
 #include "cocoa_wz_menus.h"
+#include "lib/framework/cocoa_wrapper.h"
 #endif
 
 #if defined(__EMSCRIPTEN__)
@@ -432,11 +433,22 @@ std::vector<video_backend> wzAvailableGfxBackends()
 # endif // (defined(_M_X64) || defined(_M_IX86)
 #elif defined(WZ_OS_MAC)
 // MACOS:
-	// - Order is: Vulkan, OpenGL
-#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
-	availableBackends.push_back(video_backend::vulkan);
-#   endif
-	availableBackends.push_back(video_backend::opengl);
+	if (cocoaIsRunningOnMacOSAtLeastVersion(13, 0)) // macOS 13.0+, which has Metal 3+
+	{
+		// - Order is: Vulkan, OpenGL
+#   	if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+		availableBackends.push_back(video_backend::vulkan);
+#   	endif
+		availableBackends.push_back(video_backend::opengl);
+	}
+	else
+	{
+		// - For older macOS, default to: OpenGL, Vulkan
+		availableBackends.push_back(video_backend::opengl);
+#   	if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+		availableBackends.push_back(video_backend::vulkan);
+#   	endif
+	}
 #elif defined(WZ_OS_UNIX)
 // LINUX / UNIX:
 	// We'd *like* to default to Vulkan first here,
