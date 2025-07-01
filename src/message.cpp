@@ -1051,6 +1051,11 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 {
 	if (psProxDisp->type == POS_PROXDATA)
 	{
+		if (psProxDisp->psMessage->pViewData == nullptr)
+		{
+			return; // if no data - ignore message
+		}
+
 		const VIEWDATA *psViewData = psProxDisp->psMessage->pViewData;
 		const VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)psViewData->pData;
 

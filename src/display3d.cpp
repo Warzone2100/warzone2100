@@ -2593,6 +2593,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	if (psProxDisp->type == POS_PROXDATA)
 	{
+		if (psProxDisp->psMessage->pViewData == nullptr)
+		{
+			return; // if no data - ignore message
+		}
 		pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 		if (pViewProximity)
 		{
