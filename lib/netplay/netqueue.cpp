@@ -107,7 +107,7 @@ bool decode_uint32_t(uint8_t b, uint32_t &v, unsigned n)
 	return !isLastByte;
 }
 
-NetMessage::NetMessage(std::vector<uint8_t>&& data)
+NetMessage::NetMessage(NetMsgDataVector&& data)
 	: data_(std::move(data))
 {}
 
@@ -117,7 +117,7 @@ uint8_t NetMessage::type() const
 	return data_[0];
 }
 
-const std::vector<uint8_t>& NetMessage::rawData() const
+const NetMsgDataVector& NetMessage::rawData() const
 {
 	return data_;
 }
@@ -161,19 +161,21 @@ void NetMessage::rawDataAppendToVector(std::vector<uint8_t>& output) const
 }
 
 NetMessageBuilder::NetMessageBuilder(uint8_t type, size_t reservedCapacity /* = 16 */)
+	: data_(MsgDataAllocator(defaultMemoryPool()))
 {
 	data_.reserve(reservedCapacity + NetMessage::HEADER_LENGTH);
 	data_.resize(NetMessage::HEADER_LENGTH);
 	data_[0] = type;
 }
 
-NetMessageBuilder::NetMessageBuilder(std::vector<uint8_t>&& rawData)
+NetMessageBuilder::NetMessageBuilder(NetMsgDataVector&& rawData)
 	: data_(std::move(rawData))
 {}
 
 NetQueue::NetQueue()
 	: canGetMessagesForNet(true)
 	, canGetMessages(true)
+	, messages(MsgAllocator(defaultMemoryPool()))
 	, pendingGameTimeUpdateMessages(0)
 	, bCurrentMessageWasDecrypted(false)
 {

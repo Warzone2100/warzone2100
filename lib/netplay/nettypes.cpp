@@ -773,27 +773,6 @@ void NETbin(MessageReader &r, uint8_t *str, uint32_t len)
     r.bytes(str, len);
 }
 
-void NETbytes(MessageReader &r, std::vector<uint8_t>& vec, unsigned maxLen /* = 10000 */)
-{
-	/*
-	 * Strings sent over the network are prefixed with their length, sent as an
-	 * unsigned 16-bit integer, not including \0 termination.
-	 */
-
-	uint32_t len = 0;
-	NETuint32_t(r, len);
-	if (len > maxLen)
-	{
-		debug(LOG_ERROR, "NETbytes: Decoding packet, length %u truncated at %u", len, maxLen);
-	}
-	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
-	vec.clear();
-	if (r.valid())
-	{
-		r.bytesVector(vec, len);
-	}
-}
-
 void NETPosition(MessageReader& r, Position& pos)
 {
 	NETint32_t(r, pos.x);
@@ -816,7 +795,7 @@ void NETVector2i(MessageReader& r, Vector2i& vec)
 
 void NETnetMessage(MessageReader& r, NetMessage** msg)
 {
-	std::vector<uint8_t> rawData;
+	NetMsgDataVector rawData{MsgDataAllocator(defaultMemoryPool())};
 	NETbytes(r, rawData, std::numeric_limits<uint32_t>::max());
 	*msg = new NetMessage(NetMessageBuilder(std::move(rawData)).build());
 }
@@ -944,24 +923,6 @@ void NETstring(MessageWriter& w, const std::string& s, uint32_t maxLen /* = 6553
 void NETbin(MessageWriter& w, const uint8_t* str, uint32_t len)
 {
 	w.bytes(str, len);
-}
-
-void NETbytes(MessageWriter& w, const std::vector<uint8_t>& vec, unsigned maxLen)
-{
-	/*
-	 * Strings sent over the network are prefixed with their length, sent as an
-	 * unsigned 16-bit integer, not including \0 termination.
-	 */
-
-	ASSERT(vec.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "vec.size() exceeds uint32_t max");
-	uint32_t len = static_cast<uint32_t>(std::min(vec.size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
-	if (len > maxLen)
-	{
-		debug(LOG_ERROR, "NETbytes: Encoding packet, length %u truncated at %u", len, maxLen);
-	}
-	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
-	NETuint32_t(w, len);
-	w.bytes(vec.data(), len);
 }
 
 void NETPosition(MessageWriter& w, const Position& pos)
