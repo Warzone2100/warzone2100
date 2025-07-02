@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-06-28 21:44+0000\n"
+"POT-Creation-Date: 2025-07-02 17:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4192,7 +4192,7 @@ msgstr ""
 #: data/base/script/tutorial.js:258
 #: data/base/script/tutorial.js:515
 #: data/mp/multiplay/script/rules/reticule.js:111
-#: lib/sdl/main_sdl.cpp:3421
+#: lib/sdl/main_sdl.cpp:3433
 #: src/challenge.cpp:265
 #: src/hci.cpp:2527
 #: src/hci/objects_stats.cpp:282
@@ -5875,19 +5875,19 @@ msgstr ""
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3423
+#: lib/sdl/main_sdl.cpp:3435
 msgid "Warzone 2100: Failed to initialize graphics"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3424
+#: lib/sdl/main_sdl.cpp:3436
 msgid "Failed to initialize graphics for all backends."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3427
+#: lib/sdl/main_sdl.cpp:3439
 msgid "Error Details:"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3434
+#: lib/sdl/main_sdl.cpp:3446
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
