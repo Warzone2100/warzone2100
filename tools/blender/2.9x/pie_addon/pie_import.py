@@ -41,6 +41,12 @@ def convertPolygonList(ls):
         out.append(float(ls[i]))
     return out
 
+def convertAnimTransformList(ls):
+    """First 7 elements are int, final 3 are floats"""
+    out = [int(word) for word in ls[:7]]
+    out += [float(word) for word in ls[7:]]
+    return out
+
 def newTexAnimGroup(ob, poly, intUV):
     ob.pie_tex_anim_grps.add()
     ob.pie_tex_anim_grps_index = len(ob.pie_tex_anim_grps) - 1
@@ -157,10 +163,14 @@ class Importer():
                 elif reading == 'POLYGONS':
                     result = tuple(convertPolygonList(ls))
 
-                elif reading in [
-                    'NORMALS', 'ANIMOBJECT', 'SHADOWPOLYGONS'
-                ]:
-                    result = (int(ls[0]), int(ls[1]), int(ls[2]), int(ls[3]), int(ls[4]), int(ls[5]), int(ls[6]), float(ls[7]), float(ls[8]), float(ls[9]))
+                elif reading == 'ANIMOBJECT':
+                    result = tuple(convertAnimTransformList(ls))
+
+                elif reading == 'NORMALS':
+                    result = tuple(convertStrListToFloatList(ls))
+
+                elif reading == 'SHADOWPOLYGONS':
+                    result = tuple(convertStrListToIntList(ls))
 
                 if result is not None:
                     pie_info['LEVELS'][lvl][reading].append(result)
