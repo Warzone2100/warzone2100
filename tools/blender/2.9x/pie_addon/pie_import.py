@@ -22,6 +22,7 @@
 import bpy
 import bmesh
 import os
+import math
 from .shared import getTexAnimGrp
 
 
@@ -159,7 +160,6 @@ class Importer():
                 elif reading in [
                     'NORMALS', 'ANIMOBJECT', 'SHADOWPOLYGONS'
                 ]:
-                    result = (*(list([int(ii)] for ii in ls[0:6]) + list([float(ii) for ii in ls[6:9]])),)
                     result = (int(ls[0]), int(ls[1]), int(ls[2]), int(ls[3]), int(ls[4]), int(ls[5]), int(ls[6]), float(ls[7]), float(ls[8]), float(ls[9]))
 
                 if result is not None:
@@ -266,17 +266,17 @@ class Importer():
 
                         if pieParse['PIE'] == 2:
                             tagIsEqual = (
-                                int(p[5]) == tag.imageCount and
-                                int(p[6]) == tag.imageRate and
-                                float(p[7] / 256) == tag.imageWidth and
-                                float(p[8] / 256) == tag.imageHeight
+                                p[5] == tag.imageCount and
+                                p[6] == tag.imageRate and
+                                math.isclose(p[7] / 256, tag.imageWidth, abs_tol=0.00005) and
+                                math.isclose(p[8] / 256, tag.imageHeight, abs_tol=0.00005)
                             )
                         else:
                             tagIsEqual = (
-                                int(p[5]) == tag.imageCount and
-                                int(p[6]) == tag.imageRate and
-                                float(p[7]) == tag.imageWidth and
-                                float(p[8]) == tag.imageHeight
+                                p[5] == tag.imageCount and
+                                p[6] == tag.imageRate and
+                                math.isclose(p[7], tag.imageWidth, abs_tol=0.00005) and
+                                math.isclose(p[8], tag.imageHeight, abs_tol=0.00005)
                             )
 
                         if tagIsEqual:
