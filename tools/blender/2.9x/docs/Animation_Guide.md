@@ -77,7 +77,7 @@ The Level2 object is a simple square made out of two triangles that are utilizin
 
 ## Texture animation
 
-**PIE Texture animation groups** represent the polygons of the Level mesh that will be animated. So the number of groups will be the same as the number of animated polygons.
+**PIE Texture animation groups** are set on levels and represent the group of polygons from the Level mesh that will be animated.
 
 ![](./006.png)
 
@@ -90,7 +90,7 @@ To illustrate, we can see how it is set on the imported blfact0.
 
 ![](./007.png)
 
-The Level 2 mesh is a square, made of two polygons, so there are two animation groups. 
+The Level 2 mesh is a square, made of two polygons, both assigned to animation group. In edit mode, you can click on select to check which polygons are assigned to the animation group. Also you can use the set button to assign polygons to an animation group.
 Images are set to 4, which means 4 frames will be used. Those are the four went circles in the texture. The first is already used as a default texture.
 Rate is set to 200 milliseconds per frame.
 With and height is set to 0.045 - that is the x length by witch the frame will move (jump) on x axis. It also the size of the square made of two polygons. The four frames in the texture are next to each other with no space between. So moving the frame by 0.045 will move (jump) it exactly one full frame.
@@ -98,7 +98,7 @@ The animation will cycle through the 4 frames repeatedly, one by one frame every
 
 You are not limited to 4 frames. You can make smooth and high quality animations, by utilizing more frames. If you have more frames than you can fit in a row inside a texture, put the remaining frames in another wow below he first one. 
 
-Here is an example. Using a simple 8 blade fan design, we can animate 45 degrees rotation as a cyclic animation. Why 45 degrees? Because rotating the 8bladed fan 45 degrees returns the symmetrical fan into its starting position. Using 20 images, 100x100 pixels rotating each by 2.25 degrees to the previous one. The rate set to 200 and wight and height set to 0.049 since that is the size of one image that we have to move. And here it is:
+Here is an example. Using a simple 8 blade fan design, we can animate 45 degrees rotation as a cyclic animation. Why 45 degrees? Because rotating the 8bladed fan 45 degrees returns the symmetrical fan into its starting position. Using 20 images, 100x100 pixels rotating each by 2.25 degrees to the previous one. The rate set to 200, wight and height set to 0.049 since that is the size of one image that we have to move. And here it is:
 
 ![](./008.png)
 
