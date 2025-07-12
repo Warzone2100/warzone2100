@@ -6039,6 +6039,10 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	{
 		displayRoomSystemMessage(_("Sorry! Failed to host the game."));
 		wz_command_interface_output("WZEVENT: hostingFailed\n");
+		if (bIsAutoHostOrAutoGame && headlessGameMode())
+		{
+			wzQuit(1);
+		}
 		return false;
 	}
 
