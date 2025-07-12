@@ -5470,6 +5470,11 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 			{
 				code_part log_level = (bIsAutoHostOrAutoGame) ? LOG_ERROR : LOG_FATAL;
 				debug(log_level, "Map %s not found!", mapName);
+				if (wz_command_interface_enabled())
+				{
+					std::string mapNameB64 = base64Encode(std::vector<unsigned char>(mapName, mapName + strlen(mapName)));
+					wz_command_interface_output("WZEVENT: mapNotFound: %s %s\n", mapNameB64.c_str(), mapHash.toString().c_str());
+				}
 				if (bIsAutoHostOrAutoGame && headlessGameMode())
 				{
 					wzQuit(1);
@@ -5965,6 +5970,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	if (!hostCampaign((char*)game.name, (char*)sPlayer, spectatorHost, bIsAutoHostOrAutoGame))
 	{
 		displayRoomSystemMessage(_("Sorry! Failed to host the game."));
+		wz_command_interface_output("WZEVENT: hostingFailed\n");
 		return false;
 	}
 
