@@ -161,7 +161,7 @@ Now the bone is aligned. Let's parent it to the blderik Level3 bone. It will loo
 
 ![](./017.png)
 
-The bone is now the child of the blderik Level3 bone. Now go back to object mode, select the object blderik Level3 right-click, select Parent and Clear Parent.
+The bone is now the child of the blderik Level3 bone. Now go back to object mode, select the object blderik Level3 with right-click, select Parent and Clear Parent.
 
 ![](./018.png)
 
