@@ -139,7 +139,7 @@ Let's start with the hammer. We want to create a bone to control the hammer move
 
 ![](./010.png)
 
-We will duplicate the bone with Shift+d and move (G+Z) it on the z-axis to the hammer level. Rename the duplicated bone from blderik Level3.001 to Hammer.
+We will duplicate the bone with Shift+D and move (G+Z) it on the Z-axis to the hammer level. Rename the duplicated bone from blderik Level3.001 to Hammer.
 
 ![](./011.png)
 
