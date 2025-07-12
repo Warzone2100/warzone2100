@@ -147,7 +147,7 @@ Align the bone with the level object. You can do it manually or use the 3D curso
 
 ![](./012.png)
 
-The 3D cursor is in the middle of the cube now. Switch to object mode select the armature, switch back to edit mode and select the hammer bone. Select the ball on the root of the bone (the side where the bone is thicker), press shift+s and Selection to cursor.
+The 3D cursor is in the middle of the cube now. Switch to object mode, select the armature, switch back to edit mode and select the hammer bone. Select the ball on the root of the bone (the side where the bone is thicker), press Shift+S and Selection to cursor.
 
 ![](./013.png)
 ![](./014.png)
