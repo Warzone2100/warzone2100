@@ -842,31 +842,51 @@ static bool NET_HasAnyOpenSlots()
 	return false;
 }
 
+static inline bool NET_IsSlotOpenForPlayerJoin(int i, bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
+{
+	if (!forceTakeLowestAvailablePlayerNumber && !asSpectator.value_or(false) && (i >= game.maxPlayers || i >= MAX_PLAYERS || NetPlay.players[i].position >= game.maxPlayers))
+	{
+		// Player slots are only supported where the player index and the player position is <= game.maxPlayers
+		// Skip otherwise
+		return false;
+	}
+	if (i == scavengerSlot())
+	{
+		// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
+		return false;
+	}
+	if (i == PLAYER_FEATURE)
+	{
+		// do not offer up this "player feature" slot - TODO: maybe remove the need for this slot?
+		return false;
+	}
+
+	PLAYER const &p = NetPlay.players[i];
+	if (p.allocated || p.ai != AI_OPEN)
+	{
+		// not an open slot
+		return false;
+	}
+	if (asSpectator.has_value() && asSpectator.value() != p.isSpectator)
+	{
+		return false;
+	}
+	return true;
+}
+
 static optional<uint32_t> NET_FindOpenSlotForPlayer(bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
 {
 	int index = -1;
 	int position = INT_MAX;
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		if (!forceTakeLowestAvailablePlayerNumber && !asSpectator.value_or(false) && (i >= game.maxPlayers || i >= MAX_PLAYERS || NetPlay.players[i].position >= game.maxPlayers))
+		if (!NET_IsSlotOpenForPlayerJoin(i, forceTakeLowestAvailablePlayerNumber, asSpectator))
 		{
-			// Player slots are only supported where the player index and the player position is <= game.maxPlayers
-			// Skip otherwise
-			continue;
-		}
-		if (i == scavengerSlot())
-		{
-			// do not offer up the scavenger slot (this really needs to be refactored later - why is this a variable slot index?!?)
-			continue;
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			// do not offer up this "player feature" slot - TODO: maybe remove the need for this slot?
 			continue;
 		}
 		// find the lowest "position" slot that is available (unless forceTakeLowestAvailablePlayerNumber is set, in which case just take the first available)
 		PLAYER const &p = NetPlay.players[i];
-		if (!p.allocated && p.ai == AI_OPEN && p.position < position && (!asSpectator.has_value() || asSpectator.value() == p.isSpectator))
+		if (p.position < position)
 		{
 			index = i;
 			position = p.position;
@@ -885,6 +905,27 @@ static optional<uint32_t> NET_FindOpenSlotForPlayer(bool forceTakeLowestAvailabl
 	return static_cast<uint32_t>(index);
 }
 
+static bool NET_CreatePlayerAtIdx(uint32_t index, char const *name)
+{
+	ASSERT_OR_RETURN(false, !NetPlay.players[index].allocated, "Player index (%" PRIu32 ")already allocated!", index);
+
+	char buf[250] = {'\0'};
+
+	ssprintf(buf, "A new player has been created. Player, %s, is set to slot %u", name, index);
+	debug(LOG_NET, "%s", buf);
+	NETlogEntry(buf, SYNC_FLAG, index);
+	NET_InitPlayer(index, false);  // re-init everything
+	NetPlay.players[index].allocated = true;
+	NetPlay.players[index].difficulty = AIDifficulty::HUMAN;
+	setPlayerName(index, name);
+	if (!NetPlay.players[index].isSpectator)
+	{
+		++NetPlay.playercount;
+	}
+	++sync_counter.joins;
+	return true;
+}
+
 static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false, optional<bool> asSpectator = false)
 {
 	optional<uint32_t> index = NET_FindOpenSlotForPlayer(forceTakeLowestAvailablePlayerNumber, asSpectator);
@@ -895,20 +936,11 @@ static optional<uint32_t> NET_CreatePlayer(char const *name, bool forceTakeLowes
 		return nullopt;
 	}
 
-	char buf[250] = {'\0'};
-
-	ssprintf(buf, "A new player has been created. Player, %s, is set to slot %u", name, index.value());
-	debug(LOG_NET, "%s", buf);
-	NETlogEntry(buf, SYNC_FLAG, index.value());
-	NET_InitPlayer(index.value(), false);  // re-init everything
-	NetPlay.players[index.value()].allocated = true;
-	NetPlay.players[index.value()].difficulty = AIDifficulty::HUMAN;
-	setPlayerName(index.value(), name);
-	if (!NetPlay.players[index.value()].isSpectator)
+	if (!NET_CreatePlayerAtIdx(index.value(), name))
 	{
-		++NetPlay.playercount;
+		// should not happen
+		return nullopt;
 	}
-	++sync_counter.joins;
 	return index;
 }
 
