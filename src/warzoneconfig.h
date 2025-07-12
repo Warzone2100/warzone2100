@@ -142,6 +142,8 @@ int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
 int war_getAutoDesyncKickSeconds();
 void war_setAutoDesyncKickSeconds(int seconds);
+int war_getAutoNotReadyKickSeconds();
+void war_setAutoNotReadyKickSeconds(int seconds);
 bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
 int war_getMaxReplaysSaved();

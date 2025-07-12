@@ -106,7 +106,8 @@
 	/* WZ-generated internal messages - not for users to deliberately send */ \
 	MSG(INTERNAL_MSG_DELIVERY_FAILURE_TRY_AGAIN) /* This should always be the first internal message! */ \
 	MSG(INTERNAL_LOBBY_NOTICE_MAP_DOWNLOADED) \
-	MSG(INTERNAL_ADMIN_ACTION_NOTICE)
+	MSG(INTERNAL_ADMIN_ACTION_NOTICE) \
+	MSG(INTERNAL_LOCALIZED_LOBBY_NOTICE)
 
 #define GENERATE_ENUM(ENUM) ENUM,
 
@@ -175,6 +176,17 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 	};
 	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdx);
 } // namespace INTERNAL_ADMIN_ACTION_NOTICE
+
+// - INTERNAL_LOCALIZED_LOBBY_NOTICE
+namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
+	enum class Context : uint32_t
+	{
+		Invalid = 0,
+		NotReadyKickWarning,
+		NotReadyKicked
+	};
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx);
+} // namespace INTERNAL_LOCALIZED_LOBBY_NOTICE
 
 } // namespace WzQuickChatDataContexts
 

@@ -76,6 +76,7 @@ struct WARZONE_GLOBALS
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
 	int autoDesyncKickSeconds = 10;
+	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -505,6 +506,21 @@ void war_setAutoDesyncKickSeconds(int seconds)
 		seconds = std::max(seconds, 10);
 	}
 	warGlobs.autoDesyncKickSeconds = seconds;
+}
+
+int war_getAutoNotReadyKickSeconds()
+{
+	return warGlobs.autoNotReadyKickSeconds;
+}
+
+void war_setAutoNotReadyKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 15);
+	}
+	warGlobs.autoNotReadyKickSeconds = seconds;
 }
 
 bool war_getDisableReplayRecording()

@@ -132,6 +132,7 @@ struct MULTIPLAYERINGAME
 	optional<std::chrono::steady_clock::time_point> endTime;
 	std::chrono::steady_clock::time_point lastLagCheck;
 	std::chrono::steady_clock::time_point lastDesyncCheck;
+	std::chrono::steady_clock::time_point lastNotReadyCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
 	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
@@ -286,7 +287,9 @@ void printConsoleNameChange(const char *oldName, const char *newName);  ///< Pri
 
 void turnOffMultiMsg(bool bDoit);
 
-void autoLagKickRoutine();
+void autoLagKickRoutine(std::chrono::steady_clock::time_point now);
+void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now);
+uint64_t calculateSecondsNotReadyForPlayer(size_t i, std::chrono::steady_clock::time_point now);
 
 void sendMap();
 bool multiplayerWinSequence(bool firstCall);

@@ -630,6 +630,7 @@ bool loadConfig()
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
 	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
+	war_setAutoNotReadyKickSeconds(iniGetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	war_setMaxReplaysSaved(iniGetInteger("maxReplaysSaved", war_getMaxReplaysSaved()).value());
 	war_setOldLogsLimit(iniGetInteger("oldLogsLimit", war_getOldLogsLimit()).value());
@@ -850,6 +851,7 @@ bool saveConfig()
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
 	iniSetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds());
+	iniSetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
 	iniSetInteger("maxReplaysSaved", war_getMaxReplaysSaved());
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
