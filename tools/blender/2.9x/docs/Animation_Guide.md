@@ -130,7 +130,7 @@ The armature has three default bones, one for each level. If you would animate s
 However, it is recommended creating child bones and parenting the bone to the default bone, animating them that way. This will give you much more control of positioning and advanced animation techniques.
 Remember, we have only location, rotation, and scale values that we can use to animate the level objects. We are not able to animate the mesh, like mesh deform. The level object will be the child of the animation bone.
 
-We should remove the the imported animation data first. Switch to Animation Tab, select the bones blderik_anim Level 2 and blderik_anim Level 3, click into the timeline, and tap A key. This will select all keyframes.
+We should remove the imported animation data first. Switch to Animation Tab, select the bones blderik_anim Level 2 and blderik_anim Level 3, click into the timeline, and tap A key. This will select all keyframes.
 Right click in the timeline and select Delete Keyframes
 
 ![](./009_2.png)
