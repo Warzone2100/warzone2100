@@ -819,8 +819,6 @@ void WzPlayerRow::updateState()
 
 void WzPlayerRow::updateReadyButton()
 {
-	bool disallow = (allPlayersOnSameTeam(-1) != -1) && !isBlindSimpleLobby(game.blindMode);
-
 	const auto& aidata = getAIData();
 	const auto& locked = getLockedOptions();
 
@@ -907,7 +905,7 @@ void WzPlayerRow::updateReadyButton()
 		return;
 	}
 
-	if (disallow)
+	if (!multiplayPlayersCanCheckReady())
 	{
 		// remove ready / difficulty button
 		deleteExistingReadyButton();
