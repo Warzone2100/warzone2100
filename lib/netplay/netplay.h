@@ -384,7 +384,7 @@ void NETinitPortMapping();
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
 size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
-void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
+void NETplayerKicked(UDWORD index, bool quiet = false);			// Cleanup after player has been kicked
 
 bool NETplayerHasConnection(uint32_t index);
 

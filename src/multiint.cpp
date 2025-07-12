@@ -6643,6 +6643,7 @@ void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, co
 	auto redirectInfo = parseKickRedirectInfo(redirectString, optCurrHostAddress.value());
 	if (!redirectInfo.has_value())
 	{
+		debug(LOG_ERROR, "Unable to parse kick redirect info");
 		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent));
 		return;
 	}
@@ -6664,6 +6665,7 @@ void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, co
 	if (!startJoinRedirectAttempt(sPlayer, redirectInfo->connList, redirectInfo->asSpectator, expectedHostProps))
 	{
 		// Display a message box about being kicked, and unable to rejoin
+		debug(LOG_INFO, "startJoinRedirectAttempt failed");
 		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process repeated or invalid redirects")), parent));
 	}
 }
@@ -7039,7 +7041,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				}
 				else
 				{
-					NETplayerKicked(player_id);
+					NETplayerKicked(player_id, KICK_TYPE == ERROR_REDIRECT);
 				}
 				break;
 			}
