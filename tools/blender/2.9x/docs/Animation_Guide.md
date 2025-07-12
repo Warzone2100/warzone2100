@@ -114,7 +114,7 @@ You can set the end frame to 24 and test the playback with Space. As you can see
 The script will export all keyframes from 0 to the last key frame that has set animation data. If you have an animation with only few keyframes, there is no need to set each frame manually, as the export will create the in between frames for you.
 
 Interpolate animation - it is important to remember that interpolate is by default on and it is represented by value 0. Checking the checkbox will set it to 1 and disable interpolate animation for the pie.
-Normally 0 is off and 1 is on, but in this case it reversed. Please remember this when exporting. Of your animation in-game is jittery, test with enabled or disabled.
+Normally 0 is off and 1 is on, but in this case it is reversed. Please remember this when exporting. If your animation in-game is jittery, test with enabled or disabled.
 
 Animation time and animation cycles are set directly on the Level objects. Both blderik_anim Level2 and Level3 have the same values, animation time 60 and animation cycles 0 (0 is infinite repetitions.)
 You can set different animation time cycles if you want to have asynchronous animations for different Levels.
