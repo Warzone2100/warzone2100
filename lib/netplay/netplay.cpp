@@ -3985,6 +3985,10 @@ static void NETaddSessionBanBadIP(const std::string& badIP)
 
 static bool quickRejectConnection(const std::string& ip)
 {
+	if (isLoopbackIP(ip.c_str()))
+	{
+		return false;
+	}
 	auto it = tmp_pendingIPs.find(ip);
 	if (it != tmp_pendingIPs.end())
 	{
