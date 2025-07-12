@@ -199,7 +199,7 @@ Switch to Pose mode, switch to view the derik from the side, hold down shift and
 
 Select Location, Rotation & Scale. When you select the bones again, you can see the keyframe data on both of them.
 
-Now let's select the frame 29, rotate the hammer bone, move the piston up on the z-axis, and insert another keyframe.
+Now let's select the frame 29, rotate the hammer bone, move the piston up on the Z-axis, and insert another keyframe.
 
 ![](./025.png)
 
