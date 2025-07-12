@@ -261,6 +261,11 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j[mapPlayerDataOutputName("recentResearchPerformance", naming)] = p.recentResearchPerformance;
 		j[mapPlayerDataOutputName("usertype", naming)] = mapPlayerUserTypeOutputValue(p.usertype, naming);
 
+		if (idx < ingame.playerLeftGameTime.size() && ingame.playerLeftGameTime[idx].has_value())
+		{
+			j["playerLeftGameTime"] = ingame.playerLeftGameTime[idx].value();
+		}
+
 		size_t outputIndex = idx;
 		switch (outputKey)
 		{
@@ -354,6 +359,12 @@ void GameStoryLogger::logGameFrame()
 	if (!bMultiPlayer)
 	{
 		// skip for campaign, for now
+		return;
+	}
+
+	if (frameLoggingInterval == 0)
+	{
+		// frame logging disabled
 		return;
 	}
 
@@ -527,9 +538,9 @@ nlohmann::json GameStoryLogger::genFrameReport(const GameFrame& frame, OutputKey
 	return report;
 }
 
-nlohmann::json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const
+nlohmann::ordered_json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const
 {
-	nlohmann::json report = nlohmann::json::object();
+	nlohmann::ordered_json report = nlohmann::json::object();
 
 	report["JSONversion"] = CurrentGameLogOutputJSONVersion;
 	report["gameTime"] = gameTime;

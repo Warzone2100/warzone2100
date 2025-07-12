@@ -148,7 +148,7 @@ private:
 
 	GameFrame genCurrentFrame() const;
 	nlohmann::json genFrameReport(const GameFrame& frame, OutputKey key, OutputNaming naming);
-	nlohmann::json genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const;
+	nlohmann::ordered_json genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const;
 	std::string getLogOutputFilename() const;
 
 	void outputLine(std::string&& line);
