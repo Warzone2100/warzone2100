@@ -489,6 +489,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (wz_command_interface_enabled())
 	{
+		// WZEVENT: playerLeft: <playerIdx> <gameTime> <b64pubkey> <hash> <V|?> <b64name> <ip>
 		const auto& identity = getOutputPlayerIdentity(playerIndex);
 		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = identity.publicHashString();

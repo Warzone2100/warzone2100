@@ -1955,6 +1955,18 @@ bool NETsend(NETQUEUE queue, NetMessage const& message)
 
 static void NETcloseTempSocket(unsigned int i)
 {
+	if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingAsyncApproval
+		|| tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::ProcessJoin)
+	{
+		// If there's any chance we may have issued an async join approval request, ensure we issue a joinFailed event
+		// WZEVENT: joinFailed: <b64pubkey> <b64name> [spec|play] <reason>
+		const auto& joinRequestInfo = tmp_connectState[i].receivedJoinInfo;
+		std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
+		std::string joinerName = joinRequestInfo.name;
+		std::string joinerNameB64 = base64Encode(std::vector<unsigned char>(joinerName.begin(), joinerName.end()));
+		wz_command_interface_output("WZEVENT: joinFailed: %s %s %s %s\n", joinerPublicKeyB64.c_str(), joinerNameB64.c_str(), (joinRequestInfo.playerType == NET_JOIN_SPECTATOR) ? "spec" : "play", "full");
+	}
+
 	std::string rIP = tmp_socket[i]->textAddress();
 	tmp_socket_set->remove(tmp_socket[i]);
 	tmp_socket[i]->close();
@@ -3761,6 +3773,7 @@ bool LobbyServerConnectionHandler::disconnect()
 	queuedServerUpdate = false;
 
 	ActivityManager::instance().hostGameLobbyServerDisconnect();
+	wz_command_interface_output_str("WZEVENT: lobbyerror: Disconnected\n");
 
 	currentState = LobbyConnectionState::Disconnected;
 	return true;
@@ -4824,7 +4837,12 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	if (server_listen_socket == nullptr)
 	{
 		const auto sockErrMsg = serverListenResult.error().message();
-		debug(LOG_ERROR, "Cannot connect to master self: %s", sockErrMsg.c_str());
+		debug(LOG_ERROR, "Cannot open listening connection: %s", sockErrMsg.c_str());
+		if (wz_command_interface_enabled())
+		{
+			std::string sockErrMsgB64 = base64Encode(std::vector<unsigned char>(sockErrMsg.begin(), sockErrMsg.end()));
+			wz_command_interface_output("WZEVENT: serverListenSocketFailed: %d %s\n", serverListenResult.error().value(), sockErrMsgB64.c_str());
+		}
 		return false;
 	}
 	debug(LOG_NET, "New server_listen_socket = %p", static_cast<void *>(server_listen_socket));

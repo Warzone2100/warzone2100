@@ -220,7 +220,11 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
-			wz_command_interface_output("WZEVENT: lag-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
+			if (wz_command_interface_enabled()) {
+				const auto& identity = getOutputPlayerIdentity(i);
+				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+				wz_command_interface_output("WZEVENT: lag-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
+			}
 			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION, false);
 			ingame.LagCounter[i] = 0;
 		}
@@ -311,7 +315,11 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i), DesyncAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
-			wz_command_interface_output("WZEVENT: desync-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
+			if (wz_command_interface_enabled()) {
+				const auto& identity = getOutputPlayerIdentity(i);
+				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+				wz_command_interface_output("WZEVENT: desync-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
+			}
 			kickPlayer(i, "Your game simulation deviated too far from the host - desync.", ERROR_CONNECTION, false);
 			ingame.DesyncCounter[i] = 0;
 		}
