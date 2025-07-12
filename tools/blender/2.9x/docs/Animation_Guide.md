@@ -110,7 +110,7 @@ Let's import blderik_anim.pie as an example for the animobject animation. Once i
 ![](./009.png)
 
 As you can see, the blderik_anim Level 2 "Piston" and  blderik_anim Level 3 "Hammer" have 24 keyframes set. The blderik_anim Level 1 has no keyframes set as the "base" is not animated.
-You can set the end frame to 24 and test the playback with space. As you can see, the animation is using rotation and location to animate the level objects. The bones hold the animation key frames data and they are the level object's parent. That way the object follows the bone movement and rotation.
+You can set the end frame to 24 and test the playback with Space. As you can see, the animation is using rotation and location to animate the level objects. The bones hold the animation key frames data and they are the level object's parent. That way the object follows the bone movement and rotation.
 The script will export all keyframes from 0 to the last key frame that has set animation data. If you have an animation with only few keyframes, there is no need to set each frame manually, as the export will create the in between frames for you.
 
 Interpolate animation - it is important to remember that interpolate is by default on and it is represented by value 0. Checking the checkbox will set it to 1 and disable interpolate animation for the pie.
