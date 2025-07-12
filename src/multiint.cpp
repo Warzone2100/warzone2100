@@ -5707,6 +5707,14 @@ static void loadMapPlayerSettings(WzConfig& ini)
 				NetPlay.players[i].ai = AI_OPEN;
 			}
 		}
+
+		if (ini.contains("closed"))
+		{
+			if (ini.value("closed").toBool())
+			{
+				NetPlay.players[i].ai = AI_CLOSED;
+			}
+		}
 		ini.endGroup();
 	}
 
