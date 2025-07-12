@@ -84,7 +84,7 @@ The Level2 object is a simple square made out of two triangles that are utilizin
 - **Images** represent the number of frames the animation will use.
 - **Rate** is the playback rate. The units are game ticks per frame (effectively millisecond per frame)
 - **width/height**  x and y size of the animation frame. The x value cannot be zero. Blender is rounding up the view so click into the value field to get the exact value.
-X value is the distance by witch the next frame will be offset. Y is not used, but if you want a texture animation to scroll vertically instead of horizontally, specify a width of 256.
+X value is the distance by which the next frame will be offset. Y is not used, but if you want a texture animation to scroll vertically instead of horizontally, specify a width of 256.
 
 To illustrate, we can see how it is set on the imported blfact0.
 
