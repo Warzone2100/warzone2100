@@ -2632,7 +2632,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 			}
 		}
 
-		wz_command_interface_output_room_status_json();
+		wz_command_interface_output_room_status_json(true);
 	}
 }
 

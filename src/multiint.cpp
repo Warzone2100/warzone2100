@@ -2540,6 +2540,49 @@ static void informIfAdminChangedOtherTeam(uint32_t targetPlayerIdx, uint32_t res
 	debug(LOG_INFO, "Admin %s (%s) changed team of player ([%u] %s) to: %d", getPlayerName(responsibleIdx), senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, getPlayerName(targetPlayerIdx), NetPlay.players[targetPlayerIdx].team);
 }
 
+void handlePossiblePlayersCanCheckReadyChange(bool previousPlayersCanCheckReadyValue)
+{
+	bool currentPlayersAbleToCheckReadyValue = multiplayPlayersCanCheckReady();
+	if (previousPlayersCanCheckReadyValue != currentPlayersAbleToCheckReadyValue)
+	{
+		if (currentPlayersAbleToCheckReadyValue)
+		{
+			// Player can now check ready
+			// Update ingame.lastNotReadyTimes for all not-ready players to "now"
+			auto now = std::chrono::steady_clock::now();
+			for (size_t i = 0; i < NetPlay.players.size(); i++)
+			{
+				if (!isHumanPlayer(i)) { continue; }
+				if (!NetPlay.players[i].ready)
+				{
+					ingame.lastNotReadyTimes[i] = now;
+				}
+			}
+		}
+		else
+		{
+			// Players can no longer check ready
+			// Update ingame.secondsNotReady for all not-ready players
+			// Reset ingame.lastNotReadyTimes to nullopt
+			auto now = std::chrono::steady_clock::now();
+			for (size_t i = 0; i < NetPlay.players.size(); i++)
+			{
+				if (!isHumanPlayer(i)) { continue; }
+				if (!NetPlay.players[i].ready)
+				{
+					// accumulate time spent not ready while they _could_ check ready
+					if (ingame.lastNotReadyTimes[i].has_value())
+					{
+						ingame.secondsNotReady[i] += std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastNotReadyTimes[i].value()).count();
+					}
+				}
+				ingame.lastNotReadyTimes[i].reset();
+			}
+		}
+		wz_command_interface_output_room_status_json(true);
+	}
+}
+
 static bool changeTeam(UBYTE player, UBYTE team, uint32_t responsibleIdx)
 {
 	if (team >= MAX_CONNECTED_PLAYERS)
@@ -2558,10 +2601,14 @@ static bool changeTeam(UBYTE player, UBYTE team, uint32_t responsibleIdx)
 		return false;  // Nothing to do.
 	}
 
+	bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
+
 	NetPlay.players[player].team = team;
 	debug(LOG_WZ, "set %d as new team for player %d", team, player);
 	NETBroadcastPlayerInfo(player);
 	informIfAdminChangedOtherTeam(player, responsibleIdx);
+
+	handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 
 	netPlayersUpdated = true;
 	return true;
@@ -2720,6 +2767,27 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 {
 	bool changedValue = NetPlay.players[player].ready != bReady;
 	NetPlay.players[player].ready = bReady;
+	if (changedValue)
+	{
+		if (bReady)
+		{
+			auto now = std::chrono::steady_clock::now();
+			if (ingame.lastNotReadyTimes[player].has_value())
+			{
+				// accumulate time spent since the player last went "not ready"
+				ingame.secondsNotReady[player] += std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastNotReadyTimes[player].value()).count();
+				ingame.lastNotReadyTimes[player].reset();
+			}
+			ingame.lastReadyTimes[player] = now;
+		}
+		else
+		{
+			if (multiplayPlayersCanCheckReady())
+			{
+				ingame.lastNotReadyTimes[player] = std::chrono::steady_clock::now();
+			}
+		}
+	}
 	NETBroadcastPlayerInfo(player);
 	netPlayersUpdated = true;
 	// Player is fast! Clicked the "Ready" button before we had a chance to ping him/her
