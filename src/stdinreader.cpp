@@ -30,6 +30,7 @@
 #include "clparse.h"
 #include "main.h"
 #include "multivote.h"
+#include "hci/teamstrategy.h"
 
 #include <string>
 #include <atomic>
@@ -1627,8 +1628,29 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 
 	if (!gameHasFiredUp)
 	{
-		// in lobby, output "ready" status
+		// in lobby:
+		auto currentTime = std::chrono::steady_clock::now();
+
+		// output "ready" status
 		j["ready"] = static_cast<int>(p.ready);
+
+		if (NetPlay.isHost)
+		{
+			// output seconds since join
+			if (ingame.joinTimes[player].has_value())
+			{
+				j["joinedfor"] = std::chrono::duration_cast<std::chrono::seconds>(currentTime - ingame.joinTimes[player].value()).count();
+			}
+
+			// output seconds since _last_ ready (i.e. if currently ready, how long we've been ready this time)
+			if (p.ready && ingame.lastReadyTimes[player].has_value())
+			{
+				j["readyfor"] = std::chrono::duration_cast<std::chrono::seconds>(currentTime - ingame.lastReadyTimes[player].value()).count();
+			}
+
+			// output _total_ seconds spent not ready (at this snapshot)
+			j["notreadyfor"] = calculateSecondsNotReadyForPlayer(player, currentTime);
+		}
 	}
 	else
 	{
@@ -1651,6 +1673,11 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 		else
 		{
 			j["status"] = "left";
+
+			if (ingame.playerLeftGameTime[player].has_value())
+			{
+				j["playerLeftGameTime"] = ingame.playerLeftGameTime[player].value();
+			}
 		}
 	}
 
@@ -1709,7 +1736,11 @@ void wz_command_interface_output_room_status_json(bool queued)
 	auto data = nlohmann::ordered_json::object();
 	if (gameHasFiredUp)
 	{
-		if (ingame.TimeEveryoneIsInGame.has_value())
+		if (ingame.endTime.has_value())
+		{
+			data["state"] = "ended";
+		}
+		else if (ingame.TimeEveryoneIsInGame.has_value())
 		{
 			data["state"] = "started";
 		}
@@ -1732,6 +1763,7 @@ void wz_command_interface_output_room_status_json(bool queued)
 	}
 	data["map"] = game.map;
 	data["blind"] = static_cast<uint8_t>(game.blindMode);
+	data["unixtime"] = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	root["data"] = std::move(data);
 
@@ -1744,7 +1776,7 @@ void wz_command_interface_output_room_status_json(bool queued)
 			auto j = nlohmann::ordered_json::object();
 
 			j["pos"] = p.position;
-			j["team"] = p.team;
+			j["team"] = checkedGetPlayerTeam(player);
 			j["col"] = p.colour;
 			j["fact"] = static_cast<int32_t>(p.faction);
 
