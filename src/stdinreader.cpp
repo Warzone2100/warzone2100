@@ -1048,6 +1048,7 @@ int cmdInputThreadFunc(void *)
 			else
 			{
 				std::string chatmsgstr(chatmsg);
+				convertEscapedNewlines(chatmsgstr);
 				wzAsyncExecOnMainThread([chatmsgstr] {
 					if (!NetPlay.isHostAlive)
 					{
@@ -1071,6 +1072,7 @@ int cmdInputThreadFunc(void *)
 			{
 				std::string playerIdentityStrCopy(playeridentitystring);
 				std::string chatmsgstr(chatmsg);
+				convertEscapedNewlines(chatmsgstr);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, chatmsgstr] {
 					bool foundActivePlayer = chatActivePlayerWithIdentity(playerIdentityStrCopy, chatmsgstr);
 					if (!foundActivePlayer)
