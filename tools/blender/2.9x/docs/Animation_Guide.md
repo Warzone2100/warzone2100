@@ -143,7 +143,7 @@ We will duplicate the bone with Shift+D and move (G+Z) it on the Z-axis to the h
 
 ![](./011.png)
 
-Align the bone with the level object. You can do it manually or use the 3D cursor. Switch to object mode, select the blderik Level 3 object (the mesh, not the bone) and switch to edit mode again. Change to wire-frame (Z), select all vertices of the square mesh, press shift+s and select cursor to selected.
+Align the bone with the level object. You can do it manually or use the 3D cursor. Switch to object mode, select the blderik Level 3 object (the mesh, not the bone) and switch to edit mode again. Change to wire-frame (Z), select all vertices of the square mesh, press Shift+S and select cursor to selected.
 
 ![](./012.png)
 
