@@ -165,7 +165,7 @@ The bone is now the child of the blderik Level3 bone. Now go back to object mode
 
 ![](./018.png)
 
-Now the object not parented to the armature anymore.
+Now the object is not parented to the armature anymore.
 
 ![](./019.png)
 
