@@ -169,7 +169,7 @@ Now the object is not parented to the armature anymore.
 
 ![](./019.png)
 
-We need to parent the object to the hammer bone. Still in object mode, select the blderik Level3, hold shift and select the armature object, switch to pose mode, and select the hammer bone. Press ctrl+p and select bone.
+We need to parent the object to the hammer bone. Still in object mode, select the blderik Level3, hold Shift and select the armature object, switch to pose mode, and select the hammer bone. Press Ctrl+P and select bone.
 
 ![](./020.png)
 
