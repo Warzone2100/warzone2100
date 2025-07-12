@@ -203,7 +203,7 @@ Now let's select the frame 29, rotate the hammer bone, move the piston up on the
 
 ![](./025.png)
 
-Now go to frame 59, rotate the hammer back and move the piston back into the same position as on frame -1. If you want to be sure to have he exact starting position, you can copy the the key frame -1 by selecting and right-clicking the points on frame -1. Then select frame 59, right-click and paste.
+Now go to frame 59, rotate the hammer back and move the piston back into the same position as on frame -1. If you want to be sure to have the exact starting position, you can copy the key frame -1 by selecting and right-clicking the points on frame -1. Then select frame 59, right-click and paste.
 
 ![](./026.png)
 ![](./027.png)
