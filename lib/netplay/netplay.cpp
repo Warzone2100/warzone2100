@@ -4761,6 +4761,23 @@ void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const 
 
 } // anonymous namespace
 
+static void NETEnableAllowJoining(const std::string& externalIp, uint16_t extPort)
+{
+	ASSERT_HOST_ONLY(return);
+	ASSERT_OR_RETURN(, !allow_joining, "allow_joining already true!");
+
+	// Once this is true, we are able to connect to the lobby server and announce to other players that
+	// this game session is available to join to.
+	allow_joining = true;
+
+	std::string connType = (activeConnProvider) ? to_string(activeConnProvider->type()) : std::string();
+	std::string outputExternalIP = (!externalIp.empty()) ? externalIp : "unknown";
+	std::string outputGamePassword = (NETGameIsLocked()) ? NetPlay.gamePassword : "";
+	wz_command_interface_output("WZEVENT: readyForJoins: %s %" PRIu16 " %s %s\n", connType.c_str(), extPort, outputExternalIP.c_str(), outputGamePassword.c_str());
+
+	debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+}
+
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost,
                  uint32_t gameType, uint32_t two, uint32_t three, uint32_t four,
                  UDWORD plyrs)	// # of players.
@@ -4865,15 +4882,13 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 			//
 			// Once this is true, we are able to connect to the lobby server and announce to other players that
 			// this game session is available to join to.
-			allow_joining = true;
-			debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+			NETEnableAllowJoining(externalIp, extPort);
 		}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingDiscoveryStatus /*status*/) // failure callback
 		{
 			// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 			// that others will still be able to connect to us.
 			SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
-			allow_joining = true;
-			debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+			NETEnableAllowJoining("", gameserver_port);
 		});
 	}
 	else
@@ -4883,8 +4898,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 		// that others will still be able to connect to us.
 		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
-		allow_joining = true;
-		debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
+		NETEnableAllowJoining("", gameserver_port);
 	}
 
 	return true;
