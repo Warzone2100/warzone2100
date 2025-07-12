@@ -28,7 +28,7 @@ As described in the add-on readme, objects in Blender can be assigned one of the
 
 ### PIE Import Example
 
-Let's start importing a PIE file, as it gives us an good example with the whole structure in place. Take the factory model blfact0.pie from the extracted base.wz/structs directory (mentioned earlier).
+Let's start importing a PIE file, as it gives us a good example with the whole structure in place. Take the factory model blfact0.pie from the extracted base.wz/structs directory (mentioned earlier).
 File -> Import -> Warzone 2100 model (.pie) 
 
 ![](./001.png)
