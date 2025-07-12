@@ -157,7 +157,7 @@ The root of the bone will snap to the cursor. Repeat the same with the other end
 ![](./015.png)
 ![](./016.png)
 
-Now the bone is aligned. Let's parent it to the blderik Level3 bone. It will look more organized in the hierarchy. Still in edit mode, select the blderik Level3 bone, hold shift and select the hammer bone. Move the cursor to the viewport and press ctrl+p and select keep offset.
+Now the bone is aligned. Let's parent it to the blderik Level3 bone. It will look more organized in the hierarchy. Still in edit mode, select the blderik Level3 bone, hold Shift and select the hammer bone. Move the cursor to the viewport and press Ctrl+P and select keep offset.
 
 ![](./017.png)
 
