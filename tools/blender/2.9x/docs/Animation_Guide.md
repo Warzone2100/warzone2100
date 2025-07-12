@@ -225,6 +225,6 @@ Now let's export the PIE. Switch to object mode, select the armature. Change PIE
 
 ![](./031.png)
 
-With the selected root armature, click on File - Export - Warzone 2100 model (.pie), select the location and click export pie to directory.
+With the selected root armature, click on File - Export - Warzone 2100 model (.pie), select the location and click export PIE to directory.
 
 ![](./032.png)
