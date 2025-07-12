@@ -3098,11 +3098,6 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 				NETplayerDropped(current);
 				connected_bsocket[current] = nullptr;		// clear their socket
 			}
-			else
-			{
-				// lobby errors were set in NET_fillBuffer()
-				return false;
-			}
 		}
 	}
 
