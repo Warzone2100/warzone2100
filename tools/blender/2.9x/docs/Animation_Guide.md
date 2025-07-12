@@ -193,7 +193,7 @@ To enable negative frames in Blender Edit -> Preferences -> Animation -> Allow N
 
 ![](./023.png)
 
-Switch to Pose mode, switch to view the derik from the side, hold down shift and select both Piston and hammer bone. Now make sure the frame -1 is selected in the timeline, and right-click in the view and select Insert Keyframe.
+Switch to Pose mode, switch to view the derik from the side, hold down Shift and select both Piston and hammer bone. Now make sure the frame -1 is selected in the timeline, and right-click in the view and select Insert Keyframe.
 
 ![](./024.png)
 
