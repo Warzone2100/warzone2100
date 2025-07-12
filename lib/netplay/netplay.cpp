@@ -613,9 +613,9 @@ static size_t NET_fillBuffer(IClientConnection** pSocket, IConnectionPollGroup* 
 		{
 			debug(LOG_NET, "Host connection was lost!");
 			NETlogEntry("Host connection was lost!", SYNC_FLAG, selectedPlayer);
-			bsocket = nullptr;
 			//Game is pretty much over --should just end everything when HOST dies.
-			NetPlay.isHostAlive = false;
+			NETclientHandleHostDisconnected();
+			bsocket = nullptr;
 			ingame.localJoiningInProgress = false;
 			setLobbyError(ERROR_NOERROR);
 			NETclose();
@@ -1915,7 +1915,7 @@ bool NETsend(NETQUEUE queue, NetMessage const& message)
 	else if (player == NetPlay.hostPlayer)
 	{
 		// We are a client, send directly to player, who happens to be the host.
-		if (bsocket)
+		if (bsocket && NetPlay.isHostAlive)
 		{
 			const auto& rawData = message.rawData();
 			ssize_t rawLen = rawData.size();
@@ -1951,6 +1951,7 @@ bool NETsend(NETQUEUE queue, NetMessage const& message)
 		NETuint8_t(w, player);
 		NETnetMessage(w, message);
 		NETend(w);
+		return true;
 	}
 
 	return false;
@@ -1992,13 +1993,8 @@ static void NETcloseTempSocket(unsigned int i)
 static void NETclientHandleHostDisconnected()
 {
 	ASSERT_OR_RETURN(, !NetPlay.isHost, "Should only be called by clients!");
-	ASSERT_OR_RETURN(, bsocket != nullptr, "bsocket is already null?");
-	if (client_socket_set)
-	{
-		client_socket_set->remove(bsocket); // mark it invalid
-	}
-	bsocket->close();
-	bsocket = nullptr;
+	// NOTE: Do *not* close the socket or connection group here, as this is called from both send and receiving functions
+	// And if this was detected on a send, we still might have buffered data to read!
 	ASSERT(NetPlay.hostPlayer < NetPlay.players.size(), "Invalid NetPlay.hostPlayer: %" PRIu32, NetPlay.hostPlayer);
 	NetPlay.players[NetPlay.hostPlayer].heartbeat = false;	// mark host as dead
 	//Game is pretty much over --should just end everything when HOST dies.
@@ -2063,11 +2059,11 @@ void NETflush()
 	}
 	else
 	{
-		if (bsocket != nullptr)
+		if (bsocket != nullptr && NetPlay.isHostAlive)
 		{
 			if (!bsocket->isValid() || !bsocket->flush(&compressedRawLen).has_value())
 			{
-				debug(LOG_INFO, "Failed to flush socket for host. Closing connection.");
+				debug(LOG_NET, "Failed to flush socket for host. Host probably disconnected.");
 				NETlogEntry("flush error--client disconnect.", SYNC_FLAG, NetPlay.hostPlayer);
 				NETclientHandleHostDisconnected();
 				return;
