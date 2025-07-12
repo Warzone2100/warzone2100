@@ -297,7 +297,9 @@ bool getInputLine(int fd, bool isSocketFd, optional<std::string> &nextLine)
 	}
 	if (bytesRead == 0)
 	{
-		return true;
+		// read() returned 0, or EOF - pipe closed?
+		debug(LOG_INFO, "read returned 0 / EOF - pipe closed?");
+		return false;
 	}
 	actualAvailableBytes += static_cast<size_t>(bytesRead);
 	nextLine = getNextLineFromBuffer();
