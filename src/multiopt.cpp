@@ -483,6 +483,11 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
 	ingame.PendingDisconnect[selectedPlayer] = false;
+	ingame.joinTimes[selectedPlayer] = std::chrono::steady_clock::now();
+	ingame.lastReadyTimes[selectedPlayer].reset();
+	ingame.lastNotReadyTimes[selectedPlayer].reset();
+	ingame.secondsNotReady[selectedPlayer] = 0;
+	ingame.playerLeftGameTime[selectedPlayer].reset();
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 

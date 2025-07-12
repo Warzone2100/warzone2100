@@ -116,6 +116,15 @@ struct MULTIPLAYERINGAME
 	bool				PendingDisconnect[MAX_CONNECTED_PLAYERS];		// used to mark players who have disconnected after the game has "fired up" but before it actually starts (i.e. pre-game / loading phase) - UI only
 	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
 	std::array<bool, MAX_CONNECTED_PLAYERS> hostChatPermissions;		// the *host*-set free chat permission status for players (true if free chat is allowed, false if only Quick Chat is allowed)
+
+	// Used by the host to track players lingering in lobby without checking ready
+	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> joinTimes;
+	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> lastReadyTimes;
+	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> lastNotReadyTimes;
+	std::array<uint64_t, MAX_CONNECTED_PLAYERS> secondsNotReady; // updated when player status switches to ready
+	std::array<optional<uint32_t>, MAX_CONNECTED_PLAYERS> playerLeftGameTime; // records when the player leaves the game (as a player)
+	//
+
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;

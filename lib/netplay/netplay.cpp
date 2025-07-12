@@ -665,6 +665,11 @@ static void initPlayerNetworkProps(int playerIndex)
 	{
 		ingame.JoiningInProgress[playerIndex] = false;
 		ingame.PendingDisconnect[playerIndex] = false;
+		ingame.joinTimes[playerIndex].reset();
+		ingame.lastReadyTimes[playerIndex].reset();
+		ingame.lastNotReadyTimes[playerIndex].reset();
+		ingame.secondsNotReady[playerIndex] = 0;
+		ingame.playerLeftGameTime[playerIndex].reset();
 		ingame.hostChatPermissions[playerIndex] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 	}
 }
@@ -1069,24 +1074,21 @@ static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose)
 static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 {
 	ASSERT_OR_RETURN(, index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
+	bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
 	NETplayerCloseSocket(index, quietSocketClose);
 	sync_counter.left++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(index);		// more cleanup
-	bool resetReadyCalled = false;
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		NET_DestroyPlayer(index);       // sets index player's array to false
 		if (!wasSpectator)
 		{
 			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// reset ready status for all players
-			resetReadyCalled = true;
 		}
+		handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 
-		if (!resetReadyCalled)
-		{
-			wz_command_interface_output_room_status_json();
-		}
+		wz_command_interface_output_room_status_json(true);
 	}
 }
 
@@ -1106,10 +1108,11 @@ static void NETplayerDropped(UDWORD index)
 		return;
 	}
 
+	bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
+
 	sync_counter.drops++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
 	MultiPlayerLeave(id);			// more cleanup
-	bool resetReadyCalled = false;
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		// Send message type specifically for dropped / disconnects
@@ -1121,13 +1124,10 @@ static void NETplayerDropped(UDWORD index)
 		if (!wasSpectator)
 		{
 			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// reset ready status for all players
-			resetReadyCalled = true;
 		}
+		handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 
-		if (!resetReadyCalled)
-		{
-			wz_command_interface_output_room_status_json();
-		}
+		wz_command_interface_output_room_status_json(true);
 	}
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, id);
@@ -2139,6 +2139,13 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 	std::swap(ingame.PendingDisconnect[playerIndexA], ingame.PendingDisconnect[playerIndexB]);
 	std::swap(ingame.DataIntegrity[playerIndexA], ingame.DataIntegrity[playerIndexB]);
 	std::swap(ingame.hostChatPermissions[playerIndexA], ingame.hostChatPermissions[playerIndexB]);
+
+	std::swap(ingame.joinTimes[playerIndexA], ingame.joinTimes[playerIndexB]);
+	std::swap(ingame.lastReadyTimes[playerIndexA], ingame.lastReadyTimes[playerIndexB]);
+	std::swap(ingame.lastNotReadyTimes[playerIndexA], ingame.lastNotReadyTimes[playerIndexB]);
+	std::swap(ingame.secondsNotReady[playerIndexA], ingame.secondsNotReady[playerIndexB]);
+	std::swap(ingame.playerLeftGameTime[playerIndexA], ingame.playerLeftGameTime[playerIndexB]);
+
 	std::swap(ingame.lastSentPlayerDataCheck2[playerIndexA], ingame.lastSentPlayerDataCheck2[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
@@ -4566,6 +4573,7 @@ static void NETallowJoining()
 		// note: *not* an "else if" because the condition above may transition the state to ProcessJoin!
 		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::ProcessJoin)
 		{
+			bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
 			optional<uint32_t> tmp = nullopt;
 
 			TmpSocketInfo::ReceivedJoinInfo joinRequestInfo = std::move(tmp_connectState[i].receivedJoinInfo); // keep the join info
@@ -4629,6 +4637,7 @@ static void NETallowJoining()
 			// Increment player count
 			gamestruct.desc.dwCurrentPlayers++;
 
+			handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 			MultiPlayerJoin(index, joinRequestInfo.identity.toBytes(EcKey::Public));
 
 			std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));

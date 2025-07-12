@@ -112,6 +112,7 @@ void printBlindModeHelpMessagesToConsole();
 int allPlayersOnSameTeam(int except);
 
 bool multiplayPlayersCanCheckReady();
+void handlePossiblePlayersCanCheckReadyChange(bool previousPlayersCanCheckReadyValue);
 
 bool multiplayPlayersReady();
 bool multiplayIsStartingGame();

@@ -326,6 +326,8 @@ void handlePlayerLeftInGame(UDWORD player)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
+	bool leftWhilePlayer = NetPlay.players[player].isSpectator;
+
 	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
 	NetPlay.playerReferences[player] = std::make_shared<PlayerReference>(player);
@@ -338,6 +340,11 @@ void handlePlayerLeftInGame(UDWORD player)
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
+
+	if (leftWhilePlayer)
+	{
+		ingame.playerLeftGameTime[player] = gameTime;
+	}
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -691,11 +698,23 @@ void setupNewPlayer(UDWORD player)
 	ingame.DesyncCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.joinTimes[player] = std::chrono::steady_clock::now();
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.hostChatPermissions[player] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
+	ingame.lastReadyTimes[player].reset();
+	if (multiplayPlayersCanCheckReady())
+	{
+		ingame.lastNotReadyTimes[player] = ingame.joinTimes[player];
+	}
+	else
+	{
+		ingame.lastNotReadyTimes[player].reset();
+	}
+	ingame.secondsNotReady[player] = 0;
+	ingame.playerLeftGameTime[player].reset();
 	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.
