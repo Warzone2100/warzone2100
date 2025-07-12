@@ -4547,7 +4547,7 @@ static void NETallowJoining()
 			else
 			{
 				// if no async approval, do a timeout check
-				std::chrono::milliseconds::rep timeout = 5000; // must currently be set relatively short because of the client join blocking delay
+				std::chrono::milliseconds::rep timeout = 8000; // although the client no longer blocks on join, a response should still be relatively prompt (the client has its own timeout)
 				if (std::chrono::duration_cast<std::chrono::milliseconds>(currentSteadTime - tmp_connectState[i].connectTime).count() > timeout)
 				{
 					debug(LOG_INFO, "Freeing temp socket %p due to async connection approval timeout (IP: %s)", static_cast<void *>(tmp_socket[i]), tmp_connectState[i].ip.c_str());
