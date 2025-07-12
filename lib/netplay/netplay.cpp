@@ -256,6 +256,7 @@ bool netPlayersUpdated;
 static IListenSocket* server_listen_socket = nullptr;
 
 static IClientConnection* bsocket = nullptr;                  ///< Socket used to talk to the host (clients only). If bsocket != NULL, then client_transient_socket == NULL.
+static optional<std::string> lastHostAddress = nullopt;
 static IClientConnection* connected_bsocket[MAX_CONNECTED_PLAYERS] = { nullptr };  ///< Sockets used to talk to clients (host only).
 // Client-side socket set. Contains of only 1 socket at most: `bsocket` (which is a stable client connection to the host).
 static IConnectionPollGroup* client_socket_set = nullptr;
@@ -5145,6 +5146,9 @@ bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uin
 	setPlayerName(index, playername);
 	NetPlay.players[index].heartbeat = true;
 
+	// Store the host's address
+	lastHostAddress = bsocket->textAddress();
+
 	return true;
 }
 
@@ -5502,7 +5506,7 @@ optional<std::string> NET_getCurrentHostTextAddress()
 {
 	if (!bsocket)
 	{
-		return nullopt;
+		return lastHostAddress.value();
 	}
 	return bsocket->textAddress();
 }
