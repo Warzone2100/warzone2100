@@ -2478,6 +2478,46 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 	}
 } // namespace INTERNAL_ADMIN_ACTION_NOTICE
 
+// - INTERNAL_LOCALIZED_LOBBY_NOTICE
+namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx)
+	{
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), 0, targetPlayerIdx };
+	}
+
+	std::string to_output_string(WzQuickChatMessageData messageData)
+	{
+		uint32_t targetPlayerIdx = messageData.dataB;
+
+		if (targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
+		{
+			return std::string();
+		}
+
+		const char* targetPlayerName = getPlayerName(targetPlayerIdx);
+
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::Invalid):
+				return "";
+			case static_cast<uint32_t>(Context::NotReadyKickWarning):
+				if (targetPlayerIdx == selectedPlayer)
+				{
+					return _("NOTICE: If you don't check Ready soon, you will be kicked from the room");
+				}
+				else
+				{
+					// Not intended for this player
+					return "";
+				}
+			case static_cast<uint32_t>(Context::NotReadyKicked):
+				return astringf(_("Auto-kicking player (%s) because they waited too long to check Ready"), targetPlayerName);
+		}
+
+		return ""; // Silence compiler warning
+	}
+} // namespace INTERNAL_LOCALIZED_LOBBY_NOTICE
+
 } // namespace WzQuickChatDataContexts
 
 // MARK: - Public functions
@@ -2488,6 +2528,7 @@ bool quickChatMessageExpectsExtraData(WzQuickChatMessage msg)
 	{
 		// WZ-generated internal messages which require extra data
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 			return true;
 
 		default:
@@ -2504,6 +2545,8 @@ int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender)
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			// override the "sender" to SYSTEM_MESSAGE type
 			return SYSTEM_MESSAGE;
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+			return NOTIFY_MESSAGE;
 
 		default:
 			return sender;
@@ -2557,6 +2600,8 @@ std::string to_output_string(WzQuickChatMessage msg, const optional<WzQuickChatM
 		// WZ-generated internal messages - not for users to deliberately send
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::to_output_string(messageData.value());
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+			return WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::to_output_string(messageData.value());
 
 		default:
 			return to_display_string(msg);
@@ -2723,6 +2768,8 @@ const char* to_display_string(WzQuickChatMessage msg)
 			return _("Map Downloaded");
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return _("Admin modified a setting");
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+			return "";
 
 		// not a valid message
 		case WzQuickChatMessage::MESSAGE_COUNT:

@@ -241,17 +241,6 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 	}
 }
 
-void autoLagKickRoutine()
-{
-	if (!bMultiPlayer || !NetPlay.bComms || !NetPlay.isHost)
-	{
-		return;
-	}
-
-	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-	autoLagKickRoutine(now);
-}
-
 #define DESYNC_CHECK_INTERVAL 1000
 const std::chrono::milliseconds DesyncCheckInterval(DESYNC_CHECK_INTERVAL);
 
@@ -332,6 +321,95 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
+		}
+	}
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+
+uint64_t calculateSecondsNotReadyForPlayer(size_t i, std::chrono::steady_clock::time_point now)
+{
+	if (i >= NetPlay.players.size()) { return 0; }
+
+	uint64_t totalSecondsNotReady = ingame.secondsNotReady[i];
+	if (ingame.lastNotReadyTimes[i].has_value())
+	{
+		// accumulate time since last not ready
+		totalSecondsNotReady += std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastNotReadyTimes[i].value()).count();
+	}
+	return totalSecondsNotReady;
+}
+
+#define NOTREADY_CHECK_INTERVAL 1000
+const std::chrono::milliseconds NotReadyCheckInterval(NOTREADY_CHECK_INTERVAL);
+
+void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
+{
+	if (!bMultiPlayer || !NetPlay.bComms || !NetPlay.isHost)
+	{
+		return;
+	}
+
+	const bool isLobby = ingame.localJoiningInProgress;
+	if (!isLobby)
+	{
+		return;
+	}
+
+	if (!multiplayPlayersCanCheckReady())
+	{
+		// If players can't check ready, skip
+		return;
+	}
+
+	int NotReadyAutoKickSeconds = war_getAutoLagKickSeconds();
+	if (NotReadyAutoKickSeconds <= 0)
+	{
+		return;
+	}
+
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastNotReadyCheck) < NotReadyCheckInterval)
+	{
+		return;
+	}
+
+	ingame.lastNotReadyCheck = now;
+	for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	{
+		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+		if (i == NetPlay.hostPlayer)
+		{
+			continue;
+		}
+		if (i > MAX_PLAYERS && !gtimeShouldWaitForPlayer(i))
+		{
+			continue;
+		}
+		if (ingame.PendingDisconnect[i])
+		{
+			// player already technically left, but we're still in the "pre-game" phase so the GAME_PLAYER_LEFT hasn't been processed yet
+			continue;
+		}
+
+		auto totalSecondsNotReady = calculateSecondsNotReadyForPlayer(i, now);
+		if (totalSecondsNotReady >= NotReadyAutoKickSeconds) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because they aren't ready. (Timeout: %u seconds)", i, getPlayerName(i), NotReadyAutoKickSeconds);
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKicked, i));
+			if (wz_command_interface_enabled()) {
+				const auto& identity = getOutputPlayerIdentity(i);
+				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+				wz_command_interface_output("WZEVENT: notready-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
+			}
+			kickPlayer(i, "You have been removed from the room.\nYou have spent too much time without checking Ready.\n\nIn the future, please check Ready and leave it checked, to avoid delaying games for other players.", ERROR_CONNECTION, false);
+		}
+		else if (!NetPlay.players[i].ready && totalSecondsNotReady >= (NotReadyAutoKickSeconds - 6)) {
+			WzQuickChatTargeting targeting;
+			targeting.specificPlayers.insert(i);
+			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKickWarning, i));
 		}
 	}
 }

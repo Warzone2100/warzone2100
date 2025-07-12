@@ -7154,7 +7154,9 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		NETpop(queue);
 	}
 
-	autoLagKickRoutine();
+	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	autoLagKickRoutine(now);
+	autoLobbyNotReadyKickRoutine(now);
 
 	return MultiMessagesResult::Continue;
 }
