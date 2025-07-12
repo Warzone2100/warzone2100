@@ -7972,6 +7972,11 @@ std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, U
 	return addMultiBut(*pWidget, id, x, y, width, height, tipres, norm, down, hi, tc, alpha);
 }
 
+bool multiplayPlayersCanCheckReady()
+{
+	return isBlindSimpleLobby(game.blindMode) || (allPlayersOnSameTeam(-1) == -1);
+}
+
 /* Returns true if the multiplayer game can start (i.e. all players are ready) */
 bool multiplayPlayersReady()
 {
