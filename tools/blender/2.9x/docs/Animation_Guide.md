@@ -152,7 +152,7 @@ The 3D cursor is in the middle of the cube now. Switch to object mode, select th
 ![](./013.png)
 ![](./014.png)
 
-The root of the bone will snap to the cursor. Repeat the same with the other end of the hammer - cursor to selection. Switch to armature in edit mode, select the other end of the bone and shift+s selection to cursor to snap the bone tip to the cursor.
+The root of the bone will snap to the cursor. Repeat the same with the other end of the hammer - cursor to selection. Switch to armature in edit mode, select the other end of the bone and Shift+S selection to cursor to snap the bone tip to the cursor.
 
 ![](./015.png)
 ![](./016.png)
