@@ -309,6 +309,7 @@ struct TmpSocketInfo
 	// async join approval
 	std::string uniqueJoinID;
 	optional<AsyncJoinApprovalAction> asyncJoinApprovalResult = nullopt;
+	optional<uint8_t> asyncJoinApprovalExplicitPlayerIdx = nullopt;
 	LOBBY_ERROR_TYPES asyncJoinRejectCode = ERROR_NOERROR;
 	std::string asyncJoinRejectCustomMessage;
 
@@ -323,6 +324,7 @@ struct TmpSocketInfo
 		receivedJoinInfo.reset();
 		uniqueJoinID.clear();
 		asyncJoinApprovalResult = nullopt;
+		asyncJoinApprovalExplicitPlayerIdx = nullopt;
 		asyncJoinRejectCode = ERROR_NOERROR;
 		asyncJoinRejectCustomMessage.clear();
 	}
@@ -537,7 +539,7 @@ void NETsetAsyncJoinApprovalRequired(bool enabled)
 }
 
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, LOBBY_ERROR_TYPES rejectedReason, optional<std::string> customRejectionMessage)
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, optional<uint8_t> explicitPlayerIdx, LOBBY_ERROR_TYPES rejectedReason, optional<std::string> customRejectionMessage)
 {
 	if (action == AsyncJoinApprovalAction::Reject && rejectedReason == ERROR_NOERROR)
 	{
@@ -551,6 +553,7 @@ bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApp
 		{
 			// found a match
 			tmp_info.asyncJoinApprovalResult = action;
+			tmp_info.asyncJoinApprovalExplicitPlayerIdx = (action == AsyncJoinApprovalAction::Approve) ? explicitPlayerIdx : nullopt;
 			tmp_info.asyncJoinRejectCode = (action != AsyncJoinApprovalAction::Reject) ? ERROR_NOERROR : rejectedReason;
 			if (customRejectionMessage.has_value())
 			{
@@ -4576,12 +4579,26 @@ static void NETallowJoining()
 			bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
 			optional<uint32_t> tmp = nullopt;
 
-			TmpSocketInfo::ReceivedJoinInfo joinRequestInfo = std::move(tmp_connectState[i].receivedJoinInfo); // keep the join info
-			tmp_connectState[i].reset();
-
-			if ((joinRequestInfo.playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
+			if (tmp_connectState[i].asyncJoinApprovalExplicitPlayerIdx.has_value())
 			{
-				tmp = NET_CreatePlayer(joinRequestInfo.name, false, (joinRequestInfo.playerType == NET_JOIN_SPECTATOR));
+				// Try to allocate the new player at the explicit index
+				if (NET_IsSlotOpenForPlayerJoin(tmp_connectState[i].asyncJoinApprovalExplicitPlayerIdx.value())
+					&& NET_CreatePlayerAtIdx(tmp_connectState[i].asyncJoinApprovalExplicitPlayerIdx.value(), tmp_connectState[i].receivedJoinInfo.name))
+				{
+					tmp = tmp_connectState[i].asyncJoinApprovalExplicitPlayerIdx.value();
+				}
+				else
+				{
+					debug(LOG_INFO, "Async join approval provided explicit player index (%" PRIu32 "), but it's occupied", tmp_connectState[i].asyncJoinApprovalExplicitPlayerIdx.value());
+				}
+			}
+			else
+			{
+				// Try to allocate the new player an open slot
+				if ((tmp_connectState[i].receivedJoinInfo.playerType == NET_JOIN_SPECTATOR) || (int)NetPlay.playercount <= gamestruct.desc.dwMaxPlayers)
+				{
+					tmp = NET_CreatePlayer(tmp_connectState[i].receivedJoinInfo.name, false, (tmp_connectState[i].receivedJoinInfo.playerType == NET_JOIN_SPECTATOR));
+				}
 			}
 
 			if (!tmp.has_value() || tmp.value() > static_cast<uint32_t>(std::numeric_limits<uint8_t>::max()))
@@ -4595,6 +4612,9 @@ static void NETallowJoining()
 			}
 
 			uint8_t index = static_cast<uint8_t>(tmp.value());
+
+			TmpSocketInfo::ReceivedJoinInfo joinRequestInfo = std::move(tmp_connectState[i].receivedJoinInfo); // keep the join info
+			tmp_connectState[i].reset();
 
 			NEThostPromoteTempSocketToPermanentPlayerConnection(i, index);
 
