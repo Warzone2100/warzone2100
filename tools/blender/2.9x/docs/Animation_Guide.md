@@ -221,7 +221,7 @@ Leave Interpolate animation unchecked, and test in-game first.
 
 ![](./030.png)
 
-Now let's export the PIE. Switch to object mode, select the armature. Change Pie Version to 4 and set the texture to page-11-player-buildings.png.
+Now let's export the PIE. Switch to object mode, select the armature. Change PIE Version to 4 and set the texture to page-11-player-buildings.png.
 
 ![](./031.png)
 
