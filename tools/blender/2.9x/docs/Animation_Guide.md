@@ -91,7 +91,7 @@ To illustrate, we can see how it is set on the imported blfact0.
 ![](./007.png)
 
 The Level 2 mesh is a square, made of two polygons, both assigned to animation group. In edit mode, you can click on select to check which polygons are assigned to the animation group. Also you can use the set button to assign polygons to an animation group.
-Images are set to 4, which means 4 frames will be used. Those are the four went circles in the texture. The first is already used as a default texture.
+Images are set to 4, which means 4 frames will be used. Those are the four vent circles in the texture. The first is already used as the default texture.
 Rate is set to 200 milliseconds per frame.
 With and height is set to 0.045 - that is the x length by witch the frame will move (jump) on x axis. It also the size of the square made of two polygons. The four frames in the texture are next to each other with no space between. So moving the frame by 0.045 will move (jump) it exactly one full frame.
 The animation will cycle through the 4 frames repeatedly, one by one frame every 200 milliseconds, from left to right.
