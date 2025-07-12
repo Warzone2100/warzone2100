@@ -1087,8 +1087,8 @@ int cmdInputThreadFunc(void *)
 			char action[1024] = {0};
 			char uniqueJoinID[1024] = {0};
 			char rejectionMessage[MAX_JOIN_REJECT_REASON] = {0};
-			unsigned int rejectionReason = static_cast<unsigned int>(ERROR_NOERROR);
-			int r = sscanf(line, "join %1023s %1023s %u %2047[^\n]s", action, uniqueJoinID, &rejectionReason, rejectionMessage);
+			unsigned int uintVal = static_cast<unsigned int>(ERROR_NOERROR);
+			int r = sscanf(line, "join %1023s %1023s %u %2047[^\n]s", action, uniqueJoinID, &uintVal, rejectionMessage);
 			if (r < 2 || r > 4)
 			{
 				wz_command_interface_output_onmainthread("WZCMD error: Failed to parse join command!\n");
@@ -1096,27 +1096,37 @@ int cmdInputThreadFunc(void *)
 			else
 			{
 				optional<AsyncJoinApprovalAction> approve = nullopt;
+				optional<uint8_t> explicitPlayerIdx = nullopt;
+				LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR;
 				if (strcmp(action, "approve") == 0)
 				{
 					approve = AsyncJoinApprovalAction::Approve;
+					if (r >= 3)
+					{
+						explicitPlayerIdx = uintVal;
+					}
 				}
 				else if (strcmp(action, "reject") == 0)
 				{
 					approve = AsyncJoinApprovalAction::Reject;
+					if (uintVal < static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
+					{
+						rejectedReason = static_cast<LOBBY_ERROR_TYPES>(uintVal);
+					}
 				}
 				else if (strcmp(action, "approvespec") == 0)
 				{
 					approve = AsyncJoinApprovalAction::ApproveSpectators;
 				}
-				if (approve.has_value() && rejectionReason < static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
+				if (approve.has_value())
 				{
 					auto approveValue = approve.value();
 					std::string uniqueJoinIDCopy(uniqueJoinID);
 					std::string rejectionMessageCopy(rejectionMessage);
 					convertEscapedNewlines(rejectionMessageCopy);
-					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason, rejectionMessageCopy]() mutable {
+					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, explicitPlayerIdx, rejectedReason, rejectionMessageCopy]() mutable {
 
-						if (rejectionReason == ERROR_REDIRECT)
+						if (rejectedReason == ERROR_REDIRECT)
 						{
 							// Parse the rejection message as a cmdinterface redirect string
 							auto redirectInfoOpt = parseCmdInterfaceRedirectStringToRedirectInfo(rejectionMessageCopy);
@@ -1148,7 +1158,7 @@ int cmdInputThreadFunc(void *)
 							}
 						}
 
-						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, static_cast<LOBBY_ERROR_TYPES>(rejectionReason), rejectionMessageCopy))
+						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, explicitPlayerIdx, rejectedReason, rejectionMessageCopy))
 						{
 							wz_command_interface_output("WZCMD info: Could not find currently-waiting join with specified uniqueJoinID\n");
 						}
