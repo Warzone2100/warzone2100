@@ -212,7 +212,7 @@ To check the animation, set the start frame to 0 and end frame to 59.
 
 ![](./028.png)
 
-Now you can press space to play the animation and ESC to stop it, or use the play stop buttons.
+Now you can press Space to play the animation and ESC to stop it, or use the play stop buttons.
 
 ![](./029.png)
 
