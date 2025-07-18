@@ -52,6 +52,8 @@ parts:
     source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.8/SDL2-2.32.8.tar.gz
     source-checksum: sha512/484c33638e7bd1002815bb1f6a47a292d1eaf0b963598dde65f4a3e077dfe75ee35b9ea4b3b767365b3ef4f613c4d69ce55b5e96675de562994344e83a978272
     plugin: cmake
+    build-environment:
+      - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
     - -DSDL_ALSA=OFF
@@ -136,6 +138,8 @@ parts:
     after: [sdl, launcher]
     plugin: cmake
     source: .
+    build-environment:
+      - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
