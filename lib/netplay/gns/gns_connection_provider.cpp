@@ -264,11 +264,11 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 		debug(LOG_ERROR, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	default:
 		break;
@@ -293,11 +293,11 @@ void GNSConnectionProvider::ClientConnectionStateChanged(SteamNetConnectionStatu
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 		debug(LOG_WARNING, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	default:
 		break;
@@ -328,7 +328,14 @@ void GNSConnectionProvider::registerAcceptedConnection(GNSClientConnection* conn
 	activeClients_[conn->connectionHandle()] = conn;
 }
 
-void GNSConnectionProvider::disposeConnection(HSteamNetConnection hConn)
+void GNSConnectionProvider::disposeConnection(IClientConnection* conn)
+{
+	auto* gnsConn = dynamic_cast<GNSClientConnection*>(conn);
+	ASSERT_OR_RETURN(, gnsConn != nullptr, "Expected GNSClientConnection instance");
+	disposeConnectionImpl(gnsConn->connectionHandle());
+}
+
+void GNSConnectionProvider::disposeConnectionImpl(HSteamNetConnection hConn)
 {
 	if (hConn == k_HSteamNetConnection_Invalid)
 	{
