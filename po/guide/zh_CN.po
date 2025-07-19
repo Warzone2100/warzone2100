@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-06-12 03:55+0000\n"
-"PO-Revision-Date: 2024-10-07 02:29\n"
+"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"PO-Revision-Date: 2025-06-28 03:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -190,6 +190,18 @@ msgstr "你可以命令更多的工程车帮助建造 (加快建造速度)，选
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
 msgstr "提示：要建造“墙” (如果可用)，您可以单击并拖动以建造多堵墙。"
+
+msgid "Cyborg Factory"
+msgstr ""
+
+msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
+msgstr ""
+
+msgid "Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr ""
+
+msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgstr ""
 
 msgid "Demolishing Structures"
 msgstr "拆除建筑物"
@@ -557,6 +569,204 @@ msgstr "显示单位等级的图标在单位血条旁边。"
 msgid "Units with higher experience levels can make all the difference in battle!"
 msgstr "高经验等级的单位能够在战斗中发挥关键作用！"
 
+msgid "Cyborgs"
+msgstr ""
+
+msgid "Cyborgs are your main infantry units."
+msgstr ""
+
+msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
+msgstr ""
+
+msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
+msgstr ""
+
+msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
+msgstr ""
+
+msgid "Half-tracks"
+msgstr ""
+
+msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
+msgstr ""
+
+msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
+msgstr ""
+
+msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
+msgstr ""
+
+msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
+msgstr ""
+
+msgid "Hover"
+msgstr ""
+
+msgid "Hover is a fast, amphibious propulsion for vehicles."
+msgstr ""
+
+msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
+msgstr ""
+
+msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
+msgstr ""
+
+msgid "Hover's high speeds and ability to traverse water make it perfect for hit-and-run attack vehicles."
+msgstr ""
+
+msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
+msgstr ""
+
+msgid "Tracks"
+msgstr ""
+
+msgid "Tracks are a highly-armored propulsion for vehicles."
+msgstr ""
+
+msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
+msgstr ""
+
+msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
+msgstr ""
+
+msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
+msgstr ""
+
+msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
+msgstr ""
+
+msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
+msgstr ""
+
+msgid "Attacking with VTOLs"
+msgstr ""
+
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr "要使用 VTOL 攻击，请选择它然后点击敌人。"
+
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr "然而，你可能会注意到其血条下面的白色弹药栏。"
+
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr "与自动装弹的地面单位不同，VTOL 携带数量有限的弹药。一旦该弹药耗尽，VTOL 将无法攻击。"
+
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr "用完弹药的 VTOL 会自动找到一个 VTOL 补给站以装弹和维修 (一旦完全装弹完成，将返回攻击)，也可以手动装弹，选择 VTOL 并点击一个 VTOL 补给站。"
+
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr "与通常攻击最近目标的其他单位不同，VTOL 不会自动攻击任何目标。 然而，通过选择 VTOL 并 alt+单击一个位置，VTOL 将在其当前位置和点击位置之间的区域巡逻，并攻击附近的任何敌人。"
+
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr "或者，VTOL 可以指派给 VTOL 攻击雷达和 VTOL 反炮兵雷达， 这将使它们像火炮一样攻击雷达锁定的敌人。"
+
+msgid "Defending with VTOLs"
+msgstr ""
+
+msgid "VTOL units may also be used to defend areas of the map."
+msgstr ""
+
+msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
+msgstr ""
+
+msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
+msgstr ""
+
+msgid "Defending Against VTOLs"
+msgstr "防空"
+
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr "天上的是什么？... 这是一个 VTOL 单位"
+
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr "由于 VTOL 不是地面单位，大多数地面武器都无法击中。"
+
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr "它们只能被防空 (常常被缩写为“AA”) 或多用途 (可以攻击空中或地面) 武器击中。"
+
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr "只有少数几种武器是多用途的：机枪、激光和迷你火箭。"
+
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr "(火箭和导弹也是多用途的，但只有在装在半机械人或 VTOL 上时才能防空)"
+
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr "多用途武器对 VTOL 的伤害不如专用防空武器。因此建议使用专用的防空武器。"
+
+msgid "Using VTOLs"
+msgstr ""
+
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr "设计 VTOL 单位与设计地面单位相似。"
+
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr "在选择推进动力时，只需选择“VTOL”推进器。"
+
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr "然后您将能够从可用的 VTOL 武器中选择。"
+
+msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
+msgstr ""
+
+msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
+msgstr ""
+
+msgid "VTOL Weapons"
+msgstr ""
+
+msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
+msgstr ""
+
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr "普通武器的 VTOL 版本无需单独研究。"
+
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr "除了地面直射武器的 VTOL 版本外，VTOL 还可以使用炸弹武器。 这些武器相当于炮兵，且非常强大。"
+
+msgid "VTOL"
+msgstr ""
+
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr "VTOL（垂直起降）是主要空中单位。"
+
+msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
+msgstr ""
+
+msgid "Additionally, they cannot be targeted by most weapons while airborne."
+msgstr ""
+
+msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
+msgstr ""
+
+msgid "Wheels"
+msgstr ""
+
+msgid "Wheels are the most basic vehicle propulsion."
+msgstr ""
+
+msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
+msgstr ""
+
+msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
+msgstr ""
+
+msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
+msgstr ""
+
+msgid "Propulsions"
+msgstr ""
+
+msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
+msgstr ""
+
+msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
+msgstr ""
+
+msgid "Additionally, you can find descriptions of each propulsion in this guide."
+msgstr ""
+
+msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
+msgstr ""
+
 msgid "Repairing Units"
 msgstr "修理单位"
 
@@ -617,59 +827,29 @@ msgstr "炮兵武器本身的射击不能超过自己的传感器射程 (未升�
 msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
 msgstr "然而，即使是最基本的炮兵武器也有18格的射程。要使用它，你需要在战场上建造和部署传感器 (传感器塔或带传感器炮塔的坦克)。"
 
+msgid "Kinetic & Thermal Damage"
+msgstr ""
+
+msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
+msgstr ""
+
+msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
+msgstr ""
+
+msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
+msgstr ""
+
+msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
+msgstr ""
+
+msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
+msgstr ""
+
 msgid "Attacking"
 msgstr "攻击"
 
-msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr "要使用 VTOL 攻击，请选择它然后点击敌人。"
-
-msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
-msgstr "然而，你可能会注意到其血条下面的白色弹药栏。"
-
-msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr "与自动装弹的地面单位不同，VTOL 携带数量有限的弹药。一旦该弹药耗尽，VTOL 将无法攻击。"
-
-msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr "用完弹药的 VTOL 会自动找到一个 VTOL 补给站以装弹和维修 (一旦完全装弹完成，将返回攻击)，也可以手动装弹，选择 VTOL 并点击一个 VTOL 补给站。"
-
-msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr "与通常攻击最近目标的其他单位不同，VTOL 不会自动攻击任何目标。 然而，通过选择 VTOL 并 alt+单击一个位置，VTOL 将在其当前位置和点击位置之间的区域巡逻，并攻击附近的任何敌人。"
-
-msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr "或者，VTOL 可以指派给 VTOL 攻击雷达和 VTOL 反炮兵雷达， 这将使它们像火炮一样攻击雷达锁定的敌人。"
-
-msgid "Defending Against VTOLs"
-msgstr "防空"
-
-msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr "天上的是什么？... 这是一个 VTOL 单位"
-
-msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr "由于 VTOL 不是地面单位，大多数地面武器都无法击中。"
-
-msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr "它们只能被防空 (常常被缩写为“AA”) 或多用途 (可以攻击空中或地面) 武器击中。"
-
-msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr "只有少数几种武器是多用途的：机枪、激光和迷你火箭。"
-
-msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr "(火箭和导弹也是多用途的，但只有在装在半机械人或 VTOL 上时才能防空)"
-
-msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr "多用途武器对 VTOL 的伤害不如专用防空武器。因此建议使用专用的防空武器。"
-
 msgid "Designing VTOLs"
 msgstr "设计 VTOL"
-
-msgid "Designing VTOL units is similar to designing ground units."
-msgstr "设计 VTOL 单位与设计地面单位相似。"
-
-msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr "在选择推进动力时，只需选择“VTOL”推进器。"
-
-msgid "You will then be able to select from the available VTOL Weapons."
-msgstr "然后您将能够从可用的 VTOL 武器中选择。"
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
 msgstr "记住：需要“VTOL 工厂”才能生产 VTOL 单位。"
@@ -680,17 +860,8 @@ msgstr "武器"
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
 msgstr "大多数武器都有等效的 VTOL 武器，VTOL 武器的伤害至少是地面武器的两倍，但弹药有限。"
 
-msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr "普通武器的 VTOL 版本无需单独研究。"
-
-msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr "除了地面直射武器的 VTOL 版本外，VTOL 还可以使用炸弹武器。 这些武器相当于炮兵，且非常强大。"
-
 msgid "VTOLs"
 msgstr "VTOL"
-
-msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr "VTOL（垂直起降）是主要空中单位。"
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
 msgstr "要生产 VTOL 单位，您需要研究“VTOL 推进动力”和“VTOL 工厂”。"
@@ -721,3 +892,129 @@ msgstr "这也是 Warzone 2100 的独特之处。"
 
 msgid "To be able to design units, a Command Center is required."
 msgstr "为了能够设计单位，需要一个指挥中心。"
+
+msgid "All-Rounder"
+msgstr ""
+
+msgid "\"All-Rounder\" weapons are effective against vehicles and most structures."
+msgstr ""
+
+msgid "However, All-Rounder weapons are less effective against bunkers and infantry."
+msgstr ""
+
+msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
+msgstr ""
+
+msgid "Anti-Air"
+msgstr ""
+
+msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
+msgstr ""
+
+msgid "However, AA weapons are incapable of attacking structures or units on the ground."
+msgstr ""
+
+msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
+msgstr ""
+
+msgid "Anti-Personnel"
+msgstr ""
+
+msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
+msgstr ""
+
+msgid "However, these weapons are less effective against structures and heavily armored targets."
+msgstr ""
+
+msgid "Anti-Tank"
+msgstr ""
+
+msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
+msgstr ""
+
+msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
+msgstr ""
+
+msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
+msgstr ""
+
+msgid "Artillery"
+msgstr ""
+
+msgid "Artillery weapons are devastating against infantry and most structures."
+msgstr ""
+
+msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
+msgstr ""
+
+msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
+msgstr ""
+
+msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
+msgstr ""
+
+msgid "High-Explosive Bombs"
+msgstr ""
+
+msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
+msgstr ""
+
+msgid "These bombs explode on impact, damaging everything caught in the blast."
+msgstr ""
+
+msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
+msgstr ""
+
+msgid "Just make sure your own units and structures aren't caught in the blast!"
+msgstr ""
+
+msgid "Incendiary Bombs"
+msgstr ""
+
+msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
+msgstr ""
+
+msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
+msgstr ""
+
+msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
+msgstr ""
+
+msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
+msgstr ""
+
+msgid "Bomb Bays"
+msgstr ""
+
+msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
+msgstr ""
+
+msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
+msgstr ""
+
+msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
+msgstr ""
+
+msgid "Bunker Buster"
+msgstr ""
+
+msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
+msgstr ""
+
+msgid "However, the Bunker Buster is extremely weak against any non-structure target."
+msgstr ""
+
+msgid "Flamer"
+msgstr ""
+
+msgid "Incendiary \"Flamer\" weapons are effective against both vehicles and infantry."
+msgstr ""
+
+msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
+msgstr ""
+
+msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
+msgstr ""
+
+msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
+msgstr ""
