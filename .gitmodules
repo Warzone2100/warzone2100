@@ -86,3 +86,6 @@
 [submodule "pkg/win_installer/resources"]
 	path = pkg/win_installer/resources
 	url = https://github.com/Warzone2100/win_installer_resources.git
+[submodule "tools/blender/pie-addon"]
+	path = tools/blender/pie-addon
+	url = https://github.com/Warzone2100/blender-pie-addon.git
