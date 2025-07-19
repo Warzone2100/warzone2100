@@ -5587,6 +5587,13 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 				debug(LOG_ERROR, "Invalid blindMode (%s) specified in config .json - ignoring", blindMode_str.toUtf8().c_str());
 			}
 
+			// Allow setting gamePassword
+			WzString gamePass_str = ini.value("gamePassword", "").toWzString();
+			if (!gamePass_str.isEmpty())
+			{
+				NETsetGamePassword(gamePass_str.toUtf8().c_str());
+			}
+
 			// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
 			//             Keeping it around in case mods use it.
 			locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
