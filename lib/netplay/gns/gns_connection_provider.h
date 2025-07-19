@@ -81,6 +81,8 @@ public:
 
 	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const override;
 
+	virtual void disposeConnection(IClientConnection* conn) override;
+
 	void registerAcceptedConnection(GNSClientConnection* conn);
 
 private:
@@ -102,7 +104,7 @@ private:
 	// The connection object is automatically removed from its owning poll group (if there's any)
 	// and the internal GNS connection handle is closed, so that the connection object
 	// will be left in an invalid state (that is, `isValid()` will become `false`).
-	void disposeConnection(HSteamNetConnection hConn);
+	void disposeConnectionImpl(HSteamNetConnection hConn);
 
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	std::unordered_map<HSteamNetConnection, GNSClientConnection*> activeClients_;
