@@ -3122,6 +3122,7 @@ IMPL_JS_FUNC(enumDroid, wzapi::enumDroid)
 IMPL_JS_FUNC(dump, wzapi::dump)
 IMPL_JS_FUNC(debug, wzapi::debugOutputStrings)
 IMPL_JS_FUNC(pickStructLocation, wzapi::pickStructLocation)
+IMPL_JS_FUNC(structureCanFit, wzapi::structureCanFit)
 IMPL_JS_FUNC(structureIdle, wzapi::structureIdle)
 IMPL_JS_FUNC(removeStruct, wzapi::removeStruct)
 IMPL_JS_FUNC(removeObject, wzapi::removeObject)
@@ -3479,6 +3480,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(queuedPower, 1); // WZAPI
 	JS_REGISTER_FUNC2(isStructureAvailable, 1, 2); // WZAPI
 	JS_REGISTER_FUNC2(pickStructLocation, 4, 5); // WZAPI
+	JS_REGISTER_FUNC2(structureCanFit, 3, 4); // WZAPI
 	JS_REGISTER_FUNC(droidCanReach, 3); // WZAPI
 	JS_REGISTER_FUNC(propulsionCanReach, 5); // WZAPI
 	JS_REGISTER_FUNC(terrainType, 2); // WZAPI

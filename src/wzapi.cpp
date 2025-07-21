@@ -1669,6 +1669,26 @@ endstructloc:
 	return {};
 }
 
+//-- ## structureCanFit(structureName, x, y[, direction])
+//--
+//-- Return true if given building can be built at the position. (4.6+ only)
+//--
+bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y, optional<float> _direction))
+{
+	const int player = context.player();
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	STRUCTURE_STATS	*psStat = &asStructureStats[structureIndex];
+
+	if (_direction.has_value() && std::isnan(_direction.value()))
+	{
+		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
+	}
+	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+
+	return (tileOnMap(x, y)
+			&& validLocation(psStat, world_coord(Vector2i(x, y)), direction, player, false));
+}
+
 //-- ## droidCanReach(droid, x, y)
 //--
 //-- Return whether or not the given droid could possibly drive to the given position. Does
