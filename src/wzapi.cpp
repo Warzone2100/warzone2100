@@ -1676,8 +1676,11 @@ endstructloc:
 bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y, optional<float> _direction))
 {
 	const int player = context.player();
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	STRUCTURE_STATS	*psStat = &asStructureStats[structureIndex];
+	SCRIPT_ASSERT(false, context, psStat, "No such stat found: %s", structureName.c_str());
 
 	if (_direction.has_value() && std::isnan(_direction.value()))
 	{
