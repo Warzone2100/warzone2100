@@ -4655,9 +4655,14 @@ static void NETallowJoining()
 			handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 			MultiPlayerJoin(index, joinRequestInfo.identity.toBytes(EcKey::Public));
 
-			std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
-			std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
-			wz_command_interface_output("WZEVENT: player join: %u %s %s %s\n", index, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[index].IPtextAddress);
+			if (wz_command_interface_enabled())
+			{
+				std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
+				std::string joinerIdentityHash = joinRequestInfo.identity.publicHashString();
+				std::string joinerName = joinRequestInfo.name;
+				std::string joinerNameB64 = base64Encode(std::vector<unsigned char>(joinerName.begin(), joinerName.end()));
+				wz_command_interface_output("WZEVENT: player join: %u %s %s %s %s\n", index, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[index].IPtextAddress, joinerNameB64.c_str());
+			}
 
 			// Narrowcast to new player that everyone has joined.
 			for (uint8_t j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
