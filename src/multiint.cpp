@@ -626,7 +626,7 @@ static MAP_TILESET guessMapTilesetType(LEVEL_DATASET *psLevel)
 	return MAP_TILESET::ARIZONA;
 }
 
-static void loadEmptyMapPreview()
+static void loadEmptyMapPreview(bool withQuestionMarks = true)
 {
 	// No map is available to preview, so improvise.
 	iV_Image bckImage;
@@ -637,17 +637,21 @@ static void loadEmptyMapPreview()
 	}
 	unsigned char *imageData = bckImage.bmp_w();
 	memset(imageData, 0, BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
-	int const ex = 100, ey = 100, bx = 5, by = 8;
-	for (unsigned n = 0; n < 125; ++n)
+	int const ex = 100, ey = 100;
+	if (withQuestionMarks)
 	{
-		int sx = rand() % (ex - bx), sy = rand() % (ey - by);
-		char col[3] = {char(rand() % 256), char(rand() % 256), char(rand() % 256)};
-		for (unsigned y = 0; y < by; ++y)
-			for (unsigned x = 0; x < bx; ++x)
-				if (("\2\1\261\11\6"[x] >> y & 1) == 1) // ?
-				{
-					memcpy(imageData + 3 * (sx + x + BACKDROP_HACK_WIDTH * (sy + y)), col, 3);
-				}
+		int const bx = 5, by = 8;
+		for (unsigned n = 0; n < 125; ++n)
+		{
+			int sx = rand() % (ex - bx), sy = rand() % (ey - by);
+			char col[3] = {char(rand() % 256), char(rand() % 256), char(rand() % 256)};
+			for (unsigned y = 0; y < by; ++y)
+				for (unsigned x = 0; x < bx; ++x)
+					if (("\2\1\261\11\6"[x] >> y & 1) == 1) // ?
+					{
+						memcpy(imageData + 3 * (sx + x + BACKDROP_HACK_WIDTH * (sy + y)), col, 3);
+					}
+		}
 	}
 
 	// Slight hack to init array with a special value used to determine how many players on map
@@ -725,6 +729,12 @@ void loadMapPreview(bool hideInterface)
 	// true by default for now, like it used to be
 	// TODO: Is this still needed at all?
 	game.mapHasScavengers = true; // this is really the wrong place for it, but this is where it has to be
+
+	if (isBlindSimpleLobby(game.blindMode) && !NetPlay.isHost)
+	{
+		loadEmptyMapPreview(false);
+		return;
+	}
 
 	// load the terrain types
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
