@@ -15,10 +15,10 @@
 # Copyright © 2018-2023 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2023-09-01a
+# Script Version: 2025-07-23a
 #
 
-cmake_minimum_required(VERSION 3.5...3.24)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 set(_PF32BIT "ProgramFiles(x86)")
 
