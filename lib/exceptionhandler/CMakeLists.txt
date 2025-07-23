@@ -35,7 +35,7 @@ target_link_libraries(exception-handler PRIVATE framework launchinfo)
 #  - WZ_BUILD_SENTRY (to build with sentry support)
 #  - SENTRY_IO_DSN (to supply the DSN configuration URL)
 
-if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY AND NOT CMAKE_VERSION VERSION_LESS "3.11.0")
+if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY)
 	include(FetchSentryNative) # uses FetchContent, so requires CMake 3.11+
 
 	# Piggy-back on the exception-handler target to get these libraries / defines over to the main target # TODO: Refactor later?

@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.24)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Remove the files that workbox-cli generates as output from the current/working directory
 # - service-worker.js
