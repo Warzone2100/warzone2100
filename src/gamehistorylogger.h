@@ -91,6 +91,7 @@ public:
 			uint64_t recentResearchPotential = 0;
 			uint64_t recentResearchPerformance = 0;
 			std::string usertype; // from end_conditions.js
+			optional<uint32_t> playerLeftGameTime = nullopt;
 		};
 
 		std::vector<PlayerStats> playerData;
