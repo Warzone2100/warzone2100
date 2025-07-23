@@ -698,6 +698,22 @@ static bool chatActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 	});
 }
 
+static void handleCmdInterfaceConnectionClosed()
+{
+	if (!ingame.localJoiningInProgress || ingame.TimeEveryoneIsInGame.has_value())
+	{
+		// do nothing once game has fired up
+		return;
+	}
+
+	// if in lobby...
+	if (NETgetAsyncJoinApprovalRequired())
+	{
+		debug(LOG_INFO, "Shutting down lobby due to closed cmdinterface connection + async join approval required");
+		wzQuit(1);
+	}
+}
+
 int cmdInputThreadFunc(void *)
 {
 	fseek(stdin, 0, SEEK_END);
@@ -733,6 +749,9 @@ int cmdInputThreadFunc(void *)
 				if (!getInputLine(readFd, readFdIsSocket, nextLine))
 				{
 					errlog("WZCMD FAILURE: get input line failed! (did peer close the connection?)\n");
+					wzAsyncExecOnMainThread([]() {
+						handleCmdInterfaceConnectionClosed();
+					});
 					return 1;
 				}
 				break;
