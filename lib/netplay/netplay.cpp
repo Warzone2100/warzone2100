@@ -538,6 +538,11 @@ void NETsetAsyncJoinApprovalRequired(bool enabled)
 	}
 }
 
+bool NETgetAsyncJoinApprovalRequired()
+{
+	return bAsyncJoinApprovalEnabled;
+}
+
 //	NOTE: *MUST* be called from the main thread!
 bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, optional<uint8_t> explicitPlayerIdx, LOBBY_ERROR_TYPES rejectedReason, optional<std::string> customRejectionMessage)
 {
