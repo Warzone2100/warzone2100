@@ -64,8 +64,11 @@ FetchContent_Declare(
 	${_sentrynative_fetch_download_options}
 	SOURCE_DIR "${_sentrynative_source_dir}"
 	PATCH_COMMAND ${CMAKE_COMMAND} "-DSOURCE_DIR=<SOURCE_DIR>" -P "${CMAKE_SOURCE_DIR}/lib/exceptionhandler/3rdparty/sentry/PatchSentryNative.cmake"
+	EXCLUDE_FROM_ALL # Requires CMake 3.28+
+	# Intentionally prevent FetchContent_MakeAvailable from adding the subdirectory automatically
+	# Reference: https://discourse.cmake.org/t/prevent-fetchcontent-makeavailable-to-execute-cmakelists-txt/12704/3
+	SOURCE_SUBDIR dummy_noexist
 )
-FetchContent_GetProperties(sentrynative)
 set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "Sentry build shared libs" FORCE)
 set(SENTRY_EXPORT_SYMBOLS OFF CACHE BOOL "Export symbols" FORCE)
 set(SENTRY_BUILD_RUNTIMESTATIC OFF CACHE BOOL "Build sentry-native with static runtime" FORCE)
@@ -84,10 +87,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin|Linux" AND NOT DEFINED SENTRY_BACKEND)
 	set(SENTRY_BACKEND "breakpad" CACHE STRING
 	"The sentry backend responsible for reporting crashes, can be either 'none', 'inproc', 'breakpad' or 'crashpad'." FORCE)
 endif()
-if(NOT sentrynative_POPULATED)
-	FetchContent_Populate(sentrynative)
-	add_subdirectory("${sentrynative_SOURCE_DIR}" "${sentrynative_BINARY_DIR}" EXCLUDE_FROM_ALL)
-endif()
+FetchContent_MakeAvailable(sentrynative)
+add_subdirectory("${sentrynative_SOURCE_DIR}" "${sentrynative_BINARY_DIR}" EXCLUDE_FROM_ALL) # Because FetchContent_Declare EXCLUDE_FROM_ALL requires CMake 3.28+
 message(STATUS "Enabling crash-handling backend: sentry-native ($CACHE{SENTRY_BACKEND}) for (${CMAKE_SYSTEM_NAME}:${CMAKE_SYSTEM_PROCESSOR})")
 
 ####################
