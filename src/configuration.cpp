@@ -790,8 +790,6 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	iniSetString("autoratingUrlV2", getAutoratingUrl());
-	iniSetBool("autorating", getAutoratingEnable());
 	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());

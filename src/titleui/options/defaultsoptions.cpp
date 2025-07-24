@@ -505,25 +505,6 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
-	{
-		auto optionInfo = OptionInfo("defaults.hosting.ratingLookup", N_("Enable Rating"), "");
-		auto valueChanger = OptionsDropdown<bool>::make(
-			[]() {
-				OptionChoices<bool> result;
-				result.choices = {
-					{ _("Off"), "", false },
-					{ _("On"), "", true },
-				};
-				result.setCurrentIdxForValue(getAutoratingEnable());
-				return result;
-			},
-			[](const auto& newValue) -> bool {
-				setAutoratingEnable(newValue);
-				return true;
-			}, false
-		);
-		result->addOption(optionInfo, valueChanger, true);
-	}
 
 	return result;
 }
