@@ -1041,6 +1041,7 @@ namespace wzapi
 	int queuedPower(WZAPI_PARAMS(int player));
 	bool isStructureAvailable(WZAPI_PARAMS(std::string structureName, optional<int> _player));
 	optional<scr_position> pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string structureName, int startX, int startY, optional<int> _maxBlockingTiles));
+	bool structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y, optional<float> _direction));
 	bool droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y));
 	bool propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, int y1, int x2, int y2));
 	int terrainType(WZAPI_PARAMS(int x, int y));
