@@ -2248,11 +2248,7 @@ static bool writeMapFile(const char *fileName);
 
 static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
-// `nextFreeGroupID` acts as the initial offset for assigning new group IDs in `loadSaveGroup()`.
-// This number is passed by reference and is intended to be used a single counter throughout multiple
-// invocations of `loadSaveDroid()` (for each available droid list), so that group mappings stay consistent
-// across all droid lists.
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists, int& nextFreeGroupID);
+static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists);
 static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists* ppsCurrentDroidLists);
 static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& ppsCurrentDroidLists);
 
@@ -2674,13 +2670,6 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 	UDWORD			player, inc, i, j;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
-	// This will be set to the largest group ID found throughout each droid file + 1
-	// on each invocation of `loadSaveDroid()` function.
-	// Acts as the initial offset for assigning new group IDs in `loadSaveGroup()`.
-	//
-	// It helps to allocate non-conflicting group IDs for commanders which
-	// happen to lose their group, e.g. when transitioning from an offworld mission.
-	int nextFreeGroupID = 0;
 
 	/* Stop the game clock */
 	gameTimeStop();
@@ -3094,7 +3083,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mdroid.json");
-		if (loadSaveDroid(aFileName, apsDroidLists, nextFreeGroupID))
+		if (loadSaveDroid(aFileName, apsDroidLists))
 		{
 			droidMap[aFileName] = &mission.apsDroidLists; // need to swap here to read correct list later
 		}
@@ -3219,7 +3208,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		}
 		else
 		{
-			if (loadSaveDroid(aFileName, apsDroidLists, nextFreeGroupID))
+			if (loadSaveDroid(aFileName, apsDroidLists))
 			{
 				debug(LOG_SAVE, "Loaded new style droids");
 				droidMap[aFileName] = &apsDroidLists;	// load pointers later
@@ -3233,7 +3222,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (!loadSaveDroid(aFileName, apsDroidLists, nextFreeGroupID))
+		if (!loadSaveDroid(aFileName, apsDroidLists))
 		{
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
@@ -3264,7 +3253,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			strcat(aFileName, "mdroid.json");
 
 			// load the data into mission.apsDroidLists, if any
-			if (loadSaveDroid(aFileName, mission.apsDroidLists, nextFreeGroupID))
+			if (loadSaveDroid(aFileName, mission.apsDroidLists))
 			{
 				droidMap[aFileName] = &mission.apsDroidLists;
 			}
@@ -3276,7 +3265,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		// load in the limbo droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "limbo.json");
-		if (loadSaveDroid(aFileName, apsLimboDroids, nextFreeGroupID))
+		if (loadSaveDroid(aFileName, apsLimboDroids))
 		{
 			droidMap[aFileName] = &apsLimboDroids;
 		}
@@ -5638,7 +5627,7 @@ inline T getCompFromName_NullCompOnFail(COMPONENT_TYPE compType, const WzString 
 	return (index >= 0) ? static_cast<T>(index) : 0; // 0 to reference the null weapon / body / etc
 }
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists, int& nextFreeGroupID)
+static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
@@ -5652,11 +5641,13 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 	std::vector<std::pair<int, WzString>> sortedList;
 	bool missionList = fName.compare("mdroid");
 
+	using DroidGroupIdMapping = std::unordered_map<int, DROID_GROUP*>;
+	DroidGroupIdMapping aigroupToDroidGroupMapping;
+
 	for (size_t i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		DROID_TYPE droidType = (DROID_TYPE)ini.value("droidType").toInt();
-		int aigroup = ini.value("aigroup", -1).toInt();
 		int priority = 0;
 		switch (droidType)
 		{
@@ -5671,10 +5662,6 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 			if (!missionList || (missionList && !getDroidsToSafetyFlag()))
 			{
 				++priority;
-			}
-			if (aigroup >= 0)
-			{
-				nextFreeGroupID = std::max(nextFreeGroupID, aigroup) + 1;
 			}
 		default:
 			break;
@@ -5798,9 +5785,32 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		int aigroup = ini.value("aigroup", -1).toInt();
 		if (aigroup >= 0)
 		{
-			DROID_GROUP *psGroup = grpFind(aigroup);
-			psGroup->add(psDroid);
-			if (psGroup->type == GT_TRANSPORTER)
+			DROID_GROUP *psGroup = nullptr;
+
+			// Find mapping and add to group
+			auto it = aigroupToDroidGroupMapping.find(aigroup);
+			if (it != aigroupToDroidGroupMapping.end())
+			{
+				psGroup = it->second;
+				psGroup->add(psDroid);
+			}
+			else if (psDroid->isTransporter() || psDroid->droidType == DROID_COMMAND)
+			{
+				ASSERT(psDroid->psGroup != nullptr, "Droid did not get created with group!: %s", sortedList[i].second.toUtf8().c_str());
+				if (psDroid->psGroup)
+				{
+					// Store mapping
+					auto result = aigroupToDroidGroupMapping.insert(DroidGroupIdMapping::value_type(aigroup, psDroid->psGroup));
+					ASSERT(result.second, "Already a mapping entry for group??: (id: %d)", aigroup);
+					psGroup = psDroid->psGroup;
+				}
+			}
+			else
+			{
+				debug(LOG_ERROR, "Failed to find & map group (%d) for droid: %s", aigroup, sortedList[i].second.toUtf8().c_str());
+			}
+
+			if (psGroup != nullptr && psGroup->type == GT_TRANSPORTER)
 			{
 				psDroid->selected = false;  // Droid should be visible in the transporter interface.
 				if (!psDroid->isTransporter())
@@ -5813,8 +5823,11 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		{
 			if (psDroid->isTransporter() || psDroid->droidType == DROID_COMMAND)
 			{
-				DROID_GROUP *psGroup = grpCreate(nextFreeGroupID++);
-				psGroup->add(psDroid);
+				ASSERT(psDroid->psGroup != nullptr, "Droid did not get created with group!: %s", sortedList[i].second.toUtf8().c_str());
+				if (psDroid->psGroup)
+				{
+					ASSERT(aigroupToDroidGroupMapping.count(psDroid->psGroup->id) == 0, "Droid created with conflicting group id (%d)!: %s", psDroid->psGroup->id, sortedList[i].second.toUtf8().c_str());
+				}
 			}
 			else
 			{
