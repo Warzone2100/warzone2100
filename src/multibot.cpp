@@ -703,7 +703,9 @@ bool recvDroidInfo(NETQUEUE queue)
 				* If the current order not is a command order and we are not a
 				* commander yet are in the commander group remove us from it.
 				*/
-				if (hasCommander(psDroid))
+				if (hasCommander(psDroid)
+					&& info.order != DORDER_RTR
+					&& info.order != DORDER_RTR_SPECIFIED)
 				{
 					psDroid->psGroup->remove(psDroid);
 				}
