@@ -30,6 +30,12 @@
 				"id": "WallTower01",
 				"onlyIfKnown": "campaign"
 			}
+		},
+		{
+			"stat": {
+				"id": "A0TankTrap",
+				"onlyIfKnown": "campaign"
+			}
 		}
 	],
 	"contents": [
