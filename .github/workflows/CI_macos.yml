@@ -29,21 +29,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "Xcode 14.3 (x64)"
-            image: "macos-13"
+          - name: "Xcode 16.4 (x64)"
+            image: "macos-15"
             osx_target_arch: "x86_64"
             vcpkg_triplet: "x64-osx"
-            vcpkg_host_triplet: "x64-osx"
-            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
+            vcpkg_host_triplet: "arm64-osx"
+            xcode_dev_dir: "/Applications/Xcode_16.4.app"
             include_videos: false
             artifact_suffix: "x64"
             publish_artifact: true
-          - name: "Xcode 14.3 (ARM64)"
-            image: "macos-13"
+          - name: "Xcode 16.4 (ARM64)"
+            image: "macos-15"
             osx_target_arch: "arm64"
             vcpkg_triplet: "arm64-osx"
-            vcpkg_host_triplet: "x64-osx"
-            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
+            vcpkg_host_triplet: "arm64-osx"
+            xcode_dev_dir: "/Applications/Xcode_16.4.app"
             include_videos: true
             artifact_suffix: "arm64"
             publish_artifact: true
@@ -87,7 +87,7 @@ jobs:
         HOMEBREW_NO_INSTALL_UPGRADE: 1
       run: |
         echo "::group::brew install"
-        brew install --quiet automake gettext pkg-config xcbeautify
+        brew install --quiet automake libtool gettext pkg-config xcbeautify
         echo "::endgroup::"
 
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
