@@ -21,6 +21,12 @@
 		},
 		{
 			"stat": {
+				"id": "GuardTower1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
 				"id": "GuardTower1MG",
 				"onlyIfKnown": "campaign"
 			}
