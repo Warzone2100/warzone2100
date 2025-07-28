@@ -169,12 +169,17 @@ function __camProcessResearchGatedGuideTopics(research = null)
 	{
 		addGuideTopic("wz2100::weapons::bombs::incendiary", __SHOW_FLAGS);
 	}
+	// First defense researched
+	if (__camGuideTopicCheckResearchComplete("R-Defense-Tower01", research))
+	{
+		addGuideTopic("wz2100::general::defendingbase", __SHOW_FLAGS);
+	}
 }
 
 function __camEnableGuideTopics()
 {
 	// Always enable (most) general topics & unit orders
-	addGuideTopic("wz2100::general::**", 0, ["wz2100::general::artifacts", "wz2100::general::researching", "wz2100::general::power"]);
+	addGuideTopic("wz2100::general::**", 0, ["wz2100::general::artifacts", "wz2100::general::researching", "wz2100::general::power", "wz2100::general::defendingbase"]);
 	addGuideTopic("wz2100::unitorders::**");
 	// Basic base / structure topics
 	addGuideTopic("wz2100::structures::building");
@@ -185,6 +190,7 @@ function __camEnableGuideTopics()
 		addGuideTopic("wz2100::general::artifacts");
 		addGuideTopic("wz2100::general::researching");
 		addGuideTopic("wz2100::general::power");
+		addGuideTopic("wz2100::general::defendingbase");
 		// Basic structure topics
 		addGuideTopic("wz2100::structures::hq");
 		addGuideTopic("wz2100::structures::researchfacility");
