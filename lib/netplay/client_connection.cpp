@@ -187,7 +187,13 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 	}
 	else
 	{
-		compressionAdapter_->compress(buf, size);
+		auto compressRes = compressionAdapter_->compress(buf, size);
+		if (!compressRes.has_value())
+		{
+			// compress failed?
+			debug(LOG_ERROR, "IClientConnection::writeAll: compress failed?");
+			return tl::make_unexpected(compressRes.error());
+		}
 	}
 
 	return size;
@@ -217,7 +223,13 @@ net::result<void> IClientConnection::flush(size_t* rawByteCount)
 		return tl::make_unexpected(writeErrorCode().value());
 	}
 
-	compressionAdapter_->flushCompressionStream();
+	auto flushCompressionRes = compressionAdapter_->flushCompressionStream();
+	if (!flushCompressionRes.has_value())
+	{
+		// flushCompressionStream failed
+		debug(LOG_ERROR, "Socket write error encountered flushing compression stream");
+		return tl::make_unexpected(flushCompressionRes.error());
+	}
 
 	auto& compressionBuf = compressionAdapter_->compressionOutBuffer();
 	if (compressionBuf.empty())
