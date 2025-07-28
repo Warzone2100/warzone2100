@@ -4178,14 +4178,22 @@ static void NETallowJoining()
 						// Copy gameId (as 32bit large big endian number)
 						push32(gamestruct.gameId);
 
-						tmp_socket[i]->writeAll(buf, sizeof(buf), nullptr);
+						const auto writeResult = tmp_socket[i]->writeAll(buf, sizeof(buf), nullptr);
+						if (!writeResult.has_value())
+						{
+							debug(LOG_NET, "writeAll to tmpSocket[%u] failed with error?: %d", i, writeResult.error().value());
+						}
 						connectFailed = true;
 					}
 					else if (NETisCorrectVersion(major, minor))
 					{
 						result = wz_htonl(ERROR_NOERROR);
 						memcpy(&tmp_connectState[i].buffer, &result, sizeof(result));
-						tmp_socket[i]->writeAll(&tmp_connectState[i].buffer, sizeof(result), nullptr);
+						const auto writeResult = tmp_socket[i]->writeAll(&tmp_connectState[i].buffer, sizeof(result), nullptr);
+						if (!writeResult.has_value())
+						{
+							debug(LOG_NET, "writeAll to tmpSocket[%u] failed with error?: %d", i, writeResult.error().value());
+						}
 						tmp_socket[i]->enableCompression();
 
 						// Connection is successful.
@@ -4208,7 +4216,11 @@ static void NETallowJoining()
 						debug(LOG_INFO, "Received an invalid version \"%" PRIu32 ".%" PRIu32 "\".", major, minor);
 						result = wz_htonl(ERROR_WRONGVERSION);
 						memcpy(&tmp_connectState[i].buffer, &result, sizeof(result));
-						tmp_socket[i]->writeAll(&tmp_connectState[i].buffer, sizeof(result), nullptr);
+						const auto writeResult = tmp_socket[i]->writeAll(&tmp_connectState[i].buffer, sizeof(result), nullptr);
+						if (!writeResult.has_value())
+						{
+							debug(LOG_NET, "writeAll to tmpSocket[%u] failed with error?: %d", i, writeResult.error().value());
+						}
 						NETlogEntry("Invalid game version", SYNC_FLAG, i);
 						NETaddSessionBanBadIP(tmp_connectState[i].ip);
 						connectFailed = true;
