@@ -528,7 +528,14 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	}
 	else
 	{
-		proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		if (psAttacker == nullptr)
+		{
+			proj.dst.z = target.z - LINE_OF_FIRE_MINIMUM;
+		}
+		else
+		{
+			proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		}
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
