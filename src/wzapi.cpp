@@ -3394,7 +3394,7 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 	Vector3i target;
 	target.x = world_coord(x);
 	target.y = world_coord(y);
-	target.z = map_Height(x, y);
+	target.z = mapTile(x, y)->height;
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weaponIndex;
