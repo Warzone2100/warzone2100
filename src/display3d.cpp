@@ -1397,7 +1397,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				{
 					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
 
-					pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
+					pos.y = map_TileHeightSurface(playerXTile + j, playerZTile + i);
 					auto color = pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level));
 					lightmap(playerXTile + j, playerZTile + i) = color;
 				}
