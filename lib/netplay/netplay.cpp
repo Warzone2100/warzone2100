@@ -1092,7 +1092,7 @@ static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 		NET_DestroyPlayer(index);       // sets index player's array to false
 		if (!wasSpectator)
 		{
-			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// reset ready status for all players
+			resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		// reset ready status for all players
 		}
 		handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 
@@ -1131,7 +1131,7 @@ static void NETplayerDropped(UDWORD index)
 		NET_DestroyPlayer(id);          // just clears array
 		if (!wasSpectator)
 		{
-			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// reset ready status for all players
+			resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		// reset ready status for all players
 		}
 		handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
 

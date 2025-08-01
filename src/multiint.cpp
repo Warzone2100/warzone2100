@@ -6421,7 +6421,7 @@ public:
 		std::string slotType = (NetPlay.players[player].isSpectator) ? "spectator" : "player";
 		sendRoomSystemMessage((std::string("Kicking ")+slotType+": "+std::string(getPlayerName(player, true))).c_str());
 		::kickPlayer(player, reason, ERROR_KICKED, ban);
-		resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+		resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());
 		return true;
 	}
 	virtual bool changeHostChatPermissions(uint32_t player, bool freeChatEnabled) override
@@ -6901,7 +6901,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 			{
 				uint32_t player_id = MAX_CONNECTED_PLAYERS;
 
-				resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+				resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());
 
 				auto r = NETbeginDecode(queue, NET_PLAYER_DROPPED);
 				{

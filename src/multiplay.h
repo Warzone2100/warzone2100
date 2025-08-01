@@ -391,6 +391,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 
 void startMultiplayerGame();
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
+bool shouldSkipReadyResetOnPlayerJoinLeaveEvent();
 
 STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists& pList, unsigned player, unsigned index);
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index); // checks apsStructLists
