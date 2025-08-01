@@ -4348,7 +4348,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 			int x0 = PLAYERBOX_X0 - 1;
 			int y0 = 1;
 			int width = MULTIOP_PLAYERSW - (PLAYERBOX_X0 * 2);
-			int height = psParent->height() - y0;
+			int height = psParent->height() - y0 - 1;
 			psWidget->setGeometry(x0, y0, width, height);
 		}));
 	}

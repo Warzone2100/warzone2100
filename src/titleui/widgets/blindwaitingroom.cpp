@@ -683,8 +683,8 @@ public:
 
 	void initialize(const std::shared_ptr<WzMultiplayerOptionsTitleUI>& titleUI)
 	{
-		// Add the "BLIND ROOM" info bar at top
-		titleBanner = WzRoomTitleBanner::make(_("Blind Waiting Room"), []() {
+		// Add the "Waiting Room" info bar at top
+		titleBanner = WzRoomTitleBanner::make(_("Waiting Room"), []() {
 			widgScheduleTask([]() {
 				printBlindModeHelpMessagesToConsole();
 			});
