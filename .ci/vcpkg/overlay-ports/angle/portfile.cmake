@@ -18,9 +18,7 @@ endif()
 set(ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW "OFF")
 if (VCPKG_TARGET_IS_WINDOWS OR VCPKG_TARGET_IS_UWP)
   set(ANGLE_BUILDSYSTEM_PORT "Win")
-  if (NOT VCPKG_TARGET_IS_MINGW)
-    set(ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW "ON")
-  endif()
+  set(ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW "ON")
 elseif (VCPKG_TARGET_IS_OSX)
   set(ANGLE_BUILDSYSTEM_PORT "Mac")
 elseif (VCPKG_TARGET_IS_LINUX)
@@ -50,6 +48,7 @@ vcpkg_from_github(
     PATCHES
         001-fix-builder-error.patch
         fix-freebsd.patch
+        wz-mingw-headers.patch
 )
 
 # Generate angle_commit.h

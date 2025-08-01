@@ -71,6 +71,10 @@ endif()
 
 find_package(ZLIB REQUIRED)
 
+if(MINGW)
+    include_directories(AFTER SYSTEM "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/wz-mingw-headers>")
+endif()
+
 ##################################################
 
 # Derived from: https://github.com/WebKit/WebKit/blob/92dbcacf4c3e3a8fc6eea68e7022ca59401749e0/Source/ThirdParty/ANGLE/CMakeLists.txt
