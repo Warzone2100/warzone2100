@@ -6511,7 +6511,6 @@ public:
 
 		std::string msg = astringf(_("Asking %s to move to Players..."), playerNameStr.c_str());
 		sendRoomSystemMessage(msg.c_str());
-		resetReadyStatus(true);		//reset and send notification to all clients
 		return true;
 	}
 	virtual bool autoBalancePlayers(uint32_t responsibleIdx) override
