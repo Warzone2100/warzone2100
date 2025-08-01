@@ -973,7 +973,7 @@ void WzPlayerRow::updateReadyButton()
 						std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player, true));
 						sendRoomSystemMessage(msg.c_str());
 						kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
-						resetReadyStatus(true, isBlindSimpleLobby(game.blindMode));		//reset and send notification to all clients
+						resetReadyStatus(true, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		//reset and send notification to all clients
 					}
 				}
 			});
