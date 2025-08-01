@@ -139,8 +139,8 @@ modules:
     @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
-        url: https://github.com/icculus/physfs/archive/741c4be358cd87366af1387d1e04e3f7d4f50c1e.zip # PhysFS 3.2.0+
-        sha512: 56bfe808e28d7de6b9f242ca3ce81d08439480499c7d5901f78a3ec8ea75c55b71958515db015f101bb6b884a0a0f1140fab1a7222aff0bbe28555ebf378807f
+        url: https://github.com/icculus/physfs/archive/9d18d36b5a5207b72f473f05e1b2834e347d8144.zip # PhysFS 3.2.0+
+        sha512: f982bc6352e632be91061a6c8baf18ef666b5665959174b7d1f273ef538be50b8a54884e9605adc3cbf56705fd6dc16554bfba797a1054b92d802d585a15dc0f
       
   - name: fribidi
     buildsystem: meson
@@ -154,8 +154,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/fribidi/fribidi
-        tag: v1.0.15
-        commit: 2803ff176713a27d7edb57a24bc60c38a02182e9
+        tag: v1.0.16
+        commit: 68162babff4f39c4e2dc164a5e825af93bda9983
 
   - name: libsodium
     @WZ_CROSS_BUILD_OPTIONS@
