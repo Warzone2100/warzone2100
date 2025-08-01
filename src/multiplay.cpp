@@ -1594,8 +1594,6 @@ bool recvMessage()
 			{
 				uint32_t player_id;
 
-				resetReadyStatus(false);
-
 				auto r = NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(r, player_id);
