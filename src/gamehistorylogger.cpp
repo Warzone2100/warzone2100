@@ -366,14 +366,9 @@ void GameStoryLogger::logGameFrame()
 		return;
 	}
 
-	if (frameLoggingInterval == 0)
-	{
-		// frame logging disabled
-		return;
-	}
-
 	// throttle recording of game frames
-	if (lastRecordedGameFrameTime > 0 && (gameTime - lastRecordedGameFrameTime < frameLoggingInterval))
+	// (if frameLoggingInterval == 0, ongoing frame logging is disabled - however, always output the first frame regardless!)
+	if (lastRecordedGameFrameTime > 0 && ((frameLoggingInterval == 0) || (gameTime - lastRecordedGameFrameTime < frameLoggingInterval)))
 	{
 		return;
 	}
