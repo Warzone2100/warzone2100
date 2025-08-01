@@ -3042,8 +3042,6 @@ bool recvFactionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	resetReadyStatus(false, true);
-
 	return changeFaction(player, newFactionId.value(), queue.index);
 }
 
@@ -3070,8 +3068,6 @@ bool recvColourRequest(NETQUEUE queue)
 		HandleBadParam("NET_COLOURREQUEST given incorrect params.", player, queue.index);
 		return false;
 	}
-
-	resetReadyStatus(false, true);
 
 	return changeColour(player, col, queue.index);
 }
