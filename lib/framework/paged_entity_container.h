@@ -680,7 +680,12 @@ public:
 		for (size_t i = 0, end = _pages.size(); i != end; ++i)
 		{
 			Page& p = _pages[i];
+			if (p.is_expired())
+			{
+				continue;
+			}
 			auto* storage = p.storage();
+			assert(storage != nullptr);
 			// If the address is inside the current page, calculate the index from raw offset.
 			if (addr >= storage && addr <= &storage[p.max_valid_index()])
 			{
