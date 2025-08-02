@@ -7,12 +7,13 @@ include(WebKitCommon-minimal)
 set(ANGLE_FRAMEWORK_HEADERS_DIR "${CMAKE_BINARY_DIR}/ANGLE/headers")
 
 set(USE_ANGLE_EGL ON)
-if (NOT WINDOWS_STORE)
+if (NOT WINDOWS_STORE AND NOT USE_METAL)
     set(USE_OPENGL ON)
 endif()
 
 if(MSVC)
     add_compile_options(/d2guard4 /Wv:18 /guard:cf /permissive /bigobj)
+    add_link_options(/guard:cf)
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
@@ -43,7 +44,7 @@ add_compile_options("$<$<CONFIG:DEBUG>:-DANGLE_ENABLE_DEBUG_ANNOTATIONS>")
 if(WIN32)
     add_definitions(-DANGLE_IS_WIN)
 endif()
-if(LINUX)
+if(LINUX OR CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
     add_definitions(-DANGLE_IS_LINUX)
 endif()
 if(ANGLE_IS_64_BIT_CPU)
@@ -56,6 +57,16 @@ if(ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW)
         message(FATAL_ERROR "ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW is set, but is only supported on Windows")
     endif()
     set(angle_enable_d3d11_compositor_native_window TRUE)
+endif()
+if(NOT BUILD_SHARED_LIBS)
+    add_definitions(
+        -DANGLE_EXPORT=
+        -DANGLE_STATIC=1
+        -DANGLE_UTIL_EXPORT=
+        -DEGLAPI=
+        -DGL_APICALL=
+        -DGL_API=
+    )
 endif()
 
 find_package(ZLIB REQUIRED)
@@ -99,9 +110,6 @@ elseif (WIN32)
     set(angle_enable_d3d11 TRUE)
 elseif (UNIX)
     set(is_linux TRUE)
-    if(LINUX)
-        set(angle_use_x11 TRUE)
-    endif()
 endif ()
 # VCPKG EDIT: end vcpkg modified block
 
@@ -228,13 +236,6 @@ set(angle_gl_enum_utils # VCPKG EDIT: Update paths
     "src/common/gl_enum_utils_autogen.h"
 )
 
-set(angle_glslang_wrapper
-    "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.cpp"
-    "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h"
-    "src/libANGLE/renderer/glslang_wrapper_utils.cpp"
-    "src/libANGLE/renderer/glslang_wrapper_utils.h"
-)
-
 WEBKIT_INCLUDE_CONFIG_FILES_IF_EXISTS()
 
 add_subdirectory(include)
@@ -261,9 +262,13 @@ if (USE_ANGLE_EGL OR ENABLE_WEBGL)
     target_compile_definitions(ANGLE PUBLIC ${ANGLE_DEFINITIONS})
     target_link_libraries(ANGLE PRIVATE ZLIB::ZLIB ${CMAKE_DL_LIBS})
 
+    find_package(Threads REQUIRED)
+    target_link_libraries(ANGLE PRIVATE Threads::Threads)
+
     target_compile_definitions(ANGLEFramework INTERFACE ${gl_prototypes})
 
     add_library(GLESv2 ${GLESv2_LIBRARY_TYPE}
+        ${libglesv2_entry_point_sources}
         ${libglesv2_sources}
     )
     target_include_directories(GLESv2 PRIVATE ${ANGLE_PRIVATE_INCLUDE_DIRECTORIES})
@@ -384,16 +389,6 @@ add_library(ANGLE::ANGLE ALIAS ANGLEFramework)
 #### VCPKG EDIT:
 #### various vcpkg additions and install commands
 
-# X11 support
-if (angle_use_x11)
-    find_package(X11 COMPONENTS Xext Xi REQUIRED)
-    target_include_directories(ANGLE PRIVATE ${X11_INCLUDE_DIR})
-    target_sources(ANGLE PRIVATE ${libangle_gpu_info_util_x11_sources})
-    target_sources(ANGLE PRIVATE "src/gpu_info_util/SystemInfo_x11.cpp")
-    target_compile_definitions(ANGLE PRIVATE ANGLE_USE_X11 GPU_INFO_USE_X11)
-    target_link_libraries(ANGLE PRIVATE $X11_LIBRARIES} X11::X11 X11::Xi X11::Xext)
-endif()
-
 # set export names of some targets to match prior vcpkg port buildsystem
 if(TARGET EGL)
     set_target_properties(EGL PROPERTIES EXPORT_NAME libEGL)
@@ -420,19 +415,53 @@ install(EXPORT ANGLEExport FILE unofficial-angle-targets.cmake NAMESPACE unoffic
 install(FILES unofficial-angle-config.cmake DESTINATION share/unofficial-angle)
 
 if(NOT DISABLE_INSTALL_HEADERS)
-    install(
-        DIRECTORY "${ANGLE_FRAMEWORK_HEADERS_DIR}"
-        DESTINATION include
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.inc"
-        PATTERN "CL" EXCLUDE
-        PATTERN "GLSLANG" EXCLUDE
-        PATTERN "egl.h" EXCLUDE
-        PATTERN "eglext.h" EXCLUDE
-        PATTERN "eglplatform.h" EXCLUDE
-        PATTERN "KHR" EXCLUDE
-        PATTERN "WGL" EXCLUDE
-        PATTERN "export.h" EXCLUDE
-    )
+	install(
+		DIRECTORY "${ANGLE_FRAMEWORK_HEADERS_DIR}/"
+		DESTINATION include
+		FILES_MATCHING
+		PATTERN "*.h"
+		PATTERN "*.inc"
+		PATTERN "CL" EXCLUDE
+		PATTERN "GLSLANG" EXCLUDE
+		PATTERN "EGL/egl.h" EXCLUDE
+		PATTERN "EGL/eglext.h" EXCLUDE
+		PATTERN "EGL/eglplatform.h" EXCLUDE
+		PATTERN "KHR" EXCLUDE
+		PATTERN "WGL" EXCLUDE
+		PATTERN "export.h" EXCLUDE
+		PATTERN "GLES/egl.h" EXCLUDE
+		PATTERN "GLES/gl.h" EXCLUDE
+		PATTERN "GLES/glext.h" EXCLUDE
+		PATTERN "GLES/glplatform.h" EXCLUDE
+		PATTERN "GLES2/gl2.h" EXCLUDE
+		PATTERN "GLES2/gl2ext.h" EXCLUDE
+		PATTERN "GLES2/gl2platform.h" EXCLUDE
+		PATTERN "GLES3/gl3.h" EXCLUDE
+		PATTERN "GLES3/gl31.h" EXCLUDE
+		PATTERN "GLES3/gl32.h" EXCLUDE
+		PATTERN "GLES3/gl3platform.h" EXCLUDE
+	)
+	install(
+		DIRECTORY "${ANGLE_FRAMEWORK_HEADERS_DIR}/"
+		DESTINATION include/angle
+		FILES_MATCHING
+		PATTERN "*.h"
+		PATTERN "*.inc"
+		PATTERN "CL" EXCLUDE
+		PATTERN "GLSLANG" EXCLUDE
+		PATTERN "EGL/egl.h" EXCLUDE
+		PATTERN "EGL/eglext.h" EXCLUDE
+		PATTERN "EGL/eglplatform.h" EXCLUDE
+		PATTERN "KHR" EXCLUDE
+		PATTERN "WGL" EXCLUDE
+		PATTERN "export.h" EXCLUDE
+	)
+endif()
+
+if(NOT BUILD_SHARED_LIBS)
+    foreach(angle_target EGL GLESv2 ANGLE)
+        if(TARGET ${angle_target})
+            target_compile_definitions(${angle_target} INTERFACE $<INSTALL_INTERFACE:KHRONOS_STATIC>)
+        endif()
+    endforeach()
 endif()
