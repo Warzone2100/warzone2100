@@ -3982,6 +3982,7 @@ static bool gameLoad(const char *fileName)
 		{
 			debug(LOG_ERROR, "Failed to unload old data. Attempting to load anyway");
 		}
+		challengeFileName = "";
 
 		//remove the file extension
 		CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
@@ -3992,7 +3993,6 @@ static bool gameLoad(const char *fileName)
 
 		loadMainFileFinal(std::string(CurrentFileName) + "/main.json");
 
-		challengeFileName = "";
 		return retVal;
 	}
 	else
