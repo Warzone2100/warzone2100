@@ -24,6 +24,7 @@
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
+#include "lib/framework/stringsearch.h"
 #include "piemode.h"
 
 #include <vector>
@@ -3371,6 +3372,9 @@ bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> c
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 
+static const PreprocessedASCIISearchString OOM_GL_ERROR_SEARCH_STRING = PreprocessedASCIISearchString("GL_OUT_OF_MEMORY");
+static std::atomic<bool> khrCallbackOomDetected(false);
+
 static const char *cbsource(GLenum source)
 {
 	switch (source)
@@ -3421,6 +3425,12 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 		if (severity == GL_DEBUG_SEVERITY_HIGH)
 		{
 			log_level = LOG_ERROR;
+
+			// detect OUT_OF_MEMORY errors, set flag
+			if (message != nullptr && containsSubstringPreprocessed(message, std::min<size_t>(length, strnlen(message, length)), OOM_GL_ERROR_SEARCH_STRING))
+			{
+				khrCallbackOomDetected.store(true);
+			}
 		}
 	}
 	debugLogFromGfxCallback(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), (message != nullptr) ? message : "");
@@ -3489,6 +3499,10 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 
 bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	khrCallbackOomDetected.store(false);
+#endif
+
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
 	if (!backend_impl)
@@ -4058,6 +4072,13 @@ void gl_context::beginRenderPass()
 #endif
 }
 
+[[noreturn]] static void glContextHandleOOMError()
+{
+	wzDisplayFatalGfxBackendFailure("GL_OUT_OF_MEMORY");
+	wzResetGfxSettingsOnFailure();
+	abort();
+}
+
 void gl_context::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
@@ -4066,6 +4087,13 @@ void gl_context::endRenderPass()
 	current_program = nullptr;
 #if !defined(__EMSCRIPTEN__)
 	_beginRenderPassImpl();
+#endif
+
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (khrCallbackOomDetected.load())
+	{
+		glContextHandleOOMError();
+	}
 #endif
 }
 
