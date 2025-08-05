@@ -285,7 +285,11 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	}
 
 	// Display a message and prompt the user to try a different graphics backend next time
-	wzPromptToChangeGfxBackendOnFailure("Failed with error: " + vk::to_string(reason));
+	std::string additionalErrorDetails = "Failed with error: " + vk::to_string(reason);
+	if (!wzPromptToChangeGfxBackendOnFailure(additionalErrorDetails))
+	{
+		wzDisplayFatalGfxBackendFailure(additionalErrorDetails);
+	}
 	abort();
 }
 

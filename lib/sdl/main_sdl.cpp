@@ -2672,7 +2672,26 @@ void wzResetGfxSettingsOnFailure()
 	saveGfxConfig();
 }
 
-bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= ""*/)
+void wzDisplayFatalGfxBackendFailure(const std::string& additionalErrorDetails)
+{
+	std::string backendString;
+	if (WZbackend.has_value())
+	{
+		backendString = to_display_string(WZbackend.value());
+	}
+
+	// Display message that there was a failure with the gfx backend
+	std::string title = std::string("Graphics Error: ") + backendString;
+	std::string messageString = std::string("An error occured with graphics backend: ") + backendString + ".\n\n";
+	if (!additionalErrorDetails.empty())
+	{
+		messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
+	}
+	messageString += "Warzone 2100 will now close.";
+	wzDisplayDialog(Dialog_Error, title.c_str(), messageString.c_str());
+}
+
+bool wzPromptToChangeGfxBackendOnFailure(const std::string& additionalErrorDetails /*= ""*/)
 {
 	if (!WZbackend.has_value())
 	{
@@ -2686,20 +2705,8 @@ bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= 
 		{
 			resetGfxBackend(defaultBackend);
 			saveGfxConfig(); // must force-persist the new value before returning!
-			return true;
 		}
-	}
-	else
-	{
-		// Display message that there was a failure with the gfx backend (but there's no other backend to offer changing it to?)
-		std::string title = std::string("Graphics Error: ") + to_display_string(WZbackend.value());
-		std::string messageString = std::string("An error occured with graphics backend: ") + to_display_string(WZbackend.value()) + ".\n\n";
-		if (!additionalErrorDetails.empty())
-		{
-			messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
-		}
-		messageString += "Warzone 2100 will now close.";
-		wzDisplayDialog(Dialog_Error, title.c_str(), messageString.c_str());
+		return true; // handled by this function (prompted user)
 	}
 	return false;
 }

@@ -72,7 +72,8 @@ struct screeninfo
 void wzMain(int &argc, char **argv);
 bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, WINDOW_MODE fullscreen = WINDOW_MODE::windowed, int vsync = 1, int lodDistanceBiasPercentage = 0, uint32_t depthMapResolution = 0, bool highDPI = true);
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
-bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails = "");
+bool wzPromptToChangeGfxBackendOnFailure(const std::string& additionalErrorDetails = "");
+void wzDisplayFatalGfxBackendFailure(const std::string& additionalErrorDetails = "");
 void wzResetGfxSettingsOnFailure();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage);
