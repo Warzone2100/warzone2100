@@ -175,6 +175,8 @@ public:
 	~gl_pipeline_id() {}
 };
 
+struct gl_context;
+
 struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 {
 	gfx_api::state_description desc;
@@ -195,7 +197,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
+	gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -216,7 +218,8 @@ private:
 
 	void getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind);
 
-	void build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
+	void build_program(gl_context& ctx,
+					   bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * fragment_header, const std::string& fragmentPath,
@@ -377,8 +380,17 @@ private:
 	bool createSceneRenderpass();
 	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
+
+protected:
+	friend struct gl_pipeline_state_object;
+	void wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
+	void wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message);
+	void wzGLPopDebugGroup();
+	bool useKHRSuffixedDebugFuncs();
+
 private:
 	bool initGLContext();
+	bool enableDebugMessageCallbacks();
 	void enableVertexAttribArray(GLuint index);
 	void disableVertexAttribArray(GLuint index);
 	std::string calculateFormattedRendererInfoString() const;
