@@ -8221,12 +8221,25 @@ static void setMapScroll()
 	if (scrollMaxX > (SDWORD)mapWidth)
 	{
 		scrollMaxX = mapWidth;
-		debug(LOG_NEVER, "scrollMaxX was too big It has been set to map width");
+		debug(LOG_NEVER, "scrollMaxX was too big - It has been set to map width");
 	}
 	if (scrollMaxY > (SDWORD)mapHeight)
 	{
 		scrollMaxY = mapHeight;
-		debug(LOG_NEVER, "scrollMaxY was too big It has been set to map height");
+		debug(LOG_NEVER, "scrollMaxY was too big - It has been set to map height");
+	}
+	// check for invalid minimum values (fixes some broken maps)
+	if (scrollMinX >= scrollMaxX)
+	{
+		ASSERT(false, "scrollMinX was >= scrollMaxX - min has been set to 0, max has been set to mapWidth");
+		scrollMinX = 0;
+		scrollMaxX = mapWidth;
+	}
+	if (scrollMinY >= scrollMaxY)
+	{
+		ASSERT(false, "scrollMinY was >= scrollMaxY - min has been set to 0, max has been set to mapHeight");
+		scrollMinY = 0;
+		scrollMaxY = mapHeight;
 	}
 }
 
