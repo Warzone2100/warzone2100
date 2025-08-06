@@ -135,11 +135,11 @@ static SDWORD	rotX;
 static SDWORD	rotY;
 std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::make_unique<ValueTracker>();
 std::unique_ptr<ValueTracker> rotationVerticalTracker = std::make_unique<ValueTracker>();
-static uint32_t scrollRefTime;
-static float	scrollSpeedLeftRight; //use two directions and add them because its simple
-static float	scrollStepLeftRight;
-static float	scrollSpeedUpDown;
-static float	scrollStepUpDown;
+static std::chrono::steady_clock::time_point scrollRefTime;
+static double	scrollSpeedLeftRight; //use two directions and add them because its simple
+static double	scrollStepLeftRight;
+static double	scrollSpeedUpDown;
+static double	scrollStepUpDown;
 static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
 static bool	ignoreRMBC	= true;
@@ -987,14 +987,14 @@ void processMouseClickInput()
 	}
 }
 
-static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
+static void calcScroll(double *y, double *dydt, double accel, double decel, double targetVelocity, double dt)
 {
 	double tMid;
 
 	// Stop instantly, if trying to change direction.
 	if (targetVelocity * *dydt < -1e-8f)
 	{
-		*dydt = 0;
+		*dydt = 0.0;
 	}
 
 	if (targetVelocity < *dydt)
@@ -1004,28 +1004,28 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	}
 
 	// Decelerate if needed.
-	tMid = (0 - *dydt) / decel;
-	CLIP(tMid, 0, dt);
-	*y += static_cast<float>(*dydt * tMid + decel / 2 * tMid * tMid);
+	tMid = (0.0 - *dydt) / decel;
+	CLIP(tMid, 0.0, dt);
+	*y += (*dydt * tMid + decel / 2.0 * tMid * tMid);
 	if (cameraAccel)
 	{
-		*dydt += static_cast<float>(decel * tMid);
+		*dydt += (decel * tMid);
 	}
-	dt -= static_cast<float>(tMid);
+	dt -= (tMid);
 
 	// Accelerate if needed.
 	tMid = (targetVelocity - *dydt) / accel;
-	CLIP(tMid, 0, dt);
-	*y += static_cast<float>(*dydt * tMid + accel / 2 * tMid * tMid);
+	CLIP(tMid, 0.0, dt);
+	*y += (*dydt * tMid + accel / 2.0 * tMid * tMid);
 	if (cameraAccel)
 	{
-		*dydt += static_cast<float>(accel * tMid);
+		*dydt += accel * tMid;
 	}
 	else
 	{
 		*dydt = targetVelocity;
 	}
-	dt -= static_cast<float>(tMid);
+	dt -= tMid;
 
 	// Continue at target velocity.
 	*y += *dydt * dt;
@@ -1038,12 +1038,11 @@ static inline bool shouldProcessEdgeScroll()
 
 static void handleCameraScrolling()
 {
-	SDWORD	xDif, yDif;
-	uint32_t timeDiff;
-	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
+	int	xDif, yDif;
+	double scroll_zoom_factor = 1.0 + 2.0 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 
-	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
-	float scaled_accel = scaled_max_scroll_speed / 2;
+	double scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2.0);
+	double scaled_accel = scaled_max_scroll_speed / 2.0;
 
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
@@ -1088,21 +1087,25 @@ static void handleCameraScrolling()
 	}
 
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
-	timeDiff = wzGetTicks() - scrollRefTime;
-	if (timeDiff >= 8) // throttle max update rate to avoid really jerky scrolling
+	auto now = std::chrono::steady_clock::now();
+	auto timeDiff = now - scrollRefTime;
+	if (std::chrono::duration_cast<std::chrono::nanoseconds>(timeDiff) >= std::chrono::nanoseconds(4000000)) // throttle max update rate to avoid really jerky scrolling
 	{
-		scrollRefTime += timeDiff;
-		timeDiff = std::min<unsigned>(timeDiff, 500);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
+		scrollRefTime = now;
 
-		scrollStepLeftRight = 0;
-		scrollStepUpDown = 0;
-		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
-		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+		std::chrono::duration<double> timeDiff_as_seconds_double = std::chrono::duration_cast<std::chrono::duration<double>>(timeDiff);
+		auto timeDiff_double = timeDiff_as_seconds_double.count();
+		timeDiff_double = std::min(timeDiff_double, 0.5);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
+
+		scrollStepLeftRight = 0.0;
+		scrollStepUpDown = 0.0;
+		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2.0 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, timeDiff_double);
+		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2.0 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, timeDiff_double);
 
 		/* Get x component of movement */
-		xDif = (int) (cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
+		xDif = (int) (cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight + sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
 		/* Get y component of movement */
-		yDif = (int) (sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
+		yDif = (int) (sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight - cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
 
 		/* Adjust player's position by these components */
 		playerPos.p.x += xDif;
@@ -1127,9 +1130,9 @@ void displayRenderLoop()
  */
 void resetScroll()
 {
-	scrollRefTime = wzGetTicks();
-	scrollSpeedUpDown = 0.0f;
-	scrollSpeedLeftRight = 0.0f;
+	scrollRefTime = std::chrono::steady_clock::now();
+	scrollSpeedUpDown = 0.0;
+	scrollSpeedLeftRight = 0.0;
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
 }
