@@ -3485,6 +3485,7 @@ std::vector<vk::LayerSettingEXT> VkRoot::initLayerSettings()
 bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const char*>& extensions, const std::vector<const char*>& _layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	appInfo = vk::ApplicationInfo()
+	.setPNext(nullptr)
 	.setPApplicationName("Warzone2100")
 	.setApplicationVersion(1)
 	.setPEngineName("Warzone2100")
@@ -3493,6 +3494,8 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 
 	// Now we can make the Vulkan instance
 	instanceCreateInfo = vk::InstanceCreateInfo()
+	  .setPNext(nullptr)
+	  .setFlags({})
 	  .setPpEnabledLayerNames(_layers.data())
 	  .setEnabledLayerCount(static_cast<uint32_t>(_layers.size()))
 	  .setPApplicationInfo(&appInfo)
