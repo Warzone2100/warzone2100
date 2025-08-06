@@ -923,6 +923,10 @@ bool pie_ShutdownRadar()
 {
 	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
 	{
+		if (radarGfx[i] == nullptr)
+		{
+			continue;
+		}
 		delete radarGfx[i];
 		radarGfx[i] = nullptr;
 	}
