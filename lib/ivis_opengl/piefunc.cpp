@@ -111,10 +111,16 @@ void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 
 void pie_ViewingWindow_Shutdown()
 {
-	delete radarViewGfx[0];
-	radarViewGfx[0] = nullptr;
-	delete radarViewGfx[1];
-	radarViewGfx[1] = nullptr;
+	if (radarViewGfx[0])
+	{
+		delete radarViewGfx[0];
+		radarViewGfx[0] = nullptr;
+	}
+	if (radarViewGfx[1])
+	{
+		delete radarViewGfx[1];
+		radarViewGfx[1] = nullptr;
+	}
 }
 
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
