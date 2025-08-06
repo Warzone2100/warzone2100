@@ -37,6 +37,7 @@
 #include "src/game.h"
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
+#include "sdl_backend_private.h"
 
 #if defined( _MSC_VER )
 	// Silence warning when using MSVC ARM64 compiler
@@ -3542,9 +3543,21 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	auto availableBackends = wzAvailableGfxBackends();
 	optional<video_backend> requestedBackend = backend;
 	std::vector<std::string> backendInitErrors;
+
+	auto videoInitProgress = wzResumeFailedVideoInit(backend, availableBackends, backendInitErrors);
+	if (requestedBackend.has_value() && !backend.has_value())
+	{
+		// Requested a non-null backend, but resuming from previous init failure yielded no valid backends to try
+		videoInitProgress->RecordInitFinished(false);
+		failedToInitializeAnyGraphicsBackendMessage_internal(backendInitErrors);
+		WZbackend = nullopt;
+		return false;
+	}
+
 	do {
 		bool success = false;
 		WZbackend = backend; // various other functions might need this before the call to wzAttemptInitializeBackend returns
+		videoInitProgress->RecordAttemptingBackend(backend);
 		try {
 			success = wzAttemptInitializeBackend(backend, antialiasing, fullscreen, swapMode, lodDistanceBias, depthMapResolution);
 		}
@@ -3553,6 +3566,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 			if (backend.has_value())
 			{
 				backendInitErrors.push_back(astringf("[%s]: %s", to_display_string(backend.value()).c_str(), e.what()));
+				videoInitProgress->RecordFailedBackend(backend, e.what());
 			}
 		}
 		if (success)
@@ -3564,13 +3578,16 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 			if (!backend.has_value())
 			{
 				// if the null backend, and initialization failed, return false
+				videoInitProgress->RecordInitFinished(false);
 				return false;
 			}
 
+			videoInitProgress->RecordFailedBackend(backend, "Failed to initialize");
 			availableBackends.erase(std::remove_if(availableBackends.begin(), availableBackends.end(), [&backend](video_backend a) { return a == backend.value(); }), availableBackends.end());
 			if (availableBackends.empty())
 			{
 				// No more backends to try :(
+				videoInitProgress->RecordInitFinished(false);
 				failedToInitializeAnyGraphicsBackendMessage_internal(backendInitErrors);
 				WZbackend = nullopt;
 				return false;
@@ -3587,6 +3604,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		saveGfxConfig(); // must force-persist the new value before returning!
 	}
 
+	videoInitProgress->RecordInitFinished(true);
 	return true;
 }
 
