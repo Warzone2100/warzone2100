@@ -156,6 +156,8 @@ const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulk
 	, {_vkl_env_text("DISABLE_LAYER"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true} // RTSS
 	, {_vkl_env_text("DISABLE_VULKAN_OBS_CAPTURE"), _vkl_env_text("1"), true} // OBS
+	, {_vkl_env_text("DISABLE_TWITCH_VULKAN_OVERLAY"), _vkl_env_text("1"), true} // Twitch Studio (discontinued)
+	, {_vkl_env_text("DISABLE_VULKAN_OW_OVERLAY_LAYER"), _vkl_env_text("1"), true} // OverWolf
 	, {_vkl_env_text("DISABLE_VULKAN_OW_OBS_CAPTURE"), _vkl_env_text("1"), true} // OverWolf
 	, {_vkl_env_text("VK_LAYER_bandicam_helper_DEBUG_1"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
