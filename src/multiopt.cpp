@@ -898,4 +898,4 @@ void printStructureLimitsInfo(std::vector<MULTISTRUCTLIMITS>& structureLimits, c
 			printLineFunc(tmpConsoleMsgStr);
 		}
 	}
-};
+}
