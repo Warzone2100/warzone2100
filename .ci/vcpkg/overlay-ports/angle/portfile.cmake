@@ -28,6 +28,11 @@ else()
   set(ANGLE_BUILDSYSTEM_PORT "Linux")
 endif()
 
+set(ANGLE_MINGW_OPTIONS "")
+if(VCPKG_TARGET_IS_MINGW)
+    set(ANGLE_MINGW_OPTIONS "-DCMAKE_CXX_FLAGS=-D____FIReference_1_boolean_INTERFACE_DEFINED__")
+endif()
+
 set(USE_METAL OFF)
 if ("metal" IN_LIST FEATURES)
     set(USE_METAL ON)
@@ -179,6 +184,7 @@ vcpkg_cmake_configure(
         "-DANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW=${ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW}"
         "-DVCPKG_TARGET_IS_WINDOWS=${VCPKG_TARGET_IS_WINDOWS}"
         "-DUSE_METAL=${USE_METAL}"
+        ${ANGLE_MINGW_OPTIONS}
 )
 
 vcpkg_cmake_install()
