@@ -808,7 +808,7 @@ void TeamStrategyView::display(int xOffset, int yOffset)
 {
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
-	if (backgroundColor.rgba != 0)
+	if (!backgroundColor.isTransparent())
 	{
 		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
 	}

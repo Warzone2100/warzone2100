@@ -668,7 +668,6 @@ void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 
 	// Display the button background
 	PIELIGHT backgroundColor;
-	backgroundColor.rgba = 0;
 	if (isDown)
 	{
 		backgroundColor = pal_RGBA(10, 0, 70, 250); //WZCOL_FORM_DARK;
@@ -677,7 +676,7 @@ void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 	{
 		backgroundColor = pal_RGBA(25, 0, 110, 220); //WZCOL_TEXT_MEDIUM;
 	}
-	if (backgroundColor.rgba != 0)
+	if (!backgroundColor.isTransparent())
 	{
 		// Draw the background
 		pie_UniTransBoxFill(x0, y0, x0 + psButton->width(), y0 + psButton->height(), backgroundColor);

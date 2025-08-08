@@ -47,6 +47,7 @@
 #include "lib/ivis_opengl/pielighting.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piedraw.h"
+#include "lib/ivis_opengl/pielight_convert.h"
 #include <glm/mat4x4.hpp>
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -600,7 +601,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 			}
 
 			int dxdy[4][2] = {{0,0}, {0,1}, {1,1}, {1,0}};
-			PIELIGHT grounds;
+			uint8_t groundsBytes[4];
 			gfx_api::TerrainDecalVertex vs[5];
 			for (int k = 0; k<4; k++) {
 				int dx = dxdy[k][0], dy = dxdy[k][1];
@@ -609,10 +610,12 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 				vs[k].decalUv = uv[dx][dy];
 				vs[k].normal = getGridNormal(i + dx, j + dy);
 				vs[k].decalNo = decalNo;
-				grounds.vector[k] = mapTile(i + dx, j + dy)->ground;
-				vs[k].groundWeights.rgba = 0;
-				vs[k].groundWeights.vector[k] = 255;
+				groundsBytes[k] = mapTile(i + dx, j + dy)->ground;
+				vs[k].groundWeights.clear();
+				vs[k].groundWeights.setByte(k, 255);
 			}
+			PIELIGHT grounds;
+			grounds.fromRGBA(groundsBytes[0], groundsBytes[1], groundsBytes[2], groundsBytes[3]);
 			// 4 = center;
 			getGridPos(&pos, i, j, true, false);
 			vs[4].pos = pos;
@@ -620,7 +623,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 			vs[4].normal = getGridNormal(i, j, true);
 			vs[4].decalNo = decalNo;
 			vs[4].groundWeights = {0, 0, 0, 0}; // special value for shader.
-			for (int k = 0; k < 5; k++) vs[k].grounds = grounds.rgba;
+			for (int k = 0; k < 5; k++) vs[k].grounds = grounds.rgba();
 
 			terrainDecalData[(*terrainDecalSize)++] = vs[4];
 			terrainDecalData[(*terrainDecalSize)++] = vs[1];
@@ -1132,8 +1135,6 @@ bool initTerrain()
 	int textureSize, textureIndexSize;
 	GLuint *geometryIndex = nullptr;
 	GLuint *waterIndex = nullptr;
-	GLuint *textureIndex = nullptr;
-	PIELIGHT *texture = nullptr;
 	int decalSize = 0;
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
@@ -1322,8 +1323,8 @@ bool initTerrain()
 	////////////////////
 	// fill the texture part of the sectors
 	const size_t numGroundTypes = getNumGroundTypes();
-	texture = (PIELIGHT *)malloc(sizeof(PIELIGHT) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
-	textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
+	auto texture = std::vector<PIELIGHT>(xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
+	GLuint *textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
 	textureSize = 0;
 	textureIndexSize = 0;
 	for (layer = 0; layer < numGroundTypes; layer++)
@@ -1359,7 +1360,7 @@ bool initTerrain()
 							{
 								absX = x * sectorSize + i + a;
 								absY = y * sectorSize + j + b;
-								colour[a][b].rgba = 0x00FFFFFF; // transparent
+								colour[a][b].fromRGBA(255, 255, 255, 0); // transparent
 
 								// extend the terrain type for the bottom and left edges of the map
 								off_map = false;
@@ -1381,7 +1382,7 @@ bool initTerrain()
 								}
 								if (mapTile(absX, absY)->ground == layer)
 								{
-									colour[a][b].rgba = 0xFFFFFFFF;
+									colour[a][b].fromRGBA(255, 255, 255, 255);
 									if (!off_map)
 									{
 										// if this point lies on the edge is may not force this tile to be drawn
@@ -1391,9 +1392,9 @@ bool initTerrain()
 								}
 							}
 						}
-						texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2)].rgba = colour[0][0].rgba;
+						texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2)] = colour[0][0];
 						averageColour(&centerColour, colour[0][0], colour[0][1], colour[1][0], colour[1][1]);
-						texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2 + 1)].rgba = centerColour.rgba;
+						texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2 + 1)] = centerColour;
 						textureSize += 2;
 						if ((draw) && i < sectorSize && j < sectorSize)
 						{
@@ -1425,8 +1426,9 @@ bool initTerrain()
 	if (textureVBO)
 		delete textureVBO;
 	textureVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureVBO");
-	textureVBO->upload(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes, texture);
-	free(texture);
+	static_assert(sizeof(PIELIGHT) == 4, "Unexpected sizeof(PIELIGHT)");
+	textureVBO->upload(sizeof(PIELIGHT) * texture.size(), texture.data());
+	texture.clear();
 
 	if (textureIndexVBO)
 		delete textureIndexVBO;
@@ -1790,23 +1792,13 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 glm::vec4 getFogColorVec4()
 {
 	const auto &renderState = getCurrentRenderState();
-	return glm::vec4(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	);
+	return pielightToRGBAVec4(renderState.fogColour);
 }
 
 static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	);
+	const glm::vec4 fogColor = pielightToRGBAVec4(renderState.fogColour);
 
 	// load the vertex (geometry) buffer
 	gfx_api::TerrainLayer::get().bind();
@@ -1863,12 +1855,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 	}
 
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	);
+	const glm::vec4 fogColor = pielightToRGBAVec4(renderState.fogColour);
 	gfx_api::TerrainDecals::get().bind();
 	gfx_api::TerrainDecals::get().bind_textures(getFallbackTerrainDecalsPage(), lightmap_texture);
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);

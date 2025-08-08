@@ -624,7 +624,7 @@ void WzOptionsChoiceWidget::display(int xOffset, int yOffset)
 	lastWidgetWidth = width();
 
 	// Draw background (if highlighted)
-	if (isHighlight && highlightBackgroundColor.rgba != 0)
+	if (isHighlight && !highlightBackgroundColor.isTransparent())
 	{
 		pie_UniTransBoxFill(x0, y0, x0 + w, y0 + h, highlightBackgroundColor);
 	}

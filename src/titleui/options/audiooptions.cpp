@@ -166,7 +166,7 @@ void OptionsButton::display(int xOffset, int yOffset)
 	{
 		backgroundColor = WZCOL_FORM_DARK;
 	}
-	else if (isHighlight && highlightBackgroundColor.rgba != 0)
+	else if (isHighlight && !highlightBackgroundColor.isTransparent())
 	{
 		backgroundColor = highlightBackgroundColor;
 	}

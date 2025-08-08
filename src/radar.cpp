@@ -580,16 +580,16 @@ static void DrawRadarObjects()
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
 				{
 					if (psDroid->selected && !blinkState)
-						radarOverlayBuffer[pos] = applyAlpha(flashCol, OVERLAY_OPACITY).rgba;
+						radarOverlayBuffer[pos] = applyAlpha(flashCol, OVERLAY_OPACITY).rgba();
 					else
-						radarOverlayBuffer[pos] = flashCol.rgba;
+						radarOverlayBuffer[pos] = flashCol.rgba();
 				}
 				else
 				{
 					if (psDroid->selected && !blinkState)
-						radarOverlayBuffer[pos] = applyAlpha(playerCol, OVERLAY_OPACITY).rgba;
+						radarOverlayBuffer[pos] = applyAlpha(playerCol, OVERLAY_OPACITY).rgba();
 					else
-						radarOverlayBuffer[pos] = playerCol.rgba;
+						radarOverlayBuffer[pos] = playerCol.rgba();
 				}
 			}
 		}
@@ -638,16 +638,16 @@ static void DrawRadarObjects()
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
 				{
 					if (psStruct->player == selectedPlayer && psStruct->selected && !blinkState)
-						radarOverlayBuffer[pos] = applyAlpha(flashCol, OVERLAY_OPACITY).rgba;
+						radarOverlayBuffer[pos] = applyAlpha(flashCol, OVERLAY_OPACITY).rgba();
 					else
-						radarOverlayBuffer[pos] = flashCol.rgba;
+						radarOverlayBuffer[pos] = flashCol.rgba();
 				}
 				else
 				{
 					if (psStruct->player == selectedPlayer && psStruct->selected && !blinkState)
-						radarOverlayBuffer[pos] = applyAlpha(playerCol, OVERLAY_OPACITY).rgba;
+						radarOverlayBuffer[pos] = applyAlpha(playerCol, OVERLAY_OPACITY).rgba();
 					else
-						radarOverlayBuffer[pos] = playerCol.rgba;
+						radarOverlayBuffer[pos] = playerCol.rgba();
 				}
 			}
 		}
@@ -782,7 +782,7 @@ static void setViewingWindow()
 		break;
 	default:
 		// black
-		colour.rgba = 0;
+		colour.clear();
 		colour.byte.a = 0x3f;
 		break;
 	}
