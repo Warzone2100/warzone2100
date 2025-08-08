@@ -110,7 +110,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		{
 
 			//the weapon stats holds the reference to which graphic to use
-			pImd = ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic->displayModel();
+			pImd = (((PROJECTILE *)pObject)->psWStats->pInFlightGraphic) ? ((PROJECTILE *)pObject)->psWStats->pInFlightGraphic->displayModel() : nullptr;
 
 			psSimpObj = (SIMPLE_OBJECT *) pObject;
 			position.x = psSimpObj->pos.x;
@@ -120,7 +120,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 
 			z = pie_RotateProjectWithPerspective(&position, perspectiveViewMatrix, &pixel);
 
-			if (z > 0)
+			if (z > 0 && pImd != nullptr)
 			{
 				//particle use the image radius
 				radius = pImd->radius;
