@@ -2098,7 +2098,7 @@ void	dealWithLMB()
 		        tileIsExplored(psTile) ? "Explored" : "Unexplored",
 		        mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 		        (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
-				(int)psTile->ambientOcclusion, getCurrentLightmapData()(mouseTileX, mouseTileY).rgba,
+				(int)psTile->ambientOcclusion, getCurrentLightmapData()(mouseTileX, mouseTileY).rgba(),
 		        aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
 		        (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer],
 				TileNumber_tile(psTile->texture), (TILE_HAS_DECAL(psTile)) ? "y" : "n",

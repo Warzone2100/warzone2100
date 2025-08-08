@@ -33,8 +33,8 @@ void ScrollableListWidget::initialize()
 	attach(listView = std::make_shared<ClipRectWidget>());
 	scrollBar->show(false);
 	scrollbarWidth = SCROLLBAR_WIDTH;
-	backgroundColor.rgba = 0;
-	borderColor.rgba = 0;
+	backgroundColor.clear();
+	borderColor.clear();
 	rowLinesColor = pal_RGBA(0,0,0,255);
 }
 
@@ -265,12 +265,12 @@ void ScrollableListWidget::display(int xOffset, int yOffset)
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
 
-	if (backgroundColor.rgba != 0)
+	if (!backgroundColor.isTransparent())
 	{
 		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
 	}
 
-	if (borderColor.rgba != 0)
+	if (!borderColor.isTransparent())
 	{
 		int x1 = x0 + width();
 		int y1 = y0 + height();

@@ -1706,10 +1706,10 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	}
 
 	PIELIGHT color;
-	color.vector[0] = static_cast<UBYTE>(font_colour[0] * 255.f);
-	color.vector[1] = static_cast<UBYTE>(font_colour[1] * 255.f);
-	color.vector[2] = static_cast<UBYTE>(font_colour[2] * 255.f);
-	color.vector[3] = static_cast<UBYTE>(font_colour[3] * 255.f);
+	color.byte.r = static_cast<UBYTE>(font_colour[0] * 255.f);
+	color.byte.g = static_cast<UBYTE>(font_colour[1] * 255.f);
+	color.byte.b = static_cast<UBYTE>(font_colour[2] * 255.f);
+	color.byte.a = static_cast<UBYTE>(font_colour[3] * 255.f);
 
 	DrawTextResult drawResult = getShaper().drawText(string, fontID);
 

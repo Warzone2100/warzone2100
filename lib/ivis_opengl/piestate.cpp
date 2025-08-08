@@ -62,13 +62,12 @@ void rendStatesRendModeHack()
 void pie_SetDefaultStates()//Sets all states
 {
 	PIELIGHT black;
+	black.byte.a = 255;
 
 	//fog off
 	rendStates.fogEnabled = false;// enable fog before renderer
 	rendStates.fog = false;//to force reset to false
 	pie_SetFogStatus(false);
-	black.rgba = 0;
-	black.byte.a = 255;
 	pie_SetFogColour(black);
 
 	rendStates.rendMode = REND_ALPHA;	// to force reset to REND_OPAQUE

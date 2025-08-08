@@ -297,7 +297,7 @@ void OptionsKeyBindingWidget::display(int xOffset, int yOffset)
 		backX1 -= 1;
 		backY1 -= 1;
 	}
-	if ((isHighlight || isEditingMode) && highlightBackgroundColor.rgba != 0)
+	if ((isHighlight || isEditingMode) && !highlightBackgroundColor.isTransparent())
 	{
 		backgroundColor = highlightBackgroundColor;
 	}

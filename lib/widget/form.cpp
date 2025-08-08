@@ -533,7 +533,7 @@ void W_FULLSCREENOVERLAY_CLICKFORM::display(int xOffset, int yOffset)
 		return;
 	}
 
-	if (backgroundColor.rgba == 0)
+	if (backgroundColor.isTransparent())
 	{
 		return;
 	}

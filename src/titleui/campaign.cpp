@@ -1493,7 +1493,6 @@ void WzCampaignSubInfoBox::display(int xOffset, int yOffset)
 		int compatImgPosX0 = x0 + (compatibilityLabel->x() - (imgDimensions + imgTextPadding));
 		UWORD img = 0;
 		PIELIGHT imgColor;
-		imgColor.rgba = 0;
 		switch (compatibilityResult)
 		{
 			case WzModCompatibilityResult::NOT_COMPATIBLE:

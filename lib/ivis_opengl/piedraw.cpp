@@ -35,6 +35,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/pielight_convert.h"
 #include "piematrix.h"
 #include "pielighting.h"
 #include "screen.h"
@@ -554,7 +555,7 @@ static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceDat
 	return gfx_api::Draw3DShapePerInstanceInterleavedData {
 		modelMatrix,
 		glm::vec4(stretchDepth, ecmState, !(pieFlag & pie_PREMULTIPLIED), float(frame)),
-		colour.rgba, teamcolour.rgba
+		colour.rgba(), teamcolour.rgba()
 	};
 }
 
@@ -1492,12 +1493,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	) : glm::vec4(0.f);
+	const glm::vec4 fogColor = renderState.fogEnabled ? pielightToRGBAVec4(renderState.fogColour) : glm::vec4(0.f);
 
 
 	if (useInstancedRendering)
