@@ -206,6 +206,9 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 		# -Wunknown-warning-option
 		check_compiler_flags_output("-Werror -Wno-unknown-warning-option -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unknown-warning-option" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
 
+		# -Wnontrivial-memcall
+		check_compiler_flags_output("-Werror -Wno-nontrivial-memcall -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-nontrivial-memcall" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
 		if (NOT _supported_basistranscoder_cxx_compiler_flags STREQUAL "")
 			string(REPLACE " " ";" _supported_basistranscoder_cxx_compiler_flags "${_supported_basistranscoder_cxx_compiler_flags}")
 			target_compile_options(basis_transcoder PRIVATE ${_supported_basistranscoder_cxx_compiler_flags})
