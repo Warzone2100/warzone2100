@@ -89,10 +89,12 @@ struct Sector
 	int waterSize;           ///< The size of the water geometry
 	int waterIndexOffset;    ///< The point in the water index VBO where the water triangles start
 	int waterIndexSize;      ///< The size of our water triangles
-	std::unique_ptr<int[]> textureOffset;      ///< An array containing the offsets into the texture VBO for each terrain layer
-	std::unique_ptr<int[]> textureSize;        ///< The size of the geometry for this layer for each layer
+
+	// Only used for fallback method (TerrainShaderType::FALLBACK / drawTerrainLayers):
 	std::unique_ptr<int[]> textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
 	std::unique_ptr<int[]> textureIndexSize;   ///< The size of the indices for each layer
+	//
+
 	int decalOffset = 0;         ///< Index into the decal VBO
 	int decalSize = 0;           ///< Size of the part of the decal VBO we are going to use
 	int terrainAndDecalOffset = 0;
@@ -1132,7 +1134,7 @@ bool initTerrain()
 	DecalVertex *decaldata = nullptr;
 	int geometrySize, geometryIndexSize;
 	int waterSize, waterIndexSize;
-	int textureSize, textureIndexSize;
+	int textureIndexSize;
 	GLuint *geometryIndex = nullptr;
 	GLuint *waterIndex = nullptr;
 	int decalSize = 0;
@@ -1327,7 +1329,6 @@ bool initTerrain()
 		const size_t numGroundTypes = getNumGroundTypes();
 		auto texture = std::vector<PIELIGHT>(static_cast<size_t>(xSectors) * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
 		GLuint *textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
-		textureSize = 0;
 		textureIndexSize = 0;
 		for (layer = 0; layer < numGroundTypes; layer++)
 		{
@@ -1337,14 +1338,10 @@ bool initTerrain()
 				{
 					if (layer == 0)
 					{
-						sectors[x * ySectors + y].textureOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
-						sectors[x * ySectors + y].textureSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
 						sectors[x * ySectors + y].textureIndexOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
 						sectors[x * ySectors + y].textureIndexSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
 					}
 
-					sectors[x * ySectors + y].textureOffset[layer] = textureSize;
-					sectors[x * ySectors + y].textureSize[layer] = 0;
 					sectors[x * ySectors + y].textureIndexOffset[layer] = textureIndexSize;
 					sectors[x * ySectors + y].textureIndexSize[layer] = 0;
 					//debug(LOG_WARNING, "offset when filling %i: %i", layer, xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer);
@@ -1397,7 +1394,7 @@ bool initTerrain()
 							texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2)] = colour[0][0];
 							averageColour(&centerColour, colour[0][0], colour[0][1], colour[1][0], colour[1][1]);
 							texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2 + 1)] = centerColour;
-							textureSize += 2;
+
 							if ((draw) && i < sectorSize && j < sectorSize)
 							{
 								textureIndex[textureIndexSize + 0]  = q(i  , j  , 1);
@@ -1420,7 +1417,6 @@ bool initTerrain()
 
 						}
 					}
-					sectors[x * ySectors + y].textureSize[layer] = textureSize - sectors[x * ySectors + y].textureOffset[layer];
 					sectors[x * ySectors + y].textureIndexSize[layer] = textureIndexSize - sectors[x * ySectors + y].textureIndexOffset[layer];
 				}
 			}
@@ -1573,8 +1569,6 @@ void shutdownTerrain()
 		{
 			for (int y = 0; y < ySectors; y++)
 			{
-				sectors[x * ySectors + y].textureOffset = nullptr;
-				sectors[x * ySectors + y].textureSize = nullptr;
 				sectors[x * ySectors + y].textureIndexOffset = nullptr;
 				sectors[x * ySectors + y].textureIndexSize = nullptr;
 			}
