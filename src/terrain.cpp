@@ -1320,121 +1320,124 @@ bool initTerrain()
 	free(waterIndex);
 
 
-	////////////////////
-	// fill the texture part of the sectors
-	const size_t numGroundTypes = getNumGroundTypes();
-	auto texture = std::vector<PIELIGHT>(xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
-	GLuint *textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
-	textureSize = 0;
-	textureIndexSize = 0;
-	for (layer = 0; layer < numGroundTypes; layer++)
+	if (terrainShaderType == TerrainShaderType::FALLBACK)
 	{
-		for (x = 0; x < xSectors; x++)
+		////////////////////
+		// fill the texture part of the sectors
+		const size_t numGroundTypes = getNumGroundTypes();
+		auto texture = std::vector<PIELIGHT>(static_cast<size_t>(xSectors) * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes);
+		GLuint *textureIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12 * numGroundTypes);
+		textureSize = 0;
+		textureIndexSize = 0;
+		for (layer = 0; layer < numGroundTypes; layer++)
 		{
-			for (y = 0; y < ySectors; y++)
+			for (x = 0; x < xSectors; x++)
 			{
-				if (layer == 0)
+				for (y = 0; y < ySectors; y++)
 				{
-					sectors[x * ySectors + y].textureOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
-					sectors[x * ySectors + y].textureSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
-					sectors[x * ySectors + y].textureIndexOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
-					sectors[x * ySectors + y].textureIndexSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
-				}
-
-				sectors[x * ySectors + y].textureOffset[layer] = textureSize;
-				sectors[x * ySectors + y].textureSize[layer] = 0;
-				sectors[x * ySectors + y].textureIndexOffset[layer] = textureIndexSize;
-				sectors[x * ySectors + y].textureIndexSize[layer] = 0;
-				//debug(LOG_WARNING, "offset when filling %i: %i", layer, xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer);
-				for (i = 0; i < sectorSize + 1; i++)
-				{
-					for (j = 0; j < sectorSize + 1; j++)
+					if (layer == 0)
 					{
-						bool draw = false;
-						bool off_map;
+						sectors[x * ySectors + y].textureOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
+						sectors[x * ySectors + y].textureSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
+						sectors[x * ySectors + y].textureIndexOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
+						sectors[x * ySectors + y].textureIndexSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					}
 
-						// set transparency
-						for (a = 0; a < 2; a++)
+					sectors[x * ySectors + y].textureOffset[layer] = textureSize;
+					sectors[x * ySectors + y].textureSize[layer] = 0;
+					sectors[x * ySectors + y].textureIndexOffset[layer] = textureIndexSize;
+					sectors[x * ySectors + y].textureIndexSize[layer] = 0;
+					//debug(LOG_WARNING, "offset when filling %i: %i", layer, xSectors*ySectors*(sectorSize+1)*(sectorSize+1)*2*layer);
+					for (i = 0; i < sectorSize + 1; i++)
+					{
+						for (j = 0; j < sectorSize + 1; j++)
 						{
-							for (b = 0; b < 2; b++)
+							bool draw = false;
+							bool off_map;
+
+							// set transparency
+							for (a = 0; a < 2; a++)
 							{
-								absX = x * sectorSize + i + a;
-								absY = y * sectorSize + j + b;
-								colour[a][b].fromRGBA(255, 255, 255, 0); // transparent
+								for (b = 0; b < 2; b++)
+								{
+									absX = x * sectorSize + i + a;
+									absY = y * sectorSize + j + b;
+									colour[a][b].fromRGBA(255, 255, 255, 0); // transparent
 
-								// extend the terrain type for the bottom and left edges of the map
-								off_map = false;
-								if (absX == mapWidth)
-								{
-									off_map = true;
-									absX--;
-								}
-								if (absY == mapHeight)
-								{
-									off_map = true;
-									absY--;
-								}
-
-								if (absX < 0 || absY < 0 || absX >= mapWidth || absY >= mapHeight)
-								{
-									// not on the map, so don't draw
-									continue;
-								}
-								if (mapTile(absX, absY)->ground == layer)
-								{
-									colour[a][b].fromRGBA(255, 255, 255, 255);
-									if (!off_map)
+									// extend the terrain type for the bottom and left edges of the map
+									off_map = false;
+									if (absX == mapWidth)
 									{
-										// if this point lies on the edge is may not force this tile to be drawn
-										// otherwise this will give a bright line when fog is enabled
-										draw = true;
+										off_map = true;
+										absX--;
+									}
+									if (absY == mapHeight)
+									{
+										off_map = true;
+										absY--;
+									}
+
+									if (absX < 0 || absY < 0 || absX >= mapWidth || absY >= mapHeight)
+									{
+										// not on the map, so don't draw
+										continue;
+									}
+									if (mapTile(absX, absY)->ground == layer)
+									{
+										colour[a][b].fromRGBA(255, 255, 255, 255);
+										if (!off_map)
+										{
+											// if this point lies on the edge is may not force this tile to be drawn
+											// otherwise this will give a bright line when fog is enabled
+											draw = true;
+										}
 									}
 								}
 							}
+							texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2)] = colour[0][0];
+							averageColour(&centerColour, colour[0][0], colour[0][1], colour[1][0], colour[1][1]);
+							texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2 + 1)] = centerColour;
+							textureSize += 2;
+							if ((draw) && i < sectorSize && j < sectorSize)
+							{
+								textureIndex[textureIndexSize + 0]  = q(i  , j  , 1);
+								textureIndex[textureIndexSize + 1]  = q(i  , j  , 0);
+								textureIndex[textureIndexSize + 2]  = q(i + 1, j  , 0);
+
+								textureIndex[textureIndexSize + 3]  = q(i  , j  , 1);
+								textureIndex[textureIndexSize + 4]  = q(i  , j + 1, 0);
+								textureIndex[textureIndexSize + 5]  = q(i  , j  , 0);
+
+								textureIndex[textureIndexSize + 6]  = q(i  , j  , 1);
+								textureIndex[textureIndexSize + 7]  = q(i + 1, j + 1, 0);
+								textureIndex[textureIndexSize + 8]  = q(i  , j + 1, 0);
+
+								textureIndex[textureIndexSize + 9]  = q(i  , j  , 1);
+								textureIndex[textureIndexSize + 10] = q(i + 1, j  , 0);
+								textureIndex[textureIndexSize + 11] = q(i + 1, j + 1, 0);
+								textureIndexSize += 12;
+							}
+
 						}
-						texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2)] = colour[0][0];
-						averageColour(&centerColour, colour[0][0], colour[0][1], colour[1][0], colour[1][1]);
-						texture[xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer + ((x * ySectors + y) * (sectorSize + 1) * (sectorSize + 1) * 2 + (i * (sectorSize + 1) + j) * 2 + 1)] = centerColour;
-						textureSize += 2;
-						if ((draw) && i < sectorSize && j < sectorSize)
-						{
-							textureIndex[textureIndexSize + 0]  = q(i  , j  , 1);
-							textureIndex[textureIndexSize + 1]  = q(i  , j  , 0);
-							textureIndex[textureIndexSize + 2]  = q(i + 1, j  , 0);
-
-							textureIndex[textureIndexSize + 3]  = q(i  , j  , 1);
-							textureIndex[textureIndexSize + 4]  = q(i  , j + 1, 0);
-							textureIndex[textureIndexSize + 5]  = q(i  , j  , 0);
-
-							textureIndex[textureIndexSize + 6]  = q(i  , j  , 1);
-							textureIndex[textureIndexSize + 7]  = q(i + 1, j + 1, 0);
-							textureIndex[textureIndexSize + 8]  = q(i  , j + 1, 0);
-
-							textureIndex[textureIndexSize + 9]  = q(i  , j  , 1);
-							textureIndex[textureIndexSize + 10] = q(i + 1, j  , 0);
-							textureIndex[textureIndexSize + 11] = q(i + 1, j + 1, 0);
-							textureIndexSize += 12;
-						}
-
 					}
+					sectors[x * ySectors + y].textureSize[layer] = textureSize - sectors[x * ySectors + y].textureOffset[layer];
+					sectors[x * ySectors + y].textureIndexSize[layer] = textureIndexSize - sectors[x * ySectors + y].textureIndexOffset[layer];
 				}
-				sectors[x * ySectors + y].textureSize[layer] = textureSize - sectors[x * ySectors + y].textureOffset[layer];
-				sectors[x * ySectors + y].textureIndexSize[layer] = textureIndexSize - sectors[x * ySectors + y].textureIndexOffset[layer];
 			}
 		}
-	}
-	if (textureVBO)
-		delete textureVBO;
-	textureVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureVBO");
-	static_assert(sizeof(PIELIGHT) == 4, "Unexpected sizeof(PIELIGHT)");
-	textureVBO->upload(sizeof(PIELIGHT) * texture.size(), texture.data());
-	texture.clear();
+		if (textureVBO)
+			delete textureVBO;
+		textureVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureVBO");
+		static_assert(sizeof(PIELIGHT) == 4, "Unexpected sizeof(PIELIGHT)");
+		textureVBO->upload(sizeof(PIELIGHT) * texture.size(), texture.data());
+		texture.clear();
 
-	if (textureIndexVBO)
-		delete textureIndexVBO;
-	textureIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureIndexVBO");
-	textureIndexVBO->upload(sizeof(GLuint)*textureIndexSize, textureIndex);
-	free(textureIndex);
+		if (textureIndexVBO)
+			delete textureIndexVBO;
+		textureIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::textureIndexVBO");
+		textureIndexVBO->upload(sizeof(GLuint)*textureIndexSize, textureIndex);
+		free(textureIndex);
+	}
 
 	// and finally the decals
 	gfx_api::TerrainDecalVertex *terrainDecalData = nullptr;
