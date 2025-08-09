@@ -11,10 +11,10 @@
 
 // You can redefine these paths when you make a customized AI
 // for a map or a challenge.
-NB_PATH = "/multiplay/skirmish/";
+NB_PATH = "/multiplay/skirmish/bots/Nullbot/";
 NB_INCLUDES = NB_PATH + "nb_includes/";
 NB_RULESETS = NB_PATH + "nb_rulesets/";
-NB_COMMON = NB_PATH + "nb_common/";
+NB_COMMON   = NB_PATH + "nb_common/";
 
 // please don't touch this line
 include(NB_INCLUDES + "_head.js");
@@ -24,7 +24,7 @@ include(NB_INCLUDES + "_head.js");
 
 // the rules in which this personality plays
 include(NB_RULESETS + "standard.js");
-include(NB_COMMON + "standard_build_order.js");
+include(NB_COMMON   + "standard_build_order.js");
 
 // variables defining the personality
 var subpersonalities = {

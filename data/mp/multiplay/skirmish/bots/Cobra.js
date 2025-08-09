@@ -1,6 +1,6 @@
 //globals/constants/definitions and whatever. Includes at the bottom.
-const COBRA_INCLUDES = "/multiplay/skirmish/cobra_includes/";
-const COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
+const COBRA_INCLUDES = "/multiplay/skirmish/bots/Cobra/cobra_includes/";
+const COBRA_RULESETS = "/multiplay/skirmish/bots/Cobra/cobra_rulesets/";
 
 //Rulesets here.
 include(COBRA_RULESETS + "CobraStandard.js");

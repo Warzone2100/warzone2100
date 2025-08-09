@@ -37,11 +37,12 @@ var currentEnemyTick; // Last time the enemy was changed.
 var enemyHasVtol;
 
 //And include the rest here.
-include("/multiplay/skirmish/semperfi_includes/performance.js");
-include("/multiplay/skirmish/semperfi_includes/miscFunctions.js");
-include("/multiplay/skirmish/semperfi_includes/production.js");
-include("/multiplay/skirmish/semperfi_includes/build.js");
-include("/multiplay/skirmish/semperfi_includes/tactics.js");
-include("/multiplay/skirmish/semperfi_includes/events.js");
-include("/multiplay/skirmish/semperfi_includes/research.js");
-include("/multiplay/skirmish/semperfi_includes/chat.js");
+
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/performance.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/miscFunctions.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/production.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/build.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/tactics.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/events.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/research.js");
+include("/multiplay/skirmish/bots/Semperfi/semperfi_includes/chat.js");

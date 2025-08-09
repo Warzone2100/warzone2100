@@ -8,11 +8,11 @@
 // but rather their ID mostly. This helps reduce a measurable performance impact.
 ////////////////////////////////////////////////////////////////////////////////
 
-const NEXUS_INCLUDES = "multiplay/skirmish/nexus_includes/";
-const NEXUS_STANDARDS = "multiplay/skirmish/nexus_standards/";
+const NEXUS_INCLUDES  = "multiplay/skirmish/bots/NEXUS/nexus_includes/";
+const NEXUS_STANDARDS = "multiplay/skirmish/bots/NEXUS/nexus_standards/";
 const MAX_DROID_LIMIT = getDroidLimit();
 
-const BASE_DEFEND_DURATION = (3 * 60000);
+const BASE_DEFEND_DURATION  = (3 * 60000);
 const HELP_REQUEST_INTERVAL = (3 * 60000);
 const BEACON_TIMEOUT = 30000;
 
@@ -54,7 +54,6 @@ include(NEXUS_STANDARDS + "templates.js");
 include(NEXUS_STANDARDS + "researchDefinitions.js");
 include(NEXUS_STANDARDS + "personalityDefinitions.js");
 include(NEXUS_STANDARDS + "chatDefinitions.js");
-
 //files with events first as a matter of personal preference
 include(NEXUS_INCLUDES + "misc.js");
 include(NEXUS_INCLUDES + "events.js");
