@@ -639,7 +639,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 							// make sure this target wasn't assigned explicitly to this droid
 							if (friendlyDroid->order.type != DORDER_ATTACK)
 							{
-								targetInQuestion = tempTarget;  //consider this target
+								if (bestTarget != tempTarget && psTarget != tempTarget)
+								{
+									targetInQuestion = tempTarget;  //consider this target
+								}
 							}
 						}
 					}
@@ -649,7 +652,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 					tempTarget = ((STRUCTURE *)friendlyObj)->psTarget[0];
 					if (tempTarget && !tempTarget->died)
 					{
-						targetInQuestion = tempTarget;
+						if (bestTarget != tempTarget && psTarget != tempTarget)
+						{
+							targetInQuestion = tempTarget;
+						}
 					}
 				}
 			}
@@ -716,7 +722,8 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 			}
 
 			/* Check if our weapon is most effective against this object */
-			if (psTarget != nullptr && psTarget == targetInQuestion)		//was assigned?
+			if (psTarget != nullptr && psTarget == targetInQuestion		//was assigned?
+				&& psTarget != bestTarget) // avoid duplicate checks
 			{
 				int newMod = targetAttackWeight(psTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 
