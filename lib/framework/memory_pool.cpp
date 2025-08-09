@@ -112,7 +112,7 @@ void* MemoryPool::allocate(size_t size, size_t alignment)
 		for (auto& chunk : pool->chunks)
 		{
 			// Serve from the chunk's freelist if it's not empty
-			if (!chunk.freeBlocks.empty())
+			if (chunk.has_freelist_blocks())
 			{
 				return pool->allocate_from_freelist(chunk, alignment);
 			}
@@ -148,12 +148,11 @@ void MemoryPool::deallocate(void* ptr, size_t bytes, size_t alignment)
 	auto chunkIt = pool->get_owning_chunk(ptr);
 	ASSERT_OR_RETURN(, chunkIt != pool->chunks.end(), "Pointer %p not from this pool", ptr);
 
-	++chunkIt->freeBlocksCount;
 	++pool->totalFreeBlocks;
 
 	// Each subsequent chunk in the list is larger than the previous one
 	// Always prefer larger chunks over smaller ones (with the smaller one being automatically reclaimed)
-	if (chunkIt->freeBlocksCount == chunkIt->capacity && std::next(chunkIt) != pool->chunks.end())
+	if ((chunkIt->freeBlocksCount + 1) == chunkIt->capacity && std::next(chunkIt) != pool->chunks.end())
 	{
 		// Reclaim the now-empty chunk
 		const auto reclaimedCapacity = chunkIt->capacity;
@@ -165,7 +164,7 @@ void MemoryPool::deallocate(void* ptr, size_t bytes, size_t alignment)
 	{
 		// Either this is _the_ largest chunk available in the sub-pool, or it's not empty yet
 		// Push the block to the chunk's freelist
-		chunkIt->freeBlocks.push(ptr);
+		chunkIt->push_free_block(ptr);
 	}
 }
 
@@ -207,6 +206,24 @@ MemoryPool::SubPool* MemoryPool::find_pool(size_t bytes, size_t alignment)
 	return nullptr;
 }
 
+void MemoryPool::Chunk::push_free_block(void* ptr)
+{
+	ASSERT_OR_RETURN(, ptr != nullptr, "Unexpected null pointer in memory pool");
+	ASSERT_OR_RETURN(, freeBlocksCount < capacity, "Free list is full");
+	freeListBuf[tail] = ptr;
+	tail = (tail + 1) % (capacity + 1);
+	++freeBlocksCount;
+}
+
+void* MemoryPool::Chunk::pop_free_block()
+{
+	ASSERT_OR_RETURN(nullptr, freeBlocksCount > 0 && head != tail, "Free list is empty");
+	void* ptr = freeListBuf[head];
+	head = (head + 1) % (capacity + 1);
+	--freeBlocksCount;
+	return ptr;
+}
+
 MemoryPool::SubPool::ChunkStorage::iterator MemoryPool::SubPool::get_owning_chunk(void* ptr)
 {
 	uint8_t* p = static_cast<uint8_t*>(ptr);
@@ -237,9 +254,7 @@ void* MemoryPool::SubPool::allocate_new_block(Chunk& chunk, size_t alignment)
 
 void* MemoryPool::SubPool::allocate_from_freelist(Chunk& chunk, size_t alignment)
 {
-	void* block = chunk.freeBlocks.front();
-	chunk.freeBlocks.pop();
-	--chunk.freeBlocksCount;
+	void* block = chunk.pop_free_block();
 	--totalFreeBlocks;
 	ASSERT_OR_RETURN(nullptr, reinterpret_cast<uintptr_t>(block) % alignment == 0, "Block returned from free list is not properly aligned");
 	return block;
