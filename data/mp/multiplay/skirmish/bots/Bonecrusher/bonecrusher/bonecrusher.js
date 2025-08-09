@@ -64,27 +64,26 @@ var debugName = me;
 //Массив конкретных технологий (tech.js)
 var tech = {};
 
-include("multiplay/skirmish/"+vernum+"/names.js");
+include("multiplay/skirmish/bots/"+vernum+"/names.js");
 
 //инфа
 debugName = colors[playerData[me].colour];
 
-include("multiplay/skirmish/"+vernum+"/functions.js");
+include("multiplay/skirmish/bots/"+vernum+"/functions.js");
 
 //new 3.3+
 var research_path = [];
-include("multiplay/skirmish/"+vernum+"/research-paths.js");
-include("multiplay/skirmish/"+vernum+"/research.js");
-
-include("multiplay/skirmish/"+vernum+"/builders.js");
-include("multiplay/skirmish/"+vernum+"/targeting.js");
-include("multiplay/skirmish/"+vernum+"/events.js");
-include("multiplay/skirmish/"+vernum+"/produce.js");
-include("multiplay/skirmish/"+vernum+"/performance.js");
-include("multiplay/skirmish/"+vernum+"/chatting.js");
-include("multiplay/skirmish/"+vernum+"/tech.js");
-include("multiplay/skirmish/"+vernum+"/weapons.js");
-include("multiplay/skirmish/"+vernum+"/build-normal.js");
+include("multiplay/skirmish/bots/"+vernum+"/research-paths.js");
+include("multiplay/skirmish/bots/"+vernum+"/research.js");
+include("multiplay/skirmish/bots/"+vernum+"/builders.js");
+include("multiplay/skirmish/bots/"+vernum+"/targeting.js");
+include("multiplay/skirmish/bots/"+vernum+"/events.js");
+include("multiplay/skirmish/bots/"+vernum+"/produce.js");
+include("multiplay/skirmish/bots/"+vernum+"/performance.js");
+include("multiplay/skirmish/bots/"+vernum+"/chatting.js");
+include("multiplay/skirmish/bots/"+vernum+"/tech.js");
+include("multiplay/skirmish/bots/"+vernum+"/weapons.js");
+include("multiplay/skirmish/bots/"+vernum+"/build-normal.js");
 
 /*
  *

@@ -1,6 +1,6 @@
 {
 	"AI": {
-		"js": "bonecrusher/bonecrusher.js",
+		"js": "bonecrusher.js",
 		"name": "BoneCrusher!",
 		"tip": "Non-Cheating. Hard. Fun. Crush!",
 		"easy_tip": "Gets ~ 25% less power from each oil derrick",

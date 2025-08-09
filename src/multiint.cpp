@@ -885,7 +885,7 @@ int matchAIbyName(const char *name)
 void readAIs()
 {
 	char basepath[PATH_MAX];
-	const char *sSearchPath = "multiplay/skirmish/";
+	const char *sSearchPath = "multiplay/skirmish/bots/";
 
 	aidata.clear();
 
