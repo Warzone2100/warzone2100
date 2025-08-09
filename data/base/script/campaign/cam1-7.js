@@ -37,6 +37,7 @@ var enemyHasArtifact; //Do they have the artifact
 var enemyStoleArtifact; //Reached the LZ with the artifact
 var droidWithArtiID; //The droid ID that was closest to the artifact to take it
 var artiMovePos; //where artiGroup members are moving to
+var artiResearch; //Research object for the map placed and unit dropped artifact.
 
 //These enable scav factories when close enough
 camAreaEvent("northScavFactoryTrigger", function(droid)
@@ -123,14 +124,7 @@ function eventGroupLoss(obj, group, newsize)
 			const acrate = addFeature(CAM_ARTIFACT_STAT, obj.x, obj.y);
 			addLabel(acrate, MIS_NEW_ARTI_LABEL);
 
-			if (camClassicMode())
-			{
-				camAddArtifact(MIS_NEW_ARTI_LABEL, "R-Wpn-Cannon3Mk1");
-			}
-			else
-			{
-				camAddArtifact(MIS_NEW_ARTI_LABEL, ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"]);
-			}
+			camAddArtifact(MIS_NEW_ARTI_LABEL, artiResearch);
 
 			droidWithArtiID = undefined;
 			enemyHasArtifact = false;
@@ -296,9 +290,7 @@ function eventStartLevel()
 		camClassicResearch(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
 		camClassicResearch(mis_scavengerResClassic, CAM_SCAV_7);
 
-		camSetArtifacts({
-			"artifact1": { tech: "R-Wpn-Cannon3Mk1" },
-		});
+		artiResearch = "R-Wpn-Cannon3Mk1";
 	}
 	else
 	{
@@ -319,10 +311,12 @@ function eventStartLevel()
 			addDroid(CAM_NEW_PARADIGM, 29, 18, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
 		}
 
-		camSetArtifacts({
-			"artifact1": { tech: ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"] },
-		});
+		artiResearch = ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03", "R-Wpn-Rocket-Damage03"];
 	}
+
+	camSetArtifacts({
+		"artifact1": { tech: artiResearch },
+	});
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
