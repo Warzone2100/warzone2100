@@ -110,7 +110,15 @@ private:
 		size_t freeBlocksCount;
 		size_t nextFreeIndex = 0;  // Next index for a block that has never been allocated before
 		std::unique_ptr<uint8_t[]> buffer;
-		std::queue<void*> freeBlocks;
+
+		size_t head = 0; // Dequeue index for the freelist
+		size_t tail = 0; // Enqueue index for the freelist
+		// Contiguous buffer of pointers to freelist blocks.
+		//
+		// This always has `capacity + 1` length so that in case the freelist has exactly
+		// `capacity` elements, `head` and `tail` pointers won't become equal and will be
+		// separated by a special "sentinel" element.
+		std::unique_ptr<void*[]> freeListBuf;
 
 		Chunk(size_t bSize, size_t cap)
 			: blockSize(bSize)
@@ -118,7 +126,16 @@ private:
 			, freeBlocksCount(cap)
 			, nextFreeIndex(0)
 			, buffer(std::make_unique<uint8_t[]>(bSize * cap))
+			, freeListBuf(std::make_unique<void*[]>(cap + 1))
 		{}
+
+		bool has_freelist_blocks() const
+		{
+			return head != tail;
+		}
+
+		void push_free_block(void* ptr);
+		void* pop_free_block();
 	};
 
 	struct SubPool
