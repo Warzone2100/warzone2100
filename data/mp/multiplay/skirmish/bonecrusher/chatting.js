@@ -3,29 +3,26 @@ debugMsg('Module: chatting.js','init');
 function chatting(type){
 	var chlen = _chatting[type].length;		// Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
 	return _chatting[type][Math.floor(Math.random()*chlen)];
-
 }
 
 var _chatting = {};
 
 _chatting['army'] = [
-	"If u want, i may support you with my army. Just say \"yes\"",
-	"I can share some units, say \"yes\" if u want.",
-	"I can sometimes give you my warriors, just say \"yes\""
+	"If you want, I may support you with my army. Just say \"yes\"",
+	"I can share some units, say \"yes\" if you want.",
+	"I can give you some of my warriors, just say \"yes\""
 ];
 
 _chatting['lassat_fire'] = [
 	"Bada-Boom!",
 	"Boom!",
-	"Boo-Boom!",
-	";)"
+	"Boo-Boom!"
 ];
 
 _chatting['lassat_charged'] = [
 	"Scare me",
 	"Laser ready, now get ready",
-	"He-heh",
-	":)"
+	"He-heh"
 ];
 
 _chatting['confirm'] = [
@@ -40,8 +37,8 @@ _chatting['confirm'] = [
 _chatting['kick'] = [
 	"I was kicked out, for what?",
 	"Lol, just kicked..",
-	"Well, bye, i leave.",
-	"Loosers, you're just afraid of me."
+	"Well, bye, I'll leave.",
+	"Losers, you're just afraid of me."
 ];
 
 _chatting['saved'] = [
@@ -49,17 +46,17 @@ _chatting['saved'] = [
 	"Oh, what, decided to take a break?",
 	"Save, save, save.. How long.",
 	"Now you just put my brains in a box.",
-	"Save me, save me againg!",
+	"Save me, save me again!",
 	"Save your self, save your life!",
 	"Oh, don't be scared.. Saved, nice :)"
 ];
 
 _chatting['tutorial'] = [
-	"By the way, i can ask me for money, just say \"bc give money\"",
-	"If you die, just say \"bc give truck\", and i resurrect u ;)",
+	"By the way, you can ask me for money, just say \"bc give money\"",
+	"If you die, just say \"bc give truck\", and I'll resurrect you ;)",
 	"Btw, you can ask me, \"bc give money\" or \"bc give truck\" remember that",
-	"If u don't known, team chat binding on Ctrl+Enter keys %)",
-	"btw, u can fast rotate camera by pressing Ctrl+arrows ;)",
+	"If you don't know, team chat binding on Ctrl+Enter keys %)",
+	"btw, you can fast rotate camera by pressing Ctrl+arrows ;)",
 	"Always help the team, or we will all die"
 ];
 
@@ -69,53 +66,26 @@ _chatting['ally'] = [
 
 _chatting['threat'] = [
 	'I kill you!!!',
-	'Nice try! But i will destroy you!',
+	'Nice try! But I will destroy you!',
 	'Do not expect mercy'
 ];
 
-_chatting['welcome'] = [
-	'Hello everyone',
-	'Hi there',
-	'hi.. gl hf',
-	'gl',
-	'glhf',
-	'gl hf',
-	'Hi!! ))',
-	'gl ;)',
-	'gl hf )',
-	'Hello, good luck!',
-	"i'm noob.. :|",
-	'Hi all',
-	'GLHF!',
-	'have fun..',
-	'yo',
-	'hello',
-	'=)',
-	'yoyo, hi',
-	'hi, how are you?',
-	"приветы",
-	"Здравствуйте",
-	"Всем привет",
-	"Dosvidaniya... no? %) Hi!"
-];
-
-_chatting['loose'] = [
+_chatting['lose'] = [
 	'ohh.. you win, gg',
 	'nice, gg',
 	'wow.. gg',
-	"gg i'm loose",
+	"gg I've lost",
 	'ggwp',
 	'gg wp',
 	'sorry im noob',
 	'aaarrgghghh!! You are cheater!',
-	'cheater? .. i loose..',
+	'cheater? .. I lose..',
 	'=( gg',
 	'bye',
 	'oh no! =( bye..',
 	'How dare you!',
 	'wtf?.. lol, gg',
 	'nice cheat man.. bye'
-
 ];
 
 

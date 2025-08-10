@@ -600,16 +600,8 @@ function init(){
 	//Просто дебаг информация
 	var oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
 	debugMsg("На карте "+oilDrums.length+" бочек с нефтью", 'init');
-
-	queue("welcome", 3000+me*(Math.floor(Math.random()*2000)+1500) );
 	queue("checkAlly", 2000);
 	letsRockThisFxxxingWorld(true); // <-- Жжём плазмитом сцуко!
-}
-
-function welcome(){
-	playerData.forEach((data, player) => {
-		if (!asPlayer)chat(player, ' from '+debugName+': '+chatting('welcome'));
-	});
 }
 
 //Старт
