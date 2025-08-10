@@ -885,10 +885,7 @@ private:
 		}
 		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 		// Do not change realSelectedPlayer here, so game doesn't pause.
-		const int oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = value;
-		NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
-		NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
 	}
 public:
 	std::shared_ptr<DropdownWidget> playersDropdown;

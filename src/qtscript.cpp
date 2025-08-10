@@ -933,7 +933,7 @@ void jsShowDebug()
 {
 	globalDialog = true;
 	class make_shared_enabler : public scripting_engine::DebugInterface { };
-	bool isSpectator = NetPlay.players[selectedPlayer].isSpectator;
+	bool isSpectator = NetPlay.players[realSelectedPlayer].isSpectator;
 	jsDebugCreate(std::make_shared<make_shared_enabler>(), jsHandleDebugClosed, isSpectator);
 }
 

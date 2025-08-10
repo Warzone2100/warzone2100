@@ -906,7 +906,7 @@ int whosResponsible(int player)
 	{
 		return player;			// Responsible for him or her self
 	}
-	else if (player == selectedPlayer)
+	else if (player == realSelectedPlayer)
 	{
 		return player;			// We are responsibly for ourselves
 	}
@@ -1050,7 +1050,7 @@ static void sendObj(MessageWriter& w, const BASE_OBJECT *psObj)
 
 void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SYNC_REQUEST);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_SYNC_REQUEST);
 	NETint32_t(w, req_id);
 	NETint32_t(w, x);
 	NETint32_t(w, y);
@@ -1753,7 +1753,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 bool SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	// Send the player that is researching the topic and the topic itself
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_FINISH_RESEARCH);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_FINISH_RESEARCH);
 	NETuint8_t(w, player);
 	NETuint32_t(w, index);
 	NETend(w);
@@ -1829,7 +1829,7 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t pla
 		return true;
 	}
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCHSTATUS);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_RESEARCHSTATUS);
 	NETuint8_t(w, player);
 	NETbool(w, bStart);
 
