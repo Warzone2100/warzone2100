@@ -63,7 +63,7 @@ bool SendBuildFinished(STRUCTURE *psStruct)
 	uint8_t player = psStruct->player;
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
 	NETuint32_t(w, psStruct->id);		// ID of building
 
 	// Along with enough info to build it (if needed)
@@ -147,7 +147,7 @@ bool recvBuildFinished(NETQUEUE queue)
 // Inform others that a structure has been destroyed
 bool SendDestroyStructure(STRUCTURE *s)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
 	// Struct to destroy
 	NETuint32_t(w, s->id);
 
@@ -191,7 +191,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 
 bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_LASSAT);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_LASSAT);
 	NETuint8_t(w, player);
 	NETuint32_t(w, psStruct->id);
 	NETuint32_t(w, psObj->id);	// Target
@@ -258,7 +258,7 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	uint32_t structId = psStruct->id;
 	uint8_t  structureInfo = structureInfo_;
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_STRUCTUREINFO);
 	NETuint8_t(w, player);
 	NETuint32_t(w, structId);
 	NETuint8_t(w, structureInfo);
