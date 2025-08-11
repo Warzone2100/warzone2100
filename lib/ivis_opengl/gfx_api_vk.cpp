@@ -4833,12 +4833,12 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		return false;
 	}
 	physDeviceProps = physicalDevice.getProperties(vkDynLoader);
-	debug(LOG_3D, "Picking device: %s", physDeviceProps.deviceName.data());
-	debug(LOG_3D, "- apiVersion: %s", VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion).c_str());
-	debug(LOG_3D, "- driverVersion: %" PRIu32, physDeviceProps.driverVersion);
-	debug(LOG_3D, "- vendorID: %" PRIu32, physDeviceProps.vendorID);
-	debug(LOG_3D, "- deviceID: %" PRIu32, physDeviceProps.deviceID);
-	debug(LOG_3D, "- deviceType: %s", to_string(physDeviceProps.deviceType).c_str());
+	debug(LOG_INFO, "Picking device: %s", physDeviceProps.deviceName.data());
+	debug(LOG_INFO, "- apiVersion: %s", VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion).c_str());
+	debug(LOG_INFO, "- driverVersion: %" PRIu32, physDeviceProps.driverVersion);
+	debug(LOG_INFO, "- vendorID: %" PRIu32, physDeviceProps.vendorID);
+	debug(LOG_INFO, "- deviceID: %" PRIu32, physDeviceProps.deviceID);
+	debug(LOG_INFO, "- deviceType: %s", to_string(physDeviceProps.deviceType).c_str());
 	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
