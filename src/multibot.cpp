@@ -334,8 +334,7 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 		NETuint8_t(w, player);
 		NETuint32_t(w, id);
 		NETPosition(w, pos);
-		WzString name = pTemplate->name;
-		NETwzstring(w, name);
+		NETwzstring(w, pTemplate->name);
 		NETint32_t(w, droidType);
 		NETuint8_t(w, pTemplate->asParts[COMP_BODY]);
 		NETuint8_t(w, pTemplate->asParts[COMP_BRAIN]);
