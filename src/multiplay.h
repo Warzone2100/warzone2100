@@ -298,19 +298,19 @@ bool multiplayerWinSequence(bool firstCall);
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-bool SendDestroyStructure(STRUCTURE *s);
-bool SendBuildFinished(STRUCTURE *psStruct);
-bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
-void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, DROID_TEMPLATE *psTempl);
+bool SendDestroyStructure(const STRUCTURE *s);
+bool SendBuildFinished(const STRUCTURE *psStruct);
+bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj);
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl);
 
 // droids . multibot
-bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
+bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
 
 bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
 bool multiShutdown();
