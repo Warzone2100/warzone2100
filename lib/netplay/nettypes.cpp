@@ -721,18 +721,9 @@ void NETbool(MessageReader &r, bool& val)
 
 void NETwzstring(MessageReader &r, WzString &str)
 {
-    std::vector<uint16_t> u16_characters;
-    uint32_t len;
-    NETuint32_t(r, len);
-
-    u16_characters.resize(len);
-    for (uint32_t i = 0; i < len; i++)
-    {
-        uint16_t c;
-        NETuint16_t(r, c);
-        u16_characters[i] = c;
-    }
-    str = WzString::fromUtf16(u16_characters);
+    std::string s;
+    NETstring(r, s);
+    str = WzString::fromUtf8(s);
 }
 
 /** Receives a string from the current network package.
@@ -877,18 +868,9 @@ void NETbool(MessageWriter& w, bool val)
 
 void NETwzstring(MessageWriter& w, const WzString& str)
 {
-	// NOTE: To be backwards-compatible with the old NETqstring (QString-based) function,
-	// this uses UTF-16 encoding.
-
-	const std::vector<uint16_t> u16_characters = str.toUtf16();
-	ASSERT(u16_characters.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "u16_characters.size() exceeds uint32_t max");
-
-	uint32_t len = static_cast<uint32_t>(std::min(u16_characters.size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
-	NETuint32_t(w, len);
-	for (uint32_t i = 0; i < len; ++i)
-	{
-		NETuint16_t(w, u16_characters[i]);
-	}
+	const std::string& utf8_string = str.toUtf8();
+	ASSERT(utf8_string.size() <= static_cast<size_t>(std::numeric_limits<uint16_t>::max()), "utf8_string.size() exceeds uint16_t max");
+	NETstring(w, utf8_string);
 }
 
 void NETstring(MessageWriter& w, const char* str, uint16_t maxlen)
