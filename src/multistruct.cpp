@@ -265,8 +265,7 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 	{
 		int32_t droidType = pT->droidType;
-		WzString name = pT->name;
-		NETwzstring(w, name);
+		NETwzstring(w, pT->name);
 		NETuint32_t(w, pT->multiPlayerID);
 		NETint32_t(w, droidType);
 		NETuint8_t(w, pT->asParts[COMP_BODY]);
