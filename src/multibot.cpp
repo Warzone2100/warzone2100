@@ -218,7 +218,7 @@ bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STA
  *
  *  \sa recvDroidDisEmbark()
  */
-bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid)
 {
 	if (!bMultiMessages)
 	{
@@ -301,7 +301,7 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
+bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
 {
 	if (!bMultiMessages)
 	{

@@ -58,7 +58,7 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
-bool SendBuildFinished(STRUCTURE *psStruct)
+bool SendBuildFinished(const STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
@@ -145,7 +145,7 @@ bool recvBuildFinished(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
-bool SendDestroyStructure(STRUCTURE *s)
+bool SendDestroyStructure(const STRUCTURE *s)
 {
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
 	// Struct to destroy
@@ -189,7 +189,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing
 
-bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
+bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj)
 {
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_LASSAT);
 	NETuint8_t(w, player);
@@ -252,7 +252,7 @@ bool recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID_TEMPLATE *pT)
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
