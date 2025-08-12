@@ -70,7 +70,7 @@ jobs:
       # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -230,7 +230,7 @@ jobs:
       run: |
         echo "GITHUB_REF=${GITHUB_REF}"
         echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -322,7 +322,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
           path: 'src'
