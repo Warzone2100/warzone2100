@@ -215,6 +215,7 @@ INCLUDE(AddTargetLinkFlagsIfSupported)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(WZ_WIN_HAS_PDB FALSE)
+set (CMAKE_CXX_FLAGS_DEBUG "-DDEBUG")
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 	# Set better-than-default optimization flags
 	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/Ob2>")
