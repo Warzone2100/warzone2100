@@ -495,7 +495,6 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	loadMultiStats(hostPlayerName, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
-	lookupRatingAsync(selectedPlayer);
 
 	multiStatsSetVerifiedHostIdentityFromJoin(playerStats.identity.toBytes(EcKey::Public));
 

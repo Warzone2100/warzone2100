@@ -37,7 +37,6 @@ list(APPEND wz2100_doc_FILES
 
 set(host_doc_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/hosting/AutohostConfig.md"
-	"${CMAKE_CURRENT_SOURCE_DIR}/hosting/AutoratingServer.md"
 	"${CMAKE_CURRENT_SOURCE_DIR}/hosting/DedicatedHost.md"
 	)
 set(host_doc_linux_scripts_FILES

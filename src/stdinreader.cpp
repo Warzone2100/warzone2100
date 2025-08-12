@@ -1190,19 +1190,6 @@ int cmdInputThreadFunc(void *)
 				}
 			}
 		}
-		else if(!strncmpl(line, "autobalance"))
-		{
-			wzAsyncExecOnMainThread([] {
-				if (autoBalancePlayersCmd())
-				{
-					wz_command_interface_output("WZCMD info: autobalanced players\n");
-				}
-				else
-				{
-					wz_command_interface_output("WZCMD error: autobalance failed\n");
-				}
-			});
-		}
 		else if(!strncmpl(line, "status"))
 		{
 			wzAsyncExecOnMainThread([] {
