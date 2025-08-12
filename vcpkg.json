@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "70a7abe262134f51393f02966e80789a2305ce6f",
+	"builtin-baseline": "d3e396c0020c4aa04dba442d2b3d52dab6be7b4b",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -48,10 +48,10 @@
 			]
 		},
 		{
+			"$comment": "By not specifying curl[http3] feature, defaults to schannel for Windows, which is desired",
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"schannel",
 				"ssl"
 			],
 			"platform": "windows | mingw"
