@@ -6143,7 +6143,6 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			NETchangePlayerName(selectedPlayer, (char *)sPlayer);			// update if joined.
 			setMultiStats(selectedPlayer, playerStats, false);
 			setMultiStats(selectedPlayer, playerStats, true);
-			lookupRatingAsync(selectedPlayer);
 			netPlayersUpdated = true;
 
 			if (NetPlay.isHost && NetPlay.bComms)
@@ -6511,62 +6510,6 @@ public:
 
 		std::string msg = astringf(_("Asking %s to move to Players..."), playerNameStr.c_str());
 		sendRoomSystemMessage(msg.c_str());
-		return true;
-	}
-	virtual bool autoBalancePlayers(uint32_t responsibleIdx) override
-	{
-		ASSERT_HOST_ONLY(return false);
-		if (!getAutoratingEnable())
-		{
-			sendRoomSystemMessage("Autobalance is only supported when autorating lookup is configured.");
-			return false;
-		}
-		int maxp = std::min<int>(game.maxPlayers, MAX_PLAYERS);
-		if (maxp % 2 != 0)
-		{
-			sendRoomSystemMessage("Autobalance is available only for even player count.");
-			return false;
-		}
-		struct es {
-			std::string name;
-			std::string elo;
-			int id;
-		};
-		std::vector<es> pl;
-		for (int i = 0; i < maxp; i++)
-		{
-			auto ps = getMultiStats(i);
-			pl.push_back({std::string(getPlayerName(i, true)), std::string(ps.autorating.elo), i});
-		}
-		std::sort(pl.begin(), pl.end(), [](struct es a, struct es b) { return a.elo.compare(b.elo) > 0; });
-		int teamsize = maxp/2;
-		for (int i = 0; i < maxp; i++)
-		{
-			int id = pl[i].id;
-			int toslot = i;
-
-			int linepos = i/2;
-			int team = (i+1)/2%2;
-
-			int bounceindex = teamsize - linepos/2 - 1;
-			if (linepos%2 == 0)
-			{
-				bounceindex = linepos/2;
-			}
-
-			if (team == 0)
-			{ // team a
-				toslot = bounceindex;
-			}
-			else
-			{ // team b
-				toslot = bounceindex + teamsize;
-			}
-
-			sendRoomSystemMessage(astringf("Moving [%d]\"%s\" <%s> to pos %d", id, pl[i].name.c_str(), pl[i].elo.c_str(), toslot).c_str());
-			changePosition(id, toslot, responsibleIdx);
-		}
-		sendRoomSystemMessage("Autobalance done");
 		return true;
 	}
 	virtual void quitGame(int exitCode) override
@@ -7278,7 +7221,6 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 					NETchangePlayerName(selectedPlayer, (char *)sPlayer);
 					setMultiStats(selectedPlayer, playerStats, false);
 					setMultiStats(selectedPlayer, playerStats, true);
-					lookupRatingAsync(selectedPlayer);
 					netPlayersUpdated = true;
 					if (NetPlay.isHost && NetPlay.bComms)
 					{
@@ -7633,7 +7575,6 @@ void WzMultiplayerOptionsTitleUI::start()
 
 		loadMultiStats((char*)sPlayer, &playerStats);
 		setMultiStats(selectedPlayer, playerStats, true); // just set this locally so that the identity is cached, if changing name
-		lookupRatingAsync(selectedPlayer);
 
 		/* Entering the first time with challenge, immediately start the host */
 		if (challengeActive)
@@ -8192,11 +8133,6 @@ bool isSpectatorOnlySlot(UDWORD playerIdx)
 {
 	ASSERT_OR_RETURN(false, playerIdx < NetPlay.players.size(), "Invalid playerIdx: %" PRIu32 "", playerIdx);
 	return playerIdx >= MAX_PLAYERS || NetPlay.players[playerIdx].position >= game.maxPlayers;
-}
-
-bool autoBalancePlayersCmd()
-{
-	return cmdInterface.autoBalancePlayers(realSelectedPlayer);
 }
 
 //// NOTE: Pass in NetPlay.players[i].position

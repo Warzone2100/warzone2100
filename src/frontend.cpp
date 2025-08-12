@@ -84,7 +84,6 @@
 #include "map.h" //for builtInMap and useTerrainOverrides
 #include "notifications.h"
 #include "activity.h"
-#include "clparse.h" // for autorating
 #include "hci/groups.h"
 
 #include <fmt/core.h>
