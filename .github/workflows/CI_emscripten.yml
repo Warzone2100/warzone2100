@@ -186,7 +186,7 @@ jobs:
     - name: Prep Environment
       run: mkdir dl-archive
     - name: Download Archive Artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: 'warzone2100_${{ env.WZ_BUILD_DESC }}_archive'
         path: ./dl-archive
