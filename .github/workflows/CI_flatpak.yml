@@ -71,7 +71,7 @@ jobs:
         flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
         flatpak --user remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
         echo "::endgroup::"
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -311,7 +311,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
           path: 'src'
@@ -447,7 +447,7 @@ jobs:
           curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
           chmod +x /usr/bin/flat-manager-client
           echo "::endgroup::"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: 'src'
           set-safe-directory: true

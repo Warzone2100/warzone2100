@@ -77,21 +77,21 @@ jobs:
           sudo rm -rf _dl/
       - name: Checkout (Latest)
         if: github.event.inputs.git-ref == ''
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: warzone2100
           submodules: recursive
           persist-credentials: false
       - name: Checkout (Custom Ref)
         if: github.event.inputs.git-ref != ''
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: warzone2100
           submodules: recursive
           persist-credentials: false
           ref: '${{ github.event.inputs.git-ref }}'
       - name: Checkout snap-stable-build@master
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'Warzone2100/snap-stable-build'
           ref: master
@@ -202,7 +202,7 @@ jobs:
     if: (github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease) || (github.event_name == 'workflow_dispatch')
     steps:
       - name: Checkout snap-stable-build@master
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'Warzone2100/snap-stable-build'
           ref: master
