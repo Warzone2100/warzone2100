@@ -3,7 +3,7 @@
 
 set(WZMAPLIB_VERSION_MAJOR 1)
 set(WZMAPLIB_VERSION_MINOR 4)
-set(WZMAPLIB_VERSION_REV 0)
+set(WZMAPLIB_VERSION_REV 1)
 
 ##############################
 ##############################
