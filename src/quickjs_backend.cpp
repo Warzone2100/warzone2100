@@ -157,6 +157,12 @@ static void QJSRuntimeFree_LeakHandler_Error(const char* msg)
 	debug(LOG_ERROR, "QuickJS FreeRuntime leak: %s", msg);
 }
 
+#if defined(__has_feature)
+  #define QUICKJS_HAS_FEATURE(x) __has_feature(x)
+#else
+  #define QUICKJS_HAS_FEATURE(x) 0
+#endif
+
 class quickjs_scripting_instance : public wzapi::scripting_instance
 {
 public:
@@ -165,6 +171,12 @@ public:
 	{
 		rt = JS_NewRuntime();
 		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
+
+#if defined(__SANITIZE_ADDRESS__) || QUICKJS_HAS_FEATURE(address_sanitizer)
+		#pragma message("quickjs_backend: Script stack size limit disabled due to Address Sanitizer")
+		debug(LOG_INFO, "Script stack size limit disabled due to Address Sanitizer");
+		JS_SetMaxStackSize(rt, 0);
+#endif
 
 		JSLimitedContextOptions ctxOptions = { };
 		ctxOptions.baseObjects = true;
