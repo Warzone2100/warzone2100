@@ -124,6 +124,10 @@ if(MSVC)
 	target_compile_options(warzone2100 PRIVATE "/wd4267")
 endif()
 
+if(NOT TARGET ZipIOProvider)
+	message(FATAL_ERROR "Missing ZipIOProvider - check if libzip detection was successful?")
+endif()
+
 target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ZipIOProvider ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 target_link_libraries(warzone2100 fmt::fmt)
