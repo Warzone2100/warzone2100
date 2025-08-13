@@ -118,11 +118,6 @@ static PagedEntityContainer<PROJECTILE> globalProjectileStorage;
 
 /***************************************************************************/
 
-// the last unit that did damage - used by script functions
-BASE_OBJECT		*g_pProjLastAttacker;
-
-/***************************************************************************/
-
 static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
@@ -1115,9 +1110,6 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	psStats = psObj->psWStats;
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
 
-	// note the attacker if any
-	g_pProjLastAttacker = psObj->psSource;
-
 	/* play impact audio */
 	if (gfxVisible(psObj))
 	{
@@ -1245,7 +1237,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		    && psObj->psSource)
 		{
 			// If we did enough `damage' to capture the target
-			if (electronicDamage(psObj->psDest,
+			if (electronicDamage(psObj->psDest, psObj->psSource,
 			                     calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
 			                     psObj->player))
 			{
@@ -1498,9 +1490,6 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 {
 	CHECK_PROJECTILE(psProj);
 
-	// note the attacker if any
-	g_pProjLastAttacker = psProj->psSource;
-
 	WEAPON_STATS *psStats = psProj->psWStats;
 
 	static GridList gridList;  // static to avoid allocations.
@@ -1697,7 +1686,7 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_FEATURE:

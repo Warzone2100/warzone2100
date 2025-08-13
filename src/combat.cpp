@@ -451,7 +451,7 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 		bool bMultiMessagesBackup = bMultiMessages;
 		bMultiMessages = bMultiPlayer;
 
-		triggerEventAttacked(psObj, g_pProjLastAttacker, lastHit);
+		triggerEventAttacked(psObj, (psProjectile != nullptr) ? psProjectile->psSource : nullptr, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
 	}
