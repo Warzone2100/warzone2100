@@ -1787,6 +1787,10 @@ int realmain(int argc, char *argv[])
 	if (bCrashHandlingProvider)
 	{
 		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
+		if (!bCrashHandlingProvider)
+		{
+			debug(LOG_WZ, "Failed to init crash handling provider");
+		}
 	}
 	auto shutdown_crash_handling_provider_on_return = gsl::finally([bCrashHandlingProvider] { if (bCrashHandlingProvider) { shutdownCrashHandlingProvider(); } });
 
