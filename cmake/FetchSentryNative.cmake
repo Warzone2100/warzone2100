@@ -83,7 +83,7 @@ if(CMAKE_CXX_EXTENSIONS)
 	set(_old_CMAKE_CXX_EXTENSIONS "${CMAKE_CXX_EXTENSIONS}")
 	unset(CMAKE_CXX_EXTENSIONS) # Allow sentry-native to set its desired default
 endif()
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin|Linux" AND NOT DEFINED SENTRY_BACKEND)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin" AND NOT DEFINED SENTRY_BACKEND)
 	set(SENTRY_BACKEND "breakpad" CACHE STRING
 	"The sentry backend responsible for reporting crashes, can be either 'none', 'inproc', 'breakpad' or 'crashpad'." FORCE)
 endif()

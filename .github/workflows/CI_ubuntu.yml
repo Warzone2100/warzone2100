@@ -136,7 +136,7 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       env:
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
-        SENTRY_BACKEND: breakpad
+        SENTRY_BACKEND: crashpad
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
       run: |
         ADDITIONAL_CMAKE_PARAMS=""
