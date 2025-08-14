@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100_guide\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-06-28 01:05+0000\n"
+"POT-Creation-Date: 2025-08-14 17:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,6 +109,28 @@ msgstr ""
 
 #: po/guide/extracted/wz2100-general-commandpanel.txt:5
 msgid "The middle / central button closes any open command interface."
+msgstr ""
+
+#. TRANSLATORS:
+#. The guide topic title - please maintain original capitalization
+#: po/guide/extracted/wz2100-general-defendingbase.txt:3
+msgid "Defending Your Base"
+msgstr ""
+
+#: po/guide/extracted/wz2100-general-defendingbase.txt:4
+msgid "In Warzone 2100, your home base persists throughout the campaign."
+msgstr ""
+
+#: po/guide/extracted/wz2100-general-defendingbase.txt:5
+msgid "As such, preparing for the future defense of your home base is essential."
+msgstr ""
+
+#: po/guide/extracted/wz2100-general-defendingbase.txt:6
+msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
+msgstr ""
+
+#: po/guide/extracted/wz2100-general-defendingbase.txt:7
+msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
 msgstr ""
 
 #. TRANSLATORS:
