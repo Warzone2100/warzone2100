@@ -1705,7 +1705,7 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 
 static bool isFriendlyFire(DAMAGE* psDamage)
 {
-	return psDamage->psProjectile->psDest && psDamage->psProjectile->psSource->player == psDamage->psProjectile->psDest->player;
+	return psDamage->psDest && psDamage->psProjectile->psSource->player == psDamage->psDest->player;
 }
 
 static bool shouldIncreaseExperience(DAMAGE *psDamage)
