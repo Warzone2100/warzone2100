@@ -4877,6 +4877,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 	net::result<IListenSocket*> serverListenResult = {};
 	if (!server_listen_socket)
 	{
+		debug(LOG_INFO, "Opening listening socket (backend: %s)", to_string(activeConnProvider->type()).c_str());
 		serverListenResult = activeConnProvider->openListenSocket(gameserver_port);
 		server_listen_socket = serverListenResult.value_or(nullptr);
 	}
