@@ -268,8 +268,10 @@ lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
 lib/framework/mac_wrapper.cpp
+lib/framework/memory_pool.cpp
 lib/framework/physfs_ext.cpp
 lib/framework/stdio_ext.cpp
+lib/framework/stringsearch.cpp
 lib/framework/strres.cpp
 lib/framework/treap.cpp
 lib/framework/trig.cpp
@@ -348,6 +350,7 @@ lib/sdl/gfx_api_null_sdl.cpp
 lib/sdl/gfx_api_sdl.cpp
 lib/sdl/gfx_api_vk_sdl.cpp
 lib/sdl/main_sdl.cpp
+lib/sdl/resume_init_helpers.cpp
 lib/sequence/sequence.cpp
 lib/sequence/timer.cpp
 lib/sound/audio.cpp
