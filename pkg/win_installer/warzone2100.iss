@@ -315,7 +315,6 @@ Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer
 #emit AddTranslation("he_IL", "compiler:Languages\Hebrew.isl")
 #emit AddTranslation("hu_HU", "compiler:Languages\Hungarian.isl")
 #emit AddTranslation("hy_AM", "compiler:Languages\Armenian.isl")
-#emit AddTranslation("is_IS", "compiler:Languages\Icelandic.isl")
 #emit AddTranslation("it_IT", "compiler:Languages\Italian.isl")
 #emit AddTranslation("ja_JP", "compiler:Languages\Japanese.isl")
 #emit AddTranslation("ko_KR", "compiler:Languages\Korean.isl")
