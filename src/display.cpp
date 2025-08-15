@@ -1227,7 +1227,7 @@ void displayWorld()
 			int mouseDeltaX = mouseX() - panMouseX;
 			int mouseDeltaY = mouseY() - panMouseY;
 
-			int panningSpeed = war_GetCameraSpeed() / 200;
+			int panningSpeed = std::max(1, war_GetCameraSpeed() / 200);
 
 			float horizontalMovement = panXTracker->setTargetDelta(mouseDeltaX * panningSpeed)->update()->getCurrentDelta();
 			float verticalMovement = -1 * panZTracker->setTargetDelta(mouseDeltaY * panningSpeed)->update()->getCurrentDelta();
