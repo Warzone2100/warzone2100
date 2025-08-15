@@ -3608,6 +3608,10 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	return true;
 }
 
+optional<video_backend> wzGetInitializedGfxBackend()
+{
+	return WZbackend;
+}
 
 // Calculates and returns the scale factor from the SDL window's coordinate system (in points) to the raw
 // underlying pixels of the viewport / renderer.
