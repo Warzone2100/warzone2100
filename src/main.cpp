@@ -2012,7 +2012,7 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	initializeCrashHandlingContext(gfxbackend);
+	initializeCrashHandlingContext(wzGetInitializedGfxBackend());
 
 	wzCmdInterfaceInit();
 
