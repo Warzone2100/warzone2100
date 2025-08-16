@@ -564,6 +564,7 @@ jobs:
         & cmake --build . --config Release --target warzone2100 -- -k0
         echo "::remove-matcher owner=clang::"
     - name: Archive .ZIP of Regular build
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\build'
       env:
         FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
@@ -575,6 +576,7 @@ jobs:
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     - name: Archive Debug Symbols
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\build'
       env:
         FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
@@ -586,6 +588,7 @@ jobs:
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_debugsymbols.7z" -Destination "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
     - name: Compare Build Outputs
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\output'
       run: |
         # Log hashes of the build output
@@ -597,7 +600,7 @@ jobs:
     #####################################################
     - name: 'Upload Artifact - (Debug Symbols)'
       uses: actions/upload-artifact@v4
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
@@ -614,7 +617,7 @@ jobs:
     #####################################################
     - name: 'Generate artifact attestation - (Archive)'
       # Run on push to master branch (development build), or tag release automation build
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      if: success() && (matrix.deploy_release == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
       uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
