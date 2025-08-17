@@ -988,7 +988,7 @@ jobs:
       - name: Upload Release Assets
         working-directory: '${{ github.workspace }}/upload-assets/'
         run: |
-          $SOURCE_TAG = "$($env:WZ_GITHUB_REF -replace "refs/tags/")"
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
           for file in ./warzone2100_win_*; do
             echo "Uploading: $file"
             gh release upload "${SOURCE_TAG}" "$file"
