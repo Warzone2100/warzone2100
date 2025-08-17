@@ -1155,9 +1155,6 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 	}
 	std::string host = lobbyGame.desc.host;
 	std::vector<JoinConnectionDescription> connList;
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::GNS_DIRECT, host, lobbyGame.hostPort);
-#endif
 	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, host, lobbyGame.hostPort);
 	return connList;
 }
