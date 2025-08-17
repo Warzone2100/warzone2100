@@ -303,9 +303,6 @@ static void joinLobbyGame(uint32_t gameNumber, bool asSpectator)
 	ASSERT_OR_RETURN(, gameNumber < gamesList.size(), "Invalid gameNumber: %" PRIu32, gameNumber);
 
 	std::vector<JoinConnectionDescription> connectionDesc;
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	connectionDesc.emplace_back(JoinConnectionDescription::JoinConnectionType::GNS_DIRECT, gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort);
-#endif
 	connectionDesc.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort);
 	ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
 
