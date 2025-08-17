@@ -362,7 +362,7 @@ void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
 		return;
 	}
 
-	int NotReadyAutoKickSeconds = war_getAutoLagKickSeconds();
+	int NotReadyAutoKickSeconds = war_getAutoNotReadyKickSeconds();
 	if (NotReadyAutoKickSeconds <= 0)
 	{
 		return;
