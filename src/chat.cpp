@@ -173,7 +173,7 @@ void InGameChatMessage::sendToSpectators()
 	ssprintf(formatted, "%s (%s): %s", getPlayerName(sender), _("Spectators"), text);
 
 	if ((sender == selectedPlayer || shouldReceive(selectedPlayer)) && NetPlay.players[selectedPlayer].isSpectator) {
-		auto message = NetworkTextMessage(SPECTATOR_MESSAGE, formatted);
+		auto message = NetworkTextMessage(sender, formatted);
 		printInGameTextMessage(message);
 	}
 
