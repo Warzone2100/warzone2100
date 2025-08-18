@@ -2047,19 +2047,32 @@ void NetworkTextMessage::enqueue(NETQUEUE queue)
 	NETend(w);
 }
 
+bool NetworkTextMessage::decode(const NetMessage& message, uint8_t senderIdx)
+{
+	auto r = MessageReader(message);
+	return decode(r, senderIdx);
+}
+
 bool NetworkTextMessage::receive(NETQUEUE queue)
+{
+	auto r = NETbeginDecode(queue, NET_TEXTMSG);
+	return decode(r, queue.index);
+}
+
+bool NetworkTextMessage::decode(MessageReader& r, uint8_t senderIdx)
 {
 	memset(text, 0x0, sizeof(text));
 
-	auto r = NETbeginDecode(queue, NET_TEXTMSG);
+	ASSERT_OR_RETURN(false, NET_TEXTMSG == r.msgType, "Unexpected message type: %" PRIu8, r.msgType);
+
 	NETint32_t(r, sender);
 	NETbool(r, teamSpecific);
 	NETstring(r, text, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
-	if (whosResponsible(sender) != queue.index)
+	if (whosResponsible(sender) != senderIdx)
 	{
-		sender = queue.index;  // Fix corrupted sender.
+		sender = senderIdx;  // Fix corrupted sender.
 	}
 
 	if (sender >= MAX_CONNECTED_PLAYERS || (sender >= 0 && (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN)))
@@ -2207,34 +2220,46 @@ bool recvTextMessageAI(NETQUEUE queue)
 	return true;
 }
 
-bool recvSpecInGameTextMessage(NETQUEUE queue)
+optional<NetworkTextMessage> decodeSpecInGameTextMessage(MessageReader& r, uint8_t senderIdx)
 {
+	ASSERT_OR_RETURN(nullopt, NET_SPECTEXTMSG == r.msgType, "Unexpected message type: %" PRIu8, r.msgType);
+
 	UDWORD	sender;
 	char	newmsg[MAX_CONSOLE_STRING_LENGTH] = {};
 
-	auto r = NETbeginDecode(queue, NET_SPECTEXTMSG);
 	NETuint32_t(r, sender);			//in-game player index ('normal' one)
 	NETstring(r, newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
-	if (whosResponsible(sender) != queue.index)
+	if (whosResponsible(sender) != senderIdx)
 	{
-		sender = queue.index;  // Fix corrupted sender.
+		sender = senderIdx;  // Fix corrupted sender.
 	}
 
 	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
 	{
-		return false;
+		return nullopt;
 	}
 
 	if (!NetPlay.players[selectedPlayer].isSpectator)
 	{
-		return false; // ignore
+		return nullopt; // ignore
 	}
 
-	auto message = NetworkTextMessage(sender, newmsg);
+	return NetworkTextMessage(sender, newmsg);
+}
 
-	if (isPlayerMuted(sender))
+bool recvSpecInGameTextMessage(NETQUEUE queue)
+{
+	auto r = NETbeginDecode(queue, NET_SPECTEXTMSG);
+	auto messageOpt = decodeSpecInGameTextMessage(r, queue.index);
+	if (!messageOpt.has_value())
+	{
+		return false;
+	}
+	auto& message = messageOpt.value();
+
+	if (isPlayerMuted(message.sender))
 	{
 		return false;
 	}
