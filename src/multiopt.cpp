@@ -460,7 +460,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 
 	freeMessages();
 
-	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, static_cast<uint32_t>(game.blindMode), 0, game.maxPlayers))
 	{
 		return false;
 	}
