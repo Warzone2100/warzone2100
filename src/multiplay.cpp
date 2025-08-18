@@ -217,7 +217,7 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.LagCounter[i]++;
 		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i, true), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 			if (wz_command_interface_enabled()) {
@@ -229,12 +229,12 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			ingame.LagCounter[i] = 0;
 		}
 		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
@@ -301,7 +301,7 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.DesyncCounter[i]++;
 		if (ingame.DesyncCounter[i] >= DesyncAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i), DesyncAutoKickSeconds);
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i, true), DesyncAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 			if (wz_command_interface_enabled()) {
@@ -313,12 +313,12 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 			ingame.DesyncCounter[i] = 0;
 		}
 		else if (ingame.DesyncCounter[i] >= (DesyncAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.DesyncCounter[i] % 2 == 0) { // every 2 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
