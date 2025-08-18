@@ -4764,7 +4764,7 @@ namespace
 //
 // If `extPort == 0`, then `gamestruct.hostPort` will be filled with the default value from the configuration file,
 // otherwise, it will be set to `extPort`.
-void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const std::string& externalIp, uint16_t extPort, bool spectatorHost, uint32_t plyrs, uint32_t gameType, uint32_t two, uint32_t three, uint32_t four)
+void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const std::string& externalIp, uint16_t extPort, bool spectatorHost, uint32_t plyrs, uint32_t gameType, uint32_t two, uint32_t blindMode, uint32_t four)
 {
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
@@ -4784,7 +4784,7 @@ void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const 
 	gamestruct.desc.dwFlags = 0;
 	gamestruct.desc.dwUserFlags[0] = gameType;
 	gamestruct.desc.dwUserFlags[1] = two;
-	gamestruct.desc.dwUserFlags[2] = three;
+	gamestruct.desc.dwUserFlags[2] = blindMode;
 	gamestruct.desc.dwUserFlags[3] = four;
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
@@ -4838,11 +4838,11 @@ static void NETEnableAllowJoining(const std::string& externalIp, uint16_t extPor
 }
 
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost,
-                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four,
+                 uint32_t gameType, uint32_t two, uint32_t blindMode, uint32_t four,
                  UDWORD plyrs)	// # of players.
 {
 	debug(LOG_NET, "NEThostGame(%s, %s, %" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %u)", SessionName, PlayerName,
-		  gameType, two, three, four, plyrs);
+		  gameType, two, blindMode, four, plyrs);
 
 	netPlayersUpdated = true;
 
@@ -4939,20 +4939,20 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		// Do not allow others to join and delay announcing the game session to the lobby server
 		// until we manage to setup (successfully or not) the port mapping rule for the `gameserver_port`.
 		PortMappingManager::instance().attach_callback(ipv4MappingRequest,
-			[SessionName, spectatorHost, plyrs, gameType, two, three, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
+			[SessionName, spectatorHost, plyrs, gameType, two, blindMode, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
 		{
 			// Setup gamestruct with the external ip + port combination received from the LibPlum.
-			SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, three, four);
+			SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, blindMode, four);
 			// Only allow joining the game once the server has successfully discovered it's external IP + port combination.
 			//
 			// Once this is true, we are able to connect to the lobby server and announce to other players that
 			// this game session is available to join to.
 			NETEnableAllowJoining(externalIp, extPort);
-		}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, three, four](PortMappingDiscoveryStatus /*status*/) // failure callback
+		}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, blindMode, four](PortMappingDiscoveryStatus /*status*/) // failure callback
 		{
 			// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 			// that others will still be able to connect to us.
-			SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
+			SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, blindMode, four);
 			NETEnableAllowJoining("", gameserver_port);
 		});
 	}
@@ -4962,7 +4962,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 
 		// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 		// that others will still be able to connect to us.
-		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, three, four);
+		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, blindMode, four);
 		NETEnableAllowJoining("", gameserver_port);
 	}
 

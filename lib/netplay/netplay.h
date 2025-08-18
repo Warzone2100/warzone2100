@@ -178,7 +178,7 @@ struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
-	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, unused, unused)
+	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, blindMode, unused)
 };
 
 /**
