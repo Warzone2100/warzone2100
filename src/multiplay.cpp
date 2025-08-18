@@ -2232,7 +2232,7 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 		return false; // ignore
 	}
 
-	auto message = NetworkTextMessage(SPECTATOR_MESSAGE, newmsg);
+	auto message = NetworkTextMessage(sender, newmsg);
 
 	if (isPlayerMuted(sender))
 	{
