@@ -1039,14 +1039,17 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
-		// search for the nearest transporter if the current one is already full
-		for (auto psOtherDroid : apsDroidLists[psTransporter->player])
+		if (bMultiPlayer)
 		{
-			if (psOtherDroid->isTransporter() && checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
-				droidSqDist(psOtherDroid, psTransporter) < MAX_NEAREST_TRANSPORT_SQ_DIST)
+			// search for the nearest transporter if the current one is already full
+			for (auto psOtherDroid : apsDroidLists[psTransporter->player])
 			{
-				orderDroidObj(psDroidToAdd, DORDER_EMBARK, psOtherDroid, ModeQueue);
-				return;
+				if (psOtherDroid->isTransporter() && checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
+					droidSqDist(psOtherDroid, psTransporter) < MAX_NEAREST_TRANSPORT_SQ_DIST)
+				{
+					orderDroidObj(psDroidToAdd, DORDER_EMBARK, psOtherDroid, ModeQueue);
+					return;
+				}
 			}
 		}
 		if (psTransporter->player == selectedPlayer)
