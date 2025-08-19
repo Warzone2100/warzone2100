@@ -167,7 +167,7 @@ void dbgDumpLog(DumpFileHandle file)
 		dumpstr(file, msg.data(), msg.size());
 		dumpEOL(file);
 	}
-	
+
 	G.unlock();
 
 	// Terminate with a separating newline
