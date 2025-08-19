@@ -422,7 +422,7 @@ function init(){
 //			debugMsg("TEST: "+bc_ally.length, 'research');
 			//			debugName = colors[data.colour];
 		}
-		else if (playerLoose(player)) {msg+=" отсутствует";}
+		else if (playerLose(player)) {msg+=" отсутствует";}
 		else if (playerSpectator(player)) {msg+=" наблюдатель";}
 		else if (allianceExistsBetween(me,player)) {
 			msg+=" мой союзник ";

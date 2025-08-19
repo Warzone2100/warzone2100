@@ -122,7 +122,7 @@ function checkAlly(){
 			+", ally=spectator, dist="+dist, "ally");
 			return;
 		}
-		if (playerLoose(player)) {
+		if (playerLose(player)) {
 			debugMsg("#"+player+" name=\"Empty Slot\""
 			+", ally=empty, dist="+dist, "ally");
 			return;
@@ -344,8 +344,8 @@ function checkProcess(){
 	if (!running)return;
 	if (Math.floor(gameTime / 1000) < 300) return;
 
-	if (playerLoose(me)) {
-		gameStop("loose");
+	if (playerLose(me)) {
+		gameStop("lose");
 	}
 
 	for (const plally in bc_ally) {
@@ -386,11 +386,11 @@ function checkProcess(){
 function gameStop(condition){
 
 
-	if (condition === 'loose') {
-		debugMsg("I guess, i'm loose.. Give up", 'end');
+	if (condition === 'lose') {
+		debugMsg("I guess, I'm loser.. Give up", 'end');
 		if (running) {
 			playerData.forEach((data, player) => {
-				if (!asPlayer)chat(player, ' from '+debugName+': '+chatting('loose'));
+				if (!asPlayer)chat(player, ' from '+debugName+': '+chatting('lose'));
 			});
 		}
 
@@ -399,7 +399,7 @@ function gameStop(condition){
 		var _ally=false;
 		playerData.forEach((data, player) => {
 			if (player === me) return;
-			if (playerLoose(player)) return;
+			if (playerLose(player)) return;
 			if (playerSpectator(player)) return;
 			if (!allianceExistsBetween(me,player)) return;
 			if (allianceExistsBetween(me,player)) {
@@ -425,22 +425,22 @@ function gameStop(condition){
 		running = false;
 }
 
-function playerLoose(player){
-	var loose = false;
+function playerLose(player){
+	var lose = false;
 	if (enumStruct(player,"A0LightFactory").length === 0 &&
 		enumDroid(player, DROID_CONSTRUCT).length === 0 &&
 		enumStruct(player,"A0CyborgFactory").length === 0 &&
-		enumDroid(player, 10).length === 0) loose = true;
-	return loose;
+		enumDroid(player, 10).length === 0) lose = true;
+	return lose;
 }
 
 function playerSpectator(player){
-	var loose = false;
+	var lose = false;
 	if ((enumStruct(player, "A0Sat-linkCentre").length === 1 || enumStruct(player, "A0CommandCentre").length === 1) &&
 		enumStruct(player,"A0LightFactory").length === 0 &&
 		enumStruct(player,"A0CyborgFactory").length === 0 &&
-		enumDroid(player, 10).length === 0) loose = true;
-	return loose;
+		enumDroid(player, 10).length === 0) lose = true;
+	return lose;
 }
 
 //функция отфильтровывает объекты, которые находяться близко
@@ -449,7 +449,7 @@ function filterNearAlly(obj){
 	for (let p = 0; p < maxPlayers; ++p) {
 		if (p === me) continue; //Выкидываем себя
 		if (!allianceExistsBetween(me,p)) continue; //Выкидываем вражеские
-//		if (playerLoose(p)) continue; //Пропускаем проигравших
+//		if (playerLose(p)) continue; //Пропускаем проигравших
 		if (playerSpectator(p)) continue;
 
 		//Если союзнику доступно 40 вышек, не уступаем ему свободную.
@@ -499,7 +499,7 @@ function getEnemyNearAlly(){
 	for (let p = 0; p < maxPlayers; ++p) {
 		if (p === me) continue;
 		if (!allianceExistsBetween(me,p)) continue;
-//		if (playerLoose(p)) continue; //Пропускаем проигравших
+//		if (playerLose(p)) continue; //Пропускаем проигравших
 		if (playerSpectator(p)) continue;
 //		enemy = enemy.concat(targ.filter((e) => {if (distBetweenTwoPoints_p(e.x,e.y,startPositions[p].x,startPositions[p].y) < (base_range/2)) {
 		enemy = enemy.concat(targ.filter((e) => {if (distBetweenTwoPoints_p(e.x,e.y,startPositions[p].x,startPositions[p].y) < base_range) {
@@ -680,7 +680,7 @@ function getNumEnemies(){
 	for (let e = 0; e < maxPlayers; ++e) {
 		if (allianceExistsBetween(me,e)) continue;
 		if (playerSpectator(e)) continue;
-		if (playerLoose(e)) continue;
+		if (playerLose(e)) continue;
 		if (e === me) continue;
 		enemies++;
 	}
@@ -754,7 +754,7 @@ function getEnemyStartPos(){
 	for (let e = 0; e < maxPlayers; ++e) {
 		if (allianceExistsBetween(me,e)) continue;
 		if (playerSpectator(e)) continue;
-		if (playerLoose(e)) continue;
+		if (playerLose(e)) continue;
 		targ = targ.concat(startPositions[e]);
 	}
 	return targ;
@@ -1103,7 +1103,7 @@ function longCycle(){
 		playerData.forEach((data, player) => {
 			if (!access) return;
 			if (player === me) return;
-			if (playerLoose(player)) return;
+			if (playerLose(player)) return;
 			if (playerSpectator(player)) return;
 			if (allianceExistsBetween(me,player)) return;
 			if (propulsionCanReach('wheeled01', base.x, base.y, startPositions[player].x, startPositions[player].y)) { access = false; debugMsg("LongCycle: "+player+', land - exit', 'debug'); return; }
@@ -1154,7 +1154,7 @@ function longCycle(){
 	if (playerPower(me) > 10000) {
 		playerData.forEach((data, player) => {
 			if (player === me) return;
-			if (playerLoose(player)) return;
+			if (playerLose(player)) return;
 			if (playerSpectator(player)) return;
 			if (!allianceExistsBetween(me,player)) return;
 			if (allianceExistsBetween(me,player)) {
