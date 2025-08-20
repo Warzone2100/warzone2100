@@ -526,10 +526,6 @@ bool sendLeavingMsg()
 // called in Init.c to shutdown the whole netgame gubbins.
 bool multiShutdown()
 {
-	// shut down netplay lib.
-	debug(LOG_MAIN, "shutting down networking");
-	NETshutdown();
-
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
