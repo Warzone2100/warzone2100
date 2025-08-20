@@ -495,6 +495,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 		int initialShieldInterruptRegenTime = 0;
 		int shieldInterruptRegenTimeDec = 0;
 		int shieldPointsPerStep = 0;
+		std::vector<int> shieldTileDistance;
 	} shield;
 };
 

@@ -16,7 +16,8 @@
 		"shieldRegenTimeDec": 2,
 		"initialShieldInterruptRegenTime": 2000,
 		"shieldInterruptRegenTimeDec": 100,
-		"shieldPointsPerStep": 4
+		"shieldPointsPerStep": 4,
+		"shieldTileDistance": []
 	},
 	"ZNULLBRAIN": {
 		"id": "ZNULLBRAIN",
@@ -30,6 +31,7 @@
 		"shieldRegenTimeDec": 2,
 		"initialShieldInterruptRegenTime": 2000,
 		"shieldInterruptRegenTimeDec": 100,
-		"shieldPointsPerStep": 4
+		"shieldPointsPerStep": 4,
+		"shieldTileDistance": [ 4, 8, 12, 16, 20, 24, 28, 32, 36 ]
 	}
 }

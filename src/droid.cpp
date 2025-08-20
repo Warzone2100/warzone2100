@@ -1047,6 +1047,29 @@ void droidUpdate(DROID *psDroid)
 	CHECK_DROID(psDroid);
 }
 
+/* Check if droid is within commander's range */
+static inline bool droidWithinCommanderRange(const DROID *psDroid)
+{
+	if (psDroid->droidType == DROID_COMMAND)
+	{
+		return true;
+	}
+
+	ASSERT_OR_RETURN(false, psDroid->psGroup && psDroid->psGroup->psCommander, "Droid group or commander is NULL");
+
+	auto level = getDroidLevel(psDroid->psGroup->psCommander);
+	if (level >= psDroid->getBrainStats()->shield.shieldTileDistance.size())
+	{
+		return false;
+	}
+
+	auto sqDist = droidSqDist(psDroid, psDroid->psGroup->psCommander);
+	const auto &maxTiles = psDroid->getBrainStats()->shield.shieldTileDistance[level];
+	auto maxSqDist = TILE_WIDTH * TILE_WIDTH * maxTiles * maxTiles;
+
+	return sqDist <= maxSqDist;
+}
+
 void droidUpdateShields(DROID *psDroid)
 {
 	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND)
@@ -1061,7 +1084,8 @@ void droidUpdateShields(DROID *psDroid)
 		{
 			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
 				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
-				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid))
+				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid) &&
+				droidWithinCommanderRange(psDroid))
 			{
 				auto availableShieldPoints = droidGetMaxShieldPoints(psDroid) - psDroid->shieldPoints;
 
