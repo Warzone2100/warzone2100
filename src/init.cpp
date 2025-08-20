@@ -1164,6 +1164,7 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
+	NETshutdown();		// MUST come after widgShutDown (as widget screens might have connections, etc)
 	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
