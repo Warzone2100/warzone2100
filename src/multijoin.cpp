@@ -745,9 +745,9 @@ void ShowMOTD()
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	if (NetPlay.MOTD)
+	if (!NetPlay.MOTD.empty())
 	{
-		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		addConsoleMessage(NetPlay.MOTD.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 	else
 	{

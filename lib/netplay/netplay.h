@@ -327,8 +327,7 @@ struct NETPLAY
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	bool HaveUpgrade;					// game updates available
-	char MOTDbuffer[255];				// buffer for MOTD
-	char *MOTD = nullptr;
+	std::string MOTD;
 
 	std::vector<std::unordered_map<std::string, std::string>> scriptSetPlayerDataStrings;
 	std::vector<std::shared_ptr<PlayerReference>> playerReferences;
@@ -449,8 +448,8 @@ bool NEThaltJoining();				// stop new players joining this game
 
 class WzConnectionProvider;
 WzConnectionProvider* NET_getLobbyConnectionProvider();
-bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
-bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
+bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc, const std::function<void(std::string&& lobbyMOTD)>& lobbyMotdFunc = nullptr);
+bool NETfindGames(std::vector<GAMESTRUCT>& results, std::string& lobbyMOTD, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 
 class IClientConnection;
