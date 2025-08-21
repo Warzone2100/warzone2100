@@ -1048,8 +1048,14 @@ void droidUpdate(DROID *psDroid)
 }
 
 /* Check if droid is within commander's range */
-static inline bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
+bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 {
+	// expTileDistance is disabled for campaign
+	if (!shield && !bMultiPlayer)
+	{
+		return true;
+	}
+
 	if (psDroid->droidType == DROID_COMMAND)
 	{
 		return true;
@@ -2651,9 +2657,7 @@ void giveExperienceForSquish(DROID *psDroid)
 	{
 		const uint32_t expGain = std::max(65536 / 2, 65536 * getExpGain(psDroid->player) / 100);
 		droidIncreaseExperience(psDroid, expGain);
-		if (droidWithinCommanderRange(psDroid, false)) {
-			cmdDroidUpdateExperience(psDroid, expGain);
-		}
+		cmdDroidUpdateExperience(psDroid, expGain);
 	}
 }
 
