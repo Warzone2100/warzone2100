@@ -1652,14 +1652,9 @@ int NETinit(ConnectionProviderType pt)
 	NetPlay.isHostAlive = false;
 	NetPlay.HaveUpgrade = false;
 	NetPlay.gamePassword[0] = '\0';
-	NetPlay.MOTD = nullptr;
 	NETstartLogging();
 
-	if (NetPlay.MOTD)
-	{
-		free(NetPlay.MOTD);
-	}
-	NetPlay.MOTD = nullptr;
+	NetPlay.MOTD.clear();
 	NetPlay.ShowedMOTD = false;
 	NetPlay.GamePassworded = false;
 	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
@@ -1680,11 +1675,7 @@ int NETshutdown()
 	}
 	NETstopLogging();
 	NETpermissionsShutdown();
-	if (NetPlay.MOTD)
-	{
-		free(NetPlay.MOTD);
-	}
-	NetPlay.MOTD = nullptr;
+	NetPlay.MOTD.clear();
 	NETdeleteQueue();
 
 	auto& cpr = ConnectionProviderRegistry::Instance();
@@ -3459,10 +3450,10 @@ unsigned NETgetDownloadProgress(unsigned player)
 	return static_cast<unsigned>(progress);
 }
 
-static ssize_t readLobbyResponse(IClientConnection& sock, unsigned int timeout)
+#define MAX_LOBBY_MOTD_LENGTH (2*1024)
+
+static net::result<ssize_t> readLobbyResponseInternal(IClientConnection& sock, unsigned int timeout, uint32_t& output_lobbyStatusCode, std::string& output_MOTD)
 {
-	uint32_t lobbyStatusCode;
-	uint32_t MOTDLength;
 	uint32_t buffer[2];
 	ssize_t received = 0;
 
@@ -3470,69 +3461,74 @@ static ssize_t readLobbyResponse(IClientConnection& sock, unsigned int timeout)
 	auto readResult = sock.readAll(&buffer, sizeof(buffer), timeout);
 	if (!readResult.has_value())
 	{
-		goto error;
+		return readResult;
 	}
 	received += readResult.value();
-	lobbyStatusCode = wz_ntohl(buffer[0]);
-	MOTDLength = wz_ntohl(buffer[1]);
+	output_lobbyStatusCode = wz_ntohl(buffer[0]);
+	uint32_t MOTDLength = wz_ntohl(buffer[1]);
 
 	// Get status message
-	if (NetPlay.MOTD)
+	if (MOTDLength > MAX_LOBBY_MOTD_LENGTH)
 	{
-		free(NetPlay.MOTD);
+		return tl::make_unexpected(std::make_error_code(std::errc::bad_message));
 	}
-	NetPlay.MOTD = (char *)malloc(MOTDLength + 1);
-	readResult = sock.readAll(NetPlay.MOTD, MOTDLength, timeout);
+	std::vector<char> tmpMOTDBuffer;
+	tmpMOTDBuffer.resize(MOTDLength);
+	readResult = sock.readAll(tmpMOTDBuffer.data(), MOTDLength, timeout);
+	if (!readResult.has_value())
+	{
+		return readResult;
+	}
+	received += readResult.value();
+
+	// truncate at first null byte in MOTD (or the end)
+	auto endIt = std::find(tmpMOTDBuffer.begin(), tmpMOTDBuffer.end(), 0);
+	output_MOTD.assign(tmpMOTDBuffer.begin(), endIt);
+
+	return received;
+}
+
+static ssize_t readLobbyResponse(IClientConnection& sock, unsigned int timeout)
+{
+	ssize_t received = 0;
+	uint32_t lobbyStatusCode = 0;
+	auto readResult = readLobbyResponseInternal(sock, timeout, lobbyStatusCode, NetPlay.MOTD);
 	if (!readResult.has_value())
 	{
 		goto error;
 	}
-	received += readResult.value();
-	// NUL terminate string
-	NetPlay.MOTD[MOTDLength] = '\0';
+	received = readResult.value();
 
 	switch (lobbyStatusCode)
 	{
 	case 200:
-		debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD.c_str());
 		NetPlay.HaveUpgrade = false;
 		break;
 
 	case 400:
-		debug(LOG_NET, "**Upgrade available! Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		debug(LOG_NET, "**Upgrade available! Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD.c_str());
 		NetPlay.HaveUpgrade = true;
 		break;
 
 	default:
-		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD.c_str());
 		// ensure if the lobby returns an error, we are prepared to display it (once)
 		NetPlay.ShowedMOTD = false;
 		// this is horrible but MOTD can have 0x0a and other junk in it
-		std::string strmotd = std::string(NetPlay.MOTD);
-		wz_command_interface_output("WZEVENT: lobbyerror (%u): %s\n", (unsigned int)lobbyStatusCode, base64Encode(std::vector<unsigned char>(strmotd.begin(), strmotd.end())).c_str());
+		wz_command_interface_output("WZEVENT: lobbyerror (%u): %s\n", (unsigned int)lobbyStatusCode, base64Encode(std::vector<unsigned char>(NetPlay.MOTD.begin(), NetPlay.MOTD.end())).c_str());
 		break;
 	}
 
 	return received;
 
 error:
-	if (NetPlay.MOTD)
-	{
-		free(NetPlay.MOTD);
-	}
 	const auto readErrMsg = readResult.error().message();
-	if (asprintf(&NetPlay.MOTD, "Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", readErrMsg.c_str(), gameserver_port) == -1)
-	{
-		NetPlay.MOTD = nullptr;
-	}
-	else
-	{
-		NetPlay.ShowedMOTD = false;
-		debug(LOG_ERROR, "%s", NetPlay.MOTD);
-	}
+	NetPlay.MOTD = astringf("Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", readErrMsg.c_str(), gameserver_port);
+	NetPlay.ShowedMOTD = false;
+	debug(LOG_ERROR, "%s", NetPlay.MOTD.c_str());
 
-	std::string strmotd = (NetPlay.MOTD) ? std::string(NetPlay.MOTD) : std::string();
-	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (!strmotd.empty()) ? base64Encode(std::vector<unsigned char>(strmotd.begin(), strmotd.end())).c_str() : "");
+	wz_command_interface_output("WZEVENT: lobbysocketerror: %s\n", (!NetPlay.MOTD.empty()) ? base64Encode(std::vector<unsigned char>(NetPlay.MOTD.begin(), NetPlay.MOTD.end())).c_str() : "");
 
 	return SOCKET_ERROR;
 }
@@ -3654,11 +3650,7 @@ bool LobbyServerConnectionHandler::connect()
 	{
 		const auto hostsErrMsg = hostsResult.error().message();
 		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, hostsErrMsg.c_str());
-		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name) == -1)
-		{
-			NetPlay.MOTD = nullptr;
-		}
+		NetPlay.MOTD = astringf(_("Could not resolve masterserver name (%s)!"), masterserver_name);
 		wz_command_interface_output("WZEVENT: lobbyerror (%u): Cannot resolve lobby server: %s\n", 0, hostsErrMsg.c_str());
 		server_not_there = true;
 		return bProcessingConnectOrDisconnectThisCall;
@@ -3683,12 +3675,8 @@ bool LobbyServerConnectionHandler::connect()
 	{
 		const auto errMsg = sockResult.error().message();
 		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, errMsg.c_str());
-		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to enable UPnP/NAT-PMP/PCP\n or to forward the port to your system."),
-					 errMsg.c_str(), masterserver_port) == -1)
-		{
-			NetPlay.MOTD = nullptr;
-		}
+		NetPlay.MOTD = astringf(_("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to enable UPnP/NAT-PMP/PCP\n or to forward the port to your system."),
+								errMsg.c_str(), masterserver_port);
 		server_not_there = true;
 		return bProcessingConnectOrDisconnectThisCall;
 	}
@@ -3702,15 +3690,8 @@ bool LobbyServerConnectionHandler::connect()
 	if (!gameIdResult.has_value())
 	{
 		const auto gameIdErrMsg = gameIdResult.error().message();
-		free(NetPlay.MOTD);
-		if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", gameIdErrMsg.c_str()) == -1)
-		{
-			NetPlay.MOTD = nullptr;
-		}
-		else
-		{
-			debug(LOG_ERROR, "%s", NetPlay.MOTD);
-		}
+		NetPlay.MOTD = astringf("Failed to retrieve a game ID: %s", gameIdErrMsg.c_str());
+		debug(LOG_ERROR, "%s", NetPlay.MOTD.c_str());
 
 		// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
 		disconnect();
@@ -4098,11 +4079,10 @@ static void NETallowJoining()
 
 	// This is here since we need to get the status, before we can show the info.
 	// FIXME: find better location to stick this?
-	if ((!NetPlay.ShowedMOTD) && (NetPlay.MOTD != nullptr))
+	if ((!NetPlay.ShowedMOTD) && (!NetPlay.MOTD.empty()))
 	{
 		ShowMOTD();
-		free(NetPlay.MOTD);
-		NetPlay.MOTD = nullptr;
+		NetPlay.MOTD.clear();
 		NetPlay.ShowedMOTD = true;
 	}
 
@@ -4980,7 +4960,7 @@ bool NEThaltJoining()
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
+bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc, const std::function<void(std::string&& lobbyMOTD)>& lobbyMotdFunc)
 {
 	debug(LOG_NET, "Looking for games...");
 
@@ -5033,7 +5013,9 @@ bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<b
 	}
 
 	// read the lobby response
-	if (readLobbyResponse(*sock, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+	uint32_t lobbyStatusCode = 0;
+	std::string lobbyMOTD;
+	if (!readLobbyResponseInternal(*sock, NET_TIMEOUT_DELAY, lobbyStatusCode, lobbyMOTD).has_value())
 	{
 		// mark it invalid
 		sock->close();
@@ -5041,6 +5023,10 @@ bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<b
 
 		// treat as fatal error
 		return false;
+	}
+	if (lobbyMotdFunc)
+	{
+		lobbyMotdFunc(std::move(lobbyMOTD));
 	}
 
 	// Backwards-compatible protocol enhancement, to raise game limit
@@ -5114,10 +5100,11 @@ bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<b
 	return true;
 }
 
-bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion /*= false*/)
+bool NETfindGames(std::vector<GAMESTRUCT>& results, std::string& lobbyMOTD, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion /*= false*/)
 {
 	size_t gamecount = 0;
 	results.clear();
+	lobbyMOTD.clear();
 
 	auto* connProvider = NET_getLobbyConnectionProvider();
 	bool success = NETenumerateGames(connProvider, [&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
@@ -5138,6 +5125,9 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 		}
 		results.push_back(lobbyGame);
 		return true;
+	},
+	[&lobbyMOTD](std::string&& lobbyMOTDResult) {
+		lobbyMOTD = std::move(lobbyMOTDResult);
 	});
 
 	return success;
