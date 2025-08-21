@@ -25,7 +25,7 @@
 		"name": "Z NULL BRAIN",
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 2, 4, 6, 8, 10, 12, 14, 16 ],
-		"expTileDistance": [ 4, 8, 12, 16, 20, 24, 28, 32, 36 ],
+		"expTileDistance": [ 4, 6, 8, 10, 12, 14, 16, 18, 20 ],
 		"turret": "ZNULLWEAPON",
 		"initialShieldPointsPercent": 25,
 		"additiveShieldPointsPercent": 10,
@@ -34,6 +34,6 @@
 		"initialShieldInterruptRegenTime": 2000,
 		"shieldInterruptRegenTimeDec": 100,
 		"shieldPointsPerStep": 4,
-		"shieldTileDistance": [ 4, 8, 12, 16, 20, 24, 28, 32, 36 ]
+		"shieldTileDistance": [ 4, 6, 8, 10, 12, 14, 16, 18, 20 ]
 	}
 }
