@@ -688,7 +688,7 @@ void WzGameFindTitleUI::addGames()
 		switch (getLobbyError())
 		{
 		case ERROR_NOERROR:
-			if (NetPlay.HaveUpgrade || NET_getLobbyDisabled())
+			if (NET_getLobbyDisabled())
 			{
 				txt = _("There appears to be a game update available!");
 			}
