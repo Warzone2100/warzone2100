@@ -738,7 +738,7 @@ void ActivityManager::hostGameLobbyServerDisconnect()
 	for (auto sink : activitySinks) { sink->hostingMultiplayerGame(currentMultiplayGameInfo); }
 }
 
-void ActivityManager::hostLobbyQuit()
+void ActivityManager::hostLobbyQuit(LOBBY_ERROR_TYPES errorResult)
 {
 	if (currentMode != ActivitySink::GameMode::HOSTING_IN_LOBBY)
 	{
@@ -748,7 +748,7 @@ void ActivityManager::hostLobbyQuit()
 	currentMode = ActivitySink::GameMode::MENUS;
 
 	// Notify the ActivitySink that we've left the game lobby
-	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(true, getLobbyError()); }
+	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(true, errorResult); }
 }
 
 // called when attempting to join a lobby game
@@ -795,7 +795,7 @@ void ActivityManager::joinGameSucceeded(const char *host, uint32_t port)
 	// Therefore, delay ActivitySink::joinedMultiplayerGame until after we receive the initial game data
 }
 
-void ActivityManager::joinedLobbyQuit()
+void ActivityManager::joinedLobbyQuit(LOBBY_ERROR_TYPES errorResult)
 {
 	if (currentMode != ActivitySink::GameMode::JOINING_IN_PROGRESS && currentMode != ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
@@ -808,7 +808,7 @@ void ActivityManager::joinedLobbyQuit()
 	currentMode = ActivitySink::GameMode::MENUS;
 
 	// Notify the ActivitySink that we've left the game lobby
-	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(false, getLobbyError()); }
+	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(false, errorResult); }
 }
 
 // for skirmish / multiplayer, provide additional data / state

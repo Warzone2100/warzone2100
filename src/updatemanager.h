@@ -23,10 +23,7 @@
 #include <unordered_set>
 #include <string>
 
-#include <nonstd/optional.hpp>
-using nonstd::optional;
-using nonstd::nullopt;
-
+#include <optional>
 
 class WzInfoManager {
 public:
@@ -57,11 +54,11 @@ struct CompatCheckIssue
 
 struct CompatCheckResults
 {
-	optional<CompatCheckIssue> issue;
+	std::optional<CompatCheckIssue> issue;
 	bool successfulCheck = false;
 
 public:
-	CompatCheckResults(bool successfulCheck, optional<CompatCheckIssue> issue = nullopt)
+	CompatCheckResults(bool successfulCheck, std::optional<CompatCheckIssue> issue = std::nullopt)
 	: issue(issue)
 	, successfulCheck(successfulCheck)
 	{ }
@@ -75,5 +72,7 @@ typedef std::function<void (CompatCheckResults results)> CompatCheckResultsHandl
 // Get the compat check results
 // NOTE: resultClosure may be called on any thread at any time - use wzAsyncExecOnMainThread inside your closure if you need to perform tasks on the main thread
 void asyncGetCompatCheckResults(CompatCheckResultsHandlerFunc resultClosure);
+
+std::optional<bool> getVersionCheckNewVersionAvailable();
 
 #endif //_WZ_UPDATE_MANAGER_H_

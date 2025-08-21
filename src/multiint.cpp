@@ -193,7 +193,6 @@ bool multiintDisableLobbyRefresh = false; // if we allow lobby to be refreshed o
 std::string defaultSkirmishAI = "";
 
 static UDWORD hideTime = 0;
-LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool bInActualHostedLobby = false;
 static bool bRequestedSelfMoveToPlayers = false;
 static std::vector<bool> bHostRequestedMoveToPlayers = std::vector<bool>(MAX_CONNECTED_PLAYERS, false);
@@ -247,7 +246,7 @@ static bool		SendFactionRequest(UBYTE player, UBYTE faction);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 static bool		SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator);
 bool changeReadyStatus(UBYTE player, bool bReady);
-static void stopJoining(std::shared_ptr<WzTitleUI> parent);
+static void stopJoining(std::shared_ptr<WzTitleUI> parent, LOBBY_ERROR_TYPES errorResult);
 
 static void sendRoomChatMessage(char const *text, bool skipLocalDisplay = false);
 
@@ -997,26 +996,6 @@ static void decideWRF()
 	}
 }
 
-// ////////////////////////////////////////////////////////////////////////
-// Lobby error reading
-LOBBY_ERROR_TYPES getLobbyError()
-{
-	return LobbyError;
-}
-
-void setLobbyError(LOBBY_ERROR_TYPES error_type)
-{
-	LobbyError = error_type;
-	if (LobbyError != ERROR_INVALID)
-	{
-		multiintDisableLobbyRefresh = false;
-	}
-	else
-	{
-		multiintDisableLobbyRefresh = true;
-	}
-}
-
 std::string JoinConnectionDescription::connectiontype_to_string(JoinConnectionDescription::JoinConnectionType type)
 {
 	switch (type)
@@ -1100,24 +1079,12 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 		NETsetMasterserverPort(originalLobbyServerPort);
 	};
 
-	if (getLobbyError() != ERROR_INVALID)
-	{
-		setLobbyError(ERROR_NOERROR);
-	}
-
 	GAMESTRUCT lobbyGame;
 	memset(&lobbyGame, 0x00, sizeof(lobbyGame));
 	if (!NETfindGame(lobbyGameId, lobbyGame))
 	{
 		// failed to get list of games from lobby server
 		debug(LOG_ERROR, "Failed to find gameId in lobby server");
-		cleanup();
-		return {};
-	}
-
-	if (getLobbyError())
-	{
-		debug(LOG_ERROR, "Lobby error: %d", (int)getLobbyError());
 		cleanup();
 		return {};
 	}
@@ -5367,7 +5334,7 @@ static void updateInActualHostedLobby(bool value)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-static void stopJoining(std::shared_ptr<WzTitleUI> parent)
+static void stopJoining(std::shared_ptr<WzTitleUI> parent, LOBBY_ERROR_TYPES errorResult)
 {
 	updateInActualHostedLobby(false);
 
@@ -5389,7 +5356,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		NETend(w);
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
-		ActivityManager::instance().hostLobbyQuit();
+		ActivityManager::instance().hostLobbyQuit(errorResult);
 		changeTitleUI(wzTitleUICurrent);				// refresh options screen.
 		ingame.localJoiningInProgress = false;
 		return;
@@ -5415,7 +5382,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 			NetPlay.isHost = false;
 		}
 
-		ActivityManager::instance().joinedLobbyQuit();
+		ActivityManager::instance().joinedLobbyQuit(errorResult);
 		if (parent)
 		{
 			changeTitleUI(parent);
@@ -5430,7 +5397,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		return;
 	}
 	debug(LOG_NET, "We have stopped joining.");
-	ActivityManager::instance().joinedLobbyQuit();
+	ActivityManager::instance().joinedLobbyQuit(errorResult);
 	NETremRedirects();
 	changeTitleUI(parent);
 	selectedPlayer = 0;
@@ -6179,7 +6146,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 				sendLobbyChangeVoteData(0);
 			}
 			NETGameLocked(false);		// reset status on a cancel
-			stopJoining(parent);
+			stopJoining(parent, ERROR_NOERROR);
 		}
 		else
 		{
@@ -6515,7 +6482,7 @@ public:
 		auto psStrongMultiOptionsTitleUI = currentMultiOptionsTitleUI.lock();
 		if (psStrongMultiOptionsTitleUI)
 		{
-			stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI());
+			stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI(), ERROR_NOERROR);
 		}
 		wzQuit(exitCode);
 	}
@@ -6599,7 +6566,7 @@ void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, co
 	if (!optCurrHostAddress.has_value())
 	{
 		debug(LOG_ERROR, "Unable to get current host's address?");
-		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to handle host redirect")), parent));
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to handle host redirect")), parent), ERROR_REDIRECT);
 		return;
 	}
 
@@ -6608,19 +6575,19 @@ void WzMultiplayerOptionsTitleUI::handleKickRedirect(uint8_t kickerPlayerIdx, co
 	if (!redirectInfo.has_value())
 	{
 		debug(LOG_ERROR, "Unable to parse kick redirect info");
-		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent));
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent), ERROR_REDIRECT);
 		return;
 	}
 	if (redirectInfo->connList.empty())
 	{
 		// No valid connection descriptions!
 		debug(LOG_ERROR, "No valid connection descriptions in redirect: %s", redirectString.c_str());
-		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent));
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Unable to process redirect")), parent), ERROR_REDIRECT);
 		return;
 	}
 
 	// Stop current joining
-	stopJoining(parent);
+	stopJoining(parent, ERROR_REDIRECT);
 
 	// Attempt a redirect join
 	ExpectedHostProperties expectedHostProps;
@@ -6708,8 +6675,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 			if (!recvOptions(queue))
 			{
 				// supplied NET_OPTIONS are not valid
-				setLobbyError(ERROR_INVALID);
-				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid options")), parent));
+				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid options")), parent), ERROR_INVALID);
 				return MultiMessagesResult::StoppedJoining;
 			}
 			updateInActualHostedLobby(true);
@@ -6736,8 +6702,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 			if (!recvHostConfig(queue))
 			{
 				// supplied NET_HOST_CONFIG is not valid
-				setLobbyError(ERROR_INVALID);
-				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid host config")), parent));
+				stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("Host supplied invalid host config")), parent), ERROR_INVALID);
 				break;
 			}
 			if (std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent))
@@ -6869,7 +6834,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 				if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 				{
-					stopJoining(parent);
+					stopJoining(parent, ERROR_NOERROR);
 				}
 				updateGameOptions();
 				break;
@@ -6987,7 +6952,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 						{
 							kickReasonStr = kickReasonStr.substr(0, maxLinePos);
 						}
-						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")), WzString::fromUtf8(kickReasonStr), parent));
+						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")), WzString::fromUtf8(kickReasonStr), parent), KICK_TYPE);
 						debug(LOG_INFO, "You have been kicked, because %s ", kickReasonStr.c_str());
 						displayKickReasonPopup(kickReasonStr.c_str());
 						ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
@@ -7011,9 +6976,8 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 		{
 			auto r = NETbeginDecode(queue, NET_HOST_DROPPED);
 			NETend(r);
-			stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("No connection to host.")), parent));
+			stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("No connection to host.")), parent), ERROR_HOSTDROPPED);
 			debug(LOG_NET, "The host has quit!");
-			setLobbyError(ERROR_HOSTDROPPED);
 			break;
 		}
 		case NET_TEXTMSG:					// Chat message
@@ -7094,8 +7058,7 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 						// Leave the badly behaved (likely modified) host!
 						sendRoomChatMessage(_("The host moved me to Players, but I never gave permission for this change. Bye!"));
 						debug(LOG_INFO, "Leaving game because host moved us to Players, but we never gave permission.");
-						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("The host tried to move us to Players, but we never gave permission.")), parent));
-						setLobbyError(ERROR_HOSTDROPPED);
+						stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Disconnected from host:")), WzString(_("The host tried to move us to Players, but we never gave permission.")), parent), ERROR_HOSTDROPPED);
 						return MultiMessagesResult::StoppedJoining;
 					}
 				}
@@ -7364,7 +7327,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		cancelOrDismissNotificationIfTag([](const std::string& tag) {
 			return (tag.rfind(SLOTTYPE_TAG_PREFIX, 0) == 0);
 		});
-		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("The host has quit.")), parent));
+		stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Connection lost:")), WzString(_("The host has quit.")), parent), ERROR_HOSTDROPPED);
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
 
@@ -7498,11 +7461,6 @@ void WzMultiplayerOptionsTitleUI::start()
 
 	addBackdrop()->setCalcLayout(calcBackdropLayoutForMultiplayerOptionsTitleUI);
 	addTopForm(true);
-
-	if (getLobbyError() != ERROR_INVALID)
-	{
-		setLobbyError(ERROR_NOERROR);
-	}
 
 	/* Entering the first time */
 	if (!bReenter)

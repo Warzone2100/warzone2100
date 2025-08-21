@@ -44,6 +44,7 @@
 #include "../frend.h"
 #include "../loadsave.h"			// for blueboxes.
 #include "../activity.h"
+#include "../updatemanager.h"
 
 struct DisplayRemoteGameCache
 {
@@ -56,6 +57,7 @@ struct DisplayRemoteGameCache
 
 // find games
 static std::vector<GAMESTRUCT> gamesList;
+static bool lobbyConnectionError = false;
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
 }
@@ -98,8 +100,10 @@ void WzGameFindTitleUI::start()
 	}
 
 	addConsoleBox();
-	if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))
+	lobbyConnectionError = false;
+	if (!NET_getLobbyDisabled() && !NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))
 	{
+		lobbyConnectionError = true;
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
 
@@ -130,9 +134,10 @@ TITLECODE WzGameFindTitleUI::run()
 		addConsoleBox();
 		if (safeSearch || handleUserRefreshRequest)
 		{
-			setLobbyError(ERROR_NOERROR); // clear lobby error first
-			if (!NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))	// find games synchronously
+			lobbyConnectionError = false;
+			if (!NET_getLobbyDisabled() && !NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))	// find games synchronously
 			{
+				lobbyConnectionError = true;
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			}
 			lastFetchRealTime = realTime;
@@ -147,7 +152,6 @@ TITLECODE WzGameFindTitleUI::run()
 	if (id == CON_CANCEL)								// ok
 	{
 		clearActiveConsole();
-		setLobbyError(ERROR_NOERROR); // clear any lobby error
 		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 	}
 
@@ -338,7 +342,7 @@ public:
 		int y0 = yOffset + y();
 		char tmp[80], name[StringSize];
 
-		if (getLobbyError() != ERROR_NOERROR && bMultiPlayer && !NetPlay.bComms)
+		if (lobbyConnectionError && bMultiPlayer && !NetPlay.bComms)
 		{
 			addConsoleMessage(_("Can't connect to lobby server!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			return;
@@ -618,15 +622,12 @@ void WzGameFindTitleUI::addGames()
 	// we want the old games deleted, and only list games when we should
 	widgDelete(psWScreen, GAMES_GAMEHEADER);
 	widgDelete(psWScreen, GAMES_GAMELIST);
-	if (getLobbyError() || !gcount)
-	{
-		gcount = 0;
-	}
+
 	// in case they refresh, and a game becomes available.
 	widgDelete(psWScreen, FRONTEND_NOGAMESAVAILABLE);
 
 	// only have to do this if we have any games available.
-	if (!getLobbyError() && gcount)
+	if (gcount)
 	{
 		// add header
 		auto headerWidget = GameListHeader::make();
@@ -685,46 +686,18 @@ void WzGameFindTitleUI::addGames()
 		// This is a 'button', not text so it can be hilighted/centered.
 		const char *txt;
 
-		switch (getLobbyError())
+		if (NET_getLobbyDisabled() || getVersionCheckNewVersionAvailable().value_or(false))
 		{
-		case ERROR_NOERROR:
-			if (NET_getLobbyDisabled())
-			{
-				txt = _("There appears to be a game update available!");
-			}
-			else
-			{
-				txt = _("No games are available for your version");
-			}
-			break;
-		case ERROR_FULL:
-			txt = _("Game is full");
-			break;
-		case ERROR_KICKED:
-		case ERROR_INVALID:
-			txt = _("You were kicked!");
-			break;
-		case ERROR_WRONGVERSION:
-			txt = _("Wrong Game Version!");
-			break;
-		case ERROR_WRONGDATA:
-			txt = _("You have an incompatible mod.");
-			break;
-		// AFAIK, the only way this can really happy is if the Host's file is named wrong, or a client side error.
-		case ERROR_UNKNOWNFILEISSUE:
-			txt = _("Host couldn't send file?");
-			debug(LOG_POPUP, "Warzone couldn't complete a file request.\n\nPossibly, Host's file is incorrect. Check your logs for more details.");
-			break;
-		case ERROR_WRONGPASSWORD:
-			txt = _("Incorrect Password!");
-			break;
-		case ERROR_HOSTDROPPED:
-			txt = _("Host has dropped connection!");
-			break;
-		case ERROR_CONNECTION:
-		default:
+			txt = _("There appears to be a game update available!");
+		}
+		else
+		{
+			txt = _("No games are available for your version");
+		}
+
+		if (lobbyConnectionError)
+		{
 			txt = _("Connection Error");
-			break;
 		}
 
 		// delete old widget if necessary
