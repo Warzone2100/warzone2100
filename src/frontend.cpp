@@ -584,10 +584,6 @@ bool runMultiPlayerMenu()
 			// Don't call `NETinit()` just yet.
 			// It will be called automatically during join attempts.
 			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-			if (getLobbyError() != ERROR_INVALID)
-			{
-				setLobbyError(ERROR_NOERROR);
-			}
 			changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 			break;
 		case FRONTEND_REPLAY:
