@@ -108,10 +108,6 @@ TITLECODE WzProtocolTitleUI::run()
 		bMultiMessages = false;
 		break;
 	case CON_TYPESID_START+0: // Lobby button
-		if (getLobbyError() != ERROR_INVALID)
-		{
-			setLobbyError(ERROR_NOERROR);
-		}
 		changeTitleUI(std::make_shared<WzGameFindTitleUI>());
 		break;
 	case CON_TYPESID_START+1: // IP button

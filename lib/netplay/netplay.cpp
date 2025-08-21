@@ -622,7 +622,6 @@ static size_t NET_fillBuffer(IClientConnection** pSocket, IConnectionPollGroup* 
 			NETclientHandleHostDisconnected();
 			bsocket = nullptr;
 			ingame.localJoiningInProgress = false;
-			setLobbyError(ERROR_NOERROR);
 			NETclose();
 			return 0;
 		}
@@ -4978,12 +4977,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 {
 	debug(LOG_NET, "Looking for games...");
 
-	if (getLobbyError() == ERROR_INVALID || getLobbyError() == ERROR_KICKED || getLobbyError() == ERROR_HOSTDROPPED)
-	{
-		return false;
-	}
-	setLobbyError(ERROR_NOERROR);
-
 	if (!NetPlay.bComms)
 	{
 		debug(LOG_ERROR, "Likely missing NETinit() - this won't return any results");
@@ -4997,7 +4990,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	{
 		const auto hostsErrMsg = hostsResult.error().message();
 		debug(LOG_ERROR, "Cannot resolve hostname \"%s\": %s", masterserver_name, hostsErrMsg.c_str());
-		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 	const auto& hosts = hostsResult.value();
@@ -5006,7 +4998,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	if (!sockResult.has_value()) {
 		const auto sockErrMsg = sockResult.error().message();
 		debug(LOG_ERROR, "Cannot connect to \"%s:%d\": %s", masterserver_name, masterserver_port, sockErrMsg.c_str());
-		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 	IClientConnection* sock = sockResult.value();
@@ -5023,7 +5014,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		sock->close();
 
 		// when we fail to receive a game count, bail out
-		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
@@ -5039,7 +5029,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		// mark it invalid
 		sock->close();
 
-		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
@@ -5051,7 +5040,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 
 		// treat as fatal error
-		setLobbyError(ERROR_CONNECTION);
 		return false;
 	}
 
@@ -5102,7 +5090,6 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 					sock->close();
 
 					// when we fail to receive a game count, bail out
-					setLobbyError(ERROR_CONNECTION);
 					return false;
 				}
 			}
