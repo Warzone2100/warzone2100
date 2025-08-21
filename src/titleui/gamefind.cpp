@@ -57,6 +57,7 @@ struct DisplayRemoteGameCache
 
 // find games
 static std::vector<GAMESTRUCT> gamesList;
+static std::string lobbyMOTD;
 static bool lobbyConnectionError = false;
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
@@ -101,7 +102,7 @@ void WzGameFindTitleUI::start()
 
 	addConsoleBox();
 	lobbyConnectionError = false;
-	if (!NET_getLobbyDisabled() && !NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))
+	if (!NET_getLobbyDisabled() && !NETfindGames(gamesList, lobbyMOTD, 0, GAMES_MAX, toggleFilter))
 	{
 		lobbyConnectionError = true;
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
@@ -135,7 +136,7 @@ TITLECODE WzGameFindTitleUI::run()
 		if (safeSearch || handleUserRefreshRequest)
 		{
 			lobbyConnectionError = false;
-			if (!NET_getLobbyDisabled() && !NETfindGames(gamesList, 0, GAMES_MAX, toggleFilter))	// find games synchronously
+			if (!NET_getLobbyDisabled() && !NETfindGames(gamesList, lobbyMOTD, 0, GAMES_MAX, toggleFilter))	// find games synchronously
 			{
 				lobbyConnectionError = true;
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
@@ -724,10 +725,10 @@ void WzGameFindTitleUI::addGames()
 
 		widgAddButton(psWScreen, &sButInit);
 	}
-	if (NetPlay.MOTD && strlen(NetPlay.MOTD))
+	if (!lobbyMOTD.empty())
 	{
 		permitNewConsoleMessages(true);
-		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		addConsoleMessage(lobbyMOTD.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 	}
 	setConsolePermanence(false, false);
 	updateConsoleMessages();
