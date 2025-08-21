@@ -446,7 +446,10 @@ SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) ab
 uint32_t NETgetGameUserFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining();				// stop new players joining this game
-bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
+
+class WzConnectionProvider;
+WzConnectionProvider* NET_getLobbyConnectionProvider();
+bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
 bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 
