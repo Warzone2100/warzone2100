@@ -3602,7 +3602,7 @@ static net::result<void> ignoreExpectedResultValue(const net::result<T>& res)
 	return res.has_value() ? net::result<void>{} : tl::make_unexpected(res.error());
 }
 
-void LobbyServerConnectionHandler::ensureInitialized()
+WzConnectionProvider* NET_getLobbyConnectionProvider()
 {
 	// The only supported backend type for talking with lobby server at the moment.
 	constexpr auto PROVIDER_TYPE = ConnectionProviderType::TCP_DIRECT;
@@ -3612,10 +3612,17 @@ void LobbyServerConnectionHandler::ensureInitialized()
 	{
 		cpr.Register(PROVIDER_TYPE);
 	}
-	connProvider = &cpr.Get(ConnectionProviderType::TCP_DIRECT);
+	WzConnectionProvider* connProvider = &cpr.Get(ConnectionProviderType::TCP_DIRECT);
 	connProvider->initialize();
 
 	PendingWritesManagerMap::instance().get(*connProvider).initialize(*connProvider);
+
+	return connProvider;
+}
+
+void LobbyServerConnectionHandler::ensureInitialized()
+{
+	connProvider = NET_getLobbyConnectionProvider();
 }
 
 bool LobbyServerConnectionHandler::connect()
@@ -4973,17 +4980,10 @@ bool NEThaltJoining()
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
+bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
 {
 	debug(LOG_NET, "Looking for games...");
 
-	if (!NetPlay.bComms)
-	{
-		debug(LOG_ERROR, "Likely missing NETinit() - this won't return any results");
-		return false;
-	}
-	lobbyConnectionHandler.ensureInitialized();
-	auto* connProvider = lobbyConnectionHandler.connectionProvider();
 	ASSERT_OR_RETURN(false, connProvider != nullptr, "Lobby-specific connection provider is null!");
 	const auto hostsResult = connProvider->resolveHost(masterserver_name, masterserver_port);
 	if (!hostsResult.has_value())
@@ -5037,7 +5037,7 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	{
 		// mark it invalid
 		sock->close();
-		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		debug(LOG_INFO, "Failed to get a lobby response!");
 
 		// treat as fatal error
 		return false;
@@ -5119,12 +5119,8 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 	size_t gamecount = 0;
 	results.clear();
 
-	if (lobby_disabled)
-	{
-		return true;
-	}
-
-	bool success = NETenumerateGames([&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
+	auto* connProvider = NET_getLobbyConnectionProvider();
+	bool success = NETenumerateGames(connProvider, [&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
 		if (gamecount++ < startingIndex)
 		{
 			// skip this item, continue
@@ -5151,7 +5147,8 @@ bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
 {
 	bool foundMatch = false;
 	memset(&output, 0x00, sizeof(output));
-	NETenumerateGames([&foundMatch, &output, gameId](const GAMESTRUCT &lobbyGame) -> bool {
+	auto* connProvider = NET_getLobbyConnectionProvider();
+	NETenumerateGames(connProvider, [&foundMatch, &output, gameId](const GAMESTRUCT &lobbyGame) -> bool {
 		if (lobbyGame.gameId != gameId)
 		{
 			// not a match - continue enumerating
