@@ -735,6 +735,13 @@ bool loadBrainStats(WzConfig &ini)
 			psStats->shield.shieldTileDistance.push_back(v.get<int>());
 		}
 
+		auto expTileDistance = ini.json("expTileDistance");
+		ASSERT(expTileDistance.is_array(), "expTileDistance is not an array");
+		for (const auto& v : expTileDistance)
+		{
+			psStats->expTileDistance.push_back(v.get<int>());
+		}
+
 		auto rankNames = ini.json("ranks");
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)

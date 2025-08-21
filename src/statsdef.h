@@ -486,6 +486,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 		int maxDroidsMult = 0;   ///< maximum number of controlled droids multiplied by level
 	} upgrade[MAX_PLAYERS], base;
 	std::vector<std::string> rankNames;
+	std::vector<int> expTileDistance;
 	struct
 	{
 		int initialShieldPointsPercent = 0;

@@ -1048,7 +1048,7 @@ void droidUpdate(DROID *psDroid)
 }
 
 /* Check if droid is within commander's range */
-static inline bool droidWithinCommanderRange(const DROID *psDroid)
+static inline bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 {
 	if (psDroid->droidType == DROID_COMMAND)
 	{
@@ -1057,15 +1057,16 @@ static inline bool droidWithinCommanderRange(const DROID *psDroid)
 
 	ASSERT_OR_RETURN(false, psDroid->psGroup && psDroid->psGroup->psCommander, "Droid group or commander is NULL");
 
+	const auto &distArray = shield ? psDroid->getBrainStats()->shield.shieldTileDistance : psDroid->getBrainStats()->expTileDistance;
+
 	auto level = getDroidLevel(psDroid->psGroup->psCommander);
-	if (level >= psDroid->getBrainStats()->shield.shieldTileDistance.size())
+	if (level >= distArray.size())
 	{
 		return false;
 	}
 
 	auto sqDist = droidSqDist(psDroid, psDroid->psGroup->psCommander);
-	const auto &maxTiles = psDroid->getBrainStats()->shield.shieldTileDistance[level];
-	auto maxSqDist = TILE_WIDTH * TILE_WIDTH * maxTiles * maxTiles;
+	auto maxSqDist = TILE_WIDTH * TILE_WIDTH * distArray[level] * distArray[level];
 
 	return sqDist <= maxSqDist;
 }
@@ -1085,7 +1086,7 @@ void droidUpdateShields(DROID *psDroid)
 			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
 				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
 				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid) &&
-				droidWithinCommanderRange(psDroid))
+				droidWithinCommanderRange(psDroid, true))
 			{
 				auto availableShieldPoints = droidGetMaxShieldPoints(psDroid) - psDroid->shieldPoints;
 
@@ -2650,7 +2651,9 @@ void giveExperienceForSquish(DROID *psDroid)
 	{
 		const uint32_t expGain = std::max(65536 / 2, 65536 * getExpGain(psDroid->player) / 100);
 		droidIncreaseExperience(psDroid, expGain);
-		cmdDroidUpdateExperience(psDroid, expGain);
+		if (droidWithinCommanderRange(psDroid, false)) {
+			cmdDroidUpdateExperience(psDroid, expGain);
+		}
 	}
 }
 
