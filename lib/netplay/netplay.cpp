@@ -3582,15 +3582,6 @@ bool readGameStructsList(IClientConnection& sock, unsigned int timeout, const st
 			strncpy(tmpGame.desc.host, textAddr.data(), sizeof(tmpGame.desc.host) - 1);
 		}
 
-		uint32_t Vmgr = (tmpGame.future4 & 0xFFFF0000) >> 16;
-		uint32_t Vmnr = (tmpGame.future4 & 0x0000FFFF);
-
-		if (NETisGreaterVersion(Vmgr, Vmnr))
-		{
-			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
-			NetPlay.HaveUpgrade = true;
-		}
-
 		if (tmpGame.desc.dwSize != 0)
 		{
 			if (!handleEnumerateGameFunc(tmpGame))
