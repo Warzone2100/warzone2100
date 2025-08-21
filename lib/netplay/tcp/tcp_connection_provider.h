@@ -70,6 +70,7 @@ public:
 
 private:
 
+	bool initialized_ = false;
 	std::unique_ptr<IAddressResolver> addressResolver_;
 };
 
