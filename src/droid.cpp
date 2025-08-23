@@ -1071,7 +1071,7 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 		return false;
 	}
 
-	auto sqDist = droidSqDist(psDroid, psDroid->psGroup->psCommander);
+	auto sqDist = objPosDiffSq(psDroid, psDroid->psGroup->psCommander);
 	auto maxSqDist = TILE_WIDTH * TILE_WIDTH * distArray[level] * distArray[level];
 
 	return sqDist <= maxSqDist;
