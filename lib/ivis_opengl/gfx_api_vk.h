@@ -789,7 +789,7 @@ private:
 	bool canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const;
 
 	// pickPhysicalDevice();
-	void getQueueFamiliesInfo();
+	bool getQueueFamiliesInfo();
 	bool createLogicalDevice();
 	bool createAllocator();
 	void getQueues();
