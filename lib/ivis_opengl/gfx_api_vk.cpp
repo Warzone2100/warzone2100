@@ -4925,7 +4925,11 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		debug(LOG_INFO, "Output_SurfaceInformation failed: %s", e.what());
 	}
 
-	getQueueFamiliesInfo();
+	if (!getQueueFamiliesInfo())
+	{
+		debug(LOG_ERROR, "getQueueFamiliesInfo() failed");
+		return false;
+	}
 
 	if (!createLogicalDevice())
 	{
@@ -5102,20 +5106,28 @@ bool VkRoot::createSurface()
 	return true;
 }
 
-void VkRoot::getQueueFamiliesInfo()
+bool VkRoot::getQueueFamiliesInfo()
 {
 	ASSERT(physicalDevice, "Physical device is null");
 	ASSERT(surface, "Surface is null");
 
 	queueFamilyIndices = findQueueFamilies(physicalDevice, surface, vkDynLoader);
-	ASSERT_OR_RETURN(, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
+	ASSERT_OR_RETURN(false, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
 
 	// check for optional features of queue family
 	const auto queuesFamilies = physicalDevice.getQueueFamilyProperties(vkDynLoader);
 	uint32_t graphicsFamilyIdx = queueFamilyIndices.graphicsFamily.value();
 	queueSupportsTimestamps = false;
-	ASSERT_OR_RETURN(, graphicsFamilyIdx < queuesFamilies.size(), "Failed to determine queue (%" PRIu32")'s timestampValidBits", graphicsFamilyIdx);
-	queueSupportsTimestamps = (queuesFamilies[graphicsFamilyIdx].timestampValidBits > 0);
+	if (graphicsFamilyIdx < queuesFamilies.size())
+	{
+		queueSupportsTimestamps = (queuesFamilies[graphicsFamilyIdx].timestampValidBits > 0);
+	}
+	else
+	{
+		debug(LOG_INFO, "Failed to determine queue (%" PRIu32")'s timestampValidBits", graphicsFamilyIdx);
+	}
+
+	return true;
 }
 
 bool VkRoot::createLogicalDevice()
@@ -5123,7 +5135,7 @@ bool VkRoot::createLogicalDevice()
 	ASSERT(physicalDevice, "Physical device is null");
 	ASSERT(surface, "Surface is null");
 
-	ASSERT(queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
+	ASSERT_OR_RETURN(false, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
 
 	// determine extensions to use
 	enabledDeviceExtensions = deviceExtensions;
