@@ -1050,7 +1050,7 @@ void droidUpdate(DROID *psDroid)
 /* Check if droid is within commander's range */
 bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 {
-	// expTileDistance is disabled for campaign
+	// expRange is disabled for campaign
 	if (!shield && !bMultiPlayer)
 	{
 		return true;
@@ -1063,16 +1063,16 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 
 	ASSERT_OR_RETURN(false, psDroid->psGroup && psDroid->psGroup->psCommander, "Droid group or commander is NULL");
 
-	const auto &distArray = shield ? psDroid->getBrainStats()->shield.shieldTileDistance : psDroid->getBrainStats()->expTileDistance;
+	const auto &rangeArray = shield ? psDroid->getBrainStats()->shield.shieldRange : psDroid->getBrainStats()->expRange;
 
 	auto level = getDroidLevel(psDroid->psGroup->psCommander);
-	if (level >= distArray.size())
+	if (level >= rangeArray.size())
 	{
 		return false;
 	}
 
 	auto sqDist = objPosDiffSq(psDroid, psDroid->psGroup->psCommander);
-	auto maxSqDist = TILE_WIDTH * TILE_WIDTH * distArray[level] * distArray[level];
+	auto maxSqDist = rangeArray[level] * rangeArray[level];
 
 	return sqDist <= maxSqDist;
 }
