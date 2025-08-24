@@ -813,7 +813,7 @@ void loadMapPreview(bool hideInterface)
 
 	std::unique_ptr<WzMap::LoggingProtocol> generatePreviewLogger(new WzMapDebugLogger());
 	auto mapPreviewResult = WzMap::generate2DMapPreview(*data, previewColorScheme, WzMap::MapStatsConfiguration(WzMap::MapType::SKIRMISH), generatePreviewLogger.get());
-	if (!mapPreviewResult)
+	if (!mapPreviewResult || mapPreviewResult->width == 0 || mapPreviewResult->height == 0)
 	{
 		// Failed to generate map preview
 		debug(LOG_ERROR, "Failed to generate map preview for: %s", psLevel->pName.c_str());
