@@ -101,6 +101,7 @@
 #include "version.h"
 #include "hci/teamstrategy.h"
 #include "screens/guidescreen.h"
+#include "titleui/widgets/gamebrowserform.h"
 #include "wzapi.h"
 
 #include "wzphysfszipioprovider.h"
@@ -1164,6 +1165,7 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
+	shutdownLobbyBrowserFetches();
 	NETshutdown();		// MUST come after widgShutDown (as widget screens might have connections, etc)
 	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
