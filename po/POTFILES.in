@@ -535,7 +535,7 @@ src/terrain.cpp
 src/text.cpp
 src/texture.cpp
 src/titleui/campaign.cpp
-src/titleui/gamefind.cpp
+src/titleui/gamebrowser.cpp
 src/titleui/msgbox.cpp
 src/titleui/musicmanagertitleui.cpp
 src/titleui/old.cpp
@@ -552,11 +552,13 @@ src/titleui/titleui.cpp
 src/titleui/widgets/advcheckbox.cpp
 src/titleui/widgets/blindwaitingroom.cpp
 src/titleui/widgets/frontendimagebutton.cpp
+src/titleui/widgets/gamebrowserform.cpp
 src/titleui/widgets/infobutton.cpp
 src/titleui/widgets/lobbyplayerrow.cpp
 src/titleui/widgets/multilobbyoptions.cpp
 src/titleui/widgets/optionsform.cpp
 src/titleui/widgets/starthostingbutton.cpp
+src/titleui/widgets/titleformwrapper.cpp
 src/transporter.cpp
 src/updatemanager.cpp
 src/urlhelpers.cpp

@@ -38,6 +38,7 @@
 #include "../warzoneconfig.h"
 #include "../frend.h"
 #include "lib/widget/checkbox.h"
+#include "gamebrowser.h"
 
 static std::string serverName;
 
@@ -108,7 +109,7 @@ TITLECODE WzProtocolTitleUI::run()
 		bMultiMessages = false;
 		break;
 	case CON_TYPESID_START+0: // Lobby button
-		changeTitleUI(std::make_shared<WzGameFindTitleUI>());
+		changeTitleUI(std::make_shared<WzGameBrowserTitleUI>(wzTitleUICurrent));
 		break;
 	case CON_TYPESID_START+1: // IP button
 		openIPDialog();
