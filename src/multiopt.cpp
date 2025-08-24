@@ -755,6 +755,8 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 	}
 
 	// Otherwise, output changes for each changed player
+	std::vector<int> playerIdxFreechatEnabled;
+	std::vector<int> playerIdxFreechatDisabled;
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
@@ -775,15 +777,41 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 			if (ingame.hostChatPermissions[i])
 			{
 				// Host enabled free chat for player
-				auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(i));
-				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				playerIdxFreechatEnabled.push_back(i);
 			}
 			else
 			{
 				// Host disabled free chat for player
-				auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(i));
-				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				playerIdxFreechatDisabled.push_back(i);
 			}
+		}
+	}
+
+	if (!playerIdxFreechatEnabled.empty())
+	{
+		if (playerIdxFreechatEnabled.size() == 1)
+		{
+			auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(playerIdxFreechatEnabled[0]));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			auto msg = astringf(_("The host has enabled free chat for %d players"), static_cast<int>(playerIdxFreechatEnabled.size()));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	   }
+	}
+
+	if (!playerIdxFreechatDisabled.empty())
+	{
+		if (playerIdxFreechatDisabled.size() == 1)
+		{
+			auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(playerIdxFreechatDisabled[0]));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			auto msg = astringf(_("The host has muted free chat for %d players"), static_cast<int>(playerIdxFreechatDisabled.size()));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
 }
