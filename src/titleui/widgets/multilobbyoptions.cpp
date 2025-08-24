@@ -1036,6 +1036,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 			if (NetPlay.isHost)
 			{
 				sendOptions();
+
+				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1061,6 +1064,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 			if (NetPlay.isHost)
 			{
 				sendOptions();
+
+				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1087,6 +1093,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 			if (NetPlay.isHost)
 			{
 				sendOptions();
+
+				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1113,6 +1122,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				if (NetPlay.isHost)
 				{
 					sendOptions();
+
+					NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+					NETregisterServer(WZ_SERVER_UPDATE);
 				}
 			}
 		});

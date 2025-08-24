@@ -174,7 +174,10 @@ static_assert(MaxMsgSize <= UINT16_MAX, "NetMessage/NetMessageBuilder encodes me
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 {
 	int32_t dwSize;
-	int32_t dwFlags;
+	uint8_t alliances;
+	uint8_t techLevel;
+	uint8_t powerLevel;
+	uint8_t basesLevel;
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
@@ -457,7 +460,8 @@ class IConnectionPollGroup;
 
 bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char* playername, NETQUEUE joiningQUEUEInfo, IClientConnection** client_joining_socket, IConnectionPollGroup** client_joining_socket_set);
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
-                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
+                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs,
+                 uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 
@@ -488,6 +492,7 @@ void NET_InitPlayers(bool initTeams = false, bool initSpectator = false);
 
 uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
+void NETsetLobbyConfigFlagsFields(uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
 std::vector<uint8_t> NET_getHumanPlayers(void);
 
 const std::vector<WZFile>& NET_getDownloadingWzFiles();
