@@ -5965,6 +5965,9 @@ void multiLobbyRandomizeOptions()
 	}
 
 	refreshMultiplayerOptionsTitleUIIfActive();
+
+	NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+	NETregisterServer(WZ_SERVER_UPDATE);
 }
 
 void displayLobbyDisabledNotification()
@@ -6333,6 +6336,8 @@ public:
 		resetReadyStatus(false);
 		sendOptions();
 		refreshMultiplayerOptionsTitleUIIfActive(); //refresh to see the proper tech level in the map name
+		NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+		NETregisterServer(WZ_SERVER_UPDATE);
 		return true;
 	}
 	virtual bool changeAlliances(uint8_t allianceValue) override
@@ -6349,6 +6354,8 @@ public:
 		netPlayersUpdated = true;
 		sendOptions();
 		refreshMultiplayerOptionsTitleUIIfActive(); //refresh to see the proper tech level in the map name
+		NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+		NETregisterServer(WZ_SERVER_UPDATE);
 		return true;
 	}
 	virtual bool changeScavengers(uint8_t scavsValue) override

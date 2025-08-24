@@ -1327,6 +1327,11 @@ static net::result<void> NETsendGAMESTRUCT(IClientConnection* sock, const GAMEST
 		buffer += sizeof(swapped);
 	};
 
+	auto push8 = [&](uint8_t value) {
+		memcpy(buffer, &value, sizeof(value));
+		buffer += sizeof(value);
+	};
+
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
 	push32(ourgamestruct->GAMESTRUCT_VERSION);
@@ -1337,7 +1342,12 @@ static net::result<void> NETsendGAMESTRUCT(IClientConnection* sock, const GAMEST
 
 	// Copy 32bit large big endian numbers
 	push32(ourgamestruct->desc.dwSize);
-	push32(ourgamestruct->desc.dwFlags);
+
+	// Copy various bytes
+	push8(ourgamestruct->desc.alliances);
+	push8(ourgamestruct->desc.techLevel);
+	push8(ourgamestruct->desc.powerLevel);
+	push8(ourgamestruct->desc.basesLevel);
 
 	// Copy yet another string
 	strlcpy(buffer, ourgamestruct->desc.host, sizeof(ourgamestruct->desc.host));
@@ -1455,6 +1465,13 @@ static bool NETrecvGAMESTRUCT(IClientConnection& sock, GAMESTRUCT *ourgamestruct
 		return value;
 	};
 
+	auto pop8 = [&]() -> uint8_t {
+		uint8_t value = 0;
+		memcpy(&value, buffer, sizeof(value));
+		buffer += sizeof(value);
+		return value;
+	};
+
 	// Read a GAMESTRUCT from the connection
 	auto readResult = sock.readAll(buf, sizeof(buf), NET_TIMEOUT_DELAY);
 	if (!readResult.has_value())
@@ -1481,7 +1498,12 @@ static bool NETrecvGAMESTRUCT(IClientConnection& sock, GAMESTRUCT *ourgamestruct
 
 	// Copy 32bit large big endian numbers
 	ourgamestruct->desc.dwSize = pop32();
-	ourgamestruct->desc.dwFlags = pop32();
+
+	// Copy various bytes
+	ourgamestruct->desc.alliances = pop8();
+	ourgamestruct->desc.techLevel = pop8();
+	ourgamestruct->desc.powerLevel = pop8();
+	ourgamestruct->desc.basesLevel = pop8();
 
 	// Copy yet another string
 	sstrcpy(ourgamestruct->desc.host, buffer);
@@ -3940,6 +3962,14 @@ void NETfixPlayerCount()
 
 }
 
+void NETsetLobbyConfigFlagsFields(uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel)
+{
+	gamestruct.desc.alliances = alliancesType;
+	gamestruct.desc.techLevel = techLevel;
+	gamestruct.desc.powerLevel = powerLevel;
+	gamestruct.desc.basesLevel = basesLevel;
+}
+
 static void NETaddSessionBanBadIP(const std::string& badIP)
 {
 	if (isLoopbackIP(badIP.c_str()))
@@ -4741,7 +4771,7 @@ namespace
 //
 // If `extPort == 0`, then `gamestruct.hostPort` will be filled with the default value from the configuration file,
 // otherwise, it will be set to `extPort`.
-void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const std::string& externalIp, uint16_t extPort, bool spectatorHost, uint32_t plyrs, uint32_t gameType, uint32_t two, uint32_t blindMode, uint32_t four)
+void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const std::string& externalIp, uint16_t extPort, bool spectatorHost, uint32_t plyrs, uint32_t gameType, uint32_t two, uint32_t blindMode, uint32_t four, uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel)
 {
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
@@ -4758,7 +4788,10 @@ void SetupGameStructInfo(const char* SessionName, const char* PlayerName, const 
 	}
 	gamestruct.desc.dwCurrentPlayers = (!spectatorHost) ? 1 : 0;
 	gamestruct.desc.dwMaxPlayers = plyrs;
-	gamestruct.desc.dwFlags = 0;
+	gamestruct.desc.alliances = alliancesType;
+	gamestruct.desc.techLevel = techLevel;
+	gamestruct.desc.powerLevel = powerLevel;
+	gamestruct.desc.basesLevel = basesLevel;
 	gamestruct.desc.dwUserFlags[0] = gameType;
 	gamestruct.desc.dwUserFlags[1] = two;
 	gamestruct.desc.dwUserFlags[2] = blindMode;
@@ -4816,7 +4849,8 @@ static void NETEnableAllowJoining(const std::string& externalIp, uint16_t extPor
 
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost,
                  uint32_t gameType, uint32_t two, uint32_t blindMode, uint32_t four,
-                 UDWORD plyrs)	// # of players.
+                 UDWORD plyrs,	// # of players
+                 uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel)
 {
 	debug(LOG_NET, "NEThostGame(%s, %s, %" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %u)", SessionName, PlayerName,
 		  gameType, two, blindMode, four, plyrs);
@@ -4916,20 +4950,20 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 		// Do not allow others to join and delay announcing the game session to the lobby server
 		// until we manage to setup (successfully or not) the port mapping rule for the `gameserver_port`.
 		PortMappingManager::instance().attach_callback(ipv4MappingRequest,
-			[SessionName, spectatorHost, plyrs, gameType, two, blindMode, four, PlayerName](std::string externalIp, uint16_t extPort) // success callback
+			[SessionName, spectatorHost, plyrs, gameType, two, blindMode, four, PlayerName, alliancesType, techLevel, powerLevel, basesLevel](std::string externalIp, uint16_t extPort) // success callback
 		{
 			// Setup gamestruct with the external ip + port combination received from the LibPlum.
-			SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, blindMode, four);
+			SetupGameStructInfo(SessionName, PlayerName, externalIp, extPort, spectatorHost, plyrs, gameType, two, blindMode, four, alliancesType, techLevel, powerLevel, basesLevel);
 			// Only allow joining the game once the server has successfully discovered it's external IP + port combination.
 			//
 			// Once this is true, we are able to connect to the lobby server and announce to other players that
 			// this game session is available to join to.
 			NETEnableAllowJoining(externalIp, extPort);
-		}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, blindMode, four](PortMappingDiscoveryStatus /*status*/) // failure callback
+		}, [SessionName, PlayerName, spectatorHost, plyrs, gameType, two, blindMode, four, alliancesType, techLevel, powerLevel, basesLevel](PortMappingDiscoveryStatus /*status*/) // failure callback
 		{
 			// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 			// that others will still be able to connect to us.
-			SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, blindMode, four);
+			SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, blindMode, four, alliancesType, techLevel, powerLevel, basesLevel);
 			NETEnableAllowJoining("", gameserver_port);
 		});
 	}
@@ -4939,7 +4973,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectator
 
 		// Allow joining with the default gameserver host + port combination and proceed as usual in the hope
 		// that others will still be able to connect to us.
-		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, blindMode, four);
+		SetupGameStructInfo(SessionName, PlayerName, std::string(), 0, spectatorHost, plyrs, gameType, two, blindMode, four, alliancesType, techLevel, powerLevel, basesLevel);
 		NETEnableAllowJoining("", gameserver_port);
 	}
 
