@@ -3230,6 +3230,11 @@ static bool recvPlayerSlotTypeRequestAndPop(WzMultiplayerOptionsTitleUI& titleUI
 
 	ASSERT_HOST_ONLY(return false);
 
+	if (locked.spectators)
+	{
+		return false;
+	}
+
 	const char *pPlayerName = getPlayerName(playerIndex, true);
 	std::string playerName = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(playerIndex) + "]");
 
@@ -5491,6 +5496,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		locked.scavengers = ini.value("scavengers", challengeActive).toBool();
 		locked.position = ini.value("position", challengeActive).toBool();
 		locked.bases = ini.value("bases", challengeActive).toBool();
+		locked.spectators = ini.value("spectators", challengeActive).toBool();
 	}
 	ini.endGroup();
 
