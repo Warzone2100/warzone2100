@@ -88,6 +88,11 @@ void WzFrontendImageButton::setCustomImageColor(optional<PIELIGHT> color)
 	customImgColor = color;
 }
 
+void WzFrontendImageButton::setBackgroundColor(optional<PIELIGHT> color)
+{
+	customBackgroundColor = color;
+}
+
 void WzFrontendImageButton::setString(WzString string)
 {
 	W_BUTTON::setString(string);
@@ -143,6 +148,15 @@ void WzFrontendImageButton::display(int xOffset, int yOffset)
 	if (isDisabled)
 	{
 		textColor.byte.a = (textColor.byte.a / 2);
+	}
+
+	if (customBackgroundColor.has_value())
+	{
+		int boxX0 = x0;
+		int boxY0 = y0;
+		int boxX1 = boxX0 + width();
+		int boxY1 = boxY0 + height();
+		pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY1, customBackgroundColor.value());
 	}
 
 	switch (borderDrawMode)
