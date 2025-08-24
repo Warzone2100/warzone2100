@@ -46,6 +46,7 @@ public:
 
 	// Set whether the row background highlights on mouse-over
 	void setHighlightsOnMouseOver(bool value);
+	void setHighlightColor(PIELIGHT newHighlightColor);
 
 	// Get the total idealWidth() returned by all column widgets in this row (does not include padding)
 	int32_t getColumnTotalContentIdealWidth();
@@ -80,7 +81,9 @@ private:
 	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
 	optional<PIELIGHT> borderColor = nullopt;
 	optional<PIELIGHT> backgroundColor = nullopt;
+	PIELIGHT highlightColor;
 	PIELIGHT disabledColor;
+	int32_t maxDisplayedColumnX1 = 0;
 };
 
 class TableHeader; // forward-declare
