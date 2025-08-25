@@ -729,17 +729,23 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->shield.shieldPointsPerStep = ini.value("shieldPointsPerStep").toInt();
 
 		auto shieldRange = ini.json("shieldRange");
-		ASSERT(shieldRange.is_array(), "shieldRange is not an array");
-		for (const auto& v : shieldRange)
+		if (!shieldRange.is_null())
 		{
-			psStats->shield.shieldRange.push_back(v.get<int>());
+			ASSERT(shieldRange.is_array(), "shieldRange is not an array");
+			for (const auto& v : shieldRange)
+			{
+				psStats->shield.shieldRange.push_back(v.get<int>());
+			}
 		}
 
 		auto expRange = ini.json("expRange");
-		ASSERT(expRange.is_array(), "expRange is not an array");
-		for (const auto& v : expRange)
+		if (!expRange.is_null())
 		{
-			psStats->expRange.push_back(v.get<int>());
+			ASSERT(expRange.is_array(), "expRange is not an array");
+			for (const auto& v : expRange)
+			{
+				psStats->expRange.push_back(v.get<int>());
+			}
 		}
 
 		auto rankNames = ini.json("ranks");
