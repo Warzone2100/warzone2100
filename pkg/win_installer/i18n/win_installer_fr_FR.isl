@@ -21,7 +21,7 @@ MSSysLibraries=DLLs Microsoft Runtime importantes
 
 ; *** Advanced Options
 
-AdvancedButton=&avancé
+AdvancedButton=&Avancé
 
 ; *** wzadvancedoptionsform.iss:
 
@@ -32,7 +32,7 @@ StandardUpdate=Installation standard (mise à jour)
 StandardUpdateDesc=Mettre à jour les fichiers existants de %1 sur l'ordinateur (recommandé)
 SideBySideInstall=Installation côte à côte
 SideBySideInstallDesc=Installe cette version du jeu en plus des versions déjà existantes, y compris l'installation standard. Les paramètres et sauvegardes seront partagées.
-PortableInstall=Installation "portable"
+PortableInstall=Installation portable
 PortableInstallDesc=Installe le jeu sur une clé USB, un dossier quelconque, etc. en créant un dossier indépendant, incluant les paramètres et les sauvegardes.
 InstallArchitecture=Architecture cible de l'installation :
 
