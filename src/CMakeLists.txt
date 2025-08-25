@@ -156,6 +156,9 @@ if (WZ_PROFILING_NVTX)
 	target_link_libraries(warzone2100 nvtx3-cpp)
 endif()
 
+include(CheckAtomic)
+TARGET_LINK_ATOMICS_IF_NEEDED(warzone2100)
+
 set(_curl_gnutls_thread_safe_fix FALSE)
 if (DEFINED CURL_GNUTLS_REQUIRES_CALLBACKS)
 	if (CURL_GNUTLS_REQUIRES_CALLBACKS STREQUAL "YES")
