@@ -1050,12 +1050,6 @@ void droidUpdate(DROID *psDroid)
 /* Check if droid is within commander's range */
 bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 {
-	// expRange is disabled for campaign
-	if (!shield && !bMultiPlayer)
-	{
-		return true;
-	}
-
 	if (psDroid->droidType == DROID_COMMAND)
 	{
 		return true;
