@@ -2175,6 +2175,16 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 		return false;
 	}
 
+	if (message.sender >= 0)
+	{
+		if (playerSpamMutedUntil(message.sender).has_value())
+		{
+			// discard messages from sender while spam-muted
+			return false;
+		}
+		recordPlayerMessageSent(message.sender);
+	}
+
 	printInGameTextMessage(message);
 	cmdInterfaceLogChatMsg(message, "WZCHATGAM");
 
@@ -2262,6 +2272,16 @@ bool recvSpecInGameTextMessage(NETQUEUE queue)
 	if (isPlayerMuted(message.sender))
 	{
 		return false;
+	}
+
+	if (message.sender >= 0)
+	{
+		if (playerSpamMutedUntil(message.sender).has_value())
+		{
+			// discard messages from sender while spam-muted
+			return false;
+		}
+		recordPlayerMessageSent(message.sender);
 	}
 
 	printInGameTextMessage(message);
