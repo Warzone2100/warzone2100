@@ -66,8 +66,13 @@ constexpr size_t MAX_RECORDED_MESSAGE_TIMES = 200;
 constexpr std::chrono::milliseconds MESSAGE_INTERVAL(5000);
 constexpr std::chrono::milliseconds MESSAGE_THROTTLE_TIMEOUT_INTERVAL(5000);
 
-static optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx)
+optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx)
 {
+	if (playerIdx >= lastQuickChatMessageTimes.size())
+	{
+		return nullopt;
+	}
+
 	if (lastQuickChatMessageTimes[playerIdx].empty())
 	{
 		return nullopt;
@@ -99,7 +104,7 @@ static optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint
 	return nullopt;
 }
 
-static void recordPlayerMessageSent(uint32_t playerIdx)
+void recordPlayerMessageSent(uint32_t playerIdx)
 {
 	if (playerSpamMutedUntil(playerIdx).has_value())
 	{

@@ -7000,11 +7000,16 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				if (message.receive(queue)) {
 
 					bool displayedMessage = false;
-					if (message.sender < 0 || !isPlayerMuted(message.sender))
+					if (message.sender < 0 || (!isPlayerMuted(message.sender) && !playerSpamMutedUntil(message.sender).has_value()))
 					{
 						displayRoomMessage(buildMessage(message.sender, message.text));
 						audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 						displayedMessage = true;
+
+						if (message.sender >= 0)
+						{
+							recordPlayerMessageSent(message.sender);
+						}
 					}
 
 					bool isLobbySlashCommand = false;
@@ -8049,6 +8054,20 @@ void sendRoomSystemMessageToSingleReceiver(char const *text, uint32_t receiver, 
 
 static void sendRoomChatMessage(char const *text, bool skipLocalDisplay)
 {
+	if (NetPlay.bComms)
+	{
+		auto mutedUntil = playerSpamMutedUntil(selectedPlayer);
+		if (mutedUntil.has_value())
+		{
+			auto currentTime = std::chrono::steady_clock::now();
+			auto duration_until_send_allowed = std::chrono::duration_cast<std::chrono::seconds>(mutedUntil.value() - currentTime).count();
+			auto duration_timeout_message = astringf(_("You have sent too many messages in the last few seconds. Please wait and try again."), static_cast<unsigned>(duration_until_send_allowed));
+			addConsoleMessage(duration_timeout_message.c_str(), DEFAULT_JUSTIFY, INFO_MESSAGE, false, static_cast<UDWORD>(std::chrono::duration_cast<std::chrono::milliseconds>(mutedUntil.value() - currentTime).count()));
+			return;
+		}
+		recordPlayerMessageSent(selectedPlayer);
+	}
+
 	NetworkTextMessage message(selectedPlayer, text);
 	if (!skipLocalDisplay)
 	{
