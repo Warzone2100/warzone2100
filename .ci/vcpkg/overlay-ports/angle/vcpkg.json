@@ -28,7 +28,7 @@
   "features": {
     "metal": {
       "description": "Metal support for angle",
-      "supports": "ios, osx"
+      "supports": "osx | ios"
     }
   }
 }
