@@ -217,7 +217,7 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.LagCounter[i]++;
 		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i, true), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 			if (wz_command_interface_enabled()) {
@@ -229,12 +229,12 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			ingame.LagCounter[i] = 0;
 		}
 		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
@@ -301,7 +301,7 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.DesyncCounter[i]++;
 		if (ingame.DesyncCounter[i] >= DesyncAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i), DesyncAutoKickSeconds);
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i, true), DesyncAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 			if (wz_command_interface_enabled()) {
@@ -313,12 +313,12 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 			ingame.DesyncCounter[i] = 0;
 		}
 		else if (ingame.DesyncCounter[i] >= (DesyncAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.DesyncCounter[i] % 2 == 0) { // every 2 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
@@ -2047,19 +2047,32 @@ void NetworkTextMessage::enqueue(NETQUEUE queue)
 	NETend(w);
 }
 
+bool NetworkTextMessage::decode(const NetMessage& message, uint8_t senderIdx)
+{
+	auto r = MessageReader(message);
+	return decode(r, senderIdx);
+}
+
 bool NetworkTextMessage::receive(NETQUEUE queue)
+{
+	auto r = NETbeginDecode(queue, NET_TEXTMSG);
+	return decode(r, queue.index);
+}
+
+bool NetworkTextMessage::decode(MessageReader& r, uint8_t senderIdx)
 {
 	memset(text, 0x0, sizeof(text));
 
-	auto r = NETbeginDecode(queue, NET_TEXTMSG);
+	ASSERT_OR_RETURN(false, NET_TEXTMSG == r.msgType, "Unexpected message type: %" PRIu8, r.msgType);
+
 	NETint32_t(r, sender);
 	NETbool(r, teamSpecific);
 	NETstring(r, text, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
-	if (whosResponsible(sender) != queue.index)
+	if (whosResponsible(sender) != senderIdx)
 	{
-		sender = queue.index;  // Fix corrupted sender.
+		sender = senderIdx;  // Fix corrupted sender.
 	}
 
 	if (sender >= MAX_CONNECTED_PLAYERS || (sender >= 0 && (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN)))
@@ -2162,6 +2175,16 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 		return false;
 	}
 
+	if (message.sender >= 0)
+	{
+		if (playerSpamMutedUntil(message.sender).has_value())
+		{
+			// discard messages from sender while spam-muted
+			return false;
+		}
+		recordPlayerMessageSent(message.sender);
+	}
+
 	printInGameTextMessage(message);
 	cmdInterfaceLogChatMsg(message, "WZCHATGAM");
 
@@ -2207,36 +2230,58 @@ bool recvTextMessageAI(NETQUEUE queue)
 	return true;
 }
 
-bool recvSpecInGameTextMessage(NETQUEUE queue)
+optional<NetworkTextMessage> decodeSpecInGameTextMessage(MessageReader& r, uint8_t senderIdx)
 {
+	ASSERT_OR_RETURN(nullopt, NET_SPECTEXTMSG == r.msgType, "Unexpected message type: %" PRIu8, r.msgType);
+
 	UDWORD	sender;
 	char	newmsg[MAX_CONSOLE_STRING_LENGTH] = {};
 
-	auto r = NETbeginDecode(queue, NET_SPECTEXTMSG);
 	NETuint32_t(r, sender);			//in-game player index ('normal' one)
 	NETstring(r, newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
-	if (whosResponsible(sender) != queue.index)
+	if (whosResponsible(sender) != senderIdx)
 	{
-		sender = queue.index;  // Fix corrupted sender.
+		sender = senderIdx;  // Fix corrupted sender.
 	}
 
 	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
 	{
-		return false;
+		return nullopt;
 	}
 
 	if (!NetPlay.players[selectedPlayer].isSpectator)
 	{
-		return false; // ignore
+		return nullopt; // ignore
 	}
 
-	auto message = NetworkTextMessage(SPECTATOR_MESSAGE, newmsg);
+	return NetworkTextMessage(sender, newmsg);
+}
 
-	if (isPlayerMuted(sender))
+bool recvSpecInGameTextMessage(NETQUEUE queue)
+{
+	auto r = NETbeginDecode(queue, NET_SPECTEXTMSG);
+	auto messageOpt = decodeSpecInGameTextMessage(r, queue.index);
+	if (!messageOpt.has_value())
 	{
 		return false;
+	}
+	auto& message = messageOpt.value();
+
+	if (isPlayerMuted(message.sender))
+	{
+		return false;
+	}
+
+	if (message.sender >= 0)
+	{
+		if (playerSpamMutedUntil(message.sender).has_value())
+		{
+			// discard messages from sender while spam-muted
+			return false;
+		}
+		recordPlayerMessageSent(message.sender);
 	}
 
 	printInGameTextMessage(message);

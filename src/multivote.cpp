@@ -804,7 +804,7 @@ static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 	// there is no "votes" that disallows map change so assume they are all allowing
 	if(newVote == 1) {
 		char msg[128] = {0};
-		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), getPlayerName(player), player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), getPlayerName(player, true), player, static_cast<int>(getLobbyChangeVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
 		sendRoomSystemMessage(msg);
 	}
 }
@@ -839,23 +839,23 @@ static void recvPlayerKickVote(uint32_t voteID, uint32_t sender, uint8_t newVote
 		std::string outputMsg;
 		if (voteToKick)
 		{
-			outputMsg = astringf(_("A player voted FOR kicking: %s"), getPlayerName(it->target_player_id));
+			outputMsg = astringf(_("A player voted FOR kicking: %s"), getPlayerName(it->target_player_id, true));
 			sendInGameSystemMessage(outputMsg.c_str());
-			debug(LOG_INFO, "Player [%" PRIu32 "] %s voted FOR kicking player: %s", sender, getPlayerName(sender), getPlayerName(it->target_player_id));
+			debug(LOG_INFO, "Player [%" PRIu32 "] %s voted FOR kicking player: %s", sender, getPlayerName(sender, true), getPlayerName(it->target_player_id, true));
 		}
 		else
 		{
 			if (newVote == 0)
 			{
-				outputMsg = astringf(_("A player voted AGAINST kicking: %s"), getPlayerName(it->target_player_id));
+				outputMsg = astringf(_("A player voted AGAINST kicking: %s"), getPlayerName(it->target_player_id, true));
 				sendInGameSystemMessage(outputMsg.c_str());
-				debug(LOG_INFO, "Player [%" PRIu32 "] %s voted AGAINST kicking player: %s", sender, getPlayerName(sender), getPlayerName(it->target_player_id));
+				debug(LOG_INFO, "Player [%" PRIu32 "] %s voted AGAINST kicking player: %s", sender, getPlayerName(sender, true), getPlayerName(it->target_player_id, true));
 			}
 			else
 			{
-				outputMsg = astringf(_("A player's client ignored your vote to kick request (too frequent): %s"), getPlayerName(it->target_player_id));
+				outputMsg = astringf(_("A player's client ignored your vote to kick request (too frequent): %s"), getPlayerName(it->target_player_id, true));
 				addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false); // only display to the host
-				debug(LOG_INFO, "Player [%" PRIu32 "] %s ignored vote to kick request for player: %s - (too frequent)", sender, getPlayerName(sender), getPlayerName(it->target_player_id));
+				debug(LOG_INFO, "Player [%" PRIu32 "] %s ignored vote to kick request for player: %s - (too frequent)", sender, getPlayerName(sender, true), getPlayerName(it->target_player_id, true));
 			}
 		}
 	}
@@ -1324,7 +1324,7 @@ static bool handleVoteKickResult(PendingVoteKick& pendingVote)
 
 	if (currentResult.value())
 	{
-		std::string outputMsg = astringf(_("The vote to kick player %s succeeded (sufficient votes in favor) - kicking"), getPlayerName(pendingVote.target_player_id));
+		std::string outputMsg = astringf(_("The vote to kick player %s succeeded (sufficient votes in favor) - kicking"), getPlayerName(pendingVote.target_player_id, true));
 		sendInGameSystemMessage(outputMsg.c_str());
 		std::string logMsg = astringf("kicked %s : %s from the game", getPlayerName(pendingVote.target_player_id), NetPlay.players[pendingVote.target_player_id].IPtextAddress);
 		NETlogEntry(logMsg.c_str(), SYNC_FLAG, pendingVote.target_player_id);
@@ -1334,7 +1334,7 @@ static bool handleVoteKickResult(PendingVoteKick& pendingVote)
 	else
 	{
 		// Vote failed - message all players
-		std::string outputMsg = astringf(_("The vote to kick player %s failed (insufficient votes in favor)"), getPlayerName(pendingVote.target_player_id));
+		std::string outputMsg = astringf(_("The vote to kick player %s failed (insufficient votes in favor)"), getPlayerName(pendingVote.target_player_id, true));
 		sendInGameSystemMessage(outputMsg.c_str());
 	}
 	return true;
@@ -1358,7 +1358,7 @@ void processPendingKickVotes()
 			if (!handleVoteKickResult(*it))
 			{
 				// dismiss the pending vote
-				std::string outputMsg = astringf(_("The vote to kick player %s failed (insufficient votes before timeout)"), getPlayerName(it->target_player_id));
+				std::string outputMsg = astringf(_("The vote to kick player %s failed (insufficient votes before timeout)"), getPlayerName(it->target_player_id, true));
 				sendInGameSystemMessage(outputMsg.c_str());
 				debug(LOG_INFO, "%s", outputMsg.c_str());
 			}
@@ -1390,7 +1390,7 @@ bool startKickVote(uint32_t targetPlayer, optional<uint32_t> requester_player_id
 		else
 		{
 			// message to the requester that player kick vote failed
-			std::string outputMsg = astringf(_("The vote to kick player %s failed"), getPlayerName(targetPlayer));
+			std::string outputMsg = astringf(_("The vote to kick player %s failed"), getPlayerName(targetPlayer, true));
 			addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false);
 			return false;
 		}
@@ -1401,7 +1401,7 @@ bool startKickVote(uint32_t targetPlayer, optional<uint32_t> requester_player_id
 		if (realTime - lastKickVoteForEachPlayer[targetPlayer].value() < MIN_INTERVAL_BETWEEN_PLAYER_KICK_VOTES_MS + 5000) // + extra on the sender side
 		{
 			// Prevent spamming kick votes
-			std::string outputMsg = astringf(_("Cannot request vote to kick player %s yet - please wait a bit longer"), getPlayerName(targetPlayer));
+			std::string outputMsg = astringf(_("Cannot request vote to kick player %s yet - please wait a bit longer"), getPlayerName(targetPlayer, true));
 			addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false);
 			return false;
 		}
@@ -1413,9 +1413,9 @@ bool startKickVote(uint32_t targetPlayer, optional<uint32_t> requester_player_id
 	// Initiate a network vote
 	sendVoteRequest(NetVoteType::KICK_PLAYER, pendingVote.unique_vote_id, pendingVote.target_player_id);
 
-	std::string outputMsg = astringf(_("Starting vote to kick player: %s"), getPlayerName(targetPlayer));
+	std::string outputMsg = astringf(_("Starting vote to kick player: %s"), getPlayerName(targetPlayer, true));
 	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false);
-	debug(LOG_INFO, "Starting vote to kick player: %s", getPlayerName(targetPlayer));
+	debug(LOG_INFO, "Starting vote to kick player: %s", getPlayerName(targetPlayer, true));
 
 	lastKickVoteForEachPlayer[targetPlayer] = realTime;
 	return true;

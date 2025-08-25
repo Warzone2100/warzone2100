@@ -119,9 +119,6 @@ bool multiplayIsStartingGame();
 
 bool sendReadyRequest(UBYTE player, bool bReady);
 
-LOBBY_ERROR_TYPES getLobbyError();
-void setLobbyError(LOBBY_ERROR_TYPES error_type);
-
 /**
  * Updates structure limit flags. Flags indicate which structures are disabled.
  */

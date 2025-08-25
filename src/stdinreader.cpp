@@ -1764,7 +1764,7 @@ void wz_command_interface_output_room_status_json(bool queued)
 		auto lobbyGameId = NET_getCurrentHostedLobbyGameId();
 		if (lobbyGameId != 0)
 		{
-			data["lobbyid"] = lobbyGameId;
+			data["lobbyid"] = std::to_string(lobbyGameId);
 		}
 	}
 	data["map"] = game.map;

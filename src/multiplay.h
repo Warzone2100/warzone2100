@@ -161,7 +161,12 @@ struct NetworkTextMessage
 	NetworkTextMessage(int32_t messageSender, char const *messageText);
 	void enqueue(NETQUEUE queue);
 	bool receive(NETQUEUE queue);
+	bool decode(const NetMessage& message, uint8_t senderIdx);
+private:
+	bool decode(MessageReader& r, uint8_t senderIdx);
 };
+
+optional<NetworkTextMessage> decodeSpecInGameTextMessage(MessageReader& r, uint8_t senderIdx);
 
 enum STRUCTURE_INFO
 {

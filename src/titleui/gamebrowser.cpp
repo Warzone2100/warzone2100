@@ -19,37 +19,33 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** \file
- *  Options Title UI.
+ *  Game Browser Title UI.
  */
 
-#include "optionstitleui.h"
-#include "../frontend.h"
-#include "../multiint.h"
-#include "../hci.h"
-#include "../frend.h"
-#include "../intdisplay.h"
-#include "lib/widget/margin.h"
+#include "gamebrowser.h"
+#include "lib/widget/form.h"
 #include "widgets/titleformwrapper.h"
+#include "widgets/gamebrowserform.h"
 
 // MARK: -
 
-WzOptionsTitleUI::WzOptionsTitleUI(std::shared_ptr<WzTitleUI> parent)
+WzGameBrowserTitleUI::WzGameBrowserTitleUI(std::shared_ptr<WzTitleUI> parent)
 	: parent(parent)
 {
 	screen = W_SCREEN::make();
 }
 
-WzOptionsTitleUI::~WzOptionsTitleUI()
+WzGameBrowserTitleUI::~WzGameBrowserTitleUI()
 {
 	// currently a no-op
 }
 
-void WzOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+void WzGameBrowserTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	screen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
-void WzOptionsTitleUI::start()
+void WzGameBrowserTitleUI::start()
 {
 	if (bAlreadyStarted)
 	{
@@ -60,39 +56,27 @@ void WzOptionsTitleUI::start()
 
 	addBackdrop(screen);
 
-	auto weakSelf = std::weak_ptr<WzOptionsTitleUI>(std::dynamic_pointer_cast<WzOptionsTitleUI>(shared_from_this()));
+	auto weakSelf = std::weak_ptr<WzGameBrowserTitleUI>(std::dynamic_pointer_cast<WzGameBrowserTitleUI>(shared_from_this()));
 
-	auto psQuitButton = std::make_shared<WzMultiButton>();
-	psQuitButton->setGeometry(0, 0, 30, 29);
-	psQuitButton->setTip(P_("menu", "Return"));
-	psQuitButton->imNormal = AtlasImage(FrontImages, IMAGE_RETURN);
-	psQuitButton->imDown = AtlasImage(FrontImages, IMAGE_RETURN_HI);
-	psQuitButton->doHighlight = IMAGE_RETURN_HI;
-	psQuitButton->tc = MAX_PLAYERS;
-	psQuitButton->alpha = 255;
-	psQuitButton->addOnClickHandler([weakSelf](W_BUTTON& button) {
-		widgScheduleTask([weakSelf]() {
-			auto strongSelf = weakSelf.lock();
-			ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent");
-			changeTitleUI(strongSelf->parent); // go back
-		});
+	gameBrowserForm = makeLobbyBrowser([weakSelf](){
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent");
+		changeTitleUI(strongSelf->parent); // go back
 	});
 
-	optionsBrowserForm = createOptionsBrowser(false, Margin(8, 10).wrap(psQuitButton));
-
-	auto newRootForm = makeTitleFormWrapper([](){ return _("OPTIONS"); }, optionsBrowserForm);
+	auto newRootForm = makeTitleFormWrapper([](){ return _("GAMES"); }, gameBrowserForm);
 	newRootForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(0, 0, screenWidth, screenHeight);
 	}));
 	screen->psForm->attach(newRootForm, WIDGET::ChildZPos::Front);
 }
 
-std::shared_ptr<WzTitleUI> WzOptionsTitleUI::getParentTitleUI()
+std::shared_ptr<WzTitleUI> WzGameBrowserTitleUI::getParentTitleUI()
 {
 	return parent;
 }
 
-TITLECODE WzOptionsTitleUI::run()
+TITLECODE WzGameBrowserTitleUI::run()
 {
 	widgRunScreen(screen);
 

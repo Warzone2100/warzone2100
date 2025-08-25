@@ -152,14 +152,17 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (!NetPlay.players[i].isSpectator)
 	{
-		if (alliancesSetTeamsBeforeGame(game.alliance))
+		if (!isBlindSimpleLobby(game.blindMode) || NetPlay.isHost)
 		{
-			ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
-			iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 1, y + 8);
-		}
-		else
-		{
-			// TODO: Maybe display something else here to signify "no team, FFA"
+			if (alliancesSetTeamsBeforeGame(game.alliance))
+			{
+				ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
+				iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 1, y + 8);
+			}
+			else
+			{
+				// TODO: Maybe display something else here to signify "no team, FFA"
+			}
 		}
 	}
 	else

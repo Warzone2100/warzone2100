@@ -24,6 +24,7 @@
 
 #include <unordered_set>
 #include <unordered_map>
+#include <chrono>
 
 #define FOREACH_QUICKCHATMSG(MSG) \
 	/* LOBBY ONLY */ \
@@ -197,3 +198,7 @@ void quickChatInitInGame();
 struct NETQUEUE;
 void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatTargeting targeting, optional<WzQuickChatMessageData> messageData = nullopt);
 bool recvQuickChat(NETQUEUE queue);
+
+// message throttling, spam prevention
+void recordPlayerMessageSent(uint32_t playerIdx);
+optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx);

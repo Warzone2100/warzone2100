@@ -296,7 +296,7 @@ MessageWriter NETbeginEncode(NETQUEUE queue, uint8_t type)
 
 MessageReader NETbeginDecode(NETQUEUE queue, uint8_t type)
 {
-	auto res = MessageReader(queue, receiveQueue(queue)->getMessage());
+	auto res = MessageReader(receiveQueue(queue)->getMessage());
 	assert(type == res.msgType);
 	return res;
 }
