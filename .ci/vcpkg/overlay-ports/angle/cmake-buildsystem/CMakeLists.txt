@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(angle CXX C)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(WebKitCommon-minimal)
 
 set(ANGLE_FRAMEWORK_HEADERS_DIR "${CMAKE_BINARY_DIR}/ANGLE/headers")
@@ -70,10 +70,6 @@ if(NOT BUILD_SHARED_LIBS)
 endif()
 
 find_package(ZLIB REQUIRED)
-
-if(MINGW)
-    include_directories(AFTER SYSTEM "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/wz-mingw-headers>")
-endif()
 
 ##################################################
 
