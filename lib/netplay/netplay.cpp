@@ -2518,6 +2518,64 @@ static inline bool NETFilterMessageWhileSwappingPlayer(uint8_t sender, uint8_t t
 	return false;
 }
 
+static void cmdInterfaceLogChatMsgInternal(const NetworkTextMessage& message, const char* log_prefix, optional<std::string> _senderPublicKeyB64 = nullopt)
+{
+	if (!NetPlay.isHost || !wz_command_interface_enabled() || (NetPlay.hostPlayer < MAX_PLAYER_SLOTS))
+	{
+		return;
+	}
+
+	if (message.sender < 0)
+	{
+		// for now, skip system messages
+		return;
+	}
+
+	ASSERT_OR_RETURN(, message.sender < MAX_CONNECTED_PLAYERS, "Invalid message.sender (%d)", message.sender);
+
+	const auto& identity = getOutputPlayerIdentity(message.sender);
+	std::string senderPublicKeyB64 = _senderPublicKeyB64.value_or(base64Encode(identity.toBytes(EcKey::Public)));
+	std::string senderVerifiedStatus = (ingame.VerifiedIdentity[message.sender]) ? "V" : "?";
+	std::string sendername = getPlayerName(message.sender);
+	std::string sendername64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
+	std::string messagetext = message.text;
+	std::string messagetext64 = base64Encode(std::vector<unsigned char>(messagetext.begin(), messagetext.end()));
+	wz_command_interface_output("%s: %i %s %s %s %s %s\n", log_prefix, message.sender, senderPublicKeyB64.c_str(), sendername64.c_str(), messagetext64.c_str(), senderVerifiedStatus.c_str(), NetPlay.players[message.sender].IPtextAddress);
+}
+
+// receiver may be a player index or NET_ALL_PLAYERS
+static void LogChatMsg(uint8_t msgType, const NetMessage& message, uint8_t senderIdx, uint8_t receiver)
+{
+	if (!wz_command_interface_enabled())
+	{
+		return;
+	}
+
+	switch (msgType)
+	{
+		case NET_TEXTMSG:
+		{
+			NetworkTextMessage textMsg;
+			if (textMsg.decode(message, senderIdx))
+			{
+				// Process & log
+				cmdInterfaceLogChatMsgInternal(textMsg, "WZCHAT");
+			}
+			break;
+		}
+		case NET_SPECTEXTMSG:
+		{
+			auto r = MessageReader(message);
+			if (auto specMsg = decodeSpecInGameTextMessage(r, senderIdx))
+			{
+				// Process & log
+				cmdInterfaceLogChatMsgInternal(specMsg.value(), "WZCHAT");
+			}
+			break;
+		}
+	}
+}
+
 ///////////////////////////////////////////////////////////////////////////
 // Check if a message is a system message
 static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
@@ -2621,14 +2679,18 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				}
 
 				// Certain messages should be filtered due to hostChatPermissions
-				if ((msgType == NET_TEXTMSG || msgType == NET_SPECTEXTMSG || msgType == NET_AITEXTMSG)
-					&& !ingame.hostChatPermissions[sender])
+				if (msgType == NET_TEXTMSG || msgType == NET_SPECTEXTMSG || msgType == NET_AITEXTMSG)
 				{
-					// Only allow messages direct to host in this case! (Carve-out to allow /hostmsg commands...)
-					if (receiver != NetPlay.hostPlayer)
+					if (!ingame.hostChatPermissions[sender])
 					{
-						break;
+						// Only allow messages direct to host in this case! (Carve-out to allow /hostmsg commands...)
+						if (receiver != NetPlay.hostPlayer)
+						{
+							break;
+						}
 					}
+
+					LogChatMsg(msgType, *message, sender, receiver);
 				}
 
 				size_t rawLen = message->rawData().size();
