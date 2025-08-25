@@ -2457,7 +2457,22 @@ static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 /* An auxiliary function for std::stable_sort in placeDroid */
 static bool comparePlacementPoints(Vector2i a, Vector2i b)
 {
-	return abs(a.x) + abs(a.y) < abs(b.x) + abs(b.y);
+	// Compare by Manhattan distance first
+	int dist_a = abs(a.x) + abs(a.y);
+	int dist_b = abs(b.x) + abs(b.y);
+
+	if (dist_a != dist_b)
+	{
+		return dist_a < dist_b; // Sort by Manhattan distance
+	}
+	else
+	{
+		if (a.x != b.x)
+		{
+			return a.x < b.x; // Compare x-coordinates
+		}
+		return a.y < b.y; // Compare y-coordinates
+	}
 }
 
 /* Find a location near to a structure to start the droid of */
