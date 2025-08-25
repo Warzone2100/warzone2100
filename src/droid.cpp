@@ -1066,9 +1066,14 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 	const auto &rangeArray = shield ? psDroid->getBrainStats()->shield.shieldRange : psDroid->getBrainStats()->expRange;
 
 	auto level = getDroidLevel(psDroid->psGroup->psCommander);
-	if (level >= rangeArray.size())
+	auto rangeArraySize = rangeArray.size();
+	if (level >= rangeArraySize)
 	{
-		return false;
+		if (rangeArraySize == 0)
+		{
+			return true; // default to true (matches old behavior, which didn't have limits for expRange, etc)
+		}
+		level = rangeArraySize - 1; // use the last listed value, for the last listed level in the array
 	}
 
 	auto sqDist = objPosDiffSq(psDroid, psDroid->psGroup->psCommander);
