@@ -738,13 +738,13 @@ bool loadBrainStats(WzConfig &ini)
 			}
 		}
 
-		auto expRange = ini.json("expRange");
-		if (!expRange.is_null())
+		auto cmdExpRange = ini.json("cmdExpRange");
+		if (!cmdExpRange.is_null())
 		{
-			ASSERT(expRange.is_array(), "expRange is not an array");
-			for (const auto& v : expRange)
+			ASSERT(cmdExpRange.is_array(), "cmdExpRange is not an array");
+			for (const auto& v : cmdExpRange)
 			{
-				psStats->expRange.push_back(v.get<int>());
+				psStats->cmdExpRange.push_back(v.get<int>());
 			}
 		}
 
