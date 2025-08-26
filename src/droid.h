@@ -118,6 +118,9 @@ int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, W
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
 
+/* Check if droid is within commander's range */
+bool droidWithinCommanderRange(const DROID *psDroid, bool shield);
+
 /* Update droid shields. */
 void droidUpdateShields(DROID *psDroid);
 

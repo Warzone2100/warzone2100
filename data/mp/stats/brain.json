@@ -9,6 +9,7 @@
 		"name": "Command Turret",
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 12, 24, 36, 48, 60, 72, 84, 96 ],
+		"cmdExpRange": [],
 		"turret": "CommandTurret1",
 		"initialShieldPointsPercent": 25,
 		"additiveShieldPointsPercent": 10,
@@ -16,13 +17,15 @@
 		"shieldRegenTimeDec": 2,
 		"initialShieldInterruptRegenTime": 2000,
 		"shieldInterruptRegenTimeDec": 100,
-		"shieldPointsPerStep": 4
+		"shieldPointsPerStep": 4,
+		"shieldRange": []
 	},
 	"ZNULLBRAIN": {
 		"id": "ZNULLBRAIN",
 		"name": "Z NULL BRAIN",
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 2, 4, 6, 8, 10, 12, 14, 16 ],
+		"cmdExpRange": [ 512, 768, 1024, 1280, 1536, 1792, 2048, 2304, 2560 ],
 		"turret": "ZNULLWEAPON",
 		"initialShieldPointsPercent": 25,
 		"additiveShieldPointsPercent": 10,
@@ -30,6 +33,7 @@
 		"shieldRegenTimeDec": 2,
 		"initialShieldInterruptRegenTime": 2000,
 		"shieldInterruptRegenTimeDec": 100,
-		"shieldPointsPerStep": 4
+		"shieldPointsPerStep": 4,
+		"shieldRange": [ 512, 768, 1024, 1280, 1536, 1792, 2048, 2304, 2560 ]
 	}
 }

@@ -486,6 +486,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 		int maxDroidsMult = 0;   ///< maximum number of controlled droids multiplied by level
 	} upgrade[MAX_PLAYERS], base;
 	std::vector<std::string> rankNames;
+	std::vector<int> cmdExpRange;
 	struct
 	{
 		int initialShieldPointsPercent = 0;
@@ -495,6 +496,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 		int initialShieldInterruptRegenTime = 0;
 		int shieldInterruptRegenTimeDec = 0;
 		int shieldPointsPerStep = 0;
+		std::vector<int> shieldRange;
 	} shield;
 };
 
