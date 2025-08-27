@@ -168,14 +168,38 @@ jobs:
         echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_OUTPUT
         WZ_FLATPAK_MIRROR_SCREENSHOTS_URL="https://dl.flathub.org/media/"
         echo "WZ_FLATPAK_MIRROR_SCREENSHOTS_URL=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL}" >> $GITHUB_ENV
+    - name: (Release Publish) Fetch Release tarball details
+      # Run on release publish event
+      if: (github.event_name == 'release' && github.event.action == 'published') && (github.repository == 'Warzone2100/warzone2100')
+      run: |
+        WZ_RELEASE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+        # Grab the release tarball
+        mkdir -p dl-assets
+        curl -Lf "https://github.com/Warzone2100/warzone2100/releases/download/${WZ_RELEASE_TAG}/warzone2100_src.tar.xz" --retry 5 --output dl-assets/warzone2100_src.tar.xz
+        # Verify attestation
+        gh attestation verify dl-assets/warzone2100_src.tar.xz --repo Warzone2100/warzone2100 --signer-repo Warzone2100/warzone2100 --deny-self-hosted-runners
+        # Calculate its sha256
+        WZ_RELEASE_TARBALL_SHA256="$(sha256sum dl-assets/warzone2100_src.tar.xz | cut -d ' ' -f 1)"
+        # Output
+        echo "WZ_RELEASE_TAG=${WZ_RELEASE_TAG}"
+        echo "WZ_RELEASE_TAG=${WZ_RELEASE_TAG}" >> $GITHUB_ENV
+        echo "WZ_RELEASE_TARBALL_SHA256=${WZ_RELEASE_TARBALL_SHA256}"
+        echo "WZ_RELEASE_TARBALL_SHA256=${WZ_RELEASE_TARBALL_SHA256}" >> $GITHUB_ENV
+        echo "WZ_RELEASE_PUBLISH_BUILD=true" >> $GITHUB_ENV
+        echo "WZ_FLATPAK_BUNDLE_SOURCES=true" >> $GITHUB_ENV
     - name: Generate Flatpak manifest
       working-directory: '${{ github.workspace }}/src'
       shell: bash
       run: |
         ADDITIONAL_CONFIG_OPTIONS=""
+        if [[ "${WZ_RELEASE_PUBLISH_BUILD}" == "true" ]]; then
+          # Publish release build (from source tarball)
+          echo "Publishing release build"
+          ADDITIONAL_CONFIG_OPTIONS="-DWZ_RELEASE_PUBLISH_BUILD=ON -DWZ_RELEASE_TAG=${WZ_RELEASE_TAG} -DWZ_RELEASE_TARBALL_SHA256=${WZ_RELEASE_TARBALL_SHA256}"
+        fi
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compilation is needed
-          ADDITIONAL_CONFIG_OPTIONS="-DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
+          ADDITIONAL_CONFIG_OPTIONS="${ADDITIONAL_CONFIG_OPTIONS} -DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
         fi
         echo "::group::Generate manifest"
         cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.flatpak.net.wz2100.wz2100.yaml" "-DPROJECT_ROOT=./" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
@@ -519,7 +543,8 @@ jobs:
 
           echo "::group::Build commit from stable repo"
           for i in app/${WZ_FLATPAK_APPID} \
-            runtime/${WZ_FLATPAK_APPID}.Debug
+            runtime/${WZ_FLATPAK_APPID}.Debug \
+            runtime/${WZ_FLATPAK_APPID}.Sources
           do
             # Move the commits to the beta repo
             echo "Processing: --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH}"
