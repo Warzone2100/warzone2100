@@ -1,10 +1,8 @@
 app-id: net.wz2100.wz2100@WZ_OUTPUT_NAME_SUFFIX@
-# We need to force the target architecture for the runtime, to support cross-compilation
-runtime: org.freedesktop.Platform@WZ_RUNTIME_SUFFIX@
+runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 command: warzone2100
-@WZ_CROSS_COMPILE_SDK_EXTENSIONS@
 separate-locales: false
 finish-args:
   - --require-version=0.10.3
@@ -28,31 +26,14 @@ cleanup:
   - /share/gtk-doc
   - /share/man
   - /share/pkgconfig
+  - /protoc-host/
   - '*.a'
   - '*.la'
 build-options:
   env:
     GEM_PATH: /app/lib/ruby/gems/build-dep
 
-x-compat-aarch64-build-options: &compat-aarch64-build-options
-  # Add the cross compiler to the PATH
-  append-path: /usr/lib/sdk/toolchain-aarch64/bin
-  # binutils are available there in a different path. GCC knows
-  # where to get them. But if we need access to those tools,
-  # they can be added to the path that way:
-  # prepend-path: /usr/lib/sdk/toolchain-aarch64/aarch64-unknown-linux-gnu/bin
-  # Use the proper pkg-config path
-  prepend-pkg-config-path: /usr/lib/aarch64-linux-gnu/pkgconfig
-  # Because default CFLAGS are architecture-specific, we need
-  # to reset them to something more portable.
-  cflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fno-omit-frame-pointer
-  cflags-override: true
-  cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fno-omit-frame-pointer
-  cxxflags-override : true
-
 modules:
-  
-  @WZ_CROSS_FILES_SETUP@
 
   - name: asciidoctor
     cleanup:
@@ -131,12 +112,10 @@ modules:
   - name: physfs
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
     - -DCMAKE_INSTALL_PREFIX=/app
     - -DCMAKE_BUILD_TYPE=Release
     - -DPHYSFS_BUILD_TEST=OFF
-    @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
         url: https://github.com/icculus/physfs/archive/9d18d36b5a5207b72f473f05e1b2834e347d8144.zip # PhysFS 3.2.0+
@@ -145,9 +124,7 @@ modules:
   - name: fribidi
     buildsystem: meson
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
-    @WZ_MESON_CROSS_CONFIG_OPTIONS@
     - -Ddocs=false
     - -Dbin=false
     - -Dtests=false
@@ -158,9 +135,6 @@ modules:
         commit: 68162babff4f39c4e2dc164a5e825af93bda9983
 
   - name: libsodium
-    @WZ_CROSS_BUILD_OPTIONS@
-    config-opts:
-    @WZ_AUTOTOOLS_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
         url: https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz
@@ -207,14 +181,12 @@ modules:
   - name: abseil-cpp
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
       - -DCMAKE_INSTALL_PREFIX=/app
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_CXX_STANDARD=17
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
       - -DBUILD_SHARED_LIBS:BOOL=OFF
-      @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
         url: https://github.com/abseil/abseil-cpp/releases/download/20250127.1/abseil-cpp-20250127.1.tar.gz
@@ -223,7 +195,6 @@ modules:
   - name: protobuf
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
       - -DCMAKE_INSTALL_PREFIX=/app
       - -DCMAKE_BUILD_TYPE=Release
@@ -231,7 +202,6 @@ modules:
       - -Dprotobuf_BUILD_PROTOBUF_BINARIES:BOOL=ON
       - -Dprotobuf_BUILD_PROTOC_BINARIES:BOOL=OFF
       - -Dprotobuf_BUILD_SHARED_LIBS:BOOL=ON
-      @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
         url: https://github.com/protocolbuffers/protobuf/releases/download/v30.1/protobuf-30.1.tar.gz
@@ -240,7 +210,6 @@ modules:
   - name: libzip
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
     - -DCMAKE_INSTALL_PREFIX=/app
     - -DCMAKE_BUILD_TYPE=Release
@@ -256,7 +225,6 @@ modules:
     - -DBUILD_OSSFUZZ=OFF
     - -DBUILD_EXAMPLES=OFF
     - -DBUILD_DOC=OFF
-    @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
         url: https://github.com/nih-at/libzip/releases/download/v1.11.3/libzip-1.11.3.tar.gz
@@ -265,7 +233,6 @@ modules:
   - name: warzone2100
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DWZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY=ON
@@ -278,7 +245,6 @@ modules:
       - -DSENTRY_BACKEND=crashpad
       - -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON
       - -DProtobuf_PROTOC_EXECUTABLE=/app/protoc-host/bin/protoc
-      @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
       - -DDISCORD_RPC_APPID:STRING=$DISCORD_RPC_APPID
