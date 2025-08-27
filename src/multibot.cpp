@@ -704,6 +704,7 @@ bool recvDroidInfo(NETQUEUE queue)
 				*/
 				if (hasCommander(psDroid)
 					&& info.order != DORDER_RTR
+					&& info.order != DORDER_RTB
 					&& info.order != DORDER_RTR_SPECIFIED)
 				{
 					psDroid->psGroup->remove(psDroid);
