@@ -122,7 +122,7 @@ public:
 
 	static WzString resolutionString(const screeninfo &info)
 	{
-		return WzString::fromUtf8(astringf("[%d] %d × %d", info.screen, info.width, info.height));
+		return WzString::format("[%d] %d × %d", info.screen, info.width, info.height);
 	}
 
 private:

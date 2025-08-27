@@ -266,7 +266,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 				if (!result.setCurrentIdxForValue(currValue))
 				{
 					// add "Custom" item
-					result.choices.push_back({ WzString::fromUtf8(astringf("(Custom: %u)", currValue)), "", currValue });
+					result.choices.push_back({ WzString::format("(Custom: %u)", currValue), "", currValue });
 					result.currentIdx = result.choices.size() - 1;
 				}
 				return result;
