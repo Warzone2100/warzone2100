@@ -31,7 +31,36 @@ if (DEFINED WZ_CROSS_COMPILE_TARGET_ARCH)
 	message( FATAL_ERROR "WZ_CROSS_COMPILE_TARGET_ARCH detected - not currently supported by this script" )
 endif()
 
+if (WZ_RELEASE_PUBLISH_BUILD)
+	if(NOT DEFINED WZ_RELEASE_TAG OR "${WZ_RELEASE_TAG}" STREQUAL "")
+		message( FATAL_ERROR "Missing expected input define: WZ_RELEASE_TAG" )
+	endif()
+	if(NOT DEFINED WZ_RELEASE_TARBALL_SHA256 OR "${WZ_RELEASE_TARBALL_SHA256}" STREQUAL "")
+		message( FATAL_ERROR "Missing expected input define: WZ_RELEASE_TARBALL_SHA256" )
+	endif()
+endif()
+
 get_filename_component(_input_dir "${TEMPLATE_FILE}" DIRECTORY)
+
+##################################
+
+if (NOT WZ_RELEASE_PUBLISH_BUILD)
+	# Default WZ module source (for regular CI builds, the current dir into which the Github repo is checked-out)
+	set(WZ_MAIN_MODULE_SOURCE "\n\
+      - type: dir\n\
+        path: ./\n\
+")
+
+else()
+	# For release-publishing-triggered builds (i.e. for Flathub), use the .tar.xz from the release
+	message( STATUS "WZ_RELEASE_PUBLISH_BUILD detected - configuring for build from source tarball for \"${WZ_RELEASE_TAG}\"" )
+	set(WZ_MAIN_MODULE_SOURCE "
+      - type: archive\n\
+        url: https://github.com/Warzone2100/warzone2100/releases/download/${WZ_RELEASE_TAG}/warzone2100_src.tar.xz\n\
+        sha256: ${WZ_RELEASE_TARBALL_SHA256}\n\
+")
+
+endif()
 
 ##################################
 # Handle sentry-native
