@@ -3088,21 +3088,6 @@ bool droidUnderRepair(const DROID *psDroid)
 	return false;
 }
 
-//count how many Command Droids exist in the world at any one moment
-UBYTE checkCommandExist(UBYTE player)
-{
-	UBYTE	quantity = 0;
-
-	for (const DROID *psDroid : apsDroidLists[player])
-	{
-		if (psDroid->droidType == DROID_COMMAND)
-		{
-			quantity++;
-		}
-	}
-	return quantity;
-}
-
 static inline bool isTransporter(DROID_TYPE type)
 {
 	return type == DROID_TRANSPORTER || type == DROID_SUPERTRANSPORTER;

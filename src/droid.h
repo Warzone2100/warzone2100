@@ -244,9 +244,6 @@ bool electronicDroid(const DROID *psDroid);
 /// checks to see if the droid is currently being repaired by another
 bool droidUnderRepair(const DROID *psDroid);
 
-/// Count how many Command Droids exist in the world at any one moment
-UBYTE checkCommandExist(UBYTE player);
-
 /// For a given repair droid, check if there are any damaged droids within a defined range
  BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);
 
