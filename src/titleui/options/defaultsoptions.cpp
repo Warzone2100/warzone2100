@@ -372,13 +372,13 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 				};
 				for (uint32_t inactivityMinutes = MIN_MPINACTIVITY_MINUTES; inactivityMinutes <= (MIN_MPINACTIVITY_MINUTES + 6); inactivityMinutes++)
 				{
-					result.choices.push_back({ WzString::fromUtf8(astringf(_("%u minutes"), inactivityMinutes)), "", inactivityMinutes });
+					result.choices.push_back({ WzString::format(_("%u minutes"), inactivityMinutes), "", inactivityMinutes });
 				}
 				auto currValue = war_getMPInactivityMinutes();
 				if (!result.setCurrentIdxForValue(currValue))
 				{
 					// add "Custom" item
-					result.choices.push_back({ WzString::fromUtf8(astringf(_("%u minutes"), currValue)), "", currValue });
+					result.choices.push_back({ WzString::format(_("%u minutes"), currValue), "", currValue });
 					result.currentIdx = result.choices.size() - 1;
 				}
 				return result;
@@ -401,13 +401,13 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 				};
 				for (int lagKickSeconds = 60; lagKickSeconds <= 120; lagKickSeconds += 30)
 				{
-					result.choices.push_back({ WzString::fromUtf8(astringf(_("%u seconds"), lagKickSeconds)), "", lagKickSeconds });
+					result.choices.push_back({ WzString::format(_("%u seconds"), lagKickSeconds), "", lagKickSeconds });
 				}
 				auto currValue = war_getAutoLagKickSeconds();
 				if (!result.setCurrentIdxForValue(currValue))
 				{
 					// add "Custom" item
-					result.choices.push_back({ WzString::fromUtf8(astringf(_("%u seconds"), currValue)), "", currValue });
+					result.choices.push_back({ WzString::format(_("%u seconds"), currValue), "", currValue });
 					result.currentIdx = result.choices.size() - 1;
 				}
 				return result;

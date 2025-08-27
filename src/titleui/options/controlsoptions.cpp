@@ -1027,7 +1027,7 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 				if (!result.setCurrentIdxForValue(currValue))
 				{
 					// add "Custom" item
-					result.choices.push_back({WzString::fromUtf8(astringf("(%u%%)", currValue)), "", currValue});
+					result.choices.push_back({WzString::format("(%u%%)", currValue), "", currValue});
 					result.currentIdx = result.choices.size() - 1;
 				}
 				return result;
