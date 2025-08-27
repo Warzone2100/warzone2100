@@ -253,9 +253,6 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 //returns the quantity of a specific template in the production list
 ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
-//looks through a players production list to see if a command droid is being built
-UBYTE checkProductionForCommand(UBYTE player);
-
 //check that delivery points haven't been put down in invalid location
 void checkDeliveryPoints(UDWORD version);
 
