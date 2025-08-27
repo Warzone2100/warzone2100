@@ -36,9 +36,11 @@ jobs:
           - name: "Flatpak"
             arch: "x86_64"
             flatpak-arch: "x86_64"
+            runs-on: ubuntu-latest
           - name: "Flatpak"
             arch: "arm64"
             flatpak-arch: "aarch64"
+            runs-on: ubuntu-24.04-arm
       fail-fast: false
     name: '${{ matrix.name }} (${{ matrix.arch }})'
     permissions:
@@ -46,12 +48,12 @@ jobs:
       # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
       id-token: write
       attestations: write
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
       WZ_FLATPAK_BUILD_DIR: flatpak_app
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
-      WZ_FLATPAK_BUILD_ARCH: x86_64
+      WZ_FLATPAK_BUILD_ARCH: ${{ matrix.flatpak-arch }}
       WZ_FREEDESKTOP_RUNTIME_VERSION: 24.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
     outputs:
       # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it

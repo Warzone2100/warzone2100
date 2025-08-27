@@ -35,6 +35,8 @@ echo "::endgroup::"
 if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
   SRC_LOCAL_REPO_NAME="${WZ_FLATPAK_LOCAL_REPO_NAME}"
 
+  echo "::warn::Cross-compile support no longer included in flatpak yaml"
+
   # Create a new repository containing the commits for the cross target arch
   echo "::group::Creating new local repo for target arch: ${WZ_FLATPAK_LOCAL_REPO_NAME}"
   WZ_FLATPAK_LOCAL_REPO_NAME="${WZ_FLATPAK_TARGET_ARCH}-repo"
