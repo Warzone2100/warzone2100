@@ -32,7 +32,6 @@ if (DEFINED WZ_CROSS_COMPILE_TARGET_ARCH)
 endif()
 
 get_filename_component(_input_dir "${TEMPLATE_FILE}" DIRECTORY)
-get_filename_component(_output_dir "${OUTPUT_FILE}" DIRECTORY)
 
 ##################################
 # Handling cross-compilation
@@ -64,17 +63,17 @@ if (DEFINED WZ_CROSS_COMPILE_TARGET_ARCH)
       - install -Dm644 meson-cross-file.txt /app/etc/wz-config/meson-cross-file.txt\n\
     sources:\n\
       - type: file\n\
-        path: ../../.ci/flatpak/Toolchain-cross-arch.cmake\n\
+        path: .ci/flatpak/Toolchain-cross-arch.cmake\n\
       - type: file\n\
-        path: ../../.ci/flatpak/meson-cross-file.txt\n\
+        path: .ci/flatpak/meson-cross-file.txt\n\
 ")
 
 	# Configure CMake cross-compile toolchain
-	configure_file("${_input_dir}/Toolchain-cross-arch.cmake.in" "${_output_dir}/Toolchain-cross-arch.cmake" @ONLY)
+	configure_file("${_input_dir}/Toolchain-cross-arch.cmake.in" ".ci/flatpak/Toolchain-cross-arch.cmake" @ONLY)
 	set(WZ_CMAKE_CROSS_CONFIG_OPTIONS "- -DCMAKE_TOOLCHAIN_FILE=/app/etc/wz-config/Toolchain-cross-arch.cmake")
 
 	# Construct simple meson cross-compile file
-	configure_file("${_input_dir}/meson-cross-file.txt.in" "${_output_dir}/meson-cross-file.txt" @ONLY)
+	configure_file("${_input_dir}/meson-cross-file.txt.in" ".ci/flatpak/meson-cross-file.txt" @ONLY)
 	set(WZ_MESON_CROSS_CONFIG_OPTIONS "- --cross-file=/app/etc/wz-config/meson-cross-file.txt")
 
 	# Autotools just requires a config option

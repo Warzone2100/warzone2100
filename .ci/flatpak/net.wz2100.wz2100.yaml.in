@@ -289,7 +289,7 @@ modules:
       - WZ_OUTPUT_NAME_SUFFIX
     sources:
       - type: dir
-        path: ../../
+        path: ./
       - type: file
         url: https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz
         sha256: 142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3
