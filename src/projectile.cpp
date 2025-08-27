@@ -1508,11 +1508,9 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			continue;  // Don't damage your own droids, nor ally droids - unrealistic, but better.
 		}
 
-		if (psCurr->type == OBJ_DROID &&
-		    ((DROID *)psCurr)->isVtol() &&
-		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
+		if (psCurr->type == OBJ_DROID && ((DROID *)psCurr)->isFlying())
 		{
-			continue;  // Can't set flying vtols on fire.
+			continue;  // Can't set flying units on fire.
 		}
 
 		if (psCurr->type == OBJ_FEATURE && !((FEATURE *)psCurr)->psStats->damageable)
