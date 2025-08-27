@@ -248,3 +248,5 @@ warzone*.*build
 /.ci/flatpak/net.wz2100.wz2100.yaml
 /.ci/flatpak/Toolchain-cross-arch.cmake
 /.ci/flatpak/meson-cross-file.txt
+# generated flatpak config in root
+/.flatpak.net.wz2100.wz2100.yaml
