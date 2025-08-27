@@ -118,11 +118,6 @@ static PagedEntityContainer<PROJECTILE> globalProjectileStorage;
 
 /***************************************************************************/
 
-// the last unit that did damage - used by script functions
-BASE_OBJECT		*g_pProjLastAttacker;
-
-/***************************************************************************/
-
 static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
@@ -346,8 +341,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-		if (psSensor
-		    && psSensor->type == OBJ_DROID)
+		if (psSensor && psSensor->type == OBJ_DROID)
 		{
 			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
@@ -360,7 +354,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		if (psDroid != nullptr)
 		{
-			psDroid->experience += experienceInc;
+			droidIncreaseExperience(psDroid, experienceInc);
 		}
 	}
 }
@@ -529,7 +523,14 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	}
 	else
 	{
-		proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		if (psAttacker == nullptr)
+		{
+			proj.dst.z = target.z - LINE_OF_FIRE_MINIMUM;
+		}
+		else
+		{
+			proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		}
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
@@ -1109,9 +1110,6 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	psStats = psObj->psWStats;
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
 
-	// note the attacker if any
-	g_pProjLastAttacker = psObj->psSource;
-
 	/* play impact audio */
 	if (gfxVisible(psObj))
 	{
@@ -1239,7 +1237,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		    && psObj->psSource)
 		{
 			// If we did enough `damage' to capture the target
-			if (electronicDamage(psObj->psDest,
+			if (electronicDamage(psObj->psDest, psObj->psSource,
 			                     calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
 			                     psObj->player))
 			{
@@ -1492,9 +1490,6 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 {
 	CHECK_PROJECTILE(psProj);
 
-	// note the attacker if any
-	g_pProjLastAttacker = psProj->psSource;
-
 	WEAPON_STATS *psStats = psProj->psWStats;
 
 	static GridList gridList;  // static to avoid allocations.
@@ -1687,11 +1682,11 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_FEATURE:
@@ -1710,7 +1705,7 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 
 static bool isFriendlyFire(DAMAGE* psDamage)
 {
-	return psDamage->psProjectile->psDest && psDamage->psProjectile->psSource->player == psDamage->psProjectile->psDest->player;
+	return psDamage->psDest && psDamage->psProjectile->psSource->player == psDamage->psDest->player;
 }
 
 static bool shouldIncreaseExperience(DAMAGE *psDamage)

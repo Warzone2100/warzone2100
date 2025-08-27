@@ -1,0 +1,44 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::antitank",
+	"title": "Anti-Tank",
+	"sort": "02",
+	"visual": [
+		{
+			"stat": {
+				"id": "Rocket-Pod",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Rocket-LtA-TMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Rocket-LtA-T",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Rocket-HvyA-T",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Anti-Tank weapons are specialized against all types of enemy vehicles.",
+		"",
+		"However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry.",
+		"",
+		"Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::units::propulsions::cyborg",
+		"wz2100::units::propulsions::tracks"
+	]
+}

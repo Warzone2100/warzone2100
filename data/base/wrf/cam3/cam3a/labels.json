@@ -16,88 +16,96 @@
 		"pos": [832, 6464]
 	},
 	"position_4": {
-		"label": "vtolRemovePos",
-		"pos": [128, 8320]
-	},
-	"position_5": {
 		"label": "healthRetreatPos",
 		"pos": [1344, 15296]
 	},
-	"position_6": {
+	"position_5": {
 		"label": "genericasAssembly",
 		"pos": [4544, 10816]
 	},
-	"position_7": {
+	"position_6": {
 		"label": "northFacAssembly",
 		"pos": [7104, 9280]
 	},
-	"position_8": {
+	"position_7": {
 		"label": "ambushPlayerPos",
 		"pos": [7360, 14656]
 	},
-	"position_9": {
+	"position_8": {
 		"label": "hoverGrpPos1",
 		"pos": [4928, 14400]
 	},
-	"position_10": {
+	"position_9": {
 		"label": "hoverGrpPos2",
 		"pos": [5312, 12352]
 	},
-	"position_11": {
+	"position_10": {
 		"label": "hoverGrpPos3",
 		"pos": [3776, 12864]
 	},
-	"position_12": {
+	"position_11": {
 		"label": "southWestBasePatrol",
 		"pos": [1344, 15296]
 	},
-	"position_13": {
+	"position_12": {
 		"label": "westEntrancePatrol",
 		"pos": [5952, 14144]
 	},
-	"position_14": {
+	"position_13": {
 		"label": "playerLZPatrol",
 		"pos": [7232, 14656]
 	},
-	"position_15": {
+	"position_14": {
 		"label": "NEBaseRetreat",
 		"pos": [5568, 9792]
 	},
-	"position_16": {
+	"position_15": {
 		"label": "NWBaseRetreat",
 		"pos": [1472, 8512]
 	},
-	"position_17": {
+	"position_16": {
 		"label": "SWBaseRetreat",
 		"pos": [2496, 15168]
 	},
-	"position_18": {
+	"position_17": {
 		"label": "NXcybFac-b3Assembly",
 		"pos": [5568, 8896]
 	},
-	"position_19": {
+	"position_18": {
 		"label": "NXcybFac-b2-1Assembly",
 		"pos": [2624, 14656]
 	},
-	"position_20": {
+	"position_19": {
 		"label": "NXcybFac-b2-2Assembly",
 		"pos": [1600, 15296]
 	},
-	"position_21": {
+	"position_20": {
 		"label": "NXHvyFac-b2Assembly",
 		"pos": [1600, 14912]
 	},
-	"position_22": {
+	"position_21": {
 		"label": "NXcybFac-b4Assembly",
 		"pos": [2112, 8896]
 	},
-	"position_23": {
+	"position_22": {
 		"label": "buildPos1",
 		"pos": [1024, 13696]
 	},
-	"position_24": {
+	"position_23": {
 		"label": "buildPos2",
 		"pos": [2176, 9384]
+	},
+	"position_24": {
+		"label": "northSpawnPos",
+		"pos": [3584, 8448]
+	},
+	"position_25": {
+		"label": "southSpawnPos",
+		"pos": [4736, 16128]
+	},
+	"position_26": {
+		"label": "NexusTransporterLandingPos",
+		"pos": [1152, 12544]
 	},
 
 	"area_0": {

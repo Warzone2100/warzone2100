@@ -655,7 +655,7 @@ void WzInGameChatScreen_CLICKFORM::display(int xOffset, int yOffset)
 		return; // skip if hidden
 	}
 
-	if (backgroundColor.rgba == 0)
+	if (backgroundColor.isTransparent())
 	{
 		return;
 	}

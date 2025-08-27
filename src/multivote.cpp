@@ -632,88 +632,93 @@ size_t getMultiOptionPrefValueTotal(TechLevel val, bool playersOnly)
 static constexpr uint32_t MaxSupportedSetMembers = static_cast<uint32_t>(std::numeric_limits<uint8_t>::max());
 
 template<typename T>
-bool NETEnumTSet_uint8(bool decode, std::set<T>& val, std::function<bool (uint8_t)> validateValueFunc = nullptr)
+bool NETEnumTSet_uint8(MessageReader& r, std::set<T>& val, std::function<bool(uint8_t)> validateValueFunc = nullptr)
 {
 	bool retVal = true;
 	uint32_t numElements = 0;
 
-	if (decode)
-	{
-		val.clear();
-	}
-	else
-	{
-#if SIZE_MAX > UINT32_MAX
-		if (val.size() > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
-		{
-			numElements = 0;
-			NETuint32_t(&numElements);
-			return false;
-		}
-#endif
-		numElements = static_cast<uint32_t>(val.size());
-		if (numElements > MaxSupportedSetMembers)
-		{
-			ASSERT(false, "Invalid number of set members: %" PRIu32, numElements);
-			numElements = MaxSupportedSetMembers;
-		}
-	}
+	val.clear();
 
-	NETuint32_t(&numElements);
+	NETuint32_t(r, numElements);
 
-	if (decode)
+	if (numElements > MaxSupportedSetMembers)
 	{
-		if (numElements > MaxSupportedSetMembers)
+		debug(LOG_NET, "Invalid number of set members: %" PRIu32, numElements);
+		// will skip extras in the loop, set return value to false
+		retVal = false;
+	}
+	for (uint32_t i = 0; i < numElements; ++i)
+	{
+		uint8_t el = 0;
+		NETuint8_t(r, el);
+		if (i < numElements)
 		{
-			debug(LOG_NET, "Invalid number of set members: %" PRIu32, numElements);
-			// will skip extras in the loop, set return value to false
-			retVal = false;
-		}
-		for (uint32_t i = 0; i < numElements; ++i)
-		{
-			uint8_t el = 0;
-			NETuint8_t(&el);
-			if (i < numElements)
+			if (validateValueFunc)
 			{
-				if (validateValueFunc)
+				if (!validateValueFunc(el))
 				{
-					if (!validateValueFunc(el))
-					{
-						retVal = false;
-						continue;
-					}
+					retVal = false;
+					continue;
 				}
-				val.insert(static_cast<T>(el));
 			}
-		}
-	}
-	else
-	{
-		size_t i = 0;
-		for (auto el : val)
-		{
-			if (i >= numElements)
-			{
-				break;
-			}
-			uint8_t el_uint8 = static_cast<uint8_t>(el);
-			NETuint8_t(&el_uint8);
-			++i;
+			val.insert(static_cast<T>(el));
 		}
 	}
 	return retVal;
 }
 
-bool NETbuiltinPlayerPreferences(bool decode, PlayerPreferences::BuiltinPreferences& builtinPrefs)
+template<typename T>
+bool NETEnumTSet_uint8(MessageWriter& w, std::set<T>& val, std::function<bool(uint8_t)> validateValueFunc = nullptr)
 {
+	bool retVal = true;
+	uint32_t numElements = 0;
+
+
+#if SIZE_MAX > UINT32_MAX
+	if (val.size() > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
+	{
+		numElements = 0;
+		NETuint32_t(w, numElements);
+		return false;
+	}
+#endif
+	numElements = static_cast<uint32_t>(val.size());
+	if (numElements > MaxSupportedSetMembers)
+	{
+		ASSERT(false, "Invalid number of set members: %" PRIu32, numElements);
+		numElements = MaxSupportedSetMembers;
+	}
+
+	NETuint32_t(w, numElements);
+
+	size_t i = 0;
+	for (auto el : val)
+	{
+		if (i >= numElements)
+		{
+			break;
+		}
+		uint8_t el_uint8 = static_cast<uint8_t>(el);
+		NETuint8_t(w, el_uint8);
+		++i;
+	}
+	return retVal;
+}
+
+template <typename SerdeContext>
+bool NETbuiltinPlayerPreferences(SerdeContext& c, PlayerPreferences::BuiltinPreferences& builtinPrefs)
+{
+	static_assert(std::is_same<SerdeContext, MessageReader>::value || std::is_same<SerdeContext, MessageWriter>::value,
+		"SerdeContext is expected to be either MessageReader or MessageWriter");
+
 	bool retSuccess = true;
-	retSuccess = NETEnumTSet_uint8<ScavType>(decode, builtinPrefs.scavengers, validateNumToScavTypeEnum<uint8_t>) && retSuccess;
-	retSuccess = NETEnumTSet_uint8<AllianceType>(decode, builtinPrefs.alliances, validateNumToAlliancesTypeEnum<uint8_t>) && retSuccess;
-	retSuccess = NETEnumTSet_uint8<PowerSetting>(decode, builtinPrefs.power, validateNumToPowerSettingEnum<uint8_t>) && retSuccess;
-	retSuccess = NETEnumTSet_uint8<CampType>(decode, builtinPrefs.base, validateNumToCampTypeEnum<uint8_t>) && retSuccess;
-	retSuccess = NETEnumTSet_uint8<TechLevel>(decode, builtinPrefs.techLevel, validateNumToTechLevelEnum<uint8_t>) && retSuccess;
-	NETuint8_t(&builtinPrefs.minPlayers);
-	NETuint8_t(&builtinPrefs.maxPlayers);
+	retSuccess = NETEnumTSet_uint8<ScavType>(c, builtinPrefs.scavengers, validateNumToScavTypeEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<AllianceType>(c, builtinPrefs.alliances, validateNumToAlliancesTypeEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<PowerSetting>(c, builtinPrefs.power, validateNumToPowerSettingEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<CampType>(c, builtinPrefs.base, validateNumToCampTypeEnum<uint8_t>) && retSuccess;
+	retSuccess = NETEnumTSet_uint8<TechLevel>(c, builtinPrefs.techLevel, validateNumToTechLevelEnum<uint8_t>) && retSuccess;
+	NETuint8_t(c, builtinPrefs.minPlayers);
+	NETuint8_t(c, builtinPrefs.maxPlayers);
 	if (!validateMinMaxPlayersPrefValue(builtinPrefs.minPlayers))
 	{
 		builtinPrefs.minPlayers = 2;
@@ -754,12 +759,12 @@ void resetLobbyChangePlayerVote(uint32_t player)
 
 void sendLobbyChangeVoteData(uint8_t currentVote)
 {
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
-	NETuint32_t(&selectedPlayer);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
+	NETuint32_t(w, selectedPlayer);
 	uint8_t voteType = static_cast<uint8_t>(NetVoteType::LOBBY_SETTING_CHANGE);
-	NETuint8_t(&voteType);
-	NETuint8_t(&currentVote);
-	NETend();
+	NETuint8_t(w, voteType);
+	NETuint8_t(w, currentVote);
+	NETend(w);
 }
 
 uint8_t getLobbyChangeVoteTotal()
@@ -806,13 +811,13 @@ static void recvLobbyChangeVote(uint32_t player, uint8_t newVote)
 
 void sendPlayerKickedVote(uint32_t voteID, uint8_t newVote)
 {
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
-	NETuint32_t(&selectedPlayer);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_VOTE);
+	NETuint32_t(w, selectedPlayer);
 	uint8_t voteType = static_cast<uint8_t>(NetVoteType::KICK_PLAYER);
-	NETuint8_t(&voteType);
-	NETuint32_t(&voteID);
-	NETuint8_t(&newVote);
-	NETend();
+	NETuint8_t(w, voteType);
+	NETuint32_t(w, voteID);
+	NETuint8_t(w, newVote);
+	NETend(w);
 }
 
 static void recvPlayerKickVote(uint32_t voteID, uint32_t sender, uint8_t newVote)
@@ -868,12 +873,12 @@ static void sendPlayerMultiOptPreferencesBuiltin(uint32_t playerIdx)
 	ASSERT_OR_RETURN(, whosResponsible(playerIdx) == selectedPlayer || NetPlay.isHost, "Sending unexpected player prefs: %" PRIu32, playerIdx);
 	ASSERT_OR_RETURN(, GetGameMode() != GS_NORMAL, "Trying to send multiopt preferences after game started?");
 
-	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_VOTE);
-	NETuint32_t(&selectedPlayer);
+	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_VOTE);
+	NETuint32_t(w, selectedPlayer);
 	uint8_t voteType = static_cast<uint8_t>(NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN);
-	NETuint8_t(&voteType);
-	NETbuiltinPlayerPreferences(false, playerPreferences[playerIdx].getBuiltinPreferences());
-	NETend();
+	NETuint8_t(w, voteType);
+	NETbuiltinPlayerPreferences(w, playerPreferences[playerIdx].getBuiltinPreferences());
+	NETend(w);
 }
 
 bool recvPlayerMultiOptPreferencesBuiltin(int32_t sender, PlayerPreferences::BuiltinPreferences&& builtinPreferences)
@@ -899,28 +904,28 @@ bool recvVote(NETQUEUE queue, bool inLobby)
 	bool senderIsSpectator = (queue.index < NetPlay.players.size()) ? NetPlay.players[queue.index].isSpectator : true;
 	bool validPrefs = false;
 
-	NETbeginDecode(queue, NET_VOTE);
-	NETuint32_t(&player);
-	NETuint8_t(&voteType);
+	auto r = NETbeginDecode(queue, NET_VOTE);
+	NETuint32_t(r, player);
+	NETuint8_t(r, voteType);
 
 	switch (static_cast<NetVoteType>(voteType))
 	{
 		case NetVoteType::LOBBY_SETTING_CHANGE:
-			NETuint8_t(&newVote);
+			NETuint8_t(r, newVote);
 			break;
 		case NetVoteType::KICK_PLAYER:
-			NETuint32_t(&voteID);
-			NETuint8_t(&newVote);
+			NETuint32_t(r, voteID);
+			NETuint8_t(r, newVote);
 			break;
 		case NetVoteType::LOBBY_OPTION_PREFERENCES_BUILTIN:
 			if (inLobby)
 			{
-				validPrefs = NETbuiltinPlayerPreferences(true, builtinPreferences);
+				validPrefs = NETbuiltinPlayerPreferences(r, builtinPreferences);
 			}
 			break;
 	}
 
-	NETend();
+	NETend(r);
 
 	switch (static_cast<NetVoteType>(voteType))
 	{
@@ -1079,13 +1084,13 @@ static bool sendVoteRequest(NetVoteType type, uint32_t voteID = 0, uint32_t targ
 	ASSERT_HOST_ONLY(return false);
 
 	//setup a vote popup for the clients
-	NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
-	NETuint32_t(&selectedPlayer);
-	NETuint32_t(&targetPlayer);
-	NETuint32_t(&voteID);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
+	NETuint32_t(w, selectedPlayer);
+	NETuint32_t(w, targetPlayer);
+	NETuint32_t(w, voteID);
 	uint8_t voteType = static_cast<uint8_t>(type);
-	NETuint8_t(&voteType);
-	NETend();
+	NETuint8_t(w, voteType);
+	NETend(w);
 
 	return true;
 }
@@ -1096,12 +1101,12 @@ bool recvVoteRequest(NETQUEUE queue)
 	uint32_t targetPlayer = MAX_PLAYERS;
 	uint32_t voteID = 0;
 	uint8_t voteType = 0;
-	NETbeginDecode(queue, NET_VOTE_REQUEST);
-	NETuint32_t(&sender);
-	NETuint32_t(&targetPlayer);
-	NETuint32_t(&voteID);
-	NETuint8_t(&voteType);
-	NETend();
+	auto r = NETbeginDecode(queue, NET_VOTE_REQUEST);
+	NETuint32_t(r, sender);
+	NETuint32_t(r, targetPlayer);
+	NETuint32_t(r, voteID);
+	NETuint8_t(r, voteType);
+	NETend(r);
 
 	if (sender >= MAX_PLAYERS)
 	{

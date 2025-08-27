@@ -41,6 +41,8 @@
 # include <windows.h>
 #endif
 
+constexpr uint64_t WzMapZipDefaultEmbeddedFileMaxFileSize = 104857600; // 100 MiB
+
 class WrappedZipArchive
 {
 public:
@@ -49,7 +51,12 @@ public:
 	WrappedZipArchive(zip_t* pZip, PostCloseFunc postCloseFunc = nullptr)
 	: pZip(pZip)
 	, postCloseFunc(postCloseFunc)
-	{ }
+	{
+		if (pZip)
+		{
+			readOnly = zip_get_archive_flag(pZip, ZIP_AFL_RDONLY, 0) == 1;
+		}
+	}
 	~WrappedZipArchive()
 	{
 		close();
@@ -260,6 +267,142 @@ private:
 	bool m_fixedLastMod = false;
 };
 
+WzZipIOSourceReadProvider::WzZipIOSourceReadProvider()
+{
+	error_ = new zip_error_t();
+	zip_error_init(static_cast<zip_error_t*>(error_));
+}
+WzZipIOSourceReadProvider::~WzZipIOSourceReadProvider()
+{
+#if DEBUG
+	assert(retainCount == 0);
+#else
+	(void)retainCount;
+#endif
+	if (error_)
+	{
+		zip_error_fini(static_cast<zip_error_t*>(error_));
+	}
+	delete static_cast<zip_error_t*>(error_);
+	error_ = nullptr;
+}
+
+void* WzZipIOSourceReadProvider::error()
+{
+	return error_;
+}
+
+void WzZipIOSourceReadProvider::inform_source_keep()
+{
+	++retainCount;
+}
+
+void WzZipIOSourceReadProvider::inform_source_free()
+{
+	if (retainCount > 0)
+	{
+		--retainCount;
+	}
+}
+
+static inline zip_error_t* getZipIOCtxError(WzZipIOSourceReadProvider *ctx)
+{
+	return static_cast<zip_error_t*>(ctx->error());
+}
+
+zip_int64_t wzZipIOSourceProviderCallback(void *state, void *data, zip_uint64_t len, zip_source_cmd_t cmd)
+{
+	WzZipIOSourceReadProvider *ctx = (WzZipIOSourceReadProvider *)state;
+
+	switch (cmd)
+	{
+		case ZIP_SOURCE_OPEN:
+			ctx->seek(0);
+			return 0;
+
+		case ZIP_SOURCE_READ:
+			if (len > ZIP_INT64_MAX)
+			{
+				zip_error_set(getZipIOCtxError(ctx), ZIP_ER_INVAL, 0);
+				return -1;
+			}
+			return ctx->readBytes(data, len).value_or(-1);
+
+		case ZIP_SOURCE_CLOSE:
+			return 0;
+
+		case ZIP_SOURCE_STAT: {
+			zip_stat_t *st = ZIP_SOURCE_GET_ARGS(zip_stat_t, data, len, getZipIOCtxError(ctx));
+			if (st == NULL)
+			{
+				return -1;
+			}
+			zip_stat_init(st);
+			if (auto modTime = ctx->modTime())
+			{
+				st->mtime = modTime.value();
+				st->valid |= ZIP_STAT_MTIME;
+			}
+			if (auto fileSize = ctx->fileSize())
+			{
+				st->size = fileSize.value();
+				st->valid |= ZIP_STAT_SIZE;
+			}
+			return sizeof(struct zip_stat);
+		}
+
+		case ZIP_SOURCE_ERROR:
+			return zip_error_to_data(getZipIOCtxError(ctx), data, len);
+
+		case ZIP_SOURCE_FREE:
+			ctx->inform_source_free();
+			return 0;
+
+		case ZIP_SOURCE_TELL:
+		{
+			auto currentOffset = ctx->tell();
+			if (!currentOffset.has_value())
+			{
+				zip_error_set(getZipIOCtxError(ctx), ZIP_ER_TELL, ECANCELED);
+				return -1;
+			}
+			if (currentOffset.value() > ZIP_INT64_MAX) {
+				zip_error_set(getZipIOCtxError(ctx), ZIP_ER_TELL, EOVERFLOW);
+				return -1;
+			}
+			return (zip_int64_t)currentOffset.value();
+		}
+
+		case ZIP_SOURCE_SEEK:
+		{
+			auto currentOffset = ctx->tell();
+			if (!currentOffset.has_value())
+			{
+				zip_error_set(getZipIOCtxError(ctx), ZIP_ER_TELL, ECANCELED);
+				return -1;
+			}
+			zip_int64_t new_offset = zip_source_seek_compute_offset(static_cast<zip_uint64_t>(currentOffset.value()), static_cast<zip_uint64_t>(ctx->fileSize().value_or(0)), data, len, getZipIOCtxError(ctx));
+			if (new_offset < 0)
+			{
+				return -1;
+			}
+			if (!ctx->seek(static_cast<uint64_t>(new_offset)))
+			{
+				// seek failed
+				return -1;
+			}
+			return 0;
+		}
+
+		case ZIP_SOURCE_SUPPORTS:
+			return zip_source_make_command_bitmap(ZIP_SOURCE_OPEN, ZIP_SOURCE_READ, ZIP_SOURCE_CLOSE, ZIP_SOURCE_STAT, ZIP_SOURCE_ERROR, ZIP_SOURCE_FREE, ZIP_SOURCE_SEEK, ZIP_SOURCE_TELL /*, ZIP_SOURCE_SUPPORTS_REOPEN*/ /* Requires libzip >= 1.10 */, -1);
+
+		default:
+			zip_error_set(getZipIOCtxError(ctx), ZIP_ER_OPNOTSUPP, 0);
+			return -1;
+	}
+}
+
 static zip_int64_t wz_zip_name_locate_impl(zip_t *archive, const char *fname, zip_flags_t flags, bool useWindowsPathWorkaroundIfNeeded)
 {
 	auto zipLocateResult = zip_name_locate(archive, fname, flags);
@@ -342,7 +485,7 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveMemory(std::unique_ptr<std
 		zip_error_fini(&error);
 		return nullptr;
 	}
-	int flags = 0;
+	int flags = ZIP_RDONLY;
 	if (extraConsistencyChecks)
 	{
 		flags |= ZIP_CHECKCONS;
@@ -365,6 +508,52 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveMemory(std::unique_ptr<std
 		zip_source_free(pMemSource);
 		// retainedZipFileContents will stick around until *after* this call to zip_source_free, which is required
 		retainedZipFileContents->reset();
+	});
+	return result;
+}
+
+std::shared_ptr<WzMapZipIO> WzMapZipIO::openZipArchiveReadIOProvider(std::shared_ptr<WzZipIOSourceReadProvider> zipSourceProvider, WzMap::LoggingProtocol* pCustomLogger /*= nullptr*/, bool extraConsistencyChecks /*= false*/)
+{
+	if (zipSourceProvider == nullptr) { return nullptr; }
+	struct zip_error error;
+	zip_error_init(&error);
+
+	zip_source_t *pProviderSource = zip_source_function_create(wzZipIOSourceProviderCallback, zipSourceProvider.get(), &error);
+	if (pProviderSource == NULL)
+	{
+		// Failed to create source
+		zip_error_fini(&error);
+		return nullptr;
+	}
+	int flags = ZIP_RDONLY;
+	if (extraConsistencyChecks)
+	{
+		flags |= ZIP_CHECKCONS;
+	}
+	zip_t* pZip = zip_open_from_source(pProviderSource, flags, &error);
+	if (pZip == NULL)
+	{
+		// Failed to open from source
+		if (pCustomLogger)
+		{
+			const char* pErrorStr = zip_error_strerror(&error);
+			pCustomLogger->printLog(WzMap::LoggingProtocol::LogLevel::Error, __FUNCTION__, __LINE__, (pErrorStr) ? pErrorStr : "<n/a>");
+			pErrorStr = nullptr;
+		}
+		zip_source_free(pProviderSource);
+		zip_error_fini(&error);
+		return nullptr;
+	}
+	zip_error_fini(&error);
+	zip_source_keep(pProviderSource); // explicitly keep the zip source buffer around after the in-memory zip file is "closed"
+	zipSourceProvider->inform_source_keep();
+
+	auto result = std::shared_ptr<WzMapZipIO>(new WzMapZipIO());
+	result->m_zipArchive = std::make_shared<WrappedZipArchive>(pZip, [pProviderSource, zipSourceProvider]() mutable { // keep zipSourceProvider around until actual close
+		// This closure is run after the zip file is "closed"
+		zip_source_free(pProviderSource);
+		// zipSourceProvider must stick around until *after* this call to zip_source_free, which is required
+		zipSourceProvider.reset();
 	});
 	return result;
 }
@@ -471,6 +660,38 @@ std::shared_ptr<WzMapZipIO> WzMapZipIO::createZipArchiveFS(const char* fileSyste
 WzMapZipIO::~WzMapZipIO()
 { }
 
+enum class ZipSanityCheckResult
+{
+	PASSED,
+	FAILURE_EXCEEDS_MAXFILESIZE,
+	FAILURE_UNSUPPORTED_COMP_METHOD
+};
+
+static ZipSanityCheckResult wzMapZipIOSanityCheckStat(const struct zip_stat& st, uint64_t fileSizeLimit = WzMapZipDefaultEmbeddedFileMaxFileSize)
+{
+	if (st.valid & ZIP_STAT_SIZE)
+	{
+		if (fileSizeLimit < st.size)
+		{
+			// size is too big!
+			return ZipSanityCheckResult::FAILURE_EXCEEDS_MAXFILESIZE;
+		}
+	}
+
+	bool compressedFile = (st.valid & ZIP_STAT_COMP_METHOD) && (st.comp_method != ZIP_CM_STORE);
+	if (compressedFile)
+	{
+		// Check for permitted compression methods
+		// (This is a subset of all methods that latest libzip itself may support, but we want to ensure consistent support across all WZ target platforms)
+		if (st.comp_method != ZIP_CM_DEFLATE)
+		{
+			return ZipSanityCheckResult::FAILURE_UNSUPPORTED_COMP_METHOD;
+		}
+	}
+
+	return ZipSanityCheckResult::PASSED;
+}
+
 std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode)
 {
 	std::unique_ptr<WzMap::BinaryIOStream> pStream;
@@ -485,6 +706,17 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 				return nullptr;
 			}
 			zip_uint64_t zipFileIndex = static_cast<zip_uint64_t>(zipLocateResult);
+			// Get file stats
+			struct zip_stat st;
+			if (zip_stat_index(m_zipArchive->handle(), zipFileIndex, 0, &st) != 0)
+			{
+				// Failed to stat file?
+				return nullptr;
+			}
+			if (wzMapZipIOSanityCheckStat(st) != ZipSanityCheckResult::PASSED)
+			{
+				return nullptr;
+			}
 			pStream = WzMapBinaryZipIOStream::openForReading(zipFileIndex, m_zipArchive);
 			break;
 		}
@@ -495,37 +727,41 @@ std::unique_ptr<WzMap::BinaryIOStream> WzMapZipIO::openBinaryStream(const std::s
 	return pStream;
 }
 
-bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter /*= false*/)
+WzMap::IOProvider::LoadFullFileResult WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize /*= 0*/, bool appendNullCharacter /*= false*/)
 {
 	auto zipLocateResult = wz_zip_name_locate(m_zipArchive->handle(), filename.c_str(), ZIP_FL_ENC_GUESS);
 	if (zipLocateResult < 0)
 	{
 		// Failed to find a file with this name
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	zip_uint64_t zipFileIndex = static_cast<zip_uint64_t>(zipLocateResult);
 	// Get the expected length of the file
 	struct zip_stat st;
-	zip_stat_init(&st);
 	if (zip_stat_index(m_zipArchive->handle(), zipFileIndex, 0, &st) != 0)
 	{
 		// zip_stat failed for file??
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	if (!(st.valid & ZIP_STAT_SIZE))
 	{
 		// couldn't get the file size??
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
-	if (std::numeric_limits<uint32_t>::max() < st.size)
+	switch (wzMapZipIOSanityCheckStat(st, (maxFileSize) ? maxFileSize : WzMapZipDefaultEmbeddedFileMaxFileSize))
 	{
-		// size is too big!
-		return false;
+		case ZipSanityCheckResult::PASSED:
+			break;
+		case ZipSanityCheckResult::FAILURE_EXCEEDS_MAXFILESIZE:
+			return WzMap::IOProvider::LoadFullFileResult::FAILURE_EXCEEDS_MAXFILESIZE;
+		default:
+			// failed some other sanity check
+			return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	auto readStream = WzMapBinaryZipIOStream::openForReading(zipFileIndex, m_zipArchive);
 	if (!readStream)
 	{
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_OPEN;
 	}
 	// read the entire file
 	fileData.clear();
@@ -535,20 +771,20 @@ bool WzMapZipIO::loadFullFile(const std::string& filename, std::vector<char>& fi
 	if (!result.has_value())
 	{
 		// read failed
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_READ;
 	}
 	if (result.value() != expectedFileSize)
 	{
 		// read was short
 		fileData.clear();
-		return false;
+		return WzMap::IOProvider::LoadFullFileResult::FAILURE_READ;
 	}
 	if (appendNullCharacter)
 	{
 		fileData[fileData.size() - 1] = 0;
 	}
 	readStream->close();
-	return true;
+	return WzMap::IOProvider::LoadFullFileResult::SUCCESS;
 }
 
 bool WzMapZipIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
@@ -585,6 +821,17 @@ bool WzMapZipIO::makeDirectory(const std::string& directoryPath)
 const char* WzMapZipIO::pathSeparator() const
 {
 	return "/";
+}
+
+bool WzMapZipIO::fileExists(const std::string& filename)
+{
+	auto zipLocateResult = wz_zip_name_locate(m_zipArchive->handle(), filename.c_str(), ZIP_FL_ENC_GUESS);
+	if (zipLocateResult < 0)
+	{
+		// Failed to find a file with this name
+		return false;
+	}
+	return true;
 }
 
 static inline bool isUnsafeZipEntryName(const std::string& filename)

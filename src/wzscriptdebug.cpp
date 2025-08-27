@@ -885,10 +885,7 @@ private:
 		}
 		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 		// Do not change realSelectedPlayer here, so game doesn't pause.
-		const int oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = value;
-		NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
-		NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
 	}
 public:
 	std::shared_ptr<DropdownWidget> playersDropdown;
@@ -1295,7 +1292,6 @@ private:
 		attach(contextLabel);
 
 		auto dropdown = std::make_shared<DropdownWidget>();
-		dropdown->id = FRONTEND_TERRAIN_QUALITY_R;
 		dropdown->setListHeight(TAB_BUTTONS_HEIGHT * std::min<uint32_t>(5, dropDownChoices.size()));
 		attach(dropdown);
 		for (const auto& option : dropDownChoices)

@@ -1,0 +1,27 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::vtols",
+	"title": "VTOL",
+	"sort": "06",
+	"visual": {
+		"stat": {
+			"id": "V-Tol"
+		}
+	},
+	"contents": [
+		"VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies.",
+		"",
+		"VTOLs have an extremely high maximum speed and can traverse all types of terrain.",
+		"",
+		"Additionally, they cannot be targeted by most weapons while airborne.",
+		"",
+		"Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
+	],
+	"links": [
+		"wz2100::units::propulsions::vtols::using",
+		"wz2100::structures::vtolfactory",
+		"wz2100::units::propulsions::vtols::attacking",
+		"wz2100::units::propulsions::vtols::defending",
+		"wz2100::units::propulsions::vtols::weapons"
+	]
+}

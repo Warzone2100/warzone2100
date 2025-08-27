@@ -70,7 +70,7 @@ jobs:
       # Needed by the release + other later jobs - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -136,7 +136,7 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       env:
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
-        SENTRY_BACKEND: breakpad
+        SENTRY_BACKEND: crashpad
         DISCORD_RPC_APPID: '${{ secrets.DISCORD_RPC_APPID }}'
       run: |
         ADDITIONAL_CMAKE_PARAMS=""
@@ -202,7 +202,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && (matrix.publish_artifact == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
         subject-path: '${{ env.WZ_FULL_OUTPUT_DEB_PATH }}'
@@ -230,7 +230,7 @@ jobs:
       run: |
         echo "GITHUB_REF=${GITHUB_REF}"
         echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -296,7 +296,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
         subject-path: '${{ env.OUTPUT_DIR }}/warzone2100_src.tar.xz'
@@ -322,7 +322,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
           path: 'src'
@@ -331,7 +331,7 @@ jobs:
           mkdir dl-debug-symbols
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: 'debugsymbols_*'
           path: ./dl-debug-symbols

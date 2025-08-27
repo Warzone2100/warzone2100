@@ -113,10 +113,25 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
+
+/* Check if droid is within commander's range */
+bool droidWithinCommanderRange(const DROID *psDroid, bool shield);
+
+/* Update droid shields. */
+void droidUpdateShields(DROID *psDroid);
+
+/* Calculate the droid's shield regeneration step time */
+UDWORD droidCalculateShieldRegenTime(const DROID *psDroid);
+
+/* Calculate the droid's shield interruption time */
+UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid);
+
+/* Get droid maximum shield points */
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};

@@ -1,0 +1,25 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions",
+	"title": "Propulsions",
+	"sort": "06",
+	"visual": {
+		"stat": {
+			"id": "ZNULLPROP"
+		}
+	},
+	"contents": [
+		"Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs.",
+		"",
+		"When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes.",
+		"",
+		"Additionally, you can find descriptions of each propulsion in this guide.",
+		"",
+		"Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
+		],
+	"links": [
+		"wz2100::general::intelmap",
+		"wz2100::units::designing",
+		"wz2100::weapons"
+	]
+}

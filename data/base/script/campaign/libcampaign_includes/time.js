@@ -51,3 +51,25 @@ function camHoursToSeconds(hours)
 {
 	return hours * camMinutesToSeconds(CAM_MINUTES_IN_HOUR);
 }
+
+//;; ## camSetMissionTimer(seconds)
+//;;
+//;; Sets the mission time for a level. This acts as a wrapper for `setMissionTime()`
+//;; and is mostly used to either set the time value passed (as seconds) or infinite
+//;; time if the `infiniteTime` tweak option is active.
+//;;
+//;; @param {number} time value in seconds
+//;; @returns {void}
+//;;
+function camSetMissionTimer(seconds)
+{
+	let timer = -1;
+	if (camDef(seconds) &&
+		camDef(tweakOptions.infiniteTime) &&
+		!tweakOptions.infiniteTime &&
+		(seconds >= 0))
+	{
+		timer = seconds;
+	}
+	setMissionTime(timer);
+}

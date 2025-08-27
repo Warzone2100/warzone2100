@@ -78,49 +78,48 @@ void sendOptions()
 
 	game.modHashes = getModHashList();
 
-	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
-
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 	// First send information about the game
-	NETuint8_t(reinterpret_cast<uint8_t*>(&game.type));
-	NETstring(game.map, 128);
-	NETbin(game.hash.bytes, game.hash.Bytes);
+	NETuint8_t(w, static_cast<uint8_t>(game.type));
+	NETstring(w, game.map, 128);
+	NETbin(w, game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize = game.modHashes.size();
-	NETuint32_t(&modHashesSize);
+	NETuint32_t(w, modHashesSize);
 	for (auto &hash : game.modHashes)
 	{
-		NETbin(hash.bytes, hash.Bytes);
+		NETbin(w, hash.bytes, hash.Bytes);
 	}
-	NETuint8_t(&game.maxPlayers);
-	NETstring(game.name, 128);
-	NETuint32_t(&game.power);
-	NETuint8_t(&game.base);
-	NETuint8_t(&game.alliance);
-	NETuint8_t(&game.scavengers);
-	NETbool(&game.isMapMod);
-	NETuint32_t(&game.techLevel);
+	NETuint8_t(w, game.maxPlayers);
+	NETstring(w, game.name, 128);
+	NETuint32_t(w, game.power);
+	NETuint8_t(w, game.base);
+	NETuint8_t(w, game.alliance);
+	NETuint8_t(w, game.scavengers);
+	NETbool(w, game.isMapMod);
+	NETuint32_t(w, game.techLevel);
 	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32 "; resetting to: %" PRIu32, game.inactivityMinutes, static_cast<uint32_t>(MIN_MPINACTIVITY_MINUTES));
 		game.inactivityMinutes = MIN_MPINACTIVITY_MINUTES;
 	}
-	NETuint32_t(&game.inactivityMinutes);
+	NETuint32_t(w, game.inactivityMinutes);
 	if (game.gameTimeLimitMinutes > 0 && game.gameTimeLimitMinutes < MIN_MPGAMETIMELIMIT_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid gameTimeLimitMinutes value specified: %" PRIu32 "; resetting to: %" PRIu32, game.gameTimeLimitMinutes, static_cast<uint32_t>(MIN_MPGAMETIMELIMIT_MINUTES));
 		game.gameTimeLimitMinutes = MIN_MPGAMETIMELIMIT_MINUTES;
 	}
-	NETuint32_t(&game.gameTimeLimitMinutes);
-	NETuint8_t(reinterpret_cast<uint8_t*>(&game.playerLeaveMode));
+	NETuint32_t(w, game.gameTimeLimitMinutes);
+	NETuint8_t(w, static_cast<uint8_t>(game.playerLeaveMode));
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
+		NETint8_t(w, static_cast<int8_t>(NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
-		NETbool(&ingame.JoiningInProgress[i]);
+		NETbool(w, ingame.JoiningInProgress[i]);
 	}
 
 	// Same goes for the alliances
@@ -128,7 +127,7 @@ void sendOptions()
 	{
 		for (unsigned j = 0; j < MAX_PLAYERS; j++)
 		{
-			NETuint8_t(&alliances[i][j]);
+			NETuint8_t(w, alliances[i][j]);
 		}
 	}
 
@@ -139,18 +138,18 @@ void sendOptions()
 		debug(LOG_ERROR, "Number of structure limits (%" PRIu32") exceeds maximum supported - truncating", numStructureLimits);
 		numStructureLimits = MAX_STRUCTURE_LIMITS;
 	}
-	NETuint32_t(&numStructureLimits);
+	NETuint32_t(w, numStructureLimits);
 	debug(LOG_NET, "(Host) Structure limits to process on client is %zu", ingame.structureLimits.size());
 	// Send the structures changed
 	for (auto structLimit : ingame.structureLimits)
 	{
-		NETuint32_t(&structLimit.id);
-		NETuint32_t(&structLimit.limit);
+		NETuint32_t(w, structLimit.id);
+		NETuint32_t(w, structLimit.limit);
 	}
 	updateStructureDisabledFlags();
-	NETuint8_t(&ingame.flags);
+	NETuint8_t(w, ingame.flags);
 
-	NETend();
+	NETend(w);
 
 	// also send a NET_HOST_CONFIG msg here
 	sendHostConfig();
@@ -174,42 +173,42 @@ bool recvOptions(NETQUEUE queue)
 	MULTIPLAYERGAME priorGameInfo = game;
 
 	debug(LOG_NET, "Receiving options from host");
-	NETbeginDecode(queue, NET_OPTIONS);
+	auto r = NETbeginDecode(queue, NET_OPTIONS);
 
 	// Get general information about the game
-	NETuint8_t(reinterpret_cast<uint8_t*>(&game.type));
-	NETstring(game.map, 128);
-	NETbin(game.hash.bytes, game.hash.Bytes);
+	NETuint8_t(r, reinterpret_cast<uint8_t&>(game.type));
+	NETstring(r, game.map, 128);
+	NETbin(r, game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
-	NETuint32_t(&modHashesSize);
+	NETuint32_t(r, modHashesSize);
 	ASSERT_OR_RETURN(false, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
 	game.modHashes.resize(modHashesSize);
 	for (auto &hash : game.modHashes)
 	{
-		NETbin(hash.bytes, hash.Bytes);
+		NETbin(r, hash.bytes, hash.Bytes);
 	}
-	NETuint8_t(&game.maxPlayers);
-	NETstring(game.name, 128);
-	NETuint32_t(&game.power);
-	NETuint8_t(&game.base);
-	NETuint8_t(&game.alliance);
-	NETuint8_t(&game.scavengers);
-	NETbool(&game.isMapMod);
-	NETuint32_t(&game.techLevel);
-	NETuint32_t(&game.inactivityMinutes);
+	NETuint8_t(r, game.maxPlayers);
+	NETstring(r, game.name, 128);
+	NETuint32_t(r, game.power);
+	NETuint8_t(r, game.base);
+	NETuint8_t(r, game.alliance);
+	NETuint8_t(r, game.scavengers);
+	NETbool(r, game.isMapMod);
+	NETuint32_t(r, game.techLevel);
+	NETuint32_t(r, game.inactivityMinutes);
 	if (game.inactivityMinutes > 0 && game.inactivityMinutes < MIN_MPINACTIVITY_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid inactivityMinutes value specified: %" PRIu32, game.inactivityMinutes);
 		return false;
 	}
-	NETuint32_t(&game.gameTimeLimitMinutes);
+	NETuint32_t(r, game.gameTimeLimitMinutes);
 	if (game.gameTimeLimitMinutes > 0 && game.gameTimeLimitMinutes < MIN_MPGAMETIMELIMIT_MINUTES)
 	{
 		debug(LOG_ERROR, "Invalid gameTimeLimitMinutes value specified: %" PRIu32, game.gameTimeLimitMinutes);
 		return false;
 	}
 	uint8_t tempPlayerLeaveModeValue = 0;
-	NETuint8_t(&tempPlayerLeaveModeValue);
+	NETuint8_t(r, tempPlayerLeaveModeValue);
 	if (tempPlayerLeaveModeValue > static_cast<uint8_t>(PLAYER_LEAVE_MODE_MAX))
 	{
 		debug(LOG_ERROR, "Invalid playerLeaveMode value specified: %" PRIu8, tempPlayerLeaveModeValue);
@@ -219,13 +218,13 @@ bool recvOptions(NETQUEUE queue)
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
+		NETint8_t(r, reinterpret_cast<int8_t&>(NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
-		NETbool(&ingame.JoiningInProgress[i]);
+		NETbool(r, ingame.JoiningInProgress[i]);
 	}
 
 	// Alliances
@@ -235,7 +234,7 @@ bool recvOptions(NETQUEUE queue)
 
 		for (j = 0; j < MAX_PLAYERS; j++)
 		{
-			NETuint8_t(&alliances[i][j]);
+			NETuint8_t(r, alliances[i][j]);
 		}
 	}
 
@@ -249,12 +248,12 @@ bool recvOptions(NETQUEUE queue)
 
 	// Get the number of structure limits to expect
 	uint32_t numStructureLimits = 0;
-	NETuint32_t(&numStructureLimits);
+	NETuint32_t(r, numStructureLimits);
 	debug(LOG_NET, "Host is sending us %u structure limits", numStructureLimits);
 	if (numStructureLimits > MAX_STRUCTURE_LIMITS)
 	{
 		debug(LOG_POPUP, "Number of structure limits (%" PRIu32") exceeds maximum supported. Incompatible host.", numStructureLimits);
-		NETend();
+		NETend(r);
 		return false;
 	}
 	// If there were any changes allocate memory for them
@@ -280,12 +279,12 @@ bool recvOptions(NETQUEUE queue)
 
 	for (i = 0; i < numStructureLimits; i++)
 	{
-		NETuint32_t(&ingame.structureLimits[i].id);
-		NETuint32_t(&ingame.structureLimits[i].limit);
+		NETuint32_t(r, ingame.structureLimits[i].id);
+		NETuint32_t(r, ingame.structureLimits[i].limit);
 	}
-	NETuint8_t(&ingame.flags);
+	NETuint8_t(r, ingame.flags);
 
-	NETend();
+	NETend(r);
 
 	// Do not print limits information if we don't have them loaded
 	if (bLimiterLoaded)
@@ -359,9 +358,9 @@ bool recvOptions(NETQUEUE queue)
 		NET_addDownloadingWZFile(WZFile(pFileHandle, filename, hash));
 
 		// Request the map/mod from the host
-		NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FILE_REQUESTED);
-		NETbin(hash.bytes, hash.Bytes);
-		NETend();
+		auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_FILE_REQUESTED);
+		NETbin(w, hash.bytes, hash.Bytes);
+		NETend(w);
 
 		return FileRequestResult::StartingDownload;  // Starting download now.
 	};
@@ -484,6 +483,11 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
 	ingame.PendingDisconnect[selectedPlayer] = false;
+	ingame.joinTimes[selectedPlayer] = std::chrono::steady_clock::now();
+	ingame.lastReadyTimes[selectedPlayer].reset();
+	ingame.lastNotReadyTimes[selectedPlayer].reset();
+	ingame.secondsNotReady[selectedPlayer] = 0;
+	ingame.playerLeftGameTime[selectedPlayer].reset();
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
@@ -491,7 +495,6 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	loadMultiStats(hostPlayerName, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
-	lookupRatingAsync(selectedPlayer);
 
 	multiStatsSetVerifiedHostIdentityFromJoin(playerStats.identity.toBytes(EcKey::Public));
 
@@ -505,15 +508,15 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 bool sendLeavingMsg()
 {
 	debug(LOG_NET, "We are leaving 'nicely'");
-	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_PLAYER_LEAVING);
+	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_PLAYER_LEAVING);
 	{
 		bool host = NetPlay.isHost;
 		uint32_t id = selectedPlayer;
 
-		NETuint32_t(&id);
-		NETbool(&host);
+		NETuint32_t(w, id);
+		NETbool(w, host);
 	}
-	NETend();
+	NETend(w);
 	NETflush();
 
 	return true;
@@ -523,10 +526,6 @@ bool sendLeavingMsg()
 // called in Init.c to shutdown the whole netgame gubbins.
 bool multiShutdown()
 {
-	// shut down netplay lib.
-	debug(LOG_MAIN, "shutting down networking");
-	NETshutdown();
-
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
@@ -610,9 +609,9 @@ void playerResponding()
 	}
 
 	// Tell the world we're here
-	NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
-	NETuint32_t(&selectedPlayer);
-	NETend();
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_PLAYERRESPONDING);
+	NETuint32_t(w, selectedPlayer);
+	NETend(w);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -793,15 +792,15 @@ void sendHostConfig()
 {
 	ASSERT_HOST_ONLY(return);
 
-	NETbeginEncode(NETbroadcastQueue(), NET_HOST_CONFIG);
+	auto w = NETbeginEncode(NETbroadcastQueue(), NET_HOST_CONFIG);
 
 	// Send the list of host-set player chat permissions
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
-		NETbool(&ingame.hostChatPermissions[i]);
+		NETbool(w, ingame.hostChatPermissions[i]);
 	}
 
-	NETend();
+	NETend(w);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -814,17 +813,18 @@ bool recvHostConfig(NETQUEUE queue)
 	std::array<bool, MAX_CONNECTED_PLAYERS> priorHostChatPermissions = ingame.hostChatPermissions;
 
 	debug(LOG_NET, "Receiving host_config from host");
-	NETbeginDecode(queue, NET_HOST_CONFIG);
+	auto r = NETbeginDecode(queue, NET_HOST_CONFIG);
 
 	// Host-set player chat permissions
 	for (unsigned int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
-		NETbool(&ingame.hostChatPermissions[i]);
+		NETbool(r, ingame.hostChatPermissions[i]);
 	}
 
-	NETend();
+	NETend(r);
 
 	informOnHostChatPermissionChanges(priorHostChatPermissions);
+	multiLobbyHandleHostOptionsChanges(priorHostChatPermissions);
 
 	return true;
 }
@@ -893,4 +893,4 @@ void printStructureLimitsInfo(std::vector<MULTISTRUCTLIMITS>& structureLimits, c
 			printLineFunc(tmpConsoleMsgStr);
 		}
 	}
-};
+}

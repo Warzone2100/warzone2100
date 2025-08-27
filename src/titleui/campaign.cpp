@@ -1493,7 +1493,6 @@ void WzCampaignSubInfoBox::display(int xOffset, int yOffset)
 		int compatImgPosX0 = x0 + (compatibilityLabel->x() - (imgDimensions + imgTextPadding));
 		UWORD img = 0;
 		PIELIGHT imgColor;
-		imgColor.rgba = 0;
 		switch (compatibilityResult)
 		{
 			case WzModCompatibilityResult::NOT_COMPATIBLE:
@@ -1553,6 +1552,62 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		"ps1Modifiers",
 		_("PS1 Modifiers"),
 		_("Reduces the damage the enemy deals to a third of the current difficulty modifier."),
+		false, true
+	);
+
+	results.emplace_back(
+		"infiniteTime",
+		_("Infinite Time"),
+		_("Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."),
+		false, true
+	);
+
+	results.emplace_back(
+		"victoryHints",
+		_("Victory Hints"),
+		_("Displays a console message every few minutes showing victory related information."),
+		true, true
+	);
+
+	results.emplace_back(
+		"gammaEndBonus",
+		_("Finale Fun"),
+		_("Activate Final Gamma mission bonus content."),
+		true, true
+	);
+
+	results.emplace_back(
+		"gammaBonusLevel",
+		_("Gamma Bonus"),
+		_("Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."),
+		false, true
+	);
+
+	results.emplace_back(
+		"insanePlus",
+		_("Insane Spawns"),
+		_("Enables additional enemy spawns and behavior for Insane difficulty (or higher)."),
+		true, true
+	);
+
+	results.emplace_back(
+		"insanePlusLowDiff",
+		_("Non-Insane Spawns"),
+		_("Toggles tweak option Insane Spawns for Hard difficulty and below."),
+		false, true
+	);
+
+	results.emplace_back(
+		"fastExp",
+		_("Fast EXP gain"),
+		_("Increases unit experience point gain by 2x."),
+		false, true
+	);
+
+	results.emplace_back(
+		"towerWars",
+		_("Tower Wars"),
+		_("Player gets significantly stronger structures."),
 		false, true
 	);
 
@@ -1745,7 +1800,7 @@ void CampaignStartOptionsForm::display(int xOffset, int yOffset)
 	iV_Line(leftLineX0, y0, leftLineX0, y1, pal_RGBA(0,0,0,255));
 }
 
-static char const *difficultyLevelToString(DIFFICULTY_LEVEL difficulty)
+const char* difficultyLevelToString(DIFFICULTY_LEVEL difficulty)
 {
 	switch (difficulty)
 	{
@@ -1758,7 +1813,7 @@ static char const *difficultyLevelToString(DIFFICULTY_LEVEL difficulty)
 	return _("Unsupported");
 }
 
-static const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty)
+const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty)
 {
 	switch (difficulty)
 	{

@@ -52,7 +52,8 @@ enum LOBBY_ERROR_TYPES
 	ERROR_WRONGPASSWORD,
 	ERROR_HOSTDROPPED,
 	ERROR_WRONGDATA,
-	ERROR_UNKNOWNFILEISSUE
+	ERROR_UNKNOWNFILEISSUE,
+	ERROR_REDIRECT
 };
 
 enum CONNECTION_STATUS
@@ -158,7 +159,7 @@ enum SYNC_OPT_TYPES
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.
-#define MaxMsgSize		16384		// max size of a message in bytes.
+#define MaxMsgSize		32768		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define extra_string_size	157		// extra 199 char for future use
 #define map_string_size		40
@@ -167,6 +168,8 @@ enum SYNC_OPT_TYPES
 #define password_string_size 64		// longer passwords slow down the join code
 
 #define MAX_NET_TRANSFERRABLE_FILE_SIZE	0x8000000
+
+static_assert(MaxMsgSize <= UINT16_MAX, "NetMessage/NetMessageBuilder encodes message length as a uint16_t");
 
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 {
@@ -358,7 +361,7 @@ enum class ConnectionProviderType : uint8_t;
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 int NETinit(ConnectionProviderType pt);
-WZ_DECL_NONNULL(2) bool NETsend(NETQUEUE queue, NetMessage const *message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+bool NETsend(NETQUEUE queue, NetMessage const& message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
 void NETsendProcessDelayedActions();
 WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        ///< recv a message from the net queues if possible.
 WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       ///< recv a message from the game queues which is sceduled to execute by time, if possible.
@@ -381,7 +384,7 @@ void NETinitPortMapping();
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
 size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
-void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
+void NETplayerKicked(UDWORD index, bool quiet = false);			// Cleanup after player has been kicked
 
 bool NETplayerHasConnection(uint32_t index);
 
@@ -494,6 +497,9 @@ const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
 uint32_t NET_getCurrentHostedLobbyGameId();
 
+// If a client, retrieve the current host's address
+optional<std::string> NET_getCurrentHostTextAddress();
+
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
@@ -502,6 +508,7 @@ void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);   
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
 void NETsetAsyncJoinApprovalRequired(bool enabled);
+bool NETgetAsyncJoinApprovalRequired();
 
 enum class AsyncJoinApprovalAction
 {
@@ -510,7 +517,7 @@ enum class AsyncJoinApprovalAction
 	Reject
 };
 //	NOTE: *MUST* be called from the main thread!
-bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR, optional<std::string> customRejectionMessage = nullopt);
+bool NETsetAsyncJoinApprovalResult(const std::string& uniqueJoinID, AsyncJoinApprovalAction action, optional<uint8_t> explicitPlayerIdx, LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR, optional<std::string> customRejectionMessage = nullopt);
 
 const char *messageTypeToString(unsigned messageType);
 

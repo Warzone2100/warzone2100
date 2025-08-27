@@ -1,3 +1,5 @@
+# https://github.com/WebKit/WebKit/blob/0742522b24152262b04913242cb0b3c48de92ba0/Source/cmake/DetectSSE2.cmake
+
 #################################
 # Check for the presence of SSE2.
 #
@@ -34,9 +36,9 @@
 set(SSE2_SUPPORT_FOUND FALSE)
 
 macro(CHECK_FOR_SSE2)
-    include(CheckCXXSourceCompiles)
+    include(CheckCXXSourceRuns)
 
-    check_cxx_source_compiles("
+    check_cxx_source_runs("
         #include <emmintrin.h>
         int main ()
         {
@@ -47,7 +49,7 @@ macro(CHECK_FOR_SSE2)
             _mm_storeu_pd (vals,b);
             return 0;
         }"
-        HAVE_SSE2_EXTENSIONS)
+            HAVE_SSE2_EXTENSIONS)
 
     if (COMPILER_IS_GCC_OR_CLANG OR (MSVC AND NOT CMAKE_CL_64))
         if (HAVE_SSE2_EXTENSIONS)

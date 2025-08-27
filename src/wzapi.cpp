@@ -1669,6 +1669,29 @@ endstructloc:
 	return {};
 }
 
+//-- ## structureCanFit(structureName, x, y[, direction])
+//--
+//-- Return true if given building can be built at the position. (4.6+ only)
+//--
+bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y, optional<float> _direction))
+{
+	const int player = context.player();
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
+	STRUCTURE_STATS	*psStat = &asStructureStats[structureIndex];
+	SCRIPT_ASSERT(false, context, psStat, "No such stat found: %s", structureName.c_str());
+
+	if (_direction.has_value() && std::isnan(_direction.value()))
+	{
+		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
+	}
+	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+
+	return (tileOnMap(x, y)
+			&& validLocation(psStat, world_coord(Vector2i(x, y)), direction, player, false));
+}
+
 //-- ## droidCanReach(droid, x, y)
 //--
 //-- Return whether or not the given droid could possibly drive to the given position. Does
@@ -3265,12 +3288,12 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 	{
 		return false;
 	}
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-	NETuint8_t(&giftType);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint32_t(&object_id);
-	NETend();
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+	NETuint8_t(w, giftType);
+	NETuint8_t(w, from);
+	NETuint8_t(w, to);
+	NETuint32_t(w, object_id);
+	NETend(w);
 	return true;
 }
 
@@ -3371,7 +3394,7 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 	Vector3i target;
 	target.x = world_coord(x);
 	target.y = world_coord(y);
-	target.z = map_Height(x, y);
+	target.z = mapTile(x, y)->height;
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weaponIndex;

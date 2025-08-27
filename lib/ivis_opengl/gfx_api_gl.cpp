@@ -24,6 +24,7 @@
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
+#include "lib/framework/stringsearch.h"
 #include "piemode.h"
 
 #include <vector>
@@ -836,7 +837,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents"
+			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4},
@@ -861,7 +862,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
+			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4}
@@ -904,11 +905,15 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
 			"tex1", "tex2", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex", "tex_nm", "tex_sm", "lightmap_tex" } }),
+			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
+			"tex", "tex_nm", "tex_sm", "lightmap_tex"
+		},
+		{
+			{"shadowMap", 4}
+		} }),
 	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -1150,13 +1155,13 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
+gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
 	std::string fragmentShaderHeader;
 
-	if (!gles)
+	if (!ctx.gles)
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL context
 		// (The built-in shaders support (and have been tested with) VERSION_120, VERSION_150_CORE, VERSION_330_CORE)
@@ -1190,7 +1195,8 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
 	}
 
-	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
+	build_program(ctx,
+				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
 				  shader_to_file_table.at(createInfo.shader_mode).friendly_name,
 				  vertexShaderHeader.c_str(),
 				  shader_to_file_table.at(createInfo.shader_mode).vertex_file,
@@ -1703,7 +1709,7 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
 }
 
-void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
 											 bool patchFragmentShaderMipLodBias,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
@@ -1780,10 +1786,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				success = true;
 			}
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
-			{
-				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
-			}
+			ctx.wzGLObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 #endif
 		}
 	}
@@ -1853,10 +1856,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				success = true;
 			}
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
-			{
-				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
-			}
+			ctx.wzGLObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 #endif
 		}
 	}
@@ -1878,10 +1878,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 			printProgramInfoLog(LOG_3D, program);
 		}
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-		if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
-		{
-			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
-		}
+		ctx.wzGLObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 #endif
 	}
 	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
@@ -2124,6 +2121,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(24, cbuf.normalMap);
 	setUniforms(25, cbuf.specularMap);
 	setUniforms(26, cbuf.hasTangents);
+	setUniforms(27, cbuf.shieldEffect);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
@@ -2257,9 +2255,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ViewMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
 	setUniforms(i++, cbuf.emissiveLight);
@@ -2267,6 +2265,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.diffuseLight);
 	setUniforms(i++, cbuf.specularLight);
 	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
+	setUniforms(i++, cbuf.ShadowMapSize);
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
@@ -2462,9 +2462,9 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 	for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
@@ -2502,9 +2502,9 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 	// Allocate a client-side buffer
@@ -2533,9 +2533,9 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 
@@ -2559,9 +2559,9 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 
@@ -2591,7 +2591,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	}
 
 	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
+	auto pipeline = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
 	if (!psoID.has_value())
 	{
 		createdPipelines.emplace_back(createInfo);
@@ -3065,9 +3065,9 @@ void gl_context::debugStringMarker(const char *str)
 void gl_context::debugSceneBegin(const char *descr)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPushDebugGroup)
+	if (khr_debug)
 	{
-		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
+		wzGLPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
 	}
 #else
 	// not supported
@@ -3077,9 +3077,9 @@ void gl_context::debugSceneBegin(const char *descr)
 void gl_context::debugSceneEnd(const char *descr)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPopDebugGroup)
+	if (khr_debug)
 	{
-		glPopDebugGroup();
+		wzGLPopDebugGroup();
 	}
 #else
 	// not supported
@@ -3122,9 +3122,9 @@ void gl_context::debugPerfStop()
 void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPushDebugGroup)
+	if (khr_debug)
 	{
-		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
+		wzGLPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
 	}
 #endif
 #if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
@@ -3139,9 +3139,9 @@ void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 void gl_context::debugPerfEnd(PERF_POINT pp)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPopDebugGroup)
+	if (khr_debug)
 	{
-		glPopDebugGroup();
+		wzGLPopDebugGroup();
 	}
 #endif
 #if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
@@ -3364,6 +3364,9 @@ bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> c
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 
+static const PreprocessedASCIISearchString OOM_GL_ERROR_SEARCH_STRING = PreprocessedASCIISearchString("GL_OUT_OF_MEMORY");
+static std::atomic<bool> khrCallbackOomDetected(false);
+
 static const char *cbsource(GLenum source)
 {
 	switch (source)
@@ -3414,6 +3417,12 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 		if (severity == GL_DEBUG_SEVERITY_HIGH)
 		{
 			log_level = LOG_ERROR;
+
+			// detect OUT_OF_MEMORY errors, set flag
+			if (message != nullptr && containsSubstringPreprocessed(message, std::min<size_t>(length, strnlen(message, length)), OOM_GL_ERROR_SEARCH_STRING))
+			{
+				khrCallbackOomDetected.store(true);
+			}
 		}
 	}
 	debugLogFromGfxCallback(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), (message != nullptr) ? message : "");
@@ -3482,6 +3491,10 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 
 bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	khrCallbackOomDetected.store(false);
+#endif
+
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
 	if (!backend_impl)
@@ -3537,11 +3550,11 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		return false;
 	}
 
-	if (!setSwapInterval(mode))
+	if (!setSwapIntervalInternal(mode))
 	{
 		// default to vsync on
 		debug(LOG_3D, "Failed to set swap interval: %d; defaulting to vsync on", to_int(mode));
-		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
+		setSwapIntervalInternal(gfx_api::context::swap_interval_mode::vsync);
 	}
 
 	mipLodBias = _mipLodBias;
@@ -3681,6 +3694,176 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 	return false;
 }
 
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+
+bool gl_context::enableDebugMessageCallbacks()
+{
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glDebugMessageCallback && glDebugMessageControl)
+		{
+			glDebugMessageCallback(khr_callback, nullptr);
+			wzGLCheckErrors();
+			glEnable(GL_DEBUG_OUTPUT);
+			wzGLCheckErrors();
+			// Do not want to output notifications. Some drivers spam them too much.
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+			wzGLCheckErrors();
+			debug(LOG_3D, "Enabling KHR_debug message callback");
+			return true;
+		}
+		else
+		{
+			debug(LOG_3D, "Failed to enable KHR_debug message callback");
+		}
+	}
+	else
+	{
+		if (glDebugMessageCallbackKHR && glDebugMessageControlKHR)
+		{
+			glDebugMessageCallbackKHR(khr_callback, nullptr);
+			wzGLCheckErrors();
+			glEnable(GL_DEBUG_OUTPUT_KHR);
+			wzGLCheckErrors();
+			// Do not want to output notifications. Some drivers spam them too much.
+			glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION_KHR, 0, nullptr, GL_FALSE);
+			wzGLCheckErrors();
+			debug(LOG_3D, "Enabling KHR_debug message callback");
+			return true;
+		}
+		else
+		{
+			debug(LOG_3D, "Failed to enable KHR_debug message callback");
+		}
+	}
+
+	return false;
+}
+
+void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
+{
+	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	{
+		return;
+	}
+
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glObjectLabel)
+		{
+			glObjectLabel(identifier, name, length, label);
+		}
+	}
+	else
+	{
+		if (glObjectLabelKHR)
+		{
+			glObjectLabelKHR(identifier, name, length, label);
+		}
+	}
+}
+
+void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
+{
+	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	{
+		return;
+	}
+
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glPushDebugGroup)
+		{
+			glPushDebugGroup(source, id, length, message);
+		}
+	}
+	else
+	{
+		if (glPushDebugGroupKHR)
+		{
+			glPushDebugGroupKHR(source, id, length, message);
+		}
+	}
+}
+
+void gl_context::wzGLPopDebugGroup()
+{
+	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	{
+		return;
+	}
+
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glPopDebugGroup)
+		{
+			glPopDebugGroup();
+		}
+	}
+	else
+	{
+		if (glPopDebugGroupKHR)
+		{
+			glPopDebugGroupKHR();
+		}
+	}
+}
+
+bool gl_context::useKHRSuffixedDebugFuncs()
+{
+	if (!gles)
+	{
+		// Desktop OpenGL does *not* use KHR-suffixed entrypoints
+		return false;
+	}
+
+	// OpenGL ES:
+	//
+	// OpenGL ES 3.2 makes this "core" (without the suffix)
+	if (GLAD_GL_ES_VERSION_3_2)
+	{
+		return false;
+	}
+	// When KHR_debug is implemented in an OpenGL ES context, all entry points defined must have a "KHR" suffix.
+	// Reference: https://registry.khronos.org/OpenGL/extensions/KHR/KHR_debug.txt
+	if (GLAD_GL_KHR_debug)
+	{
+		return true;
+	}
+	return false;
+}
+
+#else
+
+bool gl_context::enableDebugMessageCallbacks()
+{
+	return false;
+}
+
+void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
+{
+	// no-op
+}
+
+void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
+{
+	// no-op
+}
+
+void gl_context::wzGLPopDebugGroup()
+{
+	// no-op
+}
+
+bool gl_context::useKHRSuffixedDebugFuncs()
+{
+	return false;
+}
+
+#endif
+
+
+
 bool gl_context::initGLContext()
 {
 	frameNum = 1;
@@ -3732,7 +3915,7 @@ bool gl_context::initGLContext()
 	}
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	khr_debug = GLAD_GL_KHR_debug;
+	khr_debug = (/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug);
 #else
 	khr_debug = false;
 #endif
@@ -3922,21 +4105,7 @@ bool gl_context::initGLContext()
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug)
 	{
-		if (glDebugMessageCallback && glDebugMessageControl)
-		{
-			glDebugMessageCallback(khr_callback, nullptr);
-			wzGLCheckErrors();
-			glEnable(GL_DEBUG_OUTPUT);
-			wzGLCheckErrors();
-			// Do not want to output notifications. Some drivers spam them too much.
-			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-			wzGLCheckErrors();
-			debug(LOG_3D, "Enabling KHR_debug message callback");
-		}
-		else
-		{
-			debug(LOG_3D, "Failed to enable KHR_debug message callback");
-		}
+		enableDebugMessageCallbacks();
 	}
 #endif
 
@@ -4051,6 +4220,13 @@ void gl_context::beginRenderPass()
 #endif
 }
 
+[[noreturn]] static void glContextHandleOOMError()
+{
+	wzDisplayFatalGfxBackendFailure("GL_OUT_OF_MEMORY");
+	wzResetGfxSettingsOnFailure();
+	abort();
+}
+
 void gl_context::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
@@ -4059,6 +4235,13 @@ void gl_context::endRenderPass()
 	current_program = nullptr;
 #if !defined(__EMSCRIPTEN__)
 	_beginRenderPassImpl();
+#endif
+
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (khrCallbackOomDetected.load())
+	{
+		glContextHandleOOMError();
+	}
 #endif
 }
 
@@ -4780,9 +4963,19 @@ const size_t& gl_context::current_FrameNum() const
 	return frameNum;
 }
 
-bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode)
+bool gl_context::setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode)
 {
 	return backend_impl->setSwapInterval(mode);
+}
+
+bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler)
+{
+	auto success = setSwapIntervalInternal(mode);
+	if (success && completionHandler)
+	{
+		completionHandler();
+	}
+	return success;
 }
 
 gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const
@@ -4865,7 +5058,7 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 			(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
 		}
 	}
 
@@ -4880,7 +5073,7 @@ bool gl_context::debugRecompileAllPipelines()
 		if (pipelineInfo.pso)
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
 		}
 	}
 	return true;

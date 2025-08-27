@@ -271,8 +271,10 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 	return psTarget;
 }
 
-/* Calculates attack priority for a certain target */
-static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
+// Calculates attack priority for a certain target
+// Returns the target attack weight if it's greater than currentBest
+// (otherwise, may shortcut various costly calculations, and returns <= 0)
+static SDWORD targetAttackWeightIfGreaterThan(SDWORD currentBest, BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, SDWORD weapon_slot)
 {
 	SDWORD			targetTypeBonus = 0, damageRatio = 0, attackWeight = 0, noTarget = -1;
 	UDWORD			weaponSlot;
@@ -489,11 +491,6 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		return 1;
 	}
 
-	if (bDirect && !lineOfFire(psAttacker, psTarget, weapon_slot, false))
-	{
-		attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain
-	}
-
 	/* We prefer objects we can see and can attack immediately */
 	if (!visibleObject((BASE_OBJECT *)psAttacker, psTarget, true))
 	{
@@ -542,6 +539,19 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 					attackWeight += WEIGHT_CMD_SAME_TARGET;
 				}
 			}
+		}
+	}
+
+	if (bDirect)
+	{
+		// lineOfFire is a costly check - shortcut if there's no way we'd return an attackWeight > currentBest
+		if (attackWeight <= currentBest)
+		{
+			return std::min<int>(0, attackWeight);
+		}
+		if (!lineOfFire(psAttacker, psTarget, weapon_slot, false))
+		{
+			attackWeight /= WEIGHT_NOT_LOS_VISIBLE_F; // Prefer objects not obstructed by terrain
 		}
 	}
 
@@ -594,7 +604,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	if (!proj_Direct(psWStats))
 	{
 		bestTarget = aiSearchSensorTargets((BASE_OBJECT *)psDroid, weapon_slot, psWStats, &tmpOrigin);
-		bestMod = targetAttackWeight(bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
+		bestMod = targetAttackWeightIfGreaterThan(-1, bestTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 	}
 
 	weaponEffect = psWStats->weaponEffect;
@@ -639,7 +649,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 							// make sure this target wasn't assigned explicitly to this droid
 							if (friendlyDroid->order.type != DORDER_ATTACK)
 							{
-								targetInQuestion = tempTarget;  //consider this target
+								if (bestTarget != tempTarget && psTarget != tempTarget)
+								{
+									targetInQuestion = tempTarget;  //consider this target
+								}
 							}
 						}
 					}
@@ -649,7 +662,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 					tempTarget = ((STRUCTURE *)friendlyObj)->psTarget[0];
 					if (tempTarget && !tempTarget->died)
 					{
-						targetInQuestion = tempTarget;
+						if (bestTarget != tempTarget && psTarget != tempTarget)
+						{
+							targetInQuestion = tempTarget;
+						}
 					}
 				}
 			}
@@ -716,9 +732,10 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 			}
 
 			/* Check if our weapon is most effective against this object */
-			if (psTarget != nullptr && psTarget == targetInQuestion)		//was assigned?
+			if (psTarget != nullptr && psTarget == targetInQuestion		//was assigned?
+				&& psTarget != bestTarget) // avoid duplicate checks
 			{
-				int newMod = targetAttackWeight(psTarget, (BASE_OBJECT *)psDroid, weapon_slot);
+				int newMod = targetAttackWeightIfGreaterThan(bestMod, psTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 
 				/* Remember this one if it's our best target so far */
 				if (newMod >= 0 && (newMod > bestMod || bestTarget == nullptr))
@@ -879,7 +896,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		 * ourselves... */
 		if (bUpdateTarget && psCurrTarget != psObj)
 		{
-			curTargetWeight = targetAttackWeight(psCurrTarget, psObj, weapon_slot);
+			curTargetWeight = targetAttackWeightIfGreaterThan(-1, psCurrTarget, psObj, weapon_slot);
 		}
 
 		if (newTargetWeight >= 0		// found a new target
@@ -966,7 +983,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 				    && validTarget(psObj, psCurr, weapon_slot) && psCurr->visible[psObj->player] == UBYTE_MAX
 				    && aiStructHasRange((STRUCTURE *)psObj, psCurr, weapon_slot))
 				{
-					int newTargetValue = targetAttackWeight(psCurr, psObj, weapon_slot);
+					int newTargetValue = targetAttackWeightIfGreaterThan(targetValue - 1, psCurr, psObj, weapon_slot);
 					// See if in sensor range and visible
 					int distSq = objPosDiffSq(psCurr->pos, psObj->pos);
 					if (newTargetValue < targetValue || (newTargetValue == targetValue && distSq >= tarDist))

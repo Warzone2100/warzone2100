@@ -48,6 +48,39 @@
 namespace gns
 {
 
+namespace
+{
+
+void setupCommonConnOptions(std::vector<SteamNetworkingConfigValue_t>& opts)
+{
+	constexpr int32_t SEND_BUFFER_SIZE = 1024 * 1024; // 1 MB
+	constexpr int32_t RECV_BUFFER_SIZE = 2 * 1024 * 1024; // 2 MB
+	constexpr int32_t SEND_RATE_LIMIT = 10 * 1024 * 1024; // 10 MB/s
+
+	// Adjust the default Send/Receive buffer sizes for the client connections.
+	// Send buffer size defaults to 512 KB and receive buffer size defaults to 1024 KB, which may not
+	// be enough for some edge cases, so increase them to 1 MB and 2 MB, respectively.
+	SteamNetworkingConfigValue_t sendBufferSize;
+	sendBufferSize.SetInt32(k_ESteamNetworkingConfig_SendBufferSize, SEND_BUFFER_SIZE);
+	opts.emplace_back(std::move(sendBufferSize));
+
+	SteamNetworkingConfigValue_t recvBufferSize;
+	recvBufferSize.SetInt32(k_ESteamNetworkingConfig_RecvBufferSize, RECV_BUFFER_SIZE);
+	opts.emplace_back(std::move(recvBufferSize));
+
+	// Increase the send rate limit for the created connections from the default 256 KB/s to 10 MB/s
+	// to ensure that we're not artificially rate-limited in any realistic scenario.
+	SteamNetworkingConfigValue_t sendRateMin;
+	sendRateMin.SetInt32(k_ESteamNetworkingConfig_SendRateMin, SEND_RATE_LIMIT);
+	opts.emplace_back(std::move(sendRateMin));
+
+	SteamNetworkingConfigValue_t sendRateMax;
+	sendRateMax.SetInt32(k_ESteamNetworkingConfig_SendRateMax, SEND_RATE_LIMIT);
+	opts.emplace_back(std::move(sendRateMax));
+}
+
+} // anonymous namespace
+
 static std::once_flag gnsInitFlag;
 static GNSConnectionProvider* activeServer = nullptr;
 
@@ -98,12 +131,16 @@ void GNSConnectionProvider::initialize()
 		constexpr int32_t CONNECTED_TIMEOUT_MS = 10000;
 		connectedTimeoutMs.SetInt32(k_ESteamNetworkingConfig_TimeoutConnected, CONNECTED_TIMEOUT_MS);
 		listenSocketOpts_.emplace_back(std::move(connectedTimeoutMs));
+
+		setupCommonConnOptions(listenSocketOpts_);
 	}
 	{
 		// Initialize base client-side options for client connections
 		SteamNetworkingConfigValue_t connStatusCb;
 		connStatusCb.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, reinterpret_cast<void*>(GNSConnectionProvider::ClientConnectionStateChanged));
 		clientConnOpts_.emplace_back(std::move(connStatusCb));
+
+		setupCommonConnOptions(clientConnOpts_);
 	}
 
 	activeServer = this;
@@ -227,11 +264,11 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 		debug(LOG_ERROR, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	default:
 		break;
@@ -256,11 +293,11 @@ void GNSConnectionProvider::ClientConnectionStateChanged(SteamNetConnectionStatu
 		break;
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 		debug(LOG_WARNING, "Connection closed by peer: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
 		debug(LOG_ERROR, "Connection closed, problem detected locally: %u", pInfo->m_hConn);
-		connProvider->disposeConnection(pInfo->m_hConn);
+		connProvider->disposeConnectionImpl(pInfo->m_hConn);
 		break;
 	default:
 		break;
@@ -291,7 +328,14 @@ void GNSConnectionProvider::registerAcceptedConnection(GNSClientConnection* conn
 	activeClients_[conn->connectionHandle()] = conn;
 }
 
-void GNSConnectionProvider::disposeConnection(HSteamNetConnection hConn)
+void GNSConnectionProvider::disposeConnection(IClientConnection* conn)
+{
+	auto* gnsConn = dynamic_cast<GNSClientConnection*>(conn);
+	ASSERT_OR_RETURN(, gnsConn != nullptr, "Expected GNSClientConnection instance");
+	disposeConnectionImpl(gnsConn->connectionHandle());
+}
+
+void GNSConnectionProvider::disposeConnectionImpl(HSteamNetConnection hConn)
 {
 	if (hConn == k_HSteamNetConnection_Invalid)
 	{

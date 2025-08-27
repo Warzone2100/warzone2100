@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.14)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Automatically update the VERSION_INFO in the warzone2100.rc and the .manifest file
 #
@@ -70,6 +67,9 @@ if(DID_EXTRACT_VERSION)
 
 else()
 	message( WARNING "The VCS_MOST_RECENT_TAGGED_VERSION tag does not seem to include a version #; defaulting to 0.0.0" )
+	set(EXTRACTED_VERSION_MAJOR "0")
+	set(EXTRACTED_VERSION_MINOR "0")
+	set(EXTRACTED_VERSION_PATCH "0")
 endif()
 
 # Determine the build-number component of the version info

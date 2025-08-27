@@ -95,6 +95,11 @@ void TableRow::setDrawBorder(optional<PIELIGHT> newBorderColor)
 	borderColor = newBorderColor;
 }
 
+void TableRow::setBackgroundColor(optional<PIELIGHT> newBackgroundColor)
+{
+	backgroundColor = newBackgroundColor;
+}
+
 // Set whether row is "disabled"
 void TableRow::setDisabled(bool disabled)
 {
@@ -124,13 +129,19 @@ void TableRow::display(int xOffset, int yOffset)
 	int x1 = x0 + width();
 	int y1 = y0 + height();
 
+	if (highlightsOnMouseOver && isMouseOverRowOrChildren() && !disabledRow)
+	{
+		iV_TransBoxFill(x0, y0, x1, y1);
+	}
+	else if (backgroundColor.has_value())
+	{
+		pie_UniTransBoxFill(x0, y0, x1, y1, backgroundColor.value());
+	}
+
 	if (borderColor.has_value())
 	{
 		iV_Box(x0, y0, x1, y1, borderColor.value());
 	}
-
-	if (!highlightsOnMouseOver || !isMouseOverRowOrChildren() || disabledRow) { return; }
-	iV_TransBoxFill(x0, y0, x1, y1);
 }
 
 void TableRow::displayRecursive(WidgetGraphicsContext const& context)
@@ -162,13 +173,13 @@ bool TableRow::hitTest(int x, int y) const
 	return W_BUTTON::hitTest(x, y);
 }
 
-bool TableRow::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> TableRow::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	// if processClickRecursive was called for this row, it means the mouse is over it
-	// (see WIDGET::processClickRecursive)
+	// if findMouseTargetRecursive was called for this row, it means the mouse is over it
+	// (see WIDGET::findMouseTargetRecursive)
 	lastFrameMouseIsOverRowOrChildren = frameGetFrameNumber();
 
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 bool TableRow::isMouseOverRowOrChildren() const
@@ -218,6 +229,8 @@ protected:
 	virtual void released(W_CONTEXT *, WIDGET_KEY) override;
 	virtual void run(W_CONTEXT *psContext) override;
 	virtual void geometryChanged() override;
+	virtual bool capturesMouseDrag(WIDGET_KEY) override;
+	virtual void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
 
 public:
 	void addColumn(const TableColumn& column);
@@ -278,17 +291,29 @@ void TableHeader::display(int xOffset, int yOffset)
 	}
 }
 
-void TableHeader::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+bool TableHeader::capturesMouseDrag(WIDGET_KEY)
 {
-	if (userResizableHeaders && key == WKEY_PRIMARY && !columns.empty())
+	return userResizableHeaders;
+}
+
+void TableHeader::mouseDragged(WIDGET_KEY key, W_CONTEXT *start, W_CONTEXT *current)
+{
+	if (!userResizableHeaders || key != WKEY_PRIMARY || columns.empty())
 	{
+		return;
+	}
+
+	if (!dragStart.has_value())
+	{
+		dragStart = Vector2i(start->mx, start->my);
+
 		// determine the column that is being resized
 		colBeingResized = nullopt;
 		for (size_t colIdx = columns.size() - 1; /* termination handled in loop body */; colIdx--)
 		{
 			auto& columnWidget = columns[colIdx].columnWidget;
 			int col_x1 = columnWidget->x() + columnWidget->width();
-			if (psContext->mx > col_x1)
+			if (start->mx > col_x1)
 			{
 				if (columns[colIdx].resizeBehavior != TableColumn::ResizeBehavior::FIXED_WIDTH)
 				{
@@ -302,13 +327,36 @@ void TableHeader::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 			}
 		}
 		if (!colBeingResized.has_value()) { return; }
-		dragStart = Vector2i(psContext->mx, psContext->my);
 	}
+
+	if (dragStart.has_value() && colBeingResized.has_value())
+	{
+		// handle column resize while dragging
+		Vector2i currentMousePos(current->mx, current->my);
+		Vector2i dragDelta(currentMousePos.x - dragStart.value().x, currentMousePos.y - dragStart.value().y);
+
+		int priorColumnWidth = columns[colBeingResized.value()].columnWidget->width();
+		size_t newProposedColumnWidth = static_cast<size_t>(std::max<int>(priorColumnWidth + dragDelta.x, 0));
+		if (auto table = parentTable.lock())
+		{
+			auto result = table->header_changeColumnWidth(colBeingResized.value(), static_cast<size_t>(newProposedColumnWidth));
+			if (result.has_value())
+			{
+				Vector2i currentDragLogicalPos = dragStart.value();
+				currentDragLogicalPos.x += (static_cast<int>(result.value()) - priorColumnWidth);
+				dragStart = currentDragLogicalPos;
+			}
+		}
+	}
+}
+
+void TableHeader::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	// currently, no-op
 }
 
 void TableHeader::released(W_CONTEXT *, WIDGET_KEY)
 {
-	if (!userResizableHeaders || !dragStart.has_value()) { return; }
 	colBeingResized = nullopt;
 	dragStart = nullopt;
 }
@@ -339,32 +387,7 @@ void TableHeader::setColumnPadding(Vector2i padding)
 
 void TableHeader::run(W_CONTEXT *psContext)
 {
-	if (!userResizableHeaders || !dragStart.has_value()) { return; }
-
-	/* If the mouse is released *anywhere*, stop dragging */
-	if (mouseReleased(MOUSE_LMB))
-	{
-		colBeingResized = nullopt;
-		dragStart = nullopt;
-		return;
-	}
-
-	Vector2i currentMousePos(psContext->mx, psContext->my);
-	if (currentMousePos == dragStart.value()) { return; }
-	Vector2i dragDelta(currentMousePos.x - dragStart.value().x, currentMousePos.y - dragStart.value().y);
-
-	int priorColumnWidth = columns[colBeingResized.value()].columnWidget->width();
-	size_t newProposedColumnWidth = static_cast<size_t>(std::max<int>(priorColumnWidth + dragDelta.x, 0));
-	if (auto table = parentTable.lock())
-	{
-		auto result = table->header_changeColumnWidth(colBeingResized.value(), static_cast<size_t>(newProposedColumnWidth));
-		if (result.has_value())
-		{
-			Vector2i currentDragLogicalPos = dragStart.value();
-			currentDragLogicalPos.x += (static_cast<int>(result.value()) - priorColumnWidth);
-			dragStart = currentDragLogicalPos;
-		}
-	}
+	// currently, no-op
 }
 
 void TableHeader::geometryChanged()

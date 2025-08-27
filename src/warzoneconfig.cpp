@@ -60,7 +60,7 @@ struct WARZONE_GLOBALS
 	int antialiasing = 0;
 	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
-	bool trapCursor = false;
+	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -76,6 +76,7 @@ struct WARZONE_GLOBALS
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
 	int autoDesyncKickSeconds = 10;
+	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -199,13 +200,13 @@ int war_getAntialiasing()
 	return warGlobs.antialiasing;
 }
 
-void war_SetTrapCursor(bool b)
+void war_SetTrapCursor(TrapCursorMode v)
 {
-	warGlobs.trapCursor = b;
-	ActivityManager::instance().changedSetting("trapCursor", std::to_string(b));
+	warGlobs.trapCursor = v;
+	ActivityManager::instance().changedSetting("trapCursor", std::to_string(static_cast<int>(v)));
 }
 
-bool war_GetTrapCursor()
+TrapCursorMode war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
 }
@@ -505,6 +506,21 @@ void war_setAutoDesyncKickSeconds(int seconds)
 		seconds = std::max(seconds, 10);
 	}
 	warGlobs.autoDesyncKickSeconds = seconds;
+}
+
+int war_getAutoNotReadyKickSeconds()
+{
+	return warGlobs.autoNotReadyKickSeconds;
+}
+
+void war_setAutoNotReadyKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 15);
+	}
+	warGlobs.autoNotReadyKickSeconds = seconds;
 }
 
 bool war_getDisableReplayRecording()

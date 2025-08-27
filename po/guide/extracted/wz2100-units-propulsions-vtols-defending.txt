@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Defending with VTOLs")
+_("VTOL units may also be used to defend areas of the map.")
+_("VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor).")
+_("VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path.")

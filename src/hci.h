@@ -268,6 +268,8 @@ extern iIMDShape	*pNewDesignIMD;
 /* Initialise the in game interface */
 bool intInitialise();
 
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj);
+
 bool intAddRadarWidget();
 
 // Check of coordinate is in the build menu
@@ -297,6 +299,7 @@ bool intHelpOverlayIsUp();
 
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule();
+bool intAddInGameOptionsButton();
 bool intShowGroupSelectionMenu();
 bool intAddPower();
 void intRemoveReticule();

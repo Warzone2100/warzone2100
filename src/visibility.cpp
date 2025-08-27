@@ -147,8 +147,8 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 		}
 		MAPTILE *psTile = mapTile(mapX, mapY);
 		psTile->tileExploredBits |= alliancebits[player];
-		uint8_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
-		if (visionType[player] < UBYTE_MAX)
+		uint16_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
+		if (visionType[player] < UINT16_MAX)
 		{
 			TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(radar)};
 			visionType[player]++;          // we observe this tile
@@ -215,7 +215,7 @@ SPOTTER::~SPOTTER()
 	{
 		const TILEPOS tilePos = watchedTiles[i];
 		MAPTILE *psTile = mapTile(tilePos.x, tilePos.y);
-		uint8_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
+		uint16_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
 		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)tilePos.x, (int)tilePos.y);
 		visionType[player]--;
 		updateTileVis(psTile, player);
@@ -233,9 +233,9 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 	const int ydiff = map_coord(psObj->pos.y) - mapY;
 	const int distSq = xdiff * xdiff + ydiff * ydiff;
 	const bool inRange = (distSq < 16);
-	uint8_t *visionType = inRange ? psTile->watchers : psTile->sensors;
+	uint16_t *visionType = inRange ? psTile->watchers : psTile->sensors;
 
-	if (visionType[rayPlayer] < UBYTE_MAX)
+	if (visionType[rayPlayer] < UINT16_MAX)
 	{
 		TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(inRange)};
 
@@ -399,7 +399,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
-			uint8_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
+			uint16_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
 			if (visionType[psObj->player] == 0 && game.type == LEVEL_TYPE::CAMPAIGN)	// hack
 			{
 				continue;

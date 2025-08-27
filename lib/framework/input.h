@@ -182,6 +182,8 @@ void StopTextInput();
 WZ_DECL_NONNULL(2) void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 WZ_DECL_NONNULL(2) void mouseKeyCodeToString(const MOUSE_KEY_CODE code, char *ascii, const int maxStringLength);
 
+void inputRestoreMetaKeyState();
+
 /** Initialise the input module. */
 void inputInitialise();
 

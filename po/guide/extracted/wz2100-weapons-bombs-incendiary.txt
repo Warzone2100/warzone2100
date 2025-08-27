@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Incendiary Bombs")
+_("Incendiary bombs act somewhat similarly to ground-based Flamer weapons.")
+_("Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site.")
+_("Enemy units and structures that linger within this area will take a large amount of damage over time.")
+_("Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures.")

@@ -34,8 +34,6 @@
 
 /***************************************************************************/
 
-extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - used by script functions
-
 #define PROJ_MAX_PITCH  45
 #define PROJ_ULTIMATE_PITCH  80
 

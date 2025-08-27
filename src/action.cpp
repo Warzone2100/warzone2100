@@ -2305,6 +2305,9 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
 	objTrace(psDroid->id, "base set action to %s (was %s)", getDroidActionName(psAction->action), getDroidActionName(psDroid->action));
 
+	DROID_ACTION priorDroidAction = psDroid->action;
+	BASE_OBJECT* priorActionTarget0 = psDroid->psActionTarget[0];
+
 	DROID_ORDER_DATA *order = &psDroid->order;
 	bool hasValidWeapon = false;
 	for (int i = 0; i < MAX_WEAPONS; i++)
@@ -2599,7 +2602,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		break;
 	case DACTION_DROIDREPAIR:
 		{
-			auto priorDroidAction = psDroid->action;
 			psDroid->action = psAction->action;
 			psDroid->actionPos.x = psAction->x;
 			psDroid->actionPos.y = psAction->y;
@@ -2643,6 +2645,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	default:
 		ASSERT(!"unknown action", "actionUnitBase: unknown action");
 		break;
+	}
+	if (priorDroidAction == DACTION_DROIDREPAIR && psDroid->action != DACTION_DROIDREPAIR)
+	{
+		droidRepairStopped(castDroid(priorActionTarget0), psDroid);
 	}
 	syncDebugDroid(psDroid, '+');
 	CHECK_DROID(psDroid);

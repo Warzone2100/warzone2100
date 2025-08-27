@@ -789,11 +789,11 @@ private:
 	bool canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const;
 
 	// pickPhysicalDevice();
-	void getQueueFamiliesInfo();
+	bool getQueueFamiliesInfo();
 	bool createLogicalDevice();
 	bool createAllocator();
 	void getQueues();
-	bool createSwapchain(bool allowHandleSurfaceLost = true);
+	void createSwapchain(bool allowHandleSurfaceLost = true); // Throws on failure
 	void rebuildPipelinesIfNecessary();
 
 	void createDefaultRenderpass(vk::Format swapchainFormat, vk::Format depthFormat);
@@ -842,15 +842,14 @@ private:
 	enum AcquireNextSwapchainImageResult
 	{
 		eSuccess,
-		eRecoveredFromError,
-		eUnhandledFailure
+		eRecoveredFromError
 	};
-	AcquireNextSwapchainImageResult acquireNextSwapchainImage();
+	AcquireNextSwapchainImageResult acquireNextSwapchainImage(bool allowHandleSurfaceLost);
 
-	bool handleSurfaceLost();
-	void waitForAllIdle();
+	void handleSurfaceLost(); // Throws on failure
+	void waitForAllIdle(); // Throws on failure
 	void destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain);
-	bool createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason);
+	void createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason); // Throws on failure
 
 public:
 	virtual int32_t get_context_value(const gfx_api::context::context_value property) override;
@@ -873,7 +872,7 @@ public:
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
-	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
@@ -890,7 +889,7 @@ public:
 	virtual bool debugRecompileAllPipelines() override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
-	void initPixelFormatsSupport();
+	bool initPixelFormatsSupport();
 	gfx_api::pixel_format_usage::flags getPixelFormatUsageSupport(gfx_api::pixel_format format) const;
 	std::string calculateFormattedRendererInfoString() const;
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
@@ -902,6 +901,13 @@ private:
 	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 	uint32_t lastRenderPassEndTime = 0;
 	size_t currentRenderPassId = DEFAULT_RENDER_PASS_ID;
+
+	struct QueuedSwapModeChange
+	{
+		gfx_api::context::swap_interval_mode newMode;
+		SetSwapIntervalCompletionHandler completionHandler;
+	};
+	optional<QueuedSwapModeChange> queuedSwapModeChange = nullopt;
 };
 
 #endif // defined(WZ_VULKAN_ENABLED)

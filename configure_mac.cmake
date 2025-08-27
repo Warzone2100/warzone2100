@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.30)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Optional input defines:
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
@@ -14,10 +14,10 @@ cmake_minimum_required(VERSION 3.5...3.30)
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.14")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.3.296.0")
+set(VULKAN_SDK_VERSION "1.4.321.0")
 set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.zip")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "393fd11f65a4001f12fd34fdd009c38045220ca3f735bc686d97822152b0f33c")
+set(VULKAN_SDK_DL_SHA256 "d873c43acacec1e3330fb530dafd541aa5d8a5726575a98a3f70ca505fc203db")
 
 ########################################################
 
@@ -99,9 +99,9 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 			file(REMOVE_RECURSE "${_full_vulkan_install_path}")
 		endif()
 
-		# ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
+		# ./vulkansdk-macOS-${VULKAN_SDK_VERSION}.app/Contents/MacOS/vulkansdk-macOS-${VULKAN_SDK_VERSION} --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
 		execute_process(
-			COMMAND ./InstallVulkan.app/Contents/MacOS/InstallVulkan
+			COMMAND ./vulkansdk-macOS-${VULKAN_SDK_VERSION}.app/Contents/MacOS/vulkansdk-macOS-${VULKAN_SDK_VERSION}
 					--root ${_full_vulkan_install_path}
 					--accept-licenses
 					--default-answer

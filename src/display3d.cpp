@@ -183,6 +183,7 @@ iView	playerPos;
 
 /// How far away are we from the terrain
 static float distance;
+static bool bIsCloseDistance = false;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES + 1][VISIBLE_XTILES + 1];
@@ -1388,15 +1389,15 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				Vector2i screen(0, 0);
 				Position pos;
 
-				pos.x = world_coord(j);
-				pos.z = -world_coord(i);
+				pos.x = world_coord(j) - (playerPos.p.x % TILE_WIDTH);
+				pos.z = -world_coord(i) + (playerPos.p.z % TILE_HEIGHT);
 				pos.y = 0;
 
 				if (tileOnMap(playerXTile + j, playerZTile + i))
 				{
 					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
 
-					pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
+					pos.y = map_TileHeightSurface(playerXTile + j, playerZTile + i);
 					auto color = pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level));
 					lightmap(playerXTile + j, playerZTile + i) = color;
 				}
@@ -1528,7 +1529,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	// prepare for the water and the lightmap
 	pie_SetFogStatus(true);
 	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
+	drawWater(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
@@ -1777,6 +1778,12 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
 	const iIMDShape * pIMD = (psBStats != nullptr && psBStats->pIMD != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
+	if (psDroid->heightAboveMap > 0)
+	{
+		// clipShapeOnScreen is noticeably insufficient if it's a flying unit - we have to care about both shadows and the unit itself...
+		// HACK: boost the overdrawScreenPoints by a factor based on the heightAboveMap
+		overdrawScreenPoints *= std::max<int>(1, (psDroid->heightAboveMap / 20));
+	}
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
 
@@ -1784,10 +1791,18 @@ bool clipStructureOnScreen(STRUCTURE *psStructure)
 {
 	StructureBounds b = getStructureBounds(psStructure);
 	assert(b.size.x != 0 && b.size.y != 0);
-	for (int breadth = 0; breadth < b.size.y + 2; ++breadth) // +2 to make room for shadows on the terrain
+	// +4 to make room for shadows on the terrain
+	int start = -2;
+	int endB = (b.size.y + 2) - 1;
+	int endW = (b.size.x + 2) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
 	{
-		for (int width = 0; width < b.size.x + 2; ++width)
+		for (int width = start; width <= endW; ++width)
 		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
 			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
 			{
 				return true;
@@ -2006,7 +2021,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 		for (BASE_OBJECT* obj : apsStructLists[aPlayer])
 		{
 			/* Worth rendering the structure? */
-			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+				|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 			{
 				continue;
 			}
@@ -2027,7 +2043,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	for (BASE_OBJECT* obj : psDestroyedObj)
 	{
 		/* Worth rendering the structure? */
-		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+			|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			continue;
 		}
@@ -2274,6 +2291,32 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 	}
 }
 
+bool clipFeatureOnScreen(FEATURE *psFeature)
+{
+	StructureBounds b = getStructureBounds(psFeature);
+	assert(b.size.x != 0 && b.size.y != 0);
+	int overdrawTiles = (b.size.x < 2 && b.size.y < 2) ? 1 : 2; // make room for shadows on the terrain
+	int start = -overdrawTiles;
+	int endB = (b.size.y + overdrawTiles) - 1;
+	int endW = (b.size.x + overdrawTiles) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
+	{
+		for (int width = start; width <= endW; ++width)
+		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
+			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 /// Draw the features
 static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix)
 {
@@ -2285,10 +2328,13 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	{
 		if (obj->type == OBJ_FEATURE
 			&& (obj->died == 0 || obj->died > graphicsTime)
-			&& clipXY(obj->pos.x, obj->pos.y))
+			&& quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			FEATURE* psFeature = castFeature(obj);
-			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			if (clipFeatureOnScreen(psFeature))
+			{
+				renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			}
 		}
 	}
 
@@ -2432,10 +2478,16 @@ float getViewDistance()
 	return distance;
 }
 
+bool getIsCloseDistance()
+{
+	return bIsCloseDistance;
+}
+
 /// Set the distance at which the player views the world
 void setViewDistance(float dist)
 {
 	distance = dist;
+	bIsCloseDistance = (distance < 750.f);
 	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
 }
 
@@ -2541,6 +2593,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	if (psProxDisp->type == POS_PROXDATA)
 	{
+		if (psProxDisp->psMessage->pViewData == nullptr)
+		{
+			return; // if no data - ignore message
+		}
 		pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 		if (pViewProximity)
 		{
@@ -3432,6 +3488,18 @@ bool	eitherSelected(DROID *psDroid)
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
 	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+	UDWORD shields = 0;
+
+	if (psDroid->shieldPoints >= 0)
+	{
+		int maxShieldPoints = droidGetMaxShieldPoints(psDroid);
+
+		if (maxShieldPoints > 0)
+		{
+			shields = PERCENT(psDroid->shieldPoints, maxShieldPoints);
+			shields = static_cast<UDWORD>((float)psDroid->shieldPoints / (float)maxShieldPoints * (float)psDroid->sDisplay.screenR);
+		}
+	}
 
 	PIELIGHT powerCol = WZCOL_BLACK;
 	PIELIGHT powerColShadow = WZCOL_BLACK;
@@ -3472,6 +3540,18 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_LBLUE),
+	rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 2,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_BLACK),
+	rectGroup);
 }
 
 static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
@@ -3918,8 +3998,8 @@ void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tile
 				/* We've got a match for our mouse coords */
 				if (inQuad(&screenCoord, &quad))
 				{
-					outMousePos.x = playerPos.p.x + world_coord(j);
-					outMousePos.y = playerPos.p.z + world_coord(i);
+					outMousePos.x = playerPos.p.x + (world_coord(j) - (playerPos.p.x % TILE_WIDTH));
+					outMousePos.y = playerPos.p.z + (world_coord(i) - (playerPos.p.z % TILE_HEIGHT));
 					outMousePos += positionInQuad(screenCoord, quad);
 					if (outMousePos.x < 0)
 					{

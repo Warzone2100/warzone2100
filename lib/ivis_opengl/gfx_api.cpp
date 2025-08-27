@@ -30,6 +30,17 @@ static gfx_api::backend_type backend = gfx_api::backend_type::opengl_backend;
 bool uses_gfx_debug = false;
 static gfx_api::context* current_backend_context = nullptr;
 
+static const char* to_string(gfx_api::backend_type backendType)
+{
+	switch (backendType)
+	{
+		case gfx_api::backend_type::null_backend: return "Null backend";
+		case gfx_api::backend_type::opengl_backend: return "GL backend";
+		case gfx_api::backend_type::vulkan_backend: return "Vulkan backend";
+	}
+	return "";
+}
+
 bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
 	if (current_backend_context != nullptr && backend == backendType)
@@ -41,7 +52,7 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 	backend = backendType;
 	if (current_backend_context)
 	{
-		debug(LOG_FATAL, "Attempt to reinitialize gfx_api::context for a new backend type - currently unsupported");
+		debug(LOG_FATAL, "Attempt to reinitialize gfx_api::context for a new backend type once initialized - currently unsupported");
 		return false;
 	}
 	switch (backend)
@@ -61,10 +72,14 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 #endif
 			break;
 	}
-	ASSERT(current_backend_context != nullptr, "Failed to initialize gfx backend context");
+	ASSERT_OR_RETURN(false, current_backend_context != nullptr, "Failed to initialize gfx backend context");
 	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias, depthMapResolution);
 	if (!result)
 	{
+		debug(LOG_INFO, "Failed to initialize gfx_api::context for: %s", to_string(backend));
+		current_backend_context->shutdown();
+		delete current_backend_context;
+		current_backend_context = nullptr;
 		return false;
 	}
 
@@ -434,7 +449,8 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	}
 
 	// 2.) If maxWidth / maxHeight exceed current image dimensions, resize()
-	image.scale_image_max_size(maxWidth, maxHeight);
+	bool imgScaleResult = image.scale_image_max_size(maxWidth, maxHeight);
+	ASSERT_OR_RETURN(nullptr, imgScaleResult, "Failed to scale image to max size (%d x %d): %s", maxWidth, maxHeight, filename.c_str());
 
 	// 3.) Determine mipmap levels (if needed / desired, based on textureType)
 	size_t mipmap_levels = calcMipmapLevelsForUncompressedImage(image, textureType);
@@ -446,7 +462,8 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 	ASSERT_OR_RETURN(nullptr, closestSupportedChannels.has_value(), "Exhausted all possible uncompressed formats??");
 	for (auto i = image.channels(); i < closestSupportedChannels; ++i)
 	{
-		image.expand_channels_towards_rgba();
+		bool expandResult = image.expand_channels_towards_rgba();
+		ASSERT_OR_RETURN(nullptr, expandResult, "Failed to expand channels: %s", filename.c_str());
 	}
 
 	auto uploadFormat = image.pixel_format();
@@ -493,7 +510,8 @@ gfx_api::texture* gfx_api::context::loadTextureFromUncompressedImage(iV_Image&& 
 		unsigned int output_w = std::max<unsigned int>(1, image.width() >> 1);
 		unsigned int output_h = std::max<unsigned int>(1, image.height() >> 1);
 
-		image.resize(output_w, output_h, alphaChannelOverride);
+		bool resizeResult = image.resize(output_w, output_h, alphaChannelOverride);
+		ASSERT_OR_RETURN(nullptr, resizeResult, "Failed to resize image mipmap [%zu] to output size (%u x %u): %s", i, output_w, output_h, filename.c_str());
 
 		if (uploadFormat == image.pixel_format())
 		{

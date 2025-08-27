@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "2eb117a2fdc926812229eb7c81fe9f52594ac8a0",
+	"builtin-baseline": "6ecbbbdf31cba47aafa7cf6189b1e73e10ac61f8",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -41,10 +41,17 @@
 		"sqlite3",
 		"libsodium",
 		{
+			"name": "libzip",
+			"default-features": false,
+			"features": [
+				"bzip2"
+			]
+		},
+		{
+			"$comment": "By not specifying curl[http3] feature, defaults to schannel for Windows, which is desired",
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"winssl",
 				"ssl"
 			],
 			"platform": "windows | mingw"
@@ -53,7 +60,7 @@
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"sectransp",
+				"openssl",
 				"ssl"
 			],
 			"platform": "osx"
@@ -78,6 +85,10 @@
 			"name": "protobuf",
 			"platform": "!emscripten"
 		}
+	],
+	"overrides": [
+		{ "name": "openal-soft", "version": "1.24.3" },
+		{ "name": "sqlite3", "version": "3.49.2" }
 	],
 	"default-features": [
 		"vulkan"

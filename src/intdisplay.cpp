@@ -1721,6 +1721,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 
 			if (psProxDisp->type == POS_PROXDATA)
 			{
+				if (psProxDisp->psMessage->pViewData == nullptr)
+				{
+					continue; // if no data - ignore message
+				}
 				PROX_TYPE proxType = ((VIEW_PROXIMITY*)psProxDisp->psMessage->pViewData->pData)->proxType;
 				images = imagesProxTypes[proxType];
 			}

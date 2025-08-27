@@ -191,7 +191,7 @@ function __camCheckPlaceArtifact(obj)
 	if (ai.tech instanceof Array)
 	{
 		camTrace("Placing multi-tech granting artifact");
-		for (let i = 0; i < ai.tech.length; ++i)
+		for (let i = 0, len = ai.tech.length; i < len; ++i)
 		{
 			const __TECH_STRING = ai.tech[i];
 			camTrace(i, ":", __TECH_STRING);
@@ -227,14 +227,13 @@ function __camPickupArtifact(artifact)
 		return;
 	}
 	ai.pickedUp = true;
-
 	camTrace("Picked up", ai.tech);
 	playSound(cam_sounds.artifactRecovered, artifact.x, artifact.y, artifact.z);
 	// artifacts are not self-removing...
 	camSafeRemoveObject(artifact);
 	if (ai.tech instanceof Array)
 	{
-		for (let i = 0; i < ai.tech.length; ++i)
+		for (let i = 0, len = ai.tech.length; i < len; ++i)
 		{
 			const __TECH_STRING = ai.tech[i];
 			enableResearch(__TECH_STRING);
@@ -244,11 +243,9 @@ function __camPickupArtifact(artifact)
 	{
 		enableResearch(ai.tech);
 	}
-
 	addGuideTopic("wz2100::structures::researchfacility");
 	addGuideTopic("wz2100::general::researching");
 	addGuideTopic("wz2100::general::artifacts", SHOWTOPIC_FIRSTADD);
-
 	// bump counter before the callback, so that it was
 	// actual during the callback
 	++__camNumArtifacts;
@@ -257,7 +254,6 @@ function __camPickupArtifact(artifact)
 	{
 		callback();
 	}
-
 	__camSetupConsoleForVictoryConditions();
 }
 
@@ -280,7 +276,7 @@ function __camLetMeWinArtifacts()
 		{
 			if (ai.tech instanceof Array)
 			{
-				for (let i = 0; i < ai.tech.length; ++i)
+				for (let i = 0, len = ai.tech.length; i < len; ++i)
 				{
 					const __TECH_STRING = ai.tech[i];
 					enableResearch(__TECH_STRING);

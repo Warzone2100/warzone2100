@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.24)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Build the warzone2100.pot default language file
 # from the files listed in POTFILES.in

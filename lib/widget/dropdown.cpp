@@ -63,11 +63,12 @@ void DropdownItemWrapper::initialize(const std::shared_ptr<DropdownWidget>& newP
 	parent = newParent;
 }
 
-bool DropdownItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> DropdownItemWrapper::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	auto result = WIDGET::processClickRecursive(psContext, key, wasPressed);
+	W_CONTEXT inputContext(psContext);
+	auto result = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 
-	if (key != WKEY_NONE && this->hitTest(psContext->mx, psContext->my))
+	if (key != WKEY_NONE && this->hitTest(inputContext.mx, inputContext.my))
 	{
 		if (auto psStrongParent = parent.lock())
 		{
@@ -84,7 +85,18 @@ bool DropdownItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY
 			if (mouseDownOnWrapper)
 			{
 				mouseDownOnWrapper = false;
-				onSelect(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
+
+				// Instead of calling the onSelect handler immediately, schedule a task.
+				//
+				// (The onSelect handler may call close(), and we want that to be delayed by an event processing cycle
+				// so the mouse event gets properly attributed to the overlay screen by other code - such as the game
+				// event processing loop, which currently usese isMouseOverScreenOverlayChild)
+				auto weakSelf = std::weak_ptr<DropdownItemWrapper>(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
+				widgScheduleTask([weakSelf]() {
+					auto strongSelf = weakSelf.lock();
+					ASSERT_OR_RETURN(, strongSelf != nullptr, "DropdownItemWrapper disappeared?");
+					strongSelf->onSelect(strongSelf);
+				});
 			}
 		}
 	}
@@ -130,6 +142,21 @@ void DropdownWidget::run(W_CONTEXT *psContext)
 			inputLoseFocus();	// clear the input buffer.
 			close();
 		}
+	}
+	else
+	{
+		callRunOnItems();
+	}
+}
+
+void DropdownWidget::callRunOnItems()
+{
+	// Some child widgets might use run() to clear cached textures (etc), so call run regularly to allow them
+	for (const auto& item : items)
+	{
+		auto ctx = W_CONTEXT::ZeroContext();
+		item->item->runRecursive(&ctx);
+		item->item->manuallyCallRun(&ctx);
 	}
 }
 
@@ -275,6 +302,7 @@ bool DropdownWidget::isOpen() const
 
 void DropdownWidget::close()
 {
+	ASSERT_OR_RETURN(, isOpen(), "Dropdown isn't open");
 	mouseDownItem.reset();
 	std::weak_ptr<DropdownWidget> pWeakThis(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()));
 	widgScheduleTask([pWeakThis]() {
@@ -282,6 +310,11 @@ void DropdownWidget::close()
 		{
 			if (dropdownWidget->overlayScreen != nullptr)
 			{
+				if (dropdownWidget->onClose)
+				{
+					dropdownWidget->onClose(*dropdownWidget);
+				}
+
 				widgRemoveOverlayScreen(dropdownWidget->overlayScreen);
 				if (dropdownWidget->overlayScreen->psForm)
 				{
@@ -394,7 +427,7 @@ void DropdownWidget::clear()
 	mouseDownItem.reset();
 }
 
-bool DropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> DropdownWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	if (!overlayScreen && selectedItem && !isDisabled && key == WKEY_NONE) // only forward highlighting events
 	{
@@ -405,10 +438,15 @@ bool DropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key,
 		shiftedContext.my = psContext->my - deltaY;
 		shiftedContext.xOffset = psContext->xOffset + deltaX;
 		shiftedContext.yOffset = psContext->yOffset + deltaY;
-		selectedItem->processClickRecursive(&shiftedContext, key, wasPressed);
+		auto highlightedSelectedItemChildWidget = selectedItem->findMouseTargetRecursive(&shiftedContext, key, wasPressed);
+		if (highlightedSelectedItemChildWidget)
+		{
+			*psContext = shiftedContext; // bubble-up the matching hit's context
+			return highlightedSelectedItemChildWidget;
+		}
 	}
 
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void DropdownWidget::setMouseClickOnItem(std::shared_ptr<DropdownItemWrapper> item, WIDGET_KEY key, bool wasPressed)

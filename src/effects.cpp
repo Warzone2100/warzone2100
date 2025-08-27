@@ -2369,9 +2369,14 @@ bool writeFXData(const char *fileName)
 		// Move on to reading the next effect
 	}
 
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString;
+	try {
+		jsonString = mRoot.dump(4);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", fileName, e.what());
+		return false;
+	}
 	debug(LOG_SAVE, "%s %s", "Saving", fileName);
 	saveFile(fileName, jsonString.c_str(), jsonString.size());
 

@@ -59,7 +59,7 @@ struct MAPTILE
 	uint8_t         tileInfoBits;
 	PlayerMask      tileExploredBits;
 	PlayerMask      sensorBits;             ///< bit per player, who can see tile with sensor
-	uint8_t         watchers[MAX_PLAYERS];  // player sees through fog of war here with this many objects
+	uint16_t        watchers[MAX_PLAYERS];  // player sees through fog of war here with this many objects
 	uint16_t        texture;                // Which graphics texture is on this tile
 	int32_t         height;                 ///< The height at the top left of the tile
 	BASE_OBJECT *   psObject;               // Any object sitting on the location (e.g. building)
@@ -68,8 +68,8 @@ struct MAPTILE
 	uint16_t        fireEndTime;            ///< The (uint16_t)(gameTime / GAME_TICKS_PER_UPDATE) that BITS_ON_FIRE should be cleared.
 	int32_t         waterLevel;             ///< At what height is the water for this tile
 	PlayerMask      jammerBits;             ///< bit per player, who is jamming tile
-	uint8_t         sensors[MAX_PLAYERS];   ///< player sees this tile with this many radar sensors
-	uint8_t         jammers[MAX_PLAYERS];   ///< player jams the tile with this many objects
+	uint16_t        sensors[MAX_PLAYERS];   ///< player sees this tile with this many radar sensors
+	uint16_t        jammers[MAX_PLAYERS];   ///< player jams the tile with this many objects
 
 	// DISPLAY ONLY (NOT for use in game calculations)
 	uint8_t         ground;                 ///< The ground type used for the terrain renderer
@@ -391,6 +391,7 @@ bool mapShutdown();
 /* Load the map data */
 bool mapLoad(char const *filename);
 struct ScriptMapData;
+bool loadTerrainTypeMap(const std::shared_ptr<WzMap::TerrainTypeData>& ttypeData);
 bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
 
 // used to reload decal + ground types types when switching terrain overrides
@@ -405,10 +406,13 @@ public:
 	{ }
 public:
 	virtual std::unique_ptr<WzMap::BinaryIOStream> openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode) override;
-	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData, bool appendNullCharacter = false) override;
+	virtual WzMap::IOProvider::LoadFullFileResult loadFullFile(const std::string& filename, std::vector<char>& fileData, uint32_t maxFileSize = 0, bool appendNullCharacter = false) override;
 	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 	virtual bool makeDirectory(const std::string& directoryPath) override;
 	virtual const char* pathSeparator() const override;
+	virtual bool fileExists(const std::string& filename) override;
+
+	bool folderExists(const std::string& dirPath);
 
 	virtual bool enumerateFiles(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;
 	virtual bool enumerateFolders(const std::string& basePath, const std::function<bool (const char* file)>& enumFunc) override;

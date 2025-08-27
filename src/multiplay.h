@@ -116,6 +116,15 @@ struct MULTIPLAYERINGAME
 	bool				PendingDisconnect[MAX_CONNECTED_PLAYERS];		// used to mark players who have disconnected after the game has "fired up" but before it actually starts (i.e. pre-game / loading phase) - UI only
 	bool				DataIntegrity[MAX_CONNECTED_PLAYERS];
 	std::array<bool, MAX_CONNECTED_PLAYERS> hostChatPermissions;		// the *host*-set free chat permission status for players (true if free chat is allowed, false if only Quick Chat is allowed)
+
+	// Used by the host to track players lingering in lobby without checking ready
+	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> joinTimes;
+	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> lastReadyTimes;
+	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> lastNotReadyTimes;
+	std::array<uint64_t, MAX_CONNECTED_PLAYERS> secondsNotReady; // updated when player status switches to ready
+	std::array<optional<uint32_t>, MAX_CONNECTED_PLAYERS> playerLeftGameTime; // records when the player leaves the game (as a player)
+	//
+
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
@@ -123,6 +132,7 @@ struct MULTIPLAYERINGAME
 	optional<std::chrono::steady_clock::time_point> endTime;
 	std::chrono::steady_clock::time_point lastLagCheck;
 	std::chrono::steady_clock::time_point lastDesyncCheck;
+	std::chrono::steady_clock::time_point lastNotReadyCheck;
 	optional<std::chrono::steady_clock::time_point> lastSentPlayerDataCheck2[MAX_CONNECTED_PLAYERS] = {};
 	std::chrono::steady_clock::time_point lastPlayerDataCheck2;
 	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
@@ -277,7 +287,9 @@ void printConsoleNameChange(const char *oldName, const char *newName);  ///< Pri
 
 void turnOffMultiMsg(bool bDoit);
 
-void autoLagKickRoutine();
+void autoLagKickRoutine(std::chrono::steady_clock::time_point now);
+void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now);
+uint64_t calculateSecondsNotReadyForPlayer(size_t i, std::chrono::steady_clock::time_point now);
 
 void sendMap();
 bool multiplayerWinSequence(bool firstCall);
@@ -286,19 +298,19 @@ bool multiplayerWinSequence(bool firstCall);
 // definitions of functions in multiplay's other c files.
 
 // Buildings . multistruct
-bool SendDestroyStructure(STRUCTURE *s);
-bool SendBuildFinished(STRUCTURE *psStruct);
-bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
-void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, DROID_TEMPLATE *psTempl);
+bool SendDestroyStructure(const STRUCTURE *s);
+bool SendBuildFinished(const STRUCTURE *psStruct);
+bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj);
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, const DROID_TEMPLATE *psTempl);
 
 // droids . multibot
-bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
+bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
 
 bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
-bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
 bool multiShutdown();
@@ -307,6 +319,9 @@ bool sendLeavingMsg();
 bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs);
 struct JoinConnectionDescription
 {
+public:
+	JoinConnectionDescription()
+	{ }
 public:
 	enum class JoinConnectionType
 	{
@@ -327,6 +342,9 @@ public:
 	, type(t)
 	{ }
 public:
+	static std::string connectiontype_to_string(JoinConnectionType type);
+	static optional<JoinConnectionType> connectiontype_from_string(const std::string& str);
+public:
 	std::string host;
 	uint32_t port = 0;
 	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
@@ -345,6 +363,20 @@ bool multiGameInit();
 bool multiGameShutdown();
 bool multiStartScreenInit();
 
+// kick-redirect
+struct KickRedirectInfo
+{
+	std::vector<JoinConnectionDescription> connList; // a list of connection options - probably just one with a different port and an empty or "=" host (which reuses the current host address)
+	optional<std::string> gamePassword = nullopt;
+	bool asSpectator = false;
+};
+void to_json(nlohmann::json& j, const KickRedirectInfo& v);
+void from_json(const nlohmann::json& j, KickRedirectInfo& v);
+optional<KickRedirectInfo> parseKickRedirectInfo(const std::string& redirectJSONString, const std::string& currHostAddress);
+
+bool kickRedirectPlayer(uint32_t player_id, const KickRedirectInfo& redirectInfo);
+bool kickRedirectPlayer(uint32_t player_id, JoinConnectionDescription::JoinConnectionType connectionType, uint16_t newPort, bool asSpectator, optional<std::string> gamePassword);
+
 // syncing.
 bool sendScoreCheck();							//score check only(frontend)
 void multiSyncResetAllChallenges();
@@ -359,6 +391,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 
 void startMultiplayerGame();
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
+bool shouldSkipReadyResetOnPlayerJoinLeaveEvent();
 
 STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists& pList, unsigned player, unsigned index);
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index); // checks apsStructLists

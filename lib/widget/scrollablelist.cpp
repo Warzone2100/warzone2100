@@ -33,8 +33,8 @@ void ScrollableListWidget::initialize()
 	attach(listView = std::make_shared<ClipRectWidget>());
 	scrollBar->show(false);
 	scrollbarWidth = SCROLLBAR_WIDTH;
-	backgroundColor.rgba = 0;
-	borderColor.rgba = 0;
+	backgroundColor.clear();
+	borderColor.clear();
 	rowLinesColor = pal_RGBA(0,0,0,255);
 }
 
@@ -145,7 +145,11 @@ void ScrollableListWidget::updateLayout()
 
 	auto listViewWidthWithoutScrollBar = calculateListViewWidth();
 	auto widthOfScrollbar = scrollBar->width();
-	auto listViewWidthWithScrollBar = (widthOfScrollbar >= 0 && listViewWidthWithoutScrollBar > static_cast<uint32_t>(widthOfScrollbar)) ? listViewWidthWithoutScrollBar - static_cast<uint32_t>(widthOfScrollbar) : 0;
+	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar;
+	if (widthOfScrollbar > padding.right)
+	{
+		listViewWidthWithScrollBar = (widthOfScrollbar >= 0 && listViewWidthWithoutScrollBar > static_cast<uint32_t>(widthOfScrollbar)) ? listViewWidthWithoutScrollBar - static_cast<uint32_t>(widthOfScrollbar) : 0;
+	}
 	auto listViewHeight = calculateListViewHeight();
 
 	resizeChildren(listViewWidthWithScrollBar);
@@ -156,7 +160,10 @@ void ScrollableListWidget::updateLayout()
 	{
 		listView->setGeometry(padding.left, padding.top, listViewWidthWithScrollBar, listViewHeight);
 	} else {
-		resizeChildren(listViewWidthWithoutScrollBar);
+		if (listViewWidthWithScrollBar != listViewWidthWithoutScrollBar)
+		{
+			resizeChildren(listViewWidthWithoutScrollBar);
+		}
 		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
 	}
 
@@ -191,10 +198,10 @@ uint32_t ScrollableListWidget::calculateListViewWidth() const
 	return (result > 0) ? static_cast<uint32_t>(result) : 0;
 }
 
-bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> ScrollableListWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void ScrollableListWidget::enableScroll()
@@ -258,12 +265,12 @@ void ScrollableListWidget::display(int xOffset, int yOffset)
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
 
-	if (backgroundColor.rgba != 0)
+	if (!backgroundColor.isTransparent())
 	{
 		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
 	}
 
-	if (borderColor.rgba != 0)
+	if (!borderColor.isTransparent())
 	{
 		int x1 = x0 + width();
 		int y1 = y0 + height();

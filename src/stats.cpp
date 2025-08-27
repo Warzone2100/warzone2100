@@ -720,6 +720,34 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.maxDroids = ini.value("maxDroids").toInt();
 		psStats->base.maxDroidsMult = ini.value("maxDroidsMult").toInt();
+		psStats->shield.initialShieldPointsPercent = ini.value("initialShieldPointsPercent").toInt();
+		psStats->shield.additiveShieldPointsPercent = ini.value("additiveShieldPointsPercent").toInt();
+		psStats->shield.initialShieldRegenTime = ini.value("initialShieldRegenTime").toInt();
+		psStats->shield.shieldRegenTimeDec = ini.value("shieldRegenTimeDec").toInt();
+		psStats->shield.initialShieldInterruptRegenTime = ini.value("initialShieldInterruptRegenTime").toInt();
+		psStats->shield.shieldInterruptRegenTimeDec = ini.value("shieldInterruptRegenTimeDec").toInt();
+		psStats->shield.shieldPointsPerStep = ini.value("shieldPointsPerStep").toInt();
+
+		auto shieldRange = ini.json("shieldRange");
+		if (!shieldRange.is_null())
+		{
+			ASSERT(shieldRange.is_array(), "shieldRange is not an array");
+			for (const auto& v : shieldRange)
+			{
+				psStats->shield.shieldRange.push_back(v.get<int>());
+			}
+		}
+
+		auto cmdExpRange = ini.json("cmdExpRange");
+		if (!cmdExpRange.is_null())
+		{
+			ASSERT(cmdExpRange.is_array(), "cmdExpRange is not an array");
+			for (const auto& v : cmdExpRange)
+			{
+				psStats->cmdExpRange.push_back(v.get<int>());
+			}
+		}
+
 		auto rankNames = ini.json("ranks");
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)

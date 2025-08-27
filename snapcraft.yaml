@@ -49,9 +49,11 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.30.8/SDL2-2.30.8.tar.gz
-    source-checksum: sha512/72e49d8a67f5ca1241a262e7e7ae7f6ff148e8774343110db652589ab2e72d3425534ca7f8c7825b2ae1afc779c09228da33a9586219ac4e53546a4930380b64
+    source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.8/SDL2-2.32.8.tar.gz
+    source-checksum: sha512/484c33638e7bd1002815bb1f6a47a292d1eaf0b963598dde65f4a3e077dfe75ee35b9ea4b3b767365b3ef4f613c4d69ce55b5e96675de562994344e83a978272
     plugin: cmake
+    build-environment:
+      - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
     - -DSDL_ALSA=OFF
@@ -136,6 +138,8 @@ parts:
     after: [sdl, launcher]
     plugin: cmake
     source: .
+    build-environment:
+      - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
@@ -186,10 +190,16 @@ parts:
       - libsqlite3-dev
       - libprotobuf-dev
       - protobuf-compiler
+      - libzip-dev
       - ninja-build
       - unzip
       - wget
       - zip
+      # Required because of broken CMake config files for libzip-dev 1.7.3:
+      - zipcmp
+      - zipmerge
+      - ziptool
+      #
     stage-packages:
       #- libfontconfig1
       - libfreetype6
@@ -208,6 +218,8 @@ parts:
       - libcurl3-gnutls
       - libsodium23
       - libsqlite3-0
+      - libprotobuf32t64
+      - libzip4t64
       - libglu1-mesa
       # - mesa-vulkan-drivers # provided by gpu-2404 / mesa-2404
       - unzip

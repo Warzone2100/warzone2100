@@ -33,6 +33,11 @@
 #define SOURCE_DIR "files"
 #endif
 
+// Points to a directory into which unofficial Inno Setup base translations have been downloaded
+#ifndef UNOFFICIAL_TRANSLATIONS_DIR
+#define UNOFFICIAL_TRANSLATIONS_DIR SOURCE_DIR
+#endif
+
 #define WZ_BINDIR "bin"
 #ifndef WZ_DATADIR
 #define WZ_DATADIR "data"
@@ -279,36 +284,57 @@ InfoBeforeFile={#SourcePath}\wz2100_innowizard_infobefore.rtf
 [Languages]
 // Base language is en
 Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer_base.isl"
+
+#define AddTranslationImpl(str LangName, MessagesFile) \
+	Local[0] = AddBackslash(SourcePath) + 'i18n\win_installer_' + LangName + '.isl', \
+	Local[1] = 'Name: "' + LangName + '"; MessagesFile: "' + MessagesFile, \
+	Local[1] = FileExists(Local[0]) ? Local[1] + ',' + Local[0] + '"' : Local[1] + '"', \
+	Message('LANGUAGE: ' + Local[1]), \
+	Local[1]
+
+#define AddTranslation(str LangName, MessagesFile) \
+	Local[0] = FileExists(MessagesFile) ? AddTranslationImpl(LangName, MessagesFile) \
+	: (Warning('Cannot find language file (' + LangName + '): ' + MessagesFile), ''), \
+	Local[0]
+
+#define AddUnofficialTranslation(str LangName, MessagesFileName) \
+	Local[0] = AddTranslation(LangName, AddBackslash(UNOFFICIAL_TRANSLATIONS_DIR) + MessagesFileName), \
+	Local[0]
+
 // Additional languages with "official" base Inno Setup translations
-Name: "ar"; MessagesFile: "compiler:Languages\Arabic.isl"
-Name: "bg"; MessagesFile: "compiler:Languages\Bulgarian.isl"
-Name: "ca"; MessagesFile: "compiler:Languages\Catalan.isl"
-Name: "co"; MessagesFile: "compiler:Languages\Corsican.isl"
-Name: "cs"; MessagesFile: "compiler:Languages\Czech.isl"
-Name: "da"; MessagesFile: "compiler:Languages\Danish.isl"
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"
-Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
-Name: "fi"; MessagesFile: "compiler:Languages\Finnish.isl"
-Name: "fr"; MessagesFile: "compiler:Languages\French.isl"
-Name: "he"; MessagesFile: "compiler:Languages\Hebrew.isl"
-Name: "hu"; MessagesFile: "compiler:Languages\Hungarian.isl"
-Name: "hy"; MessagesFile: "compiler:Languages\Armenian.isl"
-Name: "is"; MessagesFile: "compiler:Languages\Icelandic.isl"
-Name: "it"; MessagesFile: "compiler:Languages\Italian.isl"
-Name: "ja"; MessagesFile: "compiler:Languages\Japanese.isl"
-Name: "ko"; MessagesFile: "compiler:Languages\Korean.isl"
-Name: "nb"; MessagesFile: "compiler:Languages\Norwegian.isl"
-Name: "nl"; MessagesFile: "compiler:Languages\Dutch.isl"
-Name: "pl"; MessagesFile: "compiler:Languages\Polish.isl"
-Name: "pt_PT"; MessagesFile: "compiler:Languages\Portuguese.isl"
-Name: "pt_BR"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
-Name: "ru"; MessagesFile: "compiler:Languages\Russian.isl"
-Name: "sk"; MessagesFile: "compiler:Languages\Slovak.isl"
-Name: "sl"; MessagesFile: "compiler:Languages\Slovenian.isl"
-Name: "sv"; MessagesFile: "compiler:Languages\Swedish.isl"
-Name: "ta"; MessagesFile: "compiler:Languages\Tamil.isl"
-Name: "tr"; MessagesFile: "compiler:Languages\Turkish.isl"
-Name: "uk"; MessagesFile: "compiler:Languages\Ukrainian.isl"
+#emit AddTranslation("ar_SA", "compiler:Languages\Arabic.isl")
+#emit AddTranslation("bg_BG", "compiler:Languages\Bulgarian.isl")
+#emit AddTranslation("ca_ES", "compiler:Languages\Catalan.isl")
+#emit AddTranslation("co_FR", "compiler:Languages\Corsican.isl")
+#emit AddTranslation("cs_CZ", "compiler:Languages\Czech.isl")
+#emit AddTranslation("da_DK", "compiler:Languages\Danish.isl")
+#emit AddTranslation("de_DE", "compiler:Languages\German.isl")
+#emit AddTranslation("es_ES", "compiler:Languages\Spanish.isl")
+#emit AddTranslation("fi_FI", "compiler:Languages\Finnish.isl")
+#emit AddTranslation("fr_FR", "compiler:Languages\French.isl")
+#emit AddTranslation("he_IL", "compiler:Languages\Hebrew.isl")
+#emit AddTranslation("hu_HU", "compiler:Languages\Hungarian.isl")
+#emit AddTranslation("hy_AM", "compiler:Languages\Armenian.isl")
+#emit AddTranslation("it_IT", "compiler:Languages\Italian.isl")
+#emit AddTranslation("ja_JP", "compiler:Languages\Japanese.isl")
+#emit AddTranslation("ko_KR", "compiler:Languages\Korean.isl")
+#emit AddTranslation("nb_NO", "compiler:Languages\Norwegian.isl")
+#emit AddTranslation("nl_NL", "compiler:Languages\Dutch.isl")
+#emit AddTranslation("pl_PL", "compiler:Languages\Polish.isl")
+#emit AddTranslation("pt_PT", "compiler:Languages\Portuguese.isl")
+#emit AddTranslation("pt_BR", "compiler:Languages\BrazilianPortuguese.isl")
+#emit AddTranslation("ru_RU", "compiler:Languages\Russian.isl")
+#emit AddTranslation("sk_SK", "compiler:Languages\Slovak.isl")
+#emit AddTranslation("sl_SI", "compiler:Languages\Slovenian.isl")
+#emit AddTranslation("sv_SE", "compiler:Languages\Swedish.isl")
+#emit AddTranslation("ta_IN", "compiler:Languages\Tamil.isl")
+#emit AddTranslation("tr_TR", "compiler:Languages\Turkish.isl")
+#emit AddTranslation("uk_UA", "compiler:Languages\Ukrainian.isl")
+
+// Additional languages with "unofficial" base Inno Setup translations
+#emit AddUnofficialTranslation("id_ID", "Indonesian.isl")
+#emit AddUnofficialTranslation("ro_RO", "Romanian.isl")
+#emit AddUnofficialTranslation("zh_CN", "ChineseSimplified.isl")
 
 [LangOptions]
 // Future TODO: 

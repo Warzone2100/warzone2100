@@ -2478,6 +2478,46 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 	}
 } // namespace INTERNAL_ADMIN_ACTION_NOTICE
 
+// - INTERNAL_LOCALIZED_LOBBY_NOTICE
+namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx)
+	{
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), 0, targetPlayerIdx };
+	}
+
+	std::string to_output_string(WzQuickChatMessageData messageData)
+	{
+		uint32_t targetPlayerIdx = messageData.dataB;
+
+		if (targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
+		{
+			return std::string();
+		}
+
+		const char* targetPlayerName = getPlayerName(targetPlayerIdx);
+
+		switch (messageData.dataContext)
+		{
+			case static_cast<uint32_t>(Context::Invalid):
+				return "";
+			case static_cast<uint32_t>(Context::NotReadyKickWarning):
+				if (targetPlayerIdx == selectedPlayer)
+				{
+					return _("NOTICE: If you don't check Ready soon, you will be kicked from the room");
+				}
+				else
+				{
+					// Not intended for this player
+					return "";
+				}
+			case static_cast<uint32_t>(Context::NotReadyKicked):
+				return astringf(_("Auto-kicking player (%s) because they waited too long to check Ready"), targetPlayerName);
+		}
+
+		return ""; // Silence compiler warning
+	}
+} // namespace INTERNAL_LOCALIZED_LOBBY_NOTICE
+
 } // namespace WzQuickChatDataContexts
 
 // MARK: - Public functions
@@ -2488,6 +2528,7 @@ bool quickChatMessageExpectsExtraData(WzQuickChatMessage msg)
 	{
 		// WZ-generated internal messages which require extra data
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 			return true;
 
 		default:
@@ -2504,6 +2545,8 @@ int32_t to_output_sender(WzQuickChatMessage msg, uint32_t sender)
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			// override the "sender" to SYSTEM_MESSAGE type
 			return SYSTEM_MESSAGE;
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+			return NOTIFY_MESSAGE;
 
 		default:
 			return sender;
@@ -2557,6 +2600,8 @@ std::string to_output_string(WzQuickChatMessage msg, const optional<WzQuickChatM
 		// WZ-generated internal messages - not for users to deliberately send
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return WzQuickChatDataContexts::INTERNAL_ADMIN_ACTION_NOTICE::to_output_string(messageData.value());
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+			return WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::to_output_string(messageData.value());
 
 		default:
 			return to_display_string(msg);
@@ -2723,6 +2768,8 @@ const char* to_display_string(WzQuickChatMessage msg)
 			return _("Map Downloaded");
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
 			return _("Admin modified a setting");
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
+			return "";
 
 		// not a valid message
 		case WzQuickChatMessage::MESSAGE_COUNT:
@@ -3046,9 +3093,11 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 
 		NETQUEUE queue = NETnetQueue((recipient < MAX_PLAYERS) ? whosResponsible(recipient) : recipient);
 		bool sendSecured = isInGame && (queue.index == NetPlay.hostPlayer || queue.index < MAX_PLAYERS) && senderCanUseSecuredMessages;
+		optional<MessageWriter> w;
 		if (sendSecured)
 		{
-			if (!NETbeginEncodeSecured(queue, NET_QUICK_CHAT_MSG))
+			w = NETbeginEncodeSecured(queue, NET_QUICK_CHAT_MSG);
+			if (!w)
 			{
 				debug(LOG_NET, "Failed to encode secured message for queue.index: %" PRIu32, static_cast<uint32_t>(queue.index));
 				continue;
@@ -3056,32 +3105,33 @@ void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatT
 		}
 		else
 		{
-			NETbeginEncode(queue, NET_QUICK_CHAT_MSG);
+			w = NETbeginEncode(queue, NET_QUICK_CHAT_MSG);
 		}
+		auto& wref = *w;
 
-		NETuint32_t(&fromPlayer);
-		NETuint32_t(&recipient);
-		NETuint32_t(&messageValue);
+		NETuint32_t(wref, fromPlayer);
+		NETuint32_t(wref, recipient);
+		NETuint32_t(wref, messageValue);
 		// send targeting structure
-		NETbool(&targeting.all);
-		NETbool(&targeting.humanTeammates);
-		NETbool(&targeting.aiTeammates);
+		NETbool(wref, targeting.all);
+		NETbool(wref, targeting.humanTeammates);
+		NETbool(wref, targeting.aiTeammates);
 		uint32_t numSpecificRecipients = static_cast<uint32_t>(targeting.specificPlayers.size());
-		NETuint32_t(&numSpecificRecipients);
+		NETuint32_t(wref, numSpecificRecipients);
 		for (auto playerIdx : targeting.specificPlayers)
 		{
-			NETuint32_t(&playerIdx);
+			NETuint32_t(wref, playerIdx);
 		}
 		if (quickChatMessageExpectsExtraData(message))
 		{
 			if (messageData.has_value())
 			{
-				NETuint32_t(&messageData.value().dataContext);
-				NETuint32_t(&messageData.value().dataA);
-				NETuint32_t(&messageData.value().dataB);
+				NETuint32_t(wref, messageData.value().dataContext);
+				NETuint32_t(wref, messageData.value().dataA);
+				NETuint32_t(wref, messageData.value().dataB);
 			}
 		}
-		NETend();
+		NETend(wref);
 	}
 
 	if (fromPlayer == selectedPlayer && (!recipients.empty() || !isInGame) && !shouldHideQuickChatMessageFromLocalDisplay(message))
@@ -3169,30 +3219,33 @@ bool recvQuickChat(NETQUEUE queue)
 
 	WzQuickChatMessage msgEnumVal;
 
+	optional<MessageReader> r;
 	if (expectingSecuredMessage)
 	{
-		if (!NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG))
+		r = NETbeginDecodeSecured(queue, NET_QUICK_CHAT_MSG);
+		if (!r)
 		{
 			return false;
 		}
 	}
 	else
 	{
-		NETbeginDecode(queue, NET_QUICK_CHAT_MSG);
+		r = NETbeginDecode(queue, NET_QUICK_CHAT_MSG);
 	}
-	NETuint32_t(&sender);
-	NETuint32_t(&recipient);
-	NETuint32_t(&messageValue);
+	auto& rref = *r;
+	NETuint32_t(rref, sender);
+	NETuint32_t(rref, recipient);
+	NETuint32_t(rref, messageValue);
 	// receive targeting structure
-	NETbool(&targeting.all);
-	NETbool(&targeting.humanTeammates);
-	NETbool(&targeting.aiTeammates);
+	NETbool(rref, targeting.all);
+	NETbool(rref, targeting.humanTeammates);
+	NETbool(rref, targeting.aiTeammates);
 	uint32_t numSpecificRecipients = 0;
-	NETuint32_t(&numSpecificRecipients);
+	NETuint32_t(rref, numSpecificRecipients);
 	for (uint32_t i = 0; i < numSpecificRecipients; ++i)
 	{
 		uint32_t tmp_playerIdx = std::numeric_limits<uint32_t>::max();
-		NETuint32_t(&tmp_playerIdx);
+		NETuint32_t(rref, tmp_playerIdx);
 		if (tmp_playerIdx < MAX_CONNECTED_PLAYERS)
 		{
 			targeting.specificPlayers.insert(tmp_playerIdx);
@@ -3202,11 +3255,11 @@ bool recvQuickChat(NETQUEUE queue)
 	if (validMessageEnumValue && quickChatMessageExpectsExtraData(msgEnumVal))
 	{
 		messageData = WzQuickChatMessageData();
-		NETuint32_t(&messageData.value().dataContext);
-		NETuint32_t(&messageData.value().dataA);
-		NETuint32_t(&messageData.value().dataB);
+		NETuint32_t(rref, messageData.value().dataContext);
+		NETuint32_t(rref, messageData.value().dataA);
+		NETuint32_t(rref, messageData.value().dataB);
 	}
-	NETend();
+	NETend(rref);
 
 	if (!validMessageEnumValue)
 	{

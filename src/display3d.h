@@ -63,6 +63,7 @@ extern bool showORDERS;
 extern int BlueprintTrackAnimationSpeed;
 
 float getViewDistance();
+bool getIsCloseDistance();
 void setViewDistance(float dist);
 extern bool	radarOnScreen;
 extern bool	radarPermitted;

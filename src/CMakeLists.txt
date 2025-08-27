@@ -124,7 +124,11 @@ if(MSVC)
 	target_compile_options(warzone2100 PRIVATE "/wd4267")
 endif()
 
-target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ivis-opengl netplay sdl-backend framework sequence sound widget)
+if(NOT TARGET ZipIOProvider)
+	message(FATAL_ERROR "Missing ZipIOProvider - check if libzip detection was successful?")
+endif()
+
+target_link_libraries(warzone2100 exception-handler gamelib wzmaplib ZipIOProvider ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 target_link_libraries(warzone2100 fmt::fmt)
 if(ENABLE_NLS)
@@ -259,6 +263,13 @@ set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 
+	# Enable STRICT + related
+	target_compile_options(warzone2100 PRIVATE "SHELL:-s STRICT")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s STRICT")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s AUTO_JS_LIBRARIES=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s AUTO_NATIVE_LIBRARIES=1")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s ALLOW_UNIMPLEMENTED_SYSCALLS")
+
 	# WZ requires WebGL 2
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MIN_WEBGL_VERSION=2")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MAX_WEBGL_VERSION=2")
@@ -270,8 +281,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 
 	target_link_options(warzone2100 PRIVATE "SHELL:-s MINIFY_HTML=0") # Disable MINIFY_HTML
 
+	# Specify properties set on incoming Module object (see shell.html, postjs.js, prejs.js)
+	target_link_options(warzone2100 PRIVATE "SHELL:-s INCOMING_MODULE_JS_API=[wasmMemory,arguments,preRun,postRun,print,printErr,canvas,setStatus,monitorRunDependencies,locateFile,onExit]")
+
 	# Stack and memory usage
-	target_link_options(warzone2100 PRIVATE "SHELL:-s TOTAL_STACK=10485760")
+	target_link_options(warzone2100 PRIVATE "SHELL:-s STACK_SIZE=10485760")
 	target_link_options(warzone2100 PRIVATE "SHELL:-s INITIAL_MEMORY=268435456") # 256 MB
 	target_link_options(warzone2100 PRIVATE "SHELL:-s ALLOW_MEMORY_GROWTH=1")
 	# NOTE: WZ's shell.html handles intelligently detecting and picking a maximum for the WebAssembly.Memory request
@@ -285,9 +299,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.50)
 		target_link_options(warzone2100 PRIVATE "SHELL:-s GL_ENABLE_GET_PROC_ADDRESS=1")
 	endif()
-
-	# Display more information on linking issues
-	target_link_options(warzone2100 PRIVATE "SHELL:-s LLD_REPORT_UNDEFINED")
 
 	# Offscreen canvas and proxy to pthread support
 	# - not currently supported - seems to lead to eventual freezes in Firefox and flickering in Safari

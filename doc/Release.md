@@ -59,9 +59,9 @@ Testing
 You should locally test whether the master branch of the game actually runs, in both single & skirmish and multiplayer.
 The latest CI (master branch) builds may be downloaded from:
 * [Windows Builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
-   * Select the latest "Windows" workflow run, download the `warzone2100_win_*_portable` and `warzone2100_win_*_installer` artifacts.
-   * (Note: These will be a .zip _of_ the .exe. Only the .exe gets automatically uploaded on release.)
-   * Test both the portable and regular installers!
+   * Select the latest "Windows" workflow run, download the `warzone2100_win_installer` artifact.
+   * (Note: This will be a .zip _of_ the .exe. Only the .exe gets automatically uploaded on release.)
+   * Test the installer!
 * [macOS Build](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
    * Select the latest "macOS" workflow run, download the `warzone2100_macOS_universal` and `warzone2100_macOS_universal_novideos` artifacts.
    * (Note: This may be a .zip _of_ a .zip. Only the inner .zip gets automatically uploaded on release.)
@@ -75,9 +75,9 @@ Use the Linux build instructions to build via the source tarball you downloaded 
 Verify that the build succeeds (and that no files are missing from the tarball).
 Then proceed with normal game testing.
 
-### Test the Windows portable & regular installers
+### Test the Windows regular installer
 
-Verify that each installer works, and the game runs. (Start by testing the portable installer.)
+Verify that the installer works, and the game runs.
 
 ### Test the Web Edition dev builds
 
@@ -167,15 +167,10 @@ the CI -> GitHub integration breaks).
 - [x] Verify all release assets have been uploaded by CI to the draft GitHub Release.
 - [x] Download each release asset and verify:
    - [x] Download the Windows builds from the draft release:
-      - [x] `warzone2100_win_x86.DEBUGSYMBOLS.7z`
-      - [x] `warzone2100_win_x86_installer.exe`
-      - [x] `warzone2100_win_x86_portable.exe`
-      - [x] `warzone2100_win_x64.DEBUGSYMBOLS.7z`
-      - [x] `warzone2100_win_x64_installer.exe`
-      - [x] `warzone2100_win_x64_portable.exe`
-   - [x] Verify the SHA512 hashes towards the end of the most recent [`workflow_run` Windows workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+event%3Aworkflow_run) log match the files you downloaded.
+      - [x] `warzone2100_win_installer.exe`
+   - [x] Verify the SHA512 hash towards the end of the most recent [`workflow_run` Windows workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+event%3Aworkflow_run) log match the files you downloaded.
       - [x] **Make sure you are viewing the build for the _tag_ you just made**
-      - [x] Select the appropriate job (x86, x64, etc).
+      - [x] Select the appropriate job (Build Installer, Sign Release Installers, etc).
       - [x] Expand the "Compare Build Outputs" step, which outputs the SHA512 hashes at the bottom of its output.
    - [x] Download the macOS build from the draft release:
       - [x] `warzone2100_macOS.zip`

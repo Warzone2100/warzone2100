@@ -26,6 +26,7 @@
 
 #include "lib/ivis_opengl/piedraw.h"
 #include "lib/framework/frame.h"
+#include "lib/framework/pool_allocator.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -35,6 +36,7 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/pielight_convert.h"
 #include "piematrix.h"
 #include "pielighting.h"
 #include "screen.h"
@@ -43,6 +45,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+#include <utility>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -553,7 +556,7 @@ static inline gfx_api::Draw3DShapePerInstanceInterleavedData GenerateInstanceDat
 	return gfx_api::Draw3DShapePerInstanceInterleavedData {
 		modelMatrix,
 		glm::vec4(stretchDepth, ecmState, !(pieFlag & pie_PREMULTIPLIED), float(frame)),
-		colour.rgba, teamcolour.rgba
+		colour.rgba(), teamcolour.rgba()
 	};
 }
 
@@ -957,9 +960,54 @@ static bool canInstancedMeshRendererUseInstancedRendering(bool quiet /*= false*/
 	return true;
 }
 
+template <typename Key, typename Value>
+class InsertionOrderMap
+{
+public:
+	typedef std::pair<Key, Value> Pair;
+	typedef std::vector<Pair> PairVector;
+	typedef typename PairVector::iterator iterator;
+	typedef typename PairVector::const_iterator const_iterator;
+	using ValueAllocator = typename Value::allocator_type;
+public:
+
+	explicit InsertionOrderMap(const ValueAllocator& alloc)
+		: allocator(alloc)
+	{}
+
+	Value& operator[](const Key& k)
+	{
+		auto it = keyToValuesIdxMap.find(k);
+		if (it != keyToValuesIdxMap.end())
+		{
+			return values[it->second].second;
+		}
+		auto idx = values.size();
+		values.emplace_back(k, allocator);
+		keyToValuesIdxMap[k] = idx;
+		return values[idx].second;
+	}
+	void clear() noexcept
+	{
+		values.clear();
+		keyToValuesIdxMap.clear();
+	}
+	iterator begin() noexcept { return values.begin(); }
+	iterator end() noexcept { return values.end(); }
+	const_iterator cbegin() const noexcept { return values.cbegin(); }
+	const_iterator cend() const noexcept { return values.cend(); }
+private:
+	PairVector values;
+	std::unordered_map<Key, size_t> keyToValuesIdxMap;
+	const ValueAllocator& allocator;
+};
+
 class InstancedMeshRenderer
 {
 public:
+
+	InstancedMeshRenderer();
+
 	// Queues a mesh for drawing
 	bool Draw3DShape(const iIMDShape *shape, int frame, PIELIGHT teamcolour, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth);
 
@@ -995,16 +1043,28 @@ public:
 private:
 	bool useInstancedRendering = false;
 
+	static inline constexpr MemoryPoolOptions memPoolOpts {
+		32, // minimal_supported_block_size
+		65536, // largest_required_block_size
+		512, // required_capacity_for_smallest_sub_pool
+		8 // minimal_required_capacity
+	};
+
+	MemoryPool memoryPool{ memPoolOpts };
+	PoolAllocator<SHAPE> poolAllocator;
+
+	using ShapeVector = std::vector<SHAPE, PoolAllocator<SHAPE>>;
 	typedef templatedState MeshInstanceKey;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceMeshes;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceTranslucentMeshes;
-	std::unordered_map<MeshInstanceKey, std::vector<SHAPE>> instanceAdditiveMeshes;
+	std::unordered_map<MeshInstanceKey, ShapeVector, std::hash<MeshInstanceKey>, std::equal_to<MeshInstanceKey>, PoolAllocator<std::pair<const MeshInstanceKey, ShapeVector>>> instanceMeshes;
+	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceTranslucentMeshes;
+	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceTranslucentMeshesNoDepthWrite;
+	InsertionOrderMap<MeshInstanceKey, ShapeVector> instanceAdditiveMeshes;
 	size_t instancesCount = 0;
 	size_t translucentInstancesCount = 0;
 	size_t additiveInstancesCount = 0;
 
-	std::vector<SHAPE> tshapes;
-	std::vector<SHAPE> shapes;
+	ShapeVector tshapes;
+	ShapeVector shapes;
 
 	std::vector<gfx_api::Draw3DShapePerInstanceInterleavedData> instancesData;
 	std::vector<gfx_api::buffer*> instanceDataBuffers;
@@ -1028,8 +1088,20 @@ private:
 	};
 	std::vector<InstancedDrawCall> finalizedDrawCalls;
 	size_t startIdxTranslucentDrawCalls = 0;
+	size_t startIdxTranslucentNoDepthWriteDrawCalls = 0;
 	size_t startIdxAdditiveDrawCalls = 0;
 };
+
+InstancedMeshRenderer::InstancedMeshRenderer()
+	: poolAllocator(memoryPool),
+	instanceMeshes(poolAllocator),
+	instanceTranslucentMeshes(poolAllocator),
+	instanceTranslucentMeshesNoDepthWrite(poolAllocator),
+	instanceAdditiveMeshes(poolAllocator),
+	tshapes(poolAllocator),
+	shapes(poolAllocator)
+{
+}
 
 bool InstancedMeshRenderer::initialize()
 {
@@ -1054,6 +1126,7 @@ void InstancedMeshRenderer::clear()
 {
 	instanceMeshes.clear();
 	instanceTranslucentMeshes.clear();
+	instanceTranslucentMeshesNoDepthWrite.clear();
 	instanceAdditiveMeshes.clear();
 	instancesCount = 0;
 	translucentInstancesCount = 0;
@@ -1115,6 +1188,11 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 	tshape.stretch = stretchDepth;
 	tshape.modelMatrix = modelMatrix;
 
+	if (pieFlag & pie_SHIELD)
+	{
+		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(pie_SHIELD_FACTOR, pie_SHIELD_FACTOR, pie_SHIELD_FACTOR));
+	}
+
 	if (pieFlag & pie_HEIGHT_SCALED)	// construct
 	{
 		tshape.modelMatrix = glm::scale(tshape.modelMatrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
@@ -1140,7 +1218,14 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 	{
 		if (useInstancedRendering)
 		{
-			instanceTranslucentMeshes[currentState].push_back(tshape);
+			if (pieFlag & pie_NODEPTHWRITE)
+			{
+				instanceTranslucentMeshesNoDepthWrite[currentState].push_back(tshape);
+			}
+			else
+			{
+				instanceTranslucentMeshes[currentState].push_back(tshape);
+			}
 		}
 		else
 		{
@@ -1178,7 +1263,8 @@ bool InstancedMeshRenderer::Draw3DShape(const iIMDShape *shape, int frame, PIELI
 		}
 		if (useInstancedRendering)
 		{
-			instanceMeshes[currentState].push_back(tshape);
+			auto [it, _] = instanceMeshes.try_emplace(currentState, poolAllocator);
+			it->second.push_back(tshape);
 		}
 		else
 		{
@@ -1391,6 +1477,19 @@ bool InstancedMeshRenderer::FinalizeInstances()
 		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
 	}
 
+	startIdxTranslucentNoDepthWriteDrawCalls = finalizedDrawCalls.size();
+
+	for (const auto& mesh : instanceTranslucentMeshesNoDepthWrite)
+	{
+		const auto& meshInstances = mesh.second;
+		size_t startingIdxInInstancesBuffer = instancesData.size();
+		for (const auto& instance : meshInstances)
+		{
+			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
+		}
+		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+	}
+
 	startIdxAdditiveDrawCalls = finalizedDrawCalls.size();
 
 	for (const auto& mesh : instanceAdditiveMeshes)
@@ -1428,12 +1527,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	) : glm::vec4(0.f);
+	const glm::vec4 fogColor = renderState.fogEnabled ? pielightToRGBAVec4(renderState.fogColour) : glm::vec4(0.f);
 
 
 	if (useInstancedRendering)
@@ -1463,7 +1557,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 }
 
 template<SHADER_MODE shader, typename Draw3DInstancedPSO>
-static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::texture* lightmapTexture)
+static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::texture* lightmapTexture, bool shieldEffect)
 {
 	const auto& textures = shape->getTextures();
 	auto* tcmask = textures.tcmaskpage != iV_TEX_INVALID ? &pie_Texture(textures.tcmaskpage) : nullptr;
@@ -1471,7 +1565,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 	auto* specularmap = textures.specularpage != iV_TEX_INVALID ? &pie_Texture(textures.specularpage) : nullptr;
 
 	gfx_api::Draw3DShapeInstancedPerMeshUniforms meshUniforms {
-		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr
+		tcmask ? 1 : 0, normalmap != nullptr, specularmap != nullptr, shape->buffers[VBO_TANGENT] != nullptr, shieldEffect ? 1 : 0
 	};
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
@@ -1525,43 +1619,45 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename PremultipliedNoDepthWRTPSO, typename OpaquePSO>
 static void drawInstanced3dShapeTemplated(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, gfx_api::texture* lightmapTexture)
 {
+	bool shieldEffect = pieFlag & pie_SHIELD;
+
 	/* Set tranlucency */
 	if (pieFlag & pie_ADDITIVE)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditivePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AdditiveNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, AlphaNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
 		if (!(pieFlag & pie_NODEPTHWRITE))
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 		else
 		{
-			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+			return drawInstanced3dShapeTemplated_Inner<shader, PremultipliedNoDepthWRTPSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 		}
 	}
 	else
 	{
-		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
+		return drawInstanced3dShapeTemplated_Inner<shader, OpaquePSO>(globalsOnce, globalUniforms, shape, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture, shieldEffect);
 	}
 }
 
@@ -1667,17 +1763,32 @@ void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, Sh
 	{
 		// Draw translucent models next
 		gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
-		for (size_t i = startIdxTranslucentDrawCalls; i < startIdxAdditiveDrawCalls; ++i)
+		for (size_t i = startIdxTranslucentDrawCalls; i < startIdxTranslucentNoDepthWriteDrawCalls; ++i)
 		{
 			const auto& call = finalizedDrawCalls[i];
 			const iIMDShape * shape = call.state.shape;
 			size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
 			pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count, depthPass, lightmapTexture);
 		}
-		if (startIdxTranslucentDrawCalls < finalizedDrawCalls.size())
+		if (startIdxTranslucentDrawCalls < startIdxTranslucentNoDepthWriteDrawCalls)
 		{
 			// unbind last index buffer bound inside pie_Draw3DShape2
-			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls.back().state.shape)->buffers[VBO_INDEX]));
+			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls[startIdxTranslucentNoDepthWriteDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
+		}
+
+		// Draw translucent (no depth write) models after
+		gfx_api::context::get().debugStringMarker("Remaining passes - translucent (no depth write) models");
+		for (size_t i = startIdxTranslucentNoDepthWriteDrawCalls; i < startIdxAdditiveDrawCalls; ++i)
+		{
+			const auto& call = finalizedDrawCalls[i];
+			const iIMDShape * shape = call.state.shape;
+			size_t instanceBufferOffset = static_cast<size_t>(sizeof(gfx_api::Draw3DShapePerInstanceInterleavedData) * call.startingIdxInInstancesBuffer);
+			pie_Draw3DShape2_Instanced(perFrameUniformsShaderOnce, globalUniforms, shape, call.state.pieFlag, instanceDataBuffers[currInstanceBufferIdx], instanceBufferOffset, call.instance_count, depthPass, lightmapTexture);
+		}
+		if (startIdxTranslucentNoDepthWriteDrawCalls < startIdxAdditiveDrawCalls)
+		{
+			// unbind last index buffer bound inside pie_Draw3DShape2
+			gfx_api::context::get().unbind_index_buffer(*((finalizedDrawCalls[startIdxAdditiveDrawCalls-1].state.shape)->buffers[VBO_INDEX]));
 		}
 	}
 

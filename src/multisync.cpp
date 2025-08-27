@@ -221,11 +221,11 @@ bool sendPing()
 			{
 				pingChallenges[i] = generatePingChallenge(i);
 
-				NETbeginEncode(NETnetQueue(i), NET_PING);
-				NETuint8_t(&player);
-				NETbool(&isNew);
-				NETbin(pingChallenges[i].value().data(), PING_CHALLENGE_BYTES);
-				NETend();
+				auto w = NETbeginEncode(NETnetQueue(i), NET_PING);
+				NETuint8_t(w, player);
+				NETbool(w, isNew);
+				NETbin(w, pingChallenges[i].value().data(), PING_CHALLENGE_BYTES);
+				NETend(w);
 
 				// Note when we sent the ping
 				PingSend[i] = realTime;
@@ -237,11 +237,11 @@ bool sendPing()
 		// Just generate and broadcast the same ping challenge to all other players
 		pingChallenges[0] = generatePingChallenge(0);
 
-		NETbeginEncode(NETbroadcastQueue(), NET_PING);
-		NETuint8_t(&player);
-		NETbool(&isNew);
-		NETbin(pingChallenges[0].value().data(), PING_CHALLENGE_BYTES);
-		NETend();
+		auto w = NETbeginEncode(NETbroadcastQueue(), NET_PING);
+		NETuint8_t(w, player);
+		NETbool(w, isNew);
+		NETbin(w, pingChallenges[0].value().data(), PING_CHALLENGE_BYTES);
+		NETend(w);
 
 		// Note when we sent the ping
 		for (int i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
@@ -266,18 +266,18 @@ bool recvPing(NETQUEUE queue)
 	uint8_t challenge[PING_CHALLENGE_BYTES];
 	EcKey::Sig challengeResponse;
 
-	NETbeginDecode(queue, NET_PING);
-	NETuint8_t(&sender);
-	NETbool(&isNew);
+	auto r = NETbeginDecode(queue, NET_PING);
+	NETuint8_t(r, sender);
+	NETbool(r, isNew);
 	if (isNew)
 	{
-		NETbin(challenge, PING_CHALLENGE_BYTES);
+		NETbin(r, challenge, PING_CHALLENGE_BYTES);
 	}
 	else
 	{
-		NETbytes(&challengeResponse);
+		NETbytes(r, challengeResponse);
 	}
-	NETend();
+	NETend(r);
 
 	if (sender >= MAX_CONNECTED_PLAYERS)
 	{
@@ -296,14 +296,14 @@ bool recvPing(NETQUEUE queue)
 	{
 		challengeResponse = getLocalSharedIdentity().sign(&challenge, PING_CHALLENGE_BYTES);
 
-		NETbeginEncode(NETnetQueue(sender), NET_PING);
+		auto w = NETbeginEncode(NETnetQueue(sender), NET_PING);
 		// We are responding to a new ping
 		isNew = false;
 
-		NETuint8_t(&us);
-		NETbool(&isNew);
-		NETbytes(&challengeResponse);
-		NETend();
+		NETuint8_t(w, us);
+		NETbool(w, isNew);
+		NETbytes(w, challengeResponse);
+		NETend(w);
 	}
 	// They are responding to one of our pings
 	else

@@ -71,7 +71,7 @@ jobs:
         flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
         flatpak --user remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
         echo "::endgroup::"
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -272,7 +272,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
         subject-path: '${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}'
@@ -311,7 +311,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
           path: 'src'
@@ -321,13 +321,13 @@ jobs:
           mkdir -p dl-debug/additional
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Debug Symbols
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
           merge-multiple: false
       - name: Download Additional Debug Files
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
@@ -375,7 +375,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
           path: ./dl-artifacts
@@ -447,7 +447,7 @@ jobs:
           curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
           chmod +x /usr/bin/flat-manager-client
           echo "::endgroup::"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: 'src'
           set-safe-directory: true
@@ -455,7 +455,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'ostree_repo_flatpak_${{ matrix.arch }}_${{ needs.build-flatpak.outputs.WZ_FLATPAK_BRANCH }}'
           path: ./dl-artifacts

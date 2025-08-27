@@ -10,6 +10,7 @@ on:
       - 'po/warzone2100.pot'
       - 'po/guide/warzone2100_guide.pot'
       - 'pkg/nsis/i18n/win_installer_base.nsh'
+      - 'pkg/win_installer/i18n/win_installer_base.isl'
   workflow_dispatch:
 
 concurrency:
@@ -23,7 +24,7 @@ jobs:
     environment: crowdin_sync
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: 'master'
 

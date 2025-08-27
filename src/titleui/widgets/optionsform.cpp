@@ -25,6 +25,7 @@
 #include "optionsform.h"
 #include "src/frend.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/widget/form.h"
 #include "lib/widget/label.h"
 #include "lib/widget/scrollablelist.h"
@@ -36,12 +37,229 @@
 #include "lib/netplay/netplay.h"
 #include "src/multiplay.h"
 #include "src/main.h"
+#include "src/intimage.h"
+
+// MARK: OptionsSlider
+
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	W_SLIDER *Slider = (W_SLIDER *)psWidget;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+
+	iV_DrawImage(IntImages, IMAGE_SLIDER_BIG, x, y);			// draw bdrop
+
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / std::max<int>(Slider->numStops, 1);  // determine pos.
+	iV_DrawImage(IntImages, IMAGE_SLIDER_BIGBUT, x + 3 + sx, y + 3);								//draw amount
+}
+
+OptionsSlider::OptionsSlider()
+{ }
+
+std::shared_ptr<OptionsSlider> OptionsSlider::make(int32_t minValue, int32_t maxValue, int32_t stepValue, CurrentValueFunc currentValFunc, OnChangeValueFunc onChange, bool needsStateUpdates)
+{
+	ASSERT_OR_RETURN(nullptr, minValue < maxValue, "minValue is not < maxValue");
+	ASSERT_OR_RETURN(nullptr, currentValFunc != nullptr, "Invalid currentVal func");
+	ASSERT_OR_RETURN(nullptr, IntImages != nullptr, "IntImages not loaded?");
+
+	uint32_t totalRange = static_cast<uint32_t>(maxValue - minValue);
+	UWORD numStops = (maxValue - minValue) / stepValue;
+	UWORD currPos = (currentValFunc() - minValue) / stepValue;
+
+	W_SLDINIT sSldInit;
+	sSldInit.formID		= 0;
+	sSldInit.id			= 0;
+	sSldInit.width		= iV_GetImageWidth(IntImages, IMAGE_SLIDER_BIG);
+	sSldInit.height		= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
+	sSldInit.numStops	= numStops;
+	sSldInit.barSize	= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
+	sSldInit.pos		= currPos;
+	sSldInit.pDisplay	= displayBigSlider;
+
+	auto sliderWidget = std::make_shared<W_SLIDER>(&sSldInit);
+
+	class make_shared_enabler : public OptionsSlider { };
+	auto result = std::make_shared<make_shared_enabler>();
+	result->sliderWidget = sliderWidget;
+	result->minValue = minValue;
+	result->maxValue = maxValue;
+	result->totalRange = totalRange;
+	result->stepValue = stepValue;
+	result->currentValFunc = currentValFunc;
+	result->onChangeValueFunc = onChange;
+	result->needsStateUpdates = needsStateUpdates;
+
+	auto weakParent = std::weak_ptr<OptionsSlider>(result);
+	result->sliderWidget->addOnChange([weakParent](W_SLIDER& s) {
+		auto strongParent = weakParent.lock();
+		ASSERT_OR_RETURN(, strongParent != nullptr, "Null parent");
+		strongParent->handleSliderPosChanged();
+	});
+	result->attach(result->sliderWidget);
+
+	result->cachedIdealSliderWidth = iV_GetImageWidth(IntImages, IMAGE_SLIDER_BIG);
+	result->updateSliderValueText();
+
+	return result;
+}
+
+int32_t OptionsSlider::currentValue() const
+{
+	return (static_cast<int32_t>(sliderWidget->pos) * stepValue) + minValue;
+}
+
+void OptionsSlider::handleSliderPosChanged()
+{
+	auto newValue = currentValue();
+	if (onChangeValueFunc)
+	{
+		onChangeValueFunc(newValue);
+	}
+	updateSliderValueText();
+}
+
+void OptionsSlider::updateSliderValueText()
+{
+	text = WzString::number(currentValue());
+	cacheIdealTextSize();
+}
+
+size_t OptionsSlider::maxNumValueCharacters()
+{
+	WzString minValueStr = WzString::number(minValue);
+	WzString maxValueStr = WzString::number(maxValue);
+	return std::max<size_t>(minValueStr.length(), maxValueStr.length());
+}
+
+void OptionsSlider::cacheIdealTextSize()
+{
+	auto tmpStr = WzString("444444");
+	tmpStr.truncate(maxNumValueCharacters());
+	cachedIdealTextWidth = iV_GetTextWidth(tmpStr.toUtf8().c_str(), FontID) + 2;
+	cachedIdealTextLineSize = iV_GetTextLineSize(FontID);
+}
+
+void OptionsSlider::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int w = width();
+	int h = height();
+
+	bool isHighlight = false;
+
+	iV_fonts fontID = wzText.getFontID();
+	if (fontID == font_count || lastWidgetWidth != width() || wzText.getText() != text)
+	{
+		fontID = FontID;
+		wzText.setText(text, fontID);
+	}
+
+	const int maxTextDisplayableWidth  = w - cachedIdealSliderWidth - (horizontalPadding * 3);
+	if (wzText->width() > maxTextDisplayableWidth)
+	{
+		// text would exceed the bounds of the button area
+		// try to shrink font so it fits
+		do {
+			if (fontID == font_small || fontID == font_bar)
+			{
+				break;
+			}
+			auto result = iV_ShrinkFont(fontID);
+			if (!result.has_value())
+			{
+				break;
+			}
+			fontID = result.value();
+			wzText.setText(text, fontID);
+		} while (wzText->width() > maxTextDisplayableWidth);
+	}
+	lastWidgetWidth = width();
+
+	// Draw the main text
+	PIELIGHT textColor = (isHighlight) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+	if (isDisabled)
+	{
+		textColor.byte.a = (textColor.byte.a / 2);
+	}
+
+	int maxDisplayableMainTextWidth = maxTextDisplayableWidth;
+
+	int textX0 = x0 + w - horizontalPadding - std::min(maxDisplayableMainTextWidth, wzText->width());
+	int textY0 = y0 + (h - wzText->lineSize()) / 2 - wzText->aboveBase();
+
+	isTruncated = maxDisplayableMainTextWidth < wzText->width();
+	if (isTruncated)
+	{
+		maxDisplayableMainTextWidth -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
+	}
+	wzText->render(textX0, textY0, textColor, 0.0f, maxDisplayableMainTextWidth);
+	if (isTruncated)
+	{
+		// Render ellipsis
+		iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxDisplayableMainTextWidth + 2, textY0), textColor);
+	}
+}
+
+void OptionsSlider::geometryChanged()
+{
+	int w = width();
+	int h = height();
+
+	if (w == 0 || h == 0)
+	{
+		return;
+	}
+
+	int sliderX0 = horizontalPadding;
+	int sliderY0 = (h - sliderWidget->height()) / 2;
+	int maxSliderWidth = w - (horizontalPadding * 2);
+	int sliderWidth = std::min<int>(maxSliderWidth, cachedIdealSliderWidth);
+	sliderWidget->setGeometry(sliderX0, sliderY0, sliderWidth, sliderWidget->height());
+}
+
+int32_t OptionsSlider::idealWidth()
+{
+	return horizontalPadding + cachedIdealSliderWidth + horizontalPadding + cachedIdealTextWidth + horizontalPadding;
+}
+
+int32_t OptionsSlider::idealHeight()
+{
+	return (outerPaddingY * 2) + iV_GetTextLineSize(font_regular);
+}
+
+void OptionsSlider::update(bool force)
+{
+	if (!force && !needsStateUpdates)
+	{
+		return;
+	}
+
+	sliderWidget->pos = (currentValFunc() - minValue) / stepValue;
+}
+
+void OptionsSlider::informAvailable(bool isAvailable)
+{
+	// TODO: Set disabled flag so display can disable the slider appearance?
+}
+
+void OptionsSlider::addOnChangeHandler(std::function<void(WIDGET&)> handler)
+{
+	sliderWidget->addOnChange(handler);
+}
 
 // MARK: -
 
 WzOptionsDropdownWidget::WzOptionsDropdownWidget()
 {
-	setDropdownCaretImage(AtlasImage(FrontImages, IMAGE_CARET_DOWN_FILL), WzSize(12, 12), Padding{0, 8, 0, 0});
+	if (FrontImages != nullptr)
+	{
+		setDropdownCaretImage(AtlasImage(FrontImages, IMAGE_CARET_DOWN_FILL), WzSize(12, 12), Padding{0, 8, 0, 0});
+	}
+	else
+	{
+		// FUTURE TODO: Different image for in-game options? (For now, no image)
+	}
 	setStyle(DropdownWidget::DropdownMenuStyle::Separate);
 	setListBackgroundColor(pal_RGBA(20,20,20,255));
 }
@@ -52,10 +270,10 @@ void WzOptionsDropdownWidget::setTextAlignment(WzTextAlignment align)
 	style |= align;
 }
 
-bool WzOptionsDropdownWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> WzOptionsDropdownWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	// deliberately skip the default DropdownWidget::processClickRecursive behavior (which forwards highlighting events to the selected item)
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	// deliberately skip the default DropdownWidget::findMouseTargetRecursive behavior (which forwards highlighting events to the selected item)
+	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void WzOptionsDropdownWidget::display(int xOffset, int yOffset)
@@ -90,7 +308,6 @@ void WzOptionsDropdownWidget::drawOpenedHighlight(int xOffset, int yOffset)
 		if (isHighlighted)
 		{
 			backgroundColor = WZCOL_MENU_SCORE_BUILT;
-			backgroundColor.byte.a = backgroundColor.byte.a / 2;
 		}
 		else
 		{
@@ -101,7 +318,7 @@ void WzOptionsDropdownWidget::drawOpenedHighlight(int xOffset, int yOffset)
 		int backX1 = backX0 + w;
 		if (style & WLAB_ALIGNRIGHT)
 		{
-			int highlightWidth = currentOptionChoiceDisplayWidg->width();
+			int highlightWidth = currentOptionChoiceDisplayWidg->width() + paddingLeft;
 			int itemWidth = getItemDisplayWidth();
 			backX0 = (x0 + itemWidth) - highlightWidth;
 		}
@@ -161,7 +378,7 @@ void WzOptionsDropdownWidget::onSelectedItemChanged()
 	if (!currentOptionChoiceDisplayWidg)
 	{
 		currentOptionChoiceDisplayWidg = WzOptionsChoiceWidget::make(font_regular_bold);
-		currentOptionChoiceDisplayWidg->setPadding(10, 5);
+		currentOptionChoiceDisplayWidg->setPadding(10, 8);
 		currentOptionChoiceDisplayWidg->setTransparentToMouse(true);
 		currentOptionChoiceDisplayWidg->setHighlightBackgroundColor(pal_RGBA(0,0,0,0));
 		attach(currentOptionChoiceDisplayWidg);
@@ -195,7 +412,7 @@ void WzOptionsDropdownWidget::updateCurrentChoiceDisplayWidgetGeometry()
 
 int32_t WzOptionsDropdownWidget::idealWidth()
 {
-	return calculateCurrentUsedWidth();
+	return calculateCurrentUsedWidth() + paddingLeft;
 }
 
 int32_t WzOptionsDropdownWidget::idealHeight()
@@ -209,7 +426,6 @@ WzOptionsChoiceWidget::WzOptionsChoiceWidget(iV_fonts desiredFontID)
 : FontID(desiredFontID)
 {
 	highlightBackgroundColor = WZCOL_MENU_SCORE_BUILT;
-	highlightBackgroundColor.byte.a = highlightBackgroundColor.byte.a / 2;
 }
 
 std::shared_ptr<WzOptionsChoiceWidget> WzOptionsChoiceWidget::make(iV_fonts desiredFontID)
@@ -224,31 +440,71 @@ std::shared_ptr<WzOptionsChoiceWidget> WzOptionsChoiceWidget::make(iV_fonts desi
 	return widget;
 }
 
-void WzOptionsChoiceWidget::cacheIdealTextSize()
+void WzOptionsChoiceWidget::recalcIconDrawSize()
 {
-	cachedIdealTextWidth = wzText->width();
-	cachedIdealTextLineSize = wzText->lineSize();
+	auto scaledIconSize = scaleIconSizeFor(width(), height());
+	iconDrawWidth = scaledIconSize.width();
+	iconDrawHeight = scaledIconSize.height();
+}
+
+WzSize WzOptionsChoiceWidget::scaleIconSizeFor(optional<int> width, optional<int> height)
+{
+	WzSize result;
+	if (!icon)
+	{
+		return result;
+	}
+
+	int iconMaxWidth = width.value_or(INT_MAX) - (horizontalPadding * 2);
+	int iconMaxHeight = height.value_or(INT_MAX) - (verticalPadding * 2);
+
+	result.setWidth(icon->Width);
+	result.setHeight(icon->Height);
+	if (result.width() <= iconMaxWidth && result.height() <= iconMaxHeight)
+	{
+		return result;
+	}
+
+	float widthScale = 1.f;
+	float heightScale = 1.f;
+	if (result.width() > iconMaxWidth)
+	{
+		widthScale = float(iconMaxWidth) / result.width();
+	}
+	if (result.height() > iconMaxHeight)
+	{
+		heightScale = float(iconMaxHeight) / result.height();
+	}
+	float scale = std::min<float>(widthScale, heightScale);
+	result.setWidth(static_cast<int>(result.width() * scale));
+	result.setHeight(static_cast<int>(result.height() * scale));
+	return result;
 }
 
 int32_t WzOptionsChoiceWidget::idealWidth()
 {
-	return (horizontalPadding * 2) + cachedIdealTextWidth;
+	int result = (horizontalPadding * 2) + wzText.getTextWidth();
+	if (icon)
+	{
+		result += (scaleIconSizeFor(nullopt, idealHeight()).width() + iconPaddingAfter);
+	}
+	return result;
 }
 
 int32_t WzOptionsChoiceWidget::idealHeight()
 {
-	return (verticalPadding * 2) + cachedIdealTextLineSize;
+	return (verticalPadding * 2) + wzText.getTextLineSize();
 }
 
 void WzOptionsChoiceWidget::setString(WzString string)
 {
-	if (string == text)
-	{
-		return;
-	}
 	text = string;
 	wzText.setText(string, FontID); // any time the string is changed, set wzText to the desired string & FontID, so we can calculate the ideal width + height
-	cacheIdealTextSize();
+}
+
+void WzOptionsChoiceWidget::setIcon(const AtlasImageDef *icon_)
+{
+	icon = icon_;
 }
 
 void WzOptionsChoiceWidget::setDisabled(bool value)
@@ -306,9 +562,24 @@ void WzOptionsChoiceWidget::highlightLost()
 	isHighlighted = false;
 }
 
+void WzOptionsChoiceWidget::geometryChanged()
+{
+	recalcIconDrawSize();
+}
+
 void WzOptionsChoiceWidget::run(W_CONTEXT *)
 {
 	wzText.tick();
+}
+
+void WzOptionsChoiceWidget::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	// use as a signal that we should re-check any font scaling or layout calculations (as display scaling setting may have changed)
+	if (wzText.getFontID() != FontID)
+	{
+		wzText.setText(text, FontID);
+	}
+	wzText.resetCachedDimensions();
 }
 
 void WzOptionsChoiceWidget::display(int xOffset, int yOffset)
@@ -328,6 +599,10 @@ void WzOptionsChoiceWidget::display(int xOffset, int yOffset)
 	}
 
 	int availableButtonTextWidth = w - (horizontalPadding * 2);
+	if (iconDrawWidth > 0)
+	{
+		availableButtonTextWidth -= (iconDrawWidth + iconPaddingAfter);
+	}
 	if (wzText->width() > availableButtonTextWidth)
 	{
 		// text would exceed the bounds of the button area
@@ -349,20 +624,19 @@ void WzOptionsChoiceWidget::display(int xOffset, int yOffset)
 	lastWidgetWidth = width();
 
 	// Draw background (if highlighted)
-	if (isHighlight && highlightBackgroundColor.rgba != 0)
+	if (isHighlight && !highlightBackgroundColor.isTransparent())
 	{
 		pie_UniTransBoxFill(x0, y0, x0 + w, y0 + h, highlightBackgroundColor);
 	}
 
 	// Draw the main text
-	PIELIGHT textColor = (isHighlight) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+	PIELIGHT textColor = WZCOL_TEXT_BRIGHT;
 	if (isDisabled)
 	{
 		textColor.byte.a = (textColor.byte.a / 2);
 	}
 
-	const int maxTextDisplayableWidth = w - (horizontalPadding * 2);
-	int maxDisplayableMainTextWidth = maxTextDisplayableWidth;
+	int maxDisplayableMainTextWidth = availableButtonTextWidth;
 
 	int textX0 = 0;
 	if (style & WLAB_ALIGNRIGHT)
@@ -372,6 +646,10 @@ void WzOptionsChoiceWidget::display(int xOffset, int yOffset)
 	else
 	{
 		textX0 = x0 + horizontalPadding;
+		if (iconDrawWidth > 0)
+		{
+			textX0 += (iconDrawWidth + iconPaddingAfter);
+		}
 	}
 	int textY0 = y0 + (h - wzText->lineSize()) / 2 - wzText->aboveBase();
 
@@ -385,6 +663,17 @@ void WzOptionsChoiceWidget::display(int xOffset, int yOffset)
 	{
 		// Render ellipsis
 		iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxDisplayableMainTextWidth + 2, textY0), textColor);
+	}
+
+	if (icon)
+	{
+		int iconX0 = x0 + horizontalPadding;
+		if (style & WLAB_ALIGNRIGHT)
+		{
+			iconX0 = x0 + w - horizontalPadding - std::min(availableButtonTextWidth, wzText->width()) - (iconDrawWidth + iconPaddingAfter);
+		}
+		int iconY0 = y0 + (h - iconDrawHeight) / 2;
+		iV_DrawImage2(icon, iconX0, iconY0, iconDrawWidth, iconDrawHeight);
 	}
 }
 
@@ -485,13 +774,21 @@ OptionInfo& OptionInfo::addAvailabilityCondition(const OptionAvailabilityConditi
 	return *this;
 }
 
+OptionInfo& OptionInfo::setRequiresRestart(bool val)
+{
+	bRequiresRestart = val;
+	return *this;
+}
+
 WzString OptionInfo::getTranslatedDisplayName() const
 {
+	if (displayName.isEmpty()) { return {}; }
 	return gettext(displayName.toUtf8().c_str());
 }
 
 WzString OptionInfo::getTranslatedHelpDescription() const
 {
+	if (helpDescription.isEmpty()) { return {}; }
 	return gettext(helpDescription.toUtf8().c_str());
 }
 
@@ -511,6 +808,11 @@ std::vector<OptionInfo::AvailabilityResult> OptionInfo::getAvailabilityResults()
 		result.push_back(condition(*this));
 	}
 	return result;
+}
+
+bool OptionInfo::requiresRestart() const
+{
+	return bRequiresRestart;
 }
 
 // MARK: - OptionAvailabilityConditions
@@ -547,11 +849,13 @@ const WzString& OptionsSection::sectionId() const
 
 WzString OptionsSection::getTranslatedDisplayName() const
 {
+	if (displayName.isEmpty()) { return {}; }
 	return gettext(displayName.toUtf8().c_str());
 }
 
 WzString OptionsSection::getTranslatedHelpDescription() const
 {
+	if (helpDescription.isEmpty()) { return {}; }
 	return gettext(helpDescription.toUtf8().c_str());
 }
 
@@ -626,7 +930,7 @@ void OptionsValueChangerWidgetWrapper::displayRecursive(WidgetGraphicsContext co
 		auto childrenContext = context.translatedBy(x(), y()).setAllowChildDisplayRecursiveIfSelfClipped(false);
 		// Display the widgets on this widget.
 		// NOTE: Draw them in the opposite order that clicks are processed, so behavior matches the visual.
-		// i.e. Since processClickRecursive handles processing children in decreasing z-order (i.e. "top-down")
+		// i.e. Since findMouseTargetRecursive handles processing children in decreasing z-order (i.e. "top-down")
 		//      we want to draw things in list order (bottom-up) so the "top-most" is drawn last
 		for (auto const &child: children())
 		{
@@ -636,14 +940,18 @@ void OptionsValueChangerWidgetWrapper::displayRecursive(WidgetGraphicsContext co
 			}
 		}
 
-		// "over-draw" with the disabled color over the contained changer widget
-		int x0 = context.getXOffset() + x();
-		int y0 = context.getYOffset() + y();
-		int widgX0 = x0 + optionValueChangerWidget->x();
-		int widgY0 = y0 + optionValueChangerWidget->y();
-		int widgX1 = widgX0 + optionValueChangerWidget->width();
-		int widgY1 = widgY0 + optionValueChangerWidget->height();
-		pie_UniTransBoxFill(widgX0, widgY0, widgX1, widgY1, WZCOL_TRANSPARENT_BOX);
+		bool widgetIsClipped = !context.clipContains(geometry());
+		if (!widgetIsClipped)
+		{
+			// "over-draw" with the disabled color over the contained changer widget
+			int x0 = context.getXOffset() + x();
+			int y0 = context.getYOffset() + y();
+			int widgX0 = x0 + optionValueChangerWidget->x();
+			int widgY0 = y0 + optionValueChangerWidget->y();
+			int widgX1 = widgX0 + optionValueChangerWidget->width();
+			int widgY1 = widgY0 + optionValueChangerWidget->height();
+			pie_UniTransBoxFill(widgX0, widgY0, widgX1, widgY1, WZCOL_TRANSPARENT_BOX);
+		}
 	}
 }
 
@@ -665,16 +973,160 @@ public:
 	virtual void setIsHighlighted(bool val) = 0;
 };
 
+class OptionsPaddingRow: public OptionsRowWidgetBase
+{
+public:
+	static std::shared_ptr<OptionsPaddingRow> make(int paddingHeight);
+
+	void setIsHighlighted(bool val) override;
+
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+protected:
+	void display(int xOffset, int yOffset) override;
+private:
+	int32_t paddingHeight = 0;
+};
+
+std::shared_ptr<OptionsPaddingRow> OptionsPaddingRow::make(int paddingHeight)
+{
+	class make_shared_enabler: public OptionsPaddingRow {};
+	auto result = std::make_shared<make_shared_enabler>();
+	result->paddingHeight = paddingHeight;
+	result->setGeometry(0, 0, result->idealWidth(), result->idealHeight());
+	return result;
+}
+
+void OptionsPaddingRow::setIsHighlighted(bool)
+{
+	// no-op
+}
+
+int32_t OptionsPaddingRow::idealWidth()
+{
+	return 100;
+}
+
+int32_t OptionsPaddingRow::idealHeight()
+{
+	return paddingHeight;
+}
+
+void OptionsPaddingRow::display(int xOffset, int yOffset)
+{
+	// no-op
+}
+
+// MARK: OptionsSectionRow
+
 class OptionsSectionRow: public OptionsRowWidgetBase
 {
 public:
+	static std::shared_ptr<OptionsSectionRow> make(const WzString& sectionName);
+
 	void setIsHighlighted(bool val) override;
+	void setShowBottomBorder(bool show) { showBottomBorder = show; }
+	void setSectionName(const WzString& sectionName);
+
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+	void geometryChanged() override;
+
+	void flashHighlight();
+protected:
+	void display(int xOffset, int yOffset) override;
+private:
+	std::shared_ptr<W_LABEL> m_labelWidget;
+	bool showBottomBorder = false;
+	optional<uint32_t> flashHighlightStart = nullopt;
+	const int32_t outerPaddingX = 1;
+	const int32_t outerPaddingY = 8;
+	const int32_t innerPaddingX = 4;
 };
+
+std::shared_ptr<OptionsSectionRow> OptionsSectionRow::make(const WzString& sectionName)
+{
+	class make_shared_enabler: public OptionsSectionRow {};
+	auto result = std::make_shared<make_shared_enabler>();
+
+	result->m_labelWidget = std::make_shared<W_LABEL>();
+	result->m_labelWidget->setFont(font_regular_bold, WZCOL_TEXT_MEDIUM);
+	result->m_labelWidget->setString(sectionName);
+	result->m_labelWidget->setTextAlignment(WLAB_ALIGNLEFT);
+	result->m_labelWidget->setGeometry(0, 0, result->m_labelWidget->idealWidth(), result->m_labelWidget->idealHeight());
+	result->attach(result->m_labelWidget);
+
+	result->setGeometry(0, 0, result->idealWidth(), result->idealHeight());
+
+	return result;
+}
 
 void OptionsSectionRow::setIsHighlighted(bool)
 {
 	// no-op
 }
+
+void OptionsSectionRow::setSectionName(const WzString& sectionName)
+{
+	m_labelWidget->setString(sectionName);
+}
+
+int32_t OptionsSectionRow::idealWidth()
+{
+	return (outerPaddingX * 2) + (innerPaddingX * 2) + m_labelWidget->idealWidth();
+}
+
+int32_t OptionsSectionRow::idealHeight()
+{
+	return (outerPaddingY * 2) + m_labelWidget->idealHeight();
+}
+
+void OptionsSectionRow::geometryChanged()
+{
+	m_labelWidget->setGeometry(outerPaddingX + innerPaddingX, outerPaddingY, width() - (outerPaddingX * 2) - (innerPaddingX * 2), height() - (outerPaddingY * 2));
+}
+
+void OptionsSectionRow::display(int xOffset, int yOffset)
+{
+	int x0 = xOffset + x();
+	int y0 = yOffset + y();
+	int x1 = x0 + width();
+	int y1 = y0 + height();
+
+	if (flashHighlightStart.has_value())
+	{
+		auto delta = realTime - flashHighlightStart.value();
+		if (delta < 500)
+		{
+			PIELIGHT flashColor = WZCOL_MENU_SCORE_BUILT;
+			uint8_t alphaValue = 180 - static_cast<uint8_t>((float(delta) / 500.f) * 180);
+			flashColor.byte.a = alphaValue;
+			pie_UniTransBoxFill(x0, y0, x1 - 1, y1 - ((showBottomBorder) ? 1 : 0), flashColor);
+		}
+		else
+		{
+			flashHighlightStart.reset();
+		}
+	}
+
+	if (showBottomBorder)
+	{
+		int bottomBorderX0 = x0 + outerPaddingX;
+		int bottomBorderX1 = x1 - outerPaddingX;
+		int bottomBorderY0 = y1 - 1;
+		int bottomBorderY1 = bottomBorderY0 + 1;
+		PIELIGHT lineColor = WZCOL_TEXT_MEDIUM;
+		lineColor.byte.a = (lineColor.byte.a / 2);
+		pie_UniTransBoxFill(bottomBorderX0, bottomBorderY0, bottomBorderX1, bottomBorderY1, lineColor);
+	}
+}
+
+void OptionsSectionRow::flashHighlight()
+{
+	flashHighlightStart = realTime;
+}
+
+// MARK: OptionRow
 
 class OptionRow: public OptionsRowWidgetBase
 {
@@ -686,6 +1138,7 @@ public:
 	void setParentOptionsForm(const std::shared_ptr<OptionsForm>& parentOptionsForm);
 	void setIsHighlighted(bool val) override;
 	void setShowBottomBorder(bool show) { showBottomBorder = show; }
+	void flashHighlight();
 
 	int32_t idealWidth() override;
 	int32_t idealHeight() override;
@@ -705,10 +1158,11 @@ private:
 	std::shared_ptr<OptionsValueChangerWidgetWrapper> m_wrappedOptionValueChangerWidget;
 	std::weak_ptr<OptionsForm> m_weakParentForm;
 	int16_t m_indentLevel = 0;
+	optional<uint32_t> flashHighlightStart = nullopt;
 	bool showBottomBorder = false;
 	bool isHighlighted = false;
-	const int32_t outerPaddingX = 0;
-	const int32_t outerPaddingY = 6;
+	const int32_t outerPaddingX = 1;
+	const int32_t outerPaddingY = 0;
 	const int32_t innerPaddingX = 6;
 	const int32_t indentPaddingPerLevel = 10;
 	const int32_t minimumLabelWidth = 100;
@@ -737,7 +1191,7 @@ int32_t OptionRow::idealWidth()
 
 int32_t OptionRow::idealHeight()
 {
-	return (outerPaddingY * 2) + std::max<int32_t>(m_labelWidget->idealHeight(), m_wrappedOptionValueChangerWidget->idealHeight());
+	return (outerPaddingY * 2) + std::max<int32_t>(m_labelWidget->idealHeight(), m_wrappedOptionValueChangerWidget->idealHeight()) + (showBottomBorder ? 1 : 0);
 }
 
 void OptionRow::geometryChanged()
@@ -752,7 +1206,7 @@ void OptionRow::geometryChanged()
 
 	int32_t leftIndentWidth = leftIndent();
 	int32_t availableWidthForWidgets = w - (outerPaddingX * 2) - leftIndentWidth - innerPaddingX;
-	int32_t availableWidgetHeight = h - (outerPaddingY * 2);
+	int32_t availableWidgetHeight = h - (outerPaddingY * 2) - (showBottomBorder ? 1 : 0);
 
 	int32_t labelWidth = m_labelWidget->idealWidth();
 	int32_t valueChangerWidth = m_wrappedOptionValueChangerWidget->idealWidth();
@@ -796,9 +1250,32 @@ void OptionRow::display(int xOffset, int yOffset)
 	int x1 = x0 + width();
 	int y1 = y0 + height();
 
+	if (isHighlighted)
+	{
+		PIELIGHT highlightColor = WZCOL_MENU_SCORE_BUILT;
+		highlightColor.byte.a = highlightColor.byte.a / 2;
+		pie_UniTransBoxFill(x0, y0, x1 - 1, y1 - ((showBottomBorder) ? 1 : 0), highlightColor);
+	}
+
+	if (flashHighlightStart.has_value())
+	{
+		auto delta = realTime - flashHighlightStart.value();
+		if (delta < 500)
+		{
+			PIELIGHT flashColor = pal_RGBA(16, 150, 2, 255);
+			uint8_t alphaValue = 180 - static_cast<uint8_t>((float(delta) / 500.f) * 180);
+			flashColor.byte.a = alphaValue;
+			pie_UniTransBoxFill(x0, y0, x1 - 1, y1 - ((showBottomBorder) ? 1 : 0), flashColor);
+		}
+		else
+		{
+			flashHighlightStart.reset();
+		}
+	}
+
 	if (showBottomBorder)
 	{
-		int bottomBorderX0 = x0 + outerPaddingX + leftIndent();
+		int bottomBorderX0 = x0 + outerPaddingX;
 		int bottomBorderX1 = x1 - outerPaddingX;
 		int bottomBorderY0 = y1 - 1;
 		int bottomBorderY1 = bottomBorderY0 + 1;
@@ -819,6 +1296,11 @@ void OptionRow::setIsHighlighted(bool newValue)
 	m_labelWidget->setDisplayHighlighted(isHighlighted);
 }
 
+void OptionRow::flashHighlight()
+{
+	flashHighlightStart = realTime;
+}
+
 // MARK: - OptionsForm
 
 std::shared_ptr<OptionsForm> OptionsForm::make()
@@ -831,6 +1313,15 @@ std::shared_ptr<OptionsForm> OptionsForm::make()
 
 OptionsForm::OptionsForm()
 { }
+
+OptionsForm::~OptionsForm()
+{
+	if (currentHelpPopoverWidget)
+	{
+		currentHelpPopoverWidget->close();
+		currentHelpPopoverWidget.reset();
+	}
+}
 
 void OptionsForm::initialize()
 {
@@ -929,6 +1420,20 @@ bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::ve
 
 			wroteALine = true;
 		}
+
+		if (optionInfo.requiresRestart())
+		{
+			if (wroteALine)
+			{
+				paragraph->addText("\n \n");
+			}
+
+			paragraph->setFont(font_bar); // font_small_bold
+			paragraph->addText(WzString("* ") + _("Takes effect on game restart"));
+			wroteALine = true;
+
+			paragraph->setFont(font_small);
+		}
 	}
 	else
 	{
@@ -1019,9 +1524,150 @@ void OptionsForm::closeHelpPopover()
 	currentHelpPopoverWidget.reset();
 }
 
+void OptionsForm::handleStartedRowEditing(const WzString& optionId)
+{
+	closeHelpPopover();
+
+	auto it = optionDetailsMap.find(optionId);
+	ASSERT_OR_RETURN(, it != optionDetailsMap.end(), "Could not find OptionRow for: %s", optionId.toUtf8().c_str());
+	auto row = std::dynamic_pointer_cast<OptionRow>(optionsList->getItemAtIdx(it->second.idxInOptionsList));
+	ASSERT_OR_RETURN(, row != nullptr, "Could not find OptionRow for: %s", optionId.toUtf8().c_str());
+
+	capturedEditingRowWidget = row;
+}
+
+void OptionsForm::handleEndedRowEditing(const WzString& optionId)
+{
+	auto it = optionDetailsMap.find(optionId);
+	ASSERT_OR_RETURN(, it != optionDetailsMap.end(), "Could not find OptionRow for: %s", optionId.toUtf8().c_str());
+	auto row = std::dynamic_pointer_cast<OptionRow>(optionsList->getItemAtIdx(it->second.idxInOptionsList));
+	ASSERT_OR_RETURN(, row != nullptr, "Could not find OptionRow for: %s", optionId.toUtf8().c_str());
+
+	if (row != capturedEditingRowWidget)
+	{
+		debug(LOG_INFO, "Ignorning call for non-current captured editing row widget: %s", optionId.toUtf8().c_str());
+	}
+
+	capturedEditingRowWidget = nullptr;
+}
+
 void OptionsForm::display(int xOffset, int yOffset)
 {
 	// no-op
+}
+
+bool OptionsForm::hasOptionsThatRequireRestart() const
+{
+	for (auto& i : optionDetailsMap)
+	{
+		if (i.second.info.requiresRestart())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool OptionsForm::jumpToSectionId(const WzString& sectionId)
+{
+	auto it = sectionDetailsMap.find(sectionId);
+	if (it == sectionDetailsMap.end())
+	{
+		return false;
+	}
+	auto idx = it->second.idxInOptionsList;
+	optionsList->scrollToItem(idx);
+	if (auto sectionRow = std::dynamic_pointer_cast<OptionsSectionRow>(optionsList->getItemAtIdx(idx)))
+	{
+		sectionRow->flashHighlight();
+	}
+	return true;
+}
+
+bool OptionsForm::jumpToOptionId(const WzString& optionId)
+{
+	auto it = optionDetailsMap.find(optionId);
+	if (it == optionDetailsMap.end())
+	{
+		return false;
+	}
+	jumpToItemIdx(it->second.idxInOptionsList, true);
+	return true;
+}
+
+size_t OptionsForm::numSections() const
+{
+	return optionDetailsMap.size();
+}
+
+std::vector<OptionsSection> OptionsForm::getSectionInfos() const
+{
+	std::vector<OptionsSection> result;
+	for (const auto& sectionId : orderedSectionIds)
+	{
+		auto it = sectionDetailsMap.find(sectionId);
+		if (it == sectionDetailsMap.end())
+		{
+			continue;
+		}
+		result.push_back(it->second.info);
+	}
+	return result;
+}
+
+void OptionsForm::setMaxListWidth(int32_t maxListWidth_)
+{
+	maxListWidth = maxListWidth_;
+	geometryChanged();
+}
+
+void OptionsForm::setRefreshOptionsOnScreenSizeChange(bool enabled)
+{
+	refreshOptionsOnScreenSizeChange = enabled;
+}
+
+bool OptionsForm::jumpToItemIdx(size_t idx, bool flash)
+{
+	optionsList->scrollEnsureItemVisible(idx);
+	if (flash)
+	{
+		if (auto row = std::dynamic_pointer_cast<OptionRow>(optionsList->getItemAtIdx(idx)))
+		{
+			row->flashHighlight();
+		}
+	}
+	return true;
+}
+
+void OptionsForm::addSection(const OptionsSection& optionsSection, bool bottomBorder /*= false*/)
+{
+	if (optionsList->numItems() > 0)
+	{
+		// Add "padding" row above the section row
+		optionsList->addItem(OptionsPaddingRow::make(20));
+	}
+
+	auto optionsSectionWidget = OptionsSectionRow::make(optionsSection.getTranslatedDisplayName());
+	optionsSectionWidget->setShowBottomBorder(bottomBorder);
+
+	// Store mapping
+	auto insertResult = sectionDetailsMap.insert({optionsSection.sectionId(), {optionsSection, optionsSectionWidget, 0}});
+	ASSERT_OR_RETURN(, insertResult.second, "Option section already added to OptionsForm: %s", optionsSection.sectionId().toUtf8().c_str());
+	orderedSectionIds.push_back(optionsSection.sectionId());
+
+	// Add options section widget to list
+	size_t itemListIdx = optionsList->addItem(optionsSectionWidget);
+	insertResult.first->second.idxInOptionsList = itemListIdx;
+}
+
+static WzString getOptionInfoTranslatedDisplayName(const OptionInfo& optionInfo)
+{
+	WzString result = optionInfo.getTranslatedDisplayName();
+	if (optionInfo.requiresRestart())
+	{
+		result.append("*");
+	}
+	return result;
 }
 
 void OptionsForm::addOptionInternal(const OptionInfo& optionInfo, const std::shared_ptr<WIDGET>& optionValueChangerWidget, bool bottomBorder /*= false*/, int16_t indentLevel /*= 0*/)
@@ -1030,8 +1676,8 @@ void OptionsForm::addOptionInternal(const OptionInfo& optionInfo, const std::sha
 
 	// Create left side widget for displaying the Option label / display name
 	auto optionLabelWidget = WzOptionsLabelWidget::make(font_regular);
-	optionLabelWidget->setString(optionInfo.getTranslatedDisplayName());
-	optionLabelWidget->setPadding(0, 5);
+	optionLabelWidget->setString(getOptionInfoTranslatedDisplayName(optionInfo));
+	optionLabelWidget->setPadding(4, 8);
 	optionLabelWidget->setTextAlignment(WLAB_ALIGNLEFT);
 	optionLabelWidget->setGeometry(0, 0, optionLabelWidget->idealWidth(), optionLabelWidget->idealHeight());
 	optionLabelWidget->setHighlightBackgroundColor(pal_RGBA(0,0,0,0));
@@ -1045,10 +1691,15 @@ void OptionsForm::addOptionInternal(const OptionInfo& optionInfo, const std::sha
 		ASSERT_OR_RETURN(, strongOptionsForm != nullptr, "Invalid pointer");
 		strongOptionsForm->handleOptionValueChanged(optionIdCopy);
 	});
-	pOptionValueChangerInterface->addCloseFormManagedPopoversHandler([pWeakOptionsForm](WIDGET&) {
+	pOptionValueChangerInterface->addStartingCapturedEditingHandler([pWeakOptionsForm, optionIdCopy](WIDGET&) {
 		auto strongOptionsForm = pWeakOptionsForm.lock();
 		ASSERT_OR_RETURN(, strongOptionsForm != nullptr, "Invalid pointer");
-		strongOptionsForm->closeHelpPopover();
+		strongOptionsForm->handleStartedRowEditing(optionIdCopy);
+	});
+	pOptionValueChangerInterface->addEndingCapturedEditingHandler([pWeakOptionsForm, optionIdCopy](WIDGET&) {
+		auto strongOptionsForm = pWeakOptionsForm.lock();
+		ASSERT_OR_RETURN(, strongOptionsForm != nullptr, "Invalid pointer");
+		strongOptionsForm->handleEndedRowEditing(optionIdCopy);
 	});
 
 	// Wrap the optionValueChangerWidget in an OptionsValueChangerWidgetWrapper
@@ -1075,9 +1726,9 @@ void OptionsForm::addOptionInternal(const OptionInfo& optionInfo, const std::sha
 	insertResult.first->second.idxInOptionsList = itemListIdx;
 }
 
-bool OptionsForm::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> OptionsForm::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	if (key == WKEY_NONE) // called this way for highlight processing by WIDGET::processClickRecursive, only if the mouse is actually over this widget (i.e. if hit-testing passes)
+	if (key == WKEY_NONE) // called this way for highlight processing by WIDGET::findMouseTargetRecursive, only if the mouse is actually over this widget (i.e. if hit-testing passes)
 	{
 		// mouse is over the options form this frame
 		W_CONTEXT shiftedContext(psContext);
@@ -1089,17 +1740,35 @@ bool OptionsForm::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bo
 	}
 
 	// forward to parent
-	return W_FORM::processClickRecursive(psContext, key, wasPressed);
+	return W_FORM::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
 void OptionsForm::run(W_CONTEXT *psContext)
 {
-	if (mouseOverFormPosThisFrame.has_value())
+	std::shared_ptr<WIDGET> currentHoverWidget = nullptr;
+	if (capturedEditingRowWidget)
 	{
-		// determine which row the mouse is currently over
-		auto psWidget = std::dynamic_pointer_cast<OptionsRowWidgetBase>(optionsList->getItemAtYPos(mouseOverFormPosThisFrame.value().y));
-		handleMouseIsOverRow(psWidget);
+		currentHoverWidget = capturedEditingRowWidget;
+	}
+	else if (mouseOverFormPosThisFrame.has_value())
+	{
+		const auto& listPadding = optionsList->getPadding();
+		if ((mouseOverFormPosThisFrame.value().x >= listPadding.left)
+			&& (mouseOverFormPosThisFrame.value().x <= (optionsList->width() - listPadding.right)))
+		{
+			// determine which row the mouse is currently over
+			currentHoverWidget = std::dynamic_pointer_cast<OptionsRowWidgetBase>(optionsList->getItemAtYPos(mouseOverFormPosThisFrame.value().y));
+		}
+		else
+		{
+			currentHoverWidget = nullptr;
+		}
 		mouseOverFormPosThisFrame.reset(); // consume it
+	}
+
+	if (currentHoverWidget)
+	{
+		handleMouseIsOverRow(currentHoverWidget);
 	}
 	else if (priorMouseOverRowWidget)
 	{
@@ -1113,7 +1782,18 @@ void OptionsForm::geometryChanged()
 	int32_t h = height();
 
 	int32_t listHeight = std::min<int32_t>(optionsList->idealHeight(), h);
+	uint32_t listPaddingX = (maxListWidth > 0 && maxListWidth < w) ? static_cast<uint32_t>((w - maxListWidth) / 2) : 0;
+	optionsList->setPadding(Padding{0, listPaddingX, 0, listPaddingX});
 	optionsList->setGeometry(0, 0, w, listHeight);
+}
+
+void OptionsForm::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	if (refreshOptionsOnScreenSizeChange)
+	{
+		refreshOptions(true);
+	}
+	W_FORM::screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 void OptionsForm::handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget)
@@ -1137,9 +1817,10 @@ void OptionsForm::handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget)
 		}
 		std::dynamic_pointer_cast<OptionsRowWidgetBase>(rowWidget)->setIsHighlighted(true);
 		auto psOptionRowWidget = std::dynamic_pointer_cast<OptionRow>(rowWidget);
-		if (psOptionRowWidget)
+		bool rowIsInCapturedEditMode = capturedEditingRowWidget != nullptr;
+		if (psOptionRowWidget && !rowIsInCapturedEditMode)
 		{
-			// it's an option row - display the help popover
+			// it's an option row - display the help popover (as long as not in captured editing mode)
 			auto it = optionDetailsMap.find(psOptionRowWidget->optionId());
 			if (it != optionDetailsMap.end())
 			{
@@ -1156,6 +1837,14 @@ void OptionsForm::handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget)
 				}
 				openHelpPopover(it->second.info, choiceHelpDescriptions, wrappedOptionValueChangerWidget);
 			}
+			else
+			{
+				closeHelpPopover();
+			}
+		}
+		else
+		{
+			closeHelpPopover();
 		}
 		priorMouseOverRowWidget = rowWidget;
 	}
@@ -1163,6 +1852,9 @@ void OptionsForm::handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget)
 
 void OptionsForm::handleOptionValueChanged(const WzString& optionId)
 {
+	// Call update on all other options
+	refreshOptionsInternal({optionId});
+
 	// Update row layout (if needed)
 	auto it = optionDetailsMap.find(optionId);
 	if (it != optionDetailsMap.end())
@@ -1173,9 +1865,6 @@ void OptionsForm::handleOptionValueChanged(const WzString& optionId)
 			row->geometryChanged();
 		}
 	}
-
-	// Call update on all other options
-	refreshOptionsInternal({optionId});
 }
 
 void OptionsForm::refreshOptionsInternal(const std::unordered_set<WzString>& except)
@@ -1190,18 +1879,28 @@ void OptionsForm::refreshOptionsInternal(const std::unordered_set<WzString>& exc
 	if (changedTranslationLocale)
 	{
 		lastConfiguredTranslationLocale = currentTranslationLocale;
+
+		for (auto& i : sectionDetailsMap)
+		{
+			// Update the section row text
+			auto pSectionRow = std::dynamic_pointer_cast<OptionsSectionRow>(i.second.optionSectionWidget);
+			if (pSectionRow)
+			{
+				pSectionRow->setSectionName(i.second.info.getTranslatedDisplayName());
+			}
+		}
 	}
 	bool forceUpdate = changedTranslationLocale;
 	for (auto& i : optionDetailsMap)
 	{
-		if (except.count(i.first))
-		{
-			continue;
-		}
 		auto pOptionLabel = std::dynamic_pointer_cast<WzOptionsLabelWidget>(i.second.optionLabelWidget);
 		if (pOptionLabel && forceUpdate)
 		{
-			pOptionLabel->setString(i.second.info.getTranslatedDisplayName());
+			pOptionLabel->setString(getOptionInfoTranslatedDisplayName(i.second.info));
+		}
+		if (except.count(i.first))
+		{
+			continue;
 		}
 		bool isAvailable = i.second.info.isAvailable();
 		auto wrappedOptionValueChangerWidget = std::static_pointer_cast<OptionsValueChangerWidgetWrapper>(i.second.optionValueChangerWidgetWrapper);
@@ -1212,13 +1911,56 @@ void OptionsForm::refreshOptionsInternal(const std::unordered_set<WzString>& exc
 			pOptionValueChangerInterface->informAvailable(isAvailable);
 		}
 		wrappedOptionValueChangerWidget->enable(isAvailable);
+		if (changedTranslationLocale)
+		{
+			auto row = std::dynamic_pointer_cast<OptionRow>(optionsList->getItemAtIdx(i.second.idxInOptionsList));
+			if (row)
+			{
+				row->geometryChanged();
+			}
+		}
 	}
 	isInRefreshOptionsInternal = false;
 }
 
-void OptionsForm::refreshOptions()
+void OptionsForm::refreshOptions(bool forceRowLayoutUpdates /*= false*/)
 {
 	refreshOptionsInternal({});
+	if (forceRowLayoutUpdates)
+	{
+		for (auto& i : optionDetailsMap)
+		{
+			auto row = std::dynamic_pointer_cast<OptionRow>(optionsList->getItemAtIdx(i.second.idxInOptionsList));
+			if (row)
+			{
+				row->geometryChanged();
+			}
+		}
+	}
+}
+
+void OptionsForm::refreshOptionsLayoutCalc()
+{
+	// trigger screenSizeDidChange to ensure all widgets have a chance to respond to display scale changes that occurred while not part of the active widget hierarchy
+	WIDGET::screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
+
+	// call geometryChanged() on rows to recalculate layout based on child widget ideal width (etc)
+	for (auto& i : optionDetailsMap)
+	{
+		auto row = std::dynamic_pointer_cast<OptionRow>(optionsList->getItemAtIdx(i.second.idxInOptionsList));
+		if (row)
+		{
+			row->geometryChanged();
+		}
+	}
+	for (auto& i : sectionDetailsMap)
+	{
+		auto row = std::dynamic_pointer_cast<OptionsSectionRow>(optionsList->getItemAtIdx(i.second.idxInOptionsList));
+		if (row)
+		{
+			row->geometryChanged();
+		}
+	}
 }
 
 void OptionsForm::refreshOptionAvailability()

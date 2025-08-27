@@ -111,21 +111,21 @@ modules:
     sources:
       - type: git
         url: https://github.com/google/shaderc.git
-        tag: v2024.3
-        commit: ff84893dd52d28f0b1737d2635733d952013bd9c
+        tag: v2025.3
+        commit: 8c2e602ce440b7739c95ff3d69cecb1adf6becda
       # Replicate the needed functionality of utils/git-sync-deps
       # To avoid having to break the build sandbox to download files
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        commit: 2a9b6f951c7d6b04b6c21fe1bf3f475b68b84801 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 2a611a970fdbc41ac2e3e328802aed9985352dca # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-headers
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        commit: 01c8438ee4ac52c248119b7e03e0b021f853b51a # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 33e02568181e3312f49a3cf33df470bf96ef293a # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-tools
       - type: git
         url: https://github.com/KhronosGroup/glslang.git
-        commit: 467ce01c71e38cf01814c48987a5c0dadd914df4 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: efd24d75bcbc55620e759f6bf42c45a32abac5f8 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/glslang
 
   - name: physfs
@@ -139,8 +139,8 @@ modules:
     @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
-        url: https://github.com/icculus/physfs/archive/741c4be358cd87366af1387d1e04e3f7d4f50c1e.zip # PhysFS 3.2.0+
-        sha512: 56bfe808e28d7de6b9f242ca3ce81d08439480499c7d5901f78a3ec8ea75c55b71958515db015f101bb6b884a0a0f1140fab1a7222aff0bbe28555ebf378807f
+        url: https://github.com/icculus/physfs/archive/9d18d36b5a5207b72f473f05e1b2834e347d8144.zip # PhysFS 3.2.0+
+        sha512: f982bc6352e632be91061a6c8baf18ef666b5665959174b7d1f273ef538be50b8a54884e9605adc3cbf56705fd6dc16554bfba797a1054b92d802d585a15dc0f
       
   - name: fribidi
     buildsystem: meson
@@ -154,8 +154,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/fribidi/fribidi
-        tag: v1.0.15
-        commit: 2803ff176713a27d7edb57a24bc60c38a02182e9
+        tag: v1.0.16
+        commit: 68162babff4f39c4e2dc164a5e825af93bda9983
 
   - name: libsodium
     @WZ_CROSS_BUILD_OPTIONS@
@@ -175,6 +175,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_CXX_STANDARD=17
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS:BOOL=OFF
     sources:
       - type: archive
         url: https://github.com/abseil/abseil-cpp/releases/download/20250127.1/abseil-cpp-20250127.1.tar.gz
@@ -212,6 +213,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_CXX_STANDARD=17
       - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS:BOOL=OFF
       @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
@@ -234,6 +236,31 @@ modules:
       - type: archive
         url: https://github.com/protocolbuffers/protobuf/releases/download/v30.1/protobuf-30.1.tar.gz
         sha256: 1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68
+
+  - name: libzip
+    buildsystem: cmake-ninja
+    builddir: true
+    @WZ_CROSS_BUILD_OPTIONS@
+    config-opts:
+    - -DCMAKE_INSTALL_PREFIX=/app
+    - -DCMAKE_BUILD_TYPE=Release
+    - -DENABLE_COMMONCRYPTO=OFF
+    - -DENABLE_GNUTLS=OFF
+    - -DENABLE_MBEDTLS=OFF
+    - -DENABLE_OPENSSL=OFF
+    - -DENABLE_WINDOWS_CRYPTO=OFF
+    - -DENABLE_LZMA=OFF
+    - -DENABLE_ZSTD=OFF
+    - -DBUILD_TOOLS=OFF
+    - -DBUILD_REGRESS=OFF
+    - -DBUILD_OSSFUZZ=OFF
+    - -DBUILD_EXAMPLES=OFF
+    - -DBUILD_DOC=OFF
+    @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
+    sources:
+      - type: archive
+        url: https://github.com/nih-at/libzip/releases/download/v1.11.3/libzip-1.11.3.tar.gz
+        sha512: 476ac845be5ae75cb666076bada9fb00c08d267308623672e9c7685998aeff40378a96d0fb37cde5b6d0f0c61935c84bd0e63900deff1554c9e0208f626ff390
 
   - name: warzone2100
     buildsystem: cmake-ninja

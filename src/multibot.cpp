@@ -218,24 +218,23 @@ bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STA
  *
  *  \sa recvDroidDisEmbark()
  */
-bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid)
 {
 	if (!bMultiMessages)
 	{
 		return true;
 	}
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDISEMBARK);
-	{
-		uint32_t player = psTransporter->player;
-		uint32_t droidId = psDroid->id;
-		uint32_t transportId = psTransporter->id;
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDDISEMBARK);
+	uint32_t player = psTransporter->player;
+	uint32_t droidId = psDroid->id;
+	uint32_t transportId = psTransporter->id;
 
-		NETuint32_t(&player);
-		NETuint32_t(&droidId);
-		NETuint32_t(&transportId);
-	}
-	return NETend();
+	NETuint32_t(w, player);
+	NETuint32_t(w, droidId);
+	NETuint32_t(w, transportId);
+
+	return NETend(w);
 }
 
 /** Receive info about a droid that is being unloaded from a transporter
@@ -244,17 +243,17 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 {
 	DROID *psFoundDroid = nullptr, *psTransporterDroid = nullptr;
 
-	NETbeginDecode(queue, GAME_DROIDDISEMBARK);
+	auto r = NETbeginDecode(queue, GAME_DROIDDISEMBARK);
 	{
 		uint32_t player;
 		uint32_t droidID;
 		uint32_t transporterID;
 
-		NETuint32_t(&player);
-		NETuint32_t(&droidID);
-		NETuint32_t(&transporterID);
+		NETuint32_t(r, player);
+		NETuint32_t(r, droidID);
+		NETuint32_t(r, transporterID);
 
-		NETend();
+		NETend(r);
 
 		// find the transporter first
 		psTransporterDroid = IdToDroid(transporterID, player);
@@ -302,7 +301,7 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
+bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
 {
 	if (!bMultiMessages)
 	{
@@ -326,42 +325,41 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 	}
 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_DROID);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_DROID);
 	{
 		Position pos(x, y, 0);
 		bool haveInitialOrders = initialOrdersP != nullptr;
 		int32_t droidType = pTemplate->droidType;
 
-		NETuint8_t(&player);
-		NETuint32_t(&id);
-		NETPosition(&pos);
-		WzString name = pTemplate->name;
-		NETwzstring(name);
-		NETint32_t(&droidType);
-		NETuint8_t(&pTemplate->asParts[COMP_BODY]);
-		NETuint8_t(&pTemplate->asParts[COMP_BRAIN]);
-		NETuint8_t(&pTemplate->asParts[COMP_PROPULSION]);
-		NETuint8_t(&pTemplate->asParts[COMP_REPAIRUNIT]);
-		NETuint8_t(&pTemplate->asParts[COMP_ECM]);
-		NETuint8_t(&pTemplate->asParts[COMP_SENSOR]);
-		NETuint8_t(&pTemplate->asParts[COMP_CONSTRUCT]);
-		NETint8_t(&pTemplate->numWeaps);
+		NETuint8_t(w, player);
+		NETuint32_t(w, id);
+		NETPosition(w, pos);
+		NETwzstring(w, pTemplate->name);
+		NETint32_t(w, droidType);
+		NETuint8_t(w, pTemplate->asParts[COMP_BODY]);
+		NETuint8_t(w, pTemplate->asParts[COMP_BRAIN]);
+		NETuint8_t(w, pTemplate->asParts[COMP_PROPULSION]);
+		NETuint8_t(w, pTemplate->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(w, pTemplate->asParts[COMP_ECM]);
+		NETuint8_t(w, pTemplate->asParts[COMP_SENSOR]);
+		NETuint8_t(w, pTemplate->asParts[COMP_CONSTRUCT]);
+		NETint8_t(w, pTemplate->numWeaps);
 		for (int i = 0; i < pTemplate->numWeaps; i++)
 		{
-			NETuint32_t(&pTemplate->asWeaps[i]);
+			NETuint32_t(w, pTemplate->asWeaps[i]);
 		}
-		NETbool(&haveInitialOrders);
+		NETbool(w, haveInitialOrders);
 		if (haveInitialOrders)
 		{
 			INITIAL_DROID_ORDERS initialOrders = *initialOrdersP;
-			NETuint32_t(&initialOrders.secondaryOrder);
-			NETint32_t(&initialOrders.moveToX);
-			NETint32_t(&initialOrders.moveToY);
-			NETuint32_t(&initialOrders.factoryId);  // For making scripts happy.
+			NETuint32_t(w, initialOrders.secondaryOrder);
+			NETint32_t(w, initialOrders.moveToX);
+			NETint32_t(w, initialOrders.moveToY);
+			NETuint32_t(w, initialOrders.factoryId);  // For making scripts happy.
 		}
 	}
 	debug(LOG_LIFE, "===> sending Droid from %u id of %u ", player, id);
-	return NETend();
+	return NETend(w);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -376,42 +374,42 @@ bool recvDroid(NETQUEUE queue)
 	bool haveInitialOrders = false;
 	INITIAL_DROID_ORDERS initialOrders = { 0, 0, 0, 0 };
 
-	NETbeginDecode(queue, GAME_DEBUG_ADD_DROID);
+	auto r = NETbeginDecode(queue, GAME_DEBUG_ADD_DROID);
 	{
 		int32_t droidType;
 
-		NETuint8_t(&player);
-		NETuint32_t(&id);
-		NETPosition(&pos);
+		NETuint8_t(r, player);
+		NETuint32_t(r, id);
+		NETPosition(r, pos);
 		WzString name;
-		NETwzstring(name);
+		NETwzstring(r, name);
 		pT->name = name;
 		pT->id = pT->name;
-		NETint32_t(&droidType);
-		NETuint8_t(&pT->asParts[COMP_BODY]);
-		NETuint8_t(&pT->asParts[COMP_BRAIN]);
-		NETuint8_t(&pT->asParts[COMP_PROPULSION]);
-		NETuint8_t(&pT->asParts[COMP_REPAIRUNIT]);
-		NETuint8_t(&pT->asParts[COMP_ECM]);
-		NETuint8_t(&pT->asParts[COMP_SENSOR]);
-		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
-		NETint8_t(&pT->numWeaps);
+		NETint32_t(r, droidType);
+		NETuint8_t(r, pT->asParts[COMP_BODY]);
+		NETuint8_t(r, pT->asParts[COMP_BRAIN]);
+		NETuint8_t(r, pT->asParts[COMP_PROPULSION]);
+		NETuint8_t(r, pT->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(r, pT->asParts[COMP_ECM]);
+		NETuint8_t(r, pT->asParts[COMP_SENSOR]);
+		NETuint8_t(r, pT->asParts[COMP_CONSTRUCT]);
+		NETint8_t(r, pT->numWeaps);
 		ASSERT_OR_RETURN(false, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps), "Bad numWeaps %d", pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			NETuint32_t(&pT->asWeaps[i]);
+			NETuint32_t(r, pT->asWeaps[i]);
 		}
-		NETbool(&haveInitialOrders);
+		NETbool(r, haveInitialOrders);
 		if (haveInitialOrders)
 		{
-			NETuint32_t(&initialOrders.secondaryOrder);
-			NETint32_t(&initialOrders.moveToX);
-			NETint32_t(&initialOrders.moveToY);
-			NETuint32_t(&initialOrders.factoryId);  // For making scripts happy.
+			NETuint32_t(r, initialOrders.secondaryOrder);
+			NETint32_t(r, initialOrders.moveToX);
+			NETint32_t(r, initialOrders.moveToY);
+			NETuint32_t(r, initialOrders.factoryId);  // For making scripts happy.
 		}
 		pT->droidType = (DROID_TYPE)droidType;
 	}
-	NETend();
+	NETend(r);
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
@@ -431,8 +429,8 @@ bool recvDroid(NETQUEUE queue)
 	}
 
 	// Create that droid on this machine.
-	const auto r = Rotation();
-	psDroid = reallyBuildDroid(pT, pos, player, false, r, id);
+	const auto rot = Rotation();
+	psDroid = reallyBuildDroid(pT, pos, player, false, rot, id);
 
 	// If we were able to build the droid set it up
 	if (psDroid)
@@ -462,44 +460,53 @@ bool recvDroid(NETQUEUE queue)
 	return true;
 }
 
+template <typename SerdeContext, typename T>
+struct SerdeFnArgT
+{
+	using reference_type = std::conditional_t<std::is_same<SerdeContext, MessageReader>::value, T&, const T&>;
+};
 
 /// Does not read/write info->droidId!
-static void NETQueuedDroidInfo(QueuedDroidInfo *info)
+template <typename SerdeContext>
+static void NETQueuedDroidInfo(SerdeContext& c, typename SerdeFnArgT<SerdeContext, QueuedDroidInfo>::reference_type info)
 {
-	NETuint8_t(&info->player);
-	NETenum(&info->subType);
-	switch (info->subType)
+	static_assert(std::is_same<SerdeContext, MessageReader>::value || std::is_same<SerdeContext, MessageWriter>::value,
+		"SerdeContext is expected to be either MessageReader or MessageWriter");
+
+	NETuint8_t(c, info.player);
+	NETenum(c, info.subType);
+	switch (info.subType)
 	{
 	case ObjOrder:
 	case LocOrder:
-		NETenum(&info->order);
-		if (info->subType == ObjOrder)
+		NETenum(c, info.order);
+		if (info.subType == ObjOrder)
 		{
-			NETuint32_t(&info->destId);
-			NETenum(&info->destType);
+			NETuint32_t(c, info.destId);
+			NETenum(c, info.destType);
 		}
 		else
 		{
-			NETauto(info->pos);
+			NETVector2i(c, info.pos);
 		}
-		if (info->order == DORDER_BUILD || info->order == DORDER_LINEBUILD)
+		if (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD)
 		{
-			NETuint32_t(&info->structRef);
-			NETuint16_t(&info->direction);
+			NETuint32_t(c, info.structRef);
+			NETuint16_t(c, info.direction);
 		}
-		if (info->order == DORDER_LINEBUILD)
+		if (info.order == DORDER_LINEBUILD)
 		{
-			NETauto(info->pos2);
+			NETVector2i(c, info.pos2);
 		}
-		if (info->order == DORDER_BUILDMODULE)
+		if (info.order == DORDER_BUILDMODULE)
 		{
-			NETauto(info->index);
+			NETuint32_t(c, info.index);
 		}
-		NETbool(&info->add);
+		NETbool(c, info.add);
 		break;
 	case SecondaryOrder:
-		NETenum(&info->secOrder);
-		NETenum(&info->secState);
+		NETenum(c, info.secOrder);
+		NETenum(c, info.secState);
 		break;
 	}
 }
@@ -508,8 +515,8 @@ static void NETQueuedDroidInfo(QueuedDroidInfo *info)
 void sendQueuedDroidInfo()
 {
 	// Given an order type, we bring all other orders of the same type together
-	// WHILE KEEPING their relative order!! This is important because 
-	// sending all MOVE and then all HOLD_POSITION is clearly not the same as 
+	// WHILE KEEPING their relative order!! This is important because
+	// sending all MOVE and then all HOLD_POSITION is clearly not the same as
 	// sending all HOLD_POSITION and then MOVE
 	// yes, we need an ordered map here, not std::sort
 	static std::map<DROID_ORDER, std::vector<QueuedDroidInfo> > orderedMap; // static to avoid allocations
@@ -518,21 +525,21 @@ void sendQueuedDroidInfo()
 	{
 		orderedMap[info.order].push_back(info);
 	}
-	std::vector<QueuedDroidInfo>::iterator eqBegin, eqEnd;
+	std::vector<QueuedDroidInfo>::const_iterator eqBegin, eqEnd;
 	for (auto &pair: orderedMap)
 	{
-		auto qOrders = pair.second;
+		const auto& qOrders = pair.second;
 		for (eqBegin = qOrders.begin(); eqBegin != qOrders.end(); eqBegin = eqEnd)
 		{
 			// Find end of range of orders which differ only by the droid ID.
 			for (eqEnd = eqBegin + 1; eqEnd != qOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
 			{}
 
-			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
-			NETQueuedDroidInfo(&*eqBegin);
+			auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDINFO);
+			NETQueuedDroidInfo(w, *eqBegin);
 
 			uint32_t num = eqEnd - eqBegin;
-			NETuint32_t(&num);
+			NETuint32_t(w, num);
 
 			uint32_t prevDroidId = 0;
 			for (unsigned n = 0; n < num; ++n)
@@ -541,14 +548,13 @@ void sendQueuedDroidInfo()
 
 				// Encode deltas between droid IDs, since the deltas are smaller than the actual droid IDs, and will encode to less bytes on average.
 				uint32_t deltaDroidId = droidId - prevDroidId;
-				NETuint32_t(&deltaDroidId);
+				NETuint32_t(w, deltaDroidId);
 
 				prevDroidId = droidId;
 			}
-			NETend();
+			NETend(w);
 		}
-		qOrders.clear();
-	}	
+	}
 	// Sent the orders. Don't send them again.
 	queuedOrders.clear();
 }
@@ -631,10 +637,10 @@ void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 // receive droid information form other players.
 bool recvDroidInfo(NETQUEUE queue)
 {
-	NETbeginDecode(queue, GAME_DROIDINFO);
+	auto r = NETbeginDecode(queue, GAME_DROIDINFO);
 	{
 		QueuedDroidInfo info;
-		NETQueuedDroidInfo(&info);
+		NETQueuedDroidInfo(r, info);
 
 		STRUCTURE_STATS *psStats = nullptr;
 		if (info.subType == LocOrder && (info.order == DORDER_BUILD || info.order == DORDER_LINEBUILD))
@@ -660,13 +666,13 @@ bool recvDroidInfo(NETQUEUE queue)
 		DROID_ORDER_DATA sOrder = infoToOrderData(info, psStats);
 
 		uint32_t num = 0;
-		NETuint32_t(&num);
+		NETuint32_t(r, num);
 
 		for (unsigned n = 0; n < num; ++n)
 		{
 			// Get the next droid ID which is being given this order.
 			uint32_t deltaDroidId = 0;
-			NETuint32_t(&deltaDroidId);
+			NETuint32_t(r, deltaDroidId);
 			info.droidId += deltaDroidId;
 
 			DROID *psDroid = IdToDroid(info.droidId, info.player);
@@ -696,7 +702,9 @@ bool recvDroidInfo(NETQUEUE queue)
 				* If the current order not is a command order and we are not a
 				* commander yet are in the commander group remove us from it.
 				*/
-				if (hasCommander(psDroid))
+				if (hasCommander(psDroid)
+					&& info.order != DORDER_RTR
+					&& info.order != DORDER_RTR_SPECIFIED)
 				{
 					psDroid->psGroup->remove(psDroid);
 				}
@@ -727,7 +735,7 @@ bool recvDroidInfo(NETQUEUE queue)
 			CHECK_DROID(psDroid);
 		}
 	}
-	NETend();
+	NETend(r);
 
 	return true;
 }
@@ -783,15 +791,15 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 // Inform other players that a droid has been destroyed
 bool SendDestroyDroid(const DROID *psDroid)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_DROID);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id = psDroid->id;
 
 		// Send the droid's ID
 		debug(LOG_DEATH, "Requested all players to destroy droid %u", (unsigned int)id);
-		NETuint32_t(&id);
+		NETuint32_t(w, id);
 	}
-	return NETend();
+	return NETend(w);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -800,12 +808,12 @@ bool recvDestroyDroid(NETQUEUE queue)
 {
 	DROID *psDroid;
 
-	NETbeginDecode(queue, GAME_DEBUG_REMOVE_DROID);
+	auto r = NETbeginDecode(queue, GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id;
 
 		// Retrieve the droid
-		NETuint32_t(&id);
+		NETuint32_t(r, id);
 		psDroid = IdToDroid(id, ANYPLAYER);
 		if (!psDroid)
 		{
@@ -814,7 +822,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 			return false;
 		}
 	}
-	NETend();
+	NETend(r);
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)

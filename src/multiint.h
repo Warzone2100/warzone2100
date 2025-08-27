@@ -111,6 +111,9 @@ void printBlindModeHelpMessagesToConsole();
  */
 int allPlayersOnSameTeam(int except);
 
+bool multiplayPlayersCanCheckReady();
+void handlePossiblePlayersCanCheckReadyChange(bool previousPlayersCanCheckReadyValue);
+
 bool multiplayPlayersReady();
 bool multiplayIsStartingGame();
 
@@ -158,6 +161,8 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions);
+
 void multiLobbyRandomizeOptions();
 
 bool SendColourRequest(UBYTE player, UBYTE col);
@@ -165,8 +170,6 @@ bool SendColourRequest(UBYTE player, UBYTE col);
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
-
-bool autoBalancePlayersCmd();
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN

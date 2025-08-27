@@ -873,7 +873,6 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 				poly->texAnim.y = 0;
 			}
 
-			poly->texCoord.resize(3);
 			for (unsigned j = 0; j < 3; j++)
 			{
 				float VertexU, VertexV;
@@ -899,7 +898,6 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, c
 		else
 		{
 			ASSERT_OR_RETURN(false, !(poly->flags & iV_IMD_TEXANIM), "Polygons with texture animation must have textures!");
-			poly->texCoord.clear();
 		}
 
 		pFileData = lineToProcess.pNextLineBegin;

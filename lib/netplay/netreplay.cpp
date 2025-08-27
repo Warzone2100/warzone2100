@@ -51,7 +51,8 @@ static PHYSFS_file *replaySaveHandle = nullptr;
 static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
-static const uint32_t currentReplayFormatVer = 2;
+static const uint32_t currentReplayFormatVer = 3;
+static const uint32_t minReplayFormatVerSupported = 3;
 static const size_t DefaultReplayBufferSize = 32768;
 static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
 
@@ -115,16 +116,16 @@ static bool NETreplaySaveWritePreamble(const nlohmann::json& settings, ReplayOpt
 	return true;
 }
 
-bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename)
+std::string NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename)
 {
 	if (NETisReplay())
 	{
 		// Have already loaded and will be running a replay - don't bother saving another
 		debug(LOG_WZ, "Replay loaded - skip recording of new replay");
-		return false;
+		return "";
 	}
 
-	ASSERT_OR_RETURN(false, !subdir.empty(), "Must provide a valid subdir");
+	ASSERT_OR_RETURN("", !subdir.empty(), "Must provide a valid subdir");
 
 	if (maxReplaysSaved > 0)
 	{
@@ -157,7 +158,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	if (replaySaveHandle == nullptr)
 	{
 		debug(LOG_ERROR, "Could not create replay file %s: %s", filename.c_str(), WZ_PHYSFS_getLastError());
-		return false;
+		return "";
 	}
 
 	WZ_PHYSFS_SETBUFFER(replaySaveHandle, 1024 * 32)//;
@@ -218,7 +219,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 		saveThread = nullptr;
 	}
 
-	return true;
+	return filename;
 }
 
 bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)
@@ -229,7 +230,7 @@ bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)
 	}
 
 	// v2: Append the "REPLAY_ENDED" message (from hostPlayer)
-	auto replayEndedMessage = NetMessage(REPLAY_ENDED);
+	auto replayEndedMessage = NetMessageBuilder(REPLAY_ENDED, 0).build();
 	latestWriteBuffer.push_back(NetPlay.hostPlayer);
 	replayEndedMessage.rawDataAppendToVector(latestWriteBuffer);
 
@@ -289,7 +290,7 @@ void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player)
 		return;
 	}
 
-	if (message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE)
+	if (message->type() > GAME_MIN_TYPE && message->type() < GAME_MAX_TYPE)
 	{
 		latestWriteBuffer.push_back(player);
 		message->rawDataAppendToVector(latestWriteBuffer);
@@ -353,6 +354,17 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 			wzDisplayDialog(Dialog_Error, _("Replay File Format Unsupported"), mismatchVersionDescription.c_str());
 
 			std::string failLogStr = "Replay file format is newer than this version of Warzone 2100 can support: " + std::to_string(replayFormatVer);
+			return onFail(failLogStr.c_str());
+		}
+
+		if (replayFormatVer < minReplayFormatVerSupported)
+		{
+			std::string mismatchVersionDescription = _("The replay file format is older than this version of Warzone 2100 can support.");
+			mismatchVersionDescription += "\n\n";
+			mismatchVersionDescription += astringf(_("Replay Format Version: %u"), static_cast<unsigned>(replayFormatVer));
+			wzDisplayDialog(Dialog_Error, _("Replay File Format Unsupported"), mismatchVersionDescription.c_str());
+
+			std::string failLogStr = "Replay file format is older than this version of Warzone 2100 can support: " + std::to_string(replayFormatVer);
 			return onFail(failLogStr.c_str());
 		}
 
@@ -428,29 +440,30 @@ bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &play
 	uint8_t type;
 	WZ_PHYSFS_readBytes(replayLoadHandle, &type, 1);
 
-	uint32_t len = 0;
-	uint8_t b;
-	unsigned n = 0;
-	bool rd;
-	do
-	{
-		rd = WZ_PHYSFS_readBytes(replayLoadHandle, &b, 1);
-	} while (decode_uint32_t(b, len, n++));
-
+	uint8_t b[2];
+	bool rd = WZ_PHYSFS_readBytes(replayLoadHandle, &b, 2);
 	if (!rd)
 	{
 		return false;
 	}
+	uint16_t len = 0;
+	// Load payload length from uint16_t (network byte order) starting at the second byte of the data buffer.
+	wz_ntohs_load_unaligned(len, b);
 
-	message = std::make_unique<NetMessage>(type);
-	message->data.resize(len);
-	size_t messageRead = WZ_PHYSFS_readBytes(replayLoadHandle, message->data.data(), message->data.size());
-	if (messageRead != message->data.size())
+	std::vector<uint8_t> replayData(len);
+	size_t messageRead = WZ_PHYSFS_readBytes(replayLoadHandle, replayData.data(), len);
+
+	if (messageRead != len)
 	{
 		return false;
 	}
 
-	return (message->type > GAME_MIN_TYPE && message->type < GAME_MAX_TYPE) || message->type == REPLAY_ENDED;
+	NetMessageBuilder msgBuilder(type, len);
+	msgBuilder.append(replayData.data(), len);
+
+	message = std::make_unique<NetMessage>(msgBuilder.build());
+
+	return (message->type() > GAME_MIN_TYPE && message->type() < GAME_MAX_TYPE) || message->type() == REPLAY_ENDED;
 }
 
 bool NETreplayLoadStop()

@@ -326,6 +326,8 @@ void handlePlayerLeftInGame(UDWORD player)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
+	bool leftWhilePlayer = NetPlay.players[player].isSpectator;
+
 	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
 	NetPlay.playerReferences[player] = std::make_shared<PlayerReference>(player);
@@ -338,6 +340,11 @@ void handlePlayerLeftInGame(UDWORD player)
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
+
+	if (leftWhilePlayer)
+	{
+		ingame.playerLeftGameTime[player] = gameTime;
+	}
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -398,9 +405,9 @@ static void sendPlayerLeft(uint32_t playerIndex)
 
 	uint32_t forcedPlayerIndex = whosResponsible(playerIndex);
 	NETQUEUE(*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer ? NETgameQueueForced : NETgameQueue;
-	NETbeginEncode(netQueueType(forcedPlayerIndex), GAME_PLAYER_LEFT);
-	NETuint32_t(&playerIndex);
-	NETend();
+	auto w = NETbeginEncode(netQueueType(forcedPlayerIndex), GAME_PLAYER_LEFT);
+	NETuint32_t(w, playerIndex);
+	NETend(w);
 }
 
 static void addConsolePlayerLeftMessage(unsigned playerIndex)
@@ -429,9 +436,9 @@ static void addConsolePlayerJoinMessage(unsigned playerIndex)
 void recvPlayerLeft(NETQUEUE queue)
 {
 	uint32_t playerIndex = 0;
-	NETbeginDecode(queue, GAME_PLAYER_LEFT);
-	NETuint32_t(&playerIndex);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_PLAYER_LEFT);
+	NETuint32_t(r, playerIndex);
+	NETend(r);
 
 	addConsolePlayerLeftMessage(playerIndex);
 
@@ -453,6 +460,13 @@ void recvPlayerLeft(NETQUEUE queue)
 	cancelOrDismissKickVote(playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game! (gameTime: %" PRIu32 ")", playerIndex, gameTime);
+
+	// fire script callback to reassign skirmish players.
+	if (GetGameMode() == GS_NORMAL)
+	{
+		triggerEventPlayerLeft(playerIndex);
+	}
+
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 
 	wz_command_interface_output_room_status_json();
@@ -482,6 +496,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (wz_command_interface_enabled())
 	{
+		// WZEVENT: playerLeft: <playerIdx> <gameTime> <b64pubkey> <hash> <V|?> <b64name> <ip>
 		const auto& identity = getOutputPlayerIdentity(playerIndex);
 		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = identity.publicHashString();
@@ -504,9 +519,9 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 		if (bDisplayMultiJoiningStatus) // if still waiting for players to load *or* waiting for game to start...
 		{
-			NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
-			NETuint32_t(&playerIndex);
-			NETend();
+			auto w = NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_DROPPED);
+			NETuint32_t(w, playerIndex);
+			NETend(w);
 			// only set ingame.JoiningInProgress[player_id] to false
 			// when the game starts, it will handle the GAME_PLAYER_LEFT message in their queue properly
 			ingame.JoiningInProgress[playerIndex] = false;
@@ -530,12 +545,6 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 		{
 			audio_QueueTrack(ID_CLAN_EXIT);
 		}
-	}
-
-	// fire script callback to reassign skirmish players.
-	if (GetGameMode() == GS_NORMAL)
-	{
-		triggerEventPlayerLeft(playerIndex);
 	}
 
 	netPlayersUpdated = true;
@@ -607,12 +616,12 @@ bool sendDataCheck()
 {
 	int i = 0;
 
-	NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK);		// only need to send to HOST
+	auto w = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_DATA_CHECK);		// only need to send to HOST
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
-		NETuint32_t(&DataHash[i]);
+		NETuint32_t(w, DataHash[i]);
 	}
-	NETend();
+	NETend(w);
 	debug(LOG_NET, "sent hash to host");
 	return true;
 }
@@ -629,12 +638,12 @@ bool recvDataCheck(NETQUEUE queue)
 		return false;
 	}
 
-	NETbeginDecode(queue, NET_DATA_CHECK);
+	auto r = NETbeginDecode(queue, NET_DATA_CHECK);
 	for (i = 0; i < DATA_MAXDATA; i++)
 	{
-		NETuint32_t(&tempBuffer[i]);
+		NETuint32_t(r, tempBuffer[i]);
 	}
-	NETend();
+	NETend(r);
 
 	if (player >= MAX_CONNECTED_PLAYERS) // invalid player number.
 	{
@@ -689,11 +698,23 @@ void setupNewPlayer(UDWORD player)
 	ingame.DesyncCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.joinTimes[player] = std::chrono::steady_clock::now();
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.hostChatPermissions[player] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
+	ingame.lastReadyTimes[player].reset();
+	if (multiplayPlayersCanCheckReady())
+	{
+		ingame.lastNotReadyTimes[player] = ingame.joinTimes[player];
+	}
+	else
+	{
+		ingame.lastNotReadyTimes[player].reset();
+	}
+	ingame.secondsNotReady[player] = 0;
+	ingame.playerLeftGameTime[player].reset();
 	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.

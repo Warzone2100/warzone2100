@@ -24,6 +24,10 @@ on:
     types:
       - completed
 
+env:
+  # Controls whether release builds are signed
+  WZ_CI_SIGN_RELEASE_BUILDS: true
+
 jobs:
   windows-build:
     strategy:
@@ -78,7 +82,7 @@ jobs:
       # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -298,8 +302,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "acb4ae0786fd3e558f8b3c36cc3eba91638984217ba8a6795ec64d2f9ffd8c4b"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.4.321.1/windows/vulkansdk-windows-X64-1.4.321.1.exe?Human=true"
+        $VULKAN_DL_SHA256 = "baaa4f7ca11ed3d82aa1c102b21208915485bbaa473068c763daa425cca468bd"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
@@ -381,10 +385,10 @@ jobs:
         $VerbosePreference = "Continue"
         . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
 
-        $LLVM_MINGW_RELEASE = "20240619";
+        $LLVM_MINGW_RELEASE = "20250709";
         $LLVM_MINGW_PKG = "llvm-mingw-${LLVM_MINGW_RELEASE}-ucrt-x86_64"
         $LLVM_MINGW_DL_URL = "https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_RELEASE}/${LLVM_MINGW_PKG}.zip"
-        $LLVM_MINGW_DL_SHA512 = "d98928107d61e19d27990eb75863f7c34f3d9c23200b5ead7e1ccfd4c6f028a0093d79c06905494329a704b00fab0f10eb7db5d370a342b08154a11988084371"
+        $LLVM_MINGW_DL_SHA512 = "e080a8928d7ae6263a54d506949421ca03e269a1829f7fdaae53accb9b060a404ec1e6c32eb8b08e051769edd943437635e0dd8beb16ed06b9b04e9423609714"
 
         $LLVM_MINGW_DL_BASEDIR = "${{ github.workspace }}\dl"
         $LLVM_MINGW_DL_PATH = "${LLVM_MINGW_DL_BASEDIR}\llvm-mingw.zip"
@@ -560,6 +564,7 @@ jobs:
         & cmake --build . --config Release --target warzone2100 -- -k0
         echo "::remove-matcher owner=clang::"
     - name: Archive .ZIP of Regular build
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\build'
       env:
         FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
@@ -571,6 +576,7 @@ jobs:
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     - name: Archive Debug Symbols
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\build'
       env:
         FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
@@ -582,6 +588,7 @@ jobs:
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_debugsymbols.7z" -Destination "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
     - name: Compare Build Outputs
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\output'
       run: |
         # Log hashes of the build output
@@ -593,7 +600,7 @@ jobs:
     #####################################################
     - name: 'Upload Artifact - (Debug Symbols)'
       uses: actions/upload-artifact@v4
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
@@ -610,7 +617,7 @@ jobs:
     #####################################################
     - name: 'Generate artifact attestation - (Archive)'
       # Run on push to master branch (development build), or tag release automation build
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      if: success() && (matrix.deploy_release == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
       uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
@@ -670,8 +677,10 @@ jobs:
       attestations: write
     runs-on: windows-latest
     needs: windows-build
+    outputs:
+      combined-installer-artifact-id: ${{ steps.upload-combined-installer-artifact.outputs.artifact-id }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           path: 'src'
@@ -699,6 +708,7 @@ jobs:
           mkdir dependency-dl
           mkdir innosetup
           mkdir innosetup-deps
+          mkdir innosetup-unofficial-translations
           mkdir built-archives
           mkdir tmp
           mkdir combined-staging
@@ -711,8 +721,8 @@ jobs:
           $VerbosePreference = "Continue"
           . "src\.ci\powershell\request.ps1"
 
-          $INNOSETUP_DL_URL = "https://files.jrsoftware.org/is/6/innosetup-6.4.3.exe"
-          $INNOSETUP_DL_SHA256 = "f3c42116542c4cc57263c5ba6c4feabfc49fe771f2f98a79d2f7628b8762723b"
+          $INNOSETUP_DL_URL = "https://files.jrsoftware.org/is/6/innosetup-6.5.1.exe"
+          $INNOSETUP_DL_SHA256 = "3622ffdad7b2534239370099149c33adb85b90054799d901cb8ec844df7a0e41"
 
           $INNOSETUP_DL_PATH = ".\dependency-dl\innosetup.exe"
           $req = Req -Params @{ 'Method'='GET';'Uri'="$INNOSETUP_DL_URL";'OutFile'="${INNOSETUP_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${INNOSETUP_DL_SHA256}" -Algorithm SHA256
@@ -743,8 +753,31 @@ jobs:
           Move-Item -Path "${FILECHECK_DL_PATH}" -Destination "$installLocation" -Force -ErrorAction Stop
 
           echo "WZ_INNOSETUP_SCRIPT_DEPENDENCIES_PATH=${env:SCRIPT_DEP_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Fetch Unofficial Base Setup Translations
+        id: unofficial-base-translations
+        env:
+          UNOFFICIAL_TRANSLATIONS_INSTALL_PATH: '${{ github.workspace }}\innosetup-unofficial-translations'
+        run: |
+          Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+          $VerbosePreference = "Continue"
+          . "src\.ci\powershell\request.ps1"
+
+          $TRANSLATIONS_COMMIT_DL_URL = "https://github.com/jrsoftware/issrc/archive/bf7dc5d0fce1c1743167f07a89dff8d224acba51.zip"
+          $TRANSLATIONS_COMMIT_DL_SHA512 = "0faf94c9639b69fbfcfb06edd23a00baa39704dab3a4c097f4a0c8e9a654d4f98d855c861b391f7f44cb38a4c7d0b4efb9c9f0811477930b3f5ca2d6dbd8a63e"
+
+          $TRANSLATIONS_COMMIT_DL_PATH = ".\dependency-dl\translations_commit.zip"
+          $req = Req -Params @{ 'Method'='GET';'Uri'="$TRANSLATIONS_COMMIT_DL_URL";'OutFile'="${TRANSLATIONS_COMMIT_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${TRANSLATIONS_COMMIT_DL_SHA512}" -Algorithm SHA512
+
+          echo "::group::Expanding archive ..."
+          $TRANSLATIONS_EXTRACTED_PATH = "$(pwd)\dependency-dl\translations_commit_extracted"
+          Expand-Archive -LiteralPath "${TRANSLATIONS_COMMIT_DL_PATH}" -DestinationPath "${TRANSLATIONS_EXTRACTED_PATH}"
+          echo "Expanding archive ... Done"
+
+          Copy-Item -Path "${TRANSLATIONS_EXTRACTED_PATH}\*\Files\Languages\Unofficial\*.isl" -Destination "${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" -ErrorAction Stop
+
+          echo "WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH=${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Download Architecture Archives
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: 'warzone2100_win_*_archive'
           path: .\built-archives
@@ -773,8 +806,9 @@ jobs:
           INSTALLER_SOURCE_DIR: '${{ github.workspace }}\combined-staging'
           INSTALLER_OUTPUT_DIR: '${{ github.workspace }}\output'
           INNOFILECHECK_DLL_DIR: '${{ steps.script-dependencies.outputs.WZ_INNOSETUP_SCRIPT_DEPENDENCIES_PATH }}'
+          UNOFFICIAL_TRANSLATIONS_DIR: '${{ steps.unofficial-base-translations.outputs.WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH }}'
         run: |
-          & "${env:WZ_INNOSETUP_PATH}\ISCC.exe" "/O${env:INSTALLER_OUTPUT_DIR}" "/DSOURCE_DIR=${env:INSTALLER_SOURCE_DIR}" "/DINNOFILECHECK_DLL_DIR=${env:INNOFILECHECK_DLL_DIR}" "src\pkg\win_installer\warzone2100.iss"
+          & "${env:WZ_INNOSETUP_PATH}\ISCC.exe" "/O${env:INSTALLER_OUTPUT_DIR}" "/DSOURCE_DIR=${env:INSTALLER_SOURCE_DIR}" "/DINNOFILECHECK_DLL_DIR=${env:INNOFILECHECK_DLL_DIR}" "/DUNOFFICIAL_TRANSLATIONS_DIR=${env:UNOFFICIAL_TRANSLATIONS_DIR}" "src\pkg\win_installer\warzone2100.iss"
           if ($? -eq $false) {
             Write-Error "Failed building installer"
             Exit 1
@@ -790,6 +824,7 @@ jobs:
         run: |
           Get-Content "${env:INSTALLER_OUTPUT_DIR}\setup-manifest.txt"
       - name: 'Upload Artifact - (Combined Installer)'
+        id: upload-combined-installer-artifact
         uses: actions/upload-artifact@v4
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         with:
@@ -803,6 +838,110 @@ jobs:
         continue-on-error: true
         with:
           subject-path: '${{ steps.build-installer.outputs.INSTALLER_EXE }}'
+  sign-release-installers:
+    # Sign the Windows installer binaries using our Signpath certificate.  Note that this involves sending the binary to the
+    # remote SignPath service where the signing actually happens.  We need to have an account and credentials with
+    # that service to use it, so this step can't be done in forked repositories.
+    #
+    # Various settings here have to align with the "warzone2100" project in the "Warzone 2100 [OSS]" organization
+    # registered at https://app.signpath.io/.
+    #
+    # In particular, the repository needs to have a "sign_release" environment configured with the following secret:
+    #
+    #    SIGNPATH_API_TOKEN - As generated in app.signpath.io from the user profile page for the CI user
+    #
+    # We also add the following GitHub Actions variable (see
+    # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables):
+    #
+    #    SIGNPATH_ORGANIZATION_ID - Set to the organization ID (a UUID) for "Warzone 2100 [OSS]" in app.signpath.io
+    #
+    # One reason not to hard code SIGNPATH_ORGANIZATION_ID is that we use its existence to signal that the above
+    # secrets are available - i.e. that we can do the build signing.
+    name: 'Sign Release Installers'
+    permissions:
+      actions: read
+      contents: read
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
+    runs-on: windows-latest
+    needs: [combined-installer-build]
+    environment: sign_release
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    outputs:
+      signedfiles: ${{ steps.output-result.outputs.signedfiles }}
+    steps:
+      # Download all releasable artifacts that need signing
+      - name: Prep Environment
+        id: settings
+        shell: bash
+        run: mkdir unsigned-installers && mkdir signed-installers
+      - name: Download Release Installer
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: actions/download-artifact@v5
+        with:
+          artifact-ids: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
+          path: .\unsigned-installers
+          merge-multiple: true
+      - name: Log Unsigned Installer Details
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        working-directory: '${{ github.workspace }}\unsigned-installers'
+        run: |
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: SignPath - Request Signing of Installer EXE
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        id: signpath-sign
+        continue-on-error: true
+        uses: signpath/github-action-submit-signing-request@v1.3
+        env:
+          SIGNPATH_SIGNING_POLICY_SLUG: ${{ (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && 'release-signing' || 'test-signing' }}
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'warzone2100' # Has to match slug in https://app.signpath.io/ "warzone2100" project
+          signing-policy-slug: '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+          github-artifact-id: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
+          wait-for-completion: true
+          # 4h to manually approve the request
+          wait-for-completion-timeout-in-seconds: 14400
+          output-artifact-directory: '${{ github.workspace }}\signed-installers\'
+      - name: Log Signed Build Outputs
+        if: (steps.signpath-sign.outcome == 'success')
+        working-directory: '${{ github.workspace }}\signed-installers\'
+        run: |
+          # Log hashes of the signed setup EXEs
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: 'Generate artifact attestations - (Signed Installers)'
+        if: (steps.signpath-sign.outcome == 'success') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v2
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}\signed-installers\*'
+      - name: 'Upload Artifact - All Signed Installer EXEs'
+        if: (steps.signpath-sign.outcome == 'success')
+        uses: actions/upload-artifact@v4
+        with:
+          name: warzone2100_installers_signed
+          path: '${{ github.workspace }}\signed-installers\*'
+          if-no-files-found: 'error'
+      - name: Output Result
+        id: output-result
+        env:
+          SIGN_STEP_OUTCOME: ${{ steps.signpath-sign.outcome }}
+        run: |
+          $signedfiles=false; if ("${env:SIGN_STEP_OUTCOME}" -eq "success") { $signedfiles=true; }
+          echo "signedfiles=${signedfiles}"
+          echo "signedfiles=${signedfiles}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
   upload-release-assets:
     name: 'Upload Release Assets'
     permissions:
@@ -810,27 +949,46 @@ jobs:
     runs-on: ubuntu-latest
     # Run on tag release automation build
     if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
-    needs: [windows-build, combined-installer-build]
+    needs: [windows-build, combined-installer-build, sign-release-installers]
     env:
       WZ_GITHUB_REF: ${{needs.windows-build.outputs.WZ_GITHUB_REF}}
     steps:
       - name: Prep Environment
         id: settings
-        run: |
-          mkdir upload-assets
+        run: mkdir upload-assets && mkdir upload-assets-signed
       - name: Download Release Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           # Includes the release artifacts: installer, debug symbols, and archive
           pattern: 'warzone2100_win_*'
           path: ./upload-assets
           merge-multiple: true
       - name: List Assets
-        run: ls -LR ./upload-assets
+        run: ls -LRl ./upload-assets
+      - name: Download Signed Release Artifacts
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v5
+        with:
+          name: 'warzone2100_installers_signed'
+          path: ./upload-assets-signed
+          merge-multiple: true
+      - name: Replace Unsigned with Signed Release Artifacts
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        run: |
+          for file in ./upload-assets-signed/*; do
+            filename="${file##*/}"
+            dest="./upload-assets/${filename}"
+            if [ ! -f "${dest}" ]; then
+              echo "::warning ::Missing original (unsigned) file - ${filename} ?"
+            fi
+            echo "Replacing with signed: ${filename}"
+            mv -f "${file}" "${dest}"
+          done
+          ls -LRl ./upload-assets
       - name: Upload Release Assets
         working-directory: '${{ github.workspace }}/upload-assets/'
         run: |
-          $SOURCE_TAG = "$($env:WZ_GITHUB_REF -replace "refs/tags/")"
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
           for file in ./warzone2100_win_*; do
             echo "Uploading: $file"
             gh release upload "${SOURCE_TAG}" "$file"
@@ -856,7 +1014,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
           path: 'src'
@@ -870,7 +1028,7 @@ jobs:
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
           path: ./dl-archive
@@ -880,7 +1038,7 @@ jobs:
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
       - name: Download Debug Symbols Artifact
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS'
           path: ./dl-archive
@@ -899,7 +1057,7 @@ jobs:
           fi
       - name: Download Source Bundle
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'debug_sourcebundles_win_${{ matrix.architecture }}'
           path: ./dl-sourcebundle

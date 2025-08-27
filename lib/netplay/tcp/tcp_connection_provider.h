@@ -62,6 +62,12 @@ public:
 
 	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const override;
 
+	virtual void disposeConnection(IClientConnection* conn) override
+	{
+		// TODO: Remove the connection from the owning poll group (if there's any).
+		// For this, we'll need to have a reference to the poll group in the `IClientConnection` interface.
+	}
+
 private:
 
 	std::unique_ptr<IAddressResolver> addressResolver_;

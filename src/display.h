@@ -30,6 +30,10 @@
 #include "input/keyconfig.h"
 #include <glm/fwd.hpp>
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 /* Initialise the display system */
 bool dispInitialise();
 
@@ -60,14 +64,20 @@ bool	getInvertMouseStatus();
 void	setRightClickOrders(bool val);
 bool	getRightClickOrders();
 
-void	setMiddleClickRotate(bool val);
-bool	getMiddleClickRotate();
+optional<MOUSE_KEY_CODE> getRotateMouseKey();
+bool setRotateMouseKey(optional<MOUSE_KEY_CODE> key);
+
+optional<MOUSE_KEY_CODE> getPanMouseKey();
+bool setPanMouseKey(optional<MOUSE_KEY_CODE> key);
 
 void	setDrawShadows(bool val);
 bool	getDrawShadows();
 
 bool	getCameraAccel();
 void	setCameraAccel(bool val);
+
+void	setEdgeScrollOutsideWindowBounds(bool val);
+bool	getEdgeScrollOutsideWindowBounds();
 
 /* Do the 3D display */
 void displayWorld();
