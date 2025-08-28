@@ -163,6 +163,8 @@ std::string WzConfig::compactStringRepresentation(const bool ensure_ascii) const
 
 std::vector<WzString> WzConfig::childGroups() const
 {
+	ASSERT_OR_RETURN({}, pCurrentObj != nullptr, "current object is nullptr");
+	ASSERT_OR_RETURN({}, pCurrentObj->is_object(), "current pointer is not an object");
 	std::vector<WzString> keys;
 	for (auto it = pCurrentObj->begin(); it != pCurrentObj->end(); ++it)
 	{
@@ -176,6 +178,8 @@ std::vector<WzString> WzConfig::childGroups() const
 
 std::vector<WzString> WzConfig::childKeys() const
 {
+	ASSERT_OR_RETURN({}, pCurrentObj != nullptr, "current object is nullptr");
+	ASSERT_OR_RETURN({}, pCurrentObj->is_object(), "current pointer is not an object");
 	std::vector<WzString> keys;
 	for (auto it = pCurrentObj->begin(); it != pCurrentObj->end(); ++it)
 	{
