@@ -863,13 +863,27 @@ net::result<SocketAddress*> resolveHost(const char *host, unsigned int port)
 	hint.ai_next      = nullptr;
 
 	service = astringf("%u", port);
+	char realHost[40]={};
+	int a=0,b=40;
+	for (int i=0;host[i];i++)
+	{
+		if (host[i]=='[')
+		{
+			a=i+1;
+		}
+		if (host[i]==']')
+		{
+			b=i;
+		}
+	}
+	strncpy(realHost,host+a,b-a);
 
-	auto error = getaddrinfo(host, service.c_str(), &hint, &results);
+	auto error = getaddrinfo(realHost, service.c_str(), &hint, &results);
 	if (error != 0)
 	{
 		const auto ec = make_getaddrinfo_error_code(error);
 		const auto errMsg = ec.message();
-		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service.c_str(), errMsg.c_str());
+		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", realHost, service.c_str(), errMsg.c_str());
 		return tl::make_unexpected(ec);
 	}
 
