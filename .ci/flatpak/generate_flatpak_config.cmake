@@ -46,9 +46,10 @@ get_filename_component(_input_dir "${TEMPLATE_FILE}" DIRECTORY)
 
 if (NOT WZ_RELEASE_PUBLISH_BUILD)
 	# Default WZ module source (for regular CI builds, the current dir into which the Github repo is checked-out)
+	# Assumes the generated config will be placed in .ci/flatpak/
 	set(WZ_MAIN_MODULE_SOURCE "\n\
       - type: dir\n\
-        path: ./\n\
+        path: ../../\n\
 ")
 
 else()
