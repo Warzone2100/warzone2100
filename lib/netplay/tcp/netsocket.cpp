@@ -863,20 +863,20 @@ net::result<SocketAddress*> resolveHost(const char *host, unsigned int port)
 	hint.ai_next      = nullptr;
 
 	service = astringf("%u", port);
-	char realHost[40]={};
-	int a=0,b=40;
-	for (int i=0;host[i];i++)
+	char realHost[40] = {};
+	int a = 0,b = 40;
+	for (int i=0; host[i]; i++)
 	{
-		if (host[i]=='[')
+		if (host[i] == '[')
 		{
-			a=i+1;
+			a = i + 1;
 		}
-		if (host[i]==']')
+		if (host[i] == ']')
 		{
-			b=i;
+			b = i;
 		}
 	}
-	strncpy(realHost,host+a,b-a);
+	strncpy(realHost, host+a, b-a);
 
 	auto error = getaddrinfo(realHost, service.c_str(), &hint, &results);
 	if (error != 0)
