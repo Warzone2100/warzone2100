@@ -3324,6 +3324,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 		{
 			if (psDroid->group != UBYTE_MAX)
 			{
+				ASSERT(psDroid->repairGroup == UBYTE_MAX, "repairGroup was already: %" PRIu8 "; setting to: %" PRIu8, psDroid->repairGroup, psDroid->group);
 				psDroid->repairGroup = psDroid->group;
 				intGroupsChanged(psDroid->group);
 			}
