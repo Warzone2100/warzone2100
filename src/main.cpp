@@ -1008,6 +1008,9 @@ static bool initSaveGameLoad()
 		addMissionTimerInterface();
 	}
 
+	// set a flag for the trigger/event system to indicate initialisation is complete
+	gameInitialised = true;
+
 	return true;
 }
 
