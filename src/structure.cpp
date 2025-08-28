@@ -2430,7 +2430,8 @@ static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 	UDWORD	player;
 
 	/* Check for a structure */
-	if (fpathBlockingTile(x, y, propulsion))
+	/* NOTE: Substitute PROPULSION_TYPE_WHEELED for PROPULSION_TYPE_LIFT, as flying droids are initially placed on the ground */
+	if (fpathBlockingTile(x, y, (propulsion != PROPULSION_TYPE_LIFT) ? propulsion : PROPULSION_TYPE_WHEELED))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
