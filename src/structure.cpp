@@ -6913,6 +6913,10 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			// add to other list.
 			addStructure(psStructure);
 
+			// increment structure count for new owner
+			UDWORD max = psStructure->pStructureType - asStructureStats;
+			asStructureStats[max].curCount[attackPlayer]++;
+
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (DROID* psCurr : apsDroidLists[attackPlayer])
 			{
