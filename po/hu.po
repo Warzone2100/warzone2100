@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -918,7 +918,7 @@ msgid "Jump Assault Gunner"
 msgstr "Ugró rohamlöveges"
 
 msgid "Jump Needle Gunner"
-msgstr "Ugró nyílpuskás"
+msgstr "Ugró tűvetős"
 
 msgid "Jump Scourge"
 msgstr "Ugró Scourge rakétás"
@@ -1164,13 +1164,13 @@ msgid "Requires Cyborg factory to produce"
 msgstr "Kiborggyár szükséges az előállításához"
 
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Rohamlöveggel felszerelt kiborg"
+msgstr "Kiborg rohamlöveggel felszerelt"
 
 msgid "New Jump Cyborg Available"
 msgstr "Új ugró kiborg érhető el"
 
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Revenger föld-levegő rakétával felszerelve"
+msgstr "Revenger irányított föld-levegő rakétával felszerelt"
 
 msgid "Defenses Improved"
 msgstr "Védművek fejlesztve"
@@ -1254,13 +1254,13 @@ msgid "Armored guard tower with Heavy Machinegun"
 msgstr "Páncélozott őrtorony nehézgéppuskával"
 
 msgid "Automatically targets enemies within sensor range"
-msgstr "Érzékelőtartományon belül automatikusan célozza meg az ellenséget"
+msgstr "Automatikusan becélozza az érzékelők hatótávjában lévő ellenséget"
 
 msgid "Armored guard tower with Flamer"
 msgstr "Páncélozott őrtorony lángszóróval"
 
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Páncélozott őrtorony tankelhárító rakétával"
+msgstr "Páncélozott őrtorony Lancer tankelhárító rakétával"
 
 msgid "Armored bunker with Heavy Machinegun"
 msgstr "Páncélozott bunker nehézgéppuskával"
@@ -1290,7 +1290,7 @@ msgid "Repair Facility Improved"
 msgstr "Javítóüzem fejlesztve"
 
 msgid "New robotic repair techniques"
-msgstr "Új javítórobot technikák"
+msgstr "Új robotizált javítótechnikák"
 
 msgid "Increases Repair Speed"
 msgstr "Megnöveli a javítási sebességet"
@@ -1305,7 +1305,7 @@ msgid "Robotic Cyborg Production"
 msgstr "Robotizált kiborggyártás"
 
 msgid "Increases Cyborg factory output"
-msgstr "Megnövekedett Cyborg gyártási teljesítmény"
+msgstr "Megnöveli a kiborggyár teljesítményét"
 
 msgid "All Cyborg factories upgraded automatically"
 msgstr "Az összes kiborggyár automatikusan fejlesztve"
@@ -1437,7 +1437,7 @@ msgid "New target recognition systems"
 msgstr "Új célfelismerő rendszerek"
 
 msgid "Extends VTOL Strike Range"
-msgstr "Megnöveli a VTOL csapás hatótávját"
+msgstr "Megnöveli a VTOL csapásmérés hatótávját"
 
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "Az összes VTOL csapásmérő érzékelő automatikusan fejlesztve"
@@ -1449,7 +1449,7 @@ msgid "Improvement in synaptic link technology"
 msgstr "Fejlesztés a szinaptikus kapcsolat technológiában"
 
 msgid "Increases scrambler rate"
-msgstr "Megnövekedett kódolási arány"
+msgstr "Megnöveli a jelzavarási arányt"
 
 msgid "All scramblers upgraded automatically"
 msgstr "Az összes jelzavaró automatikusan fejlesztve"
@@ -1464,7 +1464,7 @@ msgid "Slower than Viper"
 msgstr "Lassabb mint a Viper"
 
 msgid "High power costs and slower to produce than Viper"
-msgstr "Magas energiaköltségek, és lassabb gyártás a Viperhez képest"
+msgstr "Magas energiaköltségek és lassabb gyártás a Viperhez képest"
 
 msgid "Collective Medium Body"
 msgstr "Kollektíva közepes karosszériája"
@@ -1476,16 +1476,16 @@ msgid "Slower than Cobra"
 msgstr "Lassabb mint a Cobra"
 
 msgid "High power costs and slower to produce than Cobra"
-msgstr "Magas energiaköltségek, és lassabb gyártás a Cobrához képest"
+msgstr "Magas energiaköltségek és lassabb gyártás a Cobrához képest"
 
 msgid "Vehicle Engine Upgrade"
-msgstr "Jármű motor fejlesztés"
+msgstr "Járművek motorjának fejlesztése"
 
 msgid "Turbo-Charged Engine"
 msgstr "Turbófeltöltős motor"
 
 msgid "Improves vehicle speed"
-msgstr "Jármű sebesség továbbfejlesztése"
+msgstr "Fejleszti a jármű sebességét"
 
 msgid "All vehicles upgraded automatically"
 msgstr "Az összes jármű automatikusan fejlesztve"
@@ -1494,16 +1494,16 @@ msgid "Vehicle Bodies Improved"
 msgstr "Járműkarosszériák fejlesztve"
 
 msgid "Increases kinetic armor and body points"
-msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
+msgstr "Megnöveli a kinetikus páncélt és a karosszériaértékeket"
 
 msgid "Vehicle Thermal Armor Improved"
-msgstr "Jármű hőpajzs fejlesztve"
+msgstr "Járművek hőpajzsa fejlesztve"
 
 msgid "Heat-resistant armored layers"
 msgstr "Hőálló páncélozott rétegek"
 
 msgid "Increases Thermal Armor"
-msgstr "Megnövekedett hőpajzs értékek"
+msgstr "Megnöveli a hőpajzsokat"
 
 msgid "Vehicle Propulsion Improved"
 msgstr "Járműhajtómű fejlesztve"
@@ -1512,7 +1512,7 @@ msgid "New armored construction"
 msgstr "Új páncélzat építése"
 
 msgid "Increases Body Points"
-msgstr "Megnövekedett karosszéria értékek"
+msgstr "Megneli a karosszériaértékeket"
 
 msgid "All half-tracks upgraded automatically"
 msgstr "Az összes féllánctalpas automatikusan fejlesztve"
@@ -1584,7 +1584,7 @@ msgid "Best Targets: Base Structures and Defenses"
 msgstr "Legjobb célpontok: bázisépületek és védművek"
 
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr "A szuperbombatorony az ellenség közelében robban fel"
+msgstr "A szuperbombatorony az ellenség közelében felrobban"
 
 msgid "New Bomb Bay Available"
 msgstr "Új bombaszekrény érhető el"
@@ -1722,7 +1722,7 @@ msgid "Body Points: Very Low"
 msgstr "Karosszéria fejlettsége: nagyon alacsony"
 
 msgid "Mortar Upgrade"
-msgstr "Aknavető-fejlesztés"
+msgstr "Aknavető fejlesztés"
 
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "Nagy hatóerejű, páncéltörő gránátok"
@@ -1755,10 +1755,10 @@ msgid "Rocket Upgrade"
 msgstr "Rakéta fejlesztés"
 
 msgid "High Explosive Squash Head warhead"
-msgstr "Nagy hatóerejű, rogyókúpos repeszhatású robbanófej"
+msgstr "Rogyókúpos repeszhatású robbanófej"
 
 msgid "Increases Rocket damage"
-msgstr "Megnövekedett rakéta sebzés"
+msgstr "Megnöveli a rakéták sebzését"
 
 msgid "All rockets upgraded automatically"
 msgstr "Az összes rakéta automatikusan fejlesztve"
@@ -1785,7 +1785,7 @@ msgid "Send off at least one transporter with a truck and survive The Collective
 msgstr "Küldjön el legalább egy szállítót egy teherautóval, és az időzítő lejártáig élje túl a Kollektíva támadását"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
-msgstr "Küldönj annyi szállítót, amennyit csak tud, és hozzon legalább egy teherautót"
+msgstr "Küldjön annyi szállítót, amennyit csak tud, és hozzon legalább egy teherautót"
 
 msgid "Move all units into the valley"
 msgstr "Vigye az összes egységet a völgybe"
@@ -1797,7 +1797,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Mentse ki az Alfa csapatot a Nexusból"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr ""
+msgstr "Akadályozza meg, hogy a Nexus légpárnás tankjai elhagyják a területet"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "A Nexus főhadszállás megsemmisítésével letilthatja a Nexus behatoló programot"
@@ -1806,7 +1806,7 @@ msgid "Warning: HQ shielded against VTOL attacks"
 msgstr "Figyelmeztetés: a főhadiszállás pajzzsal védett a VTOL támadásokkal szemben"
 
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr "Fejlesszen ki ellenállósági áramköröket és élje túl a Nexus támadásait"
+msgstr "Fejlesszen ki ellenállósági áramköröket, és élje túl a Nexus támadásait"
 
 msgid "Build a forward base at the silos"
 msgstr "Építsen előretolt bázist a silóknál"
@@ -1821,7 +1821,7 @@ msgid "Return to LZ"
 msgstr "Vissza az LZ-re"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "Segítség az Őrült nehézséghez:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Építsen egy erős bázist a pályán, hogy meg tudja védeni magát a Kollektívától"
@@ -2301,7 +2301,7 @@ msgid "Analysis of NASDA Central leaves no doubt that The Collective has introdu
 msgstr "A NASDA központ elemzése nem hagy kétséget afelől, hogy a Kollektíva bejuttatta a NEXUS behatoló vírust."
 
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr "Energia előállítására a nukleáris reaktort fogja használni, az összeomlás előtti számítógépes rendszerek hatalmas hálózatához."
+msgstr "A nukleáris reaktort az összeomlás előtti számítógépes rendszerek hatalmas hálózatának ellátására szánták."
 
 msgid "Commander, we have just detected a missile launch at these coordinates."
 msgstr "Parancsnok, ezeken a koordinátákon rakétaindítást észleltünk."
@@ -2316,22 +2316,22 @@ msgid "Warriors of the Collective, I seek the location of NASDA Central."
 msgstr "Kollektíva harcosai, a NASDA központját keresem."
 
 msgid "It lies somewhere in your territory."
-msgstr "Valószínűleg valahol az önök területeteken fekszik."
+msgstr "Valószínűleg valahol az Önök területén fekszik."
 
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "Találjátok meg nekem, cserébe fegyverekkel támogatlak titeket a Terv elleni harcotokban."
+msgstr "Találják meg nekem, cserébe fegyverekkel támogatom Önöket a Terv elleni harcukban."
 
 msgid "Warriors of The Collective, more intruders are entering our territory."
 msgstr "Kollektíva harcosai, még több betolakodó lépett a területünkre."
 
 msgid "They are not part of the machine."
-msgstr "Nem képezi a gép részét."
+msgstr "Nem részei a gépnek."
 
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
 msgstr "Kollektíva harcosai, megtámadni és elpusztítani azokat, akik ellenállnak a gépnek."
 
 msgid "Attack! Erase their presence from this area!"
-msgstr "Támadás! Töröld ki őket erről a területről!"
+msgstr "Támadás! Töröljék ki őket erről a területről!"
 
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
 msgstr "Kollektíva harcosai, készen állunk, hogy megsemmisítsük a betolakodókat, akik beszennyezik a földjeinket."
@@ -2343,16 +2343,16 @@ msgid "They shall fall before the might of The Collective."
 msgstr "A Kollektíva erejétől el fognak bukni."
 
 msgid "Attack and destroy all who resist the machine."
-msgstr "Támadni és megsemmisíteni mindenkit aki ellenáll a gépnek."
+msgstr "Támadni és megsemmisíteni mindenkit, aki ellenáll a gépnek."
 
 msgid "Attack!"
-msgstr "Támadás!!"
+msgstr "Támadás!"
 
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
 msgstr "Kollektíva harcosai, a NEXUS nekünk adta a gép erejét, hogy el tudjunk pusztítani mindenkit, aki szembeszáll velünk."
 
 msgid "Nexus now asks us to crush the Project."
-msgstr "A NEXUS válaszolt, semmisítsük meg a Tervet."
+msgstr "A NEXUS most arra kér minket, hogy semmisítsük meg a Tervet."
 
 msgid "Cleanse and destroy!!"
 msgstr "Felkutatás és megsemmisítés!!"
@@ -2361,13 +2361,13 @@ msgid "Warriors of the Collective. You have performed well."
 msgstr "Kollektíva harcosai. Jól teljesítettek."
 
 msgid "Your just reward is on its way."
-msgstr "A megérdemelt jutalma úton van."
+msgstr "A megérdemelt jutalmuk úton van."
 
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr "A terv menekíti a bázisát és ellopja a technológiádat."
+msgstr "A Terv menekül a bázisáról, és ellopja a technológiájukat."
 
 msgid "You must stop them!"
-msgstr "Le kell állítania őket!"
+msgstr "Le kell állítaniuk őket!"
 
 msgid "Decoding Transmission..."
 msgstr "Üzenet dekódolása…"
@@ -2379,22 +2379,22 @@ msgid "NORTHERN SECTOR"
 msgstr "ÉSZAKI SZEKTOR"
 
 msgid "Dusk, December 3rd, 2100"
-msgstr "2100 december 3, alkony"
+msgstr "2100. december 3., alkony"
 
 msgid "In-flight to Northern Sector"
-msgstr "Repülés az Északi Szektorba."
+msgstr "Repülés az északi szektorba"
 
 msgid "The Final Encounter"
-msgstr "A Végső Találkozás."
+msgstr "A végső találkozás"
 
 msgid "Briefing Commences"
-msgstr "Eligazítás Kezdődik:"
+msgstr "Eligazítás kezdődik"
 
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr "A Gamma bázis személyzete megerősítette, hogy nukleáris rakéták vették célba Alfa és Béta bázist, amit a szektorukban lévő silóból indítottak."
+msgstr "A Gamma bázis személyzete megerősítette, hogy nukleáris rakéták vették célba az Alfa és a Béta bázist, melyeket a szektorukban lévő silóból indítottak."
 
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr "Gamma csapat jelenleg felderíti a silók helyzetét és felügyeli a NEXUS tevékenységét."
+msgstr "A Gamma csapat jelenleg felderíti a silók helyzetét és felügyeli a NEXUS tevékenységét."
 
 msgid "Time's up commander!!"
 msgstr "Az idő lejárt parancsnok!!"
@@ -2403,10 +2403,10 @@ msgid "Commander, we are detecting NEXUS forces from these coordinates..."
 msgstr "Parancsnok, NEXUS erőket észleltünk ezeken a koordinátákon..."
 
 msgid "Glad you could make it, Commander."
-msgstr "Sok szerencsét, Parancsnok."
+msgstr "Örülök, hogy el tudott jönni, parancsnok."
 
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Ellenséges VTOL csapás ideszögezett minket. Sikerült a Cyborgokat és a tankokat távol tartanunk, de nem volt alkalmunk haladni a völgy mentén."
+msgstr "Az ellenséges csapásmérő VTOL-ok bekerítettek minket. Sikerült visszatartanunk a kiborgokat és a tankokat, de nem tudtunk előrehaladni a völgyben."
 
 msgid "Can you try and reach us with anti-aircraft units?"
 msgstr "El tud érni minket légvédelmi egységekkel?"
@@ -2415,7 +2415,7 @@ msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assi
 msgstr "Itt Alfa csapat. Ismétlem, itt Alfa csapat. Azonnali segítséget igénylünk."
 
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr "Támadás alatt állunk, mindenhol Cyborgok, lézertankok és VTOL-ek."
+msgstr "Támadás alatt állunk, mindenhol kiborgok, lézertankok és csapásmérő VTOL-ok."
 
 msgid "We were trying to reach your position, but have been ambushed."
 msgstr "Megpróbáltuk elérni a pozícióját, de lesből ránk támadtak."
@@ -2424,43 +2424,43 @@ msgid "We're holed up in  a valley at these coordinates."
 msgstr "Elrejtőztünk a völgyben, ezeken a koordinátákon."
 
 msgid "Please assist."
-msgstr "Kérlek segíts."
+msgstr "Segítsen!"
 
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr "Parancsnok, az Alfa csapat erői elmenekültek a nukleáris támadás elől az Alfa Bázisra."
+msgstr "Parancsnok, az Alfa csapat erői elmenekültek az Alfa bázis elleni nukleáris támadás elől."
 
 msgid "We are experiencing some interference from NEXUS."
-msgstr "NEXUS beavatkozást észleltük."
+msgstr "A NEXUS beavatkozását észleljük."
 
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr "Meg kell semmisítenie a parancsnoki központját, mielőtt elveszítené a fő rendszerei irányítását. "
+msgstr "Meg kell semmisítenie a parancsnoki központját, mielőtt elveszítenénk a fő rendszerek irányítását."
 
 msgid "Commander, welcome to NEXUS!"
-msgstr "Parancsnok, üdvözöljük NEXUS-ban!"
+msgstr "Parancsnok, üdvözöljük a NEXUS-nál!"
 
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr "Rendben van parancsnok, megakadályozta az utolsó rakéta kilövését."
+msgstr "Szép munka, parancsnok, megakadályozta az utolsó rakéta kilövését."
 
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr "Milyen kár. A Terv főhadiszállása csodálatos cél lett volna."
+msgstr "Milyen kár. A Terv főhadiszállása csodálatos célpont lett volna."
 
 msgid "But it's good of you to join me here."
-msgstr "Örülök, hogy csatlakozik hozzám."
+msgstr "De örülök, hogy csatlakozik hozzám."
 
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr "Eltemetve a siló alatt, egy taktikai nukleáris robbanófej van, kilövésre programozva."
+msgstr "A siló alá van temetve egy taktikai nukleáris robbanófej, hamarosan robban."
 
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr "Nem tudom elindítani, fel kell robbantani ott ahol van."
+msgstr "Mivel nem tudom kilőni, így helyben kell felrobbantani."
 
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "Kérem vegye figyelembe, hogy minden bejárat ami a föld alávezet, használhatatlan. Minden jót, parancsnok."
+msgstr "Kérem vegye figyelembe, hogy minden bejárat, ami a föld alá vezet, használhatatlan. Viszontlátásra, parancsnok."
 
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
 msgstr "Parancsnok, annyira jó, hogy csatlakozik hozzánk itt, a NEXUS bázison."
 
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr "Gamma csapat nagyon hasznos dolgokat tett a hegyekben."
+msgstr "A Gamma csapat nagyon hasznos dolgokat készített elő itt a hegyekben."
 
 msgid "Their absorption was such a pleasure."
 msgstr "Gyönyörűen felszívódtak."
@@ -2475,16 +2475,16 @@ msgid "I'm now activating all your synaptic links so that your forces can meld w
 msgstr "Most aktiválom az összes szinaptikus kapcsolatot, így az erői beolvadhatnak a NEXUS-ba."
 
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr "Az erői most a bányában vannak! Üdvözlünk a NEXUSban."
+msgstr "Az erői most már az enyémek! Üdvözlöm a NEXUS-ban."
 
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr "Parancsnok, rugalmasabbnak bizonyult, mint gondoltam."
+msgstr "Parancsnok, ellenállóbbnak bizonyult, mint gondoltam."
 
 msgid "Such a pity that you refused to join me earlier."
 msgstr "Milyen kár, hogy korábban nem volt hajlandó csatlakozni."
 
 msgid "But no matter, as you'll not be here much longer."
-msgstr "Nem számít, nem leszel itt sokáig."
+msgstr "De nem számít, más nem lesz itt sokáig."
 
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
 msgstr "A sok keresés és átprogramozás után, végre az összes rendszerem újra működik."
@@ -2574,13 +2574,13 @@ msgid "Midnight, April 10th, 2086"
 msgstr "2086 április 10, éjfél"
 
 msgid "Rocky Mountains"
-msgstr "Sziklás hegység"
+msgstr "Sziklás-hegység"
 
 msgid "Safety"
-msgstr "Biztonságos"
+msgstr "Biztonság"
 
 msgid "Dawn, April 4th, 2100"
-msgstr "2100 április 4, hajnal"
+msgstr "2100. április 4., pirkadat"
 
 msgid "A New Beginning"
 msgstr "Egy új kezdet"
@@ -2595,7 +2595,7 @@ msgid "Those nukes were targeted on every major city around the world. NASDA was
 msgstr "Azok az atomfegyverek a világ összes nagyvárosát célba vették. A NASDA arra lett beprogramozba, hogy indítsa el az Összeomlást. Amikor az ellencsapások elindultak, a lézervédelme és a földi rakétaelhárító rendszerei csődöt mondtak."
 
 msgid "The world as we knew it ended..."
-msgstr "A világ ahogy mi ismertük, már vége..."
+msgstr "Az addig ismert világ véget ért…"
 
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
 msgstr "A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, akik túlélték a nukleáris csapást. A háború végén harcok folytak a konzervért és a kutyaeledelért, ami további áldozatokat szedett."
@@ -2979,9 +2979,6 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-msgid "Failed to get a lobby response!"
-msgstr "Képtelenség, hogy kapjon egy támogatói választ!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "A visszajátszási fájl formátuma újabb, mint amit a Warzone 2100 ezen verziója támogatni tud."
 
@@ -3273,10 +3270,10 @@ msgid "Angel Missile Emplacement"
 msgstr "Angel rakétaállás"
 
 msgid "Angel Missile"
-msgstr "Angyal rakéta"
+msgstr "Angel irányított rakéta"
 
 msgid "Anti-tank missile"
-msgstr "Tankelhárító rakéta"
+msgstr "Tankelhárító irányított rakéta"
 
 msgid "Anti-tank rocket"
 msgstr "Tankelhárító rakéta"
@@ -3300,22 +3297,22 @@ msgid "APFSDS Cannon Rounds"
 msgstr "APFSDS ágyúlőszer"
 
 msgid "Archangel Missile Battery"
-msgstr "Archangel rakéta üteg"
+msgstr "Archangel rakétaüteg"
 
 msgid "Archangel Missile Emplacement"
 msgstr "Archangel rakétaállás"
 
 msgid "Archangel Missile"
-msgstr "Archangel rakéta"
+msgstr "Archangel irányított rakéta"
 
 msgid "Armed with Cyborg assault gun"
-msgstr "Rohamlöveggel felszerelt kiborg"
+msgstr "Kiborg rohamlöveggel felszerelt"
 
 msgid "Armed with Cyborg Cannon"
 msgstr "Kiborg ágyúval felszerelt"
 
 msgid "Armed with Cyborg Flamer"
-msgstr "Cyborg lángszóróval felszerelt"
+msgstr "Kiborg lángszóróval felszerelt"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
 msgstr "Kiborg hipersebességű ágyúval felszerelt"
@@ -3324,21 +3321,21 @@ msgid "Armed with Cyborg Machinegun"
 msgstr "Kiborg géppuskával felszerelt"
 
 msgid "Armed with Cyborg Pulse Laser"
-msgstr "Cyborg impulzus lézerrel"
+msgstr "Kiborg impulzuslézerrel felszerelt"
 
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Cyborg sínágyúval"
+msgstr "Kiborg sínágyúval felszerelt"
 
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Cyborg Scourge rakétakilövővel felszerelt"
+msgstr "Kiborg Scourge rakétakilövővel felszerelt"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr "Kiborg tankvadász rakétákkal felszerelt"
-
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Cyborg termit lángszóróval felszerelt"
+msgstr "Kiborg Tank Killer rakétákkal felszerelt"
 
 msgid "Armed with Cyborg Thermite flamer"
+msgstr "Kiborg termit lángszóróval felszerelt"
+
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Kiborg termit lángszóróval felszerelt"
 
 msgid "Armed with Flashlight Laser"
@@ -3357,10 +3354,10 @@ msgid "Armed with hyper velocity quad-barrel automatic-cannon"
 msgstr "Hipersebességű négycsöves gépágyúval felszerelt"
 
 msgid "Armed with Lancer anti-tank missile"
-msgstr "Tankelhárító rakétával felszerelt"
+msgstr "Lancer tankelhárító irányított rakétával felszerelt"
 
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr "Tankelhárító rakétával szerelt"
+msgstr "Lancer tankelhárító rakétával felszerelt"
 
 msgid "Armed with Machinegun"
 msgstr "Géppuskával felszerelt"
@@ -3369,10 +3366,10 @@ msgid "Armed with medium cannon"
 msgstr "Közepes ágyúval felszerelt"
 
 msgid "Armed with Needle Gun"
-msgstr "Flechette ágyúval felszerelt"
+msgstr "Tűvetővel felszerelt"
 
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Scourge tankelhárító rakétával felszerelt"
+msgstr "Scourge tankelhárító irányított rakétával felszerelt"
 
 msgid "Armed with tank killer rockets"
 msgstr "Tank Killer rakétákkal felszerelt"
@@ -3419,7 +3416,7 @@ msgid "Armored guard tower with Mini-Rocket Pod"
 msgstr "Páncélozott őrtoron kisrakéta vetővel"
 
 msgid "Armored guard tower with Needle Gun"
-msgstr "Páncélozott őrtorony nyílövedékes ágyúval"
+msgstr "Páncélozott őrtorony tűvetővel"
 
 msgid "Armored guard tower with Nexus Link"
 msgstr "Páncélozott őrtorony NEXUS dekóderrel"
@@ -3540,7 +3537,7 @@ msgid "Assault Gun Python Half Track"
 msgstr "Python féllánctalpas rohamlöveg"
 
 msgid "Assault Gun Python Hover"
-msgstr "Python légpárnás rohamlöveg"
+msgstr "Python légpárnás rohamlöveggel"
 
 msgid "Assault Gun Python Tracks"
 msgstr "Python féllánctalpas rohamlöveg"
@@ -3653,10 +3650,10 @@ msgstr "Legjobb célpontok: bázisépületek"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Legjobb célpontok: bázisépületek, védművek, kiborgok"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Célpontok: bunkerek és talapzatok"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Célpontok: bunkerek és talapzatok"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -4858,19 +4855,19 @@ msgid "HMG Bunker"
 msgstr "Nehézgéppuskás bunker"
 
 msgid "Hover AI"
-msgstr "Légpárnás AI"
+msgstr "Légpárnás MI"
 
 msgid "Hover II"
-msgstr "légpárna II"
+msgstr "Légpárnás II"
 
 msgid "Hover III"
-msgstr "légpárna III"
+msgstr "Légpárnás III"
 
 msgid "Hover Propulsion"
 msgstr "Légpárnás hajtómű"
 
 msgid "Hover"
-msgstr "légpárna"
+msgstr "Légpárnás"
 
 #, no-c-format
 msgid "Howitzer accuracy +10%"
@@ -5020,7 +5017,7 @@ msgid "Improved Thermal Emissions detection"
 msgstr "Továbbfejlesztett hőkibocsátás-érzékelés"
 
 msgid "Improved Titanium-reinforced concrete"
-msgstr "Korszerűsített Titán erősítésű vasbeton"
+msgstr "Korszerűsített titán erősítésű vasbeton"
 
 msgid "Improved trinitramine explosive formula"
 msgstr "Jobb trinitramin robbanóanyag képlet"
@@ -5034,11 +5031,11 @@ msgstr "Lézeroptika javulása csökkenti a fényszóródást"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Gyújtó tarackállás 2"
 
-msgid "Incendiary howitzer emplacement"
-msgstr "Gyújtóbombás tarack állás"
-
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Gyújtó tarackállás"
+
+msgid "Incendiary howitzer emplacement"
+msgstr "Gyújtóbombás tarack állás"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a gyutacsos tarackhoz"
@@ -5140,7 +5137,7 @@ msgid "Inferno Cobra Half-Tracks"
 msgstr "Cobra féllánctalpas Inferno lángszóró"
 
 msgid "Inferno Cobra Hover"
-msgstr "Cobra légpárnás Inferno lángszóró"
+msgstr "Cobra légpárnás Inferno lángszóróval"
 
 msgid "Inferno Emplacement"
 msgstr "Inferno lángszóró állás"
@@ -5149,7 +5146,7 @@ msgid "Inferno Hardpoint"
 msgstr "Inferno talapzat"
 
 msgid "Inferno Python Hover"
-msgstr "Python légpárnás Inferno lángszóró"
+msgstr "Python légpárnás Inferno lángszóróval"
 
 msgid "Inferno"
 msgstr "Inferno lángszóró"
@@ -5601,22 +5598,22 @@ msgid "Narrow area of effect"
 msgstr "Szűk területi hatás"
 
 msgid "Needle Gun Retribution Tracks"
-msgstr "Retribution lánctalpas nyíllövedékes ágyú"
+msgstr "Retribution lánctalpas tűvetővel"
 
 msgid "Needle Gun Tiger Tracks"
-msgstr "Tiger lánctalpas nyíllövedékes ágyú"
+msgstr "Tiger lánctalpas tűvetővel"
 
 msgid "Needle Gun Tower"
-msgstr "Nyíllövedékes ágyú torony"
+msgstr "Tűvetős torony"
 
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Vengeance lánctalpas nyíllövedékes ágyú"
+msgstr "Vengeance lánctalpas tűvetővel"
 
 msgid "Needle Gun"
-msgstr "Nyíllövedékes ágyú"
+msgstr "Tűvető"
 
 msgid "Needle Gunner Cyborg"
-msgstr "Cyborg nyíllövedékes ágyú"
+msgstr "Kiborg tűvetővel"
 
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "Kutatási agy az idegi szinapszishoz Mk2"
@@ -5708,10 +5705,10 @@ msgstr "Új rendszerépítmény érhető el"
 msgid "New Systems Tower Available"
 msgstr "Új rendszertorony érhető el"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Új rendszertorony érhető el a tervezéshez"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Új rendszertorony érhető el a tervezéshez"
 
 msgid "New Thermal Emissions detection"
@@ -6056,7 +6053,7 @@ msgid "Rapid Fire Chaingun"
 msgstr "Gyorstüzelésű láncfegyver"
 
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Gyorstüzelésű sínágyú nyíllövedékekkel tüzel"
+msgstr "Gyorstüzelésű sínágyú tűlövedékekkel"
 
 msgid "Rapid Loader increases reload rate"
 msgstr "Automatikus újratöltés felgyorsítja az újratöltést"
@@ -6593,10 +6590,10 @@ msgstr "Szinaptikus kapcsolatú adatelemzés Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Szinaptikus kapcsolatú adatelemzés Mk3"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Szinaptikus kapcsolatú adatelemzés"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Szinaptikus kapcsolatú adatelemzés"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7061,7 +7058,7 @@ msgid "VTOL Mini-Rocket"
 msgstr "VTOL kisrakéta"
 
 msgid "VTOL Needle Gun"
-msgstr "VTOL nyíllövedékes ágyú"
+msgstr "VTOL tűvetővel"
 
 msgid "VTOL Particle Gun"
 msgstr ""
@@ -7264,6 +7261,9 @@ msgstr " és "
 
 msgid "Spectators"
 msgstr "Nézők"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Túl sok üzenetet küldött az elmúlt néhány másodpercben. Várjon, és próbálja újra."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8309,9 +8309,6 @@ msgstr "Bot szövetségesek"
 
 msgid "Human Allies"
 msgstr "Emberi szövetségesek"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Túl sok üzenetet küldött az elmúlt néhány másodpercben. Várjon, és próbálja újra."
 
 msgid "Research Progress"
 msgstr "Kutatás előrehaladása"
@@ -10123,8 +10120,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "A házigazda engedélyezte a szabad csevegést a következő játékosnál: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "A házigazda némította a szabad csevegést a következő játékosnál: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10980,91 +10985,6 @@ msgstr "KÜLDETÉSEK"
 msgid "GAMES"
 msgstr "JÁTÉKOK"
 
-msgid "Refresh Games List"
-msgstr "Játéklista frissítése"
-
-msgid "Filter Games List"
-msgstr "Játéklista szűrése"
-
-msgid "Refreshing..."
-msgstr "Frissítés…"
-
-msgid "Searching"
-msgstr "Keresés"
-
-msgid "Connecting to the lobby server..."
-msgstr "Kapcsolódás a várókiszolgálóhoz…"
-
-msgid "Game Name"
-msgstr "Játéknév"
-
-msgid "Map Name"
-msgstr "Térképnév"
-
-msgid "Status"
-msgstr "Állapot"
-
-msgid "Can't connect to lobby server!"
-msgstr "Nem lehet kapcsolódni a várókiszolgálóhoz!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Modok: %s"
-
-msgid "Mods: None!"
-msgstr "Modok: nincsenek!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Verzió: %s"
-
-msgid "Join as spectator"
-msgstr "Csatlakozás nézőként"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "A Warzone verziója nem kompatibilis ezzel a játékkal."
-
-msgid "[Password required]"
-msgstr "[Jelszó szükséges]"
-
-msgid "[No Tanks]"
-msgstr "[Nincsenek tankok]"
-
-msgid "[No Cyborgs]"
-msgstr "[Nincsenek kiborgok]"
-
-msgid "[No VTOLs]"
-msgstr "[Nincs VTO járművek]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Házigazda:%s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Házigazda: %s –%s"
-
-msgid "Can't find any games for your version."
-msgstr "Nem található játék a verziójához."
-
-msgid "There appears to be a game update available!"
-msgstr "Úgy néz ki, hogy játékfrissítés érhető el!"
-
-msgid "No games are available for your version"
-msgstr "Nincs rendelkezésre álló játék a verziójához"
-
-msgid "Wrong Game Version!"
-msgstr "Hibás játékverzió!"
-
-msgid "You have an incompatible mod."
-msgstr "Egy nem kompatibilis moddal rendelkezik."
-
-msgid "Host couldn't send file?"
-msgstr "A házigazda nem tudott fájlt küldeni?"
-
-msgid "Incorrect Password!"
-msgstr "Helytelen jelszó!"
-
 msgid "Continue"
 msgstr "Folytatás"
 
@@ -11120,6 +11040,12 @@ msgid "Music Manager"
 msgstr "Zenekezelő"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11592,6 +11518,93 @@ msgstr "nincs kész"
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Úgy néz ki, hogy játékfrissítés érhető el!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "A Warzone verziója nem kompatibilis ezzel a játékkal."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Térkép küldése: %u%%"
@@ -11706,6 +11719,9 @@ msgstr "Egyjátékos csata"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Játéknév"
+
 msgid "Click to see Map"
 msgstr "Kattintson a térkép megtekintéséhez"
 
@@ -11797,13 +11813,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

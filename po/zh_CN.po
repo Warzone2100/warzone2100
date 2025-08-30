@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1797,7 +1797,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "从“枢纽”手中营救 Alpha 中队"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr "阻止所有中枢悬浮坦克逃离任务区域"
+msgstr "阻止所有“枢纽”气垫坦克逃离任务区域"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "摧毁“枢纽”总部，停止“枢纽”入侵程序"
@@ -2985,9 +2985,6 @@ msgstr ""
 "如果你正在使用路由器，请启用 UPNP/NAT-PMP/PCP\n"
 " 或者转发端口到你的系统"
 
-msgid "Failed to get a lobby response!"
-msgstr "游戏响应失败!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "回放文件格式比此版本的 Warzone 2100 能够支持的更新。"
 
@@ -2999,7 +2996,7 @@ msgid "Replay File Format Unsupported"
 msgstr "不支持的回放文件格式"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "此回放文件的格式版本过旧，当前版本的 Warzone 2100 无法支持。"
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "无法加载回放：回放文件不完整或已损坏。"
@@ -3014,23 +3011,23 @@ msgid "Error Details:"
 msgstr "错误详情："
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr "请更新或重装图形驱动程序，并检查系统设置！"
+msgstr "请更新或重装图形驱动程序，并检查系统设置。"
 
 msgid "OK"
 msgstr "确定"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100：上一次启动失败"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "先前尝试初始化以下图形后端时引发了崩溃："
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "图形后端： %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100 现在将尝试使用其他图形后端启动。"
 
 msgid "Menu"
 msgstr "菜单"
@@ -3270,7 +3267,7 @@ msgid "Alpha"
 msgstr "Alpha"
 
 msgid "Amphibious hover propulsion"
-msgstr "两栖气垫推进动力"
+msgstr "两栖气垫推进系统"
 
 msgid "Angel Missile Battery"
 msgstr "“天使”导弹炮组"
@@ -3341,10 +3338,10 @@ msgstr "装备半机械人“天谴”导弹发射器"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "装备半机械人坦克杀手火箭"
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr "装备半机械人铝热火焰喷射器"
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr "装备半机械人铝热火焰喷射器"
 
 msgid "Armed with Flashlight Laser"
@@ -3473,7 +3470,7 @@ msgid "Armored Incendiary Mortar battery pit"
 msgstr "装甲燃烧迫击炮散兵坑"
 
 msgid "Armored Mortar battery pit"
-msgstr "装备有迫击炮之阵地"
+msgstr "装甲迫击炮散兵坑"
 
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "装甲“手电筒”激光加强火力点"
@@ -3485,7 +3482,7 @@ msgid "Armored strongpoint with Heavy Laser"
 msgstr "装甲重型激光加强火力点"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr "粒子炮重装据点"
+msgstr "粒子炮加强火力点"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "装甲等离子火焰喷射器加强火力点"
@@ -3659,10 +3656,10 @@ msgstr "最佳目标：基本建筑物"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "最佳目标：基本建筑物，炮位与半机械人"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目标：碉堡与火力点"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "最佳目标：碉堡与火力点"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -3716,7 +3713,7 @@ msgid "Bomb damage +25%"
 msgstr "炸弹攻击力 +25%"
 
 msgid "Bomb Damage"
-msgstr "炸弹伤害"
+msgstr "炸弹攻击力"
 
 msgid "Bomb Upgrade"
 msgstr "炸弹升级"
@@ -3802,7 +3799,7 @@ msgid "Cannon damage +25%"
 msgstr "加农炮伤害 +25%"
 
 msgid "Cannon Damage"
-msgstr "加农炮伤害"
+msgstr "加农炮攻击力"
 
 msgid "Cannon Fire Truck"
 msgstr "大炮消防车"
@@ -3830,7 +3827,7 @@ msgid "Cannon reload time -10%"
 msgstr "加农炮装填时间 -10%"
 
 msgid "Cannon Reload"
-msgstr "加农炮装填时间"
+msgstr "加农炮装填速度"
 
 msgid "Cannon Tower"
 msgstr "加农炮防卫塔"
@@ -3938,10 +3935,10 @@ msgid "Complete battlefield visibility"
 msgstr "整个战场可见性"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr "复合合金AI加成Mk2"
+msgstr "复合合金加成 AI 二型"
 
 msgid "Composite Alloys Buff AI"
-msgstr "复合合金AI加成"
+msgstr "复合合金加成 AI"
 
 msgid "Composite Alloys Mk2"
 msgstr "复合合金二型"
@@ -4003,13 +4000,13 @@ msgid "Crane2"
 msgstr "起重机 2"
 
 msgid "Cyborg Alloys"
-msgstr "生化人合金"
+msgstr "半机械人合金"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr "生化人复合合金AI加成Mk2"
+msgstr "半机械人复合合金加成 AI 二型"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr "生化人复合合金AI加成"
+msgstr "半机械人复合合金加成 AI"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "半机械人复合合金二型"
@@ -4078,10 +4075,10 @@ msgid "Cyborg Tank Killer"
 msgstr "半机械人 (“坦克杀手”)"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
-msgstr "生化人隔热装甲AI加成Mk2"
+msgstr "半机械人隔热装甲加成 AI 二型"
 
 msgid "Cyborg Thermal Armor Buff AI"
-msgstr "生化人隔热装甲AI加成"
+msgstr "半机械人隔热装甲加成 AI"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "半机械人隔热装甲二型"
@@ -4093,7 +4090,7 @@ msgid "Cyborg Thermal Armor"
 msgstr "半机械人隔热装甲"
 
 msgid "Cyborg Thermal"
-msgstr "生化人隔热装甲"
+msgstr "半机械人隔热装甲"
 
 msgid "Cyborg Thermite"
 msgstr "半机械人 (铝热火焰喷射)"
@@ -4334,7 +4331,7 @@ msgid "Flamer damage +25%"
 msgstr "火焰喷射伤害 +25%"
 
 msgid "Flamer Damage"
-msgstr "火焰喷射器伤害"
+msgstr "火焰喷射器攻击力"
 
 msgid "Flamer Fast Loader"
 msgstr "火焰喷射快速装填"
@@ -4344,7 +4341,7 @@ msgid "Flamer reload time -15%"
 msgstr "火焰喷射自动装填时间 -15%"
 
 msgid "Flamer Reload"
-msgstr "火焰喷射器装填时间"
+msgstr "火焰喷射器装填速度"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "响尾蛇半履带车 (火焰喷射)"
@@ -4896,13 +4893,13 @@ msgid "Howitzer damage +25%"
 msgstr "榴弹炮伤害 +25%"
 
 msgid "Howitzer Damage Buff AI Mk2"
-msgstr "榴弹炮伤害AI加成Mk2"
+msgstr "榴弹炮攻击力加成 AI 二型"
 
 msgid "Howitzer Damage Buff AI Mk3"
-msgstr "榴弹炮伤害AI加成Mk3"
+msgstr "榴弹炮攻击力加成 AI 三型"
 
 msgid "Howitzer Damage Buff AI"
-msgstr "榴弹炮伤害AI加成"
+msgstr "榴弹炮攻击力加成 AI"
 
 msgid "Howitzer Fast Loader"
 msgstr "迫击炮快速装载系统"
@@ -4918,10 +4915,10 @@ msgid "Howitzers Accuracy"
 msgstr "榴弹炮命中率"
 
 msgid "Howitzers Damage"
-msgstr "榴弹炮伤害"
+msgstr "榴弹炮攻击力"
 
 msgid "Howitzers Reload"
-msgstr "榴弹炮装填时间"
+msgstr "榴弹炮装填速度"
 
 msgid "Hurricane AA Site"
 msgstr "飓风级高射炮台"
@@ -4987,7 +4984,7 @@ msgid "Improved fire detection systems"
 msgstr "改进型火焰探测系统"
 
 msgid "Improved Hardcrete Buff AI"
-msgstr "强化水泥AI加成"
+msgstr "改进型硬化混凝土加成 AI"
 
 msgid "Improved Hardcrete Mk2"
 msgstr "改进型硬化混凝土墙体二型"
@@ -5040,10 +5037,10 @@ msgstr "改善激光系统的光学结构使之不易发散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃烧榴弹炮炮位 2"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "燃烧榴弹炮炮位"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "燃烧榴弹炮炮位"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5249,14 +5246,14 @@ msgid "Laser accuracy +10%"
 msgstr "激光命中率 +10%"
 
 msgid "Laser Accuracy"
-msgstr "激光精准度"
+msgstr "激光命中率"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "激光伤害 +25%"
 
 msgid "Laser Damage"
-msgstr "激光伤害"
+msgstr "激光攻击力"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "激光指向器提供武器导引指向目标功能"
@@ -5266,7 +5263,7 @@ msgid "Laser reload time -15%"
 msgstr "激光武器装填时间 -15%"
 
 msgid "Laser Reload"
-msgstr "激光充能时间"
+msgstr "激光充能速度"
 
 msgid "Laser Satellite Command Post"
 msgstr "激光卫星指挥中心"
@@ -5445,10 +5442,10 @@ msgid "Medium Super Heavy Body"
 msgstr "中型超重量级车身"
 
 msgid "MG Damage"
-msgstr "机枪伤害"
+msgstr "机枪攻击力"
 
 msgid "MG Reload"
-msgstr "机枪装填时间"
+msgstr "机枪装填速度"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "迷你火箭装甲加强火力点"
@@ -5516,7 +5513,7 @@ msgid "Missile damage +25%"
 msgstr "导弹攻击力 +25%"
 
 msgid "Missile Damage"
-msgstr "导弹伤害"
+msgstr "导弹攻击力"
 
 msgid "Missile Fortress"
 msgstr "导弹堡垒"
@@ -5526,7 +5523,7 @@ msgid "Missile reload time -15%"
 msgstr "导弹装填时间 -15%"
 
 msgid "Missile Reload"
-msgstr "导弹装填时间"
+msgstr "导弹装填速度"
 
 msgid "Missile Upgrade"
 msgstr "导弹升级"
@@ -5567,7 +5564,7 @@ msgid "Mortar damage +25%"
 msgstr "迫击炮伤害 +25%"
 
 msgid "Mortar Damage"
-msgstr "迫击炮伤害"
+msgstr "迫击炮攻击力"
 
 msgid "Mortar Fast Loader"
 msgstr "迫击炮快速装载系统"
@@ -5580,7 +5577,7 @@ msgid "Mortar reload time -10%"
 msgstr "迫击炮自动装填时间 -15%"
 
 msgid "Mortar Reload"
-msgstr "迫击炮装填时间"
+msgstr "迫击炮装填速度"
 
 msgid "Mortar Targeting Computer"
 msgstr "迫击炮目标锁定计算机"
@@ -5673,16 +5670,16 @@ msgid "New Paradigm Medium body"
 msgstr "“新范式”中型车体"
 
 msgid "New power efficient propulsion"
-msgstr "新的高效能推进动力"
+msgstr "新的高效能推进系统"
 
 msgid "New Power Generation Technology"
 msgstr "新的发电技术"
 
 msgid "New Propulsion Available for Design"
-msgstr "可在设计选单中选用新的推进动力"
+msgstr "可在设计选单中选用新的推进系统"
 
 msgid "New Propulsion Available"
-msgstr "可搭载新的推进动力"
+msgstr "可搭载新的推进系统"
 
 msgid "New Rail Gun Available"
 msgstr "可搭载新的武器系统：轨道炮"
@@ -5714,11 +5711,11 @@ msgstr "可建筑新的系统建筑"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系统防御工事"
 
-msgid "New Systems Turret Available for Design"
-msgstr "可搭载新的系统装备"
-
 msgid "New Systems Turret Available For Design"
 msgstr "可在设计选单中使用新的系统装备"
+
+msgid "New Systems Turret Available for Design"
+msgstr "可搭载新的系统装备"
 
 msgid "New Thermal Emissions detection"
 msgstr "可侦测热能放射"
@@ -5817,7 +5814,7 @@ msgid "Panther"
 msgstr "黑豹"
 
 msgid "Particle Gun Emplacement"
-msgstr "粒子炮阵地"
+msgstr "粒子炮炮位"
 
 msgid "Particle Gun"
 msgstr "粒子炮"
@@ -5999,10 +5996,10 @@ msgid "Radar Detector"
 msgstr "雷达检测器"
 
 msgid "Rail Accuracy"
-msgstr "磁轨炮精度"
+msgstr "轨道炮命中率"
 
 msgid "Rail Damage"
-msgstr "磁轨炮伤害"
+msgstr "轨道炮攻击力"
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
@@ -6081,7 +6078,7 @@ msgid "Refuels, rearms and repairs VTOLs"
 msgstr "重新加油、补充弹药及修理VTOL"
 
 msgid "Reinforced Base Structure Materials Buff AI Mk2"
-msgstr "强化基地结构材料AI加成Mk2"
+msgstr "强化基地结构材料AI加成二型"
 
 msgid "Reinforced Base Structure Materials Buff AI"
 msgstr "强化基地结构材料AI加成"
@@ -6226,7 +6223,7 @@ msgid "Rocket accuracy +10%"
 msgstr "火箭命中率 +10%"
 
 msgid "Rocket Accuracy"
-msgstr "火箭精度"
+msgstr "火箭命中率"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "火箭阵列部队，可指派给雷达导引"
@@ -6248,7 +6245,7 @@ msgid "Rocket damage +25%"
 msgstr "火箭伤害 +25%"
 
 msgid "Rocket Damage"
-msgstr "火箭伤害"
+msgstr "火箭攻击力"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "火箭会自动侦测与锁定引擎发出的热源"
@@ -6273,7 +6270,7 @@ msgid "Rocket reload time -15%"
 msgstr "火箭重加载时间 -15%"
 
 msgid "Rocket Reload"
-msgstr "火箭装填时间"
+msgstr "火箭装填速度"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "火箭会跟随激光指向器的轨迹攻击目标"
@@ -6432,7 +6429,7 @@ msgid "Sensor Upgrade"
 msgstr "雷达升级一型"
 
 msgid "Sensor"
-msgstr "传感器"
+msgstr "雷达"
 
 msgid "Sensors Improved"
 msgstr "改善雷达"
@@ -6599,10 +6596,10 @@ msgstr "突触连结数据分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突触连结数据分析三型"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突触连结数据分析"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突触连结数据分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6618,7 +6615,7 @@ msgid "Systems Research Completed"
 msgstr "系统科技研发完成"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "坦克合金"
 
 msgid "Tank Killer Cyborg"
 msgstr "半机械人 (坦克杀手火箭)"
@@ -6694,10 +6691,10 @@ msgid "Thermal Armor +45%"
 msgstr "热能装甲 +45%"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr "隔热装甲AI加成Mk2"
+msgstr "隔热装甲加成 AI 二型"
 
 msgid "Thermal Armor Buff AI"
-msgstr "隔热装甲AI加成"
+msgstr "隔热装甲加成 AI"
 
 msgid "Thermal Armor Mk2"
 msgstr "热能装甲二型"
@@ -6742,10 +6739,10 @@ msgid "Titanium-reinforced concrete"
 msgstr "钛钢筋强化混凝土"
 
 msgid "Tower wars AI, based on NullBot"
-msgstr "NullBot 塔防战争"
+msgstr "塔防人工智能，基于 NullBot"
 
 msgid "Tower Wars Buff"
-msgstr "高塔战争加成"
+msgstr "塔防战争加成"
 
 msgid "Tracked Propulsion"
 msgstr "推进动力：履带"
@@ -7070,7 +7067,7 @@ msgid "VTOL Needle Gun"
 msgstr "VTOL 针刺炮"
 
 msgid "VTOL Particle Gun"
-msgstr "垂直起降粒子炮"
+msgstr "VTOL 粒子炮"
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL 白磷炸弹舱"
@@ -7097,7 +7094,7 @@ msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "要使 VTOL 拥有持续攻击的能力，需建造 VTOL 补给平台"
 
 msgid "VTOL Rearming"
-msgstr "垂直起降战机整备速度"
+msgstr "VTOL 弹药补给"
 
 msgid "VTOL Scourge Missile"
 msgstr "VTOL “天谴”导弹"
@@ -7270,6 +7267,9 @@ msgstr " 和 "
 
 msgid "Spectators"
 msgstr "旁观者"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "您在过去几秒内发送了太多消息。请稍后重试。"
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8079,20 +8079,20 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) 将玩家 (%s) 的阵营更改为： %s"
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr ""
+msgstr "注意：请尽快准备，超时将被踢出房间"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr ""
+msgstr "正在自动踢除玩家（%s），原因：准备超时"
 
 msgid "Can someone please transfer me some units?"
-msgstr "有人能给我输送一些单位吗？"
+msgstr "有人能给我转移一些单位吗？"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr "有人能给我输送一些卡车，以便我重建吗？"
+msgstr "有人能给我工程车让我重建吗？"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "抱歉，我不太明白。(请使用快速聊天吗？)"
+msgstr "抱歉，我不太明白。(请问能否使用快速聊天？)"
 
 msgid "I suggest: Building more units"
 msgstr "我建议：造更多单位"
@@ -8173,7 +8173,7 @@ msgid "Not yet"
 msgstr "还不行"
 
 msgid "Soon"
-msgstr "很快"
+msgstr "马上"
 
 msgid "Thank you"
 msgstr "谢谢你"
@@ -8182,13 +8182,13 @@ msgid "No problem"
 msgstr "没问题"
 
 msgid "Well-played"
-msgstr "玩的很棒"
+msgstr "干的漂亮"
 
 msgid "@#%*!"
 msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr "抱歉，我不太明白。(使用快速聊天吗？)"
+msgstr "抱歉，我不太明白。(请问能否使用快速聊天？)"
 
 msgid "Get ready..."
 msgstr "做好准备..."
@@ -8281,7 +8281,7 @@ msgid "Capture oil resources"
 msgstr "夺取石油资源"
 
 msgid "That didn't go well..."
-msgstr "大事不妙…"
+msgstr "大事不妙……"
 
 msgid "I have another plan"
 msgstr "我有另一个计划"
@@ -8309,9 +8309,6 @@ msgstr "电脑盟友"
 
 msgid "Human Allies"
 msgstr "人类盟友"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "您在过去几秒内发送了太多消息。请稍后重试。"
 
 msgid "Research Progress"
 msgstr "研究进展"
@@ -10122,8 +10119,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "主机已允许 %s 玩家自由聊天"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "主机已禁止 %s 玩家自由聊天"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr "限制已重置为默认值。"
@@ -10654,7 +10659,7 @@ msgid "Kinetic Armor"
 msgstr "动能装甲"
 
 msgid "(Tanks / Cyborgs)"
-msgstr "(坦克/机器人)"
+msgstr "（坦克/半机械人）"
 
 msgid "Cannons"
 msgstr "加农炮"
@@ -10796,7 +10801,7 @@ msgid "Electronic Reward - Visibility Report"
 msgstr "电子回馈 - 可见性报告"
 
 msgid "Factory Reward - Propulsion"
-msgstr "工厂奖励 - 推进动力"
+msgstr "工厂奖励 - 推进系统"
 
 msgid "Factory Reward - Body"
 msgstr "工厂奖励 - 车身"
@@ -10897,40 +10902,40 @@ msgid "Displays a console message every few minutes showing victory related info
 msgstr "每隔几分钟在控制台显示一次与胜利条件相关的信息。"
 
 msgid "Finale Fun"
-msgstr ""
+msgstr "终极趣味"
 
 msgid "Activate Final Gamma mission bonus content."
-msgstr ""
+msgstr "启用终极 Gamma 任务的奖励内容。"
 
 msgid "Gamma Bonus"
-msgstr ""
+msgstr "Gamma 奖励"
 
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
-msgstr ""
+msgstr "额外的 Gamma 任务，使用由原开发团队创作的地图（地图更新者：DARwins）。"
 
 msgid "Insane Spawns"
-msgstr ""
+msgstr "疯狂生成"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
-msgstr ""
+msgstr "启用更强大的敌军生成与行为，适用于“疯狂”（或更高）难度。"
 
 msgid "Non-Insane Spawns"
-msgstr ""
+msgstr "非疯狂生成"
 
 msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr ""
+msgstr "切换“困难”及以下难度的“疯狂敌军生成”选项。"
 
 msgid "Fast EXP gain"
-msgstr ""
+msgstr "快速经验值增益"
 
 msgid "Increases unit experience point gain by 2x."
-msgstr ""
+msgstr "单位所获经验值提升至2倍。"
 
 msgid "Tower Wars"
-msgstr ""
+msgstr "塔防战争"
 
 msgid "Player gets significantly stronger structures."
-msgstr ""
+msgstr "玩家建筑强度大幅提升。"
 
 msgid "Unsupported"
 msgstr "不支持的"
@@ -10977,91 +10982,6 @@ msgstr "战役"
 msgid "GAMES"
 msgstr "游戏"
 
-msgid "Refresh Games List"
-msgstr "刷新游戏列表"
-
-msgid "Filter Games List"
-msgstr "筛选游戏列表"
-
-msgid "Refreshing..."
-msgstr "正在刷新..."
-
-msgid "Searching"
-msgstr "正在搜索"
-
-msgid "Connecting to the lobby server..."
-msgstr "连接大厅服务器中..."
-
-msgid "Game Name"
-msgstr "游戏名称"
-
-msgid "Map Name"
-msgstr "地图名称"
-
-msgid "Status"
-msgstr "状态"
-
-msgid "Can't connect to lobby server!"
-msgstr "无法连接到大厅服务器！"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "模组：%s"
-
-msgid "Mods: None!"
-msgstr "模组：无！"
-
-#, c-format
-msgid "Version: %s"
-msgstr "版本：%s"
-
-msgid "Join as spectator"
-msgstr "作为旁观者加入"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "你的 Warzone 版本与这个游戏不兼容。"
-
-msgid "[Password required]"
-msgstr "[需要密码]"
-
-msgid "[No Tanks]"
-msgstr "[没有坦克]"
-
-msgid "[No Cyborgs]"
-msgstr "[没有半机械人]"
-
-msgid "[No VTOLs]"
-msgstr "[没有 VTOL]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "由 %s 主持"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "由 %s 主持—%s"
-
-msgid "Can't find any games for your version."
-msgstr "找不到此版本的游戏"
-
-msgid "There appears to be a game update available!"
-msgstr "有新更新可用"
-
-msgid "No games are available for your version"
-msgstr "没有对于你的版本可用的游戏"
-
-msgid "Wrong Game Version!"
-msgstr "错误的游戏版本"
-
-msgid "You have an incompatible mod."
-msgstr "您有一个不兼容的模组"
-
-msgid "Host couldn't send file?"
-msgstr "主玩家不能发送文件？"
-
-msgid "Incorrect Password!"
-msgstr "密码错误！"
-
 msgid "Continue"
 msgstr "继续"
 
@@ -11090,7 +11010,7 @@ msgid "HRTF"
 msgstr "HRTF"
 
 msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
-msgstr ""
+msgstr "当与耳机或某些立体声输出设备一起使用时，HRTF可以启用强化空间化。"
 
 msgid "Disabled"
 msgstr "禁用"
@@ -11119,20 +11039,26 @@ msgstr "音乐管理器"
 msgid "Open Music Manager"
 msgstr "打开音乐管理器"
 
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
+msgstr ""
+
 msgid "Mouse"
 msgstr "鼠标设置"
 
 msgid "Right-Click Orders"
-msgstr ""
+msgstr "右键命令"
 
 msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
-msgstr ""
+msgstr "默认情况下，《Warzone 2100》使用左键同时进行选择单位与下达指令/锁定目标。如果您更习惯现代即时战略游戏的鼠标操作方式，请将此选项设为“开”。如果您正在使用触控板或触摸屏输入，则建议将其设为“关”。"
 
 msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
-msgstr ""
+msgstr "使用左键同时进行选择与下达指令/攻击目标。（此为《Warzone 2100》的经典默认设置。）"
 
 msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
-msgstr ""
+msgstr "左键选择单位，右键命令移动或攻击目标。（符合其他主流即时战略游戏的默认设置。）"
 
 msgid "Trap Cursor"
 msgstr "捕捉光标"
@@ -11150,43 +11076,43 @@ msgid "Camera Speed"
 msgstr "镜头速度"
 
 msgid "Camera Starting Zoom"
-msgstr ""
+msgstr "开局默认视角高度"
 
 msgid "Camera Zoom Rate"
-msgstr ""
+msgstr "镜头缩放速度"
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "鼠标旋转"
 
 msgid "Reverse Rotation"
 msgstr "反向旋转"
 
 msgid "Mouse Pan"
-msgstr ""
+msgstr "鼠标平移"
 
 msgid "Edge Scrolling"
-msgstr ""
+msgstr "边缘滚动"
 
 msgid "Reset"
 msgstr "重置"
 
 msgid "Reset Keys to:"
-msgstr ""
+msgstr "重置按键为："
 
 msgid "(Select Profile)"
-msgstr ""
+msgstr "(选择配置)"
 
 msgid "Reset Keys to: Defaults"
-msgstr ""
+msgstr "重置按键为默认值"
 
 msgid "Unit Color"
-msgstr ""
+msgstr "单位颜色"
 
 msgid "Difficulty Level"
 msgstr "难度等级"
 
 msgid "Default AI"
-msgstr ""
+msgstr "默认 AI"
 
 msgid "Hosting Options"
 msgstr "主机选项"
@@ -11243,37 +11169,37 @@ msgid "%s hours"
 msgstr "%s 小时"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "“地形阴影质量”仅在使用“地形外观：重制版（高品质）”时生效"
 
 msgid "Shadows are not enabled."
-msgstr ""
+msgstr "阴影未启用。"
 
 msgid "Shadow mapping not available on this system."
 msgstr "阴影贴图在此系统上不可用。"
 
 msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "“高级光照”效果仅在使用“地形外观：重制版（高品质）”时可用"
 
 msgid "Terrain"
-msgstr ""
+msgstr "地形"
 
 msgid "Terrain Appearance"
-msgstr ""
+msgstr "地形外观"
 
 msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
-msgstr ""
+msgstr "此为游戏初始版本中的经典地形外观。采用低分辨率像素艺术纹理。"
 
 msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
-msgstr ""
+msgstr "此为过去十余年间一直作为默认设置的常规地形外观。采用更高分辨率的重制纹理。"
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr ""
+msgstr "此为重制版的高品质地形外观。采用高分辨率纹理及现代凹凸映射+高光映射技术。需要占用更多内存并对 GPU 有更高要求。"
 
 msgid "Terrain Shading Quality"
-msgstr ""
+msgstr "地形阴影质量"
 
 msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
-msgstr ""
+msgstr "地形阴影质量决定了地形着色效果（包含法线贴图、高光效果等）的精细程度。设置越高，地形细节越丰富，但会占用更多性能与内存资源。"
 
 msgid "Medium Quality"
 msgstr "中等画质"
@@ -11285,13 +11211,13 @@ msgid "Shadows"
 msgstr "阴影"
 
 msgid "Draw Shadows"
-msgstr ""
+msgstr "绘制阴影"
 
 msgid "Shadow Resolution"
 msgstr "阴影分辨率"
 
 msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
-msgstr ""
+msgstr "此项设置了用于渲染阴影贴图的内部分辨率。数值越高，阴影外观越精细，但同时会消耗更多性能与内存资源。"
 
 msgid "High"
 msgstr "高"
@@ -11300,7 +11226,7 @@ msgid "Shadow Filtering"
 msgstr "阴影过滤"
 
 msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
-msgstr ""
+msgstr "此项控制阴影外观的过滤/平滑程度。设置越高，阴影边缘越平滑，但同时会消耗更多性能。"
 
 msgid "Low"
 msgstr "低"
@@ -11309,25 +11235,25 @@ msgid "Ultra"
 msgstr "最高"
 
 msgid "Lighting"
-msgstr ""
+msgstr "光照"
 
 msgid "Point Lights"
-msgstr ""
+msgstr "点光源"
 
 msgid "Lightmap"
 msgstr "光照贴图"
 
 msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
-msgstr ""
+msgstr "使用经典光照贴图来计算物体与地砖上的点光源效果。（此为“经典”与“常规”外观模式的默认设置，性能开销最低。）"
 
 msgid "Per-Pixel (HQ)"
-msgstr ""
+msgstr "每像素 （高清）"
 
 msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
-msgstr ""
+msgstr "使用先进的逐像素点光源光照技术来提升画面效果。（可能会影响性能，需要更强大的 GPU 支持。）"
 
 msgid "Effects"
-msgstr ""
+msgstr "效果"
 
 msgid "Fog"
 msgstr "迷雾"
@@ -11336,40 +11262,40 @@ msgid "Screen Shake"
 msgstr "屏幕晃动"
 
 msgid "Textures"
-msgstr ""
+msgstr "纹理"
 
 msgid "Texture Size Limit"
-msgstr ""
+msgstr "纹理尺寸限制"
 
 msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
-msgstr ""
+msgstr "对于大于设定限制的纹理，系统将对其进行降采样处理。除非在可用内存有限的系统上运行，否则此项通常应设置为最大值。"
 
 msgid "LOD Distance"
 msgstr "LOD 距离"
 
 msgid "How level of detail (in textures) is preserved as distance increases."
-msgstr ""
+msgstr "此项控制了（纹理的）细节层次随距离增加而保留的程度。"
 
 msgid "Default"
 msgstr "默认"
 
 msgid "The system default (no supplied bias, may result in less sharp visuals)."
-msgstr ""
+msgstr "系统默认（无附加偏移，可能导致画面清晰度下降）。"
 
 msgid "Use LOD Distance bias to increase visual sharpness."
-msgstr ""
+msgstr "使用 LOD 距离偏移来提升视觉清晰度。"
 
 msgid "Advanced"
-msgstr ""
+msgstr "高级"
 
 msgid "Graphics Backend"
-msgstr ""
+msgstr "图形后端"
 
 msgid "Antialiasing"
-msgstr ""
+msgstr "抗锯齿"
 
 msgid "Vertical Sync"
-msgstr ""
+msgstr "垂直同步"
 
 msgid "Adaptive"
 msgstr "自适应"
@@ -11387,10 +11313,10 @@ msgid "Game UI"
 msgstr "游戏界面"
 
 msgid "Show FPS"
-msgstr ""
+msgstr "显示 FPS"
 
 msgid "Show Unit Counts"
-msgstr ""
+msgstr "显示单位数量"
 
 msgid "Groups Menu"
 msgstr "编队菜单"
@@ -11405,7 +11331,7 @@ msgid "Radar"
 msgstr "雷达"
 
 msgid "Radar Orientation"
-msgstr ""
+msgstr "雷达方向"
 
 msgid "Fixed"
 msgstr "固定"
@@ -11429,7 +11355,7 @@ msgid "Video Playback"
 msgstr "播放影片"
 
 msgid "Video Size"
-msgstr ""
+msgstr "视频尺寸"
 
 msgid "1×"
 msgstr "1×"
@@ -11465,7 +11391,7 @@ msgid "Failed to open configuration directory"
 msgstr "无法打开配置目录"
 
 msgid "Interface"
-msgstr ""
+msgstr "界面"
 
 msgid "Defaults"
 msgstr "默认"
@@ -11477,7 +11403,7 @@ msgid "Audio"
 msgstr "音效"
 
 msgid "Controls"
-msgstr ""
+msgstr "控制"
 
 msgid "Window"
 msgstr "窗口"
@@ -11508,7 +11434,7 @@ msgid "Behaviors"
 msgstr "行为"
 
 msgid "Minimize on Focus Loss"
-msgstr ""
+msgstr "失去焦点时最小化"
 
 msgid "Whether the window should auto-minimize on focus loss"
 msgstr "窗口是否应在失去焦点时自动最小化"
@@ -11587,6 +11513,93 @@ msgid "not ready"
 msgstr "未就绪"
 
 msgid "Waiting Room"
+msgstr "等候室"
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr "盲选大厅"
+
+msgid "Blind Game"
+msgstr "盲选模式"
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "有新更新可用"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "你的 Warzone 版本与这个游戏不兼容。"
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11658,22 +11671,22 @@ msgid "Structure Limits Enforced."
 msgstr "已执行建筑数量限制。"
 
 msgid "Challenge:"
-msgstr ""
+msgstr "挑战："
 
 msgid "Skirmish:"
-msgstr ""
+msgstr "遭遇战："
 
 msgid "Local (Offline)"
 msgstr "本地(离线)"
 
 msgid "Hosting:"
-msgstr ""
+msgstr "主机："
 
 msgid "Password-Protected (Private)"
-msgstr ""
+msgstr "密码保护（私人）"
 
 msgid "Open (Public)"
-msgstr ""
+msgstr "开放（公开）"
 
 msgid "Connected to Host:"
 msgstr "已连接到主机："
@@ -11682,7 +11695,7 @@ msgid "Set Password"
 msgstr "设置密码"
 
 msgid "Require Password to Join"
-msgstr ""
+msgstr "需要密码才能加入"
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
@@ -11703,6 +11716,9 @@ msgstr "单人遭遇战"
 msgid "Edit Game Name"
 msgstr "编辑游戏名称"
 
+msgid "Game Name"
+msgstr "游戏名称"
+
 msgid "Click to see Map"
 msgstr "点击查看地图"
 
@@ -11714,7 +11730,7 @@ msgstr ""
 "玩家可以投票阻止"
 
 msgid "Match Options"
-msgstr ""
+msgstr "对局选项"
 
 msgid "Base"
 msgstr "基地"
@@ -11741,7 +11757,7 @@ msgid "Randomize Options"
 msgstr "随机游戏选项"
 
 msgid "Match Option Preferences:"
-msgstr ""
+msgstr "匹配选项偏好设置："
 
 msgid "Star All"
 msgstr "全部星标"
@@ -11756,13 +11772,13 @@ msgid "Hide Player Preferences"
 msgstr "隐藏玩家首选项"
 
 msgid "Not editable while in a game."
-msgstr ""
+msgstr "游戏进行中不可编辑。"
 
 msgid "Not editable while in a multiplayer game."
-msgstr ""
+msgstr "在多人游戏中不可编辑。"
 
 msgid "Takes effect on game restart"
-msgstr ""
+msgstr "重启游戏后生效"
 
 msgid "Advanced Hosting Options:"
 msgstr "高级主机选项："
@@ -11771,46 +11787,40 @@ msgid "Host Role"
 msgstr "主机角色"
 
 msgid "Player Host"
-msgstr ""
+msgstr "玩家主机"
 
 msgid "Host is a player in the game (the default)."
-msgstr ""
+msgstr "主机是游戏中的一名玩家（默认设置）。"
 
 msgid "Spectator Host"
-msgstr ""
+msgstr "旁观者主机"
 
 msgid "Host is a spectator in the game."
-msgstr ""
+msgstr "主机是游戏中的旁观者。"
 
 msgid "Blind Mode"
-msgstr ""
+msgstr "盲选模式"
 
 msgid "Whether and when players are blinded to other players' identities."
-msgstr ""
+msgstr "玩家是否以及何时对其他玩家的身份不知情。"
 
 msgid "Blind modes are only available when host is a Spectator Host."
-msgstr ""
+msgstr "只有当主机为“旁观者主机”时，盲选模式才可用。"
 
 msgid "Players' identities are visible, in lobby and in game (the default)."
-msgstr ""
-
-msgid "Blind Lobby"
-msgstr ""
+msgstr "玩家的身份在大厅和游戏中均可见（默认设置）。"
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
-msgstr ""
+msgstr "在游戏开始前，所有玩家的身份对所有人（除旁观者主机外）均处于隐藏状态。"
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
-msgstr ""
+msgstr "直到游戏结束，所有玩家的身份对所有人（除旁观者主机外）均处于隐藏状态。"
 
 msgid "Start Hosting"
-msgstr ""
+msgstr "开始创建主机"
 
 msgid "Configure Advanced Hosting Options"
-msgstr ""
+msgstr "配置高级主机设置选项"
 
 msgid "Launch Transport"
 msgstr "发射运输舰"

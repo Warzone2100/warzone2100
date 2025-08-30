@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -2983,9 +2983,6 @@ msgstr ""
 "如果您使用的是路由器，請將其設定為啟用 UPnP/NAT-PMP/PCP\n"
 " 或將埠位址轉發到您的系統."
 
-msgid "Failed to get a lobby response!"
-msgstr "未能取得遊戲大廳回應!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "重播檔格式比此版本的 Warzone 2100 可以支援的還新."
 
@@ -3339,10 +3336,10 @@ msgstr "裝備有天譴導彈發射器之生化人步兵"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "裝備有火箭(坦克殺手)的生化人步兵"
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
 msgid "Armed with Flashlight Laser"
@@ -3657,10 +3654,10 @@ msgstr "最佳目標: 基本建築物"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "最佳目標: 基地結構、位置、生化人"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目標: 碉堡與要塞"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "最佳目標: 碉堡與要塞"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -5038,11 +5035,11 @@ msgstr "改善雷射系統的光學結構使之不易發散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃燒榴彈炮陣地 二型"
 
-msgid "Incendiary howitzer emplacement"
-msgstr "燃燒榴彈砲砲台"
-
 msgid "Incendiary Howitzer Emplacement"
 msgstr "燃燒榴彈炮陣地"
+
+msgid "Incendiary howitzer emplacement"
+msgstr "燃燒榴彈砲砲台"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "燃燒榴彈砲可以指派給一座雷達"
@@ -5712,11 +5709,11 @@ msgstr "可建造新的系統建築"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系統防禦工事"
 
-msgid "New Systems Turret Available for Design"
-msgstr "可搭載新的系統裝備"
-
 msgid "New Systems Turret Available For Design"
 msgstr "可在設計功能中使用新的系統裝備"
+
+msgid "New Systems Turret Available for Design"
+msgstr "可搭載新的系統裝備"
 
 msgid "New Thermal Emissions detection"
 msgstr "可偵測熱能放射"
@@ -6597,10 +6594,10 @@ msgstr "突觸連結資料分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突觸連結資料分析三型"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突觸連結資料分析"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突觸連結資料分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7268,6 +7265,9 @@ msgstr " 以及 "
 
 msgid "Spectators"
 msgstr "旁觀者"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "您在過去幾秒鐘內發送了太多訊息. 請稍候重試."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8303,9 +8303,6 @@ msgstr "生化人同盟"
 
 msgid "Human Allies"
 msgstr "人類同盟"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "您在過去幾秒鐘內發送了太多訊息. 請稍候重試."
 
 msgid "Research Progress"
 msgstr "研發進度"
@@ -10116,8 +10113,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "主持已開啟自由聊天功能給玩家: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "主持已對玩家關閉自由聊天功能: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10971,91 +10976,6 @@ msgstr "戰役"
 msgid "GAMES"
 msgstr "遊戲"
 
-msgid "Refresh Games List"
-msgstr "重新整理遊戲清單"
-
-msgid "Filter Games List"
-msgstr "篩選遊戲清單"
-
-msgid "Refreshing..."
-msgstr "重新整理中..."
-
-msgid "Searching"
-msgstr "搜尋"
-
-msgid "Connecting to the lobby server..."
-msgstr "正在連線到遊戲大廳伺服器..."
-
-msgid "Game Name"
-msgstr "遊戲名稱"
-
-msgid "Map Name"
-msgstr "地圖名稱"
-
-msgid "Status"
-msgstr "狀態"
-
-msgid "Can't connect to lobby server!"
-msgstr "無法連接遊戲大廳伺服器!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "模組: %s"
-
-msgid "Mods: None!"
-msgstr "模組: 無!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "版本: %s"
-
-msgid "Join as spectator"
-msgstr "加入旁觀"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "您的戰場2100版本與該遊戲並不相容."
-
-msgid "[Password required]"
-msgstr "[需要密碼]"
-
-msgid "[No Tanks]"
-msgstr "[無坦克戰車]"
-
-msgid "[No Cyborgs]"
-msgstr "[無生化人]"
-
-msgid "[No VTOLs]"
-msgstr "[無垂直起降裝備]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "由 %s 主持遊戲"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "由 %s 主持遊戲 — %s"
-
-msgid "Can't find any games for your version."
-msgstr "您的遊戲版本找不到可用遊戲."
-
-msgid "There appears to be a game update available!"
-msgstr "似乎有可用的遊戲更新!"
-
-msgid "No games are available for your version"
-msgstr "您的遊戲版本無可用遊戲"
-
-msgid "Wrong Game Version!"
-msgstr "游戲版本錯誤!"
-
-msgid "You have an incompatible mod."
-msgstr "你有一個不相容的遊戲模組."
-
-msgid "Host couldn't send file?"
-msgstr "遊戲主持無法傳送檔案?"
-
-msgid "Incorrect Password!"
-msgstr "密碼錯誤!"
-
 msgid "Continue"
 msgstr "繼續"
 
@@ -11111,6 +11031,12 @@ msgid "Music Manager"
 msgstr "音樂管理"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11581,6 +11507,93 @@ msgstr ""
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "似乎有可用的遊戲更新!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "您的戰場2100版本與該遊戲並不相容."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "地圖傳送: %u %%"
@@ -11695,6 +11708,9 @@ msgstr "單人玩家遭遇戰"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "遊戲名稱"
+
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
@@ -11786,13 +11802,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

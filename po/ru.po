@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2983,9 +2983,6 @@ msgstr ""
 "Если у вас есть роутер, включите UPnP/NAT-PMP/PVP соединения\n"
 "или перенаправьте порт напрямую на ваш компьютер."
 
-msgid "Failed to get a lobby response!"
-msgstr "Не получилось получить ответ от лобби!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Формат файла реплея новее, чем эта версия Warzone 2100."
 
@@ -3339,11 +3336,11 @@ msgstr "Вооружён противотанковыми управляемым
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Вооружён неуправляемой ракетой Танк-Киллер для киборгов"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Вооружён термитным огнемётом Инферно"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Вооружён термитным огнемётом для киборгов"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Вооружён термитным огнемётом Инферно"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Вооружён лазером Вспышка"
@@ -3657,10 +3654,10 @@ msgstr "Лучшие цели: основные постройки"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Лучшие цели: основные постройки, установки, киборги"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Лучшие цели: бункеры и укрепточки"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Лучшие цели: бункеры и укрепточки"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -5038,10 +5035,10 @@ msgstr "Улучшение в лазерной оптики снижает ра�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Установка зажигательной гаубицы 2"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Установка зажигательной гаубицы"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Установка зажигательной гаубицы"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5712,10 +5709,10 @@ msgstr "Доступна новая системная структура"
 msgid "New Systems Tower Available"
 msgstr "Доступна новая системная башня"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Доступна новая системная турель для дизайна"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Доступна новая системная турель для дизайна"
 
 msgid "New Thermal Emissions detection"
@@ -6597,11 +6594,11 @@ msgstr "Анализ нейросвязи Мk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Анализ нейросвязи Мk3"
 
-msgid "Synaptic link data analysis"
-msgstr "Анализ данных о нейросвязи"
-
 msgid "Synaptic Link Data Analysis"
 msgstr "Анализ нейросвязи"
+
+msgid "Synaptic link data analysis"
+msgstr "Анализ данных о нейросвязи"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Технология шифратора с помощью нейросвязи"
@@ -7268,6 +7265,9 @@ msgstr " и "
 
 msgid "Spectators"
 msgstr "Зрители"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Вы отправили слишком много сообщений за последние несколько секунд. Подождите и повторите попытку."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8325,9 +8325,6 @@ msgstr "Боты-союзники"
 
 msgid "Human Allies"
 msgstr "Игроки-союзники"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Вы отправили слишком много сообщений за последние несколько секунд. Подождите и повторите попытку."
 
 msgid "Research Progress"
 msgstr "Прогресс исследования"
@@ -10141,8 +10138,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "Хост разблокировал общий чат для игрока: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "Хост заблокировал общий чат для игрока: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr "Установлены лимиты по умолчанию."
@@ -11002,91 +11007,6 @@ msgstr "КАМПАНИИ"
 msgid "GAMES"
 msgstr "ИГРЫ"
 
-msgid "Refresh Games List"
-msgstr "Обновить список игр"
-
-msgid "Filter Games List"
-msgstr "Фильтр списка игр"
-
-msgid "Refreshing..."
-msgstr "Обновление..."
-
-msgid "Searching"
-msgstr "Поиск"
-
-msgid "Connecting to the lobby server..."
-msgstr "Соединяемся с лобби сервером..."
-
-msgid "Game Name"
-msgstr "Название игры"
-
-msgid "Map Name"
-msgstr "Название карты"
-
-msgid "Status"
-msgstr "Статус"
-
-msgid "Can't connect to lobby server!"
-msgstr "Не могу соединиться с лобби сервером!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Моды: %s"
-
-msgid "Mods: None!"
-msgstr "Моды: отсутствуют!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Версия: %s"
-
-msgid "Join as spectator"
-msgstr "Присоединиться как зритель"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Ваша версия Warzone несовместима с этой игрой."
-
-msgid "[Password required]"
-msgstr "[Требуется пароль]"
-
-msgid "[No Tanks]"
-msgstr "[Без танков]"
-
-msgid "[No Cyborgs]"
-msgstr "[Без киборгов]"
-
-msgid "[No VTOLs]"
-msgstr "[Без СВВП]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Хостинг: %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Хостинг: %s —%s"
-
-msgid "Can't find any games for your version."
-msgstr "Не могу найти игры для вашей версии."
-
-msgid "There appears to be a game update available!"
-msgstr "Похоже, доступно обновление игры!"
-
-msgid "No games are available for your version"
-msgstr "Нет доступных игр для вашей версии"
-
-msgid "Wrong Game Version!"
-msgstr "Неверная версия игры!"
-
-msgid "You have an incompatible mod."
-msgstr "У вас несовместимый мод."
-
-msgid "Host couldn't send file?"
-msgstr "Хост не может отправить файл?"
-
-msgid "Incorrect Password!"
-msgstr "Неверный пароль!"
-
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -11143,6 +11063,12 @@ msgstr "Менеджер музыки"
 
 msgid "Open Music Manager"
 msgstr "Открыть менеджер музыки"
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
+msgstr ""
 
 msgid "Mouse"
 msgstr "Мышь"
@@ -11614,6 +11540,93 @@ msgstr "не готов"
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr "Лобби вслепую"
+
+msgid "Blind Game"
+msgstr "Игра вслепую"
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Похоже, доступно обновление игры!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Ваша версия Warzone несовместима с этой игрой."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Отправка карты: %u%% "
@@ -11728,6 +11741,9 @@ msgstr "Одиночное сражение"
 msgid "Edit Game Name"
 msgstr "Изменить название игры"
 
+msgid "Game Name"
+msgstr "Название игры"
+
 msgid "Click to see Map"
 msgstr "Нажмите для просмотра карты"
 
@@ -11819,14 +11835,8 @@ msgstr "Режимы вслепую доступны только если хо�
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr "Личности игроков видны в лобби и в игре (по умолчанию)."
 
-msgid "Blind Lobby"
-msgstr "Лобби вслепую"
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
 msgstr "Личности игроков скрыты от всех (кроме зрителя-хоста) до тех пор, пока игра не начнется."
-
-msgid "Blind Game"
-msgstr "Игра вслепую"
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
 msgstr "Личности игроков скрыты от всех (кроме зрителя-хоста) до тех пор, пока игра не закончится."
