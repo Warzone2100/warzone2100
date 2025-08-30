@@ -1128,18 +1128,39 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 
 void joinGame(const char *connectionString, bool asSpectator /*= false*/)
 {
-	if (strchr(connectionString, '[') == NULL || strchr(connectionString, ']') == NULL) // it is not IPv6. For more see rfc3986 section-3.2.2
+	const char* a = strchr(connectionString, '[');
+	const char* b = (a != nullptr) ? strchr(a, ']') : nullptr;
+	if (a != nullptr && b != nullptr)
 	{
-		const char* ddch = strchr(connectionString, ':');
-		if(ddch != NULL)
+		// Bracketed host (example, bracketed IPv6 address) - may have a port after
+		std::string serverIP = "";
+		const char* ipv6AddressStart = a+1;
+		serverIP.assign(ipv6AddressStart, b-ipv6AddressStart);
+		uint32_t serverPort = 0; // default port
+		if (*(b+1) == ':')
 		{
+			// extract the port
+			serverPort = atoi(b+2);
+		}
+		debug(LOG_INFO, "Connecting to host [%s] port %d", serverIP.c_str(), serverPort);
+		joinGame(serverIP.c_str(), serverPort, asSpectator);
+		return;
+	}
+	else
+	{
+		const char* ddch = strrchr(connectionString, ':');
+		const char* firstCh = (ddch != nullptr) ? strchr(connectionString, ':') : nullptr;
+		if (ddch != nullptr && firstCh == ddch)
+		{
+			// Presumably a host:port string (has a single colon), where host is either an IPv4 address or a hostname
 			uint32_t serverPort = atoi(ddch+1);
 			std::string serverIP = "";
 			serverIP.assign(connectionString, ddch - connectionString);
-			debug(LOG_INFO, "Connecting to ip [%s] port %d", serverIP.c_str(), serverPort);
+			debug(LOG_INFO, "Connecting to host [%s] port %d", serverIP.c_str(), serverPort);
 			joinGame(serverIP.c_str(), serverPort, asSpectator);
 			return;
 		}
+		// otherwise fall-back to just treating the entire connectionString as the host (IPv4/6 address, hostname, etc)
 	}
 	joinGame(connectionString, 0, asSpectator);
 }
