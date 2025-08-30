@@ -185,6 +185,9 @@ void war_setOptionsButtonVisibility(uint8_t val);
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
 
+bool war_getPlayAudioCue_GroupReporting();
+void war_setPlayAudioCue_GroupReporting(bool val);
+
 enum class ConnectionProviderType : uint8_t;
 
 void war_setHostConnectionProvider(ConnectionProviderType pt);

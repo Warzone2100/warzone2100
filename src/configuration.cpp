@@ -669,6 +669,8 @@ bool loadConfig()
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
 
+	war_setPlayAudioCue_GroupReporting(iniGetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting()).value());
+
 	auto hostConnProvider = war_getHostConnectionProvider();
 	if (iniGeneral.has("hostConnectionProvider"))
 	{
@@ -858,6 +860,7 @@ bool saveConfig()
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
+	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

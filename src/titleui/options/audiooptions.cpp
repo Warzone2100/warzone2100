@@ -393,5 +393,27 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 
+	// Audio Cues:
+	result->addSection(OptionsSection(N_("Audio Cues"), ""), true);
+	{
+		auto optionInfo = OptionInfo("audio.cues.groupReporting", N_("Group Reporting"), "");
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_getPlayAudioCue_GroupReporting());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setPlayAudioCue_GroupReporting(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
 	return result;
 }
