@@ -1,3 +1,38 @@
+2025-08-31: Version 4.6.0-beta3:
+ * General:
+   * Add: Add to brain.json: cmdExpRange, shieldRange to cap distance for when shields regenerate and rank to be given to Commanders (commit:903a57b93f45c65bd8b9a65798d8442b6535332e, #4493)
+   * Add: Add "Audio Cues" options section, toggle for "Group Reporting" audio cue (commit:688bdb8bd54f0c215195e23ec7d9235008f170b2, #4519)
+   * Change: Transporters caught fire when flying over fire; Disabled burning transporter in general as they are always flying (commit:58ca5fb835c360eee6c114ae02637824c0895afb, #4504)
+   * Fix: Cleanup Commander template limit code to allow multi-factory production; Don't hide Commander templates at limit; Hardcoded 5 Commander production limit removed as it conflicts with modern scripts (commit:7ffa8e9951e6f41bc5733ae0d486df3d88203c1b, #4506)
+   * Fix: Set gameInitialised to true in initSaveGameLoad() to fix autosaves not happening after the new autosave message PR was done (commit:1bc622f83872bd93f548adb24a2cd6c6c9fee504, #4513)
+   * Fix: Additional calls to droidRepairStopped() to prevent sticking healthbars until fully healed (commit:18421b3c56aaceb298d0d004a6656626a209f07a, #4518)
+ * Graphics:
+   * Add: [Vulkan] Ability to block bad drivers, up max requested version to 1.3, Update minimum VK_HEADER_VERSION to 290 (too many commits, #4502)
+   * Fix: [Vulkan] Handle getQueueFamiliesInfo failure (commit:8afe3df7c40540424ac5f9c423c2f753f6aaaac1, #4496)
+ * Multiplayer:
+   * Add: Search for the nearest transporter if the current one is already full during an attempted embark (commit:b9538249871c1521fce983069304ba9118cc26fa, commit:780ac3100c750df9845a369fd02eaab39a0e8ce2, #4422)
+   * Add: Blind lobby & netplay tweaks, New lobby game browser. New widgets, more filtering options, more room information, and increased responsiveness (too many commits, #4499)
+   * Fix: Additional map preview sanity checks (commit:2838c083f68a484c90611a46fd60ce2ef30fd8c8, #4497)
+ * AI:
+   * Fix: Fix typos in BoneCrusher (commit:fe1e616c15fe5b652e4d7c814af66c91c7bfcb91, #4444)
+ * Networking:
+   * Fix: Do not add GNS to joinLobbyGame connection list to prevent a long wait time (commit:0df36e7306342bc1d2a6a9d9a050181b6be4c3ff, #4479)
+   * Fix: autoLobbyNotReadyKickRoutine using the wrong value (commit:fe4f29674945b15247d433febb9150e8d22aebdf, #4485)
+   * Fix: Move NETshutdown() later in systemShutdown() (commit:e3901055bd0884c97789a8d51a5d5de146cc8b62, #4492)
+   * Fix: Prevent 12 year old rare desync from different compiler / standard library implementations of std::sort when an unlucky list of tiles were generated during factory droid placement (commit:9dc499a1edf3266a8a43c8ab4b617109ed993f4c, #4486)
+   * Fix: Only output playerLeft event when slot is still allocated (commit:7dec24fae60165ed7dac192fdff6ed2ce5b1413d, #4521)
+   * Fix: Kicked-related message was not blinded (commit:a2b0ded3b90abaa828d910e6583b66d07b97438c, #4521)
+   * Fix: Improve connectionString parsing, including for IPv6 addresses (commit:8e7fabf243967b26d3b96d2941a7d6826d502930, #4523)
+ * Balance MP:
+   * Change: brain.json: Adjust shield strength; Additional sanity checks (commit:2622f38fc8c94627f3da1075e51431c1b9794b6b, commit:5dec5ba6274fb785f08dd43092e15e67fc1e23d6, #4522)
+ * Other:
+   * Add: Add Music Document (commit:8c2572d94162dbebdddbeed815a46f0dbc8ea7e8, #4174)
+   * Change: Update angle vcpkg port, vcpkg baseline (too many commits, #4500)
+   * Fix: Fix segfault with dumpinfo.cpp trying to use a WZ_MUTEX (commit:4f551999640f519b723ce6384a4c4036ab84d0f1, #4482)
+   * Fix: Additional sanity checks (too many commits, #4514)
+   * Fix: Match the pre-#4281 behavior for flying unit factory production placement (while preserving the fixes for other units) (commit:c75f6bbcb6df331a72d788175eec21bf55c4cfbd, #4511)
+   * Fix: Increment structure count maximum for the new owner on donation (commit:9659b33c754a382f6cfe9826399b2125c356704e, #4517)
+
 2025-08-16: Version 4.6.0-beta1:
  * General:
    * Add: Improve research items tooltips with categories and time (too many commits, #4216)
