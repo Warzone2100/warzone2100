@@ -7,7 +7,7 @@
 
 ; *** Components:
 
-CoreGame=基础游戏
+CoreGame=核心游戏
 Addons=扩展包
 HQTerrain=高画质地形
 AddonMusic=附加音乐包
@@ -28,7 +28,7 @@ AdvancedButton=&高级选项
 AdvancedOptionsTitle=高级选项 - %1
 StandardInstall=标准安装
 StandardInstallDesc=安装 %1 到此电脑（推荐）
-StandardUpdate=标准安装（升级版）
+StandardUpdate=标准安装（升级）
 StandardUpdateDesc=更新此电脑上 %1 的现有安装（推荐）
 SideBySideInstall=并行安装
 SideBySideInstallDesc=安装该版本，可与其他版本（含标准安装版）共存；共享设置和存档
