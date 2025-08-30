@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-15 02:39\n"
+"PO-Revision-Date: 2025-08-28 02:34\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -3025,7 +3025,7 @@ msgid "Warzone 2100: Prior launch failed"
 msgstr "Warzone 2100 : le lancement précédent a échoué"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "La dernière tentative d'initialisation du backend graphique suivant a causé un crash :"
 
 #, c-format
 msgid "Graphics Backend: %s"
@@ -9922,7 +9922,7 @@ msgid "Player names will not be visible to other players (until the game is over
 msgstr "Les noms des joueurs ne seront pas visibles par les autres joueurs (tant que la partie n'est pas terminée)"
 
 msgid "Player names will not be visible to other players (until the game has started)"
-msgstr "- Les noms des joueurs ne seront pas visibles par les autres joueurs (tant que la partie n'est pas lancée)"
+msgstr "Les noms des joueurs ne seront pas visibles par les autres joueurs (tant que la partie n'est pas lancée)"
 
 msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
 msgstr "IMPORTANT : L'hôte est un joueur, et peut voir et configurer d'autres joueurs (!)"
@@ -11278,7 +11278,7 @@ msgid "The normal terrain appearance used as the default for more than a decade.
 msgstr "L'apparence normale du terrain utilisée comme valeur par défaut depuis plus d'une décennie. Textures recrées en haute résolution."
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr "L'apparence remasterisée et de haute qualité du terrain. Haute résolution, avec une un placage de relief et des reflets spéculaires modernes. Nécessite plus de mémoire et un meilleur GPU."
+msgstr "L'apparence remasterisée et de haute qualité du terrain. Haute résolution, avec un placage de relief et des reflets spéculaires modernes. Nécessite plus de mémoire et un meilleur GPU."
 
 msgid "Terrain Shading Quality"
 msgstr "Qualité de l'ombrage du terrain"
@@ -11725,7 +11725,7 @@ msgstr ""
 "Peut être bloquée par le vote des joueurs"
 
 msgid "Match Options"
-msgstr "Faire correspondre les options"
+msgstr "Préférences des paramètres"
 
 msgid "Base"
 msgstr "Base"
@@ -11818,7 +11818,7 @@ msgid "Players' identities are hidden from everyone (except the spectator host) 
 msgstr "Les identités des joueurs sont cachées à tout le monde (à l'exception de l'hôte spectateur) jusqu'à la fin du jeu."
 
 msgid "Start Hosting"
-msgstr "Démarrer l'hébergement"
+msgstr "Démarrer le serveur hôte"
 
 msgid "Configure Advanced Hosting Options"
 msgstr "Configurer les options avancées d'hébergement"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"PO-Revision-Date: 2025-08-30 03:07\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1797,7 +1797,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Salva la squadra Alfa da Nexus"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr ""
+msgstr "Impedisci a qualsiasi carro armato hoover Nexus di fuggire dall'area"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Distruggi il quartier generale di Nexus per disabilitare il Programma d'intrusione NEXUS"
@@ -1821,7 +1821,7 @@ msgid "Return to LZ"
 msgstr "Ritorna alla zona di atterraggio"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "Suggerimento per difficoltà folle:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Fortifica una base forte sulla mappa per proteggerti dal Collettivo"
@@ -2962,7 +2962,7 @@ msgstr "Impossibile creare la mappatura porte (timeout)"
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "Utilizzo del back-end di rete %s."
 
 msgid "Client failed to ack player index swap"
 msgstr "Il client non ha potuto riconoscere il cambio d'indice del giocatore"
@@ -2997,22 +2997,22 @@ msgid "Replay File Format Unsupported"
 msgstr "Formato del file di replay non supportato"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Il formato del file di replay è più vecchio di quanto questa versione di Warzone 2100 possa supportare."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Impossibile caricare il replay: il file è incompleto o danneggiato."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: impossibile inizializzare la grafica"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "Impossibile inizializzare la grafica per tutti i backend."
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Dettagli dell'errore:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "Aggiorna e/o reinstalla i driver grafici e controlla le impostazioni di sistema."
 
 msgid "OK"
 msgstr "OK"
