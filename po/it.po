@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1797,7 +1797,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Salva la squadra Alfa da Nexus"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr ""
+msgstr "Impedisci a qualsiasi carro armato hoover Nexus di fuggire dall'area"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Distruggi il quartier generale di Nexus per disabilitare il Programma d'intrusione NEXUS"
@@ -1821,7 +1821,7 @@ msgid "Return to LZ"
 msgstr "Ritorna alla zona di atterraggio"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "Suggerimento per difficoltà folle:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Fortifica una base forte sulla mappa per proteggerti dal Collettivo"
@@ -2962,7 +2962,7 @@ msgstr "Impossibile creare la mappatura porte (timeout)"
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "Utilizzo del back-end di rete %s."
 
 msgid "Client failed to ack player index swap"
 msgstr "Il client non ha potuto riconoscere il cambio d'indice del giocatore"
@@ -2983,9 +2983,6 @@ msgstr ""
 "Se stai usando un router configuralo per usare l'UPnP, o esegui il\n"
 "port forward al tuo sistema."
 
-msgid "Failed to get a lobby response!"
-msgstr "Impossibile avere risposte della lobby!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Il formato del file del replay è più recente di quanto questa versione di Warzone 2100 possa supportare."
 
@@ -2997,22 +2994,22 @@ msgid "Replay File Format Unsupported"
 msgstr "Formato del file di replay non supportato"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Il formato del file di replay è più vecchio di quanto questa versione di Warzone 2100 possa supportare."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Impossibile caricare il replay: il file è incompleto o danneggiato."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: impossibile inizializzare la grafica"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "Impossibile inizializzare la grafica per tutti i backend."
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Dettagli dell'errore:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "Aggiorna e/o reinstalla i driver grafici e controlla le impostazioni di sistema."
 
 msgid "OK"
 msgstr "OK"
@@ -3339,11 +3336,11 @@ msgstr "Armato con Lanciamissili Scourge per Cyborg"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Armato con Razzi Tank Killer per Cyborg"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armato con Cyborg Lanciafiamme alla Termite"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Armato con Lanciafiamme alla Termite per Cyborg"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Armato con Cyborg Lanciafiamme alla Termite"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Armato con Laser Flashlight"
@@ -3657,10 +3654,10 @@ msgstr "Bersagli Migliori: strutture della base"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Bersagli migliori: strutture, fortificazioni e cyborg"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Bersagli migliori: bunker e postazioni"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Bersagli migliori: bunker e postazioni"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -5038,10 +5035,10 @@ msgstr "Miglioramenti nell'ottica dei laser riducono la dispersione di luce"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Fortificazione con obice Incendiario 2"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Fortificazione con obice incendiario"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Fortificazione con obice incendiario"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5712,11 +5709,11 @@ msgstr "Nuova Struttura con Sistemi Disponibile"
 msgid "New Systems Tower Available"
 msgstr "Nuova torre con sistemi disponibile"
 
-msgid "New Systems Turret Available for Design"
-msgstr "Nuova torretta con sistemi disponibile per la progettazione"
-
 msgid "New Systems Turret Available For Design"
 msgstr "Nuova torretta con sistemi disponibile"
+
+msgid "New Systems Turret Available for Design"
+msgstr "Nuova torretta con sistemi disponibile per la progettazione"
 
 msgid "New Thermal Emissions detection"
 msgstr "Nuovo rilevamento delle emissioni termiche"
@@ -6597,11 +6594,11 @@ msgstr "Analisi a Collegamento Sinaptico Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analisi a Collegamento Sinaptico Mk3"
 
-msgid "Synaptic link data analysis"
-msgstr "Analisi a collegamento sinaptico"
-
 msgid "Synaptic Link Data Analysis"
 msgstr "Analisi a Collegamento Sinaptico"
+
+msgid "Synaptic link data analysis"
+msgstr "Analisi a collegamento sinaptico"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Teconlogia di disturbo del collegamento sinaptico"
@@ -7268,6 +7265,9 @@ msgstr " e "
 
 msgid "Spectators"
 msgstr "Spettatori"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Hai inviato troppi messaggi negli ultimi secondi. Si prega di attendere e riprovare."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8313,9 +8313,6 @@ msgstr "Bot alleati"
 
 msgid "Human Allies"
 msgstr "Umani alleati"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Hai inviato troppi messaggi negli ultimi secondi. Si prega di attendere e riprovare."
 
 msgid "Research Progress"
 msgstr "Progresso della ricerca"
@@ -10127,8 +10124,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "L'host ha abilitato la chat libera per il giocatore: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "L'host ha silenziato la chat libera per il giocatore: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10984,91 +10989,6 @@ msgstr "CAMPAGNE"
 msgid "GAMES"
 msgstr "PARTITE"
 
-msgid "Refresh Games List"
-msgstr "Aggiorna la Lista Partite"
-
-msgid "Filter Games List"
-msgstr "Filtra la lista delle partite"
-
-msgid "Refreshing..."
-msgstr "Aggiornamento..."
-
-msgid "Searching"
-msgstr "Ricerca in corso..."
-
-msgid "Connecting to the lobby server..."
-msgstr "Connessione alla lobby..."
-
-msgid "Game Name"
-msgstr "Nome della partita"
-
-msgid "Map Name"
-msgstr "Nome mappa"
-
-msgid "Status"
-msgstr "Stato"
-
-msgid "Can't connect to lobby server!"
-msgstr "Impossibile connettersi alla lobby!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mod: %s"
-
-msgid "Mods: None!"
-msgstr "Mods: Nessuna!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Versione: %s"
-
-msgid "Join as spectator"
-msgstr "Unisciti come spettatore"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "La tua versione di Warzone non è compatibile con questa partita."
-
-msgid "[Password required]"
-msgstr "[Password richiesta]"
-
-msgid "[No Tanks]"
-msgstr "[No carri]"
-
-msgid "[No Cyborgs]"
-msgstr "[No Cyborg]"
-
-msgid "[No VTOLs]"
-msgstr "[No VTOL]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Ospitato da %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Ospitato da %s —%s"
-
-msgid "Can't find any games for your version."
-msgstr "Impossibile trovare partite per la tua versione."
-
-msgid "There appears to be a game update available!"
-msgstr "Sembra che ci sia un aggiornamento disponibile!"
-
-msgid "No games are available for your version"
-msgstr "Non ci sono partite disponibili per la tua versione"
-
-msgid "Wrong Game Version!"
-msgstr "Versione del gioco non corretta!"
-
-msgid "You have an incompatible mod."
-msgstr "Hai un mod incompatibile."
-
-msgid "Host couldn't send file?"
-msgstr "L'host non ha potuto inviare il file?"
-
-msgid "Incorrect Password!"
-msgstr "Password non corretta!"
-
 msgid "Continue"
 msgstr "Continua"
 
@@ -11124,6 +11044,12 @@ msgid "Music Manager"
 msgstr "Gestore della musica"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11596,6 +11522,93 @@ msgstr ""
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Sembra che ci sia un aggiornamento disponibile!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "La tua versione di Warzone non è compatibile con questa partita."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Invio mappa: %u%% "
@@ -11710,6 +11723,9 @@ msgstr "Schermaglia a un giocatore"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Nome della partita"
+
 msgid "Click to see Map"
 msgstr "Fai clic per vedere la mappa"
 
@@ -11801,13 +11817,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -2983,9 +2983,6 @@ msgstr ""
 "Si utilitzeu un encaminador, configuri'l per activar l'UPnP/NAT-PMP/PCP\n"
 " o per encaminar el port al vostre sistema."
 
-msgid "Failed to get a lobby response!"
-msgstr "No s'ha rebut resposta de la sala!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "El format del fitxer del replay és més recent que el que aquesta versió de Warzone 2100 pot suportar."
 
@@ -3339,11 +3336,11 @@ msgstr "Armat amb llançador de míssils Scourge cíborg"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Armat amb un Cíborg amb Coet Mata-Tancs"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armat amb llança-flames de termita"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Armat amb Cíborg llança-flames de termita"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Armat amb llança-flames de termita"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Armat amb làser Llanterna"
@@ -3657,11 +3654,11 @@ msgstr "Millors objectius: Estructures de base"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Millors objectius: construccions, emplaçaments i cíborgs"
 
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Millors objectius: Búnquers i fortificacions"
-
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Millors objectius: Búnquers i fortificacions"
+
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Millors objectius: Búnquers i fortificacions"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr "Millors objectius: Búnquers, defenses, construccions"
@@ -5038,11 +5035,11 @@ msgstr "La millora de l'òptica del làser redueix la dispersió de la llum"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplaçament d'incendiari Howitzer 2"
 
-msgid "Incendiary howitzer emplacement"
-msgstr "Emplaçament de howitzer incendiari"
-
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Emplaçament de Howitzer incendiari"
+
+msgid "Incendiary howitzer emplacement"
+msgstr "Emplaçament de howitzer incendiari"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "El howitzer incendiari es pot d'assignar a un sensor"
@@ -5712,10 +5709,10 @@ msgstr "Hi ha un nou sistema d'estructures disponible"
 msgid "New Systems Tower Available"
 msgstr "Hi ha una nova torre de sistemes disponible"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
 msgid "New Thermal Emissions detection"
@@ -6597,10 +6594,10 @@ msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk3"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7268,6 +7265,9 @@ msgstr " i "
 
 msgid "Spectators"
 msgstr "Espectadors"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Ha enviat massa missatges. Esperi i torni-ho a intentar."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8313,9 +8313,6 @@ msgstr "Aliats bot"
 
 msgid "Human Allies"
 msgstr "Aliats humans"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Ha enviat massa missatges. Esperi i torni-ho a intentar."
 
 msgid "Research Progress"
 msgstr "Progrés de la recerca"
@@ -10127,8 +10124,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "L'hoste ha activat el xat lliure pel jugador: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "L'hoste ha bloquejat el xat lliure al jugador: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10984,91 +10989,6 @@ msgstr "CAMPANYES"
 msgid "GAMES"
 msgstr "JOCS"
 
-msgid "Refresh Games List"
-msgstr "Refresca la llista de partides"
-
-msgid "Filter Games List"
-msgstr "Filtrar la llista de partides"
-
-msgid "Refreshing..."
-msgstr "Refrescant..."
-
-msgid "Searching"
-msgstr "Buscant"
-
-msgid "Connecting to the lobby server..."
-msgstr "S'està connectant al servidor dels lobbys..."
-
-msgid "Game Name"
-msgstr "Nom de la partida"
-
-msgid "Map Name"
-msgstr "Nom del mapa"
-
-msgid "Status"
-msgstr "Estat"
-
-msgid "Can't connect to lobby server!"
-msgstr "No s'ha pogut connectar al servidor de lobbys!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mods: %s"
-
-msgid "Mods: None!"
-msgstr "Mods: Cap!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Versió: %s"
-
-msgid "Join as spectator"
-msgstr "Unir-se com espectador"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "La vostra versió de Warzone 2100 és incompatible amb aquesta partida."
-
-msgid "[Password required]"
-msgstr "[Contrasenya necessària]"
-
-msgid "[No Tanks]"
-msgstr "[Sense tancs]"
-
-msgid "[No Cyborgs]"
-msgstr "[Sense cíborgs]"
-
-msgid "[No VTOLs]"
-msgstr "[Sense VTOL]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Hostatjat per %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Hostatjat per %s -%s"
-
-msgid "Can't find any games for your version."
-msgstr "Cap partida disponible per la vostra versió."
-
-msgid "There appears to be a game update available!"
-msgstr "Sembla que hi ha una nova versió del joc!"
-
-msgid "No games are available for your version"
-msgstr "Cap partida disponible per la teva versió del joc"
-
-msgid "Wrong Game Version!"
-msgstr "Versió del joc equivocada!"
-
-msgid "You have an incompatible mod."
-msgstr "Teniu un mod incompatible."
-
-msgid "Host couldn't send file?"
-msgstr "L'amfitrió no us ha pogut enviar el fitxer?"
-
-msgid "Incorrect Password!"
-msgstr "Contrasenya incorrecta!"
-
 msgid "Continue"
 msgstr "Continuar"
 
@@ -11124,6 +11044,12 @@ msgid "Music Manager"
 msgstr "Gestor de música"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11596,6 +11522,93 @@ msgstr "esperant"
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Sembla que hi ha una nova versió del joc!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "La vostra versió de Warzone 2100 és incompatible amb aquesta partida."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "S'està enviant el mapa: %u%%"
@@ -11710,6 +11723,9 @@ msgstr "Escaramussa d'un jugador"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Nom de la partida"
+
 msgid "Click to see Map"
 msgstr "Feu clic per veure el mapa"
 
@@ -11801,13 +11817,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
