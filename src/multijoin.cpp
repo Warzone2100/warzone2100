@@ -502,7 +502,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	ingame.muteChat[playerIndex] = false;
 
-	if (wz_command_interface_enabled())
+	if (wz_command_interface_enabled() && NetPlay.players[playerIndex].allocated)
 	{
 		// WZEVENT: playerLeft: <playerIdx> <gameTime> <b64pubkey> <hash> <V|?> <b64name> <ip>
 		const auto& identity = getOutputPlayerIdentity(playerIndex);
