@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Persian\n"
 "Language: fa_IR\n"
@@ -2979,9 +2979,6 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-msgid "Failed to get a lobby response!"
-msgstr ""
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
 
@@ -3335,10 +3332,10 @@ msgstr ""
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr ""
 
 msgid "Armed with Flashlight Laser"
@@ -3653,10 +3650,10 @@ msgstr ""
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr ""
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr ""
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -5028,10 +5025,10 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr ""
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5702,10 +5699,10 @@ msgstr ""
 msgid "New Systems Tower Available"
 msgstr ""
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr ""
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr ""
 
 msgid "New Thermal Emissions detection"
@@ -6587,10 +6584,10 @@ msgstr ""
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr ""
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr ""
 
 msgid "Synaptic Link Scrambler technology"
@@ -7255,6 +7252,9 @@ msgid " and "
 msgstr ""
 
 msgid "Spectators"
+msgstr ""
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 #, c-format
@@ -8296,9 +8296,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -10108,7 +10105,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -10965,91 +10970,6 @@ msgstr ""
 msgid "GAMES"
 msgstr ""
 
-msgid "Refresh Games List"
-msgstr ""
-
-msgid "Filter Games List"
-msgstr ""
-
-msgid "Refreshing..."
-msgstr ""
-
-msgid "Searching"
-msgstr ""
-
-msgid "Connecting to the lobby server..."
-msgstr ""
-
-msgid "Game Name"
-msgstr ""
-
-msgid "Map Name"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Can't connect to lobby server!"
-msgstr ""
-
-#, c-format
-msgid "Mods: %s"
-msgstr ""
-
-msgid "Mods: None!"
-msgstr ""
-
-#, c-format
-msgid "Version: %s"
-msgstr ""
-
-msgid "Join as spectator"
-msgstr ""
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
-
-msgid "[Password required]"
-msgstr ""
-
-msgid "[No Tanks]"
-msgstr ""
-
-msgid "[No Cyborgs]"
-msgstr ""
-
-msgid "[No VTOLs]"
-msgstr ""
-
-#, c-format
-msgid "Hosted by %s"
-msgstr ""
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr ""
-
-msgid "Can't find any games for your version."
-msgstr ""
-
-msgid "There appears to be a game update available!"
-msgstr ""
-
-msgid "No games are available for your version"
-msgstr ""
-
-msgid "Wrong Game Version!"
-msgstr ""
-
-msgid "You have an incompatible mod."
-msgstr ""
-
-msgid "Host couldn't send file?"
-msgstr ""
-
-msgid "Incorrect Password!"
-msgstr ""
-
 msgid "Continue"
 msgstr ""
 
@@ -11105,6 +11025,12 @@ msgid "Music Manager"
 msgstr ""
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11575,6 +11501,93 @@ msgstr ""
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr ""
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr ""
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr ""
@@ -11689,6 +11702,9 @@ msgstr ""
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr ""
+
 msgid "Click to see Map"
 msgstr ""
 
@@ -11778,13 +11794,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

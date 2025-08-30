@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -2979,9 +2979,6 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-msgid "Failed to get a lobby response!"
-msgstr "Αδυναμία λήψης ανταπόκρισης από το υπολογιστή αναμονής."
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
 
@@ -3335,11 +3332,11 @@ msgstr "Εξοπλισμένο με Εκτοξευτή Πυραυλιδίου Μ
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Εξοπλισμένο με Ανθρωπομηχανή Φλογοβόλου Θερμίτη"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Εξοπλισμένο με Ανθρωπομηχανή Φλογοβόλου Θερμίτη"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Εξοπλισμένο με Φωτακτινιστή Αναλαμπής"
@@ -3653,10 +3650,10 @@ msgstr "Προτιμώμενοι Στόχοι: Δομές Βάσης"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Προτιμώμενοι στόχοι: Οχυρά και Επισκληρύνσεις"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Προτιμώμενοι στόχοι: Οχυρά και Επισκληρύνσεις"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -5034,11 +5031,11 @@ msgstr "Βελτίωση στους οπτικούς φακούς, μειώνε�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary howitzer emplacement"
-msgstr "Ένθεση εμπρηστικού οβιδοβόλου"
-
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Ένθεση Εμπρηστικού Οβιδοβόλου"
+
+msgid "Incendiary howitzer emplacement"
+msgstr "Ένθεση εμπρηστικού οβιδοβόλου"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Εμπρηστικό οβιδοβόλο, μπορεί να ανατεθεί σε αισθητήρα"
@@ -5708,10 +5705,10 @@ msgstr "Διαθέσιμη Νέα Δομή Συστημάτων"
 msgid "New Systems Tower Available"
 msgstr "Διαθέσιμος Νέος Πύργος Συστημάτων"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Νέος Πυργίσκος Συστημάτων Διαθέσιμος για Σύνθεση"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Νέος Πυργίσκος Συστημάτων Διαθέσιμος για Σύνθεση"
 
 msgid "New Thermal Emissions detection"
@@ -6593,11 +6590,11 @@ msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού Τύ
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού Τύπος3"
 
-msgid "Synaptic link data analysis"
-msgstr "Ανάλυση δεδομένων Συναπτικού Δεσμού"
-
 msgid "Synaptic Link Data Analysis"
 msgstr "Ανάλυση Δεδομένων Συναπτικού Δεσμού"
+
+msgid "Synaptic link data analysis"
+msgstr "Ανάλυση δεδομένων Συναπτικού Δεσμού"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Τεχνολογία Αποκωδικοποίησης Συναπτικού Δεσμού"
@@ -7263,6 +7260,9 @@ msgid " and "
 msgstr ""
 
 msgid "Spectators"
+msgstr ""
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 #, c-format
@@ -8308,9 +8308,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -10123,7 +10120,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -10980,91 +10985,6 @@ msgstr "ΕΚΣΤΡΑΤΕΙΕΣ"
 msgid "GAMES"
 msgstr "ΠΑΙΧΝΙΔΙΑ"
 
-msgid "Refresh Games List"
-msgstr "Ανανέωση της Λίστας Παιχνιδιών"
-
-msgid "Filter Games List"
-msgstr "Ξεδιάλεγμα της Λίστας Παιχνιδιών"
-
-msgid "Refreshing..."
-msgstr "Ανανεώνεται..."
-
-msgid "Searching"
-msgstr "Γίνεται Αναζήτηση"
-
-msgid "Connecting to the lobby server..."
-msgstr "Συνδέεται με τον εξυπηρετητή αναμονής..."
-
-msgid "Game Name"
-msgstr "Όνομα του Παιχνιδιού"
-
-msgid "Map Name"
-msgstr "Όνομα του Χάρτη"
-
-msgid "Status"
-msgstr "Κατάσταση"
-
-msgid "Can't connect to lobby server!"
-msgstr "Αδυναμία σύνδεσης στον εξυπηρετητή αναμονής."
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Διασκευές: %s"
-
-msgid "Mods: None!"
-msgstr "Διασκευές: Καμία"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Έκδοση: %s"
-
-msgid "Join as spectator"
-msgstr ""
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Η έκδοσή σου της Ζώνης Πολέμου είναι ασύμβατη με αυτό το παιχνίδι."
-
-msgid "[Password required]"
-msgstr "[Απαιτείται κωδικός πρόσβασης]"
-
-msgid "[No Tanks]"
-msgstr "[Χωρίς Άρματα]"
-
-msgid "[No Cyborgs]"
-msgstr "[Χωρίς Ανθρωπομηχανές]"
-
-msgid "[No VTOLs]"
-msgstr "[χωρίς αεροσκάφη]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Φιλοξενία από τον %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Φιλοξενία από τον %s —%s"
-
-msgid "Can't find any games for your version."
-msgstr "Αδυναμία ανεύρεσης παιχνιδιών για την έκδοσή σου."
-
-msgid "There appears to be a game update available!"
-msgstr "Φαίνεται να υπάρχει διαθέσιμη μία νεότερη έκδοση του παιχνιδιού!"
-
-msgid "No games are available for your version"
-msgstr "Δεν υπάρχουν διαθέσιμα παιχνίδια για την έκδοσή σου"
-
-msgid "Wrong Game Version!"
-msgstr "Λάθος Έκδοση Παιχνιδιού."
-
-msgid "You have an incompatible mod."
-msgstr "Η Διασκευή σου είναι μη συμβατή."
-
-msgid "Host couldn't send file?"
-msgstr "Μήπως ο οικοδεσπότης δεν μπόρεσε να αποστείλει το αρχείο;"
-
-msgid "Incorrect Password!"
-msgstr "Εσφαλμένος Κωδικός"
-
 msgid "Continue"
 msgstr "Συνέχιση"
 
@@ -11120,6 +11040,12 @@ msgid "Music Manager"
 msgstr ""
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11590,6 +11516,93 @@ msgstr ""
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Φαίνεται να υπάρχει διαθέσιμη μία νεότερη έκδοση του παιχνιδιού!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Η έκδοσή σου της Ζώνης Πολέμου είναι ασύμβατη με αυτό το παιχνίδι."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Αποστέλνεται ο Χάρτης: %u%% "
@@ -11704,6 +11717,9 @@ msgstr "Μάχη για Έναν Παίχτη"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Όνομα του Παιχνιδιού"
+
 msgid "Click to see Map"
 msgstr "Κάνε κλικ για να δεις το Χάρτη"
 
@@ -11795,13 +11811,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

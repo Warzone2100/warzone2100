@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-08-30 13:50+0000\n"
+"PO-Revision-Date: 2025-08-30 15:14\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -2984,9 +2984,6 @@ msgstr ""
 "Переконайтеся, що порт %d може приймати вхідні з'єднання.\n"
 "Якщо ви використовуєте маршрутизатор, налаштуйте його для увімкнення UPnP/NAT-PMP/PCP або для перенаправлення порту на вашу систему."
 
-msgid "Failed to get a lobby response!"
-msgstr "Не вдалося отримати відповідь у лобі!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Формат файлу відтворення є новішим, ніж може підтримувати ця версія Warzone 2100."
 
@@ -3340,11 +3337,11 @@ msgstr "Кіборг озброєний ПУ 'Батіг'"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Кіборг озброєний Термітним Вогнеметом"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Кіборг, озброєний Термічним Вогнеметом"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Кіборг озброєний Термітним Вогнеметом"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Кіборг озброєний лазером 'Спалах'"
@@ -3658,11 +3655,11 @@ msgstr "Найкраще Уражає: Будівлі бази"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Найкращі цілі: Базові споруди, пускові установки, кіборги"
 
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Найкраще Уражає: Бункери та укріплення"
-
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Найкраще Уражає: Бункери та Вогневі позиції"
+
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Найкраще Уражає: Бункери та укріплення"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr "Найкраще Уражає: Бункери, захист, базові споруди"
@@ -5039,11 +5036,11 @@ msgstr "Вдосконалення лазерної оптики зменшує 
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Вогнева Позиція Фугасної Гаубиці"
 
-msgid "Incendiary howitzer emplacement"
-msgstr "Вогнева позиція Фугасної Мортири"
-
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Вогнева Позиція Фугасної Гаубиці"
+
+msgid "Incendiary howitzer emplacement"
+msgstr "Вогнева позиція Фугасної Мортири"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Фугасна Мортира може бути закріплена за сенсором"
@@ -5713,11 +5710,11 @@ msgstr "Доступна Нова Системна Будівля"
 msgid "New Systems Tower Available"
 msgstr "Доступна Нова Системна Вежа"
 
-msgid "New Systems Turret Available for Design"
-msgstr "Нова Системна Башта Доступна для Проектування"
-
 msgid "New Systems Turret Available For Design"
 msgstr "Нова Системна Башта Доступна для Конструювання"
+
+msgid "New Systems Turret Available for Design"
+msgstr "Нова Системна Башта Доступна для Проектування"
 
 msgid "New Thermal Emissions detection"
 msgstr "Нова Система Виявлення Термальної Емісії"
@@ -6598,11 +6595,11 @@ msgstr "Аналіз Даних Синаптичного Зв'язку Мк2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Аналіз Даних Синаптичного Зв'язку Мк3"
 
-msgid "Synaptic link data analysis"
-msgstr "Аналіз даних Синаптичного Зв'язку"
-
 msgid "Synaptic Link Data Analysis"
 msgstr "Аналіз Даних Синаптичного Зв'язку"
+
+msgid "Synaptic link data analysis"
+msgstr "Аналіз даних Синаптичного Зв'язку"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Технологія Генератора Перешкод Синаптичного Зв'язку"
@@ -7269,6 +7266,9 @@ msgstr " і "
 
 msgid "Spectators"
 msgstr "Глядачі"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr ""
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -8325,9 +8325,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -10142,7 +10139,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -11003,91 +11008,6 @@ msgstr "КАМПАНІЯ"
 msgid "GAMES"
 msgstr "ІГРИ"
 
-msgid "Refresh Games List"
-msgstr "Оновити Список Ігор"
-
-msgid "Filter Games List"
-msgstr ""
-
-msgid "Refreshing..."
-msgstr ""
-
-msgid "Searching"
-msgstr "Пошук"
-
-msgid "Connecting to the lobby server..."
-msgstr "Підключення до POP3 сервера"
-
-msgid "Game Name"
-msgstr "Назва гри"
-
-msgid "Map Name"
-msgstr "Назва карти"
-
-msgid "Status"
-msgstr "Становище"
-
-msgid "Can't connect to lobby server!"
-msgstr "Неможливо підключитися до сервера лобі!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Режими: %s"
-
-msgid "Mods: None!"
-msgstr ""
-
-#, c-format
-msgid "Version: %s"
-msgstr "Версія: %s"
-
-msgid "Join as spectator"
-msgstr "Приєднайтеся до глядачів"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Ваша версія Warzone несумісна з цією грою."
-
-msgid "[Password required]"
-msgstr "Потрібен пароль"
-
-msgid "[No Tanks]"
-msgstr "[Без танків]"
-
-msgid "[No Cyborgs]"
-msgstr "[Без Кіборгів]"
-
-msgid "[No VTOLs]"
-msgstr "[Без ВЗІПів]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Організовано %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Хостинг від %s —%s"
-
-msgid "Can't find any games for your version."
-msgstr "Не можу знайти жодної гри для вашої версії."
-
-msgid "There appears to be a game update available!"
-msgstr "Здається, наявне оновлення гри!"
-
-msgid "No games are available for your version"
-msgstr ""
-
-msgid "Wrong Game Version!"
-msgstr "Невірна Версія Гри!"
-
-msgid "You have an incompatible mod."
-msgstr "У вас несумісний мод."
-
-msgid "Host couldn't send file?"
-msgstr "Хост не зміг відправити файл?"
-
-msgid "Incorrect Password!"
-msgstr "Невірний Пароль!"
-
 msgid "Continue"
 msgstr ""
 
@@ -11143,6 +11063,12 @@ msgid "Music Manager"
 msgstr "Менеджер музики"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11615,6 +11541,93 @@ msgstr ""
 msgid "Waiting Room"
 msgstr ""
 
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Здається, наявне оновлення гри!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Ваша версія Warzone несумісна з цією грою."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Відправляється Карта: %u%% "
@@ -11729,6 +11742,9 @@ msgstr "Сутичка для Одного Гравця"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Назва гри"
+
 msgid "Click to see Map"
 msgstr "Натисни, щоб побачити Мапу"
 
@@ -11820,13 +11836,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
