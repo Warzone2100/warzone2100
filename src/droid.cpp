@@ -1114,13 +1114,23 @@ void droidUpdateShields(DROID *psDroid)
 UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
 {
 	const auto &psStats = psDroid->getBrainStats()->shield;
-	return psStats.initialShieldRegenTime - (psStats.shieldRegenTimeDec * getDroidLevel(psDroid));
+	auto levelBasedReduction = (psStats.shieldRegenTimeDec * getDroidLevel(psDroid));
+	if (levelBasedReduction >= psStats.initialShieldRegenTime)
+	{
+		return 0;
+	}
+	return psStats.initialShieldRegenTime - levelBasedReduction;
 }
 
 UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
 {
 	const auto &psStats = psDroid->getBrainStats()->shield;
-	return psStats.initialShieldInterruptRegenTime - (psStats.shieldInterruptRegenTimeDec * getDroidLevel(psDroid));
+	auto levelBasedReduction = (psStats.shieldInterruptRegenTimeDec * getDroidLevel(psDroid));
+	if (levelBasedReduction >= psStats.initialShieldInterruptRegenTime)
+	{
+		return 0;
+	}
+	return psStats.initialShieldInterruptRegenTime - levelBasedReduction;
 }
 
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
