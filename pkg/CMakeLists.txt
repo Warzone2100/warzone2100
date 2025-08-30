@@ -395,6 +395,23 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/platforms/macos/external/.*/")
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/vcpkg/")
 
 ######################
+# Ignore various extra files, not needed for build
+
+# Basis Universal: Ignore large test files + WebGL examples
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/basis_universal/test_files/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/basis_universal/webgl/")
+
+# GameNetworkingSockets: Ignore large test vectors
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/GameNetworkingSockets/tests/")
+
+# GameNetworkingSockets: Ignore folders only needed for old WebRTC module, which isn't used in our build
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/GameNetworkingSockets/src/external/abseil/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/GameNetworkingSockets/src/external/webrtc/")
+
+# SQLiteCpp: Ignore GTest submodule
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/3rdparty/SQLiteCpp/googletest/")
+
+######################
 # Configure Installer Version-info at Package Build-Time
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CPackConfigVersion.cmake.in
