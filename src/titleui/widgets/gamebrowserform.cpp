@@ -79,8 +79,7 @@ public:
 	std::vector<WzString> mods;
 	uint8_t joinedPlayers = 0;
 	uint8_t maxPlayers = 0;
-	uint16_t joinedSpectators = 0;
-	uint16_t maxSpectators = 0;
+	SpectatorInfo spectatorInfo;
 	bool isPrivate = false;
 	optional<AllianceType> alliancesMode = nullopt;
 	BLIND_MODE blindMode = BLIND_MODE::NONE;
@@ -661,14 +660,16 @@ class LobbyActionWidgets : public WIDGET
 {
 protected:
 	LobbyActionWidgets() { }
-	void initialize(bool spectateAvailable);
+	void initialize(const std::function<void()>& onSpectateHandler);
 	virtual void geometryChanged() override;
 public:
-	static std::shared_ptr<LobbyActionWidgets> make(bool spectateAvailable)
+	typedef std::function<void()> OnSpectateHandlerFunc;
+
+	static std::shared_ptr<LobbyActionWidgets> make(const OnSpectateHandlerFunc& onSpectateHandler)
 	{
 		class make_shared_enabler: public LobbyActionWidgets {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(spectateAvailable);
+		widget->initialize(onSpectateHandler);
 		return widget;
 	}
 	virtual int32_t idealWidth() override;
@@ -677,14 +678,20 @@ private:
 	std::shared_ptr<WzFrontendImageButton> watchButton;
 };
 
-void LobbyActionWidgets::initialize(bool spectateAvailable)
+void LobbyActionWidgets::initialize(const OnSpectateHandlerFunc& onSpectateHandler)
 {
 	watchButton = WzFrontendImageButton::make(IMAGE_EYE);
 	watchButton->setTip(_("Spectate Game"));
 	watchButton->setBorderDrawMode(WzFrontendImageButton::BorderDrawMode::Highlighted);
 	watchButton->setGeometry(0, 0, watchButton->idealWidth(), watchButton->idealHeight());
 	attach(watchButton);
-	if (!spectateAvailable)
+	if (onSpectateHandler)
+	{
+		watchButton->addOnClickHandler([onSpectateHandler](W_BUTTON&) {
+			onSpectateHandler();
+		});
+	}
+	else
 	{
 		watchButton->hide();
 	}
@@ -744,7 +751,7 @@ private:
 	void triggerAsyncGameListFetch();
 	void processAsyncGameListFetchResults(bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD);
 	void populateTableFromGameList();
-	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(const LobbyGameInfo& gameInfo);
+	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(size_t idx, const LobbyGameInfo& gameInfo);
 
 	std::shared_ptr<PopoverMenuWidget> createFiltersPopoverForm();
 	void displayFiltersOverlay(const std::shared_ptr<WIDGET>& psParent);
@@ -803,9 +810,7 @@ static inline LobbyGameInfo lobbyGAMESTRUCTtoLobbyGameInfo(const GAMESTRUCT &lob
 	info.mods = WzString(lobbyGame.modlist).split(", ");
 	info.joinedPlayers = lobbyGame.desc.dwCurrentPlayers;
 	info.maxPlayers = lobbyGame.desc.dwMaxPlayers;
-	auto spectatorInfo = SpectatorInfo::fromUint32(lobbyGame.desc.dwUserFlags[1]);
-	info.joinedSpectators = spectatorInfo.spectatorsJoined;
-	info.maxSpectators = spectatorInfo.totalSpectatorSlots;
+	info.spectatorInfo = SpectatorInfo::fromUint32(lobbyGame.desc.dwUserFlags[1]);
 	info.isPrivate = lobbyGame.privateGame != 0;
 	info.limits = lobbyGame.limits;
 
@@ -1013,7 +1018,7 @@ void LobbyBrowser::populateTableFromGameList()
 			continue;
 		}
 
-		auto columnWidgets = createLobbyGameRowColumnWidgets(gameInfo);
+		auto columnWidgets = createLobbyGameRowColumnWidgets(idx, gameInfo);
 		int32_t rowHeight = 0;
 		for (size_t i = 0; i < columnWidgets.size(); ++i)
 		{
@@ -1082,7 +1087,7 @@ void LobbyBrowser::populateTableFromGameList()
 	}
 }
 
-std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(const LobbyGameInfo& gameInfo)
+std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(size_t idx, const LobbyGameInfo& gameInfo)
 {
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 
@@ -1133,7 +1138,19 @@ std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidge
 	modsWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(modsWidg);
 
-	auto actionsWidg = LobbyActionWidgets::make(gameInfo.maxSpectators > 0);
+	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
+
+	LobbyActionWidgets::OnSpectateHandlerFunc onSpectateFunc = nullptr;
+	if (gameInfo.spectatorInfo.availableSpectatorSlots() > 0)
+	{
+		onSpectateFunc = [weakSelf, idx]() {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Parent no longer exists?");
+			strongSelf->joinLobbyGame(idx, true);
+		};
+	}
+
+	auto actionsWidg = LobbyActionWidgets::make(onSpectateFunc);
 	columnWidgets.push_back(actionsWidg);
 
 	return columnWidgets;
