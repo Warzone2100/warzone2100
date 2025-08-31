@@ -172,6 +172,9 @@ jobs:
     - name: (Release Publish) Fetch Release tarball details
       # Run on release publish event
       if: (github.event_name == 'release' && github.event.action == 'published') && (github.repository == 'Warzone2100/warzone2100')
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
       run: |
         WZ_RELEASE_TAG="${WZ_GITHUB_REF#refs/tags/}"
         # Grab the release tarball
