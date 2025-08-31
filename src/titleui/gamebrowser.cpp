@@ -78,6 +78,8 @@ std::shared_ptr<WzTitleUI> WzGameBrowserTitleUI::getParentTitleUI()
 
 TITLECODE WzGameBrowserTitleUI::run()
 {
+	screen_disableMapPreview();
+
 	widgRunScreen(screen);
 
 	widgDisplayScreen(screen); // show the widgets currently running
