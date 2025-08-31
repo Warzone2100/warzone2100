@@ -1,3 +1,8 @@
+2025-08-31: Version 4.6.0-beta4:
+ * Multiplayer:
+   * Fix: Map preview cleanup when returning to lobby browser (commit:281c08938ed521edfff72af20895705390237ba7, #4533)
+   * Fix: Lobby browser spectate button issues (commit:b8061a1072b43107a20e3c6f21cc31cd4f5d8212, #4533)
+
 2025-08-31: Version 4.6.0-beta3:
  * General:
    * Add: Add to brain.json: cmdExpRange, shieldRange to cap distance for when shields regenerate and rank to be given to Commanders (commit:903a57b93f45c65bd8b9a65798d8442b6535332e, #4493)
