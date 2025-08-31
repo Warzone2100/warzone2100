@@ -939,7 +939,10 @@ jobs:
         env:
           SIGN_STEP_OUTCOME: ${{ steps.signpath-sign.outcome }}
         run: |
-          $signedfiles=false; if ("${env:SIGN_STEP_OUTCOME}" -eq "success") { $signedfiles=true; }
+          $signedfiles = "false"
+          if ("${env:SIGN_STEP_OUTCOME}" -eq "success") {
+            $signedfiles = "true"
+          }
           echo "signedfiles=${signedfiles}"
           echo "signedfiles=${signedfiles}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
   upload-release-assets:
