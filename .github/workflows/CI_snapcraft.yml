@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
     - name: Configure Repo Checkout
@@ -126,7 +126,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
         subject-path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'

@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Propulsions")
+_("Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs.")
+_("When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes.")
+_("Additionally, you can find descriptions of each propulsion in this guide.")
+_("Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units.")

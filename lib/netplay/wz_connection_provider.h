@@ -111,4 +111,12 @@ public:
 	virtual void processConnectionStateChanges() = 0;
 
 	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const = 0;
+
+	/// <summary>
+	/// Perform generic cleanup actions for a given connection, i.e.: update the bookkeeping
+	/// information for the connection provider, flush any pending writes, remove the connection
+	/// from owning poll group (if there's any), etc.
+	/// </summary>
+	/// <param name="conn">Connection object to dispose of.</param>
+	virtual void disposeConnection(IClientConnection* conn) = 0;
 };

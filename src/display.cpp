@@ -115,7 +115,8 @@ static bool	anyDroidSelected(UDWORD player);
 static bool cyborgDroidSelected(UDWORD player);
 static bool bInvertMouse = true;
 static bool bRightClickOrders = false;
-static bool bMiddleClickRotate = false;
+optional<MOUSE_KEY_CODE> rotateMouseKey = MOUSE_RMB;
+optional<MOUSE_KEY_CODE> panMouseKey = nullopt;
 static bool bDrawShadows = true;
 static bool bEdgeScrollOutsideWindowBounds = DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
@@ -134,11 +135,11 @@ static SDWORD	rotX;
 static SDWORD	rotY;
 std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::make_unique<ValueTracker>();
 std::unique_ptr<ValueTracker> rotationVerticalTracker = std::make_unique<ValueTracker>();
-static uint32_t scrollRefTime;
-static float	scrollSpeedLeftRight; //use two directions and add them because its simple
-static float	scrollStepLeftRight;
-static float	scrollSpeedUpDown;
-static float	scrollStepUpDown;
+static std::chrono::steady_clock::time_point scrollRefTime;
+static double	scrollSpeedLeftRight; //use two directions and add them because its simple
+static double	scrollStepLeftRight;
+static double	scrollSpeedUpDown;
+static double	scrollStepUpDown;
 static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
 static bool	ignoreRMBC	= true;
@@ -299,12 +300,6 @@ void	setInvertMouseStatus(bool val)
 	bInvertMouse = val;
 }
 
-
-#define MOUSE_ORDER (bRightClickOrders?MOUSE_RMB:MOUSE_LMB)
-#define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
-#define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
-#define MOUSE_PAN (bMiddleClickRotate?MOUSE_RMB:MOUSE_MMB)
-
 bool	getRightClickOrders()
 {
 	return bRightClickOrders;
@@ -312,17 +307,74 @@ bool	getRightClickOrders()
 
 void	setRightClickOrders(bool val)
 {
+	if (val == bRightClickOrders)
+	{
+		return;
+	}
+
 	bRightClickOrders = val;
+	if (bRightClickOrders)
+	{
+		// Check for conflicting rotate / pan mouse button settings, and reset to a saner default
+		if (rotateMouseKey.value_or(MOUSE_END) == MOUSE_RMB)
+		{
+			setRotateMouseKey(MOUSE_MMB);
+		}
+		if (panMouseKey.value_or(MOUSE_END) == MOUSE_RMB)
+		{
+			panMouseKey = nullopt;
+		}
+	}
 }
 
-bool	getMiddleClickRotate()
+optional<MOUSE_KEY_CODE> getRotateMouseKey()
 {
-	return bMiddleClickRotate;
+	return rotateMouseKey;
 }
 
-void	setMiddleClickRotate(bool val)
+bool setRotateMouseKey(optional<MOUSE_KEY_CODE> key)
 {
-	bMiddleClickRotate = val;
+	if (!key.has_value())
+	{
+		rotateMouseKey = key;
+		return true;
+	}
+
+	// otherwise, check for conflicts
+	if (key.value() == MOUSE_LMB) { return false; }
+	if (bRightClickOrders && key.value() == MOUSE_RMB) { return false; }
+	if (key == panMouseKey)
+	{
+		panMouseKey = nullopt;
+	}
+
+	rotateMouseKey = key;
+	return true;
+}
+
+optional<MOUSE_KEY_CODE> getPanMouseKey()
+{
+	return panMouseKey;
+}
+
+bool setPanMouseKey(optional<MOUSE_KEY_CODE> key)
+{
+	if (!key.has_value())
+	{
+		panMouseKey = key;
+		return true;
+	}
+
+	// otherwise, check for conflicts
+	if (key.value() == MOUSE_LMB) { return false; }
+	if (bRightClickOrders && key.value() == MOUSE_RMB) { return false; }
+	if (key == rotateMouseKey)
+	{
+		rotateMouseKey = nullopt;
+	}
+
+	panMouseKey = key;
+	return true;
 }
 
 bool	getDrawShadows()
@@ -677,13 +729,13 @@ void processMouseClickInput()
 	{
 		cancelDeliveryRepos();
 	}
-	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !isRadarDragging() && !getRadarTrackingStatus())
+	if (rotateMouseKey.has_value() && mouseDrag(rotateMouseKey.value(), (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
 		rotationVerticalTracker->startTracking((UWORD)playerPos.r.x);
 		rotationHorizontalTracker->startTracking((UWORD)playerPos.r.y); // negative values caused problems with float conversion
 		rotActive = true;
 	}
-	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !isRadarDragging() && !getRadarTrackingStatus())
+	if (panMouseKey.has_value() && mouseDrag(panMouseKey.value(), (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
 		panXTracker->startTracking(playerPos.p.x);
 		panZTracker->startTracking(playerPos.p.z);
@@ -935,14 +987,14 @@ void processMouseClickInput()
 	}
 }
 
-static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
+static void calcScroll(double *y, double *dydt, double accel, double decel, double targetVelocity, double dt)
 {
 	double tMid;
 
 	// Stop instantly, if trying to change direction.
 	if (targetVelocity * *dydt < -1e-8f)
 	{
-		*dydt = 0;
+		*dydt = 0.0;
 	}
 
 	if (targetVelocity < *dydt)
@@ -952,28 +1004,28 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	}
 
 	// Decelerate if needed.
-	tMid = (0 - *dydt) / decel;
-	CLIP(tMid, 0, dt);
-	*y += static_cast<float>(*dydt * tMid + decel / 2 * tMid * tMid);
+	tMid = (0.0 - *dydt) / decel;
+	CLIP(tMid, 0.0, dt);
+	*y += (*dydt * tMid + decel / 2.0 * tMid * tMid);
 	if (cameraAccel)
 	{
-		*dydt += static_cast<float>(decel * tMid);
+		*dydt += (decel * tMid);
 	}
-	dt -= static_cast<float>(tMid);
+	dt -= (tMid);
 
 	// Accelerate if needed.
 	tMid = (targetVelocity - *dydt) / accel;
-	CLIP(tMid, 0, dt);
-	*y += static_cast<float>(*dydt * tMid + accel / 2 * tMid * tMid);
+	CLIP(tMid, 0.0, dt);
+	*y += (*dydt * tMid + accel / 2.0 * tMid * tMid);
 	if (cameraAccel)
 	{
-		*dydt += static_cast<float>(accel * tMid);
+		*dydt += accel * tMid;
 	}
 	else
 	{
 		*dydt = targetVelocity;
 	}
-	dt -= static_cast<float>(tMid);
+	dt -= tMid;
 
 	// Continue at target velocity.
 	*y += *dydt * dt;
@@ -986,12 +1038,11 @@ static inline bool shouldProcessEdgeScroll()
 
 static void handleCameraScrolling()
 {
-	SDWORD	xDif, yDif;
-	uint32_t timeDiff;
-	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
+	int	xDif, yDif;
+	double scroll_zoom_factor = 1.0 + 2.0 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 
-	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
-	float scaled_accel = scaled_max_scroll_speed / 2;
+	double scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2.0);
+	double scaled_accel = scaled_max_scroll_speed / 2.0;
 
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
@@ -1036,21 +1087,25 @@ static void handleCameraScrolling()
 	}
 
 	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
-	timeDiff = wzGetTicks() - scrollRefTime;
-	if (timeDiff >= 8) // throttle max update rate to avoid really jerky scrolling
+	auto now = std::chrono::steady_clock::now();
+	auto timeDiff = now - scrollRefTime;
+	if (std::chrono::duration_cast<std::chrono::nanoseconds>(timeDiff) >= std::chrono::nanoseconds(4000000)) // throttle max update rate to avoid really jerky scrolling
 	{
-		scrollRefTime += timeDiff;
-		timeDiff = std::min<unsigned>(timeDiff, 500);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
+		scrollRefTime = now;
 
-		scrollStepLeftRight = 0;
-		scrollStepUpDown = 0;
-		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
-		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+		std::chrono::duration<double> timeDiff_as_seconds_double = std::chrono::duration_cast<std::chrono::duration<double>>(timeDiff);
+		auto timeDiff_double = timeDiff_as_seconds_double.count();
+		timeDiff_double = std::min(timeDiff_double, 0.5);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
+
+		scrollStepLeftRight = 0.0;
+		scrollStepUpDown = 0.0;
+		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2.0 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, timeDiff_double);
+		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2.0 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, timeDiff_double);
 
 		/* Get x component of movement */
-		xDif = (int) (cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
+		xDif = (int) (cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight + sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
 		/* Get y component of movement */
-		yDif = (int) (sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
+		yDif = (int) (sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight - cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
 
 		/* Adjust player's position by these components */
 		playerPos.p.x += xDif;
@@ -1075,9 +1130,9 @@ void displayRenderLoop()
  */
 void resetScroll()
 {
-	scrollRefTime = wzGetTicks();
-	scrollSpeedUpDown = 0.0f;
-	scrollSpeedLeftRight = 0.0f;
+	scrollRefTime = std::chrono::steady_clock::now();
+	scrollSpeedUpDown = 0.0;
+	scrollSpeedLeftRight = 0.0;
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
 }
@@ -1164,15 +1219,15 @@ void displayWorld()
 
 	shakeUpdate();
 
-	if (panActive)
+	if (panMouseKey.has_value() && panActive)
 	{
-		if(!mouseDown(MOUSE_PAN)){
+		if(!mouseDown(panMouseKey.value())){
 			panActive = false;
 		} else {
 			int mouseDeltaX = mouseX() - panMouseX;
 			int mouseDeltaY = mouseY() - panMouseY;
 
-			int panningSpeed = std::min(mapWidth, mapHeight) / 10;
+			int panningSpeed = std::max(1, war_GetCameraSpeed() / 200);
 
 			float horizontalMovement = panXTracker->setTargetDelta(mouseDeltaX * panningSpeed)->update()->getCurrentDelta();
 			float verticalMovement = -1 * panZTracker->setTargetDelta(mouseDeltaY * panningSpeed)->update()->getCurrentDelta();
@@ -1187,30 +1242,32 @@ void displayWorld()
 		}
 	}
 
-	if (mouseDown(MOUSE_ROTATE) && rotActive)
+	if (rotateMouseKey.has_value() && rotActive)
 	{
-		float mouseDeltaX = mouseX() - rotX;
-		float mouseDeltaY = mouseY() - rotY;
-
-		playerPos.r.y = rotationHorizontalTracker->setTargetDelta(static_cast<int>(DEG(-mouseDeltaX) / 4))->update()->getCurrent();
-
-		if(bInvertMouse)
+		if (mouseDown(rotateMouseKey.value()))
 		{
-			mouseDeltaY *= -1;
+			float mouseDeltaX = mouseX() - rotX;
+			float mouseDeltaY = mouseY() - rotY;
+
+			playerPos.r.y = rotationHorizontalTracker->setTargetDelta(static_cast<int>(DEG(-mouseDeltaX) / 4))->update()->getCurrent();
+
+			if(bInvertMouse)
+			{
+				mouseDeltaY *= -1;
+			}
+
+			playerPos.r.x = rotationVerticalTracker->setTargetDelta(static_cast<int>(DEG(mouseDeltaY) / 4))->update()->getCurrent();
+			playerPos.r.x = glm::clamp(playerPos.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 		}
-
-		playerPos.r.x = rotationVerticalTracker->setTargetDelta(static_cast<int>(DEG(mouseDeltaY) / 4))->update()->getCurrent();
-		playerPos.r.x = glm::clamp(playerPos.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
-	}
-
-	if (!mouseDown(MOUSE_ROTATE) && rotActive)
-	{
-		rotActive = false;
-		ignoreRMBC = true;
-		pos.x = playerPos.r.x;
-		pos.y = playerPos.r.y;
-		pos.z = playerPos.r.z;
-		camInformOfRotation(&pos);
+		else
+		{
+			rotActive = false;
+			ignoreRMBC = true;
+			pos.x = playerPos.r.x;
+			pos.y = playerPos.r.y;
+			pos.z = playerPos.r.z;
+			camInformOfRotation(&pos);
+		}
 	}
 
 	draw3DScene();
@@ -2041,7 +2098,7 @@ void	dealWithLMB()
 		        tileIsExplored(psTile) ? "Explored" : "Unexplored",
 		        mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 		        (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
-				(int)psTile->ambientOcclusion, getCurrentLightmapData()(mouseTileX, mouseTileY).rgba,
+				(int)psTile->ambientOcclusion, getCurrentLightmapData()(mouseTileX, mouseTileY).rgba(),
 		        aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
 		        (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer],
 				TileNumber_tile(psTile->texture), (TILE_HAS_DECAL(psTile)) ? "y" : "n",

@@ -86,8 +86,6 @@ typedef struct _poptContext
 static bool wz_autogame = false;
 static std::string wz_saveandquit;
 static std::string wz_test;
-static std::string wz_autoratingUrl;
-static bool wz_autoratingEnable = false;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
@@ -339,7 +337,6 @@ typedef enum
 	CLI_SKIRMISH,
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
-	CLI_AUTORATING,
 	CLI_AUTOHEADLESS,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
@@ -435,7 +432,6 @@ static const struct poptOption *getOptionsTable()
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
-		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url, when hosting"), N_("autorating") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1080,16 +1076,6 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			wz_test = token;
 			break;
 
-		case CLI_AUTORATING:
-			token = poptGetOptArg(poptCon);
-			if (token == nullptr)
-			{
-				qFatal("Bad autorating server");
-			}
-			wz_autoratingUrl = token;
-			debug(LOG_INFO, "Using \"%s\" for ratings.", wz_autoratingUrl.c_str());
-			break;
-
 		case CLI_AUTOHEADLESS:
 			wz_cli_headless = true;
 			setHeadlessGameMode(true);
@@ -1398,23 +1384,6 @@ const std::string &saveandquit_enabled()
 const std::string &wz_skirmish_test()
 {
 	return wz_test;
-}
-
-void setAutoratingUrl(std::string url) {
-	wz_autoratingUrl = url;
-}
-
-std::string getAutoratingUrl() {
-	return wz_autoratingUrl;
-}
-
-void setAutoratingEnable(bool e)
-{
-	wz_autoratingEnable = e;
-}
-
-bool getAutoratingEnable() {
-	return wz_autoratingEnable;
 }
 
 bool streamer_spectator_mode()

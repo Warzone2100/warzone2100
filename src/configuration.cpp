@@ -55,7 +55,6 @@
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
-#include "clparse.h" // for autoratingUrl
 #include "terrain.h"
 #include "hci/groups.h"
 
@@ -307,6 +306,23 @@ bool loadConfig()
 		return iniSectionGetString(iniGeneral, key, defaultValue);
 	};
 
+	auto iniGetMouseKeyCode = [&iniGeneral](const std::string& key, optional<MOUSE_KEY_CODE> defaultValue) -> optional<MOUSE_KEY_CODE> {
+		auto intVal = iniSectionGetInteger(iniGeneral, key);
+		if (!intVal.has_value())
+		{
+			return defaultValue;
+		}
+		if (intVal.value() >= MOUSE_LMB && intVal.value() <= MOUSE_X2) // deliberately exclude mouse MOUSE_WUP + MOUSE_WDN
+		{
+			return static_cast<MOUSE_KEY_CODE>(intVal.value());
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid MOUSE_KEY_CODE value: %d", intVal.value());
+			return defaultValue;
+		}
+	};
+
 	auto iniGetPlayerLeaveMode = [&iniGeneral](const std::string& key, PLAYER_LEAVE_MODE defaultValue) -> optional<PLAYER_LEAVE_MODE> {
 		auto intVal = iniSectionGetInteger(iniGeneral, key);
 		if (!intVal.has_value())
@@ -392,7 +408,21 @@ bool loadConfig()
 	war_setSoundEnabled(iniGetBool("sound", true).value());
 	setInvertMouseStatus(iniGetBool("mouseflip", true).value());
 	setRightClickOrders(iniGetBool("RightClickOrders", false).value());
-	setMiddleClickRotate(iniGetBool("MiddleClickRotate", false).value());
+	setPanMouseKey(iniGetMouseKeyCode("mouseKeyPan", getPanMouseKey()));
+	if (!createdConfigFile && configVersion < 3)
+	{
+		// Upgrade old MiddleClickRotate value
+		auto oldMiddleClickRotateValue = iniGetBool("MiddleClickRotate", false).value();
+		if (!setRotateMouseKey((oldMiddleClickRotateValue) ? MOUSE_MMB : MOUSE_RMB) && !oldMiddleClickRotateValue)
+		{
+			// if unable to set (because of conflict, presumably with RightClickOrders), default to MMB
+			setRotateMouseKey(MOUSE_MMB);
+		}
+	}
+	else
+	{
+		setRotateMouseKey(iniGetMouseKeyCode("mouseKeyRotate", getRotateMouseKey()));
+	}
 	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
@@ -410,8 +440,6 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
-	setAutoratingUrl(iniGetString("autoratingUrlV2", WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL).value());
-	setAutoratingEnable(iniGetBool("autorating", false).value());
 	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
 	mpSetServerName(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
@@ -599,6 +627,7 @@ bool loadConfig()
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
 	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
+	war_setAutoNotReadyKickSeconds(iniGetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	war_setMaxReplaysSaved(iniGetInteger("maxReplaysSaved", war_getMaxReplaysSaved()).value());
 	war_setOldLogsLimit(iniGetInteger("oldLogsLimit", war_getOldLogsLimit()).value());
@@ -639,6 +668,8 @@ bool loadConfig()
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
+
+	war_setPlayAudioCue_GroupReporting(iniGetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting()).value());
 
 	auto hostConnProvider = war_getHostConnectionProvider();
 	if (iniGeneral.has("hostConnectionProvider"))
@@ -693,6 +724,14 @@ bool saveConfig()
 		}
 		iniGeneral.SetString(key, strVal);
 	};
+	auto iniSetMouseKeyOpt = [&iniGeneral](const std::string& key, optional<MOUSE_KEY_CODE> code) {
+		if (!code.has_value())
+		{
+			iniSectionSetInteger(iniGeneral, key, 0);
+			return;
+		}
+		iniSectionSetInteger(iniGeneral, key, static_cast<int>(code.value()));
+	};
 
 	// //////////////////////////
 	// voicevol, fxvol and cdvol
@@ -725,7 +764,8 @@ bool saveConfig()
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
-	iniSetInteger("MiddleClickRotate", (int)(getMiddleClickRotate()));
+	iniSetMouseKeyOpt("mouseKeyPan", getPanMouseKey());
+	iniSetMouseKeyOpt("mouseKeyRotate", getRotateMouseKey());
 	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
@@ -749,8 +789,6 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	iniSetString("autoratingUrlV2", getAutoratingUrl());
-	iniSetBool("autorating", getAutoratingEnable());
 	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
 	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
 	iniSetString("server_name", mpGetServerName());
@@ -810,6 +848,7 @@ bool saveConfig()
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
 	iniSetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds());
+	iniSetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
 	iniSetInteger("maxReplaysSaved", war_getMaxReplaysSaved());
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
@@ -821,6 +860,7 @@ bool saveConfig()
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
+	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

@@ -46,7 +46,7 @@ public:
 	const std::shared_ptr<WIDGET>& getItem() const;
 	bool getCloseMenuOnClick() const;
 
-	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	virtual void geometryChanged() override;
 
 	virtual int32_t idealWidth() override;

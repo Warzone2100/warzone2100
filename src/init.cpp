@@ -101,6 +101,7 @@
 #include "version.h"
 #include "hci/teamstrategy.h"
 #include "screens/guidescreen.h"
+#include "titleui/widgets/gamebrowserform.h"
 #include "wzapi.h"
 
 #include "wzphysfszipioprovider.h"
@@ -1164,6 +1165,8 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
+	shutdownLobbyBrowserFetches();
+	NETshutdown();		// MUST come after widgShutDown (as widget screens might have connections, etc)
 	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
@@ -1179,6 +1182,8 @@ void systemShutdown()
 
 bool frontendInitialise(const char *ResourceFile)
 {
+	frontendIsShuttingDown();
+
 	debug(LOG_WZ, "== Initializing frontend == : %s", ResourceFile);
 
 	if (!InitialiseGlobals())				// Initialise all globals and statics everywhere.
@@ -1278,6 +1283,7 @@ bool frontendShutdown()
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
+	FrontImages = nullptr;
 	frontendIsShuttingDown();
 
 	if (!objShutdown())

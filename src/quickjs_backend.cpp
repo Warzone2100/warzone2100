@@ -157,6 +157,12 @@ static void QJSRuntimeFree_LeakHandler_Error(const char* msg)
 	debug(LOG_ERROR, "QuickJS FreeRuntime leak: %s", msg);
 }
 
+#if defined(__has_feature)
+  #define QUICKJS_HAS_FEATURE(x) __has_feature(x)
+#else
+  #define QUICKJS_HAS_FEATURE(x) 0
+#endif
+
 class quickjs_scripting_instance : public wzapi::scripting_instance
 {
 public:
@@ -165,6 +171,12 @@ public:
 	{
 		rt = JS_NewRuntime();
 		ASSERT(rt != nullptr, "JS_NewRuntime failed?");
+
+#if defined(__SANITIZE_ADDRESS__) || QUICKJS_HAS_FEATURE(address_sanitizer)
+		#pragma message("quickjs_backend: Script stack size limit disabled due to Address Sanitizer")
+		debug(LOG_INFO, "Script stack size limit disabled due to Address Sanitizer");
+		JS_SetMaxStackSize(rt, 0);
+#endif
 
 		JSLimitedContextOptions ctxOptions = { };
 		ctxOptions.baseObjects = true;
@@ -3122,6 +3134,7 @@ IMPL_JS_FUNC(enumDroid, wzapi::enumDroid)
 IMPL_JS_FUNC(dump, wzapi::dump)
 IMPL_JS_FUNC(debug, wzapi::debugOutputStrings)
 IMPL_JS_FUNC(pickStructLocation, wzapi::pickStructLocation)
+IMPL_JS_FUNC(structureCanFit, wzapi::structureCanFit)
 IMPL_JS_FUNC(structureIdle, wzapi::structureIdle)
 IMPL_JS_FUNC(removeStruct, wzapi::removeStruct)
 IMPL_JS_FUNC(removeObject, wzapi::removeObject)
@@ -3479,6 +3492,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(queuedPower, 1); // WZAPI
 	JS_REGISTER_FUNC2(isStructureAvailable, 1, 2); // WZAPI
 	JS_REGISTER_FUNC2(pickStructLocation, 4, 5); // WZAPI
+	JS_REGISTER_FUNC2(structureCanFit, 3, 4); // WZAPI
 	JS_REGISTER_FUNC(droidCanReach, 3); // WZAPI
 	JS_REGISTER_FUNC(propulsionCanReach, 5); // WZAPI
 	JS_REGISTER_FUNC(terrainType, 2); // WZAPI

@@ -95,7 +95,7 @@ bool structureStatsShutDown();
 int requestOpenGate(STRUCTURE *psStructure);
 int gateCurrentOpenHeight(const STRUCTURE *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
 
-int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t structureDamage(STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
 void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate);
@@ -218,7 +218,7 @@ if not a good combination!*/
 bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
 
 /*calculates the damage caused to the resistance levels of structures*/
-bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer);
+bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer);
 
 /* EW works differently in multiplayer mode compared with single player.*/
 bool validStructResistance(const STRUCTURE *psStruct);
@@ -252,9 +252,6 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 
 //returns the quantity of a specific template in the production list
 ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
-
-//looks through a players production list to see if a command droid is being built
-UBYTE checkProductionForCommand(UBYTE player);
 
 //check that delivery points haven't been put down in invalid location
 void checkDeliveryPoints(UDWORD version);

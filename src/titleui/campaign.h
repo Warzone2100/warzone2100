@@ -53,4 +53,7 @@ private:
 	std::shared_ptr<WIDGET> displayedPanel;
 };
 
+const char* difficultyLevelToString(DIFFICULTY_LEVEL difficulty);
+const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty);
+
 #endif // __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__

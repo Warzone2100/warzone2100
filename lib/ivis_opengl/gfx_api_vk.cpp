@@ -70,8 +70,8 @@ const uint32_t minSupportedVulkanVersion = VK_API_VERSION_1_0;
 // For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
 const uint32_t maxRequestableInstanceVulkanVersion = VK_API_VERSION_1_0;
 #else
-// For regular builds, currently limit to: Vulkan 1.1
-const uint32_t maxRequestableInstanceVulkanVersion = (uint32_t)VK_MAKE_VERSION(1, 1, 0);
+// For regular builds, currently limit to: Vulkan 1.3
+const uint32_t maxRequestableInstanceVulkanVersion = (uint32_t)VK_MAKE_VERSION(1, 3, 0);
 #endif
 
 const size_t MAX_FRAMES_IN_FLIGHT = 2;
@@ -154,12 +154,20 @@ const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulk
 	// avoid crashes / bugs caused by these layers
 	, {_vkl_env_text("DISABLE_FPSMON_LAYER"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_LAYER"), _vkl_env_text("1"), true}
-	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_RTSS_LAYER"), _vkl_env_text("1"), true} // RTSS
 	, {_vkl_env_text("DISABLE_VULKAN_OBS_CAPTURE"), _vkl_env_text("1"), true} // OBS
+	, {_vkl_env_text("DISABLE_TWITCH_VULKAN_OVERLAY"), _vkl_env_text("1"), true} // Twitch Studio (discontinued)
+	, {_vkl_env_text("DISABLE_VULKAN_OW_OVERLAY_LAYER"), _vkl_env_text("1"), true} // OverWolf
 	, {_vkl_env_text("DISABLE_VULKAN_OW_OBS_CAPTURE"), _vkl_env_text("1"), true} // OverWolf
 	, {_vkl_env_text("VK_LAYER_bandicam_helper_DEBUG_1"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_SAMPLE_LAYER"), _vkl_env_text("1"), true} // AgaueEye
 	, {_vkl_env_text("DISABLE_GAMEPP_LAYER"), _vkl_env_text("1"), true} // Gamepp
+	, {_vkl_env_text("DISABLE_VK_LAYER_TENCENT_wegame_cross_overlay_1"), _vkl_env_text("1"), true} // wegame cross
+	, {_vkl_env_text("DISABLE_VK_LAYER_reshade_1"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VK_LAYER_GPUOpen_GRS"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VKBASALT"), _vkl_env_text("1"), true}
+	// Disable this layer to avoid various issues enumerating all devices on systems with AMD iGPU + dedicated graphics card
+	, {_vkl_env_text("DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1"), _vkl_env_text("1"), true}
 };
 
 #if defined(VK_EXT_layer_settings)
@@ -281,7 +289,11 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	}
 
 	// Display a message and prompt the user to try a different graphics backend next time
-	wzPromptToChangeGfxBackendOnFailure("Failed with error: " + vk::to_string(reason));
+	std::string additionalErrorDetails = "Failed with error: " + vk::to_string(reason);
+	if (!wzPromptToChangeGfxBackendOnFailure(additionalErrorDetails))
+	{
+		wzDisplayFatalGfxBackendFailure(additionalErrorDetails);
+	}
 	abort();
 }
 
@@ -3477,6 +3489,7 @@ std::vector<vk::LayerSettingEXT> VkRoot::initLayerSettings()
 bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const char*>& extensions, const std::vector<const char*>& _layers, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr)
 {
 	appInfo = vk::ApplicationInfo()
+	.setPNext(nullptr)
 	.setPApplicationName("Warzone2100")
 	.setApplicationVersion(1)
 	.setPEngineName("Warzone2100")
@@ -3485,6 +3498,8 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 
 	// Now we can make the Vulkan instance
 	instanceCreateInfo = vk::InstanceCreateInfo()
+	  .setPNext(nullptr)
+	  .setFlags({})
 	  .setPpEnabledLayerNames(_layers.data())
 	  .setEnabledLayerCount(static_cast<uint32_t>(_layers.size()))
 	  .setPApplicationInfo(&appInfo)
@@ -3579,6 +3594,92 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 	}
 
 	return true;
+}
+
+struct VulkanDeviceBlocklistEntry
+{
+	struct VersionRange
+	{
+		optional<uint32_t> minVersion;
+		optional<uint32_t> maxVersion;
+
+		bool isWithinRange(uint32_t version) const;
+	};
+	optional<uint32_t> vendorID;
+	optional<uint32_t> deviceID;
+	optional<VersionRange> driverVersion;
+	optional<VersionRange> apiVersion;
+};
+
+bool VulkanDeviceBlocklistEntry::VersionRange::isWithinRange(uint32_t version) const
+{
+	if (minVersion.has_value() && version < minVersion.value())
+	{
+		return false;
+	}
+	if (maxVersion.has_value() && version > maxVersion.value())
+	{
+		return false;
+	}
+	return minVersion.has_value() || maxVersion.has_value();
+}
+
+inline constexpr uint32_t kVendorIdIntel = 0x8086;
+
+constexpr VulkanDeviceBlocklistEntry vulkanDeviceBlocklist[] = {
+	// Block old Intel drivers due to crashes (by checking for ones that support < Vulkan 1.1.0 - these should be very old)
+	{ kVendorIdIntel, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 1, 0))-1} }
+};
+
+static bool isOnVulkanDeviceBlocklist(const vk::PhysicalDeviceProperties& deviceProperties)
+{
+	for (const auto& blocklistEntry : vulkanDeviceBlocklist)
+	{
+		bool matchedAValue = false;
+
+		if (blocklistEntry.vendorID.has_value())
+		{
+			if (deviceProperties.vendorID != blocklistEntry.vendorID.value())
+			{
+				continue;
+			}
+			matchedAValue = true;
+		}
+
+		if (blocklistEntry.deviceID.has_value())
+		{
+			if (deviceProperties.deviceID != blocklistEntry.deviceID.value())
+			{
+				continue;
+			}
+			matchedAValue = true;
+		}
+
+		if (blocklistEntry.driverVersion.has_value())
+		{
+			if (!blocklistEntry.driverVersion.value().isWithinRange(deviceProperties.driverVersion))
+			{
+				continue;
+			}
+			matchedAValue = true;
+		}
+
+		if (blocklistEntry.apiVersion.has_value())
+		{
+			if (!blocklistEntry.apiVersion.value().isWithinRange(deviceProperties.apiVersion))
+			{
+				continue;
+			}
+			matchedAValue = true;
+		}
+
+		if (matchedAValue)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 // WZ-specific functions for rating / determining requirements
@@ -3698,6 +3799,12 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	catch (const vk::SystemError& e)
 	{
 		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: querySwapChainSupport failed with error: %s", deviceProperties.deviceID, deviceProperties.deviceName.data(), e.what());
+		return 0;
+	}
+
+	if (isOnVulkanDeviceBlocklist(deviceProperties))
+	{
+		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: on Vulkan blocklist - please update your driver", deviceProperties.deviceID, deviceProperties.deviceName.data());
 		return 0;
 	}
 
@@ -4227,7 +4334,7 @@ gfx_api::context::swap_interval_mode from_vk_presentmode(vk::PresentModeKHR pres
 	return gfx_api::context::swap_interval_mode::vsync; // prevent warning
 }
 
-bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
+bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode, const SetSwapIntervalCompletionHandler& completionHandler)
 {
 	ASSERT(physicalDevice, "Physical device is null");
 	ASSERT(surface, "Surface is null");
@@ -4248,38 +4355,8 @@ bool VkRoot::setSwapInterval(gfx_api::context::swap_interval_mode newSwapMode)
 		return true;
 	}
 
-	// set swapMode
-	swapMode = newSwapMode;
-
-	// Destroy + recreate swapchain
-	destroySwapchainAndSwapchainSpecificStuff(false);
-	try {
-		createSwapchain();
-	}
-	catch (const vk::SystemError &e)
-	{
-		// Encountered an unrecoverable error trying to create the swapchain
-		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug(LOG_ERROR, "createSwapchain() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-		handleUnrecoverableError(resultErr);
-	}
-	catch (const std::exception &e)
-	{
-		// Encountered some other exception (possibly bad_alloc, etc)
-		debug(LOG_FATAL, "createSwapchain() failed with an exception: %s", e.what());
-		return false;
-	}
-
-	try {
-		rebuildPipelinesIfNecessary();
-	}
-	catch (const vk::SystemError &e)
-	{
-		// Encountered an unrecoverable error trying to rebuild pipelines
-		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug(LOG_ERROR, "rebuildPipelinesIfNecessary() failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-		handleUnrecoverableError(resultErr);
-	}
+	// queue swap-mode change
+	queuedSwapModeChange = { newSwapMode, completionHandler };
 	return true;
 }
 
@@ -4848,12 +4925,12 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		return false;
 	}
 	physDeviceProps = physicalDevice.getProperties(vkDynLoader);
-	debug(LOG_3D, "Picking device: %s", physDeviceProps.deviceName.data());
-	debug(LOG_3D, "- apiVersion: %s", VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion).c_str());
-	debug(LOG_3D, "- driverVersion: %" PRIu32, physDeviceProps.driverVersion);
-	debug(LOG_3D, "- vendorID: %" PRIu32, physDeviceProps.vendorID);
-	debug(LOG_3D, "- deviceID: %" PRIu32, physDeviceProps.deviceID);
-	debug(LOG_3D, "- deviceType: %s", to_string(physDeviceProps.deviceType).c_str());
+	debug(LOG_INFO, "Picking device: %s", physDeviceProps.deviceName.data());
+	debug(LOG_INFO, "- apiVersion: %s", VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion).c_str());
+	debug(LOG_INFO, "- driverVersion: %" PRIu32, physDeviceProps.driverVersion);
+	debug(LOG_INFO, "- vendorID: %" PRIu32, physDeviceProps.vendorID);
+	debug(LOG_INFO, "- deviceID: %" PRIu32, physDeviceProps.deviceID);
+	debug(LOG_INFO, "- deviceType: %s", to_string(physDeviceProps.deviceType).c_str());
 	formattedRendererInfoString = calculateFormattedRendererInfoString(); // must be called after physDeviceProps is populated
 	physDeviceFeatures = physicalDevice.getFeatures(vkDynLoader);
 	memprops = physicalDevice.getMemoryProperties(vkDynLoader);
@@ -4940,7 +5017,11 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		debug(LOG_INFO, "Output_SurfaceInformation failed: %s", e.what());
 	}
 
-	getQueueFamiliesInfo();
+	if (!getQueueFamiliesInfo())
+	{
+		debug(LOG_ERROR, "getQueueFamiliesInfo() failed");
+		return false;
+	}
 
 	if (!createLogicalDevice())
 	{
@@ -5117,20 +5198,28 @@ bool VkRoot::createSurface()
 	return true;
 }
 
-void VkRoot::getQueueFamiliesInfo()
+bool VkRoot::getQueueFamiliesInfo()
 {
 	ASSERT(physicalDevice, "Physical device is null");
 	ASSERT(surface, "Surface is null");
 
 	queueFamilyIndices = findQueueFamilies(physicalDevice, surface, vkDynLoader);
-	ASSERT_OR_RETURN(, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
+	ASSERT_OR_RETURN(false, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
 
 	// check for optional features of queue family
 	const auto queuesFamilies = physicalDevice.getQueueFamilyProperties(vkDynLoader);
 	uint32_t graphicsFamilyIdx = queueFamilyIndices.graphicsFamily.value();
 	queueSupportsTimestamps = false;
-	ASSERT_OR_RETURN(, graphicsFamilyIdx < queuesFamilies.size(), "Failed to determine queue (%" PRIu32")'s timestampValidBits", graphicsFamilyIdx);
-	queueSupportsTimestamps = (queuesFamilies[graphicsFamilyIdx].timestampValidBits > 0);
+	if (graphicsFamilyIdx < queuesFamilies.size())
+	{
+		queueSupportsTimestamps = (queuesFamilies[graphicsFamilyIdx].timestampValidBits > 0);
+	}
+	else
+	{
+		debug(LOG_INFO, "Failed to determine queue (%" PRIu32")'s timestampValidBits", graphicsFamilyIdx);
+	}
+
+	return true;
 }
 
 bool VkRoot::createLogicalDevice()
@@ -5138,7 +5227,7 @@ bool VkRoot::createLogicalDevice()
 	ASSERT(physicalDevice, "Physical device is null");
 	ASSERT(surface, "Surface is null");
 
-	ASSERT(queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
+	ASSERT_OR_RETURN(false, queueFamilyIndices.isComplete(), "Did not receive complete indices from findQueueFamilies");
 
 	// determine extensions to use
 	enabledDeviceExtensions = deviceExtensions;
@@ -6022,6 +6111,12 @@ void VkRoot::endRenderPass()
 		handleUnrecoverableError(resultErr);
 	}
 
+	if (queuedSwapModeChange.has_value())
+	{
+		swapMode = queuedSwapModeChange.value().newMode;
+		mustRecreateSwapchain = true;
+	}
+
 	if (mustRecreateSwapchain)
 	{
 		try {
@@ -6031,7 +6126,16 @@ void VkRoot::endRenderPass()
 		{
 			auto resultErr = static_cast<vk::Result>(e.code().value());
 			debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+			queuedSwapModeChange.reset();
 			handleUnrecoverableError(resultErr);
+		}
+		if (queuedSwapModeChange.has_value())
+		{
+			if (queuedSwapModeChange.value().completionHandler)
+			{
+				queuedSwapModeChange.value().completionHandler();
+			}
+			queuedSwapModeChange.reset();
 		}
 		return; // end processing this flip
 	}

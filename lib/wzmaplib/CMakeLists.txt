@@ -3,33 +3,16 @@
 
 set(WZMAPLIB_VERSION_MAJOR 1)
 set(WZMAPLIB_VERSION_MINOR 4)
-set(WZMAPLIB_VERSION_REV 0)
-
-###################
-# Determine minimum CMake version
-
-set(_cmake_min_ver_supported 3.5)
-if (TARGET nlohmann_json AND TARGET optional-lite AND TARGET quickjs)
-	# This should happen if being included in the larger WZ build scripts, thus we don't need FetchContent and can support earlier CMake
-	message(DEBUG "All required dependencies are already available - no need to use FetchContent")
-else()
-	message(STATUS "wzmaplib: One or more dependencies must be fetched")
-	set(_cmake_min_ver_supported 3.11) # CMake 3.11 is the minimum version for FetchContent
-	set(_will_need_fetch_content TRUE)
-endif()
+set(WZMAPLIB_VERSION_REV 1)
 
 ##############################
 ##############################
 # wzmaplib project
 
-cmake_minimum_required(VERSION ${_cmake_min_ver_supported}...3.31)
+cmake_minimum_required(VERSION 3.16...3.31)
 project (wzmaplib CXX)
 
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-	cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
-
-OPTION(WZMAPLIB_ENABLE_ZIPIOPROVIDER "wzmaplib: Provide ZipIOProvider (which requires libzip)" OFF)
+OPTION(WZMAPLIB_ENABLE_ZIPIOPROVIDER "wzmaplib: Provide ZipIOProvider (which requires libzip)" ON)
 
 file(GLOB PUBLIC_HEADERS "include/wzmaplib/*.h")
 file(GLOB PRIVATE_HEADERS "src/*.h")
@@ -69,9 +52,7 @@ target_include_directories(wzmaplib PUBLIC "include")
 ########################
 # wzmaplib dependencies
 
-if(_will_need_fetch_content)
-	include(FetchContent)
-endif()
+include(FetchContent)
 
 function(WZMAPLIB_ADD_3RDPARTY_DIR PATH BUILD_DIR INIT_SUBMODULE_IF_NEEDED)
 	# wzmaplib lives inside the warzone2100 repo
@@ -204,13 +185,13 @@ if (libzip_FOUND)
 	cmake_pop_check_state()
 	if(libzip_LINK_TEST)
 		message( STATUS "Found libzip... (link test successful)" )
-		get_target_property(_libzip_INCLUDE_DIR libzip::zip INTERFACE_INCLUDE_DIRECTORIES)
-		message( STATUS "- libzip include dir: ${_libzip_INCLUDE_DIR}" )
 	else()
-		message( STATUS "Found libzip, but link test NOT successful" )
+		message( WARNING "Found libzip, but link test NOT successful? (Continuing anyway)" )
 	endif()
+	get_target_property(_libzip_INCLUDE_DIR libzip::zip INTERFACE_INCLUDE_DIRECTORIES)
+	message( STATUS "- libzip include dir: ${_libzip_INCLUDE_DIR}" )
 endif()
-if (libzip_FOUND AND libzip_LINK_TEST)
+if (libzip_FOUND)
 	file(GLOB ZIPIOPROVIDER_HEADERS "plugins/ZipIOProvider/include/ZipIOProvider.h")
 	file(GLOB ZIPIOPROVIDER_SRC "plugins/ZipIOProvider/src/ZipIOProvider.cpp")
 

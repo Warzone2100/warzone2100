@@ -326,6 +326,8 @@ void handlePlayerLeftInGame(UDWORD player)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
+	bool leftWhilePlayer = NetPlay.players[player].isSpectator;
+
 	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
 	NetPlay.playerReferences[player] = std::make_shared<PlayerReference>(player);
@@ -338,6 +340,11 @@ void handlePlayerLeftInGame(UDWORD player)
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.lastSentPlayerDataCheck2[player].reset();
+
+	if (leftWhilePlayer)
+	{
+		ingame.playerLeftGameTime[player] = gameTime;
+	}
 
 	if (player >= MAX_PLAYERS)
 	{
@@ -405,6 +412,10 @@ static void sendPlayerLeft(uint32_t playerIndex)
 
 static void addConsolePlayerLeftMessage(unsigned playerIndex)
 {
+	if (!NetPlay.isHost && isBlindSimpleLobby(game.blindMode) && (GetGameMode() != GS_NORMAL))
+	{
+		return;
+	}
 	if (selectedPlayer != playerIndex)
 	{
 		std::string msg = astringf(_("%s has Left the Game"), getPlayerName(playerIndex));
@@ -414,6 +425,10 @@ static void addConsolePlayerLeftMessage(unsigned playerIndex)
 
 static void addConsolePlayerJoinMessage(unsigned playerIndex)
 {
+	if (!NetPlay.isHost && isBlindSimpleLobby(game.blindMode) && (GetGameMode() != GS_NORMAL))
+	{
+		return;
+	}
 	if (selectedPlayer != playerIndex)
 	{
 		std::string msg = astringf(_("%s joined the Game"), getPlayerName(playerIndex));
@@ -487,8 +502,9 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	ingame.muteChat[playerIndex] = false;
 
-	if (wz_command_interface_enabled())
+	if (wz_command_interface_enabled() && NetPlay.players[playerIndex].allocated)
 	{
+		// WZEVENT: playerLeft: <playerIdx> <gameTime> <b64pubkey> <hash> <V|?> <b64name> <ip>
 		const auto& identity = getOutputPlayerIdentity(playerIndex);
 		std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
 		std::string playerIdentityHash = identity.publicHashString();
@@ -690,11 +706,23 @@ void setupNewPlayer(UDWORD player)
 	ingame.DesyncCounter[player] = 0;
 	ingame.VerifiedIdentity[player] = false;
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
+	ingame.joinTimes[player] = std::chrono::steady_clock::now();
 	ingame.PendingDisconnect[player] = false;
 	ingame.DataIntegrity[player] = false;
 	ingame.hostChatPermissions[player] = (NetPlay.bComms) ? NETgetDefaultMPHostFreeChatPreference() : true;
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
+	ingame.lastReadyTimes[player].reset();
+	if (multiplayPlayersCanCheckReady())
+	{
+		ingame.lastNotReadyTimes[player] = ingame.joinTimes[player];
+	}
+	else
+	{
+		ingame.lastNotReadyTimes[player].reset();
+	}
+	ingame.secondsNotReady[player] = 0;
+	ingame.playerLeftGameTime[player].reset();
 	multiSyncResetPlayerChallenge(player);
 
 	resetMultiVisibility(player);						// set visibility flags.
@@ -717,9 +745,9 @@ void ShowMOTD()
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	if (NetPlay.MOTD)
+	if (!NetPlay.MOTD.empty())
 	{
-		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		addConsoleMessage(NetPlay.MOTD.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 	else
 	{

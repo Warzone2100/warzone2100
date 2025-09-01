@@ -36,9 +36,11 @@ jobs:
           - name: "Flatpak"
             arch: "x86_64"
             flatpak-arch: "x86_64"
+            runs-on: ubuntu-latest
           - name: "Flatpak"
             arch: "arm64"
             flatpak-arch: "aarch64"
+            runs-on: ubuntu-24.04-arm
       fail-fast: false
     name: '${{ matrix.name }} (${{ matrix.arch }})'
     permissions:
@@ -46,12 +48,12 @@ jobs:
       # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
       id-token: write
       attestations: write
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runs-on }}
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
       WZ_FLATPAK_BUILD_DIR: flatpak_app
       WZ_FLATPAK_TARGET_ARCH: ${{ matrix.flatpak-arch }}
-      WZ_FLATPAK_BUILD_ARCH: x86_64
+      WZ_FLATPAK_BUILD_ARCH: ${{ matrix.flatpak-arch }}
       WZ_FREEDESKTOP_RUNTIME_VERSION: 24.08 # should match runtime-version in .ci/flatpak/net.wz2100.wz2100.yaml.in
     outputs:
       # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
@@ -71,11 +73,12 @@ jobs:
         flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
         flatpak --user remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
         echo "::endgroup::"
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
         set-safe-directory: true
+        persist-credentials: false
     - name: Configure Repo Checkout
       id: checkout-config
       working-directory: '${{ github.workspace }}/src'
@@ -166,14 +169,41 @@ jobs:
         echo "WZ_FLATPAK_BUNDLE=${WZ_FLATPAK_BUNDLE}" >> $GITHUB_OUTPUT
         WZ_FLATPAK_MIRROR_SCREENSHOTS_URL="https://dl.flathub.org/media/"
         echo "WZ_FLATPAK_MIRROR_SCREENSHOTS_URL=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL}" >> $GITHUB_ENV
+    - name: (Release Publish) Fetch Release tarball details
+      # Run on release publish event
+      if: (github.event_name == 'release' && github.event.action == 'published') && (github.repository == 'Warzone2100/warzone2100')
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+      run: |
+        WZ_RELEASE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+        # Grab the release tarball
+        mkdir -p dl-assets
+        curl -Lf "https://github.com/Warzone2100/warzone2100/releases/download/${WZ_RELEASE_TAG}/warzone2100_src.tar.xz" --retry 5 --output dl-assets/warzone2100_src.tar.xz
+        # Verify attestation
+        gh attestation verify dl-assets/warzone2100_src.tar.xz --repo Warzone2100/warzone2100 --signer-repo Warzone2100/warzone2100 --deny-self-hosted-runners
+        # Calculate its sha256
+        WZ_RELEASE_TARBALL_SHA256="$(sha256sum dl-assets/warzone2100_src.tar.xz | cut -d ' ' -f 1)"
+        # Output
+        echo "WZ_RELEASE_TAG=${WZ_RELEASE_TAG}"
+        echo "WZ_RELEASE_TAG=${WZ_RELEASE_TAG}" >> $GITHUB_ENV
+        echo "WZ_RELEASE_TARBALL_SHA256=${WZ_RELEASE_TARBALL_SHA256}"
+        echo "WZ_RELEASE_TARBALL_SHA256=${WZ_RELEASE_TARBALL_SHA256}" >> $GITHUB_ENV
+        echo "WZ_RELEASE_PUBLISH_BUILD=true" >> $GITHUB_ENV
+        echo "WZ_FLATPAK_BUNDLE_SOURCES=true" >> $GITHUB_ENV
     - name: Generate Flatpak manifest
       working-directory: '${{ github.workspace }}/src'
       shell: bash
       run: |
         ADDITIONAL_CONFIG_OPTIONS=""
+        if [[ "${WZ_RELEASE_PUBLISH_BUILD}" == "true" ]]; then
+          # Publish release build (from source tarball)
+          echo "Publishing release build"
+          ADDITIONAL_CONFIG_OPTIONS="-DWZ_RELEASE_PUBLISH_BUILD=ON -DWZ_RELEASE_TAG=${WZ_RELEASE_TAG} -DWZ_RELEASE_TARBALL_SHA256=${WZ_RELEASE_TARBALL_SHA256}"
+        fi
         if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
           # Cross compilation is needed
-          ADDITIONAL_CONFIG_OPTIONS="-DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
+          ADDITIONAL_CONFIG_OPTIONS="${ADDITIONAL_CONFIG_OPTIONS} -DWZ_CROSS_COMPILE_TARGET_ARCH=${WZ_FLATPAK_TARGET_ARCH}"
         fi
         echo "::group::Generate manifest"
         cmake "-DTEMPLATE_FILE=.ci/flatpak/net.wz2100.wz2100.yaml.in" "-DOUTPUT_FILE=.ci/flatpak/net.wz2100.wz2100.yaml" "-DPROJECT_ROOT=./" "-DWZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" ${ADDITIONAL_CONFIG_OPTIONS} -P .ci/flatpak/generate_flatpak_config.cmake
@@ -272,7 +302,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
         subject-path: '${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}'
@@ -311,7 +341,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 1
           path: 'src'
@@ -321,13 +351,13 @@ jobs:
           mkdir -p dl-debug/additional
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Debug Symbols
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
           merge-multiple: false
       - name: Download Additional Debug Files
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
@@ -375,7 +405,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
           path: ./dl-artifacts
@@ -447,7 +477,7 @@ jobs:
           curl -Lf https://raw.githubusercontent.com/flatpak/flat-manager/master/flat-manager-client --output /usr/bin/flat-manager-client
           chmod +x /usr/bin/flat-manager-client
           echo "::endgroup::"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: 'src'
           set-safe-directory: true
@@ -455,7 +485,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: 'ostree_repo_flatpak_${{ matrix.arch }}_${{ needs.build-flatpak.outputs.WZ_FLATPAK_BRANCH }}'
           path: ./dl-artifacts
@@ -517,7 +547,8 @@ jobs:
 
           echo "::group::Build commit from stable repo"
           for i in app/${WZ_FLATPAK_APPID} \
-            runtime/${WZ_FLATPAK_APPID}.Debug
+            runtime/${WZ_FLATPAK_APPID}.Debug \
+            runtime/${WZ_FLATPAK_APPID}.Sources
           do
             # Move the commits to the beta repo
             echo "Processing: --src-ref=${i}/${WZ_FLATPAK_TARGET_ARCH}/${WZ_FLATPAK_BRANCH}"

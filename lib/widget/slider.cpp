@@ -196,6 +196,7 @@ void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)
 	int mx = psContext->mx - x();
 	int my = psContext->my - y();
 	int stopSize;
+	auto prevPos = pos;
 	switch (orientation)
 	{
 	case WSLD_LEFT:
@@ -272,5 +273,23 @@ void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)
 				  / std::max<int>((height() - barSize), 1);
 		}
 		break;
+	}
+	if (prevPos != pos)
+	{
+		callOnChangeFuncs();
+	}
+}
+
+void W_SLIDER::addOnChange(const SliderOnChangeFunc& func)
+{
+	ASSERT_OR_RETURN(, func != nullptr, "Null func");
+	onChangeFuncs.push_back(func);
+}
+
+void W_SLIDER::callOnChangeFuncs()
+{
+	for (const auto& f : onChangeFuncs)
+	{
+		f(*this);
 	}
 }

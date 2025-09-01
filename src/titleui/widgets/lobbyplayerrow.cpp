@@ -53,7 +53,6 @@ struct DisplayPlayerCache {
 	WzText		wzAltNameText;
 
 	WzText		wzSubText;		// the sub text (used for players)
-	WzText		wzEloText;      // the elo text (used for players)
 };
 
 static void drawBlueBox_Spectator(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
@@ -153,14 +152,17 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (!NetPlay.players[i].isSpectator)
 	{
-		if (alliancesSetTeamsBeforeGame(game.alliance))
+		if (!isBlindSimpleLobby(game.blindMode) || NetPlay.isHost)
 		{
-			ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
-			iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 1, y + 8);
-		}
-		else
-		{
-			// TODO: Maybe display something else here to signify "no team, FFA"
+			if (alliancesSetTeamsBeforeGame(game.alliance))
+			{
+				ASSERT_OR_RETURN(, NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
+				iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 1, y + 8);
+			}
+			else
+			{
+				// TODO: Maybe display something else here to signify "no team, FFA"
+			}
 		}
 	}
 	else
@@ -188,7 +190,7 @@ static bool isKnownPlayer(std::map<std::string, EcKey::Key> const &knownPlayers,
 	return i != knownPlayers.end() && key.toBytes(EcKey::Public) == i->second;
 }
 
-static void displayAltNameBox(int x, int y, WIDGET *psWidget, DisplayPlayerCache& cache, const PLAYERSTATS::Autorating& ar, bool isHighlight)
+static void displayAltNameBox(int x, int y, WIDGET *psWidget, DisplayPlayerCache& cache, bool isHighlight)
 {
 	int altNameBoxWidth = cache.wzAltNameText.width() + 4;
 	int altNameBoxHeight = cache.wzAltNameText.lineSize() + 2;
@@ -199,10 +201,6 @@ static void displayAltNameBox(int x, int y, WIDGET *psWidget, DisplayPlayerCache
 
 	int altNameTextY0 = y + (altNameBoxHeight - cache.wzAltNameText.lineSize()) / 2 - cache.wzAltNameText.aboveBase();
 	PIELIGHT altNameTextColor = WZCOL_TEXT_MEDIUM;
-	if (ar.altNameTextColorOverride[0] != 255 || ar.altNameTextColorOverride[1] != 255 || ar.altNameTextColorOverride[2] != 255)
-	{
-		altNameTextColor = pal_Colour(ar.altNameTextColorOverride[0], ar.altNameTextColorOverride[1], ar.altNameTextColorOverride[2]);
-	}
 	if (isHighlight)
 	{
 		altNameTextColor.byte.a = static_cast<uint8_t>(static_cast<float>(altNameTextColor.byte.a) * 0.3f);
@@ -240,7 +238,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
 		const PLAYERSTATS& stat = getMultiStats(j);
-		auto ar = stat.autorating;
 
 		std::string name = getPlayerName(j);
 		if (game.blindMode != BLIND_MODE::NONE)
@@ -250,6 +247,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			{
 				name = NetPlay.players[j].name;
 			}
+		}
+		const char* pAltName = nullptr;
+		if (NetPlay.players[j].isAdmin)
+		{
+			pAltName = _("Admin");
 		}
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
@@ -344,29 +346,25 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			subText += buf;
 		}
 
-		if (!ar.valid)
+		bool dummy = stat.played < 5;
+		uint8_t star[3] = {0, 0, 0};
+		uint8_t medal = 0;
+
+		// star 1 total droid kills
+		star[0] = stat.totalKills > 600? 1 : stat.totalKills > 300? 2 : stat.totalKills > 150? 3 : 0;
+
+		// star 2 games played
+		star[1] = stat.played > 200? 1 : stat.played > 100? 2 : stat.played > 50? 3 : 0;
+
+		// star 3 games won.
+		star[2] = stat.wins > 80? 1 : stat.wins > 40? 2 : stat.wins > 10? 3 : 0;
+
+		// medals.
+		medal = stat.wins >= 24 && stat.wins > 8 * stat.losses? 1 : stat.wins >= 12 && stat.wins > 4 * stat.losses? 2 : stat.wins >= 6 && stat.wins > 2 * stat.losses? 3 : 0;
+
+		if (pAltName != nullptr && cache.fullAltNameText.compare(pAltName) != 0)
 		{
-			ar.dummy = stat.played < 5;
-			// star 1 total droid kills
-			ar.star[0] = stat.totalKills > 600? 1 : stat.totalKills > 300? 2 : stat.totalKills > 150? 3 : 0;
-
-			// star 2 games played
-			ar.star[1] = stat.played > 200? 1 : stat.played > 100? 2 : stat.played > 50? 3 : 0;
-
-			// star 3 games won.
-			ar.star[2] = stat.wins > 80? 1 : stat.wins > 40? 2 : stat.wins > 10? 3 : 0;
-
-			// medals.
-			ar.medal = stat.wins >= 24 && stat.wins > 8 * stat.losses? 1 : stat.wins >= 12 && stat.wins > 4 * stat.losses? 2 : stat.wins >= 6 && stat.wins > 2 * stat.losses? 3 : 0;
-
-			ar.level = 0;
-			ar.autohoster = false;
-			ar.elo.clear();
-		}
-
-		if (cache.fullAltNameText != ar.altName)
-		{
-			std::string altName = ar.altName;
+			std::string altName = pAltName;
 			int maxAltNameWidth = static_cast<int>(static_cast<float>(psWidget->width() - nameX) * 0.65f);
 			iV_fonts fontID = font_small;
 			cache.wzAltNameText.setText(WzString::fromUtf8(altName), fontID);
@@ -382,74 +380,54 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 		}
 
-		if (!ar.altName.empty() && isHighlight)
+		if (pAltName && isHighlight)
 		{
 			// display first, behind everything
-			displayAltNameBox(x, y, psWidget, cache, ar, isHighlight);
+			displayAltNameBox(x, y, psWidget, cache, isHighlight);
 		}
 
 		int H = 5;
-		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.isEmpty() - H*(ar.valid && !ar.elo.empty()), colour);
+		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.isEmpty(), colour);
 		if (!subText.isEmpty())
 		{
 			cache.wzSubText.setText(subText, font_small);
-			cache.wzSubText.render(x + nameX, y + 28 - H*!ar.elo.empty(), WZCOL_TEXT_MEDIUM);
+			cache.wzSubText.render(x + nameX, y + 28, WZCOL_TEXT_MEDIUM);
 		}
 
-		if (ar.autohoster)
-		{
-			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
-		}
-		else if (!ar.valid && (game.blindMode != BLIND_MODE::NONE) && (!NetPlay.isHost || NetPlay.hostPlayer < MAX_PLAYER_SLOTS))
+		if ((game.blindMode != BLIND_MODE::NONE) && (!NetPlay.isHost || NetPlay.hostPlayer < MAX_PLAYER_SLOTS))
 		{
 			iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 4, y + 13);
 		}
-		else if (ar.dummy)
+		else if (dummy)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}
 		else
 		{
 			constexpr int starImgs[4] = {0, IMAGE_MULTIRANK1, IMAGE_MULTIRANK2, IMAGE_MULTIRANK3};
-			if (1 <= ar.star[0] && ar.star[0] < ARRAY_SIZE(starImgs))
+			if (1 <= star[0] && star[0] < ARRAY_SIZE(starImgs))
 			{
-				iV_DrawImage(FrontImages, starImgs[ar.star[0]], x + 4, y + 3);
+				iV_DrawImage(FrontImages, starImgs[star[0]], x + 4, y + 3);
 			}
-			if (1 <= ar.star[1] && ar.star[1] < ARRAY_SIZE(starImgs))
+			if (1 <= star[1] && star[1] < ARRAY_SIZE(starImgs))
 			{
-				iV_DrawImage(FrontImages, starImgs[ar.star[1]], x + 4, y + 13);
+				iV_DrawImage(FrontImages, starImgs[star[1]], x + 4, y + 13);
 			}
-			if (1 <= ar.star[2] && ar.star[2] < ARRAY_SIZE(starImgs))
+			if (1 <= star[2] && star[2] < ARRAY_SIZE(starImgs))
 			{
-				iV_DrawImage(FrontImages, starImgs[ar.star[2]], x + 4, y + 23);
+				iV_DrawImage(FrontImages, starImgs[star[2]], x + 4, y + 23);
 			}
 			constexpr int medalImgs[4] = {0, IMAGE_MEDAL_GOLD, IMAGE_MEDAL_SILVER, IMAGE_MEDAL_BRONZE};
-			if (1 <= ar.medal && ar.medal < ARRAY_SIZE(medalImgs))
+			if (1 <= medal && medal < ARRAY_SIZE(medalImgs))
 			{
-				iV_DrawImage(FrontImages, medalImgs[ar.medal], x + 16 - 2*(ar.level != 0), y + 11);
+				iV_DrawImage(FrontImages, medalImgs[medal], x + 16, y + 11);
 			}
 		}
-		constexpr int levelImgs[9] = {0, IMAGE_LEV_0, IMAGE_LEV_1, IMAGE_LEV_2, IMAGE_LEV_3, IMAGE_LEV_4, IMAGE_LEV_5, IMAGE_LEV_6, IMAGE_LEV_7};
-		if (ar.level > 0 && ar.level < ARRAY_SIZE(levelImgs))
-		{
-			iV_DrawImage(IntImages, levelImgs[ar.level], x + 24, y + 15);
-		}
 
-		if (!ar.elo.empty())
-		{
-			PIELIGHT eloColour = WZCOL_TEXT_BRIGHT;
-			if (ar.eloTextColorOverride[0] != 255 || ar.eloTextColorOverride[1] != 255 || ar.eloTextColorOverride[2] != 255)
-			{
-				eloColour = pal_Colour(ar.eloTextColorOverride[0], ar.eloTextColorOverride[1], ar.eloTextColorOverride[2]);
-			}
-			cache.wzEloText.setText(WzString::fromUtf8(ar.elo), font_small);
-			cache.wzEloText.render(x + nameX, y + 28 + H*!subText.isEmpty(), eloColour);
-		}
-
-		if (!ar.altName.empty() && !isHighlight)
+		if (pAltName && !isHighlight)
 		{
 			// display last, over top of everything
-			displayAltNameBox(x, y, psWidget, cache, ar, isHighlight);
+			displayAltNameBox(x, y, psWidget, cache, isHighlight);
 		}
 	}
 	else	// AI
@@ -741,7 +719,6 @@ void WzPlayerRow::updateState()
 	}
 	if (NetPlay.players[playerIdx].allocated && (game.blindMode == BLIND_MODE::NONE || (NetPlay.isHost && NetPlay.hostPlayer >= MAX_PLAYER_SLOTS)))
 	{
-		const PLAYERSTATS& stats = getMultiStats(playerIdx);
 		const auto& identity = getOutputPlayerIdentity(playerIdx);
 		if (!identity.empty())
 		{
@@ -753,63 +730,6 @@ void WzPlayerRow::updateState()
 			playerInfoTooltip += _("Player ID: ");
 			playerInfoTooltip += hash.empty()? _("(none)") : hash;
 		}
-		std::string autoratingTooltipText;
-		if (stats.autorating.valid)
-		{
-			if (!stats.autorating.altName.empty())
-			{
-				if (!autoratingTooltipText.empty())
-				{
-					autoratingTooltipText += "\n";
-				}
-				std::string altnameStr = stats.autorating.altName;
-				if (altnameStr.size() > 128)
-				{
-					altnameStr = altnameStr.substr(0, 128);
-				}
-				size_t maxLinePos = nthOccurrenceOfChar(altnameStr, '\n', 1);
-				if (maxLinePos != std::string::npos)
-				{
-					altnameStr = altnameStr.substr(0, maxLinePos);
-				}
-				autoratingTooltipText += std::string(_("Alt Name:")) + " " + altnameStr;
-			}
-			if (!stats.autorating.details.empty()
-				&& stats.autoratingFrom == RATING_SOURCE_LOCAL) // do not display host-provided details (for now)
-			{
-				if (!autoratingTooltipText.empty())
-				{
-					autoratingTooltipText += "\n";
-				}
-				std::string detailsstr = stats.autorating.details;
-				if (detailsstr.size() > 512)
-				{
-					detailsstr = detailsstr.substr(0, 512);
-				}
-				size_t maxLinePos = nthOccurrenceOfChar(detailsstr, '\n', 10);
-				if (maxLinePos != std::string::npos)
-				{
-					detailsstr = detailsstr.substr(0, maxLinePos);
-				}
-				autoratingTooltipText += std::string(_("Player rating:")) + "\n" + detailsstr;
-			}
-		}
-		if (!autoratingTooltipText.empty())
-		{
-			if (!playerInfoTooltip.empty())
-			{
-				playerInfoTooltip += "\n\n";
-			}
-			if (stats.autoratingFrom == RATING_SOURCE_HOST)
-			{
-				playerInfoTooltip += std::string("[") + _("Host provided") + "]\n";
-			}
-			else
-			{
-				playerInfoTooltip += std::string("[") + astringf(_("From: %s"), getAutoratingUrl().c_str()) + "]\n";
-			}
-			playerInfoTooltip += autoratingTooltipText;
-		}
 	}
 	playerInfo->setTip(playerInfoTooltip);
 
@@ -819,8 +739,6 @@ void WzPlayerRow::updateState()
 
 void WzPlayerRow::updateReadyButton()
 {
-	bool disallow = (allPlayersOnSameTeam(-1) != -1) && !isBlindSimpleLobby(game.blindMode);
-
 	const auto& aidata = getAIData();
 	const auto& locked = getLockedOptions();
 
@@ -907,7 +825,7 @@ void WzPlayerRow::updateReadyButton()
 		return;
 	}
 
-	if (disallow)
+	if (!multiplayPlayersCanCheckReady())
 	{
 		// remove ready / difficulty button
 		deleteExistingReadyButton();
@@ -975,7 +893,7 @@ void WzPlayerRow::updateReadyButton()
 						std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player, true));
 						sendRoomSystemMessage(msg.c_str());
 						kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED, false);
-						resetReadyStatus(true, isBlindSimpleLobby(game.blindMode));		//reset and send notification to all clients
+						resetReadyStatus(true, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		//reset and send notification to all clients
 					}
 				}
 			});

@@ -105,6 +105,10 @@ static nlohmann::json buildGameDetailsOutputJSON(std::chrono::system_clock::time
 	nlohmann::json gameObj = nlohmann::json::object();
 	gameObj["version"] = version_getVersionString();
 	gameObj["mapName"] = game.map;
+	if (!game.hash.isZero())
+	{
+		gameObj["mapHash"] = game.hash.toString();
+	}
 	gameObj["baseType"] = game.base;
 	gameObj["alliancesType"] = game.alliance;
 	gameObj["powerType"] = game.power;
@@ -261,6 +265,11 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j[mapPlayerDataOutputName("recentResearchPerformance", naming)] = p.recentResearchPerformance;
 		j[mapPlayerDataOutputName("usertype", naming)] = mapPlayerUserTypeOutputValue(p.usertype, naming);
 
+		if (p.playerLeftGameTime.has_value())
+		{
+			j["playerLeftGameTime"] = p.playerLeftGameTime.value();
+		}
+
 		size_t outputIndex = idx;
 		switch (outputKey)
 		{
@@ -358,7 +367,8 @@ void GameStoryLogger::logGameFrame()
 	}
 
 	// throttle recording of game frames
-	if (lastRecordedGameFrameTime > 0 && (gameTime - lastRecordedGameFrameTime < frameLoggingInterval))
+	// (if frameLoggingInterval == 0, ongoing frame logging is disabled - however, always output the first frame regardless!)
+	if (lastRecordedGameFrameTime > 0 && ((frameLoggingInterval == 0) || (gameTime - lastRecordedGameFrameTime < frameLoggingInterval)))
 	{
 		return;
 	}
@@ -504,6 +514,11 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 			}
 		}
 
+		if (i < ingame.playerLeftGameTime.size() && ingame.playerLeftGameTime[i].has_value())
+		{
+			playerStats.playerLeftGameTime = ingame.playerLeftGameTime[i];
+		}
+
 		frame.playerData.push_back(playerStats);
 	}
 
@@ -527,9 +542,9 @@ nlohmann::json GameStoryLogger::genFrameReport(const GameFrame& frame, OutputKey
 	return report;
 }
 
-nlohmann::json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const
+nlohmann::ordered_json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const
 {
-	nlohmann::json report = nlohmann::json::object();
+	nlohmann::ordered_json report = nlohmann::json::object();
 
 	report["JSONversion"] = CurrentGameLogOutputJSONVersion;
 	report["gameTime"] = gameTime;
@@ -589,6 +604,10 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerS
 	j["recentResearchPotential"] = p.recentResearchPotential;
 	j["recentResearchPerformance"] = p.recentResearchPerformance;
 	j["usertype"] = p.usertype;
+	if (p.playerLeftGameTime.has_value())
+	{
+		j["playerLeftGameTime"] = p.playerLeftGameTime.value();
+	}
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::PlayerStats& p) {
@@ -613,6 +632,13 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::Playe
 	p.recentResearchPotential = j.at("recentResearchPotential").get<uint64_t>();
 	p.recentResearchPerformance = j.at("recentResearchPerformance").get<uint64_t>();
 	p.usertype = j.at("usertype").get<std::string>();
+
+	p.playerLeftGameTime = nullopt;
+	auto it = j.find("playerLeftGameTime");
+	if (it != j.end())
+	{
+		p.playerLeftGameTime = it.value().get<uint32_t>();
+	}
 }
 
 inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame& p) {

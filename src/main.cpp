@@ -185,7 +185,6 @@ char    ReplayPath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
-char	KeyMapPath[PATH_MAX];
 char	FavoriteStructuresPath[PATH_MAX];
 static uint32_t forcedAutosaveTime = 0;
 // Start game in title mode:
@@ -878,7 +877,10 @@ static bool startGameLoop()
 			if (!war_getDisableReplayRecording())
 			{
 				WZGameReplayOptionsHandler replayOptions;
-				NETreplaySaveStart((currentGameMode == ActivitySink::GameMode::MULTIPLAYER) ? "multiplay" : "skirmish", replayOptions, war_getMaxReplaysSaved(), (currentGameMode == ActivitySink::GameMode::MULTIPLAYER));
+				auto replayFilename = NETreplaySaveStart((currentGameMode == ActivitySink::GameMode::MULTIPLAYER) ? "multiplay" : "skirmish", replayOptions, war_getMaxReplaysSaved(), (currentGameMode == ActivitySink::GameMode::MULTIPLAYER));
+				if (!replayFilename.empty()) {
+					wz_command_interface_output("WZEVENT: replaySaveStarted: %s\n", replayFilename.c_str());
+				}
 			}
 			break;
 		}
@@ -1005,6 +1007,9 @@ static bool initSaveGameLoad()
 	{
 		addMissionTimerInterface();
 	}
+
+	// set a flag for the trigger/event system to indicate initialisation is complete
+	gameInitialised = true;
 
 	return true;
 }
@@ -1785,6 +1790,10 @@ int realmain(int argc, char *argv[])
 	if (bCrashHandlingProvider)
 	{
 		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()), debugCrashHandler);
+		if (!bCrashHandlingProvider)
+		{
+			debug(LOG_WZ, "Failed to init crash handling provider");
+		}
 	}
 	auto shutdown_crash_handling_provider_on_return = gsl::finally([bCrashHandlingProvider] { if (bCrashHandlingProvider) { shutdownCrashHandlingProvider(); } });
 
@@ -1896,7 +1905,7 @@ int realmain(int argc, char *argv[])
 	ActivityManager::instance().initialize();
 
 	/* Put in the writedir root */
-	sstrcpy(KeyMapPath, "keymap.json");
+	gInputManager.setKeyMapJsonPath("keymap.json");
 	sstrcpy(FavoriteStructuresPath, "favoriteStructures.json");
 
 	// initialise all the command line states
@@ -2006,7 +2015,7 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	initializeCrashHandlingContext(gfxbackend);
+	initializeCrashHandlingContext(wzGetInitializedGfxBackend());
 
 	wzCmdInterfaceInit();
 

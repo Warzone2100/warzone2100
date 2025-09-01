@@ -460,7 +460,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 
 	freeMessages();
 
-	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, static_cast<uint32_t>(game.blindMode), 0, game.maxPlayers, game.alliance, game.techLevel, game.power, game.base))
 	{
 		return false;
 	}
@@ -483,6 +483,11 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
 	ingame.PendingDisconnect[selectedPlayer] = false;
+	ingame.joinTimes[selectedPlayer] = std::chrono::steady_clock::now();
+	ingame.lastReadyTimes[selectedPlayer].reset();
+	ingame.lastNotReadyTimes[selectedPlayer].reset();
+	ingame.secondsNotReady[selectedPlayer] = 0;
+	ingame.playerLeftGameTime[selectedPlayer].reset();
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
@@ -490,7 +495,6 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	loadMultiStats(hostPlayerName, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
-	lookupRatingAsync(selectedPlayer);
 
 	multiStatsSetVerifiedHostIdentityFromJoin(playerStats.identity.toBytes(EcKey::Public));
 
@@ -522,10 +526,6 @@ bool sendLeavingMsg()
 // called in Init.c to shutdown the whole netgame gubbins.
 bool multiShutdown()
 {
-	// shut down netplay lib.
-	debug(LOG_MAIN, "shutting down networking");
-	NETshutdown();
-
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
@@ -755,6 +755,8 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 	}
 
 	// Otherwise, output changes for each changed player
+	std::vector<int> playerIdxFreechatEnabled;
+	std::vector<int> playerIdxFreechatDisabled;
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
@@ -775,15 +777,41 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 			if (ingame.hostChatPermissions[i])
 			{
 				// Host enabled free chat for player
-				auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(i));
-				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				playerIdxFreechatEnabled.push_back(i);
 			}
 			else
 			{
 				// Host disabled free chat for player
-				auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(i));
-				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				playerIdxFreechatDisabled.push_back(i);
 			}
+		}
+	}
+
+	if (!playerIdxFreechatEnabled.empty())
+	{
+		if (playerIdxFreechatEnabled.size() == 1)
+		{
+			auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(playerIdxFreechatEnabled[0]));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			auto msg = astringf(_("The host has enabled free chat for %d players"), static_cast<int>(playerIdxFreechatEnabled.size()));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	   }
+	}
+
+	if (!playerIdxFreechatDisabled.empty())
+	{
+		if (playerIdxFreechatDisabled.size() == 1)
+		{
+			auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(playerIdxFreechatDisabled[0]));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			auto msg = astringf(_("The host has muted free chat for %d players"), static_cast<int>(playerIdxFreechatDisabled.size()));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 	}
 }
@@ -893,4 +921,4 @@ void printStructureLimitsInfo(std::vector<MULTISTRUCTLIMITS>& structureLimits, c
 			printLineFunc(tmpConsoleMsgStr);
 		}
 	}
-};
+}

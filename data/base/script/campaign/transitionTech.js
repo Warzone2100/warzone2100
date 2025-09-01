@@ -42,7 +42,7 @@ const mis_alphaResearchNew = [
 
 	// 8
 	"R-Vehicle-Metals02", "R-Wpn-MG-Damage04", "R-Wpn-Rocket02-MRL",
-	"R-Wpn-Rocket-Damage03", "R-Wpn-Mortar02Hvy", "R-Wpn-Mortar-Damage03", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Rocket-Damage02", "R-Wpn-Mortar02Hvy", "R-Wpn-Mortar-Damage03", "R-Wpn-Cannon-Damage03",
 	"R-Wpn-RocketSlow-Damage02", "R-Vehicle-Body11", "R-Defense-MRL", "R-Defense-HvyMor",
 
 	// 9
@@ -58,7 +58,7 @@ const mis_alphaResearchNew = [
 
 	// 11
 	"R-Wpn-Cannon3Mk1", "R-Defense-WallTower04", "R-Wpn-RocketSlow-Damage03",
-	"R-Cyborg-Wpn-Cannon",
+	"R-Cyborg-Wpn-Cannon", "R-Wpn-Rocket-Damage03",
 
 	//12
 	"R-Vehicle-Prop-Hover", "R-Vehicle-Metals03", "R-Vehicle-Body12", "R-Vehicle-Engine03",

@@ -49,7 +49,7 @@ public:
 		return widget;
 	}
 
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void geometryChanged() override;
 
 	const std::shared_ptr<WIDGET>& getItem() const
@@ -101,7 +101,7 @@ public:
 	void open();
 	bool isOpen() const;
 	void close();
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void setListHeight(uint32_t value)
 	{
 		itemsList->setGeometry(itemsList->x(), itemsList->y(), itemsList->width(), value);
@@ -124,6 +124,10 @@ public:
 	void setOnOpen(std::function<void(DropdownWidget&)> value)
 	{
 		onOpen = value;
+	}
+	void setOnClose(std::function<void(DropdownWidget&)> value)
+	{
+		onClose = value;
 	}
 	std::shared_ptr<WIDGET> getItem(size_t idx) const
 	{
@@ -196,6 +200,8 @@ protected:
 	virtual int calculateDropdownListScreenPosX() const;
 	virtual int calculateDropdownListDisplayWidth() const;
 
+	void callRunOnItems();
+
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
 	std::shared_ptr<ScrollableListWidget> itemsList;
@@ -204,6 +210,7 @@ private:
 	std::function<bool(DropdownWidget&, size_t newIndex, std::shared_ptr<WIDGET> newSelectedWidget)> canChange;
 	std::function<void(DropdownWidget&)> onChange;
 	std::function<void(DropdownWidget&)> onOpen;
+	std::function<void(DropdownWidget&)> onClose;
 	std::shared_ptr<DropdownItemWrapper> mouseOverItem;
 	std::shared_ptr<DropdownItemWrapper> mouseDownItem;
 	int32_t overlayYPosOffset = 0;

@@ -31,7 +31,4 @@
 
 struct DROID;
 
-/** This defines the maximum number of command droids allowed per player.*/
-#define MAX_CMDDROIDS	5
-
 #endif // __INCLUDED_CMDDROIDDEF_H__

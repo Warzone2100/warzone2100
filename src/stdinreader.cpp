@@ -30,6 +30,7 @@
 #include "clparse.h"
 #include "main.h"
 #include "multivote.h"
+#include "hci/teamstrategy.h"
 
 #include <string>
 #include <atomic>
@@ -297,7 +298,9 @@ bool getInputLine(int fd, bool isSocketFd, optional<std::string> &nextLine)
 	}
 	if (bytesRead == 0)
 	{
-		return true;
+		// read() returned 0, or EOF - pipe closed?
+		debug(LOG_INFO, "read returned 0 / EOF - pipe closed?");
+		return false;
 	}
 	actualAvailableBytes += static_cast<size_t>(bytesRead);
 	nextLine = getNextLineFromBuffer();
@@ -601,7 +604,7 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 			wz_command_interface_output("WZCMD error: Can't kick host!\n");
 			return;
 		}
-		const char *pPlayerName = getPlayerName(i);
+		const char *pPlayerName = getPlayerName(i, true);
 		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(i) + "]");
 		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
 		auto KickMessage = astringf("Player %s was kicked by the administrator.", playerNameStr.c_str());
@@ -609,10 +612,8 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 	});
 }
 
-static bool redirectActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& redirectStrCopy)
+static optional<KickRedirectInfo> parseCmdInterfaceRedirectStringToRedirectInfo(const std::string& redirectStrCopy)
 {
-	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress && !ingame.TimeEveryoneIsInGame.has_value(), "Game must not have started yet!");
-
 	// Parse the redirect string:
 	// <tcp/gns>:<new_port>:<0/1=spectator>:<optional:gamepassword>
 
@@ -621,29 +622,29 @@ static bool redirectActivePlayerWithIdentity(const std::string& playerIdentitySt
 	bool asSpectator = false;
 
 	auto redirectComponents = splitAtAnyDelimiter(redirectStrCopy, ":");
-	ASSERT_OR_RETURN(false, redirectComponents.size() >= 3, "Invalid redirect string");
+	ASSERT_OR_RETURN(nullopt, redirectComponents.size() >= 3, "Invalid redirect string");
 
 	auto optConnectionType = JoinConnectionDescription::connectiontype_from_string(redirectComponents[0]);
-	ASSERT_OR_RETURN(false, optConnectionType.has_value(), "Unrecognized / unsupported connection type: \"%s\"", redirectComponents[0].c_str());
+	ASSERT_OR_RETURN(nullopt, optConnectionType.has_value(), "Unrecognized / unsupported connection type: \"%s\"", redirectComponents[0].c_str());
 	connectionType = optConnectionType.value();
 
 	try {
 		auto portNumber = std::stoul(redirectComponents[1], nullptr, 10);
-		ASSERT_OR_RETURN(false, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
+		ASSERT_OR_RETURN(nullopt, newPort < std::numeric_limits<uint16_t>::max(), "Invalid port: %ul", newPort);
 		newPort = static_cast<uint16_t>(portNumber);
 	}
 	catch (const std::exception& e) {
-		ASSERT_OR_RETURN(false, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
+		ASSERT_OR_RETURN(nullopt, false, "Invalid port specified: \"%s\"", redirectComponents[1].c_str());
 	}
 
-	ASSERT_OR_RETURN(false, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
+	ASSERT_OR_RETURN(nullopt, newPort > 1024, "Invalid port (%ul) - cannot redirect to privileged port <= 1024", static_cast<unsigned int>(newPort));
 
 	try {
 		auto specValue = std::stoul(redirectComponents[2], nullptr, 10);
 		asSpectator = specValue != 0;
 	}
 	catch (const std::exception& e) {
-		ASSERT_OR_RETURN(false, false, "Invalid spec value specified: \"%s\"", redirectComponents[2].c_str());
+		ASSERT_OR_RETURN(nullopt, false, "Invalid spec value specified: \"%s\"", redirectComponents[2].c_str());
 	}
 
 	std::string gamePassword;
@@ -656,13 +657,31 @@ static bool redirectActivePlayerWithIdentity(const std::string& playerIdentitySt
 		gamePassword += redirectComponents[i];
 	}
 
+	KickRedirectInfo redirectInfo;
+	redirectInfo.connList.push_back(JoinConnectionDescription(connectionType, "=", newPort)); // special "=" value is treated as "same address" on the client side
+	redirectInfo.gamePassword = gamePassword;
+	redirectInfo.asSpectator = asSpectator;
+	return redirectInfo;
+}
+
+static bool redirectActivePlayerWithIdentity(const std::string& playerIdentityStrCopy, const std::string& redirectStrCopy)
+{
+	ASSERT_OR_RETURN(false, ingame.localJoiningInProgress && !ingame.TimeEveryoneIsInGame.has_value(), "Game must not have started yet!");
+
+	// Parse the redirect string:
+	auto redirectInfoOpt = parseCmdInterfaceRedirectStringToRedirectInfo(redirectStrCopy);
+	if (!redirectInfoOpt.has_value())
+	{
+		return false;
+	}
+
 	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
 		if (i == NetPlay.hostPlayer)
 		{
 			wz_command_interface_output("WZCMD error: Can't redirect host!\n");
 			return;
 		}
-		kickRedirectPlayer(i, connectionType, newPort, asSpectator, gamePassword);
+		kickRedirectPlayer(i, redirectInfoOpt.value());
 	});
 }
 
@@ -677,6 +696,22 @@ static bool chatActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 	return applyToActivePlayerWithIdentity(playerIdentityStrCopy, [&](uint32_t i) {
 		sendRoomSystemMessageToSingleReceiver(chatmsgstr.c_str(), i);
 	});
+}
+
+static void handleCmdInterfaceConnectionClosed()
+{
+	if (!ingame.localJoiningInProgress || ingame.TimeEveryoneIsInGame.has_value())
+	{
+		// do nothing once game has fired up
+		return;
+	}
+
+	// if in lobby...
+	if (NETgetAsyncJoinApprovalRequired())
+	{
+		debug(LOG_INFO, "Shutting down lobby due to closed cmdinterface connection + async join approval required");
+		wzQuit(1);
+	}
 }
 
 int cmdInputThreadFunc(void *)
@@ -714,6 +749,9 @@ int cmdInputThreadFunc(void *)
 				if (!getInputLine(readFd, readFdIsSocket, nextLine))
 				{
 					errlog("WZCMD FAILURE: get input line failed! (did peer close the connection?)\n");
+					wzAsyncExecOnMainThread([]() {
+						handleCmdInterfaceConnectionClosed();
+					});
 					return 1;
 				}
 				break;
@@ -1030,6 +1068,7 @@ int cmdInputThreadFunc(void *)
 			else
 			{
 				std::string chatmsgstr(chatmsg);
+				convertEscapedNewlines(chatmsgstr);
 				wzAsyncExecOnMainThread([chatmsgstr] {
 					if (!NetPlay.isHostAlive)
 					{
@@ -1053,6 +1092,7 @@ int cmdInputThreadFunc(void *)
 			{
 				std::string playerIdentityStrCopy(playeridentitystring);
 				std::string chatmsgstr(chatmsg);
+				convertEscapedNewlines(chatmsgstr);
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, chatmsgstr] {
 					bool foundActivePlayer = chatActivePlayerWithIdentity(playerIdentityStrCopy, chatmsgstr);
 					if (!foundActivePlayer)
@@ -1067,8 +1107,8 @@ int cmdInputThreadFunc(void *)
 			char action[1024] = {0};
 			char uniqueJoinID[1024] = {0};
 			char rejectionMessage[MAX_JOIN_REJECT_REASON] = {0};
-			unsigned int rejectionReason = static_cast<unsigned int>(ERROR_NOERROR);
-			int r = sscanf(line, "join %1023s %1023s %u %2047[^\n]s", action, uniqueJoinID, &rejectionReason, rejectionMessage);
+			unsigned int uintVal = static_cast<unsigned int>(ERROR_NOERROR);
+			int r = sscanf(line, "join %1023s %1023s %u %2047[^\n]s", action, uniqueJoinID, &uintVal, rejectionMessage);
 			if (r < 2 || r > 4)
 			{
 				wz_command_interface_output_onmainthread("WZCMD error: Failed to parse join command!\n");
@@ -1076,26 +1116,69 @@ int cmdInputThreadFunc(void *)
 			else
 			{
 				optional<AsyncJoinApprovalAction> approve = nullopt;
+				optional<uint8_t> explicitPlayerIdx = nullopt;
+				LOBBY_ERROR_TYPES rejectedReason = ERROR_NOERROR;
 				if (strcmp(action, "approve") == 0)
 				{
 					approve = AsyncJoinApprovalAction::Approve;
+					if (r >= 3)
+					{
+						explicitPlayerIdx = uintVal;
+					}
 				}
 				else if (strcmp(action, "reject") == 0)
 				{
 					approve = AsyncJoinApprovalAction::Reject;
+					if (uintVal < static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
+					{
+						rejectedReason = static_cast<LOBBY_ERROR_TYPES>(uintVal);
+					}
 				}
 				else if (strcmp(action, "approvespec") == 0)
 				{
 					approve = AsyncJoinApprovalAction::ApproveSpectators;
 				}
-				if (approve.has_value() && rejectionReason < static_cast<unsigned int>(std::numeric_limits<uint8_t>::max()))
+				if (approve.has_value())
 				{
 					auto approveValue = approve.value();
 					std::string uniqueJoinIDCopy(uniqueJoinID);
 					std::string rejectionMessageCopy(rejectionMessage);
 					convertEscapedNewlines(rejectionMessageCopy);
-					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, rejectionReason, rejectionMessageCopy] {
-						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, static_cast<LOBBY_ERROR_TYPES>(rejectionReason), rejectionMessageCopy))
+					wzAsyncExecOnMainThread([uniqueJoinIDCopy, approveValue, explicitPlayerIdx, rejectedReason, rejectionMessageCopy]() mutable {
+
+						if (rejectedReason == ERROR_REDIRECT)
+						{
+							// Parse the rejection message as a cmdinterface redirect string
+							auto redirectInfoOpt = parseCmdInterfaceRedirectStringToRedirectInfo(rejectionMessageCopy);
+							if (redirectInfoOpt.has_value())
+							{
+								// Convert it to json redirect string
+								std::string redirectStr;
+								try {
+									nlohmann::json obj = redirectInfoOpt.value();
+									redirectStr = obj.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
+								}
+								catch (const std::exception& e) {
+									debug(LOG_ERROR, "Failed to encode redirect string with error: %s", e.what());
+									redirectStr.clear();
+								}
+
+								if (!redirectStr.empty() && redirectStr.size() <= MAX_KICK_REASON)
+								{
+									rejectionMessageCopy = redirectStr;
+								}
+								else
+								{
+									wz_command_interface_output("WZCMD error: Encoded redirect string invalid length - redirect failed\n");
+								}
+							}
+							else
+							{
+								wz_command_interface_output("WZCMD error: Failed to parse redirect string\n");
+							}
+						}
+
+						if (!NETsetAsyncJoinApprovalResult(uniqueJoinIDCopy, approveValue, explicitPlayerIdx, rejectedReason, rejectionMessageCopy))
 						{
 							wz_command_interface_output("WZCMD info: Could not find currently-waiting join with specified uniqueJoinID\n");
 						}
@@ -1106,19 +1189,6 @@ int cmdInputThreadFunc(void *)
 					wz_command_interface_output_onmainthread("WZCMD error: Invalid action or rejectionReason passed to join approve/reject command\n");
 				}
 			}
-		}
-		else if(!strncmpl(line, "autobalance"))
-		{
-			wzAsyncExecOnMainThread([] {
-				if (autoBalancePlayersCmd())
-				{
-					wz_command_interface_output("WZCMD info: autobalanced players\n");
-				}
-				else
-				{
-					wz_command_interface_output("WZCMD error: autobalance failed\n");
-				}
-			});
 		}
 		else if(!strncmpl(line, "status"))
 		{
@@ -1564,8 +1634,29 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 
 	if (!gameHasFiredUp)
 	{
-		// in lobby, output "ready" status
+		// in lobby:
+		auto currentTime = std::chrono::steady_clock::now();
+
+		// output "ready" status
 		j["ready"] = static_cast<int>(p.ready);
+
+		if (NetPlay.isHost)
+		{
+			// output seconds since join
+			if (ingame.joinTimes[player].has_value())
+			{
+				j["joinedfor"] = std::chrono::duration_cast<std::chrono::seconds>(currentTime - ingame.joinTimes[player].value()).count();
+			}
+
+			// output seconds since _last_ ready (i.e. if currently ready, how long we've been ready this time)
+			if (p.ready && ingame.lastReadyTimes[player].has_value())
+			{
+				j["readyfor"] = std::chrono::duration_cast<std::chrono::seconds>(currentTime - ingame.lastReadyTimes[player].value()).count();
+			}
+
+			// output _total_ seconds spent not ready (at this snapshot)
+			j["notreadyfor"] = calculateSecondsNotReadyForPlayer(player, currentTime);
+		}
 	}
 	else
 	{
@@ -1588,6 +1679,11 @@ static void WzCmdInterfaceDumpHumanPlayerVarsImpl(uint32_t player, bool gameHasF
 		else
 		{
 			j["status"] = "left";
+
+			if (ingame.playerLeftGameTime[player].has_value())
+			{
+				j["playerLeftGameTime"] = ingame.playerLeftGameTime[player].value();
+			}
 		}
 	}
 
@@ -1646,7 +1742,11 @@ void wz_command_interface_output_room_status_json(bool queued)
 	auto data = nlohmann::ordered_json::object();
 	if (gameHasFiredUp)
 	{
-		if (ingame.TimeEveryoneIsInGame.has_value())
+		if (ingame.endTime.has_value())
+		{
+			data["state"] = "ended";
+		}
+		else if (ingame.TimeEveryoneIsInGame.has_value())
 		{
 			data["state"] = "started";
 		}
@@ -1664,11 +1764,12 @@ void wz_command_interface_output_room_status_json(bool queued)
 		auto lobbyGameId = NET_getCurrentHostedLobbyGameId();
 		if (lobbyGameId != 0)
 		{
-			data["lobbyid"] = lobbyGameId;
+			data["lobbyid"] = std::to_string(lobbyGameId);
 		}
 	}
 	data["map"] = game.map;
 	data["blind"] = static_cast<uint8_t>(game.blindMode);
+	data["unixtime"] = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	root["data"] = std::move(data);
 
@@ -1681,7 +1782,7 @@ void wz_command_interface_output_room_status_json(bool queued)
 			auto j = nlohmann::ordered_json::object();
 
 			j["pos"] = p.position;
-			j["team"] = p.team;
+			j["team"] = checkedGetPlayerTeam(player);
 			j["col"] = p.colour;
 			j["fact"] = static_cast<int32_t>(p.faction);
 

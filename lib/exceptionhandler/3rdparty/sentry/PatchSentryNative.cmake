@@ -12,3 +12,9 @@ endif()
 if (EXISTS "${SOURCE_DIR}/external/crashpad/compat/mingw/werapi.h")
 	file(REMOVE "${SOURCE_DIR}/external/crashpad/compat/mingw/werapi.h")
 endif()
+
+# Use compat/mingw/werapi.h (no longer needed) to add missing include for external/crashpad/handler/win/wer/crashpad_wer.cc
+# Fixes llvm-mingw compilation error (caused by lack of #include <cstddef> in crashpad_wer.cc)
+file(WRITE "${SOURCE_DIR}/external/crashpad/compat/mingw/werapi.h"
+  "#include_next <werapi.h>\n\n#include <cstddef>\n"
+)

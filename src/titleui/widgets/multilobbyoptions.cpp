@@ -935,34 +935,37 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 	}
 	optionsList->addItem(wrapItemForList(roomNameWidget, displayWrappedMainRoomItem));
 
-	// Add "Map" row
-	auto mapWidget = std::make_shared<LobbyMultiOptionsSectionWidget>();
-	mapNameWidget = std::make_shared<W_LABEL>(); // TODO: Replace with custom widget!!
-	mapNameWidget->setString(formatMapName(game.map));
-	mapWidget->setLabel(mapNameWidget);
-	auto mapViewButton = addSectionImageButton(mapWidget, IMAGE_EYE, 1);
-	mapViewButton->setTip(_("Click to see Map"));
-	mapViewButton->addOnClickHandler([](W_BUTTON&) {
-		widgScheduleTask([]{
-			loadMapPreview(true);
+	bool hideMapRow = isBlindSimpleLobby(game.blindMode) && !NetPlay.isHost;
+	if (!hideMapRow) {
+		// Add "Map" row
+		auto mapWidget = std::make_shared<LobbyMultiOptionsSectionWidget>();
+		mapNameWidget = std::make_shared<W_LABEL>(); // TODO: Replace with custom widget!!
+		mapNameWidget->setString(formatMapName(game.map));
+		mapWidget->setLabel(mapNameWidget);
+		auto mapViewButton = addSectionImageButton(mapWidget, IMAGE_EYE, 1);
+		mapViewButton->setTip(_("Click to see Map"));
+		mapViewButton->addOnClickHandler([](W_BUTTON&) {
+			widgScheduleTask([]{
+				loadMapPreview(true);
+			});
 		});
-	});
-	auto mapChangeButton = addSectionImageButton(mapWidget, IMAGE_GLOBE, 2);
-	mapChangeButton->setTip(_("Select Map\nCan be blocked by players' votes"));
-	if (titleUI)
-	{
-		mapChangeButton->addOnClickHandler([psWeakTitleUI](W_BUTTON&) {
-			auto multiOptionsTitleUI = psWeakTitleUI.lock();
-			ASSERT_OR_RETURN(, multiOptionsTitleUI != nullptr, "Null title UI?");
-			multiOptionsTitleUI->openMapChooser(); // FUTURE TODO: Replace this with a new map chooser overlay screen
-		});
+		auto mapChangeButton = addSectionImageButton(mapWidget, IMAGE_GLOBE, 2);
+		mapChangeButton->setTip(_("Select Map\nCan be blocked by players' votes"));
+		if (titleUI)
+		{
+			mapChangeButton->addOnClickHandler([psWeakTitleUI](W_BUTTON&) {
+				auto multiOptionsTitleUI = psWeakTitleUI.lock();
+				ASSERT_OR_RETURN(, multiOptionsTitleUI != nullptr, "Null title UI?");
+				multiOptionsTitleUI->openMapChooser(); // FUTURE TODO: Replace this with a new map chooser overlay screen
+			});
+		}
+		if (isChallenge || ingame.side == InGameSide::MULTIPLAYER_CLIENT || !titleUI)
+		{
+			mapChangeButton->setState(WBUT_DISABLE);
+		}
+		mapWidget->setGeometry(0, 0, mapWidget->idealWidth(), mapWidget->idealHeight());
+		optionsList->addItem(wrapItemForList(mapWidget, displayWrappedMainRoomItem));
 	}
-	if (isChallenge || ingame.side == InGameSide::MULTIPLAYER_CLIENT || !titleUI)
-	{
-		mapChangeButton->setState(WBUT_DISABLE);
-	}
-	mapWidget->setGeometry(0, 0, mapWidget->idealWidth(), mapWidget->idealHeight());
-	optionsList->addItem(wrapItemForList(mapWidget, displayWrappedMainRoomItem));
 
 	// SECTION: "Match Options"
 	auto matchOptionsSection = std::make_shared<LobbyMultiOptionsSectionWidget>();
@@ -1033,6 +1036,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 			if (NetPlay.isHost)
 			{
 				sendOptions();
+
+				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1058,6 +1064,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 			if (NetPlay.isHost)
 			{
 				sendOptions();
+
+				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1084,6 +1093,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 			if (NetPlay.isHost)
 			{
 				sendOptions();
+
+				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1110,6 +1122,9 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				if (NetPlay.isHost)
 				{
 					sendOptions();
+
+					NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
+					NETregisterServer(WZ_SERVER_UPDATE);
 				}
 			}
 		});
@@ -1177,8 +1192,11 @@ void WzMultiLobbyOptionsImpl::setGameOptionStates()
 		roomPasswordOptionsButton->setImage((NETGameIsLocked()) ? IMAGE_LOCK : IMAGE_UNLOCK);
 	}
 
-	// Update map name & details
-	mapNameWidget->setString(formatMapName(game.map));
+	if (mapNameWidget)
+	{
+		// Update map name & details
+		mapNameWidget->setString(formatMapName(game.map));
+	}
 
 	auto setButtonState = [](const std::shared_ptr<LobbyMultiOptionsChoiceWidget>& mbw, int value, int state)
 	{

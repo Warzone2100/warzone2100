@@ -28,6 +28,7 @@
 
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
+#import <TargetConditionals.h>
 
 static inline NSString * _Nonnull nsstringify(const char *str)
 {
@@ -146,6 +147,33 @@ bool TransformProcessState(ProcessApplicationTransformState newState)
 bool cocoaTransformToBackgroundApplication()
 {
     return TransformProcessState(kProcessTransformToBackgroundApplication);
+}
+
+bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor)
+{
+# if TARGET_OS_MAC
+	@autoreleasepool {
+		NSOperatingSystemVersion targetMin = {
+			.majorVersion = major,
+			.minorVersion = minor,
+			.patchVersion = 0
+		};
+
+//		if (@available(macOS 10.10, *)) {	// "@available" is only available on Xcode 9+
+		if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10) { // alternative to @available
+			if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:targetMin]) {
+				return true;
+			}
+		} else {
+			// macOS 10.9 and earlier require now-deprecated APIs
+			return false;
+		}
+		return false;
+	}
+#else
+	// not macOS
+	return false;
+#endif
 }
 
 #endif // WZ_OS_MAC

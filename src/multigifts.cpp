@@ -192,7 +192,7 @@ static void giftAutoGame(uint8_t from, uint8_t to, bool send)
 	{
 		uint8_t subType = AUTOGAME_GIFT;
 
-		auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
 		NETuint8_t(w, subType);
 		NETuint8_t(w, from);
 		NETuint8_t(w, to);
@@ -223,7 +223,7 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 	{
 		uint8_t subType = RADAR_GIFT;
 
-		auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
 		NETuint8_t(w, subType);
 		NETuint8_t(w, from);
 		NETuint8_t(w, to);
@@ -337,7 +337,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 				continue;
 			}
 
-			auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+			auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
 			NETuint8_t(w, giftType);
 			NETuint8_t(w, from);
 			NETuint8_t(w, to);
@@ -362,7 +362,7 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 	{
 		uint8_t giftType = RESEARCH_GIFT;
 
-		auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
 		NETuint8_t(w, giftType);
 		NETuint8_t(w, from);
 		NETuint8_t(w, to);
@@ -397,7 +397,7 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 	{
 		uint8_t giftType = POWER_GIFT;
 
-		auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
 		NETuint8_t(w, giftType);
 		NETuint8_t(w, from);
 		NETuint8_t(w, to);
@@ -641,7 +641,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 
 void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_ALLIANCE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_ALLIANCE);
 	NETuint8_t(w, from);
 	NETuint8_t(w, to);
 	NETuint8_t(w, state);
@@ -764,7 +764,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
  */
 void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_FEATURE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_FEATURE);
 	{
 		NETuint32_t(w, ref);
 		NETuint32_t(w, x);

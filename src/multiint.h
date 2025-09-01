@@ -111,13 +111,13 @@ void printBlindModeHelpMessagesToConsole();
  */
 int allPlayersOnSameTeam(int except);
 
+bool multiplayPlayersCanCheckReady();
+void handlePossiblePlayersCanCheckReadyChange(bool previousPlayersCanCheckReadyValue);
+
 bool multiplayPlayersReady();
 bool multiplayIsStartingGame();
 
 bool sendReadyRequest(UBYTE player, bool bReady);
-
-LOBBY_ERROR_TYPES getLobbyError();
-void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
 /**
  * Updates structure limit flags. Flags indicate which structures are disabled.
@@ -167,8 +167,6 @@ bool SendColourRequest(UBYTE player, UBYTE col);
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
-
-bool autoBalancePlayersCmd();
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN

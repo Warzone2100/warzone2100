@@ -851,7 +851,7 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t structureDamage(STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -860,7 +860,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 	      psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
-	relativeDamage = objDamage(psStructure, nullptr, damage, psStructure->structureBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
+	relativeDamage = objDamage(psStructure, psProjectile, damage, psStructure->structureBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -1047,6 +1047,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 					REPAIR_FACILITY	*psRepairFac = &psStruct->pFunctionality->repairFacility;
 					if (psRepairFac->psObj)
 					{
+						if (psRepairFac->state == RepairState::Repairing)
+						{
+							droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+						}
 						psRepairFac->psObj = nullptr;
 						psRepairFac->state = RepairState::Idle;
 					}
@@ -2156,10 +2160,6 @@ static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
 
 			psRepairFac->psObj = nullptr;
-			psRepairFac->psGroup = grpCreate();
-
-			// Add NULL droid to the group
-			psRepairFac->psGroup->add(nullptr);
 
 			// Create an assembly point for repaired droids
 			if (!createFlagPosition(&psRepairFac->psDeliveryPoint, psBuilding->player))
@@ -2434,7 +2434,8 @@ static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 	UDWORD	player;
 
 	/* Check for a structure */
-	if (fpathBlockingTile(x, y, propulsion))
+	/* NOTE: Substitute PROPULSION_TYPE_WHEELED for PROPULSION_TYPE_LIFT, as flying droids are initially placed on the ground */
+	if (fpathBlockingTile(x, y, (propulsion != PROPULSION_TYPE_LIFT) ? propulsion : PROPULSION_TYPE_WHEELED))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
@@ -2461,7 +2462,22 @@ static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 /* An auxiliary function for std::stable_sort in placeDroid */
 static bool comparePlacementPoints(Vector2i a, Vector2i b)
 {
-	return abs(a.x) + abs(a.y) < abs(b.x) + abs(b.y);
+	// Compare by Manhattan distance first
+	int dist_a = abs(a.x) + abs(a.y);
+	int dist_b = abs(b.x) + abs(b.y);
+
+	if (dist_a != dist_b)
+	{
+		return dist_a < dist_b; // Sort by Manhattan distance
+	}
+	else
+	{
+		if (a.x != b.x)
+		{
+			return a.x < b.x; // Compare x-coordinates
+		}
+		return a.y < b.y; // Compare y-coordinates
+	}
 }
 
 /* Find a location near to a structure to start the droid of */
@@ -5695,7 +5711,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 
 /*calculates the damage caused to the resistance levels of structures - returns
 true when captured*/
-bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
+bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer)
 {
 	STRUCTURE   *psStructure;
 	DROID       *psDroid;
@@ -5729,7 +5745,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 			psStructure->lastHitWeapon = WSC_ELECTRONIC;
 
-			triggerEventAttacked(psStructure, g_pProjLastAttacker, lastHit);
+			triggerEventAttacked(psStructure, psAttacker, lastHit);
 
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
 
@@ -5774,7 +5790,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		}
 		else
 		{
-			triggerEventAttacked(psDroid, g_pProjLastAttacker, lastHit);
+			triggerEventAttacked(psDroid, psAttacker, lastHit);
 
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
 
@@ -5800,7 +5816,8 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, gameTime - deltaGameTime);
 					}
 				}
-				if (!isDead(psDroid) && !giftSingleDroid(psDroid, attackPlayer, true, g_pProjLastAttacker->pos.xy()))
+				Vector2i giftPos = (psAttacker) ? psAttacker->pos.xy() : psDroid->pos.xy();
+				if (!isDead(psDroid) && !giftSingleDroid(psDroid, attackPlayer, true, giftPos))
 				{
 					// droid limit reached, recycle
 					// don't check for transporter/mission coz multiplayer only issue.
@@ -6454,38 +6471,6 @@ ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl
 	return ProductionRunEntry();
 }
 
-
-/*looks through a players production list to see how many command droids
-are being built*/
-UBYTE checkProductionForCommand(UBYTE player)
-{
-	unsigned quantity = 0;
-
-	if (player == productionPlayer)
-	{
-		//assumes Cyborg or VTOL droids are not Command types!
-		unsigned factoryType = FACTORY_FLAG;
-
-		for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
-		{
-			//check to see if there is a factory with a production run
-			if (factoryNumFlag[player][factoryType][factoryInc] && factoryInc < asProductionRun[factoryType].size())
-			{
-				ProductionRun &productionRun = asProductionRun[factoryType][factoryInc];
-				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
-				{
-					if (productionRun[inc].psTemplate->droidType == DROID_COMMAND)
-					{
-						quantity += productionRun[inc].numRemaining();
-					}
-				}
-			}
-		}
-	}
-	return quantity;
-}
-
-
 // Count number of factories assignable to a command droid.
 //
 UWORD countAssignableFactories(UBYTE player, UWORD factoryType)
@@ -6927,6 +6912,10 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 
 			// add to other list.
 			addStructure(psStructure);
+
+			// increment structure count for new owner
+			UDWORD max = psStructure->pStructureType - asStructureStats;
+			asStructureStats[max].curCount[attackPlayer]++;
 
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (DROID* psCurr : apsDroidLists[attackPlayer])

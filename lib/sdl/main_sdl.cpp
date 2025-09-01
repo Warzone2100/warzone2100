@@ -37,6 +37,7 @@
 #include "src/game.h"
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
+#include "sdl_backend_private.h"
 
 #if defined( _MSC_VER )
 	// Silence warning when using MSVC ARM64 compiler
@@ -68,6 +69,7 @@
 #if defined(WZ_OS_MAC)
 #include "cocoa_sdl_helpers.h"
 #include "cocoa_wz_menus.h"
+#include "lib/framework/cocoa_wrapper.h"
 #endif
 
 #if defined(__EMSCRIPTEN__)
@@ -162,7 +164,9 @@ bool get_scrap(char **dst);
 #define DOUBLE_CLICK_INTERVAL 250
 
 /* The current state of the keyboard */
-static INPUT_STATE aKeyState[KEY_MAXSCAN];		// NOTE: SDL_NUM_SCANCODES is the max, but KEY_MAXSCAN is our limit
+// NOTE: SDL_NUM_SCANCODES is the max, but KEY_MAXSCAN is our limit
+static INPUT_STATE aKeyState[KEY_MAXSCAN];		// the logical key state (impacted by attempts to clear input)
+static INPUT_STATE actualKeyState[KEY_MAXSCAN];	// the underlying key state (ignoring any attempts to clear input)
 
 /* The current location of the mouse */
 static Uint16 mouseXPos = 0;
@@ -430,11 +434,22 @@ std::vector<video_backend> wzAvailableGfxBackends()
 # endif // (defined(_M_X64) || defined(_M_IX86)
 #elif defined(WZ_OS_MAC)
 // MACOS:
-	// - Order is: Vulkan, OpenGL
-#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
-	availableBackends.push_back(video_backend::vulkan);
-#   endif
-	availableBackends.push_back(video_backend::opengl);
+	if (cocoaIsRunningOnMacOSAtLeastVersion(13, 0)) // macOS 13.0+, which has Metal 3+
+	{
+		// - Order is: Vulkan, OpenGL
+#   	if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+		availableBackends.push_back(video_backend::vulkan);
+#   	endif
+		availableBackends.push_back(video_backend::opengl);
+	}
+	else
+	{
+		// - For older macOS, default to: OpenGL, Vulkan
+		availableBackends.push_back(video_backend::opengl);
+#   	if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+		availableBackends.push_back(video_backend::vulkan);
+#   	endif
+	}
 #elif defined(WZ_OS_UNIX)
 // LINUX / UNIX:
 	// We'd *like* to default to Vulkan first here,
@@ -1366,6 +1381,7 @@ void inputInitialise(void)
 	for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
 	{
 		aKeyState[i].state = KEY_UP;
+		actualKeyState[i].state = KEY_UP;
 	}
 
 	for (unsigned int i = 0; i < MOUSE_END; i++)
@@ -1434,12 +1450,14 @@ void inputNewFrame(void)
 		if (aKeyState[i].state == KEY_PRESSED)
 		{
 			aKeyState[i].state = KEY_DOWN;
+			actualKeyState[i].state = KEY_DOWN;
 			debug(LOG_NEVER, "This key is DOWN! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 		else if (aKeyState[i].state == KEY_RELEASED  ||
 		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
+			actualKeyState[i].state = KEY_UP;
 			debug(LOG_NEVER, "This key is UP! %x, %d [%s]", i, i, SDL_GetScancodeName(keyCodeToSDLScancode((KEY_CODE)i)));
 		}
 	}
@@ -1471,11 +1489,35 @@ void inputLoseFocus(void)
 	for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
 	{
 		aKeyState[i].state = KEY_UP;
+		// Do *NOT* clear actualKeyState here!
 	}
 	for (unsigned int i = 0; i < MOUSE_END; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
+}
+
+static void restoreKeyDownState(KEY_CODE code)
+{
+	if (actualKeyState[code].state != KEY_UP)
+	{
+		aKeyState[code] = actualKeyState[code];
+	}
+}
+
+void inputRestoreMetaKeyState()
+{
+	restoreKeyDownState(KEY_RALT);
+	restoreKeyDownState(KEY_LALT);
+
+	restoreKeyDownState(KEY_RCTRL);
+	restoreKeyDownState(KEY_LCTRL);
+
+	restoreKeyDownState(KEY_RSHIFT);
+	restoreKeyDownState(KEY_LSHIFT);
+
+	restoreKeyDownState(KEY_RMETA);
+	restoreKeyDownState(KEY_LMETA);
 }
 
 /* This returns true if the key is currently depressed */
@@ -1664,19 +1706,22 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 			// whether double key press or not
 			aKeyState[code].state = KEY_PRESSED;
 			aKeyState[code].lastdown = 0;
+			actualKeyState[code].state = KEY_PRESSED;
+			actualKeyState[code].lastdown = 0;
 		}
 		break;
 	}
 
 	case SDL_KEYUP:
 	{
-		unsigned currentKey = keyEvent->keysym.scancode;
-		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetKeyName(currentKey));
-		KEY_CODE code = sdlScancodeToKeyCode(keyEvent->keysym.scancode);
+		SDL_Scancode currentKey = keyEvent->keysym.scancode;
+		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
+		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
 		if (code >= KEY_MAXSCAN)
 		{
 			break;
 		}
+		actualKeyState[code].state = KEY_UP;
 		if (aKeyState[code].state == KEY_PRESSED)
 		{
 			aKeyState[code].state = KEY_PRESSRELEASE;
@@ -2628,7 +2673,26 @@ void wzResetGfxSettingsOnFailure()
 	saveGfxConfig();
 }
 
-bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= ""*/)
+void wzDisplayFatalGfxBackendFailure(const std::string& additionalErrorDetails)
+{
+	std::string backendString;
+	if (WZbackend.has_value())
+	{
+		backendString = to_display_string(WZbackend.value());
+	}
+
+	// Display message that there was a failure with the gfx backend
+	std::string title = std::string("Graphics Error: ") + backendString;
+	std::string messageString = std::string("An error occured with graphics backend: ") + backendString + ".\n\n";
+	if (!additionalErrorDetails.empty())
+	{
+		messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
+	}
+	messageString += "Warzone 2100 will now close.";
+	wzDisplayDialog(Dialog_Error, title.c_str(), messageString.c_str());
+}
+
+bool wzPromptToChangeGfxBackendOnFailure(const std::string& additionalErrorDetails /*= ""*/)
 {
 	if (!WZbackend.has_value())
 	{
@@ -2642,20 +2706,8 @@ bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails /*= 
 		{
 			resetGfxBackend(defaultBackend);
 			saveGfxConfig(); // must force-persist the new value before returning!
-			return true;
 		}
-	}
-	else
-	{
-		// Display message that there was a failure with the gfx backend (but there's no other backend to offer changing it to?)
-		std::string title = std::string("Graphics Error: ") + to_display_string(WZbackend.value());
-		std::string messageString = std::string("An error occured with graphics backend: ") + to_display_string(WZbackend.value()) + ".\n\n";
-		if (!additionalErrorDetails.empty())
-		{
-			messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
-		}
-		messageString += "Warzone 2100 will now close.";
-		wzDisplayDialog(Dialog_Error, title.c_str(), messageString.c_str());
+		return true; // handled by this function (prompted user)
 	}
 	return false;
 }
@@ -3491,9 +3543,21 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 	auto availableBackends = wzAvailableGfxBackends();
 	optional<video_backend> requestedBackend = backend;
 	std::vector<std::string> backendInitErrors;
+
+	auto videoInitProgress = wzResumeFailedVideoInit(backend, availableBackends, backendInitErrors);
+	if (requestedBackend.has_value() && !backend.has_value())
+	{
+		// Requested a non-null backend, but resuming from previous init failure yielded no valid backends to try
+		videoInitProgress->RecordInitFinished(false);
+		failedToInitializeAnyGraphicsBackendMessage_internal(backendInitErrors);
+		WZbackend = nullopt;
+		return false;
+	}
+
 	do {
 		bool success = false;
 		WZbackend = backend; // various other functions might need this before the call to wzAttemptInitializeBackend returns
+		videoInitProgress->RecordAttemptingBackend(backend);
 		try {
 			success = wzAttemptInitializeBackend(backend, antialiasing, fullscreen, swapMode, lodDistanceBias, depthMapResolution);
 		}
@@ -3502,6 +3566,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 			if (backend.has_value())
 			{
 				backendInitErrors.push_back(astringf("[%s]: %s", to_display_string(backend.value()).c_str(), e.what()));
+				videoInitProgress->RecordFailedBackend(backend, e.what());
 			}
 		}
 		if (success)
@@ -3513,13 +3578,16 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 			if (!backend.has_value())
 			{
 				// if the null backend, and initialization failed, return false
+				videoInitProgress->RecordInitFinished(false);
 				return false;
 			}
 
+			videoInitProgress->RecordFailedBackend(backend, "Failed to initialize");
 			availableBackends.erase(std::remove_if(availableBackends.begin(), availableBackends.end(), [&backend](video_backend a) { return a == backend.value(); }), availableBackends.end());
 			if (availableBackends.empty())
 			{
 				// No more backends to try :(
+				videoInitProgress->RecordInitFinished(false);
 				failedToInitializeAnyGraphicsBackendMessage_internal(backendInitErrors);
 				WZbackend = nullopt;
 				return false;
@@ -3536,9 +3604,14 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		saveGfxConfig(); // must force-persist the new value before returning!
 	}
 
+	videoInitProgress->RecordInitFinished(true);
 	return true;
 }
 
+optional<video_backend> wzGetInitializedGfxBackend()
+{
+	return WZbackend;
+}
 
 // Calculates and returns the scale factor from the SDL window's coordinate system (in points) to the raw
 // underlying pixels of the viewport / renderer.
@@ -3797,6 +3870,11 @@ static void handleActiveEvent(SDL_Event *event)
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 			windowHasFocus = false;
 			debug(LOG_WZ, "Window %d lost keyboard focus", event->window.windowID);
+			for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
+			{
+				aKeyState[i].state = KEY_UP;
+				actualKeyState[i].state = KEY_UP;
+			}
 			break;
 		case SDL_WINDOWEVENT_CLOSE:
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);

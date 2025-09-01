@@ -247,8 +247,6 @@ struct REPAIR_FACILITY
 {
 	BASE_OBJECT *psObj;                /* Object being repaired */
 	FLAG_POSITION *psDeliveryPoint;    /* Place for the repaired droids to assemble at */
-	// The group the droids to be repaired by this facility belong to
-	DROID_GROUP *psGroup;
 	RepairState state;
 };
 

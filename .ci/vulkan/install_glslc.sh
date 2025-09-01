@@ -15,7 +15,7 @@ DEBIAN_FRONTEND=noninteractive apt-get -y install cmake python3 lcov
 echo "Fetching shaderc"
 git clone https://github.com/google/shaderc shaderc
 cd shaderc
-git checkout tags/v2024.3 -b v2024.3
+git checkout tags/v2025.3 -b v2025.3
 ./utils/git-sync-deps
 cd ..
 

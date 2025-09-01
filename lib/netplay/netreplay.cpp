@@ -52,6 +52,7 @@ static PHYSFS_file *replayLoadHandle = nullptr;
 
 static const uint32_t magicReplayNumber = 0x575A7270;  // "WZrp"
 static const uint32_t currentReplayFormatVer = 3;
+static const uint32_t minReplayFormatVerSupported = 3;
 static const size_t DefaultReplayBufferSize = 32768;
 static const size_t MaxReplayBufferSize = 2 * 1024 * 1024;
 
@@ -115,16 +116,16 @@ static bool NETreplaySaveWritePreamble(const nlohmann::json& settings, ReplayOpt
 	return true;
 }
 
-bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename)
+std::string NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &optionsHandler, int maxReplaysSaved, bool appendPlayerToFilename)
 {
 	if (NETisReplay())
 	{
 		// Have already loaded and will be running a replay - don't bother saving another
 		debug(LOG_WZ, "Replay loaded - skip recording of new replay");
-		return false;
+		return "";
 	}
 
-	ASSERT_OR_RETURN(false, !subdir.empty(), "Must provide a valid subdir");
+	ASSERT_OR_RETURN("", !subdir.empty(), "Must provide a valid subdir");
 
 	if (maxReplaysSaved > 0)
 	{
@@ -157,7 +158,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 	if (replaySaveHandle == nullptr)
 	{
 		debug(LOG_ERROR, "Could not create replay file %s: %s", filename.c_str(), WZ_PHYSFS_getLastError());
-		return false;
+		return "";
 	}
 
 	WZ_PHYSFS_SETBUFFER(replaySaveHandle, 1024 * 32)//;
@@ -218,7 +219,7 @@ bool NETreplaySaveStart(std::string const& subdir, ReplayOptionsHandler const &o
 		saveThread = nullptr;
 	}
 
-	return true;
+	return filename;
 }
 
 bool NETreplaySaveStop(ReplayOptionsHandler const &optionsHandler)
@@ -353,6 +354,17 @@ bool NETreplayLoadStart(std::string const &filename, ReplayOptionsHandler& optio
 			wzDisplayDialog(Dialog_Error, _("Replay File Format Unsupported"), mismatchVersionDescription.c_str());
 
 			std::string failLogStr = "Replay file format is newer than this version of Warzone 2100 can support: " + std::to_string(replayFormatVer);
+			return onFail(failLogStr.c_str());
+		}
+
+		if (replayFormatVer < minReplayFormatVerSupported)
+		{
+			std::string mismatchVersionDescription = _("The replay file format is older than this version of Warzone 2100 can support.");
+			mismatchVersionDescription += "\n\n";
+			mismatchVersionDescription += astringf(_("Replay Format Version: %u"), static_cast<unsigned>(replayFormatVer));
+			wzDisplayDialog(Dialog_Error, _("Replay File Format Unsupported"), mismatchVersionDescription.c_str());
+
+			std::string failLogStr = "Replay file format is older than this version of Warzone 2100 can support: " + std::to_string(replayFormatVer);
 			return onFail(failLogStr.c_str());
 		}
 

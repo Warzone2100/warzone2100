@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.24)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 set(_OLD_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}")
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -7,10 +7,6 @@ set(CMAKE_MODULE_PATH "${_OLD_CMAKE_MODULE_PATH}")
 unset(_OLD_CMAKE_MODULE_PATH)
 
 project(warzone2100)
-
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-	cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
 
 include(CMakeDependentOption)
 
@@ -148,8 +144,8 @@ endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	# Check minimum Emscripten version
-	if (NOT "${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.0)
-		message(FATAL_ERROR "Emscripten version must be at least 3.1.0")
+	if (NOT "${EMSCRIPTEN_VERSION}" VERSION_GREATER 3.1.57)
+		message(FATAL_ERROR "Emscripten version must be at least 3.1.58")
 	endif()
 
 	# For Emscripten, we must currently get the following packages from Emscripten ports:
@@ -163,11 +159,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	#	- Fetch API [LINK - see src/CMakeLists.txt]
 
 	set(COMP_AND_LINK_FLAGS "-fwasm-exceptions")
+	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER_EQUAL 4.0.0)
+		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -sWASM_LEGACY_EXCEPTIONS")
+	endif()
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		set(COMP_AND_LINK_FLAGS "${COMP_AND_LINK_FLAGS} -fsanitize=address -fsanitize-recover=address")
 	endif()
-	#set(USE_FLAGS "-s USE_PTHREADS=1 -s USE_SDL=2 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1")
-	set(USE_FLAGS "-s USE_PTHREADS=1 -s USE_SDL=0 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1")
+	set(USE_FLAGS "-pthread --use-port=freetype --use-port=harfbuzz")
 
 	# Set various flags and executable settings
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMP_AND_LINK_FLAGS} ${USE_FLAGS}")
@@ -178,6 +176,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	add_link_options(
 		"$<$<LINK_LANGUAGE:CXX,C>:-fwasm-exceptions>"
 	)
+	if ("${EMSCRIPTEN_VERSION}" VERSION_GREATER_EQUAL 4.0.0)
+		add_link_options(
+			"$<$<LINK_LANGUAGE:CXX,C>:-sWASM_LEGACY_EXCEPTIONS>"
+		)
+	endif()
 	if (WZ_EMSCRIPTEN_ENABLE_ASAN)
 		add_link_options(
 			"$<$<LINK_LANGUAGE:CXX,C>:-fsanitize=address>"
@@ -201,22 +204,15 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 			#"$<$<AND:$<LINK_LANGUAGE:CXX,C>,${debug_builds_only}>:-gsource-map>"
 		)
 	endif()
+
+	# Ensure FindThreads.cmake works
+	set(THREADS_PREFER_PTHREAD_FLAG ON)
 endif()
 
 INCLUDE(AddTargetLinkFlagsIfSupported)
 
 # Use "-fPIC" / "-fPIE" for all targets by default, including static libs
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-if (CMAKE_VERSION VERSION_LESS 3.14)
-	# CMake < 3.14 doesn't add "-pie" by default for executables (CMake issue #14983)
-	CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
-	if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
-		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
-	endif()
-elseif(POLICY CMP0083)
-	cmake_policy(SET CMP0083 NEW) # Apply -pie link flag if supported
-endif()
 
 set(WZ_WIN_HAS_PDB FALSE)
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")

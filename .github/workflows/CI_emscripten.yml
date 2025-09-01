@@ -27,7 +27,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  EMSDK_VERSION: 3.1.61
+  EMSDK_VERSION: 4.0.10
   CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
       WZ_GITHUB_SHA: ${{ steps.checkout-config.outputs.WZ_GITHUB_SHA }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: 'src'
@@ -163,7 +163,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       continue-on-error: true
       with:
         subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
@@ -186,7 +186,7 @@ jobs:
     - name: Prep Environment
       run: mkdir dl-archive
     - name: Download Archive Artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: 'warzone2100_${{ env.WZ_BUILD_DESC }}_archive'
         path: ./dl-archive

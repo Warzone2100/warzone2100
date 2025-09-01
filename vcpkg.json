@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "984f9232b2fe0eb94f5e9f161d6c632c581fff0c",
+	"builtin-baseline": "5300a2a461a53b76405db4fcbe6aeb0eea43935d",
 	"dependencies": [
 		"physfs",
 		"sdl2",
@@ -48,10 +48,10 @@
 			]
 		},
 		{
+			"$comment": "By not specifying curl[http3] feature, defaults to schannel for Windows, which is desired",
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"schannel",
 				"ssl"
 			],
 			"platform": "windows | mingw"
@@ -60,7 +60,7 @@
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"sectransp",
+				"openssl",
 				"ssl"
 			],
 			"platform": "osx"
@@ -87,7 +87,8 @@
 		}
 	],
 	"overrides": [
-		{ "name": "openal-soft", "version": "1.24.3" }
+		{ "name": "openal-soft", "version": "1.24.3" },
+		{ "name": "sqlite3", "version": "3.49.2" }
 	],
 	"default-features": [
 		"vulkan"

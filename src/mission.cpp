@@ -205,6 +205,10 @@ static void resetHomeStructureObjects()
 				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
 				if (psRepairFac->psObj)
 				{
+					if (psRepairFac->state == RepairState::Repairing)
+					{
+						droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+					}
 					psRepairFac->psObj = nullptr;
 					psRepairFac->state = RepairState::Idle;
 				}

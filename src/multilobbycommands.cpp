@@ -529,26 +529,6 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			return false;
 		}
 	}
-	else if (strncmp(&message.text[startingCommandPosition], "autobalance", 11) == 0)
-	{
-		ADMIN_REQUIRED_FOR_COMMAND("autobalance");
-		if (!getAutoratingEnable())
-		{
-			sendRoomSystemMessage("Autobalance is only supported when autorating lookup is configured.");
-			return false;
-		}
-		int maxp = std::min<int>(game.maxPlayers, MAX_PLAYERS);
-		if (maxp % 2 != 0)
-		{
-			sendRoomSystemMessage("Autobalance is available only for even player count.");
-			return false;
-		}
-		if (!cmdInterface.autoBalancePlayers(message.sender))
-		{
-			// failure message logged by autoBalancePlayers()
-			return false;
-		}
-	}
 	else if (strncmp(&message.text[startingCommandPosition], "mute ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "unmute ", 7) == 0)
 	{
 		bool isMute = strncmp(&message.text[startingCommandPosition], "mute", 4) == 0;

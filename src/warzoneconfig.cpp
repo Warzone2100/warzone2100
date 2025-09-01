@@ -76,6 +76,7 @@ struct WARZONE_GLOBALS
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
 	int autoDesyncKickSeconds = 10;
+	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -107,6 +108,9 @@ struct WARZONE_GLOBALS
 
 	// Connection provider used for hosting games
 	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
+
+	// audio cues
+	bool playAudioCue_GroupReporting = true;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -507,6 +511,21 @@ void war_setAutoDesyncKickSeconds(int seconds)
 	warGlobs.autoDesyncKickSeconds = seconds;
 }
 
+int war_getAutoNotReadyKickSeconds()
+{
+	return warGlobs.autoNotReadyKickSeconds;
+}
+
+void war_setAutoNotReadyKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 15);
+	}
+	warGlobs.autoNotReadyKickSeconds = seconds;
+}
+
 bool war_getDisableReplayRecording()
 {
 	return warGlobs.disableReplayRecording;
@@ -763,4 +782,14 @@ std::string to_string(ConnectionProviderType pt)
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
+}
+
+bool war_getPlayAudioCue_GroupReporting()
+{
+	return warGlobs.playAudioCue_GroupReporting;
+}
+
+void war_setPlayAudioCue_GroupReporting(bool val)
+{
+	warGlobs.playAudioCue_GroupReporting = val;
 }

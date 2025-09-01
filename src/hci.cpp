@@ -1489,7 +1489,7 @@ INT_RETVAL intRunWidgets()
 		/*****************  Reticule buttons  *****************/
 
 		case IDRET_COMMAND:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1500,7 +1500,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_BUILD:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1511,7 +1511,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_MANUFACTURE:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1522,7 +1522,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_RESEARCH:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1533,10 +1533,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_INTEL_MAP:
-			if (isKeyMapEditorUp)
-			{
-				break;
-			}
 			// check if RMB was clicked
 			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 			{
@@ -1553,7 +1549,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_DESIGN:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1570,10 +1566,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_CANCEL:
-			if (isKeyMapEditorUp)
-			{
-				break;
-			}
 			intResetScreen(false);
 			psCurrentMsg = nullptr;
 			reticuleCallback(RETBUT_CANCEL);
@@ -2766,11 +2758,6 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 // show selected widget from reticule menu
 void intShowWidget(int buttonID)
 {
-	if (isKeyMapEditorUp)
-	{
-		return;
-	}
-
 	switch (buttonID)
 	{
 	case RETBUT_FACTORY:

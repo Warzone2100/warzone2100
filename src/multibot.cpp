@@ -218,14 +218,14 @@ bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STA
  *
  *  \sa recvDroidDisEmbark()
  */
-bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
+bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid)
 {
 	if (!bMultiMessages)
 	{
 		return true;
 	}
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDDISEMBARK);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDDISEMBARK);
 	uint32_t player = psTransporter->player;
 	uint32_t droidId = psDroid->id;
 	uint32_t transportId = psTransporter->id;
@@ -301,7 +301,7 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
+bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
 {
 	if (!bMultiMessages)
 	{
@@ -325,7 +325,7 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 	}
 
 	debug(LOG_SYNC, "Droid sent with id of %u", id);
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_DROID);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_DROID);
 	{
 		Position pos(x, y, 0);
 		bool haveInitialOrders = initialOrdersP != nullptr;
@@ -334,8 +334,7 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 		NETuint8_t(w, player);
 		NETuint32_t(w, id);
 		NETPosition(w, pos);
-		WzString name = pTemplate->name;
-		NETwzstring(w, name);
+		NETwzstring(w, pTemplate->name);
 		NETint32_t(w, droidType);
 		NETuint8_t(w, pTemplate->asParts[COMP_BODY]);
 		NETuint8_t(w, pTemplate->asParts[COMP_BRAIN]);
@@ -536,7 +535,7 @@ void sendQueuedDroidInfo()
 			for (eqEnd = eqBegin + 1; eqEnd != qOrders.end() && eqEnd->orderCompare(*eqBegin) == 0; ++eqEnd)
 			{}
 
-			auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DROIDINFO);
+			auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DROIDINFO);
 			NETQueuedDroidInfo(w, *eqBegin);
 
 			uint32_t num = eqEnd - eqBegin;
@@ -703,7 +702,9 @@ bool recvDroidInfo(NETQUEUE queue)
 				* If the current order not is a command order and we are not a
 				* commander yet are in the commander group remove us from it.
 				*/
-				if (hasCommander(psDroid))
+				if (hasCommander(psDroid)
+					&& info.order != DORDER_RTR
+					&& info.order != DORDER_RTR_SPECIFIED)
 				{
 					psDroid->psGroup->remove(psDroid);
 				}
@@ -790,7 +791,7 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 // Inform other players that a droid has been destroyed
 bool SendDestroyDroid(const DROID *psDroid)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_DROID);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_DROID);
 	{
 		uint32_t id = psDroid->id;
 

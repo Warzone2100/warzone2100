@@ -724,6 +724,8 @@ public:
 	}
 
 private:
+	void applyExpectedHostProps();
+
 	void attemptToOpenConnection(size_t connectionIdx);
 
 	// Process a connection result (to be called from non-main threads)
@@ -731,6 +733,8 @@ private:
 
 	// Process a connection result - **Only to be called on the main thread**
 	void processOpenConnectionResult(size_t connectionIdx, OpenConnectionResult&& result);
+
+	bool verifyEncryptedHostResponse(const std::vector<uint8_t>& encryptedHostChallengeResponse);
 
 	// called from run()
 	void processJoining();
@@ -775,6 +779,7 @@ private:
 	bool asSpectator = false;
 	char gamePassword[password_string_size] = {};
 	size_t currentConnectionIdx = 0;
+	size_t numJoinRedirects = 0;
 
 	JoinSuccessHandler onSuccessFunc;
 	JoinFailureHandler onFailureFunc;
@@ -907,14 +912,19 @@ std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot
 	return widget;
 }
 
-void WzJoiningGameScreen_HandlerRoot::initialize()
+void WzJoiningGameScreen_HandlerRoot::applyExpectedHostProps()
 {
-	timeStarted = std::chrono::steady_clock::now();
-
 	if (expectedHostProps.gamePassword.has_value())
 	{
 		sstrcpy(gamePassword, expectedHostProps.gamePassword.value().c_str());
 	}
+}
+
+void WzJoiningGameScreen_HandlerRoot::initialize()
+{
+	timeStarted = std::chrono::steady_clock::now();
+
+	applyExpectedHostProps();
 
 	auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
 
@@ -1097,7 +1107,7 @@ void WzJoiningGameScreen_HandlerRoot::display(int xOffset, int yOffset)
 		return; // skip if hidden
 	}
 
-	if (backgroundColor.rgba == 0)
+	if (backgroundColor.isTransparent())
 	{
 		return;
 	}
@@ -1358,6 +1368,26 @@ static std::vector<uint8_t> serializeConnectionDescription(const JoinConnectionD
 	return std::vector<uint8_t>(connDescJsonStr.begin(), connDescJsonStr.end());
 }
 
+bool WzJoiningGameScreen_HandlerRoot::verifyEncryptedHostResponse(const std::vector<uint8_t>& encryptedHostChallengeResponse)
+{
+	// Decrypt the encryptedHostChallengeResponse
+	std::vector<uint8_t> hostChallengeResponse;
+	if (!connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedHostChallengeResponse[0]), encryptedHostChallengeResponse.size(), hostChallengeResponse))
+	{
+		debug(LOG_ERROR, "Invalid host challenge response data received!");
+		return false;
+	}
+
+	// Verify the host identity challenge response
+	if (!hostIdentity.verify(hostChallengeResponse, challengeForHost.data(), challengeForHost.size()))
+	{
+		debug(LOG_ERROR, "Unable to verify host challenge response!");
+		return false;
+	}
+
+	return true;
+}
+
 void WzJoiningGameScreen_HandlerRoot::processJoining()
 {
 	if (currentJoiningState == JoiningState::Success)
@@ -1541,20 +1571,9 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return;
 			}
 
-			// Decrypt the encryptedHostChallengeResponse
-			std::vector<uint8_t> hostChallengeResponse;
-			if (!connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedHostChallengeResponse[0]), encryptedHostChallengeResponse.size(), hostChallengeResponse))
-			{
-				debug(LOG_ERROR, "Invalid host challenge response data received!");
-				closeConnectionAttempt();
-				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
-				return;
-			}
-
 			// Verify the host identity challenge response
-			if (!hostIdentity.verify(hostChallengeResponse, challengeForHost.data(), challengeForHost.size()))
+			if (!verifyEncryptedHostResponse(encryptedHostChallengeResponse))
 			{
-				debug(LOG_ERROR, "Unable to verify host challenge response!");
 				closeConnectionAttempt();
 				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
 				return;
@@ -1608,10 +1627,15 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		{
 			uint8_t rejection = 0;
 			char reason[MAX_JOIN_REJECT_REASON] = {};
+			std::vector<uint8_t> encryptedHostChallengeResponse;
 
 			auto r = NETbeginDecode(tmpJoiningQUEUE, NET_REJECTED);
 			NETuint8_t(r, rejection);
 			NETstring(r, reason, MAX_JOIN_REJECT_REASON);
+			if (rejection == ERROR_REDIRECT)
+			{
+				NETbytes(r, encryptedHostChallengeResponse);
+			}
 			NETend(r);
 			NETpop(tmpJoiningQUEUE);
 
@@ -1619,7 +1643,49 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 
 			closeConnectionAttempt();
 
-			if (rejection == ERROR_WRONGPASSWORD)
+			if (rejection == ERROR_REDIRECT && numJoinRedirects == 0)
+			{
+				numJoinRedirects++;
+
+				// Verify the host identity challenge response
+				if (!verifyEncryptedHostResponse(encryptedHostChallengeResponse))
+				{
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
+					return;
+				}
+
+				auto redirectInfo = parseKickRedirectInfo(reason, connectionList[currentConnectionIdx].host);
+				if (!redirectInfo.has_value())
+				{
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Unable to process redirect")));
+					return;
+				}
+				if (redirectInfo->connList.empty())
+				{
+					// No valid connection descriptions!
+					debug(LOG_ERROR, "No valid connection descriptions in redirect: %s", reason);
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Unable to process redirect")));
+					return;
+				}
+
+				// Update expected host properties
+				expectedHostProps.hostPublicKey = hostIdentity.toBytes(EcKey::Public); // new join must match current hostPublicKey
+				expectedHostProps.gamePassword = redirectInfo->gamePassword;
+
+				closeConnectionAttempt();
+
+				// Attempt to join using the redirect connection details
+				connectionList = redirectInfo->connList;
+				asSpectator = redirectInfo->asSpectator;
+				applyExpectedHostProps();
+				currentJoiningState = JoiningState::AwaitingConnection;
+				attemptToOpenConnection(0);
+				return;
+			}
+			else if (rejection == ERROR_WRONGPASSWORD)
 			{
 				if (!expectedHostProps.gamePassword.has_value())
 				{

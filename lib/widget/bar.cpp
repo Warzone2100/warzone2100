@@ -39,8 +39,8 @@ W_BARINIT::W_BARINIT()
 	  //sCol
 	  //sMinorCol
 {
-	sCol.rgba = 0;
-	sMinorCol.rgba = 0;
+	sCol.clear();
+	sMinorCol.clear();
 }
 
 W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)

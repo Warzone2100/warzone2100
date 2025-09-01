@@ -1493,7 +1493,6 @@ void WzCampaignSubInfoBox::display(int xOffset, int yOffset)
 		int compatImgPosX0 = x0 + (compatibilityLabel->x() - (imgDimensions + imgTextPadding));
 		UWORD img = 0;
 		PIELIGHT imgColor;
-		imgColor.rgba = 0;
 		switch (compatibilityResult)
 		{
 			case WzModCompatibilityResult::NOT_COMPATIBLE:
@@ -1801,7 +1800,7 @@ void CampaignStartOptionsForm::display(int xOffset, int yOffset)
 	iV_Line(leftLineX0, y0, leftLineX0, y1, pal_RGBA(0,0,0,255));
 }
 
-static char const *difficultyLevelToString(DIFFICULTY_LEVEL difficulty)
+const char* difficultyLevelToString(DIFFICULTY_LEVEL difficulty)
 {
 	switch (difficulty)
 	{
@@ -1814,7 +1813,7 @@ static char const *difficultyLevelToString(DIFFICULTY_LEVEL difficulty)
 	return _("Unsupported");
 }
 
-static const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty)
+const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty)
 {
 	switch (difficulty)
 	{

@@ -727,6 +727,27 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->shield.initialShieldInterruptRegenTime = ini.value("initialShieldInterruptRegenTime").toInt();
 		psStats->shield.shieldInterruptRegenTimeDec = ini.value("shieldInterruptRegenTimeDec").toInt();
 		psStats->shield.shieldPointsPerStep = ini.value("shieldPointsPerStep").toInt();
+
+		auto shieldRange = ini.json("shieldRange");
+		if (!shieldRange.is_null())
+		{
+			ASSERT(shieldRange.is_array(), "shieldRange is not an array");
+			for (const auto& v : shieldRange)
+			{
+				psStats->shield.shieldRange.push_back(v.get<int>());
+			}
+		}
+
+		auto cmdExpRange = ini.json("cmdExpRange");
+		if (!cmdExpRange.is_null())
+		{
+			ASSERT(cmdExpRange.is_array(), "cmdExpRange is not an array");
+			for (const auto& v : cmdExpRange)
+			{
+				psStats->cmdExpRange.push_back(v.get<int>());
+			}
+		}
+
 		auto rankNames = ini.json("ranks");
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)

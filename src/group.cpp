@@ -64,34 +64,18 @@ DROID_GROUP::DROID_GROUP()
 }
 
 // create a new group
-DROID_GROUP *grpCreate(int id)
+DROID_GROUP *grpCreate()
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
 	auto psGroup = std::make_unique<DROID_GROUP>();
-	if (id == -1)
 	{
 		int i;
 		for (i = 0; grpGlobalManager.find(i) != grpGlobalManager.end(); i++) {}	// surly hack
 		psGroup->id = i;
 	}
-	else
-	{
-		ASSERT(grpGlobalManager.find(id) == grpGlobalManager.end(), "Group %d is already created!", id);
-		psGroup->id = id;
-	}
 	DROID_GROUP* rawPsGroup = psGroup.get();
 	grpGlobalManager.emplace(psGroup->id, std::move(psGroup));
 	return rawPsGroup;
-}
-
-DROID_GROUP *grpFind(int id)
-{
-	auto it = grpGlobalManager.find(id);
-	if (it != grpGlobalManager.end())
-	{
-		return it->second.get();
-	}
-	return grpCreate(id);
 }
 
 // add a droid to a group

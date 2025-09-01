@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.14)
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Automatically update the VERSION_INFO in the warzone2100.rc and the .manifest file
 #

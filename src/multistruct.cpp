@@ -58,12 +58,12 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
-bool SendBuildFinished(STRUCTURE *psStruct)
+bool SendBuildFinished(const STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
 	NETuint32_t(w, psStruct->id);		// ID of building
 
 	// Along with enough info to build it (if needed)
@@ -145,9 +145,9 @@ bool recvBuildFinished(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
-bool SendDestroyStructure(STRUCTURE *s)
+bool SendDestroyStructure(const STRUCTURE *s)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
 	// Struct to destroy
 	NETuint32_t(w, s->id);
 
@@ -189,9 +189,9 @@ bool recvDestroyStructure(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing
 
-bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
+bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_LASSAT);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_LASSAT);
 	NETuint8_t(w, player);
 	NETuint32_t(w, psStruct->id);
 	NETuint32_t(w, psObj->id);	// Target
@@ -252,21 +252,20 @@ bool recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID_TEMPLATE *pT)
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
 	uint8_t  structureInfo = structureInfo_;
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_STRUCTUREINFO);
 	NETuint8_t(w, player);
 	NETuint32_t(w, structId);
 	NETuint8_t(w, structureInfo);
 	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 	{
 		int32_t droidType = pT->droidType;
-		WzString name = pT->name;
-		NETwzstring(w, name);
+		NETwzstring(w, pT->name);
 		NETuint32_t(w, pT->multiPlayerID);
 		NETint32_t(w, droidType);
 		NETuint8_t(w, pT->asParts[COMP_BODY]);

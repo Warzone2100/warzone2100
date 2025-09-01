@@ -118,6 +118,9 @@ int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, W
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
 
+/* Check if droid is within commander's range */
+bool droidWithinCommanderRange(const DROID *psDroid, bool shield);
+
 /* Update droid shields. */
 void droidUpdateShields(DROID *psDroid);
 
@@ -240,9 +243,6 @@ bool electronicDroid(const DROID *psDroid);
 
 /// checks to see if the droid is currently being repaired by another
 bool droidUnderRepair(const DROID *psDroid);
-
-/// Count how many Command Droids exist in the world at any one moment
-UBYTE checkCommandExist(UBYTE player);
 
 /// For a given repair droid, check if there are any damaged droids within a defined range
  BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);

@@ -217,35 +217,28 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.LagCounter[i]++;
 		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i), LagAutoKickSeconds);
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i, true), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
-			wz_command_interface_output("WZEVENT: lag-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
+			if (wz_command_interface_enabled()) {
+				const auto& identity = getOutputPlayerIdentity(i);
+				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+				wz_command_interface_output("WZEVENT: lag-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
+			}
 			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION, false);
 			ingame.LagCounter[i] = 0;
 		}
 		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i), (LagAutoKickSeconds - ingame.LagCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 	}
-}
-
-void autoLagKickRoutine()
-{
-	if (!bMultiPlayer || !NetPlay.bComms || !NetPlay.isHost)
-	{
-		return;
-	}
-
-	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-	autoLagKickRoutine(now);
 }
 
 #define DESYNC_CHECK_INTERVAL 1000
@@ -308,22 +301,115 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 
 		ingame.DesyncCounter[i]++;
 		if (ingame.DesyncCounter[i] >= DesyncAutoKickSeconds) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i), DesyncAutoKickSeconds);
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of desync. (Timeout: %u seconds)", i, getPlayerName(i, true), DesyncAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
-			wz_command_interface_output("WZEVENT: desync-kick: %u %s\n", i, NetPlay.players[i].IPtextAddress);
+			if (wz_command_interface_enabled()) {
+				const auto& identity = getOutputPlayerIdentity(i);
+				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+				wz_command_interface_output("WZEVENT: desync-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
+			}
 			kickPlayer(i, "Your game simulation deviated too far from the host - desync.", ERROR_CONNECTION, false);
 			ingame.DesyncCounter[i] = 0;
 		}
 		else if (ingame.DesyncCounter[i] >= (DesyncAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
 		else if (ingame.DesyncCounter[i] % 2 == 0) { // every 2 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (desync)", i, getPlayerName(i, true), (DesyncAutoKickSeconds - ingame.DesyncCounter[i]));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
+		}
+	}
+}
+
+// ////////////////////////////////////////////////////////////////////////////
+
+uint64_t calculateSecondsNotReadyForPlayer(size_t i, std::chrono::steady_clock::time_point now)
+{
+	if (i >= NetPlay.players.size()) { return 0; }
+
+	uint64_t totalSecondsNotReady = ingame.secondsNotReady[i];
+	if (ingame.lastNotReadyTimes[i].has_value())
+	{
+		// accumulate time since last not ready
+		totalSecondsNotReady += std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastNotReadyTimes[i].value()).count();
+	}
+	return totalSecondsNotReady;
+}
+
+#define NOTREADY_CHECK_INTERVAL 1000
+const std::chrono::milliseconds NotReadyCheckInterval(NOTREADY_CHECK_INTERVAL);
+
+void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
+{
+	if (!bMultiPlayer || !NetPlay.bComms || !NetPlay.isHost)
+	{
+		return;
+	}
+
+	const bool isLobby = ingame.localJoiningInProgress;
+	if (!isLobby)
+	{
+		return;
+	}
+
+	if (!multiplayPlayersCanCheckReady())
+	{
+		// If players can't check ready, skip
+		return;
+	}
+
+	int NotReadyAutoKickSeconds = war_getAutoNotReadyKickSeconds();
+	if (NotReadyAutoKickSeconds <= 0)
+	{
+		return;
+	}
+
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastNotReadyCheck) < NotReadyCheckInterval)
+	{
+		return;
+	}
+
+	ingame.lastNotReadyCheck = now;
+	for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	{
+		if (!isHumanPlayer(i))
+		{
+			continue;
+		}
+		if (i == NetPlay.hostPlayer)
+		{
+			continue;
+		}
+		if (i > MAX_PLAYERS && !gtimeShouldWaitForPlayer(i))
+		{
+			continue;
+		}
+		if (ingame.PendingDisconnect[i])
+		{
+			// player already technically left, but we're still in the "pre-game" phase so the GAME_PLAYER_LEFT hasn't been processed yet
+			continue;
+		}
+
+		auto totalSecondsNotReady = calculateSecondsNotReadyForPlayer(i, now);
+		if (totalSecondsNotReady >= NotReadyAutoKickSeconds) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because they aren't ready. (Timeout: %u seconds)", i, getPlayerName(i), NotReadyAutoKickSeconds);
+			debug(LOG_INFO, "%s", msg.c_str());
+			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKicked, i));
+			if (wz_command_interface_enabled()) {
+				const auto& identity = getOutputPlayerIdentity(i);
+				std::string playerPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+				wz_command_interface_output("WZEVENT: notready-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
+			}
+			kickPlayer(i, "You have been removed from the room.\nYou have spent too much time without checking Ready.\n\nIn the future, please check Ready and leave it checked, to avoid delaying games for other players.", ERROR_CONNECTION, false);
+		}
+		else if (!NetPlay.players[i].ready && totalSecondsNotReady >= (NotReadyAutoKickSeconds - 6)) {
+			WzQuickChatTargeting targeting;
+			targeting.specificPlayers.insert(i);
+			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKickWarning, i));
 		}
 	}
 }
@@ -454,7 +540,7 @@ bool multiPlayerLoop()
 		if (!ingame.TimeEveryoneIsInGame.has_value())
 		{
 			ingame.TimeEveryoneIsInGame = gameTime;
-			debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame.value());
+			debug(LOG_NET, "I have entered the game @ %u", gameTime);
 			if (!NetPlay.isHost)
 			{
 				debug(LOG_NET, "=== Sending hash to host ===");
@@ -803,15 +889,7 @@ bool isHumanPlayer(int player)
 	{
 		return false;	// obvious, really
 	}
-	const auto& p = NetPlay.players[player];
-	return p.allocated && p.difficulty == AIDifficulty::HUMAN;
-}
-
-// Returns true if this player slot is not occupied by either player or a bot
-bool isClosedPlayerSlot(int player)
-{
-	const auto& p = NetPlay.players[player];
-	return p.allocated == false && p.difficulty == AIDifficulty::DISABLED;
+	return NetPlay.players[player].allocated;
 }
 
 // Clear player name data after game quit.
@@ -828,7 +906,7 @@ int whosResponsible(int player)
 	{
 		return player;			// Responsible for him or her self
 	}
-	else if (player == selectedPlayer)
+	else if (player == realSelectedPlayer)
 	{
 		return player;			// We are responsibly for ourselves
 	}
@@ -841,7 +919,7 @@ int whosResponsible(int player)
 //returns true if selected player is responsible for 'player'
 bool myResponsibility(int player)
 {
-	return !isClosedPlayerSlot(player) && (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer);
+	return (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer);
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
@@ -972,7 +1050,7 @@ static void sendObj(MessageWriter& w, const BASE_OBJECT *psObj)
 
 void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2)
 {
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SYNC_REQUEST);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_SYNC_REQUEST);
 	NETint32_t(w, req_id);
 	NETint32_t(w, x);
 	NETint32_t(w, y);
@@ -1516,8 +1594,6 @@ bool recvMessage()
 			{
 				uint32_t player_id;
 
-				resetReadyStatus(false);
-
 				auto r = NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(r, player_id);
@@ -1677,7 +1753,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 bool SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	// Send the player that is researching the topic and the topic itself
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_FINISH_RESEARCH);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_FINISH_RESEARCH);
 	NETuint8_t(w, player);
 	NETuint32_t(w, index);
 	NETend(w);
@@ -1753,7 +1829,7 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t pla
 		return true;
 	}
 
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCHSTATUS);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_RESEARCHSTATUS);
 	NETuint8_t(w, player);
 	NETbool(w, bStart);
 
@@ -1971,19 +2047,32 @@ void NetworkTextMessage::enqueue(NETQUEUE queue)
 	NETend(w);
 }
 
+bool NetworkTextMessage::decode(const NetMessage& message, uint8_t senderIdx)
+{
+	auto r = MessageReader(message);
+	return decode(r, senderIdx);
+}
+
 bool NetworkTextMessage::receive(NETQUEUE queue)
+{
+	auto r = NETbeginDecode(queue, NET_TEXTMSG);
+	return decode(r, queue.index);
+}
+
+bool NetworkTextMessage::decode(MessageReader& r, uint8_t senderIdx)
 {
 	memset(text, 0x0, sizeof(text));
 
-	auto r = NETbeginDecode(queue, NET_TEXTMSG);
+	ASSERT_OR_RETURN(false, NET_TEXTMSG == r.msgType, "Unexpected message type: %" PRIu8, r.msgType);
+
 	NETint32_t(r, sender);
 	NETbool(r, teamSpecific);
 	NETstring(r, text, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
-	if (whosResponsible(sender) != queue.index)
+	if (whosResponsible(sender) != senderIdx)
 	{
-		sender = queue.index;  // Fix corrupted sender.
+		sender = senderIdx;  // Fix corrupted sender.
 	}
 
 	if (sender >= MAX_CONNECTED_PLAYERS || (sender >= 0 && (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN)))
@@ -2086,6 +2175,16 @@ bool receiveInGameTextMessage(NETQUEUE queue)
 		return false;
 	}
 
+	if (message.sender >= 0)
+	{
+		if (playerSpamMutedUntil(message.sender).has_value())
+		{
+			// discard messages from sender while spam-muted
+			return false;
+		}
+		recordPlayerMessageSent(message.sender);
+	}
+
 	printInGameTextMessage(message);
 	cmdInterfaceLogChatMsg(message, "WZCHATGAM");
 
@@ -2131,36 +2230,58 @@ bool recvTextMessageAI(NETQUEUE queue)
 	return true;
 }
 
-bool recvSpecInGameTextMessage(NETQUEUE queue)
+optional<NetworkTextMessage> decodeSpecInGameTextMessage(MessageReader& r, uint8_t senderIdx)
 {
+	ASSERT_OR_RETURN(nullopt, NET_SPECTEXTMSG == r.msgType, "Unexpected message type: %" PRIu8, r.msgType);
+
 	UDWORD	sender;
 	char	newmsg[MAX_CONSOLE_STRING_LENGTH] = {};
 
-	auto r = NETbeginDecode(queue, NET_SPECTEXTMSG);
 	NETuint32_t(r, sender);			//in-game player index ('normal' one)
 	NETstring(r, newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend(r);
 
-	if (whosResponsible(sender) != queue.index)
+	if (whosResponsible(sender) != senderIdx)
 	{
-		sender = queue.index;  // Fix corrupted sender.
+		sender = senderIdx;  // Fix corrupted sender.
 	}
 
 	if (sender >= MAX_CONNECTED_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
 	{
-		return false;
+		return nullopt;
 	}
 
 	if (!NetPlay.players[selectedPlayer].isSpectator)
 	{
-		return false; // ignore
+		return nullopt; // ignore
 	}
 
-	auto message = NetworkTextMessage(SPECTATOR_MESSAGE, newmsg);
+	return NetworkTextMessage(sender, newmsg);
+}
 
-	if (isPlayerMuted(sender))
+bool recvSpecInGameTextMessage(NETQUEUE queue)
+{
+	auto r = NETbeginDecode(queue, NET_SPECTEXTMSG);
+	auto messageOpt = decodeSpecInGameTextMessage(r, queue.index);
+	if (!messageOpt.has_value())
 	{
 		return false;
+	}
+	auto& message = messageOpt.value();
+
+	if (isPlayerMuted(message.sender))
+	{
+		return false;
+	}
+
+	if (message.sender >= 0)
+	{
+		if (playerSpamMutedUntil(message.sender).has_value())
+		{
+			// discard messages from sender while spam-muted
+			return false;
+		}
+		recordPlayerMessageSent(message.sender);
 	}
 
 	printInGameTextMessage(message);
@@ -2603,6 +2724,14 @@ const char *getPlayerColourName(int player)
 	return gettext(playerColors[getPlayerColour(player)]);
 }
 
+bool shouldSkipReadyResetOnPlayerJoinLeaveEvent()
+{
+	// If a player joins or leaves, do not reset existing player "ready" status if:
+	// 1. It's a blind simple lobby (i.e. waiting room)
+	// 2. min_autostart_player_count is set (ex. via the --startplayers= command line option)
+	return isBlindSimpleLobby(game.blindMode) || (min_autostart_player_count() > 0);
+}
+
 /* Reset ready status for all players */
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 {
@@ -2632,7 +2761,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 			}
 		}
 
-		wz_command_interface_output_room_status_json();
+		wz_command_interface_output_room_status_json(true);
 	}
 }
 

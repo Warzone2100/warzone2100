@@ -37,7 +37,6 @@
 
 #include "clparse.h"
 #include "frontend.h"
-#include "keyedit.h"
 #include "mission.h"
 #include "multiint.h"
 #include "multilimit.h"
@@ -104,6 +103,11 @@ static void setupLoadingScreen()
 	if (!stars)
 	{
 		stars = (STAR *)malloc(sizeof(STAR) * starsNum);
+		if (!stars)
+		{
+			starsNum = 0;
+			return;
+		}
 	}
 
 	for (i = 0; i < starsNum; ++i)

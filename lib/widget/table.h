@@ -46,12 +46,16 @@ public:
 
 	// Set whether the row background highlights on mouse-over
 	void setHighlightsOnMouseOver(bool value);
+	void setHighlightColor(PIELIGHT newHighlightColor);
 
 	// Get the total idealWidth() returned by all column widgets in this row (does not include padding)
 	int32_t getColumnTotalContentIdealWidth();
 
 	// Set whether the row draws an outer border
 	void setDrawBorder(optional<PIELIGHT> borderColor);
+
+	// Set a background color for the row
+	void setBackgroundColor(optional<PIELIGHT> backgroundColor);
 
 	// Set whether row is "disabled"
 	void setDisabled(bool disabled);
@@ -62,7 +66,7 @@ protected:
 	virtual void displayRecursive(WidgetGraphicsContext const& context) override;
 	virtual bool hitTest(int x, int y) const override;
 public:
-	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 protected:
 	friend class ScrollableTableWidget;
 	virtual void resizeColumns(const std::vector<size_t>& columnWidths, int columnPadding);
@@ -76,7 +80,10 @@ private:
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
 	optional<PIELIGHT> borderColor = nullopt;
+	optional<PIELIGHT> backgroundColor = nullopt;
+	PIELIGHT highlightColor;
 	PIELIGHT disabledColor;
+	int32_t maxDisplayedColumnX1 = 0;
 };
 
 class TableHeader; // forward-declare
@@ -110,6 +117,7 @@ public:
 	// See: ``TableRow``
 	void addRow(const std::shared_ptr<TableRow> &row);
 	void clearRows();
+	const std::vector<std::shared_ptr<TableRow>>& getRows() const { return rows; }
 
 	// Show / hide header
 	void setHeaderVisible(bool visible);

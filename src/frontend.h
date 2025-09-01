@@ -30,23 +30,14 @@ enum tMode
 	TITLE,			// 0 intro mode
 	SINGLE,			// 1 single player menu
 	MULTI,			// 2 multiplayer menu
-	OPTIONS,		// 3 options menu
-	GAME,			// 4
-	TUTORIAL,		// 5  tutorial/fastplay
-	TITLE_UNUSED,	// 6
-	FORCESELECT,	// 7 MULTIPLAYER, Force design screen
-	STARTGAME,		// 8 Fire up the game
-	SHOWINTRO,		// 9 reshow the intro
-	QUIT,			// 10 leaving game
-	LOADSAVEGAME,	// 11 loading a save game
-	KEYMAP,			// 12 keymap editor
-	GRAPHICS_OPTIONS,       // 13 graphics options menu
-	AUDIO_AND_ZOOM_OPTIONS, // 14 audio and zoom options menu
-	VIDEO_OPTIONS,          // 15 video options menu
-	MOUSE_OPTIONS,          // 16 mouse options menu
-	CAMPAIGNS,              // 17 campaign selector
-	MUSIC_MANAGER,			// 18 music manager
-	MULTIPLAY_OPTIONS,		// 19 multiplay options menu
+	TUTORIAL,		// 3  tutorial/fastplay
+	TITLE_UNUSED,	// 4
+	FORCESELECT,	// 5 MULTIPLAYER, Force design screen
+	STARTGAME,		// 6 Fire up the game
+	SHOWINTRO,		// 7 reshow the intro
+	QUIT,			// 8 leaving game
+	LOADSAVEGAME,	// 9 loading a save game
+	CAMPAIGNS,      // 10 campaign selector
 };
 
 #define MAX_LEVEL_NAME_SIZE	(256)
@@ -60,30 +51,17 @@ void changeTitleMode(tMode mode);
 bool runTitleMenu();
 bool runSinglePlayerMenu();
 bool runMultiPlayerMenu();
-bool runGameOptionsMenu();
-bool runMultiplayOptionsMenu();
-bool runOptionsMenu();
-bool runGraphicsOptionsMenu();
-bool runAudioAndZoomOptionsMenu();
-bool runVideoOptionsMenu();
-bool runMouseOptionsMenu();
 bool runTutorialMenu();
 void runContinue();
 void startTitleMenu();
 void startTutorialMenu();
 void startSinglePlayerMenu();
 void startMultiPlayerMenu();
-void startOptionsMenu();
-void startGraphicsOptionsMenu();
-void startAudioAndZoomOptionsMenu();
-void startVideoOptionsMenu();
-void startMouseOptionsMenu();
-void startGameOptionsMenu();
-void startMultiplayOptionsMenu();
-void refreshCurrentVideoOptionsValues();
 void frontendIsShuttingDown();
 
 void notifyAboutMissingVideos();
+
+std::shared_ptr<IMAGEFILE> getFlagsImages();
 
 void addTopForm(bool wide);
 void addBottomForm(bool wide = false);
@@ -103,34 +81,7 @@ bool CancelPressed();
 /* Tell the frontend when the screen has been resized */
 void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
-// Graphics options, shared for in-game options menu use
-char const *graphicsOptionsFmvmodeString();
-char const *graphicsOptionsScanlinesString();
-char const *graphicsOptionsSubtitlesString();
-char const *graphicsOptionsShadowsString();
-char const *graphicsOptionsRadarString();
-char const *graphicsOptionsRadarJumpString();
-char const *graphicsOptionsScreenShakeString();
-char const *graphicsOptionsGroupsMenuEnabled();
-void seqFMVmode();
-void seqScanlineMode();
-
-// Video options, shared for in-game options menu use
-char const *videoOptionsDisplayScaleLabel();
-char const *videoOptionsVsyncString();
-std::string videoOptionsDisplayScaleString();
 std::vector<unsigned int> availableDisplayScalesSorted();
-void seqDisplayScale();
-void seqVsyncMode();
-
-// Mouse options, shared for in-game options menu use
-char const *mouseOptionsMflipString();
-char const *mouseOptionsTrapString();
-char const *mouseOptionsMbuttonsString();
-char const *mouseOptionsMmrotateString();
-char const *mouseOptionsCursorModeString();
-char const *mouseOptionsScrollEventString();
-void seqScrollEvent();
 
 struct DisplayTextOptionCache
 {
@@ -270,133 +221,9 @@ enum
 	FRONTEND_CAMPAIGN_5,
 	FRONTEND_CAMPAIGN_6,
 
-	FRONTEND_GAMEOPTIONS = 21000,           // Game Options menu
-	FRONTEND_LANGUAGE,
-	FRONTEND_LANGUAGE_R,
-	FRONTEND_COLOUR,
-	FRONTEND_COLOUR_CAM,
-	FRONTEND_COLOUR_MP,
-	FRONTEND_DIFFICULTY,
-	FRONTEND_DIFFICULTY_R,
-	FRONTEND_CAMERASPEED,
-	FRONTEND_CAMERASPEED_R,
-
-	FRONTEND_GRAPHICSOPTIONS = 22000,       // Graphics Options Menu
-	FRONTEND_FMVMODE,
-	FRONTEND_FMVMODE_R,
-	FRONTEND_SCANLINES,
-	FRONTEND_SCANLINES_R,
-	FRONTEND_SHADOWS,
-	FRONTEND_SHADOWS_R,
-	FRONTEND_SHADOWMAP_RESOLUTION,
-	FRONTEND_SHADOWMAP_RESOLUTION_DROPDOWN,
-	FRONTEND_SHADOW_FILTER_SIZE,
-	FRONTEND_SHADOW_FILTER_SIZE_DROPDOWN,
-	FRONTEND_LIGHTS,
-	FRONTEND_LIGHTS_R,
-	FRONTEND_FOG,
-	FRONTEND_FOG_R,
-	FRONTEND_RADAR,
-	FRONTEND_RADAR_R,
-	FRONTEND_RADAR_JUMP,
-	FRONTEND_RADAR_JUMP_R,
-	FRONTEND_LOD_DISTANCE,
-	FRONTEND_LOD_DISTANCE_R,
-	FRONTEND_SSHAKE,
-	FRONTEND_SSHAKE_R,
-	FRONTEND_TERRAIN_QUALITY,
-	FRONTEND_TERRAIN_QUALITY_R,
-	FRONTEND_TERRAIN_SHADING_QUALITY,
-	FRONTEND_TERRAIN_SHADING_QUALITY_R,
-	FRONTEND_GROUPS,
-	FRONTEND_GROUPS_R,
-	FRONTEND_INGAMEOPTIONS_BUTTON,
-	FRONTEND_INGAMEOPTIONS_BUTTON_DROPDOWN,
-
-	FRONTEND_AUDIO_AND_ZOOMOPTIONS = 23000,                 // Audio and Zoom Options Menu
-	FRONTEND_3D_FX,						// 3d sound volume
-	FRONTEND_FX,						// 2d (voice) sound volume
-	FRONTEND_MUSIC,						// music volume
-	FRONTEND_SUBTITLES,
-	FRONTEND_SUBTITLES_R,
-	FRONTEND_SOUND_HRTF,				// HRTF mode
-	FRONTEND_MAP_ZOOM,					// map zoom
-	FRONTEND_MAP_ZOOM_RATE,					// map zoom rate
-	FRONTEND_RADAR_ZOOM,					// radar zoom rate
-	FRONTEND_3D_FX_SL,
-	FRONTEND_FX_SL,
-	FRONTEND_MUSIC_SL,
-	FRONTEND_SOUND_HRTF_R,
-	FRONTEND_MAP_ZOOM_R,
-	FRONTEND_MAP_ZOOM_RATE_R,
-	FRONTEND_RADAR_ZOOM_R,
-
-	FRONTEND_VIDEOOPTIONS = 24000,          // video Options Menu
-	FRONTEND_WINDOWMODE,
-	FRONTEND_WINDOWMODE_R,
-	FRONTEND_RESOLUTION_READONLY_LABEL_CONTAINER,
-	FRONTEND_RESOLUTION_READONLY_LABEL,
-	FRONTEND_RESOLUTION_READONLY_CONTAINER,
-	FRONTEND_RESOLUTION_READONLY,
-	FRONTEND_RESOLUTION_DROPDOWN_LABEL_CONTAINER,
-	FRONTEND_RESOLUTION_DROPDOWN_LABEL,
-	FRONTEND_RESOLUTION_DROPDOWN,
-	FRONTEND_TEXTURESZ,
-	FRONTEND_TEXTURESZ_R,
-	FRONTEND_VSYNC,
-	FRONTEND_VSYNC_R,
-	FRONTEND_FSAA,
-	FRONTEND_FSAA_R,
-	FRONTEND_DISPLAYSCALE,
-	FRONTEND_DISPLAYSCALE_R,
-	FRONTEND_GFXBACKEND,
-	FRONTEND_GFXBACKEND_R,
-	FRONTEND_MINIMIZE_ON_FOCUS_LOSS,
-	FRONTEND_MINIMIZE_ON_FOCUS_LOSS_DROPDOWN,
-	FRONTEND_ALTENTER_TOGGLE_MODE,
-	FRONTEND_ALTENTER_TOGGLE_MODE_DROPDOWN,
-
-	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
-	FRONTEND_CURSORMODE,
-	FRONTEND_CURSORMODE_R,
-	FRONTEND_TRAP,
-	FRONTEND_TRAP_R,
-	FRONTEND_MFLIP,
-	FRONTEND_MFLIP_R,
-	FRONTEND_MBUTTONS,
-	FRONTEND_MBUTTONS_R,
-	FRONTEND_MMROTATE,
-	FRONTEND_MMROTATE_R,
-	FRONTEND_SCROLLEVENT,
-	FRONTEND_SCROLLEVENT_R,
-	FRONTEND_CURSORSCALE,
-	FRONTEND_CURSORSCALE_DROPDOWN,
-
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
 
 	FRONTEND_MUSICMANAGER   = 27000,	// Music manager menu
-
-	FRONTEND_MULTIPLAYOPTIONS = 28000,	// Multiplayer Options Menu
-	FRONTEND_GAME_PORT,
-	FRONTEND_GAME_PORT_R,
-	FRONTEND_PORT_MAPPING,
-	FRONTEND_PORT_MAPPING_R,
-	FRONTEND_HOST_CHATDEFAULT,
-	FRONTEND_HOST_CHATDEFAULT_R,
-	FRONTEND_HOST_DEFAULT_AI,
-	FRONTEND_HOST_DEFAULT_AI_R,
-	FRONTEND_INACTIVITY_TIMEOUT,
-	FRONTEND_INACTIVITY_TIMEOUT_DROPDOWN,
-	FRONTEND_GAME_TIME_LIMIT,
-	FRONTEND_GAME_TIME_LIMIT_DROPDOWN,
-	FRONTEND_LAG_KICK,
-	FRONTEND_LAG_KICK_DROPDOWN,
-	FRONTEND_SPECTATOR_SLOTS,
-	FRONTEND_SPECTATOR_SLOTS_DROPDOWN,
-	FRONTEND_PLAYER_LEAVE_MODE,
-	FRONTEND_PLAYER_LEAVE_MODE_DROPDOWN,
-	FRONTEND_AUTORATING,
-	FRONTEND_AUTORATING_R,
 
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 

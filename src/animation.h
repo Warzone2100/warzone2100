@@ -34,7 +34,7 @@ class ValueTracker {
 	int target;
 	int targetDelta;
 	bool _reachedTarget;
-	float current;
+	double current;
 	int speed = 10;
 	public:
 	/// Starts the tracking with the specified initial value.

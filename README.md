@@ -1,41 +1,55 @@
-Warzone 2100
-============
+<h1 align="center">
+  <img src="icons/warzone2100.large.png" alt="Warzone 2100">
+  <br />
+  Warzone 2100
+</h1>
 
-[Homepage of the Warzone 2100 Project](https://wz2100.net/)
+<p align="center">Warzone 2100 is a <b>free, open source, 3D real-time strategy game</b> with a story-driven single-player campaign, online multi-player, offline skirmish, and more.</p>
 
-Origins
--------
+# Highlights
 
-Warzone 2100, released in 1999 and developed by Pumpkin Studios, is a
+- Remastered single-player campaign with expanding persistent bases, away missions, and more
+- Online multiplayer with up to 10 players, free-for-all or team-play, for massive battles
+- Local skirmish with AI bots, for endless replayability
+- Extensive tech tree with over 400 different technologies
+- Customizable units with a flexible design system that enables a wide variety of possible tactics
+- Cross-platform multiplayer
+- Support for multiple graphics backends (OpenGL, OpenGL ES, Vulkan)
+- 100% free and open source
+
+For more info, see: [Homepage of the Warzone 2100 Project](https://wz2100.net/)
+
+# Installation
+
+**Visit https://wz2100.net for the latest stable release for Windows, macOS and Linux.**
+
+> Note for videos in Ubuntu: For important information during the game, download the videos manually. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
+> ```shell
+> mkdir ~/.local/share/warzone2100
+> wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
+> ```
+
+# Origins
+
+Warzone 2100, was originally developed by Pumpkin Studios, and released in 1999 as a
 ground-breaking and innovative 3D real-time strategy game.
 
-In 2004 Eidos, in collaboration with Pumpkin Studios, decided to release
-the source for the game under the terms of the GNU GPL, including everything
-but the music and in-game video sequences, which were released later.
+In 2004, Eidos (in collaboration with Pumpkin Studios) decided to release the source for the game
+under the terms of the GNU GPL - followed later by the remaining music & video files.
 
-State of the game
------------------
+It has been developed, maintained, and improved by the community ever since, under the banner of
+the “Warzone 2100 Project”.
+
+# State of the game
 
 After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
-proprietary technologies have been replaced with open-source counterparts.
+proprietary technologies have been replaced with open-source counterparts, and
+extensive improvements and additions have been made throughout while preserving 
+what made the original release so great.
 
-Currently, the supported platforms are Linux, Windows, and macOS. There are reports
-that Warzone 2100 is also working on BSD.
+Development continues on GitHub, and bug reports & contributions are welcome!
 
-Installation
-------------
-
-Visit https://wz2100.net for the latest stable release for Windows, macOS and Ubuntu.
-
-Note for videos in Ubuntu: For important information during the game, download the videos manually. Assuming the game is installed in the standard `~/.local/share/` folder, use these commands:
-```shell
-mkdir ~/.local/share/warzone2100
-wget https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz -O ~/.local/share/warzone2100/sequences.wz
-```
-
-Latest development builds
--------------------------
-
+# Latest development builds
 
 [![Windows Build Status](https://img.shields.io/github/actions/workflow/status/Warzone2100/warzone2100/CI_windows.yml?branch=master&label=Windows&logo=windows)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
  [![macOS Build Status](https://img.shields.io/github/actions/workflow/status/Warzone2100/warzone2100/CI_macos.yml?branch=master&label=macOS&logo=apple)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
@@ -97,8 +111,7 @@ Clone this Git repo and build, following the instructions under:
 You can download videos from [here](https://github.com/Warzone2100/wz-sequences/releases/tag/v3), or [here](https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/). You will need to rename the downloaded file to `sequences.wz`, and place it into your Warzone 2100 directory, as described above.
 Note that `.wz` files are just `.zip` in disguise, you can rename it and extract the content if wish to inspect them.
 
-Reporting bugs
---------------
+# Reporting bugs
 
 This game still has bugs and if you run into one, please use the GitHub bugtracker
 (https://github.com/Warzone2100/warzone2100/issues) to report the bug. In order to fix
@@ -121,8 +134,7 @@ those bugs more quickly, we require that you follow these rules:
       watch the bug-report after it has been submitted. Additionally, you can enable
       e-mails of comments to your bug report.
 
-Configuration
--------------
+# Configuration
 
 Warzone 2100 uses its own subdirectory in a user's home directory to save
 configuration data, save files and certain other things. Additionally you can
@@ -135,43 +147,6 @@ location of this directory depends on the operating system.
 > 2. Click "Options"
 > 3. Click the small "Open Configuration Directory" link in the bottom-left
 
-### Warzone 2100 directory under GNU/Linux
-
-Under GNU/Linux, Warzone 2100 conforms to the [XDG base directory spec](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
-
-By default, the directory `warzone2100-<version>` can be found in your home directory
-under the path `~/.local/share/`.
-(If the `XDG_DATA_HOME` environment variable is defined, the Warzone 2100 folder will
-be located within `$XDG_DATA_HOME`.)
-
-The leading dot in the `.local` part of the path indicates that it is a hidden
-directory, so depending on your configuration you may not be able to see it.
-However, you can still access it by typing the path into your address bar.
-
-### Warzone 2100 directory under Windows
-
-The directory `Warzone 2100 Project\Warzone 2100 <version>` is located under the
-`%APPDATA%` folder.
-
-Typical `%APPDATA%` path:
-- Windows Vista+: `\Users\$USER$\AppData\Roaming`
-
-Hence, the default path for the Warzone 2100 configuration data on Windows Vista+ would be:
-`C:\Users\$USER$\AppData\Roaming\Warzone 2100 Project\Warzone 2100 <version>\`
-
-By default, the `%APPDATA%` folder is hidden. Entering:
-`%APPDATA%\Warzone 2100 Project\` into the address bar of Windows Explorer
-will browse to your Warzone 2100 directory.
-
-### Warzone 2100 directory under macOS
-
-The directory `Warzone 2100 <version>` can be found in your home directory at:
-`~/Library/Application Support/`
-
-By default, recent version of macOS hide your account's Library folder. To view it in
-**Finder**, hold down the **Option (⌥)** key while clicking the **Go** menu, and your Library folder
-will appear as a menu choice.
-
 ### Configuration file
 
 The configuration file is just called 'config' and contains several configuration
@@ -182,8 +157,7 @@ If at any point you did something wrong, you can delete the old configuration
 file and just restart Warzone 2100. Then the game will regenerate a new
 configuration file with default values.
 
-Command-line options
---------------------
+# Command-line options
 
 Warzone 2100 can be started with different options and arguments. For a list
 of these options, run the game with the --help option.
@@ -195,8 +169,7 @@ with a '=' sign - spaces do not work.
 Note: Some options have corresponding entries in the configuration file and will
 persist from one start of Warzone 2100 to the next.
 
-Multiplaying via internet
--------------------------
+# Multiplaying via internet
 
 There are two methods to start a multiplayer game via the internet: using the host's
 IP or using the lobby server. Make sure you are able to communicate on TCP ports
@@ -225,59 +198,12 @@ enter "lobby.wz2100.net" when prompted to enter the host's IP or change the
 entry in the config file back. You will have to restart Warzone 2100 in order
 for config changes to take effect.
 
-Cheats
-------
+# Cheats
 
-Like many other games, Warzone 2100 features a certain set of cheats that can be
-used to have an advantage in the singleplayer-campaign and skirmish-games, or to
-just help mod-makers and map-makers with testing. Cheats do not work in multiplayer,
-unless all players agree to it.
+Warzone 2100 has many built-in cheat codes:
+* [Warzone 2100 Cheats](doc/Cheats.md)
 
-Cheats are likely to contain or trigger bugs, so use with care, especially
-during campaign.
-
-### Entering cheat mode
-
-To be able cheats while in-game, press shift and backspace simultaneously.
-An on-screen message should appear telling you that cheat mode has been enabled.
-You can disable it using the same key combination again.
-
-Pressing ctrl+o opens up the debug menu, which is useful for inspecting the
-game state, or just messing around.
-
-### Cheat commands
-
-After activating cheat mode, cheats can be entered using the normal chat-
-function. Cheats are ordered by their use and where they can be used.
-
-There are many cheat commands. Some examples:
-
-* `biffer baker` - Your units do more damage and are stronger
-* `double up` - Your units are twice as strong
-* `give all` - Allows you to build and research everything
-* `work harder` - All currently active research topics are instantly researched
-* `research all` - Everything is researched instantly
-* `let me win` - You win the current campaign mission
-* `superpower` - Gives you maximum power
-* `teach us` - Gives experience to selected units
-* `makemehero` - Makes selected units Heroes
-* `clone wars` - Clones selected units (x10)
-* `clone wars!` - Clones selected units (x40)
-* `clone wars!!` - Clones selected units (x135)
-* `kill` - Kills selected object
-* `john kettley` - Toggles weather conditions
-* `get off my land` - Kills all enemy units and structures
-* `showfps` - Shows average FPS
-* `reload me` - Reloads selected weapon instantly
-* `damage me` - Selected object takes 20% damage
-* `showunits` - Displays unit count information
-* `showorders` - Displays unit order/action state
-* `droidinfo` - Shows unit stats
-
-All available commands can be found in this file: https://github.com/Warzone2100/warzone2100/blob/master/src/cheat.cpp
-
-Modding information
--------------------
+# Modding information
 
 Warzone 2100 AI, maps and campaign can be scripted using JavaScript.
 
@@ -286,8 +212,7 @@ Links to further information
 * [Model format](doc/PIE.md)
 * [Animation](doc/Animation.md)
 
-How to build
--------------------
+# How to build
 
 ### Getting the Source
 
@@ -328,6 +253,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
       * [SQLite](https://www.sqlite.org/index.html) ≥ 3.14
       * [libzip](https://github.com/nih-at/libzip) _(strongly recommended: ≥ 1.10.1)_
+      * [libprotobuf](https://github.com/protocolbuffers/protobuf) (if compiling with GNS support)
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
@@ -362,42 +288,12 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
 
 ### Windows using MSVC
 
-* Prerequisites
-   * **Visual Studio 2022** (Visual Studio 2019 may work, but 2022+ is strongly encouraged)
-      - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
-      - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
-   * **CMake 3.24+** (https://cmake.org/)
-   * **Git** (if not building from a release source archive)
-   * **7-Zip** (https://www.7-zip.org)
-   * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
-      - Required only if you want to build with Vulkan support.
-* **Preparing to build:**
-   Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
-   * Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
-* **Building from the command-line:**
-   * Change directory to the warzone2100 repo directory
-   * Configure
-      * Visual Studio 2022: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 17 2022"`
-      * Visual Studio 2019: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 16 2019"`
-   * Build
-      * Release: `cmake --build build --config Release`
-      * Debug: `cmake --build build --config Debug`
-* **Building using Visual Studio:**
-   1. Open Visual Studio
-   2. Open the warzone2100 folder using **File** > **Open** > **Folder...**
-      - Allow Visual Studio some time to load the project and retrieve information from CMake.
-   3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).
-      - This creates `CMakeSettings.json`
-   4. Add the following variables to `CMakeSettings.json`:
-      - To `cmakeCommandArgs`, add: `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake`
-      - Note: Visual Studio automatically escapes and turns each `\` into `\\`
-   5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
+See [platforms/windows/README-build.md](platforms/windows/README-build.md)
 
 ### macOS
 See [platforms/macos/README.md](platforms/macos/README.md)
 
-Licensing
--------------------
+# Licensing
 
 Warzone 2100 is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
@@ -405,7 +301,6 @@ Warzone 2100 is free software; you can redistribute it and/or modify it under th
 
 More information: [COPYING.README](COPYING.README), [COPYING.NONGPL](COPYING.NONGPL)
 
-Special thanks
--------------------
+# Special thanks
 
 Free code signing for Windows provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).

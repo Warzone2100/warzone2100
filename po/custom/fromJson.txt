@@ -537,13 +537,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-_("Armed with Cyborg assault gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 _("Armed with Cyborg Assault Gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+_("Armed with Cyborg assault gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -806,6 +806,9 @@ _("Armored strongpoint with Hyper-Velocity Cannon")
 // data/mp/messages/resmessages2.json: $.RES_EMP_HVFL.text[1]
 _("Armored strongpoint with Inferno Flamer")  
 // TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_PG.text[1]
+_("Armored strongpoint with Particle Gun")  
+// TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text[1]
 _("Armored strongpoint with Plasmite Flamer")  
 // TRANSLATORS: 
@@ -999,7 +1002,7 @@ _("Automatically Repairs Damaged Units")
 // data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[2]
 // data/base/messages/resmessages2.json: $.RES_EMP_HPV.text[2]
 // data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[2]
-// ... + 17 refs
+// ... + 18 refs
 _("Automatically targets enemies in range")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -1165,7 +1168,7 @@ _("Best Targets: Vehicles and Emplacements")
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_HvAT.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
-// ... + 13 refs
+// ... + 14 refs
 _("Best Targets: Vehicles")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_CN2MK1.text[2]
@@ -1203,7 +1206,7 @@ _("Body Points: Low")
 // data/base/messages/resmessages1.json: $.RES_CN1MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CN2MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[2]
-// ... + 79 refs
+// ... + 80 refs
 _("Body Points: Medium")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -1228,6 +1231,11 @@ _("Bomb damage +10%")
 // data/mp/messages/resmessages3.json: $.RES_W_BDMG3.text[2]
 // xgettext:no-c-format
 _("Bomb damage +25%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Bomb-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Bomb-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Bomb-Damage03.category
+_("Bomb Damage")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -1267,6 +1275,11 @@ _("Bug")
 // data/base/stats/templates.json: $.BarbarianBuggy.name
 // data/mp/stats/templates.json: $.BarbarianBuggy.name
 _("Buggy")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Struc-Materials01.category
+// data/mp/stats/research.json: $.R-Struc-Materials02.category
+// data/mp/stats/research.json: $.R-Struc-Materials03.category
+_("Buildings")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[2]
 // data/base/messages/resmessages3.json: $.RES_SY_ASTRUC.text[2]
@@ -1316,6 +1329,10 @@ _("Burns oil more efficiently")
 // xgettext:no-c-format
 _("Cannon accuracy +10%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy01.category
+// data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy02.category
+_("Cannon Accuracy")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 _("Cannon Autoloader Mk2")  
@@ -1333,6 +1350,12 @@ _("Cannon Autoloader")
 // data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[2]
 // xgettext:no-c-format
 _("Cannon damage +25%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Cannon-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Cannon-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Cannon-Damage03.category
+// ... + 6 refs
+_("Cannon Damage")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.BabaFireCan.name
 // data/mp/stats/templates.json: $.BabaFireCan.name
@@ -1367,6 +1390,12 @@ _("Cannon Rapid Loader")
 // data/mp/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
 // xgettext:no-c-format
 _("Cannon reload time -10%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Cannon-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Cannon-ROF03.category
+// ... + 3 refs
+_("Cannon Reload")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0CannonTower.name
 // data/mp/stats/structure.json: $.A0CannonTower.name
@@ -1527,6 +1556,12 @@ _("Commander leads groups acts as factory delivery point")
 // data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[1]
 _("Complete battlefield visibility")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Vehicle-Metals11.name
+_("Composite Alloys Buff AI Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Vehicle-Metals10.name
+_("Composite Alloys Buff AI")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Metals02.name
 // data/mp/stats/research.json: $.R-Vehicle-Metals02.name
 _("Composite Alloys Mk2")  
@@ -1602,6 +1637,18 @@ _("Crane1")
 // TRANSLATORS: 
 // data/mp/stats/construction.json: $.scavCrane2.name
 _("Crane2")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Cyborg-Metals01.category
+// data/mp/stats/research.json: $.R-Cyborg-Metals02.category
+// data/mp/stats/research.json: $.R-Cyborg-Metals03.category
+// ... + 6 refs
+_("Cyborg Alloys")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Metals11.name
+_("Cyborg Composite Alloys Buff AI Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Metals10.name
+_("Cyborg Composite Alloys Buff AI")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Metals02.name
 // data/mp/stats/research.json: $.R-Cyborg-Metals02.name
@@ -1714,6 +1761,12 @@ _("Cyborg Superdense Thermal Armor")
 // data/base/stats/weapons.json: $.CyborgRocket02.name
 _("Cyborg Tank Killer")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Armor-Heat08.name
+_("Cyborg Thermal Armor Buff AI Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Cyborg-Armor-Heat07.name
+_("Cyborg Thermal Armor Buff AI")  
+// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
 // data/base/messages/resmessages3.json: $.RES_CY_AH4.text[0]
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1731,6 +1784,12 @@ _("Cyborg Thermal Armor Mk3")
 // data/base/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 // data/mp/stats/research.json: $.R-Cyborg-Armor-Heat01.name
 _("Cyborg Thermal Armor")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Cyborg-Armor-Heat01.category
+// data/mp/stats/research.json: $.R-Cyborg-Armor-Heat02.category
+// data/mp/stats/research.json: $.R-Cyborg-Armor-Heat03.category
+// ... + 6 refs
+_("Cyborg Thermal")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.CyborgFlamer02.name
 _("Cyborg Thermite")  
@@ -1798,7 +1857,7 @@ _("Defensive Strength: Low")
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[3]
 // data/base/messages/resmessages1.json: $.RES_TTRAP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[3]
-// ... + 59 refs
+// ... + 60 refs
 _("Defensive Strength: Medium")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ADemolishStructure.name
@@ -1939,8 +1998,16 @@ _("Enables self-repair")
 // ... + 7 refs
 _("Enemy")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Vehicle-Engine01.category
+// data/mp/stats/research.json: $.R-Vehicle-Engine02.category
+// data/mp/stats/research.json: $.R-Vehicle-Engine03.category
+// ... + 6 refs
+_("Engine")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Sys-Engineering01.name
+// data/mp/stats/research.json: $.R-Sys-Engineering01.category
 // data/mp/stats/research.json: $.R-Sys-Engineering01.name
+// ... + 2 refs
 _("Engineering")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_V_B07.text[3]
@@ -2048,6 +2115,9 @@ _("Fin-stabilization improves flight trajectory")
 // data/mp/stats/templates.json: $.BabaFireTruck.name
 _("Fire Truck")  
 // TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_W_PG.text[1]
+_("Fires beams of subatomic particle")  
+// TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[1]
 _("Fires Electronic Magnetic Pulse Missiles")  
 // TRANSLATORS: 
@@ -2101,6 +2171,12 @@ _("Flamer Cyborg")
 // xgettext:no-c-format
 _("Flamer damage +25%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.category
+// ... + 6 refs
+_("Flamer Damage")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Flamer-ROF04.name
 _("Flamer Fast Loader")  
 // TRANSLATORS: 
@@ -2116,6 +2192,11 @@ _("Flamer Hardpoint")
 // data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 // xgettext:no-c-format
 _("Flamer reload time -15%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Flamer-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Flamer-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Flamer-ROF03.category
+_("Flamer Reload")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Flame1Mk1-Tower.name
 _("Flamer Tower")  
@@ -2926,6 +3007,15 @@ _("Howitzer Autoloader")
 // xgettext:no-c-format
 _("Howitzer damage +25%")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Howitzer-Damage08.name
+_("Howitzer Damage Buff AI Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Howitzer-Damage09.name
+_("Howitzer Damage Buff AI Mk3")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Howitzer-Damage07.name
+_("Howitzer Damage Buff AI")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Howitzer.name
 // data/base/stats/structure.json: $.Emplacement-Howitzer105.name
 // data/mp/stats/research.json: $.R-Defense-Howitzer.name
@@ -2951,6 +3041,23 @@ _("Howitzer Upgrade")
 // data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 // data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 _("Howitzer")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.category
+_("Howitzers Accuracy")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Damage03.category
+// ... + 3 refs
+_("Howitzers Damage")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.category
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.category
+_("Howitzers Reload")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
 // data/base/stats/structure.json: $.AASite-QuadMg1.name
@@ -3053,6 +3160,9 @@ _("Improved Engineering")
 // ... + 3 refs
 _("Improved fire detection systems")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallUpgrade13.name
+_("Improved Hardcrete Buff AI")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-WallUpgrade02.name
 // data/mp/stats/research.json: $.R-Defense-WallUpgrade02.name
 _("Improved Hardcrete Mk2")  
@@ -3135,12 +3245,12 @@ _("Improves vehicle speed")
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 _("Incendiary Howitzer Emplacement 2")  
 // TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-_("Incendiary howitzer emplacement")  
-// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 _("Incendiary Howitzer Emplacement")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+_("Incendiary howitzer emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
@@ -3524,9 +3634,17 @@ _("Laser AA Gun Available")
 // xgettext:no-c-format
 _("Laser accuracy +10%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Energy-Accuracy01.category
+_("Laser Accuracy")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_LASD1.text[2]
 // xgettext:no-c-format
 _("Laser damage +25%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Energy-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Energy-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Energy-Damage03.category
+_("Laser Damage")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
 // data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
@@ -3535,6 +3653,11 @@ _("Laser designator paints and guides rounds to the target")
 // data/mp/messages/resmessages3.json: $.RES_LASROF1.text[2]
 // xgettext:no-c-format
 _("Laser reload time -15%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Energy-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Energy-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Energy-ROF03.category
+_("Laser Reload")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-LasSat.name
 // data/mp/stats/structure.json: $.A0LasSatCommand.name
@@ -3822,6 +3945,17 @@ _("Medium Cannon")
 // data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
 _("Medium Super Heavy Body")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-MG-Damage03.category
+// ... + 7 refs
+_("MG Damage")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-MG-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-MG-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-MG-ROF03.category
+_("MG Reload")  
+// TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_EMP_MRL.text[1]
 // data/mp/messages/resmessages12.json: $.RES_EMP_MRL.text[1]
 _("Mini-rocket armored strongpoint")  
@@ -3896,6 +4030,10 @@ _("Mini-Rocket Viper Wheels")
 // xgettext:no-c-format
 _("Missile accuracy +10%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy01.category
+// data/mp/stats/research.json: $.R-Wpn-Missile-Accuracy02.category
+_("Missile Accuracy")  
+// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_MS_AC2.text[1]
 // data/mp/messages/resmessages3.json: $.RES_W_MS_AC2.text[1]
 _("Missile actively seeks and homes on targets")  
@@ -3903,6 +4041,11 @@ _("Missile actively seeks and homes on targets")
 // data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text[2]
 // xgettext:no-c-format
 _("Missile damage +25%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Missile-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Missile-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Missile-Damage03.category
+_("Missile Damage")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Super-Missile.name
 // data/mp/stats/structure.json: $.X-Super-Missile.name
@@ -3913,6 +4056,11 @@ _("Missile Fortress")
 // data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[2]
 // xgettext:no-c-format
 _("Missile reload time -15%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Missile-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Missile-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Missile-ROF03.category
+_("Missile Reload")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NX-CruiseSite.name
 // data/mp/stats/structure.json: $.NX-CruiseSite.name
@@ -3950,6 +4098,11 @@ _("More armor and body points than Vengeance")
 // xgettext:no-c-format
 _("Mortar accuracy +10%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Acc01.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Acc02.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Acc03.category
+_("Mortar Accuracy")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF02.name
 _("Mortar Autoloader Mk2")  
@@ -3971,6 +4124,12 @@ _("Mortar Cobra Half-tracks")
 // xgettext:no-c-format
 _("Mortar damage +25%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Damage03.category
+// ... + 3 refs
+_("Mortar Damage")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 _("Mortar Fast Loader")  
@@ -3985,6 +4144,12 @@ _("Mortar Pit")
 // data/mp/messages/resmessages3.json: $.RES_W_M_ROF4.text[2]
 // xgettext:no-c-format
 _("Mortar reload time -10%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Mortar-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-ROF03.category
+// data/mp/stats/research.json: $.R-Wpn-Mortar-ROF04.category
+_("Mortar Reload")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc01.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc01.name
@@ -4129,7 +4294,7 @@ _("New Cyborg Research Available")
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[0]
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[0]
 // data/base/messages/resmessages1.json: $.RES_PB_ATR.text[0]
-// ... + 112 refs
+// ... + 113 refs
 _("New Defensive Structure Available")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[0]
@@ -4294,7 +4459,7 @@ _("New VTOL Missile Launcher")
 // data/base/messages/resmessages1.json: $.RES_CN1MK1.text[0]
 // data/base/messages/resmessages1.json: $.RES_CN2MK1.text[0]
 // data/base/messages/resmessages1.json: $.RES_CN3MK1.text[0]
-// ... + 25 refs
+// ... + 26 refs
 _("New Weapon Turret Available")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSCWall.name
@@ -4420,6 +4585,14 @@ _("Original Skirmish")
 // data/mp/stats/body.json: $.Body6SUPP.name
 _("Panther")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-ParticleGun.name
+// data/mp/stats/structure.json: $.Emplacement-ParticleGun.name
+_("Particle Gun Emplacement")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-ParticleGun.name
+// data/mp/stats/weapons.json: $.ParticleGun.name
+_("Particle Gun")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-RotMor.name
 // data/base/stats/structure.json: $.Emplacement-RotMor.name
 // data/mp/stats/research.json: $.R-Defense-RotMor.name
@@ -4534,6 +4707,12 @@ _("Power output +30%")
 // data/base/messages/messages.json: $.MSG2.text[0]
 _("Power Research Completed")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Struc-Power-Upgrade01.category
+// data/mp/stats/research.json: $.R-Struc-Power-Upgrade01b.category
+// data/mp/stats/research.json: $.R-Struc-Power-Upgrade01c.category
+// ... + 3 refs
+_("Power")  
+// TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[1]
 _("Powerful Electronic magnetic pulse weapon")  
 // TRANSLATORS: 
@@ -4553,6 +4732,12 @@ _("Produces Cyborgs")
 // data/base/messages/resmessages3.json: $.RES_ST_VFU4.text[0]
 // ... + 5 refs
 _("Production Improved")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Struc-Factory-Upgrade01.category
+// data/mp/stats/research.json: $.R-Struc-Factory-Upgrade04.category
+// data/mp/stats/research.json: $.R-Struc-Factory-Upgrade07.category
+// data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.category
+_("Production")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_RESU4.text[3]
 _("Professional and Regular rank units are protected")  
@@ -4654,6 +4839,14 @@ _("Radar Detector Tower")
 // data/mp/stats/sensor.json: $.RadarDetector.name
 _("Radar Detector")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.category
+_("Rail Accuracy")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rail-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Rail-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Rail-Damage03.category
+_("Rail Damage")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
 // xgettext:no-c-format
 _("Rail Gun accuracy +10%")  
@@ -4710,6 +4903,11 @@ _("Rail Gun Upgrade")
 // data/mp/stats/weapons.json: $.RailGun2Mk1.name
 _("Rail Gun")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rail-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Rail-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Rail-ROF03.category
+_("Rail Reload")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
 _("Rail Target Prediction Computer")  
 // TRANSLATORS: 
@@ -4755,6 +4953,12 @@ _("Reduces rearming time")
 // data/base/messages/resmessagesall.json: $.RES_ST_VP.text[1]
 // data/mp/messages/resmessagesall.json: $.RES_ST_VP.text[1]
 _("Refuels, rearms and repairs VTOLs")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Struc-Materials11.name
+_("Reinforced Base Structure Materials Buff AI Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Struc-Materials10.name
+_("Reinforced Base Structure Materials Buff AI")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Materials02.name
 _("Reinforced Base Structure Materials Mk2")  
@@ -4895,6 +5099,12 @@ _("Research speed +30%")
 // xgettext:no-c-format
 _("Research speed +85%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.category
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade02.category
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.category
+// ... + 6 refs
+_("Research")  
+// TRANSLATORS: 
 // data/base/stats/body.json: $.Body3MBT.name
 // data/mp/stats/body.json: $.Body3MBT.name
 _("Retaliation")  
@@ -4981,6 +5191,12 @@ _("Robotic VTOL Rearming")
 // xgettext:no-c-format
 _("Rocket accuracy +10%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.category
+// data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy02.category
+// data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.category
+// data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy02.category
+_("Rocket Accuracy")  
+// TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
 // data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
 _("Rocket artillery; can be assigned to a sensor")  
@@ -5008,6 +5224,12 @@ _("Rocket Buggy")
 // xgettext:no-c-format
 _("Rocket damage +25%")  
 // TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rocket-Damage01.category
+// data/mp/stats/research.json: $.R-Wpn-Rocket-Damage02.category
+// data/mp/stats/research.json: $.R-Wpn-Rocket-Damage03.category
+// ... + 6 refs
+_("Rocket Damage")  
+// TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
 // data/mp/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
 _("Rocket detects and locks on to engine emissions")  
@@ -5033,6 +5255,11 @@ _("Rocket Rapid Loader")
 // data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[2]
 // xgettext:no-c-format
 _("Rocket reload time -15%")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-Rocket-ROF01.category
+// data/mp/stats/research.json: $.R-Wpn-Rocket-ROF02.category
+// data/mp/stats/research.json: $.R-Wpn-Rocket-ROF03.category
+_("Rocket Reload")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
 // data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
@@ -5253,6 +5480,11 @@ _("Sensor Upgrade Mk3")
 // data/base/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 // data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
 _("Sensor Upgrade")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade01.category
+// data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.category
+// data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade03.category
+_("Sensor")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[0]
 // data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[0]
@@ -5514,13 +5746,13 @@ _("Synaptic Link Data Analysis Mk2")
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-// data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-_("Synaptic link data analysis")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 _("Synaptic Link Data Analysis")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+// data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+_("Synaptic link data analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -5538,6 +5770,12 @@ _("Synaptic Link")
 // TRANSLATORS: 
 // data/base/messages/messages.json: $.MSG5.text[0]
 _("Systems Research Completed")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Vehicle-Metals01.category
+// data/mp/stats/research.json: $.R-Vehicle-Metals02.category
+// data/mp/stats/research.json: $.R-Vehicle-Metals03.category
+// ... + 6 refs
+_("Tank Alloys")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Cyborg-Wpn-Rocket02.name
 // data/base/stats/templates.json: $.CyborgRkt02Ground.name
@@ -5576,6 +5814,12 @@ _("Tank Killer Vengeance Tracks")
 // data/base/stats/weapons.json: $.Rocket-HvyA-T.name
 // data/mp/stats/weapons.json: $.Rocket-HvyA-T.name
 _("Tank Killer")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Vehicle-Armor-Heat01.category
+// data/mp/stats/research.json: $.R-Vehicle-Armor-Heat02.category
+// data/mp/stats/research.json: $.R-Vehicle-Armor-Heat03.category
+// ... + 6 refs
+_("Tank Thermal")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-TankTrap01.name
 // data/base/stats/structure.json: $.A0TankTrap.name
@@ -5630,6 +5874,12 @@ _("Thermal armor +40%")
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +45%")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Vehicle-Armor-Heat08.name
+_("Thermal Armor Buff AI Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Vehicle-Armor-Heat07.name
+_("Thermal Armor Buff AI")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // data/base/messages/resmessages3.json: $.RES_CY_AH4.text[2]
@@ -5694,6 +5944,9 @@ _("Titanium-reinforced concrete")
 // TRANSLATORS: 
 // data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 _("Tower wars AI, based on NullBot")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-WallUpgrade-TweakOption01.name
+_("Tower Wars Buff")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Vehicle-Prop-Tracks02.name
 _("Tracked Propulsion II")  
@@ -6151,6 +6404,9 @@ _("VTOL Mini-Rocket")
 // data/mp/stats/weapons.json: $.RailGun1-VTOL.name
 _("VTOL Needle Gun")  
 // TRANSLATORS: 
+// data/mp/stats/weapons.json: $.ParticleGun-VTOL.name
+_("VTOL Particle Gun")  
+// TRANSLATORS: 
 // data/base/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
 // data/mp/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
 _("VTOL Phosphor Bomb Bay")  
@@ -6193,6 +6449,12 @@ _("VTOL rearming pads required to keep VTOLs flying")
 // data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[0]
 // data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[0]
 _("VTOL Rearming Times Reduced")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade01.category
+// data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.category
+// data/mp/stats/research.json: $.R-Struc-VTOLPad-Upgrade03.category
+// ... + 3 refs
+_("VTOL Rearming")  
 // TRANSLATORS: 
 // data/base/stats/weapons.json: $.Missile-VTOL-AT.name
 // data/mp/stats/weapons.json: $.Missile-VTOL-AT.name
@@ -6249,6 +6511,9 @@ _("VTOL")
 _("VTOLs attack until enemy battery is suppressed")  
 // TRANSLATORS: 
 // data/base/stats/features.json: $.Wall.name
+// data/mp/stats/research.json: $.R-Defense-WallUpgrade01.category
+// data/mp/stats/research.json: $.R-Defense-WallUpgrade02.category
+// ... + 10 refs
 _("Wall")  
 // TRANSLATORS: 
 // data/base/stats/features.json: $.WallCorner.name

@@ -119,7 +119,7 @@
 		"model": "prltrk1.pie",
 		"name": "Tracks",
 		"speed": 125,
-		"spinAngle": 45,
+		"spinAngle": 65,
 		"type": "Tracked",
 		"weight": 650
 	},

@@ -29,6 +29,8 @@
 
 class W_SLIDER : public WIDGET
 {
+public:
+	typedef std::function<void(W_SLIDER &)> SliderOnChangeFunc;
 
 public:
 	W_SLIDER(W_SLDINIT const *init);
@@ -49,6 +51,8 @@ public:
 	std::string getTip() override;
 	WidgetHelp const * getHelp() const override;
 
+	void addOnChange(const SliderOnChangeFunc& func);
+
 	bool capturesMouseDrag(WIDGET_KEY) override;
 	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
 
@@ -61,8 +65,10 @@ public:
 private:
 	optional<WidgetHelp> help;
 	bool		isHandlingDrag = false;
+	std::vector<SliderOnChangeFunc> onChangeFuncs;
 private:
 	void updateSliderFromMousePosition(W_CONTEXT*);
+	void callOnChangeFuncs();
 };
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__

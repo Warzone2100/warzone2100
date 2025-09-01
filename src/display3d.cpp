@@ -1397,7 +1397,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				{
 					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
 
-					pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
+					pos.y = map_TileHeightSurface(playerXTile + j, playerZTile + i);
 					auto color = pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level));
 					lightmap(playerXTile + j, playerZTile + i) = color;
 				}
@@ -2593,6 +2593,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	if (psProxDisp->type == POS_PROXDATA)
 	{
+		if (psProxDisp->psMessage->pViewData == nullptr)
+		{
+			return; // if no data - ignore message
+		}
 		pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 		if (pViewProximity)
 		{

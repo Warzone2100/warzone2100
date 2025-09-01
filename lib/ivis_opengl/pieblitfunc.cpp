@@ -36,6 +36,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/pielight_convert.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/tex.h"
 #include "piematrix.h"
@@ -164,12 +165,7 @@ GFX::~GFX()
 
 void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
-	const glm::vec4 color(
-		colour.vector[0] / 255.f,
-		colour.vector[1] / 255.f,
-		colour.vector[2] / 255.f,
-		colour.vector[3] / 255.f
-	);
+	const glm::vec4 color = pielightToRGBAVec4(colour);
 	const auto &mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
 	gfx_api::LinePSO::get().bind();
 	gfx_api::LinePSO::get().bind_constants({ mat, glm::vec2(x0, y0), glm::vec2(x1, y1), color });
@@ -180,12 +176,7 @@ void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 
 void iV_Lines(const std::vector<glm::ivec4> &lines, PIELIGHT colour)
 {
-	const glm::vec4 color(
-		colour.vector[0] / 255.f,
-		colour.vector[1] / 255.f,
-		colour.vector[2] / 255.f,
-		colour.vector[3] / 255.f
-	);
+	const glm::vec4 color = pielightToRGBAVec4(colour);
 	const auto &mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
 	gfx_api::LinePSO::get().bind();
 	gfx_api::LinePSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
@@ -215,8 +206,7 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 	const auto& mvp = defaultProjectionMatrix() * glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(x1 - x0, y1 - y0, 1.f));
 
 	PSO::get().bind();
-	PSO::get().bind_constants({ mvp, glm::vec2{}, glm::vec2{},
-		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f) });
+	PSO::get().bind_constants({ mvp, glm::vec2{}, glm::vec2{}, pielightToRGBAVec4(colour) });
 	PSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
 	PSO::get().draw(4, 0);
 	PSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
@@ -243,8 +233,7 @@ void pie_DrawMultiRect(std::vector<PIERECT_DrawRequest> rects)
 		const auto& colour = it->color;
 		const auto& center = Vector2f(it->x0, it->y0);
 		const auto& mvp = projectionMatrix * glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(it->x1 - it->x0, it->y1 - it->y0, 1.f));
-		gfx_api::BoxFillPSO::get().bind_constants({ mvp, glm::vec2(0.f), glm::vec2(0.f),
-			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f) });
+		gfx_api::BoxFillPSO::get().bind_constants({ mvp, glm::vec2(0.f), glm::vec2(0.f), pielightToRGBAVec4(colour) });
 		if (!didEnableRect)
 		{
 			gfx_api::BoxFillPSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
@@ -274,7 +263,7 @@ void BatchedMultiRectRenderer::addRect(PIERECT_DrawRequest rect, size_t rectGrou
 	const auto center = Vector2f(rect.x0, rect.y0);
 	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
 
-	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba });
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba() });
 	++totalAddedRects;
 }
 
@@ -291,7 +280,7 @@ void BatchedMultiRectRenderer::addRectF(PIERECT_DrawRequest_f rect, size_t rectG
 	const auto center = Vector2f(rect.x0, rect.y0);
 	const glm::mat4 matrix = glm::translate(Vector3f(center, 0.f)) * glm::scale(glm::vec3(rect.x1 - rect.x0, rect.y1 - rect.y0, 1.f));
 
-	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba });
+	groupsData[rectGroup].push_back(gfx_api::MultiRectPerInstanceInterleavedData{ matrix, glm::vec4(0.f, 0.f, 0.f, 0.f), rect.color.rgba() });
 	++totalAddedRects;
 }
 
@@ -488,12 +477,7 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 {
 	const glm::mat4 mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
-	const glm::vec4 firstColor(
-		first.vector[0] / 255.f,
-		first.vector[1] / 255.f,
-		first.vector[2] / 255.f,
-		first.vector[3] / 255.f
-	);
+	const glm::vec4 firstColor = pielightToRGBAVec4(first);
 	gfx_api::LinePSO::get().bind();
 	gfx_api::LinePSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
 	gfx_api::LinePSO::get().bind_constants({ mat, glm::vec2(x0, y1), glm::vec2(x0, y0), firstColor });
@@ -501,12 +485,7 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 	gfx_api::LinePSO::get().bind_constants({ mat, glm::vec2(x0, y0), glm::vec2(x1, y0), firstColor });
 	gfx_api::LinePSO::get().draw(2, 0);
 
-	const glm::vec4 secondColor(
-		second.vector[0] / 255.f,
-		second.vector[1] / 255.f,
-		second.vector[2] / 255.f,
-		second.vector[3] / 255.f
-	);
+	const glm::vec4 secondColor = pielightToRGBAVec4(second);
 	gfx_api::LinePSO::get().bind_constants({ mat, glm::vec2(x1, y0), glm::vec2(x1, y1), secondColor });
 	gfx_api::LinePSO::get().draw(2, 0);
 	gfx_api::LinePSO::get().bind_constants({ mat, glm::vec2(x0, y1), glm::vec2(x1, y1), secondColor });
@@ -564,7 +543,7 @@ static void iv_DrawImageImpl(gfx_api::texture& TextureID, Vector2f offset, Vecto
 	PSO::get().bind_constants({ transformMat,
 		TextureUV,
 		TextureSize,
-		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f), 0});
+		pielightToRGBAVec4(colour), 0});
 	PSO::get().bind_textures(&TextureID);
 	PSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
 	PSO::get().draw(4, 0);
@@ -585,16 +564,16 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f o
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
-void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect)
+void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, const WzClippingRectF& clippingRect)
 {
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
 
 	gfx_api::gfxFloat invTextureSizeX = 1.f / textureSize.x;
 	gfx_api::gfxFloat invTextureSizeY = 1.f / textureSize.y;
-	float tu = (float)(clippingRect.x()) * invTextureSizeX;
-	float tv = (float)(clippingRect.y()) * invTextureSizeY;
-	float su = (float)(clippingRect.x() + clippingRect.width()) * invTextureSizeX;
-	float sv = (float)(clippingRect.y() + clippingRect.height()) * invTextureSizeY;
+	float tu = clippingRect.x() * invTextureSizeX;
+	float tv = clippingRect.y() * invTextureSizeY;
+	float su = clippingRect.width() * invTextureSizeX;
+	float sv = clippingRect.height() * invTextureSizeY;
 
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(tu, tv), Vector2f(su, sv), colour, mvp, SHADER_TEXT);
 }
@@ -653,7 +632,9 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 		gfx_api::DrawImagePSO::get().bind_constants({ transformMat,
 			TextureUV,
 			TextureSize,
-			glm::vec4(request.colour.vector[0] / 255.f, request.colour.vector[1] / 255.f, request.colour.vector[2] / 255.f, request.colour.vector[3] / 255.f), 0});
+			pielightToRGBAVec4(request.colour),
+			0
+		});
 
 		gfx_api::DrawImagePSO::get().bind_textures(&TextureID);
 
@@ -923,6 +904,10 @@ bool pie_ShutdownRadar()
 {
 	for (size_t i = 0; i < NUM_RADAR_TEXTURES; ++i)
 	{
+		if (radarGfx[i] == nullptr)
+		{
+			continue;
+		}
 		delete radarGfx[i];
 		radarGfx[i] = nullptr;
 	}
@@ -1019,7 +1004,7 @@ void iV_DebugDrawTextureToQuad(gfx_api::abstract_texture& texture, size_t layer,
 		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_constants({ mvpFinal,
 			uvTransformMatrix,
 			channelSwizzle,
-			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f),
+			pielightToRGBAVec4(colour),
 			static_cast<int>(layer),
 			0});
 		gfx_api::DebugDrawTexture2DArrayToQuad::get().bind_textures(&texture);
@@ -1033,7 +1018,7 @@ void iV_DebugDrawTextureToQuad(gfx_api::abstract_texture& texture, size_t layer,
 		gfx_api::DebugDrawTexture2DToQuad::get().bind_constants({ mvpFinal,
 			uvTransformMatrix,
 			channelSwizzle,
-			glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f),
+			pielightToRGBAVec4(colour),
 			0});
 		gfx_api::DebugDrawTexture2DToQuad::get().bind_textures(&texture);
 		gfx_api::DebugDrawTexture2DToQuad::get().bind_vertex_buffers(pie_internal::rectBuffer);

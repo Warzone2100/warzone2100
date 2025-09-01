@@ -41,7 +41,7 @@ jobs:
           repositories: "warzone2100"
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: 'master'
           token: ${{ steps.app-token.outputs.token }}

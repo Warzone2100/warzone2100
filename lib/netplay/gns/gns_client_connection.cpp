@@ -133,7 +133,7 @@ std::string GNSClientConnection::textAddress() const
 			auto pIPAddr = connInfo.m_identityRemote.GetIPAddr();
 			ASSERT_OR_RETURN({}, pIPAddr != nullptr, "Unable to get ip address?");
 			pIPAddr->ToString(buf, SteamNetworkingIdentity::k_cchMaxString, false);
-			break;
+			return std::string(buf);
 		}
 		case k_ESteamNetworkingIdentityType_Invalid:
 			ASSERT(false, "Connection identity type is invalid?");

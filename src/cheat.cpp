@@ -186,7 +186,7 @@ void sendProcessDebugMappings(bool val)
 	{
 		return;
 	}
-	auto w = NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_MODE);
 	NETbool(w, val);
 	NETend(w);
 }

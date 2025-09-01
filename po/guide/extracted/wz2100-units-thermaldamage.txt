@@ -1,0 +1,8 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Kinetic & Thermal Damage")
+_("Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating.")
+_("However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor.")
+_("Instead, thermal weapons are mitigated by a target's thermal armor.")
+_("A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen.")
+_("Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!")

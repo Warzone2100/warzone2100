@@ -189,8 +189,8 @@ bool sdl_OpenGL_Impl::createGLContext()
 	{
 		if (value == 0)
 		{
-			debug(LOG_FATAL, "OpenGL initialization did not give double buffering! (%d)", value);
-			debug(LOG_FATAL, "Double buffering is required for this game!");
+			debug(LOG_ERROR, "OpenGL initialization did not give double buffering! (%d)", value);
+			debug(LOG_ERROR, "Double buffering is required for this game!");
 			SDL_GL_DeleteContext(WZglcontext);
 			return false;
 		}
@@ -199,7 +199,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 	{
 		// SDL_GL_GetAttribute failed for SDL_GL_DOUBLEBUFFER
 		// For desktop OpenGL, treat this as a fatal error
-		code_part log_type = LOG_FATAL;
+		code_part log_type = LOG_ERROR;
 		if (isOpenGLES())
 		{
 			// For OpenGL ES (EGL?), log this + let execution continue
@@ -210,7 +210,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 		}
 		debug(log_type, "SDL_GL_GetAttribute failed to get value for SDL_GL_DOUBLEBUFFER (%s)", SDL_GetError());
 		debug(log_type, "Double buffering is required for this game - if it isn't actually enabled, things will fail!");
-		if (log_type == LOG_FATAL)
+		if (log_type == LOG_ERROR)
 		{
 			SDL_GL_DeleteContext(WZglcontext);
 			return false;

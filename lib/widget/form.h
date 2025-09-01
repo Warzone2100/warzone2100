@@ -52,7 +52,7 @@ public:
 
 	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
 	bool hitTest(int x, int y) const override;
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 	using WIDGET::displayRecursive;
 
@@ -153,7 +153,7 @@ public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 125);
 	std::function<void ()> onClickedFunc;
 	std::function<void ()> onCancelPressed;
-private:
+protected:
 	std::weak_ptr<WIDGET> cutoutWidget;
 };
 
