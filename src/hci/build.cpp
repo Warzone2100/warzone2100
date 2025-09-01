@@ -379,7 +379,7 @@ private:
 
 		if (remaining != -1)
 		{
-			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", remaining)));
+			productionRunSizeLabel->setString(WzString::format("%d", remaining));
 			productionRunSizeLabel->show();
 		}
 		else
