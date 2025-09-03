@@ -3113,6 +3113,11 @@ bool isTransporter(DROID_TEMPLATE const *psTemplate)
 	return isTransporter(psTemplate->droidType);
 }
 
+bool DROID::isFlightBasedTransporter() const
+{
+	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT && isTransporter();
+}
+
 //access functions for vtols
 bool DROID::isVtol() const
 {
