@@ -108,6 +108,8 @@ struct DROID : public BASE_OBJECT
 	bool isCyborg() const;
 	// Returns true if the droid is a transporter.
 	bool isTransporter() const;
+	// Returns true if the droid has VTOL Propulsion and is a transporter.
+	bool isFlightBasedTransporter() const;
 	// Returns true if the droid has VTOL propulsion, and is not a transport.
 	bool isVtol() const;
 	// Returns true if the droid has VTOL propulsion and is moving.
