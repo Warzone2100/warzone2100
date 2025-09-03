@@ -539,7 +539,7 @@ void updateDroidOrientation(DROID *psDroid)
 	const int d = 20;
 	int32_t vX, vY;
 
-	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isTransporter()
+	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isFlightBasedTransporter()
 	    || psDroid->isFlying())
 	{
 		/* The ground doesn't affect the pitch/roll of these droids*/
@@ -1205,7 +1205,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
 			objR = moveObjRadius(psObj);
-			if (psObjcast->isTransporter())
+			if (psObjcast->isFlightBasedTransporter())
 			{
 				// ignore transporters
 				continue;
