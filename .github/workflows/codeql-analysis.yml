@@ -47,6 +47,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
+        trap-caching: false
         languages: ${{ matrix.language }}
         config-file: ./.github/codeql/codeql-config-${{ matrix.language }}.yml
       # Override language selection by uncommenting this and choosing your languages
