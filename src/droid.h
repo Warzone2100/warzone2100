@@ -119,16 +119,10 @@ int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, W
 void droidUpdate(DROID *psDroid);
 
 /* Check if droid is within commander's range */
-bool droidWithinCommanderRange(const DROID *psDroid, bool shield);
+bool droidWithinCommanderRange(const DROID *psDroid);
 
 /* Update droid shields. */
 void droidUpdateShields(DROID *psDroid);
-
-/* Calculate the droid's shield regeneration step time */
-UDWORD droidCalculateShieldRegenTime(const DROID *psDroid);
-
-/* Calculate the droid's shield interruption time */
-UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid);
 
 /* Get droid maximum shield points */
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
