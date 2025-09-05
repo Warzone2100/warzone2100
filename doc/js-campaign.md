@@ -298,6 +298,12 @@ Change a numeric value based on campaign difficulty.
 @param {number} numericValue
 @returns {number}
 
+## camAllowInsaneSpawns()
+
+Allow additional Insane difficulty (or higher) spawns and behavior.
+
+@returns {boolean}
+
 ## camIsSystemDroid(gameObject)
 
 Determine if the passed in object is a non-weapon based droid.
@@ -322,18 +328,24 @@ Break alliances between all players.
 
 @returns {void}
 
-## camGenerateRandomMapEdgeCoordinate(reachPosition)
+## camGenerateRandomMapEdgeCoordinate(reachPosition [, propulsion [, distFromReach]])
 
-Returns a random coordinate anywhere on the edge of the map that reachs a position.
+Returns a random coordinate anywhere on the edge of the map that reaches a position.
+`reachPosition` may be undefined if you just want a random edge coordinate.
 
 @param {Object} reachPosition
+@param {String} propulsion
 @returns {Object}
 
-## camGenerateRandomMapCoordinate(reachPosition)
+## camGenerateRandomMapCoordinate(reachPosition [, propulsion [, distFromReach [, scanObjectRadius, [, avoidNearbyCliffs]]]])
 
-Returns a random coordinate anywhere on the map
+Returns a random coordinate anywhere on the map.
 
 @param {Object} reachPosition
+@param {String} propulsion
+@param {Number} distFromReach
+@param {Number} scanObjectRadius
+@param {Boolean} avoidNearbyCliffs
 @returns {Object}
 
 ## camDiscoverCampaign()
@@ -341,6 +353,29 @@ Returns a random coordinate anywhere on the map
 Figures out what campaign we are in without reliance on the source at all.
 
 @returns {number}
+
+## camGetRankThreshold(rank [, command [, player]])
+
+Returns the rank threshold for a given rank.
+
+@param {String|Number} rank
+@param {Boolean} command
+@param {Number} player
+@returns {number}
+
+## camSetExpLevel(rank)
+
+Sets what rank will be used for the AI when it creates units. Can be a rank threshold
+index or the name of the rank.
+
+@param {Number|String} rank
+@returns {void}
+
+## camSetOnMapEnemyUnitExp()
+
+Sets all non-player units to the chosen rank set through camSetExpLevel().
+
+@returns {void}
 
 ## camNexusLaugh()
 
@@ -462,6 +497,7 @@ Useful if a droid is assigned to an object label. It can be either an array or a
 ## camSendReinforcement(playerId, position, templates, kind[, data])
 
 Give a single bunch of droids (template list) for a player at a position label. Kind can be one of:
+* `CAM_REINFORCE_NONE` Reinforcements are skipped this call.
 * `CAM_REINFORCE_GROUND` Reinforcements magically appear on the ground.
 * `CAM_REINFORCE_TRANSPORT` Reinforcements are unloaded from a transporter.
   **NOTE:** the game engine doesn't seem to support two simultaneous incoming transporters for the same player.
@@ -482,6 +518,31 @@ Give a single bunch of droids (template list) for a player at a position label. 
 @param {Object} [data]
 @returns {void}
 
+## camSendGenericSpawn(kind, player, condition, position, unitList, minimumUnits, maxRandoms)
+
+A simple means to send a group of units, either by spawn or transporter, on a simple attack order.
+Creating VTOLs this way isn't advised as they won't automatically retreat to a removal zone. However,
+for maps with VTOL Rearming Pads present, it could be ok as long as the mission script is careful.
+`kind`: Works similar to `camSendReinforcement()`.
+`player`: The player that will own these units.
+`condition`: Works similar to `camReinforcementConditionPasses()`.
+`position`: An object that contains coordinate data, such as {x: x, y: y}, to tell where units will appear.
+  May be a label or even an array of labels or objects containing coordinates, and if so, will be randomly selected.
+`unitList`: An array of units that will randomly be chosen from, or, a single template.
+May also be an object like so: {units: array_of_units|single_template, appended: array_of_units|single_template}.
+`appended` will always additionally be added to the randomly selected units.
+`minimumUnits`: The absolute minimum units this spawn will create.
+`maxRandoms`: How many units will randomly be added to the minimumUnits.
+
+@param {number} type
+@param {number} player
+@param {number} condition
+@param {object} position
+@param {array} unitList
+@param {number} minimumUnits
+@param {number} maxRandoms
+@returns {boolean}
+
 ## camSetBaseReinforcements(baseLabel, interval, callbackName, kind, data)
 
 Periodically brings reinforcements to an enemy base, until the base is eliminated.
@@ -496,6 +557,21 @@ Use `CAM_REINFORCE_NONE` as kind to disable previously set reinforcements.
 @param {number} kind
 @param {Object} data
 @returns {void}
+
+## camReinforcementConditionPasses(condition, player)
+
+Determines if a generic reinforcement condition will allow a spawn to proceed.
+`condition`: Basic conditions to not spawn anything, can be one of:
+  * `CAM_REINFORCE_CONDITION_NONE` or `undefined`: Do not use a condition, will always attempt a spawn.
+  * `CAM_REINFORCE_CONDITION_BASES`: Do not spawn if all bases are eliminated.
+  * `CAM_REINFORCE_CONDITION_UNITS`: Do not spawn if `player` has zero units.
+  * An `Object` {condition: `CAM_REINFORCE_CONDITION_OBJECT`, object: `label_of_object`} or `label`: spawns only if object is alive.
+  * `CAM_REINFORCE_CONDITION_ARTIFACTS`: Do not spawn if the player has picked up all artifacts.
+`player`: The player to check conditions for. Doesn't need to be specified except for the units condition.
+
+@param {Number|Object} condition
+@param {Number} player
+@returns {Boolean}
 
 ## camEnableRes(researchIds, playerId)
 
@@ -556,6 +632,10 @@ different aspects of behavior. The order parameter is one of:
   * `repair` Health percentage to fall back to repair facility, if any.
   * `regroup` If set to `true`, the group will not move forward unless it has at least `count` droids in its biggest cluster.
     If `count` is set to `-1`, at least ⅔ of group's droids should be in the biggest cluster.
+  * `patrolType` Type of patrol behavior. Defaults to `CAM_PATROL_RANDOM` where the group randomly chooses a patrol position.
+    `CAM_PATROL_CYCLE` forces the group to loop through the entire list of patrol positions one after the other.
+  * `reactToAttack` Defaults to false and can be used to break the group out of patrol and
+     into a `CAM_ORDER_ATTACK` state, if the group is attacked.
 * `CAM_ORDER_COMPROMISE` Same as `CAM_ORDER_ATTACK`, just stay near the last (or only)
   attack position instead of looking for the player around the whole map. Useful for offworld missions,
   with player's LZ as the final position. The following data object fields are available:
@@ -621,6 +701,15 @@ Returns the amount of seconds in `hours`.
 @param {number} hours
 @returns {number}
 
+## camSetMissionTimer(seconds)
+
+Sets the mission time for a level. This acts as a wrapper for `setMissionTime()`
+and is mostly used to either set the time value passed (as seconds) or infinite
+time if the `infiniteTime` tweak option is active.
+
+@param {number} time value in seconds
+@returns {void}
+
 ## camIsTransporter(gameObject)
 
 Determine if the object is a transporter.
@@ -645,12 +734,13 @@ Removes the last blip that an enemy transporter left behind, if any.
 
 @returns {void}
 
-## camManageTrucks(playerId)
+## camManageTrucks(playerId [, allowOilCapture])
 
-Manage trucks for an AI player. This assumes recapturing oils and rebuilding destroyed trucks
-in factories, the latter is implemented via `camQueueDroidProduction()` mechanism.
+Manage trucks for an AI player. This assumes rebuilding destroyed trucks
+in factories, which is implemented via the `camQueueDroidProduction()` mechanism.
 
 @param {number} playerId
+@param {boolean} allowOilCapture
 @returns {void}
 
 ## camQueueBuilding(playerId, stat[, position])
@@ -744,7 +834,7 @@ as a sound to play before a video. Of which is only supported when parameter `da
 @param {Object|Object[]} data
 @returns {void}
 
-## camSetVtolData(player, startPos, exitPos, templates, timer, [obj[, extras]])
+## camSetVtolData(player, startPos, exitPos, templates, timer, [condition[, extras]])
 
 Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calling this function.
 `Player`: What player number the VTOLs will belong to.
@@ -752,7 +842,7 @@ Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calli
 `ExitPos`: Exit position object where VTOLs will despawn at.
 `Templates`: An array of templates that the spawn uses.
 `Timer`: How much time in milliseconds the VTOLs will wait to spawn again.
-`Obj`: A game object that will stop the spawn when it no longer exists. May be undefined for no explicit end condition.
+`Condition`: A game object label that will stop the spawn when it no longer exists. Can use `camReinforcementConditionPasses()` conditions too.
 `Extras`: An object with possible members:
 		`limit`: Numeric limit of a VTOL design in regards to the parameter Templates. May be an array paired to Templates.
 		`alternate`: A boolean to force the spawn to use one of the designs at a time in parameter Templates.
@@ -765,7 +855,7 @@ Setup hit and runner VTOLs. NOTE: Will almost immediately spawn VTOLs upon calli
 @param {Object} exitPos
 @param {Object[]} templates
 @param {number} timer
-@param {Object} obj
+@param {Object|Number} Condition
 @param {Object} extras
 @returns {void}
 
@@ -784,4 +874,11 @@ Sets the active status of all VTOL spawns to `state`.
 
 @param {boolean} state
 @returns {void}
+
+## camVtolCanDisappear(droid)
+
+Checks if the given VTOL can fly off map if damage or ammo amount allows.
+
+@param {Object} droid
+@returns {Boolean}
 

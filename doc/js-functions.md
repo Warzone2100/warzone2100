@@ -483,6 +483,10 @@ Returns true if given structure can be built. It checks both research and unit l
 Pick a location for constructing a certain type of building near some given position.
 Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
 
+## structureCanFit(structureName, x, y[, direction])
+
+Return true if given building can be built at the position. (4.6+ only)
+
 ## droidCanReach(droid, x, y)
 
 Return whether or not the given droid could possibly drive to the given position. Does
