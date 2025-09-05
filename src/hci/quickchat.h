@@ -202,3 +202,5 @@ bool recvQuickChat(NETQUEUE queue);
 // message throttling, spam prevention
 void recordPlayerMessageSent(uint32_t playerIdx);
 optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx);
+void playerSpamMuteNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB);
+void playerSpamMuteReset(uint32_t playerIndex);

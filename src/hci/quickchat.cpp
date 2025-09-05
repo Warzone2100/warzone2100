@@ -104,6 +104,19 @@ optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t pl
 	return nullopt;
 }
 
+void playerSpamMuteNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	ASSERT_OR_RETURN(, playerIndexA < lastQuickChatMessageTimes.size(), "playerIndexA invalid: %" PRIu32, playerIndexA);
+	ASSERT_OR_RETURN(, playerIndexB < lastQuickChatMessageTimes.size(), "playerIndexB invalid: %" PRIu32, playerIndexB);
+	std::swap(lastQuickChatMessageTimes[playerIndexA], lastQuickChatMessageTimes[playerIndexB]);
+}
+
+void playerSpamMuteReset(uint32_t playerIndex)
+{
+	ASSERT_OR_RETURN(, playerIndex < lastQuickChatMessageTimes.size(), "playerIndex invalid: %" PRIu32, playerIndex);
+	lastQuickChatMessageTimes[playerIndex].clear();
+}
+
 void recordPlayerMessageSent(uint32_t playerIdx)
 {
 	if (playerSpamMutedUntil(playerIdx).has_value())
