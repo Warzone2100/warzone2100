@@ -745,6 +745,7 @@ void NET_InitPlayers(bool initTeams, bool initSpectator)
 	{
 		NET_InitPlayer(i, true, initTeams, initSpectator);
 		ingame.muteChat[i] = false;
+		playerSpamMuteReset(i);
 		clearPlayerName(i);
 		NETinitQueue(NETnetQueue(i));
 	}
@@ -2164,6 +2165,7 @@ static bool swapPlayerIndexes(uint32_t playerIndexA, uint32_t playerIndexB)
 
 	std::swap(ingame.lastSentPlayerDataCheck2[playerIndexA], ingame.lastSentPlayerDataCheck2[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
+	playerSpamMuteNotifyIndexSwap(playerIndexA, playerIndexB);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 
 	// Ensure we filter messages appropriately waiting for the client ack *at each new index*

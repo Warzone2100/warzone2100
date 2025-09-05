@@ -3436,6 +3436,7 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 	}
 	std::swap(ingame.hostChatPermissions[playerIndexA], ingame.hostChatPermissions[playerIndexB]);
 	std::swap(ingame.muteChat[playerIndexA], ingame.muteChat[playerIndexB]);
+	playerSpamMuteNotifyIndexSwap(playerIndexA, playerIndexB);
 	multiSyncPlayerSwap(playerIndexA, playerIndexB);
 	multiOptionPrefValuesSwap(playerIndexA, playerIndexB);
 

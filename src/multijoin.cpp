@@ -74,6 +74,7 @@
 #include "clparse.h"
 #include "multilobbycommands.h"
 #include "stdinreader.h"
+#include "hci/quickchat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -575,6 +576,8 @@ bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdenti
 			netPlayersUpdated = true;	// update the player box.
 		}
 	}
+
+	playerSpamMuteReset(playerIndex);
 
 	if (NetPlay.isHost)		// host responsible for welcoming this player.
 	{
