@@ -1048,7 +1048,7 @@ void droidUpdate(DROID *psDroid)
 }
 
 /* Check if droid is within commander's range */
-bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
+bool droidWithinCommanderRange(const DROID *psDroid)
 {
 	if (psDroid->droidType == DROID_COMMAND)
 	{
@@ -1057,7 +1057,7 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 
 	ASSERT_OR_RETURN(false, psDroid->psGroup && psDroid->psGroup->psCommander, "Droid group or commander is NULL");
 
-	const auto &rangeArray = shield ? psDroid->getBrainStats()->shield.shieldRange : psDroid->getBrainStats()->cmdExpRange;
+	const auto &rangeArray = psDroid->getBrainStats()->cmdExpRange;
 
 	auto level = getDroidLevel(psDroid->psGroup->psCommander);
 	auto rangeArraySize = rangeArray.size();
@@ -1078,66 +1078,13 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 
 void droidUpdateShields(DROID *psDroid)
 {
-	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND)
-	{
-		if (psDroid->shieldPoints < 0)
-		{
-			psDroid->shieldPoints = 0;
-			psDroid->shieldRegenTime = gameTime;
-			psDroid->shieldInterruptRegenTime = gameTime;
-		}
-		else
-		{
-			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
-				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
-				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid) &&
-				droidWithinCommanderRange(psDroid, true))
-			{
-				auto availableShieldPoints = droidGetMaxShieldPoints(psDroid) - psDroid->shieldPoints;
-
-				if (availableShieldPoints > 0)
-				{
-					auto pointsToAdd = std::min<UDWORD>(psDroid->getBrainStats()->shield.shieldPointsPerStep, availableShieldPoints);
-					psDroid->shieldPoints += pointsToAdd;
-				}
-				psDroid->shieldRegenTime = gameTime;
-			}
-		}
-	}
-	else
-	{
-		// unit has lost commander, shields are down!
-		psDroid->shieldPoints = -1;
-	}
-}
-
-UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
-{
-	const auto &psStats = psDroid->getBrainStats()->shield;
-	auto levelBasedReduction = (psStats.shieldRegenTimeDec * getDroidLevel(psDroid));
-	if (levelBasedReduction >= psStats.initialShieldRegenTime)
-	{
-		return 0;
-	}
-	return psStats.initialShieldRegenTime - levelBasedReduction;
-}
-
-UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
-{
-	const auto &psStats = psDroid->getBrainStats()->shield;
-	auto levelBasedReduction = (psStats.shieldInterruptRegenTimeDec * getDroidLevel(psDroid));
-	if (levelBasedReduction >= psStats.initialShieldInterruptRegenTime)
-	{
-		return 0;
-	}
-	return psStats.initialShieldInterruptRegenTime - levelBasedReduction;
+	// shields are down (left for experimentation with different implementations)
+	psDroid->shieldPoints = -1;
 }
 
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
 {
-	const auto &psStats = psDroid->getBrainStats()->shield;
-	UDWORD percent = psDroid->originalBody / 100;
-	return percent * (psStats.initialShieldPointsPercent + psStats.additiveShieldPointsPercent * getDroidLevel(psDroid));
+	return 0; // currently disabled, but left for experimentation with different implementations
 }
 
 /* See if a droid is next to a structure */
