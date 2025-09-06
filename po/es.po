@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-08-30 13:50+0000\n"
-"PO-Revision-Date: 2025-08-30 15:14\n"
+"PO-Revision-Date: 2025-09-06 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -1821,7 +1821,7 @@ msgid "Return to LZ"
 msgstr "Vuelve a la ZA"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "Consejo de dificultad loca:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Construye una base robusta a lo largo del mapa para protegerte del Colectivo"
@@ -3000,13 +3000,13 @@ msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "No se puede cargar la repetición: el archivo de repetición está incompleto o está corrupto."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: Error al inicializar gráficos"
 
 msgid "Failed to initialize graphics for all backends."
 msgstr ""
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Detalles de error:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
@@ -3015,7 +3015,7 @@ msgid "OK"
 msgstr "OK"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: Error al iniciar antes"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
 msgstr ""
@@ -3637,7 +3637,7 @@ msgid "Battlefield repair unit"
 msgstr "Unidad de reparación para el campo de batalla"
 
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Mejores Objetivos: vehículos y cyborgs"
 
 msgid "Best Targets : Vehicles"
 msgstr "Mejores Objetivos: Vehículos"
@@ -3661,7 +3661,7 @@ msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Mejores Objetivos: Búnkers y Defensas"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Mejores objetivos: Bunkers, defensas, estructuras básicas"
 
 msgid "Best Targets: Cyborgs"
 msgstr "Mejores Objetivos: Cyborgs"
@@ -3711,7 +3711,7 @@ msgid "Bomb damage +25%"
 msgstr "Daño por Bombas +25%"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Daño de bomba"
 
 msgid "Bomb Upgrade"
 msgstr "Mejora de Bombas"
@@ -3738,7 +3738,7 @@ msgid "Buggy"
 msgstr "Buggy"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Construcciones"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistemas incorporados de diagnóstico y reparación"
@@ -3781,7 +3781,7 @@ msgid "Cannon accuracy +10%"
 msgstr "Precisión de Cañón +10%"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Precisión de Cañón"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Autorecarga de Cañón Mk2"
@@ -3797,7 +3797,7 @@ msgid "Cannon damage +25%"
 msgstr "Daño de Cañón +25%"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Daño de Cañón"
 
 msgid "Cannon Fire Truck"
 msgstr "Camión de bomberos con Cañón"
@@ -3825,7 +3825,7 @@ msgid "Cannon reload time -10%"
 msgstr "Tiempo de recarga de Cañón -10%"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "Recarga del Cañón"
 
 msgid "Cannon Tower"
 msgstr "Torre de Cañón"
@@ -3998,7 +3998,7 @@ msgid "Crane2"
 msgstr "Grúa2"
 
 msgid "Cyborg Alloys"
-msgstr ""
+msgstr "Aleaciones Cyborg"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
 msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-08-30 13:50+0000\n"
-"PO-Revision-Date: 2025-08-30 15:14\n"
+"PO-Revision-Date: 2025-09-06 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -18,28 +18,28 @@ msgstr ""
 "X-Crowdin-File-ID: 72\n"
 
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "МЕТА: Знайти і повернути невральну синаптичну технологію"
+msgstr "МЕТА: Знайти й повернути технологію нейронного синапсу"
 
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Збудуйте базу, а потім шукайте Докатастрофну будівлю."
+msgstr "Збудуйте базу, а потім шукайте Доколапсову будівлю."
 
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Ця будівля містить технологію життєво важливу для успіху Проекту."
+msgstr "Ця будівля містить технологію життєво важливу для успіху Проєкту."
 
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "МІСІЯ БАЗИ АЛЬФА: Рейдери Звалищників"
+msgstr "МІСІЯ БАЗИ АЛЬФА: Рейдери"
 
 msgid "Scavenger raiders are approaching our base."
-msgstr "Рейдери Звалищників наближаються до нашої бази."
+msgstr "Рейдери наближаються до нашої бази."
 
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Захистіть базу та знищте табір Звалищників."
+msgstr "Захистіть базу та знищте табір Рейдерів."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "МІСІЯ БАЗИ АЛЬФА: Помічено Стрибок Напруги"
+msgstr "МІСІЯ БАЗИ АЛЬФА: Виявлено Сигнал"
 
 msgid "A power surge has been detected to the south of our position."
-msgstr "Стрибок напруги був помічений на півдні від нашої позиції."
+msgstr "Сплеск енергії був помічений на півдні від нашої позиції."
 
 msgid "Investigate and secure the area."
 msgstr "Розвідайте територію та встановіть над нею контроль."
@@ -48,13 +48,13 @@ msgid "ALPHA BASE MISSION: The New Paradigm"
 msgstr "МІСІЯ БАЗИ АЛЬФА: Нова Парадигма"
 
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Нова Парадигма володіє найкращими технологіями озброєнь."
+msgstr "Нова Парадигма володіє найкращими технологіями."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Вони можуть мати технологію синаптичного зв’язку, її необхідно повернути."
+msgstr "Можливо, в них є технологія синаптичного зв’язку — ми повинні її повернути."
 
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "ТРАНСПОРТНА МІСІЯ: Знайти і Підібрати Артефакти"
+msgstr "ТРАНСПОРТНА МІСІЯ: Знайти і Повернути Артефакти"
 
 msgid "Load an attack force into the transport."
 msgstr "Завантажте штурмову групу на транспорт."
@@ -63,13 +63,13 @@ msgid "On landing, explore the ruins and recover any artifacts."
 msgstr "Після посадки, дослідіть руїни та знайдіть усі артефакти."
 
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "ТРАНСПОРТНА МІСІЯ: Обстежити Дослідний Центр"
+msgstr "ТРАНСПОРТНА МІСІЯ: Обстежити науково-дослідницький центр"
 
 msgid "Investigate the area and recover any artifacts present."
 msgstr "Обстежте територію та знайдіть усі наявні артефакти."
 
 msgid "Reinforcements are available."
-msgstr "Доступні Підкріплення."
+msgstr "Доступні підкріплення."
 
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
 msgstr "ТРАНСПОРТНА МІСІЯ: Зафіксовано Кодовані Сигнали"
@@ -81,13 +81,13 @@ msgid "Use your trucks to build defenses at your LZ."
 msgstr "За допомогою Інженерів збудуйте укріплення в Зоні Висадки"
 
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "ТРАНСПОРТНА МІСІЯ: Зафіксовано Ворожі Передачі"
+msgstr "ТРАНСПОРТНА МІСІЯ: Зафіксована передача ворога"
 
 msgid "Scout the designated area for enemy research facilities."
-msgstr "На визначеній території знайдіть ворожі дослідницькі станції."
+msgstr "На визначеній території знайдіть ворожі науково-дослідницькі станції."
 
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Рухайтесь до Зони Висадки №2. Поки що, не вступайте у контакт з ворогом."
+msgstr "Рухайтесь до Зони Висадки №2. Не вступайте у контакт з ворогом."
 
 msgid "TRANSPORT MISSION: Synaptic Link Location"
 msgstr "ТРАНСПОРТНА МІСІЯ: Місцезнаходження Синаптичного Зв’язку"
@@ -117,7 +117,7 @@ msgid "Eradicate the base and secure the area."
 msgstr "Ліквідуйте базу і встановіть контроль над територією."
 
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "МІСІЯ БАЗИ АЛЬФА: Створення Передової Бази"
+msgstr "МІСІЯ БАЗИ АЛЬФА: Побудуйте передову базу"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
 msgstr "Створити передову базу на плато та відгородитися від Нової Парадигми."
@@ -132,7 +132,7 @@ msgid "Enemy forces are approaching from the east and north."
 msgstr "Ворожі війська наступають зі сходу та півночі."
 
 msgid "Hold the bases and repulse any attacks."
-msgstr "Втримайте бази та відбийте всі напади."
+msgstr "Захистіть бази та відбийте всі напади."
 
 msgid "ALPHA BASE MISSION: Incoming Transmission"
 msgstr "МІСІЯ БАЗИ АЛЬФА: Вхідне Повідомлення"
@@ -141,7 +141,7 @@ msgid "We are detecting enemy forces at these locations."
 msgstr "Ми фіксуємо ворожі сили на цих територіях."
 
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Це наш шанс завдати поразки Новій Парадігмі та знищити їх базу."
+msgstr "Це наш шанс перемогти Нову Парадигму та знищити їх базу."
 
 msgid "Congratulations Commander."
 msgstr "Вітаємо, Командире."
@@ -156,7 +156,7 @@ msgid "The first two zones are now secure."
 msgstr "У перших двох зонах тепер безпечно."
 
 msgid "PROJECT TEAM UPDATES"
-msgstr "ДОПОВІДІ КОМАНД ПРОЕКТУ"
+msgstr "ДОПОВІДІ КОМАНДИРІВ ПРОЕКТУ"
 
 msgid "TEAM BETA UPDATE"
 msgstr "ДОПОВІДАЄ КОМАНДА БЕТА"
@@ -174,22 +174,22 @@ msgid "Nothing to report."
 msgstr "Нічого доповідати."
 
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "Ми не знайшли ні артефактів, ні супротивників."
+msgstr "Ми не знайшли ні артефактів, ні ворогів."
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
 msgstr "ДОПОВІДЬ РОЗВІДКИ БАЗИ АЛЬФА: Ворожа Атака."
 
 msgid "We are detecting an enemy attack force at this location."
-msgstr "Ми фіксуємо ворожі атакуючі сили в цьому районі."
+msgstr "Ми фіксуємо ворожі сили в цьому районі."
 
 msgid "PRIMARY OBJECTIVE"
 msgstr "ОСНОВНЕ ЗАВДАННЯ"
 
 msgid "This structure is your primary objective."
-msgstr "Ця будівля - ваше основне завдання."
+msgstr "Ця будівля - ваша основна ціль."
 
 msgid "Search for and recover any artifacts here."
-msgstr "Знайдіть і вилучіть звідси всі артефакти."
+msgstr "Знайдіть і поверніть звідси всі артефакти."
 
 msgid "ENEMY LZ"
 msgstr "ВОРОЖА ЗОНА ВИСАДКИ"
@@ -228,7 +228,7 @@ msgid "We have decoded the incoming message to the New Paradigm..."
 msgstr "Ми розшифрували вхідне повідомлення для Нової Парадигми."
 
 msgid "Destroy Enemy Base"
-msgstr "Знищити Ворожу Базу"
+msgstr "Знищіть ворожу базу"
 
 msgid "Assemble an attack force and board the transport."
 msgstr "Зберіть штурмову групу і завантажте на транспорт."
@@ -1797,7 +1797,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Команда спасения Альфа из Нексуса"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr ""
+msgstr "Lo"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Знищіть КК НЕКСУСу, щоб вимкнути Вірусну Програму Nexus"
@@ -3007,7 +3007,7 @@ msgid "Failed to initialize graphics for all backends."
 msgstr ""
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Інформація про помилку"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
@@ -3044,7 +3044,7 @@ msgid "Multiplayer"
 msgstr "Мультиплеєр"
 
 msgid "Menu Music"
-msgstr "Музика меню"
+msgstr "Музика в меню"
 
 msgid "(untitled)"
 msgstr "(Без назви)"
@@ -3712,7 +3712,7 @@ msgid "Bomb damage +25%"
 msgstr "Сила бомб +25%"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Шкода від бомби"
 
 msgid "Bomb Upgrade"
 msgstr "Покращення Бомб"
@@ -3739,7 +3739,7 @@ msgid "Buggy"
 msgstr "Баггі"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Будівлі"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Вбудовані системи діагностики та ремонту"
@@ -3782,7 +3782,7 @@ msgid "Cannon accuracy +10%"
 msgstr "Точність Гармати +10%"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Точність Гармати"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Автоматичний Зарядник Гармати Мк2"
@@ -3798,7 +3798,7 @@ msgid "Cannon damage +25%"
 msgstr "Сила Гармати +25%"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Шкода від Гармати"
 
 msgid "Cannon Fire Truck"
 msgstr "Гарматний пожежний автомобіль"
@@ -3826,7 +3826,7 @@ msgid "Cannon reload time -10%"
 msgstr "Час перезарядки Гармати -10%"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "Перезаряджання Гармати"
 
 msgid "Cannon Tower"
 msgstr "Гарматна Вежа"
@@ -4218,7 +4218,7 @@ msgid "Enemy"
 msgstr "Ворог"
 
 msgid "Engine"
-msgstr ""
+msgstr "Двигун"
 
 msgid "Engineering"
 msgstr "Інженіринг"
@@ -4330,7 +4330,7 @@ msgid "Flamer damage +25%"
 msgstr "Сила Вогнемету +25%"
 
 msgid "Flamer Damage"
-msgstr ""
+msgstr "Шкода Вогнемету"
 
 msgid "Flamer Fast Loader"
 msgstr "Швидкий Зарядник Вогнемету"
@@ -4340,7 +4340,7 @@ msgid "Flamer reload time -15%"
 msgstr "Час перезарядки Вогнемета -15%"
 
 msgid "Flamer Reload"
-msgstr ""
+msgstr "Перезаряджання вогнемету"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Напівгусенична Гадюка з Вогнеметом"
@@ -4911,13 +4911,13 @@ msgid "Howitzer"
 msgstr "Гаубиця"
 
 msgid "Howitzers Accuracy"
-msgstr ""
+msgstr "Точність Гаубиці"
 
 msgid "Howitzers Damage"
-msgstr ""
+msgstr "Шкода Гаубиці"
 
 msgid "Howitzers Reload"
-msgstr ""
+msgstr "Перезаряджання Гаубиці"
 
 msgid "Hurricane AA Site"
 msgstr "ПП Зенітна Установка 'Ураган'"
@@ -5502,7 +5502,7 @@ msgid "Missile accuracy +10%"
 msgstr "Точність Ракет +10%"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "Точність Ракет"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "Ракета виявляє та наводиться на ціль"
@@ -5512,7 +5512,7 @@ msgid "Missile damage +25%"
 msgstr "Сила Ракет +25%"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "Шкода від ракети"
 
 msgid "Missile Fortress"
 msgstr "Фортеця з Самонавідною Пусковою Установкою"
@@ -5522,7 +5522,7 @@ msgid "Missile reload time -15%"
 msgstr "Час перезарядки Ракет -15%"
 
 msgid "Missile Reload"
-msgstr ""
+msgstr "Перезарядка ракети"
 
 msgid "Missile Upgrade"
 msgstr "Покращення Ракет"
@@ -5544,7 +5544,7 @@ msgid "Mortar accuracy +10%"
 msgstr "Точність Мортири +10%"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "Точність мортири"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Автозярядник Мортири Мк2"
@@ -5563,7 +5563,7 @@ msgid "Mortar damage +25%"
 msgstr "Сила Мортири +25%"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "Шкода від Мортири"
 
 msgid "Mortar Fast Loader"
 msgstr "Автозярядник Мортири Мк3"
@@ -5576,7 +5576,7 @@ msgid "Mortar reload time -10%"
 msgstr "Час перезарядки Мортири -10%"
 
 msgid "Mortar Reload"
-msgstr ""
+msgstr "Перезаряджання мортири"
 
 msgid "Mortar Targeting Computer"
 msgstr "Навідний Комп'ютер Мортири"
@@ -7349,7 +7349,7 @@ msgid "Load a saved skirmish game"
 msgstr "Завантажте збережену сутичку"
 
 msgid "savegame"
-msgstr "збережена гра"
+msgstr "Збережена гра"
 
 msgid "Load a saved campaign game"
 msgstr "Завантажте збережену компанію гри"
@@ -7421,7 +7421,7 @@ msgid "Immediately save game and quit"
 msgstr "Негайне збереження гри та вихід з гри"
 
 msgid "save name"
-msgstr "зберегти ім'я"
+msgstr "Зберегти назву"
 
 msgid "Start skirmish game with given settings file"
 msgstr "Почніть гру із заданим файлом налаштувань"
@@ -7731,7 +7731,7 @@ msgid "Single Player"
 msgstr "Один Гравець"
 
 msgid "Multi Player"
-msgstr "Кілька Гравців"
+msgstr "Мультиплеєр"
 
 msgid "Tutorial"
 msgstr "Навчання"
@@ -7746,10 +7746,10 @@ msgid "Videos are missing, download them from http://wz2100.net"
 msgstr "Відео відсутні, завантажте їх http://wz2100.net"
 
 msgid "Continue Last Save"
-msgstr "Продовжити збереження"
+msgstr "Продовжити з останнього збереження "
 
 msgid "No last save available"
-msgstr "доступний останній день"
+msgstr "Останнє збереження не доступне"
 
 msgid "Quit Game"
 msgstr "Вийти з Гри"
@@ -7795,7 +7795,7 @@ msgid "Start Skirmish Game"
 msgstr "Почати Одиночну Гру"
 
 msgid "Challenges"
-msgstr "Виклики"
+msgstr "Завдання"
 
 msgid "Load Campaign Game"
 msgstr "Завантажити гру для маркетингової кампанії"
@@ -7804,7 +7804,7 @@ msgid "Load Skirmish Game"
 msgstr "Почати Одиночну Гру"
 
 msgid "View Skirmish Replay"
-msgstr "Переглянути повтор Підзорної Ринки"
+msgstr "Переглянути повтор Сутички"
 
 msgid "SINGLE PLAYER"
 msgstr "РЕЖИМ ОДНОГО ГРАВЦЯ"
@@ -7813,13 +7813,13 @@ msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Не вистачає відео для кампанії! Отримайте їх від http://wz2100.net"
 
 msgid "Load Campaign Saved Game"
-msgstr "Завантажити гру для маркетингової кампанії"
+msgstr "Завантажити кампанію"
 
 msgid "Load Skirmish Saved Game"
-msgstr "Почати Одиночну Гру"
+msgstr "Завантажити Сутичку"
 
 msgid "Load Skirmish Replay"
-msgstr "Переглянути повтор Підзорної Ринки"
+msgstr "Завантажити повтор Сутички"
 
 msgid "MULTI PLAYER"
 msgstr "РЕЖИМ КІЛЬКОХ ГРАВЦІВ"
@@ -8142,7 +8142,7 @@ msgid "I suggest: Capturing oil resources"
 msgstr ""
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Всім привіт!"
 
 msgid "Welcome!"
 msgstr "Вітаю!"
@@ -8175,7 +8175,7 @@ msgid "Be right back"
 msgstr ""
 
 msgid "I'm back"
-msgstr ""
+msgstr "Я повернувся"
 
 msgid "Yes"
 msgstr "Так"
@@ -8247,16 +8247,16 @@ msgid "Transfer Request: Trucks"
 msgstr ""
 
 msgid "Attacking now!"
-msgstr ""
+msgstr "Атакую!"
 
 msgid "On my way!"
-msgstr ""
+msgstr "В дорозі!"
 
 msgid "They're coming!"
-msgstr ""
+msgstr "Вони наближаються!"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "На мене напали!"
 
 msgid "I'm rushing oils"
 msgstr ""
@@ -8283,10 +8283,10 @@ msgid "Keep research centers busy"
 msgstr ""
 
 msgid "Build anti-air"
-msgstr ""
+msgstr "Побудуй ППО"
 
 msgid "Repair your units"
-msgstr ""
+msgstr "Поремонтуй юнітів"
 
 msgid "Build repair facilities"
 msgstr ""
@@ -9285,7 +9285,7 @@ msgid "Enabling level editor"
 msgstr "Увімкнути редактор рівнів"
 
 msgid "God Mode ON"
-msgstr "Режим Бога Задіяно"
+msgstr "Режим Бога Ввімкнено"
 
 msgid "God Mode OFF"
 msgstr "Режим Бога Вимкнено"
@@ -9307,16 +9307,16 @@ msgid "SKIRMISH"
 msgstr "СКІРМІШ"
 
 msgid "DIFFICULTY: SUPER EASY"
-msgstr "СКЛАДНІСТЬ: НАДЗВИЧАЙНО ЛЕГКО"
+msgstr "Складність: Надзвичайно легко"
 
 msgid "DIFFICULTY: EASY"
-msgstr "КІЛЬНА СКЛАДНІСТЬ: СЕВА"
+msgstr "Складність: Легко"
 
 msgid "DIFFICULTY: NORMAL"
-msgstr "Склад: СВІТЛА"
+msgstr "Складність: Нормально"
 
 msgid "DIFFICULTY: HARD"
-msgstr "трудність:важко"
+msgstr "Складність: Важко"
 
 msgid "DIFFICULTY: INSANE"
 msgstr "ефективність:всередині"
@@ -9477,7 +9477,7 @@ msgid "AutoSave %s failed"
 msgstr ""
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "Автозбереження..."
 
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
@@ -9492,7 +9492,7 @@ msgid "Shows the number of units currently loaded into the mission transporter, 
 msgstr ""
 
 msgid "Open the Transporter Load Menu"
-msgstr ""
+msgstr "Відкрити меню транспортера"
 
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "ЗАВДАННЯ ВИКОНАНО за допомогою шахрайства!"
@@ -9662,7 +9662,7 @@ msgid "Cannot swap with host"
 msgstr ""
 
 msgid "Spectator"
-msgstr ""
+msgstr "Глядач"
 
 #, c-format
 msgid "The host has kicked %s from the game!"
@@ -9765,10 +9765,10 @@ msgid "You have been assigned the codename: \"%s\""
 msgstr ""
 
 msgid "Joined:"
-msgstr ""
+msgstr "Приєднався:"
 
 msgid "Ready:"
-msgstr ""
+msgstr "Готовий:"
 
 msgid "Players"
 msgstr "Гравці"
@@ -9956,7 +9956,7 @@ msgid "Open"
 msgstr "Відкрити"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr "Версія Warzone 2100 служить для збереження цього файла повтору не відповідає поточній версії."
+msgstr "Версія Warzone 2100, яка використовується для збереження цього файлу повтору, не відповідає поточній версії."
 
 #, c-format
 msgid "Replay File Saved With: \"%s\""
@@ -9967,7 +9967,7 @@ msgid "Current Warzone 2100 Version: \"%s\""
 msgstr "Поточна версія Warzone 2100: \"%s\""
 
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr "Повтори зазвичай повинні відтворені з тією ж версією, що використовується для збереження повтору."
+msgstr "Повтори зазвичай повинні відтворюватися на тій же версії, на якій було збережено повтор."
 
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr "Повтор не може відтворити відео успішно, або ж розрив у симуляції може бути різним."
@@ -10036,7 +10036,7 @@ msgid "Administrator has kicked you from the game."
 msgstr ""
 
 msgid "Search for map"
-msgstr ""
+msgstr "Пошук по карті"
 
 msgid "Any number of players"
 msgstr "Будь-яка кількість гравців"
@@ -10068,7 +10068,7 @@ msgid "Units"
 msgstr "Підрозділи"
 
 msgid "Channel"
-msgstr ""
+msgstr "Канал"
 
 msgid "Toggle Alliance State"
 msgstr "Змінити Статус Союзу"
@@ -10184,10 +10184,10 @@ msgid "Unauthorized network command"
 msgstr ""
 
 msgid "REPLAY HAS ENDED"
-msgstr ""
+msgstr "РЕПЛЕЙ ЗАВЕРШЕНО"
 
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Натисніть ESC щоб вийти)"
 
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
@@ -10238,13 +10238,13 @@ msgid "Cyan"
 msgstr "Блакитний"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Жовтий"
 
 msgid "Purple"
-msgstr ""
+msgstr "Рожевий"
 
 msgid "White"
-msgstr ""
+msgstr "Білий"
 
 msgid "Bright blue"
 msgstr ""
@@ -10259,13 +10259,13 @@ msgid "Ultraviolet"
 msgstr ""
 
 msgid "Brown"
-msgstr ""
+msgstr "Коричневий"
 
 msgid "Spectator Mode"
-msgstr ""
+msgstr "Режим глядач"
 
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr ""
+msgstr "Тепер ти глядач. Гарного перегляди гри!"
 
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
@@ -10508,10 +10508,10 @@ msgid "Related Keymappings:"
 msgstr ""
 
 msgid "Enter password"
-msgstr ""
+msgstr "Введіть пароль"
 
 msgid "Connecting to Game"
-msgstr ""
+msgstr "Приєднатися до гри"
 
 msgid "Status:"
 msgstr ""
@@ -10616,10 +10616,10 @@ msgid "Failure to generate valid response"
 msgstr ""
 
 msgid "Kick Spectator"
-msgstr ""
+msgstr "Викинути глядача"
 
 msgid "Kick Player"
-msgstr ""
+msgstr "Викинути гравця"
 
 msgid "Loading Status:"
 msgstr ""
@@ -10628,10 +10628,10 @@ msgid "TEAM STRATEGY"
 msgstr ""
 
 msgid "Game will start in ..."
-msgstr ""
+msgstr "Гра почнеться через..."
 
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "Чекаємо інших гравців..."
 
 msgid "Team Planning"
 msgstr ""
@@ -10655,7 +10655,7 @@ msgid "Loading video"
 msgstr ""
 
 msgid "Show Player Stats"
-msgstr ""
+msgstr "Показати статистику гравця"
 
 msgid "Weapon Grade"
 msgstr ""
@@ -10676,31 +10676,31 @@ msgid "Lab Use"
 msgstr ""
 
 msgid "Kinetic Armor"
-msgstr ""
+msgstr "Кінетична броня"
 
 msgid "(Tanks / Cyborgs)"
 msgstr ""
 
 msgid "Cannons"
-msgstr ""
+msgstr "Гармати"
 
 msgid "Mortars"
-msgstr ""
+msgstr "Мортири"
 
 msgid "Missiles"
-msgstr ""
+msgstr "Ракети"
 
 msgid "Rockets"
 msgstr ""
 
 msgid "Energy"
-msgstr ""
+msgstr "Енергія"
 
 msgid "Gauss"
 msgstr ""
 
 msgid "Flame"
-msgstr ""
+msgstr "Полум'я"
 
 msgid "Howitzers"
 msgstr ""
@@ -10709,7 +10709,7 @@ msgid "MG"
 msgstr ""
 
 msgid "Machine Guns"
-msgstr ""
+msgstr "Кулемети"
 
 msgid "Electronic"
 msgstr ""
@@ -10730,7 +10730,7 @@ msgid "Las-Sat"
 msgstr ""
 
 msgid "Laser Satellite"
-msgstr ""
+msgstr "Лазерний супутник"
 
 msgid "Bombs"
 msgstr ""
@@ -10845,25 +10845,25 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Винагорода Ремонтної Майстерні - Нічого"
 
 msgid "Classic"
-msgstr ""
+msgstr "Класичне"
 
 msgid "Remastered (HQ)"
-msgstr ""
+msgstr "Висока якість"
 
 msgid "Additional Campaigns"
-msgstr ""
+msgstr "Додаткові кампанії"
 
 msgid "Start Game"
-msgstr ""
+msgstr "Почати гру"
 
 msgid "Tweak Options:"
-msgstr ""
+msgstr "Додаткові параметри:"
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Скинути по замовчуванню"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
-msgstr ""
+msgstr "Керуйте силами Проєкту в битві за відновлення світу"
 
 msgid "Warzone 2100 Universe"
 msgstr ""
@@ -10892,13 +10892,13 @@ msgid "Grant power based on the remaining level timer, so there's no need to wai
 msgstr ""
 
 msgid "Classic Timers"
-msgstr ""
+msgstr "Таймери (Класичні)"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
 msgstr ""
 
 msgid "40 Unit Limit"
-msgstr ""
+msgstr "Ліміт до 40 юнітів"
 
 msgid "Lower the player's unit limit to 40, matching the original PS1 release."
 msgstr ""
@@ -10910,7 +10910,7 @@ msgid "Disable the ability to manually save / quick-save, limit autosaves to the
 msgstr ""
 
 msgid "PS1 Modifiers"
-msgstr ""
+msgstr "PS1 модифікатори"
 
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
@@ -10931,7 +10931,7 @@ msgid "Finale Fun"
 msgstr ""
 
 msgid "Activate Final Gamma mission bonus content."
-msgstr ""
+msgstr "Активувати кінцевий вміст місії Gamma."
 
 msgid "Gamma Bonus"
 msgstr ""
@@ -10958,7 +10958,7 @@ msgid "Increases unit experience point gain by 2x."
 msgstr ""
 
 msgid "Tower Wars"
-msgstr ""
+msgstr "Війна веж"
 
 msgid "Player gets significantly stronger structures."
 msgstr ""
@@ -10982,7 +10982,7 @@ msgid "An unforgiving challenge for experienced players only"
 msgstr ""
 
 msgid "\"Classic\" campaign balance"
-msgstr ""
+msgstr "\"Класичний\" баланс кампанії"
 
 msgid "Remastered"
 msgstr ""
@@ -10991,7 +10991,7 @@ msgid "The remastered campaign experience"
 msgstr ""
 
 msgid "Difficulty:"
-msgstr ""
+msgstr "Складність:"
 
 msgid "Balance:"
 msgstr ""
@@ -11018,7 +11018,7 @@ msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "HRTF не підтримується на пристрої / системній / бібліотеці OpenAL"
 
 msgid "Volume"
-msgstr ""
+msgstr "Гучність"
 
 msgid "Voice Volume"
 msgstr "Гучність Звуку"
@@ -11057,7 +11057,7 @@ msgid "On"
 msgstr "Ввімкнено"
 
 msgid "Music"
-msgstr ""
+msgstr "Музика"
 
 msgid "Music Manager"
 msgstr "Менеджер музики"
@@ -11072,7 +11072,7 @@ msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
-msgstr ""
+msgstr "Миша"
 
 msgid "Right-Click Orders"
 msgstr ""
@@ -11096,7 +11096,7 @@ msgid "Cursor Size"
 msgstr "Розмір Курсору"
 
 msgid "Camera"
-msgstr ""
+msgstr "Камера"
 
 msgid "Camera Speed"
 msgstr "Швидкість руху камери"
@@ -11132,10 +11132,10 @@ msgid "Reset Keys to: Defaults"
 msgstr ""
 
 msgid "Unit Color"
-msgstr ""
+msgstr "Колір юнітів"
 
 msgid "Difficulty Level"
-msgstr ""
+msgstr "Рівень складності"
 
 msgid "Default AI"
 msgstr ""
@@ -11166,7 +11166,7 @@ msgid "%u minutes"
 msgstr "%u хвилин"
 
 msgid "Lag Kick"
-msgstr "Виключення через лаги"
+msgstr "Видалити через затримку"
 
 #, c-format
 msgid "%u seconds"
@@ -11198,7 +11198,7 @@ msgid "Terrain Shading Quality only applies when using terrain appearance: Remas
 msgstr ""
 
 msgid "Shadows are not enabled."
-msgstr ""
+msgstr "Тіні не ввімкнені"
 
 msgid "Shadow mapping not available on this system."
 msgstr "Тіньове картографування недоступне в цій системі."
@@ -11312,7 +11312,7 @@ msgid "Use LOD Distance bias to increase visual sharpness."
 msgstr ""
 
 msgid "Advanced"
-msgstr ""
+msgstr "Розширені"
 
 msgid "Graphics Backend"
 msgstr ""
@@ -11339,7 +11339,7 @@ msgid "Game UI"
 msgstr ""
 
 msgid "Show FPS"
-msgstr ""
+msgstr "Показати FPS"
 
 msgid "Show Unit Counts"
 msgstr ""
@@ -11417,22 +11417,22 @@ msgid "Failed to open configuration directory"
 msgstr "Не вдалося відкрити директорію конфігурації"
 
 msgid "Interface"
-msgstr ""
+msgstr "Інтерфейс"
 
 msgid "Defaults"
 msgstr ""
 
 msgid "Graphics"
-msgstr ""
+msgstr "Графіка"
 
 msgid "Audio"
-msgstr ""
+msgstr "Аудіо"
 
 msgid "Controls"
-msgstr ""
+msgstr "Клавіші"
 
 msgid "Window"
-msgstr ""
+msgstr "вікно"
 
 msgid ""
 "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
@@ -11445,7 +11445,7 @@ msgid "You can change the resolution by resizing the window normally. (Try dragg
 msgstr "Ви можете змінити роздільну здатність шляхом нормального зміни розміру вікна. (Спробуйте перетягування куту/краю.)"
 
 msgid "Window Mode"
-msgstr ""
+msgstr "Віконний режим"
 
 msgid "Windowed"
 msgstr "Віконний Режим"
@@ -11499,7 +11499,7 @@ msgid "Waiting for host to configure teams"
 msgstr ""
 
 msgid "Waiting for players"
-msgstr ""
+msgstr "Чекаємо гравців"
 
 msgid "Downloading map / mods"
 msgstr ""
@@ -11697,13 +11697,13 @@ msgid "Structure Limits Enforced."
 msgstr "Обмеження структури дотримуються."
 
 msgid "Challenge:"
-msgstr ""
+msgstr "Завдання:"
 
 msgid "Skirmish:"
-msgstr ""
+msgstr "Сутичка:"
 
 msgid "Local (Offline)"
-msgstr ""
+msgstr "Локально"
 
 msgid "Hosting:"
 msgstr ""
@@ -11715,13 +11715,13 @@ msgid "Open (Public)"
 msgstr ""
 
 msgid "Connected to Host:"
-msgstr ""
+msgstr "Доєднатися до Хоста:"
 
 msgid "Set Password"
-msgstr ""
+msgstr "Встановити пароль"
 
 msgid "Require Password to Join"
-msgstr ""
+msgstr "Потребує пароль щоб приєднатися"
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
@@ -11822,7 +11822,7 @@ msgid "Spectator Host"
 msgstr ""
 
 msgid "Host is a spectator in the game."
-msgstr ""
+msgstr "Хост є глядачем у грі"
 
 msgid "Blind Mode"
 msgstr ""
@@ -11852,10 +11852,10 @@ msgid "Launch Transport"
 msgstr "Запустити Транспорт"
 
 msgid "Launch the Transporter"
-msgstr ""
+msgstr "Запустити транспорт"
 
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "У транспорті недостатньо місця!"
 
 msgid "Reinforcements landing"
 msgstr "Висаджується  Підкріплення."
