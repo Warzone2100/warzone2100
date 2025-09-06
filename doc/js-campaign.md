@@ -335,6 +335,7 @@ Returns a random coordinate anywhere on the edge of the map that reaches a posit
 
 @param {Object} reachPosition
 @param {String} propulsion
+@param {Number} distFromReach
 @returns {Object}
 
 ## camGenerateRandomMapCoordinate(reachPosition [, propulsion [, distFromReach [, scanObjectRadius, [, avoidNearbyCliffs]]]])
