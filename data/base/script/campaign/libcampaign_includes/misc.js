@@ -464,6 +464,7 @@ function camBreakAlliances()
 //;;
 //;; @param {Object} reachPosition
 //;; @param {String} propulsion
+//;; @param {Number} distFromReach
 //;; @returns {Object}
 //;;
 function camGenerateRandomMapEdgeCoordinate(reachPosition, propulsion, distFromReach)

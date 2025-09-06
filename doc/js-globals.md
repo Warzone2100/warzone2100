@@ -66,6 +66,7 @@ These values are defined:
   * ```Weapon``` Weapon turrets
   * ```WeaponClass``` Defined weapon classes
   * ```Building``` Buildings
+  * ```Research``` Researches
 * ```playerData``` An array of information about the players in a game. Each item in the array is an object
 containing the following variables:
   * ```difficulty``` (see ```difficulty``` global constant)
