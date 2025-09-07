@@ -3467,13 +3467,13 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	// debug(LOG_INFO, "found a total of %lu RT, and %lu RF", vDroid.size(), vFacility.size());
 
 	// the center of this area starts at the closest repair droid/facility!
-	#define MAGIC_SUITABLE_REPAIR_AREA ((REPAIR_RANGE*3) * (REPAIR_RANGE*3))
+	#define MAGIC_SUITABLE_REPAIR_AREA ((REPAIR_RANGE*5) * (REPAIR_RANGE*5))
 	Position bestRepairPoint = bestDistToRepairFac < bestDistToRepairDroid ? bestFacPos: bestDroidPos;
 	// find all close enough repairing candidates
 	for (int i=0; i < vFacilityPos.size(); i++)
 	{
 		Vector2i diff = (bestRepairPoint - vFacilityPos[i]).xy();
-		if (dot(diff, diff) < MAGIC_SUITABLE_REPAIR_AREA)
+		if (dot(diff, diff) <= MAGIC_SUITABLE_REPAIR_AREA)
 		{
 			vFacilityCloseEnough.push_back(i);
 		}
@@ -3481,7 +3481,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	for (int i=0; i < vDroidPos.size(); i++)
 	{
 		Vector2i diff = (bestRepairPoint - vDroidPos[i]).xy();
-		if (dot(diff, diff) < MAGIC_SUITABLE_REPAIR_AREA)
+		if (dot(diff, diff) <= MAGIC_SUITABLE_REPAIR_AREA)
 		{
 			vDroidCloseEnough.push_back(i);
 		}
