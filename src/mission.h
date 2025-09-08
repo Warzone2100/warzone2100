@@ -102,7 +102,7 @@ void intRemoveMissionResultNoAnim();
 void intProcessMissionResult(UDWORD id);
 void intRunMissionResult();
 
-void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome);
+void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y);
 
 /** Sets the appropriate pause states for when the interface is up but the game needs to be paused. */
 void setMissionPauseState();
