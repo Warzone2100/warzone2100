@@ -1791,9 +1791,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 		}
 
 		/* trigger script callback detailing group about to disembark */
-		transporterSetScriptCurrent(psTransporter);
 		triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
-		transporterSetScriptCurrent(nullptr);
 
 		/* remove droids from transporter group if not already transferred to script group */
 		mutating_list_iterate(psTransporter->psGroup->psList, [&psGroup, psTransporter](DROID* psDroid)
@@ -1842,9 +1840,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 	if (psTransporter->droidType == DROID_SUPERTRANSPORTER)
 	{
 		/* trigger script callback */
-		transporterSetScriptCurrent(psTransporter);
 		triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
-		transporterSetScriptCurrent(nullptr);
 
 		if (droidRemove(psTransporter, apsDroidLists))
 		{

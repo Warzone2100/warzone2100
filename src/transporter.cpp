@@ -112,7 +112,6 @@ extern std::shared_ptr<W_SCREEN> psWScreen;
 
 /* Static variables */
 static DROID *psCurrTransporter = nullptr;
-static	DROID			*g_psCurScriptTransporter = nullptr;
 static	bool			onMission;
 static	UDWORD			g_iLaunchTime = 0;
 //used for audio message for reinforcements
@@ -986,9 +985,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 	}
 
 	// Fire off disembark event
-	transporterSetScriptCurrent(psTransport);
 	triggerEvent(TRIGGER_TRANSPORTER_DISEMBARKED, psTransport);
-	transporterSetScriptCurrent(nullptr);
 }
 
 /*adds a droid to the current transporter via the interface*/
@@ -1361,18 +1358,6 @@ void stopMissionButtonFlash(UDWORD buttonID)
 			break;
 		}
 	}
-}
-
-/* set current transporter (for script callbacks) */
-void transporterSetScriptCurrent(DROID *psTransporter)
-{
-	g_psCurScriptTransporter = psTransporter;
-}
-
-/* get current transporter (for script callbacks) */
-DROID *transporterGetScriptCurrent()
-{
-	return g_psCurScriptTransporter;
 }
 
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
