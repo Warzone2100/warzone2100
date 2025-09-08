@@ -927,9 +927,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					moveReallyStopDroid(psDroid);
 
 					// Fire off embark event
-					transporterSetScriptCurrent(transporter);
 					triggerEvent(TRIGGER_TRANSPORTER_EMBARKED, transporter);
-					transporterSetScriptCurrent(nullptr);
 
 					/* We must add the droid to the transporter only *after*
 					* processing changing its orders (see above).
