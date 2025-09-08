@@ -25,6 +25,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -112,6 +113,7 @@ private:
 	std::vector<SteamNetworkingConfigValue_t> listenSocketOpts_;
 	std::vector<SteamNetworkingConfigValue_t> clientConnOpts_;
 	std::unique_ptr<IAddressResolver> addressResolver_;
+	std::mutex activeClientsMtx_;
 };
 
-} // namespace tcp
+} // namespace gns
