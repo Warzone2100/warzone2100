@@ -1746,23 +1746,15 @@ static void missionResetDroids()
 	});
 }
 
-/*unloads the Transporter passed into the mission at the specified x/y
-goingHome = true when returning from an off World mission*/
-void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
+/*unloads the Transporter passed into the mission at the specified x/y */
+void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 {
 	PerPlayerDroidLists* ppCurrentList;
 	UDWORD		droidX, droidY;
 	DROID_GROUP	*psGroup;
 
 	ASSERT_OR_RETURN(, psTransporter != nullptr, "Invalid transporter");
-	if (goingHome)
-	{
-		ppCurrentList = &mission.apsDroidLists;
-	}
-	else
-	{
-		ppCurrentList = &apsDroidLists;
-	}
+	ppCurrentList = &apsDroidLists;
 
 	//unload all the droids from within the current Transporter
 	if (psTransporter->isTransporter())
@@ -1780,11 +1772,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			//starting point...based around the value passed in
 			droidX = map_coord(x);
 			droidY = map_coord(y);
-			if (goingHome)
-			{
-				//swap the droid and map pointers
-				swapMissionPointers();
-			}
 			if (!pickATileGen(&droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
 				ASSERT(false, "unloadTransporter: Unable to find a valid location");
@@ -1800,11 +1787,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			{
 				// So VTOLs don't try to rearm on another map
 				setDroidBase(psDroid, nullptr);
-			}
-			if (goingHome)
-			{
-				//swap the droid and map pointers
-				swapMissionPointers();
 			}
 		}
 
@@ -1838,7 +1820,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	if (!bMultiPlayer)
 	{
 		// Send all transporter Droids back to home base if off world
-		if (!goingHome)
 		{
 			/* Stop the camera following the transporter */
 			psTransporter->selected = false;

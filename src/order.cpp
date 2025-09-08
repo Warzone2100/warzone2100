@@ -553,7 +553,7 @@ bool orderUpdateDroid(DROID *psDroid)
 			}
 			else
 			{
-				unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y, false);
+				unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y);
 			}
 		}
 		break;
@@ -956,7 +956,7 @@ bool orderUpdateDroid(DROID *psDroid)
 				if (psDroid->action != DACTION_MOVE && psDroid->action != DACTION_MOVEFIRE &&
 				    psDroid->sMove.Status == MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0)
 				{
-					unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y, false);
+					unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y);
 					//reset the transporter's order
 					psDroid->order = DroidOrder(DORDER_NONE);
 				}
