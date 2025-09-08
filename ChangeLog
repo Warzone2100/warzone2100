@@ -1,3 +1,23 @@
+2025-09-08: Version 4.6.0:
+ * General:
+   * Change: Bump repair spread area from 6 to 10 tiles (commit:027134f560965fec3ff37656c10f5d7e6190da5a, #4547)
+   * Remove: Experimental commander-based shield implementation, leave stubs for future shield experiments (commit:b9c9dfbf4ed230e04106c25dcde3dc7cb4b8c8b1, #4537)
+   * Fix: Various unloadTransporter issues and edge cases (too many commits, #4548)
+ * Campaign:
+   * Fix: Prevent campaign Gauss Cannon friendly splash damage (commit:c0ff325fd155e6f38f6c1dba044d9aabf7f87f26, #4543)
+ * Multiplayer:
+   * Fix: quickchat: Add reset & index swap handling (commit:f75c92f2250eebca74e2ad986f22b7cec080bb6f, #4540)
+   * Fix: teamstrategy: Update the player names once revealed (commit:d2bedbbb06b995a3a98a965bffdbbbbab4c5b138, #4542)
+   * Fix: Prevent MP penetrating weapons causing friendly fire (commit:355c5119053108b7c422de643100f5e6b176e57a, #4543)
+ * Networking:
+   * Fix: gns: Guard read/write accesses to activeClients_ with a mutex (commit:256788c35e9140fb9ce182aef103db6662c926e4, #4549)
+ * Scripting:
+   * Add: isFlying JS field to Droid objects (commit:f349292509f38c1e9c697f9f06777fc71800e8b4, #3830)
+ * Translations:
+   * Change: Translation updates (commit:802ce2fa34049ad05510cc34d2373f20ccef4fd3, #4536)
+ * Other:
+   * Update generated docs (commit:c471247a3b3c28c4ce5056e58ba5b1f89c68fce3, #4541)
+
 2025-08-31: Version 4.6.0-beta4:
  * Multiplayer:
    * Fix: Map preview cleanup when returning to lobby browser (commit:281c08938ed521edfff72af20895705390237ba7, #4533)
@@ -38,12 +58,12 @@
    * Fix: Match the pre-#4281 behavior for flying unit factory production placement (while preserving the fixes for other units) (commit:c75f6bbcb6df331a72d788175eec21bf55c4cfbd, #4511)
    * Fix: Increment structure count maximum for the new owner on donation (commit:9659b33c754a382f6cfe9826399b2125c356704e, #4517)
 
-2025-08-16: Version 4.6.0-beta1:
+2025-08-16: Version 4.6.0-beta2:
  * General:
    * Add: Improve research items tooltips with categories and time (too many commits, #4216)
    * Add: Attempt to break infinitely circling units out of a movement loop after a set time (commit:a60772db154c813feefc30bdfe2bc714287f00ae, 4222)
    * Add: Add new combined (universal) Windows installer (too many commits, #4302, #4305, #4345)
-   * Add: Added commander shields, available in MP stats so far (too many commits, #4335, #4361, #4372, #4353))
+   * Add: Added commander shields, available in MP stats so far (too many commits, #4335, #4361, #4372, #4353)
    * Add: Various mouse edge scrolling fixes, and new "Automatic" Trap Cursor mode (too many commits, #4354)
    * Add: Support multi-threaded fpath job processing (too many commits, #4365)
    * Add: Replace & revamp options menus (too many commits, #4371)
