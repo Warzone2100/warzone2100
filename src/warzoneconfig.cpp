@@ -75,6 +75,7 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	int autoLagKickAggressiveness = 3;
 	int autoDesyncKickSeconds = 10;
 	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
@@ -494,6 +495,18 @@ void war_setAutoLagKickSeconds(int seconds)
 		seconds = std::max(seconds, 60);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
+}
+
+int war_getAutoLagKickAggressiveness()
+{
+	return warGlobs.autoLagKickAggressiveness;
+}
+
+void war_setAutoLagKickAggressiveness(int aggressiveness)
+{
+	aggressiveness = std::max(aggressiveness, 1);
+	aggressiveness = std::min(aggressiveness, 10);
+	warGlobs.autoLagKickAggressiveness = aggressiveness;
 }
 
 int war_getAutoDesyncKickSeconds()

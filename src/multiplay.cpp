@@ -135,6 +135,7 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 	{
 		return;
 	}
+	int LagKickAggressiveness = std::max<int>(war_getAutoLagKickAggressiveness(), 1);
 
 	if (std::chrono::duration_cast<std::chrono::milliseconds>(now - ingame.lastLagCheck) < LagCheckInterval)
 	{
@@ -215,8 +216,10 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			continue;
 		}
 
-		ingame.LagCounter[i]++;
-		if (ingame.LagCounter[i] >= LagAutoKickSeconds) {
+		ingame.LagCounter[i] += LagKickAggressiveness;
+		int LagSecondsCount = ingame.LagCounter[i] / LagKickAggressiveness;
+
+		if (LagSecondsCount >= LagAutoKickSeconds) {
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because of ping issues. (Timeout: %u seconds)", i, getPlayerName(i, true), LagAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
@@ -228,13 +231,13 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION, false);
 			ingame.LagCounter[i] = 0;
 		}
-		else if (ingame.LagCounter[i] >= (LagAutoKickSeconds - 3)) {
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
+		else if (LagSecondsCount >= (LagAutoKickSeconds - 3)) {
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
-		else if (ingame.LagCounter[i] % 15 == 0) { // every 15 seconds
-			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - ingame.LagCounter[i]));
+		else if (LagSecondsCount % 15 == 0) { // every 15 seconds
+			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
 		}
