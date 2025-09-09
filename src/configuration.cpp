@@ -626,6 +626,7 @@ bool loadConfig()
 		pie_EnableFog(false);
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
+	war_setAutoLagKickAggressiveness(iniGetInteger("hostAutoLagKickAggressiveness", war_getAutoLagKickAggressiveness()).value());
 	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
 	war_setAutoNotReadyKickSeconds(iniGetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());

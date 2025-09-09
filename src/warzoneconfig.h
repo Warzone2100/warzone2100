@@ -140,6 +140,8 @@ bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
 int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
+int war_getAutoLagKickAggressiveness();
+void war_setAutoLagKickAggressiveness(int aggressiveness);
 int war_getAutoDesyncKickSeconds();
 void war_setAutoDesyncKickSeconds(int seconds);
 int war_getAutoNotReadyKickSeconds();
