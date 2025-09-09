@@ -45,17 +45,10 @@ BUILD_ID="$(echo -e "${BUILD_ID}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]
 echo "Created build id: \"${BUILD_ID}\""
 
 echo "::group::flat-manager-client push"
-flat-manager-client --token "${FH_TOKEN}" push --commit --publish --wait "${BUILD_ID}" "${WZ_FLATPAK_LOCAL_REPO_NAME}"
+flat-manager-client --token "${FH_TOKEN}" push --commit --publish "${BUILD_ID}" "${WZ_FLATPAK_LOCAL_REPO_NAME}"
 exit_status=$?
 if [ $exit_status -ne 0 ]; then
   echo "ERROR: Pushing / publishing failed?"
-fi
-echo "::endgroup::"
-
-echo "::group::flat-manager-client purge"
-flat-manager-client --token "${FH_TOKEN}" purge "${BUILD_ID}"
-if [ $? -ne 0 ]; then
-  echo "ERROR: Purging failed"
 fi
 echo "::endgroup::"
 
