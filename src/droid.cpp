@@ -2511,13 +2511,13 @@ unsigned int getDroidLevel(const DROID *psDroid)
 	return getDroidLevel(psDroid->experience, psDroid->player, (psDroid->droidType != DROID_SENSOR) ? psDroid->asBits[COMP_BRAIN] : 1);
 }
 
-UDWORD getDroidEffectiveLevel(const DROID *psDroid)
+UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck)
 {
 	UDWORD level = getDroidLevel(psDroid);
 	UDWORD cmdLevel = 0;
 
 	// get commander level
-	if (hasCommander(psDroid))
+	if (hasCommander(psDroid) && (!commanderDistanceCheck || droidWithinCommanderRange(psDroid)))
 	{
 		cmdLevel = cmdGetCommanderLevel(psDroid);
 

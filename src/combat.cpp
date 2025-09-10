@@ -204,7 +204,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// add the attacker's experience
 	if (psAttacker->type == OBJ_DROID)
 	{
-		SDWORD	level = getDroidEffectiveLevel((DROID *) psAttacker);
+		SDWORD	level = getDroidEffectiveLevel((DROID *) psAttacker, true);
 
 		// increase total accuracy by EXP_ACCURACY_BONUS % for each experience level
 		resultHitChance += EXP_ACCURACY_BONUS * level * baseHitChance / 100;
@@ -213,7 +213,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// subtract the defender's experience
 	if (psTarget->type == OBJ_DROID)
 	{
-		SDWORD	level = getDroidEffectiveLevel((DROID *) psTarget);
+		SDWORD	level = getDroidEffectiveLevel((DROID *) psTarget, true);
 
 		// decrease weapon accuracy by EXP_ACCURACY_BONUS % for each experience level
 		resultHitChance -= EXP_ACCURACY_BONUS * level * baseHitChance / 100;
@@ -461,7 +461,7 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 		DROID *psDroid = (DROID *)psObj;
 
 		// Retrieve highest, applicable, experience level
-		level = getDroidEffectiveLevel(psDroid);
+		level = getDroidEffectiveLevel(psDroid, true);
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -588,7 +588,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 		DROID *psDroid = (DROID *)psTarget;
 
 		// Retrieve highest, applicable, experience level
-		level = getDroidEffectiveLevel(psDroid);
+		level = getDroidEffectiveLevel(psDroid, true);
 	}
 	else if (psTarget->type == OBJ_STRUCTURE)
 	{
