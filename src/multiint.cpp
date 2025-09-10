@@ -5390,6 +5390,8 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent, LOBBY_ERROR_TYPES err
 	}
 	else if (ingame.localJoiningInProgress)				// cancel a joined game.
 	{
+		auto origInGameSide = ingame.side;
+
 		debug(LOG_NET, "Canceling game...");
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
@@ -5398,13 +5400,29 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent, LOBBY_ERROR_TYPES err
 		ingame.localJoiningInProgress = false;			// reset local flags
 		ingame.localOptionsReceived = false;
 
-		if (ingame.side == InGameSide::MULTIPLAYER_CLIENT)
+		if (origInGameSide == InGameSide::MULTIPLAYER_CLIENT)
 		{
 			saveMultiOptionPrefValues(sPlayer, selectedPlayer); // persist any changes to multioption preferences
+
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER; // must reset to default so that rebuildSearchPath properly rebuilds local mods paths
+			bool needsLevReload = !game.modHashes.empty();
+			game.modHashes.clear(); // must clear this so that when search paths are reloaded we don't reload mods downloaded for the last game
+			rebuildSearchPath(mod_multiplay, true);
+			if (needsLevReload)
+			{
+				// Clear & reload level list
+				levShutDown();
+				levInitialise();
+				pal_Init(); // Update palettes.
+				if (!buildMapList(false))
+				{
+					debug(LOG_FATAL, "Failed to rebuild map / level list?");
+				}
+			}
 		}
 
 		// joining and host was transferred.
-		if (ingame.side == InGameSide::MULTIPLAYER_CLIENT && NetPlay.isHost)
+		if (origInGameSide == InGameSide::MULTIPLAYER_CLIENT && NetPlay.isHost)
 		{
 			NetPlay.isHost = false;
 		}
