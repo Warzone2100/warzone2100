@@ -679,7 +679,7 @@ bool multiGameShutdown()
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
-	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+	ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 	ingame.TimeEveryoneIsInGame = nullopt;
 	ingame.startTime = std::chrono::steady_clock::time_point();
 	ingame.endTime = nullopt;

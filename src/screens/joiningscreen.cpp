@@ -1851,6 +1851,8 @@ void WzJoiningGameScreen::closeScreen()
 
 static void handleJoinSuccess(const JoinConnectionDescription& connection, const PLAYERSTATS& playerStats)
 {
+	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+
 	ingame.localJoiningInProgress = true;
 
 	// send initial messages of player data (stats, color request, etc)
