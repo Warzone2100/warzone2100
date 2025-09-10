@@ -263,6 +263,17 @@ static std::vector<AIDATA> aidata;
 const std::vector<AIDATA>& getAIData() { return aidata; }
 const MultiplayOptionsLocked& getLockedOptions() { return locked; }
 
+bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts)
+{
+	ASSERT_OR_RETURN(false, !NetPlay.isHost, "Should not be called for the host");
+	if (newOpts == locked)
+	{
+		return false;
+	}
+	locked = newOpts;
+	return true;
+}
+
 const char* getDifficultyListStr(size_t idx)
 {
 	ASSERT_OR_RETURN("", idx < difficultyList.size(), "Invalid idx: %zu", idx);
@@ -1314,10 +1325,8 @@ static bool updatePlayerNameBox()
 
 void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions)
 {
-	if (priorHostChatPermissions[selectedPlayer] != ingame.hostChatPermissions[selectedPlayer])
-	{
-		updatePlayerNameBox();
-	}
+	updatePlayerNameBox();
+	// Possible future TODO: Update other UI if locked options changed?
 }
 
 // need to check for side effects.
@@ -4189,9 +4198,11 @@ std::shared_ptr<PopoverMenuWidget> WzPlayerBoxTabs::createOptionsPopoverForm()
 	addOptionsSpacer();
 	addOptionsCheckbox(_("Lock Teams"), locked.teams, false, [](WzAdvCheckbox& button){
 		locked.teams = button.isChecked();
+		sendHostConfig();
 	});
 	addOptionsCheckbox(_("Lock Position"), locked.position, false, [](WzAdvCheckbox& button){
 		locked.position = button.isChecked();
+		sendHostConfig();
 	});
 
 	int32_t idealMenuHeight = popoverMenu->idealHeight();

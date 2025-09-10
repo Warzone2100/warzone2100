@@ -816,6 +816,32 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 	}
 }
 
+static void NETlockedOptions(MessageWriter& w, const MultiplayOptionsLocked& lockedOpts)
+{
+	NETbool(w, lockedOpts.scavengers);
+	NETbool(w, lockedOpts.alliances);
+	NETbool(w, lockedOpts.teams);
+	NETbool(w, lockedOpts.power);
+	NETbool(w, lockedOpts.difficulty);
+	NETbool(w, lockedOpts.ai);
+	NETbool(w, lockedOpts.position);
+	NETbool(w, lockedOpts.bases);
+	NETbool(w, lockedOpts.spectators);
+}
+
+static void NETlockedOptions(MessageReader &r, MultiplayOptionsLocked& lockedOpts)
+{
+	NETbool(r, lockedOpts.scavengers);
+	NETbool(r, lockedOpts.alliances);
+	NETbool(r, lockedOpts.teams);
+	NETbool(r, lockedOpts.power);
+	NETbool(r, lockedOpts.difficulty);
+	NETbool(r, lockedOpts.ai);
+	NETbool(r, lockedOpts.position);
+	NETbool(r, lockedOpts.bases);
+	NETbool(r, lockedOpts.spectators);
+}
+
 void sendHostConfig()
 {
 	ASSERT_HOST_ONLY(return);
@@ -827,6 +853,9 @@ void sendHostConfig()
 	{
 		NETbool(w, ingame.hostChatPermissions[i]);
 	}
+
+	// Send the "locked" options configuration
+	NETlockedOptions(w, getLockedOptions());
 
 	NETend(w);
 }
@@ -848,6 +877,11 @@ bool recvHostConfig(NETQUEUE queue)
 	{
 		NETbool(r, ingame.hostChatPermissions[i]);
 	}
+
+	// "Locked" options configuration
+	MultiplayOptionsLocked newLockedOpts;
+	NETlockedOptions(r, newLockedOpts);
+	updateLockedOptionsFromHost(newLockedOpts);
 
 	NETend(r);
 

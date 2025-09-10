@@ -90,8 +90,22 @@ struct MultiplayOptionsLocked
 	bool position;
 	bool bases;
 	bool spectators;
+
+	bool operator==(const MultiplayOptionsLocked& other) const
+	{
+		return scavengers == other.scavengers
+			&& alliances == other.alliances
+			&& teams == other.teams
+			&& power == other.power
+			&& difficulty == other.difficulty
+			&& ai == other.ai
+			&& position == other.position
+			&& bases == other.bases
+			&& spectators == other.spectators;
+	}
 };
 const MultiplayOptionsLocked& getLockedOptions();
+bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts);
 
 const char* getDifficultyListStr(size_t idx);
 size_t getDifficultyListCount();
