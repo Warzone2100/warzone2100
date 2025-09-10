@@ -192,7 +192,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
-UDWORD getDroidEffectiveLevel(const DROID *psDroid);
+UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck = true);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
