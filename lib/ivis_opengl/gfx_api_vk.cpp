@@ -3624,11 +3624,22 @@ bool VulkanDeviceBlocklistEntry::VersionRange::isWithinRange(uint32_t version) c
 	return minVersion.has_value() || maxVersion.has_value();
 }
 
+inline constexpr uint32_t kVendorIdAMD = 0x1002;
 inline constexpr uint32_t kVendorIdIntel = 0x8086;
+inline constexpr uint32_t kVendorIdNvidia = 0x10DE;
 
 constexpr VulkanDeviceBlocklistEntry vulkanDeviceBlocklist[] = {
-	// Block old Intel drivers due to crashes (by checking for ones that support < Vulkan 1.1.0 - these should be very old)
-	{ kVendorIdIntel, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 1, 0))-1} }
+	// Block old Intel drivers due to crashes (by checking for ones that support < Vulkan 1.2.0 - these should be very old)
+	{ kVendorIdIntel, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 2, 0))-1} }
+	// Block old Nvidia drivers due to crashes (by checking for ones that support < Vulkan 1.2.0 - these should be very old)
+	, { kVendorIdNvidia, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 2, 0))-1} }
+	// Block old AMD drivers due to crashes (by checking for ones that support < Vulkan 1.1.0 - these should be very old)
+	, { kVendorIdAMD, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 1, 0))-1} }
+
+#if defined(WZ_OS_MAC)
+	// Block Vulkan (via MoltenVK) on Intel graphics on macOS (due to crashes)
+	, { kVendorIdIntel, nullopt, nullopt, nullopt }
+#endif
 };
 
 static bool isOnVulkanDeviceBlocklist(const vk::PhysicalDeviceProperties& deviceProperties)
@@ -3804,7 +3815,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 
 	if (isOnVulkanDeviceBlocklist(deviceProperties))
 	{
-		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: on Vulkan blocklist - please update your driver", deviceProperties.deviceID, deviceProperties.deviceName.data());
+		debug(LOG_INFO, "Excluding deviceID [%" PRIu32 "] (\"%s\", apiVersion: %s, driverVersion: %" PRIu32 ", vendorID: %" PRIu32 ") because: on Vulkan blocklist - please update your driver", deviceProperties.deviceID, deviceProperties.deviceName.data(), VkhInfo::vulkan_apiversion_to_string(deviceProperties.apiVersion).c_str(), deviceProperties.driverVersion, deviceProperties.vendorID);
 		return 0;
 	}
 
