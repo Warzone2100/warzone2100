@@ -1058,15 +1058,15 @@ bool droidWithinCommanderRange(const DROID *psDroid)
 	ASSERT_OR_RETURN(false, psDroid->psGroup && psDroid->psGroup->psCommander, "Droid group or commander is NULL");
 
 	const auto &rangeArray = psDroid->getBrainStats()->cmdExpRange;
+	auto rangeArraySize = rangeArray.size();
+	if (rangeArraySize == 0)
+	{
+		return true; // default to true (matches old behavior, which didn't have limits for cmdExpRange, etc)
+	}
 
 	auto level = getDroidLevel(psDroid->psGroup->psCommander);
-	auto rangeArraySize = rangeArray.size();
 	if (level >= rangeArraySize)
 	{
-		if (rangeArraySize == 0)
-		{
-			return true; // default to true (matches old behavior, which didn't have limits for cmdExpRange, etc)
-		}
 		level = rangeArraySize - 1; // use the last listed value, for the last listed level in the array
 	}
 
