@@ -2798,9 +2798,9 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				break;
 			}
 
-			if (NetPlay.isHost && !ingame.hostChatPermissions[player])
+			if (NetPlay.isHost && (!ingame.hostChatPermissions[player] || getLockedOptions().name))
 			{
-				// Name changes are denied when the host has muted a player
+				// Name changes are denied when the host has muted a player (or name changes are locked)
 				// Inform the player that their name is still what it was (resets their local display)
 				if (NetPlay.players[player].allocated)
 				{

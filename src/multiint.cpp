@@ -1285,7 +1285,7 @@ static bool updatePlayerNameBox()
 	ASSERT_OR_RETURN(false, pNameMultiBut != nullptr, "No player name edit button?");
 
 	const bool isInBlindMode = (game.blindMode != BLIND_MODE::NONE);
-	const bool changesAllowed = ingame.hostChatPermissions[selectedPlayer] && !isInBlindMode;
+	const bool changesAllowed = ingame.hostChatPermissions[selectedPlayer] && !isInBlindMode && !locked.name;
 
 	WzString playerNameTip;
 	if (!isInBlindMode)
@@ -1297,6 +1297,10 @@ static bool updatePlayerNameBox()
 		else if (!ingame.hostChatPermissions[selectedPlayer])
 		{
 			playerNameTip = _("Player Name changes are not allowed when you are muted");
+		}
+		else
+		{
+			playerNameTip = _("Player Name changes are not allowed by the host");
 		}
 	}
 	else
@@ -5613,6 +5617,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		locked.position = ini.value("position", challengeActive).toBool();
 		locked.bases = ini.value("bases", challengeActive).toBool();
 		locked.spectators = ini.value("spectators", challengeActive).toBool();
+		locked.name = ini.value("name", false).toBool();
 	}
 	ini.endGroup();
 

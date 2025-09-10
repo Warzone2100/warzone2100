@@ -827,6 +827,7 @@ static void NETlockedOptions(MessageWriter& w, const MultiplayOptionsLocked& loc
 	NETbool(w, lockedOpts.position);
 	NETbool(w, lockedOpts.bases);
 	NETbool(w, lockedOpts.spectators);
+	NETbool(w, lockedOpts.name);
 }
 
 static void NETlockedOptions(MessageReader &r, MultiplayOptionsLocked& lockedOpts)
@@ -840,6 +841,7 @@ static void NETlockedOptions(MessageReader &r, MultiplayOptionsLocked& lockedOpt
 	NETbool(r, lockedOpts.position);
 	NETbool(r, lockedOpts.bases);
 	NETbool(r, lockedOpts.spectators);
+	NETbool(r, lockedOpts.name);
 }
 
 void sendHostConfig()
