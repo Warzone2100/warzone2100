@@ -24,8 +24,12 @@
 namespace
 {
 
-OpenConnectionResult openClientConnectionSyncImpl(const char* host, uint32_t port, std::chrono::milliseconds timeout, WzConnectionProvider* connProvider)
+OpenConnectionResult openClientConnectionSyncImpl(const char* host, uint32_t port, std::chrono::milliseconds timeout, std::shared_ptr<WzConnectionProvider> connProvider)
 {
+	if (!connProvider)
+	{
+		return OpenConnectionResult(std::make_error_code(std::errc::connection_aborted), "Connection provider no longer valid");
+	}
 	auto addrResult = connProvider->resolveHost(host, port);
 	if (!addrResult.has_value())
 	{
@@ -49,7 +53,7 @@ struct OpenConnectionRequest
 	uint32_t port = 0;
 	std::chrono::milliseconds timeout{ 15000 };
 	OpenConnectionToHostResultCallback callback;
-	WzConnectionProvider* connProvider;
+	std::weak_ptr<WzConnectionProvider> connProvider;
 };
 
 int openDirectConnectionAsyncImpl(void* data)
@@ -59,11 +63,12 @@ int openDirectConnectionAsyncImpl(void* data)
 	{
 		return 1;
 	}
+	auto strongConnProvider = pRequestInfo->connProvider.lock();
 	pRequestInfo->callback(openClientConnectionSyncImpl(
 		pRequestInfo->host.c_str(),
 		pRequestInfo->port,
 		pRequestInfo->timeout,
-		pRequestInfo->connProvider));
+		strongConnProvider));
 	delete pRequestInfo;
 	return 0;
 }
@@ -78,7 +83,7 @@ bool WzConnectionProvider::openClientConnectionAsync(const std::string& host, ui
 	pRequest->port = port;
 	pRequest->timeout = timeout;
 	pRequest->callback = callback;
-	pRequest->connProvider = this;
+	pRequest->connProvider = shared_from_this();
 	WZ_THREAD* pOpenConnectionThread = wzThreadCreate(openDirectConnectionAsyncImpl, pRequest);
 	if (pOpenConnectionThread == nullptr)
 	{

@@ -793,7 +793,7 @@ public:
 	size_t startingIndex = 0;
 	size_t resultsLimit = 100;
 	bool onlyMatchingLocalVersion = false;
-	WzConnectionProvider* connProvider = nullptr;
+	std::shared_ptr<WzConnectionProvider> connProvider = nullptr;
 	CompletionHandlerFunc completionHandler;
 };
 

@@ -95,7 +95,7 @@ static bool bEnableTCPNoDelay = true;
 // Disables port saving and reading from/to config
 bool netGameserverPortOverride = false;
 
-static WzConnectionProvider* activeConnProvider = nullptr;
+static std::shared_ptr<WzConnectionProvider> activeConnProvider = nullptr;
 
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
@@ -156,7 +156,7 @@ public:
 	bool disconnect();
 	void sendUpdate();
 	void run();
-	WzConnectionProvider* connectionProvider() const { return connProvider; }
+	std::shared_ptr<WzConnectionProvider> connectionProvider() const { return connProvider; }
 
 private:
 	void sendUpdateNow();
@@ -186,7 +186,7 @@ private:
 	uint32_t lastConnectionTime = 0;
 	uint32_t lastServerUpdate = 0;
 	bool queuedServerUpdate = false;
-	WzConnectionProvider* connProvider = nullptr;
+	std::shared_ptr<WzConnectionProvider> connProvider = nullptr;
 };
 
 class PlayerManagementRecord
@@ -1652,13 +1652,14 @@ int NETinit(ConnectionProviderType pt)
 	NET_InitPlayers(true, true);
 
 	ConnectionProviderRegistry::Instance().Register(pt);
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(pt);
-	connProvider.initialize();
-	PendingWritesManagerMap::instance().get(connProvider).initialize(connProvider);
+	auto connProvider = ConnectionProviderRegistry::Instance().Get(pt);
+	ASSERT_OR_RETURN(1, connProvider != nullptr, "Null connectionProvider");
+	connProvider->initialize();
+	PendingWritesManagerMap::instance().get(*connProvider).initialize(*connProvider);
 
-	ASSERT(activeConnProvider == nullptr || activeConnProvider == &connProvider,
+	ASSERT(activeConnProvider == nullptr || activeConnProvider == connProvider,
 		"Active connection provider is already set. Call NETshutdown() first!");
-	activeConnProvider = &connProvider;
+	activeConnProvider = connProvider;
 
 	debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
@@ -3684,7 +3685,7 @@ static net::result<void> ignoreExpectedResultValue(const net::result<T>& res)
 	return res.has_value() ? net::result<void>{} : tl::make_unexpected(res.error());
 }
 
-WzConnectionProvider* NET_getLobbyConnectionProvider()
+std::shared_ptr<WzConnectionProvider> NET_getLobbyConnectionProvider()
 {
 	// The only supported backend type for talking with lobby server at the moment.
 	constexpr auto PROVIDER_TYPE = ConnectionProviderType::TCP_DIRECT;
@@ -3694,7 +3695,8 @@ WzConnectionProvider* NET_getLobbyConnectionProvider()
 	{
 		cpr.Register(PROVIDER_TYPE);
 	}
-	WzConnectionProvider* connProvider = &cpr.Get(ConnectionProviderType::TCP_DIRECT);
+	auto connProvider = cpr.Get(ConnectionProviderType::TCP_DIRECT);
+	ASSERT_OR_RETURN(nullptr, connProvider != nullptr, "Null connectionProvider");
 	connProvider->initialize();
 
 	PendingWritesManagerMap::instance().get(*connProvider).initialize(*connProvider);
@@ -5058,7 +5060,7 @@ bool NEThaltJoining()
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETenumerateGames(WzConnectionProvider* connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc, const std::function<void(std::string&& lobbyMOTD)>& lobbyMotdFunc)
+bool NETenumerateGames(const std::shared_ptr<WzConnectionProvider>& connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc, const std::function<void(std::string&& lobbyMOTD)>& lobbyMotdFunc)
 {
 	debug(LOG_NET, "Looking for games...");
 
@@ -5204,7 +5206,7 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, std::string& lobbyMOTD, size
 	results.clear();
 	lobbyMOTD.clear();
 
-	auto* connProvider = NET_getLobbyConnectionProvider();
+	auto connProvider = NET_getLobbyConnectionProvider();
 	bool success = NETenumerateGames(connProvider, [&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
 		if (gamecount++ < startingIndex)
 		{
@@ -5235,7 +5237,7 @@ bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
 {
 	bool foundMatch = false;
 	memset(&output, 0x00, sizeof(output));
-	auto* connProvider = NET_getLobbyConnectionProvider();
+	auto connProvider = NET_getLobbyConnectionProvider();
 	NETenumerateGames(connProvider, [&foundMatch, &output, gameId](const GAMESTRUCT &lobbyGame) -> bool {
 		if (lobbyGame.gameId != gameId)
 		{
