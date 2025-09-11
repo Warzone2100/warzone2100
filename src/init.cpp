@@ -1807,6 +1807,9 @@ bool stageThreeInitialise()
 		}
 	}
 
+	// Call once again to update counts (if modified by earlier wzapi events)
+	countUpdate(false);
+
 	return true;
 }
 

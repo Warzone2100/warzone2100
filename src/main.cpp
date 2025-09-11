@@ -853,6 +853,9 @@ static bool startGameLoop()
 	executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_START_LEVEL); });
 	screen_disableMapPreview();
 
+	// Call once again to update starting counts (if modified by TRIGGER_START_LEVEL event)
+	countUpdate(false);
+
 	if (!bMultiPlayer && getCamTweakOption_AutosavesOnly())
 	{
 		forcedAutosaveTime = gameTime + 1000; //Really just to prevent Intel videos messages from not getting saved if run immediately.
