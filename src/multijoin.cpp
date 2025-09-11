@@ -716,7 +716,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
 	ingame.lastReadyTimes[player].reset();
-	if (multiplayPlayersCanCheckReady())
+	if (multiplayPlayersShouldCheckReady())
 	{
 		ingame.lastNotReadyTimes[player] = ingame.joinTimes[player];
 	}
