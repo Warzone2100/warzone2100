@@ -359,7 +359,7 @@ void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
 		return;
 	}
 
-	if (!multiplayPlayersCanCheckReady())
+	if (!multiplayPlayersShouldCheckReady())
 	{
 		// If players can't check ready, skip
 		return;

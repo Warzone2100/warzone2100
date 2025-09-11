@@ -1082,7 +1082,7 @@ static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose)
 static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 {
 	ASSERT_OR_RETURN(, index < MAX_CONNECTED_PLAYERS, "Invalid index: %" PRIu32, index);
-	bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
 	NETplayerCloseSocket(index, quietSocketClose);
 	sync_counter.left++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
@@ -1094,7 +1094,7 @@ static void NETplayerLeaving(UDWORD index, bool quietSocketClose)
 		{
 			resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		// reset ready status for all players
 		}
-		handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
+		handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 
 		wz_command_interface_output_room_status_json(true);
 	}
@@ -1116,7 +1116,7 @@ static void NETplayerDropped(UDWORD index)
 		return;
 	}
 
-	bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
 
 	sync_counter.drops++;
 	bool wasSpectator = NetPlay.players[index].isSpectator;
@@ -1133,7 +1133,7 @@ static void NETplayerDropped(UDWORD index)
 		{
 			resetReadyStatus(false, shouldSkipReadyResetOnPlayerJoinLeaveEvent());		// reset ready status for all players
 		}
-		handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
+		handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 
 		wz_command_interface_output_room_status_json(true);
 	}
@@ -4659,7 +4659,7 @@ static void NETallowJoining()
 		// note: *not* an "else if" because the condition above may transition the state to ProcessJoin!
 		if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::ProcessJoin)
 		{
-			bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
+			bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
 			optional<uint32_t> tmp = nullopt;
 
 			if (tmp_connectState[i].asyncJoinApprovalExplicitPlayerIdx.has_value())
@@ -4740,7 +4740,7 @@ static void NETallowJoining()
 			// Increment player count
 			gamestruct.desc.dwCurrentPlayers++;
 
-			handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
+			handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 			MultiPlayerJoin(index, joinRequestInfo.identity.toBytes(EcKey::Public));
 
 			if (wz_command_interface_enabled())

@@ -2535,12 +2535,12 @@ static void informIfAdminChangedOtherTeam(uint32_t targetPlayerIdx, uint32_t res
 	debug(LOG_INFO, "Admin %s (%s) changed team of player ([%u] %s) to: %d", getPlayerName(responsibleIdx), senderPublicKeyB64.c_str(), NetPlay.players[targetPlayerIdx].position, getPlayerName(targetPlayerIdx), NetPlay.players[targetPlayerIdx].team);
 }
 
-void handlePossiblePlayersCanCheckReadyChange(bool previousPlayersCanCheckReadyValue)
+void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheckReadyValue)
 {
-	bool currentPlayersAbleToCheckReadyValue = multiplayPlayersCanCheckReady();
-	if (previousPlayersCanCheckReadyValue != currentPlayersAbleToCheckReadyValue)
+	bool currentPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
+	if (previousPlayersShouldCheckReadyValue != currentPlayersShouldCheckReadyValue)
 	{
-		if (currentPlayersAbleToCheckReadyValue)
+		if (currentPlayersShouldCheckReadyValue)
 		{
 			// Player can now check ready
 			// Update ingame.lastNotReadyTimes for all not-ready players to "now"
@@ -2596,14 +2596,14 @@ static bool changeTeam(UBYTE player, UBYTE team, uint32_t responsibleIdx)
 		return false;  // Nothing to do.
 	}
 
-	bool previousPlayersCanCheckReadyValue = multiplayPlayersCanCheckReady();
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
 
 	NetPlay.players[player].team = team;
 	debug(LOG_WZ, "set %d as new team for player %d", team, player);
 	NETBroadcastPlayerInfo(player);
 	informIfAdminChangedOtherTeam(player, responsibleIdx);
 
-	handlePossiblePlayersCanCheckReadyChange(previousPlayersCanCheckReadyValue);
+	handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 
 	netPlayersUpdated = true;
 	return true;
@@ -2777,7 +2777,7 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 		}
 		else
 		{
-			if (multiplayPlayersCanCheckReady())
+			if (multiplayPlayersShouldCheckReady())
 			{
 				ingame.lastNotReadyTimes[player] = std::chrono::steady_clock::now();
 			}
@@ -8026,9 +8026,30 @@ std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, U
 	return addMultiBut(*pWidget, id, x, y, width, height, tipres, norm, down, hi, tc, alpha);
 }
 
+static bool multiplayHasOpenPlayerSlot()
+{
+	for (int j = 0; j < MAX_PLAYERS; j++)
+	{
+		if (NetPlay.players[j].ai == AI_OPEN && !NetPlay.players[j].allocated && NetPlay.players[j].position < game.maxPlayers)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool multiplayPlayersCanCheckReady()
 {
 	return isBlindSimpleLobby(game.blindMode) || (allPlayersOnSameTeam(-1) == -1);
+}
+
+bool multiplayPlayersShouldCheckReady()
+{
+	if (!multiplayPlayersCanCheckReady())
+	{
+		return false;
+	}
+	return isBlindSimpleLobby(game.blindMode) || !multiplayHasOpenPlayerSlot();
 }
 
 /* Returns true if the multiplayer game can start (i.e. all players are ready) */
