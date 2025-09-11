@@ -107,6 +107,7 @@ private:
 	// will be left in an invalid state (that is, `isValid()` will become `false`).
 	void disposeConnectionImpl(HSteamNetConnection hConn);
 
+	bool initialized_ = false;
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	std::unordered_map<HSteamNetConnection, GNSClientConnection*> activeClients_;
 	std::pair<HSteamListenSocket, GNSListenSocket*> activeListenSocket_ = { k_HSteamListenSocket_Invalid, nullptr };
