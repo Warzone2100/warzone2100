@@ -103,13 +103,35 @@ static inline void drawBoxForPlayerInfoSegment(UDWORD playerIdx, UDWORD x, UDWOR
 	}
 }
 
-static void displayReadyBoxContainer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+class ReadyBoxContainerWidget : public W_FORM
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	const int j = psWidget->UserData;
+protected:
+	void display(int xOffset, int yOffset) override;
+public:
+	void setShowAnimatedHighlight(bool val) { showAnimatedHighlight = val; }
+private:
+	bool showAnimatedHighlight = false;
+};
 
-	drawBoxForPlayerInfoSegment(j, x, y, psWidget->width(), psWidget->height());
+void ReadyBoxContainerWidget::display(int xOffset, int yOffset)
+{
+	const int x0 = xOffset + x();
+	const int y0 = yOffset + y();
+	const auto w = width();
+	const auto h = height();
+	const auto playerIdx = UserData;
+
+	drawBoxForPlayerInfoSegment(playerIdx, x0, y0, w, h);
+
+	if (showAnimatedHighlight)
+	{
+		const int scale = 2500;
+		int f = realTime % scale;
+		PIELIGHT mix = pal_RGBA(3, 15, 252, 255);
+		mix.byte.a = 155 + iSinR(65536 * f / scale, 75);
+
+		pie_UniTransBoxFill(x0 + 2, y0 + 1, x0 + w - 1, y0 + h - 1, mix);
+	}
 }
 
 static int factionIcon(FactionID faction)
@@ -477,16 +499,6 @@ static bool canChooseTeamFor(int i)
 	return (i == selectedPlayer || isHostOrAdmin());
 }
 
-static std::shared_ptr<W_FORM> createBlueForm(int x, int y, int w, int h, WIDGET_DISPLAY displayFunc /* = intDisplayFeBox*/)
-{
-	ASSERT(displayFunc != nullptr, "Must have a display func!");
-	auto form = std::make_shared<W_FORM>();
-	form->setGeometry(x, y, w, h);
-	form->style = WFORM_PLAIN;
-	form->displayFunction = displayFunc;
-	return form;
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // Lobby player row
 
@@ -737,6 +749,14 @@ void WzPlayerRow::updateState()
 	updateReadyButton();
 }
 
+static std::shared_ptr<W_FORM> createReadyButtonContainerForm(int x, int y, int w, int h)
+{
+	auto form = std::make_shared<ReadyBoxContainerWidget>();
+	form->setGeometry(x, y, w, h);
+	form->style = WFORM_PLAIN;
+	return form;
+}
+
 void WzPlayerRow::updateReadyButton()
 {
 	const auto& aidata = getAIData();
@@ -745,8 +765,8 @@ void WzPlayerRow::updateReadyButton()
 	if (!readyButtonContainer)
 	{
 		// add form to hold 'ready' botton
-		readyButtonContainer = createBlueForm(MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH, 0,
-					MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT, displayReadyBoxContainer);
+		readyButtonContainer = createReadyButtonContainerForm(MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH, 0,
+					MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT);
 		readyButtonContainer->UserData = playerIdx;
 		attach(readyButtonContainer);
 		readyButtonContainer->setCalcLayout([](WIDGET *psWidget) {
@@ -766,6 +786,10 @@ void WzPlayerRow::updateReadyButton()
 		{
 			widgDelete(readyTextLabel.get());
 			readyTextLabel = nullptr;
+		}
+		if (auto readyButtonContainerForm = std::dynamic_pointer_cast<ReadyBoxContainerWidget>(readyButtonContainer))
+		{
+			readyButtonContainerForm->setShowAnimatedHighlight(false);
 		}
 	};
 	auto deleteExistingDifficultyButton = [this]() {
@@ -835,8 +859,8 @@ void WzPlayerRow::updateReadyButton()
 
 	deleteExistingDifficultyButton();
 
-	bool isMe = playerIdx == selectedPlayer;
-	int isReady = NETgetDownloadProgress(playerIdx) != 100 ? 2 : NetPlay.players[playerIdx].ready ? 1 : 0;
+	const bool isMe = playerIdx == selectedPlayer;
+	const int isReady = NETgetDownloadProgress(playerIdx) != 100 ? 2 : NetPlay.players[playerIdx].ready ? 1 : 0;
 	char const *const toolTips[2][3] = {{_("Waiting for player"), _("Player is ready"), _("Player is downloading")}, {_("Click when ready"), _("Waiting for other players"), _("Waiting for download")}};
 	unsigned images[2][3] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON, IMAGE_CHECK_DOWNLOAD}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI, IMAGE_CHECK_DOWNLOAD_HI}};
 
@@ -845,6 +869,10 @@ void WzPlayerRow::updateReadyButton()
 	bool freshReadyButton = (readyButton == nullptr);
 	readyButton = addMultiBut(*readyButtonContainer, MULTIOP_READY_START + playerIdx, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 				toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady], MAX_PLAYERS, (!greyedOutReady) ? 255 : 125);
+	if (auto readyButtonContainerForm = std::dynamic_pointer_cast<ReadyBoxContainerWidget>(readyButtonContainer))
+	{
+		readyButtonContainerForm->setShowAnimatedHighlight((isMe && !isReady && !greyedOutReady && multiplayPlayersShouldCheckReady()));
+	}
 	ASSERT_OR_RETURN(, readyButton != nullptr, "Failed to create ready button");
 	readyButton->minClickInterval = GAME_TICKS_PER_SEC;
 	readyButton->unlock();
