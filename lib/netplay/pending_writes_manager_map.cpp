@@ -39,9 +39,10 @@ PendingWritesManager& PendingWritesManagerMap::get(ConnectionProviderType pt)
 	{
 		return *it->second;
 	}
-	auto& connProvider = cpr.Get(pt);
+	auto connProvider = cpr.Get(pt);
+	ASSERT(connProvider != nullptr, "Null connection provider");
 	auto pwm = std::make_unique<PendingWritesManager>();
-	pwm->initialize(connProvider);
+	pwm->initialize(*connProvider);
 	it = pendingWritesManagers_.emplace(pt, std::move(pwm)).first;
 	return *it->second;
 }

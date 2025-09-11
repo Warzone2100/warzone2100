@@ -31,14 +31,14 @@ ConnectionProviderRegistry& ConnectionProviderRegistry::Instance()
 	return instance;
 }
 
-WzConnectionProvider& ConnectionProviderRegistry::Get(ConnectionProviderType pt)
+std::shared_ptr<WzConnectionProvider> ConnectionProviderRegistry::Get(ConnectionProviderType pt)
 {
 	const auto it = registeredProviders_.find(pt);
 	if (it == registeredProviders_.end())
 	{
 		throw std::runtime_error("Attempt to get nonexistent connection provider");
 	}
-	return *it->second;
+	return it->second;
 }
 
 bool ConnectionProviderRegistry::IsRegistered(ConnectionProviderType pt) const
@@ -56,11 +56,11 @@ void ConnectionProviderRegistry::Register(ConnectionProviderType pt)
 	switch (pt)
 	{
 	case ConnectionProviderType::TCP_DIRECT:
-		registeredProviders_.emplace(pt, std::make_unique<tcp::TCPConnectionProvider>());
+		registeredProviders_.emplace(pt, std::make_shared<tcp::TCPConnectionProvider>());
 		break;
 #ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
 	case ConnectionProviderType::GNS_DIRECT:
-		registeredProviders_.emplace(pt, std::make_unique<gns::GNSConnectionProvider>());
+		registeredProviders_.emplace(pt, std::make_shared<gns::GNSConnectionProvider>());
 		break;
 #endif
 	default:

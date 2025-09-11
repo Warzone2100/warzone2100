@@ -54,7 +54,7 @@ using PortMappingInternetProtocolMask = std::underlying_type_t<PortMappingIntern
 /// 4. Opening client-side connections (sync and async).
 /// 5. Creating connection poll groups.
 /// </summary>
-class WzConnectionProvider
+class WzConnectionProvider : public std::enable_shared_from_this<WzConnectionProvider>
 {
 public:
 
