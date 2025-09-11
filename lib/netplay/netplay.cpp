@@ -1687,7 +1687,7 @@ int NETinit(ConnectionProviderType pt)
 }
 
 // ////////////////////////////////////////////////////////////////////////
-// SHUTDOWN THE CONNECTION.
+// shutdown state related to the active connection
 int NETshutdown()
 {
 	debug(LOG_NET, "NETshutdown");
@@ -1702,14 +1702,7 @@ int NETshutdown()
 	NetPlay.MOTD.clear();
 	NETdeleteQueue();
 
-	auto& cpr = ConnectionProviderRegistry::Instance();
-	if (activeConnProvider && cpr.IsRegistered(activeConnProvider->type()))
-	{
-		const auto cpType = activeConnProvider->type();
-		PendingWritesManagerMap::instance().get(cpType).deinitialize();
-		cpr.Deregister(cpType);
-		activeConnProvider = nullptr;
-	}
+	activeConnProvider = nullptr;
 
 	// Reset net usage statistics.
 	nStats = nZeroStats;
@@ -1717,6 +1710,17 @@ int NETshutdown()
 	nStatsSecondLastSec = nZeroStats;
 
 	return 0;
+}
+
+// ////////////////////////////////////////////////////////////////////////
+// shutdown netplay (to be called at app shutdown only)
+bool netplayShutDown()
+{
+	NETshutdown();
+
+	PendingWritesManagerMap::instance().Shutdown();
+	ConnectionProviderRegistry::Instance().Shutdown();
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////

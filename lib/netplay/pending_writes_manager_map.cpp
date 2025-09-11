@@ -51,3 +51,12 @@ PendingWritesManager& PendingWritesManagerMap::get(const WzConnectionProvider& c
 {
 	return get(connProvider.type());
 }
+
+void PendingWritesManagerMap::Shutdown()
+{
+	for (auto& it : pendingWritesManagers_)
+	{
+		it.second->deinitialize();
+	}
+	pendingWritesManagers_.clear();
+}

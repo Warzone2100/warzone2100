@@ -68,16 +68,11 @@ void ConnectionProviderRegistry::Register(ConnectionProviderType pt)
 	}
 }
 
-void ConnectionProviderRegistry::Deregister(ConnectionProviderType pt)
+void ConnectionProviderRegistry::Shutdown()
 {
-	const auto it = registeredProviders_.find(pt);
-	if (it == registeredProviders_.end())
+	for (auto it : registeredProviders_)
 	{
-		return;
+		it.second->shutdown();
 	}
-	if (it->second)
-	{
-		it->second->shutdown();
-	}
-	registeredProviders_.erase(it);
+	registeredProviders_.clear();
 }
