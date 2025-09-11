@@ -376,6 +376,8 @@ unsigned NETgetDownloadProgress(unsigned player);     ///< Returns 100 when done
 int NETclose();					// close current game
 int NETshutdown();					// leave the game in play.
 
+bool netplayShutDown();
+
 void NETaddRedirects();
 void NETremRedirects();
 /// Initializes the port mapping infrastructure and spawns a background thread,

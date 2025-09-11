@@ -51,7 +51,8 @@ public:
 	bool IsRegistered(ConnectionProviderType) const;
 
 	void Register(ConnectionProviderType pt);
-	void Deregister(ConnectionProviderType pt);
+
+	void Shutdown();
 
 private:
 
