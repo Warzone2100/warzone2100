@@ -1022,14 +1022,14 @@ bool buildMapList(bool campaignOnly)
 		auto mapZipIO = WzMapZipIO::openZipArchiveReadIOProvider(zipReadSource, debugLoggerInstance.get());
 		if (!mapZipIO)
 		{
-			debug(LOG_POPUP, "Failed to open archive: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			debug(LOG_INFO, "Failed to open archive: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
 			continue;
 		}
 		debugLoggerInstance->setLogErrors(false);
 		auto mapPackage = WzMap::MapPackage::loadPackage("", debugLoggerInstance, mapZipIO);
 		if (!mapPackage)
 		{
-			debug(LOG_POPUP, "Failed to load %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			debug(LOG_INFO, "Failed to load %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
 			continue;
 		}
 
