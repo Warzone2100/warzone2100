@@ -2531,6 +2531,16 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 				}
 			case static_cast<uint32_t>(Context::NotReadyKicked):
 				return astringf(_("Auto-kicking player (%s) because they waited too long to check Ready"), targetPlayerName);
+			case static_cast<uint32_t>(Context::PlayerShouldCheckReadyNotice):
+				audio_PlayTrack(ID_SOUND_ZOOM_ON_RADAR);
+				if (isBlindSimpleLobby(game.blindMode))
+				{
+					return _("NOTICE: Please check Ready");
+				}
+				else
+				{
+					return _("NOTICE: Please check Ready so the game can begin");
+				}
 		}
 
 		return ""; // Silence compiler warning
@@ -3208,6 +3218,7 @@ bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuick
 	switch (message)
 	{
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 			// should only ever be sent by the host
 			if (queue.index != NetPlay.hostPlayer)
 			{

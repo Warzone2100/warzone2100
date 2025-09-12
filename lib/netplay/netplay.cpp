@@ -4740,8 +4740,9 @@ static void NETallowJoining()
 			// Increment player count
 			gamestruct.desc.dwCurrentPlayers++;
 
-			handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 			MultiPlayerJoin(index, joinRequestInfo.identity.toBytes(EcKey::Public));
+
+			handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 
 			if (wz_command_interface_enabled())
 			{
