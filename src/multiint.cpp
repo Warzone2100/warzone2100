@@ -2555,7 +2555,9 @@ void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheck
 	{
 		if (currentPlayersShouldCheckReadyValue)
 		{
-			// Player can now check ready
+			debug(LOG_NET, "Starting to track not-ready time");
+
+			// Player should now check ready
 			// Update ingame.lastNotReadyTimes for all not-ready players to "now"
 			auto now = std::chrono::steady_clock::now();
 			for (size_t i = 0; i < NetPlay.players.size(); i++)
@@ -2574,21 +2576,33 @@ void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheck
 		}
 		else
 		{
-			// Players can no longer check ready
-			// Update ingame.secondsNotReady for all not-ready players
-			// Reset ingame.lastNotReadyTimes to nullopt
+			debug(LOG_NET, "Stopping not-ready time tracking");
+			bool shouldAccumulateNotReadyTime = isBlindSimpleLobby(game.blindMode);
+
+			// Players are no longer required to check ready
 			auto now = std::chrono::steady_clock::now();
 			for (size_t i = 0; i < NetPlay.players.size(); i++)
 			{
 				if (!isHumanPlayer(i)) { continue; }
-				if (!NetPlay.players[i].ready)
+				if (shouldAccumulateNotReadyTime)
 				{
-					// accumulate time spent not ready while they _could_ check ready
-					if (ingame.lastNotReadyTimes[i].has_value())
+					// Update ingame.secondsNotReady for all not-ready players
+					if (!NetPlay.players[i].ready)
 					{
-						ingame.secondsNotReady[i] += std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastNotReadyTimes[i].value()).count();
+						// accumulate time spent not ready while they _could_ check ready
+						if (ingame.lastNotReadyTimes[i].has_value())
+						{
+							ingame.secondsNotReady[i] += std::chrono::duration_cast<std::chrono::seconds>(now - ingame.lastNotReadyTimes[i].value()).count();
+						}
 					}
 				}
+				else
+				{
+					// Reset the not-ready time for all players
+					// (time will start accumulating again when multiplayPlayersShouldCheckReady becomes true)
+					ingame.secondsNotReady[i] = 0;
+				}
+				// Reset ingame.lastNotReadyTimes to nullopt
 				ingame.lastNotReadyTimes[i].reset();
 			}
 		}
