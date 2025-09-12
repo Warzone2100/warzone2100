@@ -3636,6 +3636,11 @@ constexpr VulkanDeviceBlocklistEntry vulkanDeviceBlocklist[] = {
 	// Block old AMD drivers due to crashes (by checking for ones that support < Vulkan 1.1.0 - these should be very old)
 	, { kVendorIdAMD, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 1, 0))-1} }
 
+#if defined(WZ_OS_WIN)
+	// Block specific older Windows Nvidia driver version (1892728832 => 451.67.0.0) that crashes when recreating swapchain (in vkDestroySwapchainKHR)
+	, { kVendorIdNvidia, nullopt, VulkanDeviceBlocklistEntry::VersionRange{1892728832, 1892728832}, nullopt }
+#endif
+
 #if defined(WZ_OS_MAC)
 	// Block Vulkan (via MoltenVK) on Intel graphics on macOS (due to crashes)
 	, { kVendorIdIntel, nullopt, nullopt, nullopt }
