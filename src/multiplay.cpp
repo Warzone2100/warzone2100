@@ -409,7 +409,7 @@ void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
 			}
 			kickPlayer(i, "You have been removed from the room.\nYou have spent too much time without checking Ready.\n\nIn the future, please check Ready and leave it checked, to avoid delaying games for other players.", ERROR_CONNECTION, false);
 		}
-		else if (!NetPlay.players[i].ready && totalSecondsNotReady >= (NotReadyAutoKickSeconds - 6)) {
+		else if (!NetPlay.players[i].ready && totalSecondsNotReady >= (NotReadyAutoKickSeconds - 8)) {
 			WzQuickChatTargeting targeting;
 			targeting.specificPlayers.insert(i);
 			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, targeting, WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKickWarning, i));

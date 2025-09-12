@@ -2521,6 +2521,7 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 			case static_cast<uint32_t>(Context::NotReadyKickWarning):
 				if (targetPlayerIdx == selectedPlayer)
 				{
+					audio_PlayTrack(ID_SOUND_ZOOM_ON_RADAR);
 					return _("NOTICE: If you don't check Ready soon, you will be kicked from the room");
 				}
 				else
