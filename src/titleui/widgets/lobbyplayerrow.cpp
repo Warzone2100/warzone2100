@@ -604,6 +604,7 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 				if (button.getOnClickButtonPressed() == WKEY_SECONDARY && player < MAX_PLAYERS)
 				{
 					// Right clicking distributes selected AI's type and difficulty to all other AIs
+					bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
 					for (int i = 0; i < MAX_PLAYERS; ++i)
 					{
 						// Don't change open/closed slots or humans or spectator-only slots
@@ -615,6 +616,10 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 							setPlayerName(i, getAIName(player));
 							NETBroadcastPlayerInfo(i);
 						}
+					}
+					if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+					{
+						handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 					}
 					widgScheduleTask([strongTitleUI] {
 						strongTitleUI->updatePlayers();
