@@ -2567,6 +2567,11 @@ void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheck
 					ingame.lastNotReadyTimes[i] = now;
 				}
 			}
+
+			if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)
+			{
+				sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::PlayerShouldCheckReadyNotice, NetPlay.hostPlayer));
+			}
 		}
 		else
 		{
