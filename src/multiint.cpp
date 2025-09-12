@@ -1885,7 +1885,6 @@ public:
 			auto strongTitleUI = titleUI.lock();
 			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 			// Switch player
-			resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));		// will reset only locally if not a host
 			SendPositionRequest(switcherPlayerIdx, NetPlay.players[selectPositionRow->targetPlayerIdx].position);
 			widgScheduleTask([strongTitleUI] {
 				strongTitleUI->closePositionChooser();
@@ -2777,7 +2776,7 @@ bool recvReadyRequest(NETQUEUE queue)
 	return changedValue;
 }
 
-bool changeReadyStatus(UBYTE player, bool bReady)
+static bool changeReadyStatusImpl(UBYTE player, bool bReady, bool skipBroadcastUpdate)
 {
 	bool changedValue = NetPlay.players[player].ready != bReady;
 	NetPlay.players[player].ready = bReady;
@@ -2802,13 +2801,21 @@ bool changeReadyStatus(UBYTE player, bool bReady)
 			}
 		}
 	}
-	NETBroadcastPlayerInfo(player);
+	if (!skipBroadcastUpdate)
+	{
+		NETBroadcastPlayerInfo(player);
+	}
 	netPlayersUpdated = true;
 	// Player is fast! Clicked the "Ready" button before we had a chance to ping him/her
 	// change PingTime to some value less than PING_LIMIT, so that multiplayPlayersReady
 	// doesnt block
 	ingame.PingTimes[player] = ingame.PingTimes[player] == PING_LIMIT ? 1 : ingame.PingTimes[player];
 	return changedValue;
+}
+
+bool changeReadyStatus(UBYTE player, bool bReady)
+{
+	return changeReadyStatusImpl(player, bReady, false);
 }
 
 static void informIfAdminChangedOtherPosition(uint32_t targetPlayerIdx, uint32_t responsibleIdx)
@@ -2840,14 +2847,31 @@ static bool changePosition(UBYTE player, UBYTE position, uint32_t responsibleIdx
 	{
 		if (NetPlay.players[i].position == position)
 		{
-			debug(LOG_NET, "Swapping positions between players %d(%d) and %d(%d)",
-			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
-			std::swap(NetPlay.players[i].position, NetPlay.players[player].position);
-			std::swap(NetPlay.players[i].team, NetPlay.players[player].team);
-			NETBroadcastTwoPlayerInfo(player, i);
-			informIfAdminChangedOtherPosition(player, responsibleIdx);
-			netPlayersUpdated = true;
-			return true;
+			if (!isHumanPlayer(i) || isPlayerHostOrAdmin(responsibleIdx))
+			{
+				debug(LOG_NET, "Swapping positions between players %d(%d) and %d(%d)",
+					  player, NetPlay.players[player].position, i, NetPlay.players[i].position);
+				std::swap(NetPlay.players[i].position, NetPlay.players[player].position);
+				std::swap(NetPlay.players[i].team, NetPlay.players[player].team);
+				if (NetPlay.players[player].ready && isHumanPlayer(player) && ingame.JoiningInProgress[player])
+				{
+					changeReadyStatusImpl(player, false, true);
+				}
+				if (NetPlay.players[i].ready && isHumanPlayer(i) && ingame.JoiningInProgress[i])
+				{
+					changeReadyStatusImpl(i, false, true);
+				}
+				NETBroadcastTwoPlayerInfo(player, i);
+				informIfAdminChangedOtherPosition(player, responsibleIdx);
+				netPlayersUpdated = true;
+				return true;
+			}
+			else
+			{
+				debug(LOG_INFO, "Unable to swap positions between players %d(%d) and %d(%d) - lack of privileges",
+					  player, NetPlay.players[player].position, i, NetPlay.players[i].position);
+				return false;
+			}
 		}
 	}
 	debug(LOG_ERROR, "Failed to swap positions for player %d, position %d", (int)player, (int)position);
@@ -2856,6 +2880,10 @@ static bool changePosition(UBYTE player, UBYTE position, uint32_t responsibleIdx
 		debug(LOG_NET, "corrupted positions: player (%u) new position (%u) old position (%d)", player, position, NetPlay.players[player].position);
 		// Positions were corrupted. Attempt to fix.
 		NetPlay.players[player].position = position;
+		if (NetPlay.players[player].ready && isHumanPlayer(player) && ingame.JoiningInProgress[player])
+		{
+			changeReadyStatusImpl(player, false, true);
+		}
 		NETBroadcastPlayerInfo(player);
 		informIfAdminChangedOtherPosition(player, responsibleIdx);
 		netPlayersUpdated = true;
@@ -3106,9 +3134,13 @@ bool recvPositionRequest(NETQUEUE queue)
 		return false;
 	}
 
-	resetReadyStatus(false);
+	if (!changePosition(player, position, queue.index))
+	{
+		return false;
+	}
 
-	return changePosition(player, position, queue.index);
+	wz_command_interface_output_room_status_json(true);
+	return true;
 }
 
 static bool SendPlayerSlotTypeRequest(uint32_t player, bool isSpectator)
@@ -6385,7 +6417,7 @@ public:
 		{
 			return false;
 		}
-		resetReadyStatus(false, isBlindSimpleLobby(game.blindMode));
+		wz_command_interface_output_room_status_json(true);
 		return true;
 	}
 	virtual bool changeBase(uint8_t baseValue) override
@@ -7349,6 +7381,8 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 						NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
 						NETregisterServer(WZ_SERVER_UPDATE);
 					}
+
+					wz_command_interface_output_room_status_json(true);
 				}
 				break;
 			default:
