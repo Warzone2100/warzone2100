@@ -1083,6 +1083,7 @@ jobs:
           echo "::group::sentry-cli debug-files upload"
           ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
           ./sentry-cli/sentry-cli debug-files upload --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
+          ./sentry-cli/sentry-cli difutil check "${WZ_ARCHIVE_DIR}/bin/warzone2100.exe"
           echo "::endgroup::"
   trigger-updates-json:
     name: 'Trigger Info Update'
