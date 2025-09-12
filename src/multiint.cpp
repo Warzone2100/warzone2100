@@ -1656,6 +1656,20 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 	difficultyChooserUp = player;
 }
 
+static void changeAI(uint32_t player, int8_t ai)
+{
+	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32, player);
+
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
+
+	NetPlay.players[player].ai = ai;
+
+	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
+	{
+		handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
+	}
+}
+
 void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 {
 	ASSERT_HOST_ONLY(return);
@@ -1695,16 +1709,16 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 			switch (clickedButton.id)
 			{
 			case MULTIOP_AI_CLOSED:
-				NetPlay.players[player].ai = AI_CLOSED;
+				changeAI(player, AI_CLOSED);
 				NetPlay.players[player].isSpectator = false;
 				break;
 			case MULTIOP_AI_OPEN:
-				NetPlay.players[player].ai = AI_OPEN;
+				changeAI(player, AI_OPEN);
 				NetPlay.players[player].isSpectator = false;
 				break;
 			case MULTIOP_AI_SPECTATOR:
 				// set slot to open
-				NetPlay.players[player].ai = AI_OPEN;
+				changeAI(player, AI_OPEN);
 				// but also a spectator
 				NetPlay.players[player].isSpectator = true;
 				break;
@@ -1813,7 +1827,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 				if (!NetPlay.players[player].allocated)
 				{
 					NetPlay.players[player].isSpectator = false;
-					NetPlay.players[player].ai = aiIdx;
+					changeAI(player, aiIdx);
 					setPlayerName(player, getAIName(player));
 					// Difficulty is preserved when switching open AI slots.
 					if (NetPlay.players[player].difficulty == AIDifficulty::DISABLED)
