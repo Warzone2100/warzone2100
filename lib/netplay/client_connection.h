@@ -241,7 +241,7 @@ protected:
 	// memory allocations.
 	const std::vector<IClientConnection*> selfConnList_;
 	// Connection provider used to create internal descriptor sets.
-	WzConnectionProvider* connProvider_ = nullptr;
+	std::weak_ptr<WzConnectionProvider> connProvider_;
 	// Compression provider which is used to initialize compression algorithm in `enableCompression()`.
 	WzCompressionProvider* compressionProvider_ = nullptr;
 	// Pending writes manager instance, specific to a particular connection provider,

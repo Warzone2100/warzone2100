@@ -51,6 +51,8 @@ public:
 	PendingWritesManager& get(ConnectionProviderType pt);
 	PendingWritesManager& get(const WzConnectionProvider& connProvider);
 
+	void Shutdown();
+
 private:
 
 	explicit PendingWritesManagerMap() = default;

@@ -86,6 +86,8 @@ static GNSConnectionProvider* activeServer = nullptr;
 
 void GNSConnectionProvider::initialize()
 {
+	if (initialized_) { return; }
+
 	std::call_once(gnsInitFlag, []()
 	{
 		SteamDatagramErrMsg errMsg;
@@ -99,6 +101,8 @@ void GNSConnectionProvider::initialize()
 	{
 		throw std::runtime_error("Failed to initialize GNS network interface");
 	}
+
+	initialized_ = true;
 
 	addressResolver_ = std::make_unique<tcp::TCPAddressResolver>();
 
@@ -148,6 +152,8 @@ void GNSConnectionProvider::initialize()
 
 void GNSConnectionProvider::shutdown()
 {
+	if (!initialized_) { return; }
+	initialized_ = false;
 	addressResolver_.reset();
 	activeServer = nullptr;
 }

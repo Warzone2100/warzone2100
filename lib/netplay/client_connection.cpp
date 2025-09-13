@@ -29,10 +29,10 @@
 
 IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm)
 	: selfConnList_({ this }),
-	connProvider_(&connProvider),
+	connProvider_(connProvider.shared_from_this()),
 	compressionProvider_(&compressionProvider),
 	pwm_(&pwm),
-	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
+	readAllDescriptorSet_(connProvider.newDescriptorSet(PollEventType::READABLE))
 {}
 
 net::result<ssize_t> IClientConnection::readAll(void* buf, size_t size, unsigned timeout)
