@@ -328,14 +328,38 @@ Break alliances between all players.
 
 @returns {void}
 
-## camGenerateRandomMapEdgeCoordinate(reachPosition [, propulsion [, distFromReach]])
+## camIsWaterPropulsion(propulsion)
+
+Check if a propulsion can traverse water tiles. Until the Stats object can tell us this
+information, it simply uses a very basic name check against the default hover propulsions.
+
+@param {String} propulsion
+@returns {Boolean}
+
+## camNearInaccessibleAreas(start, destination [, propulsion [, distance]])
+
+Determine if a start position can reach a destination position within the limits of
+the chosen propulsion, and if there are nearby cliffs/water tiles nearby within a certain distance.
+if `destination` is undefined it will cause this function to just scan around the start position.
+
+@param {Object} start
+@param {Object} destination
+@param {String} propulsion
+@param {Number} distance
+@returns {Boolean}
+
+## camGenerateRandomMapEdgeCoordinate(reachPosition [, propulsion [, distFromReach [, scanObjectRadius]]])
 
 Returns a random coordinate anywhere on the edge of the map that reaches a position.
-`reachPosition` may be undefined if you just want a random edge coordinate.
+`reachPosition` may be undefined if you just want a random edge coordinate, without object scans.
+Which can be useful for spawning transporter entry/exit points or VTOL spawn positions.
+`scanObjectRadius` may be defined to scan possible spawn points for nearby objects,
+and should be above one tile if there are large skyscrapers at the edges of some maps.
 
 @param {Object} reachPosition
 @param {String} propulsion
 @param {Number} distFromReach
+@param {Number} scanObjectRadius
 @returns {Object}
 
 ## camGenerateRandomMapCoordinate(reachPosition [, propulsion [, distFromReach [, scanObjectRadius, [, avoidNearbyCliffs]]]])

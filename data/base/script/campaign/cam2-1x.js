@@ -53,10 +53,11 @@ camAreaEvent("crashSite", function(droid)
 
 function insaneReinforcementSpawn()
 {
+	const SCAN_DISTANCE = 2; // Skyscrapers are close to some edges.
 	const DISTANCE_FROM_POS = 25;
 	const units = [cTempl.commc, cTempl.commrl, cTempl.commrp, cTempl.npcybc];
 	const limits = {minimum: 2, maxRandom: 2};
-	const location = camGenerateRandomMapEdgeCoordinate(getObject("startingPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	const location = camGenerateRandomMapEdgeCoordinate(getObject("startingPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS, SCAN_DISTANCE);
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
 }
 

@@ -150,10 +150,11 @@ function insaneVtolAttack()
 
 function insaneReinforcementSpawn()
 {
+	const SCAN_DISTANCE = 2;
 	const DISTANCE_FROM_POS = 30;
 	const units = [cTempl.comltath, cTempl.cohhvch, cTempl.comagh];
 	const limits = {minimum: 4, maxRandom: 2};
-	const location = camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
+	const location = camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS, SCAN_DISTANCE);
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
 

@@ -457,17 +457,86 @@ function camBreakAlliances()
 	}
 }
 
-//;; ## camGenerateRandomMapEdgeCoordinate(reachPosition [, propulsion [, distFromReach]])
+//;; ## camIsWaterPropulsion(propulsion)
+//;;
+//;; Check if a propulsion can traverse water tiles. Until the Stats object can tell us this
+//;; information, it simply uses a very basic name check against the default hover propulsions.
+//;;
+//;; @param {String} propulsion
+//;; @returns {Boolean}
+//;;
+function camIsWaterPropulsion(propulsion)
+{
+	return (propulsion.indexOf("hover") !== -1);
+}
+
+//;; ## camNearInaccessibleAreas(start, destination [, propulsion [, distance]])
+//;;
+//;; Determine if a start position can reach a destination position within the limits of
+//;; the chosen propulsion, and if there are nearby cliffs/water tiles nearby within a certain distance.
+//;; if `destination` is undefined it will cause this function to just scan around the start position.
+//;;
+//;; @param {Object} start
+//;; @param {Object} destination
+//;; @param {String} propulsion
+//;; @param {Number} distance
+//;; @returns {Boolean}
+//;;
+function camNearInaccessibleAreas(start, destination, propulsion, distance)
+{
+	if (!camDef(start) || !start)
+	{
+		camDebug("Undefined start position when scanning for inaccessible areas.");
+		return true;
+	}
+	if (!camDef(propulsion))
+	{
+		propulsion = CAM_GENERIC_LAND_STAT;
+	}
+	if (!camDef(distance))
+	{
+		distance = 1;
+	}
+	if (!camDef(destination) || !destination)
+	{
+		destination = start; //Quick way to just scan for pits/cliffs at the start position.
+	}
+	for (let x = -distance; x <= distance; ++x)
+	{
+		for (let y = -distance; y <= distance; ++y)
+		{
+			const tmpStart = {x: start.x + x, y: start.y + y};
+			if ((tmpStart.x < 0) || (tmpStart.y < 0) || (tmpStart.x >= mapWidth) || (tmpStart.y >= mapHeight))
+			{
+				continue; // We don't care about being outside the map here.
+			}
+			const TTYPE = terrainType(tmpStart.x, tmpStart.y);
+			if (!propulsionCanReach(propulsion, destination.x, destination.y, tmpStart.x, tmpStart.y) ||
+				(TTYPE === TER_CLIFFFACE) ||
+				((TTYPE === TER_WATER) && !camIsWaterPropulsion(propulsion)))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+//;; ## camGenerateRandomMapEdgeCoordinate(reachPosition [, propulsion [, distFromReach [, scanObjectRadius]]])
 //;;
 //;; Returns a random coordinate anywhere on the edge of the map that reaches a position.
-//;; `reachPosition` may be undefined if you just want a random edge coordinate.
+//;; `reachPosition` may be undefined if you just want a random edge coordinate, without object scans.
+//;; Which can be useful for spawning transporter entry/exit points or VTOL spawn positions.
+//;; `scanObjectRadius` may be defined to scan possible spawn points for nearby objects,
+//;; and should be above one tile if there are large skyscrapers at the edges of some maps.
 //;;
 //;; @param {Object} reachPosition
 //;; @param {String} propulsion
 //;; @param {Number} distFromReach
+//;; @param {Number} scanObjectRadius
 //;; @returns {Object}
 //;;
-function camGenerateRandomMapEdgeCoordinate(reachPosition, propulsion, distFromReach)
+function camGenerateRandomMapEdgeCoordinate(reachPosition, propulsion, distFromReach, scanObjectRadius)
 {
 	if (!camDef(propulsion))
 	{
@@ -480,7 +549,9 @@ function camGenerateRandomMapEdgeCoordinate(reachPosition, propulsion, distFromR
 	const limits = getScrollLimits();
 	const __MAX_ATTEMPTS = 10000;
 	const __DEFINED_POS = (camDef(reachPosition) && reachPosition);
+	const __DEFINED_SCAN = (camDef(scanObjectRadius) && scanObjectRadius);
 	const __OFFSET = 3; // Gives transporters enough space to turn around near map edges.
+	const __SCAN_DIST = 1;
 	let attempts = 0;
 	let breakOut = false;
 	let loc;
@@ -524,10 +595,10 @@ function camGenerateRandomMapEdgeCoordinate(reachPosition, propulsion, distFromR
 		}
 		loc = location;
 		if ((attempts > __MAX_ATTEMPTS) ||
-			((!__DEFINED_POS ||
-			(__DEFINED_POS &&
-			(camDist(reachPosition.x, reachPosition.y, loc.x, loc.y) >= distFromReach) &&
-			propulsionCanReach(propulsion, reachPosition.x, reachPosition.y, loc.x, loc.y)))))
+			(!__DEFINED_POS ||
+			((camDist(reachPosition.x, reachPosition.y, loc.x, loc.y) >= distFromReach) &&
+			(!__DEFINED_SCAN || !enumRange(loc.x, loc.y, scanObjectRadius, ALL_PLAYERS, false).length) &&
+			!camNearInaccessibleAreas(loc, reachPosition, propulsion, __SCAN_DIST))))
 		{
 			breakOut = true;
 		}
@@ -572,6 +643,7 @@ function camGenerateRandomMapCoordinate(reachPosition, propulsion, distFromReach
 	const limits = getScrollLimits();
 	const __MAX_ATTEMPTS = 10000;
 	const __OFFSET = 3; // Gives transporters enough space to turn around near map edges.
+	const __SCAN_DIST = 2;
 	let attempts = 0;
 	let breakOut = false;
 	let pos;
@@ -600,21 +672,7 @@ function camGenerateRandomMapCoordinate(reachPosition, propulsion, distFromReach
 		// Scan for nearby pits/hills so transporters don't put units inside inaccessible areas.
 		if (avoidNearbyCliffs)
 		{
-			for (let x = -2; x <= 2; ++x)
-			{
-				for (let y = -2; y <= 2; ++y)
-				{
-					if (!propulsionCanReach(propulsion, reachPosition.x, reachPosition.y, pos.x + x, pos.y + y))
-					{
-						nearPitOrCliff = true;
-						break;
-					}
-				}
-				if (nearPitOrCliff)
-				{
-					break;
-				}
-			}
+			nearPitOrCliff = camNearInaccessibleAreas(pos, reachPosition, propulsion, __SCAN_DIST);
 		}
 		if ((attempts > __MAX_ATTEMPTS) ||
 			((camDist(pos, reachPosition) >= distFromReach) &&
