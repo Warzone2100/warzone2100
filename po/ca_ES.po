@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-30 13:50+0000\n"
-"PO-Revision-Date: 2025-09-04 02:29\n"
+"POT-Creation-Date: 2025-09-14 18:40+0000\n"
+"PO-Revision-Date: 2025-09-16 00:28\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -8089,6 +8089,12 @@ msgstr "ATENCIÓ: si no marqueu Llest aviat, sereu expulsat de la sala"
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "Expulsió automàtica del jugador (%s) car ha esperat massa per marcar llest"
 
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
 msgid "Can someone please transfer me some units?"
 msgstr "Algú pot transferir-me unitats?"
 
@@ -9585,6 +9591,9 @@ msgstr "Selecciona el nom del jugador"
 
 msgid "Player Name changes are not allowed when you are muted"
 msgstr "Els canvis de nom de jugador no es permeten quan esteu blocat"
+
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
 
 msgid "Blind Game:"
 msgstr "Joc a cegues:"
