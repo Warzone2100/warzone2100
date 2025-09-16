@@ -1,3 +1,20 @@
+2025-09-16: Version 4.6.1:
+ * General:
+   * Fix: Add various buggy drivers to the Vulkan driver blocklist (too many commits, #4560, #4568)
+   * Fix: Rebuilding search paths and reloading local mods after leaving joined lobby or multiplayer game (commit:d2310199e980f5f3781ff19580c807818598909e, commit:f28a8d1a57b989f9964f2b16f56c9789438e6eb0, #4561)
+   * Fix: Call countUpdate at init, not unsynchronized at top of gameLoop (commit:d65dcad91268e71fb26555bfadbf24c61126c082, #4564)
+ * Campaign:
+   * Fix: Improve campaign coordinate generators (commit:345c26dd053088d474bd37b7d5d01b8c179a91b4, #4570)
+ * Multiplayer:
+   * Add: hostAutoLagKickAggressiveness config value (commit:f2efcd97a65bfc3abc06c41350ea1c159d6c99d8, #4556)
+   * Add: Share more host options with clients, so clients can display the state (commit:48f52846df42c9ca74f7fe03b743b04f9e823715, #4562)
+   * Fix: Apply commander distance check to getDroidEffectiveLevel, other tweaks to avoid exploits (too many commits, #4559)
+   * Fix: Improve not-ready check / kick / warning (too many commits, #4566)
+ * Networking:
+   * Fix: netplay: Use shared/weak_ptr for WzConnectionProvider, refactor shutdown handling (too many commits, #4563)
+ * Translations:
+   * Change: Translation updates (commit:ffe13ab5532b6997c785650167d7db273cf545bb, #4571)
+
 2025-09-08: Version 4.6.0:
  * General:
    * Change: Bump repair spread area from 6 to 10 tiles (commit:027134f560965fec3ff37656c10f5d7e6190da5a, #4547)
