@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-30 13:50+0000\n"
-"PO-Revision-Date: 2025-08-30 15:14\n"
+"POT-Creation-Date: 2025-09-14 18:40+0000\n"
+"PO-Revision-Date: 2025-09-16 00:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -8085,6 +8085,12 @@ msgstr "注意：请尽快准备，超时将被踢出房间"
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "正在自动踢除玩家（%s），原因：准备超时"
 
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
 msgid "Can someone please transfer me some units?"
 msgstr "有人能给我转移一些单位吗？"
 
@@ -9581,6 +9587,9 @@ msgstr "选择玩家名称"
 
 msgid "Player Name changes are not allowed when you are muted"
 msgstr "静音时不允许更改玩家姓名"
+
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
 
 msgid "Blind Game:"
 msgstr "盲目游戏："
