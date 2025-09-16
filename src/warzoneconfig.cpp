@@ -492,7 +492,7 @@ void war_setAutoLagKickSeconds(int seconds)
 	seconds = std::max(seconds, 0);
 	if (seconds > 0)
 	{
-		seconds = std::max(seconds, 60);
+		seconds = std::max(seconds, 15);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
 }
