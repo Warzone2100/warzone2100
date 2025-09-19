@@ -604,7 +604,7 @@ private:
 
 	std::string getTip() override
 	{
-		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
+		WzString costString = WzString::format(_("Cost: %u"), getCost());
 		auto stats = getStats();
 		WzString tipString = (stats == nullptr) ? "" : getLocalizedStatsName(stats);
 		if (stats && !stats->category.isEmpty())
