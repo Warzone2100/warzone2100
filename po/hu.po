@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"PO-Revision-Date: 2025-09-20 02:28\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -9177,7 +9177,7 @@ msgid "Lets us see what you see!"
 msgstr "Mondja el, hogy mit lát!"
 
 msgid "Fine, weapon & sensor display is off!"
-msgstr ""
+msgstr "Rendben, a fegyver és érzékelő kijelzése kikapcsolva!"
 
 msgid "View Aligned to South"
 msgstr "Délre állított nézet"
@@ -9212,7 +9212,7 @@ msgid "Taking things easy!"
 msgstr "Csak könnyedén!"
 
 msgid "Back to normality!"
-msgstr "Térj vissza a szabályokhoz!"
+msgstr "Vissza a szabályokhoz!"
 
 msgid "Getting tricky!"
 msgstr "Trükkös dolog!"
@@ -9284,7 +9284,7 @@ msgstr "Északra állított nézet"
 
 #, c-format
 msgid "Trap cursor %s"
-msgstr "Rögzített kurzor %s"
+msgstr "Kurzor rögzítése: %s"
 
 msgid "CAMPAIGN"
 msgstr "KÜLDETÉS"
@@ -9317,7 +9317,7 @@ msgid "CHEATS: DISABLED"
 msgstr "CSALÁSOK: LETILTVA"
 
 msgid "Researched EVERYTHING for you!"
-msgstr "Mindent vizsgált!"
+msgstr "MINDENT kifejlesztett Önnek!"
 
 msgid "Selected buildings instantly recharged!"
 msgstr "A kiválasztott épületek azonnal feltöltve!"
@@ -9333,10 +9333,10 @@ msgid "Only displaying energy bars when selected"
 msgstr "Az energiaszintek megjelenítése csak kijelölés esetén"
 
 msgid "Always displaying energy bars for units"
-msgstr "Mindig mutassa az energia szintet az egységeknél"
+msgstr "Energiaszint megjelenítése mindig az egységeknél"
 
 msgid "Always displaying energy bars for units and structures"
-msgstr "Mindig mutassa az energia szintet az egységeknél és az épületeknél"
+msgstr "Energiaszint megjelenítése mindig az egységeknél és az épületeknél"
 
 msgid "Debug menu is Open"
 msgstr "A hibakeresési menü nyitva van"
@@ -9348,7 +9348,7 @@ msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, az időjárás kint rémisztő... HÓ"
 
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Énekelek az esőben, Én énekelek az esőben... ESŐ"
+msgstr "Énekelek az esőben, énekelek az esőben... ESŐ"
 
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Előrejelzés: tiszta idő minden területen… NINCS IDŐJÁRÁS-VÁLTOZÁS"
