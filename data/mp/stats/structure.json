@@ -1282,7 +1282,7 @@
 		"buildPower": 175,
 		"height": 1,
 		"hitpoints": 400,
-		"id": "Emplacement-HeavyLaser",
+		"id": "Emplacement-ParticleGun",
 		"name": "Particle Gun Emplacement",
 		"resistance": 150,
 		"sensorID": "DefaultSensor1Mk1",
