@@ -311,6 +311,10 @@ if (ENABLE_GNS_NETWORK_BACKEND)
 	# Don't build the shared variant of the client library: we don't use it anyway, plus it causes build conflicts for macOS.
 	set(BUILD_SHARED_LIB OFF CACHE INTERNAL "Build the shared library version of the client library" FORCE)
 	add_subdirectory(GameNetworkingSockets EXCLUDE_FROM_ALL)
+	# Avoid absl symbol leaks with protobuf>=22.0.0 by always passing -DNDEBUG
+	if(TARGET GameNetworkingSockets_s)
+		target_compile_options(GameNetworkingSockets_s PRIVATE -DNDEBUG)
+	endif()
 	unset(BUILD_SHARED_LIB CACHE)
 else()
 	message(STATUS "GameNetworkingSockets backend support: DISABLED")
