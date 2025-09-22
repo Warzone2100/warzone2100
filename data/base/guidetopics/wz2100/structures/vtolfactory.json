@@ -8,7 +8,7 @@
 		}
 	},
 	"contents": [
-		"A VTOL Factory is used to build units with VTOL propulsion (aka flying units).",
+		"A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units).",
 		"",
 		"Each VTOL Factory can build one unit at a time, but you can queue multiple units for production.",
 		"",
