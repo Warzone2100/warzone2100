@@ -27,6 +27,7 @@ The `challenge` object defines the game parameters for a multiplayer game.
   * `"blind_game"`: Players' true identities are hidden from everyone except the host - **until the game _ends_**
   * `"blind_game_simple_lobby"`: Same as `blind_game`, but with the addition of "simple lobby" mode (players will be placed in a waiting room where they can't see the list of players until the game starts)
 * `allowPositionChange` is deprecated, use the `locked` object instead.
+* `gamePassword` sets a password for the game (optional)
 
 ## the `locked` object
 
