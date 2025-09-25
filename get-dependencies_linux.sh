@@ -12,11 +12,11 @@
 set -e
 
 if [ -z "$1" ]; then
-  echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\", \"opensuse-tumbleweed\")"
+  echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\", \"opensuse-tumbleweed\", \"gentoo\")"
   exit 1
 fi
 DISTRO="$1"
-if ! [[ "$1" =~ ^(ubuntu|fedora|alpine|archlinux|opensuse-tumbleweed)$ ]]; then
+if ! [[ "$1" =~ ^(ubuntu|fedora|alpine|archlinux|opensuse-tumbleweed|gentoo)$ ]]; then
   echo "This script does not currently support Linux distro (${DISTRO}). Please see the documentation."
   exit 1
 fi
@@ -135,6 +135,21 @@ if [ "${DISTRO}" == "opensuse-tumbleweed" ]; then
 
   echo "Installing build-dependencies for OpenSUSE Tumbleweed"
   zypper install -y libSDL2-devel libphysfs-devel libpng16-devel libtheora-devel libvorbis-devel libogg-devel libopus-devel freetype-devel fribidi-devel harfbuzz-devel openal-soft-devel libsodium-devel sqlite3-devel libzip-devel libtinygettext0 ruby3.0-rubygem-asciidoctor vulkan-devel protobuf-devel
+fi
+##################
+# Gentoo
+##################
+# Package search: https://packages.gentoo.org/
+
+if [ "${DISTRO}" == "gentoo" ]; then
+	
+	if [ "${MODE}" == "build-all" ]; then
+		echo "Merge build-all for Gentoo"
+		emerge dev-build/ninja dev-debug/gdb
+	fi
+	
+	echo "Merge build-dependencies for Gentoo"
+	emerge dev-build/cmake dev-vcs/git dev-ruby/asciidoctor sys-devel/gettext media-libs/libsdl2 dev-games/physfs media-libs/libpng media-libs/libtheora media-libs/libvorbis media-libs/libogg media-libs/opus media-libs/freetype media-libs/harfbuzz dev-libs/fribidi media-libs/openal net-misc/curl dev-libs/libsodium dev-db/sqlite dev-libs/libzip dev-libs/protobuf
 fi
 ##################
 
