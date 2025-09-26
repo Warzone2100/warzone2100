@@ -8424,7 +8424,7 @@ inline void to_json(nlohmann::json& j, const PLAYER& p) {
 	j["allocated"] = p.allocated;
 	j["heartattacktime"] = p.heartattacktime;
 	j["heartbeat"] = p.heartbeat;
-	j["kick"] = p.kick;
+	j["kick"] = false; // Store fixed false value for now (PLAYER.kick removed in WZ 4.6.2)
 	j["team"] = p.team;
 	j["ready"] = p.ready;
 	j["ai"] = p.ai;
@@ -8445,7 +8445,6 @@ inline void from_json(const nlohmann::json& j, PLAYER& p) {
 	p.allocated = j.at("allocated").get<bool>();
 	p.heartattacktime = j.at("heartattacktime").get<uint32_t>();
 	p.heartbeat = j.at("heartbeat").get<bool>();
-	p.kick = j.at("kick").get<bool>();
 	p.team = j.at("team").get<int32_t>();
 	p.ready = j.at("ready").get<bool>();
 	p.ai = j.at("ai").get<int8_t>();

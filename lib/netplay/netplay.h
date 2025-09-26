@@ -272,8 +272,7 @@ struct PLAYER
 	int32_t             colour;             ///< Which colour slot this player is using
 	bool                allocated;          ///< Allocated as a human player
 	uint32_t            heartattacktime;    ///< Time cardiac arrest started
-	bool                heartbeat;          ///< If we are still alive or not
-	bool                kick;               ///< If we should kick them
+	bool                heartbeat;          ///< If connection is still alive or not
 	int32_t             team;               ///< Which team we are on (int32_t::max for spectator team)
 	bool                ready;              ///< player ready to start?
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
@@ -300,7 +299,6 @@ struct PLAYER
 		allocated = false;
 		heartattacktime = 0;
 		heartbeat = false;
-		kick = false;
 		team = -1;
 		ready = false;
 		ai = 0;

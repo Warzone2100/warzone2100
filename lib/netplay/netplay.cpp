@@ -656,8 +656,7 @@ static void initPlayerNetworkProps(int playerIndex)
 	NetPlay.players[playerIndex].allocated = false;
 	NetPlay.players[playerIndex].autoGame = false;
 	NetPlay.players[playerIndex].heartattacktime = 0;
-	NetPlay.players[playerIndex].heartbeat = true;  // we always start with a heartbeat
-	NetPlay.players[playerIndex].kick = false;
+	NetPlay.players[playerIndex].heartbeat = false;
 	NetPlay.players[playerIndex].ready = false;
 
 	if (NetPlay.players[playerIndex].wzFiles)
@@ -771,7 +770,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETuint32_t(w, index[n]);
 		NETbool(w, NetPlay.players[index[n]].allocated);
 		NETbool(w, NetPlay.players[index[n]].heartbeat);
-		NETbool(w, NetPlay.players[index[n]].kick);
+		NETbool(w, false); // to maintain message format, send false in place of old "kick" variable // FUTURE TODO: Remove
 		if (isBlindPlayerInfoState() // if in blind player info state
 			&& index[n] < MAX_PLAYER_SLOTS) // and an actual player slot (not a spectator slot)
 		{
@@ -931,6 +930,7 @@ static bool NET_CreatePlayerAtIdx(uint32_t index, char const *name)
 	NET_InitPlayer(index, false);  // re-init everything
 	NetPlay.players[index].allocated = true;
 	NetPlay.players[index].difficulty = AIDifficulty::HUMAN;
+	NetPlay.players[index].heartbeat = true;
 	setPlayerName(index, name);
 	if (!NetPlay.players[index].isSpectator)
 	{
@@ -1072,6 +1072,8 @@ static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose)
 	{
 		debug(LOG_NET, "Player (%u) has left nicely, socket already closed?", index);
 	}
+
+	NetPlay.players[index].heartbeat = false; // mark client as dead
 }
 
 /**
@@ -2877,7 +2879,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 				wasAllocated = NetPlay.players[index].allocated;
 				NETbool(r, NetPlay.players[index].allocated);
 				NETbool(r, NetPlay.players[index].heartbeat);
-				NETbool(r, NetPlay.players[index].kick);
+				bool tmpDiscard = false;
+				NETbool(r, tmpDiscard); // to maintain message format, discard old "kick" variable // FUTURE TODO: Remove
 				oldName.clear();
 				oldName = NetPlay.players[index].name;
 				NETstring(r, NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
@@ -3096,25 +3099,9 @@ static void NETcheckPlayers()
 		{
 			continue;    // not allocated means that it most likely it is a AI player
 		}
-		if (NetPlay.players[i].heartbeat == 0 && NetPlay.players[i].heartattacktime == 0)	// looks like they are dead
+		if (!NetPlay.players[i].heartbeat && NetPlay.players[i].heartattacktime == 0)	// looks like they are dead
 		{
 			NetPlay.players[i].heartattacktime = realTime;		// mark when this occurred
-		}
-		else
-		{
-			if (NetPlay.players[i].heartattacktime)
-			{
-				if (NetPlay.players[i].heartattacktime + (15 * GAME_TICKS_PER_SEC) <  realTime) // wait 15 secs
-				{
-					debug(LOG_NET, "Kicking due to client heart attack");
-					NetPlay.players[i].kick = true;		// if still dead, then kick em.
-				}
-			}
-		}
-		if (NetPlay.players[i].kick)
-		{
-			debug(LOG_NET, "Kicking player %d", i);
-			kickPlayer(i, "you are unwanted by the host.", ERROR_KICKED, false);
 		}
 	}
 }
