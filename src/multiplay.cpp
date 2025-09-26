@@ -151,7 +151,7 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 	uint32_t playerCheckLimit = (isLobby || isInitialLoad) ? MAX_CONNECTED_PLAYERS : MAX_PLAYERS;
 	for (uint32_t i = 0; i < playerCheckLimit; ++i)
 	{
-		if (!isHumanPlayer(i))
+		if (!isHumanPlayer(i) || !NetPlay.players[i].heartbeat)
 		{
 			continue;
 		}
@@ -275,7 +275,7 @@ void autoDesyncKickRoutine(std::chrono::steady_clock::time_point now)
 	uint32_t playerCheckLimit = MAX_PLAYERS;
 	for (uint32_t i = 0; i < playerCheckLimit; ++i)
 	{
-		if (!isHumanPlayer(i))
+		if (!isHumanPlayer(i) || !NetPlay.players[i].heartbeat)
 		{
 			continue;
 		}
@@ -1080,7 +1080,7 @@ static bool sendDataCheck2()
 		const auto maxWaitSeconds = maxDataCheck2WaitSeconds();
 		for (uint32_t player = 0; player < std::min<uint32_t>(game.maxPlayers, MAX_PLAYERS); ++player)
 		{
-			if (player == NetPlay.hostPlayer || !isHumanPlayer(player) || NetPlay.players[player].isSpectator)
+			if (player == NetPlay.hostPlayer || !isHumanPlayer(player) || NetPlay.players[player].isSpectator || !NetPlay.players[player].heartbeat)
 			{
 				continue;
 			}
@@ -1204,7 +1204,7 @@ static bool recvDataCheck2(NETQUEUE queue)
 		return false;
 	}
 
-	if (!isHumanPlayer(player) || NetPlay.players[player].kick)
+	if (!isHumanPlayer(player) || !NetPlay.players[player].heartbeat)
 	{
 		// Ignoring
 		return false;
