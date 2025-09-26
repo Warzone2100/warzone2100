@@ -40,6 +40,34 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
+    - name: Clean up disk space
+      run: |
+        echo "Disk space before cleanup:"
+        df -h
+        # Remove Android SDK directories
+        echo "Removing Android SDK directories"
+        sudo rm -rf /usr/local/lib/android || true
+        sudo rm -rf /opt/android || true
+        sudo rm -rf /usr/local/android-sdk || true
+        echo "Removing Android SDK directories - complete"
+        df -h
+        # Remove .NET directories
+        echo "Removing .NET directories"
+        sudo rm -rf /usr/share/dotnet || true
+        echo "Removing .NET directories - complete"
+        df -h
+        # Remove Haskell directories
+        echo "Removing Haskell directories"
+        sudo rm -rf /opt/ghc || true
+        sudo rm -rf /usr/local/.ghcup || true
+        sudo rm -rf /opt/cabal || true
+        echo "Removing Haskell directories - complete"
+        df -h
+        # apt clean
+        echo "Running apt-get clean"
+        sudo apt-get clean
+        echo "Disk space after cleanup:"
+        df -h
     - uses: actions/checkout@v5
       with:
         fetch-depth: 0
@@ -112,7 +140,7 @@ jobs:
         echo "OUTPUT_DIR=${OUTPUT_DIR}" >> $GITHUB_ENV
         mkdir -p "${OUTPUT_DIR}"
         OUTPUT_FILE_NAME="warzone2100_linux_${{ matrix.arch }}.snap"
-        cp "${{ steps.snapcraft.outputs.snap }}" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        mv "${{ steps.snapcraft.outputs.snap }}" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
         echo "Generated .snap: \"${OUTPUT_FILE_NAME}\""
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
