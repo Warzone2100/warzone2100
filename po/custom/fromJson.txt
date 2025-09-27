@@ -537,13 +537,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-_("Armed with Cyborg Assault Gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 _("Armed with Cyborg assault gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+_("Armed with Cyborg Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -1085,11 +1085,11 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
-_("Best Targets: Base Structures")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 _("Best Targets: Base structures")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
+_("Best Targets: Base Structures")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -3245,12 +3245,12 @@ _("Improves vehicle speed")
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 _("Incendiary Howitzer Emplacement 2")  
 // TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+_("Incendiary howitzer emplacement")  
+// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 _("Incendiary Howitzer Emplacement")  
-// TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-_("Incendiary howitzer emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
@@ -4428,15 +4428,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
+// TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]
@@ -5746,13 +5746,13 @@ _("Synaptic Link Data Analysis Mk2")
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-_("Synaptic Link Data Analysis")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 _("Synaptic link data analysis")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+// data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+_("Synaptic Link Data Analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]

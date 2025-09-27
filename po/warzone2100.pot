@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
+"POT-Creation-Date: 2025-09-27 15:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1849,7 +1849,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:546
 msgid "Armed with Cyborg Assault Gun"
 msgstr ""
 
@@ -3419,7 +3419,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1089
+#: po/custom/fromJson.txt:1092
 msgid "Best Targets: Base Structures"
 msgstr ""
 
@@ -5806,46 +5806,46 @@ msgstr ""
 msgid "System locale"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1588
-#: lib/netplay/netplay.cpp:1612
+#: lib/netplay/netplay.cpp:1590
+#: lib/netplay/netplay.cpp:1614
 msgid "Failed to create port mapping"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1590
-#: lib/netplay/netplay.cpp:1615
+#: lib/netplay/netplay.cpp:1592
+#: lib/netplay/netplay.cpp:1617
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1599
+#: lib/netplay/netplay.cpp:1601
 #, c-format
 msgid "Port mapping opened external port: %d"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1601
+#: lib/netplay/netplay.cpp:1603
 #, c-format
 msgid "Your external IP is: %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1608
+#: lib/netplay/netplay.cpp:1610
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1668
+#: lib/netplay/netplay.cpp:1670
 #, c-format
 msgid "Using %s network backend."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2428
+#: lib/netplay/netplay.cpp:2430
 msgid "Client failed to ack player index swap"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:3745
+#: lib/netplay/netplay.cpp:3732
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:3770
+#: lib/netplay/netplay.cpp:3757
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -6533,7 +6533,7 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:542
 msgid "Armed with Cyborg assault gun"
 msgstr ""
 
@@ -7302,7 +7302,7 @@ msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1092
+#: po/custom/fromJson.txt:1089
 msgid "Best Targets: Base structures"
 msgstr ""
 
@@ -10497,16 +10497,16 @@ msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
-#: po/custom/fromJson.txt:3250
-msgid "Incendiary Howitzer Emplacement"
+#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#: po/custom/fromJson.txt:3249
+msgid "Incendiary howitzer emplacement"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3253
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr ""
 
 #. TRANSLATORS:
@@ -12078,19 +12078,19 @@ msgid "New Systems Tower Available"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4433
-msgid "New Systems Turret Available For Design"
-msgstr ""
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4439
+#: po/custom/fromJson.txt:4435
 msgid "New Systems Turret Available for Design"
+msgstr ""
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4439
+msgid "New Systems Turret Available For Design"
 msgstr ""
 
 #. TRANSLATORS:
@@ -14093,17 +14093,17 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #: po/custom/fromJson.txt:5751
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #: po/custom/fromJson.txt:5755
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr ""
 
 #. TRANSLATORS:
@@ -19345,29 +19345,29 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:8685
+#: src/multiint.cpp:8684
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
 
-#: src/multiint.cpp:8687
+#: src/multiint.cpp:8686
 #, c-format
 msgid "Replay File Saved With: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8691
+#: src/multiint.cpp:8690
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8701
+#: src/multiint.cpp:8700
 msgid "Replays should usually be played back with the same version used to save the replay."
 msgstr ""
 
-#: src/multiint.cpp:8703
+#: src/multiint.cpp:8702
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr ""
 
-#: src/multiint.cpp:8704
+#: src/multiint.cpp:8703
 msgid "Replay Version Mismatch"
 msgstr ""
 
