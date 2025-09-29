@@ -2,7 +2,7 @@
 
 # USAGE:
 # Execute get-dependencies_linux.sh with 1-2 parameters
-# 1.) Specify one of the supported linux distros: ("ubuntu", "fedora", "alpine", "archlinux") REQUIRED
+# 1.) Specify one of the supported linux distros: ("ubuntu", "fedora", "alpine", "archlinux", "opensuse-tumbleweed", "gentoo", "raspberrypios") REQUIRED
 # 2.) Specify a mode: ("build-all" (default), "build-dependencies") OPTIONAL
 #
 # Example:
@@ -12,11 +12,11 @@
 set -e
 
 if [ -z "$1" ]; then
-  echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\", \"opensuse-tumbleweed\", \"gentoo\")"
+  echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\", \"opensuse-tumbleweed\", \"gentoo\", \"raspberrypios\", \"debian\")"
   exit 1
 fi
 DISTRO="$1"
-if ! [[ "$1" =~ ^(ubuntu|fedora|alpine|archlinux|opensuse-tumbleweed|gentoo)$ ]]; then
+if ! [[ "$1" =~ ^(ubuntu|fedora|alpine|archlinux|opensuse-tumbleweed|gentoo|raspberrypios|debian)$ ]]; then
   echo "This script does not currently support Linux distro (${DISTRO}). Please see the documentation."
   exit 1
 fi
@@ -29,6 +29,44 @@ if [ -n "$2" ]; then
   fi
   MODE="$2"
 fi
+
+##################
+# Debian / Raspberry Pi OS
+##################
+# Package search: https://packages.debian.org/index
+
+if [[ $DISTRO == "raspberrypios" || $DISTRO == "debian" ]]; then
+
+  # Get Debian version
+  VERSION=$(grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
+  echo "Detected OS version: ${VERSION}"
+
+  # Split version into parts
+  VERSION_PARTS=( ${VERSION//./ } )
+
+  echo "apt-get -u update"
+  apt -u update
+
+  if [ "${MODE}" == "build-all" ]; then
+    echo "Installing build-all for Debian"
+    DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config
+  fi
+
+  if [ "${VERSION_PARTS[0]}" -eq "12" ]; then
+    echo "Installing build-dependencies for Debian 12 Bullseye"
+    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+  elif [ "${VERSION_PARTS[0]}" -ge "13" ]; then
+    echo "Installing build-dependencies for Debian 13 Trixie"
+    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+  else
+    echo "Script does not currently support Debian ${VERSION_PARTS[0]} (${VERSION})"
+    exit 1
+  fi
+
+  # Required because of broken CMake config files installed by libzip-dev:
+  DEBIAN_FRONTEND=noninteractive apt -y install zipcmp zipmerge ziptool
+fi
+
 
 ##################
 # Ubuntu
@@ -142,12 +180,12 @@ fi
 # Package search: https://packages.gentoo.org/
 
 if [ "${DISTRO}" == "gentoo" ]; then
-	
+
 	if [ "${MODE}" == "build-all" ]; then
 		echo "Merge build-all for Gentoo"
 		emerge dev-build/ninja dev-debug/gdb
 	fi
-	
+
 	echo "Merge build-dependencies for Gentoo"
 	emerge dev-build/cmake dev-vcs/git dev-ruby/asciidoctor sys-devel/gettext media-libs/libsdl2 dev-games/physfs media-libs/libpng media-libs/libtheora media-libs/libvorbis media-libs/libogg media-libs/opus media-libs/freetype media-libs/harfbuzz dev-libs/fribidi media-libs/openal net-misc/curl dev-libs/libsodium dev-db/sqlite dev-libs/libzip dev-libs/protobuf
 fi
