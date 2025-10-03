@@ -1525,19 +1525,19 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
 	wzPerfEnd(PERF_SKYBOX);
 
-	wzPerfBegin(PERF_WATER, "3D scene - water");
-	// prepare for the water and the lightmap
-	pie_SetFogStatus(true);
-	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
-	wzPerfEnd(PERF_WATER);
-
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
 		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
 	}
 	wzPerfEnd(PERF_MODELS);
+
+	wzPerfBegin(PERF_WATER, "3D scene - water");
+	// prepare for the water and the lightmap
+	pie_SetFogStatus(true);
+	// also, make sure we can use world coordinates directly
+	drawWater(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
+	wzPerfEnd(PERF_WATER);
 
 	if (!gamePaused())
 	{
