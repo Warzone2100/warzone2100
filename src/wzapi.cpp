@@ -282,6 +282,7 @@ std::tuple<OBJECT_TYPE, int, int> wzapi::object_request::getObjectIDRequest() co
 //--
 std::string wzapi::translate(WZAPI_PARAMS(std::string str))
 {
+	if (str.empty()) return str;
 	return std::string(gettext(str.c_str()));
 }
 
