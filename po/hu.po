@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"PO-Revision-Date: 2025-09-25 02:34\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -7389,7 +7389,7 @@ msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Csatlakozás közvetlenül IP/gépnév alapján nézőként"
 
 msgid "Go directly to host screen"
-msgstr "közvetlenül a fogadó képernyőre"
+msgstr "Ugrás közvetlenül a házigazdai képernyőre"
 
 msgid "Enable texture compression"
 msgstr "Textúratömörítés bekapcsolása"
@@ -7431,7 +7431,7 @@ msgid "Start host game with given settings file"
 msgstr "Játék indítása beállítófájlból"
 
 msgid "autohost"
-msgstr "autokiszolgáló"
+msgstr "automatikus kiszolgálás"
 
 msgid "Attach or create a console window and display console output (Windows only)"
 msgstr "Parancssori ablak illesztése vagy létrehozása és a kimenet megjelenítése (csak Windowson)"
@@ -7443,7 +7443,7 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr "Porttovábbítás játék kiszolgálása során be/ki"
+msgstr "Porttovábbítás a játék kiszolgálása során be/ki"
 
 msgid "[1, true, 0, false]"
 msgstr "[1, igaz, 0, hamis]"
@@ -7518,7 +7518,7 @@ msgid "Base video URL"
 msgstr "Videók alapwebcíme"
 
 msgid "Specify connection provider type to use when hosting game sessions"
-msgstr ""
+msgstr "A játékok kiszolgálása során használt kapcsolatszolgáltató típusának megadása"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "A parancsnoknak magasabb szintre kell lépnie, hogy több egységnek parancsoljon"
@@ -9177,7 +9177,7 @@ msgid "Lets us see what you see!"
 msgstr "Mondja el, hogy mit lát!"
 
 msgid "Fine, weapon & sensor display is off!"
-msgstr ""
+msgstr "Rendben, a fegyver és érzékelő kijelzése kikapcsolva!"
 
 msgid "View Aligned to South"
 msgstr "Délre állított nézet"
@@ -9212,7 +9212,7 @@ msgid "Taking things easy!"
 msgstr "Csak könnyedén!"
 
 msgid "Back to normality!"
-msgstr "Térj vissza a szabályokhoz!"
+msgstr "Vissza a szabályokhoz!"
 
 msgid "Getting tricky!"
 msgstr "Trükkös dolog!"
@@ -9284,7 +9284,7 @@ msgstr "Északra állított nézet"
 
 #, c-format
 msgid "Trap cursor %s"
-msgstr "Rögzített kurzor %s"
+msgstr "Kurzor rögzítése: %s"
 
 msgid "CAMPAIGN"
 msgstr "KÜLDETÉS"
@@ -9317,7 +9317,7 @@ msgid "CHEATS: DISABLED"
 msgstr "CSALÁSOK: LETILTVA"
 
 msgid "Researched EVERYTHING for you!"
-msgstr "Mindent vizsgált!"
+msgstr "MINDENT kifejlesztett Önnek!"
 
 msgid "Selected buildings instantly recharged!"
 msgstr "A kiválasztott épületek azonnal feltöltve!"
@@ -9333,10 +9333,10 @@ msgid "Only displaying energy bars when selected"
 msgstr "Az energiaszintek megjelenítése csak kijelölés esetén"
 
 msgid "Always displaying energy bars for units"
-msgstr "Mindig mutassa az energia szintet az egységeknél"
+msgstr "Energiaszint megjelenítése mindig az egységeknél"
 
 msgid "Always displaying energy bars for units and structures"
-msgstr "Mindig mutassa az energia szintet az egységeknél és az épületeknél"
+msgstr "Energiaszint megjelenítése mindig az egységeknél és az épületeknél"
 
 msgid "Debug menu is Open"
 msgstr "A hibakeresési menü nyitva van"
@@ -9348,7 +9348,7 @@ msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, az időjárás kint rémisztő... HÓ"
 
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Énekelek az esőben, Én énekelek az esőben... ESŐ"
+msgstr "Énekelek az esőben, énekelek az esőben... ESŐ"
 
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Előrejelzés: tiszta idő minden területen… NINCS IDŐJÁRÁS-VÁLTOZÁS"
@@ -9589,7 +9589,7 @@ msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "A játékosnév-változásokat nem engedélyezte a házigazda"
 
 msgid "Blind Game:"
 msgstr "Vak játék:"
@@ -9862,7 +9862,7 @@ msgid "Disconnected from host:"
 msgstr "Megszakadt a kapcsolat a kiszolgálóval:"
 
 msgid "Unable to handle host redirect"
-msgstr ""
+msgstr "A kiszolgáló átirányítása nem kezelhető"
 
 msgid "Unable to process redirect"
 msgstr ""
@@ -9904,7 +9904,7 @@ msgid "Hit the ready box to begin your challenge!"
 msgstr "Kattintson a kész jelölőmezőre, és kezdődhet a kihívás!"
 
 msgid "Press the start hosting button to begin hosting a game."
-msgstr "Nyomd meg a távoli start gombot a távoli játék indításához "
+msgstr "A kezdéshez nyomja meg a játék indítása gombot."
 
 msgid "Port mapping creation is in progress..."
 msgstr "A porttovábbítás létrehozása folyamatban…"
@@ -10116,7 +10116,7 @@ msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Figyelem, ez egy térképmod, meg tudja változtatni a normális játékot."
 
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr "Figyelem, a HÁZIGAZDA megváltoztatta a játék kódját, és nem megbízhetó!"
+msgstr "Figyelem, a HÁZIGAZDA megváltoztatta a játék kódját, és nem megbízható!"
 
 msgid "The host has enabled free chat for everyone."
 msgstr "A házigazda mindenkinél engedélyezte a szabad csevegést."
@@ -11127,7 +11127,7 @@ msgid "Default AI"
 msgstr ""
 
 msgid "Hosting Options"
-msgstr ""
+msgstr "Kiszolgálóbeállítások"
 
 msgid "Port Mapping"
 msgstr "Porttovábbítás"
@@ -11391,13 +11391,13 @@ msgid "Failed to open configuration directory in system default file browser."
 msgstr "Nem sikerült megnyitni a beállítási könyvtárat a rendszer alapértelmezett fájlkezelőjében."
 
 msgid "Configuration directory is reported as:"
-msgstr "A beállítókönyvtár jelentve itt:"
+msgstr "A beállítókönyvtár jelentett helye:"
 
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
 msgstr "Ha egy virtuális konténerben vagy leválasztott környezetben fut, ez különbözhet a valódi elérési útvonaltól a lemezen."
 
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Kérjük, tekintsd meg a dokumentációt több információért a manuális megkereséséhez."
+msgstr "A kézi megkeresés további információiért lásd a dokumentációt."
 
 msgid "Failed to open configuration directory"
 msgstr "Beállítási könyvtár megnyitása sikertelen"
@@ -11424,11 +11424,11 @@ msgid ""
 "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr ""
-"Asztali teljes képernyős módban a felbontás megegyezik az asztalod felbontásával\n"
-"(vagy azzal, amit az ablakkezelőd megenged)."
+"Asztali teljes képernyős módban a felbontás megegyezik az asztal felbontásával\n"
+"(vagy azzal, amit az ablakkezelő megenged)."
 
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Az ablak normál átméretezésével megváltoztathatja a felbontást. (Húzza el a sarkot / peremet.)"
+msgstr "Az ablak normál átméretezésével megváltoztathatja a felbontást. (Húzza el az ablak sarkát vagy szélét.)"
 
 msgid "Window Mode"
 msgstr ""
@@ -11543,10 +11543,10 @@ msgid "Matchmaking"
 msgstr ""
 
 msgid "Blind Lobby"
-msgstr ""
+msgstr "Vak váró"
 
 msgid "Blind Game"
-msgstr ""
+msgstr "Vak játék"
 
 msgid "No Tanks"
 msgstr ""
@@ -11692,7 +11692,7 @@ msgid "Local (Offline)"
 msgstr ""
 
 msgid "Hosting:"
-msgstr ""
+msgstr "Kiszolgálás:"
 
 msgid "Password-Protected (Private)"
 msgstr ""
@@ -11793,46 +11793,46 @@ msgid "Takes effect on game restart"
 msgstr ""
 
 msgid "Advanced Hosting Options:"
-msgstr ""
+msgstr "Speciális kiszolgálóbeállítások:"
 
 msgid "Host Role"
-msgstr ""
+msgstr "Házigazda szerepe"
 
 msgid "Player Host"
-msgstr ""
+msgstr "Játékos"
 
 msgid "Host is a player in the game (the default)."
-msgstr ""
+msgstr "A házigazda az egyik játékos (alapértelmezett)."
 
 msgid "Spectator Host"
-msgstr ""
+msgstr "Néző"
 
 msgid "Host is a spectator in the game."
-msgstr ""
+msgstr "A házigazda néző a játékban."
 
 msgid "Blind Mode"
-msgstr ""
+msgstr "Vak mód"
 
 msgid "Whether and when players are blinded to other players' identities."
-msgstr ""
+msgstr "Rejtett-e a játékosok elől a többi játékos személyazonossága."
 
 msgid "Blind modes are only available when host is a Spectator Host."
-msgstr ""
+msgstr "A vak módok csak akkor érhetőek el, ha a házigazda néző."
 
 msgid "Players' identities are visible, in lobby and in game (the default)."
-msgstr ""
+msgstr "A játékosok személyazonossága látható a váróban és a játékban is (alapértelmezett)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
+msgstr "A játékosok személyazonossága a játék kezdetéig rejtve van (kivéve a házigazda számára)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
-msgstr ""
+msgstr "A játékosok személyazonossága a játék végéig rejtve van (kivéve a házigazda számára)."
 
 msgid "Start Hosting"
-msgstr ""
+msgstr "Játék indítása"
 
 msgid "Configure Advanced Hosting Options"
-msgstr ""
+msgstr "Speciális kiszolgálóbeállítások megadása"
 
 msgid "Launch Transport"
 msgstr "Szállító indítása"
