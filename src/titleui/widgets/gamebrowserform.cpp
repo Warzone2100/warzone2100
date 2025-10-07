@@ -1006,10 +1006,14 @@ void LobbyBrowser::populateTableFromGameList()
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
 
+	bool foundGreaterVersion = false;
+
 	// Populate table with the results
 	for (size_t idx = 0; idx < currentResults.size(); idx++)
 	{
 		const auto& gameInfo = currentResults[idx];
+
+		foundGreaterVersion = foundGreaterVersion || NETisGreaterVersion(gameInfo.netcode_version_major, gameInfo.netcode_version_minor);
 
 		bool isCompatibleGame = NETisCorrectVersion(gameInfo.netcode_version_major, gameInfo.netcode_version_minor);
 		if (filterIncompatible && !isCompatibleGame)
@@ -1081,7 +1085,7 @@ void LobbyBrowser::populateTableFromGameList()
 			lobbyStatusOverlayWidg->setString(statusStr);
 		}
 
-		if (NET_getLobbyDisabled() || getVersionCheckNewVersionAvailable().value_or(false))
+		if (NET_getLobbyDisabled() || getVersionCheckNewVersionAvailable().value_or(false) || foundGreaterVersion)
 		{
 			lobbyStatusOverlayWidg->setString(_("There appears to be a game update available!"));
 		}
