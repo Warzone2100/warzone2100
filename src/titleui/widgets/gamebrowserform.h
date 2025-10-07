@@ -31,4 +31,6 @@
 
 std::shared_ptr<WIDGET> makeLobbyBrowser(const std::function<void()>& onBackButtonFunc);
 
+bool refreshLobbyBrowser(const std::shared_ptr<WIDGET>& lobbyBrowserWidg);
+
 void shutdownLobbyBrowserFetches();
