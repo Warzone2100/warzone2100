@@ -49,6 +49,7 @@ void WzGameBrowserTitleUI::start()
 {
 	if (bAlreadyStarted)
 	{
+		refreshLobbyBrowser(gameBrowserForm);
 		return;
 	}
 

@@ -737,6 +737,8 @@ public:
 	}
 	virtual ~LobbyBrowser();
 
+	void triggerRefresh();
+
 protected:
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
@@ -880,6 +882,11 @@ static WZ_THREAD* NETcreateFindGamesAsyncThread(size_t startingIndex, size_t res
 
 	auto thread = wzThreadCreate(fetchLobbyListingThreadFunc, params, "wzFetchLobbyGameList");
 	return thread;
+}
+
+void LobbyBrowser::triggerRefresh()
+{
+	triggerAsyncGameListFetch();
 }
 
 void LobbyBrowser::triggerAsyncGameListFetch()
@@ -1438,6 +1445,14 @@ void LobbyBrowser::displayFiltersOverlay(const std::shared_ptr<WIDGET>& psParent
 std::shared_ptr<WIDGET> makeLobbyBrowser(const std::function<void()>& onBackButtonFunc)
 {
 	return LobbyBrowser::make(onBackButtonFunc);
+}
+
+bool refreshLobbyBrowser(const std::shared_ptr<WIDGET>& lobbyBrowserWidg)
+{
+	auto lobbyBrowser = std::dynamic_pointer_cast<LobbyBrowser>(lobbyBrowserWidg);
+	ASSERT_OR_RETURN(false, lobbyBrowser != nullptr, "Not a LobbyBrowser");
+	lobbyBrowser->triggerRefresh();
+	return true;
 }
 
 // Needed because of current lobby server (which uses TCP connections / connection provider)
