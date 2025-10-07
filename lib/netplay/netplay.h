@@ -485,6 +485,7 @@ void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
 void NETSendAllPlayerInfoTo(unsigned to);
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
+bool NETisGreaterVersion(uint32_t game_version_major, uint32_t game_version_minor);
 uint32_t NETGetMajorVersion();
 uint32_t NETGetMinorVersion();
 void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams = false, bool initSpectator = false);
