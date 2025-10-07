@@ -6374,7 +6374,7 @@ void handleAutoReadyRequest()
 		return; // no-op for host (currently)
 	}
 
-	if (multiplayIsStartingGame() || (GetGameMode() == GS_NORMAL))
+	if (GetGameMode() == GS_NORMAL)
 	{
 		return; // don't bother sending anything - the game is starting / started...
 	}
