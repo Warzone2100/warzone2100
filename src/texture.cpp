@@ -147,7 +147,7 @@ bool texLoad(const char *fileName)
 
 	/* Get and set radar colours */
 
-	sprintf(fullPath, "%s.radar", fileName);
+	ssprintf(fullPath, "%s.radar", fileName);
 	if (!loadFile(fullPath, &buffer, &size))
 	{
 		debug(LOG_FATAL, "texLoad: Could not find radar colours at %s", fullPath);
@@ -192,7 +192,7 @@ bool texLoad(const char *fileName)
 		while (xLimit > (xSize *= 2)) {}
 		while (yLimit > (ySize *= 2)) {}
 
-		sprintf(partialPath, "%s-%d", fileName, maxTileTexSize);
+		ssprintf(partialPath, "%s-%d", fileName, maxTileTexSize);
 
 		bool has_nm = false, has_sm = false, has_hm = false;
 		bool has_auxillary_texture_info = false;
