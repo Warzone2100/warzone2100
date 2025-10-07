@@ -177,7 +177,7 @@ static bool upnp_remove_redirect(int mappingId, const DiscoveryResults& discover
 	ssprintf(buf, "upnp_remove_redirect(%" PRIu16 ")", port);
 	MiniupnpcLogCallback(LOG_NET, buf);
 
-	sprintf(port_str, "%" PRIu16, port);
+	ssprintf(port_str, "%" PRIu16, port);
 	auto result = UPNP_DeletePortMapping(discovery.urls.controlURL, discovery.data.first.servicetype, port_str, "TCP", nullptr);
 	if (result != 0)
 	{
@@ -203,7 +203,7 @@ static upnp_map_output upnp_add_redirect(int mappingId, const DiscoveryResults& 
 
 	ssprintf(buf, "upnp_add_redirect(%" PRIu16 ")", port);
 	MiniupnpcLogCallback(LOG_NET, buf);
-	sprintf(port_str, "%" PRIu16, port);
+	ssprintf(port_str, "%" PRIu16, port);
 	r = UPNP_AddPortMapping(discovery.urls.controlURL, discovery.data.first.servicetype,
 							port_str, port_str, discovery.lanaddr, "Warzone 2100", "TCP", nullptr, "0");	// "0" = lease time unlimited
 	if (r != UPNPCOMMAND_SUCCESS)
