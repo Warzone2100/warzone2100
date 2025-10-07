@@ -250,6 +250,8 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent, LOBBY_ERROR_TYPES err
 
 static void sendRoomChatMessage(char const *text, bool skipLocalDisplay = false);
 
+static bool multiplayLacksEnoughPlayersToAutostart();
+
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -6897,32 +6899,18 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 			// If hosting and game not yet started, try to start the game if everyone is ready.
 			if (NetPlay.isHost && multiplayPlayersReady())
 			{
-				bool allowStart = true;
-				int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
-				if (minAutoStartPlayerCount > 0)
-				{
-					int playersPresent = 0;
-					for (int j = 0; j < MAX_PLAYERS; j++)
-					{
-						if (!NetPlay.players[j].allocated)
-						{
-							continue;
-						}
-						playersPresent++;
-					}
-					if (playersPresent < minAutoStartPlayerCount)
-					{
-						allowStart = false;
-					}
-				}
-				if (allowStart)
+				if (!multiplayLacksEnoughPlayersToAutostart())
 				{
 					startMultiplayerGame();
 				}
 				else
 				{
-					std::string msg = astringf("Game will not start until there are %d players.", minAutoStartPlayerCount);
-					sendRoomSystemMessage(msg.c_str());
+					int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
+					if (minAutoStartPlayerCount > 0)
+					{
+						std::string msg = astringf("Game will not start until there are %d players.", minAutoStartPlayerCount);
+						sendRoomSystemMessage(msg.c_str());
+					}
 				}
 			}
 			break;
@@ -8135,6 +8123,35 @@ bool multiplayPlayersShouldCheckReady()
 	return isBlindSimpleLobby(game.blindMode) || !multiplayHasOpenPlayerSlot();
 }
 
+static bool multiplayLacksEnoughPlayersToAutostart()
+{
+	if (!NetPlay.isHost)
+	{
+		// host does not share min autostart player count with clients,
+		// so just assume it's disabled (and host will start/autostart when appropriate)
+		return false;
+	}
+	bool allowStart = true;
+	int minAutoStartPlayerCount = getBoundedMinAutostartPlayerCount();
+	if (minAutoStartPlayerCount > 0)
+	{
+		int playersPresent = 0;
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			if (!NetPlay.players[j].allocated)
+			{
+				continue;
+			}
+			playersPresent++;
+		}
+		if (playersPresent < minAutoStartPlayerCount)
+		{
+			allowStart = false;
+		}
+	}
+	return !allowStart;
+}
+
 /* Returns true if the multiplayer game can start (i.e. all players are ready) */
 bool multiplayPlayersReady()
 {
@@ -8166,7 +8183,7 @@ bool multiplayPlayersReady()
 
 bool multiplayIsStartingGame()
 {
-	return bInActualHostedLobby && multiplayPlayersReady();
+	return bInActualHostedLobby && multiplayPlayersReady() && !multiplayLacksEnoughPlayersToAutostart();
 }
 
 void sendRoomSystemMessage(char const *text)
