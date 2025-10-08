@@ -12,7 +12,9 @@
 		"Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged).",
 		"",
 		"The experience points of the recycled unit will be transferred to the next unit that is manufactured.",
-		"",
+		""
+		"When multiple experienced units are recycled, the highest amount of experience points is transferred first.",
+		""
 		"You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 	],
 	"links": [
