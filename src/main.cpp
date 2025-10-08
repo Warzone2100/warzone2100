@@ -1856,6 +1856,7 @@ int realmain(int argc, char *argv[])
 	make_dir(MultiPlayersPath, "multiplay", "players"); // player profiles
 
 	PHYSFS_mkdir("music");	// custom music overriding default music and music mods
+	PHYSFS_mkdir("music/albums");	// where custom music albums will go
 
 	make_dir(SaveGamePath, "savegames", nullptr); 	// save games
 	PHYSFS_mkdir(SAVEGAME_CAM);		// campaign save games
