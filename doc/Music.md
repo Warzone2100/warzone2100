@@ -8,7 +8,7 @@
 
 ## 2. Create an album to hold your music
 
-1.  Create a folder called **albums**
+1.  If it does not exist yet, create a folder called **albums**
 2.  Inside, create another folder called **My Album**
 3.  Add your song(s) in `.ogg` or `.opus` format
 4.  Add an album cover image and name it `albumcover.png`
