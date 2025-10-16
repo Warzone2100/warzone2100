@@ -451,8 +451,8 @@ function findUndefendedObjectLoc(whatToScan, defenses, objectLimit, tower)
 
 function derrickDefense()
 {
-	const BEST = bestStructureIn(STANDARD_INCENDIARIES);
 	let success = false;
+	const BEST = bestStructureIn(STANDARD_INCENDIARIES);
 	const loc = findUndefendedObjectLoc(BASE_STRUCTURES.sensors, STANDARD_INCENDIARIES, 3, false);
 
 	if (defined(loc) && defined(BEST) && grabTrucksAndBuild(BEST, loc, 6, 4, groups.oilBuilders))
@@ -465,8 +465,8 @@ function derrickDefense()
 
 function sensorBuild()
 {
-	const BEST = bestStructureIn(BASE_STRUCTURES.sensors);
 	let success = false;
+	const BEST = bestStructureIn(BASE_STRUCTURES.sensors);
 	const loc = findUndefendedObjectLoc(BASE_STRUCTURES.derricks, BASE_STRUCTURES.sensors, Infinity, true);
 
 	if (defined(loc) && defined(BEST) && grabTrucksAndBuild(BEST, loc, 6, 4, groups.oilBuilders))
@@ -570,8 +570,8 @@ function personalityBuildOrder()
 			break;
 		}
 
-		const obj = nexusBranch[branch].buildOrder[i];
 		let count;
+		const obj = nexusBranch[branch].buildOrder[i];
 
 		switch (obj.stat)
 		{
@@ -618,8 +618,8 @@ function personalityBuildOrder()
 
 function buildMaxsBasedOnDerricks()
 {
-	const DERRICK_COUNT = countStruct(BASE_STRUCTURES.derricks, me);
 	let amount;
+	const DERRICK_COUNT = countStruct(BASE_STRUCTURES.derricks, me);
 
 	if (DERRICK_COUNT <= 8)
 	{
@@ -806,10 +806,10 @@ function numBuildSameBuilding(x, y)
 
 function finishStructs()
 {
-	const MAX_REBUILD_DIST = 30; //was 20
 	let success = false;
-	const trucks = enumGroup(groups.baseBuilders);
+	const MAX_REBUILD_DIST = 30; //was 20
 	const structures = enumStruct(me);
+	const trucks = enumGroup(groups.baseBuilders);
 
 	for (let i = 0, len = trucks.length; i < len; ++i)
 	{
@@ -929,6 +929,7 @@ function bestStructureIn(array)
 //Picks gates that are of a certain length, relatively empty, and none of its tile reside on water or cliff tiles.
 function findSafeGateTile(gate)
 {
+	let verticalCheck = false;
 	const MIN_GATE_SPACE = 2;
 	const GATE_MIDDLE = {
 		x1: Math.floor((gate.x1 + gate.x2) / 2),
@@ -936,7 +937,6 @@ function findSafeGateTile(gate)
 		x2: Math.ceil((gate.x1 + gate.x2) / 2),
 		y2: Math.ceil((gate.y1 + gate.y2) / 2),
 	};
-	let verticalCheck = false;
 
 	if (gate.x1 === gate.x2)
 	{

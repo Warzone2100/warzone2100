@@ -77,9 +77,9 @@ function produceConstructors()
 		truckLimit = CONSTRUCT_LIMIT;
 	}
 
-	let totalTrucks = getVirtualSystemCount().constructs + enumDroid(me, DROID_CONSTRUCT).length;
-	let occupiedFactories = 0;
 	let success = false;
+	let occupiedFactories = 0;
+	let totalTrucks = getVirtualSystemCount().constructs + enumDroid(me, DROID_CONSTRUCT).length;
 	const factories = enumStruct(me, BASE_STRUCTURES.factories);
 	const cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
@@ -103,6 +103,7 @@ function produceConstructors()
 					success = true;
 					occupiedFactories += 1;
 					totalTrucks += 1;
+
 					break;
 				}
 			}
@@ -129,6 +130,7 @@ function produceConstructors()
 				{
 					success = true;
 					totalTrucks += 1;
+
 					break;
 				}
 			}

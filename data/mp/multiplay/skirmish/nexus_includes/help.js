@@ -113,6 +113,7 @@ function attemptToHelp(player, x, y)
 		{
 			chat(ALL_PLAYERS, CHAT_RESPONSE.noHelp);
 		}
+
 		helpPlayer(player, x, y);
 	}
 	else if (defined(helpInfo.lastHelpPlayer))
