@@ -102,6 +102,7 @@ function buildAttacker(struct)
 			}
 		}
 	}
+
 	return buildDroid(struct, "Ranged Attacker", TANK_BODY_LIST, prop, "", "", weaponChoice, secondary);
 }
 
@@ -117,6 +118,7 @@ function buildCyborg(struct)
 	{
 		return buildDroid(struct, "Cyborg Flamer", "CyborgLightBody", "CyborgLegs", "", "", CYBORG_FLAMERS);
 	}
+
 	return buildDroid(struct, "Cyborg Rocket", "CyborgHeavyBody", "CyborgLegs", "", "", CYBORG_ROCKETS);
 }
 
@@ -126,6 +128,7 @@ function buildVTOL(struct)
 	const EMP_CHANCE = 20;
 
 	var weaponChoice = (random(100) < WEAPON_CHANCE) ? BOMB_LIST : VTOL_ROCKETS;
+
 	if (random(100) < EMP_CHANCE && componentAvailable("Bomb6-VTOL-EMP"))
 	{
 		weaponChoice = "Bomb6-VTOL-EMP";
@@ -154,6 +157,7 @@ function produceAndResearch()
 	for (i = 0, l = facsVirtual.length; i < l; ++i)
 	{
 		var virDroid = getDroidProduction(facsVirtual[i]);
+
 		if (virDroid !== null)
 		{
 			if (virDroid.droidType === DROID_CONSTRUCT)
@@ -166,13 +170,16 @@ function produceAndResearch()
 	for (i = 0; i < 3; ++i)
 	{
 		var facs = enumStruct(me, FAC_LIST[i]);
+
 		if (FAC_LIST[i] === CYBORG_FACTORY_STAT && isSeaMap === true)
 		{
 			continue;
 		}
+
 		for (x = 0, l = facs.length; x < l; ++x)
 		{
 			var fc = facs[x];
+
 			if (structureIdle(fc))
 			{
 				if (FAC_LIST[i] === FACTORY_STAT)
