@@ -3,12 +3,14 @@
 function vtolReady(vtolID)
 {
 	var vtol = getObject(DROID, me, vtolID);
+
 	if (vtol === null)
 	{
 		return false;
 	}
 
 	var armedVal = Math.floor(vtol.weapons[0].armed);
+
 	if (vtol.order === DORDER_REARM && armedVal < 100)
 	{
 		return false;
@@ -27,10 +29,12 @@ function vtolReady(vtolID)
 function droidNeedsRepair(droidID, percent)
 {
 	var dr = getObject(DROID, me, droidID);
+
 	if (dr === null)
 	{
 		return true; //lets say it is busy then
 	}
+
 	if (!defined(percent))
 	{
 		if (dr.propulsion === "hover01")
@@ -77,6 +81,7 @@ function getAliveEnemyPlayers(player)
 	}
 
 	var numEnemies = [];
+
 	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i !== me && !allianceExistsBetween(i, me))
@@ -170,6 +175,7 @@ function getCurrentEnemy()
 	if (!defined(currentEnemy) || (gameTime > (currentEnemyTick + 120000)))
 	{
 		var enemies = getAliveEnemyPlayers();
+
 		if (enemies.length === 0)
 		{
 			return undefined; //no more enemy players are alive.
@@ -195,20 +201,24 @@ function attackEnemy()
 		// Attack! Find a random enemy, since that is more fun.
 
 		var selectedEnemy = getCurrentEnemy();
+
 		if (!defined(selectedEnemy))
 		{
 			return; //No enemy players remain
 		}
 
 		var targetID = findNearestDerrickID(selectedEnemy);
+
 		if (!targetID)
 		{
 			targetID = findNearestFactoryID(selectedEnemy);
+
 			if (!targetID)
 			{
 				var droids = enumDroid(selectedEnemy);
 				isDroid = true;
 				targetID = findNearestConstructID(selectedEnemy);
+
 				if (!targetID && droids.length > 0)
 				{
 					//Now just start picking off any droids that remain.
@@ -219,6 +229,7 @@ function attackEnemy()
 
 		var loc;
 		var realObject;
+
 		if (targetID)
 		{
 			if (!isDroid)
@@ -248,6 +259,7 @@ function attackEnemy()
 		for (j = 0; j < len; ++j)
 		{
 			var tank = attackers[j];
+
 			if (tank.order !== DORDER_RECYCLE && !droidNeedsRepair(tank.id) && random(100) < 50)
 			{
 				orderDroidLoc(tank, DORDER_MOVE, loc.x, loc.y);
@@ -257,11 +269,13 @@ function attackEnemy()
 		//Only send VTOLs if we got a few of them
 		var vtols = enumGroup(vtolGroup);
 		len = vtols.length;
+
 		if (len > MIN_VTOL_SIZE)
 		{
 			for (j = 0; j < len; ++j)
 			{
 				var vt = vtols[j];
+
 				if (vtolReady(vt.id))
 				{
 					orderDroidLoc(vt, DORDER_SCOUT, loc.x, loc.y);
@@ -282,6 +296,7 @@ function attackEnemy()
 			for (j = 0; j < len; ++j)
 			{
 				var bust = busters[j];
+
 				if (bust.order !== DORDER_RECYCLE && !droidNeedsRepair(bust.id))
 				{
 					orderDroidObj(bust, DORDER_ATTACK, enemyStructs[0]);
@@ -302,10 +317,12 @@ function isHoverMap()
 		{
 			//Check if hover can not reach this area.
 			var temp = 0;
+
 			for (let t = 0; t < maxPlayers; ++t)
 			{
 				var b1 = startPositions[i];
 				var b2 = startPositions[t];
+
 				if (!propulsionCanReach("hover01", b1.x, b1.y, b2.x, b2.y))
 				{
 					temp = temp + 1;
@@ -384,12 +401,14 @@ function scanForVTOLs()
 	}
 
 	var myEnemy = getCurrentEnemy();
+
 	if (!defined(myEnemy))
 	{
 		return;
 	}
 
 	var visibleEnemyDroids = enumDroid(myEnemy, DROID_WEAPON, true);
+
 	for (let i = 0, l = visibleEnemyDroids.length; i < l; ++i)
 	{
 		if (isVTOL(visibleEnemyDroids[i]))

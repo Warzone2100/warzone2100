@@ -96,10 +96,12 @@ const POWER_AND_RESEARCH_TECH = [
 function evalResearch(labID, list)
 {
 	var lab = getObject(STRUCTURE, me, labID);
+
 	if (lab === null)
 	{
 		return true;
 	}
+
 	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		if (!getResearch(list[i]).done && pursueResearch(lab, list[i]))
@@ -119,6 +121,7 @@ function lookForResearch(tech, labParam)
 	}
 
 	var labList;
+
 	if (labParam) // check if called with parameter or not
 	{
 		labList = [];
@@ -145,47 +148,57 @@ function lookForResearch(tech, labParam)
 		if (!found && getRealPower() > MIN_RESEARCH_POWER)
 		{
 			found = evalResearch(lab.id, START_COMPONENTS);
+
 			if (!found && random(3) === 0)
 			{
 				found = evalResearch(lab.id, POWER_AND_RESEARCH_TECH);
 			}
+
 			if (!found && enemyHasVtol)
 			{
 				//Push for anti-air tech if we discover the enemy has VTOLs
 				//The side effect is missile research will be prioritized
 				//much earlier. Probably not much of an issue.
 				found = evalResearch(lab.id, ANTI_AIR_TECH);
+
 				if (!found)
 				{
 					found = evalResearch(lab.id, MISSILE_TECH);
 				}
+
 				if (!found)
 				{
 					found = evalResearch(lab.id, VTOL_WEAPONRY);
 				}
 			}
+
 			//If they have vtols then push rocket tech later (for bunker buster at that point).
 			if (!found && !enemyHasVtol && random(2) === 0)
 			{
 				found = evalResearch(lab.id, ROCKET_TECH);
 			}
+
 			if (!isSeaMap && countStruct(CYBORG_FACTORY_STAT) > 0 && random(2) === 0 && !found)
 			{
 				found = evalResearch(lab.id, FLAMER_TECH);
 			}
+
 			if (!found && random(3) === 0)
 			{
 				found = evalResearch(lab.id, STRUCTURE_DEFENSE_UPGRADES);
 			}
+
 			if (!found)
 			{
 				found = evalResearch(lab.id, FUNDAMENTALS2);
 			}
+
 			if (!found && random(2) === 0)
 			{
 				if (!isSeaMap)
 				{
 					found = evalResearch(lab.id, KINETIC_ALLOYS);
+
 					if (!found && random(2) === 0)
 					{
 						found = evalResearch(lab.id, THERMAL_ALLOYS);
@@ -194,18 +207,21 @@ function lookForResearch(tech, labParam)
 				else
 				{
 					found = pursueResearch(lab, "R-Vehicle-Metals09");
+
 					if (!found && random(2) === 0)
 					{
 						found = pursueResearch(lab, "R-Vehicle-Armor-Heat09");
 					}
 				}
 			}
+
 			if (!enemyHasVtol)
 			{
 				if (!found)
 				{
 					found = evalResearch(lab.id, MISSILE_TECH);
 				}
+
 				if (!found)
 				{
 					found = evalResearch(lab.id, VTOL_WEAPONRY);
@@ -218,6 +234,7 @@ function lookForResearch(tech, labParam)
 					found = evalResearch(lab.id, ROCKET_TECH);
 				}
 			}
+
 			if (!found)
 			{
 				found = evalResearch(lab.id, LATE_GAME_TECH);
@@ -228,9 +245,11 @@ function lookForResearch(tech, labParam)
 				// Find a random research item
 				var reslist = enumResearch();
 				var len = reslist.length;
+
 				if (len > 0)
 				{
 					var idx = Math.floor(Math.random() * len);
+
 					pursueResearch(lab, reslist[idx].name);
 				}
 			}
