@@ -69,8 +69,6 @@ function tryChangingVtolGroupTarget(groupIdx)
 {
 	let newTargetWeight;
 	let currentTarget = targetInfo.vtolGroupWhat[groupIdx];
-
-
 	let newTarget = chooseVtolTarget(true);
 
 	//reset the target once in a while.
@@ -142,6 +140,7 @@ function vtolAttack()
 	{
 		const currGroup = groups.vtolAttackers[i];
 		const AMT_ATTACKERS = enumGroup(currGroup).length;
+
 		if (AMT_ATTACKERS === 0)
 		{
 			continue;
@@ -287,6 +286,7 @@ function getVtolTargetWeight(what)
 		if (target.stattype === type.structure)
 		{
 			targetWeight = (type.weight - (numEnemyAAInRange(target.x, target.y, SCAN_RANGE_FOR_AA) * penalty));
+
 			break;
 		}
 	}

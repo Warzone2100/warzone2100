@@ -186,14 +186,17 @@ function baseDetails(player)
 			{
 				tmpBase.x1 = struct.x;
 			}
+
 			if (struct.x > tmpBase.x2)
 			{
 				tmpBase.x2 = struct.x;
 			}
+
 			if (struct.y < tmpBase.y1)
 			{
 				tmpBase.y1 = struct.y;
 			}
+
 			if (struct.y > tmpBase.y2)
 			{
 				tmpBase.y2 = struct.y;
@@ -656,6 +659,7 @@ function initPersonalityData(personality)
 	for (let i = 0, len = trucks.length; i < len; ++i)
 	{
 		const droid = trucks[i];
+
 		groupAdd(groups.baseBuilders, droid);
 	}
 
