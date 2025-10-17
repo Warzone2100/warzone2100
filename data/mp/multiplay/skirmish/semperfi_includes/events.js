@@ -42,7 +42,7 @@ function eventAttacked(victim, attacker)
 		//Flee if we are outnumbered to an extent
 		if (victim.type === DROID && victim.player === me)
 		{
-			var seenEnemyGroupSize = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ENEMIES, false).length;
+			const seenEnemyGroupSize = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ENEMIES, false).length;
 
 			if (isVTOL(victim))
 			{
@@ -57,7 +57,7 @@ function eventAttacked(victim, attacker)
 			}
 		}
 
-		var enemyNumber = getCurrentEnemy();
+		const enemyNumber = getCurrentEnemy();
 
 		if (!defined(enemyNumber))
 		{
@@ -84,15 +84,15 @@ function eventAttacked(victim, attacker)
 		}
 
 		//log("Defend!");
-		var loc = {x: attacker.x, y: attacker.y };
-		var defenders = enumGroup(attackGroup);
-		var defLen = defenders.length;
+		const loc = {x: attacker.x, y: attacker.y };
+		const defenders = enumGroup(attackGroup);
+		const defLen = defenders.length;
 
 		if (defLen > MIN_GROUND_UNITS)
 		{
 			for (let i = 0; i < defLen; ++i)
 			{
-				var dr = defenders[i];
+				const dr = defenders[i];
 
 				if (dr.order !== DORDER_RECYCLE && !droidNeedsRepair(dr.id) && dr.id !== victim.id)
 				{
@@ -101,14 +101,14 @@ function eventAttacked(victim, attacker)
 			}
 		}
 
-		var vtols = enumGroup(vtolGroup);
-		var vtolLen = vtols.length;
+		const vtols = enumGroup(vtolGroup);
+		const vtolLen = vtols.length;
 
 		if (vtolLen > MIN_VTOL_UNITS)
 		{
 			for (let j = 0; j < vtolLen; ++j)
 			{
-				var vt = vtols[j];
+				const vt = vtols[j];
 
 				if (vtolReady(vt.id))
 				{
@@ -157,7 +157,7 @@ function eventStartLevel()
 function eventStructureBuilt(structure, droid)
 {
 	//don't go crazy defending stuff we just built relavtively close to the base.
-	var dist = distBetweenTwoPoints(BASE.x, BASE.y, structure.x, structure.y);
+	const dist = distBetweenTwoPoints(BASE.x, BASE.y, structure.x, structure.y);
 
 	if (!droid || dist <= AVG_BASE_RADIUS)
 	{
@@ -172,7 +172,7 @@ function eventDroidIdle(droid)
 	if (droid.droidType === DROID_CONSTRUCT)
 	{
 		const ENEMY_DERRICK_SCAN_RANGE = 4;
-		var enemyDerrs = enumRange(droid.x, droid.y, ENEMY_DERRICK_SCAN_RANGE, ENEMIES, false).filter(isDerrick);
+		const enemyDerrs = enumRange(droid.x, droid.y, ENEMY_DERRICK_SCAN_RANGE, ENEMIES, false).filter(isDerrick);
 
 		//most likely an enemy truck got the oil before us, so try to build a defense near it.
 		if (enemyDerrs.length > 0)
@@ -189,13 +189,13 @@ function eventBeacon(x, y, from, to, message)
 	{
 		//log(from + " sent a beacon. Location [" + x + ", " + y + "]");
 		const BEACON_SCAN_RADIUS = 4;
-		var enemyObjects = enumRange(x, y, BEACON_SCAN_RADIUS, ENEMIES, false);
+		const enemyObjects = enumRange(x, y, BEACON_SCAN_RADIUS, ENEMIES, false);
 
 		if (enemyObjects.length > 0)
 		{
 			for (let i = 0, l = enemyObjects.length; i < l; ++i)
 			{
-				var obj = enemyObjects[i];
+				const obj = enemyObjects[i];
 
 				if (obj)
 				{
