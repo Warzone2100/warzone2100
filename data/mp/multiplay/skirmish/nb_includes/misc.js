@@ -5,7 +5,7 @@
  */
 
 const gateways = enumGateways();
-var baseLocation = startPositions[me];
+const baseLocation = startPositions[me];
 
 function distanceToBase(loc)
 {
@@ -44,7 +44,7 @@ function enumLivingPlayers()
 {
 	function uncached()
 	{
-		var ret = [];
+		const ret = [];
 
 		for (let i = 0; i < maxPlayers; ++i)
 		{

@@ -10,11 +10,11 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-var prefix = '!nb';
+const prefix = '!nb';
 
 // key: name in chat, value: function that will be executed
 // function gets two params: sender and argument
-var commandMap = {
+const commandMap = {
 	set: chatSet,
 	res: chatRes,
 	truck: chatTruck,
@@ -25,7 +25,7 @@ var commandMap = {
 	tx: chatUnhelp,
 };
 
-var beaconInfo = [];
+const beaconInfo = [];
 
 _global.noticeBeacon = function(x, y, from) {
 	beaconInfo[from] = {
@@ -68,15 +68,15 @@ _global.handleChatMessage = function(sender, receiver, message) {
 		return;
 	}
 
-	var result = message.split(/ +/);
+	const result = message.split(/ +/);
 
 	if (result[0] !== prefix)
 	{
 		return;
 	}
 
-	var command = result[1];
-	var argument = result[2];
+	const command = result[1];
+	const argument = result[2];
 
 	if (defined(commandMap[command]))
 	{
@@ -86,7 +86,7 @@ _global.handleChatMessage = function(sender, receiver, message) {
 
 function chatWho(sender, argument)
 {
-	var str = "NullBot3 (" + scriptName + ") ";
+	let str = "NullBot3 (" + scriptName + ") ";
 
 	switch (difficulty)
 	{
@@ -105,7 +105,7 @@ function chatWho(sender, argument)
 }
 
 function chatSet(sender, argument) {
-	var str = "";
+	let str = "";
 
 	for (const i in subpersonalities)
 	{
@@ -141,7 +141,7 @@ function chatRes(sender, argument)
 		return _("Researching fundamental technology.");
 	}
 
-	var str = " cl no fn";
+	let str = " cl no fn";
 
 	for (const i in weaponStats)
 	{
@@ -162,7 +162,7 @@ function chatRes(sender, argument)
 
 function chatTruck(sender, argument)
 {
-	var droid = enumTrucks().random();
+	const droid = enumTrucks().random();
 
 	if (!defined(droid))
 	{
@@ -180,7 +180,7 @@ function chatTruck(sender, argument)
 
 function chatMoney(sender, argument)
 {
-	var power = Math.round(myPower() / 3);
+	const power = Math.round(myPower() / 3);
 
 	donatePower(power, sender);
 

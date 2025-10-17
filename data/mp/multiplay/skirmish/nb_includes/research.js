@@ -14,7 +14,7 @@ _global.setForcedResearch = function(list) {
 };
 
 _global.needFastestResearch = function() {
-	var ret = scopeRatings();
+	const ret = scopeRatings();
 
 	if (ret.land === 0 && ret.sea === 0 && !iHaveVtol())
 	{
@@ -45,7 +45,7 @@ function doResearch(lab)
 	}
 
 	// if we need to quickly get a certain propulsion to reach the enemy, prioritize that.
-	var fastest = needFastestResearch();
+	const fastest = needFastestResearch();
 
 	if (fastest === PROPULSIONUSAGE.VTOL)
 	{
@@ -80,11 +80,11 @@ function doResearch(lab)
 	}
 
 	// then, see if we want to research some weapons
-	var objType = chooseObjectType();
+	const objType = chooseObjectType();
 
 	if (withChance(70)) // TODO: make a more thoughtful decision here
 	{
-		var list = weaponStatsToResList(chooseAvailableWeaponPathByRoleRatings(personality.weaponPaths, chooseWeaponRole()), objType);
+		const list = weaponStatsToResList(chooseAvailableWeaponPathByRoleRatings(personality.weaponPaths, chooseWeaponRole()), objType);
 
 		if (pursueResearch(lab, list))
 		{

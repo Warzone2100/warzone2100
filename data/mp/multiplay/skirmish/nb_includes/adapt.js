@@ -8,6 +8,19 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+var enemyStats = [];
+var enemyStatsTemp = [];
+var myStats = new MyStat();
+var myStatsTemp = new MyStat();
+var stack = [];
+const MAX_PER_CYCLE = 20;
+
+for (let i = 0; i < maxPlayers; ++i)
+{
+	enemyStats[i] = new EnemyStat();
+	enemyStatsTemp[i] = new EnemyStat();
+}
+
 function adaptVote(our, their, verbose)
 {
 	if (!defined(verbose))
@@ -15,16 +28,16 @@ function adaptVote(our, their, verbose)
 		verbose = false;
 	}
 
-	var l = our.length;
-	var ourTotal = our.reduce((prev, curr) => (prev + curr));
-	var theirTotal = their.reduce((prev, curr) => (prev + curr));
+	let l = our.length;
+	let ourTotal = our.reduce((prev, curr) => (prev + curr));
+	let theirTotal = their.reduce((prev, curr) => (prev + curr));
 
 	if (theirTotal === 0)
 	{
 		return verbose ? randomUnitArray(l) : random(l);
 	}
 
-	var rating = [];
+	const rating = [];
 
 	for (let i = 0; i < l; ++i)
 	{
@@ -44,8 +57,8 @@ function adaptVote(our, their, verbose)
 		return rating.map((val) => ((val + 1) / 2));
 	}
 
-	var maxRating = -Infinity;
-	var maxIdx = 0;
+	let maxRating = -Infinity;
+	let maxIdx = 0;
 
 	for (let i = 0; i < l; ++i)
 	{
@@ -114,7 +127,7 @@ function ScopeStat()
 	this.air = new SimpleStat();
 	// a function to convert this sort of stat to a SimpleStat
 	this.collapse = function() {
-		var ret = new SimpleStat();
+		const ret = new SimpleStat();
 
 		for (const i in SCOPES)
 		{
@@ -132,7 +145,7 @@ function EnemyStat()
 	this.offense = new SimpleStat();
 	// a function to convert this sort of stat to a SimpleStat
 	this.collapse = function() {
-		var ret = new SimpleStat();
+		const ret = new SimpleStat();
 
 		addStat(ret, this.defense.collapse());
 		addStat(ret, this.offense);
@@ -148,7 +161,7 @@ function MyStat()
 	this.offense = new ScopeStat();
 	// a function to convert this sort of stat to a SimpleStat
 	this.collapse = function() {
-		var ret = new SimpleStat();
+		const ret = new SimpleStat();
 
 		addStat(ret, this.defense);
 		addStat(ret, this.offense.collapse());
@@ -156,21 +169,6 @@ function MyStat()
 		return ret;
 	};
 }
-
-var enemyStats = [];
-var enemyStatsTemp = [];
-
-for (let i = 0; i < maxPlayers; ++i)
-{
-	enemyStats[i] = new EnemyStat();
-	enemyStatsTemp[i] = new EnemyStat();
-}
-
-var myStats = new MyStat();
-var myStatsTemp = new MyStat();
-
-var stack = [];
-var MAX_PER_CYCLE = 20;
 
 function canReachBy(scope, location)
 {
@@ -201,14 +199,14 @@ function countLandTargets(player)
 {
 	function uncached()
 	{
-		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND).last();
+		const currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND).last();
 
 		if (!defined(currProp))
 		{
 			return 0;
 		}
 
-		var list = enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT));
+		const list = enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT));
 
 		return list.filter((obj) => (canReachFromBase(currProp, obj))).length;
 	}
@@ -221,14 +219,14 @@ function countSeaTargets(player)
 {
 	function uncached()
 	{
-		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.HOVER)[0];
+		const currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.HOVER)[0];
 
 		if (!defined(currProp))
 		{
 			return 0;
 		}
 
-		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
+		const prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
 
 		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => (
 			(!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj)
@@ -243,14 +241,14 @@ function countAirTargets(player)
 {
 	function uncached()
 	{
-		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.VTOL)[0];
+		const currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.VTOL)[0];
 
 		if (!defined(currProp))
 		{
 			return 0;
 		}
 
-		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER)[0];
+		const prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER)[0];
 
 		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter((obj) => (
 			(!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj)
@@ -264,7 +262,7 @@ function countAirTargets(player)
 // become available for the API to use.
 function classifyObject(obj)
 {
-	var ret = new SimpleStat();
+	const ret = new SimpleStat();
 
 	if (obj.type === STRUCTURE && obj.stattype !== DEFENSE)
 	{
@@ -283,7 +281,7 @@ function classifyObject(obj)
 
 	for (let i = 0; i < obj.weapons.length; ++i)
 	{
-		var roles = guessWeaponRole(obj.weapons[i].name);
+		const roles = guessWeaponRole(obj.weapons[i].name);
 
 		if (!defined(roles))
 		{
@@ -368,8 +366,8 @@ function classifyObject(obj)
 
 function summUpEnemyObject(obj, stat)
 {
-	var ret = classifyObject(obj);
-	var w = obj.cost;
+	const ret = classifyObject(obj);
+	const w = obj.cost;
 
 	if (obj.type === STRUCTURE)
 	{
@@ -406,8 +404,8 @@ function summUpEnemyObject(obj, stat)
 
 function summUpMyObject(obj, stat)
 {
-	var ret = classifyObject(obj);
-	var w = obj.cost;
+	const ret = classifyObject(obj);
+	const w = obj.cost;
 
 	if (obj.type === STRUCTURE)
 	{
@@ -429,7 +427,7 @@ function summUpMyObject(obj, stat)
 			addStat(stat.defense, ret, w);
 		}
 
-		var list = enumLivingPlayers();
+		const list = enumLivingPlayers();
 
 		list.forEach((p) => {
 			if (isEnemy(p))
@@ -466,7 +464,7 @@ _global.adaptCycle = function() {
 
 	if (stack.length > 0)
 	{
-		var items = MAX_PER_CYCLE;
+		let items = MAX_PER_CYCLE;
 
 		if (items > stack.length)
 		{
@@ -475,7 +473,7 @@ _global.adaptCycle = function() {
 
 		for (let i = 0; i < items; ++i)
 		{
-			var obj = stack.pop();
+			const obj = stack.pop();
 
 			if (isEnemy(adaptCycle.player))
 			{
@@ -531,7 +529,7 @@ _global.adaptCycle = function() {
 
 function getMyGroupInfo(gr)
 {
-	var ret = new MyStat();
+	const ret = new MyStat();
 
 	enumGroup(gr).forEach((obj) => { summUpMyObject(obj, ret); });
 
@@ -579,7 +577,7 @@ function groupAttackOurs(gr)
 
 function enemyOffense()
 {
-	var theirs = new SimpleStat();
+	const theirs = new SimpleStat();
 
 	enumLivingPlayers().filter(isEnemy).forEach((p) => {
 		addStat(theirs, enemyStats[p].offense);
@@ -605,7 +603,7 @@ function groupTheirs(gr)
 		}
 		else
 		{
-			var theirs = new SimpleStat();
+			const theirs = new SimpleStat();
 
 			enumLivingPlayers().filter(isEnemy).forEach((p) => {
 				addStat(theirs, enemyStats[p].collapse());
@@ -661,7 +659,7 @@ _global.chooseDefendWeaponRole = function() {
 _global.chooseBodyClass = function(gr) {
 	function uncached()
 	{
-		var our = groupAttackOurs(gr), their = groupTheirs(gr);
+		const our = groupAttackOurs(gr), their = groupTheirs(gr);
 
 		return adaptVote(
 			[ our.kbody, our.tbody ],
@@ -675,7 +673,7 @@ _global.chooseBodyClass = function(gr) {
 _global.chooseObjectType = function() {
 	function uncached()
 	{
-		var our = groupOurs(), their = groupTheirs();
+		const our = groupOurs(), their = groupTheirs();
 		// behaviour specific for a turtle AI
 		if (personality.defensiveness === 100)
 		{
@@ -720,7 +718,7 @@ _global.chooseObjectType = function() {
 _global.scopeRatings = function() {
 	function uncached()
 	{
-		var ret = { land: 0, sea: 0, air: 0 };
+		const ret = { land: 0, sea: 0, air: 0 };
 
 		enumLivingPlayers().filter(isEnemy).forEach((player) => {
 			ret.land += countLandTargets(player);
