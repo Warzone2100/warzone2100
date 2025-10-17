@@ -11,10 +11,12 @@ function callFuncWithArgs(func, parameters)
 function cacheThis(func, funcParameters, cachedItem, time)
 {
 	const REFRESH_TIME = isDefined(time) ? time : 15000;
+
 	if (!isDefined(cachedItem))
 	{
 		cachedItem = 0;
 	}
+
 	if (!isDefined(funcParameters))
 	{
 		funcParameters = [];
@@ -34,6 +36,7 @@ function cacheThis(func, funcParameters, cachedItem, time)
 	let t = debugGetCallerFuncObject().cachedTimes[cachedItem];
 	let obj = debugGetCallerFuncObject().cachedValues[cachedItem];
 	let def = isDefined(obj);
+
 	if (!def ||
 		(isDefined(obj.typeInfo) && (getObject(obj.typeInfo, obj.playerInfo, obj.idInfo) === null)) ||
 		((gameTime - t) >= REFRESH_TIME))

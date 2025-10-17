@@ -16,9 +16,11 @@ function updateResearchList(stat, len)
 	}
 
 	let list = [];
+
 	for (let x = 0, d = stat.length - len; x < d; ++x)
 	{
 		let st = stat[x];
+
 		if (isDefined(st.res))
 		{
 			list.push(st.res);
@@ -183,9 +185,11 @@ function atGenericDefensiveResearchLimit()
 	for (let i = 0, len = LIMIT_TESTS.length; i < len; ++i)
 	{
 		let test = LIMIT_TESTS[i];
+
 		if (getResearch(test, me).started)
 		{
 			++count;
+
 			if (count == LIMIT)
 			{
 				break;
@@ -217,6 +221,7 @@ function research()
 	{
 		antiCyborgChance = 35;
 	}
+
 	if (antiCyborgChance > 0 && antiCyborgChance < 10)
 	{
 		antiCyborgChance = 10; //just in case...
@@ -230,28 +235,46 @@ function research()
 		let found = false;
 
 		if (forceHover)
+		{
 			found = pursueResearch(lab, "R-Vehicle-Prop-Hover");
+		}
 		if (enemyUsedElectronicWarfare)
+		{
 			found = pursueResearch(lab, "R-Sys-Resistance-Circuits");
+		}
 
 		if (!found && highOil)
+		{
 			found = evalResearch(lab, MODULE_RESEARCH);
+		}
 		if (!found)
+		{
 			found = evalResearch(lab, MOST_ESSENTIAL);
+		}
 
 		if (!found)
+		{
 			found = evalResearch(lab, ESSENTIALS);
+		}
 		if (!found)
+		{
 			found = evalResearch(lab, techlist);
+		}
 		//Careful not to focus too much on these research topics since offensive capability can be harmed
 		if ((random(100) < ((haveAllies || highOil || (gameTime > 2400000)) ? 60 : 20)))
 		{
 			if (!found && getResearch("R-Struc-Research-Upgrade02").done)
+			{
 				found = pursueResearch(lab, "R-Vehicle-Body11");
+			}
 			if (!found && random(100) < ((highOil || haveAllies) ? 75 : 33))
+			{
 				found = evalResearch(lab, ESSENTIALS_2);
+			}
 			if (!found && random(100) < (getResearch("R-Struc-Research-Upgrade04").done ? 40 : 15))
+			{
 				found = evalResearch(lab, ESSENTIALS_3);
+			}
 		}
 
 		if (!found && (getRealPower() > (highOil ? HIGH_OIL_RES_PRICE : -SUPER_LOW_POWER)) && (countEnemyVTOL() || componentAvailable("V-Tol")))
@@ -265,9 +288,13 @@ function research()
 			if ((random(100) < 30) && countEnemyVTOL())
 			{
 				if (!found)
+				{
 					found = evalResearch(lab, antiAirTech);
+				}
 				if (!found)
+				{
 					found = evalResearch(lab, antiAirExtras);
+				}
 			}
 		}
 
@@ -278,30 +305,42 @@ function research()
 				found = (!cyborgOnlyGame && pursueResearch(lab, "R-Vehicle-Metals03"));
 
 				if (!found && !turnOffCyborgs && (countStruct(structures.cyborgFactory, me) || cyborgOnlyGame))
+				{
 					found = pursueResearch(lab, "R-Cyborg-Metals03");
+				}
 
 				if (!atGenericDefenseLimit && ((gameTime > timeToResearchAdvancedBody()) || cyborgOnlyGame || highOil))
 				{
 					if (random(100) < (subPersonalities[personality].alloyPriority + (highOil ? 20 : 0) + ((haveAllies && highOil) ? 30 : 0)))
 					{
 						if (!found && !cyborgOnlyGame && getResearch("R-Struc-Research-Upgrade03").done && random(100) < 40)
+						{
 							found = pursueResearch(lab, "R-Vehicle-Metals05");
+						}
 						if (!found && !turnOffCyborgs && countStruct(structures.cyborgFactory, me) && random(100) < (cyborgOnlyGame ? 75 : 50))
 						{
 							found = evalResearch(lab, CYBORG_ARMOR);
+
 							if (!found && random(100) < 15 && getResearch("R-Cyborg-Metals04").done)
+							{
 								found = evalResearch(lab, CYBORG_ARMOR_THERMAL);
+							}
 						}
 						if (!found && (!cyborgOnlyGame || (cyborgOnlyGame && random(100) < 20)))
 						{
 							found = evalResearch(lab, TANK_ARMOR);
+
 							if (!found && random(100) < 15 && getResearch("R-Vehicle-Metals04").done)
+							{
 								found = evalResearch(lab, TANK_ARMOR_THERMAL);
+							}
 						}
 					}
 
 					if (!found && getResearch("R-Struc-Research-Upgrade03").done && (random(100) < (componentAvailable("Body8MBT") ? 45 : 30)))
+					{
 						found = evalResearch(lab, BODY_RESEARCH);
+					}
 				}
 			}
 
@@ -310,14 +349,20 @@ function research()
 				found = pursueResearch(lab, extremeLaserTech);
 
 				if (!found && componentAvailable("PlasmaHeavy") && random(100) < 70)
+				{
 					found = evalResearch(lab, FLAMER);
+				}
 
 				if (componentAvailable("Laser4-PlasmaCannon"))
 				{
 					if (!found)
+					{
 						found = evalResearch(lab, empWeapons);
+					}
 					if (!found && random(100) < 80)
+					{
 						found = evalResearch(lab, extremeLaserExtra);
+					}
 				}
 			}
 
@@ -328,10 +373,15 @@ function research()
 				if (!highOil || haveAllies)
 				{
 					found = evalResearch(lab, standardDefenseTech);
+
 					if (!found && useArti)
+					{
 						found = evalResearch(lab, defenseTech);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, DEFENSE_UPGRADES);
+					}
 				}
 			}
 
@@ -340,9 +390,13 @@ function research()
 				if ((!turnOffMG || cyborgOnlyGame) && random(100) < antiCyborgChance)
 				{
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponTech);
+					}
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponExtra);
+					}
 					if (!found && useLasersForCyborgControl())
 					{
 						found = true;
@@ -351,64 +405,103 @@ function research()
 				}
 
 				if (!found && random(100) < 50)
+				{
 					found = evalResearch(lab, weaponTech);
+				}
 				if (!found && random(100) < 20 && personalityIsRocketMain())
+				{
 					found = pursueResearch(lab, "R-Wpn-Rocket03-HvAT");
+				}
 				if (!found && !turnOffCyborgs && random(100) < (cyborgOnlyGame ? 75 : 50))
+				{
 					found = evalResearch(lab, cyborgWeaps);
+				}
 
 				if (!found && useVtol && random(100) < 70)
 				{
 					// Basic VTOL pads tried after Python.
 					if (componentAvailable("Body11ABT") && random(100) < 70)
+					{
 						found = pursueResearch(lab, "R-Struc-VTOLPad-Upgrade01");
+					}
 					if (!found && componentAvailable("V-Tol") && random(100) < subPersonalities[personality].vtolPriority)
+					{
 						found = evalResearch(lab, VTOL_RES);
+					}
 				}
 
 				if (!found && random(100) < 33)
+				{
 					found = evalResearch(lab, extraTech);
+				}
 				if (!found && useArti && random(100) < 40)
+				{
 					found = evalResearch(lab, artillExtra);
+				}
 				if (!found && useArti && random(100) < (personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 30))
+				{
 					found = evalResearch(lab, artilleryTech);
+				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SYSTEM_UPGRADES);
+				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SENSOR_TECH);
+				}
 
 				let cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
 				let len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					{
 						found = pursueResearch(lab, cyborgSecondary);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponExtra);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponTech);
+					}
 				}
 			}
 			else if (subPersonalities[personality].resPath === "defensive")
 			{
 				if (!found && random(100) < (personalityIsRocketMain() ? 20 : 50) && useArti)
+				{
 					found = evalResearch(lab, artillExtra);
+				}
 				if (!found && random(100) < (personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 60 : 20) : 50) && useArti)
+				{
 					found = evalResearch(lab, artilleryTech);
+				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SYSTEM_UPGRADES);
+				}
 				if (!found)
+				{
 					found = evalResearch(lab, SENSOR_TECH);
+				}
 
 				if ((!turnOffMG || cyborgOnlyGame) && random(100) < antiCyborgChance)
 				{
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponTech);
+					}
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponExtra);
+					}
 					if (!found && useLasersForCyborgControl())
 					{
 						found = true;
@@ -420,30 +513,49 @@ function research()
 				{
 					// Basic VTOL pads tried after Python.
 					if (componentAvailable("Body11ABT"))
+					{
 						found = pursueResearch(lab, "R-Struc-VTOLPad-Upgrade01");
+					}
 					if (!found && componentAvailable("V-Tol") && random(100) < subPersonalities[personality].vtolPriority)
+					{
 						found = evalResearch(lab, VTOL_RES);
+					}
 				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, weaponTech);
+				}
 				if (!found && personalityIsRocketMain())
+				{
 					found = pursueResearch(lab, "R-Wpn-Rocket03-HvAT");
+				}
 				if (!found && !turnOffCyborgs)
+				{
 					found = evalResearch(lab, cyborgWeaps);
+				}
 				if (!found)
+				{
 					found = evalResearch(lab, extraTech);
+				}
 
 				let cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
 				let len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					{
 						found = pursueResearch(lab, cyborgSecondary);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponExtra);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponTech);
+					}
 				}
 			}
 			else if (subPersonalities[personality].resPath === "offensive")
@@ -451,9 +563,13 @@ function research()
 				if ((!turnOffMG || cyborgOnlyGame) && random(100) < antiCyborgChance)
 				{
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponTech);
+					}
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponExtra);
+					}
 					if (!found && useLasersForCyborgControl())
 					{
 						found = true;
@@ -462,66 +578,105 @@ function research()
 				}
 
 				if (!found && random(100) < 40)
+				{
 					found = evalResearch(lab, weaponTech);
+				}
 				if (!found && !turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && random(100) < (cyborgOnlyGame ? 75 : 30))
+				{
 					found = evalResearch(lab, cyborgWeaps);
+				}
 				if (!found && random(100) < 60)
+				{
 					found = evalResearch(lab, extraTech);
+				}
 
 				if (!found && random(100) < 10 && personalityIsRocketMain())
+				{
 					found = pursueResearch(lab, "R-Wpn-Rocket03-HvAT");
+				}
 				if (!found && useArti && random(100) < (personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 33 : 15) : 10))
+				{
 					found = evalResearch(lab, artilleryTech);
+				}
 
 				if (!found && useVtol && random(100) < 80)
 				{
 					// Basic VTOL pads tried after Python.
 					if (componentAvailable("Body11ABT") && random(100) < 80)
+					{
 						found = pursueResearch(lab, "R-Struc-VTOLPad-Upgrade01");
+					}
 					if (!found && componentAvailable("V-Tol") && (random(100) < subPersonalities[personality].vtolPriority + 10))
+					{
 						found = evalResearch(lab, VTOL_RES);
+					}
 				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SYSTEM_UPGRADES);
+				}
 
 				if (!found && useArti && random(100) < 66)
+				{
 					found = evalResearch(lab, artillExtra);
+				}
 				if (!found && useArti && random(100) < 50)
+				{
 					found = evalResearch(lab, artilleryTech);
+				}
 
 				let cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
 				let len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					{
 						found = pursueResearch(lab, cyborgSecondary);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponExtra);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponTech);
+					}
 				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SENSOR_TECH);
+				}
 			}
 			else if (subPersonalities[personality].resPath === "air")
 			{
 				if (!useVtol)
+				{
 					useVtol = true;
+				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SYSTEM_UPGRADES);
+				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, VTOL_RES);
+				}
 
 				if ((!turnOffMG || cyborgOnlyGame) && random(100) < antiCyborgChance)
 				{
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponTech);
+					}
 					if ((!turnOffMG || cyborgOnlyGame) && !found)
+					{
 						found = evalResearch(lab, machinegunWeaponExtra);
+					}
 					if (!found && useLasersForCyborgControl())
 					{
 						found = true;
@@ -530,47 +685,76 @@ function research()
 				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, weaponTech);
+				}
 				if (!found && personalityIsRocketMain())
+				{
 					found = pursueResearch(lab, "R-Wpn-Rocket03-HvAT");
+				}
 				if (!found && !turnOffCyborgs && random(100) < (cyborgOnlyGame ? 75 : 50))
+				{
 					found = evalResearch(lab, cyborgWeaps);
+				}
 
 				if (!found && random(100) < 50)
+				{
 					found = evalResearch(lab, extraTech);
+				}
 
 				if (!found)
+				{
 					found = evalResearch(lab, SENSOR_TECH);
+				}
 
 				if (!found && useArti && random(100) < 66)
+				{
 					found = evalResearch(lab, artillExtra);
+				}
 				if (!found && useArti && random(100) < (personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 50))
+				{
 					found = evalResearch(lab, artilleryTech);
+				}
 
 				let cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
 				let len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if (!found && !turnOffCyborgs && cyborgSecondary.length > 0)
+					{
 						found = pursueResearch(lab, cyborgSecondary);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponExtra);
+					}
 					if (!found)
+					{
 						found = evalResearch(lab, secondaryWeaponTech);
+					}
 				}
 			}
 
 			if (!found)
+			{
 				found = evalResearch(lab, empWeapons);
+			}
 
 			if (!found)
+			{
 				found = pursueResearch(lab, extremeLaserTech);
+			}
 			if (componentAvailable("Laser4-PlasmaCannon"))
 			{
 				if (!found)
+				{
 					found = evalResearch(lab, extremeLaserExtra);
+				}
 				if (!found && componentAvailable("PlasmaHeavy"))
+				{
 					found = evalResearch(lab, FLAMER);
+				}
 			}
 
 			// Lasers
@@ -579,14 +763,22 @@ function research()
 				let foundLaser = false;
 
 				if (!turnOffCyborgs)
+				{
 					foundLaser = pursueResearch(lab, "R-Cyborg-Hvywpn-PulseLsr");
+				}
 				if (!foundLaser)
+				{
 					foundLaser = evalResearch(lab, laserTech);
+				}
 				if (!foundLaser)
+				{
 					foundLaser = evalResearch(lab, laserExtra);
+				}
 				//Rocket/missile AA does not need this. Still uses it if researched.
 				if (!foundLaser && (returnAntiAirAlias() !== "rktaa"))
+				{
 					pursueResearch(lab, "R-Defense-AA-Laser");
+				}
 			}
 
 			//Very likely going to be done with research by now.

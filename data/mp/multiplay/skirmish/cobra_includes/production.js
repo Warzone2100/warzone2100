@@ -150,10 +150,12 @@ function chooseRandomVTOLWeapon()
 	if (weaps.alias === "bomb")
 	{
 		let rdm = [];
+
 		while (rdm.length !== weaps.vtols.length)
 		{
 			rdm.push(weaps.vtols[random(weaps.vtols.length)]);
 		}
+
 		return rdm;
 	}
 
@@ -190,9 +192,11 @@ function choosePersonalityWeapon(type)
 			if (componentAvailable(weaponStats.lasers_AA.weapons[0].stat) && (random(100) <= 50))
 			{
 				let lasers = weaponStats.lasers_AA.weapons;
+
 				for (let i = lasers.length - 1; i >= 0; --i)
 				{
 					let weapObj = lasers[i];
+
 					weaponList.push(weapObj.stat);
 				}
 			}
@@ -207,6 +211,7 @@ function choosePersonalityWeapon(type)
 			for (let i = aa.length - 1; i >= 0; --i)
 			{
 				let weapObj = aa[i];
+
 				weaponList.push(weapObj.stat);
 			}
 		}
@@ -221,6 +226,7 @@ function choosePersonalityWeapon(type)
 			for (let i = bunkerBusters.length - 1; i >= 0; --i)
 			{
 				let weapObj = bunkerBusters[i];
+
 				weaponList.push(weapObj.stat);
 			}
 		}
@@ -236,6 +242,7 @@ function choosePersonalityWeapon(type)
 			for (let i = generalAntiCyborgWeapons.length - 1; i >= 0; --i)
 			{
 				let weapObj = generalAntiCyborgWeapons[i];
+
 				weaponList.push(weapObj.stat);
 			}
 		}
@@ -247,6 +254,7 @@ function choosePersonalityWeapon(type)
 	else if (type === "VTOL")
 	{
 		weaps = chooseRandomVTOLWeapon();
+
 		for (let i = weaps.length - 1; i >= 0; --i)
 		{
 			weaponList.push(weaps[i].stat);
@@ -276,6 +284,7 @@ function useHover(weap)
 	{
 		return true;
 	}
+
 	if (Math.floor(propulsions.track * 100) >= 50 && random(100) < 80)
 	{
 		return false;
@@ -376,6 +385,7 @@ function buildAttacker(id)
 	{
 		return false;
 	}
+
 	if (forceHover && !seaMapWithLandEnemy && !componentAvailable("hover01"))
 	{
 		return false;
@@ -400,6 +410,7 @@ function buildAttacker(id)
 function buildSys(id, weap)
 {
 	let fac = getObject(STRUCTURE, me, id);
+
 	if (fac === null)
 	{
 		return false;
@@ -411,6 +422,7 @@ function buildSys(id, weap)
 	}
 
 	let body;
+
 	if (gameTime > 600000)
 	{
 		body = (random(100) < 80) ? VTOL_BODY : TANK_BODY;
@@ -517,6 +529,7 @@ function analyzeQueuedSystems()
 			{
 				trucks += 1;
 			}
+
 			if (TYPE === DROID_SENSOR)
 			{
 				sens += 1;
@@ -555,6 +568,7 @@ function produce()
 	{
 		return; //Stop spamming about having the droid limit reached.
 	}
+
 	const MIN_SENSORS = 1;
 	let systems = analyzeQueuedSystems();
 
@@ -571,15 +585,18 @@ function produce()
 	{
 		let facType = subPersonalities[personality].factoryOrder[i];
 		let fac = enumStruct(me, facType);
+
 		if (!((facType === structures.cyborgFactory) && !forceHover && turnOffCyborgs))
 		{
 			if (facType === structures.vtolFactory && !countDroid(DROID_CONSTRUCT, me))
 			{
 				continue;
 			}
+
 			for (let x = 0, l = fac.length; x < l; ++x)
 			{
 				const FC = fac[x];
+
 				if (!(FC && FC.status === BUILT))
 				{
 					continue;
