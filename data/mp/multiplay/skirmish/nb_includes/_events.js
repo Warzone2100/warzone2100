@@ -12,8 +12,8 @@ function eventStartLevel()
 	{
 		// initialize subpersonality pseudo-randomly here
 		// to make sure teammates have the same personality
-		var j = 1;
-		var s = 0;
+		let j = 1;
+		let s = 0;
 
 		for (let i = 0; i < maxPlayers; ++i)
 		{
@@ -26,7 +26,7 @@ function eventStartLevel()
 		}
 
 		// the random "s" number obtained here is the same for all players in any team
-		var s = s + (new Date()).getMinutes();
+		s = s + (new Date()).getMinutes();
 		s = s % Object.keys(subpersonalities).length;
 		j = 0;
 

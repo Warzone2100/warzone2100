@@ -9,8 +9,8 @@
 
 function randomLocation()
 {
-	var x = baseLocation.x + random(baseScale) - baseScale / 2;
-	var y = baseLocation.y + random(baseScale) - baseScale / 2;
+	const x = baseLocation.x + random(baseScale) - baseScale / 2;
+	const y = baseLocation.y + random(baseScale) - baseScale / 2;
 
 	if (x < 3 || y < 3 || x > mapWidth - 4 || y > mapHeight - 4)
 	{
@@ -48,11 +48,11 @@ function truckFree(truck)
 // returns one or two free trucks
 function getTwoFreeTrucks()
 {
-	var trucks = enumTrucks().filter(truckFree);
+	let trucks = enumTrucks().filter(truckFree);
 
 	if (trucks.length > 2)
 	{
-		var ret = naiveFindClusters(trucks, baseScale / 2);
+		const ret = naiveFindClusters(trucks, baseScale / 2);
 
 		if (ret.maxCount >= 2)
 		{
@@ -70,7 +70,7 @@ function getTwoFreeTrucks()
 
 function getFreeTruckAround(x, y)
 {
-	var list = enumTrucks().filter(truckFree).filter((droid) => (
+	const list = enumTrucks().filter(truckFree).filter((droid) => (
 		droidCanReach(droid, x, y)
 	)).sort((one, two) => (distance(one, x, y) - distance(two, x, y)));
 
@@ -82,14 +82,14 @@ function getFreeTruckAround(x, y)
 
 function buildModule(struct)
 {
-	var trucks = getTwoFreeTrucks();
+	const trucks = getTwoFreeTrucks();
 
 	if (trucks.length <= 0)
 	{
 		return BUILDRET.FAILURE;
 	}
 
-	var moduleInfo = modules.filter((item) => (isAvailable(item.module) && item.base === struct.stattype)).last();
+	const moduleInfo = modules.filter((item) => (isAvailable(item.module) && item.base === struct.stattype)).last();
 
 	if (!defined(moduleInfo))
 	{
@@ -101,7 +101,7 @@ function buildModule(struct)
 		return BUILDRET.UNAVAILABLE;
 	}
 
-	var success = false;
+	let success = false;
 
 	for (let i = 0; i < trucks.length; ++i)
 	{
@@ -123,7 +123,7 @@ function buildBasicStructure(statlist, importance)
 		importance = IMPORTANCE.MANDATORY;
 	}
 
-	var trucks = getTwoFreeTrucks();
+	const trucks = getTwoFreeTrucks();
 
 	if (trucks.length <= 0)
 	{
@@ -132,9 +132,9 @@ function buildBasicStructure(statlist, importance)
 
 	// choose structure type (out of the statlist),
 	// together with suitable location
-	var idx = 0;
-	var loc = false;
-	var avail = false;
+	let idx = 0;
+	let loc = false;
+	let avail = false;
 
 	for (let i = 0; i < statlist.length; ++i)
 	{
@@ -149,7 +149,7 @@ function buildBasicStructure(statlist, importance)
 			}
 			else
 			{
-				var rndLoc = randomLocation();
+				const rndLoc = randomLocation();
 
 				loc = pickStructLocation(trucks[0], statlist[i], rndLoc.x, rndLoc.y);
 			}
@@ -174,7 +174,7 @@ function buildBasicStructure(statlist, importance)
 	}
 
 	// now actually build
-	var success = false;
+	let success = false;
 
 	for (let i = 0; i < trucks.length; ++i)
 	{
@@ -186,8 +186,8 @@ function buildBasicStructure(statlist, importance)
 
 function finishStructures()
 {
-	var success = false;
-	var list = enumStruct(me).filterProperty("status", BEING_BUILT);
+	let success = false;
+	const list = enumStruct(me).filterProperty("status", BEING_BUILT);
 
 	for (let i = 0; i < list.length; ++i)
 	{
@@ -198,7 +198,7 @@ function finishStructures()
 			break;
 		}
 
-		var truck = getFreeTruckAround(list[i].x, list[i].y);
+		const truck = getFreeTruckAround(list[i].x, list[i].y);
 
 		if (!defined(truck))
 		{
@@ -221,20 +221,20 @@ function buildStructureAround(statlist, loc, unique)
 		return BUILDRET.UNAVAILABLE;
 	}
 
-	var truck = getFreeTruckAround(loc.x, loc.y);
+	const truck = getFreeTruckAround(loc.x, loc.y);
 
 	if (!defined(truck))
 	{
 		return BUILDRET.FAILURE;
 	}
 
-	var stat = statlist.filter(isAvailable).filter((s) => {
+	const stat = statlist.filter(isAvailable).filter((s) => {
 		if (unique !== true)
 		{
 			return true;
 		}
 
-		var list = enumStruct(me, s);
+		const list = enumStruct(me, s);
 
 		for (let i = 0; i < list.length; ++i)
 		{
@@ -252,7 +252,7 @@ function buildStructureAround(statlist, loc, unique)
 		return BUILDRET.UNAVAILABLE;
 	}
 
-	var loc2 = pickStructLocation(truck, stat, loc.x, loc.y);
+	const loc2 = pickStructLocation(truck, stat, loc.x, loc.y);
 
 	if (!defined(loc2))
 	{
@@ -279,14 +279,14 @@ function captureOil(oil)
 		return BUILDRET.FAILURE;
 	}
 
-	var truck = getFreeTruckAround(oil.x, oil.y);
+	const truck = getFreeTruckAround(oil.x, oil.y);
 
 	if (!defined(truck))
 	{
 		return BUILDRET.FAILURE;
 	}
 
-	var stat = structures.derricks.filter(isAvailable).last();
+	const stat = structures.derricks.filter(isAvailable).last();
 
 	if (!defined(stat))
 	{
@@ -313,7 +313,7 @@ function chooseDefense(defrole)
 
 function buildTowers()
 {
-	var oils = enumStructList(structures.derricks);
+	const oils = enumStructList(structures.derricks);
 
 	if (oils.length === 0)
 	{
@@ -332,7 +332,7 @@ function buildGateways()
 {
 	function uncached()
 	{
-		var oils = countStructList(structures.derricks);
+		const oils = countStructList(structures.derricks);
 
 		if (oils <= 0)
 		{
@@ -345,15 +345,15 @@ function buildGateways()
 			return BUILDRET.FAILURE;
 		}
 
-		var gates = gateways.filter((gate) => {
-			var l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
+		const gates = gateways.filter((gate) => {
+			let l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
 
 			if (l < 0)
 			{
 				l = -l;
 			}
 
-			var cnt = enumRange(gate.x1, gate.y1, l, ALLIES).filterProperty("stattype", DEFENSE).length;
+			let cnt = enumRange(gate.x1, gate.y1, l, ALLIES).filterProperty("stattype", DEFENSE).length;
 			cnt    += enumRange(gate.x2, gate.y2, l, ALLIES).filterProperty("stattype", DEFENSE).length;
 			cnt    -= enumRange(gate.x1, gate.y1, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
 			cnt    -= enumRange(gate.x2, gate.y2, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
@@ -404,7 +404,7 @@ _global.captureSomeOil = function() {
 
 	function getOilList()
 	{
-		var oils = [];
+		let oils = [];
 		oilResources.forEach((stat) => { oils = oils.concat(enumFeature(ALL_PLAYERS, stat)); });
 
 		oils = oils.concat(enumStructList(structures.derricks).filterProperty("status", BEING_BUILT));
@@ -418,7 +418,7 @@ _global.captureSomeOil = function() {
 		return oils;
 	}
 
-	var oils = cached(getOilList, 5000);
+	const oils = cached(getOilList, 5000);
 
 	if (countFinishedStructList(structures.derricks) >= 4 * structListLimit(structures.gens))
 	{
@@ -486,8 +486,8 @@ function buildExpand()
 
 function buildEnergy()
 {
-	var oils = countFinishedStructList(structures.derricks);
-	var gens = countStructList(structures.gens);
+	const oils = countFinishedStructList(structures.derricks);
+	const gens = countStructList(structures.gens);
 
 	if (oils > 4 * gens)
 	{
@@ -510,8 +510,6 @@ function buildEnergy()
 
 function buildModules()
 {
-	var str = [];
-
 	for (let i = 0; i < modules.length; ++i)
 	{
 		if (modules[i].base === FACTORY && needFastestResearch() !== PROPULSIONUSAGE.GROUND)
@@ -519,7 +517,7 @@ function buildModules()
 			continue;
 		}
 
-		str = enumStruct(me, modules[i].base);
+		let str = enumStruct(me, modules[i].base);
 
 		for (let j = 0; j < str.length; ++j)
 		{
@@ -585,7 +583,7 @@ function listOutdatedDefenses()
 	{
 		for (const role in DEFROLE)
 		{
-			var list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
+			const list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
 
 			for (let i = 0; i < list.length - 2; ++i)
 			{
@@ -605,14 +603,14 @@ function listOutdatedDefenses()
 
 function recycleDefenses()
 {
-	var trucks = enumTrucks().filter(truckFree);
+	const trucks = enumTrucks().filter(truckFree);
 
 	if (trucks.length <= 0)
 	{
 		return false;
 	}
 
-	var list = listOutdatedDefenses();
+	const list = listOutdatedDefenses();
 
 	for (let i = 0; i < list.length; ++i)
 	{

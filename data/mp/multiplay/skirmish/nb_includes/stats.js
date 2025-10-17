@@ -115,7 +115,7 @@ function guessWeaponMicro(name)
 _global.guessDroidMicro = function(droid) {
 	for (let i = 0; i < droid.weapons.length; ++i)
 	{
-		var ret = guessWeaponMicro(droid.weapons[i].name);
+		const ret = guessWeaponMicro(droid.weapons[i].name);
 
 		if (ret !== MICRO.RANGED)
 		{
@@ -127,7 +127,7 @@ _global.guessDroidMicro = function(droid) {
 };
 
 _global.guessBodyArmor = function(name) {
-	var body = bodyStats.filterProperty("stat", name).last();
+	const body = bodyStats.filterProperty("stat", name).last();
 
 	if (defined(body))
 	{
@@ -173,8 +173,8 @@ _global.getProductionPaths = function() {
 };
 
 _global.chooseAvailableWeaponPathByRoleRatings = function(paths, rating, objectType, defrole) {
-	var minPath;
-	var minDist = Infinity;
+	let minPath;
+	let minDist = Infinity;
 
 	paths.forEach((path) => {
 		if (!weaponPathIsAvailable(path, objectType, defrole))
@@ -182,11 +182,11 @@ _global.chooseAvailableWeaponPathByRoleRatings = function(paths, rating, objectT
 			return;
 		}
 
-		var dist = 0;
+		let dist = 0;
 
 		for (let i = 0; i < ROLE.LENGTH; ++i)
 		{
-			var newDist = Math.abs(rating[i] - path.roles[i]);
+			const newDist = Math.abs(rating[i] - path.roles[i]);
 
 			if (newDist > dist)
 			{
@@ -228,7 +228,7 @@ _global.weaponStatsToResList = function(path, objType) {
 		return [];
 	}
 
-	var ret = [];
+	let ret = [];
 
 	switch (objType)
 	{
@@ -267,7 +267,7 @@ _global.filterDataByFlag = function(data, attr_name, flag) {
 };
 
 _global.filterBodyStatsByUsage = function(usage, armor) {
-	var data;
+	let data;
 
 	if (defined(armor))
 	{
@@ -282,7 +282,7 @@ _global.filterBodyStatsByUsage = function(usage, armor) {
 };
 
 _global.getPropulsionStatsComponents = function(usage) {
-	var data = filterDataByFlag(propulsionStats, 'usage', usage);
+	const data = filterDataByFlag(propulsionStats, 'usage', usage);
 
 	return data.map((val) => (val.stat)).reverse();
 };
@@ -297,7 +297,7 @@ _global.weaponStatsToDefenses = function(stats, defrole) {
 		return [];
 	}
 
-	var ret = [];
+	let ret = [];
 
 	for (let i = 0; i < stats.defenses.length; ++i)
 	{
