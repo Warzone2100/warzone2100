@@ -12,19 +12,25 @@
 // pick a target and fire
 _global.fireLassat = function(structure) {
 	var list = [];
+	var maxIdx = 0;
+	var maxPrice = 0;
+
 	enumLivingPlayers().filter(isEnemy).forEach((i) => {
 		list = list.concat(enumStruct(i), enumDroid(i));
 	});
-	var maxIdx, maxPrice = 0;
+
 	list.forEach((obj, idx) => {
 		var price = enumRange(obj.x, obj.y, lassatSplash / 2, ENEMIES, false).reduce((prev, curr) => (prev + curr.cost), 0);
-		if (price > maxPrice) {
+
+		if (price > maxPrice)
+		{
 			maxPrice = price;
 			maxIdx = idx;
 		}
 	});
+
 	activateStructure(structure, list[maxIdx]);
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 })(this);
