@@ -95,7 +95,7 @@ const POWER_AND_RESEARCH_TECH = [
 //with the given list provided.
 function evalResearch(labID, list)
 {
-	var lab = getObject(STRUCTURE, me, labID);
+	const lab = getObject(STRUCTURE, me, labID);
 
 	if (lab === null)
 	{
@@ -120,7 +120,7 @@ function lookForResearch(tech, labParam)
 		return; //need construction droids.
 	}
 
-	var labList;
+	let labList;
 
 	if (labParam) // check if called with parameter or not
 	{
@@ -136,8 +136,8 @@ function lookForResearch(tech, labParam)
 
 	for (let i = 0, r = labList.length; i < r; ++i)
 	{
-		var lab = labList[i];
-		var found = evalResearch(lab.id, FUNDAMENTALS);
+		const lab = labList[i];
+		let found = evalResearch(lab.id, FUNDAMENTALS);
 
 		// Focus on the hover research for a hover map.
 		if (!found && isSeaMap === true)
@@ -243,12 +243,12 @@ function lookForResearch(tech, labParam)
 			if (componentAvailable("Body7ABT") && !found)
 			{
 				// Find a random research item
-				var reslist = enumResearch();
-				var len = reslist.length;
+				const reslist = enumResearch();
+				const len = reslist.length;
 
 				if (len > 0)
 				{
-					var idx = Math.floor(Math.random() * len);
+					const idx = Math.floor(Math.random() * len);
 
 					pursueResearch(lab, reslist[idx].name);
 				}
