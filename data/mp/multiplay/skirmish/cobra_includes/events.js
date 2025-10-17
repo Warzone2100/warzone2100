@@ -70,6 +70,7 @@ function eventDroidIdle(droid)
 	if (shouldCobraAttack() && (droid.droidType === DROID_WEAPON || droid.droidType === DROID_CYBORG || isVTOL(droid)))
 	{
 		let enemyObjects = enumRange(droid.x, droid.y, 6, ENEMIES, false);
+
 		if (enemyObjects.length > 0)
 		{
 			enemyObjects = enemyObjects.sort(distanceToBase);
@@ -164,6 +165,7 @@ function eventAttacked(victim, attacker)
 	{
 		let nearbyScavs = 0;
 		let nearbyEnemies = enumRange(victim.x, victim.y, SCAV_ATTACKER ? (GROUP_SCAN_RADIUS * 0.75) : GROUP_SCAN_RADIUS, ENEMIES, false);
+
 		if (isVTOL(victim))
 		{
 			droidReady(victim.id);
@@ -240,6 +242,7 @@ function eventAttacked(victim, attacker)
 				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{
 					let unit = units[i];
+
 					if (unit !== null && distBetweenTwoPoints(unit.x, unit.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
 					{
 						orderDroidObj(unit, DORDER_ATTACK, attacker);
@@ -280,6 +283,7 @@ function eventStructureReady(structure)
 	if (!structure)
 	{
 		const LASER = enumStruct(me, structures.lassat);
+
 		if (LASER.length > 0)
 		{
 			structure = LASER[0];
@@ -314,6 +318,7 @@ function eventBeacon(x, y, from, to, message)
 	{
 		return;
 	}
+
 	if (!allianceExistsBetween(from, me))
 	{
 		return;

@@ -19,6 +19,7 @@ function checkIfSeaMap()
 				//Check if it is a map 'spotter' pit
 				//Cyborgs will turn off in divided maps with a physical barrier still
 				let temp = 0;
+
 				for (let t = 0; t < maxPlayers; ++t)
 				{
 					if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
@@ -49,6 +50,7 @@ function checkIfSeaMap()
 						break;
 					}
 				}
+
 				if (seaMapWithLandEnemy === true)
 				{
 					break;
@@ -68,6 +70,7 @@ function countAllResources()
 	function uncached()
 	{
 		let amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
+
 		for (let i = 0; i < maxPlayers; ++i)
 		{
 			amount += enumStruct(i, structures.derrick).length;
@@ -94,6 +97,7 @@ function averageOilPerPlayer()
 		for (let i = 0; i < maxPlayers; ++i)
 		{
 			let data = playerData[i];
+
 			players += ((data.isHuman || data.isAI) ? 1 : 0);
 		}
 
@@ -110,6 +114,7 @@ function mapOilLevel()
 	{
 		let str;
 		let perPlayer = averageOilPerPlayer();
+
 		if (perPlayer <= 10)
 		{
 			str = "LOW";

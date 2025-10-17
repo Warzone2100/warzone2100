@@ -50,9 +50,11 @@ function countEnemyVTOL(player)
 		for (let x = 0, e = enemies.length; x < e; ++x)
 		{
 			let playerDroids = enumDroid(enemies[x]);
+
 			for (let c = 0, l = playerDroids.length; c < l; ++c)
 			{
 				let prop = playerDroids[c].propulsion;
+
 				if (prop === "V-Tol" || prop === "Helicopter")
 				{
 					++enemyVtolCount;
@@ -109,6 +111,7 @@ function playerBodySizeRatio(player)
 		let medium = 0;
 		let heavy = 0;
 		let attackers = enumDroid(player, DROID_WEAPON);
+
 		for (let i = 0, len = attackers.length; i < len; ++i)
 		{
 			let body = attackers[i].body;
@@ -151,6 +154,7 @@ function playerLandPropRatio(player)
 		let track = 0;
 		let hover = 0;
 		let attackers = enumDroid(player, DROID_WEAPON);
+
 		for (let i = 0, len = attackers.length; i < len; ++i)
 		{
 			let prop = attackers[i].propulsion;

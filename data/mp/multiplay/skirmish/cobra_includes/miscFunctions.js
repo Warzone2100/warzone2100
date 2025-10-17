@@ -65,6 +65,7 @@ function distanceToBase(obj1, obj2)
 {
 	let dist1 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj1.x, obj1.y);
 	let dist2 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj2.x, obj2.y);
+
 	return (dist1 - dist2);
 }
 
@@ -108,10 +109,12 @@ function rangeStep(player)
 		{
 			targets.push(getObject(derr.typeInfo, derr.playerInfo, derr.idInfo));
 		}
+
 		if (struc)
 		{
 			targets.push(getObject(struc.typeInfo, struc.playerInfo, struc.idInfo));
 		}
+
 		if (droid)
 		{
 			targets.push(getObject(droid.typeInfo, droid.playerInfo, droid.idInfo));
@@ -169,7 +172,9 @@ function getRealPower(player)
 	{
 		player = me;
 	}
+
 	const POWER = playerPower(player) - queuedPower(player);
+
 	if (!currently_dead && playerAlliance(true).length > 0 && player === me && POWER < -300)
 	{
 		sendChatMessage("need power", ALLIES);
@@ -184,6 +189,7 @@ function findLivingEnemies()
 	function uncached()
 	{
 		let alive = [];
+
 		for (let x = 0; x < maxPlayers; ++x)
 		{
 			if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
@@ -299,6 +305,7 @@ function donateFromGroup(from, group)
 		{
 			let idx = 0;
 			let amount;
+
 			if (group !== "TRUCK")
 			{
 				amount = random(CACHE_DROIDS - (MIN_ATTACK_DROIDS - 2)) + 1;
@@ -383,6 +390,7 @@ function initCobraGroups()
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (obj.isCB)));
 
 	let cons = enumDroid(me, DROID_CONSTRUCT);
+
 	for (let i = 0, l = cons.length; i < l; ++i)
 	{
 		let con = cons[i];

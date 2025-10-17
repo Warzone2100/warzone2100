@@ -4,6 +4,7 @@
 function droidReady(droidID)
 {
 	let droid = getObject(DROID, me, droidID);
+
 	if (droid === null)
 	{
 		return false;
@@ -61,6 +62,7 @@ function returnClosestEnemyFactory(enemyNumber)
 		if (facs.length > 0)
 		{
 			facs = facs.sort(distanceToBase);
+
 			return objectInformation(facs[0]);
 		}
 
@@ -74,6 +76,7 @@ function returnClosestEnemyFactory(enemyNumber)
 function vtolReady(droidID)
 {
 	let droid = getObject(DROID, me, droidID);
+
 	if (droid === null)
 	{
 		return true;  //Pretend it is busy
@@ -85,14 +88,17 @@ function vtolReady(droidID)
 	}
 
 	const ARMED_PERCENT = 1;
+
 	if ((droid.order === DORDER_ATTACK) || (droid.order === DORDER_REARM))
 	{
 		return false;
 	}
+
 	if (vtolArmed(droid.weapons[0].armed, ARMED_PERCENT))
 	{
 		return true;
 	}
+
 	if (droid.order !== DORDER_REARM)
 	{
 		orderDroid(droid, DORDER_REARM);
@@ -105,6 +111,7 @@ function vtolReady(droidID)
 function repairDroid(droidID, force)
 {
 	let droid = getObject(DROID, me, droidID);
+
 	if (droid === null)
 	{
 		return true; //pretend it is busy
@@ -170,6 +177,7 @@ function checkAllForRepair()
 	}
 
 	let droids = enumGroup(attackGroup);
+
 	for (let i = 0, l = droids.length; i < l; ++i)
 	{
 		repairDroid(droids[i].id);
@@ -188,15 +196,18 @@ function findNearestEnemyDroid(enemy)
 		}
 
 		let badDroids = enumDroid(enemy);
+
 		if (badDroids.length > 0)
 		{
 			let temp = badDroids.filter((dr) => (!isVTOL(dr)));
+
 			if (temp.length === 0)
 			{
 				temp = badDroids;
 			}
 
 			temp = temp.sort(distanceToBase);
+
 			return objectInformation(temp[0]);
 		}
 
@@ -217,6 +228,7 @@ function findNearestEnemyStructure(enemy)
 		}
 
 		let s = enumStruct(enemy).filter((obj) => (obj.stattype !== WALL));
+
 		if (s.length === 0)
 		{
 			s = enumStruct(enemy);
@@ -225,6 +237,7 @@ function findNearestEnemyStructure(enemy)
 		if (s.length > 0)
 		{
 			s = s.sort(distanceToBase);
+
 			return objectInformation(s[0]);
 		}
 
@@ -264,6 +277,7 @@ function artilleryTactics()
 	{
 		return;
 	}
+
 	let sensors = enumGroup(sensorGroup).filter((dr) => (droidReady(dr.id)));
 	const ARTILLERY_UNITS = enumGroup(artilleryGroup);
 	const ARTI_LEN = ARTILLERY_UNITS.length;
@@ -397,6 +411,7 @@ function recycleForHover()
 	{
 		return;
 	}
+
 	if (highOilMap() && (!startAttacking || (gameTime < 900000) || (countDroid(DROID_ANY, me) < 75)))
 	{
 		return; //wait
@@ -428,6 +443,7 @@ function recycleForHover()
 		{
 			let tanks = enumGroup(attackGroup).filter((dr) => (dr.propulsion !== "hover01"));
 			const NON_HOVER_TANKS = tanks.length;
+
 			for (let j = 0; j < NON_HOVER_TANKS; ++j)
 			{
 				orderDroid(tanks[j], DORDER_RECYCLE);
@@ -445,6 +461,7 @@ function recycleForHover()
 function targetPlayer(playerNumber)
 {
 	const PREVIOUS_TARGET = getMostHarmfulPlayer();
+
 	if (isDefined(scavengerPlayer) && ((playerNumber === scavengerPlayer) || (PREVIOUS_TARGET === scavengerPlayer)))
 	{
 		return false; //No targeting scavs.
@@ -495,6 +512,7 @@ function vtolTactics()
 					{
 						continue;
 					}
+
 					if (distBetweenTwoPoints(pos.x, pos.y, beacon.x, beacon.y) <= SCOUT_TO_CIRCLE_DIST)
 					{
 						orderDroidLoc(vtols[i], D_CIRCLE, beacon.x, beacon.y);
@@ -516,18 +534,21 @@ function vtolTactics()
 function attackThisObject(droidID, target)
 {
 	let d = getObject(DROID, me, droidID);
+
 	if (d === null || !isDefined(d.weapons[0]))
 	{
 		return;
 	}
 
 	let t = getObject(target.typeInfo, target.playerInfo, target.idInfo);
+
 	if (t === null)
 	{
 		return;
 	}
 
 	let isScav = isDefined(scavengerPlayer) && t.player === scavengerPlayer;
+
 	if (droidReady(droidID) && droidCanReach(d, t.x, t.y))
 	{
 		if (isScav && getMostHarmfulPlayer() !== scavengerPlayer)
@@ -575,6 +596,7 @@ function enemyUnitsInBase()
 		if (!beacon.disabled && (beacon.endTime < gameTime))
 		{
 			let mes = isVTOL(enemyUnits[0]) ? BEACON_VTOL_ALARM : undefined;
+
 			addBeacon(enemyUnits[0].x, enemyUnits[0].y, ALLIES, mes);
 			//Set beacon data for me also since we won't receive our own beacon.
 			eventBeacon(enemyUnits[0].x, enemyUnits[0].y, me, me, mes);
@@ -593,6 +615,7 @@ function donateSomePower()
 	{
 		return;
 	}
+
 	if (!countStruct(structures.gen, me) || !countStruct(structures.derrick, me))
 	{
 		return;
@@ -605,6 +628,7 @@ function donateSomePower()
 	if (LEN > 0 && ALIVE_ENEMIES > 0)
 	{
 		let ally = ALLY_PLAYERS[random(LEN)];
+
 		if (getRealPower() > 300 && (getRealPower() > Math.floor(1.5 * getRealPower(ally))))
 		{
 			donatePower(playerPower(me) / 2, ally);
@@ -633,6 +657,7 @@ function baseShuffleDefensePattern()
 	}
 
 	let attackers = enumGroup(attackGroup).concat(enumGroup(artilleryGroup)).concat(enumGroup(vtolGroup));
+
 	if (attackers.length === 0)
 	{
 		return;
@@ -684,6 +709,7 @@ function baseShuffleDefensePattern()
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
 	const MAX_NEARBY_STRUCTURES = 2;
+
 	for (let i = 0, len = attackers.length; i < len; ++i)
 	{
 		if (attackers[i].order !== DORDER_HOLD)
@@ -710,12 +736,14 @@ function lowOilDefensePattern()
 	}
 
 	let derricks = enumStruct(me, structures.derrick);
+
 	if (derricks.length === 0)
 	{
 		return;
 	}
 
 	let attackers = enumGroup(attackGroup).concat(enumGroup(artilleryGroup)).concat(enumGroup(vtolGroup));
+
 	if (attackers.length === 0)
 	{
 		return;
@@ -724,6 +752,7 @@ function lowOilDefensePattern()
 	for (let i = 0, len = attackers.length; i < len; ++i)
 	{
 		let derr = derricks[random(derricks.length)];
+
 		orderDroidLoc(attackers[i], DORDER_SCOUT, derr.x, derr.y);
 	}
 
