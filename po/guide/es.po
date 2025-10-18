@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-09-13 02:27\n"
+"PO-Revision-Date: 2025-10-18 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -24,13 +24,13 @@ msgid "As you progress through the campaign, you will collect Artifacts from ene
 msgstr "A medida que progreses en la campaña, recogerás artefactos de bases enemigas (y unidades enemigas específicas)"
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr ""
+msgstr "Esto desbloqueará tecnologías valiosas que puedes investigar en un Centro de Investigación."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
 msgstr "Los artefactos son pequeñas cajas blancas con un indicador verde arriba, y pueden ser recogidas moviendo cualquier unidad lo suficientemente cerca."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr ""
+msgstr "Se deben recoger todos los artefactos como parte de las condiciones de victoria de cada nivel."
 
 msgid "Backstory"
 msgstr "Memorias"
@@ -75,13 +75,13 @@ msgid "- Gamma team is sent into the northern Rockies in Colorado"
 msgstr "- El equipo Gama se envía al norte de las Rocosas en Colorado"
 
 msgid "Command Panel"
-msgstr ""
+msgstr "Panel de comandos"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr ""
+msgstr "Hay seis interfaces de panel de comandos diferentes, además de un botón central. Abre una interfaz de comandos pulsando el botón apropiado."
 
 msgid "The middle / central button closes any open command interface."
-msgstr ""
+msgstr "El botón del medio/central cierra todas las interfaces de comandos abiertas."
 
 msgid "Defending Your Base"
 msgstr "Defendiendo tu base"
@@ -90,7 +90,7 @@ msgid "In Warzone 2100, your home base persists throughout the campaign."
 msgstr "En Warzone 2100, tu base principal persiste a lo largo de la campaña."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Como tal, es esencial prepararse para la defensa de tu base principal."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
 msgstr "Si bien las unidades son obviamente útiles para defender tu base, el diseño de esta también es esencial."
@@ -102,28 +102,28 @@ msgid "Intelligence Display"
 msgstr "Pantalla de Inteligencia"
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr ""
+msgstr "En la Pantalla de Inteligencia, puedes ver los objetivos de la misión actual, repetir tu reunión informativa actual y leer más sobre proyectos de investigación completados."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr ""
+msgstr "Cuando abres la Pantalla de Inteligencia, aparecen dos filas de iconos en la parte inferior de la pantalla."
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr ""
+msgstr "Al seleccionar un icono se mostrará información sobre ese objetivo de investigación o misión en el centro de la pantalla."
 
 msgid "Using the Mission Timer"
-msgstr ""
+msgstr "Cómo usar el Temporizador de misión"
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr ""
+msgstr "Muchas veces, estarás ocupado. A veces, desearás tener más tiempo. Otras veces, pensarás que tienes demasiado."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr ""
+msgstr "Siempre hay maneras inteligentes de usar el tiempo extra para prepararse para las futuras batallas."
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr ""
+msgstr "Puedes completar nuevas investigaciones, construir defensas, o reciclar y reemplazar unidades con armas y tecnologías nuevas, pero no pierdas el tiempo."
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
-msgstr ""
+msgstr "(Si tienes habilitado el ajuste del Bonus de energía de temporizador, que es el predeterminado, no debes esperar a que el temporizador te dé energía. Obtendrás, de manera automática, la energía que habrías ganado si hubieras activado el temporizador. ¡Pero el resto de usos todavía se aplican!)"
 
 msgid "Power"
 msgstr "Energía"
@@ -135,22 +135,22 @@ msgid "You spend power to build structures, manufacture units, and research upgr
 msgstr "Gasta energía para construir estructuras, crear unidades e investigar mejoras / nueva tecnología."
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr ""
+msgstr "La energía es generada por Generadores de Energía alimentados por torres de perforación de petróleo."
 
 msgid "Researching Technology"
 msgstr "Investigando tecnología"
 
 msgid "Researching technologies is accomplished using Research Facilities."
-msgstr ""
+msgstr "La investigación de las tecnologías se lleva a cabo a través de Centros de Investigación."
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
-msgstr ""
+msgstr "Cuando se selecciona un Centro de Investigación, todas las opciones disponibles se muestran en el lado izquierdo de la pantalla."
 
 msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
-msgstr ""
+msgstr "Cada proyecto de investigación requiere una cierta cantidad de energía y tiempo para completarse. La inversión eléctrica no es reembolsable."
 
 msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
-msgstr ""
+msgstr "Pero el progreso de la investigación nunca se pierde, incluso el Centro de Investigación es destruido: solo se debe reasignar el proyecto a otro centro."
 
 msgid "Completing research of a new technology may:"
 msgstr "Completar la investigación de una nueva tecnología puede:"
@@ -159,7 +159,7 @@ msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
 msgstr "- Vuelve disponibles nuevas armas, estructuras, cuerpos de unidades, propulsión"
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
-msgstr ""
+msgstr "- Mejora la efectividad de las armas, estructuras, cuerpos de unidades, etc."
 
 msgid "- Enable the research of additional technologies"
 msgstr "- Habilita la investigación de tecnologías adicionales"
@@ -180,7 +180,7 @@ msgid "Building Structures"
 msgstr "Creando estructuras"
 
 msgid "Click the \"Build\" button on the Command Panel."
-msgstr ""
+msgstr "Haz clic en el botón \"Construir\" del Panel de Comandos."
 
 msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
 msgstr "Esto abrirá el menu de estructuras en el lado izquierdo de la pantalla, con un boton para cada estructura que puedes construir."
@@ -201,10 +201,10 @@ msgid "Once you've chosen a viable location, select to confirm the placement of 
 msgstr "Una vez que elijas una ubicación viable, selecciona para confirmar el sitio de construcción. Un camión se moverá a la ubicación y comenzará su construcción."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "Puedes pedir camiones adicionales para obtener ayuda (y construir la estructura más rápidamente) seleccionándolos y ordenando que se dirijan a la estructura en construcción."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr ""
+msgstr "Consejo: Para construir \"muros\" (cuando estén disponibles), puedes hacer clic y arrastrar para dibujar el muro."
 
 msgid "Cyborg Factory"
 msgstr "Fábrica de Cyborgs"
@@ -216,16 +216,16 @@ msgid "Each Factory can build one unit at a time, but you can queue multiple uni
 msgstr "Cada fábrica puede construir una unidad a la vez, puedes añadir múltiples unidades a la cola de producción."
 
 msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Cuando se produce una unidad, recibe pedidos de la unidad de fábrica de Cyborg y pasa al punto de reunión de la fábrica."
 
 msgid "Demolishing Structures"
 msgstr "Demoler estructuras"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Demoler un edificio es casi tan simple como construir uno."
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Selecciona \"Demoler estructura\" en el menú de estructuras y haz clic en un edificio para demolerlo."
 
 msgid "A unit will move to the building and destroy it."
 msgstr "Una unidad se moverá al edificio y lo destruirá."
@@ -240,79 +240,79 @@ msgid "A Factory is used to build units. Each Factory can build one unit at a ti
 msgstr "Cada fábrica puede construir una unidad a la vez, pero puedes añadir múltiples unidades a la cola de producción."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Cuando se produce una unidad, recibe pedidos de la unidad de fábrica y pasa al punto de reunión de la fábrica."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Note: La fábrica base solo puede producir unidades con estructuras ligeras. Se pueden descubrir y crear módulos de fábrica para mejorar la capacidad de producción de la fábrica."
 
 msgid "Command Center"
-msgstr ""
+msgstr "Centro de comandos"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr ""
+msgstr "El Centro de comandos es la sede de tu base."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr ""
+msgstr "Permite acceder al minimapa/radar y a la habilidad de diseñar unidades."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr ""
+msgstr "Para construir un Centro de comandos, haz clic en el botón \"Construir\" del panel de comandos y selecciona la estructura del Centro de comandos."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr ""
+msgstr "Luego, haz clic donde quieras que tus trabajadores lo construyan."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Módulos de estructura"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Los Generadores de Energía, Fábricas y Centros de Investigación se pueden actualizar con sus respectivos módulos de estructura."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Una vez que hayas hecho la investigación, puedes acceder a estos módulos desde el menú de Construcción para aplicarlos a las estructuras en cuestión."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr ""
+msgstr "Otra alternativa es seleccionar un camión o un ingeniero de combate y hacer clic en la estructura para comenzar a construirla."
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Nota: Mientras una de estas estructuras se está actualizando, no estará disponible temporalmente hasta que la actualización se complete."
 
 msgid "Upgrade Effects:"
 msgstr "Efecto de la mejora:"
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr ""
+msgstr "- Los módulos de Generadores de Energía aumentan la tasa de generación de energía."
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- Los módulos de Fábrica permiten la producción de unidades medias y pesadas, así como disminuir el tiempo que tarda en producir unidades."
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr ""
+msgstr "- Los módulos de Centros de Investigación reducen el tiempo necesario para completar los proyectos de investigación asignados."
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Torre de petróleo"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "Se puede construir una torre de petróleo seleccionando un Camión y apuntando a un Recurso de Petróleo disponible."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "La destrucción de una torre de petróleo impedirá la construcción de otro en el mismo lugar de manera temporal hasta que cese el fuego."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr ""
+msgstr "Para utilizar una torre de petróleo y generar energía, se requiere un Generador Eléctrico."
 
 msgid "Power Generator"
-msgstr ""
+msgstr "Generador de Energía"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr ""
+msgstr "Cada Generador de Energía utiliza hasta 4 torres de petróleo. Así, por ejemplo, si tienes 10 torres de petróleo, necesitarás 3 Generadores de Energía para utilizar todas las torres y generar la máxima cantidad de energía."
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr ""
+msgstr "Mientras que las torres de petróleo deben construirse sobre recursos petroleros, los Generadores de Energía pueden construirse en cualquier lugar del mapa. Pero ten en cuenta que tener más de un generador por cada 4 torres no proporciona ningún beneficio."
 
 msgid "Rally Point"
-msgstr ""
+msgstr "Punto de reunión"
 
 msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
-msgstr ""
+msgstr "Cuando una Fábrica haya completado la construcción de una unidad, la unidad aparecerá junto a la Fábrica y luego pasará al punto de reunión designado por esta."
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
 msgstr ""
