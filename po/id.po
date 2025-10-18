@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"PO-Revision-Date: 2025-10-18 02:29\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -8077,32 +8077,32 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr ""
+msgstr "PERINGATAN: Jika kamu tidak meng-klik Siap, kamu akan dikeluarkan dari room."
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr ""
+msgstr "Mengeluarkan (%s) karena dia terlalu memakan banyak waktu untuk bersiap"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "PERINGATAN: Tolong klik Siap"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "PERINGATAN: Segera klik Siap agar game dapat dimulai"
 
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "Siapapun kasih aku unit, dong?"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "Siapapun kasih aku truk buat bangun-bangun, dong?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Sori, ga paham. (Pake Quick Chat aja gak sih?)"
 
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Saran aku: Bangun lebih banyak unit"
 
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Saran aku: Bangun unit yang berbeda"
 
 msgid "I suggest: Checking the team strategy view"
 msgstr ""
@@ -8129,40 +8129,40 @@ msgid "I suggest: Capturing oil resources"
 msgstr ""
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Halo haloo!"
 
 msgid "Welcome!"
-msgstr ""
+msgstr "Welkam bro!"
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "Aku mau nonton aja"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Aku pengin ikutan main"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Boleh tukeran tim gak?"
 
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Pencet Ready nya woi!"
 
 msgid "Please wait"
-msgstr ""
+msgstr "Tungguin aku dong"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "Gaskeun!"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Dikit lagi redi"
 
 msgid "Ready"
 msgstr "Siap"
 
 msgid "Be right back"
-msgstr ""
+msgstr "Bentar dulu guys"
 
 msgid "I'm back"
-msgstr ""
+msgstr "Gue udah kembali"
 
 msgid "Yes"
 msgstr "Ya"
@@ -8180,139 +8180,139 @@ msgid "Soon"
 msgstr "Segera"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Makasih"
 
 msgid "No problem"
-msgstr ""
+msgstr "Amann"
 
 msgid "Well-played"
-msgstr ""
+msgstr "GG"
 
 msgid "@#%*!"
 msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Sori, gak paham. (Pakai Quick Chat aja dong?)"
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Siap-siap..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Awas aja ya ntar aku bales!"
 
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "Lecet dikit ngga ngaruh!"
 
 msgid "Attack now?"
-msgstr ""
+msgstr "Serang nggak?"
 
 msgid "Group up"
-msgstr ""
+msgstr "Berkumpul!"
 
 msgid "Split up"
-msgstr ""
+msgstr "Berpisah!"
 
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "Serang yang udah ditandain!"
 
 msgid "Retreat!"
-msgstr ""
+msgstr "Mundur!"
 
 msgid "I need help!"
-msgstr ""
+msgstr "Bantuin woi!"
 
 msgid "Left side"
-msgstr ""
+msgstr "Sisi kiri"
 
 msgid "Right side"
-msgstr ""
+msgstr "Sisi kanan"
 
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "Permintaan Transfer: Unit"
 
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "Permintaan Transfer: Truk"
 
 msgid "Attacking now!"
-msgstr ""
+msgstr "Gaskeun serbu!"
 
 msgid "On my way!"
-msgstr ""
+msgstr "OTEWE!"
 
 msgid "They're coming!"
-msgstr ""
+msgstr "Musuh lagi ke sini!"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "Woi aku diserang!"
 
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "Aku nyari minyak ya"
 
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "Musuhnya nyuri minyak woi!"
 
 msgid "I don't have enough power"
-msgstr ""
+msgstr "Aku udah nggak kuat"
 
 msgid "Build more units"
-msgstr ""
+msgstr "Bangun lebih banyak unit"
 
 msgid "Build different units"
-msgstr ""
+msgstr "Bangun unit yang berbeda"
 
 msgid "Check team strategy view"
-msgstr ""
+msgstr "Cek strategi tim"
 
 msgid "Research different tech"
-msgstr ""
+msgstr "Teliti teknologi yang berbeda"
 
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "Teliti lebih banyak teknologi"
 
 msgid "Build anti-air"
-msgstr ""
+msgstr "Bangun anti serangan udara"
 
 msgid "Repair your units"
-msgstr ""
+msgstr "Perbaiki unit mu"
 
 msgid "Build repair facilities"
-msgstr ""
+msgstr "Bangun pusat perbaikan"
 
 msgid "Build power generators"
-msgstr ""
+msgstr "Bangun generator energi"
 
 msgid "Capture oil resources"
-msgstr ""
+msgstr "Cari sumber minyak"
 
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Yah..."
 
 msgid "I have another plan"
-msgstr ""
+msgstr "Aha, aku punya ide!"
 
 msgid "Good game"
-msgstr ""
+msgstr "GGWP!"
 
 msgid "I give up"
-msgstr ""
+msgstr "Capek deh"
 
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Sori, aku cabut dulu ya"
 
 msgid "Message delivery failure - try again"
 msgstr "Pengiriman pesan gagal - coba lagi"
 
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Map Didownload"
 
 msgid "Admin modified a setting"
-msgstr ""
+msgstr "Admin mengubah pengaturan"
 
 msgid "Bot Allies"
-msgstr ""
+msgstr "Teman Bot"
 
 msgid "Human Allies"
-msgstr ""
+msgstr "Teman Player"
 
 msgid "Research Progress"
 msgstr "Progres Riset"
@@ -8327,13 +8327,13 @@ msgid "Cyborgs"
 msgstr "Cyborg"
 
 msgid "No teammates."
-msgstr ""
+msgstr "Tidak ada anggota tim."
 
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "Menunggu tim lain menyelesaikan perencanaan."
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Senjata:"
 
 msgid "Units:"
 msgstr "Unit:"
@@ -8348,7 +8348,7 @@ msgid "Host Quit"
 msgstr "Penyelenggara Keluar"
 
 msgid "View Guide"
-msgstr ""
+msgstr "Lihat Panduan"
 
 msgid "Load Game"
 msgstr "Muat Permainan"
@@ -8398,30 +8398,30 @@ msgstr ""
 
 #, c-format
 msgid "Failure to load %zu game model(s)"
-msgstr ""
+msgstr "Gagal memuat %zu model game"
 
 #, c-format
 msgid "Failure to load textures for %zu model(s)"
-msgstr ""
+msgstr "Gagal memuat tekstur %zu model"
 
 #, c-format
 msgid "Failure to load model for %zu stat(s)"
-msgstr ""
+msgstr "Gagal memuat model %zu stat"
 
 msgid "Warzone 2100 encountered error(s) loading game data:"
-msgstr ""
+msgstr "Warzone 2100 mengalami error saat sedang memuat data game:"
 
 msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
-msgstr ""
+msgstr "Coba hapus mod baru - mungkin itu bermasalah atau tidak kompatibel dengan versi ini."
 
 msgid "Loaded mod(s):"
-msgstr ""
+msgstr "Mod dimuat:"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
-msgstr ""
+msgstr "Data game mungkin corrupt atau terlalu lama - coba instal ulang gamenya."
 
 msgid "Error Loading Game Data"
-msgstr ""
+msgstr "Gagal Memuat Data Game"
 
 msgid "Global Keys"
 msgstr ""
