@@ -1,6 +1,6 @@
 debugMsg('Module: weap-init.js', 'init');
 
-var guns = [
+const guns = [
 	//	===== Пулемёты
 	["R-Wpn-MG1Mk1", "MG1Mk1"], // Лёгкий пулемёт
 	["R-Wpn-MG2Mk1", "MG2Mk1"], // Лёгкий спаренный пулемёт
@@ -49,7 +49,6 @@ var guns = [
 	["R-Wpn-RailGun01", "RailGun1Mk1"], // Needle Gun
 	["R-Wpn-RailGun02", "RailGun2Mk1"], // Rail Gun
 	["R-Wpn-RailGun03", "RailGun3Mk1"], // Gauss Cannon
-
 ];
 
 // Типы пушек, по приоритету
@@ -130,7 +129,7 @@ guns_type['rl'] = [
 	["R-Wpn-RailGun03", "RailGun3Mk1"], // Gauss Cannon
 ];
 
-var guns_pts = {};
+const guns_pts = {};
 
 guns_pts['mg'] = [
 	'R-Wpn-MG3Mk1',

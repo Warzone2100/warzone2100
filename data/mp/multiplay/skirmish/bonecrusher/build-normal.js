@@ -4,16 +4,16 @@ function mainBuilders(rotation)
 {
 	// debugMsg('mainBuilders()', 'builders_advanced');
 
-	var helped = 0;
-	var module = 0;
-	var build = 0;
-	// var iter=0;
-	var _b = enumGroup(buildersMain);
+	let helped = 0;
+	let module = 0;
+	let build = 0;
+	// let iter=0;
+	const _b = enumGroup(buildersMain);
 
-	var len_research_lab_ready = research_lab_ready.length;
-	var len_research_lab = research_lab.length;
+	let len_research_lab_ready = research_lab_ready.length;
+	let len_research_lab = research_lab.length;
 
-	var technology = enumResearch().length;
+	const technology = enumResearch().length;
 
 	if (!technology)
 	{
@@ -22,13 +22,13 @@ function mainBuilders(rotation)
 	}
 
 	// enumGroup(buildersMain).forEach((obj, iter) => {
-	var rnd = Math.round(Math.random());
+	const rnd = Math.round(Math.random());
 	// debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
 	for (let i = 0; i < _b.length; ++i)
 	{
 		// debugMsg('---', 'builders');
-		var obj = _b[i];
-		// var pos = {x:base.x, y:base.y};
+		const obj = _b[i];
+		// let pos = {x:base.x, y:base.y};
 		/*
 			if (i === 0) pos = {x:obj.x, y:obj.y};
 			if (i === 2) pos = {x:obj.x, y:obj.y};
@@ -73,8 +73,8 @@ function mainBuilders(rotation)
 		// ищем чего-бы достроить или починить
 		if (helped < 1)
 		{
-			var myBase = enumStruct(me);
-			var _h = false;
+			const myBase = enumStruct(me);
+			let _h = false;
 
 			for (const b in myBase)
 			{
@@ -115,8 +115,8 @@ function mainBuilders(rotation)
 
 		// debugMsg('modules', 'builders');
 		// Модули на здания
-		var safe = getInfoNear(base.x, base.y, 'safe', (base_range / 2)).value;
-		var busy = false;
+		const safe = getInfoNear(base.x, base.y, 'safe', (base_range / 2)).value;
+		let busy = false;
 
 		if ((safe || berserk || policy['build'] === 'rich') && module < 3)
 		{

@@ -8,8 +8,8 @@ debugMsg('Module: weapons.js', 'init');
 
 function _weaponsGetGuns(num)
 {
-	var _weapons = [];
-	var _weapon, _points, _dbg;
+	let _weapons = [];
+	let _weapon, _points, _dbg;
 
 	// Цикл по всем типам стволов
 	for (const t in guns_type)
@@ -43,7 +43,7 @@ function _weaponsGetGuns(num)
 		}
 		if (_weapon)
 		{
-			var precent = Math.round((_points + 1) * 100 / (guns_pts[t].length + 1));
+			const precent = Math.round((_points + 1) * 100 / (guns_pts[t].length + 1));
 
 			_weapons.push([_weapon, _points + 1]);
 			debugMsg(_dbg + " - " + precent + "%", 'weap');
@@ -55,7 +55,7 @@ function _weaponsGetGuns(num)
 		_weapons.sort((a, b) => (a[1] < b[1]));
 		_weapons.reverse();
 		_weapons = _weapons.slice(0, num);
-		var _out = [];
+		const _out = [];
 
 		for (const w in _weapons)
 		{

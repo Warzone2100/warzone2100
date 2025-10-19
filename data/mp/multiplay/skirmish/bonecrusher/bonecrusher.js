@@ -52,23 +52,19 @@ NTW Авиация исследует кластерные бомбы и при�
 */
 
 // DEBUG: количество вывода, закоментить перед релизом
-var debugLevels = ['error'];
+const debugLevels = ['error'];
 
-// var debugLevels = ['init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting'];
+// const debugLevels = ['init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting'];
 
 
-
-var debugName = me;
+// инфа
+var debugName = colors[playerData[me].colour];
 
 
 // Массив конкретных технологий (tech.js)
 var tech = {};
 
 include("multiplay/skirmish/" + vernum + "/names.js");
-
-// инфа
-debugName = colors[playerData[me].colour];
-
 include("multiplay/skirmish/" + vernum + "/functions.js");
 
 // new 3.3+
@@ -94,18 +90,18 @@ include("multiplay/skirmish/" + vernum + "/build-normal.js");
 
 
 // Hard CPU-load algorithms
-var weakCPU = false;
+const weakCPU = false;
 
-var base_range = 20; // В каких пределах работают основные строители (не охотники)
+const base_range = 20; // В каких пределах работают основные строители (не охотники)
 
 var buildersTimer = 25000; // Триггер для заказа строителей (что бы не выходили пачкой сразу)
-var fixersTimer = 50000; // Триггер для заказа рем.инженеров
+const fixersTimer = 50000; // Триггер для заказа рем.инженеров
 var scannersTimer = 300000; // Триггер для заказа сенсоров
 var checkRegularArmyTimer = 10000;
 var reactRegularArmyTimer = 10000;
 var reactWarriorsTimer = 5000;
-var reactPartisanTimer = 20000;
-var fullBaseTimer = 60000;
+const reactPartisanTimer = 20000;
+const fullBaseTimer = 60000;
 
 var minBuilders = 5;
 
@@ -122,13 +118,13 @@ var minCyborgs = 20;
 var maxCyborgs = 30;
 var maxFixers = 5;
 var maxJammers = 2;
-var maxScouts = 2;
+//var maxScouts = 2;
 
-var maxExtractors = 40;
+const maxExtractors = 40;
 var maxGenerators = 10;
 
 // Performance limits
-var ordersLimit = 100;
+const ordersLimit = 100;
 
 // functions controller for performance purpose
 var func_buildersOrder = true;
@@ -154,7 +150,7 @@ var fullBase = false;
 var earlyGame = true;
 var running = false; // Работаем?
 
-var produceTrigger = [];
+const produceTrigger = [];
 
 var armyToPlayer = false; // Передавать всю новую армию игроку №№
 var vtolToPlayer = false;
@@ -176,10 +172,10 @@ var ally = [];
 var enemy = [];
 
 // Массив всех приказов юнитам
-var _globalOrders = [];
+const _globalOrders = [];
 
-var build_rich = 26; // Сколько должно быть рядом нефтеточек, что бы изменить механизм постройки на rich
-var army_rich = 28; // Сколько должно быть занято нефтеточек, что бы изменить механизм армии на rich
+const build_rich = 26; // Сколько должно быть рядом нефтеточек, что бы изменить механизм постройки на rich
+const army_rich = 28; // Сколько должно быть занято нефтеточек, что бы изменить механизм армии на rich
 
 var bc_ally = []; // Союзные ИИ BoneCrusher-ы
 
@@ -188,6 +184,7 @@ var avail_research = []; // Массив возможных исследован
 // var scavengerPlayer = -1;
 
 var rage = difficulty;
+var asPlayer;
 
 if (typeof asPlayer === "undefined")
 {
@@ -201,10 +198,10 @@ else
 var buildersMain = newGroup();
 var buildersHunters = newGroup();
 
-var policy = {};
+const policy = {};
 
 // Фитчи, не совместимые с 3.1.5
-var nf = {};
+const nf = {};
 nf['policy'] = false;
 
 var enemyDist = 0;
@@ -234,11 +231,11 @@ var maxPads;
 var buildersTrigger = 0;
 var fixersTrigger = 0;
 var scannersTrigger = 0;
-var checkRegularArmyTrigger = 0;
+//var checkRegularArmyTrigger = 0;
 var reactRegularArmyTrigger = 0;
 var reactWarriorsTrigger = 0;
 var fullBaseTrigger = 0;
-var partisanTrigger = 0;
+var partisanTrigger = 0; // Functionally disabled by comments.
 var fleetTrigger = 0;
 
 var berserk = false;
@@ -248,7 +245,7 @@ var credit = 0;
 var lassat_charged = false;
 
 
-var eventsRun = {};
+const eventsRun = {};
 eventsRun['targetCyborgs'] = 0;
 eventsRun['targetArmy'] = 0;
 eventsRun['targetRegular'] = 0;
@@ -264,11 +261,11 @@ eventsRun['targetSensors'] = 0;
 // old 3.2-
 // Предустановки на исследование
 var research_way = []; // Главный путь развития, компануется далее, в функциях, в зависимости от уровня сложности и др. настроек
-var research_primary = []; // Первичный, один из главных под-путей развития, к которому задаётся режим его исследований(строгий, размазанный или случайный)
-const research_synapse = ["R-Struc-Research-Upgrade09"];
-const research_power = ["R-Struc-Power-Upgrade03a"];
-const research_armor = ["R-Vehicle-Metals09"];
-const research_sensor = ["R-Sys-Sensor-UpLink"];
+//var research_primary = []; // Первичный, один из главных под-путей развития, к которому задаётся режим его исследований(строгий, размазанный или случайный)
+//const research_synapse = ["R-Struc-Research-Upgrade09"];
+//const research_power = ["R-Struc-Power-Upgrade03a"];
+//const research_armor = ["R-Vehicle-Metals09"];
+//const research_sensor = ["R-Sys-Sensor-UpLink"];
 
 // Переназначаются в функции prepeareProduce() что бы не читерить.
 // var light_bodies=["Body3MBT","Body2SUP","Body4ABT","Body1REC"];
@@ -299,7 +296,7 @@ var cyborgs = [
 	["R-Cyborg-Hvywpn-RailGunner", "CyborgHeavyBody", "Cyb-Hvywpn-RailGunner"], // Super Rail-Gunner
 ];
 
-var bodies = [
+const bodies = [
 	//	===== Средняя броня (металическая)
 	["R-Vehicle-Body01", "Body1REC"], // Стартовая броня лёгкой защиты "Вайпер" (уже есть)
 	["R-Vehicle-Body05", "Body5REC"], // Средняя защита "Кобра"
@@ -321,6 +318,7 @@ var bodies = [
 	["R-Vehicle-Body14", "Body14SUP"], // Dragon (двухпушечная)
 ];
 
+/*
 var propulsions = [
 	[true, "wheeled01"], // Стартовые колёса (уже есть)
 	["R-Vehicle-Prop-Halftracks", "HalfTrack"], // Полугусенецы
@@ -328,10 +326,12 @@ var propulsions = [
 	["R-Vehicle-Prop-Hover", "hover01"], // Ховер
 	["R-Vehicle-Prop-VTOL", "V-Tol"] // СВВП
 ];
+*/
 
 // Переназначаются в функции prepeareProduce() что бы не читерить.
 var avail_vtols = ["MG3-VTOL"];
 
+/*
 var vtols = [
 	["R-Wpn-MG3Mk1", "MG3-VTOL"], // VTOL Heavy Machinegun
 	["R-Wpn-MG4", "MG4ROTARY-VTOL"], // VTOL Assault Gun
@@ -340,11 +340,12 @@ var vtols = [
 	//["Bomb3-VTOL-LtINC","Bomb3-VTOL-LtINC"],		// VTOL Phosphor Bomb Bay
 	//["Bomb4-VTOL-HvyINC","Bomb4-VTOL-HvyINC"],		// VTOL Thermite Bomb Bay
 ];
+*/
 
 var avail_guns = [];
 
 var defence = [];
-var towers = [
+const towers = [
 	['R-Defense-Tower01', 'GuardTower1'], // Пулемётная вышка
 	['R-Defense-Pillbox01', 'PillBox1'], // Пулемётный бункер
 	['R-Defense-WallTower01', 'WallTower01'], // Укреплённый пулемёт
@@ -363,7 +364,7 @@ var towers = [
 
 var AA_defence = [];
 var AA_queue = [];
-var AA_towers = [
+const AA_towers = [
 	['R-Defense-AASite-QuadMg1', 'AASite-QuadMg1'], // Hurricane AA Site
 	['R-Defense-AASite-QuadBof', 'AASite-QuadBof'], // AA Cyclone Flak Cannon Emplacement
 	['R-Defense-WallTower-DoubleAAgun', 'WallTower-DoubleAAGun'], // AA Cyclone Flak Cannon Hardpoint
@@ -411,7 +412,7 @@ function init()
 	initBase();
 	startPos = base;
 
-	var technology = enumResearch();
+	const technology = enumResearch();
 
 	if (technology.length)
 	{
@@ -427,8 +428,8 @@ function init()
 	debugMsg('Num Enemies: ' + getNumEnemies(), 'init');
 
 	// Получаем координаты всех ресурсов и занятых и свободных
-	var freeResources = getFreeResources();
-	var nearResources = freeResources.filter((e) => (distBetweenTwoPoints_p(base.x, base.y, e.x, e.y) < base_range));
+	const freeResources = getFreeResources();
+	let nearResources = freeResources.filter((e) => (distBetweenTwoPoints_p(base.x, base.y, e.x, e.y) < base_range));
 	nearResources = nearResources.concat(enumStruct(me, "A0ResourceExtractor").filter((e) => (distBetweenTwoPoints_p(base.x, base.y, e.x, e.y) < base_range)));
 	debugMsg("На карте " + freeResources.length + " свободных ресурсов", 'init');
 
@@ -439,11 +440,11 @@ function init()
 	_builders = enumDroid(me, DROID_CONSTRUCT);
 
 	debugMsg("Игроков на карте: " + maxPlayers, 2);
-	var access = false;
+	let access = false;
 
 	playerData.forEach((data, player) => {
-		var msg = "Игрок №" + player + " " + colors[data.colour];
-		var dist = distBetweenTwoPoints_p(base.x, base.y, startPositions[player].x, startPositions[player].y);
+		let msg = "Игрок №" + player + " " + colors[data.colour];
+		const dist = distBetweenTwoPoints_p(base.x, base.y, startPositions[player].x, startPositions[player].y);
 
 		if (player === me)
 		{
@@ -556,15 +557,15 @@ function init()
 		// Если есть союзники бонкрашеры
 		if (bc_ally.length > 1)
 		{
-			var researches = [research_rich2, research_fire1, research_cannon, research_fire2, research_rich, research_rockets];
-			var r = bc_ally.indexOf(me) % researches.length;
+			const researches = [research_rich2, research_fire1, research_cannon, research_fire2, research_rich, research_rockets];
+			const r = bc_ally.indexOf(me) % researches.length;
 
 			debugMsg('Get research path #' + r + ', from ally researches array', 'init');
 			research_path = researches[r];
 		}
 		else
 		{
-			var researches = [
+			const researches = [
 				research_rich2, research_rich2, research_rich2, research_rich2, research_rich2,
 				research_cannon, research_cannon,
 				research_fire2,
@@ -573,7 +574,7 @@ function init()
 				research_fire3, research_fire3, research_fire3,
 				research_rockets
 			];
-			var r = Math.floor(Math.random() * researches.length);
+			const r = Math.floor(Math.random() * researches.length);
 
 			debugMsg('Get research path #' + r + ', from solo researches array', 'init');
 			research_path = researches[r];
@@ -597,8 +598,8 @@ function init()
 		// Если есть союзники бонкрашеры
 		if (bc_ally.length > 1)
 		{
-			var researches = [research_fire1, research_cannon, research_fire2, research_rich, research_rockets];
-			var r = bc_ally.indexOf(me) % researches.length;
+			const researches = [research_fire1, research_cannon, research_fire2, research_rich, research_rockets];
+			const r = bc_ally.indexOf(me) % researches.length;
 
 			debugMsg('Get research path #' + r + ', from ally researches array', 'init');
 			research_path = researches[r];
@@ -606,7 +607,7 @@ function init()
 		else
 		{
 
-			var researches = [
+			const researches = [
 				research_rich2,
 				research_cannon, research_cannon, research_cannon, research_cannon, research_cannon,
 				research_fire2,
@@ -616,8 +617,8 @@ function init()
 				research_rockets
 			];
 
-			// var researches = [research_green];
-			var r = Math.floor(Math.random() * researches.length);
+			// const researches = [research_green];
+			const r = Math.floor(Math.random() * researches.length);
 
 			debugMsg('Get research path #' + r + ', from solo researches array', 'init');
 			research_path = researches[r];
@@ -715,7 +716,7 @@ function init()
 	}
 
 	// Просто дебаг информация
-	var oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
+	const oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
 	debugMsg("На карте " + oilDrums.length + " бочек с нефтью", 'init');
 
 	queue("welcome", 3000 + me * (Math.floor(Math.random() * 2000) + 1500));
@@ -827,10 +828,10 @@ function initBase()
 {
 	// Первых строителей в группу
 	checkBase();
-	var _builders = enumDroid(me, DROID_CONSTRUCT);
+	const _builders = enumDroid(me, DROID_CONSTRUCT);
 
 	// Получаем свои координаты
-	var _r = Math.floor(Math.random() * _builders.length);
+	const _r = Math.floor(Math.random() * _builders.length);
 
 	if (_builders.length > 0)
 	{
@@ -866,7 +867,7 @@ function debugMsg(msg, level)
 		return;
 	}
 
-	var timeMsg = Math.floor(gameTime / 1000);
+	const timeMsg = Math.floor(gameTime / 1000);
 
 	debug(shortname + "[" + timeMsg + "]{" + debugName + "}(" + level + "): " + msg);
 }

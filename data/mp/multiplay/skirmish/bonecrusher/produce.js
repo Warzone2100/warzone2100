@@ -9,7 +9,7 @@ function prepeareProduce()
 {
 	// debugMsg('prepeareProduce()', 'production')
 	// Если есть HQ
-	var hq = enumStruct(me, HQ).filter((e) => (e.status === BUILT));
+	const hq = enumStruct(me, HQ).filter((e) => (e.status === BUILT));
 
 	if (hq.length > 0)
 	{
@@ -55,7 +55,7 @@ function prepeareProduce()
 
 		/*
 		// Сортируем пушки по "крутизне", базируясь на research.points
-		var _guns=guns.filter((e) => {
+		const _guns=guns.filter((e) => {
 			debugMsg(e[0]+' - '+getResearch(e[0]).done, 'weap');
 			return getResearch(e[0]).done;
 		}).sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));
@@ -76,11 +76,11 @@ function prepeareProduce()
 
 		// for (const i in avail_guns) debugMsg(avail_guns[i], 'weap');
 
-		var technology = enumResearch().length;
+		const technology = enumResearch().length;
 
 		// Сайборги заполонили!
 		avail_cyborgs = [];
-		var _cyb = cyborgs.filter((e) => ((getResearch(e[0]).done && technology) || (!technology && e[1] === 'CyborgHeavyBody')));
+		const _cyb = cyborgs.filter((e) => ((getResearch(e[0]).done && technology) || (!technology && e[1] === 'CyborgHeavyBody')));
 		/*.sort((a, b) => (getResearch(a[0]).points - getResearch(b[0]).points));*/
 		for (const i in _cyb)
 		{
@@ -91,7 +91,7 @@ function prepeareProduce()
 
 		// В.В.иП.
 		avail_vtols = [];
-		var _vtols = vtols.filter((e) => (getResearch(e[0]).done)).sort((a, b) => (
+		const _vtols = vtols.filter((e) => (getResearch(e[0]).done)).sort((a, b) => (
 			getResearch(a[0]).points - getResearch(b[0]).points
 		));
 
@@ -132,7 +132,7 @@ function produceDroids()
 	}
 
 	debugMsg('produceDroids()', 'production');
-	var droid_factories = enumStruct(me, FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
+	const droid_factories = enumStruct(me, FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
 
 	if (droid_factories.length === 0)
 	{
@@ -140,12 +140,12 @@ function produceDroids()
 	}
 
 
-	// var builders_limit = getDroidLimit(me, DROID_CONSTRUCT);
-	var builders = enumDroid(me, DROID_CONSTRUCT);
+	// const builders_limit = getDroidLimit(me, DROID_CONSTRUCT);
+	const builders = enumDroid(me, DROID_CONSTRUCT);
 	// debugMsg("Have builders: "+builders.length+"; limits: "+builders_limit, 'production');
 	// debugMsg("Have warriors="+groupSize(armyRegular)+" partisan="+groupSize(armyPartisans), 'production');
 
-	var _body = light_bodies[Math.floor(Math.random() * light_bodies.length)];
+	let _body = light_bodies[Math.floor(Math.random() * light_bodies.length)];
 
 	if (droid_factories[0].modules >= 1 && (playerPower(me) > 50 || berserk) && medium_bodies.length > 0)
 	{
@@ -156,7 +156,7 @@ function produceDroids()
 		_body = heavy_bodies[Math.floor(Math.random() * heavy_bodies.length)];
 	}
 
-	var _prop = ['tracked01', 'HalfTrack', 'wheeled01'];
+	let _prop = ['tracked01', 'HalfTrack', 'wheeled01'];
 
 	if (nf['policy'] === 'island')
 	{
@@ -203,7 +203,7 @@ function produceDroids()
 
 	if (enumDroid(me, DROID_SENSOR).length === 0 && getInfoNear(base.x, base.y, 'safe', base_range).value && scannersTrigger < gameTime)
 	{
-		var hq = enumStruct(me, HQ).filter((e) => (e.status === BUILT));
+		const hq = enumStruct(me, HQ).filter((e) => (e.status === BUILT));
 
 		if (hq.length > 0)
 		{
@@ -223,7 +223,7 @@ function produceDroids()
 		((playerPower(me) > 300 || berserk) || groupSize(armyFixers) === 0))
 	{
 		fixersTrigger = gameTime + fixersTimer;
-		var _repair = "LightRepair1";
+		let _repair = "LightRepair1";
 
 		if (getResearch("R-Sys-MobileRepairTurretHvy").done)
 		{
@@ -235,18 +235,18 @@ function produceDroids()
 	}
 	/*
 		if (version.substr(0,3) === '3.2' && getResearch('R-Sys-ECM-Upgrade01').done && getInfoNear(base.x,base.y,'safe',base_range).value && (groupSize(armyJammers) === 0 || groupSize(armyJammers) < maxJammers) && inProduce('jammer') === 0) {
-			var _jammer = "ECM1TurretMk1";
+			const _jammer = "ECM1TurretMk1";
 			produceTrigger[droid_factories[0].id] = 'jammer';
 			debugMsg("ADD jammer "+droid_factories[0].id, 'triggers');
 			buildDroid(droid_factories[0], "Jammer", _body, _prop, "", "", _jammer);
 		}
 	*/
 
-	var forceproduce = false;
+	let forceproduce = false;
 
 	if (berserk)
 	{
-		var enemyarmy = [];
+		let enemyarmy = [];
 
 		for (let e = 0; e < maxPlayers; ++e)
 		{
@@ -267,7 +267,7 @@ function produceDroids()
 			}
 		}
 
-		var myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
+		const myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
 
 		if (myarmy.length <= enemyarmy.length)
 		{
@@ -282,9 +282,9 @@ function produceDroids()
 		// if (( (groupSize(armyPartisans) < 7 || playerPower(me) > 250) && groupSize(armyPartisans) < maxPartisans) || !getInfoNear(base.x,base.y,'safe',base_range).value) {
 		if ((groupSize(armyPartisans) < minPartisans || playerPower(me) > (groupSize(armyPartisans) * 50)) || !getInfoNear(base.x, base.y, 'safe', base_range).value || forceproduce)
 		{
-			// var _weapon = avail_guns[Math.floor(Math.random()*Math.min(avail_guns.length, 5))]; //Случайная из 5 последних крутых пушек
-			var _weapon = avail_guns[Math.floor(Math.random() * avail_guns.length)];
-			var _second = avail_guns[Math.floor(Math.random() * avail_guns.length)];
+			// const _weapon = avail_guns[Math.floor(Math.random()*Math.min(avail_guns.length, 5))]; // Случайная из 5 последних крутых пушек
+			const _weapon = avail_guns[Math.floor(Math.random() * avail_guns.length)];
+			const _second = avail_guns[Math.floor(Math.random() * avail_guns.length)];
 
 			debugMsg(_body + " " + _prop + " " + _weapon, 'template');
 			buildDroid(droid_factories[0], "Army", _body, _prop, "", "", _weapon, _second);
@@ -300,7 +300,7 @@ function produceCyborgs()
 		return;
 	}
 
-	var cyborg_factories = enumStruct(me, CYBORG_FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
+	const cyborg_factories = enumStruct(me, CYBORG_FACTORY).filter((e) => (e.status === BUILT && structureIdle(e)));
 
 	if (cyborg_factories.length === 0)
 	{
@@ -316,11 +316,11 @@ function produceCyborgs()
 		return;
 	}
 
-	var forceproduce = false;
+	let forceproduce = false;
 
 	if (berserk)
 	{
-		var enemyarmy = [];
+		let enemyarmy = [];
 
 		for (let e = 0; e < maxPlayers; ++e)
 		{
@@ -341,7 +341,7 @@ function produceCyborgs()
 			}
 		}
 
-		var myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
+		const myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
 		if (myarmy.length <= enemyarmy.length)
 		{
 			debugMsg("Cyborg forceproduce: my " + myarmy.length + " <= enemy " + enemyarmy.length, 'berserk');
@@ -367,11 +367,11 @@ function produceCyborgs()
 	// debugMsg("Cyborg: fact="+cyborg_factories.length+"; cyb="+avail_cyborgs.length, 'production');
 	if (avail_cyborgs.length > 0 && (groupSize(armyCyborgs) < minCyborgs || !getInfoNear(base.x, base.y, 'safe', base_range).value || forceproduce))
 	{
-		// var _cyb = avail_cyborgs[Math.floor(Math.random()*Math.min(avail_cyborgs.length, 5))]; //Случайный киборг из 5 полседних
-		var _cyb = avail_cyborgs[Math.floor(Math.random() * avail_cyborgs.length)]; //Случайный киборг из доступных
-		var _body = _cyb[0];
-		// var _body = 'CyborgLightBody';
-		var _weapon = _cyb[1];
+		// const _cyb = avail_cyborgs[Math.floor(Math.random()*Math.min(avail_cyborgs.length, 5))]; //Случайный киборг из 5 полседних
+		const _cyb = avail_cyborgs[Math.floor(Math.random() * avail_cyborgs.length)]; //Случайный киборг из доступных
+		const _body = _cyb[0];
+		// const _body = 'CyborgLightBody';
+		const _weapon = _cyb[1];
 
 		debugMsg("Cyborg: body=" + _body + "; weapon=" + _weapon, 'production');
 		// buildDroid(cyborg_factories[0], "Terminator", _body, "CyborgLegs", "", "", _weapon);
@@ -386,19 +386,19 @@ function produceVTOL()
 		return;
 	}
 
-	var vtol_factory = enumStruct(me, VTOL_FACTORY);
-	var vtol_factories = vtol_factory.filter((e) => (e.status === BUILT && structureIdle(e)));
+	const vtol_factory = enumStruct(me, VTOL_FACTORY);
+	const vtol_factories = vtol_factory.filter((e) => (e.status === BUILT && structureIdle(e)));
 
 	if (vtol_factories.length === 0)
 	{
 		return;
 	}
 
-	var forceproduce = false;
+	let forceproduce = false;
 
 	if (berserk)
 	{
-		var enemyarmy = [];
+		let enemyarmy = [];
 
 		for (let e = 0; e < maxPlayers; ++e)
 		{
@@ -419,7 +419,7 @@ function produceVTOL()
 			}
 		}
 
-		var myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
+		const myarmy = enumDroid(me, DROID_WEAPON).concat(enumDroid(me, DROID_CYBORG));
 
 		if (myarmy.length <= enemyarmy.length)
 		{
@@ -487,7 +487,7 @@ function produceVTOL()
 		return;
 	}
 
-	var _body = light_bodies;
+	let _body = light_bodies;
 
 	if (((playerPower(me) > 300 && playerPower(me) < 500) || forceproduce) && medium_bodies.length > 0)
 	{
@@ -499,7 +499,7 @@ function produceVTOL()
 		_body = heavy_bodies;
 	}
 
-	var _weapon = avail_vtols[Math.floor(Math.random() * Math.min(avail_vtols.length, 5))]; // Случайная из 5 последних крутых пушек
+	const _weapon = avail_vtols[Math.floor(Math.random() * Math.min(avail_vtols.length, 5))]; // Случайная из 5 последних крутых пушек
 
 	buildDroid(vtol_factories[0], "Bomber", _body, "V-Tol", "", "", _weapon);
 }
