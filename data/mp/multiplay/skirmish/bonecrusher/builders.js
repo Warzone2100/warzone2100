@@ -276,7 +276,10 @@ function builderBuild(droid, structure, rotation, position)
 				target = sortByDistance(target, base).filter((e) => (
 					distBetweenTwoPoints_p(e.x, e.y, base.x, base.y) < base_range && droidCanReach(droid, e.x, e.y)
 				));
-				_pos = target[0];
+				if (target.length > 0)
+				{
+					_pos = target[0];
+				}
 			}
 			else
 			{

@@ -223,7 +223,7 @@ function bc_eventStructureBuilt(structure, droid)
 	{
 		case RESEARCH_LAB:
 			queue("doResearch", 1000);
-			if (rage !== EASY && gameTime < 300000)
+			if ((rage !== EASY) && (gameTime < 300000) && (groupSize(buildersMain) > 0))
 			{
 				// Ротация строителей в начале игры, для более быстрого захвата ресурсов на карте
 				// Отключено в лёгком режиме
@@ -390,6 +390,10 @@ function bc_eventDroidBuilt(droid, structure)
 
 function bc_eventAttacked(victim, attacker)
 {
+	if (!victim || !attacker)
+	{
+		return;
+	}
 	// debugMsg(JSON.stringify(victim), 'temp');
 	if (allianceExistsBetween(me, attacker.player))
 	{
