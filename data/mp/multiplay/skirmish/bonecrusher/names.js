@@ -21,7 +21,7 @@ const droidTypes = [
 	"DROID_ANY" ///< Any droid. Used as a parameter for various stuff.
 ];
 
-var droidOrders = [
+const droidOrders = [
 	"DORDER_NONE", /**< no order set. */
 
 	"DORDER_STOP", /**< stop the current order. */

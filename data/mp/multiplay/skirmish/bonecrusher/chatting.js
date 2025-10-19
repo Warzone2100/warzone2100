@@ -1,13 +1,13 @@
 debugMsg('Module: chatting.js', 'init');
 
+var _chatting = {};
+
 function chatting(type)
 {
-	var chlen = _chatting[type].length; // Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
+	const chlen = _chatting[type].length; // Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
 
 	return _chatting[type][Math.floor(Math.random() * chlen)];
 }
-
-var _chatting = {};
 
 _chatting['army'] = [
 	"If u want, I may support you with my army. Just say \"yes\"",
