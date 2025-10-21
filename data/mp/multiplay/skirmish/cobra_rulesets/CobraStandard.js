@@ -556,17 +556,20 @@ const weaponStats =
 			{ res: "R-Wpn-Laser01", stat: "Laser3BEAMMk1" }, // flash
 			{ res: "R-Wpn-Laser02", stat: "Laser2PULSEMk1" }, // pulse
 			{ res: "R-Wpn-HvyLaser", stat: "HeavyLaser" }, // hvy laser
+			{ res: "R-Wpn-ParticleGun", stat: "ParticleGun" }, // particle laser
 		],
 		vtols: [
 			{ res: "R-Wpn-Laser01", stat: "Laser3BEAM-VTOL" }, // flash
 			{ res: "R-Wpn-Laser02", stat: "Laser2PULSE-VTOL" }, // pulse
 			{ res: "R-Wpn-HvyLaser", stat: "HeavyLaser-VTOL" }, // hvy laser
+			{ res: "R-Wpn-ParticleGun", stat: "ParticleGun-VTOL" }, // particle laser
 		],
 		defenses: [
 			{ res: "R-Defense-PrisLas", stat: "Emplacement-PrisLas" }, // flash empl
 			{ res: "R-Defense-PulseLas", stat: "GuardTower-BeamLas" }, // pulse tower
 			{ res: "R-Defense-WallTower-PulseLas", stat: "WallTower-PulseLas" }, // pulse hard
 			{ res: "R-Defense-HeavyLas", stat: "Emplacement-HeavyLaser" }, // hvy empl
+			{ res: "R-Defense-ParticleGun", stat: "Emplacement-ParticleGun" }, // particle empl
 		],
 		templates: [
 			{ res: "R-Wpn-Laser01", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Laser", ] }, // flash borg
