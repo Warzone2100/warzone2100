@@ -307,8 +307,8 @@ function artilleryTactics()
 					if (!beacon.wasVtol || (beacon.wasVtol && ARTILLERY_UNITS[i].weapons[0].canHitAir))
 					{
 						//Attack something in this area, if possible.
-						let xRand = (random(100) < 50) ? random(15) : -random(15);
-						let yRand = (random(100) < 50) ? random(15) : -random(15);
+						let xRand = chance(50) ? random(15) : -random(15);
+						let yRand = chance(50) ? random(15) : -random(15);
 						let xPos = beacon.x + xRand;
 						let yPos = beacon.y + yRand;
 
@@ -371,8 +371,8 @@ function groundTactics()
 					if (!beacon.wasVtol || (beacon.wasVtol && UNITS[i].weapons[0].canHitAir))
 					{
 						//Attack something in this area, if possible.
-						let xRand = (random(100) < 50) ? random(15) : -random(15);
-						let yRand = (random(100) < 50) ? random(15) : -random(15);
+						let xRand = chance(50) ? random(15) : -random(15);
+						let yRand = chance(50) ? random(15) : -random(15);
 						let xPos = beacon.x + xRand;
 						let yPos = beacon.y + yRand;
 

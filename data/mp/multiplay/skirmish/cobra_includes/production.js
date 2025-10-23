@@ -9,7 +9,7 @@ function havePrimaryOrArtilleryWeapon()
 
 function earlyT1MachinegunChance()
 {
-	return ((getMultiTechLevel() === 1) && (gameTime < 900000) && (random(100) < 35));
+	return ((getMultiTechLevel() === 1) && (gameTime < 900000) && chance(35));
 }
 
 function superLowOnProductionPower()
@@ -78,7 +78,7 @@ function chooseWeaponType(weaps)
 		weaponType = rdm;
 	}
 
-	if (isDefined(weaps.fastFire) && (random(100) < 50))
+	if (isDefined(weaps.fastFire) && chance(50))
 	{
 		weaponType = weaps.fastFire;
 	}
@@ -131,12 +131,12 @@ function chooseRandomVTOLWeapon()
 	}
 
 	//Rare chance to make a Sunburst VTOL if we use Rocket AA.
-	if ((returnAntiAirAlias() === "rktaa") && (random(100) < 8) && playerVtolRatio(getMostHarmfulPlayer()) >= 0.25)
+	if ((returnAntiAirAlias() === "rktaa") && chance(8) && playerVtolRatio(getMostHarmfulPlayer()) >= 0.25)
 	{
 		weaps = weaponStats.rockets_AA;
 	}
 	//Rare chance to make a bunker buster VTOL if we are a rocket personality.
-	if ((random(100) < 5) && personalityIsRocketMain() && (playerStructureUnitRatio(getMostHarmfulPlayer()) >= 0.08))
+	if (chance(5) && personalityIsRocketMain() && (playerStructureUnitRatio(getMostHarmfulPlayer()) >= 0.08))
 	{
 		weaps = weaponStats.rockets_AS;
 	}
@@ -183,13 +183,13 @@ function choosePersonalityWeapon(type)
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
 		// Choose an anti-air weapon instead... checks target player and then total player vtols.
-		if (((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && random(100) < 20)
+		if (((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && chance(20))
 		{
 			weaponList = [];
 			skip = true;
 
 			// The lasers are the most powerful...
-			if (componentAvailable(weaponStats.lasers_AA.weapons[0].stat) && (random(100) <= 50))
+			if (componentAvailable(weaponStats.lasers_AA.weapons[0].stat) && chance(51))
 			{
 				let lasers = weaponStats.lasers_AA.weapons;
 
@@ -217,7 +217,7 @@ function choosePersonalityWeapon(type)
 		}
 
 		// Allow small chance for Bunker Busters if main weapons lines are rockets.
-		if (!skip && ((random(100) < 7) && personalityIsRocketMain() && (playerStructureUnitRatio(getMostHarmfulPlayer()) >= 0.25)))
+		if (!skip && (chance(7) && personalityIsRocketMain() && (playerStructureUnitRatio(getMostHarmfulPlayer()) >= 0.25)))
 		{
 			weaponList = [];
 			skip = true;
@@ -232,7 +232,7 @@ function choosePersonalityWeapon(type)
 		}
 
 		// Maybe choose a machinegun.
-		if (!skip && ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
+		if (!skip && ((!turnOffMG && chance(Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
 			!havePrimaryOrArtilleryWeapon() ||
 			earlyT1MachinegunChance()))
 		{
@@ -280,12 +280,12 @@ function useHover(weap)
 
 	let propulsions = playerLandPropRatio(getMostHarmfulPlayer());
 
-	if (Math.floor(propulsions.hover * 100) >= 30 && random(100) < 20)
+	if (Math.floor(propulsions.hover * 100) >= 30 && chance(20))
 	{
 		return true;
 	}
 
-	if (Math.floor(propulsions.track * 100) >= 50 && random(100) < 80)
+	if (Math.floor(propulsions.track * 100) >= 50 && chance(80))
 	{
 		return false;
 	}
@@ -298,24 +298,24 @@ function useHover(weap)
 
 		if ((NAME === "Flame1Mk1") || (NAME === "Flame2") || (NAME === "PlasmiteFlamer"))
 		{
-			useHover = (random(100) <= 40);
+			useHover = chance(41);
 			break;
 		}
 
 		if ((NAME === "Rocket-LtA-T") || (NAME === "Rocket-HvyA-T") || (NAME === "Missile-A-T"))
 		{
-			useHover = (random(100) <= 33);
+			useHover = chance(34);
 			break;
 		}
 
 		if ((NAME === "Laser3BEAMMk1") || (NAME === "Laser2PULSEMk1") || (NAME === "HeavyLaser"))
 		{
-			useHover = (random(100) <= 40);
+			useHover = chance(41);
 			break;
 		}
 	}
 
-	return (((useHover === true) || (random(100) <= 15)) && (weap[0] !== "Laser4-PlasmaCannon"));
+	return (((useHover === true) || chance(16)) && (weap[0] !== "Laser4-PlasmaCannon"));
 }
 
 //Choose our ground propulsion. Non-hover units will have a preference for tracks.
@@ -341,7 +341,7 @@ function pickPropulsion(weap)
 
 	let propulsions = playerLandPropRatio(getMostHarmfulPlayer());
 
-	if (Math.floor(propulsions.track * 100) <= 55 && random(100) < ((superLowOnProductionPower()) ? 85 : 60))
+	if (Math.floor(propulsions.track * 100) <= 55 && chance(superLowOnProductionPower() ? 85 : 60))
 	{
 		tankProp.shift();
 	}
@@ -358,17 +358,17 @@ function pickTankBody()
 	let bodySwitchTime = 900000;
 	let sizeRatio = playerBodySizeRatio(getMostHarmfulPlayer());
 
-	if ((Math.floor(sizeRatio.small * 100) >= 66 && random(100) < 40) || (gameTime < bodySwitchTime && random(100) < 80))
+	if ((Math.floor(sizeRatio.small * 100) >= 66 && chance(40)) || (gameTime < bodySwitchTime && chance(80)))
 	{
-		body = (random(100) < ((superLowOnProductionPower()) ? 50 : 20)) ? SYSTEM_BODY : VTOL_BODY;
+		body = chance(superLowOnProductionPower() ? 50 : 20) ? SYSTEM_BODY : VTOL_BODY;
 	}
 	else
 	{
-		body = (random(100) < 30) ? VTOL_BODY : TANK_BODY;
+		body = chance(30) ? VTOL_BODY : TANK_BODY;
 	}
 
 	// If they go super big, we go super big
-	if (Math.floor(sizeRatio.heavy * 100) >= 45 && random(100) < 66)
+	if (Math.floor(sizeRatio.heavy * 100) >= 45 && chance(66))
 	{
 		body = TANK_BODY;
 	}
@@ -425,11 +425,11 @@ function buildSys(id, weap)
 
 	if (gameTime > 600000)
 	{
-		body = (random(100) < 80) ? VTOL_BODY : TANK_BODY;
+		body = chance(80) ? VTOL_BODY : TANK_BODY;
 	}
 	else
 	{
-		body = (random(100) < 60) ? SYSTEM_BODY : VTOL_BODY;
+		body = chance(60) ? SYSTEM_BODY : VTOL_BODY;
 	}
 
 	if (buildDroid(fac, "System unit", body, SYSTEM_PROPULSION, "", "", weap))
@@ -462,10 +462,10 @@ function buildCyborg(id, useEngineer)
 	let weaponLine = choosePersonalityWeapon("CYBORG");
 
 	//Choose MG instead if enemy has enough cyborgs.
-	if (((!turnOffMG || (cyborgOnlyGame && !useLasersForCyborgControl() && random(100) < 66)) &&
-		(random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
+	if (((!turnOffMG || (cyborgOnlyGame && !useLasersForCyborgControl() && chance(66)) &&
+		(chance(Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100)))) ||
 		!havePrimaryOrArtilleryWeapon() ||
-		earlyT1MachinegunChance())
+		earlyT1MachinegunChance()))
 	{
 		weaponLine = weaponStats.machineguns;
 	}
@@ -502,7 +502,7 @@ function buildVTOL(id)
 
 	if (fac !== null && isDefined(weap) && isDefined(weap2))
 	{
-		let body = (random(100) < 60) ? VTOL_BODY : TANK_BODY;
+		let body = chance(60) ? VTOL_BODY : TANK_BODY;
 
 		return buildDroid(fac, "VTOL unit", body, "V-Tol", "", "", weap, weap2);
 	}
@@ -626,7 +626,7 @@ function produce()
 						(gameTime < 240000 && highOilMap()) ||
 						!havePrimaryOrArtilleryWeapon() ||
 						(getMultiTechLevel() > 1) ||
-						(gameTime > 240000 && random(100) < 25)))
+						(gameTime > 240000 && chance(25))))
 					{
 						buildSys(FC.id, "Spade1Mk1");
 					}

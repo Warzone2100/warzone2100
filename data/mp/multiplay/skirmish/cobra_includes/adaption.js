@@ -254,7 +254,7 @@ function adaptToMap()
 	{
 		subPersonalities[chosen].resPath = "offensive";
 
-		if ((HIGH_TECH_LEVEL || (baseType >= CAMP_BASE)) && random(100) < 33)
+		if ((HIGH_TECH_LEVEL || (baseType >= CAMP_BASE)) && chance(33))
 		{
 			subPersonalities[chosen].resPath = "air";
 		}
