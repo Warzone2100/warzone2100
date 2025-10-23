@@ -569,6 +569,10 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_NO_FRIENDLY_FIRE, true);
 		}
+		if (std::find(flags.begin(), flags.end(), "allowedontransporter") != flags.end()) // "AllowedOnTransporter"
+		{
+			psStats->flags.set(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER, true);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
