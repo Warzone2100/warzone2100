@@ -151,19 +151,19 @@ function fastDefendSpot(structure, droid)
 		return; //do not waste time trying to defend basic base structures.
 	}
 
-	let chance = (gameTime > 900000 && ((structure && structure.stattype === RESOURCE_EXTRACTOR) || (random(100) < 20)));
+	let rndChance = (gameTime > 900000 && ((structure && structure.stattype === RESOURCE_EXTRACTOR) || chance(20)));
 	let structs = enumRange(droid.x, droid.y, 7, me, false).filter((obj) => (obj.type === STRUCTURE));
 	let defenses = structs.filter((obj) => (obj.stattype === DEFENSE));
 	let enemyDerr = enumRange(droid.x, droid.y, 8, ENEMIES, false).filter((obj) => (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR));
 	//Build a defense structure here.
-	if (chance || (defenses.length < MIN_DEFENSES) || (enemyDerr.length > 0 && defenses.length === 0))
+	if (rndChance || (defenses.length < MIN_DEFENSES) || (enemyDerr.length > 0 && defenses.length === 0))
 	{
 		buildDefenses(droid, true); // Build right where this droid is at.
 		return;
 	}
 
 	//Try a sensor tower
-	if (gameTime > 900000 && random(100) < 67 && structs.length < 5)
+	if (gameTime > 900000 && chance(67) && structs.length < 5)
 	{
 		let sensor;
 		const TOWERS = [ "Sys-SensoTowerWS", "Sys-SensoTower02" ];
@@ -447,7 +447,7 @@ function lookForOil()
 		forceDerrickBuildDefense = true;
 	}
 
-	if (forceDerrickBuildDefense && random(100) < 15)
+	if (forceDerrickBuildDefense && chance(15))
 	{
 		protectUnguardedDerricks();
 	}
@@ -543,7 +543,7 @@ function returnDefense(type)
 	let bestDefense;
 
 	//Choose a random electronic warfare defense if possible.
-	if (random(100) < ELECTRONIC_CHANCE)
+	if (chance(ELECTRONIC_CHANCE))
 	{
 		let avail = 0;
 
@@ -974,7 +974,7 @@ function buildExtras()
 
 	let gens = countStruct(structures.gen, me);
 
-	if (random(100) < 40 && getRealPower() > SUPER_LOW_POWER && countStruct(structures.repair, me) < 5 && countAndBuild(structures.repair, gens + 1))
+	if (chance(40) && getRealPower() > SUPER_LOW_POWER && countStruct(structures.repair, me) < 5 && countAndBuild(structures.repair, gens + 1))
 	{
 		return true;
 	}
@@ -1010,9 +1010,9 @@ function defendNTWMap()
 		return false;
 	}
 
-	if (random(100) < 5)
+	if (chance(5))
 	{
-		if (random(100) < 50)
+		if (chance(50))
 		{
 			if (countAndBuild("Sys-SensoTowerWS", Infinity))
 			{
@@ -1031,7 +1031,7 @@ function defendNTWMap()
 
 	let randomChoice;
 
-	if (random(100) < 80 && isStructureAvailable("Emplacement-HvART-pit") && countAndBuild("Emplacement-HvART-pit", Infinity))
+	if (chance(80) && isStructureAvailable("Emplacement-HvART-pit") && countAndBuild("Emplacement-HvART-pit", Infinity))
 	{
 		return true;
 	}
@@ -1041,7 +1041,7 @@ function defendNTWMap()
 		return true;
 	}
 
-	if (!isStructureAvailable("Emplacement-HvART-pit") && random(100) < 33 && countAndBuild("Emplacement-Rocket06-IDF", Infinity))
+	if (!isStructureAvailable("Emplacement-HvART-pit") && chance(33) && countAndBuild("Emplacement-Rocket06-IDF", Infinity))
 	{
 		return true;
 	}
@@ -1053,7 +1053,7 @@ function defendNTWMap()
 		default: randomChoice = weaponStats.howitzers.defenses.reverse(); break;
 	}
 
-	if (random(100) < 20)
+	if (chance(20))
 	{
 		randomChoice = [{stat: "Emplacement-RotHow"}];
 	}
@@ -1131,12 +1131,12 @@ function buildOrders()
 	}
 
 	// Final build priority. Defenses and special structures. Max limits for base structures.
-	if (isNTW && random(100) < 20 && buildDefenses(undefined, false))
+	if (isNTW && chance(20) && buildDefenses(undefined, false))
 	{
 		return;
 	}
 
-	if (random(100) < 70 && buildAAForPersonality())
+	if (chance(70) && buildAAForPersonality())
 	{
 		return;
 	}
@@ -1146,7 +1146,7 @@ function buildOrders()
 		return;
 	}
 
-	if (random(100) < 33 && buildSpecialStructures())
+	if (chance(33) && buildSpecialStructures())
 	{
 		return;
 	}

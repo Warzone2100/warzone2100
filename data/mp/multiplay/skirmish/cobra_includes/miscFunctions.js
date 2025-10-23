@@ -127,7 +127,7 @@ function rangeStep(player)
 
 		if (targets.length > 0)
 		{
-			if (!highOil && derr && ((random(100) < 7) || (countStruct(structures.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
+			if (!highOil && derr && (chance(7) || (countStruct(structures.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
 			{
 				return objectInformation(derr);
 			}
@@ -433,7 +433,7 @@ function initCobraVars()
 	startAttacking = false;
 	lastShuffleTime = 0;
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
-	randomResearchLabStart = (random(100) < 20);
+	randomResearchLabStart = chance(20);
 	cyborgOnlyGame = (getStructureLimit(structures.factory, me) === 0 && getStructureLimit(structures.cyborgFactory) > 0);
 	volatileResearchData = {
 		lab: undefined,
@@ -455,8 +455,8 @@ function randomOffsetLocation(location)
 	{
 		const MAP_EDGE = 2;
 		const TILE_OFFSET_MAX = 3;
-		let newValueX = (random(100) < 50) ? location.x + random(TILE_OFFSET_MAX) : location.x - random(TILE_OFFSET_MAX);
-		let newValueY = (random(100) < 50) ? location.y + random(TILE_OFFSET_MAX) : location.y - random(TILE_OFFSET_MAX);
+		let newValueX = chance(50) ? location.x + random(TILE_OFFSET_MAX) : location.x - random(TILE_OFFSET_MAX);
+		let newValueY = chance(50) ? location.y + random(TILE_OFFSET_MAX) : location.y - random(TILE_OFFSET_MAX);
 
 		if (newValueX < MAP_EDGE)
 		{

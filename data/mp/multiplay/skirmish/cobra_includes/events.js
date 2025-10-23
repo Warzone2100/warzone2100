@@ -239,7 +239,7 @@ function eventAttacked(victim, attacker)
 		{
 			for (let i = 0; i < UNIT_LEN; ++i)
 			{
-				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
+				if ((subPersonalities[personality].resPath === "offensive") || chance(33))
 				{
 					let unit = units[i];
 
