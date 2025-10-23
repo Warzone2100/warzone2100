@@ -2590,7 +2590,7 @@
 		"effectSize": 150,
 		"facePlayer": 1,
 		"firePause": 7,
-		"flags": "ShootAir",
+		"flags": ["ShootAir", "AllowedOnTransporter"],
 		"flightGfx": "fxtracerh.pie",
 		"flightSpeed": 1000,
 		"hitGfx": "FXMETHIT.PIE",
