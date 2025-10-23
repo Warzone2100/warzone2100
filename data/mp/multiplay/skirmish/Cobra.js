@@ -291,6 +291,7 @@ var lastShuffleTime;
 var forceDerrickBuildDefense;
 var randomResearchLabStart;
 var cyborgOnlyGame;
+var volatileResearchData; //Object that holds some game objects and data releated to research choices.
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;

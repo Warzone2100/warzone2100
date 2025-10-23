@@ -7,6 +7,11 @@ function random(max)
 	return (max <= 0) ? 0 : Math.floor(Math.random() * max);
 }
 
+function chance(probability)
+{
+	return random(100) < probability;
+}
+
 // Returns true if something is defined
 function isDefined(data)
 {
@@ -430,6 +435,16 @@ function initCobraVars()
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
 	randomResearchLabStart = (random(100) < 20);
 	cyborgOnlyGame = (getStructureLimit(structures.factory, me) === 0 && getStructureLimit(structures.cyborgFactory) > 0);
+	volatileResearchData = {
+		lab: undefined,
+		cybCheck: false,
+		antiPersonnelChance: 0,
+		isHighOil: false,
+		hasAlly: false,
+		highOilResPrice: 0,
+		defensiveLimit: false,
+		forceLaser: false
+	};
 }
 
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations
