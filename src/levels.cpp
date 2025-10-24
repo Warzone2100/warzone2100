@@ -307,7 +307,7 @@ bool levParse_JSON(const std::string& mountPoint, const std::string& filename, s
 	return levAddWzMap(levelDetails.value(), pathMode, realFileName);
 }
 
-bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName)
+bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName, bool frontOfList)
 {
 	// start a new level data set
 	LEVEL_DATASET *psDataSet = new LEVEL_DATASET();
@@ -381,7 +381,15 @@ bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMod
 		psDataSet->customMountPoint = strdup(customMountPoint.c_str());
 	}
 
-	psLevels.push_back(psDataSet);
+	if (!frontOfList)
+	{
+		psLevels.push_back(psDataSet);
+	}
+	else
+	{
+		ASSERT(psDataSet->realFileName != nullptr, "Inserting built-in map at front??");
+		psLevels.insert(psLevels.begin(), psDataSet);
+	}
 	return true;
 }
 

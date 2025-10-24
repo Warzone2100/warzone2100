@@ -898,7 +898,8 @@ bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
 	}
 
 	// load it into the level-loading system
-	if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, inMemoryMapVirtualFilenameUID.c_str()))
+	// (and put it at the front of the list, to ensure it's enumerated over any local copy of the map)
+	if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, inMemoryMapVirtualFilenameUID.c_str(), true))
 	{
 		// Failed to enumerate contents - corrupt map archive
 		debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
