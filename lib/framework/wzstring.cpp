@@ -24,6 +24,11 @@
 #include <sstream>
 #include <iomanip>
 #include <limits>
+#if defined(_MSC_VER) && !defined(__clang__)
+// Force-define UTF_CPP_CPLUSPLUS to C++17 for MSVC, because:
+// "By default, Visual Studio always returns the value 199711L for the __cplusplus preprocessor macro."
+#define UTF_CPP_CPLUSPLUS 201703L
+#endif
 #include <utfcpp/source/utf8.h>
 #include <utf8proc/utf8proc.h>
 
