@@ -2137,7 +2137,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	//find machine that is hosting this human or AI
 	sendPlayer = whosResponsible(forPlayer);
 
-	if (sendPlayer >= MAX_PLAYERS)
+	if (sendPlayer >= MAX_PLAYERS && sendPlayer != NetPlay.hostPlayer)
 	{
 		debug(LOG_ERROR, "sendBeacon() - whosResponsible() failed.");
 		return false;
