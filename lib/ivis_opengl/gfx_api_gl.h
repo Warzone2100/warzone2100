@@ -90,7 +90,7 @@ public:
 	virtual unsigned id() override;
 	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 private:
-	virtual bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
+	bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
 struct texture_array_mip_level_buffer; // forward-declare
@@ -119,7 +119,7 @@ public:
 	virtual bool upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual unsigned id() override;
 private:
-	virtual bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
+	bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
 struct gl_gpurendered_texture final : public gfx_api::abstract_texture
