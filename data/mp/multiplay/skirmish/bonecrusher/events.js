@@ -4,15 +4,13 @@ function bc_eventStructureReady(structure)
 {
 	if (structure.player === me)
 	{
-		switch (structure.stattype)
+		if (structure.stattype === LASSAT)
 		{
-			case LASSAT:
-				lassat_charged = true;
-				debugMsg('lassat charged', 'lassat');
-				playerData.forEach((data, player) => {
-					chat(player, ' from ' + debugName + ': ' + chatting('lassat_charged'));
-				});
-				break;
+			lassat_charged = true;
+			debugMsg('lassat charged', 'lassat');
+			playerData.forEach((data, player) => {
+				chat(player, ' from ' + debugName + ': ' + chatting('lassat_charged'));
+			});
 		}
 	}
 }
@@ -44,21 +42,13 @@ function bc_eventResearched(research, structure, player)
 	{
 		cyborgs = cyborgs.filter((e) => (e[2] !== 'CyborgChaingun'));
 	}
-	if (research.name === 'R-Wpn-Flame2')
+	else if (research.name === 'R-Wpn-Flame2')
 	{
 		cyborgs = cyborgs.filter((e) => (e[2] !== 'CyborgFlamer01'));
 	}
-	if (research.name === 'R-Struc-PowerModuleMk1')
-	{
-		func_buildersOrder_trigger = 0;
-		buildersOrder();
-	}
-	if (research.name === 'R-Struc-Factory-Module')
-	{
-		func_buildersOrder_trigger = 0;
-		buildersOrder();
-	}
-	if (research.name === 'R-Struc-Research-Module')
+	else if (research.name === 'R-Struc-PowerModuleMk1' ||
+		research.name === 'R-Struc-Factory-Module' ||
+		research.name === 'R-Struc-Research-Module')
 	{
 		func_buildersOrder_trigger = 0;
 		buildersOrder();
@@ -417,11 +407,9 @@ function bc_eventAttacked(victim, attacker)
 			}
 		}
 
-		let myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter((o) => (
-			o.player === me && o.type === DROID
+		const myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter((o) => (
+			o.player === me && o.type === DROID && !(o.droidType === DROID_CONSTRUCT && builderBusy(o))
 		));
-		myDroids = myDroids.filter((o) => (!(o.droidType === DROID_CONSTRUCT && builderBusy(o))));
-
 		const enemyObjects = enumRange(attacker.x, attacker.y, 7, ENEMIES, me);
 
 		debugMsg('myDroids: ' + myDroids.length + ', enemyObjects: ' + enemyObjects.length, 'temp');
