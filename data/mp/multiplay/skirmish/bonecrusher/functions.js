@@ -39,7 +39,7 @@ function getInfoNear(x, y, command, range, time, obj, cheat, inc)
 	}
 	else
 	{
-		let view;
+		const view = (typeof cheat === "undefined") ? me : -1;
 
 		if (typeof time === "undefined")
 		{
@@ -50,14 +50,6 @@ function getInfoNear(x, y, command, range, time, obj, cheat, inc)
 			range = 7;
 		}
 
-		if (typeof cheat === "undefined")
-		{
-			view = me;
-		}
-		else if (cheat)
-		{
-			view = -1;
-		}
 		// _globalInfoNear[x+'_'+y+'_'+command] = [];
 		_globalInfoNear[x + '_' + y + '_' + command] = { setTime: gameTime, updateIn: time };
 
@@ -277,8 +269,7 @@ function groupArmy(droid, type)
 	// Перегрупировка
 	if (groupSize(armyPartisans) < minPartisans && groupSize(armyRegular) > 1 && !(se_r >= army_rich && (rage === HARD || rage === INSANE)))
 	{
-		const regroup = enumGroup(armyRegular);
-		regroup.forEach((e) => {
+		enumGroup(armyRegular).forEach((e) => {
 			// debugMsg("armyRegular --> armyPartisans +1", 'group');
 			groupAdd(armyPartisans, e);
 		});
@@ -426,9 +417,7 @@ function sortByDistance(arr, obj, num, reach)
 	if (reach)
 	{
 		arr = arr.filter((e) => {
-			if (droidCanReach_p(obj, e.x, e.y)) return true;
-			// if (droidCanReach_p(e,obj.x,obj.y)) return true;
-			return false;
+			return droidCanReach_p(obj, e.x, e.y);
 		});
 	}
 
@@ -436,8 +425,7 @@ function sortByDistance(arr, obj, num, reach)
 	{
 		return arr;
 	}
-
-	if (num >= arr.length)
+	else if (num >= arr.length)
 	{
 		num = (arr.length - 1);
 	}
@@ -982,7 +970,7 @@ function getOurDefences()
 
 function getNearFreeResources(pos)
 {
-	return enumFeature(ALL_PLAYERS, "OilResource").filter((e) => (distBetweenTwoPoints_p(pos.x, pos.y, e.x, e.y) < base_range));
+	return enumFeature(ALL_PLAYERS, "OilResource").filter((e) => (distBetweenTwoPoints_p(pos.x, pos.y, e.x, e.y) < base_range)).length;
 }
 
 function getNumEnemies()
@@ -1193,18 +1181,12 @@ function getEnemyStructures()
 			continue;
 		}
 
-		targ = targ.concat(enumStruct(e, DEFENSE, me));
-		targ = targ.concat(enumStruct(e, RESOURCE_EXTRACTOR, me));
-		targ = targ.concat(enumStruct(e, FACTORY, me));
-		targ = targ.concat(enumStruct(e, CYBORG_FACTORY, me));
-		targ = targ.concat(enumStruct(e, HQ, me));
-		targ = targ.concat(enumStruct(e, LASSAT, me));
-		targ = targ.concat(enumStruct(e, POWER_GEN, me));
-		targ = targ.concat(enumStruct(e, REARM_PAD, me));
-		targ = targ.concat(enumStruct(e, REPAIR_FACILITY, me));
-		targ = targ.concat(enumStruct(e, RESEARCH_LAB, me));
-		targ = targ.concat(enumStruct(e, SAT_UPLINK, me));
-		targ = targ.concat(enumStruct(e, VTOL_FACTORY, me));
+		const types = [DEFENSE, RESOURCE_EXTRACTOR, FACTORY, CYBORG_FACTORY, HQ, LASSAT, POWER_GEN, REARM_PAD, REPAIR_FACILITY, RESEARCH_LAB, SAT_UPLINK, VTOL_FACTORY];
+
+		for (let i = 0, len = types.length; i < len; ++i)
+		{
+			targ = targ.concat(enumStruct(e, types[i], me));
+		}
 	}
 
 	if (scavengers !== NO_SCAVENGERS)

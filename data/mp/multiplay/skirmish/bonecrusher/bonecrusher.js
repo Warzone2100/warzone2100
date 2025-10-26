@@ -57,15 +57,14 @@ const debugLevels = ['error'];
 // const debugLevels = ['init', 'end', 'stats', 'temp', 'production', 'group', 'events', 'error', 'research', 'builders', 'targeting'];
 
 
-// инфа
-var debugName = colors[playerData[me].colour];
-
-
 // Массив конкретных технологий (tech.js)
 var tech = {};
 
 include("multiplay/skirmish/" + vernum + "/names.js");
 include("multiplay/skirmish/" + vernum + "/functions.js");
+
+// инфа
+var debugName = colors[playerData[me].colour];
 
 // new 3.3+
 var research_path = [];
@@ -92,7 +91,7 @@ include("multiplay/skirmish/" + vernum + "/build-normal.js");
 // Hard CPU-load algorithms
 const weakCPU = false;
 
-const base_range = 20; // В каких пределах работают основные строители (не охотники)
+var base_range = 20; // В каких пределах работают основные строители (не охотники)
 
 var buildersTimer = 25000; // Триггер для заказа строителей (что бы не выходили пачкой сразу)
 const fixersTimer = 50000; // Триггер для заказа рем.инженеров
@@ -331,7 +330,6 @@ var propulsions = [
 // Переназначаются в функции prepeareProduce() что бы не читерить.
 var avail_vtols = ["MG3-VTOL"];
 
-/*
 var vtols = [
 	["R-Wpn-MG3Mk1", "MG3-VTOL"], // VTOL Heavy Machinegun
 	["R-Wpn-MG4", "MG4ROTARY-VTOL"], // VTOL Assault Gun
@@ -340,7 +338,6 @@ var vtols = [
 	//["Bomb3-VTOL-LtINC","Bomb3-VTOL-LtINC"],		// VTOL Phosphor Bomb Bay
 	//["Bomb4-VTOL-HvyINC","Bomb4-VTOL-HvyINC"],		// VTOL Thermite Bomb Bay
 ];
-*/
 
 var avail_guns = [];
 

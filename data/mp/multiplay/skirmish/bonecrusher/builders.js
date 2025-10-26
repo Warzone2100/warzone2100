@@ -66,7 +66,8 @@ function groupBuilders(droid)
 	// распределяем строителей по группам
 	if (droid)
 	{
-		if (!earlyGame && getNearFreeResources.length > 0 && buildersHuntersLen === 0)
+		// NOTE: This first if statement was broken until 4.6.x
+		if (!earlyGame && getNearFreeResources(base) > 0 && buildersHuntersLen === 0)
 		{
 			groupAdd(buildersHunters, droid);
 			debugMsg("+....buildersHunters +1", 'group');
@@ -172,21 +173,21 @@ function builderBuild(droid, structure, rotation, position)
 	switch (structure)
 	{
 		case "A0LightFactory":
-			if (enumStruct(me, FACTORY).length >= maxFactories)
+			if (countStruct("A0LightFactory", me) >= maxFactories)
 			{
 				return false;
 			}
 			struct = factory;
 			break;
 		case "A0ResearchFacility":
-			if (enumStruct(me, RESEARCH_LAB).length >= maxLabs)
+			if (countStruct("A0ResearchFacility", me) >= maxLabs)
 			{
 				return false;
 			}
 			struct = research_lab;
 			break;
 		case "A0PowerGenerator":
-			if (enumStruct(me, POWER_GEN).length >= maxGenerators)
+			if (countStruct("A0PowerGenerator", me) >= maxGenerators)
 			{
 				return false;
 			}
@@ -205,21 +206,21 @@ function builderBuild(droid, structure, rotation, position)
 			struct = ccontrol;
 			break;
 		case "A0CyborgFactory":
-			if (enumStruct(me, CYBORG_FACTORY).length >= maxFactoriesCyb)
+			if (countStruct("A0CyborgFactory", me) >= maxFactoriesCyb)
 			{
 				return false;
 			}
 			struct = cyborg_factory;
 			break;
 		case "A0VTolFactory1":
-			if (enumStruct(me, VTOL_FACTORY).length >= maxFactoriesVTOL)
+			if (countStruct("A0VTolFactory1", me) >= maxFactoriesVTOL)
 			{
 				return false;
 			}
 			struct = vtol_factory;
 			break;
 		case "A0VtolPad":
-			if (enumStruct(me, REARM_PAD).length >= maxPads)
+			if (countStruct("A0VtolPad", me) >= maxPads)
 			{
 				return false;
 			}
@@ -605,8 +606,6 @@ function rigDefence(obj, nearbase)
 		return false; // Количество возможных защитных башен исследовано
 	}
 
-	// const toBuild = defence[Math.floor(Math.random() * defence.length)];
-
 	defQueue = sortByDistance(defQueue, obj, 0);
 
 	if (policy['build'] !== 'rich' && !getInfoNear(defQueue[0].x, defQueue[0].y, 'safe').value)
@@ -627,6 +626,7 @@ function rigDefence(obj, nearbase)
 		return false;
 	}
 
+	const toBuild = defence[Math.floor(Math.random() * defence.length)];
 	// debugMsg("rigDefence(): Строителем №"+obj.id+" строим "+toBuild+" "+defQueue[0].x+"x"+defQueue[0].y);
 	const _def = getInfoNear(defQueue[0].x, defQueue[0].y, 'buildDef', 5, 30000, false);
 
