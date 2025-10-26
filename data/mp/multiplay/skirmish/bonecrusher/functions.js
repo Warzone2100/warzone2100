@@ -55,31 +55,15 @@ function getInfoNear(x, y, command, range, time, obj, cheat, inc)
 
 		if (command === 'safe')
 		{
-			let danger = [];
-			for (let e = 0; e < maxPlayers; ++e)
-			{
-				if (allianceExistsBetween(me, e))
-				{
-					continue;
-				}
-				danger = danger.concat(enumDroid(e, DROID_WEAPON, view));
-				danger = danger.concat(enumDroid(e, DROID_CYBORG, view));
-				danger = danger.concat(enumStruct(e, DEFENSE, view));
-			}
-			if (scavengerPlayer !== -1)
-			{
-				danger = danger.concat(enumDroid(scavengerPlayer, DROID_WEAPON, view));
-				danger = danger.concat(enumDroid(scavengerPlayer, DROID_CYBORG, view));
-				danger = danger.concat(enumStruct(scavengerPlayer, DEFENSE, view));
-			}
+			const dangerLen = enumRange(x, y, range, ENEMIES, view).filter((e) =>
+				((e.type === DROID && (e.droidType === DROID_WEAPON || e.droidType === DROID_CYBORG)) ||
+				(e.type === STRUCTURE && e.stattype === DEFENSE))
+			).length;
 
-			for (const d in danger)
+			if (dangerLen > 0)
 			{
-				if (distBetweenTwoPoints_p(x, y, danger[d].x, danger[d].y) < range)
-				{
-					_globalInfoNear[x + '_' + y + '_' + command].value = false;
-					return _globalInfoNear[x + '_' + y + '_' + command];
-				}
+				_globalInfoNear[x + '_' + y + '_' + command].value = false;
+				return _globalInfoNear[x + '_' + y + '_' + command];
 			}
 			_globalInfoNear[x + '_' + y + '_' + command].value = true;
 			return _globalInfoNear[x + '_' + y + '_' + command];
