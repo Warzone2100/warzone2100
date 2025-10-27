@@ -1787,6 +1787,12 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 		}
 		s.buffers[VBO_NORMAL]->upload(normals.size() * sizeof(gfx_api::gfxFloat), normals.data());
 
+		// reverse winding order before uploading indices (-> CCW)
+		for (size_t i = 0; i < indices.size(); i += 3)
+		{
+			std::swap(indices[i+1], indices[i+2]);
+		}
+
 		if (!s.buffers[VBO_INDEX])
 			s.buffers[VBO_INDEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "index buffer");
 		if (indices.empty())
