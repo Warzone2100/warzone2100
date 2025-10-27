@@ -835,7 +835,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
@@ -860,7 +860,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
@@ -2094,34 +2094,36 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(1, cbuf.ViewMatrix);
 	setUniforms(2, cbuf.ModelUVLightmapMatrix);
 	setUniforms(3, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(4, cbuf.sunPos);
-	setUniforms(5, cbuf.sceneColor);
-	setUniforms(6, cbuf.ambient);
-	setUniforms(7, cbuf.diffuse);
-	setUniforms(8, cbuf.specular);
-	setUniforms(9, cbuf.fogColour);
-	setUniforms(10, cbuf.ShadowMapCascadeSplits);
-	setUniforms(11, cbuf.ShadowMapSize);
-	setUniforms(12, cbuf.fogEnd);
-	setUniforms(13, cbuf.fogBegin);
-	setUniforms(14, cbuf.timeState);
-	setUniforms(15, cbuf.fogEnabled);
-	setUniforms(16, cbuf.PointLightsPosition);
-	setUniforms(17, cbuf.PointLightsColorAndEnergy);
-	setUniforms(18, cbuf.bucketOffsetAndSize);
-	setUniforms(19, cbuf.indexed_lights);
-	setUniforms(20, cbuf.bucketDimensionUsed);
-	setUniforms(21, cbuf.viewportWidth);
-	setUniforms(22, cbuf.viewportheight);
+	setUniforms(4, cbuf.cameraPos);
+	setUniforms(5, cbuf.sunPos);
+	setUniforms(6, cbuf.sceneColor);
+	setUniforms(7, cbuf.ambient);
+	setUniforms(8, cbuf.diffuse);
+	setUniforms(9, cbuf.specular);
+	setUniforms(10, cbuf.fogColour);
+	setUniforms(11, cbuf.ShadowMapCascadeSplits);
+	setUniforms(12, cbuf.ShadowMapSize);
+	setUniforms(13, cbuf.fogEnd);
+	setUniforms(14, cbuf.fogBegin);
+	setUniforms(15, cbuf.timeState);
+	setUniforms(16, cbuf.fogEnabled);
+	setUniforms(17, cbuf.PointLightsPosition);
+	setUniforms(18, cbuf.PointLightsColorAndEnergy);
+	setUniforms(19, cbuf.bucketOffsetAndSize);
+	setUniforms(20, cbuf.indexed_lights);
+	setUniforms(21, cbuf.bucketDimensionUsed);
+	setUniforms(22, cbuf.viewportWidth);
+	setUniforms(23, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(23, cbuf.tcmask);
-	setUniforms(24, cbuf.normalMap);
-	setUniforms(25, cbuf.specularMap);
-	setUniforms(26, cbuf.hasTangents);
-	setUniforms(27, cbuf.shieldEffect);
+	// IMPORTANT: uniformIdx continues incrementing from Draw3DShapeInstancedGlobalUniforms above
+	setUniforms(24, cbuf.tcmask);
+	setUniforms(25, cbuf.normalMap);
+	setUniforms(26, cbuf.specularMap);
+	setUniforms(27, cbuf.hasTangents);
+	setUniforms(28, cbuf.shieldEffect);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
