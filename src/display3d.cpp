@@ -1504,7 +1504,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		for (size_t i = 0; i < numShadowCascades; ++i)
 		{
 			gfx_api::context::get().beginDepthPass(i);
-			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, shadowCascadesInfo, true);
+			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, cameraPos, shadowCascadesInfo, true);
 			gfx_api::context::get().endCurrentDepthPass();
 		}
 	}
@@ -1535,7 +1535,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
+		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, cameraPos, shadowCascadesInfo, false);
 	}
 	wzPerfEnd(PERF_MODELS);
 
