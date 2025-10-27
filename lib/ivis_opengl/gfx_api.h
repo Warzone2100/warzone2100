@@ -753,6 +753,7 @@ namespace gfx_api
 		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
 		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos;
 		glm::vec4 sceneColor;
 		glm::vec4 ambient;

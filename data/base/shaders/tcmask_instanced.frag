@@ -29,6 +29,8 @@ uniform int hasTangents; // whether tangents were calculated for model
 uniform int shieldEffect;
 uniform float graphicsCycle; // a periodically cycling value for special effects
 
+uniform vec4 cameraPos; // in modelSpace
+
 uniform vec4 sceneColor; //emissive light
 uniform vec4 ambient;
 uniform vec4 diffuse;
