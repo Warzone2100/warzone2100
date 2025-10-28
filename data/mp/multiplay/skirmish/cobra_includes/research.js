@@ -530,12 +530,11 @@ function laserResPath()
 //Careful not to focus too much on these research topics since offensive capability can be harmed
 function specialResPath()
 {
-
-	if (!cyborgOnlyGame && getResearch("R-Struc-Research-Upgrade05").done && chance(15))
+	if (!cyborgOnlyGame && getResearch("R-Struc-Research-Upgrade05").done && chance(10))
 	{
 		if (pursueResearch(resObj.lab, extremeLaserTech) ||
 			(componentAvailable("PlasmaHeavy") && chance(70) && evalResearch(resObj.lab, _FLAMER)) ||
-			(componentAvailable("Laser4-PlasmaCannon") && (evalResearch(resObj.lab, empWeapons) || evalResearch(resObj.lab, extremeLaserExtra))))
+			(componentAvailable("Laser4-PlasmaCannon") && (evalResearch(resObj.lab, empWeapons) || (chance(15) && evalResearch(resObj.lab, extremeLaserExtra)))))
 		{
 			return true;
 		}
@@ -637,8 +636,8 @@ function research()
 			continue;
 		}
 
-		if (resExecuteFuncList([resistanceResPath, structureDefenseResPath, genericResPath,
-			defensiveResPath, offensiveResPath, airResPath, specialResPath, laserResPath,
+		if (resExecuteFuncList([resistanceResPath, structureDefenseResPath, specialResPath,
+			genericResPath, defensiveResPath, offensiveResPath, airResPath, laserResPath,
 			finalResPath]))
 		{
 			continue;
