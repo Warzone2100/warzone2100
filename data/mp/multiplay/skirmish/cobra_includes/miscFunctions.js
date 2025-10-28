@@ -435,7 +435,7 @@ function initCobraVars()
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
 	randomResearchLabStart = chance(20);
 	cyborgOnlyGame = (getStructureLimit(structures.factory, me) === 0 && getStructureLimit(structures.cyborgFactory) > 0);
-	volatileResearchData = {
+	resObj = {
 		lab: undefined,
 		cybCheck: false,
 		antiPersonnelChance: 0,
