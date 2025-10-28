@@ -671,6 +671,8 @@ function baseShuffleDefensePattern()
 	];
 
 	const __maxAttempts = 100;
+	const __areaOffset = 2;
+	const _cords = {x: 0, y: 0};
 	let sector;
 	let x;
 	let y;
@@ -680,31 +682,16 @@ function baseShuffleDefensePattern()
 	{
 		++attempts;
 		sector = _quad[random(_quad.length)];
-		x = sector.x1 + random(sector.x2);
-		y = sector.y1 + random(sector.y2);
-	} while (!propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, x, y) && attempts < __maxAttempts);
+		_cords.x = sector.x1 + random(sector.x2);
+		_cords.y = sector.y1 + random(sector.y2);
+	} while (!propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, _cords.x, _cords.y) && attempts < __maxAttempts);
 
 	if (attempts > __maxAttempts)
 	{
 		return;
 	}
 
-	if (x <= 2)
-	{
-		x = 2;
-	}
-	else if (x >= mapWidth - 2)
-	{
-		x = mapWidth - 2;
-	}
-	if (y <= 2)
-	{
-		y = 2;
-	}
-	else if (y >= mapHeight - 2)
-	{
-		y = mapHeight - 2;
-	}
+	const clippedObj = clipToMapBounds(_cords, __areaOffset);
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
 	const __maxNearbyStructures = 2;
@@ -719,7 +706,7 @@ function baseShuffleDefensePattern()
 			}
 			else
 			{
-				orderDroidLoc(_attackers[i], DORDER_SCOUT, x, y);
+				orderDroidLoc(_attackers[i], DORDER_SCOUT, clippedObj.x, clippedObj.y);
 			}
 		}
 	}

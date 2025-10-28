@@ -445,12 +445,7 @@ function lookForOil()
 		protectUnguardedDerricks();
 	}
 
-	if (!_oils.length && highOilMap() && maintenance(oilGrabberGroup))
-	{
-		return;
-	}
-
-	if (skipOilGrabIfEasy())
+	if ((!_oils.length && highOilMap() && maintenance(oilGrabberGroup)) || skipOilGrabIfEasy())
 	{
 		return;
 	}
@@ -654,12 +649,9 @@ function buildDefenses(truck, urgent)
 			return buildDefenseNearTruck(truck, 0);
 		}
 
-		if (highOilMap())
+		if (highOilMap() && !defendNTWMap())
 		{
-			if (!defendNTWMap())
-			{
-				return defendRandomDerrick();
-			}
+			return defendRandomDerrick();
 		}
 		else
 		{
@@ -682,63 +674,18 @@ function buildBaseStructures()
 
 	if (!highOilMap())
 	{
-		if (__goodPowerLevel && countAndBuild(_STRUCTURES.factory, 1))
-		{
-			return true;
-		}
-
-		if ((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.factory, 2))
-		{
-			return true;
-		}
-
-		if ((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.gen, 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.hq, 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.gen, 2))
-		{
-			return true;
-		}
-
-		if ((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3))
-		{
-			return true;
-		}
-
-		if (needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.cyborgFactory, 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.vtolFactory, 1))
-		{
-			return true;
-		}
-
-		//Build 1 repair facility
-		if (countAndBuild(_STRUCTURES.repair, 1))
+		if ((__goodPowerLevel && countAndBuild(_STRUCTURES.factory, 1)) ||
+			((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1)) ||
+			(countAndBuild(_STRUCTURES.factory, 2)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2)) ||
+			(countAndBuild(_STRUCTURES.gen, 1)) ||
+			(countAndBuild(_STRUCTURES.hq, 1)) ||
+			(countAndBuild(_STRUCTURES.gen, 2)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3)) ||
+			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
+			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
+			(countAndBuild(_STRUCTURES.vtolFactory, 1)) ||
+			(countAndBuild(_STRUCTURES.repair, 1)))
 		{
 			return true;
 		}
@@ -747,83 +694,27 @@ function buildBaseStructures()
 	{
 		const __haveAllies = ((alliancesType === ALLIANCES_TEAMS) && playerAlliance(true).length);
 
-		if ((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1))
-		{
-			return true;
-		}
-
-		if (getRealPower() < 550 && countAndBuild(_STRUCTURES.gen, 4))
-		{
-			return true; //a little fail-safe
-		}
-
-		if ((getMultiTechLevel() < 4) && __goodPowerLevel && randomResearchLabStart && !researchComplete && countAndBuild(_STRUCTURES.lab, 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.factory, 2))
-		{
-			return true;
-		}
-
-		if ((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, (__haveAllies) ? 2 : 4))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.gen, 1))
-		{
-			return true; //a little fail-safe
-		}
-
-		if (countAndBuild(_STRUCTURES.hq, 1))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.factory, 3))
-		{
-			return true;
-		}
-
-		if ((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 5))
-		{
-			return true;
-		}
-
-		if (needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 7))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.cyborgFactory, 3))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.factory, 5))
-		{
-			return true;
-		}
-
-		if (needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 8))
-		{
-			return true;
-		}
-
-		if (countAndBuild(_STRUCTURES.cyborgFactory, 5))
-		{
-			return true;
-		}
-
-		if (__goodPowerLevel && countAndBuild(_STRUCTURES.repair, 3))
+		if (((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1)) ||
+			(getRealPower() < 550 && countAndBuild(_STRUCTURES.gen, 4)) ||
+			((getMultiTechLevel() < 4) && __goodPowerLevel && randomResearchLabStart && !researchComplete && countAndBuild(_STRUCTURES.lab, 1)) ||
+			(countAndBuild(_STRUCTURES.factory, 2)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, (__haveAllies) ? 2 : 4)) ||
+			(countAndBuild(_STRUCTURES.gen, 1)) || //a little fail-safe
+			(countAndBuild(_STRUCTURES.hq, 1)) ||
+			(countAndBuild(_STRUCTURES.factory, 3)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 5)) ||
+			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 7)) ||
+			(countAndBuild(_STRUCTURES.cyborgFactory, 3)) ||
+			(countAndBuild(_STRUCTURES.factory, 5)) ||
+			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 8)) ||
+			(countAndBuild(_STRUCTURES.cyborgFactory, 5)) ||
+			(__goodPowerLevel && countAndBuild(_STRUCTURES.repair, 3)))
 		{
 			return true;
 		}
 	}
 
-	if (getMultiTechLevel() > 1 && countStruct(_STRUCTURES.vtolFactory, me) > 0 && countAndBuild(_STRUCTURES.vtolPad, 3))
+	if ((getMultiTechLevel() > 1) && countStruct(_STRUCTURES.vtolFactory, me) && countAndBuild(_STRUCTURES.vtolPad, 3))
 	{
 		return true;
 	}
@@ -841,11 +732,8 @@ function factoryBuildOrder()
 	{
 		const _fac = subPersonalities[personality].factoryOrder[i];
 
-		if ((_fac === _STRUCTURES.vtolFactory && !useVtol) || (_fac === _STRUCTURES.cyborgFactory && (turnOffCyborgs || forceHover)))
-		{
-			continue;
-		}
-		if (_fac === _STRUCTURES.vtolFactory && !getResearch("R-Struc-VTOLPad").done)
+		if ((_fac === _STRUCTURES.vtolFactory && (!useVtol || !getResearch("R-Struc-VTOLPad").done)) ||
+			(_fac === _STRUCTURES.cyborgFactory && (turnOffCyborgs || forceHover)))
 		{
 			continue;
 		}
@@ -921,38 +809,13 @@ function researchBuildOrder()
 //Build minimum requirements of base _STRUCTURES.
 function buildBaseStructures2()
 {
-	if (!countStruct(_STRUCTURES.gen, me))
-	{
-		return true;
-	}
-
-	if (researchBuildOrder())
-	{
-		return true;
-	}
-
-	if (factoryBuildOrder())
-	{
-		return true;
-	}
-
-	return false;
+	return (!countStruct(_STRUCTURES.gen, me) || researchBuildOrder() || factoryBuildOrder());
 }
 
 //Laser satellite/uplink center
 function buildSpecialStructures()
 {
-	if (countAndBuild(_STRUCTURES.uplink, 1))
-	{
-		return true;
-	}
-
-	if (countAndBuild(_STRUCTURES.lassat, 1))
-	{
-		return true;
-	}
-
-	return false;
+	return (countAndBuild(_STRUCTURES.uplink, 1) || countAndBuild(_STRUCTURES.lassat, 1));
 }
 
 //Build the minimum repairs and any vtol pads.
@@ -977,23 +840,10 @@ function buildExtras()
 
 function buildNTWPhase2()
 {
-	if (countAndBuild(_STRUCTURES.cyborgFactory, 5))
-	{
-		return true;
-	}
-
-	// Ignore spam building gens early game on true 40 oil maps
-	if (needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1))
-	{
-		return true;
-	}
-
-	if (countAndBuild(_STRUCTURES.repair, 5))
-	{
-		return true;
-	}
-
-	return false;
+	return (countAndBuild(_STRUCTURES.cyborgFactory, 5) ||
+		// Ignore spam building gens early game on true 40 oil maps
+		(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
+		countAndBuild(_STRUCTURES.repair, 5));
 }
 
 function defendNTWMap()
@@ -1007,11 +857,7 @@ function defendNTWMap()
 	{
 		if (chance(50))
 		{
-			if (countAndBuild("Sys-SensoTowerWS", Infinity))
-			{
-				return true;
-			}
-			else if (countAndBuild("Sys-SensoTower02", Infinity))
+			if (countAndBuild("Sys-SensoTowerWS", Infinity) || countAndBuild("Sys-SensoTower02", Infinity))
 			{
 				return true;
 			}
@@ -1022,17 +868,9 @@ function defendNTWMap()
 		}
 	}
 
-	if (chance(80) && isStructureAvailable("Emplacement-HvART-pit") && countAndBuild("Emplacement-HvART-pit", Infinity))
-	{
-		return true;
-	}
-
-	if (isStructureAvailable("Emplacement-HeavyPlasmaLauncher") && countAndBuild("Emplacement-HeavyPlasmaLauncher", Infinity))
-	{
-		return true;
-	}
-
-	if (!isStructureAvailable("Emplacement-HvART-pit") && chance(33) && countAndBuild("Emplacement-Rocket06-IDF", Infinity))
+	if ((chance(80) && isStructureAvailable("Emplacement-HvART-pit") && countAndBuild("Emplacement-HvART-pit", Infinity)) ||
+		(isStructureAvailable("Emplacement-HeavyPlasmaLauncher") && countAndBuild("Emplacement-HeavyPlasmaLauncher", Infinity)) ||
+		(!isStructureAvailable("Emplacement-HvART-pit") && chance(33) && countAndBuild("Emplacement-Rocket06-IDF", Infinity)))
 	{
 		return true;
 	}
@@ -1065,86 +903,28 @@ function defendNTWMap()
 //Cobra's unique build decisions
 function buildOrders()
 {
-	if (currently_dead)
-	{
-		return;
-	}
-
 	const __isNTW = highOilMap();
-	let skip = false;
 
-	// No idle truck.
-	if (!findIdleTrucks(constructGroup).length && (!__isNTW || !findIdleTrucks(constructGroupNTWExtra).length))
+	// No idle truck or dead.
+	if (currently_dead || (!findIdleTrucks(constructGroup).length && (!__isNTW || !findIdleTrucks(constructGroupNTWExtra).length)))
 	{
 		return;
 	}
 
 	// Check unfinished structures.
-	if (checkUnfinishedStructures(constructGroup))
-	{
-		skip = true;
-	}
-
-	if (__isNTW && checkUnfinishedStructures(constructGroupNTWExtra))
-	{
-		skip = true;
-	}
-
-	if (skip)
-	{
-		return;
-	}
-
-	// Build basic base structures in order.
-	if (buildBaseStructures())
-	{
-		return;
-	}
-
-	// Build the modules.
-	if (maintenance(constructGroup))
-	{
-		skip = true;
-	}
-
-	if (__isNTW && maintenance(constructGroupNTWExtra))
-	{
-		skip = true;
-	}
-
-	if (skip)
-	{
-		return;
-	}
-
-	// Build further NTW based structure order.
-	if (__isNTW && buildNTWPhase2())
-	{
-		return;
-	}
-
-	// Final build priority. Defenses and special structures. Max limits for base structures.
-	if (__isNTW && chance(20) && buildDefenses(undefined, false))
-	{
-		return;
-	}
-
-	if (chance(70) && buildAAForPersonality())
-	{
-		return;
-	}
-
-	if (buildExtras())
-	{
-		return;
-	}
-
-	if (chance(33) && buildSpecialStructures())
-	{
-		return;
-	}
-
-	if (buildBaseStructures2())
+	if ((checkUnfinishedStructures(constructGroup) || (__isNTW && checkUnfinishedStructures(constructGroupNTWExtra))) ||
+		// Build basic base structures in order.
+		buildBaseStructures() ||
+		// Build the modules.
+		(maintenance(constructGroup) || (__isNTW && maintenance(constructGroupNTWExtra))) ||
+		// Build further NTW based structure order.
+		(__isNTW && buildNTWPhase2()) ||
+		// Final build priority. Defenses and special structures. Max limits for base structures.
+		(__isNTW && chance(20) && buildDefenses(undefined, false)) ||
+		(chance(70) && buildAAForPersonality()) ||
+		buildExtras() ||
+		(chance(33) && buildSpecialStructures()) ||
+		buildBaseStructures2())
 	{
 		return;
 	}
