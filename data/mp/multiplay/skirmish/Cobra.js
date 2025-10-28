@@ -1,3 +1,8 @@
+// Naming convention notes.
+// Distinguish local const arrays|objects with a single underline _ and camelCase.
+// Use 2 underlines for local consts that are of immutable types, such as: numbers, booleans, strings. Use camelCase.
+// Use _ for global consts, and __ for other globals. CAPITALIZE these ones as well with _ seperating words.
+
 //globals/constants/definitions and whatever. Includes at the bottom.
 const COBRA_INCLUDES = "/multiplay/skirmish/cobra_includes/";
 const COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
