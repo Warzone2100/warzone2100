@@ -231,7 +231,7 @@ function getMostHarmfulPlayer()
 		{
 			const _allEnemies = playerAlliance(false);
 
-			if (_allEnemies.length > 0)
+			if (_allEnemies.length)
 			{
 				return _allEnemies[0]; //just focus on a dead enemy then.
 			}

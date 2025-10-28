@@ -98,11 +98,11 @@ function eventDroidBuilt(droid, struct)
 	{
 		const __isEngineer = (droid.body === "CyborgLightBody");
 
-		if ((!__isEngineer || cyborgOnlyGame) && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
+		if ((!__isEngineer || cyborgOnlyGame) && (baseType === CAMP_CLEAN) && (getMultiTechLevel() > 1) && !enumGroup(oilGrabberGroup).length)
 		{
 			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
 		}
-		else if ((!__isEngineer || cyborgOnlyGame) && enumGroup(constructGroup).length >= 2 && enumGroup(oilGrabberGroup).length < 1)
+		else if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(constructGroup).length >= 2) && !enumGroup(oilGrabberGroup).length)
 		{
 			groupAdd(oilGrabberGroup, droid); //Get oil faster
 		}

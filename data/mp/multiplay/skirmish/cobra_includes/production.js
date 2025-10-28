@@ -102,11 +102,11 @@ function chooseRandomCyborgWeapon()
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
-	if ((weaps.templates.length === 0) || !componentAvailable(weaps.templates[0].weapons))
+	if (!weaps.templates.length || !componentAvailable(weaps.templates[0].weapons))
 	{
 		weaps = subPersonalities[personality].primaryWeapon;
 
-		if ((weaps.templates.length === 0) || !componentAvailable(weaps.templates[0].weapons))
+		if (!weaps.templates.length || !componentAvailable(weaps.templates[0].weapons))
 		{
 			weaps = subPersonalities[personality].secondaryWeapon;
 		}
@@ -141,7 +141,7 @@ function chooseRandomVTOLWeapon()
 		weaps = _WEAPON_STATS.rockets_AS;
 	}
 
-	if ((weaps.vtols.length === 0) || !componentAvailable(weaps.vtols[0].stat))
+	if (!weaps.vtols.length || !componentAvailable(weaps.vtols[0].stat))
 	{
 		weaps = _WEAPON_STATS.bombs;
 	}
@@ -632,7 +632,7 @@ function produce()
 						buildSys(_fc.id, "Spade1Mk1");
 					}
 					else if (__buildSensors &&
-						(enumGroup(artilleryGroup).length > 0) &&
+						enumGroup(artilleryGroup).length &&
 						componentAvailable("SensorTurret1Mk1"))
 					{
 						buildSys(_fc.id);

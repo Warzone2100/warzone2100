@@ -34,7 +34,7 @@ function beaconAreaHasEnemies()
 
 	const __maxScanRange = 15;
 
-	return enumRange(beacon.x, beacon.y, __maxScanRange, ENEMIES, false).length > 0;
+	return (enumRange(beacon.x, beacon.y, __maxScanRange, ENEMIES, false).length > 0);
 }
 
 //Modified from Nullbot.
@@ -59,7 +59,7 @@ function returnClosestEnemyFactory(enemyNumber)
 		.concat(enumStruct(enemyNumber, CYBORG_FACTORY))
 		.concat(enumStruct(enemyNumber, VTOL_FACTORY)).sort(distanceToBase);
 
-		if (_facs.length > 0)
+		if (_facs.length)
 		{
 			return objectInformation(_facs[0]);
 		}
@@ -199,7 +199,7 @@ function findNearestEnemyDroid(enemy)
 		{
 			let temp = _badDroids.filter((dr) => (!isVTOL(dr)));
 
-			if (temp.length === 0)
+			if (!temp.length)
 			{
 				temp = _badDroids;
 			}
@@ -227,12 +227,12 @@ function findNearestEnemyStructure(enemy)
 
 		let s = enumStruct(enemy).filter((obj) => (obj.stattype !== WALL));
 
-		if (s.length === 0)
+		if (!s.length)
 		{
 			s = enumStruct(enemy);
 		}
 
-		if (s.length > 0)
+		if (s.length)
 		{
 			s = s.sort(distanceToBase);
 
@@ -281,7 +281,7 @@ function artilleryTactics()
 	const __artiLen = _artilleryUnits.length;
 	const __sensLen = sensors.length;
 
-	if (__sensLen + __artiLen > 0)
+	if ((__sensLen + __artiLen) > 0)
 	{
 		sensors = sortAndReverseDistance(sensors);
 		const _obj = rangeStep();
@@ -579,7 +579,7 @@ function enemyUnitsInBase()
 
 	//The attack code automatically chooses the closest object of the
 	//most harmful player anyway so this should suffice for defense.
-	if (_enemyUnits.length > 0)
+	if (_enemyUnits.length)
 	{
 		if (!startAttacking &&
 			_enemyUnits[0].droidType !== DROID_CONSTRUCT &&
@@ -657,7 +657,7 @@ function baseShuffleDefensePattern()
 
 	const _attackers = enumGroup(attackGroup).concat(enumGroup(artilleryGroup)).concat(enumGroup(vtolGroup));
 
-	if (_attackers.length === 0)
+	if (!_attackers.length)
 	{
 		return;
 	}
