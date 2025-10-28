@@ -68,8 +68,8 @@ function personalityIsRocketMain()
 //Distance between an object and the Cobra base.
 function distanceToBase(obj1, obj2)
 {
-	const __dist1 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj1.x, obj1.y);
-	const __dist2 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj2.x, obj2.y);
+	const __dist1 = distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, obj1.x, obj1.y);
+	const __dist2 = distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, obj2.x, obj2.y);
 
 	return (__dist1 - __dist2);
 }
@@ -122,7 +122,7 @@ function rangeStep(player)
 
 		if (_targets.length)
 		{
-			if (!__highOil && _derr && (chance(7) || (countStruct(structures.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
+			if (!__highOil && _derr && (chance(7) || (countStruct(_STRUCTURES.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
 			{
 				return objectInformation(_derr);
 			}
@@ -301,18 +301,18 @@ function donateFromGroup(from, group)
 
 		const __droidLen = chosenGroup.length;
 
-		if ((__droidLen >= MIN_ATTACK_DROIDS) || (group === "TRUCK" && __droidLen >= MIN_TRUCKS_PER_GROUP))
+		if ((__droidLen >= __MIN_ATTACK_DROIDS) || (group === "TRUCK" && __droidLen >= __MIN_TRUCKS_PER_GROUP))
 		{
 			let idx = 0;
 			let amount;
 
 			if (group !== "TRUCK")
 			{
-				amount = random(__droidLen - (MIN_ATTACK_DROIDS - 2)) + 1;
+				amount = random(__droidLen - (__MIN_ATTACK_DROIDS - 2)) + 1;
 			}
 			else
 			{
-				amount = random(__droidLen - (MIN_TRUCKS_PER_GROUP - 1)) + 1;
+				amount = random(__droidLen - (__MIN_TRUCKS_PER_GROUP - 1)) + 1;
 			}
 
 			while (idx < amount)
@@ -347,7 +347,7 @@ function removeThisTimer(timer)
 //Check if Cobra is "alive". If not, the script is put in a very low perf impact state.
 function checkIfDead()
 {
-	if (!(countDroid(DROID_ANY, me) || countStruct(structures.factory, me) || countStruct(structures.cyborgFactory, me)))
+	if (!(countDroid(DROID_ANY, me) || countStruct(_STRUCTURES.factory, me) || countStruct(_STRUCTURES.cyborgFactory, me)))
 	{
 		currently_dead = true;
 
@@ -429,7 +429,7 @@ function initCobraVars()
 	lastShuffleTime = 0;
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
 	randomResearchLabStart = chance(20);
-	cyborgOnlyGame = (!getStructureLimit(structures.factory, me) && getStructureLimit(structures.cyborgFactory));
+	cyborgOnlyGame = (!getStructureLimit(_STRUCTURES.factory, me) && getStructureLimit(_STRUCTURES.cyborgFactory));
 	resObj = {
 		lab: undefined,
 		cybCheck: false,

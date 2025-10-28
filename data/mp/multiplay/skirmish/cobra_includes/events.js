@@ -48,15 +48,15 @@ function eventStructureBuilt(structure, droid)
 
 	if (_nearbyOils.length && !skipOilGrabIfEasy())
 	{
-		orderDroidBuild(droid, DORDER_BUILD, structures.derrick, _nearbyOils[0].x, _nearbyOils[0].y);
+		orderDroidBuild(droid, DORDER_BUILD, _STRUCTURES.derrick, _nearbyOils[0].x, _nearbyOils[0].y);
 		return;
 	}
 	else if (forceDerrickBuildDefense)
 	{
 		const __minDistFromBase = 10;
-		const __dist = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, structure.x, structure.y);
+		const __dist = distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, structure.x, structure.y);
 
-		if (__dist >= __minDistFromBase && (getRealPower() > (-3 * SUPER_LOW_POWER)))
+		if (__dist >= __minDistFromBase && (getRealPower() > (-3 * __SUPER_LOW_POWER)))
 		{
 			fastDefendSpot(structure, droid);
 			return;
@@ -106,15 +106,15 @@ function eventDroidBuilt(droid, struct)
 		{
 			groupAdd(oilGrabberGroup, droid); //Get oil faster
 		}
-		else if (enumGroup(constructGroup).length < MIN_TRUCKS_PER_GROUP)
+		else if (enumGroup(constructGroup).length < __MIN_TRUCKS_PER_GROUP)
 		{
 			groupAdd(constructGroup, droid);
 		}
-		else if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(oilGrabberGroup).length < MIN_TRUCKS_PER_GROUP))
+		else if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(oilGrabberGroup).length < __MIN_TRUCKS_PER_GROUP))
 		{
 			groupAdd(oilGrabberGroup, droid);
 		}
-		else if (highOilMap() && (enumGroup(constructGroupNTWExtra).length < MIN_TRUCKS_PER_GROUP))
+		else if (highOilMap() && (enumGroup(constructGroupNTWExtra).length < __MIN_TRUCKS_PER_GROUP))
 		{
 			groupAdd(constructGroupNTWExtra, droid);
 		}
@@ -173,7 +173,7 @@ function eventAttacked(victim, attacker)
 			victim.order !== DORDER_RECYCLE &&
 			!repairDroid(victim.id) &&
 			_nearbyUnits.length < _nearbyEnemies.length &&
-			distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, victim.x, victim.y) >= 20)
+			distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, victim.x, victim.y) >= 20)
 		{
 			let run = true;
 
@@ -192,7 +192,7 @@ function eventAttacked(victim, attacker)
 
 			if (run)
 			{
-				orderDroidLoc(victim, DORDER_MOVE, MY_BASE.x, MY_BASE.y); //Move now
+				orderDroidLoc(victim, DORDER_MOVE, _MY_BASE.x, _MY_BASE.y); //Move now
 				groupAdd(retreatGroup, victim);
 			}
 		}
@@ -214,7 +214,7 @@ function eventAttacked(victim, attacker)
 		grudgeCount[attacker.player] += (victim.type === STRUCTURE) ? 20 : 5;
 
 		//Check if a droid needs repair.
-		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(structures.repair, me))
+		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(_STRUCTURES.repair, me))
 		{
 			repairDroid(victim.id);
 		}
@@ -234,7 +234,7 @@ function eventAttacked(victim, attacker)
 
 		const __unitLen = _units.length;
 
-		if (__unitLen >= MIN_ATTACK_DROIDS && shouldCobraAttack())
+		if (__unitLen >= __MIN_ATTACK_DROIDS && shouldCobraAttack())
 		{
 			for (let i = 0; i < __unitLen; ++i)
 			{
@@ -281,7 +281,7 @@ function eventStructureReady(structure)
 
 	if (!structure)
 	{
-		const __laser = enumStruct(me, structures.lassat);
+		const __laser = enumStruct(me, _STRUCTURES.lassat);
 
 		if (__laser.length)
 		{
@@ -332,5 +332,5 @@ function eventBeacon(x, y, from, to, message)
 	beacon.y = y;
 	beacon.startTime = gameTime;
 	beacon.endTime = gameTime + 50000;
-	beacon.wasVtol = isDefined(message) && (message === BEACON_VTOL_ALARM);
+	beacon.wasVtol = isDefined(message) && (message === _BEACON_VTOL_ALARM);
 }

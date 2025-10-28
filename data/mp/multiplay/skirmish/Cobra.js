@@ -4,52 +4,52 @@
 // Use _ for global consts, and __ for other globals. CAPITALIZE these ones as well with _ seperating words.
 
 //globals/constants/definitions and whatever. Includes at the bottom.
-const COBRA_INCLUDES = "/multiplay/skirmish/cobra_includes/";
-const COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
+const __COBRA_INCLUDES = "/multiplay/skirmish/cobra_includes/";
+const __COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
 
 //Rulesets here.
-include(COBRA_RULESETS + "CobraStandard.js");
+include(__COBRA_RULESETS + "CobraStandard.js");
 
-const LOG_RESEARCH_PATH = false;
+const __LOG_RESEARCH_PATH = false;
 
-const MIN_ATTACK_DROIDS = 4;
-const MY_BASE = startPositions[me];
-const OIL_RES = "OilResource";
-const MIN_POWER = 150;
-const SUPER_LOW_POWER = 70;
-const MIN_BUILD_POWER = 220;
-const PRODUCTION_POWER = SUPER_LOW_POWER;
-const ELECTRONIC_DEFENSES = [
+const __MIN_ATTACK_DROIDS = 4;
+const _MY_BASE = startPositions[me];
+const __OIL_RES = "OilResource";
+const __MIN_POWER = 150;
+const __SUPER_LOW_POWER = 70;
+const __MIN_BUILD_POWER = 220;
+const __PRODUCTION_POWER = __SUPER_LOW_POWER;
+const _ELECTRONIC_DEFENSES = [
 	"Sys-SpyTower",
 	"WallTower-EMP",
 	"Emplacement-MortarEMP",
 ];
-const BEACON_VTOL_ALARM = "vtolSpotted";
+const _BEACON_VTOL_ALARM = "vtolSpotted";
 
 //Research constants
-const TANK_ARMOR = [
+const _TANK_ARMOR = [
 	"R-Vehicle-Metals09",
 ];
-const CYBORG_ARMOR = [
+const _CYBORG_ARMOR = [
 	"R-Cyborg-Metals09",
 ];
-const TANK_ARMOR_THERMAL = [
+const _TANK_ARMOR_THERMAL = [
 	"R-Vehicle-Armor-Heat09",
 ];
-const CYBORG_ARMOR_THERMAL = [
+const _CYBORG_ARMOR_THERMAL = [
 	"R-Cyborg-Armor-Heat09",
 ];
-const MODULE_RESEARCH = [
+const _MODULE_RESEARCH = [
 	"R-Struc-Research-Module",
 	"R-Struc-Factory-Module",
 	"R-Struc-PowerModuleMk1",
 ];
-const MOST_ESSENTIAL = [
+const _MOST_ESSENTIAL = [
 	"R-Wpn-MG-Damage01",
 	"R-Sys-Engineering01",
 	"R-Defense-Tower01",
 ];
-const ESSENTIALS = [
+const _ESSENTIALS = [
 	"R-Wpn-MG2Mk1",
 	"R-Wpn-MG-Damage02",
 	"R-Struc-PowerModuleMk1",
@@ -58,7 +58,7 @@ const ESSENTIALS = [
 	"R-Vehicle-Body05",
 	"R-Wpn-MG-Damage03",
 ];
-const ESSENTIALS_2 = [
+const _ESSENTIALS_2 = [
 	"R-Vehicle-Metals02",
 	"R-Cyborg-Metals02",
 	"R-Wpn-MG3Mk1",
@@ -67,33 +67,33 @@ const ESSENTIALS_2 = [
 	"R-Struc-Power-Upgrade03a",
 	"R-Struc-Research-Upgrade09",
 ];
-const ESSENTIALS_3 = [
+const _ESSENTIALS_3 = [
 	"R-Vehicle-Body04",
 	"R-Vehicle-Prop-Hover",
 	"R-Struc-Factory-Upgrade09",
 ];
-const SYSTEM_UPGRADES = [
+const _SYSTEM_UPGRADES = [
 	"R-Vehicle-Prop-Tracks",
 	"R-Struc-RprFac-Upgrade06",
 	"R-Sys-Sensor-Upgrade03",
 ];
-const FLAMER = [
+const _FLAMER = [
 	"R-Wpn-Flame2",
 	"R-Wpn-Flamer-ROF03",
 	"R-Wpn-Flamer-Damage09",
 ];
-const SENSOR_TECH = [
+const _SENSOR_TECH = [
 	"R-Sys-CBSensor-Tower01",
 	"R-Sys-Sensor-WSTower",
 	"R-Sys-Sensor-UpLink",
 	"R-Wpn-LasSat",
 	"R-Sys-Resistance-Circuits",
 ];
-const DEFENSE_UPGRADES = [
+const _DEFENSE_UPGRADES = [
 	"R-Struc-Materials03",
 	"R-Defense-WallUpgrade12",
 ];
-const BODY_RESEARCH = [
+const _BODY_RESEARCH = [
 	"R-Vehicle-Body08",
 	"R-Vehicle-Body12",
 	"R-Vehicle-Body09",
@@ -101,7 +101,7 @@ const BODY_RESEARCH = [
 	"R-Vehicle-Engine09",
 	"R-Vehicle-Body14",
 ];
-const VTOL_RES = [
+const _VTOL_RES = [
 	"R-Struc-VTOLPad-Upgrade01",
 	"R-Wpn-Bomb02",
 	"R-Struc-VTOLPad-Upgrade03",
@@ -113,7 +113,7 @@ const VTOL_RES = [
 ];
 
 //Production constants
-const TANK_BODY = [
+const _TANK_BODY = [
 	"Body14SUP", // Dragon
 	"Body13SUP", // Wyvern
 	"Body10MBT", // Vengeance
@@ -122,17 +122,17 @@ const TANK_BODY = [
 	"Body5REC",  // Cobra
 	"Body1REC",  // Viper
 ];
-const SYSTEM_BODY = [
+const _SYSTEM_BODY = [
 	"Body3MBT",  // Retaliation
 	"Body2SUP",  // Leopard
 	"Body4ABT",  // Bug
 	"Body1REC",  // Viper
 ];
-const SYSTEM_PROPULSION = [
+const _SYSTEM_PROPULSION = [
 	"hover01", // hover
 	"wheeled01", // wheels
 ];
-const VTOL_BODY = [
+const _VTOL_BODY = [
 	"Body7ABT",  // Retribution
 	"Body6SUPP", // Panther
 	"Body12SUP", // Mantis
@@ -140,7 +140,7 @@ const VTOL_BODY = [
 	"Body5REC",  // Cobra
 	"Body1REC",  // Viper
 ];
-const ARTILLERY_SENSORS = [
+const _ARTILLERY_SENSORS = [
 	"Sensor-WideSpec",
 	"SensorTurret1Mk1",
 ];
@@ -151,11 +151,11 @@ var subPersonalities =
 {
 	AC:
 	{
-		"primaryWeapon": weaponStats.cannons,
-		"secondaryWeapon": weaponStats.gauss,
-		"artillery": weaponStats.mortars,
-		"antiAir": weaponStats.cannons_AA,
-		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"primaryWeapon": _WEAPON_STATS.cannons,
+		"secondaryWeapon": _WEAPON_STATS.gauss,
+		"artillery": _WEAPON_STATS.mortars,
+		"antiAir": _WEAPON_STATS.cannons_AA,
+		"factoryOrder": [_STRUCTURES.factory, _STRUCTURES.cyborgFactory, _STRUCTURES.vtolFactory],
 		"defensePriority": 15,
 		"vtolPriority": 40,
 		"alloyPriority": 33,
@@ -174,11 +174,11 @@ var subPersonalities =
 	},
 	AR:
 	{
-		"primaryWeapon": weaponStats.flamers,
-		"secondaryWeapon": weaponStats.gauss,
-		"artillery": weaponStats.mortars,
-		"antiAir": weaponStats.AA,
-		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"primaryWeapon": _WEAPON_STATS.flamers,
+		"secondaryWeapon": _WEAPON_STATS.gauss,
+		"artillery": _WEAPON_STATS.mortars,
+		"antiAir": _WEAPON_STATS.AA,
+		"factoryOrder": [_STRUCTURES.factory, _STRUCTURES.cyborgFactory, _STRUCTURES.vtolFactory],
 		"defensePriority": 15,
 		"vtolPriority": 50,
 		"alloyPriority": 35,
@@ -197,11 +197,11 @@ var subPersonalities =
 	},
 	AB:
 	{
-		"primaryWeapon": weaponStats.rockets_AT,
-		"secondaryWeapon": weaponStats.gauss,
-		"artillery": weaponStats.rockets_Arty,
-		"antiAir": weaponStats.rockets_AA,
-		"factoryOrder": [structures.vtolFactory, structures.factory, structures.cyborgFactory],
+		"primaryWeapon": _WEAPON_STATS.rockets_AT,
+		"secondaryWeapon": _WEAPON_STATS.gauss,
+		"artillery": _WEAPON_STATS.rockets_Arty,
+		"antiAir": _WEAPON_STATS.rockets_AA,
+		"factoryOrder": [_STRUCTURES.vtolFactory, _STRUCTURES.factory, _STRUCTURES.cyborgFactory],
 		"defensePriority": 20,
 		"vtolPriority": 50,
 		"alloyPriority": 25,
@@ -219,11 +219,11 @@ var subPersonalities =
 	},
 	AM:
 	{
-		"primaryWeapon": weaponStats.machineguns,
-		"secondaryWeapon": weaponStats.lasers,
-		"artillery": weaponStats.mortars,
-		"antiAir": weaponStats.AA,
-		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"primaryWeapon": _WEAPON_STATS.machineguns,
+		"secondaryWeapon": _WEAPON_STATS.lasers,
+		"artillery": _WEAPON_STATS.mortars,
+		"antiAir": _WEAPON_STATS.AA,
+		"factoryOrder": [_STRUCTURES.factory, _STRUCTURES.cyborgFactory, _STRUCTURES.vtolFactory],
 		"defensePriority": 15,
 		"vtolPriority": 80,
 		"alloyPriority": 35,
@@ -241,11 +241,11 @@ var subPersonalities =
 	},
 	AA:
 	{
-		"primaryWeapon": weaponStats.mortars,
-		"secondaryWeapon": weaponStats.AS,
-		"artillery": weaponStats.fireMortars,
-		"antiAir": weaponStats.cannons_AA,
-		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"primaryWeapon": _WEAPON_STATS.mortars,
+		"secondaryWeapon": _WEAPON_STATS.AS,
+		"artillery": _WEAPON_STATS.fireMortars,
+		"antiAir": _WEAPON_STATS.cannons_AA,
+		"factoryOrder": [_STRUCTURES.factory, _STRUCTURES.cyborgFactory, _STRUCTURES.vtolFactory],
 		"defensePriority": 45,
 		"vtolPriority": 66,
 		"alloyPriority": 10,
@@ -321,15 +321,15 @@ var empWeapons;
 
 
 //Now include everthing else.
-include(COBRA_INCLUDES + "performance.js");
-include(COBRA_INCLUDES + "miscFunctions.js");
-include(COBRA_INCLUDES + "build.js");
-include(COBRA_INCLUDES + "production.js");
-include(COBRA_INCLUDES + "tactics.js");
-include(COBRA_INCLUDES + "mapDynamics.js");
-include(COBRA_INCLUDES + "research.js");
-include(COBRA_INCLUDES + "events.js");
-include(COBRA_INCLUDES + "chat.js");
-include(COBRA_INCLUDES + "adaption.js");
+include(__COBRA_INCLUDES + "performance.js");
+include(__COBRA_INCLUDES + "miscFunctions.js");
+include(__COBRA_INCLUDES + "build.js");
+include(__COBRA_INCLUDES + "production.js");
+include(__COBRA_INCLUDES + "tactics.js");
+include(__COBRA_INCLUDES + "mapDynamics.js");
+include(__COBRA_INCLUDES + "research.js");
+include(__COBRA_INCLUDES + "events.js");
+include(__COBRA_INCLUDES + "chat.js");
+include(__COBRA_INCLUDES + "adaption.js");
 
-const MIN_TRUCKS_PER_GROUP = !highOilMap() ? 3 : 5;
+const __MIN_TRUCKS_PER_GROUP = !highOilMap() ? 3 : 5;

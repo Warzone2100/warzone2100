@@ -157,7 +157,7 @@ function repairDroid(droidID, force)
 		return true;
 	}
 
-	if (countStruct(structures.repair, me) && (force || (Math.floor(_droid.health) <= __healthToRepair)))
+	if (countStruct(_STRUCTURES.repair, me) && (force || (Math.floor(_droid.health) <= __healthToRepair)))
 	{
 		orderDroid(_droid, DORDER_RTR);
 		return true;
@@ -169,7 +169,7 @@ function repairDroid(droidID, force)
 //Continuously check a random ground group for repair
 function checkAllForRepair()
 {
-	if (!countStruct(structures.repair, me))
+	if (!countStruct(_STRUCTURES.repair, me))
 	{
 		return;
 	}
@@ -255,7 +255,7 @@ function findNearestEnemyDerrick(enemy)
 			enemy = getMostHarmfulPlayer();
 		}
 
-		const _derr = enumStruct(enemy, structures.derricks).sort(distanceToBase);
+		const _derr = enumStruct(enemy, _STRUCTURES.derricks).sort(distanceToBase);
 
 		if (_derr.length)
 		{
@@ -352,7 +352,7 @@ function groundTactics()
 				droidReady(dr.id)
 			));
 
-			if (_units.length < MIN_ATTACK_DROIDS)
+			if (_units.length < __MIN_ATTACK_DROIDS)
 			{
 				return;
 			}
@@ -422,7 +422,7 @@ function recycleForHover()
 	const _unfinished = unfinishedStructures();
 	const __nonHoverSystemsLen = _systems.length;
 
-	if ((countStruct(structures.factory, me) > __minFactories) && componentAvailable("hover01"))
+	if ((countStruct(_STRUCTURES.factory, me) > __minFactories) && componentAvailable("hover01"))
 	{
 		if (!_unfinished.length && __nonHoverSystemsLen)
 		{
@@ -593,7 +593,7 @@ function enemyUnitsInBase()
 		//Send a beacon that enemies are in my base area! Allied Cobra AI can interpret and help friends through this drop.
 		if (!beacon.disabled && (beacon.endTime < gameTime))
 		{
-			const __mes = isVTOL(_enemyUnits[0]) ? BEACON_VTOL_ALARM : undefined;
+			const __mes = isVTOL(_enemyUnits[0]) ? _BEACON_VTOL_ALARM : undefined;
 
 			addBeacon(_enemyUnits[0].x, _enemyUnits[0].y, ALLIES, __mes);
 			//Set beacon data for me also since we won't receive our own beacon.
@@ -614,7 +614,7 @@ function donateSomePower()
 		return;
 	}
 
-	if (!countStruct(structures.gen, me) || !countStruct(structures.derrick, me))
+	if (!countStruct(_STRUCTURES.gen, me) || !countStruct(_STRUCTURES.derrick, me))
 	{
 		return;
 	}
@@ -682,7 +682,7 @@ function baseShuffleDefensePattern()
 		sector = _quad[random(_quad.length)];
 		x = sector.x1 + random(sector.x2);
 		y = sector.y1 + random(sector.y2);
-	} while (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, x, y) && attempts < __maxAttempts);
+	} while (!propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, x, y) && attempts < __maxAttempts);
 
 	if (attempts > __maxAttempts)
 	{
@@ -734,7 +734,7 @@ function lowOilDefensePattern()
 		return; //visit a derrick for a bit... maybe
 	}
 
-	const _derricks = enumStruct(me, structures.derrick);
+	const _derricks = enumStruct(me, _STRUCTURES.derrick);
 
 	if (!_derricks.length)
 	{
@@ -797,7 +797,7 @@ function retreatTactics()
 
 		if (enumRange(_droid.x, _droid.y, __scanRadius, ENEMIES, !__highOil).length > __friendsLen)
 		{
-			orderDroidLoc(_droid, DORDER_MOVE, MY_BASE.x, MY_BASE.y);
+			orderDroidLoc(_droid, DORDER_MOVE, _MY_BASE.x, _MY_BASE.y);
 		}
 		else
 		{
