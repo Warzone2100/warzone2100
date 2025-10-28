@@ -70,11 +70,11 @@ function isPowerResearch(research)
 //one is not completed... so lets help it a bit.
 function evalResearch(lab, list)
 {
-	let sufficientPower = getRealPower() > 2500;
+	const __sufficientPower = getRealPower() > 2500;
 
 	for (let i = 0, a = list.length; i < a; ++i)
 	{
-		if (sufficientPower && isPowerResearch(list[i]))
+		if (__sufficientPower && isPowerResearch(list[i]))
 		{
 			//Don't research power upgrades if we have an absurd amount of power.
 			continue;
