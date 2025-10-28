@@ -532,7 +532,7 @@ function buildModules()
 }
 
 _global.buildVtols = function() {
-	return buildMinimum(structures.vtolPads, enumDroid(me, DROID_WEAPON).filter(isVTOL).length, IMPORTANCE.MANDATORY);
+	return buildMinimum(structures.vtolPads, enumDroid(me, DROID_WEAPON).filter(isVTOL).length, IMPORTANCE.PEACETIME);
 };
 
 function buildExtras()
