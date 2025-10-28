@@ -410,6 +410,15 @@ function essentialsResPath()
 	{
 		return true;
 	}
+	if (chance((resObj.hasAlly || resObj.isHighOil || (gameTime > 2400000)) ? 90 : 75))
+	{
+		if ((getResearch("R-Struc-Research-Upgrade02").done && pursueResearch(resObj.lab, "R-Vehicle-Body11")) ||
+			(chance((resObj.isHighOil || resObj.hasAlly) ? 90 : 66) && evalResearch(resObj.lab, _ESSENTIALS_2)) ||
+			(chance(getResearch("R-Struc-Research-Upgrade04").done ? 80 : 25) && evalResearch(resObj.lab, _ESSENTIALS_3)))
+		{
+			return true;
+		}
+	}
 
 	return false;
 }
@@ -521,15 +530,6 @@ function laserResPath()
 //Careful not to focus too much on these research topics since offensive capability can be harmed
 function specialResPath()
 {
-	if (chance((resObj.hasAlly || resObj.isHighOil || (gameTime > 2400000)) ? 60 : 20))
-	{
-		if ((getResearch("R-Struc-Research-Upgrade02").done && pursueResearch(resObj.lab, "R-Vehicle-Body11")) ||
-			(chance((resObj.isHighOil || resObj.hasAlly) ? 75 : 33) && evalResearch(resObj.lab, _ESSENTIALS_2)) ||
-			(chance(getResearch("R-Struc-Research-Upgrade04").done ? 40 : 15) && evalResearch(resObj.lab, _ESSENTIALS_3)))
-		{
-			return true;
-		}
-	}
 
 	if (!cyborgOnlyGame && getResearch("R-Struc-Research-Upgrade05").done && chance(15))
 	{
