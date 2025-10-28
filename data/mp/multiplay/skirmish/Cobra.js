@@ -63,8 +63,8 @@ const _ESSENTIALS_2 = [
 	"R-Cyborg-Metals02",
 	"R-Wpn-MG3Mk1",
 	"R-Struc-RprFac-Upgrade01",
-	"R-Sys-Autorepair-General",
 	"R-Struc-Power-Upgrade03a",
+	"R-Sys-Autorepair-General",
 	"R-Struc-Research-Upgrade09",
 ];
 const _ESSENTIALS_3 = [
