@@ -395,12 +395,9 @@ function buildAttacker(id)
 	const _secondary = choosePersonalityWeapon("TANK");
 	const _fac = getObject(STRUCTURE, me, id);
 
-	if (isDefined(_weap) && isDefined(_secondary))
+	if (isDefined(_weap) && isDefined(_secondary) && (_fac !== null))
 	{
-		if (_fac !== null)
-		{
-			return getRealPower() > __PRODUCTION_POWER && buildDroid(_fac, "Droid", pickTankBody(), pickPropulsion(_weap), "", "", _weap, _secondary);
-		}
+		return getRealPower() > __PRODUCTION_POWER && buildDroid(_fac, "Droid", pickTankBody(), pickPropulsion(_weap), "", "", _weap, _secondary);
 	}
 
 	return false;

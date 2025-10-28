@@ -161,6 +161,7 @@ function cobraBaseArea()
 	function uncached()
 	{
 		const __extraTiles = 20;
+		const __clipOffset = 0;
 		const _area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 		const _baseStructures = [
 			_STRUCTURES.factory,
@@ -207,22 +208,13 @@ function cobraBaseArea()
 		_area.x2 = _area.x2 + __extraTiles;
 		_area.y2 = _area.y2 + __extraTiles;
 
-		if (_area.x1 < 0)
-		{
-			_area.x1 = 0;
-		}
-		if (_area.y1 < 0)
-		{
-			_area.y1 = 0;
-		}
-		if (_area.x2 > mapWidth)
-		{
-			_area.x2 = mapWidth;
-		}
-		if (_area.y2 > mapHeight)
-		{
-			_area.y2 = mapHeight;
-		}
+		const _clipFirstCoords = clipToMapBounds({x: _area.x1, y: _area.y1}, __clipOffset);
+		const _clipSecondCoords = clipToMapBounds({x: _area.x2, y: _area.y2}, __clipOffset);
+
+		_area.x1 = _clipFirstCoords.x;
+		_area.y1 = _clipFirstCoords.y;
+		_area.x2 = _clipSecondCoords.x;
+		_area.y2 = _clipSecondCoords.y;
 
 		return _area;
 	}

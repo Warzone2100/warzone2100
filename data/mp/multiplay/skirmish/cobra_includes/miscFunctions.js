@@ -442,6 +442,39 @@ function initCobraVars()
 	};
 }
 
+// A simple way to make sure a set of xy coordinates are within the map. If the `off` parameter
+// is defined, it will offset away from the map. Defaults to 2 as that is roughly where the dark area ends.
+function clipToMapBounds(obj, off)
+{
+	if (!isDefined(obj) || (!isDefined(obj.x) || !isDefined(obj.y)))
+	{
+		return undefined;
+	}
+
+	const __offset = (isDefined(off) ? off : 2);
+	let tmp = obj;
+
+	if (tmp.x < __offset)
+	{
+		tmp.x = __offset;
+	}
+	else if (tmp.x > mapWidth - __offset)
+	{
+		tmp.x = mapWidth - __offset;
+	}
+
+	if (tmp.y < __offset)
+	{
+		tmp.y = __offset;
+	}
+	else if (tmp.y > mapHeight - __offset)
+	{
+		tmp.y = mapHeight - __offset;
+	}
+
+	return tmp;
+}
+
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations
 //for base structures (or others) on some maps. Returns an object with a xy position pair.
 function randomOffsetLocation(location)
