@@ -19,16 +19,16 @@ function sendChatMessage(msg, receiver)
 
 		if (receiver === ALLIES || receiver === ENEMIES)
 		{
-			let players = playerAlliance(receiver === ALLIES);
+			const _players = playerAlliance(receiver === ALLIES);
 
-			for (let i = 0, len = players.length; i < len; ++i)
+			for (let i = 0, len = _players.length; i < len; ++i)
 			{
-				if (msg === "need power" && !playerData[players[i]].isAI)
+				if (msg === "need power" && !playerData[_players[i]].isAI)
 				{
 					continue; //don't spam humans with power requests.
 				}
 
-				chat(players[i], msg);
+				chat(_players[i], msg);
 			}
 		}
 		else if (receiver === ALL_PLAYERS)
@@ -239,26 +239,26 @@ function eventChat(from, to, message)
 	}
 
 	//Here be commands that do something to a specific enemy.
-	const REAL_MSG = message.slice(0, -1);
+	const __realMsg = message.slice(0, -1);
 
-	if (REAL_MSG === "target")
+	if (__realMsg === "target")
 	{
-		let num = message.slice(-1);
+		const __num = message.slice(-1);
 
-		if (!allianceExistsBetween(num, me) && (num !== me))
+		if (!allianceExistsBetween(__num, me) && (__num !== me))
 		{
-			if (targetPlayer(num))
+			if (targetPlayer(__num))
 			{
-				sendChatMessage("Target set to player " + num, from);
+				sendChatMessage("Target set to player " + __num, from);
 			}
 			else
 			{
-				sendChatMessage("Sorry, target not changed to player " + num + " (they may be my target already)", from);
+				sendChatMessage("Sorry, target not changed to player " + __num + " (they may be my target already)", from);
 			}
 		}
 		else
 		{
-			sendChatMessage("Can not attack myself or an ally which is player " + num, from);
+			sendChatMessage("Can not attack myself or an ally which is player " + __num, from);
 		}
 	}
 }

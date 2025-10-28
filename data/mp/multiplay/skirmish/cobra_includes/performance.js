@@ -10,7 +10,7 @@ function callFuncWithArgs(func, parameters)
 //Pass in Infinity for time to never recalculate it again.
 function cacheThis(func, funcParameters, cachedItem, time)
 {
-	const REFRESH_TIME = isDefined(time) ? time : 15000;
+	const __refreshTime = isDefined(time) ? time : 15000;
 
 	if (!isDefined(cachedItem))
 	{
@@ -33,13 +33,13 @@ function cacheThis(func, funcParameters, cachedItem, time)
 		debugGetCallerFuncObject().cachedValues = {};
 	}
 
-	let t = debugGetCallerFuncObject().cachedTimes[cachedItem];
-	let obj = debugGetCallerFuncObject().cachedValues[cachedItem];
-	let def = isDefined(obj);
+	const __t = debugGetCallerFuncObject().cachedTimes[cachedItem];
+	const _obj = debugGetCallerFuncObject().cachedValues[cachedItem];
+	const __def = isDefined(_obj);
 
-	if (!def ||
-		(isDefined(obj.typeInfo) && (getObject(obj.typeInfo, obj.playerInfo, obj.idInfo) === null)) ||
-		((gameTime - t) >= REFRESH_TIME))
+	if (!__def ||
+		(isDefined(_obj.typeInfo) && (getObject(_obj.typeInfo, _obj.playerInfo, _obj.idInfo) === null)) ||
+		((gameTime - __t) >= __refreshTime))
 	{
 		debugGetCallerFuncObject().cachedValues[cachedItem] = callFuncWithArgs(func, funcParameters);
 		debugGetCallerFuncObject().cachedTimes[cachedItem] = gameTime;
