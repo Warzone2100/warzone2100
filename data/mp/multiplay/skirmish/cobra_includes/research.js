@@ -117,7 +117,7 @@ function timeToResearchAdvancedBody()
 			time = 900000;
 	}
 
-	if (playerAlliance(true).length > 0)
+	if (playerAlliance(true).length)
 	{
 		time = Math.floor(time / 2);
 	}
@@ -129,7 +129,7 @@ function timeToResearchAdvancedBody()
 // Limits that to two labs at any one given time (except for the initial basic alloys and bodies in the beginning).
 function atGenericDefensiveResearchLimit()
 {
-	if (playerAlliance(true).length > 0)
+	if (playerAlliance(true).length)
 	{
 		return false;
 	}
@@ -191,7 +191,7 @@ function secondaryResPath()
 	{
 		const _cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
 
-		if ((!turnOffCyborgs && (_cyborgSecondary.length > 0) && pursueResearch(resObj.lab, _cyborgSecondary)) ||
+		if ((!turnOffCyborgs && _cyborgSecondary.length && pursueResearch(resObj.lab, _cyborgSecondary)) ||
 			evalResearch(resObj.lab, secondaryWeaponExtra) ||
 			evalResearch(resObj.lab, secondaryWeaponTech))
 		{
@@ -494,7 +494,7 @@ function antiAirResPath()
 		(countEnemyVTOL() || componentAvailable("V-Tol")))
 	{
 		// Prepare the most basic AA defense.
-		if ((antiAirTech.length > 0) && pursueResearch(resObj.lab, antiAirTech[0]))
+		if (antiAirTech.length && pursueResearch(resObj.lab, antiAirTech[0]))
 		{
 			return true;
 		}

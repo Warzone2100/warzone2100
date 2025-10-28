@@ -232,7 +232,7 @@ function protectUnguardedDerricks(droid)
 			{
 				undefended = undefended.filter((obj) => (
 					(gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, _MY_BASE.x, _MY_BASE.y) > 9) ||
-						enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0
+						!enumRange(obj.x, obj.y, 6, ENEMIES, false).length
 				)).sort(distanceToBase);
 			}
 			else
@@ -240,7 +240,7 @@ function protectUnguardedDerricks(droid)
 				undefended = undefended.sort(distanceToBase);
 			}
 
-			if (undefended.length > 0 && buildStuff(returnDefense(), undefined, undefended[0], __maxBlocking, oilGrabberGroup))
+			if (undefended.length && buildStuff(returnDefense(), undefined, undefended[0], __maxBlocking, oilGrabberGroup))
 			{
 				return true;
 			}
@@ -745,7 +745,7 @@ function buildBaseStructures()
 	}
 	else
 	{
-		const __haveAllies = (alliancesType === ALLIANCES_TEAMS) && (playerAlliance(true).length > 0);
+		const __haveAllies = ((alliancesType === ALLIANCES_TEAMS) && playerAlliance(true).length);
 
 		if ((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1))
 		{
