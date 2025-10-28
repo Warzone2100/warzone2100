@@ -13,7 +13,7 @@ function checkIfSeaMap()
 
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
+			if (!propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, startPositions[i].x, startPositions[i].y))
 			{
 
 				//Check if it is a map 'spotter' pit
@@ -41,7 +41,7 @@ function checkIfSeaMap()
 		{
 			for (let i = 0; i < maxPlayers; ++i)
 			{
-				if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
+				if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, startPositions[i].x, startPositions[i].y))
 				{
 					//Check to see if it is a closed player slot
 					if (countDroid(DROID_ANY, i) > 0)
@@ -69,16 +69,16 @@ function countAllResources()
 {
 	function uncached()
 	{
-		let amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
+		let amount = enumFeature(ALL_PLAYERS, __OIL_RES).length;
 
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			amount += enumStruct(i, structures.derrick).length;
+			amount += enumStruct(i, _STRUCTURES.derrick).length;
 		}
 
 		if (isDefined(scavengerPlayer))
 		{
-			amount += enumStruct(scavengerPlayer, structures.derrick).length;
+			amount += enumStruct(scavengerPlayer, _STRUCTURES.derrick).length;
 		}
 
 		return amount;
@@ -163,15 +163,15 @@ function cobraBaseArea()
 		const __extraTiles = 20;
 		const _area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 		const _baseStructures = [
-			structures.factory,
-			structures.cyborgFactory,
-			structures.vtolFactory,
-			structures.lab,
-			structures.gen,
-			structures.hq,
-			structures.repair,
-			structures.uplink,
-			structures.lassat,
+			_STRUCTURES.factory,
+			_STRUCTURES.cyborgFactory,
+			_STRUCTURES.vtolFactory,
+			_STRUCTURES.lab,
+			_STRUCTURES.gen,
+			_STRUCTURES.hq,
+			_STRUCTURES.repair,
+			_STRUCTURES.uplink,
+			_STRUCTURES.lassat,
 		];
 
 		for (let i = 0, len = _baseStructures.length; i < len; ++i)

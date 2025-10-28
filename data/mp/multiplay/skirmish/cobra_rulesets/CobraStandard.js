@@ -1,5 +1,5 @@
 
-const structures = {
+const _STRUCTURES = {
 	factory: "A0LightFactory",
 	cyborgFactory: "A0CyborgFactory",
 	vtolFactory: "A0VTolFactory1",
@@ -14,6 +14,8 @@ const structures = {
 	lassat: "A0LasSatCommand",
 };
 
+// Quick reference for various stats.
+/*
 const powerUps = [ "OilDrum", "Crate" ];
 
 const sensorTurrets = [
@@ -49,8 +51,9 @@ const propulsionStats = [
 	{ res: "R-Vehicle-Prop-Hover", stat: "hover01" },
 	{ res: "R-Vehicle-Prop-VTOL", stat: "V-Tol" },
 ];
+*/
 
-const weaponStats =
+const _WEAPON_STATS =
 {
 	machineguns:
 	{
