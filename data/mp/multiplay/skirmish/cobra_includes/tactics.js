@@ -127,7 +127,7 @@ function repairDroid(droidID, force)
 		return false;
 	}
 
-	const __safeExtremeOilIgnoreNum = 80;
+	const __safeExtremeOilIgnoreNum = 100;
 
 	const __forceRepairPercent = 50;
 	const __experienceDivisor = 26;
