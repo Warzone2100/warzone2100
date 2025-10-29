@@ -48,8 +48,8 @@ uint32_t gameRand_GetSeed();
 /// Must not be called from graphics routines, only for making game decisions.
 uint32_t gameRandU32();
 
-/// Generates a random number in the interval [0...limit - 1]. Not equidistributed for large non-powers of 2.
+/// Generates a random number in the interval [0...limit - 1].
 /// Must not be called from graphics routines, only for making game decisions.
-int32_t gameRand(uint32_t limit);
+uint32_t gameRand(uint32_t limit);
 
 #endif //_RAND_H_

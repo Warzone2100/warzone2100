@@ -94,8 +94,25 @@ uint32_t gameRandU32()
 	return gamePseudorandomNumberGenerator.u32();
 }
 
-int32_t gameRand(uint32_t limit)
+uint32_t gameRand(uint32_t limit)
 {
 	syncDebug("Used a random number.");
-	return gamePseudorandomNumberGenerator.u32() % limit;
+
+	if (limit == 0)
+	{
+		return 0;
+	}
+
+	// Use Lemire's Algorithm to map a random value to an
+	// arbitrary range while maintaining a uniform distribution
+	uint64_t m = (uint64_t)gamePseudorandomNumberGenerator.u32() * limit;
+	uint32_t l = (uint32_t)m;
+	if (l < limit) {
+		uint32_t t = -limit % limit;
+		while (l < t) {
+			m = (uint64_t)gamePseudorandomNumberGenerator.u32() * limit;
+			l = (uint32_t)m;
+		}
+	}
+	return m >> 32;
 }
