@@ -68,6 +68,7 @@ var debugName = colors[playerData[me].colour];
 
 // new 3.3+
 var research_path = [];
+include("multiplay/skirmish/" + vernum + "/weap-init.js");
 include("multiplay/skirmish/" + vernum + "/research-paths.js");
 include("multiplay/skirmish/" + vernum + "/research.js");
 
@@ -735,8 +736,6 @@ function welcome()
 function letsRockThisFxxxingWorld(init)
 {
 	debugMsg("Старт/Run", 'init');
-
-	include("multiplay/skirmish/" + vernum + "/weap-init.js");
 
 	// Remove chaingun and flamer cyborgs if better available
 	cyborgs = cyborgs.filter((e) => (!((e[2] === 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] === 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done))));
