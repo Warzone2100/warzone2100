@@ -284,7 +284,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	bool bVisibleAnyway = psTarget->player == selectedPlayer;
 
 	// see if we were lucky to hit the target
-	bool isHit = gameRand(100) <= resultHitChance;
+	bool isHit = static_cast<int>(gameRand(100)) <= resultHitChance;
 	if (isHit)
 	{
 		/* Kerrrbaaang !!!!! a hit */
@@ -310,14 +310,14 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		// Use a random seed to determine how far the miss will land from the target
 		// That (num/100)^3 allow the misses to fall much more frequently close to the target
-		int num = gameRand(100) + 1;
+		int num = static_cast<int>(gameRand(100)) + 1;
 		int minOffset = 2 * targetShape.radius();
 
 		int missDist = minOffset + (worstShot * num * num * num) / (100 * 100 * 100);
 
 		// Determine the angle of the miss in the 270 degrees in "front" of the target.
 		// The 90 degrees behind would most probably cause an unwanted hit when the projectile will be drawn through the hitbox.
-		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(270)) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
+		Vector3i miss = Vector3i(iSinCosR(static_cast<int>(gameRand(DEG(270))) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
 		predict += miss;
 
 		psTarget = nullptr;  // Missed the target, so don't expect to hit it.

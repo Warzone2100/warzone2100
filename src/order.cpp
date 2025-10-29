@@ -3493,7 +3493,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 
 	} else if (vFacilityCloseEnough.size() > 1)
 	{
-		int32_t which = gameRand(vFacilityCloseEnough.size());
+		uint32_t which = gameRand(vFacilityCloseEnough.size());
 		return RtrBestResult(RTR_TYPE_REPAIR_FACILITY, vFacility[vFacilityCloseEnough[which]]);
 	}
 
@@ -3503,7 +3503,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		return RtrBestResult(RTR_TYPE_DROID, vDroid[vDroidCloseEnough[0]]);
 	} else if (vDroidCloseEnough.size() > 1)
 	{
-		int32_t which = gameRand(vDroidCloseEnough.size());
+		uint32_t which = gameRand(vDroidCloseEnough.size());
 		return RtrBestResult(RTR_TYPE_DROID, vDroid[vDroidCloseEnough[which]]);
 	}
 
