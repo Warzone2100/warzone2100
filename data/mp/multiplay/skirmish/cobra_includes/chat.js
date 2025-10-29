@@ -56,13 +56,14 @@ function eventChat(from, to, message)
 	}
 	else if (message === "cobra strat list")
 	{
-		sendChatMessage("My strategies are: AC, AR, AB, AM, AA", ALLIES);
+		sendChatMessage("My strategies are: AC, AR, AB, AM, AA, AV", ALLIES);
 	}
 	else if (message === "AC" ||
 		message === "AR" ||
 		message === "AB" ||
 		message === "AM" ||
-		message === "AA")
+		message === "AA" ||
+		message === "AV")
 	{
 		if (personality !== message)
 		{

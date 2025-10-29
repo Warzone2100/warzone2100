@@ -90,7 +90,20 @@ const _SENSOR_TECH = [
 	"R-Sys-Resistance-Circuits",
 ];
 const _DEFENSE_UPGRADES = [
+	"R-Struc-Materials01",
+	"R-Struc-Materials02",
 	"R-Struc-Materials03",
+	"R-Defense-WallUpgrade01",
+	"R-Defense-WallUpgrade02",
+	"R-Defense-WallUpgrade03",
+	"R-Defense-WallUpgrade04",
+	"R-Defense-WallUpgrade05",
+	"R-Defense-WallUpgrade06",
+	"R-Defense-WallUpgrade07",
+	"R-Defense-WallUpgrade08",
+	"R-Defense-WallUpgrade09",
+	"R-Defense-WallUpgrade10",
+	"R-Defense-WallUpgrade11",
 	"R-Defense-WallUpgrade12",
 ];
 const _BODY_RESEARCH = [
@@ -259,10 +272,34 @@ var subPersonalities =
 			"R-Wpn-Mortar-Acc01",
 			"R-Wpn-Mortar-Damage03",
 		],
-		"canPlayBySelf": false,
+		"canPlayBySelf": (baseType >= CAMP_WALLS),
 		"beaconArmyPercentage": 40,
 		"beaconArtilleryPercentage": 40,
 		"beaconVtolPercentage": 70,
+	},
+	AV:
+	{
+		"primaryWeapon":_WEAPON_STATS.cannons,
+		"secondaryWeapon": _WEAPON_STATS.gauss,
+		"artillery": _WEAPON_STATS.fireMortars,
+		"antiAir": _WEAPON_STATS.cannons_AA,
+		"factoryOrder": [_STRUCTURES.vtolFactory, _STRUCTURES.factory, _STRUCTURES.cyborgFactory],
+		"defensePriority": 100,
+		"vtolPriority": 100,
+		"alloyPriority": 10,
+		"useLasers": true,
+		"resPath": "air",
+		"retreatScanRange": 9,
+		"cyborgThreatPercentage": 0.1,
+		"res": [
+			"R-Wpn-MG2Mk1",
+			"R-Wpn-Bomb02",
+			"R-Struc-VTOLPad-Upgrade01",
+		],
+		"canPlayBySelf": (baseType >= CAMP_BASE),
+		"beaconArmyPercentage": 80,
+		"beaconArtilleryPercentage": 80,
+		"beaconVtolPercentage": 60,
 	},
 };
 
