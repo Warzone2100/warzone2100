@@ -64,12 +64,37 @@ function isPowerResearch(research)
 	return research.indexOf("R-Struc-Power-Upgrade") !== -1;
 }
 
+function checkTopicCurrentlyAvailable(research)
+{
+	function uncached(research)
+	{
+		const _availResearch = enumResearch();
+
+		for (let i = 0, len = _availResearch.length; i < len; ++i)
+		{
+			if (_availResearch[i].id === research)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	return cacheThis(uncached, [research], "checkTopicCurrentlyAvailable" + me + research, 30000);
+}
+
 //This function aims to more cleanly discover available research topics
 //with the given list provided. pursueResearch falls short in that it fails to
 //acknowledge the availability of an item further into the list if a previous
 //one is not completed... so lets help it a bit.
-function evalResearch(lab, list)
+function evalResearch(lab, list, onlyIfCurrentlyAvailable)
 {
+	if (!isDefined(onlyIfCurrentlyAvailable))
+	{
+		onlyIfCurrentlyAvailable = false;
+	}
+
 	const __sufficientPower = getRealPower() > 2500;
 
 	for (let i = 0, a = list.length; i < a; ++i)
@@ -77,6 +102,11 @@ function evalResearch(lab, list)
 		if (__sufficientPower && isPowerResearch(list[i]))
 		{
 			//Don't research power upgrades if we have an absurd amount of power.
+			continue;
+		}
+
+		if (onlyIfCurrentlyAvailable && !checkTopicCurrentlyAvailable(list[i]))
+		{
 			continue;
 		}
 
@@ -425,13 +455,14 @@ function essentialsResPath()
 
 function structureDefenseResPath()
 {
-	if (((subPersonalities[personality].resPath === "defensive") ||
-		(!resObj.defensiveLimit && chance(subPersonalities[personality].defensePriority))))
+	const __superDefense = ((subPersonalities[personality].resPath === "defensive") || (subPersonalities[personality].defensePriority >= 75));
+
+	if (__superDefense || (!resObj.defensiveLimit && chance(subPersonalities[personality].defensePriority)))
 	{
-		if ((!resObj.isHighOil || resObj.hasAlly) &&
-			(evalResearch(resObj.lab, standardDefenseTech) ||
-			(useArti && evalResearch(resObj.lab, defenseTech)) ||
-			evalResearch(resObj.lab, _DEFENSE_UPGRADES)))
+		if ((!resObj.isHighOil || resObj.hasAlly || __superDefense) &&
+			(evalResearch(resObj.lab, _DEFENSE_UPGRADES, true) ||
+			evalResearch(resObj.lab, standardDefenseTech, true) ||
+			(useArti && evalResearch(resObj.lab, defenseTech, true))))
 		{
 			return true;
 		}

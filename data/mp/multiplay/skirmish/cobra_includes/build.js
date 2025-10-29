@@ -650,11 +650,8 @@ function defendRandomDerrick()
 	{
 		const __maxBlocking = 8;
 		const _derr = _derrs[random(_derrs.length)];
-		const _defsLen = enumRange(_derr.x, _derr.y, 10, ALLIES, false).filter((obj) => (
-			obj.type === STRUCTURE && obj.stattype === DEFENSE
-		)).length;
 
-		if ((_defsLen < 4) && buildStuff(returnDefense(), undefined, _derr, __maxBlocking, oilGrabberGroup))
+		if (buildStuff(returnDefense(), undefined, _derr, __maxBlocking, oilGrabberGroup))
 		{
 			return true;
 		}
@@ -683,14 +680,9 @@ function buildDefenses(truck, urgent)
 			return buildDefenseNearTruck(truck, 0);
 		}
 
-		if (highOilMap() && !defendNTWMap())
-		{
-			return defendRandomDerrick();
-		}
-		else
-		{
-			return defendRandomDerrick();
-		}
+		return ((highOilMap() && chance(25) && !defendNTWMap()) ||
+			(chance(80) && defendRandomDerrick()) ||
+			buildStuff(returnDefense(), undefined, undefined, 0, undefined));
 	}
 
 	return false;
@@ -855,9 +847,10 @@ function buildSpecialStructures()
 //Build the minimum repairs and any vtol pads.
 function buildExtras()
 {
+	const __maxBlocking = 8;
 	const __needVtolPads = (countStruct(_STRUCTURES.vtolPad, me) < enumGroup(vtolGroup).length);
 
-	if (__needVtolPads && buildStuff(_STRUCTURES.vtolPad))
+	if (__needVtolPads && buildStuff(_STRUCTURES.vtolPad, undefined, undefined, __maxBlocking, undefined))
 	{
 		return true;
 	}
@@ -882,12 +875,12 @@ function buildNTWPhase2()
 
 function defendNTWMap()
 {
-	if (!getResearch("R-Struc-Research-Upgrade07").done)
+	if (!getResearch("R-Struc-Research-Upgrade05").done)
 	{
 		return false;
 	}
 
-	if (chance(5))
+	if (chance(10))
 	{
 		if (chance(50))
 		{
@@ -938,6 +931,7 @@ function defendNTWMap()
 function buildOrders()
 {
 	const __isNTW = highOilMap();
+	const __superDefense = (subPersonalities[personality].defensePriority >= 75);
 
 	// No idle truck or dead.
 	if (currently_dead || (!findIdleTrucks(constructGroup).length && (!__isNTW || !findIdleTrucks(constructGroupNTWExtra).length)))
@@ -954,9 +948,9 @@ function buildOrders()
 		// Build further NTW based structure order.
 		(__isNTW && buildNTWPhase2()) ||
 		// Final build priority. Defenses and special structures. Max limits for base structures.
-		(__isNTW && chance(20) && buildDefenses(undefined, false)) ||
-		(chance(70) && buildAAForPersonality()) ||
-		buildExtras() ||
+		((__superDefense && chance(20) && buildDefenses(undefined, false))) ||
+		(chance(50) && buildAAForPersonality()) ||
+		(chance(50) && buildExtras()) ||
 		(chance(33) && buildSpecialStructures()) ||
 		buildBaseStructures2())
 	{

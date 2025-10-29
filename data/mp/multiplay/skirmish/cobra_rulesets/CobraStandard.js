@@ -238,7 +238,7 @@ const _WEAPON_STATS =
 			{ res: "R-Wpn-Bomb02", stat: "Bomb2-VTOL-HvHE" },
 		],
 		defenses: [
-			//{ res: "R-Defense-MortarPit", stat: "Emplacement-MortarPit01" },
+			{ res: "R-Defense-MortarPit", stat: "Emplacement-MortarPit01" },
 			{ res: "R-Defense-HvyMor", stat: "Emplacement-MortarPit02" },
 			{ res: "R-Defense-RotMor", stat: "Emplacement-RotMor" },
 			{ res: "R-Defense-Howitzer", stat: "Emplacement-Howitzer105" },
@@ -532,9 +532,9 @@ const _WEAPON_STATS =
 		defenses: [
 			{ res: "R-Defense-Sunburst", stat: "P0-AASite-Sunburst" }, // sunburst
 			{ res: "R-Defense-SamSite1", stat: "P0-AASite-SAM1" }, // avenger
-			//{ res: "R-Defense-WallTower-SamSite", stat: "WallTower-SamSite" }, // avenger
+			{ res: "R-Defense-WallTower-SamSite", stat: "WallTower-SamSite" }, // avenger
 			{ res: "R-Defense-SamSite2", stat: "P0-AASite-SAM2" }, // vindicator
-			//{ res: "R-Defense-WallTower-SamHvy", stat: "WallTower-SamHvy" }, // vindicator hardpoint
+			{ res: "R-Defense-WallTower-SamHvy", stat: "WallTower-SamHvy" }, // vindicator hardpoint
 		],
 		templates: [],
 		extras: [
@@ -631,8 +631,8 @@ const _WEAPON_STATS =
 		alias: "bomb",
 		weapons: [],
 		vtols: [
-		//	{ res: "R-Wpn-Bomb01", stat: "Bomb1-VTOL-LtHE" }, // cluster bomb
-			//{ res: "R-Wpn-Bomb03", stat: "Bomb3-VTOL-LtINC" }, // Phosphor bomb
+			{ res: "R-Wpn-Bomb01", stat: "Bomb1-VTOL-LtHE" }, // cluster bomb
+			{ res: "R-Wpn-Bomb03", stat: "Bomb3-VTOL-LtINC" }, // Phosphor bomb
 			{ res: "R-Wpn-Bomb02", stat: "Bomb2-VTOL-HvHE" }, // HEAP bomb
 			{ res: "R-Wpn-Bomb04", stat: "Bomb4-VTOL-HvyINC" }, // Thermite bomb
 			{ res: "R-Wpn-Bomb05", stat: "Bomb5-VTOL-Plasmite" }, // Plasmite bomb
@@ -662,7 +662,7 @@ const _WEAPON_STATS =
 		defenses: [
 			{ res: "R-Defense-AASite-QuadMg1", stat: "AASite-QuadMg1" }, // hurricane
 			{ res: "R-Defense-AASite-QuadRotMg", stat: "AASite-QuadRotMg" }, // whirlwind
-			//{ res: "R-Defense-WallTower-QuadRotAA", stat: "WallTower-QuadRotAAGun" },
+			{ res: "R-Defense-WallTower-QuadRotAA", stat: "WallTower-QuadRotAAGun" },
 		],
 		templates: [],
 		extras: [
