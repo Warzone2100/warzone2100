@@ -211,7 +211,7 @@ function findLivingEnemies()
 		return _alive;
 	}
 
-	return cacheThis(uncached, [], "findLivingEnemies + me", 8000);
+	return cacheThis(uncached, [], "findLivingEnemies" + me, 8000);
 }
 
 //The enemy of which Cobra is focusing on.
