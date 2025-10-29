@@ -123,6 +123,36 @@ function countAndBuild(stat, count)
 	return false;
 }
 
+// Return a hopefully good enough set of coordinates for where to build repair facilities.
+function findRepairClusterLocation()
+{
+	function uncached()
+	{
+		const _repairStr = enumStruct(me, REPAIR_FACILITY);
+
+		if (!_repairStr.length)
+		{
+			return _MY_BASE;
+		}
+
+		const _avgCoords = {x: 0, y: 0};
+		let total = 0;
+
+		_repairStr.forEach((r) => {
+			_avgCoords.x += r.x;
+			_avgCoords.y += r.y;
+			++total;
+		});
+
+		_avgCoords.x = _avgCoords.x / total;
+		_avgCoords.y = _avgCoords.y / total;
+
+		return _avgCoords;
+	}
+
+	return cacheThis(uncached, [], "findRepairClusterLocation" + me, 10000);
+}
+
 // Use this to build a defense next to a derrick (that was taken before we got to build there)
 // This can be called from eventStructureBuilt() to build a few defenses with a chance.
 function fastDefendSpot(structure, droid)
@@ -278,7 +308,7 @@ function buildStructure(droid, stat, defendThis, blocking)
 		}
 		else
 		{
-			const _tempBasePos = randomOffsetLocation(_MY_BASE);
+			const _tempBasePos = (stat === _STRUCTURES.repair) ? findRepairClusterLocation() : randomOffsetLocation(_MY_BASE);
 			loc = pickStructLocation(droid, stat, _tempBasePos.x, _tempBasePos.y, blocking);
 		}
 
