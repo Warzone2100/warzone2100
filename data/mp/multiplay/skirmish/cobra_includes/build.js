@@ -237,7 +237,11 @@ function protectUnguardedDerricks(droid)
 			}
 			else
 			{
-				undefended = undefended.sort(distanceToBase);
+				const _baseArea = cobraBaseArea();
+				// Try to avoid building defenses at the base, as it may trap units with lines of resources.
+				undefended = undefended.filter((obj) => (
+					(obj.x < _baseArea.x1 || obj.x > _baseArea.x2) && (obj.y < _baseArea.y1 || obj.y > _baseArea.y2)
+				)).sort(distanceToBase);
 			}
 
 			if (undefended.length && buildStuff(returnDefense(), undefined, undefended[0], __maxBlocking, oilGrabberGroup))
