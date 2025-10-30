@@ -224,10 +224,11 @@ function adaptToMap()
 	if (__highTechLevel || __highOil)
 	{
 		personal = [
-			"AR", "AR", "AR", "AR", "AR",
+			"AR", "AR",
 			"AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB",
 			"AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC",
 			"AA", "AA", "AA",
+			"AV", "AV", "AV", "AV",
 		];
 	}
 	else
@@ -238,6 +239,7 @@ function adaptToMap()
 			"AB", "AB", "AB", "AB", "AB", "AB", "AB",
 			"AC", "AC", "AC", "AC", "AC", "AC", "AC",
 			"AA", "AA",
+			"AV", "AV", "AV"
 		];
 	}
 
