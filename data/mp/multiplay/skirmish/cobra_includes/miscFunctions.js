@@ -440,6 +440,13 @@ function initCobraVars()
 		defensiveLimit: false,
 		forceLaser: false
 	};
+	noBasesHighTechStart = ((getMultiTechLevel() > 1) && (baseType === CAMP_CLEAN));
+}
+
+// T2+ No Bases Low Power. The ultimate meta.
+function strangeStartSettingOver()
+{
+	return (!noBasesHighTechStart || (startAttacking || (countStruct(_STRUCTURES.derrick, me) > 6) || (gameTime > 360000)));
 }
 
 // A simple way to make sure a set of xy coordinates are within the map. If the `off` parameter

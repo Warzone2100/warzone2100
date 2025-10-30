@@ -665,6 +665,11 @@ function research()
 		resObj.defensiveLimit = atGenericDefensiveResearchLimit();
 		resObj.lab = _labList[i];
 
+		if (!strangeStartSettingOver() && (i >= 2))
+		{
+			break;
+		}
+
 		if (resExecuteFuncList([megaEssentialsResPath, essentialsResPath, antiAirResPath]))
 		{
 			continue;

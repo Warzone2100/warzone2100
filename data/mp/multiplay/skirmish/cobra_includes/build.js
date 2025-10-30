@@ -700,6 +700,7 @@ function buildBaseStructures()
 
 	if (!highOilMap())
 	{
+		const derrs = countStruct(_STRUCTURES.derrick, me);
 		if ((__goodPowerLevel && countAndBuild(_STRUCTURES.factory, 1)) ||
 			((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1)) ||
 			(countAndBuild(_STRUCTURES.factory, 2)) ||
@@ -710,8 +711,8 @@ function buildBaseStructures()
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3)) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
 			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
-			(countAndBuild(_STRUCTURES.vtolFactory, 1)) ||
-			(countAndBuild(_STRUCTURES.repair, 1)))
+			((derrs >= 6) && countAndBuild(_STRUCTURES.vtolFactory, 1)) ||
+			((derrs >= 6) && countAndBuild(_STRUCTURES.repair, 1)))
 		{
 			return true;
 		}
@@ -927,6 +928,52 @@ function defendNTWMap()
 	return false;
 }
 
+function strangeBuildOrder()
+{
+	if (!noBasesHighTechStart)
+	{
+		return false;
+	}
+
+	const __isNTW = highOilMap();
+
+	if (!__isNTW)
+	{
+		if ((countAndBuild(_STRUCTURES.factory, 2)) ||
+			(countAndBuild(_STRUCTURES.gen, 2)) ||
+			(countAndBuild(_STRUCTURES.hq, 1)) || // helps artillery hit stuff near the base
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 1)) ||
+			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
+			(maintenance()) ||
+			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2)))
+		{
+			return true;
+		}
+	}
+	else
+	{
+		if ((countAndBuild(_STRUCTURES.factory, 2)) ||
+			(countAndBuild(_STRUCTURES.gen, 3)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2)) ||
+			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 7)) ||
+			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
+			(countAndBuild(_STRUCTURES.hq, 1)) || // helps artillery hit stuff near the base
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3)) ||
+			(maintenance(constructGroup) || maintenance(constructGroupNTWExtra)) ||
+			(countAndBuild(_STRUCTURES.factory, 4)) ||
+			(countAndBuild(_STRUCTURES.cyborgFactory, 5)) ||
+			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 9)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 5)) ||
+			(countAndBuild(_STRUCTURES.factory, 5)))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 //Cobra's unique build decisions
 function buildOrders()
 {
@@ -941,6 +988,8 @@ function buildOrders()
 
 	// Check unfinished structures.
 	if ((checkUnfinishedStructures(constructGroup) || (__isNTW && checkUnfinishedStructures(constructGroupNTWExtra))) ||
+		// You just know what this means.
+		(strangeBuildOrder()) ||
 		// Build basic base structures in order.
 		buildBaseStructures() ||
 		// Build the modules.
@@ -964,7 +1013,7 @@ function buildOrders()
 //Check if a building has modules to be built
 function maintenance(group)
 {
-	if (!countStruct(_STRUCTURES.gen, me) || (countStruct(_STRUCTURES.derrick, me) < 4))
+	if (!countStruct(_STRUCTURES.gen, me) || (strangeStartSettingOver() && (countStruct(_STRUCTURES.derrick, me) < 4)))
 	{
 		return false;
 	}
