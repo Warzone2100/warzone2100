@@ -2373,14 +2373,14 @@
 		"buildPoints": 350,
 		"buildPower": 275,
 		"height": 2,
-		"hitpoints": 400,
+		"hitpoints": 600,
 		"id": "P0-AASite-SAM1",
 		"name": "Avenger SAM Site",
 		"resistance": 150,
 		"sensorID": "DefaultSensor1Mk1",
 		"strength": "HARD",
 		"structureModel": [
-			"Blaamnt1.PIE"
+			"Blaamnt2.PIE"
 		],
 		"thermal": 10,
 		"type": "DEFENSE",
