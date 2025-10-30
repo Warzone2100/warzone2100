@@ -181,6 +181,7 @@ var subPersonalities =
 			"R-Wpn-Cannon-ROF02",
 		],
 		"canPlayBySelf": true,
+		"allowAutomaticPersonalityOverride": true,
 		"beaconArmyPercentage": 60,
 		"beaconArtilleryPercentage": 40,
 		"beaconVtolPercentage": 60,
@@ -204,6 +205,7 @@ var subPersonalities =
 			"R-Wpn-Flamer-ROF01",
 		],
 		"canPlayBySelf": false,
+		"allowAutomaticPersonalityOverride": true,
 		"beaconArmyPercentage": 60,
 		"beaconArtilleryPercentage": 40,
 		"beaconVtolPercentage": 60,
@@ -226,6 +228,7 @@ var subPersonalities =
 			"R-Wpn-Rocket02-MRL",
 		],
 		"canPlayBySelf": true,
+		"allowAutomaticPersonalityOverride": true,
 		"beaconArmyPercentage": 50,
 		"beaconArtilleryPercentage": 40,
 		"beaconVtolPercentage": 50,
@@ -248,6 +251,7 @@ var subPersonalities =
 			"R-Wpn-MG2Mk1",
 		],
 		"canPlayBySelf": true,
+		"allowAutomaticPersonalityOverride": true,
 		"beaconArmyPercentage": 50,
 		"beaconArtilleryPercentage": 50,
 		"beaconVtolPercentage": 40,
@@ -273,6 +277,7 @@ var subPersonalities =
 			"R-Wpn-Mortar-Damage03",
 		],
 		"canPlayBySelf": (baseType >= CAMP_WALLS),
+		"allowAutomaticPersonalityOverride": true,
 		"beaconArmyPercentage": 40,
 		"beaconArtilleryPercentage": 40,
 		"beaconVtolPercentage": 70,
@@ -297,6 +302,7 @@ var subPersonalities =
 			"R-Struc-VTOLPad-Upgrade01",
 		],
 		"canPlayBySelf": (baseType >= CAMP_BASE),
+		"allowAutomaticPersonalityOverride": false,
 		"beaconArmyPercentage": 80,
 		"beaconArtilleryPercentage": 80,
 		"beaconVtolPercentage": 60,
@@ -334,6 +340,7 @@ var forceDerrickBuildDefense;
 var randomResearchLabStart;
 var cyborgOnlyGame;
 var resObj; //Object that holds some game objects and data releated to research choices.
+var noBasesHighTechStart; //For those T2+ no bases matches.
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;

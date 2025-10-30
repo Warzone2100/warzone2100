@@ -9,7 +9,7 @@ function switchOffMG()
 	{
 		turnOffMG = false;
 	}
-	else if (getMultiTechLevel() === 1 && gameTime <= 600000)
+	else if (!strangeStartSettingOver() || ((getMultiTechLevel() === 1) && gameTime <= 600000))
 	{
 		turnOffMG = false;
 	}
@@ -225,10 +225,10 @@ function adaptToMap()
 	{
 		personal = [
 			"AR", "AR",
-			"AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB",
+			"AB", "AB", "AB", "AB", "AB", "AB", "AB",
 			"AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC",
-			"AA", "AA", "AA",
-			"AV", "AV", "AV", "AV",
+			"AA", "AA", "AA", "AA",
+			"AV", "AV", "AV", "AV", "AV", "AV"
 		];
 	}
 	else
@@ -252,7 +252,7 @@ function adaptToMap()
 	}
 
 	//Offensive is better for high oil
-	if (__highOil)
+	if (__highOil && subPersonalities[chosen].allowAutomaticPersonalityOverride)
 	{
 		subPersonalities[chosen].resPath = "offensive";
 

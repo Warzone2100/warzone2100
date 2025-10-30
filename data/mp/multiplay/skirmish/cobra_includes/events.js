@@ -98,11 +98,7 @@ function eventDroidBuilt(droid, struct)
 	{
 		const __isEngineer = (droid.body === "CyborgLightBody");
 
-		if ((!__isEngineer || cyborgOnlyGame) && (baseType === CAMP_CLEAN) && (getMultiTechLevel() > 1) && !enumGroup(oilGrabberGroup).length)
-		{
-			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
-		}
-		else if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(constructGroup).length >= 2) && !enumGroup(oilGrabberGroup).length)
+		if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(constructGroup).length >= 2) && !enumGroup(oilGrabberGroup).length)
 		{
 			groupAdd(oilGrabberGroup, droid); //Get oil faster
 		}
@@ -204,7 +200,7 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	if (!startAttacking && (gameTime > 420000) || !highOilMap())
+	if (!startAttacking && ((gameTime > 420000) || !highOilMap()))
 	{
 		startAttacking = true; //well, they want to play so...
 	}

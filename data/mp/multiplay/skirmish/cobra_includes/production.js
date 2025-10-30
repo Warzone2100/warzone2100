@@ -141,6 +141,11 @@ function chooseRandomVTOLWeapon()
 		weaps = _WEAPON_STATS.rockets_AS;
 	}
 
+	if (!strangeStartSettingOver())
+	{
+		weaps = _WEAPON_STATS.machineguns;
+	}
+
 	if (!weaps.vtols.length || !componentAvailable(weaps.vtols[0].stat))
 	{
 		weaps = _WEAPON_STATS.bombs;
@@ -234,7 +239,8 @@ function choosePersonalityWeapon(type)
 		// Maybe choose a machinegun.
 		if (!skip && ((!turnOffMG && chance(Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
 			!havePrimaryOrArtilleryWeapon() ||
-			earlyT1MachinegunChance()))
+			earlyT1MachinegunChance() ||
+			!strangeStartSettingOver()))
 		{
 			weaponList = [];
 			const _generalAntiCyborgWeapons = _WEAPON_STATS.machineguns.weapons;
@@ -427,6 +433,11 @@ function buildSys(id, weap)
 	else
 	{
 		body = chance(60) ? _SYSTEM_BODY : _VTOL_BODY;
+
+		if (!strangeStartSettingOver())
+		{
+			body = "Body4ABT"; // Systems use Bug for early T2+ No Bases to save power and rush harder.
+		}
 	}
 
 	if (buildDroid(_fac, "System unit", body, _SYSTEM_PROPULSION, "", "", weap))
@@ -462,7 +473,8 @@ function buildCyborg(id, useEngineer)
 	if (((!turnOffMG || (cyborgOnlyGame && !useLasersForCyborgControl() && chance(66)) &&
 		(chance(Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100)))) ||
 		!havePrimaryOrArtilleryWeapon() ||
-		earlyT1MachinegunChance()))
+		earlyT1MachinegunChance() ||
+		!strangeStartSettingOver()))
 	{
 		weaponLine = _WEAPON_STATS.machineguns;
 	}

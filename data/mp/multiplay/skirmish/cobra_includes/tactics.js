@@ -352,7 +352,7 @@ function groundTactics()
 				droidReady(dr.id)
 			));
 
-			if (_units.length < __MIN_ATTACK_DROIDS)
+			if (!noBasesHighTechStart && (_units.length < __MIN_ATTACK_DROIDS))
 			{
 				return;
 			}
@@ -638,6 +638,11 @@ function donateSomePower()
 //Have Cobra sit and wait and build up a small army before starting attack tactics.
 function haveEnoughUnitsForFirstAttack()
 {
+	if (noBasesHighTechStart && !highOilMap())
+	{
+		return true;
+	}
+
 	if (!startAttacking)
 	{
 		const __amountOfAttackers = groupSize(attackGroup) + groupSize(artilleryGroup) + groupSize(vtolGroup);
