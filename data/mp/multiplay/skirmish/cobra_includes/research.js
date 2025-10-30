@@ -461,8 +461,8 @@ function structureDefenseResPath()
 	{
 		if ((!resObj.isHighOil || resObj.hasAlly || __superDefense) &&
 			(evalResearch(resObj.lab, _DEFENSE_UPGRADES, true) ||
-			evalResearch(resObj.lab, standardDefenseTech, true) ||
-			(useArti && evalResearch(resObj.lab, defenseTech, true))))
+			evalResearch(resObj.lab, standardDefenseTech, chance(85)) ||
+			(useArti && evalResearch(resObj.lab, defenseTech, chance(85)))))
 		{
 			return true;
 		}
@@ -561,6 +561,14 @@ function laserResPath()
 //Careful not to focus too much on these research topics since offensive capability can be harmed
 function specialResPath()
 {
+	//Tiny chance to get one of these early.
+	if (getResearch("R-Struc-Research-Upgrade03").done &&
+		chance(5) &&
+		(evalResearch(resObj.lab, _SYSTEM_UPGRADES) || evalResearch(resObj.lab, _SENSOR_TECH)))
+	{
+		return true;
+	}
+
 	if (!cyborgOnlyGame && getResearch("R-Struc-Research-Upgrade05").done && chance(10))
 	{
 		if (pursueResearch(resObj.lab, extremeLaserTech) ||

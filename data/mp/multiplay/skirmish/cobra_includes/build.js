@@ -648,7 +648,7 @@ function defendRandomDerrick()
 
 	if (_derrs.length)
 	{
-		const __maxBlocking = 8;
+		const __maxBlocking = 0;
 		const _derr = _derrs[random(_derrs.length)];
 
 		if (buildStuff(returnDefense(), undefined, _derr, __maxBlocking, oilGrabberGroup))
@@ -948,7 +948,7 @@ function buildOrders()
 		// Build further NTW based structure order.
 		(__isNTW && buildNTWPhase2()) ||
 		// Final build priority. Defenses and special structures. Max limits for base structures.
-		((__superDefense && chance(20) && buildDefenses(undefined, false))) ||
+		((__superDefense && (gameTime > 300000) && chance(20) && buildDefenses(undefined, false))) ||
 		(chance(50) && buildAAForPersonality()) ||
 		(chance(50) && buildExtras()) ||
 		(chance(33) && buildSpecialStructures()) ||
@@ -975,7 +975,7 @@ function maintenance(group)
 	}
 
 	const __isNTW = highOilMap();
-	const __minModulePower = ((getMultiTechLevel() === 1) ? -__SUPER_LOW_POWER : -200);
+	const __minModulePower = ((!__isNTW && (getMultiTechLevel() === 1)) ? -__SUPER_LOW_POWER : -200);
 	let modList;
 	let struct = null;
 	let module = "";

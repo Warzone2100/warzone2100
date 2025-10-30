@@ -321,6 +321,7 @@ const _WEAPON_STATS =
 			{ res: "R-Wpn-Mortar01Lt", stat: "Mortar1Mk1" },
 			{ res: "R-Wpn-Mortar3", stat: "Mortar3ROTARYMk1" },
 			{ res: "R-Wpn-Mortar02Hvy", stat: "Mortar2Mk1" },
+			{ res: "R-Wpn-HowitzerMk1", stat: "Howitzer105Mk1" },
 			{ res: "R-Wpn-Mortar-Incendiary", stat: "Mortar-Incendiary" },
 			{ res: "R-Wpn-Howitzer-Incendiary", stat: "Howitzer-Incendiary" },
 		],
@@ -335,6 +336,7 @@ const _WEAPON_STATS =
 		],
 		defenses: [
 			{ res: "R-Defense-MortarPit-Incendiary", stat: "Emplacement-MortarPit-Incendiary" },
+			{ res: "R-Defense-Howitzer", stat: "Emplacement-Howitzer105" },
 			{ res: "R-Defense-Howitzer-Incendiary", stat: "Emplacement-Howitzer-Incendiary" },
 		],
 		templates: [],
