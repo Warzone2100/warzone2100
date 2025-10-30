@@ -58,7 +58,8 @@ function unfinishedStructures()
 		const _s = _stuff[i];
 
 		if ((_s.stattype === DEFENSE) &&
-			((!componentAvailable("hover01") ||
+			((noBasesHighTechStart) ||
+			(!componentAvailable("hover01") ||
 			(distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, _s.x, _s.y) > __safeDist))))
 		{
 			continue;
@@ -1032,6 +1033,7 @@ function maintenance(group)
 	if (__isNTW)
 	{
 		modList = [
+			{"mod": "A0PowMod1", "amount": (noBasesHighTechStart ? 1 : 0), "structure": _STRUCTURES.gen},
 			{"mod": "A0ResearchModule1", "amount": 1, "structure": _STRUCTURES.lab},
 			{"mod": "A0PowMod1", "amount": 1, "structure": _STRUCTURES.gen},
 			{"mod": "A0FacMod1", "amount": 2, "structure": _STRUCTURES.factory},
