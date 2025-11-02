@@ -217,6 +217,11 @@ function fastDefendSpot(structure, droid)
 //Find the closest derrick that is not guarded a defense.
 function protectUnguardedDerricks(droid)
 {
+	if (!droid && (gameTime < 440000) && (getMultiTechLevel() === 1) && (baseType === CAMP_CLEAN) && (getRealPower() < 100))
+	{
+		return;
+	}
+
 	const _derrs = enumStruct(me, _STRUCTURES.derrick);
 	const __len = _derrs.length;
 	const __maxBlocking = 8;
@@ -264,15 +269,15 @@ function protectUnguardedDerricks(droid)
 				undefended = undefended.filter((obj) => (
 					(gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, _MY_BASE.x, _MY_BASE.y) > 9) ||
 						!enumRange(obj.x, obj.y, 6, ENEMIES, false).length
-				)).sort(distanceToBase);
+				)).sort(distanceToBase).reverse();
 			}
 			else
 			{
 				const _baseArea = cobraBaseArea();
 				// Try to avoid building defenses at the base, as it may trap units with lines of resources.
 				undefended = undefended.filter((obj) => (
-					(obj.x < _baseArea.x1 || obj.x > _baseArea.x2) && (obj.y < _baseArea.y1 || obj.y > _baseArea.y2)
-				)).sort(distanceToBase);
+					!(((obj.x >= _baseArea.x1) && (obj.x <= _baseArea.x2)) && ((obj.y >= _baseArea.y1) && (obj.y <= _baseArea.y2)))
+				)).sort(distanceToBase).reverse();
 			}
 
 			if (undefended.length && buildStuff(returnDefense(), undefined, undefended[0], __maxBlocking, oilGrabberGroup))
@@ -562,7 +567,7 @@ function returnDefense(type)
 	const __electronicChance = 67;
 	const _standardDefenses = subPersonalities[personality].primaryWeapon.defenses;
 	const _artilleryDefenses = subPersonalities[personality].artillery.defenses;
-	let defenses = (type === 0) ? _artilleryDefenses.concat(_standardDefenses) : _standardDefenses.concat(_artilleryDefenses);
+	let defenses = ((type === 0) || !strangeStartSettingOver()) ? _artilleryDefenses.concat(_standardDefenses) : _standardDefenses.concat(_artilleryDefenses);
 	let bestDefense;
 
 	//Choose a random electronic warfare defense if possible.
@@ -681,6 +686,11 @@ function buildDefenses(truck, urgent)
 			return buildDefenseNearTruck(truck, 0);
 		}
 
+		if ((getMultiTechLevel() === 1) && (baseType === CAMP_CLEAN) && (gameTime < 600000))
+		{
+			return false; // Avoid defending base early on in T1 no bases.
+		}
+
 		return ((highOilMap() && chance(25) && !defendNTWMap()) ||
 			(chance(80) && defendRandomDerrick()) ||
 			buildStuff(returnDefense(), undefined, undefined, 0, undefined));
@@ -701,7 +711,6 @@ function buildBaseStructures()
 
 	if (!highOilMap())
 	{
-		const derrs = countStruct(_STRUCTURES.derrick, me);
 		if ((__goodPowerLevel && countAndBuild(_STRUCTURES.factory, 1)) ||
 			((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1)) ||
 			(countAndBuild(_STRUCTURES.factory, 2)) ||
@@ -711,9 +720,11 @@ function buildBaseStructures()
 			(countAndBuild(_STRUCTURES.gen, 2)) ||
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3)) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
-			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
-			((derrs >= 6) && countAndBuild(_STRUCTURES.vtolFactory, 1)) ||
-			((derrs >= 6) && countAndBuild(_STRUCTURES.repair, 1)))
+			// Micro optimization on low oil no bases so Cobra builds power modules before the first cyborg factory.
+			((countStruct(_STRUCTURES.gen, me) <= 3) && (gameTime < 900000) && maintenance(undefined, true)) ||
+			(isStructureAvailable("A0PowMod1") && countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
+			(countAndBuild(_STRUCTURES.repair, 1)) ||
+			((countStruct(_STRUCTURES.derrick, me) >= 6) && countAndBuild(_STRUCTURES.vtolFactory, 1)))
 		{
 			return true;
 		}
@@ -761,7 +772,7 @@ function factoryBuildOrder()
 		const _fac = subPersonalities[personality].factoryOrder[i];
 
 		if ((_fac === _STRUCTURES.vtolFactory && (!useVtol || !getResearch("R-Struc-VTOLPad").done)) ||
-			(_fac === _STRUCTURES.cyborgFactory && (turnOffCyborgs || forceHover)))
+			(_fac === _STRUCTURES.cyborgFactory && (turnOffCyborgs || forceHover || !isStructureAvailable("A0PowMod1"))))
 		{
 			continue;
 		}
@@ -1012,7 +1023,7 @@ function buildOrders()
 }
 
 //Check if a building has modules to be built
-function maintenance(group)
+function maintenance(group, earlyGen)
 {
 	if (!countStruct(_STRUCTURES.gen, me) || (strangeStartSettingOver() && (countStruct(_STRUCTURES.derrick, me) < 4)))
 	{
@@ -1042,7 +1053,13 @@ function maintenance(group)
 	}
 	else
 	{
-		if (mapOilLevel() === "LOW")
+		if (isDefined(earlyGen))
+		{
+			modList = [
+				{"mod": "A0PowMod1", "amount": 1, "structure": _STRUCTURES.gen},
+			];
+		}
+		else if (mapOilLevel() === "LOW")
 		{
 			modList = [
 				{"mod": "A0PowMod1", "amount": 1, "structure": _STRUCTURES.gen},
