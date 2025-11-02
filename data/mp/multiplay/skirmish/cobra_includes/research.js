@@ -5,6 +5,28 @@ function eventResearched(research, structure, player)
 	{
 		dump(research.name);
 	}
+	if ((gameTime > 2) && (player === me))
+	{
+		cobraDoResearch(true);
+	}
+	// One time check to immediately build a HMG tower next to a nearby derrick if an enemy got to it first.
+	if ((research.id === "R-Defense-Tower01") &&
+		((player === me) || allianceExistsBetween(me, player)) &&
+		(getMultiTechLevel() === 1) &&
+		(baseType === CAMP_CLEAN))
+	{
+		queue("resDoOilDefend", 100);
+	}
+}
+
+function resDoOilDefend()
+{
+	enumGroup(oilGrabberGroup).forEach((obj) => {
+		if (conCanHelp(obj, obj.x, obj.y))
+		{
+			eventDroidIdle(obj);
+		}
+	});
 }
 
 //updates a research list with whatever is passed to it.
@@ -247,9 +269,9 @@ function genericResPath()
 		}
 	}
 
-	if ((chance(50) && evalResearch(resObj.lab, weaponTech)) ||
-		(chance(20) && personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
-		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps)))
+	if ((!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps, true)) ||
+		(chance(50) && evalResearch(resObj.lab, weaponTech)) ||
+		(chance(20) && personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")))
 	{
 		return true;
 	}
@@ -290,8 +312,8 @@ function defensiveResPath()
 
 	if (((chance(personalityIsRocketMain() ? 20 : 50) && useArti) && evalResearch(resObj.lab, artillExtra)) ||
 		((chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 60 : 20) : 50) && useArti && evalResearch(resObj.lab, artilleryTech))) ||
-		evalResearch(resObj.lab, _SYSTEM_UPGRADES) ||
-		evalResearch(resObj.lab, _SENSOR_TECH))
+		(chance(15) && evalResearch(resObj.lab, _SYSTEM_UPGRADES)) ||
+		(chance(15) && evalResearch(resObj.lab, _SENSOR_TECH)))
 	{
 		return true;
 	}
@@ -311,10 +333,10 @@ function defensiveResPath()
 		return true; // Basic VTOL pads tried after Python.
 	}
 
-	if (evalResearch(resObj.lab, weaponTech) ||
+	if (evalResearch(resObj.lab, extraTech) ||
+		(!turnOffCyborgs && evalResearch(resObj.lab, cyborgWeaps, true)) ||
+		evalResearch(resObj.lab, weaponTech) ||
 		(personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
-		(!turnOffCyborgs && evalResearch(resObj.lab, cyborgWeaps)) ||
-		evalResearch(resObj.lab, extraTech) ||
 		secondaryResPath())
 	{
 		return true;
@@ -338,9 +360,9 @@ function offensiveResPath()
 		return true;
 	}
 
-	if ((chance(40) && evalResearch(resObj.lab, weaponTech)) ||
-		(!turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && chance(cyborgOnlyGame ? 75 : 30) && evalResearch(resObj.lab, cyborgWeaps)) ||
-		(chance(60) && evalResearch(resObj.lab, extraTech)) ||
+	if ((chance(60) && evalResearch(resObj.lab, extraTech)) ||
+		(!turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && chance(cyborgOnlyGame ? 75 : 30) && evalResearch(resObj.lab, cyborgWeaps, true)) ||
+		(chance(40) && evalResearch(resObj.lab, weaponTech)) ||
 		(chance(10) && personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
 		(useArti && chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 33 : 15) : 10) && evalResearch(resObj.lab, artilleryTech)))
 	{
@@ -355,8 +377,8 @@ function offensiveResPath()
 	}
 
 	if (evalResearch(resObj.lab, _SYSTEM_UPGRADES) ||
-		(useArti && chance(66) && evalResearch(resObj.lab, artilleryTech)) ||
-		(useArti && chance(50) && evalResearch(resObj.lab, artillExtra)))
+		(useArti && chance(50) && evalResearch(resObj.lab, artillExtra)) ||
+		(useArti && chance(66) && evalResearch(resObj.lab, artilleryTech)))
 	{
 		return true;
 	}
@@ -396,10 +418,10 @@ function airResPath()
 		return true;
 	}
 
-	if (evalResearch(resObj.lab, weaponTech) ||
+	if ((chance(50) && evalResearch(resObj.lab, extraTech)) ||
+		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps, true)) ||
+		evalResearch(resObj.lab, weaponTech) ||
 		(personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
-		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps)) ||
-		(chance(50) && evalResearch(resObj.lab, extraTech)) ||
 		evalResearch(resObj.lab, _SENSOR_TECH))
 	{
 		return true;
@@ -440,11 +462,11 @@ function essentialsResPath()
 	{
 		return true;
 	}
-	if (chance((resObj.hasAlly || resObj.isHighOil || (gameTime > 2400000)) ? 90 : 75))
+	if (chance((resObj.hasAlly || resObj.isHighOil || (gameTime > 2400000)) ? 60 : 20))
 	{
 		if ((getResearch("R-Struc-Research-Upgrade02").done && pursueResearch(resObj.lab, "R-Vehicle-Body11")) ||
-			(chance((resObj.isHighOil || resObj.hasAlly) ? 90 : 66) && evalResearch(resObj.lab, _ESSENTIALS_2)) ||
-			(chance(getResearch("R-Struc-Research-Upgrade04").done ? 80 : 25) && evalResearch(resObj.lab, _ESSENTIALS_3)))
+			(chance((resObj.isHighOil || resObj.hasAlly) ? 75 : 33) && evalResearch(resObj.lab, _ESSENTIALS_2)) ||
+			(chance(getResearch("R-Struc-Research-Upgrade04").done ? 40 : 15) && evalResearch(resObj.lab, _ESSENTIALS_3)))
 		{
 			return true;
 		}
@@ -457,7 +479,7 @@ function structureDefenseResPath()
 {
 	const __superDefense = ((subPersonalities[personality].resPath === "defensive") || (subPersonalities[personality].defensePriority >= 75));
 
-	if (__superDefense || (!resObj.defensiveLimit && chance(subPersonalities[personality].defensePriority)))
+	if (__superDefense || ((chance(2) || !resObj.defensiveLimit) && chance(subPersonalities[personality].defensePriority)))
 	{
 		if ((!resObj.isHighOil || resObj.hasAlly || __superDefense) &&
 			(evalResearch(resObj.lab, _DEFENSE_UPGRADES, true) ||
@@ -562,8 +584,8 @@ function laserResPath()
 function specialResPath()
 {
 	//Tiny chance to get one of these early.
-	if (getResearch("R-Struc-Research-Upgrade03").done &&
-		chance(5) &&
+	if (getResearch("R-Struc-Research-Upgrade04").done &&
+		chance(3) &&
 		(evalResearch(resObj.lab, _SYSTEM_UPGRADES) || evalResearch(resObj.lab, _SENSOR_TECH)))
 	{
 		return true;
@@ -636,7 +658,7 @@ function resExecuteFuncList(list)
 	return false;
 }
 
-function research()
+function cobraDoResearch()
 {
 	if (currently_dead ||
 		!countDroid(DROID_CONSTRUCT, me) ||
@@ -647,7 +669,9 @@ function research()
 
 	const _labList = enumStruct(me, _STRUCTURES.lab).filter((lb) => (
 		lb.status === BUILT && structureIdle(lb)
-	));
+	)).sort(function(obj1, obj2) {
+		return obj1.modules - obj2.modules
+	}).reverse();
 
 	setAntiCyborgChance();
 	resObj.isHighOil = highOilMap();

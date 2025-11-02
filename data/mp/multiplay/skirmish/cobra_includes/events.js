@@ -23,7 +23,7 @@ function eventStartLevel()
 	setTimer("produce", 400 + __delay + __easyTimeDelay);
 	setTimer("retreatTactics", 500 + __delay);
 	setTimer("checkAllForRepair", 600 + __delay + (4 * __easyTimeDelay));
-	setTimer("research", 800 + __delay + (3 * __easyTimeDelay));
+	setTimer("cobraDoResearch", 800 + __delay + (3 * __easyTimeDelay));
 	setTimer("lookForOil", 1000 + __delay);
 	setTimer("artilleryTactics", 1400 + __delay);
 	setTimer("vtolTactics", 1600 + __delay);
@@ -80,7 +80,7 @@ function eventDroidIdle(droid)
 	{
 		const __scanRange = 7;
 		const __enemyDerrsLen = enumRange(droid.x, droid.y, __scanRange, ENEMIES, false).filter((obj) => (
-			obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR
+			(obj.type === DROID && obj.droidType === DROID_CONSTRUCT) || (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
 		)).length;
 
 		//most likely an enemy truck got the oil before us, so try to build a defense near it.

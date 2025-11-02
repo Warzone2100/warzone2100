@@ -38,7 +38,7 @@ function chooseRandomWeapon()
 		weaps = _WEAPON_STATS.lasers;
 	}
 
-	if ((weaps.weapons.length === 0) || !componentAvailable(weaps.weapons[0].stat))
+	if ((weaps.weapons.length === 0) || !componentAvailable(weaps.weapons[0].stat) || !strangeStartSettingOver())
 	{
 		weaps = subPersonalities[personality].primaryWeapon;
 	}
@@ -102,7 +102,7 @@ function chooseRandomCyborgWeapon()
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
-	if (!weaps.templates.length || !componentAvailable(weaps.templates[0].weapons))
+	if (!weaps.templates.length || !componentAvailable(weaps.templates[0].weapons) || !strangeStartSettingOver())
 	{
 		weaps = subPersonalities[personality].primaryWeapon;
 
