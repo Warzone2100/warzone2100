@@ -1,6 +1,12 @@
 #version 450
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
+	mat4 ProjectionMatrix;
+	mat4 ViewMatrix;
+	vec4 cameraPos; // in model space
+	vec4 sunPos;
+	int viewportWidth;
+	int viewportHeight;
 	float gamma;
 };
 

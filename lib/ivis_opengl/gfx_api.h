@@ -1377,6 +1377,12 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_WORLD_TO_SCREEN>
 	{
+		glm::mat4 ProjectionMatrix;
+		glm::mat4 ViewMatrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos;
+		int viewportWidth;
+		int viewportHeight;
 		float gamma;
 	};
 

@@ -1553,9 +1553,15 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 	// Draw the scene to the default framebuffer
 	{
+		auto dimension = gfx_api::context::get().getDrawableDimensions();
 		WZ_PROFILE_SCOPE(copyToFBO);
 		gfx_api::WorldToScreenPSO::get().bind();
-		gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
+		gfx_api::WorldToScreenPSO::get().bind_constants({
+			perspectiveMatrix, viewMatrix,
+			glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(-getTheSun()), 0),
+			static_cast<int>(dimension.first), static_cast<int>(dimension.second),
+			1.0f
+		});
 		gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
 		gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
 		gfx_api::WorldToScreenPSO::get().draw(3, 0);

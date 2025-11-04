@@ -940,7 +940,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
-		{ "gamma" } })
+		{ "ProjectionMatrix", "ViewMatrix", "cameraPos", "sunPos", "viewportWidth", "viewportHeight", "gamma" } })
 };
 
 enum SHADER_VERSION
@@ -2381,7 +2381,13 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
 {
-	setUniforms(0, cbuf.gamma);
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.ViewMatrix);
+	setUniforms(2, cbuf.cameraPos);
+	setUniforms(3, cbuf.sunPos);
+	setUniforms(4, cbuf.viewportWidth);
+	setUniforms(5, cbuf.viewportHeight);
+	setUniforms(6, cbuf.gamma);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)

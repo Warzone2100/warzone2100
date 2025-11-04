@@ -1,21 +1,28 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform sampler2D Texture;
-
-uniform float gamma;
-
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
-#else
-#define texture(tex,uv) texture2D(tex,uv)
 #endif
 
+uniform sampler2D Texture;
+
+uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
+uniform vec4 cameraPos; // in model space
+uniform vec4 sunPos;
+uniform int viewportWidth;
+uniform int viewportHeight;
+uniform float gamma;
+
 #ifdef NEWGL
-in vec2 texCoords;
+#define FRAGMENT_INPUT in
 #else
-varying vec2 texCoords;
+#define texture(tex,uv,bias) texture2D(tex,uv,bias)
+#define FRAGMENT_INPUT varying
 #endif
+
+FRAGMENT_INPUT vec2 texCoords;
 
 #ifdef NEWGL
 out vec4 FragColor;
