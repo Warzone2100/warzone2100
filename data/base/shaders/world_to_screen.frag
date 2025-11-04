@@ -6,6 +6,7 @@
 #endif
 
 uniform sampler2D Texture;
+uniform sampler2D depthTexture;
 
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;

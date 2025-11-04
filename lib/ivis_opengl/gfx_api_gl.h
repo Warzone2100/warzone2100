@@ -331,6 +331,7 @@ struct gl_context final : public gfx_api::context
 	virtual void beginSceneRenderPass() override;
 	virtual void endSceneRenderPass() override;
 	virtual gfx_api::abstract_texture* getSceneTexture() override;
+	virtual gfx_api::abstract_texture* getSceneDepthTexture() override;
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void debugStringMarker(const char *str) override;
@@ -438,6 +439,7 @@ private:
 	GLint maxMultiSampleBufferFormatSamples = 0;
 	uint32_t multisamples = 0;
 	gl_gpurendered_texture* sceneTexture = nullptr;
+	gl_gpurendered_texture* sceneDepthTexture = nullptr;
 	std::vector<GLuint> sceneFBO;
 	std::vector<GLuint> sceneResolveFBO;
 	GLuint sceneMsaaRBO = 0;

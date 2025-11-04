@@ -406,6 +406,7 @@ namespace gfx_api
 		virtual void beginSceneRenderPass() { }
 		virtual void endSceneRenderPass() { }
 		virtual gfx_api::abstract_texture* getSceneTexture() { return nullptr; }
+		virtual gfx_api::abstract_texture* getSceneDepthTexture() { return nullptr; }
 		virtual void beginRenderPass() = 0;
 		virtual void endRenderPass() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
@@ -1393,7 +1394,10 @@ namespace gfx_api
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
 		>
 	>,
-	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_WORLD_TO_SCREEN>;
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::nearest_clamped, pixel_format_target::texture_2d>  // depth
+	>, SHADER_WORLD_TO_SCREEN>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)

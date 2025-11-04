@@ -2908,6 +2908,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 			.setPDepthStencilAttachment(&depthStencilAttachmentRef)
 			.setPResolveAttachments((msaaEnabled) ? &colorAttachmentResolveRef : nullptr)
 	};
+	// TODO: Would need to use VK_KHR_depth_stencil_resolve / Vulkan 1.2 functionality to resolve the msaa depth attachment (if MSAA is enabled) (Add VkSubpassDescriptionDepthStencilResolve to VkSubpassDescription2.pNext)
 
 	VkSubpassDependency dependency = {};
 	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -3232,6 +3233,10 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 	{
 		appendDepthAttachment(); // should always be second
 	}
+	else
+	{
+		// TODO: Append depth (resolved) texture
+	}
 
 	const size_t numColorAttachmentRef = 1;
 	const auto colorAttachmentRef =
@@ -3304,6 +3309,9 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 	// Create scene image + view
 	pSceneImage = new VkRenderedImage(*this, swapchainSize.width, swapchainSize.height, sceneFormat, "<scene image>");
 
+	// TODO:
+	// pSceneDepthImage = new VkDepthMapImage(...);
+
 	if (msaaEnabled)
 	{
 		// create sceneMSAAImage / sceneMSAAView / etc
@@ -3331,8 +3339,8 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 
 	// Create an FBO for each frame in flight
 	size_t numSceneFBOs = buffering_mechanism::numFrames();
-	const auto fboAttachments = (msaaEnabled) ? std::vector<vk::ImageView>{sceneMSAAView, sceneDepthStencilView, pSceneImage->view.get()}
-											 : std::vector<vk::ImageView>{pSceneImage->view.get(), sceneDepthStencilView};
+	const auto fboAttachments = (msaaEnabled) ? std::vector<vk::ImageView>{sceneMSAAView, sceneDepthStencilView, pSceneImage->view.get()} // TODO: <- Add pSceneDepthImage->view.get()?
+											 : std::vector<vk::ImageView>{pSceneImage->view.get(), sceneDepthStencilView}; // TODO: <- would be pSceneDepthImage->view.get()?
 	for (size_t i = 0; i < numSceneFBOs; ++i)
 	{
 		// FBO for this frame in flight

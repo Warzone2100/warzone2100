@@ -940,7 +940,10 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
-		{ "ProjectionMatrix", "ViewMatrix", "cameraPos", "sunPos", "viewportWidth", "viewportHeight", "gamma" } })
+		{ "ProjectionMatrix", "ViewMatrix", "cameraPos", "sunPos", "viewportWidth", "viewportHeight", "gamma" },
+		{
+			{ "depthTexture", 1}
+		} })
 };
 
 enum SHADER_VERSION
@@ -5226,6 +5229,11 @@ void gl_context::deleteSceneRenderpass()
 		glDeleteRenderbuffers(1, &sceneDepthStencilRBO);
 		sceneDepthStencilRBO = 0;
 	}
+	if (sceneDepthTexture)
+	{
+		delete sceneDepthTexture;
+		sceneDepthTexture = nullptr;
+	}
 }
 
 bool gl_context::createSceneRenderpass()
@@ -5292,6 +5300,9 @@ bool gl_context::createSceneRenderpass()
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
+	// Always create a depth buffer texture (for the resolved depth values)
+	sceneDepthTexture = create_gpurendered_texture(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, sceneFramebufferWidth, sceneFramebufferHeight, "<scene depth texture>");
+
 	const size_t numSceneFBOs = 2;
 	for (auto i = 0; i < numSceneFBOs; ++i)
 	{
@@ -5307,15 +5318,19 @@ bool gl_context::createSceneRenderpass()
 			// use the MSAA renderbuffer as the color attachment
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sceneMsaaRBO);
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			// use the MSAA depth renderbuffer as the depth-stencil attachment
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
 		else
 		{
 			// just directly use the sceneTexture as the color attachment (since no MSAA resolving needs to occur)
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			// just directly use the sceneDepthTexture as the depth-stencil attachment (since no MSAA resolving needs to occur)
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTexture->id(), 0);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -5340,7 +5355,8 @@ bool gl_context::createSceneRenderpass()
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			// shouldn't need a depth/stencil buffer
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTexture->id(), 0);
+			ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -5389,38 +5405,38 @@ void gl_context::endSceneRenderPass()
 	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
 	//		- core in OpenGL ES 3.0+
 
-	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
-	GLenum invalid_ap[2];
-	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
-	{
-		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
-		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
-	}
-#if !defined(__EMSCRIPTEN__)
-	else
-	{
-		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
-		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
-		if (!gles && GLAD_GL_ARB_invalidate_subdata)
-		{
-		#if !defined(WZ_STATIC_GL_BINDINGS)
-			if (glInvalidateFramebuffer)
-		#endif
-			{
-				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
-			}
-		}
-		else if (gles && GLAD_GL_EXT_discard_framebuffer)
-		{
-		#if !defined(WZ_STATIC_GL_BINDINGS)
-			if (glDiscardFramebufferEXT)
-		#endif
-			{
-				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
-			}
-		}
-	}
-#endif
+//	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
+//	GLenum invalid_ap[2];
+//	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
+//	{
+//		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
+//		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
+//	}
+//#if !defined(__EMSCRIPTEN__)
+//	else
+//	{
+//		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
+//		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
+//		if (!gles && GLAD_GL_ARB_invalidate_subdata)
+//		{
+//		#if !defined(WZ_STATIC_GL_BINDINGS)
+//			if (glInvalidateFramebuffer)
+//		#endif
+//			{
+//				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
+//			}
+//		}
+//		else if (gles && GLAD_GL_EXT_discard_framebuffer)
+//		{
+//		#if !defined(WZ_STATIC_GL_BINDINGS)
+//			if (glDiscardFramebufferEXT)
+//		#endif
+//			{
+//				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
+//			}
+//		}
+//	}
+//#endif
 
 	// If MSAA is enabled, use glBiltFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
 	bool usingMSAAIntermediate = (sceneMsaaRBO != 0);
@@ -5430,27 +5446,32 @@ void gl_context::endSceneRenderPass()
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sceneResolveFBO[sceneFBOIdx]);
 		glBlitFramebuffer(0,0, sceneFramebufferWidth, sceneFramebufferHeight,
 						  0,0, sceneFramebufferWidth, sceneFramebufferHeight,
-						  GL_COLOR_BUFFER_BIT,
-						  GL_LINEAR);
+						  GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
+						  GL_NEAREST);
 	}
 
-	// after this, sceneTexture should be the (msaa-resolved) color texture of the scene
+	// after this:
+	// sceneTexture should be the (msaa-resolved) color texture of the scene
+	// sceneDepthTextures should be the (msaa-resolved) depth texture of the scene
 
 	if (usingMSAAIntermediate)
 	{
 		// invalidate color0 (sceneMsaaRBO) in sceneFBO[sceneFBOIdx] (which is GL_READ_FRAMEBUFFER at this point)
-		GLenum invalid_msaarbo_ap[1];
+		GLenum invalid_msaarbo_ap[3];
 		invalid_msaarbo_ap[0] = GL_COLOR_ATTACHMENT0;
 		if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
 		{
-			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
+			invalid_msaarbo_ap[1] = GL_DEPTH_STENCIL_ATTACHMENT;
+			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 2, invalid_msaarbo_ap);
 		}
 		else
 		{
+			invalid_msaarbo_ap[1] = GL_DEPTH_ATTACHMENT;
+			invalid_msaarbo_ap[2] = GL_STENCIL_ATTACHMENT;
 #if defined(GL_ARB_invalidate_subdata)
 			if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
 			{
-				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
+				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 3, invalid_msaarbo_ap);
 			}
 #endif
 //			else if (gles && GLAD_GL_EXT_discard_framebuffer && glDiscardFramebufferEXT)
@@ -5479,6 +5500,11 @@ void gl_context::endSceneRenderPass()
 gfx_api::abstract_texture* gl_context::getSceneTexture()
 {
 	return sceneTexture;
+}
+
+gfx_api::abstract_texture* gl_context::getSceneDepthTexture()
+{
+	return sceneDepthTexture;
 }
 
 #if defined(__EMSCRIPTEN__)
