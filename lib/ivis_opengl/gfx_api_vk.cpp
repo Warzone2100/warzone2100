@@ -5283,8 +5283,6 @@ bool VkRoot::createLogicalDevice()
 	debug(LOG_3D, "Using device extensions: %s", deviceExtensionsAsString.c_str());
 
 	const auto deviceCreateInfo = vk::DeviceCreateInfo()
-		.setEnabledLayerCount(static_cast<uint32_t>(layers.size()))
-		.setPpEnabledLayerNames(layers.data())
 		.setEnabledExtensionCount(static_cast<uint32_t>(enabledDeviceExtensions.size()))
 		.setPpEnabledExtensionNames(enabledDeviceExtensions.data())
 		.setPEnabledFeatures(&enabledFeatures)
