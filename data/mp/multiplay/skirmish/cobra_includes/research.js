@@ -479,15 +479,25 @@ function structureDefenseResPath()
 {
 	const __superDefense = ((subPersonalities[personality].resPath === "defensive") || (subPersonalities[personality].defensePriority >= 75));
 
-	if (__superDefense || ((chance(2) || !resObj.defensiveLimit) && chance(subPersonalities[personality].defensePriority)))
+	if (__superDefense || resObj.forceDefenseRes || ((chance(2) || !resObj.defensiveLimit) && chance(subPersonalities[personality].defensePriority)))
 	{
-		if ((!resObj.isHighOil || resObj.hasAlly || __superDefense) &&
-			(evalResearch(resObj.lab, _DEFENSE_UPGRADES, true) ||
-			evalResearch(resObj.lab, standardDefenseTech, chance(85)) ||
-			(useArti && evalResearch(resObj.lab, defenseTech, chance(85)))))
+		if ((!resObj.isHighOil || resObj.hasAlly || __superDefense || resObj.forceDefenseRes) &&
+			evalResearch(resObj.lab, standardDefenseTech, chance(resObj.forceDefenseRes ? 0 : 85)) ||
+			(useArti && evalResearch(resObj.lab, defenseTech, chance(resObj.forceDefenseRes ? 0 : 85))) ||
+			(chance(resObj.forceDefenseRes ? 7 : 100) && evalResearch(resObj.lab, _DEFENSE_UPGRADES, true)))
 		{
+			if (resObj.forceDefenseRes)
+			{
+				resObj.forceDefenseRes = false;
+			}
+
 			return true;
 		}
+	}
+
+	if (chance(__superDefense ? 10 : 2))
+	{
+		resObj.forceDefenseRes = true;
 	}
 
 	return false;
