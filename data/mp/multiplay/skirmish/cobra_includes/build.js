@@ -610,6 +610,10 @@ function returnDefense(type)
 	{
 		if (isStructureAvailable("GuardTower1"))
 		{
+			if (!resObj.forceDefenseRes && (gameTime > 600000))
+			{
+				resObj.forceDefenseRes = true;
+			}
 			return "GuardTower1"; //hmg tower
 		}
 

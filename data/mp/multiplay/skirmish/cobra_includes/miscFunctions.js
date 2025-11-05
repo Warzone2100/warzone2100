@@ -438,7 +438,8 @@ function initCobraVars()
 		hasAlly: false,
 		highOilResPrice: 0,
 		defensiveLimit: false,
-		forceLaser: false
+		forceLaser: false,
+		forceDefenseRes: false
 	};
 	// We can't just detect no bases cause some maps might just give an HQ on Bases/advanced bases.
 	noBasesHighTechStart = ((getMultiTechLevel() > 1) && ((baseType === CAMP_CLEAN) || (enumStruct(me).length <= 3)));
