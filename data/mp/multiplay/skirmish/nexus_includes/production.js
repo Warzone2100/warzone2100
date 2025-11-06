@@ -407,7 +407,7 @@ function produceVtols()
 //Spread over three ticks (for the non-truck units).
 function productionMain()
 {
-	if (countDroid(me) >= MAX_DROID_LIMIT)
+	if (countDroid(DROID_ANY, me) >= MAX_DROID_LIMIT)
 	{
 		return;
 	}
