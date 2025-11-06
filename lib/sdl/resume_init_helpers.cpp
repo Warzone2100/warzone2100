@@ -27,7 +27,7 @@
 #include "src/version.h"
 #include "src/wzjsonhelpers.h"
 
-#include <SDL_messagebox.h>
+#include <SDL3/SDL_messagebox.h>
 
 // On some older systems with broken graphics drivers, attempting to create a window or initialize a graphics backend
 // may crash the WZ process. Unfortunately, these issues are sometimes not readily resolvable by WZ, but we can at least
@@ -251,7 +251,7 @@ void resumeAfterCrashInitializingGraphicsBackendMessage_internal(video_backend b
 		nullptr /* .colorScheme */
 	};
 	int buttonid;
-	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+	if (!SDL_ShowMessageBox(&messageboxdata, &buttonid)) {
 		// error displaying message box
 		debug(LOG_FATAL, "Failed to display message box");
 	}

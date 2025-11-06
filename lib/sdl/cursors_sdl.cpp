@@ -26,9 +26,9 @@
 #include "lib/ivis_opengl/tex.h"
 #include "src/warzoneconfig.h"
 #include "cursors_sdl.h"
-#include <SDL_mouse.h>
-#include <SDL_surface.h>
-#include <SDL_hints.h>
+#include <SDL3/SDL_mouse.h>
+#include <SDL3/SDL_surface.h>
+#include <SDL3/SDL_hints.h>
 #include "sdl_backend_private.h"
 #include "cursor_sdl_helpers.h"
 
@@ -1269,18 +1269,19 @@ static void scaleCursorImageForUpload(iV_Image& cursorImage, int& hot_x, int& ho
 	unsigned int verticalScalePercentage;
 	horizontalScalePercentage = verticalScalePercentage = war_getCursorScale();
 
-#if defined(WZ_OS_WIN)
-	if (SDL_GetHintBoolean(SDL_HINT_WINDOWS_DPI_SCALING, SDL_FALSE) == SDL_TRUE)
-	{
-		// Must manually scale the cursor image based on the window scale factor (in Windows w/ SDL 2.24.0+)
-		float horizWindowScaleFactor = 0.f, vertWindowScaleFactor = 0.f;
-		wzGetWindowToRendererScaleFactor(&horizWindowScaleFactor, &vertWindowScaleFactor);
-		assert(horizWindowScaleFactor != 0.f);
-		assert(vertWindowScaleFactor != 0.f);
-		horizontalScalePercentage = static_cast<unsigned int>(horizontalScalePercentage * horizWindowScaleFactor);
-		verticalScalePercentage = static_cast<unsigned int>(verticalScalePercentage * vertWindowScaleFactor);
-	}
-#endif
+	// TODO: STILL NEEDED with SDL3?
+//#if defined(WZ_OS_WIN)
+//	if (SDL_GetHintBoolean(SDL_HINT_WINDOWS_DPI_SCALING, SDL_FALSE) == SDL_TRUE)
+//	{
+//		// Must manually scale the cursor image based on the window scale factor (in Windows w/ SDL 2.24.0+)
+//		float horizWindowScaleFactor = 0.f, vertWindowScaleFactor = 0.f;
+//		wzGetWindowToRendererScaleFactor(&horizWindowScaleFactor, &vertWindowScaleFactor);
+//		assert(horizWindowScaleFactor != 0.f);
+//		assert(vertWindowScaleFactor != 0.f);
+//		horizontalScalePercentage = static_cast<unsigned int>(horizontalScalePercentage * horizWindowScaleFactor);
+//		verticalScalePercentage = static_cast<unsigned int>(verticalScalePercentage * vertWindowScaleFactor);
+//	}
+//#endif
 
 	if (horizontalScalePercentage == 100 && verticalScalePercentage == 100)
 	{
@@ -1297,6 +1298,13 @@ static void scaleCursorImageForUpload(iV_Image& cursorImage, int& hot_x, int& ho
 		hot_x = static_cast<int>(hot_x * horizontalScaleFactor);
 		hot_y = static_cast<int>(hot_y * verticalScaleFactor);
 	}
+}
+
+SDL_Surface *SDL_CreateRGBSurfaceFrom(void *pixels, int width, int height, int depth, int pitch, Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask)
+{
+	return SDL_CreateSurfaceFrom(width, height,
+								 SDL_GetPixelFormatForMasks(depth, Rmask, Gmask, Bmask, Amask),
+								 pixels, pitch);
 }
 
 SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
@@ -1316,6 +1324,7 @@ SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
 #endif
 
 	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(sprite.bmp_w(), sprite.width(), sprite.height(), sprite.depth(), sprite.width() * 4, rmask, gmask, bmask, amask);
+
 	if (!surface)
 	{
 		debug(LOG_FATAL, "Failed to create cursor because: %s", SDL_GetError());
@@ -1329,7 +1338,7 @@ SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
 	}
 
 	// free up surface & image data
-	SDL_FreeSurface(surface);
+	SDL_DestroySurface(surface);
 	sprite.clear();
 
 	return pointer;
@@ -1540,7 +1549,7 @@ void sdlFreeCursors()
 		{
 			continue;
 		}
-		SDL_FreeCursor(aCursors[i]);
+		SDL_DestroyCursor(aCursors[i]);
 		aCursors[i] = nullptr;
 	}
 	cursorsEnabled = false;
