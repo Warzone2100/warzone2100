@@ -63,12 +63,14 @@
 #include "3rdparty/INIReaderWriter.h"
 #include "3rdparty/gsl_finally.h"
 
+#include <fmt/core.h>
+
 // ////////////////////////////////////////////////////////////////////////////
 
 #define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 #define BASECONFVERSION		1
-#define CURRCONFVERSION		3
+#define CURRCONFVERSION		4
 
 static const char *fileName = "config";
 
@@ -123,6 +125,29 @@ static optional<int> iniSectionGetInteger(const INIReaderWriter::IniSection& ini
 static void iniSectionSetInteger(INIReaderWriter::IniSection& iniSection, const std::string& key, int value)
 {
 	iniSection.SetString(key, std::to_string(value));
+}
+
+static optional<float> iniSectionGetFloat(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<float> defaultValue = nullopt)
+{
+	if (!iniSection.HasValue(key))
+	{
+		return defaultValue;
+	}
+	try {
+		auto valueStr = iniSection.Get(key, "");
+		float valueFloat = std::stof(valueStr);
+		return valueFloat;
+	}
+	catch (const std::exception& e)
+	{
+		debug(LOG_ERROR, "Failed to convert value for key: \"%s\" to float; error: %s", key.c_str(), e.what());
+		return defaultValue;
+	}
+}
+
+static void iniSectionSetFloat(INIReaderWriter::IniSection& iniSection, const std::string& key, float value)
+{
+	iniSection.SetString(key, fmt::format("{:g}", value));
 }
 
 static optional<bool> iniSectionGetBool(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<bool> defaultValue = nullopt)
@@ -288,6 +313,10 @@ bool loadConfig()
 
 	auto iniGetInteger = [&iniGeneral](const std::string& key, optional<int> defaultValue) -> optional<int> {
 		return iniSectionGetInteger(iniGeneral, key, defaultValue);
+	};
+
+	auto iniGetFloat = [&iniGeneral](const std::string& key, optional<int> defaultValue) -> optional<int> {
+		return iniSectionGetFloat(iniGeneral, key, defaultValue);
 	};
 
 	auto iniGetIntegerOpt = [&iniGeneral](const std::string& key) -> optional<int> {
@@ -510,6 +539,11 @@ bool loadConfig()
 	if (auto value = iniGetIntegerOpt("fullscreen"))
 	{
 		int fullscreenmode_int = value.value();
+		// Handle porting from old fullscreen values
+		if (fullscreenmode_int != static_cast<int>(WINDOW_MODE::windowed))
+		{
+			fullscreenmode_int = static_cast<int>(WINDOW_MODE::fullscreen);
+		}
 		if (fullscreenmode_int >= static_cast<int>(MIN_VALID_WINDOW_MODE) && fullscreenmode_int <= static_cast<int>(MAX_VALID_WINDOW_MODE))
 		{
 			war_setWindowMode(static_cast<WINDOW_MODE>(fullscreenmode_int));
@@ -563,16 +597,22 @@ bool loadConfig()
 
 	int fullscreenWidth = iniGetInteger("fullscreenWidth", war_GetFullscreenModeWidth()).value();
 	int fullscreenHeight = iniGetInteger("fullscreenHeight", war_GetFullscreenModeHeight()).value();
+	float fullscreenPixelDensity = iniGetFloat("fullscreenPixelDensity", war_GetFullscreenModePixelDensity()).value();
+	float fullscreenRefreshRate = iniGetFloat("fullscreenRefreshRate", war_GetFullscreenModeRefreshRate()).value();
 	int fullscreenScreen = iniGetInteger("fullscreenScreen", 0).value();
-	if ((fullscreenWidth != 0 && fullscreenWidth < 640) || (fullscreenHeight != 0 && fullscreenHeight < 480))	// sanity check
+	bool ignoreOldFullscreenValues = (!createdConfigFile && configVersion <= 3);
+	if (ignoreOldFullscreenValues || (fullscreenWidth != 0 && fullscreenWidth < 640) || (fullscreenHeight != 0 && fullscreenHeight < 480))	// sanity check
 	{
 		// set to special value (0x0) that reverts to the default for this display
 		fullscreenWidth = 0;
 		fullscreenHeight = 0;
+		fullscreenRefreshRate = 0.f;
 	}
 	war_SetFullscreenModeWidth(fullscreenWidth);
 	war_SetFullscreenModeHeight(fullscreenHeight);
 	war_SetFullscreenModeScreen(fullscreenScreen);
+	war_SetFullscreenModePixelDensity(fullscreenPixelDensity);
+	war_SetFullscreenModeRefreshRate(fullscreenRefreshRate);
 
 	if (auto value = iniGetIntegerOpt("bpp"))
 	{
@@ -709,6 +749,9 @@ bool saveConfig()
 	auto iniSetInteger = [&iniGeneral](const std::string& key, int value) {
 		iniSectionSetInteger(iniGeneral, key, value);
 	};
+	auto iniSetFloat = [&iniGeneral](const std::string& key, float value) {
+		iniSectionSetFloat(iniGeneral, key, value);
+	};
 	auto iniSetBool = [&iniGeneral](const std::string& key, bool value) {
 		iniSectionSetBool(iniGeneral, key, value);
 	};
@@ -750,6 +793,8 @@ bool saveConfig()
 	iniSetInteger("fullscreenWidth", war_GetFullscreenModeWidth());
 	iniSetInteger("fullscreenHeight", war_GetFullscreenModeHeight());
 	iniSetInteger("fullscreenScreen", war_GetFullscreenModeScreen());
+	iniSetFloat("fullscreenPixelDensity", war_GetFullscreenModePixelDensity());
+	iniSetFloat("fullscreenRefreshRate", war_GetFullscreenModeRefreshRate());
 	iniSetInteger("bpp", war_GetVideoBufferDepth());
 	iniSetInteger("fullscreen", static_cast<typename std::underlying_type<WINDOW_MODE>::type>(war_getWindowMode()));
 	iniSetString("language", getLanguage());

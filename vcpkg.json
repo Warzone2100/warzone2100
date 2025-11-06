@@ -4,7 +4,7 @@
 	"builtin-baseline": "5300a2a461a53b76405db4fcbe6aeb0eea43935d",
 	"dependencies": [
 		"physfs",
-		"sdl2",
+		"sdl3",
 		{
 			"name": "harfbuzz",
 			"platform": "!emscripten"
@@ -98,7 +98,7 @@
 			"description": "The Vulkan backend",
 			"dependencies": [
 				{
-					"name": "sdl2",
+					"name": "sdl3",
 					"default-features": true,
 					"features": [
 						"vulkan"

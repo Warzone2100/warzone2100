@@ -65,8 +65,9 @@ struct screeninfo
 {
 	int width;
 	int height;
-	int refresh_rate;
-	int screen;
+	float pixel_density;
+	float refresh_rate;
+	uint32_t screen;
 };
 
 void wzMain(int &argc, char **argv);
@@ -87,8 +88,6 @@ std::vector<WINDOW_MODE> wzSupportedWindowModes();
 bool wzIsSupportedWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
-bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);
-WINDOW_MODE wzGetToggleFullscreenMode();
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
 WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsMaximized();
@@ -99,8 +98,7 @@ void wzPostChangedSwapInterval();
 bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
 bool wzChangeCursorScale(unsigned int cursorScale);
-bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height);
-bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
+bool wzChangeFullscreenDisplayMode(optional<screeninfo> config);
 enum class MinimizeOnFocusLossBehavior
 {
 	Auto = -1,
@@ -120,7 +118,7 @@ void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation
-int wzGetTicks();		///< Milliseconds since start of game
+uint32_t wzGetTicks();		///< Milliseconds since start of game
 enum DialogType {
 	Dialog_Error,
 	Dialog_Warning,
@@ -130,8 +128,8 @@ WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, c
 WZ_DECL_NONNULL(2, 3) size_t wzDisplayDialogAdvanced(DialogType type, const char *title, const char *message, std::vector<std::string> buttonsText);
 
 WzString wzGetPlatform();
-std::vector<screeninfo> wzAvailableResolutions();
-screeninfo wzGetCurrentFullscreenDisplayMode();
+std::vector<optional<screeninfo>> wzAvailableResolutions();
+optional<screeninfo> wzGetCurrentFullscreenDisplayMode();
 std::vector<unsigned int> wzAvailableDisplayScales();
 std::vector<video_backend> wzAvailableGfxBackends();
 WzString wzGetSelection();

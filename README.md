@@ -238,7 +238,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * Compiling tools (ex. CMake, GCC/G++/Clang, ninja-build)
    * Archiving tools (ex. zip, p7zip)
    * Various libraries:
-      * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.20)_
+      * [SDL](https://www.libsdl.org) ≥ 3.2.12 _(strongly recommended: ≥ 3.2.26)_
       * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.1 _(strongly recommended: ≥ 3.0.2)_
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
