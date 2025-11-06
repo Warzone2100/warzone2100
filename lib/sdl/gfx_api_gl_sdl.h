@@ -23,7 +23,7 @@
 #define __INCLUDED_GFX_API_GL_SDL_H__
 
 #include "lib/ivis_opengl/gfx_api_gl.h"
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 
 class sdl_OpenGL_Impl final : public gfx_api::backend_OpenGL_Impl
 {
