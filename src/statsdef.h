@@ -339,6 +339,7 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 	unsigned skidDeceleration = 0;
 	unsigned deceleration = 0;
 	unsigned acceleration = 0;
+	unsigned repairFactor = 0;
 
 	struct UPGRADE : COMPONENT_STATS::UPGRADE
 	{
