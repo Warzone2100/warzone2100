@@ -1504,14 +1504,21 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		for (size_t i = 0; i < numShadowCascades; ++i)
 		{
 			gfx_api::context::get().beginDepthPass(i);
-			drawTerrainDepthOnly(shadowCascades[i].projectionMatrix * shadowCascades[i].viewMatrix);
-			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, cameraPos, shadowCascadesInfo, true);
+			drawTerrainDepthForShadowMap(shadowCascades[i].projectionMatrix * shadowCascades[i].viewMatrix);
+			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, cameraPos, shadowCascadesInfo, MeshDrawPass::ShadowMap);
 			gfx_api::context::get().endCurrentDepthPass();
 		}
 	}
+
+	// depth pre-pass
+	{
+		gfx_api::context::get().beginSceneDepthPass();
+		drawTerrainSceneDepthMap(perspectiveViewMatrix);
+		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, cameraPos, shadowCascadesInfo, MeshDrawPass::DepthPrepass);
+		gfx_api::context::get().endSceneDepthPass();
+	}
+
 	// start main render pass
-
-
 	gfx_api::context::get().beginSceneRenderPass();
 
 	// now we are about to draw the terrain
@@ -1536,7 +1543,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, cameraPos, shadowCascadesInfo, false);
+		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, cameraPos, shadowCascadesInfo, MeshDrawPass::Scene);
 	}
 	wzPerfEnd(PERF_MODELS);
 

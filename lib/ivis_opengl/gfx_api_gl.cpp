@@ -843,7 +843,12 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			{"shadowMap", 4},
 			{"lightmap_tex", 5}
 		} }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ "Component program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
+	std::make_pair(SHADER_COMPONENT_SHADOWMAP_INSTANCED, program_data{ "Component shadowmap program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "ViewMatrix"
+		} }),
+	std::make_pair(SHADER_COMPONENT_SCENE_DEPTHMAP_INSTANCED, program_data{ "Component depth program", "shaders/tcmask_scene_depthmap_instanced.vert", "shaders/tcmask_scene_depthmap_instanced.frag",
 		{
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix"
@@ -872,8 +877,12 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
+	std::make_pair(SHADER_TERRAIN_SHADOWMAP, program_data{ "terrain_shadowmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
+
+	std::make_pair(SHADER_TERRAIN_SCENE_DEPTHMAP, program_data{ "terrain_scene_depthmap program", "shaders/terrain_scene_depthmap.vert", "shaders/terrain_scene_depthmap.frag",
+		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
+
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
@@ -1219,7 +1228,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
+		uniform_setting_func<gfx_api::TerrainDepthMapUniforms>(),
 		uniform_binding_entry<SHADER_DECALS>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
@@ -2165,7 +2174,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(8, cbuf.fog_end);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthMapUniforms& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
 //	setUniforms(1, cbuf.paramX);
@@ -3582,6 +3591,13 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
 		return false;
 	}
+	if (!createSceneDepthPrepass()) // TODO: Only create if enabled / needed
+	{
+		// Treat failure to create the depth pre-pass as a fatal error
+		shutdown();
+		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
+		return false;
+	}
 	initDepthPasses(depthBufferResolution);
 
 #if !defined(__EMSCRIPTEN__)
@@ -4876,6 +4892,7 @@ void gl_context::shutdown()
 	}
 
 	deleteSceneRenderpass();
+	deleteSceneDepthPrepass();
 
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glDeleteFramebuffers)
@@ -5148,7 +5165,7 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		return 0;
 	}
 
-	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<depth map>");
+	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<shadow map>");
 	if (!pNewDepthTexture)
 	{
 		debug(LOG_ERROR, "Failed to create depth texture");
@@ -5229,6 +5246,50 @@ void gl_context::deleteSceneRenderpass()
 		glDeleteRenderbuffers(1, &sceneDepthStencilRBO);
 		sceneDepthStencilRBO = 0;
 	}
+}
+
+bool gl_context::createSceneDepthPrepass()
+{
+	// Always create a depth buffer texture (for the resolved depth values)
+	sceneDepthTexture = create_gpurendered_texture(GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, sceneFramebufferWidth, sceneFramebufferHeight, "<scene depth texture>");
+
+	GLuint newFBO = 0;
+	glGenFramebuffers(1, &newFBO);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	sceneDepthFBO = newFBO;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTexture->id(), 0);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	GLenum buf = GL_NONE;
+	glDrawBuffers(1, &buf);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	glReadBuffer(GL_NONE);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		debug(LOG_ERROR, "Failed to create framebuffer with error: %s", cbframebuffererror(status));
+	}
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	return true;
+}
+
+void gl_context::deleteSceneDepthPrepass()
+{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (glDeleteFramebuffers)
+#endif
+	{
+		glDeleteFramebuffers(1, &sceneDepthFBO);
+	}
+
 	if (sceneDepthTexture)
 	{
 		delete sceneDepthTexture;
@@ -5300,9 +5361,6 @@ bool gl_context::createSceneRenderpass()
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
-	// Always create a depth buffer texture (for the resolved depth values)
-	sceneDepthTexture = create_gpurendered_texture(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, sceneFramebufferWidth, sceneFramebufferHeight, "<scene depth texture>");
-
 	const size_t numSceneFBOs = 2;
 	for (auto i = 0; i < numSceneFBOs; ++i)
 	{
@@ -5318,19 +5376,15 @@ bool gl_context::createSceneRenderpass()
 			// use the MSAA renderbuffer as the color attachment
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sceneMsaaRBO);
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			// use the MSAA depth renderbuffer as the depth-stencil attachment
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
 		else
 		{
 			// just directly use the sceneTexture as the color attachment (since no MSAA resolving needs to occur)
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			// just directly use the sceneDepthTexture as the depth-stencil attachment (since no MSAA resolving needs to occur)
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTexture->id(), 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
 		}
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
+		ASSERT_GL_NOERRORS_OR_RETURN(false);
 
 		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -5355,8 +5409,7 @@ bool gl_context::createSceneRenderpass()
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
 			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTexture->id(), 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
+			// shouldn't need a depth/stencil buffer
 
 			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 			if (status != GL_FRAMEBUFFER_COMPLETE)
@@ -5405,38 +5458,38 @@ void gl_context::endSceneRenderPass()
 	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
 	//		- core in OpenGL ES 3.0+
 
-//	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
-//	GLenum invalid_ap[2];
-//	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
-//	{
-//		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
-//		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
-//	}
-//#if !defined(__EMSCRIPTEN__)
-//	else
-//	{
-//		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
-//		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
-//		if (!gles && GLAD_GL_ARB_invalidate_subdata)
-//		{
-//		#if !defined(WZ_STATIC_GL_BINDINGS)
-//			if (glInvalidateFramebuffer)
-//		#endif
-//			{
-//				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
-//			}
-//		}
-//		else if (gles && GLAD_GL_EXT_discard_framebuffer)
-//		{
-//		#if !defined(WZ_STATIC_GL_BINDINGS)
-//			if (glDiscardFramebufferEXT)
-//		#endif
-//			{
-//				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
-//			}
-//		}
-//	}
-//#endif
+	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
+	GLenum invalid_ap[2];
+	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
+	{
+		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
+	}
+#if !defined(__EMSCRIPTEN__)
+	else
+	{
+		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
+		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
+		if (!gles && GLAD_GL_ARB_invalidate_subdata)
+		{
+		#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (glInvalidateFramebuffer)
+		#endif
+			{
+				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
+			}
+		}
+		else if (gles && GLAD_GL_EXT_discard_framebuffer)
+		{
+		#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (glDiscardFramebufferEXT)
+		#endif
+			{
+				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
+			}
+		}
+	}
+#endif
 
 	// If MSAA is enabled, use glBiltFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
 	bool usingMSAAIntermediate = (sceneMsaaRBO != 0);
@@ -5446,32 +5499,27 @@ void gl_context::endSceneRenderPass()
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sceneResolveFBO[sceneFBOIdx]);
 		glBlitFramebuffer(0,0, sceneFramebufferWidth, sceneFramebufferHeight,
 						  0,0, sceneFramebufferWidth, sceneFramebufferHeight,
-						  GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
-						  GL_NEAREST);
+						  GL_COLOR_BUFFER_BIT,
+						  GL_LINEAR);
 	}
 
-	// after this:
-	// sceneTexture should be the (msaa-resolved) color texture of the scene
-	// sceneDepthTextures should be the (msaa-resolved) depth texture of the scene
+	// after this, sceneTexture should be the (msaa-resolved) color texture of the scene
 
 	if (usingMSAAIntermediate)
 	{
 		// invalidate color0 (sceneMsaaRBO) in sceneFBO[sceneFBOIdx] (which is GL_READ_FRAMEBUFFER at this point)
-		GLenum invalid_msaarbo_ap[3];
+		GLenum invalid_msaarbo_ap[1];
 		invalid_msaarbo_ap[0] = GL_COLOR_ATTACHMENT0;
 		if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
 		{
-			invalid_msaarbo_ap[1] = GL_DEPTH_STENCIL_ATTACHMENT;
-			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 2, invalid_msaarbo_ap);
+			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
 		}
 		else
 		{
-			invalid_msaarbo_ap[1] = GL_DEPTH_ATTACHMENT;
-			invalid_msaarbo_ap[2] = GL_STENCIL_ATTACHMENT;
 #if defined(GL_ARB_invalidate_subdata)
 			if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
 			{
-				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 3, invalid_msaarbo_ap);
+				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
 			}
 #endif
 //			else if (gles && GLAD_GL_EXT_discard_framebuffer && glDiscardFramebufferEXT)
@@ -5500,6 +5548,18 @@ void gl_context::endSceneRenderPass()
 gfx_api::abstract_texture* gl_context::getSceneTexture()
 {
 	return sceneTexture;
+}
+
+void gl_context::beginSceneDepthPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, sceneDepthFBO);
+	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void gl_context::endSceneDepthPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 gfx_api::abstract_texture* gl_context::getSceneDepthTexture()

@@ -262,7 +262,7 @@ private:
 
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf);
+	void set_constants(const gfx_api::TerrainDepthMapUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf);
 	void set_constants(const gfx_api::TerrainCombinedUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf);
@@ -322,16 +322,24 @@ struct gl_context final : public gfx_api::context
 	virtual int32_t get_context_value(const context_value property) override;
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 
+	// shadow mapping passes
 	virtual size_t numDepthPasses() override;
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginDepthPass(size_t idx) override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
 	virtual gfx_api::abstract_texture* getDepthTexture() override;
+
+	// scene depth pre-pass
+	virtual void beginSceneDepthPass() override;
+	virtual void endSceneDepthPass() override;
+	virtual gfx_api::abstract_texture* getSceneDepthTexture() override;
+
+	// scene render pass
 	virtual void beginSceneRenderPass() override;
 	virtual void endSceneRenderPass() override;
 	virtual gfx_api::abstract_texture* getSceneTexture() override;
-	virtual gfx_api::abstract_texture* getSceneDepthTexture() override;
+
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void debugStringMarker(const char *str) override;
@@ -378,6 +386,8 @@ private:
 	gl_gpurendered_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
 	bool createDefaultTextures();
+	bool createSceneDepthPrepass();
+	void deleteSceneDepthPrepass();
 	bool createSceneRenderpass();
 	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
@@ -427,10 +437,15 @@ private:
 	gl_texture_array *pDefaultArrayTexture = nullptr;
 	gl_gpurendered_texture *pDefaultDepthTexture = nullptr;
 
+	// shadow maps
 	gl_gpurendered_texture* depthTexture = nullptr;
 	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
+
+	// scene depth prepass
+	gl_gpurendered_texture* sceneDepthTexture = nullptr;
+	GLuint sceneDepthFBO = 0;
 
 	uint32_t sceneFramebufferWidth = 0;
 	uint32_t sceneFramebufferHeight = 0;
@@ -439,7 +454,6 @@ private:
 	GLint maxMultiSampleBufferFormatSamples = 0;
 	uint32_t multisamples = 0;
 	gl_gpurendered_texture* sceneTexture = nullptr;
-	gl_gpurendered_texture* sceneDepthTexture = nullptr;
 	std::vector<GLuint> sceneFBO;
 	std::vector<GLuint> sceneResolveFBO;
 	GLuint sceneMsaaRBO = 0;
