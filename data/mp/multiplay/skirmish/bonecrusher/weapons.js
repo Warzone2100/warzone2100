@@ -69,5 +69,5 @@ function _weaponsGetGuns(num)
 		return _out;
 	}
 
-	else return [];
+	return [];
 }

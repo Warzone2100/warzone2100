@@ -495,24 +495,7 @@ function randomOffsetLocation(location)
 		let newValueX = chance(50) ? location.x + random(__tileOffsetMax) : location.x - random(__tileOffsetMax);
 		let newValueY = chance(50) ? location.y + random(__tileOffsetMax) : location.y - random(__tileOffsetMax);
 
-		if (newValueX < __mapEdge)
-		{
-			newValueX = __mapEdge;
-		}
-		if (newValueY < __mapEdge)
-		{
-			newValueY = __mapEdge;
-		}
-		if (newValueX > mapWidth - __mapEdge)
-		{
-			newValueX = mapWidth - __mapEdge;
-		}
-		if (newValueY > mapHeight - __mapEdge)
-		{
-			newValueY = mapHeight - __mapEdge;
-		}
-
-		return {x: newValueX, y: newValueY};
+		return clipToMapBounds({x: newValueX, y: newValueY}, __mapEdge);
 	}
 
 	return cacheThis(uncached, [location], "randomOffsetLocation" + me, 2000);
