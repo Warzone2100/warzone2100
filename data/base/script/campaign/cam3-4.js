@@ -235,7 +235,7 @@ function enableAllFactories()
 
 function truckDefense()
 {
-	const TRUCK_NUM = countDroid(CAM_NEXUS, DROID_CONSTRUCT);
+	const TRUCK_NUM = countDroid(DROID_CONSTRUCT, CAM_NEXUS);
 	if (TRUCK_NUM > 0)
 	{
 		const list = [
