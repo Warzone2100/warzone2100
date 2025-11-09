@@ -328,5 +328,5 @@ function eventBeacon(x, y, from, to, message)
 	beacon.y = y;
 	beacon.startTime = gameTime;
 	beacon.endTime = gameTime + 50000;
-	beacon.wasVtol = isDefined(message) && (message === _BEACON_VTOL_ALARM);
+	beacon.wasVtol = isDefined(message) && (message === __BEACON_VTOL_ALARM);
 }
