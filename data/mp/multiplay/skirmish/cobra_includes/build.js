@@ -58,7 +58,7 @@ function unfinishedStructures()
 		const _s = _stuff[i];
 
 		if ((_s.stattype === DEFENSE) &&
-			((noBasesHighTechStart) ||
+			(!strangeStartSettingOver() ||
 			(!componentAvailable("hover01") ||
 			(distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, _s.x, _s.y) > __safeDist))))
 		{
@@ -849,7 +849,7 @@ function researchBuildOrder()
 	return false;
 }
 
-//Build minimum requirements of base _STRUCTURES.
+//Build minimum requirements of base structures.
 function buildBaseStructures2()
 {
 	return (!countStruct(_STRUCTURES.gen, me) || researchBuildOrder() || factoryBuildOrder());
