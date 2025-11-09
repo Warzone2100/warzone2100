@@ -593,7 +593,7 @@ function enemyUnitsInBase()
 		//Send a beacon that enemies are in my base area! Allied Cobra AI can interpret and help friends through this drop.
 		if (!beacon.disabled && (beacon.endTime < gameTime))
 		{
-			const __mes = isVTOL(_enemyUnits[0]) ? _BEACON_VTOL_ALARM : undefined;
+			const __mes = isVTOL(_enemyUnits[0]) ? __BEACON_VTOL_ALARM : undefined;
 
 			addBeacon(_enemyUnits[0].x, _enemyUnits[0].y, ALLIES, __mes);
 			//Set beacon data for me also since we won't receive our own beacon.
