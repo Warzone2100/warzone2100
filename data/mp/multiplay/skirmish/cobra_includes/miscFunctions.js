@@ -498,5 +498,5 @@ function randomOffsetLocation(location)
 		return clipToMapBounds({x: newValueX, y: newValueY}, __mapEdge);
 	}
 
-	return cacheThis(uncached, [location], "randomOffsetLocation" + me, 2000);
+	return cacheThis(uncached, [location], "randomOffsetLocation" + me + location.x + location.y, 2000);
 }
