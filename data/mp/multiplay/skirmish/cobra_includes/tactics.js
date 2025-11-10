@@ -128,10 +128,9 @@ function repairDroid(droidID, force)
 	}
 
 	const __safeExtremeOilIgnoreNum = 100;
-
-	const __forceRepairPercent = 50;
-	const __experienceDivisor = 26;
-	const __healthToRepair = __forceRepairPercent + Math.floor(_droid.experience / __experienceDivisor);
+	const __extraRepairThreshold = 5;
+	const __forceRepairPercent = 70;
+	const __healthToRepair = __forceRepairPercent + ((_droid.experience > 2) ? __extraRepairThreshold : 0);
 
 	//Ignore repairing combat units if on super high oil map if we have X amount of units.
 	if (countDroid(DROID_ANY, me) >= __safeExtremeOilIgnoreNum && __highOil)

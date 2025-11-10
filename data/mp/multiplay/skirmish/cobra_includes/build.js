@@ -305,9 +305,10 @@ function buildStructure(droid, stat, defendThis, blocking)
 		blocking = 0;
 	}
 
-	let loc;
 	if (droid)
 	{
+		let loc;
+
 		if (isDefined(defendThis))
 		{
 			loc = pickStructLocation(droid, stat, defendThis.x, defendThis.y, blocking);
