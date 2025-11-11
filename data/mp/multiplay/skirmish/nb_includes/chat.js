@@ -67,7 +67,7 @@ _global.handleChatMessage = function(sender, receiver, message) {
 		playerData[sender].isAI &&
 		playerData[sender].scriptName.indexOf("nexus") !== -1) // Try to understand Nexus AI's way of calling for help
 	{
-		chatHelp(sender);
+		chat(sender, chatHelp(sender));
 		return;
 	}
 

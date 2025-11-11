@@ -211,6 +211,7 @@ function requestHelp(x, y)
 	// Remember when we requested help last time
 	helpInfo.lastHelpRequest[ALLY] = gameTime;
 
+	addBeacon(x, y, ALLIES, REQUESTS.help);
 	chat(ALLIES, REQUESTS.help);
 }
 
