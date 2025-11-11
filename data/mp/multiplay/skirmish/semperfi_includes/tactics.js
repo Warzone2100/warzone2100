@@ -292,7 +292,7 @@ function attackEnemy()
 
 		if (enemyStructs.length > 0)
 		{
-			for (j = 0; j < len; ++j)
+			for (let j = 0; j < len; ++j)
 			{
 				const bust = busters[j];
 
