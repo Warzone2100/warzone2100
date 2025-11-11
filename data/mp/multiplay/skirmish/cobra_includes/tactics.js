@@ -678,8 +678,6 @@ function baseShuffleDefensePattern()
 	const __areaOffset = 2;
 	const _cords = {x: 0, y: 0};
 	let sector;
-	let x;
-	let y;
 	let attempts = 0;
 
 	do

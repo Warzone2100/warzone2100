@@ -680,7 +680,7 @@ function cobraDoResearch()
 	const _labList = enumStruct(me, _STRUCTURES.lab).filter((lb) => (
 		lb.status === BUILT && structureIdle(lb)
 	)).sort(function(obj1, obj2) {
-		return obj1.modules - obj2.modules
+		return obj1.modules - obj2.modules;
 	}).reverse();
 
 	setAntiCyborgChance();
