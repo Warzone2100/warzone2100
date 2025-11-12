@@ -7,7 +7,7 @@ function eventResearched(research, structure, player)
 	}
 	if ((gameTime > 2) && (player === me))
 	{
-		cobraDoResearch(true);
+		cobraDoResearch();
 	}
 	// One time check to immediately build a HMG tower next to a nearby derrick if an enemy got to it first.
 	if ((research.id === "R-Defense-Tower01") &&
