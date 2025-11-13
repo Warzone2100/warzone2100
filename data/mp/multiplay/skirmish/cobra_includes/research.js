@@ -269,8 +269,8 @@ function genericResPath()
 		}
 	}
 
-	if ((!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps, true)) ||
-		(chance(50) && evalResearch(resObj.lab, weaponTech)) ||
+	if ((chance(50) && evalResearch(resObj.lab, weaponTech)) ||
+		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps)) ||
 		(chance(20) && personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")))
 	{
 		return true;
@@ -287,8 +287,8 @@ function genericResPath()
 	}
 
 	if ((chance(33) && evalResearch(resObj.lab, extraTech)) ||
-		(useArti && chance(40) && evalResearch(resObj.lab, artillExtra)) ||
-		(useArti && chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 30) && evalResearch(resObj.lab, artilleryTech)))
+		(useArti && chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 30) && evalResearch(resObj.lab, artilleryTech)) ||
+		(useArti && chance(40) && evalResearch(resObj.lab, artillExtra)))
 	{
 		return true;
 	}
@@ -310,8 +310,8 @@ function defensiveResPath()
 		return false;
 	}
 
-	if (((chance(personalityIsRocketMain() ? 20 : 50) && useArti) && evalResearch(resObj.lab, artillExtra)) ||
-		((chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 60 : 20) : 50) && useArti && evalResearch(resObj.lab, artilleryTech))) ||
+	if (((chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 60 : 20) : 50) && useArti && evalResearch(resObj.lab, artilleryTech))) ||
+		((chance(personalityIsRocketMain() ? 20 : 50) && useArti) && evalResearch(resObj.lab, artillExtra)) ||
 		(chance(15) && evalResearch(resObj.lab, _SYSTEM_UPGRADES)) ||
 		(chance(15) && evalResearch(resObj.lab, _SENSOR_TECH)))
 	{
@@ -333,10 +333,10 @@ function defensiveResPath()
 		return true; // Basic VTOL pads tried after Python.
 	}
 
-	if (evalResearch(resObj.lab, extraTech) ||
-		(!turnOffCyborgs && evalResearch(resObj.lab, cyborgWeaps, true)) ||
-		evalResearch(resObj.lab, weaponTech) ||
+	if (evalResearch(resObj.lab, weaponTech) ||
+		(!turnOffCyborgs && evalResearch(resObj.lab, cyborgWeaps)) ||
 		(personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
+		evalResearch(resObj.lab, extraTech) ||
 		secondaryResPath())
 	{
 		return true;
@@ -360,10 +360,10 @@ function offensiveResPath()
 		return true;
 	}
 
-	if ((chance(60) && evalResearch(resObj.lab, extraTech)) ||
-		(!turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && chance(cyborgOnlyGame ? 75 : 30) && evalResearch(resObj.lab, cyborgWeaps, true)) ||
-		(chance(40) && evalResearch(resObj.lab, weaponTech)) ||
+	if ((chance(40) && evalResearch(resObj.lab, weaponTech)) ||
+		(!turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && chance(cyborgOnlyGame ? 75 : 30) && evalResearch(resObj.lab, cyborgWeaps)) ||
 		(chance(10) && personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
+		(chance(60) && evalResearch(resObj.lab, extraTech)) ||
 		(useArti && chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 33 : 15) : 10) && evalResearch(resObj.lab, artilleryTech)))
 	{
 		return true;
@@ -377,14 +377,13 @@ function offensiveResPath()
 	}
 
 	if (evalResearch(resObj.lab, _SYSTEM_UPGRADES) ||
-		(useArti && chance(50) && evalResearch(resObj.lab, artillExtra)) ||
-		(useArti && chance(66) && evalResearch(resObj.lab, artilleryTech)))
+		(useArti && chance(66) && evalResearch(resObj.lab, artilleryTech)) ||
+		(useArti && chance(50) && evalResearch(resObj.lab, artillExtra)))
 	{
 		return true;
 	}
 
-	if (secondaryResPath() ||
-		evalResearch(resObj.lab, _SENSOR_TECH))
+	if (secondaryResPath() || evalResearch(resObj.lab, _SENSOR_TECH))
 	{
 		return true;
 	}
@@ -418,23 +417,22 @@ function airResPath()
 		return true;
 	}
 
-	if ((chance(50) && evalResearch(resObj.lab, extraTech)) ||
-		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps, true)) ||
-		evalResearch(resObj.lab, weaponTech) ||
-		(personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
-		evalResearch(resObj.lab, _SENSOR_TECH))
+	if (evalResearch(resObj.lab, weaponTech) ||
+		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps)) ||
+		(chance(50) && evalResearch(resObj.lab, extraTech)) ||
+		(personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")))
 	{
 		return true;
 	}
 
 	if (useArti &&
-		((chance(66) && evalResearch(resObj.lab, artillExtra)) ||
-		(chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 50) && evalResearch(resObj.lab, artilleryTech))))
+		((chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 50) && evalResearch(resObj.lab, artilleryTech)) ||
+		(chance(66) && evalResearch(resObj.lab, artillExtra))))
 	{
 		return true;
 	}
 
-	if (secondaryResPath())
+	if (secondaryResPath() || evalResearch(resObj.lab, _SENSOR_TECH))
 	{
 		return true;
 	}
