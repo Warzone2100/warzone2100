@@ -252,6 +252,34 @@ function secondaryResPath()
 	}
 }
 
+function machinegunResPath()
+{
+	if (resObj.cybCheck && chance(resObj.antiPersonnelChance))
+	{
+		if (resObj.forceLaser && laserResPath())
+		{
+			return true;
+		}
+
+		const __artyAlias = returnArtilleryAlias();
+
+		if ((__artyAlias === "rkta" || __artyAlias === "missa") &&
+			componentAvailable(subPersonalities[personality].artillery.weapons[0].stat))
+		{
+			if (evalResearch(resObj.lab, artilleryTech) || evalResearch(resObj.lab, artillExtra))
+			{
+				return true;
+			}
+		}
+		else if (evalResearch(resObj.lab, machinegunWeaponTech) || evalResearch(resObj.lab, machinegunWeaponExtra))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 function genericResPath()
 {
 	if (subPersonalities[personality].resPath !== "generic")
@@ -259,14 +287,10 @@ function genericResPath()
 		return false;
 	}
 
-	if (resObj.cybCheck && chance(resObj.antiPersonnelChance))
+
+	if (machinegunResPath())
 	{
-		if ((resObj.forceLaser && laserResPath()) ||
-			evalResearch(resObj.lab, machinegunWeaponTech) ||
-			evalResearch(resObj.lab, machinegunWeaponExtra))
-		{
-			return true;
-		}
+		return true;
 	}
 
 	if ((chance(50) && evalResearch(resObj.lab, weaponTech)) ||
@@ -318,10 +342,7 @@ function defensiveResPath()
 		return true;
 	}
 
-	if ((resObj.cybCheck && chance(resObj.antiPersonnelChance)) &&
-		((resObj.forceLaser && laserResPath()) ||
-		evalResearch(resObj.lab, machinegunWeaponTech) ||
-		evalResearch(resObj.lab, machinegunWeaponExtra)))
+	if (machinegunResPath())
 	{
 		return true;
 	}
@@ -352,10 +373,7 @@ function offensiveResPath()
 		return false;
 	}
 
-	if ((resObj.cybCheck && chance(resObj.antiPersonnelChance)) &&
-		((resObj.forceLaser && laserResPath()) ||
-		evalResearch(resObj.lab, machinegunWeaponTech) ||
-		evalResearch(resObj.lab, machinegunWeaponExtra)))
+	if (machinegunResPath())
 	{
 		return true;
 	}
@@ -409,10 +427,7 @@ function airResPath()
 		return true;
 	}
 
-	if ((resObj.cybCheck && chance(resObj.antiPersonnelChance)) &&
-		((resObj.forceLaser && laserResPath()) ||
-		evalResearch(resObj.lab, machinegunWeaponTech) ||
-		evalResearch(resObj.lab, machinegunWeaponExtra)))
+	if (machinegunResPath())
 	{
 		return true;
 	}
