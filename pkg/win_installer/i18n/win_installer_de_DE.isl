@@ -13,7 +13,7 @@ HQTerrain=Hohe Terrain-Qualität
 AddonMusic=Add-on-Musik
 AddonCampaigns=Add-on-Kampagnen
 Videos=Videos
-EnglishHQ=Englisch (hohe Qualität)
+EnglishHQ=Englisch (Hohe Qualität)
 EnglishStd=Englisch (Standard)
 EnglishLQ=Englisch (Niedrige Qualität)
 KeepExisting=Vorhandene beibehalten
@@ -21,7 +21,7 @@ MSSysLibraries=Wichtige Microsoft Runtime DLLs
 
 ; *** Advanced Options
 
-AdvancedButton=&Advanced
+AdvancedButton=&Erweitert
 
 ; *** wzadvancedoptionsform.iss:
 
@@ -48,5 +48,5 @@ VideoDownloadFailedText=Die Installation wird trotzdem fortgesetzt, aber viellei
 
 VCRuntimeInstalling=Installiere "Visual C++ Runtime Redistributable"
 VCRuntimeWaiting=Warte auf den Abschluss der Installation...
-VCRuntimeVerifying=Überprüfe den Download
+VCRuntimeVerifying=Download wird überprüft
 
