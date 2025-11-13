@@ -358,7 +358,7 @@ function pickPropulsion(weap)
 
 	const _propulsions = playerLandPropRatio(getMostHarmfulPlayer());
 
-	if (Math.floor(_propulsions.track * 100) <= 55 && chance(superLowOnProductionPower() ? 85 : 60))
+	if (Math.floor(_propulsions.track * 100) <= 55 && chance(superLowOnProductionPower() ? 60 : 40))
 	{
 		_tankProp.shift();
 	}
@@ -372,16 +372,18 @@ function pickTankBody()
 	//a preference towards heavy or medium bodies (if power is relatively low).
 	//This helps keep things competitive among a player rushing with small/medium bodies.
 	let body;
-	const __bodySwitchTime = 900000;
+	const __bodySwitchTime = 720000;
 	const __sizeRatio = playerBodySizeRatio(getMostHarmfulPlayer());
+	const __lowOnPower = superLowOnProductionPower();
 
-	if ((Math.floor(__sizeRatio.small * 100) >= 66 && chance(40)) || (gameTime < __bodySwitchTime && chance(80)))
+	if ((Math.floor(__sizeRatio.small * 100) >= 66 && chance(40)) ||
+		(!noBasesHighTechStart && (gameTime < __bodySwitchTime) && chance(__lowOnPower ? 40 : 25)))
 	{
-		body = chance(superLowOnProductionPower() ? 50 : 20) ? _SYSTEM_BODY : _VTOL_BODY;
+		body = chance(__lowOnPower ? 25 : 15) ? _SYSTEM_BODY : _VTOL_BODY;
 	}
 	else
 	{
-		body = chance(30) ? _VTOL_BODY : _TANK_BODY;
+		body = chance(__lowOnPower ? 30 : 15) ? _VTOL_BODY : _TANK_BODY;
 	}
 
 	// If they go super big, we go super big
@@ -437,13 +439,13 @@ function buildSys(id, weap)
 
 	let body;
 
-	if (gameTime > 600000)
+	if (!superLowOnProductionPower() && (gameTime > 600000))
 	{
 		body = chance(80) ? _VTOL_BODY : _TANK_BODY;
 	}
 	else
 	{
-		body = chance(60) ? _SYSTEM_BODY : _VTOL_BODY;
+		body = chance(75) ? _SYSTEM_BODY : _VTOL_BODY;
 
 		if (!strangeStartSettingOver())
 		{
