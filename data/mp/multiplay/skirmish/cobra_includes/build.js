@@ -691,9 +691,9 @@ function buildDefenses(truck, urgent)
 			return buildDefenseNearTruck(truck, 0);
 		}
 
-		if ((getMultiTechLevel() === 1) && (baseType === CAMP_CLEAN) && (gameTime < 600000))
+		if ((getMultiTechLevel() === 1) && (countStruct(_STRUCTURES.derrick, me) <= 8) && (gameTime < 600000))
 		{
-			return false; // Avoid defending base early on in T1 no bases.
+			return false; // Avoid defending base early on in T1 if derrick count is low.
 		}
 
 		return ((highOilMap() && chance(25) && !defendNTWMap()) ||
