@@ -7,6 +7,17 @@ function havePrimaryOrArtilleryWeapon()
 	return (__primary || __artillery);
 }
 
+function firstRocketLikeArtilleryAvailable()
+{
+	if (((returnArtilleryAlias() === "rkta") || (returnArtilleryAlias() === "missa")) &&
+		componentAvailable(subPersonalities[personality].artillery.weapons[0].stat))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 function earlyT1MachinegunChance()
 {
 	return ((getMultiTechLevel() === 1) && (gameTime < 900000) && chance(35));
@@ -243,11 +254,11 @@ function choosePersonalityWeapon(type)
 			!strangeStartSettingOver()))
 		{
 			weaponList = [];
-			const _generalAntiCyborgWeapons = _WEAPON_STATS.machineguns.weapons;
+			const _antiCybWeaps = (firstRocketLikeArtilleryAvailable()) ? subPersonalities[personality].artillery.weapons : _WEAPON_STATS.machineguns.weapons;
 
-			for (let i = _generalAntiCyborgWeapons.length - 1; i >= 0; --i)
+			for (let i = _antiCybWeaps.length - 1; i >= 0; --i)
 			{
-				const _weapObj = _generalAntiCyborgWeapons[i];
+				const _weapObj = _antiCybWeaps[i];
 
 				weaponList.push(_weapObj.stat);
 			}
@@ -476,7 +487,14 @@ function buildCyborg(id, useEngineer)
 		earlyT1MachinegunChance() ||
 		!strangeStartSettingOver()))
 	{
-		weaponLine = _WEAPON_STATS.machineguns;
+		if (firstRocketLikeArtilleryAvailable())
+		{
+			// Tanks will handle cyborgs for personalities using the rocket artillery line.
+		}
+		else
+		{
+			weaponLine = _WEAPON_STATS.machineguns;
+		}
 	}
 
 	if (isDefined(weaponLine))

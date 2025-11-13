@@ -454,6 +454,7 @@ const _WEAPON_STATS =
 			{ res: "R-Wpn-HvArtMissile", stat: "Missile-HvyArt" }, // archie
 		],
 		fastFire: [
+			{ res: "R-Wpn-Rocket02-MRL", stat: "Rocket-MRL" }, // mra
 			{ res: "R-Wpn-Rocket02-MRLHvy", stat: "Rocket-MRL-Hvy" },
 			{ res: "R-Wpn-MdArtMissile", stat: "Missile-MdArt" },
 		],
