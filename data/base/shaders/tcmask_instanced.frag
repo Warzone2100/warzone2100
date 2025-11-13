@@ -19,6 +19,7 @@ uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
 uniform sampler2DArrayShadow shadowMap; // shadow map
 uniform sampler2D lightmap_tex;
+uniform sampler2D depthTexture; // depth pre-pass texture
 
 uniform mat4 ViewMatrix;
 

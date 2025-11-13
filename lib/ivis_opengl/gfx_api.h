@@ -836,7 +836,8 @@ namespace gfx_api
 	texture_description<2, sampler_type::anisotropic>, // normal map
 	texture_description<3, sampler_type::anisotropic>, // specular map
 	texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
-	texture_description<5, sampler_type::bilinear> // lightmap
+	texture_description<5, sampler_type::bilinear>, // lightmap
+	texture_description<6, sampler_type::bilinear> // depthTexture
 	>, shader>;
 
 	using Draw3DShapeOpaque_Instanced = Draw3DShapeInstanced<REND_OPAQUE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_ON>;
@@ -1099,7 +1100,8 @@ namespace gfx_api
 	texture_description<6, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal normal
 	texture_description<7, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal specular
 	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>,  // decal height
-	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
+	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+	texture_description<10, sampler_type::bilinear> // depthTexture
 	>, shader>;
 
 	using TerrainCombined_Classic = TerrainCombinedTemplate<REND_ALPHA, SHADER_TERRAIN_COMBINED_CLASSIC>;

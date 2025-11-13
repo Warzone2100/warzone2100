@@ -841,7 +841,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		},
 		{
 			{"shadowMap", 4},
-			{"lightmap_tex", 5}
+			{"lightmap_tex", 5},
+			{"depthTexture", 6}
 		} }),
 	std::make_pair(SHADER_COMPONENT_SHADOWMAP_INSTANCED, program_data{ "Component shadowmap program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
 		{
@@ -889,24 +890,54 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight" },
+		{
+			{"lightmap_tex", 0},
+			{"groundTex", 1},
+			{"groundNormal", 2},
+			{"groundSpecular", 3},
+			{"groundHeight", 4},
+			{"decalTex", 5},
+			{"decalNormal", 6},
+			{"decalSpecular", 7},
+			{"decalHeight", 8},
+			{"shadowMap", 9},
+			{"depthTexture", 10},
+		} }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight"},
+		{
+			{"lightmap_tex", 0},
+			{"groundTex", 1},
+			{"groundNormal", 2},
+			{"groundSpecular", 3},
+			{"groundHeight", 4},
+			{"decalTex", 5},
+			{"decalNormal", 6},
+			{"decalSpecular", 7},
+			{"decalHeight", 8},
+			{"shadowMap", 9},
+			{"depthTexture", 10},
+		} }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight" },
+		{
+			{"lightmap_tex", 0},
+			{"groundTex", 1},
+			{"groundNormal", 2},
+			{"groundSpecular", 3},
+			{"groundHeight", 4},
+			{"decalTex", 5},
+			{"decalNormal", 6},
+			{"decalSpecular", 7},
+			{"decalHeight", 8},
+			{"shadowMap", 9},
+			{"depthTexture", 10},
+		} }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -2229,16 +2260,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, cbuf.bucketDimensionUsed);
 	setUniforms(i++, cbuf.viewportWidth);
 	setUniforms(i++, cbuf.viewportheight);
-	setUniforms(i++, 0); // lightmap_tex
-	setUniforms(i++, 1); // ground
-	setUniforms(i++, 2); // groundNormal
-	setUniforms(i++, 3); // groundSpecular
-	setUniforms(i++, 4); // groundHeight
-	setUniforms(i++, 5); // decal
-	setUniforms(i++, 6); // decalNormal
-	setUniforms(i++, 7); // decalSpecular
-	setUniforms(i++, 8); // decalHeight
-	setUniforms(i++, 9); // shadowMap
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)

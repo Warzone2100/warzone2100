@@ -1898,7 +1898,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
-		gfx_api::context::get().getDepthTexture());
+		gfx_api::context::get().getDepthTexture(), gfx_api::context::get().getSceneDepthTexture());
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	glm::mat4 groundScale = glm::mat4(0);
 	for (int i = 0; i < getNumGroundTypes(); i++) {
