@@ -254,7 +254,12 @@ function choosePersonalityWeapon(type)
 			!strangeStartSettingOver()))
 		{
 			weaponList = [];
-			const _antiCybWeaps = (firstRocketLikeArtilleryAvailable()) ? subPersonalities[personality].artillery.weapons : _WEAPON_STATS.machineguns.weapons;
+			let _antiCybWeaps = _WEAPON_STATS.machineguns.weapons;
+
+			if (strangeStartSettingOver() && firstRocketLikeArtilleryAvailable())
+			{
+				_antiCybWeaps = subPersonalities[personality].artillery.weapons;
+			}
 
 			for (let i = _antiCybWeaps.length - 1; i >= 0; --i)
 			{
@@ -489,7 +494,7 @@ function buildCyborg(id, useEngineer)
 		earlyT1MachinegunChance() ||
 		!strangeStartSettingOver()))
 	{
-		if (firstRocketLikeArtilleryAvailable())
+		if (strangeStartSettingOver() && firstRocketLikeArtilleryAvailable())
 		{
 			// Tanks will handle cyborgs for personalities using the rocket artillery line.
 		}
