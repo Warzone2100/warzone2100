@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"PO-Revision-Date: 2025-11-13 02:36\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -516,7 +516,7 @@ msgid "TRANSPORT MISSION: Northern Sector"
 msgstr "ТРАНСПОРТНА МІСІЯ: Північний Сектор"
 
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr "Поздоровляємо з успішною евакуацією Бази Бета"
+msgstr "Вітаємо о з успішною евакуацією Бази Бета."
 
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
 msgstr "NEXUS отримав доступ до ядерної зброї і має намір знищити Проєкт."
@@ -1086,10 +1086,10 @@ msgid "Improved Missile Loading System"
 msgstr "Вдосконалена Система Заряджання Ракет"
 
 msgid "Rapid Fire Mini-Rockets"
-msgstr "Надшвидкострільні Міні-Ракети"
+msgstr "Швидкострільні Міні-Ракети"
 
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr "Надшвидкострільні Міні-Ракети Мк2"
+msgstr "Швидкострільні Міні-Ракети Мк2"
 
 msgid "Rapid Fire Mini-Rockets Mk3"
 msgstr "Швидкострільні Міні-Ракети Мк3"
@@ -1197,10 +1197,10 @@ msgid "Defensive Strength: Medium"
 msgstr "Рівень Захисту: Середній"
 
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "ПП установка із Зенітною Баштою 'Циклон'"
+msgstr "Зенітна точка із Зенітною Баштою 'Циклон'"
 
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "ПП установка із Зенітним Кулеметом 'Ураган'"
+msgstr "Зенітна точка із Зенітним Кулеметом 'Ураган'"
 
 msgid "Automatically targets VTOL"
 msgstr "Автоматично наводиться на ВЗІПи"
@@ -1425,7 +1425,7 @@ msgid "New fire detection systems"
 msgstr "Нові системи виявлення вогню"
 
 msgid "Extends VTOL CB Range"
-msgstr "Розширюється радіус дії ВЗІП ПБ сенсора"
+msgstr "Розширюється радіус дії ВЗІП КБ сенсора"
 
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "Всі ВЗІП КБ сенсори покращуються автоматично"
@@ -1764,10 +1764,10 @@ msgid "All rockets upgraded automatically"
 msgstr "Всі ракети покращуються автоматично"
 
 msgid "Destroy all New Paradigm units"
-msgstr "Знищити всі одиниці Нової Парадигми"
+msgstr "Знищіть всі одиниці Нової Парадигми"
 
 msgid "Destroy all New Paradigm reinforcements"
-msgstr "Знищити всі підкріплення Нової Парадигми"
+msgstr "Знищіть всі підкріплення Нової Парадигми"
 
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
 msgstr "Побудувати на плато не менше 7 захисних споруд та знищити всі підкріплення Нової Парадигми"
@@ -1779,7 +1779,7 @@ msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Врятуйте мирних жителів від Колективу, поки їх не захопили надто багато"
 
 msgid "Secure the Uplink from The Collective"
-msgstr "Захистіть пост Зв'язку від Коллективу"
+msgstr "Захистіть пост Зв'язку від Колективу"
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
 msgstr "Відправте принаймні один транспорт з вантажівкою та переживіть атаку Колективу допоки не сплине таймер"
@@ -1797,7 +1797,7 @@ msgid "Rescue Alpha team from Nexus"
 msgstr "Врятуйте команду Альфа від NEXUS"
 
 msgid "Prevent any Nexus hover tanks from escaping the area"
-msgstr "Lo"
+msgstr "Не дати ховер-танкам Nexus залишити територію"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Знищіть Штаб NEXUS, щоб відключити Вірусну Програму NEXUS"
@@ -1824,7 +1824,7 @@ msgid "Insane difficulty hint:"
 msgstr "Нек"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
-msgstr "Зміцніть потужну базу поперек мапи аби захистити себе від Колективу"
+msgstr "Укріпи надійну базу по всій карті, щоб захиститися від Колективу"
 
 msgid "Destroy all enemy units and structures"
 msgstr "Знищити всі ворожі підрозділи та будівлі"
@@ -1836,10 +1836,10 @@ msgid "Bases destroyed"
 msgstr "Бази знищено"
 
 msgid "Enemy units remaining"
-msgstr "Ворожі підрозділи залишаються"
+msgstr "Ворожих підрозділів залишилося"
 
 msgid "Enemy structures remaining"
-msgstr "Ворожі об'єкти залишилися"
+msgstr "Ворожих об'єктів залишил"
 
 msgid "Return to LZ required"
 msgstr "Потрібно повернутися до Зони Висадки"
@@ -1872,7 +1872,7 @@ msgid "Design (F4)"
 msgstr "Конструювання (F4)"
 
 msgid "Design - construct HQ first"
-msgstr "Дизайн - спочатку конструктивний Штаб."
+msgstr "Дизайн - спочатку побудуй Штаб"
 
 msgid "Commanders (F6)"
 msgstr "Командири (F6)"
@@ -2046,7 +2046,7 @@ msgid "Good luck and good hunting."
 msgstr "Удачі та вдалого полювання."
 
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr "Наближаємося до зони посадки. Брифінг команди Альфа розпочинається"
+msgstr "Наближаємося до зони посадки. Брифінг команди Альфа розпочинається."
 
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
 msgstr "Командир, ви очолюєте команду Альфа, одну з трьох експедиційних груп, відправлених Проєктом для пошуку до-Колапсних артефактів."
@@ -2079,13 +2079,13 @@ msgid "Your attacks upon us will not go unpunished."
 msgstr "Ваші напади на нас не залишаться безкарними."
 
 msgid "You are in contravention of the New Paradigm."
-msgstr "Ви порушуєте Нову Парадигму."
+msgstr "Ви ворог Нової Парадигми."
 
 msgid "All attack groups commence attack on enemy."
-msgstr "Усі групи атакують ворога."
+msgstr "Усі групам наказується атакувати ворога."
 
 msgid "They are in contravention of the New Paradigm."
-msgstr "Вони суперечать Новій Парадигмі."
+msgstr "Вони діють усупереч Новій Парадигмі."
 
 msgid "They must be eradicated."
 msgstr "Їх необхідно викорінити."
@@ -2097,7 +2097,7 @@ msgid "Then destroy the New Paradigm's base."
 msgstr "Тоді знищіть базу Нової Парадигми."
 
 msgid "Open your systems to me."
-msgstr "Надайте мені доступ до Ваших систем."
+msgstr "Відкрий мені свої системи."
 
 msgid "Let me meld with your machines and cyborgs."
 msgstr "Дозволь мені злитися з твоїми машинками та кіборгами."
@@ -2844,13 +2844,13 @@ msgid "- unit building - research completion - construction of base structures (
 msgstr "- будівництво блоків - завершення досліджень - будівництво базових споруд (заводів, електростанцій, лабораторій, модулів та нафтових вишок) - нанесення шкоди"
 
 msgid "Ultimate Scavengers"
-msgstr "Кінцеві сміттярі"
+msgstr "Сильні Мародери"
 
 msgid "Scavengers"
-msgstr "Звалищники"
+msgstr "Мародери"
 
 msgid "No Scavengers"
-msgstr "Без Звалищників"
+msgstr "Без Мародерів"
 
 msgid "No Alliances"
 msgstr "Без Союзів"
@@ -5243,14 +5243,14 @@ msgid "Laser accuracy +10%"
 msgstr "Точність Лазерів +10%"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "Точність Лазера"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Сила Лазерів +25%"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "Шкода Лазера"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Лазерний цілеказувач направляє та веде набої до цілі"
@@ -5260,7 +5260,7 @@ msgid "Laser reload time -15%"
 msgstr "Час перезарядки Лазерів -15%"
 
 msgid "Laser Reload"
-msgstr ""
+msgstr "Перезарядка Лазера"
 
 msgid "Laser Satellite Command Post"
 msgstr "Командний Пункт Лезорного Супутника"
@@ -5439,10 +5439,10 @@ msgid "Medium Super Heavy Body"
 msgstr "Середній Надважкий Корпус"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "Шкода від MG"
 
 msgid "MG Reload"
-msgstr ""
+msgstr "Перезарядка MG"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "Позиція озброєна Міні-ракетами"
@@ -5918,7 +5918,7 @@ msgid "Produces Cyborgs"
 msgstr "Виробляє Кіборгів"
 
 msgid "Production"
-msgstr ""
+msgstr "Виробництво"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Професійні та регулярні рангові блоки захищені"
@@ -6220,7 +6220,7 @@ msgid "Rocket accuracy +10%"
 msgstr "Точність ракет +10%"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "Точність ракети"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Ракетна артилерія; може бути закріплена за сенсором"
@@ -6242,7 +6242,7 @@ msgid "Rocket damage +25%"
 msgstr "Сила Ракет +25%"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "Шкода від ракети"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Ракета виявляє та наводиться на вихлопи двигуна"
@@ -6267,7 +6267,7 @@ msgid "Rocket reload time -15%"
 msgstr "Сам перезарядки Ракет -15%"
 
 msgid "Rocket Reload"
-msgstr ""
+msgstr "Перезарядка ракет"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Ракети наводяться на ціль лазерним цілевказувачем"
@@ -6426,7 +6426,7 @@ msgid "Sensor Upgrade"
 msgstr "Покращення Сенсору"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Сенсор"
 
 msgid "Sensors Improved"
 msgstr "Вдосконалення Сенсорів"
@@ -6612,7 +6612,7 @@ msgid "Systems Research Completed"
 msgstr "Розробка Систем Завершена"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "Танковий Сплав"
 
 msgid "Tank Killer Cyborg"
 msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
@@ -6688,10 +6688,10 @@ msgid "Thermal Armor +45%"
 msgstr "Термальна Броня +45%"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Покращення Термальної Броні Мк2"
 
 msgid "Thermal Armor Buff AI"
-msgstr ""
+msgstr "Покращення Термальної Броні ШІ"
 
 msgid "Thermal Armor Mk2"
 msgstr "Термальна Броня Мк2"
@@ -7618,7 +7618,7 @@ msgstr "Будівництво Неможливе. Через пожежу на 
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr "%s - Гітпункти %d/%d - Досвід %.1f, %s, вбиває %d"
+msgstr "%s - Здоров'я %d/%d - Досвід %.1f, %s, вбив %d"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
@@ -7630,7 +7630,7 @@ msgstr "(Ворог!) %s - Здоров'я %d/%d - ID %d - досвід %f, %s -
 
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - союзники - Гітпункти %d/%d - досвід %d, %s"
+msgstr "%s - союзники - Здоров'я %d/%d - досвід %d, %s"
 
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
@@ -7790,7 +7790,7 @@ msgid "New Campaign"
 msgstr "Нова Кампанія"
 
 msgid "Start Skirmish Game"
-msgstr "Почати Одиночну Гру"
+msgstr "Почати Сутичку"
 
 msgid "Challenges"
 msgstr "Завдання"
@@ -8489,7 +8489,7 @@ msgid "Toggle Console Display"
 msgstr "Прибрати Консоль"
 
 msgid "Toggle Damage Bars On/Off"
-msgstr "Прибрати Індикатори Ушкоджень "
+msgstr "Прибрати Індикатори Пошкоджень"
 
 msgid "Take Screen Shot"
 msgstr "Зробити Знімок Екрану"
@@ -8810,13 +8810,13 @@ msgid "Show all keyboard mappings"
 msgstr "Показати всі переписки клавіатури"
 
 msgid "Retreat at Medium Damage"
-msgstr "Відступ при Середніх Ушкодженнях"
+msgstr "Відступ при Середніх Пошкодженнях"
 
 msgid "Retreat at Heavy Damage"
-msgstr "Відступ при Сильних Ушкодженнях"
+msgstr "Відступ при Сильних Пошкодженнях"
 
 msgid "Do or Die!"
-msgstr "Бій на Смерть!"
+msgstr "Зроби або Помри!"
 
 msgid "Select all Combat Units"
 msgstr "Обрати всі Бойові Підрозділи"
@@ -9305,7 +9305,7 @@ msgid "CAMPAIGN"
 msgstr "КАМПАНІЯ"
 
 msgid "CHALLENGE"
-msgstr ""
+msgstr "ВИПРОБОВУВАННЯ"
 
 msgid "SKIRMISH"
 msgstr "СКІРМІШ"
@@ -9326,10 +9326,10 @@ msgid "DIFFICULTY: INSANE"
 msgstr "ефективність:всередині"
 
 msgid "CHEATS: ENABLED"
-msgstr "ЧАТИ: УВІМКНУТИ"
+msgstr "ЧІТИ: УВІМКНУТІ"
 
 msgid "CHEATS: DISABLED"
-msgstr "ЧАТИ: УВІМКНУТИ"
+msgstr "ЧІТИ: ВВИМКНУТІ"
 
 msgid "Researched EVERYTHING for you!"
 msgstr "За вас ВСЕ вже винайшли!"
@@ -9390,10 +9390,10 @@ msgid "Unable to locate HQ!"
 msgstr "Не вдалося знайти Штаб!"
 
 msgid "Formation speed limiting ON"
-msgstr ""
+msgstr "Обмеження швидкості руху в строю увімкнено"
 
 msgid "Formation speed limiting OFF"
-msgstr ""
+msgstr "Обмеження швидкості руху в строю Вимкнено"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "Напрямок вертикального обертання: Нормальний"
@@ -9449,7 +9449,7 @@ msgid "QuickSave not allowed in Autosaves-Only mode"
 msgstr ""
 
 msgid "QuickSave failed"
-msgstr ""
+msgstr "Помилка швидкого збереження"
 
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
 msgstr ""
@@ -10828,7 +10828,7 @@ msgstr ""
 
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr "%s - Електронних Ушкоджень"
+msgstr "%s - Електронних Пошкоджень"
 
 msgid "Electronic Reward - Visibility Report"
 msgstr "Електронна Винагорода - Звіт про Зону Видимості"

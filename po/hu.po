@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"PO-Revision-Date: 2025-10-11 02:30\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -1065,7 +1065,7 @@ msgid "Scrambler Turret Mk2"
 msgstr "Jelzavaró torony Mk2"
 
 msgid "Sensor Lock"
-msgstr "Érzékelő zár"
+msgstr "Érzékelők célbemérése"
 
 msgid "Improved Laser Focusing Mk2"
 msgstr "Fejlesztett lézerfókuszálás Mk2"
@@ -2947,11 +2947,11 @@ msgstr "A porthozzárendelés létrehozása sikertelen"
 
 #, c-format
 msgid "Manually configure your router/firewall to open port %d!"
-msgstr ""
+msgstr "Állítsa be kézileg a routerét/tűzfalát a port kinyitásához: %d."
 
 #, c-format
 msgid "Port mapping opened external port: %d"
-msgstr ""
+msgstr "A porttovábbítás kinyitotta a külső portot: %d"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2962,7 +2962,7 @@ msgstr "A porthozzárendelés létrehozása sikertelen (időtúllépés)"
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "%s hálózati háttérrendszer használata."
 
 msgid "Client failed to ack player index swap"
 msgstr "A kliens nem tudta kezelni a játékosindex változását"
@@ -2978,6 +2978,10 @@ msgid ""
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
 msgstr ""
+"Hibás a várókiszolgálóhoz való kapcsolódás során: %s.\n"
+"Győződjön meg arról, hogy a port (%d) fogadja a bejövő kapcsolatokat.\n"
+"Ha routert használ, állítsa be az UPnP/NAT-PMP/PCP-t,\n"
+"vagy továbbítsa a portot a rendszeréhez."
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "A visszajátszási fájl formátuma újabb, mint amit a Warzone 2100 ezen verziója támogatni tud."
@@ -2990,38 +2994,38 @@ msgid "Replay File Format Unsupported"
 msgstr "A visszajátszási fájl formátuma nem támogatott"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "A visszajátszási fájl formátuma régebbi, mint amit a Warzone 2100 ezen verziója támogatni tud."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "A visszajátszás nem tölthető be: A visszajátszási fájl hiányos vagy sérült."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: A grafika előkészítése sikertelen"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "A grafikai előkészítése az összes háttérrendszer esetén sikertelen."
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Hiba részletei:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "Frissítse vagy telepítse újra a grafikus illesztőprogramjait, és ellenőrizze a rendszerbeállításokat."
 
 msgid "OK"
 msgstr "Ok"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: Az előző indítás sikertelen volt"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "A következő grafikus háttérrendszer előző előkészítési kísérlete összeomlást okozott:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Grafikus háttérrendszer: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "A Warzone 2100 most megpróbál egy másik grafikus háttérrendszerrel elindulni."
 
 msgid "Menu"
 msgstr "Menü"
@@ -3476,7 +3480,7 @@ msgid "Armored strongpoint with Heavy Laser"
 msgstr "Páncélozott erőd nehézlézerrel"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr ""
+msgstr "Páncélozott erőd részecskeágyúval"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Páncélozott erőd plazmitlángszóróval"
@@ -3495,7 +3499,7 @@ msgid "Armour +35%, Body Points +30%"
 msgstr "+35% páncélzat, +30% karosszériaérték"
 
 msgid "Artifact"
-msgstr "Tárgyi lelet"
+msgstr "Lelet"
 
 msgid "Artillery battery firing Firestorm Missiles"
 msgstr "Firestorm irányított rakétákkal tüzelő tüzérségi üteg"
@@ -3552,7 +3556,7 @@ msgid "Assault Gunner Cyborg"
 msgstr "Rohamlöveges kiborg"
 
 msgid "Assign a VTOL by selecting the rearming pad as its target"
-msgstr "Újratöltő platform hozzárendelése a VTOL-hez, mint célt"
+msgstr "Rendeljen hozzá VTOL egységet úgy, hogy célpontként adja meg"
 
 msgid "Assigned VTOLs attack the designated targets"
 msgstr "A kijelölt VTOL egységek megtámadják a kijelölt célpontokat"
@@ -3618,7 +3622,7 @@ msgid "Average power costs and production times"
 msgstr "Átlagos energiaköltségek és gyártási idők"
 
 msgid "BaBaLegs"
-msgstr "BaBALeges"
+msgstr "BaBaLegs"
 
 msgid "BaBaProp"
 msgstr "BaBaProp"
@@ -3707,7 +3711,7 @@ msgid "Bomb damage +25%"
 msgstr "+25% bombasebzés"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Bomba sebzése"
 
 msgid "Bomb Upgrade"
 msgstr "Bombafejlesztés"
@@ -3734,7 +3738,7 @@ msgid "Buggy"
 msgstr "Homokfutó"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Épületek"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Beépített diagnosztikai és javítórendszerek"
@@ -3777,7 +3781,7 @@ msgid "Cannon accuracy +10%"
 msgstr "+10% pontosság az ágyúknál"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Löveg pontossága"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Automata ágyútöltő Mk2"
@@ -3793,7 +3797,7 @@ msgid "Cannon damage +25%"
 msgstr "+25% sebzés az ágyúknál"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Löveg sebzése"
 
 msgid "Cannon Fire Truck"
 msgstr "Tűzoltóautó ágyúval"
@@ -3821,7 +3825,7 @@ msgid "Cannon reload time -10%"
 msgstr "-10% újratöltési idő az ágyúknál"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "Löveg újratöltése"
 
 msgid "Cannon Tower"
 msgstr "Ágyútorony"
@@ -3923,16 +3927,16 @@ msgid "Command Turret"
 msgstr "Parancsnoki torony"
 
 msgid "Commander leads groups acts as factory delivery point"
-msgstr "A parancsnok irányítja a csapatokat a gyári szállítási ponthoz"
+msgstr "A parancsnok által irányított csapatok gyári szállítási pontként viselkednek"
 
 msgid "Complete battlefield visibility"
 msgstr "Teljes csatatér láthatósága"
 
 msgid "Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Kompozit ötvözetek Mk2 (MI bónusza)"
 
 msgid "Composite Alloys Buff AI"
-msgstr ""
+msgstr "Kompozit ötvözetek (MI bónusza)"
 
 msgid "Composite Alloys Mk2"
 msgstr "Kompozit ötvözetek Mk2"
@@ -3997,10 +4001,10 @@ msgid "Cyborg Alloys"
 msgstr "Kiborg ötvözetek"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Kiborg kompozit ötvözetek Mk2 (MI bónusza)"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr ""
+msgstr "Kiborg kompozit ötvözetek (MI bónusza)"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Kiborg kompozit ötvözetek Mk2"
@@ -4069,10 +4073,10 @@ msgid "Cyborg Tank Killer"
 msgstr "Tank Killer rakétás kiborg"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Kiborg hőpajzs Mk2 (MI bónusza)"
 
 msgid "Cyborg Thermal Armor Buff AI"
-msgstr ""
+msgstr "Kiborg hőpajzs (MI bónusza)"
 
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Kiborg hőpajzs Mk2"
@@ -4213,7 +4217,7 @@ msgid "Enemy"
 msgstr "Ellenség"
 
 msgid "Engine"
-msgstr ""
+msgstr "Hajtómű"
 
 msgid "Engineering"
 msgstr "Mérnöki tudományok"
@@ -4225,7 +4229,7 @@ msgid "Expensive to produce"
 msgstr "Költséges az előállítása"
 
 msgid "Extended sensor range"
-msgstr "Kiterjesztett érzékelő tartomány"
+msgstr "Bővített érzékelő-hatósugár"
 
 msgid "Extends CB Range"
 msgstr "Megnöveli a válaszüteg hatósugarát"
@@ -4288,7 +4292,7 @@ msgid "Fire Truck"
 msgstr "Tűzoltóautó"
 
 msgid "Fires beams of subatomic particle"
-msgstr ""
+msgstr "Szubatomi récsecskesugarakkal tüzel"
 
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Elektromágneses impulzusos rakétákkal tüzel"
@@ -4410,7 +4414,7 @@ msgid "Gauss Cannon"
 msgstr "Gauss-ágyú"
 
 msgid "Generates and concentrates bursts of laser energy"
-msgstr "Generálja és koncentrálja a kitörő lézer energiáját"
+msgstr "Lézerengia-kitöréséket állít elő és koncentrál"
 
 #, no-c-format
 msgid ""
@@ -4437,8 +4441,8 @@ msgid ""
 "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
-"~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
-"A kutatás nem konkrét fegyver ágra fókuszál"
+"~25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"A kutatás nem konkrét fegyvernemre fókuszál"
 
 msgid "Gives Cyborg limited flight abilities"
 msgstr "Korlátozott repülési képességeket ad a kiborgoknak"
@@ -4792,7 +4796,7 @@ msgid "Hi-Energy Laser Emitter"
 msgstr "Nagy energiájú lézerkibocsátó"
 
 msgid "Hide Behind Me"
-msgstr "Rejts el mögém"
+msgstr "Rejtőzz mögöttem"
 
 msgid "High Density Base Structure Materials"
 msgstr "Nagy sűrűségű bázisépület-alapanyagok"
@@ -4887,13 +4891,13 @@ msgid "Howitzer damage +25%"
 msgstr "+25% sebzés a tarackoknál"
 
 msgid "Howitzer Damage Buff AI Mk2"
-msgstr ""
+msgstr "Taracksebzés Mk2 (MI bónusza)"
 
 msgid "Howitzer Damage Buff AI Mk3"
-msgstr ""
+msgstr "Taracksebzés Mk3 (MI bónusza)"
 
 msgid "Howitzer Damage Buff AI"
-msgstr ""
+msgstr "Taracksebzés (MI bónusza)"
 
 msgid "Howitzer Fast Loader"
 msgstr "Gyors taracktöltés"
@@ -4906,13 +4910,13 @@ msgid "Howitzer"
 msgstr "Tarack"
 
 msgid "Howitzers Accuracy"
-msgstr ""
+msgstr "Tarack pontossága"
 
 msgid "Howitzers Damage"
-msgstr ""
+msgstr "Tarack sebzése"
 
 msgid "Howitzers Reload"
-msgstr ""
+msgstr "Tarack újratöltése"
 
 msgid "Hurricane AA Site"
 msgstr "Hurricane légvédelmi platform"
@@ -4966,7 +4970,7 @@ msgid "Improved Bomb Warhead"
 msgstr "Tökéletesített robbanófej"
 
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Jobb energiacellák csökkentik a lézerek újratöltési idejét"
+msgstr "A jobb újrahasznosítás csökkenti a lézerek újratöltési idejét"
 
 msgid "Improved Engineering Techniques"
 msgstr "Továbbfejlesztett mérnöki módszerek"
@@ -4978,7 +4982,7 @@ msgid "Improved fire detection systems"
 msgstr "Továbbfejlesztett tűzérzékelő rendszerek"
 
 msgid "Improved Hardcrete Buff AI"
-msgstr ""
+msgstr "Továbbfejlesztett vasbeton (MI bónusza)"
 
 msgid "Improved Hardcrete Mk2"
 msgstr "Továbbfejlesztett vasbeton Mk2"
@@ -5158,10 +5162,10 @@ msgid "Ionizing Turbine Engine"
 msgstr "Ionturbina motor"
 
 msgid "Jammer Tower"
-msgstr "Lángszóró torony"
+msgstr "Zavarótorony"
 
 msgid "Jammer Turret"
-msgstr "Kódoló torony"
+msgstr "Zavarótorony"
 
 msgid "Jeep"
 msgstr "Terepjáró"
@@ -5240,14 +5244,14 @@ msgid "Laser accuracy +10%"
 msgstr "+10% pontosság a lézereknél"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "Lézer pontossága"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "+25% sebzés a lézereknél"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "Lézer sebzése"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Lézeres célzórendszer jelöli ki és vezeti célra a lövedéket"
@@ -5257,7 +5261,7 @@ msgid "Laser reload time -15%"
 msgstr "-15% újratöltési idő a lézereknél"
 
 msgid "Laser Reload"
-msgstr ""
+msgstr "Lézer újratöltése"
 
 msgid "Laser Satellite Command Post"
 msgstr "Lézerműhold parancsnoki állása"
@@ -5436,10 +5440,10 @@ msgid "Medium Super Heavy Body"
 msgstr "Középméretű szupernehéz karosszéria"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "Géppuska sebzése"
 
 msgid "MG Reload"
-msgstr ""
+msgstr "Géppuska újratöltése"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "Kisrakétás páncélozott erőd"
@@ -5497,17 +5501,17 @@ msgid "Missile accuracy +10%"
 msgstr "+10% pontosság a rakétáknál"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "Irányított rakéta pontossága"
 
 msgid "Missile actively seeks and homes on targets"
-msgstr "A rakéták aktívan keresik és rögzítik a célt"
+msgstr "Az irányított rakéták aktívan keresik és mérik be a célpontokat"
 
 #, no-c-format
 msgid "Missile damage +25%"
 msgstr "+25% sebzés a rakétáknál"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "Irányított rakéta sebzése"
 
 msgid "Missile Fortress"
 msgstr "Rakétás erődítmény"
@@ -5517,7 +5521,7 @@ msgid "Missile reload time -15%"
 msgstr "-15% újratöltési idő a rakétáknál"
 
 msgid "Missile Reload"
-msgstr ""
+msgstr "Irányított rakéta újratöltése"
 
 msgid "Missile Upgrade"
 msgstr "Irányított rakéták fejlesztése"
@@ -5539,7 +5543,7 @@ msgid "Mortar accuracy +10%"
 msgstr "+10% pontosság az aknavetőknél"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "Aknavető pontossága"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Automatikus aknavetőtöltés Mk2"
@@ -5558,7 +5562,7 @@ msgid "Mortar damage +25%"
 msgstr "+25% sebzés az aknavetőknél"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "Aknavető sebzése"
 
 msgid "Mortar Fast Loader"
 msgstr "Gyors aknavetőtöltés"
@@ -5571,7 +5575,7 @@ msgid "Mortar reload time -10%"
 msgstr "-10% újratöltési idő az aknavetőknél"
 
 msgid "Mortar Reload"
-msgstr ""
+msgstr "Aknavető újratöltése"
 
 msgid "Mortar Targeting Computer"
 msgstr "Aknavető-célzószámítógép"
@@ -5808,10 +5812,10 @@ msgid "Panther"
 msgstr "Panther"
 
 msgid "Particle Gun Emplacement"
-msgstr ""
+msgstr "Részecskeágyú-állás"
 
 msgid "Particle Gun"
-msgstr ""
+msgstr "Részecskeágyú"
 
 msgid "Pepperpot Pit"
 msgstr "Pepperpot aknavetőárok"
@@ -5915,7 +5919,7 @@ msgid "Produces Cyborgs"
 msgstr "Kiborgokat gyárt"
 
 msgid "Production"
-msgstr ""
+msgstr "Termelés"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "A profi és hivatásos rangú egységek védettek"
@@ -5990,10 +5994,10 @@ msgid "Radar Detector"
 msgstr "Radarérzékelő"
 
 msgid "Rail Accuracy"
-msgstr ""
+msgstr "Sínágyú pontossága"
 
 msgid "Rail Damage"
-msgstr ""
+msgstr "Sínágyú sebzése"
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
@@ -6038,7 +6042,7 @@ msgid "Rail Gun"
 msgstr "Sínágyú"
 
 msgid "Rail Reload"
-msgstr ""
+msgstr "Sínágyú újratöltése"
 
 msgid "Rail Target Prediction Computer"
 msgstr "Sínágyú-célkereső számítógép"
@@ -6072,10 +6076,10 @@ msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Üzemanyaggal és lőszerrel feltölti, valamint megjavítja a VTOL járműveket"
 
 msgid "Reinforced Base Structure Materials Buff AI Mk2"
-msgstr ""
+msgstr "Megerősített bázisépület-alapanyagok Mk2 (MI bónusza)"
 
 msgid "Reinforced Base Structure Materials Buff AI"
-msgstr ""
+msgstr "Megerősített bázisépület-alapanyagok (MI bónusza)"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Megerősített bázisépület-alapanyagok Mk2"
@@ -6217,7 +6221,7 @@ msgid "Rocket accuracy +10%"
 msgstr "+10% pontosság a rakétáknál"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "Rakéta pontossága"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Rakétás tüzérség; hozzárendelhető egy érzékelőhöz"
@@ -6239,7 +6243,7 @@ msgid "Rocket damage +25%"
 msgstr "+25% sebzés a rakétáknál"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "Rakéta sebzése"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "A rakéták észlelik és becélozzák a hajtóműveket"
@@ -6264,7 +6268,7 @@ msgid "Rocket reload time -15%"
 msgstr "-15% újratöltési idő a rakétáknál"
 
 msgid "Rocket Reload"
-msgstr ""
+msgstr "Rakéta újratöltése"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "A rakéta követi a lézeres célkijelölőt a célpontig"
@@ -6423,7 +6427,7 @@ msgid "Sensor Upgrade"
 msgstr "Érzékelőfejlesztés"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Érzékelő"
 
 msgid "Sensors Improved"
 msgstr "Érzékelők fejlesztve"
@@ -6435,7 +6439,7 @@ msgid "Seraph Missile Battery"
 msgstr "Seraph rakétaüteg"
 
 msgid "Shells detect and home to thermal heat signatures"
-msgstr "Gránátok észlelik és célként rögzítik az egyedi hőképeket"
+msgstr "A lövedékek észlelik és célként rögzítik az egyedi hőképeket"
 
 msgid "Slow moving Body"
 msgstr "Lassú mozgású karosszéria"
@@ -6609,7 +6613,7 @@ msgid "Systems Research Completed"
 msgstr "Rendszerfejlesztés befejezve"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "Tankötvözetek"
 
 msgid "Tank Killer Cyborg"
 msgstr "Kiborg Tank Killer rakéta"
@@ -6639,7 +6643,7 @@ msgid "Tank Killer"
 msgstr "Tank Killer rakéta"
 
 msgid "Tank Thermal"
-msgstr ""
+msgstr "Tankhőpajzs"
 
 msgid "Tank Traps"
 msgstr "Tankcsapdák"
@@ -6685,10 +6689,10 @@ msgid "Thermal Armor +45%"
 msgstr "+45% hőpajzs"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Hőpajzs Mk2 (MI bónusza)"
 
 msgid "Thermal Armor Buff AI"
-msgstr ""
+msgstr "Hőpajzs (MI bónusza)"
 
 msgid "Thermal Armor Mk2"
 msgstr "Hőpajzs Mk2"
@@ -6736,7 +6740,7 @@ msgid "Tower wars AI, based on NullBot"
 msgstr "Toronyharc MI, a NullBot alapján"
 
 msgid "Tower Wars Buff"
-msgstr ""
+msgstr "Toronyháború bónusza"
 
 msgid "Tracked Propulsion"
 msgstr "Lánctalpas hajtómű"
@@ -6947,7 +6951,7 @@ msgid "VTOL Assault Gun"
 msgstr "VTOL rohamlöveg"
 
 msgid "VTOL BaBa Rearming Pad"
-msgstr "VTOL újratöltő platform"
+msgstr "VTOL BaBa újratöltő platform"
 
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "Bug bunkertörő VTOL jármű"
@@ -6989,7 +6993,7 @@ msgid "VTOL Cluster Bombs Bay"
 msgstr "VTOL kazettásbomba-rekeszek"
 
 msgid "VTOL EMP Missile Launcher"
-msgstr "VTOL EMP rakétakilövő"
+msgstr "VTOL EMP-rakétavető"
 
 msgid "VTOL factory enables VTOL production"
 msgstr "A VTOL gyár lehetővé teszi a VTOL járművek gyártását"
@@ -7061,7 +7065,7 @@ msgid "VTOL Needle Gun"
 msgstr "VTOL tűvetővel"
 
 msgid "VTOL Particle Gun"
-msgstr ""
+msgstr "VTOL részecskeágyúval"
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL foszforbombaszekrény"
@@ -7088,7 +7092,7 @@ msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "VTOL újratöltő platformok szükségesek a VTOL-ok repüléséhez"
 
 msgid "VTOL Rearming"
-msgstr ""
+msgstr "VTOL újratöltés"
 
 msgid "VTOL Scourge Missile"
 msgstr "VTOL Scourge irányított rakéta"
@@ -7254,7 +7258,7 @@ msgid "Allies"
 msgstr "Szövetségesek"
 
 msgid "private to "
-msgstr "magán a "
+msgstr "privátban: "
 
 msgid " and "
 msgstr " és "
@@ -7389,7 +7393,7 @@ msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Csatlakozás közvetlenül IP/gépnév alapján nézőként"
 
 msgid "Go directly to host screen"
-msgstr "közvetlenül a fogadó képernyőre"
+msgstr "Ugrás közvetlenül a házigazdai képernyőre"
 
 msgid "Enable texture compression"
 msgstr "Textúratömörítés bekapcsolása"
@@ -7431,10 +7435,10 @@ msgid "Start host game with given settings file"
 msgstr "Játék indítása beállítófájlból"
 
 msgid "autohost"
-msgstr "autokiszolgáló"
+msgstr "automatikus kiszolgálás"
 
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr "Parancssori ablak illesztése vagy létrehozása és a kimenet megjelenítése (csak Windowson)"
+msgstr "Parancssoros ablak hozzákapcsolása vagy létrehozása, és a konzolkimenet megjelenítése (csak Windowson)"
 
 msgid "Set game server port"
 msgstr "Játékkiszolgáló portjának beállítása"
@@ -7443,22 +7447,22 @@ msgid "port"
 msgstr "port"
 
 msgid "Enable / disable port mapping when hosting"
-msgstr "Porttovábbítás játék kiszolgálása során be/ki"
+msgstr "Porttovábbítás a játék kiszolgálása során be/ki"
 
 msgid "[1, true, 0, false]"
 msgstr "[1, igaz, 0, hamis]"
 
 msgid "Enable lobby slash commands (for connecting clients)"
-msgstr "Perjeles parancsok engedélyezése (a csatlakozó játékosok számára)"
+msgstr "Váró perjeles parancsainak engedélyezése (a csatlakozó kliensek számára)"
 
 msgid "Add a lobby admin identity hash (for slash commands)"
-msgstr "Játékmesteri szeményes hash létrehozása (a perjeles parancsok használatához)"
+msgstr "Váróadminisztrátor azonosítási ujjlenyomatának létrehozása (a perjeles parancsok használatához)"
 
 msgid "hash string"
-msgstr "hash kód"
+msgstr "ujjlenyomat"
 
 msgid "Add a lobby admin public key (for slash commands)"
-msgstr "Játékmesteri publikus kulcs hozzáadása (a perjeles parancsok használatához)"
+msgstr "Váróadminisztrátor nyilvános kulcsának hozzáadása (a perjeles parancsok használatához)"
 
 msgid "b64-pub-key"
 msgstr "b64-pub-key"
@@ -7473,7 +7477,7 @@ msgid "Minimum required players to auto-start game"
 msgstr "Az automatikus játékkezdéshez szükséges játékosok száma"
 
 msgid "startplayers"
-msgstr "indulòjàtèkosok"
+msgstr "kezdőjátékosok"
 
 msgid "Game history log output mode(s)"
 msgstr "Játéknapló kimeneti módja(i)"
@@ -7518,7 +7522,7 @@ msgid "Base video URL"
 msgstr "Videók alapwebcíme"
 
 msgid "Specify connection provider type to use when hosting game sessions"
-msgstr ""
+msgstr "A játékok kiszolgálása során használt kapcsolatszolgáltató típusának megadása"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "A parancsnoknak magasabb szintre kell lépnie, hogy több egységnek parancsoljon"
@@ -7972,7 +7976,7 @@ msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "A kamera erre a csoportra fókuszálása kétszeri kattintással vagy koppintással"
 
 msgid "View and configure groups of units, which can be quickly selected and ordered."
-msgstr "Tekintse meg és állítsa be az egységek csoportjait, amelyek gyorsan kiválaszthatók és utasíthatók."
+msgstr "Gyorsan kiválasztható és utasítható egységcsoportok megtekintése és beállítása."
 
 msgid "Group buttons will glow red when units are lost (or taking lots of damage)."
 msgstr "A csoportgombok pirosan világítanak, ha az egységek elvesznek (vagy sok sebzést szenvednek)."
@@ -8079,17 +8083,17 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) erre változtatta %s játékos frakcióját: %s"
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr ""
+msgstr "MEGJEGYZÉS: Ha hamarosan nem kattint a Kész gombra, akkor ki lesz rúgva a szobából"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr ""
+msgstr "Játékos (%s) automatikus kirúgása, mert túl sokáig várt a Kész gomb megnyomásával"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "MEGJEGYZÉS: Jelölve, hogy Kész"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "MEGJEGYZÉS: Jelölve, hogy Kész, hogy elindulhasson a játék"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Át tudna adni nekem valaki néhány egységet?"
@@ -8426,19 +8430,19 @@ msgid "Error Loading Game Data"
 msgstr "Hiba a játékadatok betöltése során"
 
 msgid "Global Keys"
-msgstr ""
+msgstr "Globális gyorsbillentyűk"
 
 msgid "Other Keys"
-msgstr ""
+msgstr "Egyéb gyorsbillentyűk"
 
 msgid "Gameplay Keys"
-msgstr ""
+msgstr "Játékmenet gyorsbillentyűi"
 
 msgid "Radar Keys"
-msgstr ""
+msgstr "Radar gyorsbillentyűi"
 
 msgid "Debug Keys"
-msgstr ""
+msgstr "Hibakeresési gyorsbillentyűk"
 
 msgid "Debug (level editor)"
 msgstr "Hibakereső (pályaszerkesztő)"
@@ -8762,7 +8766,7 @@ msgid "Go to Transport"
 msgstr "Szállítóhoz"
 
 msgid "Long Range"
-msgstr "Távoli hatótáv"
+msgstr "Hosszú hatótáv"
 
 msgid "Send Global Text Message"
 msgstr "Globális szöveges üzenet küldése"
@@ -8801,7 +8805,7 @@ msgid "Retreat at Heavy Damage"
 msgstr "Visszavonulás súlyos sérüléssel"
 
 msgid "Do or Die!"
-msgstr "Csináld vagy meghalsz!"
+msgstr "Győzelem vagy halál!"
 
 msgid "Select all Combat Units"
 msgstr "Összes harci egység kiválasztása"
@@ -8814,7 +8818,7 @@ msgstr "Összes súlyosan sérült egység kiválasztása"
 
 #, no-c-format
 msgid "Select all Land Combat Units with >50% HP and no group"
-msgstr ""
+msgstr "Az összes csoporton kívüli, 50% feletti életerővel rendelkező szárazföldi harci egység kiválasztása"
 
 msgid "Select all Half-tracks"
 msgstr "Összes féllánctalpas kiválasztása"
@@ -8952,7 +8956,7 @@ msgid "Trigger some weather"
 msgstr "Időjárási esemény kiváltása"
 
 msgid "Flip terrain triangle"
-msgstr "Talaj háromszög átfordítása"
+msgstr "Talaj háromszögének átfordítása"
 
 msgid "Make a performance measurement sample"
 msgstr "Teljesítménymérési minta készítése"
@@ -8961,7 +8965,7 @@ msgid "Make all items available"
 msgstr "Összes elem elérhetővé tétele"
 
 msgid "Kill Selected Unit(s)"
-msgstr "Kijelölt egységek kivégzése"
+msgstr "Kijelölt egységek elpusztítása"
 
 msgid "Toggle god Mode Status"
 msgstr "Isten mód be/ki"
@@ -8976,7 +8980,7 @@ msgid "Reveal map at mouse position"
 msgstr "Térkép felfedése az egérpozíciónál"
 
 msgid "Trace a game object"
-msgstr ""
+msgstr "Egy játékbeli objektum nyomkövetése"
 
 msgid "Toggle fullscreen"
 msgstr "Teljes képernyő be/ki"
@@ -8998,13 +9002,13 @@ msgid "Discord: Can't Join Game"
 msgstr "Discord: nem lehet csatlakozni a játékhoz"
 
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr "Nem tudsz csatlakozni egy játékhoz, ha már egy másik játékban vagy. Kérjük mentsd el vagy lépj ki a jelenlegi játékodból, lépj ki a főmenübe és próbáld újra."
+msgstr "Nem tud csatlakozni egy játékhoz, ha már egy másik játékban van. Mentse el, vagy lépjen ki a jelenlegi játékból, lépjen ki a főmenübe és próbálja újra."
 
 msgid "Discord: Finding & Connecting to Game"
 msgstr "Discord: játék keresése és csatlakozás"
 
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr "Kísérlet a Discord meghívás által meghatározott játék megkeresésére és csatlakozásra."
+msgstr "Kísérlet a Discord-meghívás által meghatározott játék megkeresésére és a csatlakozásra."
 
 msgid "This may take a moment..."
 msgstr "Ez eltarthat egy ideig…"
@@ -9019,7 +9023,7 @@ msgid "Failed to Find Game"
 msgstr "A játék nem található"
 
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr "Nem sikerült csatlakozni a játékhoz a megadott meghívóhivatkozással, a következő hiba történt:"
+msgstr "Nem sikerült csatlakozni a játékhoz a megadott meghívási hivatkozással, a következő hiba történt:"
 
 msgid "Failed to Join Game"
 msgstr "Nem sikerült csatlakozni a játékhoz"
@@ -9177,7 +9181,7 @@ msgid "Lets us see what you see!"
 msgstr "Mondja el, hogy mit lát!"
 
 msgid "Fine, weapon & sensor display is off!"
-msgstr ""
+msgstr "Rendben, a fegyver és érzékelő kijelzése kikapcsolva!"
 
 msgid "View Aligned to South"
 msgstr "Délre állított nézet"
@@ -9212,7 +9216,7 @@ msgid "Taking things easy!"
 msgstr "Csak könnyedén!"
 
 msgid "Back to normality!"
-msgstr "Térj vissza a szabályokhoz!"
+msgstr "Vissza a szabályokhoz!"
 
 msgid "Getting tricky!"
 msgstr "Trükkös dolog!"
@@ -9284,7 +9288,7 @@ msgstr "Északra állított nézet"
 
 #, c-format
 msgid "Trap cursor %s"
-msgstr "Rögzített kurzor %s"
+msgstr "Kurzor rögzítése: %s"
 
 msgid "CAMPAIGN"
 msgstr "KÜLDETÉS"
@@ -9317,7 +9321,7 @@ msgid "CHEATS: DISABLED"
 msgstr "CSALÁSOK: LETILTVA"
 
 msgid "Researched EVERYTHING for you!"
-msgstr "Mindent vizsgált!"
+msgstr "MINDENT kifejlesztett Önnek!"
 
 msgid "Selected buildings instantly recharged!"
 msgstr "A kiválasztott épületek azonnal feltöltve!"
@@ -9333,10 +9337,10 @@ msgid "Only displaying energy bars when selected"
 msgstr "Az energiaszintek megjelenítése csak kijelölés esetén"
 
 msgid "Always displaying energy bars for units"
-msgstr "Mindig mutassa az energia szintet az egységeknél"
+msgstr "Energiaszint megjelenítése mindig az egységeknél"
 
 msgid "Always displaying energy bars for units and structures"
-msgstr "Mindig mutassa az energia szintet az egységeknél és az épületeknél"
+msgstr "Energiaszint megjelenítése mindig az egységeknél és az épületeknél"
 
 msgid "Debug menu is Open"
 msgstr "A hibakeresési menü nyitva van"
@@ -9348,7 +9352,7 @@ msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Oh, az időjárás kint rémisztő... HÓ"
 
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Énekelek az esőben, Én énekelek az esőben... ESŐ"
+msgstr "Énekelek az esőben, énekelek az esőben... ESŐ"
 
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Előrejelzés: tiszta idő minden területen… NINCS IDŐJÁRÁS-VÁLTOZÁS"
@@ -9466,13 +9470,13 @@ msgid "AutoSave %s failed"
 msgstr "A(z) „%s” automatikus mentés sikertelen"
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "Automatikus mentés…"
 
 msgid "Could not save game!"
 msgstr "Nem lehet menteni a játékot!"
 
 msgid "Failed to load level data or map. Exiting to main menu."
-msgstr ""
+msgstr "A pályaadatok vagy a térkép betöltése sikertelen. Kilépés a főmenübe."
 
 msgid "Load Transport"
 msgstr "A szállító betöltése"
@@ -9549,7 +9553,7 @@ msgstr "%s szövetséget köt vele: %s"
 
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr "Felkutatott egy tervrajzot %s -nak"
+msgstr "Felfedezte ennek a tervrajzát: %s"
 
 msgid "Super Easy"
 msgstr "Szuperkönnyű"
@@ -9586,10 +9590,10 @@ msgid "Select Player Name"
 msgstr "Játékos nevének kiválasztása"
 
 msgid "Player Name changes are not allowed when you are muted"
-msgstr ""
+msgstr "A játékosnév megváltozástatása nem engedélyezett, ha le van némítva"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "A játékosnév-változásokat nem engedélyezte a házigazda"
 
 msgid "Blind Game:"
 msgstr "Vak játék:"
@@ -9613,19 +9617,19 @@ msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
 
 msgid "Starts disadvantaged"
-msgstr "Kezdés hátrányokkal"
+msgstr "Hátrányokkal kezd"
 
 msgid "Plays nice"
-msgstr "Kedvelt játékosok"
+msgstr "Tisztán játszik"
 
 msgid "No holds barred"
-msgstr "Nincs fedetlen hatalom"
+msgstr "Nem fogja vissza magát"
 
 msgid "Starts with advantages"
-msgstr "Kezdés előnyökkel"
+msgstr "Előnyökkel kezd"
 
 msgid "CHOOSE AI"
-msgstr "MI kválasztása"
+msgstr "MI kiválasztása"
 
 msgid "Allow human players to join in this slot"
 msgstr "Emberi játékosok kapcsolódásának engedélyezése erre a helyre"
@@ -9775,7 +9779,7 @@ msgid "Lock Teams"
 msgstr "Csapatok zárolása"
 
 msgid "Lock Position"
-msgstr ""
+msgstr "Pozíció zárolása"
 
 msgid "For Spectator:"
 msgstr "Nézőnek:"
@@ -9862,13 +9866,13 @@ msgid "Disconnected from host:"
 msgstr "Megszakadt a kapcsolat a kiszolgálóval:"
 
 msgid "Unable to handle host redirect"
-msgstr ""
+msgstr "A kiszolgáló átirányítása nem kezelhető"
 
 msgid "Unable to process redirect"
-msgstr ""
+msgstr "Az átirányítás nem dolgozható fel"
 
 msgid "Unable to process repeated or invalid redirects"
-msgstr ""
+msgstr "Az ismételt vagy érvénytelen átirányítások nem dolgozhatók fel"
 
 msgid "Host supplied invalid options"
 msgstr "A kiszolgáló érvénytelen beállításokat adott meg"
@@ -9904,7 +9908,7 @@ msgid "Hit the ready box to begin your challenge!"
 msgstr "Kattintson a kész jelölőmezőre, és kezdődhet a kihívás!"
 
 msgid "Press the start hosting button to begin hosting a game."
-msgstr "Nyomd meg a távoli start gombot a távoli játék indításához "
+msgstr "A kezdéshez nyomja meg a játék indítása gombot."
 
 msgid "Port mapping creation is in progress..."
 msgstr "A porttovábbítás létrehozása folyamatban…"
@@ -10052,7 +10056,7 @@ msgid "Score"
 msgstr "Pontszám"
 
 msgid "Kills"
-msgstr "Elestek"
+msgstr "Kilőve"
 
 msgid "Units"
 msgstr "Egységek"
@@ -10116,7 +10120,7 @@ msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Figyelem, ez egy térképmod, meg tudja változtatni a normális játékot."
 
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr "Figyelem, a HÁZIGAZDA megváltoztatta a játék kódját, és nem megbízhetó!"
+msgstr "Figyelem, a HÁZIGAZDA megváltoztatta a játék kódját, és nem megbízható!"
 
 msgid "The host has enabled free chat for everyone."
 msgstr "A házigazda mindenkinél engedélyezte a szabad csevegést."
@@ -10130,7 +10134,7 @@ msgstr "A házigazda engedélyezte a szabad csevegést a következő játékosn�
 
 #, c-format
 msgid "The host has enabled free chat for %d players"
-msgstr ""
+msgstr "A házigazda %d játékosnál engedélyezte a szabad csevegést"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
@@ -10138,14 +10142,14 @@ msgstr "A házigazda némította a szabad csevegést a következő játékosnál
 
 #, c-format
 msgid "The host has muted free chat for %d players"
-msgstr ""
+msgstr "A házigazda %d játékosnál némította a szabad csevegést"
 
 msgid "Limits set to default."
-msgstr ""
+msgstr "A korlátok alaphelyzetbe lettek állítva."
 
 #, c-format
 msgid "Changed structure limits [%u]:"
-msgstr ""
+msgstr "Épületkorlátok megváltoztatva [%u]:"
 
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
@@ -10474,7 +10478,7 @@ msgid "Toggle Sidebar"
 msgstr "Oldalsáv be/ki"
 
 msgid "Disable Topic Pop-ups"
-msgstr ""
+msgstr "Témák felugró ablakainak letiltása"
 
 msgid "Close Help Mode"
 msgstr "Súgó mód bezárása"
@@ -10834,7 +10838,7 @@ msgid "Classic"
 msgstr "Klasszikus"
 
 msgid "Remastered (HQ)"
-msgstr ""
+msgstr "Felújított (HQ)"
 
 msgid "Additional Campaigns"
 msgstr "További küldetések"
@@ -10872,22 +10876,22 @@ msgid "Compatible %s"
 msgstr "Kompatibilis %s"
 
 msgid "Timer Power Bonus"
-msgstr ""
+msgstr "Időalapú energiabónusz"
 
 msgid "Grant power based on the remaining level timer, so there's no need to wait out the clock."
-msgstr ""
+msgstr "A hátralévő idő alapján engergiát ad, így nem kell kivárni az órát."
 
 msgid "Classic Timers"
 msgstr "Klasszikus időzítők"
 
 msgid "Alter / disable timers on specific levels, like the original release. (Allows power-cheating.)"
-msgstr ""
+msgstr "Egyes szintek időzítőinek módosítása/letiltása, az eredeti kiadáshoz hasonlóan. (Így több energiát lehet felhalmozni.)"
 
 msgid "40 Unit Limit"
 msgstr "40 egységes korlát"
 
 msgid "Lower the player's unit limit to 40, matching the original PS1 release."
-msgstr ""
+msgstr "A játékos egységszámának 40-re korlátozása, a PS1-es kiadásnak megfelelően."
 
 msgid "Autosaves-Only"
 msgstr "Csak automatikus mentések"
@@ -10902,52 +10906,52 @@ msgid "Reduces the damage the enemy deals to a third of the current difficulty m
 msgstr "Az ellenség sebzését a jelenlegi nehézségi módosító harmadára csökkenti."
 
 msgid "Infinite Time"
-msgstr ""
+msgstr "Végtelen idő"
 
 msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
-msgstr ""
+msgstr "A küldetéseknek nincs határideje, ha ez lehetséges (engedélyezéskor az időalapú engergiabónuszt egy kisebb energiabónusz váltja)."
 
 msgid "Victory Hints"
-msgstr ""
+msgstr "Győzelmi tippek"
 
 msgid "Displays a console message every few minutes showing victory related information."
-msgstr ""
+msgstr "Konzolüzeneteket jelenít meg néhány percenként a győzelemmel kapcsolatos információkkal."
 
 msgid "Finale Fun"
-msgstr ""
+msgstr "Szórakoztató finálé"
 
 msgid "Activate Final Gamma mission bonus content."
-msgstr ""
+msgstr "A végső Gamma küldetés bónusz tartalmának aktiválása."
 
 msgid "Gamma Bonus"
-msgstr ""
+msgstr "Gamma bónusz"
 
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
-msgstr ""
+msgstr "További Gamma küldetés, az eredeti fejlesztőcsapat által készített térkép használatával (a térképet frissítette: DARwins)."
 
 msgid "Insane Spawns"
-msgstr ""
+msgstr "Őrült felbukkanó egységek"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
-msgstr ""
+msgstr "További ellenséges felbukkanó egységeket és viselkedéseket engedélyez Őrült (vagy magasabb) nehézségi szinten."
 
 msgid "Non-Insane Spawns"
-msgstr ""
+msgstr "Nem őrült felbukkanó egységek"
 
 msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr ""
+msgstr "Az „Őrült felbukkanó egységek” beállítást Néhéz és az alatti szinten is bekapcsolja."
 
 msgid "Fast EXP gain"
-msgstr ""
+msgstr "Gyors tapasztalatszerzés"
 
 msgid "Increases unit experience point gain by 2x."
 msgstr "Megduplázza az egység tapasztalatipont-szerzését."
 
 msgid "Tower Wars"
-msgstr ""
+msgstr "Toronyháború"
 
 msgid "Player gets significantly stronger structures."
-msgstr ""
+msgstr "A játékos jelentősen erősebb épületeket kap."
 
 msgid "Unsupported"
 msgstr "Nem támogatott"
@@ -11001,10 +11005,10 @@ msgid "MUSIC MANAGER"
 msgstr "ZENEKEZELŐ"
 
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "A HRTF nem támogatott az eszközön / rendszeren / OpenAL programkönyvtárban"
+msgstr "A HRTF nem támogatott az eszközön/rendszeren/OpenAL programkönyvtárban"
 
 msgid "Volume"
-msgstr ""
+msgstr "Mennyiség"
 
 msgid "Voice Volume"
 msgstr "Beszédhang"
@@ -11016,13 +11020,13 @@ msgid "Music Volume"
 msgstr "Zene hangereje"
 
 msgid "Output"
-msgstr ""
+msgstr "Kimenet"
 
 msgid "HRTF"
 msgstr "HRTF"
 
 msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
-msgstr ""
+msgstr "A HRTF fejhallgatóval vagy egyes sztereó kimenetekkel használva javíthatja a térhatású hangzást."
 
 msgid "Disabled"
 msgstr "Kikapcsolva"
@@ -11043,34 +11047,34 @@ msgid "On"
 msgstr "Be"
 
 msgid "Music"
-msgstr ""
+msgstr "Zene"
 
 msgid "Music Manager"
 msgstr "Zenekezelő"
 
 msgid "Open Music Manager"
-msgstr ""
+msgstr "Zenekezelő megnyitása"
 
 msgid "Audio Cues"
-msgstr ""
+msgstr "Hangjelzések"
 
 msgid "Group Reporting"
-msgstr ""
+msgstr "Csoportjelentések"
 
 msgid "Mouse"
-msgstr ""
+msgstr "Egér"
 
 msgid "Right-Click Orders"
-msgstr ""
+msgstr "Jobb kattintásos parancsok"
 
 msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
-msgstr ""
+msgstr "Alapértelmezés szerint a Warzone 2100 bal kattintást használ a kiválasztáshoz és a parancsokhoz/célzáshoz. Ha a modern RTS-ekben megszokott egérbevitelt kedveli, kapcsolja be. Ha érintőtáblát vagy érintéses bevitelt használ, akkor lehet, hogy inkább kapcsolja ki."
 
 msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
-msgstr ""
+msgstr "Bal kattintás használata a kiválasztáshoz és a parancsokhoz/célzáshoz. (A klasszikus Warzone 2100 alapértelmezése.)"
 
 msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
-msgstr ""
+msgstr "Egységek utasítása jobb egérgombbal. Egységes kiválasztása bal egérgombbal. (Megegyezik a legtöbb ismert RTS-játék alapértelmezésével.)"
 
 msgid "Trap Cursor"
 msgstr "Kurzor rögzítése"
@@ -11082,52 +11086,52 @@ msgid "Cursor Size"
 msgstr "Kurzorméret"
 
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 msgid "Camera Speed"
 msgstr "Kamera sebessége"
 
 msgid "Camera Starting Zoom"
-msgstr ""
+msgstr "Kamera kezdeti nagyítási szintje"
 
 msgid "Camera Zoom Rate"
-msgstr ""
+msgstr "Kamera nagyítási sebessége"
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "Forgatás egérrel"
 
 msgid "Reverse Rotation"
 msgstr "Fordított forgatás"
 
 msgid "Mouse Pan"
-msgstr ""
+msgstr "Pásztázás egérrel"
 
 msgid "Edge Scrolling"
-msgstr ""
+msgstr "Görgetés a szélén"
 
 msgid "Reset"
-msgstr ""
+msgstr "Visszaállítás"
 
 msgid "Reset Keys to:"
-msgstr ""
+msgstr "Billentyűk visszaállítása erre:"
 
 msgid "(Select Profile)"
-msgstr ""
+msgstr "(Profil kiválasztása)"
 
 msgid "Reset Keys to: Defaults"
-msgstr ""
+msgstr "Billentyűk visszaállítása erre: Alapértelmezett"
 
 msgid "Unit Color"
-msgstr ""
+msgstr "Egységek színe"
 
 msgid "Difficulty Level"
-msgstr ""
+msgstr "Nehézségi szint"
 
 msgid "Default AI"
-msgstr ""
+msgstr "Alapértelmezett MI"
 
 msgid "Hosting Options"
-msgstr ""
+msgstr "Kiszolgálóbeállítások"
 
 msgid "Port Mapping"
 msgstr "Porttovábbítás"
@@ -11181,37 +11185,37 @@ msgid "%s hours"
 msgstr "%s óra"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "A domborzat árnyalási minősége csak a Felújított (HQ) domborzati megjelenés esetén van érvényben"
 
 msgid "Shadows are not enabled."
-msgstr ""
+msgstr "Az árnyékok nincsenek engedélyezve."
 
 msgid "Shadow mapping not available on this system."
 msgstr "Az árnyékleképezés nem érhető el ezen a rendszeren."
 
 msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "A speciális megvilágítás csak a Felújított (HQ) domborzati megjelenés esetén érhető el"
 
 msgid "Terrain"
-msgstr ""
+msgstr "Domborzat"
 
 msgid "Terrain Appearance"
-msgstr ""
+msgstr "Domborzat megjelenése"
 
 msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
-msgstr ""
+msgstr "A klasszikus domborzati megjelenés az eredeti kiadásból. Alacsony felbontású, pixeles textúrák."
 
 msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
-msgstr ""
+msgstr "A több mint egy évtizede alapértelmezettként használt dombozati megjelenés. Magasabb felbontás, újragyártott textúrák."
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr ""
+msgstr "A felújított, kiváló minőségű domborzati megjelenés. Nagy felbontású, modern domborzati és tükröződési leképezésekkel. Több memóriát és jobb GPU-t igényel."
 
 msgid "Terrain Shading Quality"
-msgstr ""
+msgstr "Domborzati árnyalás minősége"
 
 msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
-msgstr ""
+msgstr "A domborzati árnyalás minősége (normáltérképek, tükröződő fény, stb.). A magasabb értékek javítják a domborzat részleteit, a teljesítmény és a memóriahasználat kárára."
 
 msgid "Medium Quality"
 msgstr "Közepes minőség"
@@ -11223,13 +11227,13 @@ msgid "Shadows"
 msgstr "Árnyékok"
 
 msgid "Draw Shadows"
-msgstr ""
+msgstr "Rajzolt árnyékok"
 
 msgid "Shadow Resolution"
 msgstr "Árnyékok felbontása"
 
 msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
-msgstr ""
+msgstr "Az árnyéktérképek megjelenítéséhez használt belső felbontás. A magasabb értékek javítják az árnyékok megjelenését, a teljesítmény és a memóriahasználat kárára."
 
 msgid "High"
 msgstr "Magas"
@@ -11238,7 +11242,7 @@ msgid "Shadow Filtering"
 msgstr "Árnyékszűrés"
 
 msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
-msgstr ""
+msgstr "Mennyi szűrés/simítás legyen alkalmazva az árnyékok megjelenésére. A magasabb beállítások simább árnyékokat eredményeznek, a teljesítmény kárára."
 
 msgid "Low"
 msgstr "Alacsony"
@@ -11247,25 +11251,25 @@ msgid "Ultra"
 msgstr "Ultra"
 
 msgid "Lighting"
-msgstr ""
+msgstr "Megvilágítás"
 
 msgid "Point Lights"
-msgstr ""
+msgstr "Pontszerű fényforrások"
 
 msgid "Lightmap"
-msgstr ""
+msgstr "Fénytérkép"
 
 msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
-msgstr ""
+msgstr "Klasszikus fénytérkép használata a fényforrások objektumokra és csempékre való hatásának kiszámításához. (Klasszikus és normál mód alapértelmezése. Leggyorsabb teljesítmény.)"
 
 msgid "Per-Pixel (HQ)"
-msgstr ""
+msgstr "Képpontonkénti (HQ)"
 
 msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
-msgstr ""
+msgstr "Speciális képpontonkénti megvilágítás használata a jobb vizualitás érdekében. (Hatással lehet a teljesítményre. Erősebb GPU-t igényel.)"
 
 msgid "Effects"
-msgstr ""
+msgstr "Hatások"
 
 msgid "Fog"
 msgstr "Köd"
@@ -11274,13 +11278,13 @@ msgid "Screen Shake"
 msgstr "Képernyő rázása"
 
 msgid "Textures"
-msgstr ""
+msgstr "Textúrák"
 
 msgid "Texture Size Limit"
-msgstr ""
+msgstr "Textúrák méretkorlátja"
 
 msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
-msgstr ""
+msgstr "A beállított korlátnál nagyobb textúrák minősége le lesz rontva. Hacsak nem korlátozott memóriával rendelkező rendszeren futtatja, ezt általában a maximális értékre kell beállítani."
 
 msgid "LOD Distance"
 msgstr "LOD távolsága"
@@ -11292,28 +11296,28 @@ msgid "Default"
 msgstr "Alapértelmezett"
 
 msgid "The system default (no supplied bias, may result in less sharp visuals)."
-msgstr ""
+msgstr "A rendszer alapértelmezése (nincs megadva tényező, kevésbé éles képet eredményezhet)."
 
 msgid "Use LOD Distance bias to increase visual sharpness."
-msgstr ""
+msgstr "LOD távolsági tényező használata a vizuális élesség növeléséhez."
 
 msgid "Advanced"
-msgstr ""
+msgstr "Speciális"
 
 msgid "Graphics Backend"
-msgstr ""
+msgstr "Grafikus háttérrendszer"
 
 msgid "Antialiasing"
-msgstr ""
+msgstr "Élsimítás"
 
 msgid "Vertical Sync"
-msgstr ""
+msgstr "Függőleges szinkronizáció"
 
 msgid "Adaptive"
 msgstr "AdaptÍv"
 
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 msgid "Language"
 msgstr "Nyelv"
@@ -11322,13 +11326,13 @@ msgid "Display Scale"
 msgstr "Skála megjelenítése"
 
 msgid "Game UI"
-msgstr ""
+msgstr "Játékfelület"
 
 msgid "Show FPS"
-msgstr ""
+msgstr "Képkockaszám megjelenítése"
 
 msgid "Show Unit Counts"
-msgstr ""
+msgstr "Egységszámok megjelenítése"
 
 msgid "Groups Menu"
 msgstr "Csoportok menü"
@@ -11343,7 +11347,7 @@ msgid "Radar"
 msgstr "Radar"
 
 msgid "Radar Orientation"
-msgstr ""
+msgstr "Radar tájolása"
 
 msgid "Fixed"
 msgstr "Rögzítve"
@@ -11367,7 +11371,7 @@ msgid "Video Playback"
 msgstr "Videólejátszás"
 
 msgid "Video Size"
-msgstr ""
+msgstr "Videó mérete"
 
 msgid "1×"
 msgstr "1×"
@@ -11391,47 +11395,47 @@ msgid "Failed to open configuration directory in system default file browser."
 msgstr "Nem sikerült megnyitni a beállítási könyvtárat a rendszer alapértelmezett fájlkezelőjében."
 
 msgid "Configuration directory is reported as:"
-msgstr "A beállítókönyvtár jelentve itt:"
+msgstr "A beállítókönyvtár jelentett helye:"
 
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
 msgstr "Ha egy virtuális konténerben vagy leválasztott környezetben fut, ez különbözhet a valódi elérési útvonaltól a lemezen."
 
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Kérjük, tekintsd meg a dokumentációt több információért a manuális megkereséséhez."
+msgstr "A kézi megkeresés további információiért lásd a dokumentációt."
 
 msgid "Failed to open configuration directory"
 msgstr "Beállítási könyvtár megnyitása sikertelen"
 
 msgid "Interface"
-msgstr ""
+msgstr "Felület"
 
 msgid "Defaults"
-msgstr ""
+msgstr "Alapértelmezések"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
 msgid "Audio"
-msgstr ""
+msgstr "Hang"
 
 msgid "Controls"
-msgstr ""
+msgstr "Irányítás"
 
 msgid "Window"
-msgstr ""
+msgstr "Ablak"
 
 msgid ""
 "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr ""
-"Asztali teljes képernyős módban a felbontás megegyezik az asztalod felbontásával\n"
-"(vagy azzal, amit az ablakkezelőd megenged)."
+"Asztali teljes képernyős módban a felbontás megegyezik az asztal felbontásával\n"
+"(vagy azzal, amit az ablakkezelő megenged)."
 
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Az ablak normál átméretezésével megváltoztathatja a felbontást. (Húzza el a sarkot / peremet.)"
+msgstr "Az ablak normál átméretezésével megváltoztathatja a felbontást. (Húzza el az ablak sarkát vagy szélét.)"
 
 msgid "Window Mode"
-msgstr ""
+msgstr "Ablakos mód"
 
 msgid "Windowed"
 msgstr "Ablakos"
@@ -11443,10 +11447,10 @@ msgid "Resolution"
 msgstr "Felbontás"
 
 msgid "Behaviors"
-msgstr ""
+msgstr "Viselkedések"
 
 msgid "Minimize on Focus Loss"
-msgstr ""
+msgstr "Kis méret fókuszvesztéskor"
 
 msgid "Whether the window should auto-minimize on focus loss"
 msgstr "Az ablak automatikus kicsinyítése a fókusz elvesztésekor"
@@ -11525,94 +11529,94 @@ msgid "not ready"
 msgstr "nincs kész"
 
 msgid "Waiting Room"
-msgstr ""
+msgstr "Várószoba"
 
 msgid "FFA"
-msgstr ""
+msgstr "Mindenki mindenki ellen"
 
 msgid "Alliances Allowed"
-msgstr ""
+msgstr "Szövetségek engedélyezve"
 
 msgid "Teams"
-msgstr ""
+msgstr "Csapatok"
 
 msgid "Teams (No Shared Res)"
-msgstr ""
+msgstr "Csapatok (közös erőforrások nélkül)"
 
 msgid "Matchmaking"
-msgstr ""
+msgstr "Játszmakeresés"
 
 msgid "Blind Lobby"
-msgstr ""
+msgstr "Vak váró"
 
 msgid "Blind Game"
-msgstr ""
+msgstr "Vak játék"
 
 msgid "No Tanks"
-msgstr ""
+msgstr "Nincsenek tankok"
 
 msgid "No VTOL"
-msgstr ""
+msgstr "Nincsenek VTO járművek"
 
 msgid "No Cyborgs"
 msgstr "Nincsenek kiborgok"
 
 msgid "Spectate Game"
-msgstr ""
+msgstr "Játék nézése"
 
 msgid "There appears to be a game update available!"
 msgstr "Úgy néz ki, hogy játékfrissítés érhető el!"
 
 msgid "Failed to connect to lobby server"
-msgstr ""
+msgstr "Nem sikerült kapcsolódni a várókiszolgálóhoz"
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "A Warzone verziója nem kompatibilis ezzel a játékkal."
 
 #, c-format
 msgid "Host Version: %s"
-msgstr ""
+msgstr "Kiszolgáló verziója: %s"
 
 msgid "(50+ omitted)"
-msgstr ""
+msgstr "(50+ kihagyva)"
 
 #, c-format
 msgid "(%u omitted)"
-msgstr ""
+msgstr "(%u kihagyva)"
 
 msgid "No games for your version"
-msgstr ""
+msgstr "Nem található a verziójának megfelelő játék"
 
 msgid "No games matching filters"
-msgstr ""
+msgstr "Nem található a szűrőnek megfelelő játék"
 
 #, c-format
 msgid "%d players queued"
-msgstr ""
+msgstr "%d játékos várakozik"
 
 msgid "Matchmaking Room: Open"
-msgstr ""
+msgstr "Játszmakeresési szoba: Nyitva"
 
 msgid "Filters"
-msgstr ""
+msgstr "Szűrők"
 
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 msgid "Details"
-msgstr ""
+msgstr "Részletek"
 
 msgid "Mods"
-msgstr ""
+msgstr "Modok"
 
 msgid "Hide Incompatible Games"
-msgstr ""
+msgstr "Nem kompatibilis játékok elrejtése"
 
 msgid "Hide Empty Games"
-msgstr ""
+msgstr "Üres játékok elrejtése"
 
 msgid "Hide Modded Games"
-msgstr ""
+msgstr "Modolt játékok elrejtése"
 
 #, c-format
 msgid "Sending Map: %u%% "
@@ -11683,31 +11687,31 @@ msgid "Structure Limits Enforced."
 msgstr "Épületkorlátok betartatva."
 
 msgid "Challenge:"
-msgstr ""
+msgstr "Kihívás:"
 
 msgid "Skirmish:"
-msgstr ""
+msgstr "Csatározás:"
 
 msgid "Local (Offline)"
-msgstr ""
+msgstr "Helyi (offline)"
 
 msgid "Hosting:"
-msgstr ""
+msgstr "Kiszolgálás:"
 
 msgid "Password-Protected (Private)"
-msgstr ""
+msgstr "Jelszóval védett (privát)"
 
 msgid "Open (Public)"
-msgstr ""
+msgstr "Nyilvános"
 
 msgid "Connected to Host:"
-msgstr ""
+msgstr "Kapcsolódva a kiszolgálóhoz:"
 
 msgid "Set Password"
-msgstr ""
+msgstr "Jelszó beállítása"
 
 msgid "Require Password to Join"
-msgstr ""
+msgstr "Jelszó kérése a csatlakozáshoz"
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
@@ -11720,13 +11724,13 @@ msgid "Game Name Updated."
 msgstr "Játéknév frissítve."
 
 msgid "Set Game Name"
-msgstr ""
+msgstr "Játéknév beállítása"
 
 msgid "One-Player Skirmish"
 msgstr "Egyjátékos csata"
 
 msgid "Edit Game Name"
-msgstr ""
+msgstr "Játéknév szerkesztése"
 
 msgid "Game Name"
 msgstr "Játéknév"
@@ -11742,7 +11746,7 @@ msgstr ""
 "A játékosok szavazataikkal blokkolhatják"
 
 msgid "Match Options"
-msgstr ""
+msgstr "Játszmabeállítások"
 
 msgid "Base"
 msgstr "Bázis"
@@ -11763,76 +11767,76 @@ msgid "Technology Level 4"
 msgstr "4. technológiai szint"
 
 msgid "Limits"
-msgstr ""
+msgstr "Korlátok"
 
 msgid "Randomize Options"
-msgstr ""
+msgstr "Véletlenszerű beállítások"
 
 msgid "Match Option Preferences:"
-msgstr ""
+msgstr "Játszmabeállítás tulajdonságai:"
 
 msgid "Star All"
-msgstr ""
+msgstr "Összes csillagozása"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Összes törlése"
 
 msgid "Show Player Preferences"
-msgstr ""
+msgstr "Játékosbeállítások megjelenítése"
 
 msgid "Hide Player Preferences"
-msgstr ""
+msgstr "Játékosbeállítások elrejtése"
 
 msgid "Not editable while in a game."
-msgstr ""
+msgstr "Játék közben nem szerkeszthető."
 
 msgid "Not editable while in a multiplayer game."
-msgstr ""
+msgstr "Többjátékos játék közben nem szerkeszthető."
 
 msgid "Takes effect on game restart"
-msgstr ""
+msgstr "A játék újraindításakor lép életbe"
 
 msgid "Advanced Hosting Options:"
-msgstr ""
+msgstr "Speciális kiszolgálóbeállítások:"
 
 msgid "Host Role"
-msgstr ""
+msgstr "Házigazda szerepe"
 
 msgid "Player Host"
-msgstr ""
+msgstr "Játékos"
 
 msgid "Host is a player in the game (the default)."
-msgstr ""
+msgstr "A házigazda az egyik játékos (alapértelmezett)."
 
 msgid "Spectator Host"
-msgstr ""
+msgstr "Néző"
 
 msgid "Host is a spectator in the game."
-msgstr ""
+msgstr "A házigazda néző a játékban."
 
 msgid "Blind Mode"
-msgstr ""
+msgstr "Vak mód"
 
 msgid "Whether and when players are blinded to other players' identities."
-msgstr ""
+msgstr "Rejtett-e a játékosok elől a többi játékos személyazonossága."
 
 msgid "Blind modes are only available when host is a Spectator Host."
-msgstr ""
+msgstr "A vak módok csak akkor érhetőek el, ha a házigazda néző."
 
 msgid "Players' identities are visible, in lobby and in game (the default)."
-msgstr ""
+msgstr "A játékosok személyazonossága látható a váróban és a játékban is (alapértelmezett)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
+msgstr "A játékosok személyazonossága a játék kezdetéig rejtve van (kivéve a házigazda számára)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
-msgstr ""
+msgstr "A játékosok személyazonossága a játék végéig rejtve van (kivéve a házigazda számára)."
 
 msgid "Start Hosting"
-msgstr ""
+msgstr "Játék indítása"
 
 msgid "Configure Advanced Hosting Options"
-msgstr ""
+msgstr "Speciális kiszolgálóbeállítások megadása"
 
 msgid "Launch Transport"
 msgstr "Szállító indítása"
