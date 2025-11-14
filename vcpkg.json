@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "5300a2a461a53b76405db4fcbe6aeb0eea43935d",
+	"builtin-baseline": "d1ff36c6520ee43f1a656c03cd6425c2974a449e",
 	"dependencies": [
 		"physfs",
 		"sdl3",
@@ -88,7 +88,8 @@
 	],
 	"overrides": [
 		{ "name": "openal-soft", "version": "1.24.3" },
-		{ "name": "sqlite3", "version": "3.49.2" }
+		{ "name": "sqlite3", "version": "3.49.2" },
+		{ "name": "abseil", "version": "20250127.1", "port-version": 4}
 	],
 	"default-features": [
 		"vulkan"
