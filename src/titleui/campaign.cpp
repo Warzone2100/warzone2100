@@ -1585,15 +1585,15 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 
 	results.emplace_back(
 		"insanePlus",
-		_("Insane Spawns"),
+		_("Additional Spawns (Insane difficulty)"),
 		_("Enables additional enemy spawns and behavior for Insane difficulty (or higher)."),
 		true, true
 	);
 
 	results.emplace_back(
 		"insanePlusLowDiff",
-		_("Non-Insane Spawns"),
-		_("Toggles tweak option Insane Spawns for Hard difficulty and below."),
+		_("Additional Spawns (Lower difficulties than Insane)"),
+		_("Enables additional enemy spawns and behavior for Hard difficulty or lower."),
 		false, true
 	);
 
