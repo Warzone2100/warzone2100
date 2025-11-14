@@ -4,38 +4,60 @@ function setupBase(player)	// inside hackNetOff()
 	{
 		setPower(1300, player);
 		completeResearchOnTime(cleanTech, player);
-		// Keep only some structures for insane AI
-		var structs = enumStruct(player);
-		for (let i = 0; i < structs.length; ++i)
-		{
-			var s = structs[i];
-			if (playerData[player].difficulty !== INSANE
-				|| (s.stattype !== WALL && s.stattype !== DEFENSE && s.stattype !== GATE
-					&& s.stattype !== RESOURCE_EXTRACTOR))
-			{
-				removeObject(s, false);
-			}
-		}
+		removeStructs(player);
 	}
 	else if (baseType === CAMP_BASE)
 	{
 		setPower(2500, player);
 		completeResearchOnTime(timeBaseTech, player);
-		// Keep only some structures
-		var structs = enumStruct(player);
-		for (let i = 0; i < structs.length; ++i)
-		{
-			var s = structs[i];
-			if ((playerData[player].difficulty !== INSANE && (s.stattype === WALL || s.stattype === DEFENSE))
-				|| s.stattype === GATE || s.stattype === CYBORG_FACTORY || s.stattype === COMMAND_CONTROL)
-			{
-				removeObject(s, false);
-			}
-		}
+		removeStructs(player);
 	}
 	else // CAMP_WALLS
 	{
 		setPower(2500, player);
 		completeResearchOnTime(timeAdvancedBaseTech, player);
+	}
+}
+
+function removeStructs(player)
+{
+	for (const structure of enumStruct(player))
+	{
+		if (shouldRemove(structure, player))
+		{
+			removeObject(structure);
+		}
+	}
+}
+
+function shouldRemove(structure, player)
+{
+	if (baseType === CAMP_CLEAN && playerData[player].difficulty !== INSANE)
+	{
+		return true; // remove everything
+	}
+	if (baseType === CAMP_CLEAN && playerData[player].difficulty === INSANE)
+	{
+		return structure.stattype !== WALL
+			&& structure.stattype !== DEFENSE
+			&& structure.stattype !== GATE
+			&& structure.stattype !== RESOURCE_EXTRACTOR;
+	}
+	else if (baseType === CAMP_BASE && playerData[player].difficulty !== INSANE)
+	{
+		return structure.stattype === WALL
+			|| structure.stattype === DEFENSE
+			|| structure.stattype === GATE
+			|| structure.stattype === CYBORG_FACTORY
+			|| structure.stattype === COMMAND_CONTROL;
+	}
+	else if (baseType === CAMP_BASE && playerData[player].difficulty === INSANE)
+	{
+		return structure.stattype === CYBORG_FACTORY
+			|| structure.stattype === COMMAND_CONTROL;
+	}
+	else
+	{
+		return false; // don't remove anything
 	}
 }
