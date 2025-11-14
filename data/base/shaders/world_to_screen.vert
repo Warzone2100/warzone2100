@@ -2,16 +2,27 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-in vec2 vertexPos;
-#else
-attribute vec2 vertexPos;
+#define NEWGL
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-out vec2 texCoords;
+uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
+uniform vec4 cameraPos; // in model space
+uniform vec4 sunPos;
+uniform int viewportWidth;
+uniform int viewportHeight;
+
+#ifdef NEWGL
+#define VERTEX_INPUT in
+#define VERTEX_OUTPUT out
 #else
-varying vec2 texCoords;
+#define VERTEX_INPUT attribute
+#define VERTEX_OUTPUT varying
 #endif
+
+VERTEX_INPUT vec2 vertexPos;
+
+VERTEX_OUTPUT vec2 texCoords;
 
 void main()
 {
