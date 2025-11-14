@@ -799,35 +799,7 @@ WINDOW_MODE wzGetToggleFullscreenMode()
 
 void wzPostChangedSwapInterval()
 {
-#ifdef WZ_OS_MAC
-	if (WZbackend == video_backend::vulkan)
-	{
-		// If using Vulkan backend (and, thus, MoltenVK),
-		// Workaround MoltenVK issue (doesn't seem to fully accept the recreated swapchain until window resize event?)
-		// - Trigger a window resize event (regardless of current window mode)
-		auto currentMode = wzGetCurrentWindowMode();
-		switch (currentMode)
-		{
-			case WINDOW_MODE::desktop_fullscreen:
-			case WINDOW_MODE::fullscreen:
-				if (wzChangeWindowMode(WINDOW_MODE::windowed))
-				{
-					wzChangeWindowMode(currentMode);
-				}
-				break;
-			case WINDOW_MODE::windowed:
-				int currWidth = 0, currHeight = 0;
-				SDL_GetWindowSize(WZwindow, &currWidth, &currHeight);
-
-				// set one bigger than current size
-				SDL_SetWindowSize(WZwindow, currWidth+1, currHeight+1);
-
-				// restore the old windowed size
-				SDL_SetWindowSize(WZwindow, currWidth, currHeight);
-				break;
-		}
-	}
-#endif
+	// currently, no-op
 }
 
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
