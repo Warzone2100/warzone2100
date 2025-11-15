@@ -292,7 +292,7 @@ std::string wzapi::translate(WZAPI_PARAMS(std::string str))
 //-- run on all network peers in the same game frame. If it is called on just one peer (such as would be
 //-- the case for AIs, for instance), then game sync will break. (3.2+ only)
 //--
-int32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
+uint32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 {
 	if (limit == 0) return 0;
 	return gameRand(limit);
