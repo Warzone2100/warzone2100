@@ -157,7 +157,7 @@ _global.naiveFindClusters = function(list, size) {
 		{
 			if (distance(ret.xav[j], ret.yav[j], x, y) < size)
 			{
-				let n = ret.clusters[j].length;
+				const n = ret.clusters[j].length;
 
 				ret.clusters[j][n] = list[i];
 				ret.xav[j] = (n * ret.xav[j] + x) / (n + 1);
@@ -176,7 +176,7 @@ _global.naiveFindClusters = function(list, size) {
 
 		if (!found)
 		{
-			let n = ret.clusters.length;
+			const n = ret.clusters.length;
 
 			ret.clusters[n] = [list[i]];
 			ret.xav[n] = x;

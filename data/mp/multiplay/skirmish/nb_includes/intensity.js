@@ -110,7 +110,7 @@ _global.functionSeries = function(id, list) {
 	if (functionSeries.last[id] >= list.length)
 	{
 		functionSeries.last[id] = 0;
-		return false; // all functions in the list were called, none succeededv
+		return false; // all functions in the list were called, none succeeded
 	}
 
 	if (!list[functionSeries.last[id]]())

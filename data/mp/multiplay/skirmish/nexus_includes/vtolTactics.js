@@ -253,7 +253,7 @@ function chooseVtolTarget(exclusive)
 function getVtolTargetWeight(what)
 {
 	let targetWeight = 0;
-	let penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
+	const penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
 	let target;
 
 	if (!defined(what))

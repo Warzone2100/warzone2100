@@ -451,7 +451,7 @@ _global.buildMinimumDerricks = function(count) {
 function buildExpand()
 {
 	if (myPower() > personality.maxPower)
-		{
+	{
 		switch (chooseObjectType())
 		{
 			case 0:
@@ -517,7 +517,7 @@ function buildModules()
 			continue;
 		}
 
-		let str = enumStruct(me, modules[i].base);
+		const str = enumStruct(me, modules[i].base);
 
 		for (let j = 0; j < str.length; ++j)
 		{
