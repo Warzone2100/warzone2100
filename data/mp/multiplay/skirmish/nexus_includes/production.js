@@ -9,7 +9,7 @@ function getVirtualSystemCount()
 
 	for (let i = 0, len = factories.length; i < len; ++i)
 	{
-		let virDroid = getDroidProduction(factories[i]);
+		const virDroid = getDroidProduction(factories[i]);
 
 		if (virDroid !== null)
 		{
@@ -30,7 +30,7 @@ function getVirtualSystemCount()
 
 	for (let i = 0, len = cybFactories.length; i < len; ++i)
 	{
-		let virDroid = getDroidProduction(cybFactories[i]);
+		const virDroid = getDroidProduction(cybFactories[i]);
 
 		if (virDroid !== null)
 		{
