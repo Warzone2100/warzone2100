@@ -18,16 +18,25 @@
 // a function defined inside forEach((...) => {...}) can't be throttled
 _global.throttled = function(interval, notes) {
 	if (!defined(debugGetCallerFuncObject().throttleTimes))
+	{
 		debugGetCallerFuncObject().throttleTimes = {};
-	if (!defined(debugGetCallerFuncObject().throttleTimes[notes])) {
+	}
+
+	if (!defined(debugGetCallerFuncObject().throttleTimes[notes]))
+	{
 		debugGetCallerFuncObject().throttleTimes[notes] = gameTime;
 		return false;
 	}
+
 	if (gameTime - debugGetCallerFuncObject().throttleTimes[notes] < interval)
+	{
 		return true;
+	}
+
 	debugGetCallerFuncObject().throttleTimes[notes] = gameTime;
+
 	return false;
-}
+};
 
 // to cache a function's output value and make sure it's not re-calculated too often,
 // use the following trick:
@@ -42,26 +51,35 @@ _global.throttled = function(interval, notes) {
 // NOTE: it won't work if the function repeatedly dies and gets created again, eg.
 // a function defined inside forEach((...) => {...}) can't have caching inside
 _global.cached = function(whatToCall, interval, notes) {
-	if (!defined(debugGetCallerFuncObject().cachedTimes)) {
+	if (!defined(debugGetCallerFuncObject().cachedTimes))
+	{
 		debugGetCallerFuncObject().cachedTimes = {};
 		debugGetCallerFuncObject().cachedValues = {};
 	}
-	var t = debugGetCallerFuncObject().cachedTimes[notes];
-	if (!defined(t) || gameTime - t >= interval) {
+
+	const t = debugGetCallerFuncObject().cachedTimes[notes];
+
+	if (!defined(t) || gameTime - t >= interval)
+	{
 		debugGetCallerFuncObject().cachedValues[notes] = whatToCall();
 		debugGetCallerFuncObject().cachedTimes[notes] = gameTime;
 	}
+
 	return debugGetCallerFuncObject().cachedValues[notes];
-}
+};
 
 // if you actually want your script to send debug messages, consider using this function.
 // it will only output each message only once, so your debug log will be readable.
 _global.niceDebug = function() {
-	var msg = me + ": " + Array.prototype.join.call(arguments, " ");
+	const msg = me + ": " + Array.prototype.join.call(arguments, " ");
+
 	if (throttled(Infinity, msg))
+	{
 		return;
+	}
+
 	debug(msg);
-}
+};
 
 // use this if you want to split a certain void function into parts.
 // example:
@@ -76,20 +94,34 @@ _global.niceDebug = function() {
 // doManyThings does, otherwise the queue call will fail.
 _global.functionSeries = function(id, list) {
 	if (!defined(functionSeries.last))
+	{
 		functionSeries.last = {};
+	}
+
 	if (!defined(functionSeries.last[id]))
+	{
 		functionSeries.last[id] = 0;
+	}
 	else
+	{
 		++functionSeries.last[id];
-	if (functionSeries.last[id] >= list.length) {
+	}
+
+	if (functionSeries.last[id] >= list.length)
+	{
 		functionSeries.last[id] = 0;
 		return false; // all functions in the list were called, none succeeded
 	}
+
 	if (!list[functionSeries.last[id]]())
+	{
 		return true; // none of the function succeeded yet, telling to call us again next time
+	}
+
 	functionSeries.last[id] = undefined;
+
 	return false; // one of the functions succeeded, no need to call us anymore
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 })(this);

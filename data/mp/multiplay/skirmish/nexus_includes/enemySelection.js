@@ -20,7 +20,7 @@ function isPlayerAlive(player)
 //Return all enemy players that are still alive.
 function getAliveEnemyPlayers()
 {
-	var numEnemies = [];
+	const numEnemies = [];
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -82,7 +82,7 @@ function resetTargetData()
 
 function chooseEnemy()
 {
-	var enemies = getAliveEnemyPlayers();
+	const enemies = getAliveEnemyPlayers();
 
 	if (enemies.length === 0)
 	{

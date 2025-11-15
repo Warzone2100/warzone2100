@@ -75,7 +75,7 @@ function tooManyAlliances()
 //Specify any true parameter to only return the ones that are still alive.
 function getAllyPlayers(alive)
 {
-	var allies = [];
+	const allies = [];
 
 	if (!defined(alive))
 	{
@@ -100,14 +100,14 @@ function getAllyPlayers(alive)
 
 function tryBreakingAlliance()
 {
-	var allies = getAllyPlayers(true);
+	const allies = getAllyPlayers(true);
 
 	for (let i = 0, len = allies.length; i < len; ++i)
 	{
-		var ally = allies[i];
-		var breakIt = false;
+		const ALLY = allies[i];
+		let breakIt = false;
 		//Break an alliance at random if we are allies for some amount of time.
-		if (random(30) === 0 && (gameTime - allianceTime[ally]) > minutesToMilliseconds(10))
+		if (random(30) === 0 && (gameTime - allianceTime[ALLY]) > minutesToMilliseconds(10))
 		{
 			breakIt = true;
 		}
@@ -115,19 +115,19 @@ function tryBreakingAlliance()
 		//will fluctuate rapidly with the below rules.
 		// rules for breaking alliances with humans.
 		// built within my base
-		if (!breakIt && numWeapObjectsInRange(BASE.x, BASE.y, ally, baseLimits.radius, true).structures > 1)
+		if (!breakIt && numWeapObjectsInRange(BASE.x, BASE.y, ALLY, baseLimits.radius, true).structures > 1)
 		{
 			breakIt = true;
 		}
 		// you've got lots of units in my area.
-		if (!breakIt && numDroidsInBase(ally) > 3)
+		if (!breakIt && numDroidsInBase(ALLY) > 3)
 		{
 			breakIt = true;
 		}
 		// you've wiped out one of my allies ??. --TBD
 		if (breakIt)
 		{
-			setAlliance(me, ally, false);
+			setAlliance(me, ALLY, false);
 		}
 	}
 }
@@ -141,10 +141,10 @@ function tryFormingAlliances()
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
-		var time = allianceTime[i];
-		var tooEarly = (gameTime - time < minutesToMilliseconds(12));
+		const TIME = allianceTime[i];
+		const TOO_EARLY = (gameTime - TIME < minutesToMilliseconds(12));
 
-		if (i !== me && !allianceExistsBetween(me, i) && (time === 0 || tooEarly === false))
+		if (i !== me && !allianceExistsBetween(me, i) && (TIME === 0 || TOO_EARLY === false))
 		{
 			if (isPlayerAlive(i) && random(20) === 0)
 			{

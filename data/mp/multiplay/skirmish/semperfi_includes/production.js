@@ -60,7 +60,7 @@ const VTOL_ROCKETS = [
 	"Rocket-VTOL-HvyA-T", //tank killer
 	"Rocket-VTOL-LtA-T", // lancer
 ];
-var VTOL_BODY_LIST = [
+const VTOL_BODY_LIST = [
 	"Body7ABT", // retribution
 	"Body6SUPP", // panther
 	"Body8MBT", // scorpion
@@ -77,9 +77,9 @@ function buildAttacker(struct)
 	const MIN_ATTACK_GSIZE = 11;
 
 	//Choose either artillery or anti-tank.
-	var weaponChoice = (random(100) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
-	var secondary = (random(100) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
-	var prop = TANK_PROP_LIST;
+	const weaponChoice = (random(100) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
+	let secondary = (random(100) < WEAPON_CHANCE) ? TANK_WEAPON_LIST : TANK_ARTILLERY;
+	let prop = TANK_PROP_LIST;
 
 	//When dragon is available, try a chance at using EMP-Cannon as secondary.
 	if (componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon") && random(100) < EMP_CHANCE)
@@ -102,6 +102,7 @@ function buildAttacker(struct)
 			}
 		}
 	}
+
 	return buildDroid(struct, "Ranged Attacker", TANK_BODY_LIST, prop, "", "", weaponChoice, secondary);
 }
 
@@ -117,6 +118,7 @@ function buildCyborg(struct)
 	{
 		return buildDroid(struct, "Cyborg Flamer", "CyborgLightBody", "CyborgLegs", "", "", CYBORG_FLAMERS);
 	}
+
 	return buildDroid(struct, "Cyborg Rocket", "CyborgHeavyBody", "CyborgLegs", "", "", CYBORG_ROCKETS);
 }
 
@@ -125,7 +127,8 @@ function buildVTOL(struct)
 	const WEAPON_CHANCE = 50;
 	const EMP_CHANCE = 20;
 
-	var weaponChoice = (random(100) < WEAPON_CHANCE) ? BOMB_LIST : VTOL_ROCKETS;
+	let weaponChoice = (random(100) < WEAPON_CHANCE) ? BOMB_LIST : VTOL_ROCKETS;
+
 	if (random(100) < EMP_CHANCE && componentAvailable("Bomb6-VTOL-EMP"))
 	{
 		weaponChoice = "Bomb6-VTOL-EMP";
@@ -144,16 +147,14 @@ function produceAndResearch()
 	}
 
 	const FAC_LIST = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT];
-	var facsVirtual = enumStruct(me, FACTORY_STAT);
-	var virtualTrucks = 0;
-	var i = 0;
-	var x = 0;
-	var l = 0;
+	const facsVirtual = enumStruct(me, FACTORY_STAT);
+	let virtualTrucks = 0;
 
 	//Count the trucks being built so as not to build too many of them.
-	for (i = 0, l = facsVirtual.length; i < l; ++i)
+	for (let i = 0, l = facsVirtual.length; i < l; ++i)
 	{
-		var virDroid = getDroidProduction(facsVirtual[i]);
+		const virDroid = getDroidProduction(facsVirtual[i]);
+
 		if (virDroid !== null)
 		{
 			if (virDroid.droidType === DROID_CONSTRUCT)
@@ -163,16 +164,19 @@ function produceAndResearch()
 		}
 	}
 
-	for (i = 0; i < 3; ++i)
+	for (let i = 0; i < 3; ++i)
 	{
-		var facs = enumStruct(me, FAC_LIST[i]);
+		const facs = enumStruct(me, FAC_LIST[i]);
+
 		if (FAC_LIST[i] === CYBORG_FACTORY_STAT && isSeaMap === true)
 		{
 			continue;
 		}
-		for (x = 0, l = facs.length; x < l; ++x)
+
+		for (let x = 0, l = facs.length; x < l; ++x)
 		{
-			var fc = facs[x];
+			const fc = facs[x];
+
 			if (structureIdle(fc))
 			{
 				if (FAC_LIST[i] === FACTORY_STAT)

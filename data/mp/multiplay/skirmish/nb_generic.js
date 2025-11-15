@@ -26,7 +26,7 @@ include(NB_RULESETS + "standard.js");
 include(NB_COMMON + "standard_build_order.js");
 
 // variables defining the personality
-var subpersonalities = {
+const subpersonalities = {
 	MR: {
 		chatalias: "mr",
 		weaponPaths: [ // weapons to use; put late-game paths below!
@@ -129,25 +129,73 @@ var subpersonalities = {
 function buildOrder() {
 	// Only use this build order in early game, on standard difficulty, in T1 no bases.
 	// Otherwise, fall back to the safe build order.
-	if (gameTime > 300000 || difficulty === INSANE
-	                      || isStructureAvailable("A0ComDroidControl") || baseType !== CAMP_CLEAN)
+	if (gameTime > 300000 ||
+		difficulty === INSANE ||
+		isStructureAvailable("A0ComDroidControl") ||
+		baseType !== CAMP_CLEAN)
+	{
 		return buildOrder_StandardFallback();
-	if (personality.chatalias === "fc" || personality.chatalias === "fr") {
-		if (buildMinimum(structures.labs, 1)) return true;
-		if (buildMinimum(structures.factories, 1)) return true;
-		if (buildMinimum(structures.labs, 2)) return true;
-		if (buildMinimum(structures.factories, 2)) return true;
-		if (buildMinimumDerricks(2)) return true;
-		if (buildMinimum(structures.hqs, 1)) return true;
-		if (buildMinimum(structures.gens, 2)) return true;
-	} else {
-		if (buildMinimum(structures.factories, 2)) return true;
-		if (buildMinimumDerricks(1)) return true;
-		if (buildMinimum(structures.labs, 1)) return true;
-		if (buildMinimum(structures.hqs, 1)) return true;
-		if (buildMinimum(structures.factories, 3)) return true;
-		if (buildMinimum(structures.gens, 2)) return true;
 	}
+
+	if (personality.chatalias === "fc" || personality.chatalias === "fr")
+	{
+		if (buildMinimum(structures.labs, 1))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.factories, 1))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.labs, 2))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.factories, 2))
+		{
+			return true;
+		}
+		if (buildMinimumDerricks(2))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.hqs, 1))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.gens, 2))
+		{
+			return true;
+		}
+	}
+	else
+	{
+		if (buildMinimum(structures.factories, 2))
+		{
+			return true;
+		}
+		if (buildMinimumDerricks(1))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.labs, 1))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.hqs, 1))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.factories, 3))
+		{
+			return true;
+		}
+		if (buildMinimum(structures.gens, 2))
+		{
+			return true;
+		}
+	}
+
 	return captureSomeOil();
 }
 
