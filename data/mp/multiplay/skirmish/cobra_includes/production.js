@@ -10,7 +10,8 @@ function havePrimaryOrArtilleryWeapon()
 function firstRocketLikeArtilleryAvailable()
 {
 	if (((returnArtilleryAlias() === "rkta") || (returnArtilleryAlias() === "missa")) &&
-		componentAvailable(subPersonalities[personality].artillery.weapons[0].stat))
+		isDefined(subPersonalities[personality].artillery.fastFire) &&
+		componentAvailable(subPersonalities[personality].artillery.fastFire[0].stat))
 	{
 		return true;
 	}
@@ -258,7 +259,7 @@ function choosePersonalityWeapon(type)
 
 			if (strangeStartSettingOver() && firstRocketLikeArtilleryAvailable())
 			{
-				_antiCybWeaps = subPersonalities[personality].artillery.weapons;
+				_antiCybWeaps = subPersonalities[personality].artillery.fastFire;
 			}
 
 			for (let i = _antiCybWeaps.length - 1; i >= 0; --i)
