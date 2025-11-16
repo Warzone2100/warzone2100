@@ -261,10 +261,7 @@ function machinegunResPath()
 			return true;
 		}
 
-		const __artyAlias = returnArtilleryAlias();
-
-		if ((__artyAlias === "rkta" || __artyAlias === "missa") &&
-			componentAvailable(subPersonalities[personality].artillery.weapons[0].stat))
+		if (firstRocketLikeArtilleryAvailable())
 		{
 			if (evalResearch(resObj.lab, artilleryTech) || evalResearch(resObj.lab, artillExtra))
 			{
