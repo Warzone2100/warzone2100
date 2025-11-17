@@ -1774,7 +1774,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			const STRUCTURE* structureAtPos = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 
-			if (structureAtPos == nullptr)
+			if (structureAtPos == nullptr || psDroid->psActionTarget[0] == nullptr)
 			{
 				//No structure located at desired position. Move on.
 				psDroid->action = DACTION_NONE;
