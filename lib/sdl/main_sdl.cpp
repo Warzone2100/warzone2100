@@ -708,7 +708,12 @@ WINDOW_MODE wzGetCurrentWindowMode()
 
 std::vector<WINDOW_MODE> wzSupportedWindowModes()
 {
+#if defined(__EMSCRIPTEN__)
+	// For now, Emscripten always uses soft-fullscreen windowed mode
+	return {WINDOW_MODE::windowed};
+#else
 	return {WINDOW_MODE::fullscreen, WINDOW_MODE::windowed};
+#endif
 }
 
 bool wzIsSupportedWindowMode(WINDOW_MODE mode)
