@@ -2991,8 +2991,11 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
 	{
 		objTrace(psStructure->id, "Resistance too low for repair");
-		droidRepairStopped(castDroid(psRepairFac->psObj), &station);
-		psRepairFac->psObj = nullptr;
+		if (psRepairFac->psObj != nullptr)
+		{
+			droidRepairStopped(castDroid(psRepairFac->psObj), &station);
+			psRepairFac->psObj = nullptr;
+		}
 		return RepairState::Idle;
 	}
 	switch (ev)
