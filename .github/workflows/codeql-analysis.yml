@@ -40,8 +40,13 @@ jobs:
         if: matrix.language == 'cpp'
         run: |
           sudo apt-get -u update
-          DEBIAN_FRONTEND=noninteractive sudo apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config
+          DEBIAN_FRONTEND=noninteractive sudo apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config wget
+          echo "::group::get-dependencies_linux.sh"
           sudo ./get-dependencies_linux.sh ubuntu build-dependencies
+          echo "::endgroup::"
+          echo "::group::install_sdl3.sh"
+          sudo .ci/sdl3/install_sdl3.sh
+          echo "::endgroup::"
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
