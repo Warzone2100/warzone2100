@@ -438,7 +438,7 @@ function holdAllOilTrucks()
 		if (_oilGrabbers[i].order !== DORDER_RECYCLE &&
 			_oilGrabbers[i].order !== DORDER_HOLD)
 		{
-			orderDroid(oilGrabbers[i], DORDER_HOLD);
+			orderDroid(_oilGrabbers[i], DORDER_HOLD);
 		}
 	}
 }
