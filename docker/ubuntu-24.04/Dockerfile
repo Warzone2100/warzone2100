@@ -10,7 +10,7 @@ COPY get-dependencies_linux.sh /scripts
 RUN chmod +x /scripts/get-dependencies_linux.sh
 
 RUN apt-get -u update \
- && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config file \
+ && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config file wget \
  && /scripts/get-dependencies_linux.sh ubuntu build-dependencies \
  && rm -rf /var/lib/apt/lists/*
 
@@ -23,6 +23,11 @@ RUN echo "$VULKANSDK_SHA256 /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz" | sha2
  && rm /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz
 ENV VULKAN_SDK="/vulkan/1.4.328.1/x86_64"
 ENV PATH="$PATH:$VULKAN_SDK/bin"
+
+# Download, build, & install SDL3 from source
+COPY .ci/sdl3/install_sdl3.sh /scripts
+RUN chmod +x /scripts/install_sdl3.sh
+RUN cd /tmp && /scripts/install_sdl3.sh
 
 # Defines arguments which can be passed during build time.
 ARG USER=warzone2100
