@@ -578,7 +578,7 @@ function playerSpectator(player)
 {
 	let lose = false;
 
-	if ((countStruct(player, "A0Sat-linkCentre") === 1 || enumStruct(player, "A0CommandCentre").length === 1) &&
+	if ((countStruct(player, "A0Sat-linkCentre") === 1 || countStruct(player, "A0CommandCentre") === 1) &&
 		countStruct(player, "A0LightFactory") === 0 &&
 		countStruct(player, "A0CyborgFactory") === 0 &&
 		enumDroid(player, 10).length === 0)
