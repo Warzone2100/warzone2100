@@ -563,9 +563,9 @@ function playerLose(player)
 {
 	let lose = false;
 
-	if (countStruct(player, "A0LightFactory") === 0 &&
+	if (countStruct("A0LightFactory", player) === 0 &&
 		countDroid(DROID_CONSTRUCT, player) === 0 &&
-		countStruct(player, "A0CyborgFactory") === 0 &&
+		countStruct("A0CyborgFactory", player) === 0 &&
 		enumDroid(player, 10).length === 0)
 	{
 		lose = true;
@@ -578,9 +578,9 @@ function playerSpectator(player)
 {
 	let lose = false;
 
-	if ((countStruct(player, "A0Sat-linkCentre") === 1 || countStruct(player, "A0CommandCentre") === 1) &&
-		countStruct(player, "A0LightFactory") === 0 &&
-		countStruct(player, "A0CyborgFactory") === 0 &&
+	if ((countStruct("A0Sat-linkCentre", player) === 1 || countStruct("A0CommandCentre", player) === 1) &&
+		countStruct("A0LightFactory", player) === 0 &&
+		countStruct("A0CyborgFactory", player) === 0 &&
 		enumDroid(player, 10).length === 0)
 	{
 		lose = true;
