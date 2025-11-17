@@ -33,7 +33,7 @@ function playerCyborgRatio(player)
 
 	function uncached(player)
 	{
-		return enumDroid(player, DROID_CYBORG).length / (enumDroid(player).length + 1);
+		return enumDroid(player, DROID_CYBORG).length / (countDroid(DROID_ANY, player) + 1);
 	}
 
 	return cacheThis(uncached, [player], "playerCyborgRatio" + player, 8000);
@@ -77,7 +77,7 @@ function playerVtolRatio(player)
 
 	function uncached(player)
 	{
-		return countEnemyVTOL(player) / (enumDroid(player).length + 1);
+		return countEnemyVTOL(player) / (countDroid(DROID_ANY, player) + 1);
 	}
 
 	return cacheThis(uncached, [player], "playerVtolRatio" + player, 6000);
@@ -92,7 +92,7 @@ function playerStructureUnitRatio(player)
 
 	function uncached(player)
 	{
-		return enumStruct(player).length / (enumDroid(player).length + 1);
+		return enumStruct(player).length / (countDroid(DROID_ANY, player) + 1);
 	}
 
 	return cacheThis(uncached, [player], "playerStructureUnitRatio" + player, 30000);
