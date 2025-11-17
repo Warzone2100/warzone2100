@@ -757,6 +757,7 @@ int JS_DeletePropertyStr(JSContext *ctx, JSValueConst this_obj,
                           const char *prop)
 {
     JSAtom atom = JS_NewAtom(ctx, prop);
+    ASSERT_OR_RETURN(-1, atom != JS_ATOM_NULL, "Failed to create atom: %s", prop);
     int ret = JS_DeleteProperty(ctx, this_obj, atom, 0);
     JS_FreeAtom(ctx, atom);
     return ret;
@@ -774,6 +775,7 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player);
 static int QuickJS_DefinePropertyValue(JSContext *ctx, JSValueConst this_obj, const char* prop, JSValue val, int flags)
 {
 	JSAtom prop_name = JS_NewAtom(ctx, prop);
+	ASSERT_OR_RETURN(-1, prop_name != JS_ATOM_NULL, "Failed to create atom: %s", prop);
 	int ret = JS_DefinePropertyValue(ctx, this_obj, prop_name, val, flags);
 	JS_FreeAtom(ctx, prop_name);
 	return ret;
@@ -2762,7 +2764,14 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 
 	// Regular functions
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
-	registerFunctions(basename.baseName());
+	if (!registerFunctions(basename.baseName()))
+	{
+		// Failure to register functions - presumably OOM?
+		debug(LOG_ERROR, "Failed to register script functions for: %s", path.toUtf8().c_str());
+		JS_FreeValue(ctx, compiledScriptObj);
+		compiledScriptObj = JS_UNINITIALIZED;
+		return false;
+	}
 	// Remember internal, reserved names
 	std::unordered_set<std::string>& internalNamespaceRef = internalNamespace;
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [&internalNamespaceRef](const char *key, JSAtom &) {
@@ -3311,7 +3320,7 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 
 
 
-static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name, int player, int type, unsigned index)
+static bool setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name, int player, int type, unsigned index)
 {
 	const JSCFunctionListEntry js_stats_getter_setter_func[] = {
 		QJS_CGETSET_DEF(name.c_str(), js_stats_get, js_stats_set)
@@ -3322,15 +3331,28 @@ static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name,
 	char buf[64];
 
 	JSAtom atom = JS_NewAtom(ctx, name.c_str());
+	ASSERT_OR_RETURN(false, atom != JS_ATOM_NULL, "Failed to create atom: %s", name.c_str());
 
 	snprintf(buf, sizeof(buf), "get %s", name.c_str());
 	getter = JS_NewCFunction2(ctx, js_stats_getter_setter_func[0].u.getset.get.generic,
 							  buf, 0, JS_CFUNC_getter,
 							  0);
+	if (JS_IsException(getter))
+	{
+		JS_FreeAtom(ctx, atom);
+		return false;
+	}
+
 	snprintf(buf, sizeof(buf), "set %s", name.c_str());
 	setter = JS_NewCFunction2(ctx, js_stats_getter_setter_func[0].u.getset.set.generic,
 							  buf, 1, JS_CFUNC_setter,
 							  0);
+	if (JS_IsException(setter))
+	{
+		JS_FreeValue(ctx, getter);
+		JS_FreeAtom(ctx, atom);
+		return false;
+	}
 
 	JSValue funcObjects[2] = {getter, setter};
 	for (size_t i = 0; i < 2; i++)
@@ -3344,6 +3366,7 @@ static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name,
 	JS_DefinePropertyGetSet(ctx, base, atom, getter, setter, js_stats_getter_setter_func[0].prop_flags | JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 
 	JS_FreeAtom(ctx, atom);
+	return true;
 }
 
 JSValue constructUpgradesQuickJSValue(JSContext *ctx)
@@ -3366,7 +3389,15 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 				JSValue v = JS_NewObject(ctx);
 				for (const auto& property : gameEntityRules)
 				{
-					setStatsFunc(v, ctx, property.first, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex());
+					if (!setStatsFunc(v, ctx, property.first, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex()))
+					{
+						// Presumably, OOM
+						JS_FreeValue(ctx, v);
+						JS_FreeValue(ctx, entityBase);
+						JS_FreeValue(ctx, node);
+						JS_FreeValue(ctx, upgrades);
+						return JS_EXCEPTION;
+					}
 				}
 				QuickJS_DefinePropertyValue(ctx, entityBase, gameEntityName.c_str(), v, JS_PROP_ENUMERABLE);
 			}
@@ -3383,20 +3414,36 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 }
 
 #define JS_REGISTER_FUNC(js_func_name, num_parameters) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define JS_REGISTER_FUNC2(js_func_name, min_num_parameters, max_num_parameters) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, min_num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, min_num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define JS_REGISTER_FUNC_NAME(js_func_name, num_parameters, full_impl_handler_func_name) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define JS_REGISTER_FUNC_NAME2(js_func_name, min_num_parameters, max_num_parameters, full_impl_handler_func_name) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, min_num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, min_num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define MAX_JS_VARARGS 20
 
@@ -3409,6 +3456,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
 	//== These values are defined:
 	JSValue upgrades = constructUpgradesQuickJSValue(ctx);
+	ASSERT_OR_RETURN(false, !JS_IsException(upgrades), "Failure to create upgrades object");
 	JS_DefinePropertyValueStr(ctx, global_obj, "Upgrades", upgrades, JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 
 	// Register functions to the script engine here
