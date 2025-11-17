@@ -743,10 +743,8 @@ static void startTitleLoop(bool onInitialStartup = false)
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
 	}
-	if (!onInitialStartup)
-	{
-		closeLoadingScreen();
-	}
+
+	closeLoadingScreen(); // always ensure the loading screen is closed
 }
 
 
