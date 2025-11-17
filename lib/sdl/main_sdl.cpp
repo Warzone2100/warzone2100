@@ -3842,7 +3842,8 @@ bool wz_emscripten_enable_soft_fullscreen()
 	// Enable "soft fullscreen" - where the canvas automatically fills the window
 	debug(LOG_INFO, "Would enter soft fullscreen");
 	EmscriptenFullscreenStrategy strategy;
-	strategy.scaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_STDDEF;
+	strategy.scaleMode = EMSCRIPTEN_FULLSCREEN_SCALE_STRETCH;
+	strategy.canvasResolutionScaleMode = EMSCRIPTEN_FULLSCREEN_CANVAS_SCALE_HIDEF;
 	strategy.filteringMode = EMSCRIPTEN_FULLSCREEN_FILTERING_DEFAULT;
 	strategy.canvasResizedCallback = wz_emscripten_window_resized_callback;
 	strategy.canvasResizedCallbackUserData = nullptr; // pointer to user data
