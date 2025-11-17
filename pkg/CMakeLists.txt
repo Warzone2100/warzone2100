@@ -346,6 +346,9 @@ set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Innovative 3D real-time strategy\n In Warzone 2100 you command the forces of “The Project” in a battle to rebuild the world after mankind has been nearly destroyed by nuclear missiles.\n .\n The game offers campaign, tutorial, multi-player and single-player skirmish modes. An extensive tech tree with over 400 different technologies, combined with the unit design system, allows for a wide variety of possible units and tactics. Play versus AI bots in local skirmishes (or as added teammates / enemies in multiplayer), and practice your skills with endless replayability.\n .\n Warzone 2100 was originally created by Pumpkin Studios and published by Eidos Interactive, and was open-sourced in 2004. It has been developed, maintained, and improved by the community ever since, under the banner of the “Warzone 2100 Project”.\n .\n This package does not include the campaign video sequences - please see the Warzone 2100 website for details on how to download and install them.")
 
+# Add dynamically-loaded dependencies for SDL3 (since some DEB packages have it built from source)
+set(CPACK_DEBIAN_CORE_PACKAGE_DEPENDS "libdecor-0-0, libdrm2, libgbm1, libwayland-client0, libwayland-cursor0, libwayland-egl1, libx11-6, libxcursor1, libxext6, libxfixes3, libxi6, libxkbcommon0, libxrandr2, libxss1, liburing2, libdbus, libegl1, libgl1, libgles2, libvulkan1, xdg-utils")
+
 #####################
 # Package Source
 
