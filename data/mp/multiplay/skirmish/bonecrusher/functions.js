@@ -463,7 +463,7 @@ function checkProcess()
 				donatePower(_pow, bc_ally[plally]);
 			}
 
-			if (enumDroid(bc_ally[plally], DROID_CONSTRUCT).length < 3)
+			if (countDroid(DROID_CONSTRUCT, bc_ally[plally]) < 3)
 			{
 				let truck;
 
@@ -563,9 +563,9 @@ function playerLose(player)
 {
 	let lose = false;
 
-	if (enumStruct(player, "A0LightFactory").length === 0 &&
-		enumDroid(player, DROID_CONSTRUCT).length === 0 &&
-		enumStruct(player, "A0CyborgFactory").length === 0 &&
+	if (countStruct(player, "A0LightFactory") === 0 &&
+		countDroid(DROID_CONSTRUCT, player) === 0 &&
+		countStruct(player, "A0CyborgFactory") === 0 &&
 		enumDroid(player, 10).length === 0)
 	{
 		lose = true;
@@ -578,9 +578,9 @@ function playerSpectator(player)
 {
 	let lose = false;
 
-	if ((enumStruct(player, "A0Sat-linkCentre").length === 1 || enumStruct(player, "A0CommandCentre").length === 1) &&
-		enumStruct(player, "A0LightFactory").length === 0 &&
-		enumStruct(player, "A0CyborgFactory").length === 0 &&
+	if ((countStruct(player, "A0Sat-linkCentre") === 1 || enumStruct(player, "A0CommandCentre").length === 1) &&
+		countStruct(player, "A0LightFactory") === 0 &&
+		countStruct(player, "A0CyborgFactory") === 0 &&
 		enumDroid(player, 10).length === 0)
 	{
 		lose = true;
