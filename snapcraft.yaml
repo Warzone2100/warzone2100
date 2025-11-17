@@ -49,17 +49,14 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.8/SDL2-2.32.8.tar.gz
-    source-checksum: sha512/484c33638e7bd1002815bb1f6a47a292d1eaf0b963598dde65f4a3e077dfe75ee35b9ea4b3b767365b3ef4f613c4d69ce55b5e96675de562994344e83a978272
+    source: https://github.com/libsdl-org/SDL/releases/download/release-3.2.28/SDL3-3.2.28.tar.gz
+    source-checksum: sha512/9d7d54cd91a30d7a1f2999d98ff155232a629ff082d1b3a00b00c32ee3ff009820a1b0d9daf981a2f454bcf667cdb687948050c9b6f2ca98cb34f68754812b8a
     plugin: cmake
     build-environment:
       - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
     - -DSDL_ALSA=OFF
-    - -DSDL_ARTS=OFF
-    - -DSDL_ESD=OFF
-    - -DSDL_NAS=OFF
     - -DSDL_OSS=OFF
     override-build: |
       craftctl default
@@ -93,6 +90,8 @@ parts:
     - libxss-dev
     - libxxf86vm-dev
     - libgbm-dev
+    - liburing-dev
+    - libdrm-dev
     stage-packages:
     - libdecor-0-0
     - libdecor-0-plugin-1
@@ -126,6 +125,7 @@ parts:
     - libxrender1
     - libxss1
     - libxxf86vm1
+    - liburing2
 
   launcher:
     plugin: nil
