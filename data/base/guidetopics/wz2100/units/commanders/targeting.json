@@ -16,7 +16,7 @@
 		}
 	},
 	"contents": [
-		"When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit.",
+		"When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target.",
 		"",
 		"The attached units will have greater accuracy when firing."
 	],
