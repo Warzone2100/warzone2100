@@ -4707,7 +4707,7 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	//==   * ```isHuman``` whether the player is human (3.2+ only)
 	//==   * ```name``` the name of the player (3.2+ only)
 	//==   * ```team``` the number of the team the player is part of
-	//==   * ```scriptName``` File name of the AI's JS file. (4.6+ only)
+	//==   * ```scriptName``` File name of the AI's JS file. (4.6.2+ only)
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
 	const auto& aidata = getAIData();
 	for (int i = 0; i < game.maxPlayers; i++)
