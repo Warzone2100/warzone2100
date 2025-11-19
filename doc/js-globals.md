@@ -76,6 +76,7 @@ containing the following variables:
   * ```isHuman``` whether the player is human (3.2+ only)
   * ```name``` the name of the player (3.2+ only)
   * ```team``` the number of the team the player is part of
+  * ```scriptName``` File name of the AI's JS file. (4.6.2+ only)
 * ```MapTiles``` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
 containing the following variables:
   * ```terrainType``` (see ```terrainType(x, y)``` function)
