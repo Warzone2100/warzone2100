@@ -442,7 +442,9 @@ function initCobraVars()
 		forceDefenseRes: false
 	};
 	// We can't just detect no bases cause some maps might just give an HQ on Bases/advanced bases.
-	noBasesHighTechStart = ((getMultiTechLevel() > 1) && ((baseType === CAMP_CLEAN) || (enumStruct(me).length <= 3)));
+	const __lowStartingBaseStructCount = (enumStruct(me).length <= 3);
+	noBasesHighTechStart = ((getMultiTechLevel() > 1) && ((baseType === CAMP_CLEAN) || __lowStartingBaseStructCount));
+	weirdMapBaseDesign = ((baseType !== CAMP_CLEAN) && __lowStartingBaseStructCount);
 }
 
 // T2+ No Bases Low Power. The ultimate meta.
