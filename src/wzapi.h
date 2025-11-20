@@ -975,7 +975,7 @@ namespace wzapi
 	#define WZAPI_AI_UNSAFE
 
 	std::string translate(WZAPI_PARAMS(std::string str));
-	int32_t syncRandom(WZAPI_PARAMS(uint32_t limit));
+	uint32_t syncRandom(WZAPI_PARAMS(uint32_t limit));
 	bool setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies));
 	no_return_value sendAllianceRequest(WZAPI_PARAMS(int player2));
 	bool orderDroid(WZAPI_PARAMS(DROID* psDroid, int order));
