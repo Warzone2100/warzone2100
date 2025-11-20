@@ -1,17 +1,31 @@
 
 function eventResearched(research, structure, player)
 {
-	if (__LOG_RESEARCH_PATH && allianceExistsBetween(me, player))
+	if (gameTime <= 300)
 	{
-		dump(research.name);
+		return; // Just in case this event gets caught automatically during rules base/tech level research setup.
 	}
-	if ((gameTime > 2) && (player === me))
+
+	if (allianceExistsBetween(me, player))
+	{
+		if (__LOG_RESEARCH_PATH && isDefined(structure))
+		{
+			dump(research.name);
+		}
+	}
+	else
+	{
+		return;
+	}
+
+	// Attempt to quickly start another topic if we have enough power.
+	if ((player === me) && (highOilMap() || (getRealPower() > __MIN_POWER)))
 	{
 		cobraDoResearch();
 	}
+
 	// One time check to immediately build a HMG tower next to a nearby derrick if an enemy got to it first.
 	if ((research.id === "R-Defense-Tower01") &&
-		((player === me) || allianceExistsBetween(me, player)) &&
 		(getMultiTechLevel() === 1) &&
 		(baseType === CAMP_CLEAN))
 	{
