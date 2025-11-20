@@ -343,6 +343,7 @@ var randomResearchLabStart;
 var cyborgOnlyGame;
 var resObj; //Object that holds some game objects and data releated to research choices.
 var noBasesHighTechStart; //For those T2+ no bases matches.
+var weirdMapBaseDesign; //Attempt to find if we are on maps like 4p-cockpit which have almost no base structures in the base.
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;

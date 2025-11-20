@@ -659,7 +659,7 @@ function produce()
 					}
 					else if (__buildTrucks &&
 						(attackerCountsGood(false) ||
-						(gameTime < 240000 && highOilMap()) ||
+						(gameTime < 240000 && (highOilMap() || weirdMapBaseDesign)) ||
 						!havePrimaryOrArtilleryWeapon() ||
 						(getMultiTechLevel() > 1) ||
 						(gameTime > 240000 && chance(25))))
