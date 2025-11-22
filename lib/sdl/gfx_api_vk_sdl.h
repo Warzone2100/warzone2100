@@ -23,7 +23,7 @@
 #define __INCLUDED_GFX_API_VK_SDL_H__
 
 #include "lib/ivis_opengl/gfx_api_vk.h"
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 
 #if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
 

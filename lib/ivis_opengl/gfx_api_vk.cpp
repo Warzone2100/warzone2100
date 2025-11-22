@@ -5946,6 +5946,19 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 	if(acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - should probably recreate swapchain (in the future)");
+#ifdef WZ_OS_MAC
+		// Workaround MoltenVK issue: https://github.com/KhronosGroup/MoltenVK/issues/2542
+		debug(LOG_INFO, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - immediately recreate");
+		try {
+			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eSuboptimalKHR); // throws on failure
+			return AcquireNextSwapchainImageResult::eRecoveredFromError;
+		}
+		catch (const vk::SystemError& e) {
+			auto resultErr = static_cast<vk::Result>(e.code().value());
+			debug(LOG_ERROR, "Failed to recreate out-of-date swapchain: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+			throw;
+		}
+#endif
 	}
 
 	currentSwapchainIndex = acquireNextImageResult.value;

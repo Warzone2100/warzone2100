@@ -1,6 +1,6 @@
 app-id: net.wz2100.wz2100@WZ_OUTPUT_NAME_SUFFIX@
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 command: warzone2100
 separate-locales: false
@@ -29,22 +29,8 @@ cleanup:
   - /protoc-host/
   - '*.a'
   - '*.la'
-build-options:
-  env:
-    GEM_PATH: /app/lib/ruby/gems/build-dep
 
 modules:
-
-  - name: asciidoctor
-    cleanup:
-      - '*'
-    buildsystem: simple
-    build-commands:
-      - gem install --ignore-dependencies --no-user-install --verbose --local --install-dir /app/lib/ruby/gems/build-dep --bindir /app/bin asciidoctor-2.0.23.gem
-    sources:
-      - type: file
-        url: https://rubygems.org/downloads/asciidoctor-2.0.23.gem
-        sha256: 52208807f237dfa0ca29882f8b13d60b820496116ad191cf197ca56f2b7fddf3
 
   - name: sentry-native
     cleanup:
