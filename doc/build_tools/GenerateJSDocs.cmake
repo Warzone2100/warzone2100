@@ -179,6 +179,11 @@ PROCESS_LINES("data/base/script/campaign/libcampaign_includes/group.js"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
 
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/guide.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
 PROCESS_LINES("data/base/script/campaign/libcampaign_includes/hook.js"
 				MATCHING_LINE_REGEX ".*//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
