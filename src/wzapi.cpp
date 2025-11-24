@@ -3379,13 +3379,17 @@ wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int
 	return {};
 }
 
-//-- ## fireWeaponAtLoc(weaponName, x, y[, player])
+//-- ## fireWeaponAtLoc(weaponName, x, y[, player[, center]])
 //--
 //-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+//--
 //-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
 //-- may have different friendly fire logic for a few weapons (like the lassat).
 //--
-wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player))
+//-- The optional ```center``` parameter (4.6.2+ only) can be set to ```true```
+//-- to target the center of the tile. (The default is ```false```.)
+//--
+wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player, optional<bool> center))
 {
 	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
 	SCRIPT_ASSERT({}, context, weaponIndex > 0, "No such weapon: %s", weaponName.c_str());
@@ -3396,6 +3400,11 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 	Vector3i target;
 	target.x = world_coord(x);
 	target.y = world_coord(y);
+	if (center.value_or(false))
+	{
+		target.x += (TILE_UNITS / 2);
+		target.y += (TILE_UNITS / 2);
+	}
 	target.z = mapTile(x, y)->height;
 
 	WEAPON sWeapon;
