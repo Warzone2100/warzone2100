@@ -3625,7 +3625,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(startTransporterEntry, 3); // WZAPI
 	JS_REGISTER_FUNC(setTransporterExit, 3); // WZAPI
 	JS_REGISTER_FUNC(setObjectFlag, 3); // WZAPI
-	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 4); // WZAPI
+	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 5); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtObj, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(transformPlayerToSpectator, 1); // WZAPI
 	JS_REGISTER_FUNC(isSpectator, 1); // WZAPI

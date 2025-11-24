@@ -874,11 +874,15 @@ Set or unset an object flag on a given game object. Does not take care of networ
 needs wrapping in a syncRequest. (3.3+ only.)
 Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
 
-## fireWeaponAtLoc(weaponName, x, y[, player])
+## fireWeaponAtLoc(weaponName, x, y[, player[, center]])
 
 Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+
 Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
 may have different friendly fire logic for a few weapons (like the lassat).
+
+The optional ```center``` parameter (4.6.2+ only) can be set to ```true```
+to target the center of the tile. (The default is ```false```.)
 
 ## fireWeaponAtObj(weaponName, gameObject[, player])
 
