@@ -33,4 +33,11 @@ namespace gfx_api
 void pie_StartMeshes();
 void pie_UpdateLightmap(gfx_api::texture* lightmapTexture, const glm::mat4& modelUVLightmapMatrix);
 void pie_FinalizeMeshes(uint64_t currentGameFrame);
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, bool depthPass);
+
+enum class MeshDrawPass
+{
+	ShadowMap,
+	DepthPrepass,
+	Scene
+};
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, MeshDrawPass pass);

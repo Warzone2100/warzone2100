@@ -16,6 +16,7 @@ uniform mat4 ViewMatrix;
 uniform mat4 ModelUVLightmapMatrix;
 
 uniform int hasTangents; // whether tangents were calculated for model
+uniform vec4 cameraPos; // in modelSpace
 uniform vec4 lightPosition;
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
