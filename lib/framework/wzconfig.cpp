@@ -115,7 +115,14 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	}
 	pCurrentObj = &mRoot;
 	ASSERT(!mRoot.is_null(), "JSON document from %s is null", name.toUtf8().c_str());
-	ASSERT(mRoot.is_object(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
+	if (!mRoot.is_object())
+	{
+		ASSERT(mRoot.is_object(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
+		mRoot = nlohmann::json::object();
+		mStatus = false;
+		free(data);
+		return;
+	}
 	free(data);
 	WZ_PHYSFS_enumerateFolders("diffs", [&](const char *i) -> bool {
 		std::string str(std::string("diffs/") + i + std::string("/") + name.toUtf8().c_str());
@@ -140,8 +147,14 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 			debug(LOG_FATAL, "Unexpected exception parsing JSON diff from %s", name.toUtf8().c_str());
 		}
 		ASSERT(!tmpJson.is_null(), "JSON diff from %s is null", name.toUtf8().c_str());
-		ASSERT(tmpJson.is_object(), "JSON diff from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
-		mRoot = jsonMerge(mRoot, tmpJson);
+		if (tmpJson.is_object())
+		{
+			mRoot = jsonMerge(mRoot, tmpJson);
+		}
+		else
+		{
+			ASSERT(tmpJson.is_object(), "JSON diff from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
+		}
 		free(data);
 		debug(LOG_INFO, "jsondiff \"%s\" loaded and merged", str.c_str());
 		return true; // continue
