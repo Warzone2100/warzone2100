@@ -85,6 +85,9 @@ struct DROID_ACTION_DATA
 /** Radius for search when looking for VTOL landing position */
 static const int vtolLandingRadius = 23;
 
+// Sanity checks
+static_assert(MAX_SULK_TIME > MIN_SULK_TIME, "MAX_SULK_TIME must be > MIN_SULK_TIME");
+
 /**
  * @typedef tileMatchFunction
  *
