@@ -99,7 +99,7 @@ jobs:
     - uses: actions/setup-node@v4
 
     - name: Install workbox-cli
-      run: npm install workbox-cli --global
+      run: npm install --ignore-scripts workbox-cli --global
 
     - name: Install EMSDK
       id: emsdk
