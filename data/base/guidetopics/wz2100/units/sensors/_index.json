@@ -22,7 +22,7 @@
 		"",
 		"Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades).",
 		"",
-		"However, even the most basic artillery weapon has an 15-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+		"However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
 	],
 	"links": [
 		"wz2100::units::sensors::using",
