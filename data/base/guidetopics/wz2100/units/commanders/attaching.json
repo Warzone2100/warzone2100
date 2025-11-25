@@ -16,13 +16,13 @@
 		}
 	},
 	"contents": [
-		"To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached.",
+		"To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment.",
 		"",
 		"## Limits:",
 		"",
-		"Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on.",
+		"Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points.",
 		"",
-		"Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
+		"After each promotion, the Commander is able to control 2 more units."
 	],
 	"links": [
 		"wz2100::units::commanders::detaching",
