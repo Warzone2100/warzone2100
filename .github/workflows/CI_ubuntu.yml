@@ -331,7 +331,7 @@ jobs:
           mkdir dl-debug-symbols
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: 'debugsymbols_*'
           path: ./dl-debug-symbols
