@@ -90,7 +90,7 @@ jobs:
           echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_ENV
           echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_OUTPUT
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: '${{ inputs.artifact }}'
           path: ./dl-archive

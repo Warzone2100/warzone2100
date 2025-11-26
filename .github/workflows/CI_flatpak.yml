@@ -351,13 +351,13 @@ jobs:
           mkdir -p dl-debug/additional
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Debug Symbols
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
           merge-multiple: false
       - name: Download Additional Debug Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
@@ -405,7 +405,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
           path: ./dl-artifacts
@@ -485,7 +485,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: 'ostree_repo_flatpak_${{ matrix.arch }}_${{ needs.build-flatpak.outputs.WZ_FLATPAK_BRANCH }}'
           path: ./dl-artifacts
