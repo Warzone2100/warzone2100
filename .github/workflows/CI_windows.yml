@@ -897,7 +897,7 @@ jobs:
         if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
         id: signpath-sign
         continue-on-error: true
-        uses: signpath/github-action-submit-signing-request@v1.3
+        uses: signpath/github-action-submit-signing-request@v2.0
         env:
           SIGNPATH_SIGNING_POLICY_SLUG: ${{ (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && 'release-signing' || 'test-signing' }}
         with:
