@@ -260,12 +260,12 @@ jobs:
     ###############################################################
     # Upload the .flatpak and debugsymbols artifacts
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
         path: ${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}
     - name: Upload debug info
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
         path: |
@@ -293,7 +293,7 @@ jobs:
           objdump -p flatpak_app/files/bin/warzone2100 | grep NEEDED | grep -E -v 'linux-vdso|ld-linux-' | awk 'NF == 2 { system("echo " $2 " && cp ${TARGET_FREEDESKTOP_RUNTIME_PATH}/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/" $2 " output_debug_dependency_snapshot") }'
         fi
     - name: Upload additional debug dependency info
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
         path: |
@@ -324,7 +324,7 @@ jobs:
         echo "  -> Size (bytes): $(stat -c %s "${REPO_TAR_FILE}")"
     - name: Upload ostree repo
       if: success() && (github.event_name == 'release' && github.event.action == 'published')
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'ostree_repo_flatpak_${{ matrix.arch }}_${{ steps.settings.outputs.WZ_FLATPAK_BRANCH }}'
         path: '${{ steps.repo-tar.outputs.REPO_TAR_FILE }}'

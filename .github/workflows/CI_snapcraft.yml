@@ -145,7 +145,7 @@ jobs:
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_SNAP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       if: success()
       with:
         name: 'warzone2100_linux_${{ matrix.arch }}_snap'
