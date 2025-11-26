@@ -186,7 +186,7 @@ jobs:
           echo "snapstablebuild.diff (SHA512: ${DIFF_HASH}):"
           cat "${{ github.workspace }}/diff/snapstablebuild.diff"
       - name: Upload diff artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
         with:
           name: snap_stable_build_diff

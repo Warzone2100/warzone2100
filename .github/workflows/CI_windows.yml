@@ -537,7 +537,7 @@ jobs:
         & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: failure()
       with:
         name: failure_${{ steps.settings.outputs.WZ_BUILD_DESC }}_${{ matrix.architecture }}_vcpkg_logs
@@ -599,14 +599,14 @@ jobs:
     # Upload build artifacts
     #####################################################
     - name: 'Upload Artifact - (Debug Symbols)'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: success() && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: success() && (matrix.deploy_release == true)
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
@@ -662,7 +662,7 @@ jobs:
         Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
     - name: Upload Sentry source bundles
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (matrix.deploy_release == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: 'debug_sourcebundles_${{ steps.settings.outputs.WZ_BUILD_DESC }}'
         path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
@@ -825,7 +825,7 @@ jobs:
           Get-Content "${env:INSTALLER_OUTPUT_DIR}\setup-manifest.txt"
       - name: 'Upload Artifact - (Combined Installer)'
         id: upload-combined-installer-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         with:
           name: warzone2100_win_installer
@@ -929,7 +929,7 @@ jobs:
           subject-path: '${{ github.workspace }}\signed-installers\*'
       - name: 'Upload Artifact - All Signed Installer EXEs'
         if: (steps.signpath-sign.outcome == 'success')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: warzone2100_installers_signed
           path: '${{ github.workspace }}\signed-installers\*'
