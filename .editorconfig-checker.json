@@ -2,7 +2,7 @@
   "Verbose": false,
   "Debug": false,
   "IgnoreDefaults": false,
-  "SpacesAftertabs": true,
+  "SpacesAfterTabs": true,
   "NoColor": false,
   "Exclude": ["\\.json$", "\\.py$", "_parser.h$", "_parser.cpp$", "_lexer.cpp$", "^tools/"],
   "AllowedContentTypes": [],
