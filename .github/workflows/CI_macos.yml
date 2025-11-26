@@ -63,7 +63,7 @@ jobs:
       VCPKG_DEFAULT_HOST_TRIPLET: '${{ matrix.vcpkg_host_triplet }}'
       ARCHS: '${{ matrix.osx_target_arch }}'
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
         path: 'src'
@@ -223,7 +223,7 @@ jobs:
     needs: macos-build
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           path: 'src'
@@ -400,7 +400,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
           path: 'src'
