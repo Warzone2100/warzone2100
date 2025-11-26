@@ -54,121 +54,121 @@ jobs:
       WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
       WZ_GITHUB_SHA: ${{ steps.checkout-config.outputs.WZ_GITHUB_SHA }}
     steps:
-    - uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-        path: 'src'
-    - name: Configure Repo Checkout
-      id: checkout-config
-      working-directory: ./src
-      env:
-        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
-        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-      run: |
-        . .ci/githubactions/checkout_config.sh
-    - name: Prepare Git Repo for autorevision
-      working-directory: '${{ github.workspace }}/src'
-      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-    - name: Init Git Submodules
-      working-directory: '${{ github.workspace }}/src'
-      run: git submodule update --init --recursive
-    - name: Prep Directories
-      run: |
-        mkdir -p "${{ github.workspace }}/build"
-        mkdir -p "${{ github.workspace }}/installed"
-        mkdir -p "${{ github.workspace }}/output"
-    - name: Compute build variables
-      run: |
-        WZ_DISTRIBUTOR="UNKNOWN"
-        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
-          WZ_DISTRIBUTOR="wz2100.net"
-        fi
-        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
-        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          path: 'src'
+      - name: Configure Repo Checkout
+        id: checkout-config
+        working-directory: ./src
+        env:
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          . .ci/githubactions/checkout_config.sh
+      - name: Prepare Git Repo for autorevision
+        working-directory: '${{ github.workspace }}/src'
+        run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+      - name: Init Git Submodules
+        working-directory: '${{ github.workspace }}/src'
+        run: git submodule update --init --recursive
+      - name: Prep Directories
+        run: |
+          mkdir -p "${{ github.workspace }}/build"
+          mkdir -p "${{ github.workspace }}/installed"
+          mkdir -p "${{ github.workspace }}/output"
+      - name: Compute build variables
+        run: |
+          WZ_DISTRIBUTOR="UNKNOWN"
+          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+            WZ_DISTRIBUTOR="wz2100.net"
+          fi
+          echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+          echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
 
-        WZ_BUILD_DESC="web_${WZ_WASM_ARCH}"
-        echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}"
-        echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" >> $GITHUB_ENV
+          WZ_BUILD_DESC="web_${WZ_WASM_ARCH}"
+          echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}"
+          echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" >> $GITHUB_ENV
 
-    - name: Prep Build Environment
-      run: |
-        # Install additional host tools
-        sudo apt-get -u update
-        DEBIAN_FRONTEND=noninteractive sudo apt-get -y install cmake git zip unzip gettext asciidoctor
+      - name: Prep Build Environment
+        run: |
+          # Install additional host tools
+          sudo apt-get -u update
+          DEBIAN_FRONTEND=noninteractive sudo apt-get -y install cmake git zip unzip gettext asciidoctor
 
-    - uses: actions/setup-node@v6
-      with:
-        package-manager-cache: false
+      - uses: actions/setup-node@v6
+        with:
+          package-manager-cache: false
 
-    - name: Install workbox-cli
-      run: npm install --ignore-scripts workbox-cli --global
+      - name: Install workbox-cli
+        run: npm install --ignore-scripts workbox-cli --global
 
-    - name: Install EMSDK
-      id: emsdk
-      run: |
-        git clone https://github.com/emscripten-core/emsdk.git
-        cd emsdk
-        # Download and install the latest SDK tools
-        ./emsdk install ${EMSDK_VERSION}
-        # Make the "latest" SDK "active" for the current user. (writes .emscripten file)
-        ./emsdk activate ${EMSDK_VERSION}
-        # Output full path to activation script
-        echo "CI_EMSDK_ENV_SCRIPT_PATH=$(pwd)/emsdk_env.sh" >> $GITHUB_OUTPUT
-        echo "CI_EMSDK_ENV_SCRIPT_PATH=$(pwd)/emsdk_env.sh" >> $GITHUB_ENV
+      - name: Install EMSDK
+        id: emsdk
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          # Download and install the latest SDK tools
+          ./emsdk install ${EMSDK_VERSION}
+          # Make the "latest" SDK "active" for the current user. (writes .emscripten file)
+          ./emsdk activate ${EMSDK_VERSION}
+          # Output full path to activation script
+          echo "CI_EMSDK_ENV_SCRIPT_PATH=$(pwd)/emsdk_env.sh" >> $GITHUB_OUTPUT
+          echo "CI_EMSDK_ENV_SCRIPT_PATH=$(pwd)/emsdk_env.sh" >> $GITHUB_ENV
 
-    - name: CMake Configure
-      working-directory: '${{ github.workspace }}/build'
-      env:
-        WZ_INSTALL_DIR: '${{ github.workspace }}/installed'
-      run: |
-        # Setup vcpkg in build dir
-        git clone https://github.com/microsoft/vcpkg.git vcpkg
-        # CMake Configure
-        source "${CI_EMSDK_ENV_SCRIPT_PATH}"
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" "-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=${WZ_WASM_ARCH}-emscripten" "-DCMAKE_INSTALL_PREFIX:PATH=${WZ_INSTALL_DIR}" "${{ github.workspace }}/src"
-        echo "::remove-matcher owner=cmake::"
+      - name: CMake Configure
+        working-directory: '${{ github.workspace }}/build'
+        env:
+          WZ_INSTALL_DIR: '${{ github.workspace }}/installed'
+        run: |
+          # Setup vcpkg in build dir
+          git clone https://github.com/microsoft/vcpkg.git vcpkg
+          # CMake Configure
+          source "${CI_EMSDK_ENV_SCRIPT_PATH}"
+          echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
+          cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" "-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=${WZ_WASM_ARCH}-emscripten" "-DCMAKE_INSTALL_PREFIX:PATH=${WZ_INSTALL_DIR}" "${{ github.workspace }}/src"
+          echo "::remove-matcher owner=cmake::"
 
-    - name: CMake Build
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        source "${CI_EMSDK_ENV_SCRIPT_PATH}"
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/clang.json"
-        cmake --build . --config ${BUILD_TYPE} --target install
-        echo "::remove-matcher owner=clang::"
+      - name: CMake Build
+        working-directory: '${{ github.workspace }}/build'
+        run: |
+          source "${CI_EMSDK_ENV_SCRIPT_PATH}"
+          echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/clang.json"
+          cmake --build . --config ${BUILD_TYPE} --target install
+          echo "::remove-matcher owner=clang::"
 
-    - name: Debug Output
-      working-directory: ${{github.workspace}}/installed
-      run: ls -al
+      - name: Debug Output
+        working-directory: ${{github.workspace}}/installed
+        run: ls -al
 
-    - name: Package Archive
-      working-directory: '${{ github.workspace }}/build'
-      env:
-        OUTPUT_DIR: "${{ github.workspace }}/output"
-      run: |
-        cpack --config "./CPackConfig.cmake" -G ZIP -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_GROUPING=ALL_COMPONENTS_IN_ONE
-        OUTPUT_FILE_NAME="warzone2100_${WZ_BUILD_DESC}_archive.zip"
-        mv "./warzone2100_archive.zip" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
-        echo "Generated .zip: \"${OUTPUT_FILE_NAME}\""
-        echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
-        echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
-        echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
+      - name: Package Archive
+        working-directory: '${{ github.workspace }}/build'
+        env:
+          OUTPUT_DIR: "${{ github.workspace }}/output"
+        run: |
+          cpack --config "./CPackConfig.cmake" -G ZIP -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_GROUPING=ALL_COMPONENTS_IN_ONE
+          OUTPUT_FILE_NAME="warzone2100_${WZ_BUILD_DESC}_archive.zip"
+          mv "./warzone2100_archive.zip" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+          echo "Generated .zip: \"${OUTPUT_FILE_NAME}\""
+          echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+          echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+          echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
 
-    - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v5
-      if: success() && (matrix.upload_artifact == true) && (github.repository == 'Warzone2100/warzone2100')
-      with:
-        name: warzone2100_${{ env.WZ_BUILD_DESC }}_archive
-        path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
-        if-no-files-found: 'error'
+      - name: 'Upload Artifact - (Archive)'
+        uses: actions/upload-artifact@v5
+        if: success() && (matrix.upload_artifact == true) && (github.repository == 'Warzone2100/warzone2100')
+        with:
+          name: warzone2100_${{ env.WZ_BUILD_DESC }}_archive
+          path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
+          if-no-files-found: 'error'
 
-    - name: Generate artifact attestation
-      # Run on push to master branch (development build), or tag release automation build
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v3
-      continue-on-error: true
-      with:
-        subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
+      - name: Generate artifact attestation
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
 
   upload_to_release:
     strategy:
@@ -185,22 +185,22 @@ jobs:
       WZ_WASM_ARCH: '${{ matrix.architecture }}'
       WZ_BUILD_DESC: 'web_${{ matrix.architecture }}'
     steps:
-    - name: Prep Environment
-      run: mkdir dl-archive
-    - name: Download Archive Artifact
-      uses: actions/download-artifact@v6
-      with:
-        name: 'warzone2100_${{ env.WZ_BUILD_DESC }}_archive'
-        path: ./dl-archive
-    - name: Upload Release Asset
-      run: |
-        SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
-        gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ needs.web-build.outputs.WZ_GITHUB_REF }}
-        WZ_FULL_OUTPUT_ZIP_PATH: ./dl-archive/warzone2100_${{ env.WZ_BUILD_DESC }}_archive.zip
+      - name: Prep Environment
+        run: mkdir dl-archive
+      - name: Download Archive Artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: 'warzone2100_${{ env.WZ_BUILD_DESC }}_archive'
+          path: ./dl-archive
+      - name: Upload Release Asset
+        run: |
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+          gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          WZ_GITHUB_REF: ${{ needs.web-build.outputs.WZ_GITHUB_REF }}
+          WZ_FULL_OUTPUT_ZIP_PATH: ./dl-archive/warzone2100_${{ env.WZ_BUILD_DESC }}_archive.zip
 
   publish_dev_build:
     strategy:
