@@ -76,7 +76,7 @@ jobs:
           curl -i -X POST "${WZ_WEB_BUILD_RELEASE_MANAGEMENT_API_URL}" \
           --data "token=${WZ_WEB_BUILD_RELEASE_MANAGEMENT_TOKEN}&setlatest=${WZ_LATEST_RELEASE_TAG}"
       - name: 'Purge Cloudflare Cache'
-        if: success() && (steps.publishpages.outputs.PROCESS_DEPLOYMENT == 'true')
+        if: success()
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_WZ2100_ZONE }}
           CLOUDFLARE_CACHEPURGE_TOKEN: ${{ secrets.CLOUDFLARE_WZ2100_CACHEPURGE_TOKEN }}
