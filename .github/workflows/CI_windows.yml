@@ -618,7 +618,7 @@ jobs:
     - name: 'Generate artifact attestation - (Archive)'
       # Run on push to master branch (development build), or tag release automation build
       if: success() && (matrix.deploy_release == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       continue-on-error: true
       with:
         subject-path: '${{ github.workspace }}\output\archive\*'
@@ -834,7 +834,7 @@ jobs:
       - name: 'Generate Artifact Attestation'
         # Run on push to master branch (development build), or tag release automation build
         if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
           subject-path: '${{ steps.build-installer.outputs.INSTALLER_EXE }}'
@@ -923,7 +923,7 @@ jobs:
           Write-Host ""
       - name: 'Generate artifact attestations - (Signed Installers)'
         if: (steps.signpath-sign.outcome == 'success') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
           subject-path: '${{ github.workspace }}\signed-installers\*'
