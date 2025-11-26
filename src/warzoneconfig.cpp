@@ -93,6 +93,8 @@ struct WARZONE_GLOBALS
 	UDWORD fullscreenModeWidth = 0; // current display default
 	UDWORD fullscreenModeHeight = 0; // current display default
 	int fullscreenModeScreen = -1;
+	float fullscreenPixelDensity = 1.f;
+	float fullscreenRefreshRate = 0.f; // current display default
 	int toggleFullscreenMode = 0; // 0 = the backend default
 	unsigned int cursorScale = 100;
 	// shadow mapping settings
@@ -665,6 +667,26 @@ void war_SetFullscreenModeScreen(int screen)
 int war_GetFullscreenModeScreen()
 {
 	return warGlobs.fullscreenModeScreen;
+}
+
+float war_GetFullscreenModePixelDensity()
+{
+	return warGlobs.fullscreenPixelDensity;
+}
+
+void war_SetFullscreenModePixelDensity(float pixelDensity)
+{
+	warGlobs.fullscreenPixelDensity = pixelDensity;
+}
+
+float war_GetFullscreenModeRefreshRate()
+{
+	return warGlobs.fullscreenRefreshRate;
+}
+
+void war_SetFullscreenModeRefreshRate(float refreshRate)
+{
+	warGlobs.fullscreenRefreshRate = refreshRate;
 }
 
 void war_setToggleFullscreenMode(int mode)
