@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Croatian\n"
 "Language: hr_HR\n"
@@ -5025,11 +5025,11 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Zapaljiva Haubica Uporište"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Zapaljiva Haubica sa Uporištem"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Zapaljiva Haubica Uporište"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Zapaljiva Haubica može biti zadana senzorima"
@@ -5699,11 +5699,11 @@ msgstr "Novi Sustavi Građevina je Dostupno"
 msgid "New Systems Tower Available"
 msgstr "novi sustavi toranja je dostupno"
 
-msgid "New Systems Turret Available For Design"
-msgstr ""
-
 msgid "New Systems Turret Available for Design"
 msgstr "Novi infrastrukturni alat dostupan"
+
+msgid "New Systems Turret Available For Design"
+msgstr ""
 
 msgid "New Thermal Emissions detection"
 msgstr ""
@@ -6584,11 +6584,11 @@ msgstr ""
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
-msgid "Synaptic Link Data Analysis"
-msgstr ""
-
 msgid "Synaptic link data analysis"
 msgstr "Analiza podataka sinaptičke veze"
+
+msgid "Synaptic Link Data Analysis"
+msgstr ""
 
 msgid "Synaptic Link Scrambler technology"
 msgstr ""
@@ -10919,16 +10919,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"

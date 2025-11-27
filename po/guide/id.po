@@ -5,86 +5,86 @@ msgstr ""
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
 "PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
-"Language-Team: Italian\n"
-"Language: it_IT\n"
+"Language-Team: Indonesian\n"
+"Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: warzone2100\n"
 "X-Crowdin-Project-ID: 354665\n"
-"X-Crowdin-Language: it\n"
+"X-Crowdin-Language: id\n"
 "X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
 "X-Crowdin-File-ID: 360\n"
 
 msgid "Artifacts"
-msgstr "Artefatti"
+msgstr "Artefak"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
-msgstr "Man mano che progredisci attraverso la campagna, raccoglierai degli Artefatti dalle basi nemiche (e da unità nemici specifiche)."
+msgstr "Begitu kamu menjalankan misi, kamu dapat mengambil Artefak dari markas musuh (beberapa ada di unit musuh)"
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr "Questi sbloccheranno tecnologie preziose che potrai ricercare in un Centro di Ricerca."
+msgstr "Kamu dapat meneliti Artefak itu di Laboratorium agar dapat membuka berbagai teknologi yang akan berguna kedepannya."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr "Gli artefatti sono piccole scatole bianche con un indicatore verde sopra, e possono essere raccolti muovendo qualsiasi unità abbastanza vicino."
+msgstr "Artefak itu berbentuk kotak kecil warna putih yang ditandai dengan tanda hijau diatasnya, kamu dapat mengambilnya dengan menggerakkan unit manapun ke sana."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr "Tutti gli artefatti devono essere raccolti come parte delle condizioni di vittoria di ogni livello."
+msgstr "Semua artefak wajib diambil karena itu adalah salah satu objektif misi."
 
 msgid "Backstory"
-msgstr "Retroscena"
+msgstr "Backstory"
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
-msgstr "Alla fine del 21° secolo, la NASDA (Agenzia di Difesa Strategica Nord Americana o North American Strategic Defense Agency) ha sviluppato e dispiegato un massiccio sistema di difesa missilistica, compresa una rete di satelliti dotati di armi nucleari e di siti di lancio a terra."
+msgstr "Akhir abad 21, NASDA (Badan Pertahanan Strategis Amerika Utara) mengembangkan sistem pertahanan rudal berskala besar, mereka mengorbitkan beberapa satelit yang sudah dipersenjatai nuklir dan membangun situs peluncuran di darat."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr "Tuttavia, durante un controllo di manutenzione ordinaria, qualcosa è andato terribilmente storto..."
+msgstr "Tetapi, saat sedang melakukan pengecekan rutin, sesuatu yang buruk terjadi..."
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr "Il collasso è arrivato veloce e con grande impatto. A seguito di un errore tecnico nel sistema di difesa satellitare, le testate nucleari sono state lanciate nelle principali città di tutto il mondo."
+msgstr "The Collapse datang dengan cepat dan dahsyat. Akibat kesalahan teknis pada sistem pertahanan satelit, hulu ledak nuklir tak sengaja diluncurkan ke kota-kota besar di seluruh dunia."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr ""
+msgstr "Hanya selang beberapa menit, situs peluncuran di darat ikut merespons peluncuran tersebut. Jutaan nyawa terenggut begitu bom nuklir mendarat di kota mereka. Wabah dan penyakit yang muncul setelahnya juga turut membinasakan peradaban yang tersisa."
 
 msgid "Less than a million people survived the Collapse."
-msgstr "Meno di un milione di persone sopravvissero al Collapse."
+msgstr "Kini, populasi manusia di dunia hanya kurang dari satu juta"
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr ""
+msgstr "Umat manusia terpecah-belah menjadi ratusan kelompok liar yang menyerang satu sama lain demi memperebutkan sisa-sisa peradaban lama. Mereka adalah para Scavenger. Hanya sekian dari mereka yang memiliki visi untuk membangun tatanan dunia baru dari sisa-sisa abu kehancuran."
 
 msgid "## Present Day:"
-msgstr "## Oggi:"
+msgstr "## Masa Kini:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr ""
+msgstr "Kamu disini akan berperan sebagai \"Sang Komandan\", yang menjadi salah satu bagian dari sekumpulan orang yang berhasil bertahan hidup dengan berlindung di pangkalan militer di Pegunungan Rocky."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr ""
+msgstr "Kamu dan orang-orangmu memiliki ambisi untuk membangun tatanan dunia baru, dibawah nama \"The Project\""
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr ""
+msgstr "The Project terbagi menjadi tiga regu yang sama-sama bertujuan untuk mencari sisa-sisa reruntuhan dari peradaban lama, meneliti ulang artefak-artefak teknologi sebelum Collapse, lalu merekonstruksinya."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr ""
+msgstr "- Regu Alpha dikirim ke gurun Arizona yang berlokasi di sebelah tenggara Markas Besar The Project"
 
 msgid "- Beta team is sent to the remains of Chicago"
-msgstr ""
+msgstr "- Regu Beta dikirim ke reruntuhan kota Chicago"
 
 msgid "- Gamma team is sent into the northern Rockies in Colorado"
-msgstr ""
+msgstr "- Regu Gamma dikirim ke Pegunungan Rocky Utara di Colorado"
 
 msgid "Command Panel"
-msgstr "Pannello di comando"
+msgstr "Panel Perintah"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr ""
+msgstr "Di sini terdapat enam menu perintah. Kamu dapat membuka salah satu menu perintah dengan menge-kliknya."
 
 msgid "The middle / central button closes any open command interface."
-msgstr ""
+msgstr "Tombol tengah berfungsi untuk menutup menu perintah"
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Mempertahankan Pangkalanmu"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
 msgstr ""
@@ -126,10 +126,10 @@ msgid "(If you have the Timer Power Bonus tweak enabled - which is the default -
 msgstr ""
 
 msgid "Power"
-msgstr "Energia"
+msgstr ""
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr "In Warzone 2100, l'energia è la tua risorsa chiave."
+msgstr ""
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
 msgstr ""
@@ -138,7 +138,7 @@ msgid "Power is generated by Power Generators that are fed by Oil Derricks."
 msgstr ""
 
 msgid "Researching Technology"
-msgstr "Ricerca tecnologia"
+msgstr ""
 
 msgid "Researching technologies is accomplished using Research Facilities."
 msgstr ""
@@ -165,16 +165,16 @@ msgid "- Enable the research of additional technologies"
 msgstr ""
 
 msgid "General"
-msgstr "Generale"
+msgstr ""
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
-msgstr "In Warzone 2100, comandi le forze di \"The Project\" in una battaglia per ricostruire il mondo dopo che l'umanità è quasi stata distrutta dai missili nucleari."
+msgstr ""
 
 msgid "This guide will help walk you through key facets of the game."
-msgstr "Questa guida ti illustrerà gli aspetti chiave del gioco."
+msgstr ""
 
 msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
-msgstr "(Se stai giocando la campagna, nuovi argomenti della guida potrebbero essere sbloccati man mano che avanzi nel gioco.)"
+msgstr ""
 
 msgid "Building Structures"
 msgstr ""
