@@ -4,7 +4,7 @@ ${LangFileString} WZWelcomeText_Portable "Ласкаво просимо у пе�
 
 ${LangFileString} WZWelcomeHomepageLink "Завітайте на офіційну домашню сторінку https://wz2100.net за останньою версією."
 
-${LangFileString} WZ_64BIT_AVAILABLE "Доступна 64-бітна версія Warzone 2100.$\r\nЗадля подробиць відвідайте https://wz2100.net/ $\r\nВсеодно продовжити встановлення 32-бітної версії?"
+${LangFileString} WZ_64BIT_AVAILABLE "Доступна 64-бітна версія Warzone 2100.$\r\nДля подробиць відвідайте https://wz2100.net/ $\r\nОднаково продовжити встановлення 32-бітної версії?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Це 64-бітна версія Warzone 2100.$\r$\nБудь ласка, завантажте 32-бітну версію з https://wz2100.net/ $\r$\nНатисніть ОК аби вийти з клієнта для завантаження."
 
@@ -41,7 +41,7 @@ ${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Micro
 
 ${LangFileString} DLTEXT_Downloading "Завантаження"
 ${LangFileString} DLTEXT_SysLibDLFailed "Збій завантаження системної бібліотеки"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_VideosDLFailed "Помилка завантаження відео"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Для завершення встановлення необхідне перезавантаження. Бажаєте перезавантажити систему?"
+${LangFileString} TEXT_MsgRebootFailed "Помилка перезавантаження. Перезавантажте вручну."
