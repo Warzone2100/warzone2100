@@ -1,10 +1,22 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "d1ff36c6520ee43f1a656c03cd6425c2974a449e",
+	"builtin-baseline": "ab2977be50c702126336e5088f4836060733c899",
 	"dependencies": [
 		"physfs",
-		"sdl3",
+		{
+			"name": "sdl3",
+			"default-features": true,
+			"platform": "!emscripten"
+		},
+		{
+			"name": "sdl3",
+			"default-features": true,
+			"features": [
+				"emscripten-pthreads"
+			],
+			"platform": "emscripten"
+		},
 		{
 			"name": "harfbuzz",
 			"platform": "!emscripten"
