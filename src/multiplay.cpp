@@ -2731,8 +2731,8 @@ bool shouldSkipReadyResetOnPlayerJoinLeaveEvent()
 {
 	// If a player joins or leaves, do not reset existing player "ready" status if:
 	// 1. It's a blind simple lobby (i.e. waiting room)
-	// 2. min_autostart_player_count is set (ex. via the --startplayers= command line option)
-	return isBlindSimpleLobby(game.blindMode) || (min_autostart_player_count() > 0);
+	// 2. min_autostart_player_count is set (ex. via the --startplayers= command line option) *and* locked.readybeforefull is false
+	return isBlindSimpleLobby(game.blindMode) || ((min_autostart_player_count() > 0) && !getLockedOptions().readybeforefull);
 }
 
 /* Reset ready status for all players */

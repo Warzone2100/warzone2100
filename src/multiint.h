@@ -91,6 +91,7 @@ struct MultiplayOptionsLocked
 	bool bases;
 	bool spectators;
 	bool name;
+	bool readybeforefull;
 
 	bool operator==(const MultiplayOptionsLocked& other) const
 	{
@@ -103,7 +104,8 @@ struct MultiplayOptionsLocked
 			&& position == other.position
 			&& bases == other.bases
 			&& spectators == other.spectators
-			&& name == other.name;
+			&& name == other.name
+			&& readybeforefull == other.readybeforefull;
 	}
 };
 const MultiplayOptionsLocked& getLockedOptions();

@@ -2792,6 +2792,13 @@ bool recvReadyRequest(NETQUEUE queue)
 		return false;
 	}
 
+	if (!NetPlay.players[player].isSpectator && !multiplayPlayersCanCheckReady())
+	{
+		// silently ignore players trying to check ready when they shouldn't - refresh player info with current state
+		NETBroadcastPlayerInfo(player);
+		return false;
+	}
+
 	bool changedValue = changeReadyStatus((UBYTE)player, bReady);
 	if (changedValue && wz_command_interface_enabled())
 	{
@@ -5623,6 +5630,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		locked.bases = ini.value("bases", challengeActive).toBool();
 		locked.spectators = ini.value("spectators", challengeActive).toBool();
 		locked.name = ini.value("name", false).toBool();
+		locked.readybeforefull = ini.value("readybeforefull", (getHostLaunch() == HostLaunch::Autohost)).toBool();
 	}
 	ini.endGroup();
 
@@ -8114,7 +8122,18 @@ static bool multiplayHasOpenPlayerSlot()
 
 bool multiplayPlayersCanCheckReady()
 {
-	return isBlindSimpleLobby(game.blindMode) || (allPlayersOnSameTeam(-1) == -1);
+	if (isBlindSimpleLobby(game.blindMode))
+	{
+		// if in a blind simple lobby, players can always check ready
+		return true;
+	}
+
+	if (locked.readybeforefull && multiplayHasOpenPlayerSlot())
+	{
+		return false;
+	}
+
+	return (allPlayersOnSameTeam(-1) == -1);
 }
 
 bool multiplayPlayersShouldCheckReady()
