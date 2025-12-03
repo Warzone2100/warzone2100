@@ -2785,6 +2785,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			// (example: Windows), do our best to bump up the game's Display Scale setting to be a better match if the screen
 			// on which the game starts has a higher effective Display Scale than the game's starting Display Scale setting.
 			unsigned int screenBaseDisplayScale = wzGetDefaultBaseDisplayScale(screenIndex > 0 ? screenIndex : SDL_GetPrimaryDisplay());
+
 			if (screenBaseDisplayScale > wzGetCurrentDisplayScale())
 			{
 				// When bumping up the display scale, also increase the target window size proportionally
@@ -2794,7 +2795,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 				float displayScaleDiff = (float)screenBaseDisplayScale / (float)priorDisplayScale;
 				windowWidth = static_cast<unsigned int>(ceil((float)windowWidth * displayScaleDiff));
 				windowHeight = static_cast<unsigned int>(ceil((float)windowHeight * displayScaleDiff));
-				war_SetDisplayScale(screenBaseDisplayScale); // save the new display scale configuration
 			}
 		}
 
@@ -2805,7 +2805,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
 			maxDisplayScale = std::max(100u, maxDisplayScale); // if wzGetMaximumDisplayScaleForWindowSize fails, it returns < 100
 			setDisplayScale(maxDisplayScale);
-			war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
 			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 		}
 
@@ -2900,7 +2899,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			// Reduce the display scale
 			debug(LOG_WARNING, "Reducing the display scale level to the maximum supported for this window size: %u", maxDisplayScale);
 			setDisplayScale(maxDisplayScale);
-			war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
 			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 		}
 		else
@@ -2914,7 +2912,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 
 			// Attempt to default to base resolution at 100%
 			setDisplayScale(100);
-			war_SetDisplayScale(100); // save the new display scale configuration
 			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
 
 			SDL_SetWindowSize(WZwindow, minWindowWidth, minWindowHeight);
@@ -3330,6 +3327,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		}
 		if (success)
 		{
+			war_SetDisplayScale(wzGetCurrentDisplayScale()); // persist any auto-adjustments to the display scale
 			break;
 		}
 		else
