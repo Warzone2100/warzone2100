@@ -263,9 +263,15 @@ UninstallFilesDir={app}\{#UNINSTALL_DATA_SUBFOLDER}
 UninstallDisplayIcon={app}\{#WZ_BINDIR}\{#MyAppExeName}
 
 // Installer Style
+#if ComparePackedVersion(Ver, EncodeVer(6,6,0,0)) < 0
+// On Inno Setup < 6.6.0, use modern with custom default font
 WizardStyle=modern
-WizardSizePercent=110
 DefaultDialogFontName=Segoe UI
+#else
+// On Inno Setup >= 6.6.0, use modern dynamic, and the new default on fonts
+WizardStyle=modern dynamic
+#endif
+WizardSizePercent=110
 AlwaysShowComponentsList=yes
 AlwaysShowDirOnReadyPage=yes
 WizardImageFile={#AddBackslash(SourcePath) + "resources\wzwizardimage.bmp"}
@@ -336,12 +342,14 @@ Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer
 #emit AddUnofficialTranslation("ro_RO", "Romanian.isl")
 #emit AddUnofficialTranslation("zh_CN", "ChineseSimplified.isl")
 
+#if ComparePackedVersion(Ver, EncodeVer(6,6,0,0)) < 0
 [LangOptions]
 // Future TODO: 
 // - Ideally this should not override languages that specify a larger size (the default is 8),
 //   although there does seem to be a way to easily do that. Do any used language .isl files have greater?
 //   Would be nice if there was a "MinimumDialogFontSize" option.
 DialogFontSize=9
+#endif
 
 [Messages]
 AboutSetupNote=Additional scripts:%nhttps://github.com/past-due/innohelperscripts
