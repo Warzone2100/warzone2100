@@ -187,7 +187,7 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 		NotReadyKicked,
 		PlayerShouldCheckReadyNotice
 	};
-	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx);
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx, uint32_t additionalData);
 } // namespace INTERNAL_LOCALIZED_LOBBY_NOTICE
 
 } // namespace WzQuickChatDataContexts

@@ -2498,13 +2498,14 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 
 // - INTERNAL_LOCALIZED_LOBBY_NOTICE
 namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
-	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx)
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx, uint32_t additionalData)
 	{
-		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), 0, targetPlayerIdx };
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), additionalData, targetPlayerIdx };
 	}
 
 	std::string to_output_string(WzQuickChatMessageData messageData)
 	{
+		uint32_t additionalData = messageData.dataA;
 		uint32_t targetPlayerIdx = messageData.dataB;
 
 		if (targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
@@ -2526,21 +2527,36 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 				}
 				else
 				{
-					// Not intended for this player
+					// Not intended for this player, but show a single message when 5 seconds remaining
+					// so other players know a kick is coming
+					if (additionalData == 5 && !isBlindSimpleLobby(game.blindMode))
+					{
+						return astringf(_("Player will be kicked if they don't check Ready soon: %s"), targetPlayerName);
+					}
 					return "";
 				}
 			case static_cast<uint32_t>(Context::NotReadyKicked):
 				return astringf(_("Auto-kicking player (%s) because they waited too long to check Ready"), targetPlayerName);
 			case static_cast<uint32_t>(Context::PlayerShouldCheckReadyNotice):
+			{
 				audio_PlayTrack(ID_SOUND_ZOOM_ON_RADAR);
+				std::string result;
 				if (isBlindSimpleLobby(game.blindMode))
 				{
-					return _("NOTICE: Please check Ready");
+					result = _("NOTICE: Please check Ready");
 				}
 				else
 				{
-					return _("NOTICE: Please check Ready so the game can begin");
+					result = _("NOTICE: Please check Ready so the game can begin");
 				}
+				if (additionalData > 0)
+				{
+					// auto-not-ready-kick is enabled
+					result += "\n";
+					result += _("Players who don't check Ready in time will be kicked.");
+				}
+				return result;
+			}
 		}
 
 		return ""; // Silence compiler warning
@@ -2976,7 +2992,12 @@ void addQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, c
 void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
 	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
-	addConsoleMessage(to_output_string(message, messageData).c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
+	auto outputMsg = to_output_string(message, messageData);
+	if (outputMsg.empty())
+	{
+		return;
+	}
+	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
 }
 
 bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message)
