@@ -2589,7 +2589,8 @@ void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheck
 
 			if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)
 			{
-				sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::PlayerShouldCheckReadyNotice, NetPlay.hostPlayer));
+				auto autoNotReadyKickSeconds = war_getAutoNotReadyKickSeconds();
+				sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::PlayerShouldCheckReadyNotice, NetPlay.hostPlayer, (autoNotReadyKickSeconds > 0) ? static_cast<uint32_t>(autoNotReadyKickSeconds) : 0));
 			}
 		}
 		else
