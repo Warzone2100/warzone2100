@@ -721,8 +721,8 @@ jobs:
           $VerbosePreference = "Continue"
           . "src\.ci\powershell\request.ps1"
 
-          $INNOSETUP_DL_URL = "https://files.jrsoftware.org/is/6/innosetup-6.5.3.exe"
-          $INNOSETUP_DL_SHA256 = "9345ee029faa0b7aed0818c3d5b227699ef9a496cce79e20c19eb9d6ef2e2c2d"
+          $INNOSETUP_DL_URL = "https://github.com/jrsoftware/issrc/releases/download/is-6_6_1/innosetup-6.6.1.exe"
+          $INNOSETUP_DL_SHA256 = "d243ce440c02705530699554fb9612b9b2bd7a2a90629cdb7f41e66f5faeb91f"
 
           $INNOSETUP_DL_PATH = ".\dependency-dl\innosetup.exe"
           $req = Req -Params @{ 'Method'='GET';'Uri'="$INNOSETUP_DL_URL";'OutFile'="${INNOSETUP_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${INNOSETUP_DL_SHA256}" -Algorithm SHA256
@@ -762,8 +762,8 @@ jobs:
           $VerbosePreference = "Continue"
           . "src\.ci\powershell\request.ps1"
 
-          $TRANSLATIONS_COMMIT_DL_URL = "https://github.com/jrsoftware/issrc/archive/bf7dc5d0fce1c1743167f07a89dff8d224acba51.zip"
-          $TRANSLATIONS_COMMIT_DL_SHA512 = "0faf94c9639b69fbfcfb06edd23a00baa39704dab3a4c097f4a0c8e9a654d4f98d855c861b391f7f44cb38a4c7d0b4efb9c9f0811477930b3f5ca2d6dbd8a63e"
+          $TRANSLATIONS_COMMIT_DL_URL = "https://github.com/jrsoftware/issrc/archive/1324c76409001499a4f7da285fcbfb22e825cd85.zip"
+          $TRANSLATIONS_COMMIT_DL_SHA512 = "0066d5bd790a8ccc38d2f2e2c13bd7791adefbb50e77979e9491c5b342f807c5169cf86aaa4336b9195b98bf3b13b3b5b027b0edb5fd294850e9e81ff16696f8"
 
           $TRANSLATIONS_COMMIT_DL_PATH = ".\dependency-dl\translations_commit.zip"
           $req = Req -Params @{ 'Method'='GET';'Uri'="$TRANSLATIONS_COMMIT_DL_URL";'OutFile'="${TRANSLATIONS_COMMIT_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${TRANSLATIONS_COMMIT_DL_SHA512}" -Algorithm SHA512
