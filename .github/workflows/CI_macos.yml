@@ -114,6 +114,10 @@ jobs:
         echo "Setting Xcode: ${DESIRED_XCODE_DEV_DIR}"
         sudo xcode-select -s "${DESIRED_XCODE_DEV_DIR}"
 
+        SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+        echo "SDKROOT: ${SDKROOT}"
+        echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
+
         echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
         echo "VCPKG_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}" >> $GITHUB_ENV
         echo "VCPKG_KEEP_ENV_VARS=VCPKG_OSX_DEPLOYMENT_TARGET;MACOSX_DEPLOYMENT_TARGET" >> $GITHUB_ENV
