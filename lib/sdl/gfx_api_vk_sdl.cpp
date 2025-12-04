@@ -21,8 +21,8 @@
 
 #include "gfx_api_vk_sdl.h" // Must be prior to frame.h include
 #include "lib/framework/frame.h"
-#include <SDL_vulkan.h>
-#include <SDL_version.h>
+#include <SDL3/SDL_vulkan.h>
+#include <SDL3/SDL_version.h>
 
 sdl_Vulkan_Impl::sdl_Vulkan_Impl(SDL_Window* _window, bool _allowImplicitLayers)
 {
@@ -33,7 +33,14 @@ sdl_Vulkan_Impl::sdl_Vulkan_Impl(SDL_Window* _window, bool _allowImplicitLayers)
 
 PFN_vkGetInstanceProcAddr sdl_Vulkan_Impl::getVkGetInstanceProcAddr()
 {
+#if defined( _MSC_VER )
+#pragma warning( push )
+#pragma warning( disable : 4191 ) // warning C4191: 'reinterpret_cast': unsafe conversion from 'SDL_FunctionPointer' to 'PFN_vkGetInstanceProcAddr'
+#endif
 	PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(SDL_Vulkan_GetVkGetInstanceProcAddr());
+#if defined( _MSC_VER )
+#pragma warning( pop )
+#endif
 	if(!_vkGetInstanceProcAddr)
 	{
 		debug(LOG_ERROR, "SDL_Vulkan_GetVkGetInstanceProcAddr() failed: %s\n", SDL_GetError());
@@ -45,20 +52,20 @@ PFN_vkGetInstanceProcAddr sdl_Vulkan_Impl::getVkGetInstanceProcAddr()
 bool sdl_Vulkan_Impl::getRequiredInstanceExtensions(std::vector<const char*> &output)
 {
 	// Get the required extension count
-	unsigned int requiredExtensionCount;
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &requiredExtensionCount, nullptr))
+	uint32_t requiredExtensionCount;
+	const char * const *instance_extensions = SDL_Vulkan_GetInstanceExtensions(&requiredExtensionCount);
+	if (!instance_extensions)
 	{
 		debug(LOG_ERROR, "SDL_Vulkan_GetInstanceExtensions failed: %s\n", SDL_GetError());
 		return false;
 	}
 
 	std::vector<const char*> extensions;
-	extensions.resize(requiredExtensionCount);
-
-	if (!SDL_Vulkan_GetInstanceExtensions(window, &requiredExtensionCount, extensions.data()))
+	extensions.reserve(requiredExtensionCount);
+	for (uint32_t i = 0; i < requiredExtensionCount; i++)
 	{
-		debug(LOG_ERROR, "SDL_Vulkan_GetInstanceExtensions[2] failed: %s\n", SDL_GetError());
-		return false;
+		if (!instance_extensions[i]) { continue; }
+		extensions.push_back(instance_extensions[i]);
 	}
 
 	output = extensions;
@@ -67,7 +74,7 @@ bool sdl_Vulkan_Impl::getRequiredInstanceExtensions(std::vector<const char*> &ou
 
 bool sdl_Vulkan_Impl::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
 {
-	if (!SDL_Vulkan_CreateSurface(window, instance, surface))
+	if (!SDL_Vulkan_CreateSurface(window, instance, NULL, surface))
 	{
 		debug(LOG_ERROR, "SDL_Vulkan_CreateSurface() failed: %s\n", SDL_GetError());
 		return false;
@@ -77,7 +84,7 @@ bool sdl_Vulkan_Impl::createWindowSurface(VkInstance instance, VkSurfaceKHR* sur
 
 void sdl_Vulkan_Impl::getDrawableSize(int* w, int* h)
 {
-	SDL_Vulkan_GetDrawableSize(window, w, h);
+	SDL_GetWindowSizeInPixels(window, w, h);
 }
 
 bool sdl_Vulkan_Impl::allowImplicitLayers() const

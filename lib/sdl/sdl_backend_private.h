@@ -30,6 +30,7 @@ using nonstd::optional;
 using nonstd::nullopt;
 
 void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
+float wzGetDisplayContentScale();
 
 class VideoInitProgress
 {
