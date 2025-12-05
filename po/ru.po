@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-12-05 02:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2994,7 +2994,7 @@ msgid "Replay File Format Unsupported"
 msgstr "Формат реплея не поддерживается"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Формат файла реплея старше, чем эта версия Warzone 2100."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Не удается загрузить реплей: файл незавершен или поврежден."
@@ -3015,17 +3015,17 @@ msgid "OK"
 msgstr "ОК"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: предыдущий запуск не удался"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "Предыдущая попытка инициализировать графический движок крашнулась:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Графический движок: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100 теперь попытается запуститься с помощью другого графического движка."
 
 msgid "Menu"
 msgstr "Меню"
@@ -5035,10 +5035,10 @@ msgstr "Улучшение в лазерной оптики снижает ра�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Установка зажигательной гаубицы 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Установка зажигательной гаубицы"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Установка зажигательной гаубицы"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5709,10 +5709,10 @@ msgstr "Доступна новая системная структура"
 msgid "New Systems Tower Available"
 msgstr "Доступна новая системная башня"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Доступна новая системная турель для дизайна"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Доступна новая системная турель для дизайна"
 
 msgid "New Thermal Emissions detection"
@@ -6594,11 +6594,11 @@ msgstr "Анализ нейросвязи Мk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Анализ нейросвязи Мk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Анализ нейросвязи"
-
 msgid "Synaptic link data analysis"
 msgstr "Анализ данных о нейросвязи"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Анализ нейросвязи"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Технология шифратора с помощью нейросвязи"
@@ -8095,17 +8095,17 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) изменил фракцию игрока (%s) на: %s"
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr ""
+msgstr "ВНИМАНИЕ: если вы не нажмёте Готов в ближайшее время, вы будете выгнаны из комнаты"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr ""
+msgstr "Игрок (%s) автоматически выгнан, потому что слишком долго не нажимал кнопку Готов"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "ВНИМАНИЕ: пожалуйста, нажмите кнопку Готов"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "ВНИМАНИЕ: пожалуйста, нажмите кнопку Готов, чтобы игра началась"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Может кто-нибудь передать мне юнитов?"
@@ -8162,7 +8162,7 @@ msgid "I want to switch teams"
 msgstr "Я хочу сменить команду"
 
 msgid "Please check Ready so we can start"
-msgstr "Подтвердите готовность, чтобы мы начали"
+msgstr "Пожалуйста, нажмите Готов, чтобы мы начали играть"
 
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
@@ -9605,7 +9605,7 @@ msgid "Player Name changes are not allowed when you are muted"
 msgstr "Запрещено изменять имя игрока, когда вы заглушены"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "Хостом запрещено изменять имя игрока"
 
 msgid "Blind Game:"
 msgstr "Игра вслепую:"
@@ -10148,7 +10148,7 @@ msgstr "Хост разблокировал общий чат для игрок�
 
 #, c-format
 msgid "The host has enabled free chat for %d players"
-msgstr ""
+msgstr "Хост разблокировал общий чат для %d игроков"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
@@ -10156,7 +10156,7 @@ msgstr "Хост заблокировал общий чат для игрока:
 
 #, c-format
 msgid "The host has muted free chat for %d players"
-msgstr ""
+msgstr "Хост заблокировал общий чат для %d игроков"
 
 msgid "Limits set to default."
 msgstr "Установлены лимиты по умолчанию."
@@ -10947,17 +10947,17 @@ msgstr "Бонус Гамма"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr "Дополнительные миссии Гамма, использующие карту от команды разработчиков оригинала (карту обновил: DARwins)."
 
-msgid "Insane Spawns"
-msgstr "Безумные спавны"
+msgid "Additional Spawns (Insane difficulty)"
+msgstr "Дополнительные спавны (Безумная сложность)"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "Включает дополнительные спавны противника и поведение для Безумной сложности (или выше)."
 
-msgid "Non-Insane Spawns"
-msgstr "Небезумные спавны"
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr "Дополнительные спавны (Сложности ниже, чем Безумная)"
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr "Балансирует функцию Безумные спавны для тяжёлой сложности и ниже."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr "Включает дополнительные спавны противника и поведение для Тяжёлой сложности или выше."
 
 msgid "Fast EXP gain"
 msgstr "Быстрое получение опыта"
@@ -11074,10 +11074,10 @@ msgid "Open Music Manager"
 msgstr "Открыть менеджер музыки"
 
 msgid "Audio Cues"
-msgstr ""
+msgstr "Аудио сигналы"
 
 msgid "Group Reporting"
-msgstr ""
+msgstr "Рапорты групп"
 
 msgid "Mouse"
 msgstr "Мышь"
@@ -11547,22 +11547,22 @@ msgid "not ready"
 msgstr "не готов"
 
 msgid "Waiting Room"
-msgstr ""
+msgstr "Комната ожидания"
 
 msgid "FFA"
-msgstr ""
+msgstr "FFA"
 
 msgid "Alliances Allowed"
-msgstr ""
+msgstr "Союзы разрешены"
 
 msgid "Teams"
-msgstr ""
+msgstr "Команды"
 
 msgid "Teams (No Shared Res)"
-msgstr ""
+msgstr "Команды (раздельные ресурсы)"
 
 msgid "Matchmaking"
-msgstr ""
+msgstr "Подбор игроков"
 
 msgid "Blind Lobby"
 msgstr "Лобби вслепую"
@@ -11571,70 +11571,70 @@ msgid "Blind Game"
 msgstr "Игра вслепую"
 
 msgid "No Tanks"
-msgstr ""
+msgstr "Без танков"
 
 msgid "No VTOL"
-msgstr ""
+msgstr "Без СВВП"
 
 msgid "No Cyborgs"
-msgstr ""
+msgstr "Без киборгов"
 
 msgid "Spectate Game"
-msgstr ""
+msgstr "Наблюдать за игрой"
 
 msgid "There appears to be a game update available!"
 msgstr "Похоже, доступно обновление игры!"
 
 msgid "Failed to connect to lobby server"
-msgstr ""
+msgstr "Не удалось соединиться с лобби сервера"
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Ваша версия Warzone несовместима с этой игрой."
 
 #, c-format
 msgid "Host Version: %s"
-msgstr ""
+msgstr "Версия хоста: %s"
 
 msgid "(50+ omitted)"
-msgstr ""
+msgstr "(50+ пропущено)"
 
 #, c-format
 msgid "(%u omitted)"
-msgstr ""
+msgstr "(%u пропущено)"
 
 msgid "No games for your version"
-msgstr ""
+msgstr "Нет игр для вашей версии"
 
 msgid "No games matching filters"
-msgstr ""
+msgstr "Нет игр, соответствующих фильтрам"
 
 #, c-format
 msgid "%d players queued"
-msgstr ""
+msgstr "Игроков в очереди: %d"
 
 msgid "Matchmaking Room: Open"
-msgstr ""
+msgstr "Комната подбора игроков: открыта"
 
 msgid "Filters"
-msgstr ""
+msgstr "Фильтры"
 
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 msgid "Details"
-msgstr ""
+msgstr "Подробности"
 
 msgid "Mods"
-msgstr ""
+msgstr "Моды"
 
 msgid "Hide Incompatible Games"
-msgstr ""
+msgstr "Скрыть несовместимые игры"
 
 msgid "Hide Empty Games"
-msgstr ""
+msgstr "Скрыть пустые игры"
 
 msgid "Hide Modded Games"
-msgstr ""
+msgstr "Скрыть модифицированные игры"
 
 #, c-format
 msgid "Sending Map: %u%% "
