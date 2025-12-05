@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -5037,10 +5037,10 @@ msgstr "改善激光系统的光学结构使之不易发散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃烧榴弹炮炮位 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "燃烧榴弹炮炮位"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "燃烧榴弹炮炮位"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5711,11 +5711,11 @@ msgstr "可建筑新的系统建筑"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系统防御工事"
 
-msgid "New Systems Turret Available For Design"
-msgstr "可在设计选单中使用新的系统装备"
-
 msgid "New Systems Turret Available for Design"
 msgstr "可搭载新的系统装备"
+
+msgid "New Systems Turret Available For Design"
+msgstr "可在设计选单中使用新的系统装备"
 
 msgid "New Thermal Emissions detection"
 msgstr "可侦测热能放射"
@@ -6596,10 +6596,10 @@ msgstr "突触连结数据分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突触连结数据分析三型"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突触连结数据分析"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突触连结数据分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -8086,10 +8086,10 @@ msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "正在自动踢除玩家（%s），原因：准备超时"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "注意：请打勾准备"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "注意：请打勾准备就绪以便游戏开始"
 
 msgid "Can someone please transfer me some units?"
 msgstr "有人能给我转移一些单位吗？"
@@ -9589,7 +9589,7 @@ msgid "Player Name changes are not allowed when you are muted"
 msgstr "静音时不允许更改玩家姓名"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "主机不允许更改玩家名称"
 
 msgid "Blind Game:"
 msgstr "盲目游戏："
@@ -10129,7 +10129,7 @@ msgstr "主机已允许 %s 玩家自由聊天"
 
 #, c-format
 msgid "The host has enabled free chat for %d players"
-msgstr ""
+msgstr "主机已允许 %d 个玩家自由聊天"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
@@ -10137,7 +10137,7 @@ msgstr "主机已禁止 %s 玩家自由聊天"
 
 #, c-format
 msgid "The host has muted free chat for %d players"
-msgstr ""
+msgstr "主机已禁止 %d 个玩家自由聊天"
 
 msgid "Limits set to default."
 msgstr "限制已重置为默认值。"
@@ -10922,17 +10922,17 @@ msgstr "Gamma 奖励"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr "额外的 Gamma 任务，使用由原开发团队创作的地图（地图更新者：DARwins）。"
 
-msgid "Insane Spawns"
-msgstr "疯狂生成"
+msgid "Additional Spawns (Insane difficulty)"
+msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "启用更强大的敌军生成与行为，适用于“疯狂”（或更高）难度。"
 
-msgid "Non-Insane Spawns"
-msgstr "非疯狂生成"
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr "切换“困难”及以下难度的“疯狂敌军生成”选项。"
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr ""
 
 msgid "Fast EXP gain"
 msgstr "快速经验值增益"
@@ -11049,10 +11049,10 @@ msgid "Open Music Manager"
 msgstr "打开音乐管理器"
 
 msgid "Audio Cues"
-msgstr ""
+msgstr "音频提示"
 
 msgid "Group Reporting"
-msgstr ""
+msgstr "小组报告"
 
 msgid "Mouse"
 msgstr "鼠标设置"
@@ -11525,19 +11525,19 @@ msgid "Waiting Room"
 msgstr "等候室"
 
 msgid "FFA"
-msgstr ""
+msgstr "混战"
 
 msgid "Alliances Allowed"
-msgstr ""
+msgstr "允许联盟"
 
 msgid "Teams"
-msgstr ""
+msgstr "团队"
 
 msgid "Teams (No Shared Res)"
-msgstr ""
+msgstr "团队 (无资源共享)"
 
 msgid "Matchmaking"
-msgstr ""
+msgstr "匹配"
 
 msgid "Blind Lobby"
 msgstr "盲选大厅"
@@ -11546,70 +11546,70 @@ msgid "Blind Game"
 msgstr "盲选模式"
 
 msgid "No Tanks"
-msgstr ""
+msgstr "没有坦克"
 
 msgid "No VTOL"
-msgstr ""
+msgstr "没有 VTOL"
 
 msgid "No Cyborgs"
-msgstr ""
+msgstr "没有半机械人"
 
 msgid "Spectate Game"
-msgstr ""
+msgstr "观看战局"
 
 msgid "There appears to be a game update available!"
 msgstr "有新更新可用"
 
 msgid "Failed to connect to lobby server"
-msgstr ""
+msgstr "无法连接到大厅服务器"
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "你的 Warzone 版本与这个游戏不兼容。"
 
 #, c-format
 msgid "Host Version: %s"
-msgstr ""
+msgstr "主机版本: %s"
 
 msgid "(50+ omitted)"
-msgstr ""
+msgstr "(50+ 个省略)"
 
 #, c-format
 msgid "(%u omitted)"
-msgstr ""
+msgstr "(%u 个省略)"
 
 msgid "No games for your version"
-msgstr ""
+msgstr "没有适合您的版本的游戏"
 
 msgid "No games matching filters"
-msgstr ""
+msgstr "没有匹配的游戏"
 
 #, c-format
 msgid "%d players queued"
-msgstr ""
+msgstr "%d 个玩家已排队"
 
 msgid "Matchmaking Room: Open"
-msgstr ""
+msgstr "匹配房间：开放"
 
 msgid "Filters"
-msgstr ""
+msgstr "过滤器"
 
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
 msgid "Mods"
-msgstr ""
+msgstr "模组"
 
 msgid "Hide Incompatible Games"
-msgstr ""
+msgstr "隐藏不兼容的游戏"
 
 msgid "Hide Empty Games"
-msgstr ""
+msgstr "隐藏空游戏"
 
 msgid "Hide Modded Games"
-msgstr ""
+msgstr "隐藏加载模组的游戏"
 
 #, c-format
 msgid "Sending Map: %u%% "

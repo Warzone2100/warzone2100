@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -21,22 +21,22 @@ msgid "OBJECTIVE: Locate and recover neural synapse technology"
 msgstr "OBJEKTIF: Temukan dan peroleh kembali teknologi sinapsis saraf"
 
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Bangun sebuah markas, lalu cari struktur Pra-Runtuh."
+msgstr "Bangun sebuah markas, lalu cari sisa-sisa peninggalan Collapse."
 
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Struktur ini mengandung teknologi penting bagi kesuksesan Proyek ini."
+msgstr "Struktur ini memiliki teknologi penting yang dapat digunakan untuk keberhasilan The Project."
 
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISI MARKAS ALPHA: Perampok"
+msgstr "MISI ALPHA BASE: Scavenger Raiders"
 
 msgid "Scavenger raiders are approaching our base."
-msgstr "Perampok sedang mendekati markas kita."
+msgstr "Scavenger Raiders sedang mendekati markas kita."
 
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Lindungi markas lalu hancurkan kamp para Perampok."
+msgstr "Lindungi markas lalu hancurkan kamp Scavenger Raiders."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "MISI MARKAS ALPHA: Lonjakan Daya Terdeteksi"
+msgstr "MISI ALPHA BASE: Lonjakan Daya Terdeteksi"
 
 msgid "A power surge has been detected to the south of our position."
 msgstr "Sebuah lonjakan daya telah terdeteksi di sebelah selatan dari posisi kita."
@@ -45,13 +45,13 @@ msgid "Investigate and secure the area."
 msgstr "Selidiki dan amankan area."
 
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "MISI MARKAS ALPHA: Paradigma Baru"
+msgstr "MISI ALPHA BASE: The New Paradigm"
 
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Paradigma Baru mengendalikan teknologi senjata yang superior."
+msgstr "The New Paradigm punya teknologi senjata yang gila."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Mereka mungkin memiliki teknologi Tautan Sinapsis, sangat penting agar kita mengambilnya."
+msgstr "Mereka mungkin memiliki teknologi Tautan Sinapsis, kita harus mengambilnya."
 
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
 msgstr "MISI TRANSPORT: Temukan dan Ambil Artefak"
@@ -63,7 +63,7 @@ msgid "On landing, explore the ruins and recover any artifacts."
 msgstr "Setelah mendarat, jelajahi reruntuhan dan ambil semua artefak."
 
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "MISI TRANSPORT: Menyelidiki Pusat Riset"
+msgstr "MISI TRANSPORT: Menyelidiki Laboratorium"
 
 msgid "Investigate the area and recover any artifacts present."
 msgstr "Selidiki area tersebut dan ambil seluruh artefak yang ada."
@@ -78,70 +78,70 @@ msgid "Take a scout force to investigate these signals."
 msgstr "Bawa pasukan pengintai untuk menyelidiki sinyal-sinyal ini."
 
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Gunakan truk-truk Anda untuk membangun pertahanan di zona pendaratan Anda."
+msgstr "Gunakan trukmu untuk membangun pertahanan di zona pendaratan."
 
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
 msgstr "MISI TRANSPORT: Transmisi Musuh Terdeteksi"
 
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Intai area yang ditentukan untuk fasilitas riset musuh."
+msgstr "Intai area Laboratorium musuh."
 
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Lanjutkan ke Zona Pendaratan#2. Jangan melawan musuh pada saat ini."
+msgstr "Lanjutkan ke Zona Pendaratan#2. Intuk sekarang, jangan lakukan penyerangan."
 
 msgid "TRANSPORT MISSION: Synaptic Link Location"
 msgstr "MISI TRANSPORT: Lokasi Tautan Sinapsis"
 
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "Paradigma Baru sedang menganalisis teknologi tautan sinapsis di lokasi ini."
+msgstr "The New Paradigm sedang menganalisis teknologi tautan sinapsis di lokasi ini."
 
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Kumpulkan tim penyerang dan pulihkan teknologi tautan synaptic."
+msgstr "Kumpulkan tim penyerang dan ambil teknologi tautan sinapsis."
 
 msgid "TRANSPORT MISSION: New Objectives"
 msgstr "MISI TRANSPORT: Objektif Baru"
 
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Paradigma Baru sedang mencari artefak di area ini."
+msgstr "The New Paradigm sedang mencari artefak di area ini."
 
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Cegat mereka. Jangan biarkan musuh meninggalkan area ini."
+msgstr "Cegat mereka. Jangan biarkan mereka lolos."
 
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "MISI TRANSPORT: Pangkalan Musuh Sedang Dibangun"
+msgstr "MISI TRANSPORT: Musuh Sedang Membangun Markas"
 
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "Pasukan musuh sedang membangun pangkalan depan di lokasi ini."
+msgstr "Pasukan musuh sedang membangun markas garis depan di lokasi ini."
 
 msgid "Eradicate the base and secure the area."
-msgstr "Hancurkan pangkalan dan amankan area tersebut."
+msgstr "Hancurkan markas dan amankan area tersebut."
 
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "MISI MARKAS ALPHA: Membangun Pangkalan Depan"
+msgstr "MISI ALPHA BASE: Membangun Markas Garis Depan"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr "Dirikan markas penerusan di dataran tinggi dan bertahan melawan Paradigma Baru."
+msgstr "Bangun markas garis depandi dataran tinggi dan lawan The New Paradigm."
 
 msgid "Build defensive structures until the green objective blip disappears."
 msgstr "Bangun struktur pertahanan hingga lampu objektif hijau muncul."
 
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "MISI MARKAS ALPHA: Serangan Balik"
+msgstr "MISI ALPHA BASE: Counter Attack"
 
 msgid "Enemy forces are approaching from the east and north."
 msgstr "Pasukan musuh sedang mendekat dari arah timur dan utara."
 
 msgid "Hold the bases and repulse any attacks."
-msgstr "Pertahankan pangkalan dan pukul mundur serangan apa pun."
+msgstr "Pertahankan markas dan pukul mundur mereka."
 
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "MISI MARKAS ALPHA: Transmisi Masuk"
+msgstr "MISI ALPHA BASE: Transmisi Masuk"
 
 msgid "We are detecting enemy forces at these locations."
 msgstr "Kami mendeteksi pasukan musuh di lokasi ini."
 
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Ini adalah kesempatan kita untuk mengalahkan Paradigma Baru dan menghancurkan markas mereka."
+msgstr "Ini adalah kesempatan kita untuk mengalahkan The New Paradigm dan menghancurkan markas mereka."
 
 msgid "Congratulations Commander."
 msgstr "Selamat Komandan."
@@ -150,16 +150,16 @@ msgid "We now have a further task for you."
 msgstr "Kami sekarang mempunyai tugas lebih lanjut untuk Anda."
 
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "MISI MARKAS ALPHA: Temukan dan Ambil Artefak"
+msgstr "MISI ALPHA BASE: Temukan dan Ambil Artefak"
 
 msgid "The first two zones are now secure."
 msgstr "Kedua zona pertama sudah diamankan."
 
 msgid "PROJECT TEAM UPDATES"
-msgstr "PERBARUAN STATUS TIM PROYEK"
+msgstr "PEMBARUAN TIM PROJECT"
 
 msgid "TEAM BETA UPDATE"
-msgstr "PERBARUAN STATUS TIM BETA"
+msgstr "PEMBARUAN TIM BETA"
 
 msgid "We have recovered some artifacts."
 msgstr "Kami telah memperoleh beberapa artefak."
@@ -168,7 +168,7 @@ msgid "There is a better equipped force operating in this area."
 msgstr "Terdapat suatu pasukan yang lebih canggih yang beroperasi di area ini."
 
 msgid "TEAM GAMMA UPDATE"
-msgstr "PERBARUAN STATUS TIM GAMMA"
+msgstr "PEMBARUAN TIM GAMMA"
 
 msgid "Nothing to report."
 msgstr "Tidak ada yang bisa dilaporkan."
@@ -192,10 +192,10 @@ msgid "Search for and recover any artifacts here."
 msgstr "Cari dan ambil semua artefak di area ini."
 
 msgid "ENEMY LZ"
-msgstr "LZ MUSUH"
+msgstr "ZONA PENDARATAN MUSUH"
 
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Hancurkan LZ ini untuk mencegah pendaratan musuh."
+msgstr "Hancurkan Zona Pendaratan ini untuk mencegah musuh datang lebih banyak."
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
 msgstr "LAPORAN INTELIJEN MARKAS ALPHA: NEXUS"
@@ -213,7 +213,7 @@ msgid "The synaptic link technology was at this location but was removed."
 msgstr "Teknologi Tautan Sinapsis pernah ada di lokasi ini, namun telah dipindahkan."
 
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Bangun sebuah pangkalan depan, lalu lanjutkan pencarian untuk Tautan Sinapsis."
+msgstr "Bangun sebuah markas garis depan, lalu lanjutkan pencarian untuk Tautan Sinapsis."
 
 msgid "INCOMING TRANSMISSION"
 msgstr "TRANSMISI MASUK"
@@ -225,7 +225,7 @@ msgid "Commander."
 msgstr "Komandan."
 
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Kami telah membaca pesan tersandi yang terkirim ke Paradigma Baru..."
+msgstr "Kami telah berhasil mendeskripsikan pesan masuk yang terkirim ke The New Paradigm..."
 
 msgid "Destroy Enemy Base"
 msgstr "Hancurkan Markas Musuh"
@@ -240,13 +240,13 @@ msgid "The synaptic link technology has been recovered!"
 msgstr "Teknologi Tautan Sinapsis telah diperoleh kembali!"
 
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Riset awal mengkonfirmasi bahwa ini akan menjadi keuntungan besar bagi Proyek ini."
+msgstr "Penelitian awal mengkonfirmasi bahwa ini akan menjadi keuntungan besar bagi The Project."
 
 msgid "Base Beta is under heavy attack, they may need assistance."
 msgstr "Markas Beta sedang diserang, mereka mungkin membutuhkan bantuan."
 
 msgid "We will send further updates as they arrive."
-msgstr "Kami akan mengirimkan perbaruan status saat mereka sampai."
+msgstr "Kami akan mengirimkan pembaruan status saat mereka sampai."
 
 msgid "This transmission was intercepted a few minutes ago."
 msgstr "Transmisi ini dicegat beberapa menit lalu."
@@ -258,25 +258,25 @@ msgid "POWER MODULE ARTIFACT"
 msgstr "ARTEFAK MODUL DAYA"
 
 msgid "Research the power module artifact."
-msgstr "Risetlah artefak modul daya tersebut."
+msgstr "Teliti artefak modul daya tersebut."
 
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "Lalu gunakan sebuah truk untuk meningkatkan pembangkit daya dengan modul daya tersebut."
+msgstr "Lalu gunakan truk untuk meningkatkan pembangkit daya dengan modul daya tersebut."
 
 msgid "SCAVENGER BASE DETECTED"
-msgstr "PANGKALAN PERAMPOK TERDETEKSI"
+msgstr "MARKAS SCAVENGER TERDETEKSI"
 
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Kalahkan para perampok dan ambil semua artefak."
+msgstr "Kalahkan scavenger dan ambil semua artefak."
 
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr "Selamat atas penghancuran Paradigma Baru, sektor ini telah diamankan."
+msgstr "Selamat, Anda telah menghancurkan The New Paradigm, sektor ini telah diamankan."
 
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Program Penyusup Nexus ada di dalam sistem Paradigma Baru."
+msgstr "Program yang selama ini mengganggu Nexus ditemukan di dalam sistem The New Paradigm."
 
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr "Kami merekam dua percakapan dengannya, sebagai berikut..."
+msgstr "Kami berhasil merekam dua percakapan dengannya, sebagai berikut..."
 
 msgid "We'll keep you informed of further developments"
 msgstr "Kami akan tetap menginformasikan Anda akan perkembangan lebih lanjut"
@@ -285,16 +285,16 @@ msgid "Commander you are to assist Team Beta"
 msgstr "Komandan, Anda akan membantu Tim Beta"
 
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "MISI MARKAS BETA: Sektor Timur"
+msgstr "MISI BETA BASE: Sektor Timur"
 
 msgid "Upon arrival you are to assume command of the base."
-msgstr "Setelah sampai, Anda akan segera mengambil alih kendali markas."
+msgstr "Setelah sampai, kamu akan menjadi ketua markas."
 
 msgid "You must defend it and hold it."
-msgstr "Anda harus melindungi dan mempertahankannya."
+msgstr "Kamu harus melindungi dan mempertahankan markas."
 
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr "MISI MARKAS BETA: Lindungi dan Perkuat"
+msgstr "MISI BETA BASE: Bertahan dan Perkuat"
 
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
 msgstr "Perkuat pertahanan perimeter dan bangun pertahanan anti-pesawat."
@@ -303,10 +303,10 @@ msgid "New technologies are available."
 msgstr "Teknologi baru tersedia."
 
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Kami mendeteksi sinyal bitstream yang tersandi."
+msgstr "Kami mendeteksi sinyal bitstream terenkripsi."
 
 msgid "Decoding..."
-msgstr "Membaca sandi..."
+msgstr "Mendeskripsi..."
 
 msgid "TRANSPORT MISSION: Transport Down"
 msgstr "MISI TRANSPORT: Transporter Tertembak Jatuh"
@@ -315,49 +315,49 @@ msgid "Our transport carrying units from team Alpha Base has been shot down."
 msgstr "Transporter kami yang membawa unit dari Markas Alpha telah tertembak jatuh."
 
 msgid "It is under attack from The Collective at this location."
-msgstr "Sekarang transporter tersebut sedang diserang Para Kolektif di lokasi ini."
+msgstr "Itu sedang diserang The Collective di lokasi ini."
 
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Kumpulkan sebuah tim penyelamat untuk mencapai transporter dan menyelamatkan muatannya."
+msgstr "Buat regu penyelamat dan selamatkan Transporter berserta muatannya."
 
 msgid "IN-FLIGHT BRIEFING"
-msgstr "PENGARAHAN DALAM PENERBANGAN"
+msgstr "PENGARAHAN UDARA"
 
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
 msgstr "Tim Beta sedang mencari teknologi Lepas Landas dan Pendaratan Vertikal (VTOL)."
 
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "Kami yakin bahwa teknologi tersebut berada di sebuah pangkalan udara Pra-Runtuh di area ini."
+msgstr "Kami yakin bahwa teknologi tersebut berada di sebuah sisa-sisa pangkalan udara peradaban lama di area ini."
 
 msgid "Team Beta under heavy attack"
-msgstr "Tim Beta sedang dibawah serangan berat"
+msgstr "Regu Beta mengalami serangan berat"
 
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr "MISI MARKAS BETA: Pertahankan markas sebisa mungkin"
+msgstr "MISI BETA BASE: Bertahan sebisa mungkin"
 
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Kami mendeteksi sinyal bitstream tersandi dari Para Kolektif."
+msgstr "Kami mendeteksi sinyal bitstream terenkripsi dari The Collective."
 
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "MISI MARKAS BETA: Pertahankan markas sebisa mungkin"
+msgstr "MISI BETA BASE: BERTAHAN SEBISA MUNGKIN"
 
 msgid "We are detecting ground and aerial forces from the north."
 msgstr "Kami mendeteksi pasukan darat dan udara dari utara."
 
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr "Pertahankan posisi Anda dan pukul mundur serangan-serangan tersebut, lalu hancurkan pangkalan musuh."
+msgstr "Pertahankan posisi Anda dan pukul mundur serangan-serangan tersebut, lalu hancurkan markas utara musuh."
 
 msgid "TRANSPORT MISSION: Intercept convoy."
 msgstr "MISI TRANSPORT: Cegat konvoi."
 
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "Data dari pangkalan Para Kolektif menunjukkan adanya Program Penyusup Nexus."
+msgstr "Data dari pangkalan Para Kolektif menunjukkan adanya Program Penyusup NEXUS."
 
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr "Sebelum NEXUS menonaktifkan dirinya kami mengakses data berikut."
+msgstr "Sebelum NEXUS menonaktifkan dirinya kami mengakses berhasil data berikut."
 
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Seorang komandan musuh sedang mengambil suatu pengiriman dari NEXUS di lokasi ini."
+msgstr "Komandan musuh sedang mengambil suatu pengiriman dari NEXUS di lokasi ini."
 
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
 msgstr "Setelah berada di zona pendaratan/LZ, hancurkan komandan musuh dan ambil barang kiriman tersebut."
@@ -1821,7 +1821,7 @@ msgid "Return to LZ"
 msgstr "Kembali ke zona pendaratan/LZ"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "Petunjuk:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Perkuat markas di seluruh peta untuk melindungi diri dari Kolektif"
@@ -2962,7 +2962,7 @@ msgstr "Gagal membuat pemetaan port (waktu habis)"
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "Sedang menggunakan jaringan backend %s"
 
 msgid "Client failed to ack player index swap"
 msgstr "Klien gagal mengenali pergantian indeks pemain"
@@ -2994,22 +2994,22 @@ msgid "Replay File Format Unsupported"
 msgstr "Format Tayangan Ulang Tidak Didukung"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "Format file replay sudah tidak didukung di versi ini."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Tidak dapat memuat tayangan ulang: File tayangan ulang tidak lengkap atau rusak."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: Gagal menginisialisasi grafik"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "Gagal menginisialisasi grafik untuk semua backend."
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Detail Error:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "Silahkan update atau instal ulang driver grafikmu dan cek pengaturan sistem mu."
 
 msgid "OK"
 msgstr "OK"
@@ -3022,10 +3022,10 @@ msgstr ""
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Backend Grafik: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100 akan terbuka menggunakan backend grafik yang berbeda."
 
 msgid "Menu"
 msgstr "Menu"
@@ -3711,7 +3711,7 @@ msgid "Bomb damage +25%"
 msgstr "Daya rusak bom: +25%"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Damage Bom"
 
 msgid "Bomb Upgrade"
 msgstr "Peningkatan Bom"
@@ -3738,7 +3738,7 @@ msgid "Buggy"
 msgstr "Buggy"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Bangunan"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistem diagnosis dan perbaikan terintegrasi"
@@ -3781,7 +3781,7 @@ msgid "Cannon accuracy +10%"
 msgstr "Akurasi Meriam +10%"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Akurasi Cannon"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Pengisi Otomatis Meriam Mk2"
@@ -3797,7 +3797,7 @@ msgid "Cannon damage +25%"
 msgstr "Daya rusak meriam +25%"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Damage Cannon"
 
 msgid "Cannon Fire Truck"
 msgstr "Cannon Fire Truck"
@@ -3825,7 +3825,7 @@ msgid "Cannon reload time -10%"
 msgstr "Waktu isi ulang meriam -10%"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "Isi Peluru Cannon"
 
 msgid "Cannon Tower"
 msgstr "Menara dengan Meriam"
@@ -4217,7 +4217,7 @@ msgid "Enemy"
 msgstr "Musuh"
 
 msgid "Engine"
-msgstr ""
+msgstr "Mesin"
 
 msgid "Engineering"
 msgstr "Keinsinyuran"
@@ -4329,7 +4329,7 @@ msgid "Flamer damage +25%"
 msgstr "Daya rusak penyembur api +25%"
 
 msgid "Flamer Damage"
-msgstr ""
+msgstr "Damage Flamer"
 
 msgid "Flamer Fast Loader"
 msgstr "Penyembur Api Cepat"
@@ -4339,7 +4339,7 @@ msgid "Flamer reload time -15%"
 msgstr "Waktu isi penyembur api -15%"
 
 msgid "Flamer Reload"
-msgstr ""
+msgstr "Isi Ulang Flamer"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Flamer Viper Half-Tracks"
@@ -5035,10 +5035,10 @@ msgstr "Peningkatan dalam bidang optik laser mengurangi pembiasan cahaya"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplasemen Howitzer Pembakar 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Emplasemen Howitzer Pembakar"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Emplasemen Howitzer Pembakar"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5244,14 +5244,14 @@ msgid "Laser accuracy +10%"
 msgstr "Akurasi Laser +10%"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "Akurasi Laser"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Daya rusak laser +25%"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "Damage Laster"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Designator laser menandakan dan mengarahkan peluru ke target"
@@ -5261,7 +5261,7 @@ msgid "Laser reload time -15%"
 msgstr "Waktu isi ulang laser -15%"
 
 msgid "Laser Reload"
-msgstr ""
+msgstr "Isi Ulang Laser"
 
 msgid "Laser Satellite Command Post"
 msgstr "Pusat Komando Satelit Laser"
@@ -5440,10 +5440,10 @@ msgid "Medium Super Heavy Body"
 msgstr "Badan Super Berat Sedang"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "Damage MG"
 
 msgid "MG Reload"
-msgstr ""
+msgstr "Isi Ulang MG"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "Titik kuat berlapis baja dengan pod roket mini"
@@ -5501,7 +5501,7 @@ msgid "Missile accuracy +10%"
 msgstr "Akurasi Rudal +10%"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "Akurasi Missile"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "Rudal mengarahkan diri ke target secara aktif"
@@ -5511,7 +5511,7 @@ msgid "Missile damage +25%"
 msgstr "Daya rusak rudal +25%"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "Damage Missile"
 
 msgid "Missile Fortress"
 msgstr "Benteng Rudal"
@@ -5521,7 +5521,7 @@ msgid "Missile reload time -15%"
 msgstr "Waktu isi ulang rudal -15%"
 
 msgid "Missile Reload"
-msgstr ""
+msgstr "Isi Ulang Missile"
 
 msgid "Missile Upgrade"
 msgstr "Peningkatan Rudal"
@@ -5543,7 +5543,7 @@ msgid "Mortar accuracy +10%"
 msgstr "Akurasi mortir +10%"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "Akurasi Mortar"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Pengisi Otomatis Mortir Mk2"
@@ -5562,7 +5562,7 @@ msgid "Mortar damage +25%"
 msgstr "Daya rusak mortir +25%"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "Damage Mortar"
 
 msgid "Mortar Fast Loader"
 msgstr "Pengisi Cepat Mortir"
@@ -5575,7 +5575,7 @@ msgid "Mortar reload time -10%"
 msgstr "Waktu isi mortir -10%"
 
 msgid "Mortar Reload"
-msgstr ""
+msgstr "Isi Ulang Mortar"
 
 msgid "Mortar Targeting Computer"
 msgstr "Komputer Penargetan Mortir"
@@ -5709,10 +5709,10 @@ msgstr "Struktur Sistem Baru Tersedia"
 msgid "New Systems Tower Available"
 msgstr "Menara Sistem Baru Tersedia"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Turet Sistem Baru Tersedia Untuk Desain"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Turet Sistem Baru Tersedia Untuk Desain"
 
 msgid "New Thermal Emissions detection"
@@ -5919,7 +5919,7 @@ msgid "Produces Cyborgs"
 msgstr "Memproduksi Cyborg"
 
 msgid "Production"
-msgstr ""
+msgstr "Produksi"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Unit berpangkat Profesional dan Reguler dilindungi"
@@ -6427,7 +6427,7 @@ msgid "Sensor Upgrade"
 msgstr "Peningkatan Sensor"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Sensor"
 
 msgid "Sensors Improved"
 msgstr "Sensor Ditingkatkan"
@@ -6594,10 +6594,10 @@ msgstr "Analisis Data Tautan Sinapsis Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analisis Data Tautan Sinapsis Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Analisis Data Tautan Sinapsis"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Analisis Data Tautan Sinapsis"
 
 msgid "Synaptic Link Scrambler technology"
@@ -7267,7 +7267,7 @@ msgid "Spectators"
 msgstr "Penonton"
 
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
+msgstr "Kamu mengirim pesan terlalu banyak. Sabar."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7522,7 +7522,7 @@ msgid "Base video URL"
 msgstr "URL video dasar"
 
 msgid "Specify connection provider type to use when hosting game sessions"
-msgstr ""
+msgstr "Jelaskan jenis provider penghubung yang akan digunakan ketika menghosting pertempuran"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "Komandan memerlukan level yang lebih tinggi untuk memimpin lebih banyak unit"
@@ -7976,19 +7976,19 @@ msgid "Group buttons will glow red when units are lost (or taking lots of damage
 msgstr ""
 
 msgid "Unit Groups"
-msgstr ""
+msgstr "Regu Unit"
 
 msgid "Select a Group"
-msgstr ""
+msgstr "Pilih Regu"
 
 msgid "Assign Selected Units to a Group"
-msgstr ""
+msgstr "Satukan Unit Terpilih dalam Regu"
 
 msgid "Center Camera on a Group by clicking or tapping twice on the group button"
 msgstr ""
 
 msgid "Unit Groups:"
-msgstr ""
+msgstr "Regu Unit:"
 
 msgid "Construction Progress"
 msgstr "Progres Konstruksi"
@@ -8012,41 +8012,41 @@ msgid "Team"
 msgstr "Tim"
 
 msgid "Human Teammates"
-msgstr ""
+msgstr "Tim Manusia"
 
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Tim Bot"
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u pemain"
 
 msgid "Choose a recipient"
-msgstr ""
+msgstr "Pilih penerima"
 
 msgid "Quick Chat:"
-msgstr ""
+msgstr "Pesan Cepat"
 
 msgid "Lobby Chat"
-msgstr ""
+msgstr "Pesan Lobi"
 
 msgid "Requests"
-msgstr ""
+msgstr "Permintaan"
 
 msgid "Notices"
 msgstr "Pemberitahuan"
 
 msgid "Reactions"
-msgstr ""
+msgstr "Reaksi"
 
 msgid "Taunts"
 msgstr "Ejek"
 
 msgid "Coordination"
-msgstr ""
+msgstr "Koordinasi"
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Saran"
 
 msgid "Cheats"
 msgstr "Curang"
@@ -8077,92 +8077,92 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr ""
+msgstr "PERINGATAN: Jika kamu tidak meng-klik Siap, kamu akan dikeluarkan dari room."
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr ""
+msgstr "Mengeluarkan (%s) karena dia terlalu memakan banyak waktu untuk bersiap"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "PERINGATAN: Tolong klik Siap"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "PERINGATAN: Segera klik Siap agar game dapat dimulai"
 
 msgid "Can someone please transfer me some units?"
-msgstr ""
+msgstr "Siapapun kasih aku unit, dong?"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr ""
+msgstr "Siapapun kasih aku truk buat bangun-bangun, dong?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr ""
+msgstr "Sori, ga paham. (Pake Quick Chat aja gak sih?)"
 
 msgid "I suggest: Building more units"
-msgstr ""
+msgstr "Saran aku: Bangun lebih banyak unit"
 
 msgid "I suggest: Building different units"
-msgstr ""
+msgstr "Saran aku: Bangun unit yang berbeda"
 
 msgid "I suggest: Checking the team strategy view"
-msgstr ""
+msgstr "Aku menyarankan: Periksa strategi tim"
 
 msgid "I suggest: Researching different tech"
-msgstr ""
+msgstr "Aku menyarankan: Lakukan penelitian untuk teknologi lain"
 
 msgid "I suggest: Keeping research centers busy"
-msgstr ""
+msgstr "Aku menyarankan: Pastikan Laboratorium tetap sibuk"
 
 msgid "I suggest: Building anti-air"
-msgstr ""
+msgstr "Aku menyarankan: Bangun beberapa anti serangan udara"
 
 msgid "I suggest: Repairing your units"
-msgstr ""
+msgstr "Aku menyarankan: Perbaiki unitmu"
 
 msgid "I suggest: Building repair facilities"
-msgstr ""
+msgstr "Aku menyarankan: Bangun bengkel"
 
 msgid "I suggest: Building power generators"
-msgstr ""
+msgstr "Aku menyarankan: Bangun pembangkit listrik"
 
 msgid "I suggest: Capturing oil resources"
-msgstr ""
+msgstr "Aku menyarankan: Cari sumber minyak"
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Halo haloo!"
 
 msgid "Welcome!"
-msgstr ""
+msgstr "Welkam bro!"
 
 msgid "I want to spectate"
-msgstr ""
+msgstr "Aku mau nonton aja"
 
 msgid "I want to play"
-msgstr ""
+msgstr "Aku pengin ikutan main"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Boleh tukeran tim gak?"
 
 msgid "Please check Ready so we can start"
-msgstr ""
+msgstr "Pencet Ready nya woi!"
 
 msgid "Please wait"
-msgstr ""
+msgstr "Tungguin aku dong"
 
 msgid "Let's go!"
-msgstr ""
+msgstr "Gaskeun!"
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Dikit lagi redi"
 
 msgid "Ready"
 msgstr "Siap"
 
 msgid "Be right back"
-msgstr ""
+msgstr "Bentar dulu guys"
 
 msgid "I'm back"
-msgstr ""
+msgstr "Gue udah kembali"
 
 msgid "Yes"
 msgstr "Ya"
@@ -8180,139 +8180,139 @@ msgid "Soon"
 msgstr "Segera"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Makasih"
 
 msgid "No problem"
-msgstr ""
+msgstr "Amann"
 
 msgid "Well-played"
-msgstr ""
+msgstr "GG"
 
 msgid "@#%*!"
 msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr ""
+msgstr "Sori, gak paham. (Pakai Quick Chat aja dong?)"
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Siap-siap..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Awas aja ya ntar aku bales!"
 
 msgid "Barely a scratch!"
-msgstr ""
+msgstr "Lecet dikit ngga ngaruh!"
 
 msgid "Attack now?"
-msgstr ""
+msgstr "Serang nggak?"
 
 msgid "Group up"
-msgstr ""
+msgstr "Berkumpul!"
 
 msgid "Split up"
-msgstr ""
+msgstr "Berpisah!"
 
 msgid "Focus attacks where marked"
-msgstr ""
+msgstr "Serang yang udah ditandain!"
 
 msgid "Retreat!"
-msgstr ""
+msgstr "Mundur!"
 
 msgid "I need help!"
-msgstr ""
+msgstr "Bantuin woi!"
 
 msgid "Left side"
-msgstr ""
+msgstr "Sisi kiri"
 
 msgid "Right side"
-msgstr ""
+msgstr "Sisi kanan"
 
 msgid "Transfer Request: Units"
-msgstr ""
+msgstr "Permintaan Transfer: Unit"
 
 msgid "Transfer Request: Trucks"
-msgstr ""
+msgstr "Permintaan Transfer: Truk"
 
 msgid "Attacking now!"
-msgstr ""
+msgstr "Gaskeun serbu!"
 
 msgid "On my way!"
-msgstr ""
+msgstr "OTEWE!"
 
 msgid "They're coming!"
-msgstr ""
+msgstr "Musuh lagi ke sini!"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "Woi aku diserang!"
 
 msgid "I'm rushing oils"
-msgstr ""
+msgstr "Aku nyari minyak ya"
 
 msgid "They're rushing oils!"
-msgstr ""
+msgstr "Musuhnya nyuri minyak woi!"
 
 msgid "I don't have enough power"
-msgstr ""
+msgstr "Aku udah nggak kuat"
 
 msgid "Build more units"
-msgstr ""
+msgstr "Bangun lebih banyak unit"
 
 msgid "Build different units"
-msgstr ""
+msgstr "Bangun unit yang berbeda"
 
 msgid "Check team strategy view"
-msgstr ""
+msgstr "Cek strategi tim"
 
 msgid "Research different tech"
-msgstr ""
+msgstr "Teliti teknologi yang berbeda"
 
 msgid "Keep research centers busy"
-msgstr ""
+msgstr "Teliti lebih banyak teknologi"
 
 msgid "Build anti-air"
-msgstr ""
+msgstr "Bangun anti serangan udara"
 
 msgid "Repair your units"
-msgstr ""
+msgstr "Perbaiki unit mu"
 
 msgid "Build repair facilities"
-msgstr ""
+msgstr "Bangun pusat perbaikan"
 
 msgid "Build power generators"
-msgstr ""
+msgstr "Bangun generator energi"
 
 msgid "Capture oil resources"
-msgstr ""
+msgstr "Cari sumber minyak"
 
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Yah..."
 
 msgid "I have another plan"
-msgstr ""
+msgstr "Aha, aku punya ide!"
 
 msgid "Good game"
-msgstr ""
+msgstr "GGWP!"
 
 msgid "I give up"
-msgstr ""
+msgstr "Capek deh"
 
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Sori, aku cabut dulu ya"
 
 msgid "Message delivery failure - try again"
 msgstr "Pengiriman pesan gagal - coba lagi"
 
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Map Didownload"
 
 msgid "Admin modified a setting"
-msgstr ""
+msgstr "Admin mengubah pengaturan"
 
 msgid "Bot Allies"
-msgstr ""
+msgstr "Teman Bot"
 
 msgid "Human Allies"
-msgstr ""
+msgstr "Teman Player"
 
 msgid "Research Progress"
 msgstr "Progres Riset"
@@ -8327,13 +8327,13 @@ msgid "Cyborgs"
 msgstr "Cyborg"
 
 msgid "No teammates."
-msgstr ""
+msgstr "Tidak ada anggota tim."
 
 msgid "Waiting for other teams to finish planning."
-msgstr ""
+msgstr "Menunggu tim lain menyelesaikan perencanaan."
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Senjata:"
 
 msgid "Units:"
 msgstr "Unit:"
@@ -8348,7 +8348,7 @@ msgid "Host Quit"
 msgstr "Penyelenggara Keluar"
 
 msgid "View Guide"
-msgstr ""
+msgstr "Lihat Panduan"
 
 msgid "Load Game"
 msgstr "Muat Permainan"
@@ -8398,30 +8398,30 @@ msgstr ""
 
 #, c-format
 msgid "Failure to load %zu game model(s)"
-msgstr ""
+msgstr "Gagal memuat %zu model game"
 
 #, c-format
 msgid "Failure to load textures for %zu model(s)"
-msgstr ""
+msgstr "Gagal memuat tekstur %zu model"
 
 #, c-format
 msgid "Failure to load model for %zu stat(s)"
-msgstr ""
+msgstr "Gagal memuat model %zu stat"
 
 msgid "Warzone 2100 encountered error(s) loading game data:"
-msgstr ""
+msgstr "Warzone 2100 mengalami error saat sedang memuat data game:"
 
 msgid "Please try removing any new mods - they may have issues or be incompatible with this version."
-msgstr ""
+msgstr "Coba hapus mod baru - mungkin itu bermasalah atau tidak kompatibel dengan versi ini."
 
 msgid "Loaded mod(s):"
-msgstr ""
+msgstr "Mod dimuat:"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
-msgstr ""
+msgstr "Data game mungkin corrupt atau terlalu lama - coba instal ulang gamenya."
 
 msgid "Error Loading Game Data"
-msgstr ""
+msgstr "Gagal Memuat Data Game"
 
 msgid "Global Keys"
 msgstr ""
@@ -8769,10 +8769,10 @@ msgid "Send Team Text Message"
 msgstr "Kirim Pesan Teks Untuk Tim"
 
 msgid "Send Global Quick Chat"
-msgstr ""
+msgstr "Kirim Pesan Cepat Semua"
 
 msgid "Send Team Quick Chat"
-msgstr ""
+msgstr "Kirim Pesan Cepat Tim"
 
 msgid "Drop a beacon"
 msgstr "Jatuhkan suar"
@@ -9147,7 +9147,7 @@ msgid "Circle"
 msgstr "Lingkaran"
 
 msgid "Accept Retreating Units"
-msgstr ""
+msgstr "Terima Unit Yang Mundur"
 
 msgid "Sorry, that cheat is disabled in multiplayer games."
 msgstr "Maaf, cheat tersebut dimatikan dalam permainan multipemain."
@@ -9204,10 +9204,10 @@ msgid "Power overwhelming"
 msgstr "Daya luar biasa"
 
 msgid "A power fantasy!"
-msgstr ""
+msgstr "Muantap pol!"
 
 msgid "Taking things easy!"
-msgstr ""
+msgstr "Santuy aja bro!"
 
 msgid "Back to normality!"
 msgstr "Kembali ke keadaan normal!"
@@ -9216,7 +9216,7 @@ msgid "Getting tricky!"
 msgstr "Menjadi rumit!"
 
 msgid "In a nightmare!"
-msgstr ""
+msgstr "Tadi ngeri banget sumpah!"
 
 msgid "Twice as nice!"
 msgstr "Dua kali lipat lebih baik!"
@@ -9464,7 +9464,7 @@ msgid "AutoSave %s failed"
 msgstr "Simpan Otomatis %s gagal"
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "AutoSaving..."
 
 msgid "Could not save game!"
 msgstr "Tidak dapat menyimpan permainan!"
@@ -9479,7 +9479,7 @@ msgid "Shows the number of units currently loaded into the mission transporter, 
 msgstr ""
 
 msgid "Open the Transporter Load Menu"
-msgstr ""
+msgstr "Buka Menu Transporter"
 
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJEKTIF TERCAPAI dengan curang!"
@@ -9584,22 +9584,22 @@ msgid "Select Player Name"
 msgstr "Pilih Nama Pemain"
 
 msgid "Player Name changes are not allowed when you are muted"
-msgstr ""
+msgstr "Kamu tidak bisa mengubah Nama Pemain mu saat sedang dibisukan"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "Host melarang perubahan Nama Pemain"
 
 msgid "Blind Game:"
-msgstr ""
+msgstr "Blind Game:"
 
 msgid "- Player names will not be visible to other players (until the game is over)"
-msgstr ""
+msgstr "- Nama pemain tidak akan diperlihatkan ke pemain lain hingga pertempuran usai"
 
 msgid "Blind Lobby:"
-msgstr ""
+msgstr "Lobi Blind:"
 
 msgid "- Player names will not be visible to other players (until the game has started)"
-msgstr ""
+msgstr "- Nama pemain tidak akan diperlihatkan ke pemain lain hingga pertempuran usai"
 
 msgid "OPTIONS"
 msgstr "OPSI"
@@ -9729,7 +9729,7 @@ msgstr "Pemain %s telah berpindah ke Penonton"
 
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
-msgstr ""
+msgstr "Tidak dapat memindahkan %s ke pemain - tidak ada slot lagi"
 
 msgid "Spectator would like to become a Player"
 msgstr "Penonton ingin menjadi Pemain"
@@ -9742,17 +9742,17 @@ msgid "However, there are currently no open Player slots."
 msgstr "Namun, tidak ada slot pemain yang tersedia saat ini."
 
 msgid "Would you like to swap this Spectator with a Player?"
-msgstr ""
+msgstr "Apakah kamu akan menukar Penonton ini dengan pemain?"
 
 msgid "Yes, select Player slot"
 msgstr "Ya, pilih slot Pemain"
 
 msgid "BLIND LOBBY NOTICE:"
-msgstr ""
+msgstr "PERINGATAN LOBI BLIND:"
 
 #, c-format
 msgid "You have been assigned the codename: \"%s\""
-msgstr ""
+msgstr "Kamu kini menggunakan codename: %s"
 
 msgid "Joined:"
 msgstr "Tergabung:"
@@ -9767,13 +9767,13 @@ msgid "Host Options"
 msgstr "Pengaturan Penyelenggara"
 
 msgid "Enable Spectator Join"
-msgstr ""
+msgstr "Bolehkan Penonton Bergabung"
 
 msgid "Lock Teams"
 msgstr "Kunci Tim"
 
 msgid "Lock Position"
-msgstr ""
+msgstr "Kunci Posisi"
 
 msgid "For Spectator:"
 msgstr "Untuk Penonton:"
@@ -9794,22 +9794,22 @@ msgid "Kicked from game"
 msgstr "Dikeluarkan dari permainan"
 
 msgid "The host has disabled free chat. Please use Quick Chat."
-msgstr ""
+msgstr "Host telah mematikan fitur pesan. Kamu hanya dapat menggunakan Pesan Cepat."
 
 msgid "Quick Chat"
-msgstr ""
+msgstr "Pesan Cepat"
 
 msgid "Press the Tab key to open Quick Chat."
-msgstr ""
+msgstr "Tekan Tab untuk membuka Pesan Cepat"
 
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
-msgstr ""
+msgstr "Host telah mematikan fitur pesan. Kamu hanya dapat menggunakan Pesan Cepat atau perintah /hostmsg"
 
 msgid "The host has enabled free chat for you."
-msgstr ""
+msgstr "Host telah mengaktifkan fitur pesan untukmu."
 
 msgid "Copy Text to Clipboard"
-msgstr ""
+msgstr "Salin Teks ke Clipboard"
 
 #, c-format
 msgid "Mute Player: %s"
@@ -9817,16 +9817,16 @@ msgstr "Bisukan Pemain: %s"
 
 #, c-format
 msgid "Unmute Player: %s"
-msgstr ""
+msgstr "Bunyikan Pemain: %s"
 
 msgid "CHAT"
 msgstr "OBROLAN"
 
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr ""
+msgstr "Dukungan Lobi Multiplayer Tidak Tersedia"
 
 msgid "Your client cannot connect to the mutiplayer lobby."
-msgstr ""
+msgstr "Klien yang kamu gunakan tidak dapat terhubung ke lobi multiplayer."
 
 msgid "Please click the button below for more information on how to fix it."
 msgstr "Silahkan klik tombol dibawah untuk informasi lebih lanjut mengenai cara untuk memperbaikinya."
@@ -9842,11 +9842,11 @@ msgstr "Penyelenggara Memulai Permainan"
 
 #, c-format
 msgid "Host: Free chat enabled for: %s"
-msgstr ""
+msgstr "Host: telah mengaktifkan fitur pesan untuk %s"
 
 #, c-format
 msgid "Host: Free chat muted for: %s"
-msgstr ""
+msgstr "Host: telah membisukan %s"
 
 #, c-format
 msgid "Moving %s to Spectators!"
@@ -9854,10 +9854,10 @@ msgstr "Memindahkan %s ke Penonton!"
 
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr ""
+msgstr "Meminta %s untuk menjadi Pemain..."
 
 msgid "Disconnected from host:"
-msgstr ""
+msgstr "Terputus dari host:"
 
 msgid "Unable to handle host redirect"
 msgstr ""
@@ -10444,7 +10444,7 @@ msgid "Total Game Time - %s"
 msgstr "Total Waktu Permainan - %s"
 
 msgid "You cheated!"
-msgstr "Anda curang!"
+msgstr "Kamu curang!"
 
 msgid "Use Quick Chat to chat with other players."
 msgstr ""
@@ -10453,10 +10453,10 @@ msgid "The host has disabled free chat."
 msgstr ""
 
 msgid "Chat: All"
-msgstr "Obrolan: Semua"
+msgstr "Chat: Semua"
 
 msgid "Chat: Team"
-msgstr "Obrolan: Tim"
+msgstr "Chat: Tim"
 
 msgid "Did not send message - free chat is disabled by host. Please use Quick Chat."
 msgstr ""
@@ -10477,28 +10477,28 @@ msgid "Close Help Mode"
 msgstr ""
 
 msgid "Click/Tap"
-msgstr ""
+msgstr "Klik/Tap"
 
 msgid "Right-Click"
-msgstr ""
+msgstr "Klik Kanan"
 
 msgid "Click/Tap and Hold"
-msgstr ""
+msgstr "Klik/Tap lalu Tahan"
 
 msgid "Other"
 msgstr "Lainnya"
 
 msgid "Interactions:"
-msgstr ""
+msgstr "Interaksi:"
 
 msgid "Related Keymappings:"
 msgstr ""
 
 msgid "Enter password"
-msgstr ""
+msgstr "Masukkan kata sandi"
 
 msgid "Connecting to Game"
-msgstr ""
+msgstr "Menghubungkan"
 
 msgid "Status:"
 msgstr "Status:"
@@ -10507,28 +10507,28 @@ msgid "Cancel"
 msgstr "Batal"
 
 msgid "Game requires a password to join"
-msgstr ""
+msgstr "Untuk bergabung, masukkan kata sandi"
 
 msgid "Unable to Join Game"
-msgstr ""
+msgstr "Tidak dapat bergabung ke game"
 
 msgid "Error:"
 msgstr "Error:"
 
 msgid "Join Attempt Rejected"
-msgstr ""
+msgstr "Permintaan bergabung ditolak"
 
 msgid "Message from Host:"
-msgstr ""
+msgstr "Pesan dari Host:"
 
 msgid "Game is full"
-msgstr "Permainan penuh"
+msgstr "Game sudah penuh"
 
 msgid "You were kicked!"
-msgstr "Anda dikeluarkan dari permainan!"
+msgstr "Kamu dikeluarkan dari game!"
 
 msgid "Your game version does not match the host"
-msgstr ""
+msgstr "Versi gamemu tidak sama dengan host"
 
 msgid "The host rejected your connection due to invalid data"
 msgstr ""
@@ -10537,19 +10537,19 @@ msgid "Host has dropped connection!"
 msgstr "Host memutus sambungan!"
 
 msgid "Connection Error"
-msgstr "Kesalahan Sambungan"
+msgstr "Koneksi Error"
 
 msgid "No connections available"
-msgstr ""
+msgstr "Tidak ada internet"
 
 msgid "Synchronizing data with host ..."
-msgstr ""
+msgstr "Menyinkronkan data dengan host..."
 
 msgid "Waiting for correct join password"
-msgstr ""
+msgstr "Menunggu kata sandi"
 
 msgid "Attempting to connect"
-msgstr ""
+msgstr "Mencoba menghubungkan"
 
 msgid "Establishing connection handshake"
 msgstr ""
@@ -10615,13 +10615,13 @@ msgid "TEAM STRATEGY"
 msgstr ""
 
 msgid "Game will start in ..."
-msgstr ""
+msgstr "Game akan dimulai dalam ..."
 
 msgid "Waiting for other players ..."
-msgstr ""
+msgstr "Menunggu pemain lain ..."
 
 msgid "Team Planning"
-msgstr ""
+msgstr "Perencanaan"
 
 msgid "Unable to locate any repair units!"
 msgstr "Tidak dapat menemukan unit perbaikan!"
@@ -10717,7 +10717,7 @@ msgid "Las-Sat"
 msgstr "Las-Sat"
 
 msgid "Laser Satellite"
-msgstr ""
+msgstr "Satelit Laser"
 
 msgid "Bombs"
 msgstr "Bom"
@@ -10744,7 +10744,7 @@ msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Producti
 msgstr "Tidak dapat membangun \"%s\", Batas Unit Konstruksi Dicapai — Produksi Dihentikan"
 
 msgid "Laser Satellite is ready to fire!"
-msgstr ""
+msgstr "Satelit Laser siap ditembakkan!"
 
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
@@ -10826,22 +10826,22 @@ msgid "Repair Facility Award - Nothing"
 msgstr "Penghargaan Fasilitas Perbaikan - Tidak Ada"
 
 msgid "Classic"
-msgstr ""
+msgstr "Klasik"
 
 msgid "Remastered (HQ)"
-msgstr ""
+msgstr "Remastered (Kualitas Tinggi)"
 
 msgid "Additional Campaigns"
-msgstr ""
+msgstr "Misi Tambahan"
 
 msgid "Start Game"
-msgstr ""
+msgstr "Mulai"
 
 msgid "Tweak Options:"
 msgstr ""
 
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Kembalikan ke semula"
 
 msgid "Command the forces of The Project in a battle to rebuild the world"
 msgstr ""
@@ -10920,16 +10920,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -10972,19 +10972,19 @@ msgid "The remastered campaign experience"
 msgstr ""
 
 msgid "Difficulty:"
-msgstr ""
+msgstr "Kesulitan:"
 
 msgid "Balance:"
-msgstr ""
+msgstr "Keseimbangan:"
 
 msgid "Start at:"
-msgstr ""
+msgstr "Dimulai saat:"
 
 msgid "Tweaks:"
 msgstr ""
 
 msgid "CAMPAIGNS"
-msgstr "KAMPANYE"
+msgstr "MISI"
 
 msgid "GAMES"
 msgstr "PERMAINAN"
@@ -11209,7 +11209,7 @@ msgid "The quality of terrain shading (normal maps, specular highlights, etc). H
 msgstr ""
 
 msgid "Medium Quality"
-msgstr "Kualitas sedang"
+msgstr "Kualitas Sedang"
 
 msgid "High Quality"
 msgstr "Kualitas Tinggi"
@@ -11615,7 +11615,7 @@ msgstr "Mengirim Peta: %u%% "
 
 #, c-format
 msgid "Map: %u%% downloaded"
-msgstr "Peta: %u%% diunduh"
+msgstr "Peta: %u%% didownload"
 
 msgid "HOST"
 msgstr "PENYELENGGARA"
@@ -11624,7 +11624,7 @@ msgid "Choose Team"
 msgstr "Pilih Tim"
 
 msgid "Teams locked"
-msgstr "Tim terkunci"
+msgstr "Tim dikunci"
 
 msgid "Click to change player colour"
 msgstr "Klik untuk mengganti warna pemain"
@@ -11633,7 +11633,7 @@ msgid "Click to change player position"
 msgstr "Klik untuk mengganti posisi pemain"
 
 msgid "Click to change AI, right click to distribute choice"
-msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke semua slot"
+msgstr "Klik untuk mengganti AI, klik kanan untuk menerapkan ke semua"
 
 msgid "Click to close spectator slot"
 msgstr "Klik untuk menutup slot penonton"
@@ -11645,7 +11645,7 @@ msgid "Waiting for player"
 msgstr "Menunggu pemain"
 
 msgid "Player is ready"
-msgstr "Pemain Siap"
+msgstr "Pemain siap"
 
 msgid "Player is downloading"
 msgstr "Pemain sedang mengunduh"
@@ -11654,7 +11654,7 @@ msgid "Click when ready"
 msgstr "Klik saat sudah siap"
 
 msgid "Waiting for download"
-msgstr "Menunggu untuk mengunduh"
+msgstr "Menunggu didownload"
 
 msgid "READY?"
 msgstr "SIAP?"
@@ -11712,7 +11712,7 @@ msgid "*** password is NOT required! ***"
 msgstr "*** kata sandi TIDAK diperlukan! ***"
 
 msgid "Game Name Updated."
-msgstr "Nama Permainan Diperbarui."
+msgstr "Nama Game Diperbarui."
 
 msgid "Set Game Name"
 msgstr ""
@@ -11724,17 +11724,17 @@ msgid "Edit Game Name"
 msgstr ""
 
 msgid "Game Name"
-msgstr "Nama Permainan"
+msgstr "Nama Game"
 
 msgid "Click to see Map"
-msgstr "Klik untuk melihat Peta"
+msgstr "Klik untuk membuka Map"
 
 msgid ""
 "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 "Pilih Map\n"
-"Dapat diblokir oleh pemilihan dari pemain"
+"Dapat diblokir oleh berdasarkan voting para pemain"
 
 msgid "Match Options"
 msgstr ""
@@ -11746,16 +11746,16 @@ msgid "Tech"
 msgstr "Teknologi"
 
 msgid "Technology Level 1"
-msgstr "Teknologi tingkat 1"
+msgstr "Teknologi Level 1"
 
 msgid "Technology Level 2"
-msgstr "Teknologi tingkat 2"
+msgstr "Teknologi Level 2"
 
 msgid "Technology Level 3"
-msgstr "Teknologi tingkat 3"
+msgstr "Teknologi Level 3"
 
 msgid "Technology Level 4"
-msgstr "Teknologi tingkat 4"
+msgstr "Teknologi Level 4"
 
 msgid "Limits"
 msgstr ""
@@ -11830,32 +11830,32 @@ msgid "Configure Advanced Hosting Options"
 msgstr ""
 
 msgid "Launch Transport"
-msgstr "Luncurkan Transporter"
+msgstr "Kirimkan Bantuan"
 
 msgid "Launch the Transporter"
 msgstr ""
 
 msgid "There is not enough room in the Transport!"
-msgstr "Tidak ada cukup ruang dalam Transporter!"
+msgstr "Transport sudah penuh!"
 
 msgid "Reinforcements landing"
 msgstr "Bala bantuan telah mendarat"
 
 msgid "Update Available"
-msgstr "Pembaruan Tersedia"
+msgstr "Update Tersedia"
 
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr "Versi baru Warzone 2100 (%s) tersedia!"
 
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr "Versi baru ini menyediakan perbaikan bug dan perbaruan, dan Anda disarankan untuk melakukan pembaruan sekarang."
+msgstr "Versi baru ini menyediakan perbaikan bug dan perbaruan, dan disarankan untuk melakukan pembaruan sekarang."
 
 msgid "A new build of Warzone 2100 is available!"
 msgstr "Versi baru Warzone 2100 tersedia!"
 
 msgid "Get Update Now"
-msgstr "Dapatkan Perbaruan Sekarang"
+msgstr "Download Perbaruan Sekarang"
 
 msgid "Compatibility Warning"
 msgstr "Peringatan Kompatibilitas"
@@ -11878,16 +11878,16 @@ msgid "Version: %s,%s Built: %s%s"
 msgstr "Versi: %s,%s Built: %s%s"
 
 msgid "GAME OVER"
-msgstr "PERMAINAN BERAKHIR"
+msgstr "GAME OVER"
 
 msgid "The battle is over - you can leave the room."
-msgstr "Pertempuran telah berakhir - Anda dapat meninggalkan ruangan."
+msgstr "Pertempuran telah berakhir - kamu dapat meninggalkan ruangan."
 
 msgid "YOU ARE VICTORIOUS!"
-msgstr "ANDA MENANG!"
+msgstr "MENANG!"
 
 msgid "YOU WERE DEFEATED!"
-msgstr "ANDA KALAH!"
+msgstr "KALAH!"
 
 msgid "Script Debugger"
-msgstr "Pendebug Script"
+msgstr "Debugger Script"
