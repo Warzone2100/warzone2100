@@ -53,7 +53,7 @@
 		"structureModel": [
 			"bbaatower.PIE"
 		],
-		"Thermal": 11,
+		"thermal": 11,
 		"type": "DEFENSE",
 		"weapons": [
 			"bbaawep"
