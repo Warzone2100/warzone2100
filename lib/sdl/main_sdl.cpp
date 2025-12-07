@@ -2946,7 +2946,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	// Set the minimum window size
 	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
 
-#if !defined(WZ_OS_MAC) // Do not use this method to set the window icon on macOS.
+#if !defined(WZ_OS_MAC) && !defined(__EMSCRIPTEN__) // Do not use this method to set the window icon on macOS or Emscripten
 
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		uint32_t rmask = 0xff000000;
