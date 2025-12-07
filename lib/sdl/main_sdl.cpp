@@ -2704,6 +2704,12 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 				debug(LOG_WZ, "Monitor mode refresh rate < 59 -- discarding entry");
 				// only store 60Hz & higher modes, some display report 59 on Linux
 			}
+#if defined(WZ_OS_MAC)
+			else if (displaymode->refresh_rate < 59.94f)
+			{
+				// skip entries with 59.93 refresh rate, as SDL 3.2.x doesn't support switching to them due to a bug
+			}
+#endif
 			else if (pixelFormatDetails->Rbits < 8 || pixelFormatDetails->Gbits < 8 || pixelFormatDetails->Bbits < 8)
 			{
 				debug(LOG_INFO, "Monitor mode pixel format has R, G, or B bits < 8 -- discarding entry");
