@@ -14,10 +14,10 @@ cmake_minimum_required(VERSION 3.16...3.31)
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.14")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.4.321.0")
+set(VULKAN_SDK_VERSION "1.4.328.1")
 set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.zip")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "d873c43acacec1e3330fb530dafd541aa5d8a5726575a98a3f70ca505fc203db")
+set(VULKAN_SDK_DL_SHA256 "571db867d8736e402f6f674f26f17b339495d016f3b2afdbac23a3650475023f")
 
 ########################################################
 
