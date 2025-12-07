@@ -15,12 +15,14 @@ RUN apt-get -u update \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Vulkan SDK
-ADD https://packages.lunarg.com/lunarg-signing-key-pub.asc /tmp
-ADD https://packages.lunarg.com/vulkan/1.3.296/lunarg-vulkan-1.3.296-jammy.list /etc/apt/sources.list.d
-RUN apt-key add /tmp/lunarg-signing-key-pub.asc
-RUN apt-get -u update \
- && DEBIAN_FRONTEND=noninteractive apt-get -y install vulkan-sdk \
- && rm -rf /var/lib/apt/lists/*
+ENV VULKANSDK_SHA256 241e75b56c91c0d210ed07a7c638ec05a3e5b0e4c66ba9f0ba0f102d823ad6bf
+ADD "https://sdk.lunarg.com/sdk/download/1.4.328.1/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz?Human=true" "/tmp"
+RUN echo "$VULKANSDK_SHA256 /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz" | sha256sum -c \
+ && mkdir /vulkan \
+ && tar -C /vulkan -xf /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz \
+ && rm /tmp/vulkansdk-linux-x86_64-1.4.328.1.tar.xz
+ENV VULKAN_SDK="/vulkan/1.4.328.1/x86_64"
+ENV PATH="$PATH:$VULKAN_SDK/bin"
 
 # Defines arguments which can be passed during build time.
 ARG USER=warzone2100
