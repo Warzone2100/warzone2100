@@ -40,37 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - name: Clean up disk space
-      run: |
-        echo "Disk space before cleanup:"
-        df -h
-        # Remove Android SDK directories
-        echo "Removing Android SDK directories"
-        sudo rm -rf /usr/local/lib/android || true
-        sudo rm -rf /opt/android || true
-        sudo rm -rf /usr/local/android-sdk || true
-        echo "Removing Android SDK directories - complete"
-        df -h
-        # Remove .NET directories
-        echo "Removing .NET directories"
-        sudo rm -rf /usr/share/dotnet || true
-        echo "Removing .NET directories - complete"
-        df -h
-        # Remove Haskell directories
-        echo "Removing Haskell directories"
-        sudo rm -rf /opt/ghc || true
-        sudo rm -rf /usr/local/.ghcup || true
-        sudo rm -rf /opt/cabal || true
-        echo "Removing Haskell directories - complete"
-        df -h
-        # apt clean
-        echo "Running apt-get clean"
-        sudo apt-get clean
-        echo "Disk space after cleanup:"
-        df -h
     - uses: actions/checkout@v6
       with:
         fetch-depth: 0
+    - uses: ./.github/actions/clean-disk-space-ubuntu
     - name: Configure Repo Checkout
       id: checkout-config
       env:

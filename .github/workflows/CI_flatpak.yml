@@ -79,6 +79,7 @@ jobs:
         path: 'src'
         set-safe-directory: true
         persist-credentials: false
+    - uses: ./src/.github/actions/clean-disk-space-ubuntu
     - name: Configure Repo Checkout
       id: checkout-config
       working-directory: '${{ github.workspace }}/src'
