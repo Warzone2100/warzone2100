@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"POT-Creation-Date: 2025-12-08 19:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4117,60 +4117,60 @@ msgid "Survive until the timer reaches zero"
 msgstr ""
 
 #: data/base/script/rules.js:57
-#: data/base/script/tutorial.js:129
+#: data/base/script/tutorial.js:131
 #: data/mp/multiplay/script/rules/reticule.js:21
 msgid "Manufacture (F1)"
 msgstr ""
 
 #: data/base/script/rules.js:61
-#: data/base/script/tutorial.js:119
-#: data/base/script/tutorial.js:516
+#: data/base/script/tutorial.js:121
+#: data/base/script/tutorial.js:547
 #: data/mp/multiplay/script/rules/reticule.js:25
 #: data/mp/multiplay/script/rules/reticule.js:114
 msgid "Manufacture - build factory first"
 msgstr ""
 
 #: data/base/script/rules.js:107
-#: data/base/script/tutorial.js:156
+#: data/base/script/tutorial.js:158
 #: data/mp/multiplay/script/rules/reticule.js:48
 msgid "Research (F2)"
 msgstr ""
 
 #: data/base/script/rules.js:111
-#: data/base/script/tutorial.js:224
-#: data/base/script/tutorial.js:517
+#: data/base/script/tutorial.js:226
+#: data/base/script/tutorial.js:548
 #: data/mp/multiplay/script/rules/reticule.js:52
 #: data/mp/multiplay/script/rules/reticule.js:115
 msgid "Research - build research facility first"
 msgstr ""
 
 #: data/base/script/rules.js:119
-#: data/base/script/tutorial.js:148
-#: data/base/script/tutorial.js:271
-#: data/base/script/tutorial.js:361
+#: data/base/script/tutorial.js:150
+#: data/base/script/tutorial.js:273
+#: data/base/script/tutorial.js:363
 #: data/mp/multiplay/script/rules/reticule.js:60
 msgid "Build (F3)"
 msgstr ""
 
 #: data/base/script/rules.js:123
-#: data/base/script/tutorial.js:284
-#: data/base/script/tutorial.js:317
-#: data/base/script/tutorial.js:472
-#: data/base/script/tutorial.js:518
+#: data/base/script/tutorial.js:286
+#: data/base/script/tutorial.js:319
+#: data/base/script/tutorial.js:483
+#: data/base/script/tutorial.js:549
 #: data/mp/multiplay/script/rules/reticule.js:64
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Build - manufacture constructor droids first"
 msgstr ""
 
 #: data/base/script/rules.js:169
-#: data/base/script/tutorial.js:214
+#: data/base/script/tutorial.js:216
 #: data/mp/multiplay/script/rules/reticule.js:87
 msgid "Design (F4)"
 msgstr ""
 
 #: data/base/script/rules.js:174
-#: data/base/script/tutorial.js:268
-#: data/base/script/tutorial.js:519
+#: data/base/script/tutorial.js:270
+#: data/base/script/tutorial.js:550
 #: data/mp/multiplay/script/rules/reticule.js:92
 #: data/mp/multiplay/script/rules/reticule.js:117
 msgid "Design - construct HQ first"
@@ -4182,17 +4182,17 @@ msgid "Commanders (F6)"
 msgstr ""
 
 #: data/base/script/rules.js:187
-#: data/base/script/tutorial.js:521
+#: data/base/script/tutorial.js:552
 #: data/mp/multiplay/script/rules/reticule.js:105
 #: data/mp/multiplay/script/rules/reticule.js:119
 msgid "Commanders - manufacture commanders first"
 msgstr ""
 
 #: data/base/script/rules.js:193
-#: data/base/script/tutorial.js:258
-#: data/base/script/tutorial.js:515
+#: data/base/script/tutorial.js:260
+#: data/base/script/tutorial.js:546
 #: data/mp/multiplay/script/rules/reticule.js:111
-#: lib/sdl/main_sdl.cpp:3441
+#: lib/sdl/main_sdl.cpp:3225
 #: src/challenge.cpp:265
 #: src/hci.cpp:2527
 #: src/hci/objects_stats.cpp:282
@@ -4217,175 +4217,179 @@ msgid "Close"
 msgstr ""
 
 #: data/base/script/rules.js:198
-#: data/base/script/tutorial.js:520
+#: data/base/script/tutorial.js:551
 #: data/mp/multiplay/script/rules/reticule.js:118
 #: data/mp/multiplay/script/rules/reticule.js:126
 msgid "Intelligence Display (F5)"
 msgstr ""
 
-#: data/base/script/tutorial.js:29
+#: data/base/script/tutorial.js:30
 msgid "In this training session you'll learn how to build an effective base"
 msgstr ""
 
-#: data/base/script/tutorial.js:30
+#: data/base/script/tutorial.js:31
 msgid "Oil resources are key to your success"
 msgstr ""
 
-#: data/base/script/tutorial.js:31
+#: data/base/script/tutorial.js:32
 msgid "To build an oil derrick, select one of your trucks"
 msgstr ""
 
-#: data/base/script/tutorial.js:32
+#: data/base/script/tutorial.js:33
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
 msgstr ""
 
-#: data/base/script/tutorial.js:33
+#: data/base/script/tutorial.js:34
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
 msgstr ""
 
-#: data/base/script/tutorial.js:35
+#: data/base/script/tutorial.js:36
 msgid "Left click the flashing build icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:36
+#: data/base/script/tutorial.js:37
 msgid "Now left click the power generator in the build menu on the left"
 msgstr ""
 
-#: data/base/script/tutorial.js:37
+#: data/base/script/tutorial.js:38
 msgid "Position the square at your base and left click to start the build process"
 msgstr ""
 
-#: data/base/script/tutorial.js:38
+#: data/base/script/tutorial.js:39
 msgid "To increase your build rate, select your second truck"
 msgstr ""
 
-#: data/base/script/tutorial.js:39
+#: data/base/script/tutorial.js:40
 msgid "Now left click the power generator site"
 msgstr ""
 
-#: data/base/script/tutorial.js:40
+#: data/base/script/tutorial.js:41
 msgid "The other truck will now help to build the power generator"
 msgstr ""
 
-#: data/base/script/tutorial.js:42
+#: data/base/script/tutorial.js:43
 msgid "During missions you need to locate and recover technologies from before the Collapse"
 msgstr ""
 
-#: data/base/script/tutorial.js:43
+#: data/base/script/tutorial.js:44
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
 msgstr ""
 
-#: data/base/script/tutorial.js:44
+#: data/base/script/tutorial.js:45
 msgid "Move the pointer over the artifact and left click to recover it"
 msgstr ""
 
-#: data/base/script/tutorial.js:46
+#: data/base/script/tutorial.js:47
 msgid "A research facility is required to research artifacts"
 msgstr ""
 
-#: data/base/script/tutorial.js:47
-#: data/base/script/tutorial.js:66
+#: data/base/script/tutorial.js:48
+#: data/base/script/tutorial.js:67
 msgid "Left click the flashing BUILD icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:48
+#: data/base/script/tutorial.js:49
 msgid "Now left click the research facility and position it at your base"
 msgstr ""
 
-#: data/base/script/tutorial.js:49
+#: data/base/script/tutorial.js:50
 msgid "Use your other truck to help build the research facility"
 msgstr ""
 
-#: data/base/script/tutorial.js:51
+#: data/base/script/tutorial.js:52
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:52
+#: data/base/script/tutorial.js:53
 msgid "Now left click the machinegun artifact"
 msgstr ""
 
-#: data/base/script/tutorial.js:53
+#: data/base/script/tutorial.js:54
 msgid "The artifact is now being researched by the facility"
 msgstr ""
 
-#: data/base/script/tutorial.js:54
+#: data/base/script/tutorial.js:55
 msgid "The researched machinegun can now be used to design a new vehicle"
 msgstr ""
 
-#: data/base/script/tutorial.js:55
+#: data/base/script/tutorial.js:56
 msgid "Left click the flashing DESIGN icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:56
+#: data/base/script/tutorial.js:57
 msgid "To start your design, left click the NEW DESIGN icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:57
+#: data/base/script/tutorial.js:58
 msgid "Now left click the Vehicle Body icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:58
+#: data/base/script/tutorial.js:59
 msgid "Then left click the Viper body"
 msgstr ""
 
-#: data/base/script/tutorial.js:59
+#: data/base/script/tutorial.js:60
 msgid "Left click the Wheels icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:60
+#: data/base/script/tutorial.js:61
 msgid "Then left click the machinegun to complete your design"
 msgstr ""
 
-#: data/base/script/tutorial.js:63
+#: data/base/script/tutorial.js:64
 msgid "To finalize your design, left click the CLOSE icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:65
+#: data/base/script/tutorial.js:66
 msgid "A factory is now required to manufacture your new vehicle"
 msgstr ""
 
-#: data/base/script/tutorial.js:67
+#: data/base/script/tutorial.js:68
 msgid "Now left click the factory icon and position it at your base"
 msgstr ""
 
-#: data/base/script/tutorial.js:68
+#: data/base/script/tutorial.js:69
 msgid "Select a location for your factory"
 msgstr ""
 
-#: data/base/script/tutorial.js:69
+#: data/base/script/tutorial.js:70
 msgid "The delivery point is indicated by the number 1"
 msgstr ""
 
-#: data/base/script/tutorial.js:70
+#: data/base/script/tutorial.js:71
 msgid "All new units will drive to this location once built"
 msgstr ""
 
-#: data/base/script/tutorial.js:71
+#: data/base/script/tutorial.js:72
 msgid "You can move the delivery point at any time by left clicking it"
 msgstr ""
 
-#: data/base/script/tutorial.js:72
+#: data/base/script/tutorial.js:73
 msgid "Now click where you want to position the delivery point"
 msgstr ""
 
-#: data/base/script/tutorial.js:73
+#: data/base/script/tutorial.js:74
 msgid "The factory can now be ordered to build a new unit"
 msgstr ""
 
-#: data/base/script/tutorial.js:74
+#: data/base/script/tutorial.js:75
 msgid "Left click the flashing MANUFACTURE icon"
 msgstr ""
 
-#: data/base/script/tutorial.js:76
+#: data/base/script/tutorial.js:77
 msgid "Now left click the units you want to build from the menu at the left"
 msgstr ""
 
-#: data/base/script/tutorial.js:77
+#: data/base/script/tutorial.js:78
 msgid "Please wait whilst the factory manufactures the new unit(s)"
 msgstr ""
 
-#: data/base/script/tutorial.js:79
+#: data/base/script/tutorial.js:80
 msgid "Congratulations commander - you are ready for your first mission"
+msgstr ""
+
+#: data/base/script/tutorial.js:81
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
 msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
@@ -5632,7 +5636,7 @@ msgid "Command Turret IV"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/endconditions.js:233
-#: src/configuration.cpp:478
+#: src/configuration.cpp:507
 #: src/hci/quickchat.cpp:2471
 #: src/multistat.cpp:601
 #: src/spectatorwidgets.cpp:784
@@ -5877,19 +5881,19 @@ msgstr ""
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3443
+#: lib/sdl/main_sdl.cpp:3227
 msgid "Warzone 2100: Failed to initialize graphics"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3444
+#: lib/sdl/main_sdl.cpp:3228
 msgid "Failed to initialize graphics for all backends."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3447
+#: lib/sdl/main_sdl.cpp:3231
 msgid "Error Details:"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3454
+#: lib/sdl/main_sdl.cpp:3238
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
@@ -15566,36 +15570,36 @@ msgstr ""
 #: src/chat.cpp:64
 #: src/hci/chatoptions.cpp:1290
 #: src/hci/quickchat.cpp:2306
-#: src/hci/quickchat.cpp:2895
+#: src/hci/quickchat.cpp:2911
 msgid "Global"
 msgstr ""
 
 #: src/chat.cpp:68
 #: src/chat.cpp:74
-#: src/hci/quickchat.cpp:2904
-#: src/hci/quickchat.cpp:2915
-#: src/hci/quickchat.cpp:2927
+#: src/hci/quickchat.cpp:2920
+#: src/hci/quickchat.cpp:2931
+#: src/hci/quickchat.cpp:2943
 msgid "Allies"
 msgstr ""
 
 #: src/chat.cpp:76
-#: src/hci/quickchat.cpp:2950
+#: src/hci/quickchat.cpp:2966
 msgid "private to "
 msgstr ""
 
 #: src/chat.cpp:87
-#: src/hci/quickchat.cpp:2961
+#: src/hci/quickchat.cpp:2977
 msgid " and "
 msgstr ""
 
 #: src/chat.cpp:174
-#: src/multiint.cpp:3899
+#: src/multiint.cpp:3907
 msgid "Spectators"
 msgstr ""
 
 #: src/chat.cpp:222
-#: src/hci/quickchat.cpp:3013
-#: src/multiint.cpp:8228
+#: src/hci/quickchat.cpp:3034
+#: src/multiint.cpp:8248
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
@@ -15947,7 +15951,7 @@ msgstr ""
 msgid "Commander needs a higher level to command more units"
 msgstr ""
 
-#: src/configuration.cpp:477
+#: src/configuration.cpp:506
 msgid "My Game"
 msgstr ""
 
@@ -16411,7 +16415,7 @@ msgid "Please remove all incompatible mods."
 msgstr ""
 
 #: src/frontend.cpp:662
-#: src/multiint.cpp:5431
+#: src/multiint.cpp:5439
 msgid "Mod: "
 msgstr ""
 
@@ -16560,7 +16564,7 @@ msgid "Disable All"
 msgstr ""
 
 #: src/hci/chatoptions.cpp:1261
-#: src/multiint.cpp:4758
+#: src/multiint.cpp:4766
 #: src/screens/chatscreen.cpp:394
 msgid "Chat Options"
 msgstr ""
@@ -16754,345 +16758,354 @@ msgstr ""
 msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2525
+#: src/hci/quickchat.cpp:2526
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2533
+#: src/hci/quickchat.cpp:2534
+#, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#: src/hci/quickchat.cpp:2539
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2538
+#: src/hci/quickchat.cpp:2546
 msgid "NOTICE: Please check Ready"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2542
+#: src/hci/quickchat.cpp:2550
 msgid "NOTICE: Please check Ready so the game can begin"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2591
+#: src/hci/quickchat.cpp:2556
+msgid "Players who don't check Ready in time will be kicked."
+msgstr ""
+
+#: src/hci/quickchat.cpp:2607
 msgid "Can someone please transfer me some units?"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2593
+#: src/hci/quickchat.cpp:2609
 msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2595
+#: src/hci/quickchat.cpp:2611
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2600
+#: src/hci/quickchat.cpp:2616
 msgid "I suggest: Building more units"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2603
+#: src/hci/quickchat.cpp:2619
 msgid "I suggest: Building different units"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2606
+#: src/hci/quickchat.cpp:2622
 msgid "I suggest: Checking the team strategy view"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2609
+#: src/hci/quickchat.cpp:2625
 msgid "I suggest: Researching different tech"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2612
+#: src/hci/quickchat.cpp:2628
 msgid "I suggest: Keeping research centers busy"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2615
+#: src/hci/quickchat.cpp:2631
 msgid "I suggest: Building anti-air"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2618
+#: src/hci/quickchat.cpp:2634
 msgid "I suggest: Repairing your units"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2621
+#: src/hci/quickchat.cpp:2637
 msgid "I suggest: Building repair facilities"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2624
+#: src/hci/quickchat.cpp:2640
 msgid "I suggest: Building power generators"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s)
-#: src/hci/quickchat.cpp:2627
+#: src/hci/quickchat.cpp:2643
 msgid "I suggest: Capturing oil resources"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2647
+#: src/hci/quickchat.cpp:2663
 msgid "Hey everyone!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2649
+#: src/hci/quickchat.cpp:2665
 msgid "Welcome!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2651
+#: src/hci/quickchat.cpp:2667
 msgid "I want to spectate"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2653
+#: src/hci/quickchat.cpp:2669
 msgid "I want to play"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2655
+#: src/hci/quickchat.cpp:2671
 msgid "I want to switch teams"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2657
+#: src/hci/quickchat.cpp:2673
 msgid "Please check Ready so we can start"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2662
+#: src/hci/quickchat.cpp:2678
 msgid "Please wait"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2664
+#: src/hci/quickchat.cpp:2680
 msgid "Let's go!"
 msgstr ""
 
 #. TRANSLATORS: As in "I am almost ready" (but shorter, more informal)
-#: src/hci/quickchat.cpp:2668
+#: src/hci/quickchat.cpp:2684
 msgid "Almost ready"
 msgstr ""
 
 #. TRANSLATORS: As in "I am ready" (but shorter, more informal)
-#: src/hci/quickchat.cpp:2671
+#: src/hci/quickchat.cpp:2687
 msgid "Ready"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2673
+#: src/hci/quickchat.cpp:2689
 msgid "Be right back"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2675
+#: src/hci/quickchat.cpp:2691
 msgid "I'm back"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2678
+#: src/hci/quickchat.cpp:2694
 msgid "Yes"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2680
+#: src/hci/quickchat.cpp:2696
 msgid "No"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2682
+#: src/hci/quickchat.cpp:2698
 msgid "Maybe"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2684
+#: src/hci/quickchat.cpp:2700
 msgid "Not yet"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2686
+#: src/hci/quickchat.cpp:2702
 msgid "Soon"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2688
+#: src/hci/quickchat.cpp:2704
 msgid "Thank you"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2690
+#: src/hci/quickchat.cpp:2706
 msgid "No problem"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2694
+#: src/hci/quickchat.cpp:2710
 msgid "Well-played"
 msgstr ""
 
 #. TRANSLATORS: Should probably be left as-is, unless there is a better way of denoting a censored outburst in your language
-#: src/hci/quickchat.cpp:2697
+#: src/hci/quickchat.cpp:2713
 msgid "@#%*!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2699
+#: src/hci/quickchat.cpp:2715
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2703
+#: src/hci/quickchat.cpp:2719
 msgid "Get ready..."
 msgstr ""
 
-#: src/hci/quickchat.cpp:2705
+#: src/hci/quickchat.cpp:2721
 msgid "You're going to regret that"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2707
+#: src/hci/quickchat.cpp:2723
 msgid "Barely a scratch!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2711
+#: src/hci/quickchat.cpp:2727
 msgid "Attack now?"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2713
+#: src/hci/quickchat.cpp:2729
 msgid "Group up"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2715
+#: src/hci/quickchat.cpp:2731
 msgid "Split up"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2717
+#: src/hci/quickchat.cpp:2733
 msgid "Focus attacks where marked"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2719
+#: src/hci/quickchat.cpp:2735
 msgid "Retreat!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2721
+#: src/hci/quickchat.cpp:2737
 msgid "I need help!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2723
+#: src/hci/quickchat.cpp:2739
 msgid "Left side"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2725
+#: src/hci/quickchat.cpp:2741
 msgid "Right side"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2727
+#: src/hci/quickchat.cpp:2743
 msgid "Transfer Request: Units"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2729
+#: src/hci/quickchat.cpp:2745
 msgid "Transfer Request: Trucks"
 msgstr ""
 
 #. TRANSLATORS: As in "I am attacking now!" (but shorter, more informal)
-#: src/hci/quickchat.cpp:2733
+#: src/hci/quickchat.cpp:2749
 msgid "Attacking now!"
 msgstr ""
 
 #. TRANSLATORS: As in "I am on my way!" (but shorter, more informal)
-#: src/hci/quickchat.cpp:2736
+#: src/hci/quickchat.cpp:2752
 msgid "On my way!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2738
+#: src/hci/quickchat.cpp:2754
 msgid "They're coming!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2740
+#: src/hci/quickchat.cpp:2756
 msgid "I'm being attacked!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2742
+#: src/hci/quickchat.cpp:2758
 msgid "I'm rushing oils"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2744
+#: src/hci/quickchat.cpp:2760
 msgid "They're rushing oils!"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2746
+#: src/hci/quickchat.cpp:2762
 msgid "I don't have enough power"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2750
+#: src/hci/quickchat.cpp:2766
 msgid "Build more units"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2753
+#: src/hci/quickchat.cpp:2769
 msgid "Build different units"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2756
+#: src/hci/quickchat.cpp:2772
 msgid "Check team strategy view"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2759
+#: src/hci/quickchat.cpp:2775
 msgid "Research different tech"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2762
+#: src/hci/quickchat.cpp:2778
 msgid "Keep research centers busy"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2765
+#: src/hci/quickchat.cpp:2781
 msgid "Build anti-air"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2768
+#: src/hci/quickchat.cpp:2784
 msgid "Repair your units"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2771
+#: src/hci/quickchat.cpp:2787
 msgid "Build repair facilities"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2774
+#: src/hci/quickchat.cpp:2790
 msgid "Build power generators"
 msgstr ""
 
 #. TRANSLATORS: A suggestion to other player(s), as in "Suggestion: %s"
-#: src/hci/quickchat.cpp:2777
+#: src/hci/quickchat.cpp:2793
 msgid "Capture oil resources"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2781
+#: src/hci/quickchat.cpp:2797
 msgid "That didn't go well..."
 msgstr ""
 
-#: src/hci/quickchat.cpp:2783
+#: src/hci/quickchat.cpp:2799
 msgid "I have another plan"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2787
+#: src/hci/quickchat.cpp:2803
 msgid "Good game"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2789
+#: src/hci/quickchat.cpp:2805
 msgid "I give up"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2791
+#: src/hci/quickchat.cpp:2807
 msgid "Sorry, I have to leave"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2795
+#: src/hci/quickchat.cpp:2811
 msgid "Message delivery failure - try again"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2797
+#: src/hci/quickchat.cpp:2813
 msgid "Map Downloaded"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2799
+#: src/hci/quickchat.cpp:2815
 msgid "Admin modified a setting"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2911
+#: src/hci/quickchat.cpp:2927
 msgid "Bot Allies"
 msgstr ""
 
-#: src/hci/quickchat.cpp:2923
+#: src/hci/quickchat.cpp:2939
 msgid "Human Allies"
 msgstr ""
 
@@ -18673,8 +18686,8 @@ msgstr ""
 msgid "Could not save game!"
 msgstr ""
 
-#: src/main.cpp:1053
-#: src/main.cpp:1129
+#: src/main.cpp:1051
+#: src/main.cpp:1127
 msgid "Failed to load level data or map. Exiting to main menu."
 msgstr ""
 
@@ -18808,7 +18821,7 @@ msgstr ""
 
 #: src/multiint.cpp:485
 #: src/multiint.cpp:490
-#: src/multiplay.cpp:824
+#: src/multiplay.cpp:822
 msgid "Commander"
 msgstr ""
 
@@ -18918,7 +18931,7 @@ msgid "Click to swap player to this slot"
 msgstr ""
 
 #: src/multiint.cpp:1977
-#: src/multiint.cpp:3370
+#: src/multiint.cpp:3378
 #, c-format
 msgid "Spectator %s has moved to Players"
 msgstr ""
@@ -18928,7 +18941,7 @@ msgid "Cannot swap with host"
 msgstr ""
 
 #: src/multiint.cpp:2269
-#: src/multiint.cpp:7806
+#: src/multiint.cpp:7815
 #: src/titleui/protocol.cpp:186
 #: src/titleui/widgets/lobbyplayerrow.cpp:480
 #: src/titleui/widgets/lobbyplayerrow.cpp:665
@@ -18979,395 +18992,395 @@ msgstr ""
 msgid "Ask to Play"
 msgstr ""
 
-#: src/multiint.cpp:3248
+#: src/multiint.cpp:3256
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
 msgstr ""
 
-#: src/multiint.cpp:3252
+#: src/multiint.cpp:3260
 #, c-format
 msgid "Player %s wants to remain a Player"
 msgstr ""
 
-#: src/multiint.cpp:3260
+#: src/multiint.cpp:3268
 msgid "Host has declined to switch you to a Player"
 msgstr ""
 
-#: src/multiint.cpp:3264
+#: src/multiint.cpp:3272
 msgid "Unable to switch to Spectator"
 msgstr ""
 
-#: src/multiint.cpp:3292
+#: src/multiint.cpp:3300
 msgid "Do you want to spectate?"
 msgstr ""
 
-#: src/multiint.cpp:3293
+#: src/multiint.cpp:3301
 msgid "The host of this game wants to know if you're willing to spectate?"
 msgstr ""
 
-#: src/multiint.cpp:3295
+#: src/multiint.cpp:3303
 msgid "You are currently a Player."
 msgstr ""
 
-#: src/multiint.cpp:3296
+#: src/multiint.cpp:3304
 msgid "Yes, I will spectate!"
 msgstr ""
 
-#: src/multiint.cpp:3301
+#: src/multiint.cpp:3309
 msgid "Do you want to play?"
 msgstr ""
 
-#: src/multiint.cpp:3302
+#: src/multiint.cpp:3310
 msgid "The host of this game wants to know if you'd like to play?"
 msgstr ""
 
-#: src/multiint.cpp:3304
+#: src/multiint.cpp:3312
 msgid "You are currently a Spectator."
 msgstr ""
 
-#: src/multiint.cpp:3305
+#: src/multiint.cpp:3313
 msgid "Yes, I want to play!"
 msgstr ""
 
-#: src/multiint.cpp:3354
+#: src/multiint.cpp:3362
 #, c-format
 msgid "Player %s has moved to Spectators"
 msgstr ""
 
-#: src/multiint.cpp:3381
+#: src/multiint.cpp:3389
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
 msgstr ""
 
-#: src/multiint.cpp:3402
+#: src/multiint.cpp:3410
 msgid "Spectator would like to become a Player"
 msgstr ""
 
-#: src/multiint.cpp:3403
+#: src/multiint.cpp:3411
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
 msgstr ""
 
-#: src/multiint.cpp:3405
+#: src/multiint.cpp:3413
 msgid "However, there are currently no open Player slots."
 msgstr ""
 
-#: src/multiint.cpp:3407
+#: src/multiint.cpp:3415
 msgid "Would you like to swap this Spectator with a Player?"
 msgstr ""
 
-#: src/multiint.cpp:3408
+#: src/multiint.cpp:3416
 msgid "Yes, select Player slot"
 msgstr ""
 
-#: src/multiint.cpp:3589
-#: src/multiint.cpp:7547
+#: src/multiint.cpp:3597
+#: src/multiint.cpp:7556
 msgid "BLIND LOBBY NOTICE:"
 msgstr ""
 
-#: src/multiint.cpp:3591
-#: src/multiint.cpp:7565
+#: src/multiint.cpp:3599
+#: src/multiint.cpp:7574
 #, c-format
 msgid "You have been assigned the codename: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:3704
+#: src/multiint.cpp:3712
 msgid "Joined:"
 msgstr ""
 
-#: src/multiint.cpp:3707
+#: src/multiint.cpp:3715
 msgid "Ready:"
 msgstr ""
 
-#: src/multiint.cpp:3885
+#: src/multiint.cpp:3893
 msgid "Players"
 msgstr ""
 
-#: src/multiint.cpp:3915
+#: src/multiint.cpp:3923
 msgid "Host Options"
 msgstr ""
 
-#: src/multiint.cpp:4198
+#: src/multiint.cpp:4206
 msgid "Enable Spectator Join"
 msgstr ""
 
-#: src/multiint.cpp:4208
+#: src/multiint.cpp:4216
 msgid "Lock Teams"
 msgstr ""
 
-#: src/multiint.cpp:4212
+#: src/multiint.cpp:4220
 msgid "Lock Position"
 msgstr ""
 
-#: src/multiint.cpp:4315
+#: src/multiint.cpp:4323
 msgid "For Spectator:"
 msgstr ""
 
-#: src/multiint.cpp:4315
+#: src/multiint.cpp:4323
 msgid "For Player:"
 msgstr ""
 
-#: src/multiint.cpp:4333
+#: src/multiint.cpp:4341
 msgid "Choose Player Slot"
 msgstr ""
 
-#: src/multiint.cpp:4404
+#: src/multiint.cpp:4412
 msgid "PLAYERS"
 msgstr ""
 
-#: src/multiint.cpp:4532
+#: src/multiint.cpp:4540
 msgid "Add spectator slot"
 msgstr ""
 
-#: src/multiint.cpp:4702
+#: src/multiint.cpp:4710
 msgid "Kicked from game"
 msgstr ""
 
-#: src/multiint.cpp:4793
-#: src/multiint.cpp:4899
-#: src/multiint.cpp:4932
+#: src/multiint.cpp:4801
+#: src/multiint.cpp:4907
+#: src/multiint.cpp:4940
 #: src/screens/chatscreen.cpp:157
 msgid "The host has disabled free chat. Please use Quick Chat."
 msgstr ""
 
-#: src/multiint.cpp:4883
-#: src/multiint.cpp:4886
+#: src/multiint.cpp:4891
+#: src/multiint.cpp:4894
 msgid "Quick Chat"
 msgstr ""
 
-#: src/multiint.cpp:4897
-#: src/multiint.cpp:4903
+#: src/multiint.cpp:4905
+#: src/multiint.cpp:4911
 msgid "Press the Tab key to open Quick Chat."
 msgstr ""
 
-#: src/multiint.cpp:4905
-#: src/multiint.cpp:4935
+#: src/multiint.cpp:4913
+#: src/multiint.cpp:4943
 msgid "The host has disabled free chat. Please use Quick Chat or /hostmsg commands."
 msgstr ""
 
-#: src/multiint.cpp:4938
+#: src/multiint.cpp:4946
 msgid "The host has enabled free chat for you."
 msgstr ""
 
-#: src/multiint.cpp:5304
+#: src/multiint.cpp:5312
 msgid "Copy Text to Clipboard"
 msgstr ""
 
-#: src/multiint.cpp:5319
+#: src/multiint.cpp:5327
 #, c-format
 msgid "Mute Player: %s"
 msgstr ""
 
-#: src/multiint.cpp:5323
+#: src/multiint.cpp:5331
 #, c-format
 msgid "Unmute Player: %s"
 msgstr ""
 
-#: src/multiint.cpp:5427
+#: src/multiint.cpp:5435
 msgid "CHAT"
 msgstr ""
 
-#: src/multiint.cpp:6111
+#: src/multiint.cpp:6120
 msgid "Multiplayer Lobby Support Unavailable"
 msgstr ""
 
-#: src/multiint.cpp:6113
+#: src/multiint.cpp:6122
 msgid "Your client cannot connect to the mutiplayer lobby."
 msgstr ""
 
-#: src/multiint.cpp:6115
+#: src/multiint.cpp:6124
 #: src/updatemanager.cpp:631
 msgid "Please click the button below for more information on how to fix it."
 msgstr ""
 
-#: src/multiint.cpp:6118
+#: src/multiint.cpp:6127
 #: src/updatemanager.cpp:637
 msgid "More Information"
 msgstr ""
 
-#: src/multiint.cpp:6160
+#: src/multiint.cpp:6169
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:6368
+#: src/multiint.cpp:6377
 msgid "Host is Starting Game"
 msgstr ""
 
-#: src/multiint.cpp:6549
+#: src/multiint.cpp:6558
 #: src/stdinreader.cpp:575
 #, c-format
 msgid "Host: Free chat enabled for: %s"
 msgstr ""
 
-#: src/multiint.cpp:6553
+#: src/multiint.cpp:6562
 #: src/stdinreader.cpp:579
 #, c-format
 msgid "Host: Free chat muted for: %s"
 msgstr ""
 
-#: src/multiint.cpp:6587
+#: src/multiint.cpp:6596
 #, c-format
 msgid "Moving %s to Spectators!"
 msgstr ""
 
-#: src/multiint.cpp:6614
+#: src/multiint.cpp:6623
 #, c-format
 msgid "Asking %s to move to Players..."
 msgstr ""
 
-#: src/multiint.cpp:6708
 #: src/multiint.cpp:6717
-#: src/multiint.cpp:6724
-#: src/multiint.cpp:6739
-#: src/multiint.cpp:6817
-#: src/multiint.cpp:6844
-#: src/multiint.cpp:7191
+#: src/multiint.cpp:6726
+#: src/multiint.cpp:6733
+#: src/multiint.cpp:6748
+#: src/multiint.cpp:6826
+#: src/multiint.cpp:6853
+#: src/multiint.cpp:7200
 msgid "Disconnected from host:"
 msgstr ""
 
-#: src/multiint.cpp:6708
+#: src/multiint.cpp:6717
 msgid "Unable to handle host redirect"
 msgstr ""
 
-#: src/multiint.cpp:6717
-#: src/multiint.cpp:6724
+#: src/multiint.cpp:6726
+#: src/multiint.cpp:6733
 #: src/screens/joiningscreen.cpp:1662
 #: src/screens/joiningscreen.cpp:1670
 msgid "Unable to process redirect"
 msgstr ""
 
-#: src/multiint.cpp:6739
+#: src/multiint.cpp:6748
 msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
-#: src/multiint.cpp:6817
+#: src/multiint.cpp:6826
 msgid "Host supplied invalid options"
 msgstr ""
 
-#: src/multiint.cpp:6844
+#: src/multiint.cpp:6853
 msgid "Host supplied invalid host config"
 msgstr ""
 
-#: src/multiint.cpp:7080
+#: src/multiint.cpp:7089
 msgid "You have been kicked: "
 msgstr ""
 
-#: src/multiint.cpp:7104
-#: src/multiint.cpp:7462
+#: src/multiint.cpp:7113
+#: src/multiint.cpp:7471
 msgid "Connection lost:"
 msgstr ""
 
-#: src/multiint.cpp:7104
+#: src/multiint.cpp:7113
 msgid "No connection to host."
 msgstr ""
 
-#: src/multiint.cpp:7189
+#: src/multiint.cpp:7198
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
 msgstr ""
 
-#: src/multiint.cpp:7191
+#: src/multiint.cpp:7200
 msgid "The host tried to move us to Players, but we never gave permission."
 msgstr ""
 
-#: src/multiint.cpp:7360
+#: src/multiint.cpp:7369
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:7365
+#: src/multiint.cpp:7374
 msgid "Cannot change to a map with fewer slots."
 msgstr ""
 
-#: src/multiint.cpp:7462
+#: src/multiint.cpp:7471
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:7496
+#: src/multiint.cpp:7505
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:7501
+#: src/multiint.cpp:7510
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:7516
+#: src/multiint.cpp:7525
 msgid "Port mapping creation is in progress..."
 msgstr ""
 
-#: src/multiint.cpp:7525
+#: src/multiint.cpp:7534
 #, c-format
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
-#: src/multiint.cpp:7541
+#: src/multiint.cpp:7550
 msgid "BLIND GAME NOTICE:"
 msgstr ""
 
-#: src/multiint.cpp:7543
+#: src/multiint.cpp:7552
 msgid "Player names will not be visible to other players (until the game is over)"
 msgstr ""
 
-#: src/multiint.cpp:7549
+#: src/multiint.cpp:7558
 msgid "Player names will not be visible to other players (until the game has started)"
 msgstr ""
 
-#: src/multiint.cpp:7554
+#: src/multiint.cpp:7563
 msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
 msgstr ""
 
-#: src/multiint.cpp:7559
+#: src/multiint.cpp:7568
 msgid "The host is a spectator, and can see player identities and configure players / teams"
 msgstr ""
 
-#: src/multiint.cpp:7633
+#: src/multiint.cpp:7642
 msgid "Failed to load challenge:"
 msgstr ""
 
-#: src/multiint.cpp:7633
+#: src/multiint.cpp:7642
 msgid "Failed to load the challenge's map or config"
 msgstr ""
 
-#: src/multiint.cpp:7638
+#: src/multiint.cpp:7647
 msgid "Failed to process autohost config:"
 msgstr ""
 
-#: src/multiint.cpp:7638
+#: src/multiint.cpp:7647
 #, c-format
 msgid "Failed to load the autohost map or config from: %s"
 msgstr ""
 
-#: src/multiint.cpp:7800
+#: src/multiint.cpp:7809
 #: src/titleui/widgets/lobbyplayerrow.cpp:484
 msgid "Closed"
 msgstr ""
 
-#: src/multiint.cpp:7803
+#: src/multiint.cpp:7812
 #: src/titleui/widgets/lobbyplayerrow.cpp:476
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:8704
+#: src/multiint.cpp:8724
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
 
-#: src/multiint.cpp:8706
+#: src/multiint.cpp:8726
 #, c-format
 msgid "Replay File Saved With: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8710
+#: src/multiint.cpp:8730
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8720
+#: src/multiint.cpp:8740
 msgid "Replays should usually be played back with the same version used to save the replay."
 msgstr ""
 
-#: src/multiint.cpp:8722
+#: src/multiint.cpp:8742
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr ""
 
-#: src/multiint.cpp:8723
+#: src/multiint.cpp:8743
 msgid "Replay Version Mismatch"
 msgstr ""
 
@@ -19396,15 +19409,15 @@ msgid "The game is already full."
 msgstr ""
 
 #: src/multijoin.cpp:683
-#: src/multiplay.cpp:1095
-#: src/multiplay.cpp:1280
+#: src/multiplay.cpp:1093
+#: src/multiplay.cpp:1278
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr ""
 
 #: src/multijoin.cpp:687
-#: src/multiplay.cpp:1100
-#: src/multiplay.cpp:1284
+#: src/multiplay.cpp:1098
+#: src/multiplay.cpp:1282
 msgid "Your data doesn't match the host's!"
 msgstr ""
 
@@ -19558,7 +19571,7 @@ msgid "Team Strategy"
 msgstr ""
 
 #: src/multiopt.cpp:307
-#: src/multiopt.cpp:906
+#: src/multiopt.cpp:908
 #, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
@@ -19572,12 +19585,12 @@ msgid "MOD REQUESTED!"
 msgstr ""
 
 #: src/multiopt.cpp:437
-#: src/multiplay.cpp:2500
+#: src/multiplay.cpp:2498
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
 #: src/multiopt.cpp:438
-#: src/multiplay.cpp:2504
+#: src/multiplay.cpp:2502
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
 
@@ -19609,158 +19622,158 @@ msgstr ""
 msgid "The host has muted free chat for %d players"
 msgstr ""
 
-#: src/multiopt.cpp:910
-#: src/multiopt.cpp:931
+#: src/multiopt.cpp:912
+#: src/multiopt.cpp:933
 msgid "Limits set to default."
 msgstr ""
 
-#: src/multiopt.cpp:935
+#: src/multiopt.cpp:937
 #, c-format
 msgid "Changed structure limits [%u]:"
 msgstr ""
 
-#: src/multiopt.cpp:947
+#: src/multiopt.cpp:949
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
 msgstr ""
 
-#: src/multiopt.cpp:951
+#: src/multiopt.cpp:953
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr ""
 
-#: src/multiopt.cpp:959
+#: src/multiopt.cpp:961
 #, c-format
 msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
-#: src/multiplay.cpp:597
+#: src/multiplay.cpp:595
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:604
+#: src/multiplay.cpp:602
 msgid "Invalid data!"
 msgstr ""
 
-#: src/multiplay.cpp:1435
+#: src/multiplay.cpp:1433
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
 msgstr ""
 
-#: src/multiplay.cpp:1437
+#: src/multiplay.cpp:1435
 msgid "Unauthorized network command"
 msgstr ""
 
-#: src/multiplay.cpp:1546
+#: src/multiplay.cpp:1544
 msgid "REPLAY HAS ENDED"
 msgstr ""
 
-#: src/multiplay.cpp:1547
+#: src/multiplay.cpp:1545
 msgid "(Press ESC to quit.)"
 msgstr ""
 
-#: src/multiplay.cpp:1747
+#: src/multiplay.cpp:1745
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
 msgstr ""
 
-#: src/multiplay.cpp:2369
+#: src/multiplay.cpp:2367
 msgid "Map was requested: SENDING MAP!"
 msgstr ""
 
-#: src/multiplay.cpp:2391
+#: src/multiplay.cpp:2389
 msgid "Mod was requested: SENDING MOD!"
 msgstr ""
 
-#: src/multiplay.cpp:2461
+#: src/multiplay.cpp:2459
 msgid "FILE SENT!"
 msgstr ""
 
-#: src/multiplay.cpp:2476
+#: src/multiplay.cpp:2474
 msgid "MAP DOWNLOADED!"
 msgstr ""
 
-#: src/multiplay.cpp:2534
+#: src/multiplay.cpp:2532
 #, c-format
 msgid "Beacon %d"
 msgstr ""
 
-#: src/multiplay.cpp:2643
+#: src/multiplay.cpp:2641
 #, c-format
 msgid "Beacon received from %s!"
 msgstr ""
 
-#: src/multiplay.cpp:2701
+#: src/multiplay.cpp:2699
 msgid "Green"
 msgstr ""
 
-#: src/multiplay.cpp:2702
+#: src/multiplay.cpp:2700
 msgid "Orange"
 msgstr ""
 
-#: src/multiplay.cpp:2703
+#: src/multiplay.cpp:2701
 msgid "Grey"
 msgstr ""
 
-#: src/multiplay.cpp:2704
+#: src/multiplay.cpp:2702
 #: src/titleui/options/interfaceoptions.cpp:362
 msgid "Black"
 msgstr ""
 
-#: src/multiplay.cpp:2705
+#: src/multiplay.cpp:2703
 msgid "Red"
 msgstr ""
 
-#: src/multiplay.cpp:2706
+#: src/multiplay.cpp:2704
 msgid "Blue"
 msgstr ""
 
-#: src/multiplay.cpp:2707
+#: src/multiplay.cpp:2705
 msgid "Pink"
 msgstr ""
 
-#: src/multiplay.cpp:2708
+#: src/multiplay.cpp:2706
 msgid "Cyan"
 msgstr ""
 
-#: src/multiplay.cpp:2709
+#: src/multiplay.cpp:2707
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:2710
+#: src/multiplay.cpp:2708
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:2711
+#: src/multiplay.cpp:2709
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:2712
+#: src/multiplay.cpp:2710
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:2713
+#: src/multiplay.cpp:2711
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:2714
+#: src/multiplay.cpp:2712
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:2715
+#: src/multiplay.cpp:2713
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:2716
+#: src/multiplay.cpp:2714
 msgid "Brown"
 msgstr ""
 
-#: src/multiplay.cpp:2909
+#: src/multiplay.cpp:2907
 msgid "Spectator Mode"
 msgstr ""
 
-#: src/multiplay.cpp:2910
+#: src/multiplay.cpp:2908
 msgid "You are a spectator. Enjoy watching the game!"
 msgstr ""
 
@@ -20825,7 +20838,7 @@ msgstr ""
 #: src/titleui/options/audiooptions.cpp:341
 #: src/titleui/options/audiooptions.cpp:345
 #: src/titleui/options/controlsoptions.cpp:984
-#: src/titleui/options/windowoptions.cpp:265
+#: src/titleui/options/windowoptions.cpp:262
 msgid "Auto"
 msgstr ""
 
@@ -20855,7 +20868,7 @@ msgstr ""
 #: src/titleui/options/interfaceoptions.cpp:261
 #: src/titleui/options/interfaceoptions.cpp:360
 #: src/titleui/options/interfaceoptions.cpp:380
-#: src/titleui/options/windowoptions.cpp:266
+#: src/titleui/options/windowoptions.cpp:263
 msgid "Off"
 msgstr ""
 
@@ -21330,7 +21343,8 @@ msgid "2×"
 msgstr ""
 
 #: src/titleui/options/interfaceoptions.cpp:342
-#: src/titleui/options/windowoptions.cpp:191
+#: src/titleui/options/windowoptions.cpp:202
+#: src/titleui/options/windowoptions.cpp:228
 msgid "Fullscreen"
 msgstr ""
 
@@ -21387,50 +21401,36 @@ msgstr ""
 msgid "Controls"
 msgstr ""
 
-#: src/titleui/options/optionsforms.cpp:1115
-#: src/titleui/options/windowoptions.cpp:182
+#: src/titleui/options/optionsforms.cpp:1117
+#: src/titleui/options/windowoptions.cpp:194
 msgid "Window"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:39
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-#: src/titleui/options/windowoptions.cpp:42
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
-
-#: src/titleui/options/windowoptions.cpp:184
+#: src/titleui/options/windowoptions.cpp:196
 msgid "Window Mode"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:189
+#: src/titleui/options/windowoptions.cpp:201
 msgid "Windowed"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:190
-msgid "Desktop Full"
+#: src/titleui/options/windowoptions.cpp:230
+msgid "Fullscreen Mode"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:218
-msgid "Resolution"
-msgstr ""
-
-#: src/titleui/options/windowoptions.cpp:258
+#: src/titleui/options/windowoptions.cpp:255
 msgid "Behaviors"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:260
+#: src/titleui/options/windowoptions.cpp:257
 msgid "Minimize on Focus Loss"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:260
+#: src/titleui/options/windowoptions.cpp:257
 msgid "Whether the window should auto-minimize on focus loss"
 msgstr ""
 
-#: src/titleui/options/windowoptions.cpp:267
+#: src/titleui/options/windowoptions.cpp:264
 msgid "On (Fullscreen)"
 msgstr ""
 
@@ -21877,15 +21877,15 @@ msgstr ""
 msgid "Hide Player Preferences"
 msgstr ""
 
-#: src/titleui/widgets/optionsform.cpp:824
+#: src/titleui/widgets/optionsform.cpp:830
 msgid "Not editable while in a game."
 msgstr ""
 
-#: src/titleui/widgets/optionsform.cpp:833
+#: src/titleui/widgets/optionsform.cpp:839
 msgid "Not editable while in a multiplayer game."
 msgstr ""
 
-#: src/titleui/widgets/optionsform.cpp:1432
+#: src/titleui/widgets/optionsform.cpp:1438
 msgid "Takes effect on game restart"
 msgstr ""
 
