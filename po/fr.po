@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-08 19:35+0000\n"
+"PO-Revision-Date: 2025-12-08 20:30\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -2012,6 +2012,9 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr ""
 "Félicitations Commandant. Vous êtes prêt pour votre première mission !\n"
 "Vous pouvez quitter le tutoriel quand vous le souhaitez."
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "PREMIÈRE CAMPAGNE"
@@ -5039,10 +5042,10 @@ msgstr "Des percées en optique réduisent la dispersion des rayons laser"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplacement à obusier incendiaire 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Emplacement à obusier incendiaire"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Emplacement à obusier incendiaire"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5713,11 +5716,11 @@ msgstr "Nouveau bâtiment système disponible"
 msgid "New Systems Tower Available"
 msgstr "Nouvelle tour système disponible"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Nouvelle tourelle système disponible pour conception"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Nouveau système de tourelle disponible pour conception"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Nouvelle tourelle système disponible pour conception"
 
 msgid "New Thermal Emissions detection"
 msgstr "Nouvelle technologie de détection d'émissions thermiques"
@@ -6598,10 +6601,10 @@ msgstr "Analyse de données par Lien Synaptique Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analyse de données par Lien Synaptique Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Analyse de données par Lien Synaptique"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Analyse de données par Lien Synaptique"
 
 msgid "Synaptic Link Scrambler technology"
@@ -8090,13 +8093,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr "ATTENTION : si vous ne cochez pas \"Prêt\" maintenant vous allez être exclu de la partie"
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "Exclusion automatique du joueur (%s) pour avoir trop tardé à cocher \"Prêt\""
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "ATTENTION : cochez \"Prêt\""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr "ATTENTION : cochez \"Prêt\" pour que le jeu puisse commencer"
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -9597,7 +9607,7 @@ msgid "Player Name changes are not allowed when you are muted"
 msgstr "Les changements de nom de joueur ne sont pas autorisés lorsque vous êtes muet"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "L'hôte n'a pas autorisé le changement de nom des joueurs"
 
 msgid "Blind Game:"
 msgstr "Jeu en aveugle :"
@@ -10933,17 +10943,17 @@ msgstr "Bonus Gamma"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr "Mission supplémentaire Gamma utilisant une carte créée par l'équipe de développement originale (mise à jour par : DARwins)."
 
-msgid "Insane Spawns"
-msgstr "Apparitions démentes"
+msgid "Additional Spawns (Insane difficulty)"
+msgstr "Plus d'ennemis (difficulté Dément)"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "Active les apparitions et comportements ennemis supplémentaires en cas de difficulté Dément (ou supérieur)."
 
-msgid "Non-Insane Spawns"
-msgstr "Apparitions normales"
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr "Plus d'ennemis (pour les niveaux de difficulté inférieurs à Dément)"
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr "Active/désactive l'option d'apparitions supplémentaires pour la difficulté Difficile et au-dessous."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr "Augmente le nombre d'ennemis et change leur comportement pour les niveaux de difficulté jusqu'à Difficile."
 
 msgid "Fast EXP gain"
 msgstr "Gain d'expérience rapide"
@@ -11428,27 +11438,14 @@ msgstr "Contrôles"
 msgid "Window"
 msgstr "Fenêtre"
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"En mode bureau plein écran, la résolution correspond à celle de votre bureau \n"
-"(ou ce que le gestionnaire de fenêtres permet)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Vous pouvez changer la résolution en redimensionnant la fenêtre normalement. (Essayez de tirer un coin ou bord.)"
-
 msgid "Window Mode"
 msgstr "Mode fenêtre"
 
 msgid "Windowed"
 msgstr "Fenêtré"
 
-msgid "Desktop Full"
-msgstr "Bureau complet"
-
-msgid "Resolution"
-msgstr "Résolution"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr "Comportements"

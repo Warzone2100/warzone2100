@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-08 19:35+0000\n"
+"PO-Revision-Date: 2025-12-08 20:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -2008,6 +2008,9 @@ msgstr "請稍待片刻"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指揮官!!你已經完成了你的第一個任務"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "戰役一"
@@ -5035,11 +5038,11 @@ msgstr "改善雷射系統的光學結構使之不易發散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃燒榴彈炮陣地 二型"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "燃燒榴彈炮陣地"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "燃燒榴彈砲砲台"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "燃燒榴彈炮陣地"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "燃燒榴彈砲可以指派給一座雷達"
@@ -5709,11 +5712,11 @@ msgstr "可建造新的系統建築"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系統防禦工事"
 
-msgid "New Systems Turret Available For Design"
-msgstr "可在設計功能中使用新的系統裝備"
-
 msgid "New Systems Turret Available for Design"
 msgstr "可搭載新的系統裝備"
+
+msgid "New Systems Turret Available For Design"
+msgstr "可在設計功能中使用新的系統裝備"
 
 msgid "New Thermal Emissions detection"
 msgstr "可偵測熱能放射"
@@ -6594,10 +6597,10 @@ msgstr "突觸連結資料分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突觸連結資料分析三型"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突觸連結資料分析"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突觸連結資料分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -8076,6 +8079,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
@@ -8083,6 +8090,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10916,16 +10926,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11411,25 +11421,14 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr "在桌面全螢幕模式下，解析度與桌面解析度相匹配\\n(或視窗管理員允許的內容)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "您可以通過正常調整視窗大小來更改解析度. (嘗試拖動角落/邊緣)"
-
 msgid "Window Mode"
 msgstr ""
 
 msgid "Windowed"
 msgstr "視窗模式"
 
-msgid "Desktop Full"
-msgstr "佈滿桌面"
-
-msgid "Resolution"
-msgstr "解析度"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr ""

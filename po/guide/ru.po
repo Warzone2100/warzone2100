@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-12-05 02:37\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -212,10 +212,10 @@ msgstr ""
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
 msgstr ""
 
-msgid "Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
 msgstr ""
 
-msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
 msgstr ""
 
 msgid "Demolishing Structures"
@@ -413,14 +413,17 @@ msgstr "- Удерживать позицию: не двигаться ни пр
 msgid "Recycling"
 msgstr "Утилизация"
 
-msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it."
-msgstr "Для утилизации юниты отправляются к ближайшему заводу или ремонтной мастерской, где они будут разобраны."
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
+msgstr ""
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "Половина энергии, использованной для их производства, будет возвращена (хотя ее количество может быть уменьшено, если юнит поврежден)."
 
-msgid "The unit’s experience level will be placed in the next unit that is manufactured."
-msgstr "При этом, уровень опыта утилизируемой боевой единицы будет перемещен в следующего произведенного юнита."
+msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
+msgstr ""
+
+msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
+msgstr ""
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr "Вы можете отдать приказ на утилизацию всем выбранным юнитам через Меню приказов или при помощи горячей клавиши Отправить на утилизацию."
@@ -497,17 +500,17 @@ msgstr "После того как юнит будет произведен, о�
 msgid "Attaching Units"
 msgstr "Прикрепление юнитов"
 
-msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
-msgstr "Чтобы прикрепить боевую единицу (или группу боевых единиц) к Командиру, выберите ее и затем щелкните по соответствующему командиру левой кнопкой мыши. Рядом с прикрепленными юнитами отображается специальный значок."
+msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
+msgstr ""
 
 msgid "## Limits:"
 msgstr "## Ограничения:"
 
-msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
-msgstr "Командиры имеют ограничения на количество боевых единиц \"прямого огня\" (таких, как, например, пулеметы), на которые распространяется командирский уровень опыта. Уровень опыта командира повышается по достижении 2 убийств, затем 4, 8, 15, 32, 64 и так далее."
+msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
+msgstr ""
 
-msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
-msgstr "Каждый следующий уровень опыта позволяет Командиру эффективно прикреплять к себе еще 2 юнита \"прямого огня\". Вместе с тем, к Командиру можно прикреплять любое количество юнитов \"непрямого огня\" (например, артиллерии)."
+msgid "After each promotion, the Commander is able to control 2 more units."
+msgstr ""
 
 msgid "Detaching Units"
 msgstr "Открепление юнитов"
@@ -533,8 +536,8 @@ msgstr "По завершению ремонта он возвращается �
 msgid "Targeting"
 msgstr "Наведение"
 
-msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
-msgstr "Когда вы выбираете Командира и нацеливаете на вражеского юнита, все привязанные юниты так же будут наведены на него."
+msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
+msgstr ""
 
 msgid "The attached units will have greater accuracy when firing."
 msgstr "Точность привязанных юнитов выше."
@@ -548,8 +551,8 @@ msgstr "Командные турели используются так же к�
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
 msgstr "Командиры дают дополнительную точность, броню и скорость передвижения всем привязанным к ним юнитам. Бонус увеличивается вместе с ростом ранга Командира."
 
-msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
-msgstr "Изначально они могут иметь только 6 боевых не артиллерийских юнитов, но лимит увеличивается на 2 с каждым полученным Командиром рангом, который может быть повышен относительно быстро."
+msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
+msgstr ""
 
 msgid "Designing Units"
 msgstr "Проектирование Юнитов"
@@ -626,7 +629,7 @@ msgstr ""
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
 msgstr ""
 
-msgid "Hover's high speeds and ability to traverse water make it perfect for hit-and-run attack vehicles."
+msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
 msgstr ""
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
@@ -839,8 +842,8 @@ msgstr "Радары могут быть использованы для раз�
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
 msgstr "Артиллерийские орудия сами по себе не могут стрелять дальше, чем позволяет им их собственная дальность видения (8 клеток без улучшений)."
 
-msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr "Однако, даже самая ранняя артиллерия имеет дальность 18 клеток. Чтобы использовать ее, вам нужно развернуть радар на поле боя (это может быть как башня, так и танк с радаром)."
+msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr ""
 
 msgid "Kinetic & Thermal Damage"
 msgstr ""
@@ -911,10 +914,10 @@ msgstr "Для проектирования юнитов вам необходи
 msgid "All-Rounder"
 msgstr ""
 
-msgid "\"All-Rounder\" weapons are effective against vehicles and most structures."
+msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
 msgstr ""
 
-msgid "However, All-Rounder weapons are less effective against bunkers and infantry."
+msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
 msgstr ""
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
@@ -1022,7 +1025,7 @@ msgstr ""
 msgid "Flamer"
 msgstr ""
 
-msgid "Incendiary \"Flamer\" weapons are effective against both vehicles and infantry."
+msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
 msgstr ""
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-08 19:35+0000\n"
+"PO-Revision-Date: 2025-12-08 20:30\n"
 "Last-Translator: \n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -2008,6 +2008,9 @@ msgstr "Prosim počakajte medtem ko tovarna izdeluje novo(e) enoto(e)"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Čestitke poveljnik - pripravljeni ste na vašo prvo misijo"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "KAMPANJA ENA"
@@ -5031,10 +5034,10 @@ msgstr "Izboljšanje v laserski optiki zmanjša razpršitev svetlobe"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Ploščad z zažigalno havbico"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Ploščad z zažigalno havbico"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5705,10 +5708,10 @@ msgstr "Nova sistemska zgradba na voljo"
 msgid "New Systems Tower Available"
 msgstr "Nov sistemski stolp na voljo"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Nova sistemska kupola na voljo za načrt"
 
 msgid "New Thermal Emissions detection"
@@ -6590,10 +6593,10 @@ msgstr "Sinaptično povezana analiza podatkov tip 2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sinaptično povezana analiza podatkov tip 3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Sinaptično povezana analiza podatkov"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Sinaptično povezana analiza podatkov"
 
 msgid "Synaptic Link Scrambler technology"
@@ -8090,6 +8093,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
@@ -8097,6 +8104,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10939,16 +10949,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11434,25 +11444,14 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Ločljivost lahko spremenite z navadno spremembo velikosti okna. (Poskusite potegniti kot / rob.)"
-
 msgid "Window Mode"
 msgstr ""
 
 msgid "Windowed"
 msgstr "Okensko"
 
-msgid "Desktop Full"
+msgid "Fullscreen Mode"
 msgstr ""
-
-msgid "Resolution"
-msgstr "Ločljivost"
 
 msgid "Behaviors"
 msgstr ""

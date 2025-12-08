@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-08 19:35+0000\n"
+"PO-Revision-Date: 2025-12-08 20:30\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -2008,6 +2008,9 @@ msgstr "Wacht even terwijl de fabriek de nieuwe eenheden produceert"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Gefeliciteerd commandant - je bent nu klaar voor je eerste missie"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "VELDTOCHT EEN"
@@ -5025,10 +5028,10 @@ msgstr "Verbetering in laser optiek reduceert lichtverlies"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Ontbrand Houwitser Emplacement"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Ontbrand Houwitser Emplacement"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5699,11 +5702,11 @@ msgstr "Nieuwe systeemgebouw beschikbaar"
 msgid "New Systems Tower Available"
 msgstr "Nieuwe systeemtoren beschikbaar"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Nieuwe systeemkoepel beschikbaar voor ontwerp"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Nieuwe geschutstoren beschikbaar voor ontwerp"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Nieuwe systeemkoepel beschikbaar voor ontwerp"
 
 msgid "New Thermal Emissions detection"
 msgstr "Nieuwe thermale emissie detectie"
@@ -6584,11 +6587,11 @@ msgstr "Synaptische Link Gegevens Analyse Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Synaptische Link Gegevens Analyse Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Synaptische Link Gegevens Analyse"
-
 msgid "Synaptic link data analysis"
 msgstr "Synaptische Link dataverwerking"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Synaptische Link Gegevens Analyse"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Synaptsiche Link Verstoorder technologie"
@@ -8070,6 +8073,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
@@ -8077,6 +8084,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10913,16 +10923,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11408,24 +11418,13 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
-
 msgid "Window Mode"
 msgstr ""
 
 msgid "Windowed"
 msgstr "Venster"
 
-msgid "Desktop Full"
-msgstr ""
-
-msgid "Resolution"
+msgid "Fullscreen Mode"
 msgstr ""
 
 msgid "Behaviors"

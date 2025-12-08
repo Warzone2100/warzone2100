@@ -5,890 +5,890 @@ msgstr ""
 "POT-Creation-Date: 2025-12-08 19:35+0000\n"
 "PO-Revision-Date: 2025-12-08 20:30\n"
 "Last-Translator: \n"
-"Language-Team: Norwegian Bokmal\n"
-"Language: nb_NO\n"
+"Language-Team: Serbian (Latin)\n"
+"Language: sr_CS\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Crowdin-Project: warzone2100\n"
 "X-Crowdin-Project-ID: 354665\n"
-"X-Crowdin-Language: nb\n"
+"X-Crowdin-Language: sr-CS\n"
 "X-Crowdin-File: /master/po/warzone2100.pot\n"
 "X-Crowdin-File-ID: 72\n"
 
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "MÅL: Lokaliser og gjenopprett neuralsynapsteknologi"
+msgstr "CILJ: Pronaći i povratiti tehnologiju neuronskih sinapsi"
 
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Etabler en base og søk etter en struktur fra Pre-Kollaps."
+msgstr "Uspostavi bazu, pa pronađi strukturu iz vremena pre kolapsa."
 
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Denne strukturen inneholder teknologi som er helt nødvendig for at prosjektet skal lykkes."
+msgstr ""
 
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "ALFABASEOPPDRAG: Plyndreraidere"
+msgstr "MISIJA NA BAZI ALFA: Napad Pljačkaša"
 
 msgid "Scavenger raiders are approaching our base."
-msgstr "Plyndreraidere nærmer seg basen vår."
+msgstr "Pljačkaši se približavaju našoj bazi."
 
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Beskytt basen, ødelegg deretter Plyndrecampene."
+msgstr "Odbranite bazu, a zatim uništite logore Pljačkaša."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "ALFABASEOPPDRAG: Strømstigning Oppdaget"
+msgstr "MISIJA NA BAZI ALFA: Otkriven Energetski Udar"
 
 msgid "A power surge has been detected to the south of our position."
-msgstr "En strømstigning har blitt oppdaget sør for vår posisjon."
+msgstr "Otkriven je energetski udar južno od naše pozicije."
 
 msgid "Investigate and secure the area."
-msgstr "Undersøk og sikre området."
+msgstr "Istražite i obezbedite područje."
 
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "ALFABASEOPPDRAG: Det Nye Paradigmet"
+msgstr "MISIJA NA BAZI ALFA: Nova Paradigma"
 
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Det Nye Paradigmet har overlegen våpenteknologi."
+msgstr "Nova Paradigma poseduje napredniju tehnologiju oružja."
 
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "De kan ha synapselink-teknologien. Det er avgjørende at vi henter den."
+msgstr "Moguće je da poseduju tehnologiju sinaptičke veze – od ključne je važnosti da je povratimo."
 
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "TRANSPORTOPPDRAG: Lokaliser og bring tilbake artefakter"
+msgstr "MISIJA TRANSPORTA: Pronaći i Preuzeti Artefakte"
 
 msgid "Load an attack force into the transport."
-msgstr "Last en angrepsstyrke inn i transporten."
+msgstr "Ukrcaj snage za napad u transport."
 
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "Utforsk ruinene og bring tilbake alle artefakter ved landing."
+msgstr "Po sletanju, istražite ruševine i pronađite sve artefakte."
 
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "TRANSPORTOPPDRAG: Undersøk forskningssenter"
+msgstr "MISIJA TRANSPORTA: Pretraži Istraživački Centar"
 
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Undersøk området og bring tilbake alle artefakter."
+msgstr "Istražite područje i pronađite sve prisutne artefakte."
 
 msgid "Reinforcements are available."
-msgstr "Forsterkninger er tilgjengelig."
+msgstr "Pojačanja su dostupna."
 
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "TRANSPORTOPPDRAG: Kodede signaler oppdaget"
+msgstr ""
 
 msgid "Take a scout force to investigate these signals."
-msgstr "Ta en speidestyrke for å undersøke disse signalene."
+msgstr ""
 
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Bruk lastebilene for å bygge forsvarsverk ved din LS."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "TRANSPORTOPPDRAG: Fiendeoverføring oppdaget"
+msgstr ""
 
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Utforsk det angitte området etter fienders forskningsanlegg."
+msgstr ""
 
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Fortsett til LZ#2. Ikke engasjer fienden på dette tidspunktet."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "TRANSPORT MISSION: Synapselinkplassering"
+msgstr ""
 
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "Det Nye Paradigmet analyserer synapselink-teknologien her."
+msgstr ""
 
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Sett sammen et angrepsteam og hent synapselink-teknologien."
+msgstr ""
 
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "TRANSPORTOPPDRAG: Nye mål"
+msgstr ""
 
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Nye paradigme søker etter artefakter i dette området."
+msgstr ""
 
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Avskjær dem. La ingen fiender forlate dette området."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "TRANSPORTOPPDRAG: Fiendebase Under Konstruksjon"
+msgstr ""
 
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "Fiendestyrker etablerer en fremoverbase i denne sonen."
+msgstr ""
 
 msgid "Eradicate the base and secure the area."
-msgstr "Ødelegg basen og sikre området."
+msgstr ""
 
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "ALFABASEOPPDRAG: Etabler en Fremoverbase"
+msgstr ""
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
-msgstr "Etabler en fremoverbase på platået og holde det Nye Paradigmet borte."
+msgstr ""
 
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr "Bygg forsvarsbygninger til den grønne objektivprikken forsvinner."
+msgstr ""
 
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "ALFABASEOPPDRAG: Motangrep"
+msgstr ""
 
 msgid "Enemy forces are approaching from the east and north."
-msgstr "Fiendestyrker nærmer seg fra øst og nord."
+msgstr ""
 
 msgid "Hold the bases and repulse any attacks."
-msgstr "Hold basene og driv tilbake angriperne."
+msgstr ""
 
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "ALFABASEOPPDRAG: Innkommende Overføring"
+msgstr ""
 
 msgid "We are detecting enemy forces at these locations."
-msgstr "Vi har oppdaget fiendestyrker på disse plassene."
+msgstr ""
 
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Dette er vår sjanse til å beseire den Nye Paradigmen og ødelegge basen deres."
+msgstr ""
 
 msgid "Congratulations Commander."
-msgstr "Gratulerer Kommandør."
+msgstr ""
 
 msgid "We now have a further task for you."
-msgstr "Vi har enda en oppgave til deg."
+msgstr ""
 
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "ALFABASEOPPDRAG: Lokaliser og bring tilbake artefakter"
+msgstr ""
 
 msgid "The first two zones are now secure."
-msgstr "De to første sonene er nå sikre."
+msgstr ""
 
 msgid "PROJECT TEAM UPDATES"
-msgstr "PROSJEKT TEAMOPPDATERING"
+msgstr ""
 
 msgid "TEAM BETA UPDATE"
-msgstr "TEAM BETA OPPDATERING"
+msgstr ""
 
 msgid "We have recovered some artifacts."
-msgstr "Vi har bragt tilbake noen artefakter."
+msgstr ""
 
 msgid "There is a better equipped force operating in this area."
-msgstr "Det er en bedre utrustet styrke i dette området."
+msgstr ""
 
 msgid "TEAM GAMMA UPDATE"
-msgstr "TEAM GAMMA OPPDATERING"
+msgstr ""
 
 msgid "Nothing to report."
-msgstr "Ingenting å rapportere."
+msgstr ""
 
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "Vi oppdaget ingen artefakter og møtte ingen fiender."
+msgstr ""
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr "ALFABASE INTELLIGENSRAPPORT: Fiendeangrep"
+msgstr ""
 
 msgid "We are detecting an enemy attack force at this location."
-msgstr "Vi har oppdaget en fiendtlig angrepsstyrke på denne plassen."
+msgstr ""
 
 msgid "PRIMARY OBJECTIVE"
-msgstr "HOVEDMÅL"
+msgstr ""
 
 msgid "This structure is your primary objective."
-msgstr "Denne bygningen er ditt primære mål."
+msgstr ""
 
 msgid "Search for and recover any artifacts here."
-msgstr "Søk etter og bring tilbake alle artefakter her."
+msgstr ""
 
 msgid "ENEMY LZ"
-msgstr "FIENDE LS"
+msgstr ""
 
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Ødelegg denne LS for å hindre fiender i å lande."
+msgstr ""
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr "ALFABASE INTELLIGENSRAPPORT: NEXUS"
+msgstr ""
 
 msgid "New objective."
-msgstr "Nytt mål."
+msgstr ""
 
 msgid "We have detected and isolated an intruder program."
-msgstr "Vi har oppdaget og isolert et inntrengerprogram."
+msgstr ""
 
 msgid "Supplemental"
-msgstr "Supplerende"
+msgstr ""
 
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "Synapselink-teknologien var her, men har blitt fjernet."
+msgstr ""
 
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Etabler en fremoverbase og fortsett søket etter synapselinken."
+msgstr ""
 
 msgid "INCOMING TRANSMISSION"
-msgstr "INNKOMMENDE OVERFØRING"
+msgstr ""
 
 msgid "Decoding in progress....."
-msgstr "Dekoding pågår....."
+msgstr ""
 
 msgid "Commander."
-msgstr "Kommandør."
+msgstr ""
 
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Vi har dekodet den innkommende meldingen til det Nye Paradigmet..."
+msgstr ""
 
 msgid "Destroy Enemy Base"
-msgstr "Ødelegge Fiendens Base"
+msgstr ""
 
 msgid "Assemble an attack force and board the transport."
-msgstr "Sett sammen en angrepsstyrke og gå om bord transporten."
+msgstr ""
 
 msgid "Destroy the base and recover any artifacts present."
-msgstr "Ødelegg basen og bring tilbake alle artefakter."
+msgstr ""
 
 msgid "The synaptic link technology has been recovered!"
-msgstr "Synapselink-teknologien har blitt bragt tilbake!"
+msgstr ""
 
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Tidlig forskning bekrefter at det vil være til stor fordel for Prosjektet."
+msgstr ""
 
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "Base Beta er under hardt angrep, de kan trenge assistanse."
+msgstr ""
 
 msgid "We will send further updates as they arrive."
-msgstr "Vi sender ytterligere oppdateringer når de ankommer."
+msgstr ""
 
 msgid "This transmission was intercepted a few minutes ago."
-msgstr "Denne overføringen ble fanget opp for noen minutter siden."
+msgstr ""
 
 msgid "It originates from the east."
-msgstr "Den stammer fra øst."
+msgstr ""
 
 msgid "POWER MODULE ARTIFACT"
-msgstr "KRAFTMODUL-ARTEFAKT"
+msgstr ""
 
 msgid "Research the power module artifact."
-msgstr "Forsk på kraftmodul-artefakten."
+msgstr ""
 
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "Bruk så en lastebil for å oppgradere din kraftgenerator med modulen."
+msgstr ""
 
 msgid "SCAVENGER BASE DETECTED"
-msgstr "PLYNDRERBASE OPPDAGET"
+msgstr ""
 
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Beseire plyndrerne og bring tilbake alle artefakter."
+msgstr ""
 
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr "Gratulerer med å beseire det Nye Paradigmet, denne sektoren er nå sikret."
+msgstr ""
 
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Nexus Inntrengerprogrammet var i det Nye Paradigmets system."
+msgstr ""
 
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr "Vi tok opp to samtaler med det, uttrekk følger..."
+msgstr ""
 
 msgid "We'll keep you informed of further developments"
-msgstr "Vi holder deg orientert om videre utvikling"
+msgstr ""
 
 msgid "Commander you are to assist Team Beta"
-msgstr "Kommandør, du skal assistere Team Beta"
+msgstr ""
 
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "BETABASEOPPDRAG: Østre Sektor"
+msgstr ""
 
 msgid "Upon arrival you are to assume command of the base."
-msgstr "Ved ankomst skal du ta kommando av basen."
+msgstr ""
 
 msgid "You must defend it and hold it."
-msgstr "Du må forsvare og holde den."
+msgstr ""
 
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr "BETABASEOPPDRAG: Beskytt og Forsterk"
+msgstr ""
 
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Sørg for å forsterke området og etabler et luftvern."
+msgstr ""
 
 msgid "New technologies are available."
-msgstr "Nye teknologier er tilgjengelige."
+msgstr ""
 
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Vi oppdager for øyeblikket kodede bitstream-signaler."
+msgstr ""
 
 msgid "Decoding..."
-msgstr "Dekoder..."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "TRANSPORTOPPDRAG: Transport Nede"
+msgstr ""
 
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr "Transporten vår som fraktet enheter fra team Alfabase har blitt skutt ned."
+msgstr ""
 
 msgid "It is under attack from The Collective at this location."
-msgstr "Det er under angrep av Kollektivet på denne plasseringen."
+msgstr ""
 
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Sett sammen et redningslag for å bringe tilbake transporten og lasten."
+msgstr ""
 
 msgid "IN-FLIGHT BRIEFING"
-msgstr "BRIEFING I LUFTA"
+msgstr ""
 
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Team Beta søker etter Vertikal Takeoff- og Landingsteknologi (VTOL)."
+msgstr ""
 
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "Det antas å være en luftbase fra pre-Kollapsen i dette området."
+msgstr ""
 
 msgid "Team Beta under heavy attack"
-msgstr "Team Beta er under hardt angrep"
+msgstr ""
 
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr "BETABASEOPPDRAG: Hold, koste hva det koste vil"
+msgstr ""
 
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Vi oppdager kodede bitstream-signaler fra Kollektivet."
+msgstr ""
 
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "BETABASEOPPDRAG: Hold, koste hva det koste vil"
+msgstr ""
 
 msgid "We are detecting ground and aerial forces from the north."
-msgstr "Vi oppdager land- og luftstyrker fra nord."
+msgstr ""
 
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr "Hold posisjonen og slå disse angrepene tilbake. Utslett deretter fiendens nordlige base."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr "TRANSPORTOPPDRAG: Avskjær konvoi."
+msgstr ""
 
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "Data fra Kollektivets base indikerer tilstedeværelsen av NEXUS inntrengerprogram."
+msgstr ""
 
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr "Før NEXUS gikk over til offline fikk vi tilgang til følgende."
+msgstr ""
 
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "En fiendekommandør henter en forsendelse fra NEXUS på denne plasseringen."
+msgstr ""
 
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Når du ankommer LS, utslett fiendekommandøren og hent forsendelsen."
+msgstr ""
 
 msgid "Then return to the LZ."
-msgstr "Returner deretter til LS."
+msgstr ""
 
 msgid "Disturbing news regarding NASDA."
-msgstr "Forstyrrende nyheter angående NASDA."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr "TRANSPORTOPPDRAG: Søk etter og Ødelegg Konvoi"
+msgstr ""
 
 msgid "The shipment you recovered was a decoy."
-msgstr "Forsendelsen du hentet inn var en avledning."
+msgstr ""
 
 msgid "We have detected another convoy proceeding along the river."
-msgstr "Vi har oppdaget enda en konvoi som følger elven."
+msgstr ""
 
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr "Du skal avskjære konvoien og hente inn lasten."
+msgstr ""
 
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Fiende-VTOLer flyr mest sannsynlig i nærheten som eskorte."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "TRANSPORTOPPDRAG: Redd sivilister fra Konsentrasjonsleir"
+msgstr ""
 
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Kollektivet behandler og utrydder sivilister i denne basen."
+msgstr ""
 
 msgid "You are to rescue the civilians."
-msgstr "Du skal redde sivilistene."
+msgstr ""
 
 msgid "Then destroy the camp."
-msgstr "Ødelegg deretter leiren."
+msgstr ""
 
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "BETABASEOPPDRAG: Ødelegg Fiendens Luftbase og Hent Inn VTOLer."
+msgstr ""
 
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Analyse av flybaner indikerer at Kollektivets VTOLer stammer herfra."
+msgstr ""
 
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "BETABASEOPPDRAG: Ødelegg Fiendens Luftbase og Hent Inn VTOLer"
+msgstr ""
 
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "Plasseringen på fiendens luftbase er her; dette er ditt hobedmål."
+msgstr ""
 
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Utrydd alle Kollektivets styrker og bring tilbake alle artefakter."
+msgstr ""
 
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr "SIDEOPPDRAG: Ødelegg eller Avkjør Fiendens Transport"
+msgstr ""
 
 msgid "The Collective are rounding up all civilians in this area."
-msgstr "Kollektivet samler alle sivilister i dette området."
+msgstr ""
 
 msgid "They are then flying them to an unknown location."
-msgstr "Så flyr de dem til et ukjent sted."
+msgstr ""
 
 msgid "Destroy or drive off The Collective's transport."
-msgstr "Ødelegg eller avkjør Kollektivets transport."
+msgstr ""
 
 msgid "Rescue as many civilians as possible."
-msgstr "Redde så mange sivile som mulig."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr "TRANSPORTOPPDRAG: Ødelegg Reaktor"
+msgstr ""
 
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr "Kollektivet leter etter kunnskap om kjernereaktorer."
+msgstr ""
 
 msgid "They must be stopped."
-msgstr "De må stoppes."
+msgstr ""
 
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr "Fortsett fra LS til reaktoren og ødelegg den."
+msgstr ""
 
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Ikke la Kollektivet sette reaktoren til online."
+msgstr ""
 
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "BETABASEOPPDRAG: Ta over NASDA-sentral"
+msgstr ""
 
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Ta over NASDA-sentral før NEXUS og Kollektivet kan bruke det."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "TRANSPORTOPPDRAG: Satellittkommunikasjonsstasjon"
+msgstr ""
 
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr "NEXUS leter etter funksjonelle minnebanker."
+msgstr ""
 
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr "Deler av dets bevissthet har flyttet seg til et eksternt NASDA kontrollsted."
+msgstr ""
 
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr "Vi oppdager overføringer fra dette området som når ut i høy bane."
+msgstr ""
 
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr "NEXUS har nå koblet seg tilbake til NASDA-satellittene."
+msgstr ""
 
 msgid "Use the transport to carry a strike force to this site."
-msgstr "Bruk transporten for å bringe en kampstyrke til denne plassen."
+msgstr ""
 
 msgid "Destroy the site and return to your base."
-msgstr "Ødelegg stedet og dra tilbake til basen din."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "TRANSPORTOPPDRAG: Ødelegg fiendens luftvernmissilområdet"
+msgstr ""
 
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Hvis du vil rømme må du ødelegge luftvernmissilområdene rundt basen din."
+msgstr ""
 
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Fly til LS, reis så over landet for å ødelegge luftvernmissilområdene."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr "TRANSPORTOPPDRAG: Etabler en trygg havn"
+msgstr ""
 
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr "Vi kan bekrefte at et missil er på vet mot Alfabasen."
+msgstr ""
 
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr "Du skal etablere en trygg havn for evakuering av Betabasen."
+msgstr ""
 
 msgid "Eradicate any enemy and secure the area."
-msgstr "Utslett alle fiender og sikre området."
+msgstr ""
 
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Når en trygg havn er etablert, returner til LS for videre ordre."
+msgstr ""
 
 msgid "BETA BASE MISSION: Survive and evacuate! Bring a truck"
-msgstr "BETA BASE OPPDRAG: Overlev og evakuer! Ta med en lastebil"
+msgstr ""
 
 msgid "Commander, we have grave news."
-msgstr "Kommandør, vi har dårlige nyheter."
+msgstr ""
 
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr "Alfabasen har blitt ødelagt av et atommissilangrep."
+msgstr ""
 
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr "Kollektivet vet ikke om atomangrepet og har luftstyrker på vei mot din base."
+msgstr ""
 
 msgid "This message was intercepted a few moments ago..."
-msgstr "Denne beskjeden ble fanget opp for litt siden..."
+msgstr ""
 
 msgid "You must transport as many of your forces as possible."
-msgstr "Du må transportere så mange som mulig av dine styrker."
+msgstr ""
 
 msgid "Good luck, Commander."
-msgstr "Lykke til, kommandør."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "TRANSPORTOPPDRAG: Nordre Sektor"
+msgstr ""
 
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr "Gratulerer med en vellykket evakuering av Betabasen."
+msgstr ""
 
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS har skaffet seg tilgang til atomvåpen og har bestemt seg for å ødelegge Prosjektet."
+msgstr ""
 
 msgid "Take your forces to the Northern Sector"
-msgstr "Ta dine styrker til Nordre Sektor"
+msgstr ""
 
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr "Sikre en LS når du når fjellene. Etabler deretter en fremoverbase."
+msgstr ""
 
 msgid "Team Gamma will contact you there."
-msgstr "Team Gamma vil kontakte deg der."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr "TRANSPORTOPPDRAG: Etabler en fremoverbase"
+msgstr ""
 
 msgid "Commander, the success of the Project lies with you."
-msgstr "Kommandør, Prosjektets suksess ligger i dine hender."
+msgstr ""
 
 msgid "Secure an LZ, then establish a forward base."
-msgstr "Sikre en LS og etabler en fremoverbase."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "TRANSPORTOPPDRAG: Koordinator til sted for missilavfyring"
+msgstr ""
 
 msgid "We have located the site of the missile launches."
-msgstr "Vi har funnet stedet for missilavfyring."
+msgstr ""
 
 msgid "There were one or more missiles at this NASDA site."
-msgstr "Det var en eller flere missiler på dette NASDA-stedet."
+msgstr ""
 
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Vi sender koordinatene til en LS nær siloene."
+msgstr ""
 
 msgid "Coordinate Download Completed."
-msgstr "Nedlastning av koordinater fullført."
+msgstr ""
 
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "Sikre din LS, reis så over landet for å ødelegge missilsiloen."
+msgstr ""
 
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr "NORDRE SEKTOR OPPDRAG: Atomsmell"
+msgstr ""
 
 msgid "All units must escape the area before the warhead detonates."
-msgstr "Alle enheter må flykte fra området før stridshodet detonerer."
+msgstr ""
 
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr "Å hentes opp i lufta med transport er umulig. Du må dra over land."
+msgstr ""
 
 msgid "The mountain range to the east should shield you from the blast."
-msgstr "Fjellkjeden i øst burde skjerme dere fra smellet."
+msgstr ""
 
 msgid "The valley is your only chance of escape."
-msgstr "Dalen er deres eneste sjanse for å rømme."
+msgstr ""
 
 msgid "AWAY TEAM UPDATE"
-msgstr "BORTETEAM OPPDATERING"
+msgstr ""
 
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "All kommunikasjon med borteteamet gikk tapt etter atomeksplosjonen."
+msgstr ""
 
 msgid "Their last transmission indicated they were heading back to base."
-msgstr "Deres siste overføring indikerer at de var på vei tilbake til basen."
+msgstr ""
 
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr "NORDRE SEKTOR OPPDRAG: Assister Team Gamma"
+msgstr ""
 
 msgid "You are to assist Team Gamma."
-msgstr "Du skal assistere Team Gamma."
+msgstr ""
 
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Når du når Gammabasen skal du hjelpe til å sikre området fra videre NEXUS-angrep."
+msgstr ""
 
 msgid "NEXUS DEFEATED"
-msgstr "NEXUS BESEIRET"
+msgstr ""
 
 msgid "Commander, we have defeated NEXUS."
-msgstr "Kommandør, vi har beseiret NEXUS."
+msgstr ""
 
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr "Dessverre har ytelsen til våre systemer blitt påvirket av NEXUS. Vi prøver å rette opp i dette."
+msgstr ""
 
 msgid "We are currently receiving this transmission."
-msgstr "Vi mottar for øyeblikket denne overføringen."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr "TRANSPORTOPPDRAG: Team Alfa Oppdaget"
+msgstr ""
 
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Ta en speidestyrke til disse koordinatene og evaluer situasjonen."
+msgstr ""
 
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Finn ut om de er Team Alfa. Hvis de er det, redd dem og eskorter dem tilbake til LS."
+msgstr ""
 
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Denne gruppen er en del av Team Alfa. Redd dem og eskorter dem til LS."
+msgstr ""
 
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr "NORDRE SEKTOR OPPDRAG: Team Alfa Debrief"
+msgstr ""
 
 msgid "Team Alpha power transfer in progress."
-msgstr "Team Alfa kraftoverføring pågår."
+msgstr ""
 
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Kommandør, etter du forlot Vestre Sektor fant vi denne artefakten."
+msgstr ""
 
 msgid "The benefits from researching it could be vast."
-msgstr "Fordelene ved å forske på den kan være store."
+msgstr ""
 
 msgid "Enemy forces are ....... from these coordinates."
-msgstr "Fiendestyrker er ....... fra disse koordinatene."
+msgstr ""
 
 msgid "Defend the base and ........ the ......."
-msgstr "Forsvar basen og ........ ......."
+msgstr ""
 
 msgid "Search and destroy ...."
-msgstr "Søk og ødelegg ...."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "TRANSPORTOPPDRAG: Bakholdsangrip NEXUS-styrker"
+msgstr ""
 
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Kommandør, dine avgjørende tiltak stanset spredningen av NEXUS."
+msgstr ""
 
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Før NEXUS ble utvist fikk vi tak i denne meldingen - dekoding fullført."
+msgstr ""
 
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr "En NEXUS innsatsstyrke er på vei til disse koordinatene."
+msgstr ""
 
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr "Du har en mulighet til å ødelegge NEXUS før de ankommer."
+msgstr ""
 
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "Ta en angrepsstyrke og bakholdsangrip NEXUS' innsatsstyrke ved ......."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "TRANSPORTOPPDRAG: Borteteam"
+msgstr ""
 
 msgid "Commander, your attack on ...."
-msgstr "Kommandør, ditt angrep på ...."
+msgstr ""
 
 msgid "NEXUS exiting system."
-msgstr "NEXUS går ut av system."
+msgstr ""
 
 msgid "Incoming transmission from away team."
-msgstr "Innkommende overføring fra borteteam."
+msgstr ""
 
 msgid "Commander, we are attempting to return to base."
-msgstr "Kommandør, vi forsøker å returnere til basen."
+msgstr ""
 
 msgid "This is our current position."
-msgstr "Dette er vår nåværende posisjon."
+msgstr ""
 
 msgid "Take control of our forces and lead us."
-msgstr "Ta kontroll over våre styrker og led oss."
+msgstr ""
 
 msgid "Control transfer successful."
-msgstr "Kontrolloverføringen vellykket."
+msgstr ""
 
 msgid "Entering new zone."
-msgstr "Går inn i ny sone."
+msgstr ""
 
 msgid "Incoming Transmission..."
-msgstr "Innkommende overføring..."
+msgstr ""
 
 msgid "Elements of Team Gamma have contacted us."
-msgstr "Elementer i Team Gamma har kontaktet oss."
+msgstr ""
 
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr "De påstår de er frie fra NEXUS og tilbyr sin base som operasjonsområde."
+msgstr ""
 
 msgid "Base coordinates download in progress."
-msgstr "Nedlastning av basekoordinater pågår."
+msgstr ""
 
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr "NORDRE SEKTOR OPPDRAG: Lasersatellitter"
+msgstr ""
 
 msgid "We are detecting strong energy surges from orbit."
-msgstr "Vi oppdager sterke energiøkninger fra atmosfæren."
+msgstr ""
 
 msgid "The laser satellites are charged and moving towards our position."
-msgstr "Lasersatellittene er ladet opp og beveger seg mot vår posisjon."
+msgstr ""
 
 msgid "The 2nd Team Gamma base is at this location."
-msgstr "Den andre Team Gamma basen er på denne plassen."
+msgstr ""
 
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr "Vi har begrenset tid til å evakuere denne basen og flytte til Gamma Base."
+msgstr ""
 
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr "Lasersatellittene fungerer ikke som de skal, de feilskyter."
+msgstr ""
 
 msgid "They are directing their fire towards this position."
-msgstr "De sikter skuddene sine mot denne posisjonen."
+msgstr ""
 
 msgid "We will need to evacuate this base shortly."
-msgstr "Vi må evakuere denne basen innen kort tid."
+msgstr ""
 
 msgid "Team Gamma reports a missile silo at this location."
-msgstr "Team Gamma rapporterer en missilsilo på denne plassen."
+msgstr ""
 
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr "De tror siloen inneholder missiler som kan nå høyt i atmosfæren."
+msgstr ""
 
 msgid "Capture this silo at all costs."
-msgstr "Ta over denne siloen, koste hva det koste vil."
+msgstr ""
 
 msgid "Missile silos captured."
-msgstr "Missilsilo tatt over."
+msgstr ""
 
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr "NORDRE SEKTOR OPPDRAG: Missilkoder"
+msgstr ""
 
 msgid "Commander, there are missiles present at the silos."
-msgstr "Kommandør, det er missiler til stede i siloene."
+msgstr ""
 
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "Nexus hindrer oss i å få tilgang til missilkontrollkoden."
+msgstr ""
 
 msgid "NEXUS is present in our systems."
-msgstr "NEXUS finnes i våre systemer."
+msgstr ""
 
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr "For å bekjempe NEXUS må vi forske frem Nexus Inntrengerprogram."
+msgstr ""
 
 msgid "Assign this task to a research facility."
-msgstr "Tildel denne oppgaven til et forskningsanlegg."
+msgstr ""
 
 msgid "NEXUS forces detected at these locations."
-msgstr "NEXUS-styrker oppdaget på disse plassene."
+msgstr ""
 
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr "NEXUS har blitt utryddet fra alle Prosjekt-systemer."
+msgstr ""
 
 msgid "We are attempting to access the missile control codes."
-msgstr "Vi prøver å få tilgang til missilkontrollkodene."
+msgstr ""
 
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr "Et forskningsanlegg krever for å knekke koden. Sett en opp umiddelbart."
+msgstr ""
 
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr "Beskytt missilsiloen fra NEXUS-angrep."
+msgstr ""
 
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr "PROSJEKTOPPDATERING: 1. Nivå Missilkode Knekt."
+msgstr ""
 
 msgid "Missile arming in progress."
-msgstr "Missilarmering pågår."
+msgstr ""
 
 msgid "More research is required to proceed further."
-msgstr "Mer forskning krever for å fortsette."
+msgstr ""
 
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr "PROSJEKTOPPDATERING: 2. Nivå Missilkode Knekt."
+msgstr ""
 
 msgid "Missile target programming in progress."
-msgstr "Programmering av missilsikte pågår."
+msgstr ""
 
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr "Når nivå 3 kodene er knekt kan vi initiere avfyringsprosedyrer."
+msgstr ""
 
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr "PROSJEKTOPPDATERING: 3. Nivå Missilkode Knekt."
+msgstr ""
 
 msgid "Missile launch sequence initiated."
-msgstr "Missilavfyringssekvens startet."
+msgstr ""
 
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr "TRANSPORTOPPDRAG: Angrip NEXUS' Siste Base"
+msgstr ""
 
 msgid "We have located NEXUS' base at this location."
-msgstr "Vi har lokalisert NEXUS' base på denne plassen."
+msgstr ""
 
 msgid "This area contains numerous NEXUS structures."
-msgstr "Dette området har mange NEXUS-strukturer."
+msgstr ""
 
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr "Vi er sikre på at NEXUS' kjernesystemer kan finnes her."
+msgstr ""
 
 msgid "Establish an LZ."
-msgstr "Etabler en LS."
+msgstr ""
 
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr "Begynn angrepet på NEXUS. Du må ødelegge kjernesystemene."
+msgstr ""
 
 msgid "Incoming intelligence report... Team Gamma"
-msgstr "Innkommende informasjonsrapport... Team Gamma"
+msgstr ""
 
 msgid "Briefing Commences:"
-msgstr "Briefing begynner:"
+msgstr ""
 
 msgid "Scavenger Outpost"
-msgstr "Plyndreutpost"
+msgstr ""
 
 msgid "Power Resource"
-msgstr "Kraftressurs"
+msgstr ""
 
 msgid "Unknown Artifact"
-msgstr "Ukjent artefakt"
+msgstr ""
 
 msgid "Source of Power Surge"
-msgstr "Kilden til overspenningen"
+msgstr ""
 
 msgid "Landing Zone"
-msgstr "Landingssone"
+msgstr ""
 
 msgid "Mission Target"
-msgstr "Oppdragsmål"
+msgstr ""
 
 msgid "Pre-Collapse Research Center"
-msgstr "Pre-kollaps forskningssenter"
+msgstr ""
 
 msgid "En-route To Mission Site"
-msgstr "På vet til oppdragsområde"
+msgstr ""
 
 msgid "Mission Failed"
-msgstr "Oppdrag feilet"
+msgstr ""
 
 msgid "Mission Successful"
-msgstr "Oppdrag vellykket"
+msgstr ""
 
 msgid "Enemy Landing Zone"
-msgstr "Fiendens landingssone"
+msgstr ""
 
 msgid "Enemy Base"
-msgstr "Fiendebase"
+msgstr ""
 
 msgid "Incoming transmission"
-msgstr "Innkommende overføring"
+msgstr ""
 
 msgid "Incoming intelligence report."
-msgstr "Innkommende informasjonsrapport."
+msgstr ""
 
 msgid "Nuclear Reactor"
-msgstr "Kjernereaktor"
+msgstr ""
 
 msgid "New Design"
-msgstr "Nytt design"
+msgstr ""
 
 msgid "Cyborg Cannon"
-msgstr "Kyborgkanon"
+msgstr ""
 
 msgid "Demolish"
-msgstr "Ødelegg"
+msgstr ""
 
 msgid "Naval"
-msgstr "Marine"
+msgstr ""
 
 msgid "Repair Center"
-msgstr "Reparasjonssenter"
+msgstr ""
 
 msgid "Tornado AA Flak Site"
-msgstr "Tornado AA flak-område"
+msgstr ""
 
 msgid "Dragon's Teeth"
-msgstr "Dragetenner"
+msgstr ""
 
 msgid "Howitzer Emplacement"
-msgstr "Haubitsstilling"
+msgstr ""
 
 msgid "Ground Shaker Emplacement"
-msgstr "Bakkeristestilling"
+msgstr ""
 
 msgid "Hellstorm Emplacement"
-msgstr "Helvetesstormstilling"
+msgstr ""
 
 msgid "Mortar Emplacement"
-msgstr "Bombekasterstilling"
+msgstr ""
 
 msgid "Bombard Emplacement"
-msgstr "Bombardstilling"
+msgstr ""
 
 msgid "Pepperpot Emplacement"
 msgstr ""
@@ -1173,7 +1173,7 @@ msgid "Armed with Revenger Surface-to-Air missile"
 msgstr ""
 
 msgid "Defenses Improved"
-msgstr "Forsvarsverk forsterket"
+msgstr ""
 
 msgid "High-tensile concrete reinforced with boron"
 msgstr ""
@@ -1185,7 +1185,7 @@ msgid "All defenses and walls upgraded automatically"
 msgstr ""
 
 msgid "New Defensive Structure Available"
-msgstr "Nytt forsvarsverk tilgjengelig"
+msgstr ""
 
 msgid "AA Site with Tornado Flak Turret"
 msgstr ""
@@ -1851,7 +1851,7 @@ msgid "Survive until the timer reaches zero"
 msgstr ""
 
 msgid "Manufacture (F1)"
-msgstr "Produksjon (F1)"
+msgstr ""
 
 msgid "Manufacture - build factory first"
 msgstr ""
@@ -1881,7 +1881,7 @@ msgid "Commanders - manufacture commanders first"
 msgstr ""
 
 msgid "Close"
-msgstr "Lukk"
+msgstr ""
 
 msgid "Intelligence Display (F5)"
 msgstr ""
@@ -2829,7 +2829,7 @@ msgid "Command Turret IV"
 msgstr ""
 
 msgid "Player"
-msgstr "Spiller"
+msgstr ""
 
 msgid "Lost due to being inactive / playing passively."
 msgstr ""
@@ -2856,34 +2856,34 @@ msgid "No Scavengers"
 msgstr ""
 
 msgid "No Alliances"
-msgstr "Ingen allianser"
+msgstr ""
 
 msgid "Allow Alliances"
-msgstr "Aktiver allianser"
+msgstr ""
 
 msgid "Locked Teams"
-msgstr "Låste lag"
+msgstr ""
 
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 msgid "Low Power Levels"
-msgstr "Lavt energinivå"
+msgstr ""
 
 msgid "Medium Power Levels"
-msgstr "Middels energinivå"
+msgstr ""
 
 msgid "High Power Levels"
-msgstr "Høyt energinivå"
+msgstr ""
 
 msgid "Start with No Bases"
-msgstr "Start uten baser"
+msgstr ""
 
 msgid "Start with Bases"
-msgstr "Start med baser"
+msgstr ""
 
 msgid "Start with Advanced Bases"
-msgstr "Start med avanserte baser"
+msgstr ""
 
 msgid "EASY"
 msgstr ""
@@ -2943,7 +2943,7 @@ msgid "Any time, big boss!"
 msgstr ""
 
 msgid "System locale"
-msgstr "Systemspråk"
+msgstr ""
 
 msgid "Failed to create port mapping"
 msgstr ""
@@ -5900,7 +5900,7 @@ msgid "Power Research Completed"
 msgstr ""
 
 msgid "Power"
-msgstr "Energi"
+msgstr ""
 
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr ""
@@ -6153,7 +6153,7 @@ msgid "Research speed +85%"
 msgstr ""
 
 msgid "Research"
-msgstr "Forskning"
+msgstr ""
 
 msgid "Retaliation"
 msgstr ""
@@ -6600,7 +6600,7 @@ msgid "Synaptic Link technology breakthrough"
 msgstr ""
 
 msgid "Synaptic Link"
-msgstr "Synapselink"
+msgstr ""
 
 msgid "Systems Research Completed"
 msgstr ""
@@ -7180,7 +7180,7 @@ msgstr ""
 
 msgctxt "rank"
 msgid "Green"
-msgstr "Grønn"
+msgstr ""
 
 msgctxt "rank"
 msgid "Hero"
@@ -7363,10 +7363,10 @@ msgid "WIDTHxHEIGHT"
 msgstr ""
 
 msgid "Enable shadows"
-msgstr "Slå på skygger"
+msgstr ""
 
 msgid "Disable shadows"
-msgstr "Slå av skygger"
+msgstr ""
 
 msgid "Enable sound"
 msgstr ""
@@ -7504,7 +7504,7 @@ msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
 msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
-msgstr "Starter verten (autohost) som ikke klar, selv om det er en tilskuer"
+msgstr ""
 
 msgid "Base URL for on-demand video downloads"
 msgstr ""
@@ -7549,7 +7549,7 @@ msgid "Engine Output"
 msgstr ""
 
 msgid "Weight"
-msgstr "Vekt"
+msgstr ""
 
 msgid "Total Power Required"
 msgstr ""
@@ -7564,7 +7564,7 @@ msgid "Hydra "
 msgstr ""
 
 msgid "Sensor Range"
-msgstr "Sensorradius"
+msgstr ""
 
 msgid "ECM Power"
 msgstr ""
@@ -7573,7 +7573,7 @@ msgid "Build Points"
 msgstr ""
 
 msgid "Range"
-msgstr "Rekkevidde"
+msgstr ""
 
 msgid "Damage"
 msgstr ""
@@ -7606,7 +7606,7 @@ msgid "Store Design"
 msgstr ""
 
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Kan ikke bygge her. Oljeressurs brenner."
+msgstr ""
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
@@ -7654,38 +7654,44 @@ msgstr ""
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%u enhet valgt"
-msgstr[1] "%u enheter valgt"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "%u units removed from their Group"
 msgid_plural "%u units removed from their Group"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
@@ -7712,10 +7718,10 @@ msgid "Multi Player"
 msgstr ""
 
 msgid "Tutorial"
-msgstr "Introduksjon"
+msgstr ""
 
 msgid "Options"
-msgstr "Alternativer"
+msgstr ""
 
 msgid "View Intro"
 msgstr ""
@@ -7730,10 +7736,10 @@ msgid "No last save available"
 msgstr ""
 
 msgid "Quit Game"
-msgstr "Avslutt"
+msgstr ""
 
 msgid "MAIN MENU"
-msgstr "HOVEDMENY"
+msgstr ""
 
 msgid "Official site: http://wz2100.net/"
 msgstr ""
@@ -7760,7 +7766,7 @@ msgid "Fast Play"
 msgstr ""
 
 msgid "TUTORIALS"
-msgstr "INTRODUKSJON"
+msgstr ""
 
 msgctxt "menu"
 msgid "Return"
@@ -7785,7 +7791,7 @@ msgid "View Skirmish Replay"
 msgstr ""
 
 msgid "SINGLE PLAYER"
-msgstr "SOLOSPILL"
+msgstr ""
 
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
@@ -7800,13 +7806,13 @@ msgid "Load Skirmish Replay"
 msgstr ""
 
 msgid "MULTI PLAYER"
-msgstr "SAMSPILL"
+msgstr ""
 
 msgid "Host Game"
 msgstr ""
 
 msgid "Join Game"
-msgstr "Bli med i spill"
+msgstr ""
 
 msgid "View Replay"
 msgstr ""
@@ -7987,13 +7993,13 @@ msgid "Construction Progress"
 msgstr ""
 
 msgid "Factory Delivery Point"
-msgstr "Leveringsmål for fabrikk"
+msgstr ""
 
 msgid "Loop Production"
 msgstr ""
 
 msgid "Progress Bar"
-msgstr "Framdriftslinje"
+msgstr ""
 
 msgid "To:"
 msgstr ""
@@ -8351,10 +8357,10 @@ msgid "View Guide"
 msgstr ""
 
 msgid "Load Game"
-msgstr "Last Spill"
+msgstr ""
 
 msgid "Save Game"
-msgstr "Lagre spill"
+msgstr ""
 
 msgid "Quit"
 msgstr ""
@@ -8445,7 +8451,7 @@ msgid "Manufacture"
 msgstr ""
 
 msgid "Build"
-msgstr "Bygg"
+msgstr ""
 
 msgid "Design"
 msgstr ""
@@ -8637,10 +8643,10 @@ msgid "Zoom Radar In"
 msgstr ""
 
 msgid "Zoom In"
-msgstr "Zoom inn"
+msgstr ""
 
 msgid "Zoom Out"
-msgstr "Zoom ut"
+msgstr ""
 
 msgid "Pitch Forward"
 msgstr ""
@@ -8661,13 +8667,13 @@ msgid "Orders Menu"
 msgstr ""
 
 msgid "Decrease Game Speed"
-msgstr "Mindre spillhastighet"
+msgstr ""
 
 msgid "Increase Game Speed"
-msgstr "Mer spillhastighet"
+msgstr ""
 
 msgid "Reset Game Speed"
-msgstr "Nullstill hastighet"
+msgstr ""
 
 msgid "View North"
 msgstr ""
@@ -9105,7 +9111,7 @@ msgid "Allow"
 msgstr ""
 
 msgid "PAUSED"
-msgstr "PAUSE"
+msgstr ""
 
 msgid "New Intelligence Report"
 msgstr ""
@@ -9147,7 +9153,7 @@ msgid "Accept Retreating Units"
 msgstr ""
 
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Beklager, den juksekoden er slått av i flerspiller-modus."
+msgstr ""
 
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
@@ -9169,7 +9175,7 @@ msgid "Ouch! Structure's health is down 20%!"
 msgstr ""
 
 msgid "Lets us see what you see!"
-msgstr "Las oss se hva du ser!"
+msgstr ""
 
 msgid "Fine, weapon & sensor display is off!"
 msgstr ""
@@ -9219,10 +9225,10 @@ msgid "Twice as nice!"
 msgstr ""
 
 msgid "FPS display is enabled."
-msgstr "FPS-visning er slått på."
+msgstr ""
 
 msgid "FPS display is disabled."
-msgstr "FPS-visning er slått av."
+msgstr ""
 
 msgid "Unit count display is enabled."
 msgstr ""
@@ -9235,25 +9241,25 @@ msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Fea
 msgstr ""
 
 msgid "Infinite power disabled"
-msgstr "Uendelig energi slått av"
+msgstr ""
 
 msgid "Infinite power enabled"
-msgstr "Uendelig energi slått på"
+msgstr ""
 
 msgid "Lighting values for all tiles recalculated"
 msgstr ""
 
 msgid "All items made available"
-msgstr "Alle gjenstander er nå tilgjengelige"
+msgstr ""
 
 msgid "Tile info dumped into log"
 msgstr ""
 
 msgid "Fog on"
-msgstr "Tåke slått på"
+msgstr ""
 
 msgid "Fog off"
-msgstr "Tåke slått av"
+msgstr ""
 
 #, c-format
 msgid "Setting radar zoom to %u"
@@ -9340,13 +9346,13 @@ msgid "Unable to locate any oil derricks!"
 msgstr ""
 
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr "Oi, værskifte i vente... SNØ"
+msgstr ""
 
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr "Værtmelding: Klar himmel, ingen skyer i vente... IKKE VÆR"
+msgstr ""
 
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr ""
@@ -9367,7 +9373,7 @@ msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
 msgid "Unable to locate HQ!"
-msgstr "Klarer ikke å finne hovedkvarter!"
+msgstr ""
 
 msgid "Formation speed limiting ON"
 msgstr ""
@@ -9405,19 +9411,19 @@ msgid "Radar showing friend-foe colors"
 msgstr ""
 
 msgid "Radar showing player colors"
-msgstr "Radar viser spillernes farger"
+msgstr ""
 
 msgid "Radar showing only objects"
-msgstr "Radar viser kun gjenstander"
+msgstr ""
 
 msgid "Radar blending terrain and height"
 msgstr ""
 
 msgid "Radar showing terrain"
-msgstr "Radar viser terreng"
+msgstr ""
 
 msgid "Radar showing height"
-msgstr "Radar viser høyde"
+msgstr ""
 
 msgid "Asserts turned off"
 msgstr ""
@@ -9491,13 +9497,13 @@ msgid "OBJECTIVE FAILED"
 msgstr ""
 
 msgid "Continue Game"
-msgstr "Fortsett spill"
+msgstr ""
 
 msgid "Quit To Main Menu"
-msgstr "Tilbake til hovedmeny"
+msgstr ""
 
 msgid "Load Saved Game"
-msgstr "Last inn spill"
+msgstr ""
 
 msgid "GAME SAVED :"
 msgstr ""
@@ -9508,11 +9514,11 @@ msgstr ""
 
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s gir deg oversiktskart"
+msgstr ""
 
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s gir deg en %s"
+msgstr ""
 
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
@@ -9520,7 +9526,7 @@ msgstr ""
 
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s gir deg teknologidokumenter"
+msgstr ""
 
 #, c-format
 msgid "%s Gives You %d Power"
@@ -9528,19 +9534,19 @@ msgstr ""
 
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s ønsker å inngå en allianse med deg"
+msgstr ""
 
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr "Du inviterer %s til å gå inn i en allianse"
+msgstr ""
 
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr "%s bryter allianse med %s"
+msgstr ""
 
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s går inn i alianse med %s"
+msgstr ""
 
 #, c-format
 msgid "You Discover Blueprints For %s"
@@ -9550,13 +9556,13 @@ msgid "Super Easy"
 msgstr ""
 
 msgid "Easy"
-msgstr "Enkel"
+msgstr ""
 
 msgid "Medium"
 msgstr ""
 
 msgid "Hard"
-msgstr "Tøff"
+msgstr ""
 
 msgid "Insane"
 msgstr ""
@@ -9578,7 +9584,7 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 msgid "Select Player Name"
-msgstr "Velg spillernavn"
+msgstr ""
 
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
@@ -9587,19 +9593,19 @@ msgid "Player Name changes are not allowed by the host"
 msgstr ""
 
 msgid "Blind Game:"
-msgstr "Spillen i blinde:"
+msgstr ""
 
 msgid "- Player names will not be visible to other players (until the game is over)"
-msgstr "- Spillernavnene vil ikke være synlige for andre spillere (til spillet er over)"
+msgstr ""
 
 msgid "Blind Lobby:"
-msgstr "Blinde Lobbyen:"
+msgstr ""
 
 msgid "- Player names will not be visible to other players (until the game has started)"
-msgstr "- Spillernavnene vil ikke være synlige for andre spillere (til spillet har startet)"
+msgstr ""
 
 msgid "OPTIONS"
-msgstr "ALTERNATIVER"
+msgstr ""
 
 msgid "Return To Previous Screen"
 msgstr ""
@@ -9653,7 +9659,7 @@ msgstr ""
 
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "Verten har kastet ut %s fra spillet!"
+msgstr ""
 
 msgid "The host has kicked you from the game."
 msgstr ""
@@ -9745,11 +9751,11 @@ msgid "Yes, select Player slot"
 msgstr ""
 
 msgid "BLIND LOBBY NOTICE:"
-msgstr "MEDDELSE OM BLINDE LOBBYEN:"
+msgstr ""
 
 #, c-format
 msgid "You have been assigned the codename: \"%s\""
-msgstr "Du har fått tildelt kodenavnet: \"%s\""
+msgstr ""
 
 msgid "Joined:"
 msgstr ""
@@ -9758,7 +9764,7 @@ msgid "Ready:"
 msgstr ""
 
 msgid "Players"
-msgstr "Spillere"
+msgstr ""
 
 msgid "Host Options"
 msgstr ""
@@ -9782,7 +9788,7 @@ msgid "Choose Player Slot"
 msgstr ""
 
 msgid "PLAYERS"
-msgstr "SPILLERE"
+msgstr ""
 
 msgid "Add spectator slot"
 msgstr ""
@@ -9817,7 +9823,7 @@ msgid "Unmute Player: %s"
 msgstr ""
 
 msgid "CHAT"
-msgstr "PRAT"
+msgstr ""
 
 msgid "Multiplayer Lobby Support Unavailable"
 msgstr ""
@@ -9835,7 +9841,7 @@ msgid "Sorry! Failed to host the game."
 msgstr ""
 
 msgid "Host is Starting Game"
-msgstr "Vert starter spill"
+msgstr ""
 
 #, c-format
 msgid "Host: Free chat enabled for: %s"
@@ -9909,19 +9915,19 @@ msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
 msgid "BLIND GAME NOTICE:"
-msgstr "MEDDELSE OM SPILLEN I BLINDE:"
+msgstr ""
 
 msgid "Player names will not be visible to other players (until the game is over)"
-msgstr "Spillernavnene vil ikke være synlige for andre spillere (til spillet er over)"
+msgstr ""
 
 msgid "Player names will not be visible to other players (until the game has started)"
-msgstr "Spillernavnene vil ikke være synlige for andre spillere (til spillet har startet)"
+msgstr ""
 
 msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
-msgstr "TA HENSYN TIL: Verten er en spiller, og kan se og konfigurere andre spillere (!)"
+msgstr ""
 
 msgid "The host is a spectator, and can see player identities and configure players / teams"
-msgstr "Verten er tilskuer, og kan se spilleridentiteter og stemme spillere / mannskaper"
+msgstr ""
 
 msgid "Failed to load challenge:"
 msgstr ""
@@ -9964,7 +9970,7 @@ msgstr ""
 
 #, c-format
 msgid "%s has Left the Game"
-msgstr "%s har forlatt spillet"
+msgstr ""
 
 #, c-format
 msgid "%s joined the Game"
@@ -9972,7 +9978,7 @@ msgstr ""
 
 #, c-format
 msgid "(codename: %s)"
-msgstr "(kodenavnet: %s)"
+msgstr ""
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10011,7 +10017,7 @@ msgid "Apply Defaults and Return To Previous Screen"
 msgstr ""
 
 msgid "Accept Settings"
-msgstr "Aksepter instillinger"
+msgstr ""
 
 msgid "Limits reset to default values"
 msgstr ""
@@ -10033,6 +10039,7 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 msgid "Ping"
 msgstr ""
@@ -10041,7 +10048,7 @@ msgid "Structs"
 msgstr ""
 
 msgid "Alliances"
-msgstr "Allianser"
+msgstr ""
 
 msgid "Score"
 msgstr ""
@@ -10199,28 +10206,28 @@ msgid "Beacon received from %s!"
 msgstr ""
 
 msgid "Green"
-msgstr "Grønn"
+msgstr ""
 
 msgid "Orange"
-msgstr "Oransje"
+msgstr ""
 
 msgid "Grey"
-msgstr "Grå"
+msgstr ""
 
 msgid "Black"
-msgstr "Svart"
+msgstr ""
 
 msgid "Red"
-msgstr "Rød"
+msgstr ""
 
 msgid "Blue"
-msgstr "Blå"
+msgstr ""
 
 msgid "Pink"
-msgstr "Rosa"
+msgstr ""
 
 msgid "Cyan"
-msgstr "Cyanblå"
+msgstr ""
 
 msgid "Yellow"
 msgstr ""
@@ -10589,16 +10596,16 @@ msgid "Requesting to join game"
 msgstr ""
 
 msgid "Invalid host establishing data"
-msgstr "Galt vertsetableringsdata"
+msgstr ""
 
 msgid "Invalid host identity"
-msgstr "Galt vertsidentitet"
+msgstr ""
 
 msgid "Failed to establish session keys with host"
-msgstr "Opprettelse av sesjonsnøkler med verten mislyktes"
+msgstr ""
 
 msgid "Failure to generate valid response"
-msgstr "Ikke helles med gyldig svar generasjon"
+msgstr ""
 
 msgid "Kick Spectator"
 msgstr ""
@@ -10622,7 +10629,7 @@ msgid "Team Planning"
 msgstr ""
 
 msgid "Unable to locate any repair units!"
-msgstr "Fant ingen repareringsenheter!"
+msgstr ""
 
 msgid "Unable to locate any Trucks!"
 msgstr ""
@@ -10749,6 +10756,7 @@ msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
@@ -10759,6 +10767,7 @@ msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #, c-format
 msgid "%s - Hitpoints %d/%d"
@@ -10802,7 +10811,7 @@ msgstr ""
 
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr "%s - Elektrisk skadet"
+msgstr ""
 
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
@@ -10987,7 +10996,7 @@ msgid "CAMPAIGNS"
 msgstr ""
 
 msgid "GAMES"
-msgstr "SPILL"
+msgstr ""
 
 msgid "Continue"
 msgstr ""
@@ -11002,13 +11011,13 @@ msgid "Volume"
 msgstr ""
 
 msgid "Voice Volume"
-msgstr "Stemmevolum"
+msgstr ""
 
 msgid "FX Volume"
-msgstr "Lydeffektvolum"
+msgstr ""
 
 msgid "Music Volume"
-msgstr "Musikkvolum"
+msgstr ""
 
 msgid "Output"
 msgstr ""
@@ -11032,10 +11041,10 @@ msgid "Subtitles"
 msgstr ""
 
 msgid "Off"
-msgstr "Av"
+msgstr ""
 
 msgid "On"
-msgstr "På"
+msgstr ""
 
 msgid "Music"
 msgstr ""
@@ -11437,22 +11446,22 @@ msgid "On (Fullscreen)"
 msgstr ""
 
 msgid "CONNECTION"
-msgstr "TILKOBLING"
+msgstr ""
 
 msgid "Lobby"
-msgstr "Entré"
+msgstr ""
 
 msgid "IP"
 msgstr ""
 
 msgid "IP Address or Machine Name"
-msgstr "IP-adresse eller maskinnavn"
+msgstr ""
 
 msgid "Host:"
-msgstr "Vert:"
+msgstr ""
 
 msgid "NOTE: Host is also a player."
-msgstr "MERKE: Vert er også en spiller."
+msgstr ""
 
 msgid "Player ID: "
 msgstr ""
@@ -11461,50 +11470,50 @@ msgid "(none)"
 msgstr ""
 
 msgid "You:"
-msgstr "Du:"
+msgstr ""
 
 msgid "Waiting for host to configure teams"
-msgstr "Venter om verten å konfigurere mannskaper"
+msgstr ""
 
 msgid "Waiting for players"
-msgstr "Venter om spillere"
+msgstr ""
 
 msgid "Downloading map / mods"
-msgstr "Lasten ned kart / mods"
+msgstr ""
 
 msgid "Waiting for you to check ready"
-msgstr "Venter på at du skal sjekke klar"
+msgstr ""
 
 msgid "Waiting for host to start game"
-msgstr "Venter om verten å starte spillet"
+msgstr ""
 
 msgid "Waiting for spectators"
-msgstr "Venter om tilskuere"
+msgstr ""
 
 msgid "Players ready & waiting for match:"
-msgstr "Spillere er klare åg venter på å spille:"
+msgstr ""
 
 #, c-format
 msgid "Players: (%zu ready, %zu not ready)"
-msgstr "Spillere: (klare: %zu, ikke klare: %zu)"
+msgstr ""
 
 #, c-format
 msgid "AI Bots: %zu"
-msgstr "KI Boter: %zu"
+msgstr ""
 
 #, c-format
 msgid "Spectators: (%zu ready, %zu not ready)"
-msgstr "Tilskuere: (klare: %zu, ikke klare: %zu)"
+msgstr ""
 
 #, c-format
 msgid "Host: %s"
-msgstr "Vert: %s"
+msgstr ""
 
 msgid "ready"
-msgstr "klar"
+msgstr ""
 
 msgid "not ready"
-msgstr "ikke klar"
+msgstr ""
 
 msgid "Waiting Room"
 msgstr ""
@@ -11714,7 +11723,7 @@ msgid "Game Name"
 msgstr ""
 
 msgid "Click to see Map"
-msgstr "Trykk for å se kartet"
+msgstr ""
 
 msgid ""
 "Select Map\n"
@@ -11815,7 +11824,7 @@ msgid "Configure Advanced Hosting Options"
 msgstr ""
 
 msgid "Launch Transport"
-msgstr "Send transport"
+msgstr ""
 
 msgid "Launch the Transporter"
 msgstr ""
@@ -11824,7 +11833,7 @@ msgid "There is not enough room in the Transport!"
 msgstr ""
 
 msgid "Reinforcements landing"
-msgstr "Forsterkninger lander"
+msgstr ""
 
 msgid "Update Available"
 msgstr ""
@@ -11869,10 +11878,10 @@ msgid "The battle is over - you can leave the room."
 msgstr ""
 
 msgid "YOU ARE VICTORIOUS!"
-msgstr "DU HAR VUNNET!"
+msgstr ""
 
 msgid "YOU WERE DEFEATED!"
-msgstr "DU HAR TAPT!"
+msgstr ""
 
 msgid "Script Debugger"
 msgstr ""

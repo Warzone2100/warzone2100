@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-08 19:35+0000\n"
+"PO-Revision-Date: 2025-12-08 20:30\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -2009,6 +2009,9 @@ msgstr "Por favor espera mientras la fábrica produce las nuevas unidades"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Enhorabuena comandante - ahora estás listo para tu primera misión"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "CAMPAÑA UNO"
 
@@ -2994,7 +2997,7 @@ msgid "Replay File Format Unsupported"
 msgstr "Formato de archivo de repetición no soportado"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "El formato de repetición es más reciente de lo que esta versión de Warzone 2100 puede soportar."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "No se puede cargar la repetición: el archivo de repetición está incompleto o está corrupto."
@@ -3380,7 +3383,7 @@ msgstr "Armado con cohetes mata tanques"
 
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
-msgstr ""
+msgstr "Armadura +120% y Puntos Estructurales +90%"
 
 #, no-c-format
 msgid "Armor +35%, Body Points +30%"
@@ -5035,11 +5038,11 @@ msgstr "Mejora las ópticas láser y reduce la dispersión de luz"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Emplazamiento de Obús Incendiario"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Emplazamiento de Obuses Incendiarios"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Emplazamiento de Obús Incendiario"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "El Obús Incendiario puede ser asignado a un sensor"
@@ -5709,11 +5712,11 @@ msgstr "Nuevas Estructuras de Sistema Disponibles"
 msgid "New Systems Tower Available"
 msgstr "Nuevos Sistemas de Torre Disponibles"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Nuevos Sistemas de Torretas disponibles para diseño"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Nuevo Sistema de Torreta Disponible para Diseño"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Nuevos Sistemas de Torretas disponibles para diseño"
 
 msgid "New Thermal Emissions detection"
 msgstr "Nuevas Emisiones Térmicas detectadas"
@@ -6594,11 +6597,11 @@ msgstr "Enlace Sináptico de Analísis de Datos Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Enlace Sináptico de Analísis de Datos Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Enlace Sináptico de Analísis de Datos"
-
 msgid "Synaptic link data analysis"
 msgstr "Enlace Sináptico de análisis de datos"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Enlace Sináptico de Analísis de Datos"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Tecnologia de Interferencia de Conexión Sináptica"
@@ -8086,6 +8089,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
@@ -8093,6 +8100,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10929,16 +10939,16 @@ msgstr "Bonus Gamma"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11092,13 +11102,13 @@ msgid "Camera Speed"
 msgstr "Velocidad de Cámara"
 
 msgid "Camera Starting Zoom"
-msgstr ""
+msgstr "Zoom inicial de la cámara"
 
 msgid "Camera Zoom Rate"
-msgstr ""
+msgstr "Tasa de zoom de la cámara"
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "Rotación del mouse"
 
 msgid "Reverse Rotation"
 msgstr "Invertir Rotación"
@@ -11107,7 +11117,7 @@ msgid "Mouse Pan"
 msgstr ""
 
 msgid "Edge Scrolling"
-msgstr ""
+msgstr "Desplazar por Bordes"
 
 msgid "Reset"
 msgstr "Reiniciar"
@@ -11119,7 +11129,7 @@ msgid "(Select Profile)"
 msgstr "(Seleccionar perfil)"
 
 msgid "Reset Keys to: Defaults"
-msgstr ""
+msgstr "Restablecer valores predeterminados"
 
 msgid "Unit Color"
 msgstr "Color de unidad"
@@ -11131,7 +11141,7 @@ msgid "Default AI"
 msgstr "IA predeterminada"
 
 msgid "Hosting Options"
-msgstr ""
+msgstr "Opciones de Host"
 
 msgid "Port Mapping"
 msgstr "Mapeo de Puertos"
@@ -11185,7 +11195,7 @@ msgid "%s hours"
 msgstr "%s horas"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "La calidad del sombreado del terreno solo se aplica al usar la apariencia del terreno: Remasterizado (HQ)"
 
 msgid "Shadows are not enabled."
 msgstr "Las sombras no están habilitadas."
@@ -11194,7 +11204,7 @@ msgid "Shadow mapping not available on this system."
 msgstr "El mapeo de sombras no está disponible en este sistema."
 
 msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "La iluminación avanzada solo está disponible cuando se utiliza la apariencia del terreno: Remastado (HQ)"
 
 msgid "Terrain"
 msgstr "Terreno"
@@ -11203,13 +11213,13 @@ msgid "Terrain Appearance"
 msgstr "Apariencia del Terreno"
 
 msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
-msgstr ""
+msgstr "La apariencia clásica del terreno desde el lanzamiento inicial. texturas de arte de píxeles de baja resolución."
 
 msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
-msgstr ""
+msgstr "La apariencia normal del terreno utilizada como predeterminada por más de una década. Texturas con mayor resolución y recreadas."
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr ""
+msgstr "La apariencia remasterizada y de alta calidad. Alta resolución, con bump + mapeo especular moderno. Requiere más memoria y mejor GPU."
 
 msgid "Terrain Shading Quality"
 msgstr "Calidad de sombreado del terreno"
@@ -11227,7 +11237,7 @@ msgid "Shadows"
 msgstr "Sombras"
 
 msgid "Draw Shadows"
-msgstr ""
+msgstr "Mostrar sombras"
 
 msgid "Shadow Resolution"
 msgstr "Resolución de Sombra"
@@ -11254,7 +11264,7 @@ msgid "Lighting"
 msgstr "Iluminación"
 
 msgid "Point Lights"
-msgstr ""
+msgstr "Luces de punto"
 
 msgid "Lightmap"
 msgstr ""
@@ -11347,7 +11357,7 @@ msgid "Radar"
 msgstr "Radar"
 
 msgid "Radar Orientation"
-msgstr ""
+msgstr "Orientación de radar"
 
 msgid "Fixed"
 msgstr "Fijo"
@@ -11424,33 +11434,20 @@ msgstr "Controles"
 msgid "Window"
 msgstr "Ventana"
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"En el modo Pantalla Completa de Escritorio, la resolución coincide con la de tu escritorio \n"
-"(o lo que el gestor de ventanas permite)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Puedes cambiar la resolución redimensionando la ventana. (Prueba arrastrar una esquina / borde.)"
-
 msgid "Window Mode"
 msgstr "Modo ventana"
 
 msgid "Windowed"
 msgstr "En ventana"
 
-msgid "Desktop Full"
-msgstr "Escritorio Completo"
-
-msgid "Resolution"
-msgstr "Resolución"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr "Comportamientos"
 
 msgid "Minimize on Focus Loss"
-msgstr ""
+msgstr "Minimizar al perder foco"
 
 msgid "Whether the window should auto-minimize on focus loss"
 msgstr "Si la ventana debe minimizarse automáticamente al perder el foco"
@@ -11529,10 +11526,10 @@ msgid "not ready"
 msgstr "pendiente"
 
 msgid "Waiting Room"
-msgstr ""
+msgstr "Sala de espera"
 
 msgid "FFA"
-msgstr ""
+msgstr "TCT"
 
 msgid "Alliances Allowed"
 msgstr "Alianzas Permitidas"
@@ -11582,20 +11579,20 @@ msgstr "(50+ omitidos)"
 
 #, c-format
 msgid "(%u omitted)"
-msgstr ""
+msgstr "(%u omitido)"
 
 msgid "No games for your version"
-msgstr ""
+msgstr "No hay juegos para tu versión"
 
 msgid "No games matching filters"
-msgstr ""
+msgstr "No hay juegos que coincidan con el filtro"
 
 #, c-format
 msgid "%d players queued"
-msgstr ""
+msgstr "%d jugadores en cola"
 
 msgid "Matchmaking Room: Open"
-msgstr ""
+msgstr "Sala de emparejamiento: Abierta"
 
 msgid "Filters"
 msgstr "Filtros"
@@ -11815,16 +11812,16 @@ msgid "Host is a spectator in the game."
 msgstr "El anfitrión es un espectador en el juego."
 
 msgid "Blind Mode"
-msgstr ""
+msgstr "Juego a Ciegas"
 
 msgid "Whether and when players are blinded to other players' identities."
-msgstr ""
+msgstr "Si y cuando los jugadores están cegados a las identidades de otros jugadores."
 
 msgid "Blind modes are only available when host is a Spectator Host."
-msgstr ""
+msgstr "Los modos ciegos sólo están disponibles cuando el anfitrión es un Anfitrión Espectador."
 
 msgid "Players' identities are visible, in lobby and in game (the default)."
-msgstr ""
+msgstr "Las identidades de los jugadores son visibles, en el lobby y en el juego (predeterminado)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
 msgstr ""
