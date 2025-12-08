@@ -1002,7 +1002,7 @@
 		"buildPower": 500,
 		"class": "Transports",
 		"droidType": "SUPERTRANSPORTER",
-		"hitpoints": 3000,
+		"hitpoints": 2200,
 		"id": "SuperTransportBody",
 		"model": "drtrans.pie",
 		"name": "Super Transport Body",
