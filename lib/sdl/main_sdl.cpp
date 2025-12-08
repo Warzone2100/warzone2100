@@ -2723,7 +2723,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 				screenlist.screen = displays[i];		// which display this belongs to
 				displaylist.push_back(screenlist);
 
-				debug(LOG_INFO, "Monitor [%d] %dx%d %f @%f %s", displays[i], displaymode->w, displaymode->h, displaymode->refresh_rate, displaymode->pixel_density, SDL_GetPixelFormatName(displaymode->format));
+				debug(LOG_WZ, "Monitor [%d] %dx%d %f @%f %s", displays[i], displaymode->w, displaymode->h, displaymode->refresh_rate, displaymode->pixel_density, SDL_GetPixelFormatName(displaymode->format));
 			}
 		}
 
