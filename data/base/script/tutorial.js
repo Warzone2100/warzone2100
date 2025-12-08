@@ -6,6 +6,7 @@ var tutState;
 var didTheyHelpBuildGen;
 var producedUnits;
 var firstTruckID;
+var redisplayObj;
 
 //Alias for button
 const MIS_CLOSE_BUTTON = 0;
@@ -77,6 +78,7 @@ function setUpConsoleAndAudioVar()
 		{"audio": "tut51.ogg", "clear": false, "message": _("Please wait whilst the factory manufactures the new unit(s)"), "state": 25, "wait": 2},
 		//==PART FIVE== They've built their first droid.
 		{"audio": "tut81.ogg", "clear": false, "message": _("Congratulations commander - you are ready for your first mission"), "state": 26, "wait": 2},
+		{"audio": undefined, "clear": false, "message": _("Tutorial is over. Press Esc or the gear icon to quit to the main menu."), "state": 26, "wait": 5},
 	];
 }
 
@@ -373,6 +375,14 @@ function addToConsole()
 		const tutPhase = consoleVar[0];
 		if (tutPhase.state <= tutState)
 		{
+			if (tutPhase.state > redisplayObj.currentState)
+			{
+				redisplayObj.messages = [];
+			}
+
+			redisplayObj.timeSinceStateChange = gameTime;
+			redisplayObj.currentState = tutPhase.state;
+
 			//Check if we need to wait
 			if (camDef(tutPhase.wait) && tutPhase.wait > 0)
 			{
@@ -399,6 +409,7 @@ function addToConsole()
 			if (camDef(tutPhase.message))
 			{
 				console(tutPhase.message);
+				redisplayObj.messages.push(tutPhase.message);
 			}
 
 			camTrace(tutState);
@@ -479,6 +490,21 @@ function eventGameInit()
 	setTutorialMode(true);
 }
 
+function redisplayCurrentConsoleMessages()
+{
+	if (gameTime < (redisplayObj.timeSinceStateChange + camSecondsToMilliseconds(20)))
+	{
+		return;
+	}
+
+	redisplayObj.timeSinceStateChange = gameTime; // Must reset time if calling this on a fast timer.
+
+	for (let i = 0, len = redisplayObj.messages.length; i < len; ++i)
+	{
+		console(redisplayObj.messages[i]);
+	}
+}
+
 //No way of winning if the extra victory callback does nothing.
 function noWinningForYou() {}
 
@@ -494,6 +520,11 @@ function eventStartLevel()
 	producedUnits = {
 		tank: false,
 		truck: false,
+	};
+	redisplayObj = {
+		timeSinceStateChange: 0,
+		messages: [],
+		currentState: 0
 	};
 	setUpConsoleAndAudioVar();
 
@@ -521,4 +552,5 @@ function eventStartLevel()
 	setReticuleButton(MIS_COMMAND_BUTTON, _("Commanders - manufacture commanders first"), "", "");
 
 	queue("addToConsole", camSecondsToMilliseconds(2));
+	setTimer("redisplayCurrentConsoleMessages", camSecondsToMilliseconds(1));
 }
