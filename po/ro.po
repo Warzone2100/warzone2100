@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -5031,11 +5031,11 @@ msgstr ""
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Amplasament pentru howitzer incendiar"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Amplasament cu obuzier incendiar"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Amplasament pentru howitzer incendiar"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Obuzierul Incendiar poate fi atribuit unui senzor"
@@ -5705,10 +5705,10 @@ msgstr "Nouă clădire cu sisteme disponibilă"
 msgid "New Systems Tower Available"
 msgstr "Nou turn de sisteme disponibil"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Nouă Turelă Funcțională Disponibilă pentru Scheme"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Nouă Turelă Funcțională Disponibilă pentru Scheme"
 
 msgid "New Thermal Emissions detection"
@@ -6590,11 +6590,11 @@ msgstr "Analiza datelor prin legătura sinaptică Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analiza datelor prin legătura sinaptică Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Analiza datelor prin legătura sinaptică"
-
 msgid "Synaptic link data analysis"
 msgstr "Analiza datelor prin legătură sinaptică"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Analiza datelor prin legătura sinaptică"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr ""
@@ -10930,16 +10930,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"

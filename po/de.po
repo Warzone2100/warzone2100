@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -1260,7 +1260,7 @@ msgid "Armored guard tower with Flamer"
 msgstr "Gepanzerter Wachturm mit Flammenwerfer"
 
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Gepanzerter Wachturm mit Lancer-Antipanzerrakete"
+msgstr "Gepanzerter Wachturm mit Lancer-Panzerabwehrrakete"
 
 msgid "Armored bunker with Heavy Machinegun"
 msgstr "Gepanzerter Bunker mit Schwerem Maschinengewehr"
@@ -1278,7 +1278,7 @@ msgid "Armored hardpoint with Inferno flamer"
 msgstr "Gepanzerte Aufhängung mit Inferno-Flammenwerfer"
 
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Gepanzerte Aufhängung mit Tank-Killer-Antipanzerrakete"
+msgstr "Gepanzerte Aufhängung mit Tank-Killer-Panzerabwehrrakete"
 
 msgid "Reinforced concrete tank traps"
 msgstr "Panzerfallen aus verstärktem Beton"
@@ -3009,7 +3009,7 @@ msgid "Error Details:"
 msgstr "Fehlerdetails:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr "Bitte aktualisiere und/oder installiere deine Grafiktreiber, und überprüfe deine Systemeinstellungen."
+msgstr "Bitte aktualisiere und/oder reinstalliere deine Grafiktreiber, und überprüfe deine Systemeinstellungen."
 
 msgid "OK"
 msgstr "OK"
@@ -3277,10 +3277,10 @@ msgid "Angel Missile"
 msgstr "Angel-Lenkrakete"
 
 msgid "Anti-tank missile"
-msgstr "Antipanzerlenkrakete"
+msgstr "Panzerabwehrlenkrakete"
 
 msgid "Anti-tank rocket"
-msgstr "Antipanzerrakete"
+msgstr "Panzerabwehrrakete"
 
 msgid "APDSB MG Bullets Mk2"
 msgstr "Panzerbrechende Treibspiegelprojektile für Maschinengewehre Mk2"
@@ -3358,10 +3358,10 @@ msgid "Armed with hyper velocity quad-barrel automatic-cannon"
 msgstr "Bewaffnet mit vierläufiger Hochgeschwindigkeitsautomatikkanone"
 
 msgid "Armed with Lancer anti-tank missile"
-msgstr "Bewaffnet mit Lancer-Antipanzerrakete"
+msgstr "Bewaffnet mit Lancer-Panzerabwehrlenkrakete"
 
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr "Bewaffnet mit Lancer-Antipanzerrakete"
+msgstr "Bewaffnet mit Lancer-Panzerabwehrrakete"
 
 msgid "Armed with Machinegun"
 msgstr "Bewaffnet mit einem Maschinengewehr"
@@ -3373,7 +3373,7 @@ msgid "Armed with Needle Gun"
 msgstr "Bewaffnet mit Nadelkanone"
 
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Bewaffnet mit Scourge-Antipanzerlenkrakete"
+msgstr "Bewaffnet mit Scourge-Panzerabwehrlenkrakete"
 
 msgid "Armed with tank killer rockets"
 msgstr "Bewaffnet mit Tank-Killer-Raketen"
@@ -3396,7 +3396,7 @@ msgid "Armored bunker with Flamer"
 msgstr "Gepanzerter Bunker mit Flammenwerfer"
 
 msgid "Armored bunker with Lancer AT rocket"
-msgstr "Gepanzerter Bunker mit Lancer-Antipanzerrakete"
+msgstr "Gepanzerter Bunker mit Lancer-Panzerabwehrrakete"
 
 msgid "Armored bunker with Light Cannon"
 msgstr "Gepanzerter Bunker mit Leichter Kanone"
@@ -3411,7 +3411,7 @@ msgid "Armored guard tower with EMP Cannon"
 msgstr "Gepanzerter Wachturm mit EMP-Kanone"
 
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Gepanzerter Wachturm mit Lancer-Antipanzerrakete"
+msgstr "Gepanzerter Wachturm mit Lancer-Panzerabwehrrakete"
 
 msgid "Armored guard tower with Mini-Pod Rocket"
 msgstr "Gepanzerter Wachturm mit Miniraketen"
@@ -3450,7 +3450,7 @@ msgid "Armored hardpoint with Hyper-Velocity Cannon"
 msgstr "Gepanzerte Aufhängung mit Hochgeschwindigkeitskanone"
 
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Gepanzerte Aufhängung mit Lancer-Antipanzerrakete"
+msgstr "Gepanzerte Aufhängung mit Lancer-Panzerabwehrrakete"
 
 msgid "Armored hardpoint with Light Cannon"
 msgstr "Gepanzerte Aufhängung mit Leichter Kanone"
@@ -3462,7 +3462,7 @@ msgid "Armored hardpoint with Rail Gun"
 msgstr "Gepanzerte Aufhängung mit Magnetkanone"
 
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Gepanzerte Aufhängung mit Scourge-Antipanzerlenkrakete"
+msgstr "Gepanzerte Aufhängung mit Scourge-Panzerabwehrlenkrakete"
 
 msgid "Armored Incendiary Mortar battery pit"
 msgstr "Gepanzerte Grube mit Brandmörser"
@@ -4332,7 +4332,7 @@ msgid "Flamer Damage"
 msgstr "Flammenwerfer-Schaden"
 
 msgid "Flamer Fast Loader"
-msgstr "Flammenwerfer-Schnellader"
+msgstr "Flammenwerfer-Schnelllader"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
@@ -5035,10 +5035,10 @@ msgstr "Verbesserte Laseroptik reduziert Lichtstreuung"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Stellung mit Brandhaubitze 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Stellung mit Brandhaubitze"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Stellung mit Brandhaubitze"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5501,7 +5501,7 @@ msgid "Missile accuracy +10%"
 msgstr "Lenkraketengenauigkeit +10%"
 
 msgid "Missile Accuracy"
-msgstr "Lenkflugkörper Genauigkeit"
+msgstr "Lenkraketen-Genauigkeit"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "Lenkrakete sucht aktiv Ziele und steuert auf diese zu"
@@ -5511,7 +5511,7 @@ msgid "Missile damage +25%"
 msgstr "Lenkraketenschaden +25%"
 
 msgid "Missile Damage"
-msgstr "Lenkflugkörper Schaden"
+msgstr "Lenkraketen-Schaden"
 
 msgid "Missile Fortress"
 msgstr "Raketenfestung"
@@ -5521,7 +5521,7 @@ msgid "Missile reload time -15%"
 msgstr "Lenkraketennachladezeit -15%"
 
 msgid "Missile Reload"
-msgstr "Lenkflugkörper Nachladen"
+msgstr "Lenkraketen Nachladen"
 
 msgid "Missile Upgrade"
 msgstr "Lenkraketenverbesserung"
@@ -5709,10 +5709,10 @@ msgstr "Neues Systemgebäude verfügbar"
 msgid "New Systems Tower Available"
 msgstr "Neuer Systemturm verfügbar"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Neuer Systemturm verfügbar"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Neuer Systemturm verfügbar"
 
 msgid "New Thermal Emissions detection"
@@ -6594,10 +6594,10 @@ msgstr "Analyse der Daten zur synaptischen Verbindung Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analyse der Daten zur synaptischen Verbindung Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Analyse der Daten zur synaptischen Verbindung"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Analyse der Daten zur synaptischen Verbindung"
 
 msgid "Synaptic Link Scrambler technology"
@@ -8061,7 +8061,7 @@ msgid "End-Game"
 msgstr "Endspiel"
 
 msgid "Host"
-msgstr "Spielleiter"
+msgstr "Host"
 
 msgid "Admin"
 msgstr "Admin"
@@ -8421,10 +8421,10 @@ msgid "Please try removing any new mods - they may have issues or be incompatibl
 msgstr "Bitte versuche alle neuen Mods zu entfernen - sie können Probleme haben oder mit dieser Version inkompatibel sein."
 
 msgid "Loaded mod(s):"
-msgstr "Geladene Mods:"
+msgstr "Geladene Mod(s):"
 
 msgid "Base game files may be corrupt or outdated - please try reinstalling the game."
-msgstr "Basis-Spiel-Dateien sind möglicherweise beschädigt oder veraltet - bitte versuche das Spiel neu zu installieren."
+msgstr "Basis-Spiel-Dateien sind möglicherweise beschädigt oder veraltet - bitte versuche, das Spiel neu zu installieren."
 
 msgid "Error Loading Game Data"
 msgstr "Fehler beim Laden der Spieldaten"
@@ -10664,7 +10664,7 @@ msgid "PwrLost"
 msgstr "Energie verloren"
 
 msgid "PwrWon"
-msgstr "EnergieGewonnen"
+msgstr "Energie Gewonnen"
 
 msgid "Lab Use"
 msgstr "Labornutzung"
@@ -10929,16 +10929,16 @@ msgstr "Gamma Bonus"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11578,7 +11578,7 @@ msgid "Host Version: %s"
 msgstr "Hostversion: %s"
 
 msgid "(50+ omitted)"
-msgstr "(50+ weggelassen)"
+msgstr "(%u weggelassen)"
 
 #, c-format
 msgid "(%u omitted)"

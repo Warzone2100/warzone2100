@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -5035,11 +5035,11 @@ msgstr "Melhorias em lentes para laser reduzem dispersão da luz"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Plataforma de Obus Incendiário 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Plataforma de Obus Incendiário"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Armação de howitzer Incendiário"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Plataforma de Obus Incendiário"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Howitzer Incendiário, pode ser atribuído a um sensor"
@@ -5709,10 +5709,10 @@ msgstr "Nova Estrutura de Sistemas Disponível"
 msgid "New Systems Tower Available"
 msgstr "Nova Torreão de Sistemas Disponível"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Novo Torreão de Sistemas Disponível para Desenho"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Novo Torreão de Sistemas Disponível para Desenho"
 
 msgid "New Thermal Emissions detection"
@@ -6594,11 +6594,11 @@ msgstr "Análise de Dados por Ligação Sináptica Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Análise de Dados por Ligação Sináptica Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Análise de Dados por Ligação Sináptica"
-
 msgid "Synaptic link data analysis"
 msgstr "Análise de Data Por Sinapse Neural"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Análise de Dados por Ligação Sináptica"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Tecnologia para Gerador de Interferência de Ligações Sinápticas"
@@ -10929,16 +10929,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
