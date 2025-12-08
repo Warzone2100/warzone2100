@@ -1,3 +1,82 @@
+2025-12-09: Version 4.6.2:
+ * General:
+   * Fix: Add transporter weapon validity check (commit:a085887b4e3093e695f24f40a666170820c494ca, #4617)
+   * Fix: Resolve assert when loading replay with in-memory map archive (commit:6be51879a4bc0182ffc19b045d1d4fbe064a6e11, #4619)
+   * Fix: Allow stats / mods to change cyborg movement sound (commit:6800ec64a58f92a8387d0b8d1656adcd956c6cf7, #4623)
+   * Fix: Correct and clarify some topics of the in-game guide (commit:ae6965a270a9763619687e13e6642d26fbd1d587, #4582)
+   * Fix: Various potential crashes / asserts (too many commits, #4597, #4657, #4658, #4659, #4687)
+ * Graphics:
+   * Fix: MP Transporter model fixes (commit:7fbf3f31097c74b15cdcd2f2bbccd0ec07c95394, commit:ff6df7712aee58e1030bc52b460eb7aa6358aa63, #4627)
+   * Fix: Remove validation layers in Vulkan device create info (commit:ac9bc67d6ad24c2663b15e6554d659e787e27da3, #4638)
+ * Campaign:
+   * Add: Update Reclamation and Fractured Kingdom addon campaigns (commit:c50d79adf14fd8a032eb2fafc1c5c80a83bf4b89, commit:bb1d84ac901682d4b8066be2c5ebd5fc3793a68b, #4634)
+   * Fix: Make toggle options in GUI easier to understand (commit:2fa575d5a7a8b608ce4e80cb8f93923de9f1b835, #4645)
+   * Fix: Tower Wars tweak for Classic Balance (commit:b3578e1abbcef259ef5639fe4b56bc184185bee5, #4679)
+ * Multiplayer:
+   * Add: locked.readybeforefull option, to prevent checking ready before all open player slots are full (commit:af81baa87bc49c5312170cbda8dafc5d42d091c4, #4691)
+   * Change: Let Insane difficulty AI bots start with gates (commit:8a61dbab079846fd6cc6ea59bc6ef142da8c1586, #4640)
+   * Fix: Refactor how player connection state is recorded and handled, resolve "kick loop" (commit:3703421fd2ed99cf98fc5f69c0881d18a0b2d616, #4588)
+   * Fix: Trigger lobby browser refresh when exiting game lobby (commit:ae697c460a40e9d097687c37cbd5802f96372e76, #4605)
+   * Fix: Improve state management when --startplayers is specified (commit:ae35595678dfb34c1570bdb92fb8acadedf2b7af, #4605)
+   * Fix: sendBeacon error when spectator host (commit:119585ec10af38c6207b0e60204471879a4b1875, #4620)
+   * Fix: Errors in the maps Valley and Concrete (commit:7e381ce319a092f3c69552381024d09bbd702ee7, commit:169eaa25c6c22474ec9c5ee0c5f602bff7d8e71f, #4636)
+   * Fix: Name conflict with MP scavenger body stats (commit:e539abc3e1ae4cd1d344d1fd39c6f4f29ad06768, #4673)
+   * Fix: Improve not-ready-kick messaging (commit:f094d72d129a36d7431fa353f4bb9d68a539f8e1, #4691)
+   * Fix: netplay: Schedule port mapping request callbacks under the mutex (commit:6ceb6ca5c891ea1244433a81f820c1f2aa63dc52, #4698)
+ * Scripting:
+   * Add: scriptName to playerData (commit:7b933b4093ce08ed65a3ddbe7c423aa06f380e05, #4647)
+   * Change: Add optional center param to fireWeaponAtLoc (commit:43954282e18b96f1f2ad5806911854d800f54963, #4686)
+   * Fix: Update quickjs-wz, improving performance and fixing bugs (too many commits, #4596, #4613, #4639, #4685, #4699)
+   * Fix: syncRandom() return type (commit:dc4ed949908f7331189b1eeba5821b372d8c7eb7, #4630)
+ * AI:
+   * Nexus:
+     * Improve game performance when multiple Nexus bots are used
+     * Fix help system accessing help data incorrectly
+     * Fix a countDroid() call doing nothing for when to skip production
+   * NullBot family:
+     * Fix Hover AI causing "ruleset warnings" over the Mini-Rocket Pod
+     * Fix missing parenthesis introduced back in 2016 in function buildVtols (due to a recent commit, and this going unnoticed, that change unintentionally broke NullBot defense building behaviors)
+     * Make sure VTOL pads are built in safe areas
+   * Cobra:
+     * Can use Particle Gun now
+     * Create chance() function to remove repeated random() < X calls
+     * Slightly refactor research tree into separate functions
+     * Update const style convention (similar to libcampaign) to distinguish local and global constants
+     * Go for Power research more if available in low oil
+     * Reduce or eliminate chance of trapping trucks in high oil maps as it was trying to defend base derricks
+     * Try building repair facilities near other repair facilities (works best on high oil maps)
+     * Add a Cannon VTOL personality (AV chat command)
+     * Bump repair thresholds to medium damage levels
+     * Improvements to high oil build orders
+     * Much better T2+ No Bases support in all map types
+     * Micro optimize low oil build order to build power modules before cyborg factories
+     * Try using research labs with modules first when selecting research
+     * Some small research path optimizations
+     * Force Cobra to research defense topics randomly since they don't take long these days
+     * Cobra defends bases and oils better with defenses (kinda turtle-AI like)
+     * Fix Cobra building base structures very far away sometimes, due to a cache call collision returning an oil truck's defense structure location
+     * Rocket personality now ignores MG past the early game, will go full rocket artillery instead to optimize research
+     * Make it prefer stronger bodies faster, more chance to build heavy ones
+     * Fix a very old bug on Advanced Bases Cockpit / Cockate where truck production would be delayed for a few minutes (This will also fix other such maps that give almost no base structures on these settings)
+   * BoneCrusher:
+     * Fix some out-of-bounds access errors causing asserts
+     * Huge performance improvements (eliminates stutters in many higher oil maps)
+     * Fix a broken if statement for adding oil hunters which wanted to call a function to check something oil related   
+ * Balance MP:
+   * Change: Partial revert: SuperTransport base HP 3000 -> 2200, due to interaction with PR #3252 (commit:78b304b56ed9564e5d369b2448be4ab07a60069b, #4704)
+   * Fix: Copy paste stat error for Particle Gun emplacement (commit:7ed4dabf07e42bc48bc6dcfba8d0f0089f20107f, #4580)
+   * Fix: Thermal typo under bbaatow in structure.json (commit:6e4d7e9484addc8f4e8394ff7351b9280a6a6120, #4697)
+ * Other:
+   * Add: Gentoo support to get-dependencies_linux.sh (commit:19a21960feb437810ba3e6626d6f3355ffa37056, #4584)
+   * Add: Debian / Raspberry Pi OS support to get-dependencies_linux.sh (commit:19ead363d027c6734e313837bb5488a6ec6b5a7c, #4591)
+   * Add: Reminder messages in tutorial (commit:e6355e51c415d070fdaef5dc22ea663f6539a37d, #4702)
+   * Change: Port backend from SDL2 to SDL3 (too many commits, #4661)
+   * Fix: GameNetworkingSockets absl symbol leaks with protobuf (commit:fd2ab132761d293eb909f4734bc9b4eec341fa8e, #4576)
+   * Fix: Create albums music folder in config (commit:62bcfc9585cd7db0227607374618e3055a1adca0, #4609)
+   * Fix: Replace uses of sprintf (commit:ebeaaa7958f35879eea7b57474eff0c89aa4fb03, #4607)
+   * Fix: CMake: Update FindZIP to find 7zz (commit:38102e314a79dc8f6b22aed863cc7e6abba7d715, #4621)
+   * Fix: Snap: Add workaround for amdgpu.ids issue (commit:251f7c74bb3ac6ea15cbe29148c50fe7163f4188, #4648)
+
 2025-09-16: Version 4.6.1:
  * General:
    * Fix: Add various buggy drivers to the Vulkan driver blocklist (too many commits, #4560, #4568)
