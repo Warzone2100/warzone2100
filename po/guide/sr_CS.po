@@ -3,31 +3,31 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-12-08 20:30\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
-"Language-Team: Hungarian\n"
-"Language: hu_HU\n"
+"Language-Team: Serbian (Latin)\n"
+"Language: sr_CS\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Crowdin-Project: warzone2100\n"
 "X-Crowdin-Project-ID: 354665\n"
-"X-Crowdin-Language: hu\n"
+"X-Crowdin-Language: sr-CS\n"
 "X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
 "X-Crowdin-File-ID: 360\n"
 
 msgid "Artifacts"
-msgstr "Leletek"
+msgstr ""
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
 msgstr ""
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr ""
+msgstr "Ovo će otključati vredne tehnologije koje možete istraživati u Istraživačkoj Stanici."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr ""
+msgstr "Artefakti su male bele kutije sa zelenim indikatorom iznad i mogu se pokupiti pomeranjem bilo koje jedinice dovoljno blizu."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
 msgstr ""
@@ -36,52 +36,52 @@ msgid "Backstory"
 msgstr ""
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
-msgstr ""
+msgstr "Krajem 21. veka, NASDA (Severnoamerička agencija za stratešku odbranu) razvila je i rasporedila masivni sistem protivraketne odbrane, uključujući mrežu satelita opremljenih nuklearnim oružjem i zemaljske lansirne platforme."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
 msgstr ""
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr ""
+msgstr "Kolaps je došao brzo i žestoko. Nakon tehničke greške u sistemu satelitske odbrane, nuklearne bojeve glave su ispaljene na velike gradove širom sveta."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr ""
+msgstr "Nekoliko minuta kasnije, zemaljske platforme su se aktivirale kao odgovor na lansiranje. Milioni su poginuli kada su nuklearne vatrene oluje zbrisale svetske gradove. Milijarde drugih su poginule dok su kuge i epidemije uništavale ono što je ostalo od civilizacije."
 
 msgid "Less than a million people survived the Collapse."
-msgstr ""
+msgstr "Manje od milion ljudi je preživelo Kolaps."
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr ""
+msgstr "Zemlja se raspala na stotine malih grupa pljačkaša koje su se međusobno borile za ostatke nekadašnje civilizacije. Samo nekolicina je imala viziju da pokuša da iz pepela ponovo izgradi novi svet."
 
 msgid "## Present Day:"
 msgstr ""
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr ""
+msgstr "Igrač (koji se naziva „Komandant“) je deo grupe preživelih koji su potražili sklonište u vojnoj bazi u Stenovitim Planinama."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr ""
+msgstr "Oni izlaze iz baze sa ciljem obnove sveta, usvajajući ime „Projekat“."
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr ""
+msgstr "Projekat šalje tri tima sa ciljem da povrate artefakte, omogućavajući tako istraživanje i primenu tehnologija pre Kolapsa."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr "- Az Alfa csapat egy arizonai sivatagi helyszínre lett küldve, a Terv főhadiszállásától délkeletre"
+msgstr ""
 
 msgid "- Beta team is sent to the remains of Chicago"
-msgstr ""
+msgstr "- Tim Beta je poslat u ostatke Čikaga"
 
 msgid "- Gamma team is sent into the northern Rockies in Colorado"
-msgstr ""
+msgstr "- Tim Gama je poslat u severne Stenovite planine u Koloradu"
 
 msgid "Command Panel"
 msgstr ""
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr ""
+msgstr "Postoji šest različitih interfejsa komandne table, plus centralno dugme. Komandni interfejs otvarate pritiskom na odgovarajuće dugme."
 
 msgid "The middle / central button closes any open command interface."
-msgstr ""
+msgstr "Srednje/centralno dugme zatvara bilo koji otvoreni interfejs za komande."
 
 msgid "Defending Your Base"
 msgstr ""
@@ -96,13 +96,13 @@ msgid "While units are obviously helpful to defend your base, the design of your
 msgstr ""
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Izgradite odbrambene strukture koje pružaju zaklon, ograničavaju pristup, uočavaju neprijatelje i nanose štetu, kako biste mogli bolje da se suprotstavite neprijateljskim napadima."
 
 msgid "Intelligence Display"
 msgstr ""
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr ""
+msgstr "Obaveštajni Prikaz je mesto gde možete pronaći ciljeve vaše trenutne misije, ponovo pogledati trenutni brifing misije i pročitati više o završenim istraživačkim projektima."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
 msgstr ""
@@ -111,10 +111,10 @@ msgid "Selecting an icon will display information about that research or mission
 msgstr ""
 
 msgid "Using the Mission Timer"
-msgstr ""
+msgstr "Korišćenje Tajmera Misije"
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr ""
+msgstr "Većinu vremena ćete biti na satu. Ponekad ćete želeti da imate više vremena. Drugi put ćete možda misliti da imate previše."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
 msgstr ""
@@ -123,7 +123,7 @@ msgid "Whether it's completing new research, building defenses, or recycling & r
 msgstr ""
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
-msgstr ""
+msgstr "(Ako je uključen „Bonus moći tajmera“ – što je podrazumevano – ne morate čekati da tajmer istekne da biste dobili moć. Ona će vam automatski biti dodeljena kao da ste čekali da tajmer završi. Ostala pravila korišćenja i dalje važe!)"
 
 msgid "Power"
 msgstr ""
@@ -132,46 +132,48 @@ msgid "In Warzone 2100, power is your key resource."
 msgstr ""
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
-msgstr ""
+msgstr "Trošite energiju za izgradnju struktura, proizvodnju jedinica i istraživanje nadogradnji / novih tehnologija."
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr ""
+msgstr "Energiju proizvode Energetski Generatori koji se napajaju Naftnim Bušotinama."
 
 msgid "Researching Technology"
-msgstr ""
+msgstr "Istraživanje Tehnologije"
 
 msgid "Researching technologies is accomplished using Research Facilities."
 msgstr ""
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
-msgstr ""
+msgstr "Kada je izabran Istraživačka Stanica, sve dostupne opcije se prikazuju na levoj strani ekrana."
 
 msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
-msgstr ""
+msgstr "Svaki istraživački projekat zahteva određenu količinu energije i vremena za završetak. Uložena energija se ne vraća."
 
 msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
 msgstr ""
+"Ali napredak istraživanja se nikada ne gubi, čak i ako je i\n"
+"Istraživačka Stanica uništena - projekat samo treba prebaciti u drugu Stanicu."
 
 msgid "Completing research of a new technology may:"
-msgstr ""
+msgstr "Završetak istraživanja nove tehnologije može:"
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
-msgstr ""
+msgstr "- Omogućiti dostupnost novog oružja, struktura, tela jedinica, pogona itd."
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
-msgstr ""
+msgstr "- Poboljšati efikasnost postojećeg oružja, struktura, trupova jedinica itd."
 
 msgid "- Enable the research of additional technologies"
 msgstr ""
 
 msgid "General"
-msgstr "Általános"
+msgstr "Opšti"
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
-msgstr "A Warzone 2100-ban „A Terv” erőit vezeti a világ újjáépítéséért vívott csatában, miután az emberiséget csaknem elpusztították a nukleáris fegyverek."
+msgstr "U igri Warzone 2100, komandujete snagama „Projekta“ u borbi za obnovu sveta, nakon što je čovečanstvo skoro uništeno nuklearnim projektilima."
 
 msgid "This guide will help walk you through key facets of the game."
-msgstr "Ez az útmutatót végigvezeti a játék fő aspektusain."
+msgstr ""
 
 msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
 msgstr ""
@@ -180,100 +182,100 @@ msgid "Building Structures"
 msgstr ""
 
 msgid "Click the \"Build\" button on the Command Panel."
-msgstr ""
+msgstr "Kliknite na dugme „Izgradnja“ na komandnoj tabli."
 
 msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
-msgstr ""
+msgstr "Ovo će otvoriti meni Objekata na levoj strani ekrana, sa dugmetom za svaki objekat koji možete da izgradite."
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr ""
+msgstr "Izaberite dugme za željeni objekat. U svetu igre pojaviće se silueta – tu će objekat biti postavljen kada potvrdite."
 
 msgid "Move the silhouette by moving the input device."
 msgstr ""
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
-msgstr ""
+msgstr "- Ako je na nekoj lokaciji moguće izgraditi objekat, silueta će biti zelene boje kada pređete mišem preko lokacije."
 
 msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
-msgstr ""
+msgstr "- Ako objekat nije moguće izgraditi na lokaciji, silueta će biti obojena crvenom bojom."
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr ""
+msgstr "Kada odaberete odgovarajuću lokaciju, potvrdite položaj gradilišta. Kamion će doći na lokaciju i početi gradnju."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "Možete pozvati dodatne kamione da pomognu (i brže izgrade objekat) tako što ćete ih izabrati i narediti im da ciljaju na objekat u izgradnji."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr ""
+msgstr "Savet: Da biste gradili „zidove“ (kada postanu dostupni), možete kliknuti i prevući da nacrtate zid u liniji."
 
 msgid "Cyborg Factory"
 msgstr ""
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Fabrika Kiborga funkcioniše slično kao standardna Fabrika, ali isključivo proizvodi Kiborge."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Svaka Fabrika može da izgradi po jednog Kiborga istovremeno, ali možete da stavite u red više Kiborga za proizvodnju."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Kada se Kiborg proizvede, sledi naredbe fabrike i kreće ka njenoj Odredišnoj Tački."
 
 msgid "Demolishing Structures"
-msgstr ""
+msgstr "Rušenje Objekata"
 
 msgid "Demolishing a building is almost as simple as building one."
 msgstr ""
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Izaberite „Sruši Objekat“ u meniju Objekata i kliknite na zgradu koju želite da srušite."
 
 msgid "A unit will move to the building and destroy it."
 msgstr ""
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr ""
+msgstr "Srušeni objekti vraćaju polovinu energije koja je korišćena za njihovu izgradnju."
 
 msgid "Factory"
 msgstr ""
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Fabrika se koristi za izgradnju jedinica. Svaka fabrika može da gradi jednu jedinicu istovremeno, ali možete da stavite u red više jedinica za proizvodnju."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Proizvedena jedinica sledi naredbe Fabrike i ide ka njenoj Odredišnoj Tački."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Napomena: Osnovna Fabrika može proizvoditi samo jedinice sa Lakim trupom. Moduli Fabrike moraju biti otkriveni i izgrađeni da bi se unapredile proizvodne mogućnosti fabrike."
 
 msgid "Command Center"
-msgstr "Parancsnoki központ"
+msgstr "Komandni Centar"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr "A Parancsnoki központ a bázis főhadiszállása."
+msgstr ""
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr "Hozzáférést biztosít a kistérképhez/radarhoz, és lehetővé teszi az egységek tervezését."
+msgstr "Omogućava pristup mini-mapi/radaru i mogućnost za dizajniranje jedinica."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr "Parancsnoki központ építéséhez kattintson az „Építés” gombra a parancsnoki panelen, és válassza a Parancsnoki központ épületet."
+msgstr "Da biste izgradili Komandni Centar, kliknite na dugme „Izgradnja“ na komandnoj tabli i izaberite objekat Komandnog Centra."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr "Ezután kattintson oda, ahová az építői megépítsék."
+msgstr "Zatim kliknite na mesto gde želite da vaši graditelji izgrade objekat."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Moduli Objekata"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Energetski Generatori, Fabrike i Istraživački Centri mogu se unaprediti pomoću svojih odgovarajućih Modula Objekata."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Kada ih istražite, možete pristupiti ovim modulima iz menija „Izgradnja“ da biste ih primenili na predmetne objekte."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr ""
+msgstr "Alternativno, možete izabrati Kamion ili Borbenog Inženjera i kliknuti na objekat da biste započeli njegovu izgradnju."
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Napomena: Dok se jedan od ovih objekata nadograđuje, on će privremeno biti nedostupan dok se nadogradnja ne završi."
 
 msgid "Upgrade Effects:"
 msgstr ""
@@ -282,70 +284,70 @@ msgid "- Power Generator modules increase the rate of power generation"
 msgstr ""
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- Moduli Fabrike omogućavaju proizvodnju Srednjih i Teških jedinica, i ubrzavaju proizvodnju jedinica"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
 msgstr ""
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Naftna Bušotina"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "Naftna Bušotina se gradi tako što izaberete Kamion i ciljajte na raspoloživi Naftni Resurs."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
 msgstr ""
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr ""
+msgstr "Za korišćenje Naftne Bušotine i proizvodnju energije potreban je Energetski Generator."
 
 msgid "Power Generator"
 msgstr ""
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr ""
+msgstr "Svaki Energetski Generator koristi do 4 Naftne Bušotine. Dakle, na primer, ako imate 10 Naftnih Bušotina, biće vam potrebna 3 Energetska Generatora da iskoristite sve Naftne Bušotine i proizvedete maksimalnu Energiju."
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr ""
+msgstr "Dok naftne bušotine moraju biti postavljene na naftne resurse, Energetski Generatori mogu se graditi bilo gde na mapi. Ipak, imajte na umu: dodatni generatori preko jednog na svake 4 bušotine neće doneti nikakvu korist."
 
 msgid "Rally Point"
-msgstr ""
+msgstr "Odredišna Tačka"
 
 msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
-msgstr ""
+msgstr "Kada Fabrika završi proizvodnju jedinice, ta jedinica će se pojaviti pored Fabrike, a zatim krenuti ka Odredišnoj Tački Fabrike."
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr ""
+msgstr "Odredišna Tačka se inicijalno nalazi pored fabrike. Klikom na Odredišnu Tačku možete je premestiti."
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
-msgstr ""
+msgstr "Napomena: Premeštanje Odredišne Tačke dok se jedinica kreće ka njoj neće uticati na putanju jedinice."
 
 msgid "Repair Facility"
-msgstr "Javítóüzem"
+msgstr ""
 
 msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
-msgstr "A javítóüzem egy épület, amelyhez az egységek visszavonulhatnak, hogy megjavítsa őket."
+msgstr ""
 
 msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
-msgstr "A javítóüzemek gyorsabban meg tudják javítani az egységeket, mint a javítótoronnyal rendelkező mobil egységek."
+msgstr "Servisne Stanice mogu popravljati jedinice brže od mobilnih jedinica sa kupolama za popravku."
 
 msgid "Research Facility"
-msgstr "Kutatólétesítmény"
+msgstr ""
 
 msgid "Research Facilities are required in order to research new technologies."
-msgstr "Kutatólétesítmények szükségesek az új technológiák kutatásához."
+msgstr "Za istraživanje novih tehnologija potrebne su Istraživačke Stanice."
 
 msgid "Each Research Facility can research one technology at a time."
-msgstr "Minden kutatólétesítmény egyszerre csak egy technológiát kutathat."
+msgstr "Svaka Istraživačka Stanica može istraživati po jednu tehnologiju istovremeno."
 
 msgid "VTOL Factory"
-msgstr "VTOL gyár"
+msgstr "VTOL Fabrika"
 
 msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
-msgstr "A VTOL gyár állítja elő a VTOL meghajtással rendelkező (tehát repülő) egységeket."
+msgstr ""
 
 msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr "Minden VTOL gyár egyszerre csak egy egységet készíthet, de több egység állítható sorba a termeléshez."
+msgstr "Svaka VTOL Fabrika može proizvoditi po jednu jedinicu odjednom, ali možete staviti više jedinica u red za proizvodnju."
 
 msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
 msgstr ""
@@ -375,22 +377,22 @@ msgid "- Long Range: Attacks at long range (default)"
 msgstr ""
 
 msgid "Firing Mode"
-msgstr "Tüzelési mód"
+msgstr ""
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
 msgstr ""
 
 msgid "- Fire At Will: Fires at any enemy (default)"
-msgstr "- Tüzelés tetszés szerint: Tüzelés az ellenségre (alapértelmezett)"
+msgstr ""
 
 msgid "- Return Fire: Only fire if fired at"
-msgstr "- Tűz viszonzása: Tüzelés csak akkor, ha tüzelnek rá"
+msgstr ""
 
 msgid "- Do Not Fire: Units will not fire"
-msgstr "- Ne tüzeljen: Az egységek nem tüzelnek"
+msgstr ""
 
 msgid "Movement"
-msgstr "Mozgás"
+msgstr ""
 
 msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
 msgstr ""
@@ -447,7 +449,7 @@ msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
 msgstr ""
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
-msgstr "A visszavonuló egységek visszatérnek a legközelebbi javítóműhelybe, javítóegységhez, főhadiszálláshoz vagy LZ-hez."
+msgstr ""
 
 msgid "Return To"
 msgstr ""
@@ -459,22 +461,22 @@ msgid "- Return for Repair: Unit will return to a Repair Facility"
 msgstr ""
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr "- Visszatérés a főhadiszállásra: az egység visszatér a parancsnoki központhoz vagy LZ-hez (hadjárat)"
+msgstr ""
 
 msgid "- Go To Transport: Unit will go to and board transport"
 msgstr ""
 
 msgid "Unit Orders"
-msgstr "Egységparancsok"
+msgstr ""
 
 msgid "Right-click a unit or group of units to show their current Unit Orders."
-msgstr "Egy egységre vagy egységcsoportra való jobb kattintás megjeleníti a jelenlegi egységparancsot."
+msgstr ""
 
 msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
-msgstr "Az Egységparancsok panellel testreszabhatja az egységek viselkedését: őrjáratozástól az alacsony életpont esetén történő visszavonulásig."
+msgstr ""
 
 msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
-msgstr "Kattintson jobb egérgombbal egy gyárra, hogy beállítsa a jövőben gyártott egységek egységparancsait."
+msgstr ""
 
 msgid "Building Units"
 msgstr ""
@@ -495,7 +497,7 @@ msgid "While a unit is building, the unit will be shown in the Factories panel a
 msgstr ""
 
 msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
-msgstr "Ha a gyár végzett egy egység gyártásával, akkor a gyár gyülekezési pontjára vezényli az egységet."
+msgstr ""
 
 msgid "Attaching Units"
 msgstr ""
@@ -522,7 +524,7 @@ msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the un
 msgstr ""
 
 msgid "2. Give the unit a new order (eg. move)"
-msgstr "2. Adjon az egységnek egy új parancsot (például utasítsa mozgásra)"
+msgstr ""
 
 msgid "Going for repairs, BRB"
 msgstr ""
@@ -576,7 +578,7 @@ msgid "Experience & Ranks"
 msgstr ""
 
 msgid "Units gain experience when they successfully dispatch enemies."
-msgstr "Az egységek tapasztalatot kapnak, ha sikeresen elbánnak az ellenséggel."
+msgstr ""
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
 msgstr ""
@@ -585,7 +587,7 @@ msgid "An icon displaying a unit’s rank is displayed next to the unit’s heal
 msgstr ""
 
 msgid "Units with higher experience levels can make all the difference in battle!"
-msgstr "A magasabb tapasztalati szintű egységek döntőek lehetnek a csatában!"
+msgstr ""
 
 msgid "Cyborgs"
 msgstr ""
@@ -888,10 +890,10 @@ msgid "You should also research and build a few \"VTOL Rearming Pads\", so your 
 msgstr ""
 
 msgid "Weapon Selection"
-msgstr "Fegyverválasztás"
+msgstr ""
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr "Ahogy több és több fegyvert fedez fel és fejleszt ki, azt is fel fogja fedezni, hogy bizonyos fegyverek drámaian jobbak másoknál bizonyos helyzetekben (vagy bizonyos egységek vagy épületek ellen)."
+msgstr ""
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
 msgstr ""
@@ -900,139 +902,139 @@ msgid "It is to your advantage to experiment with different weapon types. If you
 msgstr ""
 
 msgid "Units"
-msgstr "Egységek"
+msgstr ""
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr "Új egységeket kell terveznie és építenie, ha felül akar kerekedni az ellenségein, és érezni akarja a győzelem ízét."
+msgstr ""
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr "A játék ezen aspektusa teszi egyedivé a Warzone 2100-at."
+msgstr ""
 
 msgid "To be able to design units, a Command Center is required."
-msgstr "Az egységek tervezéséhez parancsnoki központ szükséges."
+msgstr ""
 
 msgid "All-Rounder"
-msgstr "Sokoldalú"
+msgstr ""
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr "A „sokoldalú” fegyverek kevésbé hatékonyak, mint a specializált társaik."
+msgstr ""
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr "Viszont a sokoldalú fegyverek, a specializáltakkal ellentétben, közepesen hatékonyak az összes célponttal szemben."
+msgstr ""
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr "A sokoldalú fegyverek jelentős bónusz életpontot biztosítanak az egységnek, cserébe magasabb súlyértékekkel rendelkeznek."
+msgstr ""
 
 msgid "Anti-Air"
-msgstr "Légvédelem"
+msgstr ""
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr "A légvédelmi fegyverek az összes repülő egység ellen specializálódtak."
+msgstr ""
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr "Viszont a légvédelmi fegyverek nem képesek az épületek és a földi egységek elleni támadásra."
+msgstr ""
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr "Bár a légvédelmi fegyverek kiválóak a légi fenyegetések leküzdésében, meg kell védeni őket a földi erőktől."
+msgstr ""
 
 msgid "Anti-Personnel"
-msgstr "Személy elleni"
+msgstr ""
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr "A személy elleni fegyverek rendkívül hatékonyak az ellenséges gyalogság és a könnyű járművek felőrlésében."
+msgstr ""
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr "Viszont a személy elleni fegyverek kevésbé hatékonyak az épületek és a nehéz páncélzatú célpontokkal szemben."
+msgstr ""
 
 msgid "Anti-Tank"
-msgstr "Tankelhárító"
+msgstr ""
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr "A tankelhárító fegyverek az összes ellenséges járműre specializálódnak."
+msgstr ""
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr "Viszont a tankelhárító fegyverek kevésbé hatékonyak az épületekkel, és különösen nem hatékonyak a gyalogsággal szemben."
+msgstr ""
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr "Általánosságban a tankelhárító fegyverek könnyűek, de kevés életpontot biztosítanak. Az ilyen fegyverekkel rendelkező járművek sérülékenyebbek, mint a legtöbb más fegyvernemmel szereltek."
+msgstr ""
 
 msgid "Artillery"
-msgstr "Tüzérség"
+msgstr ""
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr "A tüzérségi fegyverek pusztítóak a gyalogsággal és a legtöbb épülettel szemben."
+msgstr ""
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr "Viszont a tüzérségi fegyverek kevésbé hatékonyak a bunkerekkel és a lánctalpas járművekkel szemben."
+msgstr ""
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr "A legtöbb (de nem az összes) tüzérségi fegyvernek álló helyzetben kell lennie a tüzeléshez. Ez, és a tüzérségi fegyverek által biztosított alacsony életpontok kombinációja azt jelenti, hogy a tüzérségi egységek önmagukban sebezhetőek."
+msgstr ""
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr "Ezért a tüzérségi fegyvereket leginkább más egységek vagy épületek támogatására érdemes használni, kerülve a közvetlen összetűzést."
+msgstr ""
 
 msgid "High-Explosive Bombs"
-msgstr "Nagy robbanóerejű bomba"
+msgstr ""
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr "A nagy robbanóerejű bombák hasonlóan viselkednek, mint a földi tüzérségi fegyverek (például a mozsarak)."
+msgstr ""
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr "Ezek a bombák becsapódáskor robbannak, és mindenben kárt tesznek a robbanás területén."
+msgstr ""
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr "A tüzérségi fegyverekhez hasonlóan a robbanó bombák kiválóak a legtöbb épület, valamint gyalogsági egységek és könnyű járművek csoportjai ellen, de bunkerek és nehéz páncélzatú tankok ellen kevésbé hatásosak."
+msgstr ""
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr "Csak figyeljen rá, hogy a robbanások ne érjék a saját egységeit és épületeit!"
+msgstr ""
 
 msgid "Incendiary Bombs"
-msgstr "Gyújtóbomba"
+msgstr ""
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr "A gyújtóbomba némileg hasonló a földi lángszórókhoz."
+msgstr ""
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr "A gyújtóbombák alacsony sebzést okoznak találatkor, de a becsapódás helyén azonnal lángra gyújtanak egy nagy területet."
+msgstr ""
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr "A területen lévő ellenséges egységek és épületek idővel további jelentős sebzést szenvednek el."
+msgstr ""
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr "A lángszórókhoz hasonlóan a gyújtóbombák kiválóak az összes egységtípussal és bunkerrel szemben, de gyengék a megerősítsett épületekkel szemben."
+msgstr ""
 
 msgid "Bomb Bays"
-msgstr "Bombaszekrény"
+msgstr ""
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr "A bombaszekrények egyedi fegyverek, melyek csak VTOL járműveken használhatók."
+msgstr ""
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr "Bár a támadási távolságuk rövid, és a lőszerkapacitásuk alacsony, a bombaszekrények bónusz életpontokat biztosítanak, és a többi VTOL fegyverhez képest sokkal erősebbek."
+msgstr ""
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr "A többi fegyverhez hasonlóan, a különböző bombák különböző hatással, erősséggel és alkalmazási módokkal rendelkeznek."
+msgstr ""
 
 msgid "Bunker Buster"
-msgstr "Bunkertörő"
+msgstr ""
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr "A bunkertörő egy egyedi fegyver, amely kivételesen hatásos az összes épülettel szemben."
+msgstr ""
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr "Viszont a bunkertörő rendkívül gyenge minden olyan célponttal szemben, amely nem épület."
+msgstr ""
 
 msgid "Flamer"
-msgstr "Lángszóró"
+msgstr ""
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr "A „Lángszóró” fegyverek hatásosak a gyalogság és a gyengébb meghajtású tankokkal szemben."
+msgstr ""
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr "A lángszóró fegyverek a bunkerek és a fosztogatók épületei ellen is kiválóak, de más épületekkel szemben gyengébbek."
+msgstr ""
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr "A lángszórók „áthatolhatnak” az egységeken, akár több egységet megsebezve és felgyújtva egyetlen lángcsóvával, így kiválóak tömegek ellen."
+msgstr ""
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr "Viszont a rövid lőtávolságuk miatt a lángszórók használata kockázatos lehet."
+msgstr ""

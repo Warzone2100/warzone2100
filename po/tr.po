@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -2008,6 +2008,9 @@ msgstr "Fabrikan istediğin birim(ler)i üretirken, lütfen bekle"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Tebrikler komutanım - birinci göreviniz için hazırsınız"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "SEFERBERLİK BİR"
@@ -5035,11 +5038,11 @@ msgstr "Lazer optiklerindeki gelişmeler sayesinde ışınlardaki hafif dağılm
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Kundakçı Havan Mevzisi 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Kundakçı Havan Mevzi"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Kundakçı obüs mevzisi"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Kundakçı Havan Mevzi"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Kundakçı Obüs bir algılayıcıya bağlanabilir"
@@ -5709,11 +5712,11 @@ msgstr "Yeni Sistem Binası Kullanılabilir"
 msgid "New Systems Tower Available"
 msgstr "Yeni Sistem Kulesi Kullanılabilir"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Yeni Sistem Tareti Tasarım için Hazır"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
 
 msgid "New Thermal Emissions detection"
 msgstr "Yeni Termal Emisyon Tespit Sistemi"
@@ -6594,11 +6597,11 @@ msgstr "Sinaptik Bağlantı Veri Analizi Kdm2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sinaptik Bağlantı Veri Analizi Kdm3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Sinaptik Bağlantı Veri Analizi"
-
 msgid "Synaptic link data analysis"
 msgstr "Sinaptik bağlantı veri analizi"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Sinaptik Bağlantı Veri Analizi"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Sinaptik Bağlantı Sinyal Bozucu teknolojisi"
@@ -7864,7 +7867,7 @@ msgid "Tip: Adjusting Display Scale"
 msgstr "Tüyo: Görüntü Ölçeğini Ayarlama"
 
 msgid "Replay"
-msgstr "Tekrar oyna"
+msgstr "Tekrar oynat"
 
 msgid "Pause"
 msgstr "Durdur"
@@ -8086,6 +8089,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
@@ -8093,6 +8100,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10929,16 +10939,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11424,13 +11434,8 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir (veya pencere yöneticisinin çözünürlüğü ile)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Çözünürlüğü pencereyi normal şekilde boyutlandırarak değiştirebilirsiniz (Köşe/kenarı sürüklemeyi deneyin)."
+msgid "Desktop Full"
+msgstr ""
 
 msgid "Window Mode"
 msgstr ""
@@ -11438,11 +11443,8 @@ msgstr ""
 msgid "Windowed"
 msgstr "Pencere"
 
-msgid "Desktop Full"
-msgstr "Penceresiz Tam Ekran"
-
-msgid "Resolution"
-msgstr "Çözünürlük"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr ""

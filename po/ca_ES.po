@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -2008,6 +2008,9 @@ msgstr "Espereu mentre la fàbrica produeix la(les) nova(es) unitat(s)"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Felicitats comandant - esteu preparat per la vostra primera missió"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "CAMPANYA U"
@@ -5035,11 +5038,11 @@ msgstr "La millora de l'òptica del làser redueix la dispersió de la llum"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Emplaçament d'incendiari Howitzer 2"
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Emplaçament de Howitzer incendiari"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Emplaçament de howitzer incendiari"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Emplaçament de Howitzer incendiari"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "El howitzer incendiari es pot d'assignar a un sensor"
@@ -5709,10 +5712,10 @@ msgstr "Hi ha un nou sistema d'estructures disponible"
 msgid "New Systems Tower Available"
 msgstr "Hi ha una nova torre de sistemes disponible"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Hi ha una nova torreta de sistemes disponible per dissenyar"
 
 msgid "New Thermal Emissions detection"
@@ -6594,10 +6597,10 @@ msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic Mk3"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "Anàlisi de les dades de l'enllaç sinàptic"
 
 msgid "Synaptic Link Scrambler technology"
@@ -8086,6 +8089,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr "ATENCIÓ: si no marqueu Llest aviat, sereu expulsat de la sala"
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "Expulsió automàtica del jugador (%s) car ha esperat massa per marcar llest"
 
@@ -8093,6 +8100,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10929,17 +10939,17 @@ msgstr "Bonus Gamma"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr "Missió Gamma extra usant un mapa creat per l'equip de desenvolupament original (mapa actualitzat per: DARwins)."
 
-msgid "Insane Spawns"
-msgstr "Aparicions dements"
+msgid "Additional Spawns (Insane difficulty)"
+msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "Activa aparicions i comportaments addicionals per la dificultat dement (o superior)."
 
-msgid "Non-Insane Spawns"
-msgstr "Aparicions normals"
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr "Commuta l'opció d'aparicions suplementàries per les dificultats difícil i menors."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr ""
 
 msgid "Fast EXP gain"
 msgstr "Guany d'experiència ràpid"
@@ -11424,15 +11434,8 @@ msgstr "Controls"
 msgid "Window"
 msgstr "Finestra"
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
+msgid "Desktop Full"
 msgstr ""
-"En mode pantalla completa, la resolució correspon a la de la seva pantalla\n"
-"(o el que permeti el gestor de finestres)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Pot canviar la resolució redimensionant la finestra com de costum. (Provi d'estirar un costat / cantonada.)"
 
 msgid "Window Mode"
 msgstr "Mode de finestra"
@@ -11440,11 +11443,8 @@ msgstr "Mode de finestra"
 msgid "Windowed"
 msgstr "Finestra"
 
-msgid "Desktop Full"
-msgstr "Pantalla completa"
-
-msgid "Resolution"
-msgstr "Resolució"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr "Comportaments"
