@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-09-14 18:40+0000\n"
-"PO-Revision-Date: 2025-09-16 00:28\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "Language: et_EE\n"
@@ -2008,6 +2008,9 @@ msgstr "Oota kuni tehas toodab uue(d) üksuse(d)"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Õnnitlused komandör - sa oled valmis oma esimeseks missiooniks"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "KAMPAANIA ÜKS"
@@ -5025,11 +5028,11 @@ msgstr "Täiustus laseri optikas vähendab valguse hajumist"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Süütepommi Haubitsa Paigaldus"
-
 msgid "Incendiary howitzer emplacement"
 msgstr "Süütepommi haubitsa paigaldus"
+
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Süütepommi Haubitsa Paigaldus"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
 msgstr "Süütepommi Haubitsat saab määrata semsorile"
@@ -5699,11 +5702,11 @@ msgstr "Uus süsteemitorn Kasutatav"
 msgid "New Systems Tower Available"
 msgstr "Uus Süsteemitorn Kasutatav"
 
-msgid "New Systems Turret Available For Design"
-msgstr "Uus Süsteemi Torn Konstruktsiooniks Kasutatav"
-
 msgid "New Systems Turret Available for Design"
 msgstr "Uus Süsteemi Torn Kasutatv Konstrueerimiseks"
+
+msgid "New Systems Turret Available For Design"
+msgstr "Uus Süsteemi Torn Konstruktsiooniks Kasutatav"
 
 msgid "New Thermal Emissions detection"
 msgstr "Uus Soojusväljalaske avastamine"
@@ -6584,11 +6587,11 @@ msgstr "Sünaptilise Liidese Andmete Analüüs Mk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Sünaptilise Liidese Andmete Analüüs Mk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Sünaptilise Liidese Andmete Analüüs"
-
 msgid "Synaptic link data analysis"
 msgstr "Sünaptiline liidese andmete analüüs"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Sünaptilise Liidese Andmete Analüüs"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Sünaptilise Liidese Signaalimuutmis-Tehnoloogia"
@@ -8070,6 +8073,10 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr ""
 
@@ -8077,6 +8084,9 @@ msgid "NOTICE: Please check Ready"
 msgstr ""
 
 msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -10910,16 +10920,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11405,12 +11415,7 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgid "Desktop Full"
 msgstr ""
 
 msgid "Window Mode"
@@ -11419,10 +11424,7 @@ msgstr ""
 msgid "Windowed"
 msgstr "Akendatud"
 
-msgid "Desktop Full"
-msgstr ""
-
-msgid "Resolution"
+msgid "Fullscreen Mode"
 msgstr ""
 
 msgid "Behaviors"
