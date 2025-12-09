@@ -110,7 +110,7 @@ public:
 	{
 		if (!optInfo.has_value())
 		{
-			return "Desktop Full";
+			return _("Desktop Full");
 		}
 		const screeninfo& info = optInfo.value();
 		auto str = WzString::fromUtf8(astringf("[%d] %d × %d @ %.2fhz", info.screen, info.width, info.height, info.refresh_rate));
