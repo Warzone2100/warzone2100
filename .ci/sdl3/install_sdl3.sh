@@ -2,6 +2,29 @@
 
 echo "[install_sdl3.sh]"
 
+if grep -q "ID=ubuntu" /etc/os-release; then
+  echo "apt-get -u update"
+  apt-get -u update
+
+  echo "Installing Ubuntu SDL3 build dependencies"
+  DEBIAN_FRONTEND=noninteractive apt-get -y install \
+    git pkg-config cmake ninja-build \
+    gnome-desktop-testing libpulse-dev \
+    libfribidi-dev libjack-dev libsndio-dev libx11-dev libxext-dev \
+    libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev \
+    libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
+    libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libthai-dev \
+    libwayland-dev libdecor-0-dev liburing-dev
+else
+  echo "*********************************************************************************"
+  echo "::warning ::Must manually ensure that SDL3 build dependencies are installed!"
+  echo "::warning ::See: https://github.com/libsdl-org/SDL/blob/main/docs/README-linux.md"
+  echo "*********************************************************************************"
+  if [[ "$CI" = "true" ]]; then
+    echo "::error ::Must manually ensure that SDL3 build dependencies are installed!"
+  fi
+fi
+
 echo "Downloading SDL3 source"
 
 # Download, build, & install SDL3 from source
