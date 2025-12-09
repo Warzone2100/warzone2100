@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-08 19:35+0000\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21404,6 +21404,10 @@ msgstr ""
 #: src/titleui/options/optionsforms.cpp:1117
 #: src/titleui/options/windowoptions.cpp:194
 msgid "Window"
+msgstr ""
+
+#: src/titleui/options/windowoptions.cpp:113
+msgid "Desktop Full"
 msgstr ""
 
 #: src/titleui/options/windowoptions.cpp:196
