@@ -94,7 +94,8 @@ parts:
     - libdrm-dev
     stage-packages:
     - libdecor-0-0
-    - libdecor-0-plugin-1
+    - libdecor-0-plugin-1-cairo
+    - libdecor-0-plugin-1-gtk
     - libdbus-1-3
     - libudev1
     - fcitx-libs
