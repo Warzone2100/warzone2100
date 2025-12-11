@@ -28,7 +28,7 @@
 #include <vector>
 #include <functional>
 
-std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()> languageDidChangeHandler = nullptr);
+std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(bool inGame, const std::function<void()> languageDidChangeHandler = nullptr);
 std::shared_ptr<OptionsForm> makeDefaultsOptionsForm();
 std::shared_ptr<OptionsForm> makeGraphicsOptionsForm();
 std::shared_ptr<OptionsForm> makeAudioOptionsForm();
