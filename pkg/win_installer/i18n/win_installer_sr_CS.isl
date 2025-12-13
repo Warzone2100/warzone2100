@@ -33,7 +33,7 @@ StandardUpdateDesc=Nadogradi postojeću instalaciju od %1 na vašem računaru. (
 SideBySideInstall=Uporedna Instalacija
 SideBySideInstallDesc=Instaliraj ovu verziju igre pored bilo koje druge verzije, uključujući standardnu instalaciju. Deli podešavanja i sačuvane partije.
 PortableInstall=Prenosiva Verzija
-PortableInstallDesc=Instaliraj na USB uređaj, fasciklu i sl. U potpunosti je samostalna u jednom direktorijumu, zajedno sa podešavanjima i sačuvanim igrama.
+PortableInstallDesc=Instaliraj na USB uređaj, fasciklu i sl. U potpunosti je samostalna u jednom direktorijumu, zajedno sa podešavanjima i sačuvanim partijama.
 InstallArchitecture=Arhitektura instalacije:
 
 ; *** Various Failure Messages:
