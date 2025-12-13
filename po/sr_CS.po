@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2025-12-12 02:40\n"
 "Last-Translator: \n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_CS\n"
@@ -27,7 +27,7 @@ msgid "This structure contains technology vital for the success of the Project."
 msgstr "Ova struktura sadrži tehnologiju ključnu za uspeh Projekta."
 
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISIJA NA BAZI ALFA: Napad Pljačkaša"
+msgstr "MISIJA BAZE ALFA: Napad Pljačkaša"
 
 msgid "Scavenger raiders are approaching our base."
 msgstr "Pljačkaši se približavaju našoj bazi."
@@ -36,7 +36,7 @@ msgid "Defend the base then destroy the Scavenger camps."
 msgstr "Odbranite bazu, a zatim uništite logore Pljačkaša."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "MISIJA NA BAZI ALFA: Otkriven Energetski Udar"
+msgstr "MISIJA BAZE ALFA: Otkriven Energetski Udar"
 
 msgid "A power surge has been detected to the south of our position."
 msgstr "Otkriven je energetski udar južno od naše pozicije."
@@ -45,7 +45,7 @@ msgid "Investigate and secure the area."
 msgstr "Istražite i obezbedite područje."
 
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "MISIJA NA BAZI ALFA: Nova Paradigma"
+msgstr "MISIJA BAZE ALFA: Nova Paradigma"
 
 msgid "The New Paradigm control superior weapons technology."
 msgstr "Nova Paradigma poseduje napredniju tehnologiju oružja."
@@ -117,106 +117,106 @@ msgid "Eradicate the base and secure the area."
 msgstr "Uništi bazu i osiguraj područje."
 
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "MISIJA NA BAZI ALFA: Osnivanje Prednje Baze"
+msgstr "MISIJA BAZE ALFA: Osnivanje Prednje Baze"
 
 msgid "Establish a forward base on the plateau and fend off the New Paradigm."
 msgstr "Osnuj prednju bazu na platou i odbij napade od Nove Paradigme."
 
 msgid "Build defensive structures until the green objective blip disappears."
-msgstr ""
+msgstr "Gradite odbrambene strukture dok zelena oznaka cilja ne nestane."
 
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "MISIJA NA BAZI ALFA: Kontra Napad"
+msgstr "MISIJA BAZE ALFA: Kontra Napad"
 
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Neprijateljske snage prilaze sa istoka i severa."
 
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Branite baze i odbijte sve napade."
 
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "MISIJA ALFA BAZE: Dolazna Poruka"
 
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Primetili smo neprijateljske snage na ovim lokacijama."
 
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Ovo je naša prilika da porazimo Novu Paradigmu i uništimo njihovu bazu."
 
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Čestitamo Komandante."
 
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Sada imamo još jedan zadatak za vas."
 
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "MISIJA NA BAZI ALFA: Lociranje i Povratak Artefakata"
+msgstr "MISIJA BAZE ALFA: Lociranje i Povratak Artefakata"
 
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Prve dve zone su sada osigurane."
 
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "STATUSI PROJEKAT TIMA"
 
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "STATUS TIMA BETA"
 
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Pronašli smo i preuzeli nekoliko artefakata."
 
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "U ovom području deluje neprijateljska sila koja je bolje opremljena."
 
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "STATUS TIMA GAMA"
 
 msgid "Nothing to report."
-msgstr ""
+msgstr "Nema izveštaja."
 
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Nismo otkrili nikakve artefakte i nismo naišli na neprijateljske jedinice."
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "OBAVEŠTAJNI IZVEŠTAJ ALFA BAZE: Neprijateljski Napad"
 
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Neprijateljska sila primećena na ovoj lokaciji."
 
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "PRIMARNI CILJ"
 
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Ova građevina je primarni cilj."
 
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Pronađite i preuzmite sve artefakte ovde."
 
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "NEPRIJATELJSKA ZS"
 
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Uništiti ovu ZS da biste sprečili neprijateljska iskrcavanja."
 
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "OBAVEŠTAJNI IZVEŠTAJ ALFA BAZE: NEKSUS"
 
 msgid "New objective."
-msgstr ""
+msgstr "Novi cilj."
 
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Ulazni zlonamerni program je otkriven i izolovan."
 
 msgid "Supplemental"
-msgstr ""
+msgstr "Dodatni"
 
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Tehnologija sinaptičke veze nalazila se na ovoj lokaciji, ali je uklonjena."
 
 msgid "Establish a forward base then continue the search for the synaptic link."
 msgstr ""
 
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "DOLAZNA PORUKA"
 
 msgid "Decoding in progress....."
 msgstr ""
@@ -225,19 +225,19 @@ msgid "Commander."
 msgstr ""
 
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "Dekodirali smo dolaznu poruku za Novu Paradigmu..."
 
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Uništiti Neprijateljsku Bazu"
 
 msgid "Assemble an attack force and board the transport."
 msgstr ""
 
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Uništite bazu i prikupite sve prisutne artefakte."
 
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Tehnologija sinaptičke veze je povraćena!"
 
 msgid "Initial research confirms it will be of great benefit to the Project."
 msgstr ""
@@ -255,22 +255,22 @@ msgid "It originates from the east."
 msgstr ""
 
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "ARTEFAKT ENERGETSKOG MODULA"
 
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Istraži artefakt energetskog modula."
 
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "Zatim upotrebi kamion da nadogradiš energetski generator sa modulom."
 
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "OTKRIVENA JE BAZA PLJAČKAŠA"
 
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Porazi pljačkaše i preuzmi sve artefakte."
 
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "Čestitamo. Nova Paradigma je poražena i sektor je pod našom kontrolom."
 
 msgid "The Nexus Intruder Program was in the New Paradigm system."
 msgstr ""
@@ -360,10 +360,10 @@ msgid "An enemy commander is collecting a shipment from NEXUS at this location."
 msgstr ""
 
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "Čim stignete do ZS, eliminišite neprijateljskog komandanta i preuzmite pošiljku."
 
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "Zatim se vratite u ZS."
 
 msgid "Disturbing news regarding NASDA."
 msgstr ""
@@ -435,7 +435,7 @@ msgid "They must be stopped."
 msgstr ""
 
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "Krenite iz ZS ka reaktoru i uništite ga."
 
 msgid "Do not allow the Collective to bring the reactor on-line."
 msgstr ""
@@ -663,7 +663,7 @@ msgid "NEXUS exiting system."
 msgstr ""
 
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "Dolazna poruka od izvidničkog tima."
 
 msgid "Commander, we are attempting to return to base."
 msgstr ""
@@ -681,7 +681,7 @@ msgid "Entering new zone."
 msgstr ""
 
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "Dolazna Poruka..."
 
 msgid "Elements of Team Gamma have contacted us."
 msgstr ""
@@ -804,7 +804,7 @@ msgid "Begin your attacks on NEXUS. You must destroy his core systems."
 msgstr ""
 
 msgid "Incoming intelligence report... Team Gamma"
-msgstr ""
+msgstr "Dolazni obaveštajni izveštaj... Tim Gama"
 
 msgid "Briefing Commences:"
 msgstr ""
@@ -846,10 +846,10 @@ msgid "Enemy Base"
 msgstr ""
 
 msgid "Incoming transmission"
-msgstr ""
+msgstr "Dolazna Poruka"
 
 msgid "Incoming intelligence report."
-msgstr ""
+msgstr "Dolazni obaveštajni izveštaj."
 
 msgid "Nuclear Reactor"
 msgstr ""
@@ -858,7 +858,7 @@ msgid "New Design"
 msgstr ""
 
 msgid "Cyborg Cannon"
-msgstr ""
+msgstr "Kiborg Top"
 
 msgid "Demolish"
 msgstr ""
@@ -903,49 +903,49 @@ msgid "Proximity Superbomb Turret"
 msgstr ""
 
 msgid "Bunker Blaster Cyborg"
-msgstr ""
+msgstr "Razarač Bunkera Kiborg"
 
 msgid "Jump Bunker Blaster"
 msgstr ""
 
 msgid "Jump Heavy Gunner"
-msgstr ""
+msgstr "Pređi Teški Topdžija"
 
 msgid "Jump Lancer"
 msgstr ""
 
 msgid "Jump Assault Gunner"
-msgstr ""
+msgstr "Pređi Jurišni Mitraljezac"
 
 msgid "Jump Needle Gunner"
-msgstr ""
+msgstr "Pređi IgloPucač"
 
 msgid "Jump Scourge"
 msgstr ""
 
 msgid "Jump Flashlight Gunner"
-msgstr ""
+msgstr "Pređi BlicoStrelac"
 
 msgid "Cyborg Jump Pack"
 msgstr ""
 
 msgid "Cyborg Propulsion II"
-msgstr ""
+msgstr "Kiborg Pogon II"
 
 msgid "Cyborg Propulsion III"
-msgstr ""
+msgstr "Kiborg Pogon III"
 
 msgid "NP-Hardcrete"
 msgstr ""
 
 msgid "Heavy Machinegun Bunker"
-msgstr ""
+msgstr "Teški Mitraljeski Bunker"
 
 msgid "Flashlight Emplacement"
 msgstr ""
 
 msgid "Heavy Machinegun Guard Tower"
-msgstr ""
+msgstr "Teška Mitraljeska Stražarska Kula"
 
 msgid "Flamer Guard Tower"
 msgstr ""
@@ -954,16 +954,16 @@ msgid "Lancer Guard Tower"
 msgstr ""
 
 msgid "Flamer Hardpoint"
-msgstr ""
+msgstr "Plamenobacač Montažnjak"
 
 msgid "Advanced Cyborg Production"
-msgstr ""
+msgstr "Napredna Proizvodnja Kiborga"
 
 msgid "Advanced Cyborg Production Mk2"
-msgstr ""
+msgstr "Napredna Proizvodnja Kiborga Mod2"
 
 msgid "Advanced Cyborg Production Mk3"
-msgstr ""
+msgstr "Napredna Proizvodnja Kiborga Mod3"
 
 msgid "Advanced Factory Production"
 msgstr ""
@@ -987,13 +987,13 @@ msgid "Robotic VTOL Rearming Mk4"
 msgstr ""
 
 msgid "Cyborg Self-Repair"
-msgstr ""
+msgstr "Samopopravka Kiborga"
 
 msgid "Automated Cyborg Repair Mk2"
-msgstr ""
+msgstr "Automatska Popravka Kiborga Mod2"
 
 msgid "Automated Cyborg Repair Mk3"
-msgstr ""
+msgstr "Automatska Popravka Kiborga Mod3"
 
 msgid "Defenses Self-Repair"
 msgstr ""
@@ -1104,7 +1104,7 @@ msgid "Wrecked Tank"
 msgstr ""
 
 msgid "Cyborg Laboratory"
-msgstr ""
+msgstr "Kiborg Laboratorija"
 
 msgid "Advanced Warfare Laboratory"
 msgstr ""
@@ -1140,10 +1140,10 @@ msgid "Increases Kinetic Armor and Body Points"
 msgstr ""
 
 msgid "All Cyborgs upgraded automatically"
-msgstr ""
+msgstr "Svi Kiborzi nadograđeni automatski"
 
 msgid "Cyborg Thermal Armor Improved"
-msgstr ""
+msgstr "Poboljšani Termalni Oklop za Kiborga"
 
 msgid "Heat resistant armored layers"
 msgstr ""
@@ -1152,7 +1152,7 @@ msgid "Thermal Armor increased"
 msgstr ""
 
 msgid "New Cyborg Available"
-msgstr ""
+msgstr "Novi Kiborg Dostupan"
 
 msgid "Armed with Bunker Buster rocket"
 msgstr ""
@@ -1161,10 +1161,10 @@ msgid "Body Points: Medium"
 msgstr ""
 
 msgid "Requires Cyborg factory to produce"
-msgstr ""
+msgstr "Za proizvodnju je potrebna fabrika Kiborga"
 
 msgid "Armed with Cyborg Assault Gun"
-msgstr ""
+msgstr "Naoružan sa Kiborg Jurišnim Mitraljezom"
 
 msgid "New Jump Cyborg Available"
 msgstr ""
@@ -1197,7 +1197,7 @@ msgid "Defensive Strength: Medium"
 msgstr ""
 
 msgid "AA Site with Cyclone Flak Turret"
-msgstr ""
+msgstr "PVO Stacionar sa Ciklon Flak Kupolom"
 
 msgid "AA Site with Hurricane Gun Turret"
 msgstr ""
@@ -1230,28 +1230,28 @@ msgid "Armored Hellstorm howitzer emplacement"
 msgstr ""
 
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr ""
+msgstr "Oklopljena utvrda sa raketom Ubica Tenkova"
 
 msgid "Automatically targets enemies in range"
 msgstr ""
 
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "Oklopljena utvrda sa Hiperbrzinskim Topom"
 
 msgid "Defensive Strength: High"
 msgstr ""
 
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr ""
+msgstr "Oklopljena utvrda sa Paklenim Plamenobacačem"
 
 msgid "Armored strongpoint with Assault Cannon"
-msgstr ""
+msgstr "Oklopljena utvrda sa Jurišnim Topom"
 
 msgid "Reinforced tower with Assault Gun"
-msgstr ""
+msgstr "Ojačana kula sa Jurišnim Mitraljezom"
 
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr ""
+msgstr "Oklopljena Stražarska Kula sa Teškim Mitraljezom"
 
 msgid "Automatically targets enemies within sensor range"
 msgstr ""
@@ -1263,22 +1263,22 @@ msgid "Armored guard tower with Lancer AT Rocket"
 msgstr ""
 
 msgid "Armored bunker with Heavy Machinegun"
-msgstr ""
+msgstr "Oklopljeni bunker sa Teškim Mitraljezom"
 
 msgid "Armored hardpoint with Flamer"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Plamenobacačem"
 
 msgid "Armored hardpoint with Assault Gun"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Jurišnim MItraljezom"
 
 msgid "Armored hardpoint with Assault Cannon"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Jurišnim Topom"
 
 msgid "Armored hardpoint with Inferno flamer"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Paklenim plamenobacačem"
 
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa vođenom PT raketom Ubica Tenkova"
 
 msgid "Reinforced concrete tank traps"
 msgstr ""
@@ -1299,7 +1299,7 @@ msgid "All repair facilities upgraded automatically"
 msgstr ""
 
 msgid "Cyborg Production Improved"
-msgstr ""
+msgstr "Kiborg Proizvodnja Poboljšana"
 
 msgid "Robotic Cyborg Production"
 msgstr ""
@@ -1539,10 +1539,10 @@ msgid "Quad 80mm flak weapon"
 msgstr ""
 
 msgid "30mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "30mm Protivvazdušni mitraljez"
 
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr ""
+msgstr "Četvorocevni 30mm Protivvazdušni mitraljez"
 
 msgid "AA Upgrade"
 msgstr ""
@@ -1620,7 +1620,7 @@ msgid "New Weapon Turret Available"
 msgstr ""
 
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr ""
+msgstr "Hiperbrzinski automatski top koji ispaljuje 88 mm projektilе"
 
 msgid "Best Targets: Vehicles"
 msgstr ""
@@ -1629,7 +1629,7 @@ msgid "Replaces Medium Cannon"
 msgstr ""
 
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "76 mm hiperbrzinski četvorocevni automatski top"
 
 msgid "Body Points: High"
 msgstr ""
@@ -1695,7 +1695,7 @@ msgid "Increases Howitzer ROF"
 msgstr ""
 
 msgid "Machinegun Upgrade"
-msgstr ""
+msgstr "Nadogradnja Mitraljeza"
 
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr ""
@@ -1782,7 +1782,7 @@ msgid "Secure the Uplink from The Collective"
 msgstr ""
 
 msgid "Send off at least one transporter with a truck and survive The Collective assault until the timer ends"
-msgstr ""
+msgstr "Pošaljite najmanje jedan transporter sa kamionom i preživite napad Kolektiva dok ne istekne tajmer"
 
 msgid "Send off as many transporters as you can and bring at least one truck"
 msgstr ""
@@ -1806,7 +1806,7 @@ msgid "Warning: HQ shielded against VTOL attacks"
 msgstr ""
 
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Istražite zaštitne sklopove i sprečite napad Nexusa"
 
 msgid "Build a forward base at the silos"
 msgstr ""
@@ -1881,10 +1881,10 @@ msgid "Commanders - manufacture commanders first"
 msgstr ""
 
 msgid "Close"
-msgstr ""
+msgstr "Zatvori"
 
 msgid "Intelligence Display (F5)"
-msgstr ""
+msgstr "Obaveštajni Prikaz (F5)"
 
 msgid "In this training session you'll learn how to build an effective base"
 msgstr ""
@@ -2058,7 +2058,7 @@ msgid "Your destination lies in the western zone."
 msgstr ""
 
 msgid "Incoming Transmission"
-msgstr ""
+msgstr "Dolazna Poruka"
 
 msgid "Transmission from Beta Base"
 msgstr ""
@@ -2418,7 +2418,7 @@ msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assi
 msgstr "Ovo je Tim Alfa. Ponavljam, ovo je Tim Alfa. Hitno nam je potrebna pomoć."
 
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "Napadnuti smo od strane kiborga, laserskih tenkova i borbenih VTOL‑ova."
 
 msgid "We were trying to reach your position, but have been ambushed."
 msgstr ""
@@ -2646,10 +2646,10 @@ msgid "Machinegun"
 msgstr ""
 
 msgid "Cyclone Flak Turret"
-msgstr ""
+msgstr "CIklon Flak Kupola"
 
 msgid "VTOL Flak Cannon"
-msgstr ""
+msgstr "VTOL Flak Top"
 
 msgid "Collective Wall"
 msgstr ""
@@ -2718,16 +2718,16 @@ msgid "Third Level Missile Firing Codes"
 msgstr ""
 
 msgid "Heavy Gunner Cyborg"
-msgstr ""
+msgstr "Teški Topdžija Kiborg"
 
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "Plamenobacač Kiborg"
 
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "Mitraljezac Kiborg"
 
 msgid "Cyborg Propulsion"
-msgstr ""
+msgstr "Kiborg Pogon"
 
 msgid "Heavy Machinegun Tower"
 msgstr ""
@@ -2796,28 +2796,28 @@ msgid "Missile Silo"
 msgstr ""
 
 msgid "Super Heavy-Gunner"
-msgstr ""
+msgstr "Super Teški-Topdžija"
 
 msgid "Super Auto-Cannon Cyborg"
-msgstr ""
+msgstr "Super Auto-Topdžija Kiborg"
 
 msgid "Super HPV Cyborg"
-msgstr ""
+msgstr "Super BrzoTopdžija Kiborg"
 
 msgid "Super Tank-Killer Cyborg"
-msgstr ""
+msgstr "Super Ubica-Tenkova Kiborg"
 
 msgid "Satellite Uplink Center"
 msgstr ""
 
 msgid "Super Pulse Laser Cyborg"
-msgstr ""
+msgstr "Super Pulsostrelac Kiborg"
 
 msgid "Super Rail-Gunner"
-msgstr ""
+msgstr "Super Šino-Topdžija"
 
 msgid "Super Scourge Cyborg"
-msgstr ""
+msgstr "Super Pustošitelj Kiborg"
 
 msgid "Command Turret II"
 msgstr ""
@@ -2847,43 +2847,43 @@ msgid "- unit building - research completion - construction of base structures (
 msgstr ""
 
 msgid "Ultimate Scavengers"
-msgstr ""
+msgstr "Najjači Pljačkaši"
 
 msgid "Scavengers"
-msgstr ""
+msgstr "Pljačkaši"
 
 msgid "No Scavengers"
-msgstr ""
+msgstr "Bez Pljačkaša"
 
 msgid "No Alliances"
-msgstr ""
+msgstr "Bez Saveza"
 
 msgid "Allow Alliances"
-msgstr ""
+msgstr "Dozvoli Saveze"
 
 msgid "Locked Teams"
-msgstr ""
+msgstr "Zaključani Timovi"
 
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "Zaključani Timovi, Bez Deljenja Istraživanja"
 
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Nisko Energetski Nivoi"
 
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Srednje Energetski Nivoi"
 
 msgid "High Power Levels"
-msgstr ""
+msgstr "Visoko Energetski Nivoi"
 
 msgid "Start with No Bases"
-msgstr ""
+msgstr "Počni bez Baza"
 
 msgid "Start with Bases"
-msgstr ""
+msgstr "Počni sa Bazama"
 
 msgid "Start with Advanced Bases"
-msgstr ""
+msgstr "Počni sa Naprednim Bazama"
 
 msgid "EASY"
 msgstr ""
@@ -2980,7 +2980,7 @@ msgid ""
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
 " or to forward the port to your system."
-msgstr ""
+msgstr "Greška pri povezivanju sa čekaonicom servera: %s. Proverite da li port %d može da prima dolazne konekcije. Ako koristite ruter, podesite ga da omogući UPnP/NAT-PMP/PCP ili da usmerite port ka svom računaru."
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
@@ -3030,7 +3030,7 @@ msgid "Menu"
 msgstr ""
 
 msgid "Campaign"
-msgstr ""
+msgstr "Kampanja"
 
 msgid "Challenge"
 msgstr ""
@@ -3039,7 +3039,7 @@ msgid "Skirmish"
 msgstr ""
 
 msgid "Multiplayer"
-msgstr ""
+msgstr "Više Igrača"
 
 msgid "Menu Music"
 msgstr ""
@@ -3097,16 +3097,16 @@ msgid "AA Chainfeed Loader"
 msgstr ""
 
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Utvrđenje PVO Ciklon Flak Topa"
 
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Ciklon PVO Flak Top Montažnjak"
 
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "PVO Ciklon Flak Top Piton Polu-guseničar"
 
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "PVO Ciklon Flak Top"
 
 #, no-c-format
 msgid "AA Flak damage +25%"
@@ -3150,7 +3150,7 @@ msgid "AA Tornado Flak Cannon Emplacement"
 msgstr ""
 
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "PVO Flak Top Tornado Montažnjak"
 
 msgid "AA Tornado Flak Cannon"
 msgstr ""
@@ -3276,10 +3276,10 @@ msgid "Angel Missile"
 msgstr ""
 
 msgid "Anti-tank missile"
-msgstr ""
+msgstr "Vođena protivtenkovska raketa"
 
 msgid "Anti-tank rocket"
-msgstr ""
+msgstr "Protivtenkovska raketa"
 
 msgid "APDSB MG Bullets Mk2"
 msgstr ""
@@ -3309,37 +3309,37 @@ msgid "Archangel Missile"
 msgstr ""
 
 msgid "Armed with Cyborg assault gun"
-msgstr ""
+msgstr "Naoružan sa Kiborg jurišinim mitraljezom"
 
 msgid "Armed with Cyborg Cannon"
-msgstr ""
+msgstr "Naoružan sa Kiborg Topom"
 
 msgid "Armed with Cyborg Flamer"
-msgstr ""
+msgstr "Naoružan sa Kiborg Plamenobacačem"
 
 msgid "Armed with Cyborg Hyper Velocity Cannon"
-msgstr ""
+msgstr "Naoružan sa Kiborg Hiperbrzinskim Topom"
 
 msgid "Armed with Cyborg Machinegun"
-msgstr ""
+msgstr "Naoružan sa Kiborg Mitraljezom"
 
 msgid "Armed with Cyborg Pulse Laser"
-msgstr ""
+msgstr "Naoružan sa Kiborg Puls Laserom"
 
 msgid "Armed with Cyborg Rail Gun"
-msgstr ""
+msgstr "Naoružan sa Kiborg Šinskim Topićem"
 
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr ""
+msgstr "Naoružan sa Kiborg lansirnom raketom Pošast"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr ""
+msgstr "Naoružan sa Kiborg raketom Ubica Tenkova"
 
 msgid "Armed with Cyborg Thermite flamer"
-msgstr ""
+msgstr "Naoružan sa Kiborg Termit plamenobacačem"
 
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr ""
+msgstr "Naoružan sa Kiborg Termit Plamenobacačem"
 
 msgid "Armed with Flashlight Laser"
 msgstr ""
@@ -3351,16 +3351,16 @@ msgid "Armed with grenades"
 msgstr ""
 
 msgid "Armed with hyper velocity cannon"
-msgstr ""
+msgstr "Naoružan sa hiperbrzim topom"
 
 msgid "Armed with hyper velocity quad-barrel automatic-cannon"
-msgstr ""
+msgstr "Naoružan sa hiperbrzim četvorocevnim automatskim topom"
 
 msgid "Armed with Lancer anti-tank missile"
-msgstr ""
+msgstr "Naoružan vođenom protivtenkovskom raketom Lanser"
 
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Naoružan Protivtenkovskom raketom Lanser"
 
 msgid "Armed with Machinegun"
 msgstr ""
@@ -3369,13 +3369,13 @@ msgid "Armed with medium cannon"
 msgstr ""
 
 msgid "Armed with Needle Gun"
-msgstr ""
+msgstr "Naoružan sa Iglo Topićem"
 
 msgid "Armed with Scourge anti-tank missile"
-msgstr ""
+msgstr "Naoružan vođenom protivtenkovskom raketom Pošast"
 
 msgid "Armed with tank killer rockets"
-msgstr ""
+msgstr "Naoružan raketama ubica tenkova"
 
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
@@ -3419,7 +3419,7 @@ msgid "Armored guard tower with Mini-Rocket Pod"
 msgstr ""
 
 msgid "Armored guard tower with Needle Gun"
-msgstr ""
+msgstr "Oklopljena Stražarska Kula sa Iglo Topićem"
 
 msgid "Armored guard tower with Nexus Link"
 msgstr ""
@@ -3434,34 +3434,34 @@ msgid "Armored Half-tracks"
 msgstr ""
 
 msgid "Armored hardpoint with Flashlight laser"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Blicostrel laserom"
 
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Gaus Topom"
 
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Teškim Topom"
 
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Teškim Mitraljezom"
 
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Hiperbrzim Topom"
 
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa vođenom PT raketom Lanser"
 
 msgid "Armored hardpoint with Light Cannon"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Lakim Topom"
 
 msgid "Armored hardpoint with Medium Cannon"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Srednjim Topom"
 
 msgid "Armored hardpoint with Rail Gun"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa Šinskim Topićem"
 
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr ""
+msgstr "Oklopljen Montažnjak sa vođenom PT raketom Pošast"
 
 msgid "Armored Incendiary Mortar battery pit"
 msgstr ""
@@ -3470,25 +3470,25 @@ msgid "Armored Mortar battery pit"
 msgstr ""
 
 msgid "Armored strongpoint with Flashlight laser"
-msgstr ""
+msgstr "Oklopljena utvrda sa Blicostrel laserom"
 
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr ""
+msgstr "Oklopljena utvrda sa Gaus Topom"
 
 msgid "Armored strongpoint with Heavy Laser"
-msgstr ""
+msgstr "Oklopljena utvrda sa Teškim Laserom"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr ""
+msgstr "Oklopljena utvrda sa Atom topom"
 
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr ""
+msgstr "Oklopljena utvrda sa Plazmitnim Plamenobacačem"
 
 msgid "Armored strongpoint with Pulse Laser"
-msgstr ""
+msgstr "Oklopljena utvrda sa Puls Laserom"
 
 msgid "Armored strongpoint with Rail Gun"
-msgstr ""
+msgstr "Oklopljena utvrda sa Šinskim Topićem"
 
 msgid "Armored Tracks"
 msgstr ""
@@ -3507,52 +3507,52 @@ msgid "Artillery battery firing Novastorm Missiles"
 msgstr ""
 
 msgid "Assault Cannon Emplacement"
-msgstr ""
+msgstr "Jurišni Top Utvrđenje"
 
 msgid "Assault Cannon Guard Tower"
-msgstr ""
+msgstr "Stražarska Kula sa Jurišnim Topom"
 
 msgid "Assault Cannon Hardpoint"
-msgstr ""
+msgstr "Juršni Top Montažnjak"
 
 msgid "Assault Cannon Mantis Hover"
-msgstr ""
+msgstr "Jurišni Top Bogomoljka Hover"
 
 msgid "Assault Cannon"
-msgstr ""
+msgstr "Jurišni Top"
 
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Bunker sa Jurišnim Mitraljezom"
 
 msgid "Assault Gun Emplacement"
-msgstr ""
+msgstr "Jurišni Mitraljez Utvrđenje"
 
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Stražarska Kula sa Jurišnim Mitraljezom 2"
 
 msgid "Assault Gun Guard Tower"
-msgstr ""
+msgstr "Stražarska Kula sa Jurišnim Mitraljezom"
 
 msgid "Assault Gun Hardpoint"
-msgstr ""
+msgstr "Jurišni Mitraljeski Topić Montažnjak"
 
 msgid "Assault Gun Python Half Track"
-msgstr ""
+msgstr "Jurišni Mitraljez Piton Polu-Guseničar"
 
 msgid "Assault Gun Python Hover"
-msgstr ""
+msgstr "Jurišni Mitraljez Piton Hover"
 
 msgid "Assault Gun Python Tracks"
-msgstr ""
+msgstr "Jurišni Mitraljez Piton Guseničar"
 
 msgid "Assault Gun Tower"
-msgstr ""
+msgstr "Kula sa Jurišnim Mitraljezom"
 
 msgid "Assault Gun"
-msgstr ""
+msgstr "Jurišni Mitraljez"
 
 msgid "Assault Gunner Cyborg"
-msgstr ""
+msgstr "Jurišni Mitraljezac Kiborg"
 
 msgid "Assign a VTOL by selecting the rearming pad as its target"
 msgstr ""
@@ -3609,7 +3609,7 @@ msgid "Automatic loader replaces manual feed"
 msgstr ""
 
 msgid "Avenger Hardpoint"
-msgstr ""
+msgstr "Montažnjak Osvetnik"
 
 msgid "Avenger SAM Site"
 msgstr ""
@@ -3654,10 +3654,10 @@ msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr ""
+msgstr "Najbolje mete: Bunkeri i Montažnjaci"
 
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr ""
+msgstr "Najbolje mete: Bunkeri i Montažnjaci"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr ""
@@ -3684,7 +3684,7 @@ msgid "Best Targets: Vehicles and Emplacements"
 msgstr ""
 
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr ""
+msgstr "Najbolje mete: Vozila, Montažnjaci"
 
 msgid "Best Targets: Wheeled and hover vehicles"
 msgstr ""
@@ -3884,7 +3884,7 @@ msgid "Collective Heavy Body"
 msgstr ""
 
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Borbeni Inženjer Kiborg"
 
 msgid "Combat engineer with construction ability"
 msgstr ""
@@ -3997,22 +3997,22 @@ msgid "Crane2"
 msgstr ""
 
 msgid "Cyborg Alloys"
-msgstr ""
+msgstr "Kiborg Legure"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
-msgstr ""
+msgstr "Poboljšani AI Mod2 za Kiborg Kompozitne Legure"
 
 msgid "Cyborg Composite Alloys Buff AI"
-msgstr ""
+msgstr "Poboljšani AI za Kiborg Kompozitne Legure"
 
 msgid "Cyborg Composite Alloys Mk2"
-msgstr ""
+msgstr "Kiborg Kompozitne Legure Mod2"
 
 msgid "Cyborg Composite Alloys Mk3"
-msgstr ""
+msgstr "Kiborg Kompozitne Legure Mod3"
 
 msgid "Cyborg Composite Alloys"
-msgstr ""
+msgstr "Kiborg Kompozitne Legure"
 
 msgid "Cyborg Dense Composite Alloys Mk2"
 msgstr ""
@@ -4024,28 +4024,28 @@ msgid "Cyborg Dense Composite Alloys"
 msgstr ""
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Kiborg Fabrika"
 
 msgid "Cyborg Flamer"
-msgstr ""
+msgstr "Plamenobacač Kiborg"
 
 msgid "Cyborg Heavy Body"
-msgstr ""
+msgstr "Kiborg Teški Trup"
 
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr ""
+msgstr "Termalna Oklopna Zaštita Visokog Intenziteta za Kiborga Mod2"
 
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr ""
+msgstr "Termalna Oklopna Zaštita Visokog Intenziteta za Kiborga Mod3"
 
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr ""
+msgstr "Termalna Oklopna Zaštita Visokog Intenziteta za Kiborga"
 
 msgid "Cyborg Lancer"
-msgstr ""
+msgstr "Lanser Kiborg"
 
 msgid "Cyborg Light Body"
-msgstr ""
+msgstr "Kiborg Laki Trup"
 
 msgid "Cyborg Propulsion Improved"
 msgstr ""
@@ -4069,7 +4069,7 @@ msgid "Cyborg Superdense Thermal Armor"
 msgstr ""
 
 msgid "Cyborg Tank Killer"
-msgstr ""
+msgstr "Ubica Tenkova Kiborg"
 
 msgid "Cyborg Thermal Armor Buff AI Mk2"
 msgstr ""
@@ -4102,10 +4102,10 @@ msgid "Cyborgs can now be researched"
 msgstr ""
 
 msgid "Cyclone AA Flak Site"
-msgstr ""
+msgstr "Ciklon PVO Flak Stacionar"
 
 msgid "Cyclone AA Python Half-tracks"
-msgstr ""
+msgstr "Ciklon PVO Piton Polu-guseničar"
 
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
 msgstr ""
@@ -4174,7 +4174,7 @@ msgid "Elite and Veteran rank units and Factories are protected"
 msgstr ""
 
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Montažnjak EMP Top"
 
 msgid "EMP Cannon"
 msgstr ""
@@ -4192,7 +4192,7 @@ msgid "Enables Hardcrete gates"
 msgstr ""
 
 msgid "Enables Hardcrete walls"
-msgstr ""
+msgstr "Omogućava zidove Betonke"
 
 msgid "Enables resistance to Nexus Link technology"
 msgstr ""
@@ -4255,7 +4255,7 @@ msgid "Factory production rate +60%"
 msgstr ""
 
 msgid "Factory"
-msgstr ""
+msgstr "Fabrika"
 
 msgid "Farther range compared to other sensors"
 msgstr ""
@@ -4350,10 +4350,10 @@ msgid "Flamer"
 msgstr ""
 
 msgid "Flashlight Gunner Cyborg"
-msgstr ""
+msgstr "Blicostrelac Kiborg"
 
 msgid "Flashlight Hardpoint"
-msgstr ""
+msgstr "Blicostrel Montažnjak"
 
 msgid "Flashlight Retribution Hover"
 msgstr ""
@@ -4398,10 +4398,10 @@ msgid "Gas Turbine Generator"
 msgstr ""
 
 msgid "Gauss Cannon Emplacement"
-msgstr ""
+msgstr "Utvrđenje Gaus Topa"
 
 msgid "Gauss Cannon Hardpoint"
-msgstr ""
+msgstr "Gaus Top Montažnjak"
 
 msgid "Gauss Cannon Python Tracks"
 msgstr ""
@@ -4410,7 +4410,7 @@ msgid "Gauss Cannon Wyvern Tracks"
 msgstr ""
 
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "Gaus Top"
 
 msgid "Generates and concentrates bursts of laser energy"
 msgstr ""
@@ -4468,16 +4468,16 @@ msgid "Half-tracks"
 msgstr ""
 
 msgid "Hardcrete Corner Wall"
-msgstr ""
+msgstr "Ugaoni Zid Betonke"
 
 msgid "Hardcrete Gate"
 msgstr ""
 
 msgid "Hardcrete Wall"
-msgstr ""
+msgstr "Zid Betonka"
 
 msgid "Hardcrete"
-msgstr ""
+msgstr "Betonka"
 
 msgid "Hardened Base Structure Materials Mk2"
 msgstr ""
@@ -4513,13 +4513,13 @@ msgid "Hardpoint Avenger SAM Site Available"
 msgstr ""
 
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr ""
+msgstr "Dostupan Montažnjak CIklon PVO Flak Top"
 
 msgid "Hardpoint Tornado AA Gun Available"
 msgstr ""
 
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr ""
+msgstr "Dostupan je Montažnjak Dvocevnog Jurišnog Mitraljeza"
 
 msgid "Hardpoint Vindicator SAM Site Available"
 msgstr ""
@@ -4621,7 +4621,7 @@ msgid "HEAT Rocket Warhead"
 msgstr ""
 
 msgid "Heavy anti-tank rocket"
-msgstr ""
+msgstr "Teška protivtenkovska raketa"
 
 msgid "Heavy Body - Mantis"
 msgstr ""
@@ -4651,7 +4651,7 @@ msgid "Heavy Cannon firing 120 mm rounds"
 msgstr ""
 
 msgid "Heavy Cannon Hardpoint"
-msgstr ""
+msgstr "Teški Top Montažnjak"
 
 msgid "Heavy Cannon Mantis Tracks"
 msgstr ""
@@ -4675,7 +4675,7 @@ msgid "Heavy Flamer - Inferno"
 msgstr ""
 
 msgid "Heavy Gunner"
-msgstr ""
+msgstr "Teški Topdžija"
 
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr ""
@@ -4705,7 +4705,7 @@ msgid "Heavy Machinegun Cobra Wheels"
 msgstr ""
 
 msgid "Heavy Machinegun Hardpoint"
-msgstr ""
+msgstr "Teški Mitraljez Montažnjak"
 
 msgid "Heavy Machinegun Scorpion Half Tracks"
 msgstr ""
@@ -4795,13 +4795,13 @@ msgid "High Density Base Structure Materials"
 msgstr ""
 
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr ""
+msgstr "Visokoeksplozivne Protivtenkovske Topovske Granate"
 
 msgid "High Explosive Anti-Tank warhead"
-msgstr ""
+msgstr "Visokoeksplozivna Protivtenkovska bojeva glava"
 
 msgid "High Explosive Anti-Tank warheads"
-msgstr ""
+msgstr "Visokoeksplozivne Protivtenkovske bojeve glave"
 
 msgid "High Explosive Armor Piercing Flak"
 msgstr ""
@@ -4933,25 +4933,25 @@ msgid "HVC Python Tracks"
 msgstr ""
 
 msgid "Hyper Fire Chaingun Upgrade"
-msgstr ""
+msgstr "Hiperbrza nadogradnja lančane puške"
 
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr ""
+msgstr "Hiperbrzinski Top Utvrđenje"
 
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr ""
+msgstr "Hiperbrzinski Top Montažnjak"
 
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr ""
+msgstr "Hiperbrzinski Top Piton Hover"
 
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr ""
+msgstr "Hiperbrzinski Top Piton Guseničar"
 
 msgid "Hyper Velocity Cannon"
-msgstr ""
+msgstr "Hiperbrzinski Top"
 
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Hiperbrzinski probojni kinetički projektil"
 
 msgid "Immense damage infliction capability"
 msgstr ""
@@ -5200,7 +5200,7 @@ msgid "Lancer Cyborg"
 msgstr ""
 
 msgid "Lancer Hardpoint"
-msgstr ""
+msgstr "Lanser Montažnjak"
 
 msgid "Lancer Mantis Tracks"
 msgstr ""
@@ -5278,7 +5278,7 @@ msgid "Less armor and body points than Python"
 msgstr ""
 
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "Laki Trup - Stenica"
 
 msgid "Light Body - Leopard"
 msgstr ""
@@ -5302,7 +5302,7 @@ msgid "Light Cannon firing 40mm rounds"
 msgstr ""
 
 msgid "Light Cannon Hardpoint"
-msgstr ""
+msgstr "Laki Top Montažnjak"
 
 msgid "Light Cannon Python Tracks"
 msgstr ""
@@ -5349,7 +5349,7 @@ msgid "Machinegun Viper Tracks"
 msgstr ""
 
 msgid "Machinegunner"
-msgstr ""
+msgstr "Mitraljezac"
 
 msgid "Makes excellent scout vehicle"
 msgstr ""
@@ -5409,7 +5409,7 @@ msgid "Medium Cannon firing 76mm rounds"
 msgstr ""
 
 msgid "Medium Cannon Hardpoint"
-msgstr ""
+msgstr "Srednji Top Montažnjak"
 
 msgid "Medium Cannon Python Hover"
 msgstr ""
@@ -5439,7 +5439,7 @@ msgid "MG Reload"
 msgstr ""
 
 msgid "Mini-rocket armored strongpoint"
-msgstr ""
+msgstr "Mini-raketna oklopljena utvrda"
 
 msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr ""
@@ -5595,22 +5595,22 @@ msgid "Narrow area of effect"
 msgstr ""
 
 msgid "Needle Gun Retribution Tracks"
-msgstr ""
+msgstr "Iglo Topić Odmazda Guseničar"
 
 msgid "Needle Gun Tiger Tracks"
-msgstr ""
+msgstr "Iglo Topić Tigar Guseničar"
 
 msgid "Needle Gun Tower"
-msgstr ""
+msgstr "Iglo Top Kula"
 
 msgid "Needle Gun Vengeance Tracks"
-msgstr ""
+msgstr "Iglo Topić Osveta Guseničar"
 
 msgid "Needle Gun"
-msgstr ""
+msgstr "Iglo Top"
 
 msgid "Needle Gunner Cyborg"
-msgstr ""
+msgstr "Iglopucač Kiborg"
 
 msgid "Neural Synapse Research Brain Mk2"
 msgstr ""
@@ -5826,13 +5826,13 @@ msgid "Pick-Up Truck"
 msgstr ""
 
 msgid "Plascrete Mk2"
-msgstr ""
+msgstr "Plastbetonka Mod2"
 
 msgid "Plascrete Mk3"
-msgstr ""
+msgstr "Plastbetonka Mod3"
 
 msgid "Plascrete"
-msgstr ""
+msgstr "Plastbetonka"
 
 msgid "Plasma Cannon Emplacement"
 msgstr ""
@@ -5862,13 +5862,13 @@ msgid "Plasmite Retribution VTOL"
 msgstr ""
 
 msgid "Plasteel Mk2"
-msgstr ""
+msgstr "Plastčelik Mod2"
 
 msgid "Plasteel Mk3"
-msgstr ""
+msgstr "Plastčelik Mod3"
 
 msgid "Plasteel"
-msgstr ""
+msgstr "Plastčelik"
 
 msgid "Power cost and production time similar to Cobra"
 msgstr ""
@@ -5900,7 +5900,7 @@ msgid "Power Research Completed"
 msgstr ""
 
 msgid "Power"
-msgstr ""
+msgstr "Energija"
 
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr ""
@@ -5912,7 +5912,7 @@ msgid "Produces Cyborgs"
 msgstr ""
 
 msgid "Production"
-msgstr ""
+msgstr "Proizvodnja"
 
 msgid "Professional and Regular rank units are protected"
 msgstr ""
@@ -5936,7 +5936,7 @@ msgid "Pulse Laser Emplacement"
 msgstr ""
 
 msgid "Pulse Laser Hardpoint"
-msgstr ""
+msgstr "Pulsni Laser Montažnjak"
 
 msgid "Pulse Laser Leopard Hover"
 msgstr ""
@@ -5994,7 +5994,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
-msgstr ""
+msgstr "Šinski Topić preciznost +10%"
 
 #, no-c-format
 msgid "Rail Gun damage +25%"
@@ -6007,7 +6007,7 @@ msgid "Rail gun firing armor-piercing darts"
 msgstr ""
 
 msgid "Rail Gun Hardpoint"
-msgstr ""
+msgstr "Šinski Topić Montažnjak"
 
 msgid "Rail Gun Mantis Tracks"
 msgstr ""
@@ -6026,13 +6026,13 @@ msgid "Rail Gun ROF"
 msgstr ""
 
 msgid "Rail Gun Tiger Hover"
-msgstr ""
+msgstr "Šinski Top Tigar Hover"
 
 msgid "Rail Gun Upgrade"
 msgstr ""
 
 msgid "Rail Gun"
-msgstr ""
+msgstr "Šinski Top"
 
 msgid "Rail Reload"
 msgstr ""
@@ -6041,7 +6041,7 @@ msgid "Rail Target Prediction Computer"
 msgstr ""
 
 msgid "Railgun Emplacement"
-msgstr ""
+msgstr "Utvrđenje Šinskog Topića"
 
 msgid "Rapid Fire Chaingun Upgrade"
 msgstr ""
@@ -6050,7 +6050,7 @@ msgid "Rapid Fire Chaingun"
 msgstr ""
 
 msgid "Rapid fire rail gun firing needle darts"
-msgstr ""
+msgstr "Šinski top velike brzine ispaljuje igličaste projektile"
 
 msgid "Rapid Loader increases reload rate"
 msgstr ""
@@ -6486,7 +6486,7 @@ msgid "Steel tower with heavy machinegun"
 msgstr ""
 
 msgid "Steel tower with machinegun"
-msgstr ""
+msgstr "Čelična kula sa mitraljezom"
 
 msgid "Steel tower with twin machinegun"
 msgstr ""
@@ -6519,13 +6519,13 @@ msgid "Sunburst AA"
 msgstr ""
 
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Super Teški-Topdžija Kiborg"
 
 msgid "Super HVC Cyborg"
 msgstr ""
 
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Super Šino-Topdžija Kiborg"
 
 msgid "Super Transport Available"
 msgstr ""
@@ -6537,10 +6537,10 @@ msgid "Super Transport"
 msgstr ""
 
 msgid "Supercrete Mk2"
-msgstr ""
+msgstr "Superbetonka Mod2"
 
 msgid "Supercrete Mk3"
-msgstr ""
+msgstr "Superbetonka Mod3"
 
 msgid "Supercrete"
 msgstr ""
@@ -6606,10 +6606,10 @@ msgid "Systems Research Completed"
 msgstr ""
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "Tenkovske Legure"
 
 msgid "Tank Killer Cyborg"
-msgstr ""
+msgstr "Ubica Tenkova Kiborg"
 
 msgid "Tank Killer Emplacement"
 msgstr ""
@@ -6621,25 +6621,25 @@ msgid "Tank Killer Mantis Hover"
 msgstr ""
 
 msgid "Tank Killer Mantis Tracks"
-msgstr ""
+msgstr "Tenk Ubica Bogomoljka Guseničar"
 
 msgid "Tank Killer Python Tracks"
-msgstr ""
+msgstr "Tenk Ubica Piton Guseničar"
 
 msgid "Tank Killer Rocket"
-msgstr ""
+msgstr "Raketa Tenk Ubica"
 
 msgid "Tank Killer Vengeance Tracks"
-msgstr ""
+msgstr "Tenk Ubica Osveta Guseničar"
 
 msgid "Tank Killer"
-msgstr ""
+msgstr "Ubica Tenkova"
 
 msgid "Tank Thermal"
 msgstr ""
 
 msgid "Tank Traps"
-msgstr ""
+msgstr "Tenkovske Zamke"
 
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr ""
@@ -6796,16 +6796,16 @@ msgid "Twin 80mm Anti-Aircraft cannon"
 msgstr ""
 
 msgid "Twin Assault Cannon Bunker"
-msgstr ""
+msgstr "Bunker sa Dvocevnim Jurišnim Topom"
 
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "Dvocevni Jurišni Top"
 
 msgid "Twin Assault Gun Hardpoint"
-msgstr ""
+msgstr "Dvocevni Jurišni Mitraljez Montažnjak"
 
 msgid "Twin Assault Gun"
-msgstr ""
+msgstr "Dvocevni Jurišni Mitraljez"
 
 msgid "Twin Machinegun Bunker"
 msgstr ""
@@ -6826,13 +6826,13 @@ msgid "Twin Machinegun Viper Wheels"
 msgstr ""
 
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "Dvocevni Mitraljez"
 
 msgid "Twin Medium Anti-Aircraft Laser"
 msgstr ""
 
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr ""
+msgstr "Dvostruki višecevni, brzometni mitraljez"
 
 msgid "Two-faced"
 msgstr ""
@@ -6905,7 +6905,7 @@ msgid "Vengeance Tracks Gauss Scourge"
 msgstr ""
 
 msgid "Vengeance Tracks Rail Gun"
-msgstr ""
+msgstr "Osveta Guseničar Šinski Top"
 
 msgid "Vengeance"
 msgstr ""
@@ -6938,16 +6938,16 @@ msgid "Viper"
 msgstr ""
 
 msgid "VTOL Assault Cannon"
-msgstr ""
+msgstr "VTOL Jurišni Top"
 
 msgid "VTOL Assault Gun"
-msgstr ""
+msgstr "VTOL Jurišni Mitraljez"
 
 msgid "VTOL BaBa Rearming Pad"
 msgstr ""
 
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr ""
+msgstr "VTOL Razarač Bunkera Stenica VTOL"
 
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr ""
@@ -6992,7 +6992,7 @@ msgid "VTOL factory enables VTOL production"
 msgstr ""
 
 msgid "VTOL Factory"
-msgstr ""
+msgstr "VTOL Fabrika"
 
 msgid "VTOL Flashlight"
 msgstr ""
@@ -7007,19 +7007,19 @@ msgid "VTOL Heavy Laser"
 msgstr ""
 
 msgid "VTOL Heavy Machinegun"
-msgstr ""
+msgstr "VTOL Teški Mitraljez"
 
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr ""
+msgstr "VTOL Hiperbrzinski Top Stenica VTOL"
 
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr ""
+msgstr "VTOL Hiperbrzinski Top Bogomoljka VTOL"
 
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr ""
+msgstr "VTOL Hiperbrzinski top Škorpion VTOL"
 
 msgid "VTOL Hyper Velocity Cannon"
-msgstr ""
+msgstr "VTOL Hiperbrzinski Top"
 
 msgid "VTOL II"
 msgstr ""
@@ -7028,7 +7028,7 @@ msgid "VTOL III"
 msgstr ""
 
 msgid "VTOL Lancer Bug VTOL"
-msgstr ""
+msgstr "VTOL Lanser Stenica VTOL"
 
 msgid "VTOL Lancer Mantis VTOL"
 msgstr ""
@@ -7043,7 +7043,7 @@ msgid "VTOL Machinegun Scav"
 msgstr ""
 
 msgid "VTOL Machinegun"
-msgstr ""
+msgstr "VTOL Mitraljez"
 
 msgid "VTOL Mini-Rocket AA"
 msgstr ""
@@ -7055,7 +7055,7 @@ msgid "VTOL Mini-Rocket"
 msgstr ""
 
 msgid "VTOL Needle Gun"
-msgstr ""
+msgstr "VTOL Iglo Topić"
 
 msgid "VTOL Particle Gun"
 msgstr ""
@@ -7076,7 +7076,7 @@ msgid "VTOL Radar Tower"
 msgstr ""
 
 msgid "VTOL Rail Gun"
-msgstr ""
+msgstr "VTOL Šinski Topić"
 
 msgid "VTOL Rearming Pad"
 msgstr ""
@@ -7112,7 +7112,7 @@ msgid "VTOL Thermite Bomb Bay"
 msgstr ""
 
 msgid "VTOL Twin Machinegun"
-msgstr ""
+msgstr "VTOL Dvocevni Mitraljez"
 
 msgid "VTOL"
 msgstr ""
@@ -7225,7 +7225,7 @@ msgid "Warzone 2100 Campaign Mod File"
 msgstr ""
 
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr ""
+msgstr "Warzone 2100 datoteka modifikacije za Više Igrača"
 
 msgid "Warzone 2100 Global Mod File"
 msgstr ""
@@ -7315,7 +7315,7 @@ msgid "level name"
 msgstr ""
 
 msgid "Show options and exit"
-msgstr ""
+msgstr "Prikaži opcije i izađi"
 
 msgid "Enable a global mod"
 msgstr ""
@@ -7408,7 +7408,7 @@ msgid "Headless mode (only supported when also specifying --autogame, --autohost
 msgstr ""
 
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Odmah sačuvaj igru i izađi"
 
 msgid "save name"
 msgstr ""
@@ -7486,13 +7486,13 @@ msgid "interval in seconds"
 msgstr ""
 
 msgid "Multiplayer game time limit (in minutes)"
-msgstr ""
+msgstr "Vremensko ograničenje partije za Više Igrača (u minutima)"
 
 msgid "number of minutes"
 msgstr ""
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
-msgstr ""
+msgstr "Pretvara .png teksturu specular-mape u luma, jednokanalni sivinski .png fajl (zatim završava rad)"
 
 msgid "Allow Vulkan implicit layers (that may be default-disabled due to potential crashes or bugs)"
 msgstr ""
@@ -7697,7 +7697,7 @@ msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 msgid "Normal"
-msgstr ""
+msgstr "Normalno"
 
 msgid "NEXUS"
 msgstr ""
@@ -7712,7 +7712,7 @@ msgid "See our FAQ on how to install videos"
 msgstr ""
 
 msgid "Single Player"
-msgstr ""
+msgstr "Jedan Igrač"
 
 msgid "Multi Player"
 msgstr ""
@@ -7721,7 +7721,7 @@ msgid "Tutorial"
 msgstr ""
 
 msgid "Options"
-msgstr ""
+msgstr "Opcije"
 
 msgid "View Intro"
 msgstr ""
@@ -7736,7 +7736,7 @@ msgid "No last save available"
 msgstr ""
 
 msgid "Quit Game"
-msgstr ""
+msgstr "Izađi iz Igre"
 
 msgid "MAIN MENU"
 msgstr ""
@@ -7770,7 +7770,7 @@ msgstr ""
 
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "Povratak"
 
 msgid "New Campaign"
 msgstr ""
@@ -7791,7 +7791,7 @@ msgid "View Skirmish Replay"
 msgstr ""
 
 msgid "SINGLE PLAYER"
-msgstr ""
+msgstr "JEDAN IGRAČ"
 
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
@@ -7822,7 +7822,7 @@ msgid "TCP port %d must be opened in your firewall or router to host games!"
 msgstr ""
 
 msgid "Load Multiplayer Replay"
-msgstr ""
+msgstr "Učitaj Snimak partije za Više Igrača"
 
 #, c-format
 msgid "Unable to load: %s."
@@ -7892,10 +7892,10 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
 msgid "Open In-Game Options"
-msgstr ""
+msgstr "Otvori Opcije u Igri"
 
 msgid "Close In-Game Options"
-msgstr ""
+msgstr "Zatvori Opcije u Igri"
 
 msgid "Hiding Obsolete Tech"
 msgstr ""
@@ -7924,7 +7924,7 @@ msgid "New Joins"
 msgstr ""
 
 msgid "Refresh"
-msgstr ""
+msgstr "Osveži"
 
 msgid "Host Chat Options"
 msgstr ""
@@ -7933,16 +7933,16 @@ msgid "Global Options:"
 msgstr ""
 
 msgid "Enable All"
-msgstr ""
+msgstr "Uključi Sve"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Isključi Sve"
 
 msgid "Chat Options"
-msgstr ""
+msgstr "Opcije Dopisivanja"
 
 msgid "Mute or configure player free chat."
-msgstr ""
+msgstr "Ućutkaj ili podesi slobodnu komunikaciju igrača."
 
 msgid "The host has globally muted 1+ players."
 msgstr ""
@@ -8327,7 +8327,7 @@ msgid "Ally progress"
 msgstr ""
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tenkovi"
 
 msgid "Cyborgs"
 msgstr ""
@@ -8348,10 +8348,10 @@ msgid "Resume Game"
 msgstr ""
 
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr ""
+msgstr "UPOZORENJE: Vi ste domaćin igre. Ukoliko izađete igra će se zavrišti za sve igrače!"
 
 msgid "Host Quit"
-msgstr ""
+msgstr "Domaćin Izašao"
 
 msgid "View Guide"
 msgstr ""
@@ -8363,7 +8363,7 @@ msgid "Save Game"
 msgstr ""
 
 msgid "Quit"
-msgstr ""
+msgstr "Izađi"
 
 msgid "Warning: Are you sure?"
 msgstr ""
@@ -8378,13 +8378,13 @@ msgid "Back"
 msgstr ""
 
 msgid "Host has quit the game!"
-msgstr ""
+msgstr "Domaćin je izašao iz igre!"
 
 msgid "The game can't continue without the host."
 msgstr ""
 
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "-->  NAPUSTI  <-"
 
 msgid "Save Campaign Game"
 msgstr ""
@@ -8457,7 +8457,7 @@ msgid "Design"
 msgstr ""
 
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Obaveštajni Prikaz"
 
 msgid "Commanders"
 msgstr ""
@@ -8613,7 +8613,7 @@ msgid "Select Commander 9"
 msgstr ""
 
 msgid "Multiplayer Options / Alliance dialog"
-msgstr ""
+msgstr "Opcije za Više Igrača / Dijalog Saveza"
 
 msgid "Move Camera Up"
 msgstr ""
@@ -8881,7 +8881,7 @@ msgid "Select all Transporters"
 msgstr ""
 
 msgid "Select all Repair Tanks"
-msgstr ""
+msgstr "Izaberi sve Servisne Tenkove"
 
 msgid "Select all Sensor Units"
 msgstr ""
@@ -8908,7 +8908,7 @@ msgid "Select next VTOL Factory"
 msgstr ""
 
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Pređi na sledeću Fabriku"
 
 msgid "Jump to next Research Facility"
 msgstr ""
@@ -8917,7 +8917,7 @@ msgid "Jump to next Power Generator"
 msgstr ""
 
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Pređi na sledeću Kiborg Fabriku"
 
 msgid "Jump to next VTOL Factory"
 msgstr ""
@@ -8999,7 +8999,7 @@ msgid "Discord: Can't Join Game"
 msgstr ""
 
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "Ne možete se pridružiti igri dok ste u drugoj igri. Molimo sačuvajte ili napustite trenutnu igru, vratite se u glavni meni i pokušajte ponovo."
 
 msgid "Discord: Finding & Connecting to Game"
 msgstr ""
@@ -9078,10 +9078,10 @@ msgid "Bots:"
 msgstr ""
 
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "U Čekaonici za Više Igrača"
 
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "U Igri za Više Igrača"
 
 #, c-format
 msgid "Game Name: \"%s\" by %s"
@@ -9114,7 +9114,7 @@ msgid "PAUSED"
 msgstr ""
 
 msgid "New Intelligence Report"
-msgstr ""
+msgstr "Novi Obaveštajni Izveštaj"
 
 msgid "Research Update"
 msgstr ""
@@ -9153,7 +9153,7 @@ msgid "Accept Retreating Units"
 msgstr ""
 
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr ""
+msgstr "Žao nam je, to varanje je onemogućeno u igrama za više igrača."
 
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
 msgstr ""
@@ -9394,7 +9394,7 @@ msgid "Screen shake when things die: On"
 msgstr ""
 
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr ""
+msgstr "Žao nam je, ali brzina igre se ne može menjati u igrama za Više Igrača."
 
 msgid "Game Speed Reset"
 msgstr ""
@@ -9429,7 +9429,7 @@ msgid "Asserts turned off"
 msgstr ""
 
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Brzo Čuvanje nije dozvoljeno u igrama za više igrača ili tutorijalima"
 
 msgid "QuickSave not allowed in Autosaves-Only mode"
 msgstr ""
@@ -9438,7 +9438,7 @@ msgid "QuickSave failed"
 msgstr ""
 
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr ""
+msgstr "Brzo učitavanje nije dozvoljeno u igrama za više igrača ili tutorijalima"
 
 msgid "QuickLoad not allowed in Autosaves-Only mode"
 msgstr ""
@@ -9500,7 +9500,7 @@ msgid "Continue Game"
 msgstr ""
 
 msgid "Quit To Main Menu"
-msgstr ""
+msgstr "Izađi na Glavni Meni"
 
 msgid "Load Saved Game"
 msgstr ""
@@ -9605,7 +9605,7 @@ msgid "- Player names will not be visible to other players (until the game has s
 msgstr ""
 
 msgid "OPTIONS"
-msgstr ""
+msgstr "OPCIJE"
 
 msgid "Return To Previous Screen"
 msgstr ""
@@ -9767,7 +9767,7 @@ msgid "Players"
 msgstr ""
 
 msgid "Host Options"
-msgstr ""
+msgstr "Opcije Domaćina"
 
 msgid "Enable Spectator Join"
 msgstr ""
@@ -9826,7 +9826,7 @@ msgid "CHAT"
 msgstr ""
 
 msgid "Multiplayer Lobby Support Unavailable"
-msgstr ""
+msgstr "Podrška za Višeigračku Čekaonicu Nije dostupna"
 
 msgid "Your client cannot connect to the mutiplayer lobby."
 msgstr ""
@@ -9899,7 +9899,7 @@ msgid "Cannot change to a map with fewer slots."
 msgstr ""
 
 msgid "The host has quit."
-msgstr ""
+msgstr "Domaćin je izašao."
 
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
@@ -10048,7 +10048,7 @@ msgid "Structs"
 msgstr ""
 
 msgid "Alliances"
-msgstr ""
+msgstr "Savezi"
 
 msgid "Score"
 msgstr ""
@@ -10179,7 +10179,7 @@ msgid "REPLAY HAS ENDED"
 msgstr ""
 
 msgid "(Press ESC to quit.)"
-msgstr ""
+msgstr "(Pritisni ESC za izlazak.)"
 
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
@@ -10671,7 +10671,7 @@ msgid "Kinetic Armor"
 msgstr ""
 
 msgid "(Tanks / Cyborgs)"
-msgstr ""
+msgstr "(Tenkovi / Kiborzi)"
 
 msgid "Cannons"
 msgstr ""
@@ -10820,13 +10820,13 @@ msgid "Factory Reward - Propulsion"
 msgstr ""
 
 msgid "Factory Reward - Body"
-msgstr ""
+msgstr "Nagrada Fabrike - Trup"
 
 msgid "Factory Reward - Weapon"
-msgstr ""
+msgstr "Nagrada Fabrike - Oružje"
 
 msgid "Factory Reward - Nothing"
-msgstr ""
+msgstr "Nagrada Fabrike - Ništa"
 
 msgid "Repair Facility Award - Repair"
 msgstr ""
@@ -11008,16 +11008,16 @@ msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr ""
 
 msgid "Volume"
-msgstr ""
+msgstr "Jačina Zvuka"
 
 msgid "Voice Volume"
-msgstr ""
+msgstr "Jačina Glasa"
 
 msgid "FX Volume"
 msgstr ""
 
 msgid "Music Volume"
-msgstr ""
+msgstr "Jačina Muzike"
 
 msgid "Output"
 msgstr ""
@@ -11029,25 +11029,25 @@ msgid "HRTF can enable enhanced spatialization when used with headphones or some
 msgstr ""
 
 msgid "Disabled"
-msgstr ""
+msgstr "Isključen"
 
 msgid "Enabled"
-msgstr ""
+msgstr "Uključen"
 
 msgid "Auto"
-msgstr ""
+msgstr "Automatski"
 
 msgid "Subtitles"
-msgstr ""
+msgstr "Titlovi"
 
 msgid "Off"
-msgstr ""
+msgstr "Isključi"
 
 msgid "On"
-msgstr ""
+msgstr "Uključi"
 
 msgid "Music"
-msgstr ""
+msgstr "Muzika"
 
 msgid "Music Manager"
 msgstr ""
@@ -11062,7 +11062,7 @@ msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
-msgstr ""
+msgstr "Miš"
 
 msgid "Right-Click Orders"
 msgstr ""
@@ -11098,7 +11098,7 @@ msgid "Camera Zoom Rate"
 msgstr ""
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "Rotacija Miša"
 
 msgid "Reverse Rotation"
 msgstr ""
@@ -11110,7 +11110,7 @@ msgid "Edge Scrolling"
 msgstr ""
 
 msgid "Reset"
-msgstr ""
+msgstr "Resetuj"
 
 msgid "Reset Keys to:"
 msgstr ""
@@ -11122,13 +11122,13 @@ msgid "Reset Keys to: Defaults"
 msgstr ""
 
 msgid "Unit Color"
-msgstr ""
+msgstr "Boja Jedinice"
 
 msgid "Difficulty Level"
 msgstr ""
 
 msgid "Default AI"
-msgstr ""
+msgstr "Podrazumevani AI"
 
 msgid "Hosting Options"
 msgstr ""
@@ -11140,13 +11140,13 @@ msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to all
 msgstr ""
 
 msgid "Chat"
-msgstr ""
+msgstr "Dopisivanje"
 
 msgid "Quick Chat Only"
-msgstr ""
+msgstr "Samo Brzo Dopisivanje"
 
 msgid "Allow All"
-msgstr ""
+msgstr "Omogući Sve"
 
 msgid "Inactivity Timeout"
 msgstr ""
@@ -11425,7 +11425,7 @@ msgid "Window"
 msgstr ""
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Desktop - ceo ekran"
 
 msgid "Window Mode"
 msgstr ""
@@ -11779,7 +11779,7 @@ msgid "Not editable while in a game."
 msgstr ""
 
 msgid "Not editable while in a multiplayer game."
-msgstr ""
+msgstr "Nije moguće menjati tokom igre za Više Igrača."
 
 msgid "Takes effect on game restart"
 msgstr ""
