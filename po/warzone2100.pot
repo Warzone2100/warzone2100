@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"POT-Creation-Date: 2025-12-14 21:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5805,8 +5805,8 @@ msgstr ""
 msgid "Any time, big boss!"
 msgstr ""
 
-#: lib/framework/i18n.cpp:111
-#: lib/framework/i18n.cpp:178
+#: lib/framework/i18n.cpp:112
+#: lib/framework/i18n.cpp:180
 msgid "System locale"
 msgstr ""
 
@@ -19717,7 +19717,7 @@ msgid "Grey"
 msgstr ""
 
 #: src/multiplay.cpp:2702
-#: src/titleui/options/interfaceoptions.cpp:362
+#: src/titleui/options/interfaceoptions.cpp:366
 msgid "Black"
 msgstr ""
 
@@ -20843,7 +20843,7 @@ msgid "Auto"
 msgstr ""
 
 #: src/titleui/options/audiooptions.cpp:362
-#: src/titleui/options/interfaceoptions.cpp:375
+#: src/titleui/options/interfaceoptions.cpp:379
 msgid "Subtitles"
 msgstr ""
 
@@ -20862,12 +20862,12 @@ msgstr ""
 #: src/titleui/options/graphicsoptions.cpp:303
 #: src/titleui/options/graphicsoptions.cpp:416
 #: src/titleui/options/graphicsoptions.cpp:443
-#: src/titleui/options/interfaceoptions.cpp:203
-#: src/titleui/options/interfaceoptions.cpp:222
-#: src/titleui/options/interfaceoptions.cpp:241
-#: src/titleui/options/interfaceoptions.cpp:261
-#: src/titleui/options/interfaceoptions.cpp:360
-#: src/titleui/options/interfaceoptions.cpp:380
+#: src/titleui/options/interfaceoptions.cpp:204
+#: src/titleui/options/interfaceoptions.cpp:223
+#: src/titleui/options/interfaceoptions.cpp:242
+#: src/titleui/options/interfaceoptions.cpp:262
+#: src/titleui/options/interfaceoptions.cpp:364
+#: src/titleui/options/interfaceoptions.cpp:384
 #: src/titleui/options/windowoptions.cpp:263
 msgid "Off"
 msgstr ""
@@ -20883,11 +20883,11 @@ msgstr ""
 #: src/titleui/options/graphicsoptions.cpp:277
 #: src/titleui/options/graphicsoptions.cpp:304
 #: src/titleui/options/graphicsoptions.cpp:444
-#: src/titleui/options/interfaceoptions.cpp:204
-#: src/titleui/options/interfaceoptions.cpp:223
-#: src/titleui/options/interfaceoptions.cpp:242
-#: src/titleui/options/interfaceoptions.cpp:263
-#: src/titleui/options/interfaceoptions.cpp:381
+#: src/titleui/options/interfaceoptions.cpp:205
+#: src/titleui/options/interfaceoptions.cpp:224
+#: src/titleui/options/interfaceoptions.cpp:243
+#: src/titleui/options/interfaceoptions.cpp:264
+#: src/titleui/options/interfaceoptions.cpp:385
 msgid "On"
 msgstr ""
 
@@ -21258,101 +21258,101 @@ msgstr ""
 msgid "Adaptive"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:99
+#: src/titleui/options/interfaceoptions.cpp:100
 msgid "General"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:101
+#: src/titleui/options/interfaceoptions.cpp:102
 msgid "Language"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:152
+#: src/titleui/options/interfaceoptions.cpp:153
 msgid "Display Scale"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:196
+#: src/titleui/options/interfaceoptions.cpp:197
 msgid "Game UI"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:198
+#: src/titleui/options/interfaceoptions.cpp:199
 msgid "Show FPS"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:217
+#: src/titleui/options/interfaceoptions.cpp:218
 msgid "Show Unit Counts"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:236
+#: src/titleui/options/interfaceoptions.cpp:237
 msgid "Groups Menu"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:256
+#: src/titleui/options/interfaceoptions.cpp:257
 msgid "Options Button"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:262
+#: src/titleui/options/interfaceoptions.cpp:263
 msgid "Opacity: 50%"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:283
+#: src/titleui/options/interfaceoptions.cpp:287
 msgid "Radar"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:285
+#: src/titleui/options/interfaceoptions.cpp:289
 msgid "Radar Orientation"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:290
+#: src/titleui/options/interfaceoptions.cpp:294
 msgid "Fixed"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:291
+#: src/titleui/options/interfaceoptions.cpp:295
 msgid "Rotating"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:304
+#: src/titleui/options/interfaceoptions.cpp:308
 msgid "Radar Jump"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:309
+#: src/titleui/options/interfaceoptions.cpp:313
 msgid "Instant"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:310
+#: src/titleui/options/interfaceoptions.cpp:314
 msgid "Tracked"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:323
+#: src/titleui/options/interfaceoptions.cpp:327
 msgid "Radar Zoom"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:333
+#: src/titleui/options/interfaceoptions.cpp:337
 msgid "Video Playback"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:335
+#: src/titleui/options/interfaceoptions.cpp:339
 msgid "Video Size"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:340
+#: src/titleui/options/interfaceoptions.cpp:344
 msgid "1×"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:341
+#: src/titleui/options/interfaceoptions.cpp:345
 msgid "2×"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:342
+#: src/titleui/options/interfaceoptions.cpp:346
 #: src/titleui/options/windowoptions.cpp:202
 #: src/titleui/options/windowoptions.cpp:228
 msgid "Fullscreen"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:355
+#: src/titleui/options/interfaceoptions.cpp:359
 msgid "Scanlines"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:361
+#: src/titleui/options/interfaceoptions.cpp:365
 msgid "50%"
 msgstr ""
 
