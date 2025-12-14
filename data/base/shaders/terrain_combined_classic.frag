@@ -69,7 +69,6 @@ uniform vec4 fogColor;
 in vec2 uvLightmap;
 in vec2 uvDecal;
 in vec2 uvGround;
-in float vertexDistance;
 flat in int tile;
 flat in uvec4 fgrounds;
 in vec4 fgroundWeights;
@@ -78,8 +77,8 @@ in vec3 groundLightDir;
 in vec3 groundHalfVec;
 in mat2 decal2groundMat2;
 // For Shadows
-in vec3 fragPos;
-in vec3 fragNormal;
+in vec3 posModelSpace;
+in vec3 posViewSpace;
 
 #ifdef NEWGL
 out vec4 FragColor;
@@ -95,10 +94,11 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 
 vec4 main_classic() {
 	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0.f);
-	float visibility = getShadowVisibility();
 
 	vec3 L = normalize(groundLightDir);
 	vec3 N = vec3(0.f,0.f,1.f);
+	float visibility = getShadowVisibility(N, L, 0.001f);
+
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
 	vec4 light = (visibility*diffuseLight*0.75*lambertTerm + ambientLight*0.25) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
@@ -115,11 +115,8 @@ void main()
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
-
-		// Return fragment color
-		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
+		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
+		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), clamp(fogFactor, 0.0, 1.0));
 	}
 
 	#ifdef NEWGL

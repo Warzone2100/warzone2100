@@ -9,6 +9,7 @@
 
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
+uniform mat4 ViewMatrix;
 
 uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
@@ -24,7 +25,6 @@ in vec4 groundWeights; // ground weights for splatting
 out vec2 uvLightmap;
 out vec2 uvGround;
 out vec2 uvDecal;
-out float vertexDistance;
 flat out int tile;
 flat out uvec4 fgrounds;
 out vec4 fgroundWeights;
@@ -35,8 +35,8 @@ out mat2 decal2groundMat2;
 
 out mat3 ModelTangentMatrix;
 // for Shadows
-out vec3 fragPos;
-out vec3 fragNormal;
+out vec3 posModelSpace;
+out vec3 posViewSpace;
 
 void main()
 {
@@ -57,10 +57,11 @@ void main()
 		vec3 vaxis = vec3(1,0,0); // v ~ vertex.x, see uv_ground
 		vec3 tangent = normalize(cross(vertexNormal, vaxis));
 		vec3 bitangent = cross(vertexNormal, tangent);
-		ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
+		//transpose tbn matrix to fit universal point lights shader
+		ModelTangentMatrix = transpose(mat3(tangent, bitangent, vertexNormal)); // aka TBN-matrix
 		// transform light to TangentSpace:
-		vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
-		groundLightDir = sunPos.xyz * ModelTangentMatrix; // already normalized
+		vec3 eyeVec = ModelTangentMatrix * normalize(cameraPos.xyz - vertex.xyz);
+		groundLightDir = ModelTangentMatrix * sunPos.xyz; // already normalized
 		groundHalfVec = groundLightDir + eyeVec;
 
 		vec3 bitangentDecal = -cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
@@ -71,10 +72,9 @@ void main()
 		);
 	}
 
-	fragPos = vertex.xyz;
-	fragNormal = vertexNormal;
+	posModelSpace = vertex.xyz;
+	posViewSpace = (ViewMatrix * vec4(vertex.xyz,1.0)).xyz;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;
-	vertexDistance = position.z;
 }

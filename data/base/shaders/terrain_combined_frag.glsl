@@ -6,7 +6,7 @@ float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeIn
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
-float getShadowVisibility()
+float getShadowVisibility(vec3 normal, vec3 lightDir, float offset)
 {
 #if WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0
 	// no shadow-mapping
@@ -14,8 +14,7 @@ float getShadowVisibility()
 #else
 	// Shadow Mapping
 
-	vec4 fragPosViewSpace = ViewMatrix * vec4(fragPos, 1.0);
-	float depthValue = abs(fragPosViewSpace.z);
+	float depthValue = abs(posViewSpace.z/gl_FragCoord.w);
 
 	int cascadeIndex = 0;
 //	for (int i = 0; i < WZ_SHADOW_CASCADES_COUNT - 1; ++i)
@@ -45,15 +44,11 @@ float getShadowVisibility()
 	}
 #endif
 
-	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(fragPos, 1.0);
+	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(posModelSpace, 1.0);
 	vec3 pos = shadowPos.xyz / shadowPos.w;
 
-	if (pos.z > 1.0f)
-	{
-		return 1.0;
-	}
+	float bias = tan(acos(max(dot(normal, lightDir),0.0))) * offset; 
 
-	float bias = 0.0002f;
 
 #if WZ_SHADOW_MODE == 1
 
@@ -217,7 +212,7 @@ float getShadowVisibility()
 #endif
 // end WZ_SHADOW_MODE == 2
 
-	visibility = clamp(visibility, 0.3, 1.0);
+	visibility = clamp(visibility, 0.5, 1.0);
 	return visibility;
 #endif
 }
