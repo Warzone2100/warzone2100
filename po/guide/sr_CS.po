@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2025-12-12 02:40\n"
 "Last-Translator: \n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_CS\n"
@@ -18,10 +18,10 @@ msgstr ""
 "X-Crowdin-File-ID: 360\n"
 
 msgid "Artifacts"
-msgstr ""
+msgstr "Artefakti"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
-msgstr ""
+msgstr "Kako napredujete kroz kampanju, sakupljaćete artefakte iz neprijateljskih baza (i određenih neprijateljskih jedinica)."
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
 msgstr "Ovo će otključati vredne tehnologije koje možete istraživati u Istraživačkoj Stanici."
@@ -30,16 +30,16 @@ msgid "Artifacts are small white boxes with a green indicator above, and can be 
 msgstr "Artefakti su male bele kutije sa zelenim indikatorom iznad i mogu se pokupiti pomeranjem bilo koje jedinice dovoljno blizu."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr ""
+msgstr "Svi artefakti moraju biti pokupljeni kao deo uslova za pobedu na svakom nivou."
 
 msgid "Backstory"
-msgstr ""
+msgstr "Pozadina priče"
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
 msgstr "Krajem 21. veka, NASDA (Severnoamerička agencija za stratešku odbranu) razvila je i rasporedila masivni sistem protivraketne odbrane, uključujući mrežu satelita opremljenih nuklearnim oružjem i zemaljske lansirne platforme."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr ""
+msgstr "Međutim, tokom rutinske provere održavanja, nešto je pošlo po zlu..."
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
 msgstr "Kolaps je došao brzo i žestoko. Nakon tehničke greške u sistemu satelitske odbrane, nuklearne bojeve glave su ispaljene na velike gradove širom sveta."
@@ -54,7 +54,7 @@ msgid "Earth broke into hundreds of small scavenger bands battling each other fo
 msgstr "Zemlja se raspala na stotine malih grupa pljačkaša koje su se međusobno borile za ostatke nekadašnje civilizacije. Samo nekolicina je imala viziju da pokuša da iz pepela ponovo izgradi novi svet."
 
 msgid "## Present Day:"
-msgstr ""
+msgstr "## Današnjost:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
 msgstr "Igrač (koji se naziva „Komandant“) je deo grupe preživelih koji su potražili sklonište u vojnoj bazi u Stenovitim Planinama."
@@ -66,7 +66,7 @@ msgid "The Project dispatches three teams with the objective of reclaiming artif
 msgstr "Projekat šalje tri tima sa ciljem da povrate artefakte, omogućavajući tako istraživanje i primenu tehnologija pre Kolapsa."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr ""
+msgstr "- Tim Alfa je poslat na lokaciju u pustinji Arizone, jugoistočno od sedišta Projekta"
 
 msgid "- Beta team is sent to the remains of Chicago"
 msgstr "- Tim Beta je poslat u ostatke Čikaga"
@@ -75,7 +75,7 @@ msgid "- Gamma team is sent into the northern Rockies in Colorado"
 msgstr "- Tim Gama je poslat u severne Stenovite planine u Koloradu"
 
 msgid "Command Panel"
-msgstr ""
+msgstr "Komandna tabla"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
 msgstr "Postoji šest različitih interfejsa komandne table, plus centralno dugme. Komandni interfejs otvarate pritiskom na odgovarajuće dugme."
@@ -84,31 +84,31 @@ msgid "The middle / central button closes any open command interface."
 msgstr "Srednje/centralno dugme zatvara bilo koji otvoreni interfejs za komande."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Odbrana baze"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "U igri Warzone 2100, vaša baza opstaje tokom cele kampanje."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Stoga je priprema za buduću odbranu vaše matične baze neophodna."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Iako su jedinice očigledno korisne za odbranu vaše baze, dizajn vaše baze je takođe bitan."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
 msgstr "Izgradite odbrambene strukture koje pružaju zaklon, ograničavaju pristup, uočavaju neprijatelje i nanose štetu, kako biste mogli bolje da se suprotstavite neprijateljskim napadima."
 
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Obaveštajni Prikaz"
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
 msgstr "Obaveštajni Prikaz je mesto gde možete pronaći ciljeve vaše trenutne misije, ponovo pogledati trenutni brifing misije i pročitati više o završenim istraživačkim projektima."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr ""
+msgstr "Kada otvorite Obaveštajni Prikaz, na dnu ekrana se pojavljuju dva reda ikona."
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr ""
+msgstr "Odabirom ikone prikazaće se informacije o tom istraživanju ili cilju misije na sredini ekrana."
 
 msgid "Using the Mission Timer"
 msgstr "Korišćenje Tajmera Misije"
@@ -117,19 +117,19 @@ msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself
 msgstr "Većinu vremena ćete biti na satu. Ponekad ćete želeti da imate više vremena. Drugi put ćete možda misliti da imate previše."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr ""
+msgstr "Uvek postoje pametni načini da se iskoristi dodatno vreme za pripremu za predstojeće bitke."
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr ""
+msgstr "Bilo da se radi o završetku novih istraživanja, izgradnji odbrane ili reciklaži i zameni jedinica novim oružjem i tehnologijama... ne dozvolite da dobro vreme propadne."
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
 msgstr "(Ako je uključen „Bonus moći tajmera“ – što je podrazumevano – ne morate čekati da tajmer istekne da biste dobili moć. Ona će vam automatski biti dodeljena kao da ste čekali da tajmer završi. Ostala pravila korišćenja i dalje važe!)"
 
 msgid "Power"
-msgstr ""
+msgstr "Energija"
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr ""
+msgstr "U igri Warzone 2100, energija je vaš ključni resurs."
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
 msgstr "Trošite energiju za izgradnju struktura, proizvodnju jedinica i istraživanje nadogradnji / novih tehnologija."
@@ -141,7 +141,7 @@ msgid "Researching Technology"
 msgstr "Istraživanje Tehnologije"
 
 msgid "Researching technologies is accomplished using Research Facilities."
-msgstr ""
+msgstr "Istraživanje tehnologija se vrši korišćenjem Istraživačkih Stanica."
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
 msgstr "Kada je izabran Istraživačka Stanica, sve dostupne opcije se prikazuju na levoj strani ekrana."
@@ -158,28 +158,28 @@ msgid "Completing research of a new technology may:"
 msgstr "Završetak istraživanja nove tehnologije može:"
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
-msgstr "- Omogućiti dostupnost novog oružja, struktura, tela jedinica, pogona itd."
+msgstr "- Omogućiti dostupnost novog oružja, struktura, trupova jedinica, pogona itd."
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
 msgstr "- Poboljšati efikasnost postojećeg oružja, struktura, trupova jedinica itd."
 
 msgid "- Enable the research of additional technologies"
-msgstr ""
+msgstr "- Omogućiti istraživanje dodatnih tehnologija"
 
 msgid "General"
-msgstr "Opšti"
+msgstr "Opšte"
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
 msgstr "U igri Warzone 2100, komandujete snagama „Projekta“ u borbi za obnovu sveta, nakon što je čovečanstvo skoro uništeno nuklearnim projektilima."
 
 msgid "This guide will help walk you through key facets of the game."
-msgstr ""
+msgstr "Ovaj vodič će vam pomoći da se upoznate sa ključnim aspektima igre."
 
 msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
-msgstr ""
+msgstr "(Ako igrate kampanju, nove teme u vodiču mogu biti otključane kako budete napredovali kroz igru.)"
 
 msgid "Building Structures"
-msgstr ""
+msgstr "Izgradnja Objekata"
 
 msgid "Click the \"Build\" button on the Command Panel."
 msgstr "Kliknite na dugme „Izgradnja“ na komandnoj tabli."
@@ -191,7 +191,7 @@ msgid "Select the desired structure button. A silhouette will appear in the game
 msgstr "Izaberite dugme za željeni objekat. U svetu igre pojaviće se silueta – tu će objekat biti postavljen kada potvrdite."
 
 msgid "Move the silhouette by moving the input device."
-msgstr ""
+msgstr "Pomerite siluetu pomeranjem miša."
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
 msgstr "- Ako je na nekoj lokaciji moguće izgraditi objekat, silueta će biti zelene boje kada pređete mišem preko lokacije."
@@ -209,7 +209,7 @@ msgid "Tip: To build \"walls\" (once they are available), you can click and drag
 msgstr "Savet: Da biste gradili „zidove“ (kada postanu dostupni), možete kliknuti i prevući da nacrtate zid u liniji."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Fabrika Kiborga"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
 msgstr "Fabrika Kiborga funkcioniše slično kao standardna Fabrika, ali isključivo proizvodi Kiborge."
@@ -218,28 +218,28 @@ msgid "Each Factory can build one Cyborg at a time, but you can queue multiple C
 msgstr "Svaka Fabrika može da izgradi po jednog Kiborga istovremeno, ali možete da stavite u red više Kiborga za proizvodnju."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr "Kada se Kiborg proizvede, sledi naredbe fabrike i kreće ka njenoj Odredišnoj Tački."
+msgstr "Kada se Kiborg proizvede, sledi naredbe Fabrike i ide ka njenoj Odredišnoj Tački."
 
 msgid "Demolishing Structures"
 msgstr "Rušenje Objekata"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Rušenje zgrade je jednostavno kao i njena izgradnja."
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
 msgstr "Izaberite „Sruši Objekat“ u meniju Objekata i kliknite na zgradu koju želite da srušite."
 
 msgid "A unit will move to the building and destroy it."
-msgstr ""
+msgstr "Jedinica će se pomeriti ka zgradi i srušiti je."
 
 msgid "Demolished structures return half the power used to build the structure."
 msgstr "Srušeni objekti vraćaju polovinu energije koja je korišćena za njihovu izgradnju."
 
 msgid "Factory"
-msgstr ""
+msgstr "Fabrika"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr "Fabrika se koristi za izgradnju jedinica. Svaka fabrika može da gradi jednu jedinicu istovremeno, ali možete da stavite u red više jedinica za proizvodnju."
+msgstr "Fabrika se koristi za izgradnju jedinica. Svaka Fabrika može da gradi jednu jedinicu istovremeno, ali možete da stavite u red više jedinica za proizvodnju."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
 msgstr "Proizvedena jedinica sledi naredbe Fabrike i ide ka njenoj Odredišnoj Tački."
@@ -251,7 +251,7 @@ msgid "Command Center"
 msgstr "Komandni Centar"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr ""
+msgstr "Komandni centar je sedište vaše baze."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
 msgstr "Omogućava pristup mini-mapi/radaru i mogućnost za dizajniranje jedinica."
@@ -278,16 +278,16 @@ msgid "Note: While one of these structures is being upgraded, it will temporaril
 msgstr "Napomena: Dok se jedan od ovih objekata nadograđuje, on će privremeno biti nedostupan dok se nadogradnja ne završi."
 
 msgid "Upgrade Effects:"
-msgstr ""
+msgstr "Efekti Nadogradnje:"
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr ""
+msgstr "- Moduli Energetskog Generatora povećavaju brzinu stvaranja energije"
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
 msgstr "- Moduli Fabrike omogućavaju proizvodnju Srednjih i Teških jedinica, i ubrzavaju proizvodnju jedinica"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr ""
+msgstr "- Moduli istraživačke stanice ubrzavaju istraživanje projekata"
 
 msgid "Oil Derrick"
 msgstr "Naftna Bušotina"
@@ -296,13 +296,13 @@ msgid "An Oil Derrick can be built by selecting a Truck and targeting an availab
 msgstr "Naftna Bušotina se gradi tako što izaberete Kamion i ciljajte na raspoloživi Naftni Resurs."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "Uništenje Naftne Bušotine privremeno će sprečiti izgradnju druge na istom mestu dok se požar ne smiri."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
 msgstr "Za korišćenje Naftne Bušotine i proizvodnju energije potreban je Energetski Generator."
 
 msgid "Power Generator"
-msgstr ""
+msgstr "Energetski Generator"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
 msgstr "Svaki Energetski Generator koristi do 4 Naftne Bušotine. Dakle, na primer, ako imate 10 Naftnih Bušotina, biće vam potrebna 3 Energetska Generatora da iskoristite sve Naftne Bušotine i proizvedete maksimalnu Energiju."
@@ -323,16 +323,16 @@ msgid "Note: Moving a Rally Point while a unit is moving to it will not affect t
 msgstr "Napomena: Premeštanje Odredišne Tačke dok se jedinica kreće ka njoj neće uticati na putanju jedinice."
 
 msgid "Repair Facility"
-msgstr ""
+msgstr "Servisna Stanica"
 
 msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
-msgstr ""
+msgstr "Servisna Stanica je fiksni objekat u koji jedinice mogu odlaziti da bi se popravile."
 
 msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
 msgstr "Servisne Stanice mogu popravljati jedinice brže od mobilnih jedinica sa kupolama za popravku."
 
 msgid "Research Facility"
-msgstr ""
+msgstr "Istraživačka Stanica"
 
 msgid "Research Facilities are required in order to research new technologies."
 msgstr "Za istraživanje novih tehnologija potrebne su Istraživačke Stanice."
@@ -344,697 +344,697 @@ msgid "VTOL Factory"
 msgstr "VTOL Fabrika"
 
 msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
-msgstr ""
+msgstr "VTOL Fabrika se koristi za izgradnju jedinica sa VTOL pogonom (tj. letećih jedinica)."
 
 msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
 msgstr "Svaka VTOL Fabrika može proizvoditi po jednu jedinicu odjednom, ali možete staviti više jedinica u red za proizvodnju."
 
 msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
-msgstr ""
+msgstr "Kada VTOL Fabrika završi proizvodnju jedinice, ona će joj narediti da poleti i sleti u blizini Odredišne Tačke fabrike."
 
 msgid "Structures"
-msgstr ""
+msgstr "Objekti (zgrade)"
 
 msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
-msgstr ""
+msgstr "Izgradnja objekata je apsolutno neophodna u Warzone 2100 - od Fabrika koje proizvode jedinice, do Istraživačkih Stanica koji istražuju nove tehnologije."
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
-msgstr ""
+msgstr "Građevine mogu graditi jedinice opremljene Kamionskim kupolama i/ili Borbeni Inženjeri."
 
 msgid "Attack Range"
-msgstr ""
+msgstr "Domet Napada"
 
 msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
-msgstr ""
+msgstr "U meniju „Naredbe Jedinicama“ možete podesiti njihov „Domet Napada“."
 
 msgid "- Optimum Range: Fires at the most accurate range"
-msgstr ""
+msgstr "Optimalni domet: Gađa sa najvećom preciznošću"
 
 msgid "- Short Range: Moves to short range and attacks"
-msgstr ""
+msgstr "Kratki domet: Približava se i napada s male udaljenosti"
 
 msgid "- Long Range: Attacks at long range (default)"
-msgstr ""
+msgstr "Dugi domet: Napada sa velike udaljenosti (podrazumevano)"
 
 msgid "Firing Mode"
-msgstr ""
+msgstr "Režim Paljbe"
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
-msgstr ""
+msgstr "Podesite „Režim Paljbe“ jedinice u meniju „Naredbe jedinicama“."
 
 msgid "- Fire At Will: Fires at any enemy (default)"
-msgstr ""
+msgstr "Gađaj Po Volji: Puca na bilo kog neprijatelja (podrazumevano)"
 
 msgid "- Return Fire: Only fire if fired at"
-msgstr ""
+msgstr "Uzvrati Vatru: Puca samo ako je napadnut"
 
 msgid "- Do Not Fire: Units will not fire"
-msgstr ""
+msgstr "Ne Gađaj: Jedinice neće pucati"
 
 msgid "Movement"
-msgstr ""
+msgstr "Kretanje"
 
 msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
-msgstr ""
+msgstr "Podesite „Kretanje“ jedinice u meniju „Naredbe jedinicama“."
 
 msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
-msgstr ""
+msgstr "- Patrola: Kreće se između dve tačke. Nakon odabira, kliknite na tačku na mapi"
 
 msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
-msgstr ""
+msgstr "- Krug: (samo VTOL jedinice) Kreće se u krugu iznad određene pozicije. Nakon odabira, kliknite na oblast"
 
 msgid "- Pursue: Pursue enemy"
-msgstr ""
+msgstr "- Juri: Juri neprijatelja"
 
 msgid "- Guard: Stay near an area or structure. (default)"
-msgstr ""
+msgstr "- Čuvaj: Ostanite u blizini oblasti ili objekta (podrazumevano)"
 
 msgid "- Hold Position: Do not move under any circumstances"
-msgstr ""
+msgstr "- Drži Poziciju: Ni pod kojim uslovima se ne pomeraj"
 
 msgid "Recycling"
-msgstr ""
+msgstr "Reciklaža"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Reciklažom jedinice ona se šalje u najbližu Fabriku ili Servisnu Stanicu, gde će biti uklonjena iz igre."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
-msgstr ""
+msgstr "Biće vam vraćena polovina energije utrošene za izradu jedinice (iako će taj iznos biti manji ako je jedinica oštećena)."
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "Iskustveni bodovi reciklirane jedinice biće preneti na sledeću jedinicu koja bude proizvedena."
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Kada se reciklira više iskusnih jedinica, najviši iznos iskustvenih bodova prenosi se prvi."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
-msgstr ""
+msgstr "Odabrane jedinice možete poslati na reciklažu preko menija „Naredbe Jedinicama“ ili pomoću prečice „Pošalji na Reciklažu“."
 
 msgid "Retreating"
-msgstr ""
+msgstr "Povlačenje"
 
 msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
-msgstr ""
+msgstr "Gubitak jedinica (posebno onih iskusnih) može ozbiljno oslabiti sposobnost vaše vojske da uspešno vodi bitku."
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
-msgstr ""
+msgstr "Možete koristiti meni „Naredbe jedinicama“ da izaberete „Prag Povlačenja“, koji će narediti jedinicama da se automatski povuku iz borbe kada dostignu određeni nivo oštećenja."
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
-msgstr ""
+msgstr "- Izvrši ili Umri: Jedinica se neće povući osim ako joj to ne naredite. (podrazumevano)"
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
-msgstr ""
+msgstr "- Povlačenje pri Srednjem Oštećenju: Jedinica će se povući pri srednjem (žutom) oštećenju"
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr ""
+msgstr "- Povlačenje pri Velikom Oštećenju: Jedinica će se povući pri velikom (crvenom) oštećenju"
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
-msgstr ""
+msgstr "Jedinice koje se povlače vratiće se do najbliže servisne stanice, jedinice za popravku, Glavnog Štaba GŠ ili Zone Sletanja ZS."
 
 msgid "Return To"
-msgstr ""
+msgstr "Vrati se"
 
 msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
-msgstr ""
+msgstr "Možete koristiti meni „Naredbe jedinicama“ da brzo naredite jedinicama da se vrate na određenu lokaciju."
 
 msgid "- Return for Repair: Unit will return to a Repair Facility"
-msgstr ""
+msgstr "- Vrati na Popravku: Jedinica će se vratiti u Servisnu Stanicu"
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
-msgstr ""
+msgstr "- Vrati se u GŠ: Jedinica će se vratiti u Glavni Štab ili ZS Zonu Sletanja (kampanja)"
 
 msgid "- Go To Transport: Unit will go to and board transport"
-msgstr ""
+msgstr "Idi u Transport: Jedinica će otići do transporta i ukrcati se"
 
 msgid "Unit Orders"
-msgstr ""
+msgstr "Naredbe jedinicama"
 
 msgid "Right-click a unit or group of units to show their current Unit Orders."
-msgstr ""
+msgstr "Kliknite desnim tasterom miša na jedinicu ili grupu jedinica da prikažete njihove trenutne Naredbe Jedinicama."
 
 msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
-msgstr ""
+msgstr "Panel „Naredbe jedinicama“ omogućava vam da prilagodite ponašanje svojih jedinica, od patroliranja određene oblasti do povlačenja pri niskom zdravlju."
 
 msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
-msgstr ""
+msgstr "Kliknite desnim tasterom miša na Fabriku da podesite Naredbe Jedinicama za sve buduće jedinice koje će fabrika proizvesti."
 
 msgid "Building Units"
-msgstr ""
+msgstr "Proizvodnja Jedinica"
 
 msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
-msgstr ""
+msgstr "Da biste proizvodili jedinice, odaberite Fabriku ili kliknite na dugme „Proizvodnja“ u komandnom panelu – ovo će otvoriti panel za proizvodnju."
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
-msgstr ""
+msgstr "Panel Proizvodnje prikazuje jedinice koje Fabrika može praviti; ograničenja zavise od tipa fabrike i modula."
 
 msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
-msgstr ""
+msgstr "Da biste odabrali drugu Fabriku, kliknite na fabriku u svetu igre ili na odgovarajuće dugme u panelu Fabrika na dnu centra ekrana."
 
 msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
-msgstr ""
+msgstr "Da biste proizveli jedinicu u Fabrici, kliknite na dugme dizajna željene jedinice u panelu za Proizvodnju. Možete staviti više istih jedinica u red tako što ćete više puta kliknuti na dugme dizajna jedinice."
 
 msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
-msgstr ""
+msgstr "Dok se jedinica pravi, prikazaće se u panelu Fabrika iznad Fabrike koja je proizvodi. Ako je traka zelena, Fabrika prikuplja energiju za izradu jedinice. Ako je traka žuta, jedinica je u procesu izrade."
 
 msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
-msgstr ""
+msgstr "Kada Fabrika završi izradu jedinice, jedinica će dobiti naredbu da se uputi ka Odredišnoj Tački Fabrike."
 
 msgid "Attaching Units"
-msgstr ""
+msgstr "Priključivanje Jedinica"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "Da biste priključili jedinice Komandantu, odaberite jedinicu/jedinice, a zatim kliknite levim tasterom miša na Komandanta kojem želite da ih priključite. Pored pridruženih jedinica pojaviće se simbol koji označava priključivanje."
 
 msgid "## Limits:"
-msgstr ""
+msgstr "Ograničenja:"
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "Komandanti imaju ograničenje broja jedinica kojima mogu komandovati, što zavisi od njihovog ranga. Napredovanja se stiču kada Komandant dostigne određeni broj iskustvenih bodova."
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "Posle svakog napredovanja, komandant može kontrolisati još 2 jedinice."
 
 msgid "Detaching Units"
-msgstr ""
+msgstr "Odvajanje Jedinica"
 
 msgid "To detach a unit from a Commander:"
-msgstr ""
+msgstr "Da biste odvojili jedinicu od Komandanta:"
 
 msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
-msgstr ""
+msgstr "1. Kliknite desnim tasterom miša na jedinicu (ili držite taster „Shift“ dok je birate) da selektujete samo tu jedinicu (umesto cele grupe komandanta)"
 
 msgid "2. Give the unit a new order (eg. move)"
-msgstr ""
+msgstr "2. Dajte jedinici novu naredbu (npr. pomeranje)"
 
 msgid "Going for repairs, BRB"
-msgstr ""
+msgstr "Idem na popravku, odmah se vraćam"
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
-msgstr ""
+msgstr "Jedinica koja se povuče iz borbe radi popravke i dalje ostaje deo Komandantove grupe."
 
 msgid "When it is done repairing, it will return to its Commander."
-msgstr ""
+msgstr "Po završetku popravke, jedinica će se automatski vratiti svom Komandantu."
 
 msgid "Targeting"
-msgstr ""
+msgstr "Navođenje ciljeva"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "Kada selektujete Komandanta i označite neprijateljsku jedinicu ili strukturu kao cilj, pridružene jedinice će se pomeriti i otvoriti vatru na taj cilj."
 
 msgid "The attached units will have greater accuracy when firing."
-msgstr ""
+msgstr "Priključene jedinice će imati veću preciznost prilikom gađanja."
 
 msgid "Commanders"
-msgstr ""
+msgstr "Komandanti"
 
 msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
-msgstr ""
+msgstr "Komandne kupole koriste se slično kao senzori, s tom razlikom što mogu komandovati bilo kojom napadačkom jedinicom, a ne samo artiljerijom."
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr ""
+msgstr "Komandanti obezbeđuju bonus na preciznost, oklop i brzinu kretanja svim jedinicama koje su im dodeljene, a ti bonusi rastu kako se čin komandanta povećava."
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "U početku mogu imati priključeno najviše 6 jedinica za napad, ali se taj limit povećava za još 2 svaki put kada komandant stekne viši čin."
 
 msgid "Designing Units"
-msgstr ""
+msgstr "Dizajniranje Jedinica"
 
 msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
-msgstr ""
+msgstr "Biće potrebno da dizajnirate nove jedinice ako želite da nadjačate neprijatelje i osetite sladak ukus pobede. Ovo je ključni deo gejmpleja Warzone 2100."
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr ""
+msgstr "Da biste započeli dizajniranje jedinice, izaberite taster „Dizajn“ u komandnom panelu. Time će se na levoj strani ekrana pojaviti dve kolone."
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
-msgstr ""
+msgstr "Da biste napravili novi dizajn, izaberite „prazno“ zeleno telo u gornjem levom uglu. Da biste izmenili postojeći dizajn jedinice, jednostavno izaberite njega."
 
 msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
-msgstr ""
+msgstr "Dizajniranje nove jedinice je jednostavan postupak u tri koraka: biranje trupa, sistema pogona i kupole. Ta tri izbora zajedno čine novu jedinicu."
 
 msgid "Once you have designed a unit, you will need a Factory to build it."
-msgstr ""
+msgstr "Kada dizajnirate jedinicu, biće vam potrebna Fabrika da biste je proizveli."
 
 msgid "Experience & Ranks"
-msgstr ""
+msgstr "Iskustvo i Činovi"
 
 msgid "Units gain experience when they successfully dispatch enemies."
-msgstr ""
+msgstr "Jedinice stiču iskustvo kada uspešno eliminišu neprijatelje."
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
-msgstr ""
+msgstr "Viši nivo iskustva znači da je jedinica preciznija, kreće se brže i prima manje štete."
 
 msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
-msgstr ""
+msgstr "Ikonica koja prikazuje čin jedinice pojavljuje se pored njenog prikaza zdravlja."
 
 msgid "Units with higher experience levels can make all the difference in battle!"
-msgstr ""
+msgstr "Jedinice sa višim nivoom iskustva mogu napraviti ogromnu razliku u borbi!"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Kiborzi"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "Kiborzi su osnovna pešadijska jedinica."
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "Brzi su i pouzdani, i izuzetno otporni na ProtivTenkovsko naoružanje."
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "Međutim, ranjivi su na ProtivPešadijsko i Artiljerijsko naoružanje."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "Imajte na umu da Kiborzi ne mogu biti dizajnirani. Šabloni za Kiborge se istražuju nezavisno i za njihovu proizvodnju potrebna je Fabrika Kiborga."
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "Polu-guseničari"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "Polu-guseničari su hibridni pogon Točkova i Gusenica."
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "Imaju umerenu cenu i brzinu, i pružaju umeren broj životnih bodova."
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Otporni su na protivpešadijsko i artiljerijsko oružje, ali su i dalje prilično ranjivi na protivtenkovsko."
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "Polu-guseničari: Univerzalne jedinice, izdržljivost niža od gusenica, brzina niža od točkova."
 
 msgid "Hover"
-msgstr ""
+msgstr "Hover"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "Hover je brza, amfibijska pogonska tehnologija za vozila."
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "Pogon za lebdenje omogućava veoma velike brzine i slobodno kretanje po vodi, što može biti neophodno za pronalaženje jedinstvenih ruta napada."
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "Ipak, koštaju više, imaju malo životnih bodova i ranjivi su na gotovo svaku vrstu štete."
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "Brzina i sposobnost kretanja po vodi čine Hovera savršenim za brze udare i povlačenja."
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "Sličan je Točkovima, ali nije baš pogodan za duže borbe na prvoj liniji."
 
 msgid "Tracks"
-msgstr ""
+msgstr "Gusenice"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "Gusenice su čvrst i oklopljen pogon za vozila."
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "Daju puno životnih bodova i visoku otpornost na protiv-pešadijsku i artiljerijsku štetu."
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "Ipak, koštaju više, prave se duže i i dalje su veoma ranjivi na protiv-tenkovsko oružje."
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "Pored toga, Gusenice dosta gube na maksimalnoj brzini."
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "Zbog velike izdržljivosti, Gusenice su idealne za vozila namenjena borbi na prvoj liniji."
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "Treba biti oprezan — njihova spora brzina kretanja može učiniti povlačenje iz loših situacija veoma teškim."
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "Napadanje VTOL jedinicama"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
-msgstr ""
+msgstr "Da bi napao sa VTOL-om, izaberi ga i klikni na neprijatelja kao i inače."
 
 msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
-msgstr ""
+msgstr "Međutim, primetićete beli pokazivač municije ispod njegovog pokazivača zdravlja kada započnete napad."
 
 msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
-msgstr ""
+msgstr "Za razliku od kopnenih jedinica, koje se automatski ponovo naoružavaju, VTOL jedinice nose ograničenu količinu municije. Kada municija nestane, VTOL ne može napadati dok se ponovo ne dopuni."
 
 msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
-msgstr ""
+msgstr "VTOL bez municije će automatski pronaći VTOL punkt da se naoruža i popravi (i nastavi napad čim bude potpuno naoružan), ili se može ručno dopuniti tako što ćete ga izabrati i kliknuti na VTOL punkt."
 
 msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
-msgstr ""
+msgstr "Za razliku od drugih jedinica koje obično napadaju najbliži cilj, VTOL jedinice neće napadati automatski. Međutim, ako izaberete VTOL i pritisnete Alt+klik na određeno područje, VTOL će patrolirati između svoje trenutne lokacije i izabrane tačke, napadajući sve što se nađe u blizini."
 
 msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
-msgstr ""
+msgstr "Alternativno, VTOL jedinice se mogu dodeliti VTOL Ofanzivnim Kulama i VTOL PA Kulama, što će ih učiniti funkcionalno sličnim artiljeriji dodeljenoj senzor tornjevima."
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "Odbrana sa VTOL"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "VTOL jedinice se takođe mogu koristiti za odbranu određenih delova mape."
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "VTOL jedinice se mogu dodeliti VTOL Ofanzivnoj Kuli ili VTOL Radar Kuli, i automatski će napadati sve što senzor označi kao cilj (slično kao artiljerija dodeljena standardnom senzoru)."
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "VTOL jedinicama se može narediti da patroliraju ili kruže oko određenog područja. Dok to rade, automatski će napadati svakog neprijatelja na svojoj putanji."
 
 msgid "Defending Against VTOLs"
-msgstr ""
+msgstr "Odbrana od VTOL-ova"
 
 msgid "What's that in the sky? ... It's a VTOL unit"
-msgstr ""
+msgstr "Šta je to na nebu? … To je VTOL jedinica"
 
 msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
-msgstr ""
+msgstr "Pošto VTOL nije kopnena jedinica, većina oružja sa tla ne može da ih pogodi."
 
 msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
-msgstr ""
+msgstr "Mogu se pogoditi samo protivvazduhoplovnim oružjem (često skraćeno \"PVO\") ili univerzalnim oružjem (koje može da pogađa i vazdušne i kopnene ciljeve)."
 
 msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
-msgstr ""
+msgstr "Postoji samo nekoliko oružja koja su univerzalna: mitraljezi, laseri i Mini-Raketni Bacač."
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(Rakete i projektile takođe spadaju u univerzalno oružje, ali samo kada su montirani na kiborga ili VTOL.)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "Pored toga što su retka, univerzalna oružja ne nanose toliko štete VTOL jedinicama kao specijalizovano protivvazduhoplovno oružje, pa se protiv VTOL-a preporučuje imati i neko PVO oružje."
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "Korišćenje VTOL-a"
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "Dizajniranje VTOL jedinica je slično dizajniranju kopnenih jedinica."
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "Prilikom izbora pogona, jednostavno odaberite pogon \"VTOL\"."
 
 msgid "You will then be able to select from the available VTOL Weapons."
-msgstr ""
+msgstr "Tada ćete moći da izaberete među dostupnim VTOL oružjima."
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "Da biste proizveli svoje VTOL dizajne, potrebno je da izgradite VTOL Fabriku."
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "Da biste popravili, dopunili municiju i održavali svoje VTOL jedinice, potrebno je da izgradite jedan ili više VTOL Punktova."
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "VTOL Oružja"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "Većina oružja ima VTOL verziju koja nanosi veću štetu, ali ima ograničenu municiju."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "VTOL verzije običnog oružja ne moraju se istraživati posebno."
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr "Pored VTOL verzija kopnenog direktnog oružja, VTOL jedinice mogu koristiti i bombe. Ova oružja su ekvivalent artiljeriji i veoma su moćna."
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
-msgstr ""
+msgstr "VTOL (jedinice sa vertikalnim poletanjem i sletanjem) su glavna vazdušna sredstva za dominaciju nebom."
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
-msgstr ""
+msgstr "VTOL jedinice imaju izuzetno veliku maksimalnu brzinu i mogu da prelaze sve vrste terena."
 
 msgid "Additionally, they cannot be targeted by most weapons while airborne."
-msgstr ""
+msgstr "Pored toga, dok su u vazduhu, većina oružja ih ne može gađati."
 
 msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
-msgstr ""
+msgstr "Imajte na umu da, iako se VTOL jedinice mogu dizajnirati kao i ostva vozila, one se mogu proizvoditi samo u specijalizovanoj VTOL Fabrici."
 
 msgid "Wheels"
-msgstr ""
+msgstr "Točkovi"
 
 msgid "Wheels are the most basic vehicle propulsion."
-msgstr ""
+msgstr "Točkovi su najosnovniji pogon za vozila."
 
 msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
-msgstr ""
+msgstr "Povoljni su i brzi za proizvodnju, a imaju i veliku maksimalnu brzinu."
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "Međutim, ranjivi su na većinu tipova štete i nemaju mnogo bodova zdravlja."
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
-msgstr ""
+msgstr "Točkovi su najbolje korišćeni na vozilima koja deluju iza linija fronta, ili na vozilima koja koriste svoju veliku brzinu za brze napade i povlačenja."
 
 msgid "Propulsions"
-msgstr ""
+msgstr "Pogoni"
 
 msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
-msgstr ""
+msgstr "Baš kao i kod oružja, takođe možete otkriti nove tipove pogona za vozila koje možete koristiti u dizajnima."
 
 msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Kada završite istraživanje novog pogona, Obaveštajni Prikaz će prikazati njegove karakteristike."
 
 msgid "Additionally, you can find descriptions of each propulsion in this guide."
-msgstr ""
+msgstr "Pored toga, u ovom vodiču možete pronaći opise svakog pogona."
 
 msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
-msgstr ""
+msgstr "Razumevanje prednosti i mana svakog pogona je ključno kako za dizajniranje sopstvenih jedinica, tako i za borbu protiv neprijateljskih jedinica."
 
 msgid "Repairing Units"
-msgstr ""
+msgstr "Popravljanje Jedinica"
 
 msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
-msgstr ""
+msgstr "Možete dizajnirati jedinicu sa kupolom za servis umesto oružja, i možete joj dati naredbu da popravi vaše druge jedinice."
 
 msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
-msgstr ""
+msgstr "Takođe, možete držati jedinice za servis dalje od borbe i koristiti Opcije Povlačenja da naredite svojim ofanzivnim jedinicama da se povuku do njih radi servisa kada dostignu određeni nivo oštećenja."
 
 msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
-msgstr ""
+msgstr "Povlačenje i popravka jedinica je često mnogo bolji izbor nego gubitak iskusne jedinice na bojnom polju."
 
 msgid "CB Sensors"
-msgstr ""
+msgstr "PA Senzori"
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
-msgstr ""
+msgstr "Protiv-Artiljerijski (PA) Senzori dramatično menjaju bojno polje omogućavajući artiljerijskim jedinicama da direktno gađaju udaljene artiljerijske platforme – pod uslovom da imaju domet."
 
 msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
-msgstr ""
+msgstr "Identifikovane strukture ili jedinice biće obojene crveno u magli bojišta čim PA senzor otkrije ispaljivanje neprijateljske artiljerije."
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr ""
+msgstr "Ako su aktivni, artiljerijski sistemi prioritetno gađaju ciljeve otkrivene PA Senzorom, umesto ciljeva otkrivenih običnim Senzorima."
 
 msgid "Un-Assigning"
-msgstr ""
+msgstr "Odvajanje"
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr ""
+msgstr "Da biste odvojili jedinicu sa senzora, najlakši način je da kliknete desnim tasterom miša na jedinicu i potom joj naredite da se pomeri na neko mesto."
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
-msgstr ""
+msgstr "Više jedinica možete odabrati tako što držite taster CTRL dok klikćete."
 
 msgid "Using Sensors"
-msgstr ""
+msgstr "Korišćenje Senzora"
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr ""
+msgstr "Artiljerijski objekti su najlakši za korišćenje. Jednostavno izgradite senzorsku kulu, i ako senzor kula cilja nešto unutar dometa oružja vaših artiljerijskih struktura, one će pucati na to."
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
-msgstr ""
+msgstr "Artiljerijski tenk, međutim, mora biti eksplicitno priključen na senzor da bi funkcionisao. Odaberite artiljerijske tenkove, zatim kliknite na senzor da biste priključili tenkove na senzor."
 
 msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
-msgstr ""
+msgstr "Priključena artiljerija na senzor kulu automatski cilja neprijatelje u dometu."
 
 msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
-msgstr ""
+msgstr "Ako je priključena na senzor tenk, senzor se može koristiti za napad na neprijatelje tako što odaberete senzor i ciljate neprijatelja. Sva artiljerija priključena na senzor će napasti njegov cilj."
 
 msgid "Sensors"
-msgstr ""
+msgstr "Senzori"
 
 msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
-msgstr ""
+msgstr "Senzori se mogu koristiti za izviđanje i nadzor, ali imaju i važniju namenu: da otkrivaju ciljeve za artiljeriju."
 
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
-msgstr ""
+msgstr "Artiljerijska oružja sama po sebi ne mogu da pucaju dalje od dometa svog senzora (8 polja bez nadogradnji)."
 
 msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "Međutim, čak i najosnovnije artiljerijsko oružje ima domet veći od ugrađenog dometa senzora. Da biste ga koristili, potrebno je da izgradite i postavite senzore na bojnom polju (bilo senzor-kule ili tenkove sa senzor-kupolama)."
 
 msgid "Kinetic & Thermal Damage"
-msgstr ""
+msgstr "Kinetička i Termalna Šteta"
 
 msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
-msgstr ""
+msgstr "Većina oružja nanosi kinetičku štetu (metci, rakete itd.), pa standardni kinetički oklop i dalje ima efekta."
 
 msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
-msgstr ""
+msgstr "Međutim, neka oružja prave toplotnu štetu, a kinetički oklop tu ne pomaže."
 
 msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
-msgstr ""
+msgstr "Toplotna oružja se, s druge strane, zaustavljaju pomoću toplotnog oklopa."
 
 msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
-msgstr ""
+msgstr "Kinetički i toplotni oklop jedinice može se videti u meniju dizajna, na ekranu za izbor trupa."
 
 msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
-msgstr ""
+msgstr "Imajte na umu da sve jedinice imaju manje toplotnog oklopa nego kinetičkog. To znači da će šteta od toplote biti veća nego kinetička šteta!"
 
 msgid "Attacking"
-msgstr ""
+msgstr "Napadanje"
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "Dizajniranje VTOL-ova"
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "Zapamtite: da biste proizvodili VTOL jedinica biće vam potrebna \"VTOL Fabrika\"."
 
 msgid "Weapons"
-msgstr ""
+msgstr "Oružja"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "Većina oružja ima VTOL verziju – dvostruko jača, ali sa ograničenom municijom."
 
 msgid "VTOLs"
-msgstr ""
+msgstr "VTOL-ovi"
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "Da biste proizvodili VTOL jedinice, morate otkriti i istražiti „VTOL Pogon“ i „VTOL Fabriku“."
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "Takođe, trebalo bi da istražite i izgradite nekoliko „VTOL Punktova“, kako bi vaše VTOL jedinice mogle da dopune municiju."
 
 msgid "Weapon Selection"
-msgstr ""
+msgstr "Izbor Oružja"
 
 msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
-msgstr ""
+msgstr "Kako budete otkrivali i istraživali nova oružja, uvidećete i da neka oružja rade znatno bolje u određenim situacijama nego druga (ili protiv određenih neprijateljskih jedinica ili građevina)."
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Kada završite istraživanje novog oružja, poruka na Obaveštajnom Prikazu pružiće vam osnovne informacije o njegovim osobinama."
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr ""
+msgstr "Isplati se eksperimentisati sa različitim tipovima oružja. Ako imate problema i već neko vreme niste preispitali sastav svoje sile, možda je vreme da razmislite o zameni oružja jačim ili uvođenju novih varijanti!"
 
 msgid "Units"
-msgstr ""
+msgstr "Jedinice"
 
 msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
-msgstr ""
+msgstr "Moraćete da dizajnirate i izgradite nove jedinice ako želite da nadjačate neprijatelje i okusite taj slatki ukus pobede."
 
 msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
-msgstr ""
+msgstr "Ovaj aspekt igre čini Warzone 2100 jedinstvenom na svoj način."
 
 msgid "To be able to design units, a Command Center is required."
-msgstr ""
+msgstr "Da biste mogli da dizajnirate jedinice, potreban je Komandni Centar."
 
 msgid "All-Rounder"
-msgstr ""
+msgstr "Višenamensko"
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr ""
+msgstr "„Višenamenska“ oružja su manje efikasna od specijalizovanih oružja."
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr ""
+msgstr "Međutim, „Višenamenska“ oružja su umereno efikasna protiv svih tipova ciljeva, za razliku od specijalizovanih oružja."
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr ""
+msgstr "Višenamenska oružja povećavaju zdravlje jedinice, ali su teža."
 
 msgid "Anti-Air"
-msgstr ""
+msgstr "Protiv-Vazdušno"
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr ""
+msgstr "Protivvazduhoplovna (ili PVO) oružja su specijalizovana za borbu protiv svih vrsta letećih jedinica."
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr ""
+msgstr "Međutim, PVO oružja nisu u stanju da napadaju građevine ili jedinice na zemlji."
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr ""
+msgstr "Iako su PVO oružja odlična za borbu protiv vazdušnih pretnji, moraju biti zaštićena od pretnji sa zemlje."
 
 msgid "Anti-Personnel"
-msgstr ""
+msgstr "Protiv-Pešadijsko"
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr ""
+msgstr "Protivpešadijska oružja su izuzetno efikasna u uništavanju neprijateljske pešadije i lakih vozila."
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr ""
+msgstr "Međutim, ova oružja su manje efikasna protiv građevina i teško oklopljenih ciljeva."
 
 msgid "Anti-Tank"
-msgstr ""
+msgstr "Protiv-Tenkovsko"
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr ""
+msgstr "Protivtenkovska oružja su specijalizovana za borbu protiv svih tipova neprijateljskih vozila."
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr ""
+msgstr "Međutim, Protivtenkovska oružja su manje efikasna protiv građevina, a posebno neefikasna protiv pešadije."
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr ""
+msgstr "Generalno, Protivtenkovska oružja su lagana, ali pružaju veoma malo zdravlja. Vozila sa ovim oružjem biće krhkija od onih opremljenih većinom drugih tipova oružja."
 
 msgid "Artillery"
-msgstr ""
+msgstr "Artiljerija"
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr ""
+msgstr "Artiljerijska oružja su razorna protiv pešadije i većine građevina."
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr ""
+msgstr "Međutim, artiljerijska oružja su manje efikasna protiv bunkera i guseničarskih vozila."
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr ""
+msgstr "Većina (ali ne i sva) artiljerijska oružja moraju da stoje u mestu da bi pucala. To, zajedno sa veoma malim zdravljem koje pružaju artiljerijska oružja, znači da su jedinice opremljene artiljerijom same po sebi ranjive."
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr ""
+msgstr "Stoga se artiljerijska oružja najracionalnije koriste u ulozi podrške drugim jedinicama ili građevinama, izbegavajući neposrednu borbu."
 
 msgid "High-Explosive Bombs"
-msgstr ""
+msgstr "Visokoeksplozivne Bombe"
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr ""
+msgstr "Eksplozivne bombe deluju slično artiljerijskom oružju na zemlji (poput Minobacača)."
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr ""
+msgstr "Ove bombe eksplodiraju pri udaru, oštećujući sve što se nađe u zoni eksplozije."
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr ""
+msgstr "Kao i Artiljerijska oružja, eksplozivne bombe su izuzetno efikasne u uništavanju većine struktura i grupa pešadije i lakih vozila, ali imaju problema protiv bunkera i teško oklopljenih tenkova."
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr ""
+msgstr "Samo pripazi da se tvoje jedinice i građevine ne nađu u udaru eksplozije!"
 
 msgid "Incendiary Bombs"
-msgstr ""
+msgstr "Zapaljive Bombe"
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr ""
+msgstr "Zapаljive bombe deluju donekle Plamenobacačima koji se koriste na zemlji."
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr ""
+msgstr "Zapаljive bombe nanose malu štetu pri udaru, ali će trenutno zapaliti veliku površinu oko mesta udara."
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr ""
+msgstr "Neprijateljske jedinice i građevine koje se zadrže unutar ove oblasti pretrpeće veliku količinu štete tokom vremena."
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr ""
+msgstr "Kao i oružja tipa Plamenobacač, zapaljive bombe su izuzetno efikasne protiv svih vrsta jedinica i bunkera, ali su slabe protiv ojačanih struktura."
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "Bombište"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "Bombište je jedinstveni tip oružja koji se može opremiti samo na VTOL jedinice."
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "Iako im je domet napada kratak, a kapacitet municije mali, bombišta daju bonus zdravlja i obično nose snažniji teret od ostalih VTOL oružja."
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "Kao i sva ostala oružja, različite bombe imaju različite efekte, jačine i namene."
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Razarač Bunkera"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "Razarač Bunkera je jedinstveno oružje koje je izuzetno efikasno protiv svih tipova građevina."
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "Međutim, Razarač Bunkera je izuzetno slab protiv bilo kojih ciljeva koji nisu građevine."
 
 msgid "Flamer"
-msgstr ""
+msgstr "Plamenobacač"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "Zapаljiva oružja tipa „Plamenobacač“ efikasna su protiv pešadije i tenkova sa slabijom vrstom pogona."
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "Plamenobacačka oružja su takođe izuzetno dobra protiv bunkera i pljačkaških građevina, ali su slabija protiv ostalih tipova građevina."
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "Plamenobacači mogu da „probiju“ kroz jedinice, oštećujući i čak zapaljujući više meta u jednom nizu, što ih čini odličnim oružjem za čišćenje većih grupa neprijatelja."
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "Međutim, zbog kratkog dometa napada, plamenobacačka oružja mogu biti rizična za upotrebu."

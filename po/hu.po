@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2025-12-13 02:37\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -2010,7 +2010,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Gratulálok parancsnok – készen áll az első küldetésére"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "A gyakorlás véget ért. Nyomja meg az Esc gombot, vagy a fogaskerék ikont a főmenübe való kilépéshez."
 
 msgid "CAMPAIGN ONE"
 msgstr "ELSŐ KÜLDETÉS"
@@ -2022,7 +2022,7 @@ msgid "Dawn, July 4th, 2100"
 msgstr "2100. július 4., pirkadat"
 
 msgid "Project HQ"
-msgstr "Terv főhadiszállása"
+msgstr "A Terv főhadiszállása"
 
 msgid "A New Era"
 msgstr "Egy új korszak"
@@ -5728,7 +5728,7 @@ msgid "NEXUS CWall"
 msgstr "NEXUS sarokfal"
 
 msgid "NEXUS Heavy Body"
-msgstr "NEXUS nehéz karosszéria"
+msgstr "NEXUS – nehéz karosszéria"
 
 msgid "NEXUS Immunization System"
 msgstr "NEXUS immunizációs rendszer"
@@ -5740,7 +5740,7 @@ msgid "NEXUS Intruder Program"
 msgstr "NEXUS behatolóprogram"
 
 msgid "NEXUS Light Body"
-msgstr "NEXUS könnyű karosszéria"
+msgstr "NEXUS – könnyű karosszéria"
 
 msgid "Nexus Link Tower"
 msgstr "NEXUS-kapcsolati torony"
@@ -5749,7 +5749,7 @@ msgid "Nexus Link Turret"
 msgstr "NEXUS-kapcsolati torony"
 
 msgid "NEXUS Medium Body"
-msgstr "NEXUS közepes karosszéria"
+msgstr "NEXUS – közepes karosszéria"
 
 msgid "Nexus Missile Silo"
 msgstr "Nexus rakétasiló"
@@ -5928,13 +5928,13 @@ msgid "Professional and Regular rank units are protected"
 msgstr "A profi és hivatásos rangú egységek védettek"
 
 msgid "Project Heavy Body"
-msgstr "Nehéz karosszéria terve"
+msgstr "A Projekt – nehéz karosszéria"
 
 msgid "Project Light Body"
-msgstr "Könnyű karosszéria terve"
+msgstr "A Projekt – könnyű karosszéria"
 
 msgid "Project Medium Body"
-msgstr "Közepes karosszéria terve"
+msgstr "A Projekt – közepes karosszéria"
 
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Propilén-oxid géllel kezelve a magasabb égési hőmérséklet eléréséhez"
@@ -8090,7 +8090,7 @@ msgstr "MEGJEGYZÉS: Ha hamarosan nem kattint a Kész gombra, akkor ki lesz rúg
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "A játékos ki lesz rúgva, ha hamarosan nem jelzi, hogy készen áll: %s"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
@@ -8103,7 +8103,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr "MEGJEGYZÉS: Jelölve, hogy Kész, hogy elindulhasson a játék"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "Azok a játékosok, akik nem jelzik időben, hogy készen állnak, ki lesznek rúgva."
 
 msgid "Can someone please transfer me some units?"
 msgstr "Át tudna adni nekem valaki néhány egységet?"
@@ -9442,7 +9442,7 @@ msgid "Asserts turned off"
 msgstr "Hibakeresési kiértékelések kikapcsolva"
 
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr "A gyors mentés nem engedélyezett a többjátékos vagy oktatójátékokban"
+msgstr "A gyors mentés nem engedélyezett a többjátékos vagy gyakorlójátékokban"
 
 msgid "QuickSave not allowed in Autosaves-Only mode"
 msgstr "A gyors mentés nem engedélyezett a csak automatikus mentési módban"
@@ -9451,7 +9451,7 @@ msgid "QuickSave failed"
 msgstr "Gyorsmentés sikertelen"
 
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr "A gyors betöltés nem engedélyezett a többjátékos vagy oktatójátékokban"
+msgstr "A gyors betöltés nem engedélyezett a többjátékos vagy gyakorlójátékokban"
 
 msgid "QuickLoad not allowed in Autosaves-Only mode"
 msgstr "A gyors betöltés nem engedélyezett a csak automatikus mentési módban"
@@ -11435,7 +11435,7 @@ msgid "Window"
 msgstr "Ablak"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Teljes asztal"
 
 msgid "Window Mode"
 msgstr "Ablakos mód"
@@ -11444,7 +11444,7 @@ msgid "Windowed"
 msgstr "Ablakos"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Teljes képernyős mód"
 
 msgid "Behaviors"
 msgstr "Viselkedések"

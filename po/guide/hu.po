@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-12-08 20:30\n"
+"PO-Revision-Date: 2025-12-13 02:37\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -21,148 +21,148 @@ msgid "Artifacts"
 msgstr "Leletek"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
-msgstr ""
+msgstr "Ahogy végighalad a hadjáraton, leleteket fog begyűjteni az ellenséges bázisokról (és adott ellenséges egységektől)."
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr ""
+msgstr "Ezek értékes technológiákat oldanak fel, melyeket a kutatólétesítményekben fejleszthet ki."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr ""
+msgstr "A leletek apró fehér dobozok, melyek fölött egy zöld jelző van, és egy tetszőleges egység elég közel vitelével lehet őket felvenni."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr ""
+msgstr "Az összes leletet fel kell venni az egyes szintek győzelmi feltételei részeként."
 
 msgid "Backstory"
-msgstr ""
+msgstr "Háttértörténet"
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
-msgstr ""
+msgstr "A késő 21. században, a NASDA (Észak-Amerikai Stratégiai Védelmi Hivatal) kifejlesztett és telepített egy hatalmas rakétavédelmi rendszert, amely nukleáris képességű műholdakat és földi kilövőállásokat is tartalmazott."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr ""
+msgstr "Viszont egy rutinellenőrzés során valami szörnyen félrecsúszott…"
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr ""
+msgstr "Az Összeomlás gyors és pusztító volt. A műholdas védelmi rendszer műszaki hibája miatt a nukleáris robbanófejek ki lettek lőve a világ nagyvárosaira."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr ""
+msgstr "Percekkel később a földi állások választüzet nyitottak. Milliók haltak meg, amikor a nukleáris tűzviharok elpusztították a világ városait. Több milliárd ember halt meg, amikor a járványok és betegségek elsöpörték a civilizáció maradékát."
 
 msgid "Less than a million people survived the Collapse."
-msgstr ""
+msgstr "Kevesebb mint egy millió ember élte túl az Összeomlást."
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr ""
+msgstr "A Föld kisebb fosztogató bandák százaira szakadt, és egymással harcolnak a korábbi civilizáció maradványaiért. Csak keveseknek volt elég előrelátásuk ahhoz, hogy megpróbálják újjáépíteni a világot a hamvakból."
 
 msgid "## Present Day:"
-msgstr ""
+msgstr "## Napjainkban:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr ""
+msgstr "A játékos („a Parancsnok”) azon túlélők része, akik a Sziklás-hegységben található katonai bázison kerestek menedéket."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr ""
+msgstr "A bázisról azzal a céllal indulnak el, hogy újjáépítsék a világot, és felveszik a „A Terv” nevet."
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr ""
+msgstr "A Terv három csapatot küld ki, azzal a céllal, hogy leleteket szerezzenek vissza, így lehetővé téve az Összeomlás előtti technológiák kutatását és alkalmazását."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr "- Az Alfa csapat egy arizonai sivatagi helyszínre lett küldve, a Terv főhadiszállásától délkeletre"
+msgstr "- Az Alfa csapat egy arizonai sivatagi helyszínre lett küldve, A Terv főhadiszállásától délkeletre"
 
 msgid "- Beta team is sent to the remains of Chicago"
-msgstr ""
+msgstr "- A Béta csapat Chicago maradványaihoz lett küldve"
 
 msgid "- Gamma team is sent into the northern Rockies in Colorado"
-msgstr ""
+msgstr "- A Gamma csapat a Sziklás-hegység északi részébe lett küldve, Coloradóba"
 
 msgid "Command Panel"
-msgstr ""
+msgstr "Parancsnoki panel"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr ""
+msgstr "Hat különböző parancsnoki panelfelület van, továbbá egy központi gomb. A parancsnoki felületet a megfelelő gomb megnyomásával nyithatja meg."
 
 msgid "The middle / central button closes any open command interface."
-msgstr ""
+msgstr "A középső gomb bezárja a nyitott parancsnoki felületet."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "A bázisa védelme"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "A Warzone 2100-ban a fő bázisa megmarad a hadjárat során."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Ezért a fő bázisa jövőbeli védelmére való felkészülés létfontosságú."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Bár az egységek nyilvánvalóan segítenek a bázisa védelmében, a bázisa megtervezése is kritikus."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Építsen védelmi épületeket, melyek fedezéket biztosítanak, korlátozzák a ki- és bejutást, érzékelik az ellenséget, és sebzést okoznak, ezáltal jobban vissza tudja verni az ellenséges támadásokat."
 
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Hírszerzési kijelző"
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr ""
+msgstr "A hírszerzési kijelzőn találja a jelenlegi küldetéscélokat, újra lejátszhatja a jelenlegi eligazítást, és többet olvashat a befejezett kutatási projektekről."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr ""
+msgstr "Amikor megnyitja a hírszerzési kijelzőt, két sornyi ikon jelenik meg a képernyő alján."
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr ""
+msgstr "Ha kiválaszt egy ikont, információt jelenít meg a kutatásról vagy a küldetéscélról a képernyő közepén."
 
 msgid "Using the Mission Timer"
-msgstr ""
+msgstr "A küldetésidőzítő használata"
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr ""
+msgstr "A legtöbb esetben időre kell dolgoznia. Néha azt kívánja majd, bárcsak több ideje lenne. Máskor pedig azt gondolhatja, hogy túl sok ideje van."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr ""
+msgstr "Mindig van okos módja a további idő kihasználásának a közelgő csatákra való felkészüléshez."
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr ""
+msgstr "Legyen az új kutatás, védművek építése vagy újrahasznosítás és az egységek fegyvereinek és technológiáinak lecserélése… ne hagyja kárba veszni az időt."
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
-msgstr ""
+msgstr "(Ha az időalapú energiabónusz beállítás engedélyezve van – ez az alapértelmezett beállítás –, akkor nem kell megvárni az időzítő lejártát, hogy megkapja az energiát. Automatikusan megkapja azt, melyet az időzítő lejártakor kapna. De a többi használati mód továbbra is érvényes!)"
 
 msgid "Power"
-msgstr ""
+msgstr "Energia"
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr ""
+msgstr "A Warzone 2100-ban az energia kulcsfontosságú erőforrás."
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
-msgstr ""
+msgstr "Energiába kerül az épületek felállítása, az egységek gyártása, valamint a fejlesztések és az új technológiák kutatása."
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr ""
+msgstr "Az energiát olajkutakkal táplált erőművek állítják elő."
 
 msgid "Researching Technology"
-msgstr ""
+msgstr "Technológia kutatása"
 
 msgid "Researching technologies is accomplished using Research Facilities."
-msgstr ""
+msgstr "A technológiák kutatása Kutatólétesítmények használatával történik."
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
-msgstr ""
+msgstr "Ha egy kutatólétesítmény van kiválasztva, az összes elérhető lehetőség megjelenik a képernyő bal oldalán."
 
 msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
-msgstr ""
+msgstr "Minden kutatási projekt adott mennyiségű energiát és időt igényel. Az energiabefektetés nem téríthető vissza."
 
 msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
-msgstr ""
+msgstr "De a kutatási előrehaladás nem vész el, még akkor sem, ha a kutatólétesítmény elpusztul – csak egy másik létesítményhez kell rendelni a projektet."
 
 msgid "Completing research of a new technology may:"
-msgstr ""
+msgstr "Az új technológiák kutatásának a következő eredményei lehetnek:"
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
-msgstr ""
+msgstr "- Új fegyverek, épületek, karosszériák, meghajtások elérhetővé tétele"
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
-msgstr ""
+msgstr "- A meglévő fegyverek, épületek, karosszériák hatékonyságának fejlesztése"
 
 msgid "- Enable the research of additional technologies"
-msgstr ""
+msgstr "- További technológiák kutatásának lehetővé tétele"
 
 msgid "General"
 msgstr "Általános"
@@ -177,7 +177,7 @@ msgid "(If you are playing the campaign, new guide topics may be unlocked as you
 msgstr ""
 
 msgid "Building Structures"
-msgstr ""
+msgstr "Létesítmények Építése"
 
 msgid "Click the \"Build\" button on the Command Panel."
 msgstr ""
@@ -186,7 +186,7 @@ msgid "This will open the Structures menu on the left side of screen, with a but
 msgstr ""
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr ""
+msgstr "Válaszd ki a kívánt épületet. Egy zöld sziluett fog megjelenni a játékvilágban - oda fogod tudni letenni az épületet, ahol nem piros."
 
 msgid "Move the silhouette by moving the input device."
 msgstr ""
@@ -207,7 +207,7 @@ msgid "Tip: To build \"walls\" (once they are available), you can click and drag
 msgstr ""
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Kiborg Gyár"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
 msgstr ""
@@ -225,7 +225,7 @@ msgid "Demolishing a building is almost as simple as building one."
 msgstr ""
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Válaszd az \"Épület Megsemmisítése\" gombot az Épületek menüben és klikkelj a megsemmisítés gombra."
 
 msgid "A unit will move to the building and destroy it."
 msgstr ""
@@ -234,7 +234,7 @@ msgid "Demolished structures return half the power used to build the structure."
 msgstr ""
 
 msgid "Factory"
-msgstr ""
+msgstr "Gyár"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
 msgstr ""
@@ -282,7 +282,7 @@ msgid "- Power Generator modules increase the rate of power generation"
 msgstr ""
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- Gyár modulok lehetővé teszik Közepes és Nehéz vázú egységek létrehozását, valamint csökkentik a gyártáshoz szükséges időt"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
 msgstr ""
@@ -294,7 +294,7 @@ msgid "An Oil Derrick can be built by selecting a Truck and targeting an availab
 msgstr ""
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "Egy Olajfúrókút elpusztítása ideiglenesen megakadályozza egy újabb kút építését, amíg a tűz el nem alszik."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
 msgstr ""
@@ -306,7 +306,7 @@ msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you h
 msgstr ""
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr ""
+msgstr "Amíg az olajfúró kutakat olajlelő helyre kell építeni, addig az Áram Generátorokat bárhova felépítheted a térképen, de tartsd észben: további generátorok építése a  \" 4 olajfúró kút / generátor \" mennyiség fölött nem adnak további előnyöket."
 
 msgid "Rally Point"
 msgstr ""
@@ -315,7 +315,7 @@ msgid "When a Factory has finished building a unit, the unit will spawn next to 
 msgstr ""
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr ""
+msgstr "Alapesetben a Gyülekező Pont a Gyár mellé van helyezve. Kattints a Gyülekező Pontra, hogy áthelyezd."
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
 msgstr ""
@@ -357,7 +357,7 @@ msgid "Building structures is absolutely vital in Warzone 2100 - from Factories 
 msgstr ""
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
-msgstr ""
+msgstr "Épületek felhúzásának a befejezéséhez a géptesteken toronyként funkcionál a teherautó konténer/dömper része és/vagy Harci Mérnökök szükségesek."
 
 msgid "Attack Range"
 msgstr ""
@@ -378,7 +378,7 @@ msgid "Firing Mode"
 msgstr "Tüzelési mód"
 
 msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
-msgstr ""
+msgstr "Használd az Egység Parancsok menüt, hogy tüzelési módot válassz."
 
 msgid "- Fire At Will: Fires at any enemy (default)"
 msgstr "- Tüzelés tetszés szerint: Tüzelés az ellenségre (alapértelmezett)"
@@ -423,46 +423,46 @@ msgid "The experience points of the recycled unit will be transferred to the nex
 msgstr ""
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Ha több tapasztalt egységedet hasznosítod újra, a legnagyobb tapasztalati ponttal rendelkezőt váltja be legelőször."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
-msgstr ""
+msgstr "Utasíthatod a kiválasztott egységeket, hogy térjenek vissza a bontóba az Egység Parancsok menüben vagy nyomd be a \"Visszatérés Újrahasznosításra\" billentyűgombot."
 
 msgid "Retreating"
-msgstr ""
+msgstr "Visszavonulás"
 
 msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
-msgstr ""
+msgstr "Az egységek elvesztése (különösen a tapasztalattal rendelkező egységeké) valódi csapást mérhet egy ellenséges erőben, hogy kifizetődően vigye végbe a csatáját."
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
-msgstr ""
+msgstr "Használd az Egység Parancsok menüt, hogy kiválaszd a \"Visszavonulási Küszöböt\", mely automatikussá teszi az egységek csatából való visszavonulását, ha elérték a kijelölt sérülési szintet."
 
 msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
-msgstr ""
+msgstr "Csináld vagy Meghalsz: Az egységed nem fog visszavonulni, amíg nem utasítod rá. (alapértelmezett)"
 
 msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
-msgstr ""
+msgstr "Visszavonulás Közepes Sebzéskor: Az egységed közepes sebzésnél (sárga) vonul vissza"
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr ""
+msgstr "Visszavonulás Komoly Sérüléskor: Az egységed visszavonul ha pirosba kerül az életereje"
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
 msgstr "A visszavonuló egységek visszatérnek a legközelebbi javítóműhelybe, javítóegységhez, főhadiszálláshoz vagy LZ-hez."
 
 msgid "Return To"
-msgstr ""
+msgstr "Visszatérés Ide"
 
 msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
-msgstr ""
+msgstr "Használd az Egység Parancsok menüt, hogy gyorsan utasítsd egységeid egy meghatározott helyre való visszatéréshez."
 
 msgid "- Return for Repair: Unit will return to a Repair Facility"
-msgstr ""
+msgstr "Visszatérés Javításra: Az egység egy Javító Központhoz vonul vissza"
 
 msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
 msgstr "- Visszatérés a főhadiszállásra: az egység visszatér a parancsnoki központhoz vagy LZ-hez (hadjárat)"
 
 msgid "- Go To Transport: Unit will go to and board transport"
-msgstr ""
+msgstr "Menj Szállításra: Az egység odamegy és felszáll a hajóra"
 
 msgid "Unit Orders"
 msgstr "Egységparancsok"
@@ -483,22 +483,22 @@ msgid "To build units, either select a Factory, or select the \"Manufacturing\" 
 msgstr ""
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
-msgstr ""
+msgstr "A Gyártás panel kijelzi az egység dizájnokat amik a jelenleg kiválasztott Gyárban készíthetőek. A Gyárak limitálva lehetnek bizonyos típusú egységek legyártására (vagy csak bizonyos egységek gyártására, ha fel van fejlesztve modulokkal a gyár)."
 
 msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
-msgstr ""
+msgstr "Hogy kiválassz egy másik Gyárat, kattints a Gyárra a játék világában vagy kattints a megfelelő gombra a Gyárak panelen belül a kijelződ alsó-közép részén."
 
 msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
-msgstr ""
+msgstr "Hogy legyárts egy egységet a Gyárban, kattints a kívánt egység dizájnra a Gyártás panelen belül. Több egységet is gyártósorra tehetsz ugyanabból a fajtából egymásutáni kattintásokkal."
 
 msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
-msgstr ""
+msgstr "Amíg egy egység készül, az egység látható lesz a Gyárak panelen a Gyár fölött, amelyik éppen készíti azt. Ha a csík zöld, a Gyár erőforrást gyűjt, hogy építsen egyet. Ha a csík sárga, az egység éppen gyártódik."
 
 msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
 msgstr "Ha a gyár végzett egy egység gyártásával, akkor a gyár gyülekezési pontjára vezényli az egységet."
 
 msgid "Attaching Units"
-msgstr ""
+msgstr "Egységek Hozzárendelése"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
 msgstr ""
@@ -528,7 +528,7 @@ msgid "Going for repairs, BRB"
 msgstr ""
 
 msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
-msgstr ""
+msgstr "Egy egység, mely visszavonul a csatából egy javító központhoz, csatlakoztatva marad a Parancsnoki csoporthoz."
 
 msgid "When it is done repairing, it will return to its Commander."
 msgstr ""
@@ -537,7 +537,7 @@ msgid "Targeting"
 msgstr ""
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "Ha kiválasztasz egy Parancsnokot, hogy célozzon meg egy ellenséges egységet vagy épületet, a hozzárendelt egységek odamennek és tüzet nyitnak a célpontra."
 
 msgid "The attached units will have greater accuracy when firing."
 msgstr ""
@@ -549,7 +549,7 @@ msgid "Command turrets are used much like sensors, except they can command any a
 msgstr ""
 
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
-msgstr ""
+msgstr "A Parancsnokokhoz minden hozzájuk rendelt egységnek pontosságot, páncélzatot, mozgási sebesség bónuszt adnak, melyek a parancsnoki rangjának növekedéssel együtt nőnek."
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
 msgstr ""
@@ -561,7 +561,7 @@ msgid "You will need to design new units if you want to overpower your enemies a
 msgstr ""
 
 msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
-msgstr ""
+msgstr "Hogy elkezdj egy egységet tervezni, válaszd ki a Tervezés gombot a Parancsnoki panelen. Ez két oszlopot fog láthatóvá tenni a képernyő bal oldalán."
 
 msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
 msgstr ""
@@ -579,7 +579,7 @@ msgid "Units gain experience when they successfully dispatch enemies."
 msgstr "Az egységek tapasztalatot kapnak, ha sikeresen elbánnak az ellenséggel."
 
 msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
-msgstr ""
+msgstr "Nagyobb tapasztalati szint azt jelenti, hogy az az egység pontosabb, gyorsabban mozog és kevesebb sebzést kap be."
 
 msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
 msgstr ""
@@ -597,10 +597,10 @@ msgid "They are fast and reliable units, and are extremely resistant to Anti-Tan
 msgstr ""
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "De emiatt sokkal sérülékenyebbek a Gyalogság-Elhárító és Tűzérségi fegyverekkel szemben."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "Tudd, hogy Kiborgokat nem tudsz tervezni. Kiborg sémákat függetlenül kell kikutatnod és szükséged van hozzájuk a Kiborg Gyárra."
 
 msgid "Half-tracks"
 msgstr ""
@@ -678,7 +678,7 @@ msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB To
 msgstr ""
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "Védekezés VTOLokkal"
 
 msgid "VTOL units may also be used to defend areas of the map."
 msgstr ""
@@ -705,40 +705,40 @@ msgid "There are only a few weapons that are versatile: machineguns, lasers, and
 msgstr ""
 
 msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
-msgstr ""
+msgstr "(A Rakéták is szerteágazóak, de csak akkor ha kiborgra vagy VTOLra vannak felszerelve.)"
 
 msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
-msgstr ""
+msgstr "Ezen felül ami nem ritka, hogy a szerteágazó fegyverek nem csinálnak annyi sebzést a VTOLoknak, mint a hivatalos anti-air fegyverek, szóval ajánlott pár AA a VTOLok ellen."
 
 msgid "Using VTOLs"
 msgstr ""
 
 msgid "Designing VTOL units is similar to designing ground units."
-msgstr ""
+msgstr "VTOLok tervezése hasonló a szárazföldi haderőéhez."
 
 msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
-msgstr ""
+msgstr "Amikor meghajtást választasz, egyszerűen válaszd a \"VTOL\" meghajtást."
 
 msgid "You will then be able to select from the available VTOL Weapons."
 msgstr ""
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "Hogy létrehozz egy VTOL tervet, építened kell egy VTOL gyárat."
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "Ahhoz, hogy megjavítsd, újra töltsd a fegyverzetet és fenntartsd a VTOLjaidat, VTOL Újrafelfegyverző Padokat kell építened."
 
 msgid "VTOL Weapons"
 msgstr ""
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "A legtöbb fegyvernek van VTOL variánsa, amik megnövelt sebzéssel, de limitált lőszerrel rendelkeznek."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
-msgstr ""
+msgstr "VTOL verzióit a hagyományos fegyvereknek nem szükséges külön kikutatni."
 
 msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
-msgstr ""
+msgstr " A VTOL szárazföldi közvetlen fegyvereinek verzióin felül, a VTOLok bombákat is használnak. Ezek a fegyverek egyenértékűek a tűzérséggel és nagyon erőteljesek."
 
 msgid "VTOL"
 msgstr ""
@@ -765,7 +765,7 @@ msgid "They are inexpensive and fast to produce, and also have a high maximum sp
 msgstr ""
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "Viszont a legtöbb sebzés típusra sérülékenyek és nem kapnak további hitpointokat."
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
 msgstr ""
@@ -789,7 +789,7 @@ msgid "Repairing Units"
 msgstr ""
 
 msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
-msgstr ""
+msgstr "Tervezhetsz egységet javító toronnyal fegyverzet helyett, amit utasíthatsz hogy javítsa a többi egységet."
 
 msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
 msgstr ""
@@ -798,7 +798,7 @@ msgid "Retreating and repairing units is often far preferable to losing experien
 msgstr ""
 
 msgid "CB Sensors"
-msgstr ""
+msgstr "ÜE Szenzorok"
 
 msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
 msgstr ""
@@ -807,13 +807,13 @@ msgid "Identified structures or units will be colored red in the fog of war once
 msgstr ""
 
 msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
-msgstr ""
+msgstr "Ha aktív, a tüzérségi egységek a CB Szenzorokat részesítik előnyben a célpontoknál a hagyományos Szenzorokkal szemben."
 
 msgid "Un-Assigning"
 msgstr ""
 
 msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
-msgstr ""
+msgstr "Hogy lecsatlakoztass egy egységet egy szenzorról, a legegyszerűbb módja az, hogy ha jobb egérrel rákattintasz egy egységre és megmondod neki hogy menjen máshova."
 
 msgid "Multiple units can be selected by holding CTRL while clicking."
 msgstr ""
@@ -822,7 +822,7 @@ msgid "Using Sensors"
 msgstr ""
 
 msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
-msgstr ""
+msgstr "Tüzérségi épületek a legegyszerűbbek. Egyszerűen építs egy szenzor tornyot és ha a szenzor torony céloz valamit a tüzérség épületeinek hatótávján belül, akkor tüzet fog rá nyitni."
 
 msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
 msgstr ""
@@ -873,19 +873,19 @@ msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit de
 msgstr ""
 
 msgid "Weapons"
-msgstr ""
+msgstr "Fegyverek"
 
 msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
-msgstr ""
+msgstr "A legtöbb fegyvernek van egyenértékű VTOL verziója, amit legalább kétszer annyit sebez, de a lőszere limitált."
 
 msgid "VTOLs"
-msgstr ""
+msgstr "VTOL egységek"
 
 msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
-msgstr ""
+msgstr "A VTOL egységek gyártásához a „VTOL meghajtás” és a „VTOL gyár” technológiák felfedezése és kutatása szükséges."
 
 msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
-msgstr ""
+msgstr "Emellett a „VTOL újratöltő platform” kutatása és néhány építése is szükséges, hogy a VTOL egységei újratölthessék a lőszereiket."
 
 msgid "Weapon Selection"
 msgstr "Fegyverválasztás"
@@ -894,7 +894,7 @@ msgid "As you discover and research more weapons, you'll also discover that cert
 msgstr "Ahogy több és több fegyvert fedez fel és fejleszt ki, azt is fel fogja fedezni, hogy bizonyos fegyverek drámaian jobbak másoknál bizonyos helyzetekben (vagy bizonyos egységek vagy épületek ellen)."
 
 msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Ha befejezi egy új fegyver kutatását, a hírszerzési kijelző egy üzenetet fog megjeleníteni a tulajdonságairól."
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
 msgstr ""
