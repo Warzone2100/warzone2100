@@ -16,8 +16,8 @@ uniform mat4 ViewMatrix;
 uniform mat4 ModelUVLightmapMatrix;
 
 uniform int hasTangents; // whether tangents were calculated for model
-uniform vec4 cameraPos; // in modelSpace
-uniform vec4 lightPosition;
+uniform vec4 lightPosition; // in view space
+uniform vec4 cameraPos; // in model space
 
 #if defined(NEWGL) || defined(GL_EXT_gpu_shader4)
 #define intMod(a, b) a % b
@@ -42,17 +42,17 @@ VERTEX_INPUT vec4 instancePackedValues; // shaderStretch_ecmState_alphaTest_anim
 VERTEX_INPUT vec4 instanceColour;
 VERTEX_INPUT vec4 instanceTeamColour;
 
-VERTEX_OUTPUT vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)
 VERTEX_OUTPUT vec3 normal, lightDir, halfVec;
-VERTEX_OUTPUT mat4 NormalMatrix;
+VERTEX_OUTPUT mat3 NormalMatrix; // local to model space for directional vectors
+VERTEX_OUTPUT mat3 TangentSpaceMatrix;
 VERTEX_OUTPUT vec4 colour;
 VERTEX_OUTPUT vec4 teamcolour;
-VERTEX_OUTPUT vec4 packed_ecmState_alphaTest;
+VERTEX_OUTPUT vec4 packed_ecmState_alphaTest_texCoord;
 VERTEX_OUTPUT vec3 uvLightmap; // uvLightmap in .xy, heightAboveTerrain in .z
 
 // for Shadows
-VERTEX_OUTPUT vec3 fragPos;
-VERTEX_OUTPUT vec3 fragNormal;
+VERTEX_OUTPUT vec3 posModelSpace;
+VERTEX_OUTPUT vec3 posViewSpace;
 
 float when_gt(float x, float y) {
   return max(sign(x - y), 0.0);
@@ -61,12 +61,10 @@ float when_gt(float x, float y) {
 void main()
 {
 	// unpack inputs
-	mat4 ModelViewMatrix = ViewMatrix * instanceModelMatrix;
 	float stretch = instancePackedValues.x;
 	float ecmState = instancePackedValues.y;
 	float alphaTest = instancePackedValues.z;
 	float animFrameNumber = instancePackedValues.w;
-	NormalMatrix = transpose(inverse(ModelViewMatrix));
 
 	// Pass texture coordinates to fragment shader
 	vec2 texCoord = vertexTexCoordAndTexAnim.xy;
@@ -76,55 +74,48 @@ void main()
 	float vFrame = float(frame / framesPerLine) * vertexTexCoordAndTexAnim.w; // texAnim.y
 	texCoord = vec2(texCoord.x + uFrame, texCoord.y + vFrame);
 
-	// Lighting we pass to the fragment shader
-	vec4 viewVertex = ModelViewMatrix * vec4(vertex.xyz, -vertex.w); // FIXME
-	vec3 eyeVec = normalize(-viewVertex.xyz);
-	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	lightDir = normalize(lightPosition.xyz);
+	mat4 ModelVeiwMatrix = ViewMatrix * instanceModelMatrix;
+	NormalMatrix = mat3(transpose(inverse(instanceModelMatrix)));
+
+	// transform face normals of classic models to World Space
+	normal = -normalize(NormalMatrix * vertexNormal);
 
 	if (hasTangents != 0)
 	{
-		// Building the matrix Eye Space -> Tangent Space with handness
-		vec3 t = normalize((NormalMatrix * vertexTangent).xyz);
-		vec3 b = cross (n, t) * vertexTangent.w;
-		mat3 TangentSpaceMatrix = mat3(t, n, b);
-
-		// Transform light and eye direction vectors by tangent basis
-		lightDir *= TangentSpaceMatrix;
-		eyeVec *= TangentSpaceMatrix;
+		// Building the World Space <-> Tangent Space matrix with handness w to support uv mirroring
+		normal = normalize(NormalMatrix * vertexNormal);
+		vec3 t = normalize(NormalMatrix * vertexTangent.xyz);
+		vec3 b = cross (normal, t) * vertexTangent.w;
+		TangentSpaceMatrix = mat3(t, normal, b);
 	}
 
-	normal = n;
-	halfVec = lightDir + eyeVec;
+	// Lighting
+	posViewSpace = vec3(ModelVeiwMatrix * vertex);
+	posModelSpace = vec3(instanceModelMatrix * vertex);
+	vec3 cameraVec = normalize(cameraPos.xyz - posModelSpace.xyz);
+	lightDir = -normalize(mat3(inverse(ViewMatrix)) * lightPosition.xyz); //to-do: pass Sun pos in world space
+	halfVec = lightDir + cameraVec;
+
+	vec3 localPosition = vertex.xyz;
 
 	// Implement building stretching to accommodate terrain
-	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
 		// NOTE: 'stretch' may be:
 		//	- if positive: building stretching
 		//	- if negative: the height above the terrain of the model intance overall
-		position.y -= (stretch * when_gt(stretch, 0.f));
+		localPosition.y -= (stretch * when_gt(stretch, 0.f));
 	}
 
-	vec4 positionModelSpace = instanceModelMatrix * position;
-	fragPos = positionModelSpace.xyz;
-	fragNormal = vertexNormal;
-
 	float heightAboveTerrain = abs(clamp(sign(stretch), -1.f, 0.f)) * abs(stretch);
-	uvLightmap = vec3((ModelUVLightmapMatrix * positionModelSpace).xy, position.y + heightAboveTerrain);
+	uvLightmap = vec3((ModelUVLightmapMatrix * vec4(posModelSpace, 1.0)).xy, localPosition.y + heightAboveTerrain);
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
-	vec4 gposition = ModelViewProjectionMatrix * position;
+	vec4 gposition = ProjectionMatrix * ModelVeiwMatrix * vec4(localPosition, vertex.w);
 	gl_Position = gposition;
-
-	// Remember vertex distance
-	float vertexDistance = gposition.z;
 
 	// pack outputs for fragment shader
 	colour = instanceColour;
 	teamcolour = instanceTeamColour;
-	texCoord_vertexDistance = vec4(texCoord.x, texCoord.y, vertexDistance, 0.f);
-	packed_ecmState_alphaTest = vec4(ecmState, alphaTest, 0.f, 0.f);
+	packed_ecmState_alphaTest_texCoord = vec4(ecmState, alphaTest, texCoord);
 }
