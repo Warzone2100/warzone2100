@@ -84,6 +84,7 @@ using nonstd::nullopt;
 #define LANG_NAME_PORTUGUESE "Português"
 #define LANG_NAME_ROMANIAN "Română"
 #define LANG_NAME_RUSSIAN "Русский"
+#define LANG_NAME_SERBIAN "Srpski"
 #define LANG_NAME_SLOVAK "Slovensky"
 #define LANG_NAME_SLOVENIAN "Slovenski"
 #define LANG_NAME_SPANISH "Español"
@@ -152,6 +153,7 @@ static const struct
 	{ "ru", LANG_NAME_RUSSIAN, "ru", LANG_RUSSIAN, SUBLANG_DEFAULT },
 	{ "sk", LANG_NAME_SLOVAK, "sk", LANG_SLOVAK, SUBLANG_DEFAULT },
 	{ "sl_SI", LANG_NAME_SLOVENIAN, "sl", LANG_SLOVENIAN, SUBLANG_DEFAULT },
+	{ "sr_RS", LANG_NAME_SERBIAN, "sr_CS", LANG_SERBIAN, SUBLANG_SERBIAN_LATIN }, // Due to how gettext-libintl maps Win32 LangIDs to locales, use sr_CS for Windows
 #if (WINVER >= 0x0600)
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, LANG_SWEDISH, SUBLANG_SWEDISH_SWEDEN },
 #else
@@ -215,6 +217,7 @@ static const struct
 	{ "ru", LANG_NAME_RUSSIAN, "ru", "ru_RU.UTF-8", "ru_RU" },
 	{ "sk", LANG_NAME_SLOVAK, "sk", "sk_SK.UTF-8", "sk_SK" },
 	{ "sl_SI", LANG_NAME_SLOVENIAN, "sl", "sl_SI.UTF-8", "sl" },
+	{ "sr_RS", LANG_NAME_SERBIAN, "sr_RS", "sr_RS.UTF-8@latin", "sr_RS" }, // Use the newer "sr_RS" identifier (with optional @latin)
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, "sv_SE.UTF-8", "sv" },
 //	{ "sv", LANG_NAME_SWEDISH, "sv.UTF-8", "sv" },
 	{ "tr", LANG_NAME_TURKISH, "tr", "tr_TR.UTF-8", "tr_TR" },
