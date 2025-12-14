@@ -80,6 +80,7 @@ static std::map<WzString, const char *> languageIconsMap()
 		{"ru", "flag-RU.png"},
 		{"sk", "flag-SK.png"},
 		{"sl_SI", "flag-SI.png"},
+		{"sr_RS", "flag-RS.png"},
 		{"sv_SE", "flag-SE.png"},
 		{"sv", "flag-SE.png"},
 		{"tr", "flag-TR.png"},
