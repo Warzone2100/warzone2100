@@ -48,7 +48,6 @@ uniform float timeSec;
 FRAGMENT_INPUT vec4 uv1_uv2;
 FRAGMENT_INPUT vec2 uvLightmap;
 FRAGMENT_INPUT float depth;
-FRAGMENT_INPUT float vertexDistance;
 // light in modelSpace:
 FRAGMENT_INPUT vec3 lightDir;
 FRAGMENT_INPUT vec3 eyeVec;
@@ -57,8 +56,8 @@ FRAGMENT_INPUT float fresnel;
 FRAGMENT_INPUT float fresnel_alpha;
 
 // For Shadows
-FRAGMENT_INPUT vec3 fragPos;
-//FRAGMENT_INPUT vec3 fragNormal;
+FRAGMENT_INPUT vec3 posModelSpace;
+FRAGMENT_INPUT vec3 posViewSpace;
 
 #ifdef NEWGL
 out vec4 FragColor;
@@ -98,7 +97,7 @@ vec4 main_bumpMapping()
 	vec3 waterColor = vec3(0.18,0.33,0.42);
 
 	// Light
-	float visibility = getShadowVisibility();
+	float visibility = getShadowVisibility(N, lightDir, 0.001f);
 	float lambertTerm = max(dot(N, lightDir), 0.0);
 	float blinnTerm = pow(max(dot(N, halfVec), 0.0), 128.0);
 	vec3 reflectLight = reflect(-lightDir, N);
@@ -128,9 +127,8 @@ void main()
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
-		fragColor = mix(vec4(fragColor.rgb,fragColor.a), vec4(fogColor.rgb,fragColor.a), fogFactor);
+		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
+		fragColor = mix(vec4(fragColor.rgb,fragColor.a), vec4(fogColor.rgb,fragColor.a), clamp(fogFactor, 0.0, 1.0));
 	}
 
 	FragColor = fragColor;
