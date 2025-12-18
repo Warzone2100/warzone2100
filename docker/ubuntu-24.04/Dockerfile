@@ -27,7 +27,8 @@ ENV PATH="$PATH:$VULKAN_SDK/bin"
 # Download, build, & install SDL3 from source
 COPY .ci/sdl3/install_sdl3.sh /scripts
 RUN chmod +x /scripts/install_sdl3.sh
-RUN cd /tmp && /scripts/install_sdl3.sh
+RUN cd /tmp && /scripts/install_sdl3.sh \
+ && rm -rf /var/lib/apt/lists/*
 
 # Defines arguments which can be passed during build time.
 ARG USER=warzone2100

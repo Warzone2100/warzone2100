@@ -97,7 +97,7 @@ if [ "${DISTRO}" == "ubuntu" ]; then
     echo "WARN: You will need to compile and install SDL3 from source!"
   elif [ "${VERSION_PARTS[0]}" -ge "20" ]; then
     echo "Installing build-dependencies for Ubuntu 20.x - 24.x"
-    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
   elif [ "${VERSION_PARTS[0]}" -ge "25" ]; then
     echo "Installing build-dependencies for Ubuntu 25.x+"
