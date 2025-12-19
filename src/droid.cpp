@@ -1527,6 +1527,8 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
 
+	iPointsToAdd = idiv_round<int>(iPointsToAdd * psDroidToRepair->getPropulsionStats()->repairFactor, 100);
+
 	psDroidToRepair->body = clip<UDWORD>(psDroidToRepair->body + iPointsToAdd, 0, psDroidToRepair->originalBody);
 
 	/* add plasma repair effect whilst being repaired */
