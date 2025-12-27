@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2025-12-19 02:39\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2010,7 +2010,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Поздравляем, Командир - теперь вы готовы к своей первой миссии"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "Обучение завершено. Нажмите Esc или на иконку шестерёнки, чтобы выйти в главное меню."
 
 msgid "CAMPAIGN ONE"
 msgstr "ПЕРВАЯ КАМПАНИЯ"
@@ -8102,7 +8102,7 @@ msgstr "ВНИМАНИЕ: если вы не нажмёте Готов в бли
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "Игрок будет выгнан, если он не установит Готов в ближайшее время: %s"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
@@ -8115,7 +8115,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr "ВНИМАНИЕ: пожалуйста, нажмите кнопку Готов, чтобы игра началась"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "Игроки, которые не установят Готов в ближайшее время, будут выгнаны."
 
 msgid "Can someone please transfer me some units?"
 msgstr "Может кто-нибудь передать мне юнитов?"
@@ -11453,7 +11453,7 @@ msgid "Window"
 msgstr "Окно"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Во весь экран"
 
 msgid "Window Mode"
 msgstr "Оконный режим"
@@ -11462,7 +11462,7 @@ msgid "Windowed"
 msgstr "В окне"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Полноэкранный режим"
 
 msgid "Behaviors"
 msgstr "Поведение"
