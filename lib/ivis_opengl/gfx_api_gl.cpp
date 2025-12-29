@@ -4183,6 +4183,7 @@ void gl_context::beginDepthPass(size_t idx)
 	ASSERT_OR_RETURN(, idx < depthFBO.size(), "Invalid depth pass #: %zu", idx);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO[idx]);
 	glViewport(0, 0, static_cast<GLsizei>(depthBufferResolution), static_cast<GLsizei>(depthBufferResolution));
+	glDepthMask(GL_TRUE);
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
@@ -4208,6 +4209,7 @@ void gl_context::_beginRenderPassImpl()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, viewportWidth, viewportHeight);
 	GLbitfield clearFlags = 0;
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 	glClear(clearFlags);
@@ -5359,6 +5361,7 @@ void gl_context::beginSceneRenderPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
 	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
 	GLbitfield clearFlags = 0;
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 	glClear(clearFlags);
