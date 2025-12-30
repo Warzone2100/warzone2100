@@ -2418,24 +2418,39 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	return JS_TRUE;
 }
 
-//-- ## includeJSON(filePath)
+//-- ## includeJSON(filePath[, quiet])
 //--
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
+//-- The optional ```quiet``` parameter (available in 4.6.3+) can be set to ```true``` to suppress logged errors
+//-- when the supplied filePath does not exist (by default, it is ```false``` and errors are logged and displayed).
+//--
 static JSValue js_includeJSON(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
+	SCRIPT_ASSERT(ctx, argc >= 1, "Must specify a file to include");
 	std::string filePath = JSValueToStdString(ctx, argv[0]);
 	SCRIPT_ASSERT(ctx, strEndsWith(filePath, ".json"), "Include file must end in .json");
+	bool quiet = false;
+	if (argc >= 2)
+	{
+		if (JS_IsBool(argv[1]))
+		{
+			quiet = JS_ToBool(ctx, argv[1]);
+		}
+	}
 	const auto instance = engineToInstanceMap.at(ctx);
 	UDWORD size;
 	char *bytes = nullptr;
 	std::string loadedFilePath;
 	if (!instance->loadFileForInclude(filePath.c_str(), loadedFilePath, &bytes, &size, wzapi::scripting_instance::LoadFileSearchOptions::ScriptPath))
 	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\"", filePath.c_str());
-		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
+		code_part level = (quiet) ? LOG_SCRIPT : LOG_ERROR;
+		debug(level, "Failed to read include file \"%s\"", filePath.c_str());
+		if (!quiet)
+		{
+			JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
+		}
 		return JS_FALSE;
 	}
 	JSValue r = JS_ParseJSON(ctx, bytes, size, loadedFilePath.c_str());
