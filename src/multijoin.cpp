@@ -327,7 +327,7 @@ void handlePlayerLeftInGame(UDWORD player)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
-	bool leftWhilePlayer = NetPlay.players[player].isSpectator;
+	bool leftWhilePlayer = !NetPlay.players[player].isSpectator;
 
 	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
