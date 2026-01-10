@@ -217,7 +217,7 @@ function findLivingEnemies()
 //The enemy of which Cobra is focusing on.
 function getMostHarmfulPlayer()
 {
-	if (isDefined(scavengerPlayer) && (gameTime < lastAttackedByScavs + 25000))
+	if ((lastAttackedByScavs > 0) && (gameTime < lastAttackedByScavs + 25000))
 	{
 		return scavengerPlayer;
 	}

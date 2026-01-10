@@ -665,7 +665,7 @@ function setAntiCyborgChance()
 	const __enemyPlayer = getMostHarmfulPlayer();
 	let antiCyborgChance = Math.max(10, Math.floor(playerCyborgRatio(__enemyPlayer) * 100));
 
-	if (!startAttacking || (isDefined(scavengerPlayer) && (__enemyPlayer === scavengerPlayer)))
+	if (!startAttacking || (__enemyPlayer === scavengerPlayer))
 	{
 		antiCyborgChance = 35;
 	}
