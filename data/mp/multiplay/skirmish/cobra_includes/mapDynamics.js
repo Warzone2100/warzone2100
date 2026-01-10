@@ -76,7 +76,7 @@ function countAllResources()
 			amount += enumStruct(i, _STRUCTURES.derrick).length;
 		}
 
-		if (isDefined(scavengerPlayer))
+		if (scavengers !== NO_SCAVENGERS)
 		{
 			amount += enumStruct(scavengerPlayer, _STRUCTURES.derrick).length;
 		}

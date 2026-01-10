@@ -148,7 +148,7 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	const __scavAttacker = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
+	const __scavAttacker = (attacker.player === scavengerPlayer);
 	const __groupScanRadius = subPersonalities[personality].retreatScanRange;
 
 	const _nearbyUnits = enumRange(victim.x, victim.y, __groupScanRadius, ALLIES, false).filter((obj) => (
