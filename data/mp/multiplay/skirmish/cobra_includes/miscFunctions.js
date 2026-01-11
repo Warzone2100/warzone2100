@@ -429,7 +429,7 @@ function initCobraVars()
 	lastShuffleTime = 0;
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
 	randomResearchLabStart = chance(20);
-	cyborgOnlyGame = (!getStructureLimit(_STRUCTURES.factory, me) && getStructureLimit(_STRUCTURES.cyborgFactory));
+	cyborgOnlyGame = (!getStructureLimit(_STRUCTURES.factory, me) && getStructureLimit(_STRUCTURES.cyborgFactory) > 0);
 	resObj = {
 		lab: undefined,
 		cybCheck: false,
@@ -451,6 +451,31 @@ function initCobraVars()
 function strangeStartSettingOver()
 {
 	return (!noBasesHighTechStart || (startAttacking || (countStruct(_STRUCTURES.derrick, me) > 6) || (gameTime > 360000)));
+}
+
+// Attempt to move one base builder to grab oil in cyborg only games after some kind of base progression goal.
+function swapTruckGroupInCyborgOnly()
+{
+	if (!cyborgOnlyGame)
+	{
+		removeThisTimer("swapTruckGroupInCyborgOnly");
+		return;
+	}
+
+	if ((countStruct(_STRUCTURES.gen, me) > 0) &&
+		(countStruct(_STRUCTURES.lab, me) > 2))
+	{
+		const _trucks = enumDroid(me, DROID_CONSTRUCT);
+
+		if (_trucks.length > 1)
+		{
+			const _truck = _trucks[0];
+			orderDroid(_truck, DORDER_HOLD); // Break them out of any build like order by force if necessary.
+			groupAdd(oilGrabberGroup, _truck);
+		}
+
+		removeThisTimer("swapTruckGroupInCyborgOnly");
+	}
 }
 
 // A simple way to make sure a set of xy coordinates are within the map. If the `off` parameter
