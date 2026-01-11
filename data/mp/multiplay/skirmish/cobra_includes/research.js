@@ -390,7 +390,7 @@ function offensiveResPath()
 	}
 
 	if ((chance(40) && evalResearch(resObj.lab, weaponTech)) ||
-		(!turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && chance(cyborgOnlyGame ? 75 : 30) && evalResearch(resObj.lab, cyborgWeaps)) ||
+		(!turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && chance(cyborgOnlyGame ? 85 : 30) && evalResearch(resObj.lab, cyborgWeaps)) ||
 		(chance(10) && personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")) ||
 		(chance(60) && evalResearch(resObj.lab, extraTech)) ||
 		(useArti && chance(personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 33 : 15) : 10) && evalResearch(resObj.lab, artilleryTech)))
@@ -444,7 +444,7 @@ function airResPath()
 	}
 
 	if (evalResearch(resObj.lab, weaponTech) ||
-		(!turnOffCyborgs && chance(cyborgOnlyGame ? 75 : 50) && evalResearch(resObj.lab, cyborgWeaps)) ||
+		(!turnOffCyborgs && chance(cyborgOnlyGame ? 100 : 50) && evalResearch(resObj.lab, cyborgWeaps)) ||
 		(chance(50) && evalResearch(resObj.lab, extraTech)) ||
 		(personalityIsRocketMain() && pursueResearch(resObj.lab, "R-Wpn-Rocket03-HvAT")))
 	{
@@ -469,7 +469,8 @@ function airResPath()
 function megaEssentialsResPath()
 {
 	if ((forceHover && pursueResearch(resObj.lab, "R-Vehicle-Prop-Hover")) ||
-		(enemyUsedElectronicWarfare && pursueResearch(resObj.lab, "R-Sys-Resistance-Circuits")))
+		(enemyUsedElectronicWarfare && pursueResearch(resObj.lab, "R-Sys-Resistance-Circuits")) ||
+		(cyborgOnlyGame && pursueResearch(resObj.lab, "R-Struc-Factory-Cyborg")))
 	{
 		return true;
 	}
@@ -541,9 +542,17 @@ function resistanceResPath()
 		{
 			if (chance(subPersonalities[personality].alloyPriority + (resObj.isHighOil ? 20 : 0) + ((resObj.hasAlly && resObj.isHighOil) ? 30 : 0)))
 			{
-				if (!cyborgOnlyGame && getResearch("R-Struc-Research-Upgrade03").done && chance(40) && pursueResearch(resObj.lab, "R-Vehicle-Metals05"))
+				if (getResearch("R-Struc-Research-Upgrade03").done && chance(40))
 				{
-					return true;
+					if (!cyborgOnlyGame && pursueResearch(resObj.lab, "R-Vehicle-Metals05"))
+					{
+						return true;
+					}
+
+					if (cyborgOnlyGame && pursueResearch(resObj.lab, "R-Cyborg-Metals05"))
+					{
+						return true;
+					}
 				}
 
 				if (!turnOffCyborgs && countStruct(_STRUCTURES.cyborgFactory, me) && chance(cyborgOnlyGame ? 75 : 50))
@@ -555,7 +564,7 @@ function resistanceResPath()
 					}
 				}
 
-				if (!cyborgOnlyGame || (cyborgOnlyGame && chance(20)))
+				if (!cyborgOnlyGame || (isStructureAvailable(_STRUCTURES.vtolPad) && chance(20)))
 				{
 					if (evalResearch(resObj.lab, _TANK_ARMOR) ||
 						(chance(15) && getResearch("R-Vehicle-Metals04").done && evalResearch(resObj.lab, _TANK_ARMOR_THERMAL)))
@@ -565,7 +574,9 @@ function resistanceResPath()
 				}
 			}
 
-			if (getResearch("R-Struc-Research-Upgrade03").done && chance(componentAvailable("Body8MBT") ? 45 : 30))
+			if (getResearch("R-Struc-Research-Upgrade03").done &&
+				(!cyborgOnlyGame || isStructureAvailable(_STRUCTURES.vtolPad)) &&
+				chance(componentAvailable("Body8MBT") ? 45 : 30))
 			{
 				return evalResearch(resObj.lab, _BODY_RESEARCH);
 			}
