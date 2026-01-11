@@ -716,14 +716,15 @@ function buildBaseStructures()
 
 	if (!highOilMap())
 	{
-		if ((__goodPowerLevel && countAndBuild(_STRUCTURES.factory, 1)) ||
+		if ((__goodPowerLevel && (countAndBuild(_STRUCTURES.factory, 1) || (cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 1)))) ||
 			((!__goodPowerLevel || (getMultiTechLevel() > 1)) && countAndBuild(_STRUCTURES.gen, 1)) ||
 			(countAndBuild(_STRUCTURES.factory, 2)) ||
-			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2)) ||
+			(cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 2)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, (cyborgOnlyGame ? 3 : 2))) ||
 			(countAndBuild(_STRUCTURES.gen, 1)) ||
 			(countAndBuild(_STRUCTURES.hq, 1)) ||
 			(countAndBuild(_STRUCTURES.gen, 2)) ||
-			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3)) ||
+			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, (cyborgOnlyGame ? 4 : 3))) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
 			// Micro optimization on low oil no bases so Cobra builds power modules before the first cyborg factory.
 			((countStruct(_STRUCTURES.gen, me) <= 3) && (gameTime < 900000) && maintenance(undefined, true)) ||
@@ -742,14 +743,17 @@ function buildBaseStructures()
 			(getRealPower() < 550 && countAndBuild(_STRUCTURES.gen, 4)) ||
 			((getMultiTechLevel() < 4) && __goodPowerLevel && randomResearchLabStart && !researchComplete && countAndBuild(_STRUCTURES.lab, 1)) ||
 			(countAndBuild(_STRUCTURES.factory, 2)) ||
+			(cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 2)) ||
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, (__haveAllies) ? 2 : 4)) ||
 			(countAndBuild(_STRUCTURES.gen, 1)) || //a little fail-safe
 			(countAndBuild(_STRUCTURES.hq, 1)) ||
 			(countAndBuild(_STRUCTURES.factory, 3)) ||
+			(cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 3)) ||
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 5)) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 7)) ||
-			(countAndBuild(_STRUCTURES.cyborgFactory, 3)) ||
+			(!cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 3)) ||
 			(countAndBuild(_STRUCTURES.factory, 5)) ||
+			(cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 5)) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 8)) ||
 			(countAndBuild(_STRUCTURES.cyborgFactory, 5)) ||
 			(__goodPowerLevel && countAndBuild(_STRUCTURES.repair, 3)))
@@ -957,12 +961,13 @@ function strangeBuildOrder()
 	if (!__isNTW)
 	{
 		if ((countAndBuild(_STRUCTURES.factory, 2)) ||
+			(cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 2)) ||
 			(countAndBuild(_STRUCTURES.gen, 2)) ||
 			(countAndBuild(_STRUCTURES.hq, 1)) || // helps artillery hit stuff near the base
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 1)) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, countStruct(_STRUCTURES.gen, me) + 1)) ||
 			(maintenance()) ||
-			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
+			(!cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2)))
 		{
 			return true;
@@ -971,10 +976,11 @@ function strangeBuildOrder()
 	else
 	{
 		if ((countAndBuild(_STRUCTURES.factory, 2)) ||
+			(cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 2)) ||
 			(countAndBuild(_STRUCTURES.gen, 3)) ||
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 2)) ||
 			(needPowerGenerator() && countAndBuild(_STRUCTURES.gen, 7)) ||
-			(countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
+			(!cyborgOnlyGame && countAndBuild(_STRUCTURES.cyborgFactory, 1)) ||
 			(countAndBuild(_STRUCTURES.hq, 1)) || // helps artillery hit stuff near the base
 			((getMultiTechLevel() < 4) && !researchComplete && countAndBuild(_STRUCTURES.lab, 3)) ||
 			(maintenance(constructGroup) || maintenance(constructGroupNTWExtra)) ||

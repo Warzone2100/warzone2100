@@ -459,7 +459,7 @@ function targetPlayer(playerNumber)
 {
 	const __previousTarget = getMostHarmfulPlayer();
 
-	if (isDefined(scavengerPlayer) && ((playerNumber === scavengerPlayer) || (__previousTarget === scavengerPlayer)))
+	if ((playerNumber === scavengerPlayer) || (__previousTarget === scavengerPlayer))
 	{
 		return false; //No targeting scavs.
 	}
@@ -544,7 +544,7 @@ function attackThisObject(droidID, target)
 		return;
 	}
 
-	const __isScav = isDefined(scavengerPlayer) && _t.player === scavengerPlayer;
+	const __isScav = (_t.player === scavengerPlayer);
 
 	if (droidReady(droidID) && droidCanReach(_d, _t.x, _t.y))
 	{

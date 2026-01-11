@@ -98,7 +98,7 @@ function getAliveEnemyPlayers(player)
 		}
 	}
 
-	if (defined(scavengerPlayer) &&
+	if ((scavengers !== NO_SCAVENGERS) &&
 		(countStruct("A0BaBaFactory", scavengerPlayer) +
 		countStruct(DERRICK_STAT, scavengerPlayer) +
 		countDroid(DROID_ANY, scavengerPlayer)) > 0)

@@ -25,6 +25,7 @@ function eventStartLevel()
 	setTimer("checkAllForRepair", 600 + __delay + (4 * __easyTimeDelay));
 	setTimer("cobraDoResearch", 800 + __delay + (3 * __easyTimeDelay));
 	setTimer("lookForOil", 1000 + __delay);
+	setTimer("swapTruckGroupInCyborgOnly", 1200 + __delay);
 	setTimer("artilleryTactics", 1400 + __delay);
 	setTimer("vtolTactics", 1600 + __delay);
 	setTimer("groundTactics", 2000 + __delay);
@@ -148,7 +149,7 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	const __scavAttacker = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
+	const __scavAttacker = (attacker.player === scavengerPlayer);
 	const __groupScanRadius = subPersonalities[personality].retreatScanRange;
 
 	const _nearbyUnits = enumRange(victim.x, victim.y, __groupScanRadius, ALLIES, false).filter((obj) => (
