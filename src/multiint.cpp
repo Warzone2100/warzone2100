@@ -5632,6 +5632,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		locked.spectators = ini.value("spectators", challengeActive).toBool();
 		locked.name = ini.value("name", false).toBool();
 		locked.readybeforefull = ini.value("readybeforefull", (getHostLaunch() == HostLaunch::Autohost)).toBool();
+		locked.cheats = ini.value("cheats", false).toBool();
 	}
 	ini.endGroup();
 
