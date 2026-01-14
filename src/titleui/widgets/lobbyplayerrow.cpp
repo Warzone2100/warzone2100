@@ -743,9 +743,10 @@ void WzPlayerRow::updateState()
 			{
 				playerInfoTooltip += "\n";
 			}
-			std::string hash = identity.publicHashString(20);
+			std::string b64Identity = base64Encode(identity.toBytes(EcKey::Public));
 			playerInfoTooltip += _("Player ID: ");
-			playerInfoTooltip += hash.empty()? _("(none)") : hash;
+			playerInfoTooltip += "\n";
+			playerInfoTooltip += b64Identity.empty()? _("(none)") : b64Identity;
 		}
 	}
 	playerInfo->setTip(playerInfoTooltip);
