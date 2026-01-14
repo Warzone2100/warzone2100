@@ -37,6 +37,8 @@
 #include "template.h"
 #include "difficulty.h"
 #include "activity.h"
+#include "multiint.h"
+#include "multiplay.h"
 
 struct CHEAT_ENTRY
 {
@@ -222,6 +224,12 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	auto r = NETbeginDecode(queue, GAME_DEBUG_MODE);
 	NETbool(r, val);
 	NETend(r);
+
+	if (getLockedOptions().cheats && val)
+	{
+		addConsoleMessage(_("The host has disabled debug mode / cheats for this game."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		return;
+	}
 
 	DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	bool oldDebugMode = dbgInputManager.debugMappingsAllowed();
