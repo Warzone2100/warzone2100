@@ -2354,6 +2354,8 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 	// Verify it's a human player
 	ASSERT_OR_RETURN(SpectatorToPlayerMoveResult::FAILED, isHumanPlayer(playerIdx) && NetPlay.players[playerIdx].isSpectator, "playerIdx is not a currently-connected spectator: %" PRIu32 "", playerIdx);
 
+	bool previousPlayersShouldCheckReadyValue = multiplayPlayersShouldCheckReady();
+
 	// Check if the host has moved this player to a spectator before, if so deny (unless the *host* is the one triggering the move)
 	if (!hostOverride && wasAlreadyMovedToSpectatorsByHost(playerIdx))
 	{
@@ -2396,6 +2398,8 @@ SpectatorToPlayerMoveResult NETmoveSpectatorToPlayerSlot(uint32_t playerIdx, opt
 
 	// Broadcast the swapped player info
 	NETBroadcastTwoPlayerInfo(playerIdx, newPlayerIdx.value());
+
+	handlePossiblePlayersShouldCheckReadyChange(previousPlayersShouldCheckReadyValue);
 
 	return SpectatorToPlayerMoveResult::SUCCESS;
 }
