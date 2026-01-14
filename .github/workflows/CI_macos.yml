@@ -160,6 +160,16 @@ jobs:
           echo "ERROR: configure_mac.cmake failed"
           exit ${result}
         fi
+    - name: Upload vcpkg logs (on failure)
+      uses: actions/upload-artifact@v5
+      if: failure()
+      with:
+        name: failure_macos_${{ matrix.architecture }}_vcpkg_logs
+        path: |
+          ${{ github.workspace }}/build/vcpkg/buildtrees/*/*.log
+          ${{ github.workspace }}/build/vcpkg/buildtrees/*/*.txt
+        if-no-files-found: 'warn'
+        retention-days: 1
     - name: Build Xcode project
       working-directory: ./build
       run: |
