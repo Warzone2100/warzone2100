@@ -37,6 +37,7 @@
 //#include "infobutton.h"
 
 #include "lib/framework/input.h"
+#include "lib/framework/wzapp.h"
 
 #include "lib/netplay/netplay.h"
 
@@ -564,6 +565,7 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 
 	// add player info box (takes up the rest of the space in the middle)
 	widget->playerInfo = std::make_shared<W_BUTTON>();
+	widget->playerInfo->style |= WBUT_SECONDARY;
 	widget->playerInfo->UserData = playerIdx;
 	widget->playerInfo->displayFunction = displayPlayer;
 	widget->playerInfo->pUserData = new DisplayPlayerCache();
@@ -584,6 +586,20 @@ std::shared_ptr<WzPlayerRow> WzPlayerRow::make(uint32_t playerIdx, const std::sh
 		auto strongTitleUI = titleUI.lock();
 		ASSERT_OR_RETURN(, strongTitleUI != nullptr, "Title UI is gone?");
 		const auto& locked = getLockedOptions();
+		if (button.getOnClickButtonPressed() == WKEY_SECONDARY && NetPlay.players[playerIdx].allocated)
+		{
+			// right-clicking on human players copies the player id to the clipboard
+			if (game.blindMode == BLIND_MODE::NONE || (NetPlay.isHost && NetPlay.hostPlayer >= MAX_PLAYER_SLOTS))
+			{
+				const auto& identity = getOutputPlayerIdentity(playerIdx);
+				if (!identity.empty())
+				{
+					std::string b64Identity = base64Encode(identity.toBytes(EcKey::Public));
+					wzSetClipboardText(b64Identity.c_str());
+				}
+			}
+			return;
+		}
 		if (playerIdx == selectedPlayer || isHostOrAdmin())
 		{
 			uint32_t player = playerIdx;
@@ -712,7 +728,6 @@ void WzPlayerRow::updateState()
 	{
 		if (NetPlay.isHost && !locked.ai)
 		{
-			playerInfo->style |= WBUT_SECONDARY;
 			if (!isSpectatorOnlySlot(playerIdx))
 			{
 				playerInfoTooltip = _("Click to change AI, right click to distribute choice");
