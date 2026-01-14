@@ -721,8 +721,8 @@ jobs:
           $VerbosePreference = "Continue"
           . "src\.ci\powershell\request.ps1"
 
-          $INNOSETUP_DL_URL = "https://github.com/jrsoftware/issrc/releases/download/is-6_6_1/innosetup-6.6.1.exe"
-          $INNOSETUP_DL_SHA256 = "d243ce440c02705530699554fb9612b9b2bd7a2a90629cdb7f41e66f5faeb91f"
+          $INNOSETUP_DL_URL = "https://github.com/jrsoftware/issrc/releases/download/is-6_7_0/innosetup-6.7.0.exe"
+          $INNOSETUP_DL_SHA256 = "f45c7d68d1e660cf13877ec36738a5179ce72a33414f9959d35e99b68c52a697"
 
           $INNOSETUP_DL_PATH = ".\dependency-dl\innosetup.exe"
           $req = Req -Params @{ 'Method'='GET';'Uri'="$INNOSETUP_DL_URL";'OutFile'="${INNOSETUP_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${INNOSETUP_DL_SHA256}" -Algorithm SHA256
