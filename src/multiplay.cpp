@@ -377,6 +377,8 @@ void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
 	}
 
 	ingame.lastNotReadyCheck = now;
+	std::array<bool, MAX_CONNECTED_PLAYERS> queuedToKickIdx {};
+
 	for (uint32_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		if (!isHumanPlayer(i))
@@ -399,6 +401,19 @@ void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
 
 		auto totalSecondsNotReady = calculateSecondsNotReadyForPlayer(i, now);
 		if (totalSecondsNotReady >= NotReadyAutoKickSeconds) {
+			// record that player should be kicked, but wait to kick until after processing all slots
+			queuedToKickIdx[i] = true;
+		}
+		else if (!NetPlay.players[i].ready && totalSecondsNotReady >= (NotReadyAutoKickSeconds - 8)) {
+			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKickWarning, i, static_cast<uint32_t>(NotReadyAutoKickSeconds - totalSecondsNotReady)));
+		}
+	}
+
+	// actually process pending kicks
+	for (uint32_t i = 0; i < queuedToKickIdx.size(); ++i)
+	{
+		if (queuedToKickIdx[i])
+		{
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") because they aren't ready. (Timeout: %u seconds)", i, getPlayerName(i), NotReadyAutoKickSeconds);
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKicked, i, static_cast<uint32_t>(NotReadyAutoKickSeconds)));
@@ -408,9 +423,6 @@ void autoLobbyNotReadyKickRoutine(std::chrono::steady_clock::time_point now)
 				wz_command_interface_output("WZEVENT: notready-kick: %u %s %s\n", i, NetPlay.players[i].IPtextAddress, playerPublicKeyB64.c_str());
 			}
 			kickPlayer(i, "You have been removed from the room.\nYou have spent too much time without checking Ready.\n\nIn the future, please check Ready and leave it checked, to avoid delaying games for other players.", ERROR_CONNECTION, false);
-		}
-		else if (!NetPlay.players[i].ready && totalSecondsNotReady >= (NotReadyAutoKickSeconds - 8)) {
-			sendQuickChat(WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE, realSelectedPlayer, WzQuickChatTargeting::targetAll(), WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::constructMessageData(WzQuickChatDataContexts::INTERNAL_LOCALIZED_LOBBY_NOTICE::Context::NotReadyKickWarning, i, static_cast<uint32_t>(NotReadyAutoKickSeconds - totalSecondsNotReady)));
 		}
 	}
 }
