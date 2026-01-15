@@ -140,12 +140,30 @@ static inline JSCFunctionListEntry QJS_CGETSET_DEF(const char *name, JSCFunction
 	return entry;
 }
 
-struct JSContextValue {
+struct JSToJsonContext
+{
 	JSContext *ctx;
-	JSValue value;
+	std::vector<JSValue> stack;
 	bool skip_constructors;
+
+	JSToJsonContext(JSContext *ctx, bool skip_constructors)
+	: ctx(ctx)
+	, skip_constructors(skip_constructors)
+	{ }
+
+	void reset()
+	{
+		stack.clear();
+	}
+
+	bool isReset()
+	{
+		return stack.empty();
+	}
 };
-void to_json(nlohmann::json& j, const JSContextValue& value); // forward-declare
+
+// NOTE: May throw if there is a circular reference!
+nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
 bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::function<void (const char *key, JSAtom& atom)>& func, bool enumerableOnly = true); // forward-declare
 
@@ -2818,8 +2836,10 @@ bool quickjs_scripting_instance::readyInstanceForExecution()
 
 bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 {
+	auto toJsonContext = JSToJsonContext(ctx, true);
+
 	// we save 'scriptName' and 'me' implicitly
-	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result](const char *key, JSAtom &atom) {
+	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result, &toJsonContext](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if (!JS_IsException(jsVal))
@@ -2828,7 +2848,13 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 				&& !JS_IsConstructor(ctx, jsVal)
 				)//&& !it.value().equals(engine->globalObject()))
 			{
-				result[nameStr] = JSContextValue{ctx, jsVal, true};
+				try {
+					result[nameStr] = wz_qjs_to_json(toJsonContext, jsVal);
+					ASSERT(toJsonContext.isReset(), "JSToJsonContext has non-empty stack!");
+				} catch (const std::runtime_error &e) {
+					debug(LOG_ERROR, "%s: Failed to convert global \"%s\" to json with error: %s", m_path.c_str(), nameStr.c_str(), e.what());
+				}
+				toJsonContext.reset();
 			}
 		}
 		else
@@ -2918,14 +2944,23 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
 {
 	nlohmann::json globals = nlohmann::json::object();
 
-	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals](const char *key, JSAtom &atom) {
+	auto toJsonContext = JSToJsonContext(ctx, false);
+
+	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals, &toJsonContext](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if ((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
 			/*&& !it.value().equals(engine->globalObject())*/)
 			|| nameStr == "Upgrades" || nameStr == "Stats")
 		{
-			globals[nameStr] = JSContextValue{ctx, jsVal, false}; // uses to_json JSContextValue implementation
+			try {
+				globals[nameStr] = wz_qjs_to_json(toJsonContext, jsVal);
+				ASSERT(toJsonContext.isReset(), "JSToJsonContext has non-empty stack!");
+			} catch (const std::runtime_error &e) {
+				debug(LOG_ERROR, "[D] %s: Failed to convert global \"%s\" to json with error: %s", m_path.c_str(), nameStr.c_str(), e.what());
+				globals[nameStr] = "<ERROR: OBJECT WITH CIRCULAR REFERENCES>";
+			}
+			toJsonContext.reset();
 		}
         JS_FreeValue(ctx, jsVal);
 	});
@@ -3328,7 +3363,13 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
 	JS_FreeValue(ctx, currentFuncObj);
 	quickjs_execution_context execution_context(ctx);
-	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val, true});
+	auto toJsonContext = JSToJsonContext(ctx, true);
+	try {
+		wzapi::setUpgradeStats(execution_context, player, name, type, index, wz_qjs_to_json(toJsonContext, val));
+	} catch (const std::runtime_error& e) {
+		debug(LOG_ERROR, "Failed to convert input value to json with error: %s", e.what());
+		return JS_ThrowTypeError(ctx, "Failed to convert input value to json with error: %s", e.what());
+	}
 	// Now read value and return it
 	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
@@ -3651,8 +3692,9 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 
 // Enable JSON support for custom types
 
-// JSContextValue
-void to_json(nlohmann::json& j, const JSContextValue& v) {
+// NOTE: May throw if there is a circular reference!
+nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
+{
 	// IMPORTANT: This largely follows the Qt documentation on QJsonValue::fromVariant
 	// See: http://doc.qt.io/qt-5/qjsonvalue.html#fromVariant
 	//
@@ -3662,103 +3704,113 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 
 	// Note: Older versions of Qt 5.x (5.6?) do not define QMetaType::Nullptr,
 	//		 so check value.isNull() instead.
-	if (JS_IsNull(v.value))
+	if (JS_IsNull(value))
 	{
-		j = nlohmann::json(); // null value
-		return;
+		return nlohmann::json(); // null value
 	}
 
-	if (WZ_QJS_IsArray(v.ctx, v.value))
+	if (JS_IsObject(value))
 	{
-		j = nlohmann::json::array();
-		uint64_t length = 0;
-		if (QuickJS_GetArrayLength(v.ctx, v.value, length))
+		if (JS_IsConstructor(c.ctx, value))
 		{
-			for (uint64_t k = 0; k < length; k++) // TODO: uint64_t isn't correct here, as we call GetUint32...
-			{
-				JSValue jsVal = JS_GetPropertyUint32(v.ctx, v.value, k);
-				nlohmann::json jsonValue;
-				to_json(jsonValue, JSContextValue{v.ctx, jsVal, v.skip_constructors});
-				j.push_back(jsonValue);
-				JS_FreeValue(v.ctx, jsVal);
-			}
+			return (!c.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
 		}
-		return;
-	}
-	if (JS_IsObject(v.value))
-	{
-		if (JS_IsConstructor(v.ctx, v.value))
+
+		if (std::any_of(c.stack.begin(), c.stack.end(), [ctx = c.ctx, &value](JSValue& stackVal) -> bool { return JS_SameValueZero(ctx, stackVal, value) != 0; }))
 		{
-			j = (!v.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
-			return;
+			// circular reference
+			throw std::runtime_error("Circular reference detected!");
 		}
-		j = nlohmann::json::object();
-		QuickJS_EnumerateObjectProperties(v.ctx, v.value, [v, &j](const char *key, JSAtom &atom) {
-			JSValue jsVal = JS_GetProperty(v.ctx, v.value, atom);
-			std::string nameStr = key;
-			if (!JS_IsException(jsVal))
+
+		nlohmann::json j;
+		c.stack.push_back(value);
+
+		if (WZ_QJS_IsArray(c.ctx, value))
+		{
+			// Handle array
+			j = nlohmann::json::array();
+			uint64_t length = 0;
+			if (QuickJS_GetArrayLength(c.ctx, value, length))
 			{
-				if (!JS_IsConstructor(v.ctx, jsVal))
+				for (uint64_t k = 0; k < length; k++) // TODO: uint64_t isn't correct here, as we call GetUint32...
 				{
-					j[nameStr] = JSContextValue{v.ctx, jsVal, v.skip_constructors};
-				}
-				else if (!v.skip_constructors)
-				{
-					j[nameStr] = "<constructor>";
+					JSValue jsVal = JS_GetPropertyUint32(c.ctx, value, k);
+					nlohmann::json jsonValue = wz_qjs_to_json(c, jsVal);
+					j.push_back(jsonValue);
+					JS_FreeValue(c.ctx, jsVal);
 				}
 			}
-			else
-			{
-				debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
-			}
-			JS_FreeValue(v.ctx, jsVal);
-		}, false);
-		return;
+		}
+		else
+		{
+			// Handle actual objects
+			j = nlohmann::json::object();
+			QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &j](const char *key, JSAtom &atom) {
+				JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+				std::string nameStr = key;
+				if (!JS_IsException(jsVal))
+				{
+					if (!JS_IsConstructor(c.ctx, jsVal))
+					{
+						j[nameStr] = wz_qjs_to_json(c, jsVal);
+					}
+					else if (!c.skip_constructors)
+					{
+						j[nameStr] = "<constructor>";
+					}
+				}
+				else
+				{
+					debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
+				}
+				JS_FreeValue(c.ctx, jsVal);
+			}, false);
+		}
+
+		c.stack.pop_back();
+		return j;
 	}
 
-	int tag = JS_VALUE_GET_NORM_TAG(v.value);
+	int tag = JS_VALUE_GET_NORM_TAG(value);
 	switch (tag)
 	{
 		case JS_TAG_BOOL:
-			j = static_cast<bool>(JS_ToBool(v.ctx, v.value) != 0);
-			break;
+			return static_cast<bool>(JS_ToBool(c.ctx, value) != 0);
 		case JS_TAG_INT:
 		{
 			int32_t intVal = 0;
-			if (JS_ToInt32(v.ctx, &intVal, v.value))
+			if (JS_ToInt32(c.ctx, &intVal, value))
 			{
 				// Failed
 				debug(LOG_SCRIPT, "Failed to convert to int32_t");
 			}
-			j = intVal;
-			break;
+			return intVal;
 		}
 		case JS_TAG_FLOAT64:
 		{
 			double dblVal = 0.0;
-			if (JS_ToFloat64(v.ctx, &dblVal, v.value))
+			if (JS_ToFloat64(c.ctx, &dblVal, value))
 			{
 				// Failed
 				debug(LOG_SCRIPT, "Failed to convert to double");
 			}
-			j = dblVal;
-			break;
+			return dblVal;
 		}
 		case JS_TAG_UNDEFINED:
-			j = nlohmann::json(); // null value // ???
-			break;
+			return nlohmann::json(); // null value // ???
 		case JS_TAG_STRING:
 		{
-			const char* pStr = JS_ToCString(v.ctx, v.value);
-			j = json(pStr ? pStr : "");
-			JS_FreeCString(v.ctx, pStr);
-			break;
+			const char* pStr = JS_ToCString(c.ctx, value);
+			auto j = json(pStr ? pStr : "");
+			JS_FreeCString(c.ctx, pStr);
+			return j;
 		}
 		default:
 		{
 			// In every other case, a conversion to a string will be attempted
-			const char* pStr = JS_ToCString(v.ctx, v.value);
+			const char* pStr = JS_ToCString(c.ctx, value);
 			// If the returned string is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
+			auto j = nlohmann::json();
 			if (pStr)
 			{
 				std::string str(pStr);
@@ -3770,12 +3822,13 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 				{
 					j = str;
 				}
-				JS_FreeCString(v.ctx, pStr);
+				JS_FreeCString(c.ctx, pStr);
 			}
 			else
 			{
 				j = nlohmann::json(); // null value
 			}
+			return j;
 		}
 	}
 }
