@@ -1302,7 +1302,7 @@ int32_t LobbyBrowser::idealWidth()
 
 int32_t LobbyBrowser::idealHeight()
 {
-	return 600;
+	return 700;
 }
 
 #define WZLOBBY_TABLE_COL_PADDING_X 5
