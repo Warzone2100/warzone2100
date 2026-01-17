@@ -49,6 +49,7 @@ void WzGameBrowserTitleUI::start()
 {
 	if (bAlreadyStarted)
 	{
+		screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 		refreshLobbyBrowser(gameBrowserForm);
 		return;
 	}

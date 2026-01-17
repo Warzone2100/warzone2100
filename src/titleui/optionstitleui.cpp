@@ -53,6 +53,7 @@ void WzOptionsTitleUI::start()
 {
 	if (bAlreadyStarted)
 	{
+		screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 		return;
 	}
 
