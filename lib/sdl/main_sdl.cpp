@@ -2030,9 +2030,12 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 	setDisplayScale(displayScale);
 
 	// Set the new minimum window size
-	unsigned int minWindowWidth = 0, minWindowHeight = 0;
-	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, newDisplayScaleFactor);
-	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+	if (wzGetCurrentWindowMode() == WINDOW_MODE::windowed)
+	{
+		unsigned int minWindowWidth = 0, minWindowHeight = 0;
+		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, newDisplayScaleFactor);
+		SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+	}
 
 	// Update the game's logical screen size
 	unsigned int oldScreenWidth = screenWidth, oldScreenHeight = screenHeight;
