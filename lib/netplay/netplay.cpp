@@ -334,7 +334,13 @@ static IClientConnection* tmp_socket[MAX_TMP_SOCKETS] = { nullptr };  ///< Socke
 static std::array<TmpSocketInfo, MAX_TMP_SOCKETS> tmp_connectState;
 static bool bAsyncJoinApprovalEnabled = false;
 static std::unordered_map<std::string, size_t> tmp_pendingIPs;
-static lru11::Cache<std::string, size_t> tmp_badIPs(512, 64);
+
+struct TmpBadIPInfo
+{
+	std::chrono::steady_clock::time_point expiry;
+	size_t attempts = 0;
+};
+static lru11::Cache<std::string, TmpBadIPInfo> tmp_badIPs(512, 64);
 
 static IConnectionPollGroup* tmp_socket_set = nullptr;
 static int32_t          NetGameFlags[4] = { 0, 0, 0, 0 };
@@ -4044,15 +4050,25 @@ static void NETaddSessionBanBadIP(const std::string& badIP)
 	{
 		return;
 	}
-	size_t *pNumBadIPAttempts = tmp_badIPs.tryGetPt(badIP);
-	if (pNumBadIPAttempts != nullptr)
+	auto now = std::chrono::steady_clock::now();
+	auto *pBadIpInfo = tmp_badIPs.tryGetPt(badIP);
+	if (pBadIpInfo != nullptr)
 	{
-		if (*pNumBadIPAttempts < std::numeric_limits<size_t>::max())
+		if (now < pBadIpInfo->expiry)
 		{
-			(*pNumBadIPAttempts)++;
+			if (pBadIpInfo->attempts < std::numeric_limits<size_t>::max())
+			{
+				pBadIpInfo->attempts++;
+			}
+		}
+		else
+		{
+			pBadIpInfo->attempts = 1;
 		}
 
-		if (*pNumBadIPAttempts == 100)
+		pBadIpInfo->expiry = now + std::chrono::minutes(30);
+
+		if (pBadIpInfo->attempts == 100)
 		{
 			// add to permanent ban list
 			addIPToBanList(badIP.c_str(), "BAD_USER");
@@ -4060,7 +4076,7 @@ static void NETaddSessionBanBadIP(const std::string& badIP)
 	}
 	else
 	{
-		tmp_badIPs.insert(badIP, 1);
+		tmp_badIPs.insert(badIP, TmpBadIPInfo{now + std::chrono::minutes(30), 1});
 	}
 }
 
@@ -4078,10 +4094,20 @@ static bool quickRejectConnection(const std::string& ip)
 			return true;
 		}
 	}
-	if (tmp_badIPs.tryGetPt(ip) != nullptr)
+	auto *pBadIpInfo = tmp_badIPs.tryGetPt(ip);
+	if (pBadIpInfo != nullptr)
 	{
-		NETaddSessionBanBadIP(ip);
-		return true;
+		if (std::chrono::steady_clock::now() < pBadIpInfo->expiry)
+		{
+			NETaddSessionBanBadIP(ip);
+			return true;
+		}
+		else
+		{
+			// clean up expired bad entry
+			tmp_badIPs.remove(ip);
+			pBadIpInfo = nullptr;
+		}
 	}
 
 	return false;
