@@ -5926,6 +5926,11 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 		}
 	}
 
+	for (unsigned playerIndex = MAX_PLAYERS_IN_GUI; playerIndex < MAX_CONNECTED_PLAYERS; playerIndex++)
+	{
+		clearPlayerName(playerIndex);
+	}
+
 	if (!bShouldResetLocal && selectedPlayerPosition < game.maxPlayers && selectedPlayer != selectedPlayerPosition) {
 		std::swap(NetPlay.players[selectedPlayer].position, NetPlay.players[selectedPlayerPosition].position);
 	}
