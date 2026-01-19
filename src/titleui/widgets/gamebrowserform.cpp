@@ -816,16 +816,13 @@ static inline LobbyGameInfo lobbyGAMESTRUCTtoLobbyGameInfo(const GAMESTRUCT &lob
 	info.isPrivate = lobbyGame.privateGame != 0;
 	info.limits = lobbyGame.limits;
 
-	if (NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
+	if (lobbyGame.desc.alliances <= ALLIANCE_TYPE_MAX)
 	{
-		if (lobbyGame.desc.alliances <= ALLIANCE_TYPE_MAX)
-		{
-			info.alliancesMode = static_cast<AllianceType>(lobbyGame.desc.alliances);
-		}
-		if (lobbyGame.desc.dwUserFlags[2] <= static_cast<uint32_t>(BLIND_MODE_MAX))
-		{
-			info.blindMode = static_cast<BLIND_MODE>(lobbyGame.desc.dwUserFlags[2]);
-		}
+		info.alliancesMode = static_cast<AllianceType>(lobbyGame.desc.alliances);
+	}
+	if (lobbyGame.desc.dwUserFlags[2] <= static_cast<uint32_t>(BLIND_MODE_MAX))
+	{
+		info.blindMode = static_cast<BLIND_MODE>(lobbyGame.desc.dwUserFlags[2]);
 	}
 
 	info.connectionDesc.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, lobbyGame.desc.host, lobbyGame.hostPort);
