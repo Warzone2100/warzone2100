@@ -6915,6 +6915,11 @@ WzMultiplayerOptionsTitleUI::MultiMessagesResult WzMultiplayerOptionsTitleUI::fr
 				if (!multiplayLacksEnoughPlayersToAutostart())
 				{
 					startMultiplayerGame();
+
+					// Start the game before processing more messages.
+					// (startMultiplayerGame transitions to new TitleUI)
+					NETpop(queue);
+					return MultiMessagesResult::StoppedJoining;
 				}
 				else
 				{
