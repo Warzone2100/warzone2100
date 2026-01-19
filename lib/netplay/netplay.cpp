@@ -1984,14 +1984,17 @@ bool NETsend(NETQUEUE queue, NetMessage const& message)
 
 static void NETcloseTempSocket(unsigned int i)
 {
+	std::string joinerPublicKeyB64;
+	std::string joinerName;
+
 	if (tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::PendingAsyncApproval
 		|| tmp_connectState[i].connectState == TmpSocketInfo::TmpConnectState::ProcessJoin)
 	{
 		// If there's any chance we may have issued an async join approval request, ensure we issue a joinFailed event
 		// WZEVENT: joinFailed: <b64pubkey> <b64name> [spec|play] <reason>
 		const auto& joinRequestInfo = tmp_connectState[i].receivedJoinInfo;
-		std::string joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
-		std::string joinerName = joinRequestInfo.name;
+		joinerPublicKeyB64 = base64Encode(joinRequestInfo.identity.toBytes(EcKey::Public));
+		joinerName = joinRequestInfo.name;
 		std::string joinerNameB64 = base64Encode(std::vector<unsigned char>(joinerName.begin(), joinerName.end()));
 		wz_command_interface_output("WZEVENT: joinFailed: %s %s %s %s\n", joinerPublicKeyB64.c_str(), joinerNameB64.c_str(), (joinRequestInfo.playerType == NET_JOIN_SPECTATOR) ? "spec" : "play", "full");
 	}
@@ -2012,6 +2015,10 @@ static void NETcloseTempSocket(unsigned int i)
 		{
 			tmp_pendingIPs.erase(it);
 		}
+	}
+	else
+	{
+		debug(LOG_INFO, "Did not find in pending IPs list: (IP: %s, Identity: %s, Name: %s)", rIP.c_str(), joinerPublicKeyB64.c_str(), joinerName.c_str());
 	}
 }
 
