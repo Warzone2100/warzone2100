@@ -502,13 +502,14 @@ static int saveScreenshotThreadFunc(void * saveRequest)
  */
 void screenDoDumpToDiskIfRequired()
 {
-	WzString fileName = screendump_filename;
 //	iV_Image image = { 0, 0, 8, nullptr };
 
 	if (!screendump_required)
 	{
 		return;
 	}
+
+	WzString fileName = screendump_filename;
 	debug(LOG_3D, "Saving screenshot %s", fileName.toUtf8().c_str());
 	screendump_required = false;
 
