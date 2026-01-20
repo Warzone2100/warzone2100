@@ -231,7 +231,7 @@ void autoLagKickRoutine(std::chrono::steady_clock::time_point now)
 			kickPlayer(i, "Your connection was too laggy.", ERROR_CONNECTION, false);
 			ingame.LagCounter[i] = 0;
 		}
-		else if (LagSecondsCount >= (LagAutoKickSeconds - 3)) {
+		else if (LagSecondsCount == (LagAutoKickSeconds - 3)) {
 			std::string msg = astringf("Auto-kicking player %" PRIu32 " (\"%s\") in %u seconds. (lag)", i, getPlayerName(i, true), (LagAutoKickSeconds - LagSecondsCount));
 			debug(LOG_INFO, "%s", msg.c_str());
 			sendInGameSystemMessage(msg.c_str());
