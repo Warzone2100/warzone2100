@@ -837,6 +837,11 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 		}
 	}
 
+#if defined(WZ_OS_MAC)
+	// Wait for window size changes to be processed
+	SDL_SyncWindow(WZwindow);
+#endif
+
 	return true;
 }
 
@@ -2873,11 +2878,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			wzAsyncExecOnMainThread([]() {
 				// transition to fullscreen mode
 				wzChangeWindowMode(WINDOW_MODE::fullscreen);
-
-#if defined(WZ_OS_MAC)
-				// Wait for window size changes to be processed
-				SDL_SyncWindow(WZwindow);
-#endif
 			});
 		}
 	}
