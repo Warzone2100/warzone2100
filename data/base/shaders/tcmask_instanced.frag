@@ -77,6 +77,7 @@ out vec4 FragColor;
 #include "pointlights.frag"
 #endif
 #include "terrain_combined_frag.glsl"
+#include "light.glsl"
 
 float random(vec2 uv)
 {
@@ -132,15 +133,15 @@ void main()
 	// Сalculate and combine final lightning
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
-	float lambertTerm = max(dot(N, L), 0.0); //diffuse light
-	float visibility = getShadowVisibility(N, L, 0.f);
+	float diffuseFactor = lambertTerm(N, L); //diffuse light
+	float visibility = getShadowVisibility(diffuseFactor, 0.0f);
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
 
 	float specularMapValue = 0.f;
 
-	if (lambertTerm > 0.0)
+	if (diffuseFactor > 0.0)
 	{
 		float vanillaFactor = 0.0; // Classic models shouldn't use diffuse light
 
@@ -154,12 +155,12 @@ void main()
 			float exponent = acos(dot(H, N)) / 0.33; //0.33 is shininess
 			float gaussianTerm = exp(-(exponent * exponent));
 
-			light += specular * gaussianTerm * lambertTerm * specularFromMap;
+			light += specular * gaussianTerm * diffuseFactor * specularFromMap;
 
 			vanillaFactor = 1.0; // Neutralize factor for spec map
 		}
 
-		light += diffuse * lambertTerm * diffuseMap * vanillaFactor;
+		light += diffuse * diffuseFactor * diffuseMap * vanillaFactor;
 	}
 	// ambient light maxed for classic models to keep results similar to original
 	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));

@@ -87,6 +87,7 @@ out vec4 FragColor;
 #endif
 
 #include "terrain_combined_frag.glsl"
+#include "light.glsl"
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
@@ -107,12 +108,12 @@ vec4 main_medium() {
 
 	vec3 L = normalize(groundLightDir);
 	vec3 N = vec3(0.f,0.f,1.f);
+	float diffuseFactor = lambertTerm(N, L); // diffuse lighting
 
-	float visibility = getShadowVisibility(N, L, 0.001f);
+	float visibility = getShadowVisibility(diffuseFactor, 0.001f);
 
-	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
-	vec4 light = (visibility*diffuseLight*0.8*(lambertTerm*lambertTerm) + ambientLight*0.2) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	vec4 light = (visibility*diffuseLight*0.8*(diffuseFactor*diffuseFactor) + ambientLight*0.2) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 

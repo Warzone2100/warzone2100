@@ -93,6 +93,7 @@ out vec4 FragColor;
 #endif
 
 #include "terrain_combined_frag.glsl"
+#include "light.glsl"
 #include "pointlights.frag"
 
 vec3 getGroundUv(int i) {
@@ -122,22 +123,21 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 
 vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	vec3 L = normalize(groundLightDir);
-	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
-	// Gaussian specular term computation
-	vec3 H = normalize(groundHalfVec);
-	float blinnTerm = clamp(dot(b.N, H), 0.f, 1.f);
-	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
-	blinnTerm = pow(blinnTerm, 16.f);
-	float visibility = getShadowVisibility(b.N, L, 0.001f);
+	float diffuseFactor = lambertTerm(b.N, L); // diffuse lighting
+	float visibility = getShadowVisibility(diffuseFactor, 0.001f);
+	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
+
+	float specularFactor = blinnTerm(b.N, normalize(groundHalfVec), b.gloss, 16.f);
+
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
 
 	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 
-	vec4 adjustedAmbientLight = ambientLight*lightmap_vec4.a;
-	vec4 light = (ambientLight*0.30f + visibility*(adjustedAmbientLight*0.40f + adjustedAmbientLight*lambertTerm*0.30f + diffuseLight*lambertTerm)) * lightmap_vec4.a;
+	vec4 adjustedAmbientLight = ambientLight * adjustedTileBrightness;
+	vec4 light = adjustedAmbientLight + diffuseLight * diffuseFactor;
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
 
-	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
+	vec4 light_spec = specularLight * specularFactor * diffuseFactor;
 	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
 	light_spec *= (b.gloss * b.gloss);
 
@@ -159,9 +159,9 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	float waterDeep = 0.003 * murkyFactor;
 	murkiness = clamp(murkiness, 0.0, 1.0);
 	waterDeep = clamp(waterDeep, 0.0, 1.0);
-	res.rgb = mix(res.rgb, (vec3(0.315,0.425,0.475)*vec3(1.0-waterDeep)) * lightmap_vec4.a, murkiness);
+	res.rgb = mix(res.rgb, (vec3(0.315,0.425,0.475)*vec3(1.0-waterDeep)), murkiness);
 
-	return vec4(res.rgb, b.color.a);
+	return vec4(res.rgb * lightmap_vec4.a, b.color.a);
 }
 
 vec4 main_bumpMapping() {
