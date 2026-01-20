@@ -207,6 +207,44 @@ Vector2i const& getMouseWheelSpeed();
 /// Returns true iff the mouse is on the window.
 bool wzMouseInWindow();
 
+
+/* Gamepad */
+
+enum GAMEPAD_BUTTON
+{
+	GAMEPAD_A = 0,
+	GAMEPAD_B = 1,
+	GAMEPAD_X = 2,
+	GAMEPAD_Y = 3,
+	GAMEPAD_BACK = 4,
+	GAMEPAD_START = 6,
+	GAMEPAD_L3 = 7,
+	GAMEPAD_R3 = 8,
+	GAMEPAD_LB = 9,
+	GAMEPAD_RB = 10,
+	GAMEPAD_UP = 11,
+	GAMEPAD_DOWN = 12,
+	GAMEPAD_LEFT = 13,
+	GAMEPAD_RIGHT = 14
+};
+
+enum GAMEPAD_AXIS
+{
+	GAMEPAD_LX = 0,
+	GAMEPAD_LY = 1,
+	GAMEPAD_RX = 2,
+	GAMEPAD_RY = 3,
+	GAMEPAD_LT = 4,
+	GAMEPAD_RT = 5,
+};
+
+void initGamepad();
+
+/* Gamepad Buttons */
+
+bool gamepadButtonPressed(GAMEPAD_BUTTON btn);
+float gamepadAxisValue(GAMEPAD_AXIS axis);
+
 /// Return the position of the mouse where it was clicked last.
 Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code) WZ_DECL_PURE;
 
