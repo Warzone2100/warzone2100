@@ -187,7 +187,7 @@ TITLECODE titleLoop()
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetFogStatus(false);
-	if (screen_RestartBackDrop())
+	if (!headlessGameMode() && screen_RestartBackDrop())
 	{
 		// changed value - draw the backdrop
 		// otherwise, pie_ScreenFrameRenderBegin handles drawing it
@@ -339,7 +339,7 @@ void initLoadingScreen(bool drawbdrop)
 	wzemscripten_display_web_loading_indicator(1);
 #endif
 
-	if (drawbdrop)
+	if (drawbdrop && !headlessGameMode())
 	{
 		if (!screen_GetBackDrop())
 		{
