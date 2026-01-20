@@ -844,7 +844,7 @@ private:
 		eSuccess,
 		eRecoveredFromError
 	};
-	AcquireNextSwapchainImageResult acquireNextSwapchainImage(bool allowHandleSurfaceLost);
+	AcquireNextSwapchainImageResult acquireNextSwapchainImage(bool allowHandleSurfaceLost, bool onCreate = false);
 
 	void handleSurfaceLost(); // Throws on failure
 	void waitForAllIdle(); // Throws on failure
