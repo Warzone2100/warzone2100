@@ -66,6 +66,7 @@ out vec4 FragColor;
 #endif
 
 #include "terrain_combined_frag.glsl"
+#include "light.glsl"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
@@ -97,26 +98,26 @@ vec4 main_bumpMapping()
 	vec3 waterColor = vec3(0.18,0.33,0.42);
 
 	// Light
-	float visibility = getShadowVisibility(N, lightDir, 0.001f);
-	float lambertTerm = max(dot(N, lightDir), 0.0);
-	float blinnTerm = pow(max(dot(N, halfVec), 0.0), 128.0);
+	float diffuseFactor = lambertTerm(N, lightDir);
+	float visibility = getShadowVisibility(diffuseFactor, 0.0f);
+	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
+	float specularFactor = blinnTerm(N, halfVec, 0.f, 128.f);
 	vec3 reflectLight = reflect(-lightDir, N);
 	float r = pow(max(dot(reflectLight, halfVec), 0.0), 14.0);
-	blinnTerm = blinnTerm + r;
+	specularFactor = (specularFactor + r) * 0.5;
 
 	vec4 ambientColor = vec4(ambientLight.rgb * foam, 0.15);
-	vec4 diffuseColor = vec4(diffuseLight.rgb * lambertTerm * waterColor+noise*noise*0.5, 0.35);
-	vec4 specColor = vec4(specularLight.rgb * blinnTerm*0.35, fresnel_alpha);
+	vec4 diffuseColor = vec4(diffuseLight.rgb * diffuseFactor * waterColor+noise*noise*0.5, 0.35);
+	vec4 specColor = vec4(specularLight.rgb * specularFactor * diffuseFactor, fresnel_alpha);
 
 	vec4 finalColor = vec4(0.0);
-	finalColor.rgb = ambientColor.rgb + ((diffuseColor.rgb + specColor.rgb) * visibility);
+	finalColor.rgb = ambientColor.rgb + diffuseColor.rgb + specColor.rgb;
 	finalColor.rgb = mix(finalColor.rgb, (finalColor.rgb+vec3(1.0,0.8,0.63))*0.5, fresnel);
 	finalColor.a = (ambientColor.a + diffuseColor.a + specColor.a) * (1.0-depth);
 
 	vec4 lightmap = texture(lightmap_tex, uvLightmap, 0.0);
-	finalColor.rgb *= vec3(lightmap.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a);
 	finalColor.rgb = blendAddEffectLighting(finalColor.rgb, (lightmap.rgb / 1.5f)); // additive color (from environmental point lights / effects)
-
+	finalColor.rgb *= lightmap.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a);
 	return finalColor;
 }
 
