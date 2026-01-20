@@ -6,7 +6,7 @@ float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeIn
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
-float getShadowVisibility(vec3 normal, vec3 lightDir, float offset)
+float getShadowVisibility(float NdotL, float offset)
 {
 #if WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0
 	// no shadow-mapping
@@ -47,8 +47,7 @@ float getShadowVisibility(vec3 normal, vec3 lightDir, float offset)
 	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(posModelSpace, 1.0);
 	vec3 pos = shadowPos.xyz / shadowPos.w;
 
-	float bias = tan(acos(max(dot(normal, lightDir),0.0))) * offset; 
-
+	float bias = (sqrt(1.0 - NdotL*NdotL) / NdotL) * offset; // should be faster than tan(acos(NdotL))
 
 #if WZ_SHADOW_MODE == 1
 
@@ -212,7 +211,7 @@ float getShadowVisibility(vec3 normal, vec3 lightDir, float offset)
 #endif
 // end WZ_SHADOW_MODE == 2
 
-	visibility = clamp(visibility, 0.5, 1.0);
+	visibility = clamp(visibility, 0.5, 1.0); //to-do: min value must be the value of final ambient component
 	return visibility;
 #endif
 }
