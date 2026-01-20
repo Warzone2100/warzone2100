@@ -5406,6 +5406,11 @@ static void addChatBox(bool preserveOldChat)
 		widgDelete(psWScreen, FRONTEND_TOPFORM);
 	}
 
+	if (headlessGameMode())
+	{
+		return;
+	}
+
 	auto desiredSendMode = (selectedPlayer < MAX_CONNECTED_PLAYERS && ingame.hostChatPermissions[selectedPlayer]) ? ChatBoxWidget::ChatBoxSendMode::ENABLED : ChatBoxWidget::ChatBoxSendMode::HOSTMSG_ONLY;
 
 	auto psExistingChatBoxWidget = widgGetFromID(psWScreen, MULTIOP_CHATBOX);
@@ -7243,6 +7248,8 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	static UDWORD	lastrefresh = 0;
 	PLAYERSTATS		playerStats;
 
+	bool isHeadless = headlessGameMode();
+
 	if (frontendMultiMessages(true) == MultiMessagesResult::StoppedJoining)
 	{
 		// shortcut any further processing - stopped joining, this title UI is about to go away
@@ -7259,7 +7266,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	{
 		netPlayersUpdated = false;
 		lastrefresh = gameTime;
-		if (!multiRequestUp && (NetPlay.isHost || ingame.localJoiningInProgress))
+		if (!multiRequestUp && (NetPlay.isHost || ingame.localJoiningInProgress) && !isHeadless)
 		{
 			if (aiChooserUp >= 0 && NetPlay.players[aiChooserUp].allocated)
 			{
@@ -7281,7 +7288,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 
 	// if we don't have the focus, then autoclick in the chatbox.
-	if (psWScreen->psFocus.expired() && !isMouseOverScreenOverlayChild(mouseX(), mouseY()) && !mouseDown(MOUSE_LMB))
+	if (!isHeadless && psWScreen->psFocus.expired() && !isMouseOverScreenOverlayChild(mouseX(), mouseY()) && !mouseDown(MOUSE_LMB))
 	{
 		auto pChatBox = dynamic_cast<ChatBoxWidget *>(widgGetFromID(psWScreen, MULTIOP_CHATBOX));
 		if (pChatBox)
@@ -7293,17 +7300,19 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		}
 	}
 
-	// chat box handling
-	if (widgGetFromID(psWScreen, MULTIOP_CHATBOX))
+	// console message history handling
+	while (getNumberConsoleMessages() > getConsoleLineInfo())
 	{
-		while (getNumberConsoleMessages() > getConsoleLineInfo())
-		{
-			removeTopConsoleMessage();
-		}
-		updateConsoleMessages();								// run the chatbox
+		removeTopConsoleMessage();
 	}
+	updateConsoleMessages();								// run the chatbox
 
 	// widget handling
+
+	if (isHeadless)
+	{
+		return TITLECODE_CONTINUE; // shortcut everything after this in headless mode
+	}
 
 	/* Map or player selection is open */
 	if (multiRequestUp)
