@@ -4783,20 +4783,6 @@ static void NETallowJoining()
 				wz_command_interface_output("WZEVENT: player join: %u %s %s %s %s\n", index, joinerPublicKeyB64.c_str(), joinerIdentityHash.c_str(), NetPlay.players[index].IPtextAddress, joinerNameB64.c_str());
 			}
 
-			// Narrowcast to new player that everyone has joined.
-			for (uint8_t j = 0; j < MAX_CONNECTED_PLAYERS; ++j)
-			{
-				if (index != j)  // We will broadcast the index == j case.
-				{
-					if (NetPlay.players[j].allocated)
-					{
-						auto w = NETbeginEncode(NETnetQueue(index), NET_PLAYER_JOINED);
-						NETuint8_t(w, j);
-						NETend(w);
-					}
-				}
-			}
-
 			// Broadcast to everyone that a new player has joined
 			{
 				auto w = NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_JOINED);
