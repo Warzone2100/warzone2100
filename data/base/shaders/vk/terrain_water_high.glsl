@@ -22,9 +22,9 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float timeSec;
 };
 
-// interpolated data. location count = 1
+// interpolated data. location count = 2
 struct FragData {
 	// for Shadows
-	vec3 fragPos;
-	// vec3 fragNormal;
+	vec3 posModelSpace;
+	vec3 posViewSpace;
 };

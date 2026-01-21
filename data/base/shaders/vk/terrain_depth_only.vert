@@ -26,6 +26,7 @@ void main()
 {
 //	color = vertexColor;
 	vec4 position = ModelViewProjectionMatrix * vertex;
+	position.z += 0.01f;
 	gl_Position = position;
 //	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vertex), dot(paramy1, vertex), 0., 1.);
 //	uv1 = uv1_tmp.xy / uv1_tmp.w;
