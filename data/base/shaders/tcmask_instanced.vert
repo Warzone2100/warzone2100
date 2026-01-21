@@ -117,5 +117,5 @@ void main()
 	// pack outputs for fragment shader
 	colour = instanceColour;
 	teamcolour = instanceTeamColour;
-	packed_ecmState_alphaTest_texCoord = vec4(ecmState, alphaTest, texCoord);
+	packed_ecmState_alphaTest_texCoord = vec4(ecmState, alphaTest, texCoord.x, texCoord.y);
 }
