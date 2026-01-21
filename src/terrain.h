@@ -59,7 +59,6 @@ enum TerrainShaderType
 extern TerrainShaderType terrainShaderType;
 
 TerrainShaderQuality getTerrainShaderQuality();
-TerrainShaderType getTerrainShaderType();
 bool setTerrainShaderQuality(TerrainShaderQuality newValue);
 std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions();
 bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value);
@@ -69,7 +68,5 @@ bool setTerrainMappingTexturesMaxSize(int texSize);
 int getTerrainMappingTexturesMaxSize();
 
 void initTerrainShaderType(); // must be called after the graphics context is initialized
-
-bool debugToggleTerrainShaderType();
 
 #endif
