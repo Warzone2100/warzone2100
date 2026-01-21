@@ -1198,25 +1198,7 @@ public:
 		}, miscLabel);
 
 		auto dropdownWidget = panel->makeTerrainQualityDropdown(4);
-
-#if defined(DEBUG)
-		// Ideally, the fallback terrain renderer will be removed soon - so don't even offer this toggle outside of debug builds
-		auto pWeakTerrainQualityDropdown = std::weak_ptr<DropdownWidget>(dropdownWidget);
-		prevButton = panel->createButton(3, "Toggle Old / New Shaders", [pWeakTerrainQualityDropdown](){
-			if (debugToggleTerrainShaderType())
-			{
-				auto updateMsg = std::string("Switched terrain shader type to: ") + ((getTerrainShaderType() == TerrainShaderType::SINGLE_PASS) ? "New Shader (Single-Pass)" : "Old (Fallback) Shader");
-				addConsoleMessage(updateMsg.c_str(), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-
-				if (auto pStrongDropdown = pWeakTerrainQualityDropdown.lock())
-				{
-					pStrongDropdown->setSelectedIndex(static_cast<size_t>(getTerrainShaderQuality()));
-				}
-			}
-		}, dropdownWidget);
-#else
 		(void)dropdownWidget;
-#endif
 
 		auto shadowsLabel = panel->createLabel(5, font_regular_bold, "Shadow Mapping:");
 		auto shadowFilterDropdownWidget = panel->makeShadowFilterSizeDropdown(5, shadowsLabel);
