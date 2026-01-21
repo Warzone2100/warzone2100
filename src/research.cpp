@@ -278,6 +278,44 @@ static bool isResAPrereqForResB(size_t resAIndex, size_t resBIndex)
 	return false;
 }
 
+static bool isResearchListValidConnectedDependencyGraph(const std::vector<size_t>& researchIndexes)
+{
+	if (researchIndexes.size() == 0)
+	{
+		return false;
+	}
+
+	std::unordered_map<size_t, size_t> in_degree;
+	std::vector<size_t> source_nodes;
+
+	for (const auto resIdxA : researchIndexes)
+	{
+		for (const auto resIdxB : researchIndexes)
+		{
+			if (isResAPrereqForResB(resIdxA, resIdxB))
+			{
+				in_degree[resIdxA]++;
+			}
+		}
+	}
+
+	for (const auto resIdx : researchIndexes)
+	{
+		if (in_degree.count(resIdx) == 0)
+		{
+			source_nodes.push_back(resIdx);
+		}
+	}
+
+	if (source_nodes.size() != 1)
+	{
+		debug(LOG_WZ, "Category graph has %zu potential source / edge nodes.", source_nodes.size());
+		return false;
+	}
+
+	return true;
+}
+
 static optional<ResearchUpgradeCalculationMode> resCalcModeStringToValue(const WzString& calcModeStr)
 {
 	if (calcModeStr.compare("compat") == 0)
@@ -626,9 +664,21 @@ bool loadResearch(WzConfig &ini)
 		}
 		resCategories[cat].push_back(inc);
 	}
-	for (auto& cat : resCategories)
+	for (auto it = resCategories.begin(); it != resCategories.end(); /* no increment here */)
 	{
-		auto& membersOfCategory = cat.second;
+		auto& membersOfCategory = it->second;
+
+		if (!isResearchListValidConnectedDependencyGraph(membersOfCategory))
+		{
+			debug(LOG_ERROR, "Research category items do not exist on a valid connected dependency graph: \"%s\"", it->first.toUtf8().c_str());
+			for (const auto& inc : membersOfCategory)
+			{
+				asResearch[inc].category.clear();
+			}
+			it = resCategories.erase(it);
+			continue;
+		}
+
 		std::stable_sort(membersOfCategory.begin(), membersOfCategory.end(), [](size_t idxA, size_t idxB) -> bool {
 			return isResAPrereqForResB(idxA, idxB);
 		});
@@ -640,6 +690,8 @@ bool loadResearch(WzConfig &ini)
 			asResearch[inc].categoryMax = categorySize;
 			prog++;
 		}
+
+		++it;
 	}
 
 	// If the first research json file does not explicitly set calculationMode, default to compat
