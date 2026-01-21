@@ -124,7 +124,7 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	vec3 L = normalize(groundLightDir);
 	float diffuseFactor = lambertTerm(b.N, L); // diffuse lighting
-	float visibility = getShadowVisibility(diffuseFactor, 0.001f);
+	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.001f);
 	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
 
 	float specularFactor = blinnTerm(b.N, normalize(groundHalfVec), b.gloss, 16.f);

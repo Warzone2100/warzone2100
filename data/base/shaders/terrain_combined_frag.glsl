@@ -1,4 +1,4 @@
-// common functions shared by terrainDecails.frag shaders
+// common shadow map functions shared by terrainDecails.frag / tcmask_instanced.frag shaders
 
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
@@ -6,7 +6,7 @@ float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeIn
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
-float getShadowVisibility(float NdotL, float offset)
+float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float NdotL, float offset)
 {
 #if WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0
 	// no shadow-mapping
@@ -14,7 +14,7 @@ float getShadowVisibility(float NdotL, float offset)
 #else
 	// Shadow Mapping
 
-	float depthValue = abs(posViewSpace.z/gl_FragCoord.w);
+	float depthValue = abs(fragPosViewSpace.z/gl_FragCoord.w);
 
 	int cascadeIndex = 0;
 //	for (int i = 0; i < WZ_SHADOW_CASCADES_COUNT - 1; ++i)
@@ -44,7 +44,7 @@ float getShadowVisibility(float NdotL, float offset)
 	}
 #endif
 
-	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(posModelSpace, 1.0);
+	vec4 shadowPos = ShadowMapMVPMatrix[cascadeIndex] * vec4(fragPosModelSpace, 1.0);
 	vec3 pos = shadowPos.xyz / shadowPos.w;
 
 	float bias = (sqrt(1.0 - NdotL*NdotL) / NdotL) * offset; // should be faster than tan(acos(NdotL))
