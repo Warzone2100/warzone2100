@@ -86,7 +86,7 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
-#include "terrain_combined_frag.glsl"
+#include "shadow_mapping.glsl"
 #include "light.glsl"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {

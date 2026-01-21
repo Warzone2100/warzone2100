@@ -32,7 +32,7 @@ layout(location = 14) in vec3 posViewSpace;
 layout(location = 0) out vec4 FragColor;
 
 #include "pointlights.glsl"
-#include "terrain_combined_frag.glsl"
+#include "shadow_mapping.glsl"
 #include "light.glsl"
 
 float random(vec2 uv)
