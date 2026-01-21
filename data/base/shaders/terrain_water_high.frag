@@ -99,7 +99,7 @@ vec4 main_bumpMapping()
 
 	// Light
 	float diffuseFactor = lambertTerm(N, lightDir);
-	float visibility = getShadowVisibility(diffuseFactor, 0.0f);
+	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.0f);
 	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
 	float specularFactor = blinnTerm(N, halfVec, 0.f, 128.f);
 	vec3 reflectLight = reflect(-lightDir, N);
