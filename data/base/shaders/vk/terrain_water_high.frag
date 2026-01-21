@@ -26,7 +26,7 @@ layout(location = 9) in FragData frag;
 
 layout(location = 0) out vec4 FragColor;
 
-#include "terrain_combined_frag.glsl"
+#include "shadow_mapping.glsl"
 #include "light.glsl"
 
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
