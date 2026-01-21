@@ -134,7 +134,7 @@ void main()
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float diffuseFactor = lambertTerm(N, L); //diffuse light
-	float visibility = getShadowVisibility(diffuseFactor, 0.0f);
+	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.0f);
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);

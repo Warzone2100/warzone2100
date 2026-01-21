@@ -110,7 +110,7 @@ vec4 main_medium() {
 	vec3 N = vec3(0.f,0.f,1.f);
 	float diffuseFactor = lambertTerm(N, L); // diffuse lighting
 
-	float visibility = getShadowVisibility(diffuseFactor, 0.001f);
+	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.001f);
 
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
 	vec4 light = (visibility*diffuseLight*0.8*(diffuseFactor*diffuseFactor) + ambientLight*0.2) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
