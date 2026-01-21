@@ -76,7 +76,7 @@ out vec4 FragColor;
 #if WZ_POINT_LIGHT_ENABLED == 1
 #include "pointlights.frag"
 #endif
-#include "terrain_combined_frag.glsl"
+#include "shadow_mapping.glsl"
 #include "light.glsl"
 
 float random(vec2 uv)
