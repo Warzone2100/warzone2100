@@ -181,7 +181,7 @@ bool texLoad(const char *fileName)
 			has_sm |= hasSuffix("_sm.png") || hasSuffix("_sm.ktx2");
 			has_hm |= hasSuffix("_hm.png") || hasSuffix("_hm.ktx2");
 			int tile = 0;
-			if (sscanf(fileName, "tile-%02d.png", &tile)) {
+			if (sscanf(fileName, "tile-%02d.png", &tile) == 1) {
 				maxTileNo = std::max(maxTileNo, tile);
 			}
 			return true;
