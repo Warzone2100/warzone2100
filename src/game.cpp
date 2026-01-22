@@ -2325,6 +2325,7 @@ bool loadGameInit(const GameLoadDetails& gameToLoad)
 
 		loadRulesetJson();
 
+		saveGameVersion = 0;
 		savedGameTime = pGamInfo->gameTime;
 		startX = pGamInfo->ScrollMinX;
 		startY = pGamInfo->ScrollMinY;
