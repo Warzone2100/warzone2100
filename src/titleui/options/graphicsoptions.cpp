@@ -151,6 +151,27 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("gfx.drawShadowsTerrain", N_("Terrain Shadows"), N_("Whether terrain casts shadows."));
+		optionInfo.addAvailabilityCondition(ShadowsEnabled);
+		optionInfo.addAvailabilityCondition(SupportsShadowMapping);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(getDrawTerrainShadows());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				setDrawTerrainShadows(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
+	{
 		auto optionInfo = OptionInfo("gfx.shadowResolution", N_("Shadow Resolution"), N_("The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."));
 		optionInfo.addAvailabilityCondition(ShadowsEnabled);
 		optionInfo.addAvailabilityCondition(SupportsShadowMapping);
