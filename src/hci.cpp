@@ -1835,7 +1835,7 @@ INT_RETVAL intRunWidgets()
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if ((testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && intMode != INT_MISSIONRES && !dbgInputManager.debugMappingsAllowed())
 	{
-		debug(LOG_ERROR, "PlayerHasLost Or Won");
+		debug(LOG_INFO, "PlayerHasLost Or Won");
 		intResetScreen(true);
 		retCode = INT_QUIT;
 	}
