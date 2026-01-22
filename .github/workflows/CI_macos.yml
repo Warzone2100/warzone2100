@@ -256,7 +256,7 @@ jobs:
           mkdir output
           echo "OUTPUT_DIR=output" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           path: ./dl-artifacts
       - name: Display structure of downloaded files
@@ -423,7 +423,7 @@ jobs:
           mkdir dl-archive
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_macOS_universal_novideos'
           path: ./dl-archive
