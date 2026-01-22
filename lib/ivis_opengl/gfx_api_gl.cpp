@@ -3536,6 +3536,17 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	}
 	initDepthPasses(depthBufferResolution);
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+#if !defined(__EMSCRIPTEN__)
+	if (!gles && GLAD_GL_VERSION_3_0)
+	{
+		// Disable sRGB on default framebuffer, if present
+		glDisable(GL_FRAMEBUFFER_SRGB);
+		wzGLCheckErrors();
+	}
+#endif
+
 #if !defined(__EMSCRIPTEN__)
 	_beginRenderPassImpl();
 #endif
