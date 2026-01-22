@@ -109,7 +109,13 @@ size_t loopPolyCount;
  */
 static bool paused = false;
 static bool video = false;
-static unsigned short int skipCounter = 0;
+
+// Time data for skipping videos.
+struct VIDEO_TIME_SKIP_STATE
+{
+	std::chrono::steady_clock::time_point begin;
+	bool canSkip;
+};
 
 //holds which pause is valid at any one time
 struct PAUSE_STATE
@@ -121,8 +127,10 @@ struct PAUSE_STATE
 	bool consolePause;
 };
 static PAUSE_STATE pauseState;
+static VIDEO_TIME_SKIP_STATE videoTimeSkipState;
 static size_t maxFastForwardTicks = WZ_DEFAULT_MAX_FASTFORWARD_TICKS;
 static bool fastForwardTicksFixedToNormalTickRate = true; // can be set to false to "catch-up" as quickly as possible (but this may result in more jerky behavior)
+static std::chrono::milliseconds sequenceMinSkipTime = std::chrono::milliseconds(800);
 
 static unsigned numDroids[MAX_PLAYERS];
 static unsigned numMissionDroids[MAX_PLAYERS];
@@ -137,6 +145,12 @@ LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 LEVEL_TYPE prevMissionType = LEVEL_TYPE::LDS_NONE;
+
+static void resetVideoSkipStates()
+{
+	videoTimeSkipState.begin = std::chrono::steady_clock::now();
+	videoTimeSkipState.canSkip = false;
+}
 
 static GAMECODE renderLoop()
 {
@@ -741,20 +755,21 @@ void videoLoop()
 	// display a frame of the FMV
 	videoFinished = !seq_UpdateFullScreenVideo();
 
-	if (skipCounter <= SEQUENCE_MIN_SKIP_DELAY)
+	if (!videoTimeSkipState.canSkip &&
+		(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - videoTimeSkipState.begin) > sequenceMinSkipTime))
 	{
-		skipCounter += 1; // "time" is stopped so we will count via loop iterations.
+		videoTimeSkipState.canSkip = true;
 	}
 
 	// should we stop playing?
-	if (videoFinished || (skipCounter > SEQUENCE_MIN_SKIP_DELAY && (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))))
+	if (videoFinished || (videoTimeSkipState.canSkip && (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))))
 	{
 		seq_StopFullScreenVideo();
 
 		//set the next video off - if any
 		if (seq_AnySeqLeft())
 		{
-			skipCounter = 0;
+			resetVideoSkipStates();
 			seq_StartNextFullScreenVideo();
 		}
 		else
@@ -777,10 +792,10 @@ void videoLoop()
 
 void loop_SetVideoPlaybackMode()
 {
-	skipCounter = 0;
 	videoMode += 1;
 	paused = true;
 	video = true;
+	resetVideoSkipStates();
 	gameTimeStop();
 	pie_SetFogStatus(false);
 	audio_StopAll();
@@ -791,10 +806,10 @@ void loop_SetVideoPlaybackMode()
 
 void loop_ClearVideoPlaybackMode()
 {
-	skipCounter = 0;
 	videoMode -= 1;
 	paused = false;
 	video = false;
+	resetVideoSkipStates();
 	gameTimeStart();
 	pie_SetFogStatus(true);
 	cdAudio_Resume();
