@@ -49,8 +49,8 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-3.2.28/SDL3-3.2.28.tar.gz
-    source-checksum: sha512/9d7d54cd91a30d7a1f2999d98ff155232a629ff082d1b3a00b00c32ee3ff009820a1b0d9daf981a2f454bcf667cdb687948050c9b6f2ca98cb34f68754812b8a
+    source: https://github.com/libsdl-org/SDL/releases/download/release-3.4.0/SDL3-3.4.0.tar.gz
+    source-checksum: sha512/b7803fc1a7260a0594644bf81df8c300d63c30c436a2b8c8217d58cd25814faf44e2945a4979c860f81cddc367913cc8c03f0bf6745da2918121f379fd9cb27b
     plugin: cmake
     build-environment:
       - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
@@ -58,6 +58,9 @@ parts:
     - -DCMAKE_INSTALL_PREFIX=/usr
     - -DSDL_ALSA=OFF
     - -DSDL_OSS=OFF
+    - -DSDL_X11_XTEST=OFF
+    - -DSDL_TEST_LIBRARY=OFF
+    - -DSDL_TESTS=OFF
     override-build: |
       craftctl default
     build-packages:
