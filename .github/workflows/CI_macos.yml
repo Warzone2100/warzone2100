@@ -161,7 +161,7 @@ jobs:
           exit ${result}
         fi
     - name: Upload vcpkg logs (on failure)
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: failure()
       with:
         name: failure_macos_${{ matrix.architecture }}_vcpkg_logs
@@ -220,7 +220,7 @@ jobs:
 
         echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
         exit 0
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       if: success() && (matrix.publish_artifact == true)
       with:
         name: "warzone2100_macOS_${{ matrix.artifact_suffix }}"
@@ -314,7 +314,7 @@ jobs:
 
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
           exit 0
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: "warzone2100_macOS_universal"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
@@ -379,7 +379,7 @@ jobs:
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
 
           exit 0
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: "warzone2100_macOS_universal_novideos"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
