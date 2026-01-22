@@ -2566,6 +2566,12 @@ bool wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLE
 	}
 #endif
 
+	// Do *not* request sRGB framebuffer
+	if (!SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 0))
+	{
+		debug(LOG_ERROR, "Failed to set SDL_GL_FRAMEBUFFER_SRGB_CAPABLE: %s", SDL_GetError());
+	}
+
 	// Set the double buffer OpenGL attribute.
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
