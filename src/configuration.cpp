@@ -696,6 +696,7 @@ bool loadConfig()
 			debug(LOG_WARNING, "Unsupported / invalid terrainShadingQuality value: %d; using default", intValue);
 		}
 	}
+	setDrawTerrainShadows(iniGetBool("terrainShadows", true).value());
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
 	if (auto value = iniGetIntegerOpt("shadowMapResolution"))
 	{
@@ -902,6 +903,7 @@ bool saveConfig()
 	iniSetInteger("fogStart", war_getFogStart());
 	iniSetInteger("terrainMode", getTerrainShaderQuality());
 	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
+	iniSetInteger("terrainShadows", (int)(getDrawTerrainShadows()));
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
