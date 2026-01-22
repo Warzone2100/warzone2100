@@ -441,7 +441,7 @@ jobs:
     - name: Cache vcpkg dependencies
       id: vcpkg-cache
       if: success() && !(github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ steps.settings.outputs.VCPKG_BINARYCACHE_DIR }}
         key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-${{ hashFiles('**/vcpkg.json') }}-${{ hashFiles('**/.ci/vcpkg/**') }}
