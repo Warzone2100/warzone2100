@@ -710,7 +710,7 @@ namespace wzapi
 		, id(psObj->id)
 		, player(psObj->player)
 		{ }
-		int type;
+		int type = OBJ_NUM_TYPES;
 		int id = -1;
 		int player = -1;
 	};
