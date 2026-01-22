@@ -172,6 +172,9 @@ static float wind = 0.0f;
 static float windSpeed = 0.0f;
 static float skybox_scale = 10000.0f;
 
+//
+static bool bDrawTerrainShadows = true;
+
 /// When to display HP bars
 UWORD barMode;
 
@@ -1501,7 +1504,10 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		for (size_t i = 0; i < numShadowCascades; ++i)
 		{
 			gfx_api::context::get().beginDepthPass(i);
-			drawTerrainDepthOnly(shadowCascades[i].projectionMatrix * shadowCascades[i].viewMatrix);
+			if (bDrawTerrainShadows)
+			{
+				drawTerrainDepthOnly(shadowCascades[i].projectionMatrix * shadowCascades[i].viewMatrix);
+			}
 			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, cameraPos, shadowCascadesInfo, true);
 			gfx_api::context::get().endCurrentDepthPass();
 		}
@@ -4618,4 +4624,14 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	PIELIGHT colour = psDroid->action == DACTION_DEMOLISH? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
 	pie_TransColouredTriangle({pt0, pt1, pt2}, colour, viewMatrix);
 	pie_TransColouredTriangle({pt0, pt2, pt1}, colour, viewMatrix);
+}
+
+bool	getDrawTerrainShadows()
+{
+	return (bDrawTerrainShadows);
+}
+
+void	setDrawTerrainShadows(bool val)
+{
+	bDrawTerrainShadows = val;
 }
