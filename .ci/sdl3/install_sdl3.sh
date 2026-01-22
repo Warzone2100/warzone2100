@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "[install_sdl3.sh]"
 
@@ -28,8 +29,8 @@ fi
 echo "Downloading SDL3 source"
 
 # Download, build, & install SDL3 from source
-SDL3_VERSION="3.2.28"
-SDL3_SHA256="1330671214d146f8aeb1ed399fc3e081873cdb38b5189d1f8bb6ab15bbc04211"
+SDL3_VERSION="3.4.0"
+SDL3_SHA256="082cbf5f429e0d80820f68dc2b507a94d4cc1b4e70817b119bbb8ec6a69584b8"
 SDL3_DLURL="https://github.com/libsdl-org/SDL/releases/download/release-${SDL3_VERSION}/SDL3-${SDL3_VERSION}.tar.gz"
 
 mkdir tmp_sdl3_build
