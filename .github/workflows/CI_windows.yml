@@ -777,7 +777,7 @@ jobs:
 
           echo "WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH=${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Download Architecture Archives
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: 'warzone2100_win_*_archive'
           path: .\built-archives
@@ -878,7 +878,7 @@ jobs:
         run: mkdir unsigned-installers && mkdir signed-installers
       - name: Download Release Installer
         if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           artifact-ids: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
           path: .\unsigned-installers
@@ -960,7 +960,7 @@ jobs:
         id: settings
         run: mkdir upload-assets && mkdir upload-assets-signed
       - name: Download Release Artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           # Includes the release artifacts: installer, debug symbols, and archive
           pattern: 'warzone2100_win_*'
@@ -970,7 +970,7 @@ jobs:
         run: ls -LRl ./upload-assets
       - name: Download Signed Release Artifacts
         if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_installers_signed'
           path: ./upload-assets-signed
@@ -1031,7 +1031,7 @@ jobs:
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
           path: ./dl-archive
@@ -1041,7 +1041,7 @@ jobs:
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
       - name: Download Debug Symbols Artifact
         continue-on-error: true
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS'
           path: ./dl-archive
@@ -1060,7 +1060,7 @@ jobs:
           fi
       - name: Download Source Bundle
         continue-on-error: true
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'debug_sourcebundles_win_${{ matrix.architecture }}'
           path: ./dl-sourcebundle
