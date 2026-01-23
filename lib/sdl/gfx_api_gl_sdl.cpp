@@ -245,6 +245,15 @@ bool sdl_OpenGL_Impl::createGLContext()
 	}
 	debug(LOG_3D, "Current value for SDL_GL_STENCIL_SIZE: (%d)", value);
 
+	if (!SDL_GL_GetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, &value))
+	{
+		debug(LOG_3D, "Failed to get value for SDL_GL_FRAMEBUFFER_SRGB_CAPABLE (%s)", SDL_GetError());
+	}
+	else
+	{
+		debug(LOG_3D, "Current value for SDL_GL_FRAMEBUFFER_SRGB_CAPABLE: (%d)", value);
+	}
+
 	int windowWidth, windowHeight = 0;
 	SDL_GetWindowSize(window, &windowWidth, &windowHeight);
 	debug(LOG_WZ, "Logical Window Size: %d x %d", windowWidth, windowHeight);
