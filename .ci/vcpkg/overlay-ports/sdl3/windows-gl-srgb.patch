@@ -1,0 +1,12 @@
+diff --git a/src/video/windows/SDL_windowsopengl.c b/src/video/windows/SDL_windowsopengl.c
+--- a/src/video/windows/SDL_windowsopengl.c
++++ b/src/video/windows/SDL_windowsopengl.c
+@@ -659,7 +659,7 @@ static bool WIN_GL_SetupWindowInternal(SDL_VideoDevice *_this, SDL_Window *windo
+         *iAttr++ = WGL_TYPE_RGBA_FLOAT_ARB;
+     }
+ 
+-    if (_this->gl_data->HAS_WGL_ARB_framebuffer_sRGB) {
++    if ((_this->gl_config.framebuffer_srgb_capable > 0) && _this->gl_data->HAS_WGL_ARB_framebuffer_sRGB) {
+         *iAttr++ = WGL_FRAMEBUFFER_SRGB_CAPABLE_ARB;
+         *iAttr++ = (_this->gl_config.framebuffer_srgb_capable > 0) ? GL_TRUE : GL_FALSE;
+     }
