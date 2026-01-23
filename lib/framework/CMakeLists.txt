@@ -3,7 +3,7 @@ MARK_AS_ADVANCED(PHYSFS_LIBRARY PHYSFS_INCLUDE_DIR)
 if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
-find_package(Sodium 1.0.14 REQUIRED)
+find_package(Sodium 1.0.16 REQUIRED)
 
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")

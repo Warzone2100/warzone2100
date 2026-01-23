@@ -384,6 +384,12 @@ bool EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 			return false;
 		}
 
+		if (crypto_core_ed25519_is_valid_point(key.data()) == 0)
+		{
+			debug(LOG_ERROR, "Invalid public key");
+			return false;
+		}
+
 		vKey = new EC_KEY(std::vector<unsigned char>(0), key);
 	}
 	else if (privacy == Private)
@@ -402,6 +408,12 @@ bool EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 		{
 			// Failed to compute public key from private key
 			debug(LOG_ERROR, "Invalid private key");
+			return false;
+		}
+
+		if (crypto_core_ed25519_is_valid_point(publicKey.data()) == 0)
+		{
+			debug(LOG_ERROR, "Invalid keypair");
 			return false;
 		}
 
