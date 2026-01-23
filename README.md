@@ -250,7 +250,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       * [fribidi](https://github.com/fribidi/fribidi)
       * [OpenAL-Soft](https://openal-soft.org)
       * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
-      * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
+      * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.16
       * [SQLite](https://www.sqlite.org/index.html) ≥ 3.14
       * [libzip](https://github.com/nih-at/libzip) _(strongly recommended: ≥ 1.10.1)_
       * [libprotobuf](https://github.com/protocolbuffers/protobuf) (if compiling with GNS support)
