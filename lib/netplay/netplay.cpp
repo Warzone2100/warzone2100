@@ -2689,18 +2689,26 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t *type)
 					char msg[256] = {'\0'};
 
 					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type());
-					sendRoomSystemMessage(msg);
 					NETlogEntry(msg, SYNC_FLAG, sender);
-					addIPToBanList(NetPlay.players[sender].IPtextAddress, NetPlay.players[sender].name);
-					NETplayerDropped(sender);
-					connected_bsocket[sender] = nullptr;
-					debug(LOG_ERROR, "%s", msg);
+
+					if (NETplayerHasConnection(sender))
+					{
+						sendRoomSystemMessage(msg);
+						debug(LOG_ERROR, "%s", msg);
+						kickPlayer(sender, "Invalid command attempted", ERROR_INVALID, true);
+					}
 					break;
 				}
 
 				// Certain messages should be filtered while we're waiting for the ack of a player index switch
 				if (NETFilterMessageWhileSwappingPlayer(sender, msgType))
 				{
+					break;
+				}
+
+				if ((msgType == NET_SHARE_GAME_QUEUE) && (receiver != NET_ALL_PLAYERS))
+				{
+					debug(LOG_NET, "Ignoring non-broadcast message type (%d) from Player %d", (int)message->type(), (int)playerQueue.index);
 					break;
 				}
 
