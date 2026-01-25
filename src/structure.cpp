@@ -6206,6 +6206,25 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
+	if (psFactory->psSubject && !psFactory->psSubject->next)
+	{
+		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const DROID_TEMPLATE *templ) {
+			return *templ == *psFactory->psSubject;
+		});
+
+		if (it == apsTemplateList.end())
+		{
+			DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psBuilding, psFactory->psSubject);
+
+			if (psNextTemplate != nullptr)
+			{
+				refundFactoryBuildPower(psBuilding);
+				structSetManufacture(psBuilding, psNextTemplate, ModeQueue);
+				return;
+			}
+		}
+	}
+
 	if (psBuilding->player == productionPlayer && mayClearProductionRun)
 	{
 		//clear the production run for this factory
@@ -6402,7 +6421,16 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 
 		if (it == apsTemplateList.end())
 		{
-			psFactory->psSubject->next = psTemplate;
+			DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, psFactory->psSubject);
+
+			if (psNextTemplate != nullptr)
+			{
+				psFactory->psSubject->next = psNextTemplate;
+			}
+			else
+			{
+				psFactory->psSubject->next = psTemplate;
+			}
 		}
 	}
 
