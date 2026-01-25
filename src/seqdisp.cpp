@@ -614,7 +614,7 @@ bool seq_UpdateFullScreenVideo()
 			{
 				wzCachedSeqText.resize(2);
 			}
-			wzCachedSeqText[0].setText(WzString::fromUtf8(astringf("%s (%" PRIu32 "%%)...", _("Loading video"), onDemandVideoProvider.getVideoDataRequestProgress(currVideoName))), font_scaled);
+			wzCachedSeqText[0].setText(WzString::format("%s (%" PRIu32 "%%)...", _("Loading video"), onDemandVideoProvider.getVideoDataRequestProgress(currVideoName)), font_scaled);
 			wzCachedSeqText[0].render((pie_GetVideoBufferWidth() - wzCachedSeqText[0].width()) / 2, (pie_GetVideoBufferHeight() - wzCachedSeqText[0].height()) / 2, WZCOL_WHITE);
 			return true;
 		}

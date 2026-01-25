@@ -113,11 +113,11 @@ public:
 			return _("Desktop Full");
 		}
 		const screeninfo& info = optInfo.value();
-		auto str = WzString::fromUtf8(astringf("[%d] %d × %d @ %.2fhz", info.screen, info.width, info.height, info.refresh_rate));
+		auto str = WzString::format("[%d] %d × %d @ %.2fhz", info.screen, info.width, info.height, info.refresh_rate);
 		if (info.pixel_density > 1.f)
 		{
 			std::string dpiStr = fmt::format("{:g}", info.pixel_density);
-			str.append(WzString::fromUtf8(astringf(" [%sx DPI]", dpiStr.c_str())));
+			str.append(WzString::format(" [%sx DPI]", dpiStr.c_str()));
 		}
 		return str;
 	}

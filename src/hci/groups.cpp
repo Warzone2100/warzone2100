@@ -129,7 +129,7 @@ public:
 	{
 		attach(groupNumberLabel = std::make_shared<W_LABEL>());
 		groupNumberLabel->setGeometry(OBJ_TEXTX, OBJ_B1TEXTY - 5, 16, 16);
-		groupNumberLabel->setString(WzString::fromUtf8(astringf("%zu", groupNumber)));
+		groupNumberLabel->setString(WzString::format("%zu", groupNumber));
 		groupNumberLabel->setTransparentToMouse(true);
 
 		attach(groupCountLabel = std::make_shared<W_LABEL>());
@@ -149,9 +149,9 @@ public:
 		setTip(_("Select / Assign Group Number: ") + groupNumberStr);
 
 		auto helpInfo = WidgetHelp()
-		  .setTitle(WzString::fromUtf8(astringf(_("Group %zu"), groupNumber)))
-		  .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, WzString::fromUtf8(astringf(_("Select the Units in Group %zu"), groupNumber)))
-		  .addInteraction({WidgetHelp::InteractionTriggers::SecondaryClick, WidgetHelp::InteractionTriggers::ClickAndHold}, WzString::fromUtf8(astringf(_("Assign Selected Units to Group %zu"), groupNumber)))
+		  .setTitle(WzString::format(_("Group %zu"), groupNumber))
+		  .addInteraction({WidgetHelp::InteractionTriggers::PrimaryClick}, WzString::format(_("Select the Units in Group %zu"), groupNumber))
+		  .addInteraction({WidgetHelp::InteractionTriggers::SecondaryClick, WidgetHelp::InteractionTriggers::ClickAndHold}, WzString::format(_("Assign Selected Units to Group %zu"), groupNumber))
 		  .addInteraction({WidgetHelp::InteractionTriggers::Misc},  _("Center Camera on this Group by clicking or tapping twice"))
 		  .addRelatedKeybinding("SelectGrouping_" + groupNumberStr)
 		  .addRelatedKeybinding("AssignGrouping_" + groupNumberStr)
@@ -209,7 +209,7 @@ protected:
 		else
 		{
 			displayIMD(AtlasImage(), ImdObject::DroidTemplate(&(groupInfo->displayDroidTemplate)), xOffset, yOffset);
-			groupCountLabel->setString(WzString::fromUtf8(astringf("%zu", groupInfo->numberInGroup)));
+			groupCountLabel->setString(WzString::format("%zu", groupInfo->numberInGroup));
 			int32_t xNumberOffset = 0;
 			const uint32_t xFitNumberInTheBox = 16;
 			if (groupCountLabel->getMaxLineWidth() > xFitNumberInTheBox)
@@ -228,7 +228,7 @@ protected:
 		}
 		else
 		{
-			groupDamagedCountLabel->setString(WzString::fromUtf8(astringf("+%zu", groupInfo->numberDamagedInGroup)));
+			groupDamagedCountLabel->setString(WzString::format("+%zu", groupInfo->numberDamagedInGroup));
 			groupDamagedCountLabel->move(groupCountLabel->x() + groupCountLabel->getMaxLineWidth(), groupCountLabel->y());
 		}
 

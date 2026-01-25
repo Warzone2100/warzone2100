@@ -366,7 +366,7 @@ protected:
 		auto x0 = xOffset + x() + PADDING;
 		auto y0 = yOffset + y() + PADDING;
 
-		valueText.setText(WzString::fromUtf8(astringf("%.*f", precision, majorValue / (float)denominator)), font_regular);
+		valueText.setText(WzString::format("%.*f", precision, majorValue / (float)denominator), font_regular);
 
 		/* indent to allow text value */
 		auto iX = x0 + maxValueTextWidth;
@@ -392,7 +392,7 @@ protected:
 		auto delta = minorValue - majorValue;
 		if (delta != 0)
 		{
-			deltaText.setText(WzString::fromUtf8(astringf("%+.*f", precision, delta / (float)denominator)), font_small);
+			deltaText.setText(WzString::format("%+.*f", precision, delta / (float)denominator), font_small);
 			auto xDeltaText = xOffset + x() + width() - deltaText.width() - PADDING;
 			deltaText.renderOutlined(xDeltaText, iY - 1, (delta < 0) == lessIsBetter ? WZCOL_LGREEN : WZCOL_LRED, {0, 0, 0, 192});
 		}

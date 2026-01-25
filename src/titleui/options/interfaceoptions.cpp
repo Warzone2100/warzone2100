@@ -267,7 +267,7 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(bool inGame, const std::fu
 				if (!result.setCurrentIdxForValue(currValue))
 				{
 					// add "Custom" item
-					result.choices.push_back({ WzString::fromUtf8(astringf("(Custom: %" PRIu8 ")", currValue)), "", currValue });
+					result.choices.push_back({ WzString::format("(Custom: %" PRIu8 ")", currValue), "", currValue });
 					result.currentIdx = result.choices.size() - 1;
 				}
 				return result;
