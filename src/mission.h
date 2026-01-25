@@ -53,7 +53,8 @@ void releaseMission();
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
-bool startMission(LEVEL_TYPE missionType, const char *pGame);
+struct GameLoadDetails;
+bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails);
 void endMission();
 
 /** Initialise the mission stuff for a save game. */
@@ -101,7 +102,7 @@ void intRemoveMissionResultNoAnim();
 void intProcessMissionResult(UDWORD id);
 void intRunMissionResult();
 
-void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome);
+void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y);
 
 /** Sets the appropriate pause states for when the interface is up but the game needs to be paused. */
 void setMissionPauseState();

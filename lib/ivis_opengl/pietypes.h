@@ -60,8 +60,10 @@ using nonstd::nullopt;
 #define pie_PREMULTIPLIED       0x200
 #define pie_NODEPTHWRITE        0x400
 #define pie_FORCELIGHT          0x800
+#define pie_SHIELD              0x1000
 
 #define pie_RAISE_SCALE			256
+#define pie_SHIELD_FACTOR		1.125f
 
 enum LIGHTING_TYPE
 {
@@ -264,16 +266,101 @@ public:
 
 struct PIELIGHTBYTES
 {
-        uint8_t r, g, b, a;
+public:
+	uint8_t r = 0;
+	uint8_t g = 0;
+	uint8_t b = 0;
+	uint8_t a = 0;
+public:
+	inline void clear()
+	{
+		r = 0;
+		g = 0;
+		b = 0;
+		a = 0;
+	}
 };
 
 /** Our basic colour type. Use whenever you want to define a colour.
- *  Set bytes separetely, and do not assume a byte order between the components. */
-union PIELIGHT
+*/
+struct PIELIGHT
 {
-        PIELIGHTBYTES byte;
-        UDWORD rgba;
-        UBYTE vector[4];
+public:
+	PIELIGHTBYTES byte;
+public:
+	inline UDWORD rgba() const
+	{
+		return (static_cast<uint32_t>(byte.a) << 24) |
+				(static_cast<uint32_t>(byte.b) << 16) |
+				(static_cast<uint32_t>(byte.g) << 8) |
+				static_cast<uint32_t>(byte.r);
+	}
+	inline bool isTransparent() const
+	{
+		return byte.a == 0;
+	}
+	inline void clear()
+	{
+		byte.clear();
+	}
+	inline void fromRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+	{
+		byte.r = r;
+		byte.g = g;
+		byte.b = b;
+		byte.a = a;
+	}
+	inline void setByte(size_t idx, uint8_t value)
+	{
+		switch (idx)
+		{
+			case 0:
+				byte.r = value;
+				break;
+			case 1:
+				byte.g = value;
+				break;
+			case 2:
+				byte.b = value;
+				break;
+			case 3:
+				byte.a = value;
+				break;
+		}
+	}
+};
+
+struct PIERECT_DrawRequest
+{
+	PIERECT_DrawRequest(int x0, int y0, int x1, int y1, PIELIGHT color)
+	: x0(x0)
+	, y0(y0)
+	, x1(x1)
+	, y1(y1)
+	, color(color)
+	{ }
+
+	int x0;
+	int y0;
+	int x1;
+	int y1;
+	PIELIGHT color;
+};
+struct PIERECT_DrawRequest_f
+{
+	PIERECT_DrawRequest_f(float x0, float y0, float x1, float y1, PIELIGHT color)
+	: x0(x0)
+	, y0(y0)
+	, x1(x1)
+	, y1(y1)
+	, color(color)
+	{ }
+
+	float x0;
+	float y0;
+	float x1;
+	float y1;
+	PIELIGHT color;
 };
 
 #endif // _pieTypes_h

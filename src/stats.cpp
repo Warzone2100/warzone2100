@@ -569,6 +569,10 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_NO_FRIENDLY_FIRE, true);
 		}
+		if (std::find(flags.begin(), flags.end(), "allowedontransporter") != flags.end()) // "AllowedOnTransporter"
+		{
+			psStats->flags.set(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER, true);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -720,6 +724,17 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.maxDroids = ini.value("maxDroids").toInt();
 		psStats->base.maxDroidsMult = ini.value("maxDroidsMult").toInt();
+
+		auto cmdExpRange = ini.json("cmdExpRange");
+		if (!cmdExpRange.is_null())
+		{
+			ASSERT(cmdExpRange.is_array(), "cmdExpRange is not an array");
+			for (const auto& v : cmdExpRange)
+			{
+				psStats->cmdExpRange.push_back(v.get<int>());
+			}
+		}
+
 		auto rankNames = ini.json("ranks");
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)

@@ -53,7 +53,9 @@ class Player
 
 	hasOnlyConstructor()
 	{
-		if (countDroid(DROID_ANY, this.playNum) - countDroid(DROID_CONSTRUCT, this.playNum) === 0)
+		const truckCnt = countDroid(DROID_CONSTRUCT, this.playNum);
+		const unitCnt = countDroid(DROID_ANY, this.playNum);
+		if (truckCnt > 0 && unitCnt - truckCnt === 0)
 		{
 			return true;
 		}

@@ -1,10 +1,22 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "3207386cc93121b907a8c5498a43b7a312f4f55d",
+	"builtin-baseline": "97bbb13b57ea5ae4e9edd851601f36a1acb3868a",
 	"dependencies": [
 		"physfs",
-		"sdl2",
+		{
+			"name": "sdl3",
+			"default-features": true,
+			"platform": "!emscripten"
+		},
+		{
+			"name": "sdl3",
+			"default-features": true,
+			"features": [
+				"emscripten-pthreads"
+			],
+			"platform": "emscripten"
+		},
 		{
 			"name": "harfbuzz",
 			"platform": "!emscripten"
@@ -41,10 +53,17 @@
 		"sqlite3",
 		"libsodium",
 		{
+			"name": "libzip",
+			"default-features": false,
+			"features": [
+				"bzip2"
+			]
+		},
+		{
+			"$comment": "By not specifying curl[http3] feature, defaults to schannel for Windows, which is desired",
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"winssl",
 				"ssl"
 			],
 			"platform": "windows | mingw"
@@ -53,7 +72,7 @@
 			"name": "curl",
 			"default-features": false,
 			"features": [
-				"sectransp",
+				"openssl",
 				"ssl"
 			],
 			"platform": "osx"
@@ -73,7 +92,16 @@
 		{
 			"name": "basisu",
 			"host": true
+		},
+		{
+			"name": "protobuf",
+			"platform": "!emscripten"
 		}
+	],
+	"overrides": [
+		{ "name": "openal-soft", "version": "1.24.3" },
+		{ "name": "sqlite3", "version": "3.49.2" },
+		{ "name": "abseil", "version": "20250127.1", "port-version": 4}
 	],
 	"default-features": [
 		"vulkan"
@@ -83,7 +111,7 @@
 			"description": "The Vulkan backend",
 			"dependencies": [
 				{
-					"name": "sdl2",
+					"name": "sdl3",
 					"default-features": true,
 					"features": [
 						"vulkan"

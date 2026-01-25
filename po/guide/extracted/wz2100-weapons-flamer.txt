@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Flamer")
+_("Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks.")
+_("Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures.")
+_("Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers.")
+_("However, due to their short attack ranges, Flamer weapons can be risky to use.")

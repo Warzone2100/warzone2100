@@ -113,10 +113,19 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
+
+/* Check if droid is within commander's range */
+bool droidWithinCommanderRange(const DROID *psDroid);
+
+/* Update droid shields. */
+void droidUpdateShields(DROID *psDroid);
+
+/* Get droid maximum shield points */
+UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
 
 /* Set up a droid to build a structure - returns true if successful */
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
@@ -183,7 +192,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
-UDWORD getDroidEffectiveLevel(const DROID *psDroid);
+UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck = true);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
@@ -228,9 +237,6 @@ bool electronicDroid(const DROID *psDroid);
 
 /// checks to see if the droid is currently being repaired by another
 bool droidUnderRepair(const DROID *psDroid);
-
-/// Count how many Command Droids exist in the world at any one moment
-UBYTE checkCommandExist(UBYTE player);
 
 /// For a given repair droid, check if there are any damaged droids within a defined range
  BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);
@@ -427,6 +433,9 @@ static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
 {
 	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)nullptr;
 }
+
+void droidRepairStarted(DROID *psDroid, BASE_OBJECT const *psRepairer);
+void droidRepairStopped(DROID *psDroid, BASE_OBJECT const *psFormerRepairer);
 
 /** \brief sends droid to delivery point, or back to commander. psRepairFac maybe nullptr when
  * repairs were made by a mobile repair turret

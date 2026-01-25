@@ -82,6 +82,9 @@
 
 #include "activity.h"
 
+#include "screens/ingameopscreen.h"
+#include "titleui/options/optionsforms.h"
+
 /*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -124,6 +127,22 @@ bool runningMultiplayer()
 static void noMPCheatMsg()
 {
 	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+}
+
+bool shouldTrapCursor()
+{
+	auto result = war_GetTrapCursor();
+	switch (result)
+	{
+		case TrapCursorMode::Disabled:
+			return false;
+		case TrapCursorMode::Enabled:
+			return true;
+		case TrapCursorMode::Automatic:
+			// automatic mode - if in fullscreen mode (including desktop full), or maximized, trap the cursor
+			return (wzIsFullscreen() || wzIsMaximized());
+	}
+	return false; // silence compiler warning
 }
 
 // --------------------------------------------------------------------------
@@ -1052,9 +1071,17 @@ void kf_ShowMappings()
 {
 	if (!InGameOpUp && !isInGamePopupUp)
 	{
-		kf_addInGameOptions();
-		intProcessInGameOptions(INTINGAMEOP_OPTIONS);
-		intProcessInGameOptions(INTINGAMEOP_KEYMAP);
+		// Open new Options screen and jump to Controls section
+		auto optionsBrowser = createOptionsBrowser(true);
+		if (!optionsBrowser->switchToOptionsForm(OptionsBrowserForm::Modes::Controls))
+		{
+			debug(LOG_INFO, "Failed to open Controls options form?");
+			return;
+		}
+		showInGameOptionsScreen(psWScreen, optionsBrowser, []() {
+			// the setting for group menu display may have been modified
+			intShowGroupSelectionMenu();
+		});
 	}
 }
 
@@ -1097,7 +1124,7 @@ void kf_SelectGrouping(UDWORD groupNumber)
 	intGroupsChanged(groupNumber);
 
 	/* play group audio but only if they weren't already selected - AM */
-	if (Selected && !bAlreadySelected)
+	if (Selected && !bAlreadySelected && war_getPlayAudioCue_GroupReporting())
 	{
 		audio_QueueTrack(ID_SOUND_GROUP_0 + groupNumber);
 		audio_QueueTrack(ID_SOUND_REPORTING);
@@ -1341,12 +1368,34 @@ MappableFunction kf_ScrollCamera(const int horizontal, const int vertical)
 	};
 }
 
+static TrapCursorMode oldTrapCursorEnabledValue = TrapCursorMode::Enabled;
 void kf_toggleTrapCursor()
 {
-	bool trap = !war_GetTrapCursor();
-	war_SetTrapCursor(trap);
-	(trap ? wzGrabMouse : wzReleaseMouse)();
-	std::string msg = astringf(_("Trap cursor %s"), trap ? "ON" : "OFF");
+	auto value = war_GetTrapCursor();
+	if (value == TrapCursorMode::Disabled)
+	{
+		value = oldTrapCursorEnabledValue;
+	}
+	else if (value == TrapCursorMode::Automatic && !shouldTrapCursor())
+	{
+		// set to auto, but will not automatically trap the cursor - toggle to enabled
+		value = TrapCursorMode::Enabled;
+	}
+	else
+	{
+		oldTrapCursorEnabledValue = value;
+		value = TrapCursorMode::Disabled;
+	}
+	war_SetTrapCursor(value);
+	(shouldTrapCursor() ? wzGrabMouse : wzReleaseMouse)();
+	const char* pValueStr = "";
+	switch (value)
+	{
+		case TrapCursorMode::Disabled: pValueStr = "OFF"; break;
+		case TrapCursorMode::Enabled: pValueStr = "ON"; break;
+		case TrapCursorMode::Automatic: pValueStr = "AUTO"; break;
+	}
+	std::string msg = astringf(_("Trap cursor %s"), pValueStr);
 	addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -1370,11 +1419,8 @@ void	kf_TogglePauseMode()
 		setAudioPause(true);
 		setScrollPause(true);
 
-		// If cursor trapping is enabled allow the cursor to leave the window
-		if (war_GetTrapCursor())
-		{
-			wzReleaseMouse();
-		}
+		// If cursor trapping is enabled, allow the cursor to leave the window when paused
+		wzReleaseMouse();
 
 		/* And stop the clock */
 		gameTimeStop();
@@ -1452,7 +1498,7 @@ void	kf_TogglePauseMode()
 		setScrollPause(false);
 
 		// Re-enable cursor trapping if it is enabled
-		if (war_GetTrapCursor())
+		if (shouldTrapCursor())
 		{
 			wzGrabMouse();
 		}
@@ -2565,6 +2611,10 @@ void kf_QuickSave()
 	{
 		console(_("QuickSave not allowed in Autosaves-Only mode"));
 		return;
+	}
+	if (NETisReplay())
+	{
+		return; // Bail out if we're running a replay
 	}
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;

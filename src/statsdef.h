@@ -108,6 +108,7 @@ enum COMPONENT_TYPE
 enum WEAPON_FLAGS
 {
 	WEAPON_FLAG_NO_FRIENDLY_FIRE,
+	WEAPON_FLAG_ALLOWED_ON_TRANSPORTER,
 	WEAPON_FLAG_COUNT
 };
 
@@ -486,6 +487,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 		int maxDroidsMult = 0;   ///< maximum number of controlled droids multiplied by level
 	} upgrade[MAX_PLAYERS], base;
 	std::vector<std::string> rankNames;
+	std::vector<int> cmdExpRange;
 };
 
 /*

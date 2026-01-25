@@ -602,6 +602,42 @@ private:
 		});
 	}
 
+	std::string getTip() override
+	{
+		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), getCost()));
+		auto stats = getStats();
+		WzString tipString = (stats == nullptr) ? "" : getLocalizedStatsName(stats);
+		if (stats && !stats->category.isEmpty())
+		{
+			tipString.append(astringf("\n(%s %d/%d)", stats->category.toUtf8().c_str(), stats->categoryProgress, stats->categoryMax).c_str());
+		}
+		tipString.append("\n");
+		tipString.append(costString);
+
+		auto facility = controller->getHighlightedObject();
+		if (stats && facility && selectedPlayer < MAX_PLAYERS)
+		{
+			auto& playerResList = asPlayerResList[selectedPlayer];
+			if (stats->index < playerResList.size())
+			{
+				uint32_t currentPoints = playerResList[stats->index].currentPoints;
+				uint32_t totalPoints = stats->researchPoints;
+				int researchRate = getBuildingResearchPoints(facility);
+				if (researchRate > 0)
+				{
+					uint32_t timeToBuild = (totalPoints - currentPoints) / static_cast<uint32_t>(researchRate);
+					char timeText[20];
+					ssprintf(timeText, "%u:%02u", timeToBuild / 60, timeToBuild % 60);
+					tipString.append(" (");
+					tipString.append(timeText);
+					tipString.append(")");
+				}
+			}
+		}
+
+		return tipString.toUtf8();
+	}
+
 	std::shared_ptr<ResearchController> controller;
 	size_t researchOptionIndex;
 	AllyResearchsIcons allyResearchIcons;

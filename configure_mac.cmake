@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.30)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Optional input defines:
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
@@ -10,14 +10,14 @@ cmake_minimum_required(VERSION 3.5...3.30)
 
 ########################################################
 
-# WZ minimum supported macOS deployment target (< 10.12 is untested)
-set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.12")
+# WZ minimum supported macOS deployment target (< 10.14 is untested, and may require earlier vcpkg baseline)
+set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.14")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.3.296.0")
+set(VULKAN_SDK_VERSION "1.4.328.1")
 set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.zip")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "393fd11f65a4001f12fd34fdd009c38045220ca3f735bc686d97822152b0f33c")
+set(VULKAN_SDK_DL_SHA256 "571db867d8736e402f6f674f26f17b339495d016f3b2afdbac23a3650475023f")
 
 ########################################################
 
@@ -99,9 +99,9 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 			file(REMOVE_RECURSE "${_full_vulkan_install_path}")
 		endif()
 
-		# ./InstallVulkan.app/Contents/MacOS/InstallVulkan --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
+		# ./vulkansdk-macOS-${VULKAN_SDK_VERSION}.app/Contents/MacOS/vulkansdk-macOS-${VULKAN_SDK_VERSION} --root ${_full_vulkan_install_path} --accept-licenses --default-answer --confirm-command install --copy_only=1
 		execute_process(
-			COMMAND ./InstallVulkan.app/Contents/MacOS/InstallVulkan
+			COMMAND ./vulkansdk-macOS-${VULKAN_SDK_VERSION}.app/Contents/MacOS/vulkansdk-macOS-${VULKAN_SDK_VERSION}
 					--root ${_full_vulkan_install_path}
 					--accept-licenses
 					--default-answer
@@ -252,7 +252,8 @@ set(_vcpkgInstallResult -1)
 set(_vcpkgAttempts 0)
 while(NOT _vcpkgInstallResult EQUAL 0 AND _vcpkgAttempts LESS 3)
 	execute_process(
-		COMMAND ./vcpkg/vcpkg install --vcpkg-root=./vcpkg/ --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} ${_additional_vcpkg_flags}
+		COMMAND ./vcpkg install --vcpkg-root=./ --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} ${_additional_vcpkg_flags}
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg"
 		RESULT_VARIABLE _vcpkgInstallResult
 	)
 	MATH(EXPR _vcpkgAttempts "${_vcpkgAttempts}+1")
@@ -284,11 +285,12 @@ endif()
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to generate Xcode project)...")
 string(REPLACE ";" " " _debug_output_args "${_additional_configure_arguments}")
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ ${CMAKE_COMMAND} \"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake\" \"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}\" -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON ${_debug_output_args} -G Xcode -B . -S \"${_repoBase}\"")
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 		"-DWZ_DISTRIBUTOR:STRING=${WZ_DISTRIBUTOR}"
+		"-DENABLE_GNS_NETWORK_BACKEND:BOOL=ON"
 		${_additional_configure_arguments}
 		-G Xcode
 		-B .

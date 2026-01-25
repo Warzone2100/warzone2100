@@ -710,7 +710,7 @@ namespace wzapi
 		, id(psObj->id)
 		, player(psObj->player)
 		{ }
-		int type;
+		int type = OBJ_NUM_TYPES;
 		int id = -1;
 		int player = -1;
 	};
@@ -975,7 +975,7 @@ namespace wzapi
 	#define WZAPI_AI_UNSAFE
 
 	std::string translate(WZAPI_PARAMS(std::string str));
-	int32_t syncRandom(WZAPI_PARAMS(uint32_t limit));
+	uint32_t syncRandom(WZAPI_PARAMS(uint32_t limit));
 	bool setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies));
 	no_return_value sendAllianceRequest(WZAPI_PARAMS(int player2));
 	bool orderDroid(WZAPI_PARAMS(DROID* psDroid, int order));
@@ -1041,6 +1041,7 @@ namespace wzapi
 	int queuedPower(WZAPI_PARAMS(int player));
 	bool isStructureAvailable(WZAPI_PARAMS(std::string structureName, optional<int> _player));
 	optional<scr_position> pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string structureName, int startX, int startY, optional<int> _maxBlockingTiles));
+	bool structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y, optional<float> _direction));
 	bool droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y));
 	bool propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, int y1, int x2, int y2));
 	int terrainType(WZAPI_PARAMS(int x, int y));
@@ -1129,7 +1130,7 @@ namespace wzapi
 	no_return_value startTransporterEntry(WZAPI_PARAMS(int x, int y, int player));
 	no_return_value setTransporterExit(WZAPI_PARAMS(int x, int y, int player));
 	no_return_value setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool flagValue)) MULTIPLAY_SYNCREQUEST_REQUIRED;
-	no_return_value fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player));
+	no_return_value fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player, optional<bool> center));
 	no_return_value fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player));
 	bool setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
 	nlohmann::json getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index));

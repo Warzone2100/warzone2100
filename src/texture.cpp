@@ -147,7 +147,7 @@ bool texLoad(const char *fileName)
 
 	/* Get and set radar colours */
 
-	sprintf(fullPath, "%s.radar", fileName);
+	ssprintf(fullPath, "%s.radar", fileName);
 	if (!loadFile(fullPath, &buffer, &size))
 	{
 		debug(LOG_FATAL, "texLoad: Could not find radar colours at %s", fullPath);
@@ -171,10 +171,12 @@ bool texLoad(const char *fileName)
 	while (k >= 3 && j + 6 < size);
 	free(buffer);
 
-	auto uploadTextureAtlasPage = [fileName](iV_Image &&bitmap, size_t texPage) {
+	auto uploadTextureAtlasPage = [fileName](iV_Image &&bitmap, size_t texPage) -> bool {
 		std::string textureDebugName = std::string("pageTexture::") + ((fileName) ? fileName : "");
 		auto pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(bitmap), gfx_api::texture_type::game_texture, textureDebugName.c_str(), -1, -1);
+		ASSERT_OR_RETURN(false, pTexture != nullptr, "Failed to load texture");
 		pie_AssignTexture(texPage, pTexture);
+		return true;
 	};
 
 	/* Now load the actual tiles */
@@ -190,7 +192,7 @@ bool texLoad(const char *fileName)
 		while (xLimit > (xSize *= 2)) {}
 		while (yLimit > (ySize *= 2)) {}
 
-		sprintf(partialPath, "%s-%d", fileName, maxTileTexSize);
+		ssprintf(partialPath, "%s-%d", fileName, maxTileTexSize);
 
 		bool has_nm = false, has_sm = false, has_hm = false;
 		bool has_auxillary_texture_info = false;
@@ -282,7 +284,10 @@ bool texLoad(const char *fileName)
 				if (yOffset + mipmap_max > yLimit)
 				{
 					/* Upload current working texture page */
-					uploadTextureAtlasPage(std::move(textureAtlas), texPage);
+					if (!uploadTextureAtlasPage(std::move(textureAtlas), texPage))
+					{
+						ASSERT_OR_RETURN(false, false, "Could not upload texture atlas page [%d]: %s", texPage, fullPath);
+					}
 					/* Change to next texture page */
 					xOffset = 0;
 					yOffset = 0;
@@ -295,7 +300,10 @@ bool texLoad(const char *fileName)
 				}
 			}
 			/* Upload current working texture page */
-			uploadTextureAtlasPage(std::move(textureAtlas), texPage);
+			if (!uploadTextureAtlasPage(std::move(textureAtlas), texPage))
+			{
+				ASSERT_OR_RETURN(false, false, "Could not upload texture atlas page [%d]: %s", texPage, fullPath);
+			}
 			debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u",
 				  k, partialPath, mipmap_max, texPage, (unsigned)pie_Texture(texPage).id());
 			break;

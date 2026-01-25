@@ -1,0 +1,32 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::flamer",
+	"title": "Flamer",
+	"sort": "05",
+	"visual": [
+		{
+			"stat": {
+				"id": "Flame1Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Flame2",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks.",
+		"",
+		"Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures.",
+		"",
+		"Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers.",
+		"",
+		"However, due to their short attack ranges, Flamer weapons can be risky to use."
+	],
+	"links": [
+		"wz2100::weapons"
+	]
+}

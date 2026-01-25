@@ -27,7 +27,7 @@ include(NB_RULESETS + "standard.js");
 include(NB_COMMON + "standard_build_order.js");
 
 // variables defining the personality
-var subpersonalities = {
+const subpersonalities = {
 	MR: {
 		chatalias: "mr",
 		weaponPaths: [
@@ -81,15 +81,44 @@ var subpersonalities = {
 function buildOrder() {
 	// Only use this build order in early game, on standard difficulty, in T1 no bases.
 	// Otherwise, fall back to the safe build order.
-	if (gameTime > 300000 || difficulty === INSANE
-	                      || isStructureAvailable("A0ComDroidControl") || baseType !== CAMP_CLEAN)
+	if (gameTime > 300000 ||
+		difficulty === INSANE ||
+		isStructureAvailable("A0ComDroidControl") ||
+		baseType !== CAMP_CLEAN)
+	{
 		return buildOrder_StandardFallback();
-	if (buildMinimum(structures.factories, 1)) return true;
-	if (buildMinimum(structures.labs, 1)) return true;
-	if (buildMinimum(structures.hqs, 1)) return true;
-	if (buildMinimum(structures.labs, 3)) return true;
-	if (buildMinimum(structures.gens, 1)) return true;
-	if (buildMinimumDerricks(3)) return true;
+	}
+
+	if (buildMinimum(structures.factories, 1))
+	{
+		return true;
+	}
+
+	if (buildMinimum(structures.labs, 1))
+	{
+		return true;
+	}
+
+	if (buildMinimum(structures.hqs, 1))
+	{
+		return true;
+	}
+
+	if (buildMinimum(structures.labs, 3))
+	{
+		return true;
+	}
+
+	if (buildMinimum(structures.gens, 1))
+	{
+		return true;
+	}
+
+	if (buildMinimumDerricks(3))
+	{
+		return true;
+	}
+
 	return withChance(25) ? captureSomeOil() : buildDefenses();
 }
 

@@ -66,6 +66,7 @@
 	"Naval": {
 		"buildPoints": 150,
 		"buildPower": 150,
+		"designable": 1,
 		"hitpointPctOfBody": 300,
 		"id": "Naval",
 		"model": "prhnaval1.pie",
@@ -118,7 +119,7 @@
 		"model": "prltrk1.pie",
 		"name": "Tracks",
 		"speed": 125,
-		"spinAngle": 45,
+		"spinAngle": 65,
 		"type": "Tracked",
 		"weight": 650
 	},

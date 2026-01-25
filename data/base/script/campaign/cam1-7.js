@@ -15,7 +15,7 @@ const mis_scavengerRes = [
 	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Damage03",
 	"R-Wpn-Cannon-Damage03", "R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
-	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-ROF03", "R-Vehicle-Metals02",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-ROF03", "R-Vehicle-Metals03",
 	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Wpn-Cannon-Accuracy01",
 	"R-Wpn-Mortar-Acc01",
 ];
@@ -37,6 +37,7 @@ var enemyHasArtifact; //Do they have the artifact
 var enemyStoleArtifact; //Reached the LZ with the artifact
 var droidWithArtiID; //The droid ID that was closest to the artifact to take it
 var artiMovePos; //where artiGroup members are moving to
+var artiResearch; //Research object for the map placed and unit dropped artifact.
 
 //These enable scav factories when close enough
 camAreaEvent("northScavFactoryTrigger", function(droid)
@@ -79,6 +80,14 @@ camAreaEvent("NPTransportTrigger", function(droid)
 	}
 });
 
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.npcybr, cTempl.npmrl, cTempl.npcybc];
+	const limits = {minimum: 4, maxRandom: 2};
+	const location = camMakePos("westSpawnPos");
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_UNITS, location, units, limits.minimum, limits.maxRandom);
+}
+
 //Only called once when the New Paradigm takes the artifact for the first time.
 function artifactVideoSetup()
 {
@@ -115,14 +124,7 @@ function eventGroupLoss(obj, group, newsize)
 			const acrate = addFeature(CAM_ARTIFACT_STAT, obj.x, obj.y);
 			addLabel(acrate, MIS_NEW_ARTI_LABEL);
 
-			if (camClassicMode())
-			{
-				camAddArtifact(MIS_NEW_ARTI_LABEL, "R-Wpn-Cannon3Mk1");
-			}
-			else
-			{
-				camAddArtifact(MIS_NEW_ARTI_LABEL, ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"]);
-			}
+			camAddArtifact(MIS_NEW_ARTI_LABEL, artiResearch);
 
 			droidWithArtiID = undefined;
 			enemyHasArtifact = false;
@@ -288,9 +290,7 @@ function eventStartLevel()
 		camClassicResearch(mis_newParadigmResClassic, CAM_NEW_PARADIGM);
 		camClassicResearch(mis_scavengerResClassic, CAM_SCAV_7);
 
-		camSetArtifacts({
-			"artifact1": { tech: "R-Wpn-Cannon3Mk1" },
-		});
+		artiResearch = "R-Wpn-Cannon3Mk1";
 	}
 	else
 	{
@@ -311,10 +311,12 @@ function eventStartLevel()
 			addDroid(CAM_NEW_PARADIGM, 29, 18, "MRA Mantis Tracks", tBody.tank.mantis, tProp.tank.tracks, "", "", tWeap.tank.miniRocketArray);
 		}
 
-		camSetArtifacts({
-			"artifact1": { tech: ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03"] },
-		});
+		artiResearch = ["R-Wpn-Cannon3Mk1", "R-Wpn-RocketSlow-Damage03", "R-Wpn-Rocket-Damage03"];
 	}
+
+	camSetArtifacts({
+		"artifact1": { tech: artiResearch },
+	});
 
 	camSetEnemyBases({
 		"ScavMiddleGroup": {
@@ -380,4 +382,8 @@ function eventStartLevel()
 
 	hackAddMessage("C1-7_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, false); //Canyon
 	queue("startArtifactCollection", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4.5));
+	}
 }

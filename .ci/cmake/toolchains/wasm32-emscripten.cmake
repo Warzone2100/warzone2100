@@ -25,8 +25,8 @@ endif()
 include("${EMSCRIPTEN_ROOT}/cmake/Modules/Platform/Emscripten.cmake")
 
 # Always enable PThreads
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_PTHREADS=1 -s USE_SDL=0")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_PTHREADS=1 -s USE_SDL=0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread")
 
 # Enable optimizations for release builds
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")

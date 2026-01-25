@@ -123,11 +123,11 @@ bool moveSetFormationSpeedLimiting(uint32_t player, bool enabled)
 		auto currentPlayer = static_cast<uint8_t>(player);
 		uint8_t optType = SYNC_OPT_FORMATION_SPEED_LIMITING;
 		uint8_t value = (enabled) ? 1 : 0;
-		NETbeginEncode(NETgameQueue(currentPlayer), GAME_SYNC_OPT_CHANGE);
-		NETuint8_t(&currentPlayer);		// player
-		NETuint8_t(&optType);
-		NETuint8_t(&value);				// formation speed limiting value
-		return NETend();
+		auto w = NETbeginEncode(NETgameQueue(currentPlayer), GAME_SYNC_OPT_CHANGE);
+		NETuint8_t(w, currentPlayer);		// player
+		NETuint8_t(w, optType);
+		NETuint8_t(w, value);				// formation speed limiting value
+		return NETend(w);
 	}
 	else
 	{
@@ -162,11 +162,11 @@ bool recvSyncOptChange(NETQUEUE queue)
 	uint8_t optType;
 	uint8_t	value;
 
-	NETbeginDecode(queue, GAME_SYNC_OPT_CHANGE);
-	NETuint8_t(&player); // the player
-	NETuint8_t(&optType);
-	NETuint8_t(&value);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_SYNC_OPT_CHANGE);
+	NETuint8_t(r, player); // the player
+	NETuint8_t(r, optType);
+	NETuint8_t(r, value);
+	NETend(r);
 
 	if (!canGiveOrdersFor(queue.index, player))
 	{
@@ -539,7 +539,7 @@ void updateDroidOrientation(DROID *psDroid)
 	const int d = 20;
 	int32_t vX, vY;
 
-	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isTransporter()
+	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isFlightBasedTransporter()
 	    || psDroid->isFlying())
 	{
 		/* The ground doesn't affect the pitch/roll of these droids*/
@@ -897,7 +897,7 @@ static void moveOpenGates(DROID *psDroid, Vector2i tile)
 		return;
 	}
 	MAPTILE *psTile = mapTile(tile);
-	if (!psDroid->isFlying() && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
+	if (!psDroid->isFlying() && !psDroid->isFlightBasedTransporter() && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
 	{
 		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
 	}
@@ -1205,7 +1205,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
 			objR = moveObjRadius(psObj);
-			if (psObjcast->isTransporter())
+			if (psObjcast->isFlightBasedTransporter())
 			{
 				// ignore transporters
 				continue;
@@ -1439,18 +1439,42 @@ static uint16_t moveGetDirection(DROID *psDroid)
 static bool moveReachedWayPoint(DROID *psDroid)
 {
 	// Calculate the vector to the droid
-	const Vector2i droid = Vector2i(psDroid->pos.xy()) - psDroid->sMove.target;
+	const Vector2i dist = Vector2i(psDroid->pos.xy()) - psDroid->sMove.target;
+	const unsigned int sqDist = dot(dist, dist);
 	const bool last = psDroid->sMove.pathIndex == (int)psDroid->sMove.asPath.size();
-	int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+	const unsigned int toleranceDist = 3 * (TILE_UNITS / 4);
+	unsigned int sqprecision = last ? ((TILE_UNITS / 4) * (TILE_UNITS / 4)) : ((TILE_UNITS / 2) * (TILE_UNITS / 2));
+
+	// Start the process of potentially increasing the distance threshold when very close to the waypoint.
+	if (sqDist < (toleranceDist * toleranceDist))
+	{
+		if (psDroid->sMove.Status != MOVEPOINTTOPOINT)
+		{
+			psDroid->sMove.tolerance = 0; // If suddenly shuffling or paused, retry later.
+		}
+		else
+		{
+			psDroid->sMove.tolerance += 1;
+		}
+	}
 
 	if (last && psDroid->sMove.bumpTime != 0)
 	{
 		// Make waypoint tolerance 1 tile after 0 seconds, 2 tiles after 3 seconds, X tiles after (X + 1)² seconds.
 		sqprecision = (gameTime - psDroid->sMove.bumpTime + GAME_TICKS_PER_SEC) * (TILE_UNITS * TILE_UNITS / GAME_TICKS_PER_SEC);
 	}
+	else if (psDroid->sMove.tolerance >= toleranceDist)
+	{
+		sqprecision = psDroid->sMove.tolerance * psDroid->sMove.tolerance;
+	}
 
 	// Else check current waypoint
-	return dot(droid, droid) < sqprecision;
+	if (sqDist < sqprecision)
+	{
+		psDroid->sMove.tolerance = 0; // Reset threshold tolerance counter when successful.
+		return true;
+	}
+	return false;
 }
 
 #define MAX_SPEED_PITCH  60
@@ -1477,7 +1501,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		mapX = map_coord(psDroid->pos.x);
 		mapY = map_coord(psDroid->pos.y);
-		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid));
+		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid, false));
 	}
 
 
@@ -2044,7 +2068,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 		{
 			iAudioID = ID_SOUND_BLIMP_FLIGHT;
 		}
-		else if (iPropType == PROPULSION_TYPE_LEGGED && psDroid->isCyborg())
+		else if (iPropType == PROPULSION_TYPE_LEGGED && psDroid->isCyborg() && psPropType->moveID == NO_SOUND)
 		{
 			iAudioID = ID_SOUND_CYBORG_MOVE;
 		}

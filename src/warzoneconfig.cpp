@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/sound/sounddefs.h"
+#include "lib/netplay/connection_provider_registry.h"
 #include "advvis.h"
 #include "component.h"
 #include "display.h"
@@ -59,7 +60,7 @@ struct WARZONE_GLOBALS
 	int antialiasing = 0;
 	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
-	bool trapCursor = false;
+	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -74,7 +75,9 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	int autoLagKickAggressiveness = 3;
 	int autoDesyncKickSeconds = 10;
+	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -90,6 +93,8 @@ struct WARZONE_GLOBALS
 	UDWORD fullscreenModeWidth = 0; // current display default
 	UDWORD fullscreenModeHeight = 0; // current display default
 	int fullscreenModeScreen = -1;
+	float fullscreenPixelDensity = 1.f;
+	float fullscreenRefreshRate = 0.f; // current display default
 	int toggleFullscreenMode = 0; // 0 = the backend default
 	unsigned int cursorScale = 100;
 	// shadow mapping settings
@@ -103,6 +108,12 @@ struct WARZONE_GLOBALS
 
 	// run-time only settings (not persisted to config!)
 	bool allowVulkanImplicitLayers = false;
+
+	// Connection provider used for hosting games
+	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
+
+	// audio cues
+	bool playAudioCue_GroupReporting = true;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -195,13 +206,13 @@ int war_getAntialiasing()
 	return warGlobs.antialiasing;
 }
 
-void war_SetTrapCursor(bool b)
+void war_SetTrapCursor(TrapCursorMode v)
 {
-	warGlobs.trapCursor = b;
-	ActivityManager::instance().changedSetting("trapCursor", std::to_string(b));
+	warGlobs.trapCursor = v;
+	ActivityManager::instance().changedSetting("trapCursor", std::to_string(static_cast<int>(v)));
 }
 
-bool war_GetTrapCursor()
+TrapCursorMode war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
 }
@@ -483,9 +494,21 @@ void war_setAutoLagKickSeconds(int seconds)
 	seconds = std::max(seconds, 0);
 	if (seconds > 0)
 	{
-		seconds = std::max(seconds, 60);
+		seconds = std::max(seconds, 15);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
+}
+
+int war_getAutoLagKickAggressiveness()
+{
+	return warGlobs.autoLagKickAggressiveness;
+}
+
+void war_setAutoLagKickAggressiveness(int aggressiveness)
+{
+	aggressiveness = std::max(aggressiveness, 1);
+	aggressiveness = std::min(aggressiveness, 10);
+	warGlobs.autoLagKickAggressiveness = aggressiveness;
 }
 
 int war_getAutoDesyncKickSeconds()
@@ -501,6 +524,21 @@ void war_setAutoDesyncKickSeconds(int seconds)
 		seconds = std::max(seconds, 10);
 	}
 	warGlobs.autoDesyncKickSeconds = seconds;
+}
+
+int war_getAutoNotReadyKickSeconds()
+{
+	return warGlobs.autoNotReadyKickSeconds;
+}
+
+void war_setAutoNotReadyKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 15);
+	}
+	warGlobs.autoNotReadyKickSeconds = seconds;
 }
 
 bool war_getDisableReplayRecording()
@@ -631,6 +669,26 @@ int war_GetFullscreenModeScreen()
 	return warGlobs.fullscreenModeScreen;
 }
 
+float war_GetFullscreenModePixelDensity()
+{
+	return warGlobs.fullscreenPixelDensity;
+}
+
+void war_SetFullscreenModePixelDensity(float pixelDensity)
+{
+	warGlobs.fullscreenPixelDensity = pixelDensity;
+}
+
+float war_GetFullscreenModeRefreshRate()
+{
+	return warGlobs.fullscreenRefreshRate;
+}
+
+void war_SetFullscreenModeRefreshRate(float refreshRate)
+{
+	warGlobs.fullscreenRefreshRate = refreshRate;
+}
+
 void war_setToggleFullscreenMode(int mode)
 {
 	warGlobs.toggleFullscreenMode = mode;
@@ -717,4 +775,56 @@ void war_setOptionsButtonVisibility(uint8_t val)
 bool war_getAllowVulkanImplicitLayers()
 {
 	return warGlobs.allowVulkanImplicitLayers;
+}
+
+void war_setHostConnectionProvider(ConnectionProviderType pt)
+{
+	warGlobs.hostProviderType = pt;
+}
+
+ConnectionProviderType war_getHostConnectionProvider()
+{
+	return warGlobs.hostProviderType;
+}
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt)
+{
+	if (strcasecmp(str, "tcp") == 0)
+	{
+		pt = ConnectionProviderType::TCP_DIRECT;
+		return true;
+	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (strcasecmp(str, "gns") == 0)
+	{
+		pt = ConnectionProviderType::GNS_DIRECT;
+		return true;
+	}
+#endif
+	return false;
+}
+
+std::string to_string(ConnectionProviderType pt)
+{
+	switch (pt)
+	{
+	case ConnectionProviderType::TCP_DIRECT:
+		return "tcp";
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case ConnectionProviderType::GNS_DIRECT:
+		return "gns";
+#endif
+	}
+	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
+	return {};
+}
+
+bool war_getPlayAudioCue_GroupReporting()
+{
+	return warGlobs.playAudioCue_GroupReporting;
+}
+
+void war_setPlayAudioCue_GroupReporting(bool val)
+{
+	warGlobs.playAudioCue_GroupReporting = val;
 }

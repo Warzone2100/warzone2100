@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("All-Rounder")
+_("\"All-Rounder\" weapons are less effective than specialized weapons.")
+_("However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons.")
+_("All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values.")

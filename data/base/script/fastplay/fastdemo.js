@@ -142,7 +142,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	setReinforcementTime(-1);
-	setMissionTime(-1);
+	camSetMissionTimer(-1);
 	grantStartTech();
 
 	setPower(1500, CAM_HUMAN_PLAYER);

@@ -94,8 +94,14 @@ uint32_t gameRandU32()
 	return gamePseudorandomNumberGenerator.u32();
 }
 
-int32_t gameRand(uint32_t limit)
+uint32_t gameRand(uint32_t limit)
 {
 	syncDebug("Used a random number.");
+
+	if (limit == 0)
+	{
+		return 0;
+	}
+
 	return gamePseudorandomNumberGenerator.u32() % limit;
 }

@@ -56,6 +56,7 @@
 #include "multilimit.h"
 #include "multigifts.h"
 #include "multimenu.h"
+#include "multiint.h"
 #include "template.h"
 #include "lighting.h"
 #include "radar.h"
@@ -282,6 +283,7 @@ std::tuple<OBJECT_TYPE, int, int> wzapi::object_request::getObjectIDRequest() co
 //--
 std::string wzapi::translate(WZAPI_PARAMS(std::string str))
 {
+	if (str.empty()) return str;
 	return std::string(gettext(str.c_str()));
 }
 
@@ -291,7 +293,7 @@ std::string wzapi::translate(WZAPI_PARAMS(std::string str))
 //-- run on all network peers in the same game frame. If it is called on just one peer (such as would be
 //-- the case for AIs, for instance), then game sync will break. (3.2+ only)
 //--
-int32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
+uint32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 {
 	if (limit == 0) return 0;
 	return gameRand(limit);
@@ -1669,6 +1671,29 @@ endstructloc:
 	return {};
 }
 
+//-- ## structureCanFit(structureName, x, y[, direction])
+//--
+//-- Return true if given building can be built at the position. (4.6+ only)
+//--
+bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y, optional<float> _direction))
+{
+	const int player = context.player();
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
+	STRUCTURE_STATS	*psStat = &asStructureStats[structureIndex];
+	SCRIPT_ASSERT(false, context, psStat, "No such stat found: %s", structureName.c_str());
+
+	if (_direction.has_value() && std::isnan(_direction.value()))
+	{
+		_direction = 0.f; // avoid undefined behavior (nan is outside the range of representable values of type 'unsigned short')
+	}
+	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
+
+	return (tileOnMap(x, y)
+			&& validLocation(psStat, world_coord(Vector2i(x, y)), direction, player, false));
+}
+
 //-- ## droidCanReach(droid, x, y)
 //--
 //-- Return whether or not the given droid could possibly drive to the given position. Does
@@ -2146,8 +2171,8 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 	SCRIPT_ASSERT(false, context, _x <= mapWidth, "Beacon x value %d is greater than mapWidth %d", _x, (int)mapWidth);
 	SCRIPT_ASSERT(false, context, _y <= mapHeight, "Beacon y value %d is greater than mapHeight %d", _y, (int)mapHeight);
 
-	int x = world_coord(_x);
-	int y = world_coord(_y);
+	int x = world_coord(_x) + (TILE_UNITS / 2);
+	int y = world_coord(_y) + (TILE_UNITS / 2);
 
 	std::string message;
 	if (_message.has_value())
@@ -3265,12 +3290,12 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 	{
 		return false;
 	}
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-	NETuint8_t(&giftType);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint32_t(&object_id);
-	NETend();
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+	NETuint8_t(w, giftType);
+	NETuint8_t(w, from);
+	NETuint8_t(w, to);
+	NETuint32_t(w, object_id);
+	NETend(w);
 	return true;
 }
 
@@ -3354,13 +3379,17 @@ wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int
 	return {};
 }
 
-//-- ## fireWeaponAtLoc(weaponName, x, y[, player])
+//-- ## fireWeaponAtLoc(weaponName, x, y[, player[, center]])
 //--
 //-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+//--
 //-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
 //-- may have different friendly fire logic for a few weapons (like the lassat).
 //--
-wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player))
+//-- The optional ```center``` parameter (4.6.2+ only) can be set to ```true```
+//-- to target the center of the tile. (The default is ```false```.)
+//--
+wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player, optional<bool> center))
 {
 	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
 	SCRIPT_ASSERT({}, context, weaponIndex > 0, "No such weapon: %s", weaponName.c_str());
@@ -3371,7 +3400,12 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 	Vector3i target;
 	target.x = world_coord(x);
 	target.y = world_coord(y);
-	target.z = map_Height(x, y);
+	if (center.value_or(false))
+	{
+		target.x += (TILE_UNITS / 2);
+		target.y += (TILE_UNITS / 2);
+	}
+	target.z = mapTile(x, y)->height;
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weaponIndex;
@@ -4458,6 +4492,7 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["ShootInAir"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_IN_AIR) != 0);
 			weap["ShootOnGround"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_ON_GROUND) != 0);
 			weap["NoFriendlyFire"] = psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE);
+			weap["AllowedOnTransporter"] = psStats->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER);
 			weap["FlightSpeed"] = psStats->flightSpeed;
 			weap["Rotate"] = psStats->rotate;
 			weap["MinElevation"] = psStats->minElevation;
@@ -4675,25 +4710,42 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	//== * ```playerData``` An array of information about the players in a game. Each item in the array is an object
 	//== containing the following variables:
 	//==   * ```difficulty``` (see ```difficulty``` global constant)
+	//==   * ```faction``` chosen faction in MP. 0 - normal, 1 - NEXUS, 2 - Collective (4.0.0+ only)
 	//==   * ```colour``` number describing the colour of the player
 	//==   * ```position``` number describing the position of the player in the game's setup screen
 	//==   * ```isAI``` whether the player is an AI (3.2+ only)
 	//==   * ```isHuman``` whether the player is human (3.2+ only)
 	//==   * ```name``` the name of the player (3.2+ only)
 	//==   * ```team``` the number of the team the player is part of
+	//==   * ```scriptName``` File name of the AI's JS file. (4.6.2+ only)
 	nlohmann::json playerData = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
+	const auto& aidata = getAIData();
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		nlohmann::json vector = nlohmann::json::object();
-		vector["name"] = NetPlay.players[i].name;
+		bool aiPlayer = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
+		if (game.blindMode >= BLIND_MODE::BLIND_GAME)
+		{
+			// to ensure the "name" field exposed to api is consistent across blind games _and_ replays of those games, always set it to the generic name if in blind mode
+			vector["name"] = getPlayerGenericName(i);
+		}
+		else
+		{
+			vector["name"] = NetPlay.players[i].name;
+		}
 		vector["difficulty"] = static_cast<int8_t>(NetPlay.players[i].difficulty);
 		vector["faction"] = NetPlay.players[i].faction;
 		vector["colour"] = NetPlay.players[i].colour;
 		vector["position"] = NetPlay.players[i].position;
 		vector["team"] = NetPlay.players[i].team;
-		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
+		vector["isAI"] = aiPlayer;
 		vector["isHuman"] = NetPlay.players[i].allocated;
 		vector["type"] = SCRIPT_PLAYER;
+		if (aiPlayer)
+		{
+			std::string js = (NetPlay.players[i].ai < aidata.size()) ? aidata[NetPlay.players[i].ai].js : "AI";
+			vector["scriptName"] = js;
+		}
 		playerData.push_back(std::move(vector));
 	}
 	return playerData;

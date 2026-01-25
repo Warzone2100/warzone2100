@@ -19,7 +19,7 @@ main() {
 	download_images || exit 1
 
 	log 'Rendering images...'
-	for flag in BG ES CZ DK DE GR US GB ES EE ES FI FR NL IE HR HU ID IT KR LT LV NO NO NL PL BR PT RO RU SK SI SE TR UZ UA CN TW VA; do
+	for flag in BG ES CZ DK DE GR US GB ES EE ES FI FR NL IE HR HU ID IT KR LT LV NO NO NL PL BR PT RO RS RU SK SI SE TR UZ UA CN TW VA; do
 		file="$flag.svg"
 
 		if ! [ -e "$file" ]; then
@@ -31,7 +31,7 @@ main() {
 
 		gravity=Center
 		# these flags have details on the left side that would be clipped out with gravity=Center
-		if grep -q "$flag " <<< 'CZ GR SI US CN TW '; then
+		if grep -q "$flag " <<< 'CZ GR RS SI US CN TW '; then
 			gravity=West
 		fi
 

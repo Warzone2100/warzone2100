@@ -8,12 +8,23 @@ echo "Target Arch: $TARGET_BUILD_ARCH"
 if [[ "$TARGET_BUILD_ARCH" == "amd64" && "$CRAFT_ARCH_BUILD_ON" == "$TARGET_BUILD_ARCH" ]]; then
   # Install Vulkan SDK (binary package)
   echo "Installing Vulkan SDK"
-
-  # Add Vulkan SDK repo
-  wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add -
-  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.3.296-noble.list https://packages.lunarg.com/vulkan/1.3.296/lunarg-vulkan-1.3.296-noble.list
-  apt update
-  apt install --yes vulkan-sdk
+  
+  VULKANSDK_SHA256="241e75b56c91c0d210ed07a7c638ec05a3e5b0e4c66ba9f0ba0f102d823ad6bf"
+  VULKANSDK_DLURL="https://sdk.lunarg.com/sdk/download/1.4.328.1/linux/vulkansdk-linux-x86_64-1.4.328.1.tar.xz?Human=true"
+  
+  VULKANSDK_INSTALL_PATH="${CRAFT_PART_BUILD}/dep_tmp/vulkan_sdk"
+  VULKAN_DL_FILE="${CRAFT_PART_BUILD}/dl_tmp/vulkansdk-linux-x86_64.tar.xz"
+  mkdir -p "${CRAFT_PART_BUILD}/dl_tmp"
+  
+  wget -O "${VULKAN_DL_FILE}" "${VULKANSDK_DLURL}"
+  
+  echo "${VULKANSDK_SHA256} ${VULKAN_DL_FILE}" | sha256sum -c
+  mkdir -p "${VULKANSDK_INSTALL_PATH}"
+  tar -C "${VULKANSDK_INSTALL_PATH}" -xf "${VULKAN_DL_FILE}"
+  rm "${VULKAN_DL_FILE}"
+  
+  export VULKAN_SDK="${VULKANSDK_INSTALL_PATH}/1.4.328.1/x86_64"
+  export PATH="$PATH:${VULKAN_SDK}/bin"
 
 else
   SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null||echo $0)"

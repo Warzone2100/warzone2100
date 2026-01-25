@@ -320,11 +320,11 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	}
 	if ((unsigned int)(psWidget->UserData) == 0)
 	{
-		sprintf(buffer, " *");
+		sstrcpy(buffer, " *");
 	}
 	else
 	{
-		sprintf(buffer, "%iP", (int)(psWidget->UserData));
+		ssprintf(buffer, "%iP", (int)(psWidget->UserData));
 		buffer[2] = '\0';  // Truncate 'P' if 2 digits, since there isn't room.
 	}
 	cache.wzText.setText(buffer, font_regular);

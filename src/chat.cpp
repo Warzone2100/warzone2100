@@ -21,6 +21,7 @@
 #include "ai.h"
 #include "lib/netplay/netplay.h"
 #include "qtscript.h"
+#include "hci/quickchat.h"
 
 InGameChatMessage::InGameChatMessage(uint32_t messageSender, char const *messageText)
 {
@@ -137,11 +138,11 @@ void InGameChatMessage::sendToAiPlayer(uint32_t receiver)
 		return;
 	}
 
-	NETbeginEncode(NETnetQueue(responsiblePlayer), NET_AITEXTMSG);
-	NETuint32_t(&sender);
-	NETuint32_t(&receiver);
-	NETstring(text, MAX_CONSOLE_STRING_LENGTH);
-	NETend();
+	auto w = NETbeginEncode(NETnetQueue(responsiblePlayer), NET_AITEXTMSG);
+	NETuint32_t(w, sender);
+	NETuint32_t(w, receiver);
+	NETstring(w, text, MAX_CONSOLE_STRING_LENGTH);
+	NETend(w);
 }
 
 void InGameChatMessage::sendToAiPlayers()
@@ -173,7 +174,7 @@ void InGameChatMessage::sendToSpectators()
 	ssprintf(formatted, "%s (%s): %s", getPlayerName(sender), _("Spectators"), text);
 
 	if ((sender == selectedPlayer || shouldReceive(selectedPlayer)) && NetPlay.players[selectedPlayer].isSpectator) {
-		auto message = NetworkTextMessage(SPECTATOR_MESSAGE, formatted);
+		auto message = NetworkTextMessage(sender, formatted);
 		printInGameTextMessage(message);
 	}
 
@@ -189,10 +190,10 @@ void InGameChatMessage::sendToSpectators()
 
 void InGameChatMessage::enqueueSpectatorMessage(NETQUEUE queue, char const* formattedMsg)
 {
-	NETbeginEncode(queue, NET_SPECTEXTMSG);
-	NETuint32_t(&sender);
-	NETstring(formattedMsg, MAX_CONSOLE_STRING_LENGTH);
-	NETend();
+	auto w = NETbeginEncode(queue, NET_SPECTEXTMSG);
+	NETuint32_t(w, sender);
+	NETstring(w, formattedMsg, MAX_CONSOLE_STRING_LENGTH);
+	NETend(w);
 }
 
 void InGameChatMessage::addReceiverByPosition(uint32_t playerPosition)
@@ -211,6 +212,20 @@ void InGameChatMessage::addReceiverByIndex(uint32_t playerIndex)
 
 void InGameChatMessage::send()
 {
+	if (NetPlay.bComms)
+	{
+		auto mutedUntil = playerSpamMutedUntil(sender);
+		if (mutedUntil.has_value())
+		{
+			auto currentTime = std::chrono::steady_clock::now();
+			auto duration_until_send_allowed = std::chrono::duration_cast<std::chrono::seconds>(mutedUntil.value() - currentTime).count();
+			auto duration_timeout_message = astringf(_("You have sent too many messages in the last few seconds. Please wait and try again."), static_cast<unsigned>(duration_until_send_allowed));
+			addConsoleMessage(duration_timeout_message.c_str(), DEFAULT_JUSTIFY, INFO_MESSAGE, false, static_cast<UDWORD>(std::chrono::duration_cast<std::chrono::milliseconds>(mutedUntil.value() - currentTime).count()));
+			return;
+		}
+		recordPlayerMessageSent(sender);
+	}
+
 	if (NetPlay.players[selectedPlayer].isSpectator && !NetPlay.isHost)
 	{
 		sendToSpectators();

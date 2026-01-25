@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.24)
-cmake_policy(SET CMP0054 NEW)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Provides functions for:
 #	- importing the autorevision data into the CMake local environment

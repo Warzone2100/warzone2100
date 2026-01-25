@@ -29,6 +29,7 @@
 #include "lib/sound/sounddefs.h"
 #include "multiplaydefs.h"
 #include <string>
+#include <stdint.h>
 
 #define	CAMERASPEED_MAX		(5000)
 #define	CAMERASPEED_MIN		(100)
@@ -62,6 +63,13 @@ enum class JS_BACKEND
 bool js_backend_from_str(const char *str, JS_BACKEND &output_backend);
 std::string to_string(JS_BACKEND backend);
 
+enum class TrapCursorMode : uint8_t
+{
+	Disabled = 0,
+	Enabled,
+	Automatic
+};
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -76,8 +84,8 @@ void war_setWindowMode(WINDOW_MODE);
 WINDOW_MODE war_getWindowMode();
 void war_setAntialiasing(int);
 int war_getAntialiasing();
-void war_SetTrapCursor(bool b);
-bool war_GetTrapCursor();
+void war_SetTrapCursor(TrapCursorMode v);
+TrapCursorMode war_GetTrapCursor();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(int value);
@@ -98,6 +106,10 @@ void war_SetFullscreenModeScreen(int screen);
 int war_GetFullscreenModeScreen();
 void war_SetFullscreenModeHeight(UDWORD height);
 UDWORD war_GetFullscreenModeHeight();
+float war_GetFullscreenModePixelDensity();
+void war_SetFullscreenModePixelDensity(float pixelDensity);
+float war_GetFullscreenModeRefreshRate();
+void war_SetFullscreenModeRefreshRate(float refreshRate);
 void war_setToggleFullscreenMode(int mode);
 int war_getToggleFullscreenMode();
 void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
@@ -132,8 +144,12 @@ bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
 int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
+int war_getAutoLagKickAggressiveness();
+void war_setAutoLagKickAggressiveness(int aggressiveness);
 int war_getAutoDesyncKickSeconds();
 void war_setAutoDesyncKickSeconds(int seconds);
+int war_getAutoNotReadyKickSeconds();
+void war_setAutoNotReadyKickSeconds(int seconds);
 bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
 int war_getMaxReplaysSaved();
@@ -174,6 +190,17 @@ void war_setOptionsButtonVisibility(uint8_t val);
 
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
+
+bool war_getPlayAudioCue_GroupReporting();
+void war_setPlayAudioCue_GroupReporting(bool val);
+
+enum class ConnectionProviderType : uint8_t;
+
+void war_setHostConnectionProvider(ConnectionProviderType pt);
+ConnectionProviderType war_getHostConnectionProvider();
+
+bool net_backend_from_str(const char* str, ConnectionProviderType& pt);
+std::string to_string(ConnectionProviderType pt);
 
 /**
  * Enable or disable sound initialization

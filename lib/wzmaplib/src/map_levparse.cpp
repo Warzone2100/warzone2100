@@ -203,9 +203,15 @@ optional<MAP_TILESET> convertLevMapTilesetType(std::string dataset)
 {
 	unsigned t = 0, c = 0;
 
-	if (sscanf(dataset.c_str(), "MULTI_CAM_%u", &c) != 1)
+	bool parsedDataset = false;
+	// MULTI_CAM_1, MULTI_CAM_2, MULTI_CAM_3
+	parsedDataset = sscanf(dataset.c_str(), "MULTI_CAM_%u", &c) == 1;
+	if (!parsedDataset)
 	{
-		sscanf(dataset.c_str(), "MULTI_T%u_C%u", &t, &c);
+		// Many older maps also specify > 1 tech level variants. Examples: MULTI_T2_C2, MULTI_T3_C2, etc
+		// Where T# is the tech level
+		// And C# maps to the campaign/tileset (which is all we care about)
+		parsedDataset = sscanf(dataset.c_str(), "MULTI_T%u_C%u", &t, &c) == 2;
 	}
 
 	switch (c)

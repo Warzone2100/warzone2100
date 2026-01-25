@@ -1,10 +1,8 @@
 app-id: net.wz2100.wz2100@WZ_OUTPUT_NAME_SUFFIX@
-# We need to force the target architecture for the runtime, to support cross-compilation
-runtime: org.freedesktop.Platform@WZ_RUNTIME_SUFFIX@
-runtime-version: '24.08'
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 command: warzone2100
-@WZ_CROSS_COMPILE_SDK_EXTENSIONS@
 separate-locales: false
 finish-args:
   - --require-version=0.10.3
@@ -28,42 +26,11 @@ cleanup:
   - /share/gtk-doc
   - /share/man
   - /share/pkgconfig
+  - /protoc-host/
   - '*.a'
   - '*.la'
-build-options:
-  env:
-    GEM_PATH: /app/lib/ruby/gems/build-dep
-
-x-compat-aarch64-build-options: &compat-aarch64-build-options
-  # Add the cross compiler to the PATH
-  append-path: /usr/lib/sdk/toolchain-aarch64/bin
-  # binutils are available there in a different path. GCC knows
-  # where to get them. But if we need access to those tools,
-  # they can be added to the path that way:
-  # prepend-path: /usr/lib/sdk/toolchain-aarch64/aarch64-unknown-linux-gnu/bin
-  # Use the proper pkg-config path
-  prepend-pkg-config-path: /usr/lib/aarch64-linux-gnu/pkgconfig
-  # Because default CFLAGS are architecture-specific, we need
-  # to reset them to something more portable.
-  cflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fno-omit-frame-pointer
-  cflags-override: true
-  cxxflags: -O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fno-omit-frame-pointer
-  cxxflags-override : true
 
 modules:
-  
-  @WZ_CROSS_FILES_SETUP@
-
-  - name: asciidoctor
-    cleanup:
-      - '*'
-    buildsystem: simple
-    build-commands:
-      - gem install --ignore-dependencies --no-user-install --verbose --local --install-dir /app/lib/ruby/gems/build-dep --bindir /app/bin asciidoctor-2.0.23.gem
-    sources:
-      - type: file
-        url: https://rubygems.org/downloads/asciidoctor-2.0.23.gem
-        sha256: 52208807f237dfa0ca29882f8b13d60b820496116ad191cf197ca56f2b7fddf3
 
   - name: sentry-native
     cleanup:
@@ -111,65 +78,116 @@ modules:
     sources:
       - type: git
         url: https://github.com/google/shaderc.git
-        tag: v2024.3
-        commit: ff84893dd52d28f0b1737d2635733d952013bd9c
+        tag: v2025.4
+        commit: 73743588fe9c39f2f1c780a087d94afac691a189
       # Replicate the needed functionality of utils/git-sync-deps
       # To avoid having to break the build sandbox to download files
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Headers.git
-        commit: 2a9b6f951c7d6b04b6c21fe1bf3f475b68b84801 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 01e0577914a75a2569c846778c2f93aa8e6feddd # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-headers
       - type: git
         url: https://github.com/KhronosGroup/SPIRV-Tools.git
-        commit: 01c8438ee4ac52c248119b7e03e0b021f853b51a # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: 19042c8921f35f7bec56b9e5c96c5f5691588ca8 # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/spirv-tools
       - type: git
         url: https://github.com/KhronosGroup/glslang.git
-        commit: 467ce01c71e38cf01814c48987a5c0dadd914df4 # retrieved from DEPS in https://github.com/google/shaderc @ tag
+        commit: d213562e35573012b6348b2d584457c3704ac09b # retrieved from DEPS in https://github.com/google/shaderc @ tag
         dest: third_party/glslang
 
   - name: physfs
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
     - -DCMAKE_INSTALL_PREFIX=/app
     - -DCMAKE_BUILD_TYPE=Release
     - -DPHYSFS_BUILD_TEST=OFF
-    @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
-        url: https://github.com/icculus/physfs/archive/741c4be358cd87366af1387d1e04e3f7d4f50c1e.zip # PhysFS 3.2.0+
-        sha512: 56bfe808e28d7de6b9f242ca3ce81d08439480499c7d5901f78a3ec8ea75c55b71958515db015f101bb6b884a0a0f1140fab1a7222aff0bbe28555ebf378807f
+        url: https://github.com/icculus/physfs/archive/d70c3fcf06814f8608c8327d3e8136063ee0133d.zip # PhysFS 3.2.0+
+        sha512: d2ee14800be053d91ce4417db09c13825b0a3468fd7eddc05e79709ed0dd971528dff39b04122ea501b67cf715c2e6ce69b0c2b837d67c75ef9b570515ddde98
       
   - name: fribidi
     buildsystem: meson
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
-    @WZ_MESON_CROSS_CONFIG_OPTIONS@
     - -Ddocs=false
     - -Dbin=false
     - -Dtests=false
     sources:
       - type: git
         url: https://github.com/fribidi/fribidi
-        tag: v1.0.15
-        commit: 2803ff176713a27d7edb57a24bc60c38a02182e9
+        tag: v1.0.16
+        commit: 68162babff4f39c4e2dc164a5e825af93bda9983
 
   - name: libsodium
-    @WZ_CROSS_BUILD_OPTIONS@
-    config-opts:
-    @WZ_AUTOTOOLS_CROSS_CONFIG_OPTIONS@
     sources:
       - type: archive
         url: https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz
         sha256: ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19
 
+  - name: abseil-cpp
+    buildsystem: cmake-ninja
+    builddir: true
+    cleanup:
+      - '*'
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_CXX_STANDARD=17
+      - -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+      - -DBUILD_SHARED_LIBS:BOOL=OFF
+    sources:
+      - type: archive
+        url: https://github.com/abseil/abseil-cpp/releases/download/20250127.1/abseil-cpp-20250127.1.tar.gz
+        sha256: b396401fd29e2e679cace77867481d388c807671dc2acc602a0259eeb79b7811
+
+  - name: protobuf
+    buildsystem: cmake-ninja
+    builddir: true
+    cleanup:
+      - '/bin'
+      - '/lib/debug/bin'
+      - '/lib/libprotoc.*'
+      - '/lib/debug/lib/libprotoc.*'
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DCMAKE_BUILD_TYPE=Release
+      - -Dprotobuf_BUILD_TESTS:BOOL=OFF
+      - -Dprotobuf_BUILD_PROTOBUF_BINARIES:BOOL=ON
+      - -Dprotobuf_BUILD_PROTOC_BINARIES:BOOL=ON
+      - -Dprotobuf_BUILD_SHARED_LIBS:BOOL=ON
+    sources:
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v30.1/protobuf-30.1.tar.gz
+        sha256: 1451b03faec83aed17cdc71671d1bbdfd72e54086b827f5f6fd02bf7a4041b68
+
+  - name: libzip
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+    - -DCMAKE_INSTALL_PREFIX=/app
+    - -DCMAKE_BUILD_TYPE=Release
+    - -DENABLE_COMMONCRYPTO=OFF
+    - -DENABLE_GNUTLS=OFF
+    - -DENABLE_MBEDTLS=OFF
+    - -DENABLE_OPENSSL=OFF
+    - -DENABLE_WINDOWS_CRYPTO=OFF
+    - -DENABLE_LZMA=OFF
+    - -DENABLE_ZSTD=OFF
+    - -DBUILD_TOOLS=OFF
+    - -DBUILD_REGRESS=OFF
+    - -DBUILD_OSSFUZZ=OFF
+    - -DBUILD_EXAMPLES=OFF
+    - -DBUILD_DOC=OFF
+    sources:
+      - type: archive
+        url: https://github.com/nih-at/libzip/releases/download/v1.11.3/libzip-1.11.3.tar.gz
+        sha512: 476ac845be5ae75cb666076bada9fb00c08d267308623672e9c7685998aeff40378a96d0fb37cde5b6d0f0c61935c84bd0e63900deff1554c9e0208f626ff390
+
   - name: warzone2100
     buildsystem: cmake-ninja
     builddir: true
-    @WZ_CROSS_BUILD_OPTIONS@
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DWZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY=ON
@@ -180,7 +198,7 @@ modules:
       - -DWZ_DOWNLOAD_PREBUILT_PACKAGES_ASSET_DIR=/app/prestaged-dl
       # Crashpad/breakpad works in the Flatpak sandbox *if* --allow=devel is set above. Otherwise, this must be: inproc
       - -DSENTRY_BACKEND=crashpad
-      @WZ_CMAKE_CROSS_CONFIG_OPTIONS@
+      - -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
       - -DDISCORD_RPC_APPID:STRING=$DISCORD_RPC_APPID
@@ -190,8 +208,7 @@ modules:
     secret-env:
       - WZ_OUTPUT_NAME_SUFFIX
     sources:
-      - type: dir
-        path: ../../
+      @WZ_MAIN_MODULE_SOURCE@
       - type: file
         url: https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz
         sha256: 142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3

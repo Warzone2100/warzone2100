@@ -7,11 +7,13 @@
 		"secondaryUnitOrderButtons": "RECYCLE"
 	},
 	"contents": [
-		"Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it.",
+		"Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play.",
 		"",
 		"Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged).",
 		"",
-		"The unit’s experience level will be placed in the next unit that is manufactured.",
+		"The experience points of the recycled unit will be transferred to the next unit that is manufactured.",
+		"",
+		"When multiple experienced units are recycled, the highest amount of experience points is transferred first.",
 		"",
 		"You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 	],

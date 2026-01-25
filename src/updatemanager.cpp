@@ -109,6 +109,8 @@ static const char compatCacheInfoPath[] = WZ_UPDATES_CACHE_DIR "/cache_info_comp
 static CachePaths updatesCachePaths = CachePaths{updatesCacheDataPath, cacheInfoPath};
 static CachePaths compatCachePaths = CachePaths{compatDataPath, compatCacheInfoPath};
 
+static std::atomic<int> newVersionAvailable; // -1 if false, 1 if true, 0 if no result (yet, or matching)
+
 static std::mutex compatCheckResultsMutex;
 static optional<CompatCheckResults> compatCheckResults = nullopt;
 static std::vector<CompatCheckResultsHandlerFunc> registeredCompatCheckResultsHandlers;
@@ -507,6 +509,7 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 						}
 						addNotification(notification, WZ_Notification_Trigger::Immediate());
 					});
+					newVersionAvailable.store(1);
 					return ProcessResult::UPDATE_FOUND;
 				}
 				catch (const std::exception&)
@@ -515,6 +518,7 @@ ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, boo
 					continue;
 				}
 			}
+			newVersionAvailable.store(-1);
 			return ProcessResult::MATCHED_CHANNEL_NO_UPDATE;
 		}
 		catch (const std::exception&)
@@ -1115,4 +1119,15 @@ void asyncGetCompatCheckResults(CompatCheckResultsHandlerFunc resultClosure)
 	}
 
 	resultClosure(resultsCopy);
+}
+
+optional<bool> getVersionCheckNewVersionAvailable()
+{
+	auto val = newVersionAvailable.load();
+	if (val == 0)
+	{
+		// no result (yet, or matching)
+		return nullopt;
+	}
+	return val == 1;
 }

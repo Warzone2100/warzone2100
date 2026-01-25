@@ -251,6 +251,34 @@ bool isBlueprint(const BASE_OBJECT *psObject)
 	return psObject != nullptr && psObject->type == OBJ_STRUCTURE && ((const STRUCTURE*)psObject)->isBlueprint();
 }
 
+// Add smoke effect to cover the droid's emergence from the factory or when building structures.
+// DISPLAY ONLY - does not affect game state.
+static void displayConstructionCloud(const Vector3i &pos)
+{
+	const Vector2i coordinates = {pos.x, pos.y};
+	const MAPTILE *psTile = mapTile(map_coord(coordinates));
+	if (!tileIsClearlyVisible(psTile))
+	{
+		return;
+	}
+
+	Vector3i iVecEffect;
+
+	iVecEffect.x = pos.x;
+	iVecEffect.y = map_Height(pos.x, pos.y) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
+	iVecEffect.z = pos.y;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.x = pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
+	iVecEffect.z = pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.z = pos.y + DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.x = pos.x + DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+	iVecEffect.z = pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
+	addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
+}
+
 void initStructLimits()
 {
 	for (unsigned i = 0; i < numStructureStats; ++i)
@@ -823,7 +851,7 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t structureDamage(STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -832,7 +860,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 	      psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
-	relativeDamage = objDamage(psStructure, damage, psStructure->structureBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
+	relativeDamage = objDamage(psStructure, psProjectile, damage, psStructure->structureBody(), weaponClass, weaponSubClass, isDamagePerSecond, minDamage, empRadiusHit);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)
@@ -1019,6 +1047,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 					REPAIR_FACILITY	*psRepairFac = &psStruct->pFunctionality->repairFacility;
 					if (psRepairFac->psObj)
 					{
+						if (psRepairFac->state == RepairState::Repairing)
+						{
+							droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+						}
 						psRepairFac->psObj = nullptr;
 						psRepairFac->state = RepairState::Idle;
 					}
@@ -1797,6 +1829,11 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 			}
 		}
+
+		if (!FromSave)
+		{
+			displayConstructionCloud(psBuilding->pos);
+		}
 	}
 	else //its an upgrade
 	{
@@ -1971,6 +2008,7 @@ optional<STRUCTURE> buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos,
 	}
 
 	STRUCTURE blueprint(0, ownerPlayer);
+	blueprint.state = SAS_NORMAL;
 	// construct the fake structure
 	blueprint.pStructureType = const_cast<STRUCTURE_STATS *>(psStats);  // Couldn't be bothered to fix const correctness everywhere.
 	if (selectedPlayer < MAX_PLAYERS)
@@ -2122,10 +2160,6 @@ static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
 
 			psRepairFac->psObj = nullptr;
-			psRepairFac->psGroup = grpCreate();
-
-			// Add NULL droid to the group
-			psRepairFac->psGroup->add(nullptr);
 
 			// Create an assembly point for repaired droids
 			if (!createFlagPosition(&psRepairFac->psDeliveryPoint, psBuilding->player))
@@ -2395,12 +2429,13 @@ void clearCommandDroidFactory(DROID *psDroid)
 }
 
 /* Check that a tile is vacant for a droid to be placed */
-static bool structClearTile(UWORD x, UWORD y)
+static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 {
 	UDWORD	player;
 
 	/* Check for a structure */
-	if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
+	/* NOTE: Substitute PROPULSION_TYPE_WHEELED for PROPULSION_TYPE_LIFT, as flying droids are initially placed on the ground */
+	if (fpathBlockingTile(x, y, (propulsion != PROPULSION_TYPE_LIFT) ? propulsion : PROPULSION_TYPE_WHEELED))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
@@ -2427,11 +2462,26 @@ static bool structClearTile(UWORD x, UWORD y)
 /* An auxiliary function for std::stable_sort in placeDroid */
 static bool comparePlacementPoints(Vector2i a, Vector2i b)
 {
-	return abs(a.x) + abs(a.y) < abs(b.x) + abs(b.y);
+	// Compare by Manhattan distance first
+	int dist_a = abs(a.x) + abs(a.y);
+	int dist_b = abs(b.x) + abs(b.y);
+
+	if (dist_a != dist_b)
+	{
+		return dist_a < dist_b; // Sort by Manhattan distance
+	}
+	else
+	{
+		if (a.x != b.x)
+		{
+			return a.x < b.x; // Compare x-coordinates
+		}
+		return a.y < b.y; // Compare y-coordinates
+	}
 }
 
 /* Find a location near to a structure to start the droid of */
-bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
+bool placeDroid(STRUCTURE *psStructure, const DROID_TEMPLATE * psTempl, UDWORD *droidX, UDWORD *droidY)
 {
 	CHECK_STRUCTURE(psStructure);
 
@@ -2478,7 +2528,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	{
 		for (int x = xmin; x <= xmax; ++x)
 		{
-			if (structClearTile(x, y))
+			if (structClearTile(x, y, psTempl->getPropulsionStats()->propulsionType))
 			{
 				tiles.push_back(Vector2i(12 * x - sx, 12 * y - sy));
 			}
@@ -2565,13 +2615,12 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 	bool			placed;//bTemp = false;
 	DROID			*psNewDroid;
 	FACTORY			*psFact;
-	Vector3i iVecEffect;
 	UBYTE			factoryType;
 	bool			assignCommander;
 
 	CHECK_STRUCTURE(psStructure);
 
-	placed = placeDroid(psStructure, &x, &y);
+	placed = placeDroid(psStructure, psTempl, &x, &y);
 
 	if (placed)
 	{
@@ -2599,25 +2648,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			}
 		}
 		setFactorySecondaryState(psNewDroid, psStructure);
-		const auto mapCoord = map_coord({x, y});
-		const auto psTile = mapTile(mapCoord);
-		if (tileIsClearlyVisible(psTile)) // display only - does not affect game state
-		{
-			/* add smoke effect to cover the droid's emergence from the factory */
-			iVecEffect.x = psNewDroid->pos.x;
-			iVecEffect.y = map_Height(psNewDroid->pos.x, psNewDroid->pos.y) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
-			iVecEffect.z = psNewDroid->pos.y;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.x = psNewDroid->pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.z = psNewDroid->pos.y + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.x = psNewDroid->pos.x + DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-			iVecEffect.z = psNewDroid->pos.y - DROID_CONSTRUCTION_SMOKE_OFFSET;
-			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, nullptr, 0, gameTime - deltaGameTime + 1);
-		}
+		displayConstructionCloud(psNewDroid->pos);
 		/* add the droid to the list */
 		addDroid(psNewDroid, apsDroidLists);
 		*ppsDroid = psNewDroid;
@@ -2960,7 +2991,11 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
 	{
 		objTrace(psStructure->id, "Resistance too low for repair");
-		psRepairFac->psObj = nullptr;
+		if (psRepairFac->psObj != nullptr)
+		{
+			droidRepairStopped(castDroid(psRepairFac->psObj), &station);
+			psRepairFac->psObj = nullptr;
+		}
 		return RepairState::Idle;
 	}
 	switch (ev)
@@ -2973,6 +3008,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	{
 		ASSERT(found != nullptr, "Bug! found droid, but it was null?");
 		psRepairFac->psObj = found;
+		droidRepairStarted(found, &station);
 		return RepairState::Repairing;
 	};
 	case RepairEvents::UnitReachedMaxHP:
@@ -2983,6 +3019,7 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 		psDroid->body = psDroid->originalBody;
 		// if completely repaired reset order
 		objTrace(psDroid->id, "was fully repaired by RF");
+		droidRepairStopped(psDroid, &station);
 		droidWasFullyRepaired(psDroid, psRepairFac);
 		// only call "secondarySetState" *after* triggering "droidWasFullyRepaired"
 		// because in some cases calling it would modify primary order
@@ -2994,11 +3031,13 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	{
 		DROID *psDroid = (DROID*) psRepairFac->psObj;
 		syncDebugDroid(psDroid, '-');
+		droidRepairStopped(psDroid, &station);
 		psRepairFac->psObj = nullptr;
 		return RepairState::Idle;
 	};
 	case RepairEvents::UnitMovedAway:
 	{
+		droidRepairStopped(castDroid(psRepairFac->psObj), &station);
 		psRepairFac->psObj = nullptr;
 		return RepairState::Idle;
 	};
@@ -3115,7 +3154,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 				else
 				{
-					if (aiChooseTarget(psStructure, &psChosenObjs[0], 0, true, &tmpOrigin))
+					if (i > 0)
 					{
 						if (psChosenObjs[0])
 						{
@@ -3636,11 +3675,11 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	int ref = 0;
 	int refChr = ' ';
 
-	// Print what the structure is producing, too.
+	// Print what the structure is producing (or repairing), too.
 	switch (psStruct->pStructureType->type)
 	{
 	case REF_RESEARCH:
-		if (psStruct->pFunctionality->researchFacility.psSubject != nullptr)
+		if (psStruct->pFunctionality && psStruct->pFunctionality->researchFacility.psSubject != nullptr)
 		{
 			ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
 			refChr = 'r';
@@ -3649,10 +3688,17 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	case REF_FACTORY:
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
-		if (psStruct->pFunctionality->factory.psSubject != nullptr)
+		if (psStruct->pFunctionality && psStruct->pFunctionality->factory.psSubject != nullptr)
 		{
 			ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
 			refChr = 'p';
+		}
+		break;
+	case REF_REPAIR_FACILITY:
+		if (psStruct->pFunctionality && psStruct->pFunctionality->repairFacility.psObj != nullptr)
+		{
+			ref = (int)psStruct->pFunctionality->repairFacility.psObj->id;
+			refChr = '+';
 		}
 		break;
 	default:
@@ -3789,11 +3835,11 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 		{
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 
-			iIMDBaseShape *strFirstBaseImd = psBuilding->sDisplay.imd->displayModel()->objanimpie[psBuilding->animationEvent];
-			iIMDShape *strFirstImd = (strFirstBaseImd) ? strFirstBaseImd->displayModel() : nullptr;
+			const iIMDBaseShape *strFirstBaseImd = psBuilding->sDisplay.imd->displayModel()->objanimpie[psBuilding->animationEvent];
+			const iIMDShape *strFirstImd = (strFirstBaseImd) ? strFirstBaseImd->displayModel() : nullptr;
 			if (strFirstImd != nullptr && strFirstImd->next != nullptr)
 			{
-				iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
+				const iIMDShape *strImd = strFirstImd->next.get(); // first imd isn't animated
 				psBuilding->timeAnimationStarted = gameTime + (rand() % (strImd->objanimframes * strImd->objanimtime)); // vary animation start time
 			}
 			else
@@ -3932,12 +3978,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 			if (bMultiPlayer && ONEINTEN && !bMission && psBuilding->sDisplay.imd)
 			{
 				Vector3i position;
-				Vector3f *point;
+				const Vector3f *point;
 				SDWORD	realY;
 				UDWORD	pointIndex;
 
 				// since this is a visual effect, it should be based on the *display* model
-				iIMDShape *pDisplayModel = psBuilding->sDisplay.imd->displayModel();
+				const iIMDShape *pDisplayModel = psBuilding->sDisplay.imd->displayModel();
 				pointIndex = rand() % (pDisplayModel->points.size() - 1);
 				point = &(pDisplayModel->points.at(pointIndex));
 				position.x = static_cast<int>(psBuilding->pos.x + point->x);
@@ -4566,6 +4612,17 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 		{
 			//cancel the topic
 			cancelResearch(psDel, ModeImmediate);
+		}
+	}
+
+	if (psDel->pStructureType->type == REF_REPAIR_FACILITY)
+	{
+		if (psDel->pFunctionality && psDel->pFunctionality->repairFacility.state == RepairState::Repairing)
+		{
+			if (psDel->pFunctionality->repairFacility.psObj != nullptr)
+			{
+				droidRepairStopped(castDroid(psDel->pFunctionality->repairFacility.psObj), psDel);
+			}
 		}
 	}
 
@@ -5657,7 +5714,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 
 /*calculates the damage caused to the resistance levels of structures - returns
 true when captured*/
-bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
+bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer)
 {
 	STRUCTURE   *psStructure;
 	DROID       *psDroid;
@@ -5691,7 +5748,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 			psStructure->lastHitWeapon = WSC_ELECTRONIC;
 
-			triggerEventAttacked(psStructure, g_pProjLastAttacker, lastHit);
+			triggerEventAttacked(psStructure, psAttacker, lastHit);
 
 			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
 
@@ -5736,7 +5793,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		}
 		else
 		{
-			triggerEventAttacked(psDroid, g_pProjLastAttacker, lastHit);
+			triggerEventAttacked(psDroid, psAttacker, lastHit);
 
 			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
 
@@ -5762,7 +5819,8 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, gameTime - deltaGameTime);
 					}
 				}
-				if (!isDead(psDroid) && !giftSingleDroid(psDroid, attackPlayer, true, g_pProjLastAttacker->pos.xy()))
+				Vector2i giftPos = (psAttacker) ? psAttacker->pos.xy() : psDroid->pos.xy();
+				if (!isDead(psDroid) && !giftSingleDroid(psDroid, attackPlayer, true, giftPos))
 				{
 					// droid limit reached, recycle
 					// don't check for transporter/mission coz multiplayer only issue.
@@ -6441,38 +6499,6 @@ ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl
 	return ProductionRunEntry();
 }
 
-
-/*looks through a players production list to see how many command droids
-are being built*/
-UBYTE checkProductionForCommand(UBYTE player)
-{
-	unsigned quantity = 0;
-
-	if (player == productionPlayer)
-	{
-		//assumes Cyborg or VTOL droids are not Command types!
-		unsigned factoryType = FACTORY_FLAG;
-
-		for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
-		{
-			//check to see if there is a factory with a production run
-			if (factoryNumFlag[player][factoryType][factoryInc] && factoryInc < asProductionRun[factoryType].size())
-			{
-				ProductionRun &productionRun = asProductionRun[factoryType][factoryInc];
-				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
-				{
-					if (productionRun[inc].psTemplate->droidType == DROID_COMMAND)
-					{
-						quantity += productionRun[inc].numRemaining();
-					}
-				}
-			}
-		}
-	}
-	return quantity;
-}
-
-
 // Count number of factories assignable to a command droid.
 //
 UWORD countAssignableFactories(UBYTE player, UWORD factoryType)
@@ -6915,6 +6941,10 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			// add to other list.
 			addStructure(psStructure);
 
+			// increment structure count for new owner
+			UDWORD max = psStructure->pStructureType - asStructureStats;
+			asStructureStats[max].curCount[attackPlayer]++;
+
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (DROID* psCurr : apsDroidLists[attackPlayer])
 			{
@@ -7153,7 +7183,6 @@ bool loadFavoriteStructsFile(const char* path)
 	favoriteStructs.clear();
 
 	// file size sanity check
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	PHYSFS_Stat metaData;
 	if (PHYSFS_stat(path, &metaData) != 0)
 	{
@@ -7163,7 +7192,6 @@ bool loadFavoriteStructsFile(const char* path)
 			return false;
 		}
 	}
-#endif
 
 	auto jsonObj = parseJsonFile(path);
 	if (!jsonObj.has_value())

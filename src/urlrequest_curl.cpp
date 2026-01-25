@@ -1229,8 +1229,7 @@ void urlSelectSSLBackend()
 		// Could not retrieve ssl backend list - libcurl is probably a slightly older version built with only a single ssl backend
 		return;
 	}
-	// Note: Use CURLSSLBACKEND_DARWINSSL instead of CURLSSLBACKEND_SECURETRANSPORT to support older cURL versions
-	const std::vector<curl_sslbackend> backendPreferencesOrder = {CURLSSLBACKEND_SCHANNEL, CURLSSLBACKEND_DARWINSSL, CURLSSLBACKEND_GNUTLS};
+	const std::vector<curl_sslbackend> backendPreferencesOrder = {CURLSSLBACKEND_SCHANNEL, CURLSSLBACKEND_GNUTLS};
 	std::vector<curl_sslbackend> ignoredBackends;
 #if !defined(USE_OPENSSL_LOCKS_INIT) && !defined(CURL_OPENSSL_DOES_NOT_REQUIRE_LOCKS_INIT)
 	// Did not compile with support for thread-safety / locks for OpenSSL, so ignore it

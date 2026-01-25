@@ -104,12 +104,14 @@
 
 #define MAX_TRANSPORT_FULL_MESSAGE_PAUSE 20000
 
+/* Maximum distance to the nearest transport (16 tiles) */
+#define MAX_NEAREST_TRANSPORT_SQ_DIST (TILE_WIDTH * TILE_WIDTH * 256)
+
 /* the widget screen */
 extern std::shared_ptr<W_SCREEN> psWScreen;
 
 /* Static variables */
 static DROID *psCurrTransporter = nullptr;
-static	DROID			*g_psCurScriptTransporter = nullptr;
 static	bool			onMission;
 static	UDWORD			g_iLaunchTime = 0;
 //used for audio message for reinforcements
@@ -983,9 +985,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 	}
 
 	// Fire off disembark event
-	transporterSetScriptCurrent(psTransport);
 	triggerEvent(TRIGGER_TRANSPORTER_DISEMBARKED, psTransport);
-	transporterSetScriptCurrent(nullptr);
 }
 
 /*adds a droid to the current transporter via the interface*/
@@ -1036,6 +1036,19 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	/* check for space */
 	if (!checkTransporterSpace(psTransporter, psDroidToAdd))
 	{
+		if (bMultiPlayer)
+		{
+			// search for the nearest transporter if the current one is already full
+			for (auto psOtherDroid : apsDroidLists[psTransporter->player])
+			{
+				if (psOtherDroid->isTransporter() && checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
+					droidSqDist(psOtherDroid, psTransporter) < MAX_NEAREST_TRANSPORT_SQ_DIST)
+				{
+					orderDroidObj(psDroidToAdd, DORDER_EMBARK, psOtherDroid, ModeQueue);
+					return;
+				}
+			}
+		}
 		if (psTransporter->player == selectedPlayer)
 		{
 			audio_PlayBuildFailedOnce();
@@ -1345,18 +1358,6 @@ void stopMissionButtonFlash(UDWORD buttonID)
 			break;
 		}
 	}
-}
-
-/* set current transporter (for script callbacks) */
-void transporterSetScriptCurrent(DROID *psTransporter)
-{
-	g_psCurScriptTransporter = psTransporter;
-}
-
-/* get current transporter (for script callbacks) */
-DROID *transporterGetScriptCurrent()
-{
-	return g_psCurScriptTransporter;
 }
 
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/

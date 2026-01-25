@@ -35,7 +35,7 @@
 #include <map>
 
 // Group system variables: grpGlobalManager enables to remove all the groups to Shutdown the system
-static std::map<int, DROID_GROUP *> grpGlobalManager;
+static std::map<int, std::unique_ptr<DROID_GROUP>> grpGlobalManager;
 static bool grpInitialized = false;
 
 // initialise the group system
@@ -51,12 +51,6 @@ void grpShutDown()
 {
 	/* Since we are not very diligent removing groups after we have
 	 * created them; we need this hack to remove them on level end. */
-	std::map<int, DROID_GROUP *>::iterator iter;
-
-	for (iter = grpGlobalManager.begin(); iter != grpGlobalManager.end(); iter++)
-	{
-		delete(iter->second);
-	}
 	grpGlobalManager.clear();
 	grpInitialized = false;
 }
@@ -70,38 +64,18 @@ DROID_GROUP::DROID_GROUP()
 }
 
 // create a new group
-DROID_GROUP *grpCreate(int id)
+DROID_GROUP *grpCreate()
 {
 	ASSERT(grpInitialized, "Group code not initialized yet");
-	DROID_GROUP *psGroup = new DROID_GROUP;
-	if (id == -1)
+	auto psGroup = std::make_unique<DROID_GROUP>();
 	{
 		int i;
 		for (i = 0; grpGlobalManager.find(i) != grpGlobalManager.end(); i++) {}	// surly hack
 		psGroup->id = i;
 	}
-	else
-	{
-		ASSERT(grpGlobalManager.find(id) == grpGlobalManager.end(), "Group %d is already created!", id);
-		psGroup->id = id;
-	}
-	grpGlobalManager.emplace(psGroup->id, psGroup);
-	return psGroup;
-}
-
-DROID_GROUP *grpFind(int id)
-{
-	DROID_GROUP *psGroup = nullptr;
-	std::map<int, DROID_GROUP *>::iterator it = grpGlobalManager.find(id);
-	if (it != grpGlobalManager.end())
-	{
-		psGroup = it->second;
-	}
-	if (!psGroup)
-	{
-		psGroup = grpCreate(id);
-	}
-	return psGroup;
+	DROID_GROUP* rawPsGroup = psGroup.get();
+	grpGlobalManager.emplace(psGroup->id, std::move(psGroup));
+	return rawPsGroup;
 }
 
 // add a droid to a group
@@ -207,7 +181,6 @@ void DROID_GROUP::remove(DROID *psDroid)
 	if (refCount <= 0)
 	{
 		grpGlobalManager.erase(id);
-		delete this;
 	}
 }
 

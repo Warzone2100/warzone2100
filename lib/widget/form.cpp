@@ -318,15 +318,24 @@ bool W_FORM::hitTest(int x, int y) const
 	return minimizedGeometry().contains(x, y);
 }
 
-bool W_FORM::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+std::shared_ptr<WIDGET> W_FORM::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	if (!minimizable || formState != FormState::MINIMIZED)
+	if ((!minimizable || formState != FormState::MINIMIZED) && !disableChildren)
 	{
-		return WIDGET::processClickRecursive(psContext, key, wasPressed);
+		return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 	}
-	// handle: minimized
-	ASSERT(disableChildren, "disableChildren should be set to true while minimized");
-	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+
+	if (!visible())
+	{
+		return nullptr;
+	}
+
+	if (transparentToMouse())
+	{
+		return nullptr;
+	}
+
+	return shared_from_this();
 }
 
 void W_FORM::displayRecursive(WidgetGraphicsContext const &context)
@@ -524,7 +533,7 @@ void W_FULLSCREENOVERLAY_CLICKFORM::display(int xOffset, int yOffset)
 		return;
 	}
 
-	if (backgroundColor.rgba == 0)
+	if (backgroundColor.isTransparent())
 	{
 		return;
 	}

@@ -26,8 +26,6 @@
 #include "slider.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
-static bool DragEnabled = true;
-
 enum SliderState
 {
 	// Slider is being dragged
@@ -39,11 +37,6 @@ enum SliderState
 	// Slider is disabled
 	SLD_DISABLED = 1 << 2
 };
-
-void sliderEnableDrag(bool Enable)
-{
-	DragEnabled = Enable;
-}
 
 W_SLDINIT::W_SLDINIT()
 	: orientation(WSLD_LEFT)
@@ -110,7 +103,7 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 
 void W_SLIDER::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	if (isEnabled() && DragEnabled)
+	if (isEnabled())
 	{
 		dirty = true;
 		state |= SLD_DRAG;
@@ -191,7 +184,10 @@ bool W_SLIDER::capturesMouseDrag(WIDGET_KEY)
 
 void W_SLIDER::mouseDragged(WIDGET_KEY, W_CONTEXT *, W_CONTEXT *psContext)
 {
-	updateSliderFromMousePosition(psContext);
+	if (isEnabled())
+	{
+		updateSliderFromMousePosition(psContext);
+	}
 }
 
 void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)
@@ -200,6 +196,7 @@ void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)
 	int mx = psContext->mx - x();
 	int my = psContext->my - y();
 	int stopSize;
+	auto prevPos = pos;
 	switch (orientation)
 	{
 	case WSLD_LEFT:
@@ -276,5 +273,23 @@ void W_SLIDER::updateSliderFromMousePosition(W_CONTEXT* psContext)
 				  / std::max<int>((height() - barSize), 1);
 		}
 		break;
+	}
+	if (prevPos != pos)
+	{
+		callOnChangeFuncs();
+	}
+}
+
+void W_SLIDER::addOnChange(const SliderOnChangeFunc& func)
+{
+	ASSERT_OR_RETURN(, func != nullptr, "Null func");
+	onChangeFuncs.push_back(func);
+}
+
+void W_SLIDER::callOnChangeFuncs()
+{
+	for (const auto& f : onChangeFuncs)
+	{
+		f(*this);
 	}
 }

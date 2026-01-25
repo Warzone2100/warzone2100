@@ -1,0 +1,1038 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: warzone2100\n"
+"Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: /master/po/guide/warzone2100_guide.pot\n"
+"X-Crowdin-File-ID: 360\n"
+
+msgid "Artifacts"
+msgstr "Artefactos"
+
+msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
+msgstr "A medida que progreses en la campaña, recogerás artefactos de bases enemigas (y unidades enemigas específicas)."
+
+msgid "These will unlock valuable technologies that you can research in a Research Facility."
+msgstr "Esto desbloqueará tecnologías valiosas que puedes investigar en un Centro de Investigación."
+
+msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
+msgstr "Los artefactos son pequeñas cajas blancas con un indicador verde arriba, y pueden ser recogidas moviendo cualquier unidad lo suficientemente cerca."
+
+msgid "All artifacts must be picked up as part of each level's victory conditions."
+msgstr "Se deben recoger todos los artefactos como parte de las condiciones de victoria de cada nivel."
+
+msgid "Backstory"
+msgstr "Memorias"
+
+msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
+msgstr "A fines del siglo 21, la NASDA (Agencia de Defensa Estratégica de América del Norte) desarrolló y desplegó un sistema de defensa con una copiosa cantidad de misiles, que incluía una red de satélites con equipos nucleares y sitios de lanzamiento desde tierra."
+
+msgid "However, during a routine maintenance check, something went terribly wrong..."
+msgstr "Sin embargo, durante un control de mantenimiento de rutina, algo salió terriblemente mal..."
+
+msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
+msgstr "El Colapso vino rápido y con fuerza. Tras un error técnico en el sistema de defensa satelital, se dispararon cabezas nucleares a las ciudades principales de todo el mundo."
+
+msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
+msgstr "Minutos después, emplazamientos terrestres dispararon como respuesta al lanzamiento. Millones de personas murieron a causa de las tormentas nucleares que barrieron las ciudades del mundo. Miles de millones más murieron a medida que las plagas y epidemias arrasaban lo que quedaba de la civilización."
+
+msgid "Less than a million people survived the Collapse."
+msgstr "Menos de un millón de personas sobrevivieron al Colapso."
+
+msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
+msgstr "La Tierra se fragmentó en cientos de pequeñas bandas de carroñeros que luchaban entre sí por los restos de la antigua civilización. Solo unos pocos tenían la visión de intentar reconstruir un nuevo mundo a partir de las cenizas."
+
+msgid "## Present Day:"
+msgstr "## Hoy en día:"
+
+msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
+msgstr "El jugador (denominado \"el Comandante\") forma parte de un grupo de sobrevivientes que encontró refugio en una base militar en las Montañas Rocosas."
+
+msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
+msgstr "Surgen de la base con el objetivo de reconstruir el mundo, adoptando el nombre \"El proyecto\"."
+
+msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
+msgstr "El Proyecto envía tres equipos con el objetivo de recuperar artefactos, permitiendo así la investigación y aplicación de tecnologías antes del Colapso."
+
+msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
+msgstr "- El equipo Alfa se envía al desierto de Arizona al sudeste del cuartel general (HQ) del Proyecto"
+
+msgid "- Beta team is sent to the remains of Chicago"
+msgstr "- El equipo Beta se envía a los restos de Chicago"
+
+msgid "- Gamma team is sent into the northern Rockies in Colorado"
+msgstr "- El equipo Gama se envía al norte de las Rocosas en Colorado"
+
+msgid "Command Panel"
+msgstr "Panel de comandos"
+
+msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
+msgstr "Hay seis interfaces de panel de comandos diferentes, además de un botón central. Abre una interfaz de comandos pulsando el botón apropiado."
+
+msgid "The middle / central button closes any open command interface."
+msgstr "El botón del medio/central cierra todas las interfaces de comandos abiertas."
+
+msgid "Defending Your Base"
+msgstr "Defendiendo tu base"
+
+msgid "In Warzone 2100, your home base persists throughout the campaign."
+msgstr "En Warzone 2100, tu base principal persiste a lo largo de la campaña."
+
+msgid "As such, preparing for the future defense of your home base is essential."
+msgstr "Como tal, es esencial prepararse para la defensa de tu base principal."
+
+msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
+msgstr "Si bien las unidades son obviamente útiles para defender tu base, el diseño de esta también es esencial."
+
+msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
+msgstr "Construye estructuras defensivas que proporcionen cobertura, restrinjan acceso, detecten enemigos y dispensen daño, para que puedas contrarrestar mejor los ataques enemigos."
+
+msgid "Intelligence Display"
+msgstr "Pantalla de Inteligencia"
+
+msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
+msgstr "En la Pantalla de Inteligencia, puedes ver los objetivos de la misión actual, repetir tu reunión informativa actual y leer más sobre proyectos de investigación completados."
+
+msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
+msgstr "Cuando abres la Pantalla de Inteligencia, aparecen dos filas de iconos en la parte inferior de la pantalla."
+
+msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
+msgstr "Al seleccionar un icono se mostrará información sobre ese objetivo de investigación o misión en el centro de la pantalla."
+
+msgid "Using the Mission Timer"
+msgstr "Cómo usar el Temporizador de misión"
+
+msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
+msgstr "Muchas veces, estarás ocupado. A veces, desearás tener más tiempo. Otras veces, pensarás que tienes demasiado."
+
+msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
+msgstr "Siempre hay maneras inteligentes de usar el tiempo extra para prepararse para las futuras batallas."
+
+msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
+msgstr "Puedes completar nuevas investigaciones, construir defensas o reciclar y reemplazar unidades con armas y tecnologías nuevas, pero no pierdas el tiempo."
+
+msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
+msgstr "(Si tienes habilitado el ajuste del Bonus de energía de temporizador, que es el predeterminado, no debes esperar a que el temporizador te dé energía. Obtendrás, de manera automática, la energía que habrías ganado si hubieras activado el temporizador. ¡Pero el resto de usos todavía se aplican!)"
+
+msgid "Power"
+msgstr "Energía"
+
+msgid "In Warzone 2100, power is your key resource."
+msgstr "En Warzone 2100, la energía es tu recurso clave."
+
+msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
+msgstr "Gasta energía para construir estructuras, crear unidades e investigar mejoras / nueva tecnología."
+
+msgid "Power is generated by Power Generators that are fed by Oil Derricks."
+msgstr "La energía es generada por Generadores de Energía alimentados por torres de perforación de petróleo."
+
+msgid "Researching Technology"
+msgstr "Investigando tecnología"
+
+msgid "Researching technologies is accomplished using Research Facilities."
+msgstr "La investigación de las tecnologías se lleva a cabo a través de Centros de Investigación."
+
+msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
+msgstr "Cuando se selecciona un Centro de Investigación, todas las opciones disponibles se muestran en el lado izquierdo de la pantalla."
+
+msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
+msgstr "Cada proyecto de investigación requiere una cierta cantidad de energía y tiempo para completarse. La inversión eléctrica no es reembolsable."
+
+msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
+msgstr "Pero el progreso de la investigación nunca se pierde, incluso el Centro de Investigación es destruido: solo se debe reasignar el proyecto a otro centro."
+
+msgid "Completing research of a new technology may:"
+msgstr "Completar la investigación de una nueva tecnología puede:"
+
+msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
+msgstr "- Vuelve disponibles nuevas armas, estructuras, cuerpos de unidades, propulsión"
+
+msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
+msgstr "- Mejora la efectividad de las armas, estructuras, cuerpos de unidades, etc."
+
+msgid "- Enable the research of additional technologies"
+msgstr "- Habilita la investigación de tecnologías adicionales"
+
+msgid "General"
+msgstr "General"
+
+msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
+msgstr "En Warzone 2100, comandas las fuerzas de \"El Proyecto\" en una batalla por reconstruir el mundo, después de que la humanidad fue casi destruida por misiles nucleares."
+
+msgid "This guide will help walk you through key facets of the game."
+msgstr "Esta guía te ayudará a recorrer los aspectos clave del juego."
+
+msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
+msgstr "(Si estás jugando la campaña, la guía de nuevos temas puede ser desbloqueada a medida que avanzas a través del juego.)"
+
+msgid "Building Structures"
+msgstr "Crear estructuras"
+
+msgid "Click the \"Build\" button on the Command Panel."
+msgstr "Haz clic en el botón \"Construir\" del Panel de Comandos."
+
+msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
+msgstr "Esto abrirá el menú de estructuras en el lado izquierdo de la pantalla, con un botón para cada estructura que puedes construir."
+
+msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
+msgstr "Selecciona el botón de estructura deseado. Una silueta aparecerá en el mundo. Aquí es donde tu estructura se colocará una vez que confirmes."
+
+msgid "Move the silhouette by moving the input device."
+msgstr "Mueve la silueta moviendo el cursor."
+
+msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
+msgstr "- Si una estructura se puede construir en una ubicación, la silueta se volverá verde cuando pase el cursor sobre una ubicación."
+
+msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
+msgstr "- Si una estructura no se puede construir en una ubicación, la silueta se volverá roja."
+
+msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
+msgstr "Una vez que elijas una ubicación viable, selecciona para confirmar el sitio de construcción. Un camión se moverá a la ubicación y comenzará su construcción."
+
+msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
+msgstr "Puedes pedir camiones adicionales para obtener ayuda (y construir la estructura más rápidamente) seleccionándolos y ordenando que se dirijan a la estructura en construcción."
+
+msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
+msgstr "Consejo: Para construir \"muros\" (cuando estén disponibles), puedes hacer clic y arrastrar para dibujar el muro."
+
+msgid "Cyborg Factory"
+msgstr "Fábrica de Cyborgs"
+
+msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
+msgstr "Una fábrica de cyborgs opera como una fábrica común, pero exclusivamente ensambla Cyborgs."
+
+msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
+msgstr ""
+
+msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgstr ""
+
+msgid "Demolishing Structures"
+msgstr "Demoler estructuras"
+
+msgid "Demolishing a building is almost as simple as building one."
+msgstr "Demoler un edificio es casi tan simple como construir uno."
+
+msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
+msgstr "Selecciona \"Demoler estructura\" en el menú de estructuras y haz clic en un edificio para demolerlo."
+
+msgid "A unit will move to the building and destroy it."
+msgstr "Una unidad se moverá al edificio y lo destruirá."
+
+msgid "Demolished structures return half the power used to build the structure."
+msgstr "Las estructuras demolidas devuelven la mitad de la energía utilizada para construir la estructura."
+
+msgid "Factory"
+msgstr "Fábrica"
+
+msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "Cada fábrica puede construir una unidad a la vez, pero puedes añadir múltiples unidades a la cola de producción."
+
+msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
+msgstr "Cuando se produce una unidad, recibe pedidos de la unidad de fábrica y pasa al punto de reunión de la fábrica."
+
+msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
+msgstr "Note: La fábrica base solo puede producir unidades con estructuras ligeras. Se pueden descubrir y crear módulos de fábrica para mejorar la capacidad de producción de la fábrica."
+
+msgid "Command Center"
+msgstr "Centro de Comandos"
+
+msgid "The Command Center is the headquarters of your base."
+msgstr "El Centro de Comandos es la sede de tu base."
+
+msgid "It provides access to the mini-map / radar, and the ability to design units."
+msgstr "Permite acceder al minimapa/radar y a la habilidad de diseñar unidades."
+
+msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
+msgstr "Para construir un Centro de Comandos, haz clic en el botón \"Construir\" del panel de comandos y selecciona la estructura del Centro de Comandos."
+
+msgid "Then, click where you want your builders to construct it."
+msgstr "Luego, haz clic donde quieras que tus trabajadores lo construyan."
+
+msgid "Structure Modules"
+msgstr "Módulos de estructura"
+
+msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
+msgstr "Los Generadores de Energía, Fábricas y Centros de Investigación se pueden actualizar con sus respectivos módulos de estructura."
+
+msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
+msgstr "Una vez que hayas hecho la investigación, puedes acceder a estos módulos desde el menú de Construcción para aplicarlos a las estructuras en cuestión."
+
+msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
+msgstr "Otra alternativa es seleccionar un camión o un ingeniero de combate y hacer clic en la estructura para comenzar a construirla."
+
+msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
+msgstr "Nota: Mientras una de estas estructuras se está actualizando, no estará disponible temporalmente hasta que la actualización se complete."
+
+msgid "Upgrade Effects:"
+msgstr "Efecto de la mejora:"
+
+msgid "- Power Generator modules increase the rate of power generation"
+msgstr "- Los módulos de Generadores de Energía aumentan la tasa de generación de energía."
+
+msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
+msgstr "- Los módulos de Fábrica permiten la producción de unidades medias y pesadas, así como disminuir el tiempo que tarda en producir unidades."
+
+msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
+msgstr "- Los módulos de Centros de Investigación reducen el tiempo necesario para completar los proyectos de investigación asignados."
+
+msgid "Oil Derrick"
+msgstr "Torre de petróleo"
+
+msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
+msgstr "Se puede construir una torre de petróleo seleccionando un Camión y apuntando a un Recurso de Petróleo disponible."
+
+msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
+msgstr "La destrucción de una torre de petróleo impedirá la construcción de otro en el mismo lugar de manera temporal hasta que cese el fuego."
+
+msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
+msgstr "Para utilizar una torre de petróleo y generar energía, se requiere un Generador Eléctrico."
+
+msgid "Power Generator"
+msgstr "Generador de Energía"
+
+msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
+msgstr "Cada Generador de Energía utiliza hasta 4 torres de petróleo. Así, por ejemplo, si tienes 10 torres de petróleo, necesitarás 3 Generadores de Energía para utilizar todas las torres y generar la máxima cantidad de energía."
+
+msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
+msgstr "Mientras que las torres de petróleo deben construirse sobre recursos petroleros, los Generadores de Energía pueden construirse en cualquier lugar del mapa. Pero ten en cuenta que tener más de un generador por cada 4 torres no proporciona ningún beneficio."
+
+msgid "Rally Point"
+msgstr "Punto de Reunión"
+
+msgid "When a Factory has finished building a unit, the unit will spawn next to the Factory, and then proceed to the Factory's designated Rally Point."
+msgstr "Cuando una Fábrica haya completado la construcción de una unidad, la unidad aparecerá junto a la Fábrica y luego pasará al Punto de Reunión designado por esta."
+
+msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
+msgstr "El Punto de Reunión se coloca por defecto junto a la Fábrica. Puedes mover el Punto de reunión haciendo clic sobre él."
+
+msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
+msgstr "Nota: Mover un punto de reunión mientras una unidad se mueve a él no afectará a la ruta de la unidad."
+
+msgid "Repair Facility"
+msgstr "Centro de Reparación"
+
+msgid "Building a Repair Facility creates a fixed structure to which units can retreat to be repaired."
+msgstr "Si construyes un Centro de Reparación, tendrás una estructura fija donde reparar las unidades."
+
+msgid "Repair Facilities can repair units faster than mobile units with repair turrets."
+msgstr "Los Centros de Reparación pueden reparar unidades más rápido que las unidades móviles con torretas de reparación."
+
+msgid "Research Facility"
+msgstr "Centro de Investigación"
+
+msgid "Research Facilities are required in order to research new technologies."
+msgstr "Para investigar nuevas tecnologías, se necesitan Centros de Investigación."
+
+msgid "Each Research Facility can research one technology at a time."
+msgstr "Cada Centro de Investigación puede investigar una tecnología a la vez."
+
+msgid "VTOL Factory"
+msgstr "Fábrica VTOL"
+
+msgid "A VTOL Factory is used to build units with VTOL propulsion (i.e. flying units)."
+msgstr "La Fábrica de despegue y aterrizaje vertical (VTOL, en inglés) se utiliza para construir unidades con propulsión VTOL (es decir, unidades voladoras)."
+
+msgid "Each VTOL Factory can build one unit at a time, but you can queue multiple units for production."
+msgstr "En cada Fábrica VTOL se puede construir una unidad a la vez, pero puedes añadir varias unidades a la cola de producción."
+
+msgid "When a VTOL Factory is done building a unit, it will order it to fly and land near the factory's Rally Point."
+msgstr "Cuando se haya terminado de construir una unidad en la Fábrica VTOL, se le ordenará volar y aterrizar cerca del Punto de Reunión de la fábrica."
+
+msgid "Structures"
+msgstr "Estructuras"
+
+msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
+msgstr "En Warzone 2100, es absolutamente indispensable construir estructuras, desde fábricas para construir unidades, hasta Centros de Investigación para investigar nuevas tecnologías."
+
+msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
+msgstr "La construcción se puede realizar con unidades con camiones como torretas o Ingenieros de Combate."
+
+msgid "Attack Range"
+msgstr "Alcance de ataque"
+
+msgid "You can use the Unit Orders menu to configure unit \"Attack Range\"."
+msgstr "Puedes utilizar el menú de Órdenes a las Unidades para configurar la unidad \"Rango de Ataque\"."
+
+msgid "- Optimum Range: Fires at the most accurate range"
+msgstr "- Rango óptimo: dispara en el rango más preciso"
+
+msgid "- Short Range: Moves to short range and attacks"
+msgstr "- Rango corto: se acerca y ataca"
+
+msgid "- Long Range: Attacks at long range (default)"
+msgstr "- Rango largo: ataca a larga distancia (por defecto)"
+
+msgid "Firing Mode"
+msgstr "Modo de disparo"
+
+msgid "You can use the Unit Orders menu to configure unit \"Firing Mode\"."
+msgstr "Puedes utilizar el menú de Órdenes a las Unidades para configurar el \"Modo de disparo\"."
+
+msgid "- Fire At Will: Fires at any enemy (default)"
+msgstr "- Fuego a discreción: dispara a cualquier enemigo (por defecto)"
+
+msgid "- Return Fire: Only fire if fired at"
+msgstr "- Fuego de respuesta: solo dispara si te atacan primero"
+
+msgid "- Do Not Fire: Units will not fire"
+msgstr "- No disparar: las unidades no dispararán"
+
+msgid "Movement"
+msgstr "Movimiento"
+
+msgid "You can use the Unit Orders menu to configure unit \"Movement\"."
+msgstr "Puedes utilizar el menú de Órdenes a las Unidades para configurar el \"Movimiento\" de las unidades."
+
+msgid "- Patrol: Move between two points. Just click a point on the map after selecting it"
+msgstr "- Patrulla: moverse entre dos puntos. Simplemente haz clic en un punto del mapa después de seleccionarlo"
+
+msgid "- Circle: (VTOLs only) Move in a circle over a position. Just click an area after selecting it"
+msgstr "- Círculo: (solo para VTOL) moverse en círculos en una posición. Simplemente haz clic en un área después de seleccionarla"
+
+msgid "- Pursue: Pursue enemy"
+msgstr "- Persecución: perseguir al enemigo"
+
+msgid "- Guard: Stay near an area or structure. (default)"
+msgstr "- Guarda: mantenerse cerca de un área o una estructura (por defecto)"
+
+msgid "- Hold Position: Do not move under any circumstances"
+msgstr "- Mantener posición: No moverse bajo ninguna circunstancia"
+
+msgid "Recycling"
+msgstr "Reciclaje"
+
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
+msgstr ""
+
+msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
+msgstr "La mitad de la energía utilizada para crear la unidad será reembolsada (aunque será reducida si la unidad fue dañada)."
+
+msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
+msgstr ""
+
+msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
+msgstr ""
+
+msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
+msgstr "Puedes ordenar la devolución de las unidades seleccionadas para su reciclaje a través del menú Órdenes a las Unidades o la tecla \"Regresar para el reciclaje\"."
+
+msgid "Retreating"
+msgstr "Retirada"
+
+msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
+msgstr "Perder unidades (especialmente unidades con niveles de experiencia) puede afectar la capacidad de las fuerzas de ganar la batalla."
+
+msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
+msgstr "Puedes utilizar el menú Órdenes a las Unidades para elegir un \"Umbral de retirada\", que hará que las unidades se retiren automáticamente de la batalla cuando alcancen un nivel de daño especificado."
+
+msgid "- Do or Die: Your unit will not retreat unless ordered to. (default)"
+msgstr "- Matar o morir: tu unidad no se retirará hasta que se lo ordenes. (predeterminado)"
+
+msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) damage"
+msgstr "- Retirada ante daño moderado: tu unidad se retirará cuando haya sufrido daños moderados (amarillo)"
+
+msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
+msgstr "- Retirada ante daño grave: tu unidad se retirará cuando haya sufrido daños graves (rojo)"
+
+msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
+msgstr "Las unidades retiradas regresarán al Centro de reparación, unidad de reparación, cuartel general o LZ más cercano."
+
+msgid "Return To"
+msgstr "Regresar a"
+
+msgid "You can use the Unit Orders menu to quickly order units to return to a specific location."
+msgstr "Puedes utilizar el menú de Órdenes a las Unidades para ordenar que las unidades regresen a una ubicación específica."
+
+msgid "- Return for Repair: Unit will return to a Repair Facility"
+msgstr "- Regresar para la reparación: la unidad regresará a un Centro de reparación"
+
+msgid "- Return to HQ: Unit will return to Command Center or LZ (campaign)"
+msgstr "-Regresar al cuartel: la unidad regresará al Centro de Comandos o a LZ (campaña)"
+
+msgid "- Go To Transport: Unit will go to and board transport"
+msgstr "- Ir al transporte: la unidad se dirigirá hacia el medio de transporte y lo abordará"
+
+msgid "Unit Orders"
+msgstr "Órdenes a las Unidades"
+
+msgid "Right-click a unit or group of units to show their current Unit Orders."
+msgstr "Haz clic derecho sobre una unidad o grupo de unidades para mostrar sus Órdenes a las Unidades actuales."
+
+msgid "The Unit Orders panel allows you to customize the behavior of your units, from patrolling an area to retreating at low health."
+msgstr "El panel de Órdenes a las Unidades te permite personalizar el comportamiento de tus unidades, desde patrullar un área hasta retirarse cuando tengan poca salud."
+
+msgid "Right-click a Factory to adjust the Unit Orders for all future units produced by the Factory."
+msgstr "Haz clic derecho sobre una Fábrica para ajustar las Órdenes a las Unidades para todas las unidades que en un futuro produzca esta Fábrica."
+
+msgid "Building Units"
+msgstr "Construir unidades"
+
+msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
+msgstr "Para construir unidades, puedes seleccionar una Fábrica o usar el botón \"Fabricación\" en el Panel de Comandos: esto abrirá el panel de Fabricación en el lado izquierdo de la pantalla."
+
+msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
+msgstr "El panel de Fabricación mostrará los diseños de las unidades que la Fábrica seleccionada puede construir. Es posible que las Fábricas se limiten a producir ciertos tipos de unidades (o que solo puedan producir ciertas unidades si se actualizan con módulos)."
+
+msgid "To select a different Factory, either click on the Factory in the game world, or click on the appropriate button in the Factories panel on the bottom-center of the screen."
+msgstr "Para seleccionar otra Fábrica, haz clic en la Fábrica del mundo del juego o en el botón apropiado del panel de Fábricas ubicado en el centro inferior de la pantalla."
+
+msgid "To manufacture a unit in a Factory, click the desired unit design button in the Manufacturing panel. You can queue multiples of the same unit by repeatedly clicking the unit design button."
+msgstr "Para fabricar una unidad en una Fábrica, haz clic en el botón de diseño de unidad que quieras dentro del panel de Fabricación. Puedes poner en fila varias unidades iguales haciendo clic repetidamente en el botón del diseño de la unidad."
+
+msgid "While a unit is building, the unit will be shown in the Factories panel above the Factory that is building it. If the bar is green, the Factory is gathering power to build the unit. If the bar is yellow, the unit is being built."
+msgstr "Mientras una unidad se está construyendo, se mostrará en el panel de Fábricas encima de la Fábrica que está construyendo la unidad. Si la barra es de color verde, la Fábrica está reuniendo la energía para construir la unidad. Si la barra es amarilla, la unidad se está construyendo."
+
+msgid "When a Factory is done building a unit, it will order the unit to proceed to the Factory's Rally Point."
+msgstr "Cuando una Fábrica termina la construcción de una unidad, ordenará a la unidad que se dirija al Punto de Reunión de la Fábrica."
+
+msgid "Attaching Units"
+msgstr "Vincular unidades"
+
+msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
+msgstr ""
+
+msgid "## Limits:"
+msgstr "## Límites:"
+
+msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
+msgstr ""
+
+msgid "After each promotion, the Commander is able to control 2 more units."
+msgstr ""
+
+msgid "Detaching Units"
+msgstr "Desvincular unidades"
+
+msgid "To detach a unit from a Commander:"
+msgstr "Para desvincular una unidad de un Comandante:"
+
+msgid "1. Right-click the unit (or hold the \"Shift\" key while selecting the unit) to select only that unit (instead of the whole commander group)"
+msgstr "1. Haz clic derecho en la unidad (o mantén presionada la tecla de mayúsculas, o \"Shift\" mientras seleccionas la unidad) para seleccionar solo esa unidad (en lugar de seleccionar todo el grupo de comandos)"
+
+msgid "2. Give the unit a new order (eg. move)"
+msgstr "2. Da una nueva órden a la unidad (por ejemplo, que se mueva)"
+
+msgid "Going for repairs, BRB"
+msgstr "Recibiendo reparaciones, regreso enseguida"
+
+msgid "A unit that retreats from the battle to go to a repair facility, will stay connected to its Commander group."
+msgstr "La unidad que se retire de la batalla para ir a un centro de reparaciones, permanecerá conectada a su grupo Comandante."
+
+msgid "When it is done repairing, it will return to its Commander."
+msgstr "Cuando haya terminado las reparaciones, regresará a su Comandante."
+
+msgid "Targeting"
+msgstr "Apuntar"
+
+msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
+msgstr ""
+
+msgid "The attached units will have greater accuracy when firing."
+msgstr "Las unidades vinculadas tendrán mayor precisión al disparar."
+
+msgid "Commanders"
+msgstr "Comandantes"
+
+msgid "Command turrets are used much like sensors, except they can command any attacking unit, not just artillery."
+msgstr "Las torretas de comandos se utilizan de forma muy parecida a los sensores, excepto que pueden comandar cualquier unidad de ataque, no solo de artillería."
+
+msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
+msgstr ""
+
+msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
+msgstr ""
+
+msgid "Designing Units"
+msgstr ""
+
+msgid "You will need to design new units if you want to overpower your enemies and get that sweet taste of victory. This is a key aspect of Warzone 2100's gameplay."
+msgstr ""
+
+msgid "To start designing a unit, select the Design button in the Command Panel. This will make two columns appear on the left of the screen."
+msgstr ""
+
+msgid "To make a new design, select the \"blank\" green body in the top-left. To edit an existing unit design, just select it instead."
+msgstr ""
+
+msgid "Designing a new unit is a simple three-step procedure: selecting a body, a propulsion system, and a turret. Those three selections will result in a new unit."
+msgstr ""
+
+msgid "Once you have designed a unit, you will need a Factory to build it."
+msgstr ""
+
+msgid "Experience & Ranks"
+msgstr ""
+
+msgid "Units gain experience when they successfully dispatch enemies."
+msgstr ""
+
+msgid "A higher experience level means that a unit is more accurate, moves faster, and takes less damage."
+msgstr ""
+
+msgid "An icon displaying a unit’s rank is displayed next to the unit’s health bar."
+msgstr ""
+
+msgid "Units with higher experience levels can make all the difference in battle!"
+msgstr ""
+
+msgid "Cyborgs"
+msgstr ""
+
+msgid "Cyborgs are your main infantry units."
+msgstr ""
+
+msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
+msgstr ""
+
+msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
+msgstr ""
+
+msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
+msgstr ""
+
+msgid "Half-tracks"
+msgstr ""
+
+msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
+msgstr ""
+
+msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
+msgstr ""
+
+msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
+msgstr ""
+
+msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
+msgstr ""
+
+msgid "Hover"
+msgstr ""
+
+msgid "Hover is a fast, amphibious propulsion for vehicles."
+msgstr ""
+
+msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
+msgstr ""
+
+msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
+msgstr ""
+
+msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
+msgstr ""
+
+msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
+msgstr ""
+
+msgid "Tracks"
+msgstr ""
+
+msgid "Tracks are a highly-armored propulsion for vehicles."
+msgstr ""
+
+msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
+msgstr ""
+
+msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
+msgstr ""
+
+msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
+msgstr ""
+
+msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
+msgstr ""
+
+msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
+msgstr ""
+
+msgid "Attacking with VTOLs"
+msgstr ""
+
+msgid "To attack with a VTOL, select it and click an enemy like normal."
+msgstr ""
+
+msgid "However, you may noticed the white ammo bar below its health bar as you start attacking."
+msgstr ""
+
+msgid "Unlike ground units, which reload automatically, VTOLs carry a limited amount of ammo. Once that ammo runs out, the VTOL can’t attack until it refuels."
+msgstr ""
+
+msgid "A VTOL out of ammo will automatically find a VTOL rearming pad to rearm and repair itself (and will resume attacking once fully rearmed), or it can be manually rearmed by selecting it and clicking on a rearming pad."
+msgstr ""
+
+msgid "Unlike other units which usually attack the nearest target, VTOLs will not attack anything automatically. However, by selecting a VTOL and alt+clicking on an area, a VTOL will patrol the area between its current location and the clicked location, and attack anything in the vicinity."
+msgstr ""
+
+msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB Towers, which will cause them to function similarly to artillery assigned to sensor towers."
+msgstr ""
+
+msgid "Defending with VTOLs"
+msgstr ""
+
+msgid "VTOL units may also be used to defend areas of the map."
+msgstr ""
+
+msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
+msgstr ""
+
+msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
+msgstr ""
+
+msgid "Defending Against VTOLs"
+msgstr ""
+
+msgid "What's that in the sky? ... It's a VTOL unit"
+msgstr ""
+
+msgid "Since VTOLs are not ground-based units, most ground weapons cannot hit them."
+msgstr ""
+
+msgid "They can only be hit by either anti-air (often abbreviated \"AA\") or versatile (can hit air or ground) weapons."
+msgstr ""
+
+msgid "There are only a few weapons that are versatile: machineguns, lasers, and Mini-Rocket Pod."
+msgstr ""
+
+msgid "(Rockets and missiles are also versatile, but only when mounted on a cyborg or VTOL.)"
+msgstr ""
+
+msgid "In addition to being uncommon, versatile weapons do not do as much damage to VTOLs as dedicated anti-air, so having some AA is recommended against VTOLs."
+msgstr ""
+
+msgid "Using VTOLs"
+msgstr ""
+
+msgid "Designing VTOL units is similar to designing ground units."
+msgstr ""
+
+msgid "When choosing a propulsion, simply pick \"VTOL\" propulsion."
+msgstr ""
+
+msgid "You will then be able to select from the available VTOL Weapons."
+msgstr ""
+
+msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
+msgstr ""
+
+msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
+msgstr ""
+
+msgid "VTOL Weapons"
+msgstr ""
+
+msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
+msgstr ""
+
+msgid "VTOL versions of regular weapons do not need to be researched separately."
+msgstr ""
+
+msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+msgstr ""
+
+msgid "VTOL"
+msgstr ""
+
+msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
+msgstr ""
+
+msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
+msgstr ""
+
+msgid "Additionally, they cannot be targeted by most weapons while airborne."
+msgstr ""
+
+msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
+msgstr ""
+
+msgid "Wheels"
+msgstr ""
+
+msgid "Wheels are the most basic vehicle propulsion."
+msgstr ""
+
+msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
+msgstr ""
+
+msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
+msgstr ""
+
+msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
+msgstr ""
+
+msgid "Propulsions"
+msgstr ""
+
+msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
+msgstr ""
+
+msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
+msgstr ""
+
+msgid "Additionally, you can find descriptions of each propulsion in this guide."
+msgstr ""
+
+msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
+msgstr ""
+
+msgid "Repairing Units"
+msgstr ""
+
+msgid "You can design a unit with a repair turret instead of a weapon, and it can be ordered to repair your other units."
+msgstr ""
+
+msgid "You can also keep the repair units back from the battle, and use the Retreat Options to set your offensive units to retreat to them for repair at a certain damage level."
+msgstr ""
+
+msgid "Retreating and repairing units is often far preferable to losing experienced units on the battlefield."
+msgstr ""
+
+msgid "CB Sensors"
+msgstr ""
+
+msgid "Counter-Battery (CB) Sensors dramatically alter the battlefield by allowing artillery units to directly target distant artillery platforms - provided they have the range."
+msgstr ""
+
+msgid "Identified structures or units will be colored red in the fog of war once a CB Sensor detects the launch of any enemy artillery."
+msgstr ""
+
+msgid "If active, artillery units prioritize CB Sensor targets over targets revealed by normal Sensors."
+msgstr ""
+
+msgid "Un-Assigning"
+msgstr ""
+
+msgid "To un-assign a unit from a sensor, the easiest way is to right-click the unit, and then tell it to move somewhere."
+msgstr ""
+
+msgid "Multiple units can be selected by holding CTRL while clicking."
+msgstr ""
+
+msgid "Using Sensors"
+msgstr ""
+
+msgid "Artillery structures are the easiest. Simply build a sensor tower, and if the sensor tower is targeting something within your artillery structures' weapon range, they will fire at it."
+msgstr ""
+
+msgid "An artillery tank, however, needs to be explicitly assigned to a sensor to function. Select the artillery tanks, then click on a sensor to assign the tanks to the sensor."
+msgstr ""
+
+msgid "Once the artillery is assigned, if it is assigned to a sensor tower, that tower will target enemies that come in range automatically."
+msgstr ""
+
+msgid "If it is assigned to a sensor tank, the sensor can be used to attack enemies by selecting the sensor and targeting an enemy. All artillery assigned to the sensor will attack its target."
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "Sensors can be used for scouting and surveillance, but they also have a more important usage: to spot for artillery."
+msgstr ""
+
+msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
+msgstr ""
+
+msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr ""
+
+msgid "Kinetic & Thermal Damage"
+msgstr ""
+
+msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
+msgstr ""
+
+msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
+msgstr ""
+
+msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
+msgstr ""
+
+msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
+msgstr ""
+
+msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
+msgstr ""
+
+msgid "Attacking"
+msgstr ""
+
+msgid "Designing VTOLs"
+msgstr ""
+
+msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
+msgstr ""
+
+msgid "Weapons"
+msgstr ""
+
+msgid "Most weapons have a VTOL equivalent, which does at least twice as much damage, but has limited ammo."
+msgstr ""
+
+msgid "VTOLs"
+msgstr ""
+
+msgid "To produce VTOL units, you will need to have discovered & researched the \"VTOL Propulsion\" and \"VTOL Factory\"."
+msgstr ""
+
+msgid "You should also research and build a few \"VTOL Rearming Pads\", so your VTOL units can reload ammo."
+msgstr ""
+
+msgid "Weapon Selection"
+msgstr ""
+
+msgid "As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures)."
+msgstr ""
+
+msgid "When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes."
+msgstr ""
+
+msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
+msgstr ""
+
+msgid "Units"
+msgstr ""
+
+msgid "You will need to design and build new units if you want to overpower your enemies and get that sweet taste of victory."
+msgstr ""
+
+msgid "This aspect of the game is what makes Warzone 2100 unique in its own way."
+msgstr ""
+
+msgid "To be able to design units, a Command Center is required."
+msgstr ""
+
+msgid "All-Rounder"
+msgstr ""
+
+msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
+msgstr ""
+
+msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
+msgstr ""
+
+msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
+msgstr ""
+
+msgid "Anti-Air"
+msgstr ""
+
+msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
+msgstr ""
+
+msgid "However, AA weapons are incapable of attacking structures or units on the ground."
+msgstr ""
+
+msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
+msgstr ""
+
+msgid "Anti-Personnel"
+msgstr ""
+
+msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
+msgstr ""
+
+msgid "However, these weapons are less effective against structures and heavily armored targets."
+msgstr ""
+
+msgid "Anti-Tank"
+msgstr ""
+
+msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
+msgstr ""
+
+msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
+msgstr ""
+
+msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
+msgstr ""
+
+msgid "Artillery"
+msgstr ""
+
+msgid "Artillery weapons are devastating against infantry and most structures."
+msgstr ""
+
+msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
+msgstr ""
+
+msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
+msgstr ""
+
+msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
+msgstr ""
+
+msgid "High-Explosive Bombs"
+msgstr ""
+
+msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
+msgstr ""
+
+msgid "These bombs explode on impact, damaging everything caught in the blast."
+msgstr ""
+
+msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
+msgstr ""
+
+msgid "Just make sure your own units and structures aren't caught in the blast!"
+msgstr ""
+
+msgid "Incendiary Bombs"
+msgstr ""
+
+msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
+msgstr ""
+
+msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
+msgstr ""
+
+msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
+msgstr ""
+
+msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
+msgstr ""
+
+msgid "Bomb Bays"
+msgstr ""
+
+msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
+msgstr ""
+
+msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
+msgstr ""
+
+msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
+msgstr ""
+
+msgid "Bunker Buster"
+msgstr ""
+
+msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
+msgstr ""
+
+msgid "However, the Bunker Buster is extremely weak against any non-structure target."
+msgstr ""
+
+msgid "Flamer"
+msgstr ""
+
+msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
+msgstr ""
+
+msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
+msgstr ""
+
+msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
+msgstr ""
+
+msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
+msgstr ""

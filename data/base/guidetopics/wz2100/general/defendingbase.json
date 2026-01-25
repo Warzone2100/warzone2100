@@ -1,0 +1,60 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::general::defendingbase",
+	"title": "Defending Your Base",
+	"sort": "08",
+	"applicableModes": [
+		"campaign"
+	],
+	"visual": [
+		{
+			"stat": {
+				"id": "A0HardcreteMk1Wall",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Sys-SensoTower01",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "GuardTower1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "GuardTower1MG",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "WallTower01",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "A0TankTrap",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"In Warzone 2100, your home base persists throughout the campaign.",
+		"",
+		"As such, preparing for the future defense of your home base is essential.",
+		"",
+		"While units are obviously helpful to defend your base, the design of your base is also critical.",
+		"",
+		"Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
+	],
+	"links": [
+		"wz2100::structures::building",
+		"wz2100::general::commandpanel"
+	]
+}

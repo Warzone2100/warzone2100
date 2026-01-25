@@ -205,7 +205,7 @@ std::vector<DROID_TEMPLATE *>   apsTemplateList;
 std::list<DROID_TEMPLATE>       localTemplates;
 
 /* Store a list of Feature pointers for features to be placed on the map */
-static FEATURE_STATS	**apsFeatureList;
+static FEATURE_STATS	**apsFeatureStatsList;
 
 /* Store a list of component stats pointers for the design screen */
 UDWORD			numComponent;
@@ -278,6 +278,31 @@ static void processProximityButtons(UDWORD id);
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
 
+// In-Game Options button Widget
+
+class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
+{
+protected:
+	W_INGAMEOPTIONS_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+
+	int getMarginX() const { return marginX; }
+	int getMarginTop() const { return marginTop; }
+
+private:
+	uint8_t currentAlphaValue() const;
+	bool isHighlighted() const;
+
+private:
+	int marginX = 16;
+	int marginTop = 18;
+};
 
 /***************************GAME CODE ****************************/
 
@@ -864,9 +889,11 @@ bool createReplayControllerOverlay()
 
 	// Position the Replay Controller form
 	replayControllerForm->setCalcLayout([](WIDGET *psWidget) {
-		int x0 = screenWidth - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
+		auto psOptionsButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(widgFormGetFromID(psWScreen->psForm, IDRET_OPTIONS));
+		bool visibleOptionsbutton = (psOptionsButton != nullptr && psOptionsButton->visible());
+		int x0 = screenWidth - (visibleOptionsbutton ? psOptionsButton->getMarginX() + psOptionsButton->width() : 0) - psWidget->width() - (REPLAY_ACTION_BUTTONS_SPACING * 2);
 		int y0 = 0;
-		psWidget->move(x0, y0);
+		psWidget->move(std::max<int>(0, x0), y0);
 	});
 
 	widgRegisterOverlayScreenOnTopOfScreen(replayOverlayScreen, psWScreen);
@@ -893,7 +920,7 @@ bool intInitialise()
 	apsTemplateList.clear();
 
 	/* Create storage for the feature list */
-	apsFeatureList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) * MAXFEATURES);
+	apsFeatureStatsList = (FEATURE_STATS **)malloc(sizeof(FEATURE_STATS *) * MAXFEATURES);
 
 	/* Create storage for the component list */
 	apsComponentList = (COMPONENT_STATS **)malloc(sizeof(COMPONENT_STATS *) * MAXCOMPONENT);
@@ -983,14 +1010,14 @@ void interfaceShutDown()
 
 	free(apsStructStatsList);
 	apsTemplateList.clear();
-	free(apsFeatureList);
+	free(apsFeatureStatsList);
 	free(apsComponentList);
 	free(apsExtraSysList);
 	psSelectedBuilder = nullptr;
 
 	psWScreen = nullptr;
 	apsStructStatsList = nullptr;
-	apsFeatureList = nullptr;
+	apsFeatureStatsList = nullptr;
 	apsComponentList = nullptr;
 	apsExtraSysList = nullptr;
 
@@ -1027,6 +1054,16 @@ bool intIsRefreshing()
 void intRefreshGroupsUI()
 {
 	IntGroupsRefreshPending = true;
+}
+
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj)
+{
+	if (psSelectedBuilder == psObj)
+	{
+		debug(LOG_INFO, "Selected builder removed");
+		psSelectedBuilder = nullptr;
+	}
+	// intDoScreenRefresh handles refreshing the backing stores for any open interfaceController
 }
 
 bool intAddRadarWidget()
@@ -1294,9 +1331,9 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 	case OBJ_FEATURE:
 		for (unsigned i = 0, end = std::min<unsigned>(asFeatureStats.size(), MAXFEATURES); i < end; ++i)
 		{
-			apsFeatureList[i] = &asFeatureStats[i];
+			apsFeatureStatsList[i] = &asFeatureStats[i];
 		}
-		ppsStatsList = (BASE_STATS **)apsFeatureList;
+		ppsStatsList = (BASE_STATS **)apsFeatureStatsList;
 		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(asFeatureStats.size(), MAXFEATURES));
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
@@ -1452,7 +1489,7 @@ INT_RETVAL intRunWidgets()
 		/*****************  Reticule buttons  *****************/
 
 		case IDRET_COMMAND:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1463,7 +1500,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_BUILD:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1474,7 +1511,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_MANUFACTURE:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1485,7 +1522,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_RESEARCH:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1496,10 +1533,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_INTEL_MAP:
-			if (isKeyMapEditorUp)
-			{
-				break;
-			}
 			// check if RMB was clicked
 			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 			{
@@ -1516,7 +1549,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_DESIGN:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1533,10 +1566,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_CANCEL:
-			if (isKeyMapEditorUp)
-			{
-				break;
-			}
 			intResetScreen(false);
 			psCurrentMsg = nullptr;
 			reticuleCallback(RETBUT_CANCEL);
@@ -1714,7 +1743,6 @@ INT_RETVAL intRunWidgets()
 
 						if (psBuilding->type == REF_DEMOLISH)
 						{
-							STRUCTURE tmp(0, selectedPlayer);
 							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
@@ -1733,6 +1761,7 @@ INT_RETVAL intRunWidgets()
 						{
 							STRUCTURE tmp(generateNewObjectId(), selectedPlayer);
 							STRUCTURE *psStructure = &tmp;
+							tmp.state = SAS_NORMAL;
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
 							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
 
@@ -2149,22 +2178,7 @@ bool intShowGroupSelectionMenu()
 	return true;
 }
 
-class W_INGAMEOPTIONS_BUTTON : public W_BUTTON
-{
-protected:
-	W_INGAMEOPTIONS_BUTTON()
-	{ }
-	void initialize();
-public:
-	static std::shared_ptr<W_INGAMEOPTIONS_BUTTON> make();
-
-	void display(int xOffset, int yOffset) override;
-	std::string getTip() override;
-
-private:
-	uint8_t currentAlphaValue() const;
-	bool isHighlighted() const;
-};
+// MARK: W_INGAMEOPTIONS_BUTTON
 
 std::shared_ptr<W_INGAMEOPTIONS_BUTTON> W_INGAMEOPTIONS_BUTTON::make()
 {
@@ -2246,13 +2260,13 @@ bool intAddInGameOptionsButton()
 	auto psExistingBut = widgGetFromID(psWScreen, IDRET_OPTIONS);
 	if (psExistingBut != nullptr)
 	{
-		if (!hiddenOptionsButton)
+		bool oldButtonHiddenStatus = !psExistingBut->visible();
+		psExistingBut->show(!hiddenOptionsButton);
+
+		// Trigger Re-position of the Replay Controller form
+		if (replayOverlayScreen && (oldButtonHiddenStatus != hiddenOptionsButton))
 		{
-			psExistingBut->show();
-		}
-		else
-		{
-			psExistingBut->hide();
+			replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 		}
 		return false;
 	}
@@ -2267,10 +2281,12 @@ bool intAddInGameOptionsButton()
 		psWScreen->psForm->attach(button);
 		setReticuleButtonDimensions(*button, "image_ingameoptions_up.png");
 		button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			auto psIngameOptButton = std::dynamic_pointer_cast<W_INGAMEOPTIONS_BUTTON>(psWidget->shared_from_this());
+			ASSERT_OR_RETURN(, psIngameOptButton != nullptr, "Wrong button type?");
 			int w = psWidget->width();
 			int h = psWidget->height();
-			int x0 = screenWidth - (w + 16);
-			int y0 = 18;
+			int x0 = screenWidth - (w + psIngameOptButton->getMarginX());
+			int y0 = psIngameOptButton->getMarginTop();
 			psWidget->setGeometry(x0, y0, w, h);
 		}));
 		button->addOnClickHandler([](W_BUTTON&) {
@@ -2283,6 +2299,12 @@ bool intAddInGameOptionsButton()
 		{
 			button->hide();
 		}
+	}
+
+	// Trigger Re-position of the Replay Controller form
+	if (replayOverlayScreen)
+	{
+		replayOverlayScreen->screenSizeDidChange(screenWidth, screenHeight, screenWidth, screenHeight);
 	}
 
 	return true;
@@ -2736,11 +2758,6 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 // show selected widget from reticule menu
 void intShowWidget(int buttonID)
 {
-	if (isKeyMapEditorUp)
-	{
-		return;
-	}
-
 	switch (buttonID)
 	{
 	case RETBUT_FACTORY:

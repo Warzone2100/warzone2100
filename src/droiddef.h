@@ -111,6 +111,8 @@ struct DROID : public BASE_OBJECT
 	bool isCyborg() const;
 	// Returns true if the droid is a transporter.
 	bool isTransporter() const;
+	// Returns true if the droid has VTOL Propulsion and is a transporter.
+	bool isFlightBasedTransporter() const;
 	// Returns true if the droid has VTOL propulsion, and is not a transport.
 	bool isVtol() const;
 	// Returns true if the droid has VTOL propulsion and is moving.
@@ -153,6 +155,9 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependent on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
+	SDWORD          shieldPoints;                   ///< Shield points of droid, which will be drained instead of health (default: -1 if no shields)
+	UDWORD          shieldRegenTime;                ///< How long should it be before the next regeneration step
+	UDWORD          shieldInterruptRegenTime;       ///< Standby time in case the shield was destroyed to begin regenerating again
 	uint32_t        kills;
 	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 	SWORD           resistance;                     ///< used in Electronic Warfare
@@ -199,6 +204,8 @@ struct DROID : public BASE_OBJECT
 	/* anim data */
 	SDWORD          iAudioID;
 	int32_t			heightAboveMap;					///< Current calculated height above the terrain (set for VTOL-propulsion units)
+	/* repair data */
+	uint16_t		underRepair;					///< Number of other droids / structures currently repairing this unit (does not include self-repair tech)
 };
 
 #endif // __INCLUDED_DROIDDEF_H__

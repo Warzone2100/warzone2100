@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Cyborgs")
+_("Cyborgs are your main infantry units.")
+_("They are fast and reliable units, and are extremely resistant to Anti-Tank weapons.")
+_("However, they are more vulnerable to Anti-Personnel and Artillery weapons.")
+_("Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce.")

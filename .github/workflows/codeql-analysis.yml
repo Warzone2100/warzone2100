@@ -28,45 +28,52 @@ jobs:
     name: Analyze (${{ matrix.language }})
     env:
       WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES: ON
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5 # Fix compatibility with CMake 4.0+ (Ubuntu's openal-soft package config specifies min CMake < 3.5)
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
-    - name: 'Install WZ Build Pre-reqs'
-      if: matrix.language == 'cpp'
-      run: |
-        sudo apt-get -u update
-        DEBIAN_FRONTEND=noninteractive sudo apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config
-        sudo ./get-dependencies_linux.sh ubuntu build-dependencies
+      - name: 'Install WZ Build Pre-reqs'
+        if: matrix.language == 'cpp'
+        run: |
+          sudo apt-get -u update
+          DEBIAN_FRONTEND=noninteractive sudo apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config wget
+          echo "::group::get-dependencies_linux.sh"
+          sudo ./get-dependencies_linux.sh ubuntu build-dependencies
+          echo "::endgroup::"
+          echo "::group::install_sdl3.sh"
+          sudo .ci/sdl3/install_sdl3.sh
+          echo "::endgroup::"
 
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        config-file: ./.github/codeql/codeql-config-${{ matrix.language }}.yml
-      # Override language selection by uncommenting this and choosing your languages
-      #   languages: go, javascript, csharp, python, cpp, java
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          trap-caching: false
+          languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config-${{ matrix.language }}.yml
+        # Override language selection by uncommenting this and choosing your languages
+        #   languages: go, javascript, csharp, python, cpp, java
 
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
+      # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+      # If this step fails, then you should remove it and run the build manually (see below)
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
 
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+      # ℹ️ Command-line programs to run using the OS shell.
+      # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
 
-    #   If the Autobuild fails above, remove it and uncomment the following three lines.
-    #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
+      #   If the Autobuild fails above, remove it and uncomment the following three lines.
+      #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
 
-    # - run: |
-    #     echo "Run, Build Application using script"
-    #     ./location_of_script_within_repo/buildscript.sh
+      # - run: |
+      #     echo "Run, Build Application using script"
+      #     ./location_of_script_within_repo/buildscript.sh
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        category: "/language:${{matrix.language}}"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{matrix.language}}"

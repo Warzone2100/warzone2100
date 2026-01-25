@@ -32,7 +32,6 @@
 #include "../intdisplay.h"
 #include "../frontend.h"
 #include "../hci.h"
-#include "../keyedit.h"
 #include "../mission.h"
 #include "../multiint.h"
 #include "../multilimit.h"
@@ -55,33 +54,9 @@ void WzOldTitleUI::start()
 		ActivityManager::instance().navigateToMenu("Single Player");
 		startSinglePlayerMenu();
 		break;
-	case GAME:
-		ActivityManager::instance().navigateToMenu("Game Options");
-		startGameOptionsMenu();
-		break;
-	case GRAPHICS_OPTIONS:
-		ActivityManager::instance().navigateToMenu("Graphics Options");
-		startGraphicsOptionsMenu();
-		break;
-	case AUDIO_AND_ZOOM_OPTIONS:
-		ActivityManager::instance().navigateToMenu("Audio + Zoom Options");
-		startAudioAndZoomOptionsMenu();
-		break;
-	case VIDEO_OPTIONS:
-		ActivityManager::instance().navigateToMenu("Video Options");
-		startVideoOptionsMenu();
-		break;
-	case MOUSE_OPTIONS:
-		ActivityManager::instance().navigateToMenu("Mouse Options");
-		startMouseOptionsMenu();
-		break;
 	case TUTORIAL:
 		ActivityManager::instance().navigateToMenu("Tutorial");
 		startTutorialMenu();
-		break;
-	case OPTIONS:
-		ActivityManager::instance().navigateToMenu("Options");
-		startOptionsMenu();
 		break;
 	case TITLE:
 		ActivityManager::instance().navigateToMenu("Main");
@@ -90,18 +65,6 @@ void WzOldTitleUI::start()
 	case MULTI:
 		ActivityManager::instance().navigateToMenu("Multiplayer");
 		startMultiPlayerMenu();		// goto multiplayer menu
-		break;
-	case KEYMAP:
-		ActivityManager::instance().navigateToMenu("KeyMap Editor");
-		startKeyMapEditor(gInputManager, gKeyFuncConfig, true);
-		break;
-	case MUSIC_MANAGER:
-		ActivityManager::instance().navigateToMenu("Music Manager");
-		startMusicManager();
-		break;
-	case MULTIPLAY_OPTIONS:
-		ActivityManager::instance().navigateToMenu("Multiplay Options");
-		startMultiplayOptionsMenu();
 		break;
 	case STARTGAME:
 	case QUIT:
@@ -133,13 +96,6 @@ TITLECODE WzOldTitleUI::run()
 	case MULTI:
 		runMultiPlayerMenu();
 		break;
-	case KEYMAP:
-		runKeyMapEditor(gInputManager, gKeyFuncConfig);
-		break;
-
-	case MUSIC_MANAGER:
-		runMusicManager();
-		break;
 
 	case TITLE:
 		runTitleMenu();
@@ -151,34 +107,6 @@ TITLECODE WzOldTitleUI::run()
 
 	case TUTORIAL:
 		runTutorialMenu();
-		break;
-
-	case OPTIONS:
-		runOptionsMenu();
-		break;
-
-	case GAME:
-		runGameOptionsMenu();
-		break;
-
-	case GRAPHICS_OPTIONS:
-		runGraphicsOptionsMenu();
-		break;
-
-	case AUDIO_AND_ZOOM_OPTIONS:
-		runAudioAndZoomOptionsMenu();
-		break;
-
-	case VIDEO_OPTIONS:
-		runVideoOptionsMenu();
-		break;
-
-	case MOUSE_OPTIONS:
-		runMouseOptionsMenu();
-		break;
-
-	case MULTIPLAY_OPTIONS:
-		runMultiplayOptionsMenu();
 		break;
 
 	case QUIT:
@@ -206,9 +134,5 @@ TITLECODE WzOldTitleUI::run()
 
 void WzOldTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
-	// If the Video Options screen is up, the current resolution text (and other values) should be refreshed
-	if (mode == VIDEO_OPTIONS)
-	{
-		refreshCurrentVideoOptionsValues();
-	}
+	// no-op
 }

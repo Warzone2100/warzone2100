@@ -26,7 +26,13 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/math_ext.h"
 #include "lib/netplay/sync_debug.h"
+
+#include "lib/ivis_opengl/ivisdef.h"
+
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
 
 #include "action.h"
 #include "combat.h"
@@ -38,6 +44,11 @@
 #include "qtscript.h"
 #include "order.h"
 #include "objmem.h"
+#include "effects.h"
+#include "display3ddef.h"
+
+#define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
+#define DROID_SHIELD_PARTICLES		(6 + rand()%8)
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -193,7 +204,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// add the attacker's experience
 	if (psAttacker->type == OBJ_DROID)
 	{
-		SDWORD	level = getDroidEffectiveLevel((DROID *) psAttacker);
+		SDWORD	level = getDroidEffectiveLevel((DROID *) psAttacker, true);
 
 		// increase total accuracy by EXP_ACCURACY_BONUS % for each experience level
 		resultHitChance += EXP_ACCURACY_BONUS * level * baseHitChance / 100;
@@ -202,7 +213,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// subtract the defender's experience
 	if (psTarget->type == OBJ_DROID)
 	{
-		SDWORD	level = getDroidEffectiveLevel((DROID *) psTarget);
+		SDWORD	level = getDroidEffectiveLevel((DROID *) psTarget, true);
 
 		// decrease weapon accuracy by EXP_ACCURACY_BONUS % for each experience level
 		resultHitChance -= EXP_ACCURACY_BONUS * level * baseHitChance / 100;
@@ -262,7 +273,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		}
 
 		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
-		if (!psDroid->isFlying())
+		if (!psDroid->isFlying() && !psDroid->isFlightBasedTransporter())
 		{
 			predict.z = map_Height(predict.xy());  // Predict that the object will be on the ground.
 		}
@@ -273,7 +284,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	bool bVisibleAnyway = psTarget->player == selectedPlayer;
 
 	// see if we were lucky to hit the target
-	bool isHit = gameRand(100) <= resultHitChance;
+	bool isHit = static_cast<int>(gameRand(100)) <= resultHitChance;
 	if (isHit)
 	{
 		/* Kerrrbaaang !!!!! a hit */
@@ -299,14 +310,14 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		// Use a random seed to determine how far the miss will land from the target
 		// That (num/100)^3 allow the misses to fall much more frequently close to the target
-		int num = gameRand(100) + 1;
+		int num = static_cast<int>(gameRand(100)) + 1;
 		int minOffset = 2 * targetShape.radius();
 
 		int missDist = minOffset + (worstShot * num * num * num) / (100 * 100 * 100);
 
 		// Determine the angle of the miss in the 270 degrees in "front" of the target.
 		// The 90 degrees behind would most probably cause an unwanted hit when the projectile will be drawn through the hitbox.
-		Vector3i miss = Vector3i(iSinCosR(gameRand(DEG(270)) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
+		Vector3i miss = Vector3i(iSinCosR(static_cast<int>(gameRand(DEG(270))) - DEG(135) + iAtan2(deltaPosPredict.xy()), missDist), 0);
 		predict += miss;
 
 		psTarget = nullptr;  // Missed the target, so don't expect to hit it.
@@ -395,12 +406,13 @@ int objArmour(const BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
 
 /* Deals damage to an object
  * \param psObj object to deal damage to
+ * \param psProjectile projectile which hit the object (may be nullptr)
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int level = 0;
 	int armour = objArmour(psObj, weaponClass);
@@ -418,6 +430,15 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	// EMP weapon radius should not do actual damage
 	if (weaponSubClass == WSC_EMP && empRadiusHit)
 	{
+		if (psObj->type == OBJ_DROID)
+		{
+			DROID *psDroid = castDroid(psObj);
+
+			if (psDroid->shieldPoints > 0) {
+				// EMP weapons kills droid shields completely
+				psDroid->shieldPoints = 0;
+			}
+		}
 		return 0;
 	}
 
@@ -430,7 +451,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		bool bMultiMessagesBackup = bMultiMessages;
 		bMultiMessages = bMultiPlayer;
 
-		triggerEventAttacked(psObj, g_pProjLastAttacker, lastHit);
+		triggerEventAttacked(psObj, (psProjectile != nullptr) ? psProjectile->psSource : nullptr, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
 	}
@@ -440,7 +461,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		DROID *psDroid = (DROID *)psObj;
 
 		// Retrieve highest, applicable, experience level
-		level = getDroidEffectiveLevel(psDroid);
+		level = getDroidEffectiveLevel(psDroid, true);
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -485,6 +506,52 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 		return -(int64_t)65536 * psObj->body / originalhp;
 	}
 
+	// Drain shields first
+	if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = castDroid(psObj);
+
+		if (psDroid->shieldPoints > 0)
+		{
+			if (psDroid->shieldPoints > actualDamage)
+			{
+				psDroid->shieldPoints -= actualDamage;
+				actualDamage = 0;
+			}
+			else
+			{
+				actualDamage -= psDroid->shieldPoints;
+				psDroid->shieldPoints = 0;
+			}
+
+			if (psDroid->shieldPoints == 0)
+			{
+				// shields are interrupted, wait for a while until regeneration starts again
+				psDroid->shieldInterruptRegenTime = psDroid->time;
+			}
+
+			if (psProjectile != nullptr &&
+				weaponSubClass != WSC_FLAME &&
+				weaponSubClass != WSC_COMMAND &&
+				droidGetMaxShieldPoints(psDroid) > 0 &&
+				PERCENT(psDroid->shieldPoints, droidGetMaxShieldPoints(psDroid)) > 25 &&
+				objPosDiffSq(psDroid->pos, psProjectile->pos) < TILE_WIDTH * TILE_WIDTH)
+			{
+				Vector3i dv;
+				dv.y = psProjectile->pos.z;
+
+				for (int i = 0; i < DROID_SHIELD_PARTICLES; i++)
+				{
+					dv.x = psProjectile->pos.x + DROID_SHIELD_DAMAGE_SPREAD;
+					dv.z = psProjectile->pos.y + DROID_SHIELD_DAMAGE_SPREAD;
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, nullptr, 0, gameTime - deltaGameTime + 1);
+				}
+
+				audio_PlayStaticTrack(psProjectile->pos.x, psProjectile->pos.y, ID_SOUND_SHIELD_HIT);
+			}
+		}
+	}
+
 	// Subtract the dealt damage from the droid's remaining body points
 	psObj->body -= actualDamage;
 
@@ -521,7 +588,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 		DROID *psDroid = (DROID *)psTarget;
 
 		// Retrieve highest, applicable, experience level
-		level = getDroidEffectiveLevel(psDroid);
+		level = getDroidEffectiveLevel(psDroid, true);
 	}
 	else if (psTarget->type == OBJ_STRUCTURE)
 	{

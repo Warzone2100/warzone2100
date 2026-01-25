@@ -31,7 +31,12 @@ You can provide more arguments to fine-tune your environment.
 * `--enablelobbyslashcmd` allows administrators to use slash commands to modify the settings (see below to add administrators).
 * `--addlobbyadminhash=<hash>` grants admin right to the given player, identified by their hash. This argument must be repeated to add multiple administrators. See `PlayerKeys.md` for details about hashes.
 * `--addlobbyadminpublickey=<public key>` grants admin rights to the given player, by their public key. This argument must be repeated to add multiple administrators. See `PlayerKeys.md` for details about keys.
-* `--autorating=<host>` overrides the autorating url. See `AutoratingServer.md` for details about the autorating server.
+
+
+#### Advanced usage
+
+* `--enablecmdinterface=<stdin|unixsocket:path>` enables the command interface. See [/doc/CmdInterface.md](/doc/CmdInterface.md)
+* `--autohost-not-ready` starts the host (autohost) as not ready, even if it's a spectator host. Should usually be combined with usage of the cmdinterface to trigger host ready via the `set host ready 1` command (or the game will never start!)
 
 
 ### Checking your firewall

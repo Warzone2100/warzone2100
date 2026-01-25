@@ -38,7 +38,7 @@ jobs:
     name: 'Generate Snap Stable Config'
     permissions:
       contents: read
-    runs-on: ubuntu-20.04 # Use instead of ubuntu-latest until https://github.com/snapcore/action-build/issues/42 is resolved
+    runs-on: ubuntu-latest
     steps:
       - name: Generate Config
         id: config
@@ -77,21 +77,21 @@ jobs:
           sudo rm -rf _dl/
       - name: Checkout (Latest)
         if: github.event.inputs.git-ref == ''
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: warzone2100
           submodules: recursive
           persist-credentials: false
       - name: Checkout (Custom Ref)
         if: github.event.inputs.git-ref != ''
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: warzone2100
           submodules: recursive
           persist-credentials: false
           ref: '${{ github.event.inputs.git-ref }}'
       - name: Checkout snap-stable-build@master
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: 'Warzone2100/snap-stable-build'
           ref: master
@@ -186,7 +186,7 @@ jobs:
           echo "snapstablebuild.diff (SHA512: ${DIFF_HASH}):"
           cat "${{ github.workspace }}/diff/snapstablebuild.diff"
       - name: Upload diff artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
         with:
           name: snap_stable_build_diff
@@ -202,14 +202,14 @@ jobs:
     if: (github.event_name == 'release' && github.event.action == 'published' && !github.event.release.prerelease) || (github.event_name == 'workflow_dispatch')
     steps:
       - name: Checkout snap-stable-build@master
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: 'Warzone2100/snap-stable-build'
           ref: master
           path: snap-stable-build
           ssh-key: '${{ secrets.SNAP_STABLE_BUILD_REPO_GH_DEPLOY_KEY }}'
       - name: Fetch Snap Stable Config Changes
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: snap_stable_build_diff
           path: '${{ github.workspace }}/diff'

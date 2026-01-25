@@ -118,11 +118,6 @@ static PagedEntityContainer<PROJECTILE> globalProjectileStorage;
 
 /***************************************************************************/
 
-// the last unit that did damage - used by script functions
-BASE_OBJECT		*g_pProjLastAttacker;
-
-/***************************************************************************/
-
 static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
@@ -346,8 +341,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-		if (psSensor
-		    && psSensor->type == OBJ_DROID)
+		if (psSensor && psSensor->type == OBJ_DROID)
 		{
 			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
@@ -360,7 +354,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		if (psDroid != nullptr)
 		{
-			psDroid->experience += experienceInc;
+			droidIncreaseExperience(psDroid, experienceInc);
 		}
 	}
 }
@@ -390,7 +384,7 @@ void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char c
 static int32_t randomVariation(int32_t val)
 {
 	// Up to ±5% random variation.
-	return (int64_t)val * (95000 + gameRand(10001)) / 100000;
+	return (int64_t)val * (95000 + static_cast<int64_t>(gameRand(10001))) / 100000;
 }
 
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz, int min_angle)
@@ -523,13 +517,20 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 		int minHeight = std::min(std::max(maxHeight + 2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true), 0), maxHeight);
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
-		proj.dst.z = psTarget->pos.z + minHeight + gameRand(std::max(maxHeight - minHeight, 1));
+		proj.dst.z = psTarget->pos.z + minHeight + static_cast<int>(gameRand(std::max(maxHeight - minHeight, 1)));
 		/* store visible part (LOCK ON this part for homing :) */
 		proj.partVisible = maxHeight - minHeight;
 	}
 	else
 	{
-		proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		if (psAttacker == nullptr)
+		{
+			proj.dst.z = target.z - LINE_OF_FIRE_MINIMUM;
+		}
+		else
+		{
+			proj.dst.z = target.z + LINE_OF_FIRE_MINIMUM;
+		}
 		scoreUpdateVar(WD_SHOTS_OFF_TARGET);
 	}
 
@@ -892,7 +893,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
 		         (psTempObj->type == OBJ_STRUCTURE ||
 		          psTempObj->type == OBJ_FEATURE ||
-		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlying())
+		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlightBasedTransporter() && !((DROID*)psTempObj)->isFlying())
 		         ))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
@@ -1109,9 +1110,6 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	psStats = psObj->psWStats;
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid weapon stats pointer");
 
-	// note the attacker if any
-	g_pProjLastAttacker = psObj->psSource;
-
 	/* play impact audio */
 	if (gfxVisible(psObj))
 	{
@@ -1239,7 +1237,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		    && psObj->psSource)
 		{
 			// If we did enough `damage' to capture the target
-			if (electronicDamage(psObj->psDest,
+			if (electronicDamage(psObj->psDest, psObj->psSource,
 			                     calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
 			                     psObj->player))
 			{
@@ -1492,9 +1490,6 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 {
 	CHECK_PROJECTILE(psProj);
 
-	// note the attacker if any
-	g_pProjLastAttacker = psProj->psSource;
-
 	WEAPON_STATS *psStats = psProj->psWStats;
 
 	static GridList gridList;  // static to avoid allocations.
@@ -1513,11 +1508,9 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			continue;  // Don't damage your own droids, nor ally droids - unrealistic, but better.
 		}
 
-		if (psCurr->type == OBJ_DROID &&
-		    ((DROID *)psCurr)->isVtol() &&
-		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
+		if (psCurr->type == OBJ_DROID && ((DROID *)psCurr)->isFlying())
 		{
-			continue;  // Can't set flying vtols on fire.
+			continue;  // Can't set flying units on fire.
 		}
 
 		if (psCurr->type == OBJ_FEATURE && !((FEATURE *)psCurr)->psStats->damageable)
@@ -1687,11 +1680,11 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_FEATURE:
@@ -1710,7 +1703,7 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 
 static bool isFriendlyFire(DAMAGE* psDamage)
 {
-	return psDamage->psProjectile->psDest && psDamage->psProjectile->psSource->player == psDamage->psProjectile->psDest->player;
+	return psDamage->psDest && psDamage->psProjectile->psSource->player == psDamage->psDest->player;
 }
 
 static bool shouldIncreaseExperience(DAMAGE *psDamage)

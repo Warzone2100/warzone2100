@@ -90,7 +90,7 @@ public:
 	virtual unsigned id() override;
 	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 private:
-	virtual bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
+	bool upload_internal(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
 struct texture_array_mip_level_buffer; // forward-declare
@@ -119,7 +119,7 @@ public:
 	virtual bool upload_layer(const size_t& layer, const size_t& mip_level, const iV_BaseImage& image) override;
 	virtual unsigned id() override;
 private:
-	virtual bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
+	bool upload_internal(const size_t& layer, const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image);
 };
 
 struct gl_gpurendered_texture final : public gfx_api::abstract_texture
@@ -175,6 +175,8 @@ public:
 	~gl_pipeline_id() {}
 };
 
+struct gl_context;
+
 struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 {
 	gfx_api::state_description desc;
@@ -195,7 +197,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	template<typename T>
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
-	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
+	gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants);
 	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
@@ -216,7 +218,8 @@ private:
 
 	void getLocs(const std::vector<std::tuple<std::string, GLint>> &samplersToBind);
 
-	void build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
+	void build_program(gl_context& ctx,
+					   bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias,
 					   const std::string& programName,
 					   const char * vertex_header, const std::string& vertexPath,
 					   const char * fragment_header, const std::string& fragmentPath,
@@ -348,7 +351,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
-	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
@@ -377,13 +380,23 @@ private:
 	bool createSceneRenderpass();
 	void deleteSceneRenderpass();
 	void _beginRenderPassImpl();
+
+protected:
+	friend struct gl_pipeline_state_object;
+	void wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
+	void wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message);
+	void wzGLPopDebugGroup();
+	bool useKHRSuffixedDebugFuncs();
+
 private:
 	bool initGLContext();
+	bool enableDebugMessageCallbacks();
 	void enableVertexAttribArray(GLuint index);
 	void disableVertexAttribArray(GLuint index);
 	std::string calculateFormattedRendererInfoString() const;
 	bool isBlocklistedGraphicsDriver() const;
 	uint32_t getSuggestedDefaultDepthBufferResolution() const;
+	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;

@@ -88,6 +88,13 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 
 bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName);
 
+
+namespace WzMap {
+struct LevelDetails; // forward-declare
+}
+bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName, bool frontOfList = false);
+
+
 // shutdown the level system
 void levShutDown();
 
@@ -108,7 +115,7 @@ bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash
 bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash);
 
 // free the currently loaded dataset
-bool levReleaseAll();
+bool levReleaseAll(bool forceOnError = false);
 
 // free the data for the current mission
 bool levReleaseMissionData();

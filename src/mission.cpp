@@ -151,12 +151,12 @@ static UBYTE   bPlayCountDown;
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
 static void resetHomeStructureObjects();
-static bool startMissionOffClear(const char *pGame);
-static bool startMissionOffKeep(const char *pGame);
-static bool startMissionCampaignStart(const char *pGame);
-static bool startMissionCampaignChange(const char *pGame);
-static bool startMissionCampaignExpand(const char *pGame);
-static bool startMissionCampaignExpandLimbo(const char *pGame);
+static bool startMissionOffClear(const GameLoadDetails& gameToLoad);
+static bool startMissionOffKeep(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignStart(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignChange(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad);
+static bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad);
 static bool startMissionBetween();
 static void endMissionCamChange();
 static void endMissionOffClear();
@@ -205,6 +205,10 @@ static void resetHomeStructureObjects()
 				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
 				if (psRepairFac->psObj)
 				{
+					if (psRepairFac->state == RepairState::Repairing)
+					{
+						droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+					}
 					psRepairFac->psObj = nullptr;
 					psRepairFac->state = RepairState::Idle;
 				}
@@ -408,7 +412,7 @@ void setMissionCountDown()
 }
 
 
-bool startMission(LEVEL_TYPE missionType, const char *pGame)
+bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 {
 	bool	loaded = true;
 
@@ -437,7 +441,7 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 	//load the game file for all types of mission except a Between Mission
 	if (missionType != LEVEL_TYPE::LDS_BETWEEN)
 	{
-		loadGameInit(pGame);
+		loadGameInit(gameDetails);
 	}
 
 	//all proximity messages are removed between missions now
@@ -446,14 +450,14 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 	switch (missionType)
 	{
 	case LEVEL_TYPE::LDS_CAMSTART:
-		if (!startMissionCampaignStart(pGame))
+		if (!startMissionCampaignStart(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MKEEP:
 	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
-		if (!startMissionOffKeep(pGame))
+		if (!startMissionOffKeep(gameDetails))
 		{
 			loaded = false;
 		}
@@ -466,25 +470,25 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 		}
 		break;
 	case LEVEL_TYPE::LDS_CAMCHANGE:
-		if (!startMissionCampaignChange(pGame))
+		if (!startMissionCampaignChange(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND:
-		if (!startMissionCampaignExpand(pGame))
+		if (!startMissionCampaignExpand(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
-		if (!startMissionCampaignExpandLimbo(pGame))
+		if (!startMissionCampaignExpandLimbo(gameDetails))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MCLEAR:
-		if (!startMissionOffClear(pGame))
+		if (!startMissionOffClear(gameDetails))
 		{
 			loaded = false;
 		}
@@ -498,7 +502,7 @@ bool startMission(LEVEL_TYPE missionType, const char *pGame)
 
 	if (!loaded)
 	{
-		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, pGame);
+		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, gameDetails.filePath.c_str());
 		return false;
 	}
 
@@ -1151,14 +1155,14 @@ void saveCampaignData()
 
 
 //start an off world mission - clearing the object lists
-bool startMissionOffClear(const char *pGame)
+bool startMissionOffClear(const GameLoadDetails& gameToLoad)
 {
-	debug(LOG_SAVE, "called for %s", pGame);
+	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(pGame, !KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1172,13 +1176,13 @@ bool startMissionOffClear(const char *pGame)
 }
 
 //start an off world mission - keeping the object lists
-bool startMissionOffKeep(const char *pGame)
+bool startMissionOffKeep(const GameLoadDetails& gameToLoad)
 {
-	debug(LOG_SAVE, "called for %s", pGame);
+	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(pGame, !KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1191,9 +1195,9 @@ bool startMissionOffKeep(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignStart(const char *pGame)
+bool startMissionCampaignStart(const GameLoadDetails& gameToLoad)
 {
-	debug(LOG_SAVE, "called for %s", pGame);
+	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1202,7 +1206,7 @@ bool startMissionCampaignStart(const char *pGame)
 	clearCampaignUnits();
 
 	// Load in the new game details
-	if (!loadGame(pGame, !KEEPOBJECTS, FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, FREEMEM))
 	{
 		return false;
 	}
@@ -1212,7 +1216,7 @@ bool startMissionCampaignStart(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignChange(const char *pGame)
+bool startMissionCampaignChange(const GameLoadDetails& gameToLoad)
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1229,7 +1233,7 @@ bool startMissionCampaignChange(const char *pGame)
 	saveCampaignData();
 
 	//load in the new game details
-	if (!loadGame(pGame, !KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1239,10 +1243,10 @@ bool startMissionCampaignChange(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignExpand(const char *pGame)
+bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad)
 {
 	//load in the new game details
-	if (!loadGame(pGame, KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1251,12 +1255,12 @@ bool startMissionCampaignExpand(const char *pGame)
 	return true;
 }
 
-bool startMissionCampaignExpandLimbo(const char *pGame)
+bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad)
 {
 	saveMissionLimboData();
 
 	//load in the new game details
-	if (!loadGame(pGame, KEEPOBJECTS, !FREEMEM, false))
+	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
 	{
 		return false;
 	}
@@ -1742,23 +1746,19 @@ static void missionResetDroids()
 	});
 }
 
-/*unloads the Transporter passed into the mission at the specified x/y
-goingHome = true when returning from an off World mission*/
-void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
+/*unloads the Transporter passed into the mission at the specified x/y */
+void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 {
+	static std::vector<DROID *> disembarkedDroids;
 	PerPlayerDroidLists* ppCurrentList;
-	UDWORD		droidX, droidY;
+	UDWORD droidX, droidY;
+	optional<UDWORD> lastDroidX, lastDroidY;
 	DROID_GROUP	*psGroup;
 
 	ASSERT_OR_RETURN(, psTransporter != nullptr, "Invalid transporter");
-	if (goingHome)
-	{
-		ppCurrentList = &mission.apsDroidLists;
-	}
-	else
-	{
-		ppCurrentList = &apsDroidLists;
-	}
+	ppCurrentList = &apsDroidLists;
+
+	disembarkedDroids.clear();
 
 	//unload all the droids from within the current Transporter
 	if (psTransporter->isTransporter())
@@ -1770,22 +1770,40 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			{
 				break;
 			}
-			//add it back into current droid lists
-			addDroid(psDroid, *ppCurrentList);
 
 			//starting point...based around the value passed in
 			droidX = map_coord(x);
 			droidY = map_coord(y);
-			if (goingHome)
-			{
-				//swap the droid and map pointers
-				swapMissionPointers();
-			}
 			if (!pickATileGen(&droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
-				ASSERT(false, "unloadTransporter: Unable to find a valid location");
-				return;
+				if (!bMultiPlayer)
+				{
+					// try to avoid failing to unload a transporter in campaign mode - stack units on top of each other if needed
+					if (lastDroidX.has_value() && lastDroidY.has_value())
+					{
+						debug(LOG_INFO, "unloadTransporter: Stacking units due to lack of space");
+						droidX = lastDroidX.value();
+						droidY = lastDroidY.value();
+					}
+					else
+					{
+						ASSERT(false, "unloadTransporter: Unable to find a valid location");
+						break;
+					}
+				}
+				else
+				{
+					// in skirmish / MP, a full or partial failure to unload may occur - log and continue with possibly partial disembark
+					debug(LOG_INFO, "unloadTransporter: Only room to unload %zu units", disembarkedDroids.size());
+					break;
+				}
 			}
+			lastDroidX = droidX;
+			lastDroidY = droidY;
+
+			//add it back into current droid lists
+			addDroid(psDroid, *ppCurrentList);
+
 			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
 			updateDroidOrientation(psDroid);
 
@@ -1797,17 +1815,15 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 				// So VTOLs don't try to rearm on another map
 				setDroidBase(psDroid, nullptr);
 			}
-			if (goingHome)
-			{
-				//swap the droid and map pointers
-				swapMissionPointers();
-			}
+
+			disembarkedDroids.push_back(psDroid);
 		}
 
-		/* trigger script callback detailing group about to disembark */
-		transporterSetScriptCurrent(psTransporter);
-		triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
-		transporterSetScriptCurrent(nullptr);
+		if (!bMultiPlayer || !disembarkedDroids.empty())
+		{
+			/* trigger script callback detailing group about to disembark */
+			triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
+		}
 
 		/* remove droids from transporter group if not already transferred to script group */
 		mutating_list_iterate(psTransporter->psGroup->psList, [&psGroup, psTransporter](DROID* psDroid)
@@ -1816,6 +1832,13 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			{
 				return IterationResult::BREAK_ITERATION;
 			}
+
+			if (std::find(disembarkedDroids.begin(), disembarkedDroids.end(), psDroid) == disembarkedDroids.end())
+			{
+				// not found in list of disembarked droids - skip removing from the transporter group
+				return IterationResult::CONTINUE_ITERATION;
+			}
+
 			// a commander needs to get it's group back
 			if (psDroid->droidType == DROID_COMMAND)
 			{
@@ -1834,7 +1857,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	if (!bMultiPlayer)
 	{
 		// Send all transporter Droids back to home base if off world
-		if (!goingHome)
 		{
 			/* Stop the camera following the transporter */
 			psTransporter->selected = false;
@@ -1848,6 +1870,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			transporterSetLaunchTime(gameTime);
 		}
 	}
+
+	disembarkedDroids.clear();
 }
 
 void missionMoveTransporterOffWorld(DROID *psTransporter)
@@ -1857,9 +1881,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 	if (psTransporter->droidType == DROID_SUPERTRANSPORTER)
 	{
 		/* trigger script callback */
-		transporterSetScriptCurrent(psTransporter);
 		triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
-		transporterSetScriptCurrent(nullptr);
 
 		if (droidRemove(psTransporter, apsDroidLists))
 		{

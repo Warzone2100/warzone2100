@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.5...3.24)
+cmake_minimum_required (VERSION 3.16...3.31)
 
 include(CheckCompilerFlagsOutput)
 
@@ -24,6 +24,10 @@ SET(FMT_INSTALL OFF CACHE BOOL "Generate the install target" FORCE)
 SET(FMT_SYSTEM_HEADERS ON CACHE BOOL "Expose headers with marking them as system." FORCE)
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
 set_property(TARGET fmt PROPERTY FOLDER "3rdparty")
+# Define a custom inline namespace for the fmt used by WZ, to prevent ODR violations if static linking to any libraries that themselves embed (a different version of) fmt
+target_compile_definitions(fmt PUBLIC "FMT_BEGIN_NAMESPACE=namespace fmt { inline namespace v11_wz2100 {")
+target_compile_definitions(fmt PUBLIC "FMT_END_NAMESPACE=}}")
+
 
 # inih library
 add_library(inih STATIC "inih/ini.h" "inih/ini.c")
@@ -70,6 +74,7 @@ set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "Run cpplint.py tool for Google C++ Sty
 set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "Run cppcheck C++ static analysis tool." FORCE)
 set(SQLITECPP_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
 set(SQLITECPP_BUILD_TESTS OFF CACHE BOOL "Build and run tests." FORCE)
+set(SQLITECPP_INSTALL OFF CACHE BOOL "Enables the install target." FORCE)
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	set(SQLITECPP_USE_STACK_PROTECTION OFF CACHE BOOL "USE Stack Protection hardening." FORCE)
 endif()
@@ -101,7 +106,7 @@ target_compile_definitions(nlohmann_json INTERFACE "NLOHMANN_JSON_NAMESPACE=nloh
 add_subdirectory(optional-lite EXCLUDE_FROM_ALL)
 
 add_subdirectory(quickjs-wz EXCLUDE_FROM_ALL)
-set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
+set_property(TARGET qjs PROPERTY FOLDER "3rdparty")
 
 
 if (WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
@@ -111,13 +116,7 @@ if (WZ_ENABLE_BASIS_UNIVERSAL AND NOT WZ_CI_DISABLE_BASIS_COMPRESS_TEXTURES)
 	if(DEFINED VCPKG_INSTALLED_DIR AND DEFINED VCPKG_HOST_TRIPLET)
 	  # Partial workaround for: https://github.com/microsoft/vcpkg/issues/17001
 	  # Explicitly add the HOST_TRIPLET paths to CMAKE_PROGRAM_PATH
-	  list(APPEND CMAKE_PROGRAM_PATH "${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools")
-	  file(GLOB Z_VCPKG_TOOLS_DIRS "${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools/*")
-	  foreach(Z_VCPKG_TOOLS_DIR IN LISTS Z_VCPKG_TOOLS_DIRS)
-		if(IS_DIRECTORY "${Z_VCPKG_TOOLS_DIR}")
-		  list(APPEND CMAKE_PROGRAM_PATH "${Z_VCPKG_TOOLS_DIR}")
-		endif()
-	  endforeach()
+	  list(APPEND CMAKE_PROGRAM_PATH "${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}")
 	endif()
 	find_program(BASIS_UNIVERSAL_CLI NAMES basisu PATH_SUFFIXES "tools/basisu" NO_CACHE)
 	set(CMAKE_PROGRAM_PATH "${_ORIGINAL_CMAKE_PROGRAM_PATH}")
@@ -182,7 +181,7 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 
 	add_library(basis_transcoder STATIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder/basisu_transcoder.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder/basisu_transcoder.h" "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/zstd/zstddeclib.c")
 	set_property(TARGET basis_transcoder PROPERTY FOLDER "3rdparty")
-	target_include_directories(basis_transcoder PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder")
+	target_include_directories(basis_transcoder SYSTEM PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/basis_universal/transcoder")
 
 	if(NOT MSVC)
 		set(_supported_basistranscoder_cxx_compiler_flags "")
@@ -204,6 +203,12 @@ if (WZ_ENABLE_BASIS_UNIVERSAL)
 
 		# -Wunused-const-variable
 		check_compiler_flags_output("-Werror -Wno-unused-const-variable -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unused-const-variable" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wunknown-warning-option
+		check_compiler_flags_output("-Werror -Wno-unknown-warning-option -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-unknown-warning-option" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
+
+		# -Wnontrivial-memcall
+		check_compiler_flags_output("-Werror -Wno-nontrivial-memcall -Wno-error=cpp" COMPILER_TYPE CXX   OUTPUT_FLAGS "-Wno-nontrivial-memcall" OUTPUT_VARIABLE _supported_basistranscoder_cxx_compiler_flags APPEND)
 
 		if (NOT _supported_basistranscoder_cxx_compiler_flags STREQUAL "")
 			string(REPLACE " " ";" _supported_basistranscoder_cxx_compiler_flags "${_supported_basistranscoder_cxx_compiler_flags}")
@@ -263,6 +268,7 @@ if (WZ_PROFILING_NVTX)
 
 endif ()
 
+set(PLUM_NO_EXAMPLE ON CACHE BOOL "Disable example build" FORCE)
 add_subdirectory(libplum EXCLUDE_FROM_ALL)
 set_target_properties(plum plum-static PROPERTIES FOLDER "3rdparty")
 if(NOT MSVC)
@@ -289,4 +295,28 @@ add_subdirectory(expected EXCLUDE_FROM_ALL)
 # for some clarification about this.
 if (CMAKE_VERSION VERSION_GREATER "3.18")
 	set_target_properties(expected PROPERTIES FOLDER "3rdparty")
+endif()
+
+set(_default_enable_gns_network_backend_value ON)
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	set(_default_enable_gns_network_backend_value OFF)
+endif()
+
+option(ENABLE_GNS_NETWORK_BACKEND "Enable building Warzone 2100 with GameNetworkingSockets network backend support" ${_default_enable_gns_network_backend_value})
+if (ENABLE_GNS_NETWORK_BACKEND)
+	message(STATUS "GameNetworkingSockets backend support: ENABLED")
+	# This will be propagated to the autogenerated wz-specific config header.
+	set(WZ_GNS_NETWORK_BACKEND_ENABLED ON CACHE INTERNAL "Enables Valve GNS network backend support." FORCE)
+	# Force usage of libsodium as the crypto backend.
+	set(USE_CRYPTO libsodium CACHE INTERNAL "Crypto library to use for AES/SHA256" FORCE)
+	# Don't build the shared variant of the client library: we don't use it anyway, plus it causes build conflicts for macOS.
+	set(BUILD_SHARED_LIB OFF CACHE INTERNAL "Build the shared library version of the client library" FORCE)
+	add_subdirectory(GameNetworkingSockets EXCLUDE_FROM_ALL)
+	# Avoid absl symbol leaks with protobuf>=22.0.0 by always passing -DNDEBUG
+	if(TARGET GameNetworkingSockets_s)
+		target_compile_options(GameNetworkingSockets_s PRIVATE -DNDEBUG)
+	endif()
+	unset(BUILD_SHARED_LIB CACHE)
+else()
+	message(STATUS "GameNetworkingSockets backend support: DISABLED")
 endif()

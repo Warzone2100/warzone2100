@@ -254,7 +254,7 @@ void effectSetSize(UDWORD size)
 }
 
 void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP group,
-                    EFFECT_TYPE type, bool specified, iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
+                    EFFECT_TYPE type, bool specified, const iIMDShape *imd, unsigned int number, bool lit, unsigned int size, unsigned effectTime)
 {
 	if (number == 0)
 	{
@@ -297,14 +297,14 @@ void SetEffectForPlayer(uint8_t player)
 	EffectForPlayer = getPlayerColour(player);
 }
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit)
 {
 	return addEffect(pos, group, type, specified, imd, lit, graphicsTime);
 }
 
 static bool updateDroidDeathAnimationEffect(EFFECT *psEffect)
 {
-	iIMDShape *imd = psEffect->imd;
+	const iIMDShape *imd = psEffect->imd;
 	if (!imd)
 	{
 		return false;
@@ -346,7 +346,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	SDWORD pieFlag = pie_SHADOW;
 	SDWORD iPieData = 0;
 
-	iIMDShape *strImd = psEffect->imd;
+	const iIMDShape *strImd = psEffect->imd;
 	UDWORD timeAnimationStarted = psEffect->lastFrame;
 	while (strImd)
 	{
@@ -355,7 +355,7 @@ static void renderDroidDeathAnimationEffect(const EFFECT *psEffect, const glm::m
 	}
 }
 
-void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
+void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, const iIMDShape *imd, int lit, unsigned effectTime, Vector3i *rot /*= nullptr*/, Vector3f *velocity /*= nullptr*/)
 {
 	if (gamePaused())
 	{
@@ -1047,6 +1047,10 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 				/* Half it's velocity */
 				psEffect->velocity.y /= (float)(-2); // only y gets flipped
 
+				/* Also decrease other velocities */
+				psEffect->velocity.x *= 0.5f;
+				psEffect->velocity.z *= 0.5f;
+
 				/* Set it at ground level - may have gone through */
 				psEffect->position.y = (float)groundHeight;
 			}
@@ -1074,7 +1078,7 @@ static bool updateDestruction(EFFECT *psEffect, LightingData& lightData)
 {
 	Vector3i pos;
 	UDWORD	effectType;
-	UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
+	UDWORD	widthScatter = 1, breadthScatter = 1, heightScatter = 1;
 	SDWORD	iX, iY;
 	LIGHT	light;
 	int     percent;
@@ -1878,8 +1882,8 @@ void	effectSetupGraviton(EFFECT& effect)
 	switch (effect.type)
 	{
 	case GRAVITON_TYPE_GIBLET:
-		effect.velocity.x = GIBLET_INIT_VEL_X;
-		effect.velocity.z = GIBLET_INIT_VEL_Z;
+		effect.velocity.x += GIBLET_INIT_VEL_X;
+		effect.velocity.z += GIBLET_INIT_VEL_Z;
 		effect.velocity.y = GIBLET_INIT_VEL_Y;
 		break;
 	case GRAVITON_TYPE_EMITTING_ST:
@@ -1889,8 +1893,8 @@ void	effectSetupGraviton(EFFECT& effect)
 		effect.size = (UWORD)(120 + rand() % 30);
 		break;
 	case GRAVITON_TYPE_EMITTING_DR:
-		effect.velocity.x = GRAVITON_INIT_VEL_X / 2;
-		effect.velocity.z = GRAVITON_INIT_VEL_Z / 2;
+		effect.velocity.x += GRAVITON_INIT_VEL_X / 2;
+		effect.velocity.z += GRAVITON_INIT_VEL_Z / 2;
 		effect.velocity.y = GRAVITON_INIT_VEL_Y;
 		break;
 	default:
@@ -2133,7 +2137,7 @@ static void effectSetupDestruction(EFFECT& effect)
 
 
 #define SMOKE_SHIFT (16 - (rand()%32))
-void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
+void initPerimeterSmoke(const iIMDShape *pImd, Vector3i base)
 {
 	int i;
 	int shift = SMOKE_SHIFT;
@@ -2255,7 +2259,7 @@ static void effectStructureUpdates()
 				continue;
 			}
 
-			iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
+			const iIMDShape *pDisplayModel = psStructure->sDisplay.imd->displayModel();
 
 			/* Factories puff out smoke, power stations puff out tesla stuff */
 			switch (psStructure->pStructureType->type)
@@ -2365,9 +2369,14 @@ bool writeFXData(const char *fileName)
 		// Move on to reading the next effect
 	}
 
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString;
+	try {
+		jsonString = mRoot.dump(4);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", fileName, e.what());
+		return false;
+	}
 	debug(LOG_SAVE, "%s %s", "Saving", fileName);
 	saveFile(fileName, jsonString.c_str(), jsonString.size());
 

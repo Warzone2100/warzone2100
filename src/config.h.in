@@ -183,4 +183,7 @@
 /* Enables usage of VTune-based instrumentation backend. */
 #cmakedefine WZ_PROFILING_VTUNE
 
+/* Enables Valve GNS network backend support. */
+#cmakedefine WZ_GNS_NETWORK_BACKEND_ENABLED
+
 #endif // __INCLUDED_WZ_GENERATED_CONFIG_H__

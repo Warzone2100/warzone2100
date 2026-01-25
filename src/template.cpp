@@ -869,15 +869,6 @@ std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory)
 		// Must add droids if currently in production.
 		if (!getProduction(psFactory, psCurr).quantity)
 		{
-			//can only have (MAX_CMDDROIDS) in the world at any one time
-			if (psCurr->droidType == DROID_COMMAND)
-			{
-				if (checkProductionForCommand(player) + checkCommandExist(player) >= (MAX_CMDDROIDS))
-				{
-					continue;
-				}
-			}
-
 			if (!psCurr->enabled
 				|| (bMultiPlayer && !playerBuiltHQ && (psCurr->droidType != DROID_CONSTRUCT && psCurr->droidType != DROID_CYBORG_CONSTRUCT))
 				|| !validTemplateForFactory(psCurr, psFactory, false)

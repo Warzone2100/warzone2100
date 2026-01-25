@@ -34,10 +34,10 @@ public:
 	ClipRectWidget() : WIDGET() {}
 
 	void runRecursive(W_CONTEXT *psContext) override;
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
-	void setTopOffset(uint16_t value);
-	void setLeftOffset(uint16_t value);
+	bool setTopOffset(uint16_t value);
+	bool setLeftOffset(uint16_t value);
 	uint16_t getTopOffset();
 	bool isChildVisible(const std::shared_ptr<WIDGET>& child);
 	int parentRelativeXOffset(int coord) const override;

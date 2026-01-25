@@ -95,6 +95,14 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 	Find and kick (with adding to ip banlist) player with specified ip
 	(result of `WZEVENT: bancheck:` from outside)
 
+* `redirect identity <pkey> <connectionstring>`\
+	Kick + redirect any player(s) matching the specified identity to a different game instance hosted on the same host
+	- `<connectionstring>` takes the form: `<tcp|gns>:<port>:<specjoin>:<gamepassword>` where:
+		- `port` specifies a new port to connect to (which must be > `1024`)
+		- `specjoin` is either `0` (join as player) or `1` (join as spectator)
+		- `gamepassword` is an (optional) password to use when joining a password-protected game
+	> NOTE: Currently, you can do this once per user-initiated join to a server. (Repeated redirects will just kick the player.)
+
 * `permissions set connect:allow <pkey|hash>`\
 	Allows player with the specified identity to connect (bypassing any ip bans)
 
@@ -111,6 +119,9 @@ If state of interface buffer is unknown and/or corrupted, interface can send a f
 	
 * `chat bcast <message [^\n]>`\
 	Send system level message to the room from stdin.
+
+* `set host ready <0|1>`\
+	Sets the host ready state to either not-ready (0) or ready (1).
 
 * `shutdown now`\
 	Trigger graceful shutdown of the game regardless of state.

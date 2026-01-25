@@ -8,7 +8,7 @@ ${LangFileString} WZ_64BIT_AVAILABLE "Elérhető a Warzone 2100 64 bites verzió
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Ez a Warzone 2100 64 bites verziója.$\r$\nTöltse le a 32 bites verziót a https://wz2100.net/ oldalról.$\r$\nA telepítésből történő kilépéshez kattintson az OK gombra."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Ez a Warzone 2001 ARM64-hez készült változata, és az eszköznek nincs ARM64 processzora.$\r$\nKeresse fel a https://wz2100.net/ oldalt, és töltse le a rendszerének megfelelő verziót (például: x64).$\r$\nMégis folytatja az ARM64-es telepítést?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Ez a Warzone 2100 ARM64-hez készült változata, és az eszköznek nincs ARM64 processzora.$\r$\nKeresse fel a https://wz2100.net/ oldalt, és töltse le a rendszerének megfelelő verziót (például: x64).$\r$\nMégis folytatja az ARM64-es telepítést?"
 
 ${LangFileString} WZ_GPL_NEXT "Következő"
 
@@ -36,12 +36,12 @@ ${LangFileString} DESC_SecNLS "Az angolon kívüli nyelvek támogatása."
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "A Windows betűkészletmappájának hozzáadása a keresési útvonalhoz. Engedélyezze, ha egyéni betűkészleteket akar használni a konfigurációs fájlban vagy problémája van a szabványos betűkészlettel. Vistán és későbbi rendszereken lassú lehet!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Fontos Microsoft Runtime DLL-ek"
+${LangFileString} TEXT_SecMSSysLibraries "Fontos Microsoft Runtime DDL-ek"
 ${LangFileString} DESC_SecMSSysLibraries "A Microsoft Visual C++ terjeszthető rendszer-programkönyvtárak letöltése és telepítése (vagy frissítése), amely az egyes komponensek futtatásához szükséges lehet."
 
-${LangFileString} DLTEXT_Downloading "Letöltés"
+${LangFileString} DLTEXT_Downloading "Letöltés…"
 ${LangFileString} DLTEXT_SysLibDLFailed "A rendszer-programkönyvtár letöltése sikertelen"
 ${LangFileString} DLTEXT_VideosDLFailed "A videók letöltése sikertelen"
 
 ${LangFileString} TEXT_PromptRebootNeeded "Újraindítás szükséges a telepítés befejezéséhez. Újraindítja most a rendszert?"
-${LangFileString} TEXT_MsgRebootFailed "Újraindítás sikertelen. Indítsa újra kézzel."
+${LangFileString} TEXT_MsgRebootFailed "Újraindítás sikertelen. Indítsa újra kézileg."

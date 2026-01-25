@@ -108,22 +108,6 @@ private:
 	std::shared_ptr<WzTitleUI> next;
 };
 
-// - gamefind.cpp -
-class WzGameFindTitleUI: public WzTitleUI
-{
-public:
-	WzGameFindTitleUI();
-	~WzGameFindTitleUI();
-	virtual void start() override;
-	virtual TITLECODE run() override;
-private:
-	void addGames();
-	void addConsoleBox();
-	bool safeSearch = false; // allow auto game finding.
-	bool toggleFilter = true; // Used to show all games or only games that are of the same version
-	bool queuedRefreshOfGamesList = false;
-};
-
 #define WZ_MSGBOX_TUI_LEAVE 4597000
 
 void mpSetServerName(const std::string& hostname);

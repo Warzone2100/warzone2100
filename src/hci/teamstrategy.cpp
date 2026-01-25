@@ -165,13 +165,15 @@ void sendStrategyPlanUpdate(uint32_t forPlayer)
 		// Only send to active (connected) human players - *NOT* AIs (which would effectively just have to send this to the host)
 		if (isHumanPlayer(player))
 		{
-			if (NETbeginEncodeSecured(NETnetQueue(player), NET_TEAM_STRATEGY))
+			auto w = NETbeginEncodeSecured(NETnetQueue(player), NET_TEAM_STRATEGY);
+			if (w)
 			{
+				auto& wref = *w;
 				uint32_t sender = forPlayer;
-				NETuint32_t(&sender);
-				NETbytes(&weaponStates);
-				NETbytes(&unitStates);
-				NETend();
+				NETuint32_t(wref, sender);
+				NETbytes(wref, weaponStates);
+				NETbytes(wref, unitStates);
+				NETend(wref);
 			}
 		}
 	}
@@ -183,14 +185,16 @@ bool recvStrategyPlanUpdate(NETQUEUE queue)
 	std::vector<uint8_t> weaponStates;
 	std::vector<uint8_t> unitStates;
 
-	if (!NETbeginDecodeSecured(queue, NET_TEAM_STRATEGY))
+	auto r = NETbeginDecodeSecured(queue, NET_TEAM_STRATEGY);
+	if (!r)
 	{
 		return false;
 	}
-	NETuint32_t(&sender);
-	NETbytes(&weaponStates);
-	NETbytes(&unitStates);
-	NETend();
+	auto& rref = *r;
+	NETuint32_t(rref, sender);
+	NETbytes(rref, weaponStates);
+	NETbytes(rref, unitStates);
+	NETend(rref);
 
 	if (whosResponsible(sender) != queue.index)
 	{
@@ -804,7 +808,7 @@ void TeamStrategyView::display(int xOffset, int yOffset)
 {
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
-	if (backgroundColor.rgba != 0)
+	if (!backgroundColor.isTransparent())
 	{
 		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
 	}
@@ -834,6 +838,40 @@ void TeamStrategyView::updateNoTeamLabelContents()
 	noTeammatesLabel->setGeometry(0, 0, noTeammatesLabel->getMaxLineWidth(), noTeammatesLabel->requiredHeight());
 }
 
+class PlayerNameLabel : public W_LABEL
+{
+protected:
+	PlayerNameLabel()
+	: W_LABEL()
+	{ }
+
+	void initialize(uint32_t playerIdx_)
+	{
+		playerIdx = playerIdx_;
+		setFont((playerIdx == selectedPlayer) ? font_regular_bold : font_regular);
+		setString(getPlayerName(playerIdx));
+		setGeometry(0, 0, getMaxLineWidth(), requiredHeight());
+		setTransparentToMouse(true);
+		setCanTruncate(true);
+	}
+public:
+	static std::shared_ptr<PlayerNameLabel> make(uint32_t playerIdx)
+	{
+		class make_shared_enabler: public PlayerNameLabel {};
+		auto result = std::make_shared<make_shared_enabler>();
+		result->initialize(playerIdx);
+		return result;
+	}
+
+	virtual void run(W_CONTEXT *) override
+	{
+		// Update the player name (ex. once revealed in a blind_lobby game)
+		setString(getPlayerName(playerIdx));
+	}
+private:
+	uint32_t playerIdx = 0;
+};
+
 std::shared_ptr<TableRow> TeamStrategyView::newPlayerStrategyRow(uint32_t playerIdx, const std::vector<WEAPON_SUBCLASS>& displayedWeaponSubclasses, const std::unordered_set<WzStrategyPlanningUnitTypes>& disabledUnitTypes)
 {
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
@@ -843,11 +881,7 @@ std::shared_ptr<TableRow> TeamStrategyView::newPlayerStrategyRow(uint32_t player
 	int verticalRowPadding = (playerIdx == selectedPlayer) ? 10 : 3;
 
 	// Player Name widget
-	auto playerNameLabel = std::make_shared<W_LABEL>();
-	playerNameLabel->setFont((playerIdx == selectedPlayer) ? font_regular_bold : font_regular);
-	playerNameLabel->setString(getPlayerName(playerIdx));
-	playerNameLabel->setGeometry(0, 0, playerNameLabel->getMaxLineWidth(), playerNameLabel->requiredHeight());
-	playerNameLabel->setTransparentToMouse(true);
+	auto playerNameLabel = PlayerNameLabel::make(playerIdx);
 	auto wrappedPlayerNameWidget = Margin(verticalRowPadding, 0).wrap(playerNameLabel);
 	columnWidgets.push_back(wrappedPlayerNameWidget);
 

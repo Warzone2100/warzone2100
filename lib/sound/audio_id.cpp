@@ -439,6 +439,7 @@ static AUDIO_ID_MAP asAudioID[] =
 	{ID_SOUND_BARB_SCREAM2,							"scream2.ogg"},
 	{ID_SOUND_BARB_SCREAM3,							"scream3.ogg"},
 	{ID_SOUND_OF_SILENCE,                          "silence.ogg"},
+	{ID_SOUND_SHIELD_HIT,                          "shield-hit.ogg"},
 
 	/* Extra */
 	{ID_SOUND_LANDING_ZONE,                        "lndgzne.ogg"},
@@ -491,6 +492,7 @@ static AUDIO_ID_MAP asAudioID[] =
 	{ID_SOUND_EMP,                                 "emp.ogg"},
 	{ID_SOUND_LASER_HEAVY,                         "hevlsr.ogg"},
 	{ID_SOUND_PLASMA_FLAMER,                       "plasflm.ogg"},
+	{ID_SOUND_PARTICLE_GUN,                        "partgun.ogg"},
 	{ID_SOUND_UPLINK,                              "uplink.ogg"},
 	{ID_SOUND_LAS_SAT_COUNTDOWN,                   "lasstrk.ogg"},
 	{ID_SOUND_BEACON,								"beacon.ogg"},

@@ -52,43 +52,44 @@ using nonstd::nullopt;
 #endif
 // Language names (http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes)
 #define LANG_NAME_ARABIC "العربية"
-#define LANG_NAME_BASQUE "euskara"
+#define LANG_NAME_BASQUE "Euskara"
 #define LANG_NAME_BULGARIAN "български език"
-#define LANG_NAME_CATALAN "català"
+#define LANG_NAME_CATALAN "Català"
 #define LANG_NAME_CHINESE_SIMPLIFIED "汉语"
 #define LANG_NAME_CHINESE_TRADITIONAL "漢語"
 #define LANG_NAME_CROATIAN "Hrvatski"
-#define LANG_NAME_CZECH "česky"
+#define LANG_NAME_CZECH "Česky"
 #define LANG_NAME_DANISH "Dansk"
 #define LANG_NAME_DUTCH "Nederlands"
 #define LANG_NAME_ENGLISH "English"
 #define LANG_NAME_ENGLISH_UK "British English"
 #define LANG_NAME_ESTONIAN "Eesti Keel"
-#define LANG_NAME_FINNISH "suomi"
+#define LANG_NAME_FINNISH "Suomi"
 #define LANG_NAME_FRENCH "Français"
-#define LANG_NAME_FRISIAN_NETHERLANDS "frysk"
+#define LANG_NAME_FRISIAN_NETHERLANDS "Frysk"
 #define LANG_NAME_GERMAN "Deutsch"
 #define LANG_NAME_GREEK "Ελληνικά"
-#define LANG_NAME_HUNGARIAN "magyar"
+#define LANG_NAME_HUNGARIAN "Magyar"
 #define LANG_NAME_INDONESIAN "Bahasa Indonesia"
 #define LANG_NAME_IRISH "Imruagadh"
 #define LANG_NAME_ITALIAN "Italiano"
 #define LANG_NAME_KOREAN "한국어"
-#define LANG_NAME_LATIN "latine"
-#define LANG_NAME_LATVIAN "latviešu valoda"
-#define LANG_NAME_LITHUANIAN "lietuvių kalba"
+#define LANG_NAME_LATIN "Latine"
+#define LANG_NAME_LATVIAN "Latviešu valoda"
+#define LANG_NAME_LITHUANIAN "Lietuvių kalba"
 #define LANG_NAME_NORWEGIAN "Norsk"
-#define LANG_NAME_NORWEGIAN_NYNORSK "nynorsk"
+#define LANG_NAME_NORWEGIAN_NYNORSK "Nynorsk"
 #define LANG_NAME_POLISH "Polski"
 #define LANG_NAME_PORTUGUESE_BRAZILIAN "Português Brasileiro"
 #define LANG_NAME_PORTUGUESE "Português"
-#define LANG_NAME_ROMANIAN "română"
+#define LANG_NAME_ROMANIAN "Română"
 #define LANG_NAME_RUSSIAN "Русский"
+#define LANG_NAME_SERBIAN "Srpski"
 #define LANG_NAME_SLOVAK "Slovensky"
 #define LANG_NAME_SLOVENIAN "Slovenski"
 #define LANG_NAME_SPANISH "Español"
-#define LANG_NAME_SWEDISH "svenska"
-#define LANG_NAME_SWEDISH_SWEDEN "svenska (Sverige)"
+#define LANG_NAME_SWEDISH "Svenska"
+#define LANG_NAME_SWEDISH_SWEDEN "Svenska (Sverige)"
 #define LANG_NAME_TURKISH "Türkçe"
 #define LANG_NAME_UKRAINIAN "Українська"
 #define LANG_NAME_UZBEK_CYRILLIC "Ўзбек"
@@ -152,6 +153,7 @@ static const struct
 	{ "ru", LANG_NAME_RUSSIAN, "ru", LANG_RUSSIAN, SUBLANG_DEFAULT },
 	{ "sk", LANG_NAME_SLOVAK, "sk", LANG_SLOVAK, SUBLANG_DEFAULT },
 	{ "sl_SI", LANG_NAME_SLOVENIAN, "sl", LANG_SLOVENIAN, SUBLANG_DEFAULT },
+	{ "sr_RS", LANG_NAME_SERBIAN, "sr_CS", LANG_SERBIAN, SUBLANG_SERBIAN_LATIN }, // Due to how gettext-libintl maps Win32 LangIDs to locales, use sr_CS for Windows
 #if (WINVER >= 0x0600)
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, LANG_SWEDISH, SUBLANG_SWEDISH_SWEDEN },
 #else
@@ -215,6 +217,7 @@ static const struct
 	{ "ru", LANG_NAME_RUSSIAN, "ru", "ru_RU.UTF-8", "ru_RU" },
 	{ "sk", LANG_NAME_SLOVAK, "sk", "sk_SK.UTF-8", "sk_SK" },
 	{ "sl_SI", LANG_NAME_SLOVENIAN, "sl", "sl_SI.UTF-8", "sl" },
+	{ "sr_RS", LANG_NAME_SERBIAN, "sr_RS", "sr_RS.UTF-8@latin", "sr_RS" }, // Use the newer "sr_RS" identifier (with optional @latin)
 //	{ "sv_SE", LANG_NAME_SWEDISH_SWEDEN, "sv_SE.UTF-8", "sv" },
 //	{ "sv", LANG_NAME_SWEDISH, "sv.UTF-8", "sv" },
 	{ "tr", LANG_NAME_TURKISH, "tr", "tr_TR.UTF-8", "tr_TR" },

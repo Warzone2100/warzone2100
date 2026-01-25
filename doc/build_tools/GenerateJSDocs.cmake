@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # A cross-platform script to support JS doc generation
 #
@@ -175,6 +175,11 @@ PROCESS_LINES("data/base/script/campaign/libcampaign_includes/events.js"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
 
 PROCESS_LINES("data/base/script/campaign/libcampaign_includes/group.js"
+				MATCHING_LINE_REGEX ".*//[;][;]"
+				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
+				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)
+
+PROCESS_LINES("data/base/script/campaign/libcampaign_includes/guide.js"
 				MATCHING_LINE_REGEX ".*//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-campaign.md" APPEND)

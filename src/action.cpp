@@ -85,6 +85,9 @@ struct DROID_ACTION_DATA
 /** Radius for search when looking for VTOL landing position */
 static const int vtolLandingRadius = 23;
 
+// Sanity checks
+static_assert(MAX_SULK_TIME > MIN_SULK_TIME, "MAX_SULK_TIME must be > MIN_SULK_TIME");
+
 /**
  * @typedef tileMatchFunction
  *
@@ -586,7 +589,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		}
 
 		Vector2i delta = map_coord(droid->pos.xy()) - b.map;
-		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || droid->isFlying())
+		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || droid->isFlying() || droid->isFlightBasedTransporter())
 		{
 			continue;  // Droid not under new structure (just near it).
 		}
@@ -638,6 +641,10 @@ void actionSanity(DROID *psDroid)
 		bDirect = proj_Direct(psDroid->getWeaponStats(i));
 		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
 		{
+			if (psDroid->action == DACTION_DROIDREPAIR)
+			{
+				droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
+			}
 			syncDebugObject(psDroid->psActionTarget[i], '-');
 			setDroidActionTarget(psDroid, nullptr, i);
 			if (i == 0)
@@ -1770,7 +1777,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			const STRUCTURE* structureAtPos = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 
-			if (structureAtPos == nullptr)
+			if (structureAtPos == nullptr || psDroid->psActionTarget[0] == nullptr)
 			{
 				//No structure located at desired position. Move on.
 				psDroid->action = DACTION_NONE;
@@ -2082,6 +2089,7 @@ void actionUpdateDroid(DROID *psDroid)
 				actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 				droidStartAction(psDroid);
 				psDroid->action = DACTION_DROIDREPAIR;
+				droidRepairStarted((DROID *)psDroid->psActionTarget[0], psDroid);
 			}
 			if (DROID_STOPPED(psDroid))
 			{
@@ -2123,6 +2131,7 @@ void actionUpdateDroid(DROID *psDroid)
 							&& IS_TIME_TO_CHECK_FOR_NEW_TARGET(psDroid)
 						    && aiBestNearestTarget(psDroid, &psTemp, i) >= 0 && psTemp)
 						{
+							droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 							psDroid->action = DACTION_ATTACK;
 							setDroidActionTarget(psDroid, psTemp, 0);
 							break;
@@ -2140,6 +2149,7 @@ void actionUpdateDroid(DROID *psDroid)
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
 			if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE * REPAIR_RANGE)
 			{
+				droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 				if (order->type == DORDER_DROIDREPAIR)
 				{
 					// damaged droid has moved off - follow if we're not holding position!
@@ -2156,6 +2166,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				if (!droidUpdateDroidRepair(psDroid))
 				{
+					droidRepairStopped(castDroid(psDroid->psActionTarget[0]), psDroid);
 					psDroid->action = DACTION_NONE;
 					moveStopDroid(psDroid);
 					//if the order is RTR then resubmit order so that the unit will go to repair facility point
@@ -2296,6 +2307,9 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	syncDebugDroid(psDroid, '-');
 	syncDebug("%d does %s", psDroid->id, getDroidActionName(psAction->action));
 	objTrace(psDroid->id, "base set action to %s (was %s)", getDroidActionName(psAction->action), getDroidActionName(psDroid->action));
+
+	DROID_ACTION priorDroidAction = psDroid->action;
+	BASE_OBJECT* priorActionTarget0 = psDroid->psActionTarget[0];
 
 	DROID_ORDER_DATA *order = &psDroid->order;
 	bool hasValidWeapon = false;
@@ -2495,7 +2509,15 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
-		moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+		// Move a droid in a tile if it has never been moved before
+		if (psDroid->actionPos == psDroid->pos.xy())
+		{
+			actionRemoveDroidsFromBuildPos(psDroid->player, psDroid->actionPos, order->direction, order->psStats);
+		}
+		else
+		{
+			moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
+		}
 		break;
 	case DACTION_DEMOLISH:
 		ASSERT_OR_RETURN(, order->type == DORDER_DEMOLISH, "cannot start demolish action without a demolish order");
@@ -2603,6 +2625,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				psDroid->action = DACTION_MOVETODROIDREPAIR;
 				moveDroidTo(psDroid, psAction->x, psAction->y);
 			}
+			if (psDroid->action == DACTION_DROIDREPAIR && priorDroidAction != DACTION_DROIDREPAIR)
+			{
+				droidRepairStarted(castDroid(psDroid->psActionTarget[0]), psDroid);
+			}
 			break;
 		}
 	case DACTION_RESTORE:
@@ -2622,6 +2648,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 	default:
 		ASSERT(!"unknown action", "actionUnitBase: unknown action");
 		break;
+	}
+	if (priorDroidAction == DACTION_DROIDREPAIR && psDroid->action != DACTION_DROIDREPAIR)
+	{
+		droidRepairStopped(castDroid(priorActionTarget0), psDroid);
 	}
 	syncDebugDroid(psDroid, '+');
 	CHECK_DROID(psDroid);

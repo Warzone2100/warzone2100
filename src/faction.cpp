@@ -145,7 +145,7 @@ optional<WzString> getFactionModelName(const FactionID faction, const WzString& 
 	return getFactionModelName(getFactionByID(faction), normalFactionName);
 }
 
-iIMDShape* getFactionDisplayIMD(const FACTION *faction, iIMDShape* imd)
+const iIMDShape* getFactionDisplayIMD(const FACTION *faction, const iIMDShape* imd)
 {
 	auto factionModelName = getFactionModelName(faction, modelName(imd));
 	if (!factionModelName.has_value())

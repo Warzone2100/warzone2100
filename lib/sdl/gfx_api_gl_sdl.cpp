@@ -19,9 +19,9 @@
 
 #include "lib/framework/frame.h"
 #include "gfx_api_gl_sdl.h"
-#include <SDL_opengl.h>
-#include <SDL_timer.h>
-#include <SDL_hints.h>
+#include <SDL3/SDL_opengl.h>
+#include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_hints.h>
 #include <thread>
 #include <chrono>
 
@@ -36,10 +36,19 @@ sdl_OpenGL_Impl::sdl_OpenGL_Impl(SDL_Window* _window, bool _useOpenGLES, bool _u
 	useOpenGLESLibrary = _useOpenGLESLibrary;
 }
 
+#if defined( _MSC_VER )
+#pragma warning( push )
+#pragma warning( disable : 4191 ) // warning C4191: 'reinterpret_cast': unsafe conversion from 'SDL_FunctionPointer (__cdecl *)(const char *)' to 'GLADloadproc'
+#endif
+
 GLADloadproc sdl_OpenGL_Impl::getGLGetProcAddress()
 {
-	return SDL_GL_GetProcAddress;
+	return reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress);
 }
+
+#if defined( _MSC_VER )
+#pragma warning( pop )
+#endif
 
 void sdl_OpenGL_Impl::setOpenGLESDriver(bool useOpenGLESLibrary)
 {
@@ -185,13 +194,13 @@ bool sdl_OpenGL_Impl::createGLContext()
 	debug(LOG_INFO, "Requested %s context", to_string(contextRequest).c_str());
 
 	int value = 0;
-	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == 0)
+	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value))
 	{
 		if (value == 0)
 		{
-			debug(LOG_FATAL, "OpenGL initialization did not give double buffering! (%d)", value);
-			debug(LOG_FATAL, "Double buffering is required for this game!");
-			SDL_GL_DeleteContext(WZglcontext);
+			debug(LOG_ERROR, "OpenGL initialization did not give double buffering! (%d)", value);
+			debug(LOG_ERROR, "Double buffering is required for this game!");
+			SDL_GL_DestroyContext(WZglcontext);
 			return false;
 		}
 	}
@@ -199,7 +208,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 	{
 		// SDL_GL_GetAttribute failed for SDL_GL_DOUBLEBUFFER
 		// For desktop OpenGL, treat this as a fatal error
-		code_part log_type = LOG_FATAL;
+		code_part log_type = LOG_ERROR;
 		if (isOpenGLES())
 		{
 			// For OpenGL ES (EGL?), log this + let execution continue
@@ -210,9 +219,9 @@ bool sdl_OpenGL_Impl::createGLContext()
 		}
 		debug(log_type, "SDL_GL_GetAttribute failed to get value for SDL_GL_DOUBLEBUFFER (%s)", SDL_GetError());
 		debug(log_type, "Double buffering is required for this game - if it isn't actually enabled, things will fail!");
-		if (log_type == LOG_FATAL)
+		if (log_type == LOG_ERROR)
 		{
-			SDL_GL_DeleteContext(WZglcontext);
+			SDL_GL_DestroyContext(WZglcontext);
 			return false;
 		}
 	}
@@ -224,13 +233,13 @@ bool sdl_OpenGL_Impl::createGLContext()
 	SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &a);
 	debug(LOG_3D, "Current values for: SDL_GL_RED_SIZE (%d), SDL_GL_GREEN_SIZE (%d), SDL_GL_BLUE_SIZE (%d), SDL_GL_ALPHA_SIZE (%d)", r, g, b, a);
 
-	if (SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &value) != 0)
+	if (!SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &value))
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_DEPTH_SIZE (%s)", SDL_GetError());
 	}
 	debug(LOG_3D, "Current value for SDL_GL_DEPTH_SIZE: (%d)", value);
 
-	if (SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &value) != 0)
+	if (!SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &value))
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_STENCIL_SIZE (%s)", SDL_GetError());
 	}
@@ -250,7 +259,7 @@ bool sdl_OpenGL_Impl::destroyGLContext()
 	{
 		return false;
 	}
-	SDL_GL_DeleteContext(WZglcontext);
+	SDL_GL_DestroyContext(WZglcontext);
 	return true;
 }
 
@@ -258,7 +267,7 @@ void sdl_OpenGL_Impl::swapWindow()
 {
 #if defined(WZ_OS_MAC)
 	// Workaround for OpenGL on macOS (see below)
-	const uint32_t swapStartTime = SDL_GetTicks();
+	const uint64_t swapStartTime = SDL_GetTicks();
 #endif
 
 	SDL_GL_SwapWindow(window);
@@ -268,13 +277,13 @@ void sdl_OpenGL_Impl::swapWindow()
 	// - If the OpenGL window is minimized (or occluded), SwapWindow may not wait for the vertical blanking interval
 	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
 	static uint32_t numFramesNoVsync = 0;
-	static uint32_t lastSwapEndTime = 0;
+	static uint64_t lastSwapEndTime = 0;
 	const bool isMinimized = static_cast<bool>(SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED);
-	const uint32_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
-	const uint32_t minSwapEndTick = swapStartTime + 2;
-	uint32_t swapEndTime = SDL_GetTicks();
+	const uint64_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
+	const uint64_t minSwapEndTick = swapStartTime + 2;
+	uint64_t swapEndTime = SDL_GetTicks();
 	const uint32_t frameTime = swapEndTime - lastSwapEndTime;
-	if ((vsyncIsEnabled || isMinimized) && !SDL_TICKS_PASSED(swapEndTime, minSwapEndTick) && (frameTime < minFrameInterval))
+	if ((vsyncIsEnabled || isMinimized) && swapEndTime < minSwapEndTick && (frameTime < minFrameInterval))
 	{
 		const uint32_t leewayFramesBeforeThrottling = (isMinimized) ? 2 : 4;
 		if (leewayFramesBeforeThrottling < numFramesNoVsync)
@@ -297,7 +306,7 @@ void sdl_OpenGL_Impl::swapWindow()
 
 void sdl_OpenGL_Impl::getDrawableSize(int* w, int* h)
 {
-	SDL_GL_GetDrawableSize(window, w, h);
+	SDL_GetWindowSizeInPixels(window, w, h);
 }
 
 bool to_sdl_swap_interval(gfx_api::context::swap_interval_mode mode, int &output_value)
@@ -342,7 +351,7 @@ bool sdl_OpenGL_Impl::setSwapInterval(gfx_api::context::swap_interval_mode mode)
 		debug(LOG_3D, "Unsupported swap_interval_mode for SDL OpenGL backend: %d", to_int(mode));
 		return false;
 	}
-	if (SDL_GL_SetSwapInterval(interval) != 0)
+	if (!SDL_GL_SetSwapInterval(interval))
 	{
 		debug(LOG_WARNING, "SDL_GL_SetSwapInterval(%d) failed with error (%s)", interval, SDL_GetError());
 		return false;
@@ -353,7 +362,8 @@ bool sdl_OpenGL_Impl::setSwapInterval(gfx_api::context::swap_interval_mode mode)
 
 gfx_api::context::swap_interval_mode sdl_OpenGL_Impl::getSwapInterval() const
 {
-	int interval = SDL_GL_GetSwapInterval();
+	int interval = 0;
+	SDL_GL_GetSwapInterval(&interval);
 	return from_sdl_swap_interval(interval);
 }
 

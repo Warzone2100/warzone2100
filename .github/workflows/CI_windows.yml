@@ -24,6 +24,10 @@ on:
     types:
       - completed
 
+env:
+  # Controls whether release builds are signed
+  WZ_CI_SIGN_RELEASE_BUILDS: true
+
 jobs:
   windows-build:
     strategy:
@@ -33,12 +37,12 @@ jobs:
             architecture: "x86"
             artifact_description: "msvc_x86"
             deploy_release: false
-            support_sentry : true
+            support_sentry: true
           - compiler: "MSVC_2022"
             architecture: "x64"
             artifact_description: "msvc_x64"
             deploy_release: false
-            support_sentry : true
+            support_sentry: true
           # - compiler: "MSVC_2022"
           #   architecture: "arm64"
           #   artifact_description: "msvc_arm64"
@@ -46,17 +50,17 @@ jobs:
           - compiler: "LLVM_MINGW"
             architecture: "x86"
             deploy_release: true
-            support_sentry : true
+            support_sentry: true
             sentry_backend: breakpad
           - compiler: "LLVM_MINGW"
             architecture: "x64"
             deploy_release: true
-            support_sentry : true
+            support_sentry: true
             sentry_backend: crashpad
           - compiler: "LLVM_MINGW"
             architecture: "arm64"
             deploy_release: true
-            support_sentry : true
+            support_sentry: true
             sentry_backend: crashpad
       fail-fast: false
     env:
@@ -74,8 +78,11 @@ jobs:
       attestations: write
     runs-on: windows-2022
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      # Needed by the release job - despite this being a matrix job, this should be the same for all, so we can allow whatever is last to persist it
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
         path: 'src'
@@ -116,21 +123,25 @@ jobs:
         $AsciidoctorBatPath = Split-Path -Path "${AsciidoctorBat}"
         echo "Asciidoctor.bat path: ${AsciidoctorBatPath}"
         echo "ASCIIDOCTOR_PATH=${AsciidoctorBatPath}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-    - name: Install NSIS
-      run: choco install nsis -y
     - name: Generate Settings for Run [${{ matrix.compiler }}:${{ matrix.architecture }}]
       id: settings
       env:
         BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
+        WZ_DEPLOY_TO_RELEASE: ${{ matrix.deploy_release }}
       run: |
         # Basic variable setup
         # --------------------
 
         $WZ_VC_TARGET_PLATFORMNAME = "$env:WZ_TARGET_ARCH"
-        $WZ_BUILD_DESC = "win_${env:WZ_TARGET_ARCH}"
+        $WZ_BUILD_DESC_PREFIX = "win"
+        if ("${env:WZ_DEPLOY_TO_RELEASE}" -ne "true") {
+          # Builds that aren't to be deployed to a release should have a different WZ_BUILD_DESC prefix (not "win_") for easier wildcard selection later
+          $WZ_BUILD_DESC_PREFIX = "ci_only"
+        }
+        $WZ_BUILD_DESC = "${WZ_BUILD_DESC_PREFIX}_${env:WZ_TARGET_ARCH}"
         if (-not ([string]::IsNullOrEmpty("${{ matrix.artifact_description }}")))
         {
-          $WZ_BUILD_DESC = "win_${{ matrix.artifact_description }}"
+          $WZ_BUILD_DESC = "${WZ_BUILD_DESC_PREFIX}_${{ matrix.artifact_description }}"
         }
 
         if ($env:WZ_COMPILER_VER -eq "LLVM_MINGW") {
@@ -202,28 +213,6 @@ jobs:
           if ($LastExitCode -ne 0)
           {
             echo "::warning ::Could not find MSVC 2022"
-            $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
-          }
-        }
-        elseif ($env:WZ_COMPILER_VER -eq "MSVC_2019") {
-          $WZ_VC_GENERATOR = "Visual Studio 16 2019"
-          #$env:WZ_VC_TOOLCHAIN = "v142"
-          # Get the installation path for a specific version of MSVC (2019)
-          $WZ_VISUAL_STUDIO_INSTALL_PATH = & "vswhere.exe" -latest -property installationPath -version "[16.0,17.0)"
-          if ($LastExitCode -ne 0)
-          {
-            echo "::warning ::Could not find MSVC 2019"
-            $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
-          }
-        }
-        elseif ($env:WZ_COMPILER_VER -eq "MSVC_2017") {
-          $WZ_VC_GENERATOR = "Visual Studio 15 2017"
-          #$env:WZ_VC_TOOLCHAIN = "v141"
-          # Get the installation path for a specific version of MSVC (2017)
-          $WZ_VISUAL_STUDIO_INSTALL_PATH = & "vswhere.exe" -latest -property installationPath -version "[15.0,16.0)"
-          if ($LastExitCode -ne 0)
-          {
-            echo "::warning ::Could not find MSVC 2017"
             $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
           }
         }
@@ -313,8 +302,8 @@ jobs:
 
         Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
 
-        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe?Human=true"
-        $VULKAN_DL_SHA256 = "acb4ae0786fd3e558f8b3c36cc3eba91638984217ba8a6795ec64d2f9ffd8c4b"
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.4.328.1/windows/vulkansdk-windows-X64-1.4.328.1.exe?Human=true"
+        $VULKAN_DL_SHA256 = "a8675df6d538079c2a719a9373994948091db785b48f142e024254e76348d16c"
 
         $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
         $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
@@ -358,8 +347,8 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\installer"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
-        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
-        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\sentry_source_bundles"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\logs\error_logs"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\sentry_output\sentry_source_bundles"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\sentry_artifacts"
     - name: 'Download & Install Ninja-Build'
       id: ninja-dl
@@ -378,14 +367,7 @@ jobs:
         $NINJA_DL_PATH = "${NINJA_DL_BASEDIR}\ninja-win.zip"
         if (!(Test-Path -Path "$NINJA_DL_BASEDIR")) { New-Item -ItemType Directory -Force -Path "$NINJA_DL_BASEDIR" }
 
-        $req = Req -Params @{ 'Method'='GET';'Uri'="$NINJA_DL_URL";'OutFile'="${NINJA_DL_PATH}" } -Retries 3 -SecondsDelay 10
-
-        $ninja_zip_hash = Get-FileHash -LiteralPath "${NINJA_DL_PATH}" -Algorithm SHA512
-        if ($ninja_zip_hash.Hash -eq $NINJA_DL_SHA512) {
-          Write-Host "Successfully downloaded Ninja-Build .zip"
-        } Else {
-          Write-Error "The downloaded Ninja-build zip hash '$($ninja_zip_hash.Hash)' does not match the expected hash: '$NINJA_DL_SHA512'"
-        }
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$NINJA_DL_URL";'OutFile'="${NINJA_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${NINJA_DL_SHA512}" -Algorithm SHA512
 
         Write-Host "Extracting Ninja-Build..."
         $NINJA_INSTALL_PATH = "${{ github.workspace }}\buildtools\ninja"
@@ -403,23 +385,16 @@ jobs:
         $VerbosePreference = "Continue"
         . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
 
-        $LLVM_MINGW_RELEASE = "20240619";
+        $LLVM_MINGW_RELEASE = "20250709";
         $LLVM_MINGW_PKG = "llvm-mingw-${LLVM_MINGW_RELEASE}-ucrt-x86_64"
         $LLVM_MINGW_DL_URL = "https://github.com/mstorsjo/llvm-mingw/releases/download/${LLVM_MINGW_RELEASE}/${LLVM_MINGW_PKG}.zip"
-        $LLVM_MINGW_DL_SHA512 = "d98928107d61e19d27990eb75863f7c34f3d9c23200b5ead7e1ccfd4c6f028a0093d79c06905494329a704b00fab0f10eb7db5d370a342b08154a11988084371"
+        $LLVM_MINGW_DL_SHA512 = "e080a8928d7ae6263a54d506949421ca03e269a1829f7fdaae53accb9b060a404ec1e6c32eb8b08e051769edd943437635e0dd8beb16ed06b9b04e9423609714"
 
         $LLVM_MINGW_DL_BASEDIR = "${{ github.workspace }}\dl"
         $LLVM_MINGW_DL_PATH = "${LLVM_MINGW_DL_BASEDIR}\llvm-mingw.zip"
         if (!(Test-Path -Path "$LLVM_MINGW_DL_BASEDIR")) { New-Item -ItemType Directory -Force -Path "$LLVM_MINGW_DL_BASEDIR" }
 
-        $req = Req -Params @{ 'Method'='GET';'Uri'="$LLVM_MINGW_DL_URL";'OutFile'="${LLVM_MINGW_DL_PATH}" } -Retries 3 -SecondsDelay 10
-
-        $dl_zip_hash = Get-FileHash -LiteralPath "${LLVM_MINGW_DL_PATH}" -Algorithm SHA512
-        if ($dl_zip_hash.Hash -eq $LLVM_MINGW_DL_SHA512) {
-          Write-Host "Successfully downloaded LLVM-mingw .zip"
-        } Else {
-          Write-Error "The downloaded LLVM-mingw zip hash '$($dl_zip_hash.Hash)' does not match the expected hash: '$LLVM_MINGW_DL_SHA512'"
-        }
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$LLVM_MINGW_DL_URL";'OutFile'="${LLVM_MINGW_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${LLVM_MINGW_DL_SHA512}" -Algorithm SHA512
 
         Write-Host "Extracting LLVM-mingw..."
         $LLVM_MINGW_INSTALL_PATH = "${{ github.workspace }}\buildtools\llvm-mingw"
@@ -466,7 +441,7 @@ jobs:
     - name: Cache vcpkg dependencies
       id: vcpkg-cache
       if: success() && !(github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ steps.settings.outputs.VCPKG_BINARYCACHE_DIR }}
         key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-${{ hashFiles('**/vcpkg.json') }}-${{ hashFiles('**/.ci/vcpkg/**') }}
@@ -507,7 +482,6 @@ jobs:
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
       env:
-        CXXFLAGS: '/MP'
         BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
         WZ_ENABLE_SENTRY: ${{ steps.settings.outputs.WZ_ENABLE_SENTRY }}
         SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
@@ -515,12 +489,12 @@ jobs:
         WZ_FULL_MSGMERGE_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGMERGE_PATH }}
         WZ_FULL_MSGFMT_PATH: ${{ steps.settings.outputs.WZ_FULL_MSGFMT_PATH }}
       run: |
-        $ADDITIONAL_CMAKE_PARAMS = ""
+        $ADDITIONAL_CMAKE_PARAMS = "-DWZ_MSVC_MULTITHREADED_COMPILATION:BOOL=ON -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON"
         $WZ_BUILD_SENTRY_VALUE = "OFF"
         if ("${env:BUILD_SENTRY_SUPPORT}" -eq "true") {
           $WZ_BUILD_SENTRY_VALUE = "ON"
           if (("${env:WZ_ENABLE_SENTRY}" -eq "true") -and (-not ([string]::IsNullOrEmpty("${env:SENTRY_IO_DSN}")))) {
-            $ADDITIONAL_CMAKE_PARAMS = "-DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
+            $ADDITIONAL_CMAKE_PARAMS = "$ADDITIONAL_CMAKE_PARAMS -DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
           }
         }
         $env:PATH = "${env:PATH};${env:WZ_FULL_MSGMERGE_PATH}";
@@ -560,13 +534,13 @@ jobs:
         }
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         $env:PATH = "${env:WZ_MINGW_ENV_PATH}";
-        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       if: failure()
       with:
-        name: win_${{ matrix.architecture }}_vcpkg_logs
+        name: failure_${{ steps.settings.outputs.WZ_BUILD_DESC }}_${{ matrix.architecture }}_vcpkg_logs
         path: |
           ${{ github.workspace }}\build\vcpkg\buildtrees\*\*.log
           ${{ github.workspace }}\build\vcpkg\buildtrees\*\*.txt
@@ -575,8 +549,6 @@ jobs:
     - name: CMake Build (MSVC)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
-      env:
-        CXXFLAGS: '/MP'
       run: |
         # Workaround: https://github.com/actions/runner-images/issues/10004
         $env:CXXFLAGS = "${env:CXXFLAGS} /D_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR"
@@ -591,49 +563,8 @@ jobs:
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\clang.json"
         & cmake --build . --config Release --target warzone2100 -- -k0
         echo "::remove-matcher owner=clang::"
-    - name: Package Portable Installer
-      working-directory: '${{ github.workspace }}\build'
-      env:
-        FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
-      run: |
-        . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
-        Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
-        # Run CPack
-        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_portable" -D CPACK_WZ_PORTABLE=ON -G NSIS -C "Release"
-        # Rename the portable installer
-        Move-Item -LiteralPath ".\warzone2100_portable.exe" -Destination "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
-    - name: Collect Failure Logs
-      if: failure()
-      run: |
-        $NSIS_Log = "build\_CPack_Packages\win32\NSIS\NSISOutput.log"
-        if (Test-Path $NSIS_Log -PathType Leaf)
-        {
-          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
-        }
-        $NSIS_Log = "build\_CPack_Packages\win64\NSIS\NSISOutput.log"
-        if (Test-Path $NSIS_Log -PathType Leaf)
-        {
-          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
-        }
-    - name: Upload Failure Logs Artifact
-      uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: win_${{ matrix.architecture }}_error_logs
-        path: '${{ github.workspace }}\output\error_logs'
-        if-no-files-found: 'warn'
-    - name: Package Full Installer
-      working-directory: '${{ github.workspace }}\build'
-      env:
-        FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
-      run: |
-        . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
-        Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
-        # Run CPack
-        & "${env:FULL_CMAKE_PATH}\cpack.exe" -D CPACK_PACKAGE_FILE_NAME="warzone2100_installer" -D CPACK_WZ_PORTABLE=OFF -G NSIS -C "Release"
-        # Rename the archive
-        Move-Item -LiteralPath ".\warzone2100_installer.exe" -Destination "${{ github.workspace }}\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
     - name: Archive .ZIP of Regular build
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\build'
       env:
         FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
@@ -645,6 +576,7 @@ jobs:
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     - name: Archive Debug Symbols
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\build'
       env:
         FULL_CMAKE_PATH: '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}'
@@ -656,41 +588,26 @@ jobs:
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_debugsymbols.7z" -Destination "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
     - name: Compare Build Outputs
+      if: success() && (matrix.deploy_release == true)
       working-directory: '${{ github.workspace }}\output'
       run: |
-        # Log hashes of the setup EXEs
+        # Log hashes of the build output
         Write-Host "SHA512 Hashes:"
-        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
-        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
         Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_archive.zip`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip").Length)"
         Write-Host ""
     #####################################################
     # Upload build artifacts
     #####################################################
-    - name: 'Upload Artifact - (Portable Build)'
-      uses: actions/upload-artifact@v4
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
-      with:
-        name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_portable
-        path: '${{ github.workspace }}\output\portable'
-        if-no-files-found: 'error'
-    - name: 'Upload Artifact - (Regular Installer)'
-      uses: actions/upload-artifact@v4
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
-      with:
-        name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_installer
-        path: '${{ github.workspace }}\output\installer'
-        if-no-files-found: 'error'
     - name: 'Upload Artifact - (Debug Symbols)'
-      uses: actions/upload-artifact@v4
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
+      uses: actions/upload-artifact@v6
+      if: success() && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v4
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')) && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
+      uses: actions/upload-artifact@v6
+      if: success() && (matrix.deploy_release == true)
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
         path: '${{ github.workspace }}\output\archive'
@@ -698,44 +615,18 @@ jobs:
     #####################################################
     # Generate artifact attestations
     #####################################################
-    - name: 'Generate artifact attestation - (Portable Build)'
-      # Run on push to master branch (development build), or tag release automation build
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
-      continue-on-error: true
-      with:
-        subject-path: '${{ github.workspace }}\output\portable\*'
-    - name: 'Generate artifact attestation - (Regular Installer)'
-      # Run on push to master branch (development build), or tag release automation build
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
-      continue-on-error: true
-      with:
-        subject-path: '${{ github.workspace }}\output\installer\*'
     - name: 'Generate artifact attestation - (Archive)'
       # Run on push to master branch (development build), or tag release automation build
-      if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v1
+      if: success() && (matrix.deploy_release == true) && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+      uses: actions/attest-build-provenance@v3
       continue-on-error: true
       with:
         subject-path: '${{ github.workspace }}\output\archive\*'
-    #####################################################
-    # Upload Release assets (if a release tag)
-    #####################################################
-    - name: Upload Release Assets
-      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
-      run: |
-        $SOURCE_TAG = "$($env:WZ_GITHUB_REF -replace "refs/tags/")"
-        gh release upload "${SOURCE_TAG}" "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" "${{ github.workspace }}\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z" "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
-    #####################################################
-    # Create Sentry source bundle
-    #####################################################
+    #########################################################
+    # Create Sentry source bundle (for releasable artifacts)
+    #########################################################
     - name: Create Sentry source bundle
-      if: success() && (matrix.support_sentry == true)
+      if: success() && (matrix.support_sentry == true) && (matrix.deploy_release == true)
       id: create-sentry-source-bundle
       continue-on-error: true
       working-directory: '${{ github.workspace }}\sentry_artifacts'
@@ -743,7 +634,7 @@ jobs:
         WZ_REPO_PATH: ${{ steps.settings.outputs.WZ_REPO_PATH }}
         WZ_ARCHIVE_PATH: '${{ github.workspace }}\output\archive\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive.zip'
         WZ_DEBUGSYMBOLS_PATH: '${{ github.workspace }}\output\debugsymbols\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}.DEBUGSYMBOLS.7z'
-        SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\output\sentry_source_bundles'
+        SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
       run: |
         # Download sentry-cli
         echo "::group::Downloading sentry-cli ..."
@@ -770,13 +661,344 @@ jobs:
         # List output bundles
         Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
     - name: Upload Sentry source bundles
-      if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
-      uses: actions/upload-artifact@v4
+      if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (matrix.deploy_release == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
+      uses: actions/upload-artifact@v6
       with:
-        name: 'warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_debug_sourcebundles'
-        path: '${{ github.workspace }}\output\sentry_source_bundles'
+        name: 'debug_sourcebundles_${{ steps.settings.outputs.WZ_BUILD_DESC }}'
+        path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
         retention-days: 1
         if-no-files-found: 'warn'
+  combined-installer-build:
+    name: 'Build Installer'
+    permissions:
+      contents: read
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
+    runs-on: windows-latest
+    needs: windows-build
+    outputs:
+      combined-installer-artifact-id: ${{ steps.upload-combined-installer-artifact.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          path: 'src'
+      - name: Configure Repo Checkout
+        id: checkout-config
+        working-directory: '${{ github.workspace }}\src'
+        shell: bash
+        env:
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          . .ci/githubactions/checkout_config.sh
+      - name: Prepare Git Repo for autorevision
+        working-directory: '${{ github.workspace }}\src'
+        run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+      - name: Init Git Submodules
+        working-directory: '${{ github.workspace }}\src'
+        run: |
+          # To save time, only init the submodules in the pkg/win_installer/ folder
+          git submodule update --init --recursive -- pkg/win_installer/innohelperscripts pkg/win_installer/resources
+      - name: Prep Environment
+        id: settings
+        shell: bash
+        run: |
+          mkdir dependency-dl
+          mkdir innosetup
+          mkdir innosetup-deps
+          mkdir innosetup-unofficial-translations
+          mkdir built-archives
+          mkdir tmp
+          mkdir combined-staging
+          mkdir output
+      - name: Install Inno Setup
+        env:
+          INNOSETUP_INSTALL_PATH: '${{ github.workspace }}\innosetup'
+        run: |
+          Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+          $VerbosePreference = "Continue"
+          . "src\.ci\powershell\request.ps1"
+
+          $INNOSETUP_DL_URL = "https://github.com/jrsoftware/issrc/releases/download/is-6_7_0/innosetup-6.7.0.exe"
+          $INNOSETUP_DL_SHA256 = "f45c7d68d1e660cf13877ec36738a5179ce72a33414f9959d35e99b68c52a697"
+
+          $INNOSETUP_DL_PATH = ".\dependency-dl\innosetup.exe"
+          $req = Req -Params @{ 'Method'='GET';'Uri'="$INNOSETUP_DL_URL";'OutFile'="${INNOSETUP_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${INNOSETUP_DL_SHA256}" -Algorithm SHA256
+
+          # Install portably (to avoid conflict with any version that's shipped in the GitHub Actions images)
+          Write-Host "Installing Inno Setup..."
+          Start-Process -FilePath "${INNOSETUP_DL_PATH}" -ArgumentList /portable=1,"/DIR=${env:INNOSETUP_INSTALL_PATH}",/CURRENTUSER,/NOICONS,/VERYSILENT,/SUPPRESSMSGBOXES,/NORESTART -NoNewWindow -Wait
+          Write-Host "Finished installing Inno Setup"
+
+          echo "WZ_INNOSETUP_PATH=${env:INNOSETUP_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo "WZ_INNOSETUP_PATH=${env:INNOSETUP_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Install Install Script Dependencies
+        id: script-dependencies
+        env:
+          SCRIPT_DEP_INSTALL_PATH: '${{ github.workspace }}\innosetup-deps'
+        run: |
+          Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+          $VerbosePreference = "Continue"
+          . "src\.ci\powershell\request.ps1"
+
+          $FILECHECK_DL_URL = "https://github.com/past-due/innofilecheck/releases/download/v1.0.1/innofilecheck.dll"
+          $FILECHECK_DL_SHA512 = "a2983b025c56c8c134427360dcc1b07a55b14b9e4700ea7ccdb99d0a23537adb41e1d19f116b7358747def2c2f27c773fdc3f8bb4faf3acb516d2f8b288de194"
+
+          $FILECHECK_DL_PATH = ".\dependency-dl\innofilecheck.dll"
+          $req = Req -Params @{ 'Method'='GET';'Uri'="$FILECHECK_DL_URL";'OutFile'="${FILECHECK_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${FILECHECK_DL_SHA512}" -Algorithm SHA512
+
+          $installLocation = "$(Join-Path "${env:SCRIPT_DEP_INSTALL_PATH}" "innofilecheck.dll")"
+          Move-Item -Path "${FILECHECK_DL_PATH}" -Destination "$installLocation" -Force -ErrorAction Stop
+
+          echo "WZ_INNOSETUP_SCRIPT_DEPENDENCIES_PATH=${env:SCRIPT_DEP_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Fetch Unofficial Base Setup Translations
+        id: unofficial-base-translations
+        env:
+          UNOFFICIAL_TRANSLATIONS_INSTALL_PATH: '${{ github.workspace }}\innosetup-unofficial-translations'
+        run: |
+          Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+          $VerbosePreference = "Continue"
+          . "src\.ci\powershell\request.ps1"
+
+          $TRANSLATIONS_COMMIT_DL_URL = "https://github.com/jrsoftware/issrc/archive/1324c76409001499a4f7da285fcbfb22e825cd85.zip"
+          $TRANSLATIONS_COMMIT_DL_SHA512 = "0066d5bd790a8ccc38d2f2e2c13bd7791adefbb50e77979e9491c5b342f807c5169cf86aaa4336b9195b98bf3b13b3b5b027b0edb5fd294850e9e81ff16696f8"
+
+          $TRANSLATIONS_COMMIT_DL_PATH = ".\dependency-dl\translations_commit.zip"
+          $req = Req -Params @{ 'Method'='GET';'Uri'="$TRANSLATIONS_COMMIT_DL_URL";'OutFile'="${TRANSLATIONS_COMMIT_DL_PATH}" } -Retries 3 -SecondsDelay 10 -ExpectedHash "${TRANSLATIONS_COMMIT_DL_SHA512}" -Algorithm SHA512
+
+          echo "::group::Expanding archive ..."
+          $TRANSLATIONS_EXTRACTED_PATH = "$(pwd)\dependency-dl\translations_commit_extracted"
+          Expand-Archive -LiteralPath "${TRANSLATIONS_COMMIT_DL_PATH}" -DestinationPath "${TRANSLATIONS_EXTRACTED_PATH}"
+          echo "Expanding archive ... Done"
+
+          Copy-Item -Path "${TRANSLATIONS_EXTRACTED_PATH}\*\Files\Languages\Unofficial\*.isl" -Destination "${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" -ErrorAction Stop
+
+          echo "WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH=${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Download Architecture Archives
+        uses: actions/download-artifact@v7
+        with:
+          pattern: 'warzone2100_win_*_archive'
+          path: .\built-archives
+          merge-multiple: true
+      - name: Log Archive Details
+        working-directory: '${{ github.workspace }}\built-archives'
+        run: |
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: Create Combined Staging of Arch Builds
+        env:
+          BASE_WORKING_PATH: '${{ github.workspace }}'
+        run: |
+          $VerbosePreference = "Continue"
+          $InformationPreference = "Continue"
+          . "src\pkg\win_combined_archive\build_win_combined_arch.ps1"
+          Build-WinCombinedArchDir -InputArchivesDir "${env:BASE_WORKING_PATH}\built-archives" -TmpExtractDir "${env:BASE_WORKING_PATH}\tmp" -BuildDir "${env:BASE_WORKING_PATH}\combined-staging"
+          Get-ChildItem -Path "${env:BASE_WORKING_PATH}\combined-staging" -Recurse -File
+      - name: Build Combined Installer
+        id: build-installer
+        env:
+          INSTALLER_SOURCE_DIR: '${{ github.workspace }}\combined-staging'
+          INSTALLER_OUTPUT_DIR: '${{ github.workspace }}\output'
+          INNOFILECHECK_DLL_DIR: '${{ steps.script-dependencies.outputs.WZ_INNOSETUP_SCRIPT_DEPENDENCIES_PATH }}'
+          UNOFFICIAL_TRANSLATIONS_DIR: '${{ steps.unofficial-base-translations.outputs.WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH }}'
+        run: |
+          & "${env:WZ_INNOSETUP_PATH}\ISCC.exe" "/O${env:INSTALLER_OUTPUT_DIR}" "/DSOURCE_DIR=${env:INSTALLER_SOURCE_DIR}" "/DINNOFILECHECK_DLL_DIR=${env:INNOFILECHECK_DLL_DIR}" "/DUNOFFICIAL_TRANSLATIONS_DIR=${env:UNOFFICIAL_TRANSLATIONS_DIR}" "src\pkg\win_installer\warzone2100.iss"
+          if ($? -eq $false) {
+            Write-Error "Failed building installer"
+            Exit 1
+          }
+          $OutputFile = "$(Join-Path "${env:INSTALLER_OUTPUT_DIR}" "warzone2100_win_installer.exe")"
+          Write-Host "Finished building installer:"
+          Write-Host "`n$($OutputFile)`n`t-> SHA512: $((Get-FileHash -Path "$OutputFile" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$OutputFile").Length)"
+          echo "INSTALLER_OUTPUT_DIR=${env:INSTALLER_OUTPUT_DIR}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          echo "INSTALLER_EXE=${OutputFile}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: Debug Output - Install Manifest
+        env:
+          INSTALLER_OUTPUT_DIR: '${{ steps.build-installer.outputs.INSTALLER_OUTPUT_DIR }}'
+        run: |
+          Get-Content "${env:INSTALLER_OUTPUT_DIR}\setup-manifest.txt"
+      - name: 'Upload Artifact - (Combined Installer)'
+        id: upload-combined-installer-artifact
+        uses: actions/upload-artifact@v6
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        with:
+          name: warzone2100_win_installer
+          path: ${{ steps.build-installer.outputs.INSTALLER_EXE }}
+          if-no-files-found: 'error'
+      - name: 'Generate Artifact Attestation'
+        # Run on push to master branch (development build), or tag release automation build
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ steps.build-installer.outputs.INSTALLER_EXE }}'
+  sign-release-installers:
+    # Sign the Windows installer binaries using our Signpath certificate.  Note that this involves sending the binary to the
+    # remote SignPath service where the signing actually happens.  We need to have an account and credentials with
+    # that service to use it, so this step can't be done in forked repositories.
+    #
+    # Various settings here have to align with the "warzone2100" project in the "Warzone 2100 [OSS]" organization
+    # registered at https://app.signpath.io/.
+    #
+    # In particular, the repository needs to have a "sign_release" environment configured with the following secret:
+    #
+    #    SIGNPATH_API_TOKEN - As generated in app.signpath.io from the user profile page for the CI user
+    #
+    # We also add the following GitHub Actions variable (see
+    # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables):
+    #
+    #    SIGNPATH_ORGANIZATION_ID - Set to the organization ID (a UUID) for "Warzone 2100 [OSS]" in app.signpath.io
+    #
+    # One reason not to hard code SIGNPATH_ORGANIZATION_ID is that we use its existence to signal that the above
+    # secrets are available - i.e. that we can do the build signing.
+    name: 'Sign Release Installers'
+    permissions:
+      actions: read
+      contents: read
+      # needed to generate artifact attestations, see: https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
+      id-token: write
+      attestations: write
+    runs-on: windows-latest
+    needs: [combined-installer-build]
+    environment: sign_release
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    outputs:
+      signedfiles: ${{ steps.output-result.outputs.signedfiles }}
+    steps:
+      # Download all releasable artifacts that need signing
+      - name: Prep Environment
+        id: settings
+        shell: bash
+        run: mkdir unsigned-installers && mkdir signed-installers
+      - name: Download Release Installer
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: actions/download-artifact@v7
+        with:
+          artifact-ids: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
+          path: .\unsigned-installers
+          merge-multiple: true
+      - name: Log Unsigned Installer Details
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        working-directory: '${{ github.workspace }}\unsigned-installers'
+        run: |
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: SignPath - Request Signing of Installer EXE
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        id: signpath-sign
+        continue-on-error: true
+        uses: signpath/github-action-submit-signing-request@v2.0
+        env:
+          SIGNPATH_SIGNING_POLICY_SLUG: ${{ (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && 'release-signing' || 'test-signing' }}
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'warzone2100' # Has to match slug in https://app.signpath.io/ "warzone2100" project
+          signing-policy-slug: '${{ env.SIGNPATH_SIGNING_POLICY_SLUG }}'
+          github-artifact-id: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
+          wait-for-completion: true
+          # 4h to manually approve the request
+          wait-for-completion-timeout-in-seconds: 14400
+          output-artifact-directory: '${{ github.workspace }}\signed-installers\'
+      - name: Log Signed Build Outputs
+        if: (steps.signpath-sign.outcome == 'success')
+        working-directory: '${{ github.workspace }}\signed-installers\'
+        run: |
+          # Log hashes of the signed setup EXEs
+          Write-Host "SHA512 Hashes:"
+          $files = Get-ChildItem -Path . -File
+          foreach ($file in $files) {
+            Write-Host "`n$($file.Name)`n`t-> SHA512: $((Get-FileHash -Path "$file" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -Path "$file").Length)"
+          }
+          Write-Host ""
+      - name: 'Generate artifact attestations - (Signed Installers)'
+        if: (steps.signpath-sign.outcome == 'success') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ github.workspace }}\signed-installers\*'
+      - name: 'Upload Artifact - All Signed Installer EXEs'
+        if: (steps.signpath-sign.outcome == 'success')
+        uses: actions/upload-artifact@v6
+        with:
+          name: warzone2100_installers_signed
+          path: '${{ github.workspace }}\signed-installers\*'
+          if-no-files-found: 'error'
+      - name: Output Result
+        id: output-result
+        env:
+          SIGN_STEP_OUTCOME: ${{ steps.signpath-sign.outcome }}
+        run: |
+          $signedfiles = "false"
+          if ("${env:SIGN_STEP_OUTCOME}" -eq "success") {
+            $signedfiles = "true"
+          }
+          echo "signedfiles=${signedfiles}"
+          echo "signedfiles=${signedfiles}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+  upload-release-assets:
+    name: 'Upload Release Assets'
+    permissions:
+      contents: write # Needed to upload to releases
+    runs-on: ubuntu-latest
+    # Run on tag release automation build
+    if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+    needs: [windows-build, combined-installer-build, sign-release-installers]
+    env:
+      WZ_GITHUB_REF: ${{needs.windows-build.outputs.WZ_GITHUB_REF}}
+    steps:
+      - name: Prep Environment
+        id: settings
+        run: mkdir upload-assets && mkdir upload-assets-signed
+      - name: Download Release Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          # Includes the release artifacts: installer, debug symbols, and archive
+          pattern: 'warzone2100_win_*'
+          path: ./upload-assets
+          merge-multiple: true
+      - name: List Assets
+        run: ls -LRl ./upload-assets
+      - name: Download Signed Release Artifacts
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        uses: actions/download-artifact@v7
+        with:
+          name: 'warzone2100_installers_signed'
+          path: ./upload-assets-signed
+          merge-multiple: true
+      - name: Replace Unsigned with Signed Release Artifacts
+        if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
+        run: |
+          for file in ./upload-assets-signed/*; do
+            filename="${file##*/}"
+            dest="./upload-assets/${filename}"
+            if [ ! -f "${dest}" ]; then
+              echo "::warning ::Missing original (unsigned) file - ${filename} ?"
+            fi
+            echo "Replacing with signed: ${filename}"
+            mv -f "${file}" "${dest}"
+          done
+          ls -LRl ./upload-assets
+      - name: Upload Release Assets
+        working-directory: '${{ github.workspace }}/upload-assets/'
+        run: |
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+          for file in ./warzone2100_win_*; do
+            echo "Uploading: $file"
+            gh release upload "${SOURCE_TAG}" "$file"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
   upload-debug-symbols:
     strategy:
       matrix:
@@ -795,7 +1017,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
           path: 'src'
@@ -809,7 +1031,7 @@ jobs:
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
           path: ./dl-archive
@@ -819,7 +1041,7 @@ jobs:
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
       - name: Download Debug Symbols Artifact
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS'
           path: ./dl-archive
@@ -838,9 +1060,9 @@ jobs:
           fi
       - name: Download Source Bundle
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
-          name: 'warzone2100_win_${{ matrix.architecture }}_debug_sourcebundles'
+          name: 'debug_sourcebundles_win_${{ matrix.architecture }}'
           path: ./dl-sourcebundle
       - name: 'Upload debug symbols'
         env:
@@ -859,8 +1081,9 @@ jobs:
           echo "::endgroup::"
           # Upload symbols
           echo "::group::sentry-cli debug-files upload"
-          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          ./sentry-cli/sentry-cli debug-files upload --no-zips -o warzone2100 -p warzone2100 --wait "${WZ_ARCHIVE_DIR}"
           ./sentry-cli/sentry-cli debug-files upload --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
+          ./sentry-cli/sentry-cli difutil check "${WZ_ARCHIVE_DIR}/bin/warzone2100.exe"
           echo "::endgroup::"
   trigger-updates-json:
     name: 'Trigger Info Update'
@@ -875,7 +1098,9 @@ jobs:
     steps:
       - name: 'Trigger updates.json update'
         run: |
-          curl -X POST https://api.github.com/repos/Warzone2100/update-data/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
-          -u ${{ secrets.SITE_DISPATCH_ACCESS_TOKEN }} \
+          curl -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.SITE_DISPATCH_ACCESS_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/Warzone2100/update-data/dispatches \
           --data '{"event_type": "development_build_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'

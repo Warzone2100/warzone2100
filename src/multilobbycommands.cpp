@@ -65,29 +65,8 @@ bool identityMatchesAdmin(const EcKey& identity)
 	return lobbyAdminPublicKeys.count(senderPublicKeyB64) != 0 || lobbyAdminPublicHashStrings.count(senderIdentityHash) != 0;
 }
 
-// NOTE: **IMPORTANT** this should *NOT* be used for determining whether a sender has permission to execute admin commands
-// (Use senderHasLobbyCommandAdminPrivs instead)
-static bool senderApparentlyMatchesAdmin(uint32_t playerIdx)
-{
-	if (playerIdx >= MAX_CONNECTED_PLAYERS)
-	{
-		return false;
-	}
-	if (playerIdx == NetPlay.hostPlayer && NetPlay.isHost)
-	{
-		// the host is always an admin
-		return true;
-	}
-	auto& identity = getMultiStats(playerIdx).identity;
-	if (identity.empty())
-	{
-		return false;
-	}
-	return identityMatchesAdmin(identity);
-}
-
 // **THIS** is the function that should be used to determine whether a sender currently has permission to execute admin commands
-static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx)
+static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx, bool quiet = false)
 {
 	if (playerIdx >= MAX_CONNECTED_PLAYERS)
 	{
@@ -98,27 +77,37 @@ static bool senderHasLobbyCommandAdminPrivs(uint32_t playerIdx)
 		// the host always has permissions
 		return true;
 	}
-	if (!senderApparentlyMatchesAdmin(playerIdx))
+
+	auto trueIdentity = getTruePlayerIdentity(playerIdx);
+	if (trueIdentity.identity.empty())
 	{
-		// identity hash is not in permitted list
 		return false;
 	}
+	if (!identityMatchesAdmin(trueIdentity.identity))
+	{
+		// identity is not in permitted list
+		return false;
+	}
+
 	// Verify the player's identity has been verified
-	if (!ingame.VerifiedIdentity[playerIdx])
+	if (!trueIdentity.verified)
 	{
 		// While this player claims to have an identity that matches an admin,
 		// they have not yet verified it by responding to a NET_PING with a valid signature
-		auto& identity = getMultiStats(playerIdx).identity;
-		std::string senderIdentityHash = identity.publicHashString();
-		std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
-		sendRoomSystemMessageToSingleReceiver("Waiting for sync (admin privileges not yet enabled)", playerIdx, true);
-		if (lobbyAdminPublicKeys.count(senderPublicKeyB64) > 0)
+		if (!quiet)
 		{
-			debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public key: %s), but they have not yet verified their identity", playerIdx, senderPublicKeyB64.c_str());
-		}
-		else
-		{
-			debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public identity: %s), but they have not yet verified their identity", playerIdx, senderIdentityHash.c_str());
+			auto& identity = getOutputPlayerIdentity(playerIdx);
+			std::string senderIdentityHash = identity.publicHashString();
+			std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
+			sendRoomSystemMessageToSingleReceiver("Waiting for sync (admin privileges not yet enabled)", playerIdx, true);
+			if (lobbyAdminPublicKeys.count(senderPublicKeyB64) > 0)
+			{
+				debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public key: %s), but they have not yet verified their identity", playerIdx, senderPublicKeyB64.c_str());
+			}
+			else
+			{
+				debug(LOG_INFO, "Received an admin check for player %" PRIu32 " that passed (public identity: %s), but they have not yet verified their identity", playerIdx, senderIdentityHash.c_str());
+			}
 		}
 		return false;
 	}
@@ -131,7 +120,7 @@ static void lobbyCommand_PrintHelp(uint32_t receiver)
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "help - Get this message", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "admin - Display currently-connected admin players", receiver, true);
 	sendRoomSystemMessageToSingleReceiver(LOBBY_COMMAND_PREFIX "me - Display your information", receiver, true);
-	if (!senderApparentlyMatchesAdmin(receiver))
+	if (!senderHasLobbyCommandAdminPrivs(receiver, true))
 	{
 		sendRoomSystemMessageToSingleReceiver("(Additional commands are available for admins)", receiver, true);
 		return;
@@ -153,7 +142,7 @@ static std::unordered_set<size_t> getConnectedAdminPlayerIndexes()
 	std::unordered_set<size_t> adminPlayerIndexes;
 	for (size_t playerIdx = 0; playerIdx < std::min<size_t>(MAX_CONNECTED_PLAYERS, NetPlay.players.size()); ++playerIdx)
 	{
-		if (senderApparentlyMatchesAdmin(playerIdx))
+		if (senderHasLobbyCommandAdminPrivs(playerIdx, true))
 		{
 			adminPlayerIndexes.insert(playerIdx);
 		}
@@ -185,7 +174,7 @@ static void lobbyCommand_Admin()
 		}
 		msg += " [";
 		msg += std::to_string(adminPlayerIdx) + "] ";
-		msg += NetPlay.players[adminPlayerIdx].name;
+		msg += getPlayerName(adminPlayerIdx, true);
 		++currNum;
 	}
 	sendRoomSystemMessage(msg.c_str());
@@ -215,11 +204,11 @@ void cmdInterfaceLogChatMsg(const NetworkTextMessage& message, const char* log_p
 
 	ASSERT_OR_RETURN(, message.sender < MAX_CONNECTED_PLAYERS, "Invalid message.sender (%d)", message.sender);
 
-	const auto& identity = getMultiStats(message.sender).identity;
+	const auto& identity = getOutputPlayerIdentity(message.sender);
 	std::string senderhash = _senderhash.value_or(identity.publicHashString(64));
 	std::string senderPublicKeyB64 = _senderPublicKeyB64.value_or(base64Encode(identity.toBytes(EcKey::Public)));
 	std::string senderVerifiedStatus = (ingame.VerifiedIdentity[message.sender]) ? "V" : "?";
-	std::string sendername = NetPlay.players[message.sender].name;
+	std::string sendername = getPlayerName(message.sender);
 	std::string sendername64 = base64Encode(std::vector<unsigned char>(sendername.begin(), sendername.end()));
 	std::string messagetext = message.text;
 	std::string messagetext64 = base64Encode(std::vector<unsigned char>(messagetext.begin(), messagetext.end()));
@@ -262,7 +251,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		}
 		return a;
 	};
-	const auto& identity = getMultiStats(message.sender).identity;
+	const auto& identity = getOutputPlayerIdentity(message.sender);
 	std::string senderhash = identity.publicHashString(64);
 	std::string senderPublicKeyB64 = base64Encode(identity.toBytes(EcKey::Public));
 	debug(LOG_INFO, "message [%s] [%s]", senderhash.c_str(), message.text);
@@ -282,7 +271,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 								senderhash.c_str(),
 								message.sender,
 								NetPlay.players[message.sender].position,
-								NetPlay.players[message.sender].name);
+								getPlayerName(message.sender, true));
 		sendRoomSystemMessageToSingleReceiver(msg.c_str(), message.sender, true);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "team ", 5) == 0)
@@ -537,26 +526,6 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		{
 			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
 			sendRoomSystemMessage(msg.c_str());
-			return false;
-		}
-	}
-	else if (strncmp(&message.text[startingCommandPosition], "autobalance", 11) == 0)
-	{
-		ADMIN_REQUIRED_FOR_COMMAND("autobalance");
-		if (!getAutoratingEnable())
-		{
-			sendRoomSystemMessage("Autobalance is only supported when autorating lookup is configured.");
-			return false;
-		}
-		int maxp = std::min<int>(game.maxPlayers, MAX_PLAYERS);
-		if (maxp % 2 != 0)
-		{
-			sendRoomSystemMessage("Autobalance is available only for even player count.");
-			return false;
-		}
-		if (!cmdInterface.autoBalancePlayers(message.sender))
-		{
-			// failure message logged by autoBalancePlayers()
 			return false;
 		}
 	}

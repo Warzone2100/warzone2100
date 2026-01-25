@@ -1,0 +1,18 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::vtols::weapons",
+	"title": "VTOL Weapons",
+	"sort": "02",
+	"contents": [
+		"Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo.",
+		"",
+		"VTOL versions of regular weapons do not need to be researched separately.",
+		"",
+		"In addition to VTOL versions of ground-based direct weapons, VTOLs can also use bomb weapons. These weapons are the equivalent of artillery, and are very powerful."
+	],
+	"links": [
+		"wz2100::units::propulsions::vtols::attacking",
+		"wz2100::units::propulsions::vtols",
+		"wz2100::weapons::bombs"
+	]
+}

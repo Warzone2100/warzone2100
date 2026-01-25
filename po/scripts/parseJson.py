@@ -11,7 +11,7 @@ def parse(obj, filename):
 		if isinstance(obj, dict):
 			for k, v in obj.items():
 				_parse(v, filename, jsonPath + "." + k)
-				if k in ['name', 'tip', 'easy_tip', 'medium_tip', 'hard_tip', 'insane_tip'] and isinstance(v, str):
+				if k in ['name', 'category', 'tip', 'easy_tip', 'medium_tip', 'hard_tip', 'insane_tip'] and isinstance(v, str):
 					printString(v, '_(', '\n', filename, jsonPath + "." + k)
 				elif k in ['text', 'ranks'] and isinstance(v, list):
 					for idx, s in enumerate(v):

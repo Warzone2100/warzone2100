@@ -23,7 +23,7 @@
 #define __INCLUDED_GFX_API_NULL_SDL_H__
 
 #include "lib/ivis_opengl/gfx_api_null.h"
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 #include <chrono>
 
 class sdl_Null_Impl final : public gfx_api::backend_Null_Impl

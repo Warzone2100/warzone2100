@@ -29,19 +29,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "Xcode 14.3 (x64)"
-            image: "macos-13"
+          - name: "Xcode 16.4 (x64)"
+            image: "macos-15"
             osx_target_arch: "x86_64"
             vcpkg_triplet: "x64-osx"
-            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
+            vcpkg_host_triplet: "arm64-osx"
+            xcode_dev_dir: "/Applications/Xcode_16.4.app"
             include_videos: false
             artifact_suffix: "x64"
             publish_artifact: true
-          - name: "Xcode 14.3 (ARM64)"
-            image: "macos-13"
+          - name: "Xcode 16.4 (ARM64)"
+            image: "macos-15"
             osx_target_arch: "arm64"
             vcpkg_triplet: "arm64-osx"
-            xcode_dev_dir: "/Applications/Xcode_14.3.1.app"
+            vcpkg_host_triplet: "arm64-osx"
+            xcode_dev_dir: "/Applications/Xcode_16.4.app"
             include_videos: true
             artifact_suffix: "arm64"
             publish_artifact: true
@@ -52,15 +54,16 @@ jobs:
     runs-on: '${{ matrix.image }}'
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     env:
-      MACOSX_DEPLOYMENT_TARGET: '10.13'
+      MACOSX_DEPLOYMENT_TARGET: '10.14'
       VSCMD_SKIP_SENDTELEMETRY: 1
       DESIRED_XCODE_DEV_DIR: '${{ matrix.xcode_dev_dir }}'
       WZ_INCLUDE_VIDEOS: '${{ matrix.include_videos }}'
       WZ_OSX_TARGET_ARCH: '${{ matrix.osx_target_arch }}'
       VCPKG_DEFAULT_TRIPLET: '${{ matrix.vcpkg_triplet }}'
+      VCPKG_DEFAULT_HOST_TRIPLET: '${{ matrix.vcpkg_host_triplet }}'
       ARCHS: '${{ matrix.osx_target_arch }}'
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
         path: 'src'
@@ -84,7 +87,7 @@ jobs:
         HOMEBREW_NO_INSTALL_UPGRADE: 1
       run: |
         echo "::group::brew install"
-        brew install --quiet automake gettext pkg-config xcbeautify
+        brew install --quiet automake libtool gettext pkg-config xcbeautify
         echo "::endgroup::"
 
         # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
@@ -110,6 +113,10 @@ jobs:
 
         echo "Setting Xcode: ${DESIRED_XCODE_DEV_DIR}"
         sudo xcode-select -s "${DESIRED_XCODE_DEV_DIR}"
+
+        SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+        echo "SDKROOT: ${SDKROOT}"
+        echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
 
         echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
         echo "VCPKG_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}" >> $GITHUB_ENV
@@ -153,6 +160,16 @@ jobs:
           echo "ERROR: configure_mac.cmake failed"
           exit ${result}
         fi
+    - name: Upload vcpkg logs (on failure)
+      uses: actions/upload-artifact@v6
+      if: failure()
+      with:
+        name: failure_macos_${{ matrix.architecture }}_vcpkg_logs
+        path: |
+          ${{ github.workspace }}/build/vcpkg/buildtrees/*/*.log
+          ${{ github.workspace }}/build/vcpkg/buildtrees/*/*.txt
+        if-no-files-found: 'warn'
+        retention-days: 1
     - name: Build Xcode project
       working-directory: ./build
       run: |
@@ -203,7 +220,7 @@ jobs:
 
         echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
         exit 0
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: success() && (matrix.publish_artifact == true)
       with:
         name: "warzone2100_macOS_${{ matrix.artifact_suffix }}"
@@ -220,7 +237,7 @@ jobs:
     needs: macos-build
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           path: 'src'
@@ -239,7 +256,7 @@ jobs:
           mkdir output
           echo "OUTPUT_DIR=output" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: ./dl-artifacts
       - name: Display structure of downloaded files
@@ -297,7 +314,7 @@ jobs:
 
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
           exit 0
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: "warzone2100_macOS_universal"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
@@ -305,7 +322,7 @@ jobs:
       - name: 'Generate artifact attestation - (full)'
         # Run on push to master branch (development build), or tag release automation build
         if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
@@ -362,7 +379,7 @@ jobs:
           echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
 
           exit 0
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: "warzone2100_macOS_universal_novideos"
           path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
@@ -370,7 +387,7 @@ jobs:
       - name: 'Generate artifact attestation - (novideos)'
         # Run on push to master branch (development build), or tag release automation build
         if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         continue-on-error: true
         with:
           subject-path: '${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}'
@@ -397,7 +414,7 @@ jobs:
     # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
     # SENTRY_AUTH_TOKEN
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
           path: 'src'
@@ -406,7 +423,7 @@ jobs:
           mkdir dl-archive
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_macOS_universal_novideos'
           path: ./dl-archive

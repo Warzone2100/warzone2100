@@ -49,16 +49,18 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.30.8/SDL2-2.30.8.tar.gz
-    source-checksum: sha512/72e49d8a67f5ca1241a262e7e7ae7f6ff148e8774343110db652589ab2e72d3425534ca7f8c7825b2ae1afc779c09228da33a9586219ac4e53546a4930380b64
+    source: https://github.com/libsdl-org/SDL/releases/download/release-3.4.0/SDL3-3.4.0.tar.gz
+    source-checksum: sha512/b7803fc1a7260a0594644bf81df8c300d63c30c436a2b8c8217d58cd25814faf44e2945a4979c860f81cddc367913cc8c03f0bf6745da2918121f379fd9cb27b
     plugin: cmake
+    build-environment:
+      - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
     - -DSDL_ALSA=OFF
-    - -DSDL_ARTS=OFF
-    - -DSDL_ESD=OFF
-    - -DSDL_NAS=OFF
     - -DSDL_OSS=OFF
+    - -DSDL_X11_XTEST=OFF
+    - -DSDL_TEST_LIBRARY=OFF
+    - -DSDL_TESTS=OFF
     override-build: |
       craftctl default
     build-packages:
@@ -91,9 +93,12 @@ parts:
     - libxss-dev
     - libxxf86vm-dev
     - libgbm-dev
+    - liburing-dev
+    - libdrm-dev
     stage-packages:
     - libdecor-0-0
-    - libdecor-0-plugin-1
+    - libdecor-0-plugin-1-cairo
+    - libdecor-0-plugin-1-gtk
     - libdbus-1-3
     - libudev1
     - fcitx-libs
@@ -124,6 +129,7 @@ parts:
     - libxrender1
     - libxss1
     - libxxf86vm1
+    - liburing2
 
   launcher:
     plugin: nil
@@ -136,6 +142,8 @@ parts:
     after: [sdl, launcher]
     plugin: cmake
     source: .
+    build-environment:
+      - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
@@ -155,7 +163,7 @@ parts:
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       set +u
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
-      cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
+      cmake -S "$CRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G"Ninja"
       cmake --build . -- -j$CRAFT_PARALLEL_BUILD_COUNT
       DESTDIR=$CRAFT_PART_INSTALL cmake --build . -- install
 
@@ -184,10 +192,18 @@ parts:
       - libgnutls28-dev
       - libsodium-dev
       - libsqlite3-dev
+      - libprotobuf-dev
+      - protobuf-compiler
+      - libzip-dev
       - ninja-build
       - unzip
       - wget
       - zip
+      # Required because of broken CMake config files for libzip-dev 1.7.3:
+      - zipcmp
+      - zipmerge
+      - ziptool
+      #
     stage-packages:
       #- libfontconfig1
       - libfreetype6
@@ -206,6 +222,8 @@ parts:
       - libcurl3-gnutls
       - libsodium23
       - libsqlite3-0
+      - libprotobuf32t64
+      - libzip4t64
       - libglu1-mesa
       # - mesa-vulkan-drivers # provided by gpu-2404 / mesa-2404
       - unzip
@@ -218,6 +236,8 @@ parts:
     override-prime: |
       craftctl default
       ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
+      # Workaround for https://bugs.launchpad.net/snapd/+bug/2055273
+      mkdir -p "${CRAFT_PRIME}/gpu-2404"
     # Note: No "prime" part here, as we only use this for cleanup, and rely on the gnome extension to properly stage and setup the gpu-2404-wrapper and the command-chain
 
   # This part removes all the files in this snap which already exist in
