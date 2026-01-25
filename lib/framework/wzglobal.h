@@ -382,6 +382,16 @@
 #endif
 
 
+#if defined(WZ_CC_MINGW)
+#  ifndef __MINGW_PRINTF_FORMAT
+#    define __MINGW_PRINTF_FORMAT gnu_printf
+#  endif
+#  define WZ_PRINTF_FORMAT __MINGW_PRINTF_FORMAT
+#else
+#  define WZ_PRINTF_FORMAT printf
+#endif
+
+
 /*! \def WZ_DECL_FORMAT
  * GCC: "The format attribute specifies that a function takes printf, scanf, strftime or strfmon
  *       style arguments which should be type-checked against a format string."
@@ -391,6 +401,17 @@
 	__attribute__((__format__(archetype, string_index, first_to_check)))
 #else
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
+#endif
+
+/*! \def WZ_DECL_FORMAT_CXX
+ * The same as WZ_DECL_FORMAT, but for use with functions with C++ variadic templates
+ * Requires compiler support (LLVM/Clang 16+)
+ */
+#if !defined(WZ_CC_INTEL) && (defined(WZ_CC_CLANG) && defined(__clang_major__) && __clang_major__ >= 16)
+#  define WZ_DECL_FORMAT_CXX(archetype, string_index, first_to_check) \
+	__attribute__((__format__(archetype, string_index, first_to_check)))
+#else
+#  define WZ_DECL_FORMAT_CXX(archetype, string_index, first_to_check)
 #endif
 
 #if WZ_CC_GNU_PREREQ(4,9)
