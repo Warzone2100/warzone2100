@@ -2140,11 +2140,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
-//	setUniforms(1, cbuf.paramX);
-//	setUniforms(2, cbuf.paramY);
-//	setUniforms(3, cbuf.texture0);
-//	setUniforms(4, cbuf.paramXLight);
-//	setUniforms(5, cbuf.paramYLight);
 	setUniforms(1, cbuf.fog_enabled);
 	setUniforms(2, cbuf.fog_begin);
 	setUniforms(3, cbuf.fog_end);
