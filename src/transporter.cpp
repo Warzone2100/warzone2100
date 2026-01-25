@@ -1049,6 +1049,10 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 				}
 			}
 		}
+		if (!onMission && psDroidToAdd->isVtol())
+		{
+			moveStopDroid(psDroidToAdd); // So VTOLs are put into a MOVEHOVER status from the prior moveReallyStopDroid() in order.cpp's embark section.
+		}
 		if (psTransporter->player == selectedPlayer)
 		{
 			audio_PlayBuildFailedOnce();
