@@ -108,6 +108,7 @@ enum COMPONENT_TYPE
 enum WEAPON_FLAGS
 {
 	WEAPON_FLAG_NO_FRIENDLY_FIRE,
+	WEAPON_FLAG_ALLOWED_ON_TRANSPORTER,
 	WEAPON_FLAG_COUNT
 };
 
@@ -487,17 +488,6 @@ struct BRAIN_STATS : public COMPONENT_STATS
 	} upgrade[MAX_PLAYERS], base;
 	std::vector<std::string> rankNames;
 	std::vector<int> cmdExpRange;
-	struct
-	{
-		int initialShieldPointsPercent = 0;
-		int additiveShieldPointsPercent = 0;
-		int initialShieldRegenTime = 0;
-		int shieldRegenTimeDec = 0;
-		int initialShieldInterruptRegenTime = 0;
-		int shieldInterruptRegenTimeDec = 0;
-		int shieldPointsPerStep = 0;
-		std::vector<int> shieldRange;
-	} shield;
 };
 
 /*

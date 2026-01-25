@@ -90,8 +90,26 @@ struct MultiplayOptionsLocked
 	bool position;
 	bool bases;
 	bool spectators;
+	bool name;
+	bool readybeforefull;
+
+	bool operator==(const MultiplayOptionsLocked& other) const
+	{
+		return scavengers == other.scavengers
+			&& alliances == other.alliances
+			&& teams == other.teams
+			&& power == other.power
+			&& difficulty == other.difficulty
+			&& ai == other.ai
+			&& position == other.position
+			&& bases == other.bases
+			&& spectators == other.spectators
+			&& name == other.name
+			&& readybeforefull == other.readybeforefull;
+	}
 };
 const MultiplayOptionsLocked& getLockedOptions();
+bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts);
 
 const char* getDifficultyListStr(size_t idx);
 size_t getDifficultyListCount();
@@ -112,15 +130,13 @@ void printBlindModeHelpMessagesToConsole();
 int allPlayersOnSameTeam(int except);
 
 bool multiplayPlayersCanCheckReady();
-void handlePossiblePlayersCanCheckReadyChange(bool previousPlayersCanCheckReadyValue);
+bool multiplayPlayersShouldCheckReady();
+void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheckReadyValue);
 
 bool multiplayPlayersReady();
 bool multiplayIsStartingGame();
 
 bool sendReadyRequest(UBYTE player, bool bReady);
-
-LOBBY_ERROR_TYPES getLobbyError();
-void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
 /**
  * Updates structure limit flags. Flags indicate which structures are disabled.

@@ -1047,6 +1047,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 					REPAIR_FACILITY	*psRepairFac = &psStruct->pFunctionality->repairFacility;
 					if (psRepairFac->psObj)
 					{
+						if (psRepairFac->state == RepairState::Repairing)
+						{
+							droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+						}
 						psRepairFac->psObj = nullptr;
 						psRepairFac->state = RepairState::Idle;
 					}
@@ -2430,7 +2434,8 @@ static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 	UDWORD	player;
 
 	/* Check for a structure */
-	if (fpathBlockingTile(x, y, propulsion))
+	/* NOTE: Substitute PROPULSION_TYPE_WHEELED for PROPULSION_TYPE_LIFT, as flying droids are initially placed on the ground */
+	if (fpathBlockingTile(x, y, (propulsion != PROPULSION_TYPE_LIFT) ? propulsion : PROPULSION_TYPE_WHEELED))
 	{
 		debug(LOG_NEVER, "failed - blocked");
 		return false;
@@ -2986,8 +2991,11 @@ RepairState aiUpdateRepair_handleEvents(STRUCTURE &station, RepairEvents ev, DRO
 	if (bMultiPlayer && psStructure->resistance < (int)structureResistance(psStructure->pStructureType, psStructure->player))
 	{
 		objTrace(psStructure->id, "Resistance too low for repair");
-		droidRepairStopped(castDroid(psRepairFac->psObj), &station);
-		psRepairFac->psObj = nullptr;
+		if (psRepairFac->psObj != nullptr)
+		{
+			droidRepairStopped(castDroid(psRepairFac->psObj), &station);
+			psRepairFac->psObj = nullptr;
+		}
 		return RepairState::Idle;
 	}
 	switch (ev)
@@ -6466,38 +6474,6 @@ ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl
 	return ProductionRunEntry();
 }
 
-
-/*looks through a players production list to see how many command droids
-are being built*/
-UBYTE checkProductionForCommand(UBYTE player)
-{
-	unsigned quantity = 0;
-
-	if (player == productionPlayer)
-	{
-		//assumes Cyborg or VTOL droids are not Command types!
-		unsigned factoryType = FACTORY_FLAG;
-
-		for (unsigned factoryInc = 0; factoryInc < factoryNumFlag[player][factoryType].size(); ++factoryInc)
-		{
-			//check to see if there is a factory with a production run
-			if (factoryNumFlag[player][factoryType][factoryInc] && factoryInc < asProductionRun[factoryType].size())
-			{
-				ProductionRun &productionRun = asProductionRun[factoryType][factoryInc];
-				for (unsigned inc = 0; inc < productionRun.size(); ++inc)
-				{
-					if (productionRun[inc].psTemplate->droidType == DROID_COMMAND)
-					{
-						quantity += productionRun[inc].numRemaining();
-					}
-				}
-			}
-		}
-	}
-	return quantity;
-}
-
-
 // Count number of factories assignable to a command droid.
 //
 UWORD countAssignableFactories(UBYTE player, UWORD factoryType)
@@ -6939,6 +6915,10 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 
 			// add to other list.
 			addStructure(psStructure);
+
+			// increment structure count for new owner
+			UDWORD max = psStructure->pStructureType - asStructureStats;
+			asStructureStats[max].curCount[attackPlayer]++;
 
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
 			for (DROID* psCurr : apsDroidLists[attackPlayer])

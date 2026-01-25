@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -2009,6 +2009,9 @@ msgstr "공장에서 새로운 유닛이 생산되는 동안 잠시 기다려 �
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "축하합니다 사령관님 - 이제 당신은 첫번째 임무에 착수할 준비가 되었습니다"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "첫번째 캠페인"
 
@@ -2979,9 +2982,6 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-msgid "Failed to get a lobby response!"
-msgstr ""
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
 
@@ -3335,11 +3335,11 @@ msgstr "사이보그 스커지 미사일 발사기"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "사이보그용 써마이트 화염방사기로 무장"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "사이보그용 써마이트 화염방사기로 무장"
 
 msgid "Armed with Flashlight Laser"
 msgstr "레이저 플래시라이트로 무장"
@@ -3653,10 +3653,10 @@ msgstr "가장 효과적인 타깃: 기지 구조물"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "가장 효과적인 표적: 벙커와 하드포인트"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "가장 효과적인 표적: 벙커와 하드포인트"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -7259,6 +7259,9 @@ msgstr " 및 "
 msgid "Spectators"
 msgstr "관전자들"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
@@ -8066,7 +8069,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8292,9 +8308,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -9569,6 +9582,9 @@ msgstr "플레이어 이름 선택"
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
+
 msgid "Blind Game:"
 msgstr ""
 
@@ -10106,7 +10122,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -10892,16 +10916,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -10961,91 +10985,6 @@ msgstr "캠페인"
 msgid "GAMES"
 msgstr "게임"
 
-msgid "Refresh Games List"
-msgstr "게임 목록 새로고침"
-
-msgid "Filter Games List"
-msgstr ""
-
-msgid "Refreshing..."
-msgstr "새로고침..."
-
-msgid "Searching"
-msgstr "찾는 중"
-
-msgid "Connecting to the lobby server..."
-msgstr ""
-
-msgid "Game Name"
-msgstr "게임 이름"
-
-msgid "Map Name"
-msgstr "맵 이름"
-
-msgid "Status"
-msgstr "상태"
-
-msgid "Can't connect to lobby server!"
-msgstr "로비 서버에 연결할 수 없습니다!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "모드: %s"
-
-msgid "Mods: None!"
-msgstr "모드: 없음!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "버전: %s"
-
-msgid "Join as spectator"
-msgstr ""
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
-
-msgid "[Password required]"
-msgstr "[비밀번호 필요]"
-
-msgid "[No Tanks]"
-msgstr "[탱크 없음]"
-
-msgid "[No Cyborgs]"
-msgstr "[사이보그 없음]"
-
-msgid "[No VTOLs]"
-msgstr "[VTOL 없음]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "%s에 의해 호스트 됨"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr ""
-
-msgid "Can't find any games for your version."
-msgstr "버전에 맞는 게임을 찾을 수 없습니다."
-
-msgid "There appears to be a game update available!"
-msgstr ""
-
-msgid "No games are available for your version"
-msgstr ""
-
-msgid "Wrong Game Version!"
-msgstr "잘못된 게임 버젼입니다!"
-
-msgid "You have an incompatible mod."
-msgstr "당신은 호환되지 않는 mod를 사용 중입니다."
-
-msgid "Host couldn't send file?"
-msgstr "호스트가 파일을 보내지 못했습니다."
-
-msgid "Incorrect Password!"
-msgstr "비밀번호가 틀립니다!"
-
 msgid "Continue"
 msgstr "계속하기"
 
@@ -11101,6 +11040,12 @@ msgid "Music Manager"
 msgstr "음악 관리자"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11466,12 +11411,7 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgid "Desktop Full"
 msgstr ""
 
 msgid "Window Mode"
@@ -11480,10 +11420,7 @@ msgstr ""
 msgid "Windowed"
 msgstr "윈도우(창) 모드"
 
-msgid "Desktop Full"
-msgstr ""
-
-msgid "Resolution"
+msgid "Fullscreen Mode"
 msgstr ""
 
 msgid "Behaviors"
@@ -11569,6 +11506,93 @@ msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr ""
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr ""
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11685,6 +11709,9 @@ msgstr "싱글플레이어 스커미쉬"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "게임 이름"
+
 msgid "Click to see Map"
 msgstr "맵을 보려면 클릭하십시오"
 
@@ -11774,13 +11801,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

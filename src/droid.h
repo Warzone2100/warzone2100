@@ -119,16 +119,10 @@ int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, W
 void droidUpdate(DROID *psDroid);
 
 /* Check if droid is within commander's range */
-bool droidWithinCommanderRange(const DROID *psDroid, bool shield);
+bool droidWithinCommanderRange(const DROID *psDroid);
 
 /* Update droid shields. */
 void droidUpdateShields(DROID *psDroid);
-
-/* Calculate the droid's shield regeneration step time */
-UDWORD droidCalculateShieldRegenTime(const DROID *psDroid);
-
-/* Calculate the droid's shield interruption time */
-UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid);
 
 /* Get droid maximum shield points */
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid);
@@ -198,7 +192,7 @@ bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int wea
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
 unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brainComponent);
-UDWORD getDroidEffectiveLevel(const DROID *psDroid);
+UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck = true);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
@@ -243,9 +237,6 @@ bool electronicDroid(const DROID *psDroid);
 
 /// checks to see if the droid is currently being repaired by another
 bool droidUnderRepair(const DROID *psDroid);
-
-/// Count how many Command Droids exist in the world at any one moment
-UBYTE checkCommandExist(UBYTE player);
 
 /// For a given repair droid, check if there are any damaged droids within a defined range
  BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);

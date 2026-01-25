@@ -25,6 +25,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -106,12 +107,14 @@ private:
 	// will be left in an invalid state (that is, `isValid()` will become `false`).
 	void disposeConnectionImpl(HSteamNetConnection hConn);
 
+	bool initialized_ = false;
 	ISteamNetworkingSockets* networkInterface_ = nullptr;
 	std::unordered_map<HSteamNetConnection, GNSClientConnection*> activeClients_;
 	std::pair<HSteamListenSocket, GNSListenSocket*> activeListenSocket_ = { k_HSteamListenSocket_Invalid, nullptr };
 	std::vector<SteamNetworkingConfigValue_t> listenSocketOpts_;
 	std::vector<SteamNetworkingConfigValue_t> clientConnOpts_;
 	std::unique_ptr<IAddressResolver> addressResolver_;
+	std::mutex activeClientsMtx_;
 };
 
-} // namespace tcp
+} // namespace gns

@@ -85,6 +85,9 @@ struct DROID_ACTION_DATA
 /** Radius for search when looking for VTOL landing position */
 static const int vtolLandingRadius = 23;
 
+// Sanity checks
+static_assert(MAX_SULK_TIME > MIN_SULK_TIME, "MAX_SULK_TIME must be > MIN_SULK_TIME");
+
 /**
  * @typedef tileMatchFunction
  *
@@ -586,7 +589,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		}
 
 		Vector2i delta = map_coord(droid->pos.xy()) - b.map;
-		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || droid->isFlying())
+		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || droid->isFlying() || droid->isFlightBasedTransporter())
 		{
 			continue;  // Droid not under new structure (just near it).
 		}
@@ -1774,7 +1777,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			const STRUCTURE* structureAtPos = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 
-			if (structureAtPos == nullptr)
+			if (structureAtPos == nullptr || psDroid->psActionTarget[0] == nullptr)
 			{
 				//No structure located at desired position. Move on.
 				psDroid->action = DACTION_NONE;

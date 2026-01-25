@@ -460,7 +460,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 
 	freeMessages();
 
-	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, static_cast<uint32_t>(game.blindMode), 0, game.maxPlayers, game.alliance, game.techLevel, game.power, game.base))
 	{
 		return false;
 	}
@@ -526,6 +526,9 @@ bool sendLeavingMsg()
 // called in Init.c to shutdown the whole netgame gubbins.
 bool multiShutdown()
 {
+	debug(LOG_MAIN, "shutting down networking");
+	NETshutdown();
+
 	debug(LOG_MAIN, "free game data (structure limits)");
 	ingame.structureLimits.clear();
 
@@ -679,7 +682,7 @@ bool multiGameShutdown()
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
-	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+	ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 	ingame.TimeEveryoneIsInGame = nullopt;
 	ingame.startTime = std::chrono::steady_clock::time_point();
 	ingame.endTime = nullopt;
@@ -755,6 +758,8 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 	}
 
 	// Otherwise, output changes for each changed player
+	std::vector<int> playerIdxFreechatEnabled;
+	std::vector<int> playerIdxFreechatDisabled;
 	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
 		if (priorHostChatPermissions[i] != ingame.hostChatPermissions[i])
@@ -775,17 +780,73 @@ static void informOnHostChatPermissionChanges(const std::array<bool, MAX_CONNECT
 			if (ingame.hostChatPermissions[i])
 			{
 				// Host enabled free chat for player
-				auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(i));
-				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				playerIdxFreechatEnabled.push_back(i);
 			}
 			else
 			{
 				// Host disabled free chat for player
-				auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(i));
-				addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				playerIdxFreechatDisabled.push_back(i);
 			}
 		}
 	}
+
+	if (!playerIdxFreechatEnabled.empty())
+	{
+		if (playerIdxFreechatEnabled.size() == 1)
+		{
+			auto msg = astringf(_("The host has enabled free chat for player: %s"), getPlayerName(playerIdxFreechatEnabled[0]));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			auto msg = astringf(_("The host has enabled free chat for %d players"), static_cast<int>(playerIdxFreechatEnabled.size()));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	   }
+	}
+
+	if (!playerIdxFreechatDisabled.empty())
+	{
+		if (playerIdxFreechatDisabled.size() == 1)
+		{
+			auto msg = astringf(_("The host has muted free chat for player: %s"), getPlayerName(playerIdxFreechatDisabled[0]));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			auto msg = astringf(_("The host has muted free chat for %d players"), static_cast<int>(playerIdxFreechatDisabled.size()));
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
+}
+
+static void NETlockedOptions(MessageWriter& w, const MultiplayOptionsLocked& lockedOpts)
+{
+	NETbool(w, lockedOpts.scavengers);
+	NETbool(w, lockedOpts.alliances);
+	NETbool(w, lockedOpts.teams);
+	NETbool(w, lockedOpts.power);
+	NETbool(w, lockedOpts.difficulty);
+	NETbool(w, lockedOpts.ai);
+	NETbool(w, lockedOpts.position);
+	NETbool(w, lockedOpts.bases);
+	NETbool(w, lockedOpts.spectators);
+	NETbool(w, lockedOpts.name);
+	NETbool(w, lockedOpts.readybeforefull);
+}
+
+static void NETlockedOptions(MessageReader &r, MultiplayOptionsLocked& lockedOpts)
+{
+	NETbool(r, lockedOpts.scavengers);
+	NETbool(r, lockedOpts.alliances);
+	NETbool(r, lockedOpts.teams);
+	NETbool(r, lockedOpts.power);
+	NETbool(r, lockedOpts.difficulty);
+	NETbool(r, lockedOpts.ai);
+	NETbool(r, lockedOpts.position);
+	NETbool(r, lockedOpts.bases);
+	NETbool(r, lockedOpts.spectators);
+	NETbool(r, lockedOpts.name);
+	NETbool(r, lockedOpts.readybeforefull);
 }
 
 void sendHostConfig()
@@ -799,6 +860,9 @@ void sendHostConfig()
 	{
 		NETbool(w, ingame.hostChatPermissions[i]);
 	}
+
+	// Send the "locked" options configuration
+	NETlockedOptions(w, getLockedOptions());
 
 	NETend(w);
 }
@@ -820,6 +884,11 @@ bool recvHostConfig(NETQUEUE queue)
 	{
 		NETbool(r, ingame.hostChatPermissions[i]);
 	}
+
+	// "Locked" options configuration
+	MultiplayOptionsLocked newLockedOpts;
+	NETlockedOptions(r, newLockedOpts);
+	updateLockedOptionsFromHost(newLockedOpts);
 
 	NETend(r);
 

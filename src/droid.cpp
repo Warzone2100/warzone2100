@@ -1048,7 +1048,7 @@ void droidUpdate(DROID *psDroid)
 }
 
 /* Check if droid is within commander's range */
-bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
+bool droidWithinCommanderRange(const DROID *psDroid)
 {
 	if (psDroid->droidType == DROID_COMMAND)
 	{
@@ -1057,16 +1057,16 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 
 	ASSERT_OR_RETURN(false, psDroid->psGroup && psDroid->psGroup->psCommander, "Droid group or commander is NULL");
 
-	const auto &rangeArray = shield ? psDroid->getBrainStats()->shield.shieldRange : psDroid->getBrainStats()->cmdExpRange;
+	const auto &rangeArray = psDroid->getBrainStats()->cmdExpRange;
+	auto rangeArraySize = rangeArray.size();
+	if (rangeArraySize == 0)
+	{
+		return true; // default to true (matches old behavior, which didn't have limits for cmdExpRange, etc)
+	}
 
 	auto level = getDroidLevel(psDroid->psGroup->psCommander);
-	auto rangeArraySize = rangeArray.size();
 	if (level >= rangeArraySize)
 	{
-		if (rangeArraySize == 0)
-		{
-			return true; // default to true (matches old behavior, which didn't have limits for cmdExpRange, etc)
-		}
 		level = rangeArraySize - 1; // use the last listed value, for the last listed level in the array
 	}
 
@@ -1078,56 +1078,13 @@ bool droidWithinCommanderRange(const DROID *psDroid, bool shield)
 
 void droidUpdateShields(DROID *psDroid)
 {
-	if (hasCommander(psDroid) || psDroid->droidType == DROID_COMMAND)
-	{
-		if (psDroid->shieldPoints < 0)
-		{
-			psDroid->shieldPoints = 0;
-			psDroid->shieldRegenTime = gameTime;
-			psDroid->shieldInterruptRegenTime = gameTime;
-		}
-		else
-		{
-			if (!((psDroid->lastHitWeapon == WSC_EMP) && ((gameTime - psDroid->timeLastHit) < EMP_DISABLE_TIME)) &&
-				gameTime - psDroid->shieldInterruptRegenTime > droidCalculateShieldInterruptRegenTime(psDroid) &&
-				gameTime - psDroid->shieldRegenTime > droidCalculateShieldRegenTime(psDroid) &&
-				droidWithinCommanderRange(psDroid, true))
-			{
-				auto availableShieldPoints = droidGetMaxShieldPoints(psDroid) - psDroid->shieldPoints;
-
-				if (availableShieldPoints > 0)
-				{
-					auto pointsToAdd = std::min<UDWORD>(psDroid->getBrainStats()->shield.shieldPointsPerStep, availableShieldPoints);
-					psDroid->shieldPoints += pointsToAdd;
-				}
-				psDroid->shieldRegenTime = gameTime;
-			}
-		}
-	}
-	else
-	{
-		// unit has lost commander, shields are down!
-		psDroid->shieldPoints = -1;
-	}
-}
-
-UDWORD droidCalculateShieldRegenTime(const DROID *psDroid)
-{
-	const auto &psStats = psDroid->getBrainStats()->shield;
-	return psStats.initialShieldRegenTime - (psStats.shieldRegenTimeDec * getDroidLevel(psDroid));
-}
-
-UDWORD droidCalculateShieldInterruptRegenTime(const DROID *psDroid)
-{
-	const auto &psStats = psDroid->getBrainStats()->shield;
-	return psStats.initialShieldInterruptRegenTime - (psStats.shieldInterruptRegenTimeDec * getDroidLevel(psDroid));
+	// shields are down (left for experimentation with different implementations)
+	psDroid->shieldPoints = -1;
 }
 
 UDWORD droidGetMaxShieldPoints(const DROID *psDroid)
 {
-	const auto &psStats = psDroid->getBrainStats()->shield;
-	UDWORD percent = psDroid->originalBody / 100;
-	return percent * (psStats.initialShieldPointsPercent + psStats.additiveShieldPointsPercent * getDroidLevel(psDroid));
+	return 0; // currently disabled, but left for experimentation with different implementations
 }
 
 /* See if a droid is next to a structure */
@@ -2554,13 +2511,13 @@ unsigned int getDroidLevel(const DROID *psDroid)
 	return getDroidLevel(psDroid->experience, psDroid->player, (psDroid->droidType != DROID_SENSOR) ? psDroid->asBits[COMP_BRAIN] : 1);
 }
 
-UDWORD getDroidEffectiveLevel(const DROID *psDroid)
+UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck)
 {
 	UDWORD level = getDroidLevel(psDroid);
 	UDWORD cmdLevel = 0;
 
 	// get commander level
-	if (hasCommander(psDroid))
+	if (hasCommander(psDroid) && (!commanderDistanceCheck || droidWithinCommanderRange(psDroid)))
 	{
 		cmdLevel = cmdGetCommanderLevel(psDroid);
 
@@ -3088,21 +3045,6 @@ bool droidUnderRepair(const DROID *psDroid)
 	return false;
 }
 
-//count how many Command Droids exist in the world at any one moment
-UBYTE checkCommandExist(UBYTE player)
-{
-	UBYTE	quantity = 0;
-
-	for (const DROID *psDroid : apsDroidLists[player])
-	{
-		if (psDroid->droidType == DROID_COMMAND)
-		{
-			quantity++;
-		}
-	}
-	return quantity;
-}
-
 static inline bool isTransporter(DROID_TYPE type)
 {
 	return type == DROID_TRANSPORTER || type == DROID_SUPERTRANSPORTER;
@@ -3118,6 +3060,11 @@ bool isTransporter(DROID_TEMPLATE const *psTemplate)
 	return isTransporter(psTemplate->droidType);
 }
 
+bool DROID::isFlightBasedTransporter() const
+{
+	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT && isTransporter();
+}
+
 //access functions for vtols
 bool DROID::isVtol() const
 {
@@ -3128,8 +3075,7 @@ bool DROID::isVtol() const
 /* returns true if the droid has lift propulsion and is moving */
 bool DROID::isFlying() const
 {
-	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT
-		   && (sMove.Status != MOVEINACTIVE || isTransporter());
+	return getPropulsionStats()->propulsionType == PROPULSION_TYPE_LIFT && sMove.Status != MOVEINACTIVE;
 }
 
 // true if a droid is retreating for repair

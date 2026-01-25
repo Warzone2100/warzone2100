@@ -40,9 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
+    - uses: ./.github/actions/clean-disk-space-ubuntu
     - name: Configure Repo Checkout
       id: checkout-config
       env:
@@ -112,12 +113,12 @@ jobs:
         echo "OUTPUT_DIR=${OUTPUT_DIR}" >> $GITHUB_ENV
         mkdir -p "${OUTPUT_DIR}"
         OUTPUT_FILE_NAME="warzone2100_linux_${{ matrix.arch }}.snap"
-        cp "${{ steps.snapcraft.outputs.snap }}" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        mv "${{ steps.snapcraft.outputs.snap }}" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
         echo "Generated .snap: \"${OUTPUT_FILE_NAME}\""
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_SNAP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: success()
       with:
         name: 'warzone2100_linux_${{ matrix.arch }}_snap'
@@ -126,7 +127,7 @@ jobs:
     - name: Generate artifact attestation
       # Run on push to master branch (development build), or tag release automation build
       if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       continue-on-error: true
       with:
         subject-path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'

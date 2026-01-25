@@ -74,6 +74,7 @@
 #include "clparse.h"
 #include "multilobbycommands.h"
 #include "stdinreader.h"
+#include "hci/quickchat.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -326,7 +327,7 @@ void handlePlayerLeftInGame(UDWORD player)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
-	bool leftWhilePlayer = NetPlay.players[player].isSpectator;
+	bool leftWhilePlayer = !NetPlay.players[player].isSpectator;
 
 	ASSERT(player < NetPlay.playerReferences.size(), "Invalid player: %" PRIu32 "", player);
 	NetPlay.playerReferences[player]->disconnect();
@@ -412,6 +413,10 @@ static void sendPlayerLeft(uint32_t playerIndex)
 
 static void addConsolePlayerLeftMessage(unsigned playerIndex)
 {
+	if (!NetPlay.isHost && isBlindSimpleLobby(game.blindMode) && (GetGameMode() != GS_NORMAL))
+	{
+		return;
+	}
 	if (selectedPlayer != playerIndex)
 	{
 		std::string msg = astringf(_("%s has Left the Game"), getPlayerName(playerIndex));
@@ -421,6 +426,10 @@ static void addConsolePlayerLeftMessage(unsigned playerIndex)
 
 static void addConsolePlayerJoinMessage(unsigned playerIndex)
 {
+	if (!NetPlay.isHost && isBlindSimpleLobby(game.blindMode) && (GetGameMode() != GS_NORMAL))
+	{
+		return;
+	}
 	if (selectedPlayer != playerIndex)
 	{
 		std::string msg = astringf(_("%s joined the Game"), getPlayerName(playerIndex));
@@ -494,7 +503,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	ingame.muteChat[playerIndex] = false;
 
-	if (wz_command_interface_enabled())
+	if (wz_command_interface_enabled() && NetPlay.players[playerIndex].allocated)
 	{
 		// WZEVENT: playerLeft: <playerIdx> <gameTime> <b64pubkey> <hash> <V|?> <b64name> <ip>
 		const auto& identity = getOutputPlayerIdentity(playerIndex);
@@ -567,6 +576,8 @@ bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdenti
 			netPlayersUpdated = true;	// update the player box.
 		}
 	}
+
+	playerSpamMuteReset(playerIndex);
 
 	if (NetPlay.isHost)		// host responsible for welcoming this player.
 	{
@@ -705,7 +716,7 @@ void setupNewPlayer(UDWORD player)
 	ingame.lastSentPlayerDataCheck2[player].reset();
 	ingame.muteChat[player] = false;
 	ingame.lastReadyTimes[player].reset();
-	if (multiplayPlayersCanCheckReady())
+	if (multiplayPlayersShouldCheckReady())
 	{
 		ingame.lastNotReadyTimes[player] = ingame.joinTimes[player];
 	}
@@ -737,9 +748,9 @@ void ShowMOTD()
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	if (NetPlay.MOTD)
+	if (!NetPlay.MOTD.empty())
 	{
-		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		addConsoleMessage(NetPlay.MOTD.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 	else
 	{

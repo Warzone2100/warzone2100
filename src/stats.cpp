@@ -569,6 +569,10 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_NO_FRIENDLY_FIRE, true);
 		}
+		if (std::find(flags.begin(), flags.end(), "allowedontransporter") != flags.end()) // "AllowedOnTransporter"
+		{
+			psStats->flags.set(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER, true);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -720,23 +724,6 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.maxDroids = ini.value("maxDroids").toInt();
 		psStats->base.maxDroidsMult = ini.value("maxDroidsMult").toInt();
-		psStats->shield.initialShieldPointsPercent = ini.value("initialShieldPointsPercent").toInt();
-		psStats->shield.additiveShieldPointsPercent = ini.value("additiveShieldPointsPercent").toInt();
-		psStats->shield.initialShieldRegenTime = ini.value("initialShieldRegenTime").toInt();
-		psStats->shield.shieldRegenTimeDec = ini.value("shieldRegenTimeDec").toInt();
-		psStats->shield.initialShieldInterruptRegenTime = ini.value("initialShieldInterruptRegenTime").toInt();
-		psStats->shield.shieldInterruptRegenTimeDec = ini.value("shieldInterruptRegenTimeDec").toInt();
-		psStats->shield.shieldPointsPerStep = ini.value("shieldPointsPerStep").toInt();
-
-		auto shieldRange = ini.json("shieldRange");
-		if (!shieldRange.is_null())
-		{
-			ASSERT(shieldRange.is_array(), "shieldRange is not an array");
-			for (const auto& v : shieldRange)
-			{
-				psStats->shield.shieldRange.push_back(v.get<int>());
-			}
-		}
 
 		auto cmdExpRange = ini.json("cmdExpRange");
 		if (!cmdExpRange.is_null())

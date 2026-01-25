@@ -37,6 +37,7 @@ public:
 	void setImageHorizontalOffset(int xOffset);
 	void setCustomTextColors(optional<PIELIGHT> textColor, optional<PIELIGHT> highlightedTextColor);
 	void setCustomImageColor(optional<PIELIGHT> color);
+	void setBackgroundColor(optional<PIELIGHT> color);
 	enum class BorderDrawMode
 	{
 		Never,
@@ -59,6 +60,7 @@ private:
 	optional<PIELIGHT> customTextColor = nullopt;
 	optional<PIELIGHT> customTextHighlightColor = nullopt;
 	optional<PIELIGHT> customImgColor = nullopt;
+	optional<PIELIGHT> customBackgroundColor = nullopt;
 	bool missingImage = false;
 	int imageDimensions = 16;
 	int cachedIdealWidth = 0;

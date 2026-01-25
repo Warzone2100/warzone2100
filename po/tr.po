@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -2009,6 +2009,9 @@ msgstr "Fabrikan istediğin birim(ler)i üretirken, lütfen bekle"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Tebrikler komutanım - birinci göreviniz için hazırsınız"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "SEFERBERLİK BİR"
 
@@ -2983,9 +2986,6 @@ msgstr ""
 "Eğer bir yönlendirici kullanıyorsanız, UPnP'yi veya sisteminizin \n"
 "bağlantı noktasını kullanabilir hale getirin."
 
-msgid "Failed to get a lobby response!"
-msgstr "Bekleme odası cevabı alma başarısız!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Oyun tekrarı dosyasının biçimi, mevcut Warzone 2100'ün destekleyebileceği sürümden daha yeni."
 
@@ -3339,11 +3339,11 @@ msgstr "Sayborg Felaket Füzeli"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Sayborg Termik Alevi Atıcı"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Sayborg Termik Alevi Atıcı"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Flaşışığı Lazeri ile silahlandırılmış Sayborg"
@@ -3657,11 +3657,11 @@ msgstr "Harika Hedefler: Üs binaları"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "En iyi hedefler: Üs yapıları, yerleşkeler, sayborglar"
 
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Harika Hedefler: Sığınaklar ve Bağlama Noktaları"
-
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
+
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Harika Hedefler: Sığınaklar ve Bağlama Noktaları"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr "En iyi hedefler: Sığınaklar, savunmalar, üs yapıları"
@@ -7269,6 +7269,9 @@ msgstr " ve "
 msgid "Spectators"
 msgstr "Gözlemciler"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Aynı anda bir çok mesaj attın. Lütfen daha sonra tekrar dene."
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s hata ayıklama modunu devreye almak istiyor. Etkin: %s, Etkin değil: %s."
@@ -7864,7 +7867,7 @@ msgid "Tip: Adjusting Display Scale"
 msgstr "Tüyo: Görüntü Ölçeğini Ayarlama"
 
 msgid "Replay"
-msgstr "Tekrar oyna"
+msgstr "Tekrar oynat"
 
 msgid "Pause"
 msgstr "Durdur"
@@ -8086,7 +8089,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8313,9 +8329,6 @@ msgstr "Bot düşmanlar"
 
 msgid "Human Allies"
 msgstr "İnsan Düşmanlar"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Aynı anda bir çok mesaj attın. Lütfen daha sonra tekrar dene."
 
 msgid "Research Progress"
 msgstr "Araştırma İlerlemesi"
@@ -9589,6 +9602,9 @@ msgstr "Oyuncu İsmi Seç"
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
+
 msgid "Blind Game:"
 msgstr ""
 
@@ -10127,8 +10143,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "Kurucu, %s kullanıcısı için serbest sohbeti açtı"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "Kurucu, %s kullanıcısı için serbest sohbeti kapadı"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10915,16 +10939,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -10984,91 +11008,6 @@ msgstr "SEFERBERLİK"
 msgid "GAMES"
 msgstr "OYUNLAR"
 
-msgid "Refresh Games List"
-msgstr "Oyun Listesini Yenile"
-
-msgid "Filter Games List"
-msgstr "Oyun Listesini Süz"
-
-msgid "Refreshing..."
-msgstr "Yenileniyor..."
-
-msgid "Searching"
-msgstr "Aranıyor"
-
-msgid "Connecting to the lobby server..."
-msgstr "Bekleme odası sunucusuna bağlanılıyor..."
-
-msgid "Game Name"
-msgstr "Oyun İsmi"
-
-msgid "Map Name"
-msgstr "Harita Adı"
-
-msgid "Status"
-msgstr "Durum"
-
-msgid "Can't connect to lobby server!"
-msgstr "Bekleme odası sunucusuna bağlanılamıyor!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mod: %s"
-
-msgid "Mods: None!"
-msgstr "Mod: Yok!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Sürüm: %s"
-
-msgid "Join as spectator"
-msgstr "Gözlemci olarak katıl"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Warzone sürümünüz bu oyun ile uyumlu değil."
-
-msgid "[Password required]"
-msgstr "[Şifre gerekli]"
-
-msgid "[No Tanks]"
-msgstr "[Tanklar yok]"
-
-msgid "[No Cyborgs]"
-msgstr "[Sayborg yok]"
-
-msgid "[No VTOLs]"
-msgstr "[DİvKlar yok]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "%s tarafından kuruldu"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "%s —%s tarafından kuruldu"
-
-msgid "Can't find any games for your version."
-msgstr "Kullandığınız sürümde oyun bulunamadı."
-
-msgid "There appears to be a game update available!"
-msgstr "Bir oyun güncellemesi var gibi görünüyor!"
-
-msgid "No games are available for your version"
-msgstr "Kullandığınız sürümde oyun bulunamadı"
-
-msgid "Wrong Game Version!"
-msgstr "Yanlış Oyun Sürümü!"
-
-msgid "You have an incompatible mod."
-msgstr "Uyumsuz bir kipiniz var."
-
-msgid "Host couldn't send file?"
-msgstr "Kurucu dosyayı gönderemedi mi?"
-
-msgid "Incorrect Password!"
-msgstr "Geçersiz Şifre!"
-
 msgid "Continue"
 msgstr "Devam Et"
 
@@ -11124,6 +11063,12 @@ msgid "Music Manager"
 msgstr "Müzik Yöneticisi"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11489,13 +11434,8 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr "Tam ekran masaüstü modunda, çözünürlük masaüstünüz ile eşleştirilir (veya pencere yöneticisinin çözünürlüğü ile)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Çözünürlüğü pencereyi normal şekilde boyutlandırarak değiştirebilirsiniz (Köşe/kenarı sürüklemeyi deneyin)."
+msgid "Desktop Full"
+msgstr ""
 
 msgid "Window Mode"
 msgstr ""
@@ -11503,11 +11443,8 @@ msgstr ""
 msgid "Windowed"
 msgstr "Pencere"
 
-msgid "Desktop Full"
-msgstr "Penceresiz Tam Ekran"
-
-msgid "Resolution"
-msgstr "Çözünürlük"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr ""
@@ -11592,6 +11529,93 @@ msgid "not ready"
 msgstr "hazır değil"
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Bir oyun güncellemesi var gibi görünüyor!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Warzone sürümünüz bu oyun ile uyumlu değil."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11708,6 +11732,9 @@ msgstr "Tek Kişilik Çatışma"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Oyun İsmi"
+
 msgid "Click to see Map"
 msgstr "Haritayı görmek için tıkla"
 
@@ -11799,13 +11826,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

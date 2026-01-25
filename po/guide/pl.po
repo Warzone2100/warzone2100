@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -24,121 +24,121 @@ msgid "As you progress through the campaign, you will collect Artifacts from ene
 msgstr "Postępując w kampanii będziesz zbierać artefakty z baz przeciwnika (oraz z wybranych jednostek przeciwnika)."
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr ""
+msgstr "To miejsce, odblokuje Ci cenne technologie, które możesz badać w obiekcie badawczym."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr ""
+msgstr "Artefakty to małe białe pudełka z zielonym wskaźnikiem powyżej i można je podnieść, przesuwając jakąkolwiek jednostkę wystarczająco blisko."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr ""
+msgstr "Wszystkie artefakty muszą być zbierane w ramach warunków zwycięstwa każdego poziomu."
 
 msgid "Backstory"
-msgstr ""
+msgstr "Historia"
 
 msgid "In the late 21st century, NASDA (the North American Strategic Defense Agency) developed and deployed a massive missile defense system, including a network of nuclear-equipped satellites and ground-based launch sites."
-msgstr ""
+msgstr "Pod koniec XXI wieku, NASDA (północnoamerykańska strategiczna Agencja Obrony) opracowała i wprowadziła system obrony przeciwrakietowej, w tym sieć satelitów wyposażonych w broń jądrową i naziemnych miejsc startu."
 
 msgid "However, during a routine maintenance check, something went terribly wrong..."
-msgstr ""
+msgstr "Jednak podczas rutynowej kontroli konserwacji, coś poszło strasznie źle..."
 
 msgid "The Collapse came fast and hard. Following a technical error in the satellite defense system, nuclear warheads were ﬁred at major cites across the world."
-msgstr ""
+msgstr "Upadek nastąpił szybko i brutalnie. W związku z błędem technicznym w systemie obrony satelitarnej głowica jądrowa została wystrzelona w główne miasta na całym świecie."
 
 msgid "Minutes later, ground based sites ﬁred in response to the launch. Millions died as nuclear ﬁrestorms wiped out the world’s cities. Billions more died as plagues and epidemics swept away what remained of civilization."
-msgstr ""
+msgstr "Minuty później, naziemne wyrzutnie odpowiedziały ogniem. Miliony zginęły, kiedy burze ognia pochłonęły miasta na świecie. Ponad miliard więcej zginęło, kiedy plagi i epidemie spustoszyły pozostałości cywilizacji."
 
 msgid "Less than a million people survived the Collapse."
-msgstr ""
+msgstr "Mniej niż milion ludzi przetrwało upadek."
 
 msgid "Earth broke into hundreds of small scavenger bands battling each other for the remnants of the former civilization. Only a few had the vision to attempt to rebuild a new world from the ashes."
-msgstr ""
+msgstr "Ziemia została podzielona na setki małych obozów bandytów, którzy walczą pomiędzy sobą o resztki dawnej cywilizacji. Tylko kilka z nich miało wizję, aby spróbować odbudować nowy świat z popiołów."
 
 msgid "## Present Day:"
-msgstr ""
+msgstr "## Obecnie:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr ""
+msgstr "Gracz (zwany dalej „dowódcą”) należy do grupy ocalałych, którzy szukali schronienia w bazie wojskowej na górach skalistych."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr ""
+msgstr "Wychodzą one z podstawy odbudowy świata, przyjmując nazwę „Projekt”."
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr ""
+msgstr "Projekt wysyła trzy zespoły w celu odzyskania artefaktów, umożliwiając w ten sposób badania i stosowanie technologii sprzed upadku."
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
-msgstr ""
+msgstr "- Drużyna Alfa została wysłana do pustyni Arizony na południowym wschodzie od siedziby Projektu."
 
 msgid "- Beta team is sent to the remains of Chicago"
-msgstr ""
+msgstr "- Drużyna Beta została wysłana na pozostałości Chicago"
 
 msgid "- Gamma team is sent into the northern Rockies in Colorado"
-msgstr ""
+msgstr "- Drużyna Gamma została wysłana do północnych gór skalistych w Colorado"
 
 msgid "Command Panel"
-msgstr ""
+msgstr "Kwatera główna"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr ""
+msgstr "Istnieje sześć różnych interfejsów panelu poleceń, plus przycisk centralny. Otwierasz interfejs poleceń, naciskając odpowiedni przycisk."
 
 msgid "The middle / central button closes any open command interface."
-msgstr ""
+msgstr "Środkowy / centralny przycisk zamyka każdy otwarty interfejs poleceń."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Obrona Twojej Bazy"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "W Warzone 2100 twoja baza domowa trwa przez cały czas trwania kampanii."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "W związku z tym niezbędne jest przygotowanie się do przyszłej obrony Twojej bazy."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Gdy jednostki są oczywistą obroną Twojej bazy, jej konstrukcja jest również bardzo ważna."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Zbuduj struktury obronne, które zapewniają ochronę, ograniczają dostęp, wykrywają wrogów i zadają obrażenia, dzięki czemu możesz lepiej przeciwdziałać ataki wroga."
 
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Dane wywiadu"
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr ""
+msgstr "Okno Inteligencji to miejsce, w którym możesz znaleźć swoje aktualne cele misji, odtworzyć spotkanie z aktualną misją i przeczytać więcej o ukończonych projektach badawczych."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr ""
+msgstr "Gdy otworzysz okno inteligencji, na dole ekranu pojawiają się dwa rzędy ikon."
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr ""
+msgstr "Wybranie ikony wyświetli informacje o tym badaniu lub misji w środku ekranu."
 
 msgid "Using the Mission Timer"
-msgstr ""
+msgstr "Używanie Timera Misji"
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr ""
+msgstr "Większość czasu, spędzisz na patrzeniu na zegar. Czasami, będziesz marzył o większej jego ilości. A czasami będziesz myślał, że masz to aż za dużo."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr ""
+msgstr "Zawsze istnieją inteligentne sposoby na wykorzystanie dodatkowego czasu, aby przygotować się na walki, które są przed Tobą."
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr ""
+msgstr "Bez względu na to, czy ukończysz nowe badanie, wybudujesz budynki obronne czy będziesz przerabiać jednostki z nowymi broniami i technologią... nie pozwól na marnowanie czasu."
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
 msgstr ""
 
 msgid "Power"
-msgstr ""
+msgstr "Energia"
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr ""
+msgstr "W Warzone 2100 energia jest twoim kluczowym zasobem."
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
-msgstr ""
+msgstr "Wydajesz energię do budowania struktur, wytwarzania jednostek i badania ulepszeń / nowych technologi."
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr ""
+msgstr "Energia wytwarzana jest przez generatory zasilania, które są zasilane dalej przez Wiertnice Naftowe."
 
 msgid "Researching Technology"
-msgstr ""
+msgstr "Technologia badania"
 
 msgid "Researching technologies is accomplished using Research Facilities."
 msgstr ""
@@ -212,10 +212,10 @@ msgstr ""
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
 msgstr ""
 
-msgid "Each Factory can build one unit at a time, but you can queue multiple units for production."
+msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
 msgstr ""
 
-msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
 msgstr ""
 
 msgid "Demolishing Structures"
@@ -413,13 +413,16 @@ msgstr ""
 msgid "Recycling"
 msgstr ""
 
-msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it."
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
 msgstr ""
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr ""
 
-msgid "The unit’s experience level will be placed in the next unit that is manufactured."
+msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
+msgstr ""
+
+msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
 msgstr ""
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
@@ -497,16 +500,16 @@ msgstr ""
 msgid "Attaching Units"
 msgstr ""
 
-msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
+msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
 msgstr ""
 
 msgid "## Limits:"
 msgstr ""
 
-msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
+msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
 msgstr ""
 
-msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
+msgid "After each promotion, the Commander is able to control 2 more units."
 msgstr ""
 
 msgid "Detaching Units"
@@ -533,7 +536,7 @@ msgstr ""
 msgid "Targeting"
 msgstr ""
 
-msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
+msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
 msgstr ""
 
 msgid "The attached units will have greater accuracy when firing."
@@ -548,7 +551,7 @@ msgstr ""
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
 msgstr ""
 
-msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
+msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
 msgstr ""
 
 msgid "Designing Units"
@@ -626,7 +629,7 @@ msgstr ""
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
 msgstr ""
 
-msgid "Hover's high speeds and ability to traverse water make it perfect for hit-and-run attack vehicles."
+msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
 msgstr ""
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
@@ -839,7 +842,7 @@ msgstr ""
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
 msgstr ""
 
-msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
 msgstr ""
 
 msgid "Kinetic & Thermal Damage"
@@ -911,10 +914,10 @@ msgstr ""
 msgid "All-Rounder"
 msgstr ""
 
-msgid "\"All-Rounder\" weapons are effective against vehicles and most structures."
+msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
 msgstr ""
 
-msgid "However, All-Rounder weapons are less effective against bunkers and infantry."
+msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
 msgstr ""
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
@@ -1022,7 +1025,7 @@ msgstr ""
 msgid "Flamer"
 msgstr ""
 
-msgid "Incendiary \"Flamer\" weapons are effective against both vehicles and infantry."
+msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
 msgstr ""
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."

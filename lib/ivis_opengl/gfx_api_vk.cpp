@@ -166,6 +166,8 @@ const std::vector<std::tuple<_vkl_env_text_type, _vkl_env_text_type, bool>> vulk
 	, {_vkl_env_text("DISABLE_VK_LAYER_reshade_1"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_VK_LAYER_GPUOpen_GRS"), _vkl_env_text("1"), true}
 	, {_vkl_env_text("DISABLE_VKBASALT"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_PLAYCLAW_LAYER"), _vkl_env_text("1"), true}
+	, {_vkl_env_text("DISABLE_VULKAN_WS_CAPTURE"), _vkl_env_text("1"), true} // WS CaptureGameHook (VK_LAYER_WS_HOOK)
 	// Disable this layer to avoid various issues enumerating all devices on systems with AMD iGPU + dedicated graphics card
 	, {_vkl_env_text("DISABLE_LAYER_AMD_SWITCHABLE_GRAPHICS_1"), _vkl_env_text("1"), true}
 };
@@ -3624,11 +3626,27 @@ bool VulkanDeviceBlocklistEntry::VersionRange::isWithinRange(uint32_t version) c
 	return minVersion.has_value() || maxVersion.has_value();
 }
 
+inline constexpr uint32_t kVendorIdAMD = 0x1002;
 inline constexpr uint32_t kVendorIdIntel = 0x8086;
+inline constexpr uint32_t kVendorIdNvidia = 0x10DE;
 
 constexpr VulkanDeviceBlocklistEntry vulkanDeviceBlocklist[] = {
-	// Block old Intel drivers due to crashes (by checking for ones that support < Vulkan 1.1.0 - these should be very old)
-	{ kVendorIdIntel, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 1, 0))-1} }
+	// Block old Intel drivers due to crashes (by checking for ones that support < Vulkan 1.2.0 - these should be very old)
+	{ kVendorIdIntel, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 2, 0))-1} }
+	// Block old Nvidia drivers due to crashes (by checking for ones that support < Vulkan 1.2.0 - these should be very old)
+	, { kVendorIdNvidia, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 2, 0))-1} }
+	// Block old AMD drivers due to crashes (by checking for ones that support < Vulkan 1.1.0 - these should be very old)
+	, { kVendorIdAMD, nullopt, nullopt, VulkanDeviceBlocklistEntry::VersionRange{nullopt, /* maxVersion */ (VK_MAKE_VERSION(1, 1, 0))-1} }
+
+#if defined(WZ_OS_WIN)
+	// Block specific older Windows Nvidia driver version (1892728832 => 451.67.0.0) that crashes when recreating swapchain (in vkDestroySwapchainKHR)
+	, { kVendorIdNvidia, nullopt, VulkanDeviceBlocklistEntry::VersionRange{1892728832, 1892728832}, nullopt }
+#endif
+
+#if defined(WZ_OS_MAC)
+	// Block Vulkan (via MoltenVK) on Intel graphics on macOS (due to crashes)
+	, { kVendorIdIntel, nullopt, nullopt, nullopt }
+#endif
 };
 
 static bool isOnVulkanDeviceBlocklist(const vk::PhysicalDeviceProperties& deviceProperties)
@@ -3804,7 +3822,7 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 
 	if (isOnVulkanDeviceBlocklist(deviceProperties))
 	{
-		debug(LOG_3D, "Excluding deviceID [%" PRIu32 "] (%s) because: on Vulkan blocklist - please update your driver", deviceProperties.deviceID, deviceProperties.deviceName.data());
+		debug(LOG_INFO, "Excluding deviceID [%" PRIu32 "] (\"%s\", apiVersion: %s, driverVersion: %" PRIu32 ", vendorID: %" PRIu32 ") because: on Vulkan blocklist - please update your driver", deviceProperties.deviceID, deviceProperties.deviceName.data(), VkhInfo::vulkan_apiversion_to_string(deviceProperties.apiVersion).c_str(), deviceProperties.driverVersion, deviceProperties.vendorID);
 		return 0;
 	}
 
@@ -4188,7 +4206,14 @@ void VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reaso
 	{
 		// Encountered an unrecoverable error trying to create the swapchain
 		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug(LOG_ERROR, "createSwapchain() failed - unrecoverable Vulkan error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		if (resultErr == vk::Result::eSuboptimalKHR)
+		{
+			debug(LOG_3D, "createSwapchain() failed with error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		}
+		else
+		{
+			debug(LOG_ERROR, "createSwapchain() failed - unrecoverable Vulkan error: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+		}
 		errorHandlingDepth.pop_back();
 		throw;
 	}
@@ -4621,7 +4646,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	}
 
 	try {
-		auto acquireNextResult = acquireNextSwapchainImage(allowHandleSurfaceLost);
+		auto acquireNextResult = acquireNextSwapchainImage(allowHandleSurfaceLost, true);
 		switch (acquireNextResult)
 		{
 			case AcquireNextSwapchainImageResult::eSuccess:
@@ -4636,7 +4661,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	catch (const vk::SystemError& e) {
 		// acquireNextSwapchainImage failed, and couldn't recover
 		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug(LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
+		debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
 		throw;
 	}
 
@@ -5267,8 +5292,6 @@ bool VkRoot::createLogicalDevice()
 	debug(LOG_3D, "Using device extensions: %s", deviceExtensionsAsString.c_str());
 
 	const auto deviceCreateInfo = vk::DeviceCreateInfo()
-		.setEnabledLayerCount(static_cast<uint32_t>(layers.size()))
-		.setPpEnabledLayerNames(layers.data())
 		.setEnabledExtensionCount(static_cast<uint32_t>(enabledDeviceExtensions.size()))
 		.setPpEnabledExtensionNames(enabledDeviceExtensions.data())
 		.setPEnabledFeatures(&enabledFeatures)
@@ -5882,7 +5905,7 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 }
 
 // throws a vk::SystemError on an unrecoverable error (like OOM)
-VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool allowHandleSurfaceLost)
+VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool allowHandleSurfaceLost, bool onCreate)
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
@@ -5929,9 +5952,31 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: unhandled error: %s", e.what());
 		throw;
 	}
-	if(acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
+	if (acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - should probably recreate swapchain (in the future)");
+#ifdef WZ_OS_MAC
+		// Workaround MoltenVK issue: https://github.com/KhronosGroup/MoltenVK/issues/2542
+		if (!onCreate)
+		{
+			debug(LOG_INFO, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - immediately recreate");
+			try {
+				createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eSuboptimalKHR); // throws on failure
+				return AcquireNextSwapchainImageResult::eRecoveredFromError;
+			}
+			catch (const vk::SystemError& e) {
+				auto resultErr = static_cast<vk::Result>(e.code().value());
+				debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "Failed to recreate out-of-date swapchain: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+				throw;
+			}
+		}
+		else
+		{
+			// Can't recreate (already attempting to), so throw eSuboptimalKHR as an exception,
+			// and rely on calling code to skip drawing until the swapchain can be properly recreated...
+			WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eSuboptimalKHR, "acquireNextImageKHR failed");
+		}
+#endif
 	}
 
 	currentSwapchainIndex = acquireNextImageResult.value;
@@ -6121,21 +6166,31 @@ void VkRoot::endRenderPass()
 	{
 		try {
 			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+
+			if (queuedSwapModeChange.has_value())
+			{
+				if (queuedSwapModeChange.value().completionHandler)
+				{
+					queuedSwapModeChange.value().completionHandler();
+				}
+				queuedSwapModeChange.reset();
+			}
 		}
 		catch (const vk::SystemError& e)
 		{
 			auto resultErr = static_cast<vk::Result>(e.code().value());
-			debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-			queuedSwapModeChange.reset();
-			handleUnrecoverableError(resultErr);
-		}
-		if (queuedSwapModeChange.has_value())
-		{
-			if (queuedSwapModeChange.value().completionHandler)
+			debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
+			if (resultErr == vk::Result::eSuboptimalKHR)
 			{
-				queuedSwapModeChange.value().completionHandler();
+				// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
+				swapchainSize.width = 1;
+				swapchainSize.height = 1;
 			}
-			queuedSwapModeChange.reset();
+			else
+			{
+				queuedSwapModeChange.reset();
+				handleUnrecoverableError(resultErr);
+			}
 		}
 		return; // end processing this flip
 	}
@@ -6213,8 +6268,17 @@ void VkRoot::endRenderPass()
 		catch (const vk::SystemError& e) {
 			// acquireNextSwapchainImage failed, and couldn't recover
 			auto resultErr = static_cast<vk::Result>(e.code().value());
-			debug(LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
-			handleUnrecoverableError(resultErr);
+			debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
+			if (resultErr == vk::Result::eSuboptimalKHR)
+			{
+				// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
+				swapchainSize.width = 1;
+				swapchainSize.height = 1;
+			}
+			else
+			{
+				handleUnrecoverableError(resultErr);
+			}
 		}
 
 		backend_impl->getDrawableSize(&w, &h);
@@ -6224,7 +6288,24 @@ void VkRoot::endRenderPass()
 			{
 				// Must re-create swapchain
 				debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-				createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+				try {
+					createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+				}
+				catch (const vk::SystemError& e)
+				{
+					auto resultErr = static_cast<vk::Result>(e.code().value());
+					debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "createNewSwapchainAndSwapchainSpecificStuff failed: %s", vk::to_string(resultErr).c_str());
+					if (resultErr == vk::Result::eSuboptimalKHR)
+					{
+						// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
+						swapchainSize.width = 1;
+						swapchainSize.height = 1;
+					}
+					else
+					{
+						handleUnrecoverableError(resultErr);
+					}
+				}
 				return; // end processing this flip
 			}
 		}

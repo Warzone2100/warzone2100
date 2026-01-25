@@ -205,6 +205,10 @@ static void resetHomeStructureObjects()
 				REPAIR_FACILITY *psRepairFac = &psStruct->pFunctionality->repairFacility;
 				if (psRepairFac->psObj)
 				{
+					if (psRepairFac->state == RepairState::Repairing)
+					{
+						droidRepairStopped(castDroid(psRepairFac->psObj), psStruct);
+					}
 					psRepairFac->psObj = nullptr;
 					psRepairFac->state = RepairState::Idle;
 				}
@@ -1742,23 +1746,19 @@ static void missionResetDroids()
 	});
 }
 
-/*unloads the Transporter passed into the mission at the specified x/y
-goingHome = true when returning from an off World mission*/
-void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
+/*unloads the Transporter passed into the mission at the specified x/y */
+void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 {
+	static std::vector<DROID *> disembarkedDroids;
 	PerPlayerDroidLists* ppCurrentList;
-	UDWORD		droidX, droidY;
+	UDWORD droidX, droidY;
+	optional<UDWORD> lastDroidX, lastDroidY;
 	DROID_GROUP	*psGroup;
 
 	ASSERT_OR_RETURN(, psTransporter != nullptr, "Invalid transporter");
-	if (goingHome)
-	{
-		ppCurrentList = &mission.apsDroidLists;
-	}
-	else
-	{
-		ppCurrentList = &apsDroidLists;
-	}
+	ppCurrentList = &apsDroidLists;
+
+	disembarkedDroids.clear();
 
 	//unload all the droids from within the current Transporter
 	if (psTransporter->isTransporter())
@@ -1770,22 +1770,40 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			{
 				break;
 			}
-			//add it back into current droid lists
-			addDroid(psDroid, *ppCurrentList);
 
 			//starting point...based around the value passed in
 			droidX = map_coord(x);
 			droidY = map_coord(y);
-			if (goingHome)
-			{
-				//swap the droid and map pointers
-				swapMissionPointers();
-			}
 			if (!pickATileGen(&droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
-				ASSERT(false, "unloadTransporter: Unable to find a valid location");
-				return;
+				if (!bMultiPlayer)
+				{
+					// try to avoid failing to unload a transporter in campaign mode - stack units on top of each other if needed
+					if (lastDroidX.has_value() && lastDroidY.has_value())
+					{
+						debug(LOG_INFO, "unloadTransporter: Stacking units due to lack of space");
+						droidX = lastDroidX.value();
+						droidY = lastDroidY.value();
+					}
+					else
+					{
+						ASSERT(false, "unloadTransporter: Unable to find a valid location");
+						break;
+					}
+				}
+				else
+				{
+					// in skirmish / MP, a full or partial failure to unload may occur - log and continue with possibly partial disembark
+					debug(LOG_INFO, "unloadTransporter: Only room to unload %zu units", disembarkedDroids.size());
+					break;
+				}
 			}
+			lastDroidX = droidX;
+			lastDroidY = droidY;
+
+			//add it back into current droid lists
+			addDroid(psDroid, *ppCurrentList);
+
 			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
 			updateDroidOrientation(psDroid);
 
@@ -1797,17 +1815,15 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 				// So VTOLs don't try to rearm on another map
 				setDroidBase(psDroid, nullptr);
 			}
-			if (goingHome)
-			{
-				//swap the droid and map pointers
-				swapMissionPointers();
-			}
+
+			disembarkedDroids.push_back(psDroid);
 		}
 
-		/* trigger script callback detailing group about to disembark */
-		transporterSetScriptCurrent(psTransporter);
-		triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
-		transporterSetScriptCurrent(nullptr);
+		if (!bMultiPlayer || !disembarkedDroids.empty())
+		{
+			/* trigger script callback detailing group about to disembark */
+			triggerEvent(TRIGGER_TRANSPORTER_LANDED, psTransporter);
+		}
 
 		/* remove droids from transporter group if not already transferred to script group */
 		mutating_list_iterate(psTransporter->psGroup->psList, [&psGroup, psTransporter](DROID* psDroid)
@@ -1816,6 +1832,13 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			{
 				return IterationResult::BREAK_ITERATION;
 			}
+
+			if (std::find(disembarkedDroids.begin(), disembarkedDroids.end(), psDroid) == disembarkedDroids.end())
+			{
+				// not found in list of disembarked droids - skip removing from the transporter group
+				return IterationResult::CONTINUE_ITERATION;
+			}
+
 			// a commander needs to get it's group back
 			if (psDroid->droidType == DROID_COMMAND)
 			{
@@ -1834,7 +1857,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	if (!bMultiPlayer)
 	{
 		// Send all transporter Droids back to home base if off world
-		if (!goingHome)
 		{
 			/* Stop the camera following the transporter */
 			psTransporter->selected = false;
@@ -1848,6 +1870,8 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			transporterSetLaunchTime(gameTime);
 		}
 	}
+
+	disembarkedDroids.clear();
 }
 
 void missionMoveTransporterOffWorld(DROID *psTransporter)
@@ -1857,9 +1881,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 	if (psTransporter->droidType == DROID_SUPERTRANSPORTER)
 	{
 		/* trigger script callback */
-		transporterSetScriptCurrent(psTransporter);
 		triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
-		transporterSetScriptCurrent(nullptr);
 
 		if (droidRemove(psTransporter, apsDroidLists))
 		{

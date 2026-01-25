@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "Language: et_EE\n"
@@ -2009,6 +2009,9 @@ msgstr "Oota kuni tehas toodab uue(d) üksuse(d)"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Õnnitlused komandör - sa oled valmis oma esimeseks missiooniks"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "KAMPAANIA ÜKS"
 
@@ -2979,9 +2982,6 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-msgid "Failed to get a lobby response!"
-msgstr ""
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
 
@@ -3335,11 +3335,11 @@ msgstr "Relvastatud Küborgi Scourge Rakettiheitjaga"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Relvastatud küborgi Termiidi Leegiheitjaga"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Relvastatud küborgi Termiidi Leegiheitjaga"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Relvastatud Välkvalgus laseriga"
@@ -3653,11 +3653,11 @@ msgstr "Parimad Sihtmärgid: Baas ehitised"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Parimad Sihtmärgid: Punkrid ja Tugipunkt"
-
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Parimad Sihtmärgid: Punkrid ja tugipunktid"
+
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Parimad Sihtmärgid: Punkrid ja Tugipunkt"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr ""
@@ -7257,6 +7257,9 @@ msgstr ""
 msgid "Spectators"
 msgstr ""
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
@@ -8070,7 +8073,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8296,9 +8312,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -9570,6 +9583,9 @@ msgstr "Sisesta Mängija nimi"
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
+
 msgid "Blind Game:"
 msgstr ""
 
@@ -10108,7 +10124,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -10896,16 +10920,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -10965,91 +10989,6 @@ msgstr ""
 msgid "GAMES"
 msgstr "MÄNGUD"
 
-msgid "Refresh Games List"
-msgstr "Värskenda Mängulisti"
-
-msgid "Filter Games List"
-msgstr ""
-
-msgid "Refreshing..."
-msgstr ""
-
-msgid "Searching"
-msgstr "Otsimine"
-
-msgid "Connecting to the lobby server..."
-msgstr ""
-
-msgid "Game Name"
-msgstr ""
-
-msgid "Map Name"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Can't connect to lobby server!"
-msgstr ""
-
-#, c-format
-msgid "Mods: %s"
-msgstr ""
-
-msgid "Mods: None!"
-msgstr ""
-
-#, c-format
-msgid "Version: %s"
-msgstr ""
-
-msgid "Join as spectator"
-msgstr ""
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
-
-msgid "[Password required]"
-msgstr ""
-
-msgid "[No Tanks]"
-msgstr ""
-
-msgid "[No Cyborgs]"
-msgstr ""
-
-msgid "[No VTOLs]"
-msgstr ""
-
-#, c-format
-msgid "Hosted by %s"
-msgstr ""
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr ""
-
-msgid "Can't find any games for your version."
-msgstr ""
-
-msgid "There appears to be a game update available!"
-msgstr ""
-
-msgid "No games are available for your version"
-msgstr ""
-
-msgid "Wrong Game Version!"
-msgstr "Vale Mängu versioon"
-
-msgid "You have an incompatible mod."
-msgstr "Sul on vastuolus mod."
-
-msgid "Host couldn't send file?"
-msgstr "Võõrustaja ei suutnud faili saata?"
-
-msgid "Incorrect Password!"
-msgstr "Vale Salasõna"
-
 msgid "Continue"
 msgstr ""
 
@@ -11105,6 +11044,12 @@ msgid "Music Manager"
 msgstr ""
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11470,12 +11415,7 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgid "Desktop Full"
 msgstr ""
 
 msgid "Window Mode"
@@ -11484,10 +11424,7 @@ msgstr ""
 msgid "Windowed"
 msgstr "Akendatud"
 
-msgid "Desktop Full"
-msgstr ""
-
-msgid "Resolution"
+msgid "Fullscreen Mode"
 msgstr ""
 
 msgid "Behaviors"
@@ -11573,6 +11510,93 @@ msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr ""
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr ""
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11689,6 +11713,9 @@ msgstr "Ühe Mängja Lahing"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr ""
+
 msgid "Click to see Map"
 msgstr "Vajuta, et Kaarti näha"
 
@@ -11778,13 +11805,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

@@ -604,7 +604,7 @@ static bool kickActivePlayerWithIdentity(const std::string& playerIdentityStrCop
 			wz_command_interface_output("WZCMD error: Can't kick host!\n");
 			return;
 		}
-		const char *pPlayerName = getPlayerName(i);
+		const char *pPlayerName = getPlayerName(i, true);
 		std::string playerNameStr = (pPlayerName) ? pPlayerName : (std::string("[p") + std::to_string(i) + "]");
 		kickPlayer(i, kickReasonStrCopy.c_str(), ERROR_KICKED, banPlayer);
 		auto KickMessage = astringf("Player %s was kicked by the administrator.", playerNameStr.c_str());
@@ -1764,7 +1764,7 @@ void wz_command_interface_output_room_status_json(bool queued)
 		auto lobbyGameId = NET_getCurrentHostedLobbyGameId();
 		if (lobbyGameId != 0)
 		{
-			data["lobbyid"] = lobbyGameId;
+			data["lobbyid"] = std::to_string(lobbyGameId);
 		}
 	}
 	data["map"] = game.map;

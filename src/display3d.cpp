@@ -1125,7 +1125,7 @@ void draw3DScene()
 			++visibleDroids;
 		}
 		char droidCounts[255];
-		sprintf(droidCounts, "Droids: %d drawn, %d undrawn", visibleDroids, undrawnDroids);
+		ssprintf(droidCounts, "Droids: %d drawn, %d undrawn", visibleDroids, undrawnDroids);
 		droidText.setText(droidCounts, font_regular);
 		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
 	}

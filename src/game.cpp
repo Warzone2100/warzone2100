@@ -7944,15 +7944,18 @@ static bool writeMessageFile(const char *pFileName)
 					if (psProx && psProx->type == POS_PROXDATA)
 					{
 						//message has viewdata so store the name
-						VIEWDATA *pViewData = psMessage->pViewData;
-						ini.setValue("name", pViewData->name);
+						const VIEWDATA *pViewData = psMessage->pViewData;
+						ini.setValue("name", pViewData != nullptr ? pViewData->name : "NULL");
 
 						// save beacon data
 						if (psMessage->dataType == MSG_DATA_BEACON)
 						{
-							VIEW_PROXIMITY *viewData = (VIEW_PROXIMITY *)psMessage->pViewData->pData;
-							ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
-							ini.setValue("sender", viewData->sender);
+							const VIEW_PROXIMITY *viewData = (psMessage->pViewData) ? (VIEW_PROXIMITY *)psMessage->pViewData->pData : nullptr;
+							if (viewData)
+							{
+								ini.setVector2i("position", Vector2i(viewData->x, viewData->y));
+								ini.setValue("sender", viewData->sender);
+							}
 						}
 					}
 					else

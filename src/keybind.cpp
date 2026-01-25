@@ -1124,7 +1124,7 @@ void kf_SelectGrouping(UDWORD groupNumber)
 	intGroupsChanged(groupNumber);
 
 	/* play group audio but only if they weren't already selected - AM */
-	if (Selected && !bAlreadySelected)
+	if (Selected && !bAlreadySelected && war_getPlayAudioCue_GroupReporting())
 	{
 		audio_QueueTrack(ID_SOUND_GROUP_0 + groupNumber);
 		audio_QueueTrack(ID_SOUND_REPORTING);

@@ -66,7 +66,7 @@ enum AP_STATUS
 };
 
 static ATPART	*asAtmosParts = nullptr;
-static UDWORD	freeParticle;
+static UDWORD	freeParticle = 0;
 static WT_CLASS	weather = WT_NONE;
 
 /* Setup all the particles */
@@ -76,6 +76,10 @@ void atmosInitSystem()
 	{
 		// calloc sets all to APS_INACTIVE initially
 		asAtmosParts = (ATPART *)calloc(MAX_ATMOS_PARTICLES, sizeof(*asAtmosParts));
+		if (!asAtmosParts)
+		{
+			debug(LOG_ERROR, "Failed to initialize atmos system - memory allocation failed");
+		}
 	}
 	/* Start at the beginning */
 	freeParticle = 0;
@@ -253,6 +257,11 @@ void atmosUpdateSystem()
 	UDWORD	numberToAdd;
 	Vector3f pos;
 
+	if (!asAtmosParts)
+	{
+		return;
+	}
+
 	// we don't want to do any of this while paused.
 	if (!gamePaused() && weather != WT_NONE)
 	{
@@ -329,7 +338,7 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiv
 	WZ_PROFILE_SCOPE(atmosDrawParticles);
 	UDWORD	i;
 
-	if (weather == WT_NONE)
+	if (weather == WT_NONE || !asAtmosParts)
 	{
 		return;
 	}

@@ -27,23 +27,14 @@
 #include "../../warzoneconfig.h"
 #include "lib/framework/wzapp.h"
 
+#include <fmt/core.h>
+
 // MARK: -
 
-OptionInfo::AvailabilityResult IsInFullscreenMode(const OptionInfo&)
+OptionInfo::AvailabilityResult NotEditableCondition(const OptionInfo&)
 {
 	OptionInfo::AvailabilityResult result;
-	result.available = (war_getWindowMode() == WINDOW_MODE::fullscreen);
-	switch (war_getWindowMode())
-	{
-		case WINDOW_MODE::desktop_fullscreen:
-			result.localizedUnavailabilityReason = _("In Desktop Fullscreen mode, the resolution matches that of your desktop \n(or what the window manager allows).");
-			break;
-		case WINDOW_MODE::windowed:
-			result.localizedUnavailabilityReason = _("You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)");
-			break;
-		default:
-			break;
-	}
+	result.available = false;
 	return result;
 }
 
@@ -52,8 +43,8 @@ OptionInfo::AvailabilityResult IsInFullscreenMode(const OptionInfo&)
 class ScreenResolutionsModel
 {
 public:
-	typedef const std::vector<screeninfo>::iterator iterator;
-	typedef const std::vector<screeninfo>::const_iterator const_iterator;
+	typedef const std::vector<optional<screeninfo>>::iterator iterator;
+	typedef const std::vector<optional<screeninfo>>::const_iterator const_iterator;
 
 	ScreenResolutionsModel(): modes(ScreenResolutionsModel::loadModes())
 	{
@@ -88,29 +79,24 @@ public:
 
 	bool selectAt(size_t index) const
 	{
-		ASSERT_OR_RETURN(false, wzGetCurrentWindowMode() == WINDOW_MODE::fullscreen, "Attempt to change resolution in windowed-mode / desktop-fullscreen mode");
-
 		ASSERT_OR_RETURN(false, index < modes.size(), "Invalid mode index passed to ScreenResolutionsModel::selectAt");
 
 		auto selectedResolution = modes.at(index);
 
 		auto currentResolution = getCurrentResolution();
 		// Attempt to change the resolution
-		if (!wzChangeFullscreenDisplayMode(selectedResolution.screen, selectedResolution.width, selectedResolution.height))
+		if (!wzChangeFullscreenDisplayMode(selectedResolution))
 		{
 			debug(
 				LOG_WARNING,
-				"Failed to change active resolution from: %s to: %s",
+				"Failed to change fullscreen mode from: %s to: %s",
 				ScreenResolutionsModel::resolutionString(currentResolution).toUtf8().c_str(),
 				ScreenResolutionsModel::resolutionString(selectedResolution).toUtf8().c_str()
 			);
 			return false;
 		}
 
-		// Store the new width and height
-		war_SetFullscreenModeScreen(selectedResolution.screen);
-		war_SetFullscreenModeWidth(selectedResolution.width);
-		war_SetFullscreenModeHeight(selectedResolution.height);
+		// NOTE: Settings are saved by wzChangeFullscreenDisplayMode on success
 
 		return true;
 	}
@@ -120,13 +106,24 @@ public:
 		return ScreenResolutionsModel::resolutionString(getCurrentResolution());
 	}
 
-	static WzString resolutionString(const screeninfo &info)
+	static WzString resolutionString(const optional<screeninfo> &optInfo)
 	{
-		return WzString::format("[%d] %d × %d", info.screen, info.width, info.height);
+		if (!optInfo.has_value())
+		{
+			return _("Desktop Full");
+		}
+		const screeninfo& info = optInfo.value();
+		auto str = WzString::format("[%d] %d × %d @ %.2fhz", info.screen, info.width, info.height, info.refresh_rate);
+		if (info.pixel_density > 1.f)
+		{
+			std::string dpiStr = fmt::format("{:g}", info.pixel_density);
+			str.append(WzString::format(" [%sx DPI]", dpiStr.c_str()));
+		}
+		return str;
 	}
 
 private:
-	const std::vector<screeninfo> modes;
+	const std::vector<optional<screeninfo>> modes;
 
 	static screeninfo getCurrentWindowedResolution()
 	{
@@ -137,38 +134,51 @@ private:
 		info.screen = screen;
 		info.width = windowWidth;
 		info.height = windowHeight;
-		info.refresh_rate = -1;  // Unused.
+		info.pixel_density = 0.f; // Unused.
+		info.refresh_rate = -1.f;  // Unused.
 		return info;
 	}
 
-	static screeninfo getCurrentResolution(optional<WINDOW_MODE> modeOverride = nullopt)
+	static optional<screeninfo> getCurrentResolution()
 	{
-		return (modeOverride.value_or(wzGetCurrentWindowMode()) == WINDOW_MODE::fullscreen) ? wzGetCurrentFullscreenDisplayMode() : getCurrentWindowedResolution();
+		return wzGetCurrentFullscreenDisplayMode();
 	}
 
-	static std::vector<screeninfo> loadModes()
+	static std::vector<optional<screeninfo>> loadModes()
 	{
 		// Get resolutions, sorted with duplicates removed.
-		std::vector<screeninfo> modes = wzAvailableResolutions();
+		std::vector<optional<screeninfo>> modes = wzAvailableResolutions();
 		std::sort(modes.begin(), modes.end(), ScreenResolutionsModel::compareLess);
 		modes.erase(std::unique(modes.begin(), modes.end(), ScreenResolutionsModel::compareEq), modes.end());
 
 		return modes;
 	}
 
-	static std::tuple<int, int, int> compareKey(const screeninfo &x)
+	static std::tuple<int, int, int, float, float> compareKey(const screeninfo &x)
 	{
-		return std::make_tuple(x.screen, x.width, x.height);
+		return std::make_tuple(x.screen, x.width, x.height, x.refresh_rate, x.pixel_density);
 	}
 
-	static bool compareLess(const screeninfo &a, const screeninfo &b)
+	static bool compareLess(const optional<screeninfo> &a, const optional<screeninfo> &b)
 	{
-		return ScreenResolutionsModel::compareKey(a) < ScreenResolutionsModel::compareKey(b);
+		if (!a.has_value())
+		{
+			return b.has_value();
+		}
+		if (!b.has_value())
+		{
+			return false;
+		}
+		return ScreenResolutionsModel::compareKey(a.value()) < ScreenResolutionsModel::compareKey(b.value());
 	}
 
-	static bool compareEq(const screeninfo &a, const screeninfo &b)
+	static bool compareEq(const optional<screeninfo> &a, const optional<screeninfo> &b)
 	{
-		return ScreenResolutionsModel::compareKey(a) == ScreenResolutionsModel::compareKey(b);
+		if (!a.has_value() || !b.has_value())
+		{
+			return a.has_value() == b.has_value();
+		}
+		return ScreenResolutionsModel::compareKey(a.value()) == ScreenResolutionsModel::compareKey(b.value());
 	}
 };
 
@@ -179,6 +189,8 @@ std::shared_ptr<OptionsForm> makeWindowOptionsForm()
 	auto result = OptionsForm::make();
 	result->setRefreshOptionsOnScreenSizeChange(true);
 
+	auto screenResolutionsModel = std::make_shared<ScreenResolutionsModel>();
+
 	result->addSection(OptionsSection(N_("Window"), ""), true);
 	{
 		auto optionInfo = OptionInfo("window.mode", N_("Window Mode"), "");
@@ -187,7 +199,6 @@ std::shared_ptr<OptionsForm> makeWindowOptionsForm()
 				OptionChoices<WINDOW_MODE> result;
 				result.choices = {
 					{_("Windowed"), "", WINDOW_MODE::windowed},
-					{_("Desktop Full"), "", WINDOW_MODE::desktop_fullscreen},
 					{_("Fullscreen"), "", WINDOW_MODE::fullscreen},
 				};
 				result.choices.erase(std::remove_if(result.choices.begin(), result.choices.end(), [](const auto& item) -> bool {
@@ -213,20 +224,13 @@ std::shared_ptr<OptionsForm> makeWindowOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
-	auto screenResolutionsModel = std::make_shared<ScreenResolutionsModel>();
+
+	result->addSection(OptionsSection(N_("Fullscreen"), ""), true);
 	{
-		auto optionInfo = OptionInfo("window.resolution", N_("Resolution"), "");
-		optionInfo.addAvailabilityCondition(IsInFullscreenMode);
+		auto optionInfo = OptionInfo("fullscreen.mode", N_("Fullscreen Mode"), "");
 		auto valueChanger = OptionsDropdown<size_t>::make(
 			[screenResolutionsModel]() {
 				OptionChoices<size_t> result;
-				if (war_getWindowMode() != WINDOW_MODE::fullscreen)
-				{
-					// for now, only allow editing the fullscreen mode when in fullscreen mode
-					// just display the current resolution
-					result.choices.push_back({ScreenResolutionsModel::currentResolutionString(), "", 0});
-					return result;
-				}
 				size_t idx = 0;
 				for (auto resolution: *screenResolutionsModel)
 				{
@@ -241,19 +245,12 @@ std::shared_ptr<OptionsForm> makeWindowOptionsForm()
 				return result;
 			},
 			[screenResolutionsModel](const auto& newResolutionIdx) -> bool {
-				if (war_getWindowMode() != WINDOW_MODE::fullscreen)
-				{
-					return true;
-				}
-				if (!screenResolutionsModel->selectAt(newResolutionIdx))
-				{
-					return false;
-				}
-				return true;
-			}, true
+				return screenResolutionsModel->selectAt(newResolutionIdx);
+			}, true, 15
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
+
 #if !defined(__EMSCRIPTEN__)
 	result->addSection(OptionsSection(N_("Behaviors"), ""), true);
 	{

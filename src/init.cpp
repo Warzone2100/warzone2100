@@ -101,6 +101,7 @@
 #include "version.h"
 #include "hci/teamstrategy.h"
 #include "screens/guidescreen.h"
+#include "titleui/widgets/gamebrowserform.h"
 #include "wzapi.h"
 
 #include "wzphysfszipioprovider.h"
@@ -897,7 +898,8 @@ bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
 	}
 
 	// load it into the level-loading system
-	if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, inMemoryMapVirtualFilenameUID.c_str()))
+	// (and put it at the front of the list, to ensure it's enumerated over any local copy of the map)
+	if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, inMemoryMapVirtualFilenameUID.c_str(), true))
 	{
 		// Failed to enumerate contents - corrupt map archive
 		debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
@@ -1021,14 +1023,14 @@ bool buildMapList(bool campaignOnly)
 		auto mapZipIO = WzMapZipIO::openZipArchiveReadIOProvider(zipReadSource, debugLoggerInstance.get());
 		if (!mapZipIO)
 		{
-			debug(LOG_POPUP, "Failed to open archive: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			debug(LOG_INFO, "Failed to open archive: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
 			continue;
 		}
 		debugLoggerInstance->setLogErrors(false);
 		auto mapPackage = WzMap::MapPackage::loadPackage("", debugLoggerInstance, mapZipIO);
 		if (!mapPackage)
 		{
-			debug(LOG_POPUP, "Failed to load %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			debug(LOG_INFO, "Failed to load %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
 			continue;
 		}
 
@@ -1164,7 +1166,8 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
-	NETshutdown();		// MUST come after widgShutDown (as widget screens might have connections, etc)
+	shutdownLobbyBrowserFetches();
+	netplayShutDown();	// MUST come after widgShutDown (as widget screens might have connections, etc)
 	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
@@ -1804,6 +1807,9 @@ bool stageThreeInitialise()
 			multiStartScreenInit();
 		}
 	}
+
+	// Call once again to update counts (if modified by earlier wzapi events)
+	countUpdate(false);
 
 	return true;
 }

@@ -106,6 +106,10 @@ void war_SetFullscreenModeScreen(int screen);
 int war_GetFullscreenModeScreen();
 void war_SetFullscreenModeHeight(UDWORD height);
 UDWORD war_GetFullscreenModeHeight();
+float war_GetFullscreenModePixelDensity();
+void war_SetFullscreenModePixelDensity(float pixelDensity);
+float war_GetFullscreenModeRefreshRate();
+void war_SetFullscreenModeRefreshRate(float refreshRate);
 void war_setToggleFullscreenMode(int mode);
 int war_getToggleFullscreenMode();
 void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
@@ -140,6 +144,8 @@ bool war_getAutoAdjustDisplayScale();
 void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
 int war_getAutoLagKickSeconds();
 void war_setAutoLagKickSeconds(int seconds);
+int war_getAutoLagKickAggressiveness();
+void war_setAutoLagKickAggressiveness(int aggressiveness);
 int war_getAutoDesyncKickSeconds();
 void war_setAutoDesyncKickSeconds(int seconds);
 int war_getAutoNotReadyKickSeconds();
@@ -184,6 +190,9 @@ void war_setOptionsButtonVisibility(uint8_t val);
 
 void war_runtimeOnlySetAllowVulkanImplicitLayers(bool allowed); // not persisted to config
 bool war_getAllowVulkanImplicitLayers();
+
+bool war_getPlayAudioCue_GroupReporting();
+void war_setPlayAudioCue_GroupReporting(bool val);
 
 enum class ConnectionProviderType : uint8_t;
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -2009,6 +2009,9 @@ msgstr "Aguarde enquanto a fábrica produz a(s) nova(s) unidade(s)"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Parabéns comandante - você está pronto para sua primeira missão"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "PRIMEIRA CAMPANHA"
 
@@ -2983,9 +2986,6 @@ msgstr ""
 "Se você está usando um roteador, configure-o para usar UPnP/NAT-PMP/PCP,\n"
 "ou para encaminhar a porta ao seu sistema."
 
-msgid "Failed to get a lobby response!"
-msgstr "Falha ao obter uma resposta do lobby!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "O formato do arquivo de replay é mais recente que esta versão do Warzone 2100 pode suportar."
 
@@ -2997,7 +2997,7 @@ msgid "Replay File Format Unsupported"
 msgstr "Formato de arquivo de replay não suportado"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "O formato do arquivo de replay é mais antigo do que esta versão do Warzone 2100 pode suportar."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Não foi possível carregar o replay: O arquivo de replay está incompleto ou corrompido."
@@ -3018,17 +3018,17 @@ msgid "OK"
 msgstr "OK"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: Falha no lançamento anterior"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "A tentativa anterior de inicializar o seguinte backend gráfico causou uma falha:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Backend Gráfico: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100 agora vai tentar ser executado usando um backend de gráficos diferentes."
 
 msgid "Menu"
 msgstr "Menu"
@@ -3339,11 +3339,11 @@ msgstr "Armado com o Lançador de Mísseis Scourge"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Armado com foguetes destruidores de Tanques Ciborgue"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armado com Lança-Chamas de Termite"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Armado com Incendiário de Termite Ciborgue"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Armado com Lança-Chamas de Termite"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Armado com Laser Médio"
@@ -3657,10 +3657,10 @@ msgstr "Alvo: Estruturas"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Alvo: Estruturas, defesas, ciborgues"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Alvos: Defesas"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Alvos: Defesas"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -5815,10 +5815,10 @@ msgid "Panther"
 msgstr "Pantera"
 
 msgid "Particle Gun Emplacement"
-msgstr ""
+msgstr "Defesa de Arma de Partículas"
 
 msgid "Particle Gun"
-msgstr ""
+msgstr "Arma de Partículas"
 
 msgid "Pepperpot Pit"
 msgstr "Vala de Morteiro de Velocidade"
@@ -5922,7 +5922,7 @@ msgid "Produces Cyborgs"
 msgstr "Produz ciborgues"
 
 msgid "Production"
-msgstr ""
+msgstr "Produção"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Unidades Regulares e Profissionais são protegidas"
@@ -6224,7 +6224,7 @@ msgid "Rocket accuracy +10%"
 msgstr "Precisão de foguetes +10%"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "Precisão dos Foguetes"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artilharia de foguetes; pode ser designada a um sensor"
@@ -6246,7 +6246,7 @@ msgid "Rocket damage +25%"
 msgstr "Dano de foguetes +25%"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "Dano dos Foguetes"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "O foguete detecta e trava nas emissões dos motores"
@@ -6271,7 +6271,7 @@ msgid "Rocket reload time -15%"
 msgstr "Recarga de foguetes -15%"
 
 msgid "Rocket Reload"
-msgstr ""
+msgstr "Recarga dos Foguetes"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "O foguete segue o designador laser até o alvo"
@@ -6430,7 +6430,7 @@ msgid "Sensor Upgrade"
 msgstr "Melhoria do Sensor"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Sensor"
 
 msgid "Sensors Improved"
 msgstr "Sensores atualizados"
@@ -6616,7 +6616,7 @@ msgid "Systems Research Completed"
 msgstr "Pesquisa de Sistemas Concluída"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "Ligas de Tanque"
 
 msgid "Tank Killer Cyborg"
 msgstr "Ciborgue Destruidor de Tanques"
@@ -6646,7 +6646,7 @@ msgid "Tank Killer"
 msgstr "Destruidor de Tanques"
 
 msgid "Tank Thermal"
-msgstr ""
+msgstr "Térmica de Tanque"
 
 msgid "Tank Traps"
 msgstr "Armadilhas de Tanques"
@@ -6692,10 +6692,10 @@ msgid "Thermal Armor +45%"
 msgstr "Armadura Térmica +45%"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Melhoria de Armadura Térmica AI Mk2"
 
 msgid "Thermal Armor Buff AI"
-msgstr ""
+msgstr "Melhoria de Armadura Térmica AI"
 
 msgid "Thermal Armor Mk2"
 msgstr "Armadura Térmica Mk2"
@@ -7068,7 +7068,7 @@ msgid "VTOL Needle Gun"
 msgstr "Perfuratriz VTOL"
 
 msgid "VTOL Particle Gun"
-msgstr ""
+msgstr "Canhão de Partículas VTOL"
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Bombas de Fósforo VTOL"
@@ -7095,7 +7095,7 @@ msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Áreas de Rearmamento são necessárias para a manutenção dos VTOL's"
 
 msgid "VTOL Rearming"
-msgstr ""
+msgstr "Rearmamento de VTOL"
 
 msgid "VTOL Scourge Missile"
 msgstr "Míssil VTOL Scouge"
@@ -7268,6 +7268,9 @@ msgstr " e "
 
 msgid "Spectators"
 msgstr "Espectadores"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Você enviou mensagens demais nos últimos segundos. Por favor, aguarde e tente novamente."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7513,7 +7516,7 @@ msgid "Enable async join approval (for connecting clients)"
 msgstr "Ativar aprovação para entrada async (para conectar jogadores)"
 
 msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
-msgstr ""
+msgstr "Inicia o anfitrião (autohost) como \"não pronto\", mesmo que seja um anfitrião espectador"
 
 msgid "Base URL for on-demand video downloads"
 msgstr "URL base para downloads de vídeo sob demanda"
@@ -7522,7 +7525,7 @@ msgid "Base video URL"
 msgstr "URL base do vídeo"
 
 msgid "Specify connection provider type to use when hosting game sessions"
-msgstr ""
+msgstr "Especificar o provedor de conexão a usar ao hospedar sessões de jogo"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "O comandante precisa de um nível maior para comandar mais unidades"
@@ -8061,32 +8064,45 @@ msgid "End-Game"
 msgstr "Fim de jogo"
 
 msgid "Host"
-msgstr ""
+msgstr "Anfitrião"
 
 msgid "Admin"
 msgstr "Administrador"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) mudou o time do jogador (%s) para: %d"
 
 #, c-format
 msgid "%s (%s) changed position of player (%s) to: %d"
-msgstr ""
+msgstr "%s (%s) mudou a posição do jogador (%s) para: %d"
 
 #, c-format
 msgid "%s (%s) changed color of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) mudou a cor do jogador (%s) para: %s"
 
 #, c-format
 msgid "%s (%s) changed faction of player (%s) to: %s"
-msgstr ""
+msgstr "%s (%s) mudou a facção do jogador (%s) para: %s"
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
+msgstr "AVISO: Se você não marcar \"Pronto\" logo, você será expulso da sala"
+
+#, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
 msgstr ""
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr "Auto-expulsar jogador (%s) porque ele demorou muito para marcar \"Pronto\""
+
+msgid "NOTICE: Please check Ready"
+msgstr "AVISO: Por favor, marque \"Pronto\""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr "AVISO: Por favor, marque \"Pronto\" para que o jogo possa começar"
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8306,16 +8322,13 @@ msgid "Map Downloaded"
 msgstr "Mapa Baixado"
 
 msgid "Admin modified a setting"
-msgstr ""
+msgstr "O administrador modificou uma configuração"
 
 msgid "Bot Allies"
 msgstr "Aliados de IA"
 
 msgid "Human Allies"
 msgstr "Aliados Humanos"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Você enviou mensagens demais nos últimos segundos. Por favor, aguarde e tente novamente."
 
 msgid "Research Progress"
 msgstr "Progresso das Pesquisas"
@@ -8427,19 +8440,19 @@ msgid "Error Loading Game Data"
 msgstr "Erro ao carregar dados do jogo"
 
 msgid "Global Keys"
-msgstr ""
+msgstr "Chaves Globais"
 
 msgid "Other Keys"
-msgstr ""
+msgstr "Outras Chaves"
 
 msgid "Gameplay Keys"
-msgstr ""
+msgstr "Chaves de Jogabilidade"
 
 msgid "Radar Keys"
-msgstr ""
+msgstr "Chaves de Radar"
 
 msgid "Debug Keys"
-msgstr ""
+msgstr "Chaves de Depuração"
 
 msgid "Debug (level editor)"
 msgstr "Debug (editor de nível)"
@@ -8815,7 +8828,7 @@ msgstr "Selecionar todas as unidades muito danificadas"
 
 #, no-c-format
 msgid "Select all Land Combat Units with >50% HP and no group"
-msgstr ""
+msgstr "Selecione todas as Unidades de Combate Terrestres com > 50% de HP e nenhum grupo"
 
 msgid "Select all Half-tracks"
 msgstr "Selecionar todas as unidades híbridas"
@@ -9467,13 +9480,13 @@ msgid "AutoSave %s failed"
 msgstr "Salvamento automático %s falhou"
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "Salvando automaticamente..."
 
 msgid "Could not save game!"
 msgstr "Impossível salvar o jogo!"
 
 msgid "Failed to load level data or map. Exiting to main menu."
-msgstr ""
+msgstr "Falha ao carregar os dados do nível ou mapa. Saindo para o menu principal."
 
 msgid "Load Transport"
 msgstr "Carregar Transportes"
@@ -9587,19 +9600,22 @@ msgid "Select Player Name"
 msgstr "Selecionar o Nome do Jogador"
 
 msgid "Player Name changes are not allowed when you are muted"
-msgstr ""
+msgstr "Mudanças de Nome de Jogador não são permitidas quando você está mutado"
+
+msgid "Player Name changes are not allowed by the host"
+msgstr "Alterações de Nome do Jogador não são permitidas pelo anfitrião"
 
 msgid "Blind Game:"
 msgstr ""
 
 msgid "- Player names will not be visible to other players (until the game is over)"
-msgstr ""
+msgstr "- Os nomes dos jogadores não serão visíveis para outros jogadores (até o fim do jogo)"
 
 msgid "Blind Lobby:"
 msgstr ""
 
 msgid "- Player names will not be visible to other players (until the game has started)"
-msgstr ""
+msgstr "- Os nomes dos jogadores não serão visíveis para outros jogadores (até que o jogo comece)"
 
 msgid "OPTIONS"
 msgstr "OPÇÕES"
@@ -10127,8 +10143,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "O anfitrião ativou o bate-papo gratuito para o jogador: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "O anfitrião silenciou o bate-papo gratuito para o jogador: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10915,29 +10939,29 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr "Permite spawns e comportamentos adicionais de inimigos para a dificuldade Insana (ou superior)."
+
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Non-Insane Spawns"
-msgstr ""
-
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
-msgstr ""
+msgstr "Ganho Rápido de EXP"
 
 msgid "Increases unit experience point gain by 2x."
-msgstr ""
+msgstr "Aumenta o ganho de experiência das unidades em 2x."
 
 msgid "Tower Wars"
 msgstr ""
 
 msgid "Player gets significantly stronger structures."
-msgstr ""
+msgstr "O jogador obtém estruturas significativamente mais fortes."
 
 msgid "Unsupported"
 msgstr "Não suportado"
@@ -10984,91 +11008,6 @@ msgstr "CAMPANHAS"
 msgid "GAMES"
 msgstr "JOGOS"
 
-msgid "Refresh Games List"
-msgstr "Atualizar Lista de Jogos"
-
-msgid "Filter Games List"
-msgstr "Filtrar Lista de Jogos"
-
-msgid "Refreshing..."
-msgstr "Atualizando..."
-
-msgid "Searching"
-msgstr "Pesquisando"
-
-msgid "Connecting to the lobby server..."
-msgstr "Conectando-se ao servidor de lobby..."
-
-msgid "Game Name"
-msgstr "Nome do Jogo"
-
-msgid "Map Name"
-msgstr "Nome do Mapa"
-
-msgid "Status"
-msgstr "Estado"
-
-msgid "Can't connect to lobby server!"
-msgstr "Impossível conectar ao servidor de lobby!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mods: %s"
-
-msgid "Mods: None!"
-msgstr "Mods: Nenhum!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Versão %s"
-
-msgid "Join as spectator"
-msgstr "Entrar como espectador"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Sua versão do Warzone é incompatível com esse jogo."
-
-msgid "[Password required]"
-msgstr "[Senha necessária]"
-
-msgid "[No Tanks]"
-msgstr "[Sem Tanques]"
-
-msgid "[No Cyborgs]"
-msgstr "[Sem Ciborgues]"
-
-msgid "[No VTOLs]"
-msgstr "[Sem VTOLs]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Hospedado por %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Hospedado por %s —%s"
-
-msgid "Can't find any games for your version."
-msgstr "Impossível encontrar jogos para a sua versão."
-
-msgid "There appears to be a game update available!"
-msgstr "Parece que há uma nova versão disponível!"
-
-msgid "No games are available for your version"
-msgstr "Não há jogos disponíveis para sua versão"
-
-msgid "Wrong Game Version!"
-msgstr "Versão do Jogo Errada!"
-
-msgid "You have an incompatible mod."
-msgstr "Você tem um mod incompatível."
-
-msgid "Host couldn't send file?"
-msgstr "Anfit. não pôde enviar arquvo?"
-
-msgid "Incorrect Password!"
-msgstr "Senha Incorreta!"
-
 msgid "Continue"
 msgstr "Continuar"
 
@@ -11079,7 +11018,7 @@ msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "O Áudio Binaural não é suportado no seu dispositivo / sistema / biblioteca OpenAL"
 
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgid "Voice Volume"
 msgstr "Volume da Voz"
@@ -11091,13 +11030,13 @@ msgid "Music Volume"
 msgstr "Volume da Música"
 
 msgid "Output"
-msgstr ""
+msgstr "Saída"
 
 msgid "HRTF"
 msgstr "Áudio Binaural"
 
 msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
-msgstr ""
+msgstr "O HRTF pode habilitar a espacialização aprimorada quando usado com fones de ouvido ou com alguma saída estéreo."
 
 msgid "Disabled"
 msgstr "Desativado"
@@ -11118,28 +11057,34 @@ msgid "On"
 msgstr "Ligado"
 
 msgid "Music"
-msgstr ""
+msgstr "Música"
 
 msgid "Music Manager"
 msgstr "Gerenciador de Música"
 
 msgid "Open Music Manager"
+msgstr "Abrir Gerenciador de Músicas"
+
+msgid "Audio Cues"
 msgstr ""
+
+msgid "Group Reporting"
+msgstr "Relatório do Grupo"
 
 msgid "Mouse"
-msgstr ""
+msgstr "Mouse"
 
 msgid "Right-Click Orders"
-msgstr ""
+msgstr "Comandos do Botão Direito"
 
 msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
-msgstr ""
+msgstr "Por padrão, Warzone 2100 usa o botão esquerdo para seleção e comando / direcionamento. Se você preferir a entrada de mouse para RTS moderna, marque como Ligado. Se você estiver usando um trackpad ou uma entrada sensível ao toque, você pode querer definir isso como Desligado."
 
 msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
-msgstr ""
+msgstr "Use o botão esquerdo para seleção e comando / direcionamento. (O padrão clássico de Warzone 2100.)"
 
 msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
-msgstr ""
+msgstr "Ordenar unidades para se mover ou atacar com o botão direito. Selecione unidades com o botão esquerdo. (Corresponde ao padrão comum de outros jogos RTS.)"
 
 msgid "Trap Cursor"
 msgstr "Travar Cursor"
@@ -11151,19 +11096,19 @@ msgid "Cursor Size"
 msgstr "Tamanho do Cursor"
 
 msgid "Camera"
-msgstr ""
+msgstr "Câmera"
 
 msgid "Camera Speed"
 msgstr "Velocidade da Câmera"
 
 msgid "Camera Starting Zoom"
-msgstr ""
+msgstr "Zoom Inicial da câmera"
 
 msgid "Camera Zoom Rate"
-msgstr ""
+msgstr "Taxa de Zoom da Câmera"
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "Rotação do Mouse"
 
 msgid "Reverse Rotation"
 msgstr "Reverter Rotação"
@@ -11172,31 +11117,31 @@ msgid "Mouse Pan"
 msgstr ""
 
 msgid "Edge Scrolling"
-msgstr ""
+msgstr "Rolagem na Borda"
 
 msgid "Reset"
-msgstr ""
+msgstr "Redefinir"
 
 msgid "Reset Keys to:"
-msgstr ""
+msgstr "Redefinir Chaves para:"
 
 msgid "(Select Profile)"
-msgstr ""
+msgstr "(Selecionar Perfil)"
 
 msgid "Reset Keys to: Defaults"
-msgstr ""
+msgstr "Redefinir chaves para: Padrão"
 
 msgid "Unit Color"
-msgstr ""
+msgstr "Cor das Unidades"
 
 msgid "Difficulty Level"
-msgstr ""
+msgstr "Nível de Dificuldade"
 
 msgid "Default AI"
-msgstr ""
+msgstr "AI Padrão"
 
 msgid "Hosting Options"
-msgstr ""
+msgstr "Opções de Hospedagem"
 
 msgid "Port Mapping"
 msgstr "Mapeamento de portas"
@@ -11262,25 +11207,25 @@ msgid "Advanced lighting is only available when using terrain appearance: Remast
 msgstr ""
 
 msgid "Terrain"
-msgstr ""
+msgstr "Terreno"
 
 msgid "Terrain Appearance"
-msgstr ""
+msgstr "Aparência do Terreno"
 
 msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
-msgstr ""
+msgstr "A aparência de terreno clássica do lançamento inicial. Texturas em baixa resolução, pixel-art."
 
 msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
-msgstr ""
+msgstr "A aparência do terreno normal usada como padrão por mais de uma década. Texturas de melhor resolução, recriadas."
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr ""
+msgstr "A aparência de terreno remasterizada de alta qualidade. Alta resolução, com propulsão moderna + mapeamento especulativo. Requer mais memória e uma GPU melhor."
 
 msgid "Terrain Shading Quality"
-msgstr ""
+msgstr "Qualidade da Sombra do Terreno"
 
 msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
-msgstr ""
+msgstr "Qualidade de sombreamento do terreno (mapas normais, realces especulativos, etc). Configurações maiores melhoram os detalhes do terreno à custa de desempenho e uso de memória."
 
 msgid "Medium Quality"
 msgstr "Qualidade Média"
@@ -11292,13 +11237,13 @@ msgid "Shadows"
 msgstr "Sombras"
 
 msgid "Draw Shadows"
-msgstr ""
+msgstr "Mostrar Sombras"
 
 msgid "Shadow Resolution"
 msgstr "Resolução de Sombra"
 
 msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
-msgstr ""
+msgstr "A resolução interna usada para renderizar os mapas das sombras. Valores maiores melhoram a aparência da sombra à custa de desempenho e uso de memória."
 
 msgid "High"
 msgstr "Alto"
@@ -11307,7 +11252,7 @@ msgid "Shadow Filtering"
 msgstr "Filtragem de Sombra"
 
 msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
-msgstr ""
+msgstr "Quanta filtragem / suavização é aplicada à aparência das sombras. Configurações mais altas suavizam mais as sombras, à custa de performance."
 
 msgid "Low"
 msgstr "Baixo"
@@ -11316,7 +11261,7 @@ msgid "Ultra"
 msgstr "Ultra"
 
 msgid "Lighting"
-msgstr ""
+msgstr "Iluminação"
 
 msgid "Point Lights"
 msgstr ""
@@ -11489,15 +11434,8 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
+msgid "Desktop Full"
 msgstr ""
-"No modo Jane Sem Bordas, a resolução corresponde à do seu monitor \n"
-"(ou ao que o gerenciador de janela permite)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Você pode mudar a resolução alterando a janela normalmente. (Tente arrastar uma borda / canto.)"
 
 msgid "Window Mode"
 msgstr ""
@@ -11505,11 +11443,8 @@ msgstr ""
 msgid "Windowed"
 msgstr "Em Janela"
 
-msgid "Desktop Full"
-msgstr "Janela Sem Borda"
-
-msgid "Resolution"
-msgstr "Resolução"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr ""
@@ -11594,6 +11529,93 @@ msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Parece que há uma nova versão disponível!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Sua versão do Warzone é incompatível com esse jogo."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11710,6 +11732,9 @@ msgstr "Jogador vs. Computador"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Nome do Jogo"
+
 msgid "Click to see Map"
 msgstr "Clique para ver o Mapa"
 
@@ -11801,13 +11826,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

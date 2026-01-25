@@ -199,7 +199,7 @@ void cmdDroidUpdateExperience(DROID *psShooter, uint32_t experienceInc)
 {
 	ASSERT_OR_RETURN(, psShooter != nullptr, "invalid Unit pointer");
 
-	if (hasCommander(psShooter) && droidWithinCommanderRange(psShooter, false))
+	if (hasCommander(psShooter) && droidWithinCommanderRange(psShooter))
 	{
 		DROID *psCommander = psShooter->psGroup->psCommander;
 		droidIncreaseExperience(psCommander, MIN(experienceInc, UINT32_MAX - psCommander->experience));

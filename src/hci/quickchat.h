@@ -24,6 +24,7 @@
 
 #include <unordered_set>
 #include <unordered_map>
+#include <chrono>
 
 #define FOREACH_QUICKCHATMSG(MSG) \
 	/* LOBBY ONLY */ \
@@ -183,9 +184,10 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 	{
 		Invalid = 0,
 		NotReadyKickWarning,
-		NotReadyKicked
+		NotReadyKicked,
+		PlayerShouldCheckReadyNotice
 	};
-	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx);
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx, uint32_t additionalData);
 } // namespace INTERNAL_LOCALIZED_LOBBY_NOTICE
 
 } // namespace WzQuickChatDataContexts
@@ -197,3 +199,9 @@ void quickChatInitInGame();
 struct NETQUEUE;
 void sendQuickChat(WzQuickChatMessage message, uint32_t fromPlayer, WzQuickChatTargeting targeting, optional<WzQuickChatMessageData> messageData = nullopt);
 bool recvQuickChat(NETQUEUE queue);
+
+// message throttling, spam prevention
+void recordPlayerMessageSent(uint32_t playerIdx);
+optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx);
+void playerSpamMuteNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB);
+void playerSpamMuteReset(uint32_t playerIndex);

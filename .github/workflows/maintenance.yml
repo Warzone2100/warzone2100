@@ -16,57 +16,57 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
-    - uses: actions/checkout@v5
-      with:
-        ref: master
-        path: master
-        fetch-depth: 1
-        submodules: recursive
-    - name: Install gettext
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: sudo apt-get -y install gettext
-    - name: Generate POTFILES.in
-      working-directory: '${{ github.workspace }}/master/po/scripts'
-      run: |
-        echo "Generate POTFILES.in"
-        ./update-po.sh
-    - name: Generate warzone2100.pot
-      working-directory: '${{ github.workspace }}/master'
-      run: |
-        echo "Generate warzone2100.pot"
-        potfiles_in_path="${GITHUB_WORKSPACE}/master/po/POTFILES.in"
-        potFile_inRepo="${GITHUB_WORKSPACE}/master/po/warzone2100.pot"
-        temp_dir="${GITHUB_WORKSPACE}/temp/po"
-        mkdir -p "${temp_dir}"
-        cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DPACKAGE_NAME=warzone2100" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
-    - name: Generate warzone2100_guide.pot
-      working-directory: '${{ github.workspace }}/master'
-      run: |
-        echo "Generate warzone2100_guide.pot"
-        potfiles_in_path="${GITHUB_WORKSPACE}/master/po/guide/POTFILES.in"
-        potFile_inRepo="${GITHUB_WORKSPACE}/master/po/guide/warzone2100_guide.pot"
-        temp_dir="${GITHUB_WORKSPACE}/temp/po_guide"
-        mkdir -p "${temp_dir}"
-        cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DPACKAGE_NAME=warzone2100_guide" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
-    - name: Publish any changes to base translation files
-      if: success() && (github.repository == 'Warzone2100/warzone2100')
-      id: pushupdates
-      working-directory: '${{ github.workspace }}/master'
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
-        git add -A
-        git commit -m "Update base translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
-        echo "Pushing changes to update_base_translations branch"
-        git push -f origin master:update_base_translations
-        echo "PROCESS_PR=true" >> $GITHUB_OUTPUT
-    - name: Create Pull Request to update base files (if needed)
-      if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
-      id: cpr
-      working-directory: '${{ github.workspace }}/master'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GH_REPO: ${{ github.repository }}
-      run: |
-        gh pr create --head "update_base_translations" --title "Update base translations" --body "Update base string / translation files in the master branch (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+          path: master
+          fetch-depth: 1
+          submodules: recursive
+      - name: Install gettext
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: sudo apt-get -y install gettext
+      - name: Generate POTFILES.in
+        working-directory: '${{ github.workspace }}/master/po/scripts'
+        run: |
+          echo "Generate POTFILES.in"
+          ./update-po.sh
+      - name: Generate warzone2100.pot
+        working-directory: '${{ github.workspace }}/master'
+        run: |
+          echo "Generate warzone2100.pot"
+          potfiles_in_path="${GITHUB_WORKSPACE}/master/po/POTFILES.in"
+          potFile_inRepo="${GITHUB_WORKSPACE}/master/po/warzone2100.pot"
+          temp_dir="${GITHUB_WORKSPACE}/temp/po"
+          mkdir -p "${temp_dir}"
+          cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DPACKAGE_NAME=warzone2100" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
+      - name: Generate warzone2100_guide.pot
+        working-directory: '${{ github.workspace }}/master'
+        run: |
+          echo "Generate warzone2100_guide.pot"
+          potfiles_in_path="${GITHUB_WORKSPACE}/master/po/guide/POTFILES.in"
+          potFile_inRepo="${GITHUB_WORKSPACE}/master/po/guide/warzone2100_guide.pot"
+          temp_dir="${GITHUB_WORKSPACE}/temp/po_guide"
+          mkdir -p "${temp_dir}"
+          cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DPACKAGE_NAME=warzone2100_guide" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
+      - name: Publish any changes to base translation files
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        id: pushupdates
+        working-directory: '${{ github.workspace }}/master'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
+          git add -A
+          git commit -m "Update base translations" || { echo "PROCESS_PR=false" >> $GITHUB_OUTPUT && exit 0; }
+          echo "Pushing changes to update_base_translations branch"
+          git push -f origin master:update_base_translations
+          echo "PROCESS_PR=true" >> $GITHUB_OUTPUT
+      - name: Create Pull Request to update base files (if needed)
+        if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.pushupdates.outputs.PROCESS_PR == 'true')
+        id: cpr
+        working-directory: '${{ github.workspace }}/master'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh pr create --head "update_base_translations" --title "Update base translations" --body "Update base string / translation files in the master branch (Auto-generated)" --label "automated pr" || echo "Seems like PR already exists?"

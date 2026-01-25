@@ -643,9 +643,6 @@ GAMECODE gameLoop()
 	static size_t numForcedUpdatesLastCall = 0;
 	static bool previousUpdateWasRender = false;
 
-	// Shouldn't this be when initialising the game, rather than randomly called between ticks?
-	countUpdate(false); // kick off with correct counts
-
 	size_t numRegularUpdatesTicks = 0;
 	size_t numFastForwardTicks = 0;
 	gameTimeUpdateBegin();

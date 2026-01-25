@@ -2,13 +2,15 @@
 //Check if this vtol is free to do something.
 function vtolReady(vtolID)
 {
-	var vtol = getObject(DROID, me, vtolID);
+	const vtol = getObject(DROID, me, vtolID);
+
 	if (vtol === null)
 	{
 		return false;
 	}
 
-	var armedVal = Math.floor(vtol.weapons[0].armed);
+	const armedVal = Math.floor(vtol.weapons[0].armed);
+
 	if (vtol.order === DORDER_REARM && armedVal < 100)
 	{
 		return false;
@@ -26,11 +28,13 @@ function vtolReady(vtolID)
 //Does a droid need to repair.
 function droidNeedsRepair(droidID, percent)
 {
-	var dr = getObject(DROID, me, droidID);
+	const dr = getObject(DROID, me, droidID);
+
 	if (dr === null)
 	{
 		return true; //lets say it is busy then
 	}
+
 	if (!defined(percent))
 	{
 		if (dr.propulsion === "hover01")
@@ -76,7 +80,8 @@ function getAliveEnemyPlayers(player)
 		return false;
 	}
 
-	var numEnemies = [];
+	const numEnemies = [];
+
 	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i !== me && !allianceExistsBetween(i, me))
@@ -93,7 +98,7 @@ function getAliveEnemyPlayers(player)
 		}
 	}
 
-	if (defined(scavengerPlayer) &&
+	if ((scavengers !== NO_SCAVENGERS) &&
 		(countStruct("A0BaBaFactory", scavengerPlayer) +
 		countStruct(DERRICK_STAT, scavengerPlayer) +
 		countDroid(DROID_ANY, scavengerPlayer)) > 0)
@@ -107,10 +112,10 @@ function getAliveEnemyPlayers(player)
 //return the nearest factory ID (normal factory has precedence). undefined if none.
 function findNearestFactoryID(player)
 {
-	var facs = enumStruct(player, FACTORY_STAT).sort(sortByDistToBase);
-	var cybFacs = enumStruct(player, CYBORG_FACTORY_STAT).sort(sortByDistToBase);
-	var vtolFacs = enumStruct(player, VTOL_FACTORY_STAT).sort(sortByDistToBase);
-	var target;
+	let target;
+	const facs = enumStruct(player, FACTORY_STAT).sort(sortByDistToBase);
+	const cybFacs = enumStruct(player, CYBORG_FACTORY_STAT).sort(sortByDistToBase);
+	const vtolFacs = enumStruct(player, VTOL_FACTORY_STAT).sort(sortByDistToBase);
 
 	if (facs.length > 0)
 	{
@@ -131,8 +136,8 @@ function findNearestFactoryID(player)
 //Return closest player construct ID. Undefined if none.
 function findNearestConstructID(player)
 {
-	var constructs = enumDroid(player, DROID_CONSTRUCT).sort(sortByDistToBase);
-	var target;
+	let target;
+	const constructs = enumDroid(player, DROID_CONSTRUCT).sort(sortByDistToBase);
 
 	if (constructs.length > 0)
 	{
@@ -145,8 +150,8 @@ function findNearestConstructID(player)
 //Return closest player derrick ID. Undefined if none.
 function findNearestDerrickID(player)
 {
-	var target;
-	var derr = enumStruct(player, DERRICK_STAT).sort(sortByDistToBase);
+	let target;
+	const derr = enumStruct(player, DERRICK_STAT).sort(sortByDistToBase);
 
 	if (derr.length > 0)
 	{
@@ -169,7 +174,8 @@ function getCurrentEnemy()
 {
 	if (!defined(currentEnemy) || (gameTime > (currentEnemyTick + 120000)))
 	{
-		var enemies = getAliveEnemyPlayers();
+		const enemies = getAliveEnemyPlayers();
+
 		if (enemies.length === 0)
 		{
 			return undefined; //no more enemy players are alive.
@@ -189,26 +195,30 @@ function attackEnemy()
 
 	if (groupSizes[attackGroup] > MIN_GROUP_SIZE)
 	{
-		var isDroid = false;
-		var attackers = enumGroup(attackGroup);
+		let isDroid = false;
+		const attackers = enumGroup(attackGroup);
 		//log("-- Military offensive --");
 		// Attack! Find a random enemy, since that is more fun.
 
-		var selectedEnemy = getCurrentEnemy();
+		const selectedEnemy = getCurrentEnemy();
+
 		if (!defined(selectedEnemy))
 		{
 			return; //No enemy players remain
 		}
 
-		var targetID = findNearestDerrickID(selectedEnemy);
+		let targetID = findNearestDerrickID(selectedEnemy);
+
 		if (!targetID)
 		{
 			targetID = findNearestFactoryID(selectedEnemy);
+
 			if (!targetID)
 			{
-				var droids = enumDroid(selectedEnemy);
+				const droids = enumDroid(selectedEnemy);
 				isDroid = true;
 				targetID = findNearestConstructID(selectedEnemy);
+
 				if (!targetID && droids.length > 0)
 				{
 					//Now just start picking off any droids that remain.
@@ -217,8 +227,9 @@ function attackEnemy()
 			}
 		}
 
-		var loc;
-		var realObject;
+		let loc;
+		let realObject;
+
 		if (targetID)
 		{
 			if (!isDroid)
@@ -242,12 +253,12 @@ function attackEnemy()
 			return;
 		}
 		//log("ATTACKING player " + selectedEnemy);
-		var j = 0;
-		var len = attackers.length;
+		let len = attackers.length;
 
-		for (j = 0; j < len; ++j)
+		for (let j = 0; j < len; ++j)
 		{
-			var tank = attackers[j];
+			const tank = attackers[j];
+
 			if (tank.order !== DORDER_RECYCLE && !droidNeedsRepair(tank.id) && random(100) < 50)
 			{
 				orderDroidLoc(tank, DORDER_MOVE, loc.x, loc.y);
@@ -255,13 +266,15 @@ function attackEnemy()
 		}
 
 		//Only send VTOLs if we got a few of them
-		var vtols = enumGroup(vtolGroup);
+		const vtols = enumGroup(vtolGroup);
 		len = vtols.length;
+
 		if (len > MIN_VTOL_SIZE)
 		{
-			for (j = 0; j < len; ++j)
+			for (let j = 0; j < len; ++j)
 			{
-				var vt = vtols[j];
+				const vt = vtols[j];
+
 				if (vtolReady(vt.id))
 				{
 					orderDroidLoc(vt, DORDER_SCOUT, loc.x, loc.y);
@@ -271,17 +284,18 @@ function attackEnemy()
 		}
 
 		//Now send in bunker buster which only focus on structures.
-		var busters = enumGroup(busterGroup);
+		const busters = enumGroup(busterGroup);
 		len = busters.length;
-		var enemyStructs = enumRange(loc.x, loc.y, 10, ENEMIES, false).filter((obj) => (
+		const enemyStructs = enumRange(loc.x, loc.y, 10, ENEMIES, false).filter((obj) => (
 			obj.type === STRUCTURE
 		));
 
 		if (enemyStructs.length > 0)
 		{
-			for (j = 0; j < len; ++j)
+			for (let j = 0; j < len; ++j)
 			{
-				var bust = busters[j];
+				const bust = busters[j];
+
 				if (bust.order !== DORDER_RECYCLE && !droidNeedsRepair(bust.id))
 				{
 					orderDroidObj(bust, DORDER_ATTACK, enemyStructs[0]);
@@ -294,18 +308,20 @@ function attackEnemy()
 //Use a slim version of the hover map checking code from Cobra AI.
 function isHoverMap()
 {
-	var hoverMap = false;
+	let hoverMap = false;
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (!propulsionCanReach("wheeled01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y))
 		{
 			//Check if hover can not reach this area.
-			var temp = 0;
+			let temp = 0;
+
 			for (let t = 0; t < maxPlayers; ++t)
 			{
-				var b1 = startPositions[i];
-				var b2 = startPositions[t];
+				const b1 = startPositions[i];
+				const b2 = startPositions[t];
+
 				if (!propulsionCanReach("hover01", b1.x, b1.y, b2.x, b2.y))
 				{
 					temp = temp + 1;
@@ -331,10 +347,10 @@ function recycleDroidsForHover()
 	}
 
 	const MIN_FACTORY = 1;
-	var systems = enumDroid(me, DROID_CONSTRUCT).filter((dr) => (
+	const systems = enumDroid(me, DROID_CONSTRUCT).filter((dr) => (
 		dr.propulsion !== "hover01"
 	));
-	var unfinishedStructures = enumStruct(me).filter((obj) => (
+	const unfinishedStructures = enumStruct(me).filter((obj) => (
 		obj.status !== BUILT && obj.stattype !== RESOURCE_EXTRACTOR && obj.stattype !== DEFENSE
 	));
 	const NON_HOVER_SYSTEMS = systems.length;
@@ -356,7 +372,7 @@ function recycleDroidsForHover()
 
 		if (isSeaMap)
 		{
-			var tanks = enumGroup(attackGroup).filter((dr) => (
+			const tanks = enumGroup(attackGroup).filter((dr) => (
 				dr.droidType === DROID_WEAPON && dr.propulsion !== "hover01"
 			));
 			const NON_HOVER_TANKS = tanks.length;
@@ -383,13 +399,15 @@ function scanForVTOLs()
 		return; //already aware of VTOLs
 	}
 
-	var myEnemy = getCurrentEnemy();
+	const myEnemy = getCurrentEnemy();
+
 	if (!defined(myEnemy))
 	{
 		return;
 	}
 
-	var visibleEnemyDroids = enumDroid(myEnemy, DROID_WEAPON, true);
+	const visibleEnemyDroids = enumDroid(myEnemy, DROID_WEAPON, true);
+
 	for (let i = 0, l = visibleEnemyDroids.length; i < l; ++i)
 	{
 		if (isVTOL(visibleEnemyDroids[i]))

@@ -20,6 +20,22 @@ if(NOT XGETTEXT_CMD)
 	return()
 endif()
 
+function (WZ_GETTEXT_GET_OUTPUT_LANG_NAME input_lang_name output_var_name)
+	set(output_lang_name "${input_lang_name}")
+
+	# Platform-specific fixups / transformations:
+	# - sr_CS -> sr_RS (on all OSes *except* Windows, which stays at sr_CS at this time)
+	if(input_lang_name STREQUAL "sr_CS" AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
+		set(output_lang_name "sr_RS")
+	endif()
+
+	if(NOT input_lang_name STREQUAL output_lang_name)
+		message(STATUS "Mapping language name ${input_lang_name} -> ${output_lang_name}")
+	endif()
+
+	set(${output_var_name} "${output_lang_name}" PARENT_SCOPE)
+endfunction()
+
 # GETTEXT_CREATE_TRANSLATIONS_WZ(potFile [ALL]
 #								 [INSTALL_DESTINATION <destdir>]
 #								 [INSTALL_COMPONENT component]
@@ -60,7 +76,9 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       get_filename_component(_currentPoFileName "${_currentPoFile}" NAME)
       get_filename_component(_absFile "${_currentPoFile}" ABSOLUTE)
       get_filename_component(_abs_PATH "${_absFile}" PATH)
-      get_filename_component(_lang "${_absFile}" NAME_WE)
+      get_filename_component(_input_lang "${_absFile}" NAME_WE)
+
+      WZ_GETTEXT_GET_OUTPUT_LANG_NAME("${_input_lang}" _lang)
 
       file(RELATIVE_PATH _po_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${_absFile}")
       get_filename_component(_po_file_subdir_path "${_po_file_relative_path}" DIRECTORY)

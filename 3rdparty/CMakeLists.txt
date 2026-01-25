@@ -74,6 +74,7 @@ set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "Run cpplint.py tool for Google C++ Sty
 set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "Run cppcheck C++ static analysis tool." FORCE)
 set(SQLITECPP_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
 set(SQLITECPP_BUILD_TESTS OFF CACHE BOOL "Build and run tests." FORCE)
+set(SQLITECPP_INSTALL OFF CACHE BOOL "Enables the install target." FORCE)
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	set(SQLITECPP_USE_STACK_PROTECTION OFF CACHE BOOL "USE Stack Protection hardening." FORCE)
 endif()
@@ -311,6 +312,10 @@ if (ENABLE_GNS_NETWORK_BACKEND)
 	# Don't build the shared variant of the client library: we don't use it anyway, plus it causes build conflicts for macOS.
 	set(BUILD_SHARED_LIB OFF CACHE INTERNAL "Build the shared library version of the client library" FORCE)
 	add_subdirectory(GameNetworkingSockets EXCLUDE_FROM_ALL)
+	# Avoid absl symbol leaks with protobuf>=22.0.0 by always passing -DNDEBUG
+	if(TARGET GameNetworkingSockets_s)
+		target_compile_options(GameNetworkingSockets_s PRIVATE -DNDEBUG)
+	endif()
 	unset(BUILD_SHARED_LIB CACHE)
 else()
 	message(STATUS "GameNetworkingSockets backend support: DISABLED")

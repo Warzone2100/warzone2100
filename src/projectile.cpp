@@ -384,7 +384,7 @@ void _syncDebugProjectile(const char *function, PROJECTILE const *psProj, char c
 static int32_t randomVariation(int32_t val)
 {
 	// Up to ±5% random variation.
-	return (int64_t)val * (95000 + gameRand(10001)) / 100000;
+	return (int64_t)val * (95000 + static_cast<int64_t>(gameRand(10001))) / 100000;
 }
 
 int32_t projCalcIndirectVelocities(const int32_t dx, const int32_t dz, int32_t v, int32_t *vx, int32_t *vz, int min_angle)
@@ -517,7 +517,7 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 		int minHeight = std::min(std::max(maxHeight + 2 * LINE_OF_FIRE_MINIMUM - areaOfFire(psAttacker, psTarget, weapon_slot, true), 0), maxHeight);
 		scoreUpdateVar(WD_SHOTS_ON_TARGET);
 
-		proj.dst.z = psTarget->pos.z + minHeight + gameRand(std::max(maxHeight - minHeight, 1));
+		proj.dst.z = psTarget->pos.z + minHeight + static_cast<int>(gameRand(std::max(maxHeight - minHeight, 1)));
 		/* store visible part (LOCK ON this part for homing :) */
 		proj.partVisible = maxHeight - minHeight;
 	}
@@ -893,7 +893,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
 		         (psTempObj->type == OBJ_STRUCTURE ||
 		          psTempObj->type == OBJ_FEATURE ||
-		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlying())
+		          (psTempObj->type == OBJ_DROID && !((DROID*)psTempObj)->isFlightBasedTransporter() && !((DROID*)psTempObj)->isFlying())
 		         ))
 		{
 			// AA weapons should not hit buildings and non-vtol droids
@@ -1508,11 +1508,9 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			continue;  // Don't damage your own droids, nor ally droids - unrealistic, but better.
 		}
 
-		if (psCurr->type == OBJ_DROID &&
-		    ((DROID *)psCurr)->isVtol() &&
-		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
+		if (psCurr->type == OBJ_DROID && ((DROID *)psCurr)->isFlying())
 		{
-			continue;  // Can't set flying vtols on fire.
+			continue;  // Can't set flying units on fire.
 		}
 
 		if (psCurr->type == OBJ_FEATURE && !((FEATURE *)psCurr)->psStats->damageable)

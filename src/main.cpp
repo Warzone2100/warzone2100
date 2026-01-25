@@ -743,10 +743,8 @@ static void startTitleLoop(bool onInitialStartup = false)
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
 	}
-	if (!onInitialStartup)
-	{
-		closeLoadingScreen();
-	}
+
+	closeLoadingScreen(); // always ensure the loading screen is closed
 }
 
 
@@ -852,6 +850,9 @@ static bool startGameLoop()
 	}
 	executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_START_LEVEL); });
 	screen_disableMapPreview();
+
+	// Call once again to update starting counts (if modified by TRIGGER_START_LEVEL event)
+	countUpdate(false);
 
 	if (!bMultiPlayer && getCamTweakOption_AutosavesOnly())
 	{
@@ -1007,6 +1008,9 @@ static bool initSaveGameLoad()
 	{
 		addMissionTimerInterface();
 	}
+
+	// set a flag for the trigger/event system to indicate initialisation is complete
+	gameInitialised = true;
 
 	return true;
 }
@@ -1850,6 +1854,7 @@ int realmain(int argc, char *argv[])
 	make_dir(MultiPlayersPath, "multiplay", "players"); // player profiles
 
 	PHYSFS_mkdir("music");	// custom music overriding default music and music mods
+	PHYSFS_mkdir("music/albums");	// where custom music albums will go
 
 	make_dir(SaveGamePath, "savegames", nullptr); 	// save games
 	PHYSFS_mkdir(SAVEGAME_CAM);		// campaign save games

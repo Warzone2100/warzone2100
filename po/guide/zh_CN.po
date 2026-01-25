@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-11-26 19:48+0000\n"
+"PO-Revision-Date: 2025-11-26 20:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -60,10 +60,10 @@ msgid "The player (referred to as \"the Commander\") is part of a group of survi
 msgstr "玩家 (即 “指挥官”) 是在落基山脉军事基地寻求庇护的一群幸存者之一。"
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
-msgstr "他们从基地出发，怀着重建世界的使命，自称“项目”。"
+msgstr "他们从基地出发，怀着重建世界的使命，自称“工程”。"
 
 msgid "The Project dispatches three teams with the objective of reclaiming artifacts, thus allowing the research and application of pre-Collapse technologies."
-msgstr "“项目”派遣了三个中队，以回收遗留科技为目标，以便研究和使用“大崩溃”前的技术。"
+msgstr "“工程”派遣了三个中队，以回收遗留科技为目标，以便研究和使用“大崩溃”前的技术。"
 
 msgid "- Team Alpha is sent to an Arizona desert location southeast of Project HQ"
 msgstr "- Alpha 中队被派往位于“工程”总部东南方的亚利桑那沙漠"
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "中间的按钮关闭任何打开的命令界面。"
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "基地防御指南"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "在《Warzone 2100》中，您的主基地将在整个战役模式中持续存在。"
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "因此，为您的主基地做好未来的防御准备至关重要。"
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "虽然作战单位在基地防御中的作用显而易见，但基地的整体布局设计同样至关重要。"
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "建造能提供掩护、限制通道、侦测敌情并倾泻火力的防御建筑，以便您能更有效地应对敌人的进攻。"
 
 msgid "Intelligence Display"
 msgstr "情报展示"
@@ -207,15 +207,15 @@ msgid "Tip: To build \"walls\" (once they are available), you can click and drag
 msgstr "提示：要建造“墙” (如果可用)，您可以单击并拖动以建造多堵墙。"
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "半机械人工厂"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
+msgstr "半机械人工厂的运作方式与标准工厂类似，但专门用于生产半机械人单位。"
+
+msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
 msgstr ""
 
-msgid "Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
-
-msgid "When a unit is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
+msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
 msgstr ""
 
 msgid "Demolishing Structures"
@@ -413,14 +413,17 @@ msgstr "- 保持位置：在任何情况下都不移动"
 msgid "Recycling"
 msgstr "回收"
 
-msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it."
-msgstr "回收单位将使其前往最近的工厂或修理设施并销毁。"
+msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
+msgstr ""
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "返还一半的能源 (如单位受损，返还能源将减少)。"
 
-msgid "The unit’s experience level will be placed in the next unit that is manufactured."
-msgstr "下一个生产的单位将获得回收单位的经验等级。"
+msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
+msgstr ""
+
+msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
+msgstr ""
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr "您可以通过单位命令菜单或“返回以回收”快捷键命令使单位返回回收。"
@@ -497,17 +500,17 @@ msgstr "一个单位被生产出来时，它将前往工厂的集结点。"
 msgid "Attaching Units"
 msgstr "指派单位"
 
-msgid "To attach a unit to a Commander, select a unit, then left-click the Commander you want to attach the unit to. A symbol will appear next to the unit to signify it is attached."
-msgstr "若要将一个单位指派给指挥官，请选择一个单位，然后左键单击对应的指挥官。指派后单位旁边将显示符号。"
+msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
+msgstr ""
 
 msgid "## Limits:"
 msgstr "## 限制："
 
-msgid "Commanders have a limit to the amount of direct-fire units (eg machine-guns) which is affected by their own experience level. Levels are earned by the Commander reaching 2 kills, 4, 8, 16, 32, 64 and so on."
-msgstr "能够指派给指挥官的直接射击单位数量 (例如机枪) 受自身经验等级的影响。 当杀敌数达到 2、4、8、16、32、64 时，指挥官将获得对于的经验等级。"
+msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
+msgstr ""
 
-msgid "Each experience level allows the Commander 2 more direct-fire units. However, a Commander can have as many indirect-fire units as it wants."
-msgstr "每一级经验使指挥官能够有更多的直接射击单位，但指挥官可以有任意多的间接射击单位。"
+msgid "After each promotion, the Commander is able to control 2 more units."
+msgstr ""
 
 msgid "Detaching Units"
 msgstr "分离单位"
@@ -533,8 +536,8 @@ msgstr "修理完毕后，将返回指挥官。"
 msgid "Targeting"
 msgstr "单位锁定"
 
-msgid "When you select a Commander and target an enemy unit, any attached units will move to fire on the targeted unit."
-msgstr "当你选择一名指挥官并锁定敌方单位时，任何附属单位都会向目标单位开火。"
+msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
+msgstr ""
 
 msgid "The attached units will have greater accuracy when firing."
 msgstr "指派给指挥官的单位在射击时更准确。"
@@ -548,8 +551,8 @@ msgstr "指挥官用起来就像是传感器，但可以指挥任何攻击单位
 msgid "Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases."
 msgstr "指挥官为指派给它们的所有单位提供射击精度、装甲和移动速度加成，这种加成随着指挥官等级的增加而提升。"
 
-msgid "They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
-msgstr "在开始时，一个指挥官最多有 6 个非炮兵攻击单位。 但指挥官升级时，单位限制增加 2。"
+msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
+msgstr ""
 
 msgid "Designing Units"
 msgstr "设计单位"
@@ -585,76 +588,76 @@ msgid "Units with higher experience levels can make all the difference in battle
 msgstr "高经验等级的单位能够在战斗中发挥关键作用！"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "半机械人"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "半机械人是你麾下的主力步兵单位。"
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "它们是速度快且可靠性高的单位，并对反坦克武器具有极高的抗性。"
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "然而，它们对反人员武器和火炮更为脆弱。"
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "请注意，半机械人无法自定义设计。其模板通过独立研究项目解锁，且需依托半机械人工厂进行生产。"
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "半履带式载具"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "半履带车是车轮与履带相结合的混合推进载具。"
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "它们拥有适中的制造成本、移动速度以及耐久度。"
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "它们还对反人员武器和火炮伤害具有一定的抗性，但仍然十分容易受到反坦克武器的攻击。"
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "半履带车是出色的通用型载具，但其耐久性不及全履带式车辆，速度也不及轮式车辆。"
 
 msgid "Hover"
-msgstr ""
+msgstr "气垫载具"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "气垫载具是一种高速且具备两栖行进能力的车辆推进系统。"
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "气垫推进系统可提供极高的最大速度，并能自由穿越水域，这一特性对于寻找独特的进攻路线而言不可或缺。"
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "然而，气垫载具的制造成本更高，耐久度较低，且对多数攻击类型抗性较弱。"
 
-msgid "Hover's high speeds and ability to traverse water make it perfect for hit-and-run attack vehicles."
+msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
 msgstr ""
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "然而，与轮式车辆类似，气垫载具极不适合在前线进行持久战斗。"
 
 msgid "Tracks"
-msgstr ""
+msgstr "坦克（履带式载具）"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "坦克（履带式载具）是一种具备重型装甲的车辆推进系统。"
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "坦克（履带式载具）拥有极高的耐久度，并对反人员武器和火炮伤害具有显著抗性。"
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "然而，坦克（履带式载具）的制造成本更高、生产时间更长，且对反坦克武器仍然极为脆弱。"
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "此外，坦克（履带式载具）还会对其最大速度造成显著负面影响。"
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "得益于其极高的耐久度，坦克（履带式载具）是专为前线战斗而设计的完美载具。"
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "然而务必谨慎操作。坦克（履带式载具）缓慢的移动速度，使其极难从不利战局中撤离。"
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "使用 VTOL 攻击"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
 msgstr "要使用 VTOL 攻击，请选择它然后点击敌人。"
@@ -675,16 +678,16 @@ msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB To
 msgstr "或者，VTOL 可以指派给 VTOL 攻击雷达和 VTOL 反炮兵雷达， 这将使它们像火炮一样攻击雷达锁定的敌人。"
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "使用 VTOL 防御"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "VTOL 单位也可用于防守地图上的关键区域。"
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "可将 VTOL 单位指派至 VTOL 攻击雷达塔 或 VTOL 雷达塔，它们将自动攻击雷达锁定的任何目标（其运作逻辑类似于指派至标准雷达的火炮单位）。"
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "也可命令 VTOL 单位对区域执行“巡逻”或“盘旋”指令。执行指令时，它们将自动攻击沿途遭遇的任何敌方单位。"
 
 msgid "Defending Against VTOLs"
 msgstr "防空"
@@ -708,7 +711,7 @@ msgid "In addition to being uncommon, versatile weapons do not do as much damage
 msgstr "多用途武器对 VTOL 的伤害不如专用防空武器。因此建议使用专用的防空武器。"
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "使用 VTOL"
 
 msgid "Designing VTOL units is similar to designing ground units."
 msgstr "设计 VTOL 单位与设计地面单位相似。"
@@ -720,16 +723,16 @@ msgid "You will then be able to select from the available VTOL Weapons."
 msgstr "然后您将能够从可用的 VTOL 武器中选择。"
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "要生产您设计的 VTOL 单位，需要建造一座 VTOL 工厂。"
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "为使您的 VTOL 单位能够维修、补给弹药和维护，您需要建造一个或多个 VTOL 补给平台。"
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "VTOL 武器"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "大多数武器都拥有对应的 VTOL 版本，这些版本能造成更高伤害，但弹药携带量有限。"
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
 msgstr "普通武器的 VTOL 版本无需单独研究。"
@@ -738,49 +741,49 @@ msgid "In addition to VTOL versions of ground-based direct weapons, VTOLs can al
 msgstr "除了地面直射武器的 VTOL 版本外，VTOL 还可以使用炸弹武器。 这些武器相当于炮兵，且非常强大。"
 
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies."
 msgstr "VTOL（垂直起降）是主要空中单位。"
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
-msgstr ""
+msgstr "VTOL 单位具有极高的最大速度，且能够跨越所有类型的地形。"
 
 msgid "Additionally, they cannot be targeted by most weapons while airborne."
-msgstr ""
+msgstr "此外，VTOL 单位在空中飞行时，绝大多数武器无法将其锁定为目标。"
 
 msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
-msgstr ""
+msgstr "请注意，虽然 VTOL 单位可像其他载具一样进行设计，但只能通过专用的 VTOL 工厂进行生产。"
 
 msgid "Wheels"
-msgstr ""
+msgstr "轮式载具"
 
 msgid "Wheels are the most basic vehicle propulsion."
-msgstr ""
+msgstr "轮式载具是最基础的车辆推进系统。"
 
 msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
-msgstr ""
+msgstr "轮式载具的生产成本低廉、制造速度快，且拥有极高的最大速度。"
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "然而，轮式载具对多数攻击类型抗性较弱，且耐久度较低。"
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
-msgstr ""
+msgstr "轮式载具最适合用于前线后方的支援单位，或利用其高速度实施“打了就跑”战术的突袭单位。"
 
 msgid "Propulsions"
-msgstr ""
+msgstr "推进系统"
 
 msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
-msgstr ""
+msgstr "与武器系统类似，您也可能发现可用于设计的新型车辆推进系统。"
 
 msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "当您完成新型推进系统的研究后，一则情报展示消息将提供其相关属性的说明。"
 
 msgid "Additionally, you can find descriptions of each propulsion in this guide."
-msgstr ""
+msgstr "此外，您亦可于本指南中查阅各类推进系统的详细说明。"
 
 msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
-msgstr ""
+msgstr "透彻了解每种推进系统的优势与劣势，对于自主设计单位及对抗敌方单位都至关重要。"
 
 msgid "Repairing Units"
 msgstr "修理单位"
@@ -839,26 +842,26 @@ msgstr "传感器可用于侦察和监视敌人，但也有更重要的用法：
 msgid "Artillery weapons, by themselves, cannot fire more than their own sensor range (8 tiles without upgrades)."
 msgstr "炮兵武器本身的射击不能超过自己的传感器射程 (未升级时为8个格子)。"
 
-msgid "However, even the most basic artillery weapon has an 18-tile weapon range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr "然而，即使是最基本的炮兵武器也有18格的射程。要使用它，你需要在战场上建造和部署传感器 (传感器塔或带传感器炮塔的坦克)。"
+msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
+msgstr ""
 
 msgid "Kinetic & Thermal Damage"
-msgstr ""
+msgstr "动能与热能伤害"
 
 msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
-msgstr ""
+msgstr "大多数武器通过动能方式（子弹、火箭弹等）造成伤害，因此其伤害效果受标准动能装甲板影响。"
 
 msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
-msgstr ""
+msgstr "然而，部分武器会造成热能伤害，该类型伤害不受目标的动能装甲影响。"
 
 msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
-msgstr ""
+msgstr "相反，热能武器造成的伤害由目标的隔热装甲进行削弱。"
 
 msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
-msgstr ""
+msgstr "单位个体的动能与隔热装甲数值可在设计菜单的车体选择界面中查看。"
 
 msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
-msgstr ""
+msgstr "请注意，所有单位的隔热装甲值均低于动能装甲值。这意味着热能伤害所能被减免的幅度通常更小！"
 
 msgid "Attacking"
 msgstr "攻击"
@@ -909,127 +912,127 @@ msgid "To be able to design units, a Command Center is required."
 msgstr "为了能够设计单位，需要一个指挥中心。"
 
 msgid "All-Rounder"
+msgstr "多面手"
+
+msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
 msgstr ""
 
-msgid "\"All-Rounder\" weapons are effective against vehicles and most structures."
-msgstr ""
-
-msgid "However, All-Rounder weapons are less effective against bunkers and infantry."
+msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
 msgstr ""
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr ""
+msgstr "“多面手”武器还会为装备它的单位提供可观的生命值加成，但代价是自身具有更高的重量值。"
 
 msgid "Anti-Air"
-msgstr ""
+msgstr "防空"
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr ""
+msgstr "防空（或 AA）武器专精于对抗所有类型的飞行单位。"
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr ""
+msgstr "然而，防空武器无法攻击建筑或地面单位。"
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr ""
+msgstr "尽管防空武器能有效应对空中威胁，但其自身需防范来自地面的攻击。"
 
 msgid "Anti-Personnel"
-msgstr ""
+msgstr "反人员武器"
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr ""
+msgstr "反人员武器能极其高效地歼灭敌方步兵单位与轻型车辆。"
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr ""
+msgstr "然而，此类武器对建筑和重装甲目标效果不佳。"
 
 msgid "Anti-Tank"
-msgstr ""
+msgstr "反坦克武器"
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr ""
+msgstr "反坦克武器专精于对抗所有类型的敌方车辆。"
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr ""
+msgstr "然而，反坦克武器对建筑效果较差，对步兵单位尤其无效。"
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr ""
+msgstr "通常而言，反坦克武器重量较轻，但提供的耐久度极低。装备此类武器的车辆会比配备大多数其他武器类型的车辆更为脆弱。"
 
 msgid "Artillery"
-msgstr ""
+msgstr "火炮"
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr ""
+msgstr "火炮类武器能对步兵和多数建筑造成毁灭性打击。"
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr ""
+msgstr "然而，火炮类武器对碉堡和履带式载具效果不佳。"
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr ""
+msgstr "大多数（但并非全部）火炮武器必须处于静止状态才能开火。加之火炮武器的生命值极低，这就导致配备火炮的单位在单独行动时极为脆弱。"
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr ""
+msgstr "因此，火炮武器最适合用于支援其他单位或建筑，同时应避免直接对抗。"
 
 msgid "High-Explosive Bombs"
-msgstr ""
+msgstr "高爆炸弹"
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr ""
+msgstr "高爆炸弹的作用方式与地面火炮武器（如迫击炮）类似。"
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr ""
+msgstr "这类炸弹在命中时便会引爆，对爆炸波及范围内的所有物体都能造成伤害。"
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr ""
+msgstr "与火炮武器类似，高爆炸弹在摧毁大多数建筑、步兵集群及轻型载具方面表现出色，但难以对抗碉堡和重型装甲坦克。"
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr ""
+msgstr "只需确保你方单位和建筑不会被卷入爆炸范围即可！"
 
 msgid "Incendiary Bombs"
-msgstr ""
+msgstr "燃烧弹"
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr ""
+msgstr "燃烧弹的作用方式与地面火焰喷射武器有些类似。"
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr ""
+msgstr "燃烧弹在命中时造成的伤害较低，但会立即点燃命中点周围的大片区域。"
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr ""
+msgstr "敌方单位和建筑若在该区域内停留，会随着时间的推移受到大量伤害。"
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr ""
+msgstr "与火焰喷射武器类似，燃烧弹能出色地对抗所有类型的单位和碉堡，但对坚固的防御工事效果较差。"
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "炸弹舱"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "炸弹舱是一种独特的武器类型，只能装配在VTOL上。"
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "尽管炸弹舱的攻击范围较短且弹药容量较低，但它能为VTOL提供额外的生命值，而且相较于其他VTOL武器，其搭载的弹药通常具有更强的威力。"
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "与其他所有武器一样，不同的炸弹有着不同的效果、优势和应用场景。"
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "“碉堡终结者”"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "“碉堡终结者”是一种独特的武器，对所有建筑都能产生极佳的破坏效果。"
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "然而，“碉堡终结者”对任何非建筑目标的效果都极为有限。"
 
 msgid "Flamer"
-msgstr ""
+msgstr "火焰武器"
 
-msgid "Incendiary \"Flamer\" weapons are effective against both vehicles and infantry."
+msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
 msgstr ""
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "火焰喷射武器在对抗碉堡和拾荒者建筑方面同样表现出色，但对其他建筑的效果相对较弱。"
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "火焰喷射武器能够“穿透”多个单位，一次喷射即可对多个单位造成伤害，甚至可能点燃它们，因此火焰喷射武器是出色的群体杀伤武器。"
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "然而，由于火焰喷射武器的攻击范围较短，使用起来可能具有一定的危险性。"

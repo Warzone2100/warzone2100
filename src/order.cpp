@@ -553,7 +553,7 @@ bool orderUpdateDroid(DROID *psDroid)
 			}
 			else
 			{
-				unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y, false);
+				unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y);
 			}
 		}
 		break;
@@ -927,9 +927,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					moveReallyStopDroid(psDroid);
 
 					// Fire off embark event
-					transporterSetScriptCurrent(transporter);
 					triggerEvent(TRIGGER_TRANSPORTER_EMBARKED, transporter);
-					transporterSetScriptCurrent(nullptr);
 
 					/* We must add the droid to the transporter only *after*
 					* processing changing its orders (see above).
@@ -956,7 +954,7 @@ bool orderUpdateDroid(DROID *psDroid)
 				if (psDroid->action != DACTION_MOVE && psDroid->action != DACTION_MOVEFIRE &&
 				    psDroid->sMove.Status == MOVEINACTIVE && psDroid->sMove.iVertSpeed == 0)
 				{
-					unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y, false);
+					unloadTransporter(psDroid, psDroid->pos.x, psDroid->pos.y);
 					//reset the transporter's order
 					psDroid->order = DroidOrder(DORDER_NONE);
 				}
@@ -3324,6 +3322,7 @@ void secondaryCheckDamageLevel(DROID *psDroid)
 		{
 			if (psDroid->group != UBYTE_MAX)
 			{
+				ASSERT(psDroid->repairGroup == UBYTE_MAX, "repairGroup was already: %" PRIu8 "; setting to: %" PRIu8, psDroid->repairGroup, psDroid->group);
 				psDroid->repairGroup = psDroid->group;
 				intGroupsChanged(psDroid->group);
 			}
@@ -3466,13 +3465,13 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	// debug(LOG_INFO, "found a total of %lu RT, and %lu RF", vDroid.size(), vFacility.size());
 
 	// the center of this area starts at the closest repair droid/facility!
-	#define MAGIC_SUITABLE_REPAIR_AREA ((REPAIR_RANGE*3) * (REPAIR_RANGE*3))
+	#define MAGIC_SUITABLE_REPAIR_AREA ((REPAIR_RANGE*5) * (REPAIR_RANGE*5))
 	Position bestRepairPoint = bestDistToRepairFac < bestDistToRepairDroid ? bestFacPos: bestDroidPos;
 	// find all close enough repairing candidates
 	for (int i=0; i < vFacilityPos.size(); i++)
 	{
 		Vector2i diff = (bestRepairPoint - vFacilityPos[i]).xy();
-		if (dot(diff, diff) < MAGIC_SUITABLE_REPAIR_AREA)
+		if (dot(diff, diff) <= MAGIC_SUITABLE_REPAIR_AREA)
 		{
 			vFacilityCloseEnough.push_back(i);
 		}
@@ -3480,7 +3479,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	for (int i=0; i < vDroidPos.size(); i++)
 	{
 		Vector2i diff = (bestRepairPoint - vDroidPos[i]).xy();
-		if (dot(diff, diff) < MAGIC_SUITABLE_REPAIR_AREA)
+		if (dot(diff, diff) <= MAGIC_SUITABLE_REPAIR_AREA)
 		{
 			vDroidCloseEnough.push_back(i);
 		}
@@ -3494,7 +3493,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 
 	} else if (vFacilityCloseEnough.size() > 1)
 	{
-		int32_t which = gameRand(vFacilityCloseEnough.size());
+		uint32_t which = gameRand(vFacilityCloseEnough.size());
 		return RtrBestResult(RTR_TYPE_REPAIR_FACILITY, vFacility[vFacilityCloseEnough[which]]);
 	}
 
@@ -3504,7 +3503,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		return RtrBestResult(RTR_TYPE_DROID, vDroid[vDroidCloseEnough[0]]);
 	} else if (vDroidCloseEnough.size() > 1)
 	{
-		int32_t which = gameRand(vDroidCloseEnough.size());
+		uint32_t which = gameRand(vDroidCloseEnough.size());
 		return RtrBestResult(RTR_TYPE_DROID, vDroid[vDroidCloseEnough[which]]);
 	}
 

@@ -1,10 +1,22 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "6ecbbbdf31cba47aafa7cf6189b1e73e10ac61f8",
+	"builtin-baseline": "97bbb13b57ea5ae4e9edd851601f36a1acb3868a",
 	"dependencies": [
 		"physfs",
-		"sdl2",
+		{
+			"name": "sdl3",
+			"default-features": true,
+			"platform": "!emscripten"
+		},
+		{
+			"name": "sdl3",
+			"default-features": true,
+			"features": [
+				"emscripten-pthreads"
+			],
+			"platform": "emscripten"
+		},
 		{
 			"name": "harfbuzz",
 			"platform": "!emscripten"
@@ -88,7 +100,8 @@
 	],
 	"overrides": [
 		{ "name": "openal-soft", "version": "1.24.3" },
-		{ "name": "sqlite3", "version": "3.49.2" }
+		{ "name": "sqlite3", "version": "3.49.2" },
+		{ "name": "abseil", "version": "20250127.1", "port-version": 4}
 	],
 	"default-features": [
 		"vulkan"
@@ -98,7 +111,7 @@
 			"description": "The Vulkan backend",
 			"dependencies": [
 				{
-					"name": "sdl2",
+					"name": "sdl3",
 					"default-features": true,
 					"features": [
 						"vulkan"

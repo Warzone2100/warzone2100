@@ -710,7 +710,7 @@ namespace wzapi
 		, id(psObj->id)
 		, player(psObj->player)
 		{ }
-		int type;
+		int type = OBJ_NUM_TYPES;
 		int id = -1;
 		int player = -1;
 	};
@@ -975,7 +975,7 @@ namespace wzapi
 	#define WZAPI_AI_UNSAFE
 
 	std::string translate(WZAPI_PARAMS(std::string str));
-	int32_t syncRandom(WZAPI_PARAMS(uint32_t limit));
+	uint32_t syncRandom(WZAPI_PARAMS(uint32_t limit));
 	bool setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies));
 	no_return_value sendAllianceRequest(WZAPI_PARAMS(int player2));
 	bool orderDroid(WZAPI_PARAMS(DROID* psDroid, int order));
@@ -1130,7 +1130,7 @@ namespace wzapi
 	no_return_value startTransporterEntry(WZAPI_PARAMS(int x, int y, int player));
 	no_return_value setTransporterExit(WZAPI_PARAMS(int x, int y, int player));
 	no_return_value setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool flagValue)) MULTIPLAY_SYNCREQUEST_REQUIRED;
-	no_return_value fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player));
+	no_return_value fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player, optional<bool> center));
 	no_return_value fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player));
 	bool setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
 	nlohmann::json getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index));

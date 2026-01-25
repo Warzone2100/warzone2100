@@ -1,7 +1,8 @@
 // TRANSLATORS:
 // The guide topic title - please maintain original capitalization
 _("Recycling")
-_("Recycling a unit will send it to the nearest Factory or Repair Facility, and destroy it.")
+_("Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play.")
 _("Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged).")
-_("The unit’s experience level will be placed in the next unit that is manufactured.")
+_("The experience points of the recycled unit will be transferred to the next unit that is manufactured.")
+_("When multiple experienced units are recycled, the highest amount of experience points is transferred first.")
 _("You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind.")

@@ -218,7 +218,14 @@ void PendingWritesManager::safeDispose(IClientConnection* conn)
 		else
 		{
 			// Notify the owning connection provider to properly dispose of the connection object.
-			conn->connProvider_->disposeConnection(conn);
+			if (auto connProvider = conn->connProvider_.lock())
+			{
+				connProvider->disposeConnection(conn);
+			}
+			else
+			{
+				ASSERT(false, "IClientConnection::connProvider_ has gone away before safeDispose!");
+			}
 			// Delete the socket and destroy the connection right away.
 			delete conn;
 		}

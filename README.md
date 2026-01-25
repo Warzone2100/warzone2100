@@ -44,7 +44,7 @@ the “Warzone 2100 Project”.
 
 After the liberation of the Warzone 2100 source-code on December 6th, 2004, all
 proprietary technologies have been replaced with open-source counterparts, and
-extensive improvements and additions have been made throughout while preserving 
+extensive improvements and additions have been made throughout while preserving
 what made the original release so great.
 
 Development continues on GitHub, and bug reports & contributions are welcome!
@@ -238,7 +238,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * Compiling tools (ex. CMake, GCC/G++/Clang, ninja-build)
    * Archiving tools (ex. zip, p7zip)
    * Various libraries:
-      * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.20)_
+      * [SDL](https://www.libsdl.org) ≥ 3.2.12 _(strongly recommended: ≥ 3.2.26)_
       * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.1 _(strongly recommended: ≥ 3.0.2)_
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
@@ -259,7 +259,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
 * **Installing prerequisites:**
    * Using `get-dependencies_linux.sh`:
-      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`, `opensuse-tumbleweed`) _REQUIRED_
+      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`, `opensuse-tumbleweed`, `gentoo`, `debian`, `raspberrypios`) _REQUIRED_
       2. Specify a mode: (`build-all` (default), `build-dependencies`) _OPTIONAL_
 
       Example:

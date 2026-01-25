@@ -80,6 +80,7 @@ static std::map<WzString, const char *> languageIconsMap()
 		{"ru", "flag-RU.png"},
 		{"sk", "flag-SK.png"},
 		{"sl_SI", "flag-SI.png"},
+		{"sr_RS", "flag-RS.png"},
 		{"sv_SE", "flag-SE.png"},
 		{"sv", "flag-SE.png"},
 		{"tr", "flag-TR.png"},
@@ -91,7 +92,7 @@ static std::map<WzString, const char *> languageIconsMap()
 	return iconsMap;
 }
 
-std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()> languageDidChangeHandler)
+std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(bool inGame, const std::function<void()> languageDidChangeHandler)
 {
 	auto result = OptionsForm::make();
 	result->setRefreshOptionsOnScreenSizeChange(true);
@@ -271,9 +272,12 @@ std::shared_ptr<OptionsForm> makeInterfaceOptionsForm(const std::function<void()
 				}
 				return result;
 			},
-			[](const auto& newValue) -> bool {
+			[inGame](const auto& newValue) -> bool {
 				war_setOptionsButtonVisibility(newValue);
-				intAddInGameOptionsButton(); // properly refresh button state
+				if (inGame)
+				{
+					intAddInGameOptionsButton(); // properly refresh button state
+				}
 				return true;
 			}, true
 		);

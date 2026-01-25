@@ -3,7 +3,7 @@
 
 set(WZMAPLIB_VERSION_MAJOR 1)
 set(WZMAPLIB_VERSION_MINOR 4)
-set(WZMAPLIB_VERSION_REV 1)
+set(WZMAPLIB_VERSION_REV 6)
 
 ##############################
 ##############################
@@ -226,5 +226,5 @@ if (libzip_FOUND)
 		endif()
 	endif()
 else()
-	message(STATUS "Could NOT find libzip - ZipIOProvider target will not be available")
+	message(WARNING "Could NOT find libzip - ZipIOProvider target will not be available")
 endif()

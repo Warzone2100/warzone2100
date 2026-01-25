@@ -1078,7 +1078,7 @@ static bool updateDestruction(EFFECT *psEffect, LightingData& lightData)
 {
 	Vector3i pos;
 	UDWORD	effectType;
-	UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
+	UDWORD	widthScatter = 1, breadthScatter = 1, heightScatter = 1;
 	SDWORD	iX, iY;
 	LIGHT	light;
 	int     percent;

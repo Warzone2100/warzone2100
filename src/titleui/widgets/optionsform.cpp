@@ -353,8 +353,14 @@ void WzOptionsDropdownWidget::highlightLost()
 
 int WzOptionsDropdownWidget::calculateDropdownListScreenPosX() const
 {
-	// align with left side of current displayed text label
-	return currentOptionChoiceDisplayWidg->screenPosX();
+	// align with left side of current displayed text label (if possible)
+	int xPos = currentOptionChoiceDisplayWidg->screenPosX();
+	int displayWidth = calculateDropdownListDisplayWidth();
+	if (xPos + displayWidth > screenWidth)
+	{
+		xPos = std::max<int>(screenWidth - displayWidth, 0);
+	}
+	return xPos;
 }
 
 int WzOptionsDropdownWidget::calculateDropdownListDisplayWidth() const

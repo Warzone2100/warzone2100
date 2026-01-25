@@ -38,6 +38,7 @@
 
 TableRow::TableRow()
 : W_BUTTON()
+, highlightColor(WZCOL_TRANSPARENT_BOX)
 , disabledColor(WZCOL_FORM_DISABLE)
 {
 	AudioCallback = nullptr;
@@ -90,6 +91,11 @@ void TableRow::setHighlightsOnMouseOver(bool value)
 	highlightsOnMouseOver = value;
 }
 
+void TableRow::setHighlightColor(PIELIGHT newHighlightColor)
+{
+	highlightColor = newHighlightColor;
+}
+
 void TableRow::setDrawBorder(optional<PIELIGHT> newBorderColor)
 {
 	borderColor = newBorderColor;
@@ -104,6 +110,7 @@ void TableRow::setBackgroundColor(optional<PIELIGHT> newBackgroundColor)
 void TableRow::setDisabled(bool disabled)
 {
 	disabledRow = disabled;
+	W_BUTTON::setState((disabled) ? WBUT_DISABLE : 0);
 }
 
 // Set row disable overlay color
@@ -131,7 +138,7 @@ void TableRow::display(int xOffset, int yOffset)
 
 	if (highlightsOnMouseOver && isMouseOverRowOrChildren() && !disabledRow)
 	{
-		iV_TransBoxFill(x0, y0, x1, y1);
+		pie_UniTransBoxFill(x0, y0, x1, y1, highlightColor);
 	}
 	else if (backgroundColor.has_value())
 	{
@@ -169,7 +176,7 @@ void TableRow::displayRecursive(WidgetGraphicsContext const& context)
 
 bool TableRow::hitTest(int x, int y) const
 {
-	if (disabledRow) { return false; }
+	if (x >= maxDisplayedColumnX1) { return false; }
 	return W_BUTTON::hitTest(x, y);
 }
 
@@ -179,6 +186,11 @@ std::shared_ptr<WIDGET> TableRow::findMouseTargetRecursive(W_CONTEXT *psContext,
 	// (see WIDGET::findMouseTargetRecursive)
 	lastFrameMouseIsOverRowOrChildren = frameGetFrameNumber();
 
+
+	if (disabledRow)
+	{
+		return shared_from_this();
+	}
 	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
 }
 
@@ -202,6 +214,7 @@ void TableRow::resizeColumns(const std::vector<size_t>& newColumnWidths, int col
 		columnWidgets[colIdx]->show();
 		lastColumnEndX = (columnWidgets[colIdx]->x() + columnWidgets[colIdx]->width());
 	}
+	maxDisplayedColumnX1 = lastColumnEndX;
 	// hide any additional column widgets
 	for (; colIdx < columnWidgets.size(); colIdx++)
 	{

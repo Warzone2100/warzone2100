@@ -1,9 +1,165 @@
-2025-08-16: Version 4.6.0-beta1:
+2025-12-09: Version 4.6.2:
+ * General:
+   * Fix: Add transporter weapon validity check (commit:a085887b4e3093e695f24f40a666170820c494ca, #4617)
+   * Fix: Resolve assert when loading replay with in-memory map archive (commit:6be51879a4bc0182ffc19b045d1d4fbe064a6e11, #4619)
+   * Fix: Allow stats / mods to change cyborg movement sound (commit:6800ec64a58f92a8387d0b8d1656adcd956c6cf7, #4623)
+   * Fix: Correct and clarify some topics of the in-game guide (commit:ae6965a270a9763619687e13e6642d26fbd1d587, #4582)
+   * Fix: Various potential crashes / asserts (too many commits, #4597, #4657, #4658, #4659, #4687)
+ * Graphics:
+   * Fix: MP Transporter model fixes (commit:7fbf3f31097c74b15cdcd2f2bbccd0ec07c95394, commit:ff6df7712aee58e1030bc52b460eb7aa6358aa63, #4627)
+   * Fix: Remove validation layers in Vulkan device create info (commit:ac9bc67d6ad24c2663b15e6554d659e787e27da3, #4638)
+ * Campaign:
+   * Add: Update Reclamation and Fractured Kingdom addon campaigns (commit:c50d79adf14fd8a032eb2fafc1c5c80a83bf4b89, commit:bb1d84ac901682d4b8066be2c5ebd5fc3793a68b, #4634)
+   * Fix: Make toggle options in GUI easier to understand (commit:2fa575d5a7a8b608ce4e80cb8f93923de9f1b835, #4645)
+   * Fix: Tower Wars tweak for Classic Balance (commit:b3578e1abbcef259ef5639fe4b56bc184185bee5, #4679)
+ * Multiplayer:
+   * Add: locked.readybeforefull option, to prevent checking ready before all open player slots are full (commit:af81baa87bc49c5312170cbda8dafc5d42d091c4, #4691)
+   * Change: Let Insane difficulty AI bots start with gates (commit:8a61dbab079846fd6cc6ea59bc6ef142da8c1586, #4640)
+   * Fix: Refactor how player connection state is recorded and handled, resolve "kick loop" (commit:3703421fd2ed99cf98fc5f69c0881d18a0b2d616, #4588)
+   * Fix: Trigger lobby browser refresh when exiting game lobby (commit:ae697c460a40e9d097687c37cbd5802f96372e76, #4605)
+   * Fix: Improve state management when --startplayers is specified (commit:ae35595678dfb34c1570bdb92fb8acadedf2b7af, #4605)
+   * Fix: sendBeacon error when spectator host (commit:119585ec10af38c6207b0e60204471879a4b1875, #4620)
+   * Fix: Errors in the maps Valley and Concrete (commit:7e381ce319a092f3c69552381024d09bbd702ee7, commit:169eaa25c6c22474ec9c5ee0c5f602bff7d8e71f, #4636)
+   * Fix: Name conflict with MP scavenger body stats (commit:e539abc3e1ae4cd1d344d1fd39c6f4f29ad06768, #4673)
+   * Fix: Improve not-ready-kick messaging (commit:f094d72d129a36d7431fa353f4bb9d68a539f8e1, #4691)
+   * Fix: netplay: Schedule port mapping request callbacks under the mutex (commit:6ceb6ca5c891ea1244433a81f820c1f2aa63dc52, #4698)
+ * Scripting:
+   * Add: scriptName to playerData (commit:7b933b4093ce08ed65a3ddbe7c423aa06f380e05, #4647)
+   * Change: Add optional center param to fireWeaponAtLoc (commit:43954282e18b96f1f2ad5806911854d800f54963, #4686)
+   * Fix: Update quickjs-wz, improving performance and fixing bugs (too many commits, #4596, #4613, #4639, #4685, #4699)
+   * Fix: syncRandom() return type (commit:dc4ed949908f7331189b1eeba5821b372d8c7eb7, #4630)
+ * AI:
+   * Nexus:
+     * Improve game performance when multiple Nexus bots are used
+     * Fix help system accessing help data incorrectly
+     * Fix a countDroid() call doing nothing for when to skip production
+   * NullBot family:
+     * Fix Hover AI causing "ruleset warnings" over the Mini-Rocket Pod
+     * Fix missing parenthesis introduced back in 2016 in function buildVtols (due to a recent commit, and this going unnoticed, that change unintentionally broke NullBot defense building behaviors)
+     * Make sure VTOL pads are built in safe areas
+   * Cobra:
+     * Can use Particle Gun now
+     * Create chance() function to remove repeated random() < X calls
+     * Slightly refactor research tree into separate functions
+     * Update const style convention (similar to libcampaign) to distinguish local and global constants
+     * Go for Power research more if available in low oil
+     * Reduce or eliminate chance of trapping trucks in high oil maps as it was trying to defend base derricks
+     * Try building repair facilities near other repair facilities (works best on high oil maps)
+     * Add a Cannon VTOL personality (AV chat command)
+     * Bump repair thresholds to medium damage levels
+     * Improvements to high oil build orders
+     * Much better T2+ No Bases support in all map types
+     * Micro optimize low oil build order to build power modules before cyborg factories
+     * Try using research labs with modules first when selecting research
+     * Some small research path optimizations
+     * Force Cobra to research defense topics randomly since they don't take long these days
+     * Cobra defends bases and oils better with defenses (kinda turtle-AI like)
+     * Fix Cobra building base structures very far away sometimes, due to a cache call collision returning an oil truck's defense structure location
+     * Rocket personality now ignores MG past the early game, will go full rocket artillery instead to optimize research
+     * Make it prefer stronger bodies faster, more chance to build heavy ones
+     * Fix a very old bug on Advanced Bases Cockpit / Cockate where truck production would be delayed for a few minutes (This will also fix other such maps that give almost no base structures on these settings)
+   * BoneCrusher:
+     * Fix some out-of-bounds access errors causing asserts
+     * Huge performance improvements (eliminates stutters in many higher oil maps)
+     * Fix a broken if statement for adding oil hunters which wanted to call a function to check something oil related   
+ * Balance MP:
+   * Change: Partial revert: SuperTransport base HP 3000 -> 2200, due to interaction with PR #3252 (commit:78b304b56ed9564e5d369b2448be4ab07a60069b, #4704)
+   * Fix: Copy paste stat error for Particle Gun emplacement (commit:7ed4dabf07e42bc48bc6dcfba8d0f0089f20107f, #4580)
+   * Fix: Thermal typo under bbaatow in structure.json (commit:6e4d7e9484addc8f4e8394ff7351b9280a6a6120, #4697)
+ * Other:
+   * Add: Gentoo support to get-dependencies_linux.sh (commit:19a21960feb437810ba3e6626d6f3355ffa37056, #4584)
+   * Add: Debian / Raspberry Pi OS support to get-dependencies_linux.sh (commit:19ead363d027c6734e313837bb5488a6ec6b5a7c, #4591)
+   * Add: Reminder messages in tutorial (commit:e6355e51c415d070fdaef5dc22ea663f6539a37d, #4702)
+   * Change: Port backend from SDL2 to SDL3 (too many commits, #4661)
+   * Fix: GameNetworkingSockets absl symbol leaks with protobuf (commit:fd2ab132761d293eb909f4734bc9b4eec341fa8e, #4576)
+   * Fix: Create albums music folder in config (commit:62bcfc9585cd7db0227607374618e3055a1adca0, #4609)
+   * Fix: Replace uses of sprintf (commit:ebeaaa7958f35879eea7b57474eff0c89aa4fb03, #4607)
+   * Fix: CMake: Update FindZIP to find 7zz (commit:38102e314a79dc8f6b22aed863cc7e6abba7d715, #4621)
+   * Fix: Snap: Add workaround for amdgpu.ids issue (commit:251f7c74bb3ac6ea15cbe29148c50fe7163f4188, #4648)
+
+2025-09-16: Version 4.6.1:
+ * General:
+   * Fix: Add various buggy drivers to the Vulkan driver blocklist (too many commits, #4560, #4568)
+   * Fix: Rebuilding search paths and reloading local mods after leaving joined lobby or multiplayer game (commit:d2310199e980f5f3781ff19580c807818598909e, commit:f28a8d1a57b989f9964f2b16f56c9789438e6eb0, #4561)
+   * Fix: Call countUpdate at init, not unsynchronized at top of gameLoop (commit:d65dcad91268e71fb26555bfadbf24c61126c082, #4564)
+ * Campaign:
+   * Fix: Improve campaign coordinate generators (commit:345c26dd053088d474bd37b7d5d01b8c179a91b4, #4570)
+ * Multiplayer:
+   * Add: hostAutoLagKickAggressiveness config value (commit:f2efcd97a65bfc3abc06c41350ea1c159d6c99d8, #4556)
+   * Add: Share more host options with clients, so clients can display the state (commit:48f52846df42c9ca74f7fe03b743b04f9e823715, #4562)
+   * Fix: Apply commander distance check to getDroidEffectiveLevel, other tweaks to avoid exploits (too many commits, #4559)
+   * Fix: Improve not-ready check / kick / warning (too many commits, #4566)
+ * Networking:
+   * Fix: netplay: Use shared/weak_ptr for WzConnectionProvider, refactor shutdown handling (too many commits, #4563)
+ * Translations:
+   * Change: Translation updates (commit:ffe13ab5532b6997c785650167d7db273cf545bb, #4571)
+
+2025-09-08: Version 4.6.0:
+ * General:
+   * Change: Bump repair spread area from 6 to 10 tiles (commit:027134f560965fec3ff37656c10f5d7e6190da5a, #4547)
+   * Remove: Experimental commander-based shield implementation, leave stubs for future shield experiments (commit:b9c9dfbf4ed230e04106c25dcde3dc7cb4b8c8b1, #4537)
+   * Fix: Various unloadTransporter issues and edge cases (too many commits, #4548)
+ * Campaign:
+   * Fix: Prevent campaign Gauss Cannon friendly splash damage (commit:c0ff325fd155e6f38f6c1dba044d9aabf7f87f26, #4543)
+ * Multiplayer:
+   * Fix: quickchat: Add reset & index swap handling (commit:f75c92f2250eebca74e2ad986f22b7cec080bb6f, #4540)
+   * Fix: teamstrategy: Update the player names once revealed (commit:d2bedbbb06b995a3a98a965bffdbbbbab4c5b138, #4542)
+   * Fix: Prevent MP penetrating weapons causing friendly fire (commit:355c5119053108b7c422de643100f5e6b176e57a, #4543)
+ * Networking:
+   * Fix: gns: Guard read/write accesses to activeClients_ with a mutex (commit:256788c35e9140fb9ce182aef103db6662c926e4, #4549)
+ * Scripting:
+   * Add: isFlying JS field to Droid objects (commit:f349292509f38c1e9c697f9f06777fc71800e8b4, #3830)
+ * Translations:
+   * Change: Translation updates (commit:802ce2fa34049ad05510cc34d2373f20ccef4fd3, #4536)
+ * Other:
+   * Update generated docs (commit:c471247a3b3c28c4ce5056e58ba5b1f89c68fce3, #4541)
+
+2025-08-31: Version 4.6.0-beta4:
+ * Multiplayer:
+   * Fix: Map preview cleanup when returning to lobby browser (commit:281c08938ed521edfff72af20895705390237ba7, #4533)
+   * Fix: Lobby browser spectate button issues (commit:b8061a1072b43107a20e3c6f21cc31cd4f5d8212, #4533)
+
+2025-08-31: Version 4.6.0-beta3:
+ * General:
+   * Add: Add to brain.json: cmdExpRange, shieldRange to cap distance for when shields regenerate and rank to be given to Commanders (commit:903a57b93f45c65bd8b9a65798d8442b6535332e, #4493)
+   * Add: Add "Audio Cues" options section, toggle for "Group Reporting" audio cue (commit:688bdb8bd54f0c215195e23ec7d9235008f170b2, #4519)
+   * Change: Transporters caught fire when flying over fire; Disabled burning transporter in general as they are always flying (commit:58ca5fb835c360eee6c114ae02637824c0895afb, #4504)
+   * Fix: Cleanup Commander template limit code to allow multi-factory production; Don't hide Commander templates at limit; Hardcoded 5 Commander production limit removed as it conflicts with modern scripts (commit:7ffa8e9951e6f41bc5733ae0d486df3d88203c1b, #4506)
+   * Fix: Set gameInitialised to true in initSaveGameLoad() to fix autosaves not happening after the new autosave message PR was done (commit:1bc622f83872bd93f548adb24a2cd6c6c9fee504, #4513)
+   * Fix: Additional calls to droidRepairStopped() to prevent sticking healthbars until fully healed (commit:18421b3c56aaceb298d0d004a6656626a209f07a, #4518)
+ * Graphics:
+   * Add: [Vulkan] Ability to block bad drivers, up max requested version to 1.3, Update minimum VK_HEADER_VERSION to 290 (too many commits, #4502)
+   * Fix: [Vulkan] Handle getQueueFamiliesInfo failure (commit:8afe3df7c40540424ac5f9c423c2f753f6aaaac1, #4496)
+ * Multiplayer:
+   * Add: Search for the nearest transporter if the current one is already full during an attempted embark (commit:b9538249871c1521fce983069304ba9118cc26fa, commit:780ac3100c750df9845a369fd02eaab39a0e8ce2, #4422)
+   * Add: Blind lobby & netplay tweaks, New lobby game browser. New widgets, more filtering options, more room information, and increased responsiveness (too many commits, #4499)
+   * Fix: Additional map preview sanity checks (commit:2838c083f68a484c90611a46fd60ce2ef30fd8c8, #4497)
+ * AI:
+   * Fix: Fix typos in BoneCrusher (commit:fe1e616c15fe5b652e4d7c814af66c91c7bfcb91, #4444)
+ * Networking:
+   * Fix: Do not add GNS to joinLobbyGame connection list to prevent a long wait time (commit:0df36e7306342bc1d2a6a9d9a050181b6be4c3ff, #4479)
+   * Fix: autoLobbyNotReadyKickRoutine using the wrong value (commit:fe4f29674945b15247d433febb9150e8d22aebdf, #4485)
+   * Fix: Move NETshutdown() later in systemShutdown() (commit:e3901055bd0884c97789a8d51a5d5de146cc8b62, #4492)
+   * Fix: Prevent 12 year old rare desync from different compiler / standard library implementations of std::sort when an unlucky list of tiles were generated during factory droid placement (commit:9dc499a1edf3266a8a43c8ab4b617109ed993f4c, #4486)
+   * Fix: Only output playerLeft event when slot is still allocated (commit:7dec24fae60165ed7dac192fdff6ed2ce5b1413d, #4521)
+   * Fix: Kicked-related message was not blinded (commit:a2b0ded3b90abaa828d910e6583b66d07b97438c, #4521)
+   * Fix: Improve connectionString parsing, including for IPv6 addresses (commit:8e7fabf243967b26d3b96d2941a7d6826d502930, #4523)
+ * Balance MP:
+   * Change: brain.json: Adjust shield strength; Additional sanity checks (commit:2622f38fc8c94627f3da1075e51431c1b9794b6b, commit:5dec5ba6274fb785f08dd43092e15e67fc1e23d6, #4522)
+ * Other:
+   * Add: Add Music Document (commit:8c2572d94162dbebdddbeed815a46f0dbc8ea7e8, #4174)
+   * Change: Update angle vcpkg port, vcpkg baseline (too many commits, #4500)
+   * Fix: Fix segfault with dumpinfo.cpp trying to use a WZ_MUTEX (commit:4f551999640f519b723ce6384a4c4036ab84d0f1, #4482)
+   * Fix: Additional sanity checks (too many commits, #4514)
+   * Fix: Match the pre-#4281 behavior for flying unit factory production placement (while preserving the fixes for other units) (commit:c75f6bbcb6df331a72d788175eec21bf55c4cfbd, #4511)
+   * Fix: Increment structure count maximum for the new owner on donation (commit:9659b33c754a382f6cfe9826399b2125c356704e, #4517)
+
+2025-08-16: Version 4.6.0-beta2:
  * General:
    * Add: Improve research items tooltips with categories and time (too many commits, #4216)
    * Add: Attempt to break infinitely circling units out of a movement loop after a set time (commit:a60772db154c813feefc30bdfe2bc714287f00ae, 4222)
    * Add: Add new combined (universal) Windows installer (too many commits, #4302, #4305, #4345)
-   * Add: Added commander shields, available in MP stats so far (too many commits, #4335, #4361, #4372, #4353))
+   * Add: Added commander shields, available in MP stats so far (too many commits, #4335, #4361, #4372, #4353)
    * Add: Various mouse edge scrolling fixes, and new "Automatic" Trap Cursor mode (too many commits, #4354)
    * Add: Support multi-threaded fpath job processing (too many commits, #4365)
    * Add: Replace & revamp options menus (too many commits, #4371)

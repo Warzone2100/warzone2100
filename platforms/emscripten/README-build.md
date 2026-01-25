@@ -14,7 +14,7 @@
 1. [Install the Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html)
 2. Install [workbox-cli](https://developer.chrome.com/docs/workbox/modules/workbox-cli)
    ```
-   npm install workbox-cli --global
+   npm install --ignore-scripts workbox-cli --global
    ```
 3. Follow the instructions for [Warzone 2100: Getting the Source](https://github.com/Warzone2100/warzone2100#getting-the-source)
 4. `mkdir` a new build folder (as a sibling directory to the warzone2100 repo)

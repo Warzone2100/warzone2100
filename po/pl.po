@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -2009,6 +2009,9 @@ msgstr "Poczekaj chwilę aż fabryka wyprodukuje nowe jednostki"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Gratulacje dowódco - jesteś gotowy na swoją pierwszą misję"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "KAMPANIA PIERWSZA"
 
@@ -2983,9 +2986,6 @@ msgstr ""
 "Jeśli używasz routera, włącz UPnP/NAT-PMP/PCP\n"
 "lub przekieruj porty."
 
-msgid "Failed to get a lobby response!"
-msgstr "Brak odpowiedzi z serwera lobby!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
 
@@ -3339,11 +3339,11 @@ msgstr "Uzbrojony w wyrzutnię rakiet Scourge"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Uzbrojony w termitowy miotacz ognia"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Uzbrojony w termitowy miotacz ognia"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Uzbrojony w laser Flashlight"
@@ -3657,10 +3657,10 @@ msgstr "Najlepsze cele: struktury bazy"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Najlepsze cele: bunkry i umocnienia"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Najlepsze cele: bunkry i umocnienia"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -7269,6 +7269,9 @@ msgstr ""
 msgid "Spectators"
 msgstr ""
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s chce włączyć tryb odpluskwiania. Włączony: %s, Wyłączony: %s."
@@ -8098,7 +8101,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8324,9 +8340,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -9601,6 +9614,9 @@ msgstr "Wybierz nazwę gracza"
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
+
 msgid "Blind Game:"
 msgstr ""
 
@@ -10141,7 +10157,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -10933,16 +10957,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -11002,91 +11026,6 @@ msgstr "KAMPANIE"
 msgid "GAMES"
 msgstr "GRY"
 
-msgid "Refresh Games List"
-msgstr "Odśwież listę gier"
-
-msgid "Filter Games List"
-msgstr "Filtruj listę gier"
-
-msgid "Refreshing..."
-msgstr "Odświeżanie..."
-
-msgid "Searching"
-msgstr "Szukam"
-
-msgid "Connecting to the lobby server..."
-msgstr "Łączenie z serwerem lobby..."
-
-msgid "Game Name"
-msgstr "Nazwa gry"
-
-msgid "Map Name"
-msgstr "Nazwa mapy"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Can't connect to lobby server!"
-msgstr "Nie można połączyć się z serwerem lobby!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mody: %s"
-
-msgid "Mods: None!"
-msgstr "Mody: brak!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Wersja %s"
-
-msgid "Join as spectator"
-msgstr ""
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Twoja wersja Warzone jest niekompatybilna z tą grą."
-
-msgid "[Password required]"
-msgstr "[Wymagane hasło]"
-
-msgid "[No Tanks]"
-msgstr "[Bez czołgów]"
-
-msgid "[No Cyborgs]"
-msgstr "[Bez cyborgów]"
-
-msgid "[No VTOLs]"
-msgstr "[Bez VTOLi]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Hostowana przez %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Hostowana przez %s —%s"
-
-msgid "Can't find any games for your version."
-msgstr "Nie można znaleźć żadnych gier do Twojej wersji."
-
-msgid "There appears to be a game update available!"
-msgstr "Wygląda na to, że dostępna jest aktualizacja gry!"
-
-msgid "No games are available for your version"
-msgstr "Brak gier dostępnych do Twojej wersji"
-
-msgid "Wrong Game Version!"
-msgstr "Niewłaściwa wersja gry!"
-
-msgid "You have an incompatible mod."
-msgstr "Masz niekompatybilny mod."
-
-msgid "Host couldn't send file?"
-msgstr "Host nie mógł przesłać pliku?"
-
-msgid "Incorrect Password!"
-msgstr "Niewłaściwe hasło!"
-
 msgid "Continue"
 msgstr "Kontynuuj"
 
@@ -11142,6 +11081,12 @@ msgid "Music Manager"
 msgstr "Menedżer muzyki"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11507,14 +11452,7 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"W trybie pełnoekranowym rozdzielczość dopasowuje się do rozdzielczości Twojego pulpitu \n"
-"(lub do tego, na co pozwala systemowy menedżer okien)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
+msgid "Desktop Full"
 msgstr ""
 
 msgid "Window Mode"
@@ -11523,11 +11461,8 @@ msgstr ""
 msgid "Windowed"
 msgstr "W oknie"
 
-msgid "Desktop Full"
+msgid "Fullscreen Mode"
 msgstr ""
-
-msgid "Resolution"
-msgstr "Rozdzielczość"
 
 msgid "Behaviors"
 msgstr ""
@@ -11612,6 +11547,93 @@ msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "Wygląda na to, że dostępna jest aktualizacja gry!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Twoja wersja Warzone jest niekompatybilna z tą grą."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11728,6 +11750,9 @@ msgstr "Potyczka"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Nazwa gry"
+
 msgid "Click to see Map"
 msgstr "Kliknij by obejrzeć mapę"
 
@@ -11819,13 +11844,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

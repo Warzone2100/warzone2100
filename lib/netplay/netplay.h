@@ -174,11 +174,14 @@ static_assert(MaxMsgSize <= UINT16_MAX, "NetMessage/NetMessageBuilder encodes me
 struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
 {
 	int32_t dwSize;
-	int32_t dwFlags;
+	uint8_t alliances;
+	uint8_t techLevel;
+	uint8_t powerLevel;
+	uint8_t basesLevel;
 	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
 	int32_t dwMaxPlayers;
 	int32_t dwCurrentPlayers;
-	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, unused, unused)
+	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, blindMode, unused)
 };
 
 /**
@@ -269,8 +272,7 @@ struct PLAYER
 	int32_t             colour;             ///< Which colour slot this player is using
 	bool                allocated;          ///< Allocated as a human player
 	uint32_t            heartattacktime;    ///< Time cardiac arrest started
-	bool                heartbeat;          ///< If we are still alive or not
-	bool                kick;               ///< If we should kick them
+	bool                heartbeat;          ///< If connection is still alive or not
 	int32_t             team;               ///< Which team we are on (int32_t::max for spectator team)
 	bool                ready;              ///< player ready to start?
 	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
@@ -297,7 +299,6 @@ struct PLAYER
 		allocated = false;
 		heartattacktime = 0;
 		heartbeat = false;
-		kick = false;
 		team = -1;
 		ready = false;
 		ai = 0;
@@ -327,8 +328,7 @@ struct NETPLAY
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	bool HaveUpgrade;					// game updates available
-	char MOTDbuffer[255];				// buffer for MOTD
-	char *MOTD = nullptr;
+	std::string MOTD;
 
 	std::vector<std::unordered_map<std::string, std::string>> scriptSetPlayerDataStrings;
 	std::vector<std::shared_ptr<PlayerReference>> playerReferences;
@@ -373,6 +373,8 @@ unsigned NETgetDownloadProgress(unsigned player);     ///< Returns 100 when done
 
 int NETclose();					// close current game
 int NETshutdown();					// leave the game in play.
+
+bool netplayShutDown();
 
 void NETaddRedirects();
 void NETremRedirects();
@@ -446,8 +448,11 @@ SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) ab
 uint32_t NETgetGameUserFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining();				// stop new players joining this game
-bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
-bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
+
+class WzConnectionProvider;
+std::shared_ptr<WzConnectionProvider> NET_getLobbyConnectionProvider();
+bool NETenumerateGames(const std::shared_ptr<WzConnectionProvider>& connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc, const std::function<void(std::string&& lobbyMOTD)>& lobbyMotdFunc = nullptr);
+bool NETfindGames(std::vector<GAMESTRUCT>& results, std::string& lobbyMOTD, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 
 class IClientConnection;
@@ -455,7 +460,8 @@ class IConnectionPollGroup;
 
 bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char* playername, NETQUEUE joiningQUEUEInfo, IClientConnection** client_joining_socket, IConnectionPollGroup** client_joining_socket_set);
 bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
-                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs);
+                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs,
+                 uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 
@@ -479,6 +485,7 @@ void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
 void NETSendAllPlayerInfoTo(unsigned to);
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
+bool NETisGreaterVersion(uint32_t game_version_major, uint32_t game_version_minor);
 uint32_t NETGetMajorVersion();
 uint32_t NETGetMinorVersion();
 void NET_InitPlayer(uint32_t i, bool initPosition, bool initTeams = false, bool initSpectator = false);
@@ -486,6 +493,7 @@ void NET_InitPlayers(bool initTeams = false, bool initSpectator = false);
 
 uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
+void NETsetLobbyConfigFlagsFields(uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
 std::vector<uint8_t> NET_getHumanPlayers(void);
 
 const std::vector<WZFile>& NET_getDownloadingWzFiles();

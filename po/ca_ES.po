@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -1821,7 +1821,7 @@ msgid "Return to LZ"
 msgstr "Torneu a la ZA"
 
 msgid "Insane difficulty hint:"
-msgstr ""
+msgstr "Pista de dificultat Dement:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Construïu una base fortificada sobre el mapa per protegir-vos del Col·lectiu"
@@ -2008,6 +2008,9 @@ msgstr "Espereu mentre la fàbrica produeix la(les) nova(es) unitat(s)"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Felicitats comandant - esteu preparat per la vostra primera missió"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "CAMPANYA U"
@@ -2962,7 +2965,7 @@ msgstr "No s'ha pogut crear el mapatge dels ports (timeout)"
 
 #, c-format
 msgid "Using %s network backend."
-msgstr ""
+msgstr "S'està utilitzant el backend xarxa %s."
 
 msgid "Client failed to ack player index swap"
 msgstr "El client no ha confirmat el canvi de lloc del jugador"
@@ -2983,9 +2986,6 @@ msgstr ""
 "Si utilitzeu un encaminador, configuri'l per activar l'UPnP/NAT-PMP/PCP\n"
 " o per encaminar el port al vostre sistema."
 
-msgid "Failed to get a lobby response!"
-msgstr "No s'ha rebut resposta de la sala!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "El format del fitxer del replay és més recent que el que aquesta versió de Warzone 2100 pot suportar."
 
@@ -2997,38 +2997,38 @@ msgid "Replay File Format Unsupported"
 msgstr "El format del fitxer del replay no està suportat"
 
 msgid "The replay file format is older than this version of Warzone 2100 can support."
-msgstr ""
+msgstr "El format del fitxer del replay és més antic que el que aquesta versió de Warzone 2100 pot suportar."
 
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "No s'ha pogut carregar el replay: El fitxer del replay està incomplet o corrumput."
 
 msgid "Warzone 2100: Failed to initialize graphics"
-msgstr ""
+msgstr "Warzone 2100: inicialització dels gràfics fallida"
 
 msgid "Failed to initialize graphics for all backends."
-msgstr ""
+msgstr "Inicialització dels gràfics fallida per tots els backends."
 
 msgid "Error Details:"
-msgstr ""
+msgstr "Detalls de l'error:"
 
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
-msgstr ""
+msgstr "Actualitzeu i/o reinstal·leu els vostres drivers gràfics i verificeu la configuració del sistema."
 
 msgid "OK"
 msgstr "OK"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: el llançament precedent ha fallat"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "L'intent darrer per inicialitzar el backend gràfic següent ha causat un crash:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Gràfics del backend: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100 intentarà ara d'executar-se usant un backend gràfic diferent."
 
 msgid "Menu"
 msgstr "Menú"
@@ -3339,11 +3339,11 @@ msgstr "Armat amb llançador de míssils Scourge cíborg"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Armat amb un Cíborg amb Coet Mata-Tancs"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armat amb llança-flames de termita"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Armat amb Cíborg llança-flames de termita"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Armat amb llança-flames de termita"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Armat amb làser Llanterna"
@@ -3483,7 +3483,7 @@ msgid "Armored strongpoint with Heavy Laser"
 msgstr "Post blindat amb làser pesat"
 
 msgid "Armored strongpoint with Particle Gun"
-msgstr ""
+msgstr "Post blindat amb pistola de partícules"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Post blindat amb llança-flames de plasmit"
@@ -3657,11 +3657,11 @@ msgstr "Millors objectius: Estructures de base"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Millors objectius: construccions, emplaçaments i cíborgs"
 
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Millors objectius: Búnquers i fortificacions"
-
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Millors objectius: Búnquers i fortificacions"
+
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Millors objectius: Búnquers i fortificacions"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr "Millors objectius: Búnquers, defenses, construccions"
@@ -3714,7 +3714,7 @@ msgid "Bomb damage +25%"
 msgstr "+25% de danys produïts per les bombes"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Dany de la Bomba"
 
 msgid "Bomb Upgrade"
 msgstr "Millora de bomba"
@@ -3741,7 +3741,7 @@ msgid "Buggy"
 msgstr "4x4"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Edificis"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Sistemes de diagnosi i reparació interns"
@@ -3784,7 +3784,7 @@ msgid "Cannon accuracy +10%"
 msgstr "+10% de precisió dels canons"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Precisió de canó"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Carregador automàtic de canó Mk2"
@@ -3800,7 +3800,7 @@ msgid "Cannon damage +25%"
 msgstr "+25% de danys produïts pels canons"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Danys del canó"
 
 msgid "Cannon Fire Truck"
 msgstr "Camió llança-flames"
@@ -3828,7 +3828,7 @@ msgid "Cannon reload time -10%"
 msgstr "-10% de temps de càrrega dels canons"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "Recàrrega del canó"
 
 msgid "Cannon Tower"
 msgstr "Torre amb canó"
@@ -4001,7 +4001,7 @@ msgid "Crane2"
 msgstr "Grua2"
 
 msgid "Cyborg Alloys"
-msgstr ""
+msgstr "Aliatges cíborgs"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
 msgstr ""
@@ -4220,7 +4220,7 @@ msgid "Enemy"
 msgstr "Enemic"
 
 msgid "Engine"
-msgstr ""
+msgstr "Motor"
 
 msgid "Engineering"
 msgstr "Enginyeria"
@@ -4295,7 +4295,7 @@ msgid "Fire Truck"
 msgstr "Camió de bombers"
 
 msgid "Fires beams of subatomic particle"
-msgstr ""
+msgstr "Dispara rajos de partícules subatòmiques"
 
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Dispara míssils d'impulsos electromagnètics"
@@ -4332,7 +4332,7 @@ msgid "Flamer damage +25%"
 msgstr "+25% de danys produïts pels llança-flames"
 
 msgid "Flamer Damage"
-msgstr ""
+msgstr "Danys del llança-flames"
 
 msgid "Flamer Fast Loader"
 msgstr "Recàrrega ràpida per llança-flames"
@@ -4342,7 +4342,7 @@ msgid "Flamer reload time -15%"
 msgstr "-15% de temps de càrrega dels llança-flames"
 
 msgid "Flamer Reload"
-msgstr ""
+msgstr "Recàrrega del llança-flames"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Llança-flames, Escurçó i semieruga"
@@ -5247,14 +5247,14 @@ msgid "Laser accuracy +10%"
 msgstr "+10% de precisió dels làsers"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "Precisió del làser"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "+25 de danys produïts pel làser"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "Danys del làser"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "El punter làser marca l'objectiu i serveix de guia per les bales"
@@ -5264,7 +5264,7 @@ msgid "Laser reload time -15%"
 msgstr "-15% de temps de càrrega del làser"
 
 msgid "Laser Reload"
-msgstr ""
+msgstr "Recàrrega del làser"
 
 msgid "Laser Satellite Command Post"
 msgstr "Comand. de làser per satèl·lit"
@@ -5504,7 +5504,7 @@ msgid "Missile accuracy +10%"
 msgstr "+10% de precisió dels míssils"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "Precisió del míssil"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "El míssil busca activament els objectius i els fixa com a objectiu"
@@ -5514,7 +5514,7 @@ msgid "Missile damage +25%"
 msgstr "+25% de danys produïts pels míssils"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "Danys del míssil"
 
 msgid "Missile Fortress"
 msgstr "Fortalesa amb míssils"
@@ -5524,7 +5524,7 @@ msgid "Missile reload time -15%"
 msgstr "-15% de temps de càrrega dels míssils"
 
 msgid "Missile Reload"
-msgstr ""
+msgstr "Recàrrega del míssil"
 
 msgid "Missile Upgrade"
 msgstr "Millora de míssil"
@@ -5546,7 +5546,7 @@ msgid "Mortar accuracy +10%"
 msgstr "+10% de precisió dels morters"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "Precisió del morter"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Carregador automàtic de morter Mk2"
@@ -5565,7 +5565,7 @@ msgid "Mortar damage +25%"
 msgstr "+25% de danys produïts pels morters"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "Danys del morter"
 
 msgid "Mortar Fast Loader"
 msgstr "Carregador ràpid de morter"
@@ -5578,7 +5578,7 @@ msgid "Mortar reload time -10%"
 msgstr "-10% de temps de càrrega dels morters"
 
 msgid "Mortar Reload"
-msgstr ""
+msgstr "Recàrrega del morter"
 
 msgid "Mortar Targeting Computer"
 msgstr "Localització d'objectius d'ordinador per morters"
@@ -5815,10 +5815,10 @@ msgid "Panther"
 msgstr "Pantera"
 
 msgid "Particle Gun Emplacement"
-msgstr ""
+msgstr "Emplaçament amb canó de partícules"
 
 msgid "Particle Gun"
-msgstr ""
+msgstr "Canó de partícules"
 
 msgid "Pepperpot Pit"
 msgstr "Fosa Pepperpot"
@@ -5922,7 +5922,7 @@ msgid "Produces Cyborgs"
 msgstr "Fabrica cíborgs"
 
 msgid "Production"
-msgstr ""
+msgstr "Producció"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Les unitats de rang professional i regular estan protegides"
@@ -6430,7 +6430,7 @@ msgid "Sensor Upgrade"
 msgstr "Millora del sensor"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Sensor"
 
 msgid "Sensors Improved"
 msgstr "S'han millorat els sensors"
@@ -6616,7 +6616,7 @@ msgid "Systems Research Completed"
 msgstr "S'ha completat la recerca del sistema"
 
 msgid "Tank Alloys"
-msgstr ""
+msgstr "Aliatges de tanc"
 
 msgid "Tank Killer Cyborg"
 msgstr "Cíborg mata-tancs"
@@ -6646,7 +6646,7 @@ msgid "Tank Killer"
 msgstr "Destructor de tancs"
 
 msgid "Tank Thermal"
-msgstr ""
+msgstr "Armadura tèrmica per tancs"
 
 msgid "Tank Traps"
 msgstr "Trampes per tanc"
@@ -6692,10 +6692,10 @@ msgid "Thermal Armor +45%"
 msgstr "+45% d'armadura tèrmica"
 
 msgid "Thermal Armor Buff AI Mk2"
-msgstr ""
+msgstr "Millora d'armadura tèrmica per IA Mk2"
 
 msgid "Thermal Armor Buff AI"
-msgstr ""
+msgstr "Millora d'armadura tèrmica per IA"
 
 msgid "Thermal Armor Mk2"
 msgstr "Armadura tèrmica Mk2"
@@ -6743,7 +6743,7 @@ msgid "Tower wars AI, based on NullBot"
 msgstr "Mapa marí de l'IA, basat en el NullBot"
 
 msgid "Tower Wars Buff"
-msgstr ""
+msgstr "Bonus Guerra de torres"
 
 msgid "Tracked Propulsion"
 msgstr "Propulsió eruga"
@@ -7068,7 +7068,7 @@ msgid "VTOL Needle Gun"
 msgstr "Canó d'agulla VTOL"
 
 msgid "VTOL Particle Gun"
-msgstr ""
+msgstr "Canó de partícules VTOL"
 
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Plataforma de bombes de fòsfor VTOL"
@@ -7095,7 +7095,7 @@ msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Necessiteu plataformes VTOL per mantenir-los volant"
 
 msgid "VTOL Rearming"
-msgstr ""
+msgstr "Rearmament VTOL"
 
 msgid "VTOL Scourge Missile"
 msgstr "Míssil Flagel VTOL"
@@ -7268,6 +7268,9 @@ msgstr " i "
 
 msgid "Spectators"
 msgstr "Espectadors"
+
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Ha enviat massa missatges. Esperi i torni-ho a intentar."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7522,7 +7525,7 @@ msgid "Base video URL"
 msgstr "URL base del vídeo"
 
 msgid "Specify connection provider type to use when hosting game sessions"
-msgstr ""
+msgstr "Especificar el tipus de proveïdor de connexió a usar hostatjant sessions de joc"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "El comandant necessita un nivell més alt per controlar més unitats"
@@ -8083,10 +8086,23 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) ha canviat la facció del jugador (%s) a: %s"
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
+msgstr "ATENCIÓ: si no marqueu Llest aviat, sereu expulsat de la sala"
+
+#, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
 msgstr ""
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr "Expulsió automàtica del jugador (%s) car ha esperat massa per marcar llest"
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8314,9 +8330,6 @@ msgstr "Aliats bot"
 msgid "Human Allies"
 msgstr "Aliats humans"
 
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Ha enviat massa missatges. Esperi i torni-ho a intentar."
-
 msgid "Research Progress"
 msgstr "Progrés de la recerca"
 
@@ -8427,19 +8440,19 @@ msgid "Error Loading Game Data"
 msgstr "Error intentant carregar la informació del joc"
 
 msgid "Global Keys"
-msgstr ""
+msgstr "Tecles globals"
 
 msgid "Other Keys"
-msgstr ""
+msgstr "Altres tecles"
 
 msgid "Gameplay Keys"
-msgstr ""
+msgstr "Tecles pel gameplay"
 
 msgid "Radar Keys"
-msgstr ""
+msgstr "Tecles pels radars"
 
 msgid "Debug Keys"
-msgstr ""
+msgstr "Tecles pel debug"
 
 msgid "Debug (level editor)"
 msgstr "Depuració (editor de nivell)"
@@ -8815,7 +8828,7 @@ msgstr "Selecciona totes les unitats molt malmeses"
 
 #, no-c-format
 msgid "Select all Land Combat Units with >50% HP and no group"
-msgstr ""
+msgstr "Selecciona totes les unitats de combat terrestre amb >50% de PV sense grup"
 
 msgid "Select all Half-tracks"
 msgstr "Selecciona totes les unitats semieruga"
@@ -9467,13 +9480,13 @@ msgid "AutoSave %s failed"
 msgstr "Autodesada %s fallida"
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "Autodesant..."
 
 msgid "Could not save game!"
 msgstr "No s'ha pogut desar el joc!"
 
 msgid "Failed to load level data or map. Exiting to main menu."
-msgstr ""
+msgstr "Càrrega de les dades del nivell o del mapa fallida. Sortir cap al menú principal."
 
 msgid "Load Transport"
 msgstr "Carrega el transport"
@@ -9587,6 +9600,9 @@ msgid "Select Player Name"
 msgstr "Selecciona el nom del jugador"
 
 msgid "Player Name changes are not allowed when you are muted"
+msgstr "Els canvis de nom de jugador no es permeten quan esteu blocat"
+
+msgid "Player Name changes are not allowed by the host"
 msgstr ""
 
 msgid "Blind Game:"
@@ -9773,7 +9789,7 @@ msgid "Lock Teams"
 msgstr "Bloquejar els equips"
 
 msgid "Lock Position"
-msgstr ""
+msgstr "Fixa la posició"
 
 msgid "For Spectator:"
 msgstr "Per l'espectador:"
@@ -9860,13 +9876,13 @@ msgid "Disconnected from host:"
 msgstr "Desconnectat de l'hoste:"
 
 msgid "Unable to handle host redirect"
-msgstr ""
+msgstr "Incapaç de gestionar la redirecció de l'hoste"
 
 msgid "Unable to process redirect"
-msgstr ""
+msgstr "Incapaç de processar la redirecció"
 
 msgid "Unable to process repeated or invalid redirects"
-msgstr ""
+msgstr "Incapaç de processar redireccions repetides o invàlides"
 
 msgid "Host supplied invalid options"
 msgstr "Opcions invàlides proveïdes per l'hoste"
@@ -10127,15 +10143,23 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "L'hoste ha activat el xat lliure pel jugador: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr "L'hoste ha activat el xat lliure per %d jugadors"
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "L'hoste ha bloquejat el xat lliure al jugador: %s"
 
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr "L'hoste ha bloquejat el xat lliure a %d jugadors"
+
 msgid "Limits set to default."
-msgstr ""
+msgstr "Límits restablerts."
 
 #, c-format
 msgid "Changed structure limits [%u]:"
-msgstr ""
+msgstr "Límit de construccions modificat [%u]:"
 
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
@@ -10824,7 +10848,7 @@ msgid "Classic"
 msgstr "Clàssic"
 
 msgid "Remastered (HQ)"
-msgstr ""
+msgstr "Remasteritzat (Alta Qualitat)"
 
 msgid "Additional Campaigns"
 msgstr "Campanyes addicionals"
@@ -10892,52 +10916,52 @@ msgid "Reduces the damage the enemy deals to a third of the current difficulty m
 msgstr "Redueix el dany que fa l'enemic a un terç del modificador de dificultat actual."
 
 msgid "Infinite Time"
-msgstr ""
+msgstr "Temps infinit"
 
 msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
-msgstr ""
+msgstr "Les missions no tenen temps límit en la mesura del possible (el bonus d'energia de temps és reemplaçat per un petit bonus d'energia si està activat)."
 
 msgid "Victory Hints"
-msgstr ""
+msgstr "Pistes per la victòria"
 
 msgid "Displays a console message every few minutes showing victory related information."
-msgstr ""
+msgstr "Mostra un missatge a la consola de tant en tant mostrant informació relativa a la victòria."
 
 msgid "Finale Fun"
 msgstr ""
 
 msgid "Activate Final Gamma mission bonus content."
-msgstr ""
+msgstr "Activar el contingut bonus de la missió final Gamma."
 
 msgid "Gamma Bonus"
-msgstr ""
+msgstr "Bonus Gamma"
 
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
-msgstr ""
+msgstr "Missió Gamma extra usant un mapa creat per l'equip de desenvolupament original (mapa actualitzat per: DARwins)."
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr "Activa aparicions i comportaments addicionals per la dificultat dement (o superior)."
+
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Non-Insane Spawns"
-msgstr ""
-
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
-msgstr ""
+msgstr "Guany d'experiència ràpid"
 
 msgid "Increases unit experience point gain by 2x."
-msgstr ""
+msgstr "Dobla el guany d'experiència de les unitats."
 
 msgid "Tower Wars"
-msgstr ""
+msgstr "Guerra de torres"
 
 msgid "Player gets significantly stronger structures."
-msgstr ""
+msgstr "El jugador obté estructures significantment més fortes."
 
 msgid "Unsupported"
 msgstr "No és compatible"
@@ -10984,91 +11008,6 @@ msgstr "CAMPANYES"
 msgid "GAMES"
 msgstr "JOCS"
 
-msgid "Refresh Games List"
-msgstr "Refresca la llista de partides"
-
-msgid "Filter Games List"
-msgstr "Filtrar la llista de partides"
-
-msgid "Refreshing..."
-msgstr "Refrescant..."
-
-msgid "Searching"
-msgstr "Buscant"
-
-msgid "Connecting to the lobby server..."
-msgstr "S'està connectant al servidor dels lobbys..."
-
-msgid "Game Name"
-msgstr "Nom de la partida"
-
-msgid "Map Name"
-msgstr "Nom del mapa"
-
-msgid "Status"
-msgstr "Estat"
-
-msgid "Can't connect to lobby server!"
-msgstr "No s'ha pogut connectar al servidor de lobbys!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mods: %s"
-
-msgid "Mods: None!"
-msgstr "Mods: Cap!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Versió: %s"
-
-msgid "Join as spectator"
-msgstr "Unir-se com espectador"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "La vostra versió de Warzone 2100 és incompatible amb aquesta partida."
-
-msgid "[Password required]"
-msgstr "[Contrasenya necessària]"
-
-msgid "[No Tanks]"
-msgstr "[Sense tancs]"
-
-msgid "[No Cyborgs]"
-msgstr "[Sense cíborgs]"
-
-msgid "[No VTOLs]"
-msgstr "[Sense VTOL]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Hostatjat per %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Hostatjat per %s -%s"
-
-msgid "Can't find any games for your version."
-msgstr "Cap partida disponible per la vostra versió."
-
-msgid "There appears to be a game update available!"
-msgstr "Sembla que hi ha una nova versió del joc!"
-
-msgid "No games are available for your version"
-msgstr "Cap partida disponible per la teva versió del joc"
-
-msgid "Wrong Game Version!"
-msgstr "Versió del joc equivocada!"
-
-msgid "You have an incompatible mod."
-msgstr "Teniu un mod incompatible."
-
-msgid "Host couldn't send file?"
-msgstr "L'amfitrió no us ha pogut enviar el fitxer?"
-
-msgid "Incorrect Password!"
-msgstr "Contrasenya incorrecta!"
-
 msgid "Continue"
 msgstr "Continuar"
 
@@ -11079,7 +11018,7 @@ msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "L'aparell / OS / OpenAl library no suporta l'HRTF"
 
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 msgid "Voice Volume"
 msgstr "Volum de la veu"
@@ -11091,13 +11030,13 @@ msgid "Music Volume"
 msgstr "Volum de la música"
 
 msgid "Output"
-msgstr ""
+msgstr "Sortida"
 
 msgid "HRTF"
 msgstr "HRTF"
 
 msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
-msgstr ""
+msgstr "L'HRTF pot activar una espacialització millorada usant cascos o sortida estèreo."
 
 msgid "Disabled"
 msgstr "Desactivat"
@@ -11118,22 +11057,28 @@ msgid "On"
 msgstr "Actiu"
 
 msgid "Music"
-msgstr ""
+msgstr "Música"
 
 msgid "Music Manager"
 msgstr "Gestor de música"
 
 msgid "Open Music Manager"
-msgstr ""
+msgstr "Obre el gestor de música"
+
+msgid "Audio Cues"
+msgstr "Senyals d'àudio"
+
+msgid "Group Reporting"
+msgstr "Informe de grups"
 
 msgid "Mouse"
-msgstr ""
+msgstr "Ratolí"
 
 msgid "Right-Click Orders"
-msgstr ""
+msgstr "Ordres de clic-dret"
 
 msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
-msgstr ""
+msgstr "Per defecte, Warzone 2100 utilitza els clics-esquerres per la selecció i les ordres. Si preferiu l'entrada RTS moderna (clic-dret per les ordres), activeu aquesta opció. Si utilitzeu un trackpad o entrada tàctil, podríeu preferir desactivar-la."
 
 msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
 msgstr ""
@@ -11151,7 +11096,7 @@ msgid "Cursor Size"
 msgstr "Mida del cursor"
 
 msgid "Camera"
-msgstr ""
+msgstr "Càmera"
 
 msgid "Camera Speed"
 msgstr "Velocitat de la càmera"
@@ -11163,40 +11108,40 @@ msgid "Camera Zoom Rate"
 msgstr ""
 
 msgid "Mouse Rotate"
-msgstr ""
+msgstr "Rotació del ratolí"
 
 msgid "Reverse Rotation"
 msgstr "Rotació inversa"
 
 msgid "Mouse Pan"
-msgstr ""
+msgstr "Desplaçament del ratolí"
 
 msgid "Edge Scrolling"
 msgstr ""
 
 msgid "Reset"
-msgstr ""
+msgstr "Restablir"
 
 msgid "Reset Keys to:"
-msgstr ""
+msgstr "Restableix les tecles a:"
 
 msgid "(Select Profile)"
-msgstr ""
+msgstr "(Seleccionar el perfil)"
 
 msgid "Reset Keys to: Defaults"
-msgstr ""
+msgstr "Restableix les tecles a: Per defecte"
 
 msgid "Unit Color"
-msgstr ""
+msgstr "Color de les unitats"
 
 msgid "Difficulty Level"
-msgstr ""
+msgstr "Nivell de dificultat"
 
 msgid "Default AI"
-msgstr ""
+msgstr "IA per defecte"
 
 msgid "Hosting Options"
-msgstr ""
+msgstr "Opcions d'hostatge"
 
 msgid "Port Mapping"
 msgstr "Mapatge dels ports"
@@ -11262,10 +11207,10 @@ msgid "Advanced lighting is only available when using terrain appearance: Remast
 msgstr ""
 
 msgid "Terrain"
-msgstr ""
+msgstr "Terreny"
 
 msgid "Terrain Appearance"
-msgstr ""
+msgstr "Aparença del terreny"
 
 msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
 msgstr ""
@@ -11367,22 +11312,22 @@ msgid "Use LOD Distance bias to increase visual sharpness."
 msgstr ""
 
 msgid "Advanced"
-msgstr ""
+msgstr "Avançat"
 
 msgid "Graphics Backend"
-msgstr ""
+msgstr "Gràfics del backend"
 
 msgid "Antialiasing"
-msgstr ""
+msgstr "Suavitzat"
 
 msgid "Vertical Sync"
-msgstr ""
+msgstr "Sincronització vertical"
 
 msgid "Adaptive"
 msgstr "Adaptatiu"
 
 msgid "General"
-msgstr ""
+msgstr "General"
 
 msgid "Language"
 msgstr "Idioma"
@@ -11391,13 +11336,13 @@ msgid "Display Scale"
 msgstr "Escala de visualització"
 
 msgid "Game UI"
-msgstr ""
+msgstr "Interfície del joc"
 
 msgid "Show FPS"
-msgstr ""
+msgstr "Mostra els FPS"
 
 msgid "Show Unit Counts"
-msgstr ""
+msgstr "Mostra el nombre d'unitats"
 
 msgid "Groups Menu"
 msgstr "Menú dels grups"
@@ -11412,7 +11357,7 @@ msgid "Radar"
 msgstr "Radar"
 
 msgid "Radar Orientation"
-msgstr ""
+msgstr "Orientació del radar"
 
 msgid "Fixed"
 msgstr "Fix"
@@ -11436,7 +11381,7 @@ msgid "Video Playback"
 msgstr "Reproducció dels vídeos"
 
 msgid "Video Size"
-msgstr ""
+msgstr "Mida del vídeo"
 
 msgid "1×"
 msgstr "1x"
@@ -11472,50 +11417,40 @@ msgid "Failed to open configuration directory"
 msgstr "No s'ha pogut obrir la carpeta de configuració"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interfície"
 
 msgid "Defaults"
-msgstr ""
+msgstr "Per defecte"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Gràfics"
 
 msgid "Audio"
-msgstr ""
+msgstr "Àudio"
 
 msgid "Controls"
-msgstr ""
+msgstr "Controls"
 
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
+msgid "Desktop Full"
 msgstr ""
-"En mode pantalla completa, la resolució correspon a la de la seva pantalla\n"
-"(o el que permeti el gestor de finestres)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Pot canviar la resolució redimensionant la finestra com de costum. (Provi d'estirar un costat / cantonada.)"
 
 msgid "Window Mode"
-msgstr ""
+msgstr "Mode de finestra"
 
 msgid "Windowed"
 msgstr "Finestra"
 
-msgid "Desktop Full"
-msgstr "Pantalla completa"
-
-msgid "Resolution"
-msgstr "Resolució"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
-msgstr ""
+msgstr "Comportaments"
 
 msgid "Minimize on Focus Loss"
-msgstr ""
+msgstr "Minimitza quan es perdi el focus"
 
 msgid "Whether the window should auto-minimize on focus loss"
 msgstr "Si la finestra s'ha d'autominimitzar si es perd el focus"
@@ -11594,7 +11529,94 @@ msgid "not ready"
 msgstr "esperant"
 
 msgid "Waiting Room"
-msgstr ""
+msgstr "Sala d'espera"
+
+msgid "FFA"
+msgstr "Tots contra tots"
+
+msgid "Alliances Allowed"
+msgstr "Aliances autoritzades"
+
+msgid "Teams"
+msgstr "Equips"
+
+msgid "Teams (No Shared Res)"
+msgstr "Equips (recerca no compartida)"
+
+msgid "Matchmaking"
+msgstr "Formació d'equips"
+
+msgid "Blind Lobby"
+msgstr "Lobby a cegues"
+
+msgid "Blind Game"
+msgstr "Joc a cegues"
+
+msgid "No Tanks"
+msgstr "Sense tancs"
+
+msgid "No VTOL"
+msgstr "Sense VTOL"
+
+msgid "No Cyborgs"
+msgstr "Sense cíborgs"
+
+msgid "Spectate Game"
+msgstr "Espectar la partida"
+
+msgid "There appears to be a game update available!"
+msgstr "Sembla que hi ha una nova versió del joc!"
+
+msgid "Failed to connect to lobby server"
+msgstr "Connexió fallida al servidor de lobbys"
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "La vostra versió de Warzone 2100 és incompatible amb aquesta partida."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr "Versió de l'hoste: %s"
+
+msgid "(50+ omitted)"
+msgstr "(50+ omesos)"
+
+#, c-format
+msgid "(%u omitted)"
+msgstr "(%u omesos)"
+
+msgid "No games for your version"
+msgstr "Cap partida per la vostra versió del joc"
+
+msgid "No games matching filters"
+msgstr "Cap partida correspon als filtres"
+
+#, c-format
+msgid "%d players queued"
+msgstr "%d jugadors en espera"
+
+msgid "Matchmaking Room: Open"
+msgstr "Sala de formació d'equips: Oberta"
+
+msgid "Filters"
+msgstr "Filtres"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Details"
+msgstr "Detalls"
+
+msgid "Mods"
+msgstr "Mods"
+
+msgid "Hide Incompatible Games"
+msgstr "Amaga les partides incompatibles"
+
+msgid "Hide Empty Games"
+msgstr "Amaga les partides buides"
+
+msgid "Hide Modded Games"
+msgstr "Amaga les partides modejades"
 
 #, c-format
 msgid "Sending Map: %u%% "
@@ -11665,31 +11687,31 @@ msgid "Structure Limits Enforced."
 msgstr "Límits de l'estructura reforçats."
 
 msgid "Challenge:"
-msgstr ""
+msgstr "Repte:"
 
 msgid "Skirmish:"
-msgstr ""
+msgstr "Escaramussa:"
 
 msgid "Local (Offline)"
-msgstr ""
+msgstr "Local (Fora de línia)"
 
 msgid "Hosting:"
-msgstr ""
+msgstr "Hostatge:"
 
 msgid "Password-Protected (Private)"
-msgstr ""
+msgstr "Protegit per contrasenya (Privat)"
 
 msgid "Open (Public)"
-msgstr ""
+msgstr "Obert (Públic)"
 
 msgid "Connected to Host:"
-msgstr ""
+msgstr "Connectat a l'hoste:"
 
 msgid "Set Password"
-msgstr ""
+msgstr "Definir contrasenya"
 
 msgid "Require Password to Join"
-msgstr ""
+msgstr "Exigeix contrasenya per entrar"
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
@@ -11702,13 +11724,16 @@ msgid "Game Name Updated."
 msgstr "Nom de la partida actualitzat."
 
 msgid "Set Game Name"
-msgstr ""
+msgstr "Definir el nom de la partida"
 
 msgid "One-Player Skirmish"
 msgstr "Escaramussa d'un jugador"
 
 msgid "Edit Game Name"
-msgstr ""
+msgstr "Editar el nom de la partida"
+
+msgid "Game Name"
+msgstr "Nom de la partida"
 
 msgid "Click to see Map"
 msgstr "Feu clic per veure el mapa"
@@ -11721,7 +11746,7 @@ msgstr ""
 "Pot estar bloquejat per votació dels jugadors"
 
 msgid "Match Options"
-msgstr ""
+msgstr "Opcions de la partida"
 
 msgid "Base"
 msgstr "Base"
@@ -11742,43 +11767,43 @@ msgid "Technology Level 4"
 msgstr "Nivell de tecnologia 4"
 
 msgid "Limits"
-msgstr ""
+msgstr "Límits"
 
 msgid "Randomize Options"
-msgstr ""
+msgstr "Opcions de joc aleatòries"
 
 msgid "Match Option Preferences:"
-msgstr ""
+msgstr "Preferències de les opcions del joc:"
 
 msgid "Star All"
-msgstr ""
+msgstr "Marca'ls tots"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Desmarca'ls tots"
 
 msgid "Show Player Preferences"
-msgstr ""
+msgstr "Mostra les preferències del jugador"
 
 msgid "Hide Player Preferences"
-msgstr ""
+msgstr "Amaga les preferències del jugador"
 
 msgid "Not editable while in a game."
-msgstr ""
+msgstr "No editable durant la partida."
 
 msgid "Not editable while in a multiplayer game."
-msgstr ""
+msgstr "No editable en mode multijugador."
 
 msgid "Takes effect on game restart"
-msgstr ""
+msgstr "Prendrà efecte reiniciant el joc"
 
 msgid "Advanced Hosting Options:"
-msgstr ""
+msgstr "Opcions d'hostatge avançades:"
 
 msgid "Host Role"
-msgstr ""
+msgstr "Rol d'hoste"
 
 msgid "Player Host"
-msgstr ""
+msgstr "Hoste jugador"
 
 msgid "Host is a player in the game (the default)."
 msgstr ""
@@ -11801,13 +11826,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

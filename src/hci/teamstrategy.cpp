@@ -838,6 +838,40 @@ void TeamStrategyView::updateNoTeamLabelContents()
 	noTeammatesLabel->setGeometry(0, 0, noTeammatesLabel->getMaxLineWidth(), noTeammatesLabel->requiredHeight());
 }
 
+class PlayerNameLabel : public W_LABEL
+{
+protected:
+	PlayerNameLabel()
+	: W_LABEL()
+	{ }
+
+	void initialize(uint32_t playerIdx_)
+	{
+		playerIdx = playerIdx_;
+		setFont((playerIdx == selectedPlayer) ? font_regular_bold : font_regular);
+		setString(getPlayerName(playerIdx));
+		setGeometry(0, 0, getMaxLineWidth(), requiredHeight());
+		setTransparentToMouse(true);
+		setCanTruncate(true);
+	}
+public:
+	static std::shared_ptr<PlayerNameLabel> make(uint32_t playerIdx)
+	{
+		class make_shared_enabler: public PlayerNameLabel {};
+		auto result = std::make_shared<make_shared_enabler>();
+		result->initialize(playerIdx);
+		return result;
+	}
+
+	virtual void run(W_CONTEXT *) override
+	{
+		// Update the player name (ex. once revealed in a blind_lobby game)
+		setString(getPlayerName(playerIdx));
+	}
+private:
+	uint32_t playerIdx = 0;
+};
+
 std::shared_ptr<TableRow> TeamStrategyView::newPlayerStrategyRow(uint32_t playerIdx, const std::vector<WEAPON_SUBCLASS>& displayedWeaponSubclasses, const std::unordered_set<WzStrategyPlanningUnitTypes>& disabledUnitTypes)
 {
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
@@ -847,11 +881,7 @@ std::shared_ptr<TableRow> TeamStrategyView::newPlayerStrategyRow(uint32_t player
 	int verticalRowPadding = (playerIdx == selectedPlayer) ? 10 : 3;
 
 	// Player Name widget
-	auto playerNameLabel = std::make_shared<W_LABEL>();
-	playerNameLabel->setFont((playerIdx == selectedPlayer) ? font_regular_bold : font_regular);
-	playerNameLabel->setString(getPlayerName(playerIdx));
-	playerNameLabel->setGeometry(0, 0, playerNameLabel->getMaxLineWidth(), playerNameLabel->requiredHeight());
-	playerNameLabel->setTransparentToMouse(true);
+	auto playerNameLabel = PlayerNameLabel::make(playerIdx);
 	auto wrappedPlayerNameWidget = Margin(verticalRowPadding, 0).wrap(playerNameLabel);
 	columnWidgets.push_back(wrappedPlayerNameWidget);
 

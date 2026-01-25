@@ -49,18 +49,18 @@ apps:
 
 parts:
   sdl:
-    source: https://github.com/libsdl-org/SDL/releases/download/release-2.32.8/SDL2-2.32.8.tar.gz
-    source-checksum: sha512/484c33638e7bd1002815bb1f6a47a292d1eaf0b963598dde65f4a3e077dfe75ee35b9ea4b3b767365b3ef4f613c4d69ce55b5e96675de562994344e83a978272
+    source: https://github.com/libsdl-org/SDL/releases/download/release-3.4.0/SDL3-3.4.0.tar.gz
+    source-checksum: sha512/b7803fc1a7260a0594644bf81df8c300d63c30c436a2b8c8217d58cd25814faf44e2945a4979c860f81cddc367913cc8c03f0bf6745da2918121f379fd9cb27b
     plugin: cmake
     build-environment:
       - CMAKE_PREFIX_PATH: $CRAFT_STAGE/usr
     cmake-parameters:
     - -DCMAKE_INSTALL_PREFIX=/usr
     - -DSDL_ALSA=OFF
-    - -DSDL_ARTS=OFF
-    - -DSDL_ESD=OFF
-    - -DSDL_NAS=OFF
     - -DSDL_OSS=OFF
+    - -DSDL_X11_XTEST=OFF
+    - -DSDL_TEST_LIBRARY=OFF
+    - -DSDL_TESTS=OFF
     override-build: |
       craftctl default
     build-packages:
@@ -93,9 +93,12 @@ parts:
     - libxss-dev
     - libxxf86vm-dev
     - libgbm-dev
+    - liburing-dev
+    - libdrm-dev
     stage-packages:
     - libdecor-0-0
-    - libdecor-0-plugin-1
+    - libdecor-0-plugin-1-cairo
+    - libdecor-0-plugin-1-gtk
     - libdbus-1-3
     - libudev1
     - fcitx-libs
@@ -126,6 +129,7 @@ parts:
     - libxrender1
     - libxss1
     - libxxf86vm1
+    - liburing2
 
   launcher:
     plugin: nil
@@ -232,6 +236,8 @@ parts:
     override-prime: |
       craftctl default
       ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
+      # Workaround for https://bugs.launchpad.net/snapd/+bug/2055273
+      mkdir -p "${CRAFT_PRIME}/gpu-2404"
     # Note: No "prime" part here, as we only use this for cleanup, and rely on the gnome extension to properly stage and setup the gpu-2404-wrapper and the command-chain
 
   # This part removes all the files in this snap which already exist in

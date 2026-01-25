@@ -26,7 +26,7 @@
 #ifndef cocoa_sdl_helpers_h
 #define cocoa_sdl_helpers_h
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <string>
 
 bool cocoaIsSDLWindowFullscreened(SDL_Window *window);

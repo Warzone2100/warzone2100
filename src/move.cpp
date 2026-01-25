@@ -539,7 +539,7 @@ void updateDroidOrientation(DROID *psDroid)
 	const int d = 20;
 	int32_t vX, vY;
 
-	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isTransporter()
+	if (psDroid->droidType == DROID_PERSON || psDroid->isCyborg() || psDroid->isFlightBasedTransporter()
 	    || psDroid->isFlying())
 	{
 		/* The ground doesn't affect the pitch/roll of these droids*/
@@ -897,7 +897,7 @@ static void moveOpenGates(DROID *psDroid, Vector2i tile)
 		return;
 	}
 	MAPTILE *psTile = mapTile(tile);
-	if (!psDroid->isFlying() && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
+	if (!psDroid->isFlying() && !psDroid->isFlightBasedTransporter() && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
 	{
 		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
 	}
@@ -1205,7 +1205,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
 			objR = moveObjRadius(psObj);
-			if (psObjcast->isTransporter())
+			if (psObjcast->isFlightBasedTransporter())
 			{
 				// ignore transporters
 				continue;
@@ -1501,7 +1501,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		mapX = map_coord(psDroid->pos.x);
 		mapY = map_coord(psDroid->pos.y);
-		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid));
+		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid, false));
 	}
 
 
@@ -2068,7 +2068,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 		{
 			iAudioID = ID_SOUND_BLIMP_FLIGHT;
 		}
-		else if (iPropType == PROPULSION_TYPE_LEGGED && psDroid->isCyborg())
+		else if (iPropType == PROPULSION_TYPE_LEGGED && psDroid->isCyborg() && psPropType->moveID == NO_SOUND)
 		{
 			iAudioID = ID_SOUND_CYBORG_MOVE;
 		}

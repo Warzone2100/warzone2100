@@ -1237,8 +1237,8 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 		return;
 	}
 
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(toConnectionProviderType(connectionList[connectionIdx].type));
-	tmp_joining_socket_set = connProvider.newConnectionPollGroup();
+	auto connProvider = ConnectionProviderRegistry::Instance().Get(toConnectionProviderType(connectionList[connectionIdx].type));
+	tmp_joining_socket_set = connProvider->newConnectionPollGroup();
 	if (tmp_joining_socket_set == nullptr)
 	{
 		debug(LOG_ERROR, "Cannot create socket set - out of memory?");
@@ -1290,8 +1290,8 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 
 	const auto ct = toConnectionProviderType(description.type);
 	NETinit(ct);
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ct);
-	connProvider.openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
+	auto connProvider = ConnectionProviderRegistry::Instance().Get(ct);
+	connProvider->openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
 		[weakSelf, connectionIdx](OpenConnectionResult&& result) {
 		auto strongSelf = weakSelf.lock();
 		if (!strongSelf)
@@ -1851,6 +1851,8 @@ void WzJoiningGameScreen::closeScreen()
 
 static void handleJoinSuccess(const JoinConnectionDescription& connection, const PLAYERSTATS& playerStats)
 {
+	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+
 	ingame.localJoiningInProgress = true;
 
 	// send initial messages of player data (stats, color request, etc)

@@ -63,7 +63,7 @@ jobs:
           mkdir -p "${CHANGELOG_DIR}"
           echo "CHANGELOG_DIR=${CHANGELOG_DIR}" >> $GITHUB_OUTPUT
           # BUILD_ASSETS_UPLOAD_DIR
-          BUILD_ASSETS_UPLOAD_DIR="build_wz_${{ inputs.architecture }}"
+          BUILD_ASSETS_UPLOAD_DIR="build_wz_${WASM_ARCHITECTURE}"
           echo "BUILD_ASSETS_UPLOAD_DIR=${BUILD_ASSETS_UPLOAD_DIR}" >> $GITHUB_ENV
           echo "BUILD_ASSETS_UPLOAD_DIR=${BUILD_ASSETS_UPLOAD_DIR}" >> $GITHUB_OUTPUT
           # Determine additional output subdir based on architecture
@@ -90,13 +90,15 @@ jobs:
           echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_ENV
           echo "WZ_CDN_BASE_HOSTNAME=${WZ_CDN_BASE_HOSTNAME}" >> $GITHUB_OUTPUT
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: '${{ inputs.artifact }}'
           path: ./dl-archive
       - name: Extract archive
+        env:
+          WASM_ARCHITECTURE: ${{ inputs.architecture }}
         run: |
-          ZIPFILE="./dl-archive/warzone2100_web_${{ inputs.architecture }}_archive.zip"
+          ZIPFILE="./dl-archive/warzone2100_web_${WASM_ARCHITECTURE}_archive.zip"
           unzip -o "${ZIPFILE}" -d "${BUILD_ASSETS_UPLOAD_DIR}" && rm "${ZIPFILE}"
       - name: Get list of files
         id: fileslist

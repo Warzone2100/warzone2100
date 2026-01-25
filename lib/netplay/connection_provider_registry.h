@@ -47,11 +47,12 @@ public:
 
 	static ConnectionProviderRegistry& Instance();
 
-	WzConnectionProvider& Get(ConnectionProviderType pt);
+	std::shared_ptr<WzConnectionProvider> Get(ConnectionProviderType pt);
 	bool IsRegistered(ConnectionProviderType) const;
 
 	void Register(ConnectionProviderType pt);
-	void Deregister(ConnectionProviderType pt);
+
+	void Shutdown();
 
 private:
 
@@ -59,5 +60,5 @@ private:
 	ConnectionProviderRegistry(const ConnectionProviderRegistry&) = delete;
 	ConnectionProviderRegistry(ConnectionProviderRegistry&&) = delete;
 
-	std::unordered_map<ConnectionProviderType, std::unique_ptr<WzConnectionProvider>> registeredProviders_;
+	std::unordered_map<ConnectionProviderType, std::shared_ptr<WzConnectionProvider>> registeredProviders_;
 };

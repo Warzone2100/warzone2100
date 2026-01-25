@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -2009,6 +2009,9 @@ msgstr "請稍待片刻"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指揮官!!你已經完成了你的第一個任務"
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "戰役一"
 
@@ -2983,9 +2986,6 @@ msgstr ""
 "如果您使用的是路由器，請將其設定為啟用 UPnP/NAT-PMP/PCP\n"
 " 或將埠位址轉發到您的系統."
 
-msgid "Failed to get a lobby response!"
-msgstr "未能取得遊戲大廳回應!"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "重播檔格式比此版本的 Warzone 2100 可以支援的還新."
 
@@ -3339,10 +3339,10 @@ msgstr "裝備有天譴導彈發射器之生化人步兵"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "裝備有火箭(坦克殺手)的生化人步兵"
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr "裝備有鋁熱火焰噴射的生化人步兵"
 
 msgid "Armed with Flashlight Laser"
@@ -3657,10 +3657,10 @@ msgstr "最佳目標: 基本建築物"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "最佳目標: 基地結構、位置、生化人"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目標: 碉堡與要塞"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "最佳目標: 碉堡與要塞"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -7269,6 +7269,9 @@ msgstr " 以及 "
 msgid "Spectators"
 msgstr "旁觀者"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "您在過去幾秒鐘內發送了太多訊息. 請稍候重試."
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s 想要啟用偵錯模式. 已啟用: %s. 已停用: %s."
@@ -8076,7 +8079,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8303,9 +8319,6 @@ msgstr "生化人同盟"
 
 msgid "Human Allies"
 msgstr "人類同盟"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "您在過去幾秒鐘內發送了太多訊息. 請稍候重試."
 
 msgid "Research Progress"
 msgstr "研發進度"
@@ -9579,6 +9592,9 @@ msgstr "選擇玩家名稱"
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
+
 msgid "Blind Game:"
 msgstr ""
 
@@ -10116,8 +10132,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "主持已開啟自由聊天功能給玩家: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "主持已對玩家關閉自由聊天功能: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
 
 msgid "Limits set to default."
 msgstr ""
@@ -10902,16 +10926,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -10971,91 +10995,6 @@ msgstr "戰役"
 msgid "GAMES"
 msgstr "遊戲"
 
-msgid "Refresh Games List"
-msgstr "重新整理遊戲清單"
-
-msgid "Filter Games List"
-msgstr "篩選遊戲清單"
-
-msgid "Refreshing..."
-msgstr "重新整理中..."
-
-msgid "Searching"
-msgstr "搜尋"
-
-msgid "Connecting to the lobby server..."
-msgstr "正在連線到遊戲大廳伺服器..."
-
-msgid "Game Name"
-msgstr "遊戲名稱"
-
-msgid "Map Name"
-msgstr "地圖名稱"
-
-msgid "Status"
-msgstr "狀態"
-
-msgid "Can't connect to lobby server!"
-msgstr "無法連接遊戲大廳伺服器!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "模組: %s"
-
-msgid "Mods: None!"
-msgstr "模組: 無!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "版本: %s"
-
-msgid "Join as spectator"
-msgstr "加入旁觀"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "您的戰場2100版本與該遊戲並不相容."
-
-msgid "[Password required]"
-msgstr "[需要密碼]"
-
-msgid "[No Tanks]"
-msgstr "[無坦克戰車]"
-
-msgid "[No Cyborgs]"
-msgstr "[無生化人]"
-
-msgid "[No VTOLs]"
-msgstr "[無垂直起降裝備]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "由 %s 主持遊戲"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "由 %s 主持遊戲 — %s"
-
-msgid "Can't find any games for your version."
-msgstr "您的遊戲版本找不到可用遊戲."
-
-msgid "There appears to be a game update available!"
-msgstr "似乎有可用的遊戲更新!"
-
-msgid "No games are available for your version"
-msgstr "您的遊戲版本無可用遊戲"
-
-msgid "Wrong Game Version!"
-msgstr "游戲版本錯誤!"
-
-msgid "You have an incompatible mod."
-msgstr "你有一個不相容的遊戲模組."
-
-msgid "Host couldn't send file?"
-msgstr "遊戲主持無法傳送檔案?"
-
-msgid "Incorrect Password!"
-msgstr "密碼錯誤!"
-
 msgid "Continue"
 msgstr "繼續"
 
@@ -11111,6 +11050,12 @@ msgid "Music Manager"
 msgstr "音樂管理"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11476,13 +11421,8 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr "在桌面全螢幕模式下，解析度與桌面解析度相匹配\\n(或視窗管理員允許的內容)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "您可以通過正常調整視窗大小來更改解析度. (嘗試拖動角落/邊緣)"
+msgid "Desktop Full"
+msgstr ""
 
 msgid "Window Mode"
 msgstr ""
@@ -11490,11 +11430,8 @@ msgstr ""
 msgid "Windowed"
 msgstr "視窗模式"
 
-msgid "Desktop Full"
-msgstr "佈滿桌面"
-
-msgid "Resolution"
-msgstr "解析度"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr ""
@@ -11579,6 +11516,93 @@ msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr "似乎有可用的遊戲更新!"
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "您的戰場2100版本與該遊戲並不相容."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11695,6 +11719,9 @@ msgstr "單人玩家遭遇戰"
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "遊戲名稱"
+
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
@@ -11786,13 +11813,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

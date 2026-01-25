@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-14 17:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -2009,6 +2009,9 @@ msgstr "Моля изчакайте докато заводът произвеж
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr ""
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "КАМПАНИЯ ЕДНО"
 
@@ -2979,9 +2982,6 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-msgid "Failed to get a lobby response!"
-msgstr ""
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr ""
 
@@ -3335,10 +3335,10 @@ msgstr ""
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr ""
 
 msgid "Armed with Flashlight Laser"
@@ -3653,10 +3653,10 @@ msgstr "Най-добри цели: Базови съоръжения"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Най-добри цели: Базови съоръжения, гнезда и киборги"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Най-подходящи цели: Бункери и укрепени точки"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Най-подходящи цели: Бункери и укрепени точки"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -7257,6 +7257,9 @@ msgstr ""
 msgid "Spectators"
 msgstr "Зрители"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
@@ -8070,7 +8073,20 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr ""
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8296,9 +8312,6 @@ msgid "Bot Allies"
 msgstr ""
 
 msgid "Human Allies"
-msgstr ""
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
 msgid "Research Progress"
@@ -9570,6 +9583,9 @@ msgstr ""
 msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
+msgid "Player Name changes are not allowed by the host"
+msgstr ""
+
 msgid "Blind Game:"
 msgstr ""
 
@@ -10108,7 +10124,15 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
 msgstr ""
 
 msgid "Limits set to default."
@@ -10896,16 +10920,16 @@ msgstr ""
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr ""
 
-msgid "Insane Spawns"
+msgid "Additional Spawns (Insane difficulty)"
 msgstr ""
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr ""
 
-msgid "Non-Insane Spawns"
+msgid "Additional Spawns (Lower difficulties than Insane)"
 msgstr ""
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
 msgstr ""
 
 msgid "Fast EXP gain"
@@ -10965,91 +10989,6 @@ msgstr "КАМПАНИИ"
 msgid "GAMES"
 msgstr "ИГРИ"
 
-msgid "Refresh Games List"
-msgstr "Опресни списъка с игри"
-
-msgid "Filter Games List"
-msgstr "Филтрирай списъка с игри"
-
-msgid "Refreshing..."
-msgstr "Опресняване..."
-
-msgid "Searching"
-msgstr "Търсене"
-
-msgid "Connecting to the lobby server..."
-msgstr "Свързване с лоби сървъра..."
-
-msgid "Game Name"
-msgstr "Име на играта"
-
-msgid "Map Name"
-msgstr "Име на картата"
-
-msgid "Status"
-msgstr "Състояние"
-
-msgid "Can't connect to lobby server!"
-msgstr "Не може да се осъществи връзка с лоби сървъра!"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Модове: %s"
-
-msgid "Mods: None!"
-msgstr "Модове: Няма!"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Версия: %s"
-
-msgid "Join as spectator"
-msgstr "Присъединяване като зрител"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Вашата версия на Warzone не е съвместима с тази игра."
-
-msgid "[Password required]"
-msgstr "[Изисква се парола]"
-
-msgid "[No Tanks]"
-msgstr "[Без танкове]"
-
-msgid "[No Cyborgs]"
-msgstr "[Без киборги]"
-
-msgid "[No VTOLs]"
-msgstr "[Без СВиК]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr ""
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr ""
-
-msgid "Can't find any games for your version."
-msgstr "Не можем да намерим игри за вашата версия."
-
-msgid "There appears to be a game update available!"
-msgstr ""
-
-msgid "No games are available for your version"
-msgstr "Няма налични игри за вашата версия"
-
-msgid "Wrong Game Version!"
-msgstr "Грешна версия на играта!"
-
-msgid "You have an incompatible mod."
-msgstr ""
-
-msgid "Host couldn't send file?"
-msgstr ""
-
-msgid "Incorrect Password!"
-msgstr "Неправилна парола!"
-
 msgid "Continue"
 msgstr "Продължаване"
 
@@ -11105,6 +11044,12 @@ msgid "Music Manager"
 msgstr "Музика"
 
 msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
 msgstr ""
 
 msgid "Mouse"
@@ -11470,15 +11415,8 @@ msgstr ""
 msgid "Window"
 msgstr ""
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
+msgid "Desktop Full"
 msgstr ""
-"В безрамков режим, резолюцията на прозореца съвпада с тази на работния плот \n"
-"(или с каквато системата позволява)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Можете да промените резолюцията, като преоразмерите прозореца нормално. (Опитайте да провлачите някой ъгъл.)"
 
 msgid "Window Mode"
 msgstr ""
@@ -11486,11 +11424,8 @@ msgstr ""
 msgid "Windowed"
 msgstr "Прозорец"
 
-msgid "Desktop Full"
-msgstr "Безрамков"
-
-msgid "Resolution"
-msgstr "Резолюция"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr ""
@@ -11575,6 +11510,93 @@ msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "There appears to be a game update available!"
+msgstr ""
+
+msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Вашата версия на Warzone не е съвместима с тази игра."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
+
+msgid "(50+ omitted)"
+msgstr ""
+
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
+
+msgid "No games for your version"
+msgstr ""
+
+msgid "No games matching filters"
+msgstr ""
+
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
 msgstr ""
 
 #, c-format
@@ -11691,6 +11713,9 @@ msgstr ""
 msgid "Edit Game Name"
 msgstr ""
 
+msgid "Game Name"
+msgstr "Име на играта"
+
 msgid "Click to see Map"
 msgstr "Кликнете, за да видите картата"
 
@@ -11780,13 +11805,7 @@ msgstr ""
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr ""
 
-msgid "Blind Lobby"
-msgstr ""
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
-
-msgid "Blind Game"
 msgstr ""
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."

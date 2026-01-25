@@ -140,12 +140,30 @@ static inline JSCFunctionListEntry QJS_CGETSET_DEF(const char *name, JSCFunction
 	return entry;
 }
 
-struct JSContextValue {
+struct JSToJsonContext
+{
 	JSContext *ctx;
-	JSValue value;
+	std::vector<JSValue> stack;
 	bool skip_constructors;
+
+	JSToJsonContext(JSContext *ctx, bool skip_constructors)
+	: ctx(ctx)
+	, skip_constructors(skip_constructors)
+	{ }
+
+	void reset()
+	{
+		stack.clear();
+	}
+
+	bool isReset()
+	{
+		return stack.empty();
+	}
 };
-void to_json(nlohmann::json& j, const JSContextValue& value); // forward-declare
+
+// NOTE: May throw if there is a circular reference!
+nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
 bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::function<void (const char *key, JSAtom& atom)>& func, bool enumerableOnly = true); // forward-declare
 
@@ -757,6 +775,7 @@ int JS_DeletePropertyStr(JSContext *ctx, JSValueConst this_obj,
                           const char *prop)
 {
     JSAtom atom = JS_NewAtom(ctx, prop);
+    ASSERT_OR_RETURN(-1, atom != JS_ATOM_NULL, "Failed to create atom: %s", prop);
     int ret = JS_DeleteProperty(ctx, this_obj, atom, 0);
     JS_FreeAtom(ctx, atom);
     return ret;
@@ -774,6 +793,7 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player);
 static int QuickJS_DefinePropertyValue(JSContext *ctx, JSValueConst this_obj, const char* prop, JSValue val, int flags)
 {
 	JSAtom prop_name = JS_NewAtom(ctx, prop);
+	ASSERT_OR_RETURN(-1, prop_name != JS_ATOM_NULL, "Failed to create atom: %s", prop);
 	int ret = JS_DefinePropertyValue(ctx, this_obj, prop_name, val, flags);
 	JS_FreeAtom(ctx, prop_name);
 	return ret;
@@ -841,6 +861,7 @@ JSValue convResearch(const RESEARCH *psResearch, JSContext *ctx, int player)
 //;; * ```isRadarDetector``` True if the structure has radar detector ability. (3.2+ only)
 //;; * ```range``` Maximum range of its weapons. (3.2+ only)
 //;; * ```hasIndirect``` One or more of the structure's weapons are indirect. (3.2+ only)
+//;; * ```health``` Percentage that this structure is damaged (where 100 means not damaged at all).
 //;;
 JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 {
@@ -921,6 +942,7 @@ JSValue convStructure(const STRUCTURE *psStruct, JSContext *ctx)
 //;; * ```type``` It will always be ```FEATURE```.
 //;; * ```stattype``` The type of feature. Defined types are ```OIL_RESOURCE```, ```OIL_DRUM``` and ```ARTIFACT```.
 //;; * ```damageable``` Can this feature be damaged?
+//;; * ```health``` Percentage that this feature is damaged (where 100 means not damaged at all).
 //;;
 JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 {
@@ -974,11 +996,11 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 //;;   * ```DROID_TRANSPORTER``` Cyborg transporter.
 //;;   * ```DROID_SUPERTRANSPORTER``` Droid transporter.
 //;;   * ```DROID_COMMAND``` Commanders.
-//;; * ```group``` The group this droid is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
 //;; * ```armed``` The percentage of weapon capability that is fully armed. Will be \emph{null} for droids other than VTOLs.
 //;; * ```experience``` Amount of experience this droid has, based on damage it has dealt to enemies.
 //;; * ```cost``` What it would cost to build the droid. (3.2+ only)
 //;; * ```isVTOL``` True if the droid is VTOL. (3.2+ only)
+//;; * ```isFlying``` True if the droid is currently flying. (4.6.0+ only)
 //;; * ```canHitAir``` True if the droid has anti-air capabilities. (3.2+ only)
 //;; * ```canHitGround``` True if the droid has anti-ground capabilities. (3.2+ only)
 //;; * ```isSensor``` True if the droid has sensor ability. (3.2+ only)
@@ -993,6 +1015,7 @@ JSValue convFeature(const FEATURE *psFeature, JSContext *ctx)
 //;; * ```cargoSpace``` Defined for transporters only: Cargo capacity left. (3.2+ only)
 //;; * ```cargoCount``` Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
 //;; * ```cargoSize``` The amount of cargo space the droid will take inside a transport. (3.2+ only)
+//;; * ```health``` Percentage that this droid is damaged (where 100 means not damaged at all).
 //;;
 JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 {
@@ -1054,6 +1077,7 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 	QuickJS_DefinePropertyValue(ctx, value, "canHitAir", JS_NewBool(ctx, aa), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "canHitGround", JS_NewBool(ctx, ga), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "isVTOL", JS_NewBool(ctx, psDroid->isVtol()), JS_PROP_ENUMERABLE);
+	QuickJS_DefinePropertyValue(ctx, value, "isFlying", JS_NewBool(ctx, psDroid->isFlying()), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "droidType", JS_NewInt32(ctx, (int)type), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "experience", JS_NewFloat64(ctx, (double)psDroid->experience / 65536.0), JS_PROP_ENUMERABLE);
 	QuickJS_DefinePropertyValue(ctx, value, "health", JS_NewFloat64(ctx, 100.0 / (double)psDroid->originalBody * (double)psDroid->body), JS_PROP_ENUMERABLE);
@@ -1095,10 +1119,10 @@ JSValue convDroid(const DROID *psDroid, JSContext *ctx)
 //;; * ```player``` The player owning this object.
 //;; * ```selected``` A boolean saying whether 'selectedPlayer' has selected this object.
 //;; * ```name``` A user-friendly name for this object.
-//;; * ```health``` Percentage that this object is damaged (where 100 means not damaged at all).
 //;; * ```armour``` Amount of armour points that protect against kinetic weapons.
 //;; * ```thermal``` Amount of thermal protection that protect against heat based weapons.
 //;; * ```born``` The game time at which this object was produced or came into the world. (3.2+ only)
+//;; * ```group``` The group this object is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
 //;;
 JSValue convObj(const BASE_OBJECT *psObj, JSContext *ctx)
 {
@@ -2414,24 +2438,39 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	return JS_TRUE;
 }
 
-//-- ## includeJSON(filePath)
+//-- ## includeJSON(filePath[, quiet])
 //--
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
+//-- The optional ```quiet``` parameter (available in 4.6.3+) can be set to ```true``` to suppress logged errors
+//-- when the supplied filePath does not exist (by default, it is ```false``` and errors are logged and displayed).
+//--
 static JSValue js_includeJSON(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
-	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
+	SCRIPT_ASSERT(ctx, argc >= 1, "Must specify a file to include");
 	std::string filePath = JSValueToStdString(ctx, argv[0]);
 	SCRIPT_ASSERT(ctx, strEndsWith(filePath, ".json"), "Include file must end in .json");
+	bool quiet = false;
+	if (argc >= 2)
+	{
+		if (JS_IsBool(argv[1]))
+		{
+			quiet = JS_ToBool(ctx, argv[1]);
+		}
+	}
 	const auto instance = engineToInstanceMap.at(ctx);
 	UDWORD size;
 	char *bytes = nullptr;
 	std::string loadedFilePath;
 	if (!instance->loadFileForInclude(filePath.c_str(), loadedFilePath, &bytes, &size, wzapi::scripting_instance::LoadFileSearchOptions::ScriptPath))
 	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\"", filePath.c_str());
-		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
+		code_part level = (quiet) ? LOG_SCRIPT : LOG_ERROR;
+		debug(level, "Failed to read include file \"%s\"", filePath.c_str());
+		if (!quiet)
+		{
+			JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
+		}
 		return JS_FALSE;
 	}
 	JSValue r = JS_ParseJSON(ctx, bytes, size, loadedFilePath.c_str());
@@ -2760,7 +2799,14 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 
 	// Regular functions
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
-	registerFunctions(basename.baseName());
+	if (!registerFunctions(basename.baseName()))
+	{
+		// Failure to register functions - presumably OOM?
+		debug(LOG_ERROR, "Failed to register script functions for: %s", path.toUtf8().c_str());
+		JS_FreeValue(ctx, compiledScriptObj);
+		compiledScriptObj = JS_UNINITIALIZED;
+		return false;
+	}
 	// Remember internal, reserved names
 	std::unordered_set<std::string>& internalNamespaceRef = internalNamespace;
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [&internalNamespaceRef](const char *key, JSAtom &) {
@@ -2792,8 +2838,10 @@ bool quickjs_scripting_instance::readyInstanceForExecution()
 
 bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 {
+	auto toJsonContext = JSToJsonContext(ctx, true);
+
 	// we save 'scriptName' and 'me' implicitly
-	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result](const char *key, JSAtom &atom) {
+	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &result, &toJsonContext](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if (!JS_IsException(jsVal))
@@ -2802,7 +2850,13 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 				&& !JS_IsConstructor(ctx, jsVal)
 				)//&& !it.value().equals(engine->globalObject()))
 			{
-				result[nameStr] = JSContextValue{ctx, jsVal, true};
+				try {
+					result[nameStr] = wz_qjs_to_json(toJsonContext, jsVal);
+					ASSERT(toJsonContext.isReset(), "JSToJsonContext has non-empty stack!");
+				} catch (const std::runtime_error &e) {
+					debug(LOG_ERROR, "%s: Failed to convert global \"%s\" to json with error: %s", m_path.c_str(), nameStr.c_str(), e.what());
+				}
+				toJsonContext.reset();
 			}
 		}
 		else
@@ -2892,14 +2946,23 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
 {
 	nlohmann::json globals = nlohmann::json::object();
 
-	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals](const char *key, JSAtom &atom) {
+	auto toJsonContext = JSToJsonContext(ctx, false);
+
+	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals, &toJsonContext](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if ((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
 			/*&& !it.value().equals(engine->globalObject())*/)
 			|| nameStr == "Upgrades" || nameStr == "Stats")
 		{
-			globals[nameStr] = JSContextValue{ctx, jsVal, false}; // uses to_json JSContextValue implementation
+			try {
+				globals[nameStr] = wz_qjs_to_json(toJsonContext, jsVal);
+				ASSERT(toJsonContext.isReset(), "JSToJsonContext has non-empty stack!");
+			} catch (const std::runtime_error &e) {
+				debug(LOG_ERROR, "[D] %s: Failed to convert global \"%s\" to json with error: %s", m_path.c_str(), nameStr.c_str(), e.what());
+				globals[nameStr] = "<ERROR: OBJECT WITH CIRCULAR REFERENCES>";
+			}
+			toJsonContext.reset();
 		}
         JS_FreeValue(ctx, jsVal);
 	});
@@ -3302,14 +3365,20 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
 	JS_FreeValue(ctx, currentFuncObj);
 	quickjs_execution_context execution_context(ctx);
-	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val, true});
+	auto toJsonContext = JSToJsonContext(ctx, true);
+	try {
+		wzapi::setUpgradeStats(execution_context, player, name, type, index, wz_qjs_to_json(toJsonContext, val));
+	} catch (const std::runtime_error& e) {
+		debug(LOG_ERROR, "Failed to convert input value to json with error: %s", e.what());
+		return JS_ThrowTypeError(ctx, "Failed to convert input value to json with error: %s", e.what());
+	}
 	// Now read value and return it
 	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
 
 
 
-static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name, int player, int type, unsigned index)
+static bool setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name, int player, int type, unsigned index)
 {
 	const JSCFunctionListEntry js_stats_getter_setter_func[] = {
 		QJS_CGETSET_DEF(name.c_str(), js_stats_get, js_stats_set)
@@ -3320,15 +3389,28 @@ static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name,
 	char buf[64];
 
 	JSAtom atom = JS_NewAtom(ctx, name.c_str());
+	ASSERT_OR_RETURN(false, atom != JS_ATOM_NULL, "Failed to create atom: %s", name.c_str());
 
 	snprintf(buf, sizeof(buf), "get %s", name.c_str());
 	getter = JS_NewCFunction2(ctx, js_stats_getter_setter_func[0].u.getset.get.generic,
 							  buf, 0, JS_CFUNC_getter,
 							  0);
+	if (JS_IsException(getter))
+	{
+		JS_FreeAtom(ctx, atom);
+		return false;
+	}
+
 	snprintf(buf, sizeof(buf), "set %s", name.c_str());
 	setter = JS_NewCFunction2(ctx, js_stats_getter_setter_func[0].u.getset.set.generic,
 							  buf, 1, JS_CFUNC_setter,
 							  0);
+	if (JS_IsException(setter))
+	{
+		JS_FreeValue(ctx, getter);
+		JS_FreeAtom(ctx, atom);
+		return false;
+	}
 
 	JSValue funcObjects[2] = {getter, setter};
 	for (size_t i = 0; i < 2; i++)
@@ -3342,6 +3424,7 @@ static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name,
 	JS_DefinePropertyGetSet(ctx, base, atom, getter, setter, js_stats_getter_setter_func[0].prop_flags | JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 
 	JS_FreeAtom(ctx, atom);
+	return true;
 }
 
 JSValue constructUpgradesQuickJSValue(JSContext *ctx)
@@ -3364,7 +3447,15 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 				JSValue v = JS_NewObject(ctx);
 				for (const auto& property : gameEntityRules)
 				{
-					setStatsFunc(v, ctx, property.first, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex());
+					if (!setStatsFunc(v, ctx, property.first, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex()))
+					{
+						// Presumably, OOM
+						JS_FreeValue(ctx, v);
+						JS_FreeValue(ctx, entityBase);
+						JS_FreeValue(ctx, node);
+						JS_FreeValue(ctx, upgrades);
+						return JS_EXCEPTION;
+					}
 				}
 				QuickJS_DefinePropertyValue(ctx, entityBase, gameEntityName.c_str(), v, JS_PROP_ENUMERABLE);
 			}
@@ -3381,20 +3472,36 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 }
 
 #define JS_REGISTER_FUNC(js_func_name, num_parameters) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define JS_REGISTER_FUNC2(js_func_name, min_num_parameters, max_num_parameters) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, min_num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, JS_FUNC_IMPL_NAME(js_func_name), #js_func_name, min_num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define JS_REGISTER_FUNC_NAME(js_func_name, num_parameters, full_impl_handler_func_name) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define JS_REGISTER_FUNC_NAME2(js_func_name, min_num_parameters, max_num_parameters, full_impl_handler_func_name) \
-	JS_SetPropertyStr(ctx, global_obj, #js_func_name, \
-		JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, min_num_parameters));
+{ \
+	JSValue newFunc = JS_NewCFunction(ctx, full_impl_handler_func_name, #js_func_name, min_num_parameters); \
+	ASSERT_OR_RETURN(false, !JS_IsException(newFunc), "Failure to create function: %s", #js_func_name); \
+	int setRes = JS_SetPropertyStr(ctx, global_obj, #js_func_name, newFunc); \
+	ASSERT_OR_RETURN(false, setRes == 1, "Failure to register function property: %s", #js_func_name); \
+}
 
 #define MAX_JS_VARARGS 20
 
@@ -3407,6 +3514,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
 	//== These values are defined:
 	JSValue upgrades = constructUpgradesQuickJSValue(ctx);
+	ASSERT_OR_RETURN(false, !JS_IsException(upgrades), "Failure to create upgrades object");
 	JS_DefinePropertyValueStr(ctx, global_obj, "Upgrades", upgrades, JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 
 	// Register functions to the script engine here
@@ -3575,7 +3683,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(startTransporterEntry, 3); // WZAPI
 	JS_REGISTER_FUNC(setTransporterExit, 3); // WZAPI
 	JS_REGISTER_FUNC(setObjectFlag, 3); // WZAPI
-	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 4); // WZAPI
+	JS_REGISTER_FUNC2(fireWeaponAtLoc, 3, 5); // WZAPI
 	JS_REGISTER_FUNC2(fireWeaponAtObj, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(transformPlayerToSpectator, 1); // WZAPI
 	JS_REGISTER_FUNC(isSpectator, 1); // WZAPI
@@ -3586,8 +3694,9 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 
 // Enable JSON support for custom types
 
-// JSContextValue
-void to_json(nlohmann::json& j, const JSContextValue& v) {
+// NOTE: May throw if there is a circular reference!
+nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
+{
 	// IMPORTANT: This largely follows the Qt documentation on QJsonValue::fromVariant
 	// See: http://doc.qt.io/qt-5/qjsonvalue.html#fromVariant
 	//
@@ -3597,103 +3706,113 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 
 	// Note: Older versions of Qt 5.x (5.6?) do not define QMetaType::Nullptr,
 	//		 so check value.isNull() instead.
-	if (JS_IsNull(v.value))
+	if (JS_IsNull(value))
 	{
-		j = nlohmann::json(); // null value
-		return;
+		return nlohmann::json(); // null value
 	}
 
-	if (WZ_QJS_IsArray(v.ctx, v.value))
+	if (JS_IsObject(value))
 	{
-		j = nlohmann::json::array();
-		uint64_t length = 0;
-		if (QuickJS_GetArrayLength(v.ctx, v.value, length))
+		if (JS_IsConstructor(c.ctx, value))
 		{
-			for (uint64_t k = 0; k < length; k++) // TODO: uint64_t isn't correct here, as we call GetUint32...
-			{
-				JSValue jsVal = JS_GetPropertyUint32(v.ctx, v.value, k);
-				nlohmann::json jsonValue;
-				to_json(jsonValue, JSContextValue{v.ctx, jsVal, v.skip_constructors});
-				j.push_back(jsonValue);
-				JS_FreeValue(v.ctx, jsVal);
-			}
+			return (!c.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
 		}
-		return;
-	}
-	if (JS_IsObject(v.value))
-	{
-		if (JS_IsConstructor(v.ctx, v.value))
+
+		if (std::any_of(c.stack.begin(), c.stack.end(), [ctx = c.ctx, &value](JSValue& stackVal) -> bool { return JS_SameValueZero(ctx, stackVal, value) != 0; }))
 		{
-			j = (!v.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
-			return;
+			// circular reference
+			throw std::runtime_error("Circular reference detected!");
 		}
-		j = nlohmann::json::object();
-		QuickJS_EnumerateObjectProperties(v.ctx, v.value, [v, &j](const char *key, JSAtom &atom) {
-			JSValue jsVal = JS_GetProperty(v.ctx, v.value, atom);
-			std::string nameStr = key;
-			if (!JS_IsException(jsVal))
+
+		nlohmann::json j;
+		c.stack.push_back(value);
+
+		if (WZ_QJS_IsArray(c.ctx, value))
+		{
+			// Handle array
+			j = nlohmann::json::array();
+			uint64_t length = 0;
+			if (QuickJS_GetArrayLength(c.ctx, value, length))
 			{
-				if (!JS_IsConstructor(v.ctx, jsVal))
+				for (uint64_t k = 0; k < length; k++) // TODO: uint64_t isn't correct here, as we call GetUint32...
 				{
-					j[nameStr] = JSContextValue{v.ctx, jsVal, v.skip_constructors};
-				}
-				else if (!v.skip_constructors)
-				{
-					j[nameStr] = "<constructor>";
+					JSValue jsVal = JS_GetPropertyUint32(c.ctx, value, k);
+					nlohmann::json jsonValue = wz_qjs_to_json(c, jsVal);
+					j.push_back(jsonValue);
+					JS_FreeValue(c.ctx, jsVal);
 				}
 			}
-			else
-			{
-				debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
-			}
-			JS_FreeValue(v.ctx, jsVal);
-		}, false);
-		return;
+		}
+		else
+		{
+			// Handle actual objects
+			j = nlohmann::json::object();
+			QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &j](const char *key, JSAtom &atom) {
+				JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+				std::string nameStr = key;
+				if (!JS_IsException(jsVal))
+				{
+					if (!JS_IsConstructor(c.ctx, jsVal))
+					{
+						j[nameStr] = wz_qjs_to_json(c, jsVal);
+					}
+					else if (!c.skip_constructors)
+					{
+						j[nameStr] = "<constructor>";
+					}
+				}
+				else
+				{
+					debug(LOG_INFO, "Got an exception trying to get the value of \"%s\"?", nameStr.c_str());
+				}
+				JS_FreeValue(c.ctx, jsVal);
+			}, false);
+		}
+
+		c.stack.pop_back();
+		return j;
 	}
 
-	int tag = JS_VALUE_GET_NORM_TAG(v.value);
+	int tag = JS_VALUE_GET_NORM_TAG(value);
 	switch (tag)
 	{
 		case JS_TAG_BOOL:
-			j = static_cast<bool>(JS_ToBool(v.ctx, v.value) != 0);
-			break;
+			return static_cast<bool>(JS_ToBool(c.ctx, value) != 0);
 		case JS_TAG_INT:
 		{
 			int32_t intVal = 0;
-			if (JS_ToInt32(v.ctx, &intVal, v.value))
+			if (JS_ToInt32(c.ctx, &intVal, value))
 			{
 				// Failed
 				debug(LOG_SCRIPT, "Failed to convert to int32_t");
 			}
-			j = intVal;
-			break;
+			return intVal;
 		}
 		case JS_TAG_FLOAT64:
 		{
 			double dblVal = 0.0;
-			if (JS_ToFloat64(v.ctx, &dblVal, v.value))
+			if (JS_ToFloat64(c.ctx, &dblVal, value))
 			{
 				// Failed
 				debug(LOG_SCRIPT, "Failed to convert to double");
 			}
-			j = dblVal;
-			break;
+			return dblVal;
 		}
 		case JS_TAG_UNDEFINED:
-			j = nlohmann::json(); // null value // ???
-			break;
+			return nlohmann::json(); // null value // ???
 		case JS_TAG_STRING:
 		{
-			const char* pStr = JS_ToCString(v.ctx, v.value);
-			j = json(pStr ? pStr : "");
-			JS_FreeCString(v.ctx, pStr);
-			break;
+			const char* pStr = JS_ToCString(c.ctx, value);
+			auto j = json(pStr ? pStr : "");
+			JS_FreeCString(c.ctx, pStr);
+			return j;
 		}
 		default:
 		{
 			// In every other case, a conversion to a string will be attempted
-			const char* pStr = JS_ToCString(v.ctx, v.value);
+			const char* pStr = JS_ToCString(c.ctx, value);
 			// If the returned string is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
+			auto j = nlohmann::json();
 			if (pStr)
 			{
 				std::string str(pStr);
@@ -3705,12 +3824,13 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 				{
 					j = str;
 				}
-				JS_FreeCString(v.ctx, pStr);
+				JS_FreeCString(c.ctx, pStr);
 			}
 			else
 			{
 				j = nlohmann::json(); // null value
 			}
+			return j;
 		}
 	}
 }

@@ -45,12 +45,16 @@ namespace tcp
 
 void TCPConnectionProvider::initialize()
 {
+	if (initialized_) { return; }
+	initialized_ = true;
 	SOCKETinit();
 	addressResolver_ = std::make_unique<TCPAddressResolver>();
 }
 
 void TCPConnectionProvider::shutdown()
 {
+	if (!initialized_) { return; }
+	initialized_ = false;
 	addressResolver_.reset();
 	SOCKETshutdown();
 }

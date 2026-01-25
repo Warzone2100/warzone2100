@@ -1,12 +1,13 @@
-debugMsg('Module: chatting.js','init');
-
-function chatting(type){
-	var chlen = _chatting[type].length;		// Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
-	return _chatting[type][Math.floor(Math.random()*chlen)];
-
-}
+debugMsg('Module: chatting.js', 'init');
 
 var _chatting = {};
+
+function chatting(type)
+{
+	const chlen = _chatting[type].length; // Забавно, спустя некотое время я только осознал, что за имя я дал этой переменной xDDD
+
+	return _chatting[type][Math.floor(Math.random() * chlen)];
+}
 
 _chatting['army'] = [
 	"If u want, I may support you with my army. Just say \"yes\"",
@@ -117,34 +118,32 @@ _chatting['lose'] = [
 	'nice cheat man.. bye'
 ];
 
-
 _chatting['berserk'] = [
-'Time to kick someone\'s ..',
-'You made me angry',
-'You\'re clearly pissing me off',
-'You just got a problem',
-'I have a great deal on oil, and what\'s your trump card?',
-'Who needs oil. Oil for suckers'
+	'Time to kick someone\'s ..',
+	'You made me angry',
+	'You\'re clearly pissing me off',
+	'You just got a problem',
+	'I have a great deal on oil, and what\'s your trump card?',
+	'Who needs oil. Oil for suckers'
 ];
 
 _chatting['seer'] = [
-'You\'re a leather bag of brains, and I\'m just a cheater.',
-'Leather bag, aren\'t you afraid?',
-'I can see everything.',
-'Tons of oil - check, see the entire map - check.'
+	'You\'re a leather bag of brains, and I\'m just a cheater.',
+	'Leather bag, aren\'t you afraid?',
+	'I can see everything.',
+	'Tons of oil - check, see the entire map - check.'
 ];
 
 _chatting['no'] = [
-'I\'m sorry, I can\'t do this.',
-'No, I\'m not ready for that',
-'Sorry, but no.',
-'Unfortunately, no',
-'No, no, and no again',
-'No',
-'Nope',
-'I would love to, but no.',
-'Well, whatever you say.. but.. wait, no!'
+	'I\'m sorry, I can\'t do this.',
+	'No, I\'m not ready for that',
+	'Sorry, but no.',
+	'Unfortunately, no',
+	'No, no, and no again',
+	'No',
+	'Nope',
+	'I would love to, but no.',
+	'Well, whatever you say.. but.. wait, no!'
 ];
-
 
 _chatting['dev'] = ['This is dev version, dont use it! Данная версия бота не является релизом и может содержать баги! Не используйте её!'];

@@ -2826,6 +2826,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		return false;
 	}
 
+	const bool isTransportTempl = isTransporter(psTempl);
+
 	// Check a turret has been installed
 	if (psTempl->numWeaps == 0 &&
 	    psTempl->asParts[COMP_SENSOR] == 0 &&
@@ -2833,13 +2835,13 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	    psTempl->asParts[COMP_BRAIN] == 0 &&
 	    psTempl->asParts[COMP_REPAIRUNIT] == 0 &&
 	    psTempl->asParts[COMP_CONSTRUCT] == 0 &&
-	    !isTransporter(psTempl))
+		!isTransportTempl)
 	{
 		debug(level, "No turret for template");
 		return false;
 	}
 
-	const bool isVtolTemplate = checkTemplateIsVtol(psTempl);
+	const bool isVtolTemplate = checkTemplateIsVtol(psTempl); // True for transporters also.
 
 	// Check the weapons
 	for (int i = 0; i < psTempl->numWeaps; i++)
@@ -2853,6 +2855,11 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		    || psTempl->asWeaps[i] == 0)
 		{
 			debug(level, "No weapon given for weapon droid, or wrong weapon size");
+			return false;
+		}
+		if (isTransportTempl && !psTempl->getWeaponStats(i)->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER))
+		{
+			debug(level, "Transporter with invalid turret, not possible");
 			return false;
 		}
 		if (isVtolTemplate)
@@ -2894,7 +2901,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	//can only have a VTOL weapon on a VTOL propulsion
-	if (isVtolTemplate && !isTransporter(psTempl) && psTempl->numWeaps == 0)
+	if (isVtolTemplate && !isTransportTempl && psTempl->numWeaps == 0)
 	{
 		debug(level, "VTOL with system turret, not possible");
 		return false;

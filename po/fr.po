@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-08-14 17:01+0000\n"
-"PO-Revision-Date: 2025-08-15 02:39\n"
+"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"PO-Revision-Date: 2025-12-09 00:37\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -2013,6 +2013,9 @@ msgstr ""
 "Félicitations Commandant. Vous êtes prêt pour votre première mission !\n"
 "Vous pouvez quitter le tutoriel quand vous le souhaitez."
 
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
+
 msgid "CAMPAIGN ONE"
 msgstr "PREMIÈRE CAMPAGNE"
 
@@ -2987,9 +2990,6 @@ msgstr ""
 "Si vous utilisez un routeur, configurez-le pour activer UPnP/NAT-PMP/PCP\n"
 " ou pour transférer le port vers votre système."
 
-msgid "Failed to get a lobby response!"
-msgstr "Le salon ne répond pas !"
-
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Le format de fichier de replay est plus récent que ce que cette version de Warzone 2100 peut supporter."
 
@@ -3025,7 +3025,7 @@ msgid "Warzone 2100: Prior launch failed"
 msgstr "Warzone 2100 : le lancement précédent a échoué"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "La dernière tentative d'initialisation du backend graphique suivant a causé un crash :"
 
 #, c-format
 msgid "Graphics Backend: %s"
@@ -3343,11 +3343,11 @@ msgstr "Armé d'un lance-missiles anti-char"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Armé de cyborgs anti-char"
 
-msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armé d'un lance-plasma"
-
 msgid "Armed with Cyborg Thermite flamer"
 msgstr "Armé de cyborgs Thermite"
+
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Armé d'un lance-plasma"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Armé d'un laser Flashlight"
@@ -3661,10 +3661,10 @@ msgstr "Efficace contre : structures"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Efficace contre : structures, emplacements, cyborgs"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Efficace contre : bunkers et points défensifs"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Efficace contre : bunkers et points défensifs"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -7273,6 +7273,9 @@ msgstr " et "
 msgid "Spectators"
 msgstr "Spectateurs"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Vous avez envoyé trop de messages dans les dernières secondes. Veuillez patienter avant de réessayer."
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s veut activer le mode débogage. Activé : %s, Désactivé : %s"
@@ -8090,8 +8093,21 @@ msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
 msgstr "ATTENTION : si vous ne cochez pas \"Prêt\" maintenant vous allez être exclu de la partie"
 
 #, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "Exclusion automatique du joueur (%s) pour avoir trop tardé à cocher \"Prêt\""
+
+msgid "NOTICE: Please check Ready"
+msgstr "ATTENTION : cochez \"Prêt\""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr "ATTENTION : cochez \"Prêt\" pour que le jeu puisse commencer"
+
+msgid "Players who don't check Ready in time will be kicked."
+msgstr ""
 
 msgid "Can someone please transfer me some units?"
 msgstr "Quelqu'un peut-il me transférer des unités ?"
@@ -8317,9 +8333,6 @@ msgstr "Bots alliés"
 
 msgid "Human Allies"
 msgstr "Alliés Humains"
-
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Vous avez envoyé trop de messages dans les dernières secondes. Veuillez patienter avant de réessayer."
 
 msgid "Research Progress"
 msgstr "Progression de la recherche"
@@ -9593,6 +9606,9 @@ msgstr "Choisir le nom du joueur"
 msgid "Player Name changes are not allowed when you are muted"
 msgstr "Les changements de nom de joueur ne sont pas autorisés lorsque vous êtes muet"
 
+msgid "Player Name changes are not allowed by the host"
+msgstr "L'hôte n'a pas autorisé le changement de nom des joueurs"
+
 msgid "Blind Game:"
 msgstr "Jeu en aveugle :"
 
@@ -9922,7 +9938,7 @@ msgid "Player names will not be visible to other players (until the game is over
 msgstr "Les noms des joueurs ne seront pas visibles par les autres joueurs (tant que la partie n'est pas terminée)"
 
 msgid "Player names will not be visible to other players (until the game has started)"
-msgstr "- Les noms des joueurs ne seront pas visibles par les autres joueurs (tant que la partie n'est pas lancée)"
+msgstr "Les noms des joueurs ne seront pas visibles par les autres joueurs (tant que la partie n'est pas lancée)"
 
 msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
 msgstr "IMPORTANT : L'hôte est un joueur, et peut voir et configurer d'autres joueurs (!)"
@@ -10131,8 +10147,16 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "L'hôte a activé le tchat libre pour le joueur : %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr "L'hôte a activé le chat libre pour %d joueurs"
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "L'hôte a rendu muet en tchat libre le joueur : %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr "L'hôte a désactivé le chat libre pour %d joueurs"
 
 msgid "Limits set to default."
 msgstr "Limites définies aux valeurs par défaut."
@@ -10919,17 +10943,17 @@ msgstr "Bonus Gamma"
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
 msgstr "Mission supplémentaire Gamma utilisant une carte créée par l'équipe de développement originale (mise à jour par : DARwins)."
 
-msgid "Insane Spawns"
-msgstr "Apparitions démentes"
+msgid "Additional Spawns (Insane difficulty)"
+msgstr "Plus d'ennemis (difficulté Dément)"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "Active les apparitions et comportements ennemis supplémentaires en cas de difficulté Dément (ou supérieur)."
 
-msgid "Non-Insane Spawns"
-msgstr "Apparitions normales"
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr "Plus d'ennemis (pour les niveaux de difficulté inférieurs à Dément)"
 
-msgid "Toggles tweak option Insane Spawns for Hard difficulty and below."
-msgstr "Active/désactive l'option d'apparitions supplémentaires pour la difficulté Difficile et au-dessous."
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr "Augmente le nombre d'ennemis et change leur comportement pour les niveaux de difficulté jusqu'à Difficile."
 
 msgid "Fast EXP gain"
 msgstr "Gain d'expérience rapide"
@@ -10988,91 +11012,6 @@ msgstr "CAMPAGNES"
 msgid "GAMES"
 msgstr "PARTIES"
 
-msgid "Refresh Games List"
-msgstr "Rafraîchir la liste des parties"
-
-msgid "Filter Games List"
-msgstr "Filtrer la liste des parties"
-
-msgid "Refreshing..."
-msgstr "Mise à jour..."
-
-msgid "Searching"
-msgstr "Recherche"
-
-msgid "Connecting to the lobby server..."
-msgstr "Connexion au salon..."
-
-msgid "Game Name"
-msgstr "Nom de la partie"
-
-msgid "Map Name"
-msgstr "Nom de la carte"
-
-msgid "Status"
-msgstr "Statut"
-
-msgid "Can't connect to lobby server!"
-msgstr "La connexion au salon a échoué !"
-
-#, c-format
-msgid "Mods: %s"
-msgstr "Mods : %s"
-
-msgid "Mods: None!"
-msgstr "Mods : aucun !"
-
-#, c-format
-msgid "Version: %s"
-msgstr "Version : %s"
-
-msgid "Join as spectator"
-msgstr "Rejoindre en tant que spectateur"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Votre version de Warzone est incompatible avec cette partie."
-
-msgid "[Password required]"
-msgstr "[Mot de passe requis]"
-
-msgid "[No Tanks]"
-msgstr "[Pas de tanks]"
-
-msgid "[No Cyborgs]"
-msgstr "[Pas de Cyborgs]"
-
-msgid "[No VTOLs]"
-msgstr "[Pas de VTOLs]"
-
-#, c-format
-msgid "Hosted by %s"
-msgstr "Hébergé par %s"
-
-#, c-format
-msgid "Hosted by %s —%s"
-msgstr "Hébergé par %s - %s"
-
-msgid "Can't find any games for your version."
-msgstr "Aucune partie disponible pour votre version du jeu."
-
-msgid "There appears to be a game update available!"
-msgstr "Une nouvelle version du jeu est disponible !"
-
-msgid "No games are available for your version"
-msgstr "Aucune partie disponible pour votre version du jeu"
-
-msgid "Wrong Game Version!"
-msgstr "Mauvaise version du jeu !"
-
-msgid "You have an incompatible mod."
-msgstr "Vous avez un mod incompatible."
-
-msgid "Host couldn't send file?"
-msgstr "L'hôte n'a-t-il pas pu envoyer le fichier ?"
-
-msgid "Incorrect Password!"
-msgstr "Mot de passe incorrect !"
-
 msgid "Continue"
 msgstr "Continuer"
 
@@ -11129,6 +11068,12 @@ msgstr "Gestionnaire de musique"
 
 msgid "Open Music Manager"
 msgstr "Ouvrir le gestionnaire de musique"
+
+msgid "Audio Cues"
+msgstr "Signaux audio"
+
+msgid "Group Reporting"
+msgstr "Rapport de groupe"
 
 msgid "Mouse"
 msgstr "Souris"
@@ -11278,7 +11223,7 @@ msgid "The normal terrain appearance used as the default for more than a decade.
 msgstr "L'apparence normale du terrain utilisée comme valeur par défaut depuis plus d'une décennie. Textures recrées en haute résolution."
 
 msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
-msgstr "L'apparence remasterisée et de haute qualité du terrain. Haute résolution, avec une un placage de relief et des reflets spéculaires modernes. Nécessite plus de mémoire et un meilleur GPU."
+msgstr "L'apparence remasterisée et de haute qualité du terrain. Haute résolution, avec un placage de relief et des reflets spéculaires modernes. Nécessite plus de mémoire et un meilleur GPU."
 
 msgid "Terrain Shading Quality"
 msgstr "Qualité de l'ombrage du terrain"
@@ -11493,15 +11438,8 @@ msgstr "Contrôles"
 msgid "Window"
 msgstr "Fenêtre"
 
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
+msgid "Desktop Full"
 msgstr ""
-"En mode bureau plein écran, la résolution correspond à celle de votre bureau \n"
-"(ou ce que le gestionnaire de fenêtres permet)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Vous pouvez changer la résolution en redimensionnant la fenêtre normalement. (Essayez de tirer un coin ou bord.)"
 
 msgid "Window Mode"
 msgstr "Mode fenêtre"
@@ -11509,11 +11447,8 @@ msgstr "Mode fenêtre"
 msgid "Windowed"
 msgstr "Fenêtré"
 
-msgid "Desktop Full"
-msgstr "Bureau complet"
-
-msgid "Resolution"
-msgstr "Résolution"
+msgid "Fullscreen Mode"
+msgstr ""
 
 msgid "Behaviors"
 msgstr "Comportements"
@@ -11599,6 +11534,93 @@ msgstr "pas prêt(e)"
 
 msgid "Waiting Room"
 msgstr "Salon d'attente"
+
+msgid "FFA"
+msgstr "Chacun pour soi"
+
+msgid "Alliances Allowed"
+msgstr "Alliances autorisées"
+
+msgid "Teams"
+msgstr "Équipes"
+
+msgid "Teams (No Shared Res)"
+msgstr "Équipes (recherches non partagées)"
+
+msgid "Matchmaking"
+msgstr "Composition des équipes"
+
+msgid "Blind Lobby"
+msgstr "Salon en aveugle"
+
+msgid "Blind Game"
+msgstr "Jeu en aveugle"
+
+msgid "No Tanks"
+msgstr "Pas de tanks"
+
+msgid "No VTOL"
+msgstr "Pas de VTOLs"
+
+msgid "No Cyborgs"
+msgstr "Pas de Cyborgs"
+
+msgid "Spectate Game"
+msgstr "Être spectateur de la partie"
+
+msgid "There appears to be a game update available!"
+msgstr "Une nouvelle version du jeu est disponible !"
+
+msgid "Failed to connect to lobby server"
+msgstr "Échec de conexion au serveur du salon"
+
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Votre version de Warzone est incompatible avec cette partie."
+
+#, c-format
+msgid "Host Version: %s"
+msgstr "Version de l'hôte : %s"
+
+msgid "(50+ omitted)"
+msgstr "(50+ écartés)"
+
+#, c-format
+msgid "(%u omitted)"
+msgstr "(%u écartés)"
+
+msgid "No games for your version"
+msgstr "Pas de partie pour votre version du jeu"
+
+msgid "No games matching filters"
+msgstr "Pas de filtre de parties"
+
+#, c-format
+msgid "%d players queued"
+msgstr "%d joueurs en attente"
+
+msgid "Matchmaking Room: Open"
+msgstr "Composition des équipes : Ouvert"
+
+msgid "Filters"
+msgstr "Filtres"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Details"
+msgstr "Détails"
+
+msgid "Mods"
+msgstr "Mods"
+
+msgid "Hide Incompatible Games"
+msgstr "Cacher les parties incompatibles"
+
+msgid "Hide Empty Games"
+msgstr "Cacher les parties sans joueurs"
+
+msgid "Hide Modded Games"
+msgstr "Cacher les parties modées"
 
 #, c-format
 msgid "Sending Map: %u%% "
@@ -11714,6 +11736,9 @@ msgstr "Escarmouche un joueur"
 msgid "Edit Game Name"
 msgstr "Modifier le nom de la partie"
 
+msgid "Game Name"
+msgstr "Nom de la partie"
+
 msgid "Click to see Map"
 msgstr "Cliquez pour voir la carte"
 
@@ -11725,7 +11750,7 @@ msgstr ""
 "Peut être bloquée par le vote des joueurs"
 
 msgid "Match Options"
-msgstr "Faire correspondre les options"
+msgstr "Préférences des paramètres"
 
 msgid "Base"
 msgstr "Base"
@@ -11805,20 +11830,14 @@ msgstr "Les modes aveugles ne sont disponibles que lorsque l'hôte est un specta
 msgid "Players' identities are visible, in lobby and in game (the default)."
 msgstr "Les identités des joueurs sont visibles, dans le salon et dans le jeu (par défaut)."
 
-msgid "Blind Lobby"
-msgstr "Salon en aveugle"
-
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
 msgstr "Les identités des joueurs sont cachées à tout le monde (à l'exception de l'hôte spectateur) jusqu'au début du jeu."
-
-msgid "Blind Game"
-msgstr "Jeu en aveugle"
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
 msgstr "Les identités des joueurs sont cachées à tout le monde (à l'exception de l'hôte spectateur) jusqu'à la fin du jeu."
 
 msgid "Start Hosting"
-msgstr "Démarrer l'hébergement"
+msgstr "Démarrer le serveur hôte"
 
 msgid "Configure Advanced Hosting Options"
 msgstr "Configurer les options avancées d'hébergement"

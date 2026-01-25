@@ -86,6 +86,8 @@ static GNSConnectionProvider* activeServer = nullptr;
 
 void GNSConnectionProvider::initialize()
 {
+	if (initialized_) { return; }
+
 	std::call_once(gnsInitFlag, []()
 	{
 		SteamDatagramErrMsg errMsg;
@@ -99,6 +101,8 @@ void GNSConnectionProvider::initialize()
 	{
 		throw std::runtime_error("Failed to initialize GNS network interface");
 	}
+
+	initialized_ = true;
 
 	addressResolver_ = std::make_unique<tcp::TCPAddressResolver>();
 
@@ -148,6 +152,8 @@ void GNSConnectionProvider::initialize()
 
 void GNSConnectionProvider::shutdown()
 {
+	if (!initialized_) { return; }
+	initialized_ = false;
 	addressResolver_.reset();
 	activeServer = nullptr;
 }
@@ -219,6 +225,7 @@ net::result<IClientConnection*> GNSConnectionProvider::openClientConnectionAny(c
 		return tl::make_unexpected(make_network_error_code(EBADF)); // bad file descriptor
 	}
 	auto conn = new GNSClientConnection(*this, WzCompressionProvider::Instance(), PendingWritesManagerMap::instance().get(type()), networkInterface_, h);
+	std::unique_lock lock(activeClientsMtx_);
 	activeClients_.emplace(h, conn);
 	return conn;
 }
@@ -244,7 +251,7 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 	case k_ESteamNetworkingConnectionState_None:
 		break;
 	case k_ESteamNetworkingConnectionState_Connecting:
-		ASSERT(connProvider->activeClients_.count(pInfo->m_hConn) == 0, "Expected to have a new connection");
+	{
 		ASSERT(pInfo->m_info.m_hListenSocket == connProvider->activeListenSocket_.first, "Unexpected listen socket handle");
 		if (connProvider->networkInterface_->AcceptConnection(pInfo->m_hConn) != k_EResultOK)
 		{
@@ -252,16 +259,24 @@ void GNSConnectionProvider::ServerConnectionStateChanged(SteamNetConnectionStatu
 			connProvider->networkInterface_->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
 			break;
 		}
+		std::unique_lock lock(connProvider->activeClientsMtx_);
+
+		ASSERT(connProvider->activeClients_.count(pInfo->m_hConn) == 0, "Expected to have a new connection");
 		// We don't yet have a live `IClientConnection` instance for this connection
 		connProvider->activeClients_.emplace(pInfo->m_hConn, nullptr);
 		break;
+	}
 	case k_ESteamNetworkingConnectionState_FindingRoute:
 		break;
 	case k_ESteamNetworkingConnectionState_Connected:
+	{
+		std::unique_lock lock(connProvider->activeClientsMtx_);
+
 		ASSERT(connProvider->activeClients_.count(pInfo->m_hConn) != 0, "Expected to be a connection that we are aware of");
 		ASSERT(pInfo->m_info.m_hListenSocket == connProvider->activeListenSocket_.first, "Unexpected listen socket handle");
 		connProvider->activeListenSocket_.second->addPendingAcceptedConnection(pInfo->m_hConn);
 		break;
+	}
 	case k_ESteamNetworkingConnectionState_ClosedByPeer:
 		debug(LOG_ERROR, "Connection closed by peer: %u", pInfo->m_hConn);
 		connProvider->disposeConnectionImpl(pInfo->m_hConn);
@@ -325,6 +340,7 @@ PortMappingInternetProtocolMask GNSConnectionProvider::portMappingProtocolTypes(
 void GNSConnectionProvider::registerAcceptedConnection(GNSClientConnection* conn)
 {
 	ASSERT_OR_RETURN(, conn->isValid(), "Invalid GNS client connection handle");
+	std::unique_lock lock(activeClientsMtx_);
 	activeClients_[conn->connectionHandle()] = conn;
 }
 
@@ -341,10 +357,16 @@ void GNSConnectionProvider::disposeConnectionImpl(HSteamNetConnection hConn)
 	{
 		return;
 	}
+	std::unique_lock lock(activeClientsMtx_);
 	const auto connIt = activeClients_.find(hConn);
 	if (connIt != activeClients_.end())
 	{
 		GNSClientConnection* conn = connIt->second;
+		// Remove this connection handle from active clients list
+		activeClients_.erase(connIt);
+		// No more need to hold the lock since the connection is not visible anymore
+		lock.unlock();
+
 		if (conn)
 		{
 			// Remove any pending writes for this connection
@@ -361,8 +383,6 @@ void GNSConnectionProvider::disposeConnectionImpl(HSteamNetConnection hConn)
 			// This call renders the current connection object invalid!
 			conn->expireConnectionHandle();
 		}
-		// Remove this connection handle from active clients list
-		activeClients_.erase(connIt);
 	}
 	// Close the internal GNS connection handle
 	networkInterface_->CloseConnection(hConn, 0, nullptr, true);

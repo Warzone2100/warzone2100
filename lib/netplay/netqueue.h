@@ -201,8 +201,8 @@ class MessageReader
 {
 public:
 
-	explicit MessageReader(NETQUEUE queue, const NetMessage& m)
-		: queueInfo(queue), msgData(&m.rawData()), index(NetMessage::HEADER_LENGTH), msgType(m.type())
+	explicit MessageReader(const NetMessage& m)
+		: msgData(&m.rawData()), index(NetMessage::HEADER_LENGTH), msgType(m.type())
 	{}
 
 	MessageReader(MessageReader&&) = default;
@@ -246,7 +246,6 @@ public:
 		return index <= msgData->size();
 	}
 
-	NETQUEUE queueInfo;
 	const NetMsgDataVector* msgData;
 	mutable size_t index = NetMessage::HEADER_LENGTH;
 	uint8_t msgType;

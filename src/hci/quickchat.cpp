@@ -66,8 +66,13 @@ constexpr size_t MAX_RECORDED_MESSAGE_TIMES = 200;
 constexpr std::chrono::milliseconds MESSAGE_INTERVAL(5000);
 constexpr std::chrono::milliseconds MESSAGE_THROTTLE_TIMEOUT_INTERVAL(5000);
 
-static optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx)
+optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint32_t playerIdx)
 {
+	if (playerIdx >= lastQuickChatMessageTimes.size())
+	{
+		return nullopt;
+	}
+
 	if (lastQuickChatMessageTimes[playerIdx].empty())
 	{
 		return nullopt;
@@ -99,7 +104,20 @@ static optional<std::chrono::steady_clock::time_point> playerSpamMutedUntil(uint
 	return nullopt;
 }
 
-static void recordPlayerMessageSent(uint32_t playerIdx)
+void playerSpamMuteNotifyIndexSwap(uint32_t playerIndexA, uint32_t playerIndexB)
+{
+	ASSERT_OR_RETURN(, playerIndexA < lastQuickChatMessageTimes.size(), "playerIndexA invalid: %" PRIu32, playerIndexA);
+	ASSERT_OR_RETURN(, playerIndexB < lastQuickChatMessageTimes.size(), "playerIndexB invalid: %" PRIu32, playerIndexB);
+	std::swap(lastQuickChatMessageTimes[playerIndexA], lastQuickChatMessageTimes[playerIndexB]);
+}
+
+void playerSpamMuteReset(uint32_t playerIndex)
+{
+	ASSERT_OR_RETURN(, playerIndex < lastQuickChatMessageTimes.size(), "playerIndex invalid: %" PRIu32, playerIndex);
+	lastQuickChatMessageTimes[playerIndex].clear();
+}
+
+void recordPlayerMessageSent(uint32_t playerIdx)
 {
 	if (playerSpamMutedUntil(playerIdx).has_value())
 	{
@@ -2480,13 +2498,14 @@ namespace INTERNAL_ADMIN_ACTION_NOTICE {
 
 // - INTERNAL_LOCALIZED_LOBBY_NOTICE
 namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
-	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx)
+	WzQuickChatMessageData constructMessageData(Context ctx, uint32_t targetPlayerIdx, uint32_t additionalData)
 	{
-		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), 0, targetPlayerIdx };
+		return WzQuickChatMessageData { static_cast<uint32_t>(ctx), additionalData, targetPlayerIdx };
 	}
 
 	std::string to_output_string(WzQuickChatMessageData messageData)
 	{
+		uint32_t additionalData = messageData.dataA;
 		uint32_t targetPlayerIdx = messageData.dataB;
 
 		if (targetPlayerIdx >= MAX_CONNECTED_PLAYERS)
@@ -2503,15 +2522,41 @@ namespace INTERNAL_LOCALIZED_LOBBY_NOTICE {
 			case static_cast<uint32_t>(Context::NotReadyKickWarning):
 				if (targetPlayerIdx == selectedPlayer)
 				{
+					audio_PlayTrack(ID_SOUND_ZOOM_ON_RADAR);
 					return _("NOTICE: If you don't check Ready soon, you will be kicked from the room");
 				}
 				else
 				{
-					// Not intended for this player
+					// Not intended for this player, but show a single message when 5 seconds remaining
+					// so other players know a kick is coming
+					if (additionalData == 5 && !isBlindSimpleLobby(game.blindMode))
+					{
+						return astringf(_("Player will be kicked if they don't check Ready soon: %s"), targetPlayerName);
+					}
 					return "";
 				}
 			case static_cast<uint32_t>(Context::NotReadyKicked):
 				return astringf(_("Auto-kicking player (%s) because they waited too long to check Ready"), targetPlayerName);
+			case static_cast<uint32_t>(Context::PlayerShouldCheckReadyNotice):
+			{
+				audio_PlayTrack(ID_SOUND_ZOOM_ON_RADAR);
+				std::string result;
+				if (isBlindSimpleLobby(game.blindMode))
+				{
+					result = _("NOTICE: Please check Ready");
+				}
+				else
+				{
+					result = _("NOTICE: Please check Ready so the game can begin");
+				}
+				if (additionalData > 0)
+				{
+					// auto-not-ready-kick is enabled
+					result += "\n";
+					result += _("Players who don't check Ready in time will be kicked.");
+				}
+				return result;
+			}
 		}
 
 		return ""; // Silence compiler warning
@@ -2947,7 +2992,12 @@ void addQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, c
 void addLobbyQuickChatMessageToConsole(WzQuickChatMessage message, uint32_t sender, const WzQuickChatTargeting& targeting, const optional<WzQuickChatMessageData>& messageData)
 {
 	bool teamSpecific = !targeting.all && (targeting.humanTeammates || targeting.aiTeammates);
-	addConsoleMessage(to_output_string(message, messageData).c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
+	auto outputMsg = to_output_string(message, messageData);
+	if (outputMsg.empty())
+	{
+		return;
+	}
+	addConsoleMessage(outputMsg.c_str(), DEFAULT_JUSTIFY, to_output_sender(message, sender), teamSpecific);
 }
 
 bool shouldHideQuickChatMessageFromLocalDisplay(WzQuickChatMessage message)
@@ -3189,6 +3239,7 @@ bool shouldProcessQuickChatMessage(const NETQUEUE& queue, bool isInGame, WzQuick
 	switch (message)
 	{
 		case WzQuickChatMessage::INTERNAL_ADMIN_ACTION_NOTICE:
+		case WzQuickChatMessage::INTERNAL_LOCALIZED_LOBBY_NOTICE:
 			// should only ever be sent by the host
 			if (queue.index != NetPlay.hostPlayer)
 			{

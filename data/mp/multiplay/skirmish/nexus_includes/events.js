@@ -2,7 +2,8 @@
 // Generally, initialize variables, personality information, and timers.
 function eventStartLevel()
 {
-	var lenient = (difficulty <= MEDIUM);
+	const LENIENT = (difficulty <= MEDIUM);
+	const OFFSET = (me * 100); //Helps performance with multiple Nexus AIs.
 	debugMode = true;
 	numVtolUnits = 0;
 	rebuildQueue = [];
@@ -13,19 +14,19 @@ function eventStartLevel()
 	initPersonalityData();
 
 	//See also the notes at each * function for how many ticks they span over.
-	setTimer("buildBase", (lenient) ? 3600 : 900); //* 9
-	setTimer("buildDerrick", (lenient) ? 4000 : 1000);
-	setTimer("protectCloseDerrick", (lenient) ? 4800 : 1200);
-	setTimer("doResearch", (lenient) ? 5600 : 1400);
-	setTimer("productionMain", (lenient) ? 8000 : 1600); //* 3
+	setTimer("buildBase", ((LENIENT) ? 3600 : 900) + OFFSET); //* 9
+	setTimer("buildDerrick", ((LENIENT) ? 4000 : 1000) + OFFSET);
+	setTimer("protectCloseDerrick", ((LENIENT) ? 4800 : 1200) + OFFSET);
+	setTimer("doResearch", ((LENIENT) ? 5600 : 1400) + OFFSET);
+	setTimer("productionMain", ((LENIENT) ? 8000 : 1600) + OFFSET); //* 3
 	if (alliancesType === ALLIANCES)
 	{
-		setTimer("allianceMain", 2000); //* 2
+		setTimer("allianceMain", 2000 + OFFSET); //* 2
 	}
-	setTimer("helpMain", 2400);
-	setTimer("scoutMain", (lenient) ? 10800 : 2700); //* 2
-	setTimer("tacticsMain", (lenient) ? 18000 : 3000); //* 2
-	setTimer("vtolMain", (lenient) ? 10200 : 3400); //* 3
+	setTimer("helpMain", 2400 + OFFSET);
+	setTimer("scoutMain", ((LENIENT) ? 10800 : 2700) + OFFSET); //* 2
+	setTimer("tacticsMain", ((LENIENT) ? 18000 : 3000) + OFFSET); //* 2
+	setTimer("vtolMain", ((LENIENT) ? 10200 : 3400) + OFFSET); //* 3
 }
 
 function eventAttacked(victim, attacker)
@@ -96,7 +97,7 @@ function eventAttacked(victim, attacker)
 
 function eventDroidIdle(droid)
 {
-	var loc;
+	let loc;
 
 	if (droid.player !== me)
 	{
@@ -166,14 +167,14 @@ function eventDroidBuilt(droid, structure)
 		}
 		else if (droid.droidType === DROID_CONSTRUCT)
 		{
-			var cyb = isCyborgStat(droid.body);
+			const CYB = isCyborgStat(droid.body);
 
-			if (!cyb && enumGroup(groups.oilBuilders).length < TRUCK_INFO.min)
+			if (!CYB && enumGroup(groups.oilBuilders).length < TRUCK_INFO.min)
 			{
 				groupAdd(groups.oilBuilders, droid);
 				queue("buildDerrick", 100);
 			}
-			else if (cyb || enumGroup(groups.baseBuilders).length < TRUCK_INFO.min)
+			else if (CYB || enumGroup(groups.baseBuilders).length < TRUCK_INFO.min)
 			{
 				groupAdd(groups.baseBuilders, droid);
 			}
@@ -197,32 +198,32 @@ function eventDroidBuilt(droid, structure)
 		}
 		else
 		{
-			var scoutLen = enumGroup(groups.scouts).length;
-			var attackLen = enumGroup(groups.attackers).length;
-			var defendLen = enumGroup(groups.defenders).length;
+			const SCOUT_LEN = enumGroup(groups.scouts).length;
+			const ATTACK_LEN = enumGroup(groups.attackers).length;
+			const DEFEND_LEN = enumGroup(groups.defenders).length;
 
-			if (attackLen < nexusBranch[branch].minimums.attackers)
+			if (ATTACK_LEN < nexusBranch[branch].minimums.attackers)
 			{
 				groupAdd(groups.attackers, droid);
 			}
-			else if (defendLen < nexusBranch[branch].minimums.defenders)
+			else if (DEFEND_LEN < nexusBranch[branch].minimums.defenders)
 			{
 				groupAdd(groups.defenders, droid);
 			}
-			else if (scoutLen < nexusBranch[branch].minimums.scouts)
+			else if (SCOUT_LEN < nexusBranch[branch].minimums.scouts)
 			{
 				groupAdd(groups.scouts, droid);
 			}
 			// Now the maximums
-			else if (scoutLen < nexusBranch[branch].maximums.scouts)
+			else if (SCOUT_LEN < nexusBranch[branch].maximums.scouts)
 			{
 				groupAdd(groups.scouts, droid);
 			}
-			else if (defendLen < nexusBranch[branch].maximums.defenders)
+			else if (DEFEND_LEN < nexusBranch[branch].maximums.defenders)
 			{
 				groupAdd(groups.defenders, droid);
 			}
-			else if (attackLen < nexusBranch[branch].maximums.attackers)
+			else if (ATTACK_LEN < nexusBranch[branch].maximums.attackers)
 			{
 				groupAdd(groups.attackers, droid);
 			}
@@ -254,7 +255,7 @@ function eventDestroyed(what)
 		// add certain structures to the rebuild list
 		for (let i = 0, len = STANDARD_REBUILD_STRUCTURES.length; i < len; ++i)
 		{
-			var obj = STANDARD_REBUILD_STRUCTURES[i];
+			const obj = STANDARD_REBUILD_STRUCTURES[i];
 
 			//Some things like walls don't have a unique stattype.
 			if (defined(obj.name))
@@ -284,7 +285,7 @@ function eventStructureBuilt(structure, droid)
 	if (droid && droid.player === me && structure.stattype === RESOURCE_EXTRACTOR)
 	{
 		const SCAN_RANGE = 10;
-		var oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter((o) => (
+		const oils = enumRange(droid.x, droid.y, SCAN_RANGE, ALL_PLAYERS, false).filter((o) => (
 			o.type === FEATURE && o.stattype === OIL_RESOURCE
 		));
 

@@ -75,6 +75,7 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	int autoLagKickAggressiveness = 3;
 	int autoDesyncKickSeconds = 10;
 	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
@@ -92,6 +93,8 @@ struct WARZONE_GLOBALS
 	UDWORD fullscreenModeWidth = 0; // current display default
 	UDWORD fullscreenModeHeight = 0; // current display default
 	int fullscreenModeScreen = -1;
+	float fullscreenPixelDensity = 1.f;
+	float fullscreenRefreshRate = 0.f; // current display default
 	int toggleFullscreenMode = 0; // 0 = the backend default
 	unsigned int cursorScale = 100;
 	// shadow mapping settings
@@ -108,6 +111,9 @@ struct WARZONE_GLOBALS
 
 	// Connection provider used for hosting games
 	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
+
+	// audio cues
+	bool playAudioCue_GroupReporting = true;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -488,9 +494,21 @@ void war_setAutoLagKickSeconds(int seconds)
 	seconds = std::max(seconds, 0);
 	if (seconds > 0)
 	{
-		seconds = std::max(seconds, 60);
+		seconds = std::max(seconds, 15);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
+}
+
+int war_getAutoLagKickAggressiveness()
+{
+	return warGlobs.autoLagKickAggressiveness;
+}
+
+void war_setAutoLagKickAggressiveness(int aggressiveness)
+{
+	aggressiveness = std::max(aggressiveness, 1);
+	aggressiveness = std::min(aggressiveness, 10);
+	warGlobs.autoLagKickAggressiveness = aggressiveness;
 }
 
 int war_getAutoDesyncKickSeconds()
@@ -651,6 +669,26 @@ int war_GetFullscreenModeScreen()
 	return warGlobs.fullscreenModeScreen;
 }
 
+float war_GetFullscreenModePixelDensity()
+{
+	return warGlobs.fullscreenPixelDensity;
+}
+
+void war_SetFullscreenModePixelDensity(float pixelDensity)
+{
+	warGlobs.fullscreenPixelDensity = pixelDensity;
+}
+
+float war_GetFullscreenModeRefreshRate()
+{
+	return warGlobs.fullscreenRefreshRate;
+}
+
+void war_SetFullscreenModeRefreshRate(float refreshRate)
+{
+	warGlobs.fullscreenRefreshRate = refreshRate;
+}
+
 void war_setToggleFullscreenMode(int mode)
 {
 	warGlobs.toggleFullscreenMode = mode;
@@ -779,4 +817,14 @@ std::string to_string(ConnectionProviderType pt)
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
+}
+
+bool war_getPlayAudioCue_GroupReporting()
+{
+	return warGlobs.playAudioCue_GroupReporting;
+}
+
+void war_setPlayAudioCue_GroupReporting(bool val)
+{
+	warGlobs.playAudioCue_GroupReporting = val;
 }

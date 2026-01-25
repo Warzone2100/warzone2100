@@ -209,6 +209,7 @@ Files: data/base/images/frontend/image_cam_universe_stars.png
        data/base/images/frontend/image_info_circle.png
        data/base/images/frontend/image_check_square_fill.png
        data/base/images/frontend/image_check_square_empty.png
+       data/base/images/frontend/image_arrow_reload.png
        data/base/images/frontend/image_arrow_undo.png
        data/base/images/frontend/image_sidebar_list.png
        data/base/images/frontend/image_caret_down_fill.png
@@ -217,6 +218,9 @@ Files: data/base/images/frontend/image_cam_universe_stars.png
        data/base/images/frontend/image_globe.png
        data/base/images/frontend/image_lock.png
        data/base/images/frontend/image_pencil_square.png
+       data/base/images/frontend/image_person.png
+       data/base/images/frontend/image_person_fill.png
+       data/base/images/frontend/image_person_plus_fill.png
        data/base/images/frontend/image_profile_edit.png
        data/base/images/frontend/image_profile_template.png
        data/base/images/frontend/image_star_fill.png

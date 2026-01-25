@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "loadsave.h"
@@ -353,7 +354,7 @@ PIELIGHT getConsoleTextColor(int player)
 	{
 		return WZCOL_CONS_TEXT_INFO;
 	}
-	else if (player == SPECTATOR_MESSAGE)
+	else if (player >= 0 && player < NetPlay.players.size() && NetPlay.players[player].isSpectator)
 	{
 		return WZCOL_TEXT_MEDIUM;
 	}
