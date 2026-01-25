@@ -609,7 +609,7 @@ private:
 		WzString tipString = (stats == nullptr) ? "" : getLocalizedStatsName(stats);
 		if (stats && !stats->category.isEmpty())
 		{
-			tipString.append(astringf("\n(%s %d/%d)", stats->category.toUtf8().c_str(), stats->categoryProgress, stats->categoryMax).c_str());
+			tipString.append(astringf("\n(%s %u/%u)", stats->category.toUtf8().c_str(), static_cast<unsigned>(stats->categoryProgress), static_cast<unsigned>(stats->categoryMax)).c_str());
 		}
 		tipString.append("\n");
 		tipString.append(costString);

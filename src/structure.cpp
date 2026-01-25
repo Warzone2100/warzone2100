@@ -5577,7 +5577,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			// TRANSLATORS: A debug output string (user-visible if debug mode is enabled)
 			// "state": The "RepairState" (printed as an integer, Idle = 0, Repairing = 1)
-			console(_("ID %d - State %d"), psStructure->id, psStructure->pFunctionality->repairFacility.state);
+			console(_("ID %d - State %d"), psStructure->id, static_cast<int>(psStructure->pFunctionality->repairFacility.state));
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:

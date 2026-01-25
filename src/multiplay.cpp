@@ -1430,7 +1430,7 @@ bool shouldProcessMessage(NETQUEUE& queue, uint8_t type)
 				char buf[255];
 				auto senderPlayerIdx = queue.index;
 				debug(LOG_INFO, "Auto kicking player %s, invalid command received: %s", getPlayerName(senderPlayerIdx), messageTypeToString(type));
-				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), getPlayerName(senderPlayerIdx, true), type);
+				ssprintf(buf, _("Auto kicking player %s, invalid command received: %u"), getPlayerName(senderPlayerIdx, true), static_cast<unsigned>(type));
 				sendInGameSystemMessage(buf);
 				kickPlayer(queue.index, _("Unauthorized network command"), ERROR_INVALID, false);
 			}

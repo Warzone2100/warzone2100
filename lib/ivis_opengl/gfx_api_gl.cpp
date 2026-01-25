@@ -3101,7 +3101,7 @@ bool gl_context::debugPerfStart(size_t sample)
 	if (GLAD_GL_ARB_timer_query)
 	{
 		char text[80];
-		ssprintf(text, "Starting performance sample %02d", sample);
+		ssprintf(text, "Starting performance sample %02zu", sample);
 		debugStringMarker(text);
 		perfStarted = true;
 		return true;

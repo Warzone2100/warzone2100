@@ -104,7 +104,7 @@ void consoleRemoveMessageListener(const std::shared_ptr<CONSOLE_MESSAGE_LISTENER
 # define debug_console(...) (void)0
 #endif // !defined(DEBUG)
 
-void console(const char *pFormat, ...); /// Print always to the ingame console
+void console(const char *pFormat, ...) WZ_DECL_FORMAT(WZ_PRINTF_FORMAT, 1, 2); /// Print always to the ingame console
 
 /**
  Usage:
@@ -115,12 +115,22 @@ void console(const char *pFormat, ...); /// Print always to the ingame console
  eg.
 	CONPRINTF("Hello %d", 123);
 */
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgcc-compat"
+#endif
+
 template <typename... P>
-static inline void CONPRINTF(P &&... params)
+static inline void CONPRINTF(char const *format, P &&... params) WZ_DECL_FORMAT_CXX(WZ_PRINTF_FORMAT, 1, 2)
 {
-	snprintf(ConsoleString, sizeof(ConsoleString), std::forward<P>(params)...);
+	snprintf(ConsoleString, sizeof(ConsoleString), format, std::forward<P>(params)...);
 	addConsoleMessage(ConsoleString, DEFAULT_JUSTIFY, INFO_MESSAGE);
 }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 
 #include <functional>

@@ -522,7 +522,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit
-	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
+	ssprintf(str, "%u", static_cast<unsigned>(((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos));
 	cache.wzLimitText.setText(str, font_regular);
 	cache.wzLimitText.render(x + 270, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 

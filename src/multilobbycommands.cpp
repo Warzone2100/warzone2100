@@ -440,7 +440,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			}
 			if (!cmdInterface.changeAlliances(alliancesType))
 			{
-				std::string msg = astringf("Unable to set alliances to: %" PRIu8, alliancesType);
+				std::string msg = astringf("Unable to set alliances to: %u", static_cast<unsigned>(alliancesType));
 				sendRoomNotifyMessage(msg.c_str());
 				return false;
 			}
