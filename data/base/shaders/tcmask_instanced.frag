@@ -134,7 +134,9 @@ void main()
 	vec4 light = sceneColor;
 	vec3 L = normalize(lightDir);
 	float diffuseFactor = lambertTerm(N, L); //diffuse light
-	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.0f);
+	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.0002f);
+	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
+	visibility = mix(visibility, 1.0, min(float(specularmap), 1.0)); // check to exclude double multiply for hq models
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap.xy, 0.f);
 	float distanceAboveTerrain = uvLightmap.z;
 	float lightmapFactor = 1.0f - (clamp(distanceAboveTerrain, 0.f, 300.f) / 300.f);
@@ -162,15 +164,17 @@ void main()
 
 		light += diffuse * diffuseFactor * diffuseMap * vanillaFactor;
 	}
+
+	vec4 ambientLight = vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap;
 	// ambient light maxed for classic models to keep results similar to original
-	light += vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap * (1.0 + (1.0 - float(specularmap)));
+	light += ambientLight * (1.0 + (1.0 - float(specularmap))) * visibility;
 
 #if WZ_POINT_LIGHT_ENABLED == 1
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
 	light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(halfVec - lightDir), diffuseMap, specularMapValue, mat3(1.f));
 #endif
 
-	light.rgb *= visibility;
+	light.rgb *= lightmap_vec4.a; // apply lightmap.a here to hide objects in fog of war
 	light.a = 1.0f;
 
 	vec4 fragColour;
