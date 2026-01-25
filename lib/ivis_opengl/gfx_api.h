@@ -928,17 +928,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>
 	{
 		glm::mat4 transform_matrix;
-//		glm::vec4 paramX;
-//		glm::vec4 paramY;
-//		glm::vec4 paramXLight;
-//		glm::vec4 paramYLight;
-//		glm::mat4 unused;
-//		glm::mat4 texture_matrix;
-//		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-//		int texture0;
 	};
 
 	using TerrainDepthOnlyForDepthMap = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u32,
