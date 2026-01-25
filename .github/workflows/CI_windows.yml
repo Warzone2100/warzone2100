@@ -441,7 +441,7 @@ jobs:
     - name: Cache vcpkg dependencies
       id: vcpkg-cache
       if: success() && !(github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ steps.settings.outputs.VCPKG_BINARYCACHE_DIR }}
         key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-${{ hashFiles('**/vcpkg.json') }}-${{ hashFiles('**/.ci/vcpkg/**') }}
@@ -537,7 +537,7 @@ jobs:
         & "${env:WZ_FULL_CMAKE_PATH}\cmake.exe" -DCMAKE_ASM_MASM_COMPILER="${env:WZ_ASM_MASM_COMPILER}" -DWZ_MINGW_DIST_PATH="${env:WZ_MINGW_DIST_PATH}" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE="${env:WZ_MINGW_CHAINLOAD_TOOLCHAIN_FILE}" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DENABLE_DISCORD:BOOL=ON -DDISCORD_RPC_APPID:STRING="${env:DISCORD_RPC_APPID}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${SENTRY_DSN_PARAM} ${SENTRY_BACKEND_PARAM} -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: Upload vcpkg logs (on failure)
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: failure()
       with:
         name: failure_${{ steps.settings.outputs.WZ_BUILD_DESC }}_${{ matrix.architecture }}_vcpkg_logs
@@ -599,14 +599,14 @@ jobs:
     # Upload build artifacts
     #####################################################
     - name: 'Upload Artifact - (Debug Symbols)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: success() && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: success() && (matrix.deploy_release == true)
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
@@ -662,7 +662,7 @@ jobs:
         Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
     - name: Upload Sentry source bundles
       if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (matrix.deploy_release == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: 'debug_sourcebundles_${{ steps.settings.outputs.WZ_BUILD_DESC }}'
         path: '${{ github.workspace }}\sentry_output\sentry_source_bundles'
@@ -777,7 +777,7 @@ jobs:
 
           echo "WZ_INNOSETUP_UNOFFICIAL_TRANSLATIONS_PATH=${env:UNOFFICIAL_TRANSLATIONS_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Download Architecture Archives
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: 'warzone2100_win_*_archive'
           path: .\built-archives
@@ -825,7 +825,7 @@ jobs:
           Get-Content "${env:INSTALLER_OUTPUT_DIR}\setup-manifest.txt"
       - name: 'Upload Artifact - (Combined Installer)'
         id: upload-combined-installer-artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success() && (github.repository == 'Warzone2100/warzone2100')
         with:
           name: warzone2100_win_installer
@@ -878,7 +878,7 @@ jobs:
         run: mkdir unsigned-installers && mkdir signed-installers
       - name: Download Release Installer
         if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           artifact-ids: '${{ needs.combined-installer-build.outputs.combined-installer-artifact-id }}'
           path: .\unsigned-installers
@@ -929,7 +929,7 @@ jobs:
           subject-path: '${{ github.workspace }}\signed-installers\*'
       - name: 'Upload Artifact - All Signed Installer EXEs'
         if: (steps.signpath-sign.outcome == 'success')
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: warzone2100_installers_signed
           path: '${{ github.workspace }}\signed-installers\*'
@@ -960,7 +960,7 @@ jobs:
         id: settings
         run: mkdir upload-assets && mkdir upload-assets-signed
       - name: Download Release Artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           # Includes the release artifacts: installer, debug symbols, and archive
           pattern: 'warzone2100_win_*'
@@ -970,7 +970,7 @@ jobs:
         run: ls -LRl ./upload-assets
       - name: Download Signed Release Artifacts
         if: success() && env.WZ_CI_SIGN_RELEASE_BUILDS == 'true' && (needs.sign-release-installers.outputs.signedfiles == 'true')
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_installers_signed'
           path: ./upload-assets-signed
@@ -1031,7 +1031,7 @@ jobs:
           echo "ARCHIVEDIR=${OUTPUTDIR}" >> $GITHUB_OUTPUT
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Archive Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
           path: ./dl-archive
@@ -1041,7 +1041,7 @@ jobs:
           unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
       - name: Download Debug Symbols Artifact
         continue-on-error: true
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS'
           path: ./dl-archive
@@ -1060,7 +1060,7 @@ jobs:
           fi
       - name: Download Source Bundle
         continue-on-error: true
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'debug_sourcebundles_win_${{ matrix.architecture }}'
           path: ./dl-sourcebundle

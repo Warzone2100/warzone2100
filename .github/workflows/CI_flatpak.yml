@@ -261,12 +261,12 @@ jobs:
     ###############################################################
     # Upload the .flatpak and debugsymbols artifacts
     - name: Upload Artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
         path: ${{ steps.settings.outputs.WZ_FLATPAK_BUNDLE }}
     - name: Upload debug info
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: 'debugsymbols_linux_flatpak_${{ matrix.arch }}'
         path: |
@@ -294,7 +294,7 @@ jobs:
           objdump -p flatpak_app/files/bin/warzone2100 | grep NEEDED | grep -E -v 'linux-vdso|ld-linux-' | awk 'NF == 2 { system("echo " $2 " && cp ${TARGET_FREEDESKTOP_RUNTIME_PATH}/files/lib/${WZ_FLATPAK_TARGET_ARCH}-linux-gnu/" $2 " output_debug_dependency_snapshot") }'
         fi
     - name: Upload additional debug dependency info
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: 'debugdependencylibsnapshot_linux_flatpak_${{ matrix.arch }}'
         path: |
@@ -325,7 +325,7 @@ jobs:
         echo "  -> Size (bytes): $(stat -c %s "${REPO_TAR_FILE}")"
     - name: Upload ostree repo
       if: success() && (github.event_name == 'release' && github.event.action == 'published')
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: 'ostree_repo_flatpak_${{ matrix.arch }}_${{ steps.settings.outputs.WZ_FLATPAK_BRANCH }}'
         path: '${{ steps.repo-tar.outputs.REPO_TAR_FILE }}'
@@ -352,13 +352,13 @@ jobs:
           mkdir -p dl-debug/additional
           echo "WZ_REPO_PATH=$(pwd)/src" >> $GITHUB_ENV
       - name: Download Debug Symbols
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: 'debugsymbols_linux_flatpak_*'
           path: ./dl-debug/symbols
           merge-multiple: false
       - name: Download Additional Debug Files
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: 'debugdependencylibsnapshot_linux_flatpak_*'
           path: ./dl-debug/additional
@@ -406,7 +406,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'warzone2100_linux_flatpak_${{ matrix.arch }}'
           path: ./dl-artifacts
@@ -486,7 +486,7 @@ jobs:
         run: |
           mkdir dl-artifacts
       - name: Download Artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: 'ostree_repo_flatpak_${{ matrix.arch }}_${{ needs.build-flatpak.outputs.WZ_FLATPAK_BRANCH }}'
           path: ./dl-artifacts

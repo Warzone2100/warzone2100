@@ -16,10 +16,13 @@ Includes another source code file at this point. You should generally only speci
 not try to specify its path, here.
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 
-## includeJSON(filePath)
+## includeJSON(filePath[, quiet])
 
 Reads a JSON file and returns an object. You should generally only specify the filename,
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+
+The optional ```quiet``` parameter (available in 4.6.3+) can be set to ```true``` to suppress logged errors
+when the supplied filePath does not exist (by default, it is ```false``` and errors are logged and displayed).
 
 ## setTimer(functionName, milliseconds[, object])
 

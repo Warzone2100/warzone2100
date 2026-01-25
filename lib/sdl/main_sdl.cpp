@@ -837,6 +837,11 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 		}
 	}
 
+#if defined(WZ_OS_MAC)
+	// Wait for window size changes to be processed
+	SDL_SyncWindow(WZwindow);
+#endif
+
 	return true;
 }
 
@@ -2030,9 +2035,12 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 	setDisplayScale(displayScale);
 
 	// Set the new minimum window size
-	unsigned int minWindowWidth = 0, minWindowHeight = 0;
-	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, newDisplayScaleFactor);
-	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+	if (wzGetCurrentWindowMode() == WINDOW_MODE::windowed)
+	{
+		unsigned int minWindowWidth = 0, minWindowHeight = 0;
+		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, newDisplayScaleFactor);
+		SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+	}
 
 	// Update the game's logical screen size
 	unsigned int oldScreenWidth = screenWidth, oldScreenHeight = screenHeight;
@@ -2870,11 +2878,6 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			wzAsyncExecOnMainThread([]() {
 				// transition to fullscreen mode
 				wzChangeWindowMode(WINDOW_MODE::fullscreen);
-
-#if defined(WZ_OS_MAC)
-				// Wait for window size changes to be processed
-				SDL_SyncWindow(WZwindow);
-#endif
 			});
 		}
 	}
