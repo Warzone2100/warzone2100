@@ -37,7 +37,7 @@ function processCommand(message, sender, blipMessage)
 				helpInfo.location[sender].x,
 				helpInfo.location[sender].y))
 			{
-				chat(ALL_PLAYERS, CHAT_RESPONSE.confirm);
+				chat(ALLIES, CHAT_RESPONSE.confirm);
 			}
 		}
 		else
@@ -63,7 +63,7 @@ function processCommand(message, sender, blipMessage)
 		if (helpingAlly() && helpInfo.lastHelpPlayer === sender)
 		{
 			stopHelpingAlly();
-			chat(ALL_PLAYERS, CHAT_RESPONSE.affirmative);
+			chat(ALLIES, CHAT_RESPONSE.affirmative);
 		}
 		else if (numEnemiesInBase() > 0)
 		{
