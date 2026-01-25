@@ -72,7 +72,6 @@ uniform vec4 fogColor;
 in vec2 uvLightmap;
 in vec2 uvDecal;
 in vec2 uvGround;
-in float vertexDistance;
 flat in int tile;
 flat in uvec4 fgrounds;
 in vec4 fgroundWeights;
@@ -84,8 +83,8 @@ in mat2 decal2groundMat2;
 
 in mat3 ModelTangentMatrix;
 // For Shadows
-in vec3 fragPos;
-in vec3 fragNormal;
+in vec3 posModelSpace;
+in vec3 posViewSpace;
 
 #ifdef NEWGL
 out vec4 FragColor;
@@ -93,7 +92,8 @@ out vec4 FragColor;
 // Uses gl_FragColor
 #endif
 
-#include "terrain_combined_frag.glsl"
+#include "shadow_mapping.glsl"
+#include "light.glsl"
 #include "pointlights.frag"
 
 vec3 getGroundUv(int i) {
@@ -123,22 +123,21 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 
 vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 	vec3 L = normalize(groundLightDir);
-	float lambertTerm = max(dot(b.N, L), 0.0); // diffuse lighting
-	// Gaussian specular term computation
-	vec3 H = normalize(groundHalfVec);
-	float blinnTerm = clamp(dot(b.N, H), 0.f, 1.f);
-	blinnTerm = lambertTerm != 0.0 ? blinnTerm : 0.0;
-	blinnTerm = pow(blinnTerm, 16.f);
-	float visibility = getShadowVisibility();
+	float diffuseFactor = lambertTerm(b.N, L); // diffuse lighting
+	float visibility = getShadowVisibility(posModelSpace, posViewSpace, diffuseFactor, 0.001f);
+	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
+
+	float specularFactor = blinnTerm(b.N, normalize(groundHalfVec), b.gloss, 16.f);
+
 	vec4 lightmap_vec4 = texture(lightmap_tex, uvLightmap, 0.f);
 
 	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 
-	vec4 adjustedAmbientLight = ambientLight*lightmap_vec4.a;
-	vec4 light = (ambientLight*0.30f + visibility*(adjustedAmbientLight*0.40f + adjustedAmbientLight*lambertTerm*0.30f + diffuseLight*lambertTerm)) * lightmap_vec4.a;
+	vec4 adjustedAmbientLight = ambientLight * adjustedTileBrightness;
+	vec4 light = adjustedAmbientLight + diffuseLight * diffuseFactor;
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
 
-	vec4 light_spec = (visibility*specularLight*blinnTerm*lambertTerm) * adjustedTileBrightness;
+	vec4 light_spec = specularLight * specularFactor * diffuseFactor;
 	light_spec.rgb = blendAddEffectLighting(light_spec.rgb, (lightmap_vec4.rgb / 2.5f)); // additive color (from environmental point lights / effects)
 	light_spec *= (b.gloss * b.gloss);
 
@@ -147,22 +146,22 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 #if WZ_POINT_LIGHT_ENABLED == 1
 	// point lights
 	vec2 clipSpaceCoord = gl_FragCoord.xy / vec2(float(viewportWidth), float(viewportHeight));
-	res += iterateOverAllPointLights(clipSpaceCoord, fragPos, b.N, normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
+	res += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, b.N, normalize(groundHalfVec - groundLightDir), b.color, b.gloss, ModelTangentMatrix);
 #endif
 
 	// Calculate water murkiness based on non-constant-density-fog, see https://iquilezles.org/articles/fog/
-	vec3 c2p = normalize(fragPos - cameraPos.xyz); // camera to point vector
+	vec3 c2p = normalize(posModelSpace - cameraPos.xyz); // camera to point vector
 	vec3 c = normalize(cameraPos.xyz);
 	float inscatter = 0.007; // in-scattering
 	float extinction = 0.001; // extinction
-	float murkyFactor = exp(-c.y * extinction) * (1.0 - exp( -(fragPos.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
+	float murkyFactor = exp(-c.y * extinction) * (1.0 - exp( -(posModelSpace.y+40.0) * c2p.y * extinction)) / (-c2p.y * extinction);
 	float murkiness = inscatter * murkyFactor;
 	float waterDeep = 0.003 * murkyFactor;
 	murkiness = clamp(murkiness, 0.0, 1.0);
 	waterDeep = clamp(waterDeep, 0.0, 1.0);
-	res.rgb = mix(res.rgb, (vec3(0.315,0.425,0.475)*vec3(1.0-waterDeep)) * lightmap_vec4.a, murkiness);
+	res.rgb = mix(res.rgb, (vec3(0.315,0.425,0.475)*vec3(1.0-waterDeep)), murkiness);
 
-	return vec4(res.rgb, b.color.a);
+	return vec4(res.rgb * lightmap_vec4.a, b.color.a);
 }
 
 vec4 main_bumpMapping() {
@@ -197,9 +196,8 @@ void main()
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
-		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
-		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), fogFactor);
+		float fogFactor = (fogEnd - length(posViewSpace)) / (fogEnd - fogStart);
+		fragColor = mix(fragColor, vec4(fogColor.rgb, fragColor.a), clamp(fogFactor, 0.0, 1.0));
 	}
 
 	#ifdef NEWGL

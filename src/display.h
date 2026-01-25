@@ -73,6 +73,9 @@ bool setPanMouseKey(optional<MOUSE_KEY_CODE> key);
 void	setDrawShadows(bool val);
 bool	getDrawShadows();
 
+void	setDrawTerrainShadows(bool val);
+bool	getDrawTerrainShadows();
+
 bool	getCameraAccel();
 void	setCameraAccel(bool val);
 

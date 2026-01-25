@@ -172,6 +172,9 @@ static float wind = 0.0f;
 static float windSpeed = 0.0f;
 static float skybox_scale = 10000.0f;
 
+//
+static bool bDrawTerrainShadows = true;
+
 /// When to display HP bars
 UWORD barMode;
 
@@ -1378,7 +1381,6 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 	// update the fog of war... FIXME: Remove this
 	const glm::mat4 tileCalcPerspectiveViewMatrix = perspectiveMatrix * baseViewMatrix;
-	auto currTerrainShaderType = getTerrainShaderType();
 	{
 		WZ_PROFILE_SCOPE(init_lightmap);
 		for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
@@ -1395,10 +1397,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 				if (tileOnMap(playerXTile + j, playerZTile + i))
 				{
-					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
-
 					pos.y = map_TileHeightSurface(playerXTile + j, playerZTile + i);
-					auto color = pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level));
+					auto color = pal_SetBrightness(0);
 					lightmap(playerXTile + j, playerZTile + i) = color;
 				}
 				tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
@@ -1504,7 +1504,11 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		for (size_t i = 0; i < numShadowCascades; ++i)
 		{
 			gfx_api::context::get().beginDepthPass(i);
-			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, shadowCascadesInfo, true);
+			if (bDrawTerrainShadows)
+			{
+				drawTerrainDepthOnly(shadowCascades[i].projectionMatrix * shadowCascades[i].viewMatrix);
+			}
+			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, cameraPos, shadowCascadesInfo, true);
 			gfx_api::context::get().endCurrentDepthPass();
 		}
 	}
@@ -1535,7 +1539,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	{
 		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
+		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, cameraPos, shadowCascadesInfo, false);
 	}
 	wzPerfEnd(PERF_MODELS);
 
@@ -4620,4 +4624,14 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	PIELIGHT colour = psDroid->action == DACTION_DEMOLISH? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
 	pie_TransColouredTriangle({pt0, pt1, pt2}, colour, viewMatrix);
 	pie_TransColouredTriangle({pt0, pt2, pt1}, colour, viewMatrix);
+}
+
+bool	getDrawTerrainShadows()
+{
+	return (bDrawTerrainShadows);
+}
+
+void	setDrawTerrainShadows(bool val)
+{
+	bDrawTerrainShadows = val;
 }

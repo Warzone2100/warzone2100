@@ -41,14 +41,7 @@ static bool bRevealActive = true;
 // For display only (*NOT* for use in game state calculations)
 inline float getTileIllumination(const MAPTILE *psTile)
 {
-	switch (terrainShaderType)
-	{
-		case TerrainShaderType::SINGLE_PASS:
-			return psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
-		case TerrainShaderType::FALLBACK:
-			return psTile->illumination;
-	}
-	return psTile->illumination; // silence GCC warning
+	return psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
 }
 
 // ------------------------------------------------------------------------------------

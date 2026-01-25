@@ -835,7 +835,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
@@ -860,23 +860,17 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4}
 		} }),
-	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
-		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
@@ -1214,10 +1208,8 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedGlobalUniforms>(),
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedPerMeshUniforms>(),
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
-		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
-		uniform_binding_entry<SHADER_DECALS>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
 		uniform_binding_entry<SHADER_WATER_HIGH>(),
@@ -2094,57 +2086,42 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(1, cbuf.ViewMatrix);
 	setUniforms(2, cbuf.ModelUVLightmapMatrix);
 	setUniforms(3, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(4, cbuf.sunPos);
-	setUniforms(5, cbuf.sceneColor);
-	setUniforms(6, cbuf.ambient);
-	setUniforms(7, cbuf.diffuse);
-	setUniforms(8, cbuf.specular);
-	setUniforms(9, cbuf.fogColour);
-	setUniforms(10, cbuf.ShadowMapCascadeSplits);
-	setUniforms(11, cbuf.ShadowMapSize);
-	setUniforms(12, cbuf.fogEnd);
-	setUniforms(13, cbuf.fogBegin);
-	setUniforms(14, cbuf.timeState);
-	setUniforms(15, cbuf.fogEnabled);
-	setUniforms(16, cbuf.PointLightsPosition);
-	setUniforms(17, cbuf.PointLightsColorAndEnergy);
-	setUniforms(18, cbuf.bucketOffsetAndSize);
-	setUniforms(19, cbuf.indexed_lights);
-	setUniforms(20, cbuf.bucketDimensionUsed);
-	setUniforms(21, cbuf.viewportWidth);
-	setUniforms(22, cbuf.viewportheight);
+	setUniforms(4, cbuf.cameraPos);
+	setUniforms(5, cbuf.sunPos);
+	setUniforms(6, cbuf.sceneColor);
+	setUniforms(7, cbuf.ambient);
+	setUniforms(8, cbuf.diffuse);
+	setUniforms(9, cbuf.specular);
+	setUniforms(10, cbuf.fogColour);
+	setUniforms(11, cbuf.ShadowMapCascadeSplits);
+	setUniforms(12, cbuf.ShadowMapSize);
+	setUniforms(13, cbuf.fogEnd);
+	setUniforms(14, cbuf.fogBegin);
+	setUniforms(15, cbuf.timeState);
+	setUniforms(16, cbuf.fogEnabled);
+	setUniforms(17, cbuf.PointLightsPosition);
+	setUniforms(18, cbuf.PointLightsColorAndEnergy);
+	setUniforms(19, cbuf.bucketOffsetAndSize);
+	setUniforms(20, cbuf.indexed_lights);
+	setUniforms(21, cbuf.bucketDimensionUsed);
+	setUniforms(22, cbuf.viewportWidth);
+	setUniforms(23, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(23, cbuf.tcmask);
-	setUniforms(24, cbuf.normalMap);
-	setUniforms(25, cbuf.specularMap);
-	setUniforms(26, cbuf.hasTangents);
-	setUniforms(27, cbuf.shieldEffect);
+	// IMPORTANT: uniformIdx continues incrementing from Draw3DShapeInstancedGlobalUniforms above
+	setUniforms(24, cbuf.tcmask);
+	setUniforms(25, cbuf.normalMap);
+	setUniforms(26, cbuf.specularMap);
+	setUniforms(27, cbuf.hasTangents);
+	setUniforms(28, cbuf.shieldEffect);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
 {
 	setUniforms(0, cbuf.ProjectionMatrix);
 	setUniforms(1, cbuf.ViewMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.paramX);
-	setUniforms(2, cbuf.paramY);
-	setUniforms(3, cbuf.paramXLight);
-	setUniforms(4, cbuf.paramYLight);
-	setUniforms(5, cbuf.texture0);
-	setUniforms(6, cbuf.texture1);
-	setUniforms(7, cbuf.unused);
-	setUniforms(8, cbuf.texture_matrix);
-	setUniforms(9, cbuf.fog_colour);
-	setUniforms(10, cbuf.fog_enabled);
-	setUniforms(11, cbuf.fog_begin);
-	setUniforms(12, cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
@@ -2163,28 +2140,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
-//	setUniforms(1, cbuf.paramX);
-//	setUniforms(2, cbuf.paramY);
-//	setUniforms(3, cbuf.texture0);
-//	setUniforms(4, cbuf.paramXLight);
-//	setUniforms(5, cbuf.paramYLight);
 	setUniforms(1, cbuf.fog_enabled);
 	setUniforms(2, cbuf.fog_begin);
 	setUniforms(3, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.texture_matrix);
-	setUniforms(2, cbuf.param1);
-	setUniforms(3, cbuf.param2);
-	setUniforms(4, cbuf.fog_colour);
-	setUniforms(5, cbuf.fog_enabled);
-	setUniforms(6, cbuf.fog_begin);
-	setUniforms(7, cbuf.fog_end);
-	setUniforms(8, cbuf.texture0);
-	setUniforms(9, cbuf.texture1);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUniforms& cbuf)
@@ -3573,6 +3531,17 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	}
 	initDepthPasses(depthBufferResolution);
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+#if !defined(__EMSCRIPTEN__)
+	if (!gles && GLAD_GL_VERSION_3_0)
+	{
+		// Disable sRGB on default framebuffer, if present
+		glDisable(GL_FRAMEBUFFER_SRGB);
+		wzGLCheckErrors();
+	}
+#endif
+
 #if !defined(__EMSCRIPTEN__)
 	_beginRenderPassImpl();
 #endif
@@ -4181,6 +4150,7 @@ void gl_context::beginDepthPass(size_t idx)
 	ASSERT_OR_RETURN(, idx < depthFBO.size(), "Invalid depth pass #: %zu", idx);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO[idx]);
 	glViewport(0, 0, static_cast<GLsizei>(depthBufferResolution), static_cast<GLsizei>(depthBufferResolution));
+	glDepthMask(GL_TRUE);
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
@@ -4206,6 +4176,7 @@ void gl_context::_beginRenderPassImpl()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, viewportWidth, viewportHeight);
 	GLbitfield clearFlags = 0;
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 	glClear(clearFlags);
@@ -5357,6 +5328,7 @@ void gl_context::beginSceneRenderPass()
 	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
 	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
 	GLbitfield clearFlags = 0;
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glDepthMask(GL_TRUE);
 	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 	glClear(clearFlags);
