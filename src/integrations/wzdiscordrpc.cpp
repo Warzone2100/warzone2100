@@ -1086,7 +1086,7 @@ static void handleDiscordJoinRequest(const DiscordUser* request)
 			const std::string discordUserString = username + "#" + discriminator;
 
 			std::string content;
-			content = astringf(_("Discord user \"%s\" would like to join your game."), discordUserString.c_str(), userId.c_str());
+			content = astringf(_("Discord user \"%s\" would like to join your game."), discordUserString.c_str());
 			content += "\n\n";
 			content += _("Allow this player to join your game?");
 

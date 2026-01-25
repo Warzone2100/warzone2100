@@ -279,7 +279,7 @@ protected:
 		}
 		if (psStruct->productToGroup != UBYTE_MAX)
 		{
-			factoryAssignGroupLabel->setString(WzString::fromUtf8(astringf("%u", psStruct->productToGroup)));
+			factoryAssignGroupLabel->setString(WzString::fromUtf8(astringf("%" PRIu8, psStruct->productToGroup)));
 		}
 		else
 		{

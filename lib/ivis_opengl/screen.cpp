@@ -186,7 +186,7 @@ void wzPerfFrame()
 	time(&aclock);           /* Get time in seconds */
 	t = getLocalTime(aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
+	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02zu-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
 	         t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
 	screendump_required = true;
 	gfx_api::context::get().debugStringMarker("Performance sample complete");

@@ -1598,7 +1598,7 @@ void NETaddRedirects()
 	// Report the user-visible status once the discovery is finished.
 	pmm.attach_callback(ipv4MappingRequest, [](std::string extIp, uint16_t extPort) // success callback
 	{
-		std::string msg = astringf(_("Port mapping opened external port: %d"), extPort);
+		std::string msg = astringf(_("Port mapping opened external port: %u"), static_cast<unsigned>(extPort));
 		msg += "\n";
 		msg += astringf(_("Your external IP is: %s"), extIp.c_str());
 		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);

@@ -378,7 +378,7 @@ bool recvOptions(NETQUEUE queue)
 			mapName[strlen(mapName) - 3] = '\0';  // Cut off "-T1", "-T2" or "-T3".
 		}
 		char filename[256];
-		ssprintf(filename, "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, game.hash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
+		ssprintf(filename, "maps/%uc-%s-%s.wz", static_cast<unsigned>(game.maxPlayers), mapName, game.hash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
 
 		auto requestResult = requestFile(game.hash, filename);
 		switch (requestResult)
@@ -958,7 +958,7 @@ void printStructureLimitsInfo(std::vector<MULTISTRUCTLIMITS>& structureLimits, c
 		}
 		else
 		{
-			std::string tmpConsoleMsgStr = astringf(_("[%d] Limit that is bigger than numStructureStats (%u): %u"), i, structureLimits[i].id, structureLimits[i].limit);
+			std::string tmpConsoleMsgStr = astringf(_("[%zu] Limit that is bigger than numStructureStats (%u): %u"), i, structureLimits[i].id, structureLimits[i].limit);
 			printLineFunc(tmpConsoleMsgStr);
 		}
 	}
