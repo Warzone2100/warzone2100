@@ -978,7 +978,7 @@ MappableFunction kf_RadarZoom(const int multiplier)
 
 		if (newZoomLevel != oldZoomLevel)
 		{
-			CONPRINTF(_("Setting radar zoom to %u"), newZoomLevel);
+			CONPRINTF(_("Setting radar zoom to %u"), static_cast<unsigned>(newZoomLevel));
 			SetRadarZoom(newZoomLevel);
 			war_SetRadarZoom(GetRadarZoom()); // persist changed setting to config
 			audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
@@ -2391,7 +2391,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 	}
 	else
 	{
-		ssprintf(modString, "%d", newMod.n);
+		ssprintf(modString, "%d", static_cast<int>(newMod.n));
 	}
 
 	if (newMod == 1)

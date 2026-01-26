@@ -2604,7 +2604,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
-		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), powerCost));
+		WzString costString = WzString::format(_("Cost: %u"), powerCost);
 		tipString.append("\n");
 		tipString.append(costString);
 		button->setTip(tipString.toUtf8().c_str());

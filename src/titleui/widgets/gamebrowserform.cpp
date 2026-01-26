@@ -1051,7 +1051,7 @@ void LobbyBrowser::populateTableFromGameList()
 			row->setDisabledColor(pal_RGBA(0,0,0,120));
 			WzString tooltip = _("Your version of Warzone is incompatible with this game.");
 			tooltip += "\n";
-			tooltip += WzString::fromUtf8(astringf(_("Host Version: %s"), gameInfo.gameVersionStr.toUtf8().c_str()));
+			tooltip += WzString::format(_("Host Version: %s"), gameInfo.gameVersionStr.toUtf8().c_str());
 			row->setTip(tooltip.toUtf8());
 		}
 		row->addOnClickHandler([weakSelf, idx](W_BUTTON&) {
@@ -1071,7 +1071,7 @@ void LobbyBrowser::populateTableFromGameList()
 		}
 		else
 		{
-			omittedStr = WzString::fromUtf8(astringf(_("(%u omitted)"), static_cast<unsigned int>(currentResults.size())));
+			omittedStr = WzString::format(_("(%u omitted)"), static_cast<unsigned int>(currentResults.size()));
 		}
 
 		if (!filterEmpty && !filterModded)

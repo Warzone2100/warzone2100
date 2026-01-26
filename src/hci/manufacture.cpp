@@ -275,11 +275,11 @@ protected:
 		}
 		else
 		{
-			factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
+			factoryNumberLabel->setString(WzString::format("%u", factory->psAssemblyPoint->factoryInc + 1));
 		}
 		if (psStruct->productToGroup != UBYTE_MAX)
 		{
-			factoryAssignGroupLabel->setString(WzString::fromUtf8(astringf("%u", psStruct->productToGroup)));
+			factoryAssignGroupLabel->setString(WzString::format("%u", static_cast<unsigned>(psStruct->productToGroup)));
 		}
 		else
 		{
@@ -421,8 +421,8 @@ private:
 		{
 			auto manufacture = StructureGetFactory(factory);
 			productionRunSizeLabel->setString((manufacture->psSubject && manufacture->psSubject->next) ?
-				WzString::fromUtf8(astringf("1+%d", productionRemaining)) :
-				WzString::fromUtf8(astringf("%d", productionRemaining)));
+				WzString::format("1+%d", productionRemaining) :
+				WzString::format("%d", productionRemaining));
 			productionRunSizeLabel->show();
 		}
 		else

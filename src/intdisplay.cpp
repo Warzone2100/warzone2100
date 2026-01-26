@@ -284,7 +284,7 @@ void PowerBar::display(int xOffset, int yOffset)
 	if (unusedDerricks > 0)
 	{
 		char unusedText[50];
-		ssprintf(unusedText, _("%d derrick(s) inactive"), unusedDerricks);
+		ssprintf(unusedText, _("%u derrick(s) inactive"), static_cast<unsigned>(unusedDerricks));
 		cache.wzNeedText.setText(unusedText, font_small);
 	}
 	else if (Avail < 0)

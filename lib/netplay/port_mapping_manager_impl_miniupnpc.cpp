@@ -174,14 +174,14 @@ static bool upnp_remove_redirect(int mappingId, const DiscoveryResults& discover
 	char port_str[16];
 	char buf[512] = {'\0'};
 
-	ssprintf(buf, "upnp_remove_redirect(%" PRIu16 ")", port);
+	ssprintf(buf, "upnp_remove_redirect(%u)", static_cast<unsigned>(port));
 	MiniupnpcLogCallback(LOG_NET, buf);
 
-	ssprintf(port_str, "%" PRIu16, port);
+	ssprintf(port_str, "%u", static_cast<unsigned>(port));
 	auto result = UPNP_DeletePortMapping(discovery.urls.controlURL, discovery.data.first.servicetype, port_str, "TCP", nullptr);
 	if (result != 0)
 	{
-		ssprintf(buf, "upnp_remove_redirect(%" PRIu16 ") failed with error: %d", port, result);
+		ssprintf(buf, "upnp_remove_redirect(%u) failed with error: %d", static_cast<unsigned>(port), result);
 		MiniupnpcLogCallback(LOG_NET, buf);
 	}
 	return result == 0;
@@ -201,9 +201,9 @@ static upnp_map_output upnp_add_redirect(int mappingId, const DiscoveryResults& 
 	int r;
 	char externalIPAddress[40] = {};
 
-	ssprintf(buf, "upnp_add_redirect(%" PRIu16 ")", port);
+	ssprintf(buf, "upnp_add_redirect(%u)", static_cast<unsigned>(port));
 	MiniupnpcLogCallback(LOG_NET, buf);
-	ssprintf(port_str, "%" PRIu16, port);
+	ssprintf(port_str, "%u", static_cast<unsigned>(port));
 	r = UPNP_AddPortMapping(discovery.urls.controlURL, discovery.data.first.servicetype,
 							port_str, port_str, discovery.lanaddr, "Warzone 2100", "TCP", nullptr, "0");	// "0" = lease time unlimited
 	if (r != UPNPCOMMAND_SUCCESS)
