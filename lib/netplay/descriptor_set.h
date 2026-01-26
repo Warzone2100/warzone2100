@@ -64,10 +64,18 @@ public:
 	/// </returns>
 	virtual net::result<int> poll(std::chrono::milliseconds timeout) = 0;
 
+
+	enum class ErroredState
+	{
+		InvalidConn,
+		Error,			// POLLERR
+		HangUp,			// POLLHUP
+	};
+
 	/// <summary>
 	/// Check if a given connection is marked as `ready`, i.e.: the previous `poll()` operation
 	/// has successfully set a readable/writable flag (depending on the `EventType` template argument)
 	/// on this connection.
 	/// </summary>
-	virtual bool isSet(const IClientConnection* conn) const = 0;
+	virtual ::tl::expected<bool, ErroredState> isSet(const IClientConnection* conn) const = 0;
 };

@@ -108,15 +108,35 @@ public:
 		return ret;
 	}
 
-	virtual bool isSet(const IClientConnection* conn) const override
+	virtual ::tl::expected<bool, ErroredState> isSet(const IClientConnection* conn) const override
 	{
 		const TCPClientConnection* tcpConn = dynamic_cast<const TCPClientConnection*>(conn);
-		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+		ASSERT_OR_RETURN(tl::make_unexpected(ErroredState::InvalidConn), tcpConn, "Invalid connection type: expected TCPClientConnection");
 
 		constexpr short evt = EventType == PollEventType::READABLE ? POLLIN : POLLOUT;
 
 		const auto it = std::find_if(fds_.begin(), fds_.end(), [fd = tcpConn->getRawSocketFd()](const pollfd& pfd) { return pfd.fd == fd; });
-		return it != fds_.end() && (it->revents & evt);
+		if (it == fds_.end())
+		{
+			return false;
+		}
+
+		if (it->revents & evt)
+		{
+			return true;
+		}
+
+		if (it->revents & POLLERR)
+		{
+			return tl::make_unexpected(ErroredState::Error);
+		}
+
+		if (it->revents & POLLHUP)
+		{
+			return tl::make_unexpected(ErroredState::HangUp);
+		}
+
+		return false;
 	}
 
 	virtual bool empty() const override
