@@ -1041,9 +1041,14 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 			// search for the nearest transporter if the current one is already full
 			for (auto psOtherDroid : apsDroidLists[psTransporter->player])
 			{
-				if (psOtherDroid->isTransporter() && checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
+				if (psOtherDroid->isTransporter() &&
+					checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
 					droidSqDist(psOtherDroid, psTransporter) < MAX_NEAREST_TRANSPORT_SQ_DIST)
 				{
+					if (psOtherDroid->droidType == DROID_TRANSPORTER && !psDroidToAdd->isCyborg())
+					{
+						continue; // Only send cyborgs to a cyborg transporter.
+					}
 					orderDroidObj(psDroidToAdd, DORDER_EMBARK, psOtherDroid, ModeQueue);
 					return;
 				}
