@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
+"POT-Creation-Date: 2026-01-28 20:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4192,7 +4192,7 @@ msgstr ""
 #: data/base/script/tutorial.js:260
 #: data/base/script/tutorial.js:546
 #: data/mp/multiplay/script/rules/reticule.js:111
-#: lib/sdl/main_sdl.cpp:3225
+#: lib/sdl/main_sdl.cpp:3228
 #: src/challenge.cpp:265
 #: src/hci.cpp:2527
 #: src/hci/objects_stats.cpp:282
@@ -5805,8 +5805,8 @@ msgstr ""
 msgid "Any time, big boss!"
 msgstr ""
 
-#: lib/framework/i18n.cpp:111
-#: lib/framework/i18n.cpp:178
+#: lib/framework/i18n.cpp:112
+#: lib/framework/i18n.cpp:180
 msgid "System locale"
 msgstr ""
 
@@ -5823,7 +5823,7 @@ msgstr ""
 
 #: lib/netplay/netplay.cpp:1601
 #, c-format
-msgid "Port mapping opened external port: %d"
+msgid "Port mapping opened external port: %u"
 msgstr ""
 
 #: lib/netplay/netplay.cpp:1603
@@ -5881,19 +5881,19 @@ msgstr ""
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3227
+#: lib/sdl/main_sdl.cpp:3230
 msgid "Warzone 2100: Failed to initialize graphics"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3228
+#: lib/sdl/main_sdl.cpp:3231
 msgid "Failed to initialize graphics for all backends."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3231
+#: lib/sdl/main_sdl.cpp:3234
 msgid "Error Details:"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3238
+#: lib/sdl/main_sdl.cpp:3241
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
@@ -15597,9 +15597,9 @@ msgstr ""
 msgid "Spectators"
 msgstr ""
 
-#: src/chat.cpp:222
-#: src/hci/quickchat.cpp:3034
-#: src/multiint.cpp:8248
+#: src/chat.cpp:221
+#: src/hci/quickchat.cpp:3033
+#: src/multiint.cpp:8247
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
@@ -16471,8 +16471,8 @@ msgid "Fast-Forward"
 msgstr ""
 
 #: src/hci.cpp:1405
-#: src/loop.cpp:262
-#: src/loop.cpp:278
+#: src/loop.cpp:276
+#: src/loop.cpp:292
 msgid "GAME SAVED: "
 msgstr ""
 
@@ -16587,17 +16587,17 @@ msgstr ""
 
 #: src/hci/groups.cpp:152
 #, c-format
-msgid "Group %u"
+msgid "Group %zu"
 msgstr ""
 
 #: src/hci/groups.cpp:153
 #, c-format
-msgid "Select the Units in Group %u"
+msgid "Select the Units in Group %zu"
 msgstr ""
 
 #: src/hci/groups.cpp:154
 #, c-format
-msgid "Assign Selected Units to Group %u"
+msgid "Assign Selected Units to Group %zu"
 msgstr ""
 
 #: src/hci/groups.cpp:155
@@ -18021,7 +18021,7 @@ msgstr ""
 
 #: src/intdisplay.cpp:287
 #, c-format
-msgid "%d derrick(s) inactive"
+msgid "%u derrick(s) inactive"
 msgstr ""
 
 #: src/intdisplay.cpp:292
@@ -18681,8 +18681,8 @@ msgstr ""
 msgid "AutoSaving..."
 msgstr ""
 
-#: src/loop.cpp:269
-#: src/loop.cpp:285
+#: src/loop.cpp:283
+#: src/loop.cpp:299
 msgid "Could not save game!"
 msgstr ""
 
@@ -19358,29 +19358,29 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:8724
+#: src/multiint.cpp:8722
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr ""
 
-#: src/multiint.cpp:8726
+#: src/multiint.cpp:8724
 #, c-format
 msgid "Replay File Saved With: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8730
+#: src/multiint.cpp:8728
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr ""
 
-#: src/multiint.cpp:8740
+#: src/multiint.cpp:8738
 msgid "Replays should usually be played back with the same version used to save the replay."
 msgstr ""
 
-#: src/multiint.cpp:8742
+#: src/multiint.cpp:8740
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
 msgstr ""
 
-#: src/multiint.cpp:8743
+#: src/multiint.cpp:8741
 msgid "Replay Version Mismatch"
 msgstr ""
 
@@ -19644,7 +19644,7 @@ msgstr ""
 
 #: src/multiopt.cpp:961
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #: src/multiplay.cpp:595
@@ -19717,7 +19717,7 @@ msgid "Grey"
 msgstr ""
 
 #: src/multiplay.cpp:2702
-#: src/titleui/options/interfaceoptions.cpp:362
+#: src/titleui/options/interfaceoptions.cpp:366
 msgid "Black"
 msgstr ""
 
@@ -19896,12 +19896,12 @@ msgstr ""
 msgid "Loaded the %s AI script for current player!"
 msgstr ""
 
-#: src/research.cpp:1222
+#: src/research.cpp:1274
 #, c-format
 msgid "Research completed: %s"
 msgstr ""
 
-#: src/research.cpp:1737
+#: src/research.cpp:1789
 msgid "Research Award"
 msgstr ""
 
@@ -20843,7 +20843,7 @@ msgid "Auto"
 msgstr ""
 
 #: src/titleui/options/audiooptions.cpp:362
-#: src/titleui/options/interfaceoptions.cpp:375
+#: src/titleui/options/interfaceoptions.cpp:379
 msgid "Subtitles"
 msgstr ""
 
@@ -20862,12 +20862,12 @@ msgstr ""
 #: src/titleui/options/graphicsoptions.cpp:303
 #: src/titleui/options/graphicsoptions.cpp:416
 #: src/titleui/options/graphicsoptions.cpp:443
-#: src/titleui/options/interfaceoptions.cpp:203
-#: src/titleui/options/interfaceoptions.cpp:222
-#: src/titleui/options/interfaceoptions.cpp:241
-#: src/titleui/options/interfaceoptions.cpp:261
-#: src/titleui/options/interfaceoptions.cpp:360
-#: src/titleui/options/interfaceoptions.cpp:380
+#: src/titleui/options/interfaceoptions.cpp:204
+#: src/titleui/options/interfaceoptions.cpp:223
+#: src/titleui/options/interfaceoptions.cpp:242
+#: src/titleui/options/interfaceoptions.cpp:262
+#: src/titleui/options/interfaceoptions.cpp:364
+#: src/titleui/options/interfaceoptions.cpp:384
 #: src/titleui/options/windowoptions.cpp:263
 msgid "Off"
 msgstr ""
@@ -20883,11 +20883,11 @@ msgstr ""
 #: src/titleui/options/graphicsoptions.cpp:277
 #: src/titleui/options/graphicsoptions.cpp:304
 #: src/titleui/options/graphicsoptions.cpp:444
-#: src/titleui/options/interfaceoptions.cpp:204
-#: src/titleui/options/interfaceoptions.cpp:223
-#: src/titleui/options/interfaceoptions.cpp:242
-#: src/titleui/options/interfaceoptions.cpp:263
-#: src/titleui/options/interfaceoptions.cpp:381
+#: src/titleui/options/interfaceoptions.cpp:205
+#: src/titleui/options/interfaceoptions.cpp:224
+#: src/titleui/options/interfaceoptions.cpp:243
+#: src/titleui/options/interfaceoptions.cpp:264
+#: src/titleui/options/interfaceoptions.cpp:385
 msgid "On"
 msgstr ""
 
@@ -21258,101 +21258,101 @@ msgstr ""
 msgid "Adaptive"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:99
+#: src/titleui/options/interfaceoptions.cpp:100
 msgid "General"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:101
+#: src/titleui/options/interfaceoptions.cpp:102
 msgid "Language"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:152
+#: src/titleui/options/interfaceoptions.cpp:153
 msgid "Display Scale"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:196
+#: src/titleui/options/interfaceoptions.cpp:197
 msgid "Game UI"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:198
+#: src/titleui/options/interfaceoptions.cpp:199
 msgid "Show FPS"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:217
+#: src/titleui/options/interfaceoptions.cpp:218
 msgid "Show Unit Counts"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:236
+#: src/titleui/options/interfaceoptions.cpp:237
 msgid "Groups Menu"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:256
+#: src/titleui/options/interfaceoptions.cpp:257
 msgid "Options Button"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:262
+#: src/titleui/options/interfaceoptions.cpp:263
 msgid "Opacity: 50%"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:283
+#: src/titleui/options/interfaceoptions.cpp:287
 msgid "Radar"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:285
+#: src/titleui/options/interfaceoptions.cpp:289
 msgid "Radar Orientation"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:290
+#: src/titleui/options/interfaceoptions.cpp:294
 msgid "Fixed"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:291
+#: src/titleui/options/interfaceoptions.cpp:295
 msgid "Rotating"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:304
+#: src/titleui/options/interfaceoptions.cpp:308
 msgid "Radar Jump"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:309
+#: src/titleui/options/interfaceoptions.cpp:313
 msgid "Instant"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:310
+#: src/titleui/options/interfaceoptions.cpp:314
 msgid "Tracked"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:323
+#: src/titleui/options/interfaceoptions.cpp:327
 msgid "Radar Zoom"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:333
+#: src/titleui/options/interfaceoptions.cpp:337
 msgid "Video Playback"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:335
+#: src/titleui/options/interfaceoptions.cpp:339
 msgid "Video Size"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:340
+#: src/titleui/options/interfaceoptions.cpp:344
 msgid "1×"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:341
+#: src/titleui/options/interfaceoptions.cpp:345
 msgid "2×"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:342
+#: src/titleui/options/interfaceoptions.cpp:346
 #: src/titleui/options/windowoptions.cpp:202
 #: src/titleui/options/windowoptions.cpp:228
 msgid "Fullscreen"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:355
+#: src/titleui/options/interfaceoptions.cpp:359
 msgid "Scanlines"
 msgstr ""
 
-#: src/titleui/options/interfaceoptions.cpp:361
+#: src/titleui/options/interfaceoptions.cpp:365
 msgid "50%"
 msgstr ""
 
@@ -21961,11 +21961,11 @@ msgstr ""
 msgid "Launch the Transporter"
 msgstr ""
 
-#: src/transporter.cpp:1057
+#: src/transporter.cpp:1066
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1242
+#: src/transporter.cpp:1251
 msgid "Reinforcements landing"
 msgstr ""
 
