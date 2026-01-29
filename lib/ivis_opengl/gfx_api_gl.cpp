@@ -835,15 +835,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4},
-			{"lightmap_tex", 5}
+			{"lightmap_tex", 5},
+			{"depthTexture", 6}
 		} }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, program_data{ "Component program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
+	std::make_pair(SHADER_COMPONENT_SHADOWMAP_INSTANCED, program_data{ "Component shadowmap program", "shaders/tcmask_depth_instanced.vert", "shaders/tcmask_depth_instanced.frag",
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "ViewMatrix"
+		} }),
+	std::make_pair(SHADER_COMPONENT_SCENE_DEPTHMAP_INSTANCED, program_data{ "Component depth program", "shaders/tcmask_scene_depthmap_instanced.vert", "shaders/tcmask_scene_depthmap_instanced.frag",
 		{
 			// per-frame global uniforms
 			"ProjectionMatrix", "ViewMatrix"
@@ -860,7 +866,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
@@ -872,32 +878,66 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
+	std::make_pair(SHADER_TERRAIN_SHADOWMAP, program_data{ "terrain_shadowmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
+
+	std::make_pair(SHADER_TERRAIN_SCENE_DEPTHMAP, program_data{ "terrain_scene_depthmap program", "shaders/terrain_scene_depthmap.vert", "shaders/terrain_scene_depthmap.frag",
+		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
+
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight" },
+		{
+			{"lightmap_tex", 0},
+			{"groundTex", 1},
+			{"groundNormal", 2},
+			{"groundSpecular", 3},
+			{"groundHeight", 4},
+			{"decalTex", 5},
+			{"decalNormal", 6},
+			{"decalSpecular", 7},
+			{"decalHeight", 8},
+			{"shadowMap", 9},
+			{"depthTexture", 10},
+		} }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight"},
+		{
+			{"lightmap_tex", 0},
+			{"groundTex", 1},
+			{"groundNormal", 2},
+			{"groundSpecular", 3},
+			{"groundHeight", 4},
+			{"decalTex", 5},
+			{"decalNormal", 6},
+			{"decalSpecular", 7},
+			{"decalHeight", 8},
+			{"shadowMap", 9},
+			{"depthTexture", 10},
+		} }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
-				"lightmap_tex",
-				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight" },
+		{
+			{"lightmap_tex", 0},
+			{"groundTex", 1},
+			{"groundNormal", 2},
+			{"groundSpecular", 3},
+			{"groundHeight", 4},
+			{"decalTex", 5},
+			{"decalNormal", 6},
+			{"decalSpecular", 7},
+			{"decalHeight", 8},
+			{"shadowMap", 9},
+			{"depthTexture", 10},
+		} }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -940,7 +980,10 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
-		{ "gamma" } })
+		{ "ProjectionMatrix", "ViewMatrix", "cameraPos", "sunPos", "viewportWidth", "viewportHeight", "gamma" },
+		{
+			{ "depthTexture", 1}
+		} })
 };
 
 enum SHADER_VERSION
@@ -1216,7 +1259,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
-		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
+		uniform_setting_func<gfx_api::TerrainDepthMapUniforms>(),
 		uniform_binding_entry<SHADER_DECALS>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
@@ -1363,12 +1406,12 @@ void gl_pipeline_state_object::bind()
 	{
 		case gfx_api::cull_mode::back:
 			glEnable(GL_CULL_FACE);
-			glCullFace(GL_FRONT);
+			glCullFace(GL_BACK);
 			break;
 		case gfx_api::cull_mode::shadow_mapping:
 		case gfx_api::cull_mode::front:
 			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
+			glCullFace(GL_FRONT);
 			break;
 		case gfx_api::cull_mode::none:
 			glDisable(GL_CULL_FACE);
@@ -2094,34 +2137,36 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(1, cbuf.ViewMatrix);
 	setUniforms(2, cbuf.ModelUVLightmapMatrix);
 	setUniforms(3, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(4, cbuf.sunPos);
-	setUniforms(5, cbuf.sceneColor);
-	setUniforms(6, cbuf.ambient);
-	setUniforms(7, cbuf.diffuse);
-	setUniforms(8, cbuf.specular);
-	setUniforms(9, cbuf.fogColour);
-	setUniforms(10, cbuf.ShadowMapCascadeSplits);
-	setUniforms(11, cbuf.ShadowMapSize);
-	setUniforms(12, cbuf.fogEnd);
-	setUniforms(13, cbuf.fogBegin);
-	setUniforms(14, cbuf.timeState);
-	setUniforms(15, cbuf.fogEnabled);
-	setUniforms(16, cbuf.PointLightsPosition);
-	setUniforms(17, cbuf.PointLightsColorAndEnergy);
-	setUniforms(18, cbuf.bucketOffsetAndSize);
-	setUniforms(19, cbuf.indexed_lights);
-	setUniforms(20, cbuf.bucketDimensionUsed);
-	setUniforms(21, cbuf.viewportWidth);
-	setUniforms(22, cbuf.viewportheight);
+	setUniforms(4, cbuf.cameraPos);
+	setUniforms(5, cbuf.sunPos);
+	setUniforms(6, cbuf.sceneColor);
+	setUniforms(7, cbuf.ambient);
+	setUniforms(8, cbuf.diffuse);
+	setUniforms(9, cbuf.specular);
+	setUniforms(10, cbuf.fogColour);
+	setUniforms(11, cbuf.ShadowMapCascadeSplits);
+	setUniforms(12, cbuf.ShadowMapSize);
+	setUniforms(13, cbuf.fogEnd);
+	setUniforms(14, cbuf.fogBegin);
+	setUniforms(15, cbuf.timeState);
+	setUniforms(16, cbuf.fogEnabled);
+	setUniforms(17, cbuf.PointLightsPosition);
+	setUniforms(18, cbuf.PointLightsColorAndEnergy);
+	setUniforms(19, cbuf.bucketOffsetAndSize);
+	setUniforms(20, cbuf.indexed_lights);
+	setUniforms(21, cbuf.bucketDimensionUsed);
+	setUniforms(22, cbuf.viewportWidth);
+	setUniforms(23, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(23, cbuf.tcmask);
-	setUniforms(24, cbuf.normalMap);
-	setUniforms(25, cbuf.specularMap);
-	setUniforms(26, cbuf.hasTangents);
-	setUniforms(27, cbuf.shieldEffect);
+	// IMPORTANT: uniformIdx continues incrementing from Draw3DShapeInstancedGlobalUniforms above
+	setUniforms(24, cbuf.tcmask);
+	setUniforms(25, cbuf.normalMap);
+	setUniforms(26, cbuf.specularMap);
+	setUniforms(27, cbuf.hasTangents);
+	setUniforms(28, cbuf.shieldEffect);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
@@ -2160,7 +2205,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(8, cbuf.fog_end);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthMapUniforms& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
 //	setUniforms(1, cbuf.paramX);
@@ -2215,16 +2260,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, cbuf.bucketDimensionUsed);
 	setUniforms(i++, cbuf.viewportWidth);
 	setUniforms(i++, cbuf.viewportheight);
-	setUniforms(i++, 0); // lightmap_tex
-	setUniforms(i++, 1); // ground
-	setUniforms(i++, 2); // groundNormal
-	setUniforms(i++, 3); // groundSpecular
-	setUniforms(i++, 4); // groundHeight
-	setUniforms(i++, 5); // decal
-	setUniforms(i++, 6); // decalNormal
-	setUniforms(i++, 7); // decalSpecular
-	setUniforms(i++, 8); // decalHeight
-	setUniforms(i++, 9); // shadowMap
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
@@ -2379,7 +2414,13 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
 {
-	setUniforms(0, cbuf.gamma);
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.ViewMatrix);
+	setUniforms(2, cbuf.cameraPos);
+	setUniforms(3, cbuf.sunPos);
+	setUniforms(4, cbuf.viewportWidth);
+	setUniforms(5, cbuf.viewportHeight);
+	setUniforms(6, cbuf.gamma);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)
@@ -3567,6 +3608,13 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	if (!createSceneRenderpass())
 	{
 		// Treat failure to create the scene render pass as a fatal error
+		shutdown();
+		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
+		return false;
+	}
+	if (!createSceneDepthPrepass()) // TODO: Only create if enabled / needed
+	{
+		// Treat failure to create the depth pre-pass as a fatal error
 		shutdown();
 		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
 		return false;
@@ -4865,6 +4913,7 @@ void gl_context::shutdown()
 	}
 
 	deleteSceneRenderpass();
+	deleteSceneDepthPrepass();
 
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glDeleteFramebuffers)
@@ -5137,7 +5186,7 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		return 0;
 	}
 
-	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<depth map>");
+	auto pNewDepthTexture = create_depthmap_texture(depthPassCount, resolution, resolution, "<shadow map>");
 	if (!pNewDepthTexture)
 	{
 		debug(LOG_ERROR, "Failed to create depth texture");
@@ -5217,6 +5266,55 @@ void gl_context::deleteSceneRenderpass()
 	{
 		glDeleteRenderbuffers(1, &sceneDepthStencilRBO);
 		sceneDepthStencilRBO = 0;
+	}
+}
+
+bool gl_context::createSceneDepthPrepass()
+{
+	// Always create a depth buffer texture (for the resolved depth values)
+	sceneDepthTexture = create_gpurendered_texture(GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, sceneFramebufferWidth, sceneFramebufferHeight, "<scene depth texture>");
+
+	GLuint newFBO = 0;
+	glGenFramebuffers(1, &newFBO);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	sceneDepthFBO = newFBO;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTexture->id(), 0);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	GLenum buf = GL_NONE;
+	glDrawBuffers(1, &buf);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+	glReadBuffer(GL_NONE);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		debug(LOG_ERROR, "Failed to create framebuffer with error: %s", cbframebuffererror(status));
+	}
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	return true;
+}
+
+void gl_context::deleteSceneDepthPrepass()
+{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	if (glDeleteFramebuffers)
+#endif
+	{
+		glDeleteFramebuffers(1, &sceneDepthFBO);
+	}
+
+	if (sceneDepthTexture)
+	{
+		delete sceneDepthTexture;
+		sceneDepthTexture = nullptr;
 	}
 }
 
@@ -5471,6 +5569,23 @@ void gl_context::endSceneRenderPass()
 gfx_api::abstract_texture* gl_context::getSceneTexture()
 {
 	return sceneTexture;
+}
+
+void gl_context::beginSceneDepthPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, sceneDepthFBO);
+	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void gl_context::endSceneDepthPass()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+gfx_api::abstract_texture* gl_context::getSceneDepthTexture()
+{
+	return sceneDepthTexture;
 }
 
 #if defined(__EMSCRIPTEN__)

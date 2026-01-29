@@ -1208,12 +1208,12 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 {
 	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
 	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true, true }),
-	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
+	std::make_pair(SHADER_COMPONENT_SHADOWMAP_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
+	std::make_pair(SHADER_TERRAIN_SHADOWMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
 	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true }),
@@ -1465,11 +1465,11 @@ vk::PipelineRasterizationStateCreateInfo VkPSO::to_vk(const bool& offset, const 
 	case gfx_api::cull_mode::shadow_mapping:
 	case gfx_api::cull_mode::back:
 		result = result.setCullMode(vk::CullModeFlagBits::eBack)
-			.setFrontFace(vk::FrontFace::eClockwise);
+			.setFrontFace(vk::FrontFace::eCounterClockwise);
 		break;
 	case gfx_api::cull_mode::front:
 		result = result.setCullMode(vk::CullModeFlagBits::eFront)
-			.setFrontFace(vk::FrontFace::eClockwise);
+			.setFrontFace(vk::FrontFace::eCounterClockwise);
 		break;
 	case gfx_api::cull_mode::none:
 		result = result.setCullMode(vk::CullModeFlagBits::eNone)
@@ -2910,6 +2910,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 			.setPDepthStencilAttachment(&depthStencilAttachmentRef)
 			.setPResolveAttachments((msaaEnabled) ? &colorAttachmentResolveRef : nullptr)
 	};
+	// TODO: Would need to use VK_KHR_depth_stencil_resolve / Vulkan 1.2 functionality to resolve the msaa depth attachment (if MSAA is enabled) (Add VkSubpassDescriptionDepthStencilResolve to VkSubpassDescription2.pNext)
 
 	VkSubpassDependency dependency = {};
 	dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
@@ -3234,6 +3235,10 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 	{
 		appendDepthAttachment(); // should always be second
 	}
+	else
+	{
+		// TODO: Append depth (resolved) texture
+	}
 
 	const size_t numColorAttachmentRef = 1;
 	const auto colorAttachmentRef =
@@ -3306,6 +3311,9 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 	// Create scene image + view
 	pSceneImage = new VkRenderedImage(*this, swapchainSize.width, swapchainSize.height, sceneFormat, "<scene image>");
 
+	// TODO:
+	// pSceneDepthImage = new VkDepthMapImage(...);
+
 	if (msaaEnabled)
 	{
 		// create sceneMSAAImage / sceneMSAAView / etc
@@ -3333,8 +3341,8 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 
 	// Create an FBO for each frame in flight
 	size_t numSceneFBOs = buffering_mechanism::numFrames();
-	const auto fboAttachments = (msaaEnabled) ? std::vector<vk::ImageView>{sceneMSAAView, sceneDepthStencilView, pSceneImage->view.get()}
-											 : std::vector<vk::ImageView>{pSceneImage->view.get(), sceneDepthStencilView};
+	const auto fboAttachments = (msaaEnabled) ? std::vector<vk::ImageView>{sceneMSAAView, sceneDepthStencilView, pSceneImage->view.get()} // TODO: <- Add pSceneDepthImage->view.get()?
+											 : std::vector<vk::ImageView>{pSceneImage->view.get(), sceneDepthStencilView}; // TODO: <- would be pSceneDepthImage->view.get()?
 	for (size_t i = 0; i < numSceneFBOs; ++i)
 	{
 		// FBO for this frame in flight
