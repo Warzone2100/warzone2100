@@ -3357,10 +3357,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 	if (structureMode == REF_RESEARCH)
 	{
-		if (pSubject != nullptr)
-		{
-			incrementMultiStatsResearchPerformance(psStructure->player);
-		}
 		incrementMultiStatsResearchPotential(psStructure->player);
 	}
 
@@ -3384,6 +3380,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			{
 				return;
 			}
+
+			incrementMultiStatsResearchPerformance(psStructure->player);
 
 			int researchIndex = pSubject->ref - STAT_RESEARCH;
 
