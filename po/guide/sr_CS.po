@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-12-12 02:40\n"
+"PO-Revision-Date: 2026-01-08 02:43\n"
 "Last-Translator: \n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_CS\n"
@@ -1016,13 +1016,13 @@ msgid "Like all other weapons, different bombs have different effects, strengths
 msgstr "Kao i sva ostala oružja, različite bombe imaju različite efekte, jačine i namene."
 
 msgid "Bunker Buster"
-msgstr "Razarač Bunkera"
+msgstr "Razbijač Bunkera"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr "Razarač Bunkera je jedinstveno oružje koje je izuzetno efikasno protiv svih tipova građevina."
+msgstr "Razbijač Bunkera je jedinstveno oružje koje je izuzetno efikasno protiv svih tipova građevina."
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr "Međutim, Razarač Bunkera je izuzetno slab protiv bilo kojih ciljeva koji nisu građevine."
+msgstr "Međutim, Razbijač Bunkera je izuzetno slab protiv bilo kojih ciljeva koji nisu građevine."
 
 msgid "Flamer"
 msgstr "Plamenobacač"

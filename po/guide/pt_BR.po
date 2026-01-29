@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-01-07 02:43\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "O botão do meio/ central fecha qualquer ‘interface’ de comando aberto."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Defendendo sua Base"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "Em Warzone 2100, sua base principal permanece durante toda a campanha."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Então, preparar a defesa de sua base principal é essencial."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Assim como unidades são úteis para defesa, a forma de sua base também é crítico."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Construa estruturas defensivas que forneçam cobertura, acesso restrito, sensor de inimigos e ejetor de dano, para poder combater melhor os ataques inimigos."
 
 msgid "Intelligence Display"
 msgstr "Exibição de Inteligência"
@@ -207,16 +207,16 @@ msgid "Tip: To build \"walls\" (once they are available), you can click and drag
 msgstr "Dica: Para construir \"paredes\" (assim que estiverem disponíveis), clique e arraste para desenhar uma parede em uma linha."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Fábrica de Ciborgue"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Uma Fábrica de Ciborgues opera da mesma forma que uma Fábrica padrão, mas constrói exclusivamente Ciborgues."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Cada Fábrica pode construir um Ciborgue por vez, mas você pode colocar vários Ciborgues em fila para produção."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Quando um Ciborgue é produzido, recebe as Ordens da Unidade de Fábrica Ciborgue e segue para o Ponto de Mobilização da fábrica."
 
 msgid "Demolishing Structures"
 msgstr "Demolindo estruturas"
@@ -414,7 +414,7 @@ msgid "Recycling"
 msgstr "Reciclagem"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Reciclar uma unidade irá enviá-la para a Fábrica ou Centro de Reparo mais próximo e a destruirá."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "Metade do poder usado na criação da unidade será reembolsado (embora isso seja reduzido se a unidade estiver danificada)."
