@@ -336,6 +336,8 @@ bool intDemolishSelectMode();
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen();
 
+bool intAddRepairStationInterface();
+
 /* Reset the widget screen to just the reticule */
 void intResetScreen(bool NoAnim, bool skipMissionResultScreen = false);
 

@@ -78,6 +78,7 @@
 #include "radar.h"
 #include "hci/build.h"
 #include "hci/research.h"
+#include "hci/repair_st.h"
 #include "hci/manufacture.h"
 #include "hci/commander.h"
 #include "notifications.h"
@@ -1922,6 +1923,11 @@ void intObjectSelected(BASE_OBJECT *psObj)
 						intAddResearch();
 						break;
 					}
+					else if (structure->pStructureType->type == REF_REPAIR_FACILITY)
+					{
+						intAddRepairStationInterface();
+						break;
+					}
 				}
 			}
 			intResetScreen(false);
@@ -2712,6 +2718,13 @@ void addTransporterInterface(DROID *psSelected, bool onMission)
 		intAddTransporter(psSelected, onMission);
 		intMode = INT_TRANSPORTER;
 	}
+}
+
+//sets up Repair Station ui as far as the interface is concerned
+bool intAddRepairStationInterface()
+{
+	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator) { return false; }
+	return setController(std::make_shared<RepairStationController>(), INT_STAT, IOBJ_NONE);
 }
 
 /*sets which list of structures to use for the interface*/
