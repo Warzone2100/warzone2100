@@ -416,8 +416,6 @@ const mis_gammaBonusResClassic = [
 	"R-Wpn-Mortar-ROF02",
 	"R-Wpn-Mortar-ROF03",
 	"R-Defense-Pillbox-RotMG",
-	"R-Wpn-Howitzer-Damage02",
-	"R-Wpn-Howitzer-Damage03",
 	"R-Wpn-Howitzer-ROF02",
 	"R-Struc-VTOLPad-Upgrade03",
 	"R-Wpn-Bomb-Damage02",
