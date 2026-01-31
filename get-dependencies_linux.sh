@@ -52,12 +52,12 @@ if [[ $DISTRO == "raspberrypios" || $DISTRO == "debian" ]]; then
     DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config
   fi
 
-  if [ "${VERSION_PARTS[0]}" -eq "12" ]; then
-    echo "Installing build-dependencies for Debian 12 Bullseye"
+  if [[ "${VERSION_PARTS[0]}" == "12" || "${VERSION_PARTS[0]}" == "13" ]]; then
+    echo "Installing build-dependencies for Debian 12 / 13"
     DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
-  elif [ "${VERSION_PARTS[0]}" -ge "13" ]; then
-    echo "Installing build-dependencies for Debian 13 Trixie"
+  elif [ "${VERSION_PARTS[0]}" -ge "14" ]; then
+    echo "Installing build-dependencies for Debian 14+"
     DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
   else
     echo "Script does not currently support Debian ${VERSION_PARTS[0]} (${VERSION})"
@@ -95,7 +95,7 @@ if [ "${DISTRO}" == "ubuntu" ]; then
     echo "Installing build-dependencies for Ubuntu 18.x"
     DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
-  elif [ "${VERSION_PARTS[0]}" -ge "20" ]; then
+  elif [[ "${VERSION_PARTS[0]}" -ge 20 && "${VERSION_PARTS[0]}" -lt 25 ]]; then
     echo "Installing build-dependencies for Ubuntu 20.x - 24.x"
     DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
