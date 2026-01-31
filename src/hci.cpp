@@ -3096,7 +3096,7 @@ bool isSecondaryWindowUp()
 
 void setSecondaryWindowUp(bool value)
 {
-	secondaryWindowUp = true;
+	secondaryWindowUp = value;
 }
 
 void intSetShouldShowRedundantDesign(bool value)
