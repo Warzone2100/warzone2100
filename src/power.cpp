@@ -377,7 +377,7 @@ std::string getApproxPowerGeneratedPerSecForDisplay(unsigned player)
 {
 	if (player >= MAX_PLAYERS)
 	{
-		return 0;
+		return "-";
 	}
 
 	double floatingValue = (static_cast<double>(asPower[player].powerGeneratedLastUpdate) / FP_ONE) * static_cast<double>(GAME_UPDATES_PER_SEC);
