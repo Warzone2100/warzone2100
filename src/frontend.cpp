@@ -86,8 +86,6 @@
 #include "activity.h"
 #include "hci/groups.h"
 
-#include <fmt/core.h>
-
 #if defined(__EMSCRIPTEN__)
 # include "emscripten_helpers.h"
 #endif
