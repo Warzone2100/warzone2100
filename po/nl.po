@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2026-02-01 03:06\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -2886,16 +2886,16 @@ msgid "Start with Advanced Bases"
 msgstr "Start met gevanceerde basis"
 
 msgid "EASY"
-msgstr ""
+msgstr "GEMAKKELIJK"
 
 msgid "MEDIUM"
-msgstr ""
+msgstr "GEMIDDELD"
 
 msgid "HARD"
-msgstr ""
+msgstr "MOEILIJK"
 
 msgid "INSANE"
-msgstr ""
+msgstr "KRANKZINNIG"
 
 msgid "Personality change successful."
 msgstr ""
@@ -2958,7 +2958,7 @@ msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
-msgstr ""
+msgstr "Je externe IP-adres is: %s"
 
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
@@ -3011,7 +3011,7 @@ msgid "Please update and/or reinstall your graphics drivers, and check your syst
 msgstr ""
 
 msgid "OK"
-msgstr ""
+msgstr "Oké"
 
 msgid "Warzone 2100: Prior launch failed"
 msgstr ""
@@ -3027,13 +3027,13 @@ msgid "Warzone 2100 will now attempt to launch using a different graphics backen
 msgstr ""
 
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 msgid "Campaign"
 msgstr "Veldtocht"
 
 msgid "Challenge"
-msgstr ""
+msgstr "Uitdaging"
 
 msgid "Skirmish"
 msgstr ""
@@ -3048,10 +3048,10 @@ msgid "(untitled)"
 msgstr ""
 
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Pad kopiëren naar Klembord"
 
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "JSON kopiëren naar Klembord"
 
 msgid "Dump JSON to StdOut"
 msgstr ""
@@ -3255,13 +3255,13 @@ msgid "All VTOLs upgraded automatically"
 msgstr "Alle VTOLs automatisch verbeterd"
 
 msgid "Ally"
-msgstr ""
+msgstr "Bondgenoot"
 
 msgid "Alpha Campaign"
 msgstr ""
 
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 msgid "Amphibious hover propulsion"
 msgstr "Amfibisch luchtkussenaandrijving"
@@ -3693,7 +3693,7 @@ msgid "Beta Campaign"
 msgstr ""
 
 msgid "Beta"
-msgstr ""
+msgstr "Bèta"
 
 msgid "Body Points and Speed Increased"
 msgstr "Carrosseriepunten en snelheid verhoogd"
@@ -3703,14 +3703,14 @@ msgstr "Carrosseriepunten: Zeer laag"
 
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Bom schade +10%"
 
 #, no-c-format
 msgid "Bomb damage +25%"
 msgstr "Bom schade +25%"
 
 msgid "Bomb Damage"
-msgstr ""
+msgstr "Bom schade"
 
 msgid "Bomb Upgrade"
 msgstr "Bom verbetering"
@@ -3737,7 +3737,7 @@ msgid "Buggy"
 msgstr "Terreinwagen"
 
 msgid "Buildings"
-msgstr ""
+msgstr "Gebouwen"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "Ingebouwde diagnostiek en repareer systemen"
@@ -3780,7 +3780,7 @@ msgid "Cannon accuracy +10%"
 msgstr "Kanon precisie +10%"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Kanon nauwkeurigheid"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Kanon-autolader Mk2"
@@ -3796,7 +3796,7 @@ msgid "Cannon damage +25%"
 msgstr "Kanon schade +25%"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Kanon schade"
 
 msgid "Cannon Fire Truck"
 msgstr "Kanon Brandweerauto"
@@ -3872,7 +3872,7 @@ msgid "Cobra Truck"
 msgstr "Cobra Vrachtwagen"
 
 msgid "Cobra"
-msgstr ""
+msgstr "Cobra"
 
 msgid "Collapsing Plutonium kinetic energy bullets"
 msgstr "Kogels van kinetische energie en afbrekend plutonium"
@@ -3979,7 +3979,7 @@ msgid "Construction Unit"
 msgstr "Constructie Eenheid"
 
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "Bestuurt tot 10 commandanten"
 
 msgid "Counter-battery fire continues until enemy battery is suppressed"
 msgstr "Contra-batterij vuurt continu totdat vijandelijke batterij onderdrukt is"
@@ -3991,10 +3991,10 @@ msgid "Counter-battery turret detects enemy indirect fire batteries"
 msgstr "Contra-batterij toren detecteerd indirecte vijandelijke lanceer-batterijen"
 
 msgid "Crane1"
-msgstr ""
+msgstr "Kraan1"
 
 msgid "Crane2"
-msgstr ""
+msgstr "Kraan2"
 
 msgid "Cyborg Alloys"
 msgstr ""
@@ -4213,10 +4213,10 @@ msgid "Enables self-repair"
 msgstr "Maakt zelf-repareren mogelijk"
 
 msgid "Enemy"
-msgstr ""
+msgstr "Vijand"
 
 msgid "Engine"
-msgstr ""
+msgstr "Motor"
 
 msgid "Engineering"
 msgstr "Genie"
@@ -4258,7 +4258,7 @@ msgid "Factory"
 msgstr "Fabriek"
 
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Meer bereik dan andere sensoren"
 
 msgid "Fast Fire Mini-Rockets Mk2"
 msgstr "Snelvuur-mini-raketten Mk2"
@@ -4328,7 +4328,7 @@ msgid "Flamer damage +25%"
 msgstr "Vlammenwerper schade +25%"
 
 msgid "Flamer Damage"
-msgstr ""
+msgstr "Vlammenwerper schade"
 
 msgid "Flamer Fast Loader"
 msgstr ""
@@ -4374,7 +4374,7 @@ msgid "Gamma Campaign"
 msgstr ""
 
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 msgid "Gas turbine boosts power output"
 msgstr "Gasturbine verhoogt energieuitvoer"
@@ -4762,7 +4762,7 @@ msgid "Heavyweaponslab"
 msgstr ""
 
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 msgid "Hellstorm"
 msgstr ""
@@ -4789,7 +4789,7 @@ msgid "Hi-Energy Laser Emitter"
 msgstr "Hoog-energetische laseruitzender"
 
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Schuil achter mij"
 
 msgid "High Density Base Structure Materials"
 msgstr "Materialen met hoge dichtheid voor basis gebouwen"
@@ -4843,7 +4843,7 @@ msgid "High tensile concrete-plastic composite"
 msgstr "Hoog rekbaar beton-plastic composiet"
 
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Hoge druk gas container"
 
 msgid "High-pressure gas throws the flamer gel further"
 msgstr ""
@@ -4918,7 +4918,7 @@ msgid "Hurricane AA Turret"
 msgstr "Orkaan AA Koepel"
 
 msgid "Hut"
-msgstr ""
+msgstr "Hut"
 
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS-kanonspatronen Mk2"
@@ -5146,7 +5146,7 @@ msgid "Inferno Python Hover"
 msgstr "Inferno Python Luchtkussen"
 
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno"
 
 msgid "Intruder parasite isolated"
 msgstr "Indringende parasiet geisoleerd"
@@ -5237,14 +5237,14 @@ msgid "Laser accuracy +10%"
 msgstr "Laser precisie +10%"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "Laser nauwkeurigheid"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Laser schade +25%"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "Laser schade"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Laser-bepaler markeert en geleid kogels naar het doel"
@@ -5433,7 +5433,7 @@ msgid "Medium Super Heavy Body"
 msgstr "Gemiddelde Super Zware Carrosserie"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "MG schade"
 
 msgid "MG Reload"
 msgstr ""
@@ -5494,7 +5494,7 @@ msgid "Missile accuracy +10%"
 msgstr "Raket precisie +10%"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "Raket nauwkeurigheid"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "Raket zoekt en vliegt op doelen in"
@@ -5504,7 +5504,7 @@ msgid "Missile damage +25%"
 msgstr "Raket schade +25%"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "Raket schade"
 
 msgid "Missile Fortress"
 msgstr "Raket Fort"
@@ -5536,7 +5536,7 @@ msgid "Mortar accuracy +10%"
 msgstr "Mortier precisie +10%"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "Mortier nauwkeurigheid"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Mortier-autolader Mk2"
@@ -5555,7 +5555,7 @@ msgid "Mortar damage +25%"
 msgstr "Mortier schade +25%"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "Mortier schade"
 
 msgid "Mortar Fast Loader"
 msgstr "Snelle mortierlader"
@@ -5757,7 +5757,7 @@ msgid "NEXUS Wall"
 msgstr "NEXUS Muur"
 
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 msgid "No Place To Hide"
 msgstr ""
@@ -5912,7 +5912,7 @@ msgid "Produces Cyborgs"
 msgstr "Produceert Cyborgs"
 
 msgid "Production"
-msgstr ""
+msgstr "Productie"
 
 msgid "Professional and Regular rank units are protected"
 msgstr ""
@@ -5969,7 +5969,7 @@ msgid "Python Heavy Cannon Tracks"
 msgstr "Pyton Banden Met Zwaar Kanon"
 
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 msgid "Quad 80mm Anti-Aircraft cannon"
 msgstr ""
@@ -5984,7 +5984,7 @@ msgid "Radar Detector Tower"
 msgstr "Radar Detector Toren"
 
 msgid "Radar Detector"
-msgstr ""
+msgstr "Radar detector"
 
 msgid "Rail Accuracy"
 msgstr ""
@@ -6214,7 +6214,7 @@ msgid "Rocket accuracy +10%"
 msgstr "Raket precisie +10%"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "Raket nauwkeurigheid"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Raketartillerie; kan worden toegewezen aan een sensor"
@@ -6236,7 +6236,7 @@ msgid "Rocket damage +25%"
 msgstr "Raket schade +25%"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "Raket schade"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Raket detecteert en pint vast op motor emissie's"
@@ -6248,10 +6248,10 @@ msgid "Rocket Laser Designator"
 msgstr "Raket-laser-aanwijzer"
 
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Raket snellader Mk2"
 
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Raket snellader Mk3"
 
 msgid "Rocket Rapid Loader"
 msgstr ""
@@ -6420,7 +6420,7 @@ msgid "Sensor Upgrade"
 msgstr "Sensorverbetering"
 
 msgid "Sensor"
-msgstr ""
+msgstr "Sensor"
 
 msgid "Sensors Improved"
 msgstr "Sensoren verbeterd"
@@ -6480,16 +6480,16 @@ msgid "Steel Heavy Machinegun Guard Tower"
 msgstr ""
 
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Stalen toren met vlammenwerper"
 
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Stalen toren met zwaar machinegeweer"
 
 msgid "Steel tower with machinegun"
 msgstr "Stalen toren met machinegeweer"
 
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Stalen toren met dubbel machinegeweer"
 
 msgid "Stops NEXUS take-over"
 msgstr ""
@@ -7118,7 +7118,7 @@ msgid "VTOL"
 msgstr "VTOL"
 
 msgid "Wall"
-msgstr ""
+msgstr "Muur"
 
 msgid "Wallcorner"
 msgstr ""
@@ -7176,7 +7176,7 @@ msgstr ""
 
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elite"
 
 msgctxt "rank"
 msgid "Green"
@@ -7184,7 +7184,7 @@ msgstr "Groen"
 
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Held"
 
 msgctxt "rank"
 msgid "Professional"
@@ -7208,7 +7208,7 @@ msgstr ""
 
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veteraan"
 
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -7243,16 +7243,16 @@ msgid "Strategy Game"
 msgstr "Strategie Spel"
 
 msgid "Global"
-msgstr ""
+msgstr "Globaal"
 
 msgid "Allies"
-msgstr ""
+msgstr "Bondgenoten"
 
 msgid "private to "
 msgstr ""
 
 msgid " and "
-msgstr ""
+msgstr "en"
 
 msgid "Spectators"
 msgstr ""
@@ -7285,7 +7285,7 @@ msgid "configuration directory"
 msgstr "instellingenmap"
 
 msgid "Add data directory"
-msgstr ""
+msgstr "Voeg gegevensmap toe"
 
 msgid "data directory"
 msgstr "gegevensmap"
@@ -7312,7 +7312,7 @@ msgid "Load a specific game mode"
 msgstr ""
 
 msgid "level name"
-msgstr ""
+msgstr "level naam"
 
 msgid "Show options and exit"
 msgstr ""
@@ -7342,7 +7342,7 @@ msgid "savegame"
 msgstr "opgeslagen spel"
 
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "Laad een opgeslagen campagne spel"
 
 msgid "Load a replay"
 msgstr ""
@@ -7402,13 +7402,13 @@ msgid "Set JS backend"
 msgstr ""
 
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Spellen automatisch afspelen voor testen"
 
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
 msgstr ""
 
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Het spel direct opslaan en afsluiten"
 
 msgid "save name"
 msgstr ""
@@ -7417,10 +7417,10 @@ msgid "Start skirmish game with given settings file"
 msgstr ""
 
 msgid "test"
-msgstr ""
+msgstr "test"
 
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Ga verder met het laatst opgeslagen spel"
 
 msgid "Start host game with given settings file"
 msgstr ""
@@ -7489,7 +7489,7 @@ msgid "Multiplayer game time limit (in minutes)"
 msgstr ""
 
 msgid "number of minutes"
-msgstr ""
+msgstr "aantal minuten"
 
 msgid "Convert a specular-map .png to a luma, single-channel, grayscale .png (and exit)"
 msgstr ""
@@ -7646,7 +7646,7 @@ msgstr ""
 
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s Verloren!"
 
 msgid "Structure Restored"
 msgstr "Gebouw hersteld"
@@ -7694,7 +7694,7 @@ msgid "Normal"
 msgstr "Normaal"
 
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 msgid "Collective"
 msgstr ""
@@ -7736,13 +7736,13 @@ msgid "MAIN MENU"
 msgstr "HOOFDMENU"
 
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Officiële site: http://wz2100.net/"
 
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr ""
 
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Doneren: http://donations.wz.2100.net/"
 
 msgid "Help support the project with our server costs, Click this link."
 msgstr ""
@@ -7754,7 +7754,7 @@ msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr ""
 
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Controleer op nieuwere versie"
 
 msgid "Fast Play"
 msgstr "Snel spelen"
@@ -7858,10 +7858,10 @@ msgid "Replay"
 msgstr ""
 
 msgid "Pause"
-msgstr ""
+msgstr "Pauzeren"
 
 msgid "Resume"
-msgstr ""
+msgstr "Hervatten"
 
 msgid "Fast-Forward"
 msgstr ""
@@ -7918,19 +7918,19 @@ msgid "New Joins"
 msgstr ""
 
 msgid "Refresh"
-msgstr ""
+msgstr "Vernieuw"
 
 msgid "Host Chat Options"
 msgstr ""
 
 msgid "Global Options:"
-msgstr ""
+msgstr "Globale opties"
 
 msgid "Enable All"
-msgstr ""
+msgstr "Alles inschakelen"
 
 msgid "Disable All"
-msgstr ""
+msgstr "Alles uitschakelen"
 
 msgid "Chat Options"
 msgstr ""
@@ -7942,22 +7942,22 @@ msgid "The host has globally muted 1+ players."
 msgstr ""
 
 msgid "Local"
-msgstr ""
+msgstr "Lokaal"
 
 msgid "Select / Assign Group Number: "
 msgstr ""
 
 #, c-format
 msgid "Group %u"
-msgstr ""
+msgstr "Groep %u"
 
 #, c-format
 msgid "Select the Units in Group %u"
-msgstr ""
+msgstr "Selecteer eenheden in Groep %u"
 
 #, c-format
 msgid "Assign Selected Units to Group %u"
-msgstr ""
+msgstr "Geselecteerde eenheden toewijzen aan groep %u"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr ""
@@ -7972,7 +7972,7 @@ msgid "Unit Groups"
 msgstr ""
 
 msgid "Select a Group"
-msgstr ""
+msgstr "Selecteer een Groep"
 
 msgid "Assign Selected Units to a Group"
 msgstr ""
@@ -7996,10 +7996,10 @@ msgid "Progress Bar"
 msgstr "Voortgangsbalk"
 
 msgid "To:"
-msgstr ""
+msgstr "Naar:"
 
 msgid "All"
-msgstr ""
+msgstr "Iedereen"
 
 msgid "Team"
 msgstr "Ploeg"
@@ -8008,11 +8008,11 @@ msgid "Human Teammates"
 msgstr ""
 
 msgid "Bot Teammates"
-msgstr ""
+msgstr "Robot teamgenoten"
 
 #, c-format
 msgid "%u players"
-msgstr ""
+msgstr "%u spelers"
 
 msgid "Choose a recipient"
 msgstr ""
@@ -8024,22 +8024,22 @@ msgid "Lobby Chat"
 msgstr ""
 
 msgid "Requests"
-msgstr ""
+msgstr "Verzoeken"
 
 msgid "Notices"
 msgstr ""
 
 msgid "Reactions"
-msgstr ""
+msgstr "Reacties"
 
 msgid "Taunts"
 msgstr ""
 
 msgid "Coordination"
-msgstr ""
+msgstr "Coördinatie"
 
 msgid "Suggestions"
-msgstr ""
+msgstr "Suggesties"
 
 msgid "Cheats"
 msgstr ""
@@ -8048,10 +8048,10 @@ msgid "End-Game"
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Spelleider"
 
 msgid "Admin"
-msgstr ""
+msgstr "Beheerder"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
@@ -8129,19 +8129,19 @@ msgid "I suggest: Capturing oil resources"
 msgstr ""
 
 msgid "Hey everyone!"
-msgstr ""
+msgstr "Hallo iedereen!"
 
 msgid "Welcome!"
-msgstr ""
+msgstr "Welkom!"
 
 msgid "I want to spectate"
 msgstr ""
 
 msgid "I want to play"
-msgstr ""
+msgstr "Ik wil spelen"
 
 msgid "I want to switch teams"
-msgstr ""
+msgstr "Ik wil van team wisselen"
 
 msgid "Please check Ready so we can start"
 msgstr ""
@@ -8153,10 +8153,10 @@ msgid "Let's go!"
 msgstr ""
 
 msgid "Almost ready"
-msgstr ""
+msgstr "Bijna klaar"
 
 msgid "Ready"
-msgstr ""
+msgstr "Klaar"
 
 msgid "Be right back"
 msgstr ""
@@ -8165,67 +8165,67 @@ msgid "I'm back"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 msgid "Maybe"
-msgstr ""
+msgstr "Misschien"
 
 msgid "Not yet"
-msgstr ""
+msgstr "Nog niet"
 
 msgid "Soon"
-msgstr ""
+msgstr "Binnenkort"
 
 msgid "Thank you"
-msgstr ""
+msgstr "Bedankt"
 
 msgid "No problem"
-msgstr ""
+msgstr "Geen probleem"
 
 msgid "Well-played"
-msgstr ""
+msgstr "Goed gespeeld"
 
 msgid "@#%*!"
-msgstr ""
+msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
 msgstr ""
 
 msgid "Get ready..."
-msgstr ""
+msgstr "Maak je klaar..."
 
 msgid "You're going to regret that"
-msgstr ""
+msgstr "Je zult daar spijt van krijgen"
 
 msgid "Barely a scratch!"
 msgstr ""
 
 msgid "Attack now?"
-msgstr ""
+msgstr "Nu aanvallen?"
 
 msgid "Group up"
-msgstr ""
+msgstr "Groepeer"
 
 msgid "Split up"
-msgstr ""
+msgstr "Splitsen"
 
 msgid "Focus attacks where marked"
 msgstr ""
 
 msgid "Retreat!"
-msgstr ""
+msgstr "Terugtrekken!"
 
 msgid "I need help!"
-msgstr ""
+msgstr "Ik heb hulp nodig!"
 
 msgid "Left side"
-msgstr ""
+msgstr "Linker kant"
 
 msgid "Right side"
-msgstr ""
+msgstr "Rechter kant"
 
 msgid "Transfer Request: Units"
 msgstr ""
@@ -8240,10 +8240,10 @@ msgid "On my way!"
 msgstr ""
 
 msgid "They're coming!"
-msgstr ""
+msgstr "Ze komen eraan!"
 
 msgid "I'm being attacked!"
-msgstr ""
+msgstr "Ik word aangevallen!"
 
 msgid "I'm rushing oils"
 msgstr ""
@@ -8255,7 +8255,7 @@ msgid "I don't have enough power"
 msgstr ""
 
 msgid "Build more units"
-msgstr ""
+msgstr "Bouw meer eenheden"
 
 msgid "Build different units"
 msgstr ""
@@ -8270,49 +8270,49 @@ msgid "Keep research centers busy"
 msgstr ""
 
 msgid "Build anti-air"
-msgstr ""
+msgstr "Bouw luchtafweer"
 
 msgid "Repair your units"
-msgstr ""
+msgstr "Repareer je eenheden"
 
 msgid "Build repair facilities"
-msgstr ""
+msgstr "Bouw reparatievoorzieningen"
 
 msgid "Build power generators"
-msgstr ""
+msgstr "Bouw energiegeneratoren"
 
 msgid "Capture oil resources"
 msgstr ""
 
 msgid "That didn't go well..."
-msgstr ""
+msgstr "Dat ging niet goed..."
 
 msgid "I have another plan"
-msgstr ""
+msgstr "Ik heb een ander plan"
 
 msgid "Good game"
-msgstr ""
+msgstr "Goed gespeeld"
 
 msgid "I give up"
-msgstr ""
+msgstr "Ik geef op"
 
 msgid "Sorry, I have to leave"
-msgstr ""
+msgstr "Sorry, ik moet gaan"
 
 msgid "Message delivery failure - try again"
 msgstr ""
 
 msgid "Map Downloaded"
-msgstr ""
+msgstr "Kaart gedownload"
 
 msgid "Admin modified a setting"
 msgstr ""
 
 msgid "Bot Allies"
-msgstr ""
+msgstr "Robot bondgenoten"
 
 msgid "Human Allies"
-msgstr ""
+msgstr "Menselijke Bondgenoten"
 
 msgid "Research Progress"
 msgstr "Onderzoek Voortgang"
@@ -8321,22 +8321,22 @@ msgid "Ally progress"
 msgstr "Alliantie genoot voortgang"
 
 msgid "Tanks"
-msgstr ""
+msgstr "Tanks"
 
 msgid "Cyborgs"
 msgstr ""
 
 msgid "No teammates."
-msgstr ""
+msgstr "Geen teamgenoten."
 
 msgid "Waiting for other teams to finish planning."
 msgstr ""
 
 msgid "Weapons:"
-msgstr ""
+msgstr "Wapens:"
 
 msgid "Units:"
-msgstr ""
+msgstr "Eenheden:"
 
 msgid "Resume Game"
 msgstr "Spel hervatten"
@@ -8348,7 +8348,7 @@ msgid "Host Quit"
 msgstr ""
 
 msgid "View Guide"
-msgstr ""
+msgstr "Bekijk gids"
 
 msgid "Load Game"
 msgstr "Spel laden"
@@ -8360,16 +8360,16 @@ msgid "Quit"
 msgstr "Afsluiten"
 
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Waarschuwing: Weet je het zeker?"
 
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Waarschuwing: Weet je het zeker? Alle niet opgeslagen voortgang zal verloren gaan."
 
 msgid "Confirm"
-msgstr ""
+msgstr "Bevestigen"
 
 msgid "Back"
-msgstr ""
+msgstr "Terug"
 
 msgid "Host has quit the game!"
 msgstr "De Host heeft het spel verlaten"
@@ -8517,34 +8517,34 @@ msgid "Assign Group 9"
 msgstr "Groep 9 toekennen"
 
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Toevoegen aan groep 0"
 
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Toevoegen aan groep 1"
 
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Toevoegen aan groep 2"
 
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Toevoegen aan groep 3"
 
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Toevoegen aan groep 4"
 
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Toevoegen aan groep 5"
 
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Toevoegen aan groep 6"
 
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Toevoegen aan groep 7"
 
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Toevoegen aan groep 8"
 
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Toevoegen aan groep 9"
 
 msgid "Remove from current Group"
 msgstr ""
@@ -8833,7 +8833,7 @@ msgid "Select all Tracks"
 msgstr "Selecteer alle banden"
 
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Selecteer alle rupsbanden zonder groep"
 
 msgid "Select EVERY unit"
 msgstr "Selecteer ALLE eenheden"
@@ -8854,7 +8854,7 @@ msgid "Show frame rate"
 msgstr "Toont frames per seconde"
 
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Selecteer alle eenheden met dezelfde onderdelen"
 
 msgid "Select all Combat Cyborgs"
 msgstr "Selecteer alle Gevechtscyborgs"
@@ -8905,13 +8905,13 @@ msgid "Select next VTOL Factory"
 msgstr "Selecteer de volgende VTOL Fabriek"
 
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Ga naar de volgende Fabriek"
 
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Ga naar het volgende onderzoekscentrum"
 
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Ga naar de volgende energiegenerator"
 
 msgid "Jump to next Cyborg Factory"
 msgstr ""
@@ -8983,11 +8983,11 @@ msgid "Waiting for Power"
 msgstr "Wachten op Power"
 
 msgid "Power Per Second"
-msgstr ""
+msgstr "Energie per seconde"
 
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d ja-knikker(s) inactief"
 
 msgid "Need more resources!"
 msgstr "Meer grondstoffen nodig!"
@@ -9032,7 +9032,7 @@ msgid "Discord: Connect to Untrusted Lobby?"
 msgstr ""
 
 msgid "Trust & Connect"
-msgstr ""
+msgstr "Vertrouwen & verbinden"
 
 msgid "The invite link you have followed specifies a direct connection."
 msgstr ""
@@ -9069,10 +9069,10 @@ msgid "Playing: %s Skirmish"
 msgstr ""
 
 msgid "Map:"
-msgstr ""
+msgstr "Kaart:"
 
 msgid "Bots:"
-msgstr ""
+msgstr "Robots:"
 
 msgid "In Multiplayer Lobby"
 msgstr ""
@@ -9088,24 +9088,24 @@ msgid "No:"
 msgstr "Nr:"
 
 msgid "Alliances:"
-msgstr ""
+msgstr "Bondgenoten:"
 
 msgid "In Menu"
-msgstr ""
+msgstr "In menu"
 
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "Discord gebruiker \"%s\" wil graag deelnemen aan je spel."
 
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "Deze speler toestaan om mee te doen met je spel?"
 
 #, c-format
 msgid "Join Request from %s"
 msgstr ""
 
 msgid "Allow"
-msgstr ""
+msgstr "Toestaan"
 
 msgid "PAUSED"
 msgstr "GEPAUZEERD"
@@ -9216,7 +9216,7 @@ msgid "Getting tricky!"
 msgstr "Wordt moeilijk!"
 
 msgid "In a nightmare!"
-msgstr ""
+msgstr "In een nachtmerrie!"
 
 msgid "Twice as nice!"
 msgstr "Twee keer zo fijn!"
@@ -9285,28 +9285,28 @@ msgid "Trap cursor %s"
 msgstr "Cursor opsluiten %s"
 
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "CAMPAGNE"
 
 msgid "CHALLENGE"
-msgstr ""
+msgstr "UITDAGING"
 
 msgid "SKIRMISH"
 msgstr ""
 
 msgid "DIFFICULTY: SUPER EASY"
-msgstr ""
+msgstr "MOEILIJKHEID: SUPER MAKKELIJK"
 
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "MOEILIJKHEID: MAKKELIJK"
 
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "MOEILIJKHEID: NORMAAL"
 
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "MOEILIJKHEID: LASTIG"
 
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "MOEILIJKHEID: KRANKZINNIG"
 
 msgid "CHEATS: ENABLED"
 msgstr ""
@@ -9318,7 +9318,7 @@ msgid "Researched EVERYTHING for you!"
 msgstr "ALLES onderzocht!"
 
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "Geselecteerde gebouwen direct herladen!"
 
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
@@ -9453,7 +9453,7 @@ msgid "Autosave directory (not allowed for saving)"
 msgstr ""
 
 msgid "cheated"
-msgstr ""
+msgstr "valsgespeeld"
 
 #, c-format
 msgid "AutoSave %s"
@@ -9464,7 +9464,7 @@ msgid "AutoSave %s failed"
 msgstr ""
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "Automatisch Opslaan..."
 
 msgid "Could not save game!"
 msgstr "Kon het spel NIET opslaan!"
@@ -9527,7 +9527,7 @@ msgstr "%s geeft je onderzoeksrapporten"
 
 #, c-format
 msgid "%s Gives You %d Power"
-msgstr ""
+msgstr "%s geeft je %d Energie"
 
 #, c-format
 msgid "%s Requests An Alliance With You"
@@ -9550,7 +9550,7 @@ msgid "You Discover Blueprints For %s"
 msgstr "Je ontdekt blauwdrukken voor %s"
 
 msgid "Super Easy"
-msgstr ""
+msgstr "Super Makkelijk"
 
 msgid "Easy"
 msgstr "Makkelijk"
@@ -9565,7 +9565,7 @@ msgid "Insane"
 msgstr "Idioot"
 
 msgid "Commander"
-msgstr ""
+msgstr "Commandant"
 
 msgid "MISSING AI NAME"
 msgstr ""
@@ -9590,7 +9590,7 @@ msgid "Player Name changes are not allowed by the host"
 msgstr ""
 
 msgid "Blind Game:"
-msgstr ""
+msgstr "Blind spel:"
 
 msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr ""
@@ -9611,7 +9611,7 @@ msgid "DIFFICULTY"
 msgstr "MOEILIJKHEIDSGRAAD"
 
 msgid "Starts disadvantaged"
-msgstr ""
+msgstr "Begint achtergesteld"
 
 msgid "Plays nice"
 msgstr "Speelt aardig"
@@ -9652,7 +9652,7 @@ msgid "Cannot swap with host"
 msgstr ""
 
 msgid "Spectator"
-msgstr ""
+msgstr "Toeschouwer"
 
 #, c-format
 msgid "The host has kicked %s from the game!"
@@ -9683,7 +9683,7 @@ msgid "Ask Spectator to Play"
 msgstr ""
 
 msgid "Ask to Play"
-msgstr ""
+msgstr "Vraag om te spelen"
 
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
@@ -9706,13 +9706,13 @@ msgid "The host of this game wants to know if you're willing to spectate?"
 msgstr ""
 
 msgid "You are currently a Player."
-msgstr ""
+msgstr "Je bent momenteel een speler."
 
 msgid "Yes, I will spectate!"
 msgstr ""
 
 msgid "Do you want to play?"
-msgstr ""
+msgstr "Wil je spelen?"
 
 msgid "The host of this game wants to know if you'd like to play?"
 msgstr ""
@@ -9721,7 +9721,7 @@ msgid "You are currently a Spectator."
 msgstr ""
 
 msgid "Yes, I want to play!"
-msgstr ""
+msgstr "Ja, ik wil spelen!"
 
 #, c-format
 msgid "Player %s has moved to Spectators"
@@ -9776,10 +9776,10 @@ msgid "Lock Position"
 msgstr ""
 
 msgid "For Spectator:"
-msgstr ""
+msgstr "Voor Toeschouwer:"
 
 msgid "For Player:"
-msgstr ""
+msgstr "Voor speler:"
 
 msgid "Choose Player Slot"
 msgstr ""
@@ -9832,7 +9832,7 @@ msgid "Please click the button below for more information on how to fix it."
 msgstr ""
 
 msgid "More Information"
-msgstr ""
+msgstr "Meer informatie"
 
 msgid "Sorry! Failed to host the game."
 msgstr "Sorry! Niet mogelijk om het spel te hosten."
@@ -9878,10 +9878,10 @@ msgid "You have been kicked: "
 msgstr ""
 
 msgid "Connection lost:"
-msgstr ""
+msgstr "Verbinding verloren:"
 
 msgid "No connection to host."
-msgstr ""
+msgstr "Geen verbinding met de spelleider"
 
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
 msgstr ""
@@ -11492,28 +11492,28 @@ msgstr ""
 
 #, c-format
 msgid "Players: (%zu ready, %zu not ready)"
-msgstr ""
+msgstr "Spelers: (%zu gereed, %zu niet gereed)"
 
 #, c-format
 msgid "AI Bots: %zu"
-msgstr ""
+msgstr "KI Bots: %zu"
 
 #, c-format
 msgid "Spectators: (%zu ready, %zu not ready)"
-msgstr ""
+msgstr "Toeschouwers: (%zu gereed, %zu niet gereed)"
 
 #, c-format
 msgid "Host: %s"
-msgstr ""
+msgstr "Spelleider: %s"
 
 msgid "ready"
-msgstr ""
+msgstr "gereed"
 
 msgid "not ready"
 msgstr ""
 
 msgid "Waiting Room"
-msgstr ""
+msgstr "Wachtruimte"
 
 msgid "FFA"
 msgstr ""
@@ -11522,10 +11522,10 @@ msgid "Alliances Allowed"
 msgstr ""
 
 msgid "Teams"
-msgstr ""
+msgstr "Teams"
 
 msgid "Teams (No Shared Res)"
-msgstr ""
+msgstr "Teams (Geen gedeelde onderzoeken)"
 
 msgid "Matchmaking"
 msgstr ""
@@ -11537,7 +11537,7 @@ msgid "Blind Game"
 msgstr ""
 
 msgid "No Tanks"
-msgstr ""
+msgstr "Geen tanks"
 
 msgid "No VTOL"
 msgstr ""
@@ -11737,19 +11737,19 @@ msgid "Tech"
 msgstr ""
 
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Technology niveau 1"
 
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Technology niveau 2"
 
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Technology niveau 3"
 
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Technology niveau 4"
 
 msgid "Limits"
-msgstr ""
+msgstr "Limieten"
 
 msgid "Randomize Options"
 msgstr ""
@@ -11833,7 +11833,7 @@ msgid "Reinforcements landing"
 msgstr "Versterkingen landen"
 
 msgid "Update Available"
-msgstr ""
+msgstr "Update beschikbaar"
 
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"

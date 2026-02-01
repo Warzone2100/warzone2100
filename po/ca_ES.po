@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2026-01-10 02:38\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -2010,7 +2010,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Felicitats comandant - esteu preparat per la vostra primera missió"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "Fi del tutorial. Premeu Esc o la icona d'engranatge per tornar al menú principal."
 
 msgid "CAMPAIGN ONE"
 msgstr "CAMPANYA U"
@@ -4913,13 +4913,13 @@ msgid "Howitzer"
 msgstr "Obuser"
 
 msgid "Howitzers Accuracy"
-msgstr ""
+msgstr "Precisió dels Howitzers"
 
 msgid "Howitzers Damage"
-msgstr ""
+msgstr "Danys dels Howitzers"
 
 msgid "Howitzers Reload"
-msgstr ""
+msgstr "Recàrrega dels Howitzers"
 
 msgid "Hurricane AA Site"
 msgstr "Punt de foc AA tipus Huracà"
@@ -4985,7 +4985,7 @@ msgid "Improved fire detection systems"
 msgstr "S'ha millorat el sistema de detecció de foc"
 
 msgid "Improved Hardcrete Buff AI"
-msgstr ""
+msgstr "Millora per IA de les parets de ciment"
 
 msgid "Improved Hardcrete Mk2"
 msgstr "Ciment armat millorat Mk2"
@@ -5443,10 +5443,10 @@ msgid "Medium Super Heavy Body"
 msgstr "Cos super-pesat mitjà"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "Danys de les metralladores"
 
 msgid "MG Reload"
-msgstr ""
+msgstr "Recàrrega de les metralladores"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "Post fortificat armat amb mini-míssils"
@@ -5997,10 +5997,10 @@ msgid "Radar Detector"
 msgstr "Detector de radars"
 
 msgid "Rail Accuracy"
-msgstr ""
+msgstr "Precisió dels canons elèctrics"
 
 msgid "Rail Damage"
-msgstr ""
+msgstr "Danys dels canons elèctrics"
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
@@ -6045,7 +6045,7 @@ msgid "Rail Gun"
 msgstr "Llançador de raïl"
 
 msgid "Rail Reload"
-msgstr ""
+msgstr "Recàrrega dels canons elèctrics"
 
 msgid "Rail Target Prediction Computer"
 msgstr "Ordinador de predicció d'objectius per raïl"
@@ -6079,10 +6079,10 @@ msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Omple el dipòsit, la munició i repara els VTOL"
 
 msgid "Reinforced Base Structure Materials Buff AI Mk2"
-msgstr ""
+msgstr "Materials d'estructura de base reforçats per IA Mk2"
 
 msgid "Reinforced Base Structure Materials Buff AI"
-msgstr ""
+msgstr "Materials d'estructura de base reforçats per IA"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Materials d'estructura de base reforçats Mk2"
@@ -6224,7 +6224,7 @@ msgid "Rocket accuracy +10%"
 msgstr "+10% de precisió dels coets"
 
 msgid "Rocket Accuracy"
-msgstr ""
+msgstr "Precisió dels coets"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Artilleria de míssils: pot ser assignada a un sensor"
@@ -6246,7 +6246,7 @@ msgid "Rocket damage +25%"
 msgstr "+25% de danys produïts pels coets"
 
 msgid "Rocket Damage"
-msgstr ""
+msgstr "Danys dels coets"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "El coet detecta i es fixa en les emissions dels motors"
@@ -6271,7 +6271,7 @@ msgid "Rocket reload time -15%"
 msgstr "-15% de temps de càrrega dels llançacoets"
 
 msgid "Rocket Reload"
-msgstr ""
+msgstr "Recàrrega dels coets"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "El coet segueix el punter làser fins a l'objectiu"
@@ -8090,20 +8090,20 @@ msgstr "ATENCIÓ: si no marqueu Llest aviat, sereu expulsat de la sala"
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "El jugador serà expulsat si no està llest aviat: %s"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
 msgstr "Expulsió automàtica del jugador (%s) car ha esperat massa per marcar llest"
 
 msgid "NOTICE: Please check Ready"
-msgstr ""
+msgstr "AVÍS: Marca't llest"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr ""
+msgstr "AVÍS: Marca't llest perquè la partida pugui començar"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "Els jugadors que no es marquin llestos a temps, seran expulsats."
 
 msgid "Can someone please transfer me some units?"
 msgstr "Algú pot transferir-me unitats?"
@@ -9603,7 +9603,7 @@ msgid "Player Name changes are not allowed when you are muted"
 msgstr "Els canvis de nom de jugador no es permeten quan esteu blocat"
 
 msgid "Player Name changes are not allowed by the host"
-msgstr ""
+msgstr "Els canvis de nom de jugador no s'han permès per l'hoste"
 
 msgid "Blind Game:"
 msgstr "Joc a cegues:"
@@ -10928,7 +10928,7 @@ msgid "Displays a console message every few minutes showing victory related info
 msgstr "Mostra un missatge a la consola de tant en tant mostrant informació relativa a la victòria."
 
 msgid "Finale Fun"
-msgstr ""
+msgstr "Final Divertida"
 
 msgid "Activate Final Gamma mission bonus content."
 msgstr "Activar el contingut bonus de la missió final Gamma."
@@ -10940,16 +10940,16 @@ msgid "Extra Gamma mission making use of a map created by the original developem
 msgstr "Missió Gamma extra usant un mapa creat per l'equip de desenvolupament original (mapa actualitzat per: DARwins)."
 
 msgid "Additional Spawns (Insane difficulty)"
-msgstr ""
+msgstr "Més enemics (Dificultat Demencial)"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "Activa aparicions i comportaments addicionals per la dificultat dement (o superior)."
 
 msgid "Additional Spawns (Lower difficulties than Insane)"
-msgstr ""
+msgstr "Més enemics (pels nivells de dificultat inferiors a Demencial)"
 
 msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
-msgstr ""
+msgstr "Activa les aparicions i comportaments addicionals per la dificultat Difícil o inferior."
 
 msgid "Fast EXP gain"
 msgstr "Guany d'experiència ràpid"
@@ -11081,10 +11081,10 @@ msgid "By default, Warzone 2100 uses left-click for both selection and ordering 
 msgstr "Per defecte, Warzone 2100 utilitza els clics-esquerres per la selecció i les ordres. Si preferiu l'entrada RTS moderna (clic-dret per les ordres), activeu aquesta opció. Si utilitzeu un trackpad o entrada tàctil, podríeu preferir desactivar-la."
 
 msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
-msgstr ""
+msgstr "Utilitzar el clic esquerre per la selecció i les ordres. (Per defecte a la versió clàssica de Warzone 2100.)"
 
 msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
-msgstr ""
+msgstr "Ordres de desplaçament i d'objectius amb clic dret. Selecciona les unitats amb clic esquerre. (Correspon als valors per defecte d'altres jocs RTS corrents.)"
 
 msgid "Trap Cursor"
 msgstr "Captura el cursor"
@@ -11102,10 +11102,10 @@ msgid "Camera Speed"
 msgstr "Velocitat de la càmera"
 
 msgid "Camera Starting Zoom"
-msgstr ""
+msgstr "Zoom inicial de la càmera"
 
 msgid "Camera Zoom Rate"
-msgstr ""
+msgstr "Velocitat de zoom de la càmera"
 
 msgid "Mouse Rotate"
 msgstr "Rotació del ratolí"
@@ -11117,7 +11117,7 @@ msgid "Mouse Pan"
 msgstr "Desplaçament del ratolí"
 
 msgid "Edge Scrolling"
-msgstr ""
+msgstr "Desplaçament per les vores"
 
 msgid "Reset"
 msgstr "Restablir"
@@ -11195,16 +11195,16 @@ msgid "%s hours"
 msgstr "%s hores"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "La qualitat d'ombratge del terreny s'aplica només quan s'usa l'aparença de terreny: Remasteritzat (Alta Qualitat)"
 
 msgid "Shadows are not enabled."
-msgstr ""
+msgstr "Les ombres no estan activades."
 
 msgid "Shadow mapping not available on this system."
 msgstr "El mapa d'ombres no està disponible en aquest sistema."
 
 msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "La il·luminació avançada només està disponible quan s'usa l'aparença de terreny: Remasteritzat (Alta Qualitat)"
 
 msgid "Terrain"
 msgstr "Terreny"
@@ -11222,10 +11222,10 @@ msgid "The remastered, high-quality terrain appearance. High-resolution, with mo
 msgstr ""
 
 msgid "Terrain Shading Quality"
-msgstr ""
+msgstr "Qualitat d'ombratge del terreny"
 
 msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
-msgstr ""
+msgstr "La qualitat de l'ombratge del terreny (mapes normals, reflexos espectaculars, etc.). Paràmetres més elevats milloren els detalls del terreny però és menys ràpid i usa més memòria."
 
 msgid "Medium Quality"
 msgstr "Qualitat mitjana"
@@ -11237,13 +11237,13 @@ msgid "Shadows"
 msgstr "Ombres"
 
 msgid "Draw Shadows"
-msgstr ""
+msgstr "Pinta les ombres"
 
 msgid "Shadow Resolution"
 msgstr "Resolució de les ombres"
 
 msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
-msgstr ""
+msgstr "La resolució interna usada pels mapes d'ombratge. Valors més alts milloren l'aparença de les ombres però és menys ràpid i usa més memòria."
 
 msgid "High"
 msgstr "Alt"
@@ -11261,10 +11261,10 @@ msgid "Ultra"
 msgstr "Ultra"
 
 msgid "Lighting"
-msgstr ""
+msgstr "Il·luminació"
 
 msgid "Point Lights"
-msgstr ""
+msgstr "Punts de llum"
 
 msgid "Lightmap"
 msgstr "Mapa de llum"
@@ -11291,25 +11291,25 @@ msgid "Textures"
 msgstr ""
 
 msgid "Texture Size Limit"
-msgstr ""
+msgstr "Mida límit de textures"
 
 msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
-msgstr ""
+msgstr "Les textures més grans que la mida límit seran reduïdes. A menys que el sistema disposi de poca memòria, mantenir aquest paràmetre al màxim hauria de convenir."
 
 msgid "LOD Distance"
 msgstr "Distància de visualització"
 
 msgid "How level of detail (in textures) is preserved as distance increases."
-msgstr ""
+msgstr "Com es preserva el nivell de detall (de les textures) a mesura que la distància augmenta."
 
 msgid "Default"
 msgstr "Per defecte"
 
 msgid "The system default (no supplied bias, may result in less sharp visuals)."
-msgstr ""
+msgstr "Paràmetres per defecte (sense canvis, les imatges podrien ser menys nítides)."
 
 msgid "Use LOD Distance bias to increase visual sharpness."
-msgstr ""
+msgstr "Utilitzeu el mode LOD per augmentar la nitidesa."
 
 msgid "Advanced"
 msgstr "Avançat"
@@ -11435,7 +11435,7 @@ msgid "Window"
 msgstr "Finestra"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Pantalla completa"
 
 msgid "Window Mode"
 msgstr "Mode de finestra"
@@ -11444,7 +11444,7 @@ msgid "Windowed"
 msgstr "Finestra"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Mode Pantalla Completa"
 
 msgid "Behaviors"
 msgstr "Comportaments"
@@ -11806,37 +11806,37 @@ msgid "Player Host"
 msgstr "Hoste jugador"
 
 msgid "Host is a player in the game (the default)."
-msgstr ""
+msgstr "L'hoste és un jugador al joc (per defecte)."
 
 msgid "Spectator Host"
-msgstr ""
+msgstr "Hoste Espectador"
 
 msgid "Host is a spectator in the game."
-msgstr ""
+msgstr "L'hoste és un espectador durant la partida."
 
 msgid "Blind Mode"
-msgstr ""
+msgstr "Mode a Cegues"
 
 msgid "Whether and when players are blinded to other players' identities."
-msgstr ""
+msgstr "Si i quan s'amaguen les identitats dels altres jugadors."
 
 msgid "Blind modes are only available when host is a Spectator Host."
-msgstr ""
+msgstr "Els modes a cegues no estan disponibles quan l'hoste és espectador."
 
 msgid "Players' identities are visible, in lobby and in game (the default)."
-msgstr ""
+msgstr "Les identitats dels jugadors són visibles, al lobby i durant la partida (per defecte)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
+msgstr "Les identitats dels jugadors s'amaguen per tothom (excepte a l'hoste espectador) fins a l'inici de la partida."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
-msgstr ""
+msgstr "Les identitats dels jugadors s'amaguen per tothom (excepte a l'hoste espectador) fins que la partida acaba."
 
 msgid "Start Hosting"
-msgstr ""
+msgstr "Començar a hostatjar"
 
 msgid "Configure Advanced Hosting Options"
-msgstr ""
+msgstr "Configurar les opcions avançades d'hostatge"
 
 msgid "Launch Transport"
 msgstr "Inicia el transport"
