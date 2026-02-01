@@ -944,6 +944,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 
 	gfx_api::pixel_format uploadFormat = bestUncompressedPixelFormat(gfx_api::pixel_format_target::texture_2d_array, textureType);
 	gfx_api::pixel_format desiredImageExtractionFormat = uploadFormat;
+#if defined(BASIS_ENABLED)
 	if (allFilesAreKTX2)
 	{
 		auto bestBasisFormat = gfx_api::getBestAvailableTranscodeFormatForBasis(gfx_api::pixel_format_target::texture_2d_array, textureType);
@@ -954,6 +955,7 @@ gfx_api::texture_array* gfx_api::context::loadTextureArrayFromFiles(const std::v
 		}
 	}
 	else
+#endif
 	{
 		// just use the best runtime compression format
 		auto bestAvailableCompressedFormat = gfx_api::bestRealTimeCompressionFormat(gfx_api::pixel_format_target::texture_2d_array, textureType);
