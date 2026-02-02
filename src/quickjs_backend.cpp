@@ -3283,11 +3283,6 @@ IMPL_JS_FUNC(enumRange, wzapi::enumRange)
 IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
 IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
-//-- ## removeBeacon(playerFilter)
-//--
-//-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
-//-- Returns a boolean that is true on success. (3.2+ only)
-//--
 static JSValue js_removeBeacon(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	JSValue retVal = wrap_(wzapi::removeBeacon, ctx, argc, argv);
