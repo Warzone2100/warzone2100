@@ -48,6 +48,9 @@ uniform sampler2DArray decalHeight;
 // shadow map
 uniform sampler2DArrayShadow shadowMap;
 
+// depth pre-pass texture
+uniform sampler2D depthTexture;
+
 uniform mat4 ViewMatrix;
 uniform mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 uniform vec4 ShadowMapCascadeSplits;

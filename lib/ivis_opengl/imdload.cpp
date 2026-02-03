@@ -1444,11 +1444,11 @@ void finishTangentsGeneration()
 	   // Calculate handedness
 	   if (glm::dot(glm::cross(n, t), b) < 0.f)
 	   {
-		   tangentsAsVec4[i] = Vector4f(-t, 1.f);
+		   tangentsAsVec4[i] = Vector4f(t, 1.f);
 	   }
 	   else
 	   {
-		   tangentsAsVec4[i] = Vector4f(-t, -1.f);
+		   tangentsAsVec4[i] = Vector4f(t, -1.f);
 	   }
    }
 }
@@ -1786,6 +1786,12 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 			debug(LOG_ERROR, "_imd_load_level: file corrupt? - no normals?: %s (key: %s)", filename.toUtf8().c_str(), key.c_str());
 		}
 		s.buffers[VBO_NORMAL]->upload(normals.size() * sizeof(gfx_api::gfxFloat), normals.data());
+
+		// reverse winding order before uploading indices (-> CCW)
+		for (size_t i = 0; i < indices.size(); i += 3)
+		{
+			std::swap(indices[i+1], indices[i+2]);
+		}
 
 		if (!s.buffers[VBO_INDEX])
 			s.buffers[VBO_INDEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "index buffer");

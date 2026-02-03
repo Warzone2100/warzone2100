@@ -1744,16 +1744,18 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
+template<typename PSO>
 static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
 	const auto &renderState = getCurrentRenderState();
 
 	// bind the vertex buffer
-	gfx_api::TerrainDepthOnlyForDepthMap::get().bind();
-	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_textures(lightmap_texture);
-	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_vertex_buffers(geometryVBO);
-	gfx_api::TerrainDepthOnlyForDepthMap::get().bind_constants({ ModelViewProjection, /*paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
-	glm::vec4(0.f), */ renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, /*0, 0*/ });
+	PSO::get().bind();
+	PSO::get().bind_textures(lightmap_texture);
+	PSO::get().bind_vertex_buffers(geometryVBO);
+	gfx_api::TerrainDepthMapUniforms uniforms = { ModelViewProjection, /*paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
+	glm::vec4(0.f), */ renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, /*0, 0*/};
+	PSO::get().set_uniforms(uniforms);
 	gfx_api::context::get().bind_index_buffer(*geometryIndexVBO, gfx_api::index_type::u32);
 
 //	if (withOffset)
@@ -1769,7 +1771,7 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<gfx_api::TerrainDepthOnlyForDepthMap>(
+				addDrawRangeElements<PSO>(
 					sectors[x * ySectors + y].geometryOffset,
 					sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
 					sectors[x * ySectors + y].geometryIndexSize,
@@ -1777,12 +1779,12 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 			}
 		}
 	}
-	finishDrawRangeElements<gfx_api::TerrainDepthOnlyForDepthMap>();
+	finishDrawRangeElements<PSO>();
 //	if (withOffset)
 //	{
 //		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 //	}
-	gfx_api::TerrainDepthOnlyForDepthMap::get().unbind_vertex_buffers(geometryVBO);
+	PSO::get().unbind_vertex_buffers(geometryVBO);
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
@@ -1896,7 +1898,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
-		gfx_api::context::get().getDepthTexture());
+		gfx_api::context::get().getDepthTexture(), gfx_api::context::get().getSceneDepthTexture());
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	glm::mat4 groundScale = glm::mat4(0);
 	for (int i = 0; i < getNumGroundTypes(); i++) {
@@ -1993,9 +1995,14 @@ const glm::mat4& getModelUVLightmapMatrix()
 	return lightmapValues.ModelUVLightmap;
 }
 
-void drawTerrainDepthOnly(const glm::mat4 &mvp)
+void drawTerrainDepthForShadowMap(const glm::mat4 &mvp)
 {
-	drawDepthOnlyForDepthMap(mvp, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
+	drawDepthOnlyForDepthMap<gfx_api::TerrainDepthOnlyForShadowMap>(mvp, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
+}
+
+void drawTerrainSceneDepthMap(const glm::mat4 &mvp)
+{
+	drawDepthOnlyForDepthMap<gfx_api::TerrainDepthOnlyForSceneDepthMap>(mvp, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
 }
 
 /**

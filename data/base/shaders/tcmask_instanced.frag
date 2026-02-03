@@ -19,6 +19,7 @@ uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
 uniform sampler2DArrayShadow shadowMap; // shadow map
 uniform sampler2D lightmap_tex;
+uniform sampler2D depthTexture; // depth pre-pass texture
 
 uniform mat4 ViewMatrix;
 
@@ -28,6 +29,8 @@ uniform int specularmap; // whether a specular map exists for the model
 uniform int hasTangents; // whether tangents were calculated for model
 uniform int shieldEffect;
 uniform float graphicsCycle; // a periodically cycling value for special effects
+
+uniform vec4 cameraPos; // in modelSpace
 
 uniform vec4 sceneColor; //emissive light
 uniform vec4 ambient;
