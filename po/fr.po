@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2025-12-17 02:37\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -2014,7 +2014,7 @@ msgstr ""
 "Vous pouvez quitter le tutoriel quand vous le souhaitez."
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "Le tutoriel est fini. Appuyez sur Echap ou l'icône paramètres pour revenir au menu principal."
 
 msgid "CAMPAIGN ONE"
 msgstr "PREMIÈRE CAMPAGNE"
@@ -8094,7 +8094,7 @@ msgstr "ATTENTION : si vous ne cochez pas \"Prêt\" maintenant vous allez être 
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "Le joueur %s sera exclu de la partie s'il ne coche pas \"Prêt\" rapidement !"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
@@ -8107,7 +8107,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr "ATTENTION : cochez \"Prêt\" pour que le jeu puisse commencer"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "Les joueurs qui ne cochent pas \"Prêt\" à temps seront exclus de la partie !"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Quelqu'un peut-il me transférer des unités ?"
@@ -11439,7 +11439,7 @@ msgid "Window"
 msgstr "Fenêtre"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Bureau entier"
 
 msgid "Window Mode"
 msgstr "Mode fenêtre"
@@ -11448,7 +11448,7 @@ msgid "Windowed"
 msgstr "Fenêtré"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Mode plein écran"
 
 msgid "Behaviors"
 msgstr "Comportements"

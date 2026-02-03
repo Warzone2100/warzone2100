@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-13 02:37\n"
+"PO-Revision-Date: 2026-01-31 02:57\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -4124,7 +4124,7 @@ msgid "Defensive Strength: Low"
 msgstr "Védelmi erő: Alacsony"
 
 msgid "Demolish Structure"
-msgstr "Építmény lerombolása"
+msgstr "Épület lebontása"
 
 msgid "Dense Composite Alloys Mk2"
 msgstr "Sűrű kompozit ötvözetek Mk2"
@@ -4424,19 +4424,19 @@ msgid ""
 "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
-"~ 100%-kal több energiát nyer ki minden egyes fúrótoronyból\n"
-"Védelmi épületekkel és fúrótornyokkal kezd"
+"~ 100%-kal több energiát nyer ki minden egyes olajkútból\n"
+"Védelmi épületekkel és olajkutakkal kezd"
 
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból"
+msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes olajkútból"
 
 #, no-c-format
 msgid ""
 "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
-"~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"~ 25%-kal kevesebb energiát nyer ki minden egyes olajkútból\n"
 "Az alapvető döntéshozás lassabb"
 
 #, no-c-format
@@ -4444,7 +4444,7 @@ msgid ""
 "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
-"~25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"~25%-kal kevesebb energiát nyer ki minden egyes olajkútból\n"
 "A kutatás nem konkrét fegyvernemre fókuszál"
 
 msgid "Gives Cyborg limited flight abilities"
@@ -6863,7 +6863,7 @@ msgid "Use a truck to add modules to a factory"
 msgstr "A modul gyárhoz adásához használjon egy teherautót"
 
 msgid "Use a truck to add the module to a power generator"
-msgstr "A modul áramfejlesztőhöz adásához használjon egy teherautót"
+msgstr "A modul erőműhöz adásához használjon egy teherautót"
 
 msgid "Use a truck to add the module to a research facility"
 msgstr "A modul kutatóközponthoz adásához használjon egy teherautót"
@@ -8139,7 +8139,7 @@ msgid "I suggest: Building repair facilities"
 msgstr "Javaslom: építsen javítóműhelyeket"
 
 msgid "I suggest: Building power generators"
-msgstr "Javaslom: építsen áramfejlesztőket"
+msgstr "Javaslom: építsen erőműveket"
 
 msgid "I suggest: Capturing oil resources"
 msgstr "Javaslom: foglaljon el olajforrásokat"
@@ -8295,7 +8295,7 @@ msgid "Build repair facilities"
 msgstr "Építsen javítóműhelyeket"
 
 msgid "Build power generators"
-msgstr "Építsen áramfejlesztőket"
+msgstr "Építsen erőműveket"
 
 msgid "Capture oil resources"
 msgstr "Foglaljon el olajforrásokat"
@@ -9003,7 +9003,7 @@ msgstr "Energia/másodperc"
 
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr "%d fúrótorony inaktív"
+msgstr "%d olajkút inaktív"
 
 msgid "Need more resources!"
 msgstr "További erőforrás szükséges!"

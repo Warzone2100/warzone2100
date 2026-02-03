@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"PO-Revision-Date: 2026-01-21 02:43\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -2010,7 +2010,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Congratulazioni comandante - ora è pronto per la sua prima missione"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "Il tutorial è finito. Premi Esc o l'icona dell'ingranaggio per andare al menù principale."
 
 msgid "CAMPAIGN ONE"
 msgstr "PRIMA CAMPAGNA"
@@ -3018,17 +3018,17 @@ msgid "OK"
 msgstr "OK"
 
 msgid "Warzone 2100: Prior launch failed"
-msgstr ""
+msgstr "Warzone 2100: avvio precedente fallito"
 
 msgid "The prior attempt to initialize the following graphics backend caused a crash:"
-msgstr ""
+msgstr "Il precedente tentativo d'inizializzare il seguente backend grafico ha causato un crash:"
 
 #, c-format
 msgid "Graphics Backend: %s"
-msgstr ""
+msgstr "Backend grafico: %s"
 
 msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
-msgstr ""
+msgstr "Warzone 2100 tenterà ora di avviarsi utilizzando un backend grafico diverso."
 
 msgid "Menu"
 msgstr "Menu"
@@ -3784,7 +3784,7 @@ msgid "Cannon accuracy +10%"
 msgstr "Precisione dei Cannoni +10%"
 
 msgid "Cannon Accuracy"
-msgstr ""
+msgstr "Precisione cannone"
 
 msgid "Cannon Autoloader Mk2"
 msgstr "Caricatore automatico per cannone Mk2"
@@ -3800,7 +3800,7 @@ msgid "Cannon damage +25%"
 msgstr "Danno dei Cannoni +25%"
 
 msgid "Cannon Damage"
-msgstr ""
+msgstr "Danno cannone"
 
 msgid "Cannon Fire Truck"
 msgstr "Camion dei Pompieri con Cannone"
@@ -3828,7 +3828,7 @@ msgid "Cannon reload time -10%"
 msgstr "Tempo di ricarica dei cannoni -10%"
 
 msgid "Cannon Reload"
-msgstr ""
+msgstr "Ricarica cannone"
 
 msgid "Cannon Tower"
 msgstr "Torre con Cannone"
@@ -4001,7 +4001,7 @@ msgid "Crane2"
 msgstr "Gru2"
 
 msgid "Cyborg Alloys"
-msgstr ""
+msgstr "Leghe cyborg"
 
 msgid "Cyborg Composite Alloys Buff AI Mk2"
 msgstr ""
@@ -4220,7 +4220,7 @@ msgid "Enemy"
 msgstr "Nemico"
 
 msgid "Engine"
-msgstr ""
+msgstr "Motore"
 
 msgid "Engineering"
 msgstr "Ingegneria"
@@ -5247,14 +5247,14 @@ msgid "Laser accuracy +10%"
 msgstr "Precisione dei Laser +10%"
 
 msgid "Laser Accuracy"
-msgstr ""
+msgstr "Precisione laser"
 
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Danno dei Laser +25%"
 
 msgid "Laser Damage"
-msgstr ""
+msgstr "Danno laser"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Il designatore laser illumina e guida i proiettili sul bersaglio"
@@ -5264,7 +5264,7 @@ msgid "Laser reload time -15%"
 msgstr "Tempo di ricarica dei laser -15%"
 
 msgid "Laser Reload"
-msgstr ""
+msgstr "Ricarica laser"
 
 msgid "Laser Satellite Command Post"
 msgstr "Centro di comando per il laser satellitare"
@@ -5443,10 +5443,10 @@ msgid "Medium Super Heavy Body"
 msgstr "Corpo medio super pesante"
 
 msgid "MG Damage"
-msgstr ""
+msgstr "Danno MG"
 
 msgid "MG Reload"
-msgstr ""
+msgstr "Ricarica MG"
 
 msgid "Mini-rocket armored strongpoint"
 msgstr "Posizione corazzata con mini-razzi"
@@ -5504,7 +5504,7 @@ msgid "Missile accuracy +10%"
 msgstr "Precisione dei Missili +10%"
 
 msgid "Missile Accuracy"
-msgstr ""
+msgstr "Precisione missili"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "I missili cercano e agganciano i bersagli attivamente"
@@ -5514,7 +5514,7 @@ msgid "Missile damage +25%"
 msgstr "Danni dei Missili +25%"
 
 msgid "Missile Damage"
-msgstr ""
+msgstr "Danno missili"
 
 msgid "Missile Fortress"
 msgstr "Fortezza con lanciamissili"
@@ -5524,7 +5524,7 @@ msgid "Missile reload time -15%"
 msgstr "Tempo di ricarica dei missili -15%"
 
 msgid "Missile Reload"
-msgstr ""
+msgstr "Ricarica missili"
 
 msgid "Missile Upgrade"
 msgstr "Aggiornamento dei missili"
@@ -5546,7 +5546,7 @@ msgid "Mortar accuracy +10%"
 msgstr "Precisione dei mortai +10%"
 
 msgid "Mortar Accuracy"
-msgstr ""
+msgstr "Precisione mortaio"
 
 msgid "Mortar Autoloader Mk2"
 msgstr "Caricatore automatico per mortaio Mk2"
@@ -5565,7 +5565,7 @@ msgid "Mortar damage +25%"
 msgstr "Danni dei mortai +25%"
 
 msgid "Mortar Damage"
-msgstr ""
+msgstr "Danno mortaio"
 
 msgid "Mortar Fast Loader"
 msgstr "Caricatore rapido per mortaio"
@@ -5578,7 +5578,7 @@ msgid "Mortar reload time -10%"
 msgstr "Tempo di ricarica dei mortai -10%"
 
 msgid "Mortar Reload"
-msgstr ""
+msgstr "Ricarica mortaio"
 
 msgid "Mortar Targeting Computer"
 msgstr "Computer di Puntamento del Mortaio"
@@ -5922,7 +5922,7 @@ msgid "Produces Cyborgs"
 msgstr "Produce Cyborg"
 
 msgid "Production"
-msgstr ""
+msgstr "Produzione"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Le unità di rango Professionista e Regolare sono protette"
@@ -8103,7 +8103,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr ""
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "I giocatori che non mettono Pronto in tempo verranno cacciati."
 
 msgid "Can someone please transfer me some units?"
 msgstr "Qualcuno può trasferirmi alcune unità, per favore?"
@@ -8440,19 +8440,19 @@ msgid "Error Loading Game Data"
 msgstr "Errore nel caricamento dei dati di gioco"
 
 msgid "Global Keys"
-msgstr ""
+msgstr "Tasti globali"
 
 msgid "Other Keys"
-msgstr ""
+msgstr "Altre tasti"
 
 msgid "Gameplay Keys"
-msgstr ""
+msgstr "Tasti di gioco"
 
 msgid "Radar Keys"
-msgstr ""
+msgstr "Tasti radar"
 
 msgid "Debug Keys"
-msgstr ""
+msgstr "Tasti debug"
 
 msgid "Debug (level editor)"
 msgstr "Debug (editor di livelli)"
@@ -8828,7 +8828,7 @@ msgstr "Seleziona tutte le unità gravemente danneggiate"
 
 #, no-c-format
 msgid "Select all Land Combat Units with >50% HP and no group"
-msgstr ""
+msgstr "Seleziona tutte le unità combattenti di terra con >50% HP senza gruppo"
 
 msgid "Select all Half-tracks"
 msgstr "Seleziona tutti i semicingolati"
@@ -9480,13 +9480,13 @@ msgid "AutoSave %s failed"
 msgstr "Salvataggio automatico %s non riuscito"
 
 msgid "AutoSaving..."
-msgstr ""
+msgstr "Auto salvataggio..."
 
 msgid "Could not save game!"
 msgstr "Non posso salvare la partita!"
 
 msgid "Failed to load level data or map. Exiting to main menu."
-msgstr ""
+msgstr "Impossibile caricare i dati del livello o la mappa. Uscita al menù principale."
 
 msgid "Load Transport"
 msgstr "Carica il trasporto"
