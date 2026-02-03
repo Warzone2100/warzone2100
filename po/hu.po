@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-13 02:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -2953,8 +2953,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "Állítsa be kézileg a routerét/tűzfalát a port kinyitásához: %d."
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "A porttovábbítás kinyitotta a külső portot: %d"
+msgid "Port mapping opened external port: %u"
+msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -4124,7 +4124,7 @@ msgid "Defensive Strength: Low"
 msgstr "Védelmi erő: Alacsony"
 
 msgid "Demolish Structure"
-msgstr "Építmény lerombolása"
+msgstr "Épület lebontása"
 
 msgid "Dense Composite Alloys Mk2"
 msgstr "Sűrű kompozit ötvözetek Mk2"
@@ -4424,19 +4424,19 @@ msgid ""
 "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
 msgstr ""
-"~ 100%-kal több energiát nyer ki minden egyes fúrótoronyból\n"
-"Védelmi épületekkel és fúrótornyokkal kezd"
+"~ 100%-kal több energiát nyer ki minden egyes olajkútból\n"
+"Védelmi épületekkel és olajkutakkal kezd"
 
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból"
+msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes olajkútból"
 
 #, no-c-format
 msgid ""
 "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
 msgstr ""
-"~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"~ 25%-kal kevesebb energiát nyer ki minden egyes olajkútból\n"
 "Az alapvető döntéshozás lassabb"
 
 #, no-c-format
@@ -4444,7 +4444,7 @@ msgid ""
 "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
 msgstr ""
-"~25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"~25%-kal kevesebb energiát nyer ki minden egyes olajkútból\n"
 "A kutatás nem konkrét fegyvernemre fókuszál"
 
 msgid "Gives Cyborg limited flight abilities"
@@ -6863,7 +6863,7 @@ msgid "Use a truck to add modules to a factory"
 msgstr "A modul gyárhoz adásához használjon egy teherautót"
 
 msgid "Use a truck to add the module to a power generator"
-msgstr "A modul áramfejlesztőhöz adásához használjon egy teherautót"
+msgstr "A modul erőműhöz adásához használjon egy teherautót"
 
 msgid "Use a truck to add the module to a research facility"
 msgstr "A modul kutatóközponthoz adásához használjon egy teherautót"
@@ -7271,6 +7271,9 @@ msgstr "Nézők"
 
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "Túl sok üzenetet küldött az elmúlt néhány másodpercben. Várjon, és próbálja újra."
+
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7964,16 +7967,16 @@ msgid "Select / Assign Group Number: "
 msgstr "Csoportszám kiválasztása/hozzárendelése: "
 
 #, c-format
-msgid "Group %u"
-msgstr "%u. csoport"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "%u. csoport egységeinek kiválasztása"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "Kijelölt egységek hozzárendelése a(z) %u. csoporthoz"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "A kamera erre a csoportra fókuszálása kétszeri kattintással vagy koppintással"
@@ -8139,7 +8142,7 @@ msgid "I suggest: Building repair facilities"
 msgstr "Javaslom: építsen javítóműhelyeket"
 
 msgid "I suggest: Building power generators"
-msgstr "Javaslom: építsen áramfejlesztőket"
+msgstr "Javaslom: építsen erőműveket"
 
 msgid "I suggest: Capturing oil resources"
 msgstr "Javaslom: foglaljon el olajforrásokat"
@@ -8295,7 +8298,7 @@ msgid "Build repair facilities"
 msgstr "Építsen javítóműhelyeket"
 
 msgid "Build power generators"
-msgstr "Építsen áramfejlesztőket"
+msgstr "Építsen erőműveket"
 
 msgid "Capture oil resources"
 msgstr "Foglaljon el olajforrásokat"
@@ -9002,8 +9005,8 @@ msgid "Power Per Second"
 msgstr "Energia/másodperc"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d fúrótorony inaktív"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "További erőforrás szükséges!"
@@ -10170,8 +10173,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] korlát [%s]: %u (alapértelmezett: nincs korlát)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] A numStructureStats értékénél (%u) nagyobb korlát: %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"

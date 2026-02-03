@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -2953,7 +2953,7 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "Konfiguriere Deinen Router/Deine Firewall manuell, um Port %d zu öffnen!"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
+msgid "Port mapping opened external port: %u"
 msgstr ""
 
 #, c-format
@@ -7272,6 +7272,9 @@ msgstr "Zuschauer"
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "Du hast zu viele Nachrichten in den letzten paar Sekunden abgeschickt. Bitte warte und versuche es später erneut."
 
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s möchte den Debug-Modus einschalten. Eingeschaltet: %s, Ausgeschaltet: %s."
@@ -7964,16 +7967,16 @@ msgid "Select / Assign Group Number: "
 msgstr "Gruppennummer auswählen / zuweisen: "
 
 #, c-format
-msgid "Group %u"
-msgstr "Gruppe %u"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "Wähle die Einheiten in Gruppe %u aus"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "Weise ausgewählte Einheiten Gruppe %u zu"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Zentriere die Kamera auf diese Gruppe durch zweimaliges Klicken oder Antippen"
@@ -9002,8 +9005,8 @@ msgid "Power Per Second"
 msgstr "Energie pro Sekunde"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d Bohrturm/-türme inaktiv"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "Brauche mehr Ressourcen!"
@@ -10170,8 +10173,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] Beschränkung [%s]: %u (Standard: keine Beschr.)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] Beschränkung, die größer ist als numStructureStats (%u): %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"

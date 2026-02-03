@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 02:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2010,7 +2010,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜指挥官，您已准备好完成第一次任务"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "教程已经结束，按 Esc 或齿轮图标退回主菜单。"
 
 msgid "CAMPAIGN ONE"
 msgstr "战役一"
@@ -2955,8 +2955,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "手动配置您的路由器/防火墙来打开端口 %d！"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "端口映射已打开外部端口：%d"
+msgid "Port mapping opened external port: %u"
+msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -5902,11 +5902,11 @@ msgstr "发电模组"
 
 #, no-c-format
 msgid "Power output +25%"
-msgstr "电力输出 +25%"
+msgstr "能源输出 +25%"
 
 #, no-c-format
 msgid "Power output +30%"
-msgstr "电力输出 +30%"
+msgstr "能源输出 +30%"
 
 msgid "Power Research Completed"
 msgstr "能源科技研发完成"
@@ -7274,6 +7274,9 @@ msgstr "旁观者"
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "您在过去几秒内发送了太多消息。请稍后重试。"
 
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s 想启用调试模式，已启用：%s，已禁用：%s。"
@@ -7960,16 +7963,16 @@ msgid "Select / Assign Group Number: "
 msgstr "选择/分配编队号： "
 
 #, c-format
-msgid "Group %u"
-msgstr "%u 号编队"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "选择 %u 号编队中的单位"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "分配单位至 %u 号编队"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "通过点击或双击将相机居中至该编队"
@@ -8086,7 +8089,7 @@ msgstr "注意：请尽快准备，超时将被踢出房间"
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "若玩家未尽快勾选就绪，将被踢出：%s"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
@@ -8099,7 +8102,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr "注意：请打勾准备就绪以便游戏开始"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "未及时勾选就绪的玩家将被踢出。"
 
 msgid "Can someone please transfer me some units?"
 msgstr "有人能给我转移一些单位吗？"
@@ -8998,8 +9001,8 @@ msgid "Power Per Second"
 msgstr "每秒能源收入"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d 个闲置钻油井"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "需要更多资源！"
@@ -10165,8 +10168,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] 限制 [%s]: %u (默认：无限制)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] 限制大于numStructureStats (%u)： %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10912,7 +10915,7 @@ msgid "Infinite Time"
 msgstr "无限时间"
 
 msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
-msgstr "任务（在可能的情况下）无时间限制（若启用此选项，计时器电力奖励将被替换为少量电力奖励）。"
+msgstr "任务（在可能的情况下）无时间限制（若启用此选项，计时器能源奖励将被替换为少量能源奖励）。"
 
 msgid "Victory Hints"
 msgstr "胜利提示"
@@ -10933,16 +10936,16 @@ msgid "Extra Gamma mission making use of a map created by the original developem
 msgstr "额外的 Gamma 任务，使用由原开发团队创作的地图（地图更新者：DARwins）。"
 
 msgid "Additional Spawns (Insane difficulty)"
-msgstr ""
+msgstr "额外刷新单位（疯狂难度）"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "启用更强大的敌军生成与行为，适用于“疯狂”（或更高）难度。"
 
 msgid "Additional Spawns (Lower difficulties than Insane)"
-msgstr ""
+msgstr "额外刷新单位（比疯狂难度简单点）"
 
 msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
-msgstr ""
+msgstr "为困难难度及以下模式，启用额外的敌人刷新机制与敌人行为设定。"
 
 msgid "Fast EXP gain"
 msgstr "快速经验值增益"
@@ -11437,7 +11440,7 @@ msgid "Windowed"
 msgstr "窗口模式"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "全屏模式"
 
 msgid "Behaviors"
 msgstr "行为"
@@ -11760,7 +11763,7 @@ msgid "Technology Level 4"
 msgstr "四阶"
 
 msgid "Limits"
-msgstr "限度"
+msgstr "限制"
 
 msgid "Randomize Options"
 msgstr "随机游戏选项"

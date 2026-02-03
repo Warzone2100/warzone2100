@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -2010,7 +2010,7 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Parabéns comandante - você está pronto para sua primeira missão"
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "O tutorial acabou. Pressione Esc ou o ícone de engrenagem para sair do menu principal."
 
 msgid "CAMPAIGN ONE"
 msgstr "PRIMEIRA CAMPANHA"
@@ -2953,8 +2953,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "Configure manualmente seu roteador/firewall para abrir a porta %d!"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "Mapeamento de porta abrindo porta externa: %d"
+msgid "Port mapping opened external port: %u"
+msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -5997,10 +5997,10 @@ msgid "Radar Detector"
 msgstr "Detector de Radar"
 
 msgid "Rail Accuracy"
-msgstr ""
+msgstr "Precisão do Laser"
 
 msgid "Rail Damage"
-msgstr ""
+msgstr "Dano do Laser"
 
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
@@ -6045,7 +6045,7 @@ msgid "Rail Gun"
 msgstr "Canhão Elétrico"
 
 msgid "Rail Reload"
-msgstr ""
+msgstr "Recarga Laser"
 
 msgid "Rail Target Prediction Computer"
 msgstr "Computador de Predição de Alvos"
@@ -6079,10 +6079,10 @@ msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Reabastece, recarrega e repara VTOL's"
 
 msgid "Reinforced Base Structure Materials Buff AI Mk2"
-msgstr ""
+msgstr "Aprimoramento de Materiais de Estrutura Básicos AI Mk2 Reforçados"
 
 msgid "Reinforced Base Structure Materials Buff AI"
-msgstr ""
+msgstr "Aprimoramento de Materiais de Estrutura Básicos AI Reforçados"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Materiais Base de Estruturas Reforçado Mk2"
@@ -6743,7 +6743,7 @@ msgid "Tower wars AI, based on NullBot"
 msgstr "IA de construção de torres, baseada no NullBot"
 
 msgid "Tower Wars Buff"
-msgstr ""
+msgstr "Aprimoramento de Torres de Guerra"
 
 msgid "Tracked Propulsion"
 msgstr "Propulsão Tanque"
@@ -7271,6 +7271,9 @@ msgstr "Espectadores"
 
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "Você enviou mensagens demais nos últimos segundos. Por favor, aguarde e tente novamente."
+
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7964,16 +7967,16 @@ msgid "Select / Assign Group Number: "
 msgstr "Selecionar / Atribuir Número de Grupo: "
 
 #, c-format
-msgid "Group %u"
-msgstr "Grupo %u"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "Selecione as Unidades no Grupo %u"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "Atribuir Unidades Selecionadas ao Grupo %u"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Centralizar câmera neste grupo clicando ou tocando duas vezes"
@@ -8090,7 +8093,7 @@ msgstr "AVISO: Se você não marcar \"Pronto\" logo, você será expulso da sala
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "Jogador será expulso caso não verifique Pronto em breve: %s"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
@@ -8103,7 +8106,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr "AVISO: Por favor, marque \"Pronto\" para que o jogo possa começar"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "Jogadores que não verificarem Pronto em tempo serão expulsos."
 
 msgid "Can someone please transfer me some units?"
 msgstr "Alguém pode me transferir algumas unidades, por favor?"
@@ -9002,8 +9005,8 @@ msgid "Power Per Second"
 msgstr "Poder Por Segundo"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d extrator(es) inativos"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "Precisa de mais recursos!"
@@ -9606,13 +9609,13 @@ msgid "Player Name changes are not allowed by the host"
 msgstr "Alterações de Nome do Jogador não são permitidas pelo anfitrião"
 
 msgid "Blind Game:"
-msgstr ""
+msgstr "Jogo Cego:"
 
 msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr "- Os nomes dos jogadores não serão visíveis para outros jogadores (até o fim do jogo)"
 
 msgid "Blind Lobby:"
-msgstr ""
+msgstr "Sala de Espera Cega:"
 
 msgid "- Player names will not be visible to other players (until the game has started)"
 msgstr "- Os nomes dos jogadores não serão visíveis para outros jogadores (até que o jogo comece)"
@@ -9764,11 +9767,11 @@ msgid "Yes, select Player slot"
 msgstr "Sim, selecione o espaço de Jogador"
 
 msgid "BLIND LOBBY NOTICE:"
-msgstr ""
+msgstr "AVISOS DA SALA DE ESPERA CEGA:"
 
 #, c-format
 msgid "You have been assigned the codename: \"%s\""
-msgstr ""
+msgstr "Foi atribuído a você o codinome: \"%s\""
 
 msgid "Joined:"
 msgstr "Entrou:"
@@ -9789,7 +9792,7 @@ msgid "Lock Teams"
 msgstr "Trancar equipes"
 
 msgid "Lock Position"
-msgstr ""
+msgstr "Travar Posição"
 
 msgid "For Spectator:"
 msgstr "Para Espectador:"
@@ -9876,13 +9879,13 @@ msgid "Disconnected from host:"
 msgstr "Desconectado do anfitrião:"
 
 msgid "Unable to handle host redirect"
-msgstr ""
+msgstr "Incapaz de manipular o redirecionamento de host"
 
 msgid "Unable to process redirect"
-msgstr ""
+msgstr "Incapaz de processar o redirecionamento"
 
 msgid "Unable to process repeated or invalid redirects"
-msgstr ""
+msgstr "Incapaz de processar inválidos ou repetidos redirecionamentos"
 
 msgid "Host supplied invalid options"
 msgstr "Opções de host fornecidas inválidas"
@@ -9928,19 +9931,19 @@ msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Mapeamento de portas desabilitado pelo usuário. Configuração automática da porta %d não vai acontecer."
 
 msgid "BLIND GAME NOTICE:"
-msgstr ""
+msgstr "AVISOS DO JOGO CEGO:"
 
 msgid "Player names will not be visible to other players (until the game is over)"
-msgstr ""
+msgstr "Os nomes dos jogadores não estará visível para outros jogadores (até que o jogo acabe)"
 
 msgid "Player names will not be visible to other players (until the game has started)"
-msgstr ""
+msgstr "Os nomes dos jogadores não estará visível para outros jogadores (até que o jogo comece)"
 
 msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
-msgstr ""
+msgstr "IMPORTANTE: O host é um dos jogadores e consegue ver e configurar outros jogadores (!)"
 
 msgid "The host is a spectator, and can see player identities and configure players / teams"
-msgstr ""
+msgstr "O host está como espectador, podendo ver a identidade dos jogadores, bem como configurar jogadores / equipes"
 
 msgid "Failed to load challenge:"
 msgstr "Falha ao carregar o desafio:"
@@ -9991,7 +9994,7 @@ msgstr "%s entrou no Jogo"
 
 #, c-format
 msgid "(codename: %s)"
-msgstr ""
+msgstr "(codinome: %s)"
 
 #, c-format
 msgid "File transfer has been aborted for %d."
@@ -10144,7 +10147,7 @@ msgstr "O anfitrião ativou o bate-papo gratuito para o jogador: %s"
 
 #, c-format
 msgid "The host has enabled free chat for %d players"
-msgstr ""
+msgstr "O host habilitou o bate-papo livre para %d jogadores"
 
 #, c-format
 msgid "The host has muted free chat for player: %s"
@@ -10152,14 +10155,14 @@ msgstr "O anfitrião silenciou o bate-papo gratuito para o jogador: %s"
 
 #, c-format
 msgid "The host has muted free chat for %d players"
-msgstr ""
+msgstr "O host silenciou o bate-papo livre para %d jogadores"
 
 msgid "Limits set to default."
-msgstr ""
+msgstr "Limites redefinidos para o padrão."
 
 #, c-format
 msgid "Changed structure limits [%u]:"
-msgstr ""
+msgstr "Limite das estruturas alterado [%u]:"
 
 #, c-format
 msgid "[%d] Limit [%s]: %u (default: %u)"
@@ -10170,8 +10173,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] Limite [%s]: %u (padrão: ilimitado)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] O limite é maior que numStructureStats (%u): %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10563,30 +10566,30 @@ msgid "Synchronizing data with host ..."
 msgstr "Sincronizando dados com o host ..."
 
 msgid "Waiting for correct join password"
-msgstr ""
+msgstr "Aguardando a senha correta de acesso"
 
 msgid "Attempting to connect"
-msgstr ""
+msgstr "Tentando conexão"
 
 msgid "Establishing connection handshake"
-msgstr ""
+msgstr "Estabelecendo conexão"
 
 msgid "Coordinating join with host"
-msgstr ""
+msgstr "Coordenando conexão com o host"
 
 msgid "Join attempt failed"
-msgstr ""
+msgstr "Tentativa de conexão falhou"
 
 msgid "Host did not respond before timeout"
 msgstr "O anfitrião não respondeu no tempo limite"
 
 #, c-format
 msgid "Failed at: [%s] - %s"
-msgstr ""
+msgstr "Falha em: [%s] - %s"
 
 #, c-format
 msgid "Failed at: [%s]"
-msgstr ""
+msgstr "Falha em: [%s]"
 
 #, c-format
 msgid "Failed to open connection: [%d] %s"
@@ -10608,16 +10611,16 @@ msgid "Requesting to join game"
 msgstr "Solicitando para entrar no jogo"
 
 msgid "Invalid host establishing data"
-msgstr ""
+msgstr "Estabelecendo dados de host inválido"
 
 msgid "Invalid host identity"
-msgstr ""
+msgstr "Identidade de host inválido"
 
 msgid "Failed to establish session keys with host"
-msgstr ""
+msgstr "Falha ao estabelecer chaves de sessão com o host"
 
 msgid "Failure to generate valid response"
-msgstr ""
+msgstr "Falha ao gerar resposta válida"
 
 msgid "Kick Spectator"
 msgstr "Expulsar espectador"
@@ -10848,7 +10851,7 @@ msgid "Classic"
 msgstr "Clássico"
 
 msgid "Remastered (HQ)"
-msgstr ""
+msgstr "Remasterizado (HQ)"
 
 msgid "Additional Campaigns"
 msgstr "Campanhas Adicionais"
@@ -10916,40 +10919,40 @@ msgid "Reduces the damage the enemy deals to a third of the current difficulty m
 msgstr "Reduz o dano que o inimigo lida a um terço da atual dificuldade do modificador."
 
 msgid "Infinite Time"
-msgstr ""
+msgstr "Tempo Infinito"
 
 msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
-msgstr ""
+msgstr "Missões não possuem temporizador quando possível (Bônus de Poder do Temporizador substituídos por uma pequena recompensa de poder se ativado)."
 
 msgid "Victory Hints"
-msgstr ""
+msgstr "Dicas de Vitória"
 
 msgid "Displays a console message every few minutes showing victory related information."
-msgstr ""
+msgstr "Mostra uma caixa de mensagens a cada alguns minutos com informações relacionadas a vitória."
 
 msgid "Finale Fun"
-msgstr ""
+msgstr "Diversão Final"
 
 msgid "Activate Final Gamma mission bonus content."
-msgstr ""
+msgstr "Ativar conteúdo bônus da missão Gamma Final."
 
 msgid "Gamma Bonus"
-msgstr ""
+msgstr "Bônus Gamma"
 
 msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
-msgstr ""
+msgstr "Missão Gamma Extra está usando o mapa criado pela equipe de desenvolvedores originais (mapa atualizado por: DARwins)."
 
 msgid "Additional Spawns (Insane difficulty)"
-msgstr ""
+msgstr "Surgimentos Adicionais (dificuldade insana)"
 
 msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
 msgstr "Permite spawns e comportamentos adicionais de inimigos para a dificuldade Insana (ou superior)."
 
 msgid "Additional Spawns (Lower difficulties than Insane)"
-msgstr ""
+msgstr "Surgimentos Adicionais (dificuldades menores que a insana)"
 
 msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
-msgstr ""
+msgstr "Habilita o surgimento adicional de inimigos com comportamentos de dificuldade Difícil ou menor."
 
 msgid "Fast EXP gain"
 msgstr "Ganho Rápido de EXP"
@@ -10958,7 +10961,7 @@ msgid "Increases unit experience point gain by 2x."
 msgstr "Aumenta o ganho de experiência das unidades em 2x."
 
 msgid "Tower Wars"
-msgstr ""
+msgstr "Torres de Guerra"
 
 msgid "Player gets significantly stronger structures."
 msgstr "O jogador obtém estruturas significativamente mais fortes."
@@ -11066,7 +11069,7 @@ msgid "Open Music Manager"
 msgstr "Abrir Gerenciador de Músicas"
 
 msgid "Audio Cues"
-msgstr ""
+msgstr "Sinais sonoros"
 
 msgid "Group Reporting"
 msgstr "Relatório do Grupo"
@@ -11114,7 +11117,7 @@ msgid "Reverse Rotation"
 msgstr "Reverter Rotação"
 
 msgid "Mouse Pan"
-msgstr ""
+msgstr "Câmera panorâmica com mouse"
 
 msgid "Edge Scrolling"
 msgstr "Rolagem na Borda"
@@ -11195,16 +11198,16 @@ msgid "%s hours"
 msgstr "%s horas"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "A qualidade de sombreamento do terreno apenas se aplica quando se usam as aparências de terreno: Remasterizado (HQ)"
 
 msgid "Shadows are not enabled."
-msgstr ""
+msgstr "Sombras não estão habilitadas."
 
 msgid "Shadow mapping not available on this system."
 msgstr "O mapeamento de sombra não está disponível neste sistema."
 
 msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
-msgstr ""
+msgstr "Iluminação avançada só está disponível quando se usam as aparências de terreno: Remasterizado (HQ)"
 
 msgid "Terrain"
 msgstr "Terreno"
@@ -11264,22 +11267,22 @@ msgid "Lighting"
 msgstr "Iluminação"
 
 msgid "Point Lights"
-msgstr ""
+msgstr "Pontos de Luz"
 
 msgid "Lightmap"
 msgstr "Lightmap"
 
 msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
-msgstr ""
+msgstr "Use um mapa de luz clássico para calcular pontos de luz impactando objetos e blocos. (Padrão Clássico & Normal. Mais rápido desempenho.)"
 
 msgid "Per-Pixel (HQ)"
-msgstr ""
+msgstr "Por-Pixel (HQ)"
 
 msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
-msgstr ""
+msgstr "Use pontos de luz por-pixel avançado para melhorar os visuais. (Pode afetar o desempenho. Requer uma GPU mais forte.)"
 
 msgid "Effects"
-msgstr ""
+msgstr "Efeitos"
 
 msgid "Fog"
 msgstr "Névoa"
@@ -11288,46 +11291,46 @@ msgid "Screen Shake"
 msgstr "Agitar Tela"
 
 msgid "Textures"
-msgstr ""
+msgstr "Texturas"
 
 msgid "Texture Size Limit"
-msgstr ""
+msgstr "Limites no tamanho de textura"
 
 msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
-msgstr ""
+msgstr "Texturas maiores que o limite configurado serão reduzidas. A menos que esteja rodando em um sistema com memória limitada disponível, isso geralmente deve ser definido para o valor máximo."
 
 msgid "LOD Distance"
 msgstr "Distância do Nível de Detalhes"
 
 msgid "How level of detail (in textures) is preserved as distance increases."
-msgstr ""
+msgstr "Como o nível de detalhes (em texturas) é preservado conforme aumenta-se a distância."
 
 msgid "Default"
 msgstr "Padrão"
 
 msgid "The system default (no supplied bias, may result in less sharp visuals)."
-msgstr ""
+msgstr "O padrão do sistema (sem dados fornecidos, pode resultar em visuais não tão nítidos)."
 
 msgid "Use LOD Distance bias to increase visual sharpness."
-msgstr ""
+msgstr "Use dados de Distância LOD para melhorar a nitidez do visual."
 
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 msgid "Graphics Backend"
-msgstr ""
+msgstr "Backend Gráfico"
 
 msgid "Antialiasing"
-msgstr ""
+msgstr "Suavização de serrilhado"
 
 msgid "Vertical Sync"
-msgstr ""
+msgstr "Sincronização Vertical"
 
 msgid "Adaptive"
 msgstr "Adaptativo"
 
 msgid "General"
-msgstr ""
+msgstr "Geral"
 
 msgid "Language"
 msgstr "Idioma"
@@ -11336,13 +11339,13 @@ msgid "Display Scale"
 msgstr "Proporção"
 
 msgid "Game UI"
-msgstr ""
+msgstr "Interface do Jogo"
 
 msgid "Show FPS"
-msgstr ""
+msgstr "Mostrar FPS"
 
 msgid "Show Unit Counts"
-msgstr ""
+msgstr "Mostrar contagem de unidades"
 
 msgid "Groups Menu"
 msgstr "Menu de Grupos"
@@ -11357,7 +11360,7 @@ msgid "Radar"
 msgstr "Radar"
 
 msgid "Radar Orientation"
-msgstr ""
+msgstr "Orientação do Radar"
 
 msgid "Fixed"
 msgstr "Fixo"
@@ -11381,7 +11384,7 @@ msgid "Video Playback"
 msgstr "Tamanho de Vídeo"
 
 msgid "Video Size"
-msgstr ""
+msgstr "Tamanho do vídeo"
 
 msgid "1×"
 msgstr "1x"
@@ -11417,40 +11420,40 @@ msgid "Failed to open configuration directory"
 msgstr "Falha ao abrir o diretório de configurações"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 msgid "Defaults"
-msgstr ""
+msgstr "Padrões"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Gráficos"
 
 msgid "Audio"
-msgstr ""
+msgstr "Áudio"
 
 msgid "Controls"
-msgstr ""
+msgstr "Controles"
 
 msgid "Window"
-msgstr ""
+msgstr "Janela"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Tela Cheia"
 
 msgid "Window Mode"
-msgstr ""
+msgstr "Modo janela"
 
 msgid "Windowed"
 msgstr "Em Janela"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Modo tela cheia"
 
 msgid "Behaviors"
-msgstr ""
+msgstr "Comportamentos"
 
 msgid "Minimize on Focus Loss"
-msgstr ""
+msgstr "Minimizar na perda de foco"
 
 msgid "Whether the window should auto-minimize on focus loss"
 msgstr "Se a janela deve minimizar automaticamente na perda de foco"
@@ -11471,10 +11474,10 @@ msgid "IP Address or Machine Name"
 msgstr "Endereço IP ou Nome da Máquina"
 
 msgid "Host:"
-msgstr ""
+msgstr "Host:"
 
 msgid "NOTE: Host is also a player."
-msgstr ""
+msgstr "AVISO: O host também é um jogador."
 
 msgid "Player ID: "
 msgstr "ID do Jogador: "
@@ -11483,140 +11486,140 @@ msgid "(none)"
 msgstr "(nenhum)"
 
 msgid "You:"
-msgstr ""
+msgstr "Você:"
 
 msgid "Waiting for host to configure teams"
-msgstr ""
+msgstr "Aguardando o host configurar as equipes"
 
 msgid "Waiting for players"
-msgstr ""
+msgstr "Aguardando jogadores"
 
 msgid "Downloading map / mods"
-msgstr ""
+msgstr "Baixando mapa / mods"
 
 msgid "Waiting for you to check ready"
-msgstr ""
+msgstr "Esperando que você verifique pronto"
 
 msgid "Waiting for host to start game"
-msgstr ""
+msgstr "Esperando o host iniciar o jogo"
 
 msgid "Waiting for spectators"
-msgstr ""
+msgstr "Aguardando espectadores"
 
 msgid "Players ready & waiting for match:"
-msgstr ""
+msgstr "Jogadores prontos e esperando pela partida:"
 
 #, c-format
 msgid "Players: (%zu ready, %zu not ready)"
-msgstr ""
+msgstr "Jogadores: (%zu ready, %zu not ready)"
 
 #, c-format
 msgid "AI Bots: %zu"
-msgstr ""
+msgstr "IA Bots: %zu"
 
 #, c-format
 msgid "Spectators: (%zu ready, %zu not ready)"
-msgstr ""
+msgstr "Espectadores: (%zu ready, %zu not ready)"
 
 #, c-format
 msgid "Host: %s"
-msgstr ""
+msgstr "Host: %s"
 
 msgid "ready"
-msgstr ""
+msgstr "pronto"
 
 msgid "not ready"
-msgstr ""
+msgstr "preparando"
 
 msgid "Waiting Room"
-msgstr ""
+msgstr "Sala de Espera"
 
 msgid "FFA"
-msgstr ""
+msgstr "FFA"
 
 msgid "Alliances Allowed"
-msgstr ""
+msgstr "Alianças permitidas"
 
 msgid "Teams"
-msgstr ""
+msgstr "Equipes"
 
 msgid "Teams (No Shared Res)"
-msgstr ""
+msgstr "Equipes (Res não compartilhadas)"
 
 msgid "Matchmaking"
-msgstr ""
+msgstr "Organizando de Partida"
 
 msgid "Blind Lobby"
-msgstr ""
+msgstr "Sala de espera Cega"
 
 msgid "Blind Game"
-msgstr ""
+msgstr "Jogo Cego"
 
 msgid "No Tanks"
-msgstr ""
+msgstr "Sem tanques"
 
 msgid "No VTOL"
-msgstr ""
+msgstr "Sem VTOL"
 
 msgid "No Cyborgs"
-msgstr ""
+msgstr "Sem Ciborgues"
 
 msgid "Spectate Game"
-msgstr ""
+msgstr "Assistindo partida"
 
 msgid "There appears to be a game update available!"
 msgstr "Parece que há uma nova versão disponível!"
 
 msgid "Failed to connect to lobby server"
-msgstr ""
+msgstr "Falha ao conectar a sala de espera do servidor"
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Sua versão do Warzone é incompatível com esse jogo."
 
 #, c-format
 msgid "Host Version: %s"
-msgstr ""
+msgstr "Versão Host: %s"
 
 msgid "(50+ omitted)"
-msgstr ""
+msgstr "(50+ omitido)"
 
 #, c-format
 msgid "(%u omitted)"
-msgstr ""
+msgstr "(%u omitido)"
 
 msgid "No games for your version"
-msgstr ""
+msgstr "Sem jogos para a sua versão"
 
 msgid "No games matching filters"
-msgstr ""
+msgstr "Sem jogos para os seus filtros"
 
 #, c-format
 msgid "%d players queued"
-msgstr ""
+msgstr "%d jogadores enfileirados"
 
 msgid "Matchmaking Room: Open"
-msgstr ""
+msgstr "Sala de organização da partida: Aberto"
 
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 msgid "Details"
-msgstr ""
+msgstr "Detalhes"
 
 msgid "Mods"
-msgstr ""
+msgstr "Modificações"
 
 msgid "Hide Incompatible Games"
-msgstr ""
+msgstr "Ocultar jogos incompatíveis"
 
 msgid "Hide Empty Games"
-msgstr ""
+msgstr "Ocultar Jogos Vazios"
 
 msgid "Hide Modded Games"
-msgstr ""
+msgstr "Ocultar Jogos Modificados"
 
 #, c-format
 msgid "Sending Map: %u%% "
@@ -11687,31 +11690,31 @@ msgid "Structure Limits Enforced."
 msgstr "Impostos Limites de Estrutura."
 
 msgid "Challenge:"
-msgstr ""
+msgstr "Desafio:"
 
 msgid "Skirmish:"
-msgstr ""
+msgstr "Conflitos:"
 
 msgid "Local (Offline)"
-msgstr ""
+msgstr "Local (Offline)"
 
 msgid "Hosting:"
-msgstr ""
+msgstr "Hospedando:"
 
 msgid "Password-Protected (Private)"
-msgstr ""
+msgstr "Protegido por senha (Privado)"
 
 msgid "Open (Public)"
-msgstr ""
+msgstr "Aberto (Público)"
 
 msgid "Connected to Host:"
-msgstr ""
+msgstr "Conectado ao Host:"
 
 msgid "Set Password"
-msgstr ""
+msgstr "Definir senha"
 
 msgid "Require Password to Join"
-msgstr ""
+msgstr "Exige senha para entrar"
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
@@ -11724,13 +11727,13 @@ msgid "Game Name Updated."
 msgstr "Nome do Jogo Atualizado."
 
 msgid "Set Game Name"
-msgstr ""
+msgstr "Definir nome do jogo"
 
 msgid "One-Player Skirmish"
 msgstr "Jogador vs. Computador"
 
 msgid "Edit Game Name"
-msgstr ""
+msgstr "Editar nome do jogo"
 
 msgid "Game Name"
 msgstr "Nome do Jogo"
@@ -11746,7 +11749,7 @@ msgstr ""
 "Pode ser bloqueado pelos votos dos jogadores"
 
 msgid "Match Options"
-msgstr ""
+msgstr "Opções de partida"
 
 msgid "Base"
 msgstr "Bases"
@@ -11767,76 +11770,76 @@ msgid "Technology Level 4"
 msgstr "Tecnologia Nível 4"
 
 msgid "Limits"
-msgstr ""
+msgstr "Limites"
 
 msgid "Randomize Options"
-msgstr ""
+msgstr "Opções aleatórias"
 
 msgid "Match Option Preferences:"
-msgstr ""
+msgstr "Opção de preferências da partida:"
 
 msgid "Star All"
-msgstr ""
+msgstr "Marcar tudo"
 
 msgid "Clear All"
-msgstr ""
+msgstr "Limpar tudo"
 
 msgid "Show Player Preferences"
-msgstr ""
+msgstr "Mostar preferências do jogador"
 
 msgid "Hide Player Preferences"
-msgstr ""
+msgstr "Ocultar preferências do jogador"
 
 msgid "Not editable while in a game."
-msgstr ""
+msgstr "Não editável durante a partida."
 
 msgid "Not editable while in a multiplayer game."
-msgstr ""
+msgstr "Não editável durante partida multijogador."
 
 msgid "Takes effect on game restart"
-msgstr ""
+msgstr "Será aplicado ao reiniciar o jogo"
 
 msgid "Advanced Hosting Options:"
-msgstr ""
+msgstr "Opções avançadas de hospedagem:"
 
 msgid "Host Role"
-msgstr ""
+msgstr "Função do Host"
 
 msgid "Player Host"
-msgstr ""
+msgstr "Jogador Host"
 
 msgid "Host is a player in the game (the default)."
-msgstr ""
+msgstr "O host é um jogador na partida (o padrão)."
 
 msgid "Spectator Host"
-msgstr ""
+msgstr "Host espectador"
 
 msgid "Host is a spectator in the game."
-msgstr ""
+msgstr "O host é um espectador na partida."
 
 msgid "Blind Mode"
-msgstr ""
+msgstr "Modo Cego"
 
 msgid "Whether and when players are blinded to other players' identities."
-msgstr ""
+msgstr "Se e quando os jogadores são ocultos para a identidade de outros jogadores."
 
 msgid "Blind modes are only available when host is a Spectator Host."
-msgstr ""
+msgstr "Modos cegos só estão disponíveis quando o host é um Host Espectador."
 
 msgid "Players' identities are visible, in lobby and in game (the default)."
-msgstr ""
+msgstr "As identidades dos jogadores são visíveis, na sala de espera e no jogo (o padrão)."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
-msgstr ""
+msgstr "As identidades dos jogadores ficam ocultas de todos (exceto o host espectador) até o jogo começar."
 
 msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
-msgstr ""
+msgstr "As identidades dos jogadores ficam ocultas de todos (exceto o host espectador) até o jogo terminar."
 
 msgid "Start Hosting"
-msgstr ""
+msgstr "Iniciar Hospedagem"
 
 msgid "Configure Advanced Hosting Options"
-msgstr ""
+msgstr "Configurar Opções Avançadas de Hospedagem"
 
 msgid "Launch Transport"
 msgstr "Lançar Transporte"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-12-13 02:37\n"
+"PO-Revision-Date: 2026-01-31 02:57\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -177,7 +177,7 @@ msgid "(If you are playing the campaign, new guide topics may be unlocked as you
 msgstr ""
 
 msgid "Building Structures"
-msgstr "Létesítmények Építése"
+msgstr "Épületek építése"
 
 msgid "Click the \"Build\" button on the Command Panel."
 msgstr ""
@@ -186,7 +186,7 @@ msgid "This will open the Structures menu on the left side of screen, with a but
 msgstr ""
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr "Válaszd ki a kívánt épületet. Egy zöld sziluett fog megjelenni a játékvilágban - oda fogod tudni letenni az épületet, ahol nem piros."
+msgstr "Válassza ki a kívánt épületet. Egy zöld sziluett fog megjelenni a játékvilágban – oda fogja tudni letenni az épületet, ahol nem piros."
 
 msgid "Move the silhouette by moving the input device."
 msgstr ""
@@ -198,16 +198,16 @@ msgid "- If a structure is not buildable in a location, the silhouette will be c
 msgstr ""
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr ""
+msgstr "Amint megfelelő helyet választott, kijelöléssel erősítse meg az építési terület helyét. Egy teherautó odamegy, és elkezdi az építést."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "További teherautókat is utasíthat, hogy segítsenek (gyorsabb építkezést elérve), válassza ki őket, és utasítsa őket az épülő épület megcélzásával."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
 msgstr ""
 
 msgid "Cyborg Factory"
-msgstr "Kiborg Gyár"
+msgstr "Kiborggyár"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
 msgstr ""
@@ -219,31 +219,31 @@ msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders
 msgstr ""
 
 msgid "Demolishing Structures"
-msgstr ""
+msgstr "Épületek lebontása"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Az épületek lebontása majdnem olyan egyszerű, mint egy új építése."
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr "Válaszd az \"Épület Megsemmisítése\" gombot az Épületek menüben és klikkelj a megsemmisítés gombra."
+msgstr "Válassza az „Épület lebontása” gombot az Épületek menüben, és kattintson a lebontandó épületre."
 
 msgid "A unit will move to the building and destroy it."
-msgstr ""
+msgstr "Egy egység odamegy az épülethez, és lebontja."
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr ""
+msgstr "A lebontott épületek visszaadják az építéshez használt energia felét."
 
 msgid "Factory"
 msgstr "Gyár"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "A gyár az egységek építésére szolgál. Minden gyár egyszerre egy egységet tud készíteni, de több egység termelése is sorba állítható."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Ha egy egység elkészül, akkor megkapja a gyár egységparancsait, és a gyár gyülekezési pontjához megy."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Megjegyzés: az alap gyár csak könnyű karosszériájú egységeket tud gyártani. A gyár termelési képességének növeléséhez gyármodulokat kell felfedezni és építeni."
 
 msgid "Command Center"
 msgstr "Parancsnoki központ"
@@ -261,52 +261,52 @@ msgid "Then, click where you want your builders to construct it."
 msgstr "Ezután kattintson oda, ahová az építői megépítsék."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Épületmodulok"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Az erőművek, gyárak és kutatólétesítmények a megfelelő épületmodulokkal fejleszthetőek."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Ha a kutatás elkészült, akkor a modulokat az Építés menüben találja, és a kérdéses épületekre alkalmazhatóak."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
-msgstr ""
+msgstr "Másik lehetőségként kijelölhet egy teherautót vagy egy hadmérnököt, és rákattinthat az épületre, hogy elkezdje az építését."
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Megjegyzés: míg ezek az épületek fejlesztés alatt állnak, a befejezésükig ideiglenesen nem lesznek elérhetők."
 
 msgid "Upgrade Effects:"
-msgstr ""
+msgstr "Fejlesztési hatások:"
 
 msgid "- Power Generator modules increase the rate of power generation"
-msgstr ""
+msgstr "- Az erőműmodulok növelik az energiatermelés sebességét"
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr "- Gyár modulok lehetővé teszik Közepes és Nehéz vázú egységek létrehozását, valamint csökkentik a gyártáshoz szükséges időt"
+msgstr "- A gyármodulok lehetővé teszik a közepes és nehéz karosszériájú egységek létrehozását, valamint csökkentik a gyártáshoz szükséges időt"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
-msgstr ""
+msgstr "- A kutatólétesítmény-modulok csökkentik a hozzárendelt kutatási projektek befejezési idejét"
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Olajkút"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "Olajkút egy teherautó kijelölésével és egy elérhető olajforrás megcélzásával építhető."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr "Egy Olajfúrókút elpusztítása ideiglenesen megakadályozza egy újabb kút építését, amíg a tűz el nem alszik."
+msgstr "Egy olajkút elpusztítása ideiglenesen megakadályozza egy újabb kút építését, amíg a tűz el nem alszik."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
-msgstr ""
+msgstr "Az olajkút kiaknázásához és az energiatermeléshez egy erőműre van szükség."
 
 msgid "Power Generator"
-msgstr ""
+msgstr "Erőmű"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
-msgstr ""
+msgstr "Minden erőmű legfeljebb 4 olajkutat használ. Így például, ha 10 olajkútja van, akkor 3 erőműre van szükség az összes olajkút kihasználásához, és a lehető leggyorsabb energiatermeléshez."
 
 msgid "While oil derricks must be built on oil resources, Power Generators can be built anywhere on the map. But keep in mind: additional generators beyond one for every 4 derricks will provide no benefit."
-msgstr "Amíg az olajfúró kutakat olajlelő helyre kell építeni, addig az Áram Generátorokat bárhova felépítheted a térképen, de tartsd észben: további generátorok építése a  \" 4 olajfúró kút / generátor \" mennyiség fölött nem adnak további előnyöket."
+msgstr "Amíg az olajkutakat lelőhelyekre kell építeni, addig az erőművek bárhova építhetők a térképen, de tartsa észben: 4 olajkút / erőmű mennyiség fölött a további erőművek építése nem ad további előnyöket."
 
 msgid "Rally Point"
 msgstr ""
@@ -315,7 +315,7 @@ msgid "When a Factory has finished building a unit, the unit will spawn next to 
 msgstr ""
 
 msgid "By default, the Rally Point is placed next to the Factory. Clicking a Rally Point will allow you to move it."
-msgstr "Alapesetben a Gyülekező Pont a Gyár mellé van helyezve. Kattints a Gyülekező Pontra, hogy áthelyezd."
+msgstr "Alapesetben a gyülekezési pont a gyár mellé kerül. A gyülekezési pontra való kattintással helyezheti át."
 
 msgid "Note: Moving a Rally Point while a unit is moving to it will not affect the unit's path."
 msgstr ""
@@ -351,10 +351,10 @@ msgid "When a VTOL Factory is done building a unit, it will order it to fly and 
 msgstr ""
 
 msgid "Structures"
-msgstr ""
+msgstr "Épületek"
 
 msgid "Building structures is absolutely vital in Warzone 2100 - from Factories which build units, to Research Facilities that research new technologies."
-msgstr ""
+msgstr "Az épületek építése létfontosságú a Warzone 2100-ban – az egységeket készítő gyáraktól, az új technológiákat kifejlesztő kutatólétesítményekig."
 
 msgid "Building can be done with units with Trucks as turrets and/or Combat Engineers."
 msgstr "Épületek felhúzásának a befejezéséhez a géptesteken toronyként funkcionál a teherautó konténer/dömper része és/vagy Harci Mérnökök szükségesek."
@@ -432,7 +432,7 @@ msgid "Retreating"
 msgstr "Visszavonulás"
 
 msgid "Losing units (especially units with experience levels) can be a real hit to a force's ability to successfully wage battle."
-msgstr "Az egységek elvesztése (különösen a tapasztalattal rendelkező egységeké) valódi csapást mérhet egy ellenséges erőben, hogy kifizetődően vigye végbe a csatáját."
+msgstr "Az egységek elvesztése (különösen a tapasztalattal rendelkező egységeké) komoly csapás lehet az erők harci képességére."
 
 msgid "You can use the Unit Orders menu to choose a \"Retreat Threshold\", which will cause units to automatically retreat from the battle when they reach a specified damage level."
 msgstr "Használd az Egység Parancsok menüt, hogy kiválaszd a \"Visszavonulási Küszöböt\", mely automatikussá teszi az egységek csatából való visszavonulását, ha elérték a kijelölt sérülési szintet."
@@ -477,10 +477,10 @@ msgid "Right-click a Factory to adjust the Unit Orders for all future units prod
 msgstr "Kattintson jobb egérgombbal egy gyárra, hogy beállítsa a jövőben gyártott egységek egységparancsait."
 
 msgid "Building Units"
-msgstr ""
+msgstr "Egységek gyártása"
 
 msgid "To build units, either select a Factory, or select the \"Manufacturing\" button on the Command Panel - this will open the Manufacturing panel on the left side of the screen."
-msgstr ""
+msgstr "Az egységek gyártásához válasszon ki egy gyárat, vagy válassza a „Gyártás” gombot a Parancsnoki panelen – ez megnyitja a Gyártás panelt a képernyő bal oldalán."
 
 msgid "The Manufacturing panel will display the unit designs which are buildable by the currently-selected Factory. Factories may be limited to producing certain types of units (or may only be able to produce certain units if upgraded with modules)."
 msgstr "A Gyártás panel kijelzi az egység dizájnokat amik a jelenleg kiválasztott Gyárban készíthetőek. A Gyárak limitálva lehetnek bizonyos típusú egységek legyártására (vagy csak bizonyos egységek gyártására, ha fel van fejlesztve modulokkal a gyár)."
@@ -501,7 +501,7 @@ msgid "Attaching Units"
 msgstr "Egységek Hozzárendelése"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "Hogy egységeket rendeljen a parancsnokhoz, válassza ki az egységeket, majd kattintson bal egérgombbal a hozzárendelendő parancsnokra. Egy szimbólum fog megjelenni a hozzárendelt egységek felett, hogy jelezze a hozzárendelést."
 
 msgid "## Limits:"
 msgstr ""
@@ -600,7 +600,7 @@ msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons
 msgstr "De emiatt sokkal sérülékenyebbek a Gyalogság-Elhárító és Tűzérségi fegyverekkel szemben."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr "Tudd, hogy Kiborgokat nem tudsz tervezni. Kiborg sémákat függetlenül kell kikutatnod és szükséged van hozzájuk a Kiborg Gyárra."
+msgstr "Vegye figyelembe, hogy kiborgokat nem lehet tervezni. A kiborgsablonokat függetlenül kell kutatni, és a gyártásukhoz kiborggyárra van szükség."
 
 msgid "Half-tracks"
 msgstr ""
@@ -864,13 +864,13 @@ msgid "Note that all units have less thermal armor than kinetic armor. This mean
 msgstr ""
 
 msgid "Attacking"
-msgstr ""
+msgstr "Támadás"
 
 msgid "Designing VTOLs"
-msgstr ""
+msgstr "VTOL járművek tervezése"
 
 msgid "Remember: You will need a \"VTOL Factory\" to actually build VTOL unit designs."
-msgstr ""
+msgstr "Ne feledje: egy „VTOL gyárra” lesz szüksége, hogy VTOL járműveket építsen."
 
 msgid "Weapons"
 msgstr "Fegyverek"
@@ -897,7 +897,7 @@ msgid "When you complete research on a new weapon, an Intelligence Display messa
 msgstr "Ha befejezi egy új fegyver kutatását, a hírszerzési kijelző egy üzenetet fog megjeleníteni a tulajdonságairól."
 
 msgid "It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
-msgstr ""
+msgstr "A hasznára válik, ha különböző fegyvertípusokkal kísérletezik. Ha problémája akad, és egy ideje nem gondolta át az erői összetételét, akkor itt az ideje a fegyverek erősebbre vagy más változatokra való váltásának."
 
 msgid "Units"
 msgstr "Egységek"
