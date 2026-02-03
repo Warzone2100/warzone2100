@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -2953,7 +2953,7 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr ""
 
 #, c-format
-msgid "Port mapping opened external port: %d"
+msgid "Port mapping opened external port: %u"
 msgstr ""
 
 #, c-format
@@ -7268,6 +7268,9 @@ msgstr ""
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "Ai trimis prea multe mesaje în ultimele câteva secunde. Te rugăm să aștepți și să încerci din nou."
 
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
@@ -7962,15 +7965,15 @@ msgid "Select / Assign Group Number: "
 msgstr ""
 
 #, c-format
-msgid "Group %u"
+msgid "Group %zu"
 msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
+msgid "Select the Units in Group %zu"
 msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
+msgid "Assign Selected Units to Group %zu"
 msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
@@ -9000,8 +9003,8 @@ msgid "Power Per Second"
 msgstr "Energie pe secundă"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d pompă(e) inactive"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "Ai nevoie de mai multe resurse!"
@@ -10169,7 +10172,7 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr ""
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format

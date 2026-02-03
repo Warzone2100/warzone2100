@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -2014,7 +2014,7 @@ msgstr ""
 "Vous pouvez quitter le tutoriel quand vous le souhaitez."
 
 msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
-msgstr ""
+msgstr "Le tutoriel est fini. Appuyez sur Echap ou l'icône paramètres pour revenir au menu principal."
 
 msgid "CAMPAIGN ONE"
 msgstr "PREMIÈRE CAMPAGNE"
@@ -2957,8 +2957,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "Configurez manuellement votre routeur/pare-feu pour ouvrir le port %d !"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "Le mapping de ports a ouvert un port externe : %d"
+msgid "Port mapping opened external port: %u"
+msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -7276,6 +7276,9 @@ msgstr "Spectateurs"
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "Vous avez envoyé trop de messages dans les dernières secondes. Veuillez patienter avant de réessayer."
 
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s veut activer le mode débogage. Activé : %s, Désactivé : %s"
@@ -7968,16 +7971,16 @@ msgid "Select / Assign Group Number: "
 msgstr "Sélectionner / Assigner un numéro de groupe : "
 
 #, c-format
-msgid "Group %u"
-msgstr "Groupe %u"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "Sélectionnez les unités dans le groupe %u"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "Assigner les unités sélectionnées au groupe %u"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Centrer la caméra sur ce groupe en cliquant ou en tapant deux fois"
@@ -8094,7 +8097,7 @@ msgstr "ATTENTION : si vous ne cochez pas \"Prêt\" maintenant vous allez être 
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
-msgstr ""
+msgstr "Le joueur %s sera exclu de la partie s'il ne coche pas \"Prêt\" rapidement !"
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
@@ -8107,7 +8110,7 @@ msgid "NOTICE: Please check Ready so the game can begin"
 msgstr "ATTENTION : cochez \"Prêt\" pour que le jeu puisse commencer"
 
 msgid "Players who don't check Ready in time will be kicked."
-msgstr ""
+msgstr "Les joueurs qui ne cochent pas \"Prêt\" à temps seront exclus de la partie !"
 
 msgid "Can someone please transfer me some units?"
 msgstr "Quelqu'un peut-il me transférer des unités ?"
@@ -9006,8 +9009,8 @@ msgid "Power Per Second"
 msgstr "Énergie par seconde"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d puits inactif(s)"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "PAS ASSEZ D'ÉNERGIE !"
@@ -10174,8 +10177,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] Limite [%s] : %u (par défaut : pas de limite)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] Limite supérieure à numStructureStats (%u) : %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -11439,7 +11442,7 @@ msgid "Window"
 msgstr "Fenêtre"
 
 msgid "Desktop Full"
-msgstr ""
+msgstr "Bureau entier"
 
 msgid "Window Mode"
 msgstr "Mode fenêtre"
@@ -11448,7 +11451,7 @@ msgid "Windowed"
 msgstr "Fenêtré"
 
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Mode plein écran"
 
 msgid "Behaviors"
 msgstr "Comportements"

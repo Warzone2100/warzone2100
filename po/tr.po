@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -2953,7 +2953,7 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr ""
 
 #, c-format
-msgid "Port mapping opened external port: %d"
+msgid "Port mapping opened external port: %u"
 msgstr ""
 
 #, c-format
@@ -7272,6 +7272,9 @@ msgstr "Gözlemciler"
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr "Aynı anda bir çok mesaj attın. Lütfen daha sonra tekrar dene."
 
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s hata ayıklama modunu devreye almak istiyor. Etkin: %s, Etkin değil: %s."
@@ -7964,15 +7967,15 @@ msgid "Select / Assign Group Number: "
 msgstr ""
 
 #, c-format
-msgid "Group %u"
-msgstr "Grup %u"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "%u Grubundaki Birimleri Seç"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
+msgid "Assign Selected Units to Group %zu"
 msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
@@ -9002,8 +9005,8 @@ msgid "Power Per Second"
 msgstr "Saniye Başına Güç"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d pompa etkin değil"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "Daha fazla kaynak gerekli!"
@@ -10170,8 +10173,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] Sınır [%s]: %u (varsayılan: sınırsız)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] Sınır numStructureStats (%u) değerinden daha fazla: %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"

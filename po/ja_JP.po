@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2025-12-09 00:24+0000\n"
-"PO-Revision-Date: 2025-12-09 00:37\n"
+"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"PO-Revision-Date: 2026-02-03 21:43\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -2953,8 +2953,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "ポート %dを開くようにルーター/ファイアウォールを手動で設定してください！"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "ポートマッピングが外部ポートを開きました: %d"
+msgid "Port mapping opened external port: %u"
+msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -7272,6 +7272,9 @@ msgstr "観戦者"
 msgid "You have sent too many messages in the last few seconds. Please wait and try again."
 msgstr ""
 
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s はデバッグ・モードを有効にしようとしています。有効：%s、無効：%s。"
@@ -7958,16 +7961,16 @@ msgid "Select / Assign Group Number: "
 msgstr "グループ番号を選択 / 割り当てる: "
 
 #, c-format
-msgid "Group %u"
-msgstr "グループ %u"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "グループ %u で単位を選択"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "選択したユニットをグループ %u に割り当てる"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "このグループのカメラをクリックまたは2回タップして中央に表示"
@@ -8996,8 +8999,8 @@ msgid "Power Per Second"
 msgstr "電力毎秒"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d  台の採油機が非稼働です"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "もっとリソースが必要だ！"
@@ -10163,8 +10166,8 @@ msgid "[%d] Limit [%s]: %u (default: no limit)"
 msgstr "[%d] 上限 [%s]：%u (デフォルト：上限なし)"
 
 #, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] numStructureStats (%u) よりも大きい制限: %u"
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
