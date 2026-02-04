@@ -1,3 +1,46 @@
+2026-02-04: Version 4.6.3:
+ * General:
+   * Fix: Detect disconnected research categories (commit:23710dd093bcc75169279f601fe646b1d8914352, #4779)
+   * Fix: Video sequence skip time delay for powerful systems (commit:e5654b3a9b6a930ab4857d830996b50989bd9ba3, #4785)
+   * Fix: VTOLs floating motionless in mid-air after failed embark (commit:55d232be355175e9764b0dd234d0e2d26de8c127, #4785)
+   * Fix: Auto-embark transporter selection behavior in skirmish / mp (commit:f5e663f840f7f397f74d1e3f334132298675d7ff, #4785)
+   * Fix: Trigger screenSizeDidChange if already started in *TitleUI::start (commit:83329a612dd0aacac0dbd743cd04e8626abaf8d4, #4790)
+   * Fix: History console position and sizing when layout changes (commit:eba7eb08ee875bf776b62e26a3f0e5cb81f20eed, #4796)
+   * Fix: Various potential crashes / asserts (too many commits, #4719, #4777, #4782)
+ * Graphics:
+   * Add: Terrain Shadows graphics option, terrain can now cast actual shadows on itself and everything else (too many commits, #4743)
+   * Add: Numerous improvements for shadows, lighting, and fog (too many commits, #4743)
+   * Change: Remove old fallback terrain renderer (commit:3c31d5d9aab6fe70cab1af00bf1acc5fcff0d233, #4743)
+   * Fix: Vulkan: Default-disable additional problematic layers (commit:7b4c5549016183741d2b19591afa8c104213e5a2, #4714)
+   * Fix: Black borders when changing display scale while fullscreen on some platforms (commit:4715d7ae4f3a9beec69947493e8ec9bcb540b68b, #4777)
+ * Multiplayer:
+   * Add: locked.cheats option, to reject debug mode / cheat voting (commit:635b4f7d728ec1c047fb56935ca195f96ec8a406, #4790)
+   * Add: Right-clicking on a human player copies the player id to the clipboard (commit:97c43ef2c055668b1188ac879ebc915302cfe832, #4790)
+   * Change: Display the player id (b64) instead of the old player hash (commit:c06834c1694316e353e9024f5fa83501caed68cb, #4790)
+   * Fix: handlePlayerLeftInGame leftWhilePlayer value (commit:c55b41bc3a5921b442c29216daf8ad42868aa182, #4757)
+   * Fix: Auto-not-ready kick behavior (commit:bcb89fe13a57ab407fccd8a17319c288ce3cb525, #4790)
+   * Fix: Improve tmp bad IPs list with expiry (commit: 78be0596010eb0118a416607109ca351450ce9ae, #4790)
+   * Fix: Return immediately after startMultiplayerGame() in frontendMultiMessages (commit:4d1721cab9e18a114ae8276909ca38b76278b9ad, #4790)
+   * Fix: Skip additional graphics or display-related tasks in headless mode (too many commits, #4790)
+   * Fix: Reduce amount of host / system message spam when joining lobbies and while in a lobby (too many commits, #4790)
+   * Fix: Handle poll connection-related errors in PendingWritesManager (commit:e8cfe956dcb085fd88665dc786ff7a72482bf91c, #4790)
+   * Fix: Improve accuracy of multiStatsResearchPerformance accumulation (commit:19e3f29d6f9929ca0668e2cbbebc57c0d1ca7d7d, #4790)
+   * Fix: Various possible causes of rare desyncs (too many commits, #4790)
+ * Scripting:
+   * Add: Optional "quiet" param to includeJSON() (commit:8ca6d1ef105791b3a446fcbb8248e6f9a41bc004, #4750)
+   * Fix: Remove or change some defensive checks in skirmish bots (commit:656433b9d0a5dbe631239d235639b9ee60fad849, #4764)
+   * Fix: Handle circular references when converting JSValue to json (commit:777a9fb4759d68794f39b6f7317b9b6226aec4a9, #4769)
+ * AI:
+   * Change: Cobra AI: Improve cyborg style games (commit:d4b0391b3eaa9ba4428d22ec641a56b87648b8ce, #4764)
+   * Fix: Nexus AI: Send help chat messages to allies only (commit:ee0a1394f76510d9e243e1f6b926279bd0b880eb, #4786)
+ * Translations:
+   * Add: Serbian translation (commit:67e7d0cd6eab6815405281880429ec92b3a7111c, #4726)
+   * Change: Translation updates (too many commits, #4710, #4802)
+ * Other:
+   * Fix: Various Wformat warnings and correctness issues (too many commits, #4787)
+   * Fix: get-dependencies_linux.sh: Debian / Ubuntu version-handling (commit:c763d01bf83dcb1b5a9e7bd9e4ac77739cd049de, #4795)
+   * Fix: Various documentation cleanups (too many commits, #4729, #4784, #4800)
+
 2025-12-09: Version 4.6.2:
  * General:
    * Fix: Add transporter weapon validity check (commit:a085887b4e3093e695f24f40a666170820c494ca, #4617)
