@@ -445,18 +445,6 @@ bool loadResearch(WzConfig &ini)
 			research.excludeFromCheats = 0;
 		}
 
-		//set tech code
-		UBYTE techCode = ini.value("techCode", 0).toUInt();
-		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getStatsName(&research));
-		if (techCode == 0)
-		{
-			research.techCode = TC_MAJOR;
-		}
-		else
-		{
-			research.techCode = TC_MINOR;
-		}
-
 		//get flags when to disable tech
 		UBYTE disabledWhen = ini.value("disabledWhen", 0).toUInt();
 		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getStatsName(&research));
@@ -497,15 +485,16 @@ bool loadResearch(WzConfig &ini)
 			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getStatsName(&research));
 		}
 
+		// If specified, indicates major topic and defines the RES_MSG to use when researched
 		WzString msgName = ini.value("msgName", "").toWzString();
 		if (msgName.compare("") != 0)
 		{
-			//check its a major tech code
-			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getStatsName(&research));
-			if (research.techCode == TC_MAJOR)
-			{
-				research.pViewData = getViewData(msgName);
-			}
+			research.techCode = TC_MAJOR;
+			research.pViewData = getViewData(msgName);
+		}
+		else
+		{
+			research.techCode = TC_MINOR;
 		}
 
 		//set the researchPoints
