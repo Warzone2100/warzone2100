@@ -3799,6 +3799,7 @@ bool LobbyServerConnectionHandler::connect()
 
 		// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
 		disconnect();
+		server_not_there = true;
 		return bProcessingConnectOrDisconnectThisCall;
 	}
 
