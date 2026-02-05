@@ -84,6 +84,14 @@ function eventAttacked(victim, attacker)
 	}
 }
 
+function insaneReinforcementSpawn()
+{
+	const units = (!camClassicMode()) ? [cTempl.blokeheavy, cTempl.trikeheavy, cTempl.buggyheavy, cTempl.bjeepheavy] : [cTempl.bloke, cTempl.trike, cTempl.buggy, cTempl.bjeep];
+	const limits = {minimum: 8, maxRandom: 2};
+	const location = camMakePos(camGenerateRandomMapEdgeCoordinate(getObject("landingZone")));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_SCAV_7, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+}
+
 //Send the south-eastern scavs in the main base on an attack run when the front bunkers get destroyed.
 function checkFrontBunkers()
 {
@@ -155,9 +163,9 @@ function eventStartLevel()
 		}
 
 		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
-		camUpgradeOnMapTemplates(cTempl.trike, cTempl.triketwin, CAM_SCAV_7);
-		camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggytwin, CAM_SCAV_7);
-		camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeeptwin, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.trike, (camAllowInsaneSpawns()) ? cTempl.trikeheavy : cTempl.triketwin, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.buggy, (camAllowInsaneSpawns()) ? cTempl.buggyheavy : cTempl.buggytwin, CAM_SCAV_7);
+		camUpgradeOnMapTemplates(cTempl.bjeep, (camAllowInsaneSpawns()) ? cTempl.bjeepheavy : cTempl.bjeeptwin, CAM_SCAV_7);
 
 		camSetArtifacts({
 			"scavFactory1": { tech: "R-Wpn-MG3Mk1" }, //Heavy machine gun
@@ -189,5 +197,10 @@ function eventStartLevel()
 	else
 	{
 		queue("blowupNonOriginalStructures", camSecondsToMilliseconds(2));
+	}
+
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(30));
 	}
 }

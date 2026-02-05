@@ -5639,21 +5639,21 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "RepeatDamage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "RadiusDamage",
-				"value": 25
+				"value": 30
 			}
 		],
 		"statID": "Howitzer105Mk1",
@@ -5749,14 +5749,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "FirePause",
-				"value": -10
+				"value": -30
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "ReloadTime",
-				"value": -10
+				"value": -30
 			}
 		],
 		"statID": "Howitzer105Mk1",
@@ -6059,7 +6059,7 @@
 		"id": "R-Wpn-Mortar-Damage04",
 		"keyTopic": 1,
 		"msgName": "RES_W_M_D4",
-		"name": "HEAP Mortar Shells",
+		"name": "HESC Mortar Shells",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage03"
 		],
@@ -6094,10 +6094,11 @@
 	"R-Wpn-Mortar-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Damage05",
-		"name": "HEAP Mortar Shells Mk2",
+		"name": "HESC Mortar Shells Mk2",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
-			"R-Wpn-Mortar-ROF02"
+			"R-Wpn-Mortar-ROF01",
+			"R-Wpn-Mortar3"
 		],
 		"researchPoints": 11200,
 		"researchPower": 350,
@@ -6107,21 +6108,21 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "Damage",
-				"value": 30
+				"value": 10
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 10
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "RepeatDamage",
-				"value": 30
+				"value": 10
 			}
 		],
 		"statID": "Mortar1Mk1",
@@ -6131,7 +6132,7 @@
 	"R-Wpn-Mortar-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Damage06",
-		"name": "HEAP Mortar Shells Mk3",
+		"name": "HESC Mortar Shells Mk3",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage05",
 			"R-Wpn-Mortar-ROF03"
@@ -6141,24 +6142,135 @@
 		"results": [
 			{
 				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "MORTARS",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
 				"parameter": "Damage",
-				"value": 30
+				"value": 50
 			},
 			{
 				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "MORTARS",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
 				"parameter": "RadiusDamage",
-				"value": 30
+				"value": 50
 			},
 			{
 				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "MORTARS",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
 				"parameter": "RepeatDamage",
-				"value": 30
+				"value": 50
+			}
+		],
+		"statID": "Mortar2Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-Mortar-Damage07": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Mortar-Damage07",
+		"msgName": "RES_W_M_D7",
+		"name": "HESCHC Mortar Shells",
+		"requiredResearch": [
+			"R-Wpn-Mortar-Damage06",
+			"R-Wpn-Howitzer-Damage03"
+		],
+		"researchPoints": 13200,
+		"researchPower": 412,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "Damage",
+				"value": 60
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "RadiusDamage",
+				"value": 60
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "RepeatDamage",
+				"value": 60
+			}
+		],
+		"statID": "Mortar2Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
+	},
+	"R-Wpn-Mortar-Damage08": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Mortar-Damage08",
+		"name": "HESCHC Mortar Shells Mk2",
+		"requiredResearch": [
+			"R-Wpn-Mortar-Damage07",
+			"R-Wpn-Howitzer-Damage04"
+		],
+		"researchPoints": 13200,
+		"researchPower": 412,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "Damage",
+				"value": 70
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "RadiusDamage",
+				"value": 70
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "RepeatDamage",
+				"value": 70
+			}
+		],
+		"statID": "Mortar2Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"techCode": 1
+	},
+	"R-Wpn-Mortar-Damage09": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Mortar-Damage09",
+		"name": "HESCHC Mortar Shells Mk3",
+		"requiredResearch": [
+			"R-Wpn-Mortar-Damage08",
+			"R-Wpn-Cannon-Damage08"
+		],
+		"researchPoints": 13200,
+		"researchPower": 412,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "Damage",
+				"value": 40
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "RadiusDamage",
+				"value": 40
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
+				"parameter": "RepeatDamage",
+				"value": 40
 			}
 		],
 		"statID": "Mortar2Mk1",
@@ -6180,14 +6292,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "FirePause",
-				"value": -10
+				"value": -5
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "ReloadTime",
-				"value": -10
+				"value": -5
 			}
 		],
 		"statID": "Mortar1Mk1",
@@ -6200,7 +6312,8 @@
 		"name": "Mortar Autoloader Mk3",
 		"requiredResearch": [
 			"R-Wpn-Mortar-ROF02",
-			"R-Wpn-Mortar3"
+			"R-Wpn-Mortar3",
+			"R-Struc-Research-Upgrade04"
 		],
 		"researchPoints": 8000,
 		"researchPower": 250,
@@ -6210,14 +6323,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "FirePause",
-				"value": -10
+				"value": -25
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "ReloadTime",
-				"value": -10
+				"value": -25
 			}
 		],
 		"statID": "Mortar2Mk1",
@@ -6235,7 +6348,8 @@
 			"Rocket-MRL"
 		],
 		"requiredResearch": [
-			"R-Wpn-Mortar02Hvy"
+			"R-Wpn-Mortar02Hvy",
+			"R-Wpn-Mortar-ROF01"
 		],
 		"researchPoints": 10000,
 		"researchPower": 312,
@@ -7954,6 +8068,7 @@
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Bomb-Damage03",
 		"imdName": "trlvtlhe.PIE",
+		"keyTopic": 1,
 		"msgName": "RES_W_BDMG3",
 		"name": "Advanced Bomb Warhead",
 		"requiredResearch": [
@@ -8732,10 +8847,11 @@
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-ROF04",
 		"msgName": "RES_W_HOWRF4",
-		"name": "Fast Loader",
+		"name": "Howitzer Fast Loader",
 		"requiredResearch": [
 			"R-Wpn-Mortar-ROF04",
-			"R-Wpn-Howitzer-ROF03"
+			"R-Wpn-Howitzer-ROF03",
+			"R-Struc-Research-Upgrade07"
 		],
 		"researchPoints": 12000,
 		"researchPower": 375,
@@ -9192,11 +9308,41 @@
 	"R-Wpn-Mortar-Acc03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Acc03",
-		"keyTopic": 1,
 		"msgName": "RES_W_M_AC3",
 		"name": "Target Acquisition Mortar Shells",
 		"requiredResearch": [
-			"R-Wpn-Mortar-Acc02"
+			"R-Wpn-Mortar-Acc02",
+			"R-Wpn-Mortar-ROF04",
+			"R-Wpn-Howitzer-Accuracy01"
+		],
+		"researchPoints": 9200,
+		"researchPower": 287,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MORTARS",
+				"parameter": "HitChance",
+				"value": 10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MORTARS",
+				"parameter": "ShortHitChance",
+				"value": 10
+			}
+		],
+		"statID": "Mortar2Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPACC"
+	},
+	"R-Wpn-Mortar-Acc04": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Mortar-Acc04",
+		"name": "Target Acquisition Mortar Shells Mk2",
+		"requiredResearch": [
+			"R-Wpn-Mortar-Acc03",
+			"R-Wpn-Mortar-Damage07"
 		],
 		"researchPoints": 9200,
 		"researchPower": 287,
@@ -9222,11 +9368,70 @@
 	"R-Wpn-Mortar-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-ROF04",
+		"keyTopic": 1,
 		"msgName": "RES_W_M_ROF4",
 		"name": "Mortar Fast Loader",
 		"requiredResearch": [
-			"R-Wpn-Cannon-ROF04",
 			"R-Wpn-Mortar-ROF03"
+		],
+		"researchPoints": 10000,
+		"researchPower": 312,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MORTARS",
+				"parameter": "FirePause",
+				"value": -10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MORTARS",
+				"parameter": "ReloadTime",
+				"value": -10
+			}
+		],
+		"statID": "Mortar2Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPROF"
+	},
+	"R-Wpn-Mortar-ROF05": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Mortar-ROF05",
+		"name": "Mortar Fast Loader Mk2",
+		"requiredResearch": [
+			"R-Wpn-Mortar-Damage09",
+			"R-Wpn-Mortar-ROF04",
+			"R-Wpn-Cannon-ROF04"
+		],
+		"researchPoints": 10000,
+		"researchPower": 312,
+		"results": [
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MORTARS",
+				"parameter": "FirePause",
+				"value": -10
+			},
+			{
+				"class": "Weapon",
+				"filterParameter": "ImpactClass",
+				"filterValue": "MORTARS",
+				"parameter": "ReloadTime",
+				"value": -10
+			}
+		],
+		"statID": "Mortar2Mk1",
+		"subgroupIconID": "IMAGE_RES_GRPROF"
+	},
+	"R-Wpn-Mortar-ROF06": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-Mortar-ROF06",
+		"name": "Mortar Fast Loader Mk3",
+		"requiredResearch": [
+			"R-Wpn-Mortar-ROF05",
+			"R-Wpn-Cannon-ROF05"
 		],
 		"researchPoints": 10000,
 		"researchPower": 312,

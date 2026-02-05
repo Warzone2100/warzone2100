@@ -4,7 +4,7 @@ include("script/campaign/transitionTech.js");
 
 const MIS_ALPHA_PLAYER = 1; //Team alpha units belong to player 1.
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade10", "R-Struc-Materials09",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage10", "R-Wpn-Mortar-ROF04",
