@@ -6204,6 +6204,25 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
+	if (psFactory->psSubject && !psFactory->psSubject->next)
+	{
+		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const DROID_TEMPLATE *templ) {
+			return *templ == *psFactory->psSubject;
+		});
+
+		if (it == apsTemplateList.end())
+		{
+			DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psBuilding, psFactory->psSubject);
+
+			if (psNextTemplate != nullptr)
+			{
+				refundFactoryBuildPower(psBuilding);
+				structSetManufacture(psBuilding, psNextTemplate, ModeQueue);
+				return;
+			}
+		}
+	}
+
 	if (psBuilding->player == productionPlayer && mayClearProductionRun)
 	{
 		//clear the production run for this factory
@@ -6288,6 +6307,12 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 
 void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode)
 {
+	if (current && current->next)
+	{
+		structSetManufacture(psStructure, current->next, ModeQueue);
+		return;
+	}
+
 	DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, current);
 
 	if (psNextTemplate != nullptr)
@@ -6383,6 +6408,30 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	ASSERT_OR_RETURN(, psTemplate != nullptr, "NULL template");
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
+
+	// the droid template being produced is different from the one we want to make,
+	// save new template into the old one
+	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate)
+	{
+		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const DROID_TEMPLATE *templ) {
+			return *templ == *psFactory->psSubject;
+		});
+
+		if (it == apsTemplateList.end())
+		{
+			DROID_TEMPLATE *psNextTemplate = factoryProdUpdate(psStructure, psFactory->psSubject);
+
+			if (psNextTemplate != nullptr)
+			{
+				psFactory->psSubject->next = psNextTemplate;
+			}
+			else
+			{
+				psFactory->psSubject->next = psTemplate;
+			}
+		}
+	}
+
 	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
 	{
 		asProductionRun[psFactory->psAssemblyPoint->factoryType].resize(psFactory->psAssemblyPoint->factoryInc + 1);  // Don't have a production list, create it.
@@ -6432,6 +6481,10 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	//need to check if this was the template that was mid-production
 	if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
 	{
+		if (psFactory->psSubject && psFactory->psSubject->next)
+		{
+			return;
+		}
 		doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
 	}
 	else if (!StructureIsManufacturingPending(psStructure))
