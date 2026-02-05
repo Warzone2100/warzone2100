@@ -1711,18 +1711,25 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 	return true;
 }
 
-//__ ## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+//__ ## eventSyncRequest(fromPlayerId, req_id, x, y, obj, obj2)
 //__
-//__ An event that is called from a script and synchronized with all other scripts and hosts
-//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
-//__ cheating!
+//__ This event is triggered simultaneously on all scripts and hosts when a script
+//__ invokes the `syncRequest()` function. The calling script sends a unique `req_id`,
+//__ and `x, y` position (in tile units), and optionally one or two game objects (`null`
+//__ if not specified). Scripts handling the event should use the `req_id` to determine
+//__ what should happen, and with the other provided information implement that change
+//__ (for example, the `req_id` might indicate that something should happen at `x, y`).
+//__ Sync requests should be carefully evaluated to prevent cheating!
 //__
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+	// Convert x,y from world coordinates to tile coordinates
+	int tile_x = map_coord(x);
+	int tile_y = map_coord(y);
 	for (auto *instance : scripts)
 	{
-		instance->handle_eventSyncRequest(from, req_id, x, y, psObj, psObj2);
+		instance->handle_eventSyncRequest(from, req_id, tile_x, tile_y, psObj, psObj2);
 	}
 	return true;
 }

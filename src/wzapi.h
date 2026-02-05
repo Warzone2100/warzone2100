@@ -545,11 +545,12 @@ namespace wzapi
 	public:
 		// MARK: Special input events
 
-		//__ ## eventSyncRequest(req_id, x, y, obj_id, obj_id2)
+		//__ ## eventSyncRequest(from, req_id, x, y, obj, obj2)
 		//__
 		//__ An event that is called from a script and synchronized with all other scripts and hosts
 		//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
-		//__ cheating!
+		//__ cheating! The first parameter is the player who sent the request. Parameters `x` and `y`
+		//__ are in tile coordinates. Parameters `obj` and `obj2` are game objects.
 		//__
 		virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) = 0;
 	};
