@@ -5,7 +5,7 @@ const mis_newParadigmRes = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 	"R-Sys-Engineering01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Cannon-Damage03",
 	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
-	"R-Defense-WallUpgrade02", "R-Struc-Materials02", "R-Vehicle-Engine02",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials02", "R-Vehicle-Engine02",
 	"R-Struc-RprFac-Upgrade03", "R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF03",
 	"R-Vehicle-Metals02", "R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
 	"R-Wpn-RocketSlow-Damage02", "R-Wpn-Mortar-ROF01", "R-Cyborg-Metals03",
@@ -285,6 +285,12 @@ function eventStartLevel()
 			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 			player: CAM_NEW_PARADIGM
+		},
+		"ScavOutpostGroup": {
+			cleanup: "ScavMiddle",
+			detectMsg: "C1-5_BASE4",
+			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated
 		},
 	});
 

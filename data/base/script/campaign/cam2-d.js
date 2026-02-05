@@ -7,8 +7,8 @@ const mis_collectiveRes = [
 	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05", "R-Wpn-Cannon-ROF02",
 	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
-	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage05",
-	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc03", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF02", "R-Wpn-Howitzer-ROF02",
 	"R-Wpn-Howitzer-Damage08", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
@@ -88,7 +88,7 @@ function vtolAttack()
 
 function insaneReinforcementSpawn()
 {
-	const DISTANCE_FROM_POS = 20;
+	const DISTANCE_FROM_POS = 25;
 	const units = [cTempl.comltath, cTempl.cohhvch, cTempl.comagh];
 	const limits = {minimum: 5, maxRandom: 3};
 	const location = camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
@@ -97,7 +97,7 @@ function insaneReinforcementSpawn()
 
 function insaneTransporterAttack()
 {
-	const DISTANCE_FROM_POS = 15;
+	const DISTANCE_FROM_POS = 25;
 	const units = (!camClassicMode()) ? [cTempl.cocybsn, cTempl.cocybtk, cTempl.comltath, cTempl.cohhvch] : [cTempl.comltath, cTempl.cohhvch, cTempl.comagh];
 	const limits = {minimum: 6, maxRandom: 4};
 	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);

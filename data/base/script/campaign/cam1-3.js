@@ -96,7 +96,7 @@ function insaneReinforcementSpawn()
 	const units = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
 	const limits = {minimum: 5, maxRandom: 5};
 	const condition = {condition: CAM_REINFORCE_CONDITION_OBJECT, object: "NPHQ"};
-	const location = camMakePos("NPReinforcementPos");
+	const location = ["NPReinforcementPos", "NPReinforcementPosWest"];
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, condition, location, units, limits.minimum, limits.maxRandom);
 }
 
@@ -248,6 +248,11 @@ function eventStartLevel()
 	{
 		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
 		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		if (difficulty >= HARD)
+		{
+			completeResearch("R-Defense-WallUpgrade02", CAM_NEW_PARADIGM);
+		}
 
 		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);

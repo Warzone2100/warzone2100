@@ -82,9 +82,11 @@ camAreaEvent("NPTransportTrigger", function(droid)
 
 function insaneReinforcementSpawn()
 {
-	const units = [cTempl.npcybr, cTempl.npmrl, cTempl.npcybc];
-	const limits = {minimum: 4, maxRandom: 2};
-	const location = camMakePos("westSpawnPos");
+	const list = [cTempl.npcybr, cTempl.npmrlsh, cTempl.npcybc, cTempl.nphmgt, cTempl.npmorb];
+	const limits = {minimum: 10, maxRandom: 2};
+	const extraUnits = [cTempl.nphct, cTempl.npmrlsh, cTempl.npmsens];
+	const units = {units: list, appended: extraUnits};
+	const location = ["insaneWestSpawnPos", "insaneEastSpawnPos", "insaneValleySpawnPos"];
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_UNITS, location, units, limits.minimum, limits.maxRandom);
 }
 
@@ -384,6 +386,6 @@ function eventStartLevel()
 	queue("startArtifactCollection", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
 	if (camAllowInsaneSpawns())
 	{
-		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(4.5));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
 	}
 }

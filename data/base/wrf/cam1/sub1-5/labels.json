@@ -99,6 +99,11 @@
 		"pos1": [6976, 4928],
 		"pos2": [7616, 5312]
 	},
+	"area_9": {
+		"label": "ScavMiddle",
+		"pos1": [1280, 3328],
+		"pos2": [3200, 4864]
+	},
 
 	"object_0": {
 		"label": "NPLeftFactory",
