@@ -489,12 +489,12 @@ bool loadResearch(WzConfig &ini)
 		WzString msgName = ini.value("msgName", "").toWzString();
 		if (msgName.compare("") != 0)
 		{
-			research.techCode = TC_MAJOR;
+			research.isMajor = true;
 			research.pViewData = getViewData(msgName);
 		}
 		else
 		{
-			research.techCode = TC_MINOR;
+			research.isMajor = false;
 		}
 
 		//set the researchPoints
@@ -1233,7 +1233,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 
 	//Add message to player's list if Major Topic
-	if ((pResearch->techCode == TC_MAJOR) && bDisplay)
+	if (pResearch->isMajor && bDisplay)
 	{
 		//only play sound if major topic
 		if (player == selectedPlayer)
