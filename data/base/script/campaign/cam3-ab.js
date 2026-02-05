@@ -38,7 +38,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
-function sendEdgeMapDroids()
+function sendEdgeMapDroids(positions)
 {
 	const ADD_EXTRA = (!camClassicMode() && (difficulty >= HARD));
 	const units = {
@@ -51,7 +51,7 @@ function sendEdgeMapDroids()
 		units.units.push(cTempl.nxmangel);
 	}
 	const limits = {minimum: (difficulty >= INSANE) ? 14 : 16, maxRandom: (difficulty >= INSANE) ? 2 : 4};
-	const location = ["SWPhantomFactory", "NWPhantomFactory"];
+	const location = (camDef(positions) ? positions : ["SWPhantomFactory", "NWPhantomFactory"]);
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
@@ -91,15 +91,26 @@ function vtolAttack()
 	}
 }
 
+function insaneMapEdgeSpawn()
+{
+	if (getResearch(cam_resistance_circuits.third).done)
+	{
+		return;
+	}
+	const insanePositions = ["southSpawnPos", "eastPhantomFactory"];
+	sendEdgeMapDroids(insanePositions);
+}
+
 function insaneTransporterAttack()
 {
 	if (getResearch(cam_resistance_circuits.third).done)
 	{
 		return;
 	}
+	const DISTANCE_FROM_POS = 0;
 	const units = {units: [cTempl.nxmangel, cTempl.nxmangel], appended: cTempl.nxmsens};
 	const limits = {minimum: 9, maxRandom: 0};
-	const location = camMakePos("nexusEastTransportPos");
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
 	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
@@ -291,7 +302,7 @@ function eventStartLevel()
 
 	enableResearch(cam_resistance_circuits.first, CAM_HUMAN_PLAYER);
 	winFlag = false;
-	hackFailChance = (difficulty <= EASY) ? 45 : 33;
+	hackFailChance = (difficulty <= EASY) ? 40 : 30;
 
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 
@@ -300,11 +311,12 @@ function eventStartLevel()
 	queue("sendEdgeMapDroids", camSecondsToMilliseconds(15));
 
 	setTimer("truckDefense", camSecondsToMilliseconds(2));
-	setTimer("hackPlayer", camChangeOnDiff(camSecondsToMilliseconds(8)));
+	setTimer("hackPlayer", camSecondsToMilliseconds((difficulty <= MEDIUM) ? 8 : 5));
 	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
-	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3.5)));
 	if (camAllowInsaneSpawns())
 	{
+		setTimer("insaneMapEdgeSpawn", camMinutesToMilliseconds(4));
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5));
 	}
 }

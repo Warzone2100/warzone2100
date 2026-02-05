@@ -20,8 +20,12 @@
 		"pos": [128, 3456]
 	},
 	"position_5": {
-		"label": "nexusEastTransportPos",
-		"pos": [6144, 6528]
+		"label": "southSpawnPos",
+		"pos": [4736, 16128]
+	},
+	"position_6": {
+		"label": "eastPhantomFactory",
+		"pos": [7680, 6528]
 	},
 
 	"area_0": {

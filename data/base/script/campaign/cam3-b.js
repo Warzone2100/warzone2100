@@ -326,24 +326,32 @@ function eventStartLevel()
 		camClassicResearch(mis_nexusResClassic, CAM_NEXUS);
 		camClassicResearch(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
 		camClassicResearch(mis_nexusResClassic, MIS_GAMMA_PLAYER); //They get even more research.
+
+		camSetArtifacts({
+			"NXCommandCenter": { tech: "R-Struc-Research-Upgrade07" },
+			"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
+			"gammaResLabArti": { tech: "R-Wpn-Mortar-Acc03" },
+			"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
+			"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
+		});
 	}
 	else
 	{
 		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 		camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
 		camCompleteRequiredResearch(mis_nexusRes, MIS_GAMMA_PLAYER); //They get even more research.
+
+		camSetArtifacts({
+			"NXCommandCenter": { tech: "R-Struc-Research-Upgrade07" },
+			"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
+			"gammaResLabArti": { tech: "R-Wpn-Bomb-Damage03" },
+			"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
+			"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
+		});
 	}
 
 	setAlliance(MIS_GAMMA_PLAYER, CAM_HUMAN_PLAYER, false);
 	setAlliance(MIS_GAMMA_PLAYER, CAM_NEXUS, true);
-
-	camSetArtifacts({
-		"NXCommandCenter": { tech: "R-Struc-Research-Upgrade07" },
-		"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
-		"gammaResLabArti": { tech: "R-Wpn-Mortar-Acc03" },
-		"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
-		"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
-	});
 
 	camSetEnemyBases({
 		"GammaBase": {

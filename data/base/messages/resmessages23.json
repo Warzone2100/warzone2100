@@ -32,6 +32,17 @@
 			"All power generators upgraded automatically"
 		]
 	},
+	"RES_W_M_D7": {
+		"id": "RES_W_M_D7",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_weapons.ogg",
+		"text": [
+			"Mortar Upgrade",
+			"High Explosive Soft Casing High Capacity Shells",
+			"Increases Mortar damage",
+			"All mortars upgraded automatically"
+		]
+	},
 	"RES_W_SRK_ROF4": {
 		"id": "RES_W_SRK_ROF4",
 		"imdName": "MICAPSUL.PIE",

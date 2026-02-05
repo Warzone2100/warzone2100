@@ -55,7 +55,7 @@ function insaneReinforcementSpawn()
 {
 	const SCAN_DISTANCE = 2; // Skyscrapers are close to some edges.
 	const DISTANCE_FROM_POS = 25;
-	const units = [cTempl.commc, cTempl.commrl, cTempl.commrp, cTempl.npcybc];
+	const units = [cTempl.commrl, cTempl.commrp, cTempl.npcybc];
 	const limits = {minimum: 2, maxRandom: 2};
 	const location = camGenerateRandomMapEdgeCoordinate(getObject("startingPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS, SCAN_DISTANCE);
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_BASES, location, units, limits.minimum, limits.maxRandom);
@@ -117,13 +117,24 @@ function checkCrashedTeam()
 
 	if (camDef(victoryFlag) && victoryFlag)
 	{
+		if (camAllowInsaneSpawns())
+		{
+			if (!camAllEnemyBasesEliminated())
+			{
+				return;
+			}
+		}
+
 		return true;
 	}
 }
 
 function eventStartLevel()
 {
-	camSetExtraObjectiveMessage(_("Locate and rescue your units from the shot down transporter"));
+	const VIC_MSG = _("Locate and rescue your units from the shot down transporter");
+	const VIC_MSG_SPAWNS = _("Destroy all enemy bases");
+	const vicMessages = (!camAllowInsaneSpawns()) ? VIC_MSG : [VIC_MSG, VIC_MSG_SPAWNS];
+	camSetExtraObjectiveMessage(vicMessages);
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, cam_levels.beta3, {
 		area: "RTLZ",
@@ -165,6 +176,19 @@ function eventStartLevel()
 		{
 			camUpgradeOnMapTemplates(cTempl.commc, cTempl.commrp, CAM_THE_COLLECTIVE);
 		}
+	}
+
+	if (camAllowInsaneSpawns())
+	{
+		addDroid(CAM_THE_COLLECTIVE, 35,22, "MRP Panther Tracks", tBody.tank.panther, tProp.tank.tracks, "", "", tWeap.tank.miniRocketPod);
+		addDroid(CAM_THE_COLLECTIVE, 35,23, "MRP Panther Tracks", tBody.tank.panther, tProp.tank.tracks, "", "", tWeap.tank.miniRocketPod);
+		addDroid(CAM_THE_COLLECTIVE, 35,24, "Heavy Cannon Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyCannon);
+		addDroid(CAM_THE_COLLECTIVE, 35,25, "Heavy Cannon Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyCannon);
+		addDroid(CAM_THE_COLLECTIVE, 35,26, "Heavy Cannon Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyCannon);
+		addDroid(CAM_THE_COLLECTIVE, 36,26, "Heavy Cannon Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyCannon);
+		addDroid(CAM_THE_COLLECTIVE, 37,26, "Heavy Cannon Tiger Tracks", tBody.tank.tiger, tProp.tank.tracks, "", "", tWeap.tank.heavyCannon);
+		addDroid(CAM_THE_COLLECTIVE, 38,26, "MRP Panther Tracks", tBody.tank.panther, tProp.tank.tracks, "", "", tWeap.tank.miniRocketPod);
+		addDroid(CAM_THE_COLLECTIVE, 39,26, "MRP Panther Tracks", tBody.tank.panther, tProp.tank.tracks, "", "", tWeap.tank.miniRocketPod);
 	}
 
 	camSetEnemyBases({

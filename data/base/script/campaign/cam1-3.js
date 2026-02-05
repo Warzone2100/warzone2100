@@ -96,7 +96,7 @@ function insaneReinforcementSpawn()
 	const units = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
 	const limits = {minimum: 5, maxRandom: 5};
 	const condition = {condition: CAM_REINFORCE_CONDITION_OBJECT, object: "NPHQ"};
-	const location = camMakePos("NPReinforcementPos");
+	const location = ["NPReinforcementPos", "NPReinforcementPosWest"];
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, condition, location, units, limits.minimum, limits.maxRandom);
 }
 

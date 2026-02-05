@@ -286,6 +286,12 @@ function eventStartLevel()
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 			player: CAM_NEW_PARADIGM
 		},
+		"ScavOutpostGroup": {
+			cleanup: "ScavMiddle",
+			detectMsg: "C1-5_BASE4",
+			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated
+		},
 	});
 
 	camSetFactories({
