@@ -198,6 +198,12 @@ bool getBodySize(const WzString &size, BODY_SIZE *pStore);
 bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type);
 
 /**
+ * Reverse lookup of PROPULSION_TYPE -> typeName
+ * used in JS API global Stats.Propulsion objects
+ */
+const char *getPropulsionTypeName(PROPULSION_TYPE type);
+
+/**
  * Determines the weapon effect indicated by the @c weaponEffect string passed
  * in.
  *

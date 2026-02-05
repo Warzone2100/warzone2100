@@ -4352,7 +4352,7 @@ nlohmann::json register_common(COMPONENT_STATS *psStats)
 nlohmann::json wzapi::constructStatsObject()
 {
 	/// Register 'Stats' object. It is a read-only representation of basic game component states.
-	//== * ```Stats``` A sparse, read-only array containing rules information for game entity types.
+	//== * ```Stats``` A sparse, read-only object containing rules information for game entity types.
 	//== (For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
 	//== to see them all.)
 	//== These values are defined:
@@ -4364,13 +4364,14 @@ nlohmann::json wzapi::constructStatsObject()
 		{
 			BODY_STATS *psStats = &asBodyStats[j];
 			nlohmann::json body = register_common(psStats);
-			body["Power"] = psStats->base.power;
 			body["Armour"] = psStats->base.armour;
-			body["Thermal"] = psStats->base.thermal;
+			body["BodyClass"] = psStats->bodyClass;
+			body["Designable"] = psStats->designable;
+			body["Power"] = psStats->base.power;
 			body["Resistance"] = psStats->base.resistance;
 			body["Size"] = psStats->size;
+			body["Thermal"] = psStats->base.thermal;
 			body["WeaponSlots"] = psStats->weaponSlots;
-			body["BodyClass"] = psStats->bodyClass;
 			bodybase[psStats->name.toUtf8()] = std::move(body);
 		}
 		stats["Body"] = std::move(bodybase);
@@ -4381,6 +4382,7 @@ nlohmann::json wzapi::constructStatsObject()
 		{
 			SENSOR_STATS *psStats = &asSensorStats[j];
 			nlohmann::json sensor = register_common(psStats);
+			sensor["Designable"] = psStats->designable;
 			sensor["Range"] = psStats->base.range;
 			sensorbase[psStats->name.toUtf8()] = std::move(sensor);
 		}
@@ -4392,6 +4394,7 @@ nlohmann::json wzapi::constructStatsObject()
 		{
 			ECM_STATS *psStats = &asECMStats[j];
 			nlohmann::json ecm = register_common(psStats);
+			ecm["Designable"] = psStats->designable;
 			ecm["Range"] = psStats->base.range;
 			ecmbase[psStats->name.toUtf8()] = std::move(ecm);
 		}
@@ -4402,16 +4405,18 @@ nlohmann::json wzapi::constructStatsObject()
 		for (int j = 0; j < asPropulsionStats.size(); j++)
 		{
 			PROPULSION_STATS *psStats = &asPropulsionStats[j];
-			nlohmann::json v = register_common(psStats);
-			v["HitpointPctOfBody"] = psStats->base.hitpointPctOfBody;
-			v["MaxSpeed"] = psStats->maxSpeed;
-			v["TurnSpeed"] = psStats->turnSpeed;
-			v["SpinSpeed"] = psStats->spinSpeed;
-			v["SpinAngle"] = psStats->spinAngle;
-			v["SkidDeceleration"] = psStats->skidDeceleration;
-			v["Acceleration"] = psStats->acceleration;
-			v["Deceleration"] = psStats->deceleration;
-			propbase[psStats->name.toUtf8()] = std::move(v);
+			nlohmann::json prop = register_common(psStats);
+			prop["Acceleration"] = psStats->acceleration;
+			prop["Deceleration"] = psStats->deceleration;
+			prop["Designable"] = psStats->designable;
+			prop["HitpointPctOfBody"] = psStats->base.hitpointPctOfBody;
+			prop["MaxSpeed"] = psStats->maxSpeed;
+			prop["SkidDeceleration"] = psStats->skidDeceleration;
+			prop["SpinAngle"] = psStats->spinAngle;
+			prop["SpinSpeed"] = psStats->spinSpeed;
+			prop["TurnSpeed"] = psStats->turnSpeed;
+			prop["Type"] = getPropulsionTypeName(psStats->propulsionType);
+			propbase[psStats->name.toUtf8()] = std::move(prop);
 		}
 		stats["Propulsion"] = std::move(propbase);
 
@@ -4421,6 +4426,7 @@ nlohmann::json wzapi::constructStatsObject()
 		{
 			REPAIR_STATS *psStats = &asRepairStats[j];
 			nlohmann::json repair = register_common(psStats);
+			repair["Designable"] = psStats->designable;
 			repair["RepairPoints"] = psStats->base.repairPoints;
 			repairbase[psStats->name.toUtf8()] = std::move(repair);
 		}
@@ -4433,6 +4439,7 @@ nlohmann::json wzapi::constructStatsObject()
 			CONSTRUCT_STATS *psStats = &asConstructStats[j];
 			nlohmann::json con = register_common(psStats);
 			con["ConstructorPoints"] = psStats->base.constructPoints;
+			con["Designable"] = psStats->designable;
 			conbase[psStats->name.toUtf8()] = std::move(con);
 		}
 		stats["Construct"] = std::move(conbase);
@@ -4445,6 +4452,7 @@ nlohmann::json wzapi::constructStatsObject()
 			nlohmann::json br = register_common(psStats);
 			br["BaseCommandLimit"] = psStats->base.maxDroids;
 			br["CommandLimitByLevel"] = psStats->base.maxDroidsMult;
+			br["Designable"] = psStats->designable;
 			nlohmann::json thresholds = nlohmann::json::array(); //engine->newArray(psStats->base.rankThresholds.size());
 			for (int x = 0; x < psStats->base.rankThresholds.size(); x++)
 			{
@@ -4467,38 +4475,39 @@ nlohmann::json wzapi::constructStatsObject()
 		{
 			WEAPON_STATS *psStats = &asWeaponStats[j];
 			nlohmann::json weap = register_common(psStats);
-			weap["MaxRange"] = psStats->base.maxRange;
-			weap["ShortRange"] = psStats->base.shortRange;
-			weap["MinRange"] = psStats->base.minRange;
-			weap["HitChance"] = psStats->base.hitChance;
-			weap["ShortHitChance"] = psStats->base.shortHitChance;
-			weap["FirePause"] = psStats->base.firePause;
-			weap["ReloadTime"] = psStats->base.reloadTime;
-			weap["Rounds"] = psStats->base.numRounds;
+			weap["AllowedOnTransporter"] = psStats->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER);
 			weap["Damage"] = psStats->base.damage;
+			weap["Designable"] = psStats->designable;
+			weap["Effect"] = getWeaponEffect(psStats->weaponEffect);
+			weap["EmpRadius"] = psStats->base.empRadius;
+			weap["FireOnMove"] = psStats->fireOnMove;
+			weap["FirePause"] = psStats->base.firePause;
+			weap["FlightSpeed"] = psStats->flightSpeed;
+			weap["HitChance"] = psStats->base.hitChance;
+			weap["ImpactClass"] = getWeaponSubClass(psStats->weaponSubClass);
+			weap["ImpactType"] = psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
+			weap["MaxElevation"] = psStats->maxElevation;
+			weap["MaxRange"] = psStats->base.maxRange;
+			weap["MinElevation"] = psStats->minElevation;
 			weap["MinimumDamage"] = psStats->base.minimumDamage;
+			weap["MinRange"] = psStats->base.minRange;
+			weap["NoFriendlyFire"] = psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE);
+			weap["Penetrate"] = psStats->penetrate;
+			weap["Radius"] = psStats->base.radius;
 			weap["RadiusDamage"] = psStats->base.radiusDamage;
+			weap["Recoil"] = psStats->recoilValue;
+			weap["ReloadTime"] = psStats->base.reloadTime;
+			weap["RepeatClass"] = getWeaponSubClass(psStats->periodicalDamageWeaponSubClass);
 			weap["RepeatDamage"] = psStats->base.periodicalDamage;
 			weap["RepeatRadius"] = psStats->base.periodicalDamageRadius;
 			weap["RepeatTime"] = psStats->base.periodicalDamageTime;
-			weap["Radius"] = psStats->base.radius;
-			weap["EmpRadius"] = psStats->base.empRadius;
-			weap["ImpactType"] = psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
 			weap["RepeatType"] = psStats->periodicalDamageWeaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
-			weap["ImpactClass"] = getWeaponSubClass(psStats->weaponSubClass);
-			weap["RepeatClass"] = getWeaponSubClass(psStats->periodicalDamageWeaponSubClass);
-			weap["FireOnMove"] = psStats->fireOnMove;
-			weap["Effect"] = getWeaponEffect(psStats->weaponEffect);
+			weap["Rotate"] = psStats->rotate;
+			weap["Rounds"] = psStats->base.numRounds;
 			weap["ShootInAir"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_IN_AIR) != 0);
 			weap["ShootOnGround"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_ON_GROUND) != 0);
-			weap["NoFriendlyFire"] = psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE);
-			weap["AllowedOnTransporter"] = psStats->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER);
-			weap["FlightSpeed"] = psStats->flightSpeed;
-			weap["Rotate"] = psStats->rotate;
-			weap["MinElevation"] = psStats->minElevation;
-			weap["MaxElevation"] = psStats->maxElevation;
-			weap["Recoil"] = psStats->recoilValue;
-			weap["Penetrate"] = psStats->penetrate;
+			weap["ShortHitChance"] = psStats->base.shortHitChance;
+			weap["ShortRange"] = psStats->base.shortRange;
 			wbase[psStats->name.toUtf8()] = std::move(weap);
 		}
 		stats["Weapon"] = std::move(wbase);
