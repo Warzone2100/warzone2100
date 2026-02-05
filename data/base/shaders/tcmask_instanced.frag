@@ -174,7 +174,6 @@ void main()
 	light += iterateOverAllPointLights(clipSpaceCoord, posModelSpace, N, normalize(halfVec - lightDir), diffuseMap, specularMapValue, mat3(1.f));
 #endif
 
-	light.rgb *= lightmap_vec4.a; // apply lightmap.a here to hide objects in fog of war
 	light.a = 1.0f;
 
 	vec4 fragColour;
