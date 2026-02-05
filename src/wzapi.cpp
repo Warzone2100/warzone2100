@@ -4405,18 +4405,18 @@ nlohmann::json wzapi::constructStatsObject()
 		for (int j = 0; j < asPropulsionStats.size(); j++)
 		{
 			PROPULSION_STATS *psStats = &asPropulsionStats[j];
-			nlohmann::json v = register_common(psStats);
-			v["Acceleration"] = psStats->acceleration;
-			v["Deceleration"] = psStats->deceleration;
-			v["Designable"] = psStats->designable;
-			v["HitpointPctOfBody"] = psStats->base.hitpointPctOfBody;
-			v["MaxSpeed"] = psStats->maxSpeed;
-			v["SkidDeceleration"] = psStats->skidDeceleration;
-			v["SpinAngle"] = psStats->spinAngle;
-			v["SpinSpeed"] = psStats->spinSpeed;
-			v["TurnSpeed"] = psStats->turnSpeed;
-			v["Type"] = getPropulsionTypeName(psStats->propulsionType);
-			propbase[psStats->name.toUtf8()] = std::move(v);
+			nlohmann::json prop = register_common(psStats);
+			prop["Acceleration"] = psStats->acceleration;
+			prop["Deceleration"] = psStats->deceleration;
+			prop["Designable"] = psStats->designable;
+			prop["HitpointPctOfBody"] = psStats->base.hitpointPctOfBody;
+			prop["MaxSpeed"] = psStats->maxSpeed;
+			prop["SkidDeceleration"] = psStats->skidDeceleration;
+			prop["SpinAngle"] = psStats->spinAngle;
+			prop["SpinSpeed"] = psStats->spinSpeed;
+			prop["TurnSpeed"] = psStats->turnSpeed;
+			prop["Type"] = getPropulsionTypeName(psStats->propulsionType);
+			propbase[psStats->name.toUtf8()] = std::move(prop);
 		}
 		stats["Propulsion"] = std::move(propbase);
 
