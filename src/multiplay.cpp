@@ -1019,13 +1019,14 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 
 static void recvSyncRequest(NETQUEUE queue)
 {
-	int32_t req_id, x, y, obj_id, obj_id2, player_id, player_id2;
+	int32_t req_id, obj_id, obj_id2, player_id, player_id2;
+	uint8_t x, y;
 	BASE_OBJECT *psObj = nullptr, *psObj2 = nullptr;
 
 	auto r = NETbeginDecode(queue, GAME_SYNC_REQUEST);
 	NETint32_t(r, req_id);
-	NETint32_t(r, x);
-	NETint32_t(r, y);
+	NETuint8_t(r, x);
+	NETuint8_t(r, y);
 	NETint32_t(r, obj_id);
 	NETint32_t(r, player_id);
 	NETint32_t(r, obj_id2);
@@ -1061,12 +1062,12 @@ static void sendObj(MessageWriter& w, const BASE_OBJECT *psObj)
 	}
 }
 
-void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2)
+void sendSyncRequest(int32_t req_id, uint8_t x, uint8_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2)
 {
 	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_SYNC_REQUEST);
 	NETint32_t(w, req_id);
-	NETint32_t(w, x);
-	NETint32_t(w, y);
+	NETuint8_t(w, x);
+	NETuint8_t(w, y);
 	sendObj(w, psObj);
 	sendObj(w, psObj2);
 	NETend(w);

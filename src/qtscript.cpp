@@ -1724,12 +1724,9 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to)
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
-	// Convert x,y from world coordinates to tile coordinates
-	int tile_x = map_coord(x);
-	int tile_y = map_coord(y);
 	for (auto *instance : scripts)
 	{
-		instance->handle_eventSyncRequest(from, req_id, tile_x, tile_y, psObj, psObj2);
+		instance->handle_eventSyncRequest(from, req_id, x, y, psObj, psObj2);
 	}
 	return true;
 }
