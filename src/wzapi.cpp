@@ -563,6 +563,8 @@ bool wzapi::removeSpotter(WZAPI_PARAMS(uint32_t spotterId))
 //--
 bool wzapi::syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t _x, int32_t _y, optional<const BASE_OBJECT *> _psObj, optional<const BASE_OBJECT *> _psObj2))
 {
+	SCRIPT_ASSERT(false, context, _x >= 0 && _x <= 255, "X coordinate %d is out of valid range (0-255)", _x);
+	SCRIPT_ASSERT(false, context, _y >= 0 && _y <= 255, "Y coordinate %d is out of valid range (0-255)", _y);
 	const BASE_OBJECT *psObj = nullptr, *psObj2 = nullptr;
 	if (_psObj.has_value())
 	{
