@@ -367,7 +367,8 @@ static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api:
 			if (image.channels() > 1)
 			{
 				ASSERT_OR_RETURN(false, image.channels() == 4, "(%s): Alpha mask does not have 1 or 4 channels, as expected", filename.c_str());
-				image.convert_to_single_channel(3); // extract alpha channel
+				bool result = image.convert_to_single_channel(3); // extract alpha channel
+				ASSERT_OR_RETURN(false, result, "(%s): Failed extract alpha channel", filename.c_str());
 			}
 			break;
 		}
@@ -375,7 +376,8 @@ static inline bool uncompressedPNGImageConvertChannels(iV_Image& image, gfx_api:
 		{
 			if (image.channels() > 1)
 			{
-				image.convert_to_single_channel(0); // extract first channel
+				bool result = image.convert_to_single_channel(0); // extract first channel
+				ASSERT_OR_RETURN(false, result, "(%s): Failed to extract first channel", filename.c_str());
 			}
 			break;
 		}
