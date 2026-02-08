@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-02-03 01:34+0000\n"
-"PO-Revision-Date: 2026-02-03 21:43\n"
+"PO-Revision-Date: 2026-02-04 03:00\n"
 "Last-Translator: \n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_CS\n"
@@ -2954,7 +2954,7 @@ msgstr ""
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "Mapiranje portova je otvorilo spoljašnji port: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -7261,7 +7261,7 @@ msgid "You have sent too many messages in the last few seconds. Please wait and 
 msgstr ""
 
 msgid "The host has disabled debug mode / cheats for this game."
-msgstr ""
+msgstr "Domaćin je onemogućio debug režim / varalice za ovu igru."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7958,15 +7958,15 @@ msgstr ""
 
 #, c-format
 msgid "Group %zu"
-msgstr ""
+msgstr "Grupa %zu"
 
 #, c-format
 msgid "Select the Units in Group %zu"
-msgstr ""
+msgstr "Izaberite Jedinice u Grupi %zu"
 
 #, c-format
 msgid "Assign Selected Units to Group %zu"
-msgstr ""
+msgstr "Dodelite Izabrane Jedinice Grupi %zu"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr ""
@@ -8993,7 +8993,7 @@ msgstr ""
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "%u naftnih bušotina neaktivno"
 
 msgid "Need more resources!"
 msgstr ""
@@ -10162,7 +10162,7 @@ msgstr ""
 
 #, c-format
 msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%zu] Ograničenje koje je veće od numStructureStats (%u): %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
