@@ -552,6 +552,14 @@ namespace wzapi
 		//__ cheating!
 		//__
 		virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) = 0;
+
+		//__ ## eventSyncString(req_id, str)
+		//__
+		//__ An event that is called from a script and synchronized with all other scripts and hosts
+		//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
+		//__ cheating!
+		//__
+		virtual bool handle_eventSyncString(int from, int req_id, const WzString& str) = 0;
 	};
 
 	enum class GlobalVariableFlags
@@ -992,6 +1000,7 @@ namespace wzapi
 	uint32_t addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, bool radar, uint32_t expiry));
 	bool removeSpotter(WZAPI_PARAMS(uint32_t spotterId));
 	bool syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t x, int32_t y, optional<const BASE_OBJECT *> _psObj, optional<const BASE_OBJECT *> _psObj2));
+	bool syncString(WZAPI_PARAMS(int32_t req_id, std::string str));
 	bool replaceTexture(WZAPI_PARAMS(std::string oldFilename, std::string newFilename));
 	bool changePlayerColour(WZAPI_PARAMS(int player, int colour));
 	bool setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)); MULTIPLAY_SYNCREQUEST_REQUIRED

@@ -1727,6 +1727,24 @@ bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *ps
 	return true;
 }
 
+//__ ## eventSyncString(from, req_id, str)
+//__
+//__ This event is triggered simultaneously on all scripts and hosts when a script
+//__ invokes the `syncString()` function. The `from` parameter is the player ID
+//__ of the originating script. Use `playerData[from].scriptName` to identify the
+//__ the calling script. `req_id` and `str` are the values set by the originating
+//__ script. Sync requests should be carefully evaluated to prevent cheating!
+//__
+bool triggerEventSyncString(int from, int req_id, const WzString& str)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *instance : scripts)
+	{
+		instance->handle_eventSyncString(from, req_id, str);
+	}
+	return true;
+}
+
 // ----
 
 #define ALL_PLAYERS -1
