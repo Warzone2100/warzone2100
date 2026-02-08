@@ -589,7 +589,7 @@ bool wzapi::syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t _x, int32_t _y, opt
 bool wzapi::syncString(WZAPI_PARAMS(int32_t req_id, std::string str))
 {
 	const WzString payload = WzString::fromUtf8(str);
-	SCRIPT_ASSERT(false, context, payload.length() <= 1024, "syncString: String length %zu exceeds maximum of 1024 bytes", payload.length());
+	SCRIPT_ASSERT(false, context, payload.length() <= 1024, "syncString: String length %d exceeds maximum of 1024 bytes", payload.length());
 	sendSyncString(req_id, payload);
 	return true;
 }
