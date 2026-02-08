@@ -1910,6 +1910,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			return JS_NewStringLen(ctx, str.c_str(), str.length());
 		}
 
+		JSValue box(const WzString& str, JSContext* ctx)
+		{
+			auto utf8Str = str.toUtf8();
+			return JS_NewStringLen(ctx, utf8Str.c_str(), utf8Str.length());
+		}
+
 		JSValue box(wzapi::no_return_value, JSContext* ctx)
 		{
 			return JS_UNDEFINED;
