@@ -6041,6 +6041,40 @@ void VkRoot::beginRenderPass()
 	startRenderPass();
 }
 
+bool VkRoot::endRenderPass_RecreateSwapchain(const vk::Result& reason)
+{
+	try {
+		createNewSwapchainAndSwapchainSpecificStuff(reason);
+
+		if (queuedSwapModeChange.has_value())
+		{
+			if (queuedSwapModeChange.value().completionHandler)
+			{
+				queuedSwapModeChange.value().completionHandler();
+			}
+			queuedSwapModeChange.reset();
+		}
+		return true;
+	}
+	catch (const vk::SystemError& e)
+	{
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "createNewSwapchainAndSwapchainSpecificStuff failed: %s", vk::to_string(resultErr).c_str());
+		if (resultErr == vk::Result::eSuboptimalKHR)
+		{
+			// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
+			swapchainSize.width = 1;
+			swapchainSize.height = 1;
+		}
+		else
+		{
+			queuedSwapModeChange.reset();
+			handleUnrecoverableError(resultErr);
+		}
+	}
+	return false;
+}
+
 void VkRoot::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
@@ -6162,34 +6196,7 @@ void VkRoot::endRenderPass()
 
 	if (mustRecreateSwapchain)
 	{
-		try {
-			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-
-			if (queuedSwapModeChange.has_value())
-			{
-				if (queuedSwapModeChange.value().completionHandler)
-				{
-					queuedSwapModeChange.value().completionHandler();
-				}
-				queuedSwapModeChange.reset();
-			}
-		}
-		catch (const vk::SystemError& e)
-		{
-			auto resultErr = static_cast<vk::Result>(e.code().value());
-			debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-			if (resultErr == vk::Result::eSuboptimalKHR)
-			{
-				// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
-				swapchainSize.width = 1;
-				swapchainSize.height = 1;
-			}
-			else
-			{
-				queuedSwapModeChange.reset();
-				handleUnrecoverableError(resultErr);
-			}
-		}
+		endRenderPass_RecreateSwapchain(vk::Result::eErrorOutOfDateKHR);
 		return; // end processing this flip
 	}
 
@@ -6202,8 +6209,8 @@ void VkRoot::endRenderPass()
 		catch (const vk::OutOfDateKHRError&)
 		{
 			debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
-			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-			return; // end processing this flip
+			presentResult = vk::Result::eErrorOutOfDateKHR;
+			mustRecreateSwapchain = true;
 		}
 		catch (const vk::SurfaceLostKHRError&)
 		{
@@ -6226,7 +6233,14 @@ void VkRoot::endRenderPass()
 		}
 		if (presentResult == vk::Result::eSuboptimalKHR)
 		{
-			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
+			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
+			mustRecreateSwapchain = true;
+		}
+
+		if (mustRecreateSwapchain)
+		{
+			endRenderPass_RecreateSwapchain(presentResult);
+			return; // end processing this flip
 		}
 	}
 
@@ -6286,24 +6300,8 @@ void VkRoot::endRenderPass()
 			{
 				// Must re-create swapchain
 				debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-				try {
-					createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-				}
-				catch (const vk::SystemError& e)
-				{
-					auto resultErr = static_cast<vk::Result>(e.code().value());
-					debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "createNewSwapchainAndSwapchainSpecificStuff failed: %s", vk::to_string(resultErr).c_str());
-					if (resultErr == vk::Result::eSuboptimalKHR)
-					{
-						// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
-						swapchainSize.width = 1;
-						swapchainSize.height = 1;
-					}
-					else
-					{
-						handleUnrecoverableError(resultErr);
-					}
-				}
+
+				endRenderPass_RecreateSwapchain(vk::Result::eErrorOutOfDateKHR);
 				return; // end processing this flip
 			}
 		}
