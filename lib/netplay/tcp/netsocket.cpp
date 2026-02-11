@@ -476,6 +476,28 @@ net::result<Socket*> socketOpen(const SocketAddress *addr, unsigned timeout)
 		return tl::make_unexpected(make_network_error_code(sockErr));
 	}
 
+	static const char* bind_addr = std::getenv("WARZONE2100_SOCKET_BIND_IPV4_ADDRESS");
+	if (bind_addr)
+	{
+		sockaddr_in addr4;
+		addr4.sin_family = AF_INET;
+		addr4.sin_port = htons(0);
+		if (inet_pton(addr4.sin_family, bind_addr, &addr4.sin_addr) == 0)
+		{
+			const auto sockErr = getSockErr();
+			debug(LOG_ERROR, "Bad address format (only IPV4 supported): %s", bind_addr);
+			socketCloseNow(conn);
+			return tl::make_unexpected(make_network_error_code(sockErr));
+		}
+		else if (bind(conn->fd[SOCK_CONNECTION], reinterpret_cast<sockaddr*>(&addr4), sizeof(addr4)) == SOCKET_ERROR)
+		{
+				const auto sockErr = getSockErr();
+				debug(LOG_ERROR, "Failed to bind IPv4 socket to address %s. Error: %s", bind_addr, strSockError(sockErr));
+				socketCloseNow(conn);
+				return tl::make_unexpected(make_network_error_code(sockErr));
+		}
+	}
+
 #if !defined(SOCK_CLOEXEC)
 	if (!setSocketInheritable(conn->fd[SOCK_CONNECTION], false))
 	{
@@ -602,13 +624,41 @@ net::result<Socket*> socketListen(unsigned int port)
 	// Listen on all local IPv4 and IPv6 addresses for the given port
 	addr4.sin_family      = AF_INET;
 	addr4.sin_port        = htons(port);
-	addr4.sin_addr.s_addr = INADDR_ANY;
+	static const char* bind_addr4 = std::getenv("WARZONE2100_SOCKET_BIND_IPV4_ADDRESS");
+	if (bind_addr4)
+	{
+		if (inet_pton(addr4.sin_family, bind_addr4, &addr4.sin_addr) == 0)
+		{
+			const auto sockErr = getSockErr();
+			debug(LOG_ERROR, "Bad address format (only IPV4 supported): %s", bind_addr4);
+			socketCloseNow(conn);
+			return tl::make_unexpected(make_network_error_code(sockErr));
+		}
+	}
+	else
+	{
+		addr4.sin_addr.s_addr = INADDR_ANY;
+	}
 
 	addr6.sin6_family   = AF_INET6;
 	addr6.sin6_port     = htons(port);
-	addr6.sin6_addr     = in6addr_any;
 	addr6.sin6_flowinfo = 0;
 	addr6.sin6_scope_id = 0;
+	static const char* bind_addr6 = std::getenv("WARZONE2100_SOCKET_BIND_IPV6_ADDRESS");
+	if (bind_addr6)
+	{
+		if (inet_pton(addr6.sin6_family, bind_addr6, &addr6.sin6_addr) == 0)
+		{
+			const auto sockErr = getSockErr();
+			debug(LOG_ERROR, "Bad address format (only IPV6 supported): %s", bind_addr6);
+			socketCloseNow(conn);
+			return tl::make_unexpected(make_network_error_code(sockErr));
+		}
+	}
+	else
+	{
+		addr6.sin6_addr = in6addr_any;
+	}
 
 	int socket_type = SOCK_STREAM;
 #if defined(SOCK_CLOEXEC)
