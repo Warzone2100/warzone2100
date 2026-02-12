@@ -239,6 +239,7 @@ struct perFrameResources_t
 	uint32_t numalloc = 0;
 	vk::CommandPool pool;
 	vk::Fence previousSubmission;
+	vk::Semaphore imageAcquireSemaphore;
 	std::vector</*WZ_vk::UniqueBuffer*/vk::Buffer> buffer_to_delete;
 	std::vector</*WZ_vk::UniqueImage*/vk::Image> image_to_delete;
 	std::vector<WZ_vk::UniqueImageView> image_view_to_delete;
@@ -307,7 +308,6 @@ private:
 struct perSwapchainImageResources_t
 {
 	vk::Device dev;
-	vk::Semaphore imageAcquireSemaphore;
 	vk::Semaphore renderFinishedSemaphore;
 
 	perSwapchainImageResources_t( const perSwapchainImageResources_t& other ) = delete; // non construction-copyable
@@ -330,13 +330,12 @@ struct buffering_mechanism
 	static std::vector<std::unique_ptr<perSwapchainImageResources_t>> perSwapchainImageResources;
 
 	static size_t currentFrame;
-	static size_t currentSwapchainImageResourcesFrame;
 
 	static perFrameResources_t& get_current_resources();
-	static perSwapchainImageResources_t& get_current_swapchain_resources();
+	static perSwapchainImageResources_t& get_swapchain_resources(uint32_t swapchainIndex);
 	static void init(vk::Device dev, const VmaAllocator& allocator, size_t swapchainImageCount, const uint32_t& graphicsQueueFamilyIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 	static void destroy(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
-	static void swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage);
+	static void swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 	static bool isInitialized();
 	static size_t get_current_frame_num();
 	static size_t numFrames();

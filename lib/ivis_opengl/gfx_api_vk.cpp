@@ -827,6 +827,7 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
 	);
+	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 }
 
 perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount)
@@ -977,6 +978,7 @@ perFrameResources_t::~perFrameResources_t()
 		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
 	}
 	dev.destroyFence(previousSubmission, nullptr, *pVkDynLoader);
+	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
 	clean();
 }
 
@@ -1003,10 +1005,11 @@ perFrameResources_t& buffering_mechanism::get_current_resources()
 	return *perFrameResources[currentFrame];
 }
 
-perSwapchainImageResources_t& buffering_mechanism::get_current_swapchain_resources()
+perSwapchainImageResources_t& buffering_mechanism::get_swapchain_resources(uint32_t swapchainIndex)
 {
-	ASSERT(!perFrameResources.empty(), "perSwapchainImageResources are not initialized??");
-	return *perSwapchainImageResources[currentSwapchainImageResourcesFrame];
+	ASSERT(!perSwapchainImageResources.empty(), "perSwapchainImageResources are not initialized??");
+	ASSERT(swapchainIndex < perSwapchainImageResources.size(), "Invalid swapchainIndex (%" PRIu32 ")", swapchainIndex);
+	return *perSwapchainImageResources[swapchainIndex];
 }
 
 bool buffering_mechanism::isInitialized()
@@ -1018,13 +1021,11 @@ perSwapchainImageResources_t::perSwapchainImageResources_t(vk::Device& _dev, con
 	: dev(_dev)
 	, pVkDynLoader(&vkDynLoader)
 {
-	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 }
 
 perSwapchainImageResources_t::~perSwapchainImageResources_t()
 {
-	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
 	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 }
 
@@ -1033,11 +1034,13 @@ perSwapchainImageResources_t::~perSwapchainImageResources_t()
 void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = 0;
-	currentSwapchainImageResourcesFrame = 0;
 
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 	{
 		perFrameResources.emplace_back(new perFrameResources_t(dev, allocator, graphicsQueueFamilyIndex, vkDynLoader));
+	}
+	for (size_t i = 0; i < swapChainImageCount; ++i)
+	{
 		perSwapchainImageResources.emplace_back(new perSwapchainImageResources_t(dev, vkDynLoader));
 	}
 
@@ -1060,16 +1063,11 @@ void buffering_mechanism::destroy(vk::Device dev, const WZ_vk::DispatchLoaderDyn
 	perFrameResources.clear();
 	perSwapchainImageResources.clear();
 	currentFrame = 0;
-	currentSwapchainImageResourcesFrame = 0;
 }
 
-void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage)
+void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = (currentFrame < (perFrameResources.size() - 1)) ? currentFrame + 1 : 0;
-	if (!skipAcquireNewSwapchainImage)
-	{
-		currentSwapchainImageResourcesFrame = (currentSwapchainImageResourcesFrame < (perSwapchainImageResources.size() - 1)) ? currentSwapchainImageResourcesFrame + 1 : 0;
-	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
 	auto waitResult = dev.waitForFences(fences, true, -1, vkDynLoader);
@@ -1091,7 +1089,6 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 std::vector<std::unique_ptr<perFrameResources_t>> buffering_mechanism::perFrameResources;
 std::vector<std::unique_ptr<perSwapchainImageResources_t>> buffering_mechanism::perSwapchainImageResources;
 size_t buffering_mechanism::currentFrame;
-size_t buffering_mechanism::currentSwapchainImageResourcesFrame;
 
 // MARK: Debug Callback
 
@@ -4576,7 +4573,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	//
 
 	try {
-		buffering_mechanism::init(dev, allocator, MAX_FRAMES_IN_FLIGHT, queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
+		buffering_mechanism::init(dev, allocator, swapchainImages.size(), queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
 	}
 	catch (const vk::SystemError &e) {
 		auto resultErr = static_cast<vk::Result>(e.code().value());
@@ -5907,7 +5904,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
-		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
+		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
 	}
 	catch (const vk::OutOfDateKHRError&)
 	{
@@ -6141,7 +6138,7 @@ void VkRoot::endRenderPass()
 	{
 		submitInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore)
+			.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
 			.setPWaitDstStageMask(&waitStage);
 	}
 
@@ -6155,12 +6152,12 @@ void VkRoot::endRenderPass()
 		// for handling separate graphics and presentation queues
 		submitInfo
 			.setSignalSemaphoreCount(1)
-			.setPSignalSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
+			.setPSignalSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
 
 		// for handling separate graphics and presentation queues
 		presentInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
+			.setPWaitSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
 	}
 
 	try {
@@ -6245,7 +6242,7 @@ void VkRoot::endRenderPass()
 	}
 
 	try {
-		buffering_mechanism::swap(dev, vkDynLoader, mustSkipDrawing); // must be called *before* acquireNextSwapchainImage()
+		buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
 	}
 	catch (const vk::OutOfHostMemoryError& e)
 	{
