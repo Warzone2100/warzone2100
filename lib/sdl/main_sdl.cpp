@@ -3283,6 +3283,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES");
 	}
 #endif
+
 #if defined(WZ_OS_WIN)
 	// on Windows, opt-in to SDL 2.24.0+'s DPI scaling support
 	// SDL_HINT_WINDOWS_DPI_AWARENESS does not appear to be needed if SDL_HINT_WINDOWS_DPI_SCALING is set
@@ -3292,6 +3293,15 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_WINDOWS_DPI_AWARENESS");
 	}
 #endif
+
+#if defined(SDL_HINT_MOUSE_DPI_SCALE_CURSORS)
+	// set SDL_HINT_MOUSE_DPI_SCALE_CURSORS to 1, to enable auto-scaling of cursors to display content scale by default
+	if (!SDL_SetHint(SDL_HINT_MOUSE_DPI_SCALE_CURSORS, "1"))
+	{
+		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_MOUSE_DPI_SCALE_CURSORS");
+	}
+#endif
+
 	int minOnFocusLossSettingVal = war_getMinimizeOnFocusLoss();
 	if (minOnFocusLossSettingVal < -1 || minOnFocusLossSettingVal > 1)
 	{
