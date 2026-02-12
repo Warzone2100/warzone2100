@@ -1035,7 +1035,7 @@ void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, si
 {
 	currentFrame = 0;
 
-	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+	for (size_t i = 0; i < std::min<size_t>(MAX_FRAMES_IN_FLIGHT, swapChainImageCount); ++i)
 	{
 		perFrameResources.emplace_back(new perFrameResources_t(dev, allocator, graphicsQueueFamilyIndex, vkDynLoader));
 	}
