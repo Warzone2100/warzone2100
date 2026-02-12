@@ -1978,7 +1978,6 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 #if defined(DEBUG)
 	ASSERT(flag == update_flag::non_overlapping_updates_promise || (lastUploaded_FrameNum != current_FrameNum), "Attempt to upload to buffer more than once per frame");
 #endif
-	lastUploaded_FrameNum = current_FrameNum;
 
 	ASSERT(start < buffer_size, "Starting offset (%zu) is past end of buffer (length: %zu)", start, buffer_size);
 	ASSERT(start + size <= buffer_size, "Attempt to write past end of buffer");
@@ -1989,15 +1988,33 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	}
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
+	const auto cmdBuffer = frameResources.currentCopyCmdBuffer();
+
+	if (lastUploaded_FrameNum != current_FrameNum)
+	{
+		// First upload this frame - add barrier to ensure that any reads/writes from prior frames are finished
+		const auto bufferMemoryBarrier_BeforeCopy = std::array<vk::BufferMemoryBarrier, 1> {
+			vk::BufferMemoryBarrier()
+				.setSrcAccessMask(vk::AccessFlagBits::eVertexAttributeRead | vk::AccessFlagBits::eTransferWrite)
+				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
+				.setBuffer(object)
+				.setOffset(0)
+				.setSize(vk::WholeSize)
+		};
+
+		cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_BeforeCopy, nullptr, root->vkDynLoader);
+	}
 
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(size), 2);
 	const auto mappedMem = frameResources.stagingBufferAllocator.mapMemory(stagingMemory);
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
 	memcpy(mappedMem, data, size);
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
-	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto copyRegions = std::array<vk::BufferCopy, 1> { vk::BufferCopy(stagingMemory.offset, start, size) };
 	cmdBuffer->copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
+
+	lastUploaded_FrameNum = current_FrameNum;
 }
 
 size_t VkBuf::current_buffer_size()
