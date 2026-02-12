@@ -4497,12 +4497,17 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 			  swapchainSize.width, swapchainSize.height);
 	}
 
-	// pick swapchain image count
-	uint32_t swapchainDesiredImageCount = swapChainSupport.capabilities.minImageCount + 1;
-	if(swapchainDesiredImageCount > swapChainSupport.capabilities.maxImageCount
-	   && swapChainSupport.capabilities.maxImageCount > 0)
+	// pick swapchain image count (triple-buffering, if possible)
+	uint32_t swapchainDesiredImageCount = std::max<uint32_t>(3, swapChainSupport.capabilities.minImageCount);
+	if (swapChainSupport.capabilities.maxImageCount > 0) // maxImageCount may be 0, in which case there is no defined upper limit
 	{
-		swapchainDesiredImageCount = swapChainSupport.capabilities.maxImageCount;
+		swapchainDesiredImageCount = std::min<uint32_t>(swapchainDesiredImageCount, swapChainSupport.capabilities.maxImageCount);
+	}
+	ASSERT(swapchainDesiredImageCount >= 2, "swapchainDesiredImageCount: %" PRIu32, swapchainDesiredImageCount);
+	if (swapchainDesiredImageCount != 3)
+	{
+		debug(LOG_3D, "Clamped swapchainDesiredImageCount: %" PRIu32" (minImageCount: %" PRIu32", maxImageCount: %" PRIu32")",
+			  swapchainDesiredImageCount, swapChainSupport.capabilities.minImageCount, swapChainSupport.capabilities.maxImageCount);
 	}
 
 	// pick surface format
