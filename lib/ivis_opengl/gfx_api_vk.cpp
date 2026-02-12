@@ -6147,14 +6147,16 @@ void VkRoot::endRenderPass()
 		.setSwapchainCount(1)
 		.setPImageIndices(&currentSwapchainIndex);
 
-	if ((graphicsQueue != presentQueue) && !mustSkipDrawing)
+	if (!mustSkipDrawing)
 	{
-		// for handling separate graphics and presentation queues
+		// Add synchronization to:
+		// - handle separate graphics and presentation queues
+		// - ensure a swapchain present operation does not conflict with a prior layout transition
+
 		submitInfo
 			.setSignalSemaphoreCount(1)
 			.setPSignalSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
 
-		// for handling separate graphics and presentation queues
 		presentInfo
 			.setWaitSemaphoreCount(1)
 			.setPWaitSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
