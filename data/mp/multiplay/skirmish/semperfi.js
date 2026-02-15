@@ -13,6 +13,7 @@ const REPAIR_FACILITY_STAT = "A0RepairCentre3";
 const SENSOR_TOWERS = ["Sys-SensoTower02", "Sys-SensoTowerWS"];
 const UPLINK_STAT = "A0Sat-linkCentre";
 const ELECTRONIC_DEFENSES = ["Sys-SpyTower", "WallTower-EMP", "Emplacement-MortarEMP"];
+const DACTION_WAITDURINGREARM = 35;
 
 // -- globals
 const MIN_BASE_TRUCKS = 3;
