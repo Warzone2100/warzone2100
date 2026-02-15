@@ -3822,7 +3822,9 @@
 		"statID": "Emplacement-Rocket06-IDF"
 	},
 	"R-Defense-Pillbox-RotMG": {
+		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Pillbox-RotMG",
+		"msgName": "RES_PB_RotMG",
 		"name": "Assault Gun Bunker",
 		"redStructures": [
 			"PillBox1"
@@ -8393,6 +8395,7 @@
 	"R-Wpn-RocketSlow-ROFRR01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-ROFRR01",
+		"msgName": "RES_W_RR_ROF",
 		"name": "Ripple Rocket Rapid Loader",
 		"requiredResearch": [
 			"R-Wpn-Howitzer03-Rot"
@@ -9289,6 +9292,7 @@
 	"R-Wpn-Missile2A-T": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile2A-T",
+		"msgName": "RES_W_ASM_AT",
 		"name": "Scourge Missile",
 		"redComponents": [
 			"Rocket-HvyA-T",

@@ -43,6 +43,17 @@
 			"All mortars upgraded automatically"
 		]
 	},
+	"RES_W_RR_ROF": {
+		"id": "RES_W_RR_ROF",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_weapons.ogg",
+		"text": [
+			"Rocket Upgrade",
+			"Rapid Loader increases reload rate",
+			"Increases Ripple Rocket ROF",
+			"All Ripple Rockets upgraded automatically"
+		]
+	},
 	"RES_W_SRK_ROF4": {
 		"id": "RES_W_SRK_ROF4",
 		"imdName": "MICAPSUL.PIE",
