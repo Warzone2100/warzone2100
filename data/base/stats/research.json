@@ -4,15 +4,13 @@
 		"id": "ADVANCEDRESEARCH",
 		"imdName": "MICAPSUL.PIE",
 		"keyTopic": 1,
-		"name": "ADVANCED RESEARCH",
-		"techCode": 1
+		"name": "ADVANCED RESEARCH"
 	},
 	"CAM3RESEARCH": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "CAM3RESEARCH",
 		"imdName": "MICAPSUL.PIE",
-		"name": "CAM3 RESEARCH",
-		"techCode": 1
+		"name": "CAM3 RESEARCH"
 	},
 	"R-Wpn-TUTMG": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -20,8 +18,7 @@
 		"name": "Machinegun Artifact",
 		"researchPoints": 60,
 		"researchPower": 1,
-		"statID": "MG1Mk1",
-		"techCode": 1
+		"statID": "MG1Mk1"
 	},
 	"R-Vehicle-Prop-Halftracks02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -153,8 +150,7 @@
 		"resultComponents": [
 			"CyborgLegs"
 		],
-		"statID": "CyborgLegs",
-		"techCode": 1
+		"statID": "CyborgLegs"
 	},
 	"R-Cyborg-Metals01": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -213,8 +209,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals03": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -243,8 +238,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals04": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -303,8 +297,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals06": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -333,8 +326,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals07": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -393,8 +385,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals09": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -423,8 +414,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals10": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -448,8 +438,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals11": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -473,8 +462,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat01": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -518,8 +506,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat03": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -540,8 +527,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat04": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -586,8 +572,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat06": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -609,8 +594,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat07": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -627,8 +611,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat08": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -645,8 +628,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals01": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -704,8 +686,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -734,8 +715,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -794,8 +774,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -824,8 +803,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -884,8 +862,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals09": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -914,8 +891,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals10": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1007,8 +983,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1029,8 +1004,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1075,8 +1049,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1098,8 +1071,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1116,8 +1088,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat08": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1134,8 +1105,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Wpn-Cannon": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -1672,8 +1642,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade03": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -1702,8 +1671,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-CommandRelay": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1808,8 +1776,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Factory-Upgrade03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1829,8 +1796,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials01": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1887,8 +1853,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1916,8 +1881,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-PowerModuleMk1": {
 		"iconID": "IMAGE_RES_POWERTECH",
@@ -2009,8 +1973,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Research-Upgrade03": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -2029,8 +1992,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -2085,8 +2047,7 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade03": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -2113,8 +2074,7 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-Engineering01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -2206,8 +2166,7 @@
 		"resultComponents": [
 			"Spade1Mk1"
 		],
-		"statID": "Spade1Mk1",
-		"techCode": 1
+		"statID": "Spade1Mk1"
 	},
 	"R-Vehicle-Body01": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -2342,8 +2301,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Engine03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -2365,8 +2323,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Prop-Halftracks": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -2515,8 +2472,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2545,8 +2501,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon1Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2736,8 +2691,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2766,8 +2720,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2874,8 +2827,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2897,8 +2849,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3082,8 +3033,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3119,8 +3069,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3241,8 +3190,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPACC",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPACC"
 	},
 	"R-Wpn-Rocket-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3300,8 +3248,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3330,8 +3277,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3388,8 +3334,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Rocket-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3417,8 +3362,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Rocket01-LtAT": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3628,8 +3572,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-RocketSlow-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3658,8 +3601,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Defense-AASite-QuadBof": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -4000,8 +3942,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade06": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -4030,8 +3971,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Factory-Upgrade04": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4071,8 +4011,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Factory-Upgrade06": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4091,8 +4030,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials04": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4150,8 +4088,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials06": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4179,8 +4116,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Power-Upgrade01": {
 		"iconID": "IMAGE_RES_POWERTECH",
@@ -4241,8 +4177,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Research-Upgrade06": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -4261,8 +4196,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade04": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -4317,8 +4251,7 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade06": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -4345,8 +4278,7 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLFactory": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4417,8 +4349,7 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLPad-Upgrade03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4437,8 +4368,7 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-CBSensor-Tower01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -4664,8 +4594,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Engine06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -4687,8 +4616,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Prop-VTOL": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -4818,8 +4746,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4848,8 +4775,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4907,8 +4833,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-AAGun-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4937,8 +4862,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-AAGun02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5205,8 +5129,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5235,8 +5158,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5295,8 +5217,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Cannon-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5325,8 +5246,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Cannon4AMk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5442,8 +5362,7 @@
 			}
 		],
 		"statID": "Flame2",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5471,8 +5390,7 @@
 			}
 		],
 		"statID": "Flame2",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5501,8 +5419,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Flamer-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5530,8 +5447,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Flamer-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5560,8 +5476,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5620,8 +5535,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPACC"
 	},
 	"R-Wpn-Howitzer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5693,8 +5607,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5730,8 +5643,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5789,8 +5701,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5819,8 +5730,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer03-Rot": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5913,8 +5823,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-Damage07": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5936,8 +5845,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6125,8 +6033,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6162,8 +6069,7 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6191,8 +6097,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Mortar-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6221,8 +6126,7 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Mortar3": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6302,8 +6206,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6332,8 +6235,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket06-IDF": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6433,8 +6335,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-RocketSlow-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6464,8 +6365,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-RocketSlow-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6525,8 +6425,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6555,8 +6454,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Comp-MissileCodes01": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -6567,8 +6465,7 @@
 			"CAM3RESEARCH"
 		],
 		"researchPoints": 55000,
-		"researchPower": 450,
-		"techCode": 1
+		"researchPower": 450
 	},
 	"R-Comp-MissileCodes02": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -6579,8 +6476,7 @@
 			"R-Comp-MissileCodes01"
 		],
 		"researchPoints": 58000,
-		"researchPower": 450,
-		"techCode": 1
+		"researchPower": 450
 	},
 	"R-Comp-MissileCodes03": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -6591,8 +6487,7 @@
 			"R-Comp-MissileCodes02"
 		],
 		"researchPoints": 60000,
-		"researchPower": 450,
-		"techCode": 1
+		"researchPower": 450
 	},
 	"R-Defense-GuardTower-ATMiss": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -6954,8 +6849,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade09": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -6984,8 +6878,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade10": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7044,8 +6937,7 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade12": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7073,8 +6965,7 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade13": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7098,8 +6989,7 @@
 				"value": 50
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade-TweakOption01": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7137,8 +7027,7 @@
 				"value": 120
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials07": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7196,8 +7085,7 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials09": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7225,8 +7113,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials10": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7250,8 +7137,7 @@
 				"value": 100
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials11": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7275,8 +7161,7 @@
 				"value": 100
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Power-Upgrade02": {
 		"iconID": "IMAGE_RES_POWERTECH",
@@ -7337,8 +7222,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Research-Upgrade09": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -7357,8 +7241,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLPad-Upgrade04": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7398,8 +7281,7 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLPad-Upgrade06": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7418,8 +7300,7 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-Engineering03": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -7451,8 +7332,7 @@
 		],
 		"resultComponents": [
 			"NEXUSrepair"
-		],
-		"techCode": 1
+		]
 	},
 	"R-Sys-NEXUSsensor": {
 		"id": "R-Sys-NEXUSsensor",
@@ -7463,8 +7343,7 @@
 		],
 		"resultComponents": [
 			"NavGunSensor"
-		],
-		"techCode": 1
+		]
 	},
 	"R-Sys-NEXUSsensorUndo": {
 		"id": "R-Sys-NEXUSsensorUndo",
@@ -7472,8 +7351,7 @@
 		"name": "*R-Sys-NEXUSsensorUndo*",
 		"replacedComponents": [
 			"NavGunSensor:ZNULLSENSOR"
-		],
-		"techCode": 1
+		]
 	},
 	"R-Sys-Resistance": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -7715,8 +7593,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Engine09": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -7738,8 +7615,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Wpn-AAGun-Accuracy03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -7828,8 +7704,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -7858,8 +7733,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -7918,8 +7792,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-AAGun-ROF06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -7947,8 +7820,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Bomb-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8064,8 +7936,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-Damage09": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8094,8 +7965,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8154,8 +8024,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Cannon-ROF06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8183,8 +8052,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8243,8 +8111,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROF06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8272,8 +8139,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROFRR01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8388,8 +8254,7 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Energy-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8419,8 +8284,7 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Energy-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8478,8 +8342,7 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Energy-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8508,8 +8371,7 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer-Accuracy03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8613,8 +8475,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8650,8 +8511,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage07": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8675,8 +8535,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage08": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8700,8 +8559,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage09": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8725,8 +8583,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8860,8 +8717,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-Damage10": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8883,8 +8739,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MdArtMissile": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9014,8 +8869,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Missile-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9044,8 +8898,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Missile-HvSAM": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9136,8 +8989,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Missile-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9167,8 +9019,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Missile2A-T": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9334,8 +9185,7 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rail-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9364,8 +9214,7 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rail-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9423,8 +9272,7 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Rail-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9453,8 +9301,7 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RailGun01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9517,3 +9364,4 @@
 		"statID": "RailGun3Mk1"
 	}
 }
+
