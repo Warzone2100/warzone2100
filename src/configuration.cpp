@@ -341,6 +341,10 @@ bool loadConfig()
 		{
 			return defaultValue;
 		}
+		if (intVal.value() == 0)
+		{
+			return nullopt; // 0 represents "disabled"
+		}
 		if (intVal.value() >= MOUSE_LMB && intVal.value() <= MOUSE_X2) // deliberately exclude mouse MOUSE_WUP + MOUSE_WDN
 		{
 			return static_cast<MOUSE_KEY_CODE>(intVal.value());
