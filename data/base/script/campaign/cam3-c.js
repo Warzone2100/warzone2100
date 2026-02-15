@@ -66,13 +66,13 @@ function insaneVtolAttack()
 	{
 		const list = [cTempl.nxlpulsev, cTempl.nxmheapv];
 		const ext = {limit: [5, 5], alternate: true, altIdx: 0};
-		camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+		camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_NONE, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmtherv];
 		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
-		camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_ARTIFACTS, ext);
+		camSetVtolData(CAM_NEXUS, mis_vtolAppearPositions, "vtolRemoveZone", list, camMinutesToMilliseconds(4.5), CAM_REINFORCE_CONDITION_NONE, ext);
 		queue("insaneWave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("insaneWave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
@@ -152,7 +152,7 @@ function truckDefense()
 function insaneReinforcementSpawn()
 {
 	const units = {units: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmangel], appended: cTempl.nxmsens};
-	const limits = {minimum: 4, maxRandom: 4};
+	const limits = {minimum: 8, maxRandom: 4};
 	const location = ["southSpawnPos", "eastSpawnPos"];
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
@@ -181,8 +181,8 @@ function discoverGammaBase()
 	enableAllFactories();
 	if (camAllowInsaneSpawns())
 	{
-		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(6.5));
-		queue("insaneVtolAttack", camMinutesToMilliseconds(10));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
+		queue("insaneVtolAttack", camMinutesToMilliseconds(5));
 	}
 }
 

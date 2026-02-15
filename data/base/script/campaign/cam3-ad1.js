@@ -144,7 +144,11 @@ function truckDefense()
 		return;
 	}
 
-	const list = ["Emplacement-Howitzer150", "NX-Emp-MedArtMiss-Pit"];
+	const list = [
+		"Emplacement-Howitzer150", "Emplacement-Howitzer150",
+		"NX-Emp-MedArtMiss-Pit", "NX-Emp-MedArtMiss-Pit", "NX-Emp-MedArtMiss-Pit",
+		"Sys-NX-CBTower"
+	];
 	let position;
 
 	if (truckLocCounter === 0)
@@ -164,7 +168,7 @@ function truckDefense()
 function insaneReinforcementSpawn()
 {
 	const units = {units: [cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmangel], appended: cTempl.nxmsens};
-	const limits = {minimum: 8, maxRandom: 2};
+	const limits = {minimum: 10, maxRandom: 5};
 	const location = camMakePos("southSpawnPos");
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
@@ -453,8 +457,12 @@ function eventStartLevel()
 	if (difficulty >= HARD)
 	{
 		addDroid(CAM_NEXUS, 15, 234, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
+		if (camAllowInsaneSpawns())
+		{
+			addDroid(CAM_NEXUS, 8, 226, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
+		}
 		camManageTrucks(CAM_NEXUS, false);
-		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
+		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(2.5)));
 	}
 
 	camPlayVideos([{video: "MB3_AD1_MSG", type: CAMP_MSG}, {video: "MB3_AD1_MSG2", type: CAMP_MSG}, {video: "MB3_AD1_MSG3", type: MISS_MSG}]);
@@ -471,8 +479,8 @@ function eventStartLevel()
 	setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
 	if (camAllowInsaneSpawns())
 	{
-		queue("insaneVtolAttack", camMinutesToMilliseconds(7));
+		queue("insaneVtolAttack", camMinutesToMilliseconds(3));
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
-		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
 	}
 }

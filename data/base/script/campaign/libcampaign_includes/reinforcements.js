@@ -32,9 +32,12 @@ function camSendReinforcement(playerId, position, templates, kind, data)
 	const pos = camMakePos(position);
 	let order = CAM_ORDER_ATTACK;
 	let order_data = { regroup: false, count: -1 };
-	if (camDef(data) && camDef(data.order))
+	if (camDef(data))
 	{
-		order = data.order;
+		if (camDef(data.order))
+		{
+			order = data.order;
+		}
 		if (camDef(data.data))
 		{
 			order_data = data.data;

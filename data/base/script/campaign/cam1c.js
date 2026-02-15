@@ -198,6 +198,13 @@ camAreaEvent("NPLZ1Trigger", function()
 		}
 	);
 
+	// Increase the reinforcement spawn spawn speed at this point.
+	if (camAllowInsaneSpawns())
+	{
+		removeTimer("insaneReinforcementSpawn");
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
+	}
+
 	camCallOnce("activateLZDefenders");
 });
 

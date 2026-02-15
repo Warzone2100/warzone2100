@@ -138,6 +138,11 @@ function hoverAttack()
 
 function insaneReinforcementSpawn()
 {
+	if (allInValley)
+	{
+		return;
+	}
+
 	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxmrailh];
 	const limits = {minimum: 8, maxRandom: 4};
 	const location = ["northWestSpawnPos", "northEastSpawnPos"];
@@ -146,6 +151,11 @@ function insaneReinforcementSpawn()
 
 function insaneTransporterAttack()
 {
+	if (allInValley)
+	{
+		return;
+	}
+
 	const DISTANCE_FROM_POS = 30;
 	const units = [cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmrailh];
 	const limits = {minimum: 5, maxRandom: 5};

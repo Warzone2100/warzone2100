@@ -156,6 +156,18 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		return;
 	}
+	if (droid.player === CAM_HUMAN_PLAYER && structure.player === CAM_HUMAN_PLAYER)
+	{
+		// handling guide topics for built units
+		if (droid.isVTOL)
+		{
+			camCallOnce("__camDoAddVTOLUseTopics");
+		}
+		else if (droid.droidType === DROID_COMMAND)
+		{
+			camCallOnce("__camDoAddCommanderUseTopics");
+		}
+	}
 	if (!camPlayerMatchesFilter(structure.player, ENEMIES))
 	{
 		return;
@@ -168,18 +180,6 @@ function cam_eventDroidBuilt(droid, structure)
 	{
 		// Occasionally hint that NEXUS is producing units on Gamma 5.
 		playSound(cam_sounds.nexus.productionCompleted);
-	}
-	if (droid.player === CAM_HUMAN_PLAYER)
-	{
-		// handling guide topics for built units
-		if (droid.isVTOL)
-		{
-			camCallOnce("__camDoAddVTOLUseTopics");
-		}
-		else if (droid.droidType === DROID_COMMAND)
-		{
-			camCallOnce("__camDoAddCommanderUseTopics");
-		}
 	}
 	if (!camDef(__camFactoryInfo))
 	{

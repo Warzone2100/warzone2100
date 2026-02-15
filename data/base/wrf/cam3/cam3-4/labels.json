@@ -107,6 +107,10 @@
 		"label": "NX-SWCyborgFactory2Assembly",
 		"pos": [1856, 11584]
 	},
+	"position_27": {
+		"label": "insaneSouthSpawn",
+		"pos": [9088, 11904]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -164,6 +168,16 @@
 		"label": "NXlandingZone",
 		"pos1": [1408, 11392],
 		"pos2": [1792, 11648]
+	},
+	"area_11": {
+		"label": "insaneNXSouthEastGroup",
+		"pos1": [9344, 9600],
+		"pos2": [9856, 10112]
+	},
+	"area_12": {
+		"label": "insaneNXNorthWestGroup",
+		"pos1": [4736, 2816],
+		"pos2": [5248, 3328]
 	},
 
 	"object_0": {

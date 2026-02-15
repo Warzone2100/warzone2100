@@ -68,20 +68,28 @@
 		"pos": [5804, 512]
 	},
 	"position_17": {
-		"label": "southEastSpawn",
+		"label": "insaneSouthEastSpawn",
 		"pos": [6272, 7808]
 	},
 	"position_18": {
-		"label": "vtolAppearPos1",
+		"label": "insaneVtolAppearPos1",
 		"pos": [896, 256]
 	},
 	"position_19": {
-		"label": "vtolAppearPos2",
+		"label": "insaneVtolAppearPos2",
 		"pos": [7808, 4992]
 	},
 	"position_20": {
-		"label": "vtolAppearPos3",
+		"label": "insaneVtolAppearPos3",
 		"pos": [6144, 256]
+	},
+	"position_21": {
+		"label": "insaneWestSpawn",
+		"pos": [384, 3712]
+	},
+	"position_22": {
+		"label": "insaneNorthSpawn",
+		"pos": [3200, 384]
 	},
 
 	"area_0": {
@@ -151,6 +159,12 @@
 		"subscriber": 0,
 		"pos1": [2560, 5504],
 		"pos2": [8064, 6400]
+	},
+	"area_13": {
+		"label": "insaneExtraVtolPadArea",
+		"subscriber": 0,
+		"pos1": [384, 384],
+		"pos2": [6400, 2048]
 	},
 
 	"object_0": {
