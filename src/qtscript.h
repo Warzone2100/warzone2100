@@ -155,6 +155,7 @@ bool triggerEventSelected();
 bool triggerEventPlayerLeft(int player);
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
+bool triggerEventSyncString(int from, int req_id, const WzString& str);
 bool triggerEventAllianceOffer(uint8_t from, uint8_t to);
 bool triggerEventAllianceAccepted(uint8_t from, uint8_t to);
 bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
