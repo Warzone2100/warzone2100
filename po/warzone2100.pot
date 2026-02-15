@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2026-02-03 01:34+0000\n"
+"POT-Creation-Date: 2026-02-15 00:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1849,7 +1849,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:542
 msgid "Armed with Cyborg Assault Gun"
 msgstr ""
 
@@ -3419,7 +3419,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1092
+#: po/custom/fromJson.txt:1089
 msgid "Best Targets: Base Structures"
 msgstr ""
 
@@ -4192,7 +4192,7 @@ msgstr ""
 #: data/base/script/tutorial.js:260
 #: data/base/script/tutorial.js:546
 #: data/mp/multiplay/script/rules/reticule.js:111
-#: lib/sdl/main_sdl.cpp:3228
+#: lib/sdl/main_sdl.cpp:3234
 #: src/challenge.cpp:265
 #: src/hci.cpp:2527
 #: src/hci/objects_stats.cpp:282
@@ -4212,7 +4212,7 @@ msgstr ""
 #: src/transporter.cpp:206
 #: src/transporter.cpp:267
 #: src/transporter.cpp:572
-#: src/wzscriptdebug.cpp:2763
+#: src/wzscriptdebug.cpp:2750
 msgid "Close"
 msgstr ""
 
@@ -5469,7 +5469,7 @@ msgstr ""
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 #: data/mp/messages/strings/names.txt:491
-#: po/custom/fromJson.txt:4513
+#: po/custom/fromJson.txt:4510
 msgid "Nexus Resistance Circuits"
 msgstr ""
 
@@ -5881,19 +5881,19 @@ msgstr ""
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3230
+#: lib/sdl/main_sdl.cpp:3236
 msgid "Warzone 2100: Failed to initialize graphics"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3231
+#: lib/sdl/main_sdl.cpp:3237
 msgid "Failed to initialize graphics for all backends."
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3234
+#: lib/sdl/main_sdl.cpp:3240
 msgid "Error Details:"
 msgstr ""
 
-#: lib/sdl/main_sdl.cpp:3241
+#: lib/sdl/main_sdl.cpp:3247
 msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
 msgstr ""
 
@@ -6537,7 +6537,7 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:546
 msgid "Armed with Cyborg assault gun"
 msgstr ""
 
@@ -6593,15 +6593,15 @@ msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages2.json: $.RES_CYW_FL2.text[1]
+#. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
 #: po/custom/fromJson.txt:576
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
+#. data/base/messages/resmessages2.json: $.RES_CYW_FL2.text[1]
 #: po/custom/fromJson.txt:579
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
 
 #. TRANSLATORS:
@@ -7306,7 +7306,7 @@ msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1089
+#: po/custom/fromJson.txt:1092
 msgid "Best Targets: Base structures"
 msgstr ""
 
@@ -7318,18 +7318,18 @@ msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr ""
 
 #. TRANSLATORS:
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1115
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr ""
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. ... + 2 refs
-#: po/custom/fromJson.txt:1118
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr ""
-
-#. TRANSLATORS:
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1121
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr ""
 
 #. TRANSLATORS:
@@ -12193,7 +12193,7 @@ msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-#: po/custom/fromJson.txt:4510
+#: po/custom/fromJson.txt:4513
 msgid "NEXUS Resistance Circuits"
 msgstr ""
 
@@ -14294,18 +14294,18 @@ msgid "Thermal Armor +35%"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
-#: po/custom/fromJson.txt:5868
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#: po/custom/fromJson.txt:5867
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 #: po/custom/fromJson.txt:5872
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr ""
 
 #. TRANSLATORS:
@@ -16137,24 +16137,24 @@ msgstr ""
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
 msgstr ""
 
-#: src/display3d.cpp:957
+#: src/display3d.cpp:960
 msgid "Player left"
 msgstr ""
 
-#: src/display3d.cpp:961
+#: src/display3d.cpp:964
 msgid "Player dropped"
 msgstr ""
 
-#: src/display3d.cpp:965
+#: src/display3d.cpp:968
 #: src/titleui/widgets/lobbyplayerrow.cpp:885
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/display3d.cpp:970
+#: src/display3d.cpp:973
 msgid "Out of sync"
 msgstr ""
 
-#: src/display3d.cpp:2491
+#: src/display3d.cpp:2495
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
@@ -16218,9 +16218,9 @@ msgstr ""
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:214
-#: src/terrain.cpp:2569
+#: src/terrain.cpp:2023
 #: src/titleui/campaign.cpp:1809
-#: src/titleui/options/graphicsoptions.cpp:161
+#: src/titleui/options/graphicsoptions.cpp:182
 msgid "Normal"
 msgstr ""
 
@@ -20565,13 +20565,13 @@ msgstr ""
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
-#: src/terrain.cpp:2567
+#: src/terrain.cpp:2021
 #: src/titleui/campaign.cpp:1935
 #: src/titleui/campaign.cpp:1991
 msgid "Classic"
 msgstr ""
 
-#: src/terrain.cpp:2571
+#: src/terrain.cpp:2025
 msgid "Remastered (HQ)"
 msgstr ""
 
@@ -20862,10 +20862,11 @@ msgstr ""
 #: src/titleui/options/defaultsoptions.cpp:400
 #: src/titleui/options/defaultsoptions.cpp:472
 #: src/titleui/options/graphicsoptions.cpp:140
-#: src/titleui/options/graphicsoptions.cpp:276
-#: src/titleui/options/graphicsoptions.cpp:303
-#: src/titleui/options/graphicsoptions.cpp:416
-#: src/titleui/options/graphicsoptions.cpp:443
+#: src/titleui/options/graphicsoptions.cpp:161
+#: src/titleui/options/graphicsoptions.cpp:297
+#: src/titleui/options/graphicsoptions.cpp:324
+#: src/titleui/options/graphicsoptions.cpp:437
+#: src/titleui/options/graphicsoptions.cpp:464
 #: src/titleui/options/interfaceoptions.cpp:202
 #: src/titleui/options/interfaceoptions.cpp:221
 #: src/titleui/options/interfaceoptions.cpp:240
@@ -20884,9 +20885,10 @@ msgstr ""
 #: src/titleui/options/controlsoptions.cpp:1101
 #: src/titleui/options/defaultsoptions.cpp:333
 #: src/titleui/options/graphicsoptions.cpp:141
-#: src/titleui/options/graphicsoptions.cpp:277
-#: src/titleui/options/graphicsoptions.cpp:304
-#: src/titleui/options/graphicsoptions.cpp:444
+#: src/titleui/options/graphicsoptions.cpp:162
+#: src/titleui/options/graphicsoptions.cpp:298
+#: src/titleui/options/graphicsoptions.cpp:325
+#: src/titleui/options/graphicsoptions.cpp:465
 #: src/titleui/options/interfaceoptions.cpp:203
 #: src/titleui/options/interfaceoptions.cpp:222
 #: src/titleui/options/interfaceoptions.cpp:241
@@ -21144,121 +21146,129 @@ msgid "Draw Shadows"
 msgstr ""
 
 #: src/titleui/options/graphicsoptions.cpp:154
-msgid "Shadow Resolution"
+msgid "Terrain Shadows"
 msgstr ""
 
 #: src/titleui/options/graphicsoptions.cpp:154
+msgid "Whether terrain casts shadows."
+msgstr ""
+
+#: src/titleui/options/graphicsoptions.cpp:175
+msgid "Shadow Resolution"
+msgstr ""
+
+#: src/titleui/options/graphicsoptions.cpp:175
 msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:162
-#: src/titleui/options/graphicsoptions.cpp:198
-#: src/titleui/options/graphicsoptions.cpp:358
+#: src/titleui/options/graphicsoptions.cpp:183
+#: src/titleui/options/graphicsoptions.cpp:219
+#: src/titleui/options/graphicsoptions.cpp:379
 msgid "High"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:190
+#: src/titleui/options/graphicsoptions.cpp:211
 msgid "Shadow Filtering"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:190
+#: src/titleui/options/graphicsoptions.cpp:211
 msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:197
+#: src/titleui/options/graphicsoptions.cpp:218
 msgid "Low"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:199
+#: src/titleui/options/graphicsoptions.cpp:220
 msgid "Ultra"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:230
+#: src/titleui/options/graphicsoptions.cpp:251
 msgid "Lighting"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:232
+#: src/titleui/options/graphicsoptions.cpp:253
 msgid "Point Lights"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:239
+#: src/titleui/options/graphicsoptions.cpp:260
 msgid "Lightmap"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:239
+#: src/titleui/options/graphicsoptions.cpp:260
 msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:240
+#: src/titleui/options/graphicsoptions.cpp:261
 msgid "Per-Pixel (HQ)"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:240
+#: src/titleui/options/graphicsoptions.cpp:261
 msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:269
+#: src/titleui/options/graphicsoptions.cpp:290
 msgid "Effects"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:271
+#: src/titleui/options/graphicsoptions.cpp:292
 msgid "Fog"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:298
+#: src/titleui/options/graphicsoptions.cpp:319
 msgid "Screen Shake"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:318
+#: src/titleui/options/graphicsoptions.cpp:339
 msgid "Textures"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:320
+#: src/titleui/options/graphicsoptions.cpp:341
 msgid "Texture Size Limit"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:320
+#: src/titleui/options/graphicsoptions.cpp:341
 msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
 msgstr ""
 
 #. TRANSLATORS: "LOD" = "Level of Detail" - this setting is used to describe how level of detail (in textures) is preserved as distance increases (examples: "Default", "High", etc)
-#: src/titleui/options/graphicsoptions.cpp:349
+#: src/titleui/options/graphicsoptions.cpp:370
 msgid "LOD Distance"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:350
+#: src/titleui/options/graphicsoptions.cpp:371
 msgid "How level of detail (in textures) is preserved as distance increases."
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:357
+#: src/titleui/options/graphicsoptions.cpp:378
 msgid "Default"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:357
+#: src/titleui/options/graphicsoptions.cpp:378
 msgid "The system default (no supplied bias, may result in less sharp visuals)."
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:358
+#: src/titleui/options/graphicsoptions.cpp:379
 msgid "Use LOD Distance bias to increase visual sharpness."
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:378
+#: src/titleui/options/graphicsoptions.cpp:399
 msgid "Advanced"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:380
+#: src/titleui/options/graphicsoptions.cpp:401
 msgid "Graphics Backend"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:408
+#: src/titleui/options/graphicsoptions.cpp:429
 msgid "Antialiasing"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:438
+#: src/titleui/options/graphicsoptions.cpp:459
 msgid "Vertical Sync"
 msgstr ""
 
-#: src/titleui/options/graphicsoptions.cpp:445
+#: src/titleui/options/graphicsoptions.cpp:466
 msgid "Adaptive"
 msgstr ""
 
@@ -22041,6 +22051,6 @@ msgstr ""
 msgid "YOU WERE DEFEATED!"
 msgstr ""
 
-#: src/wzscriptdebug.cpp:2666
+#: src/wzscriptdebug.cpp:2653
 msgid "Script Debugger"
 msgstr ""
