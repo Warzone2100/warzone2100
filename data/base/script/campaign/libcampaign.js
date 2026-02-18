@@ -92,7 +92,7 @@ namespace("cam_");
 
 //////////global vars start
 
-var __camClassicModActive = (modList.indexOf("wz2100_camclassic.wz") !== -1);
+var __camClassicModActive = ((modList.indexOf("wz2100_camclassic.wz") !== -1) || (modList.indexOf("wz2100_campumpkin.wz") !== -1));
 
 //These are campaign player numbers.
 const CAM_HUMAN_PLAYER = 0;
