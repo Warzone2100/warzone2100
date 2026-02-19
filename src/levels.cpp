@@ -366,6 +366,7 @@ bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMod
 	}
 	psDataSet->players = static_cast<SWORD>(levelDetails.players);
 	psDataSet->pName = levelDetails.name;
+	psDataSet->pAuthor = levelDetails.author;
 	auto gamFilePath = mapIO.pathJoin(mapIO.pathDirName(customMountPoint), levelDetails.gamFilePath());
 	psDataSet->apDataFiles[0] = gamFilePath;
 	psDataSet->game = 0;
