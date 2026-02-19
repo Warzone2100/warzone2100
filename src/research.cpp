@@ -47,6 +47,7 @@
 #include "qtscript.h"
 #include "stats.h"
 #include "wzapi.h"
+#include "design.h"
 
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
@@ -1268,11 +1269,16 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
 	}
 
-	if (player == selectedPlayer && bDisplay)
+	if (player == selectedPlayer)
 	{
-		//add console text message
-		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), getLocalizedStatsName(pResearch));
-		addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		if (bDisplay)
+		{
+			//add console text message
+			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), getLocalizedStatsName(pResearch));
+			addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+
+		intRefreshDesign();
 	}
 
 	if (psResearchFacility)
