@@ -208,12 +208,6 @@ bool audio_GetPreviousQueueTrackRadarBlipPos(SDWORD *iX, SDWORD *iY)
 		return false;
 	}
 
-	if (g_sPreviousSample.iTrack != ID_SOUND_STRUCTURE_UNDER_ATTACK && g_sPreviousSample.iTrack != ID_SOUND_UNIT_UNDER_ATTACK &&
-	    g_sPreviousSample.iTrack != ID_SOUND_LASER_SATELLITE_FIRING && g_sPreviousSample.iTrack != ID_SOUND_INCOMING_LASER_SAT_STRIKE)
-	{
-		return false;
-	}
-
 	if (realTime > g_iPreviousSampleTime + 5 * GAME_TICKS_PER_SEC)
 	{
 		return false;
