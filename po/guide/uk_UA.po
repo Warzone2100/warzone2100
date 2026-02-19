@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2026-02-03 21:43\n"
+"PO-Revision-Date: 2026-02-19 03:05\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -210,10 +210,10 @@ msgid "Cyborg Factory"
 msgstr ""
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Фабрика Кіборгів працює аналогічно зі стандартною фабрикою, але виключно будує Кіборг."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Кожна Фабрика одночасно може побудувати одного Кіборга, але ви можете зробити чергу для виробництва декількох Кіборгів."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
 msgstr ""
@@ -273,7 +273,7 @@ msgid "Alternatively, you can select a Truck or a Combat Engineer and click on t
 msgstr ""
 
 msgid "Note: While one of these structures is being upgraded, it will temporarily be unavailable until the upgrade is complete."
-msgstr ""
+msgstr "Примітка: Під час оновлення Будівлі вона буде тимчасово недоступна до завершення оновлення."
 
 msgid "Upgrade Effects:"
 msgstr ""
@@ -282,25 +282,25 @@ msgid "- Power Generator modules increase the rate of power generation"
 msgstr ""
 
 msgid "- Factory modules allow the production of Medium and Heavy units, as well as decreasing the time it takes to produce units"
-msgstr ""
+msgstr "- Модулі Заводу дозволяють виробляти рухому техніку з Середньою та Важкою бронею, а також зменшувати час, необхідний для виробництва техніки"
 
 msgid "- Research Facility modules decrease the time needed to complete assigned research projects"
 msgstr ""
 
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Бурова Вежа"
 
 msgid "An Oil Derrick can be built by selecting a Truck and targeting an available Oil Resource."
-msgstr ""
+msgstr "Ви можете побудувати Нафтову Башту, обравши Вантажівку та націливши її на доступне ресурс Нафтове Родовище."
 
 msgid "The destruction of an Oil Derrick will temporarily prevent the construction of another at the same spot until the fire subsides."
-msgstr ""
+msgstr "Знищення Нафтового Родовища тимчасово запобігатиме будівництву іншого на тому ж місці, поки триває пожежа."
 
 msgid "To utilize an Oil Derrick and generate power requires a Power Generator."
 msgstr ""
 
 msgid "Power Generator"
-msgstr ""
+msgstr "Генератор Енергії"
 
 msgid "Each Power Generator uses up to 4 Oil Derricks. So, for example, if you have 10 Oil Derricks you would need 3 Power Generators to utilize all of the oil derricks and generate maximum Power."
 msgstr ""
@@ -444,7 +444,7 @@ msgid "- Retreat at Medium Damage: Your unit will retreat at medium (yellow) dam
 msgstr ""
 
 msgid "- Retreat at Heavy Damage: Your unit will retreat at heavy (red) damage"
-msgstr ""
+msgstr "- Відступ від важкої шкоди: Ваша одиниця відступить у разі важкого (червоного) пошкодження"
 
 msgid "Retreating units will return to the nearest repair facility, repair unit, HQ, or LZ."
 msgstr ""
