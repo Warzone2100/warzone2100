@@ -402,6 +402,7 @@ STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists&
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index); // checks apsStructLists
 
 void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2);
+void sendSyncString(int32_t req_id, const WzString& str);
 
 
 bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);

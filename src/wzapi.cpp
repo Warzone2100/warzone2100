@@ -580,6 +580,20 @@ bool wzapi::syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t _x, int32_t _y, opt
 	return true;
 }
 
+//-- ## syncString(req_id, str)
+//--
+//-- Generate a synchronized string request that is sent over the network to all clients and executed simultaneously.
+//-- Must be caught in an eventSyncString() function. All sync requests must be validated when received, and always
+//-- take care only to define sync requests that can be validated against cheating.
+//--
+bool wzapi::syncString(WZAPI_PARAMS(int32_t req_id, std::string str))
+{
+	const WzString payload = WzString::fromUtf8(str);
+	SCRIPT_ASSERT(false, context, payload.length() <= 1024, "syncString: String length %d exceeds maximum of 1024 bytes", payload.length());
+	sendSyncString(req_id, payload);
+	return true;
+}
+
 //-- ## replaceTexture(oldFilename, newFilename)
 //--
 //-- Replace one texture with another. This can be used to for example give buildings on a specific tileset different
