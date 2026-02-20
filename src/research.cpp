@@ -485,16 +485,46 @@ bool loadResearch(WzConfig &ini)
 			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getStatsName(&research));
 		}
 
-		// If specified, indicates major topic and defines the RES_MSG to use when researched
-		WzString msgName = ini.value("msgName", "").toWzString();
-		if (msgName.compare("") != 0)
-		{
+		// Check for new intelAudio and intelText properties
+		if (ini.contains("intelAudio") && ini.contains("intelText")) {
+			// Create VIEWDATA inline for new system
+			VIEWDATA *psViewData = new VIEWDATA;
+			psViewData->type = VIEW_RES;
+			psViewData->name = research.id;
+			psViewData->fileName = ini.fileName();
+			// Load textMsg from intelText array
+			std::vector<WzString> textList = ini.value("intelText").toWzStringList();
+			for (const auto& text : textList) {
+				psViewData->textMsg.push_back(text);
+			}
+			VIEW_RESEARCH *psViewRes = new VIEW_RESEARCH;
+			psViewRes->sequenceName = ini.value("intelAudio", "").toWzString();
+			psViewRes->audio = "";
+			// Icon: Prefer statId over imdName, default to "MICAPSUL.pie"
+			if (research.psStat && research.psStat->pIMD) {
+				psViewRes->pIMD = research.psStat->pIMD;
+			} else if (research.pIMD) {
+				psViewRes->pIMD = research.pIMD;
+			} else {
+				psViewRes->pIMD = modelGet("MICAPSUL.pie");
+			}
+			psViewRes->pIMD2 = nullptr;
+			psViewData->pData = psViewRes;
+			// Store in global map
+			apsViewData[research.id] = psViewData;
+			// Set for research
+			research.pViewData = psViewData;
 			research.isMajor = true;
-			research.pViewData = getViewData(msgName);
-		}
-		else
-		{
-			research.isMajor = false;
+		} else {
+			// Old system: Check for msgName
+			WzString msgName = ini.value("msgName", "").toWzString();
+			if (msgName.compare("") != 0) {
+				research.pViewData = getViewData(msgName);
+				research.isMajor = true;
+			} else {
+				research.pViewData = nullptr;
+				research.isMajor = false;
+			}
 		}
 
 		//set the researchPoints
