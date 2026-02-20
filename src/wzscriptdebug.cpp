@@ -58,6 +58,7 @@
 #include "lib/widget/table.h"
 #include "lib/widget/jsontable.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "intdisplay.h"
 
 #include "action.h"
@@ -1191,11 +1192,15 @@ public:
 		}, prevButton);
 
 		auto miscLabel = panel->createLabel(3, font_regular_bold, "Other:");
-		prevButton = panel->createButton(3, "Rotate sun", [](){
+		prevButton = panel->createButton(3, "Reset Sun", [](){
+			setTheSun(getDefaultSunPosition());
+			debug(LOG_INFO, "Sun set to default position");
+		}, miscLabel);
+		prevButton = panel->createButton(3, "Rotate Sun", [](){
 			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
-		}, miscLabel);
+		}, prevButton);
 
 		auto dropdownWidget = panel->makeTerrainQualityDropdown(4);
 		(void)dropdownWidget;

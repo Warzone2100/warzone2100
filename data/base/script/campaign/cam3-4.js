@@ -52,6 +52,56 @@ camAreaEvent("factoryTriggerS", function() {
 	enableAllFactories();
 });
 
+function insaneSetupSpawnGroupWest()
+{
+	camManageGroup(camMakeGroup("insaneNXNorthWestGroup"), CAM_ORDER_ATTACK, {
+		regroup: false,
+		morale: 90,
+		fallback: camMakePos("healthRetreatPos")
+	});
+}
+
+function insaneSetupSpawnGroupSouth()
+{
+	camManageGroup(camMakeGroup("insaneNXSouthEastGroup"), CAM_ORDER_ATTACK, {
+		regroup: false,
+		morale: 90,
+		fallback: camMakePos("healthRetreatPos")
+	});
+}
+
+function insaneReinforcementSpawn()
+{
+	const CONDITION = "NX-HQ";
+	const extraUnits = [cTempl.nxmsens, cTempl.nxhvarch, cTempl.nxhvarch, cTempl.nxhvarch];
+	const units = {units: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxhgauss, cTempl.nxhvscourge, cTempl.nxhvpulse], appended: extraUnits};
+	const limits = {minimum: 12, maxRandom: 3};
+	const location = camMakePos(getObject("insaneSouthSpawn"));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CONDITION, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const CONDITION = "NX-HQ";
+	const DISTANCE_FROM_POS = 20;
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxhgauss, cTempl.nxhvscourge, cTempl.nxhvpulse];
+	const limits = {minimum: 10, maxRandom: 0};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CONDITION, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneGroundReinforcementAttackSetup()
+{
+	insaneReinforcementSpawn();
+	setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
+}
+
+function insaneTransporterAttackSetup()
+{
+	insaneTransporterAttack();
+	setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5));
+}
+
 function nexusHackFeature()
 {
 	let hackFailChance = 0;
@@ -236,13 +286,26 @@ function enableAllFactories()
 function truckDefense()
 {
 	const TRUCK_NUM = countDroid(DROID_CONSTRUCT, CAM_NEXUS);
+
 	if (TRUCK_NUM > 0)
 	{
-		const list = [
-			"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
-			"NX-Tower-ATMiss", "Sys-NX-CBTower", "NX-Emp-MultiArtMiss-Pit",
-			"Sys-NX-SensorTower"
-		];
+		let list;
+		if (camAllowInsaneSpawns())
+		{
+			list = [
+				"NX-Emp-MultiArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit",
+				"NX-Emp-MultiArtMiss-Pit", "NX-Emp-MultiArtMiss-Pit", "NX-Emp-Plasma-Pit",
+				"NX-Emp-Plasma-Pit", "Sys-NX-CBTower", "Sys-NX-SensorTower"
+			];
+		}
+		else
+		{
+			list = [
+				"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
+				"NX-Tower-ATMiss", "Sys-NX-CBTower", "NX-Emp-MultiArtMiss-Pit",
+				"Sys-NX-SensorTower"
+			];
+		}
 
 		for (let i = 0; i < TRUCK_NUM; ++i)
 		{
@@ -284,6 +347,28 @@ function eventStartLevel()
 		if (difficulty >= INSANE)
 		{
 			completeResearch("R-Defense-WallUpgrade13", CAM_NEXUS);
+		}
+		// New Nexus units for Insane+
+		if (camAllowInsaneSpawns())
+		{
+			addDroid(CAM_NEXUS, 76, 76, "Gauss Cannon Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.gaussCannon);
+			addDroid(CAM_NEXUS, 76, 77, "Gauss Cannon Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.gaussCannon);
+			addDroid(CAM_NEXUS, 76, 78, "Gauss Cannon Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.gaussCannon);
+			addDroid(CAM_NEXUS, 75, 76, "Scourge Missile Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.scourgeMissile);
+			addDroid(CAM_NEXUS, 75, 77, "Scourge Missile Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.scourgeMissile);
+			addDroid(CAM_NEXUS, 75, 78, "Scourge Missile Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.scourgeMissile);
+			addDroid(CAM_NEXUS, 74, 76, "Pulse Laser Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.pulseLaser);
+			addDroid(CAM_NEXUS, 74, 77, "Pulse Laser Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.pulseLaser);
+			addDroid(CAM_NEXUS, 74, 78, "Pulse Laser Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.pulseLaser);
+			addDroid(CAM_NEXUS, 40, 23, "Gauss Cannon Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.gaussCannon);
+			addDroid(CAM_NEXUS, 39, 23, "Gauss Cannon Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.gaussCannon);
+			addDroid(CAM_NEXUS, 38, 23, "Gauss Cannon Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.gaussCannon);
+			addDroid(CAM_NEXUS, 40, 24, "Scourge Missile Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.scourgeMissile);
+			addDroid(CAM_NEXUS, 39, 24, "Scourge Missile Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.scourgeMissile);
+			addDroid(CAM_NEXUS, 38, 24, "Scourge Missile Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.scourgeMissile);
+			addDroid(CAM_NEXUS, 40, 25, "Pulse Laser Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.pulseLaser);
+			addDroid(CAM_NEXUS, 39, 25, "Pulse Laser Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.pulseLaser);
+			addDroid(CAM_NEXUS, 38, 25, "Pulse Laser Vengeance Tracks", tBody.tank.vengeance, tProp.tank.tracks, "", "", tWeap.tank.pulseLaser);
 		}
 	}
 
@@ -476,5 +561,15 @@ function eventStartLevel()
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
-	setTimer("truckDefense", camMinutesToMilliseconds(20));
+	setTimer("truckDefense", camMinutesToMilliseconds(camAllowInsaneSpawns() ? 5 : 15));
+	if (camAllowInsaneSpawns())
+	{
+		if (!camClassicMode())
+		{
+			queue("insaneSetupSpawnGroupWest", camMinutesToMilliseconds(2));
+			queue("insaneSetupSpawnGroupSouth", camMinutesToMilliseconds(3));
+		}
+		queue("insaneGroundReinforcementAttackSetup", camMinutesToMilliseconds(6));
+		queue("insaneTransporterAttackSetup", camMinutesToMilliseconds(10));
+	}
 }

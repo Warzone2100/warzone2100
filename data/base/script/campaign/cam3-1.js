@@ -2,7 +2,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade07", "R-Struc-Materials07",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade08", "R-Struc-Materials07",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
@@ -138,6 +138,11 @@ function hoverAttack()
 
 function insaneReinforcementSpawn()
 {
+	if (allInValley)
+	{
+		return;
+	}
+
 	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxmrailh];
 	const limits = {minimum: 8, maxRandom: 4};
 	const location = ["northWestSpawnPos", "northEastSpawnPos"];
@@ -146,6 +151,11 @@ function insaneReinforcementSpawn()
 
 function insaneTransporterAttack()
 {
+	if (allInValley)
+	{
+		return;
+	}
+
 	const DISTANCE_FROM_POS = 30;
 	const units = [cTempl.nxmscouh, cTempl.nxmrailh, cTempl.nxmrailh];
 	const limits = {minimum: 5, maxRandom: 5};

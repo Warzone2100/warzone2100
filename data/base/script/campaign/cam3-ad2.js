@@ -2,6 +2,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const MIS_Y_SCROLL_LIMIT = 137;
+const MIS_UNIT_LIMIT_FOR_SPAWN = 40;
 const mis_nexusRes = [
 	"R-Sys-Engineering03", "R-Defense-WallUpgrade12", "R-Struc-Materials10",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
@@ -94,8 +95,6 @@ function phantomFactorySpawn()
 	let units;
 	let location;
 	const extraUnits = [cTempl.nxmsens, cTempl.nxmsens, cTempl.nxmsamh, cTempl.nxmsamh];
-	const UNIT_LIMIT_FOR_SPAWN = 40;
-	const ALLOW_INSANE_SPAWNS = camAllowInsaneSpawns();
 
 	switch (camRand(3))
 	{
@@ -115,19 +114,30 @@ function phantomFactorySpawn()
 			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmlinkh], appended: extraUnits};
 			location = "phantomFacWest";
 	}
-	if ((difficulty >= INSANE) || ALLOW_INSANE_SPAWNS)
+	if ((difficulty >= INSANE) || camAllowInsaneSpawns())
 	{
-		if (ALLOW_INSANE_SPAWNS && (camRand(100) < 20))
-		{
-			units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh], appended: extraUnits};
-			location = "phantomFacSouth";
-		}
 		units.units.push(cTempl.nxmangel); //Insane adds Angel units as a possibility.
 	}
 
-	if (countDroid(DROID_ANY, CAM_NEXUS) < UNIT_LIMIT_FOR_SPAWN)
+	if (countDroid(DROID_ANY, CAM_NEXUS) < MIS_UNIT_LIMIT_FOR_SPAWN)
 	{
 		const limits = {minimum: 12, maxRandom: 3};
+		camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
+	}
+}
+
+function insaneReinforcementSpawn()
+{
+	if (winFlag)
+	{
+		return;
+	}
+	const extraUnits = [cTempl.nxmsens, cTempl.nxmsens, cTempl.nxmsamh, cTempl.nxmsamh];
+	const units = {units: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmangel], appended: extraUnits};
+	const limits = {minimum: 12, maxRandom: 3};
+	const location = camMakePos(getObject("phantomFacSouth"));
+	if (countDroid(DROID_ANY, CAM_NEXUS) < MIS_UNIT_LIMIT_FOR_SPAWN)
+	{
 		camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 	}
 }
@@ -349,6 +359,7 @@ function checkTime()
 		setTimer("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
 		if (camAllowInsaneSpawns())
 		{
+			setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
 			setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
 		}
 		removeTimer("checkTime");
