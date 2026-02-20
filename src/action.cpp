@@ -900,8 +900,8 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					setDroidActionTarget(psDroid, nullptr, i);
 				}
-				// Is target blocked by a wall?
-				else if (bDirect && visGetBlockingWall(psDroid, psDroid->psActionTarget[i]))
+				// Is target blocked by a (friendly) wall?
+				else if (bDirect && (blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[i])) && aiCheckAlliances(psDroid->player, blockingWall->player))
 				{
 					setDroidActionTarget(psDroid, nullptr, i);
 				}
@@ -947,21 +947,11 @@ void actionUpdateDroid(DROID *psDroid)
 					{
 						BASE_OBJECT *psActionTarget = nullptr;
 						blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[i]);
-
-						if (proj_Direct(psStats) && blockingWall)
+						
+						// Are we a direct weapon being blocked by a friendly wall?
+						if (proj_Direct(psStats) && blockingWall && aiCheckAlliances(psDroid->player, blockingWall->player))
 						{
-							WEAPON_EFFECT weapEffect = psStats->weaponEffect;
-
-							if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-								&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
-							{
-								psActionTarget = blockingWall;
-								setDroidActionTarget(psDroid, psActionTarget, i); // attack enemy wall
-							}
-							else
-							{
-								wallBlocked = true;
-							}
+							wallBlocked = true;
 						}
 						else
 						{
@@ -1091,23 +1081,12 @@ void actionUpdateDroid(DROID *psDroid)
 			    && actionInRange(psDroid, psActionTarget, i))
 			{
 				WEAPON_STATS *const psWeapStats = psDroid->getWeaponStats(i);
-				WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
 				blockingWall = visGetBlockingWall(psDroid, psActionTarget);
 
-				// if a wall is inbetween us and the target, try firing at the wall if our
-				// weapon is good enough
-				if (proj_Direct(psWeapStats) && blockingWall)
+				// Are we a direct weapon being blocked by a friendly wall?
+				if (proj_Direct(psWeapStats) && blockingWall && aiCheckAlliances(psDroid->player, blockingWall->player))
 				{
-					if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-						&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
-					{
-						psActionTarget = (BASE_OBJECT *)blockingWall;
-						setDroidActionTarget(psDroid, psActionTarget, i);
-					}
-					else
-					{
-						wallBlocked = true;
-					}
+					wallBlocked = true;
 				}
 
 				if (!bHasTarget)
@@ -1385,21 +1364,7 @@ void actionUpdateDroid(DROID *psDroid)
 							{
 								// fire while closing range
 								// do this either when trying to run over a bloke or close the distance into optimum range
-								if ((blockingWall = visGetBlockingWall(psDroid, psDroid->psActionTarget[0])) && proj_Direct(psWeapStats))
-								{
-									WEAPON_EFFECT weapEffect = psWeapStats->weaponEffect;
-
-									if (!aiCheckAlliances(psDroid->player, blockingWall->player)
-										&& asStructStrengthModifier[weapEffect][blockingWall->pStructureType->strength] >= MIN_STRUCTURE_BLOCK_STRENGTH)
-									{
-										//Shoot at wall if the weapon is good enough against them
-										combFire(&psDroid->asWeaps[i], psDroid, (BASE_OBJECT*)blockingWall, i);
-									}
-								}
-								else
-								{
-									combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
-								}
+								combFire(&psDroid->asWeaps[i], psDroid, psDroid->psActionTarget[0], i);
 							}
 							else
 							{
