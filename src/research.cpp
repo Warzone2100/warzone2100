@@ -500,10 +500,8 @@ bool loadResearch(WzConfig &ini)
 			VIEW_RESEARCH *psViewRes = new VIEW_RESEARCH;
 			psViewRes->sequenceName = ini.value("intelAudio", "").toWzString();
 			psViewRes->audio = "";
-			// Icon: Prefer statId over imdName, default to "MICAPSUL.pie"
-			if (research.psStat && research.psStat->pIMD) {
-				psViewRes->pIMD = research.psStat->pIMD;
-			} else if (research.pIMD) {
+			// Icon: Use research.pIMD (from imdName), default to "MICAPSUL.pie"
+			if (research.pIMD) {
 				psViewRes->pIMD = research.pIMD;
 			} else {
 				psViewRes->pIMD = modelGet("MICAPSUL.pie");
