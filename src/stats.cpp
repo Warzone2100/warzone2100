@@ -817,6 +817,27 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 	return true;
 }
 
+/**
+ * Reverse lookup of PROPULSION_TYPE -> typeName
+ * used in JS API global Stats.Propulsion objects
+ */
+const char *getPropulsionTypeName(PROPULSION_TYPE type)
+{
+	switch (type)
+	{
+	case PROPULSION_TYPE_WHEELED: return "Wheeled";
+	case PROPULSION_TYPE_TRACKED: return "Tracked";
+	case PROPULSION_TYPE_LEGGED: return "Legged";
+	case PROPULSION_TYPE_HOVER: return "Hover";
+	case PROPULSION_TYPE_LIFT: return "Lift";
+	case PROPULSION_TYPE_PROPELLOR: return "Propellor";
+	case PROPULSION_TYPE_HALF_TRACKED: return "Half-Tracked";
+	case PROPULSION_TYPE_NUM: break;
+	}
+	ASSERT(false, "Invalid propulsion type");
+	return "Unknown";
+}
+
 /*Load the Propulsion stats from the file exported from Access*/
 bool loadPropulsionStats(WzConfig &ini)
 {
