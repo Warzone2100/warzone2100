@@ -489,6 +489,20 @@ function buildEnergy()
 	const oils = countFinishedStructList(structures.derricks);
 	const gens = countStructList(structures.gens);
 
+    if ( myPower() < 50 && oils > 0 && countFinishedStructList(structures.gens)=== 0 )
+    {
+    //Looks like we have power emergency! (note that this only counts finished)By the way is there a better way of seeing this?
+        if (!emergencyRecycleBase())
+        {
+            return false;        
+        }
+        
+		if (buildBasicStructure(structures.gens, IMPORTANCE.MANDATORY) !== BUILDRET.UNAVAILABLE)//this will surely work...
+        {
+            return true;
+        }
+    }
+
 	if (oils > 4 * gens)
 	{
 		if (buildBasicStructure(structures.gens, IMPORTANCE.PEACETIME) !== BUILDRET.UNAVAILABLE)
@@ -625,6 +639,30 @@ function recycleDefenses()
 	}
 
 	return false;
+}
+
+function emergencyRecycleBase()
+{
+    const trucks = enumTrucks();
+
+    if (trucks.length <= 0)
+	{
+		return false;
+	}
+
+    const list = enumStruct(me);
+
+	for (let i = 0; i < list.length; ++i)
+	{
+		for (let j = 0; j < trucks.length; ++j)
+		{
+			if (droidCanReach(trucks[j], list[i].x, list[i].y))
+			{
+				orderDroidObj(trucks[j], DORDER_DEMOLISH, list[i]);
+				return true;
+			}
+		}
+	}
 }
 
 _global.checkConstruction = function() {
