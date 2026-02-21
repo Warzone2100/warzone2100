@@ -1869,6 +1869,28 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	}
 }
 
+//-- ## cancelProduction(factory)
+//--
+//-- Cancel current droid production at the given factory. Returns true if
+//-- production was successfully cancelled, false if nothing was being produced. (4.6.4+ only)
+//--
+bool wzapi::cancelProduction(WZAPI_PARAMS(STRUCTURE *psFactory))
+{
+    STRUCTURE *psStruct = psFactory;
+    SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
+    SCRIPT_ASSERT(false, context, psStruct->pStructureType->type == REF_FACTORY
+                  || psStruct->pStructureType->type == REF_CYBORG_FACTORY
+                  || psStruct->pStructureType->type == REF_VTOL_FACTORY,
+                  "Structure %s is not a factory", objInfo(psStruct));
+    const FACTORY *psFactory_ = &psStruct->pFunctionality->factory;
+    if (psFactory_->psSubject == nullptr)
+    {
+        return false; // nothing being produced
+    }
+    ::cancelProduction(psStruct, ModeQueue);
+    return true;
+}
+
 //-- ## buildDroid(factory, templateName, body, propulsion, reserved, reserved, turrets...)
 //--
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.

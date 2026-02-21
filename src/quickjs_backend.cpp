@@ -3188,6 +3188,7 @@ IMPL_JS_FUNC(addFeature, wzapi::addFeature)
 IMPL_JS_FUNC(addDroid, wzapi::addDroid)
 IMPL_JS_FUNC(addDroidToTransporter, wzapi::addDroidToTransporter)
 IMPL_JS_FUNC(makeTemplate, wzapi::makeTemplate)
+IMPL_JS_FUNC(cancelProduction, wzapi::cancelProduction)
 IMPL_JS_FUNC(buildDroid, wzapi::buildDroid)
 IMPL_JS_FUNC(enumStruct, wzapi::enumStruct)
 IMPL_JS_FUNC(enumStructOffWorld, wzapi::enumStructOffWorld)
@@ -3603,6 +3604,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(orderDroidBuild, 5, 6); // WZAPI
 	JS_REGISTER_FUNC(orderDroidObj, 3); // WZAPI
 	JS_REGISTER_FUNC(orderDroid, 2); // WZAPI
+	JS_REGISTER_FUNC(cancelProduction, 1); // WZAPI
 	JS_REGISTER_FUNC2(buildDroid, 7, 7 + MAX_JS_VARARGS); // WZAPI
 	JS_REGISTER_FUNC2(addDroid, 9, 9 + MAX_JS_VARARGS); // WZAPI
 	JS_REGISTER_FUNC(addDroidToTransporter, 2); // WZAPI
