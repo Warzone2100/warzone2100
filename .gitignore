@@ -106,6 +106,9 @@ cscope.out
 # VS Code
 .vscode
 
+# Visual Studio
+.vs
+
 # Eclipse CDT
 .project
 .cproject
