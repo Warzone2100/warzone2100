@@ -211,7 +211,7 @@ function checkPowerIncome()
 
 function finishStructures()
 {
-	let success = false
+	let success = false;
 	const list = enumStruct(me).filterProperty("status", BEING_BUILT);
 
 	for (let i = 0; i < list.length; ++i)
