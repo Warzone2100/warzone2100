@@ -184,8 +184,28 @@ function buildBasicStructure(statlist, importance)
 	return (success) ? BUILDRET.SUCCESS : BUILDRET.FAILURE;
 }
 
+function checkPowerIncome()
+{
+    if ( myPower < 50 && countStructList(structures.derricks) > 0 && countFinishedStructList(structures.gens) === 0 )
+    {
+    //Looks like we have power emergency! (note that this only counts finished)
+        niceDebug("Severe power problem detected");
+        if (!emergencyRecycleBase())
+        {
+            return false;        
+        }
+        
+		if (countStructList(structures.gens) < 1 && buildBasicStructure(structures.gens, IMPORTANCE.MANDATORY) !== BUILDRET.UNAVAILABLE)
+        {
+            return true;
+        }
+    }
+}
+
 function finishStructures()
 {
+    checkPowerIncome();
+
 	let success = false;
 	const list = enumStruct(me).filterProperty("status", BEING_BUILT);
 
@@ -489,19 +509,7 @@ function buildEnergy()
 	const oils = countFinishedStructList(structures.derricks);
 	const gens = countStructList(structures.gens);
 
-    if ( myPower() < 50 && oils > 0 && countFinishedStructList(structures.gens)=== 0 )
-    {
-    //Looks like we have power emergency! (note that this only counts finished)By the way is there a better way of seeing this?
-        if (!emergencyRecycleBase())
-        {
-            return false;        
-        }
-        
-		if (buildBasicStructure(structures.gens, IMPORTANCE.MANDATORY) !== BUILDRET.UNAVAILABLE)//this will surely work...
-        {
-            return true;
-        }
-    }
+    
 
 	if (oils > 4 * gens)
 	{
@@ -641,7 +649,7 @@ function recycleDefenses()
 	return false;
 }
 
-function emergencyRecycleBase()
+function emergencyRecycleBase()//use with care, it's nearly indiscriminate
 {
     const trucks = enumTrucks();
 
@@ -649,19 +657,24 @@ function emergencyRecycleBase()
 	{
 		return false;
 	}
+    
+    niceDebug("Trying to solve it");
 
     const list = enumStruct(me);
 
 	for (let i = 0; i < list.length; ++i)
 	{
-		for (let j = 0; j < trucks.length; ++j)
-		{
-			if (droidCanReach(trucks[j], list[i].x, list[i].y))
-			{
-				orderDroidObj(trucks[j], DORDER_DEMOLISH, list[i]);
-				return true;
-			}
-		}
+        if(list[i].stattype !== RESOURCE_EXTRACTOR && list[i].stattype !== POWER_GEN)//derricks are free (and most needed now) so leave them
+        {                                                                            //also don't demolish new generator
+		    for (let j = 0; j < trucks.length; ++j)
+		    {
+			    if (trucks[j].order !== DORDER_DEMOLISH && droidCanReach(trucks[j], list[i].x, list[i].y))
+			    {
+                    niceDebug("Should be solved");
+			    	return (orderDroidObj(trucks[j], DORDER_DEMOLISH, list[i]));
+			    }
+		    }
+        }
 	}
 }
 
