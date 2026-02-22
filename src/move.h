@@ -66,4 +66,10 @@ bool recvSyncOptChange(NETQUEUE queue);
 
 void moveInit();
 
+// Get the collision radius of an object
+int moveObjRadius(const BASE_OBJECT *psObj);
+
+// Check if a droid is blocked
+bool moveBlocked(DROID *psDroid);
+
 #endif // __INCLUDED_SRC_MOVE_H__
