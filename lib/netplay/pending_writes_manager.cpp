@@ -195,30 +195,23 @@ void PendingWritesManager::threadImplFunction()
 				}
 				else
 				{
-					if (retSent.error() == std::errc::interrupted)
+					if (
+						retSent.error() == std::errc::interrupted ||
+						retSent.error() == std::errc::resource_unavailable_try_again ||
+						retSent.error() == std::errc::operation_would_block ||
+						retSent.error() == std::errc::no_buffer_space
+					)
 					{
 						// Not an actual error, just try to send again later
 						continue;
 					}
-					const auto connStatus = conn->connectionStatus();
-					if (!conn->isValid() || !connStatus.has_value()) // Check if the connection is still open
+					const auto errMsg = retSent.error().message();
+					debug(LOG_NET, "Socket error: %s", errMsg.c_str());
+					conn->setWriteErrorCode(retSent.error());
+					pendingWrites_.erase(currentIt);  // Connection broken, don't try writing to it again.
+					if (conn->deleteLaterRequested())
 					{
-						if (!connStatus.has_value())
-						{
-							const auto errMsg = connStatus.error().message();
-							debug(LOG_NET, "Socket error: %s", errMsg.c_str());
-							conn->setWriteErrorCode(connStatus.error());
-						}
-						else
-						{
-							debug(LOG_NET, "Socket error: connection is not valid");
-							conn->setWriteErrorCode(make_network_error_code(ECONNRESET));
-						}
-						pendingWrites_.erase(currentIt);  // Connection broken, don't try writing to it again.
-						if (conn->deleteLaterRequested())
-						{
-							delete conn;
-						}
+						delete conn;
 					}
 				}
 			}
