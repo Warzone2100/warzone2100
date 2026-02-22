@@ -186,13 +186,11 @@ function buildBasicStructure(statlist, importance)
 
 function checkPowerIncome()
 {
-    if ( myPower < 50 && countStructList(structures.derricks) > 0 && countFinishedStructList(structures.gens) === 0 )
-    {
-    //Looks like we have power emergency! (note that this only counts finished)
-        niceDebug("Severe power problem detected");
-        if (!emergencyRecycleBase())
+    if (myPower() < 50 && countStructList(structures.derricks) > 0 && countFinishedStructList(structures.gens) === 0)
+    {   
+        if (cancelAllProduction() && !emergencyRecycleBase(false) && !emergencyRecycleTank())
         {
-            return false;        
+            return emergencyRecycleBase(true);//we can't do much more currently        
         }
         
 		if (countStructList(structures.gens) < 1 && buildBasicStructure(structures.gens, IMPORTANCE.MANDATORY) !== BUILDRET.UNAVAILABLE)
@@ -200,13 +198,20 @@ function checkPowerIncome()
             return true;
         }
     }
+    else if(myPower() < 100 && countStructList(structures.derricks) === 0)
+    {
+        if (!emergencyRecycleBase(false) && !emergencyRecycleTruck())//we are so low on power that trucks and most base structures are useless either.
+        {
+            return false;    
+        }    
+        return true;
+    }
+    return false;
 }
 
 function finishStructures()
 {
-    checkPowerIncome();
-
-	let success = false;
+	let success = false
 	const list = enumStruct(me).filterProperty("status", BEING_BUILT);
 
 	for (let i = 0; i < list.length; ++i)
@@ -230,6 +235,8 @@ function finishStructures()
 			success = true;
 		}
 	}
+
+    checkPowerIncome();
 
 	return success;
 }
@@ -509,8 +516,6 @@ function buildEnergy()
 	const oils = countFinishedStructList(structures.derricks);
 	const gens = countStructList(structures.gens);
 
-    
-
 	if (oils > 4 * gens)
 	{
 		if (buildBasicStructure(structures.gens, IMPORTANCE.PEACETIME) !== BUILDRET.UNAVAILABLE)
@@ -649,7 +654,7 @@ function recycleDefenses()
 	return false;
 }
 
-function emergencyRecycleBase()//use with care, it's nearly indiscriminate
+function emergencyRecycleBase(lastResort)//use with care, it's nearly indiscriminate
 {
     const trucks = enumTrucks();
 
@@ -658,24 +663,36 @@ function emergencyRecycleBase()//use with care, it's nearly indiscriminate
 		return false;
 	}
     
-    niceDebug("Trying to solve it");
+    if (!defined(lastResort))
+    {
+        lastResort = false;    
+    }
 
     const list = enumStruct(me);
+    let closestTruck;
+    let closestStruct;
+    let minDist = Infinity;
 
 	for (let i = 0; i < list.length; ++i)
 	{
-        if(list[i].stattype !== RESOURCE_EXTRACTOR && list[i].stattype !== POWER_GEN)//derricks are free (and most needed now) so leave them
-        {                                                                            //also don't demolish new generator
+        if(list[i].stattype !== RESOURCE_EXTRACTOR &&
+           list[i].stattype !== POWER_GEN && 
+          (lastResort || 
+          (list[i].stattype !== FACTORY && 
+           list[i].stattype !== CYBORG_FACTORY)))//derricks are free (and most needed now) so leave them
+        {                                       //also don't demolish new generator
 		    for (let j = 0; j < trucks.length; ++j)
 		    {
-			    if (trucks[j].order !== DORDER_DEMOLISH && droidCanReach(trucks[j], list[i].x, list[i].y))
+			    if (trucks[j].order !== DORDER_DEMOLISH && distance(trucks[j], list[i]) < minDist && droidCanReach(trucks[j], list[i].x, list[i].y))
 			    {
-                    niceDebug("Should be solved");
-			    	return (orderDroidObj(trucks[j], DORDER_DEMOLISH, list[i]));
+			    	closestTruck = j;
+                    closestStruct = i;
+                    minDist = distance(trucks[j], list[i]);
 			    }
 		    }
         }
 	}
+    return (orderDroidObj(trucks[closestTruck], DORDER_DEMOLISH, list[closestStruct]));
 }
 
 _global.checkConstruction = function() {

@@ -1,6 +1,6 @@
 
 /*
- * This file is responsible for droid production.
+ * This file is responsible for droid production and recycling.
  *
  */
 
@@ -226,6 +226,59 @@ function produceTemplate(factory)
 	}
 
 	return false;
+}
+
+_global.cancelAllProduction = function() {//just iterates over all factories and cancels production
+    const list = enumFinishedStructList(structures.factories).concat(enumFinishedStructList(structures.vtolFactories).concat(enumFinishedStructList(templateFactories)));
+    let result = false;
+
+    if (!defined(list))
+    {
+        return false;//no factories
+    }
+    
+    for (let i = 0; i < list.length; ++i)
+    {
+        if(cancelProduction(list[i]))
+        {
+            result = true;        
+        }
+    }
+    return result;
+}
+
+_global.emergencyRecycleTank = function() {
+    const list = enumDroid(me);
+
+    if (!defined(list))
+    {
+        return false;//no droids
+    }
+    
+    for (let i = 0; i < list.length; ++i)
+    {
+        if ( list[i].droidType !== DROID_CONSTRUCT && orderDroid(list[i], DORDER_RECYCLE))  
+        {
+            return true;        
+        }
+    }
+    return emergencyRecycleTruck();
+}
+
+_global.emergencyRecycleTruck = function() {
+    const truckList = enumTrucks(me);
+    
+    if (defined(truckList) && truckList.length > 1)
+    {
+         for (let i = 0; i < truckList.length; ++i)
+        {
+            if (orderDroid(truckList[i], DORDER_RECYCLE))  
+            {
+                return true;        
+            }
+        }   
+    }
+    return false;
 }
 
 _global.checkTruckProduction = function() {
