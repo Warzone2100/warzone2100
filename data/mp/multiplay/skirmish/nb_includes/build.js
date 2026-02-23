@@ -188,7 +188,7 @@ function checkPowerIncome()
 {
     if (myPower() < 50 && countStructList(structures.derricks) > 0 && countFinishedStructList(structures.gens) === 0)
     {   
-        if (cancelAllProduction() && !emergencyRecycleBase(false) && !emergencyRecycleTank())
+        if (!cancelAllProduction() && !emergencyRecycleBase(false) && !emergencyRecycleTank())
         {
             return emergencyRecycleBase(true);//we can't do much more currently        
         }

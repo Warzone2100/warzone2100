@@ -252,12 +252,12 @@ _global.emergencyRecycleTank = function() {
 
     if (!defined(list))
     {
-        return false;//no droids
+        return false;//no tanks
     }
     
     for (let i = 0; i < list.length; ++i)
     {
-        if ( list[i].droidType !== DROID_CONSTRUCT && orderDroid(list[i], DORDER_RECYCLE))  
+        if (list[i].droidType !== DROID_CONSTRUCT && list[i].order !== DORDER_RECYCLE && orderDroid(list[i], DORDER_RECYCLE))  
         {
             return true;        
         }
@@ -272,7 +272,7 @@ _global.emergencyRecycleTruck = function() {
     {
          for (let i = 0; i < truckList.length; ++i)
         {
-            if (orderDroid(truckList[i], DORDER_RECYCLE))  
+            if (truckList[i].order !== DORDER_RECYCLE && orderDroid(truckList[i], DORDER_RECYCLE))  
             {
                 return true;        
             }
