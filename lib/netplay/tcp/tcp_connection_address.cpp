@@ -65,7 +65,7 @@ net::result<std::string> TCPConnectionAddress::toString() const
 	{
 		struct sockaddr_in6* sin = reinterpret_cast<struct sockaddr_in6*>(addr_->ai_addr);
 		char ipStr[INET6_ADDRSTRLEN] = {};
-		if (inet_ntop(addr_->ai_family, &sin->sin6_addr, ipStr, INET_ADDRSTRLEN))
+		if (inet_ntop(addr_->ai_family, &sin->sin6_addr, ipStr, INET6_ADDRSTRLEN))
 		{
 			return fmt::format("[{}]:{}", ipStr, ntohs(sin->sin6_port));
 		}
