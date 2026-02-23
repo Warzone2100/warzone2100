@@ -23,6 +23,7 @@
 #include "urlrequest_private.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/string_ext.h"
 #include <list>
 #include <memory>
 
@@ -130,11 +131,12 @@ public:
 		handle = nullptr;
 	}
 
+	virtual URLRequestMethod method() const = 0;
 	virtual const std::string& url() const = 0;
-	virtual const char* requestMethod() const { return "GET"; }
 	virtual InternetProtocol protocol() const = 0;
 	virtual bool noProxy() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
+	virtual const char* requestBody() const = 0;
 	virtual uint64_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
 
 	virtual emscripten_fetch_t* initiateFetch()
@@ -144,7 +146,8 @@ public:
 		emscripten_fetch_attr_init(&attr);
 
 		// Set request method
-		strcpy(attr.requestMethod, requestMethod());
+		auto requestMethod = method();
+		strlcpy(attr.requestMethod, to_string(requestMethod), sizeof(attr.requestMethod));
 
 		// Always load to memory
 		attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
@@ -158,6 +161,16 @@ public:
 
 		formattedRequestHeaders = std::make_shared<FetchRequestHeaders>(requestHeaders());
 		attr.requestHeaders = formattedRequestHeaders->getPointer();
+
+		if (requestMethod == URLRequestMethod::POST || requestMethod == URLRequestMethod::PATCH)
+		{
+			const char* pRequestBody = requestBody();
+			if (pRequestBody != nullptr)
+			{
+				attr.requestData = pRequestBody;
+				attr.requestDataSize = strlen(pRequestBody);
+			}
+		}
 
 		// Set callbacks
 		attr.onsuccess = wz_fetch_success;
@@ -298,6 +311,11 @@ public:
 	: URLTransferRequest()
 	{ }
 
+	virtual URLRequestMethod method() const override
+	{
+		return URLRequestMethod::GET;
+	}
+
 	virtual const std::string& url() const override
 	{
 		return getBaseRequest().url;
@@ -316,6 +334,11 @@ public:
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const override
 	{
 		return getBaseRequest().getRequestHeaders();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		return nullptr;
 	}
 
 	virtual bool onProgressUpdate(uint64_t dltotal, uint64_t dlnow) override
@@ -411,6 +434,20 @@ public:
 		{
 			_maxDownloadSize = std::min<uint64_t>(request.maxDownloadSizeLimit, static_cast<uint64_t>(MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE));
 		}
+	}
+
+	virtual URLRequestMethod method() const override
+	{
+		return request.method();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		if (request.requestBody().empty())
+		{
+			return nullptr;
+		}
+		return request.requestBody().c_str();
 	}
 
 	virtual const URLRequestBase& getBaseRequest() const override

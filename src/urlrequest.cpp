@@ -22,6 +22,18 @@
 #include "urlrequest_private.h"
 #include "lib/framework/wzapp.h"
 
+const char* to_string(URLRequestMethod method)
+{
+	switch (method)
+	{
+		case URLRequestMethod::GET: return "GET";
+		case URLRequestMethod::POST: return "POST";
+		case URLRequestMethod::PATCH: return "PATCH";
+		case URLRequestMethod::DELETE: return "DELETE";
+	}
+	return nullptr;
+}
+
 MemoryStruct::MemoryStruct()
 {
 	memory = (char *) malloc(1);
@@ -60,4 +72,33 @@ bool HTTPResponseHeadersContainer::getHeader(const std::string& name, std::strin
 	if (it == responseHeaders.end()) { return false; }
 	output_value = it->second;
 	return true;
+}
+
+void URLDataRequest::setPost(std::string&& jsonData)
+{
+	m_method = URLRequestMethod::POST;
+	m_requestBody = std::move(jsonData);
+	setRequestHeader("Content-Type", "application/json");
+}
+
+void URLDataRequest::setPatch(std::string&& jsonData)
+{
+	m_method = URLRequestMethod::PATCH;
+	m_requestBody = std::move(jsonData);
+	setRequestHeader("Content-Type", "application/json");
+}
+
+void URLDataRequest::setDelete()
+{
+	m_method = URLRequestMethod::DELETE;
+}
+
+URLRequestMethod URLDataRequest::method() const
+{
+	return m_method;
+}
+
+const std::string& URLDataRequest::requestBody() const
+{
+	return m_requestBody;
 }

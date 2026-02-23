@@ -84,6 +84,14 @@ enum class InternetProtocol {
 	IPv6
 };
 
+enum class URLRequestMethod {
+	GET,
+	POST,
+	PATCH,
+	DELETE
+};
+const char* to_string(URLRequestMethod method);
+
 struct URLRequestBase
 {
 public:
@@ -119,6 +127,7 @@ typedef std::function<void (const std::string& url, const HTTPResponseDetails& r
 
 struct URLDataRequest : public URLRequestBase
 {
+public:
 	curl_off_t maxDownloadSizeLimit = 0;
 
 	// MARK: callbacks
@@ -127,6 +136,20 @@ struct URLDataRequest : public URLRequestBase
 	// - if you need to do something on the main thread, please wrap that logic
 	//   (inside your callback) in wzAsyncExecOnMainThread
 	UrlRequestSuccess onSuccess;
+
+public:
+	void setPost(std::string&& jsonData);
+	void setPatch(std::string&& jsonData);
+	void setDelete();
+
+	URLRequestMethod method() const;
+	const std::string& requestBody() const;
+
+private:
+	URLRequestMethod m_method = URLRequestMethod::GET;
+
+	// Data to be provided in a POST/PATCH body
+	std::string m_requestBody;
 };
 
 typedef std::function<void (const std::string& url, const HTTPResponseDetails& response, const std::string& outFilePath)> UrlDownloadFileSuccess;

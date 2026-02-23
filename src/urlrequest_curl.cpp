@@ -419,10 +419,12 @@ public:
 		}
 	}
 
+	virtual URLRequestMethod method() const = 0;
 	virtual const std::string& url() const = 0;
 	virtual InternetProtocol protocol() const = 0;
 	virtual bool noProxy() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
+	virtual const char* requestBody() const = 0;
 	virtual curl_off_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
 
 	virtual CURL* createCURLHandle()
@@ -434,6 +436,10 @@ public:
 			// Something went wrong with curl_easy_init
 			return nullptr;
 		}
+
+		auto requestMethod = method();
+		curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, to_string(requestMethod));
+
 		curl_easy_setopt(handle, CURLOPT_URL, url().c_str());
 
 #if LIBCURL_VERSION_NUM >= 0x071000	// cURL 7.16.0+
@@ -491,6 +497,16 @@ public:
 		if (request_header_list != nullptr)
 		{
 			curl_easy_setopt(handle, CURLOPT_HTTPHEADER, request_header_list);
+		}
+
+		if (requestMethod == URLRequestMethod::POST || requestMethod == URLRequestMethod::PATCH)
+		{
+			const char* pRequestBody = requestBody();
+			if (pRequestBody != nullptr)
+			{
+				/* pass in a pointer to the data - libcurl does not copy */
+				curl_easy_setopt(handle, CURLOPT_POSTFIELDS, pRequestBody);
+			}
 		}
 
 		if (hasWriteMemoryCallback())
@@ -664,6 +680,11 @@ public:
 	: URLTransferRequest(requestHandle)
 	{ }
 
+	virtual URLRequestMethod method() const override
+	{
+		return URLRequestMethod::GET;
+	}
+
 	virtual const std::string& url() const override
 	{
 		return getBaseRequest().url;
@@ -682,6 +703,11 @@ public:
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const override
 	{
 		return getBaseRequest().getRequestHeaders();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		return nullptr;
 	}
 
 	virtual bool onProgressUpdate(int64_t dltotal, int64_t dlnow, int64_t ultotal, int64_t ulnow) override
@@ -786,6 +812,20 @@ public:
 		{
 			_maxDownloadSize = std::min(request.maxDownloadSizeLimit, static_cast<curl_off_t>(MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE));
 		}
+	}
+
+	virtual URLRequestMethod method() const override
+	{
+		return request.method();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		if (request.requestBody().empty())
+		{
+			return nullptr;
+		}
+		return request.requestBody().c_str();
 	}
 
 	virtual const URLRequestBase& getBaseRequest() const override
