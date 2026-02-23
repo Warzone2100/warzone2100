@@ -1,6 +1,6 @@
 
 /*
- * This file describes building construction procedures.
+ * This file describes building construction and recycling procedures.
  *
  */
 
@@ -675,12 +675,12 @@ function emergencyRecycleBase(lastResort)//use with care, it's nearly indiscrimi
 
 	for (let i = 0; i < list.length; ++i)
 	{
-        if(list[i].stattype !== RESOURCE_EXTRACTOR &&
-           list[i].stattype !== POWER_GEN && 
+        if(list[i].stattype !== RESOURCE_EXTRACTOR &&//derricks are free (and most needed now) so leave them
+           list[i].stattype !== POWER_GEN && //also don't demolish new generator
           (lastResort || 
           (list[i].stattype !== FACTORY && 
-           list[i].stattype !== CYBORG_FACTORY)))//derricks are free (and most needed now) so leave them
-        {                                       //also don't demolish new generator
+           list[i].stattype !== CYBORG_FACTORY)))
+        {                                       
 		    for (let j = 0; j < trucks.length; ++j)
 		    {
 			    if (trucks[j].order !== DORDER_DEMOLISH && distance(trucks[j], list[i]) < minDist && droidCanReach(trucks[j], list[i].x, list[i].y))
@@ -692,7 +692,11 @@ function emergencyRecycleBase(lastResort)//use with care, it's nearly indiscrimi
 		    }
         }
 	}
-    return (orderDroidObj(trucks[closestTruck], DORDER_DEMOLISH, list[closestStruct]));
+    if (defined(closestTruck) && defined(closestStruct))
+    {
+        return (orderDroidObj(trucks[closestTruck], DORDER_DEMOLISH, list[closestStruct]));
+    }
+    return false;
 }
 
 _global.checkConstruction = function() {
