@@ -218,7 +218,7 @@ if not a good combination!*/
 bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
 
 /*calculates the damage caused to the resistance levels of structures*/
-bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer);
+bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer, bool tpCapture);
 
 /* EW works differently in multiplayer mode compared with single player.*/
 bool validStructResistance(const STRUCTURE *psStruct);

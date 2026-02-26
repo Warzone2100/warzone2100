@@ -5712,7 +5712,7 @@ bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFact
 
 /*calculates the damage caused to the resistance levels of structures - returns
 true when captured*/
-bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer)
+bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer, bool tpCapture)
 {
 	STRUCTURE   *psStructure;
 	DROID       *psDroid;
@@ -5817,7 +5817,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD dam
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, gameTime - deltaGameTime);
 					}
 				}
-				Vector2i giftPos = (psAttacker) ? psAttacker->pos.xy() : psDroid->pos.xy();
+				Vector2i giftPos = (psAttacker && tpCapture) ? psAttacker->pos.xy() : psDroid->pos.xy();
 				if (!isDead(psDroid) && !giftSingleDroid(psDroid, attackPlayer, true, giftPos))
 				{
 					// droid limit reached, recycle

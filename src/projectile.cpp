@@ -1232,14 +1232,13 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		}
 
 		// Check for electronic warfare damage where we know the subclass and source
-		if (proj_Direct(psStats)
-		    && psStats->weaponSubClass == WSC_ELECTRONIC
+		if (psStats->weaponSubClass == WSC_ELECTRONIC
 		    && psObj->psSource)
 		{
 			// If we did enough `damage' to capture the target
 			if (electronicDamage(psObj->psDest, psObj->psSource,
 			                     calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
-			                     psObj->player))
+			                     psObj->player, psStats->flags.test(WEAPON_FLAG_TELEPORT_CAPTURE)))
 			{
 				switch (psObj->psSource->type)
 				{
