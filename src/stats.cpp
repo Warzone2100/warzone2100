@@ -573,6 +573,10 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER, true);
 		}
+		if (std::find(flags.begin(), flags.end(), "teleportcapture") != flags.end()) // "TeleportCapture"
+		{
+			psStats->flags.set(WEAPON_FLAG_TELEPORT_CAPTURE, true);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
