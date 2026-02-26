@@ -3687,10 +3687,7 @@ int16_t DROID::droidResistance() const
 {
 	CHECK_DROID(this);
 	const BODY_STATS *psStats = getBodyStats();
-	int res = experience / (65536 / MAX(1, psStats->upgrade[player].resistance));
-	// ensure resistance is a base minimum
-	res = MAX(res, psStats->upgrade[player].resistance);
-	return MIN(res, INT16_MAX);
+	return psStats->upgrade[player].resistance;
 }
 
 /*this is called to check the weapon is 'allowed'. Check if VTOL, the weapon is

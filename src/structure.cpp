@@ -5722,6 +5722,23 @@ bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD dam
 	ASSERT_OR_RETURN(false, attackPlayer < MAX_PLAYERS, "Invalid player id %d", (int)attackPlayer);
 	ASSERT_OR_RETURN(false, psTarget != nullptr, "Target is NULL");
 
+	int level = 0;
+	if (psTarget->type == OBJ_DROID)
+	{
+		// Retrieve highest, applicable, experience level
+		level = getDroidEffectiveLevel((DROID *)psTarget, true);
+	}
+	else if (psTarget->type == OBJ_STRUCTURE)
+	{
+		level = getStructureDamageBaseExperienceLevel();
+	}
+
+	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
+	int actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
+
+	// Deal at least MIN_WEAPON_DAMAGE points
+	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
+
 	//structure electronic damage
 	if (psTarget->type == OBJ_STRUCTURE)
 	{
@@ -5748,7 +5765,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD dam
 
 			triggerEventAttacked(psStructure, psAttacker, lastHit);
 
-			psStructure->resistance = (SWORD)(psStructure->resistance - damage);
+			psStructure->resistance = (SWORD)(psStructure->resistance - actualDamage);
 
 			if (psStructure->resistance < 0)
 			{
@@ -5793,7 +5810,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD dam
 		{
 			triggerEventAttacked(psDroid, psAttacker, lastHit);
 
-			psDroid->resistance = (SWORD)(psDroid->resistance - damage);
+			psDroid->resistance = (SWORD)(psDroid->resistance - actualDamage);
 
 			if (psDroid->resistance <= 0)
 			{
