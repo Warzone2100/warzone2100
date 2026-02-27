@@ -1064,12 +1064,12 @@ namespace wzapi
 	std::unique_ptr<const DROID> getDroidProduction(WZAPI_PARAMS(const STRUCTURE *_psFactory));
 	int getDroidLimit(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType));
 	int getExperienceModifier(WZAPI_PARAMS(int player));
-	int getPlayerDamageModifier(WZAPI_PARAMS(int player));
+	int getDamageModifier(WZAPI_PARAMS(int player));
 	bool setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> _droidType));
 	bool setCommanderLimit(WZAPI_PARAMS(int player, int maxNumber));
 	bool setConstructorLimit(WZAPI_PARAMS(int player, int maxNumber));
 	bool setExperienceModifier(WZAPI_PARAMS(int player, int percent));
-	bool setPlayerDamageModifier(WZAPI_PARAMS(int player, int percent));
+	bool setDamageModifier(WZAPI_PARAMS(int player, int percent));
 	std::vector<const DROID *> enumCargo(WZAPI_PARAMS(const DROID *psDroid));
 	bool isSpectator(WZAPI_PARAMS(int player));
 

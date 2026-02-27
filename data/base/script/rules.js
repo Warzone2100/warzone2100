@@ -236,6 +236,9 @@ function setupGame()
 	//Use dark fog for campaign
 	setRevealStatus(false);
 
+	// Apply difficulty damage modifiers
+	setDamageModifiers();
+
 	if (tilesetType === "ARIZONA")
 	{
 		setCampaignNumber(1);
@@ -329,7 +332,7 @@ function setDamageModifiers()
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
-		setPlayerDamageModifier(i, i === selectedPlayer ? playerDamage : enemyDamage);
+		setDamageModifier(i, i === selectedPlayer ? playerDamage : enemyDamage);
 	}
 }
 
@@ -383,7 +386,7 @@ function resetPower()
 function eventStartLevel()
 {
 	setLimits();
-	setDamageModifiers();
+	
 	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
 	{
 		weatherCycle();
