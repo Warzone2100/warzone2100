@@ -40,6 +40,7 @@
 #include "console.h"
 #include "design.h"
 #include "display3d.h"
+#include "difficulty.h"
 #include "map.h"
 #include "mission.h"
 #include "campaigninfo.h"
@@ -2287,6 +2288,16 @@ int wzapi::getExperienceModifier(WZAPI_PARAMS(int player))
 	return getExpGain(player);
 }
 
+//-- ## getPlayerDamageModifier(player)
+//--
+//-- Get the percentage of damage this player's stuff will take.
+//--
+int wzapi::getPlayerDamageModifier(WZAPI_PARAMS(int player))
+{
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	return getDamageModifiers(player);
+}
+
 //-- ## setDroidLimit(player, maxNumber[, droidType])
 //--
 //-- Set the maximum number of droids that this player can produce. If a third
@@ -2347,6 +2358,18 @@ bool wzapi::setExperienceModifier(WZAPI_PARAMS(int player, int percent))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	setExpGain(player, percent);
+	return true;
+}
+
+//-- ## setPlayerDamageModifier(player, percent)
+//--
+//-- Set a modifier for how much damage a specific player's objects will take.
+//-- A percent > 100 means this player will take more damage, while < 100 means reduced damage.
+//--
+bool wzapi::setPlayerDamageModifier(WZAPI_PARAMS(int player, int percent))
+{
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	setDamageModifiers(player, percent);
 	return true;
 }
 

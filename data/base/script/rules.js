@@ -301,6 +301,38 @@ function setLimits()
 	}
 }
 
+function setDamageModifiers()
+{
+	let playerDamage = 100; // How much damage the player takes
+	let enemyDamage = 100; // How much damage enemies take
+	switch (difficulty)
+	{
+		case SUPEREASY:
+			playerDamage = 70; // Player takes 70% damage
+			enemyDamage = 150; // Player deals 150% damage
+			break;
+		case EASY:
+			playerDamage = 85;
+			enemyDamage = 125;
+			break;
+		case MEDIUM:
+			break; // Player takes and deals 100% damage
+		case HARD:
+			playerDamage = 110;
+			enemyDamage = 90;
+			break;
+		case INSANE:
+			playerDamage = 120;
+			enemyDamage = 80;
+			break;
+	}
+
+	for (let i = 0; i < maxPlayers; ++i)
+	{
+		setPlayerDamageModifier(i, i === selectedPlayer ? playerDamage : enemyDamage);
+	}
+}
+
 function resetPower()
 {
 	let powerLimit = 999999;
@@ -351,6 +383,7 @@ function resetPower()
 function eventStartLevel()
 {
 	setLimits();
+	setDamageModifiers();
 	if (tilesetType === "URBAN" || tilesetType === "ROCKIES")
 	{
 		weatherCycle();
