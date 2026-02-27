@@ -2460,14 +2460,13 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 //-- ## emitSound(sound, x, y)
 //--
 //-- Emit a sound from an in-game location.
-//-- Coordinates are in 1/128ths of a tile.
 //--
 bool wzapi::emitSound(WZAPI_PARAMS(std::string sound, int x, int y))
 {
 	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
 	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
-	SCRIPT_ASSERT(false, context, x <= mapWidth * 128, "x value %d is greater than mapWidth %d", x, (int)mapWidth * 128);
-	SCRIPT_ASSERT(false, context, y <= mapHeight * 128, "y value %d is greater than mapHeight %d", y, (int)mapHeight * 128);
+	SCRIPT_ASSERT(false, context, x <= mapWidth, "x value %d is greater than mapWidth %d", x, (int)mapWidth);
+	SCRIPT_ASSERT(false, context, y <= mapHeight, "y value %d is greater than mapHeight %d", y, (int)mapHeight);
 
 	int soundID = audio_GetTrackID(sound.c_str());
 	if (soundID == SAMPLE_NOT_FOUND)
@@ -2475,7 +2474,7 @@ bool wzapi::emitSound(WZAPI_PARAMS(std::string sound, int x, int y))
 		soundID = audio_SetTrackVals(sound.c_str(), false, 100, 1800);
 	}
 
-	return audio_PlayStaticTrack(x, y, soundID);
+	return audio_PlayStaticTrack(x * 128, y * 128, soundID);
 }
 
 //-- ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
