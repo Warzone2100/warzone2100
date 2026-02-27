@@ -1082,6 +1082,7 @@ namespace wzapi
 	// MARK: - Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	bool setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player));
 	bool applyLimitSet(WZAPI_NO_PARAMS);
+	bool emitSound(WZAPI_PARAMS(std::string sound, int x, int y));
 	no_return_value setMissionTime(WZAPI_PARAMS(int _time));
 	int getMissionTime(WZAPI_NO_PARAMS);
 	no_return_value setReinforcementTime(WZAPI_PARAMS(int _time, optional<bool> _removeLaunch));
