@@ -1,0 +1,117 @@
+{
+    "name": "Pumpkin Balance",
+    "author": "Warzone 2100",
+    "type": "campaignBalanceMod",
+    "license": "GPL-2.0-or-later",
+    "minVersionSupported": "@MODINFO_LATEST_VERSION@",
+    "maxVersionTested": "@MODINFO_LATEST_VERSION@",
+    "description": {
+        "en": "\"Pumpkin\" campaign balance"
+    },
+    "universe": "wz2100",
+    "difficultyLevels": "default",
+    "camTweakOptions": [
+        {
+            "id": "timerPowerBonus",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "classicTimers",
+            "default": true,
+            "userEditable": true
+        },
+        {
+            "id": "playerUnitCap40",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "autosavesOnly",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "ps1Modifiers",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "infiniteTime",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "victoryHints",
+            "default": true,
+            "userEditable": true
+        },
+        {
+            "id": "gammaEndBonus",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "gammaBonusLevel",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "insanePlus",
+            "default": true,
+            "userEditable": true
+        },
+        {
+            "id": "insanePlusLowDiff",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "fastExp",
+            "default": false,
+            "userEditable": true
+        },
+        {
+            "id": "towerWars",
+            "default": false,
+            "userEditable": true
+        }
+    ],
+    "customTweakOptions": [
+        {
+            "id": "camClassic_balance32",
+            "type": "bool",
+            "default": false,
+            "displayName": {
+                "en": "3.2.x Balance"
+            },
+            "description": {
+                "en": "3.2.x series balance by emulating research bugs."
+            },
+            "userEditable": false
+        },
+        {
+            "id": "camClassic_slowProduction",
+            "type": "bool",
+            "default": false,
+            "displayName": {
+                "en": "Slow Factory Production"
+            },
+            "description": {
+                "en": "Slower AI factory production times."
+            }
+        },
+        {
+            "id": "camPumpkin_identifier110",
+            "type": "bool",
+            "default": true,
+            "displayName": {
+                "en": "Pumpkin Balance"
+            },
+            "description": {
+                "en": "Campaign using Pumpkin balance stats of v1.10."
+            },
+            "userEditable": false
+        }
+    ]
+}

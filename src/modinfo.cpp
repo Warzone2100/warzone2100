@@ -217,7 +217,15 @@ WzCampaignTweakOption customTweakOptionFromJSON(const nlohmann::json& j)
 	v.uniqueIdentifier = j.at("id").get<std::string>();
 	v.type = j.at("type").get<WzCampaignTweakOption::Type>();
 	v.enabled = j.at("default").get<bool>();
-	v.userEditable = true;
+	auto it = j.find("userEditable");
+	if (it != j.end())
+	{
+		v.userEditable = j.at("userEditable").get<bool>();
+	}
+	else
+	{
+		v.userEditable = true;
+	}
 	v.displayName = j.at("displayName").get<WzJsonLocalizedString>();
 	v.description = j.at("description").get<WzJsonLocalizedString>();
 	return v;

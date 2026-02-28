@@ -51,6 +51,7 @@
 typedef WzAdvCheckbox WzCampaignTweakOptionToggle;
 
 #define WZ2100_CORE_CLASSIC_BALANCE_MOD_FILENAME "wz2100_camclassic.wz"
+#define WZ2100_CORE_PUMPKIN_BALANCE_MOD_FILENAME "wz2100_campumpkin.wz"
 
 #define FRONTEND_CAMPAIGNUI_BUTHEIGHT 28
 
@@ -1933,7 +1934,9 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 	}
 
 	campaignBalanceChoices.push_back({_("Classic"), _("\"Classic\" campaign balance"), nullopt});
+	campaignBalanceChoices.push_back({_("Pumpkin"), _("\"Pumpkin\" campaign balance"), nullopt});
 	constexpr size_t classicModIdx = 1;
+	constexpr size_t pumpkinModIdx = 2;
 
 	for (const auto& mod : availableCampaignMods)
 	{
@@ -1945,6 +1948,12 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 		{
 			// already added above in all cases - just update the modinfo
 			campaignBalanceChoices[classicModIdx].modInfo = mod;
+			continue;
+		}
+		if (mod.modFilename == WZ2100_CORE_PUMPKIN_BALANCE_MOD_FILENAME)
+		{
+			// already added above in all cases - just update the modinfo
+			campaignBalanceChoices[pumpkinModIdx].modInfo = mod;
 			continue;
 		}
 		campaignBalanceChoices.push_back({WzString::fromUtf8(mod.name), WzString::fromUtf8(mod.description.getLocalizedString()), mod});
@@ -1962,7 +1971,7 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 		item->setGeometry(0, 0, item->idealWidth(), item->idealHeight());
 		maxItemHeight = std::max(maxItemHeight, item->idealHeight());
 
-		if (i == classicModIdx && (!option.modInfo.has_value()))
+		if (((i == classicModIdx) || (i == pumpkinModIdx)) && (!option.modInfo.has_value()))
 		{
 			// disable classic balance mod, which is always displayed, if unavailable
 			item->setState(WBUT_DISABLE);
@@ -1989,8 +1998,10 @@ std::shared_ptr<WIDGET> CampaignStartOptionsForm::makeCampaignBalanceDropdown()
 	campaignBalanceChoices = {
 		{_("Remastered"), _("The remastered campaign experience"), nullopt},
 		{_("Classic"), _("\"Classic\" campaign balance"), nullopt},
+		{_("Pumpkin"), _("\"Pumpkin\" campaign balance"), nullopt},
 	};
 	constexpr size_t classicModIdx = 1;
+	constexpr size_t pumpkinModIdx = 2;
 
 	campaignBalanceDropdown = std::make_shared<DropdownWidget>();
 
@@ -2004,7 +2015,7 @@ std::shared_ptr<WIDGET> CampaignStartOptionsForm::makeCampaignBalanceDropdown()
 		item->setGeometry(0, 0, item->idealWidth(), item->idealHeight());
 		maxItemHeight = std::max(maxItemHeight, item->idealHeight());
 
-		if (i == classicModIdx && (!option.modInfo.has_value()))
+		if (((i == classicModIdx) || (i == pumpkinModIdx)) && (!option.modInfo.has_value()))
 		{
 			// disable classic balance mod (which is always displayed) by default - updateCampaignBalanceDropdown handles enabling if available
 			item->setState(WBUT_DISABLE);
@@ -2284,7 +2295,7 @@ void CampaignStartOptionsForm::initialize(const std::shared_ptr<WzCampaignSelect
 	grid->place({1, 1, true}, row, makeDifficultySelectorDropdown(availableDifficultyLevels));
 	row.start++;
 
-	// Only display Balance Choice: Remastered / Classic / etc if !modInfo.has_value() (i.e. if original campaign)
+	// Only display Balance Choice: Remastered / Classic / Pumpkin / etc if !modInfo.has_value() (i.e. if original campaign)
 	if (!modInfo.has_value())
 	{
 		// Original Campaign - add balance dropdown
