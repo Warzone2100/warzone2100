@@ -82,6 +82,8 @@ VIEWDATA *getViewData(const WzString &name);
 /// Get a list of viewdata entries
 std::vector<WzString> getViewDataKeys();
 
+extern std::map<WzString, VIEWDATA *> apsViewData;
+
 // Get rid of mission objectives
 void releaseAllFlicMessages(PerPlayerMessageLists& list);
 
