@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-02-03 01:34+0000\n"
-"PO-Revision-Date: 2026-02-03 21:43\n"
+"PO-Revision-Date: 2026-02-05 03:02\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -2958,7 +2958,7 @@ msgstr "Configurez manuellement votre routeur/pare-feu pour ouvrir le port %d !"
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "Le mapping de ports a ouvert le port externe : %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -7277,7 +7277,7 @@ msgid "You have sent too many messages in the last few seconds. Please wait and 
 msgstr "Vous avez envoyé trop de messages dans les dernières secondes. Veuillez patienter avant de réessayer."
 
 msgid "The host has disabled debug mode / cheats for this game."
-msgstr ""
+msgstr "L'hôte a désactivé le mode debug et les triches pour cette partie."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7972,15 +7972,15 @@ msgstr "Sélectionner / Assigner un numéro de groupe : "
 
 #, c-format
 msgid "Group %zu"
-msgstr ""
+msgstr "Groupe %zu"
 
 #, c-format
 msgid "Select the Units in Group %zu"
-msgstr ""
+msgstr "Sélectionner les unités dans le groupe %zu"
 
 #, c-format
 msgid "Assign Selected Units to Group %zu"
-msgstr ""
+msgstr "Assigner les unités au groupe %zu"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Centrer la caméra sur ce groupe en cliquant ou en tapant deux fois"
@@ -9010,7 +9010,7 @@ msgstr "Énergie par seconde"
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "%u puits de pétrole inactifs"
 
 msgid "Need more resources!"
 msgstr "PAS ASSEZ D'ÉNERGIE !"
@@ -10178,7 +10178,7 @@ msgstr "[%d] Limite [%s] : %u (par défaut : pas de limite)"
 
 #, c-format
 msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%zu] Limite plus grande que numStructureStats (%u) : %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
