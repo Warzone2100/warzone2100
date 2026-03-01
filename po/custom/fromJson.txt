@@ -363,7 +363,7 @@ _("All missiles upgraded automatically")
 // data/base/messages/resmessages1.json: $.RES_W_M_D1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_M_AC1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[3]
-// ... + 11 refs
+// ... + 12 refs
 _("All mortars upgraded automatically")  
 // TRANSLATORS: 
 // data/base/messages/resmessages23.json: $.RES_POWU1.text[3]
@@ -395,6 +395,9 @@ _("All repair facilities upgraded automatically")
 // data/base/messages/resmessages3.json: $.RES_ST_RU7.text[3]
 // ... + 3 refs
 _("All research facilities upgraded automatically")  
+// TRANSLATORS: 
+// data/base/messages/resmessages23.json: $.RES_W_RR_ROF.text[3]
+_("All Ripple Rockets upgraded automatically")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[3]
 // data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[3]
@@ -537,13 +540,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-_("Armed with Cyborg assault gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 _("Armed with Cyborg Assault Gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+_("Armed with Cyborg assault gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -572,11 +575,11 @@ _("Armed with Cyborg Scourge Missile Launcher")
 // data/base/messages/resmessages2.json: $.RES_CYW_RK2.text[1]
 _("Armed with Cyborg Tank Killer rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_FL2.text[1]
-_("Armed with Cyborg Thermite flamer")  
-// TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
 _("Armed with Cyborg Thermite Flamer")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_FL2.text[1]
+_("Armed with Cyborg Thermite flamer")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
@@ -653,6 +656,9 @@ _("Armor-Piercing Fin-Stabilized Discarding Sabot")
 // data/base/messages/resmessages2.json: $.RES_EMP_HvyMor.text[1]
 // data/mp/messages/resmessages2.json: $.RES_EMP_HvyMor.text[1]
 _("Armored Bombard battery pit")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_PB_RotMG.text[1]
+_("Armored bunker with Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_PB_FL.text[1]
 // data/mp/messages/resmessages1.json: $.RES_PB_FL.text[1]
@@ -1002,7 +1008,7 @@ _("Automatically Repairs Damaged Units")
 // data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[2]
 // data/base/messages/resmessages2.json: $.RES_EMP_HPV.text[2]
 // data/base/messages/resmessages2.json: $.RES_EMP_HVATR.text[2]
-// ... + 18 refs
+// ... + 19 refs
 _("Automatically targets enemies in range")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -1085,11 +1091,11 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-_("Best Targets: Base structures")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 _("Best Targets: Base Structures")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+_("Best Targets: Base structures")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -1111,14 +1117,14 @@ _("Best Targets: Base Structures, infantry, wheeled vehicles")
 // ... + 7 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
+// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+_("Best Targets: Bunkers and Hardpoints")  
+// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 // ... + 2 refs
 _("Best Targets: Bunkers and hardpoints")  
-// TRANSLATORS: 
-// data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-_("Best Targets: Bunkers and Hardpoints")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 _("Best Targets: Bunkers, defenses, base structures")  
@@ -1845,7 +1851,7 @@ _("Defensive Strength : High")
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
 // data/base/messages/resmessages1.json: $.RES_PB_ATR.text[3]
 // data/base/messages/resmessages1.json: $.RES_PB_FL.text[3]
-// ... + 45 refs
+// ... + 46 refs
 _("Defensive Strength: High")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_TOWER1.text[3]
@@ -2085,9 +2091,6 @@ _("Fast Fire Mini-Rockets")
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
 _("Fast firing light anti-vehicle rockets")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
-_("Fast Loader")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_V_B08.text[2]
 // data/base/messages/resmessages3.json: $.RES_V_B07.text[2]
@@ -2543,15 +2546,12 @@ _("HEAP Mini-Rockets Mk3")
 // data/base/stats/research.json: $.R-Wpn-Rocket-Damage04.name
 _("HEAP Mini-Rockets")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Mortar-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage05.name
 _("HEAP Mortar Shells Mk2")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Mortar-Damage06.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage06.name
 _("HEAP Mortar Shells Mk3")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Mortar-Damage04.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Damage04.name
 _("HEAP Mortar Shells")  
 // TRANSLATORS: 
@@ -2828,6 +2828,24 @@ _("Hellstorm")
 // data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[3]
 _("Hero and Special rank units are protected")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Damage05.name
+_("HESC Mortar Shells Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Damage06.name
+_("HESC Mortar Shells Mk3")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Damage04.name
+_("HESC Mortar Shells")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Damage08.name
+_("HESCHC Mortar Shells Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Damage09.name
+_("HESCHC Mortar Shells Mk3")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Damage07.name
+_("HESCHC Mortar Shells")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
 // data/mp/stats/research.json: $.R-Wpn-Rocket-Damage08.name
 _("HESH Rocket Warhead Mk2")  
@@ -2878,7 +2896,6 @@ _("High Explosive Armor Piercing Flak")
 // data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[1]
 _("High Explosive Armor Piercing Shells")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_M_D4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_M_D4.text[1]
 _("High Explosive Armor-Piercing Shells")  
 // TRANSLATORS: 
@@ -2906,6 +2923,12 @@ _("High explosive shaped charge missile")
 // data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[1]
 _("High Explosive shells")  
+// TRANSLATORS: 
+// data/base/messages/resmessages23.json: $.RES_W_M_D7.text[1]
+_("High Explosive Soft Casing High Capacity Shells")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_M_D4.text[1]
+_("High Explosive Soft Casing Shells")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_SRK_D4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_SRK_D4.text[1]
@@ -3022,6 +3045,7 @@ _("Howitzer Damage Buff AI")
 // data/mp/stats/structure.json: $.Emplacement-Howitzer105.name
 _("Howitzer Emplacement")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 _("Howitzer Fast Loader")  
 // TRANSLATORS: 
@@ -3421,6 +3445,7 @@ _("Increases Mortar accuracy")
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_M_D1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_M_D4.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_M_D7.text[2]
 _("Increases Mortar damage")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -3446,6 +3471,9 @@ _("Increases Repair Speed")
 // data/base/messages/resmessages2.json: $.RES_ST_RU4.text[2]
 // data/base/messages/resmessages3.json: $.RES_ST_RU7.text[2]
 _("Increases research speed")  
+// TRANSLATORS: 
+// data/base/messages/resmessages23.json: $.RES_W_RR_ROF.text[2]
+_("Increases Ripple Rocket ROF")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[2]
@@ -4130,6 +4158,12 @@ _("Mortar damage +25%")
 // ... + 3 refs
 _("Mortar Damage")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-ROF05.name
+_("Mortar Fast Loader Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-ROF06.name
+_("Mortar Fast Loader Mk3")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-ROF04.name
 _("Mortar Fast Loader")  
@@ -4158,7 +4192,7 @@ _("Mortar Targeting Computer")
 // data/base/messages/resmessages1.json: $.RES_W_M_D1.text[0]
 // data/base/messages/resmessages12.json: $.RES_W_M_AC1.text[0]
 // data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[0]
-// ... + 11 refs
+// ... + 12 refs
 _("Mortar Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar01Lt.name
@@ -4294,7 +4328,7 @@ _("New Cyborg Research Available")
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[0]
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[0]
 // data/base/messages/resmessages1.json: $.RES_PB_ATR.text[0]
-// ... + 113 refs
+// ... + 114 refs
 _("New Defensive Structure Available")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[0]
@@ -4506,11 +4540,11 @@ _("NEXUS Resistance Circuits Mk2")
 // data/base/stats/research.json: $.R-Sys-Resistance-Upgrade03.name
 _("NEXUS Resistance Circuits Mk3")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-_("NEXUS Resistance Circuits")  
-// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 _("Nexus Resistance Circuits")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
+_("NEXUS Resistance Circuits")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSWall.name
 // data/mp/stats/structure.json: $.NEXUSWall.name
@@ -4925,6 +4959,7 @@ _("Rapid Fire Chaingun")
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 _("Rapid fire rail gun firing needle darts")  
 // TRANSLATORS: 
+// data/base/messages/resmessages23.json: $.RES_W_RR_ROF.text[1]
 // data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 _("Rapid Loader increases reload rate")  
 // TRANSLATORS: 
@@ -5268,7 +5303,7 @@ _("Rocket tracks the laser designator to the target")
 // data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[0]
 // data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[0]
 // data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[0]
-// ... + 14 refs
+// ... + 15 refs
 _("Rocket Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
@@ -5835,6 +5870,9 @@ _("Target Acquisition Artillery Shells Mk2")
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 _("Target Acquisition Artillery Shells")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Mortar-Acc04.name
+_("Target Acquisition Mortar Shells Mk2")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 _("Target Acquisition Mortar Shells")  
@@ -5862,14 +5900,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
-// TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
