@@ -37,6 +37,7 @@
 #include "map.h"
 #include "main.h"
 #include "lib/sound/audio_id.h"
+#include "lib/sound/audio.h"
 #include "projectile.h"
 #include "text.h"
 #include "notifications.h"
@@ -1184,12 +1185,12 @@ static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString
 	{
 		*piWavID = NO_SOUND;
 	}
-	else if ((*piWavID = audio_GetIDFromStr(szWavName.toUtf8().c_str())) == NO_SOUND)
+	else if ((*piWavID = audio_GetTrackID(szWavName.toUtf8().c_str())) == NO_SOUND)
 	{
 		debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName.toUtf8().c_str());
 		return false;
 	}
-	if ((*piWavID < 0 || *piWavID > ID_MAX_SOUND) && *piWavID != NO_SOUND)
+	if (*piWavID < 0 && *piWavID != NO_SOUND)
 	{
 		debug(LOG_FATAL, "Invalid ID - %d for sound %s", *piWavID, szStatName.toUtf8().c_str());
 		return false;
