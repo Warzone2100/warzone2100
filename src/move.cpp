@@ -57,6 +57,8 @@
 #include "mission.h"
 #include "campaigninfo.h"
 #include "qtscript.h"
+#include "steering/steering.h"
+#include "steering/collision_avoidance_behavior.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -102,6 +104,17 @@
 #define EXTRA_PRECISION                         (1 << EXTRA_BITS)
 
 static std::vector<bool> playerFormationSpeedLimiting = std::vector<bool>(MAX_PLAYERS, false);
+
+static steering::SteeringManager& moveSteeringManager()
+{
+	using namespace steering;
+	static SteeringManager instance = [] {
+		SteeringManager inst;
+		inst.addBehavior(std::make_unique<CollisionAvoidanceBehavior>());
+		return inst;
+	}();
+	return instance;
+}
 
 void moveInit()
 {
@@ -688,7 +701,7 @@ static bool moveNextTarget(DROID *psDroid)
 static	int mvPersRad = 20, mvCybRad = 30, mvSmRad = 40, mvMedRad = 50, mvLgRad = 60;
 
 // Get the radius of a base object for collision
-static SDWORD moveObjRadius(const BASE_OBJECT *psObj)
+SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 {
 	switch (psObj->type)
 	{
@@ -783,7 +796,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 
 
 // See if the droid has been stopped long enough to give up on the move
-static bool moveBlocked(DROID *psDroid)
+bool moveBlocked(DROID *psDroid)
 {
 	SDWORD	xdiff, ydiff, diffSq;
 	UDWORD	blockTime;
@@ -1300,121 +1313,6 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 	CHECK_DROID(psDroid);
 }
 
-// get an obstacle avoidance vector
-static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
-{
-	int32_t                 numObst = 0, distTot = 0;
-	Vector2i                dir(0, 0);
-	PROPULSION_STATS       *psPropStats = psDroid->getPropulsionStats();
-	ASSERT_OR_RETURN(dir, psPropStats, "invalid propulsion stats pointer");
-
-	int ourMaxSpeed = psPropStats->maxSpeed;
-	int ourRadius = moveObjRadius(psDroid);
-	if (ourMaxSpeed == 0)
-	{
-		return dest;  // No point deciding which way to go, if we can't move...
-	}
-
-	// scan the neighbours for obstacles
-	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, AVOID_DIST);
-	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
-	{
-		if (*gi == psDroid)
-		{
-			continue;  // Don't try to avoid ourselves.
-		}
-
-		DROID *psObstacle = castDroid(*gi);
-		if (psObstacle == nullptr)
-		{
-			// Object wrong type to worry about.
-			continue;
-		}
-
-		// vtol droids only avoid each other and don't affect ground droids
-		if (psDroid->isVtol() != psObstacle->isVtol())
-		{
-			continue;
-		}
-
-		if (psObstacle->isTransporter() ||
-		    (psObstacle->droidType == DROID_PERSON &&
-		     psObstacle->player != psDroid->player))
-		{
-			// don't avoid people on the other side - run over them
-			continue;
-		}
-
-		PROPULSION_STATS *obstaclePropStats = psObstacle->getPropulsionStats();
-		int obstacleMaxSpeed = obstaclePropStats->maxSpeed;
-		int obstacleRadius = moveObjRadius(psObstacle);
-		int totalRadius = ourRadius + obstacleRadius;
-
-		// Try to guess where the obstacle will be when we get close.
-		// Velocity guess 1: Guess the velocity the droid is actually moving at.
-		Vector2i obstVelocityGuess1 = iSinCosR(psObstacle->sMove.moveDir, psObstacle->sMove.speed);
-		// Velocity guess 2: Guess the velocity the droid wants to move at.
-		Vector2i obstTargetDiff = psObstacle->sMove.target - psObstacle->pos.xy();
-		Vector2i obstVelocityGuess2 = iSinCosR(iAtan2(obstTargetDiff), obstacleMaxSpeed * std::min(iHypot(obstTargetDiff), AVOID_DIST) / AVOID_DIST);
-		if (moveBlocked(psObstacle))
-		{
-			obstVelocityGuess2 = Vector2i(0, 0);  // This obstacle isn't going anywhere, even if it wants to.
-			//obstVelocityGuess2 = -obstVelocityGuess2;
-		}
-		// Guess the average of the two guesses.
-		Vector2i obstVelocityGuess = (obstVelocityGuess1 + obstVelocityGuess2) / 2;
-
-		// Find the guessed obstacle speed and direction, clamped to half our speed.
-		int obstSpeedGuess = std::min(iHypot(obstVelocityGuess), ourMaxSpeed / 2);
-		uint16_t obstDirectionGuess = iAtan2(obstVelocityGuess);
-
-		// Position of obstacle relative to us.
-		Vector2i diff = (psObstacle->pos - psDroid->pos).xy();
-
-		// Find very approximate position of obstacle relative to us when we get close, based on our guesses.
-		Vector2i deltaDiff = iSinCosR(obstDirectionGuess, (int64_t)std::max(iHypot(diff) - totalRadius * 2 / 3, 0) * obstSpeedGuess / ourMaxSpeed);
-		if (!fpathBlockingTile(map_coord(psObstacle->pos.x + deltaDiff.x), map_coord(psObstacle->pos.y + deltaDiff.y), obstaclePropStats->propulsionType))  // Don't assume obstacle can go through cliffs.
-		{
-			diff += deltaDiff;
-		}
-
-		if (dot(diff, dest) < 0)
-		{
-			// object behind
-			continue;
-		}
-
-		int centreDist = std::max(iHypot(diff), 1);
-		int dist = std::max(centreDist - totalRadius, 1);
-
-		dir += diff * 65536 / (centreDist * dist);
-		distTot += 65536 / dist;
-		numObst += 1;
-	}
-
-	if (dir == Vector2i(0, 0) || numObst == 0)
-	{
-		return dest;
-	}
-
-	dir = Vector2i(dir.x / numObst, dir.y / numObst);
-	distTot /= numObst;
-
-	// Create the avoid vector
-	Vector2i o(dir.y, -dir.x);
-	Vector2i avoid = dot(dest, o) < 0 ? -o : o;
-
-	// Normalise dest and avoid.
-	dest = dest * 32767 / (iHypot(dest) + 1);
-	avoid = avoid * 32767 / (iHypot(avoid) + 1);  // avoid.x and avoid.y are up to 65536, so we can multiply by at most 32767 here without potential overflow.
-
-	// combine the avoid vector and the target vector
-	int ratio = std::min(distTot * ourRadius / 2, 65536);
-
-	return dest * (65536 - ratio) + avoid * ratio;
-}
-
 /*!
  * Get a direction for a droid to avoid obstacles etc.
  * \param psDroid Which droid to examine
@@ -1422,17 +1320,19 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
  */
 static uint16_t moveGetDirection(DROID *psDroid)
 {
-	Vector2i src = psDroid->pos.xy();  // Do not want precise precision here, would overflow.
-	Vector2i target = psDroid->sMove.target;
-	Vector2i dest = target - src;
+	// Build steering context
+	steering::SteeringContext ctx;
+	ctx.droid = psDroid;
+	ctx.currentPos = psDroid->pos.xy();
+	ctx.targetPos = psDroid->sMove.target;
+	ctx.velocity = iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed);
+	ctx.moveDir = psDroid->sMove.moveDir;
+	ctx.speed = psDroid->sMove.speed;
+	ctx.maxSpeed = psDroid->getPropulsionStats()->maxSpeed;
+	ctx.radius = moveObjRadius(psDroid);
 
-	// Transporters don't need to avoid obstacles, but everyone else should
-	if (!psDroid->isTransporter())
-	{
-		dest = moveGetObstacleVector(psDroid, dest);
-	}
-
-	return iAtan2(dest);
+	// Calculate steering direction
+	return moveSteeringManager().calculateSteeringDirection(ctx);
 }
 
 // Check if a droid has got to a way point
