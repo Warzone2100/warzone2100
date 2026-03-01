@@ -38,37 +38,25 @@
 
 static DIFFICULTY_LEVEL presDifLevel = DL_NORMAL;
 
-static int fDifPlayerModifier;
-static int fDifEnemyModifier;
+static int fDifDamageModifier[MAX_PLAYERS];
 
-void setDamageModifiers(int playerModifier, int enemyModifier)
+void setDamageModifiers(int player, int percentDamage)
 {
-	fDifPlayerModifier = std::max(1, playerModifier);
-	fDifEnemyModifier = std::max(1, (!bMultiPlayer && getCamTweakOption_PS1Modifiers()) ? enemyModifier / 3 : enemyModifier);
+	// If we're in the campaign with the PS1 modifiers tweak, set the player to take 1/3 damage
+	fDifDamageModifier[player] = std::max(1, (!bMultiPlayer && getCamTweakOption_PS1Modifiers() && player == selectedPlayer) ? percentDamage / 3 : percentDamage);
+}
+
+// ------------------------------------------------------------------------------------
+/* Returns the damage modifiers for the given player */
+int getDamageModifiers(int player)
+{
+	return fDifDamageModifier[player];
 }
 
 // ------------------------------------------------------------------------------------
 /* Sets the game difficulty level */
 void setDifficultyLevel(DIFFICULTY_LEVEL lev)
 {
-	switch (lev)
-	{
-	case DL_SUPER_EASY:
-		setDamageModifiers(150, 70);
-		break;
-	case DL_EASY:
-		setDamageModifiers(125, 85);
-		break;
-	case DL_NORMAL:
-		setDamageModifiers(100, 100);
-		break;
-	case DL_HARD:
-		setDamageModifiers(90, 110);
-		break;
-	case DL_INSANE:
-		setDamageModifiers(80, 120);
-		break;
-	}
 	presDifLevel = lev;
 }
 
@@ -79,28 +67,17 @@ DIFFICULTY_LEVEL getDifficultyLevel()
 	return presDifLevel;
 }
 
-int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
+int modifyForDifficultyLevel(int basicVal, int targetPlayer)
 {
-	if (IsPlayer)
-	{
-		return basicVal * fDifPlayerModifier / 100;
-	}
-	else
-	{
-		return basicVal * fDifEnemyModifier / 100;
-	}
+	return basicVal * fDifDamageModifier[targetPlayer] / 100;
 }
 
 // reset damage modifiers changed by "double up" or "biffer baker" cheat and
 // prevent campaign difficulty from influencing skirmish and multiplayer games
 void resetDamageModifiers()
 {
-	if (bMultiPlayer)
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		setDamageModifiers(100, 100);
-	}
-	else
-	{
-		setDifficultyLevel(getDifficultyLevel());
+		setDamageModifiers(i, 100);
 	}
 }

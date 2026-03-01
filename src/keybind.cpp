@@ -588,7 +588,17 @@ void	kf_BifferBaker()
 	}
 
 	// player deals far more damage, and the enemy far less
-	setDamageModifiers(999, 1);
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (i == selectedPlayer)
+		{
+			setDamageModifiers(i, 999);
+		}
+		else
+		{
+			setDamageModifiers(i, 1);
+		}
+	}
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Hard as nails!!!"));
 	sendInGameSystemMessage(cmsg.c_str());
@@ -654,7 +664,13 @@ void	kf_DoubleUp()
 		noMPCheatMsg();
 		return;
 	}
-	setDamageModifiers(100, 50); // enemy damage halved
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (i != selectedPlayer)
+		{
+			setDamageModifiers(i, 50); // enemy damage halved
+		}
+	}
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
 	sendInGameSystemMessage(cmsg.c_str());

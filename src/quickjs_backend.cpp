@@ -3306,6 +3306,8 @@ IMPL_JS_FUNC(getDroidProduction, wzapi::getDroidProduction)
 IMPL_JS_FUNC(getDroidLimit, wzapi::getDroidLimit)
 IMPL_JS_FUNC(getExperienceModifier, wzapi::getExperienceModifier)
 IMPL_JS_FUNC(setExperienceModifier, wzapi::setExperienceModifier)
+IMPL_JS_FUNC(getDamageModifier, wzapi::getDamageModifier)
+IMPL_JS_FUNC(setDamageModifier, wzapi::setDamageModifier)
 IMPL_JS_FUNC(setDroidLimit, wzapi::setDroidLimit)
 IMPL_JS_FUNC(setCommanderLimit, wzapi::setCommanderLimit)
 IMPL_JS_FUNC(setConstructorLimit, wzapi::setConstructorLimit)
@@ -3620,10 +3622,12 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(getDroidProduction, 1); // WZAPI
 	JS_REGISTER_FUNC2(getDroidLimit, 0, 2); // WZAPI
 	JS_REGISTER_FUNC(getExperienceModifier, 1); // WZAPI
+	JS_REGISTER_FUNC(getDamageModifier, 1); // WZAPI
 	JS_REGISTER_FUNC2(setDroidLimit, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(setCommanderLimit, 2); // deprecated!!
 	JS_REGISTER_FUNC(setConstructorLimit, 2); // deprecated!!
 	JS_REGISTER_FUNC(setExperienceModifier, 2); // WZAPI
+	JS_REGISTER_FUNC(setDamageModifier, 2); // WZAPI
 	JS_REGISTER_FUNC(getWeaponInfo, 1); // WZAPI // deprecated!!
 	JS_REGISTER_FUNC(enumCargo, 1); // WZAPI
 

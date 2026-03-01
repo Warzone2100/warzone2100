@@ -443,7 +443,7 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 	}
 
 	// apply game difficulty setting
-	damage = modifyForDifficultyLevel(damage, psObj->player != selectedPlayer);
+	damage = modifyForDifficultyLevel(damage, psObj->player);
 
 	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
 	{
@@ -580,7 +580,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	damage = calcDamage(weaponDamage(*psStats, player), psStats->weaponEffect, psTarget);
 
 	// apply game difficulty setting
-	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
+	damage = modifyForDifficultyLevel(damage, psTarget->player);
 	armour = objArmour(psTarget, psStats->weaponClass);
 
 	if (psTarget->type == OBJ_DROID)
