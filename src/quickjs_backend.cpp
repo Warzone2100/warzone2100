@@ -3224,6 +3224,7 @@ IMPL_JS_FUNC(centreView, wzapi::centreView)
 IMPL_JS_FUNC(hackPlayIngameAudio, wzapi::hackPlayIngameAudio)
 IMPL_JS_FUNC(hackStopIngameAudio, wzapi::hackStopIngameAudio)
 IMPL_JS_FUNC(playSound, wzapi::playSound)
+IMPL_JS_FUNC(emitSound, wzapi::emitSound)
 IMPL_JS_FUNC_DEBUGMSGUPDATE(gameOverMessage, wzapi::gameOverMessage)
 IMPL_JS_FUNC(completeResearch, wzapi::completeResearch)
 IMPL_JS_FUNC(completeAllResearch, wzapi::completeAllResearch)
@@ -3635,6 +3636,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(applyLimitSet, 0); // WZAPI
+	JS_REGISTER_FUNC(emitSound, 3); // WZAPI
 	JS_REGISTER_FUNC(setMissionTime, 1); // WZAPI
 	JS_REGISTER_FUNC(getMissionTime, 0); // WZAPI
 	JS_REGISTER_FUNC2(setReinforcementTime, 1, 2); // WZAPI

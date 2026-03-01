@@ -647,6 +647,10 @@ Center the player's camera at the given position.
 
 Play a sound, optionally at a location.
 
+## emitSound(sound, x, y)
+
+Emit a sound from an in-game location.
+
 ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
 
 Add a guide topic to the in-game guide.
