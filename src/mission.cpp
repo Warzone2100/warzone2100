@@ -2101,7 +2101,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 		timeElapsed = gameTime - mission.startTime;
 	}
 
-	if (!challengeActive)
+	if (!challengeActive || mission.time >= 0)
 	{
 		timeRemaining = mission.time - timeElapsed;
 		if (timeRemaining < 0)
@@ -2117,7 +2117,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 	fillTimeDisplay(*Label, timeRemaining, true);
 	Label->show();  // Make sure its visible
 
-	if (challengeActive)
+	if (challengeActive && mission.time < 0)
 	{
 		return;	// all done
 	}
