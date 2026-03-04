@@ -28,6 +28,8 @@ typedef long curl_off_t;
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
+#include <chrono>
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -123,19 +125,85 @@ private:
 	std::unordered_map<std::string, std::string> requestHeaders;
 };
 
-typedef std::function<void (const std::string& url, const HTTPResponseDetails& response, const std::shared_ptr<MemoryStruct>& data)> UrlRequestSuccess;
+constexpr long HttpRequestConnectionFailure = 0; // 0 is returned as the http response code if there is an internal curl error or error connecting altogether
+constexpr long HttpStatusTooManyRequests = 429; // RFC 6585, 4
+
+struct URLRequestAutoRetryStrategy
+{
+public:
+	URLRequestAutoRetryStrategy()
+	{ }
+public:
+	static URLRequestAutoRetryStrategy None()
+	{
+		return URLRequestAutoRetryStrategy();
+	}
+	static URLRequestAutoRetryStrategy RetryAfter(std::chrono::milliseconds minDelay, size_t maxRetries = 1, const std::unordered_set<long> retryResponseCodes = {HttpRequestConnectionFailure, HttpStatusTooManyRequests}, std::chrono::milliseconds maxDelay = std::chrono::milliseconds(10000))
+	{
+		auto result = URLRequestAutoRetryStrategy();
+		result.m_minDelay = minDelay;
+		result.m_maxRetries = maxRetries;
+		result.m_maxDelay = maxDelay;
+		result.m_retryResponseCodes = retryResponseCodes;
+		return result;
+	}
+public:
+	bool shouldRetryOnHttpResponseCode(long httpResponseCode) const { return m_maxRetries > 0 && m_retryResponseCodes.count(httpResponseCode) != 0; }
+	size_t maxRetries() const { return m_maxRetries; }
+	std::chrono::milliseconds minDelay() const { return m_minDelay; }
+	std::chrono::milliseconds maxDelay() const { return m_maxDelay; }
+private:
+	std::chrono::milliseconds m_minDelay = std::chrono::milliseconds(0);
+	std::chrono::milliseconds m_maxDelay = std::chrono::milliseconds(0);
+	size_t m_maxRetries = 0;
+	std::unordered_set<long> m_retryResponseCodes;
+};
+
+struct URLRequestHandlingBehavior
+{
+public:
+	enum class Strategy
+	{
+		Done,
+		RetryAfter
+	};
+protected:
+	URLRequestHandlingBehavior(Strategy strategy)
+	: m_strategy(strategy)
+	{ }
+public:
+	static URLRequestHandlingBehavior Done()
+	{
+		return URLRequestHandlingBehavior(Strategy::Done);
+	}
+	static URLRequestHandlingBehavior RetryAfter(std::chrono::milliseconds delay)
+	{
+		auto result = URLRequestHandlingBehavior(Strategy::RetryAfter);
+		result.m_delay = delay;
+		return result;
+	}
+public:
+	Strategy strategy() const { return m_strategy; }
+	std::chrono::milliseconds delay() const { return m_delay; }
+private:
+	Strategy m_strategy;
+	std::chrono::milliseconds m_delay;
+};
+
+typedef std::function<URLRequestHandlingBehavior (const std::string& url, const HTTPResponseDetails& response, const std::shared_ptr<MemoryStruct>& data)> UrlRequestResponseHandler;
 
 struct URLDataRequest : public URLRequestBase
 {
 public:
 	curl_off_t maxDownloadSizeLimit = 0;
+	URLRequestAutoRetryStrategy autoRetryStrategy = URLRequestAutoRetryStrategy::None();
 
 	// MARK: callbacks
 	// IMPORTANT:
 	// - callbacks will be called on a background thread
 	// - if you need to do something on the main thread, please wrap that logic
 	//   (inside your callback) in wzAsyncExecOnMainThread
-	UrlRequestSuccess onSuccess;
+	UrlRequestResponseHandler onResponse;
 
 public:
 	void setPost(std::string&& jsonData);
@@ -163,7 +231,7 @@ struct URLFileDownloadRequest : public URLRequestBase
 	// - callbacks will be called on a background thread
 	// - if you need to do something on the main thread, please wrap that logic
 	//   (inside your callback) in wzAsyncExecOnMainThread
-	UrlDownloadFileSuccess onSuccess;
+	UrlDownloadFileSuccess onResponse;
 };
 
 struct AsyncRequest

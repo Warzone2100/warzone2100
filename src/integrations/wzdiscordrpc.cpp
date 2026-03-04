@@ -75,7 +75,7 @@ static void asyncGetDiscordDefaultUserAvatar(const std::string& discord_user_dis
 
 	URLDataRequest urlRequest;
 	urlRequest.url = std::string("https://cdn.discordapp.com/embed/avatars/") + urlEncode(user_discriminator_img_str.c_str()) + ".png?size=128";
-	urlRequest.onSuccess = [callback](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	urlRequest.onResponse = [callback](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
 		{
@@ -83,18 +83,19 @@ static void asyncGetDiscordDefaultUserAvatar(const std::string& discord_user_dis
 				debug(LOG_WARNING, "Query for default Discord user avatar returned HTTP status code: %ld", httpStatusCode);
 			});
 			callback(nullopt);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		if (!data || data->memory == nullptr || data->size == 0)
 		{
 			// Invalid data response
 			callback(nullopt);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		std::vector<unsigned char> memoryBuffer((unsigned char *)data->memory, ((unsigned char*)data->memory) + data->size);
 		callback(memoryBuffer);
+		return URLRequestHandlingBehavior::Done();
 	};
 	urlRequest.onFailure = [callback](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		callback(nullopt);
@@ -126,7 +127,7 @@ static void asyncGetDiscordUserAvatar(const DiscordUser* request, const std::fun
 
 	URLDataRequest urlRequest;
 	urlRequest.url = std::string("https://cdn.discordapp.com/avatars/") + urlEncode(request->userId) + "/" + urlEncode(request->avatar) + ".png?size=128";
-	urlRequest.onSuccess = [callback, discord_user_discriminator](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	urlRequest.onResponse = [callback, discord_user_discriminator](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
 		{
@@ -135,7 +136,7 @@ static void asyncGetDiscordUserAvatar(const DiscordUser* request, const std::fun
 			});
 			// fallback
 			asyncGetDiscordDefaultUserAvatar(discord_user_discriminator, callback);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		if (!data || data->memory == nullptr || data->size == 0)
@@ -143,11 +144,12 @@ static void asyncGetDiscordUserAvatar(const DiscordUser* request, const std::fun
 			// Invalid data response
 			// fallback
 			asyncGetDiscordDefaultUserAvatar(discord_user_discriminator, callback);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		std::vector<unsigned char> memoryBuffer((unsigned char *)data->memory, ((unsigned char*)data->memory) + data->size);
 		callback(memoryBuffer);
+		return URLRequestHandlingBehavior::Done();
 	};
 	urlRequest.onFailure = [callback, discord_user_discriminator](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		// fallback

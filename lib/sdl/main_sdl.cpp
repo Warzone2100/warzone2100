@@ -1012,6 +1012,11 @@ void wzSemaphoreWait(WZ_SEMAPHORE *semaphore)
 	SDL_WaitSemaphore((SDL_Semaphore *)semaphore);
 }
 
+bool wzSemaphoreWaitTimeout(WZ_SEMAPHORE *semaphore, int32_t timeoutMS)
+{
+	return SDL_WaitSemaphoreTimeout((SDL_Semaphore *)semaphore, timeoutMS);
+}
+
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 {
 	SDL_SignalSemaphore((SDL_Semaphore *)semaphore);

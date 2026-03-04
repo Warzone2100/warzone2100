@@ -196,7 +196,7 @@ public:
 
 	virtual bool waitOnShutdown() const { return false; }
 
-	virtual void handleRequestSuccess(unsigned short status) { }
+	virtual void handleRequestDone(unsigned short status) { }
 	virtual void handleRequestError(unsigned short status) { }
 	virtual void requestFailedToFinish(URLRequestFailureType type) { }
 
@@ -221,7 +221,7 @@ void wz_fetch_success(emscripten_fetch_t *fetch)
 			pRequest->writeMemoryCallback(fetch->data, fetch->numBytes, fetch->dataOffset);
 		}
 
-		pRequest->handleRequestSuccess(fetch->status);
+		pRequest->handleRequestDone(fetch->status);
 
 		// now remove from the list of activeURLRequests
 		pSharedRequest = pRequest->shared_from_this();
@@ -351,9 +351,9 @@ public:
 		return false;
 	}
 
-	virtual void handleRequestSuccess(unsigned short status) override
+	virtual void handleRequestDone(unsigned short status) override
 	{
-		onSuccess(EmFetchHTTPResponseDetails(true, status, responseHeaders));
+		onResponse(EmFetchHTTPResponseDetails(true, status, responseHeaders));
 	}
 
 	virtual void handleRequestError(unsigned short status) override
@@ -368,7 +368,7 @@ public:
 	}
 
 private:
-	virtual void onSuccess(const HTTPResponseDetails& responseDetails) = 0;
+	virtual void onResponse(const HTTPResponseDetails& responseDetails) = 0;
 
 	void onFailure(URLRequestFailureType type, const std::shared_ptr<EmFetchHTTPResponseDetails>& transferDetails)
 	{
@@ -500,19 +500,19 @@ public:
 	}
 
 private:
-	void onSuccess(const HTTPResponseDetails& responseDetails) override
+	void onResponse(const HTTPResponseDetails& responseDetails) override
 	{
-		if (request.onSuccess)
+		if (request.onResponse)
 		{
-			request.onSuccess(request.url, responseDetails, chunk);
+			request.onResponse(request.url, responseDetails, chunk);
 		}
 	}
 };
 
 
 // Request data from a URL (stores the response in memory)
-// Generally, you should define both onSuccess and onFailure callbacks
-// If you want to actually process the response, you *must* define an onSuccess callback
+// Generally, you should define both onResponse and onFailure callbacks
+// If you want to actually process the response, you *must* define an onResponse callback
 //
 // IMPORTANT: Callbacks may be called on a background thread
 AsyncURLRequestHandle urlRequestData(const URLDataRequest& request)
@@ -540,7 +540,7 @@ AsyncURLRequestHandle urlRequestData(const URLDataRequest& request)
 }
 
 // Download a file (stores the response in the outFilePath)
-// Generally, you should define both onSuccess and onFailure callbacks
+// Generally, you should define both onResponse and onFailure callbacks
 //
 // IMPORTANT: Callbacks may be called on a background thread
 AsyncURLRequestHandle urlDownloadFile(const URLFileDownloadRequest& request)

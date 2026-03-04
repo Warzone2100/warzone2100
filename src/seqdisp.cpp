@@ -229,7 +229,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 
 	URLDataRequest urlRequest;
 	urlRequest.url = baseURLPath.value().toUtf8() + urlEncodeVideoPathComponents(videoName).toUtf8();
-	urlRequest.onSuccess = [requestDetails](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	urlRequest.onResponse = [requestDetails](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
@@ -246,7 +246,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 				debug(LOG_INFO, "Failed to load video: %s (no data)", urlCopy.c_str());
 				requestDetails->status = RequestDetails::RequestStatus::Failure;
 			});
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		auto memoryBuffer = std::make_shared<std::vector<char>>((char *)data->memory, ((char*)data->memory) + data->size);
@@ -255,6 +255,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 			requestDetails->status = RequestDetails::RequestStatus::Success;
 			requestDetails->responseData = memoryBuffer;
 		});
+		return URLRequestHandlingBehavior::Done();
 	};
 	urlRequest.onFailure = [requestDetails](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string urlCopy = url;

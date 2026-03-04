@@ -169,6 +169,7 @@ WZ_DECL_NONNULL(1) void wzMutexUnlock(WZ_MUTEX *mutex);
 WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
 WZ_DECL_NONNULL(1) void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
+WZ_DECL_NONNULL(1) bool wzSemaphoreWaitTimeout(WZ_SEMAPHORE *semaphore, int32_t timeoutMS);
 WZ_DECL_NONNULL(1) void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec);
 

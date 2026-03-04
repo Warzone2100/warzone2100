@@ -74,7 +74,7 @@ static void requestPublicIPAddress(const std::string& lookupServiceUrl, Internet
 	request.url = lookupServiceUrl;
 	request.protocol = protocol;
 	request.noProxy = true;
-	request.onSuccess = [jsonResponseKey, callback](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	request.onResponse = [jsonResponseKey, callback](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
@@ -82,7 +82,7 @@ static void requestPublicIPAddress(const std::string& lookupServiceUrl, Internet
 			std::string errorString = "Request returned HTTP status code: ";
 			errorString += std::to_string(httpStatusCode);
 			callback(nullopt, errorString);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		// Parse the remaining json (minus the digital signature)
@@ -94,14 +94,14 @@ static void requestPublicIPAddress(const std::string& lookupServiceUrl, Internet
 			std::string errorString = "Failed to parse JSON response: ";
 			errorString += e.what();
 			callback(nullopt, errorString);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		// Get the IP address from the JSON response
 		if (!updateData.is_object())
 		{
 			callback(nullopt, "JSON response is not an object");
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		auto it = updateData.find(jsonResponseKey);
@@ -111,11 +111,12 @@ static void requestPublicIPAddress(const std::string& lookupServiceUrl, Internet
 			std::string errorString = "JSON object missing expected property: ";
 			errorString += jsonResponseKey;
 			callback(nullopt, errorString);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		std::string ipAddressString = it.value().get<std::string>();
 		callback(ipAddressString, nullopt);
+		return URLRequestHandlingBehavior::Done();
 	};
 	request.onFailure = [callback](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string errorString = "Request failed; failure type: ";

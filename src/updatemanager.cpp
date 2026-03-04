@@ -885,7 +885,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 	URLDataRequest* pRequest = new URLDataRequest();
 	pRequest->url = updateDataUrls.front();
 	std::vector<std::string> additionalUrls(updateDataUrls.begin() + 1, updateDataUrls.end());
-	pRequest->onSuccess = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	pRequest->onResponse = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 
 		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
@@ -895,7 +895,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				debug(LOG_WARNING, "Update check returned HTTP status code: %ld", httpStatusCode);
 			});
 			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		// Extract the digital signature, and verify it
@@ -910,7 +910,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				debug(LOG_INFO, "Failed to verify signature: %s; %s", errorStr.c_str(), urlCopy.c_str());
 			});
 			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		// Parse the remaining json (minus the digital signature)
@@ -924,7 +924,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				debug(LOG_INFO, "Failed to parse JSON: %s; %s", errorStr.c_str(), urlCopy.c_str());
 			});
 			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		// Determine if the JSON is still valid (note: requires accurate system clock)
@@ -935,7 +935,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			// signature is invalid, or data is expired, and there are further urls to try to fetch
 			// instead of proceeding, try the next url
 			fetchLatestData(additionalUrls, processDataFunc, outputPaths, completionHandler);
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		// Otherwise,
@@ -952,7 +952,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			{
 				completionHandler();
 			}
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 		const auto processResult = processDataFunc(updateData, validSignature, validExpiry);
 		if (completionHandler)
@@ -966,7 +966,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 			if (!WZ_PHYSFS_isDirectory(WZ_UPDATES_CACHE_DIR))
 			{
 				// Cache dir should have already been created?
-				return;
+				return URLRequestHandlingBehavior::Done();
 			}
 			if (outputPaths.cache_data_path)
 			{
@@ -1007,6 +1007,7 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 				}
 			}
 		}
+		return URLRequestHandlingBehavior::Done();
 	};
 	pRequest->onFailure = [additionalUrls, processDataFunc, outputPaths, completionHandler](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		bool tryNextUrl = false;
