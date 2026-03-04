@@ -428,6 +428,7 @@ public:
 	virtual const std::string& url() const = 0;
 	virtual InternetProtocol protocol() const = 0;
 	virtual bool noProxy() const = 0;
+	virtual uint32_t connectTimeoutMs() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
 	virtual const char* requestBody() const = 0;
 	virtual curl_off_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
@@ -480,6 +481,15 @@ public:
 				break;
 		}
 #endif
+
+		auto connectTimeoutMsVal = connectTimeoutMs();
+		if (connectTimeoutMsVal > 0)
+		{
+#if LIBCURL_VERSION_NUM >= 0x071002 // cURL 7.16.2+
+			curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT_MS, static_cast<long>(connectTimeoutMsVal));
+#endif
+		}
+
 		if (noProxy())
 		{
 #if LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
@@ -716,6 +726,11 @@ public:
 		return getBaseRequest().noProxy;
 	}
 
+	virtual uint32_t connectTimeoutMs() const override
+	{
+		return getBaseRequest().connectTimeoutMs;
+	}
+
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const override
 	{
 		return getBaseRequest().getRequestHeaders();
@@ -755,7 +770,21 @@ public:
 		}
 		else
 		{
-			onFailure(URLRequestFailureType::TRANSFER_FAILED, std::make_shared<CURLHTTPResponseDetails>(result, code, responseHeaders));
+			URLRequestFailureType failureType = URLRequestFailureType::TRANSFER_FAILED;
+			switch (result)
+			{
+				case CURLE_OPERATION_TIMEOUTED:
+					failureType = URLRequestFailureType::OPERATION_TIMEOUT;
+					break;
+				case CURLE_COULDNT_RESOLVE_HOST:
+				case CURLE_COULDNT_CONNECT:
+				case CURLE_SSL_CONNECT_ERROR:
+					failureType = URLRequestFailureType::COULDNT_CONNECT;
+					break;
+				default:
+					break;
+			}
+			onFailure(failureType, std::make_shared<CURLHTTPResponseDetails>(result, code, responseHeaders));
 			return URLRequestHandlingBehavior::Done();
 		}
 	}
@@ -779,6 +808,16 @@ private:
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
 				wzAsyncExecOnMainThread([url]{
 					debug(LOG_NET, "cURL: Failed to initialize request for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::OPERATION_TIMEOUT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Request timeout for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::COULDNT_CONNECT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Couldn't connect for (%s)", url.c_str());
 				});
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:

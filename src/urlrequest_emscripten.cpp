@@ -382,6 +382,16 @@ private:
 					debug(LOG_NET, "Fetch: Failed to initialize request for (%s)", url.c_str());
 				});
 				break;
+			case URLRequestFailureType::OPERATION_TIMEOUT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Request timeout for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::COULDNT_CONNECT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Couldn't connect for (%s)", url.c_str());
+				});
+				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
 				if (!transferDetails)
 				{

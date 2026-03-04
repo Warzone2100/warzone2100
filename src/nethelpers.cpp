@@ -120,7 +120,7 @@ static void requestPublicIPAddress(const std::string& lookupServiceUrl, Internet
 	};
 	request.onFailure = [callback](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string errorString = "Request failed; failure type: ";
-		errorString += std::to_string(type);
+		errorString += to_string(type);
 		if (transferDetails)
 		{
 			errorString += "; status code: " + std::to_string(transferDetails->httpStatusCode());

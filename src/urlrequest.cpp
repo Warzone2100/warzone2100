@@ -22,6 +22,20 @@
 #include "urlrequest_private.h"
 #include "lib/framework/wzapp.h"
 
+const char* to_string(URLRequestFailureType val)
+{
+	switch (val)
+	{
+		case URLRequestFailureType::INITIALIZE_REQUEST_ERROR: return "INITIALIZE_REQUEST_ERROR";
+		case URLRequestFailureType::OPERATION_TIMEOUT: return "OPERATION_TIMEOUT";
+		case URLRequestFailureType::COULDNT_CONNECT: return "COULDNT_CONNECT";
+		case URLRequestFailureType::TRANSFER_FAILED: return "TRANSFER_FAILED";
+		case URLRequestFailureType::CANCELLED: return "CANCELLED";
+		case URLRequestFailureType::CANCELLED_BY_SHUTDOWN: return "CANCELLED_BY_SHUTDOWN";
+	}
+	return nullptr;
+}
+
 const char* to_string(URLRequestMethod method)
 {
 	switch (method)

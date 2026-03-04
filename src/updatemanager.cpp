@@ -1014,8 +1014,10 @@ static void fetchLatestData(const std::vector<std::string> &updateDataUrls, Proc
 		switch (type)
 		{
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
-				wzAsyncExecOnMainThread([]{
-					debug(LOG_WARNING, "Failed to initialize request for update check");
+			case URLRequestFailureType::OPERATION_TIMEOUT:
+			case URLRequestFailureType::COULDNT_CONNECT:
+				wzAsyncExecOnMainThread([type]{
+					debug(LOG_WARNING, "Request failed for update check: %s", to_string(type));
 				});
 				tryNextUrl = true;
 				break;

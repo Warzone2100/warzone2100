@@ -42,12 +42,16 @@ struct MemoryStruct {
 	~MemoryStruct();
 };
 
-enum URLRequestFailureType {
+enum class URLRequestFailureType {
 	INITIALIZE_REQUEST_ERROR,
+	OPERATION_TIMEOUT,
+	COULDNT_CONNECT,
 	TRANSFER_FAILED,
 	CANCELLED,
 	CANCELLED_BY_SHUTDOWN
 };
+
+const char* to_string(URLRequestFailureType val);
 
 class HTTPResponseHeaders {
 public:
@@ -99,7 +103,15 @@ struct URLRequestBase
 public:
 	std::string url;
 	InternetProtocol protocol = InternetProtocol::IP_ANY;
+
+	// Whether to disable the use of proxy.
+	// NOTE: Only supported with cURL backend.
 	bool noProxy = false;
+
+	// The desired maximum time in milliseconds for the connection phase to take
+	// (DNS resolution, establishing connection). 0 for default.
+	// NOTE: Only supported with cURL backend.
+	uint32_t connectTimeoutMs = 0;
 
 	// MARK: callbacks
 	// IMPORTANT:
