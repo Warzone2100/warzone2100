@@ -34,7 +34,7 @@ set (SRC
 	"connection_provider_registry.cpp"
 	"error_categories.cpp"
 	"listen_socket.cpp"
-	"netjoin_stub.cpp"
+	"netjoin.cpp"
 	"netlog.cpp"
 	"netpermissions.cpp"
 	"netplay.cpp"

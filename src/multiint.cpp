@@ -1012,33 +1012,6 @@ static void decideWRF()
 	}
 }
 
-std::string JoinConnectionDescription::connectiontype_to_string(JoinConnectionDescription::JoinConnectionType type)
-{
-	switch (type)
-	{
-	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT: return "tcp";
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	case JoinConnectionDescription::JoinConnectionType::GNS_DIRECT: return "gns";
-#endif
-	}
-	return {}; // silence compiler warning
-}
-
-optional<JoinConnectionDescription::JoinConnectionType> JoinConnectionDescription::connectiontype_from_string(const std::string& str)
-{
-	if (str == "tcp")
-	{
-		return JoinConnectionDescription::JoinConnectionType::TCP_DIRECT;
-	}
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	if (str == "gns")
-	{
-		return JoinConnectionDescription::JoinConnectionType::GNS_DIRECT;
-	}
-#endif
-	return nullopt;
-}
-
 void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v)
 {
 	j = JoinConnectionDescription::connectiontype_to_string(v);

@@ -29,6 +29,7 @@
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
 #include "lib/netplay/nettypes.h"
+#include "lib/netplay/netjoin.h"
 #include "multiplaydefs.h"
 #include "orderdef.h"
 #include "stringdef.h"
@@ -322,38 +323,7 @@ bool multiShutdown();
 bool sendLeavingMsg();
 
 bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs);
-struct JoinConnectionDescription
-{
-public:
-	JoinConnectionDescription()
-	{ }
-public:
-	enum class JoinConnectionType
-	{
-		TCP_DIRECT,
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-		GNS_DIRECT,
-#endif
-	};
-public:
-	JoinConnectionDescription(const std::string& host, uint32_t port)
-	: host(host)
-	, port(port)
-	, type(JoinConnectionType::TCP_DIRECT)
-	{ }
-	JoinConnectionDescription(JoinConnectionType t, const std::string& host, uint32_t port)
-	: host(host)
-	, port(port)
-	, type(t)
-	{ }
-public:
-	static std::string connectiontype_to_string(JoinConnectionType type);
-	static optional<JoinConnectionType> connectiontype_from_string(const std::string& str);
-public:
-	std::string host;
-	uint32_t port = 0;
-	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
-};
+
 void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v);
 void to_json(nlohmann::json& j, const JoinConnectionDescription& v);

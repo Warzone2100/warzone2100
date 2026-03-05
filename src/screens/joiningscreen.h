@@ -24,7 +24,8 @@
 
 #include <functional>
 
-#include "../multiplay.h"	// for JoinConnectionDescription
+#include "lib/netplay/netjoin.h"	// for JoinConnectionDescription
+#include "lib/framework/crc.h"
 
 struct ExpectedHostProperties
 {

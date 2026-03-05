@@ -445,7 +445,6 @@ SpectatorInfo NETGameGetSpectatorInfo();
 
 // from netjoin.c
 SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-uint32_t NETgetGameUserFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining();				// stop new players joining this game
 
