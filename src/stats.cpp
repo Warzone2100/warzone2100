@@ -840,6 +840,10 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 	{
 		*type = PROPULSION_TYPE_HALF_TRACKED;
 	}
+	else if (strcmp(typeName, "Legged-Super") == 0)
+	{
+		*type = PROPULSION_TYPE_LEGGED_SUPER;
+	}
 	else
 	{
 		debug(LOG_ERROR, "getPropulsionType: Invalid Propulsion type %s - assuming Hover", typeName);
@@ -1202,6 +1206,7 @@ bool loadTerrainTable(WzConfig &ini)
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_LIFT] = ini.value("lift", 100).toUInt();
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_PROPELLOR] = ini.value("propellor", 100).toUInt();
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_HALF_TRACKED] = ini.value("half-tracked", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_LEGGED_SUPER] = ini.value("legged-super", 100).toUInt();
 		ini.endGroup();
 		ini.endGroup();
 	}
