@@ -549,6 +549,10 @@ public:
 		curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
 		/* set max redirects */
 		curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10L);
+	#if LIBCURL_VERSION_NUM >= 0x075500		// cURL 7.85.0+
+		/* only allow HTTP and HTTPS for redirections */
+		curl_easy_setopt(handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+	#endif
 
 		progress.request = this;
 	#if LIBCURL_VERSION_NUM >= 0x072000
