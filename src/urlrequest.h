@@ -108,6 +108,10 @@ public:
 	// NOTE: Only supported with cURL backend.
 	bool noProxy = false;
 
+	// Whether to disable following redirects.
+	// NOTE: Only supported with cURL backend.
+	bool noFollowRedirects = false;
+
 	// The desired maximum time in milliseconds for the connection phase to take
 	// (DNS resolution, establishing connection). 0 for default.
 	// NOTE: Only supported with cURL backend.

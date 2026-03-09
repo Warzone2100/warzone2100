@@ -428,6 +428,7 @@ public:
 	virtual const std::string& url() const = 0;
 	virtual InternetProtocol protocol() const = 0;
 	virtual bool noProxy() const = 0;
+	virtual bool noFollowRedirects() const = 0;
 	virtual uint32_t connectTimeoutMs() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
 	virtual const char* requestBody() const = 0;
@@ -545,10 +546,20 @@ public:
 		/* only allow HTTP and HTTPS */
 		curl_easy_setopt(handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 	#endif
-		/* tell libcurl to follow redirection */
-		curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
-		/* set max redirects */
-		curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10L);
+
+		if (noFollowRedirects())
+		{
+			/* tell libcurl to NOT automatically follow redirection */
+			curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 0L);
+		}
+		else
+		{
+			/* tell libcurl to follow redirection */
+			curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
+			/* set max redirects */
+			curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10L);
+		}
+
 	#if LIBCURL_VERSION_NUM >= 0x075500		// cURL 7.85.0+
 		/* only allow HTTP and HTTPS for redirections */
 		curl_easy_setopt(handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
@@ -728,6 +739,11 @@ public:
 	virtual bool noProxy() const override
 	{
 		return getBaseRequest().noProxy;
+	}
+
+	virtual bool noFollowRedirects() const override
+	{
+		return getBaseRequest().noFollowRedirects;
 	}
 
 	virtual uint32_t connectTimeoutMs() const override
