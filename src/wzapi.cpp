@@ -2474,7 +2474,7 @@ bool wzapi::emitSound(WZAPI_PARAMS(std::string sound, int x, int y))
 		soundID = audio_SetTrackVals(sound.c_str(), false, 100, 1800);
 	}
 
-	return audio_PlayStaticTrack(x * 128, y * 128, soundID);
+	return audio_PlayStaticTrack(x * TILE_UNITS, y * TILE_UNITS, soundID);
 }
 
 //-- ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
