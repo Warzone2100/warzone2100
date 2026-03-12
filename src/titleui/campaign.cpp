@@ -1215,7 +1215,7 @@ protected:
 			// load built-in details for original campaign
 			displayName = _("Original Campaign");
 			author = "Warzone 2100";
-			description = _("Command the forces of The Project in a battle to rebuild the world");
+			description = _("Command the forces of The Project in a battle to rebuild the world.\nBalance descriptions:\n\"Remastered\": Increases the viability of weaponry and designs on a per mission basis.\n\"Classic\": Stats of game versions ~2.x - 3.x unintentionally affected by game patches over the years.\n\"Pumpkin\": Matching game version 1.10, this is the closest representation of stats the original developers (Pumpkin Studios) intended.");
 			version = version_getVersionString();
 			pBackgroundTexture = gfx_api::context::get().loadTextureFromFile("images/wz_original_campaign_banner.png", gfx_api::texture_type::user_interface, -1, -1, true);
 		}
