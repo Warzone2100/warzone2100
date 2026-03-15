@@ -1686,222 +1686,30 @@ const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFE
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect)
 {
-	if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI PERSONNEL") == 0)
+	for (const auto& weapon : map_WEAPON_EFFECT)
 	{
-		*effect = WE_ANTI_PERSONNEL;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI TANK") == 0)
-	{
-		*effect = WE_ANTI_TANK;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "BUNKER BUSTER") == 0)
-	{
-		*effect = WE_BUNKER_BUSTER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ARTILLERY ROUND") == 0)
-	{
-		*effect = WE_ARTILLERY_ROUND;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "FLAMER") == 0)
-	{
-		*effect = WE_FLAMER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect.toUtf8().c_str(), "ALL ROUNDER") == 0)
-	{
-		*effect = WE_ANTI_AIRCRAFT;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "BOMB") == 0)
-	{
-		*effect = WE_BOMB;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "FIRE BOMB") == 0)
-	{
-		*effect = WE_FIRE_BOMB;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "EMP BOMB") == 0)
-	{
-		*effect = WE_EMP_BOMB;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "MACHINEGUN") == 0)
-	{
-		*effect = WE_MACHINEGUN;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ASSAULT MACHINEGUN") == 0)
-	{
-		*effect = WE_ASSAULT_MACHINEGUN;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "CANNON") == 0)
-	{
-		*effect = WE_CANNON;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW CANNON") == 0)
-	{
-		*effect = WE_SLOW_CANNON;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "PLASMA CANNON") == 0)
-	{
-		*effect = WE_PLASMA_CANNON;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ROCKET") == 0)
-	{
-		*effect = WE_ROCKET;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW ROCKET") == 0)
-	{
-		*effect = WE_SLOW_ROCKET;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "GAUSS") == 0)
-	{
-		*effect = WE_GAUSS;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW GAUSS") == 0)
-	{
-		*effect = WE_SLOW_GAUSS;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "MISSILE") == 0)
-	{
-		*effect = WE_MISSILE;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW MISSILE") == 0)
-	{
-		*effect = WE_SLOW_MISSILE;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "LASER") == 0)
-	{
-		*effect = WE_LASER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW LASER") == 0)
-	{
-		*effect = WE_SLOW_LASER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "MORTAR") == 0)
-	{
-		*effect = WE_MORTAR_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "FIRE MORTAR") == 0)
-	{
-		*effect = WE_FIRE_MORTAR_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "HOWITZER") == 0)
-	{
-		*effect = WE_HOWITZER_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "FIRE HOWITZER") == 0)
-	{
-		*effect = WE_FIRE_HOWITZER_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ROCKET ARTILLERY") == 0)
-	{
-		*effect = WE_ROCKET_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW ROCKET ARTILLERY") == 0)
-	{
-		*effect = WE_SLOW_ROCKET_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "MISSILE ARTILLERY") == 0)
-	{
-		*effect = WE_MISSILE_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW MISSILE ARTILLERY") == 0)
-	{
-		*effect = WE_SLOW_MISSILE_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "PLASMA") == 0)
-	{
-		*effect = WE_PLASMA;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "PLASMA FLAMER") == 0)
-	{
-		*effect = WE_PLASMA_FLAMER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "PLASMA ARTILLERY") == 0)
-	{
-		*effect = WE_PLASMA_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW PLASMA ARTILLERY") == 0)
-	{
-		*effect = WE_SLOW_PLASMA_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ELECTRONIC") == 0)
-	{
-		*effect = WE_ELECTRONIC;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "NEXUS LINK") == 0)
-	{
-		*effect = WE_NEXUS_LINK;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "EMP") == 0)
-	{
-		*effect = WE_EMP;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "EMP ARTILLERY") == 0)
-	{
-		*effect = WE_EMP_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "SLOW EMP ARTILLERY") == 0)
-	{
-		*effect = WE_SLOW_EMP_ARTILLERY;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "LASSAT") == 0)
-	{
-		*effect = WE_LASSAT;
-	}
-	else
-	{
-		ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect.toUtf8().c_str());
-		return false;
+		if (strcmp(weaponEffect.toUtf8().c_str(), weapon.first) == 0)
+		{
+			*effect = static_cast<WEAPON_EFFECT>(weapon.second);
+			return true;
+		}
 	}
 
-	return true;
+	ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect.toUtf8().c_str());
+	return false;
 }
 
 /*returns the weapon effect string based on the enum passed in */
 const char *getWeaponEffect(WEAPON_EFFECT effect)
 {
-	switch (effect)
+	for (const auto& weapon : map_WEAPON_EFFECT)
 	{
-	case WE_ANTI_PERSONNEL: return "ANTI PERSONNEL";
-	case WE_ANTI_TANK: return "ANTI TANK";
-	case WE_BUNKER_BUSTER: return "BUNKER BUSTER";
-	case WE_ARTILLERY_ROUND: return "ARTILLERY ROUND";
-	case WE_FLAMER: return "FLAMER";
-	case WE_ANTI_AIRCRAFT: return "ANTI AIRCRAFT";
-	case WE_BOMB: return "BOMB";
-	case WE_FIRE_BOMB: return "FIRE BOMB";
-	case WE_EMP_BOMB: return "EMP BOMB";
-	case WE_MACHINEGUN: return "MACHINEGUN";
-	case WE_ASSAULT_MACHINEGUN: return "ASSAULT MACHINEGUN";
-	case WE_CANNON: return "CANNON";
-	case WE_SLOW_CANNON: return "SLOW CANNON";
-	case WE_PLASMA_CANNON: return "PLASMA CANNON";
-	case WE_ROCKET: return "ROCKET";
-	case WE_SLOW_ROCKET: return "SLOW ROCKET";
-	case WE_GAUSS: return "GAUSS";
-	case WE_SLOW_GAUSS: return "SLOW GAUSS";
-	case WE_MISSILE: return "MISSILE";
-	case WE_SLOW_MISSILE: return "SLOW MISSILE";
-	case WE_LASER: return "LASER";
-	case WE_SLOW_LASER: return "SLOW LASER";
-	case WE_MORTAR_ARTILLERY: return "MORTAR";
-	case WE_FIRE_MORTAR_ARTILLERY: return "FIRE MORTAR";
-	case WE_HOWITZER_ARTILLERY: return "HOWITZER";
-	case WE_FIRE_HOWITZER_ARTILLERY: return "FIRE HOWITZER";
-	case WE_ROCKET_ARTILLERY: return "ROCKET ARTILLERY";
-	case WE_SLOW_ROCKET_ARTILLERY: return "SLOW ROCKET ARTILLERY";
-	case WE_MISSILE_ARTILLERY: return "MISSILE ARTILLERY";
-	case WE_SLOW_MISSILE_ARTILLERY: return "SLOW MISSILE ARTILLERY";
-	case WE_PLASMA: return "PLASMA";
-	case WE_PLASMA_FLAMER: return "PLASMA FLAMER";
-	case WE_PLASMA_ARTILLERY: return "PLASMA ARTILLERY";
-	case WE_SLOW_PLASMA_ARTILLERY: return "SLOW PLASMA ARTILLERY";
-	case WE_ELECTRONIC: return "ELECTRONIC";
-	case WE_NEXUS_LINK: return "NEXUS LINK";
-	case WE_EMP: return "EMP";
-	case WE_EMP_ARTILLERY: return "EMP ARTILLERY";
-	case WE_SLOW_EMP_ARTILLERY: return "SLOW EMP ARTILLERY";
-	case WE_LASSAT: return "LASSAT";
-	case WE_NUMEFFECTS: break;
+		if (effect == weapon.second)
+		{
+			return weapon.first;
+		}
 	}
+
 	ASSERT(false, "No such weapon effect");
 	return "Bad weapon effect";
 }
