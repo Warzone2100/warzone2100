@@ -68,4 +68,9 @@ IListenSocket::IPVersionsMask TCPListenSocket::supportedIpVersions() const
 	return resMask;
 }
 
+ConnectionProviderType TCPListenSocket::type() const noexcept
+{
+	return ConnectionProviderType::TCP_DIRECT;
+}
+
 } // namespace tcp
