@@ -1097,33 +1097,30 @@ static int urlRequestThreadFunc(void *)
 					auto retryStrategy = urlTransfer->retryStrategy();
 					if (!shuttingDown && retryStrategy.maxRetries() > 0)
 					{
-						long httpResponseCode = 0;
 						if (result == CURLE_OK)
 						{
+							long httpResponseCode = 0;
 							if (curl_easy_getinfo(urlTransfer->handle, CURLINFO_RESPONSE_CODE, &httpResponseCode) != CURLE_OK)
 							{
 								httpResponseCode = 0;
 							}
-						}
 
-						if (retryStrategy.shouldRetryOnHttpResponseCode(httpResponseCode) && urlTransfer->getNumRetries() < retryStrategy.maxRetries())
-						{
-							urlTransfer->incrementNumRetries();
-
-							curl_off_t retryAfterSeconds = 0;
-							if (result == CURLE_OK)
+							if (retryStrategy.shouldRetryOnHttpResponseCode(httpResponseCode) && urlTransfer->getNumRetries() < retryStrategy.maxRetries())
 							{
+								urlTransfer->incrementNumRetries();
+
+								curl_off_t retryAfterSeconds = 0;
 								curl_easy_getinfo(urlTransfer->handle, CURLINFO_RETRY_AFTER, &retryAfterSeconds);
+								retryAfterSeconds = std::clamp<curl_off_t>(retryAfterSeconds, 0, 3600);
+
+								auto minRetryDelay = std::min(retryStrategy.minDelay() * static_cast<std::chrono::milliseconds::rep>(urlTransfer->getNumRetries()), retryStrategy.maxDelay());
+
+								auto delayMS = std::clamp(std::chrono::milliseconds(retryAfterSeconds * 1000), minRetryDelay, retryStrategy.maxDelay());
+								auto retryAfterTime = std::chrono::steady_clock::now() + delayMS;
+
+								delayedTransfers.push_back({urlTransfer, retryAfterTime});
+								continue;
 							}
-							retryAfterSeconds = std::clamp<curl_off_t>(retryAfterSeconds, 0, 3600);
-
-							auto minRetryDelay = std::min(retryStrategy.minDelay() * static_cast<std::chrono::milliseconds::rep>(urlTransfer->getNumRetries()), retryStrategy.maxDelay());
-
-							auto delayMS = std::clamp(std::chrono::milliseconds(retryAfterSeconds * 1000), minRetryDelay, retryStrategy.maxDelay());
-							auto retryAfterTime = std::chrono::steady_clock::now() + delayMS;
-
-							delayedTransfers.push_back({urlTransfer, retryAfterTime});
-							continue;
 						}
 					}
 
