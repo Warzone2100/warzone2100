@@ -36,6 +36,17 @@ const char* to_string(URLRequestFailureType val)
 	return nullptr;
 }
 
+const char* to_string(InternetProtocol protocol)
+{
+	switch (protocol)
+	{
+		case InternetProtocol::IP_ANY: return "IP_ANY";
+		case InternetProtocol::IPv4: return "IPv4";
+		case InternetProtocol::IPv6: return "IPv6";
+	}
+	return "";
+}
+
 const char* to_string(URLRequestMethod method)
 {
 	switch (method)

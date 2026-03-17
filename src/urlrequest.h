@@ -89,6 +89,7 @@ enum class InternetProtocol {
 	IPv4,
 	IPv6
 };
+const char* to_string(InternetProtocol protocol);
 
 enum class URLRequestMethod {
 	GET,
