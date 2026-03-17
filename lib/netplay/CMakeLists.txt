@@ -33,6 +33,7 @@ set (SRC
 	"client_connection.cpp"
 	"connection_provider_registry.cpp"
 	"error_categories.cpp"
+	"ip_helpers.cpp"
 	"listen_socket.cpp"
 	"netjoin.cpp"
 	"netlog.cpp"
