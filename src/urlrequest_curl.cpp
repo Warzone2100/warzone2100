@@ -615,7 +615,7 @@ public:
 
 	virtual bool onProgressUpdate(int64_t dltotal, int64_t dlnow, int64_t ultotal, int64_t ulnow) { return false; }
 
-	virtual bool waitOnShutdown() const { return false; }
+	virtual bool waitOnShutdown() const { return method() != URLRequestMethod::GET; }
 
 	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) { return URLRequestHandlingBehavior::Done(); }
 	virtual void requestFailedToFinish(URLRequestFailureType type) { }
