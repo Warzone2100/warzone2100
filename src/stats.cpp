@@ -1135,7 +1135,7 @@ bool loadPropulsionTypes(WzConfig &ini)
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 
-	for (int i = 0; i < NumTypes; ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_TYPE type;
 
