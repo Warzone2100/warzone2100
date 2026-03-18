@@ -609,8 +609,9 @@ public:
 		return handle;
 	}
 
-	virtual bool hasWriteMemoryCallback() { return false; }
-	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) { return 0; }
+	virtual bool hasWriteMemoryCallback() = 0;
+	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) = 0;
+	virtual void resetWriteMemory() = 0;
 
 	virtual bool onProgressUpdate(int64_t dltotal, int64_t dlnow, int64_t ultotal, int64_t ulnow) { return false; }
 
@@ -620,7 +621,11 @@ public:
 	virtual void requestFailedToFinish(URLRequestFailureType type) { }
 
 	size_t getNumRetries() const { return numRetries; }
-	void incrementNumRetries() { numRetries++; }
+	void incrementNumRetries()
+	{
+		resetWriteMemory();
+		numRetries++;
+	}
 
 protected:
 	friend size_t header_callback(char *buffer, size_t size, size_t nitems, void *userdata);
@@ -944,6 +949,10 @@ public:
 
 		return realsize;
 	}
+	virtual void resetWriteMemory() override
+	{
+		chunk = std::make_shared<MemoryStruct>();
+	}
 
 private:
 	URLRequestHandlingBehavior onResponse(const CURLHTTPResponseDetails& responseDetails) override
@@ -960,12 +969,63 @@ class RunningURLFileDownloadRequest : public RunningURLTransferRequestBase
 {
 public:
 	URLFileDownloadRequest request;
-	FILE *outFile;
+	FILE *outFile = nullptr;
 
 	RunningURLFileDownloadRequest(const URLFileDownloadRequest& request, const std::shared_ptr<AsyncRequestImpl>& requestHandle)
 	: RunningURLTransferRequestBase(requestHandle)
 	, request(request)
 	{
+		openFileForWriting();
+	}
+
+	virtual const URLRequestBase& getBaseRequest() const override
+	{
+		return request;
+	}
+
+	virtual bool hasWriteMemoryCallback() override { return true; }
+	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) override
+	{
+		if (!outFile) return 0;
+		size_t written = fwrite(contents, size, nmemb, outFile);
+		return written;
+	}
+	virtual void resetWriteMemory() override
+	{
+		if (!outFile) return;
+
+		// reopen file for writing
+		openFileForWriting();
+	}
+
+	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) override
+	{
+		if (outFile)
+		{
+			fclose(outFile);
+		}
+
+		return RunningURLTransferRequestBase::handleRequestDone(result);
+	}
+
+private:
+	URLRequestHandlingBehavior onResponse(const CURLHTTPResponseDetails& responseDetails) override
+	{
+		if (request.onResponse)
+		{
+			request.onResponse(request.url, responseDetails, request.outFilePath);
+		}
+		return URLRequestHandlingBehavior::Done();
+	}
+
+	void openFileForWriting()
+	{
+		if (outFile)
+		{
+			fclose(outFile);
+			outFile = nullptr;
+		}
+
 #if defined(WZ_OS_WIN)
 		// On Windows, path strings passed to fopen() are interpreted using the ANSI or OEM codepage
 		// (and not as UTF-8). To support Unicode paths, the string must be converted to a wide-char
@@ -1006,39 +1066,6 @@ public:
 			fcntl(fd, F_SETFD, FD_CLOEXEC);
 		}
 #endif
-	}
-
-	virtual const URLRequestBase& getBaseRequest() const override
-	{
-		return request;
-	}
-
-	virtual bool hasWriteMemoryCallback() override { return true; }
-	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) override
-	{
-		if (!outFile) return 0;
-		size_t written = fwrite(contents, size, nmemb, outFile);
-		return written;
-	}
-
-	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) override
-	{
-		if (outFile)
-		{
-			fclose(outFile);
-		}
-
-		return RunningURLTransferRequestBase::handleRequestDone(result);
-	}
-
-private:
-	URLRequestHandlingBehavior onResponse(const CURLHTTPResponseDetails& responseDetails) override
-	{
-		if (request.onResponse)
-		{
-			request.onResponse(request.url, responseDetails, request.outFilePath);
-		}
-		return URLRequestHandlingBehavior::Done();
 	}
 };
 
@@ -1130,6 +1157,7 @@ static int urlRequestThreadFunc(void *)
 						case URLRequestHandlingBehavior::Strategy::RetryAfter:
 							if (!shuttingDown)
 							{
+								urlTransfer->incrementNumRetries();
 								delayedTransfers.push_back({urlTransfer, std::chrono::steady_clock::now() + responseBehavior.delay()});
 								break;
 							}
@@ -1179,7 +1207,7 @@ static int urlRequestThreadFunc(void *)
 				else
 				{
 
-					auto millisecondsToWait = std::chrono::duration_cast<std::chrono::milliseconds>(now - it->second).count();
+					auto millisecondsToWait = std::chrono::duration_cast<std::chrono::milliseconds>(it->second - now).count();
 					millisecondsToWait = std::min(millisecondsToWait, static_cast<std::chrono::milliseconds::rep>(std::numeric_limits<int32_t>::max()));
 					minDelayMS = std::min<int32_t>(minDelayMS, static_cast<int32_t>(millisecondsToWait));
 					++it;
