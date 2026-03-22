@@ -929,12 +929,13 @@ int cmdInputThreadFunc(void *)
 			else
 			{
 				std::string playerIdentityStrCopy(playeridentitystring);
-				std::string kickReasonStrCopy = "You have been kicked by the administrator.";
+				std::string kickReasonStrCopy = "You have been blocked by the administrator.";
 				wzAsyncExecOnMainThread([playerIdentityStrCopy, kickReasonStrCopy] {
 					netPermissionsSet_Connect(playerIdentityStrCopy, ConnectPermissions::Blocked);
 					if (NetPlay.hostPlayer < MAX_PLAYERS)
 					{
 						// host is not a spectator host
+						wz_command_interface_output_onmainthread("WZCMD error: Failed to execute in-game block command! Host should be a spectator\n");
 						return;
 					}
 					kickActivePlayerWithIdentity(playerIdentityStrCopy, kickReasonStrCopy, true);
