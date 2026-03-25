@@ -1737,8 +1737,8 @@ void mainShutdown()
 	discordRPCShutdown();
 #endif
 	wzCmdInterfaceShutdown();
-	urlRequestShutdown();
 	cleanupOldLogFiles();
+	// NOTE: urlRequestShutdown is called inside systemShutdown, as it must happen after certain other calls
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < utfargc; i++)

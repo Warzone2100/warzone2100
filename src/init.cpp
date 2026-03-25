@@ -103,6 +103,7 @@
 #include "screens/guidescreen.h"
 #include "titleui/widgets/gamebrowserform.h"
 #include "wzapi.h"
+#include "urlrequest.h"
 
 #include "wzphysfszipioprovider.h"
 #include <wzmaplib/map_package.h>
@@ -1121,6 +1122,8 @@ void systemShutdown()
 	}
 
 	NETclose();
+
+	urlRequestShutdown(); // MUST come after NETclose(), as hosts need a chance to inform lobby they are gone
 
 	seqReleaseAll();
 
