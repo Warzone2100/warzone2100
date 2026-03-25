@@ -32,6 +32,7 @@
 #endif
 
 #include <string>
+#include <vector>
 #include <utility>
 #include <stdarg.h>
 
@@ -267,6 +268,22 @@ static inline size_t nthOccurrenceOfChar(const std::string& str, const char c, s
 	}
 
 	return pos;
+}
+
+static inline std::string strJoin(std::vector<std::string> const &strs, std::string const &sep)
+{
+	std::string str;
+	bool first = true;
+	for (auto const &s : strs)
+	{
+		if (!first)
+		{
+			str += sep;
+		}
+		str += s;
+		first = false;
+	}
+	return str;
 }
 
 #endif // STRING_EXT_H
