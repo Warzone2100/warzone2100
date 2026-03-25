@@ -90,7 +90,7 @@
 #undef max
 #undef min
 
-#define MAX_WAIT_ON_SHUTDOWN_SECONDS 60
+#define MAX_WAIT_ON_SHUTDOWN_SECONDS 15
 
 static volatile bool urlRequestQuit = false;
 
