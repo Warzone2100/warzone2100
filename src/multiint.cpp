@@ -124,6 +124,7 @@
 #include "campaigninfo.h"
 #include "screens/joiningscreen.h"
 #include "titleui/widgets/lobbyplayerrow.h"
+#include "titleui/widgets/lobbyplayerboxtabs.h"
 #include "titleui/widgets/blindwaitingroom.h"
 #include "titleui/widgets/multilobbyoptions.h"
 #include "titleui/widgets/starthostingbutton.h"
@@ -197,13 +198,6 @@ static bool bInActualHostedLobby = false;
 static bool bRequestedSelfMoveToPlayers = false;
 static std::vector<bool> bHostRequestedMoveToPlayers = std::vector<bool>(MAX_CONNECTED_PLAYERS, false);
 
-enum class PlayerDisplayView
-{
-	Players,
-	Spectators
-};
-static PlayerDisplayView playerDisplayView = PlayerDisplayView::Players;
-
 static std::weak_ptr<WzMultiplayerOptionsTitleUI> currentMultiOptionsTitleUI;
 
 /// end of globals.
@@ -264,6 +258,18 @@ static std::vector<AIDATA> aidata;
 
 const std::vector<AIDATA>& getAIData() { return aidata; }
 const MultiplayOptionsLocked& getLockedOptions() { return locked; }
+
+bool updateLockedOptionsOnHost(const MultiplayOptionsLocked& newOpts)
+{
+	ASSERT_HOST_ONLY(return false);
+	if (newOpts == locked)
+	{
+		return false;
+	}
+	locked = newOpts;
+	sendHostConfig();
+	return true;
+}
 
 bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts)
 {
@@ -3523,643 +3529,6 @@ static SwapPlayerIndexesResult recvSwapPlayerIndexes(NETQUEUE queue, const std::
 	return SwapPlayerIndexesResult::SUCCESS;
 }
 
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// tabs for player box
-
-class WzPlayerBoxTabButton : public W_BUTTON
-{
-protected:
-	WzPlayerBoxTabButton()
-	: W_BUTTON()
-	{}
-
-public:
-	static std::shared_ptr<WzPlayerBoxTabButton> make(const std::string& title)
-	{
-		class make_shared_enabler: public WzPlayerBoxTabButton {};
-		auto widget = std::make_shared<make_shared_enabler>();
-
-		// add the titleLabel
-		widget->titleLabel = std::make_shared<W_LABEL>();
-		widget->titleLabel->setFont(font_regular, WZCOL_TEXT_BRIGHT);
-		widget->titleLabel->setString(WzString::fromUtf8(title));
-		widget->titleLabel->setGeometry(0, 0, widget->titleLabel->getMaxLineWidth(), widget->titleLabel->idealHeight());
-		widget->titleLabel->setCanTruncate(true);
-
-		// add the slot counts label
-		widget->slotsCountsLabel = std::make_shared<W_LABEL>();
-		widget->slotsCountsLabel->setFont(font_small, WZCOL_TEXT_BRIGHT);
-
-		// refresh tooltip
-		widget->refreshTip();
-
-		return widget;
-	}
-
-	void display(int xOffset, int yOffset) override;
-	void geometryChanged() override;
-
-public:
-	void setSlotCounts(uint8_t numTakenSlots, uint8_t totalAvailableSlots);
-	void setSlotReadyStatus(uint8_t numTakenSlotsReady);
-	void setSelected(bool selected);
-
-private:
-	inline AtlasImage getImageForSlotsReadyStatus() const
-	{
-		if (totalAvailableSlots == 0)
-		{
-			return AtlasImage();
-		}
-		if (numTakenSlots == 0)
-		{
-			return AtlasImage();
-		}
-		if (numTakenSlots != numTakenSlotsReady)
-		{
-			return AtlasImage(FrontImages, IMAGE_LAMP_AMBER);
-		}
-		return AtlasImage(FrontImages, IMAGE_LAMP_GREEN);
-	}
-	void recalculateSlotsLabel();
-	void recalculateTitleLabel();
-	void refreshTip();
-
-private:
-	uint8_t numTakenSlots = 0;
-	uint8_t numTakenSlotsReady = 0;
-	uint8_t totalAvailableSlots = 0;
-	int rightPadding = 0;
-	const int elementPadding = 5;
-	const int borderWidth = 1;
-	bool selected = false;
-	std::shared_ptr<W_LABEL> titleLabel;
-	std::shared_ptr<W_LABEL> slotsCountsLabel;
-};
-
-void WzPlayerBoxTabButton::setSlotCounts(uint8_t new_numTakenSlots, uint8_t new_totalAvailableSlots)
-{
-	if (new_numTakenSlots != numTakenSlots || new_totalAvailableSlots != totalAvailableSlots)
-	{
-		numTakenSlots = new_numTakenSlots;
-		totalAvailableSlots = new_totalAvailableSlots;
-
-		WzString slotCountsStr = WzString::number(numTakenSlots) + " / " + WzString::number(totalAvailableSlots);
-		slotsCountsLabel->setString(slotCountsStr);
-		recalculateSlotsLabel();
-		recalculateTitleLabel();
-		refreshTip();
-	}
-}
-
-void WzPlayerBoxTabButton::refreshTip()
-{
-	WzString tipStr = titleLabel->getString();
-	tipStr += "\n";
-	tipStr += _("Joined:");
-	tipStr += WzString(" ") + WzString::number(numTakenSlots) + "/" + WzString::number(totalAvailableSlots);
-	tipStr += " - ";
-	tipStr += _("Ready:");
-	tipStr += WzString(" ") + WzString::number(numTakenSlotsReady) + "/" + WzString::number(numTakenSlots);
-	setTip(tipStr.toUtf8());
-}
-
-void WzPlayerBoxTabButton::recalculateSlotsLabel()
-{
-	int slotCountsLabelWidth = slotsCountsLabel->getMaxLineWidth();
-	int slotCountsLabelHeight = slotsCountsLabel->idealHeight();
-	int slotCountsLabelX0 = width() - borderWidth - rightPadding - elementPadding - slotCountsLabelWidth;
-	int slotCountsLabelY0 = (height() - slotCountsLabelHeight) / 2;
-	slotsCountsLabel->setGeometry(slotCountsLabelX0, slotCountsLabelY0, slotCountsLabelWidth, slotCountsLabelHeight);
-}
-
-void WzPlayerBoxTabButton::recalculateTitleLabel()
-{
-	// size titleLabel to take up available space in the middle
-	int slotCountsLabelX0 = slotsCountsLabel->x();
-	int titleLabelX0 = borderWidth + elementPadding + (AtlasImage(FrontImages, IMAGE_LAMP_GREEN).width() / 2) + elementPadding;
-	int titleLabelY0 = (height() - titleLabel->height()) / 2;
-	int titleLabelWidth = slotCountsLabelX0 - elementPadding - titleLabelX0;
-	titleLabel->setGeometry(titleLabelX0, titleLabelY0, titleLabelWidth, titleLabel->height());
-}
-
-void WzPlayerBoxTabButton::setSlotReadyStatus(uint8_t new_numTakenSlotsReady)
-{
-	numTakenSlotsReady = new_numTakenSlotsReady;
-	refreshTip();
-}
-
-void WzPlayerBoxTabButton::setSelected(bool new_selected)
-{
-	selected = new_selected;
-}
-
-void WzPlayerBoxTabButton::geometryChanged()
-{
-	recalculateSlotsLabel();
-	recalculateTitleLabel();
-}
-
-void WzPlayerBoxTabButton::display(int xOffset, int yOffset)
-{
-	int x0 = xOffset + x();
-	int y0 = yOffset + y();
-	int w = width();
-	int h = height();
-	bool highlight = (getState() & WBUT_HIGHLIGHT) != 0;
-	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-
-	// draw box
-	PIELIGHT boxBorder = (!selected) ? WZCOL_MENU_BACKGROUND : WZCOL_MENU_BORDER;
-	if (highlight)
-	{
-		boxBorder = pal_RGBA(255, 255, 255, 255);
-	}
-	PIELIGHT boxBackground = (!selected) ? WZCOL_MENU_BACKGROUND : WZCOL_MENU_BORDER;
-	pie_BoxFill(x0, y0, x0 + w, y0 + h, boxBorder);
-	pie_BoxFill(x0 + 1, y0 + 1, x0 + w - 1, y0 + h - 1, boxBackground);
-	if (!selected && (!highlight || down))
-	{
-		pie_UniTransBoxFill(x0 + 1, y0 + 1, x0 + w - 1, y0 + h - 1, pal_RGBA(0, 0, 0, 80));
-	}
-
-	// draw ready status image
-	AtlasImage readyStatusImage = getImageForSlotsReadyStatus();
-	if (!readyStatusImage.isNull())
-	{
-		int imageDisplayWidth = readyStatusImage.width() / 2;
-		int imageDisplayHeight = readyStatusImage.height() / 2;
-		int imageX0 = x0 + borderWidth + elementPadding;
-		int imageY0 = y0 + ((h - imageDisplayHeight) / 2);
-		iV_DrawImageFileAnisotropic(readyStatusImage.images, readyStatusImage.id, imageX0, imageY0, Vector2f(imageDisplayWidth, imageDisplayHeight), defaultProjectionMatrix(), 255);
-	}
-
-	// label drawing is handled by the embedded W_LABEL
-	titleLabel->display(x0, y0);
-
-	// slot count drawing is handled by the embedded W_LABEL
-	slotsCountsLabel->display(x0, y0);
-}
-
-class WzPlayerBoxOptionsButton : public W_BUTTON
-{
-protected:
-	WzPlayerBoxOptionsButton()
-	: W_BUTTON()
-	{}
-
-public:
-	static std::shared_ptr<WzPlayerBoxOptionsButton> make()
-	{
-		class make_shared_enabler: public WzPlayerBoxOptionsButton {};
-		auto widget = std::make_shared<make_shared_enabler>();
-
-		// add the titleLabel
-		widget->titleLabel = std::make_shared<W_LABEL>();
-		widget->titleLabel->setFont(font_regular, WZCOL_TEXT_BRIGHT);
-		widget->titleLabel->setString(WzString::fromUtf8("\u2699")); // "⚙"
-		std::weak_ptr<WzPlayerBoxOptionsButton> psWeakParent = widget;
-		widget->titleLabel->setCalcLayout([psWeakParent](WIDGET *psWidget){
-			auto psParent = psWeakParent.lock();
-			ASSERT_OR_RETURN(, psParent != nullptr, "Parent is null");
-			psWidget->setGeometry(0, 0, psParent->width(), psParent->height());
-		});
-		widget->titleLabel->setTextAlignment(WLAB_ALIGNCENTRE);
-
-		return widget;
-	}
-
-	void geometryChanged() override
-	{
-		if (titleLabel)
-		{
-			titleLabel->callCalcLayout();
-		}
-	}
-
-	void display(int xOffset, int yOffset) override
-	{
-		int x0 = xOffset + x();
-		int y0 = yOffset + y();
-		int w = width();
-		int h = height();
-		bool highlight = (getState() & WBUT_HIGHLIGHT) != 0;
-		bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-		bool selected = false;
-
-		// draw box
-		PIELIGHT boxBorder = (!selected) ? WZCOL_MENU_BACKGROUND : WZCOL_MENU_BORDER;
-		if (highlight || down)
-		{
-			boxBorder = pal_RGBA(255, 255, 255, 255);
-		}
-		PIELIGHT boxBackground = (!selected) ? WZCOL_MENU_BACKGROUND : WZCOL_MENU_BORDER;
-		pie_BoxFill(x0, y0, x0 + w, y0 + h, boxBorder);
-		pie_BoxFill(x0 + 1, y0 + 1, x0 + w - 1, y0 + h - 1, boxBackground);
-		if (!selected && (!highlight || down))
-		{
-			pie_UniTransBoxFill(x0 + 1, y0 + 1, x0 + w - 1, y0 + h - 1, pal_RGBA(0, 0, 0, 80));
-		}
-
-		// label drawing is handled by the embedded W_LABEL
-		titleLabel->display(x0, y0);
-	}
-
-private:
-	std::shared_ptr<W_LABEL> titleLabel;
-};
-
-class WzPlayerBoxTabs : public WIDGET
-{
-protected:
-	WzPlayerBoxTabs(const std::shared_ptr<WzMultiplayerOptionsTitleUI>& titleUI)
-	: WIDGET()
-	, weakTitleUI(titleUI)
-	{ }
-
-	~WzPlayerBoxTabs()
-	{
-		if (currentPopoverMenu)
-		{
-			currentPopoverMenu->closeMenu();
-		}
-	}
-
-public:
-	static std::shared_ptr<WzPlayerBoxTabs> make(bool displayHostOptions, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& titleUI)
-	{
-		class make_shared_enabler: public WzPlayerBoxTabs {
-		public:
-			make_shared_enabler(const std::shared_ptr<WzMultiplayerOptionsTitleUI>& titleUI) : WzPlayerBoxTabs(titleUI) { }
-		};
-		auto widget = std::make_shared<make_shared_enabler>(titleUI);
-
-		std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUI(titleUI);
-
-		// add the "players" button
-		auto playersButton = WzPlayerBoxTabButton::make(_("Players"));
-		playersButton->setSelected(true);
-		widget->tabButtons.push_back(playersButton);
-		widget->attach(playersButton);
-		playersButton->addOnClickHandler([weakTitleUI](W_BUTTON& button){
-			widgScheduleTask([weakTitleUI](){
-				auto strongTitleUI = weakTitleUI.lock();
-				ASSERT_OR_RETURN(, strongTitleUI != nullptr, "No parent title UI");
-				playerDisplayView = PlayerDisplayView::Players;
-				strongTitleUI->updatePlayers();
-			});
-		});
-
-		// add the "spectators" button
-		auto spectatorsButton = WzPlayerBoxTabButton::make(_("Spectators"));
-		widget->tabButtons.push_back(spectatorsButton);
-		widget->attach(spectatorsButton);
-		spectatorsButton->addOnClickHandler([weakTitleUI](W_BUTTON& button){
-			widgScheduleTask([weakTitleUI](){
-				auto strongTitleUI = weakTitleUI.lock();
-				ASSERT_OR_RETURN(, strongTitleUI != nullptr, "No parent title UI");
-				playerDisplayView = PlayerDisplayView::Spectators;
-				strongTitleUI->updatePlayers();
-			});
-		});
-
-		if (displayHostOptions)
-		{
-			// Add "gear" / "Host Options" button
-			widget->optionsButton = WzPlayerBoxOptionsButton::make(); // "⚙"
-			widget->optionsButton->setTip(_("Host Options"));
-			widget->attach(widget->optionsButton);
-			widget->optionsButton->addOnClickHandler([](W_BUTTON& button) {
-				auto psParent = std::dynamic_pointer_cast<WzPlayerBoxTabs>(button.parent());
-				ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-				// Display a "pop-over" options menu
-				psParent->displayOptionsOverlay(button.shared_from_this());
-			});
-		}
-
-		widget->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			auto psPlayerBoxTabs = std::dynamic_pointer_cast<WzPlayerBoxTabs>(psWidget->shared_from_this());
-			ASSERT_OR_RETURN(, psPlayerBoxTabs.get() != nullptr, "Wrong type of psWidget??");
-			psPlayerBoxTabs->recalculateTabLayout();
-		}));
-
-		widget->refreshData();
-
-		return widget;
-	}
-
-	void geometryChanged() override
-	{
-		recalculateTabLayout();
-	}
-
-	void run(W_CONTEXT *psContext) override
-	{
-		refreshData();
-	}
-
-private:
-	void setSelectedTab(size_t index)
-	{
-		for (size_t i = 0; i < tabButtons.size(); ++i)
-		{
-			tabButtons[i]->setSelected(i == index);
-		}
-	}
-
-	void refreshData()
-	{
-		// update currently-selected tab
-		switch (playerDisplayView)
-		{
-			case PlayerDisplayView::Players:
-				setSelectedTab(0);
-				break;
-			case PlayerDisplayView::Spectators:
-				setSelectedTab(1);
-				break;
-		}
-
-		// update counts of players & spectators
-		uint8_t takenPlayerSlots = 0;
-		uint8_t totalPlayerSlots = 0;
-		uint8_t readyPlayers = 0;
-		uint8_t takenSpectatorOnlySlots = 0;
-		uint8_t totalSpectatorOnlySlots = 0;
-		uint8_t readySpectatorOnlySlots = 0;
-		for (size_t i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
-		{
-			PLAYER const &p = NetPlay.players[i];
-			if (p.ai == AI_CLOSED)
-			{
-				// closed slot - skip
-				continue;
-			}
-			if (isSpectatorOnlySlot(i)
-					 && ((i >= NetPlay.players.size()) || !(NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN)))
-			{
-				// the only slots displayable beyond game.maxPlayers are spectator slots
-				continue;
-			}
-			if (isSpectatorOnlySlot(i))
-			{
-				if (p.ai == AI_OPEN)
-				{
-					++totalSpectatorOnlySlots;
-					if (NetPlay.players[i].allocated)
-					{
-						++takenSpectatorOnlySlots;
-						if (NetPlay.players[i].ready)
-						{
-							++readySpectatorOnlySlots;
-						}
-					}
-				}
-				continue;
-			}
-			++totalPlayerSlots;
-			if (p.ai == AI_OPEN)
-			{
-				if (p.allocated)
-				{
-					++takenPlayerSlots;
-					if (NetPlay.players[i].ready)
-					{
-						++readyPlayers;
-					}
-				}
-			}
-			else
-			{
-				ASSERT(!p.allocated, "Expecting AI bots to not be flagged as allocated?");
-				++takenPlayerSlots;
-				++readyPlayers; // AI slots are always "ready"
-			}
-		}
-
-		// players button
-		tabButtons[0]->setSlotCounts(takenPlayerSlots, totalPlayerSlots);
-		tabButtons[0]->setSlotReadyStatus(readyPlayers);
-
-		// spectators button
-		tabButtons[1]->setSlotCounts(takenSpectatorOnlySlots, totalSpectatorOnlySlots);
-		tabButtons[1]->setSlotReadyStatus(readySpectatorOnlySlots);
-	}
-
-	void recalculateTabLayout()
-	{
-		int optionsButtonSize = (optionsButton) ? height() : 0;
-		int rightPaddingForAllButtons = optionsButtonSize;
-		int availableWidthForButtons = width() - rightPaddingForAllButtons; // width minus internal and external button padding
-		int baseWidthPerButton = availableWidthForButtons / static_cast<int>(tabButtons.size());
-		int x0 = 0;
-		for (auto &button : tabButtons)
-		{
-			int buttonNewWidth = baseWidthPerButton;
-			button->setGeometry(x0, 0, buttonNewWidth, height());
-			x0 = button->x() + button->width();
-		}
-
-		if (optionsButton)
-		{
-			int optionsButtonX0 = width() - optionsButtonSize;
-			optionsButton->setGeometry(optionsButtonX0, 0, optionsButtonSize, optionsButtonSize);
-		}
-	}
-
-	void displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent);
-	std::shared_ptr<PopoverMenuWidget> createOptionsPopoverForm();
-
-private:
-	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUI;
-	std::vector<std::shared_ptr<WzPlayerBoxTabButton>> tabButtons;
-	std::shared_ptr<WzPlayerBoxOptionsButton> optionsButton;
-	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
-};
-
-static bool hasOpenSpectatorOnlySlots()
-{
-	// Look for a spectator slot that's available
-	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (!isSpectatorOnlySlot(i))
-		{
-			continue;
-		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
-		{
-			continue; // skip it
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			continue; // skip it
-		}
-		if (NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN && !NetPlay.players[i].allocated)
-		{
-			// found available spectator-only slot
-			return true;
-		}
-	}
-	return false;
-}
-
-static bool canAddSpectatorOnlySlots()
-{
-	for (int i = MAX_PLAYER_SLOTS; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (!isSpectatorOnlySlot(i))
-		{
-			continue;
-		}
-		if (NetPlay.players[i].allocated || NetPlay.players[i].isSpectator)
-		{
-			continue;
-		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
-		{
-			continue; // skip it
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			continue; // skip it
-		}
-		return true;
-	}
-	return false;
-}
-
-static void closeAllOpenSpectatorOnlySlots()
-{
-	ASSERT_HOST_ONLY(return);
-	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (!isSpectatorOnlySlot(i))
-		{
-			continue;
-		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
-		{
-			continue; // skip it
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			continue; // skip it
-		}
-		if (NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN && !NetPlay.players[i].allocated)
-		{
-			// found available spectator-only slot
-			// close it
-			NetPlay.players[i].ai = AI_CLOSED;
-			NetPlay.players[i].isSpectator = false;
-			NETBroadcastPlayerInfo(i);
-		}
-	}
-}
-
-static void enableSpectatorJoin(bool enabled)
-{
-	if (enabled)
-	{
-		// add max spectator slots
-		bool success = false;
-		do {
-			success = NETopenNewSpectatorSlot();
-		} while (success);
-	}
-	else
-	{
-		// disable any open / unoccupied spectator slots
-		closeAllOpenSpectatorOnlySlots();
-	}
-	netPlayersUpdated = true;
-}
-
-std::shared_ptr<PopoverMenuWidget> WzPlayerBoxTabs::createOptionsPopoverForm()
-{
-	auto popoverMenu = PopoverMenuWidget::make();
-
-	// create all the buttons / option rows
-	auto addOptionsSpacer = [&popoverMenu]() -> std::shared_ptr<WIDGET> {
-		auto spacerWidget = std::make_shared<WIDGET>();
-		spacerWidget->setGeometry(0, 0, 1, 5);
-		popoverMenu->addMenuItem(spacerWidget, false);
-		return spacerWidget;
-	};
-	auto addOptionsCheckbox = [&popoverMenu](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc) -> std::shared_ptr<WzAdvCheckbox> {
-		auto pCheckbox = WzAdvCheckbox::make(text, "");
-		pCheckbox->FontID = font_regular;
-		pCheckbox->setOuterVerticalPadding(4);
-		pCheckbox->setInnerHorizontalPadding(5);
-		pCheckbox->setIsChecked(isChecked);
-		if (isDisabled)
-		{
-			pCheckbox->setState(WBUT_DISABLE);
-		}
-		pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
-		if (onClickFunc)
-		{
-			pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
-				auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
-				ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
-				onClickFunc(*checkBoxButton);
-			});
-		}
-		popoverMenu->addMenuItem(pCheckbox, false);
-		return pCheckbox;
-	};
-
-	bool hasOpenSpectatorSlots = hasOpenSpectatorOnlySlots();
-	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUICopy = weakTitleUI;
-	addOptionsCheckbox(_("Enable Spectator Join"), hasOpenSpectatorSlots, !hasOpenSpectatorSlots && !canAddSpectatorOnlySlots(), [weakTitleUICopy](WzAdvCheckbox& button){
-		bool enableValue = button.isChecked();
-		widgScheduleTask([enableValue, weakTitleUICopy]{
-			auto strongTitleUI = weakTitleUICopy.lock();
-			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "No Title UI?");
-			enableSpectatorJoin(enableValue);
-			strongTitleUI->updatePlayers();
-		});
-	});
-	addOptionsSpacer();
-	addOptionsCheckbox(_("Lock Teams"), locked.teams, false, [](WzAdvCheckbox& button){
-		locked.teams = button.isChecked();
-		sendHostConfig();
-	});
-	addOptionsCheckbox(_("Lock Position"), locked.position, false, [](WzAdvCheckbox& button){
-		locked.position = button.isChecked();
-		sendHostConfig();
-	});
-
-	int32_t idealMenuHeight = popoverMenu->idealHeight();
-	int32_t menuHeight = idealMenuHeight;
-	if (menuHeight > screenHeight)
-	{
-		menuHeight = screenHeight;
-	}
-	popoverMenu->setGeometry(popoverMenu->x(), popoverMenu->y(), popoverMenu->idealWidth(), menuHeight);
-
-	return popoverMenu;
-}
-
-void WzPlayerBoxTabs::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
-{
-	if (currentPopoverMenu)
-	{
-		currentPopoverMenu->closeMenu();
-	}
-
-	optionsButton->setState(WBUT_CLICKLOCK);
-	currentPopoverMenu = createOptionsPopoverForm();
-	auto psWeakSelf = std::weak_ptr<WzPlayerBoxTabs>(std::static_pointer_cast<WzPlayerBoxTabs>(shared_from_this()));
-	currentPopoverMenu->openMenu(psParent, PopoverWidget::Alignment::LeftOfParent, Vector2i(0, 1), [psWeakSelf](){
-		if (auto strongSelf = psWeakSelf.lock())
-		{
-			strongSelf->optionsButton->setState(0);
-		}
-	});
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 
 void WzMultiplayerOptionsTitleUI::openPlayerSlotSwapChooser(uint32_t playerIndex)
@@ -4168,7 +3537,11 @@ void WzMultiplayerOptionsTitleUI::openPlayerSlotSwapChooser(uint32_t playerIndex
 	closeAllChoosers();
 
 	// make sure "players" view is visible
-	playerDisplayView = PlayerDisplayView::Players;
+	std::shared_ptr<WzPlayerBoxTabs> playersTabButtons = std::dynamic_pointer_cast<WzPlayerBoxTabs>(widgFormGetFromID(psWScreen->psForm, MULTIOP_PLAYERS_TABS));
+	if (playersTabButtons)
+	{
+		playersTabButtons->setDisplayView(WzPlayerBoxTabs::PlayerDisplayView::Players);
+	}
 	updatePlayers();
 
 	widgRegisterOverlayScreen(psInlineChooserOverlayScreen, 1);
@@ -4361,6 +3734,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				psWidget->setGeometry(PLAYERBOX_X0 - 1, 0, MULTIOP_PLAYERSW - PLAYERBOX_X0, MULTIOP_PLAYERS_TABS_H);
 			}));
 		}
+		const auto playerDisplayView = (playersTabButtons) ? playersTabButtons->getDisplayView() : WzPlayerBoxTabs::PlayerDisplayView::Players;
 
 		ASSERT(static_cast<size_t>(MAX_CONNECTED_PLAYERS) <= NetPlay.players.size(), "Insufficient array size: %zu versus %zu", NetPlay.players.size(), (size_t)MAX_CONNECTED_PLAYERS);
 		uint32_t numSlotsDisplayed = 0;
@@ -4395,7 +3769,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 
 			switch (playerDisplayView)
 			{
-				case PlayerDisplayView::Players:
+				case WzPlayerBoxTabs::PlayerDisplayView::Players:
 					if (isSpectatorOnlySlot(i))
 					{
 						// should not be visible
@@ -4403,7 +3777,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 						continue; // skip
 					}
 					break;
-				case PlayerDisplayView::Spectators:
+				case WzPlayerBoxTabs::PlayerDisplayView::Spectators:
 					if (!isSpectatorOnlySlot(i))
 					{
 						// should not be visible
@@ -4421,7 +3795,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				continue;
 			}
 
-			uint32_t playerRowPosition = (playerDisplayView == PlayerDisplayView::Players) ? NetPlay.players[i].position : numSlotsDisplayed;
+			uint32_t playerRowPosition = (playerDisplayView == WzPlayerBoxTabs::PlayerDisplayView::Players) ? NetPlay.players[i].position : numSlotsDisplayed;
 			playerRow->setGeometry(PLAYERBOX_X0, playerBoxHeight(playerRowPosition), MULTIOP_PLAYERWIDTH, MULTIOP_PLAYERHEIGHT);
 			playerRow->show();
 			playerRow->updateState();
@@ -4472,7 +3846,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 		}
 
 		ASSERT_OR_RETURN(, spectatorAddButton != nullptr, "Unable to create or find button");
-		if ((playerDisplayView == PlayerDisplayView::Spectators) && (numSlotsDisplayed < (MAX_PLAYERS_IN_GUI)) && spectatorSlotsSupported() && NetPlay.isHost)
+		if ((playerDisplayView == WzPlayerBoxTabs::PlayerDisplayView::Spectators) && (numSlotsDisplayed < (MAX_PLAYERS_IN_GUI)) && spectatorSlotsSupported() && NetPlay.isHost)
 		{
 			// spectator add button should be visible
 			spectatorAddButton->show();
@@ -7530,7 +6904,6 @@ void WzMultiplayerOptionsTitleUI::start()
 		psInlineChooserOverlayScreen->psForm->attach(newRootFrm);
 
 		currentMultiOptionsTitleUI = std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this());
-		playerDisplayView = PlayerDisplayView::Players;
 		bRequestedSelfMoveToPlayers = false;
 		bHostRequestedMoveToPlayers.resize(MAX_CONNECTED_PLAYERS, false);
 		playerRows.clear();

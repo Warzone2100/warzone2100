@@ -111,6 +111,7 @@ struct MultiplayOptionsLocked
 	}
 };
 const MultiplayOptionsLocked& getLockedOptions();
+bool updateLockedOptionsOnHost(const MultiplayOptionsLocked& newOpts);
 bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts);
 
 const char* getDifficultyListStr(size_t idx);
