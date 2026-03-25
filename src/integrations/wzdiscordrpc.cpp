@@ -214,67 +214,31 @@ static void joinGameImpl(const std::vector<JoinConnectionDescription>& joinConne
 	cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
 }
 
-static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
+static void findAndJoinLobbyGameImpl(std::string lobbyAddress, std::string lobbyGameId)
 {
-	WZ_Notification notification;
-	notification.duration = 60 * GAME_TICKS_PER_SEC;
-	notification.contentTitle = _("Discord: Finding & Connecting to Game");
-	std::string contentStr = _("Attempting to find & connect to the game specified by the Discord invite.");
-	contentStr += "\n\n";
-	contentStr += _("This may take a moment...");
-	notification.contentText = contentStr;
-	std::string lobbyAddressCopy = lobbyAddress;
-	notification.onDisplay = [lobbyAddressCopy, lobbyPort, lobbyGameId](const WZ_Notification&) {
-		// once the notification is completely displayed, trigger the lookup & join
-		wzAsyncExecOnMainThread([lobbyAddressCopy, lobbyPort, lobbyGameId]() {
-			const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
-			if (currentGameMode != ActivitySink::GameMode::MENUS)
-			{
-				// Can't join a game while in a game - abort
-				cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-				displayCantJoinWhileInGameNotification();
-				return;
-			}
+	wzAsyncExecOnMainThread([lobbyAddress, lobbyGameId]() {
+		const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
+		if (currentGameMode != ActivitySink::GameMode::MENUS)
+		{
+			// Can't join a game while in a game - abort
+			cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
+			displayCantJoinWhileInGameNotification();
+			return;
+		}
 
-			// `findLobbyGame()` will automatically call `NETinit()`, if needed.
-			// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
-			// ensure we're still in the menus...
-			ingame.side = InGameSide::MULTIPLAYER_CLIENT;
-			auto joinConnectionDetails = findLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId);
+		// Joining a game wouldn't be a good idea to do *during* a game, hence the check above to
+		// ensure we're still in the menus...
 
-			if (joinConnectionDetails.empty())
-			{
-				cancelOrDismissNotificationsWithTag(JOIN_FIND_AND_CONNECT_TAG);
-				debug(LOG_ERROR, "Join code: Failed to find game in the lobby server: %s:%u", lobbyAddressCopy.c_str(), lobbyPort);
-				std::string contentText = _("Failed to find game in the lobby server: ");
-				contentText += lobbyAddressCopy + ":" + std::to_string(lobbyPort) + "\n\n";
-				contentText += _("The game may have already started, or the host may have disbanded the game lobby.");
-				WZ_Notification notification;
-				notification.duration = 0;
-				notification.contentTitle = _("Failed to Find Game");
-				notification.contentText = contentText;
-				notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
-				notification.tag = std::string(JOIN_NOTIFICATION_TAG_PREFIX "failedtoconnect");
-				addNotification(notification, WZ_Notification_Trigger::Immediate());
-				return;
-			}
-
-			ActivityManager::instance().willAttemptToJoinLobbyGame(lobbyAddressCopy, lobbyPort, lobbyGameId, joinConnectionDetails);
-
-			joinGameImpl(joinConnectionDetails);
-		});
-	};
-	notification.largeIcon = WZ_Notification_Image("images/notifications/connect_wait.png");
-	notification.tag = JOIN_FIND_AND_CONNECT_TAG;
-	addNotification(notification, WZ_Notification_Trigger::Immediate());
+		joinLobbyGame(lobbyAddress, lobbyGameId);
+	});
 }
 
-static bool isTrustedLobbyServer(const std::string& lobbyAddress, unsigned int lobbyPort)
+static bool isTrustedLobbyServer(const std::string& lobbyAddress)
 {
-	return lobbyAddress == "lobby.wz2100.net";
+	return lobbyAddress == "https://wzlobby.wz2100.net" || lobbyAddress == "wzlobby.wz2100.net";
 }
 
-static void joinGameFromSecret_v1(const std::string joinSecretStr)
+static void joinGameFromSecret_v2(const std::string joinSecretStr)
 {
 	std::vector<JoinConnectionDescription> joinConnectionDetails;
 
@@ -297,7 +261,7 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 		displayErrorNotification("Join code: Invalid format");
 		return;
 	}
-	if (joinSecretComponents[0] != "v1") {
+	if (joinSecretComponents[0] != "v2") {
 		displayErrorNotification("Join code: Invalid format version");
 		return;
 	}
@@ -322,29 +286,23 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 	if (joinSecretComponents[1] == "l")
 	{
 		// lobby game
-		// format: "v1/l/<lobbyAddress>:<lobbyPort>/<lobbyGameId>"
+		// format: "v2/l/<base64url-lobbyAddress>/<lobbyGameId>"
 		if (joinSecretComponents.size() == 4)
 		{
-			std::vector<WzString> lobbyDetails = joinSecretComponents[2].split(":");
-			if (lobbyDetails.size() != 2)
-			{
-				displayErrorNotification(astringf("Join code: Invalid format for subcomponent - size: %zu", lobbyDetails.size()));
-				return;
-			}
-			std::string lobbyAddress = lobbyDetails[0].toUtf8();
-			unsigned int lobbyPort = convertStringToUint32(lobbyDetails[1].toUtf8());
-			uint32_t lobbyGameId = convertStringToUint32(joinSecretComponents[3].toUtf8());
-			if (lobbyGameId == 0)
+			auto b64DecodedLobbyAddressVec = base64Decode(b64UrlSafeTob64(joinSecretComponents[2].toUtf8()));
+			std::string lobbyAddress = std::string(b64DecodedLobbyAddressVec.begin(), b64DecodedLobbyAddressVec.end());
+			std::string lobbyGameId = joinSecretComponents[3].toUtf8();
+			if (lobbyGameId.empty())
 			{
 				// Invalid lobby gameId
 				displayErrorNotification(astringf("Join code: Invalid lobby gameId: %s", joinSecretComponents[3].toUtf8().c_str()));
 				return;
 			}
 
-			if (isTrustedLobbyServer(lobbyAddress, lobbyPort))
+			if (isTrustedLobbyServer(lobbyAddress))
 			{
 				// trusted lobby servers can proceed directly to finding and joining the game
-				findAndJoinLobbyGameImpl(lobbyAddress, lobbyPort, lobbyGameId);
+				findAndJoinLobbyGameImpl(lobbyAddress, lobbyGameId);
 				return;
 			}
 			else
@@ -352,7 +310,7 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 				// asynchronously prompt via notification system to trust lobby server before connecting
 				std::ostringstream content;
 				content << _("The invite link you have followed specifies a non-default lobby server:") << "\n";
-				content << " ⇢ " << lobbyAddress << " : " << lobbyPort << "\n";
+				content << " ⇢ " << lobbyAddress << "\n";
 				content << "\n";
 				content << _("Do you wish to trust this lobby server, and continue?") << "\n";
 
@@ -360,9 +318,9 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 				notification.duration = 0;
 				notification.contentTitle = _("Discord: Connect to Untrusted Lobby?");
 				notification.contentText = content.str();
-				notification.action = WZ_Notification_Action(_("Trust & Connect"), [lobbyAddress, lobbyPort, lobbyGameId](const WZ_Notification&){
-					wzAsyncExecOnMainThread([lobbyAddress, lobbyPort, lobbyGameId]{
-						findAndJoinLobbyGameImpl(lobbyAddress, lobbyPort, lobbyGameId);
+				notification.action = WZ_Notification_Action(_("Trust & Connect"), [lobbyAddress, lobbyGameId](const WZ_Notification&){
+					wzAsyncExecOnMainThread([lobbyAddress, lobbyGameId]{
+						findAndJoinLobbyGameImpl(lobbyAddress, lobbyGameId);
 					});
 				});
 				notification.largeIcon = WZ_Notification_Image("images/notifications/shield_questionmark.png");
@@ -379,7 +337,7 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 	else if (joinSecretComponents[1] == "i")
 	{
 		// direct connection join code
-		// format: "v1/i/<uniqueGameStr>/<base64url-network-binary-format-ip-address>:<port>/..."
+		// format: "v2/i/<uniqueGameStr>/<base64url-network-binary-format-ip-address>:<port>/..."
 
 		// for now, skip the uniqueGameStr
 		// joinSecretComponents[2]
@@ -448,10 +406,10 @@ static void joinGameFromSecret_v1(const std::string joinSecretStr)
 // May complete asynchronously / prompt the user / etc
 static void joinGameFromSecret(const std::string joinSecret)
 {
-	if (joinSecret.rfind("v1/", 0) == 0)
+	if (joinSecret.rfind("v2/", 0) == 0)
 	{
-		// v1 join secret
-		joinGameFromSecret_v1(joinSecret);
+		// v2 join secret
+		joinGameFromSecret_v2(joinSecret);
 		return;
 	}
 	else
@@ -702,27 +660,25 @@ std::vector<unsigned char> int64_tToUnsignedCharVector(int64_t value)
 
 void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerGameInfo& info, int64_t startTimestamp)
 {
-	if (info.lobbyGameId != 0)
+	if (!info.lobbyGameId.empty())
 	{
 		// construct a "lobby game" join secret
-		std::string lobbyAddressAndPort = info.lobbyAddress + ":" + std::to_string(info.lobbyPort);
+		std::string lobbyAddressBase64URLEncoded = b64Tob64UrlSafe(base64Encode(std::vector<uint8_t>(info.lobbyAddress.begin(), info.lobbyAddress.end())));
+		std::string joinSecretStr = std::string("v2/l/") + lobbyAddressBase64URLEncoded + "/" + info.lobbyGameId;
 
 		// join secret must be <= 127 characters
-		// support a custom lobby + port if they are <= 64 chars long
-		if (lobbyAddressAndPort.size() > 64)
+		if (joinSecretStr.size() > 127)
 		{
-			// lobby address is too long
-			debug(LOG_WARNING, "Lobby address exceeds maximum supported length for join code: %s", lobbyAddressAndPort.c_str());
+			// join secret is too long - the combo of lobby address and lobbyGameId exceed the limit
+			debug(LOG_WARNING, "Lobby address + gameId exceeds maximum supported length for join code: (%s) (%s)", info.lobbyAddress.c_str(), info.lobbyGameId.c_str());
+			currentRichPresenceData.joinSecret.clear();
 			return;
 		}
 
-		std::string joinSecretDetails = lobbyAddressAndPort + "/" + std::to_string(info.lobbyGameId);
-
-		std::string joinSecretStr = std::string("v1/l/") + joinSecretDetails;
 		currentRichPresenceData.joinSecret = joinSecretStr;
 
 		// construct a unique party id from the lobby address/port + lobbyGameId
-		std::string rawPartyId = std::to_string(info.lobbyGameId) + ":" + info.lobbyAddress + ":" + std::to_string(info.lobbyPort) + ":" + std::to_string(info.lobbyGameId);
+		std::string rawPartyId = info.lobbyGameId + ":" + info.lobbyAddress;
 		currentRichPresenceData.partyId = hashAndB64EncodePartyId(rawPartyId);
 		return;
 	}
@@ -799,7 +755,7 @@ void DiscordRPCActivitySink::setJoinInformation(const ActivitySink::MultiplayerG
 				std::string uniqueGameStr = b64Tob64UrlSafe(EmbeddedJSONSignature::b64Encode(int64_tToUnsignedCharVector(startTimestamp)));
 
 				// construct "direct connection" join secret
-				std::string joinSecretStr = std::string("v1/i/") + uniqueGameStr + "/" + joinSecretDetails;
+				std::string joinSecretStr = std::string("v2/i/") + uniqueGameStr + "/" + joinSecretDetails;
 
 				// construct a unique party id from the uniqueGameStr + ip addresses, hashed
 				std::string rawPartyId = std::string("direct_connection:") + uniqueGameStr + ":" + *pExternalIPv4Address + ":" + std::to_string(externalIPv4Port) + ":" + ipv6Address + ":" + std::to_string(listeningInterfaces.ipv6_port);

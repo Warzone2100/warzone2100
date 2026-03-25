@@ -90,6 +90,7 @@ static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
 static int wz_min_autostart_players = -1;
+static std::string wz_lobby_game_to_connect_str;
 
 #if defined(WZ_OS_WIN)
 
@@ -324,6 +325,8 @@ typedef enum
 	CLI_NOSOUND,
 	CLI_CONNECTTOIP,
 	CLI_CONNECTTOIP_SPECTATE,
+	CLI_CONNECTTOLOBBYGAME,
+	CLI_CONNECTTOLOBBYGAME_SPECTATE,
 	CLI_HOSTLAUNCH,
 	CLI_NOASSERT,
 	CLI_CRASH,
@@ -407,6 +410,8 @@ static const struct poptOption *getOptionsTable()
 		{ "nosound", POPT_ARG_NONE, CLI_NOSOUND,    N_("Disable sound"),                     nullptr },
 		{ "join", POPT_ARG_STRING, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host") },
 		{ "spectate", POPT_ARG_STRING, CLI_CONNECTTOIP_SPECTATE, N_("Connect directly to IP/hostname as a spectator"),  N_("host") },
+		{ "lobbyjoin", POPT_ARG_STRING, CLI_CONNECTTOLOBBYGAME, N_("Connect to lobby game"),  N_("lobbyGameId") },
+		{ "lobbyspectate", POPT_ARG_STRING, CLI_CONNECTTOLOBBYGAME_SPECTATE, N_("Connect to lobby game as a spectator"),  N_("lobbyGameId") },
 		{ "host", POPT_ARG_NONE, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
 		{ "texturecompression", POPT_ARG_NONE, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
@@ -794,7 +799,18 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			sstrcpy(iptoconnect, token);
 			// also set spectate flag
-			cliConnectToIpAsSpectator = (option == CLI_CONNECTTOIP_SPECTATE);
+			cliConnectAsSpectator = (option == CLI_CONNECTTOIP_SPECTATE);
+			break;
+		case CLI_CONNECTTOLOBBYGAME:
+		case CLI_CONNECTTOLOBBYGAME_SPECTATE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("No lobbyGameId given");
+			}
+			wz_lobby_game_to_connect_str = token;
+			// also set spectate flag
+			cliConnectAsSpectator = (option == CLI_CONNECTTOLOBBYGAME_SPECTATE);
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
@@ -1399,4 +1415,9 @@ bool lobby_slashcommands_enabled()
 int min_autostart_player_count()
 {
 	return wz_min_autostart_players;
+}
+
+const std::string& cli_lobby_game_to_connect_str()
+{
+	return wz_lobby_game_to_connect_str;
 }

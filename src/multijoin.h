@@ -39,7 +39,7 @@ void setupNewPlayer(UDWORD player);		// stuff to do when player joins.
 void clearPlayer(UDWORD player, bool quietly);     // wipe a player off the face of the earth.
 void handlePlayerLeftInGame(UDWORD player);		   // handle a player leaving in-game
 
-void ShowMOTD();
+void ShowLobbyStatusMessage(const std::vector<std::string>& msgs);
 bool recvDataCheck(NETQUEUE queue);
 bool sendDataCheck();
 

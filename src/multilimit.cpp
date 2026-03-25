@@ -366,7 +366,10 @@ void createLimitSet()
 
 	if (NetPlay.isHost)
 	{
+		updateStructureDisabledFlags();
 		sendOptions();
+
+		NETsetLobbyLimitFlags(ingame.flags);
 	}
 }
 

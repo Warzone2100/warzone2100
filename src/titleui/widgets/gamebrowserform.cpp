@@ -42,50 +42,12 @@
 #include "frontendimagebutton.h"
 #include "advcheckbox.h"
 #include "src/screens/joiningscreen.h"
+#include "lib/netplay/netlobby.h"
 
 #include <numeric>
 #include <vector>
 #include <optional>
 #include <unordered_set>
-
-// MARK: - Global status of fetch threads
-
-static std::unordered_set<WZ_THREAD*> pendingFetchThreads;
-
-static void registerCreatedFetchThread(WZ_THREAD *thread)
-{
-	pendingFetchThreads.insert(thread);
-}
-
-static int joinFetchThread(WZ_THREAD *thread)
-{
-	auto erased = pendingFetchThreads.erase(thread);
-	ASSERT_OR_RETURN(-1, erased > 0, "Could not find pending fetch thread");
-	return wzThreadJoin(thread);
-}
-
-// MARK: - LobbyGameInfo struct
-
-class LobbyGameInfo
-{
-public:
-	uint32_t gameId = 0;
-	WzString name;
-	WzString hostName;
-	WzString mapName;
-	uint32_t netcode_version_major = 0;
-	uint32_t netcode_version_minor = 0;
-	WzString gameVersionStr;
-	std::vector<WzString> mods;
-	uint8_t joinedPlayers = 0;
-	uint8_t maxPlayers = 0;
-	SpectatorInfo spectatorInfo;
-	bool isPrivate = false;
-	optional<AllianceType> alliancesMode = nullopt;
-	BLIND_MODE blindMode = BLIND_MODE::NONE;
-	uint32_t limits = 0;	// holds limits bitmask (NO_VTOL|NO_TANKS|NO_BORGS)
-	std::vector<JoinConnectionDescription> connectionDesc;
-};
 
 // MARK: - Lobby Status Overlay Widget
 
@@ -548,17 +510,17 @@ class LobbyGameModsWidget : public WIDGET
 {
 protected:
 	LobbyGameModsWidget() { }
-	void initialize(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
+	void initialize(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
 	virtual void geometryChanged() override;
 public:
-	static std::shared_ptr<LobbyGameModsWidget> make(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
+	static std::shared_ptr<LobbyGameModsWidget> make(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
 	{
 		class make_shared_enabler: public LobbyGameModsWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize(modsList, noVtol, noTanks, noCyborgs);
 		return widget;
 	}
-	void updateValue(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
+	void updateValue(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
 private:
@@ -567,7 +529,7 @@ private:
 	std::shared_ptr<W_LABEL> limitsListWidg;
 };
 
-void LobbyGameModsWidget::initialize(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
+void LobbyGameModsWidget::initialize(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
 {
 	modsListWidg = std::make_shared<W_LABEL>();
 	modsListWidg->setFont(font_small, pal_RGBA(255,50,50,255));
@@ -613,7 +575,7 @@ int32_t LobbyGameModsWidget::idealHeight()
 	return result;
 }
 
-void LobbyGameModsWidget::updateValue(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
+void LobbyGameModsWidget::updateValue(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
 {
 	WzString modsListStr;
 	for (const auto& mod : modsList)
@@ -622,7 +584,7 @@ void LobbyGameModsWidget::updateValue(const std::vector<WzString>& modsList, boo
 		{
 			modsListStr.append(", ");
 		}
-		modsListStr.append(mod);
+		modsListStr.append(mod.name);
 	}
 	modsListWidg->setString(modsListStr);
 
@@ -745,15 +707,16 @@ protected:
 
 private:
 	void joinLobbyGame(size_t idx, bool asSpectator);
+	void setMotd(const std::string& motd);
 
 private:
 	std::shared_ptr<W_BUTTON> makeBackButton();
 	std::shared_ptr<WIDGET> createColumnHeaderLabel(const char* text, WzTextAlignment align, int minLeftPadding);
 	std::shared_ptr<ScrollableTableWidget> createGamesList();
 	void triggerAsyncGameListFetch();
-	void processAsyncGameListFetchResults(bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD);
+	void processAsyncGameListFetchResults(netlobby::ListResult&& results);
 	void populateTableFromGameList();
-	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(size_t idx, const LobbyGameInfo& gameInfo);
+	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(size_t idx, const netlobby::GameListing& listing);
 
 	std::shared_ptr<PopoverMenuWidget> createFiltersPopoverForm();
 	void displayFiltersOverlay(const std::shared_ptr<WIDGET>& psParent);
@@ -768,118 +731,15 @@ private:
 	std::shared_ptr<LobbyStatusOverlayWidget> lobbyStatusOverlayWidg;
 	std::shared_ptr<ScrollableListWidget> lobbyStatusMessageContainer;
 
-	std::vector<LobbyGameInfo> currentResults;
+	std::vector<netlobby::GameListing> currentResults;
 	bool filterIncompatible = true;
 	bool filterEmpty = false;
 	bool filterModded = false;
 
 	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
 
-	WZ_THREAD* currentFetchThread = nullptr;
+	bool hasPendingFetchRequest = false;
 };
-
-class AsyncListLobbyGamesParams
-{
-public:
-	typedef std::function<void(bool, std::vector<LobbyGameInfo>&&, std::string&& lobbyMOTD)> CompletionHandlerFunc;
-public:
-	AsyncListLobbyGamesParams(size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion, const CompletionHandlerFunc& completionHandler)
-	: startingIndex(startingIndex)
-	, resultsLimit(resultsLimit)
-	, onlyMatchingLocalVersion(onlyMatchingLocalVersion)
-	, completionHandler(completionHandler)
-	{
-		connProvider = NET_getLobbyConnectionProvider();
-	}
-public:
-	size_t startingIndex = 0;
-	size_t resultsLimit = 100;
-	bool onlyMatchingLocalVersion = false;
-	std::shared_ptr<WzConnectionProvider> connProvider = nullptr;
-	CompletionHandlerFunc completionHandler;
-};
-
-static inline LobbyGameInfo lobbyGAMESTRUCTtoLobbyGameInfo(const GAMESTRUCT &lobbyGame)
-{
-	LobbyGameInfo info;
-	info.gameId = lobbyGame.gameId;
-	info.name = lobbyGame.name;
-	info.hostName = lobbyGame.hostname;
-	info.mapName = lobbyGame.mapname;
-	info.netcode_version_major = lobbyGame.game_version_major;
-	info.netcode_version_minor = lobbyGame.game_version_minor;
-	info.gameVersionStr = lobbyGame.versionstring;
-	info.mods = WzString(lobbyGame.modlist).split(", ");
-	info.joinedPlayers = lobbyGame.desc.dwCurrentPlayers;
-	info.maxPlayers = lobbyGame.desc.dwMaxPlayers;
-	info.spectatorInfo = SpectatorInfo::fromUint32(lobbyGame.desc.dwUserFlags[1]);
-	info.isPrivate = lobbyGame.privateGame != 0;
-	info.limits = lobbyGame.limits;
-
-	if (lobbyGame.desc.alliances <= ALLIANCE_TYPE_MAX)
-	{
-		info.alliancesMode = static_cast<AllianceType>(lobbyGame.desc.alliances);
-	}
-	if (lobbyGame.desc.dwUserFlags[2] <= static_cast<uint32_t>(BLIND_MODE_MAX))
-	{
-		info.blindMode = static_cast<BLIND_MODE>(lobbyGame.desc.dwUserFlags[2]);
-	}
-
-	info.connectionDesc.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, lobbyGame.desc.host, lobbyGame.hostPort);
-
-	return info;
-}
-
-/** This runs in a separate thread */
-static int fetchLobbyListingThreadFunc(void *data)
-{
-	AsyncListLobbyGamesParams* fetchInfo = static_cast<AsyncListLobbyGamesParams*>(data);
-	auto startingIndex = fetchInfo->startingIndex;
-	auto resultsLimit = fetchInfo->resultsLimit;
-	auto onlyMatchingLocalVersion = fetchInfo->onlyMatchingLocalVersion;
-
-	size_t gamecount = 0;
-	std::vector<LobbyGameInfo> results;
-	std::string lobbyMOTD;
-	bool success = NETenumerateGames(fetchInfo->connProvider, [&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
-		if (gamecount++ < startingIndex)
-		{
-			// skip this item, continue
-			return true;
-		}
-		if ((resultsLimit > 0) && (results.size() >= resultsLimit))
-		{
-			// stop processing games
-			return false;
-		}
-		if (onlyMatchingLocalVersion && !NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
-		{
-			// skip this non-matching version, continue
-			return true;
-		}
-		results.push_back(lobbyGAMESTRUCTtoLobbyGameInfo(lobbyGame));
-		return true;
-	},
-	[&lobbyMOTD](std::string&& lobbyMOTDResult) {
-		lobbyMOTD = std::move(lobbyMOTDResult);
-	});
-
-	if (fetchInfo->completionHandler)
-	{
-		fetchInfo->completionHandler(success, std::move(results), std::move(lobbyMOTD));
-	}
-
-	delete fetchInfo;
-	return 0;
-}
-
-static WZ_THREAD* NETcreateFindGamesAsyncThread(size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion, const AsyncListLobbyGamesParams::CompletionHandlerFunc& completionHandler)
-{
-	AsyncListLobbyGamesParams *params = new AsyncListLobbyGamesParams(startingIndex, resultsLimit, onlyMatchingLocalVersion, completionHandler);
-
-	auto thread = wzThreadCreate(fetchLobbyListingThreadFunc, params, "wzFetchLobbyGameList");
-	return thread;
-}
 
 void LobbyBrowser::triggerRefresh()
 {
@@ -888,7 +748,7 @@ void LobbyBrowser::triggerRefresh()
 
 void LobbyBrowser::triggerAsyncGameListFetch()
 {
-	if (currentFetchThread) { return; }
+	if (hasPendingFetchRequest) { return; }
 
 	if (NET_getLobbyDisabled())
 	{
@@ -902,96 +762,119 @@ void LobbyBrowser::triggerAsyncGameListFetch()
 	lobbyStatusOverlayWidg->setString("");
 	lobbyStatusOverlayWidg->show(true);
 
-	struct ThreadDetails
-	{
-		WZ_THREAD* pThread = nullptr;
-	};
-	auto pThreadDetails = new ThreadDetails();
-
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
-	currentFetchThread = NETcreateFindGamesAsyncThread(0, 100, false, [weakSelf, pThreadDetails](bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD) {
-		wzAsyncExecOnMainThread([weakSelf, success, results = std::move(results), lobbyMOTD = std::move(lobbyMOTD), pThreadDetails]() mutable {
+	auto dispatchedListRequest = netlobby::EnumerateGames(NETgetLobbyserverAddress(), [weakSelf](netlobby::ListResult results) {
+		wzAsyncExecOnMainThread([weakSelf, results = std::move(results)]() mutable {
 			auto strongSelf = weakSelf.lock();
 			if (strongSelf == nullptr)
 			{
 				debug(LOG_WZ, "Widget gone");
-				// Parent widget is gone - attempt immediate cleanup of the thread
+				// Parent widget is gone
 				// (Can happen if the user closes this form before the async task returns results)
-				if (pThreadDetails && pThreadDetails->pThread)
-				{
-					if (joinFetchThread(pThreadDetails->pThread) >= 0)
-					{
-						pThreadDetails->pThread = nullptr;
-					}
-				}
-				delete pThreadDetails;
 				return;
 			}
-			strongSelf->processAsyncGameListFetchResults(success, std::move(results), std::move(lobbyMOTD));
-			delete pThreadDetails;
+			strongSelf->processAsyncGameListFetchResults(std::move(results));
 		});
-	});
-	pThreadDetails->pThread = currentFetchThread;
-	registerCreatedFetchThread(currentFetchThread);
-	wzThreadStart(currentFetchThread);
+	}, 200);
+
+	if (!dispatchedListRequest)
+	{
+		// Restore widgets config
+		refreshButton->setState(0);
+		lobbyStatusOverlayWidg->showIndeterminateIndicator(false);
+
+		debug(LOG_INFO, "Failed to dispatch lobby list request");
+
+		// Display error if no results
+		if (currentResults.empty())
+		{
+			lobbyStatusOverlayWidg->setString(_("Error dispatching request"));
+			lobbyStatusOverlayWidg->show();
+		}
+		return;
+	}
+
+	hasPendingFetchRequest = true;
 }
 
 void LobbyBrowser::joinLobbyGame(size_t idx, bool asSpectator)
 {
 	ASSERT_OR_RETURN(, idx < currentResults.size(), "Invalid idx: %zu", idx);
 
-	const std::vector<JoinConnectionDescription>& connectionDesc = currentResults[idx].connectionDesc;
-	ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), currentResults[idx].gameId, connectionDesc);
-
 	clearActiveConsole();
 
-	// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 	ingame.localOptionsReceived = false;								// note, we are awaiting options
-	sstrcpy(game.name, currentResults[idx].name.toUtf8().c_str());		// store name
-	joinGame(connectionDesc, asSpectator);
+	sstrcpy(game.name, currentResults[idx].details.name.toUtf8().c_str());		// store name
+
+	ExpectedHostProperties expectedHostProps;
+	expectedHostProps.hostPublicKey = base64Decode(currentResults[idx].details.host.publicIdentity);
+
+	startLobbyJoiningAttempt(sPlayer, NETgetLobbyserverAddress(), currentResults[idx].gameId, asSpectator, expectedHostProps);
 }
 
-void LobbyBrowser::processAsyncGameListFetchResults(bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD)
+void LobbyBrowser::setMotd(const std::string &motd)
 {
-	if (currentFetchThread)
-	{
-		if (joinFetchThread(currentFetchThread) >= 0)
-		{
-			currentFetchThread = nullptr;
-		}
-		else
-		{
-			ASSERT(false, "Logic error: currentFetchThread not in the registered set?");
-		}
-	}
+	auto lobbyMOTDParagraph = std::make_shared<Paragraph>();
+	lobbyMOTDParagraph->setGeometry(0, 0, lobbyStatusMessageContainer->calculateListViewWidth(), lobbyStatusMessageContainer->calculateListViewHeight());
+	lobbyMOTDParagraph->setFont(font_regular);
+	lobbyMOTDParagraph->setFontColour(WZCOL_TEXT_MEDIUM);
+	lobbyMOTDParagraph->setTransparentToMouse(true);
+	lobbyMOTDParagraph->addText(WzString::fromUtf8(motd));
+	lobbyStatusMessageContainer->addItem(lobbyMOTDParagraph);
+}
+
+void LobbyBrowser::processAsyncGameListFetchResults(netlobby::ListResult&& results)
+{
+	hasPendingFetchRequest = false;
 
 	refreshButton->setState(0);
 	lobbyStatusOverlayWidg->showIndeterminateIndicator(false);
 
-	table->clearRows();
-	lobbyStatusMessageContainer->clear();
-
-	if (!success)
+	if (!results.has_value())
 	{
+		if (results.error().errCode == "RATE_LIMITED" && !currentResults.empty())
+		{
+			// Have prior results, hit temporary rate limit - silently ignore
+			return;
+		}
+
 		lobbyStatusOverlayWidg->setString(_("Failed to connect to lobby server"));
+
+		table->clearRows();
+		lobbyStatusMessageContainer->clear();
 		currentResults.clear();
 		return;
 	}
 
-	currentResults = std::move(results);
+	table->clearRows();
+	lobbyStatusMessageContainer->clear();
+
+	currentResults = std::move(results.value().games);
 	populateTableFromGameList();
 
 	// Display the lobby MOTD
-	if (!lobbyMOTD.empty())
+	if (!results.value().lobbyMOTD.empty())
 	{
-		auto lobbyMOTDParagraph = std::make_shared<Paragraph>();
-		lobbyMOTDParagraph->setGeometry(0, 0, lobbyStatusMessageContainer->calculateListViewWidth(), lobbyStatusMessageContainer->calculateListViewHeight());
-		lobbyMOTDParagraph->setFont(font_regular);
-		lobbyMOTDParagraph->setFontColour(WZCOL_TEXT_MEDIUM);
-		lobbyMOTDParagraph->setTransparentToMouse(true);
-		lobbyMOTDParagraph->addText(WzString::fromUtf8(lobbyMOTD));
-		lobbyStatusMessageContainer->addItem(lobbyMOTDParagraph);
+		setMotd(results.value().lobbyMOTD);
 	}
+}
+
+static inline optional<AllianceType> alliancesModeFromLobbyGameDetails(uint8_t alliancesMode)
+{
+	if (alliancesMode <= ALLIANCE_TYPE_MAX)
+	{
+		return static_cast<AllianceType>(alliancesMode);
+	}
+	return nullopt;
+}
+
+static inline optional<BLIND_MODE> blindModeFromLobbyGameDetails(uint8_t blindMode)
+{
+	if (blindMode <= static_cast<uint8_t>(BLIND_MODE_MAX))
+	{
+		return static_cast<BLIND_MODE>(blindMode);
+	}
+	return nullopt;
 }
 
 void LobbyBrowser::populateTableFromGameList()
@@ -1008,16 +891,17 @@ void LobbyBrowser::populateTableFromGameList()
 	// Populate table with the results
 	for (size_t idx = 0; idx < currentResults.size(); idx++)
 	{
-		const auto& gameInfo = currentResults[idx];
+		const auto& listing = currentResults[idx];
+		const auto& gameInfo = listing.details;
 
-		foundGreaterVersion = foundGreaterVersion || NETisGreaterVersion(gameInfo.netcode_version_major, gameInfo.netcode_version_minor);
+		foundGreaterVersion = foundGreaterVersion || NETisGreaterVersion(gameInfo.netcodeVer.major, gameInfo.netcodeVer.minor);
 
-		bool isCompatibleGame = NETisCorrectVersion(gameInfo.netcode_version_major, gameInfo.netcode_version_minor);
+		bool isCompatibleGame = NETisCorrectVersion(gameInfo.netcodeVer.major, gameInfo.netcodeVer.minor);
 		if (filterIncompatible && !isCompatibleGame)
 		{
 			continue;
 		}
-		if (filterEmpty && gameInfo.joinedPlayers == 0 && !isBlindSimpleLobby(gameInfo.blindMode))
+		if (filterEmpty && gameInfo.players.current == 0 && !isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE)))
 		{
 			continue;
 		}
@@ -1026,7 +910,7 @@ void LobbyBrowser::populateTableFromGameList()
 			continue;
 		}
 
-		auto columnWidgets = createLobbyGameRowColumnWidgets(idx, gameInfo);
+		auto columnWidgets = createLobbyGameRowColumnWidgets(idx, listing);
 		int32_t rowHeight = 0;
 		for (size_t i = 0; i < columnWidgets.size(); ++i)
 		{
@@ -1038,9 +922,10 @@ void LobbyBrowser::populateTableFromGameList()
 		row->setDisabledColor(pal_RGBA(0, 0, 0, 100));
 		if (isCompatibleGame)
 		{
+			const bool blindSimpleLobby = isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE));
 			row->setHighlightsOnMouseOver(true);
 			row->setHighlightColor(pal_RGBA(5,29,245,200));
-			row->setBackgroundColor(isBlindSimpleLobby(gameInfo.blindMode) ? pal_RGBA(0,20,130,50) : pal_RGBA(0,0,0,50));
+			row->setBackgroundColor(blindSimpleLobby ? pal_RGBA(0,20,130,50) : pal_RGBA(0,0,0,50));
 		}
 		else
 		{
@@ -1048,7 +933,7 @@ void LobbyBrowser::populateTableFromGameList()
 			row->setDisabledColor(pal_RGBA(0,0,0,120));
 			WzString tooltip = _("Your version of Warzone is incompatible with this game.");
 			tooltip += "\n";
-			tooltip += WzString::format(_("Host Version: %s"), gameInfo.gameVersionStr.toUtf8().c_str());
+			tooltip += WzString::format(_("Host Version: %s"), gameInfo.versionStr.toUtf8().c_str());
 			row->setTip(tooltip.toUtf8());
 		}
 		row->addOnClickHandler([weakSelf, idx](W_BUTTON&) {
@@ -1095,8 +980,9 @@ void LobbyBrowser::populateTableFromGameList()
 	}
 }
 
-std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(size_t idx, const LobbyGameInfo& gameInfo)
+std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(size_t idx, const netlobby::GameListing& listing)
 {
+	const auto& gameInfo = listing.details;
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 
 	std::shared_ptr<LobbyGameIconWidget> privateGameWidg;
@@ -1111,19 +997,19 @@ std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidge
 	privateGameWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(privateGameWidg);
 
-	if (!isBlindSimpleLobby(gameInfo.blindMode))
+	if (!isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE)))
 	{
-		auto playersWidg = LobbyGamePlayersWidget::make(gameInfo.joinedPlayers, gameInfo.maxPlayers);
+		auto playersWidg = LobbyGamePlayersWidget::make(gameInfo.players.current, gameInfo.players.max);
 		playersWidg->setTransparentToClicks(true);
 		columnWidgets.push_back(playersWidg);
 	}
 	else
 	{
-		UWORD frontendImgID = (gameInfo.joinedPlayers > 0) ? IMAGE_PERSON_FILL : IMAGE_PERSON;
+		UWORD frontendImgID = (gameInfo.players.current > 0) ? IMAGE_PERSON_FILL : IMAGE_PERSON;
 		auto playersWidg = LobbyGameIconWidget::make(frontendImgID);
-		if (gameInfo.joinedPlayers > 0)
+		if (gameInfo.players.current > 0)
 		{
-			playersWidg->setTip(astringf(_("%d players queued"), static_cast<int>(gameInfo.joinedPlayers)));
+			playersWidg->setTip(astringf(_("%d players queued"), static_cast<int>(gameInfo.players.current)));
 		}
 		else
 		{
@@ -1134,22 +1020,27 @@ std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidge
 		columnWidgets.push_back(playersWidg);
 	}
 
-	auto nameWidg = LobbyGameNameWidget::make(gameInfo.name, gameInfo.hostName);
+	auto nameWidg = LobbyGameNameWidget::make(gameInfo.name, gameInfo.host.name);
 	nameWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(nameWidg);
 
-	auto mapWidg = LobbyGameMapWidget::make(gameInfo.mapName, gameInfo.alliancesMode, gameInfo.blindMode);
+	auto mapWidg = LobbyGameMapWidget::make(gameInfo.map.name, alliancesModeFromLobbyGameDetails(gameInfo.alliancesMode), blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE));
 	mapWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(mapWidg);
 
-	auto modsWidg = LobbyGameModsWidget::make(gameInfo.mods, gameInfo.limits & NO_VTOLS, gameInfo.limits & NO_TANKS, gameInfo.limits & NO_BORGS);
+	auto modsWidg = LobbyGameModsWidget::make(
+		gameInfo.mods,
+		gameInfo.limits & static_cast<uint8_t>(netlobby::StructureLimits::NO_VTOLS),
+		gameInfo.limits & static_cast<uint8_t>(netlobby::StructureLimits::NO_TANKS),
+		gameInfo.limits & static_cast<uint8_t>(netlobby::StructureLimits::NO_BORGS)
+	);
 	modsWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(modsWidg);
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
 
 	LobbyActionWidgets::OnSpectateHandlerFunc onSpectateFunc = nullptr;
-	if (gameInfo.spectatorInfo.availableSpectatorSlots() > 0)
+	if (gameInfo.spectators.availableSlots() > 0)
 	{
 		onSpectateFunc = [weakSelf, idx]() {
 			auto strongSelf = weakSelf.lock();
@@ -1454,16 +1345,4 @@ bool refreshLobbyBrowser(const std::shared_ptr<WIDGET>& lobbyBrowserWidg)
 	ASSERT_OR_RETURN(false, lobbyBrowser != nullptr, "Not a LobbyBrowser");
 	lobbyBrowser->triggerRefresh();
 	return true;
-}
-
-// Needed because of current lobby server (which uses TCP connections / connection provider)
-// Ensure that all pending fetches have finished (before anything might clean up the connection provider)
-void shutdownLobbyBrowserFetches()
-{
-	// Force-wait for any background fetch threads
-	for (const auto thread : pendingFetchThreads)
-	{
-		wzThreadJoin(thread);
-	}
-	pendingFetchThreads.clear();
 }

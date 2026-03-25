@@ -229,7 +229,17 @@ TITLECODE titleLoop()
 			// Don't call `NETinit()` just yet.
 			// It will be automatically called by `joinGame()` upon connection attempt
 			// with the correct connection provider type corresponding to the connection string.
-			joinGame(iptoconnect, cliConnectToIpAsSpectator);
+			joinGame(iptoconnect, cliConnectAsSpectator);
+		}
+		else if (!cli_lobby_game_to_connect_str().empty())
+		{
+			NetPlay.bComms = true; // use network = true
+			// Ensure the joinGame has a place to return to
+			changeTitleMode(TITLE);
+			// Don't call `NETinit()` just yet.
+			// It will be automatically called upon connection attempt
+			// with the correct connection provider type corresponding to discovered connection info.
+			joinLobbyGame(NETgetLobbyserverAddress(), cli_lobby_game_to_connect_str(), cliConnectAsSpectator);
 		}
 		else
 		{

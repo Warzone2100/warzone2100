@@ -37,6 +37,8 @@ const char* WZ_DECL_PURE version_getLatestTag();
 std::string version_getBuildIdentifierReleaseString();
 std::string version_getBuildIdentifierReleaseEnvironment();
 
+std::string version_getHTTPUserAgentString();
+
 #define TAGVER_MAX_QUALIF_LEN 16
 struct TagVer
 {

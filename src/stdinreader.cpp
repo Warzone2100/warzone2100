@@ -1762,9 +1762,9 @@ void wz_command_interface_output_room_status_json(bool queued)
 	if (NetPlay.isHost)
 	{
 		auto lobbyGameId = NET_getCurrentHostedLobbyGameId();
-		if (lobbyGameId != 0)
+		if (!lobbyGameId.empty())
 		{
-			data["lobbyid"] = std::to_string(lobbyGameId);
+			data["lobbyid"] = lobbyGameId;
 		}
 	}
 	data["map"] = game.map;

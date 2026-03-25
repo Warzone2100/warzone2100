@@ -56,6 +56,7 @@
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
 #include "terrain.h"
+#include "lib/netplay/netlobby.h"
 #include "hci/groups.h"
 
 #include <type_traits>
@@ -67,7 +68,6 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 
-#define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 #define BASECONFVERSION		1
 #define CURRCONFVERSION		4
@@ -473,12 +473,11 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
-	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
+	NETsetLobbyserverAddress(iniGetString("lobbyserver", std::string(netlobby::GetDefaultLobbyAddress())).value());
 	mpSetServerName(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 //	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 //	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
-	NETsetMasterserverPort(iniGetInteger("masterserver_port", MASTERSERVERPORT).value());
 	if(!netGameserverPortOverride)  // do not load the config port setting if there's a command-line override
 	{
 		NETsetGameserverPort(iniGetInteger("gameserver_port", GAMESERVERPORT).value());
@@ -486,6 +485,22 @@ bool loadConfig()
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
 	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
 	NETsetEnableTCPNoDelay(iniGetBool("tcp_nodelay", NETgetEnableTCPNoDelay()).value());
+	{
+		auto lobbyHostJoinOpts = NETgetLobbyHostJoinOptions();
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_botProt"))
+		{
+			lobbyHostJoinOpts.botProt = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_proxyIPs"))
+		{
+			lobbyHostJoinOpts.proxyIPs = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_hostingIPs"))
+		{
+			lobbyHostJoinOpts.hostingIPs = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		NETsetLobbyHostJoinOptions(lobbyHostJoinOpts);
+	}
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
@@ -840,8 +855,7 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
-	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
+	iniSetString("lobbyserver", NETgetLobbyserverAddress());
 	iniSetString("server_name", mpGetServerName());
 	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
 	{

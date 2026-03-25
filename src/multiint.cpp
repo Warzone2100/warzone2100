@@ -1046,75 +1046,6 @@ void from_json(const nlohmann::json& j, JoinConnectionDescription& v)
 	v.type = j.at("t").get<JoinConnectionDescription::JoinConnectionType>();
 }
 
-// NOTE: Must call NETinit(); before this will actually work
-std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
-{
-	WzString originalLobbyServerName = WzString::fromUtf8(NETgetMasterserverName());
-	unsigned int originalLobbyServerPort = NETgetMasterserverPort();
-
-	if (!lobbyAddress.empty())
-	{
-		if (lobbyPort == 0)
-		{
-			debug(LOG_ERROR, "Invalid lobby port #");
-			return {};
-		}
-		NETsetMasterserverName(lobbyAddress.c_str());
-		NETsetMasterserverPort(lobbyPort);
-	}
-
-	auto cleanup = [&]() {
-		NETsetMasterserverName(originalLobbyServerName.toUtf8().c_str());
-		NETsetMasterserverPort(originalLobbyServerPort);
-	};
-
-	GAMESTRUCT lobbyGame;
-	memset(&lobbyGame, 0x00, sizeof(lobbyGame));
-	if (!NETfindGame(lobbyGameId, lobbyGame))
-	{
-		// failed to get list of games from lobby server
-		debug(LOG_ERROR, "Failed to find gameId in lobby server");
-		cleanup();
-		return {};
-	}
-
-	if (lobbyGame.desc.dwSize == 0)
-	{
-		debug(LOG_ERROR, "Invalid game struct");
-		cleanup();
-		return {};
-	}
-
-	if (lobbyGame.gameId != lobbyGameId)
-	{
-		ASSERT(lobbyGame.gameId == lobbyGameId, "NETfindGame returned a non-matching game"); // logic error
-		cleanup();
-		return {};
-	}
-
-	// found the game id, but is it compatible?
-
-	if (!NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
-	{
-		// incompatible version
-		debug(LOG_ERROR, "Failed to find a matching + compatible game in the lobby server");
-		cleanup();
-		return {};
-	}
-
-	// found the game
-	if (strlen(lobbyGame.desc.host) == 0)
-	{
-		debug(LOG_ERROR, "Found the game, but no host details available");
-		cleanup();
-		return {};
-	}
-	std::string host = lobbyGame.desc.host;
-	std::vector<JoinConnectionDescription> connList;
-	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, host, lobbyGame.hostPort);
-	return connList;
-}
-
 void joinGame(const char *connectionString, bool asSpectator /*= false*/)
 {
 	const char* a = strchr(connectionString, '[');
@@ -1165,8 +1096,14 @@ void joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
 	joinGame(connList, asSpectator);
 }
 
-void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/) {
+void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/)
+{
 	startJoiningAttempt(sPlayer, connection_list, asSpectator);
+}
+
+void joinLobbyGame(const std::string& lobbyAddress, const std::string& lobbyGameId, bool asSpectator /*= false*/)
+{
+	startLobbyJoiningAttempt(sPlayer, lobbyAddress, lobbyGameId, asSpectator);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -2487,7 +2424,6 @@ void WzMultiplayerOptionsTitleUI::openMapChooser()
 		sendOptions();
 
 		NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
-		NETregisterServer(WZ_SERVER_UPDATE);
 	}
 }
 
@@ -6092,7 +6028,6 @@ void multiLobbyRandomizeOptions()
 	refreshMultiplayerOptionsTitleUIIfActive();
 
 	NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-	NETregisterServer(WZ_SERVER_UPDATE);
 }
 
 void displayLobbyDisabledNotification()
@@ -6148,7 +6083,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	}
 
 	const bool bIsAutoHostOrAutoGame = getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost;
-	if (!hostCampaign((char*)game.name, (char*)sPlayer, spectatorHost, bIsAutoHostOrAutoGame))
+	if (!hostCampaign((char*)game.name, (char*)sPlayer, spectatorHost, bIsAutoHostOrAutoGame, defaultOpenSpectatorSlots))
 	{
 		displayRoomSystemMessage(_("Sorry! Failed to host the game."));
 		wz_command_interface_output("WZEVENT: hostingFailed\n");
@@ -6171,21 +6106,6 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 
 	ingame.localOptionsReceived = true;
 
-	if (NetPlay.bComms)
-	{
-		auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
-		auto desiredDefaultOpenSpectatorSlots = std::min<uint16_t>(defaultOpenSpectatorSlots, MAX_SPECTATOR_SLOTS);
-		if (currentSpectatorSlotInfo.availableSpectatorSlots() < desiredDefaultOpenSpectatorSlots)
-		{
-			for (uint16_t addedSpecSlots = currentSpectatorSlotInfo.availableSpectatorSlots(); addedSpecSlots < desiredDefaultOpenSpectatorSlots; ++addedSpecSlots)
-			{
-				if (!NETopenNewSpectatorSlot())
-				{
-					break;
-				}
-			}
-		}
-	}
 
 	addGameOptions();
 	addChatBox();
@@ -6241,7 +6161,6 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			{
 				sendOptions();
 				NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 		else
@@ -6345,7 +6264,7 @@ void startMultiplayerGame()
 		createLimitSet();
 		debug(LOG_NET, "sending our options to all clients");
 		sendOptions();
-		NEThaltJoining();							// stop new players entering.
+		NEThaltJoining(true);						// stop new players entering.
 		ingame.TimeEveryoneIsInGame = nullopt;
 		ingame.endTime = nullopt;
 		ingame.isAllPlayersDataOK = false;
@@ -6462,7 +6381,6 @@ public:
 		sendOptions();
 		refreshMultiplayerOptionsTitleUIIfActive(); //refresh to see the proper tech level in the map name
 		NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-		NETregisterServer(WZ_SERVER_UPDATE);
 		return true;
 	}
 	virtual bool changeAlliances(uint8_t allianceValue) override
@@ -6480,7 +6398,6 @@ public:
 		sendOptions();
 		refreshMultiplayerOptionsTitleUIIfActive(); //refresh to see the proper tech level in the map name
 		NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-		NETregisterServer(WZ_SERVER_UPDATE);
 		return true;
 	}
 	virtual bool changeScavengers(uint8_t scavsValue) override
@@ -7318,7 +7235,6 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 					{
 						sendOptions();
 						NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
-						NETregisterServer(WZ_SERVER_UPDATE);
 					}
 				}
 				else
@@ -7402,7 +7318,6 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 					{
 						sendOptions();
 						NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
-						NETregisterServer(WZ_SERVER_UPDATE);
 					}
 
 					wz_command_interface_output_room_status_json(true);

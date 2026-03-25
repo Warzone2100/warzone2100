@@ -454,13 +454,16 @@ bool recvOptions(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs)
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs, uint16_t desiredOpenSpectatorSlots)
 {
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", SessionName, hostPlayerName);
 
 	freeMessages();
 
-	if (!NEThostGame(SessionName, hostPlayerName, spectatorHost, static_cast<uint32_t>(game.type), 0, static_cast<uint32_t>(game.blindMode), 0, game.maxPlayers, game.alliance, game.techLevel, game.power, game.base))
+	PLAYERSTATS playerStats;
+	loadMultiStats(hostPlayerName, &playerStats);
+
+	if (!NEThostGame(SessionName, hostPlayerName, playerStats.identity, spectatorHost, static_cast<uint32_t>(game.type), static_cast<uint32_t>(game.blindMode), game.maxPlayers, desiredOpenSpectatorSlots, game.alliance, game.techLevel, game.power, game.base))
 	{
 		return false;
 	}
@@ -491,8 +494,6 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorH
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
-	PLAYERSTATS playerStats;
-	loadMultiStats(hostPlayerName, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 

@@ -39,6 +39,12 @@
 #include <functional>
 #include <memory>
 
+namespace netlobby
+{
+	struct HostJoinOptions;
+	enum class HostJoinOptionType;
+}
+
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -171,53 +177,6 @@ enum SYNC_OPT_TYPES
 
 static_assert(MaxMsgSize <= UINT16_MAX, "NetMessage/NetMessageBuilder encodes message length as a uint16_t");
 
-struct SESSIONDESC  //Available game storage... JUST FOR REFERENCE!
-{
-	int32_t dwSize;
-	uint8_t alliances;
-	uint8_t techLevel;
-	uint8_t powerLevel;
-	uint8_t basesLevel;
-	char host[40];	// host's ip address (can fit a full IPv4 and IPv6 address + terminating NUL)
-	int32_t dwMaxPlayers;
-	int32_t dwCurrentPlayers;
-	uint32_t dwUserFlags[4]; // {game.type, openSpectatorSlots, blindMode, unused)
-};
-
-/**
- * @note when changing this structure, NETsendGAMESTRUCT, NETrecvGAMESTRUCT and
- *       the lobby server should be changed accordingly.
- */
-struct GAMESTRUCT
-{
-	/* Version of this structure and thus the binary lobby protocol.
-	 * @NOTE: <em>MUST</em> be the first item of this struct.
-	 */
-	uint32_t	GAMESTRUCT_VERSION;
-
-	char		name[StringSize];
-	SESSIONDESC	desc;
-	// END of old GAMESTRUCT format
-	// NOTE: do NOT save the following items in game.c--it will break savegames.
-	char		secondaryHosts[2][40];
-	char		extra[extra_string_size];		// extra string (future use)
-	uint16_t	hostPort;						// server port
-	char		mapname[map_string_size];		// map server is hosting
-	char		hostname[hostname_string_size];	// ...
-	char		versionstring[StringSize];		//
-	char		modlist[modlist_string_size];	// ???
-	uint32_t	game_version_major;				//
-	uint32_t	game_version_minor;				//
-	uint32_t	privateGame;					// if true, it is a private game
-	uint32_t	pureMap;						// If this map has mods in it.
-	uint32_t	Mods;							// number of concatenated mods?
-	// Game ID, used on the lobby server to link games with multiple address families to eachother
-	uint32_t	gameId;
-	uint32_t	limits;							// holds limits bitmask (NO_VTOL|NO_TANKS|NO_BORGS)
-	uint32_t	future3;						// for future use
-	uint32_t	future4;						// for future use
-};
-
 // ////////////////////////////////////////////////////////////////////////
 // Message information. ie. the packets sent between machines.
 
@@ -326,9 +285,6 @@ struct NETPLAY
 	bool		isHostAlive;	/// if the host is still alive
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
-	bool ShowedMOTD;					// only want to show this once
-	bool HaveUpgrade;					// game updates available
-	std::string MOTD;
 
 	std::vector<std::unordered_map<std::string, std::string>> scriptSetPlayerDataStrings;
 	std::vector<std::shared_ptr<PlayerReference>> playerReferences;
@@ -344,7 +300,7 @@ extern SYNC_COUNTER sync_counter;
 // update flags
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
-extern bool cliConnectToIpAsSpectator; // = false; (for cli option)
+extern bool cliConnectAsSpectator; // = false; (for cli option)
 extern bool netGameserverPortOverride; // = false; (for cli override)
 
 extern PortMappingAsyncRequestHandle ipv4MappingRequest;
@@ -446,28 +402,25 @@ SpectatorInfo NETGameGetSpectatorInfo();
 // from netjoin.c
 SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
-bool NEThaltJoining();				// stop new players joining this game
+bool NEThaltJoining(bool matchStarted);				// stop new players joining this game
 
 class WzConnectionProvider;
 std::shared_ptr<WzConnectionProvider> NET_getLobbyConnectionProvider();
-bool NETenumerateGames(const std::shared_ptr<WzConnectionProvider>& connProvider, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc, const std::function<void(std::string&& lobbyMOTD)>& lobbyMotdFunc = nullptr);
-bool NETfindGames(std::vector<GAMESTRUCT>& results, std::string& lobbyMOTD, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
-bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 
 class IClientConnection;
 class IConnectionPollGroup;
 
 bool NETpromoteJoinAttemptToEstablishedConnectionToHost(uint32_t hostPlayer, uint8_t index, const char* playername, NETQUEUE joiningQUEUEInfo, IClientConnection** client_joining_socket, IConnectionPollGroup** client_joining_socket_set);
-bool NEThostGame(const char *SessionName, const char *PlayerName, bool spectatorHost, // host a game
-                 uint32_t gameType, uint32_t two, uint32_t three, uint32_t four, UDWORD plyrs,
+bool NEThostGame(const char *SessionName, const char *PlayerName, const EcKey& playerIdentity, bool spectatorHost, // host a game
+                 uint32_t gameType, uint32_t blindMode,
+				 UDWORD plyrs, uint16_t desiredOpenSpectatorSlots,
                  uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
 bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 
-void NETsetMasterserverName(const char *hostname);
-const char *NETgetMasterserverName();
-void NETsetMasterserverPort(unsigned int port);
-unsigned int NETgetMasterserverPort();
+void NETsetLobbyserverAddress(std::string_view lobbyAddress);
+const std::string& NETgetLobbyserverAddress();
+
 void NETsetGameserverPort(unsigned int port);
 unsigned int NETgetGameserverPort();
 void NETsetJoinPreferenceIPv6(bool bTryIPv6First);
@@ -493,6 +446,19 @@ void NET_InitPlayers(bool initTeams = false, bool initSpectator = false);
 uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
 void NETsetLobbyConfigFlagsFields(uint8_t alliancesType, uint8_t techLevel, uint8_t powerLevel, uint8_t basesLevel);
+void NETsetLobbyLimitFlags(uint8_t ingameLimitFlags);
+const netlobby::HostJoinOptions& NETgetLobbyHostJoinOptions();
+void NETsetLobbyHostJoinOptions(const netlobby::HostJoinOptions& newOpts);
+
+enum class LobbyHostDirectJoinOption
+{
+	None,
+	Local,
+	All
+};
+LobbyHostDirectJoinOption NETgetLobbyHostDirectJoinOption();
+void NETsetLobbyHostDirectJoinOption(LobbyHostDirectJoinOption newValue);
+
 std::vector<uint8_t> NET_getHumanPlayers(void);
 
 const std::vector<WZFile>& NET_getDownloadingWzFiles();
@@ -502,7 +468,8 @@ void NET_clearDownloadingWZFiles();
 bool NET_getLobbyDisabled();
 const std::string& NET_getLobbyDisabledInfoLinkURL();
 void NET_setLobbyDisabled(const std::string& infoLinkURL);
-uint32_t NET_getCurrentHostedLobbyGameId();
+std::string NET_getCurrentHostedLobbyGameId();
+optional<bool> NET_getHostJoinOptionSupportedByLobby(netlobby::HostJoinOptionType optType);
 
 // If a client, retrieve the current host's address
 optional<std::string> NET_getCurrentHostTextAddress();
@@ -510,7 +477,7 @@ optional<std::string> NET_getCurrentHostTextAddress();
 bool NETGameIsLocked();
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
-bool NETregisterServer(int state);
+
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 

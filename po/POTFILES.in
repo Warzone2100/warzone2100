@@ -318,6 +318,7 @@ lib/netplay/gns/gns_error_categories.cpp
 lib/netplay/gns/gns_listen_socket.cpp
 lib/netplay/listen_socket.cpp
 lib/netplay/netjoin.cpp
+lib/netplay/netlobby.cpp
 lib/netplay/netlog.cpp
 lib/netplay/netpermissions.cpp
 lib/netplay/netplay.cpp

@@ -139,6 +139,7 @@ struct MULTIPLAYERINGAME
 	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
+	// NOTE: Must match up with limitIcons in multilobbyoptions.h !!!
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
 #define MPFLAGS_NO_CYBORGS	0x02  		///< Flag for cyborgs disabled
 #define MPFLAGS_NO_VTOLS	0x04  		///< Flag for VTOLs disabled
@@ -198,13 +199,6 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
-
-// Bitmask for client lobby
-
-#define NO_VTOLS  1
-#define NO_TANKS 2
-#define NO_BORGS 4
-
 
 #define ANYPLAYER				99
 
@@ -322,17 +316,18 @@ bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid);
 bool multiShutdown();
 bool sendLeavingMsg();
 
-bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs);
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs, uint16_t desiredOpenSpectatorSlots);
 
 void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v);
 void to_json(nlohmann::json& j, const JoinConnectionDescription& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription& v);
 
-std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
 void joinGame(const char *connectionString, bool asSpectator = false);
 void joinGame(const char *host, uint32_t port, bool asSpectator = false);
 void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
+void joinLobbyGame(const std::string& lobbyAddress, const std::string& lobbyGameId, bool asSpectator = false);
+
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

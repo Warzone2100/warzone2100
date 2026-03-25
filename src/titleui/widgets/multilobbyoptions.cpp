@@ -830,7 +830,6 @@ static void gameNameEditHandlerFunc(W_EDITBOX& widg)
 	{
 		NETsetLobbyOptField(game.name, NET_LOBBY_OPT_FIELD::GNAME);
 		sendOptions();
-		NETregisterServer(WZ_SERVER_UPDATE);
 
 		displayRoomSystemMessage(_("Game Name Updated."));
 	}
@@ -1038,7 +1037,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				sendOptions();
 
 				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1066,7 +1064,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				sendOptions();
 
 				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1095,7 +1092,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				sendOptions();
 
 				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1124,7 +1120,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 					sendOptions();
 
 					NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-					NETregisterServer(WZ_SERVER_UPDATE);
 				}
 			}
 		});

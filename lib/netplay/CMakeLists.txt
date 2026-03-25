@@ -39,6 +39,7 @@ set (SRC
 	"ip_helpers.cpp"
 	"listen_socket.cpp"
 	"netjoin.cpp"
+	"netlobby.cpp"
 	"netlog.cpp"
 	"netpermissions.cpp"
 	"netplay.cpp"
