@@ -54,11 +54,11 @@ if [[ $DISTRO == "raspberrypios" || $DISTRO == "debian" ]]; then
 
   if [[ "${VERSION_PARTS[0]}" == "12" || "${VERSION_PARTS[0]}" == "13" ]]; then
     echo "Installing build-dependencies for Debian 12 / 13"
-    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
   elif [ "${VERSION_PARTS[0]}" -ge "14" ]; then
     echo "Installing build-dependencies for Debian 14+"
-    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+    DEBIAN_FRONTEND=noninteractive apt -y install cmake git zip unzip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
   else
     echo "Script does not currently support Debian ${VERSION_PARTS[0]} (${VERSION})"
     exit 1
@@ -93,15 +93,15 @@ if [ "${DISTRO}" == "ubuntu" ]; then
 
   if [ "${VERSION_PARTS[0]}" -eq "18" ]; then
     echo "Installing build-dependencies for Ubuntu 18.x"
-    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
   elif [[ "${VERSION_PARTS[0]}" -ge 20 && "${VERSION_PARTS[0]}" -lt 25 ]]; then
     echo "Installing build-dependencies for Ubuntu 20.x - 24.x"
-    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
     echo "WARN: You will need to compile and install SDL3 from source!"
   elif [ "${VERSION_PARTS[0]}" -ge "25" ]; then
     echo "Installing build-dependencies for Ubuntu 25.x+"
-    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev
+    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl3-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libogg-dev libopus-dev libtheora-dev libxrandr-dev libfreetype-dev libfribidi-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev libprotobuf-dev protobuf-compiler libzip-dev libturbojpeg0-dev
   else
     echo "Script does not currently support Ubuntu ${VERSION_PARTS[0]} (${VERSION})"
     exit 1
@@ -127,7 +127,7 @@ if [ "${DISTRO}" == "fedora" ]; then
   fi
 
   echo "Installing build-dependencies for Fedora"
-  dnf -y install cmake git p7zip gettext rubygem-asciidoctor SDL3-devel physfs-devel libpng-devel openal-soft-devel libvorbis-devel libogg-devel opus-devel libtheora-devel freetype-devel fribidi-devel harfbuzz-devel libcurl-devel libsodium-devel sqlite-devel protobuf-devel libzip-devel
+  dnf -y install cmake git p7zip gettext rubygem-asciidoctor SDL3-devel physfs-devel libpng-devel openal-soft-devel libvorbis-devel libogg-devel opus-devel libtheora-devel freetype-devel fribidi-devel harfbuzz-devel libcurl-devel libsodium-devel sqlite-devel protobuf-devel libzip-devel libjpeg-turbo-devel
   # Required because of broken CMake config files installed by libzip-dev:
   dnf -y install libzip-tools
   dnf -y install vulkan-devel glslc
@@ -146,7 +146,7 @@ if [ "${DISTRO}" == "alpine" ]; then
   fi
 
   echo "Installing build-dependencies for Alpine"
-  apk add --no-cache cmake git p7zip gettext asciidoctor sdl3-dev physfs-dev libpng-dev openal-soft-dev libvorbis-dev libogg-dev opus-dev libtheora-dev freetype-dev fribidi-dev harfbuzz-dev curl-dev libsodium-dev sqlite-dev protobuf-dev libzip-dev
+  apk add --no-cache cmake git p7zip gettext asciidoctor sdl3-dev physfs-dev libpng-dev openal-soft-dev libvorbis-dev libogg-dev opus-dev libtheora-dev freetype-dev fribidi-dev harfbuzz-dev curl-dev libsodium-dev sqlite-dev protobuf-dev libzip-dev libjpeg-turbo-dev
 fi
 
 ##################
@@ -162,7 +162,7 @@ if [ "${DISTRO}" == "archlinux" ]; then
   fi
 
   echo "Installing build-dependencies for ArchLinux"
-  pacman -S --noconfirm cmake git p7zip gettext asciidoctor sdl3 physfs libpng openal libvorbis libogg opus libtheora xorg-xrandr freetype2 fribidi harfbuzz curl libsodium sqlite protobuf libzip
+  pacman -S --noconfirm cmake git p7zip gettext asciidoctor sdl3 physfs libpng openal libvorbis libogg opus libtheora xorg-xrandr freetype2 fribidi harfbuzz curl libsodium sqlite protobuf libzip libjpeg-turbo
 fi
 
 ##################
@@ -178,8 +178,9 @@ if [ "${DISTRO}" == "opensuse-tumbleweed" ]; then
   fi
 
   echo "Installing build-dependencies for OpenSUSE Tumbleweed"
-  zypper install -y libSDL2-devel libphysfs-devel libpng16-devel libtheora-devel libvorbis-devel libogg-devel libopus-devel freetype-devel fribidi-devel harfbuzz-devel openal-soft-devel libsodium-devel sqlite3-devel libzip-devel libtinygettext0 ruby3.0-rubygem-asciidoctor vulkan-devel protobuf-devel
+  zypper install -y libSDL2-devel libphysfs-devel libpng16-devel libtheora-devel libvorbis-devel libogg-devel libopus-devel freetype-devel fribidi-devel harfbuzz-devel openal-soft-devel libsodium-devel sqlite3-devel libzip-devel libtinygettext0 ruby3.0-rubygem-asciidoctor vulkan-devel protobuf-devel libjpeg-turbo
 fi
+
 ##################
 # Gentoo
 ##################
@@ -193,7 +194,7 @@ if [ "${DISTRO}" == "gentoo" ]; then
 	fi
 
 	echo "Merge build-dependencies for Gentoo"
-	emerge dev-build/cmake dev-vcs/git dev-ruby/asciidoctor sys-devel/gettext media-libs/libsdl3 dev-games/physfs media-libs/libpng media-libs/libtheora media-libs/libvorbis media-libs/libogg media-libs/opus media-libs/freetype media-libs/harfbuzz dev-libs/fribidi media-libs/openal net-misc/curl dev-libs/libsodium dev-db/sqlite dev-libs/libzip dev-libs/protobuf
+	emerge dev-build/cmake dev-vcs/git dev-ruby/asciidoctor sys-devel/gettext media-libs/libsdl3 dev-games/physfs media-libs/libpng media-libs/libtheora media-libs/libvorbis media-libs/libogg media-libs/opus media-libs/freetype media-libs/harfbuzz dev-libs/fribidi media-libs/openal net-misc/curl dev-libs/libsodium dev-db/sqlite dev-libs/libzip dev-libs/protobuf media-libs/libjpeg-turbo
 fi
 ##################
 

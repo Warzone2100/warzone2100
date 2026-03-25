@@ -89,3 +89,6 @@
 [submodule "tools/blender/pie-addon"]
 	path = tools/blender/pie-addon
 	url = https://github.com/Warzone2100/blender-pie-addon.git
+[submodule "lib/ivis_opengl/3rdparty/libjpeg-turbo"]
+	path = lib/ivis_opengl/3rdparty/libjpeg-turbo
+	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git

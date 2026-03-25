@@ -29,6 +29,7 @@
 			"name": "freetype",
 			"platform": "!emscripten"
 		},
+		"libjpeg-turbo",
 		"libogg",
 		"libtheora",
 		"libvorbis",
