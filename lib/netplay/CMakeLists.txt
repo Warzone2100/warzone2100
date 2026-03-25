@@ -28,6 +28,9 @@ add_dependencies(autorevision_netcodeversion autorevision) # Ensure ordering and
 
 file(GLOB_RECURSE HEADERS "*.h")
 
+file(GLOB_RECURSE EXCLUDED_HEADERS "3rdparty/miniupnp/*.h")
+list(REMOVE_ITEM HEADERS ${EXCLUDED_HEADERS})
+
 set (SRC
 	"byteorder_funcs_wrapper.cpp"
 	"client_connection.cpp"
