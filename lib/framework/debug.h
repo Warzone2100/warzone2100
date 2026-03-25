@@ -209,6 +209,7 @@ enum code_part
 	LOG_RESEARCH,
 	LOG_SAVEGAME,
 	LOG_REPAIRS,
+	LOG_LOBBY,
 	LOG_LAST /**< _must_ be last! */
 };
 
