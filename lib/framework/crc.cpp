@@ -186,6 +186,9 @@ inline void to_json(nlohmann::json& j, const Sha256& k)
 // MARK: - ECDSA
 //================================================================================
 
+OpaqueKeyData::~OpaqueKeyData()
+{ }
+
 size_t _currentSignatureSizeInBytes()
 {
 	return crypto_sign_ed25519_BYTES;
@@ -193,8 +196,9 @@ size_t _currentSignatureSizeInBytes()
 
 #define currentSignatureSizeInBytes _currentSignatureSizeInBytes()
 
-struct EC_KEY
+class EC_KEY : public OpaqueKeyData
 {
+public:
 	std::vector<unsigned char> privateKey;
 	std::vector<unsigned char> publicKey;
 
@@ -226,46 +230,15 @@ struct EC_KEY
 	}
 };
 
-#define EC_KEY_CAST(k) ((EC_KEY *)k)
-
+#define EC_KEY_CAST(k) (std::static_pointer_cast<EC_KEY>(k))
 
 EcKey::EcKey()
 	: vKey(nullptr)
 {}
 
-EcKey::EcKey(EcKey const &b)
-{
-	vKey = b.vKey != nullptr ? new EC_KEY(*EC_KEY_CAST(b.vKey)) : nullptr;
-}
-
-EcKey::EcKey(EcKey &&b)
-	: vKey(nullptr)
-{
-	std::swap(vKey, b.vKey);
-}
-
-EcKey::~EcKey()
-{
-	clear();
-}
-
-EcKey &EcKey::operator =(EcKey const &b)
-{
-	clear();
-	vKey = b.vKey != nullptr ? new EC_KEY(*EC_KEY_CAST(b.vKey)) : nullptr;
-	return *this;
-}
-
-EcKey &EcKey::operator =(EcKey &&b)
-{
-	std::swap(vKey, b.vKey);
-	return *this;
-}
-
 void EcKey::clear()
 {
-	delete (EC_KEY *)vKey;
-	vKey = nullptr;
+	vKey.reset();
 }
 
 bool EcKey::empty() const
@@ -275,7 +248,7 @@ bool EcKey::empty() const
 
 bool EcKey::hasPrivate() const
 {
-	return vKey != nullptr && !((EC_KEY *)vKey)->privateKey.empty();
+	return vKey != nullptr && !EC_KEY_CAST(vKey)->privateKey.empty();
 }
 
 EcKey::Sig EcKey::sign(void const *data, size_t dataLen) const
@@ -390,7 +363,7 @@ bool EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 			return false;
 		}
 
-		vKey = new EC_KEY(std::vector<unsigned char>(0), key);
+		vKey = std::make_shared<EC_KEY>(std::vector<unsigned char>(0), key);
 	}
 	else if (privacy == Private)
 	{
@@ -417,7 +390,7 @@ bool EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 			return false;
 		}
 
-		vKey = new EC_KEY(key, publicKey);
+		vKey = std::make_shared<EC_KEY>(key, publicKey);
 	}
 	else
 	{
@@ -430,19 +403,18 @@ bool EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 
 EcKey EcKey::generate()
 {
-	EC_KEY * key = new EC_KEY(EC_KEY::createAndReserveForCurve());
+	auto key = std::make_shared<EC_KEY>(EC_KEY::createAndReserveForCurve());
 
 	int genResult = crypto_sign_ed25519_keypair(&(key->publicKey[0]), &(key->privateKey[0]));
 	if (genResult != 0)
 	{
 		// crypto_sign_ed25519_keypair failed
 		debug(LOG_ERROR, "Failed to generate key pair");
-		delete key;
 		return EcKey();
 	}
 
 	EcKey ret;
-	ret.vKey = (void *)key;
+	ret.vKey = key;
 	return ret;
 }
 
