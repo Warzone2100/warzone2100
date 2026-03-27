@@ -2703,14 +2703,14 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		{
 			apsDroidLists[player].clear();
 			apsStructLists[player].clear();
-			apsFeatureLists[player].clear();
 			apsFlagPosLists[player].clear();
 			//clear all the messages?
 			apsProxDisp[player].clear();
-			apsSensorList[0].clear();
 			apsExtractorLists[player].clear();
 		}
+		apsFeatureList[0].clear();
 		apsOilList[0].clear();
+		apsSensorList[0].clear();
 		initFactoryNumFlag();
 	}
 
@@ -2722,10 +2722,10 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			apsLimboDroids[player].clear();
 			mission.apsDroidLists[player].clear();
 			mission.apsStructLists[player].clear();
-			mission.apsFeatureLists[player].clear();
 			mission.apsFlagPosLists[player].clear();
 			mission.apsExtractorLists[player].clear();
 		}
+		mission.apsFeatureList[0].clear();
 		mission.apsOilList[0].clear();
 		mission.apsSensorList[0].clear();
 
@@ -3034,7 +3034,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mfeature.json");
 
-		//load the data into apsFeatureLists
+		//load the data into apsFeatureList
 		if (!loadSaveFeature2(aFileName))
 		{
 			aFileName[fileExten] = '\0';
@@ -7218,7 +7218,7 @@ bool writeFeatureFile(const char *pFileName)
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 	int counter = 0;
 
-	for (const FEATURE *psCurr : apsFeatureLists[0])
+	for (const FEATURE *psCurr : apsFeatureList[0])
 	{
 		ini.beginGroup("feature_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 		ini.setValue("name", psCurr->psStats->id);

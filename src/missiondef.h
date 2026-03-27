@@ -68,7 +68,7 @@ struct MISSION
 	PerPlayerExtractorLists apsExtractorLists;
 
 	PerPlayerDroidLists              apsDroidLists;
-	PerPlayerFeatureLists           apsFeatureLists;
+	GlobalFeatureList               apsFeatureList;
 	GlobalSensorList                apsSensorList;
 	GlobalOilList                   apsOilList;
 	PerPlayerFlagPositionLists      apsFlagPosLists;

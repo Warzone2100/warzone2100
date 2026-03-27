@@ -41,9 +41,9 @@ using PerPlayerStructureLists = PerPlayerObjectLists<STRUCTURE, MAX_PLAYERS>;
 using StructureList = typename PerPlayerStructureLists::value_type;
 extern PerPlayerStructureLists apsStructLists;
 
-using PerPlayerFeatureLists = PerPlayerObjectLists<FEATURE, MAX_PLAYERS>;
-using FeatureList = typename PerPlayerFeatureLists::value_type;
-extern PerPlayerFeatureLists apsFeatureLists;
+using GlobalFeatureList = PerPlayerObjectLists<FEATURE, 1>;
+using FeatureList = typename GlobalFeatureList::value_type;
+extern GlobalFeatureList apsFeatureList;
 
 using PerPlayerFlagPositionLists = PerPlayerObjectLists<FLAG_POSITION, MAX_PLAYERS>;
 using FlagPositionList = typename PerPlayerFlagPositionLists::value_type;

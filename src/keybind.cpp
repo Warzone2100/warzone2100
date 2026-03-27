@@ -1318,7 +1318,7 @@ void	kf_ToggleGodMode()
 		godMode = false;
 		setRevealStatus(pastReveal);
 		// now hide the features
-		for (BASE_OBJECT* psFeat : apsFeatureLists[0])
+		for (BASE_OBJECT* psFeat : apsFeatureList[0])
 		{
 			psFeat->visible[selectedPlayer] = 0;
 		}

@@ -846,10 +846,10 @@ void processVisibility()
 		{
 			processVisibilitySelf(psObj);
 		}
-		for (BASE_OBJECT* psObj : apsFeatureLists[player])
-		{
-			processVisibilitySelf(psObj);
-		}
+	}
+	for (BASE_OBJECT* psObj : apsFeatureList[0])
+	{
+		processVisibilitySelf(psObj);
 	}
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
@@ -888,10 +888,10 @@ void processVisibility()
 		{
 			processVisibilityLevel(psObj, addedMessage);
 		}
-		for (BASE_OBJECT* psObj : apsFeatureLists[player])
-		{
-			processVisibilityLevel(psObj, addedMessage);
-		}
+	}
+	for (BASE_OBJECT* psObj : apsFeatureList[0])
+	{
+		processVisibilityLevel(psObj, addedMessage);
 	}
 	if (addedMessage)
 	{

@@ -598,7 +598,7 @@ static void gameStateUpdate()
 
 	executeFnAndProcessScriptQueuedRemovals([]() { proj_UpdateAll(); });
 
-	for (FEATURE *psCFeat : apsFeatureLists[0])
+	for (FEATURE *psCFeat : apsFeatureList[0])
 	{
 		featureUpdate(psCFeat);
 	}

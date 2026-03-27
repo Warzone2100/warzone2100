@@ -1143,7 +1143,7 @@ std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, o
 	}
 
 	std::vector<const FEATURE *> matches;
-	for (const FEATURE *psFeat : apsFeatureLists[0])
+	for (const FEATURE *psFeat : apsFeatureList[0])
 	{
 		if ((playerFilter == ALL_PLAYERS || psFeat->visible[playerFilter])
 		    && !psFeat->died
@@ -2017,7 +2017,7 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 	int feature = getFeatureStatFromName(WzString::fromUtf8(featureName));
 	SCRIPT_ASSERT(nullptr, context, feature >= 0 && feature < asFeatureStats.size(), "Unknown feature name: %s", featureName.c_str());
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
-	for (const FEATURE *psFeat : apsFeatureLists[0])
+	for (const FEATURE *psFeat : apsFeatureList[0])
 	{
 		SCRIPT_ASSERT(nullptr, context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y,
 		              "Building feature on tile already occupied");

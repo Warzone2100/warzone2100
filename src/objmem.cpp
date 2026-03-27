@@ -59,7 +59,7 @@ uint32_t                synchObjID;
 /* The lists of objects allocated */
 PerPlayerDroidLists apsDroidLists;
 PerPlayerStructureLists apsStructLists;
-PerPlayerFeatureLists apsFeatureLists;		///< Only player zero is valid for features. TODO: Reduce to single list.
+GlobalFeatureList apsFeatureList;
 PerPlayerExtractorLists apsExtractorLists;
 GlobalOilList apsOilList;
 GlobalSensorList apsSensorList; ///< List of sensors in the game.
@@ -363,10 +363,11 @@ uint32_t generateSynchronisedObjectId()
 /* Add the object to its list
  * \param list is a pointer to the object list
  */
-template <typename OBJECT>
-static inline void addObjectToList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
+template <typename OBJECT, size_t PlayerCount = MAX_PLAYERS>
+static inline void addObjectToList(PerPlayerObjectLists<OBJECT, PlayerCount>& list, OBJECT* object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+	ASSERT_OR_RETURN(, player < PlayerCount, "Invalid player index: %d", player);
 
 	// Prepend the object to the top of the list
 	list[player].emplace_front(object);
@@ -390,10 +391,11 @@ static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int p
  * \param list is a pointer to the object list
  * \param del is a pointer to the object to remove
  */
-template <typename OBJECT>
-static inline void destroyObject(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object)
+template <typename OBJECT, size_t PlayerCount = MAX_PLAYERS>
+static inline void destroyObject(PerPlayerObjectLists<OBJECT, PlayerCount>& list, OBJECT* object)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+	ASSERT_OR_RETURN(, object->player < PlayerCount, "Invalid player index: %d", object->player);
 	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
 
 	auto it = std::find(list[object->player].begin(), list[object->player].end(), object);
@@ -751,7 +753,7 @@ void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureList
 /* add the feature to the Feature Lists */
 void addFeature(FEATURE *psFeatureToAdd)
 {
-	addObjectToList(apsFeatureLists, psFeatureToAdd, 0);
+	addObjectToList(apsFeatureList, psFeatureToAdd, 0);
 	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		addObjectToFuncList(apsOilList, psFeatureToAdd, 0);
@@ -766,7 +768,7 @@ void killFeature(FEATURE *psDel)
 	ASSERT(psDel->type == OBJ_FEATURE,
 	       "killFeature: pointer is not a feature");
 	psDel->player = 0;
-	destroyObject(apsFeatureLists, psDel);
+	destroyObject(apsFeatureList, psDel);
 
 	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
@@ -777,7 +779,7 @@ void killFeature(FEATURE *psDel)
 /* Remove all features */
 void freeAllFeatures()
 {
-	freeAllEntitiesImpl<FEATURE, MAX_PLAYERS>(apsFeatureLists);
+	freeAllEntitiesImpl<FEATURE, 1>(apsFeatureList);
 }
 
 /**************************  FLAG_POSITION ********************************/
@@ -994,12 +996,12 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		}
 	case OBJ_FEATURE:
 		{
-			auto pFeat = getBaseObjFromId(apsFeatureLists[0], id);
+			auto pFeat = getBaseObjFromId(apsFeatureList[0], id);
 			if (pFeat)
 			{
 				return pFeat;
 			}
-			pFeat = getBaseObjFromId(mission.apsFeatureLists[0], id);
+			pFeat = getBaseObjFromId(mission.apsFeatureList[0], id);
 			if (pFeat)
 			{
 				return pFeat;
@@ -1118,7 +1120,7 @@ static void objListIntegCheck()
 			       objInfo(psStruct), (void*)psStruct, player, (int)psStruct->player);
 		}
 	}
-	for (const BASE_OBJECT* obj : apsFeatureLists[0])
+	for (const BASE_OBJECT* obj : apsFeatureList[0])
 	{
 		ASSERT(obj->type == OBJ_FEATURE,
 		       "objListIntegCheck: misplaced object in the feature list");
@@ -1150,5 +1152,5 @@ void objCount(int *droids, int *structures, int *features)
 		*structures += apsStructLists[i].size();
 	}
 
-	*features += apsFeatureLists[0].size();
+	*features += apsFeatureList[0].size();
 }

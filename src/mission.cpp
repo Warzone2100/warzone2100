@@ -275,11 +275,11 @@ void initMission()
 	{
 		mission.apsStructLists[inc].clear();
 		mission.apsDroidLists[inc].clear();
-		mission.apsFeatureLists[inc].clear();
 		mission.apsFlagPosLists[inc].clear();
 		mission.apsExtractorLists[inc].clear();
 		apsLimboDroids[inc].clear();
 	}
+	mission.apsFeatureList[0].clear();
 	mission.apsSensorList[0].clear();
 	mission.apsOilList[0].clear();
 	offWorldKeepLists = false;
@@ -342,15 +342,15 @@ bool missionShutDown()
 			mission.apsDroidLists[inc].clear();
 			apsStructLists[inc] = std::move(mission.apsStructLists[inc]);
 			mission.apsStructLists[inc].clear();
-			apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
-			mission.apsFeatureLists[inc].clear();
 			apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
 			mission.apsFlagPosLists[inc].clear();
 			apsExtractorLists[inc] = std::move(mission.apsExtractorLists[inc]);
 			mission.apsExtractorLists[inc].clear();
 		}
+		apsFeatureList[0] = std::move(mission.apsFeatureList[0]);
 		apsSensorList[0] = std::move(mission.apsSensorList[0]);
 		apsOilList[0] = std::move(mission.apsOilList[0]);
+		mission.apsFeatureList[0].clear();
 		mission.apsSensorList[0].clear();
 		mission.apsOilList[0].clear();
 
@@ -796,10 +796,10 @@ static void saveMissionData()
 	{
 		mission.apsStructLists[inc] = apsStructLists[inc];
 		mission.apsDroidLists[inc] = apsDroidLists[inc];
-		mission.apsFeatureLists[inc] = apsFeatureLists[inc];
 		mission.apsFlagPosLists[inc] = apsFlagPosLists[inc];
 		mission.apsExtractorLists[inc] = apsExtractorLists[inc];
 	}
+	mission.apsFeatureList[0] = apsFeatureList[0];
 	mission.apsSensorList[0] = apsSensorList[0];
 	mission.apsOilList[0] = apsOilList[0];
 
@@ -859,17 +859,16 @@ void restoreMissionData()
 		apsStructLists[inc] = std::move(mission.apsStructLists[inc]);
 		mission.apsStructLists[inc].clear();
 
-		apsFeatureLists[inc] = std::move(mission.apsFeatureLists[inc]);
-		mission.apsFeatureLists[inc].clear();
-
 		apsFlagPosLists[inc] = std::move(mission.apsFlagPosLists[inc]);
 		mission.apsFlagPosLists[inc].clear();
 
 		apsExtractorLists[inc] = std::move(mission.apsExtractorLists[inc]);
 		mission.apsExtractorLists[inc].clear();
 	}
+	apsFeatureList[0] = std::move(mission.apsFeatureList[0]);
 	apsSensorList[0] = std::move(mission.apsSensorList[0]);
 	apsOilList[0] = std::move(mission.apsOilList[0]);
+	mission.apsFeatureList[0].clear();
 	mission.apsSensorList[0].clear();
 	apsOilList[0].clear();
 	//swap mission data over
@@ -1406,10 +1405,10 @@ void swapMissionPointers()
 	{
 		std::swap(apsDroidLists[inc],     mission.apsDroidLists[inc]);
 		std::swap(apsStructLists[inc],    mission.apsStructLists[inc]);
-		std::swap(apsFeatureLists[inc],   mission.apsFeatureLists[inc]);
 		std::swap(apsFlagPosLists[inc],   mission.apsFlagPosLists[inc]);
 		std::swap(apsExtractorLists[inc], mission.apsExtractorLists[inc]);
 	}
+	std::swap(apsFeatureList[0],   mission.apsFeatureList[0]);
 	std::swap(apsSensorList[0], mission.apsSensorList[0]);
 	std::swap(apsOilList[0],    mission.apsOilList[0]);
 }

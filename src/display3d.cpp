@@ -2328,7 +2328,7 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	// player can only be 0 for the features.
 
 	/* Go through all the features */
-	for (BASE_OBJECT* obj : apsFeatureLists[0])
+	for (BASE_OBJECT* obj : apsFeatureList[0])
 	{
 		if (obj->type == OBJ_FEATURE
 			&& (obj->died == 0 || obj->died > graphicsTime)
@@ -3711,7 +3711,7 @@ static void	drawDroidSelections()
 		}
 	}
 
-	for (const FEATURE *psFeature : apsFeatureLists[0])
+	for (const FEATURE *psFeature : apsFeatureList[0])
 	{
 		if (!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
 		{

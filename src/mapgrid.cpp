@@ -79,15 +79,15 @@ void gridReset()
 				}
 			}
 		}
-		for (BASE_OBJECT* psObj : apsFeatureLists[player])
+	}
+	for (BASE_OBJECT* psObj : apsFeatureList[0])
+	{
+		if (!psObj->died)
 		{
-			if (!psObj->died)
+			gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
+			for (unsigned char& viewer : psObj->seenThisTick)
 			{
-				gridPointTree->insert(psObj, psObj->pos.x, psObj->pos.y);
-				for (unsigned char& viewer : psObj->seenThisTick)
-				{
-					viewer = 0;
-				}
+				viewer = 0;
 			}
 		}
 	}
@@ -150,7 +150,7 @@ static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t r
 
 	// In case you are curious.
 	//debug(LOG_WARNING, "gridStartIterateFiltered(%d, %d, %u) found %u objects", x, y, radius, (unsigned)gridPointTree->lastQueryResults.size());
-	
+
 	static GridList gridList;
 	gridList.resize(gridPointTree->lastQueryResults.size());
 	for (unsigned n = 0; n < gridList.size(); ++n)

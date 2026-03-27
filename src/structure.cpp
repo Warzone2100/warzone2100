@@ -6092,15 +6092,6 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			}
 		}
 
-		//feature
-		for (FEATURE *psFeat : apsFeatureLists[i])
-		{
-			if (psFeat->visible[losingPlayer])
-			{
-				psFeat->visible[rewardPlayer] = psFeat->visible[losingPlayer];
-			}
-		}
-
 		//droids.
 		for (DROID *psDroid : apsDroidLists[i])
 		{
@@ -6108,6 +6099,15 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			{
 				psDroid->visible[rewardPlayer] = UBYTE_MAX;
 			}
+		}
+	}
+
+	//feature
+	for (FEATURE *psFeat : apsFeatureList[0])
+	{
+		if (psFeat->visible[losingPlayer])
+		{
+			psFeat->visible[rewardPlayer] = psFeat->visible[losingPlayer];
 		}
 	}
 }
