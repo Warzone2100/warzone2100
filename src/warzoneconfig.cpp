@@ -112,6 +112,9 @@ struct WARZONE_GLOBALS
 	// Connection provider used for hosting games
 	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
 
+	// lobby
+	bool lobbyFilterIPv6Only = false;
+
 	// audio cues
 	bool playAudioCue_GroupReporting = true;
 };
@@ -817,6 +820,16 @@ std::string to_string(ConnectionProviderType pt)
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
+}
+
+bool war_getLobbyFilterIPv6Only()
+{
+	return warGlobs.lobbyFilterIPv6Only;
+}
+
+void war_setLobbyFilterIPv6Only(bool enabled)
+{
+	warGlobs.lobbyFilterIPv6Only = enabled;
 }
 
 bool war_getPlayAudioCue_GroupReporting()

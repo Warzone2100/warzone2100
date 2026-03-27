@@ -199,6 +199,9 @@ enum class ConnectionProviderType : uint8_t;
 void war_setHostConnectionProvider(ConnectionProviderType pt);
 ConnectionProviderType war_getHostConnectionProvider();
 
+bool war_getLobbyFilterIPv6Only();
+void war_setLobbyFilterIPv6Only(bool enabled);
+
 bool net_backend_from_str(const char* str, ConnectionProviderType& pt);
 std::string to_string(ConnectionProviderType pt);
 

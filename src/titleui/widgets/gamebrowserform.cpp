@@ -43,6 +43,7 @@
 #include "advcheckbox.h"
 #include "src/screens/joiningscreen.h"
 #include "lib/netplay/netlobby.h"
+#include "src/warzoneconfig.h"
 
 #include <numeric>
 #include <vector>
@@ -735,6 +736,7 @@ private:
 	bool filterIncompatible = true;
 	bool filterEmpty = false;
 	bool filterModded = false;
+	bool filterIPv6Only = false;
 
 	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
 
@@ -877,6 +879,13 @@ static inline optional<BLIND_MODE> blindModeFromLobbyGameDetails(uint8_t blindMo
 	return nullopt;
 }
 
+static bool isIPv6Only(const std::vector<netlobby::ConnectionType>& availableConnectionTypes)
+{
+	return !std::any_of(availableConnectionTypes.begin(), availableConnectionTypes.end(), [](const netlobby::ConnectionType& connType) -> bool {
+		return connType.ipVersion.value_or(netlobby::IPVersion::IPv4) == netlobby::IPVersion::IPv4;
+	});
+}
+
 void LobbyBrowser::populateTableFromGameList()
 {
 	table->clearRows();
@@ -906,6 +915,10 @@ void LobbyBrowser::populateTableFromGameList()
 			continue;
 		}
 		if (filterModded && !gameInfo.mods.empty())
+		{
+			continue;
+		}
+		if (filterIPv6Only && isIPv6Only(listing.availableConnectionTypes))
 		{
 			continue;
 		}
@@ -1066,6 +1079,8 @@ LobbyBrowser::~LobbyBrowser()
 void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 {
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
+
+	filterIPv6Only = war_getLobbyFilterIPv6Only();
 
 	backButton = makeBackButton();
 	if (onBackButtonFunc)
@@ -1299,6 +1314,15 @@ std::shared_ptr<PopoverMenuWidget> LobbyBrowser::createFiltersPopoverForm()
 		if (auto strongSelf = weakSelf.lock())
 		{
 			strongSelf->filterModded = button.isChecked();
+			strongSelf->populateTableFromGameList();
+		}
+	});
+	addOptionsCheckbox(_("Hide IPv6-Only"), filterIPv6Only, false, [weakSelf](WzAdvCheckbox& button){
+		if (auto strongSelf = weakSelf.lock())
+		{
+			bool newValue = button.isChecked();
+			strongSelf->filterIPv6Only = newValue;
+			war_setLobbyFilterIPv6Only(newValue);
 			strongSelf->populateTableFromGameList();
 		}
 	});

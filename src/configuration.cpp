@@ -746,6 +746,8 @@ bool loadConfig()
 		war_setHostConnectionProvider(hostConnProvider);
 	}
 
+	war_setLobbyFilterIPv6Only(iniGetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only()).value());
+
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -927,6 +929,9 @@ bool saveConfig()
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
+
+	iniSetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only());
+
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes
