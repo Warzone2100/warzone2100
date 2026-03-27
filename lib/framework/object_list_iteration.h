@@ -22,7 +22,6 @@
 #pragma once
 
 #include <list>
-#include <type_traits>
 #include <iterator>
 #include <functional>
 
@@ -50,17 +49,11 @@ enum class IterationResult
 template <typename Callable>
 struct LoopBodyHandlerCallStrategy
 {
-	// Since we are constrained by C++14, we'll need to use SFINAE to determine correct
-	// specialization of `Invoke` to call depending on input type of handler function.
-	//
-	// Here we use a bunch of compile-time tests to determine
-	// whether our callable is convertible to `std::function` of a compatible signature.
+	// Use a bunch of compile-time tests to determine whether our callable is
+	// convertible to `std::function` of a compatible signature.
 	//
 	// This is the most simple way to constrain and choose a correct overload
-	// of `Invoke` function depending on the callable signature.
-	//
-	// Choosing the correct overload is done via `std::enable_if<Cond, T>` helper from <type_traits>,
-	// which basically provides `using type = T` only when `Cond` is `true`.
+	// of `Invoke` function depending on the callable signature given C++17 capabilities.
 	template <typename ObjectType>
 	static constexpr bool handler_accepts_ptr = std::is_convertible<
 		Callable,
@@ -70,20 +63,24 @@ struct LoopBodyHandlerCallStrategy
 		Callable,
 		std::function<IterationResult(typename std::list<ObjectType*>::iterator)>>::value;
 
-	// `Invoke` overload for Callable taking a list iterator as the argument
-	template <typename ObjectType>
-	static std::enable_if_t<handler_accepts_iter<ObjectType>, IterationResult>
-		Invoke(Callable handler, typename std::list<ObjectType*>::iterator iter)
-	{
-		return handler(iter);
-	}
 
-	// `Invoke` overload for Callable taking a pointer to `ObjectType` as the argument
 	template <typename ObjectType>
-	static std::enable_if_t<handler_accepts_ptr<ObjectType>, IterationResult>
-		Invoke(Callable handler, typename std::list<ObjectType*>::iterator iter)
+	static IterationResult Invoke(Callable handler, typename std::list<ObjectType*>::iterator iter)
 	{
-		return handler(*iter);
+		if constexpr (handler_accepts_iter<ObjectType>)
+		{
+			// `Invoke` overload for Callable taking a list iterator as the argument
+			return handler(iter);
+		}
+		else if constexpr (handler_accepts_ptr<ObjectType>)
+		{
+			// `Invoke` overload for Callable taking a pointer to `ObjectType` as the argument
+			return handler(*iter);
+		}
+		else
+		{
+			static_assert(sizeof(ObjectType) != sizeof(ObjectType), "Unsupported loop body handler signature");
+		}
 	}
 };
 
