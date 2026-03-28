@@ -26,18 +26,476 @@
 #include "src/intimage.h"
 #include "src/multiint.h"
 #include "src/multiplay.h"
+#include "src/warzoneconfig.h"
 
 #include "lib/widget/label.h"
 #include "lib/widget/button.h"
-#include "lib/widget/popovermenu.h"
-#include "advcheckbox.h"
 
 #include "lib/framework/input.h"
 #include "lib/framework/wzapp.h"
 
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/netlobby.h"
 
 #include "src/titleui/multiplayer.h"
+
+#include "frontendimagebutton.h"
+#include "optionsform.h"
+#include "src/titleui/options/optionsforms.h"
+
+// MARK: - Helper functions
+
+static bool hasOpenSpectatorOnlySlots()
+{
+	// Look for a spectator slot that's available
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (!isSpectatorOnlySlot(i))
+		{
+			continue;
+		}
+		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
+		{
+			continue; // skip it
+		}
+		if (i == PLAYER_FEATURE)
+		{
+			continue; // skip it
+		}
+		if (NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN && !NetPlay.players[i].allocated)
+		{
+			// found available spectator-only slot
+			return true;
+		}
+	}
+	return false;
+}
+
+static void closeAllOpenSpectatorOnlySlots()
+{
+	ASSERT_HOST_ONLY(return);
+	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	{
+		if (!isSpectatorOnlySlot(i))
+		{
+			continue;
+		}
+		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
+		{
+			continue; // skip it
+		}
+		if (i == PLAYER_FEATURE)
+		{
+			continue; // skip it
+		}
+		if (NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN && !NetPlay.players[i].allocated)
+		{
+			// found available spectator-only slot
+			// close it
+			NetPlay.players[i].ai = AI_CLOSED;
+			NetPlay.players[i].isSpectator = false;
+			NETBroadcastPlayerInfo(i);
+		}
+	}
+}
+
+static void enableSpectatorJoin(bool enabled)
+{
+	if (enabled)
+	{
+		// add max spectator slots
+		bool success = false;
+		do {
+			success = NETopenNewSpectatorSlot();
+		} while (success);
+	}
+	else
+	{
+		// disable any open / unoccupied spectator slots
+		closeAllOpenSpectatorOnlySlots();
+	}
+	netPlayersUpdated = true;
+}
+
+// MARK: - LobbyHostOptionsForm
+
+class LobbyHostOptionsForm : public WIDGET
+{
+protected:
+	LobbyHostOptionsForm() {}
+
+	void initialize(const std::weak_ptr<WzMultiplayerOptionsTitleUI>& weakTitleUI, const std::function<void ()>& onClose);
+public:
+	static std::shared_ptr<LobbyHostOptionsForm> make(const std::weak_ptr<WzMultiplayerOptionsTitleUI>& weakTitleUI, const std::function<void ()>& onCloseFunc)
+	{
+		class make_shared_enabler: public LobbyHostOptionsForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize(weakTitleUI, onCloseFunc);
+		return widget;
+	}
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+protected:
+	virtual void geometryChanged() override;
+	virtual void display(int xOffset, int yOffset) override;
+private:
+	std::shared_ptr<OptionsForm> makeHostOptionsForm();
+
+	bool setSpectatorHost(bool value);
+	bool setBlindMode(BLIND_MODE value);
+
+private:
+	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUI;
+	std::shared_ptr<W_LABEL> formTitle;
+	std::shared_ptr<WzFrontendImageButton> closeButton;
+	std::shared_ptr<OptionsForm> hostOptionsForm;
+	const int innerVerticalSpacing = 15;
+	const int outerPaddingX = 20;
+	const int optionsListPaddingX = 0;
+	const int outerPaddingY = 20;
+	const int betweenButtonPadding = 15;
+	const int closeButtonVerticalPadding = 5;
+};
+
+void LobbyHostOptionsForm::initialize(const std::weak_ptr<WzMultiplayerOptionsTitleUI>& _weakTitleUI, const std::function<void ()>& onClose)
+{
+	weakTitleUI = _weakTitleUI;
+
+	formTitle = std::make_shared<W_LABEL>();
+	formTitle->setFont(font_medium_bold, WZCOL_TEXT_BRIGHT);
+	formTitle->setString(_("Host Lobby Options"));
+	formTitle->setCanTruncate(true);
+	formTitle->setTransparentToMouse(true);
+	formTitle->setGeometry(outerPaddingX, outerPaddingY, formTitle->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
+	attach(formTitle);
+
+	// Add "Close" button
+	closeButton = WzFrontendImageButton::make(nullopt);
+	closeButton->setString(_("Close"));
+	closeButton->addOnClickHandler([onClose](W_BUTTON&) {
+		widgScheduleTask([onClose]() {
+			onClose();
+		});
+	});
+	closeButton->setPadding(7, closeButtonVerticalPadding);
+	attach(closeButton);
+
+	hostOptionsForm = makeHostOptionsForm();
+	attach(hostOptionsForm);
+}
+
+int32_t LobbyHostOptionsForm::idealWidth()
+{
+	return (outerPaddingX * 2) + optionsListPaddingX + hostOptionsForm->idealWidth();
+}
+
+int32_t LobbyHostOptionsForm::idealHeight()
+{
+	int32_t result = (outerPaddingY * 2) + std::max(formTitle->idealHeight(), closeButton->idealHeight() - closeButtonVerticalPadding);
+	result += innerVerticalSpacing;
+	result += hostOptionsForm->idealHeight();
+	result += innerVerticalSpacing;
+	return result;
+}
+
+static bool hasGameCurrentlyHostedInLobby()
+{
+	return !NET_getCurrentHostedLobbyGameId().empty();
+}
+
+OptionInfo::AvailabilityResult IsGameHostedInLobby(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = hasGameCurrentlyHostedInLobby();
+	result.localizedUnavailabilityReason = _("Game must be listed in lobby to support this option.");
+	return result;
+}
+
+OptionInfo::OptionAvailabilityCondition MakeIsLobbyHostJoinOptSupportedCondition(netlobby::HostJoinOptionType optType)
+{
+	return [optType](const OptionInfo&) -> OptionInfo::AvailabilityResult {
+		auto optAvailable = NET_getHostJoinOptionSupportedByLobby(optType);
+		OptionInfo::AvailabilityResult result;
+		result.available = optAvailable.value_or(false);
+		if (optAvailable.has_value())
+		{
+			result.localizedUnavailabilityReason = _("This option is not supported by the current lobby.");
+		}
+		else
+		{
+			result.localizedUnavailabilityReason = _("Awaiting lobby information...");
+		}
+		return result;
+	};
+}
+
+static bool lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType optType)
+{
+	return hasGameCurrentlyHostedInLobby() && NET_getHostJoinOptionSupportedByLobby(optType).value_or(false);
+}
+
+std::shared_ptr<OptionsForm> LobbyHostOptionsForm::makeHostOptionsForm()
+{
+	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUICopy = weakTitleUI;
+	std::weak_ptr<LobbyHostOptionsForm> psWeakParent = std::dynamic_pointer_cast<LobbyHostOptionsForm>(shared_from_this());
+	auto result = OptionsForm::make();
+
+	// Slot Options
+	result->addSection(OptionsSection(N_("Slot Options"), ""), true);
+	{
+		auto optionInfo = OptionInfo("mp.spectatorjoin", N_("Spectator Join"), "");
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("Allow"), "", true },
+				};
+				bool hasOpenSpectatorSlots = hasOpenSpectatorOnlySlots();
+				result.setCurrentIdxForValue(hasOpenSpectatorSlots);
+				return result;
+			},
+			[weakTitleUICopy](const auto& newValue) -> bool {
+				auto strongTitleUI = weakTitleUICopy.lock();
+				ASSERT_OR_RETURN(false, strongTitleUI != nullptr, "No Title UI?");
+				enableSpectatorJoin(newValue);
+				strongTitleUI->updatePlayers();
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("mp.locked.teams", N_("Teams"), "");
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Locked"), "", true },
+					{ _("Allow Change"), "", false },
+				};
+				result.setCurrentIdxForValue(getLockedOptions().teams);
+				return result;
+			},
+			[weakTitleUICopy](const auto& newValue) -> bool {
+				auto newLocked = getLockedOptions();
+				newLocked.teams = newValue;
+				updateLockedOptionsOnHost(newLocked);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("mp.locked.position", N_("Position"), "");
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Locked"), "", true },
+					{ _("Allow Change"), "", false },
+				};
+				result.setCurrentIdxForValue(getLockedOptions().position);
+				return result;
+			},
+			[weakTitleUICopy](const auto& newValue) -> bool {
+				auto newLocked = getLockedOptions();
+				newLocked.position = newValue;
+				updateLockedOptionsOnHost(newLocked);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	// Game Options
+	result->addSection(OptionsSection(N_("Game Options"), ""), true);
+	{
+		auto optionInfo = OptionInfo("defaults.hosting.inactivityTimeout", N_("Inactivity Timeout"), "");
+		optionInfo.addAvailabilityCondition(IsNotInGame);
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			makeInactivityTimeoutOptionsDropdownPopulateFunc(),
+			[](const auto& newValue) -> bool {
+				war_setMPInactivityMinutes(newValue);
+				game.inactivityMinutes = war_getMPInactivityMinutes();
+				sendOptions();
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("defaults.hosting.lagKick", N_("Lag Kick"), "");
+		auto valueChanger = OptionsDropdown<int>::make(
+			makeLagKickOptionsDropdownPopulateFunc(),
+			[](const auto& newValue) -> bool {
+				war_setAutoLagKickSeconds(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("defaults.hosting.gameTimeLimit", N_("Game Time Limit"), "");
+		optionInfo.addAvailabilityCondition(IsNotInGame);
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			makeGameTimeLimitOptionsDropdownPopulateFunc(),
+			[](const auto& newValue) -> bool {
+				war_setMPGameTimeLimitMinutes(newValue);
+				game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
+				sendOptions();
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	// Host Join Options
+	result->addSection(OptionsSection(N_("Lobby Join Options"), ""), true);
+	{
+		auto optionInfo = OptionInfo("mp.hostjoinoptions.botprot", N_("Bot Protection"), N_("Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."));
+		optionInfo.addAvailabilityCondition(IsGameHostedInLobby);
+		optionInfo.addAvailabilityCondition(MakeIsLobbyHostJoinOptSupportedCondition(netlobby::HostJoinOptionType::BotProt));
+		auto valueChanger = OptionsDropdown<netlobby::HostJoinOptionValue>::make(
+			[]() {
+				OptionChoices<netlobby::HostJoinOptionValue> result;
+				result.choices = {
+					{ _("Block Known Bots"), _("Block known bots or automated tools."), netlobby::HostJoinOptionValue::BlockAll },
+					{ _("Disabled"), "", netlobby::HostJoinOptionValue::Allow },
+				};
+				result.setCurrentIdxForValue(lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType::BotProt) ? NETgetLobbyHostJoinOptions().botProt : netlobby::HostJoinOptionValue::Allow );
+				return result;
+			},
+			[weakTitleUICopy](const auto& newValue) -> bool {
+				if (!lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType::BotProt)) { return false; }
+				auto opts = NETgetLobbyHostJoinOptions();
+				opts.botProt = newValue;
+				NETsetLobbyHostJoinOptions(opts);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("mp.hostjoinoptions.proxyips", N_("Proxy / VPN Connections"), N_("Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."));
+		optionInfo.addAvailabilityCondition(IsGameHostedInLobby);
+		optionInfo.addAvailabilityCondition(MakeIsLobbyHostJoinOptSupportedCondition(netlobby::HostJoinOptionType::ProxyIPs));
+		auto valueChanger = OptionsDropdown<netlobby::HostJoinOptionValue>::make(
+			[]() {
+				OptionChoices<netlobby::HostJoinOptionValue> result;
+				WzString susHelpDescription = _("Block suspicious connections from proxies / VPNs.");
+				susHelpDescription += " ";
+				susHelpDescription += _("(Recommended)");
+				result.choices = {
+					{ _("Block All"), _("Block all connections from proxies / VPNs."), netlobby::HostJoinOptionValue::BlockAll },
+					{ _("Block Suspicious"), susHelpDescription, netlobby::HostJoinOptionValue::BlockSuspicious },
+					{ _("Allow"), "", netlobby::HostJoinOptionValue::Allow },
+				};
+				result.setCurrentIdxForValue(lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType::ProxyIPs) ? NETgetLobbyHostJoinOptions().proxyIPs : netlobby::HostJoinOptionValue::Allow );
+				return result;
+			},
+			[weakTitleUICopy](const auto& newValue) -> bool {
+				if (!lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType::ProxyIPs)) { return false; }
+				auto opts = NETgetLobbyHostJoinOptions();
+				opts.proxyIPs = newValue;
+				NETsetLobbyHostJoinOptions(opts);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("mp.hostjoinoptions.hostingips", N_("Hosting Provider IPs"), N_("Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."));
+		optionInfo.addAvailabilityCondition(IsGameHostedInLobby);
+		optionInfo.addAvailabilityCondition(MakeIsLobbyHostJoinOptSupportedCondition(netlobby::HostJoinOptionType::HostingIPs));
+		auto valueChanger = OptionsDropdown<netlobby::HostJoinOptionValue>::make(
+			[]() {
+				OptionChoices<netlobby::HostJoinOptionValue> result;
+				result.choices = {
+					{ _("Block All"), _("Block all connections from hosting provider IPs."), netlobby::HostJoinOptionValue::BlockAll },
+					{ _("Block Suspicious"), _("Block suspicious connections from hosting provider IPs."), netlobby::HostJoinOptionValue::BlockSuspicious },
+					{ _("Allow"), "", netlobby::HostJoinOptionValue::Allow },
+				};
+				result.setCurrentIdxForValue(lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType::HostingIPs) ? NETgetLobbyHostJoinOptions().hostingIPs : netlobby::HostJoinOptionValue::Allow);
+				return result;
+			},
+			[weakTitleUICopy](const auto& newValue) -> bool {
+				if (!lobbyHostJoinOptionEnabled(netlobby::HostJoinOptionType::HostingIPs)) { return false; }
+				auto opts = NETgetLobbyHostJoinOptions();
+				opts.hostingIPs = newValue;
+				NETsetLobbyHostJoinOptions(opts);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("mp.hostjoinoptions.lobbyjoinbypass", N_("Lobby Join Bypass"), N_("Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"));
+		optionInfo.addAvailabilityCondition(IsGameHostedInLobby);
+		auto valueChanger = OptionsDropdown<LobbyHostDirectJoinOption>::make(
+			[]() {
+				OptionChoices<LobbyHostDirectJoinOption> result;
+				WzString allowAllDescription = _("Allow any IP to direct join. Bypasses lobby anti-abuse protections.");
+				allowAllDescription += " ";
+				allowAllDescription += _("(Not Recommended)");
+				result.choices = {
+					{ _("Off"), _("Do not allow direct joins. Require joining through the lobby."), LobbyHostDirectJoinOption::None },
+					{ _("Local"), _("Allow local / LAN IPs to direct join. Require others to join through the lobby."), LobbyHostDirectJoinOption::Local },
+					{ _("Allow All"), allowAllDescription, LobbyHostDirectJoinOption::All },
+				};
+				result.setCurrentIdxForValue(hasGameCurrentlyHostedInLobby() ? NETgetLobbyHostDirectJoinOption() : LobbyHostDirectJoinOption::All);
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				if (!hasGameCurrentlyHostedInLobby()) { return false; }
+				NETsetLobbyHostDirectJoinOption(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	return result;
+}
+
+void LobbyHostOptionsForm::geometryChanged()
+{
+	if (width() <= 1 || height() <= 1)
+	{
+		return;
+	}
+
+	// position top button(s)
+	int lastButtonX0 = width() - outerPaddingX;
+	int buttonY0 = outerPaddingY - closeButtonVerticalPadding;
+	int topButtonHeight = closeButton->idealHeight();
+	if (closeButton)
+	{
+		int buttonX0 = lastButtonX0 - closeButton->idealWidth();
+		closeButton->setGeometry(buttonX0, buttonY0, closeButton->idealWidth(), topButtonHeight);
+		lastButtonX0 = buttonX0 - betweenButtonPadding;
+	}
+
+	int maxAvailableOptionsFormHeight = height() - (outerPaddingY * 2) - std::max<int>(formTitle->height(), closeButton->height() - closeButtonVerticalPadding) - (innerVerticalSpacing * 2);
+	int hostOptionsFormY0 = outerPaddingY + std::max(formTitle->idealHeight(), closeButton->idealHeight()) + innerVerticalSpacing;
+	hostOptionsForm->setGeometry(outerPaddingX + optionsListPaddingX, hostOptionsFormY0, width() - (outerPaddingX * 2) - optionsListPaddingX, std::min<int32_t>(maxAvailableOptionsFormHeight, hostOptionsForm->idealHeight()));
+
+}
+
+void LobbyHostOptionsForm::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
+
+	PIELIGHT backColor = WZCOL_TRANSPARENT_BOX;
+	backColor.byte.a = std::max<UBYTE>(220, backColor.byte.a);
+	pie_UniTransBoxFill(x0, y0, x1, y1, backColor);
+
+	iV_Box(x0, y0, x1, y1, pal_RGBA(255, 255, 255, 175));
+}
+
 
 // MARK: - WzPlayerBoxTabButton
 
@@ -301,10 +759,7 @@ WzPlayerBoxTabs::WzPlayerBoxTabs(const std::shared_ptr<WzMultiplayerOptionsTitle
 
 WzPlayerBoxTabs::~WzPlayerBoxTabs()
 {
-	if (currentPopoverMenu)
-	{
-		currentPopoverMenu->closeMenu();
-	}
+	closeOptionsOverlay();
 }
 
 std::shared_ptr<WzPlayerBoxTabs> WzPlayerBoxTabs::make(bool displayHostOptions, const std::shared_ptr<WzMultiplayerOptionsTitleUI>& titleUI)
@@ -500,187 +955,79 @@ void WzPlayerBoxTabs::recalculateTabLayout()
 	}
 }
 
-static bool hasOpenSpectatorOnlySlots()
+void WzPlayerBoxTabs::closeOptionsOverlay()
 {
-	// Look for a spectator slot that's available
-	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
+	if (optionsOverlayScreen)
 	{
-		if (!isSpectatorOnlySlot(i))
-		{
-			continue;
-		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
-		{
-			continue; // skip it
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			continue; // skip it
-		}
-		if (NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN && !NetPlay.players[i].allocated)
-		{
-			// found available spectator-only slot
-			return true;
-		}
-	}
-	return false;
-}
-
-static bool canAddSpectatorOnlySlots()
-{
-	for (int i = MAX_PLAYER_SLOTS; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (!isSpectatorOnlySlot(i))
-		{
-			continue;
-		}
-		if (NetPlay.players[i].allocated || NetPlay.players[i].isSpectator)
-		{
-			continue;
-		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
-		{
-			continue; // skip it
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			continue; // skip it
-		}
-		return true;
-	}
-	return false;
-}
-
-static void closeAllOpenSpectatorOnlySlots()
-{
-	ASSERT_HOST_ONLY(return);
-	for (int i = 0; i < MAX_CONNECTED_PLAYERS; i++)
-	{
-		if (!isSpectatorOnlySlot(i))
-		{
-			continue;
-		}
-		if (game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot())
-		{
-			continue; // skip it
-		}
-		if (i == PLAYER_FEATURE)
-		{
-			continue; // skip it
-		}
-		if (NetPlay.players[i].isSpectator && NetPlay.players[i].ai == AI_OPEN && !NetPlay.players[i].allocated)
-		{
-			// found available spectator-only slot
-			// close it
-			NetPlay.players[i].ai = AI_CLOSED;
-			NetPlay.players[i].isSpectator = false;
-			NETBroadcastPlayerInfo(i);
-		}
+		widgRemoveOverlayScreen(optionsOverlayScreen);
+		optionsOverlayScreen.reset();
 	}
 }
 
-static void enableSpectatorJoin(bool enabled)
+std::shared_ptr<WIDGET> WzPlayerBoxTabs::createOptionsPopoverForm()
 {
-	if (enabled)
-	{
-		// add max spectator slots
-		bool success = false;
-		do {
-			success = NETopenNewSpectatorSlot();
-		} while (success);
-	}
-	else
-	{
-		// disable any open / unoccupied spectator slots
-		closeAllOpenSpectatorOnlySlots();
-	}
-	netPlayersUpdated = true;
-}
-
-std::shared_ptr<PopoverMenuWidget> WzPlayerBoxTabs::createOptionsPopoverForm()
-{
-	auto popoverMenu = PopoverMenuWidget::make();
-
-	// create all the buttons / option rows
-	auto addOptionsSpacer = [&popoverMenu]() -> std::shared_ptr<WIDGET> {
-		auto spacerWidget = std::make_shared<WIDGET>();
-		spacerWidget->setGeometry(0, 0, 1, 5);
-		popoverMenu->addMenuItem(spacerWidget, false);
-		return spacerWidget;
-	};
-	auto addOptionsCheckbox = [&popoverMenu](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc) -> std::shared_ptr<WzAdvCheckbox> {
-		auto pCheckbox = WzAdvCheckbox::make(text, "");
-		pCheckbox->FontID = font_regular;
-		pCheckbox->setOuterVerticalPadding(4);
-		pCheckbox->setInnerHorizontalPadding(5);
-		pCheckbox->setIsChecked(isChecked);
-		if (isDisabled)
-		{
-			pCheckbox->setState(WBUT_DISABLE);
-		}
-		pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
-		if (onClickFunc)
-		{
-			pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
-				auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
-				ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
-				onClickFunc(*checkBoxButton);
-			});
-		}
-		popoverMenu->addMenuItem(pCheckbox, false);
-		return pCheckbox;
-	};
-
-	bool hasOpenSpectatorSlots = hasOpenSpectatorOnlySlots();
-	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUICopy = weakTitleUI;
-	addOptionsCheckbox(_("Enable Spectator Join"), hasOpenSpectatorSlots, !hasOpenSpectatorSlots && !canAddSpectatorOnlySlots(), [weakTitleUICopy](WzAdvCheckbox& button){
-		bool enableValue = button.isChecked();
-		widgScheduleTask([enableValue, weakTitleUICopy]{
-			auto strongTitleUI = weakTitleUICopy.lock();
-			ASSERT_OR_RETURN(, strongTitleUI != nullptr, "No Title UI?");
-			enableSpectatorJoin(enableValue);
-			strongTitleUI->updatePlayers();
-		});
-	});
-	addOptionsSpacer();
-	const auto& locked = getLockedOptions();
-	addOptionsCheckbox(_("Lock Teams"), locked.teams, false, [](WzAdvCheckbox& button){
-		auto newLocked = getLockedOptions();
-		newLocked.teams = button.isChecked();
-		updateLockedOptionsOnHost(newLocked);
-	});
-	addOptionsCheckbox(_("Lock Position"), locked.position, false, [](WzAdvCheckbox& button){
-		auto newLocked = getLockedOptions();
-		newLocked.position = button.isChecked();
-		updateLockedOptionsOnHost(newLocked);
-	});
-
-	int32_t idealMenuHeight = popoverMenu->idealHeight();
-	int32_t menuHeight = idealMenuHeight;
-	if (menuHeight > screenHeight)
-	{
-		menuHeight = screenHeight;
-	}
-	popoverMenu->setGeometry(popoverMenu->x(), popoverMenu->y(), popoverMenu->idealWidth(), menuHeight);
-
-	return popoverMenu;
-}
-
-void WzPlayerBoxTabs::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
-{
-	if (currentPopoverMenu)
-	{
-		currentPopoverMenu->closeMenu();
-	}
-
-	optionsButton->setState(WBUT_CLICKLOCK);
-	currentPopoverMenu = createOptionsPopoverForm();
-	auto psWeakSelf = std::weak_ptr<WzPlayerBoxTabs>(std::static_pointer_cast<WzPlayerBoxTabs>(shared_from_this()));
-	currentPopoverMenu->openMenu(psParent, PopoverWidget::Alignment::LeftOfParent, Vector2i(0, 1), [psWeakSelf](){
+	std::weak_ptr<WzPlayerBoxTabs> psWeakSelf(std::dynamic_pointer_cast<WzPlayerBoxTabs>(shared_from_this()));
+	auto optionsPopOver = LobbyHostOptionsForm::make(weakTitleUI, [psWeakSelf](){
 		if (auto strongSelf = psWeakSelf.lock())
 		{
-			strongSelf->optionsButton->setState(0);
+			strongSelf->closeOptionsOverlay();
 		}
 	});
+	optionsPopOver->setGeometry(0, 0, optionsPopOver->idealWidth(), optionsPopOver->idealHeight());
+	return optionsPopOver;
 }
 
+void WzPlayerBoxTabs::displayOptionsOverlay(const std::shared_ptr<WIDGET> &psParent)
+{
+	auto lockedScreen = screenPointer.lock();
+	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+
+	// Initialize the options overlay screen
+	optionsOverlayScreen = W_SCREEN::make();
+	auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make();
+	std::weak_ptr<W_SCREEN> psWeakOptionsOverlayScreen(optionsOverlayScreen);
+	std::weak_ptr<WzPlayerBoxTabs> psWeakParent = std::dynamic_pointer_cast<WzPlayerBoxTabs>(shared_from_this());
+	newRootFrm->onClickedFunc = [psWeakOptionsOverlayScreen, psWeakParent]() {
+		if (auto psOverlayScreen = psWeakOptionsOverlayScreen.lock())
+		{
+			widgRemoveOverlayScreen(psOverlayScreen);
+		}
+		// Destroy Options overlay / overlay screen
+		if (auto strongParent = psWeakParent.lock())
+		{
+			strongParent->optionsOverlayScreen.reset();
+		}
+	};
+	newRootFrm->onCancelPressed = newRootFrm->onClickedFunc;
+	optionsOverlayScreen->psForm->attach(newRootFrm);
+
+	// Create the pop-over form
+	auto optionsPopOver = createOptionsPopoverForm();
+	newRootFrm->attach(optionsPopOver);
+
+	// Position the pop-over form
+	optionsPopOver->setCalcLayout([](WIDGET *psWidget) {
+		int popOverWidth = std::min<int>(std::max<int>(psWidget->idealWidth(), 400), screenWidth - 40);
+		int popOverHeight = std::min<int>(psWidget->idealHeight(), screenHeight - 40);
+
+		// Centered in screen
+		int popOverX0 = (screenWidth - popOverWidth) / 2;
+		if (popOverX0 < 0)
+		{
+			popOverX0 = 0;
+		}
+		int popOverY0 = (screenHeight - popOverHeight) / 2;
+		if (popOverY0 < 0)
+		{
+			popOverY0 = 0;
+		}
+
+		psWidget->setGeometry(popOverX0, popOverY0, popOverWidth, popOverHeight);
+	});
+
+	widgRegisterOverlayScreenOnTopOfScreen(optionsOverlayScreen, lockedScreen);
+	widgScheduleTask([lockedScreen]() {
+		// clear focus from the underlying chatbox, which aggressively takes focus
+		lockedScreen->setFocus(nullptr);
+	});
+}

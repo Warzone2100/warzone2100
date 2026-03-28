@@ -27,7 +27,6 @@
 class WzMultiplayerOptionsTitleUI;
 class WzPlayerBoxTabButton;
 class WzPlayerBoxOptionsButton;
-class PopoverMenuWidget;
 
 class WzPlayerBoxTabs : public WIDGET
 {
@@ -59,12 +58,14 @@ private:
 	void recalculateTabLayout();
 
 	void displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent);
-	std::shared_ptr<PopoverMenuWidget> createOptionsPopoverForm();
+	std::shared_ptr<WIDGET> createOptionsPopoverForm();
+
+	void closeOptionsOverlay();
 
 private:
 	std::weak_ptr<WzMultiplayerOptionsTitleUI> weakTitleUI;
 	std::vector<std::shared_ptr<WzPlayerBoxTabButton>> tabButtons;
 	std::shared_ptr<WzPlayerBoxOptionsButton> optionsButton;
-	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
+	std::shared_ptr<W_SCREEN> optionsOverlayScreen;
 	PlayerDisplayView playerDisplayView = PlayerDisplayView::Players;
 };
