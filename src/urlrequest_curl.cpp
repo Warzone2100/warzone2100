@@ -510,6 +510,10 @@ public:
 #endif
 		}
 
+		/* enable all supported built-in compressions */
+		curl_easy_setopt(handle, CURLOPT_ACCEPT_ENCODING, "");
+		curl_easy_setopt(handle, CURLOPT_HTTP_CONTENT_DECODING, 1L);
+
 		const auto& _requestHeaders = requestHeaders();
 		for (auto it : _requestHeaders)
 		{
@@ -946,20 +950,34 @@ public:
 	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) override
 	{
 		size_t realsize = size * nmemb;
+		if (realsize == 0) {
+			return 0;
+		}
+
 		MemoryStruct *mem = chunk.get();
 
-		char *ptr = (char*) realloc(mem->memory, mem->size + realsize + 1);
-		if(ptr == NULL) {
+		const size_t maxSize = static_cast<size_t>(maxDownloadSize());
+		size_t neededBufferSize = mem->size + realsize + 1;
+		size_t newBufferSize = std::min<size_t>(neededBufferSize, maxSize); // prevent allocating more than maxDownloadSize buffer size
+		if (newBufferSize <= mem->size) {
+			/* can't allocate any more */
+			return 0;
+		}
+
+		char *ptr = (char*) realloc(mem->memory, newBufferSize);
+		if (ptr == NULL) {
 			/* out of memory! */
 			return 0;
 		}
 
 		mem->memory = ptr;
-		memcpy(&(mem->memory[mem->size]), contents, realsize);
-		mem->size += realsize;
+		size_t bytesToWrite = std::min<size_t>(realsize, (newBufferSize > mem->size) ? (newBufferSize - mem->size - 1) : 0);
+		ASSERT(bytesToWrite == realsize, "Writing partial data - reached max size");
+		memcpy(&(mem->memory[mem->size]), contents, bytesToWrite);
+		mem->size += bytesToWrite;
 		mem->memory[mem->size] = 0;
 
-		return realsize;
+		return bytesToWrite;
 	}
 	virtual void resetWriteMemory() override
 	{
