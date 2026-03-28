@@ -222,6 +222,85 @@ void PlayerColorOptionsSelector::addOnChangeHandler(std::function<void(WIDGET&)>
 
 // MARK: -
 
+OptionsDropdown<uint32_t>::PopulateFunc makeInactivityTimeoutOptionsDropdownPopulateFunc()
+{
+	return []() {
+		OptionChoices<uint32_t> result;
+		result.choices = {
+			{ _("Off"), "", 0 }
+		};
+		for (uint32_t inactivityMinutes = MIN_MPINACTIVITY_MINUTES; inactivityMinutes <= (MIN_MPINACTIVITY_MINUTES + 6); inactivityMinutes++)
+		{
+			result.choices.push_back({ WzString::format(_("%u minutes"), inactivityMinutes), "", inactivityMinutes });
+		}
+		auto currValue = war_getMPInactivityMinutes();
+		if (!result.setCurrentIdxForValue(currValue))
+		{
+			// add "Custom" item
+			result.choices.push_back({ WzString::format(_("%u minutes"), currValue), "", currValue });
+			result.currentIdx = result.choices.size() - 1;
+		}
+		return result;
+	};
+}
+
+OptionsDropdown<int>::PopulateFunc makeLagKickOptionsDropdownPopulateFunc()
+{
+	return []() {
+		OptionChoices<int> result;
+		result.choices = {
+			{ _("Off"), "", 0 }
+		};
+		for (int lagKickSeconds = 60; lagKickSeconds <= 120; lagKickSeconds += 30)
+		{
+			result.choices.push_back({ WzString::format(_("%u seconds"), lagKickSeconds), "", lagKickSeconds });
+		}
+		auto currValue = war_getAutoLagKickSeconds();
+		if (!result.setCurrentIdxForValue(currValue))
+		{
+			// add "Custom" item
+			result.choices.push_back({ WzString::format(_("%u seconds"), currValue), "", currValue });
+			result.currentIdx = result.choices.size() - 1;
+		}
+		return result;
+	};
+}
+
+OptionsDropdown<uint32_t>::PopulateFunc makeGameTimeLimitOptionsDropdownPopulateFunc()
+{
+	return []() {
+		OptionChoices<uint32_t> result;
+		result.choices = {
+			{ _("Off"), "", 0 }
+		};
+		auto addGameTimeLimitMinutesOption = [&](uint32_t gameTimeLimitMinutes) {
+			std::string buttonText;
+			if (gameTimeLimitMinutes >= 120)
+			{
+				std::string hoursFloatStr = fmt::format("{:#}", static_cast<float>(gameTimeLimitMinutes) / 60.f);
+				buttonText = astringf(_("%s hours"), hoursFloatStr.c_str());
+			}
+			else
+			{
+				buttonText = astringf(_("%u minutes"), gameTimeLimitMinutes);
+			}
+			result.choices.push_back({ WzString::fromUtf8(buttonText), "", gameTimeLimitMinutes });
+		};
+		for (uint32_t gameTimeLimitMinutes = MIN_MPGAMETIMELIMIT_MINUTES; gameTimeLimitMinutes <= (MIN_MPGAMETIMELIMIT_MINUTES + (15 * 10)); gameTimeLimitMinutes += 15)
+		{
+			addGameTimeLimitMinutesOption(gameTimeLimitMinutes);
+		}
+		auto currValue = war_getMPGameTimeLimitMinutes();
+		if (!result.setCurrentIdxForValue(currValue))
+		{
+			// add custom value
+			addGameTimeLimitMinutesOption(currValue);
+			result.currentIdx = result.choices.size() - 1;
+		}
+		return result;
+	};
+}
+
 std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 {
 	auto result = OptionsForm::make();
@@ -365,24 +444,7 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 		auto optionInfo = OptionInfo("defaults.hosting.inactivityTimeout", N_("Inactivity Timeout"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
 		auto valueChanger = OptionsDropdown<uint32_t>::make(
-			[]() {
-				OptionChoices<uint32_t> result;
-				result.choices = {
-					{ _("Off"), "", 0 }
-				};
-				for (uint32_t inactivityMinutes = MIN_MPINACTIVITY_MINUTES; inactivityMinutes <= (MIN_MPINACTIVITY_MINUTES + 6); inactivityMinutes++)
-				{
-					result.choices.push_back({ WzString::format(_("%u minutes"), inactivityMinutes), "", inactivityMinutes });
-				}
-				auto currValue = war_getMPInactivityMinutes();
-				if (!result.setCurrentIdxForValue(currValue))
-				{
-					// add "Custom" item
-					result.choices.push_back({ WzString::format(_("%u minutes"), currValue), "", currValue });
-					result.currentIdx = result.choices.size() - 1;
-				}
-				return result;
-			},
+			makeInactivityTimeoutOptionsDropdownPopulateFunc(),
 			[](const auto& newValue) -> bool {
 				war_setMPInactivityMinutes(newValue);
 				game.inactivityMinutes = war_getMPInactivityMinutes();
@@ -394,24 +456,7 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 	{
 		auto optionInfo = OptionInfo("defaults.hosting.lagKick", N_("Lag Kick"), "");
 		auto valueChanger = OptionsDropdown<int>::make(
-			[]() {
-				OptionChoices<int> result;
-				result.choices = {
-					{ _("Off"), "", 0 }
-				};
-				for (int lagKickSeconds = 60; lagKickSeconds <= 120; lagKickSeconds += 30)
-				{
-					result.choices.push_back({ WzString::format(_("%u seconds"), lagKickSeconds), "", lagKickSeconds });
-				}
-				auto currValue = war_getAutoLagKickSeconds();
-				if (!result.setCurrentIdxForValue(currValue))
-				{
-					// add "Custom" item
-					result.choices.push_back({ WzString::format(_("%u seconds"), currValue), "", currValue });
-					result.currentIdx = result.choices.size() - 1;
-				}
-				return result;
-			},
+			makeLagKickOptionsDropdownPopulateFunc(),
 			[](const auto& newValue) -> bool {
 				war_setAutoLagKickSeconds(newValue);
 				return true;
@@ -466,37 +511,7 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 		auto optionInfo = OptionInfo("defaults.hosting.gameTimeLimit", N_("Game Time Limit"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
 		auto valueChanger = OptionsDropdown<uint32_t>::make(
-			[]() {
-				OptionChoices<uint32_t> result;
-				result.choices = {
-					{ _("Off"), "", 0 }
-				};
-				auto addGameTimeLimitMinutesOption = [&](uint32_t gameTimeLimitMinutes) {
-					std::string buttonText;
-					if (gameTimeLimitMinutes >= 120)
-					{
-						std::string hoursFloatStr = fmt::format("{:#}", static_cast<float>(gameTimeLimitMinutes) / 60.f);
-						buttonText = astringf(_("%s hours"), hoursFloatStr.c_str());
-					}
-					else
-					{
-						buttonText = astringf(_("%u minutes"), gameTimeLimitMinutes);
-					}
-					result.choices.push_back({ WzString::fromUtf8(buttonText), "", gameTimeLimitMinutes });
-				};
-				for (uint32_t gameTimeLimitMinutes = MIN_MPGAMETIMELIMIT_MINUTES; gameTimeLimitMinutes <= (MIN_MPGAMETIMELIMIT_MINUTES + (15 * 10)); gameTimeLimitMinutes += 15)
-				{
-					addGameTimeLimitMinutesOption(gameTimeLimitMinutes);
-				}
-				auto currValue = war_getMPGameTimeLimitMinutes();
-				if (!result.setCurrentIdxForValue(currValue))
-				{
-					// add custom value
-					addGameTimeLimitMinutesOption(currValue);
-					result.currentIdx = result.choices.size() - 1;
-				}
-				return result;
-			},
+			makeGameTimeLimitOptionsDropdownPopulateFunc(),
 			[](const auto& newValue) -> bool {
 				war_setMPGameTimeLimitMinutes(newValue);
 				game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
