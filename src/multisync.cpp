@@ -102,7 +102,7 @@ static UDWORD averagePing()
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; i++)
 	{
-		if (isHumanPlayer(i))
+		if (isHumanPlayer(i) && (i != realSelectedPlayer) && (ingame.PingTimes[i] < PING_LIMIT))
 		{
 			total += ingame.PingTimes[i];
 			count ++;
