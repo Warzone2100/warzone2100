@@ -4327,7 +4327,7 @@ ChatBoxWidget::~ChatBoxWidget()
 void ChatBoxWidget::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psParent)
 {
 	auto lockedScreen = screenPointer.lock();
-	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+	ASSERT(lockedScreen != nullptr, "The ChatBoxWidget does not have an associated screen pointer?");
 
 	// Initialize the options overlay screen
 	optionsOverlayScreen = W_SCREEN::make();
@@ -4648,7 +4648,7 @@ std::shared_ptr<WIDGET> ChatBoxWidget::createParagraphContextualMenuPopoverForm(
 void ChatBoxWidget::displayParagraphContextualMenu(const std::string& textToCopy, const std::shared_ptr<PlayerReference>& sender)
 {
 	auto lockedScreen = screenPointer.lock();
-	ASSERT(lockedScreen != nullptr, "The WzPlayerBoxTabs does not have an associated screen pointer?");
+	ASSERT(lockedScreen != nullptr, "The ChatBoxWidget does not have an associated screen pointer?");
 
 	// Initialize the options overlay screen
 	optionsOverlayScreen = W_SCREEN::make();
