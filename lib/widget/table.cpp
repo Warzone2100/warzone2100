@@ -321,12 +321,13 @@ void TableHeader::mouseDragged(WIDGET_KEY key, W_CONTEXT *start, W_CONTEXT *curr
 		dragStart = Vector2i(start->mx, start->my);
 
 		// determine the column that is being resized
+		int mx = start->mx - x();
 		colBeingResized = nullopt;
 		for (size_t colIdx = columns.size() - 1; /* termination handled in loop body */; colIdx--)
 		{
 			auto& columnWidget = columns[colIdx].columnWidget;
 			int col_x1 = columnWidget->x() + columnWidget->width();
-			if (start->mx > col_x1)
+			if (mx > col_x1)
 			{
 				if (columns[colIdx].resizeBehavior != TableColumn::ResizeBehavior::FIXED_WIDTH)
 				{
