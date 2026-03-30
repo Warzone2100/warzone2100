@@ -324,14 +324,14 @@ class LobbyGameNameWidget : public WIDGET
 {
 protected:
 	LobbyGameNameWidget() { }
-	void initialize(const WzString& roomName, const WzString& hostName);
+	void initialize(const WzString& roomName, const WzString& hostName, const std::string& hostPublicIdentity);
 	virtual void geometryChanged() override;
 public:
-	static std::shared_ptr<LobbyGameNameWidget> make(const WzString& roomName, const WzString& hostName)
+	static std::shared_ptr<LobbyGameNameWidget> make(const WzString& roomName, const WzString& hostName, const std::string& hostPublicIdentity)
 	{
 		class make_shared_enabler: public LobbyGameNameWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(roomName, hostName);
+		widget->initialize(roomName, hostName, hostPublicIdentity);
 		return widget;
 	}
 	void updateValue(const WzString& roomName, const WzString& hostName);
@@ -342,7 +342,7 @@ private:
 	std::shared_ptr<W_LABEL> hostNameWidg;
 };
 
-void LobbyGameNameWidget::initialize(const WzString& roomName, const WzString& hostName)
+void LobbyGameNameWidget::initialize(const WzString& roomName, const WzString& hostName, const std::string& hostPublicIdentity)
 {
 	roomNameWidg = std::make_shared<W_LABEL>();
 	roomNameWidg->setFont(font_regular, WZCOL_TEXT_BRIGHT);
@@ -355,6 +355,13 @@ void LobbyGameNameWidget::initialize(const WzString& roomName, const WzString& h
 	hostNameWidg->setCanTruncate(true);
 	hostNameWidg->setTransparentToClicks(true);
 	attach(hostNameWidg);
+	if (!hostPublicIdentity.empty())
+	{
+		auto tipStr = astringf(_("Host Name: %s"), hostName.toUtf8().c_str());
+		tipStr += "\n";
+		tipStr += astringf(_("ID: %s"), hostPublicIdentity.c_str());
+		hostNameWidg->setTip(tipStr);
+	}
 
 	updateValue(roomName, hostName);
 	setGeometry(0, 0, idealWidth(), idealHeight());
@@ -1033,7 +1040,7 @@ std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidge
 		columnWidgets.push_back(playersWidg);
 	}
 
-	auto nameWidg = LobbyGameNameWidget::make(gameInfo.name, gameInfo.host.name);
+	auto nameWidg = LobbyGameNameWidget::make(gameInfo.name, gameInfo.host.name, gameInfo.host.publicIdentity);
 	nameWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(nameWidg);
 
