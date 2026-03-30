@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-02-03 01:34+0000\n"
-"PO-Revision-Date: 2026-02-03 21:43\n"
+"PO-Revision-Date: 2026-03-26 03:08\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2956,7 +2956,7 @@ msgstr "手动配置您的路由器/防火墙来打开端口 %d！"
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "端口映射已打开外部端口：%u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -7275,7 +7275,7 @@ msgid "You have sent too many messages in the last few seconds. Please wait and 
 msgstr "您在过去几秒内发送了太多消息。请稍后重试。"
 
 msgid "The host has disabled debug mode / cheats for this game."
-msgstr ""
+msgstr "主机已为此游戏禁用调试模式/作弊。"
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7964,15 +7964,15 @@ msgstr "选择/分配编队号： "
 
 #, c-format
 msgid "Group %zu"
-msgstr ""
+msgstr "%zu 号编队"
 
 #, c-format
 msgid "Select the Units in Group %zu"
-msgstr ""
+msgstr "选择 %zu 号编队中的单位"
 
 #, c-format
 msgid "Assign Selected Units to Group %zu"
-msgstr ""
+msgstr "分配单位至 %zu 号编队"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "通过点击或双击将相机居中至该编队"
@@ -9002,7 +9002,7 @@ msgstr "每秒能源收入"
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "%u 个油井未激活"
 
 msgid "Need more resources!"
 msgstr "需要更多资源！"
@@ -10169,7 +10169,7 @@ msgstr "[%d] 限制 [%s]: %u (默认：无限制)"
 
 #, c-format
 msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%zu] 大于数字结构统计数据的限制(%u)： %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
