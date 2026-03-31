@@ -2028,7 +2028,7 @@ void setPlayerMuted(uint32_t playerIdx, bool muted)
 		return;
 	}
 	ingame.muteChat[playerIdx] = muted;
-	if (isHumanPlayer(playerIdx) && game.blindMode != BLIND_MODE::NONE)
+	if (isHumanPlayer(playerIdx))
 	{
 		auto trueIdentity = getTruePlayerIdentity(playerIdx);
 		if (!trueIdentity.identity.empty()
