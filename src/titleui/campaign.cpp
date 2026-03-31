@@ -47,6 +47,7 @@
 #include "widgets/infobutton.h"
 #include "widgets/frontendimagebutton.h"
 #include "widgets/advcheckbox.h"
+#include "widgets/optionsform.h"
 
 typedef WzAdvCheckbox WzCampaignTweakOptionToggle;
 
@@ -1000,6 +1001,100 @@ void WzCampaignTweakOptionsEditForm::updateResetButtonStatus()
 	resetButton->setState((hasSettingThatDiffersFromDefaults) ? 0 : WBUT_DISABLE);
 }
 
+class WidgetInfoButtonWrapper : public WIDGET
+{
+protected:
+	WidgetInfoButtonWrapper() {}
+
+	void initialize(const std::shared_ptr<WIDGET>& widget);
+public:
+	static std::shared_ptr<WidgetInfoButtonWrapper> make(const std::shared_ptr<WIDGET>& widget)
+	{
+		class make_shared_enabler: public WidgetInfoButtonWrapper {};
+		auto result = std::make_shared<make_shared_enabler>();
+		result->initialize(widget);
+		return result;
+	}
+
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+
+public:
+	typedef std::function<void ()> InfoClickHandler;
+	void setInfoClickHandler(const InfoClickHandler& func);
+
+protected:
+	void geometryChanged() override;
+
+private:
+	std::shared_ptr<WIDGET> widget;
+	std::shared_ptr<WzInfoButton> infoButton;
+	InfoClickHandler infoClickHandler;
+	int topPadding = 0;
+	int bottomPadding = 0;
+	int internalHorizontalPadding = 10;
+	const int imageDimensions = 16;
+};
+
+int32_t WidgetInfoButtonWrapper::idealWidth()
+{
+	return widget->idealWidth() + internalHorizontalPadding + infoButton->idealWidth();
+}
+
+int32_t WidgetInfoButtonWrapper::idealHeight()
+{
+	return widget->idealHeight();
+}
+
+void WidgetInfoButtonWrapper::initialize(const std::shared_ptr<WIDGET>& _widget)
+{
+	widget = _widget;
+
+	infoButton = WzInfoButton::make();
+	infoButton->setImageDimensions(imageDimensions);
+	attach(infoButton);
+	infoButton->hide();
+	auto weakSelf = std::weak_ptr<WidgetInfoButtonWrapper>(std::dynamic_pointer_cast<WidgetInfoButtonWrapper>(shared_from_this()));
+	infoButton->addOnClickHandler([weakSelf](W_BUTTON&) {
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent?");
+		if (strongSelf->infoClickHandler)
+		{
+			strongSelf->infoClickHandler();
+		}
+	});
+
+	attach(widget);
+}
+
+void WidgetInfoButtonWrapper::geometryChanged()
+{
+	int w = width();
+	int h = height();
+
+	int infoButtonWidth = imageDimensions + internalHorizontalPadding;
+	int infoButtonX0 = width() - infoButtonWidth;
+	int infoButtonHeight = height() - (topPadding + bottomPadding);
+	infoButton->setGeometry(infoButtonX0, topPadding, infoButtonWidth, infoButtonHeight);
+
+	int widgetWidth = w - infoButton->width() - internalHorizontalPadding;
+	int widgetHeight = h - (topPadding + bottomPadding);
+	widget->setGeometry(0, topPadding, widgetWidth, widgetHeight);
+}
+
+void WidgetInfoButtonWrapper::setInfoClickHandler(const InfoClickHandler& func)
+{
+	infoClickHandler = func;
+	if (infoClickHandler)
+	{
+		infoButton->show();
+	}
+	else
+	{
+		infoButton->hide();
+	}
+}
+
 class WzCampaignTweakOptionsSummaryWidget : public WIDGET
 {
 protected:
@@ -1215,7 +1310,7 @@ protected:
 			// load built-in details for original campaign
 			displayName = _("Original Campaign");
 			author = "Warzone 2100";
-			description = _("Command the forces of The Project in a battle to rebuild the world.\nBalance descriptions:\n\"Remastered\": Increases the viability of weaponry and designs on a per mission basis.\n\"Classic\": Stats of game versions ~2.x - 3.x unintentionally affected by game patches over the years.\n\"Pumpkin\": Matching game version 1.10, this is the closest representation of stats the original developers (Pumpkin Studios) intended.");
+			description = _("Command the forces of The Project in a battle to rebuild the world");
 			version = version_getVersionString();
 			pBackgroundTexture = gfx_api::context::get().loadTextureFromFile("images/wz_original_campaign_banner.png", gfx_api::texture_type::user_interface, -1, -1, true);
 		}
@@ -1687,6 +1782,8 @@ private:
 	void openOverlay(const std::shared_ptr<WIDGET>& popoverForm, const std::shared_ptr<WIDGET>& psTarget, const std::function<void ()>& onCloseFunc);
 	void closeOverlay();
 
+	void openCampaignBalanceInfoOverlay();
+
 	void updateTweakOptions();
 	void openTweakOptionsEditFormOverlay();
 
@@ -1993,6 +2090,244 @@ bool CampaignStartOptionsForm::updateCampaignBalanceDropdown(const std::vector<W
 	return true;
 }
 
+class WzCampaignHelpPanel : public WIDGET
+{
+protected:
+	WzCampaignHelpPanel()
+	{}
+	void initialize(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int idealWidth, const std::function<void()>& closeHandlerFunc);
+public:
+	static std::shared_ptr<WzCampaignHelpPanel> make(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int idealWidth, const std::function<void()>& closeHandlerFunc)
+	{
+		class make_shared_enabler: public WzCampaignHelpPanel {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize(optionInfo, choiceHelpDescriptions, idealWidth, closeHandlerFunc);
+		return widget;
+	}
+	int32_t idealHeight() override;
+protected:
+	void geometryChanged() override;
+	void display(int xOffset, int yOffset) override;
+private:
+	std::shared_ptr<Paragraph> buildParagraph(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int idealWidth);
+private:
+	std::shared_ptr<W_LABEL> formTitle;
+	std::shared_ptr<WzFrontendImageButton> closeButton;
+	std::shared_ptr<ScrollableListWidget> paragraphContainer;
+	iV_fonts baseFontId = font_regular;
+	int innerPadding = 20;
+	int betweenButtonPadding = 15;
+};
+
+std::shared_ptr<Paragraph> WzCampaignHelpPanel::buildParagraph(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int idealWidth)
+{
+	auto baseFont = iV_FontModifyBold(baseFontId, false).value_or(baseFontId);
+	auto baseFontBold = iV_FontModifyBold(baseFontId, true).value_or(baseFontId);
+
+	// Build description paragraph
+	auto paragraph = std::make_shared<Paragraph>();
+	bool wroteALine = false;
+	paragraph->setLineSpacing(1);
+	paragraph->setGeometry(0, 0, idealWidth, 20);
+
+	// Add general option info text description
+	paragraph->setFont(baseFont);
+	paragraph->setFontColour(WZCOL_TEXT_BRIGHT);
+	WzString optionHelpDescription = optionInfo.getTranslatedHelpDescription();
+	if (!optionHelpDescription.isEmpty())
+	{
+		paragraph->addText(optionHelpDescription);
+		wroteALine = true;
+	}
+
+	for (const auto& choiceHelpDesc : choiceHelpDescriptions)
+	{
+		if (choiceHelpDesc.helpDescription.isEmpty())
+		{
+			continue;
+		}
+
+		if (wroteALine)
+		{
+			paragraph->addText("\n \n");
+		}
+
+		// Add a bold string with the displayName and then append the choice help description
+		if (!choiceHelpDesc.displayName.isEmpty())
+		{
+			paragraph->setFont(baseFontBold);
+			paragraph->addText(choiceHelpDesc.displayName + ": ");
+		}
+		paragraph->setFont(baseFont);
+		paragraph->addText(choiceHelpDesc.helpDescription);
+
+		wroteALine = true;
+	}
+
+	if (!wroteALine)
+	{
+		return nullptr;
+	}
+
+	return paragraph;
+}
+
+void WzCampaignHelpPanel::initialize(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int idealWidth, const std::function<void()>& closeHandlerFunc)
+{
+	formTitle = std::make_shared<W_LABEL>();
+	formTitle->setFont(font_regular_bold, WZCOL_TEXT_MEDIUM);
+	formTitle->setString(_("About Balance Options"));
+	formTitle->setCanTruncate(true);
+	formTitle->setTransparentToMouse(true);
+	formTitle->setGeometry(innerPadding, innerPadding, formTitle->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
+	attach(formTitle);
+
+	auto weakEditForm = std::weak_ptr<WzCampaignTweakOptionsEditForm>(std::dynamic_pointer_cast<WzCampaignTweakOptionsEditForm>(shared_from_this()));
+
+	if (closeHandlerFunc)
+	{
+		// Add "Close" button
+		closeButton = WzFrontendImageButton::make(nullopt);
+		closeButton->setString(_("Close"));
+		closeButton->addOnClickHandler([closeHandlerFunc](W_BUTTON&) {
+			widgScheduleTask([closeHandlerFunc]() {
+				closeHandlerFunc();
+			});
+		});
+		attach(closeButton);
+	}
+
+	paragraphContainer = ScrollableListWidget::make();
+	paragraphContainer->setItemSpacing(10);
+	paragraphContainer->setExpandWhenScrollbarInvisible(false);
+	int listY0 = formTitle->y() + formTitle->height() + innerPadding;
+	paragraphContainer->setGeometry(innerPadding, listY0, idealWidth - (innerPadding * 2), 100);
+	attach(paragraphContainer);
+
+	auto paragraph = buildParagraph(optionInfo, choiceHelpDescriptions, idealWidth - (innerPadding * 2));
+	if (paragraph)
+	{
+		paragraph->setGeometry(0, 0, paragraphContainer->width(), 20);
+		paragraphContainer->addItem(paragraph);
+	}
+}
+
+void WzCampaignHelpPanel::geometryChanged()
+{
+	if (width() <= 1 || height() <= 1)
+	{
+		return;
+	}
+
+	// recalculate position of paragraph container
+	int listY0 = paragraphContainer->y();
+	int listH = height() - listY0 - innerPadding;
+	int listW = width() - (innerPadding * 2);
+	if (listW > 1 && listH > 1)
+	{
+		paragraphContainer->setGeometry(innerPadding, listY0, listW, listH);
+
+		// truncate list height at needed height (if scrollable height is less)
+		auto listIdealHeight = paragraphContainer->idealHeight();
+		if (listIdealHeight < listH)
+		{
+			paragraphContainer->setGeometry(innerPadding, listY0, listW, listIdealHeight);
+		}
+	}
+
+	// position top button(s)
+	int lastButtonX0 = width() - innerPadding;
+	int buttonY0 = innerPadding;
+	int topButtonHeight = closeButton->idealHeight();
+	if (closeButton)
+	{
+		int buttonX0 = lastButtonX0 - closeButton->idealWidth();
+		closeButton->setGeometry(buttonX0, buttonY0, closeButton->idealWidth(), topButtonHeight);
+		lastButtonX0 = buttonX0 - betweenButtonPadding;
+	}
+}
+
+// ideal height *for the current width*
+int32_t WzCampaignHelpPanel::idealHeight()
+{
+	return paragraphContainer->y() + paragraphContainer->height() + innerPadding;
+}
+
+void WzCampaignHelpPanel::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
+
+	PIELIGHT backColor = WZCOL_TRANSPARENT_BOX;
+	backColor.byte.a = std::max<UBYTE>(220, backColor.byte.a);
+	pie_UniTransBoxFill(x0, y0, x1, y1, backColor);
+
+	iV_Box(x0, y0, x1, y1, pal_RGBA(255, 255, 255, 175));
+}
+
+void CampaignStartOptionsForm::openCampaignBalanceInfoOverlay()
+{
+	constexpr size_t remasteredBalanceIdx = 0;
+	constexpr size_t classicModIdx = 1;
+	constexpr size_t pumpkinModIdx = 2;
+
+	auto optionInfo = OptionInfo("campaign.balancemod", N_("Balance"), N_("Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."));
+	std::vector<OptionChoiceHelpDescription> choiceHelpDescriptions;
+	for (size_t i = 0; i < campaignBalanceChoices.size(); ++i)
+	{
+		auto& option = campaignBalanceChoices[i];
+
+		OptionChoiceHelpDescription choiceHelpDescription;
+		choiceHelpDescription.displayName = option.displayName;
+
+		if (i == remasteredBalanceIdx)
+		{
+			choiceHelpDescription.helpDescription = _("The remastered campaign experience");
+			choiceHelpDescription.helpDescription += ".\n";
+			choiceHelpDescription.helpDescription += _("Increases the viability of weaponry and designs on a per mission basis.");
+		}
+		else if (i == classicModIdx)
+		{
+			choiceHelpDescription.helpDescription = _("Stats of game versions ~2.x - 3.x.");
+			choiceHelpDescription.helpDescription += "\n";
+			choiceHelpDescription.helpDescription += _("Unintentionally affected by game patches over the years.");
+		}
+		else if (i == pumpkinModIdx)
+		{
+			choiceHelpDescription.helpDescription = _("Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended.");
+		}
+		else if (option.modInfo.has_value())
+		{
+			choiceHelpDescription.helpDescription = option.modInfo.value().description.getLocalizedString();
+		}
+
+		choiceHelpDescriptions.push_back(choiceHelpDescription);
+	}
+
+	std::weak_ptr<CampaignStartOptionsForm> weakSelf(std::dynamic_pointer_cast<CampaignStartOptionsForm>(shared_from_this()));
+
+	int32_t widgetWidth = std::min<int32_t>(width() - 20, 450);
+	auto helpWidget = WzCampaignHelpPanel::make(optionInfo, choiceHelpDescriptions, widgetWidth, [weakSelf]() {
+		if (auto strongSelf = weakSelf.lock())
+		{
+			strongSelf->closeOverlay();
+		}
+	});
+	if (!helpWidget)
+	{
+		// nothing to display
+		return;
+	}
+	helpWidget->setGeometry(0, 0, widgetWidth, 370); // set the width, and a fixed maximum height
+	helpWidget->setGeometry(0, 0, widgetWidth, std::min<int>(helpWidget->idealHeight(), 370)); // shrink to idealHeight if needed for current width
+
+	openOverlay(helpWidget, campaignBalanceDropdown, [weakSelf]() {
+		// no-op onCloseFunc
+	});
+}
+
 std::shared_ptr<WIDGET> CampaignStartOptionsForm::makeCampaignBalanceDropdown()
 {
 	campaignBalanceChoices = {
@@ -2043,7 +2378,16 @@ std::shared_ptr<WIDGET> CampaignStartOptionsForm::makeCampaignBalanceDropdown()
 		});
 	});
 
-	return Margin(0, 10).wrap(campaignBalanceDropdown);
+	// wrap with info button
+	auto infoWrappedCampaignBalanceDropdown = WidgetInfoButtonWrapper::make(campaignBalanceDropdown);
+	infoWrappedCampaignBalanceDropdown->setInfoClickHandler([weakSelf]() {
+		debug(LOG_INFO, "Info button clicked");
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent?");
+		strongSelf->openCampaignBalanceInfoOverlay();
+	});
+
+	return Margin(0, 10).wrap(infoWrappedCampaignBalanceDropdown);
 }
 
 std::shared_ptr<WIDGET> CampaignStartOptionsForm::makeCampaignSelectorDropdown()
