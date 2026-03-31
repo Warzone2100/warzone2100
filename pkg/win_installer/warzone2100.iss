@@ -275,6 +275,7 @@ WizardSizePercent=110
 AlwaysShowComponentsList=yes
 AlwaysShowDirOnReadyPage=yes
 WizardImageFile={#AddBackslash(SourcePath) + "resources\wzwizardimage.bmp"}
+WizardImageFileDynamicDark={#AddBackslash(SourcePath) + "resources\wzwizardimage.bmp"}
 
 // Install Pages
 // - Show the welcome page - it's where we provide the "Advanced" button
