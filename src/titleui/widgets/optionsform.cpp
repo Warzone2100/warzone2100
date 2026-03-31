@@ -1347,28 +1347,13 @@ int32_t OptionsForm::idealHeight()
 	return optionsList->idealHeight();
 }
 
-class WzHelpPopoverWidget : public WIDGET
-{
-protected:
-	WzHelpPopoverWidget();
-	bool initialize(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth);
-public:
-	static std::shared_ptr<WzHelpPopoverWidget> make(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth);
-	int32_t idealWidth() override;
-	int32_t idealHeight() override;
-protected:
-	void display(int xOffset, int yOffset) override;
-	void geometryChanged() override;
-private:
-	std::shared_ptr<Paragraph> paragraph;
-	const int32_t outerPadding = 10;
-};
+// MARK: WzHelpPopoverWidget
 
-std::shared_ptr<WzHelpPopoverWidget> WzHelpPopoverWidget::make(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth)
+std::shared_ptr<WzHelpPopoverWidget> WzHelpPopoverWidget::make(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth, iV_fonts baseFontId)
 {
 	class make_shared_enabler : public WzHelpPopoverWidget { };
 	auto result = std::make_shared<make_shared_enabler>();
-	if (!result->initialize(optionInfo, choiceHelpDescriptions, paragraphWidth))
+	if (!result->initialize(optionInfo, choiceHelpDescriptions, paragraphWidth, baseFontId))
 	{
 		return nullptr;
 	}
@@ -1379,8 +1364,11 @@ std::shared_ptr<WzHelpPopoverWidget> WzHelpPopoverWidget::make(const OptionInfo&
 WzHelpPopoverWidget::WzHelpPopoverWidget()
 { }
 
-bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth)
+bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth, iV_fonts baseFontId)
 {
+	auto baseFont = iV_FontModifyBold(baseFontId, false).value_or(baseFontId);
+	auto baseFontBold = iV_FontModifyBold(baseFontId, true).value_or(baseFontId);
+
 	auto availabilityResults = optionInfo.getAvailabilityResults();
 	bool optionIsAvailable = std::all_of(availabilityResults.begin(), availabilityResults.end(), [](const OptionInfo::AvailabilityResult& result) -> bool {
 		return result.available;
@@ -1392,7 +1380,7 @@ bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::ve
 	paragraph->setLineSpacing(1);
 
 	// Add general option info text description
-	paragraph->setFont(font_small);
+	paragraph->setFont(baseFont);
 	paragraph->setFontColour(WZCOL_TEXT_BRIGHT);
 	WzString optionHelpDescription = optionInfo.getTranslatedHelpDescription();
 	if (!optionHelpDescription.isEmpty())
@@ -1418,10 +1406,10 @@ bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::ve
 			// Add a bold string with the displayName and then append the choice help description
 			if (!choiceHelpDesc.displayName.isEmpty())
 			{
-				paragraph->setFont(font_bar); // font_small_bold
+				paragraph->setFont(baseFontBold);
 				paragraph->addText(choiceHelpDesc.displayName + ": ");
 			}
-			paragraph->setFont(font_small);
+			paragraph->setFont(baseFont);
 			paragraph->addText(choiceHelpDesc.helpDescription);
 
 			wroteALine = true;
@@ -1434,11 +1422,11 @@ bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::ve
 				paragraph->addText("\n \n");
 			}
 
-			paragraph->setFont(font_bar); // font_small_bold
+			paragraph->setFont(baseFontBold);
 			paragraph->addText(WzString("* ") + _("Takes effect on game restart"));
 			wroteALine = true;
 
-			paragraph->setFont(font_small);
+			paragraph->setFont(baseFont);
 		}
 	}
 	else
@@ -1458,7 +1446,7 @@ bool WzHelpPopoverWidget::initialize(const OptionInfo& optionInfo, const std::ve
 			// Add a bold string with the
 			if (!result.localizedUnavailabilityReason.isEmpty())
 			{
-				paragraph->setFont(font_bar); // font_small_bold
+				paragraph->setFont(baseFontBold);
 				paragraph->addText(result.localizedUnavailabilityReason);
 				wroteALine = true;
 			}
