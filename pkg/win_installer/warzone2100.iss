@@ -225,7 +225,7 @@ AppUpdatesURL={#MyAppURL}
 
 // File VersionInfo
 VersionInfoCompany={#MyAppPublisher}
-VersionInfoCopyright=Copyright © 2024-2025 Warzone 2100 Project (https://github.com/Warzone2100)
+VersionInfoCopyright=Copyright © 2024-2026 Warzone 2100 Project (https://github.com/Warzone2100)
 VersionInfoDescription={#MyAppName} Installer
 VersionInfoProductName={#MyAppName}
 VersionInfoProductTextVersion={#MyAppInstallerProductTextVersion}
@@ -335,6 +335,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer
 #emit AddTranslation("sl_SI", "compiler:Languages\Slovenian.isl")
 #emit AddTranslation("sv_SE", "compiler:Languages\Swedish.isl")
 #emit AddTranslation("ta_IN", "compiler:Languages\Tamil.isl")
+#emit AddTranslation("th_TH", "compiler:Languages\Thai.isl")
 #emit AddTranslation("tr_TR", "compiler:Languages\Turkish.isl")
 #emit AddTranslation("uk_UA", "compiler:Languages\Ukrainian.isl")
 
