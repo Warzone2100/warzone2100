@@ -323,11 +323,6 @@ void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectio
 void to_json(nlohmann::json& j, const JoinConnectionDescription& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription& v);
 
-void joinGame(const char *connectionString, bool asSpectator = false);
-void joinGame(const char *host, uint32_t port, bool asSpectator = false);
-void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
-void joinLobbyGame(const std::string& lobbyAddress, const std::string& lobbyGameId, bool asSpectator = false);
-
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

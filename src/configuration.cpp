@@ -474,7 +474,7 @@ bool loadConfig()
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
 	NETsetLobbyserverAddress(iniGetString("lobbyserver", std::string(netlobby::GetDefaultLobbyAddress())).value());
-	mpSetServerName(iniGetString("server_name", "").value());
+	war_setLastIpServerConnect(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 //	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 //	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
@@ -858,7 +858,7 @@ bool saveConfig()
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
 	iniSetString("lobbyserver", NETgetLobbyserverAddress());
-	iniSetString("server_name", mpGetServerName());
+	iniSetString("server_name", war_getLastIpServerConnect());
 	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
 	{
 		iniSetInteger("gameserver_port", (int)NETgetGameserverPort());

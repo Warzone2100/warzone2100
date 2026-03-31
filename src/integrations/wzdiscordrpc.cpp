@@ -31,6 +31,7 @@
 #include "../urlhelpers.h"
 #include "../urlrequest.h"
 #include "../version.h"
+#include "../multijoin_helpers.h"
 #include <sstream>
 #include <algorithm>
 #include <chrono>

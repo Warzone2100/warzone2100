@@ -1052,66 +1052,6 @@ void from_json(const nlohmann::json& j, JoinConnectionDescription& v)
 	v.type = j.at("t").get<JoinConnectionDescription::JoinConnectionType>();
 }
 
-void joinGame(const char *connectionString, bool asSpectator /*= false*/)
-{
-	const char* a = strchr(connectionString, '[');
-	const char* b = (a != nullptr) ? strchr(a, ']') : nullptr;
-	if (a != nullptr && b != nullptr)
-	{
-		// Bracketed host (example, bracketed IPv6 address) - may have a port after
-		std::string serverIP = "";
-		const char* ipv6AddressStart = a+1;
-		serverIP.assign(ipv6AddressStart, b-ipv6AddressStart);
-		uint32_t serverPort = 0; // default port
-		if (*(b+1) == ':')
-		{
-			// extract the port
-			serverPort = atoi(b+2);
-		}
-		debug(LOG_INFO, "Connecting to host [%s] port %d", serverIP.c_str(), serverPort);
-		joinGame(serverIP.c_str(), serverPort, asSpectator);
-		return;
-	}
-	else
-	{
-		const char* ddch = strrchr(connectionString, ':');
-		const char* firstCh = (ddch != nullptr) ? strchr(connectionString, ':') : nullptr;
-		if (ddch != nullptr && firstCh == ddch)
-		{
-			// Presumably a host:port string (has a single colon), where host is either an IPv4 address or a hostname
-			uint32_t serverPort = atoi(ddch+1);
-			std::string serverIP = "";
-			serverIP.assign(connectionString, ddch - connectionString);
-			debug(LOG_INFO, "Connecting to host [%s] port %d", serverIP.c_str(), serverPort);
-			joinGame(serverIP.c_str(), serverPort, asSpectator);
-			return;
-		}
-		// otherwise fall-back to just treating the entire connectionString as the host (IPv4/6 address, hostname, etc)
-	}
-	joinGame(connectionString, 0, asSpectator);
-}
-
-void joinGame(const char *host, uint32_t port, bool asSpectator /*= false*/)
-{
-	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();
-	std::vector<JoinConnectionDescription> connList;
-	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, hostStr, port);
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-	connList.emplace_back(JoinConnectionDescription::JoinConnectionType::GNS_DIRECT, hostStr, port);
-#endif
-	joinGame(connList, asSpectator);
-}
-
-void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator /*= false*/)
-{
-	startJoiningAttempt(sPlayer, connection_list, asSpectator);
-}
-
-void joinLobbyGame(const std::string& lobbyAddress, const std::string& lobbyGameId, bool asSpectator /*= false*/)
-{
-	startLobbyJoiningAttempt(sPlayer, lobbyAddress, lobbyGameId, asSpectator);
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Screen.
 

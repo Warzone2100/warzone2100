@@ -31,6 +31,7 @@
 #include "lib/widget/margin.h"
 #include "lib/widget/paragraph.h"
 #include "lib/widget/popovermenu.h"
+#include "lib/widget/editbox.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "src/multiplay.h"
@@ -44,6 +45,8 @@
 #include "src/screens/joiningscreen.h"
 #include "lib/netplay/netlobby.h"
 #include "src/warzoneconfig.h"
+#include "optionsform.h"
+#include "src/multijoin_helpers.h"
 
 #include <numeric>
 #include <vector>
@@ -688,6 +691,456 @@ int32_t LobbyActionWidgets::idealHeight()
 	return watchButton->idealHeight() + (WZLOBBY_WIDG_PADDING_Y * 2);
 }
 
+// MARK: - ConnectToForm
+
+class ConnectToForm : public W_BUTTON
+{
+public:
+	typedef std::function<void(WzString inputStr, bool asSpectator)> OnSubmitFunc;
+protected:
+	ConnectToForm() { }
+	~ConnectToForm();
+	void initialize(const OnSubmitFunc& onSubmitFunc);
+
+	virtual void geometryChanged() override;
+	virtual void display(int xOffset, int yOffset) override;
+	virtual void highlight(W_CONTEXT *psContext) override;
+
+public:
+	static std::shared_ptr<ConnectToForm> make(const OnSubmitFunc& onSubmitFunc)
+	{
+		class make_shared_enabler: public ConnectToForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize(onSubmitFunc);
+		return widget;
+	}
+
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
+	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
+private:
+	bool isMouseOverFormOrChildren() const;
+	int32_t buttonAreaWidth();
+	void recalcLayout();
+
+	void submitInputBox(bool asSpectator);
+	void submit(WzString inputStr, bool asSpectator);
+
+	std::shared_ptr<PopoverMenuWidget> buildJoinOptionsMenu();
+	void displayJoinOptionsMenu(const std::shared_ptr<WIDGET> &psParent);
+
+private:
+	OnSubmitFunc onSubmitFunc;
+	optional<UWORD> frontendImgID = nullopt;
+	WzString joinTextStr;
+
+	PIELIGHT inputBoxBackground;
+	PIELIGHT inputBoxBackgroundHighlight;
+
+	std::shared_ptr<W_EDITBOX> inputBox;
+	WzText wzText;
+
+	std::shared_ptr<PopoverWidget> optionsPopover;
+
+	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
+
+	const int32_t minInputBoxHeight = 16;
+	const int32_t inputBoxHorizontalPadding = 6;
+
+	const int32_t verticalPadding = 5;
+	const int32_t horizontalPadding = 8;
+
+	const int32_t maxButtonTextAreaWidth = 100;
+
+	const int32_t imageDimensions = 12;
+	const int32_t horizontalPaddingBetweenButtonSplit = 6;
+};
+
+ConnectToForm::~ConnectToForm()
+{
+	if (optionsPopover)
+	{
+		optionsPopover->close();
+	}
+}
+
+static std::shared_ptr<WzClickableOptionsChoiceWidget> addClickableJoinMenuItem(const std::shared_ptr<PopoverMenuWidget>& menu, const WzString& text, const std::function<void (WIDGET_KEY)>& onClick, bool disabled = false, iV_fonts fontId = font_regular)
+{
+	auto result = WzClickableOptionsChoiceWidget::make(fontId);
+	result->setString(text);
+	result->setTextAlignment(WLAB_ALIGNRIGHT);
+	if (onClick)
+	{
+		result->addOnClickHandler([onClick](WzClickableOptionsChoiceWidget&, WIDGET_KEY key) {
+			onClick(key);
+		});
+	}
+	result->setDisabled(disabled);
+	result->setGeometry(0, 0, result->idealWidth(), result->idealHeight());
+	menu->addMenuItem(result, true);
+	return result;
+}
+
+std::shared_ptr<PopoverMenuWidget> ConnectToForm::buildJoinOptionsMenu()
+{
+	std::weak_ptr<ConnectToForm> weakSelf = std::dynamic_pointer_cast<ConnectToForm>(shared_from_this());
+
+	auto popoverMenu = PopoverMenuWidget::make();
+
+	auto addSpacerWidget = [&popoverMenu](int height){
+		auto spacerWidget = std::make_shared<WIDGET>();
+		spacerWidget->setGeometry(0, 0, 10, height);
+		popoverMenu->addMenuItem(spacerWidget);
+	};
+
+	std::string lastIPServerName = war_getLastIpServerConnect();
+	bool inputItemsDisabled = (inputBox->getString().isEmpty());
+	bool displayStandardInputJoinItems = (!inputItemsDisabled || lastIPServerName.empty());
+
+	if (displayStandardInputJoinItems)
+	{
+		addClickableJoinMenuItem(popoverMenu, _("Join as Player"), [weakSelf](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submitInputBox(false);
+		})->setDisabled(inputItemsDisabled);
+		addClickableJoinMenuItem(popoverMenu, _("Join as Spectator"), [weakSelf](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submitInputBox(true);
+		})->setDisabled(inputItemsDisabled);
+	}
+
+	if (!lastIPServerName.empty())
+	{
+		if (displayStandardInputJoinItems)
+		{
+			addSpacerWidget(10);
+		}
+
+		// [Last IP: %s]
+		addClickableJoinMenuItem(popoverMenu, WzString::format(_("Last IP: %s"), lastIPServerName.c_str()), nullptr, true);
+
+		addClickableJoinMenuItem(popoverMenu, _("Join as Player"), [weakSelf, lastIPServerName](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submit(WzString::fromUtf8(lastIPServerName), false);
+		});
+
+		addClickableJoinMenuItem(popoverMenu, _("Join as Spectator"), [weakSelf, lastIPServerName](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submit(WzString::fromUtf8(lastIPServerName), true);
+		});
+
+		addSpacerWidget(2);
+
+		addClickableJoinMenuItem(popoverMenu, _("Clear Last IP"), [](WIDGET_KEY) {
+			war_setLastIpServerConnect("");
+		}, false, font_small);
+	}
+
+	int32_t idealMenuHeight = popoverMenu->idealHeight();
+	int32_t menuHeight = idealMenuHeight;
+	if (menuHeight > screenHeight)
+	{
+		menuHeight = screenHeight;
+	}
+	popoverMenu->setGeometry(popoverMenu->x(), popoverMenu->y(), popoverMenu->idealWidth(), menuHeight);
+
+	return popoverMenu;
+}
+
+void ConnectToForm::displayJoinOptionsMenu(const std::shared_ptr<WIDGET> &psParent)
+{
+	auto popoverMenu = buildJoinOptionsMenu();
+
+	std::weak_ptr<ConnectToForm> weakSelf = std::dynamic_pointer_cast<ConnectToForm>(shared_from_this());
+	setState(WBUT_CLICKLOCK);
+
+	if (optionsPopover)
+	{
+		optionsPopover->close();
+	}
+	optionsPopover = popoverMenu->openMenu(psParent, PopoverWidget::Alignment::RightOfParent, Vector2i(0, 1), [weakSelf]() {
+		// close handler
+		if (auto strongConnectToForm = weakSelf.lock())
+		{
+			strongConnectToForm->setState(0); // clear clicklock state
+		}
+	});
+}
+
+void displayConnectToEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	// do not draw any background
+}
+
+constexpr int maxConnectToInputLength = 256;
+
+void ConnectToForm::initialize(const OnSubmitFunc& _onSubmitFunc)
+{
+	onSubmitFunc = _onSubmitFunc;
+
+	if (FrontImages != nullptr)
+	{
+		frontendImgID = IMAGE_CARET_DOWN_FILL;
+	}
+
+	inputBoxBackground = WZCOL_TRANSPARENT_BOX;
+	inputBoxBackground.byte.a = inputBoxBackground.byte.a / 3;
+
+	inputBoxBackgroundHighlight = WZCOL_TRANSPARENT_BOX;
+	inputBoxBackgroundHighlight.byte.a = inputBoxBackgroundHighlight.byte.a / 2;
+
+	auto weakSelf = std::weak_ptr<ConnectToForm>(std::dynamic_pointer_cast<ConnectToForm>(shared_from_this()));
+
+	inputBox = std::make_shared<W_EDITBOX>();
+	attach(inputBox);
+	inputBox->setGeometry(horizontalPadding, 0, 280, minInputBoxHeight);
+	inputBox->pBoxDisplay = displayConnectToEditBox;
+	inputBox->setMaxStringSize(maxConnectToInputLength);
+	inputBox->setPlaceholder(_("GameID or IP:port"));
+	inputBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
+
+	inputBox->setOnReturnHandler([weakSelf](W_EDITBOX& widg) {
+		auto strongParent = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongParent != nullptr, "No parent?");
+		strongParent->submitInputBox(false);
+	});
+
+	joinTextStr = _("Join");
+	wzText.setText(joinTextStr, font_regular);
+
+	addOnClickHandler([weakSelf](W_BUTTON&) {
+		auto strongConnectToForm = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongConnectToForm != nullptr, "Null form?");
+		strongConnectToForm->displayJoinOptionsMenu(strongConnectToForm);
+	});
+}
+
+void ConnectToForm::geometryChanged()
+{
+	recalcLayout();
+}
+
+void ConnectToForm::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	int clickLocationX = psContext->mx - x();
+
+	// If click is over button area, forward to W_BUTTON impl
+	if (clickLocationX >= (width() - buttonAreaWidth()))
+	{
+		W_BUTTON::clicked(psContext, key);
+	}
+	else if (clickLocationX <= inputBoxHorizontalPadding)
+	{
+		// padding area for left of input box - simulate click
+		auto weakSelf = std::weak_ptr<ConnectToForm>(std::dynamic_pointer_cast<ConnectToForm>(shared_from_this()));
+		widgScheduleTask([weakSelf]() {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Widget gone?");
+			W_CONTEXT context = W_CONTEXT::ZeroContext();
+			strongSelf->inputBox->simulateClick(&context);
+		});
+	}
+}
+
+std::shared_ptr<WIDGET> ConnectToForm::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+{
+	auto mouseOverWidget = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
+	if (mouseOverWidget != nullptr)
+	{
+		// if findMouseTargetRecursive was called for this row, it means the mouse is over it
+		// (see WIDGET::findMouseTargetRecursive)
+		lastFrameMouseIsOverRowOrChildren = frameGetFrameNumber();
+	}
+	else
+	{
+		lastFrameMouseIsOverRowOrChildren = nullopt;
+	}
+	return mouseOverWidget;
+}
+
+bool ConnectToForm::isMouseOverFormOrChildren() const
+{
+	if (!lastFrameMouseIsOverRowOrChildren.has_value())
+	{
+		return false;
+	}
+	return lastFrameMouseIsOverRowOrChildren.value() == frameGetFrameNumber();
+}
+
+void ConnectToForm::highlight(W_CONTEXT *psContext)
+{
+	int mouseXLoc = psContext->mx - x();
+	if (mouseXLoc <= inputBoxHorizontalPadding)
+	{
+		// silently ignoring button highlight when over this padding area that "belongs" to the inputBox
+		return;
+	}
+	W_BUTTON::highlight(psContext);
+}
+
+void ConnectToForm::display(int xOffset, int yOffset)
+{
+	int x0 = xOffset + x();
+	int y0 = yOffset + y();
+	int w = width();
+
+	bool isDown = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (state & WBUT_DISABLE) != 0;
+	bool isMouseOverButtonArea = ((state & WBUT_HIGHLIGHT) != 0);
+	bool isInputEditing = inputBox->isEditing();
+	bool isHighlight = isMouseOverFormOrChildren() || isInputEditing;
+	bool isMouseOverInputBoxArea = isMouseOverFormOrChildren() && !isMouseOverButtonArea;
+
+	int buttonAreaW = buttonAreaWidth();
+
+	// Draw background for input box area
+	{
+		int boxX0 = x0;
+		int boxY0 = y0;
+		int boxX1 = boxX0 + (width() - buttonAreaW);
+		int boxY1 = boxY0 + height();
+		pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY1, (isInputEditing) ? WZCOL_TRANSPARENT_BOX : (isHighlight) ? inputBoxBackgroundHighlight : inputBoxBackground);
+	}
+
+	// Draw background for button
+	{
+		int boxX0 = x0 + (w - buttonAreaW);
+		int boxY0 = y0;
+		int boxX1 = boxX0 + buttonAreaW;
+		int boxY1 = boxY0 + height();
+		pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY1, WZCOL_TRANSPARENT_BOX);
+	}
+
+	// Draw entire outer border
+	{
+		PIELIGHT borderColor = WZCOL_TEXT_MEDIUM;
+		if (isInputEditing || isMouseOverInputBoxArea)
+		{
+			borderColor = WZCOL_TEXT_BRIGHT;
+		}
+
+		if (isDisabled)
+		{
+			borderColor.byte.a = (borderColor.byte.a / 2);
+		}
+		int boxX0 = x0;
+		int boxY0 = y0;
+		int boxX1 = boxX0 + width();
+		int boxY1 = boxY0 + height();
+		iV_Box(boxX0 + 1, boxY0 + 1, boxX1, boxY1, borderColor);
+	}
+
+	// Draw Button area outer border
+	if (!isInputEditing && !isMouseOverInputBoxArea)
+	{
+		PIELIGHT borderColor = (isDown) ? WZCOL_TEXT_DARK : ((isMouseOverButtonArea) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
+		if (isDisabled)
+		{
+			borderColor.byte.a = (borderColor.byte.a / 2);
+		}
+		int boxX0 = x0 + (w - buttonAreaW);
+		int boxY0 = y0;
+		int boxX1 = boxX0 + buttonAreaW;
+		int boxY1 = boxY0 + height();
+		iV_Box(boxX0 + 1, boxY0 + 1, boxX1, boxY1, borderColor);
+	}
+	else
+	{
+		// outer border handled by the "entire" case - just draw the dividing line
+		int boxX0 = x0 + (w - buttonAreaW);
+		int boxY0 = y0;
+		int boxY1 = boxY0 + height();
+		iV_Line(boxX0 + 1, boxY0, boxX0 + 1, boxY1, (isMouseOverButtonArea) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
+	}
+
+	PIELIGHT textColor = (isMouseOverButtonArea) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+	if (isDisabled)
+	{
+		textColor.byte.a = (textColor.byte.a / 2);
+	}
+
+	// Draw image portion of button
+	const int splitButtonImageAreaX0 = x0 + (w - horizontalPadding - imageDimensions - (horizontalPaddingBetweenButtonSplit / 2));
+	{
+		// Display the image centered in the image split area
+		int imgPosX0 = splitButtonImageAreaX0 + (horizontalPaddingBetweenButtonSplit / 2);
+		int imgPosY0 = y0 + (height() - imageDimensions) / 2;
+
+		if (frontendImgID.has_value())
+		{
+			PIELIGHT imgColor = textColor;
+			iV_DrawImageFileAnisotropicTint(FrontImages, frontendImgID.value(), imgPosX0, imgPosY0, Vector2f(imageDimensions, imageDimensions), imgColor);
+		}
+	}
+
+	// Draw text portion of button
+	{
+		// Draw the main text
+		int textX0 = std::max<int>(x0 + horizontalPadding, splitButtonImageAreaX0 - wzText.width());
+		int textY0 = static_cast<int>(y0 + (height() - wzText.lineSize()) / 2 - float(wzText.aboveBase()));
+
+		const int maxTextDisplayableWidth = splitButtonImageAreaX0 - textX0;
+		int maxDisplayableMainTextWidth = maxTextDisplayableWidth;
+		bool isTruncated = maxDisplayableMainTextWidth < wzText.width();
+		if (isTruncated)
+		{
+			maxDisplayableMainTextWidth -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
+		}
+		wzText.render(textX0, textY0, textColor, 0.0f, maxDisplayableMainTextWidth);
+		if (isTruncated)
+		{
+			// Render ellipsis
+			iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxDisplayableMainTextWidth + 2, textY0), textColor);
+		}
+	}
+}
+
+int32_t ConnectToForm::idealWidth()
+{
+	return 360;
+}
+
+int32_t ConnectToForm::idealHeight()
+{
+	return (verticalPadding * 2) + std::max<int>(iV_GetTextLineSize(font_regular), minInputBoxHeight);
+}
+
+int32_t ConnectToForm::buttonAreaWidth()
+{
+	return horizontalPadding + std::min<int32_t>(wzText.width(), maxButtonTextAreaWidth) + horizontalPaddingBetweenButtonSplit + imageDimensions + horizontalPadding;
+}
+
+void ConnectToForm::recalcLayout()
+{
+	int w = width();
+	int h = height();
+
+	// input box takes up the leftmost portion, minus the space reserved for the button area
+	int inputBoxWidth = w - buttonAreaWidth() - (inputBoxHorizontalPadding * 2);
+	if (inputBoxWidth > 0)
+	{
+		inputBox->setGeometry(inputBoxHorizontalPadding, 0, inputBoxWidth, h);
+	}
+}
+
+void ConnectToForm::submit(WzString inputStr, bool asSpectator)
+{
+	ASSERT_OR_RETURN(, onSubmitFunc != nullptr, "Missing onSubmitFunc");
+	onSubmitFunc(inputStr, asSpectator);
+}
+
+void ConnectToForm::submitInputBox(bool asSpectator)
+{
+	submit(inputBox->getString(), asSpectator);
+	inputBox->setString("");
+}
+
 // MARK: - LobbyBrowser Form
 
 class LobbyBrowser : public WIDGET
@@ -731,6 +1184,7 @@ private:
 
 private:
 	std::shared_ptr<W_BUTTON> backButton;
+	std::shared_ptr<ConnectToForm> connectToForm;
 	std::shared_ptr<WzFrontendImageButton> filtersButton;
 	std::shared_ptr<WzFrontendImageButton> refreshButton;
 	std::shared_ptr<ScrollableTableWidget> table;
@@ -748,6 +1202,8 @@ private:
 	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
 
 	bool hasPendingFetchRequest = false;
+
+	const int connectToFormHorizontalPadding = 15;
 };
 
 void LobbyBrowser::triggerRefresh()
@@ -1100,9 +1556,24 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 	}
 	attach(backButton);
 
+	connectToForm = ConnectToForm::make([](WzString inputStr, bool asSpectator) {
+		if (inputStr.isEmpty())
+		{
+			return;
+		}
+		auto result = joinGameFromConnectionStr(inputStr.toUtf8(), asSpectator);
+		if (result.has_value() && result.value() == JoinGameFromConnectionStrOutcome::Attempting_IP_Join)
+		{
+			// Persist the input IP address
+			war_setLastIpServerConnect(inputStr.toUtf8());
+		}
+	});
+	connectToForm->setGeometry(0, 0, connectToForm->idealWidth(), connectToForm->idealHeight());
+	attach(connectToForm);
+
 	filtersButton = WzFrontendImageButton::make(IMAGE_GEAR);
 	filtersButton->setString(_("Filters"));
-	filtersButton->setPadding(6, 5);
+	filtersButton->setPadding(7, 5);
 	filtersButton->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
 	filtersButton->setGeometry(0, 0, filtersButton->idealWidth(), filtersButton->idealHeight());
 	filtersButton->addOnClickHandler([weakSelf](W_BUTTON& but) {
@@ -1158,8 +1629,14 @@ void LobbyBrowser::geometryChanged()
 
 	int topButtonsY0 = 10;
 
+	// left-aligned buttons
+
 	int backButtonX0 = 10;
 	backButton->setGeometry(backButtonX0, topButtonsY0, backButton->width(), backButton->height());
+
+	// right-aligned buttons
+
+	int buttonMaxHeight = std::max<int>(refreshButton->idealHeight(), filtersButton->idealHeight());
 
 	int refreshButtonX0 = w - 10 - refreshButton->idealWidth();
 	refreshButton->setGeometry(refreshButtonX0, topButtonsY0, refreshButton->idealWidth(), refreshButton->idealHeight());
@@ -1167,7 +1644,17 @@ void LobbyBrowser::geometryChanged()
 	int filtersButtonX0 = refreshButton->x() - 5 - filtersButton->idealWidth();
 	filtersButton->setGeometry(filtersButtonX0, topButtonsY0, filtersButton->idealWidth(), filtersButton->idealHeight());
 
-	int maxTopAreaY1 = std::max<int>({backButton->y() + backButton->height(), refreshButton->y() + refreshButton->height(), filtersButton->y() + filtersButton->height()});
+	// connect-to form
+
+	int connectWidgetX0 = backButton->x() + backButton->width() + connectToFormHorizontalPadding;
+	int maxAvailableConnectToFormWidget = filtersButton->x() - connectWidgetX0 - connectToFormHorizontalPadding;
+	connectToForm->setGeometry(connectWidgetX0, topButtonsY0, std::min<int>(connectToForm->idealWidth(), maxAvailableConnectToFormWidget), buttonMaxHeight);
+
+	// top area height
+
+	int maxTopAreaY1 = std::max<int>({backButton->y() + backButton->height(), connectToForm->y() + connectToForm->height(), refreshButton->y() + refreshButton->height(), filtersButton->y() + filtersButton->height()});
+
+	// table
 
 	int tablePosY0 = maxTopAreaY1 + 10;
 	int tableHeight = h - tablePosY0 - lobbyStatusMessageContainer->height();
@@ -1274,31 +1761,36 @@ std::shared_ptr<ScrollableTableWidget> LobbyBrowser::createGamesList()
 	return table;
 }
 
+static std::shared_ptr<WzAdvCheckbox> addPopoverMenuOptionsCheckbox(const std::shared_ptr<PopoverMenuWidget>& popoverMenu, const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc)
+{
+	auto pCheckbox = WzAdvCheckbox::make(text, "");
+	pCheckbox->FontID = font_regular;
+	pCheckbox->setOuterVerticalPadding(4);
+	pCheckbox->setInnerHorizontalPadding(5);
+	pCheckbox->setIsChecked(isChecked);
+	if (isDisabled)
+	{
+		pCheckbox->setState(WBUT_DISABLE);
+	}
+	pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
+	if (onClickFunc)
+	{
+		pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
+			auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
+			ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
+			onClickFunc(*checkBoxButton);
+		});
+	}
+	popoverMenu->addMenuItem(pCheckbox, false);
+	return pCheckbox;
+}
+
 std::shared_ptr<PopoverMenuWidget> LobbyBrowser::createFiltersPopoverForm()
 {
 	auto popoverMenu = PopoverMenuWidget::make();
 
 	auto addOptionsCheckbox = [&popoverMenu](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc) -> std::shared_ptr<WzAdvCheckbox> {
-		auto pCheckbox = WzAdvCheckbox::make(text, "");
-		pCheckbox->FontID = font_regular;
-		pCheckbox->setOuterVerticalPadding(4);
-		pCheckbox->setInnerHorizontalPadding(5);
-		pCheckbox->setIsChecked(isChecked);
-		if (isDisabled)
-		{
-			pCheckbox->setState(WBUT_DISABLE);
-		}
-		pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
-		if (onClickFunc)
-		{
-			pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
-				auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
-				ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
-				onClickFunc(*checkBoxButton);
-			});
-		}
-		popoverMenu->addMenuItem(pCheckbox, false);
-		return pCheckbox;
+		return addPopoverMenuOptionsCheckbox(popoverMenu, text, isChecked, isDisabled, onClickFunc);
 	};
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));

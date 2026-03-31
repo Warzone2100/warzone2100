@@ -548,7 +548,6 @@ src/titleui/options/interfaceoptions.cpp
 src/titleui/options/optionsforms.cpp
 src/titleui/options/windowoptions.cpp
 src/titleui/optionstitleui.cpp
-src/titleui/protocol.cpp
 src/titleui/titleui.cpp
 src/titleui/widgets/advcheckbox.cpp
 src/titleui/widgets/blindwaitingroom.cpp

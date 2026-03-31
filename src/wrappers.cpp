@@ -45,6 +45,7 @@
 #include "wrappers.h"
 #include "titleui/titleui.h"
 #include "stdinreader.h"
+#include "multijoin_helpers.h"
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
@@ -229,7 +230,7 @@ TITLECODE titleLoop()
 			// Don't call `NETinit()` just yet.
 			// It will be automatically called by `joinGame()` upon connection attempt
 			// with the correct connection provider type corresponding to the connection string.
-			joinGame(iptoconnect, cliConnectAsSpectator);
+			joinGameFromIPOrHostnameConnectionStr(iptoconnect, cliConnectAsSpectator);
 		}
 		else if (!cli_lobby_game_to_connect_str().empty())
 		{
