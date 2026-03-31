@@ -38,7 +38,29 @@
 #include <string>
 #include <tuple>
 
-constexpr size_t CurrentGameLogOutputJSONVersion = 11;
+constexpr size_t CurrentGameLogOutputJSONVersion = 12;
+
+inline void to_json(nlohmann::json& j, const GameStoryLogger::AIPlayerAttributes& p) {
+	j = nlohmann::json::object();
+	j["scriptName"] = p.scriptName;
+	j["difficulty"] = p.difficulty;
+}
+
+inline void from_json(const nlohmann::json& j, GameStoryLogger::AIPlayerAttributes& p) {
+	p.scriptName.clear();
+	auto it = j.find("scriptName");
+	if (it != j.end())
+	{
+		p.scriptName = it.value().get<std::string>();
+	}
+
+	p.difficulty = -1;
+	it = j.find("difficulty");
+	if (it != j.end())
+	{
+		p.difficulty = it.value().get<int8_t>();
+	}
+}
 
 static uint32_t countAllStructures(uint32_t player)
 {
@@ -242,6 +264,10 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j["colour"] = f.colour;
 		j["faction"] = f.faction;
 		j["publicKey"] = f.publicKey;
+		if (f.aiPlayerAttr.has_value())
+		{
+			j["ai"] = f.aiPlayerAttr.value();
+		}
 		// data from the frame
 		j[mapPlayerDataOutputName("droidsLost", naming)] = p.droidsLost;
 		j[mapPlayerDataOutputName("structuresLost", naming)] = p.structuresLost;
@@ -339,6 +365,8 @@ void GameStoryLogger::logStartGame()
 		}
 	}
 
+	const auto aidata = getAIData();
+
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		FixedPlayerAttributes playerAttrib;
@@ -348,6 +376,22 @@ void GameStoryLogger::logStartGame()
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
 		playerAttrib.publicKey = base64Encode(getOutputPlayerIdentity(i).toBytes(EcKey::Public));
+
+		if (NetPlay.players[i].ai >= 0 && NetPlay.players[i].ai != AI_CUSTOM)
+		{
+			AIPlayerAttributes aiAttr;
+			if (NetPlay.players[i].ai < aidata.size())
+			{
+				aiAttr.scriptName = aidata[NetPlay.players[i].ai].js;
+			}
+			else
+			{
+				aiAttr.scriptName = "<unknown ai>";
+			}
+			aiAttr.difficulty = static_cast<int8_t>(NetPlay.players[i].difficulty);
+
+			playerAttrib.aiPlayerAttr = aiAttr;
+		}
 
 		startingPlayerAttributes.push_back(playerAttrib);
 	}
@@ -570,6 +614,11 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::FixedPlayerAttribu
 	j["colour"] = p.colour;
 	j["faction"] = p.faction;
 	j["publicKey"] = p.publicKey;
+
+	if (p.aiPlayerAttr.has_value())
+	{
+		j["ai"] = p.aiPlayerAttr.value();
+	}
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttributes& p) {
@@ -579,6 +628,12 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttri
 	p.colour = j.at("colour").get<int32_t>();
 	p.faction = static_cast<FactionID>(j.at("faction").get<uint8_t>());
 	p.publicKey = j.at("publicKey").get<std::string>();
+
+	auto it = j.find("ai");
+	if (it != j.end())
+	{
+		p.aiPlayerAttr = it.value().get<GameStoryLogger::AIPlayerAttributes>();
+	}
 }
 
 inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerStats& p) {
