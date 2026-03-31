@@ -94,7 +94,7 @@ jobs:
         run: |
           # Install additional host tools
           sudo apt-get -u update
-          DEBIAN_FRONTEND=noninteractive sudo apt-get -y install cmake git zip unzip gettext asciidoctor
+          DEBIAN_FRONTEND=noninteractive sudo apt-get -y install cmake git zip unzip gettext asciidoctor autoconf autoconf-archive automake libtool
 
       - uses: actions/setup-node@v6
         with:
