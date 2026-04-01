@@ -496,9 +496,18 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				{
 				case KEY_V:
 					aText = wzGetSelection();
-					// remove any \r, \n chars
-					aText.replace(WzUniCodepoint::fromASCII('\r'), "");
-					aText.replace(WzUniCodepoint::fromASCII('\n'), "");
+					if (onPasteTransformFunc)
+					{
+						// call custom onPasteTransformFunc to process the pasted data
+						aText = onPasteTransformFunc(aText);
+					}
+					else
+					{
+						// default behavior:
+						// remove any \r, \n chars
+						aText.replace(WzUniCodepoint::fromASCII('\r'), "");
+						aText.replace(WzUniCodepoint::fromASCII('\n'), "");
+					}
 					// truncate if too long
 					if (aText.length() >= maxStringSize)
 					{
@@ -831,4 +840,9 @@ void W_EDITBOX::setOnEscapeHandler(const OnReturnHandler& func)
 void W_EDITBOX::setOnEditingStoppedHandler(const OnReturnHandler& func)
 {
 	onEditingStoppedHandler = func;
+}
+
+void W_EDITBOX::setOnPasteTransformFunc(const OnPasteTransformFunc& func)
+{
+	onPasteTransformFunc = func;
 }
