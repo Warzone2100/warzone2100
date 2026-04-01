@@ -286,4 +286,16 @@ static inline std::string strJoin(std::vector<std::string> const &strs, std::str
 	return str;
 }
 
+// A simple constexpr FNV-1a hash function
+constexpr uint32_t fnv1a_hash(std::string_view sv)
+{
+	uint32_t hash = 0x811c9dc5;
+	for (char c : sv)
+	{
+		hash ^= static_cast<uint32_t>(c);
+		hash *= 0x01000193;
+	}
+	return hash;
+}
+
 #endif // STRING_EXT_H
