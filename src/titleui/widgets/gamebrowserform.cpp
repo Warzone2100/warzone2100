@@ -53,23 +53,28 @@
 #include <optional>
 #include <unordered_set>
 
+static constexpr uint32_t LOB_DEFAULT_BEHAVIOR_CHECKSUM = 2462613339;
+
 // MARK: - Lobby Status Overlay Widget
 
 class LobbyStatusOverlayWidget : public WIDGET
 {
+public:
+	typedef std::function<void()> OnResetLobbyAddressClickFunc;
 protected:
-	void initialize();
+	void initialize(const OnResetLobbyAddressClickFunc& onResetLobbyAddressClickFunc);
 	virtual void geometryChanged() override;
 	virtual void display(int xOffset, int yOffset) override;
 public:
-	static std::shared_ptr<LobbyStatusOverlayWidget> make()
+	static std::shared_ptr<LobbyStatusOverlayWidget> make(const OnResetLobbyAddressClickFunc& onResetLobbyAddressClickFunc)
 	{
 		class make_shared_enabler: public LobbyStatusOverlayWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize();
+		widget->initialize(onResetLobbyAddressClickFunc);
 		return widget;
 	}
 	void showIndeterminateIndicator(bool show);
+	void showResetLobbyAddressButton(bool show);
 	virtual void setString(WzString string) override;
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
@@ -78,10 +83,17 @@ private:
 private:
 	std::shared_ptr<W_LABEL> textLabel;
 	std::shared_ptr<WIDGET> indeterminateIndicator;
+	std::shared_ptr<WzFrontendImageButton> resetLobbyAddressButton;
+
+	OnResetLobbyAddressClickFunc onResetLobbyAddressClickFunc;
+
+	const int verticalBetweenItemsPadding = 20;
 };
 
-void LobbyStatusOverlayWidget::initialize()
+void LobbyStatusOverlayWidget::initialize(const OnResetLobbyAddressClickFunc& _onResetLobbyAddressClickFunc)
 {
+	onResetLobbyAddressClickFunc = _onResetLobbyAddressClickFunc;
+
 	textLabel = std::make_shared<W_LABEL>();
 	textLabel->setFont(font_medium_bold, WZCOL_TEXT_MEDIUM);
 	textLabel->setTextAlignment(WLAB_ALIGNTOP);
@@ -92,6 +104,21 @@ void LobbyStatusOverlayWidget::initialize()
 	indeterminateIndicator = createJoiningIndeterminateProgressWidget(font_medium_bold);
 	indeterminateIndicator->show(false);
 	attach(indeterminateIndicator);
+
+	resetLobbyAddressButton = WzFrontendImageButton::make(IMAGE_ARROW_UNDO);
+	resetLobbyAddressButton->setString(_("Reset Lobby Address to Default"));
+	resetLobbyAddressButton->setPadding(6, 5);
+	resetLobbyAddressButton->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
+	resetLobbyAddressButton->setGeometry(0, 0, resetLobbyAddressButton->idealWidth(), resetLobbyAddressButton->idealHeight());
+	auto weakSelf = std::weak_ptr<LobbyStatusOverlayWidget>(std::dynamic_pointer_cast<LobbyStatusOverlayWidget>(shared_from_this()));
+	resetLobbyAddressButton->addOnClickHandler([weakSelf](W_BUTTON& but) {
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent?");
+		ASSERT_OR_RETURN(, strongSelf->onResetLobbyAddressClickFunc != nullptr, "Func is null?");
+		strongSelf->onResetLobbyAddressClickFunc();
+	});
+	resetLobbyAddressButton->show(false);
+	attach(resetLobbyAddressButton);
 }
 
 int32_t LobbyStatusOverlayWidget::idealWidth()
@@ -101,7 +128,28 @@ int32_t LobbyStatusOverlayWidget::idealWidth()
 
 int32_t LobbyStatusOverlayWidget::idealHeight()
 {
-	return iV_GetTextLineSize(font_medium_bold) + indeterminateIndicator->idealHeight();
+	auto result = 0;
+	if (!textLabel->getString().isEmpty())
+	{
+		result += iV_GetTextLineSize(font_medium_bold);
+	}
+	if (indeterminateIndicator->visible())
+	{
+		if (result > 0)
+		{
+			result += verticalBetweenItemsPadding;
+		}
+		result += indeterminateIndicator->idealHeight();
+	}
+	if (resetLobbyAddressButton->visible())
+	{
+		if (result > 0)
+		{
+			result += verticalBetweenItemsPadding;
+		}
+		result += resetLobbyAddressButton->idealHeight();
+	}
+	return result;
 }
 
 void LobbyStatusOverlayWidget::recalcLayout()
@@ -114,11 +162,22 @@ void LobbyStatusOverlayWidget::recalcLayout()
 		int labelWidth = std::min(w, textLabel->idealWidth());
 		int labelX0 = (w - labelWidth) / 2;
 		textLabel->setGeometry(labelX0, nextWidgY0, labelWidth, textLabel->idealHeight());
-		nextWidgY0 = textLabel->height();
+		nextWidgY0 = textLabel->height() + verticalBetweenItemsPadding;
 	}
 
-	int indicatorX0 = (w - indeterminateIndicator->idealWidth()) / 2;
-	indeterminateIndicator->setGeometry(indicatorX0, nextWidgY0, indeterminateIndicator->idealWidth(), indeterminateIndicator->idealHeight());
+	if (indeterminateIndicator->visible())
+	{
+		int indicatorX0 = (w - indeterminateIndicator->idealWidth()) / 2;
+		indeterminateIndicator->setGeometry(indicatorX0, nextWidgY0, indeterminateIndicator->idealWidth(), indeterminateIndicator->idealHeight());
+		nextWidgY0 = indeterminateIndicator->y() + indeterminateIndicator->height() + verticalBetweenItemsPadding;
+	}
+
+	if (resetLobbyAddressButton->visible())
+	{
+		int resetButtonWidth = std::min<int>(resetLobbyAddressButton->idealWidth(), w);
+		int resetButtonX0 = (w - resetButtonWidth) / 2;
+		resetLobbyAddressButton->setGeometry(resetButtonX0, nextWidgY0, resetButtonWidth, resetLobbyAddressButton->idealHeight());
+	}
 }
 
 void LobbyStatusOverlayWidget::geometryChanged()
@@ -144,12 +203,23 @@ void LobbyStatusOverlayWidget::display(int xOffset, int yOffset)
 
 void LobbyStatusOverlayWidget::showIndeterminateIndicator(bool show)
 {
+	if (indeterminateIndicator->visible() == show)
+	{
+		return;
+	}
 	indeterminateIndicator->show(show);
+	recalcLayout();
 }
 
 void LobbyStatusOverlayWidget::setString(WzString string)
 {
 	textLabel->setString(string);
+	recalcLayout();
+}
+
+void LobbyStatusOverlayWidget::showResetLobbyAddressButton(bool show)
+{
+	resetLobbyAddressButton->show(show);
 	recalcLayout();
 }
 
@@ -1231,6 +1301,7 @@ protected:
 private:
 	void joinLobbyGame(size_t idx, bool asSpectator);
 	void setMotd(const std::string& motd);
+	void recalcLobbyStatusOverlayLayout();
 
 private:
 	std::shared_ptr<W_BUTTON> makeBackButton();
@@ -1280,13 +1351,16 @@ void LobbyBrowser::triggerAsyncGameListFetch()
 	if (NET_getLobbyDisabled())
 	{
 		lobbyStatusOverlayWidg->setString(_("There appears to be a game update available!"));
+		recalcLobbyStatusOverlayLayout();
 		lobbyStatusOverlayWidg->show();
 		return;
 	}
 
 	refreshButton->setState(WBUT_DISABLE);
 	lobbyStatusOverlayWidg->showIndeterminateIndicator(true);
+	lobbyStatusOverlayWidg->showResetLobbyAddressButton(false);
 	lobbyStatusOverlayWidg->setString("");
+	recalcLobbyStatusOverlayLayout();
 	lobbyStatusOverlayWidg->show(true);
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
@@ -1318,6 +1392,7 @@ void LobbyBrowser::triggerAsyncGameListFetch()
 			lobbyStatusOverlayWidg->setString(_("Error dispatching request"));
 			lobbyStatusOverlayWidg->show();
 		}
+		recalcLobbyStatusOverlayLayout();
 		return;
 	}
 
@@ -1366,6 +1441,14 @@ void LobbyBrowser::processAsyncGameListFetchResults(netlobby::ListResult&& resul
 		}
 
 		lobbyStatusOverlayWidg->setString(_("Failed to connect to lobby server"));
+		if constexpr (fnv1a_hash(netlobby::GetDefaultLobbyAddress()) == LOB_DEFAULT_BEHAVIOR_CHECKSUM)
+		{
+			if (NETgetLobbyserverAddress() != netlobby::GetDefaultLobbyAddress())
+			{
+				lobbyStatusOverlayWidg->showResetLobbyAddressButton(true);
+			}
+		}
+		recalcLobbyStatusOverlayLayout();
 
 		table->clearRows();
 		lobbyStatusMessageContainer->clear();
@@ -1516,6 +1599,8 @@ void LobbyBrowser::populateTableFromGameList()
 	{
 		lobbyStatusOverlayWidg->hide();
 	}
+
+	recalcLobbyStatusOverlayLayout();
 }
 
 std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(size_t idx, const netlobby::GameListing& listing)
@@ -1662,7 +1747,14 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 	attach(table);
 
 	// Create progress widget
-	lobbyStatusOverlayWidg = LobbyStatusOverlayWidget::make();
+	lobbyStatusOverlayWidg = LobbyStatusOverlayWidget::make([weakSelf]() {
+		// on reset lobby address button click
+		NETsetLobbyserverAddress(netlobby::GetDefaultLobbyAddress());
+		// trigger lobby re-fetch
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent?");
+		strongSelf->triggerAsyncGameListFetch();
+	});
 	attach(lobbyStatusOverlayWidg, ChildZPos::Front);
 
 	lobbyStatusMessageContainer = ScrollableListWidget::make();
@@ -1679,9 +1771,21 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 	{
 		lobbyStatusOverlayWidg->setString(_("There appears to be a game update available!"));
 		lobbyStatusOverlayWidg->show();
+		recalcLobbyStatusOverlayLayout();
 
 		displayLobbyDisabledNotification();
 	}
+}
+
+void LobbyBrowser::recalcLobbyStatusOverlayLayout()
+{
+	int w = width();
+
+	int tableHeight = table->height();
+
+	int lobbyStatusOverlayHeight = lobbyStatusOverlayWidg->idealHeight();
+	int lobbyStatusOverlayY0 = (tableHeight - lobbyStatusOverlayHeight) / 2;
+	lobbyStatusOverlayWidg->setGeometry(0, lobbyStatusOverlayY0, w, lobbyStatusOverlayHeight);
 }
 
 void LobbyBrowser::geometryChanged()
@@ -1722,9 +1826,7 @@ void LobbyBrowser::geometryChanged()
 	int tableHeight = h - tablePosY0 - lobbyStatusMessageContainer->height();
 	table->setGeometry(0, tablePosY0, w, tableHeight);
 
-	int lobbyStatusOverlayHeight = lobbyStatusOverlayWidg->idealHeight();
-	int lobbyStatusOverlayY0 = (tableHeight - lobbyStatusOverlayHeight) / 2;
-	lobbyStatusOverlayWidg->setGeometry(0, lobbyStatusOverlayY0, w, lobbyStatusOverlayHeight);
+	recalcLobbyStatusOverlayLayout(); // after modifying table layout + height
 
 	// recalc column widths
 	table->setMinimumColumnWidths(minimumColumnWidths);
