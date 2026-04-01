@@ -880,6 +880,45 @@ void displayConnectToEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 constexpr int maxConnectToInputLength = 256;
 
+static WzString removeLobbyGameIdPrefixPattern(const WzString& input)
+{
+	const std::string& stdStrInput = input.toStdString();
+
+	// Find the first colon
+	size_t colonPos = stdStrInput.find(':');
+
+	// Must be at least one character before the colon
+	if (colonPos == std::string::npos || colonPos == 0)
+	{
+		return input;
+	}
+
+	// Check for 1 or more characters of whitespace after the colon
+	size_t afterColon = colonPos + 1;
+	size_t firstNonSpace = afterColon;
+
+	while (firstNonSpace < stdStrInput.length() && std::isspace(static_cast<unsigned char>(stdStrInput[firstNonSpace])))
+	{
+		firstNonSpace++;
+	}
+
+	// Must have at least one whitespace character after the colon
+	// (This is to exclude detection of ip:port combinations)
+	if (firstNonSpace == afterColon)
+	{
+		return input;
+	}
+
+	// Only return the remaining substring if it is non-empty
+	if (firstNonSpace < stdStrInput.length())
+	{
+		return WzString::fromUtf8(stdStrInput.substr(firstNonSpace));
+	}
+
+	// Otherwise, return original
+	return input;
+}
+
 void ConnectToForm::initialize(const OnSubmitFunc& _onSubmitFunc)
 {
 	onSubmitFunc = _onSubmitFunc;
@@ -904,6 +943,29 @@ void ConnectToForm::initialize(const OnSubmitFunc& _onSubmitFunc)
 	inputBox->setMaxStringSize(maxConnectToInputLength);
 	inputBox->setPlaceholder(_("GameID or IP:port"));
 	inputBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
+
+	inputBox->setOnPasteTransformFunc([](const WzString& pastedString) -> WzString {
+		WzString result = pastedString;
+
+		// Replace any \r, \n chars with a space
+		result.replace(WzUniCodepoint::fromASCII('\r'), " ");
+		result.replace(WzUniCodepoint::fromASCII('\n'), " ");
+
+		// Trim any whitespace
+		result = result.trimmed();
+
+		// Check if text begins with "Lobby GameId: ", the standard prefix used when outputting the GameId on host / join
+		// NOTE: The translated version of this prefix is output - someone might copy it to another who uses a different language
+		// So use a heuristic: Check for "<prefix>: <possible gameid>" (key being the ":" followed by a space), then remove that prefix if found
+		// (This should avoid interfering with ip:port or hostname:port strings, which fortunately should not have a space in them)
+		auto withRemovedPrefix = removeLobbyGameIdPrefixPattern(result).trimmed();
+		if (!withRemovedPrefix.isEmpty())
+		{
+			result = withRemovedPrefix;
+		}
+
+		return result;
+	});
 
 	inputBox->setOnReturnHandler([weakSelf](W_EDITBOX& widg) {
 		auto strongParent = weakSelf.lock();
