@@ -1309,7 +1309,7 @@ private:
 	std::shared_ptr<ScrollableTableWidget> createGamesList();
 	void triggerAsyncGameListFetch();
 	void processAsyncGameListFetchResults(netlobby::ListResult&& results);
-	void populateTableFromGameList();
+	void populateTableFromGameList(bool force = false);
 	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(size_t idx, const netlobby::GameListing& listing);
 
 	std::shared_ptr<PopoverMenuWidget> createFiltersPopoverForm();
@@ -1460,7 +1460,7 @@ void LobbyBrowser::processAsyncGameListFetchResults(netlobby::ListResult&& resul
 	lobbyStatusMessageContainer->clear();
 
 	currentResults = std::move(results.value().games);
-	populateTableFromGameList();
+	populateTableFromGameList(true);
 
 	// Display the lobby MOTD
 	if (!results.value().lobbyMOTD.empty())
@@ -1494,8 +1494,14 @@ static bool isIPv6Only(const std::vector<netlobby::ConnectionType>& availableCon
 	});
 }
 
-void LobbyBrowser::populateTableFromGameList()
+void LobbyBrowser::populateTableFromGameList(bool force)
 {
+	if (!force && currentResults.empty())
+	{
+		// do nothing, so we don't clear any lobby error status message (ex. when changing filters)
+		return;
+	}
+
 	table->clearRows();
 
 	std::vector<size_t> currentMaxColumnWidths;
