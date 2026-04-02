@@ -114,6 +114,7 @@ struct WARZONE_GLOBALS
 	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
 
 	// lobby
+	bool lobbyDisableIPv6 = false;
 	bool lobbyFilterIPv6Only = false;
 
 	// audio cues
@@ -831,6 +832,16 @@ std::string to_string(ConnectionProviderType pt)
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
+}
+
+bool war_getLobbyDisableIPv6()
+{
+	return warGlobs.lobbyDisableIPv6;
+}
+
+void war_setLobbyDisableIPv6(bool enabled)
+{
+	warGlobs.lobbyDisableIPv6 = enabled;
 }
 
 bool war_getLobbyFilterIPv6Only()

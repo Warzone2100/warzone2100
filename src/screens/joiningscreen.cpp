@@ -1058,6 +1058,11 @@ static optional<netlobby::IPVersion> knownAvailableConnectionTypesToIPVersion(co
 {
 	if (!pKnownAvailableConnectionTypes)
 	{
+		if (war_getLobbyDisableIPv6())
+		{
+			// IPv6 disabled, so just return IPv4
+			return netlobby::IPVersion::IPv4;
+		}
 		return nullopt;
 	}
 
@@ -1086,6 +1091,11 @@ static optional<netlobby::IPVersion> knownAvailableConnectionTypesToIPVersion(co
 
 	if (hasIPUnspecified)
 	{
+		if (war_getLobbyDisableIPv6())
+		{
+			// IPv6 disabled, so just return IPv4
+			return netlobby::IPVersion::IPv4;
+		}
 		return nullopt;
 	}
 	if (hasIPv4 && !hasIPv6)
@@ -1095,6 +1105,13 @@ static optional<netlobby::IPVersion> knownAvailableConnectionTypesToIPVersion(co
 	if (!hasIPv4 && hasIPv6)
 	{
 		return netlobby::IPVersion::IPv6;
+	}
+
+	// in case both IPv4 and IPv6 are available...
+	if (war_getLobbyDisableIPv6())
+	{
+		// IPv6 disabled, so just return IPv4
+		return netlobby::IPVersion::IPv4;
 	}
 	return nullopt;
 }

@@ -3705,12 +3705,19 @@ static std::vector<netlobby::ConnectionInfo> buildHostingConnectionDescriptions(
 		}
 		if (supportedProtocols & static_cast<IListenSocket::IPVersionsMask>(IListenSocket::IPVersions::IPV6))
 		{
-			netlobby::ConnectionInfo conn;
-			conn.type.method = connectionType;
-			conn.type.ipVersion = netlobby::IPVersion::IPv6;
-			conn.host = "";
-			conn.port = NETgetGameserverPort();
-			result.push_back(conn);
+			if (!war_getLobbyDisableIPv6())
+			{
+				netlobby::ConnectionInfo conn;
+				conn.type.method = connectionType;
+				conn.type.ipVersion = netlobby::IPVersion::IPv6;
+				conn.host = "";
+				conn.port = NETgetGameserverPort();
+				result.push_back(conn);
+			}
+			else
+			{
+				debug(LOG_INFO, "Disabling listing IPv6 address due to \"Enable IPv6\" lobby setting");
+			}
 		}
 	}
 

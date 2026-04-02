@@ -746,6 +746,7 @@ bool loadConfig()
 		war_setHostConnectionProvider(hostConnProvider);
 	}
 
+	war_setLobbyDisableIPv6(iniGetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6()).value());
 	war_setLobbyFilterIPv6Only(iniGetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only()).value());
 
 	ActivityManager::instance().endLoadingSettings();
@@ -930,6 +931,7 @@ bool saveConfig()
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 
+	iniSetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6());
 	iniSetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only());
 
 	iniSetInteger("configVersion", CURRCONFVERSION);

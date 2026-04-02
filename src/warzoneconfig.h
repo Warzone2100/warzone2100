@@ -203,6 +203,8 @@ enum class ConnectionProviderType : uint8_t;
 void war_setHostConnectionProvider(ConnectionProviderType pt);
 ConnectionProviderType war_getHostConnectionProvider();
 
+bool war_getLobbyDisableIPv6();
+void war_setLobbyDisableIPv6(bool enabled);
 bool war_getLobbyFilterIPv6Only();
 void war_setLobbyFilterIPv6Only(bool enabled);
 

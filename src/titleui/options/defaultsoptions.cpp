@@ -222,6 +222,16 @@ void PlayerColorOptionsSelector::addOnChangeHandler(std::function<void(WIDGET&)>
 
 // MARK: -
 
+OptionInfo::AvailabilityResult IsLobbyIPv6Enabled(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = !war_getLobbyDisableIPv6();
+	result.localizedUnavailabilityReason = _("Only useful if Enable IPv6 is On.");
+	return result;
+}
+
+// MARK: -
+
 OptionsDropdown<uint32_t>::PopulateFunc makeInactivityTimeoutOptionsDropdownPopulateFunc()
 {
 	return []() {
@@ -394,6 +404,48 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm()
 			},
 			[](const auto& newValue) -> bool {
 				setDefaultSkirmishAI(newValue.toUtf8());
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	// Lobby Options:
+	result->addSection(OptionsSection(N_("Lobby Options"), ""), true);
+	{
+		auto optionInfo = OptionInfo("defaults.lobby.enableipv6", N_("Enable IPv6"), N_("Whether to list and try connecting via IPv6 (if available)."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), _("Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."), false },
+					{ _("On"), _("Enable IPv6. If your system supports it, this is the recommended option."), true },
+				};
+				result.setCurrentIdxForValue(!war_getLobbyDisableIPv6());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setLobbyDisableIPv6(!newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("defaults.lobby.preferipv6", N_("Prefer IPv6 over IPv4"), N_("Prefer connecting via IPv6 over IPv4 when a game is available via both."));
+		optionInfo.addAvailabilityCondition(IsLobbyIPv6Enabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(NETgetJoinPreferenceIPv6());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				NETsetJoinPreferenceIPv6(newValue);
 				return true;
 			}, true
 		);

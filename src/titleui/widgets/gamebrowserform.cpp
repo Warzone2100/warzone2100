@@ -1509,6 +1509,7 @@ void LobbyBrowser::populateTableFromGameList(bool force)
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
 
+	bool disableIPv6Listings = war_getLobbyDisableIPv6();
 	bool foundGreaterVersion = false;
 
 	// Populate table with the results
@@ -1532,7 +1533,8 @@ void LobbyBrowser::populateTableFromGameList(bool force)
 		{
 			continue;
 		}
-		if (filterIPv6Only && isIPv6Only(listing.availableConnectionTypes))
+		bool isIPv6OnlyGame = isIPv6Only(listing.availableConnectionTypes);
+		if (filterIPv6Only && isIPv6OnlyGame)
 		{
 			continue;
 		}
@@ -1547,7 +1549,8 @@ void LobbyBrowser::populateTableFromGameList(bool force)
 
 		auto row = TableRow::make(columnWidgets, rowHeight);
 		row->setDisabledColor(pal_RGBA(0, 0, 0, 100));
-		if (isCompatibleGame)
+		const bool isEnabledListing = isCompatibleGame && (!disableIPv6Listings || !isIPv6OnlyGame);
+		if (isEnabledListing)
 		{
 			const bool blindSimpleLobby = isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE));
 			row->setHighlightsOnMouseOver(true);
@@ -1556,12 +1559,22 @@ void LobbyBrowser::populateTableFromGameList(bool force)
 		}
 		else
 		{
-			row->setDisabled(true);
-			row->setDisabledColor(pal_RGBA(0,0,0,120));
-			WzString tooltip = _("Your version of Warzone is incompatible with this game.");
-			tooltip += "\n";
-			tooltip += WzString::format(_("Host Version: %s"), gameInfo.versionStr.toUtf8().c_str());
-			row->setTip(tooltip.toUtf8());
+			if (isCompatibleGame && disableIPv6Listings && isIPv6OnlyGame)
+			{
+				row->setDisabled(true);
+				row->setDisabledColor(pal_RGBA(0,0,0,120));
+				WzString tooltip = _("This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults.");
+				row->setTip(tooltip.toUtf8());
+			}
+			else
+			{
+				row->setDisabled(true);
+				row->setDisabledColor(pal_RGBA(0,0,0,120));
+				WzString tooltip = _("Your version of Warzone is incompatible with this game.");
+				tooltip += "\n";
+				tooltip += WzString::format(_("Host Version: %s"), gameInfo.versionStr.toUtf8().c_str());
+				row->setTip(tooltip.toUtf8());
+			}
 		}
 		row->addOnClickHandler([weakSelf, idx](W_BUTTON&) {
 			auto strongSelf = weakSelf.lock();
