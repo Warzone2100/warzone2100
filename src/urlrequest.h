@@ -118,6 +118,10 @@ public:
 	// NOTE: Only supported with cURL backend.
 	uint32_t connectTimeoutMs = 0;
 
+	// Explicitly set the User-Agent header value
+	// NOTE: Only supported with the cURL backend currently.
+	std::string userAgent;
+
 	// MARK: callbacks
 	// IMPORTANT:
 	// - callbacks *may* be called on a background thread

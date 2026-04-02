@@ -430,6 +430,7 @@ public:
 	virtual bool noProxy() const = 0;
 	virtual bool noFollowRedirects() const = 0;
 	virtual uint32_t connectTimeoutMs() const = 0;
+	virtual std::string userAgent() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
 	virtual const char* requestBody() const = 0;
 	virtual curl_off_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
@@ -520,6 +521,12 @@ public:
 		if (request_header_list != nullptr)
 		{
 			curl_easy_setopt(handle, CURLOPT_HTTPHEADER, request_header_list);
+		}
+
+		auto specifiedUserAgent = userAgent();
+		if (!specifiedUserAgent.empty())
+		{
+			curl_easy_setopt(handle, CURLOPT_USERAGENT, specifiedUserAgent.c_str());
 		}
 
 		if (requestMethod == URLRequestMethod::POST || requestMethod == URLRequestMethod::PATCH)
@@ -754,6 +761,11 @@ public:
 	virtual uint32_t connectTimeoutMs() const override
 	{
 		return getBaseRequest().connectTimeoutMs;
+	}
+
+	virtual std::string userAgent() const override
+	{
+		return getBaseRequest().userAgent;
 	}
 
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const override
