@@ -92,10 +92,10 @@ enum class InternetProtocol {
 const char* to_string(InternetProtocol protocol);
 
 enum class URLRequestMethod {
-	GET,
-	POST,
-	PATCH,
-	DELETE
+	Get,
+	Post,
+	Patch,
+	Delete
 };
 const char* to_string(URLRequestMethod method);
 
@@ -235,7 +235,7 @@ public:
 	const std::string& requestBody() const;
 
 private:
-	URLRequestMethod m_method = URLRequestMethod::GET;
+	URLRequestMethod m_method = URLRequestMethod::Get;
 
 	// Data to be provided in a POST/PATCH body
 	std::string m_requestBody;

@@ -533,7 +533,7 @@ public:
 			curl_easy_setopt(handle, CURLOPT_USERAGENT, specifiedUserAgent.c_str());
 		}
 
-		if (requestMethod == URLRequestMethod::POST || requestMethod == URLRequestMethod::PATCH)
+		if (requestMethod == URLRequestMethod::Post || requestMethod == URLRequestMethod::Patch)
 		{
 			const char* pRequestBody = requestBody();
 			if (pRequestBody != nullptr)
@@ -626,7 +626,7 @@ public:
 
 	virtual bool onProgressUpdate(int64_t dltotal, int64_t dlnow, int64_t ultotal, int64_t ulnow) { return false; }
 
-	virtual bool waitOnShutdown() const { return method() != URLRequestMethod::GET; }
+	virtual bool waitOnShutdown() const { return method() != URLRequestMethod::Get; }
 
 	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) { return URLRequestHandlingBehavior::Done(); }
 	virtual void requestFailedToFinish(URLRequestFailureType type) { }
@@ -739,7 +739,7 @@ public:
 
 	virtual URLRequestMethod method() const override
 	{
-		return URLRequestMethod::GET;
+		return URLRequestMethod::Get;
 	}
 
 	virtual const std::string& url() const override

@@ -162,7 +162,7 @@ public:
 		formattedRequestHeaders = std::make_shared<FetchRequestHeaders>(requestHeaders());
 		attr.requestHeaders = formattedRequestHeaders->getPointer();
 
-		if (requestMethod == URLRequestMethod::POST || requestMethod == URLRequestMethod::PATCH)
+		if (requestMethod == URLRequestMethod::Post || requestMethod == URLRequestMethod::Patch)
 		{
 			const char* pRequestBody = requestBody();
 			if (pRequestBody != nullptr)
@@ -313,7 +313,7 @@ public:
 
 	virtual URLRequestMethod method() const override
 	{
-		return URLRequestMethod::GET;
+		return URLRequestMethod::Get;
 	}
 
 	virtual const std::string& url() const override

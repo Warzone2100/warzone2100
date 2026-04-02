@@ -51,10 +51,10 @@ const char* to_string(URLRequestMethod method)
 {
 	switch (method)
 	{
-		case URLRequestMethod::GET: return "GET";
-		case URLRequestMethod::POST: return "POST";
-		case URLRequestMethod::PATCH: return "PATCH";
-		case URLRequestMethod::DELETE: return "DELETE";
+		case URLRequestMethod::Get: return "GET";
+		case URLRequestMethod::Post: return "POST";
+		case URLRequestMethod::Patch: return "PATCH";
+		case URLRequestMethod::Delete: return "DELETE";
 	}
 	return nullptr;
 }
@@ -101,21 +101,21 @@ bool HTTPResponseHeadersContainer::getHeader(const std::string& name, std::strin
 
 void URLDataRequest::setPost(std::string&& jsonData)
 {
-	m_method = URLRequestMethod::POST;
+	m_method = URLRequestMethod::Post;
 	m_requestBody = std::move(jsonData);
 	setRequestHeader("Content-Type", "application/json");
 }
 
 void URLDataRequest::setPatch(std::string&& jsonData)
 {
-	m_method = URLRequestMethod::PATCH;
+	m_method = URLRequestMethod::Patch;
 	m_requestBody = std::move(jsonData);
 	setRequestHeader("Content-Type", "application/json");
 }
 
 void URLDataRequest::setDelete()
 {
-	m_method = URLRequestMethod::DELETE;
+	m_method = URLRequestMethod::Delete;
 }
 
 URLRequestMethod URLDataRequest::method() const
