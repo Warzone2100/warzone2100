@@ -188,12 +188,18 @@ else()
 	set(LIBJPEG_TURBO_INCLUDE_DIR "${LIBJPEG_TURBO_INSTALL_DIR}/include")
 	set(LIBJPEG_TURBO_LIB_PATH "${LIBJPEG_TURBO_INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}turbojpeg${CMAKE_STATIC_LIBRARY_SUFFIX}")
 
+	set(_additional_ext_proj_cmake_args)
+	if (CMAKE_TOOLCHAIN_FILE)
+		get_filename_component(_absolute_cmake_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
+		set(_additional_ext_proj_cmake_args "-DCMAKE_TOOLCHAIN_FILE=${_absolute_cmake_toolchain_file}")
+	endif()
+
 	ExternalProject_Add(libjpeg-turbo-ext
 		SOURCE_DIR		"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libjpeg-turbo"
 		BINARY_DIR		"${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo"
 		INSTALL_DIR		"${LIBJPEG_TURBO_INSTALL_DIR}"
 		# DOWNLOAD_COMMAND  ""  # Explicitly skip download for local sources
-		CMAKE_ARGS		"-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" -DWITH_TOOLS=OFF -DENABLE_STATIC=ON -DENABLE_SHARED=OFF "-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib"
+		CMAKE_ARGS		"-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" -DWITH_TOOLS=OFF -DENABLE_STATIC=ON -DENABLE_SHARED=OFF "-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib" ${_additional_ext_proj_cmake_args}
 		BUILD_BYPRODUCTS "${LIBJPEG_TURBO_LIB_PATH}"
 	)
 
