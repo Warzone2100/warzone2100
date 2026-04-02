@@ -59,6 +59,8 @@ public:
 
 	struct AIPlayerAttributes
 	{
+		AIPlayerAttributes();
+
 		std::string scriptName;
 		int8_t difficulty = -1;
 	};

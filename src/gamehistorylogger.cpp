@@ -40,13 +40,17 @@
 
 constexpr size_t CurrentGameLogOutputJSONVersion = 12;
 
-inline void to_json(nlohmann::json& j, const GameStoryLogger::AIPlayerAttributes& p) {
+GameStoryLogger::AIPlayerAttributes::AIPlayerAttributes()
+: difficulty(-1)
+{ }
+
+void to_json(nlohmann::json& j, const GameStoryLogger::AIPlayerAttributes& p) {
 	j = nlohmann::json::object();
 	j["scriptName"] = p.scriptName;
 	j["difficulty"] = p.difficulty;
 }
 
-inline void from_json(const nlohmann::json& j, GameStoryLogger::AIPlayerAttributes& p) {
+void from_json(const nlohmann::json& j, GameStoryLogger::AIPlayerAttributes& p) {
 	p.scriptName.clear();
 	auto it = j.find("scriptName");
 	if (it != j.end())
