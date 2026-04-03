@@ -3269,25 +3269,6 @@ static net::result<void> ignoreExpectedResultValue(const net::result<T>& res)
 	return res.has_value() ? net::result<void>{} : tl::make_unexpected(res.error());
 }
 
-std::shared_ptr<WzConnectionProvider> NET_getLobbyConnectionProvider()
-{
-	// The only supported backend type for talking with lobby server at the moment.
-	constexpr auto PROVIDER_TYPE = ConnectionProviderType::TCP_DIRECT;
-
-	auto& cpr = ConnectionProviderRegistry::Instance();
-	if (!cpr.IsRegistered(PROVIDER_TYPE))
-	{
-		cpr.Register(PROVIDER_TYPE);
-	}
-	auto connProvider = cpr.Get(ConnectionProviderType::TCP_DIRECT);
-	ASSERT_OR_RETURN(nullptr, connProvider != nullptr, "Null connectionProvider");
-	connProvider->initialize();
-
-	PendingWritesManagerMap::instance().get(*connProvider).initialize(*connProvider);
-
-	return connProvider;
-}
-
 static void handleLobbyHostingStatusIsKnown(optional<std::string> lobbyGameId)
 {
 	// Now that we know whether a game is listed in the lobby,

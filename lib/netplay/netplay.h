@@ -404,9 +404,6 @@ SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) ab
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining(bool matchStarted);				// stop new players joining this game
 
-class WzConnectionProvider;
-std::shared_ptr<WzConnectionProvider> NET_getLobbyConnectionProvider();
-
 class IClientConnection;
 class IConnectionPollGroup;
 
