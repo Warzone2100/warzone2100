@@ -2526,7 +2526,9 @@ static bool startLobbyJoiningAttemptInternal(char* playerName, const std::string
 
 			// used to schedule this after handleJoinSuccess's scheduled change of the TitleUI, to ensure that WzMultiplayerOptionsTitleUI::start() has been called first
 			widgScheduleTask([gameIdCopy]() {
-				auto gameIdMsg = astringf(_("Lobby GameId: %s"), gameIdCopy.c_str());
+				std::string gameIdMsg = _("Lobby GameId");
+				gameIdMsg += ": "; // build this manually to ensure that the format always separates the prefix text from the gameId with ": ",  without relying on the translation
+				gameIdMsg += gameIdCopy;
 				addConsoleMessage(gameIdMsg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			});
 		},

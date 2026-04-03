@@ -3334,7 +3334,10 @@ static std::shared_ptr<netlobby::LobbyServerHostingHandlerProtocol> NETcreateLob
 		{
 			motd = _("Game is listed in the lobby");
 		}
-		ShowLobbyStatusMessage({motd, astringf(_("Lobby GameId: %s"), gameId.c_str())});
+		std::string gameIdMsg = _("Lobby GameId");
+		gameIdMsg += ": "; // build this manually to ensure that the format always separates the prefix text from the gameId with ": ", without relying on the translation
+		gameIdMsg += gameId;
+		ShowLobbyStatusMessage({motd, gameIdMsg});
 
 		// Signal to the ActivityManager that the lobby hosting status is known
 		handleLobbyHostingStatusIsKnown(gameId);
