@@ -107,14 +107,21 @@ public:
 
 class CURLHTTPResponseDetails : public HTTPResponseDetails {
 public:
-	CURLHTTPResponseDetails(CURLcode curlResult, long httpStatusCode, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
+	CURLHTTPResponseDetails(CURLcode curlResult, long httpStatusCode, optional<std::string> primaryIp, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
 	: HTTPResponseDetails(httpStatusCode, responseHeaders)
 	, _curlResult(curlResult)
+	, primaryIp(primaryIp)
 	{ }
 	virtual ~CURLHTTPResponseDetails()
 	{ }
 
 	CURLcode curlResult() const { return _curlResult; }
+
+	optional<std::string> getPrimaryIP() const override
+	{
+		return primaryIp;
+	}
+
 	std::string getInternalResultDescription() const override
 	{
 		const char *pStrError = curl_easy_strerror(_curlResult);
@@ -127,6 +134,7 @@ public:
 
 private:
 	CURLcode _curlResult;
+	optional<std::string> primaryIp;
 };
 
 // MARK: - Handle thread-safety for cURL
@@ -805,9 +813,17 @@ public:
 			code = 0;
 		}
 
+		optional<std::string> primaryIp;
+		char *tmpIp = nullptr;
+		if (curl_easy_getinfo(handle, CURLINFO_PRIMARY_IP, &tmpIp) == CURLE_OK && tmpIp)
+		{
+			primaryIp = std::string(tmpIp);
+			tmpIp = nullptr;
+		}
+
 		if (result == CURLE_OK)
 		{
-			return onResponse(CURLHTTPResponseDetails(result, code, responseHeaders));
+			return onResponse(CURLHTTPResponseDetails(result, code, primaryIp, responseHeaders));
 		}
 		else
 		{
@@ -825,7 +841,7 @@ public:
 				default:
 					break;
 			}
-			onFailure(failureType, std::make_shared<CURLHTTPResponseDetails>(result, code, responseHeaders));
+			onFailure(failureType, std::make_shared<CURLHTTPResponseDetails>(result, code, primaryIp, responseHeaders));
 			return URLRequestHandlingBehavior::Done();
 		}
 	}

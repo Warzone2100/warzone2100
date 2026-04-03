@@ -56,6 +56,11 @@ public:
 	virtual ~EmFetchHTTPResponseDetails()
 	{ }
 
+	optional<std::string> getPrimaryIP() const override
+	{
+		return nullopt; // not implemented for fetch backend
+	}
+
 	std::string getInternalResultDescription() const override
 	{
 		return (_fetchResult) ? "Success" : "Returned Error";

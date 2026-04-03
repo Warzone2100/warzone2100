@@ -70,6 +70,7 @@ public:
 	{ }
 	virtual ~HTTPResponseDetails();
 
+	virtual optional<std::string> getPrimaryIP() const = 0;
 	virtual std::string getInternalResultDescription() const = 0;
 	long httpStatusCode() const { return _httpStatusCode; }
 
