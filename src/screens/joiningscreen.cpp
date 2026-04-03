@@ -20,6 +20,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/visitor_helper.h"
 #include "joiningscreen.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
@@ -1155,16 +1156,6 @@ void WzJoiningGameScreen_HandlerRoot::requestLobbyJoin(std::string lobbyAddress,
 		strongSelf->handleLobbyRequestJoinResult(lobbyAddress, gameId, specificIpVersion, result);
 	}, specificIpVersion, lobbyErrorResolutionData);
 }
-
-#include <variant>
-#include <type_traits>
-
-// helper type for std::visit visitor
-template<class... Ts>
-struct overloaded : Ts... { using Ts::operator()...; };
-// explicit deduction guide (not needed as of C++20)
-template<class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
 
 static const char* to_display_string(netlobby::RequestJoinDetailsResults::ConnectivityFailureType failureType)
 {
