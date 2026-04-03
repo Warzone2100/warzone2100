@@ -1,3 +1,42 @@
+2026-04-04: Version 4.7.0-beta1:
+ * General:
+   * Add: Add Weapon Stats flag for configuring Captured Units Teleport (commit:11c1b24f02faecaf5b220305858d6f39819c6f3b, #4848)
+   * Fix: Mouse cursor not respecting display scale on some OSes (commit:1dddb170ff17a2ea86ed45d7d5e89d80cc86382f, #4809)
+   * Fix: Fix 'disabled' state of mouse key code (commit:bfa315073b2c773d3b90e899552658c20595a8d5, #4813)
+ * Graphics:
+   * Fix: Vulkan: Major improvements for synchronization & recreating swapchain, fixing graphical issues and behavior on some systems (too many commits, #4826)
+   * Fix: Numerous model fixes, resolving many shadow issues, from @MaNGusT- (too many commits, #4827)
+   * Fix: Remove built in shadows for most skyscrapers and make pipes float less, from @MaNGusT- (commit:7e5250aced97b0bba5741502ac0907e79a685db1, #4834)
+   * Fix: Objects incorrectly darkened due to terrain darkness / satellite strike (commit:e12dce6490689d2e87f6a26a7d6dc7cac60b85ab, #4815)
+ * Campaign:
+   * Add: Update Remastered balance, additional spawns 2.0 (commit:b68249182fa07c46ebd5e4a3d8e6b1726fb301a7, #4818)
+   * Add: "Pumpkin" v1.10 Campaign Balance Mod - thanks to @KJeff01 (commit:d5966bc2503c140c0e37bfc57de3c604c7b98843, #4853)
+   * Add: Campaign balance descriptions help panel (commit:601d923cc7bd83d15875ac117dd650c29ac06086, #4865)
+   * Fix: Classic campaign Howitzer tree path (commit:704d54f310678fd8b60465debebd60a1f0b403d5, #4818)
+   * Fix: Various guide topic issues (commit:9c38a8c290b35af00281a7ca053bd523e795543b, #4818)
+   * Fix: Missing Intel message issues (commit:82284ff54ac56022f422d8f18418dcacec9d4bee, #4818)
+ * Multiplayer:
+   * Add: New netlobby support, with IPv4 + IPv6, improved security & privacy, enhanced options, better performance & compatibility with difficult ISPs, and much more (too many commits, #4870)
+   * Add: New unified lobby + join screen (too many commits, #4870)
+   * Add: Expanded "Host Lobby Options" panel (too many commits, #4870)
+   * Add: New --lobbyjoin and --lobbyspectate CLI options (too many commits, #4870)
+   * Fix: Properly persist player mute option (commit:19a26f3fe6681659c0a2a03017a395c97e2db936, #4869)
+   * Fix: Easily join multiplayer games by Lobby GameID (too many commits, #4870)
+ * Networking:
+   * Fix: poll_descriptor_set: Handle POLLNVAL in PollDescriptorSet::isSet() (commit:7e1e3063c46868fe1b278b192c04f30cd9b7aae1, #4840)
+ * Scripting:
+   * Add: Add "Reset Sun" button to the script debugger (commit:906b7194f746a30f96a806ba41867ee168e671f9, #4832)
+   * Add: Add an emitSound() JS function (commit:7b42b87ec86d49a57fddb72d1fc5173d6b16668f, commit:51329f10fb254e27d4a0063a6f19d09e3546a78d, #4851)
+ * AI:
+   * Fix: Semperfi AI: Fully rearm VTOLs (commit:d1ba05370b5dd2fc46776d977f1be95a8ecbaddf, #4807)
+ * Balance MP:
+   * Fix: Add missing Particle Gun times to camTechEnabler.js (commit:e9a9d876375b8990656e0ccbb63db20bbb6113bd, #4811) 
+ * Other:
+   * Change: steering: Introduce extensible steering behavior management system (commit:5fa77d392349e5c4b5a9d5ba9f2e3f5f0f0714ec, #4846)
+   * Fix: Remove unused power property from sensor.json (commit:0c32a6cfa73d8ddb3db640bf46fcaa895f2a8ff1, #4833)
+   * Fix: Reduce apsFeatureLists to a single list and rename to apsFeatureList (commit:a075294251d04f2439da994e4ab9f99692119a7f, #4861)
+   * Fix: framework: Simplify some SFINAE checks for PagedEntityContainer and LoopBodyHandlerCallStrategy (commit:a99fdde5d2b622a59c0272aa34728801861ced08, #4862)
+
 2026-02-04: Version 4.6.3:
  * General:
    * Fix: Detect disconnected research categories (commit:23710dd093bcc75169279f601fe646b1d8914352, #4779)
