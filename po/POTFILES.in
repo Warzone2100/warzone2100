@@ -291,6 +291,7 @@ lib/ivis_opengl/gfx_api_null.cpp
 lib/ivis_opengl/gfx_api_vk.cpp
 lib/ivis_opengl/imdload.cpp
 lib/ivis_opengl/jpeg_encoder.cpp
+lib/ivis_opengl/jpeg_util.cpp
 lib/ivis_opengl/pieblitfunc.cpp
 lib/ivis_opengl/pieclip.cpp
 lib/ivis_opengl/piedraw.cpp
@@ -316,6 +317,7 @@ lib/netplay/gns/gns_connection_poll_group.cpp
 lib/netplay/gns/gns_connection_provider.cpp
 lib/netplay/gns/gns_error_categories.cpp
 lib/netplay/gns/gns_listen_socket.cpp
+lib/netplay/ip_helpers.cpp
 lib/netplay/listen_socket.cpp
 lib/netplay/netjoin.cpp
 lib/netplay/netlobby.cpp
@@ -389,6 +391,7 @@ lib/widget/scrollbar.cpp
 lib/widget/slider.cpp
 lib/widget/table.cpp
 lib/widget/tip.cpp
+lib/widget/verifyprompt.cpp
 lib/widget/widget.cpp
 lib/wzmaplib/plugins/ZipIOProvider/src/ZipIOProvider.cpp
 lib/wzmaplib/src/map.cpp
@@ -491,6 +494,7 @@ src/multibot.cpp
 src/multigifts.cpp
 src/multiint.cpp
 src/multijoin.cpp
+src/multijoin_helpers.cpp
 src/multilimit.cpp
 src/multilobbycommands.cpp
 src/multimenu.cpp
@@ -554,6 +558,7 @@ src/titleui/widgets/blindwaitingroom.cpp
 src/titleui/widgets/frontendimagebutton.cpp
 src/titleui/widgets/gamebrowserform.cpp
 src/titleui/widgets/infobutton.cpp
+src/titleui/widgets/lobbyplayerboxtabs.cpp
 src/titleui/widgets/lobbyplayerrow.cpp
 src/titleui/widgets/multilobbyoptions.cpp
 src/titleui/widgets/optionsform.cpp
