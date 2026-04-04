@@ -578,6 +578,64 @@ void to_json(nlohmann::ordered_json& j, const GameDetails& v)
 	}
 }
 
+static nlohmann::ordered_json serializeGameDetailsChangedFields(const GameDetails& newGameDetails, const GameDetails& lastPersistedGameDetails)
+{
+	// Start by converting to json
+	auto gameDetailsJson = nlohmann::ordered_json(newGameDetails);
+
+	// Then check individual fields and erase them if they are the same as lastPersistedGameDetails
+	if (newGameDetails.versionStr == lastPersistedGameDetails.versionStr)
+	{
+		gameDetailsJson.erase("v");
+	}
+	if (newGameDetails.netcodeVer == lastPersistedGameDetails.netcodeVer)
+	{
+		gameDetailsJson.erase("netv");
+	}
+	if (newGameDetails.name == lastPersistedGameDetails.name)
+	{
+		gameDetailsJson.erase("name");
+	}
+	if (newGameDetails.host == lastPersistedGameDetails.host)
+	{
+		gameDetailsJson.erase("host");
+	}
+	if (newGameDetails.map == lastPersistedGameDetails.map)
+	{
+		gameDetailsJson.erase("map");
+	}
+	if (newGameDetails.mods == lastPersistedGameDetails.mods)
+	{
+		gameDetailsJson.erase("mods");
+	}
+	if (newGameDetails.players == lastPersistedGameDetails.players)
+	{
+		gameDetailsJson.erase("players");
+	}
+	if (newGameDetails.spectators == lastPersistedGameDetails.spectators)
+	{
+		gameDetailsJson.erase("specs");
+	}
+	if (newGameDetails.alliancesMode == lastPersistedGameDetails.alliancesMode)
+	{
+		gameDetailsJson.erase("ally");
+	}
+	if (newGameDetails.blindMode == lastPersistedGameDetails.blindMode)
+	{
+		gameDetailsJson.erase("blind");
+	}
+	if (newGameDetails.limits == lastPersistedGameDetails.limits)
+	{
+		gameDetailsJson.erase("lim");
+	}
+	if (newGameDetails.isPrivate == lastPersistedGameDetails.isPrivate)
+	{
+		gameDetailsJson.erase("private");
+	}
+
+	return gameDetailsJson;
+}
+
 void from_json(const nlohmann::json& j, GameDetails& v)
 {
 	v.versionStr = j.at("v").get<WzString>();
@@ -1107,7 +1165,7 @@ public:
 
 private:
 
-	void initializeGameListingCreationData(const GameDetails& gameDetails, const std::vector<ConnectionInfo>& connections);
+	void initializeGameListingCreationData(const GameDetails& gameDetails, const HostJoinOptions& joinOptions, const std::vector<ConnectionInfo>& connections);
 
 	void addConnectionsToGame(const std::vector<ConnectionInfo>& connections);
 
@@ -1147,6 +1205,7 @@ private:
 	std::chrono::seconds currPendingPublishCheckinInterval = SERVER_UPDATE_PENDING_PUBLISH_CHECKIN_MIN_INTERVAL;
 
 	GameDetails lastGameDetails;
+	HostJoinOptions lastJoinOptions;
 	std::vector<ConnectionInfo> publishedConnectionInfo;
 
 	struct PendingUpdateGameDetails
@@ -1385,7 +1444,7 @@ bool LobbyServerHostingHandlerImpl::createGameListing(const EcKey& hostIdentity,
 	ASSERT_OR_RETURN(false, state == LobbyListingState::None, "create called when lobby listing state is: %d", static_cast<int>(state));
 	ASSERT_OR_RETURN(false, !connections.empty(), "create called with no connections?");
 
-	initializeGameListingCreationData(gameDetails, connections);
+	initializeGameListingCreationData(gameDetails, joinOptions, connections);
 
 	auto request = buildBaseHostingURLDataRequest();
 	request.url = buildLobbyRequestBaseUrl(lobbyServerAddress) + "/api/v1/game";
@@ -1514,12 +1573,13 @@ void LobbyServerHostingHandlerImpl::sendListingUpdateImpl()
 
 	if (ownedPendingUpdate.has_value())
 	{
-		// FUTURE TODO: Determine which fields have changed and only serialize those to json
-
-		auto hostCreateGameInfo = nlohmann::ordered_json(ownedPendingUpdate.value().gameDetails);
+		auto hostCreateGameInfo = serializeGameDetailsChangedFields(ownedPendingUpdate.value().gameDetails, lastGameDetails);
 		ASSERT_OR_RETURN(, hostCreateGameInfo.is_object(), "Not an object?");
 
-		hostCreateGameInfo["joinopts"] = ownedPendingUpdate.value().joinOptions;
+		if (ownedPendingUpdate.value().joinOptions != lastJoinOptions)
+		{
+			hostCreateGameInfo["joinopts"] = ownedPendingUpdate.value().joinOptions;
+		}
 
 		const bool hostIdentityChanged = (lastGameDetails.host.publicIdentity != ownedPendingUpdate.value().gameDetails.host.publicIdentity);
 		if (hostIdentityChanged && trustedLobbyServerAddress)
@@ -1572,6 +1632,7 @@ void LobbyServerHostingHandlerImpl::sendListingUpdateImpl()
 		if (ownedPendingUpdate.has_value())
 		{
 			strongSelf->lastGameDetails = ownedPendingUpdate.value().gameDetails;
+			strongSelf->lastJoinOptions = ownedPendingUpdate.value().joinOptions;
 		}
 
 		// Get HostGameStatus from jsonData
@@ -1798,9 +1859,10 @@ optional<bool> LobbyServerHostingHandlerImpl::isHostJoinOptionSupportedByLobby(H
 	return supportedHostJoinOpts.value().count(optType) != 0;
 }
 
-void LobbyServerHostingHandlerImpl::initializeGameListingCreationData(const GameDetails& gameDetails, const std::vector<ConnectionInfo>& connections)
+void LobbyServerHostingHandlerImpl::initializeGameListingCreationData(const GameDetails& gameDetails, const HostJoinOptions& joinOptions, const std::vector<ConnectionInfo>& connections)
 {
 	lastGameDetails = gameDetails;
+	lastJoinOptions = joinOptions;
 
 	publishedConnectionInfo = connections;
 }
@@ -1975,6 +2037,7 @@ void LobbyServerHostingHandlerImpl::eventGameListingGone(optional<LobbyError> er
 	state = LobbyListingState::None;
 
 	lastGameDetails = GameDetails();
+	lastJoinOptions = HostJoinOptions();
 
 	pendingUpdate.reset();
 	awaitingAsyncUpdateResponse = false;

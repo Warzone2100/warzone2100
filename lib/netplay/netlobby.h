@@ -28,6 +28,7 @@
 #include <functional>
 #include <unordered_map>
 #include <variant>
+#include <tuple>
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -63,17 +64,32 @@ struct HostDetails
 	std::string publicIdentity;
 };
 
+inline bool operator==(const HostDetails& lhs, const HostDetails& rhs)
+{
+	return lhs.name == rhs.name && lhs.publicIdentity == rhs.publicIdentity;
+}
+
 struct MapDetails
 {
 	WzString name;
 	std::string hash;
 };
 
+inline bool operator==(const MapDetails& lhs, const MapDetails& rhs)
+{
+	return lhs.name == rhs.name && lhs.hash == rhs.hash;
+}
+
 struct ModDetails
 {
 	WzString name;
 	WzString hash;
 };
+
+inline bool operator==(const ModDetails& lhs, const ModDetails& rhs)
+{
+	return lhs.name == rhs.name && lhs.hash == rhs.hash;
+}
 
 struct PlayerCounts
 {
@@ -83,6 +99,11 @@ struct PlayerCounts
 public:
 	uint32_t availableSlots() const;
 };
+
+inline bool operator==(const PlayerCounts& lhs, const PlayerCounts& rhs)
+{
+	return lhs.current == rhs.current && lhs.max == rhs.max;
+}
 
 enum class StructureLimits : uint8_t {
 	NO_TANKS   = 1 << 0,
@@ -131,6 +152,17 @@ struct HostJoinOptions
 	HostJoinOptionValue proxyIPs = HostJoinOptionValue::BlockSuspicious;
 	HostJoinOptionValue hostingIPs = HostJoinOptionValue::BlockAll;
 };
+
+inline bool operator==(const HostJoinOptions& lhs, const HostJoinOptions& rhs)
+{
+	return std::tie(lhs.botProt, lhs.proxyIPs, lhs.hostingIPs)
+		== std::tie(rhs.botProt, rhs.proxyIPs, rhs.hostingIPs);
+}
+
+inline bool operator!=(const HostJoinOptions& lhs, const HostJoinOptions& rhs)
+{
+	return !(lhs == rhs);
+}
 
 enum class ConnectionMethod
 {
