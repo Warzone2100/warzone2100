@@ -44,8 +44,8 @@ namespace netlobby {
 
 constexpr std::chrono::seconds SERVER_UPDATE_PENDING_PUBLISH_CHECKIN_MIN_INTERVAL = std::chrono::seconds(1);
 constexpr std::chrono::seconds SERVER_UPDATE_PENDING_PUBLISH_CHECKIN_MAX_INTERVAL = std::chrono::seconds(5);
-constexpr std::chrono::seconds SERVER_UPDATE_MIN_INTERVAL = std::chrono::seconds(7);
-constexpr std::chrono::seconds SERVER_UPDATE_MAX_INTERVAL = std::chrono::seconds(25);
+constexpr std::chrono::seconds SERVER_UPDATE_MIN_INTERVAL = std::chrono::seconds(8);
+constexpr std::chrono::seconds SERVER_UPDATE_MAX_INTERVAL = std::chrono::seconds(30);
 constexpr std::chrono::seconds SERVER_UPDATE_NO_SUCCESS_ABANDON_INTERVAL = std::chrono::seconds(120);
 
 constexpr const char* errCodeHostNotAccessible = "HOST_NOT_ACCESSIBLE";
