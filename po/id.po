@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-02-03 01:34+0000\n"
-"PO-Revision-Date: 2026-02-03 21:43\n"
+"PO-Revision-Date: 2026-04-04 03:04\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -8083,7 +8083,7 @@ msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr ""
 
 msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
-msgstr "PERINGATAN: Jika kamu tidak meng-klik Siap, kamu akan dikeluarkan dari room."
+msgstr "PERINGATAN: Yang gak siap gue kick sekarang juga!"
 
 #, c-format
 msgid "Player will be kicked if they don't check Ready soon: %s"
@@ -8091,55 +8091,55 @@ msgstr ""
 
 #, c-format
 msgid "Auto-kicking player (%s) because they waited too long to check Ready"
-msgstr "Mengeluarkan (%s) karena dia terlalu memakan banyak waktu untuk bersiap"
+msgstr "Gue kick %s soalnya kelamaan."
 
 msgid "NOTICE: Please check Ready"
-msgstr "PERINGATAN: Tolong klik Siap"
+msgstr "PERINGATAN: Cepetan redi guys, pencettt!"
 
 msgid "NOTICE: Please check Ready so the game can begin"
-msgstr "PERINGATAN: Segera klik Siap agar game dapat dimulai"
+msgstr "PERINGATAN: Pencet Siap, kita semua udah gak sabar main."
 
 msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
-msgstr "Siapapun kasih aku unit, dong?"
+msgstr "Plis kasih aku unit, dong?"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
-msgstr "Siapapun kasih aku truk buat bangun-bangun, dong?"
+msgstr "Plis kasih aku Truck, dong? Buat bangun-bangun, nih."
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "Sori, ga paham. (Pake Quick Chat aja gak sih?)"
+msgstr "Ngomong apaan sih? (Pake Quick Chat aja, plis.)"
 
 msgid "I suggest: Building more units"
-msgstr "Saran aku: Bangun lebih banyak unit"
+msgstr "Kata aku mah: Bangun lebih banyak Unit"
 
 msgid "I suggest: Building different units"
-msgstr "Saran aku: Bangun unit yang berbeda"
+msgstr "Kata aku mah: Bangun Unit yang berbeda"
 
 msgid "I suggest: Checking the team strategy view"
-msgstr "Aku menyarankan: Periksa strategi tim"
+msgstr "Kata aku mah: Cek strategi tim"
 
 msgid "I suggest: Researching different tech"
-msgstr "Aku menyarankan: Lakukan penelitian untuk teknologi lain"
+msgstr "Kata aku mah: Research Tech yang beda lah"
 
 msgid "I suggest: Keeping research centers busy"
-msgstr "Aku menyarankan: Pastikan Laboratorium tetap sibuk"
+msgstr "Kata aku mah: Lemburin Reserach Centernya"
 
 msgid "I suggest: Building anti-air"
-msgstr "Aku menyarankan: Bangun beberapa anti serangan udara"
+msgstr "Kata aku mah: Bangun anti-air"
 
 msgid "I suggest: Repairing your units"
-msgstr "Aku menyarankan: Perbaiki unitmu"
+msgstr "Kata aku mah: Itu unit lo sekarat semua woi"
 
 msgid "I suggest: Building repair facilities"
-msgstr "Aku menyarankan: Bangun bengkel"
+msgstr "Kata aku mah: Bangun Repair Facility"
 
 msgid "I suggest: Building power generators"
-msgstr "Aku menyarankan: Bangun pembangkit listrik"
+msgstr "Kata aku mah: Bangun Power Generator"
 
 msgid "I suggest: Capturing oil resources"
-msgstr "Aku menyarankan: Cari sumber minyak"
+msgstr "Kata aku mah: Cari sumber minyak"
 
 msgid "Hey everyone!"
 msgstr "Halo haloo!"
@@ -8148,49 +8148,49 @@ msgid "Welcome!"
 msgstr "Welkam bro!"
 
 msgid "I want to spectate"
-msgstr "Aku mau nonton aja"
+msgstr "Aku bagian nonton aja, ya!"
 
 msgid "I want to play"
-msgstr "Aku pengin ikutan main"
+msgstr "Ikutan main dong guys!"
 
 msgid "I want to switch teams"
-msgstr "Boleh tukeran tim gak?"
+msgstr "Boleh tukeran tim, gak?"
 
 msgid "Please check Ready so we can start"
-msgstr "Pencet Ready nya woi!"
+msgstr "Pencet Ready nya, woi!"
 
 msgid "Please wait"
-msgstr "Tungguin aku dong"
+msgstr "Tungguin aku, dong!"
 
 msgid "Let's go!"
 msgstr "Gaskeun!"
 
 msgid "Almost ready"
-msgstr "Dikit lagi redi"
+msgstr "Bentar guys, sabar!"
 
 msgid "Ready"
 msgstr "Siap"
 
 msgid "Be right back"
-msgstr "Bentar dulu guys"
+msgstr "Bentar dulu, ya."
 
 msgid "I'm back"
-msgstr "Gue udah kembali"
+msgstr "Ada yang kangen aku, gak?"
 
 msgid "Yes"
-msgstr "Ya"
+msgstr "Yoi"
 
 msgid "No"
-msgstr "Tidak"
+msgstr "Gak"
 
 msgid "Maybe"
 msgstr "Mungkin"
 
 msgid "Not yet"
-msgstr "Belum"
+msgstr "Beloman"
 
 msgid "Soon"
-msgstr "Segera"
+msgstr "Nanti"
 
 msgid "Thank you"
 msgstr "Makasih"
@@ -8199,7 +8199,7 @@ msgid "No problem"
 msgstr "Amann"
 
 msgid "Well-played"
-msgstr "GG"
+msgstr "GG BANGET!"
 
 msgid "@#%*!"
 msgstr "@#%*!"
@@ -8220,19 +8220,19 @@ msgid "Attack now?"
 msgstr "Serang nggak?"
 
 msgid "Group up"
-msgstr "Berkumpul!"
+msgstr "Kumpul sini guys!"
 
 msgid "Split up"
-msgstr "Berpisah!"
+msgstr "Misah aja dulu!"
 
 msgid "Focus attacks where marked"
-msgstr "Serang yang udah ditandain!"
+msgstr "Fokus serang yang udah ditandain!"
 
 msgid "Retreat!"
-msgstr "Mundur!"
+msgstr "Mundur woi mundur!"
 
 msgid "I need help!"
-msgstr "Bantuin woi!"
+msgstr "Bantuin gue woi!"
 
 msgid "Left side"
 msgstr "Sisi kiri"
@@ -9690,62 +9690,62 @@ msgid "The host has moved %s to Spectators!"
 msgstr "Host telah memindahkan %s ke Penonton!"
 
 msgid "Move to Spectators"
-msgstr "Pindah ke Penonton"
+msgstr "Menjadi Spectator"
 
 msgid "Ask Spectator to Play"
-msgstr "Minta Penonton untuk Bermain"
+msgstr "Minta Spectator untuk Ikut Main"
 
 msgid "Ask to Play"
-msgstr "Minta untuk Bermain"
+msgstr "Minta Ikut Main"
 
 #, c-format
 msgid "Spectator %s wants to remain a Spectator"
-msgstr "Penonton %s ingin tetap menjadi Penonton"
+msgstr "Spectator %s ingin tetap menjadi Spectator"
 
 #, c-format
 msgid "Player %s wants to remain a Player"
-msgstr "Pemain %s ingin tetap menjadi Pemainwants to remain a Player"
+msgstr "Player %s ingin tetap menjadi Player"
 
 msgid "Host has declined to switch you to a Player"
-msgstr "Host telah menolak untuk menggantikanmu ke Pemain"
+msgstr "Host telah menolak untuk menjadikanmu Player"
 
 msgid "Unable to switch to Spectator"
-msgstr "Tidak bisa mengganti ke Penonton"
+msgstr "Tidak bisa menjadi Spectator"
 
 msgid "Do you want to spectate?"
-msgstr "Apa kamu mau menonton?"
+msgstr "Apa kamu ingin menonton?"
 
 msgid "The host of this game wants to know if you're willing to spectate?"
-msgstr "Host dari permainan ini ingin tahu apakah kamu ingin menonton?"
+msgstr "Host game ingin tahu apakah kamu ingin menonton?"
 
 msgid "You are currently a Player."
-msgstr "Kamu saat ini adalah pemain."
+msgstr "Kamu saat ini adalah Player."
 
 msgid "Yes, I will spectate!"
-msgstr "Ya, saya akan menonton!"
+msgstr "Boleh, aku pengin nonton!"
 
 msgid "Do you want to play?"
-msgstr "Apa Anda ingin bermain?"
+msgstr "Kamu pengin main?"
 
 msgid "The host of this game wants to know if you'd like to play?"
-msgstr "Penyelenggara permainan ini ingin tahu, apakah Anda ingin bermain?"
+msgstr "Host game ingin tahu, apakah kamu pengin ikut main?"
 
 msgid "You are currently a Spectator."
-msgstr "Anda saat ini adalah Penonton."
+msgstr "Kamu saat ini adalah Spectator"
 
 msgid "Yes, I want to play!"
-msgstr "Ya, saya ingin bermain!"
+msgstr "Ya, saya mau main juga!"
 
 #, c-format
 msgid "Player %s has moved to Spectators"
-msgstr "Pemain %s telah berpindah ke Penonton"
+msgstr "Player %s kini seorang Spectator"
 
 #, c-format
 msgid "Unable to move %s to Players - no available slot"
 msgstr "Tidak dapat memindahkan %s ke pemain - tidak ada slot lagi"
 
 msgid "Spectator would like to become a Player"
-msgstr "Penonton ingin menjadi Pemain"
+msgstr "Spectator ingin menjadi Player"
 
 #, c-format
 msgid "Spectator \"%s\" would like to become a player."
@@ -9848,10 +9848,10 @@ msgid "More Information"
 msgstr "Informasi lebih lanjut"
 
 msgid "Sorry! Failed to host the game."
-msgstr "Maaf! Gagal untuk menyelenggarakan permainan."
+msgstr "Maaf! Gagal untuk menghosting game."
 
 msgid "Host is Starting Game"
-msgstr "Penyelenggara Memulai Permainan"
+msgstr "Host Memulai Game"
 
 #, c-format
 msgid "Host: Free chat enabled for: %s"
@@ -9863,11 +9863,11 @@ msgstr "Host: telah membisukan %s"
 
 #, c-format
 msgid "Moving %s to Spectators!"
-msgstr "Memindahkan %s ke Penonton!"
+msgstr "Menjadikan %s Spectator!"
 
 #, c-format
 msgid "Asking %s to move to Players..."
-msgstr "Meminta %s untuk menjadi Pemain..."
+msgstr "Meminta %s untuk menjadi Player..."
 
 msgid "Disconnected from host:"
 msgstr "Terputus dari host:"
@@ -9888,34 +9888,34 @@ msgid "Host supplied invalid host config"
 msgstr ""
 
 msgid "You have been kicked: "
-msgstr "Anda telah dikeluarkan dari ruangan: "
+msgstr "Kamu telah dikeluarkan dari lobi: "
 
 msgid "Connection lost:"
 msgstr ""
 
 msgid "No connection to host."
-msgstr "Tidak ada sambungan ke penyelenggara."
+msgstr "Tidak ada sambungan dengan host."
 
 msgid "The host moved me to Players, but I never gave permission for this change. Bye!"
-msgstr "Penyelenggara memindahkan saya ke Pemain, tapi saya tidak memberikan izin untuk ini. Selamat tinggal!"
+msgstr "Host ngubah aku jadi Player, padahal aku lagi gak pengin main. Dadah! "
 
 msgid "The host tried to move us to Players, but we never gave permission."
-msgstr "Penyelenggara mencoba memindahkan kami ke Pemain, tapi kami tidak pernah memberikan izin."
+msgstr "Host nyoba jadiin kami Player, padahal kami gak minta samsek."
 
 msgid "Cannot change to a map with too few slots for all players."
-msgstr "Tidak dapat mengganti ke peta dengan tidak cukup ruang untuk semua pemain."
+msgstr "Tidak dapat mengubah map. Map terlalu kecil untuk menampung seluruh Player."
 
 msgid "Cannot change to a map with fewer slots."
-msgstr "Tidak dapat mengganti ke peta dengan ruang lebih sedikit."
+msgstr "Tidak dapat mengubah map. Slot terlalu sedikit"
 
 msgid "The host has quit."
-msgstr "Penyelenggara telah keluar."
+msgstr "Host keluar."
 
 msgid "Hit the ready box to begin your challenge!"
-msgstr "Tekan tombol siap untuk memulai tantangan!"
+msgstr "Tekan tombol siap kalau kamu sudah siap!"
 
 msgid "Press the start hosting button to begin hosting a game."
-msgstr "Tekan tombol mulai menyelenggarakan untuk mulai menyelenggarakan permainan."
+msgstr "Tekan tombol Mulai Host untuk menghosting game."
 
 msgid "Port mapping creation is in progress..."
 msgstr ""
@@ -9953,34 +9953,34 @@ msgid "Failed to load the autohost map or config from: %s"
 msgstr ""
 
 msgid "Closed"
-msgstr "Ditutup"
+msgstr "Tutup"
 
 msgid "Open"
 msgstr "Buka"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
-msgstr "Versi Warzone 2100 yang digunakan untuk menyimpan file tayangan ulang ini tidak sama dengan versi yang berjalan saat ini."
+msgstr "Versi Warzone 2100 yang digunakan untuk menyimpan file replay ini tidak sama dengan versi yang berjalan saat ini."
 
 #, c-format
 msgid "Replay File Saved With: \"%s\""
-msgstr "File Tayangan Ulang Disimpan Dengan: \"%s\""
+msgstr "File Replay Disimpan Dengan: \"%s\""
 
 #, c-format
 msgid "Current Warzone 2100 Version: \"%s\""
 msgstr "Versi Warzone 2100: \"%s\""
 
 msgid "Replays should usually be played back with the same version used to save the replay."
-msgstr "Tayangan ulang sebaiknya diputar dengan versi yang digunakan untuk merekamnya."
+msgstr "Replay sebaiknya diputar dengan versi yang digunakan untuk merekamnya."
 
 msgid "The replay may not playback successfully, or there may be differences in the simulation."
-msgstr "Tayangan ulang mungkin tidak berjalan dengan benar, atau mungkin muncul perbedaan dalam simulasi."
+msgstr "Replay mungkin tidak berjalan dengan benar, atau mungkin muncul perbedaan dalam simulasi."
 
 msgid "Replay Version Mismatch"
-msgstr "Ketidakcocokan Versi Tayangan Ulang"
+msgstr "Versi Replay Tidak Cocok"
 
 #, c-format
 msgid "%s has Left the Game"
-msgstr "%s meninggalkan permainan"
+msgstr "%s keluar"
 
 #, c-format
 msgid "%s joined the Game"
@@ -9995,98 +9995,98 @@ msgid "File transfer has been aborted for %d."
 msgstr "Transfer file telah dibatalkan untuk %d."
 
 msgid "The game is already full."
-msgstr "Permainan sudah penuh."
+msgstr "Game penuh."
 
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr "%s (%u) memiliki mod yang tidak kompatibel, dan sudah di keluarkan dari permainan."
+msgstr "%s (%u) dikeluarkan karena mengaktifkan mod yang tidak kompatibel"
 
 msgid "Your data doesn't match the host's!"
-msgstr "Data Anda tidak cocok dengan data penyelenggara!"
+msgstr "Data game mu tidak cocok dengan data milik host!"
 
 #, c-format
 msgid "%s is joining the game"
-msgstr "%s bergabung dalam permainan"
+msgstr "%s bergabung"
 
 msgid "Server message:"
 msgstr "Pesan server:"
 
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "Perbaruan permainan tersedia, silakan kunjungi https://wz2100.net untuk mengunduh versi baru."
+msgstr "Update client sudah tersedia, silakan kunjungi https://wz2100.net untuk mendownload versi baru."
 
 msgid "LIMITS"
-msgstr "BATAS-BATAS"
+msgstr "LIMIT"
 
 msgid "Map Can Exceed Limits"
-msgstr "Peta Dapat Melewati Batas-Batas"
+msgstr "Map Boleh Melewati Limit"
 
 msgid "Force Limits at Start"
-msgstr "Paksakan Batas Saat Memulai"
+msgstr "Paksakan Limit Saat Dimulai"
 
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Gunakan Default dan Kembali Ke Layar Sebelumnya"
+msgstr "Gunakan Pengaturan Default dan Kembali"
 
 msgid "Accept Settings"
-msgstr "Setujui Pengaturan"
+msgstr "OK"
 
 msgid "Limits reset to default values"
-msgstr "Batas-batas diatur ulang ke nilai default"
+msgstr "Limit direset ke nilai deault"
 
 msgid "Limits Reset To Default Values"
-msgstr "Batas-Batas Diatur Ulang ke Nilai Default"
+msgstr "Limit DIreset ke Nilai Default"
 
 msgid "Administrator has kicked you from the game."
-msgstr "Administrator telah mengeluarkan Anda dari permainan."
+msgstr "Administrator mengeluarkanmu dari game."
 
 msgid "Search for map"
 msgstr ""
 
 msgid "Any number of players"
-msgstr "Segala jumlah pemain"
+msgstr "Tanpa batas"
 
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "%d pemain"
+msgstr[0] "%d player"
 
 msgid "Ping"
 msgstr "Ping"
 
 msgid "Structs"
-msgstr "Struktur"
+msgstr "Struct"
 
 msgid "Alliances"
-msgstr "Aliansi"
+msgstr "Ally"
 
 msgid "Score"
-msgstr "Skor"
+msgstr "Score"
 
 msgid "Kills"
-msgstr "Membunuh"
+msgstr "Kill"
 
 msgid "Units"
 msgstr "Unit"
 
 msgid "Channel"
-msgstr "Saluran"
+msgstr "Channel"
 
 msgid "Toggle Alliance State"
-msgstr "Atur Keadaan Aliansi"
+msgstr "Toggle State Ally"
 
 msgid "Give Visibility Report"
-msgstr "Berikan Laporan Visibilitas"
+msgstr "Beri Visibility Report"
 
 msgid "Leak Technology Documents"
-msgstr "Bocorkan Dokumen Teknologi"
+msgstr "Bocorkan Technology Document"
 
 msgid "Hand Over Selected Units"
-msgstr "Berikan Unit yang Dipilih"
+msgstr "Berikan Pada Unit Terpilih"
 
 msgid "Give Power To Player"
-msgstr "Berikan Daya Ke Pemain"
+msgstr "Beri Power Ke Player"
 
 msgid "Toggle Chat Mute"
-msgstr "Atur Nyala/Mati Pembisuan Obrolan"
+msgstr "Toggle Mute Chat"
 
 msgid "Sent/Received per sec —"
 msgstr "Terkirim/Diterima per detik —"
@@ -10100,7 +10100,7 @@ msgstr ""
 
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr "Tidak Terkompres: %lu/%lu"
+msgstr "Uncompressed: %lu/%lu"
 
 #, c-format
 msgid "Pack: %lu/%lu"
@@ -10117,16 +10117,16 @@ msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
 msgid "MAP REQUESTED!"
-msgstr "PETA DIMINTA!"
+msgstr "PERMINTAAN TERKIRIM!"
 
 msgid "MOD REQUESTED!"
-msgstr "MOD DIMINTA!"
+msgstr "PERMINTAAN TERKIRIM!"
 
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr "Perhatian, ini adalah map-mod yang dapat mempengaruhi jalan permainan normal."
+msgstr "Peringatan, ini adalah map yang dimodifikasi, gameplay mungkin berbeda,"
 
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr "Perhatian, PENYELENGGARA telah mengganti kode permainan, dan tidak dapat dipercaya!"
+msgstr "Peringatan, HOST telah memodifikasi kode game, jangan mempercayainya!"
 
 msgid "The host has enabled free chat for everyone."
 msgstr ""
@@ -10171,47 +10171,47 @@ msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr "Mengeluarkan player %s, karena mereka mencoba melewati pemeriksaan integritas data!"
+msgstr "Player %s dikeluarkan karena mencoba untuk membypass data integrity check!"
 
 msgid "Invalid data!"
 msgstr "Data tidak valid!"
 
 #, c-format
 msgid "Auto kicking player %s, invalid command received: %u"
-msgstr "Mengeluarkan pemain %s secara otomatis, perintah tidak valid diterima: %u"
+msgstr "Player %s dikeluarkan secara otomatis, perintah tidak valid diterima: %u"
 
 msgid "Unauthorized network command"
-msgstr "Perintah jaringan tidak diizinkan"
+msgstr "Terjadi perintah jaringan yang tak diizinkan"
 
 msgid "REPLAY HAS ENDED"
-msgstr "TAYANGAN ULANG TELAH BERAKHIR"
+msgstr "REPLAY BERAKHIR"
 
 msgid "(Press ESC to quit.)"
 msgstr "(Tekan ESC untuk keluar.)"
 
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr "Mengeluarkan pemain %s secara otomatis, komando tidak valid diterima."
+msgstr "Mengeluarkan player %s secara otomatis, perintah invalid diterima."
 
 msgid "Map was requested: SENDING MAP!"
-msgstr "Peta telah diminta: MENGIRIM PETA!"
+msgstr "Map diminta: MENGIRIM MAP!"
 
 msgid "Mod was requested: SENDING MOD!"
 msgstr "Mod diminta: MENGIRIM MOD!"
 
 msgid "FILE SENT!"
-msgstr "FILE TERKIRIM!"
+msgstr "TERKIRIM!"
 
 msgid "MAP DOWNLOADED!"
-msgstr "PETA DIUNDUH!"
+msgstr "MAP DIDOWNLOAD!"
 
 #, c-format
 msgid "Beacon %d"
-msgstr "Batang Suar %d"
+msgstr "Beacon %d"
 
 #, c-format
 msgid "Beacon received from %s!"
-msgstr "Batang Suar diterima dari %s!"
+msgstr "Menerima Beacon dari %s!"
 
 msgid "Green"
 msgstr "Hijau"
@@ -10235,7 +10235,7 @@ msgid "Pink"
 msgstr "Pink"
 
 msgid "Cyan"
-msgstr "Sian"
+msgstr "Cyan"
 
 msgid "Yellow"
 msgstr "Kuning"
@@ -10253,7 +10253,7 @@ msgid "Neon green"
 msgstr "Hijau Neon"
 
 msgid "Infrared"
-msgstr "Inframerah"
+msgstr "Infrared"
 
 msgid "Ultraviolet"
 msgstr "Ultraviolet"
@@ -10262,14 +10262,14 @@ msgid "Brown"
 msgstr "Coklat"
 
 msgid "Spectator Mode"
-msgstr "Modus Penonton"
+msgstr "Mode Spectator"
 
 msgid "You are a spectator. Enjoy watching the game!"
-msgstr "Anda adalah seorang penonton. Nikmatilah permainannya!"
+msgstr "Kamu adalah Spectator. Selamat menonton, enjoy!"
 
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr "%s (%d) membolehkan perubahan peta. Total: %d/%d"
+msgstr "%s (%d) membolehkan penggantian map. Total: %d/%d"
 
 #, c-format
 msgid "A player voted FOR kicking: %s"
@@ -10284,10 +10284,10 @@ msgid "A player's client ignored your vote to kick request (too frequent): %s"
 msgstr ""
 
 msgid "Vote"
-msgstr "Pilih"
+msgstr "Vote"
 
 msgid "Allow host to change map or randomize?"
-msgstr "Bolehkan penyelenggara untuk mengubah peta atau acak?"
+msgstr "Bolehkan host untuk mengubah atau mengacak map?"
 
 msgid "A vote was started to kick you from the game."
 msgstr ""
@@ -10332,7 +10332,7 @@ msgid "Starting vote to kick player: %s"
 msgstr ""
 
 msgid "NOW PLAYING"
-msgstr "SEDANG DIMAINKAN"
+msgstr "MEMAINKAN"
 
 msgid "Album"
 msgstr "Album"
@@ -10350,25 +10350,25 @@ msgid "Do not show again"
 msgstr "Jangan tampilkan lagi"
 
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr "Kita tidak dapat melakukan itu! Kami harus berupa Cyborg untuk menggunakan Transporter Cyborg!"
+msgstr "Mana boleh gitu! Cuma Cybord Unit yang boleh pakai Cyborg Transport!"
 
 msgid "Failed to load selected AI! Check your logs to see why."
-msgstr "Gagal memuat AI yang dipilih! Cek log Anda untuk informasi lebih lanjut."
+msgstr "Gagal memuat AI yang dipilih! Cek log mu untuk informasi lebih lanjut."
 
 #, c-format
 msgid "Loaded the %s AI script for current player!"
-msgstr "Memuat script AI %s untuk pemain saat ini!"
+msgstr "Memuat script AI %s untuk player sekarang!"
 
 #, c-format
 msgid "Research completed: %s"
-msgstr "Riset selesai: %s"
+msgstr "Research berhasil: %s"
 
 msgid "Research Award"
-msgstr "Penghargaan Riset"
+msgstr "Research Award"
 
 #, c-format
 msgid "Own Units: %u"
-msgstr "Unit Sendiri: %u"
+msgstr "Unit mu: %u"
 
 #, c-format
 msgid "Enemy Units: %u"
@@ -10376,31 +10376,31 @@ msgstr "Unit Musuh: %u"
 
 #, c-format
 msgid "Own Structures: %u"
-msgstr "Struktur Sendiri: %u"
+msgstr "Total Structure mu: %u"
 
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr "Struktur Musuh: %u"
+msgstr "Total Structure Musuh: %u"
 
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr "Unit Yang Dibangun: %u"
+msgstr "Unit Diproduksi: %u"
 
 #, c-format
 msgid "Total Units: %u"
-msgstr "Jumlah Unit Total: %u"
+msgstr "Total Unit: %u"
 
 #, c-format
 msgid "Structures Built: %u"
-msgstr "Struktur yang Dibangun: %u"
+msgstr "Structure Dibangun: %u"
 
 #, c-format
 msgid "Total Structures: %u"
-msgstr "Struktur Total: %u"
+msgstr "Total Structure: %u"
 
 #, c-format
 msgid "Rookie: %u"
-msgstr "Prajurit Baru: %u"
+msgstr "Rookie: %u"
 
 #, c-format
 msgctxt "rank"
@@ -10425,39 +10425,39 @@ msgstr "Veteran: %u"
 
 #, c-format
 msgid "Elite: %u"
-msgstr "Elit: %u"
+msgstr "Elite: %u"
 
 #, c-format
 msgid "Special: %u"
-msgstr "Istimewa: %u"
+msgstr "Special: %u"
 
 #, c-format
 msgid "Hero: %u"
-msgstr "Heroik: %u"
+msgstr "Hero: %u"
 
 msgid "Unit Losses"
-msgstr "Kerugian Unit"
+msgstr "Unit Hancur"
 
 msgid "Structure Losses"
-msgstr "Kerugian Struktur"
+msgstr "Structure Hancur"
 
 msgid "Force Information"
 msgstr "Informasi Pasukan"
 
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr "ARTEFAK TERPEROLEH: %d"
+msgstr "ARTIFACT DIPULIHKAN: %d"
 
 #, c-format
 msgid "Mission Time - %s"
-msgstr "Waktu Misi - %s"
+msgstr "Mission Time - %s"
 
 #, c-format
 msgid "Total Game Time - %s"
-msgstr "Total Waktu Permainan - %s"
+msgstr "Total Waktu Game - %s"
 
 msgid "You cheated!"
-msgstr "Kamu curang!"
+msgstr "Citer woi!"
 
 msgid "Use Quick Chat to chat with other players."
 msgstr ""
@@ -10508,7 +10508,7 @@ msgid "Related Keymappings:"
 msgstr ""
 
 msgid "Enter password"
-msgstr "Masukkan kata sandi"
+msgstr "Masukkan password"
 
 msgid "Connecting to Game"
 msgstr "Menghubungkan"
@@ -10520,16 +10520,16 @@ msgid "Cancel"
 msgstr "Batal"
 
 msgid "Game requires a password to join"
-msgstr "Untuk bergabung, masukkan kata sandi"
+msgstr "Untuk bergabung, masukkan password"
 
 msgid "Unable to Join Game"
-msgstr "Tidak dapat bergabung ke game"
+msgstr "Tidak Dapat Bergabung Dengan Game"
 
 msgid "Error:"
 msgstr "Error:"
 
 msgid "Join Attempt Rejected"
-msgstr "Permintaan bergabung ditolak"
+msgstr "Permintaan Bergabung Ditolak"
 
 msgid "Message from Host:"
 msgstr "Pesan dari Host:"
@@ -10541,7 +10541,7 @@ msgid "You were kicked!"
 msgstr "Kamu dikeluarkan dari game!"
 
 msgid "Your game version does not match the host"
-msgstr "Versi gamemu tidak sama dengan host"
+msgstr "Versi client mu tidak sama dengan host"
 
 msgid "The host rejected your connection due to invalid data"
 msgstr ""
@@ -10631,40 +10631,40 @@ msgid "Game will start in ..."
 msgstr "Game akan dimulai dalam ..."
 
 msgid "Waiting for other players ..."
-msgstr "Menunggu pemain lain ..."
+msgstr "Menunggu player lain ..."
 
 msgid "Team Planning"
 msgstr "Perencanaan"
 
 msgid "Unable to locate any repair units!"
-msgstr "Tidak dapat menemukan unit perbaikan!"
+msgstr "Tidak dapat menemukan Repair Unit!"
 
 msgid "Unable to locate any Trucks!"
-msgstr "Tidak dapat menemukan truk!"
+msgstr "Tidak dapat menemukan Truck!"
 
 msgid "Unable to locate any Sensor Units!"
-msgstr "Tidak dapat menemukan unit sensor!"
+msgstr "Tidak dapat menemukan Sensor Units!"
 
 msgid "Unable to locate any Commanders!"
-msgstr "Tidak dapat menemukan unit Komandan!"
+msgstr "Tidak dapat menemukan Commander!"
 
 msgid "Cannot find required building!"
-msgstr "Tidak dapat menemukan bangunan yang diperlukan!"
+msgstr "Tidak dapat menemukan struktur yang diperlukan!"
 
 msgid "Loading video"
 msgstr "Memuat video"
 
 msgid "Show Player Stats"
-msgstr "Tunjukkan Stat Pemain"
+msgstr "Lihat Stat Player"
 
 msgid "Weapon Grade"
-msgstr "Kelas Senjata"
+msgstr "Weapon Grade"
 
 msgid "Power/Rate"
 msgstr ""
 
 msgid "Current Power / Power Per Second"
-msgstr "Daya Sekarang / Daya Per Detik"
+msgstr "Current Power / Power Per Second"
 
 msgid "PwrLost"
 msgstr "PwrLost"
@@ -10673,16 +10673,16 @@ msgid "PwrWon"
 msgstr "PwrWon"
 
 msgid "Lab Use"
-msgstr "Penggunaan Lab"
+msgstr "Lab Use"
 
 msgid "Kinetic Armor"
-msgstr "Armor Kinetik"
+msgstr "Kinetic Armor"
 
 msgid "(Tanks / Cyborgs)"
 msgstr "(Tank / Cyborg)"
 
 msgid "Cannons"
-msgstr "Meriam"
+msgstr "Cannon"
 
 msgid "Mortars"
 msgstr "Mortar"
@@ -10691,10 +10691,10 @@ msgid "Missiles"
 msgstr ""
 
 msgid "Rockets"
-msgstr "Roket"
+msgstr "Rocket"
 
 msgid "Energy"
-msgstr "Energi"
+msgstr "Energy"
 
 msgid "Gauss"
 msgstr "Gauss"
@@ -10706,7 +10706,7 @@ msgid "Howitzers"
 msgstr ""
 
 msgid "MG"
-msgstr "Senapan Mesin"
+msgstr "MG"
 
 msgid "Machine Guns"
 msgstr ""
@@ -10715,7 +10715,7 @@ msgid "Electronic"
 msgstr ""
 
 msgid "A-A"
-msgstr "Anti Udara"
+msgstr "A-A"
 
 msgid "Anti-Air"
 msgstr ""
@@ -10730,39 +10730,39 @@ msgid "Las-Sat"
 msgstr "Las-Sat"
 
 msgid "Laser Satellite"
-msgstr "Satelit Laser"
+msgstr "Laser Satellite"
 
 msgid "Bombs"
-msgstr "Bom"
+msgstr "Bomb"
 
 msgid "Command"
-msgstr "Perintah"
+msgstr "Command"
 
 msgid "EMP"
 msgstr "EMP"
 
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "Tidak dapat membangun unit, Batas Unit Dicapai — Produksi Dihentikan"
+msgstr "Tidak dapat memproduksi lebih banyak unit, Batas Unit Dicapai — Produksi Dihentikan"
 
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "Tidak dapat membangun \"%s\" tanpa Pusat Komando — Produksi Dihentikan"
+msgstr "Tidak dapat memproduksi \"%s\" tanpa Command Relay Center — Produksi Dihentikan"
 
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "Tidak dapat membangun \"%s\", Batas Komandan Dicapai — Produksi Dihentikan"
+msgstr "Tidak dapat memproduksi \"%s\", Batas Commander Dicapai — Produksi Dihentikan"
 
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Tidak dapat membangun \"%s\", Batas Unit Konstruksi Dicapai — Produksi Dihentikan"
+msgstr "Tidak dapat memproduksi \"%s\", Batas Construction Unit Dicapai — Produksi Dihentikan"
 
 msgid "Laser Satellite is ready to fire!"
-msgstr "Satelit Laser siap ditembakkan!"
+msgstr "Laser Satellite siap ditembakkan!"
 
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Unit ditugaskan - Body Point %d/%d"
+msgstr[0] "%s - %u Unit ditugaskan - Hitpoint %d/%d"
 
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
@@ -10771,11 +10771,11 @@ msgstr ""
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Unit ditugaskan - Body Point %d/%d"
+msgstr[0] "%s - %u Unit ditugaskan - Damage %d/%d"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr "%s - Body Point %d/%d"
+msgstr "%s - Hitpoint %d/%d"
 
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
@@ -10791,7 +10791,7 @@ msgstr ""
 
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - Tersambung sejumlah %u dari %u - Body Point %d/%d"
+msgstr "%s - Terhubung %u dari %u - Hitpoint %d/%d"
 
 #, c-format
 msgid "ID %u - Multiplier: %u"
@@ -10807,7 +10807,7 @@ msgstr ""
 
 #, c-format
 msgid "tile %d,%d - target %s"
-msgstr "ubin %d,%d - target %s"
+msgstr "tile %d,%d - target %s"
 
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
@@ -10815,28 +10815,28 @@ msgstr ""
 
 #, c-format
 msgid "%s - Electronically Damaged"
-msgstr "%s - Rusak Secara Elektronik"
+msgstr "%s - Electronically Damaged"
 
 msgid "Electronic Reward - Visibility Report"
-msgstr "Penghargaan Elektronik - Laporan Visibilitas"
+msgstr "Reward Electronic - Visibility Report"
 
 msgid "Factory Reward - Propulsion"
-msgstr "Penghargaan Pabrik - Propulsi"
+msgstr "Reward Factory - Propulsion"
 
 msgid "Factory Reward - Body"
-msgstr "Penghargaan Pabrik - Badan"
+msgstr "Reward Factory - Body"
 
 msgid "Factory Reward - Weapon"
-msgstr "Penghargaan Pabrik - Senjata"
+msgstr "Reward Factory - Weapon"
 
 msgid "Factory Reward - Nothing"
-msgstr "Penghargaan Pabrik - Tidak Ada"
+msgstr "Reward Factory - Tidak ada"
 
 msgid "Repair Facility Award - Repair"
-msgstr "Penghargaan Fasilitas Perbaikan - Perbaikan"
+msgstr "Award Repair Faciliity - Perbaikan"
 
 msgid "Repair Facility Award - Nothing"
-msgstr "Penghargaan Fasilitas Perbaikan - Tidak Ada"
+msgstr "Award Repair Facility - Tidak ada"
 
 msgid "Classic"
 msgstr "Klasik"
@@ -10991,7 +10991,7 @@ msgid "Balance:"
 msgstr "Keseimbangan:"
 
 msgid "Start at:"
-msgstr "Dimulai saat:"
+msgstr "Mulai saat:"
 
 msgid "Tweaks:"
 msgstr ""
@@ -11000,16 +11000,16 @@ msgid "CAMPAIGNS"
 msgstr "MISI"
 
 msgid "GAMES"
-msgstr "PERMAINAN"
+msgstr "GAME"
 
 msgid "Continue"
-msgstr "Lanjut"
+msgstr "Lanjutkan"
 
 msgid "MUSIC MANAGER"
 msgstr "MANAJER MUSIK"
 
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "HRTF tidak didukung di perangkat / sistem / perpustakaan OpenAL Anda"
+msgstr "HRTF tidak didukung di perangkat / sistem / library OpenAL Anda"
 
 msgid "Volume"
 msgstr ""
@@ -11018,7 +11018,7 @@ msgid "Voice Volume"
 msgstr "Volume Suara"
 
 msgid "FX Volume"
-msgstr "Volume Efek Suara"
+msgstr "Volume SFX"
 
 msgid "Music Volume"
 msgstr "Volume Musik"
@@ -11042,13 +11042,13 @@ msgid "Auto"
 msgstr "Otomatis"
 
 msgid "Subtitles"
-msgstr "Teks Terjemahan"
+msgstr "Subtitle"
 
 msgid "Off"
 msgstr "Mati"
 
 msgid "On"
-msgstr "Nyala"
+msgstr "Hidup"
 
 msgid "Music"
 msgstr ""
@@ -11081,13 +11081,13 @@ msgid "Order units to move or target with right-click. Select units with left-cl
 msgstr ""
 
 msgid "Trap Cursor"
-msgstr "Kursor Jebak"
+msgstr "Trap Cursor"
 
 msgid "Colored Cursors"
-msgstr "Kursor Berwarna"
+msgstr "Cursor Berwarna"
 
 msgid "Cursor Size"
-msgstr "Ukuran Kursor"
+msgstr "Ukuran Cursor"
 
 msgid "Camera"
 msgstr ""
@@ -11138,16 +11138,16 @@ msgid "Hosting Options"
 msgstr ""
 
 msgid "Port Mapping"
-msgstr "Pemetaan Port"
+msgstr "Port Mapping"
 
 msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr "Gunakan PCP, NAT-PMP, atau UPnP untuk membantu mengonfigurasi router/firewallmu dan izinkan koneksi saat melakukan hosting."
+msgstr "Gunakan PCP, NAT-PMP, atau UPnP untuk membantu mengonfigurasi router/firewall mu untuk mengizinkan koneksi saat melakukan hosting."
 
 msgid "Chat"
-msgstr "Obrolan"
+msgstr "Chat"
 
 msgid "Quick Chat Only"
-msgstr "Obrolan Cepat Saja"
+msgstr "Quick Chat Saja"
 
 msgid "Allow All"
 msgstr "Izinkan Semua"
@@ -11170,10 +11170,10 @@ msgid "Spectator Slots"
 msgstr "Slot Penonton"
 
 msgid "None"
-msgstr "Tidak ada"
+msgstr "N/A"
 
 msgid "On Player Leave"
-msgstr "Saat Pemain Pergi"
+msgstr "Begitu Player Pergi"
 
 msgid "Distribute to Team"
 msgstr "Bagikan ke Tim"
@@ -11186,7 +11186,7 @@ msgstr "Batas Waktu Game"
 
 #, c-format
 msgid "%s hours"
-msgstr "%s Jam"
+msgstr "%s jam"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
 msgstr ""
@@ -11195,7 +11195,7 @@ msgid "Shadows are not enabled."
 msgstr ""
 
 msgid "Shadow mapping not available on this system."
-msgstr "Pemetaan bayangan tidak tersedia pada sistem ini."
+msgstr "Shadow mapping tidak tersedia di sistem ini."
 
 msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
 msgstr ""
@@ -11222,10 +11222,10 @@ msgid "The quality of terrain shading (normal maps, specular highlights, etc). H
 msgstr ""
 
 msgid "Medium Quality"
-msgstr "Kualitas Sedang"
+msgstr "Sedang"
 
 msgid "High Quality"
-msgstr "Kualitas Tinggi"
+msgstr "Tinggi"
 
 msgid "Shadows"
 msgstr "Bayangan"
@@ -11243,7 +11243,7 @@ msgid "High"
 msgstr "Tinggi"
 
 msgid "Shadow Filtering"
-msgstr "Penyaringan Bayangan"
+msgstr "Shadow Filtering"
 
 msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
 msgstr ""
@@ -11261,7 +11261,7 @@ msgid "Point Lights"
 msgstr ""
 
 msgid "Lightmap"
-msgstr "Peta Cahaya"
+msgstr "Lightmap"
 
 msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
 msgstr ""
@@ -11291,7 +11291,7 @@ msgid "Textures larger than the configured limit will be downsampled. Unless run
 msgstr ""
 
 msgid "LOD Distance"
-msgstr "Jarak tingkat detail (LOD)"
+msgstr "Jarak LOD"
 
 msgid "How level of detail (in textures) is preserved as distance increases."
 msgstr ""
@@ -11342,7 +11342,7 @@ msgid "Groups Menu"
 msgstr "Menu Grup"
 
 msgid "Options Button"
-msgstr "Tombol Opsi"
+msgstr "Tombol Pengaturan"
 
 msgid "Opacity: 50%"
 msgstr "Opasitas: 50%"
@@ -11354,13 +11354,13 @@ msgid "Radar Orientation"
 msgstr ""
 
 msgid "Fixed"
-msgstr "Tetap"
+msgstr "Terkunci"
 
 msgid "Rotating"
 msgstr "Berotasi"
 
 msgid "Radar Jump"
-msgstr "Lompatan Radar"
+msgstr "Radar Jump"
 
 msgid "Instant"
 msgstr "Instan"
@@ -11369,7 +11369,7 @@ msgid "Tracked"
 msgstr "Terlacak"
 
 msgid "Radar Zoom"
-msgstr "Perbesaran Radar"
+msgstr "Radar Zoom"
 
 msgid "Video Playback"
 msgstr "Pemutaran Video"
@@ -11387,28 +11387,28 @@ msgid "Fullscreen"
 msgstr "Layar penuh"
 
 msgid "Scanlines"
-msgstr "Garis Pindai"
+msgstr "Scanline"
 
 msgid "50%"
 msgstr "50%"
 
 msgid "Open Configuration Directory"
-msgstr "Buka Direktori Konfigurasi"
+msgstr "Buka Folder Konfigurasi"
 
 msgid "Failed to open configuration directory in system default file browser."
-msgstr "Gagal membuka direktori konfigurasi dalam pencari file default."
+msgstr "Gagal membuka folder konfigurasi di file explorer."
 
 msgid "Configuration directory is reported as:"
-msgstr "Konfigurasi direktori dilaporkan sebagai:"
+msgstr "Lokasi Folder Konfigurasi:"
 
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Jika program berjalan di dalam kontainer / lingkungan terisolasi, ini mungkin berbeda dari jalur asli di disk."
+msgstr "Jika game berjalan di dalam VM atau semacamnya, path mungkin akan berbeda dari yang ditunjukkan."
 
 msgid "Please see the documentation for more information on how to locate it manually."
 msgstr "Harap melihat file dokumentasi untuk informasi lebih lanjut mengenai cara mencarinya."
 
 msgid "Failed to open configuration directory"
-msgstr "Gagal membuka konfigurasi direktori"
+msgstr "Gagal membuka folder konfigurasi"
 
 msgid "Interface"
 msgstr ""
@@ -11435,7 +11435,7 @@ msgid "Window Mode"
 msgstr ""
 
 msgid "Windowed"
-msgstr "Modus jendela"
+msgstr "Windowed"
 
 msgid "Fullscreen Mode"
 msgstr ""
@@ -11447,10 +11447,10 @@ msgid "Minimize on Focus Loss"
 msgstr ""
 
 msgid "Whether the window should auto-minimize on focus loss"
-msgstr "Apakah jendela harus diminimalkan secara otomatis saat fokus hilang"
+msgstr "Apakah jendela perlu di minimize secara otomatis saat tidak digunakan"
 
 msgid "On (Fullscreen)"
-msgstr "Aktif (Layar Penuh)"
+msgstr "Aktif (Fullscreen)"
 
 msgid "CONNECTION"
 msgstr "KONEKSI"
@@ -11471,10 +11471,10 @@ msgid "NOTE: Host is also a player."
 msgstr ""
 
 msgid "Player ID: "
-msgstr "ID pemain: "
+msgstr "UID: "
 
 msgid "(none)"
-msgstr "(tidak ada)"
+msgstr "N/A"
 
 msgid "You:"
 msgstr ""
@@ -11559,13 +11559,13 @@ msgid "Spectate Game"
 msgstr ""
 
 msgid "There appears to be a game update available!"
-msgstr "Tampaknya ada pembaruan game tersedia!"
+msgstr "Sepertinya ada update game, nih!"
 
 msgid "Failed to connect to lobby server"
 msgstr ""
 
 msgid "Your version of Warzone is incompatible with this game."
-msgstr "Versi Warzone Anda tidak kompatibel dengan permainan ini."
+msgstr "Versi client mu tidak kompatibel dengan game ini."
 
 #, c-format
 msgid "Host Version: %s"
@@ -11621,7 +11621,7 @@ msgid "Map: %u%% downloaded"
 msgstr "Peta: %u%% didownload"
 
 msgid "HOST"
-msgstr "PENYELENGGARA"
+msgstr "HOST"
 
 msgid "Choose Team"
 msgstr "Pilih Tim"
@@ -11639,22 +11639,22 @@ msgid "Click to change AI, right click to distribute choice"
 msgstr "Klik untuk mengganti AI, klik kanan untuk menerapkan ke semua"
 
 msgid "Click to close spectator slot"
-msgstr "Klik untuk menutup slot penonton"
+msgstr "Klik untuk menutup slot spectator"
 
 msgid "Click to change difficulty"
 msgstr "Klik untuk mengubah tingkat kesulitan"
 
 msgid "Waiting for player"
-msgstr "Menunggu pemain"
+msgstr "Menunggu player"
 
 msgid "Player is ready"
 msgstr "Pemain siap"
 
 msgid "Player is downloading"
-msgstr "Pemain sedang mengunduh"
+msgstr "Player sedang mendownload"
 
 msgid "Click when ready"
-msgstr "Klik saat sudah siap"
+msgstr "Klik jika sudah siap"
 
 msgid "Waiting for download"
 msgstr "Menunggu didownload"
@@ -11672,10 +11672,10 @@ msgid "VTOLs disabled."
 msgstr "VTOL dimatikan."
 
 msgid "Satellite Uplink disabled."
-msgstr "Pusat Komunikasi Satelit dimatikan."
+msgstr "Satellite Uplink dimatikan."
 
 msgid "Laser Satellite disabled."
-msgstr "Laser Satelit dimatikan."
+msgstr "Laser Satellite dimatikan."
 
 msgid "Structure Limits Enforced."
 msgstr "Batas Jumlah Struktur Diterapkan."
@@ -11709,10 +11709,10 @@ msgstr ""
 
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** kata sandi [%s] sekarang diperlukan! ***"
+msgstr "*** [%s] kini memerlukan password! ***"
 
 msgid "*** password is NOT required! ***"
-msgstr "*** kata sandi TIDAK diperlukan! ***"
+msgstr "*** TIDAK diperlukan password! ***"
 
 msgid "Game Name Updated."
 msgstr "Nama Game Diperbarui."
@@ -11721,7 +11721,7 @@ msgid "Set Game Name"
 msgstr ""
 
 msgid "One-Player Skirmish"
-msgstr "Skirmish Satu Pemain"
+msgstr "One-Player Skirmish"
 
 msgid "Edit Game Name"
 msgstr ""
@@ -11737,28 +11737,28 @@ msgid ""
 "Can be blocked by players' votes"
 msgstr ""
 "Pilih Map\n"
-"Dapat diblokir oleh berdasarkan voting para pemain"
+"Dapat diblokir oleh berdasarkan voting para player"
 
 msgid "Match Options"
 msgstr ""
 
 msgid "Base"
-msgstr "Pangkalan"
+msgstr "Base"
 
 msgid "Tech"
-msgstr "Teknologi"
+msgstr "Tech"
 
 msgid "Technology Level 1"
-msgstr "Teknologi Level 1"
+msgstr "Tech Level 1"
 
 msgid "Technology Level 2"
-msgstr "Teknologi Level 2"
+msgstr "Tech Level 2"
 
 msgid "Technology Level 3"
-msgstr "Teknologi Level 3"
+msgstr "Tech Level 3"
 
 msgid "Technology Level 4"
-msgstr "Teknologi Level 4"
+msgstr "Tech Level 4"
 
 msgid "Limits"
 msgstr ""
@@ -11839,32 +11839,32 @@ msgid "Launch the Transporter"
 msgstr ""
 
 msgid "There is not enough room in the Transport!"
-msgstr "Transport sudah penuh!"
+msgstr "Transporter sudah penuh!"
 
 msgid "Reinforcements landing"
-msgstr "Bala bantuan telah mendarat"
+msgstr "Bantuan sedang mendarat"
 
 msgid "Update Available"
 msgstr "Update Tersedia"
 
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr "Versi baru Warzone 2100 (%s) tersedia!"
+msgstr "Build terbaru Warzone 2100 (%s) tersedia!"
 
 msgid "This new version includes important bug fixes and updates, and it is recommended that you update now."
-msgstr "Versi baru ini menyediakan perbaikan bug dan perbaruan, dan disarankan untuk melakukan pembaruan sekarang."
+msgstr "Versi baru ini menyediakan perbaikan bug dan banyak update. Yuk, segera di update!"
 
 msgid "A new build of Warzone 2100 is available!"
-msgstr "Versi baru Warzone 2100 tersedia!"
+msgstr "Build terbaru Warzone 2100 sudah tersedia!"
 
 msgid "Get Update Now"
-msgstr "Download Perbaruan Sekarang"
+msgstr "Download Update Sekarang"
 
 msgid "Compatibility Warning"
 msgstr "Peringatan Kompatibilitas"
 
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr "Terdeteksi suatu masalah yang dapat mempengaruhi operasi / performa Warzone 2100."
+msgstr "Kami mendeteksi masalah yang mungkin memengaruhi performa game."
 
 #, c-format
 msgid "(Notice ID: %s)"
