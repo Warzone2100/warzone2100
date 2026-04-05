@@ -1228,9 +1228,8 @@ static int urlRequestThreadFunc(void *)
 		return true;
 	};
 
-	wzMutexLock(urlRequestMutex);
-	while (!urlRequestQuit)
-	{
+	// must be called while urlRequestMutex is held!
+	auto processDelayedTransfers_WhileLockIsHeld = [&]() -> int32_t {
 		int32_t minDelayMS = std::numeric_limits<int32_t>::max();
 		if (!delayedTransfers.empty())
 		{
@@ -1260,29 +1259,24 @@ static int urlRequestThreadFunc(void *)
 				}
 			}
 		}
+		return minDelayMS;
+	};
 
-		if (newUrlRequests.empty() && transfers_running == 0)
-		{
-			wzMutexUnlock(urlRequestMutex);
-			if (delayedTransfers.empty())
-			{
-				wzSemaphoreWait(urlRequestSemaphore);  // Go to sleep until needed.
-			}
-			else
-			{
-				// Wait for a specific limited time for a new transfer request
-				// (or loop and recheck if delayedTransfers have reached their delay)
-				wzSemaphoreWaitTimeout(urlRequestSemaphore, minDelayMS);
-			}
-			wzMutexLock(urlRequestMutex);
-			continue;
-		}
-
+	// must be called while urlRequestMutex is held!
+	auto processNewUrlRequests_WhileLockIsHeld = [&](bool shuttingDown) {
 		// Start handling new requests
-		while(!newUrlRequests.empty())
+		while (!newUrlRequests.empty())
 		{
 			URLTransferRequest* newRequest = newUrlRequests.front();
 			newUrlRequests.pop_front();
+
+			// if shuttingDown, only process waitOnShutdown requests
+			if (shuttingDown && !newRequest->waitOnShutdown())
+			{
+				newRequest->requestFailedToFinish(URLRequestFailureType::CANCELLED_BY_SHUTDOWN);
+				delete newRequest;
+				continue; // skip to next request
+			}
 
 			// Create cURL easy handle
 			if (!newRequest->createCURLHandle())
@@ -1308,6 +1302,32 @@ static int urlRequestThreadFunc(void *)
 			runningTransfers.push_back(newRequest);
 		}
 		newUrlRequests.clear();
+	};
+
+	wzMutexLock(urlRequestMutex);
+	while (!urlRequestQuit)
+	{
+		int32_t minDelayMS = processDelayedTransfers_WhileLockIsHeld();
+
+		if (newUrlRequests.empty() && transfers_running == 0)
+		{
+			wzMutexUnlock(urlRequestMutex);
+			if (delayedTransfers.empty())
+			{
+				wzSemaphoreWait(urlRequestSemaphore);  // Go to sleep until needed.
+			}
+			else
+			{
+				// Wait for a specific limited time for a new transfer request
+				// (or loop and recheck if delayedTransfers have reached their delay)
+				wzSemaphoreWaitTimeout(urlRequestSemaphore, minDelayMS);
+			}
+			wzMutexLock(urlRequestMutex);
+			continue;
+		}
+
+		// Start handling new requests
+		processNewUrlRequests_WhileLockIsHeld(false);
 
 		// cancel any requests that have been signaled to cancel
 		auto it = runningTransfers.begin();
@@ -1333,8 +1353,16 @@ static int urlRequestThreadFunc(void *)
 
 		wzMutexLock(urlRequestMutex);
 	}
+
+	// while signaled to quit, there might be one or more new requests that have yet to be started,
+	// which need to be processed before fully shutting down
+	processDelayedTransfers_WhileLockIsHeld();
+	processNewUrlRequests_WhileLockIsHeld(true);
+
+	// unlock the mutex - we're now done with protected state
 	wzMutexUnlock(urlRequestMutex);
 
+	// cancel any running transfers which are *not* flagged to waitOnShutdown()
 	auto it = runningTransfers.begin();
 	while (it != runningTransfers.end())
 	{
