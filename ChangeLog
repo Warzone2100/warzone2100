@@ -1,3 +1,14 @@
+2026-04-05: Version 4.7.0-beta2:
+ * General:
+   * Add: Reclamation soundtrack by @Lupus-Mechanicus (commit: c60373ef9ccc1b5661c850db7c14c3eabfa93f25, #4881)
+ * Multiplayer:
+   * Fix: Various netplay and netlobby improvements (too many commits, #4878)
+ * Networking:
+   * Fix: urlrequest: Improve handling of pending requests at shutdown (commit:4ba1b85f1f2d0cab8a69cc1aae5477c7f46cf6ae, #4879)
+ * Other:
+   * Fix: Flatpak: Migrate to new flat-manager-client (commit:e11955d4669d798c93f3e73bed4b812c4e0e6247, #4877)
+   * Fix: CI: Update various dependencies (too many commits, #4880, #4882)
+
 2026-04-04: Version 4.7.0-beta1:
  * General:
    * Add: Add Weapon Stats flag for configuring Captured Units Teleport (commit:11c1b24f02faecaf5b220305858d6f39819c6f3b, #4848)
