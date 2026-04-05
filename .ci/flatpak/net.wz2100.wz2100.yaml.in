@@ -199,6 +199,8 @@ modules:
       # Crashpad/breakpad works in the Flatpak sandbox *if* --allow=devel is set above. Otherwise, this must be: inproc
       - -DSENTRY_BACKEND=crashpad
       - -DENABLE_GNS_NETWORK_BACKEND:BOOL=ON
+      # Skip separating .debug files, as flatpak-builder handles this differently (and creates its own debug package)
+      - -DWZ_SKIP_ELF_SEPARATE_DEBUG:BOOL=ON
     secret-opts:
       - -DWZ_DISTRIBUTOR:STRING=$WZ_DISTRIBUTOR
       - -DDISCORD_RPC_APPID:STRING=$DISCORD_RPC_APPID

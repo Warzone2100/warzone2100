@@ -802,6 +802,53 @@ if(TARGET crashpad_handler)
 endif()
 
 #######################
+# Separate .debug info (ELF)
+
+# Only do this on Linux/Unix systems where objcopy is the standard
+# and if the objcopy tool was actually found by CMake
+if(CMAKE_SYSTEM_NAME MATCHES "Linux|FreeBSD" AND CMAKE_OBJCOPY)
+
+	# Skip option
+	OPTION(WZ_SKIP_ELF_SEPARATE_DEBUG "Skip splitting binary debug symbols into separate .debug files" OFF)
+
+	function(separate_debug_info TARGET)
+		if(WZ_SKIP_ELF_SEPARATE_DEBUG)
+			return()
+		endif()
+
+		set(BINARY_FILE "$<TARGET_FILE:${TARGET}>")
+		set(DEBUG_FILE "${BINARY_FILE}.debug")
+
+		set(IS_RELEASE_CONFIG $<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>)
+
+		add_custom_command(
+			TARGET ${TARGET}
+			POST_BUILD
+			COMMAND "$<$<CONFIG:Release,RelWithDebInfo>:${CMAKE_OBJCOPY};--only-keep-debug;${BINARY_FILE};${DEBUG_FILE}>"
+			COMMAND "$<$<CONFIG:Release,RelWithDebInfo>:${CMAKE_OBJCOPY};--strip-debug;${BINARY_FILE}>"
+			COMMAND "$<$<CONFIG:Release,RelWithDebInfo>:${CMAKE_OBJCOPY};--add-gnu-debuglink=${DEBUG_FILE};${BINARY_FILE}>"
+			COMMAND "$<$<NOT:$<CONFIG:Release,RelWithDebInfo>>:${CMAKE_COMMAND};-E;echo;Skipping objcopy strip>"
+			COMMAND_EXPAND_LISTS
+			VERBATIM
+			COMMENT "$<IF:${IS_RELEASE_CONFIG},Separating ELF debug symbols for ${TARGET}...,Skipping debug separation for non-release build.>"
+		)
+
+		install(FILES "${DEBUG_FILE}"
+			DESTINATION "${WZ_APP_INSTALL_DEST}"
+			COMPONENT DebugSymbols
+			CONFIGURATIONS Release RelWithDebInfo
+			OPTIONAL
+		)
+
+		# Ensure the .debug file is removed during clean
+		set_property(TARGET ${TARGET} APPEND PROPERTY ADDITIONAL_CLEAN_FILES ${DEBUG_FILE})
+	endfunction()
+
+	separate_debug_info(warzone2100)
+
+endif()
+
+#######################
 # Install
 
 if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
