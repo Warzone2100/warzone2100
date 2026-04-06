@@ -6107,24 +6107,24 @@
 		"results": [
 			{
 				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "MORTARS",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
 				"parameter": "Damage",
-				"value": 10
+				"value": 20
 			},
 			{
 				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "MORTARS",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
 				"parameter": "RadiusDamage",
-				"value": 10
+				"value": 20
 			},
 			{
 				"class": "Weapon",
-				"filterParameter": "ImpactClass",
-				"filterValue": "MORTARS",
+				"filterParameter": "Id",
+				"filterValue": "Mortar3ROTARYMk1",
 				"parameter": "RepeatDamage",
-				"value": 10
+				"value": 20
 			}
 		],
 		"statID": "Mortar1Mk1",
@@ -6294,14 +6294,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "FirePause",
-				"value": -5
+				"value": -15
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MORTARS",
 				"parameter": "ReloadTime",
-				"value": -5
+				"value": -15
 			}
 		],
 		"statID": "Mortar1Mk1",
@@ -9592,14 +9592,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "GAUSS",
 				"parameter": "FirePause",
-				"value": -10
+				"value": -20
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "GAUSS",
 				"parameter": "ReloadTime",
-				"value": -10
+				"value": -20
 			}
 		],
 		"statID": "RailGun1Mk1",

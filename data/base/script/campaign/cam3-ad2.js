@@ -359,7 +359,7 @@ function checkTime()
 		setTimer("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
 		if (camAllowInsaneSpawns())
 		{
-			setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
+			setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3.5));
 			setTimer("insaneTransporterAttack", camMinutesToMilliseconds(3));
 		}
 		removeTimer("checkTime");

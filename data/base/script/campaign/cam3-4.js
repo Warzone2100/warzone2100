@@ -75,7 +75,7 @@ function insaneReinforcementSpawn()
 	const CONDITION = "NX-HQ";
 	const extraUnits = [cTempl.nxmsens, cTempl.nxhvarch, cTempl.nxhvarch, cTempl.nxhvarch];
 	const units = {units: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxhgauss, cTempl.nxhvscourge, cTempl.nxhvpulse], appended: extraUnits};
-	const limits = {minimum: 12, maxRandom: 3};
+	const limits = {minimum: 6, maxRandom: 4};
 	const location = camMakePos(getObject("insaneSouthSpawn"));
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CONDITION, location, units, limits.minimum, limits.maxRandom);
 }
@@ -85,7 +85,7 @@ function insaneTransporterAttack()
 	const CONDITION = "NX-HQ";
 	const DISTANCE_FROM_POS = 20;
 	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxhgauss, cTempl.nxhvscourge, cTempl.nxhvpulse];
-	const limits = {minimum: 10, maxRandom: 0};
+	const limits = {minimum: 6, maxRandom: 4};
 	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
 	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CONDITION, location, units, limits.minimum, limits.maxRandom);
 }
@@ -93,13 +93,13 @@ function insaneTransporterAttack()
 function insaneGroundReinforcementAttackSetup()
 {
 	insaneReinforcementSpawn();
-	setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
+	setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
 }
 
 function insaneTransporterAttackSetup()
 {
 	insaneTransporterAttack();
-	setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5));
+	setTimer("insaneTransporterAttack", camMinutesToMilliseconds(7));
 }
 
 function nexusHackFeature()
@@ -566,10 +566,10 @@ function eventStartLevel()
 	{
 		if (!camClassicMode())
 		{
-			queue("insaneSetupSpawnGroupWest", camMinutesToMilliseconds(2));
+			queue("insaneSetupSpawnGroupWest", camMinutesToMilliseconds(4));
 			queue("insaneSetupSpawnGroupSouth", camMinutesToMilliseconds(3));
 		}
-		queue("insaneGroundReinforcementAttackSetup", camMinutesToMilliseconds(6));
-		queue("insaneTransporterAttackSetup", camMinutesToMilliseconds(10));
+		queue("insaneGroundReinforcementAttackSetup", camMinutesToMilliseconds(8));
+		queue("insaneTransporterAttackSetup", camMinutesToMilliseconds(11));
 	}
 }
