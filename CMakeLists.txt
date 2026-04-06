@@ -723,6 +723,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}unused-but-set-variable" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}unused-but-set-variable" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
+		# Handle -Wpsabi (GCC, warning-only)
+		check_compiler_flags_output("-Werror ${WZ_Wno_}psabi -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}psabi" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror ${WZ_Wno_}psabi -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}psabi" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
 		# Disable -Wsign-compare (FIXME)
 		check_compiler_flags_output("-Werror -Wno-sign-compare -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-sign-compare" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wno-sign-compare -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-sign-compare" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
