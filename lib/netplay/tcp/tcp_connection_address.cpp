@@ -53,21 +53,23 @@ net::result<std::string> TCPConnectionAddress::toString() const
 	ASSERT_OR_RETURN(tl::make_unexpected(make_network_error_code(EINVAL)), addr_ != nullptr, "Invalid addrinfo");
 	if (addr_->ai_family == AF_INET)
 	{
-		struct sockaddr_in* sin = reinterpret_cast<struct sockaddr_in*>(addr_->ai_addr);
+		struct sockaddr_in ipv4_addr;
+		memcpy(&ipv4_addr, addr_->ai_addr, sizeof(ipv4_addr));
 		char ipStr[INET_ADDRSTRLEN] = {};
-		if (inet_ntop(addr_->ai_family, &sin->sin_addr, ipStr, INET_ADDRSTRLEN))
+		if (inet_ntop(addr_->ai_family, &ipv4_addr.sin_addr, ipStr, INET_ADDRSTRLEN))
 		{
-			return fmt::format("{}:{}", ipStr, ntohs(sin->sin_port));
+			return fmt::format("{}:{}", ipStr, ntohs(ipv4_addr.sin_port));
 		}
 		return tl::make_unexpected(make_network_error_code(tcp::getSockErr()));
 	}
 	else if (addr_->ai_family == AF_INET6)
 	{
-		struct sockaddr_in6* sin = reinterpret_cast<struct sockaddr_in6*>(addr_->ai_addr);
+		struct sockaddr_in6 ipv6_addr;
+		memcpy(&ipv6_addr, addr_->ai_addr, sizeof(ipv6_addr));
 		char ipStr[INET6_ADDRSTRLEN] = {};
-		if (inet_ntop(addr_->ai_family, &sin->sin6_addr, ipStr, INET6_ADDRSTRLEN))
+		if (inet_ntop(addr_->ai_family, &ipv6_addr.sin6_addr, ipStr, INET6_ADDRSTRLEN))
 		{
-			return fmt::format("[{}]:{}", ipStr, ntohs(sin->sin6_port));
+			return fmt::format("[{}]:{}", ipStr, ntohs(ipv6_addr.sin6_port));
 		}
 		return tl::make_unexpected(make_network_error_code(tcp::getSockErr()));
 	}
