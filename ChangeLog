@@ -1,3 +1,13 @@
+2026-04-06: Version 4.7.0:
+ * Campaign:
+   * Change: Additional Remastered balance updates (commit:4b30f8c4637101eebfbea4d102c90cdb0ba0c461, #4888)
+   * Fix: Typo in Reclamation level 4 pushing a unit to an imaginary unit spawn array (commit:77fa552348e5b122f5e5898e0d3407a50cd46629, #4888)
+ * Translations:
+   * Change: Translation updates (commit:8867da90aee0ccc464e299865cefb3b41dfa43f0, #4873)
+ * Other:
+   * Fix: pieblitfunc: Reset mTexture pointer after deleting (commit:a25c8688fe199df75a49f20738c6c5b12f3a4865, #4886)
+   * Fix: Various compilation issues (too many commits, #4887)
+
 2026-04-05: Version 4.7.0-beta2:
  * General:
    * Add: Reclamation soundtrack by @Lupus-Mechanicus (commit: c60373ef9ccc1b5661c850db7c14c3eabfa93f25, #4881)
