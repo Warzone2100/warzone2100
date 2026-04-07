@@ -75,6 +75,11 @@
             "id": "towerWars",
             "default": false,
             "userEditable": true
+        },
+        {
+            "id": "heavilyDamagedPenalty",
+            "default": true,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [

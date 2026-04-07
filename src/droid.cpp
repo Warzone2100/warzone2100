@@ -205,6 +205,10 @@ int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_sl
 		{
 			firingStage = gameTime - psWeap->lastFired;
 			interval = bSalvo ? weaponReloadTime(*psStats, psObj->player) : weaponFirePause(*psStats, psObj->player);
+			if (!bSalvo && !bMultiPlayer && getCamTweakOption_heavilyDamagedPenalty() && objectBelowHealthLevel(const_cast<BASE_OBJECT *>(psObj), HEAVY_DAMAGE_LEVEL))
+			{
+				interval += interval;
+			}
 		}
 		if (firingStage < interval && interval > 0)
 		{

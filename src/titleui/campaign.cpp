@@ -1707,6 +1707,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"heavilyDamagedPenalty",
+		_("Heavily Damaged Penalty"),
+		_("ROF and Speed will be reduced when units or structures are below 25% HP."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )

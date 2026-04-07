@@ -46,9 +46,38 @@
 #include "objmem.h"
 #include "effects.h"
 #include "display3ddef.h"
+#include "campaigninfo.h"
 
 #define DROID_SHIELD_DAMAGE_SPREAD	(16 - rand()%32)
 #define DROID_SHIELD_PARTICLES		(6 + rand()%8)
+
+// Check if an object is below a certain HP threshold. Primarily used for a campaign tweak option to restore
+// original behavior to reduce speed and ROF if heavily damaged.
+bool objectBelowHealthLevel(BASE_OBJECT *psObj, const unsigned int percentage)
+{
+	ASSERT_OR_RETURN(false, psObj != nullptr, "Invalid object to check health against");
+	const unsigned int maxHealthLevel = 100;
+	unsigned int healthLevel = maxHealthLevel; // Fail by default if an unexpected object gets passed here.
+
+	if (psObj->type == OBJ_DROID)
+	{
+		DROID *psDroid = castDroid(psObj);
+		if (psDroid != nullptr)
+		{
+			healthLevel = PERCENT(psDroid->body, psDroid->originalBody);
+		}
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		STRUCTURE *psStructure = castStructure(psObj);
+		if (psStructure != nullptr)
+		{
+			healthLevel = PERCENT(psStructure->body, psStructure->structureBody());
+		}
+	}
+
+	return healthLevel < std::min(maxHealthLevel, percentage);
+}
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)
@@ -107,6 +136,10 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	/* See when the weapon last fired to control it's rate of fire */
 	firePause = weaponFirePause(*psStats, psAttacker->player);
 	firePause = std::max(firePause, 1u);  // Don't shoot infinitely many shots at once.
+	if (!bMultiPlayer && getCamTweakOption_heavilyDamagedPenalty() && objectBelowHealthLevel(psAttacker, HEAVY_DAMAGE_LEVEL))
+	{
+		firePause += firePause;
+	}
 	fireTime = std::max(fireTime, psWeap->lastFired + firePause);
 
 	if (gameTime < fireTime)

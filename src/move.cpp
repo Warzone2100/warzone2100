@@ -59,6 +59,7 @@
 #include "qtscript.h"
 #include "steering/steering.h"
 #include "steering/collision_avoidance_behavior.h"
+#include "combat.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -1408,6 +1409,10 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	// now offset the speed for the slope of the droid
 	pitch = angleDelta(psDroid->rot.pitch);
 	speed = (maxPitch - pitch) * speed / maxPitch;
+	if (!bMultiPlayer && getCamTweakOption_heavilyDamagedPenalty() && objectBelowHealthLevel(psDroid, HEAVY_DAMAGE_LEVEL))
+	{
+		speed = 2 * speed / 3; // slow down damaged droids.
+	}
 	if (speed <= 10)
 	{
 		// Very nasty hack to deal with buggy maps, where some cliffs are
