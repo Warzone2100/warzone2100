@@ -412,7 +412,7 @@ public:
 		bool bDrawAll = barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES;
 
 		// first, for all droids, queue the various rects
-		for (DROID *psDroid : apsDroidLists[player])
+		for (DROID *psDroid : worldObjectState.droids[player])
 		{
 			if (psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -453,7 +453,7 @@ public:
 	void addStructureSelectionsToRender(uint32_t player, BASE_OBJECT *psClickedOn, bool bMouseOverOwnStructure)
 	{
 		/* Go thru' all the buildings */
-		for (STRUCTURE *psStruct : apsStructLists[player])
+		for (STRUCTURE *psStruct : worldObjectState.structures[player])
 		{
 			if (psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -534,7 +534,7 @@ public:
 			SDWORD scrX, scrY;
 			for (uint32_t i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (const STRUCTURE* psStruct : apsStructLists[i])
+				for (const STRUCTURE* psStruct : worldObjectState.structures[i])
 				{
 					/* If it's targetted and on-screen */
 					if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
@@ -807,7 +807,7 @@ static void showDroidPaths()
 		return; // no-op for now
 	}
 
-	for (const DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID *psDroid : worldObjectState.droids[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
@@ -1118,7 +1118,7 @@ void draw3DScene()
 	{
 		int visibleDroids = 0;
 		int undrawnDroids = 0;
-		for (const DROID *psDroid : apsDroidLists[selectedPlayer])
+		for (const DROID *psDroid : worldObjectState.droids[selectedPlayer])
 		{
 			if (psDroid->sDisplay.frameNumber != currentGameFrame)
 			{
@@ -2022,7 +2022,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	for (unsigned aPlayer = 0; aPlayer < MAX_PLAYERS; ++aPlayer)
 	{
 		/* Now go all buildings for that player */
-		for (BASE_OBJECT* obj : apsStructLists[aPlayer])
+		for (BASE_OBJECT* obj : worldObjectState.structures[aPlayer])
 		{
 			/* Worth rendering the structure? */
 			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
@@ -2254,7 +2254,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 			continue;
 		}
 		STRUCT_STATES state = player == selectedPlayer ? SS_BLUEPRINT_PLANNED : SS_BLUEPRINT_PLANNED_BY_ALLY;
-		for (const DROID *psDroid : apsDroidLists[player])
+		for (const DROID *psDroid : worldObjectState.droids[player])
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
@@ -2286,7 +2286,7 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 {
 	WZ_PROFILE_SCOPE(displayDelivPoints);
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
-	for (const auto& psDelivPoint : apsFlagPosLists[selectedPlayer])
+	for (const auto& psDelivPoint : worldObjectState.flags[selectedPlayer])
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
 		{
@@ -2328,7 +2328,7 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	// player can only be 0 for the features.
 
 	/* Go through all the features */
-	for (BASE_OBJECT* obj : apsFeatureList[0])
+	for (BASE_OBJECT* obj : worldObjectState.features[0])
 	{
 		if (obj->type == OBJ_FEATURE
 			&& (obj->died == 0 || obj->died > graphicsTime)
@@ -2407,7 +2407,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 	/* Need to go through all the droid lists */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (DROID* psDroid : apsDroidLists[player])
+		for (DROID* psDroid : worldObjectState.droids[player])
 		{
 			if (!psDroid || (psDroid->died != 0 && psDroid->died < graphicsTime)
 			    || !quickClipXYToMaximumTilesFromCurrentPosition(psDroid->pos.x, psDroid->pos.y))
@@ -3693,7 +3693,7 @@ static void	drawDroidSelections()
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go thru' all the droids */
-		for (const DROID *psDroid : apsDroidLists[i])
+		for (const DROID *psDroid : worldObjectState.droids[i])
 		{
 			if (showORDERS)
 			{
@@ -3711,7 +3711,7 @@ static void	drawDroidSelections()
 		}
 	}
 
-	for (const FEATURE *psFeature : apsFeatureList[0])
+	for (const FEATURE *psFeature : worldObjectState.features[0])
 	{
 		if (!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
 		{
@@ -4234,7 +4234,7 @@ static void structureEffectsPlayer(UDWORD player)
 		return;  // Don't add effects this frame.
 	}
 
-	for (const STRUCTURE *psStructure : apsStructLists[player])
+	for (const STRUCTURE *psStructure : worldObjectState.structures[player])
 	{
 		if (psStructure->status != SS_BUILT)
 		{
@@ -4328,7 +4328,7 @@ static void structureEffects()
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (!apsStructLists[i].empty())
+		if (!worldObjectState.structures[i].empty())
 		{
 			structureEffectsPlayer(i);
 		}
@@ -4345,7 +4345,7 @@ static void	showDroidSensorRanges()
 	if (rangeOnScreen
 		&& (graphicsTime - lastRangeUpdateTime) >= 50)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
 	{
-		for (DROID* psDroid : apsDroidLists[selectedPlayer])
+		for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
 		{
 			if (psDroid->selected)
 			{
@@ -4353,7 +4353,7 @@ static void	showDroidSensorRanges()
 			}
 		}
 
-		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
+		for (STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
 		{
 			if (psStruct->selected)
 			{
@@ -4525,7 +4525,7 @@ static void doConstructionLines(const glm::mat4 &viewMatrix)
 	WZ_PROFILE_SCOPE(doConstructionLines);
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid : apsDroidLists[i])
+		for (DROID *psDroid : worldObjectState.droids[i])
 		{
 			if (clipXY(psDroid->pos.x, psDroid->pos.y)
 			    && psDroid->visibleForLocalDisplay() == UBYTE_MAX

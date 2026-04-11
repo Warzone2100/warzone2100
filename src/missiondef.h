@@ -31,6 +31,7 @@
 #include "power.h"
 #include "gateway.h"
 #include "world_map_state.h"
+#include "world_object_state.h"
 
 //mission types
 
@@ -57,14 +58,8 @@ struct MISSION
 	WorldMapState worldMapState;
 
 	//original object lists
-	PerPlayerStructureLists apsStructLists;
-	PerPlayerExtractorLists apsExtractorLists;
+	WorldObjectState worldObjectState;
 
-	PerPlayerDroidLists              apsDroidLists;
-	GlobalFeatureList               apsFeatureList;
-	GlobalSensorList                apsSensorList;
-	GlobalOilList                   apsOilList;
-	PerPlayerFlagPositionLists      apsFlagPosLists;
 	int32_t                         asCurrentPower[MAX_PLAYERS];
 
 	UDWORD				startTime;			//time the mission started

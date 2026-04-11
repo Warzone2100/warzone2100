@@ -1379,7 +1379,7 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
-			for (STRUCTURE* psCurr : apsStructLists[psDroid->player])
+			for (STRUCTURE* psCurr : worldObjectState.structures[psDroid->player])
 			{
 				if ((psCurr->pStructureType->type == REF_FACTORY) &&
 				    (((FACTORY *)psCurr->pFunctionality)->
@@ -1392,7 +1392,7 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_CYBORG_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
-			for (STRUCTURE* psCurr : apsStructLists[psDroid->player])
+			for (STRUCTURE* psCurr : worldObjectState.structures[psDroid->player])
 			{
 				if ((psCurr->pStructureType->type == REF_CYBORG_FACTORY) &&
 				    (((FACTORY *)psCurr->pFunctionality)->
@@ -1405,7 +1405,7 @@ STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 		if (psDroid->secondaryOrder & (1 << (inc + DSS_ASSPROD_VTOL_SHIFT)))
 		{
 			// found an assigned factory - look for it in the lists
-			for (STRUCTURE* psCurr : apsStructLists[psDroid->player])
+			for (STRUCTURE* psCurr : worldObjectState.structures[psDroid->player])
 			{
 				if ((psCurr->pStructureType->type == REF_VTOL_FACTORY) &&
 				    (((FACTORY *)psCurr->pFunctionality)->

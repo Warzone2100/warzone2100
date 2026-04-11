@@ -1079,7 +1079,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 {
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
+	for (const auto& psFlag : worldObjectState.flags[selectedPlayer])
 	{
 		if (psFlag->selected && psFlag->type == POS_DELIVERY)
 		{
@@ -1796,7 +1796,7 @@ INT_RETVAL intRunWidgets()
 						cancelDeliveryRepos();
 						if (psDroid)
 						{
-							addDroid(psDroid, apsDroidLists);
+							addDroid(psDroid, worldObjectState.droids);
 
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new droid.
@@ -2724,11 +2724,11 @@ StructureList *interfaceStructList()
 
 	if (offWorldKeepLists)
 	{
-		return &mission.apsStructLists[selectedPlayer];
+		return &mission.worldObjectState.structures[selectedPlayer];
 	}
 	else
 	{
-		return &apsStructLists[selectedPlayer];
+		return &worldObjectState.structures[selectedPlayer];
 	}
 }
 
@@ -2958,7 +2958,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	}
 
 	num = 0;
-	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : worldObjectState.droids[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->droidType == droidType)
 		{

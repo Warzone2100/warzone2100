@@ -398,7 +398,7 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						mutating_list_iterate(apsStructLists[player], [id](STRUCTURE* psStruct)
+						mutating_list_iterate(worldObjectState.structures[player], [id](STRUCTURE* psStruct)
 						{
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{

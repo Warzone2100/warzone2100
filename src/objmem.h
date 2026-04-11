@@ -26,40 +26,12 @@
 
 #include "objectdef.h"
 
-#include <array>
+#include "world_object_state.h"
+
 #include <list>
 
 /* The lists of objects allocated */
-template <typename ObjectType, unsigned PlayerCount>
-using PerPlayerObjectLists = std::array<std::list<ObjectType*>, PlayerCount>;
-
-using PerPlayerDroidLists = PerPlayerObjectLists<DROID, MAX_PLAYERS>;
-using DroidList = typename PerPlayerDroidLists::value_type;
-extern PerPlayerDroidLists apsDroidLists;
-
-using PerPlayerStructureLists = PerPlayerObjectLists<STRUCTURE, MAX_PLAYERS>;
-using StructureList = typename PerPlayerStructureLists::value_type;
-extern PerPlayerStructureLists apsStructLists;
-
-using GlobalFeatureList = PerPlayerObjectLists<FEATURE, 1>;
-using FeatureList = typename GlobalFeatureList::value_type;
-extern GlobalFeatureList apsFeatureList;
-
-using PerPlayerFlagPositionLists = PerPlayerObjectLists<FLAG_POSITION, MAX_PLAYERS>;
-using FlagPositionList = typename PerPlayerFlagPositionLists::value_type;
-extern PerPlayerFlagPositionLists apsFlagPosLists;
-
-using PerPlayerExtractorLists = PerPlayerStructureLists;
-using ExtractorList = typename PerPlayerExtractorLists::value_type;
-extern PerPlayerExtractorLists apsExtractorLists;
-
-using GlobalSensorList = PerPlayerObjectLists<BASE_OBJECT, 1>;
-using SensorList = typename GlobalSensorList::value_type;
-extern GlobalSensorList apsSensorList;
-
-using GlobalOilList = PerPlayerObjectLists<FEATURE, 1>;
-using OilList = typename GlobalOilList::value_type;
-extern GlobalOilList apsOilList;
+extern WorldObjectState worldObjectState;
 
 /* The list of destroyed objects */
 using DestroyedObjectsList = std::list<BASE_OBJECT*>;

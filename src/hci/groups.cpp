@@ -307,7 +307,7 @@ void GroupsUIController::updateData()
 	};
 
 	std::array<AccumulatedGroupInfo, 10> calculatedGroupInfo;
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
 	{
 		if (psDroid->repairGroup < calculatedGroupInfo.size()) {
 			calculatedGroupInfo[psDroid->repairGroup].numberDamagedInGroup++;

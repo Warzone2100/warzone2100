@@ -21,7 +21,6 @@
 /** \file
  * Per-world map state storage.
  */
-
 #pragma once
 
 #include "lib/framework/frame.h"

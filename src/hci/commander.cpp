@@ -38,7 +38,7 @@ void CommanderController::updateCommandersList()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
 
-	for (DROID *droid : apsDroidLists[selectedPlayer])
+	for (DROID *droid : worldObjectState.droids[selectedPlayer])
 	{
 		if (droid->droidType == DROID_COMMAND && droid->died == 0)
 		{

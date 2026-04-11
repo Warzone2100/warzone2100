@@ -255,11 +255,11 @@ StructureList* powerStructList(int player)
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (offWorldKeepLists)
 	{
-		return &mission.apsStructLists[player];
+		return &mission.worldObjectState.structures[player];
 	}
 	else
 	{
-		return &apsStructLists[player];
+		return &worldObjectState.structures[player];
 	}
 }
 

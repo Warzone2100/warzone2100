@@ -635,7 +635,7 @@ STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *ps
 
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (STRUCTURE* psWall : apsStructLists[player])
+			for (STRUCTURE* psWall : worldObjectState.structures[player])
 			{
 				if (map_coord(psWall->pos) == tile)
 				{
@@ -838,35 +838,35 @@ void processVisibility()
 	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (BASE_OBJECT* psObj : apsDroidLists[player])
+		for (BASE_OBJECT* psObj : worldObjectState.droids[player])
 		{
 			processVisibilitySelf(psObj);
 		}
-		for (BASE_OBJECT* psObj : apsStructLists[player])
+		for (BASE_OBJECT* psObj : worldObjectState.structures[player])
 		{
 			processVisibilitySelf(psObj);
 		}
 	}
-	for (BASE_OBJECT* psObj : apsFeatureList[0])
+	for (BASE_OBJECT* psObj : worldObjectState.features[0])
 	{
 		processVisibilitySelf(psObj);
 	}
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (BASE_OBJECT* psObj : apsDroidLists[player])
+		for (BASE_OBJECT* psObj : worldObjectState.droids[player])
 		{
 			processVisibilityVision(psObj);
 		}
-		for (BASE_OBJECT* psObj : apsStructLists[player])
+		for (BASE_OBJECT* psObj : worldObjectState.structures[player])
 		{
 			processVisibilityVision(psObj);
 		}
 	}
-	for (const BASE_OBJECT *psObj : apsSensorList[0])
+	for (const BASE_OBJECT *psObj : worldObjectState.sensors[0])
 	{
 		if (objRadarDetector(psObj))
 		{
-			for (BASE_OBJECT *psTarget : apsSensorList[0])
+			for (BASE_OBJECT *psTarget : worldObjectState.sensors[0])
 			{
 				if (psObj != psTarget && psTarget->visible[psObj->player] < UBYTE_MAX / 2
 				    && objActiveRadar(psTarget)
@@ -880,16 +880,16 @@ void processVisibility()
 	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (BASE_OBJECT* psObj : apsDroidLists[player])
+		for (BASE_OBJECT* psObj : worldObjectState.droids[player])
 		{
 			processVisibilityLevel(psObj, addedMessage);
 		}
-		for (BASE_OBJECT* psObj : apsStructLists[player])
+		for (BASE_OBJECT* psObj : worldObjectState.structures[player])
 		{
 			processVisibilityLevel(psObj, addedMessage);
 		}
 	}
-	for (BASE_OBJECT* psObj : apsFeatureList[0])
+	for (BASE_OBJECT* psObj : worldObjectState.features[0])
 	{
 		processVisibilityLevel(psObj, addedMessage);
 	}

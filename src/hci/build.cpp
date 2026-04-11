@@ -28,6 +28,7 @@
 #include "../qtscript.h"
 #include "../power.h"
 #include "../map.h"
+#include "../world_object_state.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
 bool BuildController::showFavorites = false;
@@ -45,7 +46,7 @@ void BuildController::updateBuildersList()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
 
-	for (DROID *droid : apsDroidLists[selectedPlayer])
+	for (DROID *droid : worldObjectState.droids[selectedPlayer])
 	{
 		if (droid->isConstructionDroid() && droid->died == 0)
 		{

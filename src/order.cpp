@@ -38,6 +38,7 @@
 #include "map.h"
 #include "formationdef.h"
 #include "formation.h"
+#include "objmem.h"
 #include "projectile.h"
 #include "effects.h"	// for waypoint display
 #include "lib/gamelib/gtime.h"
@@ -1681,7 +1682,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_RTB:
-		for (const STRUCTURE* psStruct : apsStructLists[psDroid->player])
+		for (const STRUCTURE* psStruct : worldObjectState.structures[psDroid->player])
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
@@ -1867,7 +1868,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_RECYCLE:
 		psFactory = nullptr;
 		iFactoryDistSq = 0;
-		for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
+		for (STRUCTURE* psStruct : worldObjectState.structures[psDroid->player])
 		{
 			// Look for nearest factory or repair facility
 			if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
@@ -2569,7 +2570,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID* psCurr : apsDroidLists[player])
+	for (DROID* psCurr : worldObjectState.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2873,7 +2874,7 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 	ASSERT_PLAYER_OR_RETURN(, player);
 
 	/* loop over selected droids */
-	for (const DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : worldObjectState.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -2908,7 +2909,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : worldObjectState.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2966,7 +2967,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : worldObjectState.droids[player])
 	{
 		if (psCurr->selected && psCurr->isConstructionDroid())
 		{
@@ -2990,7 +2991,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : worldObjectState.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -3015,7 +3016,7 @@ DROID *FindATransporter(DROID const *embarkee)
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;
 
-	for (DROID *psDroid : apsDroidLists[embarkee->player])
+	for (DROID *psDroid : worldObjectState.droids[embarkee->player])
 	{
 		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
@@ -3041,7 +3042,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct : apsStructLists[player])
+	for (STRUCTURE *psStruct : worldObjectState.structures[player])
 	{
 		if (psStruct->pStructureType->type == factoryType)
 		{
@@ -3058,7 +3059,7 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct : apsStructLists[player])
+	for (STRUCTURE *psStruct : worldObjectState.structures[player])
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
@@ -3298,7 +3299,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
 		{
-			for (DROID* psTempDroid : apsDroidLists[selectedPlayer])
+			for (DROID* psTempDroid : worldObjectState.droids[selectedPlayer])
 			{
 				if (psTempDroid != psDroid && psTempDroid->selected)
 				{
@@ -3391,7 +3392,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	vDroidPos.clear();
 	vDroid.clear();
 
-	for (STRUCTURE *psStruct : apsStructLists[psDroid->player])
+	for (STRUCTURE *psStruct : worldObjectState.structures[psDroid->player])
 	{
 		if (psStruct->pStructureType->type == REF_HQ)
 		{
@@ -3430,7 +3431,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		&& secondaryGetState(psDroid, DSO_ACCEPT_RETREP)))
 	{
 		// one of these lists is empty when on mission
-		DroidList* psdroidList = !apsDroidLists[psDroid->player].empty() ? &apsDroidLists[psDroid->player] : &mission.apsDroidLists[psDroid->player];
+		DroidList* psdroidList = !worldObjectState.droids[psDroid->player].empty() ? &worldObjectState.droids[psDroid->player] : &mission.worldObjectState.droids[psDroid->player];
 		if (!psdroidList->empty())
 		{
 			for (DROID* psCurr : *psdroidList)
@@ -3725,7 +3726,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			// look for the factories
-			for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
+			for (STRUCTURE* psStruct : worldObjectState.structures[psDroid->player])
 			{
 				factType = psStruct->pStructureType->type;
 				if (factType == REF_FACTORY ||
@@ -3974,7 +3975,7 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : worldObjectState.droids[player])
 	{
 		if (psCurr->group == group &&
 		    secondaryGetState(psCurr, sec) != state)
@@ -4003,7 +4004,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 	// count the number of units for each state
 	numStates = 0;
 	memset(aStateCount, 0, sizeof(aStateCount));
-	for (const DROID* psCurr : apsDroidLists[player])
+	for (const DROID* psCurr : worldObjectState.droids[player])
 	{
 		if (psCurr->group == group)
 		{
@@ -4184,7 +4185,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (STRUCTURE* psStruct : apsStructLists[player])
+	for (STRUCTURE* psStruct : worldObjectState.structures[player])
 	{
 		if (lasSatStructSelected(psStruct))
 		{

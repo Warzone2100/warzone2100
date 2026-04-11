@@ -36,6 +36,7 @@
 #include "ai.h"
 #include "map.h"
 #include "lib/gamelib/gtime.h"
+#include "objmem.h"
 #include "visibility.h"
 #include "structure.h"
 #include "research.h"
@@ -362,7 +363,7 @@ void resetFactoryNumFlag()
 			factoryNumFlag[i][type].clear();
 		}
 		//look through the list of structures to see which have been used
-		for (const STRUCTURE *psStruct : apsStructLists[i])
+		for (const STRUCTURE *psStruct : worldObjectState.structures[i])
 		{
 			FLAG_TYPE type;
 			switch (psStruct->pStructureType->type)
@@ -752,7 +753,7 @@ void setCurrentStructQuantity(bool displayError)
 		{
 			asStructureStats[inc].curCount[player] = 0;
 		}
-		for (const STRUCTURE *psCurr : apsStructLists[player])
+		for (const STRUCTURE *psCurr : worldObjectState.structures[player])
 		{
 			unsigned inc = psCurr->pStructureType - asStructureStats;
 			asStructureStats[inc].curCount[player]++;
@@ -927,7 +928,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (const DROID *psCurr : apsDroidLists[player])
+			for (const DROID *psCurr : worldObjectState.droids[player])
 			{
 				// An enemy droid is blocking it
 				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
@@ -984,7 +985,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		if (psDroid)
 		{
 			// Clear all orders for helping hands. Needed for AI script which runs next frame.
-			for (DROID* psIter : apsDroidLists[psDroid->player])
+			for (DROID* psIter : worldObjectState.droids[psDroid->player])
 			{
 				if ((psIter->order.type == DORDER_BUILD || psIter->order.type == DORDER_HELPBUILD || psIter->order.type == DORDER_LINEBUILD)
 				    && psIter->order.psObj == psStruct
@@ -1803,7 +1804,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		StructureBounds bounds = getStructureBounds(psBuilding);
 		for (unsigned playerNum = 0; playerNum < MAX_PLAYERS; ++playerNum)
 		{
-			for (const STRUCTURE *psStruct : apsStructLists[playerNum])
+			for (const STRUCTURE *psStruct : worldObjectState.structures[playerNum])
 			{
 				if (!psStruct)
 				{
@@ -2359,7 +2360,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		}
 		else
 		{
-			addFlagPositionToList(psFact->psAssemblyPoint, mission.apsFlagPosLists);
+			addFlagPositionToList(psFact->psAssemblyPoint, mission.worldObjectState.flags);
 		}
 	}
 
@@ -2369,7 +2370,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 
 		factoryInc = psFact->psAssemblyPoint->factoryInc;
 
-		auto& flagPosList = apsFlagPosLists[psStruct->player];
+		auto& flagPosList = worldObjectState.flags[psStruct->player];
 		FlagPositionList::iterator flagPosIt = flagPosList.begin(), flagPosItNext;
 		while (flagPosIt != flagPosList.end())
 		{
@@ -2402,7 +2403,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 {
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (STRUCTURE* psCurr : apsStructLists[selectedPlayer])
+	for (STRUCTURE* psCurr : worldObjectState.structures[selectedPlayer])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2414,7 +2415,7 @@ void clearCommandDroidFactory(DROID *psDroid)
 			}
 		}
 	}
-	for (STRUCTURE* psCurr : mission.apsStructLists[selectedPlayer])
+	for (STRUCTURE* psCurr : mission.worldObjectState.structures[selectedPlayer])
 	{
 		if ((psCurr->pStructureType->type == REF_FACTORY) ||
 		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
@@ -2444,7 +2445,7 @@ static bool structClearTile(UWORD x, UWORD y, PROPULSION_TYPE propulsion)
 	/* Check for a droid */
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (const DROID* psCurr : apsDroidLists[player])
+		for (const DROID* psCurr : worldObjectState.droids[player])
 		{
 			if (map_coord(psCurr->pos.x) == x
 			    && map_coord(psCurr->pos.y) == y)
@@ -2650,7 +2651,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		setFactorySecondaryState(psNewDroid, psStructure);
 		displayConstructionCloud(psNewDroid->pos);
 		/* add the droid to the list */
-		addDroid(psNewDroid, apsDroidLists);
+		addDroid(psNewDroid, worldObjectState.droids);
 		*ppsDroid = psNewDroid;
 		if (psNewDroid->player == selectedPlayer)
 		{
@@ -2706,7 +2707,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 				factoryType = VTOL_FLAG;
 			}
 			//find flag in question.
-			const auto& flagPosList = apsFlagPosLists[psFact->psAssemblyPoint->player];
+			const auto& flagPosList = worldObjectState.flags[psFact->psAssemblyPoint->player];
 			auto psFlag = std::find_if(flagPosList.begin(), flagPosList.end(), [psFact, factoryType](FLAG_POSITION* psFlag)
 			{
 				return psFlag->factoryInc == psFact->psAssemblyPoint->factoryInc // correct fact.
@@ -2788,7 +2789,7 @@ bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission
 		return false;
 	}
 
-	StructureList* pList = isMission ? &mission.apsStructLists[player] : &apsStructLists[player];
+	StructureList* pList = isMission ? &mission.worldObjectState.structures[player] : &worldObjectState.structures[player];
 	for (const STRUCTURE *psCurr : *pList)
 	{
 		if (psCurr->pStructureType->type == type && (!built || (built && psCurr->status == SS_BUILT)))
@@ -3074,11 +3075,11 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	{
 		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
 		int count1 = 0, count2 = 0;
-		for (const STRUCTURE* s : apsStructLists[psStructure->player])
+		for (const STRUCTURE* s : worldObjectState.structures[psStructure->player])
 		{
 			count1 += s == psStructure;
 		}
-		for (const STRUCTURE* s : mission.apsStructLists[psStructure->player])
+		for (const STRUCTURE* s : mission.worldObjectState.structures[psStructure->player])
 		{
 			count2 += s == psStructure;
 		}
@@ -3284,7 +3285,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			if (psChosenObj == nullptr)
 			{
 				objTrace(psStructure->id, "Rearm pad idle - look for victim");
-				for (DROID* psCurr : apsDroidLists[psStructure->player])
+				for (DROID* psCurr : worldObjectState.droids[psStructure->player])
 				{
 					// move next droid waiting on ground to rearm pad
 					if (vtolReadyToRearm(psCurr, psStructure) &&
@@ -3300,7 +3301,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
 					{
-						for (DROID* psCurr : apsDroidLists[i])
+						for (DROID* psCurr : worldObjectState.droids[i])
 						{
 							// move next droid waiting on ground to rearm pad
 							if (vtolReadyToRearm(psCurr, psStructure))
@@ -4063,7 +4064,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD 
 	//if currently on a mission can't build factory/research/power/derricks
 	if (!missionIsOffworld())
 	{
-		for (const STRUCTURE* psCurr : apsStructLists[_selectedPlayer])
+		for (const STRUCTURE* psCurr : worldObjectState.structures[_selectedPlayer])
 		{
 			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status == SS_BUILT)
 			{
@@ -4287,7 +4288,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	if (bCheckBuildQueue)
 	{
 		// cant place on top of a delivery point...
-		for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
+		for (const auto& psFlag : worldObjectState.flags[selectedPlayer])
 		{
 			ASSERT_OR_RETURN(false, psFlag->coords.x != ~0, "flag has invalid position");
 			Vector2i flagTile = map_coord(psFlag->coords.xy());
@@ -4907,7 +4908,7 @@ bool checkSpecificStructExists(UDWORD structInc, UDWORD player)
 {
 	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid structure inc");
 
-	for (const STRUCTURE *psStructure : apsStructLists[player])
+	for (const STRUCTURE *psStructure : worldObjectState.structures[player])
 	{
 		if (psStructure->status == SS_BUILT)
 		{
@@ -5183,7 +5184,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 	typedef std::vector<Derrick> Derricks;
 	Derricks derricks;
 	derricks.reserve(NUM_POWER_MODULES + 1);
-	for (STRUCTURE *currExtractor : apsExtractorLists[psBuilding->player])
+	for (STRUCTURE *currExtractor : worldObjectState.extractors[psBuilding->player])
 	{
 		RES_EXTRACTOR *resExtractor = &currExtractor->pFunctionality->resourceExtractor;
 
@@ -5238,7 +5239,7 @@ uint16_t countPlayerUnusedDerricks()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return 0; }
 
-	for (const STRUCTURE *psStruct : apsExtractorLists[selectedPlayer])
+	for (const STRUCTURE *psStruct : worldObjectState.extractors[selectedPlayer])
 	{
 		if (psStruct->status == SS_BUILT && psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 		{
@@ -5266,7 +5267,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 	// Find a power generator, if possible with a power module.
 	STRUCTURE *bestPowerGen = nullptr;
 	int bestSlot = 0;
-	for (STRUCTURE *psCurr : apsStructLists[psBuilding->player])
+	for (STRUCTURE *psCurr : worldObjectState.structures[psBuilding->player])
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN && psCurr->status == SS_BUILT)
 		{
@@ -5347,7 +5348,7 @@ void releaseResExtractor(STRUCTURE *psRelease)
 	psRelease->pFunctionality->resourceExtractor.psPowerGen = nullptr;
 
 	//there may be spare resource extractors
-	for (STRUCTURE* psCurr : apsExtractorLists[psRelease->player])
+	for (STRUCTURE* psCurr : worldObjectState.extractors[psRelease->player])
 	{
 		//check not connected and power left and built!
 		if (psCurr != psRelease && psCurr->pFunctionality->resourceExtractor.psPowerGen == nullptr && psCurr->status == SS_BUILT)
@@ -5383,7 +5384,7 @@ void releasePowerGen(STRUCTURE *psRelease)
 		}
 	}
 	//may have a power gen with spare capacity
-	for (STRUCTURE* psCurr : apsStructLists[psRelease->player])
+	for (STRUCTURE* psCurr : worldObjectState.structures[psRelease->player])
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN &&
 		    psCurr != psRelease && psCurr->status == SS_BUILT)
@@ -5493,7 +5494,7 @@ static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 	}
 
 	num = 0;
-	for (const DROID* psCurr : apsDroidLists[selectedPlayer])
+	for (const DROID* psCurr : worldObjectState.droids[selectedPlayer])
 	{
 		if (psCurr->order.psObj
 		    && psCurr->order.psObj->id == psStructure->id
@@ -6084,7 +6085,7 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//struct
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (STRUCTURE *psStruct : apsStructLists[i])
+		for (STRUCTURE *psStruct : worldObjectState.structures[i])
 		{
 			if (psStruct->visible[losingPlayer] && !psStruct->died)
 			{
@@ -6093,7 +6094,7 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		}
 
 		//droids.
-		for (DROID *psDroid : apsDroidLists[i])
+		for (DROID *psDroid : worldObjectState.droids[i])
 		{
 			if (psDroid->visible[losingPlayer] || psDroid->player == losingPlayer)
 			{
@@ -6103,7 +6104,7 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 
 	//feature
-	for (FEATURE *psFeat : apsFeatureList[0])
+	for (FEATURE *psFeat : worldObjectState.features[0])
 	{
 		if (psFeat->visible[losingPlayer])
 		{
@@ -6148,7 +6149,7 @@ FLAG_POSITION *FindFactoryDelivery(const STRUCTURE *Struct)
 	if (Struct && Struct->isFactory())
 	{
 		// Find the factories delivery point.
-		for (const auto& psFlag : apsFlagPosLists[Struct->player])
+		for (const auto& psFlag : worldObjectState.flags[Struct->player])
 		{
 			if (FlagIsFactory(psFlag)
 				&& Struct->pFunctionality->factory.psAssemblyPoint->factoryInc == psFlag->factoryInc
@@ -6169,7 +6170,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 	FACTORY		*psFactory;
 	REPAIR_FACILITY *psRepair;
 
-	for (STRUCTURE* psCurr : apsStructLists[psDelPoint->player])
+	for (STRUCTURE* psCurr : worldObjectState.structures[psDelPoint->player])
 	{
 		if (!psCurr)
 		{
@@ -6521,7 +6522,7 @@ void checkDeliveryPoints(UDWORD version)
 		//will have been called to put in down in the first place
 		if (inc != selectedPlayer)
 		{
-			for (STRUCTURE* psStruct : apsStructLists[inc])
+			for (STRUCTURE* psStruct : worldObjectState.structures[inc])
 			{
 				if (!psStruct)
 				{
@@ -6782,7 +6783,7 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	totallyDist = SDWORD_MAX;
 	psNearest = nullptr;
 	psTotallyClear = nullptr;
-	for (STRUCTURE *psStruct : apsStructLists[psDroid->player])
+	for (STRUCTURE *psStruct : worldObjectState.structures[psDroid->player])
 	{
 		if (psStruct->pStructureType->type == REF_REARM_PAD && (!bClear || clearRearmPad(psStruct)))
 		{
@@ -6829,7 +6830,7 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 	{
 		if (aiCheckAlliances(psStruct->player, i))
 		{
-			for (DROID *psCurr : apsDroidLists[i])
+			for (DROID *psCurr : worldObjectState.droids[i])
 			{
 				if (psCurr != psDroid
 				    && map_coord(psCurr->pos.x) == tx
@@ -6852,7 +6853,7 @@ bool vtolOnRearmPad(const STRUCTURE *psStruct, const DROID *psDroid)
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	for (const DROID* psCurr : apsDroidLists[psStruct->player])
+	for (const DROID* psCurr : worldObjectState.droids[psStruct->player])
 	{
 		if (psCurr != psDroid
 		    && map_coord(psCurr->pos.x) == tx
@@ -6901,7 +6902,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			(void)removeStruct(psStructure, false);
 
 			// remove structure from one list
-			removeStructureFromList(psStructure, apsStructLists);
+			removeStructureFromList(psStructure, worldObjectState.structures);
 
 			psStructure->selected = false;
 
@@ -6919,7 +6920,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			asStructureStats[max].curCount[attackPlayer]++;
 
 			//check through the 'attackPlayer' players list of droids to see if any are targetting it
-			for (DROID* psCurr : apsDroidLists[attackPlayer])
+			for (DROID* psCurr : worldObjectState.droids[attackPlayer])
 			{
 				if (psCurr->order.psObj == psStructure)
 				{
@@ -6939,7 +6940,7 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 			}
 
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it
-			for (STRUCTURE* psStruct : apsStructLists[attackPlayer])
+			for (STRUCTURE* psStruct : worldObjectState.structures[attackPlayer])
 			{
 				if (psStruct->psTarget[0] == psStructure)
 				{

@@ -2131,7 +2131,7 @@ static void threatUpdate(int player)
 			continue;
 		}
 
-		for (DROID* psDroid : apsDroidLists[i])
+		for (DROID* psDroid : worldObjectState.droids[i])
 		{
 			UBYTE mode = 0;
 
@@ -2154,7 +2154,7 @@ static void threatUpdate(int player)
 			}
 		}
 
-		for (STRUCTURE* psStruct : apsStructLists[i])
+		for (STRUCTURE* psStruct : worldObjectState.structures[i])
 		{
 			UBYTE mode = 0;
 

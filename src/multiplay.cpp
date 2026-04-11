@@ -41,6 +41,7 @@
 #include "hci.h"
 
 #include <time.h>									// for recording ping times.
+#include "objmem.h"
 #include "research.h"
 #include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
@@ -463,7 +464,7 @@ bool multiplayerWinSequence(bool firstCall)
 		CancelAllResearch(selectedPlayer);
 
 		// stop all manufacture.
-		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
+		for (STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
 		{
 			if (psStruct && psStruct->isFactory())
 			{
@@ -648,7 +649,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(apsDroidLists[i], id);
+			DROID* d = (DROID*)getBaseObjFromId(worldObjectState.droids[i], id);
 			if (d)
 			{
 				return d;
@@ -657,7 +658,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		DROID* d = (DROID*)getBaseObjFromId(apsDroidLists[player], id);
+		DROID* d = (DROID*)getBaseObjFromId(worldObjectState.droids[player], id);
 		if (d)
 		{
 			return d;
@@ -673,7 +674,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(mission.apsDroidLists[i], id);
+			DROID* d = (DROID*)getBaseObjFromId(mission.worldObjectState.droids[i], id);
 			if (d)
 			{
 				return d;
@@ -682,7 +683,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		DROID* d = (DROID*)getBaseObjFromId(mission.apsDroidLists[player], id);
+		DROID* d = (DROID*)getBaseObjFromId(mission.worldObjectState.droids[player], id);
 		if (d)
 		{
 			return d;
@@ -695,12 +696,12 @@ static STRUCTURE* _IdToStruct(UDWORD id, UDWORD beginPlayer, UDWORD endPlayer)
 {
 	for (int i = beginPlayer; i < endPlayer; ++i)
 	{
-		STRUCTURE* s = (STRUCTURE*)getBaseObjFromId(apsStructLists[i], id);
+		STRUCTURE* s = (STRUCTURE*)getBaseObjFromId(worldObjectState.structures[i], id);
 		if (s)
 		{
 			return s;
 		}
-		s = (STRUCTURE*)getBaseObjFromId(mission.apsStructLists[i], id);
+		s = (STRUCTURE*)getBaseObjFromId(mission.worldObjectState.structures[i], id);
 		if (s)
 		{
 			return s;
@@ -732,7 +733,7 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	return (FEATURE*)getBaseObjFromId(apsFeatureList[0], id);
+	return (FEATURE*)getBaseObjFromId(worldObjectState.features[0], id);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -969,11 +970,11 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 
 	if (player < MAX_PLAYERS)
 	{
-		auto buildingIt = std::find_if(apsStructLists[player].begin(), apsStructLists[player].end(), [](STRUCTURE* building)
+		auto buildingIt = std::find_if(worldObjectState.structures[player].begin(), worldObjectState.structures[player].end(), [](STRUCTURE* building)
 		{
 			return building->pStructureType->type == REF_HQ;
 		});
-		if (buildingIt != apsStructLists[player].end())
+		if (buildingIt != worldObjectState.structures[player].end())
 		{
 			psBuilding = *buildingIt;
 		}
@@ -984,15 +985,15 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 		x = map_coord(psBuilding->pos.x);
 		y = map_coord(psBuilding->pos.y);
 	}
-	else if ((player < MAX_PLAYERS) && !apsDroidLists[player].empty())				// or first droid
+	else if ((player < MAX_PLAYERS) && !worldObjectState.droids[player].empty())				// or first droid
 	{
-		x = map_coord(apsDroidLists[player].front()->pos.x);
-		y =	map_coord(apsDroidLists[player].front()->pos.y);
+		x = map_coord(worldObjectState.droids[player].front()->pos.x);
+		y =	map_coord(worldObjectState.droids[player].front()->pos.y);
 	}
-	else if ((player < MAX_PLAYERS) && !apsStructLists[player].empty())				// center on first struct
+	else if ((player < MAX_PLAYERS) && !worldObjectState.structures[player].empty())				// center on first struct
 	{
-		x = map_coord(apsStructLists[player].front()->pos.x);
-		y = map_coord(apsStructLists[player].front()->pos.y);
+		x = map_coord(worldObjectState.structures[player].front()->pos.x);
+		y = map_coord(worldObjectState.structures[player].front()->pos.y);
 	}
 	else														//or map center.
 	{
@@ -1885,7 +1886,7 @@ STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists&
 
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index)
 {
-	return findResearchingFacilityByResearchIndex(apsStructLists, player, index);
+	return findResearchingFacilityByResearchIndex(worldObjectState.structures, player, index);
 }
 
 bool recvResearchStatus(NETQUEUE queue)
@@ -2820,7 +2821,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy HQ
 		std::vector<STRUCTURE *> hqStructs;
-		for (STRUCTURE *psStruct : apsStructLists[playerIndex])
+		for (STRUCTURE *psStruct : worldObjectState.structures[playerIndex])
 		{
 			if (REF_HQ == psStruct->pStructureType->type)
 			{
@@ -2841,7 +2842,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy all droids
 		debug(LOG_DEATH, "killing off all droids for player %d", playerIndex);
-		mutating_list_iterate(apsDroidLists[playerIndex], [quietly](DROID* d)
+		mutating_list_iterate(worldObjectState.droids[playerIndex], [quietly](DROID* d)
 		{
 			if (quietly)			// don't show effects
 			{
@@ -2856,7 +2857,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy structs
 		debug(LOG_DEATH, "killing off structures for player %d", playerIndex);
-		mutating_list_iterate(apsStructLists[playerIndex], [quietly, removeAllStructs](STRUCTURE* psStruct)
+		mutating_list_iterate(worldObjectState.structures[playerIndex], [quietly, removeAllStructs](STRUCTURE* psStruct)
 		{
 			if (removeAllStructs
 				|| psStruct->pStructureType->type == REF_POWER_GEN

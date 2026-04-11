@@ -605,7 +605,7 @@ bool intAddDroidsAvailForm()
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	//add droids built before the mission
-	for (DROID *psDroid : mission.apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : mission.worldObjectState.droids[selectedPlayer])
 	{
 		//stop adding the buttons once IDTRANS_DROIDEND has been reached
 		if (nextButtonId == IDTRANS_DROIDEND)
@@ -952,12 +952,12 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 	//add it back into apsDroidLists
 	if (onMission)
 	{
-		addDroid(psDroid, mission.apsDroidLists);
+		addDroid(psDroid, mission.worldObjectState.droids);
 	}
 	else
 	{
 		// add the droid back onto the droid list
-		addDroid(psDroid, apsDroidLists);
+		addDroid(psDroid, worldObjectState.droids);
 	}
 
 	if (psDroid->pos.x != INVALID_XY)
@@ -1039,7 +1039,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		if (bMultiPlayer)
 		{
 			// search for the nearest transporter if the current one is already full
-			for (auto psOtherDroid : apsDroidLists[psTransporter->player])
+			for (auto psOtherDroid : worldObjectState.droids[psTransporter->player])
 			{
 				if (psOtherDroid->isTransporter() &&
 					checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
@@ -1075,12 +1075,12 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	if (onMission)
 	{
 		// removing from droid mission list
-		bDroidRemoved = droidRemove(psDroidToAdd, mission.apsDroidLists);
+		bDroidRemoved = droidRemove(psDroidToAdd, mission.worldObjectState.droids);
 	}
 	else
 	{
 		// removing from droid list
-		bDroidRemoved = droidRemove(psDroidToAdd, apsDroidLists);
+		bDroidRemoved = droidRemove(psDroidToAdd, worldObjectState.droids);
 	}
 
 	if (bDroidRemoved)
@@ -1156,11 +1156,11 @@ DroidList* transInterfaceDroidList()
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
 	if (onMission)
 	{
-		return &mission.apsDroidLists[selectedPlayer];
+		return &mission.worldObjectState.droids[selectedPlayer];
 	}
 	else
 	{
-		return &apsDroidLists[selectedPlayer];
+		return &worldObjectState.droids[selectedPlayer];
 	}
 }
 

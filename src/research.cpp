@@ -1370,7 +1370,7 @@ void CancelAllResearch(UDWORD pl)
 {
 	if (pl >= MAX_PLAYERS) { return; }
 
-	for (STRUCTURE* psCurr : apsStructLists[pl])
+	for (STRUCTURE* psCurr : worldObjectState.structures[pl])
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
@@ -1655,8 +1655,8 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 		return;
 	}
 
-	replaceDroidComponent(apsDroidLists[player], oldType, oldCompInc, newCompInc);
-	replaceDroidComponent(mission.apsDroidLists[player], oldType, oldCompInc, newCompInc);
+	replaceDroidComponent(worldObjectState.droids[player], oldType, oldCompInc, newCompInc);
+	replaceDroidComponent(mission.worldObjectState.droids[player], oldType, oldCompInc, newCompInc);
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
 	const auto replaceComponentInTemplate = [oldType, oldCompInc, newCompInc](DROID_TEMPLATE* psTemplates) {
 		switch (oldType)
@@ -1692,7 +1692,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	//check thru the templates
 	enumerateTemplates(player, replaceComponentInTemplate);
 	// also check build queues
-	for (STRUCTURE *psCBuilding : apsStructLists[player])
+	for (STRUCTURE *psCBuilding : worldObjectState.structures[player])
 	{
 		if ((psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_FACTORY ||
 			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_CYBORG_FACTORY ||
@@ -1702,8 +1702,8 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 			replaceComponentInTemplate(psCBuilding->pFunctionality->factory.psSubject);
 		}
 	}
-	replaceStructureComponent(apsStructLists[player], oldType, oldCompInc, newCompInc, player);
-	replaceStructureComponent(mission.apsStructLists[player], oldType, oldCompInc, newCompInc, player);
+	replaceStructureComponent(worldObjectState.structures[player], oldType, oldCompInc, newCompInc, player);
+	replaceStructureComponent(mission.worldObjectState.structures[player], oldType, oldCompInc, newCompInc, player);
 }
 
 /*Looks through all the currently allocated stats to check the name is not
@@ -1756,7 +1756,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	UDWORD topicIndex = 0, researchPoints = 0, rewardID = 0;
 
 	//look through the losing players structures to find a research facility
-	for (const STRUCTURE *psStruct : apsStructLists[losingPlayer])
+	for (const STRUCTURE *psStruct : worldObjectState.structures[losingPlayer])
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
@@ -1962,7 +1962,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 			}
 
 			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
-			for (const STRUCTURE *psStruct : apsStructLists[player])
+			for (const STRUCTURE *psStruct : worldObjectState.structures[player])
 			{
 				RESEARCH_FACILITY *res = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 				if (psStruct->pStructureType->type != REF_RESEARCH || res->psSubject == nullptr)

@@ -46,6 +46,7 @@
 #include "objmem.h"
 #include "move.h"
 #include "cmddroid.h"
+#include "world_object_state.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
@@ -804,11 +805,11 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				UDWORD droidX, droidY;
 
-				if (!droidRemove(psDroid, mission.apsDroidLists))
+				if (!droidRemove(psDroid, mission.worldObjectState.droids))
 				{
 					ASSERT_OR_RETURN(, false, "Unable to remove transporter from mission list");
 				}
-				addDroid(psDroid, apsDroidLists);
+				addDroid(psDroid, worldObjectState.droids);
 				//set the x/y up since they were set to INVALID_XY when moved offWorld
 				missionGetTransporterExit(selectedPlayer, &droidX, &droidY);
 				psDroid->pos.x = droidX;
@@ -2874,7 +2875,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	int startY = map_coord(p->y);
 
 	// set blocking flags for all the other droids
-	for (const DROID *psCurr : apsDroidLists[psDroid->player])
+	for (const DROID *psCurr : worldObjectState.droids[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
@@ -2906,7 +2907,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	}
 
 	// clear blocking flags for all the other droids
-	for (const DROID *psCurr : apsDroidLists[psDroid->player])
+	for (const DROID *psCurr : worldObjectState.droids[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
