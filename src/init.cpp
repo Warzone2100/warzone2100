@@ -1719,9 +1719,9 @@ bool stageThreeInitialise()
 	}
 
 	effectResetUpdates();
-	initLighting(0, 0, mapWidth, mapHeight);
+	initLighting(0, 0, worldMapState.width, worldMapState.height);
 	pie_InitLighting();
-	getCurrentLightmapData().reset(mapWidth, mapHeight);
+	getCurrentLightmapData().reset(worldMapState.width, worldMapState.height);
 
 	if (fromSave)
 	{

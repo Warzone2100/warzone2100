@@ -1140,10 +1140,10 @@ void resetScroll()
 // Checks if coordinate is inside scroll limits, returns false if not.
 bool CheckInScrollLimits(const int &xPos, const int &yPos)
 {
-	int minX = world_coord(scrollMinX);
-	int maxX = world_coord(scrollMaxX - 1);
-	int minY = world_coord(scrollMinY);
-	int maxY = world_coord(scrollMaxY - 1);
+	int minX = world_coord(worldMapState.scroll.minX);
+	int maxX = world_coord(worldMapState.scroll.maxX - 1);
+	int minY = world_coord(worldMapState.scroll.minY);
+	int maxY = world_coord(worldMapState.scroll.maxY - 1);
 
 	if ((xPos < minX) || (xPos >= maxX) || (yPos < minY) || (yPos >= maxY))
 	{
@@ -1161,10 +1161,10 @@ bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 	bool EdgeHit = false;
 	SDWORD	minX, minY, maxX, maxY;
 
-	minX = world_coord(scrollMinX);
-	maxX = world_coord(scrollMaxX - 1);
-	minY = world_coord(scrollMinY);
-	maxY = world_coord(scrollMaxY - 1);
+	minX = world_coord(worldMapState.scroll.minX);
+	maxX = world_coord(worldMapState.scroll.maxX - 1);
+	minY = world_coord(worldMapState.scroll.minY);
+	maxY = world_coord(worldMapState.scroll.maxY - 1);
 
 	//scroll is limited to what can be seen for current campaign
 	if (*xPos < minX)
@@ -1321,7 +1321,7 @@ BASE_OBJECT *mouseTarget()
 	BASE_OBJECT *psReturn = nullptr;
 	int dispX, dispY, dispR;
 
-	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > mapWidth - 1 || mouseTileY > mapHeight - 1)
+	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > worldMapState.width - 1 || mouseTileY > worldMapState.height - 1)
 	{
 		return (nullptr);
 	}
@@ -1452,8 +1452,8 @@ bool deliveryReposValid()
 	Vector2i map = map_coord(flagPos.coords.xy());
 
 	//make sure we are not too near map edge
-	if (map.x < scrollMinX + TOO_NEAR_EDGE || map.x + 1 > scrollMaxX - TOO_NEAR_EDGE ||
-	    map.y < scrollMinY + TOO_NEAR_EDGE || map.y + 1 > scrollMaxY - TOO_NEAR_EDGE)
+	if (map.x < worldMapState.scroll.minX + TOO_NEAR_EDGE || map.x + 1 > worldMapState.scroll.maxX - TOO_NEAR_EDGE ||
+	    map.y < worldMapState.scroll.minY + TOO_NEAR_EDGE || map.y + 1 > worldMapState.scroll.maxY - TOO_NEAR_EDGE)
 	{
 		return false;
 	}
@@ -1497,8 +1497,8 @@ void processDeliveryRepos()
 		return;
 	}
 
-	int bX = clip<int>(mouseTileX, 2, mapWidth - 3);
-	int bY = clip<int>(mouseTileY, 2, mapHeight - 3);
+	int bX = clip<int>(mouseTileX, 2, worldMapState.width - 3);
+	int bY = clip<int>(mouseTileY, 2, worldMapState.height - 3);
 
 	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
 }
@@ -2370,7 +2370,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 
 	*ppObjectUnderMouse = nullptr;
 
-	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > (int)(mapWidth - 1) || mouseTileY > (int)(mapHeight - 1))
+	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > (int)(worldMapState.width - 1) || mouseTileY > (int)(worldMapState.height - 1))
 	{
 		retVal = MT_BLOCKING;
 		return retVal;

@@ -30,6 +30,7 @@
 #include "featuredef.h"
 #include "power.h"
 #include "gateway.h"
+#include "world_map_state.h"
 
 //mission types
 
@@ -53,16 +54,8 @@ struct LANDING_ZONE
 struct MISSION
 {
 	LEVEL_TYPE			type;							//defines which start and end functions to use - see levels_type in levels.h
-	std::unique_ptr<MAPTILE[]>		psMapTiles;					//the original mapTiles
-	int32_t                         mapWidth;                       //the original mapWidth
-	int32_t                         mapHeight;                      //the original mapHeight
-	std::unique_ptr<uint8_t[]>      psBlockMap[AUX_MAX];
-	std::unique_ptr<uint8_t[]>		psAuxMap[MAX_PLAYERS + AUX_MAX];
-	GATEWAY_LIST                    psGateways;                     //the gateway list
-	int32_t                         scrollMinX;                     //scroll coords for original map
-	int32_t                         scrollMinY;
-	int32_t                         scrollMaxX;
-	int32_t                         scrollMaxY;
+	WorldMapState worldMapState;
+
 	//original object lists
 	PerPlayerStructureLists apsStructLists;
 	PerPlayerExtractorLists apsExtractorLists;

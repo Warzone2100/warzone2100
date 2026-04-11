@@ -63,7 +63,7 @@ Vector3f audio_GetPlayerPos()
 
 	// Invert Y to match QSOUND axes
 	// @NOTE What is QSOUND? Why invert the Y axis?
-	pos.y = world_coord(mapHeight) - pos.y;
+	pos.y = world_coord(worldMapState.height) - pos.y;
 
 	return pos;
 }
@@ -85,7 +85,7 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 	*piX = iWorldX;
 	*piZ = map_TileHeight(map_coord(iWorldX), map_coord(iWorldY));
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(mapHeight) - iWorldY;
+	*piY = world_coord(worldMapState.height) - iWorldY;
 }
 
 // @FIXME we don't need to do this, since we are not using qsound.
@@ -98,7 +98,7 @@ void audio_GetObjectPos(const SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY
 	*piZ = map_TileHeight(map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
 
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(mapHeight) - psBaseObj->pos.y;
+	*piY = world_coord(worldMapState.height) - psBaseObj->pos.y;
 }
 
 UDWORD sound_GetGameTime()

@@ -24,9 +24,13 @@
 #ifndef __INCLUDED_SRC_GATEWAY_H__
 #define __INCLUDED_SRC_GATEWAY_H__
 
+#include <list>
+
+#include <stdint.h>
+
 struct GATEWAY
 {
-	UBYTE x1, y1, x2, y2;
+	uint8_t x1, y1, x2, y2;
 };
 
 typedef std::list<GATEWAY *> GATEWAY_LIST;

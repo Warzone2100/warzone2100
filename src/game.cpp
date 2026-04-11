@@ -3001,10 +3001,10 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		//the scroll limits for the mission map have already been written
 		if (saveGameVersion >= VERSION_29)
 		{
-			missionScrollMinX = (UWORD)mission.scrollMinX;
-			missionScrollMinY = (UWORD)mission.scrollMinY;
-			missionScrollMaxX = (UWORD)mission.scrollMaxX;
-			missionScrollMaxY = (UWORD)mission.scrollMaxY;
+			missionScrollMinX = (UWORD)mission.worldMapState.scroll.minX;
+			missionScrollMinY = (UWORD)mission.worldMapState.scroll.minY;
+			missionScrollMaxX = (UWORD)mission.worldMapState.scroll.maxX;
+			missionScrollMaxY = (UWORD)mission.worldMapState.scroll.maxY;
 		}
 
 		//load the map and the droids then swap pointers
@@ -3113,17 +3113,17 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		//once the mission map has been loaded reset the mission scroll limits
 		if (saveGameVersion >= VERSION_29)
 		{
-			mission.scrollMinX = missionScrollMinX;
-			mission.scrollMinY = missionScrollMinY;
-			mission.scrollMaxX = missionScrollMaxX;
-			mission.scrollMaxY = missionScrollMaxY;
+			mission.worldMapState.scroll.minX = missionScrollMinX;
+			mission.worldMapState.scroll.minY = missionScrollMinY;
+			mission.worldMapState.scroll.maxX = missionScrollMaxX;
+			mission.worldMapState.scroll.maxY = missionScrollMaxY;
 		}
 	}
 
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
-		psMapTiles = nullptr;
+		worldMapState.tiles = nullptr;
 		// load in the map file
 		if (!data)
 		{
@@ -3530,7 +3530,7 @@ error:
 	freeAllStructs();
 	freeAllFeatures();
 	droidTemplateShutDown();
-	psMapTiles = nullptr;
+	worldMapState.tiles = nullptr;
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -4557,10 +4557,10 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<n
 
 	if (saveGameVersion >= VERSION_29)
 	{
-		mission.scrollMinX = saveGameData.missionScrollMinX;
-		mission.scrollMinY = saveGameData.missionScrollMinY;
-		mission.scrollMaxX = saveGameData.missionScrollMaxX;
-		mission.scrollMaxY = saveGameData.missionScrollMaxY;
+		mission.worldMapState.scroll.minX = saveGameData.missionScrollMinX;
+		mission.worldMapState.scroll.minY = saveGameData.missionScrollMinY;
+		mission.worldMapState.scroll.maxX = saveGameData.missionScrollMaxX;
+		mission.worldMapState.scroll.maxY = saveGameData.missionScrollMaxY;
 	}
 
 	if (saveGameVersion >= VERSION_31)
@@ -4835,8 +4835,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("campaignName", getCampaignName());
 	save.setValue("gameTime", gameTime);
 	save.setValue("missionTime", mission.startTime);
-	save.setVector2i("scrollMin", Vector2i(scrollMinX, scrollMinY));
-	save.setVector2i("scrollMax", Vector2i(scrollMaxX, scrollMaxY));
+	save.setVector2i("scrollMin", Vector2i(worldMapState.scroll.minX, worldMapState.scroll.minY));
+	save.setVector2i("scrollMax", Vector2i(worldMapState.scroll.maxX, worldMapState.scroll.maxY));
 	save.setValue("saveType", saveType);
 	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s", (int)MAX_LEVEL_SIZE, aLevelName);
 	save.setValue("levelName", aLevelName);
@@ -4847,8 +4847,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("missionCheatTime", mission.cheatTime);
 	save.setVector2i("missionHomeLZ", Vector2i(mission.homeLZ_X, mission.homeLZ_Y));
 	save.setVector2i("missionPlayerPos", Vector2i(mission.playerX, mission.playerY));
-	save.setVector2i("missionScrollMin", Vector2i(mission.scrollMinX, mission.scrollMinY));
-	save.setVector2i("missionScrollMax", Vector2i(mission.scrollMaxX, mission.scrollMaxY));
+	save.setVector2i("missionScrollMin", Vector2i(mission.worldMapState.scroll.minX, mission.worldMapState.scroll.minY));
+	save.setVector2i("missionScrollMax", Vector2i(mission.worldMapState.scroll.maxX, mission.worldMapState.scroll.maxY));
 	save.setValue("offWorldKeepLists", offWorldKeepLists);
 	save.setValue("rubbleTile", getRubbleTileNum());
 	save.setValue("waterTile", getWaterTileNum());
@@ -5011,10 +5011,10 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.missionTime = mission.startTime;
 
 	//put in the scroll data
-	saveGame.ScrollMinX = scrollMinX;
-	saveGame.ScrollMinY = scrollMinY;
-	saveGame.ScrollMaxX = scrollMaxX;
-	saveGame.ScrollMaxY = scrollMaxY;
+	saveGame.ScrollMinX = worldMapState.scroll.minX;
+	saveGame.ScrollMinY = worldMapState.scroll.minY;
+	saveGame.ScrollMaxX = worldMapState.scroll.maxX;
+	saveGame.ScrollMaxY = worldMapState.scroll.maxY;
 
 	saveGame.GameType = saveType;
 
@@ -5042,10 +5042,10 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.missionHomeLZ_Y =		mission.homeLZ_Y;
 	saveGame.missionPlayerX =		mission.playerX;
 	saveGame.missionPlayerY =		mission.playerY;
-	saveGame.missionScrollMinX = (UWORD)mission.scrollMinX;
-	saveGame.missionScrollMinY = (UWORD)mission.scrollMinY;
-	saveGame.missionScrollMaxX = (UWORD)mission.scrollMaxX;
-	saveGame.missionScrollMaxY = (UWORD)mission.scrollMaxY;
+	saveGame.missionScrollMinX = (UWORD)mission.worldMapState.scroll.minX;
+	saveGame.missionScrollMinY = (UWORD)mission.worldMapState.scroll.minY;
+	saveGame.missionScrollMaxX = (UWORD)mission.worldMapState.scroll.maxX;
+	saveGame.missionScrollMaxY = (UWORD)mission.worldMapState.scroll.maxY;
 
 	saveGame.offWorldKeepLists = offWorldKeepLists;
 	saveGame.RubbleTile	= getRubbleTileNum();
@@ -5725,8 +5725,8 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
 		if (!onMission)
 		{
-			pos.x = clip(pos.x, world_coord(1), world_coord(mapWidth - 1));
-			pos.y = clip(pos.y, world_coord(1), world_coord(mapHeight - 1));
+			pos.x = clip(pos.x, world_coord(1), world_coord(worldMapState.width - 1));
+			pos.y = clip(pos.y, world_coord(1), world_coord(worldMapState.height - 1));
 		}
 
 		/* Create the Droid */
@@ -6250,13 +6250,13 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		}
 
 		//check not trying to build too near the edge
-		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > mapWidth - TOO_NEAR_EDGE)
+		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > worldMapState.width - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
 			continue;
 		}
-		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > mapHeight - TOO_NEAR_EDGE)
+		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > worldMapState.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
@@ -6339,8 +6339,8 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > mapWidth - TOO_NEAR_EDGE
-		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > mapHeight - TOO_NEAR_EDGE)
+		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > worldMapState.width - TOO_NEAR_EDGE
+		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > worldMapState.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.c_str());
 			continue; // skip it
@@ -6476,8 +6476,8 @@ static bool loadSaveStructure2(const char *pFileName)
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > mapWidth - TOO_NEAR_EDGE
-		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > mapHeight - TOO_NEAR_EDGE)
+		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > worldMapState.width - TOO_NEAR_EDGE
+		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > worldMapState.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s (%s), coord too near the edge of the map", name.toUtf8().c_str(), list[i].toUtf8().c_str());
 			ini.endGroup();
@@ -8211,39 +8211,39 @@ static void setMapScroll()
 	//if loading in a pre version5 then scroll values will not have been set up so set to max poss
 	if (width == 0 && height == 0)
 	{
-		scrollMinX = 0;
-		scrollMaxX = mapWidth;
-		scrollMinY = 0;
-		scrollMaxY = mapHeight;
+		worldMapState.scroll.minX = 0;
+		worldMapState.scroll.maxX = worldMapState.width;
+		worldMapState.scroll.minY = 0;
+		worldMapState.scroll.maxY = worldMapState.height;
 		return;
 	}
-	scrollMinX = startX;
-	scrollMinY = startY;
-	scrollMaxX = startX + width;
-	scrollMaxY = startY + height;
+	worldMapState.scroll.minX = startX;
+	worldMapState.scroll.minY = startY;
+	worldMapState.scroll.maxX = startX + width;
+	worldMapState.scroll.maxY = startY + height;
 	//check not going beyond width/height of map
-	if (scrollMaxX > (SDWORD)mapWidth)
+	if (worldMapState.scroll.maxX > (SDWORD)worldMapState.width)
 	{
-		scrollMaxX = mapWidth;
+		worldMapState.scroll.maxX = worldMapState.width;
 		debug(LOG_NEVER, "scrollMaxX was too big - It has been set to map width");
 	}
-	if (scrollMaxY > (SDWORD)mapHeight)
+	if (worldMapState.scroll.maxY > (SDWORD)worldMapState.height)
 	{
-		scrollMaxY = mapHeight;
+		worldMapState.scroll.maxY = worldMapState.height;
 		debug(LOG_NEVER, "scrollMaxY was too big - It has been set to map height");
 	}
 	// check for invalid minimum values (fixes some broken maps)
-	if (scrollMinX >= scrollMaxX)
+	if (worldMapState.scroll.minX >= worldMapState.scroll.maxX)
 	{
 		ASSERT(false, "scrollMinX was >= scrollMaxX - min has been set to 0, max has been set to mapWidth");
-		scrollMinX = 0;
-		scrollMaxX = mapWidth;
+		worldMapState.scroll.minX = 0;
+		worldMapState.scroll.maxX = worldMapState.width;
 	}
-	if (scrollMinY >= scrollMaxY)
+	if (worldMapState.scroll.minY >= worldMapState.scroll.maxY)
 	{
 		ASSERT(false, "scrollMinY was >= scrollMaxY - min has been set to 0, max has been set to mapHeight");
-		scrollMinY = 0;
-		scrollMaxY = mapHeight;
+		worldMapState.scroll.minY = 0;
+		worldMapState.scroll.maxY = worldMapState.height;
 	}
 }
 

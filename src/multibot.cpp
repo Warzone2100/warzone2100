@@ -421,7 +421,7 @@ bool recvDroid(NETQUEUE queue)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ", player, id);
-	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
+	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(worldMapState.width) || pos.y > world_coord(worldMapState.height))
 	{
 		debug(LOG_ERROR, "Received bad droid position (%d, %d) from %d about p%d (%s)", (int)pos.x, (int)pos.y,
 		      queue.index, player, isHumanPlayer(player) ? "Human" : "AI");

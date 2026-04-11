@@ -58,13 +58,13 @@ void raiseTile(int tile3dX, int tile3dY)
 {
 	int i, j;
 
-	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	if (tile3dX < 0 || tile3dX > worldMapState.width - 1 || tile3dY < 0 || tile3dY > worldMapState.height - 1)
 	{
 		return;
 	}
-	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	for (i = tile3dX; i <= MIN(worldMapState.width - 1, tile3dX + brushSize); i++)
 	{
-		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		for (j = tile3dY; j <= MIN(worldMapState.height - 1, tile3dY + brushSize); j++)
 		{
 			adjustTileHeight(mapTile(i, j), TILE_RAISE);
 			markTileDirty(i, j);
@@ -77,13 +77,13 @@ void lowerTile(int tile3dX, int tile3dY)
 {
 	int i, j;
 
-	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	if (tile3dX < 0 || tile3dX > worldMapState.width - 1 || tile3dY < 0 || tile3dY > worldMapState.height - 1)
 	{
 		return;
 	}
-	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	for (i = tile3dX; i <= MIN(worldMapState.width - 1, tile3dX + brushSize); i++)
 	{
-		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		for (j = tile3dY; j <= MIN(worldMapState.height - 1, tile3dY + brushSize); j++)
 		{
 			adjustTileHeight(mapTile(i, j), TILE_LOWER);
 			markTileDirty(i, j);
@@ -160,7 +160,7 @@ bool process3DBuilding()
 
 	/* Need to update the building locations if we're building */
 	int border = 5*TILE_UNITS/2;
-	Vector2i bv = {clip(mousePos.x, border, mapWidth*TILE_UNITS - border), clip(mousePos.y, border, mapHeight*TILE_UNITS - border)};
+	Vector2i bv = {clip(mousePos.x, border, worldMapState.width*TILE_UNITS - border), clip(mousePos.y, border, worldMapState.height*TILE_UNITS - border)};
 	Vector2i size = getStatsSize(sBuildDetails.psStats, getBuildingDirection());
 	Vector2i worldSize = world_coord(size);
 	bv = round_to_nearest_tile(bv - worldSize/2) + worldSize/2;

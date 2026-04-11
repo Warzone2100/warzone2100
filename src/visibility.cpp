@@ -141,7 +141,7 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 	{
 		const int mapX = x + tiles[i].dx;
 		const int mapY = y + tiles[i].dy;
-		if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight)
+		if (mapX < 0 || mapX >= worldMapState.width || mapY < 0 || mapY >= worldMapState.height)
 		{
 			continue;
 		}
@@ -283,7 +283,7 @@ static void doWaveTerrain(BASE_OBJECT *psObj)
 	{
 		const int mapX = map_coord(sx) + tiles[i].dx;
 		const int mapY = map_coord(sy) + tiles[i].dy;
-		if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight)
+		if (mapX < 0 || mapX >= worldMapState.width || mapY < 0 || mapY >= worldMapState.height)
 		{
 			continue;
 		}
@@ -344,7 +344,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 {
 	VisibleObjectHelp_t *help = (VisibleObjectHelp_t *)data;
 
-	ASSERT(pos.x >= 0 && pos.x < world_coord(mapWidth) && pos.y >= 0 && pos.y < world_coord(mapHeight), "rayLOSCallback: coords off map");
+	ASSERT(pos.x >= 0 && pos.x < world_coord(worldMapState.width) && pos.y >= 0 && pos.y < world_coord(worldMapState.height), "rayLOSCallback: coords off map");
 
 	if (help->rayStart)
 	{
@@ -391,7 +391,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 /* Remove tile visibility from object */
 void visRemoveVisibility(BASE_OBJECT *psObj)
 {
-	if (mapWidth && mapHeight)
+	if (worldMapState.width && worldMapState.height)
 	{
 		for (TILEPOS pos : psObj->watchedTiles)
 		{
@@ -464,9 +464,9 @@ void revealAll(UBYTE player)
 	}
 
 	//reveal all tiles
-	for (j = 0; j < mapHeight; j++)
+	for (j = 0; j < worldMapState.height; j++)
 	{
-		for (i = 0; i < mapWidth; i++)
+		for (i = 0; i < worldMapState.width; i++)
 		{
 			psTile = mapTile(i, j);
 			psTile->tileExploredBits |= alliancebits[player];

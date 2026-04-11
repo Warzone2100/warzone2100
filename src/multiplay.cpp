@@ -503,9 +503,9 @@ bool multiplayerWinSequence(bool firstCall)
 			pos2.x = 128;
 		}
 
-		if ((unsigned)pos2.x > world_coord(mapWidth))
+		if ((unsigned)pos2.x > world_coord(worldMapState.width))
 		{
-			pos2.x = world_coord(mapWidth);
+			pos2.x = world_coord(worldMapState.width);
 		}
 
 		if (pos2.z < 0)
@@ -513,9 +513,9 @@ bool multiplayerWinSequence(bool firstCall)
 			pos2.z = 128;
 		}
 
-		if ((unsigned)pos2.z > world_coord(mapHeight))
+		if ((unsigned)pos2.z > world_coord(worldMapState.height))
 		{
-			pos2.z = world_coord(mapHeight);
+			pos2.z = world_coord(worldMapState.height);
 		}
 
 		addEffect(&pos2, EFFECT_FIREWORK, FIREWORK_TYPE_LAUNCHER, false, nullptr, 0);	// throw up some fire works.
@@ -996,8 +996,8 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 	}
 	else														//or map center.
 	{
-		x = mapWidth / 2;
-		y = mapHeight / 2;
+		x = worldMapState.width / 2;
+		y = worldMapState.height / 2;
 	}
 
 

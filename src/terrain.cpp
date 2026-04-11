@@ -347,7 +347,7 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	result->x = world_coord(x);
 	result->z = world_coord(-y);
 
-	if (x <= 0 || y <= 0 || x >= mapWidth || y >= mapHeight)
+	if (x <= 0 || y <= 0 || x >= worldMapState.width || y >= worldMapState.height)
 	{
 		result->y = 0;
 	}
@@ -438,7 +438,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 	{
 		for (j = y * sectorSize; j < y * sectorSize + sectorSize; j++)
 		{
-			if (i < 0 || j < 0 || i >= mapWidth || j >= mapHeight)
+			if (i < 0 || j < 0 || i >= worldMapState.width || j >= worldMapState.height)
 			{
 				continue;
 			}
@@ -977,8 +977,8 @@ bool initTerrain()
 
 	/////////////////////
 	// Create the sectors
-	xSectors = (mapWidth + sectorSize - 1) / sectorSize;
-	ySectors = (mapHeight + sectorSize - 1) / sectorSize;
+	xSectors = (worldMapState.width + sectorSize - 1) / sectorSize;
+	ySectors = (worldMapState.height + sectorSize - 1) / sectorSize;
 	sectors = std::unique_ptr<Sector[]> (new Sector[xSectors * ySectors]());
 
 	////////////////////
@@ -1017,7 +1017,7 @@ bool initTerrain()
 			{
 				for (j = 0; j < sectorSize; j++)
 				{
-					if (x * sectorSize + i >= mapWidth || y * sectorSize + j >= mapHeight)
+					if (x * sectorSize + i >= worldMapState.width || y * sectorSize + j >= worldMapState.height)
 					{
 						continue; // off map, so skip
 					}
@@ -1109,7 +1109,7 @@ bool initTerrain()
 
 
 	// and finally the decals
-	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapWidth * mapHeight * 12);
+	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * worldMapState.width * worldMapState.height * 12);
 	int terrainDecalSize = 0;
 
 	for (x = 0; x < xSectors; x++)
@@ -1145,13 +1145,13 @@ bool initTerrain()
 	lightmapWidth = 1;
 	lightmapHeight = 1;
 	// determine the smallest power-of-two size we can use for the lightmap
-	while (mapWidth > (lightmapWidth <<= 1)) {}
-	while (mapHeight > (lightmapHeight <<= 1)) {}
-	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
+	while (worldMapState.width > (lightmapWidth <<= 1)) {}
+	while (worldMapState.height > (lightmapHeight <<= 1)) {}
+	debug(LOG_TERRAIN, "the size of the map is %ix%i", worldMapState.width, worldMapState.height);
 	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
-	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
-	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
+	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(worldMapState.width) *((float)worldMapState.width / (float)lightmapWidth), 0, 0, 0);
+	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(worldMapState.height) *((float)worldMapState.height / (float)lightmapHeight), 0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	lightmapValues.lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
@@ -1218,9 +1218,9 @@ static void updateLightMap(const LightMap& lightmap)
 {
 	size_t lightmapChannels = lightmapPixmap->channels(); // should always be 4 now...
 	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
-	for (int j = 0; j < mapHeight; ++j)
+	for (int j = 0; j < worldMapState.height; ++j)
 	{
-		for (int i = 0; i < mapWidth; ++i)
+		for (int i = 0; i < worldMapState.width; ++i)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 			PIELIGHT colour = lightmap(i, j);

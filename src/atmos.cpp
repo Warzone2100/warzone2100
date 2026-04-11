@@ -135,8 +135,8 @@ static void processParticle(ATPART *psPart)
 
 		/* If it's gone off the WORLD... */
 		if (psPart->position.x < 0 || psPart->position.z < 0 ||
-		    psPart->position.x > ((mapWidth - 1)*TILE_UNITS) ||
-		    psPart->position.z > ((mapHeight - 1)*TILE_UNITS))
+		    psPart->position.x > ((worldMapState.width - 1)*TILE_UNITS) ||
+		    psPart->position.z > ((worldMapState.height - 1)*TILE_UNITS))
 		{
 			/* The kill it */
 			psPart->status = APS_INACTIVE;
@@ -298,8 +298,8 @@ void atmosUpdateSystem()
 
 			/* If we've got one on the grid */
 			if (pos.x > 0 && pos.z > 0 &&
-			    pos.x < (SDWORD)world_coord(mapWidth - 1) &&
-			    pos.z < (SDWORD)world_coord(mapHeight - 1))
+			    pos.x < (SDWORD)world_coord(worldMapState.width - 1) &&
+			    pos.z < (SDWORD)world_coord(worldMapState.height - 1))
 			{
 				/* On grid, so which particle shall we add? */
 				switch (weather)

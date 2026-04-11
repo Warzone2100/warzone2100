@@ -817,8 +817,8 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 					int flightTime = iHypot(delta.xy()) * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 					psProj->dst += Vector3i(iSinCosR(targetDroid->sMove.moveDir, std::min<int>(targetDroid->sMove.speed, psStats->flightSpeed * 3 / 4) * flightTime / GAME_TICKS_PER_SEC), 0);
 				}
-				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(mapWidth) - 1);
-				psProj->dst.y = clip(psProj->dst.y, 0, world_coord(mapHeight) - 1);
+				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(worldMapState.width) - 1);
+				psProj->dst.y = clip(psProj->dst.y, 0, world_coord(worldMapState.height) - 1);
 			}
 			if (psStats->movementModel == MM_HOMINGINDIRECT)
 			{

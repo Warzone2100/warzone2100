@@ -288,14 +288,14 @@ void initMission()
 
 	mission.ETA = -1;
 	mission.startTime = 0;
-	mission.psGateways.clear(); // just in case
-	mission.mapHeight = 0;
-	mission.mapWidth = 0;
-	for (auto &i : mission.psBlockMap)
+	mission.worldMapState.gateways.clear(); // just in case
+	mission.worldMapState.height = 0;
+	mission.worldMapState.width = 0;
+	for (auto &i : mission.worldMapState.blockMap)
 	{
 		i.reset();
 	}
-	for (auto &i : mission.psAuxMap)
+	for (auto &i : mission.worldMapState.auxMap)
 	{
 		i.reset();
 	}
@@ -354,18 +354,18 @@ bool missionShutDown()
 		mission.apsSensorList[0].clear();
 		mission.apsOilList[0].clear();
 
-		psMapTiles = std::move(mission.psMapTiles);
-		mapWidth = mission.mapWidth;
-		mapHeight = mission.mapHeight;
-		for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
+		worldMapState.tiles = std::move(mission.worldMapState.tiles);
+		worldMapState.width = mission.worldMapState.width;
+		worldMapState.height = mission.worldMapState.height;
+		for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.blockMap); ++i)
 		{
-			psBlockMap[i] = std::move(mission.psBlockMap[i]);
+			worldMapState.blockMap[i] = std::move(mission.worldMapState.blockMap[i]);
 		}
-		for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
+		for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.auxMap); ++i)
 		{
-			psAuxMap[i] = std::move(mission.psAuxMap[i]);
+			worldMapState.auxMap[i] = std::move(mission.worldMapState.auxMap[i]);
 		}
-		std::swap(mission.psGateways, gwGetGateways());
+		std::swap(mission.worldMapState.gateways, gwGetGateways());
 	}
 	keybindShutdown();
 	// sorry if this breaks something - but it looks like it's what should happen - John
@@ -772,22 +772,22 @@ static void saveMissionData()
 	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
-	mission.psMapTiles = std::move(psMapTiles);
-	mission.mapWidth = mapWidth;
-	mission.mapHeight = mapHeight;
-	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
+	mission.worldMapState.tiles = std::move(worldMapState.tiles);
+	mission.worldMapState.width = worldMapState.width;
+	mission.worldMapState.height = worldMapState.height;
+	for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.blockMap); ++i)
 	{
-		mission.psBlockMap[i] = std::move(psBlockMap[i]);
+		mission.worldMapState.blockMap[i] = std::move(worldMapState.blockMap[i]);
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
+	for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.auxMap); ++i)
 	{
-		mission.psAuxMap[i] = std::move(psAuxMap[i]);
+		mission.worldMapState.auxMap[i] = std::move(worldMapState.auxMap[i]);
 	}
-	mission.scrollMinX = scrollMinX;
-	mission.scrollMinY = scrollMinY;
-	mission.scrollMaxX = scrollMaxX;
-	mission.scrollMaxY = scrollMaxY;
-	std::swap(mission.psGateways, gwGetGateways());
+	mission.worldMapState.scroll.minX = worldMapState.scroll.minX;
+	mission.worldMapState.scroll.minY = worldMapState.scroll.minY;
+	mission.worldMapState.scroll.maxX = worldMapState.scroll.maxX;
+	mission.worldMapState.scroll.maxY = worldMapState.scroll.maxY;
+	std::swap(mission.worldMapState.gateways, gwGetGateways());
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
@@ -873,32 +873,32 @@ void restoreMissionData()
 	mission.apsOilList[0].clear();
 	//swap mission data over
 
-	psMapTiles = std::move(mission.psMapTiles);
+	worldMapState.tiles = std::move(mission.worldMapState.tiles);
 
-	mapWidth = mission.mapWidth;
-	mapHeight = mission.mapHeight;
-	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
+	worldMapState.width = mission.worldMapState.width;
+	worldMapState.height = mission.worldMapState.height;
+	for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.blockMap); ++i)
 	{
-		psBlockMap[i] = std::move(mission.psBlockMap[i]);
+		worldMapState.blockMap[i] = std::move(mission.worldMapState.blockMap[i]);
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
+	for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.auxMap); ++i)
 	{
-		psAuxMap[i] = std::move(mission.psAuxMap[i]);
+		worldMapState.auxMap[i] = std::move(mission.worldMapState.auxMap[i]);
 	}
-	scrollMinX = mission.scrollMinX;
-	scrollMinY = mission.scrollMinY;
-	scrollMaxX = mission.scrollMaxX;
-	scrollMaxY = mission.scrollMaxY;
-	std::swap(mission.psGateways, gwGetGateways());
+	worldMapState.scroll.minX = mission.worldMapState.scroll.minX;
+	worldMapState.scroll.minY = mission.worldMapState.scroll.minY;
+	worldMapState.scroll.maxX = mission.worldMapState.scroll.maxX;
+	worldMapState.scroll.maxY = mission.worldMapState.scroll.maxY;
+	std::swap(mission.worldMapState.gateways, gwGetGateways());
 	//and clear the mission pointers
-	mission.psMapTiles	= nullptr;
-	mission.mapWidth	= 0;
-	mission.mapHeight	= 0;
-	mission.scrollMinX	= 0;
-	mission.scrollMinY	= 0;
-	mission.scrollMaxX	= 0;
-	mission.scrollMaxY	= 0;
-	mission.psGateways.clear();
+	mission.worldMapState.tiles	= nullptr;
+	mission.worldMapState.width	= 0;
+	mission.worldMapState.height	= 0;
+	mission.worldMapState.scroll.minX	= 0;
+	mission.worldMapState.scroll.minY	= 0;
+	mission.worldMapState.scroll.maxX	= 0;
+	mission.worldMapState.scroll.maxY	= 0;
+	mission.worldMapState.gateways.clear();
 
 	//reset the current structure lists
 	setCurrentStructQuantity(false);
@@ -1384,23 +1384,23 @@ void swapMissionPointers()
 {
 	debug(LOG_SAVE, "called");
 
-	std::swap(psMapTiles, mission.psMapTiles);
-	std::swap(mapWidth,   mission.mapWidth);
-	std::swap(mapHeight,  mission.mapHeight);
-	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
+	std::swap(worldMapState.tiles, mission.worldMapState.tiles);
+	std::swap(worldMapState.width,   mission.worldMapState.width);
+	std::swap(worldMapState.height,  mission.worldMapState.height);
+	for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.blockMap); ++i)
 	{
-		std::swap(psBlockMap[i], mission.psBlockMap[i]);
+		std::swap(worldMapState.blockMap[i], mission.worldMapState.blockMap[i]);
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
+	for (int i = 0; i < ARRAY_SIZE(mission.worldMapState.auxMap); ++i)
 	{
-		std::swap(psAuxMap[i],   mission.psAuxMap[i]);
+		std::swap(worldMapState.auxMap[i],   mission.worldMapState.auxMap[i]);
 	}
 	//swap gateway zones
-	std::swap(mission.psGateways, gwGetGateways());
-	std::swap(scrollMinX, mission.scrollMinX);
-	std::swap(scrollMinY, mission.scrollMinY);
-	std::swap(scrollMaxX, mission.scrollMaxX);
-	std::swap(scrollMaxY, mission.scrollMaxY);
+	std::swap(mission.worldMapState.gateways, gwGetGateways());
+	std::swap(worldMapState.scroll.minX, mission.worldMapState.scroll.minX);
+	std::swap(worldMapState.scroll.minY, mission.worldMapState.scroll.minY);
+	std::swap(worldMapState.scroll.maxX, mission.worldMapState.scroll.maxX);
+	std::swap(worldMapState.scroll.maxY, mission.worldMapState.scroll.maxY);
 	for (unsigned inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		std::swap(apsDroidLists[inc],     mission.apsDroidLists[inc]);
@@ -1715,8 +1715,8 @@ static void missionResetDroids()
 				// check the droid is a reasonable distance from the edge of the map
 				if (psDroid->pos.x <= world_coord(EDGE_SIZE) ||
 					psDroid->pos.y <= world_coord(EDGE_SIZE) ||
-					psDroid->pos.x >= world_coord(mapWidth - EDGE_SIZE) ||
-					psDroid->pos.y >= world_coord(mapHeight - EDGE_SIZE))
+					psDroid->pos.x >= world_coord(worldMapState.width - EDGE_SIZE) ||
+					psDroid->pos.y >= world_coord(worldMapState.height - EDGE_SIZE))
 				{
 					debug(LOG_ERROR, "missionResetUnits: unit too close to edge of map - removing");
 					vanishDroid(psDroid);
@@ -2840,8 +2840,8 @@ bool withinLandingZone(UDWORD x, UDWORD y)
 {
 	UDWORD		inc;
 
-	ASSERT(x < mapWidth, "withinLandingZone: x coord bigger than mapWidth");
-	ASSERT(y < mapHeight, "withinLandingZone: y coord bigger than mapHeight");
+	ASSERT(x < worldMapState.width, "withinLandingZone: x coord bigger than mapWidth");
+	ASSERT(y < worldMapState.height, "withinLandingZone: y coord bigger than mapHeight");
 
 
 	for (inc = 0; inc < MAX_NOGO_AREAS; inc++)
@@ -2887,24 +2887,24 @@ void missionSetTransporterEntry(SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEntr
 {
 	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "missionSetTransporterEntry: player %i too high", iPlayer);
 
-	if ((iEntryTileX > scrollMinX) && (iEntryTileX < scrollMaxX))
+	if ((iEntryTileX > worldMapState.scroll.minX) && (iEntryTileX < worldMapState.scroll.maxX))
 	{
 		mission.iTranspEntryTileX[iPlayer] = (UWORD) iEntryTileX;
 	}
 	else
 	{
-		debug(LOG_SAVE, "entry point x %i outside scroll limits %i->%i", iEntryTileX, scrollMinX, scrollMaxX);
-		mission.iTranspEntryTileX[iPlayer] = (UWORD)(scrollMinX + EDGE_SIZE);
+		debug(LOG_SAVE, "entry point x %i outside scroll limits %i->%i", iEntryTileX, worldMapState.scroll.minX, worldMapState.scroll.maxX);
+		mission.iTranspEntryTileX[iPlayer] = (UWORD)(worldMapState.scroll.minX + EDGE_SIZE);
 	}
 
-	if ((iEntryTileY > scrollMinY) && (iEntryTileY < scrollMaxY))
+	if ((iEntryTileY > worldMapState.scroll.minY) && (iEntryTileY < worldMapState.scroll.maxY))
 	{
 		mission.iTranspEntryTileY[iPlayer] = (UWORD) iEntryTileY;
 	}
 	else
 	{
-		debug(LOG_SAVE, "entry point y %i outside scroll limits %i->%i", iEntryTileY, scrollMinY, scrollMaxY);
-		mission.iTranspEntryTileY[iPlayer] = (UWORD)(scrollMinY + EDGE_SIZE);
+		debug(LOG_SAVE, "entry point y %i outside scroll limits %i->%i", iEntryTileY, worldMapState.scroll.minY, worldMapState.scroll.maxY);
+		mission.iTranspEntryTileY[iPlayer] = (UWORD)(worldMapState.scroll.minY + EDGE_SIZE);
 	}
 }
 
@@ -2912,24 +2912,24 @@ void missionSetTransporterExit(SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitTi
 {
 	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "missionSetTransporterExit: player %i too high", iPlayer);
 
-	if ((iExitTileX > scrollMinX) && (iExitTileX < scrollMaxX))
+	if ((iExitTileX > worldMapState.scroll.minX) && (iExitTileX < worldMapState.scroll.maxX))
 	{
 		mission.iTranspExitTileX[iPlayer] = (UWORD) iExitTileX;
 	}
 	else
 	{
-		debug(LOG_SAVE, "entry point x %i outside scroll limits %i->%i", iExitTileX, scrollMinX, scrollMaxX);
-		mission.iTranspExitTileX[iPlayer] = (UWORD)(scrollMinX + EDGE_SIZE);
+		debug(LOG_SAVE, "entry point x %i outside scroll limits %i->%i", iExitTileX, worldMapState.scroll.minX, worldMapState.scroll.maxX);
+		mission.iTranspExitTileX[iPlayer] = (UWORD)(worldMapState.scroll.minX + EDGE_SIZE);
 	}
 
-	if ((iExitTileY > scrollMinY) && (iExitTileY < scrollMaxY))
+	if ((iExitTileY > worldMapState.scroll.minY) && (iExitTileY < worldMapState.scroll.maxY))
 	{
 		mission.iTranspExitTileY[iPlayer] = (UWORD) iExitTileY;
 	}
 	else
 	{
-		debug(LOG_SAVE, "entry point y %i outside scroll limits %i->%i", iExitTileY, scrollMinY, scrollMaxY);
-		mission.iTranspExitTileY[iPlayer] = (UWORD)(scrollMinY + EDGE_SIZE);
+		debug(LOG_SAVE, "entry point y %i outside scroll limits %i->%i", iExitTileY, worldMapState.scroll.minY, worldMapState.scroll.maxY);
+		mission.iTranspExitTileY[iPlayer] = (UWORD)(worldMapState.scroll.minY + EDGE_SIZE);
 	}
 }
 

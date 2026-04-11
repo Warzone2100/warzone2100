@@ -965,7 +965,7 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it's bounced/drifted off the map then kill it */
-	if (map_coord(static_cast<int32_t>(psEffect->position.x)) >= mapWidth || map_coord(static_cast<int32_t>(psEffect->position.z)) >= mapHeight)
+	if (map_coord(static_cast<int32_t>(psEffect->position.x)) >= worldMapState.width || map_coord(static_cast<int32_t>(psEffect->position.z)) >= worldMapState.height)
 	{
 		return false;
 	}

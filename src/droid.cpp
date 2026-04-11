@@ -1095,8 +1095,8 @@ static bool droidNextToStruct(DROID *psDroid, STRUCTURE *psStruct)
 	auto pos = map_coord(psDroid->pos);
 	int minX = std::max(pos.x - 1, 0);
 	int minY = std::max(pos.y - 1, 0);
-	int maxX = std::min(pos.x + 1, mapWidth);
-	int maxY = std::min(pos.y + 1, mapHeight);
+	int maxX = std::min(pos.x + 1, worldMapState.width);
+	int maxY = std::min(pos.y + 1, worldMapState.height);
 	for (int y = minY; y <= maxY; ++y)
 	{
 		for (int x = minX; x <= maxX; ++x)
@@ -2687,11 +2687,11 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 static bool sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
 	// not too near the edges.
-	if ((x < TOO_NEAR_EDGE) || (x > (SDWORD)(mapWidth - TOO_NEAR_EDGE)))
+	if ((x < TOO_NEAR_EDGE) || (x > (SDWORD)(worldMapState.width - TOO_NEAR_EDGE)))
 	{
 		return false;
 	}
-	if ((y < TOO_NEAR_EDGE) || (y > (SDWORD)(mapHeight - TOO_NEAR_EDGE)))
+	if ((y < TOO_NEAR_EDGE) || (y > (SDWORD)(worldMapState.height - TOO_NEAR_EDGE)))
 	{
 		return false;
 	}
@@ -2812,8 +2812,8 @@ bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	UDWORD		passes;
 	Vector3i	origin(world_coord(*x), world_coord(*y), 0);
 
-	ASSERT_OR_RETURN(false, *x < mapWidth, "x coordinate is off-map for pickATileGen");
-	ASSERT_OR_RETURN(false, *y < mapHeight, "y coordinate is off-map for pickATileGen");
+	ASSERT_OR_RETURN(false, *x < worldMapState.width, "x coordinate is off-map for pickATileGen");
+	ASSERT_OR_RETURN(false, *y < worldMapState.height, "y coordinate is off-map for pickATileGen");
 
 	if (function(*x, *y) && ((threatRange <= 0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
 	{
@@ -3870,7 +3870,7 @@ bool droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->isTransporter()
 		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()
-		|| mapHeight == 0)
+		|| worldMapState.height == 0)
 	{
 		// Off world or on a transport or is a transport or in mission list, or on a mission, or no map - ignore
 		return true;

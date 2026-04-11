@@ -262,8 +262,8 @@ bool resizeRadar()
 	{
 		free(radarOverlayBuffer);
 	}
-	radarTexWidth = static_cast<size_t>(std::abs(scrollMaxX - scrollMinX));
-	radarTexHeight = static_cast<size_t>(std::abs(scrollMaxY - scrollMinY));
+	radarTexWidth = static_cast<size_t>(std::abs(worldMapState.scroll.maxX - worldMapState.scroll.minX));
+	radarTexHeight = static_cast<size_t>(std::abs(worldMapState.scroll.maxY - worldMapState.scroll.minY));
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
 	radarBitmap.allocate(radarTexWidth, radarTexHeight, 4, true);
 	radarOverlayBuffer = (uint32_t*)malloc(radarBufferSize);
@@ -346,17 +346,17 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 	sPosX = static_cast<int>(pos.x / pixSizeH);	// adjust for pixel size
 	sPosY = static_cast<int>(pos.y / pixSizeV);
-	sPosX += scrollMinX;		// adjust for scroll limits
-	sPosY += scrollMinY;
+	sPosX += worldMapState.scroll.minX;		// adjust for scroll limits
+	sPosY += worldMapState.scroll.minY;
 
 #if REALLY_DEBUG_RADAR
 	debug(LOG_ERROR, "m=(%d,%d) radar=(%d,%d) pos(%d,%d), scroll=(%u-%u,%u-%u) sPos=(%d,%d), pixSize=(%f,%f)",
-	      mX, mY, radarX, radarY, posX, posY, scrollMinX, scrollMaxX, scrollMinY, scrollMaxY, sPosX, sPosY, pixSizeH, pixSizeV);
+	      mX, mY, radarX, radarY, posX, posY, worldMapState.scroll.minX, worldMapState.scroll.maxX, worldMapState.scroll.minY, worldMapState.scroll.maxY, sPosX, sPosY, pixSizeH, pixSizeV);
 #endif
 
 	// old safety code -- still necessary?
-	sPosX = clip<int>(sPosX, scrollMinX, scrollMaxX -1);
-	sPosY = clip<int>(sPosY, scrollMinY, scrollMaxY -1);
+	sPosX = clip<int>(sPosX, worldMapState.scroll.minX, worldMapState.scroll.maxX -1);
+	sPosY = clip<int>(sPosY, worldMapState.scroll.minY, worldMapState.scroll.maxY -1);
 
 	*PosX = sPosX;
 	*PosY = sPosY;
@@ -501,15 +501,15 @@ static void DrawRadarTiles()
 	size_t radarBufferSize2 = radarBitmap.size_in_bytes();
 	unsigned char* pRaderBuffer = radarBitmap.bmp_w();
 
-	for (x = scrollMinX; x < scrollMaxX; x++)
+	for (x = worldMapState.scroll.minX; x < worldMapState.scroll.maxX; x++)
 	{
-		for (y = scrollMinY; y < scrollMaxY; y++)
+		for (y = worldMapState.scroll.minY; y < worldMapState.scroll.maxY; y++)
 		{
 			MAPTILE	*psTile = mapTile(x, y);
-			size_t pixelStartPos = (radarTexWidth * (y - scrollMinY) + (x - scrollMinX)) * 4;
+			size_t pixelStartPos = (radarTexWidth * (y - worldMapState.scroll.minY) + (x - worldMapState.scroll.minX)) * 4;
 
 			ASSERT(pixelStartPos < radarBufferSize2, "Buffer overrun");
-			if (y == scrollMinY || x == scrollMinX || y == scrollMaxY - 1 || x == scrollMaxX - 1)
+			if (y == worldMapState.scroll.minY || x == worldMapState.scroll.minX || y == worldMapState.scroll.maxY - 1 || x == worldMapState.scroll.maxX - 1)
 			{
 				pRaderBuffer[pixelStartPos] = WZCOL_BLACK.byte.r;
 				pRaderBuffer[pixelStartPos + 1] = WZCOL_BLACK.byte.g;
@@ -563,8 +563,8 @@ static void DrawRadarObjects()
 		/* Go through all droids */
 		for (const DROID* psDroid : apsDroidLists[clan])
 		{
-			if (psDroid->pos.x < world_coord(scrollMinX) || psDroid->pos.y < world_coord(scrollMinY)
-			    || psDroid->pos.x >= world_coord(scrollMaxX) || psDroid->pos.y >= world_coord(scrollMaxY))
+			if (psDroid->pos.x < world_coord(worldMapState.scroll.minX) || psDroid->pos.y < world_coord(worldMapState.scroll.minY)
+			    || psDroid->pos.x >= world_coord(worldMapState.scroll.maxX) || psDroid->pos.y >= world_coord(worldMapState.scroll.maxY))
 			{
 				continue;
 			}
@@ -574,7 +574,7 @@ static void DrawRadarObjects()
 			{
 				int	x = psDroid->pos.x / TILE_UNITS;
 				int	y = psDroid->pos.y / TILE_UNITS;
-				size_t	pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
+				size_t	pos = (x - worldMapState.scroll.minX) + (y - worldMapState.scroll.minY) * radarTexWidth;
 
 				ASSERT(pos * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
@@ -596,13 +596,13 @@ static void DrawRadarObjects()
 	}
 
 	/* Do the same for structures */
-	for (SDWORD x = scrollMinX; x < scrollMaxX; x++)
+	for (SDWORD x = worldMapState.scroll.minX; x < worldMapState.scroll.maxX; x++)
 	{
-		for (SDWORD y = scrollMinY; y < scrollMaxY; y++)
+		for (SDWORD y = worldMapState.scroll.minY; y < worldMapState.scroll.maxY; y++)
 		{
 			MAPTILE		*psTile = mapTile(x, y);
 			STRUCTURE	*psStruct;
-			size_t		pos = (x - scrollMinX) + (y - scrollMinY) * radarTexWidth;
+			size_t		pos = (x - worldMapState.scroll.minX) + (y - worldMapState.scroll.minY) * radarTexWidth;
 
 			ASSERT(pos * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
 			if (!TileHasStructure(psTile))
@@ -758,8 +758,8 @@ static void setViewingWindow()
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = static_cast<int>(x - scrollMinX * pixSizeH);
-	centre.y = static_cast<int>(y - scrollMinY * pixSizeV);
+	centre.x = static_cast<int>(x - worldMapState.scroll.minX * pixSizeH);
+	centre.y = static_cast<int>(y - worldMapState.scroll.minY * pixSizeV);
 
 	RotateVector2D(v, tv, &centre, playerPos.r.y, 4);
 

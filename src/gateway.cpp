@@ -43,12 +43,12 @@ static void gwFreeGateway(GATEWAY *psDel);
 // get the size of the map
 static SDWORD gwMapWidth()
 {
-	return (SDWORD)mapWidth;
+	return (SDWORD)worldMapState.width;
 }
 
 static SDWORD gwMapHeight()
 {
-	return (SDWORD)mapHeight;
+	return (SDWORD)worldMapState.height;
 }
 
 // set the gateway flag on a tile
@@ -115,8 +115,8 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	// Initialise the gateway, correct out-of-map gateways
 	psNew->x1 = MAX(3, x1);
 	psNew->y1 = MAX(3, y1);
-	psNew->x2 = MIN(x2, mapWidth - 4);
-	psNew->y2 = MIN(y2, mapHeight - 4);
+	psNew->x2 = MIN(x2, worldMapState.width - 4);
+	psNew->y2 = MIN(y2, worldMapState.height - 4);
 
 	// add the gateway to the list
 	psGateways.push_back(psNew);
@@ -158,7 +158,7 @@ static void gwFreeGateway(GATEWAY *psDel)
 {
 	int pos;
 
-	if (psMapTiles) // this lines fixes the bug where we were closing the gateways after freeing the map
+	if (worldMapState.tiles) // this lines fixes the bug where we were closing the gateways after freeing the map
 	{
 		// clear the map flags
 		if (psDel->x1 == psDel->x2)

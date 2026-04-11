@@ -1531,13 +1531,13 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		y = (y & ~TILE_MASK) + size.y % 2 * TILE_UNITS / 2;
 
 		//check not trying to build too near the edge
-		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
+		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (worldMapState.width - TOO_NEAR_EDGE))
 		{
 			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
 			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return nullptr;
 		}
-		if (map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
+		if (map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > (worldMapState.height - TOO_NEAR_EDGE))
 		{
 			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
 			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
@@ -1735,15 +1735,15 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (FromSave && player == selectedPlayer && missionLimboExpand())
 		{
 			//save the current values
-			preScrollMinX = scrollMinX;
-			preScrollMinY = scrollMinY;
-			preScrollMaxX = scrollMaxX;
-			preScrollMaxY = scrollMaxY;
+			preScrollMinX = worldMapState.scroll.minX;
+			preScrollMinY = worldMapState.scroll.minY;
+			preScrollMaxX = worldMapState.scroll.maxX;
+			preScrollMaxY = worldMapState.scroll.maxY;
 			//set the current values to mapWidth/mapHeight
-			scrollMinX = 0;
-			scrollMinY = 0;
-			scrollMaxX = mapWidth;
-			scrollMaxY = mapHeight;
+			worldMapState.scroll.minX = 0;
+			worldMapState.scroll.minY = 0;
+			worldMapState.scroll.maxX = worldMapState.width;
+			worldMapState.scroll.maxY = worldMapState.height;
 			// NOTE: resizeRadar() may be required here, since we change scroll limits?
 		}
 		//set the functionality dependent on the type of structure
@@ -1755,10 +1755,10 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			if (FromSave && player == selectedPlayer && missionLimboExpand())
 			{
 				//reset the current values
-				scrollMinX = preScrollMinX;
-				scrollMinY = preScrollMinY;
-				scrollMaxX = preScrollMaxX;
-				scrollMaxY = preScrollMaxY;
+				worldMapState.scroll.minX = preScrollMinX;
+				worldMapState.scroll.minY = preScrollMinY;
+				worldMapState.scroll.maxX = preScrollMaxX;
+				worldMapState.scroll.maxY = preScrollMaxY;
 				// NOTE: resizeRadar() may be required here, since we change scroll limits?
 			}
 			return nullptr;
@@ -1768,10 +1768,10 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (FromSave && player == selectedPlayer && missionLimboExpand())
 		{
 			//reset the current values
-			scrollMinX = preScrollMinX;
-			scrollMinY = preScrollMinY;
-			scrollMaxX = preScrollMaxX;
-			scrollMaxY = preScrollMaxY;
+			worldMapState.scroll.minX = preScrollMinX;
+			worldMapState.scroll.minY = preScrollMinY;
+			worldMapState.scroll.maxX = preScrollMaxX;
+			worldMapState.scroll.maxY = preScrollMaxY;
 			// NOTE: resizeRadar() may be required here, since we change scroll limits?
 		}
 
@@ -2488,9 +2488,9 @@ bool placeDroid(STRUCTURE *psStructure, const DROID_TEMPLATE * psTempl, UDWORD *
 	// Find the four corners of the square
 	StructureBounds bounds = getStructureBounds(psStructure);
 	int xmin = std::max(bounds.map.x - 1, 0);
-	int xmax = std::min(bounds.map.x + bounds.size.x, mapWidth);
+	int xmax = std::min(bounds.map.x + bounds.size.x, worldMapState.width);
 	int ymin = std::max(bounds.map.y - 1, 0);
-	int ymax = std::min(bounds.map.y + bounds.size.y, mapHeight);
+	int ymax = std::min(bounds.map.y + bounds.size.y, worldMapState.height);
 
 	// Round direction to nearest 90°.
 	uint16_t direction = snapDirection(psStructure->rot.direction);
@@ -4278,8 +4278,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	StructureBounds b = getStructureBounds(psStats, pos, direction);
 
 	//make sure we are not too near map edge and not going to go over it
-	if (b.map.x < scrollMinX + TOO_NEAR_EDGE || b.map.x + b.size.x > scrollMaxX - TOO_NEAR_EDGE ||
-	    b.map.y < scrollMinY + TOO_NEAR_EDGE || b.map.y + b.size.y > scrollMaxY - TOO_NEAR_EDGE)
+	if (b.map.x < worldMapState.scroll.minX + TOO_NEAR_EDGE || b.map.x + b.size.x > worldMapState.scroll.maxX - TOO_NEAR_EDGE ||
+	    b.map.y < worldMapState.scroll.minY + TOO_NEAR_EDGE || b.map.y + b.size.y > worldMapState.scroll.maxY - TOO_NEAR_EDGE)
 	{
 		return false;
 	}
@@ -6069,9 +6069,9 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	ASSERT_OR_RETURN(, losingPlayer < MAX_PLAYERS && rewardPlayer < MAX_PLAYERS, "losingPlayer (%" PRIu8 "), rewardPlayer (%" PRIu8 ") must both be < MAXPLAYERS", losingPlayer, rewardPlayer);
 
 	// share exploration info - pretty useless but perhaps a nice touch?
-	for (int y = 0; y < mapHeight; ++y)
+	for (int y = 0; y < worldMapState.height; ++y)
 	{
-		for (int x = 0; x < mapWidth; ++x)
+		for (int x = 0; x < worldMapState.width; ++x)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 			if (TEST_TILE_VISIBLE(losingPlayer, psTile))

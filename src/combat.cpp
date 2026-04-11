@@ -327,8 +327,8 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
-	CLIP(predict.x, 0, world_coord(mapWidth - 1));
-	CLIP(predict.y, 0, world_coord(mapHeight - 1));
+	CLIP(predict.x, 0, world_coord(worldMapState.width - 1));
+	CLIP(predict.y, 0, world_coord(worldMapState.height - 1));
 
 	proj_SendProjectileAngled(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot, min_angle, fireTime);
 	return true;

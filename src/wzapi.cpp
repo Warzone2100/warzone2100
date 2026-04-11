@@ -1260,8 +1260,8 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 {
 	_x = std::max<int>(_x, 0);
 	_y = std::max<int>(_y, 0);
-	_x = std::min<int>(_x, mapWidth);
-	_y = std::min<int>(_y, mapHeight);
+	_x = std::min<int>(_x, worldMapState.width);
+	_y = std::min<int>(_y, worldMapState.height);
 
 	int player = context.player();
 	int x = world_coord(_x);
@@ -1598,7 +1598,7 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 	int incX, incY, x, y;
 	int maxBlockingTiles = _maxBlockingTiles.value_or(0);
 
-	SCRIPT_ASSERT({}, context, startX >= 0 && startX < mapWidth && startY >= 0 && startY < mapHeight, "Bad position (%d, %d)", startX, startY);
+	SCRIPT_ASSERT({}, context, startX >= 0 && startX < worldMapState.width && startY >= 0 && startY < worldMapState.height, "Bad position (%d, %d)", startX, startY);
 
 	x = startX;
 	y = startY;
@@ -2168,8 +2168,8 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 {
 	SCRIPT_ASSERT(false, context, _x >= 0, "Beacon x value %d is less than zero", _x);
 	SCRIPT_ASSERT(false, context, _y >= 0, "Beacon y value %d is less than zero", _y);
-	SCRIPT_ASSERT(false, context, _x <= mapWidth, "Beacon x value %d is greater than mapWidth %d", _x, (int)mapWidth);
-	SCRIPT_ASSERT(false, context, _y <= mapHeight, "Beacon y value %d is greater than mapHeight %d", _y, (int)mapHeight);
+	SCRIPT_ASSERT(false, context, _x <= worldMapState.width, "Beacon x value %d is greater than mapWidth %d", _x, (int)worldMapState.width);
+	SCRIPT_ASSERT(false, context, _y <= worldMapState.height, "Beacon y value %d is greater than mapHeight %d", _y, (int)worldMapState.height);
 
 	int x = world_coord(_x) + (TILE_UNITS / 2);
 	int y = world_coord(_y) + (TILE_UNITS / 2);
@@ -2421,8 +2421,8 @@ bool wzapi::centreView(WZAPI_PARAMS(int x, int y))
 {
 	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
 	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
-	SCRIPT_ASSERT(false, context, x <= mapWidth, "x value %d is greater than mapWidth %d", x, (int)mapWidth);
-	SCRIPT_ASSERT(false, context, y <= mapHeight, "y value %d is greater than mapHeight %d", y, (int)mapHeight);
+	SCRIPT_ASSERT(false, context, x <= worldMapState.width, "x value %d is greater than mapWidth %d", x, (int)worldMapState.width);
+	SCRIPT_ASSERT(false, context, y <= worldMapState.height, "y value %d is greater than mapHeight %d", y, (int)worldMapState.height);
 	setViewPos(x, y, false);
 	return true;
 }
@@ -2465,8 +2465,8 @@ bool wzapi::emitSound(WZAPI_PARAMS(std::string sound, int x, int y))
 {
 	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
 	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
-	SCRIPT_ASSERT(false, context, x <= mapWidth, "x value %d is greater than mapWidth %d", x, (int)mapWidth);
-	SCRIPT_ASSERT(false, context, y <= mapHeight, "y value %d is greater than mapHeight %d", y, (int)mapHeight);
+	SCRIPT_ASSERT(false, context, x <= worldMapState.width, "x value %d is greater than mapWidth %d", x, (int)worldMapState.width);
+	SCRIPT_ASSERT(false, context, y <= worldMapState.height, "y value %d is greater than mapHeight %d", y, (int)worldMapState.height);
 
 	int soundID = audio_GetTrackID(sound.c_str());
 	if (soundID == SAMPLE_NOT_FOUND)
@@ -3099,24 +3099,24 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 
 	SCRIPT_ASSERT({}, context, minX >= 0, "Minimum scroll x value %d is less than zero - ", minX);
 	SCRIPT_ASSERT({}, context, minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
-	SCRIPT_ASSERT({}, context, maxX <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)mapWidth);
-	SCRIPT_ASSERT({}, context, maxY <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)mapHeight);
+	SCRIPT_ASSERT({}, context, maxX <= worldMapState.width, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)worldMapState.width);
+	SCRIPT_ASSERT({}, context, maxY <= worldMapState.height, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)worldMapState.height);
 
-	const int prevMinX = scrollMinX;
-	const int prevMinY = scrollMinY;
-	const int prevMaxX = scrollMaxX;
-	const int prevMaxY = scrollMaxY;
+	const int prevMinX = worldMapState.scroll.minX;
+	const int prevMinY = worldMapState.scroll.minY;
+	const int prevMaxX = worldMapState.scroll.maxX;
+	const int prevMaxY = worldMapState.scroll.maxY;
 
-	scrollMinX = minX;
-	scrollMaxX = maxX;
-	scrollMinY = minY;
-	scrollMaxY = maxY;
+	worldMapState.scroll.minX = minX;
+	worldMapState.scroll.maxX = maxX;
+	worldMapState.scroll.minY = minY;
+	worldMapState.scroll.maxY = maxY;
 
 	// When the scroll limits change midgame - need to redo the lighting
-	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
-	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	initLighting(prevMinX < worldMapState.scroll.minX ? prevMinX : worldMapState.scroll.minX,
+	             prevMinY < worldMapState.scroll.minY ? prevMinY : worldMapState.scroll.minY,
+	             prevMaxX < worldMapState.scroll.maxX ? prevMaxX : worldMapState.scroll.maxX,
+	             prevMaxY < worldMapState.scroll.maxY ? prevMaxY : worldMapState.scroll.maxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -3130,10 +3130,10 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 {
 	scr_area limits;
-	limits.x1 = scrollMinX;
-	limits.y1 = scrollMinY;
-	limits.x2 = scrollMaxX;
-	limits.y2 = scrollMaxY;
+	limits.x1 = worldMapState.scroll.minX;
+	limits.y1 = worldMapState.scroll.minY;
+	limits.x2 = worldMapState.scroll.maxX;
+	limits.y2 = worldMapState.scroll.maxY;
 	return limits;
 }
 
@@ -3341,8 +3341,8 @@ wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, i
 {
 	SCRIPT_ASSERT({}, context, x1 >= 0, "Minimum scroll x value %d is less than zero - ", x1);
 	SCRIPT_ASSERT({}, context, y1 >= 0, "Minimum scroll y value %d is less than zero - ", y1);
-	SCRIPT_ASSERT({}, context, x2 <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)mapWidth);
-	SCRIPT_ASSERT({}, context, y2 <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)mapHeight);
+	SCRIPT_ASSERT({}, context, x2 <= worldMapState.width, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)worldMapState.width);
+	SCRIPT_ASSERT({}, context, y2 <= worldMapState.height, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)worldMapState.height);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Bad player filter value %d", playerFilter);
 
 	if (playerFilter == ALL_PLAYERS)
@@ -4782,10 +4782,10 @@ nlohmann::json wzapi::constructMapTilesArray()
 	//==   * ```hoverContinent``` (For hover type propulsions)
 	//==   * ```limitedContinent``` (For land or sea limited propulsion types)
 	nlohmann::json mapTileArray = nlohmann::json::array();
-	for (SDWORD y = 0; y < mapHeight; y++)
+	for (SDWORD y = 0; y < worldMapState.height; y++)
 	{
 		nlohmann::json mapRow = nlohmann::json::array();
-		for (SDWORD x = 0; x < mapWidth; x++)
+		for (SDWORD x = 0; x < worldMapState.width; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 			nlohmann::json mapTile = nlohmann::json::object();

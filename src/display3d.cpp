@@ -2165,8 +2165,8 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 	blueprints.clear();  // Delete old blueprints and draw new ones.
 
 	if ((buildState == BUILD3D_VALID || buildState == BUILD3D_POS) &&
-	    sBuildDetails.x > 0 && sBuildDetails.x < (int)mapWidth &&
-	    sBuildDetails.y > 0 && sBuildDetails.y < (int)mapHeight)
+	    sBuildDetails.x > 0 && sBuildDetails.x < (int)worldMapState.width &&
+	    sBuildDetails.y > 0 && sBuildDetails.y < (int)worldMapState.height)
 	{
 		STRUCT_STATES state;
 		if (buildState == BUILD3D_VALID)
@@ -2470,7 +2470,7 @@ Vector2i getPlayerPos()
 /// Set the player position
 void setPlayerPos(SDWORD x, SDWORD y)
 {
-	ASSERT(x >= 0 && x < world_coord(mapWidth) && y >= 0 && y < world_coord(mapHeight), "Position off map");
+	ASSERT(x >= 0 && x < world_coord(worldMapState.width) && y >= 0 && y < world_coord(worldMapState.height), "Position off map");
 	playerPos.p.x = x;
 	playerPos.p.z = y;
 	playerPos.r.z = 0;
@@ -4009,17 +4009,17 @@ void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tile
 					{
 						outMousePos.x = 0;
 					}
-					else if (outMousePos.x > world_coord(mapWidth - 1))
+					else if (outMousePos.x > world_coord(worldMapState.width - 1))
 					{
-						outMousePos.x = world_coord(mapWidth - 1);
+						outMousePos.x = world_coord(worldMapState.width - 1);
 					}
 					if (outMousePos.y < 0)
 					{
 						outMousePos.y = 0;
 					}
-					else if (outMousePos.y > world_coord(mapHeight - 1))
+					else if (outMousePos.y > world_coord(worldMapState.height - 1))
 					{
-						outMousePos.y = world_coord(mapHeight - 1);
+						outMousePos.y = world_coord(worldMapState.height - 1);
 					}
 					tileX = map_coord(outMousePos.x);
 					tileY = map_coord(outMousePos.y);

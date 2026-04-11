@@ -2760,7 +2760,7 @@ void moveToRearm(DROID *psDroid)
 // whether a tile is suitable for a vtol to land on
 static bool vtolLandingTile(SDWORD x, SDWORD y)
 {
-	if (x < 0 || x >= (SDWORD)mapWidth || y < 0 || y >= (SDWORD)mapHeight)
+	if (x < 0 || x >= (SDWORD)worldMapState.width || y < 0 || y >= (SDWORD)worldMapState.height)
 	{
 		return false;
 	}

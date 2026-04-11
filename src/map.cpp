@@ -39,6 +39,7 @@
 #include "projectile.h"
 #include "display3d.h"
 #include "game.h"
+#include "world_map_state.h"
 #include "texture.h"
 #include "advvis.h"
 #include "random.h"
@@ -69,8 +70,7 @@ static int bucketcounter;
 static UDWORD lastDangerUpdate = 0;
 static int lastDangerPlayer = -1;
 
-//scroll min and max values
-SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
+WorldMapState worldMapState;
 
 //For saves to determine if loading the terrain type override should occur
 bool builtInMap;
@@ -109,12 +109,6 @@ struct GATEWAY_SAVE
 // Maximum expected return value from get height
 #define	MAX_HEIGHT			(256 * ELEVATION_SCALE)
 
-/* The size and contents of the map */
-SDWORD	mapWidth = 0, mapHeight = 0;
-std::unique_ptr<MAPTILE[]> psMapTiles;
-std::unique_ptr<uint8_t[]> psBlockMap[AUX_MAX];
-std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
-
 #define WATER_MIN_DEPTH 500
 #define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 400)
 
@@ -146,10 +140,10 @@ void syncLogDumpAuxMaps()
 	for (int auxIdx = 0; auxIdx < MAX_PLAYERS + AUX_MAX; auxIdx++)
 	{
 		syncDebug("psAuxMap[%d]:", auxIdx);
-		for (int y = 0; y < mapHeight; ++y)
+		for (int y = 0; y < worldMapState.height; ++y)
 		{
 			std::string rowDetails;
-			for (int x = 0; x < mapWidth; ++x)
+			for (int x = 0; x < worldMapState.width; ++x)
 			{
 				auto val = auxTile(x, y, auxIdx);
 				rowDetails += std::to_string(val) + ",";
@@ -161,10 +155,10 @@ void syncLogDumpAuxMaps()
 	for (int idx = 0; idx < AUX_MAX; idx++)
 	{
 		syncDebug("psBlockMap[%d]:", idx);
-		for (int y = 0; y < mapHeight; ++y)
+		for (int y = 0; y < worldMapState.height; ++y)
 		{
 			std::string rowDetails;
-			for (int x = 0; x < mapWidth; ++x)
+			for (int x = 0; x < worldMapState.width; ++x)
 			{
 				auto val = blockTile(x, y, idx);
 				rowDetails += std::to_string(val) + ",";
@@ -563,7 +557,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	int a, b, best;
 	MAPTILE *psTile;
 
-	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
+	if (x < 0 || y < 0 || x >= worldMapState.width || y >= worldMapState.height)
 	{
 		return 0; // just return the first ground type
 	}
@@ -573,7 +567,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			if (x + i - 1 < 0 || y + j - 1 < 0 || x + i - 1 >= mapWidth || y + j - 1 >= mapHeight)
+			if (x + i - 1 < 0 || y + j - 1 < 0 || x + i - 1 >= worldMapState.width || y + j - 1 >= worldMapState.height)
 			{
 				psTile = nullptr;
 				tile = 0;
@@ -708,9 +702,9 @@ static bool hasDecals(int i, int j)
 // Sets the ground type to be a decal or not
 static bool mapSetGroundTypes()
 {
-	for (int j = 0; j < mapHeight; j++)
+	for (int j = 0; j < worldMapState.height; j++)
 	{
-		for (int i = 0; i < mapWidth; i++)
+		for (int i = 0; i < worldMapState.width; i++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 
@@ -745,7 +739,7 @@ bool mapReloadGroundTypes()
 
 static bool isWaterVertex(int x, int y)
 {
-	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+	if (x < 1 || y < 1 || x > worldMapState.width - 1 || y > worldMapState.height - 1)
 	{
 		return false;
 	}
@@ -757,17 +751,17 @@ static void generateRiverbed()
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.
 	int maxIdx = 1;
-	ASSERT_OR_RETURN(, mapWidth > 0 && mapHeight > 0, "Invalid map width or height (%d x %d)", mapWidth, mapHeight);
-	std::vector<int> idx(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight), 0);
+	ASSERT_OR_RETURN(, worldMapState.width > 0 && worldMapState.height > 0, "Invalid map width or height (%d x %d)", worldMapState.width, worldMapState.height);
+	std::vector<int> idx(static_cast<size_t>(worldMapState.width) * static_cast<size_t>(worldMapState.height), 0);
 	int x, y, l = 0;
 
-	for (y = 0; y < mapHeight; y++)
+	for (y = 0; y < worldMapState.height; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 0; x < worldMapState.width; x++)
 		{
 			// initially set the seabed index to 0 for ground and 100 for water
 			int val = 100 * isWaterVertex(x, y);
-			idx[x + (y * mapWidth)] = val;
+			idx[x + (y * worldMapState.width)] = val;
 			if (val > 0)
 			{
 				l++;
@@ -783,15 +777,15 @@ static void generateRiverbed()
 	do
 	{
 		maxIdx = 1;
-		for (y = 1; y < mapHeight - 2; y++)
+		for (y = 1; y < worldMapState.height - 2; y++)
 		{
-			for (x = 1; x < mapWidth - 2; x++)
+			for (x = 1; x < worldMapState.width - 2; x++)
 			{
-				int rowOffset = (y * mapWidth);
+				int rowOffset = (y * worldMapState.width);
 				auto& idxVal = idx[x + rowOffset];
 				if (idxVal > 0)
 				{
-					idxVal = (idx[(x - 1) + rowOffset] + idx[x + ((y - 1) * mapWidth)] + idx[x + ((y + 1) * mapWidth)] + idx[(x + 1) + rowOffset]) / 4;
+					idxVal = (idx[(x - 1) + rowOffset] + idx[x + ((y - 1) * worldMapState.width)] + idx[x + ((y + 1) * worldMapState.width)] + idx[(x + 1) + rowOffset]) / 4;
 					if (idxVal > maxIdx)
 					{
 						maxIdx = idxVal;
@@ -804,11 +798,11 @@ static void generateRiverbed()
 	}
 	while (maxIdx > 90 && l < 20);
 
-	for (y = 0; y < mapHeight; y++)
+	for (y = 0; y < worldMapState.height; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 0; x < worldMapState.width; x++)
 		{
-			auto& idxVal = idx[x + (y * mapWidth)];
+			auto& idxVal = idx[x + (y * worldMapState.width)];
 			if (idxVal > maxIdx)
 			{
 				idxVal = maxIdx;
@@ -1064,15 +1058,15 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	height = loadedMap->height;
 
 	/* See if this is the first time a map has been loaded */
-	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
+	ASSERT(worldMapState.tiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
+	worldMapState.tiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
 	getCurrentLightmapData().reset(width, height);
-	ASSERT(psMapTiles != nullptr, "Out of memory");
+	ASSERT(worldMapState.tiles != nullptr, "Out of memory");
 
-	mapWidth = width;
-	mapHeight = height;
+	worldMapState.width = width;
+	worldMapState.height = height;
 
 	// FIXME: the map preview code loads the map without setting the tileset
 	if (!tilesetDir)
@@ -1097,19 +1091,19 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 	//load in the map data itself
 
 	/* Load in the map data */
-	for (int i = 0; i < mapWidth * mapHeight; ++i)
+	for (int i = 0; i < worldMapState.width * worldMapState.height; ++i)
 	{
 		ASSERT(loadedMap->mMapTiles[i].height <= TILE_MAX_HEIGHT, "Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", loadedMap->mMapTiles[i].height, static_cast<size_t>(TILE_MAX_HEIGHT));
-		psMapTiles[i].texture = loadedMap->mMapTiles[i].texture;
-		psMapTiles[i].height = loadedMap->mMapTiles[i].height;
+		worldMapState.tiles[i].texture = loadedMap->mMapTiles[i].texture;
+		worldMapState.tiles[i].height = loadedMap->mMapTiles[i].height;
 
 		// Visibility stuff
-		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
-		memset(psMapTiles[i].sensors, 0, sizeof(psMapTiles[i].sensors));
-		memset(psMapTiles[i].jammers, 0, sizeof(psMapTiles[i].jammers));
-		psMapTiles[i].sensorBits = 0;
-		psMapTiles[i].jammerBits = 0;
-		psMapTiles[i].tileExploredBits = 0;
+		memset(worldMapState.tiles[i].watchers, 0, sizeof(worldMapState.tiles[i].watchers));
+		memset(worldMapState.tiles[i].sensors, 0, sizeof(worldMapState.tiles[i].sensors));
+		memset(worldMapState.tiles[i].jammers, 0, sizeof(worldMapState.tiles[i].jammers));
+		worldMapState.tiles[i].sensorBits = 0;
+		worldMapState.tiles[i].jammerBits = 0;
+		worldMapState.tiles[i].tileExploredBits = 0;
 	}
 
 	if (preview)
@@ -1143,9 +1137,9 @@ static bool afterMapLoad()
 		return false;
 	}
 
-	for (int y = 0; y < mapHeight; ++y)
+	for (int y = 0; y < worldMapState.height; ++y)
 	{
-		for (int x = 0; x < mapWidth; ++x)
+		for (int x = 0; x < worldMapState.width; ++x)
 		{
 			// FIXME: magic number
 			mapTile(x, y)->waterLevel = mapTile(x, y)->height - world_coord(1) / 3;
@@ -1154,25 +1148,25 @@ static bool afterMapLoad()
 	generateRiverbed();
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
-	scrollMinX = scrollMinY = 0;
-	scrollMaxX = mapWidth;
-	scrollMaxY = mapHeight;
+	worldMapState.scroll.minX = worldMapState.scroll.minY = 0;
+	worldMapState.scroll.maxX = worldMapState.width;
+	worldMapState.scroll.maxY = worldMapState.height;
 
 	/* Allocate aux maps */
-	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
-	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
-	psBlockMap[AUX_MAP] = std::make_unique<uint8_t[]>(mapSize);
-	psBlockMap[AUX_ASTARMAP] =  std::make_unique<uint8_t[]>(mapSize);
-	psBlockMap[AUX_DANGERMAP] = std::make_unique<uint8_t[]>(mapSize);
+	ASSERT(worldMapState.width >= 0 && worldMapState.height >= 0, "Invalid mapWidth or mapHeight (%d x %d)", worldMapState.width, worldMapState.height);
+	const size_t mapSize = static_cast<size_t>(worldMapState.width) * static_cast<size_t>(worldMapState.height);
+	worldMapState.blockMap[AUX_MAP] = std::make_unique<uint8_t[]>(mapSize);
+	worldMapState.blockMap[AUX_ASTARMAP] =  std::make_unique<uint8_t[]>(mapSize);
+	worldMapState.blockMap[AUX_DANGERMAP] = std::make_unique<uint8_t[]>(mapSize);
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = std::make_unique<uint8_t[]> (mapSize);
+		worldMapState.auxMap[x] = std::make_unique<uint8_t[]> (mapSize);
 	}
 
 	// Set our blocking bits
-	for (int y = 0; y < mapHeight; ++y)
+	for (int y = 0; y < worldMapState.height; ++y)
 	{
-		for (int x = 0; x < mapWidth; ++x)
+		for (int x = 0; x < worldMapState.width; ++x)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1180,7 +1174,7 @@ static bool afterMapLoad()
 			auxClearAll(x, y, AUXBITS_ALL);
 
 			/* All tiles outside of the map and on map border are blocking. */
-			if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+			if (x < 1 || y < 1 || x > worldMapState.width - 1 || y > worldMapState.height - 1)
 			{
 				auxSetBlocking(x, y, AUXBITS_ALL);	// block everything
 			}
@@ -1208,8 +1202,8 @@ static bool afterMapLoad()
 /* Save the map data */
 bool mapSaveToWzMapData(WzMap::MapData& output)
 {
-	output.width = mapWidth;
-	output.height = mapHeight;
+	output.width = worldMapState.width;
+	output.height = worldMapState.height;
 
 	// Write out the map tile data
 	uint32_t numMapTiles = output.width * output.height;
@@ -1218,14 +1212,14 @@ bool mapSaveToWzMapData(WzMap::MapData& output)
 	for (uint32_t i = 0; i < numMapTiles; i++)
 	{
 		WzMap::MapData::MapTile mapDataTile = {};
-		mapDataTile.texture = psMapTiles[i].texture;
-		if (terrainType(&psMapTiles[i]) == TER_WATER)
+		mapDataTile.texture = worldMapState.tiles[i].texture;
+		if (terrainType(&worldMapState.tiles[i]) == TER_WATER)
 		{
-			mapDataTile.height = (psMapTiles[i].waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
+			mapDataTile.height = (worldMapState.tiles[i].waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
 		}
 		else
 		{
-			mapDataTile.height = psMapTiles[i].height;
+			mapDataTile.height = worldMapState.tiles[i].height;
 		}
 		output.mMapTiles.push_back(std::move(mapDataTile));
 	}
@@ -1242,7 +1236,7 @@ bool mapSaveToWzMapData(WzMap::MapData& output)
 		gw.y2 = psCurrGate->y2;
 		ASSERT(gw.x1 == gw.x2 || gw.y1 == gw.y2, "Invalid gateway coordinates (%d, %d, %d, %d)",
 			   gw.x1, gw.y1, gw.x2, gw.y2);
-		ASSERT(gw.x1 < mapWidth && gw.y1 < mapHeight && gw.x2 < mapWidth && gw.y2 < mapHeight,
+		ASSERT(gw.x1 < worldMapState.width && gw.y1 < worldMapState.height && gw.x2 < worldMapState.width && gw.y2 < worldMapState.height,
 			   "Bad gateway dimensions for savegame");
 		output.mGateways.push_back(std::move(gw));
 	}
@@ -1269,21 +1263,21 @@ bool mapShutdown()
 	}
 
 	mapDecals = nullptr;
-	psBlockMap[AUX_MAP] = nullptr;
-	psBlockMap[AUX_ASTARMAP] = nullptr;
+	worldMapState.blockMap[AUX_MAP] = nullptr;
+	worldMapState.blockMap[AUX_ASTARMAP] = nullptr;
 	free(floodbucket);
-	psBlockMap[AUX_DANGERMAP] = nullptr;
+	worldMapState.blockMap[AUX_DANGERMAP] = nullptr;
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
-		psAuxMap[x].reset();
+		worldMapState.auxMap[x].reset();
 	}
 
 	map = nullptr;
 	floodbucket = nullptr;
 	groundTypes.clear();
 	mapDecals = nullptr;
-	psMapTiles = nullptr;
-	mapWidth = mapHeight = 0;
+	worldMapState.tiles = nullptr;
+	worldMapState.width = worldMapState.height = 0;
 	numTile_names = 0;
 	Tile_names = nullptr;
 	if (tilesetDir)
@@ -1413,7 +1407,7 @@ bool map_Intersect(int *Cx, int *Cy, int *Vx, int *Vy, int *Sx, int *Sy)
 	ASSERT(*Cy >= world_coord(tileY) && *Cy <= world_coord(tileY + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
 	ASSERT(*Vx >= world_coord(tileX) && *Vx <= world_coord(tileX + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
 	ASSERT(*Vy >= world_coord(tileY) && *Vy <= world_coord(tileY + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
-	ASSERT(tileX >= 0 && tileY >= 0 && tileX < mapWidth && tileY < mapHeight, "map_Intersect(): map Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
+	ASSERT(tileX >= 0 && tileY >= 0 && tileX < worldMapState.width && tileY < worldMapState.height, "map_Intersect(): map Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
 
 	//calculate midway line intersection points
 	if (((map_coord(itx) == tileX) == (map_coord(ily) == tileY)) && ((map_coord(ibx) == tileX) == (map_coord(iry) == tileY)))
@@ -1578,7 +1572,7 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 			src = rotateWorldQuadrant(src, -2) + Vector3i(0, -TILE_UNITS, 0);
 			dst = rotateWorldQuadrant(dst, -2) + Vector3i(0, -TILE_UNITS, 0);
 
-			if (tile.x < 0 || tile.x >= mapWidth || tile.y < 0 || tile.y >= mapHeight)
+			if (tile.x < 0 || tile.x >= worldMapState.width || tile.y < 0 || tile.y >= worldMapState.height)
 			{
 				// Intersect edge of map.
 				return (int64_t)tMax * numer[firstIntersection] / denom[firstIntersection];
@@ -1617,14 +1611,14 @@ extern int32_t map_Height(int x, int y)
 
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
-	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
-	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
+	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d", map_coord(x), map_coord(y), worldMapState.width, worldMapState.height);
+	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d", map_coord(x), map_coord(y), worldMapState.width, worldMapState.height);
 	x = MAX(x, 0);
 	y = MAX(y, 0);
-	ASSERT(x < world_coord(mapWidth) + TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
-	ASSERT(y < world_coord(mapHeight) + TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
-	x = MIN(x, world_coord(mapWidth) - 1);
-	y = MIN(y, world_coord(mapHeight) - 1);
+	ASSERT(x < world_coord(worldMapState.width) + TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d", map_coord(x), map_coord(y), worldMapState.width, worldMapState.height);
+	ASSERT(y < world_coord(worldMapState.height) + TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d", map_coord(x), map_coord(y), worldMapState.width, worldMapState.height);
+	x = MIN(x, world_coord(worldMapState.width) - 1);
+	y = MIN(y, world_coord(worldMapState.height) - 1);
 
 	// on which tile are these coords?
 	tileX = map_coord(x);
@@ -1711,15 +1705,15 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj)
 {
 	// min is used to make sure we don't go over array bounds!
 	// TODO Using the corner of the map instead doesn't make sense. Fix this...
-	const int mapsize = mapWidth * mapHeight - 1;
+	const int mapsize = worldMapState.width * worldMapState.height - 1;
 	const int tileX = map_coord(psObj->pos.x);
 	const int tileY = map_coord(psObj->pos.y);
-	const int tileYOffset1 = (tileY * mapWidth);
-	const int tileYOffset2 = ((tileY + 1) * mapWidth);
-	const int h1 = psMapTiles[MIN(mapsize, tileYOffset1 + tileX)    ].height;
-	const int h2 = psMapTiles[MIN(mapsize, tileYOffset1 + tileX + 1)].height;
-	const int h3 = psMapTiles[MIN(mapsize, tileYOffset2 + tileX)    ].height;
-	const int h4 = psMapTiles[MIN(mapsize, tileYOffset2 + tileX + 1)].height;
+	const int tileYOffset1 = (tileY * worldMapState.width);
+	const int tileYOffset2 = ((tileY + 1) * worldMapState.width);
+	const int h1 = worldMapState.tiles[MIN(mapsize, tileYOffset1 + tileX)    ].height;
+	const int h2 = worldMapState.tiles[MIN(mapsize, tileYOffset1 + tileX + 1)].height;
+	const int h3 = worldMapState.tiles[MIN(mapsize, tileYOffset2 + tileX)    ].height;
+	const int h4 = worldMapState.tiles[MIN(mapsize, tileYOffset2 + tileX + 1)].height;
 
 	/* trivial test above */
 	if (psObj->pos.z > h1 && psObj->pos.z > h2 && psObj->pos.z > h3 && psObj->pos.z > h4)
@@ -1789,9 +1783,9 @@ bool writeVisibilityData(const char *fileName)
 
 	for (unsigned plane = 0; plane < planes; ++plane)
 	{
-		for (i = 0; i < mapWidth * mapHeight; ++i)
+		for (i = 0; i < worldMapState.width * worldMapState.height; ++i)
 		{
-			if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits >> (plane * 8)))
+			if (!PHYSFS_writeUBE8(fileHandle, worldMapState.tiles[i].tileExploredBits >> (plane * 8)))
 			{
 				debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, WZ_PHYSFS_getLastError());
 				PHYSFS_close(fileHandle);
@@ -1848,7 +1842,7 @@ bool readVisibilityData(const char *fileName)
 	int planes = (game.maxPlayers + 7) / 8;
 
 	// Validate the filesize
-	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * planes;
+	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + worldMapState.width * worldMapState.height * planes;
 	fileSize = PHYSFS_fileLength(fileHandle);
 	if (fileSize != expectedFileSize)
 	{
@@ -1859,13 +1853,13 @@ bool readVisibilityData(const char *fileName)
 	}
 
 	// For every tile...
-	for (i = 0; i < mapWidth * mapHeight; i++)
+	for (i = 0; i < worldMapState.width * worldMapState.height; i++)
 	{
-		psMapTiles[i].tileExploredBits = 0;
+		worldMapState.tiles[i].tileExploredBits = 0;
 	}
 	for (unsigned plane = 0; plane < planes; ++plane)
 	{
-		for (i = 0; i < mapWidth * mapHeight; i++)
+		for (i = 0; i < worldMapState.width * worldMapState.height; i++)
 		{
 			/* Get the visibility data */
 			uint8_t val = 0;
@@ -1875,7 +1869,7 @@ bool readVisibilityData(const char *fileName)
 				PHYSFS_close(fileHandle);
 				return false;
 			}
-			psMapTiles[i].tileExploredBits |= val << (plane * 8);
+			worldMapState.tiles[i].tileExploredBits |= val << (plane * 8);
 		}
 	}
 
@@ -1921,7 +1915,7 @@ static void mapFloodFill(int x, int y, int continent, uint8_t blockedBits, uint1
 			// rely on the fact that all border tiles are inaccessible to avoid checking explicitly
 			Vector2i npos = pos + aDirOffset[i];
 
-			if (npos.x < 1 || npos.y < 1 || npos.x > mapWidth - 2 || npos.y > mapHeight - 2)
+			if (npos.x < 1 || npos.y < 1 || npos.x > worldMapState.width - 2 || npos.y > worldMapState.height - 2)
 			{
 				continue;
 			}
@@ -1941,9 +1935,9 @@ void mapFloodFillContinents()
 	int x, y, limitedContinents = 0, hoverContinents = 0;
 
 	/* Clear continents */
-	for (y = 0; y < mapHeight; y++)
+	for (y = 0; y < worldMapState.height; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 0; x < worldMapState.width; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -1953,9 +1947,9 @@ void mapFloodFillContinents()
 	}
 
 	/* Iterate over the whole map, looking for unset continents */
-	for (y = 1; y < mapHeight - 2; y++)
+	for (y = 1; y < worldMapState.height - 2; y++)
 	{
-		for (x = 1; x < mapWidth - 2; x++)
+		for (x = 1; x < worldMapState.width - 2; x++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -2023,9 +2017,9 @@ static int dangerFloodFill(int player)
 	bool start = true;	// hack to disregard the blocking status of any building exactly on the starting position
 
 	// Set our danger bits
-	for (y = 0; y < mapHeight; y++)
+	for (y = 0; y < worldMapState.height; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 0; x < worldMapState.width; x++)
 		{
 			auxSet(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_DANGER);
 			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_TEMPORARY);
@@ -2120,9 +2114,9 @@ static void threatUpdate(int player)
 	int i, weapon, x, y;
 
 	// Step 1: Clear our threat bits
-	for (y = 0; y < mapHeight; y++)
+	for (y = 0; y < worldMapState.height; y++)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (x = 0; x < worldMapState.width; x++)
 		{
 			auxClear(x, y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT | AUXBITS_AATHREAT);
 		}
@@ -2185,7 +2179,7 @@ void mapInit()
 	int player;
 
 	free(floodbucket);
-	floodbucket = (struct floodtile *)malloc(mapWidth * mapHeight * sizeof(*floodbucket));
+	floodbucket = (struct floodtile *)malloc(worldMapState.width * worldMapState.height * sizeof(*floodbucket));
 
 	lastDangerUpdate = 0;
 	lastDangerPlayer = -1;
@@ -2214,8 +2208,8 @@ void mapUpdate()
 	const uint16_t currentTime = gameTime / GAME_TICKS_PER_UPDATE;
 	int posX, posY;
 
-	for (posY = 0; posY < mapHeight; ++posY)
-		for (posX = 0; posX < mapWidth; ++posX)
+	for (posY = 0; posY < worldMapState.height; ++posY)
+		for (posX = 0; posX < worldMapState.width; ++posX)
 		{
 			MAPTILE *const tile = mapTile(posX, posY);
 

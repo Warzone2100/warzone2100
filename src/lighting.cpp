@@ -63,7 +63,7 @@ void setTheSun(Vector3f newSun)
 	if(oldSun != theSun)
 	{
 		// The sun has changed - must relcalulate lighting
-		initLighting(0, 0, mapWidth, mapHeight);
+		initLighting(0, 0, worldMapState.width, worldMapState.height);
 	}
 }
 
@@ -83,7 +83,7 @@ Vector3f getTheSun()
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
-	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
+	if (x1 > worldMapState.width || x2 > worldMapState.width || y1 > worldMapState.height || y2 > worldMapState.height)
 	{
 		ASSERT(false, "initLighting: coords off edge of map");
 		return;
@@ -96,7 +96,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			MAPTILE	*psTile = mapTile(i, j);
 
 			// always make the edge tiles dark
-			if (i == 0 || j == 0 || i >= mapWidth - 1 || j >= mapHeight - 1)
+			if (i == 0 || j == 0 || i >= worldMapState.width - 1 || j >= worldMapState.height - 1)
 			{
 				psTile->illumination = 16;
 				psTile->ambientOcclusion = 16.0;
@@ -107,8 +107,8 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			}
 			// Basically darkens down the tiles that are outside the scroll
 			// limits - thereby emphasising the cannot-go-there-ness of them
-			if ((SDWORD)i < scrollMinX + 4 || (SDWORD)i > scrollMaxX - 4
-			    || (SDWORD)j < scrollMinY + 4 || (SDWORD)j > scrollMaxY - 4)
+			if ((SDWORD)i < worldMapState.scroll.minX + 4 || (SDWORD)i > worldMapState.scroll.maxX - 4
+			    || (SDWORD)j < worldMapState.scroll.minY + 4 || (SDWORD)j > worldMapState.scroll.maxY - 4)
 			{
 				psTile->illumination /= 3;
 				psTile->ambientOcclusion /= 3;
@@ -214,7 +214,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 
 	// Primitive ambient occlusion calculation.
 	float ao = 0;
-	const int cx = world_coord(tileX), cy = world_coord(tileY), maxX = world_coord(mapWidth), maxY = world_coord(mapHeight);
+	const int cx = world_coord(tileX), cy = world_coord(tileY), maxX = world_coord(worldMapState.width), maxY = world_coord(worldMapState.height);
 	float height = map_Height(clip<int>(cx, 0, maxX), clip<int>(cy, 0, maxY));
 	constexpr float I = 100;
 	constexpr float H = I*0.70710678118654752440f;  // √½
@@ -273,11 +273,11 @@ void rendering1999::LightingManager::ComputeFrameData(const LightingData& data, 
 		/* Clip to grid limits */
 		startX = MAX(startX, 0);
 		endX = MAX(endX, 0);
-		endX = MIN(endX, mapWidth - 1);
+		endX = MIN(endX, worldMapState.width - 1);
 		startX = MIN(startX, endX);
 		startY = MAX(startY, 0);
 		endY = MAX(endY, 0);
-		endY = MIN(endY, mapHeight - 1);
+		endY = MIN(endY, worldMapState.height - 1);
 		startY = MIN(startY, endY);
 
 		for (int i = startX; i <= endX; i++)
@@ -356,7 +356,7 @@ void calcDroidIllumination(DROID *psDroid)
 		psDroid->illumination = UBYTE_MAX;
 		return;
 	}
-	else if (tileX <= 1 || tileX >= mapWidth - 2 || tileY <= 1 || tileY >= mapHeight - 2)
+	else if (tileX <= 1 || tileX >= worldMapState.width - 2 || tileY <= 1 || tileY >= worldMapState.height - 2)
 	{
 		lightVal = mapTile(tileX, tileY)->illumination;
 		lightVal += MIN_DROID_LIGHT_LEVEL;

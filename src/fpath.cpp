@@ -321,13 +321,13 @@ static uint8_t prop2bits(PROPULSION_TYPE propulsion)
 bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int mapIndex, FPATH_MOVETYPE moveType)
 {
 	/* All tiles outside of the map and on map border are blocking. */
-	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+	if (x < 1 || y < 1 || x > worldMapState.width - 1 || y > worldMapState.height - 1)
 	{
 		return true;
 	}
 
 	/* Check scroll limits (used in campaign to partition the map. */
-	if (propulsion != PROPULSION_TYPE_LIFT && (x < scrollMinX + 1 || y < scrollMinY + 1 || x >= scrollMaxX - 1 || y >= scrollMaxY - 1))
+	if (propulsion != PROPULSION_TYPE_LIFT && (x < worldMapState.scroll.minX + 1 || y < worldMapState.scroll.minY + 1 || x >= worldMapState.scroll.maxX - 1 || y >= worldMapState.scroll.maxY - 1))
 	{
 		// coords off map - auto blocking tile
 		return true;

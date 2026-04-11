@@ -326,9 +326,9 @@ void	kf_HalveHeights()
 {
 	MAPTILE	*psTile;
 
-	for (int j = 0; j < mapHeight; ++j)
+	for (int j = 0; j < worldMapState.height; ++j)
 	{
-		for (int i = 0; i < mapWidth; ++i)
+		for (int i = 0; i < worldMapState.width; ++i)
 		{
 			psTile = mapTile(i, j);
 			psTile->height /= 2;
@@ -805,7 +805,7 @@ void	kf_TogglePower()
 /* Recalculates the lighting values for a tile */
 void	kf_RecalcLighting()
 {
-	initLighting(0, 0, mapWidth, mapHeight);
+	initLighting(0, 0, worldMapState.width, worldMapState.height);
 	addConsoleMessage(_("Lighting values for all tiles recalculated"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -989,9 +989,9 @@ MappableFunction kf_RadarZoom(const int multiplier)
 // --------------------------------------------------------------------------
 void kf_MaxScrollLimits()
 {
-	scrollMinX = scrollMinY = 0;
-	scrollMaxX = mapWidth;
-	scrollMaxY = mapHeight;
+	worldMapState.scroll.minX = worldMapState.scroll.minY = 0;
+	worldMapState.scroll.maxX = worldMapState.width;
+	worldMapState.scroll.maxY = worldMapState.height;
 }
 
 // --------------------------------------------------------------------------
