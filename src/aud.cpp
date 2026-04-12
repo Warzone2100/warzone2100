@@ -83,7 +83,7 @@ void audio_Get3DPlayerRotAboutVerticalAxis(float *angle)
 void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	*piX = iWorldX;
-	*piZ = map_TileHeight(map_coord(iWorldX), map_coord(iWorldY));
+	*piZ = map_TileHeight(worldMapState, map_coord(iWorldX), map_coord(iWorldY));
 	/* invert y to match QSOUND axes */
 	*piY = world_coord(worldMapState.height) - iWorldY;
 }
@@ -95,7 +95,7 @@ void audio_GetObjectPos(const SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY
 	ASSERT_OR_RETURN(, psBaseObj != nullptr, "Game object pointer invalid");
 
 	*piX = psBaseObj->pos.x;
-	*piZ = map_TileHeight(map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
+	*piZ = map_TileHeight(worldMapState, map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
 
 	/* invert y to match QSOUND axes */
 	*piY = world_coord(worldMapState.height) - psBaseObj->pos.y;

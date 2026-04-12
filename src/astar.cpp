@@ -653,7 +653,7 @@ ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE
 	Vector2i newP(0, 0);
 	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS / 2, world_coord(endCoord.y) + TILE_UNITS / 2); true; p = newP)
 	{
-		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
+		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(worldMapState, p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
 		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (static_cast<size_t>(worldMapState.width) * static_cast<size_t>(worldMapState.height)), "Pathfinding got in a loop.");
 
 		path.push_back(p);
@@ -776,7 +776,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 			for (int y = 0; y < worldMapState.height; ++y)
 				for (int x = 0; x < worldMapState.width; ++x)
 				{
-					dangerMap[x + y * worldMapState.width] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
+					dangerMap[x + y * worldMapState.width] = auxTile(worldMapState, x, y, type.owner) & AUXBITS_THREAT;
 					checksumDangerMap ^= dangerMap[x + y * worldMapState.width] * (factor = 3 * factor + 1);
 				}
 		}

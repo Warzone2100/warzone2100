@@ -682,7 +682,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 
 		bGotFlying = true;
 		droidHeight = trackingCamera.target->pos.z;
-		droidMapHeight = map_Height(trackingCamera.target->pos.x, trackingCamera.target->pos.y);
+		droidMapHeight = map_Height(worldMapState, trackingCamera.target->pos.x, trackingCamera.target->pos.y);
 		difHeight = abs(droidHeight - droidMapHeight);
 		if (difHeight < MIN_TRACK_HEIGHT)
 		{

@@ -1677,7 +1677,7 @@ INT_RETVAL intRunWidgets()
 					// Don't allow derrick to be built on burning ground.
 					if (((STRUCTURE_STATS *)psPositionStats)->type == REF_RESOURCE_EXTRACTOR)
 					{
-						if (fireOnLocation(pos.x, pos.y))
+						if (fireOnLocation(worldMapState, pos.x, pos.y))
 						{
 							AddDerrickBurningMessage();
 						}
@@ -1743,7 +1743,7 @@ INT_RETVAL intRunWidgets()
 
 						if (psBuilding->type == REF_DEMOLISH)
 						{
-							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
+							MAPTILE *psTile = mapTile(worldMapState, map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
 
@@ -1763,7 +1763,7 @@ INT_RETVAL intRunWidgets()
 							STRUCTURE *psStructure = &tmp;
 							tmp.state = SAS_NORMAL;
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
-							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
+							tmp.pos = {pos.x, pos.y, map_Height(worldMapState, pos.x, pos.y) + world_coord(1) / 10};
 
 							// In multiplayer games be sure to send a message to the
 							// other players, telling them a new structure has been

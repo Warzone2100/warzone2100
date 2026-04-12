@@ -505,7 +505,7 @@ static void DrawRadarTiles()
 	{
 		for (y = worldMapState.scroll.minY; y < worldMapState.scroll.maxY; y++)
 		{
-			MAPTILE	*psTile = mapTile(x, y);
+			MAPTILE	*psTile = mapTile(worldMapState, x, y);
 			size_t pixelStartPos = (radarTexWidth * (y - worldMapState.scroll.minY) + (x - worldMapState.scroll.minX)) * 4;
 
 			ASSERT(pixelStartPos < radarBufferSize2, "Buffer overrun");
@@ -600,7 +600,7 @@ static void DrawRadarObjects()
 	{
 		for (SDWORD y = worldMapState.scroll.minY; y < worldMapState.scroll.maxY; y++)
 		{
-			MAPTILE		*psTile = mapTile(x, y);
+			MAPTILE		*psTile = mapTile(worldMapState, x, y);
 			STRUCTURE	*psStruct;
 			size_t		pos = (x - worldMapState.scroll.minX) + (y - worldMapState.scroll.minY) * radarTexWidth;
 

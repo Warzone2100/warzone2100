@@ -116,7 +116,7 @@ void	preProcessVisibility()
 	{
 		for (int j = 0; j < worldMapState.height; j++)
 		{
-			MAPTILE *psTile = mapTile(i, j);
+			MAPTILE *psTile = mapTile(worldMapState, i, j);
 			psTile->level = bRevealActive ? MIN(MIN_ILLUM, getTileIllumination(psTile) / 4.0f) : 0;
 
 			if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))

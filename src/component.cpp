@@ -467,7 +467,7 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 		// NOTE: Beware of transporters that are offscreen, on a mission!  We should *not* be checking tiles at this point in time!
 		if (!psDroid->isTransporter() && !missionIsOffworld())
 		{
-			MAPTILE *psTile = worldTile(psDroid->pos.x, psDroid->pos.y);
+			MAPTILE *psTile = worldTile(worldMapState, psDroid->pos.x, psDroid->pos.y);
 			if (psTile->jammerBits & alliancebits[psDroid->player])
 			{
 				pieFlag |= pie_ECM;

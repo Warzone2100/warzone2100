@@ -7871,7 +7871,7 @@ bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 						{
 							psMessage->pViewData = psViewData;
 							// Check the z value is at least the height of the terrain
-							const int terrainHeight = map_Height(((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
+							const int terrainHeight = map_Height(worldMapState, ((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
 							if (((VIEW_PROXIMITY*)psViewData->pData)->z < terrainHeight)
 							{
 								((VIEW_PROXIMITY*)psViewData->pData)->z = terrainHeight;

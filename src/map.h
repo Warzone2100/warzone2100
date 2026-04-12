@@ -85,58 +85,58 @@ size_t getNumGroundTypes();
 #define AUX_MAX		3
 
 /// Find aux bitfield for a given tile
-WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(int x, int y, int player)
+WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(const WorldMapState& mapState, int x, int y, int player)
 {
 	ASSERT_OR_RETURN(AUXBITS_ALL, player >= 0 && player < MAX_PLAYERS + AUX_MAX, "invalid player: %d", player);
-	return worldMapState.auxMap[player][x + y * worldMapState.width];
+	return mapState.auxMap[player][x + y * mapState.width];
 }
 
 /// Find blocking bitfield for a given tile
-WZ_DECL_ALWAYS_INLINE static inline uint8_t blockTile(int x, int y, int slot)
+WZ_DECL_ALWAYS_INLINE static inline uint8_t blockTile(const WorldMapState& mapState, int x, int y, int slot)
 {
-	return worldMapState.blockMap[slot][x + y * worldMapState.width];
+	return mapState.blockMap[slot][x + y * mapState.width];
 }
 
 /// Store a shadow copy of a player's aux map for use in threaded calculations
-static inline void auxMapStore(int player, int slot)
+static inline void auxMapStore(WorldMapState& mapState, int player, int slot)
 {
-	memcpy(worldMapState.blockMap[slot].get(), worldMapState.blockMap[0].get(), sizeof(uint8_t) * worldMapState.width * worldMapState.height);
-	memcpy(worldMapState.auxMap[MAX_PLAYERS + slot].get(), worldMapState.auxMap[player].get(), sizeof(uint8_t) * worldMapState.width * worldMapState.height);
+	memcpy(mapState.blockMap[slot].get(), mapState.blockMap[0].get(), sizeof(uint8_t) * mapState.width * mapState.height);
+	memcpy(mapState.auxMap[MAX_PLAYERS + slot].get(), mapState.auxMap[player].get(), sizeof(uint8_t) * mapState.width * mapState.height);
 }
 
 /// Restore selected fields from the shadow copy of a player's aux map (ignoring the block map)
-static inline void auxMapRestore(int player, int slot, int mask)
+static inline void auxMapRestore(WorldMapState& mapState, int player, int slot, int mask)
 {
 	int i;
 	uint8_t original, cached;
 
-	for (i = 0; i < worldMapState.height * worldMapState.width; i++)
+	for (i = 0; i < mapState.height * mapState.width; i++)
 	{
-		original = worldMapState.auxMap[player][i];
-		cached = worldMapState.auxMap[MAX_PLAYERS + slot][i];
-		worldMapState.auxMap[player][i] = original ^ ((original ^ cached) & mask);
+		original = mapState.auxMap[player][i];
+		cached = mapState.auxMap[MAX_PLAYERS + slot][i];
+		mapState.auxMap[player][i] = original ^ ((original ^ cached) & mask);
 	}
 }
 
 /// Set aux bits. Always set identically for all players. States not set are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxSet(int x, int y, int player, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxSet(WorldMapState& mapState, int x, int y, int player, int state)
 {
-	worldMapState.auxMap[player][x + y * worldMapState.width] |= state;
+	mapState.auxMap[player][x + y * mapState.width] |= state;
 }
 
 /// Set aux bits. Always set identically for all players. States not set are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxSetAll(int x, int y, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxSetAll(WorldMapState& mapState, int x, int y, int state)
 {
 	int i;
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		worldMapState.auxMap[i][x + y * worldMapState.width] |= state;
+		mapState.auxMap[i][x + y * mapState.width] |= state;
 	}
 }
 
 /// Set aux bits. Always set identically for all players. States not set are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(WorldMapState& mapState, int x, int y, int player, int state)
 {
 	int i;
 
@@ -144,13 +144,13 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetAllied(int x, int y, int player, 
 	{
 		if (aiCheckAlliances(player, i))
 		{
-			worldMapState.auxMap[i][x + y * worldMapState.width] |= state;
+			mapState.auxMap[i][x + y * mapState.width] |= state;
 		}
 	}
 }
 
 /// Set aux bits. Always set identically for all players. States not set are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(int x, int y, int player, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(WorldMapState& mapState, int x, int y, int player, int state)
 {
 	int i;
 
@@ -158,38 +158,38 @@ WZ_DECL_ALWAYS_INLINE static inline void auxSetEnemy(int x, int y, int player, i
 	{
 		if (!aiCheckAlliances(player, i))
 		{
-			worldMapState.auxMap[i][x + y * worldMapState.width] |= state;
+			mapState.auxMap[i][x + y * mapState.width] |= state;
 		}
 	}
 }
 
 /// Clear aux bits. Always set identically for all players. States not cleared are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxClear(int x, int y, int player, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxClear(WorldMapState& mapState, int x, int y, int player, int state)
 {
-	worldMapState.auxMap[player][x + y * worldMapState.width] &= ~state;
+	mapState.auxMap[player][x + y * mapState.width] &= ~state;
 }
 
 /// Clear all aux bits. Always set identically for all players. States not cleared are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxClearAll(int x, int y, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxClearAll(WorldMapState& mapState, int x, int y, int state)
 {
 	int i;
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		worldMapState.auxMap[i][x + y * worldMapState.width] &= ~state;
+		mapState.auxMap[i][x + y * mapState.width] &= ~state;
 	}
 }
 
 /// Set blocking bits. Always set identically for all players. States not set are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxSetBlocking(int x, int y, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxSetBlocking(WorldMapState& mapState, int x, int y, int state)
 {
-	worldMapState.blockMap[0][x + y * worldMapState.width] |= state;
+	mapState.blockMap[0][x + y * mapState.width] |= state;
 }
 
 /// Clear blocking bits. Always set identically for all players. States not cleared are retained.
-WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(int x, int y, int state)
+WZ_DECL_ALWAYS_INLINE static inline void auxClearBlocking(WorldMapState& mapState, int x, int y, int state)
 {
-	worldMapState.blockMap[0][x + y * worldMapState.width] &= ~state;
+	mapState.blockMap[0][x + y * mapState.width] &= ~state;
 }
 
 /**
@@ -345,13 +345,13 @@ static inline Vector2i round_to_nearest_tile(Vector2i const &worldCoord)
  *  \post 1 <= *worldX <= world_coord(mapWidth)-1 and
  *        1 <= *worldy <= world_coord(mapHeight)-1
  */
-static inline void clip_world_offmap(int *worldX, int *worldY)
+static inline void clip_world_offmap(const WorldMapState& mapState, int *worldX, int *worldY)
 {
 	// x,y must be > 0
 	*worldX = MAX(1, *worldX);
 	*worldY = MAX(1, *worldY);
-	*worldX = MIN(world_coord(worldMapState.width) - 1, *worldX);
-	*worldY = MIN(world_coord(worldMapState.height) - 1, *worldY);
+	*worldX = MIN(world_coord(mapState.width) - 1, *worldX);
+	*worldY = MIN(world_coord(mapState.height) - 1, *worldY);
 }
 
 /* Shutdown the map module */
@@ -400,101 +400,101 @@ public:
 bool mapSaveToWzMapData(WzMap::MapData& output);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
-static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
+static inline WZ_DECL_PURE MAPTILE *mapTile(WorldMapState& mapState, int32_t x, int32_t y)
 {
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
-	ASSERT(x >= -1, "mapTile: x value is too small (%d,%d) in %dx%d", x, y, worldMapState.width, worldMapState.height);
-	ASSERT(y >= -1, "mapTile: y value is too small (%d,%d) in %dx%d", x, y, worldMapState.width, worldMapState.height);
+	ASSERT(x >= -1, "mapTile: x value is too small (%d,%d) in %dx%d", x, y, mapState.width, mapState.height);
+	ASSERT(y >= -1, "mapTile: y value is too small (%d,%d) in %dx%d", x, y, mapState.width, mapState.height);
 	x = MAX(x, 0);
 	y = MAX(y, 0);
-	ASSERT(x < worldMapState.width + 1, "mapTile: x value is too big (%d,%d) in %dx%d", x, y, worldMapState.width, worldMapState.height);
-	ASSERT(y < worldMapState.height + 1, "mapTile: y value is too big (%d,%d) in %dx%d", x, y, worldMapState.width, worldMapState.height);
-	x = MIN(x, worldMapState.width - 1);
-	y = MIN(y, worldMapState.height - 1);
+	ASSERT(x < mapState.width + 1, "mapTile: x value is too big (%d,%d) in %dx%d", x, y, mapState.width, mapState.height);
+	ASSERT(y < mapState.height + 1, "mapTile: y value is too big (%d,%d) in %dx%d", x, y, mapState.width, mapState.height);
+	x = MIN(x, mapState.width - 1);
+	y = MIN(y, mapState.height - 1);
 
-	return &worldMapState.tiles[x + (y * worldMapState.width)];
+	return &mapState.tiles[x + (y * mapState.width)];
 }
 
-static inline WZ_DECL_PURE MAPTILE *mapTile(Vector2i const &v)
+static inline WZ_DECL_PURE MAPTILE *mapTile(WorldMapState& mapState, Vector2i const &v)
 {
-	return mapTile(v.x, v.y);
+	return mapTile(mapState, v.x, v.y);
 }
 
 /** Return a pointer to the tile structure at x,y in world coordinates */
-static inline WZ_DECL_PURE MAPTILE *worldTile(int32_t x, int32_t y)
+static inline WZ_DECL_PURE MAPTILE *worldTile(WorldMapState& mapState, int32_t x, int32_t y)
 {
-	return mapTile(map_coord(x), map_coord(y));
+	return mapTile(mapState, map_coord(x), map_coord(y));
 }
-static inline WZ_DECL_PURE MAPTILE *worldTile(Vector2i const &v)
+static inline WZ_DECL_PURE MAPTILE *worldTile(WorldMapState& mapState, Vector2i const &v)
 {
-	return mapTile(map_coord(v));
+	return mapTile(mapState, map_coord(v));
 }
 
 /// Return ground height of top-left corner of tile at x,y
-static inline WZ_DECL_PURE int32_t map_TileHeight(int32_t x, int32_t y)
+static inline WZ_DECL_PURE int32_t map_TileHeight(const WorldMapState& mapState, int32_t x, int32_t y)
 {
-	if (x >= worldMapState.width || y >= worldMapState.height || x < 0 || y < 0)
+	if (x >= mapState.width || y >= mapState.height || x < 0 || y < 0)
 	{
 		return 0;
 	}
-	return worldMapState.tiles[x + (y * worldMapState.width)].height;
+	return mapState.tiles[x + (y * mapState.width)].height;
 }
 
 /// Return water height of top-left corner of tile at x,y
-static inline WZ_DECL_PURE int32_t map_WaterHeight(int32_t x, int32_t y)
+static inline WZ_DECL_PURE int32_t map_WaterHeight(const WorldMapState& mapState, int32_t x, int32_t y)
 {
-	if (x >= worldMapState.width || y >= worldMapState.height || x < 0 || y < 0)
+	if (x >= mapState.width || y >= mapState.height || x < 0 || y < 0)
 	{
 		return 0;
 	}
-	return worldMapState.tiles[x + (y * worldMapState.width)].waterLevel;
+	return mapState.tiles[x + (y * mapState.width)].waterLevel;
 }
 
 /// Return max(ground, water) height of top-left corner of tile at x,y
-static inline WZ_DECL_PURE int32_t map_TileHeightSurface(int32_t x, int32_t y)
+static inline WZ_DECL_PURE int32_t map_TileHeightSurface(const WorldMapState& mapState, int32_t x, int32_t y)
 {
-	if (x >= worldMapState.width || y >= worldMapState.height || x < 0 || y < 0)
+	if (x >= mapState.width || y >= mapState.height || x < 0 || y < 0)
 	{
 		return 0;
 	}
-	return MAX(worldMapState.tiles[x + (y * worldMapState.width)].height, worldMapState.tiles[x + (y * worldMapState.width)].waterLevel);
+	return MAX(mapState.tiles[x + (y * mapState.width)].height, mapState.tiles[x + (y * mapState.width)].waterLevel);
 }
 
 
 /*sets the tile height */
-static inline void setTileHeight(int32_t x, int32_t y, int32_t height)
+static inline void setTileHeight(WorldMapState& mapState, int32_t x, int32_t y, int32_t height)
 {
-	ASSERT_OR_RETURN(, x < worldMapState.width && x >= 0, "x coordinate %d bigger than map width %u", x, worldMapState.width);
-	ASSERT_OR_RETURN(, y < worldMapState.height && x >= 0, "y coordinate %d bigger than map height %u", y, worldMapState.height);
+	ASSERT_OR_RETURN(, x < mapState.width && x >= 0, "x coordinate %d bigger than map width %u", x, mapState.width);
+	ASSERT_OR_RETURN(, y < mapState.height && x >= 0, "y coordinate %d bigger than map height %u", y, mapState.height);
 
-	worldMapState.tiles[x + (y * worldMapState.width)].height = height;
+	mapState.tiles[x + (y * mapState.width)].height = height;
 	markTileDirty(x, y);
 }
 
 /* Return whether a tile coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(SDWORD x, SDWORD y)
+WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(const WorldMapState& mapState, SDWORD x, SDWORD y)
 {
-	return (x >= 0) && (x < (SDWORD)worldMapState.width) && (y >= 0) && (y < (SDWORD)worldMapState.height);
+	return (x >= 0) && (x < (SDWORD)mapState.width) && (y >= 0) && (y < (SDWORD)mapState.height);
 }
 
-WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(Vector2i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool tileOnMap(const WorldMapState& mapState, Vector2i pos)
 {
-	return tileOnMap(pos.x, pos.y);
+	return tileOnMap(mapState, pos.x, pos.y);
 }
 
 /* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(int x, int y)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(const WorldMapState& mapState, int x, int y)
 {
-	return (x >= 0) && (x < ((SDWORD)worldMapState.width << TILE_SHIFT)) &&
-	       (y >= 0) && (y < ((SDWORD)worldMapState.height << TILE_SHIFT));
+	return (x >= 0) && (x < ((SDWORD)mapState.width << TILE_SHIFT)) &&
+	       (y >= 0) && (y < ((SDWORD)mapState.height << TILE_SHIFT));
 }
 
 
 /* Return whether a world coordinate is on the map */
-WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(Vector2i pos)
+WZ_DECL_ALWAYS_INLINE static inline bool worldOnMap(const WorldMapState& mapState, Vector2i pos)
 {
-	return worldOnMap(pos.x, pos.y);
+	return worldOnMap(mapState, pos.x, pos.y);
 }
 
 static inline void makeTileRubbleTexture(MAPTILE *psTile, const unsigned int x, const unsigned int y, const unsigned int newTexture)
@@ -517,11 +517,11 @@ bool map_Intersect(int *Cx, int *Cy, int *Vx, int *Vy, int *Sx, int *Sy);
 unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax);
 
 /// The max height of the terrain and water at the specified world coordinates
-int32_t map_Height(int x, int y);
+int32_t map_Height(const WorldMapState& mapState, int x, int y);
 
-static inline int32_t map_Height(Vector2i const &v)
+static inline int32_t map_Height(const WorldMapState& mapState, Vector2i const &v)
 {
-	return map_Height(v.x, v.y);
+	return map_Height(mapState, v.x, v.y);
 }
 
 /* returns true if object is above ground */
@@ -536,8 +536,8 @@ bool writeVisibilityData(const char *fileName);
 
 void mapFloodFillContinents();
 
-void tileSetFire(int32_t x, int32_t y, uint32_t duration);
-bool fireOnLocation(unsigned int x, unsigned int y);
+void tileSetFire(WorldMapState& mapState, int32_t x, int32_t y, uint32_t duration);
+bool fireOnLocation(WorldMapState& mapState, unsigned int x, unsigned int y); // FIXME: add const overload
 
 /**
  * Transitive sensor check for tile. Has to be here rather than

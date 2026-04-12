@@ -330,7 +330,7 @@ void	kf_HalveHeights()
 	{
 		for (int i = 0; i < worldMapState.width; ++i)
 		{
-			psTile = mapTile(i, j);
+			psTile = mapTile(worldMapState, i, j);
 			psTile->height /= 2;
 		}
 	}
@@ -846,7 +846,7 @@ void	kf_AllAvailable()
 void	kf_TriFlip()
 {
 	MAPTILE	*psTile;
-	psTile = mapTile(mouseTileX, mouseTileY);
+	psTile = mapTile(worldMapState, mouseTileX, mouseTileY);
 	TOGGLE_TRIFLIP(psTile);
 //	addConsoleMessage(_("Triangle flip status toggled"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
@@ -856,7 +856,7 @@ void	kf_TriFlip()
 /* Debug info about a map tile */
 void	kf_TileInfo()
 {
-	MAPTILE	*psTile = mapTile(mouseTileX, mouseTileY);
+	MAPTILE	*psTile = mapTile(worldMapState, mouseTileX, mouseTileY);
 
 	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%d Texture=%u Height=%d Illumination=%u",
 	      mouseTileX, mouseTileY, (int)terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
@@ -920,7 +920,7 @@ void kf_MapCheck()
 
 	for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
 	{
-		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+		psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
 	}
 
 	for (STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
@@ -930,7 +930,7 @@ void kf_MapCheck()
 
 	for (auto& psFlag : worldObjectState.flags[selectedPlayer])
 	{
-		psFlag->coords.z = map_Height(psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
+		psFlag->coords.z = map_Height(worldMapState, psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
 	}
 }
 

@@ -1736,7 +1736,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 				if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 				{
 					images = imagesResource;
-					if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
+					if (fireOnLocation(worldMapState, psFeature->pos.x, psFeature->pos.y))
 					{
 						images = imagesBurningResource;
 						animationLength = ARRAY_SIZE(imagesBurningResource) - 1;  // Longer animation for burning oil wells.

@@ -313,10 +313,10 @@ static void averagePos(Vector3i *center, Vector3i *a, Vector3i *b, Vector3i *c, 
 static bool isWater(int x, int y)
 {
 	bool result = false;
-	result = result || (tileOnMap(x  , y) && terrainType(mapTile(x  , y)) == TER_WATER);
-	result = result || (tileOnMap(x - 1, y) && terrainType(mapTile(x - 1, y)) == TER_WATER);
-	result = result || (tileOnMap(x  , y - 1) && terrainType(mapTile(x  , y - 1)) == TER_WATER);
-	result = result || (tileOnMap(x - 1, y - 1) && terrainType(mapTile(x - 1, y - 1)) == TER_WATER);
+	result = result || (tileOnMap(worldMapState, x  , y) && terrainType(mapTile(worldMapState, x  , y)) == TER_WATER);
+	result = result || (tileOnMap(worldMapState, x - 1, y) && terrainType(mapTile(worldMapState, x - 1, y)) == TER_WATER);
+	result = result || (tileOnMap(worldMapState, x  , y - 1) && terrainType(mapTile(worldMapState, x  , y - 1)) == TER_WATER);
+	result = result || (tileOnMap(worldMapState, x - 1, y - 1) && terrainType(mapTile(worldMapState, x - 1, y - 1)) == TER_WATER);
 	return result;
 }
 
@@ -324,10 +324,10 @@ static bool isWater(int x, int y)
 static bool isOnlyWater(int x, int y)
 {
 	bool result = true;
-	result = result && (tileOnMap(x  , y) && terrainType(mapTile(x  , y)) == TER_WATER);
-	result = result && (tileOnMap(x - 1, y) && terrainType(mapTile(x - 1, y)) == TER_WATER);
-	result = result && (tileOnMap(x  , y - 1) && terrainType(mapTile(x  , y - 1)) == TER_WATER);
-	result = result && (tileOnMap(x - 1, y - 1) && terrainType(mapTile(x - 1, y - 1)) == TER_WATER);
+	result = result && (tileOnMap(worldMapState, x  , y) && terrainType(mapTile(worldMapState, x  , y)) == TER_WATER);
+	result = result && (tileOnMap(worldMapState, x - 1, y) && terrainType(mapTile(worldMapState, x - 1, y)) == TER_WATER);
+	result = result && (tileOnMap(worldMapState, x  , y - 1) && terrainType(mapTile(worldMapState, x  , y - 1)) == TER_WATER);
+	result = result && (tileOnMap(worldMapState, x - 1, y - 1) && terrainType(mapTile(worldMapState, x - 1, y - 1)) == TER_WATER);
 	return result;
 }
 
@@ -355,15 +355,15 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	{
 		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC)
 		{
-			result->y = map_TileHeight(x, y);
+			result->y = map_TileHeight(worldMapState, x, y);
 			if (water)
 			{
-				result->y = map_WaterHeight(x, y);
+				result->y = map_WaterHeight(worldMapState, x, y);
 			}
 		}
 		else
 		{
-			result->y = map_TileHeightSurface(x, y);
+			result->y = map_TileHeightSurface(worldMapState, x, y);
 		}
 	}
 }
@@ -414,7 +414,7 @@ static void setSectorGeometry(int sx, int sy,
 			geometry[*geometrySize].pos = pos;
 			(*geometrySize)++;
 
-			float waterHeight = map_WaterHeight(x, y);
+			float waterHeight = map_WaterHeight(worldMapState, x, y);
 			water[*waterSize] = glm::vec4(pos.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterHeight : pos.y, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 
@@ -443,7 +443,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 				continue;
 			}
 
-			MAPTILE *tile = mapTile(i, j);
+			MAPTILE *tile = mapTile(worldMapState, i, j);
 			center = getTileTexArrCoords(*uv, tile->texture);
 			int decalNo = static_cast<int>(TileNumber_tile(tile->texture));
 			bool skipDecalDraw = !TILE_HAS_DECAL(tile);
@@ -467,7 +467,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 				vs[k].decalUv = uv[dx][dy];
 				vs[k].normal = getGridNormal(i + dx, j + dy);
 				vs[k].decalNo = decalNo;
-				groundsBytes[k] = mapTile(i + dx, j + dy)->ground;
+				groundsBytes[k] = mapTile(worldMapState, i + dx, j + dy)->ground;
 				vs[k].groundWeights.clear();
 				vs[k].groundWeights.setByte(k, 255);
 			}
@@ -1222,7 +1222,7 @@ static void updateLightMap(const LightMap& lightmap)
 	{
 		for (int i = 0; i < worldMapState.width; ++i)
 		{
-			MAPTILE *psTile = mapTile(i, j);
+			MAPTILE *psTile = mapTile(worldMapState, i, j);
 			PIELIGHT colour = lightmap(i, j);
 			UBYTE level = static_cast<UBYTE>(psTile->level);
 

@@ -897,7 +897,7 @@ void processMouseClickInput()
 			}
 
 			if (item == MT_TERRAIN
-			    && terrainType(mapTile(mouseTileX, mouseTileY)) == TER_CLIFFFACE)
+			    && terrainType(mapTile(worldMapState, mouseTileX, mouseTileY)) == TER_CLIFFFACE)
 			{
 				item = MT_BLOCKING;
 			}
@@ -1500,7 +1500,7 @@ void processDeliveryRepos()
 	int bX = clip<int>(mouseTileX, 2, worldMapState.width - 3);
 	int bY = clip<int>(mouseTileY, 2, worldMapState.height - 3);
 
-	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
+	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(worldMapState, bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
 }
 
 // Cancel repositioning of the delivery point without moving it.
@@ -1951,7 +1951,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 				if ((droidType(psCurr) == DROID_CONSTRUCT ||
 				     droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
 				{
-					if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
+					if (fireOnLocation(worldMapState, psFeature->pos.x, psFeature->pos.y))
 					{
 						// Can't build because it's burning
 						AddDerrickBurningMessage();
@@ -2079,10 +2079,10 @@ void	dealWithLMB()
 	}
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if (dbgInputManager.debugMappingsAllowed() && tileOnMap(mouseTileX, mouseTileY))
+	if (dbgInputManager.debugMappingsAllowed() && tileOnMap(worldMapState, mouseTileX, mouseTileY))
 	{
-		MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
-		uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
+		MAPTILE *psTile = mapTile(worldMapState, mouseTileX, mouseTileY);
+		uint8_t aux = auxTile(worldMapState, mouseTileX, mouseTileY, selectedPlayer);
 
 		int flipVal = 0;
 		if (TileNumber_texture(psTile->texture) & TILE_XFLIP)

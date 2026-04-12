@@ -145,7 +145,7 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 		{
 			continue;
 		}
-		MAPTILE *psTile = mapTile(mapX, mapY);
+		MAPTILE *psTile = mapTile(worldMapState, mapX, mapY);
 		psTile->tileExploredBits |= alliancebits[player];
 		uint16_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
 		if (visionType[player] < UINT16_MAX)
@@ -214,7 +214,7 @@ SPOTTER::~SPOTTER()
 	for (int i = 0; i < numWatchedTiles; i++)
 	{
 		const TILEPOS tilePos = watchedTiles[i];
-		MAPTILE *psTile = mapTile(tilePos.x, tilePos.y);
+		MAPTILE *psTile = mapTile(worldMapState, tilePos.x, tilePos.y);
 		uint16_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
 		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)tilePos.x, (int)tilePos.y);
 		visionType[player]--;
@@ -288,7 +288,7 @@ static void doWaveTerrain(BASE_OBJECT *psObj)
 			continue;
 		}
 
-		MAPTILE *psTile = mapTile(mapX, mapY);
+		MAPTILE *psTile = mapTile(worldMapState, mapX, mapY);
 		int tileHeight = std::max(psTile->height, psTile->waterLevel);  // If we can see the water surface, then let us see water-covered tiles too.
 		int perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
 		int perspectiveHeightLeeway = (tileHeight - sz + MIN_VIS_HEIGHT) * tiles[i].invRadius;
@@ -361,7 +361,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 	}
 
 	help->lastDist = dist;
-	help->lastHeight = map_Height(pos.x, pos.y);
+	help->lastHeight = map_Height(worldMapState, pos.x, pos.y);
 
 	if (help->wallsBlock)
 	{
@@ -370,7 +370,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 
 		if (tile != help->final)
 		{
-			MAPTILE *psTile = mapTile(tile);
+			MAPTILE *psTile = mapTile(worldMapState, tile);
 			if (TileHasWall_raycast(psTile) && !TileHasSmallStructure(psTile))
 			{
 				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
@@ -396,7 +396,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 		for (TILEPOS pos : psObj->watchedTiles)
 		{
 			// FIXME: the mapTile might have been swapped out, see swapMissionPointers()
-			MAPTILE *psTile = mapTile(pos.x, pos.y);
+			MAPTILE *psTile = mapTile(worldMapState, pos.x, pos.y);
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
 			uint16_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
@@ -468,7 +468,7 @@ void revealAll(UBYTE player)
 	{
 		for (i = 0; i < worldMapState.width; i++)
 		{
-			psTile = mapTile(i, j);
+			psTile = mapTile(worldMapState, i, j);
 			psTile->tileExploredBits |= alliancebits[player];
 		}
 	}
@@ -489,7 +489,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 
 	int range = objSensorRange(psViewer);
 
-	if (!worldOnMap(psViewer->pos.x, psViewer->pos.y) || !worldOnMap(psTarget->pos.x, psTarget->pos.y))
+	if (!worldOnMap(worldMapState, psViewer->pos.x, psViewer->pos.y) || !worldOnMap(worldMapState, psTarget->pos.x, psTarget->pos.y))
 	{
 		//Most likely a VTOL or transporter
 		debug(LOG_WARNING, "Trying to view something off map!");
@@ -554,7 +554,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 		return UBYTE_MAX;	// Should never be on top of each other, but ...
 	}
 
-	const MAPTILE *psTile = mapTile(map_coord(psTarget->pos.x), map_coord(psTarget->pos.y));
+	const MAPTILE *psTile = mapTile(worldMapState, map_coord(psTarget->pos.x), map_coord(psTarget->pos.y));
 	const bool jammed = psTile->jammerBits & ~alliancebits[psViewer->player];
 
 	// Special rule for VTOLs, as they are not affected by ECM
@@ -569,7 +569,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	VisibleObjectHelp_t help = {
 		true,
 		wallsBlock,
-		psViewer->pos.z + map_Height(psViewer->pos.x, psViewer->pos.y),
+		psViewer->pos.z + map_Height(worldMapState, psViewer->pos.x, psViewer->pos.y),
 		map_coord(psTarget->pos.xy()),
 		0,
 		0,
@@ -803,7 +803,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 
 				/* If this is an oil resource we want to add a proximity message for
 				 * the selected Player - if there isn't an Resource Extractor on it. */
-				if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE && !TileHasStructure(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
+				if (((FEATURE *)psObj)->psStats->subType == FEAT_OIL_RESOURCE && !TileHasStructure(mapTile(worldMapState, map_coord(psObj->pos.x), map_coord(psObj->pos.y))))
 				{
 					type = ID_SOUND_RESOURCE_HERE;
 				}
@@ -936,7 +936,7 @@ void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player)
 	{
 		for (j = 0; j < breadth + 1; j++)  // + 1 because visibility is for top left of tile.
 		{
-			psTile = mapTile(mapX + i, mapY + j);
+			psTile = mapTile(worldMapState, mapX + i, mapY + j);
 			if (psTile)
 			{
 				psTile->tileExploredBits |= alliancebits[player];
@@ -1101,7 +1101,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 
 		if (partSq > 0)
 		{
-			angle_check(&angletan, partSq, map_Height(current) - pos.z, distSq, dest.z - pos.z, direct);
+			angle_check(&angletan, partSq, map_Height(worldMapState, current) - pos.z, distSq, dest.z - pos.z, direct);
 		}
 
 		// intersect current tile with line of fire
@@ -1121,7 +1121,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 
 			if (partSq > 0)
 			{
-				angle_check(&angletan, partSq, map_Height(halfway) - pos.z, distSq, dest.z - pos.z, direct);
+				angle_check(&angletan, partSq, map_Height(worldMapState, halfway) - pos.z, distSq, dest.z - pos.z, direct);
 			}
 		}
 
@@ -1131,7 +1131,7 @@ static int checkFireLine(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTar
 		{
 			const MAPTILE *psTile;
 			halfway = current + (next - current) / 2;
-			psTile = mapTile(map_coord(halfway.x), map_coord(halfway.y));
+			psTile = mapTile(worldMapState, map_coord(halfway.x), map_coord(halfway.y));
 			if (TileHasStructure(psTile) && psTile->psObject != psTarget)
 			{
 				// check whether target was reached before tile's "half way" line

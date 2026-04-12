@@ -1013,7 +1013,7 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 
 	Vector3i res;
 	res.x = world_coord(x);
-	res.y = map_TileHeight(x, y);
+	res.y = map_TileHeight(worldMapState, x, y);
 	res.z = world_coord(y);
 	return res;
 }
@@ -2563,7 +2563,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 
 	//check the z value is at least the height of the terrain
-	height = map_Height(LocX, LocY);
+	height = map_Height(worldMapState, LocX, LocY);
 
 	((VIEW_PROXIMITY *)psViewData->pData)->z = height;
 

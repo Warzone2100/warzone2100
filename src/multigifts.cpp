@@ -512,8 +512,8 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		{
 			for (int j = 0; j < b.size.y; j++)
 			{
-				auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
-				auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			}
 		}
 	}
@@ -526,8 +526,8 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		{
 			for (int j = 0; j < b.size.y; j++)
 			{
-				auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
-				auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			}
 		}
 	}
@@ -603,13 +603,13 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			{
 				if (!(psStructure->pStructureType->type == REF_GATE))
 				{
-					auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+					auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 				}
 				else
 				{
 					// Make sure gates aren't set as impassible to our new allies
-					auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
-					auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+					auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
 				}
 			}
 		}
@@ -625,12 +625,12 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			{
 				if (!(psStructure->pStructureType->type == REF_GATE))
 				{
-					auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+					auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 				}
 				else
 				{
-					auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
-					auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+					auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
 				}
 			}
 		}

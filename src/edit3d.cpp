@@ -66,7 +66,7 @@ void raiseTile(int tile3dX, int tile3dY)
 	{
 		for (j = tile3dY; j <= MIN(worldMapState.height - 1, tile3dY + brushSize); j++)
 		{
-			adjustTileHeight(mapTile(i, j), TILE_RAISE);
+			adjustTileHeight(mapTile(worldMapState, i, j), TILE_RAISE);
 			markTileDirty(i, j);
 		}
 	}
@@ -85,7 +85,7 @@ void lowerTile(int tile3dX, int tile3dY)
 	{
 		for (j = tile3dY; j <= MIN(worldMapState.height - 1, tile3dY + brushSize); j++)
 		{
-			adjustTileHeight(mapTile(i, j), TILE_LOWER);
+			adjustTileHeight(mapTile(worldMapState, i, j), TILE_LOWER);
 			markTileDirty(i, j);
 		}
 	}

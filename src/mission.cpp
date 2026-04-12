@@ -623,7 +623,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 	iLandX = getLandingX(iPlayer);
 	iLandY = getLandingY(iPlayer);
 	missionGetTransporterEntry(iPlayer, &iX, &iY);
-	iZ = (UWORD)(map_Height(iX, iY) + OFFSCREEN_HEIGHT);
+	iZ = (UWORD)(map_Height(worldMapState, iX, iY) + OFFSCREEN_HEIGHT);
 
 	//get the droids for the mission
 	mutating_list_iterate(mission.worldObjectState.droids[iPlayer], [iPlayer, bTrackTransporter, iX, iY, iZ, iLandX, iLandY](DROID* psTransporter)
@@ -987,8 +987,8 @@ void placeLimboDroids()
 			}
 			psDroid->pos.x = (UWORD)world_coord(droidX);
 			psDroid->pos.y = (UWORD)world_coord(droidY);
-			ASSERT(worldOnMap(psDroid->pos.x, psDroid->pos.y), "limbo droid is not on the map");
-			psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+			ASSERT(worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y), "limbo droid is not on the map");
+			psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
 			updateDroidOrientation(psDroid);
 			psDroid->selected = false;
 			//this is mainly for VTOLs
@@ -1321,7 +1321,7 @@ static void processMission()
 			x = (UWORD)world_coord(droidX);
 			y = (UWORD)world_coord(droidY);
 			droidSetPosition(psDroid, x, y);
-			ASSERT(worldOnMap(psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
+			ASSERT(worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
 			updateDroidOrientation(psDroid);
 			// Swap the droid and map pointers back again
 			swapMissionPointers();
@@ -2813,7 +2813,7 @@ static inline void addLandingLight(int x, int y, LAND_LIGHT_SPEC spec, bool lit)
 
 	pos.x = x;
 	pos.z = y;
-	pos.y = map_Height(x, y) + AboveGround;
+	pos.y = map_Height(worldMapState, x, y) + AboveGround;
 
 	effectSetLandLightSpec(spec);
 

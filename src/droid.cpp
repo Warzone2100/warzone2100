@@ -522,7 +522,7 @@ void recycleDroid(DROID *psDroid)
 
 	Vector3i position = psDroid->pos.xzy();
 	const auto mapCoord = map_coord({psDroid->pos.x, psDroid->pos.y});
-	const auto psTile = mapTile(mapCoord);
+	const auto psTile = mapTile(worldMapState, mapCoord);
 	if (tileIsClearlyVisible(psTile))
 	{
 		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
@@ -693,7 +693,7 @@ bool destroyDroid(DROID *psDel, unsigned impactTime)
 		{
 			for (breadth = mapY - 1; breadth <= mapY + 1; breadth++)
 			{
-				psTile = mapTile(width, breadth);
+				psTile = mapTile(worldMapState, width, breadth);
 				if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 				{
 					psTile->illumination /= 2;
@@ -1101,7 +1101,7 @@ static bool droidNextToStruct(DROID *psDroid, STRUCTURE *psStruct)
 	{
 		for (int x = minX; x <= maxX; ++x)
 		{
-			if (TileHasStructure(mapTile(x, y)) &&
+			if (TileHasStructure(mapTile(worldMapState, x, y)) &&
 				getTileStructure(x, y) == psStruct)
 			{
 				return true;
@@ -1169,7 +1169,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 			return DroidStartBuildFailed;
 		}
 		// Can't build on burning oil derricks.
-		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->order.pos.x, psDroid->order.pos.y))
+		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(worldMapState, psDroid->order.pos.x, psDroid->order.pos.y))
 		{
 			// Don't cancel build, since we can wait for it to stop burning.
 			objTrace(psDroid->id, "DroidStartBuildPending: burning");
@@ -1192,7 +1192,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		psStruct = castStructure(psDroid->order.psObj);
 		if (psStruct == nullptr)
 		{
-			psStruct = castStructure(worldTile(psDroid->actionPos)->psObject);
+			psStruct = castStructure(worldTile(worldMapState, psDroid->actionPos)->psObject);
 		}
 		if (psStruct && !droidNextToStruct(psDroid, psStruct))
 		{
@@ -1241,7 +1241,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 		ASSERT_OR_RETURN(, size.x > 0 && size.y > 0, "Zero-size building?: %s", (psStruct && psStruct->pStructureType) ? psStruct->pStructureType->id.toUtf8().c_str() : "<null>");
 		Vector3i temp;
 		temp.x = psStruct->pos.x + ((rand() % (2 * size.x)) - size.x);
-		temp.y = map_TileHeight(map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) + (psStruct->sDisplay.imd->max.y / 6);
+		temp.y = map_TileHeight(worldMapState, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) + (psStruct->sDisplay.imd->max.y / 6);
 		temp.z = psStruct->pos.y + ((rand() % (2 * size.y)) - size.y);
 		if (rand() % 2)
 		{
@@ -1863,7 +1863,7 @@ UDWORD calcDroidPower(const DROID *psDroid)
 DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot, uint32_t id)
 {
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
-	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
+	ASSERT(!bMultiPlayer || worldOnMap(worldMapState, pos.x, pos.y), "the build locations are not on the map");
 
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
@@ -1879,7 +1879,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 	if (!onMission)
 	{
 		//set droid height
-		droid.pos.z = map_Height(droid.pos.x, droid.pos.y);
+		droid.pos.z = map_Height(worldMapState, droid.pos.x, droid.pos.y);
 	}
 
 	if (droid.isTransporter() || droid.droidType == DROID_COMMAND)
@@ -3875,7 +3875,7 @@ bool droidOnMap(const DROID *psDroid)
 		// Off world or on a transport or is a transport or in mission list, or on a mission, or no map - ignore
 		return true;
 	}
-	return worldOnMap(psDroid->pos.x, psDroid->pos.y);
+	return worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y);
 }
 
 /** Teleport a droid to a new position on the map */
@@ -3883,7 +3883,7 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 {
 	psDroid->pos.x = x;
 	psDroid->pos.y = y;
-	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+	psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
 	initDroidMovement(psDroid);
 	visTilesUpdate((BASE_OBJECT *)psDroid);
 }

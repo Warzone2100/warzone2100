@@ -759,7 +759,7 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;
 			// check the z value is at least the height of the terrain
-			int height = map_Height(psProx->x, psProx->y);
+			int height = map_Height(worldMapState, psProx->x, psProx->y);
 			if (psProx->z < height)
 			{
 				psProx->z = height;
@@ -911,7 +911,7 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 				{
 					for (int y = y1; y < y2; y++)
 					{
-						MAPTILE *psTile = mapTile(x, y);
+						MAPTILE *psTile = mapTile(worldMapState, x, y);
 						psTile->tileInfoBits |= BITS_MARKED;
 					}
 				}
@@ -920,7 +920,7 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 			{
 				int x = tilePosOrArea.x1;
 				int y = tilePosOrArea.y1;
-				MAPTILE *psTile = mapTile(x, y);
+				MAPTILE *psTile = mapTile(worldMapState, x, y);
 				psTile->tileInfoBits |= BITS_MARKED;
 			}
 		}
@@ -1458,7 +1458,7 @@ bool wzapi::orderDroidLoc(WZAPI_PARAMS(DROID *psDroid, int order_, int x, int y)
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)order_;
 	SCRIPT_ASSERT(false, context, validOrderForLoc(order), "Invalid location based order: %s", getDroidOrderName(order));
-	SCRIPT_ASSERT(false, context, tileOnMap(x, y), "Outside map bounds (%d, %d)", x, y);
+	SCRIPT_ASSERT(false, context, tileOnMap(worldMapState, x, y), "Outside map bounds (%d, %d)", x, y);
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
 	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
 	{
@@ -1609,7 +1609,7 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 	PROPULSION_TYPE propType = (psDroid) ? psDroid->getPropulsionStats()->propulsionType : PROPULSION_TYPE_WHEELED;
 
 	// save a lot of typing... checks whether a position is valid
-#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
+#define LOC_OK(_x, _y) (tileOnMap(worldMapState, _x, _y) && \
                         (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), propType)) \
                         && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles, propType))
 
@@ -1691,7 +1691,7 @@ bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y
 	}
 	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
-	return (tileOnMap(x, y)
+	return (tileOnMap(worldMapState, x, y)
 			&& validLocation(psStat, world_coord(Vector2i(x, y)), direction, player, false));
 }
 
@@ -1727,7 +1727,7 @@ bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, 
 //--
 int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
 {
-	return ::terrainType(mapTile(x, y));
+	return ::terrainType(mapTile(worldMapState, x, y));
 }
 
 //-- ## tileIsBurning(x, y)
@@ -1736,7 +1736,7 @@ int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
 //--
 bool wzapi::tileIsBurning(WZAPI_PARAMS(int x, int y))
 {
-	const MAPTILE *psTile = mapTile(x, y);
+	const MAPTILE *psTile = mapTile(worldMapState, x, y);
 	SCRIPT_ASSERT(false, context, psTile, "Checking fire on tile outside the map (%d, %d)", x, y);
 	return ::TileIsBurning(psTile);
 }
@@ -2061,8 +2061,8 @@ bool wzapi::isVTOL(WZAPI_PARAMS(const DROID *psDroid))
 bool wzapi::safeDest(WZAPI_PARAMS(int player, int x, int y))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	SCRIPT_ASSERT(false, context, tileOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
-	return !(auxTile(x, y, player) & AUXBITS_DANGER);
+	SCRIPT_ASSERT(false, context, tileOnMap(worldMapState, x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	return !(auxTile(worldMapState, x, y, player) & AUXBITS_DANGER);
 }
 
 //-- ## activateStructure(structure[, target])
@@ -2153,7 +2153,7 @@ std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(const DROID *psDroid)
 	for (size_t i = startPos; i < len; i++)
 	{
 		const auto& pathCoords = psDroid->sMove.asPath[i];
-		ASSERT(worldOnMap(pathCoords.x, pathCoords.y), "Path off map!");
+		ASSERT(worldOnMap(worldMapState, pathCoords.x, pathCoords.y), "Path off map!");
 		result.emplace_back(scr_position {map_coord(pathCoords.x), map_coord(pathCoords.y)});
 	}
 
@@ -3426,7 +3426,7 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 		target.x += (TILE_UNITS / 2);
 		target.y += (TILE_UNITS / 2);
 	}
-	target.z = mapTile(x, y)->height;
+	target.z = mapTile(worldMapState, x, y)->height;
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weaponIndex;
@@ -4788,7 +4788,7 @@ nlohmann::json wzapi::constructMapTilesArray()
 		nlohmann::json mapRow = nlohmann::json::array();
 		for (SDWORD x = 0; x < worldMapState.width; x++)
 		{
-			MAPTILE *psTile = mapTile(x, y);
+			MAPTILE *psTile = mapTile(worldMapState, x, y);
 			nlohmann::json mapTile = nlohmann::json::object();
 			mapTile["terrainType"] = ::terrainType(psTile);
 			mapTile["height"] = psTile->height;

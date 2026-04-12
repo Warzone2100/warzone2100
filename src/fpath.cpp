@@ -332,7 +332,7 @@ bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 		// coords off map - auto blocking tile
 		return true;
 	}
-	unsigned aux = auxTile(x, y, mapIndex);
+	unsigned aux = auxTile(worldMapState, x, y, mapIndex);
 
 	int auxMask = 0;
 	switch (moveType)
@@ -349,7 +349,7 @@ bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 	}
 
 	// the MAX hack below is because blockTile() range does not include player-specific versions...
-	return (blockTile(x, y, MAX(0, mapIndex - MAX_PLAYERS)) & unitbits) != 0;  // finally check if move is blocked by propulsion related factors
+	return (blockTile(worldMapState, x, y, MAX(0, mapIndex - MAX_PLAYERS)) & unitbits) != 0;  // finally check if move is blocked by propulsion related factors
 }
 
 bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType)
@@ -442,7 +442,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, in
 	}
 #endif
 
-	if (!worldOnMap(startX, startY) || !worldOnMap(tX, tY))
+	if (!worldOnMap(worldMapState, startX, startY) || !worldOnMap(worldMapState, tX, tY))
 	{
 		debug(LOG_ERROR, "Droid trying to find path to/from invalid location (%d %d) -> (%d %d).", startX, startY, tX, tY);
 		objTrace(id, "Invalid start/end.");
@@ -557,7 +557,7 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
-	StructureBounds dstStructure = getStructureBounds(worldTile(endPos.xy())->psObject);
+	StructureBounds dstStructure = getStructureBounds(worldTile(worldMapState, endPos.xy())->psObject);
 	const auto droidPropulsionType = psDroid->getPropulsionStats()->propulsionType;
 	startPos = findNonblockingPosition(startPos, droidPropulsionType, psDroid->player, moveType);
 	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
@@ -754,13 +754,13 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	// We have to be careful with this check because it is called on
 	// load when playing campaign on droids that are on the other
 	// map during missions, and those maps are usually larger.
-	if (!worldOnMap(orig.xy()) || !worldOnMap(dest.xy()))
+	if (!worldOnMap(worldMapState, orig.xy()) || !worldOnMap(worldMapState, dest.xy()))
 	{
 		return false;
 	}
 
-	MAPTILE *origTile = worldTile(findNonblockingPosition(orig, propulsion).xy());
-	MAPTILE *destTile = worldTile(findNonblockingPosition(dest, propulsion).xy());
+	MAPTILE *origTile = worldTile(worldMapState, findNonblockingPosition(orig, propulsion).xy());
+	MAPTILE *destTile = worldTile(worldMapState, findNonblockingPosition(dest, propulsion).xy());
 
 	ASSERT_OR_RETURN(false, propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT_OR_RETURN(false, origTile != nullptr && destTile != nullptr, "Bad tile parameter");

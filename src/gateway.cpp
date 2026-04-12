@@ -54,13 +54,13 @@ static SDWORD gwMapHeight()
 // set the gateway flag on a tile
 static void gwSetGatewayFlag(SDWORD x, SDWORD y)
 {
-	mapTile((UDWORD)x, (UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
+	mapTile(worldMapState, (UDWORD)x, (UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
 }
 
 // clear the gateway flag on a tile
 static void gwClearGatewayFlag(SDWORD x, SDWORD y)
 {
-	mapTile((UDWORD)x, (UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
+	mapTile(worldMapState, (UDWORD)x, (UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
 }
 
 
