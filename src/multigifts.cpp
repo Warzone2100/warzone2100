@@ -298,7 +298,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	uint8_t      giftType = DROID_GIFT;
 	uint8_t      totalToSend = 0;
 
-	if (worldObjectState.droids[from].empty())
+	if (gameWorld.objects.droids[from].empty())
 	{
 		return;
 	}
@@ -309,8 +309,8 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * over their droid limit.
 	 */
 
-	for (psD = worldObjectState.droids[from].begin();
-	     psD != worldObjectState.droids[from].end() && (getNumDroids(to) + totalToSend < getMaxDroids(to)) && totalToSend != UINT8_MAX;
+	for (psD = gameWorld.objects.droids[from].begin();
+	     psD != gameWorld.objects.droids[from].end() && (getNumDroids(to) + totalToSend < getMaxDroids(to)) && totalToSend != UINT8_MAX;
 	     ++psD)
 	{
 		if ((*psD)->selected)
@@ -328,7 +328,7 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * does its own net calls.
 	 */
 
-	for (psD = worldObjectState.droids[from].begin(); psD != worldObjectState.droids[from].end() && totalToSend != 0; ++psD)
+	for (psD = gameWorld.objects.droids[from].begin(); psD != gameWorld.objects.droids[from].end() && totalToSend != 0; ++psD)
 	{
 		if ((*psD)->selected)
 		{
@@ -504,7 +504,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 
 	// Make sure p1's structures are no longer considered "our buildings" to their former allies
 	// For unit pathing
-	for (const STRUCTURE* psStructure : worldObjectState.structures[p1])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -512,13 +512,13 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		{
 			for (int j = 0; j < b.size.y; j++)
 			{
-				auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
-				auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			}
 		}
 	}
 	// Do the same for p2's stuff
-	for (const STRUCTURE* psStructure : worldObjectState.structures[p2])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -526,8 +526,8 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		{
 			for (int j = 0; j < b.size.y; j++)
 			{
-				auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
-				auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			}
 		}
 	}
@@ -573,7 +573,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Clear out any attacking orders
-	for (DROID* psDroid : worldObjectState.droids[p1])	// from -> to
+	for (DROID* psDroid : gameWorld.objects.droids[p1])	// from -> to
 	{
 		if (psDroid->order.type == DORDER_ATTACK
 		    && psDroid->order.psObj
@@ -582,7 +582,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
-	for (DROID* psDroid : worldObjectState.droids[p2])	// to -> from
+	for (DROID* psDroid : gameWorld.objects.droids[p2])	// to -> from
 	{
 		if (psDroid->order.type == DORDER_ATTACK
 		    && psDroid->order.psObj
@@ -593,7 +593,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Properly mark all of p1's structures as allied buildings for unit pathing
-	for (const STRUCTURE* psStructure : worldObjectState.structures[p1])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -603,19 +603,19 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			{
 				if (!(psStructure->pStructureType->type == REF_GATE))
 				{
-					auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+					auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 				}
 				else
 				{
 					// Make sure gates aren't set as impassible to our new allies
-					auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
-					auxSetEnemy(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+					auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
 				}
 			}
 		}
 	}
 	// Do the same for p2's stuff
-	for (const STRUCTURE* psStructure : worldObjectState.structures[p2])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -625,12 +625,12 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			{
 				if (!(psStructure->pStructureType->type == REF_GATE))
 				{
-					auxSetAllied(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+					auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 				}
 				else
 				{
-					auxClearAll(worldMapState, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
-					auxSetEnemy(worldMapState, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+					auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
 				}
 			}
 		}

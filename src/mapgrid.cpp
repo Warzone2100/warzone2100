@@ -30,6 +30,7 @@
 
 #include "mapgrid.h"
 #include "pointtree.h"
+#include "game_world.h"
 
 
 static PointTree *gridPointTree = nullptr;  // A quad-tree-like object.
@@ -57,7 +58,7 @@ void gridReset()
 	// Put all existing objects into the point tree.
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (BASE_OBJECT* psObj : worldObjectState.droids[player])
+		for (BASE_OBJECT* psObj : gameWorld.objects.droids[player])
 		{
 			if (!psObj->died)
 			{
@@ -68,7 +69,7 @@ void gridReset()
 				}
 			}
 		}
-		for (BASE_OBJECT* psObj : worldObjectState.structures[player])
+		for (BASE_OBJECT* psObj : gameWorld.objects.structures[player])
 		{
 			if (!psObj->died)
 			{
@@ -80,7 +81,7 @@ void gridReset()
 			}
 		}
 	}
-	for (BASE_OBJECT* psObj : worldObjectState.features[0])
+	for (BASE_OBJECT* psObj : gameWorld.objects.features[0])
 	{
 		if (!psObj->died)
 		{

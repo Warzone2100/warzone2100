@@ -75,6 +75,7 @@
 #include "multilobbycommands.h"
 #include "stdinreader.h"
 #include "hci/quickchat.h"
+#include "game_world.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
@@ -138,7 +139,7 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
 	// delete all droids
-	mutating_list_iterate(worldObjectState.droids[player], [quietly](DROID* d)
+	mutating_list_iterate(gameWorld.objects.droids[player], [quietly](DROID* d)
 	{
 		if (quietly)			// don't show effects
 		{
@@ -153,7 +154,7 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
 	// delete all structs
-	mutating_list_iterate(worldObjectState.structures[player], [quietly](STRUCTURE* psStruct)
+	mutating_list_iterate(gameWorld.objects.structures[player], [quietly](STRUCTURE* psStruct)
 	{
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
@@ -173,7 +174,7 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE *)> cmp, bool quietly)
 {
 	bool destroyedAnyStructs = false;
-	mutating_list_iterate(worldObjectState.structures[player], [quietly, &cmp, &destroyedAnyStructs](STRUCTURE* psStruct)
+	mutating_list_iterate(gameWorld.objects.structures[player], [quietly, &cmp, &destroyedAnyStructs](STRUCTURE* psStruct)
 	{
 		if (cmp(psStruct))
 		{
@@ -256,7 +257,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 			return a.itemsRecv < b.itemsRecv;
 		});
 	};
-	mutating_list_iterate(worldObjectState.droids[player], [&droidsGiftedPerTarget, &incrRecvItem](DROID* d)
+	mutating_list_iterate(gameWorld.objects.droids[player], [&droidsGiftedPerTarget, &incrRecvItem](DROID* d)
 	{
 		bool transferredDroid = false;
 		if (!isDead(d))
@@ -294,7 +295,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 			});
 		};
 
-		mutating_list_iterate(worldObjectState.structures[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
+		mutating_list_iterate(gameWorld.objects.structures[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
 		{
 			if (psStruct && cmp(psStruct))
 			{
@@ -384,13 +385,13 @@ static void resetMultiVisibility(UDWORD player)
 		if (owned != player)								// done reset own stuff..
 		{
 			//droids
-			for (DROID* pDroid : worldObjectState.droids[owned])
+			for (DROID* pDroid : gameWorld.objects.droids[owned])
 			{
 				pDroid->visible[player] = false;
 			}
 
 			//structures
-			for (STRUCTURE* pStruct : worldObjectState.structures[owned])
+			for (STRUCTURE* pStruct : gameWorld.objects.structures[owned])
 			{
 				pStruct->visible[player] = false;
 			}

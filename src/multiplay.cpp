@@ -464,7 +464,7 @@ bool multiplayerWinSequence(bool firstCall)
 		CancelAllResearch(selectedPlayer);
 
 		// stop all manufacture.
-		for (STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
+		for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 		{
 			if (psStruct && psStruct->isFactory())
 			{
@@ -504,9 +504,9 @@ bool multiplayerWinSequence(bool firstCall)
 			pos2.x = 128;
 		}
 
-		if ((unsigned)pos2.x > world_coord(worldMapState.width))
+		if ((unsigned)pos2.x > world_coord(gameWorld.map.width))
 		{
-			pos2.x = world_coord(worldMapState.width);
+			pos2.x = world_coord(gameWorld.map.width);
 		}
 
 		if (pos2.z < 0)
@@ -514,9 +514,9 @@ bool multiplayerWinSequence(bool firstCall)
 			pos2.z = 128;
 		}
 
-		if ((unsigned)pos2.z > world_coord(worldMapState.height))
+		if ((unsigned)pos2.z > world_coord(gameWorld.map.height))
 		{
-			pos2.z = world_coord(worldMapState.height);
+			pos2.z = world_coord(gameWorld.map.height);
 		}
 
 		addEffect(&pos2, EFFECT_FIREWORK, FIREWORK_TYPE_LAUNCHER, false, nullptr, 0);	// throw up some fire works.
@@ -649,7 +649,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(worldObjectState.droids[i], id);
+			DROID* d = (DROID*)getBaseObjFromId(gameWorld.objects.droids[i], id);
 			if (d)
 			{
 				return d;
@@ -658,7 +658,7 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		DROID* d = (DROID*)getBaseObjFromId(worldObjectState.droids[player], id);
+		DROID* d = (DROID*)getBaseObjFromId(gameWorld.objects.droids[player], id);
 		if (d)
 		{
 			return d;
@@ -674,7 +674,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(mission.worldObjectState.droids[i], id);
+			DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[i], id);
 			if (d)
 			{
 				return d;
@@ -683,7 +683,7 @@ DROID *IdToMissionDroid(UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		DROID* d = (DROID*)getBaseObjFromId(mission.worldObjectState.droids[player], id);
+		DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[player], id);
 		if (d)
 		{
 			return d;
@@ -696,12 +696,12 @@ static STRUCTURE* _IdToStruct(UDWORD id, UDWORD beginPlayer, UDWORD endPlayer)
 {
 	for (int i = beginPlayer; i < endPlayer; ++i)
 	{
-		STRUCTURE* s = (STRUCTURE*)getBaseObjFromId(worldObjectState.structures[i], id);
+		STRUCTURE* s = (STRUCTURE*)getBaseObjFromId(gameWorld.objects.structures[i], id);
 		if (s)
 		{
 			return s;
 		}
-		s = (STRUCTURE*)getBaseObjFromId(mission.worldObjectState.structures[i], id);
+		s = (STRUCTURE*)getBaseObjFromId(mission.gameWorld.objects.structures[i], id);
 		if (s)
 		{
 			return s;
@@ -733,7 +733,7 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	return (FEATURE*)getBaseObjFromId(worldObjectState.features[0], id);
+	return (FEATURE*)getBaseObjFromId(gameWorld.objects.features[0], id);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -970,11 +970,11 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 
 	if (player < MAX_PLAYERS)
 	{
-		auto buildingIt = std::find_if(worldObjectState.structures[player].begin(), worldObjectState.structures[player].end(), [](STRUCTURE* building)
+		auto buildingIt = std::find_if(gameWorld.objects.structures[player].begin(), gameWorld.objects.structures[player].end(), [](STRUCTURE* building)
 		{
 			return building->pStructureType->type == REF_HQ;
 		});
-		if (buildingIt != worldObjectState.structures[player].end())
+		if (buildingIt != gameWorld.objects.structures[player].end())
 		{
 			psBuilding = *buildingIt;
 		}
@@ -985,20 +985,20 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 		x = map_coord(psBuilding->pos.x);
 		y = map_coord(psBuilding->pos.y);
 	}
-	else if ((player < MAX_PLAYERS) && !worldObjectState.droids[player].empty())				// or first droid
+	else if ((player < MAX_PLAYERS) && !gameWorld.objects.droids[player].empty())				// or first droid
 	{
-		x = map_coord(worldObjectState.droids[player].front()->pos.x);
-		y =	map_coord(worldObjectState.droids[player].front()->pos.y);
+		x = map_coord(gameWorld.objects.droids[player].front()->pos.x);
+		y =	map_coord(gameWorld.objects.droids[player].front()->pos.y);
 	}
-	else if ((player < MAX_PLAYERS) && !worldObjectState.structures[player].empty())				// center on first struct
+	else if ((player < MAX_PLAYERS) && !gameWorld.objects.structures[player].empty())				// center on first struct
 	{
-		x = map_coord(worldObjectState.structures[player].front()->pos.x);
-		y = map_coord(worldObjectState.structures[player].front()->pos.y);
+		x = map_coord(gameWorld.objects.structures[player].front()->pos.x);
+		y = map_coord(gameWorld.objects.structures[player].front()->pos.y);
 	}
 	else														//or map center.
 	{
-		x = worldMapState.width / 2;
-		y = worldMapState.height / 2;
+		x = gameWorld.map.width / 2;
+		y = gameWorld.map.height / 2;
 	}
 
 
@@ -1013,7 +1013,7 @@ Vector3i cameraToHome(UDWORD player, bool scroll, bool fromSave)
 
 	Vector3i res;
 	res.x = world_coord(x);
-	res.y = map_TileHeight(worldMapState, x, y);
+	res.y = map_TileHeight(gameWorld.map, x, y);
 	res.z = world_coord(y);
 	return res;
 }
@@ -1886,7 +1886,7 @@ STRUCTURE *findResearchingFacilityByResearchIndex(const PerPlayerStructureLists&
 
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index)
 {
-	return findResearchingFacilityByResearchIndex(worldObjectState.structures, player, index);
+	return findResearchingFacilityByResearchIndex(gameWorld.objects.structures, player, index);
 }
 
 bool recvResearchStatus(NETQUEUE queue)
@@ -2563,7 +2563,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 
 	//check the z value is at least the height of the terrain
-	height = map_Height(worldMapState, LocX, LocY);
+	height = map_Height(gameWorld.map, LocX, LocY);
 
 	((VIEW_PROXIMITY *)psViewData->pData)->z = height;
 
@@ -2821,7 +2821,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy HQ
 		std::vector<STRUCTURE *> hqStructs;
-		for (STRUCTURE *psStruct : worldObjectState.structures[playerIndex])
+		for (STRUCTURE *psStruct : gameWorld.objects.structures[playerIndex])
 		{
 			if (REF_HQ == psStruct->pStructureType->type)
 			{
@@ -2842,7 +2842,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy all droids
 		debug(LOG_DEATH, "killing off all droids for player %d", playerIndex);
-		mutating_list_iterate(worldObjectState.droids[playerIndex], [quietly](DROID* d)
+		mutating_list_iterate(gameWorld.objects.droids[playerIndex], [quietly](DROID* d)
 		{
 			if (quietly)			// don't show effects
 			{
@@ -2857,7 +2857,7 @@ bool makePlayerSpectator(uint32_t playerIndex, bool removeAllStructs, bool quiet
 
 		// Destroy structs
 		debug(LOG_DEATH, "killing off structures for player %d", playerIndex);
-		mutating_list_iterate(worldObjectState.structures[playerIndex], [quietly, removeAllStructs](STRUCTURE* psStruct)
+		mutating_list_iterate(gameWorld.objects.structures[playerIndex], [quietly, removeAllStructs](STRUCTURE* psStruct)
 		{
 			if (removeAllStructs
 				|| psStruct->pStructureType->type == REF_POWER_GEN

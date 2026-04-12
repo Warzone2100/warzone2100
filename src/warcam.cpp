@@ -183,7 +183,7 @@ static void processLeaderSelection()
 	switch (leaderClass)
 	{
 	case	LEADER_LEFT:
-		for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -202,7 +202,7 @@ static void processLeaderSelection()
 		}
 		break;
 	case	LEADER_RIGHT:
-		for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -221,7 +221,7 @@ static void processLeaderSelection()
 		}
 		break;
 	case	LEADER_UP:
-		for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -240,7 +240,7 @@ static void processLeaderSelection()
 		}
 		break;
 	case	LEADER_DOWN:
-		for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			/* Is it even on the sscreen? */
 			if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) && psDroid->selected && psDroid != trackingCamera.target)
@@ -384,7 +384,7 @@ DROID *camFindDroidTarget()
 		return nullptr;
 	}
 
-	for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -453,7 +453,7 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 	}
 
 	/* Got thru' all droids */
-	for (const DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		/* Is he worth selecting? */
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
@@ -482,7 +482,7 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 		return;
 	}
 
-	for (const DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
@@ -682,7 +682,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 
 		bGotFlying = true;
 		droidHeight = trackingCamera.target->pos.z;
-		droidMapHeight = map_Height(worldMapState, trackingCamera.target->pos.x, trackingCamera.target->pos.y);
+		droidMapHeight = map_Height(gameWorld.map, trackingCamera.target->pos.x, trackingCamera.target->pos.y);
 		difHeight = abs(droidHeight - droidMapHeight);
 		if (difHeight < MIN_TRACK_HEIGHT)
 		{

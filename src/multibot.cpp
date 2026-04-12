@@ -43,6 +43,7 @@
 #include "mapgrid.h"
 #include "multirecv.h"
 #include "transporter.h"
+#include "game_world.h"
 
 #include <vector>
 #include <algorithm>
@@ -421,7 +422,7 @@ bool recvDroid(NETQUEUE queue)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ", player, id);
-	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(worldMapState.width) || pos.y > world_coord(worldMapState.height))
+	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(gameWorld.map.width) || pos.y > world_coord(gameWorld.map.height))
 	{
 		debug(LOG_ERROR, "Received bad droid position (%d, %d) from %d about p%d (%s)", (int)pos.x, (int)pos.y,
 		      queue.index, player, isHumanPlayer(player) ? "Human" : "AI");
@@ -435,7 +436,7 @@ bool recvDroid(NETQUEUE queue)
 	// If we were able to build the droid set it up
 	if (psDroid)
 	{
-		addDroid(psDroid, worldObjectState.droids);
+		addDroid(psDroid, gameWorld.objects.droids);
 
 		if (haveInitialOrders)
 		{

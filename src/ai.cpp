@@ -37,6 +37,7 @@
 #include "objmem.h"
 #include "order.h"
 #include "visibility.h"
+#include "game_world.h"
 
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
@@ -179,7 +180,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 
-	for (BASE_OBJECT* psSensor : worldObjectState.sensors[0])
+	for (BASE_OBJECT* psSensor : gameWorld.objects.sensors[0])
 	{
 		BASE_OBJECT	*psTemp = nullptr;
 		bool		isCB = false;

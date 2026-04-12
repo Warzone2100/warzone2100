@@ -563,10 +563,10 @@ void updateDroidOrientation(DROID *psDroid)
 	//    hy0
 	// hx0 * hx1      (* = droid)
 	//    hy1
-	hx1 = map_Height(worldMapState, psDroid->pos.x + d, psDroid->pos.y);
-	hx0 = map_Height(worldMapState, MAX(0, psDroid->pos.x - d), psDroid->pos.y);
-	hy1 = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y + d);
-	hy0 = map_Height(worldMapState, psDroid->pos.x, MAX(0, psDroid->pos.y - d));
+	hx1 = map_Height(gameWorld.map, psDroid->pos.x + d, psDroid->pos.y);
+	hx0 = map_Height(gameWorld.map, MAX(0, psDroid->pos.x - d), psDroid->pos.y);
+	hy1 = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y + d);
+	hy0 = map_Height(gameWorld.map, psDroid->pos.x, MAX(0, psDroid->pos.y - d));
 
 	//update height in case were in the bottom of a trough
 	psDroid->pos.z = MAX(psDroid->pos.z, (hx0 + hx1) / 2);
@@ -905,11 +905,11 @@ static void moveCalcSlideVector(DROID *psDroid, int32_t objX, int32_t objY, int3
 static void moveOpenGates(DROID *psDroid, Vector2i tile)
 {
 	// is the new tile a gate?
-	if (!worldOnMap(worldMapState, tile.x, tile.y))
+	if (!worldOnMap(gameWorld.map, tile.x, tile.y))
 	{
 		return;
 	}
-	MAPTILE *psTile = mapTile(worldMapState, tile);
+	MAPTILE *psTile = mapTile(gameWorld.map, tile);
 	if (!psDroid->isFlying() && !psDroid->isFlightBasedTransporter() && psTile && psTile->psObject && psTile->psObject->type == OBJ_STRUCTURE && aiCheckAlliances(psTile->psObject->player, psDroid->player))
 	{
 		requestOpenGate((STRUCTURE *)psTile->psObject);  // If it's a friendly gate, open it. (It would be impolite to open an enemy gate.)
@@ -1401,7 +1401,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	{
 		mapX = map_coord(psDroid->pos.x);
 		mapY = map_coord(psDroid->pos.y);
-		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(worldMapState, mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid, false));
+		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(gameWorld.map, mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid, false));
 	}
 
 
@@ -1617,7 +1617,7 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 	psDroid->pos.y += gameTimeAdjustedAverage(dy, EXTRA_PRECISION);
 
 	/* impact if about to go off map else update coordinates */
-	if (worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y) == false)
+	if (worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y) == false)
 	{
 		/* transporter going off-world will trigger next map, and is ok */
 		ASSERT(psDroid->isTransporter(), "droid trying to move off the map!");
@@ -1691,7 +1691,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveUpdateDroidPos(psDroid, bx, by);
 
 	//set the droid height here so other routines can use it
-	psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);//jps 21july96
+	psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);//jps 21july96
 	updateDroidOrientation(psDroid);
 }
 
@@ -1744,7 +1744,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	moveUpdateDroidPos(psDroid, dx, dy);
 
 	//set the droid height here so other routines can use it
-	psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);//jps 21july96
+	psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);//jps 21july96
 
 	/* update anim if moving */
 	if (psDroid->droidType == DROID_PERSON && speed != 0 && (psDroid->animationEvent != ANIM_EVENT_ACTIVE && psDroid->animationEvent != ANIM_EVENT_DYING))
@@ -1859,9 +1859,9 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	psDroid->rot.roll = psDroid->rot.roll + (uint16_t)gameTimeAdjustedIncrement(3 * angleDelta(targetRoll - psDroid->rot.roll));
 
 	/* do vertical movement - only if on the map */
-	if (worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y))
+	if (worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y))
 	{
-		iMapZ = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
+		iMapZ = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 		psDroid->pos.z = MAX(iMapZ, psDroid->pos.z + gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed));
 		moveAdjustVtolHeight(psDroid, iMapZ);
 		psDroid->heightAboveMap = psDroid->pos.z - iMapZ;
@@ -1897,7 +1897,7 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 
 static void moveDescending(DROID *psDroid)
 {
-	int32_t iMapHeight = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
+	int32_t iMapHeight = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 
 	psDroid->sMove.speed = 0;
 
@@ -2439,7 +2439,7 @@ void moveUpdateDroid(DROID *psDroid)
 //	}
 
 	/* If it's sitting in water then it's got to go with the flow! */
-	if (worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y) && terrainType(mapTile(worldMapState, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) == TER_WATER)
+	if (worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y) && terrainType(mapTile(gameWorld.map, map_coord(psDroid->pos.x), map_coord(psDroid->pos.y))) == TER_WATER)
 	{
 		updateDroidOrientation(psDroid);
 	}

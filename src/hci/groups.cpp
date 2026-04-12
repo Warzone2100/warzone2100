@@ -21,6 +21,7 @@
 #include "groups.h"
 #include "objects_stats.h"
 #include "../group.h"
+#include "../game_world.h"
 
 static bool groupButtonEnabled = true;
 
@@ -307,7 +308,7 @@ void GroupsUIController::updateData()
 	};
 
 	std::array<AccumulatedGroupInfo, 10> calculatedGroupInfo;
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->repairGroup < calculatedGroupInfo.size()) {
 			calculatedGroupInfo[psDroid->repairGroup].numberDamagedInGroup++;

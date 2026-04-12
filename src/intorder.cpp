@@ -26,6 +26,7 @@
 #include "intorder.h"
 #include "objects.h"
 #include "order.h"
+#include "game_world.h"
 
 #include <set>
 #include <algorithm>
@@ -410,7 +411,7 @@ static bool BuildSelectedDroidList()
 		return false;
 	}
 
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{

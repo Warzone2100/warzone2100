@@ -913,7 +913,7 @@ static bool debugReloadSelectedObjectDisplayModels()
 		return false;
 	}
 
-	for (const DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -1027,7 +1027,7 @@ static bool debugReloadSelectedObjectDisplayModels()
 		}
 	};
 
-	for (const STRUCTURE* psStructure : worldObjectState.structures[selectedPlayer])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStructure->selected)
 		{

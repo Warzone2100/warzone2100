@@ -91,7 +91,7 @@ static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t
 	uint64_t totalHP = 0;
 	uint64_t totalExp = 0;
 	uint64_t numDroids = 0;
-	for (const DROID *psDroid : worldObjectState.droids[player])
+	for (const DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->died)
 		{
@@ -115,7 +115,7 @@ static uint32_t getNumOilRigs(uint32_t player)
 	}
 
 	uint32_t result = 0;
-	for (const STRUCTURE *psStruct : worldObjectState.structures[player])
+	for (const STRUCTURE *psStruct : gameWorld.objects.structures[player])
 	{
 		if (!psStruct->died
 			&& (REF_RESOURCE_EXTRACTOR == psStruct->pStructureType->type))

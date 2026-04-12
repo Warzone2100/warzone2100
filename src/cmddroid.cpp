@@ -37,6 +37,7 @@
 #include "objmem.h"
 #include "droid.h"
 #include "hci.h"
+#include "game_world.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
@@ -175,7 +176,7 @@ SDWORD cmdDroidGetIndex(const DROID *psCommander)
 		return 0;
 	}
 
-	for (const DROID* psCurr : worldObjectState.droids[psCommander->player])
+	for (const DROID* psCurr : gameWorld.objects.droids[psCommander->player])
 	{
 		if (psCurr->droidType == DROID_COMMAND &&
 		    psCurr->id < psCommander->id)

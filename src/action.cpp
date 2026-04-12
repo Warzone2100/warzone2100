@@ -46,7 +46,7 @@
 #include "objmem.h"
 #include "move.h"
 #include "cmddroid.h"
-#include "world_object_state.h"
+#include "game_world.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000
@@ -464,7 +464,7 @@ static void actionAddVtolAttackRun(DROID *psDroid)
 	/* add waypoint behind target attack length away*/
 	Vector2i dest = psTarget->pos.xy() + delta * VTOL_ATTACK_LENGTH / dist;
 
-	if (!worldOnMap(worldMapState, dest))
+	if (!worldOnMap(gameWorld.map, dest))
 	{
 		debug(LOG_NEVER, "*** actionAddVtolAttackRun: run off map! ***");
 	}
@@ -536,7 +536,7 @@ static void actionCalcPullBackPoint(BASE_OBJECT *psObj, BASE_OBJECT *psTarget, i
 	*py = psObj->pos.y + ydiff * PULL_BACK_DIST;
 
 	// make sure coordinates stay inside of the map
-	clip_world_offmap(worldMapState, px, py);
+	clip_world_offmap(gameWorld.map, px, py);
 }
 
 // check whether a droid is in the neighboring tile of another droid
@@ -805,11 +805,11 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				UDWORD droidX, droidY;
 
-				if (!droidRemove(psDroid, mission.worldObjectState.droids))
+				if (!droidRemove(psDroid, mission.gameWorld.objects.droids))
 				{
 					ASSERT_OR_RETURN(, false, "Unable to remove transporter from mission list");
 				}
-				addDroid(psDroid, worldObjectState.droids);
+				addDroid(psDroid, gameWorld.objects.droids);
 				//set the x/y up since they were set to INVALID_XY when moved offWorld
 				missionGetTransporterExit(selectedPlayer, &droidX, &droidY);
 				psDroid->pos.x = droidX;
@@ -1589,7 +1589,7 @@ void actionUpdateDroid(DROID *psDroid)
 					debug(LOG_NEVER, "DACTION_MOVETOBUILD: setUpBuildModule");
 					setUpBuildModule(psDroid);
 				}
-				else if (TileHasStructure(worldTile(worldMapState, pos)))
+				else if (TileHasStructure(worldTile(gameWorld.map, pos)))
 				{
 					// structure on the build location - see if it is the same type
 					STRUCTURE *const psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
@@ -1637,7 +1637,7 @@ void actionUpdateDroid(DROID *psDroid)
 			else if (order->type == DORDER_LINEBUILD || order->type == DORDER_BUILD)
 			{
 				// building a wall.
-				MAPTILE *const psTile = worldTile(worldMapState, psDroid->actionPos);
+				MAPTILE *const psTile = worldTile(gameWorld.map, psDroid->actionPos);
 				syncDebug("Reached build target: wall");
 				if (order->psObj == nullptr
 				    && (TileHasStructure(psTile)
@@ -2761,12 +2761,12 @@ void moveToRearm(DROID *psDroid)
 // whether a tile is suitable for a vtol to land on
 static bool vtolLandingTile(SDWORD x, SDWORD y)
 {
-	if (x < 0 || x >= (SDWORD)worldMapState.width || y < 0 || y >= (SDWORD)worldMapState.height)
+	if (x < 0 || x >= (SDWORD)gameWorld.map.width || y < 0 || y >= (SDWORD)gameWorld.map.height)
 	{
 		return false;
 	}
 
-	const MAPTILE *psTile = mapTile(worldMapState, x, y);
+	const MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 	if (psTile->tileInfoBits & BITS_FPATHBLOCK ||
 	    TileIsOccupied(psTile) ||
 	    terrainType(psTile) == TER_CLIFFFACE ||
@@ -2875,7 +2875,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	int startY = map_coord(p->y);
 
 	// set blocking flags for all the other droids
-	for (const DROID *psCurr : worldObjectState.droids[psDroid->player])
+	for (const DROID *psCurr : gameWorld.objects.droids[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
@@ -2888,9 +2888,9 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 		}
 		if (psCurr != psDroid)
 		{
-			if (tileOnMap(worldMapState, t))
+			if (tileOnMap(gameWorld.map, t))
 			{
-				mapTile(worldMapState, t)->tileInfoBits |= BITS_FPATHBLOCK;
+				mapTile(gameWorld.map, t)->tileInfoBits |= BITS_FPATHBLOCK;
 			}
 		}
 	}
@@ -2907,7 +2907,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 	}
 
 	// clear blocking flags for all the other droids
-	for (const DROID *psCurr : worldObjectState.droids[psDroid->player])
+	for (const DROID *psCurr : gameWorld.objects.droids[psDroid->player])
 	{
 		Vector2i t(0, 0);
 		if (DROID_STOPPED(psCurr))
@@ -2918,9 +2918,9 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 		{
 			t = map_coord(psCurr->sMove.destination);
 		}
-		if (tileOnMap(worldMapState, t))
+		if (tileOnMap(gameWorld.map, t))
 		{
-			mapTile(worldMapState, t)->tileInfoBits &= ~BITS_FPATHBLOCK;
+			mapTile(gameWorld.map, t)->tileInfoBits &= ~BITS_FPATHBLOCK;
 		}
 	}
 

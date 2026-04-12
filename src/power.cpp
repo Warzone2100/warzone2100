@@ -255,11 +255,11 @@ StructureList* powerStructList(int player)
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (offWorldKeepLists)
 	{
-		return &mission.worldObjectState.structures[player];
+		return &mission.gameWorld.objects.structures[player];
 	}
 	else
 	{
-		return &worldObjectState.structures[player];
+		return &gameWorld.objects.structures[player];
 	}
 }
 

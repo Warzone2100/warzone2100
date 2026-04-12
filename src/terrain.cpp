@@ -65,6 +65,8 @@
 
 #include "profiling.h"
 
+#include "game_world.h"
+
 #include <cstdint>
 
 // TODO: Fix and remove after merging terrain rendering changes
@@ -313,10 +315,10 @@ static void averagePos(Vector3i *center, Vector3i *a, Vector3i *b, Vector3i *c, 
 static bool isWater(int x, int y)
 {
 	bool result = false;
-	result = result || (tileOnMap(worldMapState, x  , y) && terrainType(mapTile(worldMapState, x  , y)) == TER_WATER);
-	result = result || (tileOnMap(worldMapState, x - 1, y) && terrainType(mapTile(worldMapState, x - 1, y)) == TER_WATER);
-	result = result || (tileOnMap(worldMapState, x  , y - 1) && terrainType(mapTile(worldMapState, x  , y - 1)) == TER_WATER);
-	result = result || (tileOnMap(worldMapState, x - 1, y - 1) && terrainType(mapTile(worldMapState, x - 1, y - 1)) == TER_WATER);
+	result = result || (tileOnMap(gameWorld.map, x  , y) && terrainType(mapTile(gameWorld.map, x  , y)) == TER_WATER);
+	result = result || (tileOnMap(gameWorld.map, x - 1, y) && terrainType(mapTile(gameWorld.map, x - 1, y)) == TER_WATER);
+	result = result || (tileOnMap(gameWorld.map, x  , y - 1) && terrainType(mapTile(gameWorld.map, x  , y - 1)) == TER_WATER);
+	result = result || (tileOnMap(gameWorld.map, x - 1, y - 1) && terrainType(mapTile(gameWorld.map, x - 1, y - 1)) == TER_WATER);
 	return result;
 }
 
@@ -324,10 +326,10 @@ static bool isWater(int x, int y)
 static bool isOnlyWater(int x, int y)
 {
 	bool result = true;
-	result = result && (tileOnMap(worldMapState, x  , y) && terrainType(mapTile(worldMapState, x  , y)) == TER_WATER);
-	result = result && (tileOnMap(worldMapState, x - 1, y) && terrainType(mapTile(worldMapState, x - 1, y)) == TER_WATER);
-	result = result && (tileOnMap(worldMapState, x  , y - 1) && terrainType(mapTile(worldMapState, x  , y - 1)) == TER_WATER);
-	result = result && (tileOnMap(worldMapState, x - 1, y - 1) && terrainType(mapTile(worldMapState, x - 1, y - 1)) == TER_WATER);
+	result = result && (tileOnMap(gameWorld.map, x  , y) && terrainType(mapTile(gameWorld.map, x  , y)) == TER_WATER);
+	result = result && (tileOnMap(gameWorld.map, x - 1, y) && terrainType(mapTile(gameWorld.map, x - 1, y)) == TER_WATER);
+	result = result && (tileOnMap(gameWorld.map, x  , y - 1) && terrainType(mapTile(gameWorld.map, x  , y - 1)) == TER_WATER);
+	result = result && (tileOnMap(gameWorld.map, x - 1, y - 1) && terrainType(mapTile(gameWorld.map, x - 1, y - 1)) == TER_WATER);
 	return result;
 }
 
@@ -347,7 +349,7 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	result->x = world_coord(x);
 	result->z = world_coord(-y);
 
-	if (x <= 0 || y <= 0 || x >= worldMapState.width || y >= worldMapState.height)
+	if (x <= 0 || y <= 0 || x >= gameWorld.map.width || y >= gameWorld.map.height)
 	{
 		result->y = 0;
 	}
@@ -355,15 +357,15 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	{
 		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC)
 		{
-			result->y = map_TileHeight(worldMapState, x, y);
+			result->y = map_TileHeight(gameWorld.map, x, y);
 			if (water)
 			{
-				result->y = map_WaterHeight(worldMapState, x, y);
+				result->y = map_WaterHeight(gameWorld.map, x, y);
 			}
 		}
 		else
 		{
-			result->y = map_TileHeightSurface(worldMapState, x, y);
+			result->y = map_TileHeightSurface(gameWorld.map, x, y);
 		}
 	}
 }
@@ -414,7 +416,7 @@ static void setSectorGeometry(int sx, int sy,
 			geometry[*geometrySize].pos = pos;
 			(*geometrySize)++;
 
-			float waterHeight = map_WaterHeight(worldMapState, x, y);
+			float waterHeight = map_WaterHeight(gameWorld.map, x, y);
 			water[*waterSize] = glm::vec4(pos.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterHeight : pos.y, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 
@@ -438,12 +440,12 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 	{
 		for (j = y * sectorSize; j < y * sectorSize + sectorSize; j++)
 		{
-			if (i < 0 || j < 0 || i >= worldMapState.width || j >= worldMapState.height)
+			if (i < 0 || j < 0 || i >= gameWorld.map.width || j >= gameWorld.map.height)
 			{
 				continue;
 			}
 
-			MAPTILE *tile = mapTile(worldMapState, i, j);
+			MAPTILE *tile = mapTile(gameWorld.map, i, j);
 			center = getTileTexArrCoords(*uv, tile->texture);
 			int decalNo = static_cast<int>(TileNumber_tile(tile->texture));
 			bool skipDecalDraw = !TILE_HAS_DECAL(tile);
@@ -467,7 +469,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 				vs[k].decalUv = uv[dx][dy];
 				vs[k].normal = getGridNormal(i + dx, j + dy);
 				vs[k].decalNo = decalNo;
-				groundsBytes[k] = mapTile(worldMapState, i + dx, j + dy)->ground;
+				groundsBytes[k] = mapTile(gameWorld.map, i + dx, j + dy)->ground;
 				vs[k].groundWeights.clear();
 				vs[k].groundWeights.setByte(k, 255);
 			}
@@ -977,8 +979,8 @@ bool initTerrain()
 
 	/////////////////////
 	// Create the sectors
-	xSectors = (worldMapState.width + sectorSize - 1) / sectorSize;
-	ySectors = (worldMapState.height + sectorSize - 1) / sectorSize;
+	xSectors = (gameWorld.map.width + sectorSize - 1) / sectorSize;
+	ySectors = (gameWorld.map.height + sectorSize - 1) / sectorSize;
 	sectors = std::unique_ptr<Sector[]> (new Sector[xSectors * ySectors]());
 
 	////////////////////
@@ -1017,7 +1019,7 @@ bool initTerrain()
 			{
 				for (j = 0; j < sectorSize; j++)
 				{
-					if (x * sectorSize + i >= worldMapState.width || y * sectorSize + j >= worldMapState.height)
+					if (x * sectorSize + i >= gameWorld.map.width || y * sectorSize + j >= gameWorld.map.height)
 					{
 						continue; // off map, so skip
 					}
@@ -1109,7 +1111,7 @@ bool initTerrain()
 
 
 	// and finally the decals
-	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * worldMapState.width * worldMapState.height * 12);
+	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * gameWorld.map.width * gameWorld.map.height * 12);
 	int terrainDecalSize = 0;
 
 	for (x = 0; x < xSectors; x++)
@@ -1145,13 +1147,13 @@ bool initTerrain()
 	lightmapWidth = 1;
 	lightmapHeight = 1;
 	// determine the smallest power-of-two size we can use for the lightmap
-	while (worldMapState.width > (lightmapWidth <<= 1)) {}
-	while (worldMapState.height > (lightmapHeight <<= 1)) {}
-	debug(LOG_TERRAIN, "the size of the map is %ix%i", worldMapState.width, worldMapState.height);
+	while (gameWorld.map.width > (lightmapWidth <<= 1)) {}
+	while (gameWorld.map.height > (lightmapHeight <<= 1)) {}
+	debug(LOG_TERRAIN, "the size of the map is %ix%i", gameWorld.map.width, gameWorld.map.height);
 	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
-	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(worldMapState.width) *((float)worldMapState.width / (float)lightmapWidth), 0, 0, 0);
-	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(worldMapState.height) *((float)worldMapState.height / (float)lightmapHeight), 0);
+	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(gameWorld.map.width) *((float)gameWorld.map.width / (float)lightmapWidth), 0, 0, 0);
+	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(gameWorld.map.height) *((float)gameWorld.map.height / (float)lightmapHeight), 0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	lightmapValues.lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
@@ -1218,11 +1220,11 @@ static void updateLightMap(const LightMap& lightmap)
 {
 	size_t lightmapChannels = lightmapPixmap->channels(); // should always be 4 now...
 	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
-	for (int j = 0; j < worldMapState.height; ++j)
+	for (int j = 0; j < gameWorld.map.height; ++j)
 	{
-		for (int i = 0; i < worldMapState.width; ++i)
+		for (int i = 0; i < gameWorld.map.width; ++i)
 		{
-			MAPTILE *psTile = mapTile(worldMapState, i, j);
+			MAPTILE *psTile = mapTile(gameWorld.map, i, j);
 			PIELIGHT colour = lightmap(i, j);
 			UBYTE level = static_cast<UBYTE>(psTile->level);
 

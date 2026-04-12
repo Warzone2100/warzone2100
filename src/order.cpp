@@ -745,7 +745,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					yoffset = iCosR(angle, 1500);
 					angle -= DEG(10);
 				}
-				while (!worldOnMap(worldMapState, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));    // Don't try to fly off map.
+				while (!worldOnMap(gameWorld.map, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));    // Don't try to fly off map.
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset);
 			}
 
@@ -1682,7 +1682,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_RTB:
-		for (const STRUCTURE* psStruct : worldObjectState.structures[psDroid->player])
+		for (const STRUCTURE* psStruct : gameWorld.objects.structures[psDroid->player])
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
@@ -1868,7 +1868,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_RECYCLE:
 		psFactory = nullptr;
 		iFactoryDistSq = 0;
-		for (STRUCTURE* psStruct : worldObjectState.structures[psDroid->player])
+		for (STRUCTURE* psStruct : gameWorld.objects.structures[psDroid->player])
 		{
 			// Look for nearest factory or repair facility
 			if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
@@ -2297,7 +2297,7 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			position = psOrder->psObj->pos.xzy();
 		}
-		position.y = map_Height(worldMapState, position.x, position.z) + 32;
+		position.y = map_Height(gameWorld.map, position.x, position.z) + 32;
 		if (psOrder->psObj != nullptr && psOrder->psObj->sDisplay.imd != nullptr)
 		{
 			position.y += psOrder->psObj->sDisplay.imd->max.y;
@@ -2570,7 +2570,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID* psCurr : worldObjectState.droids[player])
+	for (DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2612,7 +2612,7 @@ static int highestQueuedModule(DroidOrder const &order, STRUCTURE const *structu
 		{
 			// Current order is weird, the DORDER_BUILDMODULE mutates into a DORDER_BUILD, and we use the order.pos instead of order.psObj.
 			// Also, might be DORDER_BUILD if selecting the module from the menu before clicking on the structure.
-			STRUCTURE *orderStructure = castStructure(worldTile(worldMapState, order.pos)->psObject);
+			STRUCTURE *orderStructure = castStructure(worldTile(gameWorld.map, order.pos)->psObject);
 			if (orderStructure == structure && (order.psStats == orderStructure->pStructureType || order.psStats == getModuleStat(orderStructure)))  // Order must be for this structure.
 			{
 				thisQueuedModule = nextModuleToBuild(structure, prevHighestQueuedModule);
@@ -2874,7 +2874,7 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 	ASSERT_PLAYER_OR_RETURN(, player);
 
 	/* loop over selected droids */
-	for (const DROID *psDroid : worldObjectState.droids[player])
+	for (const DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -2909,7 +2909,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID *psCurr : worldObjectState.droids[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2967,7 +2967,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : worldObjectState.droids[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && psCurr->isConstructionDroid())
 		{
@@ -2991,7 +2991,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : worldObjectState.droids[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -3016,7 +3016,7 @@ DROID *FindATransporter(DROID const *embarkee)
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;
 
-	for (DROID *psDroid : worldObjectState.droids[embarkee->player])
+	for (DROID *psDroid : gameWorld.objects.droids[embarkee->player])
 	{
 		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
@@ -3042,7 +3042,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct : worldObjectState.structures[player])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
 	{
 		if (psStruct->pStructureType->type == factoryType)
 		{
@@ -3059,7 +3059,7 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct : worldObjectState.structures[player])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
@@ -3299,7 +3299,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
 		{
-			for (DROID* psTempDroid : worldObjectState.droids[selectedPlayer])
+			for (DROID* psTempDroid : gameWorld.objects.droids[selectedPlayer])
 			{
 				if (psTempDroid != psDroid && psTempDroid->selected)
 				{
@@ -3392,7 +3392,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	vDroidPos.clear();
 	vDroid.clear();
 
-	for (STRUCTURE *psStruct : worldObjectState.structures[psDroid->player])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[psDroid->player])
 	{
 		if (psStruct->pStructureType->type == REF_HQ)
 		{
@@ -3431,7 +3431,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		&& secondaryGetState(psDroid, DSO_ACCEPT_RETREP)))
 	{
 		// one of these lists is empty when on mission
-		DroidList* psdroidList = !worldObjectState.droids[psDroid->player].empty() ? &worldObjectState.droids[psDroid->player] : &mission.worldObjectState.droids[psDroid->player];
+		DroidList* psdroidList = !gameWorld.objects.droids[psDroid->player].empty() ? &gameWorld.objects.droids[psDroid->player] : &mission.gameWorld.objects.droids[psDroid->player];
 		if (!psdroidList->empty())
 		{
 			for (DROID* psCurr : *psdroidList)
@@ -3726,7 +3726,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			// look for the factories
-			for (STRUCTURE* psStruct : worldObjectState.structures[psDroid->player])
+			for (STRUCTURE* psStruct : gameWorld.objects.structures[psDroid->player])
 			{
 				factType = psStruct->pStructureType->type;
 				if (factType == REF_FACTORY ||
@@ -3975,7 +3975,7 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : worldObjectState.droids[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->group == group &&
 		    secondaryGetState(psCurr, sec) != state)
@@ -4004,7 +4004,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 	// count the number of units for each state
 	numStates = 0;
 	memset(aStateCount, 0, sizeof(aStateCount));
-	for (const DROID* psCurr : worldObjectState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->group == group)
 		{
@@ -4185,7 +4185,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (STRUCTURE* psStruct : worldObjectState.structures[player])
+	for (STRUCTURE* psStruct : gameWorld.objects.structures[player])
 	{
 		if (lasSatStructSelected(psStruct))
 		{

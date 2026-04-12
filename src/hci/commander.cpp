@@ -23,6 +23,7 @@
 #include "../cmddroid.h"
 #include "../group.h"
 #include "../intorder.h"
+#include "../game_world.h"
 
 DROID *CommanderController::highlightedCommander = nullptr;
 
@@ -38,7 +39,7 @@ void CommanderController::updateCommandersList()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
 
-	for (DROID *droid : worldObjectState.droids[selectedPlayer])
+	for (DROID *droid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (droid->droidType == DROID_COMMAND && droid->died == 0)
 		{

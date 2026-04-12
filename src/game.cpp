@@ -101,7 +101,7 @@
 #include "keybind.h"
 #include "loop.h"
 #include "screens/guidescreen.h"
-#include "world_object_state.h"
+#include "game_world.h"
 #include <array>
 
 #include "wzphysfszipioprovider.h"
@@ -2414,7 +2414,7 @@ static void sanityUpdate()
 {
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
-		for (DROID *psDroid : worldObjectState.droids[player])
+		for (DROID *psDroid : gameWorld.objects.droids[player])
 		{
 			orderCheckList(psDroid);
 			actionSanity(psDroid);
@@ -2702,16 +2702,16 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		//initialise the lists
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
-			worldObjectState.droids[player].clear();
-			worldObjectState.structures[player].clear();
-			worldObjectState.flags[player].clear();
+			gameWorld.objects.droids[player].clear();
+			gameWorld.objects.structures[player].clear();
+			gameWorld.objects.flags[player].clear();
 			//clear all the messages?
 			apsProxDisp[player].clear();
-			worldObjectState.extractors[player].clear();
+			gameWorld.objects.extractors[player].clear();
 		}
-		worldObjectState.features[0].clear();
-		worldObjectState.oils[0].clear();
-		worldObjectState.sensors[0].clear();
+		gameWorld.objects.features[0].clear();
+		gameWorld.objects.oils[0].clear();
+		gameWorld.objects.sensors[0].clear();
 		initFactoryNumFlag();
 	}
 
@@ -2721,14 +2721,14 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
 			apsLimboDroids[player].clear();
-			mission.worldObjectState.droids[player].clear();
-			mission.worldObjectState.structures[player].clear();
-			mission.worldObjectState.flags[player].clear();
-			mission.worldObjectState.extractors[player].clear();
+			mission.gameWorld.objects.droids[player].clear();
+			mission.gameWorld.objects.structures[player].clear();
+			mission.gameWorld.objects.flags[player].clear();
+			mission.gameWorld.objects.extractors[player].clear();
 		}
-		mission.worldObjectState.features[0].clear();
-		mission.worldObjectState.oils[0].clear();
-		mission.worldObjectState.sensors[0].clear();
+		mission.gameWorld.objects.features[0].clear();
+		mission.gameWorld.objects.oils[0].clear();
+		mission.gameWorld.objects.sensors[0].clear();
 
 		// Stuff added after level load to avoid being reset or initialised during load
 		// always !keepObjects
@@ -2929,7 +2929,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			if (pl != selectedPlayer)
 			{
 				/* Structures */
-				for (STRUCTURE *psStr : worldObjectState.structures[pl])
+				for (STRUCTURE *psStr : gameWorld.objects.structures[pl])
 				{
 					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psStr->player, selectedPlayer))
 					{
@@ -2938,7 +2938,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 				}
 
 				/* Droids */
-				for (DROID *psDroid : worldObjectState.droids[pl])
+				for (DROID *psDroid : gameWorld.objects.droids[pl])
 				{
 					if (selectedPlayer < MAX_PLAYERS && aiCheckAlliances(psDroid->player, selectedPlayer))
 					{
@@ -3002,10 +3002,10 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		//the scroll limits for the mission map have already been written
 		if (saveGameVersion >= VERSION_29)
 		{
-			missionScrollMinX = (UWORD)mission.worldMapState.scroll.minX;
-			missionScrollMinY = (UWORD)mission.worldMapState.scroll.minY;
-			missionScrollMaxX = (UWORD)mission.worldMapState.scroll.maxX;
-			missionScrollMaxY = (UWORD)mission.worldMapState.scroll.maxY;
+			missionScrollMinX = (UWORD)mission.gameWorld.map.scroll.minX;
+			missionScrollMinY = (UWORD)mission.gameWorld.map.scroll.minY;
+			missionScrollMaxX = (UWORD)mission.gameWorld.map.scroll.maxX;
+			missionScrollMaxY = (UWORD)mission.gameWorld.map.scroll.maxY;
 		}
 
 		//load the map and the droids then swap pointers
@@ -3079,15 +3079,15 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		}
 		else
 		{
-			structMap[aFileName] = &mission.worldObjectState.structures;	// we swap pointers below
+			structMap[aFileName] = &mission.gameWorld.objects.structures;	// we swap pointers below
 		}
 
 		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mdroid.json");
-		if (loadSaveDroid(aFileName, worldObjectState.droids))
+		if (loadSaveDroid(aFileName, gameWorld.objects.droids))
 		{
-			droidMap[aFileName] = &mission.worldObjectState.droids; // need to swap here to read correct list later
+			droidMap[aFileName] = &mission.gameWorld.objects.droids; // need to swap here to read correct list later
 		}
 
 		/* after we've loaded in the units we need to redo the orientation because
@@ -3096,7 +3096,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		 */
 		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for (DROID* psCurr : worldObjectState.droids[player])
+			for (DROID* psCurr : gameWorld.objects.droids[player])
 			{
 				if (psCurr->droidType != DROID_PERSON
 				    // && psCurr->droidType != DROID_CYBORG
@@ -3114,17 +3114,17 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		//once the mission map has been loaded reset the mission scroll limits
 		if (saveGameVersion >= VERSION_29)
 		{
-			mission.worldMapState.scroll.minX = missionScrollMinX;
-			mission.worldMapState.scroll.minY = missionScrollMinY;
-			mission.worldMapState.scroll.maxX = missionScrollMaxX;
-			mission.worldMapState.scroll.maxY = missionScrollMaxY;
+			mission.gameWorld.map.scroll.minX = missionScrollMinX;
+			mission.gameWorld.map.scroll.minY = missionScrollMinY;
+			mission.gameWorld.map.scroll.maxX = missionScrollMaxX;
+			mission.gameWorld.map.scroll.maxY = missionScrollMaxY;
 		}
 	}
 
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
-		worldMapState.tiles = nullptr;
+		gameWorld.map.tiles = nullptr;
 		// load in the map file
 		if (!data)
 		{
@@ -3210,10 +3210,10 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		}
 		else
 		{
-			if (loadSaveDroid(aFileName, worldObjectState.droids))
+			if (loadSaveDroid(aFileName, gameWorld.objects.droids))
 			{
 				debug(LOG_SAVE, "Loaded new style droids");
-				droidMap[aFileName] = &worldObjectState.droids;	// load pointers later
+				droidMap[aFileName] = &gameWorld.objects.droids;	// load pointers later
 			}
 		}
 	}
@@ -3224,12 +3224,12 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (!loadSaveDroid(aFileName, worldObjectState.droids))
+		if (!loadSaveDroid(aFileName, gameWorld.objects.droids))
 		{
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
 		}
-		droidMap[aFileName] = &worldObjectState.droids;	// load pointers later
+		droidMap[aFileName] = &gameWorld.objects.droids;	// load pointers later
 
 		/* after we've loaded in the units we need to redo the orientation because
 		 * the direction may have been saved - we need to do it outside of the loop
@@ -3237,7 +3237,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		 */
 		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for (DROID* psCurr : worldObjectState.droids[player])
+			for (DROID* psCurr : gameWorld.objects.droids[player])
 			{
 				if (psCurr->droidType != DROID_PERSON
 				    && !psCurr->isCyborg()
@@ -3255,9 +3255,9 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			strcat(aFileName, "mdroid.json");
 
 			// load the data into mission.apsDroidLists, if any
-			if (loadSaveDroid(aFileName, mission.worldObjectState.droids))
+			if (loadSaveDroid(aFileName, mission.gameWorld.objects.droids))
 			{
-				droidMap[aFileName] = &mission.worldObjectState.droids;
+				droidMap[aFileName] = &mission.gameWorld.objects.droids;
 			}
 		}
 	}
@@ -3324,7 +3324,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
 		}
-		structMap[aFileName] = &worldObjectState.structures;
+		structMap[aFileName] = &gameWorld.objects.structures;
 	}
 
 	//if user save game then load up the current level for structs and components
@@ -3475,7 +3475,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			//Which later causes issues in saveCampaignData() which tries to extract
 			//the first transporter group sent off at Beta-end by reversing this very list.
 			ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
-			mission.worldObjectState.droids[selectedPlayer].reverse();
+			mission.gameWorld.objects.droids[selectedPlayer].reverse();
 		}
 	}
 
@@ -3500,7 +3500,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		 * the day excuses...excuses...excuses
 		 */
 		ASSERT(selectedPlayer < MAX_PLAYERS, "selectedPlayer is out of bounds: %" PRIu32 "", selectedPlayer);
-		if (mission.worldObjectState.droids[selectedPlayer].empty())
+		if (mission.gameWorld.objects.droids[selectedPlayer].empty())
 		{
 			//set the mission type
 			startMissionSave(LEVEL_TYPE::LDS_EXPAND);
@@ -3531,7 +3531,7 @@ error:
 	freeAllStructs();
 	freeAllFeatures();
 	droidTemplateShutDown();
-	worldMapState.tiles = nullptr;
+	gameWorld.map.tiles = nullptr;
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -3593,7 +3593,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	CurrentFileName[fileExtension] = '\0';
 	strcat(CurrentFileName, "droid.json");
 	/*Write the current droid lists to the file*/
-	if (!writeDroidFile(CurrentFileName, worldObjectState.droids))
+	if (!writeDroidFile(CurrentFileName, gameWorld.objects.droids))
 	{
 		debug(LOG_ERROR, "writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
@@ -3747,7 +3747,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	CurrentFileName[fileExtension] = '\0';
 	strcat(CurrentFileName, "mdroid.json");
 	/*Write the swapped droid lists to the file*/
-	if (!writeDroidFile(CurrentFileName, mission.worldObjectState.droids))
+	if (!writeDroidFile(CurrentFileName, mission.gameWorld.objects.droids))
 	{
 		debug(LOG_ERROR, "writeDroidFile(\"%s\") failed", CurrentFileName);
 		goto error;
@@ -4558,10 +4558,10 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version, nonstd::optional<n
 
 	if (saveGameVersion >= VERSION_29)
 	{
-		mission.worldMapState.scroll.minX = saveGameData.missionScrollMinX;
-		mission.worldMapState.scroll.minY = saveGameData.missionScrollMinY;
-		mission.worldMapState.scroll.maxX = saveGameData.missionScrollMaxX;
-		mission.worldMapState.scroll.maxY = saveGameData.missionScrollMaxY;
+		mission.gameWorld.map.scroll.minX = saveGameData.missionScrollMinX;
+		mission.gameWorld.map.scroll.minY = saveGameData.missionScrollMinY;
+		mission.gameWorld.map.scroll.maxX = saveGameData.missionScrollMaxX;
+		mission.gameWorld.map.scroll.maxY = saveGameData.missionScrollMaxY;
 	}
 
 	if (saveGameVersion >= VERSION_31)
@@ -4836,8 +4836,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("campaignName", getCampaignName());
 	save.setValue("gameTime", gameTime);
 	save.setValue("missionTime", mission.startTime);
-	save.setVector2i("scrollMin", Vector2i(worldMapState.scroll.minX, worldMapState.scroll.minY));
-	save.setVector2i("scrollMax", Vector2i(worldMapState.scroll.maxX, worldMapState.scroll.maxY));
+	save.setVector2i("scrollMin", Vector2i(gameWorld.map.scroll.minX, gameWorld.map.scroll.minY));
+	save.setVector2i("scrollMax", Vector2i(gameWorld.map.scroll.maxX, gameWorld.map.scroll.maxY));
 	save.setValue("saveType", saveType);
 	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s", (int)MAX_LEVEL_SIZE, aLevelName);
 	save.setValue("levelName", aLevelName);
@@ -4848,8 +4848,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("missionCheatTime", mission.cheatTime);
 	save.setVector2i("missionHomeLZ", Vector2i(mission.homeLZ_X, mission.homeLZ_Y));
 	save.setVector2i("missionPlayerPos", Vector2i(mission.playerX, mission.playerY));
-	save.setVector2i("missionScrollMin", Vector2i(mission.worldMapState.scroll.minX, mission.worldMapState.scroll.minY));
-	save.setVector2i("missionScrollMax", Vector2i(mission.worldMapState.scroll.maxX, mission.worldMapState.scroll.maxY));
+	save.setVector2i("missionScrollMin", Vector2i(mission.gameWorld.map.scroll.minX, mission.gameWorld.map.scroll.minY));
+	save.setVector2i("missionScrollMax", Vector2i(mission.gameWorld.map.scroll.maxX, mission.gameWorld.map.scroll.maxY));
 	save.setValue("offWorldKeepLists", offWorldKeepLists);
 	save.setValue("rubbleTile", getRubbleTileNum());
 	save.setValue("waterTile", getWaterTileNum());
@@ -5012,10 +5012,10 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.missionTime = mission.startTime;
 
 	//put in the scroll data
-	saveGame.ScrollMinX = worldMapState.scroll.minX;
-	saveGame.ScrollMinY = worldMapState.scroll.minY;
-	saveGame.ScrollMaxX = worldMapState.scroll.maxX;
-	saveGame.ScrollMaxY = worldMapState.scroll.maxY;
+	saveGame.ScrollMinX = gameWorld.map.scroll.minX;
+	saveGame.ScrollMinY = gameWorld.map.scroll.minY;
+	saveGame.ScrollMaxX = gameWorld.map.scroll.maxX;
+	saveGame.ScrollMaxY = gameWorld.map.scroll.maxY;
 
 	saveGame.GameType = saveType;
 
@@ -5043,10 +5043,10 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.missionHomeLZ_Y =		mission.homeLZ_Y;
 	saveGame.missionPlayerX =		mission.playerX;
 	saveGame.missionPlayerY =		mission.playerY;
-	saveGame.missionScrollMinX = (UWORD)mission.worldMapState.scroll.minX;
-	saveGame.missionScrollMinY = (UWORD)mission.worldMapState.scroll.minY;
-	saveGame.missionScrollMaxX = (UWORD)mission.worldMapState.scroll.maxX;
-	saveGame.missionScrollMaxY = (UWORD)mission.worldMapState.scroll.maxY;
+	saveGame.missionScrollMinX = (UWORD)mission.gameWorld.map.scroll.minX;
+	saveGame.missionScrollMinY = (UWORD)mission.gameWorld.map.scroll.minY;
+	saveGame.missionScrollMaxX = (UWORD)mission.gameWorld.map.scroll.maxX;
+	saveGame.missionScrollMaxY = (UWORD)mission.gameWorld.map.scroll.maxY;
 
 	saveGame.offWorldKeepLists = offWorldKeepLists;
 	saveGame.RubbleTile	= getRubbleTileNum();
@@ -5317,7 +5317,7 @@ static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDW
 			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
 		}
 
-		addDroid(psDroid, worldObjectState.droids);
+		addDroid(psDroid, gameWorld.objects.droids);
 	}
 	if (NumberOfSkippedDroids)
 	{
@@ -5442,7 +5442,7 @@ static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists
 foundDroid:
 		if (!psDroid)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(mission.worldObjectState.droids[player], id);
+			DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[player], id);
 			// FIXME
 			if (d)
 			{
@@ -5726,8 +5726,8 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
 		if (!onMission)
 		{
-			pos.x = clip(pos.x, world_coord(1), world_coord(worldMapState.width - 1));
-			pos.y = clip(pos.y, world_coord(1), world_coord(worldMapState.height - 1));
+			pos.x = clip(pos.x, world_coord(1), world_coord(gameWorld.map.width - 1));
+			pos.y = clip(pos.y, world_coord(1), world_coord(gameWorld.map.height - 1));
 		}
 
 		/* Create the Droid */
@@ -6102,7 +6102,7 @@ static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& pps
 {
 	nlohmann::json mRoot = nlohmann::json::object();
 	int counter = 0;
-	bool onMission = (&ppsCurrentDroidLists == &mission.worldObjectState.droids);
+	bool onMission = (&ppsCurrentDroidLists == &mission.gameWorld.objects.droids);
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -6124,7 +6124,7 @@ static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& pps
 					}
 				}
 				//always save transporter droids that are in the mission list with an invalid value
-				if (&ppsCurrentDroidLists[player] == &mission.worldObjectState.droids[player])
+				if (&ppsCurrentDroidLists[player] == &mission.gameWorld.objects.droids[player])
 				{
 					mRoot[droidKey.toStdString()]["position"] = Vector3i(INVALID_XY, INVALID_XY, -1); // Must be INVALID_XY or else unit placement could get messed up in missionResetDroids().
 				}
@@ -6251,13 +6251,13 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		}
 
 		//check not trying to build too near the edge
-		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > worldMapState.width - TOO_NEAR_EDGE)
+		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > gameWorld.map.width - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
 			continue;
 		}
-		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > worldMapState.height - TOO_NEAR_EDGE)
+		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > gameWorld.map.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
@@ -6340,8 +6340,8 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > worldMapState.width - TOO_NEAR_EDGE
-		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > worldMapState.height - TOO_NEAR_EDGE)
+		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > gameWorld.map.width - TOO_NEAR_EDGE
+		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > gameWorld.map.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.c_str());
 			continue; // skip it
@@ -6477,8 +6477,8 @@ static bool loadSaveStructure2(const char *pFileName)
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > worldMapState.width - TOO_NEAR_EDGE
-		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > worldMapState.height - TOO_NEAR_EDGE)
+		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > gameWorld.map.width - TOO_NEAR_EDGE
+		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > gameWorld.map.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s (%s), coord too near the edge of the map", name.toUtf8().c_str(), list[i].toUtf8().c_str());
 			ini.endGroup();
@@ -6718,7 +6718,7 @@ bool writeStructFile(const char *pFileName)
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (const STRUCTURE *psCurr : worldObjectState.structures[player])
+		for (const STRUCTURE *psCurr : gameWorld.objects.structures[player])
 		{
 			if (!psCurr->pStructureType)
 			{
@@ -6923,7 +6923,7 @@ bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists
 				{
 					DROID *psCommander = (DROID *)getBaseObjFromData(tid, tplayer, ttype);
 					ASSERT(psCommander, "Commander %d not found for building %d", tid, id);
-					if (ppList == &mission.worldObjectState.structures)
+					if (ppList == &mission.gameWorld.objects.structures)
 					{
 						psFactory->psCommander = psCommander;
 					}
@@ -7219,7 +7219,7 @@ bool writeFeatureFile(const char *pFileName)
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 	int counter = 0;
 
-	for (const FEATURE *psCurr : worldObjectState.features[0])
+	for (const FEATURE *psCurr : gameWorld.objects.features[0])
 	{
 		ini.beginGroup("feature_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 		ini.setValue("name", psCurr->psStats->id);
@@ -7307,7 +7307,7 @@ bool writeTemplateFile(const char *pFileName)
 	mRoot["version"] = 1;
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		if (worldObjectState.droids[player].empty() && worldObjectState.structures[player].empty())	// only write out templates of players that are still 'alive'
+		if (gameWorld.objects.droids[player].empty() && gameWorld.objects.structures[player].empty())	// only write out templates of players that are still 'alive'
 		{
 			continue;
 		}
@@ -7631,11 +7631,11 @@ void loadFixupResearchPendingStates()
 			// - (Ideally the game would prevent this from happening by ensuring the save is queued to happen after the next tick...)
 			if (pPlayerRes->ResearchStatus & CANCELLED_RESEARCH_PENDING)
 			{
-				STRUCTURE *psLab = findResearchingFacilityByResearchIndex(worldObjectState.structures, plr, statInc);
+				STRUCTURE *psLab = findResearchingFacilityByResearchIndex(gameWorld.objects.structures, plr, statInc);
 				if (psLab == nullptr)
 				{
 					// check the mission list
-					psLab = findResearchingFacilityByResearchIndex(mission.worldObjectState.structures, plr, statInc);
+					psLab = findResearchingFacilityByResearchIndex(mission.gameWorld.objects.structures, plr, statInc);
 				}
 
 				if (psLab != nullptr)
@@ -7871,7 +7871,7 @@ bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 						{
 							psMessage->pViewData = psViewData;
 							// Check the z value is at least the height of the terrain
-							const int terrainHeight = map_Height(worldMapState, ((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
+							const int terrainHeight = map_Height(gameWorld.map, ((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
 							if (((VIEW_PROXIMITY*)psViewData->pData)->z < terrainHeight)
 							{
 								((VIEW_PROXIMITY*)psViewData->pData)->z = terrainHeight;
@@ -8212,39 +8212,39 @@ static void setMapScroll()
 	//if loading in a pre version5 then scroll values will not have been set up so set to max poss
 	if (width == 0 && height == 0)
 	{
-		worldMapState.scroll.minX = 0;
-		worldMapState.scroll.maxX = worldMapState.width;
-		worldMapState.scroll.minY = 0;
-		worldMapState.scroll.maxY = worldMapState.height;
+		gameWorld.map.scroll.minX = 0;
+		gameWorld.map.scroll.maxX = gameWorld.map.width;
+		gameWorld.map.scroll.minY = 0;
+		gameWorld.map.scroll.maxY = gameWorld.map.height;
 		return;
 	}
-	worldMapState.scroll.minX = startX;
-	worldMapState.scroll.minY = startY;
-	worldMapState.scroll.maxX = startX + width;
-	worldMapState.scroll.maxY = startY + height;
+	gameWorld.map.scroll.minX = startX;
+	gameWorld.map.scroll.minY = startY;
+	gameWorld.map.scroll.maxX = startX + width;
+	gameWorld.map.scroll.maxY = startY + height;
 	//check not going beyond width/height of map
-	if (worldMapState.scroll.maxX > (SDWORD)worldMapState.width)
+	if (gameWorld.map.scroll.maxX > (SDWORD)gameWorld.map.width)
 	{
-		worldMapState.scroll.maxX = worldMapState.width;
+		gameWorld.map.scroll.maxX = gameWorld.map.width;
 		debug(LOG_NEVER, "scrollMaxX was too big - It has been set to map width");
 	}
-	if (worldMapState.scroll.maxY > (SDWORD)worldMapState.height)
+	if (gameWorld.map.scroll.maxY > (SDWORD)gameWorld.map.height)
 	{
-		worldMapState.scroll.maxY = worldMapState.height;
+		gameWorld.map.scroll.maxY = gameWorld.map.height;
 		debug(LOG_NEVER, "scrollMaxY was too big - It has been set to map height");
 	}
 	// check for invalid minimum values (fixes some broken maps)
-	if (worldMapState.scroll.minX >= worldMapState.scroll.maxX)
+	if (gameWorld.map.scroll.minX >= gameWorld.map.scroll.maxX)
 	{
 		ASSERT(false, "scrollMinX was >= scrollMaxX - min has been set to 0, max has been set to mapWidth");
-		worldMapState.scroll.minX = 0;
-		worldMapState.scroll.maxX = worldMapState.width;
+		gameWorld.map.scroll.minX = 0;
+		gameWorld.map.scroll.maxX = gameWorld.map.width;
 	}
-	if (worldMapState.scroll.minY >= worldMapState.scroll.maxY)
+	if (gameWorld.map.scroll.minY >= gameWorld.map.scroll.maxY)
 	{
 		ASSERT(false, "scrollMinY was >= scrollMaxY - min has been set to 0, max has been set to mapHeight");
-		worldMapState.scroll.minY = 0;
-		worldMapState.scroll.maxY = worldMapState.height;
+		gameWorld.map.scroll.minY = 0;
+		gameWorld.map.scroll.maxY = gameWorld.map.height;
 	}
 }
 

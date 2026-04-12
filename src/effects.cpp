@@ -71,6 +71,7 @@
 #include "multiplay.h"
 #include "component.h"
 #include "profiling.h"
+#include "game_world.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -965,12 +966,12 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it's bounced/drifted off the map then kill it */
-	if (map_coord(static_cast<int32_t>(psEffect->position.x)) >= worldMapState.width || map_coord(static_cast<int32_t>(psEffect->position.z)) >= worldMapState.height)
+	if (map_coord(static_cast<int32_t>(psEffect->position.x)) >= gameWorld.map.width || map_coord(static_cast<int32_t>(psEffect->position.z)) >= gameWorld.map.height)
 	{
 		return false;
 	}
 
-	int groundHeight = map_Height(worldMapState, static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z));
+	int groundHeight = map_Height(gameWorld.map, static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z));
 
 	/* If it's going up and it's still under the landscape, then remove it... */
 	if (psEffect->position.y < groundHeight && psEffect->velocity.y > 0)
@@ -1032,7 +1033,7 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 	/* Are we below it? - Hit the ground? */
 	if ((int)psEffect->position.y < (int)groundHeight)
 	{
-		psTile = mapTile(worldMapState, map_coord(static_cast<int32_t>(psEffect->position.x)), map_coord(static_cast<int32_t>(psEffect->position.z)));
+		psTile = mapTile(gameWorld.map, map_coord(static_cast<int32_t>(psEffect->position.x)), map_coord(static_cast<int32_t>(psEffect->position.z)));
 		if (terrainType(psTile) == TER_WATER)
 		{
 			return false;
@@ -1281,7 +1282,7 @@ static bool updateConstruction(EFFECT *psEffect)
 	if (TEST_CYCLIC(psEffect))
 	{
 		/* Has it hit the ground */
-		if (static_cast<int>(psEffect->position.y) <= map_Height(worldMapState, static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z)))
+		if (static_cast<int>(psEffect->position.y) <= map_Height(gameWorld.map, static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z)))
 		{
 			return false;
 		}
@@ -1323,12 +1324,12 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 		pos.z = static_cast<int>(psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
 		// Effect is off map, no need to update it anymore
-		if (!worldOnMap(worldMapState, pos.x, pos.z))
+		if (!worldOnMap(gameWorld.map, pos.x, pos.z))
 		{
 			return false;
 		}
 
-		pos.y = map_Height(worldMapState, pos.x, pos.z);
+		pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 
 		if (psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
@@ -1343,7 +1344,7 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 		{
 			pos.x = static_cast<int>(psEffect->position.x + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
 			pos.z = static_cast<int>(psEffect->position.z + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
-			pos.y = map_Height(worldMapState, pos.x, pos.z);
+			pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING_HIGH, false, nullptr, 0);
 		}
 		else
@@ -1352,12 +1353,12 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 			pos.z = static_cast<int>(psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
 			// Effect is off map, no need to update it anymore
-			if (!worldOnMap(worldMapState, pos.x, pos.z))
+			if (!worldOnMap(gameWorld.map, pos.x, pos.z))
 			{
 				return false;
 			}
 
-			pos.y = map_Height(worldMapState, pos.x, pos.z);
+			pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, nullptr, 0);
 		}
 
@@ -2243,7 +2244,7 @@ static void effectStructureUpdates()
 	/* Go thru' all players */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (STRUCTURE *psStructure : worldObjectState.structures[player])
+		for (STRUCTURE *psStructure : gameWorld.objects.structures[player])
 		{
 			// Find its group.
 			unsigned int partition = psStructure->id % EFFECT_STRUCTURE_DIVISION;
@@ -2438,7 +2439,7 @@ bool readFXData(const char *fileName)
 			// Sanity check - don't allow a negative time to wrap to a huge positive unsigned value.
 			if (timeLeftToRun > 0)
 			{
-				tileSetFire(worldMapState, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
+				tileSetFire(gameWorld.map, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
 			}
 		}
 

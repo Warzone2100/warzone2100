@@ -60,7 +60,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 	selDroidDeselect(player);
 
 	// Go through all.
-	for (DROID *psDroid : worldObjectState.droids[player])
+	for (DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		bool shouldSelect = (!onlyOnScreen || objectOnScreen(psDroid, 0)) &&
 		                    condition(psDroid);
@@ -142,7 +142,7 @@ unsigned int selDroidDeselect(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID* psDroid : worldObjectState.droids[player])
+	for (DROID* psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -161,7 +161,7 @@ unsigned int selNumSelected(unsigned int player)
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (const DROID *psDroid : worldObjectState.droids[player])
+	for (const DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -239,7 +239,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	if (player >= MAX_PLAYERS) { return 0; }
 
 	// find out which units will need to be compared to which component combinations
-	for (DROID *psDroid : worldObjectState.droids[player])
+	for (DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (bOnScreen && !objectOnScreen(psDroid, 0))
 		{
@@ -260,7 +260,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	{
 		// reset unit counter
 		i = 0;
-		for (DROID *psDroid : worldObjectState.droids[player])
+		for (DROID *psDroid : gameWorld.objects.droids[player])
 		{
 			if (excluded.empty() || *excluded.begin() != i)
 			{
@@ -290,7 +290,7 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr : worldObjectState.droids[selectedPlayer])
+	for (DROID *psCurr : gameWorld.objects.droids[selectedPlayer])
 	{
 		//exceptions - as always...
 		bool bMatch = false;
@@ -398,7 +398,7 @@ void selNextUnassignedUnit()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr : worldObjectState.droids[selectedPlayer])
+	for (DROID *psCurr : gameWorld.objects.droids[selectedPlayer])
 	{
 		/* Only look at unselected ones */
 		if (psCurr->group == UBYTE_MAX)
@@ -472,7 +472,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
 
-	for (STRUCTURE *psCurr : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE *psCurr : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psResult)
 		{
@@ -536,7 +536,7 @@ static bool droidIsCommanderNum(DROID *psDroid, SDWORD n)
 	}
 
 	int numLess = 0;
-	for (const DROID *psCurr : worldObjectState.droids[psDroid->player])
+	for (const DROID *psCurr : gameWorld.objects.droids[psDroid->player])
 	{
 		if ((psCurr->droidType == DROID_COMMAND) && (psCurr->id < psDroid->id))
 		{
@@ -552,7 +552,7 @@ void selCommander(int n)
 {
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr : worldObjectState.droids[selectedPlayer])
+	for (DROID *psCurr : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (droidIsCommanderNum(psCurr, n))
 		{

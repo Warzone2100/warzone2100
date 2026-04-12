@@ -607,9 +607,9 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	//== * ```scavengers``` Whether or not scavengers are activated in this game, and, if so, which type.
 	globalVars["scavengers"] = game.scavengers;
 	//== * ```mapWidth``` Width of map in tiles.
-	globalVars["mapWidth"] = worldMapState.width;
+	globalVars["mapWidth"] = gameWorld.map.width;
 	//== * ```mapHeight``` Height of map in tiles.
-	globalVars["mapHeight"] = worldMapState.height;
+	globalVars["mapHeight"] = gameWorld.map.height;
 	//== * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
 	globalVars["scavengerPlayer"] = scavengerSlot();
 	//== * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
@@ -1792,11 +1792,11 @@ std::vector<scripting_engine::LabelInfo> scripting_engine::debug_GetLabelInfo() 
 
 void clearMarks()
 {
-	for (int y = 0; y < worldMapState.height; y++)
+	for (int y = 0; y < gameWorld.map.height; y++)
 	{
-		for (int x = 0; x < worldMapState.width; x++) // clear old marks
+		for (int x = 0; x < gameWorld.map.width; x++) // clear old marks
 		{
-			MAPTILE *psTile = mapTile(worldMapState, x, y);
+			MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 			psTile->tileInfoBits &= ~BITS_MARKED;
 		}
 	}
@@ -1839,14 +1839,14 @@ void scripting_engine::showLabel(const std::string &key, bool clear_old, bool ju
 		int maxy = map_coord(l.p2.y);
 		if (l.type == SCRIPT_POSITION)
 		{
-			maxx = MIN(worldMapState.width, maxx + 1);
-			maxy = MIN(worldMapState.height, maxy + 1);
+			maxx = MIN(gameWorld.map.width, maxx + 1);
+			maxy = MIN(gameWorld.map.height, maxy + 1);
 		}
 		for (int x = map_coord(l.p1.x); x < maxx; x++) // make new ones
 		{
 			for (int y = map_coord(l.p1.y); y < maxy; y++)
 			{
-				MAPTILE *psTile = mapTile(worldMapState, x, y);
+				MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 				psTile->tileInfoBits |= BITS_MARKED;
 			}
 		}
@@ -1857,13 +1857,13 @@ void scripting_engine::showLabel(const std::string &key, bool clear_old, bool ju
 		{
 			setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
 		}
-		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), worldMapState.width); x++)
+		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), gameWorld.map.width); x++)
 		{
-			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), worldMapState.height); y++) // l.p2.x is radius, not a bug
+			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), gameWorld.map.height); y++) // l.p2.x is radius, not a bug
 			{
 				if (iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
 				{
-					MAPTILE *psTile = mapTile(worldMapState, x, y);
+					MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 					psTile->tileInfoBits |= BITS_MARKED;
 				}
 			}
@@ -1878,7 +1878,7 @@ void scripting_engine::showLabel(const std::string &key, bool clear_old, bool ju
 			{
 				setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
 			}
-			MAPTILE *psTile = mapTile(worldMapState, map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+			MAPTILE *psTile = mapTile(gameWorld.map, map_coord(psObj->pos.x), map_coord(psObj->pos.y));
 			psTile->tileInfoBits |= BITS_MARKED;
 		}
 	}
@@ -1898,7 +1898,7 @@ void scripting_engine::showLabel(const std::string &key, bool clear_old, bool ju
 						setViewPos(map_coord(psObj->pos.x), map_coord(psObj->pos.y), false); // move camera position
 						cameraMoved = true;
 					}
-					MAPTILE *psTile = mapTile(worldMapState, map_coord(psObj->pos.x), map_coord(psObj->pos.y));
+					MAPTILE *psTile = mapTile(gameWorld.map, map_coord(psObj->pos.x), map_coord(psObj->pos.y));
 					psTile->tileInfoBits |= BITS_MARKED;
 				}
 			}
@@ -2550,8 +2550,8 @@ generic_script_object scripting_engine::getObject(WZAPI_PARAMS(wzapi::object_req
 		auto pos = request.getMapPosition();
 		int x = pos.x;
 		int y = pos.y;
-		SCRIPT_ASSERT({}, context, tileOnMap(worldMapState, x, y), "Map position (%d, %d) not on the map!", x, y);
-		const MAPTILE *psTile = mapTile(worldMapState, x, y);
+		SCRIPT_ASSERT({}, context, tileOnMap(gameWorld.map, x, y), "Map position (%d, %d) not on the map!", x, y);
+		const MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 		return generic_script_object::fromObject(psTile->psObject);
 	}
 	else if (request.requestType == wzapi::object_request::RequestType::OBJECTID_REQUEST)
@@ -2724,7 +2724,7 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	int x2 = world_coord(_x2);
 	int y2 = world_coord(_y2);
 
-	for (DROID *psDroid : worldObjectState.droids[player])
+	for (DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
 		{
@@ -2826,7 +2826,7 @@ wzapi::no_return_value scripting_engine::hackMarkTiles_ByLabel(WZAPI_PARAMS(cons
 		{
 			for (int y = map_coord(l.p1.y); y < map_coord(l.p2.y); y++)
 			{
-				MAPTILE *psTile = mapTile(worldMapState, x, y);
+				MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 				psTile->tileInfoBits |= BITS_MARKED;
 			}
 		}
@@ -2837,9 +2837,9 @@ wzapi::no_return_value scripting_engine::hackMarkTiles_ByLabel(WZAPI_PARAMS(cons
 		{
 			for (int y = map_coord(l.p1.y - l.p2.x); y < map_coord(l.p1.y + l.p2.x); y++)
 			{
-				if (x >= -1 && x < worldMapState.width + 1 && y >= -1 && y < worldMapState.width + 1 && iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
+				if (x >= -1 && x < gameWorld.map.width + 1 && y >= -1 && y < gameWorld.map.width + 1 && iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
 				{
-					MAPTILE *psTile = mapTile(worldMapState, x, y);
+					MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 					psTile->tileInfoBits |= BITS_MARKED;
 				}
 			}

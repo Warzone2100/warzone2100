@@ -275,7 +275,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
 		if (!psDroid->isFlying() && !psDroid->isFlightBasedTransporter())
 		{
-			predict.z = map_Height(worldMapState, predict.xy());  // Predict that the object will be on the ground.
+			predict.z = map_Height(gameWorld.map, predict.xy());  // Predict that the object will be on the ground.
 		}
 	}
 
@@ -327,8 +327,8 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	// Make sure we don't pass any negative or out of bounds numbers to proj_SendProjectile
-	CLIP(predict.x, 0, world_coord(worldMapState.width - 1));
-	CLIP(predict.y, 0, world_coord(worldMapState.height - 1));
+	CLIP(predict.x, 0, world_coord(gameWorld.map.width - 1));
+	CLIP(predict.y, 0, world_coord(gameWorld.map.height - 1));
 
 	proj_SendProjectileAngled(psWeap, psAttacker, psAttacker->player, predict, psTarget, bVisibleAnyway, weapon_slot, min_angle, fireTime);
 	return true;
@@ -351,7 +351,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 
 	CHECK_OBJECT(psTarget);
 
-	for (BASE_OBJECT* psViewer : worldObjectState.sensors[0])
+	for (BASE_OBJECT* psViewer : gameWorld.objects.sensors[0])
 	{
 		if (aiCheckAlliances(psTarget->player, psViewer->player))
 		{

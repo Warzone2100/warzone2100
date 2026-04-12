@@ -210,7 +210,7 @@ static GAMECODE renderLoop()
 
 			for (unsigned i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (DROID *psCurr : worldObjectState.droids[i])
+				for (DROID *psCurr : gameWorld.objects.droids[i])
 				{
 					// Don't copy the next pointer - if droids somehow get destroyed in the graphics rendering loop, who cares if we crash.
 					calcDroidIllumination(psCurr);
@@ -411,7 +411,7 @@ void countUpdate(bool synch)
 		numMissionDroids[i] = 0;
 		numTransporterDroids[i] = 0;
 
-		for (DROID *psCurr : worldObjectState.droids[i])
+		for (DROID *psCurr : gameWorld.objects.droids[i])
 		{
 			numDroids[i]++;
 			switch (psCurr->droidType)
@@ -431,7 +431,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr : mission.worldObjectState.droids[i])
+		for (DROID *psCurr : mission.gameWorld.objects.droids[i])
 		{
 			numMissionDroids[i]++;
 			switch (psCurr->droidType)
@@ -469,7 +469,7 @@ void countUpdate(bool synch)
 		}
 		// FIXME: These for-loops are code duplicationo
 		setLasSatExists(false, i);
-		for (const STRUCTURE *psCBuilding : worldObjectState.structures[i])
+		for (const STRUCTURE *psCBuilding : gameWorld.objects.structures[i])
 		{
 			if (psCBuilding == nullptr || isDead(psCBuilding))
 			{
@@ -485,7 +485,7 @@ void countUpdate(bool synch)
 				setLasSatExists(true, i);
 			}
 		}
-		for (const STRUCTURE *psCBuilding : mission.worldObjectState.structures[i])
+		for (const STRUCTURE *psCBuilding : mission.gameWorld.objects.structures[i])
 		{
 			if (psCBuilding == nullptr || isDead(psCBuilding))
 			{
@@ -564,14 +564,14 @@ static void gameStateUpdate()
 		updatePlayerPower(i);
 
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(worldObjectState.droids[i], [](DROID* d)
+			mutating_list_iterate(gameWorld.objects.droids[i], [](DROID* d)
 			{
 				droidUpdate(d);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(mission.worldObjectState.droids[i], [](DROID* d)
+			mutating_list_iterate(mission.gameWorld.objects.droids[i], [](DROID* d)
 			{
 				missionDroidUpdate(d);
 				return IterationResult::CONTINUE_ITERATION;
@@ -579,14 +579,14 @@ static void gameStateUpdate()
 		});
 		// FIXME: These for-loops are code duplication
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(worldObjectState.structures[i], [](STRUCTURE* s)
+			mutating_list_iterate(gameWorld.objects.structures[i], [](STRUCTURE* s)
 			{
 				structureUpdate(s, false);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(mission.worldObjectState.structures[i], [](STRUCTURE* s)
+			mutating_list_iterate(mission.gameWorld.objects.structures[i], [](STRUCTURE* s)
 			{
 				structureUpdate(s, true); // update for mission
 				return IterationResult::CONTINUE_ITERATION;
@@ -598,7 +598,7 @@ static void gameStateUpdate()
 
 	executeFnAndProcessScriptQueuedRemovals([]() { proj_UpdateAll(); });
 
-	for (FEATURE *psCFeat : worldObjectState.features[0])
+	for (FEATURE *psCFeat : gameWorld.objects.features[0])
 	{
 		featureUpdate(psCFeat);
 	}

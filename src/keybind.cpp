@@ -233,7 +233,7 @@ void kf_DamageMe()
 	{
 		return; // no-op
 	}
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -249,7 +249,7 @@ void kf_DamageMe()
 			}
 		}
 	}
-	for (STRUCTURE *psStruct : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -274,7 +274,7 @@ void	kf_TraceObject()
 		return; // no-op
 	}
 
-	for (const DROID* psCDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psCDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psCDroid->selected)
 		{
@@ -283,7 +283,7 @@ void	kf_TraceObject()
 			return;
 		}
 	}
-	for (const STRUCTURE* psCStruct : worldObjectState.structures[selectedPlayer])
+	for (const STRUCTURE* psCStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psCStruct->selected)
 		{
@@ -326,11 +326,11 @@ void	kf_HalveHeights()
 {
 	MAPTILE	*psTile;
 
-	for (int j = 0; j < worldMapState.height; ++j)
+	for (int j = 0; j < gameWorld.map.height; ++j)
 	{
-		for (int i = 0; i < worldMapState.width; ++i)
+		for (int i = 0; i < gameWorld.map.width; ++i)
 		{
-			psTile = mapTile(worldMapState, i, j);
+			psTile = mapTile(gameWorld.map, i, j);
 			psTile->height /= 2;
 		}
 	}
@@ -381,7 +381,7 @@ void	kf_DebugDroidInfo()
 		return; // no-op
 	}
 
-	for (const DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -409,7 +409,7 @@ void kf_CloneSelected(int limit)
 
 	bool selectedAnything = false;
 	const DROID* droidToClone = nullptr;
-	for (const DROID* d : worldObjectState.droids[selectedPlayer])
+	for (const DROID* d : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (!d->selected)
 		{
@@ -450,7 +450,7 @@ void kf_CloneSelected(int limit)
 		DROID* psNewDroid = buildDroid(sTemplate, pos.x, pos.y, droidToClone->player, false, nullptr);
 		if (psNewDroid)
 		{
-			addDroid(psNewDroid, worldObjectState.droids);
+			addDroid(psNewDroid, gameWorld.objects.droids);
 			triggerEventDroidBuilt(psNewDroid, nullptr);
 		}
 		else if (!bMultiMessages)
@@ -479,7 +479,7 @@ void kf_MakeMeHero()
 		return; // no-op
 	}
 
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
@@ -508,7 +508,7 @@ void kf_TeachSelected()
 		return; // no-op
 	}
 
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -533,7 +533,7 @@ void kf_Unselectable()
 		return; // no-op
 	}
 
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -541,7 +541,7 @@ void kf_Unselectable()
 			psDroid->selected = false;
 		}
 	}
-	for (STRUCTURE *psStruct : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -754,7 +754,7 @@ void kf_ListDroids()
 	}
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (const DROID *psDroid : worldObjectState.droids[i])
+		for (const DROID *psDroid : gameWorld.objects.droids[i])
 		{
 			const auto x = map_coord(psDroid->pos.x);
 			const auto y = map_coord(psDroid->pos.y);
@@ -805,7 +805,7 @@ void	kf_TogglePower()
 /* Recalculates the lighting values for a tile */
 void	kf_RecalcLighting()
 {
-	initLighting(0, 0, worldMapState.width, worldMapState.height);
+	initLighting(0, 0, gameWorld.map.width, gameWorld.map.height);
 	addConsoleMessage(_("Lighting values for all tiles recalculated"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -846,7 +846,7 @@ void	kf_AllAvailable()
 void	kf_TriFlip()
 {
 	MAPTILE	*psTile;
-	psTile = mapTile(worldMapState, mouseTileX, mouseTileY);
+	psTile = mapTile(gameWorld.map, mouseTileX, mouseTileY);
 	TOGGLE_TRIFLIP(psTile);
 //	addConsoleMessage(_("Triangle flip status toggled"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
@@ -856,7 +856,7 @@ void	kf_TriFlip()
 /* Debug info about a map tile */
 void	kf_TileInfo()
 {
-	MAPTILE	*psTile = mapTile(worldMapState, mouseTileX, mouseTileY);
+	MAPTILE	*psTile = mapTile(gameWorld.map, mouseTileX, mouseTileY);
 
 	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%d Texture=%u Height=%d Illumination=%u",
 	      mouseTileX, mouseTileY, (int)terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
@@ -918,19 +918,19 @@ void kf_MapCheck()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
-	for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
-		psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
+		psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 	}
 
-	for (STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		alignStructure(psStruct);
 	}
 
-	for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+	for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 	{
-		psFlag->coords.z = map_Height(worldMapState, psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
+		psFlag->coords.z = map_Height(gameWorld.map, psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
 	}
 }
 
@@ -989,9 +989,9 @@ MappableFunction kf_RadarZoom(const int multiplier)
 // --------------------------------------------------------------------------
 void kf_MaxScrollLimits()
 {
-	worldMapState.scroll.minX = worldMapState.scroll.minY = 0;
-	worldMapState.scroll.maxX = worldMapState.width;
-	worldMapState.scroll.maxY = worldMapState.height;
+	gameWorld.map.scroll.minX = gameWorld.map.scroll.minY = 0;
+	gameWorld.map.scroll.maxX = gameWorld.map.width;
+	gameWorld.map.scroll.maxY = gameWorld.map.height;
 }
 
 // --------------------------------------------------------------------------
@@ -1097,7 +1097,7 @@ void kf_SelectGrouping(UDWORD groupNumber)
 	bool	Selected;
 
 	bAlreadySelected = false;
-	for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		/* Wipe out the ones in the wrong group */
 		if (psDroid->selected && psDroid->group != groupNumber)
@@ -1318,7 +1318,7 @@ void	kf_ToggleGodMode()
 		godMode = false;
 		setRevealStatus(pastReveal);
 		// now hide the features
-		for (BASE_OBJECT* psFeat : worldObjectState.features[0])
+		for (BASE_OBJECT* psFeat : gameWorld.objects.features[0])
 		{
 			psFeat->visible[selectedPlayer] = 0;
 		}
@@ -1328,7 +1328,7 @@ void	kf_ToggleGodMode()
 		{
 			if (playerId != selectedPlayer)
 			{
-				for (STRUCTURE* psStruct : worldObjectState.structures[playerId])
+				for (STRUCTURE* psStruct : gameWorld.objects.structures[playerId])
 				{
 					psStruct->visible[selectedPlayer] = 0;
 				}
@@ -1677,16 +1677,16 @@ void	kf_JumpToResourceExtractor()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	if (worldObjectState.extractors[selectedPlayer].empty())
+	if (gameWorld.objects.extractors[selectedPlayer].empty())
 	{
 		addConsoleMessage(_("Unable to locate any oil derricks!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		return;
 	}
 
-	if (!psOldRE.has_value() || std::next(*psOldRE) == worldObjectState.extractors[selectedPlayer].end())
+	if (!psOldRE.has_value() || std::next(*psOldRE) == gameWorld.objects.extractors[selectedPlayer].end())
 	{
 		// Reset the pointer if `psOldRE` is either not initialized yet or points to the last element.
-		psOldRE.emplace(worldObjectState.extractors[selectedPlayer].begin());
+		psOldRE.emplace(gameWorld.objects.extractors[selectedPlayer].begin());
 	}
 	else
 	{
@@ -1706,7 +1706,7 @@ void	kf_JumpToResourceExtractor()
 
 void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor)
 {
-	if (psOldRE.has_value() && *psOldRE != worldObjectState.extractors[selectedPlayer].end() && **psOldRE == psResourceExtractor)
+	if (psOldRE.has_value() && *psOldRE != gameWorld.objects.extractors[selectedPlayer].end() && **psOldRE == psResourceExtractor)
 	{
 		psOldRE.reset();
 	}
@@ -1905,7 +1905,7 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 		selNextSpecifiedBuilding(factoryType, bJumpToSelected);
 
 		//deselect factories of other types
-		for (STRUCTURE* psCurrent : worldObjectState.structures[selectedPlayer])
+		for (STRUCTURE* psCurrent : gameWorld.objects.structures[selectedPlayer])
 		{
 			const STRUCTURE_TYPE currentType = psCurrent->pStructureType->type;
 			const bool bIsAnotherTypeOfFactory = currentType != factoryType && std::any_of(FACTORY_TYPES.begin(), FACTORY_TYPES.end(), [currentType](const STRUCTURE_TYPE type) {
@@ -1979,12 +1979,12 @@ void	kf_KillEnemy()
 		if (playerId != selectedPlayer && !aiCheckAlliances(selectedPlayer, playerId))
 		{
 			// wipe out all the droids
-			for (const DROID* psCDroid : worldObjectState.droids[playerId])
+			for (const DROID* psCDroid : gameWorld.objects.droids[playerId])
 			{
 				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
-			for (STRUCTURE* psCStruct : worldObjectState.structures[playerId])
+			for (STRUCTURE* psCStruct : gameWorld.objects.structures[playerId])
 			{
 				SendDestroyStructure(psCStruct);
 			}
@@ -2015,14 +2015,14 @@ void kf_KillSelected()
 	audio_PlayTrack(ID_SOUND_COLL_DIE);
 	Cheated = true;
 
-	for (const DROID* psCDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psCDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psCDroid->selected)
 		{
 			SendDestroyDroid(psCDroid);
 		}
 	}
-	for (STRUCTURE* psCStruct : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE* psCStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psCStruct->selected)
 		{
@@ -2125,7 +2125,7 @@ MappableFunction kf_OrderDroid(const DroidOrderType order)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			if (psDroid->selected)
 			{
@@ -2162,7 +2162,7 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 	// _not_ be disallowed in multiplayer games.
 
 	// This code is similar to SetSecondaryState() in intorder.cpp. Unfortunately, it seems hard to un-duplicate the code.
-	for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		// Only set the state if it's not a transporter.
 		if (psDroid->selected && !psDroid->isTransporter())
@@ -2179,12 +2179,12 @@ void	kf_TriggerRayCast()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	auto selectedDroidIt = std::find_if(worldObjectState.droids[selectedPlayer].begin(), worldObjectState.droids[selectedPlayer].end(), [](DROID* d)
+	auto selectedDroidIt = std::find_if(gameWorld.objects.droids[selectedPlayer].begin(), gameWorld.objects.droids[selectedPlayer].end(), [](DROID* d)
 	{
 		return d->selected;
 	});
 
-	if (selectedDroidIt != worldObjectState.droids[selectedPlayer].end())
+	if (selectedDroidIt != gameWorld.objects.droids[selectedPlayer].end())
 	{
 //		getBlockHeightDirToEdgeOfGrid(UDWORD x, UDWORD y, UBYTE direction, UDWORD *height, UDWORD *dist)
 //		getBlockHeightDirToEdgeOfGrid(psOther->pos.x,psOther->pos.y,psOther->direction,&height,&dist);
@@ -2202,7 +2202,7 @@ void	kf_CentreOnBase()
 	SPECTATOR_NO_OP();
 
 	/* Got through our buildings */
-	for (const STRUCTURE* pStruct : worldObjectState.structures[selectedPlayer])
+	for (const STRUCTURE* pStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		/* Have we got a HQ? */
 		if (pStruct->pStructureType->type == REF_HQ)
@@ -2266,7 +2266,7 @@ void	kf_RightOrderMenu()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	for (DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected) // && droidOnScreen(psDroid,0))
 		{

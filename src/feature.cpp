@@ -51,6 +51,7 @@
 #include "mapgrid.h"
 #include "display3d.h"
 #include "random.h"
+#include "game_world.h"
 
 /* The statistics for the features */
 std::vector<FEATURE_STATS> asFeatureStats;
@@ -194,10 +195,10 @@ static void updateFeatureOrientation(FEATURE *psFeature)
 	//    hy0
 	// hx0 * hx1      (* = feature)
 	//    hy1
-	hx1 = map_Height(worldMapState, psFeature->pos.x + d, psFeature->pos.y);
-	hx0 = map_Height(worldMapState, MAX(0, psFeature->pos.x - d), psFeature->pos.y);
-	hy1 = map_Height(worldMapState, psFeature->pos.x, psFeature->pos.y + d);
-	hy0 = map_Height(worldMapState, psFeature->pos.x, MAX(0, psFeature->pos.y - d));
+	hx1 = map_Height(gameWorld.map, psFeature->pos.x + d, psFeature->pos.y);
+	hx0 = map_Height(gameWorld.map, MAX(0, psFeature->pos.x - d), psFeature->pos.y);
+	hy1 = map_Height(gameWorld.map, psFeature->pos.x, psFeature->pos.y + d);
+	hy0 = map_Height(gameWorld.map, psFeature->pos.x, MAX(0, psFeature->pos.y - d));
 
 	//update height in case in the bottom of a trough
 	psFeature->pos.z = MAX(psFeature->pos.z, (hx0 + hx1) / 2);
@@ -268,7 +269,7 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 	{
 		for (int width = 0; width <= b.size.x; ++width)
 		{
-			int h = map_TileHeight(worldMapState, b.map.x + width, b.map.y + breadth);
+			int h = map_TileHeight(gameWorld.map, b.map.x + width, b.map.y + breadth);
 			foundationMin = std::min(foundationMin, h);
 			foundationMax = std::max(foundationMax, h);
 		}
@@ -304,11 +305,11 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
-			MAPTILE *psTile = mapTile(worldMapState, b.map.x + width, b.map.y + breadth);
+			MAPTILE *psTile = mapTile(gameWorld.map, b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(nullptr, b.map.x + width < worldMapState.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < worldMapState.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.x + width < gameWorld.map.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < gameWorld.map.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -328,12 +329,12 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(worldMapState, b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
+					auxSetBlocking(gameWorld.map, b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
 				}
 
 				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM)
 				{
-					auxSetBlocking(worldMapState, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
+					auxSetBlocking(gameWorld.map, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
 				}
 			}
 
@@ -343,7 +344,7 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 			}
 		}
 	}
-	psFeature->pos.z = map_TileHeight(worldMapState, psFeature->pos.x, psFeature->pos.y);//jps 18july97
+	psFeature->pos.z = map_TileHeight(gameWorld.map, psFeature->pos.x, psFeature->pos.y);//jps 18july97
 	updateFeatureOrientation(psFeature);
 
 	return psFeature;
@@ -414,14 +415,14 @@ bool removeFeature(FEATURE *psDel)
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
-			if (tileOnMap(worldMapState, b.map.x + width, b.map.y + breadth))
+			if (tileOnMap(gameWorld.map, b.map.x + width, b.map.y + breadth))
 			{
-				MAPTILE *psTile = mapTile(worldMapState, b.map.x + width, b.map.y + breadth);
+				MAPTILE *psTile = mapTile(gameWorld.map, b.map.x + width, b.map.y + breadth);
 
 				if (psTile->psObject == psDel)
 				{
 					psTile->psObject = nullptr;
-					auxClearBlocking(worldMapState, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
+					auxClearBlocking(gameWorld.map, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
 				}
 			}
 		}
@@ -431,7 +432,7 @@ bool removeFeature(FEATURE *psDel)
 	{
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
-		pos.y = map_Height(worldMapState, pos.x, pos.z) + 30;
+		pos.y = map_Height(gameWorld.map, pos.x, pos.z) + 30;
 		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, 0, gameTime - deltaGameTime + 1);
 		if (psDel->psStats->subType == FEAT_GEN_ARTE)
 		{
@@ -518,7 +519,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		/* Then a sequence of effects */
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
-		pos.y = map_Height(worldMapState, pos.x, pos.z);
+		pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, nullptr, 0, impactTime);
 
 		//play sound
@@ -545,7 +546,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			{
 				const unsigned int x = b.map.x + width;
 				const unsigned int y = b.map.y + breadth;
-				MAPTILE *psTile = mapTile(worldMapState, x, y);
+				MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 				if (psTile->psObject != psDel)
 				{
 					continue;
@@ -560,13 +561,13 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						{
 							makeTileRubbleTexture(psTile, x, y, RUBBLE_TILE);
 						}
-						auxClearBlocking(worldMapState, x, y, AUXBITS_ALL);
+						auxClearBlocking(gameWorld.map, x, y, AUXBITS_ALL);
 					}
 					else
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = nullptr;
-						auxClearBlocking(worldMapState, x, y, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
+						auxClearBlocking(gameWorld.map, x, y, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						if (isUrban)
 						{
 							makeTileRubbleTexture(psTile, x, y, BLOCKING_RUBBLE_TILE);

@@ -54,8 +54,6 @@ struct GROUND_TYPE
 	bool highQualityTextures = false; // whether this ground_type has normal / specular / height maps
 };
 
-extern WorldMapState worldMapState;
-
 extern float waterLevel;
 extern char *tilesetDir;
 extern MAP_TILESET currentMapTileset;

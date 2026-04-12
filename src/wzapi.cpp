@@ -522,7 +522,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 		DROID *droid = _droid.value();
 		SCRIPT_ASSERT(false, context, droid, "No valid droid provided");
 		SCRIPT_ASSERT(false, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
-		for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+		for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			psDroid->selected = psDroid == droid; // select only the target droid
 		}
@@ -759,7 +759,7 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 		{
 			VIEW_PROXIMITY *psProx = (VIEW_PROXIMITY *)psViewData->pData;
 			// check the z value is at least the height of the terrain
-			int height = map_Height(worldMapState, psProx->x, psProx->y);
+			int height = map_Height(gameWorld.map, psProx->x, psProx->y);
 			if (psProx->z < height)
 			{
 				psProx->z = height;
@@ -911,7 +911,7 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 				{
 					for (int y = y1; y < y2; y++)
 					{
-						MAPTILE *psTile = mapTile(worldMapState, x, y);
+						MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 						psTile->tileInfoBits |= BITS_MARKED;
 					}
 				}
@@ -920,7 +920,7 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 			{
 				int x = tilePosOrArea.x1;
 				int y = tilePosOrArea.y1;
-				MAPTILE *psTile = mapTile(worldMapState, x, y);
+				MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 				psTile->tileInfoBits |= BITS_MARKED;
 			}
 		}
@@ -1066,7 +1066,7 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 //--
 std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter))
 {
-	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, worldObjectState.structures);
+	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, gameWorld.objects.structures);
 }
 
 //-- ## enumStructOffWorld([player[, structureType[, playerFilter]]])
@@ -1080,7 +1080,7 @@ std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _pla
 //--
 std::vector<const STRUCTURE *> wzapi::enumStructOffWorld(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter))
 {
-	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, (mission.worldObjectState.structures));
+	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, (mission.gameWorld.objects.structures));
 }
 
 //-- ## enumDroid([player[, droidType[, playerFilter]]])
@@ -1116,7 +1116,7 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 	}
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
-	for (DROID *psDroid : worldObjectState.droids[player])
+	for (DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if ((playerFilter == ALL_PLAYERS || psDroid->visible[playerFilter])
 		    && !psDroid->died
@@ -1144,7 +1144,7 @@ std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, o
 	}
 
 	std::vector<const FEATURE *> matches;
-	for (const FEATURE *psFeat : worldObjectState.features[0])
+	for (const FEATURE *psFeat : gameWorld.objects.features[0])
 	{
 		if ((playerFilter == ALL_PLAYERS || psFeat->visible[playerFilter])
 		    && !psFeat->died
@@ -1166,7 +1166,7 @@ std::vector<scr_position> wzapi::enumBlips(WZAPI_PARAMS(int player))
 {
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	std::vector<scr_position> matches;
-	for (const BASE_OBJECT *psSensor : worldObjectState.sensors[0])
+	for (const BASE_OBJECT *psSensor : gameWorld.objects.sensors[0])
 	{
 		if (psSensor->visible[player] > 0 && psSensor->visible[player] < UBYTE_MAX)
 		{
@@ -1187,14 +1187,14 @@ std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 	{
 		return matches;
 	}
-	for (DROID *psDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
 			matches.push_back(psDroid);
 		}
 	}
-	for (STRUCTURE *psStruct : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -1261,8 +1261,8 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 {
 	_x = std::max<int>(_x, 0);
 	_y = std::max<int>(_y, 0);
-	_x = std::min<int>(_x, worldMapState.width);
-	_y = std::min<int>(_y, worldMapState.height);
+	_x = std::min<int>(_x, gameWorld.map.width);
+	_y = std::min<int>(_y, gameWorld.map.height);
 
 	int player = context.player();
 	int x = world_coord(_x);
@@ -1458,7 +1458,7 @@ bool wzapi::orderDroidLoc(WZAPI_PARAMS(DROID *psDroid, int order_, int x, int y)
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 	DROID_ORDER order = (DROID_ORDER)order_;
 	SCRIPT_ASSERT(false, context, validOrderForLoc(order), "Invalid location based order: %s", getDroidOrderName(order));
-	SCRIPT_ASSERT(false, context, tileOnMap(worldMapState, x, y), "Outside map bounds (%d, %d)", x, y);
+	SCRIPT_ASSERT(false, context, tileOnMap(gameWorld.map, x, y), "Outside map bounds (%d, %d)", x, y);
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
 	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
 	{
@@ -1599,7 +1599,7 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 	int incX, incY, x, y;
 	int maxBlockingTiles = _maxBlockingTiles.value_or(0);
 
-	SCRIPT_ASSERT({}, context, startX >= 0 && startX < worldMapState.width && startY >= 0 && startY < worldMapState.height, "Bad position (%d, %d)", startX, startY);
+	SCRIPT_ASSERT({}, context, startX >= 0 && startX < gameWorld.map.width && startY >= 0 && startY < gameWorld.map.height, "Bad position (%d, %d)", startX, startY);
 
 	x = startX;
 	y = startY;
@@ -1609,7 +1609,7 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 	PROPULSION_TYPE propType = (psDroid) ? psDroid->getPropulsionStats()->propulsionType : PROPULSION_TYPE_WHEELED;
 
 	// save a lot of typing... checks whether a position is valid
-#define LOC_OK(_x, _y) (tileOnMap(worldMapState, _x, _y) && \
+#define LOC_OK(_x, _y) (tileOnMap(gameWorld.map, _x, _y) && \
                         (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), propType)) \
                         && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles, propType))
 
@@ -1691,7 +1691,7 @@ bool wzapi::structureCanFit(WZAPI_PARAMS(std::string structureName, int x, int y
 	}
 	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
-	return (tileOnMap(worldMapState, x, y)
+	return (tileOnMap(gameWorld.map, x, y)
 			&& validLocation(psStat, world_coord(Vector2i(x, y)), direction, player, false));
 }
 
@@ -1727,7 +1727,7 @@ bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, 
 //--
 int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
 {
-	return ::terrainType(mapTile(worldMapState, x, y));
+	return ::terrainType(mapTile(gameWorld.map, x, y));
 }
 
 //-- ## tileIsBurning(x, y)
@@ -1736,7 +1736,7 @@ int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
 //--
 bool wzapi::tileIsBurning(WZAPI_PARAMS(int x, int y))
 {
-	const MAPTILE *psTile = mapTile(worldMapState, x, y);
+	const MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 	SCRIPT_ASSERT(false, context, psTile, "Checking fire on tile outside the map (%d, %d)", x, y);
 	return ::TileIsBurning(psTile);
 }
@@ -1956,7 +1956,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 			psDroid = ::buildDroid(psTemplate.get(), world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, nullptr);
 			if (psDroid)
 			{
-				addDroid(psDroid, worldObjectState.droids);
+				addDroid(psDroid, gameWorld.objects.droids);
 				debug(LOG_LIFE, "Created droid %s by script for player %d: %u", objInfo(psDroid), player, psDroid->id);
 			}
 			else
@@ -2002,7 +2002,7 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 	DROID *psDroid = IdToMissionDroid(droidId, droidPlayer);
 	SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", droidId, droidPlayer);
 	SCRIPT_ASSERT(false, context, checkTransporterSpace(psTransporter, psDroid), "Not enough room in transporter %d for droid %d", transporterId, droidId);
-	bool removeSuccessful = droidRemove(psDroid, mission.worldObjectState.droids);
+	bool removeSuccessful = droidRemove(psDroid, mission.gameWorld.objects.droids);
 	SCRIPT_ASSERT(false, context, removeSuccessful, "Could not remove droid id %d from mission list", droidId);
 	psTransporter->psGroup->add(psDroid);
 	return true;
@@ -2018,7 +2018,7 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 	int feature = getFeatureStatFromName(WzString::fromUtf8(featureName));
 	SCRIPT_ASSERT(nullptr, context, feature >= 0 && feature < asFeatureStats.size(), "Unknown feature name: %s", featureName.c_str());
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
-	for (const FEATURE *psFeat : worldObjectState.features[0])
+	for (const FEATURE *psFeat : gameWorld.objects.features[0])
 	{
 		SCRIPT_ASSERT(nullptr, context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y,
 		              "Building feature on tile already occupied");
@@ -2061,8 +2061,8 @@ bool wzapi::isVTOL(WZAPI_PARAMS(const DROID *psDroid))
 bool wzapi::safeDest(WZAPI_PARAMS(int player, int x, int y))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	SCRIPT_ASSERT(false, context, tileOnMap(worldMapState, x, y), "Out of bounds coordinates(%d, %d)", x, y);
-	return !(auxTile(worldMapState, x, y, player) & AUXBITS_DANGER);
+	SCRIPT_ASSERT(false, context, tileOnMap(gameWorld.map, x, y), "Out of bounds coordinates(%d, %d)", x, y);
+	return !(auxTile(gameWorld.map, x, y, player) & AUXBITS_DANGER);
 }
 
 //-- ## activateStructure(structure[, target])
@@ -2153,7 +2153,7 @@ std::vector<scr_position> wzapi::getDroidPath(WZAPI_PARAMS(const DROID *psDroid)
 	for (size_t i = startPos; i < len; i++)
 	{
 		const auto& pathCoords = psDroid->sMove.asPath[i];
-		ASSERT(worldOnMap(worldMapState, pathCoords.x, pathCoords.y), "Path off map!");
+		ASSERT(worldOnMap(gameWorld.map, pathCoords.x, pathCoords.y), "Path off map!");
 		result.emplace_back(scr_position {map_coord(pathCoords.x), map_coord(pathCoords.y)});
 	}
 
@@ -2169,8 +2169,8 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<st
 {
 	SCRIPT_ASSERT(false, context, _x >= 0, "Beacon x value %d is less than zero", _x);
 	SCRIPT_ASSERT(false, context, _y >= 0, "Beacon y value %d is less than zero", _y);
-	SCRIPT_ASSERT(false, context, _x <= worldMapState.width, "Beacon x value %d is greater than mapWidth %d", _x, (int)worldMapState.width);
-	SCRIPT_ASSERT(false, context, _y <= worldMapState.height, "Beacon y value %d is greater than mapHeight %d", _y, (int)worldMapState.height);
+	SCRIPT_ASSERT(false, context, _x <= gameWorld.map.width, "Beacon x value %d is greater than mapWidth %d", _x, (int)gameWorld.map.width);
+	SCRIPT_ASSERT(false, context, _y <= gameWorld.map.height, "Beacon y value %d is greater than mapHeight %d", _y, (int)gameWorld.map.height);
 
 	int x = world_coord(_x) + (TILE_UNITS / 2);
 	int y = world_coord(_y) + (TILE_UNITS / 2);
@@ -2422,8 +2422,8 @@ bool wzapi::centreView(WZAPI_PARAMS(int x, int y))
 {
 	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
 	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
-	SCRIPT_ASSERT(false, context, x <= worldMapState.width, "x value %d is greater than mapWidth %d", x, (int)worldMapState.width);
-	SCRIPT_ASSERT(false, context, y <= worldMapState.height, "y value %d is greater than mapHeight %d", y, (int)worldMapState.height);
+	SCRIPT_ASSERT(false, context, x <= gameWorld.map.width, "x value %d is greater than mapWidth %d", x, (int)gameWorld.map.width);
+	SCRIPT_ASSERT(false, context, y <= gameWorld.map.height, "y value %d is greater than mapHeight %d", y, (int)gameWorld.map.height);
 	setViewPos(x, y, false);
 	return true;
 }
@@ -2466,8 +2466,8 @@ bool wzapi::emitSound(WZAPI_PARAMS(std::string sound, int x, int y))
 {
 	SCRIPT_ASSERT(false, context, x >= 0, "x value %d is less than zero", x);
 	SCRIPT_ASSERT(false, context, y >= 0, "y value %d is less than zero", y);
-	SCRIPT_ASSERT(false, context, x <= worldMapState.width, "x value %d is greater than mapWidth %d", x, (int)worldMapState.width);
-	SCRIPT_ASSERT(false, context, y <= worldMapState.height, "y value %d is greater than mapHeight %d", y, (int)worldMapState.height);
+	SCRIPT_ASSERT(false, context, x <= gameWorld.map.width, "x value %d is greater than mapWidth %d", x, (int)gameWorld.map.width);
+	SCRIPT_ASSERT(false, context, y <= gameWorld.map.height, "y value %d is greater than mapHeight %d", y, (int)gameWorld.map.height);
 
 	int soundID = audio_GetTrackID(sound.c_str());
 	if (soundID == SAMPLE_NOT_FOUND)
@@ -2674,11 +2674,11 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time, optio
 	{
 		/* Search for a transport that is idle; if we can't find any, remove the launch button
 		 * since there's no transport to launch */
-		auto droidIt = std::find_if(worldObjectState.droids[selectedPlayer].begin(), worldObjectState.droids[selectedPlayer].end(), [](DROID* d)
+		auto droidIt = std::find_if(gameWorld.objects.droids[selectedPlayer].begin(), gameWorld.objects.droids[selectedPlayer].end(), [](DROID* d)
 		{
 			return d->isTransporter() && !transporterFlying(d);
 		});
-		DROID* psDroid = droidIt != worldObjectState.droids[selectedPlayer].end() ? *droidIt : nullptr;
+		DROID* psDroid = droidIt != gameWorld.objects.droids[selectedPlayer].end() ? *droidIt : nullptr;
 
 		// Didn't find an idle transporter, we can remove the launch button
 		if (psDroid == nullptr)
@@ -3100,24 +3100,24 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 
 	SCRIPT_ASSERT({}, context, minX >= 0, "Minimum scroll x value %d is less than zero - ", minX);
 	SCRIPT_ASSERT({}, context, minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
-	SCRIPT_ASSERT({}, context, maxX <= worldMapState.width, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)worldMapState.width);
-	SCRIPT_ASSERT({}, context, maxY <= worldMapState.height, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)worldMapState.height);
+	SCRIPT_ASSERT({}, context, maxX <= gameWorld.map.width, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)gameWorld.map.width);
+	SCRIPT_ASSERT({}, context, maxY <= gameWorld.map.height, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)gameWorld.map.height);
 
-	const int prevMinX = worldMapState.scroll.minX;
-	const int prevMinY = worldMapState.scroll.minY;
-	const int prevMaxX = worldMapState.scroll.maxX;
-	const int prevMaxY = worldMapState.scroll.maxY;
+	const int prevMinX = gameWorld.map.scroll.minX;
+	const int prevMinY = gameWorld.map.scroll.minY;
+	const int prevMaxX = gameWorld.map.scroll.maxX;
+	const int prevMaxY = gameWorld.map.scroll.maxY;
 
-	worldMapState.scroll.minX = minX;
-	worldMapState.scroll.maxX = maxX;
-	worldMapState.scroll.minY = minY;
-	worldMapState.scroll.maxY = maxY;
+	gameWorld.map.scroll.minX = minX;
+	gameWorld.map.scroll.maxX = maxX;
+	gameWorld.map.scroll.minY = minY;
+	gameWorld.map.scroll.maxY = maxY;
 
 	// When the scroll limits change midgame - need to redo the lighting
-	initLighting(prevMinX < worldMapState.scroll.minX ? prevMinX : worldMapState.scroll.minX,
-	             prevMinY < worldMapState.scroll.minY ? prevMinY : worldMapState.scroll.minY,
-	             prevMaxX < worldMapState.scroll.maxX ? prevMaxX : worldMapState.scroll.maxX,
-	             prevMaxY < worldMapState.scroll.maxY ? prevMaxY : worldMapState.scroll.maxY);
+	initLighting(prevMinX < gameWorld.map.scroll.minX ? prevMinX : gameWorld.map.scroll.minX,
+	             prevMinY < gameWorld.map.scroll.minY ? prevMinY : gameWorld.map.scroll.minY,
+	             prevMaxX < gameWorld.map.scroll.maxX ? prevMaxX : gameWorld.map.scroll.maxX,
+	             prevMaxY < gameWorld.map.scroll.maxY ? prevMaxY : gameWorld.map.scroll.maxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -3131,10 +3131,10 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 {
 	scr_area limits;
-	limits.x1 = worldMapState.scroll.minX;
-	limits.y1 = worldMapState.scroll.minY;
-	limits.x2 = worldMapState.scroll.maxX;
-	limits.y2 = worldMapState.scroll.maxY;
+	limits.x1 = gameWorld.map.scroll.minX;
+	limits.y1 = gameWorld.map.scroll.minY;
+	limits.x2 = gameWorld.map.scroll.maxX;
+	limits.y2 = gameWorld.map.scroll.maxY;
 	return limits;
 }
 
@@ -3342,8 +3342,8 @@ wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, i
 {
 	SCRIPT_ASSERT({}, context, x1 >= 0, "Minimum scroll x value %d is less than zero - ", x1);
 	SCRIPT_ASSERT({}, context, y1 >= 0, "Minimum scroll y value %d is less than zero - ", y1);
-	SCRIPT_ASSERT({}, context, x2 <= worldMapState.width, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)worldMapState.width);
-	SCRIPT_ASSERT({}, context, y2 <= worldMapState.height, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)worldMapState.height);
+	SCRIPT_ASSERT({}, context, x2 <= gameWorld.map.width, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)gameWorld.map.width);
+	SCRIPT_ASSERT({}, context, y2 <= gameWorld.map.height, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)gameWorld.map.height);
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Bad player filter value %d", playerFilter);
 
 	if (playerFilter == ALL_PLAYERS)
@@ -3426,7 +3426,7 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 		target.x += (TILE_UNITS / 2);
 		target.y += (TILE_UNITS / 2);
 	}
-	target.z = mapTile(worldMapState, x, y)->height;
+	target.z = mapTile(gameWorld.map, x, y)->height;
 
 	WEAPON sWeapon;
 	sWeapon.nStat = weaponIndex;
@@ -3483,11 +3483,11 @@ bool wzapi::transformPlayerToSpectator(WZAPI_PARAMS(int player))
 // flag all droids as requiring update on next frame
 static void dirtyAllDroids(int player)
 {
-	for (DROID *psDroid : worldObjectState.droids[player])
+	for (DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
-	for (DROID *psDroid : mission.worldObjectState.droids[player])
+	for (DROID *psDroid : mission.gameWorld.objects.droids[player])
 	{
 		psDroid->flags.set(OBJECT_FLAG_DIRTY);
 	}
@@ -3499,11 +3499,11 @@ static void dirtyAllDroids(int player)
 
 static void dirtyAllStructures(int player)
 {
-	for (STRUCTURE *psCurr : worldObjectState.structures[player])
+	for (STRUCTURE *psCurr : gameWorld.objects.structures[player])
 	{
 		psCurr->flags.set(OBJECT_FLAG_DIRTY);
 	}
-	for (STRUCTURE *psCurr : mission.worldObjectState.structures[player])
+	for (STRUCTURE *psCurr : mission.gameWorld.objects.structures[player])
 	{
 		psCurr->flags.set(OBJECT_FLAG_DIRTY);
 	}
@@ -3828,14 +3828,14 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 		case SCRCB_ELW:
 			// Update resistance points for all structures, to avoid making them damaged
 			// FIXME - this is _really_ slow! we could be doing this for dozens of buildings one at a time!
-			for (STRUCTURE *psCurr : worldObjectState.structures[player])
+			for (STRUCTURE *psCurr : gameWorld.objects.structures[player])
 			{
 				if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
 				{
 					psCurr->resistance = value;
 				}
 			}
-			for (STRUCTURE *psCurr : mission.worldObjectState.structures[player])
+			for (STRUCTURE *psCurr : mission.gameWorld.objects.structures[player])
 			{
 				if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
 				{
@@ -3848,14 +3848,14 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 			// Update body points for all structures, to avoid making them damaged
 			// FIXME - this is _really_ slow! we could be doing this for
 			// dozens of buildings one at a time!
-			for (STRUCTURE *psCurr : worldObjectState.structures[player])
+			for (STRUCTURE *psCurr : gameWorld.objects.structures[player])
 			{
 				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
 				{
 					psCurr->body = (psCurr->body * value) / psStats->upgrade[player].hitpoints;
 				}
 			}
-			for (STRUCTURE *psCurr : mission.worldObjectState.structures[player])
+			for (STRUCTURE *psCurr : mission.gameWorld.objects.structures[player])
 			{
 				if (psStats == psCurr->pStructureType && (!bMultiPlayer || (bMultiPlayer && psStats->upgrade[player].hitpoints < value)))
 				{
@@ -4783,12 +4783,12 @@ nlohmann::json wzapi::constructMapTilesArray()
 	//==   * ```hoverContinent``` (For hover type propulsions)
 	//==   * ```limitedContinent``` (For land or sea limited propulsion types)
 	nlohmann::json mapTileArray = nlohmann::json::array();
-	for (SDWORD y = 0; y < worldMapState.height; y++)
+	for (SDWORD y = 0; y < gameWorld.map.height; y++)
 	{
 		nlohmann::json mapRow = nlohmann::json::array();
-		for (SDWORD x = 0; x < worldMapState.width; x++)
+		for (SDWORD x = 0; x < gameWorld.map.width; x++)
 		{
-			MAPTILE *psTile = mapTile(worldMapState, x, y);
+			MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 			nlohmann::json mapTile = nlohmann::json::object();
 			mapTile["terrainType"] = ::terrainType(psTile);
 			mapTile["height"] = psTile->height;

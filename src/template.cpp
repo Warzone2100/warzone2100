@@ -748,10 +748,10 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 		switch (i)
 		{
 		case 0:
-			psList = &worldObjectState.structures[player];
+			psList = &gameWorld.objects.structures[player];
 			break;
 		case 1:
-			psList = &mission.worldObjectState.structures[player];
+			psList = &mission.gameWorld.objects.structures[player];
 			break;
 		}
 		if (!psList)

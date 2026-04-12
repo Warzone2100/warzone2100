@@ -25,13 +25,9 @@
 #define __INCLUDED_SRC_OBJMEM_H__
 
 #include "objectdef.h"
-
-#include "world_object_state.h"
+#include "object_lists_types.h"
 
 #include <list>
-
-/* The lists of objects allocated */
-extern WorldObjectState worldObjectState;
 
 /* The list of destroyed objects */
 using DestroyedObjectsList = std::list<BASE_OBJECT*>;

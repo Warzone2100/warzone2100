@@ -81,6 +81,7 @@
 #include "input/keyconfig.h"
 #include "mapgrid.h"
 #include "main.h"
+#include "game_world.h"
 
 InputManager gInputManager;
 KeyFunctionConfiguration gKeyFuncConfig;
@@ -414,7 +415,7 @@ static bool localPlayerHasSelection()
 		return false;
 	}
 
-	for (const DROID* psDroid : worldObjectState.droids[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -422,7 +423,7 @@ static bool localPlayerHasSelection()
 		}
 	}
 
-	for (const STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
+	for (const STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -796,7 +797,7 @@ void processMouseClickInput()
 			else if (selection == SC_DROID_REPAIR)
 			{
 				// We can't repair ourselves, so change it to a blocking cursor
-				for (const DROID *psCurr : worldObjectState.droids[selectedPlayer])
+				for (const DROID *psCurr : gameWorld.objects.droids[selectedPlayer])
 				{
 					if (psCurr->selected)
 					{
@@ -897,7 +898,7 @@ void processMouseClickInput()
 			}
 
 			if (item == MT_TERRAIN
-			    && terrainType(mapTile(worldMapState, mouseTileX, mouseTileY)) == TER_CLIFFFACE)
+			    && terrainType(mapTile(gameWorld.map, mouseTileX, mouseTileY)) == TER_CLIFFFACE)
 			{
 				item = MT_BLOCKING;
 			}
@@ -1140,10 +1141,10 @@ void resetScroll()
 // Checks if coordinate is inside scroll limits, returns false if not.
 bool CheckInScrollLimits(const int &xPos, const int &yPos)
 {
-	int minX = world_coord(worldMapState.scroll.minX);
-	int maxX = world_coord(worldMapState.scroll.maxX - 1);
-	int minY = world_coord(worldMapState.scroll.minY);
-	int maxY = world_coord(worldMapState.scroll.maxY - 1);
+	int minX = world_coord(gameWorld.map.scroll.minX);
+	int maxX = world_coord(gameWorld.map.scroll.maxX - 1);
+	int minY = world_coord(gameWorld.map.scroll.minY);
+	int maxY = world_coord(gameWorld.map.scroll.maxY - 1);
 
 	if ((xPos < minX) || (xPos >= maxX) || (yPos < minY) || (yPos >= maxY))
 	{
@@ -1161,10 +1162,10 @@ bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 	bool EdgeHit = false;
 	SDWORD	minX, minY, maxX, maxY;
 
-	minX = world_coord(worldMapState.scroll.minX);
-	maxX = world_coord(worldMapState.scroll.maxX - 1);
-	minY = world_coord(worldMapState.scroll.minY);
-	maxY = world_coord(worldMapState.scroll.maxY - 1);
+	minX = world_coord(gameWorld.map.scroll.minX);
+	maxX = world_coord(gameWorld.map.scroll.maxX - 1);
+	minY = world_coord(gameWorld.map.scroll.minY);
+	maxY = world_coord(gameWorld.map.scroll.maxY - 1);
 
 	//scroll is limited to what can be seen for current campaign
 	if (*xPos < minX)
@@ -1321,7 +1322,7 @@ BASE_OBJECT *mouseTarget()
 	BASE_OBJECT *psReturn = nullptr;
 	int dispX, dispY, dispR;
 
-	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > worldMapState.width - 1 || mouseTileY > worldMapState.height - 1)
+	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > gameWorld.map.width - 1 || mouseTileY > gameWorld.map.height - 1)
 	{
 		return (nullptr);
 	}
@@ -1329,7 +1330,7 @@ BASE_OBJECT *mouseTarget()
 	/* First have a look through the droid lists */
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid : worldObjectState.droids[i])
+		for (DROID *psDroid : gameWorld.objects.droids[i])
 		{
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
@@ -1379,7 +1380,7 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid player (selectedPlayer: %" PRIu32 ")", selectedPlayer);
 
 	//clear the selected delivery point
-	for (auto& psFlagPos : worldObjectState.flags[selectedPlayer])
+	for (auto& psFlagPos : gameWorld.objects.flags[selectedPlayer])
 	{
 		psFlagPos->selected = false;
 	}
@@ -1430,7 +1431,7 @@ void finishDeliveryPosition()
 			}
 		}
 		//deselect once moved
-		for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+		for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 		{
 			psFlag->selected = false;
 		}
@@ -1452,14 +1453,14 @@ bool deliveryReposValid()
 	Vector2i map = map_coord(flagPos.coords.xy());
 
 	//make sure we are not too near map edge
-	if (map.x < worldMapState.scroll.minX + TOO_NEAR_EDGE || map.x + 1 > worldMapState.scroll.maxX - TOO_NEAR_EDGE ||
-	    map.y < worldMapState.scroll.minY + TOO_NEAR_EDGE || map.y + 1 > worldMapState.scroll.maxY - TOO_NEAR_EDGE)
+	if (map.x < gameWorld.map.scroll.minX + TOO_NEAR_EDGE || map.x + 1 > gameWorld.map.scroll.maxX - TOO_NEAR_EDGE ||
+	    map.y < gameWorld.map.scroll.minY + TOO_NEAR_EDGE || map.y + 1 > gameWorld.map.scroll.maxY - TOO_NEAR_EDGE)
 	{
 		return false;
 	}
 
 	// cant place on top of a delivery point...
-	for (const auto& psFlag : worldObjectState.flags[selectedPlayer])
+	for (const auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 	{
 		Vector2i flagTile = map_coord(psFlag->coords.xy());
 		if (flagTile == map)
@@ -1497,10 +1498,10 @@ void processDeliveryRepos()
 		return;
 	}
 
-	int bX = clip<int>(mouseTileX, 2, worldMapState.width - 3);
-	int bY = clip<int>(mouseTileY, 2, worldMapState.height - 3);
+	int bX = clip<int>(mouseTileX, 2, gameWorld.map.width - 3);
+	int bY = clip<int>(mouseTileY, 2, gameWorld.map.height - 3);
 
-	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(worldMapState, bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
+	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(gameWorld.map, bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
 }
 
 // Cancel repositioning of the delivery point without moving it.
@@ -1730,7 +1731,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 	else if (psDroid->droidType == DROID_SENSOR)
 	{
 		bSensorAssigned = false;
-		for (DROID* psCurr : worldObjectState.droids[selectedPlayer])
+		for (DROID* psCurr : gameWorld.objects.droids[selectedPlayer])
 		{
 			//must be indirect weapon droid or VTOL weapon droid
 			if ((psCurr->droidType == DROID_WEAPON) &&
@@ -1858,7 +1859,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 			if (selection == SC_INVALID)
 			{
 				/* Clear old building selection(s) - should only be one */
-				for (STRUCTURE* psCurr : worldObjectState.structures[selectedPlayer])
+				for (STRUCTURE* psCurr : gameWorld.objects.structures[selectedPlayer])
 				{
 					psCurr->selected = false;
 				}
@@ -1883,7 +1884,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	         selection == SC_INVALID && ownStruct)
 	{
 		/* Clear old building selection(s) - should only be one */
-		for (STRUCTURE* psCurr : worldObjectState.structures[selectedPlayer])
+		for (STRUCTURE* psCurr : gameWorld.objects.structures[selectedPlayer])
 		{
 			psCurr->selected = false;
 		}
@@ -1946,12 +1947,12 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 		    (apStructTypeLists[selectedPlayer][i] == AVAILABLE))	// don't go any further if no derrick stat found.
 		{
 			// for each droid
-			for (DROID* psCurr : worldObjectState.droids[selectedPlayer])
+			for (DROID* psCurr : gameWorld.objects.droids[selectedPlayer])
 			{
 				if ((droidType(psCurr) == DROID_CONSTRUCT ||
 				     droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
 				{
-					if (fireOnLocation(worldMapState, psFeature->pos.x, psFeature->pos.y))
+					if (fireOnLocation(gameWorld.map, psFeature->pos.x, psFeature->pos.y))
 					{
 						// Can't build because it's burning
 						AddDerrickBurningMessage();
@@ -2079,10 +2080,10 @@ void	dealWithLMB()
 	}
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if (dbgInputManager.debugMappingsAllowed() && tileOnMap(worldMapState, mouseTileX, mouseTileY))
+	if (dbgInputManager.debugMappingsAllowed() && tileOnMap(gameWorld.map, mouseTileX, mouseTileY))
 	{
-		MAPTILE *psTile = mapTile(worldMapState, mouseTileX, mouseTileY);
-		uint8_t aux = auxTile(worldMapState, mouseTileX, mouseTileY, selectedPlayer);
+		MAPTILE *psTile = mapTile(gameWorld.map, mouseTileX, mouseTileY);
+		uint8_t aux = auxTile(gameWorld.map, mouseTileX, mouseTileY, selectedPlayer);
 
 		int flipVal = 0;
 		if (TileNumber_texture(psTile->texture) & TILE_XFLIP)
@@ -2168,7 +2169,7 @@ static FLAG_POSITION *findMouseDeliveryPoint()
 		return nullptr;
 	}
 
-	for (const auto& psPoint : worldObjectState.flags[selectedPlayer])
+	for (const auto& psPoint : gameWorld.objects.flags[selectedPlayer])
 	{
 		if (psPoint->type != POS_DELIVERY) {
 			continue;
@@ -2370,7 +2371,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 
 	*ppObjectUnderMouse = nullptr;
 
-	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > (int)(worldMapState.width - 1) || mouseTileY > (int)(worldMapState.height - 1))
+	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > (int)(gameWorld.map.width - 1) || mouseTileY > (int)(gameWorld.map.height - 1))
 	{
 		retVal = MT_BLOCKING;
 		return retVal;
@@ -2382,7 +2383,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 	/* First have a look through the droid lists */
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID* psDroid : worldObjectState.droids[i])
+		for (DROID* psDroid : gameWorld.objects.droids[i])
 		{
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
@@ -2601,7 +2602,7 @@ static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 		return SC_INVALID;
 	}
 
-	for (DROID *psDroid : worldObjectState.droids[_selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[_selectedPlayer])
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
@@ -2691,7 +2692,7 @@ bool	repairDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (const DROID* psCurr : worldObjectState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && (
 		        psCurr->droidType == DROID_REPAIR ||
@@ -2710,7 +2711,7 @@ bool	vtolDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "player: %" PRIu32 "", player);
 
-	for (DROID* psCurr : worldObjectState.droids[player])
+	for (DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && psCurr->isVtol())
 		{
@@ -2729,7 +2730,7 @@ bool	anyDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (const DROID* psCurr : worldObjectState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2746,7 +2747,7 @@ bool cyborgDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (const DROID* psCurr : worldObjectState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && psCurr->isCyborg())
 		{
@@ -2768,17 +2769,17 @@ void clearSelection()
 		return;
 	}
 
-	for (DROID* psCurrDroid : worldObjectState.droids[selectedPlayer])
+	for (DROID* psCurrDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		psCurrDroid->selected = false;
 	}
-	for (STRUCTURE* psStruct : worldObjectState.structures[selectedPlayer])
+	for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		psStruct->selected = false;
 	}
 	bLasSatStruct = false;
 	//clear the Deliv Point if one
-	for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+	for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 	{
 		psFlag->selected = false;
 	}

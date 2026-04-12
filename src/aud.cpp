@@ -30,6 +30,7 @@
 
 #include "display3d.h"
 #include "map.h"
+#include "game_world.h"
 
 bool audio_ObjectDead(const SIMPLE_OBJECT *psSimpleObj)
 {
@@ -63,7 +64,7 @@ Vector3f audio_GetPlayerPos()
 
 	// Invert Y to match QSOUND axes
 	// @NOTE What is QSOUND? Why invert the Y axis?
-	pos.y = world_coord(worldMapState.height) - pos.y;
+	pos.y = world_coord(gameWorld.map.height) - pos.y;
 
 	return pos;
 }
@@ -83,9 +84,9 @@ void audio_Get3DPlayerRotAboutVerticalAxis(float *angle)
 void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	*piX = iWorldX;
-	*piZ = map_TileHeight(worldMapState, map_coord(iWorldX), map_coord(iWorldY));
+	*piZ = map_TileHeight(gameWorld.map, map_coord(iWorldX), map_coord(iWorldY));
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(worldMapState.height) - iWorldY;
+	*piY = world_coord(gameWorld.map.height) - iWorldY;
 }
 
 // @FIXME we don't need to do this, since we are not using qsound.
@@ -95,10 +96,10 @@ void audio_GetObjectPos(const SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY
 	ASSERT_OR_RETURN(, psBaseObj != nullptr, "Game object pointer invalid");
 
 	*piX = psBaseObj->pos.x;
-	*piZ = map_TileHeight(worldMapState, map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
+	*piZ = map_TileHeight(gameWorld.map, map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
 
 	/* invert y to match QSOUND axes */
-	*piY = world_coord(worldMapState.height) - psBaseObj->pos.y;
+	*piY = world_coord(gameWorld.map.height) - psBaseObj->pos.y;
 }
 
 UDWORD sound_GetGameTime()

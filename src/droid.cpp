@@ -522,7 +522,7 @@ void recycleDroid(DROID *psDroid)
 
 	Vector3i position = psDroid->pos.xzy();
 	const auto mapCoord = map_coord({psDroid->pos.x, psDroid->pos.y});
-	const auto psTile = mapTile(worldMapState, mapCoord);
+	const auto psTile = mapTile(gameWorld.map, mapCoord);
 	if (tileIsClearlyVisible(psTile))
 	{
 		addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, false, gameTime - deltaGameTime + 1);
@@ -570,7 +570,7 @@ bool removeDroidBase(DROID *psDel)
 					return IterationResult::BREAK_ITERATION;
 				}
 				/* add droid to droid list then vanish it - hope this works! - GJ */
-				addDroid(psCurr, worldObjectState.droids);
+				addDroid(psCurr, gameWorld.objects.droids);
 				vanishDroid(psCurr);
 
 				return IterationResult::CONTINUE_ITERATION;
@@ -588,7 +588,7 @@ bool removeDroidBase(DROID *psDel)
 	/* Put Deliv. Pts back into world when a command droid dies */
 	if (psDel->droidType == DROID_COMMAND)
 	{
-		for (auto psStruct : worldObjectState.structures[psDel->player])
+		for (auto psStruct : gameWorld.objects.structures[psDel->player])
 		{
 			// alexl's stab at a right answer.
 			if (psStruct && psStruct->isFactory()
@@ -606,7 +606,7 @@ bool removeDroidBase(DROID *psDel)
 		if (tryingToGetLocation())
 		{
 			int numSelectedConstructors = 0;
-			for (const DROID *psDroid : worldObjectState.droids[psDel->player])
+			for (const DROID *psDroid : gameWorld.objects.droids[psDel->player])
 			{
 				numSelectedConstructors += psDroid->selected && psDroid->isConstructionDroid();
 			}
@@ -693,7 +693,7 @@ bool destroyDroid(DROID *psDel, unsigned impactTime)
 		{
 			for (breadth = mapY - 1; breadth <= mapY + 1; breadth++)
 			{
-				psTile = mapTile(worldMapState, width, breadth);
+				psTile = mapTile(gameWorld.map, width, breadth);
 				if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 				{
 					psTile->illumination /= 2;
@@ -758,7 +758,7 @@ static size_t droidCancelRepairers(DROID *psDroid, PerPlayerDroidLists& pList)
 		}
 
 		// search the main (current) list of active structures to see if any point to this
-		StructureList* pStructList = &worldObjectState.structures[player];
+		StructureList* pStructList = &gameWorld.objects.structures[player];
 		for (STRUCTURE *psCurr : *pStructList)
 		{
 			if (psCurr->pStructureType->type == REF_REPAIR_FACILITY && psCurr->pFunctionality)
@@ -872,8 +872,8 @@ void droidUpdate(DROID *psDroid)
 	// Check that we are (still) in the sensor list
 	if (psDroid->droidType == DROID_SENSOR)
 	{
-		const auto sensor = std::find(worldObjectState.sensors[0].begin(), worldObjectState.sensors[0].end(), (BASE_OBJECT*)psDroid);
-		ASSERT(sensor != worldObjectState.sensors[0].end(), "%s(%p) not in sensor list!",
+		const auto sensor = std::find(gameWorld.objects.sensors[0].begin(), gameWorld.objects.sensors[0].end(), (BASE_OBJECT*)psDroid);
+		ASSERT(sensor != gameWorld.objects.sensors[0].end(), "%s(%p) not in sensor list!",
 			   droidGetName(psDroid), static_cast<void *>(psDroid));
 	}
 #endif
@@ -1095,13 +1095,13 @@ static bool droidNextToStruct(DROID *psDroid, STRUCTURE *psStruct)
 	auto pos = map_coord(psDroid->pos);
 	int minX = std::max(pos.x - 1, 0);
 	int minY = std::max(pos.y - 1, 0);
-	int maxX = std::min(pos.x + 1, worldMapState.width);
-	int maxY = std::min(pos.y + 1, worldMapState.height);
+	int maxX = std::min(pos.x + 1, gameWorld.map.width);
+	int maxY = std::min(pos.y + 1, gameWorld.map.height);
 	for (int y = minY; y <= maxY; ++y)
 	{
 		for (int x = minX; x <= maxX; ++x)
 		{
-			if (TileHasStructure(mapTile(worldMapState, x, y)) &&
+			if (TileHasStructure(mapTile(gameWorld.map, x, y)) &&
 				getTileStructure(x, y) == psStruct)
 			{
 				return true;
@@ -1169,7 +1169,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 			return DroidStartBuildFailed;
 		}
 		// Can't build on burning oil derricks.
-		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(worldMapState, psDroid->order.pos.x, psDroid->order.pos.y))
+		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(gameWorld.map, psDroid->order.pos.x, psDroid->order.pos.y))
 		{
 			// Don't cancel build, since we can wait for it to stop burning.
 			objTrace(psDroid->id, "DroidStartBuildPending: burning");
@@ -1192,7 +1192,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		psStruct = castStructure(psDroid->order.psObj);
 		if (psStruct == nullptr)
 		{
-			psStruct = castStructure(worldTile(worldMapState, psDroid->actionPos)->psObject);
+			psStruct = castStructure(worldTile(gameWorld.map, psDroid->actionPos)->psObject);
 		}
 		if (psStruct && !droidNextToStruct(psDroid, psStruct))
 		{
@@ -1241,7 +1241,7 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 		ASSERT_OR_RETURN(, size.x > 0 && size.y > 0, "Zero-size building?: %s", (psStruct && psStruct->pStructureType) ? psStruct->pStructureType->id.toUtf8().c_str() : "<null>");
 		Vector3i temp;
 		temp.x = psStruct->pos.x + ((rand() % (2 * size.x)) - size.x);
-		temp.y = map_TileHeight(worldMapState, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) + (psStruct->sDisplay.imd->max.y / 6);
+		temp.y = map_TileHeight(gameWorld.map, map_coord(psStruct->pos.x), map_coord(psStruct->pos.y)) + (psStruct->sDisplay.imd->max.y / 6);
 		temp.z = psStruct->pos.y + ((rand() % (2 * size.y)) - size.y);
 		if (rand() % 2)
 		{
@@ -1863,7 +1863,7 @@ UDWORD calcDroidPower(const DROID *psDroid)
 DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot, uint32_t id)
 {
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
-	ASSERT(!bMultiPlayer || worldOnMap(worldMapState, pos.x, pos.y), "the build locations are not on the map");
+	ASSERT(!bMultiPlayer || worldOnMap(gameWorld.map, pos.x, pos.y), "the build locations are not on the map");
 
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
@@ -1879,7 +1879,7 @@ DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD pl
 	if (!onMission)
 	{
 		//set droid height
-		droid.pos.z = map_Height(worldMapState, droid.pos.x, droid.pos.y);
+		droid.pos.z = map_Height(gameWorld.map, droid.pos.x, droid.pos.y);
 	}
 
 	if (droid.isTransporter() || droid.droidType == DROID_COMMAND)
@@ -2081,7 +2081,7 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	if (groupNumber < UBYTE_MAX)
 	{
 		/* Run through all the droids */
-		for (DROID* psDroid : worldObjectState.droids[playerNumber])
+		for (DROID* psDroid : gameWorld.objects.droids[playerNumber])
 		{
 			/* Clear out the old ones */
 			if (clearGroup && psDroid->group == groupNumber)
@@ -2104,7 +2104,7 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	{
 		//clear the Deliv Point if one
 		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
-		for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+		for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 		{
 			psFlag->selected = false;
 		}
@@ -2124,7 +2124,7 @@ void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 	{
 		/* If no droids were selected to be added to the group, check if a factory is selected */
 		/* Run through all the structures */
-		for (STRUCTURE *psStruct : worldObjectState.structures[playerNumber])
+		for (STRUCTURE *psStruct : gameWorld.objects.structures[playerNumber])
 		{
 			if (psStruct->selected && psStruct->isFactory())
 			{
@@ -2150,7 +2150,7 @@ void removeObjectFromGroup(UDWORD playerNumber)
 
 	ASSERT_OR_RETURN(, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
-	for (STRUCTURE *psStruct : worldObjectState.structures[playerNumber])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[playerNumber])
 	{
 		if (psStruct->selected && psStruct->isFactory())
 		{
@@ -2159,7 +2159,7 @@ void removeObjectFromGroup(UDWORD playerNumber)
 		}
 	}
 
-	for (DROID* psDroid : worldObjectState.droids[playerNumber])
+	for (DROID* psDroid : gameWorld.objects.droids[playerNumber])
 	{
 		if (psDroid->selected)
 		{
@@ -2185,7 +2185,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (groupNumber < UBYTE_MAX)
 	{
-		for (DROID* psDroid : worldObjectState.droids[playerNumber])
+		for (DROID* psDroid : gameWorld.objects.droids[playerNumber])
 		{
 			/* Wipe out the ones in the wrong group */
 			if (psDroid->selected && psDroid->group != groupNumber)
@@ -2208,7 +2208,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 			ASSERT(selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
 			if (selectedPlayer < MAX_PLAYERS)
 			{
-				for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+				for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 				{
 					psFlag->selected = false;
 				}
@@ -2252,7 +2252,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	ASSERT_OR_RETURN(false, playerNumber < MAX_PLAYERS, "Invalid player: %" PRIu32 "", playerNumber);
 
 	selectionCount = selDroidSelection(selectedPlayer, dselectionClass, dselectionType, dbOnScreen);
-	for (DROID* psDroid : worldObjectState.droids[playerNumber])
+	for (DROID* psDroid : gameWorld.objects.droids[playerNumber])
 	{
 		/* Wipe out the ones in the wrong group */
 		if (psDroid->selected && psDroid->group != UBYTE_MAX)
@@ -2265,7 +2265,7 @@ bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, con
 	{
 		//clear the Deliv Point if one
 		ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
-		for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+		for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 		{
 			psFlag->selected = false;
 		}
@@ -2284,7 +2284,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (groupNumber < UBYTE_MAX)
 	{
-		for (DROID* psDroid : worldObjectState.droids[playerNumber])
+		for (DROID* psDroid : gameWorld.objects.droids[playerNumber])
 		{
 			/* Wipe out the ones in the wrong group */
 			if (psDroid->selected && psDroid->group != groupNumber)
@@ -2305,7 +2305,7 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 	{
 		//clear the Deliv Point if one
 		ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Unsupported selectedPlayer: %" PRIu32 "", selectedPlayer);
-		for (auto& psFlag : worldObjectState.flags[selectedPlayer])
+		for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 		{
 			psFlag->selected = false;
 		}
@@ -2546,7 +2546,7 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 		DroidList* dList = nullptr;
 		switch (idx)
 		{
-			case 0: dList = &worldObjectState.droids[selectedPlayer]; break;
+			case 0: dList = &gameWorld.objects.droids[selectedPlayer]; break;
 			case 1: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { dList = &apsLimboDroids[selectedPlayer]; } break;
 			default: dList = nullptr;
 		}
@@ -2644,7 +2644,7 @@ bool noDroid(UDWORD x, UDWORD y)
 	// check each droid list
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (const DROID* psDroid : worldObjectState.droids[i])
+		for (const DROID* psDroid : gameWorld.objects.droids[i])
 		{
 			if (map_coord(psDroid->pos.x) == x
 				&& map_coord(psDroid->pos.y) == y)
@@ -2665,7 +2665,7 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 	// check each droid list
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (const DROID* pD : worldObjectState.droids[i])
+		for (const DROID* pD : gameWorld.objects.droids[i])
 		{
 			if (map_coord(pD->pos.x) == x
 				&& map_coord(pD->pos.y) == y)
@@ -2687,11 +2687,11 @@ static bool oneDroidMax(UDWORD x, UDWORD y)
 static bool sensiblePlace(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
 	// not too near the edges.
-	if ((x < TOO_NEAR_EDGE) || (x > (SDWORD)(worldMapState.width - TOO_NEAR_EDGE)))
+	if ((x < TOO_NEAR_EDGE) || (x > (SDWORD)(gameWorld.map.width - TOO_NEAR_EDGE)))
 	{
 		return false;
 	}
-	if ((y < TOO_NEAR_EDGE) || (y > (SDWORD)(worldMapState.height - TOO_NEAR_EDGE)))
+	if ((y < TOO_NEAR_EDGE) || (y > (SDWORD)(gameWorld.map.height - TOO_NEAR_EDGE)))
 	{
 		return false;
 	}
@@ -2746,7 +2746,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check structures
-		for (const STRUCTURE* psStruct : worldObjectState.structures[i])
+		for (const STRUCTURE* psStruct : gameWorld.objects.structures[i])
 		{
 			if (psStruct->visible[player] || psStruct->born == 2)	// if can see it or started there
 			{
@@ -2776,7 +2776,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 		}
 
 		//check droids
-		for (const DROID* psDroid : worldObjectState.droids[i])
+		for (const DROID* psDroid : gameWorld.objects.droids[i])
 		{
 			if (psDroid->visible[player])		//can see this droid?
 			{
@@ -2812,8 +2812,8 @@ bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threat
 	UDWORD		passes;
 	Vector3i	origin(world_coord(*x), world_coord(*y), 0);
 
-	ASSERT_OR_RETURN(false, *x < worldMapState.width, "x coordinate is off-map for pickATileGen");
-	ASSERT_OR_RETURN(false, *y < worldMapState.height, "y coordinate is off-map for pickATileGen");
+	ASSERT_OR_RETURN(false, *x < gameWorld.map.width, "x coordinate is off-map for pickATileGen");
+	ASSERT_OR_RETURN(false, *y < gameWorld.map.height, "y coordinate is off-map for pickATileGen");
 
 	if (function(*x, *y) && ((threatRange <= 0) || (!ThreatInRange(player, threatRange, *x, *y, false))))	//TODO: vtol check really not needed?
 	{
@@ -2866,7 +2866,7 @@ PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations)
 building the specified structure - returns true if finds one*/
 bool checkDroidsBuilding(const STRUCTURE *psStructure)
 {
-	for (const DROID* psDroid : worldObjectState.droids[psStructure->player])
+	for (const DROID* psDroid : gameWorld.objects.droids[psStructure->player])
 	{
 		//check DORDER_BUILD, HELP_BUILD is handled the same
 		BASE_OBJECT *const psStruct = orderStateObj(psDroid, DORDER_BUILD);
@@ -2882,7 +2882,7 @@ bool checkDroidsBuilding(const STRUCTURE *psStructure)
 demolishing the specified structure - returns true if finds one*/
 bool checkDroidsDemolishing(const STRUCTURE *psStructure)
 {
-	for (const DROID* psDroid : worldObjectState.droids[psStructure->player])
+	for (const DROID* psDroid : gameWorld.objects.droids[psStructure->player])
 	{
 		//check DORDER_DEMOLISH
 		BASE_OBJECT *const psStruct = orderStateObj(psDroid, DORDER_DEMOLISH);
@@ -3259,7 +3259,7 @@ bool allVtolsRearmed(const DROID *psDroid)
 	}
 
 	bool stillRearming = false;
-	for (const DROID *psCurr : worldObjectState.droids[psDroid->player])
+	for (const DROID *psCurr : gameWorld.objects.droids[psDroid->player])
 	{
 		if (psCurr->isVtolRearming() &&
 			psCurr->order.type == psDroid->order.type &&
@@ -3543,7 +3543,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		psNewDroid = reallyBuildDroid(&sTemplate, newPos, to, false, psD->rot);
 		ASSERT_OR_RETURN(nullptr, psNewDroid, "Unable to build unit");
 
-		addDroid(psNewDroid, worldObjectState.droids);
+		addDroid(psNewDroid, gameWorld.objects.droids);
 		adjustDroidCount(psNewDroid, 1);
 
 		psNewDroid->body = clip((psD->body*psNewDroid->originalBody + psD->originalBody/2)/std::max(psD->originalBody, 1u), 1u, psNewDroid->originalBody);
@@ -3568,7 +3568,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 	int oldPlayer = psD->player;
 
 	// reset the assigned state of units attached to a leader
-	for (DROID *psCurr : worldObjectState.droids[oldPlayer])
+	for (DROID *psCurr : gameWorld.objects.droids[oldPlayer])
 	{
 		BASE_OBJECT	*psLeader;
 
@@ -3595,11 +3595,11 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 	adjustDroidCount(psD, -1);
 	scriptRemoveObject(psD); //Remove droid from any script groups
 
-	if (droidRemove(psD, worldObjectState.droids))
+	if (droidRemove(psD, gameWorld.objects.droids))
 	{
 		psD->player	= to;
 
-		addDroid(psD, worldObjectState.droids);
+		addDroid(psD, gameWorld.objects.droids);
 		adjustDroidCount(psD, 1);
 
 		// the new player may have different default sensor/ecm/repair components
@@ -3642,7 +3642,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 			continue;
 		}
 
-		for (DROID *psCurr : worldObjectState.droids[i])
+		for (DROID *psCurr : gameWorld.objects.droids[i])
 		{
 			if (psCurr->order.psObj == psD || psCurr->psActionTarget[0] == psD)
 			{
@@ -3670,7 +3670,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic, Vector2i pos)
 		}
 
 		// check through the players list, and our allies, of structures to see if any are targetting it
-		for (STRUCTURE *psStruct : worldObjectState.structures[i])
+		for (STRUCTURE *psStruct : gameWorld.objects.structures[i])
 		{
 			if (psStruct->psTarget[0] == psD)
 			{
@@ -3783,7 +3783,7 @@ void SelectDroid(DROID *psDroid, bool programmaticSelection)
 void SelectGroupDroid(DROID *psGroupDroid)
 {
 	std::vector<DROID*> groupDroids;
-	for (DROID *psDroid : worldObjectState.droids[psGroupDroid->player])
+	for (DROID *psDroid : gameWorld.objects.droids[psGroupDroid->player])
 	{
 		// skip itself because psGroupDroid may already exist in apsDroidLists
 		if (psDroid == psGroupDroid)
@@ -3870,12 +3870,12 @@ bool droidOnMap(const DROID *psDroid)
 {
 	if (psDroid->died == NOT_CURRENT_LIST || psDroid->isTransporter()
 		|| psDroid->pos.x == INVALID_XY || psDroid->pos.y == INVALID_XY || missionIsOffworld()
-		|| worldMapState.height == 0)
+		|| gameWorld.map.height == 0)
 	{
 		// Off world or on a transport or is a transport or in mission list, or on a mission, or no map - ignore
 		return true;
 	}
-	return worldOnMap(worldMapState, psDroid->pos.x, psDroid->pos.y);
+	return worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 }
 
 /** Teleport a droid to a new position on the map */
@@ -3883,7 +3883,7 @@ void droidSetPosition(DROID *psDroid, int x, int y)
 {
 	psDroid->pos.x = x;
 	psDroid->pos.y = y;
-	psDroid->pos.z = map_Height(worldMapState, psDroid->pos.x, psDroid->pos.y);
+	psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 	initDroidMovement(psDroid);
 	visTilesUpdate((BASE_OBJECT *)psDroid);
 }

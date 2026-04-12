@@ -30,8 +30,7 @@
 #include "featuredef.h"
 #include "power.h"
 #include "gateway.h"
-#include "world_map_state.h"
-#include "world_object_state.h"
+#include "game_world.h"
 
 //mission types
 
@@ -55,10 +54,7 @@ struct LANDING_ZONE
 struct MISSION
 {
 	LEVEL_TYPE			type;							//defines which start and end functions to use - see levels_type in levels.h
-	WorldMapState worldMapState;
-
-	//original object lists
-	WorldObjectState worldObjectState;
+	GameWorld gameWorld;
 
 	int32_t                         asCurrentPower[MAX_PLAYERS];
 

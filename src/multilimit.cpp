@@ -54,6 +54,7 @@
 #include "challenge.h"
 #include "objmem.h"
 #include "titleui/titleui.h"
+#include "game_world.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -398,7 +399,7 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						mutating_list_iterate(worldObjectState.structures[player], [id](STRUCTURE* psStruct)
+						mutating_list_iterate(gameWorld.objects.structures[player], [id](STRUCTURE* psStruct)
 						{
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{

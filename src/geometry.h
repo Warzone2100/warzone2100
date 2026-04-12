@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_GEOMETRY_H__
 
 #include "map.h"
+#include "game_world.h"
 
 struct QUAD
 {
@@ -36,7 +37,7 @@ bool objectOnScreen(const BASE_OBJECT *object, SDWORD tolerance);
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {
-	BASE_OBJECT *psObj = mapTile(worldMapState, x, y)->psObject;
+	BASE_OBJECT *psObj = mapTile(gameWorld.map, x, y)->psObject;
 	if (psObj && psObj->type == OBJ_STRUCTURE)
 	{
 		return (STRUCTURE *)psObj;
@@ -46,7 +47,7 @@ static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 
 static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 {
-	BASE_OBJECT *psObj = mapTile(worldMapState, x, y)->psObject;
+	BASE_OBJECT *psObj = mapTile(gameWorld.map, x, y)->psObject;
 	if (psObj && psObj->type == OBJ_FEATURE)
 	{
 		return (FEATURE *)psObj;
@@ -58,11 +59,11 @@ static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 /// Must *NOT* be used for anything game-state/simulation-calculation related
 static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 {
-	MAPTILE *psTile = mapTile(worldMapState, x, y);
+	MAPTILE *psTile = mapTile(gameWorld.map, x, y);
 
 	if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))
 	{
-		return mapTile(worldMapState, x, y)->psObject;
+		return mapTile(gameWorld.map, x, y)->psObject;
 	}
 	else
 	{
