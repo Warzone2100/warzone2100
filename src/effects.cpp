@@ -2386,7 +2386,7 @@ bool writeFXData(const char *fileName)
 }
 
 /** This will read in the effects data */
-bool readFXData(const char *fileName)
+bool readFXData(const char *fileName, WorldMapState& mapState)
 {
 	// Clear out anything that's there already!
 	initEffectsSystem();
@@ -2439,7 +2439,7 @@ bool readFXData(const char *fileName)
 			// Sanity check - don't allow a negative time to wrap to a huge positive unsigned value.
 			if (timeLeftToRun > 0)
 			{
-				tileSetFire(gameWorld.map, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
+				tileSetFire(mapState, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
 			}
 		}
 

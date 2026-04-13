@@ -1434,7 +1434,7 @@ bool stageOneShutDown()
 	ResearchRelease();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	shutdownTerrain();
 
@@ -1531,7 +1531,7 @@ bool stageTwoInitialise()
 		return false;
 	}
 
-	if (!gwInitialise())
+	if (!gwInitialise(gameWorld.map))
 	{
 		return false;
 	}
@@ -1601,10 +1601,10 @@ bool stageTwoShutDown()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 
 	if (!messageShutdown())
 	{
@@ -1621,7 +1621,7 @@ bool stageTwoShutDown()
 	cmdDroidShutDown();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	if (!mapShutdown())
 	{
@@ -1719,7 +1719,7 @@ bool stageThreeInitialise()
 	}
 
 	effectResetUpdates();
-	initLighting(0, 0, gameWorld.map.width, gameWorld.map.height);
+	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	pie_InitLighting();
 	getCurrentLightmapData().reset(gameWorld.map.width, gameWorld.map.height);
 
@@ -1738,7 +1738,7 @@ bool stageThreeInitialise()
 		initTemplates();
 	}
 
-	preProcessVisibility();
+	preProcessVisibility(gameWorld.map);
 
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
 
@@ -1747,8 +1747,8 @@ bool stageThreeInitialise()
 		return false;
 	}
 
-	mapInit();
-	gridReset();
+	mapInit(gameWorld);
+	gridReset(gameWorld);
 
 	//if mission screen is up, close it.
 	if (MissionResUp)
@@ -1768,7 +1768,7 @@ bool stageThreeInitialise()
 
 	// add radar to interface screen, and resize
 	intAddRadarWidget();
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 
 	setAllPauseStates(false);
 
@@ -1791,7 +1791,7 @@ bool stageThreeInitialise()
 		}
 
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_INIT); });
-		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
+		playerBuiltHQ = structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true);
 	}
 
 	// Start / randomize in-game music
@@ -1879,7 +1879,7 @@ bool stageThreeShutDown()
 bool campaignReset()
 {
 	debug(LOG_MAIN, "campaignReset");
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	mapShutdown();
 	shutdownTerrain();
 	// when the terrain textures are reloaded we need to reset the radar
@@ -1896,15 +1896,15 @@ bool saveGameReset()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 	initMission();
 	initTransporters();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	intResetScreen(true);
 
 	if (!mapShutdown())

@@ -544,13 +544,13 @@ static void gameStateUpdate()
 	visUpdateLevel();
 
 	// Put all droids/structures/features into the grid.
-	gridReset();
+	gridReset(gameWorld);
 
 	// Check which objects are visible.
 	processVisibility();
 
 	// Update the map.
-	mapUpdate();
+	mapUpdate(gameWorld);
 
 	//update the findpath system
 	fpathUpdate();

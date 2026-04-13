@@ -48,6 +48,7 @@
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piedraw.h"
 #include "lib/ivis_opengl/pielight_convert.h"
+#include "world_map_state.h"
 #include <glm/mat4x4.hpp>
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -312,44 +313,44 @@ static void averagePos(Vector3i *center, Vector3i *a, Vector3i *b, Vector3i *c, 
 }
 
 /// Is this position next to a water tile?
-static bool isWater(int x, int y)
+static bool isWater(WorldMapState& mapState, int x, int y)
 {
 	bool result = false;
-	result = result || (tileOnMap(gameWorld.map, x  , y) && terrainType(mapTile(gameWorld.map, x  , y)) == TER_WATER);
-	result = result || (tileOnMap(gameWorld.map, x - 1, y) && terrainType(mapTile(gameWorld.map, x - 1, y)) == TER_WATER);
-	result = result || (tileOnMap(gameWorld.map, x  , y - 1) && terrainType(mapTile(gameWorld.map, x  , y - 1)) == TER_WATER);
-	result = result || (tileOnMap(gameWorld.map, x - 1, y - 1) && terrainType(mapTile(gameWorld.map, x - 1, y - 1)) == TER_WATER);
+	result = result || (tileOnMap(mapState, x  , y) && terrainType(mapTile(mapState, x  , y)) == TER_WATER);
+	result = result || (tileOnMap(mapState, x - 1, y) && terrainType(mapTile(mapState, x - 1, y)) == TER_WATER);
+	result = result || (tileOnMap(mapState, x  , y - 1) && terrainType(mapTile(mapState, x  , y - 1)) == TER_WATER);
+	result = result || (tileOnMap(mapState, x - 1, y - 1) && terrainType(mapTile(mapState, x - 1, y - 1)) == TER_WATER);
 	return result;
 }
 
 /// Is this position an *actual* water-only tile?
-static bool isOnlyWater(int x, int y)
+static bool isOnlyWater(WorldMapState& mapState, int x, int y)
 {
 	bool result = true;
-	result = result && (tileOnMap(gameWorld.map, x  , y) && terrainType(mapTile(gameWorld.map, x  , y)) == TER_WATER);
-	result = result && (tileOnMap(gameWorld.map, x - 1, y) && terrainType(mapTile(gameWorld.map, x - 1, y)) == TER_WATER);
-	result = result && (tileOnMap(gameWorld.map, x  , y - 1) && terrainType(mapTile(gameWorld.map, x  , y - 1)) == TER_WATER);
-	result = result && (tileOnMap(gameWorld.map, x - 1, y - 1) && terrainType(mapTile(gameWorld.map, x - 1, y - 1)) == TER_WATER);
+	result = result && (tileOnMap(mapState, x  , y) && terrainType(mapTile(mapState, x  , y)) == TER_WATER);
+	result = result && (tileOnMap(mapState, x - 1, y) && terrainType(mapTile(mapState, x - 1, y)) == TER_WATER);
+	result = result && (tileOnMap(mapState, x  , y - 1) && terrainType(mapTile(mapState, x  , y - 1)) == TER_WATER);
+	result = result && (tileOnMap(mapState, x - 1, y - 1) && terrainType(mapTile(mapState, x - 1, y - 1)) == TER_WATER);
 	return result;
 }
 
 /// Get the position of a grid point
-static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
+static void getGridPos(const WorldMapState& mapState, Vector3i *result, int x, int y, bool center, bool water)
 {
 	if (center)
 	{
 		Vector3i a, b, c, d;
-		getGridPos(&a, x  , y  , false, water);
-		getGridPos(&b, x + 1, y  , false, water);
-		getGridPos(&c, x  , y + 1, false, water);
-		getGridPos(&d, x + 1, y + 1, false, water);
+		getGridPos(mapState, &a, x  , y  , false, water);
+		getGridPos(mapState, &b, x + 1, y  , false, water);
+		getGridPos(mapState, &c, x  , y + 1, false, water);
+		getGridPos(mapState, &d, x + 1, y + 1, false, water);
 		averagePos(result, &a, &b, &c, &d);
 		return;
 	}
 	result->x = world_coord(x);
 	result->z = world_coord(-y);
 
-	if (x <= 0 || y <= 0 || x >= gameWorld.map.width || y >= gameWorld.map.height)
+	if (x <= 0 || y <= 0 || x >= mapState.width || y >= mapState.height)
 	{
 		result->y = 0;
 	}
@@ -357,28 +358,28 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	{
 		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC)
 		{
-			result->y = map_TileHeight(gameWorld.map, x, y);
+			result->y = map_TileHeight(mapState, x, y);
 			if (water)
 			{
-				result->y = map_WaterHeight(gameWorld.map, x, y);
+				result->y = map_WaterHeight(mapState, x, y);
 			}
 		}
 		else
 		{
-			result->y = map_TileHeightSurface(gameWorld.map, x, y);
+			result->y = map_TileHeightSurface(mapState, x, y);
 		}
 	}
 }
 
-static Vector3f getGridPosf(int x, int y, bool center = false, bool water = false)
+static Vector3f getGridPosf(const WorldMapState& mapState, int x, int y, bool center = false, bool water = false)
 {
 	Vector3i r;
-	getGridPos(&r, x, y, center, water);
+	getGridPos(mapState, &r, x, y, center, water);
 	return Vector3f(r);
 }
 
 /// Get normal vector of grid point
-static Vector3f getGridNormal(int x, int y, bool center = false)
+static Vector3f getGridNormal(const WorldMapState& mapState, int x, int y, bool center = false)
 {
 	auto calcNormal = [](const Vector3f &pc, const std::vector<Vector3f> &p) {
 		auto res = Vector3f(0.0);
@@ -391,11 +392,11 @@ static Vector3f getGridNormal(int x, int y, bool center = false)
 	};
 	if (center) {
 		// avg nearest normals provide better results
-		return (getGridNormal(x, y) + getGridNormal(x+1, y) + getGridNormal(x+1, y+1) + getGridNormal(x, y+1)) / 4.f;
+		return (getGridNormal(mapState, x, y) + getGridNormal(mapState, x+1, y) + getGridNormal(mapState, x+1, y+1) + getGridNormal(mapState, x, y+1)) / 4.f;
 	} else {
-		return calcNormal(getGridPosf(x, y), {
-			getGridPosf(x+1, y), getGridPosf(x, y, true),     getGridPosf(x, y+1), getGridPosf(x-1, y, true),
-			getGridPosf(x-1, y), getGridPosf(x-1, y-1, true), getGridPosf(x, y-1), getGridPosf(x, y-1, true)
+		return calcNormal(getGridPosf(mapState, x, y), {
+			getGridPosf(mapState, x+1, y), getGridPosf(mapState, x, y, true),     getGridPosf(mapState, x, y+1), getGridPosf(mapState, x-1, y, true),
+			getGridPosf(mapState, x-1, y), getGridPosf(mapState, x-1, y-1, true), getGridPosf(mapState, x, y-1), getGridPosf(mapState, x, y-1, true)
 		});
 	}
 }
@@ -403,7 +404,7 @@ static Vector3f getGridNormal(int x, int y, bool center = false)
 /**
  * Set the terrain and water geometry for the specified sector
  */
-static void setSectorGeometry(int sx, int sy,
+static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 							  TerrainVertex *geometry, WaterVertex *water,
 							  int *geometrySize, int *waterSize)
 {
@@ -412,15 +413,15 @@ static void setSectorGeometry(int sx, int sy,
 		for (int y = sy * sectorSize; y < (sy+1) * sectorSize + 1; y++)
 		{
 			// set up geometry
-			auto pos = getGridPosf(x, y, false, false);
+			auto pos = getGridPosf(mapState, x, y, false, false);
 			geometry[*geometrySize].pos = pos;
 			(*geometrySize)++;
 
-			float waterHeight = map_WaterHeight(gameWorld.map, x, y);
+			float waterHeight = map_WaterHeight(mapState, x, y);
 			water[*waterSize] = glm::vec4(pos.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterHeight : pos.y, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 
-			pos = getGridPosf(x, y, true, false);
+			pos = getGridPosf(mapState, x, y, true, false);
 			geometry[*geometrySize].pos = pos;
 			(*geometrySize)++;
 
@@ -430,7 +431,7 @@ static void setSectorGeometry(int sx, int sy,
 	}
 }
 
-static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalVertex *terrainDecalData, int *terrainDecalSize)
+static void setSectorDecalVertex_SinglePass(WorldMapState& mapState, int x, int y, gfx_api::TerrainDecalVertex *terrainDecalData, int *terrainDecalSize)
 {
 	Vector3i pos;
 	Vector2f uv[2][2], center;
@@ -440,19 +441,19 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 	{
 		for (j = y * sectorSize; j < y * sectorSize + sectorSize; j++)
 		{
-			if (i < 0 || j < 0 || i >= gameWorld.map.width || j >= gameWorld.map.height)
+			if (i < 0 || j < 0 || i >= mapState.width || j >= mapState.height)
 			{
 				continue;
 			}
 
-			MAPTILE *tile = mapTile(gameWorld.map, i, j);
+			MAPTILE *tile = mapTile(mapState, i, j);
 			center = getTileTexArrCoords(*uv, tile->texture);
 			int decalNo = static_cast<int>(TileNumber_tile(tile->texture));
 			bool skipDecalDraw = !TILE_HAS_DECAL(tile);
 			if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
 			{
 				// in Classic mode, skip drawing any that are the "water only" decal (water is handled separately as a prior pass)
-				skipDecalDraw = skipDecalDraw || (isOnlyWater(i, j) && decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
+				skipDecalDraw = skipDecalDraw || (isOnlyWater(mapState, i, j) && decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
 			}
 			if (skipDecalDraw)
 			{
@@ -464,22 +465,22 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 			gfx_api::TerrainDecalVertex vs[5];
 			for (int k = 0; k<4; k++) {
 				int dx = dxdy[k][0], dy = dxdy[k][1];
-				getGridPos(&pos, i + dx, j + dy, false, false);
+				getGridPos(mapState, &pos, i + dx, j + dy, false, false);
 				vs[k].pos = pos;
 				vs[k].decalUv = uv[dx][dy];
-				vs[k].normal = getGridNormal(i + dx, j + dy);
+				vs[k].normal = getGridNormal(mapState, i + dx, j + dy);
 				vs[k].decalNo = decalNo;
-				groundsBytes[k] = mapTile(gameWorld.map, i + dx, j + dy)->ground;
+				groundsBytes[k] = mapTile(mapState, i + dx, j + dy)->ground;
 				vs[k].groundWeights.clear();
 				vs[k].groundWeights.setByte(k, 255);
 			}
 			PIELIGHT grounds;
 			grounds.fromRGBA(groundsBytes[0], groundsBytes[1], groundsBytes[2], groundsBytes[3]);
 			// 4 = center;
-			getGridPos(&pos, i, j, true, false);
+			getGridPos(mapState, &pos, i, j, true, false);
 			vs[4].pos = pos;
 			vs[4].decalUv = center;
-			vs[4].normal = getGridNormal(i, j, true);
+			vs[4].normal = getGridNormal(mapState, i, j, true);
 			vs[4].decalNo = decalNo;
 			vs[4].groundWeights = {0, 0, 0, 0}; // special value for shader.
 			for (int k = 0; k < 5; k++) vs[k].grounds = grounds.rgba();
@@ -527,7 +528,7 @@ static void setSectorDecalVertex_SinglePass(int x, int y, gfx_api::TerrainDecalV
 /**
  * Update the sector for when the terrain is changed.
  */
-static void updateSectorGeometry(int x, int y)
+static void updateSectorGeometry(WorldMapState& mapState, int x, int y)
 {
 	TerrainVertex *geometry;
 	WaterVertex *water;
@@ -537,7 +538,7 @@ static void updateSectorGeometry(int x, int y)
 	geometry = new TerrainVertex[sectors[x * ySectors + y].geometrySize];
 	water = (WaterVertex *)malloc(sizeof(WaterVertex) * sectors[x * ySectors + y].waterSize);
 
-	setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
+	setSectorGeometry(mapState, x, y, geometry, water, &geometrySize, &waterSize);
 	ASSERT(geometrySize == sectors[x * ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
 	ASSERT(waterSize    == sectors[x * ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
@@ -553,7 +554,7 @@ static void updateSectorGeometry(int x, int y)
 
 	terrainDecalVertexUpdateBuffer.resize(sectors[x * ySectors + y].terrainAndDecalSize); // reuse a buffer to avoid repeated allocations if possible
 	int terrainDecalSize = 0;
-	setSectorDecalVertex_SinglePass(x, y, terrainDecalVertexUpdateBuffer.data(), &terrainDecalSize);
+	setSectorDecalVertex_SinglePass(mapState, x, y, terrainDecalVertexUpdateBuffer.data(), &terrainDecalSize);
 	ASSERT(terrainDecalSize == sectors[x * ySectors + y].terrainAndDecalSize, "Sizes don't match!");
 	terrainDecalVBO->update(sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalOffset,
 						 sizeof(gfx_api::TerrainDecalVertex)*sectors[x * ySectors + y].terrainAndDecalSize, terrainDecalVertexUpdateBuffer.data(),
@@ -916,7 +917,7 @@ void reloadTerrainTextures()
  * Check what the videocard + drivers support and divide the loaded map into sectors that can be drawn.
  * It also determines the lightmap size.
  */
-bool initTerrain()
+bool initTerrain(WorldMapState& mapState)
 {
 	int i, j, x, y;
 
@@ -979,8 +980,8 @@ bool initTerrain()
 
 	/////////////////////
 	// Create the sectors
-	xSectors = (gameWorld.map.width + sectorSize - 1) / sectorSize;
-	ySectors = (gameWorld.map.height + sectorSize - 1) / sectorSize;
+	xSectors = (mapState.width + sectorSize - 1) / sectorSize;
+	ySectors = (mapState.height + sectorSize - 1) / sectorSize;
 	sectors = std::unique_ptr<Sector[]> (new Sector[xSectors * ySectors]());
 
 	////////////////////
@@ -1005,7 +1006,7 @@ bool initTerrain()
 			sectors[x * ySectors + y].waterOffset = waterSize;
 			sectors[x * ySectors + y].waterSize = 0;
 
-			setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
+			setSectorGeometry(mapState, x, y, geometry, water, &geometrySize, &waterSize);
 
 			sectors[x * ySectors + y].geometrySize = geometrySize - sectors[x * ySectors + y].geometryOffset;
 			sectors[x * ySectors + y].waterSize = waterSize - sectors[x * ySectors + y].waterOffset;
@@ -1019,7 +1020,7 @@ bool initTerrain()
 			{
 				for (j = 0; j < sectorSize; j++)
 				{
-					if (x * sectorSize + i >= gameWorld.map.width || y * sectorSize + j >= gameWorld.map.height)
+					if (x * sectorSize + i >= mapState.width || y * sectorSize + j >= mapState.height)
 					{
 						continue; // off map, so skip
 					}
@@ -1053,7 +1054,7 @@ bool initTerrain()
 					geometryIndex[geometryIndexSize + 10] = q(i + 1, j  , 0);	// Bottom right
 					geometryIndex[geometryIndexSize + 11] = q(i + 1, j + 1, 0);	// Top right
 					geometryIndexSize += 12;
-					if (isWater(i + x * sectorSize, j + y * sectorSize))
+					if (isWater(mapState, i + x * sectorSize, j + y * sectorSize))
 					{
 						waterIndex[waterIndexSize + 0]  = q(i  , j  , 1);
 						waterIndex[waterIndexSize + 1]  = q(i  , j  , 0);
@@ -1111,7 +1112,7 @@ bool initTerrain()
 
 
 	// and finally the decals
-	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * gameWorld.map.width * gameWorld.map.height * 12);
+	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapState.width * mapState.height * 12);
 	int terrainDecalSize = 0;
 
 	for (x = 0; x < xSectors; x++)
@@ -1120,7 +1121,7 @@ bool initTerrain()
 		{
 				sectors[x * ySectors + y].terrainAndDecalOffset = terrainDecalSize;
 				sectors[x * ySectors + y].terrainAndDecalSize = 0;
-				setSectorDecalVertex_SinglePass(x, y, terrainDecalData, &terrainDecalSize);
+				setSectorDecalVertex_SinglePass(mapState, x, y, terrainDecalData, &terrainDecalSize);
 				sectors[x * ySectors + y].terrainAndDecalSize = terrainDecalSize - sectors[x * ySectors + y].terrainAndDecalOffset;
 		}
 	}
@@ -1147,13 +1148,13 @@ bool initTerrain()
 	lightmapWidth = 1;
 	lightmapHeight = 1;
 	// determine the smallest power-of-two size we can use for the lightmap
-	while (gameWorld.map.width > (lightmapWidth <<= 1)) {}
-	while (gameWorld.map.height > (lightmapHeight <<= 1)) {}
-	debug(LOG_TERRAIN, "the size of the map is %ix%i", gameWorld.map.width, gameWorld.map.height);
+	while (mapState.width > (lightmapWidth <<= 1)) {}
+	while (mapState.height > (lightmapHeight <<= 1)) {}
+	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapState.width, mapState.height);
 	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
-	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(gameWorld.map.width) *((float)gameWorld.map.width / (float)lightmapWidth), 0, 0, 0);
-	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(gameWorld.map.height) *((float)gameWorld.map.height / (float)lightmapHeight), 0);
+	lightmapValues.paramsXLight = glm::vec4(1.0f / world_coord(mapState.width) *((float)mapState.width / (float)lightmapWidth), 0, 0, 0);
+	lightmapValues.paramsYLight = glm::vec4(0, 0, -1.0f / world_coord(mapState.height) *((float)mapState.height / (float)lightmapHeight), 0);
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	lightmapValues.lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
@@ -1216,15 +1217,15 @@ void shutdownTerrain()
 	terrainInitialised = false;
 }
 
-static void updateLightMap(const LightMap& lightmap)
+static void updateLightMap(WorldMapState& mapState, const LightMap& lightmap)
 {
 	size_t lightmapChannels = lightmapPixmap->channels(); // should always be 4 now...
 	unsigned char* lightMapWritePtr = lightmapPixmap->bmp_w();
-	for (int j = 0; j < gameWorld.map.height; ++j)
+	for (int j = 0; j < mapState.height; ++j)
 	{
-		for (int i = 0; i < gameWorld.map.width; ++i)
+		for (int i = 0; i < mapState.width; ++i)
 		{
-			MAPTILE *psTile = mapTile(gameWorld.map, i, j);
+			MAPTILE *psTile = mapTile(mapState, i, j);
 			PIELIGHT colour = lightmap(i, j);
 			UBYTE level = static_cast<UBYTE>(psTile->level);
 
@@ -1295,7 +1296,7 @@ static void updateLightMap(const LightMap& lightmap)
 	}
 }
 
-static void cullTerrain()
+static void cullTerrain(WorldMapState& mapState)
 {
 	for (int x = 0; x < xSectors; x++)
 	{
@@ -1314,7 +1315,7 @@ static void cullTerrain()
 				sectors[x * ySectors + y].draw = true;
 				if (sectors[x * ySectors + y].dirty)
 				{
-					updateSectorGeometry(x, y);
+					updateSectorGeometry(mapState, x, y);
 					sectors[x * ySectors + y].dirty = false;
 				}
 			}
@@ -1488,7 +1489,7 @@ static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm:
 
 }
 
-void perFrameTerrainUpdates(const LightMap& lightMap)
+void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightMap)
 {
 	WZ_PROFILE_SCOPE(perFrameTerrainUpdates);
 	///////////////////////////////////
@@ -1498,14 +1499,14 @@ void perFrameTerrainUpdates(const LightMap& lightMap)
 	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
 	{
 		lightmapLastUpdate = realTime;
-		updateLightMap(lightMap);
+		updateLightMap(mapState, lightMap);
 
 		lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	}
 
 	///////////////////////////////////
 	// terrain culling
-	cullTerrain();
+	cullTerrain(mapState);
 }
 
 gfx_api::texture* getTerrainLightmapTexture()

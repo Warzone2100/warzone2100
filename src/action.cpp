@@ -94,6 +94,8 @@ static_assert(MAX_SULK_TIME > MIN_SULK_TIME, "MAX_SULK_TIME must be > MIN_SULK_T
  *
  * @brief pointer to a 'tile search function', used by spiralSearch()
  *
+ * @param mapState the WorldMapState to use for the search
+ *
  * @param x,y  are the coordinates that should be inspected.
  *
  * @param data a pointer to state data, allows the search function to retain
@@ -103,7 +105,7 @@ static_assert(MAX_SULK_TIME > MIN_SULK_TIME, "MAX_SULK_TIME must be > MIN_SULK_T
  * @return true when the search has finished, false when the search should
  *         continue.
  */
-typedef bool (*tileMatchFunction)(int x, int y, void *matchState);
+typedef bool (*tileMatchFunction)(WorldMapState& mapState, int x, int y, void *matchState);
 
 const char *getDroidActionName(DROID_ACTION action)
 {
@@ -610,7 +612,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 			{
 				Vector2i dest = world_coord(b.map + Vector2i(x, y)) + Vector2i(TILE_UNITS, TILE_UNITS) / 2;
 				unsigned dist = iHypot(droid->pos.xy() - dest);
-				if (dist < bestDist && !fpathBlockingTile(map_coord(dest.x), map_coord(dest.y), droid->getPropulsionStats()->propulsionType))
+				if (dist < bestDist && !fpathBlockingTile(gameWorld.map, map_coord(dest.x), map_coord(dest.y), droid->getPropulsionStats()->propulsionType))
 				{
 					bestDest = dest;
 					bestDist = dist;
@@ -1498,7 +1500,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			// Determine if the droid can still build or help to build the ordered structure at the specified location
 			const STRUCTURE_STATS* const desiredStructure = order->psStats;
-			const STRUCTURE* const structureAtBuildPosition = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+			const STRUCTURE* const structureAtBuildPosition = getTileStructure(gameWorld.map, map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 
 			if (nullptr != structureAtBuildPosition)
 			{
@@ -1592,7 +1594,7 @@ void actionUpdateDroid(DROID *psDroid)
 				else if (TileHasStructure(worldTile(gameWorld.map, pos)))
 				{
 					// structure on the build location - see if it is the same type
-					STRUCTURE *const psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+					STRUCTURE *const psStruct = getTileStructure(gameWorld.map, map_coord(pos.x), map_coord(pos.y));
 					if (psStruct->pStructureType == order->psStats ||
 					    (order->psStats->type == REF_WALL && psStruct->pStructureType->type == REF_WALLCORNER))
 					{
@@ -1620,7 +1622,7 @@ void actionUpdateDroid(DROID *psDroid)
 						cancelBuild(psDroid);
 					}
 				}
-				else if (!validLocation(order->psStats, pos, dir, psDroid->player, false))
+				else if (!validLocation(gameWorld, order->psStats, pos, dir, psDroid->player, false))
 				{
 					syncDebug("Reached build target: invalid");
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
@@ -1646,7 +1648,7 @@ void actionUpdateDroid(DROID *psDroid)
 					if (TileHasStructure(psTile))
 					{
 						// structure on the build location - see if it is the same type
-						STRUCTURE *const psStruct = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+						STRUCTURE *const psStruct = getTileStructure(gameWorld.map, map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 						ASSERT(psStruct, "TileHasStructure, but getTileStructure returned nullptr");
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic push
@@ -1683,7 +1685,7 @@ void actionUpdateDroid(DROID *psDroid)
 					}
 					else if (TileHasFeature(psTile))
 					{
-						FEATURE *feature = getTileFeature(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+						FEATURE *feature = getTileFeature(gameWorld.map, map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 						objTrace(psDroid->id, "DACTION_MOVETOBUILD: tile has feature %d", feature->psStats->subType);
 						if (feature->psStats->subType == FEAT_OIL_RESOURCE && order->psStats->type == REF_RESOURCE_EXTRACTOR)
 						{
@@ -1776,7 +1778,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			const STRUCTURE* structureAtPos = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+			const STRUCTURE* structureAtPos = getTileStructure(gameWorld.map, map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 
 			if (structureAtPos == nullptr || psDroid->psActionTarget[0] == nullptr)
 			{
@@ -1948,7 +1950,7 @@ void actionUpdateDroid(DROID *psDroid)
 					/* set droid points to max */
 					psDroid->body = psDroid->originalBody;
 					// if completely repaired then reset order
-					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+					secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 					orderDroidObj(psDroid, DORDER_GUARD, psDroid->order.psObj, ModeImmediate);
 				}
 				else
@@ -2759,14 +2761,14 @@ void moveToRearm(DROID *psDroid)
 
 
 // whether a tile is suitable for a vtol to land on
-static bool vtolLandingTile(SDWORD x, SDWORD y)
+static bool vtolLandingTile(WorldMapState& mapState, SDWORD x, SDWORD y)
 {
-	if (x < 0 || x >= (SDWORD)gameWorld.map.width || y < 0 || y >= (SDWORD)gameWorld.map.height)
+	if (x < 0 || x >= (SDWORD)mapState.width || y < 0 || y >= (SDWORD)mapState.height)
 	{
 		return false;
 	}
 
-	const MAPTILE *psTile = mapTile(gameWorld.map, x, y);
+	const MAPTILE *psTile = mapTile(mapState, x, y);
 	if (psTile->tileInfoBits & BITS_FPATHBLOCK ||
 	    TileIsOccupied(psTile) ||
 	    terrainType(psTile) == TER_CLIFFFACE ||
@@ -2782,6 +2784,8 @@ static bool vtolLandingTile(SDWORD x, SDWORD y)
  * including) radius. For each tile, the search function is called; if it
  * returns 'true', the search will finish immediately.
  *
+ * @param mapState the WorldMapState to use for the search
+ *
  * @param startX,startY starting x and y coordinates
  *
  * @param max_radius radius to examine. Search will finish when @c max_radius is exceeded.
@@ -2791,10 +2795,10 @@ static bool vtolLandingTile(SDWORD x, SDWORD y)
  * \return true if finished because the searchFunction requested termination,
  *         false if the radius limit was reached
  */
-static bool spiralSearch(int startX, int startY, int max_radius, tileMatchFunction match, void *matchState)
+static bool spiralSearch(WorldMapState& mapState, int startX, int startY, int max_radius, tileMatchFunction match, void *matchState)
 {
 	// test center tile
-	if (match(startX, startY, matchState))
+	if (match(mapState, startX, startY, matchState))
 	{
 		return true;
 	}
@@ -2828,10 +2832,10 @@ static bool spiralSearch(int startX, int startY, int max_radius, tileMatchFuncti
 				}
 
 				// call search function for each of the 4 quadrants of the circle
-				if (match(startX + dx, startY + dy, matchState)
-				    || match(startX - dx, startY - dy, matchState)
-				    || match(startX + dy, startY - dx, matchState)
-				    || match(startX - dy, startY + dx, matchState))
+				if (match(mapState, startX + dx, startY + dy, matchState)
+				    || match(mapState, startX - dx, startY - dy, matchState)
+				    || match(mapState, startX + dy, startY - dx, matchState)
+				    || match(mapState, startX - dy, startY + dx, matchState))
 				{
 					return true;
 				}
@@ -2850,11 +2854,11 @@ static bool spiralSearch(int startX, int startY, int max_radius, tileMatchFuncti
  *
  * @return true if coordinates are a valid landing tile, false if not.
  */
-static bool vtolLandingTileSearchFunction(int x, int y, void *matchState)
+static bool vtolLandingTileSearchFunction(WorldMapState& mapState, int x, int y, void *matchState)
 {
 	Vector2i *const xyCoords = (Vector2i *)matchState;
 
-	if (vtolLandingTile(x, y))
+	if (vtolLandingTile(mapState, x, y))
 	{
 		xyCoords->x = x;
 		xyCoords->y = y;
@@ -2897,7 +2901,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 
 	// search for landing tile; will stop when found or radius exceeded
 	Vector2i xyCoords(0, 0);
-	const bool foundTile = spiralSearch(startX, startY, vtolLandingRadius,
+	const bool foundTile = spiralSearch(gameWorld.map, startX, startY, vtolLandingRadius,
 	                                    vtolLandingTileSearchFunction, &xyCoords);
 	if (foundTile)
 	{

@@ -63,8 +63,8 @@ static SDWORD			visLevelInc, visLevelDec;
 class SPOTTER
 {
 public:
-	SPOTTER(int x, int y, int plr, int radius, int type, uint32_t expiry = 0)
-		: pos(x, y, 0), player(plr), sensorRadius(radius), sensorType(type), expiryTime(expiry), numWatchedTiles(0), watchedTiles(nullptr)
+	SPOTTER(WorldMapState& mapState, int x, int y, int plr, int radius, int type, uint32_t expiry = 0)
+		: pos(x, y, 0), player(plr), sensorRadius(radius), sensorType(type), expiryTime(expiry), numWatchedTiles(0), watchedTiles(nullptr), mapState(mapState)
 	{
 		id = generateSynchronisedObjectId();
 	}
@@ -78,6 +78,7 @@ public:
 	int numWatchedTiles;
 	TILEPOS *watchedTiles;
 	uint32_t id;
+	WorldMapState& mapState;
 };
 static std::vector<SPOTTER *> apsInvisibleViewers;
 
@@ -130,10 +131,10 @@ static inline void updateTileVis(MAPTILE *psTile, int player)
 	}
 }
 
-uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry)
+uint32_t addSpotter(WorldMapState& mapState, int x, int y, int player, int radius, bool radar, uint32_t expiry)
 {
 	ASSERT_OR_RETURN(0, player >= 0 && player < MAX_PLAYERS, "invalid player: %d", player);
-	SPOTTER *psSpot = new SPOTTER(x, y, player, radius, (int)radar, expiry);
+	SPOTTER *psSpot = new SPOTTER(mapState, x, y, player, radius, (int)radar, expiry);
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
 	psSpot->watchedTiles = (TILEPOS *)malloc(size * sizeof(*psSpot->watchedTiles));
@@ -141,11 +142,11 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 	{
 		const int mapX = x + tiles[i].dx;
 		const int mapY = y + tiles[i].dy;
-		if (mapX < 0 || mapX >= gameWorld.map.width || mapY < 0 || mapY >= gameWorld.map.height)
+		if (mapX < 0 || mapX >= mapState.width || mapY < 0 || mapY >= mapState.height)
 		{
 			continue;
 		}
-		MAPTILE *psTile = mapTile(gameWorld.map, mapX, mapY);
+		MAPTILE *psTile = mapTile(mapState, mapX, mapY);
 		psTile->tileExploredBits |= alliancebits[player];
 		uint16_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
 		if (visionType[player] < UINT16_MAX)
@@ -214,7 +215,7 @@ SPOTTER::~SPOTTER()
 	for (int i = 0; i < numWatchedTiles; i++)
 	{
 		const TILEPOS tilePos = watchedTiles[i];
-		MAPTILE *psTile = mapTile(gameWorld.map, tilePos.x, tilePos.y);
+		MAPTILE *psTile = mapTile(mapState, tilePos.x, tilePos.y);
 		uint16_t *visionType = (tilePos.type == 0) ? psTile->watchers : psTile->sensors;
 		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)tilePos.x, (int)tilePos.y);
 		visionType[player]--;
@@ -251,7 +252,7 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 }
 
 /* The terrain revealing ray callback */
-static void doWaveTerrain(BASE_OBJECT *psObj)
+static void doWaveTerrain(BASE_OBJECT *psObj, WorldMapState& mapState)
 {
 	if (psObj == nullptr)
 	{
@@ -283,12 +284,12 @@ static void doWaveTerrain(BASE_OBJECT *psObj)
 	{
 		const int mapX = map_coord(sx) + tiles[i].dx;
 		const int mapY = map_coord(sy) + tiles[i].dy;
-		if (mapX < 0 || mapX >= gameWorld.map.width || mapY < 0 || mapY >= gameWorld.map.height)
+		if (mapX < 0 || mapX >= mapState.width || mapY < 0 || mapY >= mapState.height)
 		{
 			continue;
 		}
 
-		MAPTILE *psTile = mapTile(gameWorld.map, mapX, mapY);
+		MAPTILE *psTile = mapTile(mapState, mapX, mapY);
 		int tileHeight = std::max(psTile->height, psTile->waterLevel);  // If we can see the water surface, then let us see water-covered tiles too.
 		int perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
 		int perspectiveHeightLeeway = (tileHeight - sz + MIN_VIS_HEIGHT) * tiles[i].invRadius;
@@ -340,11 +341,11 @@ static void doWaveTerrain(BASE_OBJECT *psObj)
 }
 
 /* The los ray callback */
-static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
+static bool rayLOSCallback(WorldMapState& mapState, Vector2i pos, int32_t dist, void *data)
 {
 	VisibleObjectHelp_t *help = (VisibleObjectHelp_t *)data;
 
-	ASSERT(pos.x >= 0 && pos.x < world_coord(gameWorld.map.width) && pos.y >= 0 && pos.y < world_coord(gameWorld.map.height), "rayLOSCallback: coords off map");
+	ASSERT(pos.x >= 0 && pos.x < world_coord(mapState.width) && pos.y >= 0 && pos.y < world_coord(mapState.height), "rayLOSCallback: coords off map");
 
 	if (help->rayStart)
 	{
@@ -361,7 +362,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 	}
 
 	help->lastDist = dist;
-	help->lastHeight = map_Height(gameWorld.map, pos.x, pos.y);
+	help->lastHeight = map_Height(mapState, pos.x, pos.y);
 
 	if (help->wallsBlock)
 	{
@@ -370,7 +371,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 
 		if (tile != help->final)
 		{
-			MAPTILE *psTile = mapTile(gameWorld.map, tile);
+			MAPTILE *psTile = mapTile(mapState, tile);
 			if (TileHasWall_raycast(psTile) && !TileHasSmallStructure(psTile))
 			{
 				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
@@ -389,14 +390,14 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 
 
 /* Remove tile visibility from object */
-void visRemoveVisibility(BASE_OBJECT *psObj)
+void visRemoveVisibility(BASE_OBJECT *psObj, WorldMapState& mapState)
 {
-	if (gameWorld.map.width && gameWorld.map.height)
+	if (mapState.width && mapState.height)
 	{
 		for (TILEPOS pos : psObj->watchedTiles)
 		{
 			// FIXME: the mapTile might have been swapped out, see swapMissionPointers()
-			MAPTILE *psTile = mapTile(gameWorld.map, pos.x, pos.y);
+			MAPTILE *psTile = mapTile(mapState, pos.x, pos.y);
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
 			uint16_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
@@ -429,12 +430,12 @@ void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
 }
 
 /* Check which tiles can be seen by an object */
-void visTilesUpdate(BASE_OBJECT *psObj)
+void visTilesUpdate(BASE_OBJECT *psObj, WorldMapState& mapState)
 {
 	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
 
 	// Remove previous map visibility provided by object
-	visRemoveVisibility(psObj);
+	visRemoveVisibility(psObj, mapState);
 
 	if (psObj->type == OBJ_STRUCTURE)
 	{
@@ -449,11 +450,11 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 
 	// Do the whole circle in ∞ steps. No more pretty moiré patterns.
 	psObj->flags.set(OBJECT_FLAG_JAMMED_TILES, objJammerPower(psObj) > 0);
-	doWaveTerrain(psObj);
+	doWaveTerrain(psObj, mapState);
 }
 
 /*reveals all the terrain in the map*/
-void revealAll(UBYTE player)
+void revealAll(WorldMapState& mapState, UBYTE player)
 {
 	SDWORD   i, j;
 	MAPTILE	*psTile;
@@ -464,11 +465,11 @@ void revealAll(UBYTE player)
 	}
 
 	//reveal all tiles
-	for (j = 0; j < gameWorld.map.height; j++)
+	for (j = 0; j < mapState.height; j++)
 	{
-		for (i = 0; i < gameWorld.map.width; i++)
+		for (i = 0; i < mapState.width; i++)
 		{
-			psTile = mapTile(gameWorld.map, i, j);
+			psTile = mapTile(mapState, i, j);
 			psTile->tileExploredBits |= alliancebits[player];
 		}
 	}
@@ -579,7 +580,7 @@ int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool
 	};
 
 	// Cast a ray from the viewer to the target
-	rayCast(psViewer->pos.xy(), psTarget->pos.xy(), rayLOSCallback, &help);
+	rayCast(gameWorld.map, psViewer->pos.xy(), psTarget->pos.xy(), rayLOSCallback, &help);
 
 	if (gWall != nullptr && gNumWalls != nullptr) // Out globals are set
 	{

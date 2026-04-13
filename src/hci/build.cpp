@@ -59,7 +59,7 @@ void BuildController::updateBuildersList()
 
 void BuildController::updateBuildOptionsList()
 {
-	auto newBuildOptions = fillStructureList(selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
+	auto newBuildOptions = fillStructureList(gameWorld.objects, selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
 
 	stats = std::vector<STRUCTURE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
 }

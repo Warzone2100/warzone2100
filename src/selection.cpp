@@ -51,16 +51,16 @@
 static std::vector<std::vector<uint32_t> > combinations;
 
 template <typename T>
-static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)
+static unsigned selSelectUnitsIf(WorldObjectState& objState, unsigned player, T condition, bool onlyOnScreen)
 {
 	if (player >= MAX_PLAYERS) { return 0; }
 
 	unsigned count = 0;
 
-	selDroidDeselect(player);
+	selDroidDeselect(objState, player);
 
 	// Go through all.
-	for (DROID *psDroid : gameWorld.objects.droids[player])
+	for (DROID *psDroid : objState.droids[player])
 	{
 		bool shouldSelect = (!onlyOnScreen || objectOnScreen(psDroid, 0)) &&
 		                    condition(psDroid);
@@ -79,9 +79,9 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 }
 
 template <typename T, typename U>
-static unsigned selSelectUnitsIf(unsigned player, T condition, U value, bool onlyOnScreen)
+static unsigned selSelectUnitsIf(WorldObjectState& objState, unsigned player, T condition, U value, bool onlyOnScreen)
 {
-	return selSelectUnitsIf(player, [condition, value](DROID *psDroid) { return condition(psDroid, value); }, onlyOnScreen);
+	return selSelectUnitsIf(objState, player, [condition, value](DROID *psDroid) { return condition(psDroid, value); }, onlyOnScreen);
 }
 
 static bool selTransporter(DROID *droid)
@@ -137,12 +137,12 @@ static bool selCombatLandMildlyOrNotDamaged(DROID *psDroid)
 
 // ---------------------------------------------------------------------
 // Deselects all units for the player
-unsigned int selDroidDeselect(unsigned int player)
+unsigned int selDroidDeselect(WorldObjectState& objState, unsigned int player)
 {
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (DROID* psDroid : gameWorld.objects.droids[player])
+	for (DROID* psDroid : objState.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -156,12 +156,12 @@ unsigned int selDroidDeselect(unsigned int player)
 
 // ---------------------------------------------------------------------
 // Lets you know how many are selected for a given player
-unsigned int selNumSelected(unsigned int player)
+unsigned int selNumSelected(const WorldObjectState& objState, unsigned int player)
 {
 	unsigned int count = 0;
 	if (player >= MAX_PLAYERS) { return 0; }
 
-	for (const DROID *psDroid : gameWorld.objects.droids[player])
+	for (const DROID *psDroid : objState.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -229,7 +229,7 @@ static bool componentsInCombinations(DROID *psDroid, bool add)
 }
 
 // Selects all units with the same propulsion, body and turret(s) as the one(s) selected
-static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
+static unsigned int selSelectAllSame(WorldObjectState& objState, unsigned int player, bool bOnScreen)
 {
 	unsigned int i = 0, selected = 0;
 	std::vector<unsigned int> excluded;
@@ -239,7 +239,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	if (player >= MAX_PLAYERS) { return 0; }
 
 	// find out which units will need to be compared to which component combinations
-	for (DROID *psDroid : gameWorld.objects.droids[player])
+	for (DROID *psDroid : objState.droids[player])
 	{
 		if (bOnScreen && !objectOnScreen(psDroid, 0))
 		{
@@ -260,7 +260,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	{
 		// reset unit counter
 		i = 0;
-		for (DROID *psDroid : gameWorld.objects.droids[player])
+		for (DROID *psDroid : objState.droids[player])
 		{
 			if (excluded.empty() || *excluded.begin() != i)
 			{
@@ -282,7 +282,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 
 // ffs am
 // ---------------------------------------------------------------------
-void selNextSpecifiedUnit(DROID_TYPE unitType)
+void selNextSpecifiedUnit(WorldObjectState& objState, DROID_TYPE unitType)
 {
 	static DROID *psOldRD = nullptr; // pointer to last selected repair unit
 	DROID *psResult = nullptr, *psFirst = nullptr;
@@ -290,7 +290,7 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr : gameWorld.objects.droids[selectedPlayer])
+	for (DROID *psCurr : objState.droids[selectedPlayer])
 	{
 		//exceptions - as always...
 		bool bMatch = false;
@@ -351,7 +351,7 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 
 	if (psResult && !psResult->died)
 	{
-		selDroidDeselect(selectedPlayer);
+		selDroidDeselect(objState, selectedPlayer);
 		SelectDroid(psResult);
 		if (getWarCamStatus())
 		{
@@ -390,7 +390,7 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 }
 
 // ---------------------------------------------------------------------
-void selNextUnassignedUnit()
+void selNextUnassignedUnit(WorldObjectState& objState)
 {
 	static DROID *psOldNS = nullptr;
 	DROID *psResult = nullptr, *psFirst = nullptr;
@@ -398,7 +398,7 @@ void selNextUnassignedUnit()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "invalid selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (DROID *psCurr : gameWorld.objects.droids[selectedPlayer])
+	for (DROID *psCurr : objState.droids[selectedPlayer])
 	{
 		/* Only look at unselected ones */
 		if (psCurr->group == UBYTE_MAX)
@@ -438,7 +438,7 @@ void selNextUnassignedUnit()
 
 	if (psResult && !psResult->died)
 	{
-		selDroidDeselect(selectedPlayer);
+		selDroidDeselect(objState, selectedPlayer);
 		SelectDroid(psResult);
 		if (getWarCamStatus())
 		{
@@ -462,7 +462,7 @@ void selNextUnassignedUnit()
 }
 
 // ---------------------------------------------------------------------
-void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
+void selNextSpecifiedBuilding(WorldObjectState& objState, STRUCTURE_TYPE structType, bool jump)
 {
 	STRUCTURE *psResult = nullptr, *psOldStruct = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
@@ -472,7 +472,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 	/* Firstly, start coughing if the type is invalid */
 	ASSERT(structType <= NUM_DIFF_BUILDINGS, "Invalid structure type %u", structType);
 
-	for (STRUCTURE *psCurr : gameWorld.objects.structures[selectedPlayer])
+	for (STRUCTURE *psCurr : objState.structures[selectedPlayer])
 	{
 		if (psResult)
 		{
@@ -591,7 +591,7 @@ void selCommander(int n)
    Selects the units of a given player according to given criteria.
    It is also possible to request whether the units be onscreen or not.
    */
-unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen)
+unsigned int selDroidSelection(WorldObjectState& objState, unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen)
 {
 	if (player >= MAX_PLAYERS) { return 0; }
 
@@ -602,67 +602,67 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 	switch (droidClass)
 	{
 	case DS_ALL_UNITS:
-		retVal = selSelectUnitsIf(player, selTrue, bOnScreen);
+		retVal = selSelectUnitsIf(objState, player, selTrue, bOnScreen);
 		break;
 	case DS_BY_TYPE:
 		switch (droidType)
 		{
 		case DST_VTOL:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LIFT, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_LIFT, bOnScreen);
 			break;
 		case DST_VTOL_ARMED:
-			retVal = selSelectUnitsIf(player, selPropArmed, PROPULSION_TYPE_LIFT, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selPropArmed, PROPULSION_TYPE_LIFT, bOnScreen);
 			break;
 		case DST_HOVER:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_HOVER, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_HOVER, bOnScreen);
 			break;
 		case DST_WHEELED:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_WHEELED, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_WHEELED, bOnScreen);
 			break;
 		case DST_TRACKED:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_TRACKED, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_TRACKED, bOnScreen);
 			break;
 		case DST_HALF_TRACKED:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
 			break;
 		case DST_CYBORG:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LEGGED, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selProp, PROPULSION_TYPE_LEGGED, bOnScreen);
 			break;
 		case DST_ENGINEER:
-			retVal = selSelectUnitsIf(player, selType, DROID_CYBORG_CONSTRUCT, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selType, DROID_CYBORG_CONSTRUCT, bOnScreen);
 			break;
 		case DST_MECHANIC:
-			retVal = selSelectUnitsIf(player, selType, DROID_CYBORG_REPAIR, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selType, DROID_CYBORG_REPAIR, bOnScreen);
 			break;
 		case DST_TRANSPORTER:
-			retVal = selSelectUnitsIf(player, selTransporter, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selTransporter, bOnScreen);
 			break;
 		case DST_REPAIR_TANK:
-			retVal = selSelectUnitsIf(player, selType, DROID_REPAIR, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selType, DROID_REPAIR, bOnScreen);
 			break;
 		case DST_SENSOR:
-			retVal = selSelectUnitsIf(player, selType, DROID_SENSOR, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selType, DROID_SENSOR, bOnScreen);
 			break;
 		case DST_TRUCK:
-			retVal = selSelectUnitsIf(player, selType, DROID_CONSTRUCT, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selType, DROID_CONSTRUCT, bOnScreen);
 			break;
 		case DST_ALL_COMBAT:
-			retVal = selSelectUnitsIf(player, selCombat, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selCombat, bOnScreen);
 			break;
 		case DST_ALL_COMBAT_LAND:
-			retVal = selSelectUnitsIf(player, selCombatLand, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selCombatLand, bOnScreen);
 			break;
 		case DST_ALL_COMBAT_CYBORG:
-			retVal = selSelectUnitsIf(player, selCombatCyborg, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selCombatCyborg, bOnScreen);
 			break;
 		case DST_ALL_DAMAGED:
-			retVal = selSelectUnitsIf(player, selDamaged, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selDamaged, bOnScreen);
 			break;
 		case DST_ALL_SAME:
-			retVal = selSelectAllSame(player, bOnScreen);
+			retVal = selSelectAllSame(objState, player, bOnScreen);
 			break;
 		case DST_ALL_LAND_MILDLY_OR_NOT_DAMAGED:
-			retVal = selSelectUnitsIf(player, selCombatLandMildlyOrNotDamaged, bOnScreen);
+			retVal = selSelectUnitsIf(objState, player, selCombatLandMildlyOrNotDamaged, bOnScreen);
 			break;
 		default:
 			ASSERT(false, "Invalid selection type");

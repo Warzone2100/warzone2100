@@ -32,11 +32,13 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
+struct WorldObjectState;
+
 void recvPlayerLeft(NETQUEUE queue);
 bool MultiPlayerLeave(UDWORD playerIndex);						// A player has left the game.
 bool MultiPlayerJoin(UDWORD playerIndex, optional<EcKey::Key> verifiedJoinIdentity = nullopt);	// A Player has joined the game.
 void setupNewPlayer(UDWORD player);		// stuff to do when player joins.
-void clearPlayer(UDWORD player, bool quietly);     // wipe a player off the face of the earth.
+void clearPlayer(WorldObjectState& objState, UDWORD player, bool quietly);     // wipe a player off the face of the earth.
 void handlePlayerLeftInGame(UDWORD player);		   // handle a player leaving in-game
 
 void ShowLobbyStatusMessage(const std::vector<std::string>& msgs);

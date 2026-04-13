@@ -195,9 +195,11 @@ extern void shakeStop();
 // reset the input state
 void resetInput();
 
-bool CheckInScrollLimits(const int &xPos, const int &yPos);
-bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos);
-bool CheckScrollLimits();
+struct WorldMapState;
+
+bool CheckInScrollLimits(const WorldMapState& mapState, const int &xPos, const int &yPos);
+bool CheckInScrollLimitsCamera(const WorldMapState& mapState, SDWORD *xPos, SDWORD *zPos);
+bool CheckScrollLimits(const WorldMapState& mapState);
 
 BASE_OBJECT	*mouseTarget();
 

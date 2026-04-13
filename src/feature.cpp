@@ -176,10 +176,10 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	}
 }
 
-FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
+FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 {
 	const auto id = generateSynchronisedObjectId();
-	return buildFeature(psStats, x, y, FromSave, id);
+	return buildFeature(mapState, psStats, x, y, FromSave, id);
 }
 
 /* Get pitch and roll from direction and tile data */
@@ -233,7 +233,7 @@ static void updateFeatureOrientation(FEATURE *psFeature)
 }
 
 /* Create a feature on the map */
-FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
+FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
 	//try and create the Feature, obtain stable address.
 	FEATURE& feature = GlobalFeatureContainer().emplace(id, psStats);
@@ -269,7 +269,7 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 	{
 		for (int width = 0; width <= b.size.x; ++width)
 		{
-			int h = map_TileHeight(gameWorld.map, b.map.x + width, b.map.y + breadth);
+			int h = map_TileHeight(mapState, b.map.x + width, b.map.y + breadth);
 			foundationMin = std::min(foundationMin, h);
 			foundationMax = std::max(foundationMax, h);
 		}
@@ -305,11 +305,11 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
-			MAPTILE *psTile = mapTile(gameWorld.map, b.map.x + width, b.map.y + breadth);
+			MAPTILE *psTile = mapTile(mapState, b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(nullptr, b.map.x + width < gameWorld.map.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < gameWorld.map.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapState.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapState.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -329,12 +329,12 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(gameWorld.map, b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
+					auxSetBlocking(mapState, b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
 				}
 
 				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM)
 				{
-					auxSetBlocking(gameWorld.map, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
+					auxSetBlocking(mapState, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
 				}
 			}
 
@@ -344,7 +344,7 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave,
 			}
 		}
 	}
-	psFeature->pos.z = map_TileHeight(gameWorld.map, psFeature->pos.x, psFeature->pos.y);//jps 18july97
+	psFeature->pos.z = map_TileHeight(mapState, psFeature->pos.x, psFeature->pos.y);//jps 18july97
 	updateFeatureOrientation(psFeature);
 
 	return psFeature;

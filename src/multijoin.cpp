@@ -81,16 +81,17 @@
 // Local Functions
 
 static void resetMultiVisibility(UDWORD player);
-void destroyPlayerResources(UDWORD player, bool quietly);
+void destroyPlayerResources(WorldObjectState& objState, UDWORD player, bool quietly);
 
 //////////////////////////////////////////////////////////////////////////////
 /*
 ** when a remote player leaves an arena game do this!
 **
+** @param objState : the object state to destroy the resources for `player` from
 ** @param player -- the one we need to clear
 ** @param quietly -- true means without any visible effects
 */
-void clearPlayer(UDWORD player, bool quietly)
+void clearPlayer(WorldObjectState& objState, UDWORD player, bool quietly)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
@@ -112,10 +113,10 @@ void clearPlayer(UDWORD player, bool quietly)
 		return; // no more to do
 	}
 
-	destroyPlayerResources(player, quietly);
+	destroyPlayerResources(objState, player, quietly);
 }
 
-void destroyPlayerResources(UDWORD player, bool quietly)
+void destroyPlayerResources(WorldObjectState& objState, UDWORD player, bool quietly)
 {
 	UDWORD			i;
 
@@ -139,7 +140,7 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
 	// delete all droids
-	mutating_list_iterate(gameWorld.objects.droids[player], [quietly](DROID* d)
+	mutating_list_iterate(objState.droids[player], [quietly](DROID* d)
 	{
 		if (quietly)			// don't show effects
 		{
@@ -154,7 +155,7 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
 	// delete all structs
-	mutating_list_iterate(gameWorld.objects.structures[player], [quietly](STRUCTURE* psStruct)
+	mutating_list_iterate(objState.structures[player], [quietly](STRUCTURE* psStruct)
 	{
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
@@ -357,14 +358,14 @@ void handlePlayerLeftInGame(UDWORD player)
 	switch (mode)
 	{
 		case PLAYER_LEAVE_MODE::DESTROY_RESOURCES:
-			destroyPlayerResources(player, false);
+			destroyPlayerResources(gameWorld.objects, player, false);
 			break;
 		case PLAYER_LEAVE_MODE::SPLIT_WITH_TEAM:
 			if (!splitResourcesAmongTeam(player))
 			{
 				// no valid targets to split resources among
 				// instead, destroy the player
-				destroyPlayerResources(player, false);
+				destroyPlayerResources(gameWorld.objects, player, false);
 			}
 			break;
 	}
@@ -519,7 +520,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	if (ingame.localJoiningInProgress)
 	{
 		addConsolePlayerLeftMessage(playerIndex);
-		clearPlayer(playerIndex, false);
+		clearPlayer(gameWorld.objects, playerIndex, false);
 		clearPlayerMultiStats(playerIndex); // local only
 		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}

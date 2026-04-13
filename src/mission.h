@@ -37,6 +37,8 @@
 #define         MAX_NOGO_AREAS          (MAX_PLAYERS + 1)
 #define         LIMBO_LANDING           MAX_PLAYERS
 
+struct WorldMapState;
+
 extern MISSION		mission;
 extern bool			offWorldKeepLists;
 extern PerPlayerDroidLists apsLimboDroids;
@@ -134,7 +136,7 @@ void setPlayCountDown(UBYTE set);
 bool getPlayCountDown();
 
 /** Checks the x,y passed in are not within the boundary of the Landing Zone x and y in tile coords. */
-bool withinLandingZone(UDWORD x, UDWORD y);
+bool withinLandingZone(const WorldMapState& mapState, UDWORD x, UDWORD y);
 
 //sets the coords for the Transporter to land
 LANDING_ZONE *getLandingZone(SDWORD i);

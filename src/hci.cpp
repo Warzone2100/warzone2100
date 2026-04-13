@@ -1792,7 +1792,7 @@ INT_RETVAL intRunWidgets()
 					else if (psPositionStats->hasType(STAT_TEMPLATE))
 					{
 						std::string msg;
-						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
+						DROID *psDroid = buildDroid(gameWorld, (DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
 						cancelDeliveryRepos();
 						if (psDroid)
 						{
