@@ -80,6 +80,11 @@
             "id": "heavilyDamagedPenalty",
             "default": true,
             "userEditable": true
+        },
+        {
+            "id": "unexploredMapOpacity",
+            "default": false,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [

@@ -233,8 +233,8 @@ function reticuleUpdate(obj, eventType)
 
 function setupGame()
 {
-	//Use dark fog for campaign
-	setRevealStatus(false);
+	//Use dark fog for campaign by default
+	setRevealStatus((tweakOptions.unexploredMapOpacity) ? true : false);
 
 	if (tilesetType === "ARIZONA")
 	{

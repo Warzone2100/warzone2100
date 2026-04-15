@@ -1714,6 +1714,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"unexploredMapOpacity",
+		_("Unexplored Map Opacity"),
+		_("Partially reveal the layout of the map without exploration."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
