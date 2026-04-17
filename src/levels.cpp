@@ -55,6 +55,7 @@
 #include <wzmaplib/map_package.h>
 
 #include <unordered_set>
+#include <vector>
 
 #include "3rdparty/gsl_finally.h"
 
@@ -869,124 +870,144 @@ static GameLoadDetails levConstructGameLoadDetails(LEVEL_DATASET* psNewLevel, SW
 	return GameLoadDetails::makeLevelFileLoad(psNewLevel->apDataFiles[scenarioIndex]);
 }
 
-// load up the data for a level
-bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
+struct LevLoadContext
 {
-	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == nullptr ? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
-	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
-	{
-		if (!levReleaseAll())
-		{
-			debug(LOG_ERROR, "Failed to unload old data");
-			return false;
-		}
-	}
-
-	// Ensure that the LC_NUMERIC locale setting is "C"
-	ASSERT(strcmp(setlocale(LC_NUMERIC, NULL), "C") == 0, "The LC_NUMERIC locale is not \"C\" - this may break level-data parsing depending on the user's system locale settings");
-
-	levelLoadType = saveType;
-
-	// find the level dataset
-	LEVEL_DATASET* psNewLevel = levFindDataSet(name, hash);
-	if (psNewLevel == nullptr)
-	{
-		debug(LOG_INFO, "Dataset %s not found - trying to load as WRF", name);
-		return levLoadSingleWRF(name);
-	}
-	debug(LOG_WZ, "** Data set found is %s type %d", psNewLevel->pName.c_str(), (int)psNewLevel->type);
-
-	/* Keep a copy of the present level name */
-	sstrcpy(currentLevelName, name);
-
-	const bool bCamChangeSaveGame = pSaveName && saveType == GTYPE_SAVE_START && psNewLevel->psChange != nullptr;
-	if (bCamChangeSaveGame)
-	{
-		debug(LOG_WZ, "** CAMCHANGE FOUND");
-	}
-
-	// select the change dataset if there is one
+	std::string    name;
+	Sha256 const*  hash = nullptr;
+	char*          pSaveName = nullptr;
+	GAME_TYPE      saveType = GTYPE_SCENARIO_START;
+	LEVEL_DATASET* psNewLevel = nullptr;
 	LEVEL_DATASET* psChangeLevel = nullptr;
-	if (((psNewLevel->psChange != nullptr) && (psCurrLevel != nullptr)) || bCamChangeSaveGame)
-	{
-		//store the level name
-		debug(LOG_WZ, "Found CAMCHANGE dataset");
-		psChangeLevel = psNewLevel;
-		psNewLevel = psNewLevel->psChange;
-	}
+	bool           bCamChangeSaveGame = false;
+};
 
-	// ensure the correct dataset is loaded
-	if (psNewLevel->type == LEVEL_TYPE::LDS_CAMPAIGN)
+enum class LevDatasetResolveResult
+{
+	Failed,
+	SingleWRF,
+	Ok,
+};
+
+// Call after base WRF data is loaded: preload alternate faction PIE models referenced by the loaded set.
+static void levPreloadFactionModelsFromLoadedSet()
+{
+	std::unordered_set<FactionID> enabledNonNormalFactions = getEnabledFactions(true);
+	if (enabledNonNormalFactions.empty())
 	{
-		debug(LOG_ERROR, "Cannot load a campaign dataset (%s)", psNewLevel->pName.c_str());
-		return false;
+		return;
 	}
-	else
+	struct FactionModelInfo
 	{
-		if (psCurrLevel != nullptr)
+		WzString factionModel;
+		WzString normalModel;
+	};
+	std::vector<FactionModelInfo> factionModelsToLoad;
+	enumerateLoadedModels([enabledNonNormalFactions, &factionModelsToLoad](const std::string &modelName, iIMDBaseShape &s){
+		for (const auto& faction : enabledNonNormalFactions)
 		{
-			if ((psCurrLevel->psBaseData != psNewLevel->psBaseData) ||
-			    (psCurrLevel->type < LEVEL_TYPE::LDS_NONE && psNewLevel->type  >= LEVEL_TYPE::LDS_NONE) ||
-			    (psCurrLevel->type >= LEVEL_TYPE::LDS_NONE && psNewLevel->type  < LEVEL_TYPE::LDS_NONE))
+			auto wzModelName = WzString::fromUtf8(modelName);
+			auto factionModel = getFactionModelName(faction, wzModelName);
+			if (factionModel.has_value())
 			{
-				// there is a dataset loaded but it isn't the correct one
-				debug(LOG_WZ, "Incorrect base dataset loaded (%p != %p, %d - %d)",
-				      static_cast<void *>(psCurrLevel->psBaseData), static_cast<void *>(psNewLevel->psBaseData), (int)psCurrLevel->type, (int)psNewLevel->type);
-				if (!levReleaseAll())	// this sets psCurrLevel to NULL
-				{
-					debug(LOG_ERROR, "Failed to release old data");
-					return false;
-				}
-			}
-			else
-			{
-				debug(LOG_WZ, "Correct base dataset already loaded.");
+				factionModelsToLoad.push_back({factionModel.value(), wzModelName});
 			}
 		}
-
-		// setup the correct dataset to load if necessary
-		if (psCurrLevel == nullptr)
-		{
-			if (psNewLevel->psBaseData != nullptr)
-			{
-				debug(LOG_WZ, "Setting base dataset to load: %s", psNewLevel->psBaseData->pName.c_str());
-			}
-			psBaseData = psNewLevel->psBaseData;
-		}
-		else
-		{
-			debug(LOG_WZ, "No base dataset to load");
-			psBaseData = nullptr;
-		}
-	}
-
-	if (!rebuildSearchPath(psNewLevel->dataDir, true))
+	});
+	for (const auto& factionModelInfo : factionModelsToLoad)
 	{
-		debug(LOG_ERROR, "Failed to rebuild search path");
-		return false;
+		iIMDBaseShape *retval = modelGet(factionModelInfo.factionModel);
+		ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
+			   factionModelInfo.factionModel.toUtf8().c_str(), factionModelInfo.normalModel.toUtf8().c_str());
 	}
+	resDoResLoadCallback();		// do callback.
+}
 
-	// reset the old mission data if necessary
-	if (psCurrLevel != nullptr)
+static bool levStartMissionForLevelType(LEVEL_DATASET* psNewLevel, SWORD i)
+{
+	switch (psNewLevel->type)
 	{
-		debug(LOG_WZ, "Resetting old mission data");
-		if (!levReleaseMissionData())
+	case LEVEL_TYPE::LDS_COMPLETE:
+	case LEVEL_TYPE::LDS_CAMSTART:
+		debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
+		if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
 		{
-			debug(LOG_ERROR, "Failed to unload old mission data");
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 			return false;
 		}
-	}
-
-	// need to free the current map and droids etc for a save game
-	if (psBaseData == nullptr && pSaveName != nullptr)
-	{
-		if (!saveGameReset())
+		return true;
+	case LEVEL_TYPE::LDS_BETWEEN:
+		debug(LOG_WZ, "LDS_BETWEEN");
+		if (!startMission(LEVEL_TYPE::LDS_BETWEEN, levConstructGameLoadDetails(psNewLevel, i)))
 		{
-			debug(LOG_ERROR, "Failed to saveGameReset()!");
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i].c_str());
 			return false;
 		}
-	}
+		return true;
 
+	case LEVEL_TYPE::LDS_MKEEP:
+		debug(LOG_WZ, "LDS_MKEEP");
+		if (!startMission(LEVEL_TYPE::LDS_MKEEP, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+	case LEVEL_TYPE::LDS_CAMCHANGE:
+		debug(LOG_WZ, "LDS_CAMCHANGE");
+		if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+
+	case LEVEL_TYPE::LDS_EXPAND:
+		debug(LOG_WZ, "LDS_EXPAND");
+		if (!startMission(LEVEL_TYPE::LDS_EXPAND, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
+		debug(LOG_WZ, "LDS_LIMBO");
+		if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+
+	case LEVEL_TYPE::LDS_MCLEAR:
+		debug(LOG_WZ, "LDS_MCLEAR");
+		if (!startMission(LEVEL_TYPE::LDS_MCLEAR, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
+		debug(LOG_WZ, "LDS_MKEEP_LIMBO");
+		if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+	default:
+		ASSERT(psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START, "Unexpected mission type");
+		debug(LOG_WZ, "default (MULTIPLAYER)");
+		if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
+		{
+			debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
+			return false;
+		}
+		return true;
+	}
+}
+
+static bool levLoadBaseDatasetAndStageOne(LEVEL_DATASET* psNewLevel)
+{
 	// initialise if necessary
 	if (psNewLevel->type == LEVEL_TYPE::LDS_COMPLETE || psBaseData != nullptr)
 	{
@@ -1016,35 +1037,123 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 		}
 	}
+
 	// preload faction IMDs
-	std::unordered_set<FactionID> enabledNonNormalFactions = getEnabledFactions(true);
-	if (!enabledNonNormalFactions.empty())
+	levPreloadFactionModelsFromLoadedSet();
+	return true;
+}
+
+static bool levPrepareLoadEnvironment(LEVEL_DATASET* psNewLevel, char* pSaveName)
+{
+	if (!rebuildSearchPath(psNewLevel->dataDir, true))
 	{
-		struct FactionModelInfo
-		{
-			WzString factionModel;
-			WzString normalModel;
-		};
-		std::vector<FactionModelInfo> factionModelsToLoad;
-		enumerateLoadedModels([enabledNonNormalFactions, &factionModelsToLoad](const std::string &modelName, iIMDBaseShape &s){
-			for (const auto& faction : enabledNonNormalFactions)
-			{
-				auto wzModelName = WzString::fromUtf8(modelName);
-				auto factionModel = getFactionModelName(faction, wzModelName);
-				if (factionModel.has_value())
-				{
-					factionModelsToLoad.push_back({factionModel.value(), wzModelName});
-				}
-			}
-		});
-		for (const auto& factionModelInfo : factionModelsToLoad)
-		{
-			iIMDBaseShape *retval = modelGet(factionModelInfo.factionModel);
-			ASSERT(retval != nullptr, "Cannot find the faction PIE model %s (for normal model: %s)",
-				   factionModelInfo.factionModel.toUtf8().c_str(), factionModelInfo.normalModel.toUtf8().c_str());
-		}
-		resDoResLoadCallback();		// do callback.
+		debug(LOG_ERROR, "Failed to rebuild search path");
+		return false;
 	}
+
+	// reset the old mission data if necessary
+	if (psCurrLevel != nullptr)
+	{
+		debug(LOG_WZ, "Resetting old mission data");
+		if (!levReleaseMissionData())
+		{
+			debug(LOG_ERROR, "Failed to unload old mission data");
+			return false;
+		}
+	}
+
+	// need to free the current map and droids etc for a save game
+	if (psBaseData == nullptr && pSaveName != nullptr)
+	{
+		if (!saveGameReset())
+		{
+			debug(LOG_ERROR, "Failed to saveGameReset()!");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+static LevDatasetResolveResult levResolveDatasetForLoad(LevLoadContext& ctx)
+{
+	/* Keep a copy of the present level name */
+	sstrcpy(currentLevelName, ctx.name.c_str());
+
+	// find the level dataset
+	ctx.psNewLevel = levFindDataSet(ctx.name.c_str(), ctx.hash);
+	if (ctx.psNewLevel == nullptr)
+	{
+		debug(LOG_INFO, "Dataset %s not found - trying to load as WRF", ctx.name.c_str());
+		return LevDatasetResolveResult::SingleWRF;
+	}
+	debug(LOG_WZ, "** Data set found is %s type %d", ctx.psNewLevel->pName.c_str(), (int)ctx.psNewLevel->type);
+
+	ctx.bCamChangeSaveGame = ctx.pSaveName != nullptr && ctx.saveType == GTYPE_SAVE_START && ctx.psNewLevel->psChange != nullptr;
+	if (ctx.bCamChangeSaveGame)
+	{
+		debug(LOG_WZ, "** CAMCHANGE FOUND");
+	}
+
+	// select the change dataset if there is one
+	ctx.psChangeLevel = nullptr;
+	if (((ctx.psNewLevel->psChange != nullptr) && (psCurrLevel != nullptr)) || ctx.bCamChangeSaveGame)
+	{
+		//store the level name
+		debug(LOG_WZ, "Found CAMCHANGE dataset");
+		ctx.psChangeLevel = ctx.psNewLevel;
+		ctx.psNewLevel = ctx.psNewLevel->psChange;
+	}
+
+	if (ctx.psNewLevel->type == LEVEL_TYPE::LDS_CAMPAIGN)
+	{
+		debug(LOG_ERROR, "Cannot load a campaign dataset (%s)", ctx.psNewLevel->pName.c_str());
+		return LevDatasetResolveResult::Failed;
+	}
+
+	// ensure the correct dataset is loaded
+	if (psCurrLevel != nullptr)
+	{
+		if ((psCurrLevel->psBaseData != ctx.psNewLevel->psBaseData) ||
+		    (psCurrLevel->type < LEVEL_TYPE::LDS_NONE && ctx.psNewLevel->type >= LEVEL_TYPE::LDS_NONE) ||
+		    (psCurrLevel->type >= LEVEL_TYPE::LDS_NONE && ctx.psNewLevel->type < LEVEL_TYPE::LDS_NONE))
+		{
+			// there is a dataset loaded but it isn't the correct one
+			debug(LOG_WZ, "Incorrect base dataset loaded (%p != %p, %d - %d)",
+			      static_cast<void *>(psCurrLevel->psBaseData), static_cast<void *>(ctx.psNewLevel->psBaseData), (int)psCurrLevel->type, (int)ctx.psNewLevel->type);
+			if (!levReleaseAll())	// this sets psCurrLevel to NULL
+			{
+				debug(LOG_ERROR, "Failed to release old data");
+				return LevDatasetResolveResult::Failed;
+			}
+		}
+		else
+		{
+			debug(LOG_WZ, "Correct base dataset already loaded.");
+		}
+	}
+
+	// setup the correct dataset to load if necessary
+	if (psCurrLevel == nullptr)
+	{
+		if (ctx.psNewLevel->psBaseData != nullptr)
+		{
+			debug(LOG_WZ, "Setting base dataset to load: %s", ctx.psNewLevel->psBaseData->pName.c_str());
+		}
+		psBaseData = ctx.psNewLevel->psBaseData;
+	}
+	else
+	{
+		debug(LOG_WZ, "No base dataset to load");
+		psBaseData = nullptr;
+	}
+
+	return LevDatasetResolveResult::Ok;
+}
+
+static bool levLoadMissionBranchesBeforeMainLoop(LevLoadContext& ctx)
+{
+	LEVEL_DATASET *psNewLevel = ctx.psNewLevel;
 
 	if (psNewLevel->type == LEVEL_TYPE::LDS_CAMCHANGE)
 	{
@@ -1058,7 +1167,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	{
 		ASSERT(psNewLevel->type == LEVEL_TYPE::LDS_BETWEEN, "Only BETWEEN missions do not need a .gam file");
 		debug(LOG_WZ, "No .gam file for level: BETWEEN mission");
-		if (pSaveName != nullptr)
+		if (ctx.pSaveName != nullptr)
 		{
 			if (psBaseData != nullptr)
 			{
@@ -1070,7 +1179,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			//set the mission type before the saveGame data is loaded
-			if (saveType == GTYPE_SAVE_MIDMISSION)
+			if (ctx.saveType == GTYPE_SAVE_MIDMISSION)
 			{
 				debug(LOG_WZ, "Init mission stuff");
 				if (!startMissionSave(psNewLevel->type))
@@ -1083,15 +1192,15 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				dataSetSaveFlag();
 			}
 
-			debug(LOG_NEVER, "Loading savegame: %s", pSaveName);
-			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
+			debug(LOG_NEVER, "Loading savegame: %s", ctx.pSaveName);
+			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(ctx.pSaveName), false, true))
 			{
-				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
+				debug(LOG_ERROR, "Failed loadGame(%s)!", ctx.pSaveName);
 				return false;
 			}
 		}
 
-		if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
+		if (ctx.pSaveName == nullptr || ctx.saveType == GTYPE_SAVE_START)
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
 			if (!startMission((LEVEL_TYPE)psNewLevel->type, GameLoadDetails::makeLevelFileLoad("")))
@@ -1103,9 +1212,9 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	//we need to load up the save game data here for a camchange
-	if (bCamChangeSaveGame)
+	if (ctx.bCamChangeSaveGame)
 	{
-		if (pSaveName != nullptr)
+		if (ctx.pSaveName != nullptr)
 		{
 			if (psBaseData != nullptr)
 			{
@@ -1116,10 +1225,10 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				}
 			}
 
-			debug(LOG_NEVER, "loading savegame: %s", pSaveName);
-			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
+			debug(LOG_NEVER, "loading savegame: %s", ctx.pSaveName);
+			if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(ctx.pSaveName), false, true))
 			{
-				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
+				debug(LOG_ERROR, "Failed loadGame(%s)!", ctx.pSaveName);
 				return false;
 			}
 
@@ -1127,6 +1236,12 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
+	return true;
+}
+
+static bool levLoadMissionDataLoop(LevLoadContext& ctx)
+{
+	LEVEL_DATASET *psNewLevel = ctx.psNewLevel;
 
 	// load the new data
 	debug(LOG_NEVER, "Loading mission dataset: %s", psNewLevel->pName.c_str());
@@ -1135,7 +1250,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		if (psNewLevel->game == i)
 		{
 			// do some more initialising if necessary
-			if (psNewLevel->type == LEVEL_TYPE::LDS_COMPLETE || psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START || (psBaseData != nullptr && !bCamChangeSaveGame))
+			if (psNewLevel->type == LEVEL_TYPE::LDS_COMPLETE || psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START || (psBaseData != nullptr && !ctx.bCamChangeSaveGame))
 			{
 				if (!stageTwoInitialise())
 				{
@@ -1145,10 +1260,10 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			// load a savegame if there is one - but not if already done so
-			if (pSaveName != nullptr && !bCamChangeSaveGame)
+			if (ctx.pSaveName != nullptr && !ctx.bCamChangeSaveGame)
 			{
 				//set the mission type before the saveGame data is loaded
-				if (saveType == GTYPE_SAVE_MIDMISSION)
+				if (ctx.saveType == GTYPE_SAVE_MIDMISSION)
 				{
 					debug(LOG_WZ, "Init mission stuff");
 					if (!startMissionSave(psNewLevel->type))
@@ -1161,97 +1276,21 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					dataSetSaveFlag();
 				}
 
-				debug(LOG_NEVER, "Loading save game %s", pSaveName);
-				if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(pSaveName), false, true))
+				debug(LOG_NEVER, "Loading save game %s", ctx.pSaveName);
+				if (!loadGame(GameLoadDetails::makeUserSaveGameLoad(ctx.pSaveName), false, true))
 				{
-					debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
+					debug(LOG_ERROR, "Failed loadGame(%s)!", ctx.pSaveName);
 					return false;
 				}
 			}
 
-			if (pSaveName == nullptr || saveType == GTYPE_SAVE_START)
+			if (ctx.pSaveName == nullptr || ctx.saveType == GTYPE_SAVE_START)
 			{
 				// load the game
 				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i].c_str());
-				switch (psNewLevel->type)
+				if (!levStartMissionForLevelType(psNewLevel, i))
 				{
-				case LEVEL_TYPE::LDS_COMPLETE:
-				case LEVEL_TYPE::LDS_CAMSTART:
-					debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-				case LEVEL_TYPE::LDS_BETWEEN:
-					debug(LOG_WZ, "LDS_BETWEEN");
-					if (!startMission(LEVEL_TYPE::LDS_BETWEEN, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-
-				case LEVEL_TYPE::LDS_MKEEP:
-					debug(LOG_WZ, "LDS_MKEEP");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-				case LEVEL_TYPE::LDS_CAMCHANGE:
-					debug(LOG_WZ, "LDS_CAMCHANGE");
-					if (!startMission(LEVEL_TYPE::LDS_CAMCHANGE, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-
-				case LEVEL_TYPE::LDS_EXPAND:
-					debug(LOG_WZ, "LDS_EXPAND");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-				case LEVEL_TYPE::LDS_EXPAND_LIMBO:
-					debug(LOG_WZ, "LDS_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_EXPAND_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-
-				case LEVEL_TYPE::LDS_MCLEAR:
-					debug(LOG_WZ, "LDS_MCLEAR");
-					if (!startMission(LEVEL_TYPE::LDS_MCLEAR, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-				case LEVEL_TYPE::LDS_MKEEP_LIMBO:
-					debug(LOG_WZ, "LDS_MKEEP_LIMBO");
-					if (!startMission(LEVEL_TYPE::LDS_MKEEP_LIMBO, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
-				default:
-					ASSERT(psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START, "Unexpected mission type");
-					debug(LOG_WZ, "default (MULTIPLAYER)");
-					if (!startMission(LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i)))
-					{
-						debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
-						return false;
-					}
-					break;
+					return false;
 				}
 			}
 		}
@@ -1267,30 +1306,37 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
+	return true;
+}
+
+static bool levFinalizeLevelLoad(LevLoadContext& ctx)
+{
+	LEVEL_DATASET *psNewLevel = ctx.psNewLevel;
+
 	if (bMultiPlayer)
 	{
 		// This calls resLoadFile("SMSG", "multiplay.txt"). Must be before loadMissionExtras, which calls loadSaveMessage, which calls getViewData.
 		loadMultiScripts();
 	}
 
-	if (pSaveName != nullptr)
+	if (ctx.pSaveName != nullptr)
 	{
 		//load MidMission Extras
-		if (!loadMissionExtras(pSaveName, psNewLevel->type))
+		if (!loadMissionExtras(ctx.pSaveName, psNewLevel->type))
 		{
-			debug(LOG_ERROR, "Failed loadMissionExtras(%s, %d)!", pSaveName, static_cast<int8_t>(psNewLevel->type));
+			debug(LOG_ERROR, "Failed loadMissionExtras(%s, %d)!", ctx.pSaveName, static_cast<int8_t>(psNewLevel->type));
 			return false;
 		}
 	}
 
-	if (pSaveName != nullptr && saveType == GTYPE_SAVE_MIDMISSION)
+	if (ctx.pSaveName != nullptr && ctx.saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load script stuff
 		// load the event system state here for a save game
 		debug(LOG_SAVE, "Loading script system state");
-		if (!loadScriptState(pSaveName))
+		if (!loadScriptState(ctx.pSaveName))
 		{
-			debug(LOG_ERROR, "Failed loadScriptState(%s)!", pSaveName);
+			debug(LOG_ERROR, "Failed loadScriptState(%s)!", ctx.pSaveName);
 			return false;
 		}
 	}
@@ -1304,18 +1350,17 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	dataClearSaveFlag();
 
 	//restore the level name for comparisons on next mission load up
-	if (psChangeLevel == nullptr)
+	if (ctx.psChangeLevel == nullptr)
 	{
 		psCurrLevel = psNewLevel;
 	}
 	else
 	{
-		psCurrLevel = psChangeLevel;
+		psCurrLevel = ctx.psChangeLevel;
 	}
 
 	// Copy this info to be used by the crash handler for the dump file
 	char buf[256];
-
 	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName.c_str());
 	addDumpInfo(buf);
 
@@ -1336,7 +1381,64 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	ActivityManager::instance().loadedLevel(psCurrLevel->type, mapNameWithoutTechlevel(getLevelName()));
+	return true;
+}
 
+// load up the data for a level
+bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
+{
+	ASSERT_OR_RETURN(false, name != nullptr, "null level name provided");
+	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == nullptr ? "builtin" : hash->toString().c_str(), pSaveName != nullptr ? pSaveName : "<none>", (int)saveType);
+	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
+	{
+		if (!levReleaseAll())
+		{
+			debug(LOG_ERROR, "Failed to unload old data");
+			return false;
+		}
+	}
+
+	// Ensure that the LC_NUMERIC locale setting is "C"
+	ASSERT(strcmp(setlocale(LC_NUMERIC, NULL), "C") == 0, "The LC_NUMERIC locale is not \"C\" - this may break level-data parsing depending on the user's system locale settings");
+
+	levelLoadType = saveType;
+
+	LevLoadContext ctx;
+	ctx.name = name;
+	ctx.hash = hash;
+	ctx.pSaveName = pSaveName;
+	ctx.saveType = saveType;
+
+	switch (levResolveDatasetForLoad(ctx))
+	{
+	case LevDatasetResolveResult::Failed:
+		return false;
+	case LevDatasetResolveResult::SingleWRF:
+		return levLoadSingleWRF(ctx.name.c_str());
+	case LevDatasetResolveResult::Ok:
+		break;
+	}
+
+	if (!levPrepareLoadEnvironment(ctx.psNewLevel, ctx.pSaveName))
+	{
+		return false;
+	}
+	if (!levLoadBaseDatasetAndStageOne(ctx.psNewLevel))
+	{
+		return false;
+	}
+	if (!levLoadMissionBranchesBeforeMainLoop(ctx))
+	{
+		return false;
+	}
+	if (!levLoadMissionDataLoop(ctx))
+	{
+		return false;
+	}
+	if (!levFinalizeLevelLoad(ctx))
+	{
+		return false;
+	}
 	return true;
 }
 
