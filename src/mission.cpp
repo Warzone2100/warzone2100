@@ -795,59 +795,17 @@ void restoreMissionData()
 		ASSERT(false, "game type isn't campaign, but we are in a campaign game!");
 		game.type = LEVEL_TYPE::CAMPAIGN;	// fix the issue, since it is obviously a bug
 	}
-	//restore the game pointers
+	//restore the game pointers.
+	//swap mission data over
+	gameWorld = std::move(mission.gameWorld);
+	mission.gameWorld = {};
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		gameWorld.objects.droids[inc] = std::move(mission.gameWorld.objects.droids[inc]);
-		mission.gameWorld.objects.droids[inc].clear();
 		for (DROID* psObj : gameWorld.objects.droids[inc])
 		{
 			psObj->died = false;	//make sure the died flag is not set
 		}
-
-		gameWorld.objects.structures[inc] = std::move(mission.gameWorld.objects.structures[inc]);
-		mission.gameWorld.objects.structures[inc].clear();
-
-		gameWorld.objects.flags[inc] = std::move(mission.gameWorld.objects.flags[inc]);
-		mission.gameWorld.objects.flags[inc].clear();
-
-		gameWorld.objects.extractors[inc] = std::move(mission.gameWorld.objects.extractors[inc]);
-		mission.gameWorld.objects.extractors[inc].clear();
 	}
-	gameWorld.objects.features[0] = std::move(mission.gameWorld.objects.features[0]);
-	gameWorld.objects.sensors[0] = std::move(mission.gameWorld.objects.sensors[0]);
-	gameWorld.objects.oils[0] = std::move(mission.gameWorld.objects.oils[0]);
-	mission.gameWorld.objects.features[0].clear();
-	mission.gameWorld.objects.sensors[0].clear();
-	mission.gameWorld.objects.oils[0].clear();
-	//swap mission data over
-
-	gameWorld.map.tiles = std::move(mission.gameWorld.map.tiles);
-
-	gameWorld.map.width = mission.gameWorld.map.width;
-	gameWorld.map.height = mission.gameWorld.map.height;
-	for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
-	{
-		gameWorld.map.blockMap[i] = std::move(mission.gameWorld.map.blockMap[i]);
-	}
-	for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
-	{
-		gameWorld.map.auxMap[i] = std::move(mission.gameWorld.map.auxMap[i]);
-	}
-	gameWorld.map.scroll.minX = mission.gameWorld.map.scroll.minX;
-	gameWorld.map.scroll.minY = mission.gameWorld.map.scroll.minY;
-	gameWorld.map.scroll.maxX = mission.gameWorld.map.scroll.maxX;
-	gameWorld.map.scroll.maxY = mission.gameWorld.map.scroll.maxY;
-	std::swap(mission.gameWorld.map.gateways, gwGetGateways(gameWorld.map));
-	//and clear the mission pointers
-	mission.gameWorld.map.tiles	= nullptr;
-	mission.gameWorld.map.width	= 0;
-	mission.gameWorld.map.height	= 0;
-	mission.gameWorld.map.scroll.minX	= 0;
-	mission.gameWorld.map.scroll.minY	= 0;
-	mission.gameWorld.map.scroll.maxX	= 0;
-	mission.gameWorld.map.scroll.maxY	= 0;
-	mission.gameWorld.map.gateways.clear();
 
 	//reset the current structure lists
 	setCurrentStructQuantity(gameWorld.objects, false);
