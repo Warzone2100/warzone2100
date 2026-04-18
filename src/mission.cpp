@@ -745,36 +745,12 @@ static void saveMissionData()
 	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
-	mission.gameWorld.map.tiles = std::move(gameWorld.map.tiles);
-	mission.gameWorld.map.width = gameWorld.map.width;
-	mission.gameWorld.map.height = gameWorld.map.height;
-	for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
-	{
-		mission.gameWorld.map.blockMap[i] = std::move(gameWorld.map.blockMap[i]);
-	}
-	for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
-	{
-		mission.gameWorld.map.auxMap[i] = std::move(gameWorld.map.auxMap[i]);
-	}
-	mission.gameWorld.map.scroll.minX = gameWorld.map.scroll.minX;
-	mission.gameWorld.map.scroll.minY = gameWorld.map.scroll.minY;
-	mission.gameWorld.map.scroll.maxX = gameWorld.map.scroll.maxX;
-	mission.gameWorld.map.scroll.maxY = gameWorld.map.scroll.maxY;
-	std::swap(mission.gameWorld.map.gateways, gwGetGateways(gameWorld.map));
+	mission.gameWorld = std::move(gameWorld);
+	gameWorld = {};
+
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
-
-	for (unsigned int inc = 0; inc < MAX_PLAYERS; ++inc)
-	{
-		mission.gameWorld.objects.structures[inc] = gameWorld.objects.structures[inc];
-		mission.gameWorld.objects.droids[inc] = gameWorld.objects.droids[inc];
-		mission.gameWorld.objects.flags[inc] = gameWorld.objects.flags[inc];
-		mission.gameWorld.objects.extractors[inc] = gameWorld.objects.extractors[inc];
-	}
-	mission.gameWorld.objects.features[0] = gameWorld.objects.features[0];
-	mission.gameWorld.objects.sensors[0] = gameWorld.objects.sensors[0];
-	mission.gameWorld.objects.oils[0] = gameWorld.objects.oils[0];
 
 	mission.playerX = playerPos.p.x;
 	mission.playerY = playerPos.p.z;
