@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "gateway.h"
 
+#include <array>
 #include <memory>
 
 #include <stdint.h>
@@ -83,8 +84,8 @@ struct WorldMapState
 	std::unique_ptr<MAPTILE[]> tiles;
 	int32_t width = 0;
 	int32_t height = 0;
-	std::unique_ptr<uint8_t[]> blockMap[AUX_MAX];
-	std::unique_ptr<uint8_t[]> auxMap[MAX_PLAYERS + AUX_MAX]; ///< yes, we waste one element... eyes wide open... makes API nicer
+	std::array<std::unique_ptr<uint8_t[]>, AUX_MAX> blockMap;
+	std::array<std::unique_ptr<uint8_t[]>, MAX_PLAYERS + AUX_MAX> auxMap; ///< yes, we waste one element... eyes wide open... makes API nicer
 	WorldScrollLimits scroll;
 	/// the list of gateways on the current map
 	GATEWAY_LIST gateways;

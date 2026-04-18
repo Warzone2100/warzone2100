@@ -358,11 +358,11 @@ bool missionShutDown()
 		gameWorld.map.tiles = std::move(mission.gameWorld.map.tiles);
 		gameWorld.map.width = mission.gameWorld.map.width;
 		gameWorld.map.height = mission.gameWorld.map.height;
-		for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
+		for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
 		{
 			gameWorld.map.blockMap[i] = std::move(mission.gameWorld.map.blockMap[i]);
 		}
-		for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
+		for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
 		{
 			gameWorld.map.auxMap[i] = std::move(mission.gameWorld.map.auxMap[i]);
 		}
@@ -776,11 +776,11 @@ static void saveMissionData()
 	mission.gameWorld.map.tiles = std::move(gameWorld.map.tiles);
 	mission.gameWorld.map.width = gameWorld.map.width;
 	mission.gameWorld.map.height = gameWorld.map.height;
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
+	for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
 	{
 		mission.gameWorld.map.blockMap[i] = std::move(gameWorld.map.blockMap[i]);
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
+	for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
 	{
 		mission.gameWorld.map.auxMap[i] = std::move(gameWorld.map.auxMap[i]);
 	}
@@ -878,11 +878,11 @@ void restoreMissionData()
 
 	gameWorld.map.width = mission.gameWorld.map.width;
 	gameWorld.map.height = mission.gameWorld.map.height;
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
+	for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
 	{
 		gameWorld.map.blockMap[i] = std::move(mission.gameWorld.map.blockMap[i]);
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
+	for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
 	{
 		gameWorld.map.auxMap[i] = std::move(mission.gameWorld.map.auxMap[i]);
 	}
@@ -1388,11 +1388,11 @@ void swapMissionPointers()
 	std::swap(gameWorld.map.tiles, mission.gameWorld.map.tiles);
 	std::swap(gameWorld.map.width,   mission.gameWorld.map.width);
 	std::swap(gameWorld.map.height,  mission.gameWorld.map.height);
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.blockMap); ++i)
+	for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
 	{
 		std::swap(gameWorld.map.blockMap[i], mission.gameWorld.map.blockMap[i]);
 	}
-	for (int i = 0; i < ARRAY_SIZE(mission.gameWorld.map.auxMap); ++i)
+	for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
 	{
 		std::swap(gameWorld.map.auxMap[i],   mission.gameWorld.map.auxMap[i]);
 	}
