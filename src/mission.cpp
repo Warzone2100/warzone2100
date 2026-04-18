@@ -1313,18 +1313,15 @@ static void processMission()
 			addDroid(psDroid, mission.gameWorld.objects.droids);
 			droidX = getHomeLandingX();
 			droidY = getHomeLandingY();
-			// Swap the droid and map pointers
-			swapMissionPointers();
 
-			pickRes = pickHalfATile(gameWorld, &droidX, &droidY, LOOK_FOR_EMPTY_TILE);
+			pickRes = pickHalfATile(mission.gameWorld, &droidX, &droidY, LOOK_FOR_EMPTY_TILE);
 			ASSERT(pickRes != NO_FREE_TILE, "processMission: Unable to find a free location");
 			x = (UWORD)world_coord(droidX);
 			y = (UWORD)world_coord(droidY);
-			droidSetPosition(psDroid, gameWorld.map, x, y);
-			ASSERT(worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
-			updateDroidOrientation(psDroid, gameWorld.map);
-			// Swap the droid and map pointers back again
-			swapMissionPointers();
+			droidSetPosition(psDroid, mission.gameWorld.map, x, y);
+			ASSERT(worldOnMap(mission.gameWorld.map, psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
+			updateDroidOrientation(psDroid, mission.gameWorld.map);
+
 			psDroid->selected = false;
 			// This is mainly for VTOLs
 			setDroidBase(psDroid, nullptr);
