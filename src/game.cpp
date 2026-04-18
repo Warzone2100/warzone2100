@@ -3008,12 +3008,12 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			missionScrollMaxY = (UWORD)mission.gameWorld.map.scroll.maxY;
 		}
 
-		//load the map and the droids then swap pointers
+		//load the mission map and objects directly into mission.gameWorld
 
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		if (!mapLoad(aFileName, gameWorld.map))
+		if (!mapLoad(aFileName, mission.gameWorld.map))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			return false;
@@ -3024,7 +3024,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		strcat(aFileName, "misvis.bjo");
 
 		// Load in the visibility data from the chosen file
-		if (!readVisibilityData(aFileName, gameWorld.map))
+		if (!readVisibilityData(aFileName, mission.gameWorld.map))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
@@ -3036,7 +3036,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		strcat(aFileName, "mfeature.json");
 
 		//load the data into apsFeatureList
-		if (!loadSaveFeature2(aFileName, gameWorld))
+		if (!loadSaveFeature2(aFileName, mission.gameWorld))
 		{
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "mfeat.bjo");
@@ -3047,7 +3047,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
-			if (!loadSaveFeature(pFileData, fileSize, gameWorld))
+			if (!loadSaveFeature(pFileData, fileSize, mission.gameWorld))
 			{
 				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
@@ -3059,7 +3059,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		strcat(aFileName, "mstruct.json");
 
 		//load in the mission structures
-		if (!loadSaveStructure2(aFileName, gameWorld))
+		if (!loadSaveStructure2(aFileName, mission.gameWorld))
 		{
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "mstruct.bjo");
@@ -3071,7 +3071,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 				goto error;
 			}
 			//load the data into apsStructLists
-			if (!loadSaveStructure(pFileData, fileSize, gameWorld))
+			if (!loadSaveStructure(pFileData, fileSize, mission.gameWorld))
 			{
 				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
@@ -3079,15 +3079,15 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		}
 		else
 		{
-			structMap[aFileName] = &mission.gameWorld.objects.structures;	// we swap pointers below
+			structMap[aFileName] = &mission.gameWorld.objects.structures;
 		}
 
 		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mdroid.json");
-		if (loadSaveDroid(aFileName, gameWorld, gameWorld.objects.droids))
+		if (loadSaveDroid(aFileName, mission.gameWorld, mission.gameWorld.objects.droids))
 		{
-			droidMap[aFileName] = &mission.gameWorld.objects.droids; // need to swap here to read correct list later
+			droidMap[aFileName] = &mission.gameWorld.objects.droids;
 		}
 
 		/* after we've loaded in the units we need to redo the orientation because
@@ -3096,7 +3096,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		 */
 		for (player = 0; player < MAX_PLAYERS; ++player)
 		{
-			for (DROID* psCurr : gameWorld.objects.droids[player])
+			for (DROID* psCurr : mission.gameWorld.objects.droids[player])
 			{
 				if (psCurr->droidType != DROID_PERSON
 				    // && psCurr->droidType != DROID_CYBORG
@@ -3104,12 +3104,10 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 				    && (!psCurr->isTransporter())
 				    && psCurr->pos.x != INVALID_XY)
 				{
-					updateDroidOrientation(psCurr, gameWorld.map);
+					updateDroidOrientation(psCurr, mission.gameWorld.map);
 				}
 			}
 		}
-
-		swapMissionPointers();
 
 		//once the mission map has been loaded reset the mission scroll limits
 		if (saveGameVersion >= VERSION_29)
