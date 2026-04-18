@@ -3783,15 +3783,11 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 
 	if (saveGameOnMission)
 	{
-		//mission save swap the mission pointers and save the changes
-		swapMissionPointers();
-		//now save the map and droids
-
 		//save the map file
 		CurrentFileName[fileExtension] = '\0';
 		strcat(CurrentFileName, "mission.map");
 		/* Write the data to the file */
-		if (!writeMapFile(CurrentFileName, gameWorld.map))
+		if (!writeMapFile(CurrentFileName, mission.gameWorld.map))
 		{
 			debug(LOG_ERROR, "saveGame: writeMapFile(\"%s\") failed", CurrentFileName);
 			goto error;
@@ -3801,7 +3797,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		CurrentFileName[fileExtension] = '\0';
 		strcat(CurrentFileName, "misvis.bjo");
 		/* Write the data to the file */
-		if (!writeVisibilityData(CurrentFileName, gameWorld.map))
+		if (!writeVisibilityData(CurrentFileName, mission.gameWorld.map))
 		{
 			debug(LOG_ERROR, "saveGame: writeVisibilityData(\"%s\") failed", CurrentFileName);
 			goto error;
@@ -3811,7 +3807,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		CurrentFileName[fileExtension] = '\0';
 		strcat(CurrentFileName, "mstruct.json");
 		/*Write the data to the file*/
-		if (!writeStructFile(CurrentFileName, gameWorld.objects))
+		if (!writeStructFile(CurrentFileName, mission.gameWorld.objects))
 		{
 			debug(LOG_ERROR, "saveGame: writeStructFile(\"%s\") failed", CurrentFileName);
 			goto error;
@@ -3821,14 +3817,11 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 		CurrentFileName[fileExtension] = '\0';
 		strcat(CurrentFileName, "mfeature.json");
 		/*Write the data to the file*/
-		if (!writeFeatureFile(CurrentFileName, gameWorld.objects))
+		if (!writeFeatureFile(CurrentFileName, mission.gameWorld.objects))
 		{
 			debug(LOG_ERROR, "saveGame: writeFeatureFile(\"%s\") failed", CurrentFileName);
 			goto error;
 		}
-
-		//mission save swap back so we can restart the game
-		swapMissionPointers();
 	}
 
 	// strip the last filename
