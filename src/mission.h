@@ -81,8 +81,6 @@ bool missionLimboExpand();
 /** This is called mid Limbo mission via the script. */
 void resetLimboMission();
 
-void swapMissionPointers();
-
 // mission results.
 #define		IDTIMER_FORM			11000
 #define		IDTIMER_DISPLAY			11001

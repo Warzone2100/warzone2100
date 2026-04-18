@@ -396,7 +396,6 @@ void visRemoveVisibility(BASE_OBJECT *psObj, WorldMapState& mapState)
 	{
 		for (TILEPOS pos : psObj->watchedTiles)
 		{
-			// FIXME: the mapTile might have been swapped out, see swapMissionPointers()
 			MAPTILE *psTile = mapTile(mapState, pos.x, pos.y);
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
