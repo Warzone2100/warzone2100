@@ -2249,20 +2249,20 @@ static bool writeMapFile(const char *fileName, const WorldMapState& mapState);
 
 static bool loadWzMapDroidInit(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists);
+static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroidLists& ppsCurrentDroidLists);
 static bool loadSaveDroidPointers(const WzString &pFileName, PerPlayerDroidLists* ppsCurrentDroidLists);
 static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& ppsCurrentDroidLists);
 
-static bool loadSaveStructure(char *pFileData, UDWORD filesize);
+static bool loadSaveStructure(char *pFileData, UDWORD filesize, GameWorld& world);
 static bool loadSaveStructure2(const char *pFileName, GameWorld& world);
-static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding);
+static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, GameWorld& world);
 static bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists *ppList);
 static bool writeStructFile(const char *pFileName, const WorldObjectState& objState);
 
 static bool loadSaveTemplate(const char *pFileName);
 static bool writeTemplateFile(const char *pFileName);
 
-static bool loadSaveFeature(char *pFileData, UDWORD filesize);
+static bool loadSaveFeature(char *pFileData, UDWORD filesize, GameWorld& world);
 static bool writeFeatureFile(const char *pFileName, const WorldObjectState& objState);
 static bool loadSaveFeature2(const char *pFileName, GameWorld& world);
 static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId);
@@ -3047,7 +3047,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
 			}
-			if (!loadSaveFeature(pFileData, fileSize))
+			if (!loadSaveFeature(pFileData, fileSize, gameWorld))
 			{
 				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
@@ -3071,7 +3071,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 				goto error;
 			}
 			//load the data into apsStructLists
-			if (!loadSaveStructure(pFileData, fileSize))
+			if (!loadSaveStructure(pFileData, fileSize, gameWorld))
 			{
 				debug(LOG_ERROR, "Failed with: %s", aFileName);
 				goto error;
@@ -3085,7 +3085,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		// load in the mission droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mdroid.json");
-		if (loadSaveDroid(aFileName, gameWorld.objects.droids))
+		if (loadSaveDroid(aFileName, gameWorld, gameWorld.objects.droids))
 		{
 			droidMap[aFileName] = &mission.gameWorld.objects.droids; // need to swap here to read correct list later
 		}
@@ -3210,7 +3210,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		}
 		else
 		{
-			if (loadSaveDroid(aFileName, gameWorld.objects.droids))
+			if (loadSaveDroid(aFileName, gameWorld, gameWorld.objects.droids))
 			{
 				debug(LOG_SAVE, "Loaded new style droids");
 				droidMap[aFileName] = &gameWorld.objects.droids;	// load pointers later
@@ -3224,7 +3224,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (!loadSaveDroid(aFileName, gameWorld.objects.droids))
+		if (!loadSaveDroid(aFileName, gameWorld, gameWorld.objects.droids))
 		{
 			debug(LOG_ERROR, "failed to load %s", aFileName);
 			goto error;
@@ -3255,7 +3255,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 			strcat(aFileName, "mdroid.json");
 
 			// load the data into mission.apsDroidLists, if any
-			if (loadSaveDroid(aFileName, mission.gameWorld.objects.droids))
+			if (loadSaveDroid(aFileName, mission.gameWorld, mission.gameWorld.objects.droids))
 			{
 				droidMap[aFileName] = &mission.gameWorld.objects.droids;
 			}
@@ -3267,7 +3267,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		// load in the limbo droids, if any
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "limbo.json");
-		if (loadSaveDroid(aFileName, apsLimboDroids))
+		if (loadSaveDroid(aFileName, gameWorld, apsLimboDroids))
 		{
 			droidMap[aFileName] = &apsLimboDroids;
 		}
@@ -3306,7 +3306,7 @@ bool loadGame(const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem)
 		{
 			freeAllFlagPositions(gameWorld.objects);		//clear any flags put in during level loads
 		}
-		if (!loadWzMapStructure(*(data.get()), fixedMapIdToGeneratedId, moduleToBuilding))
+		if (!loadWzMapStructure(*(data.get()), fixedMapIdToGeneratedId, moduleToBuilding, gameWorld))
 		{
 			aFileName[fileExten] = '\0';
 			debug(LOG_ERROR, "Failed to load map structure init from map directory: %s", aFileName);
@@ -5629,7 +5629,7 @@ inline T getCompFromName_NullCompOnFail(COMPONENT_TYPE compType, const WzString 
 	return (index >= 0) ? static_cast<T>(index) : 0; // 0 to reference the null weapon / body / etc
 }
 
-static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrentDroidLists)
+static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroidLists& ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
 	{
@@ -5726,19 +5726,19 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
 		if (!onMission)
 		{
-			pos.x = clip(pos.x, world_coord(1), world_coord(gameWorld.map.width - 1));
-			pos.y = clip(pos.y, world_coord(1), world_coord(gameWorld.map.height - 1));
+			pos.x = clip(pos.x, world_coord(1), world_coord(world.map.width - 1));
+			pos.y = clip(pos.y, world_coord(1), world_coord(world.map.height - 1));
 		}
 
 		/* Create the Droid */
 		turnOffMultiMsg(true);
 		if (id > 0)
 		{
-			psDroid = reallyBuildDroid(gameWorld, psTemplate, pos, player, onMission, rot, id);
+			psDroid = reallyBuildDroid(world, psTemplate, pos, player, onMission, rot, id);
 		} else
 		{
 			// will generate a new id
-			psDroid = reallyBuildDroid(gameWorld, psTemplate, pos, player, onMission, rot);
+			psDroid = reallyBuildDroid(world, psTemplate, pos, player, onMission, rot);
 		}
 		ASSERT_OR_RETURN(false, psDroid != nullptr, "Failed to build unit %s", sortedList[i].second.toUtf8().c_str());
 		turnOffMultiMsg(false);
@@ -5817,7 +5817,7 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 				psDroid->selected = false;  // Droid should be visible in the transporter interface.
 				if (!psDroid->isTransporter())
 				{
-					visRemoveVisibility(psDroid, gameWorld.map); // should not have visibility data when in a transporter
+					visRemoveVisibility(psDroid, world.map); // should not have visibility data when in a transporter
 				}
 			}
 		}
@@ -5917,11 +5917,11 @@ static bool loadSaveDroid(const char *pFileName, PerPlayerDroidLists& ppsCurrent
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
 		{
 			psDroid->sMove.Status = MOVEINACTIVE;
-			fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
+			fpathDroidRoute(psDroid, world.map, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
 			psDroid->sMove.Status = MOVEWAITROUTE;
 
 			// Droid might be on a mission, so finish pathfinding now, in case pointers swap and map size changes.
-			FPATH_RETVAL dr = fpathDroidRoute(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
+			FPATH_RETVAL dr = fpathDroidRoute(psDroid, world.map, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
 			if (dr == FPR_OK)
 			{
 				psDroid->sMove.Status = MOVENAVIGATE;
@@ -6137,7 +6137,7 @@ static bool writeDroidFile(const char *pFileName, const PerPlayerDroidLists& pps
 
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveStructure(char *pFileData, UDWORD filesize)
+bool loadSaveStructure(char *pFileData, UDWORD filesize, GameWorld& world)
 {
 	STRUCT_SAVEHEADER		*psHeader;
 	SAVE_STRUCTURE_V2		*psSaveStructure, sSaveStructure;
@@ -6241,7 +6241,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			psStructure = getTileStructure(gameWorld.map, map_coord(psSaveStructure->x), map_coord(psSaveStructure->y));
+			psStructure = getTileStructure(world.map, map_coord(psSaveStructure->x), map_coord(psSaveStructure->y));
 			if (psStructure == nullptr)
 			{
 				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->player);
@@ -6251,20 +6251,20 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 		}
 
 		//check not trying to build too near the edge
-		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > gameWorld.map.width - TOO_NEAR_EDGE)
+		if (map_coord(psSaveStructure->x) < TOO_NEAR_EDGE || map_coord(psSaveStructure->x) > world.map.width - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, x coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
 			continue;
 		}
-		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > gameWorld.map.height - TOO_NEAR_EDGE)
+		if (map_coord(psSaveStructure->y) < TOO_NEAR_EDGE || map_coord(psSaveStructure->y) > world.map.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, y coord too near the edge of the map. id - %d", getSaveStructNameV19((SAVE_STRUCTURE_V17 *)psSaveStructure), psSaveStructure->id);
 			//ignore this
 			continue;
 		}
 
-		psStructure = buildStructureDir(gameWorld, psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
+		psStructure = buildStructureDir(world, psStats, psSaveStructure->x, psSaveStructure->y, DEG(psSaveStructure->direction), psSaveStructure->player, true);
 		ASSERT(psStructure, "Unable to create structure");
 		if (!psStructure)
 		{
@@ -6313,7 +6313,7 @@ static UDWORD getResearchIdFromName(const WzString &name)
 	return NULL_ID;
 }
 
-static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding)
+static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, GameWorld& world)
 {
 	uint32_t NumberOfSkippedStructures = 0;
 	auto pStructures = wzMap.mapStructures();
@@ -6332,7 +6332,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 		//for modules - need to check the base structure exists
 		if (IsStatExpansionModule(psStats))
 		{
-			STRUCTURE *psStructure = getTileStructure(gameWorld.map, map_coord(structure.position.x), map_coord(structure.position.y));
+			STRUCTURE *psStructure = getTileStructure(world.map, map_coord(structure.position.x), map_coord(structure.position.y));
 			if (psStructure == nullptr)
 			{
 				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", structure.name.c_str(), structure.player);
@@ -6340,8 +6340,8 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			}
 		}
 		//check not trying to build too near the edge
-		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > gameWorld.map.width - TOO_NEAR_EDGE
-		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > gameWorld.map.height - TOO_NEAR_EDGE)
+		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > world.map.width - TOO_NEAR_EDGE
+		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > world.map.height - TOO_NEAR_EDGE)
 		{
 			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.c_str());
 			continue; // skip it
@@ -6369,7 +6369,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", structure.id.value());
 			}
 		}
-		psStructure = buildStructureDir(gameWorld, psStats, structure.position.x, structure.position.y, structure.direction, player, true, newID, true);
+		psStructure = buildStructureDir(world, psStats, structure.position.x, structure.position.y, structure.direction, player, true, newID, true);
 		if (psStructure == nullptr)
 		{
 			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.c_str());
@@ -6401,7 +6401,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 			}
 			for (int i = 0; i < structure.modules; ++i)
 			{
-				buildStructure(gameWorld, moduleStat, structure.position.x, structure.position.y, player, true);
+				buildStructure(world, moduleStat, structure.position.x, structure.position.y, player, true);
 			}
 		}
 		buildingComplete(psStructure);
@@ -6978,7 +6978,7 @@ bool loadSaveStructurePointers(const WzString& filename, PerPlayerStructureLists
 }
 
 // -----------------------------------------------------------------------------------------
-bool loadSaveFeature(char *pFileData, UDWORD filesize)
+bool loadSaveFeature(char *pFileData, UDWORD filesize, GameWorld& world)
 {
 	FEATURE_SAVEHEADER		*psHeader;
 	SAVE_FEATURE_V14			*psSaveFeature;
@@ -7064,7 +7064,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(gameWorld.map, psStats, psSaveFeature->x, psSaveFeature->y, true, psSaveFeature->id);
+		pFeature = buildFeature(world.map, psStats, psSaveFeature->x, psSaveFeature->y, true, psSaveFeature->id);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);

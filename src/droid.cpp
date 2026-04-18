@@ -3879,13 +3879,13 @@ bool droidOnMap(const DROID *psDroid)
 }
 
 /** Teleport a droid to a new position on the map */
-void droidSetPosition(DROID *psDroid, int x, int y)
+void droidSetPosition(DROID *psDroid, WorldMapState& mapState, int x, int y)
 {
 	psDroid->pos.x = x;
 	psDroid->pos.y = y;
-	psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
+	psDroid->pos.z = map_Height(mapState, psDroid->pos.x, psDroid->pos.y);
 	initDroidMovement(psDroid);
-	visTilesUpdate((BASE_OBJECT *)psDroid, gameWorld.map);
+	visTilesUpdate((BASE_OBJECT *)psDroid, mapState);
 }
 
 /** Check validity of a droid. Crash hard if it fails. */

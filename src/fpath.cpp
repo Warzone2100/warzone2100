@@ -353,9 +353,9 @@ bool fpathBaseBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PR
 	return (blockTile(mapState, x, y, MAX(0, mapIndex - MAX_PLAYERS)) & unitbits) != 0;  // finally check if move is blocked by propulsion related factors
 }
 
-bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType)
+bool fpathDroidBlockingTile(DROID *psDroid, const WorldMapState& mapState, int x, int y, FPATH_MOVETYPE moveType)
 {
-	return fpathBaseBlockingTile(gameWorld.map, x, y, psDroid->getPropulsionStats()->propulsionType, psDroid->player, moveType);
+	return fpathBaseBlockingTile(mapState, x, y, psDroid->getPropulsionStats()->propulsionType, psDroid->player, moveType);
 }
 
 // Check if the map tile at a location blocks a droid
@@ -417,7 +417,7 @@ void fpathRemoveDroidData(int id)
 	pathResults.erase(id);
 }
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
+static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
@@ -443,7 +443,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, in
 	}
 #endif
 
-	if (!worldOnMap(gameWorld.map, startX, startY) || !worldOnMap(gameWorld.map, tX, tY))
+	if (!worldOnMap(mapState, startX, startY) || !worldOnMap(mapState, tX, tY))
 	{
 		debug(LOG_ERROR, "Droid trying to find path to/from invalid location (%d %d) -> (%d %d).", startX, startY, tX, tY);
 		objTrace(id, "Invalid start/end.");
@@ -541,7 +541,7 @@ queuePathfinding:
 
 
 // Find a route for an DROID to a location in world coordinates
-FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
 	bool acceptNearest;
 	PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
@@ -558,12 +558,12 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
-	StructureBounds dstStructure = getStructureBounds(worldTile(gameWorld.map, endPos.xy())->psObject);
+	StructureBounds dstStructure = getStructureBounds(worldTile(mapState, endPos.xy())->psObject);
 	const auto droidPropulsionType = psDroid->getPropulsionStats()->propulsionType;
-	startPos = findNonblockingPosition(gameWorld.map, startPos, droidPropulsionType, psDroid->player, moveType);
+	startPos = findNonblockingPosition(mapState, startPos, droidPropulsionType, psDroid->player, moveType);
 	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 	{
-		endPos   = findNonblockingPosition(gameWorld.map, endPos, droidPropulsionType, psDroid->player, moveType);
+		endPos   = findNonblockingPosition(mapState, endPos, droidPropulsionType, psDroid->player, moveType);
 	}
 	objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
 	switch (psDroid->order.type)
@@ -581,7 +581,7 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		acceptNearest = true;
 		break;
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
+	return fpathRoute(mapState, &psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
 	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
 }
 
@@ -660,7 +660,7 @@ static size_t fpathResultQueueLength()
 // Only used by fpathTest.
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, getStructureBounds((BASE_OBJECT *)nullptr));
+	return fpathRoute(gameWorld.map, psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, getStructureBounds((BASE_OBJECT *)nullptr));
 }
 
 void fpathTest(int x, int y, int x2, int y2)

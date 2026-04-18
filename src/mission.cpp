@@ -1320,7 +1320,7 @@ static void processMission()
 			ASSERT(pickRes != NO_FREE_TILE, "processMission: Unable to find a free location");
 			x = (UWORD)world_coord(droidX);
 			y = (UWORD)world_coord(droidY);
-			droidSetPosition(psDroid, x, y);
+			droidSetPosition(psDroid, gameWorld.map, x, y);
 			ASSERT(worldOnMap(gameWorld.map, psDroid->pos.x, psDroid->pos.y), "the droid is not on the map");
 			updateDroidOrientation(psDroid, gameWorld.map);
 			// Swap the droid and map pointers back again
@@ -1680,7 +1680,7 @@ static void missionResetDroids()
 					int wx = world_coord(x);
 					int wy = world_coord(y);
 
-					droidSetPosition(psDroid, wx, wy);
+					droidSetPosition(psDroid, gameWorld.map, wx, wy);
 					placed = true;
 				}
 			}
@@ -1703,7 +1703,7 @@ static void missionResetDroids()
 							int wx = world_coord(x);
 							int wy = world_coord(y);
 
-							droidSetPosition(psDroid, wx, wy);
+							droidSetPosition(psDroid, gameWorld.map, wx, wy);
 							placed = true;
 						}
 						break;
@@ -1804,7 +1804,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y)
 			//add it back into current droid lists
 			addDroid(psDroid, *ppCurrentList);
 
-			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
+			droidSetPosition(psDroid, gameWorld.map, world_coord(droidX), world_coord(droidY));
 			updateDroidOrientation(psDroid, gameWorld.map);
 
 			//reset droid orders

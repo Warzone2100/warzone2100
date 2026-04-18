@@ -253,7 +253,7 @@ static bool moveDroidToBase(DROID *psDroid, UDWORD x, UDWORD y, bool bFormation,
 	}
 	else
 	{
-		retVal = fpathDroidRoute(psDroid, x, y, moveType);
+		retVal = fpathDroidRoute(psDroid, gameWorld.map, x, y, moveType);
 	}
 
 	if (retVal == FPR_OK)
