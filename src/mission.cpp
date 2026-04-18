@@ -1384,34 +1384,7 @@ void processMissionLimbo()
 void swapMissionPointers()
 {
 	debug(LOG_SAVE, "called");
-
-	std::swap(gameWorld.map.tiles, mission.gameWorld.map.tiles);
-	std::swap(gameWorld.map.width,   mission.gameWorld.map.width);
-	std::swap(gameWorld.map.height,  mission.gameWorld.map.height);
-	for (int i = 0; i < mission.gameWorld.map.blockMap.size(); ++i)
-	{
-		std::swap(gameWorld.map.blockMap[i], mission.gameWorld.map.blockMap[i]);
-	}
-	for (int i = 0; i < mission.gameWorld.map.auxMap.size(); ++i)
-	{
-		std::swap(gameWorld.map.auxMap[i],   mission.gameWorld.map.auxMap[i]);
-	}
-	//swap gateway zones
-	std::swap(mission.gameWorld.map.gateways, gwGetGateways(gameWorld.map));
-	std::swap(gameWorld.map.scroll.minX, mission.gameWorld.map.scroll.minX);
-	std::swap(gameWorld.map.scroll.minY, mission.gameWorld.map.scroll.minY);
-	std::swap(gameWorld.map.scroll.maxX, mission.gameWorld.map.scroll.maxX);
-	std::swap(gameWorld.map.scroll.maxY, mission.gameWorld.map.scroll.maxY);
-	for (unsigned inc = 0; inc < MAX_PLAYERS; inc++)
-	{
-		std::swap(gameWorld.objects.droids[inc],     mission.gameWorld.objects.droids[inc]);
-		std::swap(gameWorld.objects.structures[inc],    mission.gameWorld.objects.structures[inc]);
-		std::swap(gameWorld.objects.flags[inc],   mission.gameWorld.objects.flags[inc]);
-		std::swap(gameWorld.objects.extractors[inc], mission.gameWorld.objects.extractors[inc]);
-	}
-	std::swap(gameWorld.objects.features[0],   mission.gameWorld.objects.features[0]);
-	std::swap(gameWorld.objects.sensors[0], mission.gameWorld.objects.sensors[0]);
-	std::swap(gameWorld.objects.oils[0],    mission.gameWorld.objects.oils[0]);
+	std::swap(gameWorld, mission.gameWorld);
 }
 
 void endMission()
