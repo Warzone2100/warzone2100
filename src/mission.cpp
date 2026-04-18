@@ -771,8 +771,6 @@ static void saveMissionData()
 	This routine frees the memory for the offworld mission map (in the call to mapShutdown)
 
 	- so when this routine is called we must still be set to the offworld map data
-	i.e. We shoudn't have called SwapMissionPointers()
-
 */
 void restoreMissionData()
 {
@@ -1278,16 +1276,6 @@ void processMissionLimbo()
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
-}
-
-/*switch the pointers for the map and droid lists so that droid placement
- and orientation can occur on the map they will appear on*/
-// NOTE: This is one huge hack for campaign games!
-// Pay special attention on what is getting swapped!
-void swapMissionPointers()
-{
-	debug(LOG_SAVE, "called");
-	std::swap(gameWorld, mission.gameWorld);
 }
 
 void endMission()
