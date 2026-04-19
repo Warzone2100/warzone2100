@@ -64,7 +64,7 @@ void processVisibility();  ///< Calls processVisibilitySelf and processVisibilit
 // update the visibility reduction
 void visUpdateLevel();
 
-void setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player);
+void setUnderTilesVis(BASE_OBJECT *psObj, WorldMapState& mapState, UDWORD player);
 
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj);
 void visRemoveVisibility(BASE_OBJECT *psObj, WorldMapState& mapState);

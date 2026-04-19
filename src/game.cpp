@@ -6270,7 +6270,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize, GameWorld& world)
 		psStructure->status = (STRUCT_STATES)psSaveStructure->status;
 		if (psStructure->status == SS_BUILT)
 		{
-			buildingComplete(psStructure);
+			buildingComplete(psStructure, world);
 		}
 		if (psStructure->pStructureType->type == REF_HQ)
 		{
@@ -6397,7 +6397,7 @@ static bool loadWzMapStructure(WzMap::Map& wzMap, std::unordered_map<UDWORD, UDW
 				buildStructure(world, moduleStat, structure.position.x, structure.position.y, player, true);
 			}
 		}
-		buildingComplete(psStructure);
+		buildingComplete(psStructure, world);
 		if (psStructure->pStructureType->type == REF_HQ)
 		{
 			scriptSetStartPos(player, psStructure->pos.x, psStructure->pos.y);
@@ -6632,10 +6632,10 @@ static bool loadSaveStructure2(const char *pFileName, GameWorld& world)
 			switch (psStructure->pStructureType->type)
 			{
 			case REF_POWER_GEN:
-				checkForResExtractors(psStructure);
+				checkForResExtractors(psStructure, world.objects);
 				break;
 			case REF_RESOURCE_EXTRACTOR:
-				checkForPowerGen(psStructure);
+				checkForPowerGen(psStructure, world.objects);
 				break;
 			default:
 				//do nothing for factories etc
@@ -6656,7 +6656,7 @@ static bool loadSaveStructure2(const char *pFileName, GameWorld& world)
 		psStructure->status = (STRUCT_STATES)ini.value("status", SS_BUILT).toInt();
 		if (psStructure->status == SS_BUILT)
 		{
-			buildingComplete(psStructure);
+			buildingComplete(psStructure, world);
 		}
 		ini.endGroup();
 	}
@@ -7057,7 +7057,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize, GameWorld& world)
 			continue;
 		}
 		//create the Feature
-		pFeature = buildFeature(world.map, psStats, psSaveFeature->x, psSaveFeature->y, true, psSaveFeature->id);
+		pFeature = buildFeature(world, psStats, psSaveFeature->x, psSaveFeature->y, true, psSaveFeature->id);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", psSaveFeature->name);
@@ -7114,7 +7114,7 @@ static bool loadWzMapFeature(WzMap::Map &wzMap, std::unordered_map<UDWORD, UDWOR
 				debug(LOG_ERROR, "Found duplicate hard-coded object ID in map data: %" PRIu32 "", feature.id.value());
 			}
 		}
-		pFeature = buildFeature(gameWorld.map, &*psStats, feature.position.x, feature.position.y, true, newID);
+		pFeature = buildFeature(gameWorld, &*psStats, feature.position.x, feature.position.y, true, newID);
 		if (!pFeature)
 		{
 			debug(LOG_ERROR, "Unable to create feature %s", feature.name.c_str());
@@ -7174,11 +7174,11 @@ bool loadSaveFeature2(const char *pFileName, GameWorld& world)
 		int id = ini.value("id", -1).toInt();
 		if (id > 0)
 		{
-			pFeature = buildFeature(world.map, psStats, pos.x, pos.y, true, id);
+			pFeature = buildFeature(world, psStats, pos.x, pos.y, true, id);
 		}
 		else
 		{
-			pFeature = buildFeature(world.map, psStats, pos.x, pos.y, true);
+			pFeature = buildFeature(world, psStats, pos.x, pos.y, true);
 		}
 		if (!pFeature)
 		{

@@ -117,15 +117,15 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 /// not heap-allocated and thus doesn't have a stable address!
 nonstd::optional<STRUCTURE> buildBlueprint(WorldMapState& mapState, STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding, bool bMission);
+void structureUpdate(STRUCTURE *psBuilding, GameWorld& world);
 
 /* Remove a structure and free it's memory */
-bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
+bool destroyStruct(STRUCTURE *psDel, unsigned impactTime, GameWorld& world);
 
 // remove a structure from a game without any visible effects
 // bDestroy = true if the object is to be destroyed
 // (for example used to change the type of wall at a location)
-bool removeStruct(STRUCTURE *psDel, bool bDestroy);
+bool removeStruct(STRUCTURE *psDel, bool bDestroy, GameWorld& world);
 
 //fills the list with Structures that can be built
 std::vector<STRUCTURE_STATS *> fillStructureList(const WorldObjectState& objState, UDWORD selectedPlayer, UDWORD limit, bool showFavorites);
@@ -140,7 +140,7 @@ bool validLocation(GameWorld& world, BASE_STATS *psStats, Vector2i pos, uint16_t
 bool isWall(STRUCTURE_TYPE type);                                    ///< Structure is a wall. Not completely sure it handles all cases.
 bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Structure can be built on walls. Not completely sure it handles all cases.
 
-void alignStructure(STRUCTURE *psBuilding);
+void alignStructure(STRUCTURE *psBuilding, WorldMapState& mapState);
 
 /* set the current number of structures of each type built */
 void setCurrentStructQuantity(const WorldObjectState& objState, bool displayError);
@@ -187,11 +187,11 @@ bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle,
 bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
-void buildingComplete(STRUCTURE *psBuilding);
+void buildingComplete(STRUCTURE *psBuilding, GameWorld& world);
 
 // these functions are used in game.c inplace of  building complete
-void checkForResExtractors(STRUCTURE *psPowerGen);
-void checkForPowerGen(STRUCTURE *psPowerGen);
+void checkForResExtractors(STRUCTURE *psPowerGen, WorldObjectState& objState);
+void checkForPowerGen(STRUCTURE *psPowerGen, WorldObjectState& objState);
 
 uint16_t countPlayerUnusedDerricks(const WorldObjectState& objState);
 
@@ -207,12 +207,12 @@ STRUCTURE_STATS *getModuleStat(const STRUCTURE *psStruct);
 /*called when a Res extractor is destroyed or runs out of power or is disconnected
 adjusts the owning Power Gen so that it can link to a different Res Extractor if one
 is available*/
-void releaseResExtractor(STRUCTURE *psRelease);
+void releaseResExtractor(STRUCTURE *psRelease, WorldObjectState& objState);
 
 /*called when a Power Gen is destroyed or is disconnected
 adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
-void releasePowerGen(STRUCTURE *psRelease);
+void releasePowerGen(STRUCTURE *psRelease, WorldObjectState& objState);
 
 //print some info at the top of the screen dependent on the structure
 void printStructureInfo(STRUCTURE *psStructure);

@@ -793,7 +793,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 			/* Make sure all tiles under a feature/structure become visible when you see it */
 			if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE)
 			{
-				setUnderTilesVis(psObj, player);
+				setUnderTilesVis(psObj, gameWorld.map, player);
 			}
 
 			// if a feature has just become visible set the message blips
@@ -900,7 +900,7 @@ void processVisibility()
 	}
 }
 
-void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player)
+void	setUnderTilesVis(BASE_OBJECT *psObj, WorldMapState& mapState, UDWORD player)
 {
 	UDWORD		i, j;
 	UDWORD		mapX, mapY, width, breadth;
@@ -937,7 +937,7 @@ void	setUnderTilesVis(BASE_OBJECT *psObj, UDWORD player)
 	{
 		for (j = 0; j < breadth + 1; j++)  // + 1 because visibility is for top left of tile.
 		{
-			psTile = mapTile(gameWorld.map, mapX + i, mapY + j);
+			psTile = mapTile(mapState, mapX + i, mapY + j);
 			if (psTile)
 			{
 				psTile->tileExploredBits |= alliancebits[player];

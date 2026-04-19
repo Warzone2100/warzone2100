@@ -2023,7 +2023,7 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 		SCRIPT_ASSERT(nullptr, context, map_coord(psFeat->pos.x) != x || map_coord(psFeat->pos.y) != y,
 		              "Building feature on tile already occupied");
 	}
-	FEATURE *psFeature = buildFeature(gameWorld.map, psStats, world_coord(x), world_coord(y), false);
+	FEATURE *psFeature = buildFeature(gameWorld, psStats, world_coord(x), world_coord(y), false);
 	return psFeature;
 }
 
@@ -3064,7 +3064,7 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
-	return removeStruct(psStruct, true);
+	return removeStruct(psStruct, true, gameWorld);
 }
 
 //-- ## removeObject(gameObject[, sfx])
@@ -3158,7 +3158,7 @@ wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(s
 	if (psStruct)
 	{
 		psStruct->status = SS_BUILT;
-		buildingComplete(psStruct);
+		buildingComplete(psStruct, gameWorld);
 		return psStruct;
 	}
 	return nullptr;
@@ -4836,9 +4836,9 @@ void wzapi::processScriptQueuedObjectRemovals()
 		{
 			switch (psObj->type)
 			{
-			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime); break;
-			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime); break;
-			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime); break;
+			case OBJ_STRUCTURE: destroyStruct((STRUCTURE*)psObj, gameTime, gameWorld); break;
+			case OBJ_DROID: destroyDroid((DROID*)psObj, gameTime, gameWorld); break;
+			case OBJ_FEATURE: destroyFeature((FEATURE*)psObj, gameTime, gameWorld); break;
 			default: ASSERT(false, "Wrong game object type"); break;
 			}
 		}
@@ -4846,9 +4846,9 @@ void wzapi::processScriptQueuedObjectRemovals()
 		{
 			switch (psObj->type)
 			{
-			case OBJ_STRUCTURE: removeStruct((STRUCTURE*)psObj, true); break;
-			case OBJ_DROID: removeDroidBase((DROID*)psObj); break;
-			case OBJ_FEATURE: removeFeature((FEATURE*)psObj); break;
+			case OBJ_STRUCTURE: removeStruct((STRUCTURE*)psObj, true, gameWorld); break;
+			case OBJ_DROID: removeDroidBase((DROID*)psObj, gameWorld.objects); break;
+			case OBJ_FEATURE: removeFeature((FEATURE*)psObj, gameWorld); break;
 			default: ASSERT(false, "Wrong game object type"); break;
 			}
 		}

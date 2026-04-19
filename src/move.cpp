@@ -787,7 +787,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 			if ((psDroid->player != psObj->player) && !aiCheckAlliances(psDroid->player, psObj->player))
 			{
 				// run over a bloke - kill him
-				destroyDroid((DROID *)psObj, gameTime);
+				destroyDroid((DROID *)psObj, gameTime, gameWorld);
 				scoreUpdateVar(WD_BARBARIANS_MOWED_DOWN);
 				giveExperienceForSquish(psDroid);
 			}
@@ -1629,7 +1629,7 @@ static void moveUpdateDroidPos(DROID *psDroid, int32_t dx, int32_t dy)
 		if (!psDroid->isTransporter())
 		{
 			/* dreadful last-ditch crash-avoiding hack - sort this! - GJ */
-			destroyDroid(psDroid, gameTime);
+			destroyDroid(psDroid, gameTime, gameWorld);
 			return;
 		}
 	}
@@ -2155,7 +2155,7 @@ static void checkLocalFeatures(DROID *psDroid)
 		}
 
 		turnOffMultiMsg(true);
-		removeFeature((FEATURE *)psObj);  // remove artifact+.
+		removeFeature((FEATURE *)psObj, gameWorld);  // remove artifact+.
 		turnOffMultiMsg(false);
 	}
 }

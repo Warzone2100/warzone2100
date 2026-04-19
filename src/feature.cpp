@@ -167,7 +167,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "feature (id %d) DESTROYED", psFeature->id);
-		destroyFeature(psFeature, impactTime);
+		destroyFeature(psFeature, impactTime, gameWorld);
 		return relativeDamage * -1;
 	}
 	else
@@ -176,14 +176,14 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	}
 }
 
-FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
+FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 {
 	const auto id = generateSynchronisedObjectId();
-	return buildFeature(mapState, psStats, x, y, FromSave, id);
+	return buildFeature(world, psStats, x, y, FromSave, id);
 }
 
 /* Get pitch and roll from direction and tile data */
-static void updateFeatureOrientation(FEATURE *psFeature)
+static void updateFeatureOrientation(FEATURE *psFeature, const WorldMapState& mapState)
 {
 	int32_t hx0, hx1, hy0, hy1;
 	int newPitch, deltaPitch; //, pitchLimit;
@@ -195,10 +195,10 @@ static void updateFeatureOrientation(FEATURE *psFeature)
 	//    hy0
 	// hx0 * hx1      (* = feature)
 	//    hy1
-	hx1 = map_Height(gameWorld.map, psFeature->pos.x + d, psFeature->pos.y);
-	hx0 = map_Height(gameWorld.map, MAX(0, psFeature->pos.x - d), psFeature->pos.y);
-	hy1 = map_Height(gameWorld.map, psFeature->pos.x, psFeature->pos.y + d);
-	hy0 = map_Height(gameWorld.map, psFeature->pos.x, MAX(0, psFeature->pos.y - d));
+	hx1 = map_Height(mapState, psFeature->pos.x + d, psFeature->pos.y);
+	hx0 = map_Height(mapState, MAX(0, psFeature->pos.x - d), psFeature->pos.y);
+	hy1 = map_Height(mapState, psFeature->pos.x, psFeature->pos.y + d);
+	hy0 = map_Height(mapState, psFeature->pos.x, MAX(0, psFeature->pos.y - d));
 
 	//update height in case in the bottom of a trough
 	psFeature->pos.z = MAX(psFeature->pos.z, (hx0 + hx1) / 2);
@@ -233,14 +233,14 @@ static void updateFeatureOrientation(FEATURE *psFeature)
 }
 
 /* Create a feature on the map */
-FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
+FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id)
 {
 	//try and create the Feature, obtain stable address.
 	FEATURE& feature = GlobalFeatureContainer().emplace(id, psStats);
 	FEATURE* psFeature = &feature;
 
 	//add the feature to the list - this enables it to be drawn whilst being built
-	addFeature(psFeature);
+	addFeature(psFeature, world.objects);
 
 	// snap the coords to a tile
 	if (!FromSave)
@@ -269,7 +269,7 @@ FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x,
 	{
 		for (int width = 0; width <= b.size.x; ++width)
 		{
-			int h = map_TileHeight(mapState, b.map.x + width, b.map.y + breadth);
+			int h = map_TileHeight(world.map, b.map.x + width, b.map.y + breadth);
 			foundationMin = std::min(foundationMin, h);
 			foundationMax = std::max(foundationMax, h);
 		}
@@ -305,11 +305,11 @@ FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x,
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
-			MAPTILE *psTile = mapTile(mapState, b.map.x + width, b.map.y + breadth);
+			MAPTILE *psTile = mapTile(world.map, b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapState.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapState.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.x + width < world.map.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < world.map.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -321,7 +321,7 @@ FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x,
 					      getStatsName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
 					      psBlock->psStats->baseBreadth, getStatsName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
 
-					removeFeature(psBlock);
+					removeFeature(psBlock, world);
 				}
 
 				psTile->psObject = (BASE_OBJECT *)psFeature;
@@ -329,12 +329,12 @@ FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x,
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(mapState, b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
+					auxSetBlocking(world.map, b.map.x + width, b.map.y + breadth, AIR_BLOCKED);
 				}
 
 				if (psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM)
 				{
-					auxSetBlocking(mapState, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
+					auxSetBlocking(world.map, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED);
 				}
 			}
 
@@ -344,8 +344,8 @@ FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x,
 			}
 		}
 	}
-	psFeature->pos.z = map_TileHeight(mapState, psFeature->pos.x, psFeature->pos.y);//jps 18july97
-	updateFeatureOrientation(psFeature);
+	psFeature->pos.z = map_TileHeight(world.map, psFeature->pos.x, psFeature->pos.y);//jps 18july97
+	updateFeatureOrientation(psFeature, world.map);
 
 	return psFeature;
 }
@@ -401,7 +401,7 @@ void featureUpdate(FEATURE *psFeat)
 
 
 // free up a feature with no visual effects
-bool removeFeature(FEATURE *psDel)
+bool removeFeature(FEATURE *psDel, GameWorld& world)
 {
 	MESSAGE		*psMessage;
 	Vector3i	pos;
@@ -415,14 +415,14 @@ bool removeFeature(FEATURE *psDel)
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
-			if (tileOnMap(gameWorld.map, b.map.x + width, b.map.y + breadth))
+			if (tileOnMap(world.map, b.map.x + width, b.map.y + breadth))
 			{
-				MAPTILE *psTile = mapTile(gameWorld.map, b.map.x + width, b.map.y + breadth);
+				MAPTILE *psTile = mapTile(world.map, b.map.x + width, b.map.y + breadth);
 
 				if (psTile->psObject == psDel)
 				{
 					psTile->psObject = nullptr;
-					auxClearBlocking(gameWorld.map, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
+					auxClearBlocking(world.map, b.map.x + width, b.map.y + breadth, FEATURE_BLOCKED | AIR_BLOCKED);
 				}
 			}
 		}
@@ -432,7 +432,7 @@ bool removeFeature(FEATURE *psDel)
 	{
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
-		pos.y = map_Height(gameWorld.map, pos.x, pos.z) + 30;
+		pos.y = map_Height(world.map, pos.x, pos.z) + 30;
 		addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, nullptr, 0, gameTime - deltaGameTime + 1);
 		if (psDel->psStats->subType == FEAT_GEN_ARTE)
 		{
@@ -461,13 +461,13 @@ bool removeFeature(FEATURE *psDel)
 	}
 
 	debug(LOG_DEATH, "Killing off feature %s id %d (%p)", objInfo(psDel), psDel->id, static_cast<void *>(psDel));
-	killFeature(psDel);
+	killFeature(psDel, world.objects);
 
 	return true;
 }
 
 /* Remove a Feature and free it's memory */
-bool destroyFeature(FEATURE *psDel, unsigned impactTime)
+bool destroyFeature(FEATURE *psDel, unsigned impactTime, GameWorld& world)
 {
 	UDWORD			widthScatter, breadthScatter, heightScatter, i;
 	EFFECT_TYPE		explosionSize;
@@ -519,7 +519,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		/* Then a sequence of effects */
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
-		pos.y = map_Height(gameWorld.map, pos.x, pos.z);
+		pos.y = map_Height(world.map, pos.x, pos.z);
 		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, nullptr, 0, impactTime);
 
 		//play sound
@@ -546,7 +546,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 			{
 				const unsigned int x = b.map.x + width;
 				const unsigned int y = b.map.y + breadth;
-				MAPTILE *psTile = mapTile(gameWorld.map, x, y);
+				MAPTILE *psTile = mapTile(world.map, x, y);
 				if (psTile->psObject != psDel)
 				{
 					continue;
@@ -561,13 +561,13 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 						{
 							makeTileRubbleTexture(psTile, x, y, RUBBLE_TILE);
 						}
-						auxClearBlocking(gameWorld.map, x, y, AUXBITS_ALL);
+						auxClearBlocking(world.map, x, y, AUXBITS_ALL);
 					}
 					else
 					{
 						/* This remains a blocking tile */
 						psTile->psObject = nullptr;
-						auxClearBlocking(gameWorld.map, x, y, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
+						auxClearBlocking(world.map, x, y, AIR_BLOCKED);  // Shouldn't remain blocking for air units, however.
 						if (isUrban)
 						{
 							makeTileRubbleTexture(psTile, x, y, BLOCKING_RUBBLE_TILE);
@@ -578,7 +578,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		}
 	}
 
-	removeFeature(psDel);
+	removeFeature(psDel, world);
 	psDel->died = impactTime;
 	return true;
 }

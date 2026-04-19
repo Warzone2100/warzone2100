@@ -403,7 +403,7 @@ bool applyLimitSet()
 						{
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{
-								removeStruct(psStruct, true);
+								removeStruct(psStruct, true, gameWorld);
 								return IterationResult::BREAK_ITERATION;
 							}
 							return IterationResult::CONTINUE_ITERATION;

@@ -581,14 +581,14 @@ static void gameStateUpdate()
 		executeFnAndProcessScriptQueuedRemovals([i]() {
 			mutating_list_iterate(gameWorld.objects.structures[i], [](STRUCTURE* s)
 			{
-				structureUpdate(s, false);
+				structureUpdate(s, gameWorld);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
 		executeFnAndProcessScriptQueuedRemovals([i]() {
 			mutating_list_iterate(mission.gameWorld.objects.structures[i], [](STRUCTURE* s)
 			{
-				structureUpdate(s, true); // update for mission
+				structureUpdate(s, mission.gameWorld); // update for mission
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
