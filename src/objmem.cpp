@@ -497,7 +497,7 @@ void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList)
 }
 
 /* Destroy a droid */
-void killDroid(DROID *psDel)
+void killDroid(DROID *psDel, WorldObjectState& objState)
 {
 	int i;
 
@@ -514,10 +514,10 @@ void killDroid(DROID *psDel)
 	setDroidBase(psDel, nullptr);
 	if (psDel->droidType == DROID_SENSOR)
 	{
-		removeObjectFromFuncList(gameWorld.objects.sensors, (BASE_OBJECT *)psDel, 0);
+		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psDel, 0);
 	}
 
-	destroyObject(gameWorld.objects.droids, psDel);
+	destroyObject(objState.droids, psDel);
 }
 
 template <typename EntityType>
@@ -633,22 +633,22 @@ void freeAllLimboDroids()
 /**************************  STRUCTURE  *******************************/
 
 /* add the structure to the Structure Lists */
-void addStructure(STRUCTURE *psStructToAdd)
+void addStructure(STRUCTURE *psStructToAdd, WorldObjectState& objState)
 {
-	addObjectToList(gameWorld.objects.structures, psStructToAdd, psStructToAdd->player);
+	addObjectToList(objState.structures, psStructToAdd, psStructToAdd->player);
 	if (psStructToAdd->pStructureType->pSensor
 	    && psStructToAdd->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		addObjectToFuncList(gameWorld.objects.sensors, (BASE_OBJECT *)psStructToAdd, 0);
+		addObjectToFuncList(objState.sensors, (BASE_OBJECT *)psStructToAdd, 0);
 	}
 	else if (psStructToAdd->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		addObjectToFuncList(gameWorld.objects.extractors, psStructToAdd, psStructToAdd->player);
+		addObjectToFuncList(objState.extractors, psStructToAdd, psStructToAdd->player);
 	}
 }
 
 /* Destroy a structure */
-void killStruct(STRUCTURE *psBuilding)
+void killStruct(STRUCTURE *psBuilding, WorldObjectState& objState)
 {
 	int i;
 
@@ -660,11 +660,11 @@ void killStruct(STRUCTURE *psBuilding)
 	if (psBuilding->pStructureType->pSensor
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		removeObjectFromFuncList(gameWorld.objects.sensors, (BASE_OBJECT *)psBuilding, 0);
+		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psBuilding, 0);
 	}
 	else if (psBuilding->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		removeObjectFromFuncList(gameWorld.objects.extractors, psBuilding, psBuilding->player);
+		removeObjectFromFuncList(objState.extractors, psBuilding, psBuilding->player);
 	}
 
 	for (i = 0; i < MAX_WEAPONS; i++)
@@ -704,7 +704,7 @@ void killStruct(STRUCTURE *psBuilding)
 		}
 	}
 
-	destroyObject(gameWorld.objects.structures, psBuilding);
+	destroyObject(objState.structures, psBuilding);
 }
 
 /* Remove heapall structures */
@@ -714,49 +714,49 @@ void freeAllStructs(GameWorld& world)
 }
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList)
+void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objState)
 {
 	ASSERT(psStructToRemove->type == OBJ_STRUCTURE,
 	       "removeStructureFromList: pointer is not a structure");
 	ASSERT(psStructToRemove->player < MAX_PLAYERS,
 	       "removeStructureFromList: invalid player for structure");
-	removeObjectFromList(pList, psStructToRemove, psStructToRemove->player);
+	removeObjectFromList(objState.structures, psStructToRemove, psStructToRemove->player);
 	if (psStructToRemove->pStructureType->pSensor
 	    && psStructToRemove->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		removeObjectFromFuncList(gameWorld.objects.sensors, (BASE_OBJECT *)psStructToRemove, 0);
+		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psStructToRemove, 0);
 	}
 	else if (psStructToRemove->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		removeObjectFromFuncList(gameWorld.objects.extractors, psStructToRemove, psStructToRemove->player);
+		removeObjectFromFuncList(objState.extractors, psStructToRemove, psStructToRemove->player);
 	}
 }
 
 /**************************  FEATURE  *********************************/
 
 /* add the feature to the Feature Lists */
-void addFeature(FEATURE *psFeatureToAdd)
+void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState)
 {
-	addObjectToList(gameWorld.objects.features, psFeatureToAdd, 0);
+	addObjectToList(objState.features, psFeatureToAdd, 0);
 	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		addObjectToFuncList(gameWorld.objects.oils, psFeatureToAdd, 0);
+		addObjectToFuncList(objState.oils, psFeatureToAdd, 0);
 	}
 }
 
 /* Destroy a feature */
 // set the player to 0 since features have player = maxplayers+1. This screws up destroyObject
 // it's a bit of a hack, but hey, it works
-void killFeature(FEATURE *psDel)
+void killFeature(FEATURE *psDel, WorldObjectState& objState)
 {
 	ASSERT(psDel->type == OBJ_FEATURE,
 	       "killFeature: pointer is not a feature");
 	psDel->player = 0;
-	destroyObject(gameWorld.objects.features, psDel);
+	destroyObject(objState.features, psDel);
 
 	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		removeObjectFromFuncList(gameWorld.objects.oils, psDel, 0);
+		removeObjectFromFuncList(objState.oils, psDel, 0);
 	}
 }
 
@@ -798,23 +798,17 @@ static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd, const PerPlayerF
 }
 
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, PerPlayerFlagPositionLists& list)
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState)
 {
 	ASSERT_OR_RETURN(, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
-	if (isFlagPositionInList(psFlagPosToAdd, list))
+	if (isFlagPositionInList(psFlagPosToAdd, objState.flags))
 	{
 		debug(LOG_INFO, "FlagPosition is already in the list - ignoring");
 		return;
 	}
-	list[psFlagPosToAdd->player].emplace_front(psFlagPosToAdd);
-}
-
-/* add the Flag Position to the Flag Position Lists */
-void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
-{
-	addFlagPositionToList(psFlagPosToAdd, gameWorld.objects.flags);
+	objState.flags[psFlagPosToAdd->player].emplace_front(psFlagPosToAdd);
 }
 
 // Remove it from the list, but don't delete it!
@@ -856,7 +850,7 @@ void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlaye
 	ASSERT(originalPlayer == psFlagPos->player, "Unexpected originalPlayer (%" PRIu32 ") does not match current flagPos->player (%" PRIu32 ")", originalPlayer, psFlagPos->player);
 	ASSERT(removeFlagPositionFromList(psFlagPos), "Did not find flag position in expected list?");
 	psFlagPos->player = newPlayer;
-	addFlagPosition(psFlagPos);
+	addFlagPosition(psFlagPos, gameWorld.objects);
 }
 
 // free all flag positions

@@ -747,7 +747,7 @@ void  technologyGiveAway(const STRUCTURE *pS)
 		debug(LOG_FEATURE, "Unable to find a free location.");
 		return;
 	}
-	FEATURE *pF = buildFeature(gameWorld.map, &asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
+	FEATURE *pF = buildFeature(gameWorld, &asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
 	if (pF)
 	{
 		pF->player = pS->player;
@@ -802,7 +802,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 		if (asFeatureStats[i].ref == ref)
 		{
 			// Create a feature of the specified type at the given location
-			buildFeature(gameWorld.map, &asFeatureStats[i], x, y, false, id);
+			buildFeature(gameWorld, &asFeatureStats[i], x, y, false, id);
 			break;
 		}
 	}

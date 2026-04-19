@@ -880,7 +880,7 @@ void placeLimboDroids()
 			//KILL OFF TRANSPORTER - should never be one but....
 			if (psDroid->isTransporter())
 			{
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 				return IterationResult::CONTINUE_ITERATION;
 			}
 			//set up location for each of the droids
@@ -1046,7 +1046,7 @@ void saveCampaignData()
 	{
 		mutating_list_iterate(gameWorld.objects.droids[inc], [](DROID* d)
 		{
-			vanishDroid(d);
+			vanishDroid(d, gameWorld.objects);
 			return IterationResult::CONTINUE_ITERATION;
 		});
 	}
@@ -1252,13 +1252,13 @@ void processMissionLimbo()
 		//KILL OFF TRANSPORTER - should never be one but....
 		if (psDroid->isTransporter())
 		{
-			vanishDroid(psDroid);
+			vanishDroid(psDroid, gameWorld.objects);
 		}
 		else
 		{
 			if (numDroidsAddedToLimboList >= MAXLIMBODROIDS)		// any room in limbo list
 			{
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 			}
 			else
 			{
@@ -1501,7 +1501,7 @@ static void missionResetDroids()
 			//KILL OFF TRANSPORTER
 			if (d->isTransporter())
 			{
-				vanishDroid(d);
+				vanishDroid(d, gameWorld.objects);
 			}
 			else
 			{
@@ -1596,7 +1596,7 @@ static void missionResetDroids()
 					psDroid->pos.y >= world_coord(gameWorld.map.height - EDGE_SIZE))
 				{
 					debug(LOG_ERROR, "missionResetUnits: unit too close to edge of map - removing");
-					vanishDroid(psDroid);
+					vanishDroid(psDroid, gameWorld.objects);
 					return IterationResult::CONTINUE_ITERATION;
 				}
 
@@ -1615,7 +1615,7 @@ static void missionResetDroids()
 			{
 				//can't put it down so get rid of this droid!!
 				ASSERT(false, "missionResetUnits: can't place unit - cancel to continue");
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;
@@ -2866,7 +2866,7 @@ void missionDestroyObjects()
 
 			mutating_list_iterate(gameWorld.objects.droids[Player], [](DROID* d)
 			{
-				removeDroidBase(d);
+				removeDroidBase(d, gameWorld.objects);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 
@@ -2877,14 +2877,14 @@ void missionDestroyObjects()
 			{
 				//make sure its died flag is not set since we've swapped the apsDroidList pointers over
 				psDroid->died = false;
-				removeDroidBase(psDroid);
+				removeDroidBase(psDroid, gameWorld.objects);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 			mission.gameWorld.objects.droids[Player].clear();
 
 			mutating_list_iterate(gameWorld.objects.structures[Player], [](STRUCTURE* s)
 			{
-				removeStruct(s, true);
+				removeStruct(s, true, gameWorld);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		}
@@ -2956,7 +2956,7 @@ void processPreviousCampDroids()
 			if (droidRemove(psDroid, mission.gameWorld.objects.droids))
 			{
 				addDroid(psDroid, gameWorld.objects.droids);
-				vanishDroid(psDroid);
+				vanishDroid(psDroid, gameWorld.objects);
 			}
 			return IterationResult::CONTINUE_ITERATION;
 		});
@@ -3159,12 +3159,12 @@ void emptyTransporters(bool bOffWorld)
 					});
 				}
 				//now kill off the Transporter
-				vanishDroid(psTransporter);
+				vanishDroid(psTransporter, gameWorld.objects);
 			}
 			else if (!bOffWorld && orderState(psTransporter, DORDER_TRANSPORTRETURN))
 			{
 				//also destroy transporters in the process of flying back and we're not offWorld
-				vanishDroid(psTransporter);
+				vanishDroid(psTransporter, gameWorld.objects);
 			}
 		}
 		return IterationResult::CONTINUE_ITERATION;

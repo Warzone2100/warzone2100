@@ -925,7 +925,7 @@ void kf_MapCheck()
 
 	for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
-		alignStructure(psStruct);
+		alignStructure(psStruct, gameWorld.map);
 	}
 
 	for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
@@ -1704,9 +1704,9 @@ void	kf_JumpToResourceExtractor()
 	}
 }
 
-void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor)
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor, const WorldObjectState& objState)
 {
-	if (psOldRE.has_value() && *psOldRE != gameWorld.objects.extractors[selectedPlayer].end() && **psOldRE == psResourceExtractor)
+	if (psOldRE.has_value() && *psOldRE != objState.extractors[selectedPlayer].end() && **psOldRE == psResourceExtractor)
 	{
 		psOldRE.reset();
 	}

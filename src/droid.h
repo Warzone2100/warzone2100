@@ -69,7 +69,7 @@ void add_to_experience_queue(int player, int value);
 // initialise droid module
 bool droidInit();
 
-bool removeDroidBase(DROID *psDel);
+bool removeDroidBase(DROID *psDel, WorldObjectState& objState);
 
 struct INITIAL_DROID_ORDERS
 {
@@ -161,10 +161,10 @@ bool droidUpdateRestore(DROID *psDroid);
 void recycleDroid(DROID *psDel);
 
 /* Remove a droid and free it's memory */
-bool destroyDroid(DROID *psDel, unsigned impactTime);
+bool destroyDroid(DROID *psDel, unsigned impactTime, GameWorld& world);
 
 /* Same as destroy droid except no graphical effects */
-void vanishDroid(DROID *psDel);
+void vanishDroid(DROID *psDel, WorldObjectState& objState);
 
 /* Remove a droid from the apsDroidLists so doesn't update or get drawn etc*/
 //returns true if successfully removed from the list

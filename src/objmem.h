@@ -58,7 +58,7 @@ uint32_t generateSynchronisedObjectId();
 void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList);
 
 /*destroy a droid */
-void killDroid(DROID *psDel);
+void killDroid(DROID *psDel, WorldObjectState& objState);
 
 /* Remove all droids */
 void freeAllDroids(GameWorld& world);
@@ -70,22 +70,22 @@ void removeDroid(DROID *psDroidToRemove, PerPlayerDroidLists& pList);
 void freeAllLimboDroids();
 
 /* add the structure to the Structure Lists */
-void addStructure(STRUCTURE *psStructToAdd);
+void addStructure(STRUCTURE *psStructToAdd, WorldObjectState& objState);
 
 /* Destroy a structure */
-void killStruct(STRUCTURE *psDel);
+void killStruct(STRUCTURE *psDel, WorldObjectState& objState);
 
 /* Remove all structures */
 void freeAllStructs(GameWorld& world);
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList);
+void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objState);
 
 /* add the feature to the Feature Lists */
-void addFeature(FEATURE *psFeatureToAdd);
+void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState);
 
 /* Destroy a feature */
-void killFeature(FEATURE *psDel);
+void killFeature(FEATURE *psDel, WorldObjectState& objState);
 
 /* Remove all features */
 void freeAllFeatures(GameWorld& world);
@@ -93,15 +93,13 @@ void freeAllFeatures(GameWorld& world);
 /* Create a new Flag Position */
 bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState);
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel);
 /* Transfer a Flag Position to a new player */
 void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
 void freeAllFlagPositions(WorldObjectState& objState);
-// used to add flag position to a specific list (ex. from assignFactoryCommandDroid)
-void addFlagPositionToList(FLAG_POSITION* psFlagPosToAdd, PerPlayerFlagPositionLists& list);
 
 // Find a base object from it's id
 template <typename ObjectType>

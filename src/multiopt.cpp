@@ -574,7 +574,7 @@ static bool gameInit()
 			&& !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated)
 			&& !(player < game.maxPlayers && NetPlay.players[player].allocated))
 		{
-			clearPlayer(gameWorld.objects, player, true);			// do this quietly
+			clearPlayer(gameWorld, player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
 	}
