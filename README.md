@@ -302,6 +302,9 @@ Warzone 2100 is free software; you can redistribute it and/or modify it under th
 
 More information: [COPYING.README](COPYING.README), [COPYING.NONGPL](COPYING.NONGPL)
 
+
+This is a test.
+
 # Special thanks
 
 Free code signing for Windows provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
