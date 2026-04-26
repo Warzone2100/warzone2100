@@ -104,7 +104,8 @@
 		}
 	],
 	"overrides": [
-		{ "name": "sqlite3", "version": "3.49.2" }
+		{ "name": "sqlite3", "version": "3.49.2" },
+		{ "name": "zstd", "version": "1.5.7" }
 	],
 	"default-features": [
 		"vulkan"
