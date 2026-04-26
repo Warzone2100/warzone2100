@@ -76,6 +76,10 @@ if (ENABLE_GNS_NETWORK_BACKEND)
 		"gns/gns_listen_socket.cpp")
 endif()
 
+if (WZ_ENABLE_ZSTD_COMPRESSION_ADAPTER)
+	list(APPEND SRC "zstd_compression_adapter.cpp")
+endif()
+
 if(MSVC AND CMAKE_VERSION VERSION_GREATER 3.7)
 	# Automatic detection of source groups via `source_group(TREE <root>)` syntax
 	# has been introduced in CMake 3.8.
@@ -86,6 +90,28 @@ endif()
 
 find_package (Threads REQUIRED)
 find_package (ZLIB REQUIRED)
+
+if (WZ_ENABLE_ZSTD_COMPRESSION_ADAPTER)
+	# zstd's advanced streaming API (ZSTD_compressStream2, ZSTD_CCtx_setParameter,
+	# ZSTD_getErrorCode, ZSTD_getErrorString) requires zstd >= 1.4.0.
+	find_package(zstd 1.4.0 CONFIG)
+	if (zstd_FOUND)
+		message(STATUS "Zstd Compression Adapter Support: ENABLED (zstd ${zstd_VERSION})")
+		set(zstd_target zstd::libzstd)
+	else()
+		# Try again with pkg-config
+		find_package(PkgConfig REQUIRED)
+		pkg_check_modules(zstd REQUIRED IMPORTED_TARGET libzstd>=1.4.0)
+		if (NOT zstd_FOUND)
+			message(FATAL_ERROR "Zstd Compression Adapter Support: DISABLED (zstd NOT FOUND)")
+		else()
+			message(STATUS "Zstd Compression Adapter Support: ENABLED (zstd ${zstd_VERSION})")
+		endif()
+		set(zstd_target PkgConfig::zstd)
+	endif()
+else()
+	message(STATUS "Zstd Compression Adapter Support: DISABLED")
+endif()
 
 # Attempt to find Miniupnpc (minimum supported API version = 9)
 # NOTE: This is not available on every platform / distro
@@ -115,6 +141,10 @@ WZ_TARGET_CONFIGURATION(netplay)
 target_link_libraries(netplay
 	PRIVATE framework re2::re2 nlohmann_json plum-static Threads::Threads ZLIB::ZLIB fmt::fmt
 	PUBLIC tl::expected)
+
+if (WZ_ENABLE_ZSTD_COMPRESSION_ADAPTER)
+	target_link_libraries(netplay PRIVATE "${zstd_target}")
+endif()
 
 if(WZ_USE_IMPORTED_MINIUPNPC)
 	target_link_libraries(netplay PRIVATE imported-miniupnpc)
