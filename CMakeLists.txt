@@ -874,9 +874,6 @@ CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
 
 add_subdirectory(3rdparty)
 
-# This should come after `add_subdirectory(3rdparty)` to capture submodule-specific vars
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
-
 # Determine distribution license
 set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
 if(WZ_ENABLE_BACKEND_VULKAN OR WZ_ENABLE_BASIS_UNIVERSAL)
@@ -897,6 +894,9 @@ add_subdirectory(doc)
 add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(pkg)
+
+# This should come after all subdirectories to capture submodule-specific vars
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
 
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
