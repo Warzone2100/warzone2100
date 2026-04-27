@@ -1502,7 +1502,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return buildStructureDir(pStructureType, x, y, direction, player, FromSave, generateSynchronisedObjectId());
 }
 
-STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id)
+STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation/*= false*/)
 {
 	STRUCTURE *psBuilding = nullptr;
 	const Vector2i size = pStructureType->size(direction);
@@ -1546,7 +1546,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		WallOrientation wallOrientation = WallConnectNone;
-		if (!FromSave && isWallCombiningStructureType(pStructureType))
+		if ((!FromSave || forceWallOrientation) && isWallCombiningStructureType(pStructureType))
 		{
 			for (int dy = 0; dy < size.y; ++dy)
 				for (int dx = 0; dx < size.x; ++dx)
@@ -1777,7 +1777,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		// rotate a wall if necessary
-		if (!FromSave && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
+		if ((!FromSave || forceWallOrientation) && (pStructureType->type == REF_WALL || pStructureType->type == REF_GATE))
 		{
 			psBuilding->pFunctionality->wall.type = wallType(wallOrientation);
 			if (wallOrientation != WallConnectNone)
