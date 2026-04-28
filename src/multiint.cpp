@@ -5842,12 +5842,14 @@ public:
 	virtual void quitGame(int exitCode) override
 	{
 		ASSERT_HOST_ONLY(return);
-		auto psStrongMultiOptionsTitleUI = currentMultiOptionsTitleUI.lock();
-		if (psStrongMultiOptionsTitleUI)
-		{
-			stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI(), ERROR_NOERROR);
-		}
-		wzQuit(exitCode);
+		wzAsyncExecOnMainThread([exitCode]() {
+			auto psStrongMultiOptionsTitleUI = currentMultiOptionsTitleUI.lock();
+			if (psStrongMultiOptionsTitleUI)
+			{
+				stopJoining(psStrongMultiOptionsTitleUI->getParentTitleUI(), ERROR_NOERROR);
+			}
+			wzQuit(exitCode);
+		});
 	}
 };
 
