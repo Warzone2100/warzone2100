@@ -89,6 +89,7 @@ static std::string wz_test;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
+static bool wz_lobby_slashcommands_hostexit = false;
 static int wz_min_autostart_players = -1;
 static std::string wz_lobby_game_to_connect_str;
 
@@ -350,6 +351,7 @@ typedef enum
 	CLI_WZ_DEBUG_CRASH_HANDLER,
 	CLI_STREAMER_SPECTATOR,
 	CLI_LOBBY_SLASHCOMMANDS,
+	CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT,
 	CLI_ADD_LOBBY_ADMINHASH,
 	CLI_ADD_LOBBY_ADMINPUBLICKEY,
 	CLI_COMMAND_INTERFACE,
@@ -446,6 +448,7 @@ static const struct poptOption *getOptionsTable()
 		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
 		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
+		{ "enablelobbyslashcmdhostexit", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT, N_("Enable lobby hostexit slash command (for connecting admins)"), nullptr},
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
 		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin, unixsocket:path)")},
@@ -1135,6 +1138,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			wz_lobby_slashcommands = true;
 			break;
 
+		case CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT:
+			wz_lobby_slashcommands_hostexit = true;
+			break;
+
 		case CLI_ADD_LOBBY_ADMINHASH:
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr || strlen(token) == 0)
@@ -1410,6 +1417,11 @@ bool streamer_spectator_mode()
 bool lobby_slashcommands_enabled()
 {
 	return wz_lobby_slashcommands;
+}
+
+bool lobby_slashcommands_hostexit_enabled()
+{
+	return wz_lobby_slashcommands_hostexit;
 }
 
 int min_autostart_player_count()
