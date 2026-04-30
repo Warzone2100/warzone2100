@@ -19,8 +19,14 @@
 #ifndef _physfs_ext_h
 #define _physfs_ext_h
 
-#if defined(__MACOSX__)
-# include <PhysFS/physfs.h>
+#if defined(__has_include)
+# if __has_include(<PhysFS/physfs.h>)
+#  include <PhysFS/physfs.h>
+# elif __has_include(<physfs.h>)
+#  include <physfs.h>
+# else
+#  error "PhysFS header not found"
+# endif
 #else
 # include <physfs.h>
 #endif

@@ -154,6 +154,9 @@ void pie_setShadows(bool drawShadows)
 
 optional<bool> pie_supportsShadowMapping()
 {
+#if defined(WZ_OS_IOS)
+	return false;
+#endif
 	if (!gfx_api::context::isInitialized())
 	{
 		// can't determine support yet

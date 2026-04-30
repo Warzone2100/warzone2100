@@ -15,7 +15,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>@WZINFO_CFBundleGetInfoString@</string>
 	<key>CFBundleIconFile</key>
-	<string>Warzone.icns</string>
+	<string>Warzone2100.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

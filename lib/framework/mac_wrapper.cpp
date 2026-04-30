@@ -22,7 +22,9 @@
 #ifdef WZ_OS_MAC
 
 # include "frame.h"
-# include <CoreServices/CoreServices.h>
+# include <CoreFoundation/CoreFoundation.h>
+# include <CoreFoundation/CFBundle.h>
+# include <CoreFoundation/CFURL.h>
 
 optional<WzString> wzMacAppBundleGetResourceDirectoryPath()
 {

@@ -33,8 +33,13 @@
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/gamelib/gtime.h"
 #include "src/configuration.h"
+#include "src/display.h"
 #include "src/warzoneconfig.h"
+#include "src/keybind.h"
 #include "src/game.h"
+#include "src/main.h"
+#include "src/ingameop.h"
+#include "src/mission.h"
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
 #include "sdl_backend_private.h"
@@ -58,15 +63,21 @@
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
 #include <algorithm>
+#include <cmath>
 #include <map>
 #include <locale.h>
 #include <atomic>
 #include <chrono>
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 #include "cocoa_sdl_helpers.h"
 #include "cocoa_wz_menus.h"
 #include "lib/framework/cocoa_wrapper.h"
+#endif
+
+#if defined(WZ_OS_IOS)
+#include "lib/framework/cocoa_wrapper.h"
+#include "src/radar.h"
 #endif
 
 #if defined(__EMSCRIPTEN__)
@@ -95,7 +106,11 @@ int main(int argc, char *argv[])
 
 // At this time, we only have 1 window.
 static SDL_Window *WZwindow = nullptr;
+#if defined(WZ_OS_IOS)
 static optional<video_backend> WZbackend = video_backend::vulkan;
+#else
+static optional<video_backend> WZbackend = video_backend::vulkan;
+#endif
 
 // The screen that the game window is on.
 int screenIndex = 0;
@@ -177,6 +192,498 @@ static int dragY = 0;
 /* The current mouse button state */
 static INPUT_STATE aMouseState[MOUSE_END];
 static MousePresses mousePresses;
+
+#if defined(WZ_OS_IOS)
+static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent);
+static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent);
+static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel);
+
+static constexpr SDL_FingerID WZ_INVALID_FINGER_ID = static_cast<SDL_FingerID>(-1);
+static constexpr float IOS_TOUCH_PAN_THRESHOLD = 0.0125f;
+static constexpr float IOS_TOUCH_PINCH_THRESHOLD = 0.015f;
+static constexpr float IOS_TOUCH_TAP_MOVE_THRESHOLD = 0.018f;
+static constexpr uint32_t IOS_TOUCH_LONG_PRESS_MS = 425;
+static constexpr uint32_t IOS_TOUCH_DOUBLE_TAP_MS = 300;
+static constexpr uint32_t IOS_TOUCH_MULTISELECT_GRACE_MS = 700;
+
+struct IOSTouchGestureState
+{
+	bool panActive = false;
+	bool pinchActive = false;
+	bool movedBeyondTap = false;
+	bool buildDragActive = false;
+	bool startedOverRadar = false;
+	bool radarHoldActive = false;
+	SDL_FingerID primaryFingerId = WZ_INVALID_FINGER_ID;
+	SDL_FingerID secondaryFingerId = WZ_INVALID_FINGER_ID;
+	uint32_t primaryDownTime = 0;
+	float startX = 0.f;
+	float startY = 0.f;
+	float primaryX = 0.f;
+	float primaryY = 0.f;
+	float secondaryX = 0.f;
+	float secondaryY = 0.f;
+	float lastPinchDistance = 0.f;
+	float uiScrollRemainderX = 0.f;
+	float uiScrollRemainderY = 0.f;
+};
+
+static IOSTouchGestureState iosTouchGestureState;
+static uint32_t iosTouchMultiSelectUntilTime = 0;
+static uint32_t iosLastTapTime = 0;
+static float iosLastTapX = -1.f;
+static float iosLastTapY = -1.f;
+static bool iosPrefersTouchInput = false;
+static std::atomic_bool iosAppInBackground(false);
+static bool iosSDLAppLifecycleWatchInstalled = false;
+
+static void iosSetTouchInputMode(bool touchInput)
+{
+	if (iosPrefersTouchInput == touchInput)
+	{
+		return;
+	}
+	iosPrefersTouchInput = touchInput;
+	if (touchInput)
+	{
+		SDL_HideCursor();
+	}
+	else
+	{
+		SDL_ShowCursor();
+	}
+}
+
+static void iosResetTouchGestureState()
+{
+	iosTouchGestureState = IOSTouchGestureState();
+	iosTouchMultiSelectUntilTime = 0;
+	clearTouchPanScrollScales();
+	resetScroll();
+}
+
+static bool SDLCALL iosSDLAppLifecycleEventWatch(void *, SDL_Event *event)
+{
+	switch (event->type)
+	{
+	case SDL_EVENT_TERMINATING:
+	case SDL_EVENT_WILL_ENTER_BACKGROUND:
+	case SDL_EVENT_DID_ENTER_BACKGROUND:
+		iosAppInBackground.store(true, std::memory_order_release);
+		break;
+	case SDL_EVENT_WILL_ENTER_FOREGROUND:
+	case SDL_EVENT_DID_ENTER_FOREGROUND:
+		iosAppInBackground.store(false, std::memory_order_release);
+		break;
+	default:
+		break;
+	}
+	return true;
+}
+
+static Vector2i iosTouchToLogicalCoords(float normalizedX, float normalizedY)
+{
+	unsigned int logicalWidth = screenWidth;
+	unsigned int logicalHeight = screenHeight;
+	if (logicalWidth == 0 || logicalHeight == 0)
+	{
+		logicalWidth = std::max<unsigned int>(1, static_cast<unsigned int>(std::ceil(static_cast<float>(windowWidth) / std::max(current_displayScaleFactor, 1.0f))));
+		logicalHeight = std::max<unsigned int>(1, static_cast<unsigned int>(std::ceil(static_cast<float>(windowHeight) / std::max(current_displayScaleFactor, 1.0f))));
+	}
+	int x = static_cast<int>(normalizedX * logicalWidth);
+	int y = static_cast<int>(normalizedY * logicalHeight);
+	CLIP(x, 0, static_cast<int>(logicalWidth) - 1);
+	CLIP(y, 0, static_cast<int>(logicalHeight) - 1);
+	return Vector2i(x, y);
+}
+
+static Vector2i windowPointToLogicalCoords(float windowX, float windowY)
+{
+#if defined(WZ_OS_IOS)
+	if (windowWidth > 0 && windowHeight > 0 && screenWidth > 0 && screenHeight > 0)
+	{
+		int x = static_cast<int>((windowX / static_cast<float>(windowWidth)) * static_cast<float>(screenWidth));
+		int y = static_cast<int>((windowY / static_cast<float>(windowHeight)) * static_cast<float>(screenHeight));
+		CLIP(x, 0, static_cast<int>(screenWidth) - 1);
+		CLIP(y, 0, static_cast<int>(screenHeight) - 1);
+		return Vector2i(x, y);
+	}
+#endif
+	return Vector2i(static_cast<int>(windowX / current_displayScaleFactor), static_cast<int>(windowY / current_displayScaleFactor));
+}
+
+static void iosUpdatePointerFromTouch(const SDL_TouchFingerEvent *touch)
+{
+	Vector2i logicalCoords = iosTouchToLogicalCoords(touch->x, touch->y);
+	mouseXPos = logicalCoords.x;
+	mouseYPos = logicalCoords.y;
+	mouseInWindow = true;
+}
+
+static float iosTouchDistance()
+{
+	const float dx = iosTouchGestureState.primaryX - iosTouchGestureState.secondaryX;
+	const float dy = iosTouchGestureState.primaryY - iosTouchGestureState.secondaryY;
+	return std::sqrt(dx * dx + dy * dy);
+}
+
+static bool iosTouchMovedBeyondTap(float normalizedX, float normalizedY)
+{
+	const float dx = normalizedX - iosTouchGestureState.startX;
+	const float dy = normalizedY - iosTouchGestureState.startY;
+	return std::sqrt(dx * dx + dy * dy) >= IOS_TOUCH_TAP_MOVE_THRESHOLD;
+}
+
+static bool iosTouchCanBuildDrag()
+{
+	return canTouchDragBuildStructure();
+}
+
+static void iosDispatchMouseButtonAt(float normalizedX, float normalizedY, Uint32 type, Uint8 button)
+{
+	SDL_MouseButtonEvent buttonEvent = {};
+	buttonEvent.type = static_cast<SDL_EventType>(type);
+	buttonEvent.button = button;
+	buttonEvent.x = normalizedX * static_cast<float>(windowWidth);
+	buttonEvent.y = normalizedY * static_cast<float>(windowHeight);
+	inputHandleMouseButtonEvent(&buttonEvent);
+}
+
+static void iosDispatchMouseMotionAt(float normalizedX, float normalizedY)
+{
+	SDL_MouseMotionEvent motionEvent = {};
+	motionEvent.type = SDL_EVENT_MOUSE_MOTION;
+	motionEvent.x = normalizedX * static_cast<float>(windowWidth);
+	motionEvent.y = normalizedY * static_cast<float>(windowHeight);
+	inputHandleMouseMotionEvent(&motionEvent);
+}
+
+static void iosDispatchClickAt(float normalizedX, float normalizedY, Uint8 button)
+{
+	iosDispatchMouseButtonAt(normalizedX, normalizedY, SDL_EVENT_MOUSE_BUTTON_DOWN, button);
+	iosDispatchMouseButtonAt(normalizedX, normalizedY, SDL_EVENT_MOUSE_BUTTON_UP, button);
+}
+
+static bool iosIsDoubleTap(uint32_t now, float normalizedX, float normalizedY)
+{
+	if (iosLastTapTime == 0 || now - iosLastTapTime > IOS_TOUCH_DOUBLE_TAP_MS)
+	{
+		return false;
+	}
+	const float dx = normalizedX - iosLastTapX;
+	const float dy = normalizedY - iosLastTapY;
+	return std::sqrt(dx * dx + dy * dy) <= (IOS_TOUCH_TAP_MOVE_THRESHOLD * 2.f);
+}
+
+static void iosActivateLongPressModifier(uint32_t now)
+{
+	iosTouchMultiSelectUntilTime = now + IOS_TOUCH_MULTISELECT_GRACE_MS;
+}
+
+static uint32_t iosConfiguredMultiSelectHoldMs()
+{
+	return static_cast<uint32_t>(std::max(TOUCH_MULTISELECT_HOLD_MIN_MS, war_GetTouchMultiSelectHoldMs()));
+}
+
+static void iosApplyPanGesture(float deltaX, float deltaY)
+{
+	const float directionMultiplier = war_GetTouchPanInverted() ? -1.f : 1.f;
+	const float effectiveDeltaX = deltaX * directionMultiplier;
+	const float effectiveDeltaY = deltaY * directionMultiplier;
+	const float sensitivityScale = std::max(0.25f, static_cast<float>(war_GetTouchPanSensitivity()) / 100.f);
+
+	if (std::fabs(effectiveDeltaX) >= IOS_TOUCH_PAN_THRESHOLD)
+	{
+		scrollDirLeftRight += (effectiveDeltaX > 0.f) ? 1 : -1;
+		setTouchPanScrollScaleLeftRight(std::max(1.f, (std::fabs(effectiveDeltaX) / IOS_TOUCH_PAN_THRESHOLD) * sensitivityScale));
+	}
+	if (std::fabs(effectiveDeltaY) >= IOS_TOUCH_PAN_THRESHOLD)
+	{
+		scrollDirUpDown += (effectiveDeltaY > 0.f) ? -1 : 1;
+		setTouchPanScrollScaleUpDown(std::max(1.f, (std::fabs(effectiveDeltaY) / IOS_TOUCH_PAN_THRESHOLD) * sensitivityScale));
+	}
+}
+
+static bool iosShouldRoutePrimaryDragToUI()
+{
+	return GetGameMode() != GS_NORMAL || InGameOpUp || isInGamePopupUp || MissionResUp;
+}
+
+static void iosApplyScrollGestureToUI(float deltaX, float deltaY)
+{
+	auto emitWheelSteps = [](float &remainder, float delta, bool vertical) {
+		remainder += delta;
+		while (std::fabs(remainder) >= IOS_TOUCH_PAN_THRESHOLD)
+		{
+			const int step = (remainder > 0.f) ? 1 : -1;
+			SDL_MouseWheelEvent wheelEvent = {};
+			wheelEvent.type = SDL_EVENT_MOUSE_WHEEL;
+			if (vertical)
+			{
+				wheelEvent.integer_y = step;
+				wheelEvent.y = static_cast<float>(step);
+			}
+			else
+			{
+				wheelEvent.integer_x = step;
+				wheelEvent.x = static_cast<float>(step);
+			}
+			inputHandleMouseWheelEvent(&wheelEvent);
+			remainder -= static_cast<float>(step) * IOS_TOUCH_PAN_THRESHOLD;
+		}
+	};
+
+	if (deltaY != 0.f)
+	{
+		emitWheelSteps(iosTouchGestureState.uiScrollRemainderY, deltaY, true);
+	}
+	if (deltaX != 0.f)
+	{
+		emitWheelSteps(iosTouchGestureState.uiScrollRemainderX, deltaX, false);
+	}
+}
+
+static bool iosTryActivateRadarHold(const SDL_TouchFingerEvent *touch, uint32_t now)
+{
+	if (!iosTouchGestureState.startedOverRadar || iosTouchGestureState.pinchActive || iosTouchGestureState.buildDragActive)
+	{
+		return false;
+	}
+
+	Vector2i logicalCoords = iosTouchToLogicalCoords(touch->x, touch->y);
+	if (iosTouchGestureState.radarHoldActive || now - iosTouchGestureState.primaryDownTime >= IOS_TOUCH_LONG_PRESS_MS)
+	{
+		iosTouchGestureState.radarHoldActive = true;
+		iosTouchGestureState.panActive = false;
+		iosTouchGestureState.movedBeyondTap = true;
+		radarSetViewFromScreenPoint(logicalCoords.x, logicalCoords.y);
+		return true;
+	}
+
+	return false;
+}
+
+static void iosHandleFingerDown(const SDL_TouchFingerEvent *touch)
+{
+	iosSetTouchInputMode(true);
+	iosUpdatePointerFromTouch(touch);
+
+	if (iosTouchGestureState.primaryFingerId == WZ_INVALID_FINGER_ID)
+	{
+		iosTouchGestureState.primaryFingerId = touch->fingerID;
+		iosTouchGestureState.primaryDownTime = wzGetTicks();
+		iosTouchGestureState.uiScrollRemainderX = 0.f;
+		iosTouchGestureState.uiScrollRemainderY = 0.f;
+		iosTouchGestureState.startX = touch->x;
+		iosTouchGestureState.startY = touch->y;
+		iosTouchGestureState.primaryX = touch->x;
+		iosTouchGestureState.primaryY = touch->y;
+		Vector2i logicalCoords = iosTouchToLogicalCoords(touch->x, touch->y);
+		iosTouchGestureState.startedOverRadar = radarScreenPointContains(logicalCoords.x, logicalCoords.y);
+		iosTouchGestureState.panActive = !iosTouchGestureState.startedOverRadar;
+		return;
+	}
+
+	if (iosTouchGestureState.secondaryFingerId == WZ_INVALID_FINGER_ID && touch->fingerID != iosTouchGestureState.primaryFingerId)
+	{
+		if (iosTouchGestureState.buildDragActive)
+		{
+			iosDispatchMouseButtonAt(iosTouchGestureState.primaryX, iosTouchGestureState.primaryY, SDL_EVENT_MOUSE_BUTTON_UP, SDL_BUTTON_LEFT);
+			iosTouchGestureState.buildDragActive = false;
+		}
+		iosTouchGestureState.secondaryFingerId = touch->fingerID;
+		iosTouchGestureState.secondaryX = touch->x;
+		iosTouchGestureState.secondaryY = touch->y;
+		iosTouchGestureState.uiScrollRemainderX = 0.f;
+		iosTouchGestureState.uiScrollRemainderY = 0.f;
+		iosTouchGestureState.pinchActive = true;
+		iosTouchGestureState.panActive = false;
+		iosTouchGestureState.lastPinchDistance = iosTouchDistance();
+	}
+}
+
+static void iosHandleFingerMotion(const SDL_TouchFingerEvent *touch)
+{
+	iosSetTouchInputMode(true);
+	iosUpdatePointerFromTouch(touch);
+
+	if (touch->fingerID == iosTouchGestureState.primaryFingerId)
+	{
+		iosTouchGestureState.primaryX = touch->x;
+		iosTouchGestureState.primaryY = touch->y;
+		if (iosTouchMovedBeyondTap(touch->x, touch->y))
+		{
+			iosTouchGestureState.movedBeyondTap = true;
+		}
+	}
+	else if (touch->fingerID == iosTouchGestureState.secondaryFingerId)
+	{
+		iosTouchGestureState.secondaryX = touch->x;
+		iosTouchGestureState.secondaryY = touch->y;
+	}
+	else
+	{
+		return;
+	}
+
+	if (iosTouchGestureState.pinchActive && iosTouchGestureState.secondaryFingerId != WZ_INVALID_FINGER_ID)
+	{
+		const float newDistance = iosTouchDistance();
+		const float delta = newDistance - iosTouchGestureState.lastPinchDistance;
+		if (std::fabs(delta) >= IOS_TOUCH_PINCH_THRESHOLD)
+		{
+			const float zoomDirection = (delta > 0.f) ? -1.f : 1.f;
+			const float stepMultiplier = std::max(1.f, std::fabs(delta) / IOS_TOUCH_PINCH_THRESHOLD);
+			const float sensitivityScale = std::max(0.25f, static_cast<float>(war_GetTouchZoomSensitivity()) / 100.f);
+			incrementViewDistance(static_cast<float>(war_GetMapZoomRate()) * zoomDirection * stepMultiplier * sensitivityScale);
+			iosTouchGestureState.lastPinchDistance = newDistance;
+		}
+		return;
+	}
+
+	if (touch->fingerID == iosTouchGestureState.primaryFingerId && iosTryActivateRadarHold(touch, wzGetTicks()))
+	{
+		return;
+	}
+
+	if (iosTouchGestureState.buildDragActive && touch->fingerID == iosTouchGestureState.primaryFingerId)
+	{
+		iosDispatchMouseMotionAt(touch->x, touch->y);
+		return;
+	}
+
+	if (touch->fingerID == iosTouchGestureState.primaryFingerId
+		&& iosTouchGestureState.movedBeyondTap
+		&& !iosTouchGestureState.startedOverRadar
+		&& !iosShouldRoutePrimaryDragToUI()
+		&& iosTouchCanBuildDrag())
+	{
+		iosTouchGestureState.buildDragActive = true;
+		iosTouchGestureState.panActive = false;
+		iosDispatchMouseButtonAt(iosTouchGestureState.startX, iosTouchGestureState.startY, SDL_EVENT_MOUSE_BUTTON_DOWN, SDL_BUTTON_LEFT);
+		iosDispatchMouseMotionAt(touch->x, touch->y);
+		return;
+	}
+
+	if (iosTouchGestureState.panActive && touch->fingerID == iosTouchGestureState.primaryFingerId)
+	{
+		if (iosTouchGestureState.movedBeyondTap)
+		{
+			if (iosShouldRoutePrimaryDragToUI())
+			{
+				iosApplyScrollGestureToUI(touch->dx, touch->dy);
+			}
+			else
+			{
+				iosApplyPanGesture(touch->dx, touch->dy);
+			}
+		}
+	}
+}
+
+static void iosHandleFingerUp(const SDL_TouchFingerEvent *touch)
+{
+	iosSetTouchInputMode(true);
+	iosUpdatePointerFromTouch(touch);
+
+	if (touch->fingerID == iosTouchGestureState.secondaryFingerId)
+	{
+		iosTouchGestureState.secondaryFingerId = WZ_INVALID_FINGER_ID;
+		iosTouchGestureState.pinchActive = false;
+		iosTouchGestureState.panActive = (iosTouchGestureState.primaryFingerId != WZ_INVALID_FINGER_ID) && !iosTouchGestureState.startedOverRadar;
+		return;
+	}
+
+	if (touch->fingerID == iosTouchGestureState.primaryFingerId)
+	{
+		const uint32_t now = wzGetTicks();
+		const bool radarLongPress = now - iosTouchGestureState.primaryDownTime >= IOS_TOUCH_LONG_PRESS_MS;
+		const bool multiSelectLongPress = now - iosTouchGestureState.primaryDownTime >= iosConfiguredMultiSelectHoldMs();
+		if (iosTouchGestureState.radarHoldActive || (iosTouchGestureState.startedOverRadar && radarLongPress))
+		{
+			if (!iosTouchGestureState.radarHoldActive)
+			{
+				Vector2i logicalCoords = iosTouchToLogicalCoords(touch->x, touch->y);
+				radarSetViewFromScreenPoint(logicalCoords.x, logicalCoords.y);
+			}
+			iosTouchGestureState = IOSTouchGestureState();
+			return;
+		}
+		if (iosTouchGestureState.buildDragActive)
+		{
+			if (multiSelectLongPress)
+			{
+				iosActivateLongPressModifier(now);
+			}
+			iosDispatchMouseButtonAt(touch->x, touch->y, SDL_EVENT_MOUSE_BUTTON_UP, SDL_BUTTON_LEFT);
+			iosTouchGestureState = IOSTouchGestureState();
+			return;
+		}
+
+		if (iosTouchGestureState.secondaryFingerId != WZ_INVALID_FINGER_ID)
+		{
+			iosTouchGestureState.primaryFingerId = iosTouchGestureState.secondaryFingerId;
+			iosTouchGestureState.primaryX = iosTouchGestureState.secondaryX;
+			iosTouchGestureState.primaryY = iosTouchGestureState.secondaryY;
+			iosTouchGestureState.startX = iosTouchGestureState.secondaryX;
+			iosTouchGestureState.startY = iosTouchGestureState.secondaryY;
+			iosTouchGestureState.primaryDownTime = now;
+			iosTouchGestureState.movedBeyondTap = false;
+			iosTouchGestureState.uiScrollRemainderX = 0.f;
+			iosTouchGestureState.uiScrollRemainderY = 0.f;
+			iosTouchGestureState.secondaryFingerId = WZ_INVALID_FINGER_ID;
+			iosTouchGestureState.pinchActive = false;
+			Vector2i logicalCoords = iosTouchToLogicalCoords(iosTouchGestureState.primaryX, iosTouchGestureState.primaryY);
+			iosTouchGestureState.startedOverRadar = radarScreenPointContains(logicalCoords.x, logicalCoords.y);
+			iosTouchGestureState.panActive = !iosTouchGestureState.startedOverRadar;
+		}
+		else
+		{
+			if (!iosTouchGestureState.movedBeyondTap && !iosTouchGestureState.pinchActive)
+			{
+				if (multiSelectLongPress)
+				{
+					if (canTouchActivateMultiSelectModifier())
+					{
+						iosActivateLongPressModifier(now);
+					}
+					iosDispatchClickAt(touch->x, touch->y, SDL_BUTTON_LEFT);
+				}
+				else if (iosIsDoubleTap(now, touch->x, touch->y))
+				{
+					iosDispatchClickAt(touch->x, touch->y, shouldSuppressTouchDoubleTapOrder() ? SDL_BUTTON_LEFT : SDL_BUTTON_RIGHT);
+					iosLastTapTime = 0;
+				}
+				else
+				{
+					iosDispatchClickAt(touch->x, touch->y, SDL_BUTTON_LEFT);
+					iosLastTapTime = now;
+					iosLastTapX = touch->x;
+					iosLastTapY = touch->y;
+				}
+			}
+			iosTouchGestureState = IOSTouchGestureState();
+		}
+	}
+}
+#endif
+
+#if !defined(WZ_OS_IOS)
+static Vector2i windowPointToLogicalCoords(float windowX, float windowY)
+{
+	return Vector2i(static_cast<int>(windowX / current_displayScaleFactor), static_cast<int>(windowY / current_displayScaleFactor));
+}
+#endif
+
+bool inputTouchMultiSelectActive()
+{
+#if defined(WZ_OS_IOS)
+	const uint32_t now = wzGetTicks();
+	return iosTouchMultiSelectUntilTime != 0 && now <= iosTouchMultiSelectUntilTime;
+#else
+	return false;
+#endif
+}
 
 /* The current screen resizing state for this iteration through the game loop, in the game coordinate system */
 struct ScreenSizeChange
@@ -445,6 +952,16 @@ std::vector<video_backend> wzAvailableGfxBackends()
 	availableBackends.push_back(video_backend::opengl);
 	availableBackends.push_back(video_backend::opengles);
 # endif // (defined(_M_X64) || defined(_M_IX86)
+#elif defined(WZ_OS_IOS)
+// IOS:
+	// Vulkan through MoltenVK is the Metal-backed renderer path for iOS.
+	// Do not fall back to OpenGL ES here: the simulator can create an ES
+	// context that never presents a frame, which leaves the app visually black.
+#   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#   else
+	availableBackends.push_back(video_backend::opengles);
+#   endif
 #elif defined(WZ_OS_MAC)
 // MACOS:
 	if (cocoaIsRunningOnMacOSAtLeastVersion(13, 0)) // macOS 13.0+, which has Metal 3+
@@ -560,6 +1077,13 @@ unsigned int wzGetCurrentDisplayScale()
 
 void wzShowMouse(bool visible)
 {
+#if defined(WZ_OS_IOS)
+	if (iosPrefersTouchInput && visible)
+	{
+		SDL_HideCursor();
+		return;
+	}
+#endif
 	if (visible)
 	{
 		SDL_ShowCursor();
@@ -687,12 +1211,20 @@ WINDOW_MODE wzGetCurrentWindowMode()
 	if (!WZbackend.has_value())
 	{
 		// return a dummy value
+#if defined(WZ_OS_IOS)
+		return WINDOW_MODE::fullscreen;
+#else
 		return WINDOW_MODE::windowed;
+#endif
 	}
 	if (WZwindow == nullptr)
 	{
 		debug(LOG_WARNING, "wzGetCurrentWindowMode called when window is not available");
+#if defined(WZ_OS_IOS)
+		return WINDOW_MODE::fullscreen;
+#else
 		return WINDOW_MODE::windowed;
+#endif
 	}
 
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
@@ -708,7 +1240,9 @@ WINDOW_MODE wzGetCurrentWindowMode()
 
 std::vector<WINDOW_MODE> wzSupportedWindowModes()
 {
-#if defined(__EMSCRIPTEN__)
+#if defined(WZ_OS_IOS)
+	return {WINDOW_MODE::fullscreen};
+#elif defined(__EMSCRIPTEN__)
 	// For now, Emscripten always uses soft-fullscreen windowed mode
 	return {WINDOW_MODE::windowed};
 #else
@@ -741,6 +1275,9 @@ WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode)
 
 WINDOW_MODE wzAltEnterToggleFullscreen()
 {
+#if defined(WZ_OS_IOS)
+	return WINDOW_MODE::fullscreen;
+#endif
 	auto mode = wzGetCurrentWindowMode();
 	switch (mode)
 	{
@@ -837,7 +1374,7 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 		}
 	}
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// Wait for window size changes to be processed
 	SDL_SyncWindow(WZwindow);
 #endif
@@ -1711,8 +2248,9 @@ static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
  */
 static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 {
-	mouseXPos = (int)((float)buttonEvent->x / current_displayScaleFactor);
-	mouseYPos = (int)((float)buttonEvent->y / current_displayScaleFactor);
+	Vector2i logicalCoords = windowPointToLogicalCoords(buttonEvent->x, buttonEvent->y);
+	mouseXPos = logicalCoords.x;
+	mouseYPos = logicalCoords.y;
 
 	MOUSE_KEY_CODE mouseKeyCode;
 	switch (buttonEvent->button)
@@ -1792,8 +2330,11 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	{
 	case SDL_EVENT_MOUSE_MOTION :
 		/* store the current mouse position */
-		mouseXPos = (int)((float)motionEvent->x / current_displayScaleFactor);
-		mouseYPos = (int)((float)motionEvent->y / current_displayScaleFactor);
+		{
+			Vector2i logicalCoords = windowPointToLogicalCoords(motionEvent->x, motionEvent->y);
+			mouseXPos = logicalCoords.x;
+			mouseYPos = logicalCoords.y;
+		}
 
 		/* now see if a drag has started */
 		if ((aMouseState[dragKey].state == KEY_PRESSED ||
@@ -1831,6 +2372,41 @@ void wzMain(int &argc, char **argv)
 #define MIN_WZ_GAMESCREEN_WIDTH 640
 #define MIN_WZ_GAMESCREEN_HEIGHT 480
 
+static void calculateGameScreenSizeForWindow(SDL_Window *window, unsigned int logicalWindowWidth, unsigned int logicalWindowHeight, unsigned int *logicalScreenWidth, unsigned int *logicalScreenHeight)
+{
+	*logicalScreenWidth = logicalWindowWidth;
+	*logicalScreenHeight = logicalWindowHeight;
+
+	if (current_displayScaleFactor > 1.0f)
+	{
+		*logicalScreenWidth = static_cast<unsigned int>(logicalWindowWidth / current_displayScaleFactor);
+		*logicalScreenHeight = static_cast<unsigned int>(logicalWindowHeight / current_displayScaleFactor);
+	}
+
+#if defined(WZ_OS_IOS)
+	if (window == nullptr || !cocoaIOSIsPhone())
+	{
+		return;
+	}
+
+	int drawableWidth = 0;
+	int drawableHeight = 0;
+	if (!SDL_GetWindowSizeInPixels(window, &drawableWidth, &drawableHeight) || drawableWidth <= 0 || drawableHeight <= 0 || logicalWindowWidth == 0 || logicalWindowHeight == 0)
+	{
+		return;
+	}
+
+	const float nativeScaleX = static_cast<float>(drawableWidth) / static_cast<float>(logicalWindowWidth);
+	const float nativeScaleY = static_cast<float>(drawableHeight) / static_cast<float>(logicalWindowHeight);
+	const float nativeScale = std::min(nativeScaleX, nativeScaleY);
+	const float fitWidthScale = static_cast<float>(drawableWidth) / static_cast<float>(MIN_WZ_GAMESCREEN_WIDTH);
+	const float fitHeightScale = static_cast<float>(drawableHeight) / static_cast<float>(MIN_WZ_GAMESCREEN_HEIGHT);
+	const float phoneGameScale = std::max(1.f, std::min(nativeScale, std::min(fitWidthScale, fitHeightScale)));
+	*logicalScreenWidth = std::max<unsigned int>(MIN_WZ_GAMESCREEN_WIDTH, static_cast<unsigned int>(drawableWidth / phoneGameScale));
+	*logicalScreenHeight = std::max<unsigned int>(MIN_WZ_GAMESCREEN_HEIGHT, static_cast<unsigned int>(drawableHeight / phoneGameScale));
+#endif
+}
+
 void handleGameScreenSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	screenWidth = newWidth;
@@ -1859,13 +2435,13 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 	windowWidth = newWidth;
 	windowHeight = newHeight;
 
-	// NOTE: This function receives the window size in the window's logical units, but not accounting for the interface scale factor.
-	// Therefore, the provided old/newWidth/Height must be divided by the interface scale factor to calculate the new
-	// *game* screen logical width / height.
-	unsigned int oldScreenWidth = static_cast<unsigned int>(oldWidth / current_displayScaleFactor);
-	unsigned int oldScreenHeight = static_cast<unsigned int>(oldHeight / current_displayScaleFactor);
-	unsigned int newScreenWidth = static_cast<unsigned int>(newWidth / current_displayScaleFactor);
-	unsigned int newScreenHeight = static_cast<unsigned int>(newHeight / current_displayScaleFactor);
+	(void)oldWidth;
+	(void)oldHeight;
+	unsigned int oldScreenWidth = screenWidth;
+	unsigned int oldScreenHeight = screenHeight;
+	unsigned int newScreenWidth = 0;
+	unsigned int newScreenHeight = 0;
+	calculateGameScreenSizeForWindow(WZwindow, newWidth, newHeight, &newScreenWidth, &newScreenHeight);
 
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 
@@ -1875,6 +2451,20 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 
 void wzGetMinimumWindowSizeForDisplayScaleFactor(unsigned int *minWindowWidth, unsigned int *minWindowHeight, float displayScaleFactor = current_displayScaleFactor)
 {
+#if defined(WZ_OS_IOS)
+	if (cocoaIOSIsPhone())
+	{
+		if (minWindowWidth != nullptr)
+		{
+			*minWindowWidth = 320;
+		}
+		if (minWindowHeight != nullptr)
+		{
+			*minWindowHeight = 320;
+		}
+		return;
+	}
+#endif
 	if (minWindowWidth != nullptr)
 	{
 		*minWindowWidth = (int)ceil(MIN_WZ_GAMESCREEN_WIDTH * displayScaleFactor);
@@ -2049,12 +2639,9 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 
 	// Update the game's logical screen size
 	unsigned int oldScreenWidth = screenWidth, oldScreenHeight = screenHeight;
-	unsigned int newScreenWidth = windowWidth, newScreenHeight = windowHeight;
-	if (newDisplayScaleFactor > 1.0f)
-	{
-		newScreenWidth = static_cast<unsigned int>(windowWidth / newDisplayScaleFactor);
-		newScreenHeight = static_cast<unsigned int>(windowHeight / newDisplayScaleFactor);
-	}
+	unsigned int newScreenWidth = 0;
+	unsigned int newScreenHeight = 0;
+	calculateGameScreenSizeForWindow(WZwindow, windowWidth, windowHeight, &newScreenWidth, &newScreenHeight);
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 	gameDisplayScaleFactorDidChange(newDisplayScaleFactor);
 
@@ -2228,7 +2815,7 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 	}
 	debug(LOG_WZ, "Attempt to change resolution to [%d] %dx%d", screen, width, height);
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// Workaround for SDL (2.0.5) quirk on macOS:
 	//	When the green titlebar button is used to fullscreen the app in a new space:
 	//		- SDL does not return SDL_WINDOW_MAXIMIZED nor SDL_WINDOW_FULLSCREEN.
@@ -2535,6 +3122,18 @@ bool wzSDLOneTimeInit()
 		}
 	}
 
+#if defined(WZ_OS_IOS)
+	if (!iosSDLAppLifecycleWatchInstalled)
+	{
+		if (!SDL_AddEventWatch(iosSDLAppLifecycleEventWatch, nullptr))
+		{
+			debug(LOG_ERROR, "Error: Failed to install iOS SDL lifecycle event watch (%s).", SDL_GetError());
+			return false;
+		}
+		iosSDLAppLifecycleWatchInstalled = true;
+	}
+#endif
+
 	return true;
 }
 
@@ -2601,7 +3200,7 @@ bool wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLE
 
 void wzSDLPreWindowCreate_InitVulkanLibrary()
 {
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// Attempt to explicitly load libvulkan.dylib with a full path
 	// to support situations where run-time search paths using @executable_path are prohibited
 	std::string fullPathToVulkanLibrary = cocoaGetFrameworksPath("libvulkan.dylib");
@@ -2666,9 +3265,19 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	if (std::find(supportedFullscreenModes.begin(), supportedFullscreenModes.end(), fullscreen) == supportedFullscreenModes.end())
 	{
 		debug(LOG_ERROR, "Unsupported fullscreen mode specified: %d; using default", static_cast<int>(fullscreen));
+#if defined(WZ_OS_IOS)
+		fullscreen = WINDOW_MODE::fullscreen;
+#else
 		fullscreen = WINDOW_MODE::windowed;
+#endif
 		war_setWindowMode(fullscreen); // persist the change
 	}
+#if defined(WZ_OS_IOS)
+	// iOS has no real windowed mode. Forcing SDL fullscreen here avoids using
+	// a stale desktop-style config value that can leave the GL view undersized.
+	fullscreen = WINDOW_MODE::fullscreen;
+	war_setWindowMode(fullscreen);
+#endif
 
 	if (usesSDLBackend_OpenGL)
 	{
@@ -2723,7 +3332,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 				debug(LOG_WZ, "Monitor mode refresh rate < 59 -- discarding entry");
 				// only store 60Hz & higher modes, some display report 59 on Linux
 			}
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 			else if (displaymode->refresh_rate < 59.94f)
 			{
 				// skip entries with 59.93 refresh rate, as SDL 3.2.x doesn't support switching to them due to a bug
@@ -2879,6 +3488,13 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 		debug(LOG_INFO, "Failed to create a window, because: %s", createWindowErrorStr.c_str());
 		throw WzCreateWindowError(createWindowErrorStr);
 	}
+#if defined(WZ_OS_IOS)
+	if (!SDL_SetWindowFullscreen(WZwindow, true))
+	{
+		debug(LOG_WARNING, "Failed to force iOS fullscreen window: %s", SDL_GetError());
+	}
+	SDL_SyncWindow(WZwindow);
+#endif
 
 	// Always set the fullscreen mode (so switching works to the desired mode, even if we don't start in fullscreen mode)
 	if (wzSetDefaultFullscreenDisplayMode())
@@ -2892,15 +3508,19 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 			});
 		}
 	}
-	else
-	{
-		if (fullscreen == WINDOW_MODE::fullscreen)
+		else
 		{
-			debug(LOG_ERROR, "Failed to initialize at fullscreen mode ([%d] [%u x %u]); reverting to windowed mode", screenIndex, war_GetFullscreenModeWidth(), war_GetFullscreenModeHeight());
-			wzChangeWindowMode(WINDOW_MODE::windowed);
-			fullscreen = WINDOW_MODE::windowed;
+			if (fullscreen == WINDOW_MODE::fullscreen)
+			{
+#if defined(WZ_OS_IOS)
+				debug(LOG_WARNING, "Failed to initialize explicit fullscreen display mode on iOS; continuing with forced fullscreen window");
+#else
+				debug(LOG_ERROR, "Failed to initialize at fullscreen mode ([%d] [%u x %u]); reverting to windowed mode", screenIndex, war_GetFullscreenModeWidth(), war_GetFullscreenModeHeight());
+				wzChangeWindowMode(WINDOW_MODE::windowed);
+				fullscreen = WINDOW_MODE::windowed;
+#endif
+			}
 		}
-	}
 
 	// Get resulting logical window size
 	int resultingWidth, resultingHeight = 0;
@@ -2953,13 +3573,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	windowHeight = (unsigned int)resultingHeight;
 
 	// Calculate the game screen's logical dimensions
-	screenWidth = windowWidth;
-	screenHeight = windowHeight;
-	if (current_displayScaleFactor > 1.0f)
-	{
-		screenWidth = static_cast<unsigned int>(windowWidth / current_displayScaleFactor);
-		screenHeight = static_cast<unsigned int>(windowHeight / current_displayScaleFactor);
-	}
+	calculateGameScreenSizeForWindow(WZwindow, windowWidth, windowHeight, &screenWidth, &screenHeight);
 	pie_SetVideoBufferWidth(screenWidth);
 	pie_SetVideoBufferHeight(screenHeight);
 
@@ -3223,7 +3837,7 @@ static bool wzAttemptInitializeBackend(optional<video_backend> backend, int32_t 
 		}
 	}
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	if (backend.has_value())
 	{
 		cocoaSetupWZMenus();
@@ -3281,7 +3895,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		return false;
 	}
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// on macOS, support maximizing to a fullscreen space (modern behavior)
 	if (!SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1"))
 	{
@@ -3683,18 +4297,64 @@ void wzEventLoopOneFrame(void* arg)
 	{
 		switch (event.type)
 		{
+#if defined(WZ_OS_IOS)
+		case SDL_EVENT_TERMINATING:
+		case SDL_EVENT_WILL_ENTER_BACKGROUND:
+		case SDL_EVENT_DID_ENTER_BACKGROUND:
+			iosAppInBackground.store(true, std::memory_order_release);
+			iosResetTouchGestureState();
+			inputLoseFocus();
+			break;
+		case SDL_EVENT_WILL_ENTER_FOREGROUND:
+		case SDL_EVENT_DID_ENTER_FOREGROUND:
+			iosAppInBackground.store(false, std::memory_order_release);
+			iosResetTouchGestureState();
+			inputLoseFocus();
+			break;
+		case SDL_EVENT_FINGER_DOWN:
+			iosHandleFingerDown(&event.tfinger);
+			break;
+		case SDL_EVENT_FINGER_MOTION:
+			iosHandleFingerMotion(&event.tfinger);
+			break;
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+			iosHandleFingerUp(&event.tfinger);
+			break;
+#endif
 		case SDL_EVENT_KEY_UP:
 		case SDL_EVENT_KEY_DOWN:
 			inputHandleKeyEvent(&event.key);
 			break;
 		case SDL_EVENT_MOUSE_BUTTON_UP:
 		case SDL_EVENT_MOUSE_BUTTON_DOWN:
+#if defined(WZ_OS_IOS)
+			if (event.button.which == SDL_TOUCH_MOUSEID)
+			{
+				break;
+			}
+			iosSetTouchInputMode(false);
+#endif
 			inputHandleMouseButtonEvent(&event.button);
 			break;
 		case SDL_EVENT_MOUSE_MOTION:
+#if defined(WZ_OS_IOS)
+			if (event.motion.which == SDL_TOUCH_MOUSEID)
+			{
+				break;
+			}
+			iosSetTouchInputMode(false);
+#endif
 			inputHandleMouseMotionEvent(&event.motion);
 			break;
 		case SDL_EVENT_MOUSE_WHEEL:
+#if defined(WZ_OS_IOS)
+			if (event.wheel.which == SDL_TOUCH_MOUSEID)
+			{
+				break;
+			}
+			iosSetTouchInputMode(false);
+#endif
 			inputHandleMouseWheelEvent(&event.wheel);
 			break;
 		case SDL_EVENT_TEXT_INPUT:	// SDL now handles text input differently
@@ -3731,11 +4391,11 @@ void wzEventLoopOneFrame(void* arg)
 			break;
 		}
 
-		if (wzSDLAppEvent == event.type)
-		{
-			// Custom WZ App Event
-			switch (event.user.code)
+			if (wzSDLAppEvent == event.type)
 			{
+				// Custom WZ App Event
+				switch (event.user.code)
+				{
 				case wzSDLAppEventCodes::MAINTHREADEXEC:
 					if (event.user.data1 != nullptr)
 					{
@@ -3746,9 +4406,20 @@ void wzEventLoopOneFrame(void* arg)
 					break;
 				default:
 					break;
+				}
 			}
 		}
+
+#if defined(WZ_OS_IOS)
+	if (iosAppInBackground.load(std::memory_order_acquire))
+	{
+		iosResetTouchGestureState();
+		inputLoseFocus();
+		inputNewFrame();
+		SDL_Delay(100);
+		return;
 	}
+#endif
 
 	processScreenSizeChangeNotificationIfNeeded();
 	mainLoop();				// WZ does its thing

@@ -432,6 +432,25 @@ bool loadConfig()
 		int v = value.value();
 		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
+		if (auto value = iniGetIntegerOpt("touchPanSensitivity"))
+		{
+			int v = value.value();
+			war_SetTouchPanSensitivity((v % TOUCH_PAN_SENSITIVITY_STEP != 0) ? TOUCH_PAN_SENSITIVITY_DEFAULT : v);
+		}
+		if (auto value = iniGetIntegerOpt("touchZoomSensitivity"))
+		{
+			int v = value.value();
+			war_SetTouchZoomSensitivity((v % TOUCH_ZOOM_SENSITIVITY_STEP != 0) ? TOUCH_ZOOM_SENSITIVITY_DEFAULT : v);
+		}
+		if (auto value = iniGetIntegerOpt("touchMultiSelectHoldMs"))
+		{
+			int v = value.value();
+			war_SetTouchMultiSelectHoldMs((v % TOUCH_MULTISELECT_HOLD_STEP_MS != 0) ? TOUCH_MULTISELECT_HOLD_DEFAULT_MS : v);
+		}
+		if (auto value = iniGetBoolOpt("touchPanInvert"))
+		{
+			war_SetTouchPanInverted(value.value());
+		}
 	setShakeStatus(iniGetBool("shake", false).value());
 	war_setGroupsMenuEnabled(iniGetBool("groupmenu", true).value());
 	setGroupButtonEnabled(war_getGroupsMenuEnabled());
@@ -568,6 +587,9 @@ bool loadConfig()
 			war_setWindowMode(static_cast<WINDOW_MODE>(fullscreenmode_int));
 		}
 	}
+#if defined(WZ_OS_IOS)
+	war_setWindowMode(WINDOW_MODE::fullscreen);
+#endif
 	if (!createdConfigFile && configVersion < 3)
 	{
 		// Upgrade old bool value to TrapCursorMode
@@ -748,6 +770,12 @@ bool loadConfig()
 
 	war_setLobbyDisableIPv6(iniGetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6()).value());
 	war_setLobbyFilterIPv6Only(iniGetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only()).value());
+#if defined(WZ_OS_IOS)
+	war_setHostConnectionProvider(ConnectionProviderType::TCP_DIRECT);
+	NETsetJoinPreferenceIPv6(false);
+	war_setLobbyDisableIPv6(false);
+	war_setLobbyFilterIPv6Only(false);
+#endif
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;
@@ -823,6 +851,10 @@ bool saveConfig()
 	iniSetString("language", getLanguage());
 	iniSetInteger("difficulty", getDifficultyLevel());		// level
 	iniSetInteger("cameraSpeed", war_GetCameraSpeed());	// camera speed
+	iniSetInteger("touchPanSensitivity", war_GetTouchPanSensitivity());
+	iniSetInteger("touchZoomSensitivity", war_GetTouchZoomSensitivity());
+	iniSetInteger("touchMultiSelectHoldMs", war_GetTouchMultiSelectHoldMs());
+	iniSetBool("touchPanInvert", war_GetTouchPanInverted());
 	iniSetBool("radarJump", war_GetRadarJump());		// radar jump
 	iniSetInteger("lodDistanceBias", war_getLODDistanceBiasPercentage());
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration

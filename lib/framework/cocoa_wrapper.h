@@ -23,7 +23,7 @@
 
 #include "wzglobal.h"
 
-#ifdef WZ_OS_MAC
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 
 bool cocoaSelectFileInFinder(const char *filename);
 bool cocoaSelectFolderInFinder(const char* path);
@@ -38,6 +38,14 @@ bool cocoaTransformToBackgroundApplication();
 
 bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor);
 
-#endif // WZ_OS_MAC
+#endif // WZ_OS_MAC && !WZ_OS_IOS
+
+#if defined(WZ_OS_IOS)
+
+bool cocoaGetIOSDocumentsDir(char *const tmpstr, size_t const size);
+bool cocoaOpenFolderInFiles(const char* path);
+bool cocoaIOSIsPhone();
+
+#endif // WZ_OS_IOS
 
 #endif // __INCLUDED_LIB_FRAMEWORK_COCOA_WRAPPER_H__

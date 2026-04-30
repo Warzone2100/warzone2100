@@ -51,6 +51,13 @@ void processMouseClickInput();
 
 void resetScroll();
 
+bool canTouchDragBuildStructure();
+bool canTouchActivateMultiSelectModifier();
+bool shouldSuppressTouchDoubleTapOrder();
+void setTouchPanScrollScaleLeftRight(float scale);
+void setTouchPanScrollScaleUpDown(float scale);
+void clearTouchPanScrollScales();
+
 bool DrawnInLastFrame(SDWORD Frame);
 
 // Clear all selections
@@ -195,11 +202,9 @@ extern void shakeStop();
 // reset the input state
 void resetInput();
 
-struct WorldMapState;
-
-bool CheckInScrollLimits(const WorldMapState& mapState, const int &xPos, const int &yPos);
-bool CheckInScrollLimitsCamera(const WorldMapState& mapState, SDWORD *xPos, SDWORD *zPos);
-bool CheckScrollLimits(const WorldMapState& mapState);
+bool CheckInScrollLimits(const int &xPos, const int &yPos);
+bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos);
+bool CheckScrollLimits();
 
 BASE_OBJECT	*mouseTarget();
 

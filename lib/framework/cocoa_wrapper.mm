@@ -26,9 +26,15 @@
 #error "Objective-C ARC (Automatic Reference Counting) is off"
 #endif
 
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <dispatch/dispatch.h>
+#else
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
-#import <TargetConditionals.h>
+#endif
 
 static inline NSString * _Nonnull nsstringify(const char *str)
 {
@@ -39,6 +45,55 @@ static inline NSString * _Nonnull nsstringify(const char *str)
     }
 	return nsString;
 }
+
+#if TARGET_OS_IPHONE
+
+bool cocoaGetIOSDocumentsDir(char *const tmpstr, size_t const size)
+{
+	@autoreleasepool {
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *path = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+		if (path == nil) return false;
+		return [path getCString:tmpstr maxLength:size encoding:NSUTF8StringEncoding];
+	}
+}
+
+bool cocoaOpenFolderInFiles(const char* path)
+{
+	if (path == nullptr) return false;
+
+	__block BOOL success = NO;
+	@autoreleasepool {
+		NSString *standardizedPath = [nsstringify(path) stringByStandardizingPath];
+		NSURL *pathURL = [NSURL fileURLWithPath:standardizedPath isDirectory:YES];
+		if (pathURL == nil) return false;
+		[[NSFileManager defaultManager] createDirectoryAtURL:pathURL withIntermediateDirectories:YES attributes:nil error:nil];
+		void (^openBlock)(void) = ^{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+			success = [[UIApplication sharedApplication] openURL:pathURL];
+#pragma clang diagnostic pop
+		};
+		if ([NSThread isMainThread])
+		{
+			openBlock();
+		}
+		else
+		{
+			dispatch_sync(dispatch_get_main_queue(), openBlock);
+		}
+	}
+	return success;
+}
+
+bool cocoaIOSIsPhone()
+{
+	@autoreleasepool {
+		return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
+	}
+}
+
+#else
 
 bool cocoaSelectFileInFinder(const char *filename)
 {
@@ -153,7 +208,7 @@ bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor)
 {
 # if TARGET_OS_MAC
 	@autoreleasepool {
-		NSOperatingSystemVersion targetMin = {};
+		NSOperatingSystemVersion targetMin;
 		targetMin.majorVersion = major;
 		targetMin.minorVersion = minor;
 		targetMin.patchVersion = 0;
@@ -174,5 +229,7 @@ bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor)
 	return false;
 #endif
 }
+
+#endif // TARGET_OS_IPHONE
 
 #endif // WZ_OS_MAC

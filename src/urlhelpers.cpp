@@ -193,7 +193,7 @@ bool openURLInBrowser(char const *url)
 	}
 	succeededOpeningUrl = !bShellExecuteFailure;
 #endif
-#if defined(WZ_OS_MAC) // macOS
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS) // macOS
 	succeededOpeningUrl = cocoaOpenURL(url);
 #endif
 	// Attempt using backend "open URL" support (if available)
@@ -280,8 +280,10 @@ bool openFolderInDefaultFileManager(const char* path)
 		::CoUninitialize();
 	}
 	return !bShellExecuteFailure;
-#elif defined (WZ_OS_MAC)
+#elif defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	return cocoaSelectFolderInFinder(path);
+#elif defined(WZ_OS_IOS)
+	return cocoaOpenFolderInFiles(path);
 #else
 	return xdg_open(path);
 #endif

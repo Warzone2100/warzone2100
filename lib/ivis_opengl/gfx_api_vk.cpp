@@ -3017,7 +3017,7 @@ void VkRoot::createDepthPassImagesAndFBOs(vk::Format depthFormat)
 		// Image view for just this layer
 		const auto imageViewCreateInfo = vk::ImageViewCreateInfo()
 			.setImage(pDepthMapImage->object)
-			.setViewType(vk::ImageViewType::e2DArray)
+			.setViewType(vk::ImageViewType::e2D)
 			.setFormat(depthFormat)
 			.setComponents(vk::ComponentMapping())
 			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, static_cast<uint32_t>(i), 1));
@@ -6385,6 +6385,13 @@ size_t VkRoot::numDepthPasses()
 
 bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
 {
+#if defined(WZ_OS_IOS)
+	if (_numDepthPasses != 0)
+	{
+		debug(LOG_INFO, "Disabling Vulkan shadow-map depth passes on iOS because MoltenVK does not support layered depth attachments on the simulator");
+		_numDepthPasses = 0;
+	}
+#endif
 	if (depthPassCount == _numDepthPasses
 		&& depthMapSize == _depthBufferResolution)
 	{

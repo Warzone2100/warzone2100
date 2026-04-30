@@ -30,9 +30,6 @@
 
 #include "lib/widget/widget.h"
 
-struct GameWorld;
-struct WorldMapState;
-
 void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set radar colour for given terrain type.
 
 #define MAX_RADARZOOM		(64)
@@ -42,10 +39,10 @@ void radarColour(UDWORD tileNumber, uint8_t r, uint8_t g, uint8_t b);	///< Set r
 
 bool InitRadar();				///< Initialize minimap subsystem.
 bool ShutdownRadar();			///< Shutdown minimap subsystem.
-bool resizeRadar(const WorldMapState& mapState);				///< Recalculate minimap size. For initialization code only.
-void drawRadar(GameWorld& world);				///< Draw the minimap on the screen.
-void CalcRadarPosition(const WorldMapState& mapState, int mX, int mY, int *PosX, int *PosY);	///< Given a position within the radar, returns a world coordinate.
-void SetRadarZoom(const WorldMapState& mapState, uint8_t ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
+bool resizeRadar();				///< Recalculate minimap size. For initialization code only.
+void drawRadar();				///< Draw the minimap on the screen.
+void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY);	///< Given a position within the radar, returns a world coordinate.
+void SetRadarZoom(uint8_t ZoomLevel);		///< Set current zoom level. 1.0 is 1:1 resolution.
 uint8_t GetRadarZoom();			///< Get current zoom level.
 
 /** Different mini-map draw modes. */
@@ -69,6 +66,8 @@ void radarInitVars();			///< Recalculate minimap variables. For initialization c
 std::shared_ptr<WIDGET> getRadarWidget();
 bool isMouseOverRadar();
 bool isRadarDragging();
+bool radarScreenPointContains(int x, int y);
+bool radarSetViewFromScreenPoint(int x, int y);
 
 extern PIELIGHT clanColours[];
 

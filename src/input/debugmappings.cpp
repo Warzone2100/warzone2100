@@ -31,7 +31,11 @@ DebugInputManager::DebugInputManager(const unsigned int maxPlayers)
 
 bool DebugInputManager::debugMappingsAllowed() const
 {
+#if defined(WZ_OS_IOS) && !defined(WZ_IOS_DEBUG_JIT)
+	return false;
+#else
 	return bDoingDebugMappings;
+#endif
 }
 
 bool DebugInputManager::getPlayerWantsDebugMappings(const unsigned int playerIndex) const
@@ -43,6 +47,12 @@ bool DebugInputManager::getPlayerWantsDebugMappings(const unsigned int playerInd
 
 void DebugInputManager::setPlayerWantsDebugMappings(const unsigned int playerIndex, const bool bWants)
 {
+#if defined(WZ_OS_IOS) && !defined(WZ_IOS_DEBUG_JIT)
+	(void)playerIndex;
+	(void)bWants;
+	bDoingDebugMappings = false;
+	return;
+#else
 	ASSERT_OR_RETURN(, playerIndex < playerWantsDebugMappings.size(), "playerIndex is invalid: %u", playerIndex);
 	playerWantsDebugMappings[playerIndex] = bWants;
 	bDoingDebugMappings = true;
@@ -56,4 +66,5 @@ void DebugInputManager::setPlayerWantsDebugMappings(const unsigned int playerInd
 		const bool bPlayerNWantsDebugMappings = bIsEmptySlot || (bIsSpectatorSlot && bIsTrueMultiplayerGame) || playerWantsDebugMappings[n];
 		bDoingDebugMappings &= bPlayerNWantsDebugMappings;
 	}
+#endif
 }

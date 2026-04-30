@@ -1,0 +1,165 @@
+name: iOS IPA WIP Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_label:
+        description: "Artifact label to use for this WIP build."
+        required: false
+        default: "wip"
+        type: string
+      configuration:
+        description: "Xcode configuration to package."
+        required: true
+        default: "Debug"
+        type: choice
+        options:
+          - Debug
+          - Release
+      ios_device_archs:
+        description: "Device architectures. Use arm64 unless an arm64e MoltenVK slice is available."
+        required: true
+        default: "arm64"
+        type: string
+  pull_request:
+    paths:
+      - ".github/workflows/ios_ipa_wip.yml"
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - "data/**"
+      - "lib/**"
+      - "platforms/ios/**"
+      - "src/**"
+      - "vcpkg.json"
+  merge_group:
+
+concurrency:
+  group: ios-ipa-wip-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-ios-ipa:
+    name: Build WIP iOS IPA
+    runs-on: macos-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          lfs: false
+
+      - name: Prepare WIP build settings
+        shell: bash
+        env:
+          DISPATCH_ARTIFACT_LABEL: ${{ inputs.artifact_label }}
+          DISPATCH_CONFIGURATION: ${{ inputs.configuration }}
+          DISPATCH_DEVICE_ARCHS: ${{ inputs.ios_device_archs }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            ARTIFACT_LABEL="${DISPATCH_ARTIFACT_LABEL:-wip}"
+            IOS_CONFIGURATION="${DISPATCH_CONFIGURATION:-Debug}"
+            DEVICE_ARCHS="${DISPATCH_DEVICE_ARCHS:-arm64}"
+          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            ARTIFACT_LABEL="pr-${PR_NUMBER:-unknown}-${GITHUB_SHA:0:12}"
+            IOS_CONFIGURATION="Debug"
+            DEVICE_ARCHS="arm64"
+          else
+            ARTIFACT_LABEL="${GITHUB_EVENT_NAME}-${GITHUB_SHA:0:12}"
+            IOS_CONFIGURATION="Debug"
+            DEVICE_ARCHS="arm64"
+          fi
+
+          ARTIFACT_LABEL="$(printf '%s' "${ARTIFACT_LABEL:-wip}" | tr -c 'A-Za-z0-9._-' '-')"
+          ARTIFACT_LABEL="${ARTIFACT_LABEL#-}"
+          ARTIFACT_LABEL="${ARTIFACT_LABEL%-}"
+          if [[ -z "${ARTIFACT_LABEL}" ]]; then
+            ARTIFACT_LABEL="wip-${GITHUB_SHA:0:12}"
+          fi
+          if [[ "${DEVICE_ARCHS}" != "arm64" && "${DEVICE_ARCHS}" != "arm64,arm64e" && "${DEVICE_ARCHS}" != "arm64e,arm64" ]]; then
+            echo "::error::Unsupported iOS device architectures '${DEVICE_ARCHS}'. Use arm64, or arm64,arm64e only when MoltenVK has matching slices."
+            exit 1
+          fi
+
+          echo "WIP_ARTIFACT_LABEL=${ARTIFACT_LABEL}" >> "${GITHUB_ENV}"
+          echo "IOS_BUILD_CONFIGURATION=${IOS_CONFIGURATION}" >> "${GITHUB_ENV}"
+          echo "IOS_DEVICE_ARCHS=${DEVICE_ARCHS}" >> "${GITHUB_ENV}"
+          echo "IOS_ALLOW_SOURCE_PAYLOAD=1" >> "${GITHUB_ENV}"
+          echo "IOS_ARTIFACT_DIR=platforms/ios/build/artifacts/device/${IOS_CONFIGURATION}" >> "${GITHUB_ENV}"
+
+      - name: Install build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          brew update
+          brew install \
+            autoconf \
+            automake \
+            cmake \
+            coreutils \
+            gawk \
+            glslang \
+            gnu-tar \
+            ldid \
+            libtool \
+            ninja \
+            p7zip \
+            pkg-config
+          echo "$(brew --prefix)/bin" >> "${GITHUB_PATH}"
+          echo "$(brew --prefix)/opt/gnu-tar/libexec/gnubin" >> "${GITHUB_PATH}"
+
+      - name: Install MoltenVK xcframework
+        shell: bash
+        env:
+          MOLTENVK_XCFRAMEWORK_ZIP_URL: ${{ secrets.MOLTENVK_XCFRAMEWORK_ZIP_URL }}
+        run: |
+          set -euo pipefail
+
+          WORK_DIR="${RUNNER_TEMP}/moltenvk"
+          rm -rf "${WORK_DIR}"
+          mkdir -p "${WORK_DIR}"
+
+          if [[ -d "platforms/ios/vendor/MoltenVK.xcframework" ]]; then
+            MOLTENVK_DIR="${GITHUB_WORKSPACE}/platforms/ios/vendor/MoltenVK.xcframework"
+          elif [[ -n "${MOLTENVK_XCFRAMEWORK_ZIP_URL}" ]]; then
+            curl -L "${MOLTENVK_XCFRAMEWORK_ZIP_URL}" -o "${WORK_DIR}/MoltenVK.xcframework.zip"
+            unzip -q "${WORK_DIR}/MoltenVK.xcframework.zip" -d "${WORK_DIR}"
+            MOLTENVK_DIR="$(find "${WORK_DIR}" -type d -name MoltenVK.xcframework | head -n 1)"
+          else
+            echo "::error::MoltenVK.xcframework was not found. Add platforms/ios/vendor/MoltenVK.xcframework or set the MOLTENVK_XCFRAMEWORK_ZIP_URL repository secret."
+            exit 1
+          fi
+
+          if [[ -z "${MOLTENVK_DIR}" || ! -d "${MOLTENVK_DIR}" ]]; then
+            echo "::error::Failed to locate MoltenVK.xcframework."
+            exit 1
+          fi
+
+          sudo mkdir -p /usr/local/lib
+          sudo rm -rf /usr/local/lib/MoltenVK.xcframework
+          sudo cp -R "${MOLTENVK_DIR}" /usr/local/lib/MoltenVK.xcframework
+          find /usr/local/lib/MoltenVK.xcframework -maxdepth 2 -name libMoltenVK.a -print -exec lipo -archs {} \; || true
+
+      - name: Build and package iOS app
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./platforms/ios/build_xcode_ios.sh device
+          find "${IOS_ARTIFACT_DIR}" -maxdepth 1 -type f -print -exec ls -lh {} \;
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: warzone2100-ios-${{ env.WIP_ARTIFACT_LABEL }}-${{ env.IOS_BUILD_CONFIGURATION }}
+          path: |
+            ${{ env.IOS_ARTIFACT_DIR }}/*.ipa
+            ${{ env.IOS_ARTIFACT_DIR }}/*.txt
+          if-no-files-found: error

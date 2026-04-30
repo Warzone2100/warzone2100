@@ -32,33 +32,36 @@
 #include "gateway.h"
 #include "game_world.h"
 
+/// the list of gateways on the current map
+static GATEWAY_LIST psGateways;
+
 // Prototypes
-static void gwFreeGateway(WorldMapState& mapState, GATEWAY *psDel);
+static void gwFreeGateway(GATEWAY *psDel);
 
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
 
 // get the size of the map
-static SDWORD gwMapWidth(const WorldMapState& mapState)
+static SDWORD gwMapWidth()
 {
-	return (SDWORD)mapState.width;
+	return (SDWORD)gameWorld.map.width;
 }
 
-static SDWORD gwMapHeight(const WorldMapState& mapState)
+static SDWORD gwMapHeight()
 {
-	return (SDWORD)mapState.height;
+	return (SDWORD)gameWorld.map.height;
 }
 
 // set the gateway flag on a tile
-static void gwSetGatewayFlag(WorldMapState& mapState, SDWORD x, SDWORD y)
+static void gwSetGatewayFlag(SDWORD x, SDWORD y)
 {
-	mapTile(mapState, (UDWORD)x, (UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
+	mapTile(gameWorld.map, (UDWORD)x, (UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
 }
 
 // clear the gateway flag on a tile
-static void gwClearGatewayFlag(WorldMapState& mapState, SDWORD x, SDWORD y)
+static void gwClearGatewayFlag(SDWORD x, SDWORD y)
 {
-	mapTile(mapState, (UDWORD)x, (UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
+	mapTile(gameWorld.map, (UDWORD)x, (UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
 }
 
 
@@ -66,30 +69,30 @@ static void gwClearGatewayFlag(WorldMapState& mapState, SDWORD x, SDWORD y)
 /*                   Gateway functions                                                                */
 
 // Initialise the gateway system
-bool gwInitialise(WorldMapState& mapState)
+bool gwInitialise()
 {
-	mapState.gateways.clear();
+	psGateways.clear();
 	return true;
 }
 
 // Shutdown the gateway system
-void gwShutDown(WorldMapState& mapState)
+void gwShutDown()
 {
-	for (auto psGateway : mapState.gateways)
+	for (auto psGateway : psGateways)
 	{
-		gwFreeGateway(mapState, psGateway);
+		gwFreeGateway(psGateway);
 	}
-	mapState.gateways.clear();
+	psGateways.clear();
 }
 
 // Add a gateway to the system
-bool gwNewGateway(WorldMapState& mapState, SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
+bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	GATEWAY		*psNew;
 	SDWORD		pos, temp;
 
-	ASSERT_OR_RETURN(false, x1 >= 0 && x1 < gwMapWidth(mapState) && y1 >= 0 && y1 < gwMapHeight(mapState)
-	                 && x2 >= 0 && x2 < gwMapWidth(mapState) && y2 >= 0 && y2 < gwMapHeight(mapState)
+	ASSERT_OR_RETURN(false, x1 >= 0 && x1 < gwMapWidth() && y1 >= 0 && y1 < gwMapHeight()
+	                 && x2 >= 0 && x2 < gwMapWidth() && y2 >= 0 && y2 < gwMapHeight()
 	                 && (x1 == x2 || y1 == y2), "Invalid gateway coordinates (%d, %d, %d, %d)",
 	                 x1, y1, x2, y2);
 	psNew = (GATEWAY *)malloc(sizeof(GATEWAY));
@@ -113,11 +116,11 @@ bool gwNewGateway(WorldMapState& mapState, SDWORD x1, SDWORD y1, SDWORD x2, SDWO
 	// Initialise the gateway, correct out-of-map gateways
 	psNew->x1 = MAX(3, x1);
 	psNew->y1 = MAX(3, y1);
-	psNew->x2 = MIN(x2, mapState.width - 4);
-	psNew->y2 = MIN(y2, mapState.height - 4);
+	psNew->x2 = MIN(x2, gameWorld.map.width - 4);
+	psNew->y2 = MIN(y2, gameWorld.map.height - 4);
 
 	// add the gateway to the list
-	mapState.gateways.push_back(psNew);
+	psGateways.push_back(psNew);
 
 	// set the map flags
 	if (psNew->x1 == psNew->x2)
@@ -125,7 +128,7 @@ bool gwNewGateway(WorldMapState& mapState, SDWORD x1, SDWORD y1, SDWORD x2, SDWO
 		// vertical gateway
 		for (pos = psNew->y1; pos <= psNew->y2; pos++)
 		{
-			gwSetGatewayFlag(mapState, psNew->x1, pos);
+			gwSetGatewayFlag(psNew->x1, pos);
 		}
 	}
 	else
@@ -133,7 +136,7 @@ bool gwNewGateway(WorldMapState& mapState, SDWORD x1, SDWORD y1, SDWORD x2, SDWO
 		// horizontal gateway
 		for (pos = psNew->x1; pos <= psNew->x2; pos++)
 		{
-			gwSetGatewayFlag(mapState, pos, psNew->y1);
+			gwSetGatewayFlag(pos, psNew->y1);
 		}
 	}
 
@@ -141,22 +144,22 @@ bool gwNewGateway(WorldMapState& mapState, SDWORD x1, SDWORD y1, SDWORD x2, SDWO
 }
 
 // Return the number of gateways.
-size_t gwNumGateways(const WorldMapState& mapState)
+size_t gwNumGateways()
 {
-	return mapState.gateways.size();
+	return psGateways.size();
 }
 
-GATEWAY_LIST &gwGetGateways(WorldMapState& mapState)
+GATEWAY_LIST &gwGetGateways()
 {
-	return mapState.gateways;
+	return psGateways;
 }
 
 // Release a gateway
-static void gwFreeGateway(WorldMapState& mapState, GATEWAY *psDel)
+static void gwFreeGateway(GATEWAY *psDel)
 {
 	int pos;
 
-	if (mapState.tiles) // this lines fixes the bug where we were closing the gateways after freeing the map
+	if (gameWorld.map.tiles) // this lines fixes the bug where we were closing the gateways after freeing the map
 	{
 		// clear the map flags
 		if (psDel->x1 == psDel->x2)
@@ -164,7 +167,7 @@ static void gwFreeGateway(WorldMapState& mapState, GATEWAY *psDel)
 			// vertical gateway
 			for (pos = psDel->y1; pos <= psDel->y2; pos++)
 			{
-				gwClearGatewayFlag(mapState, psDel->x1, pos);
+				gwClearGatewayFlag(psDel->x1, pos);
 			}
 		}
 		else
@@ -172,7 +175,7 @@ static void gwFreeGateway(WorldMapState& mapState, GATEWAY *psDel)
 			// horizontal gateway
 			for (pos = psDel->x1; pos <= psDel->x2; pos++)
 			{
-				gwClearGatewayFlag(mapState, pos, psDel->y1);
+				gwClearGatewayFlag(pos, psDel->y1);
 			}
 		}
 

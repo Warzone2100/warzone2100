@@ -28,14 +28,13 @@
 
 struct ShadowCascadesInfo;
 struct LightMap;
-struct WorldMapState;
 
 void loadTerrainTextures(MAP_TILESET mapTileset);
 
-bool initTerrain(WorldMapState& mapState);
+bool initTerrain();
 void shutdownTerrain();
 
-void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightData);
+void perFrameTerrainUpdates(const LightMap& lightData);
 void drawTerrainDepthOnly(const glm::mat4 &mvp);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowMVPMatrix);
 void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades);

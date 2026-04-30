@@ -28,8 +28,6 @@
 
 #include <stdint.h>
 
-struct WorldMapState;
-
 struct GATEWAY
 {
 	uint8_t x1, y1, x2, y2;
@@ -38,18 +36,18 @@ struct GATEWAY
 typedef std::list<GATEWAY *> GATEWAY_LIST;
 
 /// Initialise the gateway system
-bool gwInitialise(WorldMapState& mapState);
+bool gwInitialise();
 
 /// Shutdown the gateway system
-void gwShutDown(WorldMapState& mapState);
+void gwShutDown();
 
 /// Add a gateway to the system
-bool gwNewGateway(WorldMapState& mapState, int x1, int y1, int x2, int y2);
+bool gwNewGateway(int x1, int y1, int x2, int y2);
 
 /// Get number of gateways.
-size_t gwNumGateways(const WorldMapState& mapState);
+size_t gwNumGateways();
 
 /// Get the gateway list.
-GATEWAY_LIST &gwGetGateways(WorldMapState& mapState);
+GATEWAY_LIST &gwGetGateways();
 
 #endif // __INCLUDED_SRC_GATEWAY_H__

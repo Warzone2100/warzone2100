@@ -447,7 +447,7 @@ void kf_CloneSelected(int limit)
 	for (int i = 0; i < limit; i++)
 	{
 		Vector2i pos = droidToClone->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * (i + 1)));  // 40503 = 65536/φ (A bit more than a right angle)
-		DROID* psNewDroid = buildDroid(gameWorld, sTemplate, pos.x, pos.y, droidToClone->player, false, nullptr);
+		DROID* psNewDroid = buildDroid(sTemplate, pos.x, pos.y, droidToClone->player, false, nullptr);
 		if (psNewDroid)
 		{
 			addDroid(psNewDroid, gameWorld.objects.droids);
@@ -805,7 +805,7 @@ void	kf_TogglePower()
 /* Recalculates the lighting values for a tile */
 void	kf_RecalcLighting()
 {
-	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
+	initLighting(0, 0, gameWorld.map.width, gameWorld.map.height);
 	addConsoleMessage(_("Lighting values for all tiles recalculated"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -900,7 +900,7 @@ void kf_RevealMapAtPos()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
-	addSpotter(gameWorld.map, mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
+	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
 }
 
 // --------------------------------------------------------------------------
@@ -942,7 +942,7 @@ void	kf_RaiseTile()
 		return;  // Don't desynch if pressing 'W'...
 	}
 
-	raiseTile(gameWorld.map, mouseTileX, mouseTileY);
+	raiseTile(mouseTileX, mouseTileY);
 }
 
 // --------------------------------------------------------------------------
@@ -955,7 +955,7 @@ void	kf_LowerTile()
 		return;  // Don't desynch if pressing 'A'...
 	}
 
-	lowerTile(gameWorld.map, mouseTileX, mouseTileY);
+	lowerTile(mouseTileX, mouseTileY);
 }
 
 // --------------------------------------------------------------------------
@@ -979,7 +979,7 @@ MappableFunction kf_RadarZoom(const int multiplier)
 		if (newZoomLevel != oldZoomLevel)
 		{
 			CONPRINTF(_("Setting radar zoom to %u"), static_cast<unsigned>(newZoomLevel));
-			SetRadarZoom(gameWorld.map, newZoomLevel);
+			SetRadarZoom(newZoomLevel);
 			war_SetRadarZoom(GetRadarZoom()); // persist changed setting to config
 			audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 		}
@@ -1171,7 +1171,7 @@ MappableFunction kf_RemoveFromGrouping()
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		removeObjectFromGroup(gameWorld.objects, selectedPlayer);
+		removeObjectFromGroup(selectedPlayer);
 	};
 }
 
@@ -1288,11 +1288,11 @@ void enableGodMode()
 	}
 
 	godMode = true; // view all structures and droids
-	revealAll(gameWorld.map, selectedPlayer);
+	revealAll(selectedPlayer);
 	setRevealStatus(true); // view the entire map
 	radarPermitted = true; //add minimap without CC building
 
-	preProcessVisibility(gameWorld.map);
+	preProcessVisibility();
 }
 
 void	kf_ToggleGodMode()
@@ -1336,7 +1336,7 @@ void	kf_ToggleGodMode()
 		}
 		// remove all proximity messages
 		releaseAllProxDisp();
-		radarPermitted = structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true) || structureExists(mission.gameWorld.objects, selectedPlayer, REF_HQ, true);
+		radarPermitted = structureExists(selectedPlayer, REF_HQ, true, false) || structureExists(selectedPlayer, REF_HQ, true, true);
 	}
 	else
 	{
@@ -1719,7 +1719,7 @@ MappableFunction kf_JumpToUnits(const DROID_TYPE droidType)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedUnit(gameWorld.objects, droidType);
+		selNextSpecifiedUnit(droidType);
 	};
 }
 
@@ -1729,7 +1729,7 @@ void	kf_JumpToUnassignedUnits()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	selNextUnassignedUnit(gameWorld.objects);
+	selNextUnassignedUnit();
 }
 // --------------------------------------------------------------------------
 
@@ -1902,7 +1902,7 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedBuilding(gameWorld.objects, factoryType, bJumpToSelected);
+		selNextSpecifiedBuilding(factoryType, bJumpToSelected);
 
 		//deselect factories of other types
 		for (STRUCTURE* psCurrent : gameWorld.objects.structures[selectedPlayer])
@@ -1932,7 +1932,7 @@ MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedBuilding(gameWorld.objects, REF_RESEARCH, bJumpToSelected);
+		selNextSpecifiedBuilding(REF_RESEARCH, bJumpToSelected);
 		if (intCheckReticuleButEnabled(IDRET_RESEARCH))
 		{
 			setKeyButtonMapping(IDRET_RESEARCH);
@@ -1948,7 +1948,7 @@ MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedBuilding(gameWorld.objects, REF_POWER_GEN, bJumpToSelected);
+		selNextSpecifiedBuilding(REF_POWER_GEN, bJumpToSelected);
 		triggerEventSelected();
 	};
 }
@@ -2095,7 +2095,7 @@ void	kf_ToggleConsole()
 MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen)
 {
 	return [selectionClass, selectionType, bOnScreen]() {
-		selDroidSelection(gameWorld.objects, selectedPlayer, selectionClass, selectionType, bOnScreen);
+		selDroidSelection(selectedPlayer, selectionClass, selectionType, bOnScreen);
 	};
 }
 
@@ -2167,7 +2167,7 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 		// Only set the state if it's not a transporter.
 		if (psDroid->selected && !psDroid->isTransporter())
 		{
-			secondarySetState(psDroid, gameWorld.objects, sec, state);
+			secondarySetState(psDroid, sec, state);
 		}
 	}
 	intRefreshOrder();
@@ -2468,7 +2468,7 @@ void kf_ToggleRadarAllyEnemy()
 	{
 		CONPRINTF("%s", _("Radar showing player colors"));
 	}
-	resizeRadar(gameWorld.map);
+	resizeRadar();
 }
 
 void kf_ToggleRadarTerrain()
@@ -2521,7 +2521,7 @@ void	kf_AddHelpBlip()
 	y = mouseY();
 	if (isMouseOverRadar())
 	{
-		CalcRadarPosition(gameWorld.map, x, y, &worldX, &worldY);
+		CalcRadarPosition(x, y, &worldX, &worldY);
 		worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
 		worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
 	}

@@ -1129,6 +1129,58 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
+#if defined(WZ_OS_IOS)
+	result->addSection(OptionsSection(N_("Touch"), ""), true);
+	{
+		auto optionInfo = OptionInfo("controls.touch.panSensitivity", N_("Touch Pan Sensitivity"), N_("Adjust how strongly swipe gestures move the battlefield camera."));
+		auto valueChanger = OptionsSlider::make(TOUCH_PAN_SENSITIVITY_MIN, TOUCH_PAN_SENSITIVITY_MAX, TOUCH_PAN_SENSITIVITY_STEP,
+			[]() { return war_GetTouchPanSensitivity(); },
+			[](int32_t newValue) {
+				war_SetTouchPanSensitivity(newValue);
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.touch.zoomSensitivity", N_("Touch Zoom Sensitivity"), N_("Adjust how strongly pinch gestures zoom the battlefield camera."));
+		auto valueChanger = OptionsSlider::make(TOUCH_ZOOM_SENSITIVITY_MIN, TOUCH_ZOOM_SENSITIVITY_MAX, TOUCH_ZOOM_SENSITIVITY_STEP,
+			[]() { return war_GetTouchZoomSensitivity(); },
+			[](int32_t newValue) {
+				war_SetTouchZoomSensitivity(newValue);
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.touch.multiSelectHold", N_("Multi-Select Hold"), N_("Adjust how long an empty-space hold waits before the next tap extends selection."));
+		auto valueChanger = OptionsSlider::make(TOUCH_MULTISELECT_HOLD_MIN_MS, TOUCH_MULTISELECT_HOLD_MAX_MS, TOUCH_MULTISELECT_HOLD_STEP_MS,
+			[]() { return war_GetTouchMultiSelectHoldMs(); },
+			[](int32_t newValue) {
+				war_SetTouchMultiSelectHoldMs(newValue);
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.touch.invertPan", N_("Invert Touch Panning"), N_("Reverse swipe directions for touch camera movement."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_GetTouchPanInverted());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_SetTouchPanInverted(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+#endif
 
 	addKeyBindingsToOptionsForm(result, gInputManager, gKeyFuncConfig);
 

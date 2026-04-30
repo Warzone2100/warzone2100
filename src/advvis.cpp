@@ -46,10 +46,10 @@ inline float getTileIllumination(const MAPTILE *psTile)
 }
 
 // ------------------------------------------------------------------------------------
-void	avUpdateTiles(WorldMapState& mapState)
+void	avUpdateTiles()
 {
 	WZ_PROFILE_SCOPE(avUpdateTiles);
-	const int len = mapState.height * mapState.width;
+	const int len = gameWorld.map.height * gameWorld.map.width;
 	const int playermask = 1 << selectedPlayer;
 	UDWORD i = 0;
 	float maxLevel, increment = graphicsTimeAdjustedIncrement(FADE_IN_TIME);	// call once per frame
@@ -60,7 +60,7 @@ void	avUpdateTiles(WorldMapState& mapState)
 	/* Go through the tiles */
 	for (; i < len; i++)
 	{
-		psTile = &mapState.tiles[i];
+		psTile = &gameWorld.map.tiles[i];
 		maxLevel = getTileIllumination(psTile);
 
 		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
@@ -111,13 +111,13 @@ void	setRevealStatus(bool val)
 }
 
 // ------------------------------------------------------------------------------------
-void	preProcessVisibility(WorldMapState& mapState)
+void	preProcessVisibility()
 {
-	for (int i = 0; i < mapState.width; i++)
+	for (int i = 0; i < gameWorld.map.width; i++)
 	{
-		for (int j = 0; j < mapState.height; j++)
+		for (int j = 0; j < gameWorld.map.height; j++)
 		{
-			MAPTILE *psTile = mapTile(mapState, i, j);
+			MAPTILE *psTile = mapTile(gameWorld.map, i, j);
 			psTile->level = bRevealActive ? MIN(MIN_ILLUM, getTileIllumination(psTile) / 4.0f) : 0;
 
 			if (TEST_TILE_VISIBLE_TO_SELECTEDPLAYER(psTile))

@@ -30,6 +30,7 @@
 
 #include "input/debugmappings.h"
 #include "display.h"
+#include "hci.h"
 #include "cheat.h"
 #include "keybind.h"
 #include "multiplay.h"
@@ -128,6 +129,12 @@ bool _attemptCheatCode(const char *cheat_name)
 	}
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+#if defined(WZ_OS_IOS) && !defined(WZ_IOS_DEBUG_JIT)
+	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0 || strcmp(cheat_name, "cheat off") == 0)
+	{
+		return true;
+	}
+#endif
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{
 		if (!dbgInputManager.debugMappingsAllowed())
@@ -263,6 +270,7 @@ void recvProcessDebugMappings(NETQUEUE queue)
 		Cheated = true;
 		gInputManager.contexts().set(InputContext::DEBUG_MISC, InputContext::State::ACTIVE);
 		triggerEventCheatMode(true);
+		intFlashReticuleButtonsForDebugMode();
 	}
 	else if (oldDebugMode && !newDebugMode)
 	{

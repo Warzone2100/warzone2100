@@ -228,6 +228,9 @@ bool mouseReleased(MOUSE_KEY_CODE code);
 /** Check for a mouse drag, return the drag start coords if dragging. */
 WZ_DECL_NONNULL(2, 3) bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
+/** iOS touch long-press modifier used to add to selection/build queues without a hardware keyboard. */
+bool inputTouchMultiSelectActive();
+
 void setMouseWarp(bool value);
 bool getMouseWarp();
 

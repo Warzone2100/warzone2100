@@ -126,6 +126,9 @@
 #if defined(WZ_OS_MAC)
 # include <unistd.h>
 # include "lib/framework/mac_wrapper.h"
+#endif // WZ_OS_MAC
+
+#if defined(WZ_OS_MAC)
 # include "lib/framework/cocoa_wrapper.h"
 #endif // WZ_OS_MAC
 
@@ -442,6 +445,18 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 	}
 #endif // WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 #endif // defined(WZ_OS_WIN)
+
+#if defined(WZ_OS_IOS)
+	char documentsDir[PATH_MAX] = {'\0'};
+	if (!cocoaGetIOSDocumentsDir(documentsDir, sizeof(documentsDir)))
+	{
+		debug(LOG_FATAL, "Failed to obtain iOS Documents directory");
+		exit(1);
+	}
+
+	WzString basePath = WzString::fromUtf8(documentsDir);
+	return (basePath + PHYSFS_getDirSeparator()).toUtf8();
+#endif
 
 	const char * prefsDir = PHYSFS_getPrefDir(org, app.c_str());
 	if (prefsDir == nullptr)
@@ -2122,7 +2137,7 @@ int realmain(int argc, char *argv[])
 #endif
 	debug(LOG_MAIN, "Entering main loop");
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	if (headlessGameMode())
 	{
 		cocoaTransformToBackgroundApplication();

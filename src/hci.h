@@ -364,6 +364,9 @@ void flashReticuleButton(UDWORD buttonID);
 // stop a reticule button flashing
 void stopReticuleButtonFlash(UDWORD buttonID);
 
+// Briefly pulse the reticule when iOS Debug JIT mode is enabled.
+void intFlashReticuleButtonsForDebugMode();
+
 //toggles the Power Bar display on and off
 void togglePowerBar();
 void intShowPowerBar();

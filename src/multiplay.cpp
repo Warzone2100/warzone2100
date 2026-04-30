@@ -547,7 +547,7 @@ bool multiPlayerLoop()
 	if (joinCount)
 	{
 		// deselect anything selected.
-		selDroidDeselect(gameWorld.objects, selectedPlayer);
+		selDroidDeselect(selectedPlayer);
 	}
 	else		//everyone is in the game now!
 	{
@@ -643,13 +643,13 @@ bool multiPlayerLoop()
 // quikie functions.
 
 // to get droids ...
-DROID *IdToDroid(const WorldObjectState& objState, UDWORD id, UDWORD player)
+DROID *IdToDroid(UDWORD id, UDWORD player)
 {
 	if (player == ANYPLAYER)
 	{
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
-			DROID* d = (DROID*)getBaseObjFromId(objState.droids[i], id);
+			DROID* d = (DROID*)getBaseObjFromId(gameWorld.objects.droids[i], id);
 			if (d)
 			{
 				return d;
@@ -658,7 +658,32 @@ DROID *IdToDroid(const WorldObjectState& objState, UDWORD id, UDWORD player)
 	}
 	else if (player < MAX_PLAYERS)
 	{
-		DROID* d = (DROID*)getBaseObjFromId(objState.droids[player], id);
+		DROID* d = (DROID*)getBaseObjFromId(gameWorld.objects.droids[player], id);
+		if (d)
+		{
+			return d;
+		}
+	}
+	return nullptr;
+}
+
+// find off-world droids
+DROID *IdToMissionDroid(UDWORD id, UDWORD player)
+{
+	if (player == ANYPLAYER)
+	{
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[i], id);
+			if (d)
+			{
+				return d;
+			}
+		}
+	}
+	else if (player < MAX_PLAYERS)
+	{
+		DROID* d = (DROID*)getBaseObjFromId(mission.gameWorld.objects.droids[player], id);
 		if (d)
 		{
 			return d;
@@ -705,10 +730,10 @@ STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // find a feature
-FEATURE *IdToFeature(const WorldObjectState& objState, UDWORD id, UDWORD player)
+FEATURE *IdToFeature(UDWORD id, UDWORD player)
 {
 	(void)player;	// unused, all features go into player 0
-	return (FEATURE*)getBaseObjFromId(objState.features[0], id);
+	return (FEATURE*)getBaseObjFromId(gameWorld.objects.features[0], id);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -745,7 +770,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 	FEATURE		*pF;
 	// droids.
 
-	pD = IdToDroid(gameWorld.objects, id, player);
+	pD = IdToDroid(id, player);
 	if (pD)
 	{
 		return (BASE_OBJECT *)pD;
@@ -759,7 +784,7 @@ BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 	}
 
 	// features
-	pF = IdToFeature(gameWorld.objects, id, player);
+	pF = IdToFeature(id, player);
 	if (pF)
 	{
 		return (BASE_OBJECT *)pF;
@@ -2310,7 +2335,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		return false;
 	}
 
-	pF = IdToFeature(gameWorld.objects, id, ANYPLAYER);
+	pF = IdToFeature(id, ANYPLAYER);
 	if (pF == nullptr)
 	{
 		debug(LOG_FEATURE, "feature id %d not found (probably already destroyed)", id);

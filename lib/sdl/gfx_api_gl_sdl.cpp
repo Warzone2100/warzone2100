@@ -128,7 +128,7 @@ bool sdl_OpenGL_Impl::configureOpenGLContextRequest(GLContextRequests request, b
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 			return true;
-#  if !defined(WZ_OS_MAC)
+#  if !defined(WZ_OS_MAC) || defined(WZ_OS_IOS)
 		case OpenGLES30:
 			setOpenGLESDriver(useOpenGLESLibrary);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
@@ -194,7 +194,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 	debug(LOG_INFO, "Requested %s context", to_string(contextRequest).c_str());
 
 	int value = 0;
-	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value))
+	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == 0)
 	{
 		if (value == 0)
 		{
@@ -226,24 +226,51 @@ bool sdl_OpenGL_Impl::createGLContext()
 		}
 	}
 
-	int r, g, b, a;
-	SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &r);
-	SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &g);
-	SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &b);
-	SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &a);
-	debug(LOG_3D, "Current values for: SDL_GL_RED_SIZE (%d), SDL_GL_GREEN_SIZE (%d), SDL_GL_BLUE_SIZE (%d), SDL_GL_ALPHA_SIZE (%d)", r, g, b, a);
+	if (isOpenGLES())
+	{
+		// SDL's GL attribute queries are optional diagnostics for us, and they are
+		// not stable on every OpenGL ES bridge environment (notably PlayCover).
+		debug(LOG_3D, "Skipping optional GL attribute diagnostics for OpenGL ES");
+		int windowWidth = 0;
+		int windowHeight = 0;
+		SDL_GetWindowSize(window, &windowWidth, &windowHeight);
+		debug(LOG_WZ, "Logical Window Size: %d x %d", windowWidth, windowHeight);
+		return true;
+	}
 
-	if (!SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &value))
+	int r = 0;
+	int g = 0;
+	int b = 0;
+	int a = 0;
+	if (SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &r) != 0
+	 || SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &g) != 0
+	 || SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &b) != 0
+	 || SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &a) != 0)
+	{
+		debug(LOG_3D, "Failed to get RGBA channel sizes (%s)", SDL_GetError());
+	}
+	else
+	{
+		debug(LOG_3D, "Current values for: SDL_GL_RED_SIZE (%d), SDL_GL_GREEN_SIZE (%d), SDL_GL_BLUE_SIZE (%d), SDL_GL_ALPHA_SIZE (%d)", r, g, b, a);
+	}
+
+	if (SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &value) != 0)
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_DEPTH_SIZE (%s)", SDL_GetError());
 	}
-	debug(LOG_3D, "Current value for SDL_GL_DEPTH_SIZE: (%d)", value);
+	else
+	{
+		debug(LOG_3D, "Current value for SDL_GL_DEPTH_SIZE: (%d)", value);
+	}
 
-	if (!SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &value))
+	if (SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &value) != 0)
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_STENCIL_SIZE (%s)", SDL_GetError());
 	}
-	debug(LOG_3D, "Current value for SDL_GL_STENCIL_SIZE: (%d)", value);
+	else
+	{
+		debug(LOG_3D, "Current value for SDL_GL_STENCIL_SIZE: (%d)", value);
+	}
 
 	if (!SDL_GL_GetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, &value))
 	{
@@ -274,14 +301,14 @@ bool sdl_OpenGL_Impl::destroyGLContext()
 
 void sdl_OpenGL_Impl::swapWindow()
 {
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// Workaround for OpenGL on macOS (see below)
 	const uint64_t swapStartTime = SDL_GetTicks();
 #endif
 
 	SDL_GL_SwapWindow(window);
 
-#if defined(WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// Workaround for OpenGL on macOS
 	// - If the OpenGL window is minimized (or occluded), SwapWindow may not wait for the vertical blanking interval
 	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
@@ -375,4 +402,3 @@ gfx_api::context::swap_interval_mode sdl_OpenGL_Impl::getSwapInterval() const
 	SDL_GL_GetSwapInterval(&interval);
 	return from_sdl_swap_interval(interval);
 }
-

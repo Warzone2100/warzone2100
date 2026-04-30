@@ -23,13 +23,16 @@
 		},
 		{
 			"name": "fribidi",
-			"platform": "!emscripten"
+			"platform": "!emscripten & !ios"
 		},
 		{
 			"name": "freetype",
 			"platform": "!emscripten"
 		},
-		"libjpeg-turbo",
+		{
+			"name": "libjpeg-turbo",
+			"platform": "!ios"
+		},
 		"libogg",
 		"libtheora",
 		"libvorbis",
@@ -44,7 +47,7 @@
 		},
 		{
 			"name": "gettext-libintl",
-			"platform": "!emscripten"
+			"platform": "!emscripten & !ios"
 		},
 		{
 			"name": "openal-soft",
@@ -82,9 +85,17 @@
 			"name": "curl",
 			"default-features": false,
 			"features": [
+				"mbedtls"
+			],
+			"platform": "ios"
+		},
+		{
+			"name": "curl",
+			"default-features": false,
+			"features": [
 				"ssl"
 			],
-			"platform": "!windows & !mingw & !osx & !emscripten"
+			"platform": "!windows & !mingw & !osx & !emscripten & !ios"
 		},
 		{
 			"name": "angle",

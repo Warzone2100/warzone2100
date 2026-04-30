@@ -76,7 +76,7 @@
 #include <LRUCache11/LRUCache11.hpp>
 #include <tl/expected.hpp>
 
-#if defined (WZ_OS_MAC)
+#if defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 # include "lib/framework/cocoa_wrapper.h"
 #endif
 
@@ -3118,7 +3118,7 @@ bool markAsDownloadedFile(const std::string &filename)
 	CloseHandle(hStream);
 
 	return true;
-#elif defined (WZ_OS_MAC)
+#elif defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	// On macOS:
 	//	- Set the quarantine attribute on the file
 	return cocoaSetFileQuarantineAttribute(fullFilePath.c_str());

@@ -19,6 +19,9 @@ include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(sdl-backend)
 
 target_link_libraries(sdl-backend PRIVATE framework ivis-opengl optional-lite)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+	target_link_libraries(sdl-backend PRIVATE wzmaplib)
+endif()
 set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 
 message( STATUS "Linking to SDL3 library" )

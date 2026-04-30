@@ -23,12 +23,10 @@
 
 #include "basedef.h"
 
-struct WorldMapState;
-
-void avUpdateTiles(WorldMapState& mapState);
+void avUpdateTiles();
 UDWORD avGetObjLightLevel(BASE_OBJECT const *psObj, UDWORD origLevel);
 void setRevealStatus(bool val);
 bool getRevealStatus();
-void preProcessVisibility(WorldMapState& mapState);
+void preProcessVisibility();
 
 #endif // __INCLUDED_SRC_ADVVIS_H__

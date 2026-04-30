@@ -162,9 +162,7 @@ void	effectResetUpdates();
 
 void	initPerimeterSmoke(const iIMDShape *pImd, Vector3i base);
 
-struct WorldMapState;
-
-bool	readFXData(const char *fileName, WorldMapState& mapState);
+bool	readFXData(const char *fileName);
 bool	writeFXData(const char *fileName);
 void	effectSetSize(UDWORD size);
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);

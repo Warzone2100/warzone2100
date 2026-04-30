@@ -1,0 +1,16 @@
+set(VCPKG_TARGET_ARCHITECTURE arm64)
+set(VCPKG_CRT_LINKAGE dynamic)
+set(VCPKG_LIBRARY_LINKAGE static)
+
+set(VCPKG_CMAKE_SYSTEM_NAME iOS)
+set(VCPKG_OSX_SYSROOT "iphoneos")
+set(VCPKG_OSX_DEPLOYMENT_TARGET "16.0")
+if(DEFINED ENV{IOS_DEVICE_ARCHS} AND NOT "$ENV{IOS_DEVICE_ARCHS}" STREQUAL "")
+	string(REPLACE "," ";" VCPKG_OSX_ARCHITECTURES "$ENV{IOS_DEVICE_ARCHS}")
+else()
+	set(VCPKG_OSX_ARCHITECTURES "arm64")
+endif()
+
+get_filename_component(_warzone_repo_root "${CMAKE_CURRENT_LIST_DIR}/../../../.." ABSOLUTE)
+set(VCPKG_MESON_CROSS_FILE "${_warzone_repo_root}/platforms/ios/meson-universal-overrides.ini")
+set(VCPKG_MAKE_BUILD_TRIPLET "--build=aarch64-apple-darwin;--host=aarch64-apple-ios")

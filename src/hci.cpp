@@ -29,6 +29,7 @@
 
 #include <cstring>
 #include <algorithm>
+#include <array>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/stdio_ext.h"
@@ -86,6 +87,7 @@
 #include "screens/guidescreen.h"
 #include "hci/quickchat.h"
 #include "warzoneconfig.h"
+#include "wzscriptdebug.h"
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -132,6 +134,12 @@ static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states
 static UDWORD	keyButtonMapping = 0;
 static bool ReticuleUp = false;
 static bool Refreshing = false;
+
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+static constexpr UDWORD IOS_DEBUG_RETICULE_GLOW_MS = 3500;
+static UDWORD iosDebugReticuleGlowUntil = 0;
+static std::array<bool, NUMRETBUTS> iosDebugReticuleWasFlashing = {};
+#endif
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -342,6 +350,52 @@ void setReticuleFlash(int ButId, bool flash)
 		retbutstats[ButId].flashing = flash;
 		retbutstats[ButId].flashTime = 0;
 	}
+}
+
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+static void updateIOSDebugReticuleGlow()
+{
+	if (iosDebugReticuleGlowUntil == 0 || realTime < iosDebugReticuleGlowUntil)
+	{
+		return;
+	}
+
+	for (int retbut = 0; retbut < NUMRETBUTS; ++retbut)
+	{
+		if (retbut == RETBUT_CANCEL || iosDebugReticuleWasFlashing[retbut])
+		{
+			continue;
+		}
+		retbutstats[retbut].flashTime = 0;
+		retbutstats[retbut].flashing = false;
+	}
+	iosDebugReticuleGlowUntil = 0;
+}
+#else
+static inline void updateIOSDebugReticuleGlow()
+{
+}
+#endif
+
+void intFlashReticuleButtonsForDebugMode()
+{
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+	if (!ReticuleUp)
+	{
+		return;
+	}
+	for (int retbut = 0; retbut < NUMRETBUTS; ++retbut)
+	{
+		iosDebugReticuleWasFlashing[retbut] = retbutstats[retbut].flashing;
+		if (retbut == RETBUT_CANCEL || retbutstats[retbut].filename.isEmpty())
+		{
+			continue;
+		}
+		retbutstats[retbut].flashTime = 0;
+		retbutstats[retbut].flashing = true;
+	}
+	iosDebugReticuleGlowUntil = realTime + IOS_DEBUG_RETICULE_GLOW_MS;
+#endif
 }
 
 // set up the button's size & hit-testing based on the dimensions of the "normal" image
@@ -1384,10 +1438,77 @@ static void reticuleCallback(int retbut)
 	}
 }
 
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+static void processIOSDebugReticuleCombo(int retbut)
+{
+	static constexpr std::array<int, 10> debugCombo = {
+		RETBUT_FACTORY,
+		RETBUT_FACTORY,
+		RETBUT_DESIGN,
+		RETBUT_DESIGN,
+		RETBUT_INTELMAP,
+		RETBUT_BUILD,
+		RETBUT_INTELMAP,
+		RETBUT_BUILD,
+		RETBUT_RESEARCH,
+		RETBUT_COMMAND,
+	};
+	static size_t comboProgress = 0;
+
+	if (gInputManager.debugManager().debugMappingsAllowed())
+	{
+		comboProgress = 0;
+		return;
+	}
+
+	if (retbut == debugCombo[comboProgress])
+	{
+		++comboProgress;
+		if (comboProgress == debugCombo.size())
+		{
+			comboProgress = 0;
+			attemptCheatCode("debug");
+		}
+		return;
+	}
+
+	comboProgress = (retbut == debugCombo[0]) ? 1 : 0;
+}
+#else
+static inline void processIOSDebugReticuleCombo(int)
+{
+}
+#endif
+
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+static bool toggleIOSDebugTestMenu()
+{
+	if (!gInputManager.debugManager().debugMappingsAllowed())
+	{
+		return false;
+	}
+	if (jsDebugIsOpen())
+	{
+		jsDebugShutdown();
+	}
+	else
+	{
+		jsShowDebug();
+	}
+	return true;
+}
+#else
+static inline bool toggleIOSDebugTestMenu()
+{
+	return false;
+}
+#endif
+
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
+	updateIOSDebugReticuleGlow();
 
 	if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult) > 0)
 	{
@@ -1497,6 +1618,7 @@ INT_RETVAL intRunWidgets()
 			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
 			intAddCommand();
 			reticuleCallback(RETBUT_COMMAND);
+			processIOSDebugReticuleCombo(RETBUT_COMMAND);
 			break;
 
 		case IDRET_BUILD:
@@ -1508,6 +1630,7 @@ INT_RETVAL intRunWidgets()
 			widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
 			intAddBuild();
 			reticuleCallback(RETBUT_BUILD);
+			processIOSDebugReticuleCombo(RETBUT_BUILD);
 			break;
 
 		case IDRET_MANUFACTURE:
@@ -1519,6 +1642,7 @@ INT_RETVAL intRunWidgets()
 			widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
 			intAddManufacture();
 			reticuleCallback(RETBUT_FACTORY);
+			processIOSDebugReticuleCombo(RETBUT_FACTORY);
 			break;
 
 		case IDRET_RESEARCH:
@@ -1530,6 +1654,7 @@ INT_RETVAL intRunWidgets()
 			widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
 			intAddResearch();
 			reticuleCallback(RETBUT_RESEARCH);
+			processIOSDebugReticuleCombo(RETBUT_RESEARCH);
 			break;
 
 		case IDRET_INTEL_MAP:
@@ -1546,6 +1671,7 @@ INT_RETVAL intRunWidgets()
 			}
 			addIntelScreen();
 			reticuleCallback(RETBUT_INTELMAP);
+			processIOSDebugReticuleCombo(RETBUT_INTELMAP);
 			break;
 
 		case IDRET_DESIGN:
@@ -1562,13 +1688,18 @@ INT_RETVAL intRunWidgets()
 			gInputManager.contexts().pushState();
 			gInputManager.contexts().makeAllInactive();
 			reticuleCallback(RETBUT_DESIGN);
+			processIOSDebugReticuleCombo(RETBUT_DESIGN);
 			triggerEvent(TRIGGER_MENU_DESIGN_UP);
 			break;
 
-		case IDRET_CANCEL:
-			intResetScreen(false);
-			psCurrentMsg = nullptr;
-			reticuleCallback(RETBUT_CANCEL);
+			case IDRET_CANCEL:
+				if (toggleIOSDebugTestMenu())
+				{
+					break;
+				}
+				intResetScreen(false);
+				psCurrentMsg = nullptr;
+				reticuleCallback(RETBUT_CANCEL);
 			break;
 
 		/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
@@ -1792,7 +1923,7 @@ INT_RETVAL intRunWidgets()
 					else if (psPositionStats->hasType(STAT_TEMPLATE))
 					{
 						std::string msg;
-						DROID *psDroid = buildDroid(gameWorld, (DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
+						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
 						cancelDeliveryRepos();
 						if (psDroid)
 						{

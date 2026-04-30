@@ -110,10 +110,10 @@ int scrollDirUpDown = 0;
 #endif
 
 static bool	buildingDamaged(STRUCTURE *psStructure);
-static bool	repairDroidSelected(const WorldObjectState& objState, UDWORD player);
-static bool vtolDroidSelected(const WorldObjectState& objState, UDWORD player);
-static bool	anyDroidSelected(const WorldObjectState& objState, UDWORD player);
-static bool cyborgDroidSelected(const WorldObjectState& objState, UDWORD player);
+static bool	repairDroidSelected(UDWORD player);
+static bool vtolDroidSelected(UDWORD player);
+static bool	anyDroidSelected(UDWORD player);
+static bool cyborgDroidSelected(UDWORD player);
 static bool bInvertMouse = true;
 static bool bRightClickOrders = false;
 optional<MOUSE_KEY_CODE> rotateMouseKey = MOUSE_RMB;
@@ -141,6 +141,10 @@ static double	scrollSpeedLeftRight; //use two directions and add them because it
 static double	scrollStepLeftRight;
 static double	scrollSpeedUpDown;
 static double	scrollStepUpDown;
+static float touchPanScrollScaleLeftRight = 1.f;
+static float touchPanScrollScaleUpDown = 1.f;
+static bool touchPanScrollScaleLeftRightActive = false;
+static bool touchPanScrollScaleUpDownActive = false;
 static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
 static bool	ignoreRMBC	= true;
@@ -223,6 +227,26 @@ static void updateViewDistanceAnimation()
 		viewDistanceAnimation.update();
 		setViewDistance(viewDistanceAnimation.getCurrent());
 	}
+}
+
+void setTouchPanScrollScaleLeftRight(float scale)
+{
+	touchPanScrollScaleLeftRight = std::max(scale, 1.f);
+	touchPanScrollScaleLeftRightActive = true;
+}
+
+void setTouchPanScrollScaleUpDown(float scale)
+{
+	touchPanScrollScaleUpDown = std::max(scale, 1.f);
+	touchPanScrollScaleUpDownActive = true;
+}
+
+void clearTouchPanScrollScales()
+{
+	touchPanScrollScaleLeftRight = 1.f;
+	touchPanScrollScaleUpDown = 1.f;
+	touchPanScrollScaleLeftRightActive = false;
+	touchPanScrollScaleUpDownActive = false;
 }
 
 bool getShakeStatus()
@@ -408,14 +432,14 @@ void resetInput()
 	gInputManager.contexts().resetStates();
 }
 
-static bool localPlayerHasSelection(const WorldObjectState& objState)
+static bool localPlayerHasSelection()
 {
 	if (selectedPlayer >= MAX_PLAYERS)
 	{
 		return false;
 	}
 
-	for (const DROID* psDroid : objState.droids[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -423,7 +447,7 @@ static bool localPlayerHasSelection(const WorldObjectState& objState)
 		}
 	}
 
-	for (const STRUCTURE* psStruct : objState.structures[selectedPlayer])
+	for (const STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -472,7 +496,7 @@ void processInput()
 
 	gInputManager.contexts().set(
 		InputContext::DEBUG_HAS_SELECTION,
-		localPlayerHasSelection(gameWorld.objects) ? InputContext::State::ACTIVE : InputContext::State::INACTIVE
+		localPlayerHasSelection() ? InputContext::State::ACTIVE : InputContext::State::INACTIVE
 	);
 	gInputManager.contexts().updatePriorityStatus();
 
@@ -875,7 +899,7 @@ void processMouseClickInput()
 			//check for VTOL droids being assigned to a sensor droid/structure
 			else if ((item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
 			         && selection == SC_DROID_DIRECT
-			         && vtolDroidSelected(gameWorld.objects, (UBYTE)selectedPlayer))
+			         && vtolDroidSelected((UBYTE)selectedPlayer))
 			{
 				// NB. psSelectedVtol was set by vtolDroidSelected - yes I know its horrible, but it
 				// only smells as much as the rest of display.c so I don't feel so bad
@@ -892,7 +916,7 @@ void processMouseClickInput()
 			//vtols cannot pick up artifacts
 			else if (item == MT_ARTIFACT
 			         && selection == SC_DROID_DIRECT
-			         && vtolDroidSelected(gameWorld.objects, (UBYTE)selectedPlayer))
+			         && vtolDroidSelected((UBYTE)selectedPlayer))
 			{
 				item = MT_BLOCKING;
 			}
@@ -988,6 +1012,54 @@ void processMouseClickInput()
 	}
 }
 
+bool canTouchDragBuildStructure()
+{
+	return (buildState == BUILD3D_POS || buildState == BUILD3D_VALID)
+		&& sBuildDetails.psStats != nullptr
+		&& sBuildDetails.psStats->hasType(STAT_STRUCTURE)
+		&& canLineBuild();
+}
+
+bool canTouchActivateMultiSelectModifier()
+{
+	if (isMouseOverRadar() || isMouseOverScreenOverlayChild(mouseX(), mouseY()))
+	{
+		return false;
+	}
+	if (buildState != BUILD3D_NONE || intBuildSelectMode())
+	{
+		return false;
+	}
+
+	BASE_OBJECT *objUnderMouse = nullptr;
+	const MOUSE_TARGET target = itemUnderMouse(&objUnderMouse);
+	return objUnderMouse == nullptr && target == MT_TERRAIN;
+}
+
+bool shouldSuppressTouchDoubleTapOrder()
+{
+	if (isMouseOverRadar() || isMouseOverScreenOverlayChild(mouseX(), mouseY()))
+	{
+		return false;
+	}
+
+	BASE_OBJECT *objUnderMouse = nullptr;
+	itemUnderMouse(&objUnderMouse);
+	if (objUnderMouse == nullptr || objUnderMouse->type != OBJ_STRUCTURE || objUnderMouse->player != selectedPlayer)
+	{
+		return false;
+	}
+
+	STRUCTURE *psStructure = static_cast<STRUCTURE *>(objUnderMouse);
+	if (psStructure->pStructureType == nullptr)
+	{
+		return false;
+	}
+
+	const STRUCTURE_TYPE type = psStructure->pStructureType->type;
+	return (type == REF_FACTORY || type == REF_VTOL_FACTORY) && nextModuleToBuild(psStructure, -1) > 0;
+}
+
 static void calcScroll(double *y, double *dydt, double accel, double decel, double targetVelocity, double dt)
 {
 	double tMid;
@@ -1034,7 +1106,11 @@ static void calcScroll(double *y, double *dydt, double accel, double decel, doub
 
 static inline bool shouldProcessEdgeScroll()
 {
+#if defined(WZ_OS_IOS)
+	return false;
+#else
 	return wzMouseInWindow() || (bEdgeScrollOutsideWindowBounds && wzWindowHasFocus());
+#endif
 }
 
 static void handleCameraScrolling()
@@ -1047,6 +1123,7 @@ static void handleCameraScrolling()
 
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
+		clearTouchPanScrollScales();
 		return;
 	}
 
@@ -1100,8 +1177,10 @@ static void handleCameraScrolling()
 
 		scrollStepLeftRight = 0.0;
 		scrollStepUpDown = 0.0;
-		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2.0 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, timeDiff_double);
-		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2.0 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, timeDiff_double);
+		double leftRightScale = touchPanScrollScaleLeftRightActive ? touchPanScrollScaleLeftRight : 1.0;
+		double upDownScale = touchPanScrollScaleUpDownActive ? touchPanScrollScaleUpDown : 1.0;
+		calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel * leftRightScale, 2.0 * scaled_accel * leftRightScale, scrollDirLeftRight * scaled_max_scroll_speed * leftRightScale, timeDiff_double);
+		calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel * upDownScale,    2.0 * scaled_accel * upDownScale,    scrollDirUpDown    * scaled_max_scroll_speed * upDownScale,    timeDiff_double);
 
 		/* Get x component of movement */
 		xDif = (int) (cos(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepLeftRight + sin(static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0)) * scrollStepUpDown);
@@ -1112,12 +1191,13 @@ static void handleCameraScrolling()
 		playerPos.p.x += xDif;
 		playerPos.p.z += yDif;
 
-		CheckScrollLimits(gameWorld.map);
+		CheckScrollLimits();
 	}
 
 	// Reset scroll directions
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
+	clearTouchPanScrollScales();
 }
 
 void displayRenderLoop()
@@ -1136,15 +1216,16 @@ void resetScroll()
 	scrollSpeedLeftRight = 0.0;
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
+	clearTouchPanScrollScales();
 }
 
 // Checks if coordinate is inside scroll limits, returns false if not.
-bool CheckInScrollLimits(const WorldMapState& mapState, const int &xPos, const int &yPos)
+bool CheckInScrollLimits(const int &xPos, const int &yPos)
 {
-	int minX = world_coord(mapState.scroll.minX);
-	int maxX = world_coord(mapState.scroll.maxX - 1);
-	int minY = world_coord(mapState.scroll.minY);
-	int maxY = world_coord(mapState.scroll.maxY - 1);
+	int minX = world_coord(gameWorld.map.scroll.minX);
+	int maxX = world_coord(gameWorld.map.scroll.maxX - 1);
+	int minY = world_coord(gameWorld.map.scroll.minY);
+	int maxY = world_coord(gameWorld.map.scroll.maxY - 1);
 
 	if ((xPos < minX) || (xPos >= maxX) || (yPos < minY) || (yPos >= maxY))
 	{
@@ -1157,15 +1238,15 @@ bool CheckInScrollLimits(const WorldMapState& mapState, const int &xPos, const i
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
 //
-bool CheckInScrollLimitsCamera(const WorldMapState& mapState, SDWORD *xPos, SDWORD *zPos)
+bool CheckInScrollLimitsCamera(SDWORD *xPos, SDWORD *zPos)
 {
 	bool EdgeHit = false;
 	SDWORD	minX, minY, maxX, maxY;
 
-	minX = world_coord(mapState.scroll.minX);
-	maxX = world_coord(mapState.scroll.maxX - 1);
-	minY = world_coord(mapState.scroll.minY);
-	maxY = world_coord(mapState.scroll.maxY - 1);
+	minX = world_coord(gameWorld.map.scroll.minX);
+	maxX = world_coord(gameWorld.map.scroll.maxX - 1);
+	minY = world_coord(gameWorld.map.scroll.minY);
+	maxY = world_coord(gameWorld.map.scroll.maxY - 1);
 
 	//scroll is limited to what can be seen for current campaign
 	if (*xPos < minX)
@@ -1196,11 +1277,11 @@ bool CheckInScrollLimitsCamera(const WorldMapState& mapState, SDWORD *xPos, SDWO
 // Check the view is within the scroll limits,
 // Returns true if edge hit.
 //
-bool CheckScrollLimits(const WorldMapState& mapState)
+bool CheckScrollLimits()
 {
 	SDWORD xp = playerPos.p.x;
 	SDWORD zp = playerPos.p.z;
-	bool ret = CheckInScrollLimitsCamera(mapState, &xp, &zp);
+	bool ret = CheckInScrollLimitsCamera(&xp, &zp);
 
 	playerPos.p.x = xp;
 	playerPos.p.z = zp;
@@ -1239,7 +1320,7 @@ void displayWorld()
 			playerPos.p.z = static_cast<int>(panZTracker->getInitial()
 				+ sin(-playerPos.r.y * (M_PI / 32768)) * horizontalMovement
 				- cos(-playerPos.r.y * (M_PI / 32768)) * verticalMovement);
-			CheckScrollLimits(gameWorld.map);
+			CheckScrollLimits();
 		}
 	}
 
@@ -1352,7 +1433,7 @@ BASE_OBJECT *mouseTarget()
 
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
-	psReturn = getTileOccupier(gameWorld.map, mouseTileX, mouseTileY);
+	psReturn = getTileOccupier(mouseTileX, mouseTileY);
 
 	if (psReturn == nullptr)
 	{
@@ -1421,12 +1502,12 @@ void finishDeliveryPosition()
 			if (psStruct->isFactory() && psStruct->pFunctionality
 				&& psStruct->pFunctionality->factory.psAssemblyPoint)
 			{
-				setAssemblyPoint(gameWorld, psStruct->pFunctionality->factory.psAssemblyPoint,
+				setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
 								 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 			}
 			else if (psStruct->pStructureType && psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->pFunctionality != nullptr)
 			{
-				setAssemblyPoint(gameWorld, psStruct->pFunctionality->repairFacility.psDeliveryPoint,
+				setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
 								 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 			}
 		}
@@ -1469,7 +1550,7 @@ bool deliveryReposValid()
 		}
 	}
 
-	if (fpathBlockingTile(gameWorld.map, map.x, map.y, PROPULSION_TYPE_WHEELED))
+	if (fpathBlockingTile(map.x, map.y, PROPULSION_TYPE_WHEELED))
 	{
 		return false;
 	}
@@ -1596,7 +1677,7 @@ static void FeedbackOrderGiven()
 // check whether the queue order keys are pressed
 bool ctrlShiftDown()
 {
-	return keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT);
+	return keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT) || inputTouchMultiSelectActive();
 }
 
 void AddDerrickBurningMessage()
@@ -1610,6 +1691,7 @@ void AddDerrickBurningMessage()
 static void printDroidClickInfo(DROID *psDroid)
 {
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	const bool wasSelected = psDroid->selected;
 	if (dbgInputManager.debugMappingsAllowed()) // cheating on, so output debug info
 	{
 		console("%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %u - pitch %.0f - frust %u - kills %" PRIu32,
@@ -1624,8 +1706,19 @@ static void printDroidClickInfo(DROID *psDroid)
 		        psDroid->experience / 65536.f, _(getDroidLevelName(psDroid)), psDroid->kills);
 		FeedbackOrderGiven();
 	}
-	clearSelection();
-	dealWithDroidSelect(psDroid, false);
+	if (wasSelected)
+	{
+		DeSelectDroid(psDroid);
+		if (selectedPlayer < MAX_PLAYERS && selNumSelected(selectedPlayer) == 0)
+		{
+			intObjectSelected(nullptr);
+		}
+	}
+	else
+	{
+		clearSelection();
+		dealWithDroidSelect(psDroid, false);
+	}
 }
 
 static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
@@ -1705,7 +1798,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		else
 		{
 			// We can order all units to use the transport now
-			if (cyborgDroidSelected(gameWorld.objects, selectedPlayer))
+			if (cyborgDroidSelected(selectedPlayer))
 			{
 				// TODO add special processing for cyborgDroids
 			}
@@ -1770,7 +1863,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		FeedbackOrderGiven();
 	}
 	// Clicked on a damaged unit? Will repair it.
-	else if (psDroid->isDamaged() && repairDroidSelected(gameWorld.objects, selectedPlayer))
+	else if (psDroid->isDamaged() && repairDroidSelected(selectedPlayer))
 	{
 		assignDestTarget();
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
@@ -1855,7 +1948,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 		}
 		else
 		{
-			auto shouldDisplayInterface = !anyDroidSelected(gameWorld.objects, selectedPlayer);
+			auto shouldDisplayInterface = !anyDroidSelected(selectedPlayer);
 			if (selection == SC_INVALID)
 			{
 				/* Clear old building selection(s) - should only be one */
@@ -1971,7 +2064,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 		case FEAT_GEN_ARTE:
 		case FEAT_OIL_DRUM:
 			{
-				DROID *psNearestUnit = getNearestDroid(gameWorld.objects, mouseTileX * TILE_UNITS + TILE_UNITS / 2,
+				DROID *psNearestUnit = getNearestDroid(mouseTileX * TILE_UNITS + TILE_UNITS / 2,
 				                                       mouseTileY * TILE_UNITS + TILE_UNITS / 2, true);
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
@@ -2051,7 +2144,7 @@ void	dealWithLMB()
 
 	if (auto deliveryPoint = findMouseDeliveryPoint())
 	{
-		if (selNumSelected(gameWorld.objects, selectedPlayer) == 0) {
+		if (selNumSelected(selectedPlayer) == 0) {
 			if (bRightClickOrders)
 			{
 				//centre the view on the owning Factory
@@ -2133,7 +2226,7 @@ static void dealWithLMBDClick()
 			if (psDroid->player == selectedPlayer)
 			{
 				// Now selects all of same type on screen
-				selDroidSelection(gameWorld.objects, selectedPlayer, DS_BY_TYPE, DST_ALL_SAME, true);
+				selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_SAME, true);
 			}
 		}
 		else if (psClickedOn->type == OBJ_STRUCTURE)
@@ -2464,7 +2557,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
-	psNotDroid = getTileOccupier(gameWorld.map, mouseTileX, mouseTileY);
+	psNotDroid = getTileOccupier(mouseTileX, mouseTileY);
 	if (psNotDroid == nullptr)
 	{
 		psNotDroid = getTileBlueprintStructure(mouseTileX, mouseTileY);
@@ -2688,11 +2781,11 @@ static bool	buildingDamaged(STRUCTURE *psStructure)
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/
-bool	repairDroidSelected(const WorldObjectState& objState, UDWORD player)
+bool	repairDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (const DROID* psCurr : objState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && (
 		        psCurr->droidType == DROID_REPAIR ||
@@ -2707,11 +2800,11 @@ bool	repairDroidSelected(const WorldObjectState& objState, UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if one is a VTOL droid*/
-bool	vtolDroidSelected(const WorldObjectState& objState, UDWORD player)
+bool	vtolDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "player: %" PRIu32 "", player);
 
-	for (DROID* psCurr : objState.droids[player])
+	for (DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && psCurr->isVtol())
 		{
@@ -2726,11 +2819,11 @@ bool	vtolDroidSelected(const WorldObjectState& objState, UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if any is selected*/
-bool	anyDroidSelected(const WorldObjectState& objState, UDWORD player)
+bool	anyDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (const DROID* psCurr : objState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2743,11 +2836,11 @@ bool	anyDroidSelected(const WorldObjectState& objState, UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if one is a cyborg droid*/
-bool cyborgDroidSelected(const WorldObjectState& objState, UDWORD player)
+bool cyborgDroidSelected(UDWORD player)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player (%" PRIu32 ")", player);
 
-	for (const DROID* psCurr : objState.droids[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && psCurr->isCyborg())
 		{

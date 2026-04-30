@@ -504,7 +504,7 @@ static void debugDisplayFatalErrorMsgBox(const char* outputLogLine)
 	ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
 		\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at https://github.com/Warzone2100/warzone2100/issues/new!", outputLogLine, WZ_DBGFile, WZ_DBGFile);
 	wzDisplayDialog(Dialog_Error, "Warzone has terminated unexpectedly", wbuf);
-#elif defined(WZ_OS_MAC)
+#elif defined(WZ_OS_MAC) && !defined(WZ_OS_IOS)
 	char wbuf[MAX_LEN_LOG_LINE+128];
 	ssprintf(wbuf, "%s\n\nPlease check your logs and attach them along with a bug report. Thanks!", outputLogLine);
 	size_t clickedIndex = wzDisplayDialogAdvanced(Dialog_Error, "Warzone has quit unexpectedly.", wbuf, {"Show Log Files & Open Bug Reporter", "Ignore"});

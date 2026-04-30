@@ -278,7 +278,7 @@ void PowerBar::display(int xOffset, int yOffset)
 
 	imageDrawBatch.draw(true);
 
-	auto unusedDerricks = countPlayerUnusedDerricks(gameWorld.objects);
+	auto unusedDerricks = countPlayerUnusedDerricks();
 
 	auto showNeedMessage = true;
 	if (unusedDerricks > 0)

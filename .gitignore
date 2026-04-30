@@ -159,6 +159,7 @@ commit-*
 
 #Mac Stuff
 .DS_Store
+/com.apple.DeveloperTools/
 *.pbxuser
 *.perspectivev3
 *.xcscmblueprint

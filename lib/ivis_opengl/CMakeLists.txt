@@ -105,7 +105,11 @@ endif()
 target_link_libraries(ivis-opengl PUBLIC glad)
 target_link_libraries(ivis-opengl PUBLIC optional-lite)
 if (WZ_DEBUG_GFX_API_LEAKS)
-	target_compile_definitions(ivis-opengl PUBLIC "-DWZ_DEBUG_GFX_API_LEAKS")
+	if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+		target_compile_definitions(ivis-opengl PUBLIC "$<$<CONFIG:Debug>:WZ_DEBUG_GFX_API_LEAKS>")
+	else()
+		target_compile_definitions(ivis-opengl PUBLIC "-DWZ_DEBUG_GFX_API_LEAKS")
+	endif()
 endif()
 if (Fribidi_FOUND)
 	target_include_directories(ivis-opengl PRIVATE ${FRIBIDI_INCLUDE_DIRS})
@@ -126,7 +130,16 @@ else()
 endif()
 
 if(WZ_ENABLE_BACKEND_VULKAN)
-	find_package(VulkanHeaders 290) # minimum supported version of the Vulkan headers is 290
+	set(_ios_moltenvk_vulkan_headers "${CMAKE_SOURCE_DIR}/platforms/ios/vendor/MoltenVK/include")
+	if(CMAKE_SYSTEM_NAME STREQUAL "iOS" AND EXISTS "${_ios_moltenvk_vulkan_headers}/vulkan/vulkan.h")
+		set(VulkanHeaders_FOUND TRUE)
+		set(VulkanHeaders_INCLUDE_DIRS "${_ios_moltenvk_vulkan_headers}")
+	elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS" AND EXISTS "/usr/local/include/vulkan/vulkan.h")
+		set(VulkanHeaders_FOUND TRUE)
+		set(VulkanHeaders_INCLUDE_DIRS "/usr/local/include")
+	else()
+		find_package(VulkanHeaders 290) # minimum supported version of the Vulkan headers is 290
+	endif()
 	set(_vulkanheaders_dl_gittag "vulkan-sdk-1.3.296.0")
 	if(NOT VulkanHeaders_FOUND AND (NOT WZ_DISABLE_FETCHCONTENT_GIT_CLONE))
 		# Fetch newer Vulkan headers (using FetchContent, which requires CMake 3.11+)
@@ -190,18 +203,111 @@ else()
 
 	set(_additional_ext_proj_cmake_args)
 	if (CMAKE_TOOLCHAIN_FILE)
-		get_filename_component(_absolute_cmake_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
+		if(IS_ABSOLUTE "${CMAKE_TOOLCHAIN_FILE}")
+			set(_absolute_cmake_toolchain_file "${CMAKE_TOOLCHAIN_FILE}")
+		else()
+			get_filename_component(_absolute_cmake_toolchain_file "${CMAKE_SOURCE_DIR}/${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
+		endif()
 		set(_additional_ext_proj_cmake_args "-DCMAKE_TOOLCHAIN_FILE=${_absolute_cmake_toolchain_file}")
 	endif()
+	if (CMAKE_SYSTEM_NAME STREQUAL "iOS")
+		set(LIBJPEG_TURBO_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libjpeg-turbo")
+		set(LIBJPEG_TURBO_BUILD_ARM64_DIR "${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo-arm64")
+		set(LIBJPEG_TURBO_BUILD_ARM64E_DIR "${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo-arm64e")
+		set(LIBJPEG_TURBO_INSTALL_ARM64_DIR "${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turboinstall-arm64")
+		set(LIBJPEG_TURBO_INSTALL_ARM64E_DIR "${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turboinstall-arm64e")
 
-	ExternalProject_Add(libjpeg-turbo-ext
-		SOURCE_DIR		"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libjpeg-turbo"
-		BINARY_DIR		"${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo"
-		INSTALL_DIR		"${LIBJPEG_TURBO_INSTALL_DIR}"
-		# DOWNLOAD_COMMAND  ""  # Explicitly skip download for local sources
-		CMAKE_ARGS		"-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" -DWITH_TOOLS=OFF -DENABLE_STATIC=ON -DENABLE_SHARED=OFF "-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib" ${_additional_ext_proj_cmake_args}
-		BUILD_BYPRODUCTS "${LIBJPEG_TURBO_LIB_PATH}"
-	)
+		if(CMAKE_OSX_SYSROOT MATCHES "iphonesimulator")
+			add_custom_command(
+				OUTPUT "${LIBJPEG_TURBO_LIB_PATH}"
+				COMMAND ${CMAKE_COMMAND} -E rm -rf "${LIBJPEG_TURBO_BUILD_ARM64_DIR}" "${LIBJPEG_TURBO_INSTALL_ARM64_DIR}" "${LIBJPEG_TURBO_INSTALL_DIR}"
+				COMMAND ${CMAKE_COMMAND}
+					"-DCMAKE_INSTALL_PREFIX=${LIBJPEG_TURBO_INSTALL_ARM64_DIR}"
+					-DWITH_TOOLS=OFF
+					-DENABLE_STATIC=ON
+					-DENABLE_SHARED=OFF
+					"-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib"
+					"-DCMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}"
+					"-DCMAKE_SYSTEM_PROCESSOR=arm64"
+					"-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}"
+					"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
+					"-DCMAKE_OSX_ARCHITECTURES=arm64"
+					"-DWITH_SIMD=OFF"
+					"-DNEON_INTRINSICS=OFF"
+					${_additional_ext_proj_cmake_args}
+					-GXcode
+					-S "${LIBJPEG_TURBO_SOURCE_DIR}"
+					-B "${LIBJPEG_TURBO_BUILD_ARM64_DIR}"
+				COMMAND ${CMAKE_COMMAND} --build "${LIBJPEG_TURBO_BUILD_ARM64_DIR}" --config Release --target install
+				COMMAND ${CMAKE_COMMAND} -E make_directory "${LIBJPEG_TURBO_INCLUDE_DIR}" "${LIBJPEG_TURBO_INSTALL_DIR}/lib"
+				COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBJPEG_TURBO_INSTALL_ARM64_DIR}/include" "${LIBJPEG_TURBO_INCLUDE_DIR}"
+				COMMAND ${CMAKE_COMMAND} -E copy
+					"${LIBJPEG_TURBO_INSTALL_ARM64_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}turbojpeg${CMAKE_STATIC_LIBRARY_SUFFIX}"
+					"${LIBJPEG_TURBO_LIB_PATH}"
+				DEPENDS "${LIBJPEG_TURBO_SOURCE_DIR}/CMakeLists.txt"
+				VERBATIM
+			)
+		else()
+			add_custom_command(
+				OUTPUT "${LIBJPEG_TURBO_LIB_PATH}"
+				COMMAND ${CMAKE_COMMAND} -E rm -rf "${LIBJPEG_TURBO_BUILD_ARM64_DIR}" "${LIBJPEG_TURBO_BUILD_ARM64E_DIR}" "${LIBJPEG_TURBO_INSTALL_ARM64_DIR}" "${LIBJPEG_TURBO_INSTALL_ARM64E_DIR}" "${LIBJPEG_TURBO_INSTALL_DIR}"
+				COMMAND ${CMAKE_COMMAND}
+					"-DCMAKE_INSTALL_PREFIX=${LIBJPEG_TURBO_INSTALL_ARM64_DIR}"
+					-DWITH_TOOLS=OFF
+					-DENABLE_STATIC=ON
+					-DENABLE_SHARED=OFF
+					"-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib"
+					"-DCMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}"
+					"-DCMAKE_SYSTEM_PROCESSOR=arm64"
+					"-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}"
+					"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
+					"-DCMAKE_OSX_ARCHITECTURES=arm64"
+					"-DWITH_SIMD=OFF"
+					"-DNEON_INTRINSICS=OFF"
+					${_additional_ext_proj_cmake_args}
+					-GXcode
+					-S "${LIBJPEG_TURBO_SOURCE_DIR}"
+					-B "${LIBJPEG_TURBO_BUILD_ARM64_DIR}"
+				COMMAND ${CMAKE_COMMAND} --build "${LIBJPEG_TURBO_BUILD_ARM64_DIR}" --config Release --target install
+				COMMAND ${CMAKE_COMMAND}
+					"-DCMAKE_INSTALL_PREFIX=${LIBJPEG_TURBO_INSTALL_ARM64E_DIR}"
+					-DWITH_TOOLS=OFF
+					-DENABLE_STATIC=ON
+					-DENABLE_SHARED=OFF
+					"-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib"
+					"-DCMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME}"
+					"-DCMAKE_SYSTEM_PROCESSOR=arm64e"
+					"-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}"
+					"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}"
+					"-DCMAKE_OSX_ARCHITECTURES=arm64e"
+					"-DWITH_SIMD=OFF"
+					"-DNEON_INTRINSICS=OFF"
+					${_additional_ext_proj_cmake_args}
+					-GXcode
+					-S "${LIBJPEG_TURBO_SOURCE_DIR}"
+					-B "${LIBJPEG_TURBO_BUILD_ARM64E_DIR}"
+				COMMAND ${CMAKE_COMMAND} --build "${LIBJPEG_TURBO_BUILD_ARM64E_DIR}" --config Release --target install
+				COMMAND ${CMAKE_COMMAND} -E make_directory "${LIBJPEG_TURBO_INCLUDE_DIR}" "${LIBJPEG_TURBO_INSTALL_DIR}/lib"
+				COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBJPEG_TURBO_INSTALL_ARM64_DIR}/include" "${LIBJPEG_TURBO_INCLUDE_DIR}"
+				COMMAND xcrun --sdk iphoneos lipo -create
+					"${LIBJPEG_TURBO_INSTALL_ARM64_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}turbojpeg${CMAKE_STATIC_LIBRARY_SUFFIX}"
+					"${LIBJPEG_TURBO_INSTALL_ARM64E_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}turbojpeg${CMAKE_STATIC_LIBRARY_SUFFIX}"
+					-output "${LIBJPEG_TURBO_LIB_PATH}"
+				DEPENDS "${LIBJPEG_TURBO_SOURCE_DIR}/CMakeLists.txt"
+				VERBATIM
+			)
+		endif()
+		add_custom_target(libjpeg-turbo-ext DEPENDS "${LIBJPEG_TURBO_LIB_PATH}")
+	else()
+		ExternalProject_Add(libjpeg-turbo-ext
+			SOURCE_DIR		"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libjpeg-turbo"
+			BINARY_DIR		"${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo"
+			INSTALL_DIR		"${LIBJPEG_TURBO_INSTALL_DIR}"
+			# DOWNLOAD_COMMAND  ""  # Explicitly skip download for local sources
+			CMAKE_ARGS		"-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" -DWITH_TOOLS=OFF -DENABLE_STATIC=ON -DENABLE_SHARED=OFF "-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib" ${_additional_ext_proj_cmake_args}
+			BUILD_BYPRODUCTS "${LIBJPEG_TURBO_LIB_PATH}"
+		)
+	endif()
 
 	# Create the imported library
 	add_library(libjpeg-turbo::turbojpeg-static STATIC IMPORTED GLOBAL)

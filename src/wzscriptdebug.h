@@ -136,6 +136,7 @@ private:
 
 typedef std::function<void ()> jsDebugShutdownHandlerFunction;
 void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, const jsDebugShutdownHandlerFunction& shutdownFunc, bool readOnly = false);
+bool jsDebugIsOpen();
 bool jsDebugShutdown();
 void jsDebugUpdateLabels();
 

@@ -393,7 +393,11 @@ std::string to_display_string(const video_backend& backend)
 		case video_backend::opengl:
 			return "OpenGL";
 		case video_backend::opengles:
+#if defined(WZ_OS_IOS)
+			return "OpenGL ES (Experimental)";
+#else
 			return "OpenGL ES";
+#endif
 		case video_backend::vulkan:
 			return "Vulkan";
 #if defined(WZ_BACKEND_DIRECTX)

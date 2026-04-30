@@ -61,6 +61,26 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 endif()
 
+# On iOS, generate the Info.plist file with updated version info at *build-time*
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+	set(_info_plist_template_file "${PROJECT_SOURCE_DIR}/platforms/ios/Resources/Warzone-iOS-Info.plist.in")
+	set(_info_plist_output_file "${CMAKE_CURRENT_BINARY_DIR}/Warzone-iOS-Info.plist")
+	add_custom_command(
+		OUTPUT "${_info_plist_output_file}"
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/platforms/macos/cmake/autorevision_infoplist.cmake
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		DEPENDS "${_info_plist_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/platforms/macos/cmake/autorevision_infoplist.cmake"
+		VERBATIM
+	)
+
+	add_custom_target(autorevision_infoplist_ios ALL
+		DEPENDS
+			"${CMAKE_CURRENT_BINARY_DIR}/Warzone-iOS-Info.plist"
+	)
+	set_property(TARGET autorevision_infoplist_ios PROPERTY FOLDER "_WZBuildProcessTargets")
+	add_dependencies(autorevision_infoplist_ios autorevision) # Ensure ordering and non-concurrency
+endif()
+
 # On Emscripten, generate the extern-postjs.js file with updated version info at *build-time*
 if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 	set(_extern_postjs_template_file "${PROJECT_SOURCE_DIR}/platforms/emscripten/extern-postjs.js.in")
@@ -109,6 +129,113 @@ if (WZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY)
 	unset(WZ_OUTPUT_BINARY_SUFFIX)
 endif()
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100${WZ_OUTPUT_BINARY_SUFFIX}")
+
+#######################
+# iOS Build Config
+
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE TRUE)
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "Warzone2100")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.pumpkinstudios.warzone2100")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "com.pumpkinstudios.warzone2100")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Warzone2100")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_SKIP_INSTALL "No")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_GENERATE_INFOPLIST_FILE "NO")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_SUPPORTS_MACCATALYST "NO")
+			SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+			target_compile_definitions(warzone2100 PRIVATE
+				"$<$<CONFIG:Debug>:DEBUG=1>"
+				"$<$<CONFIG:Debug>:WZ_IOS_DEBUG_JIT=1>"
+				"$<$<NOT:$<CONFIG:Debug>>:WZ_IOS_JITLESS=1>"
+			)
+
+		set(_ios_asset_catalog "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/Resources/Assets.xcassets")
+		set(_ios_entitlements_file "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/Resources/Warzone-iOS.entitlements")
+		set_source_files_properties(
+			${_ios_asset_catalog} PROPERTIES
+			MACOSX_PACKAGE_LOCATION "Resources"
+			XCODE_EXPLICIT_FILE_TYPE "folder.assetcatalog"
+		)
+		set_source_files_properties(
+			${_ios_entitlements_file} PROPERTIES
+			XCODE_LAST_KNOWN_FILE_TYPE "text.plist.entitlements"
+		)
+		target_sources(warzone2100 PRIVATE ${_ios_asset_catalog})
+		target_sources(warzone2100 PRIVATE ${_ios_entitlements_file})
+		set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_ios_entitlements_file}")
+
+	# Let Xcode emit a real iPhoneOS bundle layout instead of a desktop-style executable folder.
+	set_property(TARGET warzone2100 PROPERTY RUNTIME_OUTPUT_DIRECTORY_RELEASE)
+	set_property(TARGET warzone2100 PROPERTY RUNTIME_OUTPUT_DIRECTORY_DEBUG)
+	set_property(TARGET warzone2100 PROPERTY LIBRARY_OUTPUT_DIRECTORY_RELEASE)
+	set_property(TARGET warzone2100 PROPERTY LIBRARY_OUTPUT_DIRECTORY_DEBUG)
+
+		add_dependencies(warzone2100 autorevision autorevision_infoplist_ios)
+		if(CMAKE_GENERATOR STREQUAL "Xcode")
+			set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_INFOPLIST_FILE "${CMAKE_CURRENT_BINARY_DIR}/Warzone-iOS-Info.plist")
+		else()
+			message(WARNING "The generator \"${CMAKE_GENERATOR}\" is not currently fully-supported for iOS builds. Use the Xcode generator.")
+		endif()
+
+		if(WZ_ENABLE_BACKEND_VULKAN)
+			set(_ios_moltenvk_xcframework_candidates
+				"${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/vendor/MoltenVK.xcframework"
+				"/usr/local/lib/MoltenVK.xcframework"
+			)
+			set(_ios_moltenvk_library "")
+			set(_ios_moltenvk_include_candidates
+				"${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/vendor/MoltenVK/include"
+				"/usr/local/include"
+			)
+			if(CMAKE_OSX_SYSROOT MATCHES "iphonesimulator")
+				set(_ios_moltenvk_slice "ios-arm64_x86_64-simulator")
+			else()
+				set(_ios_moltenvk_slice "ios-arm64")
+			endif()
+			foreach(_ios_moltenvk_xcframework IN LISTS _ios_moltenvk_xcframework_candidates)
+				set(_ios_moltenvk_candidate "${_ios_moltenvk_xcframework}/${_ios_moltenvk_slice}/libMoltenVK.a")
+				if(EXISTS "${_ios_moltenvk_candidate}")
+					set(_ios_moltenvk_library "${_ios_moltenvk_candidate}")
+					break()
+				endif()
+			endforeach()
+			set(_ios_moltenvk_include "")
+			foreach(_ios_moltenvk_include_candidate IN LISTS _ios_moltenvk_include_candidates)
+				if(EXISTS "${_ios_moltenvk_include_candidate}/vulkan/vulkan.h")
+					set(_ios_moltenvk_include "${_ios_moltenvk_include_candidate}")
+					break()
+				endif()
+			endforeach()
+			if(NOT _ios_moltenvk_include STREQUAL "")
+				target_include_directories(warzone2100 PRIVATE "${_ios_moltenvk_include}")
+			endif()
+			if(EXISTS "${_ios_moltenvk_library}")
+				message(STATUS "Linking iOS MoltenVK static library: ${_ios_moltenvk_library}")
+				target_link_options(warzone2100 PRIVATE
+					"SHELL:-Wl,-force_load,${_ios_moltenvk_library}"
+					"SHELL:-Wl,-u,_vkGetInstanceProcAddr"
+				)
+				target_link_libraries(warzone2100
+					"-framework Metal"
+					"-framework Foundation"
+					"-framework QuartzCore"
+					"-framework CoreGraphics"
+					"-framework IOSurface"
+					"-framework UIKit"
+				)
+			else()
+				message(WARNING "iOS Vulkan backend enabled but MoltenVK static library was not found: ${_ios_moltenvk_library}")
+			endif()
+		endif()
+
+	endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Build warzone exe as a Windows app (not a console app)
@@ -246,12 +373,16 @@ if(ENABLE_DISCORD)
 endif()
 
 # Dependencies
-add_dependencies(warzone2100 data)
-if(ENABLE_DOCS AND TARGET wz2100_doc)
-	add_dependencies(warzone2100 wz2100_doc)
-endif()
-if(ENABLE_NLS AND TARGET translations)
-	add_dependencies(warzone2100 translations)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+	message(STATUS "Skipping build-time data/doc/translation dependencies for iOS packaging")
+else()
+	add_dependencies(warzone2100 data)
+	if(ENABLE_DOCS AND TARGET wz2100_doc)
+		add_dependencies(warzone2100 wz2100_doc)
+	endif()
+	if(ENABLE_NLS AND TARGET translations)
+		add_dependencies(warzone2100 translations)
+	endif()
 endif()
 
 ############################
@@ -260,6 +391,10 @@ endif()
 # To change the install destination at configure-time, please change the value of CMAKE_INSTALL_BINDIR
 # (WZ_APP_INSTALL_DEST is for the platform / generator-specific overrides *in* this file)
 set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+	# Keep install/package paths inside the .app root for the Xcode iOS bundle.
+	set(WZ_APP_INSTALL_DEST ".")
+endif()
 
 #######################
 # Emscripten Build Config
@@ -538,14 +673,14 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} ${DATA_MODS_FILES})
 
 	# Add the icon
-	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/macos/Resources/Warzone.icns")
+	set(_macos_app_icon "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/macos/Resources/Warzone2100.icns")
 	set_source_files_properties(
 		${_macos_app_icon} PROPERTIES
 		MACOSX_PACKAGE_LOCATION "Resources"
 		XCODE_LAST_KNOWN_FILE_TYPE "image.icns"
 	)
 	target_sources(warzone2100 PRIVATE ${_macos_app_icon})
-	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_ICON_FILE "Warzone.icns")
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES MACOSX_BUNDLE_ICON_FILE "Warzone2100.icns")
 
 	# Bundle the translations
 	if(ENABLE_NLS)

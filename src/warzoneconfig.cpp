@@ -70,8 +70,16 @@ struct WARZONE_GLOBALS
 	int mapZoomRate = MAP_ZOOM_RATE_DEFAULT;
 	int radarZoom = DEFAULT_RADARZOOM;
 	int cameraSpeed = CAMERASPEED_DEFAULT;
+	int touchPanSensitivity = TOUCH_PAN_SENSITIVITY_DEFAULT;
+	int touchZoomSensitivity = TOUCH_ZOOM_SENSITIVITY_DEFAULT;
+	int touchMultiSelectHoldMs = TOUCH_MULTISELECT_HOLD_DEFAULT_MS;
+	bool invertTouchPan = false;
 	bool radarJump = false;
+#if defined(WZ_OS_IOS)
+	video_backend gfxBackend = video_backend::vulkan; // the actual default value is determined in loadConfig()
+#else
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
+#endif
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
@@ -426,6 +434,59 @@ void war_SetCameraSpeed(int cameraSpeed)
 	}
 }
 
+int war_GetTouchPanSensitivity()
+{
+	return warGlobs.touchPanSensitivity;
+}
+
+void war_SetTouchPanSensitivity(int sensitivity)
+{
+	if (sensitivity % TOUCH_PAN_SENSITIVITY_STEP == 0 && !(sensitivity < TOUCH_PAN_SENSITIVITY_MIN || sensitivity > TOUCH_PAN_SENSITIVITY_MAX))
+	{
+		warGlobs.touchPanSensitivity = sensitivity;
+		ActivityManager::instance().changedSetting("touchPanSensitivity", std::to_string(sensitivity));
+	}
+}
+
+int war_GetTouchZoomSensitivity()
+{
+	return warGlobs.touchZoomSensitivity;
+}
+
+void war_SetTouchZoomSensitivity(int sensitivity)
+{
+	if (sensitivity % TOUCH_ZOOM_SENSITIVITY_STEP == 0 && !(sensitivity < TOUCH_ZOOM_SENSITIVITY_MIN || sensitivity > TOUCH_ZOOM_SENSITIVITY_MAX))
+	{
+		warGlobs.touchZoomSensitivity = sensitivity;
+		ActivityManager::instance().changedSetting("touchZoomSensitivity", std::to_string(sensitivity));
+	}
+}
+
+int war_GetTouchMultiSelectHoldMs()
+{
+	return warGlobs.touchMultiSelectHoldMs;
+}
+
+void war_SetTouchMultiSelectHoldMs(int holdMs)
+{
+	if (holdMs % TOUCH_MULTISELECT_HOLD_STEP_MS == 0 && !(holdMs < TOUCH_MULTISELECT_HOLD_MIN_MS || holdMs > TOUCH_MULTISELECT_HOLD_MAX_MS))
+	{
+		warGlobs.touchMultiSelectHoldMs = holdMs;
+		ActivityManager::instance().changedSetting("touchMultiSelectHoldMs", std::to_string(holdMs));
+	}
+}
+
+bool war_GetTouchPanInverted()
+{
+	return warGlobs.invertTouchPan;
+}
+
+void war_SetTouchPanInverted(bool inverted)
+{
+	warGlobs.invertTouchPan = inverted;
+	ActivityManager::instance().changedSetting("touchPanInvert", inverted ? "true" : "false");
+}
+
 bool war_GetRadarJump()
 {
 	return warGlobs.radarJump;
@@ -466,6 +527,13 @@ video_backend war_getGfxBackend()
 
 void war_setGfxBackend(video_backend backend)
 {
+#if defined(WZ_OS_IOS)
+	if (backend != video_backend::vulkan)
+	{
+		debug(LOG_INFO, "Ignoring unsupported iOS graphics backend request: %s; forcing Vulkan", to_display_string(backend).c_str());
+		backend = video_backend::vulkan;
+	}
+#endif
 	warGlobs.gfxBackend = backend;
 }
 

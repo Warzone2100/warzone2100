@@ -44,7 +44,6 @@
 #include "qtscript.h"
 #include "order.h"
 #include "wzcrashhandlingproviders.h"
-#include "world_object_state.h"
 
 #include <algorithm>
 
@@ -592,9 +591,9 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 }
 
 /* Remove all droids */
-void freeAllDroids(GameWorld& world)
+void freeAllDroids()
 {
-	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(world.objects.droids);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(gameWorld.objects.droids);
 }
 
 /*Remove a single Droid from a list*/
@@ -622,6 +621,12 @@ void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 			removeObjectFromFuncList(mission.gameWorld.objects.sensors, (BASE_OBJECT*)psDroidToRemove, 0);
 		}
 	}
+}
+
+/*Removes all droids that may be stored in the mission lists*/
+void freeAllMissionDroids()
+{
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(mission.gameWorld.objects.droids);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
@@ -708,9 +713,9 @@ void killStruct(STRUCTURE *psBuilding)
 }
 
 /* Remove heapall structures */
-void freeAllStructs(GameWorld& world)
+void freeAllStructs()
 {
-	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(world.objects.structures);
+	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(gameWorld.objects.structures);
 }
 
 /*Remove a single Structure from a list*/
@@ -761,9 +766,9 @@ void killFeature(FEATURE *psDel)
 }
 
 /* Remove all features */
-void freeAllFeatures(GameWorld& world)
+void freeAllFeatures()
 {
-	freeAllEntitiesImpl<FEATURE, 1>(world.objects.features);
+	freeAllEntitiesImpl<FEATURE, 1>(gameWorld.objects.features);
 }
 
 /**************************  FLAG_POSITION ********************************/
@@ -860,16 +865,16 @@ void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlaye
 }
 
 // free all flag positions
-void freeAllFlagPositions(WorldObjectState& objState)
+void freeAllFlagPositions()
 {
 	for (uint32_t player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (const auto& flagPos : objState.flags[player])
+		for (const auto& flagPos : gameWorld.objects.flags[player])
 		{
 			ASSERT(player == flagPos->player, "Player mismatch? (flagPos->player == %" PRIu32 ", expecting: %d", flagPos->player, player);
 			free(flagPos);
 		}
-		objState.flags[player].clear();
+		gameWorld.objects.flags[player].clear();
 	}
 }
 

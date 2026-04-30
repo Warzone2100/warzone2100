@@ -107,6 +107,16 @@ static jsDebugShutdownHandlerFunction globalDialogShutdownHandler;
 #define TAB_BUTTONS_HEIGHT 24
 #define TAB_BUTTONS_PADDING 10
 
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+static constexpr const char *SCRIPTDEBUG_TITLE_TEXT = "TEST MENU";
+static constexpr int SCRIPTDEBUG_BOTTOM_CLEARANCE = 160;
+static constexpr bool SCRIPTDEBUG_TOUCH_TEST_MENU = true;
+#else
+static constexpr const char *SCRIPTDEBUG_TITLE_TEXT = "Script Debugger";
+static constexpr int SCRIPTDEBUG_BOTTOM_CLEARANCE = 50;
+static constexpr bool SCRIPTDEBUG_TOUCH_TEST_MENU = false;
+#endif
+
 const PIELIGHT WZCOL_DEBUG_FILL_COLOR = pal_RGBA(25, 0, 110, 220);
 const PIELIGHT WZCOL_DEBUG_FILL_COLOR_DARK = pal_RGBA(10, 0, 70, 250);
 const PIELIGHT WZCOL_DEBUG_BORDER_LIGHT = pal_RGBA(255, 255, 255, 80);
@@ -2650,7 +2660,7 @@ void WZScriptDebugger::display(int xOffset, int yOffset)
 
 	// draw title
 	int titleXPadding = 10;
-	cachedTitleText.setText(_("Script Debugger"), font_regular_bold);
+	cachedTitleText.setText(_(SCRIPTDEBUG_TITLE_TEXT), font_regular_bold);
 
 	Vector2i textBoundingBoxOffset(0, 0);
 	textBoundingBoxOffset.y = y0 + TITLE_TOP_PADDING + (TITLE_HEIGHT - cachedTitleText.lineSize()) / 2;
@@ -2716,22 +2726,24 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	auto result = std::make_shared<WZScriptDebugger>(debugInterface, readOnly);
 
 	// make minimizable
-	result->enableMinimizing("Script Debugger", WZCOL_FORM_TEXT);
+	result->enableMinimizing(SCRIPTDEBUG_TITLE_TEXT, WZCOL_FORM_TEXT);
 
 	// Main "parent" form
 	result->id = MULTIOP_OPTIONS;
-	int newFormWidth = FRONTEND_TOPFORM_WIDEW;
-	result->setGeometry((pie_GetVideoBufferWidth() - newFormWidth) / 2, 10, newFormWidth, pie_GetVideoBufferHeight() - 50);
+	int newFormWidth = std::min<int>(FRONTEND_TOPFORM_WIDEW, std::max<int>(320, pie_GetVideoBufferWidth() - 20));
+	int newFormHeight = std::max<int>(220, pie_GetVideoBufferHeight() - SCRIPTDEBUG_BOTTOM_CLEARANCE);
+	result->setGeometry((pie_GetVideoBufferWidth() - newFormWidth) / 2, 10, newFormWidth, newFormHeight);
 	result->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		int newWidth = std::min<int>(FRONTEND_TOPFORM_WIDEW, std::max<int>(320, pie_GetVideoBufferWidth() - 20));
 		// update the height
-		int newHeight = std::min<int>(pie_GetVideoBufferHeight() - 50, SCRIPTDEBUG_WINDOW_HEIGHT_MAX);
+		int newHeight = std::max<int>(220, std::min<int>(pie_GetVideoBufferHeight() - SCRIPTDEBUG_BOTTOM_CLEARANCE, SCRIPTDEBUG_WINDOW_HEIGHT_MAX));
 		// update the x if necessary to ensure the entire form is visible
-		int x0 = std::min(psWidget->x(), pie_GetVideoBufferWidth() - psWidget->width());
+		int x0 = std::max<int>(0, std::min((pie_GetVideoBufferWidth() - newWidth) / 2, pie_GetVideoBufferWidth() - newWidth));
 		// update the y if necessary to ensure the entire form is visible
 		int y0 = std::min(psWidget->y(), pie_GetVideoBufferHeight() - newHeight);
-		psWidget->setGeometry(x0, y0, psWidget->width(), newHeight);
+		psWidget->setGeometry(x0, y0, newWidth, newHeight);
 	}));
-	result->userMovable = true;
+	result->userMovable = !SCRIPTDEBUG_TOUCH_TEST_MENU;
 
 	// Add the "minimize" button
 	auto minimizeButton = makeFormTransparentCornerButton("\u21B8", TAB_BUTTONS_PADDING, WZCOL_DEBUG_FILL_COLOR); // ↸
@@ -3021,6 +3033,11 @@ bool jsDebugShutdown()
 	}
 	debugScreen = nullptr;
 	return true;
+}
+
+bool jsDebugIsOpen()
+{
+	return globalDialog != nullptr;
 }
 
 void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debugInterface, const jsDebugShutdownHandlerFunction& shutdownFunc, bool readOnly /*= false*/)

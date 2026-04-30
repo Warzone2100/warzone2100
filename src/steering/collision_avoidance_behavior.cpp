@@ -37,7 +37,6 @@
 #include "src/fpath.h"
 #include "src/move.h"
 #include "src/objects.h"
-#include "src/game_world.h"
 
 #include <algorithm>
 
@@ -100,7 +99,7 @@ SteeringForce CollisionAvoidanceBehavior::calculate(const SteeringContext& ctx)
 		Vector2i deltaDiff = iSinCosR(obstDirectionGuess, predictionFactor);
 
 		// Don't assume obstacle can go through blocking tiles
-		if (!fpathBlockingTile(gameWorld.map, map_coord(obstacle->pos.x + deltaDiff.x),
+		if (!fpathBlockingTile(map_coord(obstacle->pos.x + deltaDiff.x),
 		                       map_coord(obstacle->pos.y + deltaDiff.y),
 		                       obstaclePropStats->propulsionType))
 		{

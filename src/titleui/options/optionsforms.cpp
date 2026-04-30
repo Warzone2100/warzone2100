@@ -34,6 +34,15 @@
 
 // MARK: -
 
+static WzString getOpenConfigDirLabel()
+{
+#if defined(WZ_OS_IOS)
+	return _("Open Documents Folder");
+#else
+	return _("Open Configuration Directory");
+#endif
+}
+
 // Note: Currently does not support W_BUTTON's:
 // - setImages functions
 // - progressBorder functionality
@@ -812,7 +821,7 @@ void OptionsBrowserForm::initialize(const std::shared_ptr<WIDGET>& optionalBackB
 
 	auto openConfigurationDirectoryLinkTmp = std::make_shared<WzClippableButton>();
 	openConfigurationDirectoryLinkTmp->setFont(font_small);
-	openConfigurationDirectoryLinkTmp->setString(_("Open Configuration Directory"));
+	openConfigurationDirectoryLinkTmp->setString(getOpenConfigDirLabel());
 	openConfigurationDirectoryLinkTmp->setPadding(6, 6);
 	attach(openConfigurationDirectoryLinkTmp);
 	openConfigurationDirectoryLinkTmp->setGeometry(0, 0, openConfigurationDirectoryLinkTmp->width(), iV_GetTextLineSize(openConfigurationDirectoryLinkTmp->FontID) + 8);
@@ -1080,7 +1089,7 @@ void OptionsBrowserForm::informLanguageDidChange()
 	sectionSwitcher->informLanguageDidChange();
 
 	// Refresh open configuration directory link text
-	openConfigurationDirectoryLink->setString(_("Open Configuration Directory"));
+	openConfigurationDirectoryLink->setString(getOpenConfigDirLabel());
 
 	// Trigger layout recalc
 	geometryChanged();

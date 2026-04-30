@@ -156,6 +156,18 @@ std::string VideoInitProgressImpl::currentWZVersionString()
 
 bool VideoInitProgressImpl::tryLoadFromFile()
 {
+#if defined(WZ_OS_IOS)
+	// iOS builds intentionally expose only the Vulkan/MoltenVK path. If a
+	// prior simulator run crashed during renderer bring-up, blacklisting Vulkan
+	// leaves no backend to try and permanently blocks launch until data is
+	// wiped. Keep iOS deterministic and always retry the sole renderer.
+	if (PHYSFS_exists(filePath.c_str()))
+	{
+		PHYSFS_delete(filePath.c_str());
+	}
+	return false;
+#endif
+
 	auto optJson = wzLoadJsonObjectFromFile(filePath, true);
 	if (!optJson.has_value())
 	{

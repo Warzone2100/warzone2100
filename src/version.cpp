@@ -26,18 +26,112 @@
 #include "stringdef.h"
 
 #include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 #include <regex>
 #include <utility>
 #include <sstream>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#include <sys/sysctl.h>
+#endif
 
 using nonstd::optional;
 using nonstd::nullopt;
 
 #include "build_tools/autorevision.h"
 
-static const char vcs_branch_cstr[] = VCS_BRANCH;
+[[maybe_unused]] static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
+#if defined(WZ_OS_IOS)
+#if defined(WZ_IOS_DEBUG_JIT)
+static const char ios_release_channel_cstr[] = "0.1-beta-ios-debug-jit";
+#else
+static const char ios_release_channel_cstr[] = "0.1-beta-ios";
+#endif
+#endif
+
+#if defined(WZ_OS_IOS)
+static std::string getAppleSysctlString(const char *name)
+{
+	size_t size = 0;
+	if (sysctlbyname(name, nullptr, &size, nullptr, 0) != 0 || size == 0)
+	{
+		return {};
+	}
+	std::string buffer(size, '\0');
+	if (sysctlbyname(name, buffer.data(), &size, nullptr, 0) != 0 || size == 0)
+	{
+		return {};
+	}
+	if (!buffer.empty() && buffer.back() == '\0')
+	{
+		buffer.pop_back();
+	}
+	return buffer;
+}
+
+static int extractAppleFamilyNumber(const std::string& hardwareId, const char *prefix)
+{
+	if (hardwareId.rfind(prefix, 0) != 0)
+	{
+		return -1;
+	}
+	size_t start = strlen(prefix);
+	size_t end = hardwareId.find(',', start);
+	std::string numericPart = hardwareId.substr(start, end - start);
+	return numericPart.empty() ? -1 : atoi(numericPart.c_str());
+}
+
+static std::string appleChipForHardwareId(const std::string& hardwareId)
+{
+	const int iPhoneFamily = extractAppleFamilyNumber(hardwareId, "iPhone");
+	if (iPhoneFamily >= 0)
+	{
+		if (iPhoneFamily <= 7) return "Apple A8";
+		if (iPhoneFamily == 8) return "Apple A9";
+		if (iPhoneFamily == 9 || iPhoneFamily == 10) return "Apple A10";
+		if (iPhoneFamily == 11) return "Apple A12";
+		if (iPhoneFamily == 12) return "Apple A13";
+		if (iPhoneFamily == 13) return "Apple A14";
+		if (iPhoneFamily == 14) return "Apple A15";
+		if (iPhoneFamily == 15) return "Apple A16";
+		if (iPhoneFamily >= 16) return "Apple A17 Pro";
+	}
+
+	const int iPadFamily = extractAppleFamilyNumber(hardwareId, "iPad");
+	if (iPadFamily >= 0)
+	{
+		if (iPadFamily <= 5) return "Apple A8X";
+		if (iPadFamily == 6 || iPadFamily == 7) return "Apple A10";
+		if (iPadFamily == 8) return "Apple A12X/A12Z";
+		if (iPadFamily == 11) return "Apple A12";
+		if (iPadFamily == 13) return "Apple M1";
+		if (iPadFamily == 14) return "Apple M2";
+		if (iPadFamily >= 16) return "Apple M4";
+	}
+
+	if (hardwareId.rfind("MacBookAir10,", 0) == 0
+		|| hardwareId.rfind("MacBookPro17,", 0) == 0
+		|| hardwareId.rfind("Macmini9,", 0) == 0
+		|| hardwareId.rfind("iMac21,", 0) == 0)
+	{
+		return "Apple M1";
+	}
+	if (hardwareId.rfind("Mac14,", 0) == 0 || hardwareId.rfind("MacBookAir15,", 0) == 0 || hardwareId.rfind("Mac14", 0) == 0)
+	{
+		return "Apple M2";
+	}
+	if (hardwareId.rfind("Mac15,", 0) == 0)
+	{
+		return "Apple M3";
+	}
+
+	return "Apple Silicon";
+}
+#endif
 
 optional<TagVer> version_extractVersionNumberFromTag(const std::string& tag)
 {
@@ -86,6 +180,9 @@ optional<TagVer> version_extractVersionNumberFromTag(const std::string& tag)
  */
 std::string version_getVersionedAppDirFolderName()
 {
+#if defined(WZ_OS_IOS)
+	return "Warzone2100 0.1-beta-ios";
+#else
 	std::string versionedWriteDirFolderName;
 	std::string versionedWriteDirFolderNameSuffix;
 
@@ -130,6 +227,7 @@ std::string version_getVersionedAppDirFolderName()
 		versionedWriteDirFolderName += versionedWriteDirFolderNameSuffix;
 	}
 	return versionedWriteDirFolderName;
+#endif
 }
 
 /** Obtain the versioned application-data / config "mods" folder path
@@ -167,6 +265,9 @@ const char *version_getVersionString()
 
 	if (version_string == nullptr)
 	{
+#if defined(WZ_OS_IOS)
+		version_string = ios_release_channel_cstr;
+#else
 		if (strlen(vcs_tag))
 		{
 			version_string = vcs_tag;
@@ -180,9 +281,40 @@ const char *version_getVersionString()
 			// not a branch or a tag, so we are detached most likely.
 			version_string = VCS_EXTRA;
 		}
+#endif
 	}
 
 	return version_string;
+}
+
+std::string version_getPlatformDisplayString()
+{
+#if defined(WZ_OS_IOS)
+	std::string hardwareId;
+#if TARGET_OS_SIMULATOR
+	hardwareId = getAppleSysctlString("hw.model");
+	if (hardwareId.empty())
+	{
+		hardwareId = getAppleSysctlString("hw.machine");
+	}
+	std::string cpuName = appleChipForHardwareId(hardwareId);
+	if (!hardwareId.empty())
+	{
+		return astringf("Simulator / %s (%s)", cpuName.c_str(), hardwareId.c_str());
+	}
+	return astringf("Simulator / %s", cpuName.c_str());
+#else
+	hardwareId = getAppleSysctlString("hw.machine");
+	std::string cpuName = appleChipForHardwareId(hardwareId);
+	if (!hardwareId.empty())
+	{
+		return astringf("%s (%s)", cpuName.c_str(), hardwareId.c_str());
+	}
+	return cpuName;
+#endif
+#else
+	return {};
+#endif
 }
 
 const char *version_getLatestTag()
@@ -263,12 +395,38 @@ const char *version_getFormattedVersionString(bool translated /* = true */)
 #else
 	const char *build_type = "";
 #endif
+	std::string platformDisplay = version_getPlatformDisplayString();
+	std::string platformSuffix;
+#if defined(WZ_OS_IOS)
+	if (!platformDisplay.empty())
+	{
+#if defined(WZ_IOS_DEBUG_JIT)
+			platformSuffix = astringf(" [%s; Debug JIT]", platformDisplay.c_str());
+#elif defined(DEBUG)
+			platformSuffix = astringf(" [%s; Debug]", platformDisplay.c_str());
+#elif defined(WZ_IOS_JITLESS)
+			platformSuffix = astringf(" [%s; JITless]", platformDisplay.c_str());
+#else
+			platformSuffix = astringf(" [%s]", platformDisplay.c_str());
+#endif
+	}
+	else
+	{
+#if defined(WZ_IOS_DEBUG_JIT)
+			platformSuffix = " [Debug JIT]";
+#elif defined(DEBUG)
+			platformSuffix = " [Debug]";
+#elif defined(WZ_IOS_JITLESS)
+			platformSuffix = " [JITless]";
+#endif
+	}
+#endif
 
 	// Construct the version string
 	// TRANSLATORS: This string looks as follows when expanded.
 	// "Version: <version name/number>, <working copy state>,
 	// Built: <BUILD DATE><BUILD TYPE>"
-	snprintf(versionString, MAX_STR_LENGTH, (translated) ? _("Version: %s,%s Built: %s%s") : "Version: %s,%s Built: %s%s", version_getVersionString(), wc_state, getCompileDate(), build_type);
+	snprintf(versionString, MAX_STR_LENGTH, (translated) ? _("Version: %s%s,%s Built: %s%s") : "Version: %s%s,%s Built: %s%s", version_getVersionString(), platformSuffix.c_str(), wc_state, getCompileDate(), build_type);
 
 	return versionString;
 }

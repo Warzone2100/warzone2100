@@ -76,8 +76,12 @@
 */
 
 #if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
+#  include <TargetConditionals.h>
 #  define WZ_OS_DARWIN
 #  define WZ_OS_BSD4
+#  if TARGET_OS_IPHONE
+#    define WZ_OS_IOS
+#  endif
 #  ifdef __LP64__
 #    define WZ_OS_DARWIN64
 #  else

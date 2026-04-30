@@ -35,6 +35,18 @@
 #define	CAMERASPEED_MIN		(100)
 #define	CAMERASPEED_DEFAULT	(2500)
 #define	CAMERASPEED_STEP	(100)
+#define TOUCH_PAN_SENSITIVITY_MIN (25)
+#define TOUCH_PAN_SENSITIVITY_MAX (100)
+#define TOUCH_PAN_SENSITIVITY_DEFAULT (100)
+#define TOUCH_PAN_SENSITIVITY_STEP (25)
+#define TOUCH_ZOOM_SENSITIVITY_MIN (25)
+#define TOUCH_ZOOM_SENSITIVITY_MAX (100)
+#define TOUCH_ZOOM_SENSITIVITY_DEFAULT (100)
+#define TOUCH_ZOOM_SENSITIVITY_STEP (25)
+#define TOUCH_MULTISELECT_HOLD_MIN_MS (250)
+#define TOUCH_MULTISELECT_HOLD_MAX_MS (1000)
+#define TOUCH_MULTISELECT_HOLD_DEFAULT_MS (500)
+#define TOUCH_MULTISELECT_HOLD_STEP_MS (125)
 
 #define MIN_MPINACTIVITY_MINUTES 4
 #define MIN_MPGAMETIMELIMIT_MINUTES 30
@@ -130,6 +142,14 @@ bool war_GetRadarJump();
 void war_SetRadarJump(bool radarJump);
 int war_GetCameraSpeed();
 void war_SetCameraSpeed(int cameraSpeed);
+int war_GetTouchPanSensitivity();
+void war_SetTouchPanSensitivity(int sensitivity);
+int war_GetTouchZoomSensitivity();
+void war_SetTouchZoomSensitivity(int sensitivity);
+int war_GetTouchMultiSelectHoldMs();
+void war_SetTouchMultiSelectHoldMs(int holdMs);
+bool war_GetTouchPanInverted();
+void war_SetTouchPanInverted(bool inverted);
 int8_t war_GetSPcolor();
 void war_SetSPcolor(int color);
 void war_setMPcolour(int colour);
