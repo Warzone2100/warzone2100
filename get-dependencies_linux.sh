@@ -126,8 +126,15 @@ if [ "${DISTRO}" == "fedora" ]; then
     dnf -y install gcc gcc-c++ ninja-build
   fi
 
-  echo "Installing build-dependencies for Fedora"
-  dnf -y install cmake git p7zip gettext rubygem-asciidoctor SDL3-devel physfs-devel libpng-devel openal-soft-devel libvorbis-devel libogg-devel opus-devel libtheora-devel freetype-devel fribidi-devel harfbuzz-devel libcurl-devel libsodium-devel sqlite-devel protobuf-devel libzip-devel libjpeg-turbo-devel
+  FEDORA_VER=$(rpm -E %fedora)
+
+  FEDORA_7ZIP_PACKAGE="7zip"
+  if [ "$FEDORA_VER" -lt 43 ]; then
+    FEDORA_7ZIP_PACKAGE="p7zip"
+  fi
+
+  echo "Installing build-dependencies for Fedora (${FEDORA_VER})"
+  dnf -y install cmake git $FEDORA_7ZIP_PACKAGE gettext rubygem-asciidoctor SDL3-devel physfs-devel libpng-devel openal-soft-devel libvorbis-devel libogg-devel opus-devel libtheora-devel freetype-devel fribidi-devel harfbuzz-devel libcurl-devel libsodium-devel sqlite-devel protobuf-devel libzip-devel libjpeg-turbo-devel
   # Required because of broken CMake config files installed by libzip-dev:
   dnf -y install libzip-tools
   dnf -y install vulkan-devel glslc
