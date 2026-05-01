@@ -1,4 +1,4 @@
-name: iOS IPA WIP Build
+name: iOS IPA WIP
 
 on:
   workflow_dispatch:
@@ -21,17 +21,19 @@ on:
         required: true
         default: "arm64"
         type: string
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
   pull_request:
-    paths:
-      - ".github/workflows/ios_ipa_wip.yml"
-      - "CMakeLists.txt"
-      - "cmake/**"
-      - "data/**"
-      - "lib/**"
-      - "platforms/ios/**"
-      - "src/**"
-      - "vcpkg.json"
-  merge_group:
+    paths-ignore:
+      # Except some text-only files / documentation
+      - 'ChangeLog'
+      # Except those that only include changes to stats
+      - 'data/base/stats/**'
+      - 'data/mp/stats/**'
+      - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
 
 concurrency:
   group: ios-ipa-wip-${{ github.workflow }}-${{ github.ref }}
@@ -45,6 +47,7 @@ jobs:
     name: Build WIP iOS IPA
     runs-on: macos-latest
     timeout-minutes: 180
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
     steps:
       - name: Checkout
@@ -60,7 +63,6 @@ jobs:
           DISPATCH_ARTIFACT_LABEL: ${{ inputs.artifact_label }}
           DISPATCH_CONFIGURATION: ${{ inputs.configuration }}
           DISPATCH_DEVICE_ARCHS: ${{ inputs.ios_device_archs }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
 
@@ -69,11 +71,11 @@ jobs:
             IOS_CONFIGURATION="${DISPATCH_CONFIGURATION:-Debug}"
             DEVICE_ARCHS="${DISPATCH_DEVICE_ARCHS:-arm64}"
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
-            ARTIFACT_LABEL="pr-${PR_NUMBER:-unknown}-${GITHUB_SHA:0:12}"
+            ARTIFACT_LABEL="pr-${GITHUB_HEAD_REF:-unknown}-${GITHUB_SHA:0:12}"
             IOS_CONFIGURATION="Debug"
             DEVICE_ARCHS="arm64"
           else
-            ARTIFACT_LABEL="${GITHUB_EVENT_NAME}-${GITHUB_SHA:0:12}"
+            ARTIFACT_LABEL="${GITHUB_REF_NAME:-wip}-${GITHUB_SHA:0:12}"
             IOS_CONFIGURATION="Debug"
             DEVICE_ARCHS="arm64"
           fi
@@ -120,22 +122,36 @@ jobs:
         shell: bash
         env:
           MOLTENVK_XCFRAMEWORK_ZIP_URL: ${{ secrets.MOLTENVK_XCFRAMEWORK_ZIP_URL }}
+          MOLTENVK_IOS_TAR_URL: https://github.com/KhronosGroup/MoltenVK/releases/download/v1.4.1/MoltenVK-ios.tar
         run: |
           set -euo pipefail
 
           WORK_DIR="${RUNNER_TEMP}/moltenvk"
           rm -rf "${WORK_DIR}"
           mkdir -p "${WORK_DIR}"
+          MOLTENVK_INCLUDE_DIR=""
+
+          find_moltenvk_include_dir() {
+            local header_path
+            header_path="$(find "$1" -type f -path "*/include/vulkan/vulkan.h" -print -quit)"
+            if [[ -n "${header_path}" ]]; then
+              printf '%s\n' "${header_path%/vulkan/vulkan.h}"
+            fi
+          }
 
           if [[ -d "platforms/ios/vendor/MoltenVK.xcframework" ]]; then
             MOLTENVK_DIR="${GITHUB_WORKSPACE}/platforms/ios/vendor/MoltenVK.xcframework"
+            MOLTENVK_INCLUDE_DIR="${GITHUB_WORKSPACE}/platforms/ios/vendor/MoltenVK/include"
           elif [[ -n "${MOLTENVK_XCFRAMEWORK_ZIP_URL}" ]]; then
             curl -L "${MOLTENVK_XCFRAMEWORK_ZIP_URL}" -o "${WORK_DIR}/MoltenVK.xcframework.zip"
             unzip -q "${WORK_DIR}/MoltenVK.xcframework.zip" -d "${WORK_DIR}"
             MOLTENVK_DIR="$(find "${WORK_DIR}" -type d -name MoltenVK.xcframework | head -n 1)"
+            MOLTENVK_INCLUDE_DIR="$(find_moltenvk_include_dir "${WORK_DIR}")"
           else
-            echo "::error::MoltenVK.xcframework was not found. Add platforms/ios/vendor/MoltenVK.xcframework or set the MOLTENVK_XCFRAMEWORK_ZIP_URL repository secret."
-            exit 1
+            curl -L "${MOLTENVK_IOS_TAR_URL}" -o "${WORK_DIR}/MoltenVK-ios.tar"
+            /usr/bin/tar -xf "${WORK_DIR}/MoltenVK-ios.tar" -C "${WORK_DIR}"
+            MOLTENVK_DIR="$(find "${WORK_DIR}" -type d -name MoltenVK.xcframework | head -n 1)"
+            MOLTENVK_INCLUDE_DIR="$(find_moltenvk_include_dir "${WORK_DIR}")"
           fi
 
           if [[ -z "${MOLTENVK_DIR}" || ! -d "${MOLTENVK_DIR}" ]]; then
@@ -146,6 +162,10 @@ jobs:
           sudo mkdir -p /usr/local/lib
           sudo rm -rf /usr/local/lib/MoltenVK.xcframework
           sudo cp -R "${MOLTENVK_DIR}" /usr/local/lib/MoltenVK.xcframework
+          if [[ -n "${MOLTENVK_INCLUDE_DIR}" && -f "${MOLTENVK_INCLUDE_DIR}/vulkan/vulkan.h" ]]; then
+            sudo mkdir -p /usr/local/include
+            sudo cp -R "${MOLTENVK_INCLUDE_DIR}/." /usr/local/include/
+          fi
           find /usr/local/lib/MoltenVK.xcframework -maxdepth 2 -name libMoltenVK.a -print -exec lipo -archs {} \; || true
 
       - name: Build and package iOS app

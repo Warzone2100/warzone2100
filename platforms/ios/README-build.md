@@ -28,6 +28,8 @@ IOS_BUILD_CONFIGURATION=Debug ./platforms/ios/build_xcode_ios.sh device
 Artifacts are written under `platforms/ios/build/artifacts/<device-or-simulator>/<configuration>/`.
 
 GitHub Actions:
-- `.github/workflows/ios_ipa_wip.yml` is a WIP/merge validation workflow, not a release workflow.
+- `.github/workflows/ios_ipa_wip.yml` is a WIP CI artifact workflow, not a release workflow.
 - It builds the device IPA and uploads it as a workflow artifact only.
+- It runs on pushes and pull requests like the other CI workflows.
+- It uses a local vendor copy, a `MOLTENVK_XCFRAMEWORK_ZIP_URL` secret, or Khronos' pinned `MoltenVK-ios.tar` release asset for MoltenVK.
 - It does not create tags or GitHub releases.
