@@ -233,7 +233,7 @@ static uint32_t iosTouchMultiSelectUntilTime = 0;
 static uint32_t iosLastTapTime = 0;
 static float iosLastTapX = -1.f;
 static float iosLastTapY = -1.f;
-static bool iosPrefersTouchInput = false;
+static bool iosPrefersTouchInput = true;
 static std::atomic_bool iosAppInBackground(false);
 static bool iosSDLAppLifecycleWatchInstalled = false;
 
@@ -850,6 +850,9 @@ bool isInTextInputMode()
 
 bool wzHasTouchInputDevices()
 {
+#if defined(WZ_OS_IOS)
+	return true;
+#else
 	int numDevices = 0;
 	SDL_TouchID *devices = SDL_GetTouchDevices(&numDevices);
 	if (devices == nullptr)
@@ -858,11 +861,16 @@ bool wzHasTouchInputDevices()
 	}
 	SDL_free(devices);
 	return numDevices > 0;
+#endif
 }
 
 bool wzSeemsLikeNonTouchPlatform()
 {
+#if defined(WZ_OS_IOS)
+	return false;
+#else
 	return !wzHasTouchInputDevices() || (SDL_HasScreenKeyboardSupport() == false);
+#endif
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */

@@ -7,6 +7,12 @@ set(VCPKG_OSX_SYSROOT "iphonesimulator")
 set(VCPKG_OSX_DEPLOYMENT_TARGET "16.0")
 set(VCPKG_OSX_ARCHITECTURES "arm64")
 
+if(PORT STREQUAL "curl")
+	# The iOS simulator SDK does not expose pipe2(), even when curl's CMake
+	# probe can incorrectly cache it as available via the host environment.
+	list(APPEND VCPKG_CMAKE_CONFIGURE_OPTIONS "-DHAVE_PIPE2=0")
+endif()
+
 get_filename_component(_warzone_repo_root "${CMAKE_CURRENT_LIST_DIR}/../../../.." ABSOLUTE)
 set(VCPKG_MESON_CROSS_FILE "${_warzone_repo_root}/platforms/ios/meson-universal-overrides.ini")
 set(VCPKG_MAKE_BUILD_TRIPLET "--build=aarch64-apple-darwin;--host=aarch64-apple-ios-simulator")

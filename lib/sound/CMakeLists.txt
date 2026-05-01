@@ -47,6 +47,30 @@ target_link_libraries(sound PRIVATE Ogg::ogg Opus::opus)
 target_link_libraries(sound PUBLIC optional-lite)
 target_link_libraries(sound PUBLIC OpenAL::OpenAL)
 
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS" AND DEFINED VCPKG_INSTALLED_DIR AND DEFINED VCPKG_TARGET_TRIPLET)
+	# vcpkg's OpenAL Soft is built against the normal fmt ABI, while Warzone
+	# intentionally renames its vendored fmt namespace to avoid ODR collisions.
+	set(_wz_ios_openal_fmt_release "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib/libfmt.a")
+	set(_wz_ios_openal_fmt_debug "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib/libfmtd.a")
+	if(EXISTS "${_wz_ios_openal_fmt_release}" OR EXISTS "${_wz_ios_openal_fmt_debug}")
+		add_library(WZOpenALVcpkgFmt STATIC IMPORTED GLOBAL)
+		if(EXISTS "${_wz_ios_openal_fmt_release}")
+			set_target_properties(WZOpenALVcpkgFmt PROPERTIES
+				IMPORTED_LOCATION "${_wz_ios_openal_fmt_release}"
+				IMPORTED_LOCATION_RELEASE "${_wz_ios_openal_fmt_release}"
+				IMPORTED_LOCATION_RELWITHDEBINFO "${_wz_ios_openal_fmt_release}"
+				IMPORTED_LOCATION_MINSIZEREL "${_wz_ios_openal_fmt_release}"
+			)
+		endif()
+		if(EXISTS "${_wz_ios_openal_fmt_debug}")
+			set_target_properties(WZOpenALVcpkgFmt PROPERTIES
+				IMPORTED_LOCATION_DEBUG "${_wz_ios_openal_fmt_debug}"
+			)
+		endif()
+		target_link_libraries(sound PUBLIC WZOpenALVcpkgFmt)
+	endif()
+endif()
+
 # Opusfile
 find_package(Opusfile QUIET)
 if (NOT WZ_FORCE_MINIMAL_OPUSFILE AND Opusfile_FOUND)

@@ -114,6 +114,7 @@ execute_process(
 		-DENABLE_NLS=OFF
 		-DENABLE_DOCS=OFF
 		-DENABLE_DISCORD=OFF
+		-DENABLE_GNS_NETWORK_BACKEND=OFF
 	RESULT_VARIABLE _configure_status
 )
 if(NOT _configure_status EQUAL 0)
