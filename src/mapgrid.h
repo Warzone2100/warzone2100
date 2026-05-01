@@ -27,6 +27,8 @@
 typedef std::vector<BASE_OBJECT *> GridList;
 typedef GridList::const_iterator GridIterator;
 
+struct GameWorld;
+
 // initialise the grid system
 bool gridInitialise();
 
@@ -35,7 +37,7 @@ void gridShutDown();
 
 // Reset the grid system. Called once per update.
 // Resets seenThisTick[] to false.
-void gridReset();
+void gridReset(GameWorld& world);
 
 /// Find all objects within radius.
 GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius);

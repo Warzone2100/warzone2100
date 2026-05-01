@@ -67,6 +67,7 @@
 #include "activity.h"
 #include "warzoneconfig.h"
 #include "screens/netpregamescreen.h"
+#include "game_world.h"
 
 #define MAX_STRUCTURE_LIMITS 4096 // Set a high (but explicit) maximum for the number of structure limits supported
 
@@ -573,7 +574,7 @@ static bool gameInit()
 			&& !(NetPlay.players[player].isSpectator && NetPlay.players[player].allocated)
 			&& !(player < game.maxPlayers && NetPlay.players[player].allocated))
 		{
-			clearPlayer(player, true);			// do this quietly
+			clearPlayer(gameWorld.objects, player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
 	}

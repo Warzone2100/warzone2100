@@ -28,6 +28,8 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/paged_entity_container.h"
 
+struct WorldMapState;
+
 /* The statistics for the features */
 extern std::vector<FEATURE_STATS> asFeatureStats;
 
@@ -41,8 +43,8 @@ bool loadFeatureStats(WzConfig &ini);
 void featureStatsShutDown();
 
 /* Create a feature on the map */
-FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
-FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id);
+FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
+FEATURE *buildFeature(WorldMapState& mapState, FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave, uint32_t id);
 
 /* Update routine for features */
 void featureUpdate(FEATURE *psFeat);

@@ -86,5 +86,6 @@ struct WorldMapState
 	std::unique_ptr<uint8_t[]> blockMap[AUX_MAX];
 	std::unique_ptr<uint8_t[]> auxMap[MAX_PLAYERS + AUX_MAX]; ///< yes, we waste one element... eyes wide open... makes API nicer
 	WorldScrollLimits scroll;
+	/// the list of gateways on the current map
 	GATEWAY_LIST gateways;
 };

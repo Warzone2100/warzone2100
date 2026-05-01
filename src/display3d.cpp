@@ -127,7 +127,7 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
-static	int	calcAverageTerrainHeight(int tileX, int tileZ);
+static	int	calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ);
 static	int	calculateCameraHeight(int height);
 static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
@@ -359,7 +359,7 @@ struct Blueprint
 	}
 	optional<STRUCTURE> buildBlueprint() const
 	{
-		return ::buildBlueprint(stats, pos, dir, index, state, player);
+		return ::buildBlueprint(gameWorld.map, stats, pos, dir, index, state, player);
 	}
 	void renderBlueprint(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix) const
 	{
@@ -395,7 +395,7 @@ static const int BLUEPRINT_OPACITY = 120;
 void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	if (psWScreen == nullptr) return;
-	resizeRadar(); // recalculate radar position
+	resizeRadar(gameWorld.map); // recalculate radar position
 }
 
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup);
@@ -796,7 +796,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 
 
 /// Show all droid movement parts by displaying an explosion at every step
-static void showDroidPaths()
+static void showDroidPaths(const GameWorld& world)
 {
 	if ((graphicsTime / 250 % 2) != 0)
 	{
@@ -808,7 +808,7 @@ static void showDroidPaths()
 		return; // no-op for now
 	}
 
-	for (const DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
+	for (const DROID *psDroid : world.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
@@ -817,10 +817,10 @@ static void showDroidPaths()
 			{
 				Vector3i pos;
 
-				ASSERT(worldOnMap(gameWorld.map, psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
+				ASSERT(worldOnMap(world.map, psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
 				pos.x = psDroid->sMove.asPath[i].x;
 				pos.z = psDroid->sMove.asPath[i].y;
-				pos.y = map_Height(gameWorld.map, pos.x, pos.z) + 16;
+				pos.y = map_Height(world.map, pos.x, pos.z) + 16;
 
 				effectGiveAuxVar(80);
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
@@ -1208,7 +1208,7 @@ void draw3DScene()
 
 	if (showPath)
 	{
-		showDroidPaths();
+		showDroidPaths(gameWorld);
 	}
 
 	wzPerfEnd(PERF_MISC);
@@ -1227,7 +1227,7 @@ void	setProximityDraw(bool val)
 }
 /***************************************************************************/
 /// Calculate the average terrain height for the area directly below the tile
-static int calcAverageTerrainHeight(int tileX, int tileZ)
+static int calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ)
 {
 	int numTilesAveraged = 0;
 
@@ -1240,10 +1240,10 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 	{
 		for (int j = -4; j <= 4; j++)
 		{
-			if (tileOnMap(gameWorld.map, tileX + j, tileZ + i))
+			if (tileOnMap(mapState, tileX + j, tileZ + i))
 			{
 				/* Get a pointer to the tile at this location */
-				MAPTILE *psTile = mapTile(gameWorld.map, tileX + j, tileZ + i);
+				MAPTILE *psTile = mapTile(mapState, tileX + j, tileZ + i);
 
 				result += std::max(psTile->height, psTile->waterLevel);
 				numTilesAveraged++;
@@ -1259,7 +1259,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 	 * Work out the average height.
 	 * We use this information to keep the player camera above the terrain.
 	 */
-	MAPTILE *psTile = mapTile(gameWorld.map, tileX, tileZ);
+	MAPTILE *psTile = mapTile(mapState, tileX, tileZ);
 
 	result /= numTilesAveraged;
 	if (result < psTile->height)
@@ -1272,7 +1272,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 
 static void updatePlayerAverageCentreTerrainHeight()
 {
-	averageCentreTerrainHeight = calcAverageTerrainHeight(playerXTile, playerZTile);
+	averageCentreTerrainHeight = calcAverageTerrainHeight(gameWorld.map, playerXTile, playerZTile);
 }
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
@@ -1443,8 +1443,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
 	processEffects(perspectiveViewMatrix, lightData);
-	atmosUpdateSystem();
-	avUpdateTiles();
+	atmosUpdateSystem(gameWorld.map);
+	avUpdateTiles(gameWorld.map);
 	wzPerfEnd(PERF_EFFECTS);
 
 	// The lightmap need to be ready at this point
@@ -1454,7 +1454,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	}
 
 	// prepare terrain for drawing
-	perFrameTerrainUpdates(lightmap);
+	perFrameTerrainUpdates(gameWorld.map, lightmap);
 
 	// and prepare for rendering the models
 	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
@@ -1602,7 +1602,7 @@ bool init3DView()
 	playerPos.r.y = 0; // rotation
 	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
 
-	if (!initTerrain())
+	if (!initTerrain(gameWorld.map))
 	{
 		return false;
 	}
@@ -2469,9 +2469,9 @@ Vector2i getPlayerPos()
 }
 
 /// Set the player position
-void setPlayerPos(SDWORD x, SDWORD y)
+void setPlayerPos(const WorldMapState& mapState, SDWORD x, SDWORD y)
 {
-	ASSERT(x >= 0 && x < world_coord(gameWorld.map.width) && y >= 0 && y < world_coord(gameWorld.map.height), "Position off map");
+	ASSERT(x >= 0 && x < world_coord(mapState.width) && y >= 0 && y < world_coord(mapState.height), "Position off map");
 	playerPos.p.x = x;
 	playerPos.p.z = y;
 	playerPos.r.z = 0;
@@ -4065,9 +4065,9 @@ static int calculateCameraHeight(int _mapHeight)
 	return static_cast<int>(std::ceil(static_cast<float>(_mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
 }
 
-int calculateCameraHeightAt(int tileX, int tileY)
+int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY)
 {
-	return calculateCameraHeight(calcAverageTerrainHeight(tileX, tileY));
+	return calculateCameraHeight(calcAverageTerrainHeight(mapState, tileX, tileY));
 }
 
 /// Smoothly adjust player height to match the desired height

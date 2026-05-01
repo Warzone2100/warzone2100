@@ -51,14 +51,14 @@ bool gridInitialise()
 }
 
 // reset the grid system
-void gridReset()
+void gridReset(GameWorld& world)
 {
 	gridPointTree->clear();
 
 	// Put all existing objects into the point tree.
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (BASE_OBJECT* psObj : gameWorld.objects.droids[player])
+		for (BASE_OBJECT* psObj : world.objects.droids[player])
 		{
 			if (!psObj->died)
 			{
@@ -69,7 +69,7 @@ void gridReset()
 				}
 			}
 		}
-		for (BASE_OBJECT* psObj : gameWorld.objects.structures[player])
+		for (BASE_OBJECT* psObj : world.objects.structures[player])
 		{
 			if (!psObj->died)
 			{
@@ -81,7 +81,7 @@ void gridReset()
 			}
 		}
 	}
-	for (BASE_OBJECT* psObj : gameWorld.objects.features[0])
+	for (BASE_OBJECT* psObj : world.objects.features[0])
 	{
 		if (!psObj->died)
 		{

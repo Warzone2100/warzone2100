@@ -356,10 +356,10 @@ static inline void clip_world_offmap(const WorldMapState& mapState, int *worldX,
 bool mapShutdown();
 
 /* Load the map data */
-bool mapLoad(char const *filename);
+bool mapLoad(char const *filename, WorldMapState& mapState);
 struct ScriptMapData;
 bool loadTerrainTypeMap(const std::shared_ptr<WzMap::TerrainTypeData>& ttypeData);
-bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
+bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData, WorldMapState& mapState);
 
 // used to reload decal + ground types types when switching terrain overrides
 bool mapReloadGroundTypes();
@@ -395,7 +395,7 @@ public:
 };
 
 /* Save the map data */
-bool mapSaveToWzMapData(WzMap::MapData& output);
+bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(WorldMapState& mapState, int32_t x, int32_t y)
@@ -414,9 +414,19 @@ static inline WZ_DECL_PURE MAPTILE *mapTile(WorldMapState& mapState, int32_t x, 
 	return &mapState.tiles[x + (y * mapState.width)];
 }
 
+static inline WZ_DECL_PURE const MAPTILE* mapTile(const WorldMapState& mapState, int32_t x, int32_t y)
+{
+	return const_cast<const MAPTILE*>(mapTile(const_cast<WorldMapState&>(mapState), x, y));
+}
+
 static inline WZ_DECL_PURE MAPTILE *mapTile(WorldMapState& mapState, Vector2i const &v)
 {
 	return mapTile(mapState, v.x, v.y);
+}
+
+static inline WZ_DECL_PURE const MAPTILE* mapTile(const WorldMapState& mapState, Vector2i const &v)
+{
+	return const_cast<const MAPTILE*>(mapTile(const_cast<WorldMapState&>(mapState), v.x, v.y));
 }
 
 /** Return a pointer to the tile structure at x,y in world coordinates */
@@ -424,9 +434,20 @@ static inline WZ_DECL_PURE MAPTILE *worldTile(WorldMapState& mapState, int32_t x
 {
 	return mapTile(mapState, map_coord(x), map_coord(y));
 }
+
+static inline WZ_DECL_PURE const MAPTILE* worldTile(const WorldMapState& mapState, int32_t x, int32_t y)
+{
+	return const_cast<const MAPTILE*>(worldTile(const_cast<WorldMapState&>(mapState), x, y));
+}
+
 static inline WZ_DECL_PURE MAPTILE *worldTile(WorldMapState& mapState, Vector2i const &v)
 {
 	return mapTile(mapState, map_coord(v));
+}
+
+static inline WZ_DECL_PURE const MAPTILE* worldTile(const WorldMapState& mapState, Vector2i const &v)
+{
+	return const_cast<const MAPTILE*>(worldTile(const_cast<WorldMapState&>(mapState), v));
 }
 
 /// Return ground height of top-left corner of tile at x,y
@@ -527,12 +548,12 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj);
 
 /* returns the max and min height of a tile by looking at the four corners
    in tile coords */
-void getTileMaxMin(int x, int y, int *pMax, int *pMin);
+void getTileMaxMin(const WorldMapState& mapState, int x, int y, int *pMax, int *pMin);
 
-bool readVisibilityData(const char *fileName);
-bool writeVisibilityData(const char *fileName);
+bool readVisibilityData(const char *fileName, WorldMapState& mapState);
+bool writeVisibilityData(const char *fileName, const WorldMapState& mapState);
 
-void mapFloodFillContinents();
+void mapFloodFillContinents(WorldMapState& mapState);
 
 void tileSetFire(WorldMapState& mapState, int32_t x, int32_t y, uint32_t duration);
 bool fireOnLocation(WorldMapState& mapState, unsigned int x, unsigned int y); // FIXME: add const overload
@@ -548,8 +569,10 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 			);
 }
 
-void mapInit();
-void mapUpdate();
+struct GameWorld;
+
+void mapInit(GameWorld& world);
+void mapUpdate(GameWorld& world);
 
 bool shouldLoadTerrainTypeOverrides(const std::string& name);
 bool loadTerrainTypeMapOverride(MAP_TILESET tileSet);

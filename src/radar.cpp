@@ -199,11 +199,11 @@ PIELIGHT inline applyAlpha(PIELIGHT color, float alpha)
 	return ret;
 }
 
-static void DrawRadarTiles();
-static void DrawRadarObjects();
+static void DrawRadarTiles(WorldMapState& mapState);
+static void DrawRadarObjects(GameWorld& world);
 static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix);
 static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix);
-static void setViewingWindow();
+static void setViewingWindow(const WorldMapState& mapState);
 
 static void radarSize(int ZoomLevel)
 {
@@ -255,15 +255,15 @@ bool InitRadar()
 	return true;
 }
 
-bool resizeRadar()
+bool resizeRadar(const WorldMapState& mapState)
 {
 	radarBitmap.clear();
 	if (radarOverlayBuffer)
 	{
 		free(radarOverlayBuffer);
 	}
-	radarTexWidth = static_cast<size_t>(std::abs(gameWorld.map.scroll.maxX - gameWorld.map.scroll.minX));
-	radarTexHeight = static_cast<size_t>(std::abs(gameWorld.map.scroll.maxY - gameWorld.map.scroll.minY));
+	radarTexWidth = static_cast<size_t>(std::abs(mapState.scroll.maxX - mapState.scroll.minX));
+	radarTexHeight = static_cast<size_t>(std::abs(mapState.scroll.maxY - mapState.scroll.minY));
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
 	radarBitmap.allocate(radarTexWidth, radarTexHeight, 4, true);
 	radarOverlayBuffer = (uint32_t*)malloc(radarBufferSize);
@@ -298,7 +298,7 @@ bool ShutdownRadar()
 	return true;
 }
 
-void SetRadarZoom(uint8_t ZoomLevel)
+void SetRadarZoom(const WorldMapState& mapState, uint8_t ZoomLevel)
 {
 	if (ZoomLevel > MAX_RADARZOOM)
 	{
@@ -312,7 +312,7 @@ void SetRadarZoom(uint8_t ZoomLevel)
 	RadarZoom = ZoomLevel;
 	radarSize(RadarZoom);
 	frameSkip = 0;
-	resizeRadar();
+	resizeRadar(mapState);
 }
 
 uint8_t GetRadarZoom()
@@ -328,7 +328,7 @@ static void CalcRadarPixelSize(float *SizeH, float *SizeV)
 }
 
 /** Given a position within the radar, return a world coordinate. */
-void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
+void CalcRadarPosition(const WorldMapState& mapState, int mX, int mY, int *PosX, int *PosY)
 {
 	int		sPosX, sPosY;
 	float		pixSizeH, pixSizeV;
@@ -346,23 +346,23 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 	sPosX = static_cast<int>(pos.x / pixSizeH);	// adjust for pixel size
 	sPosY = static_cast<int>(pos.y / pixSizeV);
-	sPosX += gameWorld.map.scroll.minX;		// adjust for scroll limits
-	sPosY += gameWorld.map.scroll.minY;
+	sPosX += mapState.scroll.minX;		// adjust for scroll limits
+	sPosY += mapState.scroll.minY;
 
 #if REALLY_DEBUG_RADAR
 	debug(LOG_ERROR, "m=(%d,%d) radar=(%d,%d) pos(%d,%d), scroll=(%u-%u,%u-%u) sPos=(%d,%d), pixSize=(%f,%f)",
-	      mX, mY, radarX, radarY, posX, posY, gameWorld.map.scroll.minX, gameWorld.map.scroll.maxX, gameWorld.map.scroll.minY, gameWorld.map.scroll.maxY, sPosX, sPosY, pixSizeH, pixSizeV);
+	      mX, mY, radarX, radarY, posX, posY, mapState.scroll.minX, mapState.scroll.maxX, mapState.scroll.minY, mapState.scroll.maxY, sPosX, sPosY, pixSizeH, pixSizeV);
 #endif
 
 	// old safety code -- still necessary?
-	sPosX = clip<int>(sPosX, gameWorld.map.scroll.minX, gameWorld.map.scroll.maxX -1);
-	sPosY = clip<int>(sPosY, gameWorld.map.scroll.minY, gameWorld.map.scroll.maxY -1);
+	sPosX = clip<int>(sPosX, mapState.scroll.minX, mapState.scroll.maxX -1);
+	sPosY = clip<int>(sPosY, mapState.scroll.minY, mapState.scroll.maxY -1);
 
 	*PosX = sPosX;
 	*PosY = sPosY;
 }
 
-void drawRadar()
+void drawRadar(GameWorld& world)
 {
 	float	pixSizeH, pixSizeV;
 
@@ -371,13 +371,13 @@ void drawRadar()
 	ASSERT_OR_RETURN(, radarBitmap.bmp_w(), "No radar buffer allocated");
 	ASSERT_OR_RETURN(, radarOverlayBuffer, "No radar buffer allocated");
 
-	setViewingWindow();
+	setViewingWindow(world.map);
 	playerpos = playerPos.p; // cache position
 
 	if (frameSkip <= 0)
 	{
-		DrawRadarTiles();
-		DrawRadarObjects();
+		DrawRadarTiles(world.map);
+		DrawRadarObjects(world);
 		applyMinimapOverlay();
 		pie_DownLoadRadar(radarBitmap);
 		frameSkip = RADAR_FRAME_SKIP;
@@ -495,21 +495,21 @@ static PIELIGHT inline appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTi
 }
 
 /** Draw the map tiles on the radar. */
-static void DrawRadarTiles()
+static void DrawRadarTiles(WorldMapState& mapState)
 {
 	SDWORD	x, y;
 	size_t radarBufferSize2 = radarBitmap.size_in_bytes();
 	unsigned char* pRaderBuffer = radarBitmap.bmp_w();
 
-	for (x = gameWorld.map.scroll.minX; x < gameWorld.map.scroll.maxX; x++)
+	for (x = mapState.scroll.minX; x < mapState.scroll.maxX; x++)
 	{
-		for (y = gameWorld.map.scroll.minY; y < gameWorld.map.scroll.maxY; y++)
+		for (y = mapState.scroll.minY; y < mapState.scroll.maxY; y++)
 		{
-			MAPTILE	*psTile = mapTile(gameWorld.map, x, y);
-			size_t pixelStartPos = (radarTexWidth * (y - gameWorld.map.scroll.minY) + (x - gameWorld.map.scroll.minX)) * 4;
+			MAPTILE	*psTile = mapTile(mapState, x, y);
+			size_t pixelStartPos = (radarTexWidth * (y - mapState.scroll.minY) + (x - mapState.scroll.minX)) * 4;
 
 			ASSERT(pixelStartPos < radarBufferSize2, "Buffer overrun");
-			if (y == gameWorld.map.scroll.minY || x == gameWorld.map.scroll.minX || y == gameWorld.map.scroll.maxY - 1 || x == gameWorld.map.scroll.maxX - 1)
+			if (y == mapState.scroll.minY || x == mapState.scroll.minX || y == mapState.scroll.maxY - 1 || x == mapState.scroll.maxX - 1)
 			{
 				pRaderBuffer[pixelStartPos] = WZCOL_BLACK.byte.r;
 				pRaderBuffer[pixelStartPos + 1] = WZCOL_BLACK.byte.g;
@@ -527,7 +527,7 @@ static void DrawRadarTiles()
 }
 
 /** Draw the droids and structure positions on the radar. */
-static void DrawRadarObjects()
+static void DrawRadarObjects(GameWorld& world)
 {
 	UBYTE				clan;
 	PIELIGHT			playerCol;
@@ -561,10 +561,10 @@ static void DrawRadarObjects()
 		flashCol = flashColours[getPlayerColour(clan)];
 
 		/* Go through all droids */
-		for (const DROID* psDroid : gameWorld.objects.droids[clan])
+		for (const DROID* psDroid : world.objects.droids[clan])
 		{
-			if (psDroid->pos.x < world_coord(gameWorld.map.scroll.minX) || psDroid->pos.y < world_coord(gameWorld.map.scroll.minY)
-			    || psDroid->pos.x >= world_coord(gameWorld.map.scroll.maxX) || psDroid->pos.y >= world_coord(gameWorld.map.scroll.maxY))
+			if (psDroid->pos.x < world_coord(world.map.scroll.minX) || psDroid->pos.y < world_coord(world.map.scroll.minY)
+			    || psDroid->pos.x >= world_coord(world.map.scroll.maxX) || psDroid->pos.y >= world_coord(world.map.scroll.maxY))
 			{
 				continue;
 			}
@@ -574,7 +574,7 @@ static void DrawRadarObjects()
 			{
 				int	x = psDroid->pos.x / TILE_UNITS;
 				int	y = psDroid->pos.y / TILE_UNITS;
-				size_t	pos = (x - gameWorld.map.scroll.minX) + (y - gameWorld.map.scroll.minY) * radarTexWidth;
+				size_t	pos = (x - world.map.scroll.minX) + (y - world.map.scroll.minY) * radarTexWidth;
 
 				ASSERT(pos * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
@@ -596,13 +596,13 @@ static void DrawRadarObjects()
 	}
 
 	/* Do the same for structures */
-	for (SDWORD x = gameWorld.map.scroll.minX; x < gameWorld.map.scroll.maxX; x++)
+	for (SDWORD x = world.map.scroll.minX; x < world.map.scroll.maxX; x++)
 	{
-		for (SDWORD y = gameWorld.map.scroll.minY; y < gameWorld.map.scroll.maxY; y++)
+		for (SDWORD y = world.map.scroll.minY; y < world.map.scroll.maxY; y++)
 		{
-			MAPTILE		*psTile = mapTile(gameWorld.map, x, y);
+			MAPTILE		*psTile = mapTile(world.map, x, y);
 			STRUCTURE	*psStruct;
-			size_t		pos = (x - gameWorld.map.scroll.minX) + (y - gameWorld.map.scroll.minY) * radarTexWidth;
+			size_t		pos = (x - world.map.scroll.minX) + (y - world.map.scroll.minY) * radarTexWidth;
 
 			ASSERT(pos * sizeof(*radarOverlayBuffer) < radarBufferSize, "Buffer overrun");
 			if (!TileHasStructure(psTile))
@@ -729,7 +729,7 @@ static SDWORD getLengthAdjust()
 }
 
 /** Draws a Myth/FF7 style viewing window */
-static void setViewingWindow()
+static void setViewingWindow(const WorldMapState& mapState)
 {
 	float pixSizeH, pixSizeV;
 	Vector3i v[4] = {{0, 0, 0}}, tv[4] = {{0, 0, 0}}, centre = {0, 0, 0};
@@ -758,8 +758,8 @@ static void setViewingWindow()
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = static_cast<int>(x - gameWorld.map.scroll.minX * pixSizeH);
-	centre.y = static_cast<int>(y - gameWorld.map.scroll.minY * pixSizeV);
+	centre.x = static_cast<int>(x - mapState.scroll.minX * pixSizeH);
+	centre.y = static_cast<int>(y - mapState.scroll.minY * pixSizeV);
 
 	RotateVector2D(v, tv, &centre, playerPos.r.y, 4);
 
@@ -873,7 +873,7 @@ void RadarWidget::mouseDragged(WIDGET_KEY wkey, W_CONTEXT *psStartContext, W_CON
 			int x = screenContext.mx;
 			int y = screenContext.my;
 			int PosX, PosY;
-			CalcRadarPosition(x, y, &PosX, &PosY);
+			CalcRadarPosition(gameWorld.map, x, y, &PosX, &PosY);
 			setViewPos(PosX, PosY, true);
 			if (ctrlShiftDown())
 			{
@@ -888,7 +888,7 @@ void RadarWidget::display(int xOffset, int yOffset)
 	if (!radarVisible()) { return; }
 
 	gfx_api::context::get().debugStringMarker("Draw 3D scene - radar");
-	drawRadar();
+	drawRadar(gameWorld);
 }
 
 bool RadarWidget::hitTest(int x, int y) const
@@ -933,7 +933,7 @@ void RadarWidget::released(W_CONTEXT *context, WIDGET_KEY key)
 			y = m_clickPosition[WKEY_ORDER].value().y;
 
 			/* If we're tracking a droid, then cancel that */
-			CalcRadarPosition(x, y, &PosX, &PosY);
+			CalcRadarPosition(gameWorld.map, x, y, &PosX, &PosY);
 			if (selectedPlayer < MAX_PLAYERS)
 			{
 				// MARKER
@@ -942,7 +942,7 @@ void RadarWidget::released(W_CONTEXT *context, WIDGET_KEY key)
 								 (PosY * TILE_UNITS) + TILE_UNITS / 2, ctrlShiftDown()); // ctrlShiftDown() = ctrl clicked a destination, add an order
 
 			}
-			CheckScrollLimits();
+			CheckScrollLimits(gameWorld.map);
 			audio_PlayTrack(ID_SOUND_MESSAGEEND);
 		}
 	}
@@ -954,7 +954,7 @@ void RadarWidget::released(W_CONTEXT *context, WIDGET_KEY key)
 			x = m_clickPosition[WKEY_SELECT].value().x;
 			y = m_clickPosition[WKEY_SELECT].value().y;
 
-			CalcRadarPosition(x, y, &PosX, &PosY);
+			CalcRadarPosition(gameWorld.map, x, y, &PosX, &PosY);
 
 			if (war_GetRadarJump())
 			{

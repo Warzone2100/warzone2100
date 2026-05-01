@@ -1501,7 +1501,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				JSValue droidVal = argv[idx++];
 				int id = QuickJS_GetInt32(ctx, droidVal, "id");
 				int player = QuickJS_GetInt32(ctx, droidVal, "player");
-				DROID *psDroid = IdToDroid(id, player);
+				DROID *psDroid = IdToDroid(gameWorld.objects, id, player);
 				UNBOX_SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
 				return psDroid;
 			}

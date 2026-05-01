@@ -29,6 +29,9 @@
 
 #include <list>
 
+struct GameWorld;
+struct WorldObjectState;
+
 /* The list of destroyed objects */
 using DestroyedObjectsList = std::list<BASE_OBJECT*>;
 extern DestroyedObjectsList psDestroyedObj;
@@ -58,13 +61,10 @@ void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList);
 void killDroid(DROID *psDel);
 
 /* Remove all droids */
-void freeAllDroids();
+void freeAllDroids(GameWorld& world);
 
 /*Remove a single Droid from its list*/
 void removeDroid(DROID *psDroidToRemove, PerPlayerDroidLists& pList);
-
-/*Removes all droids that may be stored in the mission lists*/
-void freeAllMissionDroids();
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids();
@@ -76,7 +76,7 @@ void addStructure(STRUCTURE *psStructToAdd);
 void killStruct(STRUCTURE *psDel);
 
 /* Remove all structures */
-void freeAllStructs();
+void freeAllStructs(GameWorld& world);
 
 /*Remove a single Structure from a list*/
 void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList);
@@ -88,7 +88,7 @@ void addFeature(FEATURE *psFeatureToAdd);
 void killFeature(FEATURE *psDel);
 
 /* Remove all features */
-void freeAllFeatures();
+void freeAllFeatures(GameWorld& world);
 
 /* Create a new Flag Position */
 bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
@@ -99,7 +99,7 @@ void removeFlagPosition(FLAG_POSITION *psDel);
 /* Transfer a Flag Position to a new player */
 void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
-void freeAllFlagPositions();
+void freeAllFlagPositions(WorldObjectState& objState);
 // used to add flag position to a specific list (ex. from assignFactoryCommandDroid)
 void addFlagPositionToList(FLAG_POSITION* psFlagPosToAdd, PerPlayerFlagPositionLists& list);
 

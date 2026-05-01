@@ -55,38 +55,38 @@ void Edit3DInitVars()
 }
 
 /* Raises a tile by a #defined height */
-void raiseTile(int tile3dX, int tile3dY)
+void raiseTile(WorldMapState& mapState, int tile3dX, int tile3dY)
 {
 	int i, j;
 
-	if (tile3dX < 0 || tile3dX > gameWorld.map.width - 1 || tile3dY < 0 || tile3dY > gameWorld.map.height - 1)
+	if (tile3dX < 0 || tile3dX > mapState.width - 1 || tile3dY < 0 || tile3dY > mapState.height - 1)
 	{
 		return;
 	}
-	for (i = tile3dX; i <= MIN(gameWorld.map.width - 1, tile3dX + brushSize); i++)
+	for (i = tile3dX; i <= MIN(mapState.width - 1, tile3dX + brushSize); i++)
 	{
-		for (j = tile3dY; j <= MIN(gameWorld.map.height - 1, tile3dY + brushSize); j++)
+		for (j = tile3dY; j <= MIN(mapState.height - 1, tile3dY + brushSize); j++)
 		{
-			adjustTileHeight(mapTile(gameWorld.map, i, j), TILE_RAISE);
+			adjustTileHeight(mapTile(mapState, i, j), TILE_RAISE);
 			markTileDirty(i, j);
 		}
 	}
 }
 
 /* Lowers a tile by a #defined height */
-void lowerTile(int tile3dX, int tile3dY)
+void lowerTile(WorldMapState& mapState, int tile3dX, int tile3dY)
 {
 	int i, j;
 
-	if (tile3dX < 0 || tile3dX > gameWorld.map.width - 1 || tile3dY < 0 || tile3dY > gameWorld.map.height - 1)
+	if (tile3dX < 0 || tile3dX > mapState.width - 1 || tile3dY < 0 || tile3dY > mapState.height - 1)
 	{
 		return;
 	}
-	for (i = tile3dX; i <= MIN(gameWorld.map.width - 1, tile3dX + brushSize); i++)
+	for (i = tile3dX; i <= MIN(mapState.width - 1, tile3dX + brushSize); i++)
 	{
-		for (j = tile3dY; j <= MIN(gameWorld.map.height - 1, tile3dY + brushSize); j++)
+		for (j = tile3dY; j <= MIN(mapState.height - 1, tile3dY + brushSize); j++)
 		{
-			adjustTileHeight(mapTile(gameWorld.map, i, j), TILE_LOWER);
+			adjustTileHeight(mapTile(mapState, i, j), TILE_LOWER);
 			markTileDirty(i, j);
 		}
 	}
@@ -176,12 +176,12 @@ bool process3DBuilding()
 			auto lb = calcLineBuild(static_cast<STRUCTURE_STATS *>(sBuildDetails.psStats), getBuildingDirection(), wallDrag.pos, wallDrag.pos2);
 			for (int i = 0; i < lb.count && isValid; ++i)
 			{
-				isValid &= validLocation(sBuildDetails.psStats, lb[i], getBuildingDirection(), selectedPlayer, true);
+				isValid &= validLocation(gameWorld, sBuildDetails.psStats, lb[i], getBuildingDirection(), selectedPlayer, true);
 			}
 		}
 		else
 		{
-			isValid = validLocation(sBuildDetails.psStats, bv, getBuildingDirection(), selectedPlayer, true);
+			isValid = validLocation(gameWorld, sBuildDetails.psStats, bv, getBuildingDirection(), selectedPlayer, true);
 		}
 
 		buildState = isValid? BUILD3D_VALID : BUILD3D_POS;

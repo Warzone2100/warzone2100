@@ -64,7 +64,7 @@ void setTheSun(Vector3f newSun)
 	if(oldSun != theSun)
 	{
 		// The sun has changed - must relcalulate lighting
-		initLighting(0, 0, gameWorld.map.width, gameWorld.map.height);
+		initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	}
 }
 
@@ -81,10 +81,10 @@ Vector3f getTheSun()
 
 //By passing in params - it means that if the scroll limits are changed mid-mission
 //we can re-do over the area that hasn't been seen
-void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
+void initLighting(WorldMapState& mapState, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
-	if (x1 > gameWorld.map.width || x2 > gameWorld.map.width || y1 > gameWorld.map.height || y2 > gameWorld.map.height)
+	if (x1 > mapState.width || x2 > mapState.width || y1 > mapState.height || y2 > mapState.height)
 	{
 		ASSERT(false, "initLighting: coords off edge of map");
 		return;
@@ -94,10 +94,10 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 	{
 		for (unsigned i = x1; i < x2; i++)
 		{
-			MAPTILE	*psTile = mapTile(gameWorld.map, i, j);
+			MAPTILE	*psTile = mapTile(mapState, i, j);
 
 			// always make the edge tiles dark
-			if (i == 0 || j == 0 || i >= gameWorld.map.width - 1 || j >= gameWorld.map.height - 1)
+			if (i == 0 || j == 0 || i >= mapState.width - 1 || j >= mapState.height - 1)
 			{
 				psTile->illumination = 16;
 				psTile->ambientOcclusion = 16.0;
@@ -108,8 +108,8 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			}
 			// Basically darkens down the tiles that are outside the scroll
 			// limits - thereby emphasising the cannot-go-there-ness of them
-			if ((SDWORD)i < gameWorld.map.scroll.minX + 4 || (SDWORD)i > gameWorld.map.scroll.maxX - 4
-			    || (SDWORD)j < gameWorld.map.scroll.minY + 4 || (SDWORD)j > gameWorld.map.scroll.maxY - 4)
+			if ((SDWORD)i < mapState.scroll.minX + 4 || (SDWORD)i > mapState.scroll.maxX - 4
+			    || (SDWORD)j < mapState.scroll.minY + 4 || (SDWORD)j > mapState.scroll.maxY - 4)
 			{
 				psTile->illumination /= 3;
 				psTile->ambientOcclusion /= 3;

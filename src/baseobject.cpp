@@ -29,6 +29,7 @@
 #include "feature.h"
 #include "intdisplay.h"
 #include "map.h"
+#include "game_world.h"
 
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
@@ -120,7 +121,7 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 BASE_OBJECT::~BASE_OBJECT()
 {
-	visRemoveVisibility(this);
+	visRemoveVisibility(this, gameWorld.map);
 }
 
 

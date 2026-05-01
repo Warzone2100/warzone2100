@@ -916,7 +916,7 @@ static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 			//Only set the state if it's not a transporter.
 			if (!SelectedDroid->isTransporter())
 			{
-				if (!secondarySetState(SelectedDroid, sec, (SECONDARY_STATE)State))
+				if (!secondarySetState(SelectedDroid, gameWorld.objects, sec, (SECONDARY_STATE)State))
 				{
 					return false;
 				}

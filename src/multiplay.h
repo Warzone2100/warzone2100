@@ -56,6 +56,7 @@ struct DROID_TEMPLATE;
 struct FEATURE;
 struct INITIAL_DROID_ORDERS;
 struct STRUCTURE;
+struct WorldObjectState;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in a multiplayer game.
@@ -246,9 +247,8 @@ constexpr TechLevel TECH_LEVEL_MAX = TechLevel::TECH_4;
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(const WorldObjectState& objState, UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(const WorldObjectState& objState, UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
 const char *getPlayerName(uint32_t player, bool treatAsNonHost = false);

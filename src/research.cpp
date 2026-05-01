@@ -790,7 +790,7 @@ bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode)
 		bStructFound = true;
 		for (incS = 0; incS < asResearch[inc].pStructList.size(); incS++)
 		{
-			if (!checkSpecificStructExists(asResearch[inc].pStructList[incS], playerID))
+			if (!checkSpecificStructExists(gameWorld.objects, asResearch[inc].pStructList[incS], playerID))
 			{
 				//if not built, quit checking
 				bStructFound = false;

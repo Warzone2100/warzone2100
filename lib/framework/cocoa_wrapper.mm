@@ -208,7 +208,7 @@ bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor)
 {
 # if TARGET_OS_MAC
 	@autoreleasepool {
-		NSOperatingSystemVersion targetMin;
+		NSOperatingSystemVersion targetMin = {};
 		targetMin.majorVersion = major;
 		targetMin.minorVersion = minor;
 		targetMin.patchVersion = 0;

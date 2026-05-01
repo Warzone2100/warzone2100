@@ -725,7 +725,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 			uint16_t pitch;
 			unsigned group = trackingCamera.target->selected ? GROUP_SELECTED : trackingCamera.target->group;
 			getTrackingConcerns(&xPos, &yPos, &zPos, GROUP_SELECTED, true);  // FIXME Should this be group instead of GROUP_SELECTED?
-			getBestPitchToEdgeOfGrid(xPos, zPos, DEG(180) - getAverageTrackAngle(group, true), &pitch);
+			getBestPitchToEdgeOfGrid(gameWorld.map, xPos, zPos, DEG(180) - getAverageTrackAngle(group, true), &pitch);
 			pitch = MAX(angleDelta(pitch), DEG(14));
 			xConcern = -pitch;
 		}
@@ -881,7 +881,7 @@ static bool camTrackCamera()
 	}
 
 	/* Clip the position to the edge of the map */
-	CheckScrollLimits();
+	CheckScrollLimits(gameWorld.map);
 
 	/* Store away our last update as acceleration and velocity are all fn()/dt */
 	trackingCamera.lastUpdate = realTime;
@@ -925,7 +925,7 @@ DROID *getTrackingDroid()
 //-----------------------------------------------------------------------------------
 UDWORD	getNumDroidsSelected()
 {
-	return (selNumSelected(selectedPlayer));
+	return (selNumSelected(gameWorld.objects, selectedPlayer));
 }
 
 //-----------------------------------------------------------------------------------
@@ -975,7 +975,7 @@ void	camToggleInfo()
 void requestRadarTrack(SDWORD x, SDWORD y)
 {
 	auto initialPosition = Vector3f(playerPos.p);
-	auto targetPosition = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
+	auto targetPosition = Vector3f(x, calculateCameraHeightAt(gameWorld.map, map_coord(x), map_coord(y)), y);
 	auto animationDuration = static_cast<uint32_t>(glm::log(glm::length(targetPosition - initialPosition)) * 100);
 	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : playerPos.r;
 	finalRotation.z = 0;

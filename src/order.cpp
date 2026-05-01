@@ -924,7 +924,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 					setDroidTarget(psDroid, nullptr);
 					psDroid->order.psObj = nullptr;
-					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+					secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 					moveReallyStopDroid(psDroid);
 
 					// Fire off embark event
@@ -967,7 +967,7 @@ bool orderUpdateDroid(DROID *psDroid)
 		if (psDroid->action == DACTION_NONE)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+			secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 		}
 		break;
 	case DORDER_RTR:
@@ -1400,7 +1400,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	if (psOrder->type != DORDER_TRANSPORTIN         // transporters special
 	    && psOrder->psObj == nullptr			// location-type order
 	    && (validOrderForLoc(psOrder->type) || psOrder->type == DORDER_BUILD)
-	    && !fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType))
+	    && !fpathCheck(gameWorld.map, psDroid->pos, rPos, psPropStats->propulsionType))
 	{
 		if (!isHumanPlayer(psDroid->player))
 		{
@@ -1488,14 +1488,14 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_SCOUT:
 		// can't move vtols to blocking tiles
 		if (psDroid->isVtol()
-		    && fpathBlockingTile(map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
+		    && fpathBlockingTile(gameWorld.map, map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
 		{
 			break;
 		}
 		//in multiPlayer, cannot move Transporter to blocking tile either
 		if (game.type == LEVEL_TYPE::SKIRMISH
 		    && psDroid->isTransporter()
-		    && fpathBlockingTile(map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
+		    && fpathBlockingTile(gameWorld.map, map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
 		{
 			break;
 		}
@@ -1687,7 +1687,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
 				Vector2i pos = psStruct->pos.xy();
-				if (!CheckInScrollLimits(pos.x, pos.y))
+				if (!CheckInScrollLimits(gameWorld.map, pos.x, pos.y))
 				{
 					continue;
 				}
@@ -1715,12 +1715,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			int iDY = getLandingY(psDroid->player);
 			Vector2i startPos = getPlayerStartPosition(psDroid->player);
 
-			if (iDX && iDY && CheckInScrollLimits(iDX, iDY))
+			if (iDX && iDY && CheckInScrollLimits(gameWorld.map, iDX, iDY))
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, iDX, iDY);
 			}
-			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0) && CheckInScrollLimits(startPos.x, startPos.y))
+			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0) && CheckInScrollLimits(gameWorld.map, startPos.x, startPos.y))
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, startPos.x, startPos.y);
@@ -2510,7 +2510,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	{
 		propulsion = PROPULSION_TYPE_WHEELED;
 	}
-	if (!fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
+	if (!fpathBlockingTile(gameWorld.map, map_coord(x), map_coord(y), propulsion))
 	{
 		order = DORDER_MOVE;
 	}
@@ -2539,12 +2539,12 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	else if (secondaryGetState(psDroid, DSO_CIRCLE, ModeQueue) == DSS_CIRCLE_SET)  // ModeQueue here means to check whether we pressed the circle button, whether or not it synched yet. The reason for this weirdness is that a circle order makes no sense as a secondary state in the first place (the circle button _should_ have been only in the UI, not in the game state..!), so anything dealing with circle orders will necessarily be weird.
 	{
 		order = DORDER_CIRCLE;
-		secondarySetState(psDroid, DSO_CIRCLE, DSS_NONE);
+		secondarySetState(psDroid, gameWorld.objects, DSO_CIRCLE, DSS_NONE);
 	}
 	else if (secondaryGetState(psDroid, DSO_PATROL, ModeQueue) == DSS_PATROL_SET)  // ModeQueue here means to check whether we pressed the patrol button, whether or not it synched yet. The reason for this weirdness is that a patrol order makes no sense as a secondary state in the first place (the patrol button _should_ have been only in the UI, not in the game state..!), so anything dealing with patrol orders will necessarily be weird.
 	{
 		order = DORDER_PATROL;
-		secondarySetState(psDroid, DSO_PATROL, DSS_NONE);
+		secondarySetState(psDroid, gameWorld.objects, DSO_PATROL, DSS_NONE);
 	}
 
 	return order;
@@ -3396,7 +3396,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	{
 		if (psStruct->pStructureType->type == REF_HQ)
 		{
-			if (CheckInScrollLimits(psStruct->pos.x, psStruct->pos.y))
+			if (CheckInScrollLimits(gameWorld.map, psStruct->pos.x, psStruct->pos.y))
 			{
 				psHq = psStruct;
 			}
@@ -3404,7 +3404,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		}
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->status == SS_BUILT)
 		{
-			if (!CheckInScrollLimits(psStruct->pos.x, psStruct->pos.y))
+			if (!CheckInScrollLimits(gameWorld.map, psStruct->pos.x, psStruct->pos.y))
 			{
 				continue;
 			}
@@ -3440,7 +3440,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 				if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
 					&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
 				{
-					if (!CheckInScrollLimits(psCurr->pos.x, psCurr->pos.y))
+					if (!CheckInScrollLimits(gameWorld.map, psCurr->pos.x, psCurr->pos.y))
 					{
 						continue;
 					}
@@ -3519,7 +3519,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 
 /** This function assigns a state to a droid. It returns true if it assigned and false if it failed to assign.
     Note that this also modifies primary order in some cases */
-bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
+bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
 	SDWORD		factoryInc;
@@ -3726,7 +3726,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			// look for the factories
-			for (STRUCTURE* psStruct : gameWorld.objects.structures[psDroid->player])
+			for (STRUCTURE* psStruct : objState.structures[psDroid->player])
 			{
 				factType = psStruct->pStructureType->type;
 				if (factType == REF_FACTORY ||
@@ -3980,7 +3980,7 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
 		if (psCurr->group == group &&
 		    secondaryGetState(psCurr, sec) != state)
 		{
-			secondarySetState(psCurr, sec, state);
+			secondarySetState(psCurr, gameWorld.objects, sec, state);
 		}
 	}
 }

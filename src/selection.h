@@ -54,12 +54,14 @@ enum SELECTIONTYPE
 	DST_ALL_LAND_MILDLY_OR_NOT_DAMAGED,
 };
 
-unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
-unsigned int selDroidDeselect(unsigned int player);
-unsigned int selNumSelected(unsigned int player);
-void selNextUnassignedUnit();
-void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump);
-void selNextSpecifiedUnit(DROID_TYPE unitType);
+struct WorldObjectState;
+
+unsigned int selDroidSelection(WorldObjectState& objState, unsigned int player, SELECTION_CLASS droidClass, SELECTIONTYPE droidType, bool bOnScreen);
+unsigned int selDroidDeselect(WorldObjectState& objState, unsigned int player);
+unsigned int selNumSelected(const WorldObjectState& objState, unsigned int player);
+void selNextUnassignedUnit(WorldObjectState& objState);
+void selNextSpecifiedBuilding(WorldObjectState& objState, STRUCTURE_TYPE structType, bool jump);
+void selNextSpecifiedUnit(WorldObjectState& objState, DROID_TYPE unitType);
 // select the n'th command droid
 void selCommander(int n);
 std::vector<uint32_t> buildComponentsFromDroid(const DROID* psDroid);
