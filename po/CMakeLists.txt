@@ -214,6 +214,7 @@ endfunction()
 # On CMake configure, clear the build dir "locale" folder (to ensure re-generation)
 set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 file(REMOVE_RECURSE "${wz2100_translations_LOCALE_FOLDER}/")
+file(MAKE_DIRECTORY "${wz2100_translations_LOCALE_FOLDER}")
 
 BUILD_WZ_TRANSLATIONS("warzone2100${WZ_OUTPUT_NAME_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
 

@@ -10,6 +10,7 @@ file(GLOB SRC "*.cpp")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME STREQUAL "iOS")
 	list(APPEND SRC "cocoa_wrapper.mm")
+	set_source_files_properties("cocoa_wrapper.mm" PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif()
 
 add_library(framework STATIC ${HEADERS} ${SRC})

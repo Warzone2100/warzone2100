@@ -953,7 +953,11 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 	auto result = KeyOptionsForm::make();
 
 	// Mouse:
+#if defined(WZ_OS_IOS)
+	result->addSection(OptionsSection(N_("Mouse"), N_("Hardware mouse and trackpad controls are available alongside touch gestures.")), true);
+#else
 	result->addSection(OptionsSection(N_("Mouse"), ""), true);
+#endif
 	{
 		auto optionInfo = OptionInfo("controls.mouse.rightClickOrders", N_("Right-Click Orders"), N_("By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."));
 		auto valueChanger = OptionsDropdown<bool>::make(

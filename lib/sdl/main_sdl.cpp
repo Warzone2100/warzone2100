@@ -39,7 +39,6 @@
 #include "src/game.h"
 #include "src/main.h"
 #include "src/ingameop.h"
-#include "src/mission.h"
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
 #include "sdl_backend_private.h"
@@ -77,6 +76,7 @@
 
 #if defined(WZ_OS_IOS)
 #include "lib/framework/cocoa_wrapper.h"
+#include "src/mission.h"
 #include "src/radar.h"
 #endif
 

@@ -9,6 +9,7 @@ file(GLOB SRC "*.cpp")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	list(APPEND SRC "cocoa_sdl_helpers.mm" "cocoa_wz_menus.mm")
+	set_source_files_properties("cocoa_sdl_helpers.mm" "cocoa_wz_menus.mm" PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 endif()
 
 # Find SDL3

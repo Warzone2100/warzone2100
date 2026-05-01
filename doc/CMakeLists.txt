@@ -11,10 +11,19 @@ set(wz2100_doc_FILES)
 #######################
 # Scripting docs
 
+set(wz2100_js_doc_FILES
+	"${CMAKE_CURRENT_BINARY_DIR}/js-globals.md"
+	"${CMAKE_CURRENT_BINARY_DIR}/js-events.md"
+	"${CMAKE_CURRENT_BINARY_DIR}/js-functions.md"
+	"${CMAKE_CURRENT_BINARY_DIR}/js-objects.md"
+	"${CMAKE_CURRENT_BINARY_DIR}/js-campaign.md"
+)
+
 add_custom_command(
 	TARGET wz2100_doc
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake
+	BYPRODUCTS ${wz2100_js_doc_FILES}
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM
 )
@@ -22,11 +31,7 @@ add_custom_command(
 configure_file(Scripting.md "${CMAKE_CURRENT_BINARY_DIR}/Scripting.md" COPYONLY)
 
 list(APPEND wz2100_doc_FILES
-	"${CMAKE_CURRENT_BINARY_DIR}/js-globals.md"
-	"${CMAKE_CURRENT_BINARY_DIR}/js-events.md"
-	"${CMAKE_CURRENT_BINARY_DIR}/js-functions.md"
-	"${CMAKE_CURRENT_BINARY_DIR}/js-objects.md"
-	"${CMAKE_CURRENT_BINARY_DIR}/js-campaign.md"
+	${wz2100_js_doc_FILES}
 	"${CMAKE_CURRENT_BINARY_DIR}/Scripting.md"
 
 	"${CMAKE_CURRENT_SOURCE_DIR}/ScriptingManual.htm"
@@ -130,6 +135,7 @@ if(Asciidoctor_FOUND)
 			-D ${CMAKE_CURRENT_BINARY_DIR}
 			-a toc
 			${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.asciidoc
+		BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.html"
 		VERBATIM
 	)
 
@@ -146,6 +152,7 @@ if(Asciidoctor_FOUND)
 			-b html5
 			-D ${CMAKE_CURRENT_BINARY_DIR}
 			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
+		BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.html"
 		VERBATIM
 	)
 
@@ -161,6 +168,7 @@ if(Asciidoctor_FOUND)
 			-D ${CMAKE_CURRENT_BINARY_DIR}
 			-o warzone2100.6
 			${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.asciidoc
+		BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6"
 		VERBATIM
 	)
 
@@ -201,6 +209,7 @@ elseif(A2X_FOUND)
 		TARGET wz2100_doc
 		POST_BUILD
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f xhtml -D ${CMAKE_CURRENT_BINARY_DIR} ${_quickstart_asciidoc}
+		BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.html"
 		VERBATIM
 	)
 
@@ -210,6 +219,7 @@ elseif(A2X_FOUND)
 		TARGET wz2100_doc
 		POST_BUILD
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f xhtml -D ${CMAKE_CURRENT_BINARY_DIR} ${_warzone2100_6_asciidoc}
+		BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6.html"
 		VERBATIM
 	)
 	# warzone2100.6 - man-page format
@@ -217,6 +227,7 @@ elseif(A2X_FOUND)
 		TARGET wz2100_doc
 		POST_BUILD
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f manpage -D ${CMAKE_CURRENT_BINARY_DIR} ${_warzone2100_6_asciidoc}
+		BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6"
 		VERBATIM
 	)
 
@@ -229,6 +240,7 @@ elseif(A2X_FOUND)
 			ARGS
 				"${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.htm"
 				"${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.pdf"
+			BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/quickstartguide.pdf"
 			)
 
 	endif()

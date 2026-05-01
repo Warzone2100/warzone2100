@@ -1709,7 +1709,7 @@ static void printDroidClickInfo(DROID *psDroid)
 	if (wasSelected)
 	{
 		DeSelectDroid(psDroid);
-		if (selectedPlayer < MAX_PLAYERS && selNumSelected(selectedPlayer) == 0)
+		if (selectedPlayer < MAX_PLAYERS && selNumSelected(gameWorld.objects, selectedPlayer) == 0)
 		{
 			intObjectSelected(nullptr);
 		}

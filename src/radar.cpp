@@ -999,7 +999,7 @@ bool radarSetViewFromScreenPoint(int x, int y)
 
 	int posX = 0;
 	int posY = 0;
-	CalcRadarPosition(x, y, &posX, &posY);
+	CalcRadarPosition(gameWorld.map, x, y, &posX, &posY);
 	setViewPos(posX, posY, true);
 	return true;
 }

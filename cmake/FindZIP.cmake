@@ -245,6 +245,7 @@ function(COMPRESS_ZIP)
 	else()
 		add_custom_target(
 			${_parsedArguments_BUILD_ALWAYS_TARGET} ALL
+			BYPRODUCTS "${_parsedArguments_OUTPUT}"
 			${_COMMAND_LIST}
 			DEPENDS ${_depends_PATHS}
 			WORKING_DIRECTORY "${_workingDirectory}"
