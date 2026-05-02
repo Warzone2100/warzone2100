@@ -227,9 +227,8 @@ bool recvLasSat(NETQUEUE queue)
 	{
 		// Lassats have just one weapon
 		unsigned firePause = weaponFirePause(*psStruct->getWeaponStats(0), player);
-		unsigned damLevel = PERCENT(psStruct->body, psStruct->structureBody());
 
-		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		if (objectBelowHealthLevel(psStruct, HEAVY_DAMAGE_LEVEL))
 		{
 			firePause += firePause;
 		}
