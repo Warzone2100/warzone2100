@@ -897,11 +897,7 @@ private:
 	RenderPassDetails& defaultRenderpass() { return renderPasses[DEFAULT_RENDER_PASS_ID]; }
 	bool endRenderPass_RecreateSwapchain(const vk::Result& reason);
 private:
-#if defined(WZ_OS_IOS)
-	size_t depthPassCount = 0;
-#else
 	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
-#endif
 	std::string formattedRendererInfoString;
 	std::vector<gfx_api::pixel_format_usage::flags> texture2DFormatsSupport;
 	uint32_t lastRenderPassEndTime = 0;

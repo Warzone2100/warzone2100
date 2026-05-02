@@ -70,7 +70,7 @@ if [[ "$PLATFORM" == "device" ]]; then
 else
   "$ROOT_DIR/platforms/ios/stage_app_payload.sh" "$APP_PATH" "$MAC_APP_PATH"
 fi
-if [[ -d "$MAC_APP_PATH" ]]; then
+if is_resource_app "$MAC_APP_PATH"; then
   python3 "$ROOT_DIR/platforms/ios/tools/compare_apps.py" \
     --mac-app "$MAC_APP_PATH" \
     --ios-app "$APP_PATH" \

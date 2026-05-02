@@ -1528,18 +1528,16 @@ static inline void processIOSDebugReticuleCombo(int)
 #if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
 static bool toggleIOSDebugTestMenu()
 {
+	if (jsDebugIsOpen())
+	{
+		jsDebugShutdown();
+		return true;
+	}
 	if (!gInputManager.debugManager().debugMappingsAllowed())
 	{
 		return false;
 	}
-	if (jsDebugIsOpen())
-	{
-		jsDebugShutdown();
-	}
-	else
-	{
-		jsShowDebug();
-	}
+	jsShowDebug();
 	return true;
 }
 #endif

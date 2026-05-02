@@ -2634,6 +2634,10 @@ size_t VkTextureArray::backend_internal_value() const
 
 VkRoot::VkRoot(bool _debug) : validationLayer(_debug)
 {
+	if (vkDepthPassesForcedZeroForCurrentPlatform())
+	{
+		depthPassCount = 0;
+	}
 	debugInfo.setOutputHandler([&](const std::string& output) {
 		addDumpInfo(output.c_str());
 		if (enabled_debug[LOG_3D])
