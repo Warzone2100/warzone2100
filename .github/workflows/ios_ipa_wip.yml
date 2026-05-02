@@ -1,25 +1,17 @@
-name: iOS IPA WIP
+name: iOS IPA (arm64 arm64e)
 
 on:
   workflow_dispatch:
     inputs:
       artifact_label:
-        description: "Artifact label to use for this WIP build."
+        description: "Artifact label to use for this iOS IPA build."
         required: false
-        default: "wip"
+        default: "arm64-arm64e"
         type: string
-      configuration:
-        description: "Xcode configuration to package."
-        required: true
-        default: "Debug"
-        type: choice
-        options:
-          - Debug
-          - Release
       ios_device_archs:
-        description: "Device architectures. Use arm64 unless an arm64e MoltenVK slice is available."
+        description: "Device architectures. arm64e is used only when the provided iOS MoltenVK slice supports it."
         required: true
-        default: "arm64"
+        default: "arm64,arm64e"
         type: string
   push:
     branches-ignore:
@@ -36,7 +28,7 @@ on:
       - 'doc/hosting/linux_scripts/**'
 
 concurrency:
-  group: ios-ipa-wip-${{ github.workflow }}-${{ github.ref }}
+  group: ios-ipa-arm64-arm64e-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -44,7 +36,7 @@ permissions:
 
 jobs:
   build-ios-ipa:
-    name: Build WIP iOS IPA
+    name: Build iOS IPA (arm64 arm64e)
     runs-on: macos-latest
     timeout-minutes: 180
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
@@ -57,45 +49,41 @@ jobs:
           fetch-depth: 0
           lfs: false
 
-      - name: Prepare WIP build settings
+      - name: Prepare iOS build settings
         shell: bash
         env:
           DISPATCH_ARTIFACT_LABEL: ${{ inputs.artifact_label }}
-          DISPATCH_CONFIGURATION: ${{ inputs.configuration }}
           DISPATCH_DEVICE_ARCHS: ${{ inputs.ios_device_archs }}
         run: |
           set -euo pipefail
 
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            ARTIFACT_LABEL="${DISPATCH_ARTIFACT_LABEL:-wip}"
-            IOS_CONFIGURATION="${DISPATCH_CONFIGURATION:-Debug}"
-            DEVICE_ARCHS="${DISPATCH_DEVICE_ARCHS:-arm64}"
+            ARTIFACT_LABEL="${DISPATCH_ARTIFACT_LABEL:-arm64-arm64e}"
+            DEVICE_ARCHS="${DISPATCH_DEVICE_ARCHS:-arm64,arm64e}"
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             ARTIFACT_LABEL="pr-${GITHUB_HEAD_REF:-unknown}-${GITHUB_SHA:0:12}"
-            IOS_CONFIGURATION="Debug"
-            DEVICE_ARCHS="arm64"
+            DEVICE_ARCHS="arm64,arm64e"
           else
-            ARTIFACT_LABEL="${GITHUB_REF_NAME:-wip}-${GITHUB_SHA:0:12}"
-            IOS_CONFIGURATION="Debug"
-            DEVICE_ARCHS="arm64"
+            ARTIFACT_LABEL="${GITHUB_REF_NAME:-arm64-arm64e}-${GITHUB_SHA:0:12}"
+            DEVICE_ARCHS="arm64,arm64e"
           fi
 
-          ARTIFACT_LABEL="$(printf '%s' "${ARTIFACT_LABEL:-wip}" | tr -c 'A-Za-z0-9._-' '-')"
+          ARTIFACT_LABEL="$(printf '%s' "${ARTIFACT_LABEL:-arm64-arm64e}" | tr -c 'A-Za-z0-9._-' '-')"
           ARTIFACT_LABEL="${ARTIFACT_LABEL#-}"
           ARTIFACT_LABEL="${ARTIFACT_LABEL%-}"
           if [[ -z "${ARTIFACT_LABEL}" ]]; then
-            ARTIFACT_LABEL="wip-${GITHUB_SHA:0:12}"
+            ARTIFACT_LABEL="arm64-arm64e-${GITHUB_SHA:0:12}"
           fi
           if [[ "${DEVICE_ARCHS}" != "arm64" && "${DEVICE_ARCHS}" != "arm64,arm64e" && "${DEVICE_ARCHS}" != "arm64e,arm64" ]]; then
             echo "::error::Unsupported iOS device architectures '${DEVICE_ARCHS}'. Use arm64, or arm64,arm64e only when MoltenVK has matching slices."
             exit 1
           fi
 
-          echo "WIP_ARTIFACT_LABEL=${ARTIFACT_LABEL}" >> "${GITHUB_ENV}"
-          echo "IOS_BUILD_CONFIGURATION=${IOS_CONFIGURATION}" >> "${GITHUB_ENV}"
+          echo "IOS_ARTIFACT_LABEL=${ARTIFACT_LABEL}" >> "${GITHUB_ENV}"
+          echo "IOS_BUILD_CONFIGURATION=Debug" >> "${GITHUB_ENV}"
           echo "IOS_DEVICE_ARCHS=${DEVICE_ARCHS}" >> "${GITHUB_ENV}"
           echo "IOS_ALLOW_SOURCE_PAYLOAD=1" >> "${GITHUB_ENV}"
-          echo "IOS_ARTIFACT_DIR=platforms/ios/build/artifacts/device/${IOS_CONFIGURATION}" >> "${GITHUB_ENV}"
+          echo "IOS_ARTIFACT_DIR=platforms/ios/build/artifacts/device/Debug" >> "${GITHUB_ENV}"
 
       - name: Install build dependencies
         shell: bash
@@ -161,6 +149,44 @@ jobs:
             exit 1
           fi
 
+          IOS_DEVICE_LIB=""
+          IOS_DEVICE_LIB_ARCHS=""
+          while IFS= read -r candidate_lib; do
+            candidate_archs="$(lipo -archs "${candidate_lib}")"
+            candidate_matches=1
+            for required_arch in ${IOS_DEVICE_ARCHS//,/ }; do
+              if [[ " ${candidate_archs} " != *" ${required_arch} "* ]]; then
+                candidate_matches=0
+                break
+              fi
+            done
+            if [[ "${candidate_matches}" == "1" ]]; then
+              IOS_DEVICE_LIB="${candidate_lib}"
+              IOS_DEVICE_LIB_ARCHS="${candidate_archs}"
+              break
+            fi
+            if [[ -z "${IOS_DEVICE_LIB}" ]]; then
+              IOS_DEVICE_LIB="${candidate_lib}"
+              IOS_DEVICE_LIB_ARCHS="${candidate_archs}"
+            fi
+          done < <(find "${MOLTENVK_DIR}" -path "*/ios-*/libMoltenVK.a" ! -path "*simulator*" -print | sort)
+
+          if [[ -z "${IOS_DEVICE_LIB}" ]]; then
+            echo "::error::Failed to locate an iOS device MoltenVK slice."
+            exit 1
+          fi
+          for required_arch in ${IOS_DEVICE_ARCHS//,/ }; do
+            if [[ " ${IOS_DEVICE_LIB_ARCHS} " != *" ${required_arch} "* ]]; then
+              if [[ "${required_arch}" == "arm64e" ]]; then
+                echo "::warning::The selected MoltenVK iOS slice has '${IOS_DEVICE_LIB_ARCHS}', not arm64e. Building arm64 only; arm64e devices can run the arm64 slice. Provide platforms/ios/vendor/MoltenVK.xcframework or MOLTENVK_XCFRAMEWORK_ZIP_URL with an iOS arm64e slice to emit a true arm64e binary."
+                echo "IOS_DEVICE_ARCHS=arm64" >> "${GITHUB_ENV}"
+                break
+              fi
+              echo "::error::MoltenVK iOS slice is missing required architecture '${required_arch}' (has: ${IOS_DEVICE_LIB_ARCHS})."
+              exit 1
+            fi
+          done
+
           sudo mkdir -p /usr/local/lib
           sudo rm -rf /usr/local/lib/MoltenVK.xcframework
           sudo cp -R "${MOLTENVK_DIR}" /usr/local/lib/MoltenVK.xcframework
@@ -174,13 +200,38 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./platforms/ios/build_xcode_ios.sh device
+          rm -rf "${IOS_ARTIFACT_DIR}"
+          mkdir -p "${IOS_ARTIFACT_DIR}"
+          IOS_ENABLE_DEBUG_JIT=0 IOS_ARTIFACT_VARIANT_LABEL=debug-jitless ./platforms/ios/build_xcode_ios.sh device platforms/ios/build/device-debug-jitless "${IOS_ARTIFACT_DIR}"
+          IOS_ENABLE_DEBUG_JIT=1 IOS_ARTIFACT_VARIANT_LABEL=debug-jit ./platforms/ios/build_xcode_ios.sh device platforms/ios/build/device-debug-jit "${IOS_ARTIFACT_DIR}"
           find "${IOS_ARTIFACT_DIR}" -maxdepth 1 -type f -print -exec ls -lh {} \;
+
+      - name: Verify full-size IPA payloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob
+          import os
+          import sys
+
+          min_size = 850 * 1024 * 1024
+          ipas = sorted(glob.glob(os.path.join(os.environ["IOS_ARTIFACT_DIR"], "*.ipa")))
+          if len(ipas) != 2:
+              print(f"::error::Expected exactly 2 debug IPAs, found {len(ipas)}: {ipas}")
+              sys.exit(1)
+          for ipa in ipas:
+              size = os.path.getsize(ipa)
+              print(f"{ipa}: {size / (1024 * 1024):.1f} MiB")
+              if size < min_size:
+                  print(f"::error::{ipa} is too small. The full game data payload was not bundled.")
+                  sys.exit(1)
+          PY
 
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: warzone2100-ios-${{ env.WIP_ARTIFACT_LABEL }}-${{ env.IOS_BUILD_CONFIGURATION }}
+          name: warzone2100-ios-${{ env.IOS_ARTIFACT_LABEL }}-${{ env.IOS_BUILD_CONFIGURATION }}
           path: |
             ${{ env.IOS_ARTIFACT_DIR }}/*.ipa
             ${{ env.IOS_ARTIFACT_DIR }}/*.txt

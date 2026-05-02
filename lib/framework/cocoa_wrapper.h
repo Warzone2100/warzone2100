@@ -45,6 +45,7 @@ bool cocoaIsRunningOnMacOSAtLeastVersion(unsigned major, unsigned minor);
 bool cocoaGetIOSDocumentsDir(char *const tmpstr, size_t const size);
 bool cocoaOpenFolderInFiles(const char* path);
 bool cocoaIOSIsPhone();
+void cocoaIOSRequestLaunchPermissions();
 
 #endif // WZ_OS_IOS
 

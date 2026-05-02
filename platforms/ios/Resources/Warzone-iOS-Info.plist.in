@@ -52,6 +52,13 @@
 	<string>16.0</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Warzone 2100 uses your local network for Wi-Fi multiplayer, lobby connectivity, and host discovery.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_wz2100._tcp</string>
+		<string>_wz2100._udp</string>
+		<string>_warzone2100._tcp</string>
+		<string>_warzone2100._udp</string>
+	</array>
 	<key>NSHumanReadableCopyright</key>
 	<string>@WZINFO_NSHumanReadableCopyright@</string>
 	<key>UIFileSharingEnabled</key>

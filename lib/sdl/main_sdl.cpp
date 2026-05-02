@@ -101,6 +101,9 @@ int realmain(int argc, char *argv[]);
 #include <SDL3/SDL_main.h>
 int main(int argc, char *argv[])
 {
+#if defined(WZ_OS_IOS)
+	cocoaIOSRequestLaunchPermissions();
+#endif
 	return realmain(argc, argv);
 }
 
@@ -4309,7 +4312,13 @@ void wzEventLoopOneFrame(void* arg)
 #if defined(WZ_OS_IOS)
 		case SDL_EVENT_TERMINATING:
 		case SDL_EVENT_WILL_ENTER_BACKGROUND:
+			saveConfig();
+			iosAppInBackground.store(true, std::memory_order_release);
+			iosResetTouchGestureState();
+			inputLoseFocus();
+			break;
 		case SDL_EVENT_DID_ENTER_BACKGROUND:
+			saveConfig();
 			iosAppInBackground.store(true, std::memory_order_release);
 			iosResetTouchGestureState();
 			inputLoseFocus();

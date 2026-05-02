@@ -152,9 +152,13 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
 			SET_TARGET_PROPERTIES(warzone2100 PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
 			target_compile_definitions(warzone2100 PRIVATE
 				"$<$<CONFIG:Debug>:DEBUG=1>"
-				"$<$<CONFIG:Debug>:WZ_IOS_DEBUG_JIT=1>"
 				"$<$<NOT:$<CONFIG:Debug>>:WZ_IOS_JITLESS=1>"
 			)
+			if(WZ_IOS_ENABLE_DEBUG_JIT)
+				target_compile_definitions(warzone2100 PRIVATE "$<$<CONFIG:Debug>:WZ_IOS_DEBUG_JIT=1>")
+			else()
+				target_compile_definitions(warzone2100 PRIVATE "$<$<CONFIG:Debug>:WZ_IOS_JITLESS=1>")
+			endif()
 
 		set(_ios_asset_catalog "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/Resources/Assets.xcassets")
 		set(_ios_entitlements_file "${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/Resources/Warzone-iOS.entitlements")
@@ -171,6 +175,39 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
 		target_sources(warzone2100 PRIVATE ${_ios_entitlements_file})
 		set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_ios_entitlements_file}")
 
+		# The iOS IPA must be self-contained on CI, where there is no desktop
+		# Warzone.app to copy resources from.
+		add_dependencies(warzone2100 data)
+		set_property(
+			SOURCE ${DATA_FILES}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data")
+		set_property(
+			SOURCE ${DATA_TERRAIN_OVERRIDES_FILES}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/terrain_overrides")
+		set_property(
+			SOURCE ${DATA_FONTS}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/fonts")
+		foreach(_music_file ${DATA_MUSIC_FILES})
+			file(RELATIVE_PATH _music_file_relative_path "${DATA_MUSIC_BASE_SOURCEDIR}" "${_music_file}")
+			get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
+			set_property(
+				SOURCE ${_music_file}
+				PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music/${_music_file_subdir_path}")
+		endforeach()
+		foreach(_mod_file ${DATA_MODS_FILES})
+			file(RELATIVE_PATH _mods_file_relative_path "${DATA_MODS_BASE_DIR}" "${_mod_file}")
+			get_filename_component(_mods_file_subdir_path "${_mods_file_relative_path}" DIRECTORY)
+			set_property(
+				SOURCE ${_mod_file}
+				PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/mods/${_mods_file_subdir_path}")
+		endforeach()
+		set_source_files_properties(
+			${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} ${DATA_MODS_FILES} PROPERTIES
+			GENERATED TRUE
+			XCODE_LAST_KNOWN_FILE_TYPE "file"
+		)
+		target_sources(warzone2100 PRIVATE ${DATA_FILES} ${DATA_TERRAIN_OVERRIDES_FILES} ${DATA_FONTS} ${DATA_MUSIC_FILES} ${DATA_MODS_FILES})
+
 	# Let Xcode emit a real iPhoneOS bundle layout instead of a desktop-style executable folder.
 	set_property(TARGET warzone2100 PROPERTY RUNTIME_OUTPUT_DIRECTORY_RELEASE)
 	set_property(TARGET warzone2100 PROPERTY RUNTIME_OUTPUT_DIRECTORY_DEBUG)
@@ -184,6 +221,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
 			message(WARNING "The generator \"${CMAKE_GENERATOR}\" is not currently fully-supported for iOS builds. Use the Xcode generator.")
 		endif()
 
+		target_link_libraries(warzone2100
+			"-framework Network"
+			"-framework UserNotifications"
+		)
+
 		if(WZ_ENABLE_BACKEND_VULKAN)
 			set(_ios_moltenvk_xcframework_candidates
 				"${CMAKE_CURRENT_SOURCE_DIR}/../platforms/ios/vendor/MoltenVK.xcframework"
@@ -195,14 +237,19 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
 				"/usr/local/include"
 			)
 			if(CMAKE_OSX_SYSROOT MATCHES "iphonesimulator")
-				set(_ios_moltenvk_slice "ios-arm64_x86_64-simulator")
+				set(_ios_moltenvk_slices "ios-arm64_x86_64-simulator")
 			else()
-				set(_ios_moltenvk_slice "ios-arm64")
+				set(_ios_moltenvk_slices "ios-arm64_arm64e" "ios-arm64")
 			endif()
 			foreach(_ios_moltenvk_xcframework IN LISTS _ios_moltenvk_xcframework_candidates)
-				set(_ios_moltenvk_candidate "${_ios_moltenvk_xcframework}/${_ios_moltenvk_slice}/libMoltenVK.a")
-				if(EXISTS "${_ios_moltenvk_candidate}")
-					set(_ios_moltenvk_library "${_ios_moltenvk_candidate}")
+				foreach(_ios_moltenvk_slice IN LISTS _ios_moltenvk_slices)
+					set(_ios_moltenvk_candidate "${_ios_moltenvk_xcframework}/${_ios_moltenvk_slice}/libMoltenVK.a")
+					if(EXISTS "${_ios_moltenvk_candidate}")
+						set(_ios_moltenvk_library "${_ios_moltenvk_candidate}")
+						break()
+					endif()
+				endforeach()
+				if(NOT _ios_moltenvk_library STREQUAL "")
 					break()
 				endif()
 			endforeach()
@@ -374,7 +421,7 @@ endif()
 
 # Dependencies
 if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
-	message(STATUS "Skipping build-time data/doc/translation dependencies for iOS packaging")
+	message(STATUS "Using iOS bundle resources from the data target")
 else()
 	add_dependencies(warzone2100 data)
 	if(ENABLE_DOCS AND TARGET wz2100_doc)

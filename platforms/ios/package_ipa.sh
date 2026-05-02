@@ -13,10 +13,15 @@ MAC_APP_PATH="${4:-${WARZONE_DESKTOP_APP_PATH:-/Applications/Warzone 2100.app}}"
 BUNDLE_ID="com.pumpkinstudios.warzone2100"
 VERSION_LABEL="0.1-beta"
 SCRIPT_DIR="$(dirname "$0")"
+JIT_ENABLED="${IOS_ENABLE_DEBUG_JIT:-0}"
 
 case "${CONFIGURATION:l}" in
   debug)
-    VERSION_LABEL="${VERSION_LABEL}-debug-regular"
+    if [[ "$JIT_ENABLED" == "1" ]]; then
+      VERSION_LABEL="${VERSION_LABEL}-debug-jit"
+    else
+      VERSION_LABEL="${VERSION_LABEL}-debug-jitless"
+    fi
     ;;
   relwithdebinfo)
     VERSION_LABEL="${VERSION_LABEL}-relwithdebinfo"
@@ -29,6 +34,7 @@ if [[ ! -d "$APP_PATH" ]]; then
 fi
 
 mkdir -p "$OUTPUT_DIR"
+OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 "$SCRIPT_DIR/stage_app_payload.sh" "$APP_PATH" "$MAC_APP_PATH"
 
 EXECUTABLE_NAME="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP_PATH/Info.plist")"
@@ -40,7 +46,9 @@ fi
 
 LDID_BIN="${LDID:-}"
 ENTITLEMENTS_PATH="$SCRIPT_DIR/Resources/Warzone-iOS.entitlements"
-JIT_ENTITLEMENTS_PATH="$SCRIPT_DIR/Resources/Warzone-iOS-DebugJIT.entitlements"
+if [[ "${CONFIGURATION:l}" == "debug" && "$JIT_ENABLED" == "1" ]]; then
+  ENTITLEMENTS_PATH="$SCRIPT_DIR/Resources/Warzone-iOS-DebugJIT.entitlements"
+fi
 if [[ -z "$LDID_BIN" ]]; then
   if command -v ldid >/dev/null 2>&1; then
     LDID_BIN="$(command -v ldid)"
@@ -81,7 +89,3 @@ package_variant() {
 }
 
 package_variant "$VERSION_LABEL" "$ENTITLEMENTS_PATH"
-
-if [[ "${CONFIGURATION:l}" == "debug" ]]; then
-  package_variant "0.1-beta-debug-jit" "$JIT_ENTITLEMENTS_PATH"
-fi

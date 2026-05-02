@@ -29,7 +29,9 @@
 #import <TargetConditionals.h>
 #if TARGET_OS_IPHONE
 #import <Foundation/Foundation.h>
+#import <Network/Network.h>
 #import <UIKit/UIKit.h>
+#import <UserNotifications/UserNotifications.h>
 #import <dispatch/dispatch.h>
 #else
 #import <AppKit/AppKit.h>
@@ -90,6 +92,61 @@ bool cocoaIOSIsPhone()
 {
 	@autoreleasepool {
 		return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone;
+	}
+}
+
+static void cocoaIOSRequestNotificationPermission()
+{
+	if (@available(iOS 10.0, *))
+	{
+		dispatch_semaphore_t done = dispatch_semaphore_create(0);
+		UNAuthorizationOptions options = UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound;
+		[[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:options completionHandler:^(BOOL, NSError *) {
+			dispatch_semaphore_signal(done);
+		}];
+		dispatch_semaphore_wait(done, dispatch_time(DISPATCH_TIME_NOW, 15 * NSEC_PER_SEC));
+	}
+}
+
+static void cocoaIOSRequestLocalNetworkPermission()
+{
+	if (@available(iOS 14.0, *))
+	{
+		dispatch_queue_t queue = dispatch_queue_create("net.wz2100.local-network-permission", DISPATCH_QUEUE_SERIAL);
+		dispatch_semaphore_t done = dispatch_semaphore_create(0);
+		__block bool finished = false;
+		void (^finishOnce)(void) = ^{
+			if (!finished)
+			{
+				finished = true;
+				dispatch_semaphore_signal(done);
+			}
+		};
+
+		nw_browse_descriptor_t descriptor = nw_browse_descriptor_create_bonjour_service("_wz2100._tcp", nullptr);
+		nw_parameters_t parameters = nw_parameters_create();
+		nw_browser_t browser = nw_browser_create(descriptor, parameters);
+		nw_browser_set_queue(browser, queue);
+		nw_browser_set_state_changed_handler(browser, ^(nw_browser_state_t state, nw_error_t) {
+			if (state == nw_browser_state_ready || state == nw_browser_state_failed || state == nw_browser_state_cancelled)
+			{
+				finishOnce();
+			}
+		});
+		nw_browser_set_browse_results_changed_handler(browser, ^(nw_browse_result_t, nw_browse_result_t, bool) {
+			finishOnce();
+		});
+		nw_browser_start(browser);
+		dispatch_semaphore_wait(done, dispatch_time(DISPATCH_TIME_NOW, 15 * NSEC_PER_SEC));
+		nw_browser_cancel(browser);
+	}
+}
+
+void cocoaIOSRequestLaunchPermissions()
+{
+	@autoreleasepool {
+		cocoaIOSRequestNotificationPermission();
+		cocoaIOSRequestLocalNetworkPermission();
 	}
 }
 

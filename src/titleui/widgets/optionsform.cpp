@@ -35,6 +35,7 @@
 #include "lib/widget/margin.h"
 #include "lib/widget/popover.h"
 #include "lib/netplay/netplay.h"
+#include "src/configuration.h"
 #include "src/multiplay.h"
 #include "src/main.h"
 #include "src/intimage.h"
@@ -1846,6 +1847,10 @@ void OptionsForm::handleMouseIsOverRow(const std::shared_ptr<WIDGET>& rowWidget)
 
 void OptionsForm::handleOptionValueChanged(const WzString& optionId)
 {
+#if defined(WZ_OS_IOS)
+	saveConfig();
+#endif
+
 	// Call update on all other options
 	refreshOptionsInternal({optionId});
 

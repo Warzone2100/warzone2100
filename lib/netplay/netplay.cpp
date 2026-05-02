@@ -1308,6 +1308,10 @@ void NETaddRedirects()
 			std::string msg = _("Failed to create port mapping");
 			msg += "\n";
 			msg += astringf(_("Manually configure your router/firewall to open port %d!"), NETgetGameserverPort());
+#if defined(WZ_OS_IOS)
+			msg += "\n";
+			msg += _("On iOS, allow Local Network access and use Wi-Fi; cellular and some routers may block inbound hosting.");
+#endif
 			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		});
 		return;
@@ -1333,6 +1337,10 @@ void NETaddRedirects()
 		}
 		msg += "\n";
 		msg += astringf(_("Manually configure your router/firewall to open port %d!"), NETgetGameserverPort());
+#if defined(WZ_OS_IOS)
+		msg += "\n";
+		msg += _("On iOS, allow Local Network access and use Wi-Fi; cellular and some routers may block inbound hosting.");
+#endif
 		addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	});
 }

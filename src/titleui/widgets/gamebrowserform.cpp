@@ -1440,7 +1440,18 @@ void LobbyBrowser::processAsyncGameListFetchResults(netlobby::ListResult&& resul
 			return;
 		}
 
-		lobbyStatusOverlayWidg->setString(_("Failed to connect to lobby server"));
+		WzString message = _("Failed to connect to lobby server");
+		const auto& lobbyError = results.error();
+		if (!lobbyError.errMessage.empty())
+		{
+			message += "\n";
+			message += WzString::fromUtf8(lobbyError.errMessage);
+		}
+#if defined(WZ_OS_IOS)
+		message += "\n";
+		message += _("Check that Wi-Fi/cellular networking is available and Local Network permission is allowed for Warzone 2100.");
+#endif
+		lobbyStatusOverlayWidg->setString(message);
 		if constexpr (fnv1a_hash(netlobby::GetDefaultLobbyAddress()) == LOB_DEFAULT_BEHAVIOR_CHECKSUM)
 		{
 			if (NETgetLobbyserverAddress() != netlobby::GetDefaultLobbyAddress())
@@ -1596,7 +1607,16 @@ void LobbyBrowser::populateTableFromGameList(bool force)
 			omittedStr = WzString::format(_("(%u omitted)"), static_cast<unsigned int>(currentResults.size()));
 		}
 
-		if (!filterEmpty && !filterModded)
+		if (currentResults.empty())
+		{
+			WzString statusStr = _("Lobby loaded, but no public games were returned.");
+#if defined(WZ_OS_IOS)
+			statusStr += "\n";
+			statusStr += _("If this stays empty, check networking permission and tap Refresh.");
+#endif
+			lobbyStatusOverlayWidg->setString(statusStr);
+		}
+		else if (!filterEmpty && !filterModded)
 		{
 			lobbyStatusOverlayWidg->setString(_("No games for your version"));
 		}

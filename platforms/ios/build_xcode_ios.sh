@@ -5,10 +5,18 @@ ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 PLATFORM="${1:-device}"
 BUILD_ROOT_BASE="$ROOT_DIR/platforms/ios/build"
 BUILD_DIR="${2:-$BUILD_ROOT_BASE/$PLATFORM}"
-CONFIGURATION="${IOS_BUILD_CONFIGURATION:-Release}"
+CONFIGURATION="${IOS_BUILD_CONFIGURATION:-Debug}"
 OUTPUT_DIR="${3:-$BUILD_ROOT_BASE/artifacts/$PLATFORM/$CONFIGURATION}"
 MAC_APP_PATH="${4:-${WARZONE_DESKTOP_APP_PATH:-/Applications/Warzone 2100.app}}"
-REPORT_PATH="${OUTPUT_DIR}/warzone2100-macos-vs-ios-${PLATFORM}-${CONFIGURATION}.txt"
+VARIANT_LABEL="${IOS_ARTIFACT_VARIANT_LABEL:-${CONFIGURATION:l}}"
+if [[ "${CONFIGURATION:l}" == "debug" ]]; then
+  if [[ "${IOS_ENABLE_DEBUG_JIT:-0}" == "1" ]]; then
+    VARIANT_LABEL="${IOS_ARTIFACT_VARIANT_LABEL:-debug-jit}"
+  else
+    VARIANT_LABEL="${IOS_ARTIFACT_VARIANT_LABEL:-debug-jitless}"
+  fi
+fi
+REPORT_PATH="${OUTPUT_DIR}/warzone2100-macos-vs-ios-${PLATFORM}-${VARIANT_LABEL}.txt"
 
 is_resource_app() {
   local candidate="$1"
