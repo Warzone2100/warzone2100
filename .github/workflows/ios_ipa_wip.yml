@@ -129,25 +129,47 @@ jobs:
             fi
           }
 
+          select_static_ios_moltenvk_xcframework() {
+            local search_root="$1"
+            local candidate
+            while IFS= read -r candidate; do
+              if find "${candidate}" -path "*/ios-*/libMoltenVK.a" ! -path "*simulator*" -print -quit | grep -q .; then
+                printf '%s\n' "${candidate}"
+                return 0
+              fi
+            done < <(find "${search_root}" -type d -name MoltenVK.xcframework -print | sort)
+            return 0
+          }
+
           if [[ -d "platforms/ios/vendor/MoltenVK.xcframework" ]]; then
-            MOLTENVK_DIR="${GITHUB_WORKSPACE}/platforms/ios/vendor/MoltenVK.xcframework"
+            MOLTENVK_DIR="$(select_static_ios_moltenvk_xcframework "${GITHUB_WORKSPACE}/platforms/ios/vendor")"
             MOLTENVK_INCLUDE_DIR="${GITHUB_WORKSPACE}/platforms/ios/vendor/MoltenVK/include"
           elif [[ -n "${MOLTENVK_XCFRAMEWORK_ZIP_URL}" ]]; then
             curl -L "${MOLTENVK_XCFRAMEWORK_ZIP_URL}" -o "${WORK_DIR}/MoltenVK.xcframework.zip"
             unzip -q "${WORK_DIR}/MoltenVK.xcframework.zip" -d "${WORK_DIR}"
-            MOLTENVK_DIR="$(find "${WORK_DIR}" -type d -name MoltenVK.xcframework | head -n 1)"
+            MOLTENVK_DIR="$(select_static_ios_moltenvk_xcframework "${WORK_DIR}")"
             MOLTENVK_INCLUDE_DIR="$(find_moltenvk_include_dir "${WORK_DIR}")"
           else
             curl -L "${MOLTENVK_IOS_TAR_URL}" -o "${WORK_DIR}/MoltenVK-ios.tar"
             /usr/bin/tar -xf "${WORK_DIR}/MoltenVK-ios.tar" -C "${WORK_DIR}"
-            MOLTENVK_DIR="$(find "${WORK_DIR}" -type d -name MoltenVK.xcframework | head -n 1)"
+            MOLTENVK_DIR="$(select_static_ios_moltenvk_xcframework "${WORK_DIR}")"
             MOLTENVK_INCLUDE_DIR="$(find_moltenvk_include_dir "${WORK_DIR}")"
           fi
 
           if [[ -z "${MOLTENVK_DIR}" || ! -d "${MOLTENVK_DIR}" ]]; then
-            echo "::error::Failed to locate MoltenVK.xcframework."
+            echo "::group::Detected MoltenVK xcframeworks"
+            find "${WORK_DIR}" "${GITHUB_WORKSPACE}/platforms/ios/vendor" -type d -name MoltenVK.xcframework -print 2>/dev/null || true
+            echo "::endgroup::"
+            echo "::error::Failed to locate a static iOS MoltenVK.xcframework with an iOS device libMoltenVK.a slice."
             exit 1
           fi
+
+          while IFS= read -r tvos_lib; do
+            tvos_archs="$(lipo -archs "${tvos_lib}")"
+            if [[ " ${tvos_archs} " == *" arm64e "* ]]; then
+              echo "::notice::Found tvOS MoltenVK arm64e slice at ${tvos_lib}, but it cannot be linked into an iOS binary. Provide an iOS arm64e slice to emit a true arm64e iOS app."
+            fi
+          done < <(find "$(dirname "${MOLTENVK_DIR}")" -path "*/tvos-*/libMoltenVK.a" -print 2>/dev/null || true)
 
           IOS_DEVICE_LIB=""
           IOS_DEVICE_LIB_ARCHS=""
