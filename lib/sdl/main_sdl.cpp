@@ -963,13 +963,11 @@ std::vector<video_backend> wzAvailableGfxBackends()
 #elif defined(WZ_OS_IOS)
 // IOS:
 	// Vulkan through MoltenVK is the Metal-backed renderer path for iOS.
-	// Do not fall back to OpenGL ES here: the simulator can create an ES
-	// context that never presents a frame, which leaves the app visually black.
 #   if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
 	availableBackends.push_back(video_backend::vulkan);
-#   else
-	availableBackends.push_back(video_backend::opengles);
 #   endif
+	// Keep OpenGL ES available as an explicit experimental renderer choice.
+	availableBackends.push_back(video_backend::opengles);
 #elif defined(WZ_OS_MAC)
 // MACOS:
 	if (cocoaIsRunningOnMacOSAtLeastVersion(13, 0)) // macOS 13.0+, which has Metal 3+
@@ -2409,7 +2407,10 @@ static void calculateGameScreenSizeForWindow(SDL_Window *window, unsigned int lo
 	const float nativeScale = std::min(nativeScaleX, nativeScaleY);
 	const float fitWidthScale = static_cast<float>(drawableWidth) / static_cast<float>(MIN_WZ_GAMESCREEN_WIDTH);
 	const float fitHeightScale = static_cast<float>(drawableHeight) / static_cast<float>(MIN_WZ_GAMESCREEN_HEIGHT);
-	const float phoneGameScale = std::max(1.f, std::min(nativeScale, std::min(fitWidthScale, fitHeightScale)));
+	const float maxPhoneGameScale = std::min(nativeScale, std::min(fitWidthScale, fitHeightScale));
+	// Leave a little vertical breathing room on iPhone so 640x480 frontend forms
+	// are centered instead of being pinned to the bottom edge.
+	const float phoneGameScale = std::max(1.f, maxPhoneGameScale * 0.9f);
 	*logicalScreenWidth = std::max<unsigned int>(MIN_WZ_GAMESCREEN_WIDTH, static_cast<unsigned int>(drawableWidth / phoneGameScale));
 	*logicalScreenHeight = std::max<unsigned int>(MIN_WZ_GAMESCREEN_HEIGHT, static_cast<unsigned int>(drawableHeight / phoneGameScale));
 #endif

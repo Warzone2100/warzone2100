@@ -240,7 +240,9 @@ void startTitleMenu()
 		addTextButton(FRONTEND_CONTINUE, FRONTEND_POS7X, FRONTEND_POS7Y, _("Continue Last Save"), WBUT_TXTCENTRE | WBUT_DISABLE);
 		widgSetTip(psWScreen, FRONTEND_CONTINUE, _("No last save available"));
 	}
+#if !defined(WZ_OS_IOS)
 	addTextButton(FRONTEND_QUIT, FRONTEND_POS8X, FRONTEND_POS8Y, _("Quit Game"), WBUT_TXTCENTRE);
+#endif
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
@@ -268,9 +270,11 @@ bool runTitleMenu()
 
 	switch (id)
 	{
+#if !defined(WZ_OS_IOS)
 	case FRONTEND_QUIT:
 		changeTitleMode(QUIT);
 		break;
+#endif
 	case FRONTEND_MULTIPLAYER:
 		changeTitleMode(MULTI);
 #if defined(__EMSCRIPTEN__)

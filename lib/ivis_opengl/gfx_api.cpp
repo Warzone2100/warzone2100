@@ -104,6 +104,11 @@ bool gfx_api::context::isInitialized()
 	return current_backend_context != nullptr;
 }
 
+gfx_api::backend_type gfx_api::context::currentBackendType()
+{
+	return backend;
+}
+
 // MARK: - Per-texture compression overrides
 
 #include "lib/framework/file.h"

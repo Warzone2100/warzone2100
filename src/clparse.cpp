@@ -419,7 +419,11 @@ static const struct poptOption *getOptionsTable()
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
 		{ "gfxbackend", POPT_ARG_STRING, CLI_GFXBACKEND, N_("Set gfx backend"),
 #if defined(WZ_OS_IOS)
-			"(opengles)"
+	#if defined(WZ_VULKAN_ENABLED)
+				"(vulkan, opengles)"
+	#else
+				"(opengles)"
+	#endif
 #else
 			"(opengl, opengles"
 #if defined(WZ_VULKAN_ENABLED)

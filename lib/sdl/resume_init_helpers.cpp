@@ -157,10 +157,9 @@ std::string VideoInitProgressImpl::currentWZVersionString()
 bool VideoInitProgressImpl::tryLoadFromFile()
 {
 #if defined(WZ_OS_IOS)
-	// iOS builds intentionally expose only the Vulkan/MoltenVK path. If a
-	// prior simulator run crashed during renderer bring-up, blacklisting Vulkan
-	// leaves no backend to try and permanently blocks launch until data is
-	// wiped. Keep iOS deterministic and always retry the sole renderer.
+	// Keep iOS deterministic after a renderer bring-up crash: always retry the
+	// configured/default renderer first, then let the normal in-process fallback
+	// path try any remaining experimental backends.
 	if (PHYSFS_exists(filePath.c_str()))
 	{
 		PHYSFS_delete(filePath.c_str());

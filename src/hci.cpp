@@ -138,7 +138,13 @@ static bool Refreshing = false;
 #if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
 static constexpr UDWORD IOS_DEBUG_RETICULE_GLOW_MS = 3500;
 static UDWORD iosDebugReticuleGlowUntil = 0;
+static UDWORD iosDebugTestButtonGlowUntil = 0;
+static bool iosDebugReticuleGlowWasShown = false;
+static bool iosDebugTestButtonGlowWasShown = false;
 static std::array<bool, NUMRETBUTS> iosDebugReticuleWasFlashing = {};
+static bool iosDebugTestButtonShouldFlash();
+static bool intAddIOSDebugTestButton();
+static void refreshIOSDebugTestButtonVisibility();
 #endif
 
 /***************************************************************************************/
@@ -312,6 +318,32 @@ private:
 	int marginTop = 18;
 };
 
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+class W_IOSDEBUGTEST_BUTTON : public W_BUTTON
+{
+protected:
+	W_IOSDEBUGTEST_BUTTON()
+	{ }
+	void initialize();
+public:
+	static std::shared_ptr<W_IOSDEBUGTEST_BUTTON> make();
+
+	void display(int xOffset, int yOffset) override;
+	std::string getTip() override;
+
+	int getMarginX() const { return marginX; }
+	int getMarginTop() const { return marginTop; }
+
+private:
+	uint8_t currentAlphaValue() const;
+	bool isHighlighted() const;
+
+private:
+	int marginX = 16;
+	int marginTop = 18;
+};
+#endif
+
 /***************************GAME CODE ****************************/
 
 struct RETBUTSTATS
@@ -355,6 +387,7 @@ void setReticuleFlash(int ButId, bool flash)
 #if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
 static void updateIOSDebugReticuleGlow()
 {
+	refreshIOSDebugTestButtonVisibility();
 	if (iosDebugReticuleGlowUntil == 0 || realTime < iosDebugReticuleGlowUntil)
 	{
 		return;
@@ -380,10 +413,22 @@ static inline void updateIOSDebugReticuleGlow()
 void intFlashReticuleButtonsForDebugMode()
 {
 #if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+	if (!iosDebugTestButtonGlowWasShown)
+	{
+		iosDebugTestButtonGlowWasShown = true;
+		iosDebugTestButtonGlowUntil = realTime + IOS_DEBUG_RETICULE_GLOW_MS;
+		intAddIOSDebugTestButton();
+	}
+
 	if (!ReticuleUp)
 	{
 		return;
 	}
+	if (iosDebugReticuleGlowWasShown)
+	{
+		return;
+	}
+	iosDebugReticuleGlowWasShown = true;
 	for (int retbut = 0; retbut < NUMRETBUTS; ++retbut)
 	{
 		iosDebugReticuleWasFlashing[retbut] = retbutstats[retbut].flashing;
@@ -1497,11 +1542,6 @@ static bool toggleIOSDebugTestMenu()
 	}
 	return true;
 }
-#else
-static inline bool toggleIOSDebugTestMenu()
-{
-	return false;
-}
 #endif
 
 /* Run the widgets for the in game interface */
@@ -1693,19 +1733,21 @@ INT_RETVAL intRunWidgets()
 			break;
 
 			case IDRET_CANCEL:
-				if (toggleIOSDebugTestMenu())
-				{
-					break;
-				}
 				intResetScreen(false);
 				psCurrentMsg = nullptr;
 				reticuleCallback(RETBUT_CANCEL);
-			break;
+				break;
 
-		/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
-		case IDTRANTIMER_BUTTON:
-			addTransporterInterface(nullptr, true);
-			break;
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+			case IDRET_IOS_DEBUG_TEST:
+				toggleIOSDebugTestMenu();
+				break;
+#endif
+
+			/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
+			case IDTRANTIMER_BUTTON:
+				addTransporterInterface(nullptr, true);
+				break;
 
 		case IDTRANS_LAUNCH:
 			processLaunchTransporter();
@@ -2384,6 +2426,115 @@ std::string W_INGAMEOPTIONS_BUTTON::getTip()
 	}
 }
 
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+// MARK: W_IOSDEBUGTEST_BUTTON
+
+std::shared_ptr<W_IOSDEBUGTEST_BUTTON> W_IOSDEBUGTEST_BUTTON::make()
+{
+	class make_shared_enabler: public W_IOSDEBUGTEST_BUTTON {};
+	auto widget = std::make_shared<make_shared_enabler>();
+	widget->initialize();
+	return widget;
+}
+
+void W_IOSDEBUGTEST_BUTTON::initialize()
+{
+	id = IDRET_IOS_DEBUG_TEST;
+	setGeometry(0, 0, RET_BUTWIDTH * 3 / 4, RET_BUTHEIGHT * 3 / 4);
+}
+
+uint8_t W_IOSDEBUGTEST_BUTTON::currentAlphaValue() const
+{
+	if (isHighlighted() || iosDebugTestButtonShouldFlash())
+	{
+		return 255;
+	}
+	return 180;
+}
+
+bool W_IOSDEBUGTEST_BUTTON::isHighlighted() const
+{
+	return ((getState() & WBUT_HIGHLIGHT) != 0) || jsDebugIsOpen();
+}
+
+void W_IOSDEBUGTEST_BUTTON::display(int xOffset, int yOffset)
+{
+	const int x0 = xOffset + x();
+	const int y0 = yOffset + y();
+	const uint8_t alphaValue = currentAlphaValue();
+	const bool down = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) || jsDebugIsOpen();
+
+	iV_DrawImageTint(IntImages, down ? IMAGE_INGAMEOPTIONS_DOWN : IMAGE_INGAMEOPTIONS_UP, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+
+	if (isHighlighted() || iosDebugTestButtonShouldFlash())
+	{
+		iV_DrawImageTint(IntImages, IMAGE_RETICULE_HILIGHT, x0, y0, pal_RGBA(255,255,255,alphaValue), Vector2f{width(), height()});
+	}
+}
+
+std::string W_IOSDEBUGTEST_BUTTON::getTip()
+{
+	return jsDebugIsOpen() ? _("Close TEST MENU") : _("Open TEST MENU");
+}
+
+static bool iosDebugTestButtonShouldFlash()
+{
+	return iosDebugTestButtonGlowUntil != 0 && realTime < iosDebugTestButtonGlowUntil;
+}
+
+static void refreshIOSDebugTestButtonVisibility()
+{
+	if (psWScreen == nullptr)
+	{
+		return;
+	}
+	auto psDebugBut = widgGetFromID(psWScreen, IDRET_IOS_DEBUG_TEST);
+	if (psDebugBut == nullptr)
+	{
+		return;
+	}
+	psDebugBut->show(gInputManager.debugManager().debugMappingsAllowed());
+}
+
+static bool intAddIOSDebugTestButton()
+{
+	if (psWScreen == nullptr)
+	{
+		return false;
+	}
+
+	auto psExistingBut = widgGetFromID(psWScreen, IDRET_IOS_DEBUG_TEST);
+	if (psExistingBut != nullptr)
+	{
+		refreshIOSDebugTestButtonVisibility();
+		return false;
+	}
+
+	auto button = W_IOSDEBUGTEST_BUTTON::make();
+	if (!button)
+	{
+		debug(LOG_ERROR, "Failed to create iOS debug test menu button");
+		return false;
+	}
+
+	psWScreen->psForm->attach(button);
+	button->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psDebugButton = std::dynamic_pointer_cast<W_IOSDEBUGTEST_BUTTON>(psWidget->shared_from_this());
+		ASSERT_OR_RETURN(, psDebugButton != nullptr, "Wrong button type?");
+		int w = psWidget->width();
+		int h = psWidget->height();
+		psWidget->setGeometry(psDebugButton->getMarginX(), psDebugButton->getMarginTop(), w, h);
+	}));
+	button->addOnClickHandler([](W_BUTTON&) {
+		widgScheduleTask([]() {
+			toggleIOSDebugTestMenu();
+		});
+	});
+	refreshIOSDebugTestButtonVisibility();
+	return true;
+}
+#endif
+
 bool intAddInGameOptionsButton()
 {
 	bool hiddenOptionsButton = war_getOptionsButtonVisibility() == 0;
@@ -2454,6 +2605,9 @@ void intHideInGameOptionsButton()
 bool intAddReticule()
 {
 	intAddInGameOptionsButton();
+#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
+	intAddIOSDebugTestButton();
+#endif
 
 	if (ReticuleUp)
 	{

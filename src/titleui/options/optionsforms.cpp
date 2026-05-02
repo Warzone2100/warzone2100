@@ -819,6 +819,7 @@ void OptionsBrowserForm::initialize(const std::shared_ptr<WIDGET>& optionalBackB
 	attach(sectionSwitcher);
 	optionsFormSectionSwitcher = sectionSwitcher;
 
+#if !defined(WZ_OS_IOS)
 	auto openConfigurationDirectoryLinkTmp = std::make_shared<WzClippableButton>();
 	openConfigurationDirectoryLinkTmp->setFont(font_small);
 	openConfigurationDirectoryLinkTmp->setString(getOpenConfigDirLabel());
@@ -851,6 +852,7 @@ void OptionsBrowserForm::initialize(const std::shared_ptr<WIDGET>& optionalBackB
 		});
 	});
 	openConfigurationDirectoryLink = openConfigurationDirectoryLinkTmp;
+#endif
 }
 
 void OptionsBrowserForm::showOpenConfigDirLink(bool show)
@@ -1089,7 +1091,10 @@ void OptionsBrowserForm::informLanguageDidChange()
 	sectionSwitcher->informLanguageDidChange();
 
 	// Refresh open configuration directory link text
-	openConfigurationDirectoryLink->setString(getOpenConfigDirLabel());
+	if (openConfigurationDirectoryLink)
+	{
+		openConfigurationDirectoryLink->setString(getOpenConfigDirLabel());
+	}
 
 	// Trigger layout recalc
 	geometryChanged();

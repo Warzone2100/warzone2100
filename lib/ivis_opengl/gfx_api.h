@@ -397,6 +397,7 @@ namespace gfx_api
 		static context& get();
 		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backend);
 		static bool isInitialized();
+		static backend_type currentBackendType();
 		virtual size_t numDepthPasses() { return 0; }
 		virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) { return false; }
 		virtual void beginDepthPass(size_t idx) { }

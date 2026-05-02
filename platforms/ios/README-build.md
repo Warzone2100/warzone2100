@@ -8,7 +8,7 @@ What it does:
 - targets `arm64` for device builds by default
 - sets the minimum OS to `iOS 16.0`
 - defaults to Vulkan through MoltenVK for the Metal-backed iOS renderer
-- forces Vulkan/MoltenVK on iOS because the SDL OpenGL ES path can present a blank frame on simulator
+- keeps OpenGL ES available as an experimental renderer choice while leaving Vulkan/MoltenVK as the default
 - signs the built executable with `ldid`
 - generates `.ipa` packages
 - syncs `data`, `docs`, and `locale` from `/Applications/Warzone 2100.app` so the iOS bundle carries the real desktop asset payload

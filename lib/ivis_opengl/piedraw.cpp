@@ -154,14 +154,18 @@ void pie_setShadows(bool drawShadows)
 
 optional<bool> pie_supportsShadowMapping()
 {
-#if defined(WZ_OS_IOS)
-	return false;
-#endif
 	if (!gfx_api::context::isInitialized())
 	{
 		// can't determine support yet
 		return nullopt;
 	}
+
+#if defined(WZ_OS_IOS)
+	if (gfx_api::context::currentBackendType() != gfx_api::backend_type::vulkan_backend)
+	{
+		return false;
+	}
+#endif
 
 	// double-check that current system supports instanced rendering - *only* if instanced rendering is possible does WZ support shadow mapping
 	return gfx_api::context::get().supportsInstancedRendering();
