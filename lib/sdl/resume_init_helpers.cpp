@@ -156,17 +156,6 @@ std::string VideoInitProgressImpl::currentWZVersionString()
 
 bool VideoInitProgressImpl::tryLoadFromFile()
 {
-#if defined(WZ_OS_IOS)
-	// Keep iOS deterministic after a renderer bring-up crash: always retry the
-	// configured/default renderer first, then let the normal in-process fallback
-	// path try any remaining experimental backends.
-	if (PHYSFS_exists(filePath.c_str()))
-	{
-		PHYSFS_delete(filePath.c_str());
-	}
-	return false;
-#endif
-
 	auto optJson = wzLoadJsonObjectFromFile(filePath, true);
 	if (!optJson.has_value())
 	{

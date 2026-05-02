@@ -104,6 +104,7 @@ jobs:
           brew update
           brew install \
             autoconf \
+            autoconf-archive \
             automake \
             cmake \
             coreutils \
@@ -116,6 +117,7 @@ jobs:
             p7zip \
             pkg-config
           echo "$(brew --prefix)/bin" >> "${GITHUB_PATH}"
+          echo "$(brew --prefix libtool)/libexec/gnubin" >> "${GITHUB_PATH}"
           echo "$(brew --prefix)/opt/gnu-tar/libexec/gnubin" >> "${GITHUB_PATH}"
 
       - name: Install MoltenVK xcframework

@@ -13,6 +13,15 @@ What it does:
 - generates `.ipa` packages
 - syncs `data`, `docs`, and `locale` from `/Applications/Warzone 2100.app` so the iOS bundle carries the real desktop asset payload
 
+Prerequisites:
+- Install or build the desktop app before packaging iOS. By default the iOS staging scripts read `/Applications/Warzone 2100.app` and copy its `data`, `docs`, and `locale` payload into the iOS `.app`.
+- If the desktop app is installed elsewhere, set `WARZONE_DESKTOP_APP_PATH` or pass the app path as the fourth helper argument:
+
+```sh
+WARZONE_DESKTOP_APP_PATH="$HOME/Applications/Warzone 2100.app" ./platforms/ios/build_xcode_ios.sh device
+./platforms/ios/build_xcode_ios.sh device "" "" "$HOME/Applications/Warzone 2100.app"
+```
+
 Notes:
 - `pkg/` stays in the source tree. It is upstream packaging metadata and does not block the iOS compile.
 - macOS-only frameworks from the installed app are intentionally not copied into the iOS bundle.

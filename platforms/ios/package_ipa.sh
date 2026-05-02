@@ -9,7 +9,7 @@ fi
 APP_PATH="$1"
 OUTPUT_DIR="$2"
 CONFIGURATION="${3:-Release}"
-MAC_APP_PATH="${4:-/Applications/Warzone 2100.app}"
+MAC_APP_PATH="${4:-${WARZONE_DESKTOP_APP_PATH:-/Applications/Warzone 2100.app}}"
 BUNDLE_ID="com.pumpkinstudios.warzone2100"
 VERSION_LABEL="0.1-beta"
 SCRIPT_DIR="$(dirname "$0")"

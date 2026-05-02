@@ -1738,12 +1738,6 @@ INT_RETVAL intRunWidgets()
 				reticuleCallback(RETBUT_CANCEL);
 				break;
 
-#if defined(WZ_OS_IOS) && defined(WZ_IOS_DEBUG_JIT)
-			case IDRET_IOS_DEBUG_TEST:
-				toggleIOSDebugTestMenu();
-				break;
-#endif
-
 			/*Transporter button pressed - OFFWORLD Mission Maps ONLY *********/
 			case IDTRANTIMER_BUTTON:
 				addTransporterInterface(nullptr, true);

@@ -43,18 +43,18 @@ static const char* to_string(gfx_api::backend_type backendType)
 
 bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode swapMode, optional<float> mipLodBias, uint32_t depthMapResolution, gfx_api::backend_type backendType)
 {
-	if (current_backend_context != nullptr && backend == backendType)
+	if (current_backend_context != nullptr)
 	{
-		// ignore re-init for same backendType (for now)
-		debug(LOG_ERROR, "Attempt to re-initialize gfx_api::context for the same backend type - ignoring (for now)");
-		return true;
-	}
-	backend = backendType;
-	if (current_backend_context)
-	{
+		if (backend == backendType)
+		{
+			// ignore re-init for same backendType (for now)
+			debug(LOG_ERROR, "Attempt to re-initialize gfx_api::context for the same backend type - ignoring (for now)");
+			return true;
+		}
 		debug(LOG_FATAL, "Attempt to reinitialize gfx_api::context for a new backend type once initialized - currently unsupported");
 		return false;
 	}
+	backend = backendType;
 	switch (backend)
 	{
 		case gfx_api::backend_type::null_backend:
@@ -106,6 +106,23 @@ bool gfx_api::context::isInitialized()
 
 gfx_api::backend_type gfx_api::context::currentBackendType()
 {
+	if (current_backend_context != nullptr)
+	{
+		if (dynamic_cast<null_context*>(current_backend_context) != nullptr)
+		{
+			return gfx_api::backend_type::null_backend;
+		}
+		if (dynamic_cast<gl_context*>(current_backend_context) != nullptr)
+		{
+			return gfx_api::backend_type::opengl_backend;
+		}
+#if defined(WZ_VULKAN_ENABLED)
+		if (dynamic_cast<VkRoot*>(current_backend_context) != nullptr)
+		{
+			return gfx_api::backend_type::vulkan_backend;
+		}
+#endif
+	}
 	return backend;
 }
 

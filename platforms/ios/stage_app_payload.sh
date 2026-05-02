@@ -7,7 +7,7 @@ if [[ $# -lt 1 ]]; then
 fi
 
 APP_PATH="$1"
-MAC_APP_PATH="${2:-/Applications/Warzone 2100.app}"
+MAC_APP_PATH="${2:-${WARZONE_DESKTOP_APP_PATH:-/Applications/Warzone 2100.app}}"
 
 is_resource_app() {
   local candidate="$1"

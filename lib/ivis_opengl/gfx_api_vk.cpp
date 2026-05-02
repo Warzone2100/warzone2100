@@ -52,6 +52,10 @@
 #include <chrono>
 #include <thread>
 
+#if defined(WZ_OS_IOS)
+#include <TargetConditionals.h>
+#endif
+
 // Fix #define MemoryBarrier coming from winnt.h
 #undef MemoryBarrier
 
@@ -75,6 +79,15 @@ const uint32_t maxRequestableInstanceVulkanVersion = (uint32_t)VK_MAKE_VERSION(1
 #endif
 
 const size_t MAX_FRAMES_IN_FLIGHT = 2;
+
+static bool vkDepthPassesForcedZeroForCurrentPlatform()
+{
+#if defined(WZ_OS_IOS) && TARGET_OS_SIMULATOR
+	return true;
+#else
+	return false;
+#endif
+}
 
 // Vulkan version where extension is promoted to core; extension name
 #define VK_NOT_PROMOTED_TO_CORE_YET 0
@@ -5676,6 +5689,11 @@ bool VkRoot::supportsInstancedRendering()
 	return true;
 }
 
+bool VkRoot::supportsShadowMapping()
+{
+	return !vkDepthPassesForcedZeroForCurrentPlatform() && supportsInstancedRendering();
+}
+
 gfx_api::texture* VkRoot::create_texture(const std::size_t& mipmap_count, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& internal_format, const std::string& filename)
 {
 	auto result = new VkTexture(*this, mipmap_count, width, height, internal_format, filename);
@@ -6385,13 +6403,11 @@ size_t VkRoot::numDepthPasses()
 
 bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
 {
-#if defined(WZ_OS_IOS)
-	if (_numDepthPasses != 0)
+	if (vkDepthPassesForcedZeroForCurrentPlatform() && _numDepthPasses != 0)
 	{
-		debug(LOG_INFO, "Disabling Vulkan shadow-map depth passes on iOS because MoltenVK does not support layered depth attachments on the simulator");
+		debug(LOG_INFO, "Disabling Vulkan shadow-map depth passes on iOS simulator because MoltenVK does not support layered depth attachments there");
 		_numDepthPasses = 0;
 	}
-#endif
 	if (depthPassCount == _numDepthPasses
 		&& depthMapSize == _depthBufferResolution)
 	{

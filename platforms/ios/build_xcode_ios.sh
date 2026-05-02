@@ -7,7 +7,7 @@ BUILD_ROOT_BASE="$ROOT_DIR/platforms/ios/build"
 BUILD_DIR="${2:-$BUILD_ROOT_BASE/$PLATFORM}"
 CONFIGURATION="${IOS_BUILD_CONFIGURATION:-Release}"
 OUTPUT_DIR="${3:-$BUILD_ROOT_BASE/artifacts/$PLATFORM/$CONFIGURATION}"
-MAC_APP_PATH="${4:-/Applications/Warzone 2100.app}"
+MAC_APP_PATH="${4:-${WARZONE_DESKTOP_APP_PATH:-/Applications/Warzone 2100.app}}"
 REPORT_PATH="${OUTPUT_DIR}/warzone2100-macos-vs-ios-${PLATFORM}-${CONFIGURATION}.txt"
 
 is_resource_app() {

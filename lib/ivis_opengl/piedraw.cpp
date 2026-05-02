@@ -168,7 +168,7 @@ optional<bool> pie_supportsShadowMapping()
 #endif
 
 	// double-check that current system supports instanced rendering - *only* if instanced rendering is possible does WZ support shadow mapping
-	return gfx_api::context::get().supportsInstancedRendering();
+	return gfx_api::context::get().supportsShadowMapping();
 }
 
 bool pie_setShadowMapResolution(uint32_t resolution)
