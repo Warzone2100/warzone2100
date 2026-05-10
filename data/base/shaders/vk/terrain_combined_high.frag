@@ -114,17 +114,22 @@ vec4 main_bumpMapping() {
 	getGroundBM(2, bump);
 	getGroundBM(3, bump);
 
+	// compute decal partial derivatives in uniform control flow
+	vec3 uv = vec3(frag.uvDecal, fragf.tileNo);
+	float decalBiasScale = pow(2.0, WZ_MIP_LOAD_BIAS);
+	vec2 decalDx = dFdx(uv.xy) * decalBiasScale;
+	vec2 decalDy = dFdy(uv.xy) * decalBiasScale;
+
 	if (fragf.tileNo >= 0) {
-		vec3 uv = vec3(frag.uvDecal, fragf.tileNo);
-		vec4 decalColor = texture(decalTex, uv, WZ_MIP_LOAD_BIAS);
+		vec4 decalColor = textureGrad(decalTex, uv, decalDx, decalDy);
 		float a = decalColor.a;
 		// blend color, normal and gloss with ground ones based on alpha
 		bump.color = (1-a)*bump.color + a*vec4(decalColor.rgb, 1);
-		vec3 n = texture(decalNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
+		vec3 n = textureGrad(decalNormal, uv, decalDx, decalDy).xyz;
 		vec3 n_normalized = normalize(n * 2.f - 1.f);
 		n = mix(vec3(n_normalized.xy * frag.decal2groundMat2, n_normalized.z), vec3(0.f,0.f,1.f), vec3(float(n == vec3(0.f,0.f,0.f))));
 		bump.N = (1-a)*bump.N + a*n;
-		bump.gloss = (1-a)*bump.gloss + a*texture(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
+		bump.gloss = (1-a)*bump.gloss + a*textureGrad(decalSpecular, uv, decalDx, decalDy).r;
 	}
 	return doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec);
 }
