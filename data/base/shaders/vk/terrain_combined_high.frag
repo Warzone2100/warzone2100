@@ -32,7 +32,7 @@ layout(location = 12) in mat3 ModelTangentMatrix;
 layout(location = 0) out vec4 FragColor;
 
 #include "shadow_mapping.glsl"
-#include "light.glsl"
+#include "light.glsl" // updated (temp: comment here to trigger shader rebuild)
 #include "pointlights.glsl"
 
 vec3 getGroundUv(int i) {
