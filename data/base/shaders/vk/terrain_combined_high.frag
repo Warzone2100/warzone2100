@@ -46,12 +46,17 @@ struct BumpData {
 	float gloss;
 };
 
+vec3 safe_normalize(vec3 v) {
+	float lenSq = dot(v, v);
+	return (lenSq > 0.00001) ? v * inversesqrt(lenSq) : vec3(0.0, 0.0, 1.0);
+}
+
 void getGroundBM(int i, inout BumpData res) {
 	vec3 uv = getGroundUv(i);
 	float w = frag.groundWeights[i];
 	res.color += texture(groundTex, uv, WZ_MIP_LOAD_BIAS) * w;
-	vec3 N = texture(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-	N = mix(normalize(N * 2.f - 1.f), vec3(0.f,0.f,1.f), vec3(float(N == vec3(0.f,0.f,0.f))));
+	vec3 rawN = texture(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
+	vec3 N = (dot(rawN, rawN) < 0.00001) ? vec3(0.0, 0.0, 1.0) : safe_normalize(rawN * 2.0 - 1.0);
 	res.N += N * w;
 	res.gloss += texture(groundSpecular, uv, WZ_MIP_LOAD_BIAS).r * w;
 }
