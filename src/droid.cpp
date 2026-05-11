@@ -286,6 +286,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
 
 #define UNIT_LOST_DELAY	(5*GAME_TICKS_PER_SEC)
 /* Deals damage to a droid
+ * \param world the game world droid belongs to
  * \param psDroid droid to deal damage to
  * \param psProjectile projectile which hit the object (may be nullptr)
  * \param damage amount of damage to deal
@@ -295,7 +296,7 @@ void addDroidDeathAnimationEffect(DROID *psDroid)
  * \return > 0 when the dealt damage destroys the droid, < 0 when the droid survives
  *
  */
-int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t droidDamage(GameWorld& world, DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -326,7 +327,7 @@ int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, W
 		// reset the attack level
 		if (secondaryGetState(psDroid, DSO_ATTACK_LEVEL) == DSS_ALEV_ATTACKED)
 		{
-			secondarySetState(psDroid, gameWorld.objects, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
+			secondarySetState(psDroid, world.objects, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
 		}
 		// Now check for auto return on droid's secondary orders (i.e. return on medium/heavy damage)
 		secondaryCheckDamageLevel(psDroid);
@@ -387,12 +388,12 @@ int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, W
 		if (bMultiPlayer && !bMultiMessages)
 		{
 			bMultiMessages = true;
-			destroyDroid(psDroid, impactTime, gameWorld);
+			destroyDroid(psDroid, impactTime, world);
 			bMultiMessages = false;
 		}
 		else
 		{
-			destroyDroid(psDroid, impactTime, gameWorld);
+			destroyDroid(psDroid, impactTime, world);
 		}
 	}
 
@@ -1024,7 +1025,7 @@ void droidUpdate(DROID *psDroid)
 		else
 		{
 			// do hardcoded burn damage (this damage automatically applied after periodical damage finished)
-			droidDamage(psDroid, nullptr, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime / 2 + 1, true, BURN_MIN_DAMAGE, false);
+			droidDamage(gameWorld, psDroid, nullptr, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime / 2 + 1, true, BURN_MIN_DAMAGE, false);
 		}
 	}
 

@@ -123,7 +123,7 @@ static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
 
-static int32_t objectDamage(DAMAGE *psDamage);
+static int32_t objectDamage(GameWorld& world, DAMAGE *psDamage);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -1089,7 +1089,7 @@ static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i 
 			empRadius
 		};
 
-		objectDamage(&sDamage);
+		objectDamage(gameWorld, &sDamage);
 	}
 }
 
@@ -1287,7 +1287,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			};
 
 			// Damage the object
-			relativeDamage = objectDamage(&sDamage);
+			relativeDamage = objectDamage(gameWorld, &sDamage);
 
 			if (relativeDamage >= 0)	// So long as the target wasn't killed
 			{
@@ -1538,7 +1538,7 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			false
 		};
 
-		objectDamage(&sDamage);
+		objectDamage(gameWorld, &sDamage);
 	}
 }
 
@@ -1675,20 +1675,20 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJE
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamageDispatch(DAMAGE *psDamage)
+static int32_t objectDamageDispatch(GameWorld& world, DAMAGE *psDamage)
 {
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return droidDamage(world, (DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return structureDamage(world, (STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_FEATURE:
-		return featureDamage((FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return featureDamage(world, (FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_PROJECTILE:
@@ -1740,9 +1740,9 @@ static void updateKills(DAMAGE* psDamage)
 	}
 }
 
-static int32_t objectDamage(DAMAGE *psDamage)
+static int32_t objectDamage(GameWorld& world, DAMAGE *psDamage)
 {
-	int32_t relativeDamage = objectDamageDispatch(psDamage);
+	int32_t relativeDamage = objectDamageDispatch(world, psDamage);
 
 	if (shouldIncreaseExperience(psDamage)) {
 		proj_UpdateExperience(psDamage->psProjectile, abs(relativeDamage) * getExpGain(psDamage->psProjectile->psSource->player) / 100);
