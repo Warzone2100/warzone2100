@@ -1706,7 +1706,20 @@ void	kf_JumpToResourceExtractor()
 
 void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor, const WorldObjectState& objState)
 {
-	if (psOldRE.has_value() && *psOldRE != objState.extractors[selectedPlayer].end() && **psOldRE == psResourceExtractor)
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		psOldRE.reset();
+		return;
+	}
+
+	// Only consider the case `objState` represents the currently active game world state.
+	const auto& activeExtractors = gameWorld.objects.extractors[selectedPlayer];
+	if (&objState.extractors[selectedPlayer] != &activeExtractors)
+	{
+		return;
+	}
+
+	if (psOldRE.has_value() && *psOldRE != activeExtractors.end() && **psOldRE == psResourceExtractor)
 	{
 		psOldRE.reset();
 	}
