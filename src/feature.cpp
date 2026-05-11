@@ -305,11 +305,10 @@ FEATURE *buildFeature(GameWorld& world, FEATURE_STATS *psStats, UDWORD x, UDWORD
 	{
 		for (int width = 0; width < b.size.x; ++width)
 		{
-			MAPTILE *psTile = mapTile(world.map, b.map.x + width, b.map.y + breadth);
-
-			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(nullptr, b.map.x + width < world.map.width, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < world.map.height, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			const int tileX = b.map.x + width;
+			const int tileY = b.map.y + breadth;
+			ASSERT_OR_RETURN(nullptr, tileOnMap(world.map, tileX, tileY), "feature is off-map - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			MAPTILE *psTile = mapTile(world.map, tileX, tileY);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
