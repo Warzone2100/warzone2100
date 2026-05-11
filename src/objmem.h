@@ -97,7 +97,7 @@ void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState);
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel);
 /* Transfer a Flag Position to a new player */
-void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
+void transferFlagPositionToPlayer(WorldObjectState& objState, FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
 void freeAllFlagPositions(WorldObjectState& objState);
 
