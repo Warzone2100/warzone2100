@@ -147,12 +147,13 @@ void featureStatsShutDown()
 }
 
 /** Deals with damage to a feature
+ *  \param world the game world feature belongs to
  *  \param psFeature feature to deal damage to
  *  \param damage amount of damage to deal
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t featureDamage(GameWorld& world, FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -167,7 +168,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "feature (id %d) DESTROYED", psFeature->id);
-		destroyFeature(psFeature, impactTime, gameWorld);
+		destroyFeature(psFeature, impactTime, world);
 		return relativeDamage * -1;
 	}
 	else

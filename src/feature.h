@@ -58,7 +58,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime, GameWorld& world);
 /* get a feature stat id from its name */
 SDWORD getFeatureStatFromName(const WzString &name);
 
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t featureDamage(GameWorld& world, FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 void featureInitVars();
 

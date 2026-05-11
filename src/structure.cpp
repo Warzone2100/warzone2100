@@ -847,13 +847,14 @@ void handleAbandonedStructures()
 }
 
 /* Deals damage to a Structure.
+ * \param world the game world structure belongs to
  * \param psStructure structure to deal damage to
  * \param damage amount of damage to deal
  * \param weaponClass the class of the weapon that deals the damage
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
+int32_t structureDamage(GameWorld& world, STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit)
 {
 	int32_t relativeDamage;
 
@@ -868,7 +869,7 @@ int32_t structureDamage(STRUCTURE *psStructure, PROJECTILE *psProjectile, unsign
 	if (relativeDamage < 0)
 	{
 		debug(LOG_ATTACK, "Structure (id %d) DESTROYED", psStructure->id);
-		destroyStruct(psStructure, impactTime, gameWorld);
+		destroyStruct(psStructure, impactTime, world);
 	}
 	else
 	{
