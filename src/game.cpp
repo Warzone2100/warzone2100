@@ -3525,11 +3525,15 @@ error:
 	      keepObjects ? "true" : "false", freeMem ? "true" : "false", UserSaveGame ? "true" : "false");
 
 	/* Clear all the objects off the map and free up the map memory */
+	freeAllDroids(mission.gameWorld);
+	freeAllStructs(mission.gameWorld);
+	freeAllFeatures(mission.gameWorld);
+	mission.gameWorld = {};
 	freeAllDroids(gameWorld);
 	freeAllStructs(gameWorld);
 	freeAllFeatures(gameWorld);
 	droidTemplateShutDown();
-	gameWorld.map.tiles = nullptr;
+	gameWorld = {};
 
 	/* Start the game clock */
 	gameTimeStart();
