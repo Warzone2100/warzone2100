@@ -2238,7 +2238,7 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 			}
 
 			// Transfer / fix-up factory assembly point, and number
-			transferFlagPositionToPlayer(psFactory->psAssemblyPoint, priorPlayer, psBuilding->player);
+			transferFlagPositionToPlayer(gameWorld.objects, psFactory->psAssemblyPoint, priorPlayer, psBuilding->player);
 
 			switch (functionType)
 			{
@@ -2293,7 +2293,7 @@ static bool transferFixupFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE fun
 			}
 
 			// Transfer / fix-up factory assembly point, and number
-			transferFlagPositionToPlayer(psRepairFac->psDeliveryPoint, priorPlayer, psBuilding->player);
+			transferFlagPositionToPlayer(gameWorld.objects, psRepairFac->psDeliveryPoint, priorPlayer, psBuilding->player);
 
 			setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, REPAIR_FLAG);
 			break;

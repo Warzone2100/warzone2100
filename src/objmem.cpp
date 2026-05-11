@@ -812,12 +812,12 @@ void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState)
 }
 
 // Remove it from the list, but don't delete it!
-static bool removeFlagPositionFromList(FLAG_POSITION *psRemove)
+static bool removeFlagPositionFromList(WorldObjectState& objState, FLAG_POSITION *psRemove)
 {
 	ASSERT_OR_RETURN(false, psRemove != nullptr, "Invalid Flag Position pointer");
 	ASSERT_OR_RETURN(false, psRemove->player < MAX_PLAYERS, "Invalid Flag Position player: %" PRIu32, psRemove->player);
 
-	auto& flagPosList = gameWorld.objects.flags[psRemove->player];
+	auto& flagPosList = objState.flags[psRemove->player];
 	auto it = std::find(flagPosList.begin(), flagPosList.end(), psRemove);
 	if (it != flagPosList.end())
 	{
@@ -833,7 +833,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 {
 	ASSERT_OR_RETURN(, psDel != nullptr, "Invalid Flag Position pointer");
 
-	if (removeFlagPositionFromList(psDel))
+	if (removeFlagPositionFromList(gameWorld.objects, psDel))
 	{
 		free(psDel);
 	}
@@ -844,13 +844,13 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 }
 
 /* Transfer a Flag Position to a new player */
-void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer)
+void transferFlagPositionToPlayer(WorldObjectState& objState, FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer)
 {
 	ASSERT_OR_RETURN(, psFlagPos != nullptr, "Invalid Flag Position pointer");
 	ASSERT(originalPlayer == psFlagPos->player, "Unexpected originalPlayer (%" PRIu32 ") does not match current flagPos->player (%" PRIu32 ")", originalPlayer, psFlagPos->player);
-	ASSERT(removeFlagPositionFromList(psFlagPos), "Did not find flag position in expected list?");
+	ASSERT(removeFlagPositionFromList(objState, psFlagPos), "Did not find flag position in expected list?");
 	psFlagPos->player = newPlayer;
-	addFlagPosition(psFlagPos, gameWorld.objects);
+	addFlagPosition(psFlagPos, objState);
 }
 
 // free all flag positions
