@@ -912,7 +912,7 @@ float structureCompletionProgress(const STRUCTURE & structure)
 
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
 /// Also can deconstruct (demolish) a building if passed negative buildpoints
-void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int buildRate)
+void structureBuild(GameWorld& world, STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int buildRate)
 {
 	bool checkResearchButton = psStruct->status == SS_BUILT;  // We probably just started demolishing, if this is true.
 	int prevResearchState = 0;
@@ -930,7 +930,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; player++)
 		{
-			for (const DROID *psCurr : gameWorld.objects.droids[player])
+			for (const DROID *psCurr : world.objects.droids[player])
 			{
 				// An enemy droid is blocking it
 				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
@@ -969,7 +969,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	//check if structure is built
 	if (buildPoints > 0 && psStruct->currentBuildPts >= structureBuildPointsToCompletion(*psStruct))
 	{
-		buildingComplete(psStruct, gameWorld);
+		buildingComplete(psStruct, world);
 
 		//only play the sound if selected player
 		if (psDroid &&
@@ -987,7 +987,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		if (psDroid)
 		{
 			// Clear all orders for helping hands. Needed for AI script which runs next frame.
-			for (DROID* psIter : gameWorld.objects.droids[psDroid->player])
+			for (DROID* psIter : world.objects.droids[psDroid->player])
 			{
 				if ((psIter->order.type == DORDER_BUILD || psIter->order.type == DORDER_HELPBUILD || psIter->order.type == DORDER_LINEBUILD)
 				    && psIter->order.psObj == psStruct
@@ -1038,10 +1038,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 				break;
 			}
 			case REF_POWER_GEN:
-				releasePowerGen(psStruct, gameWorld.objects);
+				releasePowerGen(psStruct, world.objects);
 				break;
 			case REF_RESOURCE_EXTRACTOR:
-				releaseResExtractor(psStruct, gameWorld.objects);
+				releaseResExtractor(psStruct, world.objects);
 				break;
 			case REF_REPAIR_FACILITY:
 			{
@@ -1081,7 +1081,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
 	{
 		triggerEvent(TRIGGER_OBJECT_RECYCLED, psStruct);
-		removeStruct(psStruct, true, gameWorld);
+		removeStruct(psStruct, true, world);
 	}
 
 	if (checkResearchButton)
@@ -1110,9 +1110,9 @@ static int structureTotalReturn(const STRUCTURE *psStruct)
 	return power / 2;
 }
 
-void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
+void structureDemolish(GameWorld& world, STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 {
-	structureBuild(psStruct, psDroid, -buildPoints);
+	structureBuild(world, psStruct, psDroid, -buildPoints);
 }
 
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
