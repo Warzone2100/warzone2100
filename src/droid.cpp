@@ -611,7 +611,7 @@ bool removeDroidBase(DROID *psDel, WorldObjectState& objState)
 		if (tryingToGetLocation())
 		{
 			int numSelectedConstructors = 0;
-			for (const DROID *psDroid : gameWorld.objects.droids[psDel->player])
+			for (const DROID *psDroid : objState.droids[psDel->player])
 			{
 				numSelectedConstructors += psDroid->selected && psDroid->isConstructionDroid();
 			}
