@@ -686,7 +686,7 @@ static void saveMissionData()
 					&& psStructBeingBuilt == psStruct)
 				{
 					// just give it all its build points
-					structureBuild(psStruct, nullptr, structureBuildPointsToCompletion(*psStruct));
+					structureBuild(gameWorld, psStruct, nullptr, structureBuildPointsToCompletion(*psStruct));
 					//don't bother looking for any other droids working on it
 					break;
 				}
