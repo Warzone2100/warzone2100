@@ -708,6 +708,14 @@ public:
 	//__ cheating!
 	//__
 	virtual bool handle_eventSyncRequest(int from, int req_id, int x, int y, const BASE_OBJECT *psObj, const BASE_OBJECT *psObj2) override;
+
+	//__ ## eventSyncString(req_id, str)
+	//__
+	//__ An event that is called from a script and synchronized with all other scripts and hosts
+	//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
+	//__ cheating!
+	//__
+	virtual bool handle_eventSyncString(int from, int req_id, const WzString& str) override;
 };
 
 // private QuickJS bureaucracy
@@ -1900,6 +1908,12 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		JSValue box(std::string str, JSContext* ctx)
 		{
 			return JS_NewStringLen(ctx, str.c_str(), str.length());
+		}
+
+		JSValue box(const WzString& str, JSContext* ctx)
+		{
+			auto utf8Str = str.toUtf8();
+			return JS_NewStringLen(ctx, utf8Str.c_str(), utf8Str.length());
 		}
 
 		JSValue box(wzapi::no_return_value, JSContext* ctx)
@@ -3133,6 +3147,7 @@ IMPL_EVENT_HANDLER(eventAllianceBroken, uint8_t, uint8_t)
 
 // MARK: Special input events
 IMPL_EVENT_HANDLER(eventSyncRequest, int, int, int, int, const BASE_OBJECT *, const BASE_OBJECT *)
+IMPL_EVENT_HANDLER(eventSyncString, int, int, const WzString&)
 
 // ----------------------------------------------------------------------------------------
 // Script functions
@@ -3327,6 +3342,7 @@ IMPL_JS_FUNC(addSpotter, wzapi::addSpotter)
 IMPL_JS_FUNC(removeSpotter, wzapi::removeSpotter)
 IMPL_JS_FUNC(syncRandom, wzapi::syncRandom)
 IMPL_JS_FUNC(syncRequest, wzapi::syncRequest)
+IMPL_JS_FUNC(syncString, wzapi::syncString)
 IMPL_JS_FUNC(replaceTexture, wzapi::replaceTexture)
 IMPL_JS_FUNC(fireWeaponAtLoc, wzapi::fireWeaponAtLoc)
 IMPL_JS_FUNC(fireWeaponAtObj, wzapi::fireWeaponAtObj)
@@ -3542,6 +3558,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(addSpotter, 6); // WZAPI
 	JS_REGISTER_FUNC(removeSpotter, 1); // WZAPI
 	JS_REGISTER_FUNC2(syncRequest, 3, 5); // WZAPI
+	JS_REGISTER_FUNC(syncString, 2); // WZAPI
 	JS_REGISTER_FUNC(replaceTexture, 2); // WZAPI
 	JS_REGISTER_FUNC(changePlayerColour, 2); // WZAPI
 	JS_REGISTER_FUNC(setHealth, 2); // WZAPI
