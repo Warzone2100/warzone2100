@@ -4,15 +4,13 @@
 		"id": "ADVANCEDRESEARCH",
 		"imdName": "MICAPSUL.PIE",
 		"keyTopic": 1,
-		"name": "ADVANCED RESEARCH",
-		"techCode": 1
+		"name": "ADVANCED RESEARCH"
 	},
 	"CAM3RESEARCH": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "CAM3RESEARCH",
 		"imdName": "MICAPSUL.PIE",
-		"name": "CAM3 RESEARCH",
-		"techCode": 1
+		"name": "CAM3 RESEARCH"
 	},
 	"R-Wpn-TUTMG": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -20,14 +18,12 @@
 		"name": "Machinegun Artifact",
 		"researchPoints": 60,
 		"researchPower": 1,
-		"statID": "MG1Mk1",
-		"techCode": 1
+		"statID": "MG1Mk1"
 	},
 	"R-Vehicle-Prop-Halftracks02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Halftracks02",
 		"keyTopic": 1,
-		"msgName": "RES_HALFT2",
 		"name": "Half-tracked Propulsion II",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade04"
@@ -37,13 +33,19 @@
 		"resultComponents": [
 			"HalfTrack02"
 		],
-		"statID": "HalfTrack02"
+		"statID": "HalfTrack02",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Propulsion Improved",
+			"New armored construction",
+			"Increases Body Points",
+			"All half-tracks upgraded automatically"
+		]
 	},
 	"R-Vehicle-Prop-Tracks02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Tracks02",
 		"keyTopic": 1,
-		"msgName": "RES_TRACK2",
 		"name": "Tracked Propulsion II",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade04"
@@ -53,13 +55,19 @@
 		"resultComponents": [
 			"tracked02"
 		],
-		"statID": "tracked02"
+		"statID": "tracked02",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Propulsion Improved",
+			"New armored construction",
+			"Increases Body Points",
+			"All tracks upgraded automatically"
+		]
 	},
 	"R-Vehicle-Prop-Hover02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Hover02",
 		"keyTopic": 1,
-		"msgName": "RES_V_P_H2",
 		"name": "Hover Propulsion II",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade04"
@@ -69,14 +77,20 @@
 		"resultComponents": [
 			"hover02"
 		],
-		"statID": "hover02"
+		"statID": "hover02",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Propulsion Improved",
+			"New armored construction",
+			"Increases Body Points",
+			"All hovers upgraded automatically"
+		]
 	},
 	"R-Vehicle-Prop-VTOL02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-VTOL02",
 		"imdName": "DPVTOL.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_V_P_V2",
 		"name": "VTOL Propulsion II",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade04"
@@ -85,13 +99,19 @@
 		"researchPower": 450,
 		"resultComponents": [
 			"V-Tol02"
+		],
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Propulsion Improved",
+			"New power efficient propulsion",
+			"Body Points and Speed Increased",
+			"All VTOLs upgraded automatically"
 		]
 	},
 	"R-Vehicle-Prop-Wheels02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Wheels02",
 		"keyTopic": 1,
-		"msgName": "RES_V_P_W2",
 		"name": "Wheeled Propulsion II",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade04"
@@ -101,7 +121,14 @@
 		"resultComponents": [
 			"wheeled02"
 		],
-		"statID": "wheeled02"
+		"statID": "wheeled02",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Propulsion Improved",
+			"New armored construction",
+			"Increases Body Points",
+			"All wheels upgraded automatically"
+		]
 	},
 	"R-Cyborg-Legs02": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -121,7 +148,6 @@
 	"R-Comp-CommandTurret01": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Comp-CommandTurret01",
-		"msgName": "RES_C_CT1",
 		"name": "Command Turret",
 		"requiredResearch": [
 			"R-Struc-CommandRelay"
@@ -132,17 +158,30 @@
 			"CommandBrain01",
 			"CommandTurret1"
 		],
-		"statID": "CommandBrain01"
+		"statID": "CommandBrain01",
+		"intelAudio": "res_com.ogg",
+		"intelText": [
+			"New Systems Turret Available for Design",
+			"New battlefield computer system",
+			"Commander leads groups acts as factory delivery point",
+			"Body Points: High"
+		]
 	},
 	"R-Comp-SynapticLink": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Comp-SynapticLink",
 		"imdName": "icsynapt.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_C_SL1",
 		"name": "Synaptic Link",
 		"researchPoints": 1200,
-		"researchPower": 37
+		"researchPower": 37,
+		"intelAudio": "res_com.ogg",
+		"intelText": [
+			"Computer Technology Breakthrough",
+			"Synaptic Link allows humans to interface directly with computers",
+			"Cyborgs can now be researched",
+			"New research options available"
+		]
 	},
 	"R-Cyborg-Legs01": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -153,14 +192,12 @@
 		"resultComponents": [
 			"CyborgLegs"
 		],
-		"statID": "CyborgLegs",
-		"techCode": 1
+		"statID": "CyborgLegs"
 	},
 	"R-Cyborg-Metals01": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Metals01",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_CYMET1",
 		"name": "Cyborg Composite Alloys",
 		"requiredResearch": [
 			"R-Struc-Research-Module",
@@ -185,7 +222,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Cyborg Materials Improved",
+			"Layered composite alloys and energy-absorbing fibres",
+			"Increases Kinetic Armor and Body Points",
+			"All Cyborgs upgraded automatically"
+		]
 	},
 	"R-Cyborg-Metals02": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -213,8 +257,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals03": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -243,14 +286,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals04": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Metals04",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_CYMET4",
 		"name": "Cyborg Dense Composite Alloys",
 		"requiredResearch": [
 			"R-Vehicle-Metals04",
@@ -274,7 +315,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Cyborg Materials Improved",
+			"Layered dense composite alloys and energy-absorbing fibres",
+			"Increases Kinetic Armor and Body Points",
+			"All Cyborgs upgraded automatically"
+		]
 	},
 	"R-Cyborg-Metals05": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -303,8 +351,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals06": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -333,14 +380,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals07": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Metals07",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_CYMET7",
 		"name": "Cyborg Superdense Composite Alloys",
 		"requiredResearch": [
 			"R-Vehicle-Metals07",
@@ -364,7 +409,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Cyborg Materials Improved",
+			"Superdense composite alloys and energy-absorbing fibres",
+			"Increases Kinetic Armor and Body Points",
+			"All Cyborgs upgraded automatically"
+		]
 	},
 	"R-Cyborg-Metals08": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -393,8 +445,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals09": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -423,8 +474,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals10": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -448,8 +498,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Metals11": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -473,14 +522,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat01": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Armor-Heat01",
 		"imdName": "icamrhot.pie",
-		"msgName": "RES_CY_AH1",
 		"name": "Cyborg Thermal Armor",
 		"requiredResearch": [
 			"R-Cyborg-Metals05"
@@ -496,7 +543,14 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Cyborg Thermal Armor Improved",
+			"Heat resistant armored layers",
+			"Thermal Armor increased",
+			"All Cyborgs upgraded automatically"
+		]
 	},
 	"R-Cyborg-Armor-Heat02": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -518,8 +572,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat03": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -540,14 +593,12 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat04": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Armor-Heat04",
 		"imdName": "icamrhot.pie",
-		"msgName": "RES_CY_AH4",
 		"name": "Cyborg High Intensity Thermal Armor",
 		"requiredResearch": [
 			"R-Cyborg-Metals07",
@@ -564,7 +615,14 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Cyborg Thermal Armor Improved",
+			"Heat resistant armored layers",
+			"Thermal Armor increased",
+			"All Cyborgs upgraded automatically"
+		]
 	},
 	"R-Cyborg-Armor-Heat05": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -586,8 +644,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat06": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -609,8 +666,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat07": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -627,8 +683,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Armor-Heat08": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
@@ -645,14 +700,12 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals01": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Metals01",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_V_MET1",
 		"name": "Composite Alloys",
 		"requiredResearch": [
 			"R-Struc-Factory-Module"
@@ -675,7 +728,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Bodies Improved",
+			"Layered composite alloys and energy-absorbing fibres",
+			"Increases kinetic armor and body points",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Metals02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -704,8 +764,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -734,14 +793,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Metals04",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_V_MET4",
 		"name": "Dense Composite Alloys",
 		"requiredResearch": [
 			"R-Vehicle-Body02",
@@ -765,7 +822,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Bodies Improved",
+			"Layered dense composite alloys and energy-absorbing fibres",
+			"Increases kinetic armor and body points",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Metals05": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -794,8 +858,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -824,14 +887,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Metals07",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_V_MET7",
 		"name": "Superdense Composite Alloys",
 		"requiredResearch": [
 			"R-Vehicle-Body03",
@@ -855,7 +916,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Bodies Improved",
+			"Superdense composite alloys and energy-absorbing fibres",
+			"Increases kinetic armor and body points",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Metals08": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -884,8 +952,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals09": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -914,8 +981,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Metals10": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -969,7 +1035,6 @@
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Armor-Heat01",
 		"imdName": "icamrhot.pie",
-		"msgName": "RES_V_AH1",
 		"name": "Thermal Armor",
 		"requiredResearch": [
 			"R-Vehicle-Metals05"
@@ -985,7 +1050,14 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Thermal Armor Improved",
+			"Heat-resistant armored layers",
+			"Increases Thermal Armor",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Armor-Heat02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1007,8 +1079,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1029,14 +1100,12 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Armor-Heat04",
 		"imdName": "icamrhot.pie",
-		"msgName": "RES_V_AH4",
 		"name": "High Intensity Thermal Armor",
 		"requiredResearch": [
 			"R-Vehicle-Metals07",
@@ -1053,7 +1122,14 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Thermal Armor Improved",
+			"Heat-resistant armored layers",
+			"Increases Thermal Armor",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Armor-Heat05": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1075,8 +1151,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1098,8 +1173,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1116,8 +1190,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Armor-Heat08": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -1134,13 +1207,11 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Cyborg-Wpn-Cannon": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Cannon",
-		"msgName": "RES_CYW_CN1",
 		"name": "Heavy Gunner Cyborg",
 		"requiredResearch": [
 			"R-Wpn-Cannon3Mk1",
@@ -1151,12 +1222,18 @@
 		"resultComponents": [
 			"CyborgCannon"
 		],
-		"statID": "Cannon1Mk1"
+		"statID": "Cannon1Mk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Cannon",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Cannon02": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Cannon02",
-		"msgName": "RES_CYW_CN2",
 		"name": "Sniper Cyborg",
 		"redComponents": [
 			"CyborgCannon"
@@ -1169,12 +1246,18 @@
 		"resultComponents": [
 			"CyborgCannon02"
 		],
-		"statID": "Cannon4AUTOMk1"
+		"statID": "Cannon4AUTOMk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Hyper Velocity Cannon",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Flamer": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Flamer",
-		"msgName": "RES_CYW_FL1",
 		"name": "Flamer Cyborg",
 		"requiredResearch": [
 			"R-Wpn-Flamer01Mk1",
@@ -1185,12 +1268,18 @@
 		"resultComponents": [
 			"CyborgFlamer01"
 		],
-		"statID": "Flame1Mk1"
+		"statID": "Flame1Mk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Flamer",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Flamer02": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Flamer02",
-		"msgName": "RES_CYW_FL2",
 		"name": "Thermite Cyborg",
 		"redComponents": [
 			"CyborgFlamer01"
@@ -1203,12 +1292,18 @@
 		"resultComponents": [
 			"CyborgFlamer02"
 		],
-		"statID": "Flame2"
+		"statID": "Flame2",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Thermite flamer",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-MG": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-MG",
-		"msgName": "RES_CYW_MG1",
 		"name": "Machinegunner Cyborg",
 		"requiredResearch": [
 			"R-Struc-Factory-Cyborg"
@@ -1220,12 +1315,18 @@
 			"CyborgChaingun",
 			"CyborgLightBody"
 		],
-		"statID": "MG1Mk1"
+		"statID": "MG1Mk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Machinegun",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Rocket": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Rocket",
-		"msgName": "RES_CYW_RK1",
 		"name": "Lancer Cyborg",
 		"requiredResearch": [
 			"R-Wpn-Rocket01-LtAT",
@@ -1236,12 +1337,18 @@
 		"resultComponents": [
 			"CyborgRocket"
 		],
-		"statID": "Rocket-LtA-T"
+		"statID": "Rocket-LtA-T",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Lancer Anti-Tank rocket",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Rocket02": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Rocket02",
-		"msgName": "RES_CYW_RK2",
 		"name": "Tank Killer Cyborg",
 		"redComponents": [
 			"CyborgRocket"
@@ -1254,12 +1361,18 @@
 		"resultComponents": [
 			"CyborgRocket02"
 		],
-		"statID": "Rocket-HvyA-T"
+		"statID": "Rocket-HvyA-T",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Tank Killer rocket",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-RotMG": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-RotMG",
-		"msgName": "RES_CYW_MG4",
 		"name": "Assault Gunner Cyborg",
 		"redComponents": [
 			"CyborgChaingun"
@@ -1272,12 +1385,18 @@
 		"resultComponents": [
 			"CyborgRotMG"
 		],
-		"statID": "MG4ROTARYMk1"
+		"statID": "MG4ROTARYMk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Cyborg Assault Gun",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-ATMiss": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-ATMiss",
-		"msgName": "RES_CYW_ATM",
 		"name": "Scourge Cyborg",
 		"redComponents": [
 			"CyborgRocket02"
@@ -1290,12 +1409,18 @@
 		"resultComponents": [
 			"Cyb-Wpn-Atmiss"
 		],
-		"statID": "Missile-A-T"
+		"statID": "Missile-A-T",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Scourge anti-tank missile",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Laser1": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Laser1",
-		"msgName": "RES_CYW_LS1",
 		"name": "Flashlight Gunner Cyborg",
 		"requiredResearch": [
 			"R-Wpn-Laser01"
@@ -1305,12 +1430,18 @@
 		"resultComponents": [
 			"Cyb-Wpn-Laser"
 		],
-		"statID": "Laser2PULSEMk1"
+		"statID": "Laser2PULSEMk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with flashlight laser",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Cyborg-Wpn-Rail1": {
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Wpn-Rail1",
-		"msgName": "RES_CYW_RL1",
 		"name": "Needle Gunner Cyborg",
 		"redComponents": [
 			"CyborgCannon02"
@@ -1323,13 +1454,19 @@
 		"resultComponents": [
 			"Cyb-Wpn-Rail1"
 		],
-		"statID": "RailGun1Mk1"
+		"statID": "RailGun1Mk1",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Cyborg Available",
+			"Armed with Needle Gun",
+			"Body Points: Medium",
+			"Requires Cyborg factory to produce"
+		]
 	},
 	"R-Defense-HardcreteWall": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HardcreteWall",
 		"keyTopic": 1,
-		"msgName": "RES_DF_HCW1",
 		"name": "Hardcrete",
 		"redStructures": [
 			"GuardTower1MG",
@@ -1347,12 +1484,18 @@
 			"GuardTower3H",
 			"GuardTower4H"
 		],
-		"statID": "A0HardcreteMk1Wall"
+		"statID": "A0HardcreteMk1Wall",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Construction Options Available",
+			"Titanium-reinforced concrete",
+			"Enables Hardcrete walls",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-MRL": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-MRL",
-		"msgName": "RES_EMP_MRL",
 		"name": "Mini-Rocket Battery",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1363,12 +1506,18 @@
 		"resultStructures": [
 			"Emplacement-MRL-pit"
 		],
-		"statID": "Emplacement-MRL-pit"
+		"statID": "Emplacement-MRL-pit",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Mini-rocket armored strongpoint",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-MortarPit": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-MortarPit",
-		"msgName": "RES_EMP_Mpit",
 		"name": "Mortar Pit",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1379,12 +1528,18 @@
 		"resultStructures": [
 			"Emplacement-MortarPit01"
 		],
-		"statID": "Emplacement-MortarPit01"
+		"statID": "Emplacement-MortarPit01",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored Mortar battery pit",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-Pillbox01": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Pillbox01",
-		"msgName": "RES_DF_P1",
 		"name": "Heavy Machinegun Bunker",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1395,12 +1550,18 @@
 		"resultStructures": [
 			"PillBox1"
 		],
-		"statID": "PillBox1"
+		"statID": "PillBox1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored bunker with Machinegun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Pillbox04": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Pillbox04",
-		"msgName": "RES_PB_LC",
 		"name": "Light Cannon Bunker",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1411,12 +1572,18 @@
 		"resultStructures": [
 			"PillBox4"
 		],
-		"statID": "PillBox4"
+		"statID": "PillBox4",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored bunker with Light Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Pillbox05": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Pillbox05",
-		"msgName": "RES_PB_FL",
 		"name": "Flamer Bunker",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1427,12 +1594,18 @@
 		"resultStructures": [
 			"PillBox5"
 		],
-		"statID": "PillBox5"
+		"statID": "PillBox5",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored bunker with Flamer",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Pillbox06": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Pillbox06",
-		"msgName": "RES_PB_ATR",
 		"name": "Lancer Bunker",
 		"requiredResearch": [
 			"R-Wpn-Rocket01-LtAT",
@@ -1443,12 +1616,18 @@
 		"resultStructures": [
 			"PillBox6"
 		],
-		"statID": "PillBox6"
+		"statID": "PillBox6",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored bunker with Lancer AT rocket",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-TankTrap01": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-TankTrap01",
-		"msgName": "RES_TTRAP1",
 		"name": "Tank Traps",
 		"requiredResearch": [
 			"R-Sys-Engineering01"
@@ -1458,12 +1637,18 @@
 		"resultStructures": [
 			"A0TankTrap"
 		],
-		"statID": "A0TankTrap"
+		"statID": "A0TankTrap",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Reinforced concrete tank traps",
+			"Prevents enemy movement",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-Tower01": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower01",
-		"msgName": "RES_TOWER1",
 		"name": "Machinegun Guard Tower",
 		"requiredResearch": [
 			"R-Wpn-MG1Mk1",
@@ -1474,12 +1659,18 @@
 		"resultStructures": [
 			"GuardTower1MG"
 		],
-		"statID": "GuardTower1MG"
+		"statID": "GuardTower1MG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Steel tower with machinegun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Low"
+		]
 	},
 	"R-Defense-Tower02": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower02",
-		"msgName": "RES_TOWER2",
 		"name": "Twin Machinegun Guard Tower",
 		"redStructures": [
 			"GuardTower1MG"
@@ -1492,12 +1683,18 @@
 		"resultStructures": [
 			"GuardTower2"
 		],
-		"statID": "GuardTower2"
+		"statID": "GuardTower2",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Steel tower with twin machinegun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Low"
+		]
 	},
 	"R-Defense-Tower03": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower03",
-		"msgName": "RES_TOWER3",
 		"name": "Heavy Machinegun Guard Tower",
 		"redStructures": [
 			"GuardTower2"
@@ -1510,12 +1707,18 @@
 		"resultStructures": [
 			"GuardTower3"
 		],
-		"statID": "GuardTower3"
+		"statID": "GuardTower3",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Steel tower with heavy machinegun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Low"
+		]
 	},
 	"R-Defense-Tower06": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower06",
-		"msgName": "RES_EMP_PODTOW",
 		"name": "Mini-Rocket Guard Tower",
 		"requiredResearch": [
 			"R-Wpn-Rocket05-MiniPod",
@@ -1526,12 +1729,18 @@
 		"resultStructures": [
 			"GuardTower6"
 		],
-		"statID": "GuardTower6"
+		"statID": "GuardTower6",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored guard tower with Mini-Pod Rocket",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-WallTower01": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower01",
-		"msgName": "RES_DF_WT1",
 		"name": "Heavy Machinegun Hardpoint",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1542,12 +1751,18 @@
 		"resultStructures": [
 			"WallTower01"
 		],
-		"statID": "WallTower01"
+		"statID": "WallTower01",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Heavy Machinegun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower02": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower02",
-		"msgName": "RES_WT2_LC",
 		"name": "Light Cannon Hardpoint",
 		"requiredResearch": [
 			"R-Wpn-Cannon1Mk1",
@@ -1558,12 +1773,18 @@
 		"resultStructures": [
 			"WallTower02"
 		],
-		"statID": "WallTower02"
+		"statID": "WallTower02",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Light Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower03": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower03",
-		"msgName": "RES_WT3_MC",
 		"name": "Medium Cannon Hardpoint",
 		"redStructures": [
 			"WallTower02"
@@ -1577,12 +1798,18 @@
 		"resultStructures": [
 			"WallTower03"
 		],
-		"statID": "WallTower03"
+		"statID": "WallTower03",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Medium Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower04": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower04",
-		"msgName": "RES_WT4_HC",
 		"name": "Heavy Cannon Hardpoint",
 		"redStructures": [
 			"WallTower03"
@@ -1596,12 +1823,18 @@
 		"resultStructures": [
 			"WallTower04"
 		],
-		"statID": "WallTower04"
+		"statID": "WallTower04",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Heavy Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower06": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower06",
-		"msgName": "RES_WT6_ATR",
 		"name": "Lancer Hardpoint",
 		"requiredResearch": [
 			"R-Wpn-Rocket01-LtAT",
@@ -1613,13 +1846,19 @@
 			"WallTower06"
 		],
 		"statID": "WallTower06",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Lancer AT missile",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallUpgrade01": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade01",
 		"imdName": "BLWALLH.PIE",
-		"msgName": "RES_DF_WU1",
 		"name": "Improved Hardcrete",
 		"requiredResearch": [
 			"R-Defense-HardcreteWall",
@@ -1643,7 +1882,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Defenses Improved",
+			"Improved Titanium-reinforced concrete",
+			"Increases Armour and Body Points",
+			"All defenses and walls upgraded automatically"
+		]
 	},
 	"R-Defense-WallUpgrade02": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -1672,8 +1918,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade03": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -1702,14 +1947,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-CommandRelay": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-CommandRelay",
 		"keyTopic": 1,
-		"msgName": "RES_ST_CR1",
 		"name": "Command Relay Post",
 		"requiredResearch": [
 			"R-Sys-Sensor-Tower01"
@@ -1719,12 +1962,18 @@
 		"resultStructures": [
 			"A0ComDroidControl"
 		],
-		"statID": "A0ComDroidControl"
+		"statID": "A0ComDroidControl",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Base Structure Available",
+			"Must be built to produce commanders",
+			"Directs and collates information for command turrets",
+			"Controls up to ten commanders"
+		]
 	},
 	"R-Struc-Factory-Cyborg": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Cyborg",
-		"msgName": "RES_ST_FCY1",
 		"name": "Cyborg Factory",
 		"requiredResearch": [
 			"R-Wpn-MG-Damage01",
@@ -1735,13 +1984,19 @@
 		"resultStructures": [
 			"A0CyborgFactory"
 		],
-		"statID": "A0CyborgFactory"
+		"statID": "A0CyborgFactory",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Base Structure Available",
+			"Cyborg Factory",
+			"Produces Cyborgs",
+			"Research makes additional Cyborgs available"
+		]
 	},
 	"R-Struc-Factory-Module": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Module",
 		"keyTopic": 1,
-		"msgName": "RES_ST_FM1",
 		"name": "Factory Module",
 		"requiredResearch": [
 			"R-Sys-Engineering01"
@@ -1751,14 +2006,20 @@
 		"resultStructures": [
 			"A0FacMod1"
 		],
-		"statID": "A0FacMod1"
+		"statID": "A0FacMod1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Production Improved",
+			"Factory module enables medium and large bodies",
+			"Increases factory output",
+			"Use a truck to add modules to a factory"
+		]
 	},
 	"R-Struc-Factory-Upgrade-AI": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Upgrade-AI",
 		"imdName": "BLFACT1.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_ST_FU1",
 		"name": "Automated Factory Production",
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -1769,13 +2030,19 @@
 				"value": 30000
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Vehicle Production Improved",
+			"Automated Factory Production",
+			"Increases factory output",
+			"All vehicle factories upgraded automatically"
+		]
 	},
 	"R-Struc-Factory-Upgrade01": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Upgrade01",
 		"imdName": "BLFACT1.PIE",
-		"msgName": "RES_ST_FU1",
 		"name": "Automated Factory Production",
 		"requiredResearch": [
 			"R-Struc-Factory-Module"
@@ -1808,8 +2075,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Factory-Upgrade03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1829,14 +2095,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials01": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Materials01",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_ST_MAT1",
 		"name": "Reinforced Base Structure Materials",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade01"
@@ -1859,7 +2123,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Increases Damage Resistance",
+			"Reinforced Base Structure Materials",
+			"Increases Armor and Body Points",
+			"All base structures upgraded automatically"
+		]
 	},
 	"R-Struc-Materials02": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1887,8 +2158,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -1916,14 +2186,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-PowerModuleMk1": {
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-PowerModuleMk1",
 		"keyTopic": 1,
-		"msgName": "RES_POWMD1",
 		"name": "Power Module",
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -1937,12 +2205,18 @@
 				"value": 20
 			}
 		],
-		"statID": "A0PowMod1"
+		"statID": "A0PowMod1",
+		"intelAudio": "res_pow.ogg",
+		"intelText": [
+			"Power Module Available",
+			"Improved Power Generator Performance",
+			"Burns oil more efficiently",
+			"Use a truck to add the module to a power generator"
+		]
 	},
 	"R-Struc-RepairFacility": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-RepairFacility",
-		"msgName": "RES_REPAI1",
 		"name": "Repair Facility",
 		"requiredResearch": [
 			"R-Sys-MobileRepairTurret01",
@@ -1953,13 +2227,19 @@
 		"resultStructures": [
 			"A0RepairCentre3"
 		],
-		"statID": "A0RepairCentre3"
+		"statID": "A0RepairCentre3",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Base Structure Available",
+			"New Repair Facility Repairs Damaged Units",
+			"Use the Command Console to send units back for repair",
+			"Or select the Repair Facility as a unit's target"
+		]
 	},
 	"R-Struc-Research-Module": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Research-Module",
 		"keyTopic": 1,
-		"msgName": "RES_ST_RM1",
 		"name": "Research Module",
 		"requiredResearch": [
 			"R-Struc-CommandRelay"
@@ -1969,13 +2249,19 @@
 		"resultStructures": [
 			"A0ResearchModule1"
 		],
-		"statID": "A0ResearchModule1"
+		"statID": "A0ResearchModule1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Research Module Available",
+			"Research module expands research facilities",
+			"Increases research speed",
+			"Use a truck to add the module to a research facility"
+		]
 	},
 	"R-Struc-Research-Upgrade01": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade01",
 		"imdName": "blresch4.PIE",
-		"msgName": "RES_ST_RU1",
 		"name": "Synaptic Link Data Analysis",
 		"requiredResearch": [
 			"R-Struc-Research-Module",
@@ -1990,7 +2276,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Research Improved",
+			"Synaptic link data analysis",
+			"Increases research speed",
+			"All research facilities upgraded automatically"
+		]
 	},
 	"R-Struc-Research-Upgrade02": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -2009,8 +2302,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Research-Upgrade03": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -2029,13 +2321,11 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Struc-RprFac-Upgrade01",
-		"msgName": "RES_ST_RFU1",
 		"name": "Automated Repair Facility",
 		"requiredResearch": [
 			"R-Struc-RepairFacility",
@@ -2058,7 +2348,14 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Repair Facility Improved",
+			"New automated repair techniques",
+			"Increases Repair Speed",
+			"All repair facilities upgraded automatically"
+		]
 	},
 	"R-Struc-RprFac-Upgrade02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -2085,8 +2382,7 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade03": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -2113,15 +2409,13 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-Engineering01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Engineering01",
 		"imdName": "trlcon.pie",
 		"keyTopic": 1,
-		"msgName": "RES_ENGIN1",
 		"name": "Engineering",
 		"researchPoints": 900,
 		"researchPower": 37,
@@ -2132,25 +2426,37 @@
 				"value": 10
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Research Breakthrough Improves Construction Rates",
+			"Improved Engineering Techniques",
+			"Increases construction speed",
+			"All trucks upgraded automatically"
+		]
 	},
 	"R-Sys-MobileRepairTurret01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-MobileRepairTurret01",
 		"keyTopic": 1,
-		"msgName": "RES_REPTU1",
 		"name": "Mobile Repair Turret",
 		"researchPoints": 450,
 		"researchPower": 14,
 		"resultComponents": [
 			"LightRepair1"
 		],
-		"statID": "LightRepair1"
+		"statID": "LightRepair1",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Turret Available",
+			"Battlefield repair unit",
+			"Automatically Repairs Damaged Units",
+			"Or damaged units may be selected as target"
+		]
 	},
 	"R-Sys-Sensor-Tower01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Tower01",
-		"msgName": "RES_SY_STW1",
 		"name": "Sensor Tower",
 		"requiredResearch": [
 			"R-Sys-Sensor-Turret01",
@@ -2161,26 +2467,38 @@
 		"resultStructures": [
 			"Sys-SensoTower01"
 		],
-		"statID": "Sys-SensoTower01"
+		"statID": "Sys-SensoTower01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Tower Available",
+			"Extended sensor range",
+			"Keeps map areas under constant surveillance",
+			"May be assigned as spotter for indirect fire weapons"
+		]
 	},
 	"R-Sys-Sensor-Turret01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Turret01",
-		"msgName": "RES_SENSO1",
 		"name": "Sensor Turret",
 		"researchPoints": 900,
 		"researchPower": 28,
 		"resultComponents": [
 			"SensorTurret1Mk1"
 		],
-		"statID": "SensorTurret1Mk1"
+		"statID": "SensorTurret1Mk1",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Turret Available For Design",
+			"Improved sensor range",
+			"Makes excellent scout vehicle",
+			"May be assigned as spotter for indirect fire weapons"
+		]
 	},
 	"R-Sys-Sensor-Upgrade01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Upgrade01",
 		"imdName": "GNLSNSR1.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_SY_SU1",
 		"name": "Sensor Upgrade",
 		"requiredResearch": [
 			"R-Sys-Sensor-Tower01",
@@ -2195,7 +2513,14 @@
 				"value": 25
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Sensors Improved",
+			"New Thermal Emissions detection",
+			"Extends Sensor Range",
+			"All sensors upgraded automatically"
+		]
 	},
 	"R-Sys-Spade1Mk1": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -2206,26 +2531,30 @@
 		"resultComponents": [
 			"Spade1Mk1"
 		],
-		"statID": "Spade1Mk1",
-		"techCode": 1
+		"statID": "Spade1Mk1"
 	},
 	"R-Vehicle-Body01": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body01",
-		"msgName": "RES_V_B01",
 		"name": "Light Body - Viper",
 		"researchPoints": 600,
 		"researchPower": 18,
 		"resultComponents": [
 			"Body1REC"
 		],
-		"statID": "Body1REC"
+		"statID": "Body1REC",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Project Light Body",
+			"Light body vulnerable to heavy weapons",
+			"Good scout vehicle",
+			"Low power cost and low production times"
+		]
 	},
 	"R-Vehicle-Body04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body04",
 		"keyTopic": 1,
-		"msgName": "RES_V_B04",
 		"name": "Light Body - Bug",
 		"requiredResearch": [
 			"R-Vehicle-Body01"
@@ -2235,12 +2564,18 @@
 		"resultComponents": [
 			"Body4ABT"
 		],
-		"statID": "Body4ABT"
+		"statID": "Body4ABT",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Paradigm Light Body",
+			"Inferior armor and body points to Viper",
+			"Faster than Viper",
+			"Power cost and production time similar to Viper"
+		]
 	},
 	"R-Vehicle-Body05": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body05",
-		"msgName": "RES_V_B05",
 		"name": "Medium Body - Cobra",
 		"requiredResearch": [
 			"R-Vehicle-Metals01",
@@ -2251,12 +2586,18 @@
 		"resultComponents": [
 			"Body5REC"
 		],
-		"statID": "Body5REC"
+		"statID": "Body5REC",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Project Medium Body",
+			"Medium body increases armor and body points",
+			"Good medium tank and support vehicle",
+			"Average power costs and production times"
+		]
 	},
 	"R-Vehicle-Body08": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body08",
-		"msgName": "RES_V_B08",
 		"name": "Medium Body - Scorpion",
 		"requiredResearch": [
 			"R-Vehicle-Body05",
@@ -2268,12 +2609,18 @@
 		"resultComponents": [
 			"Body8MBT"
 		],
-		"statID": "Body8MBT"
+		"statID": "Body8MBT",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Paradigm Medium body",
+			"Inferior armor and body points to Cobra",
+			"Faster than Cobra",
+			"Power cost and production time similar to Cobra"
+		]
 	},
 	"R-Vehicle-Body11": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body11",
-		"msgName": "RES_V_B11",
 		"name": "Heavy Body - Python",
 		"requiredResearch": [
 			"R-Vehicle-Body05",
@@ -2284,13 +2631,19 @@
 		"resultComponents": [
 			"Body11ABT"
 		],
-		"statID": "Body11ABT"
+		"statID": "Body11ABT",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Project Heavy Body",
+			"Heavy body increases armor and body points",
+			"Good main battle tank and heavy artillery platform",
+			"Very high power costs and very slow to produce"
+		]
 	},
 	"R-Vehicle-Body12": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body12",
 		"keyTopic": 1,
-		"msgName": "RES_V_B12",
 		"name": "Heavy Body - Mantis",
 		"requiredResearch": [
 			"R-Vehicle-Body08"
@@ -2300,14 +2653,20 @@
 		"resultComponents": [
 			"Body12SUP"
 		],
-		"statID": "Body12SUP"
+		"statID": "Body12SUP",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Paradigm Heavy Body",
+			"Less armor and body points than Python",
+			"Faster than Python",
+			"Power cost and production time the same as Python"
+		]
 	},
 	"R-Vehicle-Engine01": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Engine01",
 		"imdName": "iceng.pie",
 		"keyTopic": 1,
-		"msgName": "RES_V_EN1",
 		"name": "Fuel Injection Engine",
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -2320,7 +2679,14 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Engine Upgrade",
+			"Fuel Injection Engine",
+			"Improves vehicle speed",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Engine02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -2342,8 +2708,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Engine03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -2365,14 +2730,12 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Prop-Halftracks": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Halftracks",
 		"keyTopic": 1,
-		"msgName": "RES_HALFT1",
 		"name": "Half-tracked Propulsion",
 		"requiredResearch": [
 			"R-Sys-Engineering01"
@@ -2382,13 +2745,19 @@
 		"resultComponents": [
 			"HalfTrack"
 		],
-		"statID": "HalfTrack"
+		"statID": "HalfTrack",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Propulsion Available",
+			"Armored Half-tracks",
+			"Speed: Medium",
+			"Body Points: Medium"
+		]
 	},
 	"R-Vehicle-Prop-Hover": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Hover",
 		"keyTopic": 1,
-		"msgName": "RES_V_P_H1",
 		"name": "Hover Propulsion",
 		"requiredResearch": [
 			"R-Struc-Factory-Module",
@@ -2399,13 +2768,19 @@
 		"resultComponents": [
 			"hover01"
 		],
-		"statID": "hover01"
+		"statID": "hover01",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Propulsion Available",
+			"Amphibious hover propulsion",
+			"Speed: Fast",
+			"Body Points: Low"
+		]
 	},
 	"R-Vehicle-Prop-Tracks": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Tracks",
 		"keyTopic": 1,
-		"msgName": "RES_TRACK1",
 		"name": "Tracked Propulsion",
 		"requiredResearch": [
 			"R-Sys-Engineering01",
@@ -2416,24 +2791,36 @@
 		"resultComponents": [
 			"tracked01"
 		],
-		"statID": "tracked01"
+		"statID": "tracked01",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Propulsion Available",
+			"Armored Tracks",
+			"Speed: Slow",
+			"Body Points: High"
+		]
 	},
 	"R-Vehicle-Prop-Wheels": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-Wheels",
-		"msgName": "RES_V_P_W1",
 		"name": "Wheeled Propulsion",
 		"researchPoints": 1200,
 		"researchPower": 37,
 		"resultComponents": [
 			"wheeled01"
 		],
-		"statID": "wheeled01"
+		"statID": "wheeled01",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Propulsion Available",
+			"Wheeled Propulsion",
+			"Speed: Fast",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-Cannon-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Accuracy01",
-		"msgName": "RES_W_CNAC1",
 		"name": "Cannon Laser Rangefinder",
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage02",
@@ -2458,12 +2845,18 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"Determines range to target",
+			"Increases Cannon accuracy",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Damage01",
-		"msgName": "RES_W_CN_D1",
 		"name": "HEAT Cannon Shells",
 		"requiredResearch": [
 			"R-Wpn-Cannon1Mk1"
@@ -2487,7 +2880,14 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"High Explosive Anti-Tank Cannon Shells",
+			"Increases Cannon damage",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2515,8 +2915,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2545,27 +2944,31 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon1Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon1Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_CN1MK1",
 		"name": "Light Cannon",
 		"researchPoints": 2400,
 		"researchPower": 75,
 		"resultComponents": [
 			"Cannon1Mk1"
 		],
-		"statID": "Cannon1Mk1"
+		"statID": "Cannon1Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Light Cannon firing 40mm rounds",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-Cannon2Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon2Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_CN2MK1",
 		"name": "Medium Cannon",
 		"redComponents": [
 			"Cannon1Mk1"
@@ -2579,13 +2982,19 @@
 		"resultComponents": [
 			"Cannon2A-TMk1"
 		],
-		"statID": "Cannon2A-TMk1"
+		"statID": "Cannon2A-TMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Medium Cannon firing 76mm rounds",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-Cannon3Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon3Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_CN3MK1",
 		"name": "Heavy Cannon",
 		"redComponents": [
 			"Cannon2A-TMk1"
@@ -2601,12 +3010,18 @@
 			"Cannon375mmMk1",
 			"Cannon375mm-VTOL"
 		],
-		"statID": "Cannon375mmMk1"
+		"statID": "Cannon375mmMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Heavy Cannon firing 120 mm rounds",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: High"
+		]
 	},
 	"R-Defense-Tower04": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Tower04",
-		"msgName": "RES_TOWER4",
 		"name": "Flamer Guard Tower",
 		"requiredResearch": [
 			"R-Wpn-Flamer01Mk1",
@@ -2617,12 +3032,18 @@
 		"resultStructures": [
 			"GuardTower4"
 		],
-		"statID": "GuardTower4"
+		"statID": "GuardTower4",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Steel tower with flamer",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Low"
+		]
 	},
 	"R-Wpn-Flamer-Range01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Range01",
-		"msgName": "RES_W_FL_R1",
 		"name": "High-Pressure Gas Container",
 		"requiredResearch": [
 			"R-Wpn-Flamer-Damage02"
@@ -2639,7 +3060,14 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Flamer Upgrade",
+			"High-pressure gas throws the flamer gel further",
+			"Increases Flamer range",
+			"All flamers upgraded automatically"
+		]
 	},
 	"R-Wpn-Flamer-Range01-ScavReduce": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2683,7 +3111,6 @@
 	"R-Wpn-Flamer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Damage01",
-		"msgName": "RES_W_FL_D1",
 		"name": "High Temperature Flamer Gel",
 		"requiredResearch": [
 			"R-Wpn-Flamer01Mk1"
@@ -2707,7 +3134,14 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Flamer Upgrade",
+			"Propylene Oxide gel treated to burn at higher temperatures",
+			"Increases Flamer damage",
+			"All flamers upgraded automatically"
+		]
 	},
 	"R-Wpn-Flamer-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2736,8 +3170,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2766,13 +3199,11 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-ROF01",
-		"msgName": "RES_W_FL_ROF1",
 		"name": "Flamer Autoloader",
 		"requiredResearch": [
 			"R-Wpn-Flamer-Damage02"
@@ -2796,26 +3227,38 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Flamer Upgrade",
+			"Automatic loading mechanism replaces manual loader",
+			"Increases Flamer ROF",
+			"All flamers upgraded automatically"
+		]
 	},
 	"R-Wpn-Flamer01Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer01Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_FLAME1",
 		"name": "Flamer",
 		"researchPoints": 600,
 		"researchPower": 18,
 		"resultComponents": [
 			"Flame1Mk1"
 		],
-		"statID": "Flame1Mk1"
+		"statID": "Flame1Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Flame-thrower firing Propylene Oxide gel",
+			"Best Targets: Bunkers, wheeled and hover vehicles",
+			"Body Points: Very low"
+		]
 	},
 	"R-Wpn-MG-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage01",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG_D1",
 		"name": "Hardened MG Bullets",
 		"requiredResearch": [
 			"R-Wpn-MG1Mk1"
@@ -2832,13 +3275,19 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Hardened case machinegun bullets",
+			"Increases Machinegun damage",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage02",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG_D2",
 		"name": "APDSB MG Bullets",
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -2852,7 +3301,14 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Armor-Piercing Discard Sabot Bullets",
+			"Increases Machinegun damage",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2874,8 +3330,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -2897,14 +3352,12 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-ROF01",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG_ROF1",
 		"name": "Chaingun Upgrade",
 		"requiredResearch": [
 			"R-Wpn-MG1Mk1"
@@ -2928,26 +3381,38 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Chaingun mechanism replaces belt-feed",
+			"Increases Machinegun ROF",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG1Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG1Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_MG1MK1",
 		"name": "Machinegun",
 		"researchPoints": 60,
 		"researchPower": 1,
 		"resultComponents": [
 			"MG1Mk1"
 		],
-		"statID": "MG1Mk1"
+		"statID": "MG1Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"7.62mm machinegun",
+			"Best Targets: Infantry, wheeled and hover vehicles",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-MG2Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG2Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_MG2MK1",
 		"name": "Twin Machinegun",
 		"redComponents": [
 			"MG1Mk1"
@@ -2960,13 +3425,19 @@
 		"resultComponents": [
 			"MG2Mk1"
 		],
-		"statID": "MG2Mk1"
+		"statID": "MG2Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Twin 7.62mm machineguns",
+			"Best Targets: Infantry, wheeled and hover vehicles",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-MG3Mk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG3Mk1",
 		"keyTopic": 1,
-		"msgName": "RES_MG3MK1",
 		"name": "Heavy Machinegun",
 		"redComponents": [
 			"MG2Mk1"
@@ -2981,12 +3452,18 @@
 			"MG3-VTOL",
 			"MG3Mk1"
 		],
-		"statID": "MG3Mk1"
+		"statID": "MG3Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			".50-calibre heavy machinegun",
+			"Best Targets: Infantry, wheeled and hover vehicles",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-Mortar-Acc01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Acc01",
-		"msgName": "RES_W_M_AC1",
 		"name": "Mortar Targeting Computer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage01",
@@ -3011,12 +3488,18 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"Targeting systems compensate for distance and weather conditions",
+			"Increases Mortar accuracy",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Damage01",
-		"msgName": "RES_W_M_D1",
 		"name": "HE Mortar Shells",
 		"requiredResearch": [
 			"R-Wpn-Mortar01Lt"
@@ -3047,7 +3530,14 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"Improved high explosive shells",
+			"Increases Mortar damage",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3082,8 +3572,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3119,13 +3608,11 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-ROF01",
-		"msgName": "RES_W_M_ROF1",
 		"name": "Mortar Autoloader",
 		"requiredResearch": [
 			"R-Wpn-Mortar01Lt"
@@ -3149,25 +3636,37 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"Automatic loader replaces manual feed",
+			"Increases Mortar ROF",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar01Lt": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar01Lt",
 		"keyTopic": 1,
-		"msgName": "RES_MORTA1",
 		"name": "Mortar",
 		"researchPoints": 2400,
 		"researchPower": 100,
 		"resultComponents": [
 			"Mortar1Mk1"
 		],
-		"statID": "Mortar1Mk1"
+		"statID": "Mortar1Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Indirect Fire Weapon Available",
+			"May be targeted directly or assigned to a sensor turret or tower",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Mortar02Hvy": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar02Hvy",
-		"msgName": "RES_W_M2",
 		"name": "Heavy Mortar - Bombard",
 		"redComponents": [
 			"Mortar1Mk1"
@@ -3182,12 +3681,18 @@
 		"resultComponents": [
 			"Mortar2Mk1"
 		],
-		"statID": "Mortar2Mk1"
+		"statID": "Mortar2Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Indirect Fire Weapon Available",
+			"May be assigned to a sensor",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Rocket-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket-Accuracy01",
-		"msgName": "RES_W_RK_AC1",
 		"name": "Stabilized Mini-Rockets",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade01",
@@ -3212,7 +3717,14 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mini-Rocket Upgrade",
+			"Fin-stabilization improves flight trajectory",
+			"Increases Mini-Rocket accuracy",
+			"All mini-rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-Rocket-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3241,13 +3753,11 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPACC",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPACC"
 	},
 	"R-Wpn-Rocket-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket-Damage01",
-		"msgName": "RES_W_RK_D1",
 		"name": "HE Mini-Rockets",
 		"requiredResearch": [
 			"R-Wpn-Rocket05-MiniPod"
@@ -3271,7 +3781,14 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mini-Rocket Upgrade",
+			"Improved shaped charge warhead",
+			"Increases Mini-Rocket damage",
+			"All mini-rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-Rocket-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3300,8 +3817,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3330,13 +3846,11 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket-ROF01",
-		"msgName": "RES_W_RK_ROF1",
 		"name": "Fast Fire Mini-Rockets",
 		"requiredResearch": [
 			"R-Wpn-Rocket05-MiniPod"
@@ -3360,7 +3874,14 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mini-Rocket Upgrade",
+			"Automated reload system",
+			"Increases Mini-Rockets ROF",
+			"All mini-rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-Rocket-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3388,8 +3909,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Rocket-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3417,13 +3937,11 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Rocket01-LtAT": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket01-LtAT",
-		"msgName": "RES_W_RK_LTAT1",
 		"name": "Lancer AT Rocket",
 		"requiredResearch": [
 			"R-Wpn-Rocket05-MiniPod"
@@ -3434,13 +3952,19 @@
 			"Rocket-LtA-T",
 			"Rocket-VTOL-LtA-T"
 		],
-		"statID": "Rocket-LtA-T"
+		"statID": "Rocket-LtA-T",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rocket Available",
+			"Anti-tank rocket",
+			"Best Targets: Vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Rocket02-MRL": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket02-MRL",
 		"keyTopic": 1,
-		"msgName": "RES_W_RK_MRL1",
 		"name": "Mini-Rocket Artillery",
 		"requiredResearch": [
 			"R-Wpn-Rocket-Damage01"
@@ -3450,12 +3974,18 @@
 		"resultComponents": [
 			"Rocket-MRL"
 		],
-		"statID": "Rocket-MRL"
+		"statID": "Rocket-MRL",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rocket Available",
+			"Fires salvoes of mini-rockets",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Rocket03-HvAT": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket03-HvAT",
-		"msgName": "RES_W_RK_HVAT1",
 		"name": "Bunker Buster Rocket",
 		"requiredResearch": [
 			"R-Wpn-Rocket05-MiniPod"
@@ -3466,13 +3996,19 @@
 			"Rocket-BB",
 			"Rocket-VTOL-BB"
 		],
-		"statID": "Rocket-BB"
+		"statID": "Rocket-BB",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rocket Available",
+			"High explosive shaped charge missile",
+			"Best Targets: Bunkers, defenses, base structures",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Rocket05-MiniPod": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket05-MiniPod",
 		"keyTopic": 1,
-		"msgName": "RES_W_RK_MP1",
 		"name": "Mini-Rocket Pod",
 		"researchPoints": 1200,
 		"researchPower": 37,
@@ -3480,12 +4016,18 @@
 			"Rocket-Pod",
 			"Rocket-VTOL-Pod"
 		],
-		"statID": "Rocket-Pod"
+		"statID": "Rocket-Pod",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rocket Available",
+			"Fast firing light anti-vehicle rockets",
+			"Best Targets: Vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-RocketSlow-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-Accuracy01",
-		"msgName": "RES_W_SRK_AC1",
 		"name": "Improved Rocket Wire Guidance",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade02",
@@ -3510,12 +4052,18 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"Tracks and directs in-flight rocket to target",
+			"Increases Rocket accuracy",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-Accuracy02",
-		"msgName": "RES_W_SRK_AC2",
 		"name": "Rocket Laser Designator",
 		"requiredResearch": [
 			"R-Wpn-RocketSlow-Damage04",
@@ -3540,13 +4088,19 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"Rocket tracks the laser designator to the target",
+			"Increases Rocket accuracy",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-Accuracy03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-Accuracy03",
 		"keyTopic": 1,
-		"msgName": "RES_W_SRK_AC3",
 		"name": "Thermal Imaging Rockets",
 		"requiredResearch": [
 			"R-Wpn-RocketSlow-Accuracy02"
@@ -3570,12 +4124,18 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"Rocket detects and locks on to engine emissions",
+			"Increases Rocket accuracy",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-Damage01",
-		"msgName": "RES_W_SRK_D1",
 		"name": "HEAT Rocket Warhead",
 		"requiredResearch": [
 			"R-Wpn-Rocket01-LtAT"
@@ -3599,7 +4159,14 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"High Explosive Anti-Tank warhead",
+			"Increases Rocket damage",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3628,8 +4195,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-RocketSlow-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -3658,13 +4224,11 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Defense-AASite-QuadBof": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-AASite-QuadBof",
-		"msgName": "RES_EMP_AA1",
 		"name": "Cyclone AA Flak Site",
 		"redStructures": [
 			"AASite-QuadMg1"
@@ -3677,13 +4241,19 @@
 		"resultStructures": [
 			"AASite-QuadBof"
 		],
-		"statID": "AASite-QuadBof"
+		"statID": "AASite-QuadBof",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"AA Site with Cyclone Flak Turret",
+			"Automatically targets VTOLs",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-AASite-QuadMg1": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-AASite-QuadMg1",
 		"keyTopic": 1,
-		"msgName": "RES_EMP_AA2",
 		"name": "Hurricane AA Site",
 		"requiredResearch": [
 			"R-Wpn-AAGun03"
@@ -3693,12 +4263,18 @@
 		"resultStructures": [
 			"AASite-QuadMg1"
 		],
-		"statID": "AASite-QuadMg1"
+		"statID": "AASite-QuadMg1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"AA Site with Hurricane Gun Turret",
+			"Automatically targets VTOL",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-AASite-QuadRotMg": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-AASite-QuadRotMg",
-		"msgName": "RES_EMP_AA3",
 		"name": "Whirlwind AA Site",
 		"redStructures": [
 			"AASite-QuadBof"
@@ -3712,12 +4288,18 @@
 		"resultStructures": [
 			"AASite-QuadRotMg"
 		],
-		"statID": "AASite-QuadRotMg"
+		"statID": "AASite-QuadRotMg",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"AA Site with Whirlwind Gun Turret",
+			"Automatically targets VTOLs",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-Emplacement-HPVcannon": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Emplacement-HPVcannon",
-		"msgName": "RES_EMP_HPV",
 		"name": "Hyper Velocity Cannon Emplacement",
 		"redStructures": [
 			"PillBox4"
@@ -3730,12 +4312,18 @@
 		"resultStructures": [
 			"Emplacement-HPVcannon"
 		],
-		"statID": "Emplacement-HPVcannon"
+		"statID": "Emplacement-HPVcannon",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Hyper-Velocity Cannon",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Howitzer": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Howitzer",
-		"msgName": "RES_EMP_HOW",
 		"name": "Howitzer Emplacement",
 		"requiredResearch": [
 			"R-Wpn-HowitzerMk1"
@@ -3745,12 +4333,18 @@
 		"resultStructures": [
 			"Emplacement-Howitzer105"
 		],
-		"statID": "Emplacement-Howitzer105"
+		"statID": "Emplacement-Howitzer105",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored howitzer emplacement",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-HvyFlamer": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HvyFlamer",
-		"msgName": "RES_EMP_HVFL",
 		"name": "Inferno Emplacement",
 		"redStructures": [
 			"PillBox5",
@@ -3765,12 +4359,18 @@
 		"resultStructures": [
 			"Tower-Projector"
 		],
-		"statID": "Tower-Projector"
+		"statID": "Tower-Projector",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Inferno Flamer",
+			"Automatically targets enemies in range",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-HvyHowitzer": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HvyHowitzer",
-		"msgName": "RES_EMP_HvHOW",
 		"name": "Ground Shaker Emplacement",
 		"redStructures": [
 			"Emplacement-Howitzer105"
@@ -3784,12 +4384,18 @@
 		"resultStructures": [
 			"Emplacement-Howitzer150"
 		],
-		"statID": "Emplacement-Howitzer150"
+		"statID": "Emplacement-Howitzer150",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored Ground Shaker howitzer emplacement",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-HvyMor": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HvyMor",
-		"msgName": "RES_EMP_HvyMor",
 		"name": "Bombard Pit",
 		"redStructures": [
 			"Emplacement-MortarPit01"
@@ -3803,12 +4409,18 @@
 		"resultStructures": [
 			"Emplacement-MortarPit02"
 		],
-		"statID": "Emplacement-MortarPit02"
+		"statID": "Emplacement-MortarPit02",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored Bombard battery pit",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-IDFRocket": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-IDFRocket",
-		"msgName": "RES_EMP_IDFR",
 		"name": "Ripple Rocket Battery",
 		"requiredResearch": [
 			"R-Wpn-Rocket06-IDF",
@@ -3819,7 +4431,14 @@
 		"resultStructures": [
 			"Emplacement-Rocket06-IDF"
 		],
-		"statID": "Emplacement-Rocket06-IDF"
+		"statID": "Emplacement-Rocket06-IDF",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Indirect fire rocket battery",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-Pillbox-RotMG": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -3842,19 +4461,24 @@
 	"R-Defense-RotCannon": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-RotCannon",
-		"msgName": "RES_EMP_RotCan",
 		"name": "Assault Cannon Emplacement",
 		"researchPoints": 3000,
 		"researchPower": 93,
 		"resultStructures": [
 			"Wall-VulcanCan"
 		],
-		"statID": "Wall-VulcanCan"
+		"statID": "Wall-VulcanCan",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Assault Cannon",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-RotMG": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-RotMG",
-		"msgName": "RES_DEF_RotMG",
 		"name": "Assault Gun Guard Tower",
 		"redStructures": [
 			"GuardTower3",
@@ -3868,12 +4492,18 @@
 		"resultStructures": [
 			"GuardTower-RotMg"
 		],
-		"statID": "GuardTower-RotMg"
+		"statID": "GuardTower-RotMg",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Reinforced tower with Assault Gun",
+			"Automatically targets enemies in range",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-RotMor": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-RotMor",
-		"msgName": "RES_EMP_RotMor",
 		"name": "Pepperpot Pit",
 		"redStructures": [
 			"Emplacement-MortarPit02",
@@ -3888,12 +4518,18 @@
 		"resultStructures": [
 			"Emplacement-RotMor"
 		],
-		"statID": "Emplacement-RotMor"
+		"statID": "Emplacement-RotMor",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored Pepperpot mortar battery pit",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-Wall-RotMg": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Wall-RotMg",
-		"msgName": "RES_WT7_RMG",
 		"name": "Assault Gun Hardpoint",
 		"redStructures": [
 			"WallTower01"
@@ -3908,12 +4544,18 @@
 		"resultStructures": [
 			"Wall-RotMg"
 		],
-		"statID": "Wall-RotMg"
+		"statID": "Wall-RotMg",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Assault Gun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Wall-VulcanCan": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Wall-VulcanCan",
-		"msgName": "RES_WT8_RC",
 		"name": "Assault Cannon Hardpoint",
 		"requiredResearch": [
 			"R-Wpn-Cannon5",
@@ -3924,12 +4566,18 @@
 		"resultStructures": [
 			"Wall-VulcanCan"
 		],
-		"statID": "Wall-VulcanCan"
+		"statID": "Wall-VulcanCan",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Assault Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower-HPVcannon": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-HPVcannon",
-		"msgName": "RES_WT13_HPV",
 		"name": "Hyper Velocity Cannon Hardpoint",
 		"redStructures": [
 			"WallTower04"
@@ -3943,13 +4591,19 @@
 		"resultStructures": [
 			"WallTower-HPVcannon"
 		],
-		"statID": "WallTower-HPVcannon"
+		"statID": "WallTower-HPVcannon",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Hyper-Velocity Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallUpgrade04": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade04",
 		"imdName": "BLWALLH.PIE",
-		"msgName": "RES_DF_WU4",
 		"name": "Supercrete",
 		"requiredResearch": [
 			"R-Sys-Engineering02",
@@ -3973,7 +4627,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Defenses Improved",
+			"High-tensile concrete reinforced with boron",
+			"Increases Armor and Body Points",
+			"All defenses and walls upgraded automatically"
+		]
 	},
 	"R-Defense-WallUpgrade05": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -4002,8 +4663,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade06": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -4032,15 +4692,13 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Factory-Upgrade04": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Factory-Upgrade04",
 		"imdName": "BLFACT1.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_ST_FU4",
 		"name": "Robotic Factory Production",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade03"
@@ -4054,7 +4712,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Vehicle Production Improved",
+			"New Robotic Techniques improve factory production",
+			"Increases factory production rate",
+			"All vehicle factories upgraded automatically"
+		]
 	},
 	"R-Struc-Factory-Upgrade05": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4073,8 +4738,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Factory-Upgrade06": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4093,14 +4757,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials04": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Materials04",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_ST_MAT4",
 		"name": "Hardened Base Structure Materials",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade04",
@@ -4124,7 +4786,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Increases Damage Resistance",
+			"Hardened Base Structure Materials",
+			"Increases Armor and Body Points",
+			"All base structures upgraded automatically"
+		]
 	},
 	"R-Struc-Materials05": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4152,8 +4821,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials06": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4181,15 +4849,13 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Power-Upgrade01": {
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade01",
 		"imdName": "blpower4.pie",
 		"keyTopic": 1,
-		"msgName": "RES_POWU1",
 		"name": "Gas Turbine Generator",
 		"requiredResearch": [
 			"R-Struc-PowerModuleMk1"
@@ -4203,14 +4869,20 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_pow.ogg",
+		"intelText": [
+			"Improved Power Generator Performance",
+			"New Power Generation Technology",
+			"Gas turbine boosts power output",
+			"All power generators upgraded automatically"
+		]
 	},
 	"R-Struc-Research-Upgrade04": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade04",
 		"imdName": "blresch4.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_ST_RU4",
 		"name": "Dedicated Synaptic Link Data Analysis",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade03"
@@ -4224,7 +4896,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Research Improved",
+			"Dedicated Synaptic Link Data Analysis",
+			"Increases research speed",
+			"All research facilities upgraded automatically"
+		]
 	},
 	"R-Struc-Research-Upgrade05": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -4243,8 +4922,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Research-Upgrade06": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -4263,13 +4941,11 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade04": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Struc-RprFac-Upgrade04",
-		"msgName": "RES_ST_RFU4",
 		"name": "Robotic Repair Facility Upgrade",
 		"requiredResearch": [
 			"R-Struc-Factory-Upgrade04",
@@ -4292,7 +4968,14 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Repair Facility Improved",
+			"New robotic repair techniques",
+			"Increases Repair Speed",
+			"All repair facilities upgraded automatically"
+		]
 	},
 	"R-Struc-RprFac-Upgrade05": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -4319,8 +5002,7 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-RprFac-Upgrade06": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
@@ -4347,13 +5029,11 @@
 			}
 		],
 		"statID": "A0RepairCentre3",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLFactory": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-VTOLFactory",
-		"msgName": "RES_ST_VF",
 		"name": "VTOL Factory",
 		"requiredResearch": [
 			"R-Vehicle-Prop-VTOL"
@@ -4363,12 +5043,18 @@
 		"resultStructures": [
 			"A0VTolFactory1"
 		],
-		"statID": "A0VTolFactory1"
+		"statID": "A0VTolFactory1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Base Structure Available",
+			"VTOL factory enables VTOL production",
+			"VTOL rearming pads required to keep VTOLs flying",
+			"May be upgraded using factory modules"
+		]
 	},
 	"R-Struc-VTOLPad": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-VTOLPad",
-		"msgName": "RES_ST_VP",
 		"name": "VTOL Rearming Pad",
 		"requiredResearch": [
 			"R-Vehicle-Prop-VTOL",
@@ -4379,13 +5065,19 @@
 		"resultStructures": [
 			"A0VtolPad"
 		],
-		"statID": "A0VtolPad"
+		"statID": "A0VtolPad",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Base Structure Available",
+			"Refuels, rearms and repairs VTOLs",
+			"Assign a VTOL by selecting the rearming pad as its target",
+			"The VTOL returns to the selected pad for rearming"
+		]
 	},
 	"R-Struc-VTOLPad-Upgrade01": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-VTOLPad-Upgrade01",
 		"keyTopic": 1,
-		"msgName": "RES_ST_VPU1",
 		"name": "Automated VTOL Rearming",
 		"requiredResearch": [
 			"R-Struc-VTOLPad"
@@ -4400,7 +5092,14 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"VTOL Rearming Times Reduced",
+			"Automated VTOL Rearming",
+			"Reduces rearming time",
+			"All rearming pads upgraded automatically"
+		]
 	},
 	"R-Struc-VTOLPad-Upgrade02": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4419,8 +5118,7 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLPad-Upgrade03": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -4439,13 +5137,11 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-CBSensor-Tower01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-CBSensor-Tower01",
-		"msgName": "RES_SY_CBSTW1",
 		"name": "CB Tower",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage03",
@@ -4456,12 +5152,18 @@
 		"resultStructures": [
 			"Sys-CB-Tower01"
 		],
-		"statID": "Sys-CB-Tower01"
+		"statID": "Sys-CB-Tower01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Tower Available",
+			"Counter-battery tower detects enemy indirect fire batteries",
+			"Orders assigned indirect fire units to fire at the enemy batteries",
+			"Counter-battery fire continues until enemy battery is suppressed"
+		]
 	},
 	"R-Sys-CBSensor-Turret01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-CBSensor-Turret01",
-		"msgName": "RES_SY_CBSTU1",
 		"name": "CB Turret",
 		"requiredResearch": [
 			"R-Sys-CBSensor-Tower01"
@@ -4471,14 +5173,20 @@
 		"resultComponents": [
 			"Sys-CBTurret01"
 		],
-		"statID": "Sys-CBTurret01"
+		"statID": "Sys-CBTurret01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Turret Available for Design",
+			"Counter-battery turret detects enemy indirect fire batteries",
+			"Orders assigned indirect fire units to fire at the enemy batteries",
+			"Counter-battery fire continues until enemy battery is suppressed"
+		]
 	},
 	"R-Sys-Engineering02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Engineering02",
 		"imdName": "trlcon.pie",
 		"keyTopic": 1,
-		"msgName": "RES_ENGIN2",
 		"name": "Improved Engineering",
 		"requiredResearch": [
 			"R-Sys-Engineering01"
@@ -4492,12 +5200,18 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Research Breakthrough Improves Construction Rates",
+			"Improved Engineering Techniques",
+			"Increases construction speed",
+			"All trucks upgraded automatically"
+		]
 	},
 	"R-Sys-Sensor-Tower02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Sensor-Tower02",
-		"msgName": "RES_SY_STW2",
 		"name": "Hardened Sensor Tower",
 		"redStructures": [
 			"Sys-SensoTower01"
@@ -4511,13 +5225,19 @@
 		"resultStructures": [
 			"Sys-SensoTower02"
 		],
-		"statID": "Sys-SensoTower02"
+		"statID": "Sys-SensoTower02",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Improved Sensor Tower Available",
+			"New construction techniques improve tower",
+			"Replaces existing sensor tower",
+			"May be assigned as spotter for indirect fire weapons"
+		]
 	},
 	"R-Sys-VTOLCBS-Tower01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-VTOLCBS-Tower01",
 		"keyTopic": 1,
-		"msgName": "RES_SY_VCBSTW1",
 		"name": "VTOL CB Tower",
 		"requiredResearch": [
 			"R-Sys-CBSensor-Tower01",
@@ -4528,12 +5248,18 @@
 		"resultStructures": [
 			"Sys-VTOL-CB-Tower01"
 		],
-		"statID": "Sys-VTOL-CB-Tower01"
+		"statID": "Sys-VTOL-CB-Tower01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Tower Available",
+			"VTOL CB Tower detects enemy indirect fire batteries",
+			"Orders assigned VTOLs to attack the enemy batteries",
+			"VTOLs attack until enemy battery is suppressed"
+		]
 	},
 	"R-Sys-VTOLCBS-Turret01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-VTOLCBS-Turret01",
-		"msgName": "RES_SY_VCBSTU1",
 		"name": "VTOL CB Turret",
 		"requiredResearch": [
 			"R-Sys-CBSensor-Turret01",
@@ -4544,12 +5270,18 @@
 		"resultComponents": [
 			"Sys-VTOLCBTurret01"
 		],
-		"statID": "Sys-VTOLCBTurret01"
+		"statID": "Sys-VTOLCBTurret01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Turret Available",
+			"VTOL CB turret detects enemy indirect fire batteries",
+			"Orders assigned VTOLs to attack the enemy batteries",
+			"VTOLs attack until enemy battery is suppressed"
+		]
 	},
 	"R-Sys-VTOLStrike-Tower01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-VTOLStrike-Tower01",
-		"msgName": "RES_SY_VSTW1",
 		"name": "VTOL Strike Tower",
 		"requiredResearch": [
 			"R-Sys-Sensor-Upgrade01",
@@ -4560,12 +5292,18 @@
 		"resultStructures": [
 			"Sys-VTOL-RadarTower01"
 		],
-		"statID": "Sys-VTOL-RadarTower01"
+		"statID": "Sys-VTOL-RadarTower01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Tower Available",
+			"VTOL Strike Tower detects approaching enemies",
+			"Assigned VTOLs attack the enemy units",
+			"Strike mission continues until enemy destroyed or they retreat"
+		]
 	},
 	"R-Sys-VTOLStrike-Turret01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-VTOLStrike-Turret01",
-		"msgName": "RES_SY_VSTU1",
 		"name": "VTOL Strike Turret",
 		"requiredResearch": [
 			"R-Sys-Sensor-Turret01",
@@ -4576,26 +5314,38 @@
 		"resultComponents": [
 			"Sys-VstrikeTurret01"
 		],
-		"statID": "Sys-VstrikeTurret01"
+		"statID": "Sys-VstrikeTurret01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Turret Available",
+			"VTOL Strike turret used to spot targets",
+			"Assigned VTOLs attack the designated targets",
+			"Select new targets to continue the VTOL strikes"
+		]
 	},
 	"R-Vehicle-Body02": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body02",
 		"keyTopic": 1,
-		"msgName": "RES_V_B02",
 		"name": "Light Body - Leopard",
 		"researchPoints": 6000,
 		"researchPower": 187,
 		"resultComponents": [
 			"Body2SUP"
 		],
-		"statID": "Body2SUP"
+		"statID": "Body2SUP",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Collective Light Body",
+			"Superior armor and body points to Viper",
+			"Slower than Viper",
+			"High power costs and slower to produce than Viper"
+		]
 	},
 	"R-Vehicle-Body06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body06",
 		"keyTopic": 1,
-		"msgName": "RES_V_B06",
 		"name": "Medium Body - Panther",
 		"requiredResearch": [
 			"R-Vehicle-Body02"
@@ -4605,13 +5355,19 @@
 		"resultComponents": [
 			"Body6SUPP"
 		],
-		"statID": "Body6SUPP"
+		"statID": "Body6SUPP",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Collective Medium Body",
+			"Superior armor and body points to Cobra",
+			"Slower than Cobra",
+			"High power costs and slower to produce than Cobra"
+		]
 	},
 	"R-Vehicle-Body09": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body09",
 		"keyTopic": 1,
-		"msgName": "RES_V_B09",
 		"name": "Heavy Body - Tiger",
 		"requiredResearch": [
 			"R-Vehicle-Body06"
@@ -4621,13 +5377,19 @@
 		"resultComponents": [
 			"Body9REC"
 		],
-		"statID": "Body9REC"
+		"statID": "Body9REC",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Collective Heavy Body",
+			"More armor and body points than Python",
+			"Slower than Python",
+			"High power costs and slow to produce"
+		]
 	},
 	"R-Vehicle-Engine04": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Engine04",
 		"imdName": "iceng.pie",
-		"msgName": "RES_V_EN4",
 		"name": "Turbo-Charged Engine",
 		"requiredResearch": [
 			"R-Vehicle-Prop-VTOL",
@@ -4644,7 +5406,14 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Engine Upgrade",
+			"Turbo-Charged Engine",
+			"Improves vehicle speed",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Engine05": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -4666,8 +5435,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Engine06": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -4689,26 +5457,30 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Prop-VTOL": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Prop-VTOL",
 		"imdName": "DPVTOL.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_V_P_V1",
 		"name": "VTOL Propulsion",
 		"researchPoints": 6000,
 		"researchPower": 187,
 		"resultComponents": [
 			"V-Tol"
+		],
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"New Propulsion Available for Design",
+			"Vertical Take Off and Landing Propulsion",
+			"Speed: VTOL",
+			"Body Points: Low"
 		]
 	},
 	"R-Wpn-AAGun-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-Accuracy01",
-		"msgName": "RES_W_AAAC1",
 		"name": "AA Thermal Imaging Sensor",
 		"requiredResearch": [
 			"R-Wpn-RocketSlow-Accuracy03"
@@ -4732,12 +5504,18 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Upgrade",
+			"Detects and locks-on to VTOL engine emissions",
+			"Increases AA accuracy",
+			"All AA weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-Accuracy02",
-		"msgName": "RES_W_AAAC2",
 		"name": "AA Target Acquisition Shells",
 		"requiredResearch": [
 			"R-Wpn-AAGun-Accuracy01",
@@ -4762,12 +5540,18 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Upgrade",
+			"Self-guided rocket powered shells",
+			"Increases AA accuracy",
+			"All AA weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-Damage01",
-		"msgName": "RES_W_AAD1",
 		"name": "AA HE Flak",
 		"requiredResearch": [
 			"R-Wpn-AAGun03"
@@ -4791,7 +5575,14 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Flak Upgrade",
+			"High Explosive Flak shards",
+			"Increases AA Flak damage",
+			"All AA flak weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4820,8 +5611,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4850,13 +5640,11 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-ROF01",
-		"msgName": "RES_W_AAROF1",
 		"name": "AA Ammunition Hopper",
 		"requiredResearch": [
 			"R-Wpn-MG-ROF01",
@@ -4881,7 +5669,14 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Upgrade",
+			"Recoil loaded AA ammunition hopper",
+			"Increases AA ROF",
+			"All AA weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4909,8 +5704,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-AAGun-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -4939,14 +5733,12 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-AAGun02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun02",
 		"keyTopic": 1,
-		"msgName": "RES_W_AA2",
 		"name": "Cyclone Flak Turret",
 		"redComponents": [
 			"QuadMg1AAGun"
@@ -4960,26 +5752,38 @@
 		"resultComponents": [
 			"AAGun2Mk1"
 		],
-		"statID": "AAGun2Mk1"
+		"statID": "AAGun2Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New AA Turret Available",
+			"Quad 80mm flak weapon",
+			"Aerial targets only",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-AAGun03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun03",
 		"keyTopic": 1,
-		"msgName": "RES_W_AA3",
 		"name": "Hurricane AA Turret",
 		"researchPoints": 3600,
 		"researchPower": 112,
 		"resultComponents": [
 			"QuadMg1AAGun"
 		],
-		"statID": "QuadMg1AAGun"
+		"statID": "QuadMg1AAGun",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New AA Turret Available",
+			"30mm Anti-Aircraft machinegun",
+			"Aerial targets only",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-AAGun04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun04",
 		"keyTopic": 1,
-		"msgName": "RES_W_AA4",
 		"name": "Whirlwind AA Turret",
 		"redComponents": [
 			"AAGun2Mk1"
@@ -4993,13 +5797,19 @@
 		"resultComponents": [
 			"QuadRotAAGun"
 		],
-		"statID": "QuadRotAAGun"
+		"statID": "QuadRotAAGun",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New AA Turret Available",
+			"Quad 30mm Anti-Aircraft machinegun",
+			"Aerial targets only",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-Bomb-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Bomb-Damage01",
 		"imdName": "trlvtlhe.PIE",
-		"msgName": "RES_W_BDMG1",
 		"name": "HE Bomb Shells",
 		"requiredResearch": [
 			"R-Wpn-Bomb01",
@@ -5030,14 +5840,20 @@
 				"value": 10
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Bomb Upgrade",
+			"High Explosive shells",
+			"Bomb damage +10%",
+			"All bomb bays upgraded automatically"
+		]
 	},
 	"R-Wpn-Bomb-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Bomb-Damage02",
 		"keyTopic": 1,
 		"imdName": "trlvtlhe.PIE",
-		"msgName": "RES_W_BDMG2",
 		"name": "Improved Bomb Warhead",
 		"requiredResearch": [
 			"R-Wpn-Bomb-Damage01"
@@ -5067,13 +5883,19 @@
 				"value": 10
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Bomb Upgrade",
+			"Improved trinitramine explosive formula",
+			"Bomb damage +10%",
+			"All bomb bays upgraded automatically"
+		]
 	},
 	"R-Wpn-Bomb01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Bomb01",
 		"imdName": "trlvtlhe.PIE",
-		"msgName": "RES_W_BMB1",
 		"name": "Cluster Bombs Bay",
 		"requiredResearch": [
 			"R-Vehicle-Prop-VTOL"
@@ -5082,6 +5904,13 @@
 		"researchPower": 171,
 		"resultComponents": [
 			"Bomb1-VTOL-LtHE"
+		],
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Bomb Bay Available",
+			"Drops High Explosive Cluster bombs",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
+			"Body Points: Low"
 		]
 	},
 	"R-Wpn-Bomb02": {
@@ -5089,7 +5918,6 @@
 		"id": "R-Wpn-Bomb02",
 		"imdName": "trmvtlhe.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_W_BMB2",
 		"name": "HEAP Bomb Bay",
 		"redComponents": [
 			"Bomb1-VTOL-LtHE"
@@ -5102,13 +5930,19 @@
 		"researchPower": 225,
 		"resultComponents": [
 			"Bomb2-VTOL-HvHE"
+		],
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Bomb Bay Available",
+			"Drops High Explosive Armor Piercing bombs",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
+			"Body Points: Low"
 		]
 	},
 	"R-Wpn-Bomb03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Bomb03",
 		"imdName": "trlvtlin.PIE",
-		"msgName": "RES_W_BMB3",
 		"name": "Phosphor Bomb Bay",
 		"requiredResearch": [
 			"R-Wpn-Bomb01",
@@ -5118,12 +5952,18 @@
 		"researchPower": 225,
 		"resultComponents": [
 			"Bomb3-VTOL-LtINC"
+		],
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Bomb Bay Available",
+			"Drops incendiary bombs",
+			"Best Targets: Bunkers, wheeled and hover vehicles",
+			"Body Points: Low"
 		]
 	},
 	"R-Wpn-Cannon-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Accuracy02",
-		"msgName": "RES_W_CNAC2",
 		"name": "Cannon Laser Designator",
 		"requiredResearch": [
 			"R-Wpn-Cannon-Accuracy01",
@@ -5148,13 +5988,19 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"Laser designator paints and guides rounds to the target",
+			"Increases Cannon accuracy",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Damage04",
 		"keyTopic": 1,
-		"msgName": "RES_W_CN_D4",
 		"name": "APFSDS Cannon Rounds",
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage03"
@@ -5178,7 +6024,14 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"Armor-Piercing Fin-Stabilized Discarding Sabot",
+			"Increases Cannon damage",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5207,8 +6060,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5237,14 +6089,12 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-ROF01",
 		"keyTopic": 1,
-		"msgName": "RES_W_CN_ROF1",
 		"name": "Cannon Autoloader",
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage04"
@@ -5268,7 +6118,14 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"Automatic loading mechanism replaces manual loader",
+			"Increases Cannon ROF",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5297,8 +6154,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Cannon-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5327,14 +6183,12 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Cannon4AMk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon4AMk1",
 		"keyTopic": 1,
-		"msgName": "RES_W_CN_4A",
 		"name": "Hyper Velocity Cannon",
 		"redComponents": [
 			"Cannon375mmMk1",
@@ -5349,13 +6203,19 @@
 			"Cannon4AUTO-VTOL",
 			"Cannon4AUTOMk1"
 		],
-		"statID": "Cannon4AUTOMk1"
+		"statID": "Cannon4AUTOMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Hyper-velocity automatic-cannon firing 88mm rounds",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: High"
+		]
 	},
 	"R-Wpn-Cannon5": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon5",
 		"keyTopic": 1,
-		"msgName": "RES_W_CN5",
 		"name": "Assault Cannon",
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
@@ -5366,13 +6226,19 @@
 			"Cannon5VulcanMk1",
 			"Cannon5Vulcan-VTOL"
 		],
-		"statID": "Cannon5VulcanMk1"
+		"statID": "Cannon5VulcanMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"76mm hyper-velocity quad-barrel automatic-cannon",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: High"
+		]
 	},
 	"R-Wpn-Flame2": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flame2",
 		"keyTopic": 1,
-		"msgName": "RES_FLAME2",
 		"name": "Heavy Flamer - Inferno",
 		"redComponents": [
 			"Flame1Mk1"
@@ -5386,12 +6252,18 @@
 		"resultComponents": [
 			"Flame2"
 		],
-		"statID": "Flame2"
+		"statID": "Flame2",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Heavy Flame-thrower firing Propylene Oxide gel",
+			"Best Targets: Bunkers, wheeled and hover vehicles",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-Flamer-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Flamer-Damage04",
-		"msgName": "RES_W_FL_D4",
 		"name": "Superhot Flamer Gel",
 		"requiredResearch": [
 			"R-Wpn-Flame2",
@@ -5416,7 +6288,14 @@
 			}
 		],
 		"statID": "Flame2",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Flamer Upgrade",
+			"Propylene Oxide treated to burn at superhot temperatures",
+			"Increases Flamer damage",
+			"All flamers upgraded automatically"
+		]
 	},
 	"R-Wpn-Flamer-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5444,8 +6323,7 @@
 			}
 		],
 		"statID": "Flame2",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5473,8 +6351,7 @@
 			}
 		],
 		"statID": "Flame2",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Flamer-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5503,8 +6380,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Flamer-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5532,8 +6408,7 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Flamer-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5562,14 +6437,12 @@
 			}
 		],
 		"statID": "Flame1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Accuracy01",
 		"keyTopic": 1,
-		"msgName": "RES_W_HOWAC1",
 		"name": "Target Acquisition Artillery Shells",
 		"requiredResearch": [
 			"R-Wpn-HowitzerMk1"
@@ -5593,7 +6466,14 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Howitzer Upgrade",
+			"Self-guided rocket powered shells",
+			"Increases Howitzer accuracy",
+			"All howitzers upgraded automatically"
+		]
 	},
 	"R-Wpn-Howitzer-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5622,13 +6502,11 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPACC"
 	},
 	"R-Wpn-Howitzer-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Damage01",
-		"msgName": "RES_W_HOWD1",
 		"name": "HE Howitzer Shells",
 		"requiredResearch": [
 			"R-Wpn-HowitzerMk1"
@@ -5659,7 +6537,14 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Howitzer Upgrade",
+			"High Explosive shells",
+			"Increases Howitzer damage",
+			"All howitzers upgraded automatically"
+		]
 	},
 	"R-Wpn-Howitzer-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5695,8 +6580,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5732,13 +6616,11 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-ROF01",
-		"msgName": "RES_W_HOWRF1",
 		"name": "Howitzer Autoloader",
 		"requiredResearch": [
 			"R-Wpn-HowitzerMk1"
@@ -5762,7 +6644,14 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Howitzer Upgrade",
+			"Automatic loading mechanism replaces manual loader",
+			"Increases Howitzer ROF",
+			"All howitzers upgraded automatically"
+		]
 	},
 	"R-Wpn-Howitzer-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5791,8 +6680,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5821,14 +6709,12 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer03-Rot": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer03-Rot",
 		"keyTopic": 1,
-		"msgName": "RES_W_RHOW",
 		"name": "Rotary Howitzer - Hellstorm",
 		"requiredResearch": [
 			"R-Wpn-HvyHowitzer"
@@ -5838,26 +6724,38 @@
 		"resultComponents": [
 			"Howitzer03-Rot"
 		],
-		"statID": "Howitzer03-Rot"
+		"statID": "Howitzer03-Rot",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Indirect Fire Weapon Available",
+			"105mm multi-barrel Howitzer may be assigned to a sensor",
+			"Best Targets: Base Structures, infantry, wheeled vehicles",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-HowitzerMk1": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HowitzerMk1",
 		"keyTopic": 1,
-		"msgName": "RES_W_HMK1",
 		"name": "Howitzer",
 		"researchPoints": 9000,
 		"researchPower": 281,
 		"resultComponents": [
 			"Howitzer105Mk1"
 		],
-		"statID": "Howitzer105Mk1"
+		"statID": "Howitzer105Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Indirect Fire Weapon Available",
+			"105mm Howitzer may be assigned to a sensor",
+			"Best Targets: Base Structures, infantry, wheeled vehicles",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-HvyHowitzer": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HvyHowitzer",
 		"keyTopic": 1,
-		"msgName": "RES_W_HH1",
 		"name": "Heavy Howitzer - Ground Shaker",
 		"redComponents": [
 			"Howitzer105Mk1"
@@ -5870,12 +6768,18 @@
 		"resultComponents": [
 			"Howitzer150Mk1"
 		],
-		"statID": "Howitzer150Mk1"
+		"statID": "Howitzer150Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Indirect Fire Weapon Available",
+			"155mm Howitzer may be assigned to a sensor",
+			"Best Targets: Base Structures, infantry, wheeled vehicles",
+			"Body Points: Low"
+		]
 	},
 	"R-Wpn-MG-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage05",
-		"msgName": "RES_W_MG_D5",
 		"name": "Tungsten-Tipped MG Bullets",
 		"requiredResearch": [
 			"R-Wpn-MG-ROF02",
@@ -5893,7 +6797,14 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Tungsten-tipped armor-piercing bullets",
+			"Increases Machinegun damage",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5915,8 +6826,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-Damage07": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -5938,14 +6848,12 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-ROF02",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG_ROF2",
 		"name": "Rapid Fire Chaingun Upgrade",
 		"requiredResearch": [
 			"R-Wpn-MG-ROF01"
@@ -5969,13 +6877,19 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Improved chaingun mechanism",
+			"Increases Machinegun ROF",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-ROF03",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG_ROF3",
 		"name": "Hyper Fire Chaingun Upgrade",
 		"requiredResearch": [
 			"R-Wpn-MG-ROF02"
@@ -5999,13 +6913,19 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Robotic advances make new chaingun upgrade available",
+			"Increases Machinegun ROF",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG4": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG4",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG4",
 		"name": "Assault Gun",
 		"redComponents": [
 			"MG1Mk1",
@@ -6024,12 +6944,18 @@
 			"MG4ROTARY-VTOL",
 			"MG4ROTARYMk1"
 		],
-		"statID": "MG4ROTARYMk1"
+		"statID": "MG4ROTARYMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Weapon Turret Available",
+			"Multi-barrel, rapid-fire machinegun",
+			"Best Targets: Infantry, wheeled and hover vehicles",
+			"Replaces all machineguns"
+		]
 	},
 	"R-Wpn-Mortar-Acc02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar-Acc02",
-		"msgName": "RES_W_M_AC2",
 		"name": "Thermal Imaging Mortar Shells",
 		"requiredResearch": [
 			"R-Wpn-RocketSlow-Accuracy03",
@@ -6054,7 +6980,14 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"Shells detect and home to thermal heat signatures",
+			"Increases Mortar accuracy",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6091,7 +7024,14 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"High Explosive Armor-Piercing Shells",
+			"Increases Mortar damage",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6128,8 +7068,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6276,8 +7215,7 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Mortar-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6305,8 +7243,7 @@
 			}
 		],
 		"statID": "Mortar1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Mortar-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6336,14 +7273,12 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Mortar3": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Mortar3",
 		"keyTopic": 1,
-		"msgName": "RES_W_M3",
 		"name": "Rotary Mortar - Pepperpot",
 		"redComponents": [
 			"Mortar2Mk1",
@@ -6358,13 +7293,19 @@
 		"resultComponents": [
 			"Mortar3ROTARYMk1"
 		],
-		"statID": "Mortar3ROTARYMk1"
+		"statID": "Mortar3ROTARYMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Indirect Fire Weapon Available",
+			"May be assigned to a sensor",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Rocket-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket-Damage04",
 		"keyTopic": 1,
-		"msgName": "RES_W_RK_D4",
 		"name": "HEAP Mini-Rockets",
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage04",
@@ -6389,7 +7330,14 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mini-Rocket Upgrade",
+			"High Explosive Armor-Piercing warheads",
+			"Increases Mini-Rocket damage",
+			"All mini-rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-Rocket-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6418,8 +7366,7 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6448,14 +7395,12 @@
 			}
 		],
 		"statID": "Rocket-Pod",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rocket06-IDF": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket06-IDF",
 		"keyTopic": 1,
-		"msgName": "RES_W_RK_IDF",
 		"name": "Ripple Rockets",
 		"requiredResearch": [
 			"R-Wpn-Rocket02-MRL",
@@ -6467,13 +7412,19 @@
 		"resultComponents": [
 			"Rocket-IDF"
 		],
-		"statID": "Rocket-IDF"
+		"statID": "Rocket-IDF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rocket Available",
+			"Rocket artillery; can be assigned to a sensor",
+			"Best Targets: Vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Rocket07-Tank-Killer": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rocket07-Tank-Killer",
 		"keyTopic": 1,
-		"msgName": "RES_W_RK_HvAT",
 		"name": "Tank Killer Rocket",
 		"redComponents": [
 			"Rocket-Pod",
@@ -6489,12 +7440,18 @@
 			"Rocket-HvyA-T",
 			"Rocket-VTOL-HvyA-T"
 		],
-		"statID": "Rocket-HvyA-T"
+		"statID": "Rocket-HvyA-T",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rocket Available",
+			"Heavy anti-tank rocket",
+			"Best Targets: Vehicles",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-RocketSlow-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-Damage04",
-		"msgName": "RES_W_SRK_D4",
 		"name": "HESH Rocket Warhead",
 		"requiredResearch": [
 			"R-Wpn-Rocket03-HvAT",
@@ -6520,7 +7477,14 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"High Explosive Squash Head warhead",
+			"Increases Rocket damage",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6549,8 +7513,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-RocketSlow-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6580,14 +7543,12 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-RocketSlow-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-ROF01",
 		"keyTopic": 1,
-		"msgName": "RES_W_SRK_ROF1",
 		"name": "Rocket Autoloader",
 		"requiredResearch": [
 			"R-Wpn-Cannon-ROF01"
@@ -6611,7 +7572,14 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"Autoloader increases reload rate",
+			"Increases Rocket ROF",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6641,8 +7609,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -6671,8 +7638,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Comp-MissileCodes01": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -6683,8 +7649,7 @@
 			"CAM3RESEARCH"
 		],
 		"researchPoints": 55000,
-		"researchPower": 450,
-		"techCode": 1
+		"researchPower": 450
 	},
 	"R-Comp-MissileCodes02": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -6695,8 +7660,7 @@
 			"R-Comp-MissileCodes01"
 		],
 		"researchPoints": 58000,
-		"researchPower": 450,
-		"techCode": 1
+		"researchPower": 450
 	},
 	"R-Comp-MissileCodes03": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -6707,13 +7671,11 @@
 			"R-Comp-MissileCodes02"
 		],
 		"researchPoints": 60000,
-		"researchPower": 450,
-		"techCode": 1
+		"researchPower": 450
 	},
 	"R-Defense-GuardTower-ATMiss": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-GuardTower-ATMiss",
-		"msgName": "RES_EMP_ATMTOW",
 		"name": "Scourge Missile Tower",
 		"redStructures": [
 			"GuardTower6"
@@ -6727,12 +7689,18 @@
 		"resultStructures": [
 			"GuardTower-ATMiss"
 		],
-		"statID": "GuardTower-ATMiss"
+		"statID": "GuardTower-ATMiss",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored guard tower with Scourge Missile",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-GuardTower-Rail1": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-GuardTower-Rail1",
-		"msgName": "RES_EMP_RL1TOW",
 		"name": "Needle Gun Tower",
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
@@ -6742,12 +7710,18 @@
 		"resultStructures": [
 			"GuardTower-Rail1"
 		],
-		"statID": "GuardTower-Rail1"
+		"statID": "GuardTower-Rail1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored guard tower with Needle Gun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-HvyA-Trocket": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HvyA-Trocket",
-		"msgName": "RES_EMP_HVATR",
 		"name": "Tank Killer Emplacement",
 		"redStructures": [
 			"PillBox6"
@@ -6760,12 +7734,18 @@
 		"resultStructures": [
 			"Emplacement-HvyATrocket"
 		],
-		"statID": "Emplacement-HvyATrocket"
+		"statID": "Emplacement-HvyATrocket",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Tank Killer rocket",
+			"Automatically targets enemies in range",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-HvyArtMissile": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-HvyArtMissile",
-		"msgName": "RES_EMP_HvAM",
 		"name": "Archangel Missile Battery",
 		"redStructures": [
 			"Emplacement-MdART-pit"
@@ -6779,12 +7759,18 @@
 		"resultStructures": [
 			"Emplacement-HvART-pit"
 		],
-		"statID": "Emplacement-HvART-pit"
+		"statID": "Emplacement-HvART-pit",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Artillery battery firing Novastorm Missiles",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-MdArtMissile": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-MdArtMissile",
-		"msgName": "RES_EMP_MdAM",
 		"name": "Angel Missile Battery",
 		"requiredResearch": [
 			"R-Wpn-MdArtMissile"
@@ -6794,12 +7780,18 @@
 		"resultStructures": [
 			"Emplacement-MdART-pit"
 		],
-		"statID": "Emplacement-MdART-pit"
+		"statID": "Emplacement-MdART-pit",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Artillery battery firing Firestorm Missiles",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-PrisLas": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-PrisLas",
-		"msgName": "RES_EMP_PrisLas",
 		"name": "Flashlight Emplacement",
 		"requiredResearch": [
 			"R-Wpn-Laser01"
@@ -6809,12 +7801,18 @@
 		"resultStructures": [
 			"Emplacement-PrisLas"
 		],
-		"statID": "Emplacement-PrisLas"
+		"statID": "Emplacement-PrisLas",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Flashlight laser",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-PulseLas": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-PulseLas",
-		"msgName": "RES_EMP_PulseLas",
 		"name": "Pulse Laser Emplacement",
 		"redStructures": [
 			"Emplacement-PrisLas",
@@ -6830,12 +7828,18 @@
 		"resultStructures": [
 			"Emplacement-PulseLaser"
 		],
-		"statID": "Emplacement-PulseLaser"
+		"statID": "Emplacement-PulseLaser",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Pulse Laser",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Rail2": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Rail2",
-		"msgName": "RES_EMP_Rail2",
 		"name": "Rail Gun Emplacement",
 		"redStructures": [
 			"Emplacement-HPVcannon",
@@ -6849,12 +7853,18 @@
 		"resultStructures": [
 			"Emplacement-Rail2"
 		],
-		"statID": "Emplacement-Rail2"
+		"statID": "Emplacement-Rail2",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Rail Gun",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-Rail3": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Rail3",
-		"msgName": "RES_EMP_Rail3",
 		"name": "Gauss Cannon Emplacement",
 		"redStructures": [
 			"Emplacement-Rail2"
@@ -6868,12 +7878,18 @@
 		"resultStructures": [
 			"Emplacement-Rail3"
 		],
-		"statID": "Emplacement-Rail3"
+		"statID": "Emplacement-Rail3",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Gauss Cannon",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-RotHow": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-RotHow",
-		"msgName": "RES_EMP_RotHOW",
 		"name": "Hellstorm Emplacement",
 		"requiredResearch": [
 			"R-Wpn-Howitzer03-Rot",
@@ -6884,12 +7900,18 @@
 		"resultStructures": [
 			"Emplacement-RotHow"
 		],
-		"statID": "Emplacement-RotHow"
+		"statID": "Emplacement-RotHow",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored Hellstorm howitzer emplacement",
+			"Assigned automatically to nearest sensor or CB tower",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-SamSite1": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-SamSite1",
-		"msgName": "RES_EMP_SAM1",
 		"name": "Avenger SAM Site",
 		"requiredResearch": [
 			"R-Wpn-Missile-LtSAM"
@@ -6899,12 +7921,18 @@
 		"resultStructures": [
 			"P0-AASite-SAM1"
 		],
-		"statID": "P0-AASite-SAM1"
+		"statID": "P0-AASite-SAM1",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"SAM site with Avenger missiles",
+			"Automatically targets VTOLs",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-SamSite2": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-SamSite2",
-		"msgName": "RES_EMP_SAM2",
 		"name": "Vindicator SAM Site",
 		"redStructures": [
 			"P0-AASite-SAM1"
@@ -6918,12 +7946,18 @@
 		"resultStructures": [
 			"P0-AASite-SAM2"
 		],
-		"statID": "P0-AASite-SAM2"
+		"statID": "P0-AASite-SAM2",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"SAM site with Vindicator missiles",
+			"Automatically targets VTOLs",
+			"Defensive Strength: Medium"
+		]
 	},
 	"R-Defense-WallTower-A-Tmiss": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-A-Tmiss",
-		"msgName": "RES_WT9_ATM",
 		"name": "Scourge Missile Hardpoint",
 		"redStructures": [
 			"WallTower-HvATrocket"
@@ -6937,12 +7971,18 @@
 		"resultStructures": [
 			"WallTower-Atmiss"
 		],
-		"statID": "WallTower-Atmiss"
+		"statID": "WallTower-Atmiss",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Scourge AT Missile",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower-HvyA-Trocket": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-HvyA-Trocket",
-		"msgName": "RES_WT12_HAT",
 		"name": "Tank Killer Hardpoint",
 		"redStructures": [
 			"WallTower06",
@@ -6957,12 +7997,18 @@
 		"resultStructures": [
 			"WallTower-HvATrocket"
 		],
-		"statID": "WallTower-HvATrocket"
+		"statID": "WallTower-HvATrocket",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Tank Killer AT missile",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower-PulseLas": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-PulseLas",
-		"msgName": "RES_WT14_PLS",
 		"name": "Flashlight Hardpoint",
 		"requiredResearch": [
 			"R-Wpn-Laser01"
@@ -6972,12 +8018,18 @@
 		"resultStructures": [
 			"WallTower-PulseLas"
 		],
-		"statID": "WallTower-PulseLas"
+		"statID": "WallTower-PulseLas",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Flashlight laser",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower-Rail2": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-Rail2",
-		"msgName": "RES_WT15_RL2",
 		"name": "Rail Gun Hardpoint",
 		"redStructures": [
 			"Wall-VulcanCan",
@@ -6991,12 +8043,18 @@
 		"resultStructures": [
 			"WallTower-Rail2"
 		],
-		"statID": "WallTower-Rail2"
+		"statID": "WallTower-Rail2",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Rail Gun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallTower-Rail3": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-Rail3",
-		"msgName": "RES_WT15_RL3",
 		"name": "Gauss Cannon Hardpoint",
 		"redStructures": [
 			"WallTower-Rail2"
@@ -7010,14 +8068,20 @@
 		"resultStructures": [
 			"WallTower-Rail3"
 		],
-		"statID": "WallTower-Rail3"
+		"statID": "WallTower-Rail3",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"New Defensive Structure Available",
+			"Armored hardpoint with Gauss Cannon",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: High"
+		]
 	},
 	"R-Defense-WallUpgrade07": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade07",
 		"imdName": "BLWALLH.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_DF_WU7",
 		"name": "Plascrete",
 		"requiredResearch": [
 			"R-Sys-Engineering03",
@@ -7041,7 +8105,14 @@
 				"value": 120
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Defenses Improved",
+			"High tensile concrete-plastic composite",
+			"Increases Armor and Body Points",
+			"All defenses and walls upgraded automatically"
+		]
 	},
 	"R-Defense-WallUpgrade08": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7070,8 +8141,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade09": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7100,15 +8170,13 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade10": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallUpgrade10",
 		"imdName": "BLWALLH.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_DF_WU10",
 		"name": "Plasteel",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade09"
@@ -7131,7 +8199,14 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Defenses Improved",
+			"Bonded metallic laminates formed into walls and defenses",
+			"Increases Armor and Body Points",
+			"All defenses and walls upgraded automatically"
+		]
 	},
 	"R-Defense-WallUpgrade11": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7160,8 +8235,7 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade12": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7189,8 +8263,7 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade13": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7214,8 +8287,7 @@
 				"value": 50
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Defense-WallUpgrade-TweakOption01": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -7253,14 +8325,12 @@
 				"value": 120
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials07": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-Materials07",
 		"imdName": "icmolql.pie",
-		"msgName": "RES_ST_MAT7",
 		"name": "Advanced Base Structure Materials",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade07",
@@ -7284,7 +8354,14 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Increases Damage Resistance",
+			"Advanced Base Structure Materials",
+			"Increases Armor and Body Points",
+			"All base structures upgraded automatically"
+		]
 	},
 	"R-Struc-Materials08": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7312,8 +8389,7 @@
 				"value": 20
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials09": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7341,8 +8417,7 @@
 				"value": 40
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials10": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7366,8 +8441,7 @@
 				"value": 100
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Materials11": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7391,15 +8465,13 @@
 				"value": 100
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Power-Upgrade02": {
 		"iconID": "IMAGE_RES_POWERTECH",
 		"id": "R-Struc-Power-Upgrade02",
 		"imdName": "blpower4.pie",
 		"keyTopic": 1,
-		"msgName": "RES_POWU2",
 		"name": "Vapor Turbine Generator",
 		"requiredResearch": [
 			"R-Struc-Power-Upgrade01"
@@ -7413,14 +8485,20 @@
 				"value": 10
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_pow.ogg",
+		"intelText": [
+			"Improved Power Generator Performance",
+			"New Power Generation Technology",
+			"Vapor Turbine boosts power output",
+			"All power generators upgraded automatically"
+		]
 	},
 	"R-Struc-Research-Upgrade07": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
 		"id": "R-Struc-Research-Upgrade07",
 		"imdName": "blresch4.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_ST_RU7",
 		"name": "Neural Synapse Research Brain",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade06"
@@ -7434,7 +8512,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"Research Improved",
+			"Neural Synapse Research Brain",
+			"Increases research speed",
+			"All research facilities upgraded automatically"
+		]
 	},
 	"R-Struc-Research-Upgrade08": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -7453,8 +8538,7 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-Research-Upgrade09": {
 		"iconID": "IMAGE_RES_COMPUTERTECH",
@@ -7473,14 +8557,12 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLPad-Upgrade04": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
 		"id": "R-Struc-VTOLPad-Upgrade04",
 		"keyTopic": 1,
-		"msgName": "RES_ST_VPU4",
 		"name": "Robotic VTOL Rearming",
 		"requiredResearch": [
 			"R-Struc-VTOLPad-Upgrade03"
@@ -7495,7 +8577,14 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_struttech.ogg",
+		"intelText": [
+			"VTOL Rearming Times Reduced",
+			"Robotic VTOL Rearming",
+			"Reduces rearming time",
+			"All rearming pads upgraded automatically"
+		]
 	},
 	"R-Struc-VTOLPad-Upgrade05": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7514,8 +8603,7 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Struc-VTOLPad-Upgrade06": {
 		"iconID": "IMAGE_RES_STRUCTURETECH",
@@ -7534,15 +8622,13 @@
 			}
 		],
 		"statID": "A0VtolPad",
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Sys-Engineering03": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Engineering03",
 		"imdName": "trlcon.pie",
 		"keyTopic": 1,
-		"msgName": "RES_ENGIN3",
 		"name": "Advanced Engineering",
 		"requiredResearch": [
 			"R-Sys-Engineering02"
@@ -7556,7 +8642,14 @@
 				"value": 30
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Research Breakthrough Improves Construction Rates",
+			"Advanced Engineering Techniques",
+			"Increases construction speed",
+			"All trucks upgraded automatically"
+		]
 	},
 	"R-Sys-NEXUSrepair": {
 		"id": "R-Sys-NEXUSrepair",
@@ -7567,8 +8660,7 @@
 		],
 		"resultComponents": [
 			"NEXUSrepair"
-		],
-		"techCode": 1
+		]
 	},
 	"R-Sys-NEXUSsensor": {
 		"id": "R-Sys-NEXUSsensor",
@@ -7579,8 +8671,7 @@
 		],
 		"resultComponents": [
 			"NavGunSensor"
-		],
-		"techCode": 1
+		]
 	},
 	"R-Sys-NEXUSsensorUndo": {
 		"id": "R-Sys-NEXUSsensorUndo",
@@ -7588,15 +8679,13 @@
 		"name": "*R-Sys-NEXUSsensorUndo*",
 		"replacedComponents": [
 			"NavGunSensor:ZNULLSENSOR"
-		],
-		"techCode": 1
+		]
 	},
 	"R-Sys-Resistance": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance",
 		"imdName": "ICCCCONS.PIE",
 		"keyTopic": 1,
-		"msgName": "RES_SY_RESU1",
 		"name": "NEXUS Intruder Program",
 		"researchPoints": 40000,
 		"researchPower": 450,
@@ -7615,13 +8704,19 @@
 				"parameter": "Resistance",
 				"value": 60
 			}
+		],
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Computer Technology Breakthrough",
+			"NEXUS Intruder Program analyzed",
+			"Intruder parasite isolated",
+			"Reduced chance of NEXUS take-over"
 		]
 	},
 	"R-Sys-Resistance-Upgrade01": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance-Upgrade01",
 		"imdName": "ICCCCONS.PIE",
-		"msgName": "RES_SY_RESU2",
 		"name": "NEXUS Resistance Circuits",
 		"researchPoints": 25000,
 		"researchPower": 450,
@@ -7641,13 +8736,19 @@
 				"value": 60
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Reduced chance of NEXUS take-over",
+			"Hero and Special rank units are protected"
+		]
 	},
 	"R-Sys-Resistance-Upgrade02": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance-Upgrade02",
 		"imdName": "ICCCCONS.PIE",
-		"msgName": "RES_SY_RESU3",
 		"name": "NEXUS Resistance Circuits Mk2",
 		"requiredResearch": [
 			"R-Sys-Resistance-Upgrade01"
@@ -7670,13 +8771,19 @@
 				"value": 60
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Reduced chance of NEXUS take-over",
+			"Elite and Veteran rank units and Factories are protected"
+		]
 	},
 	"R-Sys-Resistance-Upgrade03": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance-Upgrade03",
 		"imdName": "ICCCCONS.PIE",
-		"msgName": "RES_SY_RESU4",
 		"name": "NEXUS Resistance Circuits Mk3",
 		"requiredResearch": [
 			"R-Sys-Resistance-Upgrade02"
@@ -7699,13 +8806,19 @@
 				"value": 60
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Reduced chance of NEXUS take-over",
+			"Professional and Regular rank units are protected"
+		]
 	},
 	"R-Sys-Resistance-Upgrade04": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-Resistance-Upgrade04",
 		"imdName": "ICCCCONS.PIE",
-		"msgName": "RES_SY_RESU5",
 		"name": "NEXUS Immunization System",
 		"requiredResearch": [
 			"R-Sys-Resistance-Upgrade03"
@@ -7728,39 +8841,57 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"Computer Technology Breakthrough",
+			"Improved NEXUS resistance circuitry",
+			"Computer systems are now 'ring-fenced' from NEXUS",
+			"Stops NEXUS take-over"
+		]
 	},
 	"R-Sys-SpyTurret": {
 		"iconID": "IMAGE_RES_SYSTEMTECH",
 		"id": "R-Sys-SpyTurret",
 		"keyTopic": 1,
-		"msgName": "RES_SY_ST1",
 		"name": "Scrambler Turret",
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
 			"SpyTurret01"
 		],
-		"statID": "SpyTurret01"
+		"statID": "SpyTurret01",
+		"intelAudio": "res_systech.ogg",
+		"intelText": [
+			"New Systems Turret Available",
+			"Synaptic Link Scrambler technology",
+			"Electronically attacks and disrupts enemy structures",
+			"Steals technology from enemies"
+		]
 	},
 	"R-Vehicle-Body03": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body03",
 		"keyTopic": 1,
-		"msgName": "RES_V_B03",
 		"name": "Light Body - Retaliation",
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
 			"Body3MBT"
 		],
-		"statID": "Body3MBT"
+		"statID": "Body3MBT",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"NEXUS Light Body",
+			"Superior armor and body points to Viper",
+			"Faster than Viper",
+			"Expensive to produce"
+		]
 	},
 	"R-Vehicle-Body07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body07",
 		"keyTopic": 1,
-		"msgName": "RES_V_B07",
 		"name": "Medium Body - Retribution",
 		"requiredResearch": [
 			"R-Vehicle-Body03"
@@ -7770,13 +8901,19 @@
 		"resultComponents": [
 			"Body7ABT"
 		],
-		"statID": "Body7ABT"
+		"statID": "Body7ABT",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"NEXUS Medium Body",
+			"Superior armor and body points to Cobra",
+			"Faster than Cobra",
+			"Expensive and slow to produce"
+		]
 	},
 	"R-Vehicle-Body10": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Body10",
 		"keyTopic": 1,
-		"msgName": "RES_V_B10",
 		"name": "Heavy Body - Vengeance",
 		"requiredResearch": [
 			"R-Vehicle-Body07"
@@ -7786,13 +8923,19 @@
 		"resultComponents": [
 			"Body10MBT"
 		],
-		"statID": "Body10MBT"
+		"statID": "Body10MBT",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"NEXUS Heavy Body",
+			"More armor and body points than Python",
+			"Faster than Python",
+			"Very expensive to produce"
+		]
 	},
 	"R-Vehicle-Engine07": {
 		"iconID": "IMAGE_RES_DROIDTECH",
 		"id": "R-Vehicle-Engine07",
 		"imdName": "iceng.pie",
-		"msgName": "RES_V_EN7",
 		"name": "Gas Turbine Engine",
 		"requiredResearch": [
 			"R-Vehicle-Body03",
@@ -7809,7 +8952,14 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG"
+		"subgroupIconID": "IMAGE_RES_GRPUPG",
+		"intelAudio": "res_droid.ogg",
+		"intelText": [
+			"Vehicle Engine Upgrade",
+			"Gas Turbine Engine",
+			"Improves vehicle speed",
+			"All vehicles upgraded automatically"
+		]
 	},
 	"R-Vehicle-Engine08": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -7831,8 +8981,7 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Vehicle-Engine09": {
 		"iconID": "IMAGE_RES_DROIDTECH",
@@ -7854,13 +9003,11 @@
 				"value": 5
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPUPG",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPUPG"
 	},
 	"R-Wpn-AAGun-Accuracy03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-Accuracy03",
-		"msgName": "RES_W_AAAC3",
 		"name": "AA Target Prediction Computer",
 		"requiredResearch": [
 			"R-Wpn-Rail-Accuracy01",
@@ -7885,12 +9032,18 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Upgrade",
+			"Computer plots and guides shell to target's position",
+			"Increases AA accuracy",
+			"All AA weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-Damage04",
-		"msgName": "RES_W_AAD4",
 		"name": "AA HEAP Flak",
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage07",
@@ -7915,7 +9068,14 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Flak Upgrade",
+			"High Explosive Armor Piercing Flak",
+			"Increases AA Flak damage",
+			"All AA flak weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -7944,8 +9104,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -7974,13 +9133,11 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-AAGun-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-AAGun-ROF04",
-		"msgName": "RES_W_AAROF4",
 		"name": "AA Chainfeed Loader",
 		"requiredResearch": [
 			"R-Wpn-Cannon-ROF04",
@@ -8005,7 +9162,14 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"AA Upgrade",
+			"Chainfeed loader eradicates jams and improves performance",
+			"Increases AA ROF",
+			"All AA weapons upgraded automatically"
+		]
 	},
 	"R-Wpn-AAGun-ROF05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8034,8 +9198,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-AAGun-ROF06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8063,8 +9226,7 @@
 			}
 		],
 		"statID": "QuadMg1AAGun",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Bomb-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8102,13 +9264,19 @@
 				"value": 10
 			}
 		],
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Bomb Upgrade",
+			"Low yield thermonuclear warhead",
+			"Bomb damage +10%",
+			"All bomb bays upgraded automatically"
+		]
 	},
 	"R-Wpn-Bomb04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Bomb04",
 		"imdName": "trmvtlin.PIE",
-		"msgName": "RES_W_BMB4",
 		"name": "Thermite Bomb Bay",
 		"redComponents": [
 			"Bomb3-VTOL-LtINC"
@@ -8122,12 +9290,18 @@
 		"researchPower": 287,
 		"resultComponents": [
 			"Bomb4-VTOL-HvyINC"
+		],
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Bomb Bay Available",
+			"Drops high intensity thermite bombs",
+			"Best Targets: Bunkers, wheeled and hover vehicles",
+			"Body Points: Low"
 		]
 	},
 	"R-Wpn-Cannon-Damage07": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-Damage07",
-		"msgName": "RES_W_CN_D7",
 		"name": "HVAPFSDS Cannon Rounds",
 		"requiredResearch": [
 			"R-Wpn-MG-Damage09",
@@ -8152,7 +9326,14 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot",
+			"Increases Cannon damage",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-Damage08": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8181,8 +9362,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-Damage09": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8211,14 +9391,12 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Cannon-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Cannon-ROF04",
 		"keyTopic": 1,
-		"msgName": "RES_W_CN_ROF4",
 		"name": "Cannon Rapid Loader",
 		"requiredResearch": [
 			"R-Wpn-Cannon-ROF03"
@@ -8242,7 +9420,14 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Cannon Upgrade",
+			"Robotic loading system feeds rounds into breech",
+			"Increases Cannon ROF",
+			"All cannons upgraded automatically"
+		]
 	},
 	"R-Wpn-Cannon-ROF05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8271,8 +9456,7 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Cannon-ROF06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8300,13 +9484,11 @@
 			}
 		],
 		"statID": "Cannon1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RocketSlow-ROF04",
-		"msgName": "RES_W_SRK_ROF4",
 		"name": "Rocket Rapid Loader",
 		"requiredResearch": [
 			"R-Wpn-Cannon-ROF04",
@@ -8331,7 +9513,14 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rocket Upgrade",
+			"Rapid Loader increases reload rate",
+			"Increases Rocket ROF",
+			"All rockets upgraded automatically"
+		]
 	},
 	"R-Wpn-RocketSlow-ROF05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8360,8 +9549,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROF06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8389,8 +9577,7 @@
 			}
 		],
 		"statID": "Rocket-LtA-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RocketSlow-ROFRR01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8424,7 +9611,6 @@
 	"R-Wpn-Energy-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Energy-Accuracy01",
-		"msgName": "RES_LASAC1",
 		"name": "Improved Laser Focusing",
 		"requiredResearch": [
 			"R-Wpn-Laser01"
@@ -8448,12 +9634,18 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Laser Upgrade",
+			"Improvement in laser optics reduces light dispersal",
+			"Increases Laser accuracy",
+			"All lasers upgraded automatically"
+		]
 	},
 	"R-Wpn-Energy-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Energy-Damage01",
-		"msgName": "RES_LASD1",
 		"name": "Hi-Energy Laser Emitter",
 		"requiredResearch": [
 			"R-Wpn-Energy-Accuracy01"
@@ -8477,7 +9669,14 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Laser Upgrade",
+			"Improvement in laser emission density",
+			"Increases Laser damage",
+			"All lasers upgraded automatically"
+		]
 	},
 	"R-Wpn-Energy-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8506,8 +9705,7 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Energy-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8537,13 +9735,11 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Energy-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Energy-ROF01",
-		"msgName": "RES_LASROF1",
 		"name": "Thermopole Energizer",
 		"requiredResearch": [
 			"R-Wpn-Energy-Damage01"
@@ -8567,7 +9763,14 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Laser Upgrade",
+			"Improved Energizer reduces laser recharge time",
+			"Increases Laser ROF",
+			"All lasers upgraded automatically"
+		]
 	},
 	"R-Wpn-Energy-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8596,8 +9799,7 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Energy-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8626,13 +9828,11 @@
 			}
 		],
 		"statID": "Laser2PULSEMk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Howitzer-Accuracy03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Accuracy03",
-		"msgName": "RES_W_HOWAC3",
 		"name": "Target Prediction Artillery Shells",
 		"requiredResearch": [
 			"R-Wpn-Rail-Accuracy01",
@@ -8657,12 +9857,18 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Howitzer Upgrade",
+			"Computer guided shells",
+			"Increases Howitzer accuracy",
+			"All howitzers upgraded automatically"
+		]
 	},
 	"R-Wpn-Howitzer-Damage04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Damage04",
-		"msgName": "RES_W_HOWD4",
 		"name": "HEAP Howitzer Shells",
 		"requiredResearch": [
 			"R-Wpn-Howitzer03-Rot",
@@ -8695,7 +9901,14 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Howitzer Upgrade",
+			"High Explosive Armor Piercing Shells",
+			"Increases Howitzer damage",
+			"All howitzers upgraded automatically"
+		]
 	},
 	"R-Wpn-Howitzer-Damage05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8731,8 +9944,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage06": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8768,8 +9980,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage07": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8793,8 +10004,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage08": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8818,8 +10028,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-Damage09": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8843,8 +10052,7 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Howitzer-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8875,13 +10083,19 @@
 			}
 		],
 		"statID": "Howitzer105Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Howitzer Upgrade",
+			"Robotic loading system feeds rounds into breech",
+			"Increases Howitzer ROF",
+			"All howitzers upgraded automatically"
+		]
 	},
 	"R-Wpn-HvArtMissile": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-HvArtMissile",
 		"keyTopic": 1,
-		"msgName": "RES_W_MS_HART",
 		"name": "Archangel Missile",
 		"redComponents": [
 			"Missile-MdArt"
@@ -8894,13 +10108,19 @@
 		"resultComponents": [
 			"Missile-HvyArt"
 		],
-		"statID": "Missile-HvyArt"
+		"statID": "Missile-HvyArt",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Artillery Missile Turret Available",
+			"High explosive heavy artillery missile",
+			"Best Targets: Base structures, emplacements, cyborgs",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Laser01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Laser01",
 		"keyTopic": 1,
-		"msgName": "RES_W_LAS1",
 		"name": "Laser - Flashlight",
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -8908,13 +10128,19 @@
 			"Laser3BEAM-VTOL",
 			"Laser3BEAMMk1"
 		],
-		"statID": "Laser3BEAMMk1"
+		"statID": "Laser3BEAMMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Laser Weapon Available",
+			"Generates and concentrates bursts of laser energy",
+			"Best Targets: Cyborgs",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-Laser02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Laser02",
 		"keyTopic": 1,
-		"msgName": "RES_W_LAS2",
 		"name": "Pulse Laser",
 		"redComponents": [
 			"Laser3BEAM-VTOL",
@@ -8934,13 +10160,19 @@
 			"Laser2PULSE-VTOL",
 			"Laser2PULSEMk1"
 		],
-		"statID": "Laser2PULSEMk1"
+		"statID": "Laser2PULSEMk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Laser Weapon Available",
+			"Fires pulses of laser light",
+			"Best Targets: Cyborgs",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-MG-Damage08": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MG-Damage08",
 		"keyTopic": 1,
-		"msgName": "RES_W_MG_D8",
 		"name": "Depleted Uranium MG Bullets",
 		"requiredResearch": [
 			"R-Wpn-MG-Damage07"
@@ -8957,7 +10189,14 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Machinegun Upgrade",
+			"Depleted uranium kinetic energy bullets",
+			"Increases Machinegun damage",
+			"All machineguns upgraded automatically"
+		]
 	},
 	"R-Wpn-MG-Damage09": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -8979,8 +10218,7 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MG-Damage10": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9002,26 +10240,30 @@
 			}
 		],
 		"statID": "MG1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-MdArtMissile": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-MdArtMissile",
 		"keyTopic": 1,
-		"msgName": "RES_W_MS_MART",
 		"name": "Angel Missile",
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
 			"Missile-MdArt"
 		],
-		"statID": "Missile-MdArt"
+		"statID": "Missile-MdArt",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Artillery Missile Turret Available",
+			"High explosive artillery missile",
+			"Best Targets: Base structures, emplacements, cyborgs",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Missile-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-Accuracy01",
-		"msgName": "RES_W_MS_AC1",
 		"name": "Target Prediction Missiles",
 		"requiredResearch": [
 			"R-Wpn-Missile-Damage01"
@@ -9045,12 +10287,18 @@
 			}
 		],
 		"statID": "Missile-LtSAM",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Missile Upgrade",
+			"On-board computer predicts target movement",
+			"Increases Missile accuracy",
+			"All missiles upgraded automatically"
+		]
 	},
 	"R-Wpn-Missile-Accuracy02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-Accuracy02",
-		"msgName": "RES_W_MS_AC2",
 		"name": "Search & Destroy Missiles",
 		"requiredResearch": [
 			"R-Wpn-Missile-Damage02",
@@ -9075,12 +10323,18 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Missile Upgrade",
+			"Missile actively seeks and homes on targets",
+			"Increases Missile accuracy",
+			"All missiles upgraded automatically"
+		]
 	},
 	"R-Wpn-Missile-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-Damage01",
-		"msgName": "RES_W_MS_D1",
 		"name": "Advanced Missile Warhead",
 		"requiredResearch": [
 			"R-Wpn-Missile-LtSAM"
@@ -9104,7 +10358,14 @@
 			}
 		],
 		"statID": "Missile-LtSAM",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Missile Upgrade",
+			"Low yield thermonuclear warhead",
+			"Increases Missile damage",
+			"All missiles upgraded automatically"
+		]
 	},
 	"R-Wpn-Missile-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9133,8 +10394,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Missile-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9163,13 +10423,11 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Missile-HvSAM": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-HvSAM",
-		"msgName": "RES_W_MS_HvSAM1",
 		"name": "Vindicator SAM",
 		"redComponents": [
 			"Missile-LtSAM"
@@ -9184,25 +10442,37 @@
 		"resultComponents": [
 			"Missile-HvySAM"
 		],
-		"statID": "Missile-HvySAM"
+		"statID": "Missile-HvySAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New SAM Turret Available",
+			"Heavy surface-to-air missile",
+			"Best Targets: Aerial targets only",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Missile-LtSAM": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-LtSAM",
 		"keyTopic": 1,
-		"msgName": "RES_W_MS_LtSAM1",
 		"name": "Avenger SAM",
 		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
 			"Missile-LtSAM"
 		],
-		"statID": "Missile-LtSAM"
+		"statID": "Missile-LtSAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New SAM Turret Available",
+			"Surface-to-air missile",
+			"Best Targets: Aerial targets only",
+			"Body Points: Very Low"
+		]
 	},
 	"R-Wpn-Missile-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile-ROF01",
-		"msgName": "RES_W_MS_ROF1",
 		"name": "Advanced Missile Allocation System",
 		"requiredResearch": [
 			"R-Wpn-Missile-Damage01"
@@ -9226,7 +10496,14 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Missile Upgrade",
+			"Missiles detect and lock-on to targets while loading",
+			"Increases Missile ROF",
+			"All missiles upgraded automatically"
+		]
 	},
 	"R-Wpn-Missile-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9255,8 +10532,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Missile-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9286,8 +10562,7 @@
 			}
 		],
 		"statID": "Missile-A-T",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Missile2A-T": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9367,7 +10642,14 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"Self-guided rocket-powered shells",
+			"Increases Mortar accuracy",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar-ROF04": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9397,7 +10679,14 @@
 			}
 		],
 		"statID": "Mortar2Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Mortar Upgrade",
+			"Robotic loading system feeds rounds into breech",
+			"Increases Mortar ROF",
+			"All mortars upgraded automatically"
+		]
 	},
 	"R-Wpn-Mortar-ROF05": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9461,7 +10750,6 @@
 	"R-Wpn-Rail-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rail-Accuracy01",
-		"msgName": "RES_W_RAIL_AC1",
 		"name": "Target Prediction Computer",
 		"requiredResearch": [
 			"R-Wpn-Rail-Damage01"
@@ -9485,12 +10773,18 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPACC"
+		"subgroupIconID": "IMAGE_RES_GRPACC",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rail Gun Upgrade",
+			"Computer predicts and compensates for target's movement",
+			"Increases Rail Gun accuracy",
+			"All rail guns upgraded automatically"
+		]
 	},
 	"R-Wpn-Rail-Damage01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rail-Damage01",
-		"msgName": "RES_W_RAIL_D1",
 		"name": "Hardened Rail Dart",
 		"requiredResearch": [
 			"R-Wpn-RailGun01"
@@ -9514,7 +10808,14 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM"
+		"subgroupIconID": "IMAGE_RES_GRPDAM",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rail Gun Upgrade",
+			"Improved armor-piercing dart",
+			"Increases Rail Gun damage",
+			"All rail guns upgraded automatically"
+		]
 	},
 	"R-Wpn-Rail-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9543,8 +10844,7 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rail-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9573,13 +10873,11 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPDAM",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPDAM"
 	},
 	"R-Wpn-Rail-ROF01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Rail-ROF01",
-		"msgName": "RES_W_RAIL_ROF1",
 		"name": "Rail Gun ROF",
 		"requiredResearch": [
 			"R-Wpn-Rail-Accuracy01"
@@ -9603,7 +10901,14 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF"
+		"subgroupIconID": "IMAGE_RES_GRPROF",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"Rail Gun Upgrade",
+			"Increased gauss output speeds up reload time",
+			"Increases Rail Gun ROF",
+			"All rail guns upgraded automatically"
+		]
 	},
 	"R-Wpn-Rail-ROF02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9632,8 +10937,7 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-Rail-ROF03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
@@ -9662,14 +10966,12 @@
 			}
 		],
 		"statID": "RailGun1Mk1",
-		"subgroupIconID": "IMAGE_RES_GRPROF",
-		"techCode": 1
+		"subgroupIconID": "IMAGE_RES_GRPROF"
 	},
 	"R-Wpn-RailGun01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RailGun01",
 		"keyTopic": 1,
-		"msgName": "RES_W_RAIL1",
 		"name": "Needle Gun",
 		"redComponents": [
 			"Cannon4AUTOMk1",
@@ -9683,13 +10985,19 @@
 			"RailGun1-VTOL",
 			"RailGun1Mk1"
 		],
-		"statID": "RailGun1Mk1"
+		"statID": "RailGun1Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rail Gun Available",
+			"Rapid fire rail gun firing needle darts",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-RailGun02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RailGun02",
 		"keyTopic": 1,
-		"msgName": "RES_W_RAIL2",
 		"name": "Rail Gun",
 		"redComponents": [
 			"RailGun1-VTOL",
@@ -9704,13 +11012,19 @@
 			"RailGun2-VTOL",
 			"RailGun2Mk1"
 		],
-		"statID": "RailGun2Mk1"
+		"statID": "RailGun2Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rail Gun Available",
+			"Rail gun firing armor-piercing darts",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: Medium"
+		]
 	},
 	"R-Wpn-RailGun03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-RailGun03",
 		"keyTopic": 1,
-		"msgName": "RES_W_RAIL3",
 		"name": "Gauss Cannon",
 		"redComponents": [
 			"RailGun2Mk1"
@@ -9723,6 +11037,13 @@
 		"resultComponents": [
 			"RailGun3Mk1"
 		],
-		"statID": "RailGun3Mk1"
+		"statID": "RailGun3Mk1",
+		"intelAudio": "res_weapons.ogg",
+		"intelText": [
+			"New Rail Gun Available",
+			"Heavy rail gun firing large kinetic energy darts",
+			"Best Targets: None. Average damage against all targets",
+			"Body Points: High"
+		]
 	}
 }
