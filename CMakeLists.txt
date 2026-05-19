@@ -412,6 +412,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
 		elseif (CMAKE_CXX_STANDARD EQUAL 17)
 			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++1z")
+		elseif (CMAKE_CXX_STANDARD EQUAL 20)
+			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++2a")
 		else()
 			# Additional mapping required for CMAKE_CXX_STANDARD => Xcode's CLANG_CXX_LANGUAGE_STANDARD attribute (above)
 			# Also may need to bump the minimum supported version of Xcode for compilation
