@@ -120,7 +120,7 @@ Files: src/3rdparty/propertymatcher.*
 Copyright: 2020 past-due
 License: Expat
 
-Files: 3rdparty/date/include/date.h
+Files: 3rdparty/date/date.h
 Copyright: 2015, 2016, 2017 Howard Hinnant
            2016 Adrian Colomitchi
            2017 Florian Dang
