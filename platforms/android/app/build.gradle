@@ -19,13 +19,25 @@ android {
 
         externalNativeBuild {
             cmake {
-                arguments "-DCMAKE_BUILD_TYPE=Release",
-                          "-DWZ_ENABLE_WARNINGS=OFF",
-                          "-DENABLE_DOCS=OFF",
-                          "-DENABLE_NLS=OFF",
-                          "-DWZ_ENABLE_BACKEND_VULKAN=OFF",
-                          "-DENABLE_GNS_NETWORK_BACKEND=OFF",
-                          "-DENABLE_DISCORD=OFF"
+                def vcpkgRoot = System.getenv('VCPKG_ROOT') ?: ''
+                def ndkHome   = System.getenv('ANDROID_NDK_HOME') ?: ''
+                def cmakeArgs = [
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DWZ_ENABLE_WARNINGS=OFF",
+                    "-DENABLE_DOCS=OFF",
+                    "-DENABLE_NLS=OFF",
+                    "-DWZ_ENABLE_BACKEND_VULKAN=OFF",
+                    "-DENABLE_GNS_NETWORK_BACKEND=OFF",
+                    "-DENABLE_DISCORD=OFF",
+                    "-DVCPKG_TARGET_TRIPLET=arm64-android"
+                ]
+                if (vcpkgRoot) {
+                    cmakeArgs += "-DCMAKE_TOOLCHAIN_FILE=${vcpkgRoot}/scripts/buildsystems/vcpkg.cmake"
+                }
+                if (ndkHome) {
+                    cmakeArgs += "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${ndkHome}/build/cmake/android.toolchain.cmake"
+                }
+                arguments(*cmakeArgs)
             }
         }
     }
