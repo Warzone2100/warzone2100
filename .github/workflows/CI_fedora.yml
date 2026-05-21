@@ -2,8 +2,8 @@ name: Fedora
 
 on:
   push:
-    branches-ignore:
-      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+    branches:
+      - 'master'
   pull_request:
     # Match all pull requests...
     paths-ignore:
