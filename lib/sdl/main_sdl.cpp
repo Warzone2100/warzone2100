@@ -417,6 +417,10 @@ std::vector<video_backend> wzAvailableGfxBackends()
 // EMSCRIPTEN:
 	// - Only supports OpenGL ES (WebGL) backend
 	availableBackends.push_back(video_backend::opengles);
+#elif defined(WZ_OS_ANDROID)
+// ANDROID:
+	// - OpenGL ES 3 is the primary (and only) supported backend; Vulkan is deferred
+	availableBackends.push_back(video_backend::opengles);
 #elif defined(WZ_OS_WIN)
 // WINDOWS:
 # if defined(_M_X64) || defined(_M_IX86)

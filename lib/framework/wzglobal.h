@@ -106,6 +106,10 @@
 #  define WZ_OS_ULTRIX
 #elif defined(sinix)
 #  define WZ_OS_RELIANT
+#elif defined(__ANDROID__)
+#  define WZ_OS_ANDROID
+#  define WZ_OS_UNIX
+/* Android defines __linux__ but is NOT desktop Linux; keep WZ_OS_LINUX undefined */
 #elif defined(__linux__) || defined(__linux)
 #  define WZ_OS_LINUX
 #elif defined(__FreeBSD__) || defined(__DragonFly__)

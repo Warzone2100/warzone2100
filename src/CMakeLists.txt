@@ -96,7 +96,14 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_additionalSourceFiles "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 endif()
 
-add_executable(warzone2100 ${HEADERS} ${SRC} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
+if(CMAKE_SYSTEM_NAME MATCHES "Android")
+	# On Android, SDL3's SDLActivity dlopen's libmain.so; build as a shared library.
+	add_library(warzone2100 SHARED ${HEADERS} ${SRC} "${wz2100_autorevision_h_file}")
+	set_target_properties(warzone2100 PROPERTIES OUTPUT_NAME "main")
+	target_link_libraries(warzone2100 PRIVATE android log)
+else()
+	add_executable(warzone2100 ${HEADERS} ${SRC} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
+endif()
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(warzone2100)
 target_compile_definitions(warzone2100 PRIVATE "YY_NO_UNISTD_H")
@@ -104,11 +111,13 @@ SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "$
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
-set(WZ_OUTPUT_BINARY_SUFFIX "${WZ_OUTPUT_NAME_SUFFIX}")
-if (WZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY)
-	unset(WZ_OUTPUT_BINARY_SUFFIX)
+if(NOT CMAKE_SYSTEM_NAME MATCHES "Android")
+	set(WZ_OUTPUT_BINARY_SUFFIX "${WZ_OUTPUT_NAME_SUFFIX}")
+	if (WZ_SKIP_OUTPUT_NAME_SUFFIX_ON_BINARY)
+		unset(WZ_OUTPUT_BINARY_SUFFIX)
+	endif()
+	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100${WZ_OUTPUT_BINARY_SUFFIX}")
 endif()
-SET_TARGET_PROPERTIES(warzone2100 PROPERTIES OUTPUT_NAME "warzone2100${WZ_OUTPUT_BINARY_SUFFIX}")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Build warzone exe as a Windows app (not a console app)
@@ -851,7 +860,7 @@ endif()
 #######################
 # Install
 
-if(NOT CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+if(NOT CMAKE_SYSTEM_NAME MATCHES "(Emscripten|Android)")
 
 	# Executable
 	install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")

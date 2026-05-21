@@ -1,0 +1,164 @@
+name: Android
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+  pull_request:
+    # Match all pull requests...
+    paths-ignore:
+      # Except some text-only files / documentation
+      - 'ChangeLog'
+      # Except those that only include changes to stats
+      - 'data/base/stats/**'
+      - 'data/mp/stats/**'
+      - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+      # Linux-specific example scripts
+      - 'doc/hosting/linux_scripts/**'
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type (Debug or Release)'
+        required: false
+        default: 'Debug'
+
+env:
+  BUILD_TYPE: ${{ github.event.inputs.build_type || 'Debug' }}
+  NDK_VERSION: "26.3.11579264"
+  ANDROID_API_LEVEL: "36"
+  CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
+
+jobs:
+  android-build:
+    name: 'arm64-v8a'
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    outputs:
+      WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+      WZ_GITHUB_SHA: ${{ steps.checkout-config.outputs.WZ_GITHUB_SHA }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          path: 'src'
+
+      - name: Configure Repo Checkout
+        id: checkout-config
+        working-directory: ./src
+        env:
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          . .ci/githubactions/checkout_config.sh
+
+      - name: Prepare Git Repo for autorevision
+        working-directory: '${{ github.workspace }}/src'
+        run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+
+      - name: Init Git Submodules
+        working-directory: '${{ github.workspace }}/src'
+        run: git submodule update --init --recursive
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK Platform and NDK
+        run: |
+          sdkmanager "platforms;android-${ANDROID_API_LEVEL}" "build-tools;34.0.0" "ndk;${NDK_VERSION}"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> $GITHUB_ENV
+
+      - name: Compute build variables
+        run: |
+          WZ_DISTRIBUTOR="UNKNOWN"
+          if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+            WZ_DISTRIBUTOR="wz2100.net"
+          fi
+          echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+          echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/vcpkg
+            ${{ github.workspace }}/build/vcpkg_installed
+          key: vcpkg-android-arm64-${{ hashFiles('src/vcpkg.json') }}-${{ env.NDK_VERSION }}
+          restore-keys: |
+            vcpkg-android-arm64-${{ hashFiles('src/vcpkg.json') }}-
+            vcpkg-android-arm64-
+
+      - name: Set up vcpkg
+        run: |
+          if [ ! -d "${{ github.workspace }}/vcpkg/.git" ]; then
+            git clone https://github.com/microsoft/vcpkg.git "${{ github.workspace }}/vcpkg"
+          else
+            git -C "${{ github.workspace }}/vcpkg" pull --ff-only
+          fi
+          "${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=${{ github.workspace }}/vcpkg" >> $GITHUB_ENV
+          echo "VCPKG_DEFAULT_TRIPLET=arm64-android" >> $GITHUB_ENV
+
+      - name: Prep Directories
+        run: |
+          mkdir -p "${{ github.workspace }}/output"
+
+      - name: Make gradlew executable
+        working-directory: '${{ github.workspace }}/src/platforms/android'
+        run: chmod +x gradlew
+
+      - name: Generate Gradle Wrapper JAR
+        working-directory: '${{ github.workspace }}/src/platforms/android'
+        run: gradle wrapper
+
+      - name: Build APK (assembleDebug)
+        working-directory: '${{ github.workspace }}/src/platforms/android'
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+          VCPKG_DEFAULT_TRIPLET: arm64-android
+        run: |
+          echo "::add-matcher::${{ github.workspace }}/src/.ci/githubactions/pattern_matchers/cmake.json"
+          ./gradlew assembleDebug \
+            -Pandroid.ndkPath="${ANDROID_NDK_HOME}" \
+            --no-daemon \
+            --stacktrace
+          echo "::remove-matcher owner=cmake::"
+
+      - name: Locate APK
+        id: locate-apk
+        working-directory: '${{ github.workspace }}/src/platforms/android'
+        run: |
+          APK_PATH=$(find . -name "*.apk" -path "*/debug/*" | head -1)
+          echo "APK_PATH=${APK_PATH}"
+          WZ_BUILD_DESC="android_arm64-v8a_${BUILD_TYPE,,}"
+          OUTPUT_FILE_NAME="warzone2100_${WZ_BUILD_DESC}.apk"
+          cp "${APK_PATH}" "${{ github.workspace }}/output/${OUTPUT_FILE_NAME}"
+          echo "WZ_OUTPUT_APK_PATH=${{ github.workspace }}/output/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
+          echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" >> $GITHUB_ENV
+          echo "  -> SHA512: $(sha512sum "${{ github.workspace }}/output/${OUTPUT_FILE_NAME}")"
+          echo "  -> Size (bytes): $(stat -c %s "${{ github.workspace }}/output/${OUTPUT_FILE_NAME}")"
+
+      - name: 'Upload Artifact - APK'
+        uses: actions/upload-artifact@v7
+        if: success() && (github.repository == 'Warzone2100/warzone2100' || github.repository == 'kjenney/warzone2100')
+        with:
+          name: warzone2100_${{ env.WZ_BUILD_DESC }}_apk
+          path: '${{ env.WZ_OUTPUT_APK_PATH }}'
+          if-no-files-found: 'error'
+
+      - name: Generate artifact attestation
+        if: success() && (github.event_name == 'push' && github.ref == 'refs/heads/master')
+        uses: actions/attest-build-provenance@v3
+        continue-on-error: true
+        with:
+          subject-path: '${{ env.WZ_OUTPUT_APK_PATH }}'

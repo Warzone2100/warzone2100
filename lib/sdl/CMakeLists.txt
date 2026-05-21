@@ -24,3 +24,7 @@ set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL3 library" )
 target_link_libraries(sdl-backend PRIVATE SDL3::SDL3)
 target_compile_definitions(sdl-backend PRIVATE "-DHAVE_SDL_VULKAN_H")
+
+if(CMAKE_SYSTEM_NAME MATCHES "Android")
+	target_link_libraries(sdl-backend PRIVATE android log)
+endif()
