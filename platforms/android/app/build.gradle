@@ -2,9 +2,6 @@ plugins {
     id 'com.android.application'
 }
 
-def vcpkgRoot = System.getenv('VCPKG_ROOT') ?: ''
-def ndkHome = System.getenv('ANDROID_NDK_HOME') ?: ''
-
 android {
     namespace 'net.wz2100.wz'
     compileSdk 36
@@ -22,6 +19,8 @@ android {
 
         externalNativeBuild {
             cmake {
+                def vcpkgRoot = System.getenv('VCPKG_ROOT') ?: ''
+                def ndkHome   = System.getenv('ANDROID_NDK_HOME') ?: ''
                 def cmakeArgs = [
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DWZ_ENABLE_WARNINGS=OFF",
@@ -38,7 +37,7 @@ android {
                 if (ndkHome) {
                     cmakeArgs += "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${ndkHome}/build/cmake/android.toolchain.cmake"
                 }
-                arguments cmakeArgs as String[]
+                arguments(*cmakeArgs)
             }
         }
     }
