@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher icon placeholder for Warzone 2100.
+  Replace with a proper adaptive icon using WZ artwork before release.
+  See: https://developer.android.com/develop/ui/views/launch/icon_design_adaptive
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@android:color/black"/>
+    <foreground android:drawable="@android:color/white"/>
+</adaptive-icon>

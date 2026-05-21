@@ -84,7 +84,16 @@
 			"features": [
 				"ssl"
 			],
-			"platform": "!windows & !mingw & !osx & !emscripten"
+			"platform": "!windows & !mingw & !osx & !emscripten & !android"
+		},
+		{
+			"name": "curl",
+			"default-features": false,
+			"features": [
+				"openssl",
+				"ssl"
+			],
+			"platform": "android"
 		},
 		{
 			"name": "angle",

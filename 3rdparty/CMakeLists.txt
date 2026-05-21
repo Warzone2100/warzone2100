@@ -298,7 +298,7 @@ if (CMAKE_VERSION VERSION_GREATER "3.18")
 endif()
 
 set(_default_enable_gns_network_backend_value ON)
-if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+if(CMAKE_SYSTEM_NAME MATCHES "Emscripten" OR CMAKE_SYSTEM_NAME MATCHES "Android")
 	set(_default_enable_gns_network_backend_value OFF)
 endif()
 
