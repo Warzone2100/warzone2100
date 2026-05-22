@@ -8,6 +8,11 @@ echo "==> Build type: ${BUILD_TYPE}"
 echo "==> ANDROID_NDK_HOME: ${ANDROID_NDK_HOME}"
 echo "==> VCPKG_ROOT: ${VCPKG_ROOT}"
 
+# Force ANDROID_NDK to match ANDROID_NDK_HOME so the CMake toolchain doesn't
+# pick up a stale r27 path that may exist in the Docker layer cache.
+export ANDROID_NDK="${ANDROID_NDK_HOME}"
+echo "==> ANDROID_NDK: ${ANDROID_NDK}"
+
 # /src is the mounted repo; /build is a writable working copy
 # Copy source to writable dir to avoid polluting the mounted repo
 WORK_DIR="/home/warzone2100/work"
