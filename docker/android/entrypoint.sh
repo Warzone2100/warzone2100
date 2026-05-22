@@ -58,7 +58,7 @@ fi
 # Generate Gradle wrapper JAR (not stored in git)
 cd "${WORK_DIR}/platforms/android"
 chmod +x gradlew
-gradle wrapper --gradle-version 8.7 --distribution-type bin
+gradle wrapper --gradle-version 8.11.1 --distribution-type bin
 
 # Build APK
 echo "==> Running gradlew assemble${BUILD_TYPE}..."

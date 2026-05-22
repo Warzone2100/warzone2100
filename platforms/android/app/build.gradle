@@ -31,7 +31,7 @@ android {
                     "-DWZ_ENABLE_BACKEND_VULKAN=OFF",
                     "-DENABLE_GNS_NETWORK_BACKEND=OFF",
                     "-DENABLE_DISCORD=OFF",
-                    "-DVCPKG_TARGET_TRIPLET=arm64-android"
+                    "-DVCPKG_TARGET_TRIPLET=arm64-android",
                 ]
                 if (vcpkgRoot) {
                     cmakeArgs += "-DCMAKE_TOOLCHAIN_FILE=${vcpkgRoot}/scripts/buildsystems/vcpkg.cmake"

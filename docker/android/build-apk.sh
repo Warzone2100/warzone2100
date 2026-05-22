@@ -20,7 +20,8 @@ docker build \
   -t "${IMAGE_TAG}" \
   "${REPO_ROOT}"
 
-echo "==> Creating vcpkg cache volume: ${VCPKG_VOLUME}"
+echo "==> Creating/Recreating vcpkg cache volume: ${VCPKG_VOLUME}"
+docker volume rm wz2100-vcpkg-android-cache > /dev/null 2>&1 || true
 docker volume create "${VCPKG_VOLUME}" > /dev/null
 
 echo "==> Fixing vcpkg cache volume permissions..."

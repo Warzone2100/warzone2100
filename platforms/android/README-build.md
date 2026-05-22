@@ -5,11 +5,11 @@
 | Tool | Version |
 |------|---------|
 | Android SDK | API 36 (Android 16) |
-| Android NDK | 26.3.11579264 (r26c) |
+| Android NDK | 28.2.13676358 (r28c) |
 | CMake | 3.22.1+ (bundled with NDK) |
 | JDK | 17 (Temurin recommended) |
-| Gradle | 8.7 (via wrapper) |
-| AGP | 8.6.0 |
+| Gradle | 8.11.1 (via wrapper) |
+| AGP | 8.9.1 |
 | vcpkg | current main |
 
 ## SDL3 Java Layer
@@ -50,7 +50,7 @@ a machine with Gradle installed:
 
 ```sh
 cd platforms/android
-gradle wrapper --gradle-version 8.7 --distribution-type bin
+gradle wrapper --gradle-version 8.11.1 --distribution-type bin
 ```
 
 This creates `gradle/wrapper/gradle-wrapper.jar` locally.
@@ -59,7 +59,7 @@ This creates `gradle/wrapper/gradle-wrapper.jar` locally.
 
 ```sh
 export ANDROID_HOME=/path/to/android-sdk
-export ANDROID_NDK_HOME=/path/to/android-sdk/ndk/26.3.11579264
+export ANDROID_NDK_HOME=/path/to/android-sdk/ndk/28.2.13676358
 export VCPKG_ROOT=/path/to/vcpkg
 export VCPKG_DEFAULT_TRIPLET=arm64-android
 ```
