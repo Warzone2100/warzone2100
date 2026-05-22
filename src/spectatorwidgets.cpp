@@ -691,7 +691,7 @@ if ((!NetPlay.players[playerIdx].allocated && NetPlay.players[playerIdx].ai < 0)
 			}
 			else
 			{
-				label.setString(WzString::format("%.2f%%", ((float)sts.recentResearchPerformance/(float)sts.recentResearchPotential)*100));
+				label.setString(WzString::format("%.2f%%", ((double)sts.recentResearchPerformance/(double)sts.recentResearchPotential)*100));
 			}
 			ADJUST_LABEL_COLOR_FOR_PLAYERS();
 		}, INFO_UPDATE_INTERVAL_TICKS));

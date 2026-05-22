@@ -1647,7 +1647,7 @@ static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, fl
 	// #define WZ_MIP_LOAD_BIAS 0.f
 	const auto re = std::regex("#define WZ_MIP_LOAD_BIAS .*", std::regex_constants::ECMAScript);
 
-	std::string floatAsString = astringf("%f", mipLodBias);
+	std::string floatAsString = astringf("%f", static_cast<double>(mipLodBias));
 	size_t lastNon0Pos = floatAsString.find_last_not_of('0');
 	if (lastNon0Pos != std::string::npos)
 	{

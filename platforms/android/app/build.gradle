@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "net.wz2100.wz"
-        minSdk 26
+        minSdk 28
         targetSdk 36
         versionCode 1
         versionName "master"
@@ -19,11 +19,13 @@ android {
 
         externalNativeBuild {
             cmake {
-                def vcpkgRoot = System.getenv('VCPKG_ROOT') ?: ''
-                def ndkHome   = System.getenv('ANDROID_NDK_HOME') ?: ''
+                def vcpkgRoot         = System.getenv('VCPKG_ROOT') ?: ''
+                def ndkHome           = System.getenv('ANDROID_NDK_HOME') ?: ''
+                def vcpkgInstalledDir = project.findProperty('vcpkg.installed.dir') ?: ''
                 def cmakeArgs = [
                     "-DCMAKE_BUILD_TYPE=Release",
                     "-DWZ_ENABLE_WARNINGS=OFF",
+                    "-DWZ_ENABLE_WARNINGS_AS_ERRORS=OFF",
                     "-DENABLE_DOCS=OFF",
                     "-DENABLE_NLS=OFF",
                     "-DWZ_ENABLE_BACKEND_VULKAN=OFF",
@@ -37,6 +39,9 @@ android {
                 if (ndkHome) {
                     cmakeArgs += "-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=${ndkHome}/build/cmake/android.toolchain.cmake"
                 }
+                if (vcpkgInstalledDir) {
+                    cmakeArgs += "-DVCPKG_INSTALLED_DIR=${vcpkgInstalledDir}"
+                }
                 arguments(*cmakeArgs)
             }
         }
@@ -45,7 +50,7 @@ android {
     externalNativeBuild {
         cmake {
             // Path to the top-level CMakeLists.txt (two directories up from here)
-            path "../../CMakeLists.txt"
+            path "../../../CMakeLists.txt"
             version "3.22.1"
         }
     }
