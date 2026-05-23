@@ -157,6 +157,7 @@ public class SDLActivity extends Activity implements SurfaceHolder.Callback {
 
     // ----- Native methods -----
 
+    public static native String nativeGetVersion();
     public static native void nativeSetupJNI();
     public static native void nativeRunMain(String library, String function, Object arguments);
     public static native void nativeLowMemory();
