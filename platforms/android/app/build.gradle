@@ -73,6 +73,12 @@ android {
         }
     }
 
+    aaptOptions {
+        // .wz files are already compressed zip archives; prevent AAPT2 from
+        // double-compressing them so AssetManager streaming stays fast.
+        noCompress "wz"
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11

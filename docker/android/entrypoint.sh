@@ -49,6 +49,16 @@ export CMAKE_BUILD_PARALLEL_LEVEL=2
     exit 1
   }
 
+# Create game data archives for APK assets
+# WZActivity.java copies these to internal storage; PhysFS mounts them from there.
+WZ_ASSETS_DIR="${WORK_DIR}/platforms/android/app/src/main/assets/data"
+mkdir -p "${WZ_ASSETS_DIR}"
+echo "==> Creating base.wz from data/base ..."
+(cd "${WORK_DIR}/data/base" && zip -r "${WZ_ASSETS_DIR}/base.wz" . -x "*.DS_Store")
+echo "==> Creating mp.wz from data/mp ..."
+(cd "${WORK_DIR}/data/mp"   && zip -r "${WZ_ASSETS_DIR}/mp.wz"   . -x "*.DS_Store")
+echo "==> Game data archives staged in ${WZ_ASSETS_DIR}"
+
 # Stage SDL3 shared library required by Android Gradle build
 SDL3_SO="${VCPKG_INSTALLED}/arm64-android/lib/libSDL3.so"
 JNI_DIR="${WORK_DIR}/platforms/android/app/src/main/jniLibs/arm64-v8a"

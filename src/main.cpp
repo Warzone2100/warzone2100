@@ -616,6 +616,19 @@ static void check_Physfs()
  */
 static void scanDataDirs()
 {
+#if defined(__ANDROID__)
+	// Android: base.wz / mp.wz are copied from APK assets to internal storage by WZActivity.java
+	if (!PHYSFS_exists("gamedesc.lev"))
+	{
+		const char *internalStorage = SDL_GetAndroidInternalStoragePath();
+		if (internalStorage)
+		{
+			std::string androidDataDir = std::string(internalStorage) + "/data/";
+			registerSearchPath(androidDataDir, 3);
+			rebuildSearchPath(mod_multiplay, true);
+		}
+	}
+#endif
 #if !defined(WZ_OS_MAC)
 	// Check PREFIX-based paths
 	std::string tmpstr;
