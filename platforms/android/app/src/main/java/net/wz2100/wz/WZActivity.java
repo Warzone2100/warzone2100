@@ -5,7 +5,7 @@ import org.libsdl.app.SDLActivity;
 /**
  * Warzone 2100 Android activity.
  *
- * Extends SDLActivity (SDL3 3.2.x Java layer). SDL3's SDLActivity.dlopen's
+ * Extends SDLActivity (SDL3 3.4.2 Java layer). SDL3's SDLActivity.dlopen's
  * libSDL3.so then libmain.so (our game library) and calls SDL_main.
  */
 public class WZActivity extends SDLActivity {
@@ -16,8 +16,10 @@ public class WZActivity extends SDLActivity {
      */
     @Override
     protected String[] getLibraries() {
+        // SDL3 is statically linked into libmain.so by vcpkg (arm64-android triplet
+        // uses static linkage). Load only the game library; SDL3's JNI_OnLoad runs
+        // inside libmain.so.
         return new String[] {
-            "SDL3",
             "main"
         };
     }

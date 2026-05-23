@@ -1,87 +1,126 @@
 package org.libsdl.app;
 
-import android.media.AudioFormat;
+import android.content.Context;
+import android.media.AudioDeviceCallback;
+import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
-import android.media.AudioRecord;
-import android.media.AudioTrack;
-import android.media.MediaRecorder;
+import android.os.Build;
 import android.util.Log;
 
-/**
- * SDL3 Android audio manager (SDL3 3.2.x Java layer).
- *
- * Provides Java-side audio output and capture for SDL3's Android audio backend.
- */
+import java.util.Arrays;
+import java.util.ArrayList;
+
 class SDLAudioManager {
+    protected static final String TAG = "SDLAudio";
 
-    private static final String TAG = "SDL";
+    protected static Context mContext;
 
-    protected static AudioTrack mAudioTrack;
-    protected static AudioRecord mAudioRecord;
+    private static AudioDeviceCallback mAudioDeviceCallback;
 
-    public SDLAudioManager() {
-        mAudioTrack = null;
-        mAudioRecord = null;
-    }
+    static void initialize() {
+        mAudioDeviceCallback = null;
 
-    public static int[] audioOpen(int sampleRate, int audioFormat, int desiredChannels, int desiredFrames) {
-        int channelConfig;
-        int audioFormatConst;
+        if(Build.VERSION.SDK_INT >= 24 /* Android 7.0 (N) */)
+        {
+            mAudioDeviceCallback = new AudioDeviceCallback() {
+                @Override
+                public void onAudioDevicesAdded(AudioDeviceInfo[] addedDevices) {
+                    for (AudioDeviceInfo deviceInfo : addedDevices) {
+                        nativeAddAudioDevice(deviceInfo.isSink(), deviceInfo.getProductName().toString(), deviceInfo.getId());
+                    }
+                }
 
-        switch (desiredChannels) {
-            case 1: channelConfig = AudioFormat.CHANNEL_OUT_MONO; break;
-            case 2: channelConfig = AudioFormat.CHANNEL_OUT_STEREO; break;
-            default: channelConfig = AudioFormat.CHANNEL_OUT_STEREO; desiredChannels = 2; break;
-        }
-
-        switch (audioFormat) {
-            case 0x8010: audioFormatConst = AudioFormat.ENCODING_PCM_16BIT; break; // AUDIO_S16
-            default: audioFormatConst = AudioFormat.ENCODING_PCM_16BIT; break;
-        }
-
-        int frameSize = desiredChannels * 2; // 16-bit samples
-        int minBufferSize = AudioTrack.getMinBufferSize(sampleRate, channelConfig, audioFormatConst);
-        int desiredBufferSize = desiredFrames * frameSize;
-        int bufferSize = Math.max(minBufferSize, desiredBufferSize);
-
-        mAudioTrack = new AudioTrack(
-            AudioManager.STREAM_MUSIC, sampleRate, channelConfig,
-            audioFormatConst, bufferSize, AudioTrack.MODE_STREAM);
-
-        int[] results = { sampleRate, audioFormat, desiredChannels, desiredFrames };
-        Log.v(TAG, "audioOpen: " + sampleRate + " Hz, " + desiredChannels + " ch, " + desiredFrames + " frames");
-        return results;
-    }
-
-    public static void audioWriteShortBuffer(short[] buffer) {
-        if (mAudioTrack == null) return;
-        if (mAudioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING) {
-            mAudioTrack.play();
-        }
-        for (int i = 0; i < buffer.length; ) {
-            int written = mAudioTrack.write(buffer, i, buffer.length - i);
-            if (written <= 0) break;
-            i += written;
+                @Override
+                public void onAudioDevicesRemoved(AudioDeviceInfo[] removedDevices) {
+                    for (AudioDeviceInfo deviceInfo : removedDevices) {
+                        nativeRemoveAudioDevice(deviceInfo.isSink(), deviceInfo.getId());
+                    }
+                }
+            };
         }
     }
 
-    public static void audioWriteByteBuffer(byte[] buffer) {
-        if (mAudioTrack == null) return;
-        if (mAudioTrack.getPlayState() != AudioTrack.PLAYSTATE_PLAYING) {
-            mAudioTrack.play();
+    static void setContext(Context context) {
+        mContext = context;
+    }
+
+    static void release(Context context) {
+        // no-op atm
+    }
+
+    // Audio
+
+    private static AudioDeviceInfo getInputAudioDeviceInfo(int deviceId) {
+        if (Build.VERSION.SDK_INT >= 24 /* Android 7.0 (N) */) {
+            AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            for (AudioDeviceInfo deviceInfo : audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
+                if (deviceInfo.getId() == deviceId) {
+                    return deviceInfo;
+                }
+            }
         }
-        for (int i = 0; i < buffer.length; ) {
-            int written = mAudioTrack.write(buffer, i, buffer.length - i);
-            if (written <= 0) break;
-            i += written;
+        return null;
+    }
+
+    private static AudioDeviceInfo getPlaybackAudioDeviceInfo(int deviceId) {
+        if (Build.VERSION.SDK_INT >= 24 /* Android 7.0 (N) */) {
+            AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            for (AudioDeviceInfo deviceInfo : audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)) {
+                if (deviceInfo.getId() == deviceId) {
+                    return deviceInfo;
+                }
+            }
+        }
+        return null;
+    }
+
+    static void registerAudioDeviceCallback() {
+        if (Build.VERSION.SDK_INT >= 24 /* Android 7.0 (N) */) {
+            AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            // get an initial list now, before hotplug callbacks fire.
+            for (AudioDeviceInfo dev : audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)) {
+                if (dev.getType() == AudioDeviceInfo.TYPE_TELEPHONY) {
+                    continue;  // Device cannot be opened
+                }
+                nativeAddAudioDevice(dev.isSink(), dev.getProductName().toString(), dev.getId());
+            }
+            for (AudioDeviceInfo dev : audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS)) {
+                nativeAddAudioDevice(dev.isSink(), dev.getProductName().toString(), dev.getId());
+            }
+            audioManager.registerAudioDeviceCallback(mAudioDeviceCallback, null);
         }
     }
 
-    public static void audioClose() {
-        if (mAudioTrack != null) {
-            mAudioTrack.stop();
-            mAudioTrack.release();
-            mAudioTrack = null;
+    static void unregisterAudioDeviceCallback() {
+        if (Build.VERSION.SDK_INT >= 24 /* Android 7.0 (N) */) {
+            AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            audioManager.unregisterAudioDeviceCallback(mAudioDeviceCallback);
         }
     }
+
+    /** This method is called by SDL using JNI. */
+    static void audioSetThreadPriority(boolean recording, int device_id) {
+        try {
+
+            /* Set thread name */
+            if (recording) {
+                Thread.currentThread().setName("SDLAudioC" + device_id);
+            } else {
+                Thread.currentThread().setName("SDLAudioP" + device_id);
+            }
+
+            /* Set thread priority */
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
+
+        } catch (Exception e) {
+            Log.v(TAG, "modify thread properties failed " + e.toString());
+        }
+    }
+
+    static native void nativeSetupJNI();
+
+    static native void nativeRemoveAudioDevice(boolean recording, int deviceId);
+
+    static native void nativeAddAudioDevice(boolean recording, String name, int deviceId);
+
 }
