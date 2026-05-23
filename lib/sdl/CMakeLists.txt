@@ -24,3 +24,10 @@ set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL3 library" )
 target_link_libraries(sdl-backend PRIVATE SDL3::SDL3)
 target_compile_definitions(sdl-backend PRIVATE "-DHAVE_SDL_VULKAN_H")
+
+if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
+	# Workaround for Apple requiring min macOS version 13.3 when C++20 is used.
+	# Temporarily require C++17 for sdl-backend for all platforms, for the sake
+	# of uniformity.
+	set_target_properties(sdl-backend PROPERTIES CXX_STANDARD 17)
+endif()
