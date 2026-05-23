@@ -53,6 +53,9 @@
 #  endif
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
+#  if defined(__ANDROID__)
+#    include <SDL3/SDL_system.h>
+#  endif
 #endif // WZ_OS_WIN
 
 #include "lib/framework/input.h"
@@ -516,7 +519,19 @@ static void initialize_ConfigDir()
  */
 static void initialize_PhysicsFS(const char *argv_0)
 {
-	int result = PHYSFS_init(argv_0);
+	int result;
+#if defined(__ANDROID__)
+	// PhysFS 3.2.0 on Android requires a PHYSFS_AndroidInit struct (not argv0)
+	// so it can use JNI to determine the APK path and prefs dir.
+	// Passing a plain string causes PhysFS to fall back to /proc/self/exe
+	// (which points to the zygote app_process binary) and crash.
+	PHYSFS_AndroidInit physfsAndroidInit;
+	physfsAndroidInit.jnienv  = SDL_GetAndroidJNIEnv();
+	physfsAndroidInit.context = SDL_GetAndroidActivity();
+	result = PHYSFS_init((const char *) &physfsAndroidInit);
+#else
+	result = PHYSFS_init(argv_0);
+#endif
 
 	if (!result)
 	{
