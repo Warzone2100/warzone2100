@@ -24,11 +24,4 @@ public class WZActivity extends SDLActivity {
         };
     }
 
-    /**
-     * Return the application name shown in the SDL window title.
-     */
-    @Override
-    protected String getMainSharedObject() {
-        return "libmain.so";
-    }
 }
