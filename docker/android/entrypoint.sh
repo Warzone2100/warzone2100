@@ -55,6 +55,18 @@ WZ_ASSETS_DIR="${WORK_DIR}/platforms/android/app/src/main/assets/data"
 mkdir -p "${WZ_ASSETS_DIR}"
 echo "==> Creating base.wz from data/base ..."
 (cd "${WORK_DIR}/data/base" && zip -r "${WZ_ASSETS_DIR}/base.wz" . -x "*.DS_Store")
+
+# Append fonts to base.wz under fonts/ so PhysFS finds fonts/DejaVuSans.ttf
+echo "==> Appending fonts to base.wz ..."
+FONTS_TMPDIR=$(mktemp -d)
+mkdir -p "${FONTS_TMPDIR}/fonts"
+for _f in DejaVuSans.ttf DejaVuSans-Bold.ttf DejaVu.LICENSE.txt; do
+    _src="${WORK_DIR}/data/fonts/DejaVu/${_f}"
+    [ -f "${_src}" ] && cp "${_src}" "${FONTS_TMPDIR}/fonts/"
+done
+(cd "${FONTS_TMPDIR}" && zip -r "${WZ_ASSETS_DIR}/base.wz" fonts/)
+rm -rf "${FONTS_TMPDIR}"
+
 echo "==> Creating mp.wz from data/mp ..."
 (cd "${WORK_DIR}/data/mp"   && zip -r "${WZ_ASSETS_DIR}/mp.wz"   . -x "*.DS_Store")
 echo "==> Game data archives staged in ${WZ_ASSETS_DIR}"
