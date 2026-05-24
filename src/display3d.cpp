@@ -1588,6 +1588,10 @@ bool init3DView()
 
 	// distance is not saved, so initialise it now
 	distance = war_GetMapZoom(); // distance
+#if defined(__ANDROID__)
+	// Mobile screens are small; start closer to make the map readable.
+	distance = std::min<float>(distance, 1800.0f);
+#endif
 
 	if(pie_GetFogEnabled()){
 		pie_SetFogStatus(true);

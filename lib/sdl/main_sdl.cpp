@@ -1863,6 +1863,15 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 	windowWidth = newWidth;
 	windowHeight = newHeight;
 
+#if defined(__ANDROID__)
+	{
+		int drawableW = 0, drawableH = 0;
+		SDL_WZBackend_GetDrawableSize(WZwindow, &drawableW, &drawableH);
+		debug(LOG_3D, "handleWindowSizeChange: logical %ux%u -> %ux%u, drawable=%dx%d",
+			  oldWidth, oldHeight, newWidth, newHeight, drawableW, drawableH);
+	}
+#endif // defined(__ANDROID__)
+
 	// NOTE: This function receives the window size in the window's logical units, but not accounting for the interface scale factor.
 	// Therefore, the provided old/newWidth/Height must be divided by the interface scale factor to calculate the new
 	// *game* screen logical width / height.
@@ -2842,6 +2851,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 
 		if (fullscreen == WINDOW_MODE::windowed)
 		{
+#if !defined(__ANDROID__)
 			// Determine the maximum usable windowed size for this display/screen
 			SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
 			if (SDL_GetDisplayUsableBounds(screenIndex, &displayUsableBounds) == 0)
@@ -2852,15 +2862,23 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 					windowHeight = std::min((unsigned int)displayUsableBounds.h, windowHeight);
 				}
 			}
+#endif // !defined(__ANDROID__)
 		}
 	}
 
 	SDL_PropertiesID props = SDL_CreateProperties();
 	SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, PACKAGE_NAME);
+#if !defined(__ANDROID__)
 	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
 	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, SDL_WINDOWPOS_CENTERED_DISPLAY(screenIndex));
 	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, windowWidth);
 	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, windowHeight);
+#else
+	// On Android, let the Activity dictate the surface size via fullscreen mode.
+	// Setting explicit logical dimensions creates a sub-screen window placed at
+	// the top-left of the fullscreen Activity (the classic 1/4-screen symptom).
+	SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN, true);
+#endif // !defined(__ANDROID__)
 
 	WZ_SDL_setBackendProperty(props, backend);
 
@@ -2955,6 +2973,33 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	ASSERT(resultingWidth > 0 && resultingHeight > 0, "Invalid - SDL returned window width: %d, window height: %d", resultingWidth, resultingHeight);
 	windowWidth = (unsigned int)resultingWidth;
 	windowHeight = (unsigned int)resultingHeight;
+
+#if defined(__ANDROID__)
+	{
+		// If the window is still smaller than the physical display, force fullscreen and re-read.
+		// This can happen when SDL defers the surface resize until after the first frame.
+		SDL_DisplayID primaryDisplay = SDL_GetPrimaryDisplay();
+		const SDL_DisplayMode *dispMode = SDL_GetCurrentDisplayMode(primaryDisplay);
+		if (dispMode && ((int)windowWidth < dispMode->w || (int)windowHeight < dispMode->h))
+		{
+			debug(LOG_3D, "Android: window (%ux%u) smaller than display (%dx%d); retrying SDL_SetWindowFullscreen",
+				  windowWidth, windowHeight, dispMode->w, dispMode->h);
+			SDL_SetWindowFullscreen(WZwindow, true);
+			SDL_SyncWindow(WZwindow);
+			int retryW = 0, retryH = 0;
+			SDL_GetWindowSize(WZwindow, &retryW, &retryH);
+			if (retryW > 0 && retryH > 0)
+			{
+				windowWidth = (unsigned int)retryW;
+				windowHeight = (unsigned int)retryH;
+			}
+		}
+		int drawableW = 0, drawableH = 0;
+		SDL_WZBackend_GetDrawableSize(WZwindow, &drawableW, &drawableH);
+		debug(LOG_3D, "Android window created: logical=%ux%u, drawable=%dx%d, displayScale=%.2f",
+			  windowWidth, windowHeight, drawableW, drawableH, current_displayScaleFactor);
+	}
+#endif // defined(__ANDROID__)
 
 	// Calculate the game screen's logical dimensions
 	screenWidth = windowWidth;
