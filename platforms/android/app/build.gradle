@@ -34,6 +34,11 @@ android {
                     "-DENABLE_DISCORD=OFF",
                     "-DVCPKG_TARGET_TRIPLET=arm64-android",
                 ]
+                def ccachePath = ["which", "ccache"].execute().text.trim()
+                if (ccachePath) {
+                    cmakeArgs += "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+                    cmakeArgs += "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+                }
                 if (vcpkgRoot) {
                     cmakeArgs += "-DCMAKE_TOOLCHAIN_FILE=${vcpkgRoot}/scripts/buildsystems/vcpkg.cmake"
                 }
