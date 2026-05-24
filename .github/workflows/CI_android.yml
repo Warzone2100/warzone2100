@@ -80,7 +80,7 @@ jobs:
       - name: Install system dependencies for vcpkg builds
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y autoconf automake libtool pkg-config nasm
+          sudo apt-get install -y autoconf automake libtool pkg-config nasm meson ninja-build
 
       - name: Compute build variables
         run: |
@@ -121,9 +121,15 @@ jobs:
         working-directory: '${{ github.workspace }}/src/platforms/android'
         run: chmod +x gradlew
 
-      - name: Generate Gradle Wrapper JAR
+      - name: Install Gradle and generate wrapper JAR
         working-directory: '${{ github.workspace }}/src/platforms/android'
-        run: gradle wrapper --gradle-version 8.11.1
+        run: |
+          GRADLE_VERSION=8.11.1
+          curl -fsSL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
+            -o /tmp/gradle-${GRADLE_VERSION}-bin.zip
+          unzip -q /tmp/gradle-${GRADLE_VERSION}-bin.zip -d /tmp/gradle-install
+          /tmp/gradle-install/gradle-${GRADLE_VERSION}/bin/gradle wrapper \
+            --gradle-version ${GRADLE_VERSION}
 
       - name: Build APK (assembleDebug)
         working-directory: '${{ github.workspace }}/src/platforms/android'
