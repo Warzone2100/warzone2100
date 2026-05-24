@@ -2571,6 +2571,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
 {
+	ASSERT_OR_RETURN(, pso != nullptr, "bind_pipeline called with null pipeline_state_object");
 	gl_pipeline_id* newPSOId = static_cast<gl_pipeline_id*>(pso);
 	// lookup pipeline
 	auto& pipelineInfo = createdPipelines[newPSOId->psoID];

@@ -1880,6 +1880,12 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 	// Based on system properties, determine a reasonable default (for performance reasons)
 	// (Uses a heuristic based on system RAM, graphics renderer, and estimated VRAM)
 
+#if defined(__ANDROID__)
+	// GLES terrain shader compatibility on Android is not yet fully validated.
+	// Default to CLASSIC (widest shader compatibility) until higher qualities are tested.
+	return TerrainShaderQuality::CLASSIC;
+#endif
+
 	// If <= 8 GiB system RAM, default to medium ("normal")
 	auto systemRAMinMiB = wzGetCurrentSystemRAM();
 	if (systemRAMinMiB <= 8192)
