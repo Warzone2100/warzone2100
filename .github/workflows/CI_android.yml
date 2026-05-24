@@ -27,6 +27,8 @@ env:
   NDK_VERSION: "28.2.13676358"
   ANDROID_API_LEVEL: "36"
   CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_MAXSIZE: 3G
 
 jobs:
   android-build:
@@ -80,7 +82,7 @@ jobs:
       - name: Install system dependencies for vcpkg builds
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y autoconf autoconf-archive automake libtool pkg-config nasm meson ninja-build
+          sudo apt-get install -y autoconf autoconf-archive automake libtool pkg-config nasm meson ninja-build ccache
 
       - name: Compute build variables
         run: |
@@ -90,6 +92,25 @@ jobs:
           fi
           echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
           echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-android-arm64-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            ccache-android-arm64-${{ github.ref_name }}-
+            ccache-android-arm64-
+
+      - name: Cache Gradle distributions and caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper/dists
+            ~/.gradle/caches
+          key: gradle-${{ hashFiles('src/platforms/android/gradle/wrapper/gradle-wrapper.properties', 'src/platforms/android/**/*.gradle') }}
+          restore-keys: |
+            gradle-
 
       - name: Cache vcpkg
         uses: actions/cache@v4
@@ -137,13 +158,19 @@ jobs:
           ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
           VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
           VCPKG_DEFAULT_TRIPLET: arm64-android
+          CCACHE_DIR: ${{ env.CCACHE_DIR }}
         run: |
           echo "::add-matcher::${{ github.workspace }}/src/.ci/githubactions/pattern_matchers/cmake.json"
           ./gradlew assembleDebug \
             -Pandroid.ndkPath="${ANDROID_NDK_HOME}" \
             --no-daemon \
+            --build-cache \
             --stacktrace
           echo "::remove-matcher owner=cmake::"
+
+      - name: ccache stats
+        if: always()
+        run: ccache --show-stats
 
       - name: Locate APK
         id: locate-apk
