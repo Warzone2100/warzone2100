@@ -80,7 +80,7 @@ jobs:
       - name: Install system dependencies for vcpkg builds
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y autoconf automake libtool pkg-config nasm meson ninja-build
+          sudo apt-get install -y autoconf autoconf-archive automake libtool pkg-config nasm meson ninja-build
 
       - name: Compute build variables
         run: |
