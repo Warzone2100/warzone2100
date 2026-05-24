@@ -1319,7 +1319,7 @@ void iV_TextInit(unsigned int horizScalePercentage, unsigned int vertScalePercen
 	// (since it's only loaded on-demand, and thus might fail with a fatal error later if missing)
 	if (PHYSFS_exists(CJK_FONT_PATH) == 0)
 	{
-#if !defined(__EMSCRIPTEN__)
+#if !defined(__EMSCRIPTEN__) && !defined(__ANDROID__)
 		debug(LOG_FATAL, "Missing data file: %s", CJK_FONT_PATH);
 #endif
 	}
