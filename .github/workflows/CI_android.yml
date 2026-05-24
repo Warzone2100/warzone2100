@@ -77,6 +77,11 @@ jobs:
           sdkmanager "platforms;android-${ANDROID_API_LEVEL}" "build-tools;36.0.0" "ndk;${NDK_VERSION}" "cmake;3.22.1"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> $GITHUB_ENV
 
+      - name: Install system dependencies for vcpkg builds
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y autoconf automake libtool pkg-config nasm
+
       - name: Compute build variables
         run: |
           WZ_DISTRIBUTOR="UNKNOWN"
