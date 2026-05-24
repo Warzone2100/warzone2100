@@ -34,20 +34,31 @@ echo "==> Installing vcpkg dependencies (arm64-android)..."
 export VCPKG_MAX_CONCURRENCY=2
 export VCPKG_KEEP_ENV_VARS="CMAKE_BUILD_PARALLEL_LEVEL"
 export CMAKE_BUILD_PARALLEL_LEVEL=2
+VCPKG_LOG="/tmp/vcpkg-install.log"
 "${VCPKG_ROOT}/vcpkg" install \
   --triplet arm64-android \
   --x-install-root="${VCPKG_INSTALLED}" \
-  --overlay-ports="${WORK_DIR}/.ci/vcpkg/overlay-ports" || {
+  --overlay-ports="${WORK_DIR}/.ci/vcpkg/overlay-ports" \
+  2>&1 | tee "${VCPKG_LOG}"
+VCPKG_EXIT="${PIPESTATUS[0]}"
+if [ "${VCPKG_EXIT}" != "0" ]; then
     echo ""
-    echo "==> vcpkg install failed — dumping buildtree logs:"
-    find "${VCPKG_ROOT}/buildtrees" \( -name "*-out.log" -o -name "*-err.log" \) -print \
-      | sort | while IFS= read -r log; do
-        echo ""
-        echo "========== ${log} =========="
-        cat "${log}"
-      done
+    echo "==> vcpkg install failed (exit ${VCPKG_EXIT}). Last 50 lines:"
+    tail -50 "${VCPKG_LOG}"
+    echo ""
+    echo "==> Buildtree logs (if any):"
+    if [ -d "${VCPKG_ROOT}/buildtrees" ]; then
+      find "${VCPKG_ROOT}/buildtrees" \( -name "*-out.log" -o -name "*-err.log" \) -print \
+        | sort | while IFS= read -r log; do
+          echo ""
+          echo "========== ${log} =========="
+          cat "${log}"
+        done
+    else
+      echo "(no buildtrees directory — vcpkg failed before building any package)"
+    fi
     exit 1
-  }
+fi
 
 # Create game data archives for APK assets
 # WZActivity.java copies these to internal storage; PhysFS mounts them from there.
