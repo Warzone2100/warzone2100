@@ -89,11 +89,21 @@ out vec4 FragColor;
 #include "shadow_mapping.glsl"
 #include "light.glsl"
 
+vec3 getGroundUv(int i) {
+	uint groundNo = fgrounds[i];
+	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
+}
+
+vec3 getGround(int i) {
+	return texture2DArray(groundTex, getGroundUv(i), WZ_MIP_LOAD_BIAS).rgb * fgroundWeights[i];
+}
+
 vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 	return min(a + b, vec3(1.0));
 }
 
 vec4 main_classic() {
+	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
 	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0.f);
 
 	vec3 L = normalize(groundLightDir);
@@ -106,7 +116,7 @@ vec4 main_classic() {
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 
-	return light * decal;
+	return light * vec4((1.f - decal.a) * ground + decal.a * decal.rgb, 1.f);
 }
 
 void main()
