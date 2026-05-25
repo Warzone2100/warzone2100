@@ -1,44 +1,6 @@
 name: Publish Web Build
 
-on:
-  workflow_call:
-    inputs:
-      env:
-        description: 'The environment used for deployment (must contain the required secrets)'
-        required: true
-        type: string
-      architecture:
-        required: true
-        type: string
-      artifact:
-        description: 'The name of the artifact to download'
-        required: true
-        type: string
-      built-ref:
-        description: 'The built ref (i.e. WZ_GITHUB_REF from the calling workflow)'
-        required: true
-        type: string
-      built-commit-sha:
-        description: 'The built commit sha (i.e. WZ_GITHUB_SHA from the calling workflow)'
-        required: true
-        type: string
-      release:
-        description: 'Whether this is a release build'
-        required: true
-        type: boolean
-      ssh-dest-host:
-        description: 'The destination HOST for the rsync'
-        required: true
-        type: string
-      cdn-purge-base-url:
-        description: 'The base URL for CDN cache purging'
-        required: false
-        type: string
-    secrets:
-      WZ_WEB_BUILD_UPLOAD_SSH_KEY:
-        required: true
-      WZ_WEB_BUILD_UPLOAD_SSH_USERNAME:
-        required: true
+on: workflow_dispatch:
 
 jobs:
   publish_web_build:

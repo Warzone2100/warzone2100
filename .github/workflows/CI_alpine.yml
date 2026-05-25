@@ -1,18 +1,6 @@
 name: Alpine
 
-on:
-  push:
-    branches:
-      - 'master'
-  pull_request:
-    # Match all pull requests...
-    paths-ignore:
-      # Except some text-only files / documentation
-      - 'ChangeLog'
-      # Except those that only include changes to stats
-      - 'data/base/stats/**'
-      - 'data/mp/stats/**'
-      - 'data/mp/multiplay/script/functions/camTechEnabler.js'
+on: workflow_dispatch:
 
 jobs:
   alpine-latest:

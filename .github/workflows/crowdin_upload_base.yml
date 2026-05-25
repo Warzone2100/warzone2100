@@ -1,17 +1,6 @@
 name: Crowdin - Upload Sources
 
-on:
-  push:
-    branches:
-      # Only upload base files from the master branch!
-      - 'master'
-    paths:
-      # Should match the source paths in crowdin.yml
-      - 'po/warzone2100.pot'
-      - 'po/guide/warzone2100_guide.pot'
-      - 'pkg/nsis/i18n/win_installer_base.nsh'
-      - 'pkg/win_installer/i18n/win_installer_base.isl'
-  workflow_dispatch:
+on: workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-master

@@ -1,32 +1,6 @@
 name: Flatpak
 
-on:
-  push:
-    branches:
-      - 'master'
-  pull_request:
-    # Match all pull requests...
-    paths-ignore:
-      # Except some text-only files / documentation
-      - 'ChangeLog'
-      # Except those that only include changes to stats
-      - 'data/base/stats/**'
-      - 'data/mp/stats/**'
-      - 'data/mp/multiplay/script/functions/camTechEnabler.js'
-      # Linux-specific example scripts
-      - 'doc/hosting/linux_scripts/**'
-  # Support running after "Draft Tag Release" workflow completes, as part of automated release process
-  workflow_run:
-    workflows: ["Draft Tag Release"]
-    push:
-      tags:
-        - '*'
-    types:
-      - completed
-  # Support running on Release "publish" event to build and publish to Flathub
-  release:
-    types:
-      - published
+on: workflow_dispatch:
 
 jobs:
   build-flatpak:

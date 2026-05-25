@@ -1,11 +1,6 @@
 name: 'Lint Code Base'
 
-on:
-  push:
-    branches:
-      - 'master'
-  pull_request:
-    # Match all pull requests
+on: workflow_dispatch:
 
 jobs:
   lint-code-base:

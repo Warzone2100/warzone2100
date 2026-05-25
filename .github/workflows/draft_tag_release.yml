@@ -1,8 +1,4 @@
-on:
-  push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - '*'
+on: workflow_dispatch:
 
 name: Draft Tag Release
 
