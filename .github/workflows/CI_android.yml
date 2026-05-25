@@ -153,6 +153,26 @@ jobs:
           /tmp/gradle-install/gradle-${GRADLE_VERSION}/bin/gradle wrapper \
             --gradle-version ${GRADLE_VERSION}
 
+      - name: Create game data archives
+        working-directory: '${{ github.workspace }}/src'
+        run: |
+          WZ_ASSETS_DIR="${{ github.workspace }}/src/platforms/android/app/src/main/assets/data"
+          mkdir -p "${WZ_ASSETS_DIR}"
+          echo "==> Creating base.wz from data/base ..."
+          (cd data/base && zip -r "${WZ_ASSETS_DIR}/base.wz" . -x "*.DS_Store")
+          echo "==> Appending fonts to base.wz ..."
+          FONTS_TMPDIR=$(mktemp -d)
+          mkdir -p "${FONTS_TMPDIR}/fonts"
+          for _f in DejaVuSans.ttf DejaVuSans-Bold.ttf DejaVu.LICENSE.txt; do
+              _src="data/fonts/DejaVu/${_f}"
+              [ -f "${_src}" ] && cp "${_src}" "${FONTS_TMPDIR}/fonts/"
+          done
+          (cd "${FONTS_TMPDIR}" && zip -r "${WZ_ASSETS_DIR}/base.wz" fonts/)
+          rm -rf "${FONTS_TMPDIR}"
+          echo "==> Creating mp.wz from data/mp ..."
+          (cd data/mp && zip -r "${WZ_ASSETS_DIR}/mp.wz" . -x "*.DS_Store")
+          echo "==> Game data archives staged in ${WZ_ASSETS_DIR}"
+
       - name: Build APK (assembleDebug)
         working-directory: '${{ github.workspace }}/src/platforms/android'
         env:
