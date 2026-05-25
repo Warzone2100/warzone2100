@@ -483,8 +483,8 @@ public:
 
 		reference operator[](difference_type n) const { return m_list.contexts[m_list.orderedIndexes[n]]; }
 
-		bool operator== (const Iterator& other) { return m_idx == other.m_idx; }
-		bool operator!= (const Iterator& other) { return m_idx != other.m_idx; }
+		bool operator== (const Iterator& other) const { return m_idx == other.m_idx; }
+		bool operator!= (const Iterator& other) const { return m_idx != other.m_idx; }
 		bool operator< (const Iterator& other) const { return m_idx < other.m_idx; }
 		bool operator> (const Iterator& other) const { return m_idx > other.m_idx; }
 		bool operator<= (const Iterator& other) const { return m_idx <= other.m_idx; }
