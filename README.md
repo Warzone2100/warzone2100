@@ -287,6 +287,8 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       cmake --build . --target install
       ```
 
+### Android
+
 ### Windows using MSVC
 
 See [platforms/windows/README-build.md](platforms/windows/README-build.md)
