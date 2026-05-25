@@ -29,6 +29,8 @@ env:
   CMAKE_BUILD_PARALLEL_LEVEL: 4 # See: https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
   CCACHE_DIR: ${{ github.workspace }}/.ccache
   CCACHE_MAXSIZE: 3G
+  CCACHE_BASEDIR: ${{ github.workspace }}
+  CCACHE_SLOPPINESS: time_macros
 
 jobs:
   android-build:
@@ -117,7 +119,7 @@ jobs:
         with:
           path: |
             ${{ github.workspace }}/vcpkg
-            ${{ github.workspace }}/build/vcpkg_installed
+            ${{ github.workspace }}/vcpkg_installed
           key: vcpkg-android-arm64-${{ hashFiles('src/vcpkg.json') }}-${{ env.NDK_VERSION }}
           restore-keys: |
             vcpkg-android-arm64-${{ hashFiles('src/vcpkg.json') }}-
@@ -127,12 +129,11 @@ jobs:
         run: |
           if [ ! -d "${{ github.workspace }}/vcpkg/.git" ]; then
             git clone https://github.com/microsoft/vcpkg.git "${{ github.workspace }}/vcpkg"
-          else
-            git -C "${{ github.workspace }}/vcpkg" pull --ff-only
           fi
           "${{ github.workspace }}/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
           echo "VCPKG_ROOT=${{ github.workspace }}/vcpkg" >> $GITHUB_ENV
           echo "VCPKG_DEFAULT_TRIPLET=arm64-android" >> $GITHUB_ENV
+          echo "VCPKG_INSTALLED_DIR=${{ github.workspace }}/vcpkg_installed" >> $GITHUB_ENV
 
       - name: Prep Directories
         run: |
@@ -158,11 +159,14 @@ jobs:
           ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
           VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
           VCPKG_DEFAULT_TRIPLET: arm64-android
+          VCPKG_INSTALLED_DIR: ${{ env.VCPKG_INSTALLED_DIR }}
           CCACHE_DIR: ${{ env.CCACHE_DIR }}
         run: |
           echo "::add-matcher::${{ github.workspace }}/src/.ci/githubactions/pattern_matchers/cmake.json"
+          ccache --zero-stats
           ./gradlew assembleDebug \
             -Pandroid.ndkPath="${ANDROID_NDK_HOME}" \
+            -Pvcpkg.installed.dir="${VCPKG_INSTALLED_DIR}" \
             --no-daemon \
             --build-cache \
             --stacktrace
