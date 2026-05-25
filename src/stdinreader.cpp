@@ -813,8 +813,6 @@ int cmdInputThreadFunc(void *)
 					wz_command_interface_output("WZCMD info: Room admin hash added: %s\n", newAdminStrCopy.c_str());
 					addLobbyAdminIdentityHash(newAdminStrCopy);
 					refreshLobbyAdminStatusForConnectedPlayers();
-					auto roomAdminMessage = astringf("Room admin assigned to: %s", newAdminStrCopy.c_str());
-					sendRoomSystemMessage(roomAdminMessage.c_str());
 				});
 			}
 		}
@@ -833,8 +831,6 @@ int cmdInputThreadFunc(void *)
 					wz_command_interface_output("WZCMD info: Room admin public key added: %s\n", newAdminStrCopy.c_str());
 					addLobbyAdminPublicKey(newAdminStrCopy);
 					refreshLobbyAdminStatusForConnectedPlayers();
-					auto roomAdminMessage = astringf("Room admin assigned to: %s", newAdminStrCopy.c_str());
-					sendRoomSystemMessage(roomAdminMessage.c_str());
 				});
 			}
 		}
@@ -854,15 +850,11 @@ int cmdInputThreadFunc(void *)
 					{
 						wz_command_interface_output("WZCMD info: Room admin public key removed: %s\n", newAdminStrCopy.c_str());
 						refreshLobbyAdminStatusForConnectedPlayers();
-						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
-						sendRoomSystemMessage(roomAdminMessage.c_str());
 					}
 					else if (removeLobbyAdminIdentityHash(newAdminStrCopy))
 					{
 						wz_command_interface_output("WZCMD info: Room admin hash removed: %s\n", newAdminStrCopy.c_str());
 						refreshLobbyAdminStatusForConnectedPlayers();
-						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
-						sendRoomSystemMessage(roomAdminMessage.c_str());
 					}
 					else
 					{
