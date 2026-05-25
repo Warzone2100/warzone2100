@@ -1,12 +1,6 @@
 name: Mirror To SourceForge
 
-on:
-  release:
-    types:
-      - published
-      - edited
-      - deleted
-      - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
+on: workflow_dispatch:
 
 concurrency: sourceforge_deploy
 

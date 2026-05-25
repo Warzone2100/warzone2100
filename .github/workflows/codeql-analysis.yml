@@ -1,12 +1,6 @@
 name: "CodeQL"
 
-on:
-  push:
-    branches-ignore:
-      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
-  pull_request:
-  schedule:
-    - cron: '0 13 * * 0'
+on: workflow_dispatch:
 
 jobs:
   analyze:

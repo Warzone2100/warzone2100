@@ -1,17 +1,6 @@
 name: Crowdin - Download Translations
 
-on:
-  # Scheduled run once a day
-  schedule:
-    - cron: '0 2 * * *'
-  # Run after:
-  # - "Upload Base" workflow completes
-  workflow_run:
-    workflows: ["Crowdin - Upload Sources"]
-    types:
-      - completed
-  # Support running manually
-  workflow_dispatch:
+on: workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-master

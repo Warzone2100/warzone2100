@@ -1,35 +1,5 @@
 name: 'Snap Stable Config'
-on:
-  # Needs several triggers:
-    # On tag push, this should run to "verify only" (i.e. *without* pushing it to the snap-stable-build repo)
-    # On regular push, this should run to "verify only" - if pertinent files are changed
-    # On release publish event, this should run *and* push to the snap-stable-build repo
-    # Permit manual triggering (that pushes to the snap-stable-build repo), in case snap config for the latest tagged release needs an update
-  push:
-    branches-ignore:
-      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
-    paths: # Path filters are not evaluated for pushes to tags.
-      - '.github/workflows/generate_snap_stable_config.yml'
-      - '.ci/snap/**'
-      - 'snapcraft.yaml'
-      - 'pkg/snap/**'
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - '*'
-  pull_request:
-    paths:
-      - '.github/workflows/generate_snap_stable_config.yml'
-      - '.ci/snap/**'
-      - 'snapcraft.yaml'
-      - 'pkg/snap/**'
-  release:
-    types:
-      - published
-  workflow_dispatch:
-    inputs:
-      git-ref:
-        description: Git Ref of Snapcraft Config (Optional)
-        required: false
+on: workflow_dispatch:
 
 concurrency: 'snap_stable_config_${{ github.event_name }}'
 

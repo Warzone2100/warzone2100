@@ -1,9 +1,6 @@
 name: Maintenance
 
-on:
-  push:
-    branches:
-      - master
+on: workflow_dispatch:
 
 concurrency: master_push_maintenance
 
