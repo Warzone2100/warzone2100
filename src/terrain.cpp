@@ -1881,9 +1881,10 @@ static TerrainShaderQuality determineDefaultTerrainQuality()
 	// (Uses a heuristic based on system RAM, graphics renderer, and estimated VRAM)
 
 #if defined(__ANDROID__)
-	// GLES terrain shader compatibility on Android is not yet fully validated.
-	// Default to CLASSIC (widest shader compatibility) until higher qualities are tested.
-	return TerrainShaderQuality::CLASSIC;
+	// Default to MEDIUM quality on Android. CLASSIC requires texture overrides
+	// (terrain_overrides/classic/) which are not included in Android builds.
+	// MEDIUM uses base game terrain textures and is guaranteed available.
+	return TerrainShaderQuality::MEDIUM;
 #endif
 
 	// If <= 8 GiB system RAM, default to medium ("normal")

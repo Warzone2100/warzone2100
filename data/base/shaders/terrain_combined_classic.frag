@@ -91,7 +91,7 @@ out vec4 FragColor;
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
-	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
+	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], float(groundNo));
 }
 
 vec3 getGround(int i) {
@@ -104,7 +104,7 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 
 vec4 main_classic() {
 	vec3 ground = getGround(0) + getGround(1) + getGround(2) + getGround(3);
-	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, tile), WZ_MIP_LOAD_BIAS) : vec4(0.f);
+	vec4 decal = tile >= 0 ? texture2DArray(decalTex, vec3(uvDecal, float(tile)), WZ_MIP_LOAD_BIAS) : vec4(0.f);
 
 	vec3 L = normalize(groundLightDir);
 	vec3 N = vec3(0.f,0.f,1.f);
