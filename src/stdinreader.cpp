@@ -714,6 +714,29 @@ static void handleCmdInterfaceConnectionClosed()
 	}
 }
 
+static void refreshLobbyAdminStatusForConnectedPlayers()
+{
+	ASSERT_HOST_ONLY(return);
+
+	for (uint32_t playerIdx = 0; playerIdx < MAX_CONNECTED_PLAYERS; ++playerIdx)
+	{
+			if (!NetPlay.players[playerIdx].allocated)
+			{
+					continue;
+			}
+
+			const auto trueIdentity = getTruePlayerIdentity(playerIdx);
+			const bool shouldBeAdmin = trueIdentity.verified
+					&& !trueIdentity.identity.empty()
+					&& identityMatchesAdmin(trueIdentity.identity);
+			if (NetPlay.players[playerIdx].isAdmin != shouldBeAdmin)
+			{
+					NetPlay.players[playerIdx].isAdmin = shouldBeAdmin;
+					NETBroadcastPlayerInfo(playerIdx);
+			}
+	}
+}
+
 int cmdInputThreadFunc(void *)
 {
 	fseek(stdin, 0, SEEK_END);
@@ -789,6 +812,7 @@ int cmdInputThreadFunc(void *)
 				wzAsyncExecOnMainThread([newAdminStrCopy]{
 					wz_command_interface_output("WZCMD info: Room admin hash added: %s\n", newAdminStrCopy.c_str());
 					addLobbyAdminIdentityHash(newAdminStrCopy);
+					refreshLobbyAdminStatusForConnectedPlayers();
 					auto roomAdminMessage = astringf("Room admin assigned to: %s", newAdminStrCopy.c_str());
 					sendRoomSystemMessage(roomAdminMessage.c_str());
 				});
@@ -808,6 +832,7 @@ int cmdInputThreadFunc(void *)
 				wzAsyncExecOnMainThread([newAdminStrCopy]{
 					wz_command_interface_output("WZCMD info: Room admin public key added: %s\n", newAdminStrCopy.c_str());
 					addLobbyAdminPublicKey(newAdminStrCopy);
+					refreshLobbyAdminStatusForConnectedPlayers();
 					auto roomAdminMessage = astringf("Room admin assigned to: %s", newAdminStrCopy.c_str());
 					sendRoomSystemMessage(roomAdminMessage.c_str());
 				});
@@ -828,12 +853,14 @@ int cmdInputThreadFunc(void *)
 					if (removeLobbyAdminPublicKey(newAdminStrCopy))
 					{
 						wz_command_interface_output("WZCMD info: Room admin public key removed: %s\n", newAdminStrCopy.c_str());
+						refreshLobbyAdminStatusForConnectedPlayers();
 						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
 						sendRoomSystemMessage(roomAdminMessage.c_str());
 					}
 					else if (removeLobbyAdminIdentityHash(newAdminStrCopy))
 					{
 						wz_command_interface_output("WZCMD info: Room admin hash removed: %s\n", newAdminStrCopy.c_str());
+						refreshLobbyAdminStatusForConnectedPlayers();
 						auto roomAdminMessage = astringf("Room admin removed: %s", newAdminStrCopy.c_str());
 						sendRoomSystemMessage(roomAdminMessage.c_str());
 					}
