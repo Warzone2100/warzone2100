@@ -2,9 +2,9 @@
 // (This shader supports GLSL 1.30 - 1.50 core.)
 
 // Aspects of shader limiting GLSL compat:
-// - "flat" interpolation_qualifier (Desktop GLSL 130+, or GLES 300+)
+// - flat interpolation_qualifier (Desktop GLSL 130+, or GLES 300+)
 #if (!defined(GL_ES) && (__VERSION__ < 130)) || (defined(GL_ES) && (__VERSION__ < 300))
-#error "Unsupported version of GLSL"
+#error Unsupported_version_of_GLSL
 #endif
 
 uniform mat4 ModelViewProjectionMatrix;

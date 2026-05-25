@@ -8,7 +8,7 @@
 #endif
 // 2. OpenGL ES 3.0+
 #if (defined(GL_ES) && (__VERSION__ < 300))
-#error "Unsupported version of GLES"
+#error Unsupported_version_of_GLES
 #endif
 
 uniform ivec4 swizzle;
