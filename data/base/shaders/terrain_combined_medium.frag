@@ -8,7 +8,7 @@
 //#endif
 // 2. OpenGL ES 3.0+
 #if (defined(GL_ES) && (__VERSION__ < 300))
-#error "Unsupported version of GLES"
+#error Unsupported version of GLES
 #endif
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
