@@ -3,7 +3,7 @@
 float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeInv, int cascadeIndex, float z)
 {
 	vec2 uv = base_uv + vec2(u, v) * shadowMapSizeInv;
-	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
+	return texture( shadowMap, vec4(uv, float(cascadeIndex), z) );
 }
 
 float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float NdotL, float offset)
@@ -190,7 +190,7 @@ float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float N
 
 	// PCF
 
-	float visibility = texture( shadowMap, vec4(pos.xy, cascadeIndex, (pos.z+bias)) );
+	float visibility = texture( shadowMap, vec4(pos.xy, float(cascadeIndex), (pos.z+bias)) );
 
 #if WZ_SHADOW_FILTER_SIZE >= 2
 	const float edgeVal = 0.5+float((WZ_SHADOW_FILTER_SIZE-2)/2);
@@ -202,7 +202,7 @@ float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float N
 	{
 		for (float x=startVal; x<endVal; x+=1.0)
 		{
-			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), cascadeIndex, (pos.z+bias)) ));
+			visibility -= visibilityIncrement*(1.0-texture( shadowMap, vec4(pos.xy + vec2(x*texelIncrement, y*texelIncrement), float(cascadeIndex), (pos.z+bias)) ));
 		}
 	}
 #endif
