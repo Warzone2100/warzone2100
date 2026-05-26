@@ -134,6 +134,8 @@ enum KEY_STATE
 	KEY_RELEASED,
 	KEY_PRESSRELEASE,	// When a key goes up and down in a frame
 	KEY_DOUBLECLICK,	// Only used by mouse keys
+	KEY_TRIPLECLICK,	// Only used by mouse keys
+	KEY_QUADCLICK,		// Only used by mouse keys
 	KEY_DRAG			// Only used by mouse keys
 };
 
@@ -141,6 +143,7 @@ struct INPUT_STATE
 {
 	KEY_STATE state; /// Last key/mouse state
 	UDWORD lastdown; /// last key/mouse button down timestamp
+	uint8_t clickCount = 0; /// consecutive click counter for multi-click detection (mouse only)
 	Vector2i pressPos;    ///< Location of last mouse press event.
 	Vector2i releasePos;  ///< Location of last mouse release event.
 };
@@ -1400,6 +1403,8 @@ void inputNewFrame(void)
 		}
 		else if (aMouseState[i].state == KEY_RELEASED
 		         || aMouseState[i].state == KEY_DOUBLECLICK
+		         || aMouseState[i].state == KEY_TRIPLECLICK
+		         || aMouseState[i].state == KEY_QUADCLICK
 		         || aMouseState[i].state == KEY_PRESSRELEASE)
 		{
 			aMouseState[i].state = KEY_UP;
@@ -1517,11 +1522,25 @@ bool mouseDClicked(MOUSE_KEY_CODE code)
 	return (aMouseState[code].state == KEY_DOUBLECLICK);
 }
 
+/* This returns true if the mouse key was triple clicked */
+bool mouseTripleClicked(MOUSE_KEY_CODE code)
+{
+	return (aMouseState[code].state == KEY_TRIPLECLICK);
+}
+
+/* This returns true if the mouse key was quad clicked */
+bool mouseQuadClicked(MOUSE_KEY_CODE code)
+{
+	return (aMouseState[code].state == KEY_QUADCLICK);
+}
+
 /* This returns true if the mouse key went from being up to being down this frame */
 bool mousePressed(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_PRESSED) ||
 	        (aMouseState[code].state == KEY_DOUBLECLICK) ||
+	        (aMouseState[code].state == KEY_TRIPLECLICK) ||
+	        (aMouseState[code].state == KEY_QUADCLICK) ||
 	        (aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
@@ -1745,14 +1764,27 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 		    || aMouseState[mouseKeyCode].state == KEY_RELEASED
 		    || aMouseState[mouseKeyCode].state == KEY_PRESSRELEASE)
 		{
-			// whether double click or not
+			// multi-click detection: count consecutive clicks within DOUBLE_CLICK_INTERVAL
 			if (realTime - aMouseState[mouseKeyCode].lastdown < DOUBLE_CLICK_INTERVAL)
 			{
-				aMouseState[mouseKeyCode].state = KEY_DOUBLECLICK;
-				aMouseState[mouseKeyCode].lastdown = 0;
+				aMouseState[mouseKeyCode].clickCount++;
+				if (aMouseState[mouseKeyCode].clickCount == 2)
+				{
+					aMouseState[mouseKeyCode].state = KEY_DOUBLECLICK;
+				}
+				else if (aMouseState[mouseKeyCode].clickCount == 3)
+				{
+					aMouseState[mouseKeyCode].state = KEY_TRIPLECLICK;
+				}
+				else if (aMouseState[mouseKeyCode].clickCount >= 4)
+				{
+					aMouseState[mouseKeyCode].state = KEY_QUADCLICK;
+				}
+				aMouseState[mouseKeyCode].lastdown = realTime;
 			}
 			else
 			{
+				aMouseState[mouseKeyCode].clickCount = 1;
 				aMouseState[mouseKeyCode].state = KEY_PRESSED;
 				aMouseState[mouseKeyCode].lastdown = realTime;
 			}
@@ -1777,7 +1809,9 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 		}
 		else if (aMouseState[mouseKeyCode].state == KEY_DOWN
 		         || aMouseState[mouseKeyCode].state == KEY_DRAG
-		         || aMouseState[mouseKeyCode].state == KEY_DOUBLECLICK)
+		         || aMouseState[mouseKeyCode].state == KEY_DOUBLECLICK
+		         || aMouseState[mouseKeyCode].state == KEY_TRIPLECLICK
+		         || aMouseState[mouseKeyCode].state == KEY_QUADCLICK)
 		{
 			aMouseState[mouseKeyCode].state = KEY_RELEASED;
 		}

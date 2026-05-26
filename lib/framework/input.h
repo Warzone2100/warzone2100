@@ -219,6 +219,12 @@ bool mouseDown(MOUSE_KEY_CODE code);
 /** This returns true if the mouse key was double clicked. */
 bool mouseDClicked(MOUSE_KEY_CODE code);
 
+/** This returns true if the mouse key was triple clicked. */
+bool mouseTripleClicked(MOUSE_KEY_CODE code);
+
+/** This returns true if the mouse key was quad clicked. */
+bool mouseQuadClicked(MOUSE_KEY_CODE code);
+
 /** This returns true if the mouse key went from being up to being down this frame. */
 bool mousePressed(MOUSE_KEY_CODE code);
 

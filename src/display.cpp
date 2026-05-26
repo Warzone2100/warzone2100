@@ -123,6 +123,8 @@ static bool bEdgeScrollOutsideWindowBounds = DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
 static void	dealWithLMB();
 static void	dealWithLMBDClick();
+static void	dealWithLMBTClick();
+static void	dealWithLMBQClick();
 static void	dealWithRMB();
 static void	handleDeselectionClick();
 static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
@@ -697,6 +699,16 @@ void processMouseClickInput()
 	if (mouseDClicked(MOUSE_LMB))
 	{
 		dealWithLMBDClick();
+	}
+
+	if (mouseTripleClicked(MOUSE_LMB))
+	{
+		dealWithLMBTClick();
+	}
+
+	if (mouseQuadClicked(MOUSE_LMB))
+	{
+		dealWithLMBQClick();
 	}
 
 	if (mouseReleased(MOUSE_RMB) && !rotActive && !panActive && !ignoreRMBC)
@@ -2156,6 +2168,26 @@ static void dealWithLMBDClick()
 				}
 			}
 		}
+	}
+}
+
+// process LMB triple clicks: deselect all units when clicking on empty space
+static void dealWithLMBTClick()
+{
+	BASE_OBJECT *psClickedOn = mouseTarget();
+	if (psClickedOn == nullptr)
+	{
+		selDroidDeselect(gameWorld.objects, selectedPlayer);
+	}
+}
+
+// process LMB quad clicks: select all units when clicking on empty space
+static void dealWithLMBQClick()
+{
+	BASE_OBJECT *psClickedOn = mouseTarget();
+	if (psClickedOn == nullptr)
+	{
+		selDroidSelection(gameWorld.objects, selectedPlayer, DS_ALL_UNITS, DST_UNUSED, false);
 	}
 }
 
