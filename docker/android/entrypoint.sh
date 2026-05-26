@@ -93,6 +93,16 @@ else
   echo "WARNING: libSDL3.so not found at ${SDL3_SO} — build may fail"
 fi
 
+# Configure ccache if available
+if command -v ccache &>/dev/null; then
+  export CCACHE_DIR="${CCACHE_DIR:-/ccache}"
+  export CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-3G}"
+  export CCACHE_BASEDIR="${WORK_DIR}"
+  export CCACHE_SLOPPINESS="${CCACHE_SLOPPINESS:-time_macros}"
+  ccache --zero-stats
+  echo "==> ccache: dir=${CCACHE_DIR} maxsize=${CCACHE_MAXSIZE}"
+fi
+
 # Generate Gradle wrapper JAR (not stored in git)
 cd "${WORK_DIR}/platforms/android"
 chmod +x gradlew
@@ -104,7 +114,13 @@ echo "==> Running gradlew assemble${BUILD_TYPE}..."
   -Pandroid.ndkPath="${ANDROID_NDK_HOME}" \
   -Pvcpkg.installed.dir="${VCPKG_INSTALLED}" \
   --no-daemon \
+  --build-cache \
   --stacktrace
+
+if command -v ccache &>/dev/null; then
+  echo "==> ccache stats:"
+  ccache --show-stats
+fi
 
 # Copy APK to output volume
 APK_PATH=$(find . -name "*.apk" -path "*/${BUILD_TYPE_LOWER}/*" | head -1)
