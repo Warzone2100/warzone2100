@@ -11,6 +11,7 @@ RUN apt-get -u update \
     python3 pkg-config \
     zip tar \
     autoconf autoconf-archive automake libtool \
+    ccache nasm meson \
  && ln -sf /usr/lib/jvm/java-17-openjdk-$(dpkg --print-architecture) /usr/lib/jvm/java-17-openjdk \
  && rm -rf /var/lib/apt/lists/*
 
