@@ -98,7 +98,7 @@ out vec4 FragColor;
 
 vec3 getGroundUv(int i) {
 	uint groundNo = fgrounds[i];
-	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], groundNo);
+	return vec3(uvGround * groundScale[groundNo/4u][groundNo%4u], float(groundNo));
 }
 
 struct BumpData {
@@ -175,7 +175,7 @@ vec4 main_bumpMapping() {
 	getGroundBM(3, bump);
 
 	if (tile >= 0) {
-		vec3 uv = vec3(uvDecal, tile);
+		vec3 uv = vec3(uvDecal, float(tile));
 		vec4 decalColor = texture2DArray(decalTex, uv, WZ_MIP_LOAD_BIAS);
 		float a = decalColor.a;
 		// blend color, normal and gloss with ground ones based on alpha
