@@ -4140,7 +4140,8 @@ static void NETallowJoining()
 						// Wrong password. Reject.
 						rejected = (uint8_t)ERROR_WRONGPASSWORD;
 					}
-					else if (NetPlay.playercount >= gameDetails.players.max)
+					else if ((joinRequestInfo.playerType == NET_JOIN_PLAYER && NetPlay.playercount >= gameDetails.players.max)
+							 || (joinRequestInfo.playerType != NET_JOIN_PLAYER && !NET_FindOpenSlotForPlayer(false, true).has_value()))
 					{
 						// Game full. Reject.
 						rejected = (uint8_t)ERROR_FULL;
