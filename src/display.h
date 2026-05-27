@@ -200,6 +200,7 @@ struct WorldMapState;
 bool CheckInScrollLimits(const WorldMapState& mapState, const int &xPos, const int &yPos);
 bool CheckInScrollLimitsCamera(const WorldMapState& mapState, SDWORD *xPos, SDWORD *zPos);
 bool CheckScrollLimits(const WorldMapState& mapState);
+void applySwipeScroll(float deltaX, float deltaY);
 
 BASE_OBJECT	*mouseTarget();
 

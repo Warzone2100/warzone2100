@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 
+import android.view.GestureDetector;
 import android.view.ScaleGestureDetector;
 
 /**
@@ -48,12 +49,27 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     // Pinch events
     private final ScaleGestureDetector scaleGestureDetector;
 
+    // Swipe/pan events
+    private final GestureDetector swipeGestureDetector;
+
     // Startup
     protected SDLSurface(Context context) {
         super(context);
         getHolder().addCallback(this);
 
         scaleGestureDetector = new ScaleGestureDetector(context, this);
+
+        swipeGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                // Only handle single-finger pans; ignore while a pinch zoom is in progress
+                if (e2 != null && e2.getPointerCount() == 1 && !scaleGestureDetector.isInProgress()) {
+                    SDLActivity.onNativeWZSwipeUpdate(distanceX, distanceY);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -305,6 +321,7 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         } while (++i < pointerCount);
 
         scaleGestureDetector.onTouchEvent(event);
+        swipeGestureDetector.onTouchEvent(event);
 
         return true;
     }

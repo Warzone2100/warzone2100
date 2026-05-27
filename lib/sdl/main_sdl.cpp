@@ -4034,6 +4034,17 @@ JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZPinchEnd(JNIEnv
 	});
 }
 
+JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZSwipeUpdate(JNIEnv*, jclass, jfloat deltaX, jfloat deltaY)
+{
+	if (pinchActive) { return; }
+	const float dx = static_cast<float>(deltaX);
+	const float dy = static_cast<float>(deltaY);
+	wzAsyncExecOnMainThread([dx, dy]() {
+		if (pinchActive) { return; }
+		applySwipeScroll(dx, dy);
+	});
+}
+
 } // extern "C"
 
 #endif // defined(__ANDROID__)

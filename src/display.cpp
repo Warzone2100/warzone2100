@@ -1132,6 +1132,29 @@ static void handleCameraScrolling()
 	scrollDirUpDown = 0;
 }
 
+// Apply a swipe-driven pan to the camera. deltaX/deltaY are raw pixel deltas
+// from the Android GestureDetector.onScroll callback (positive = finger moved left/up).
+void applySwipeScroll(float deltaX, float deltaY)
+{
+	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)
+	{
+		return;
+	}
+
+	double scroll_zoom_factor = 1.0 + 2.0 * ((getViewDistance() - MINDISTANCE) / (float)(MAXDISTANCE - MINDISTANCE));
+	float scaleFactor = static_cast<float>(scroll_zoom_factor) * static_cast<float>(war_GetCameraSpeed()) / 1000.0f;
+
+	float worldDeltaX = deltaX * scaleFactor;
+	float worldDeltaY = deltaY * scaleFactor;
+
+	double rot = static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0);
+	playerPos.p.x += static_cast<int>(cos(rot) * worldDeltaX + sin(rot) * worldDeltaY);
+	playerPos.p.z += static_cast<int>(sin(rot) * worldDeltaX - cos(rot) * worldDeltaY);
+
+	setWarCamActive(false);
+	CheckScrollLimits(gameWorld.map);
+}
+
 void displayRenderLoop()
 {
 	handleCameraScrolling();

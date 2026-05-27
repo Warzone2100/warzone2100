@@ -1092,6 +1092,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
     public static native void onNativeWZPinchStart();
     public static native void onNativeWZPinchUpdate(float scale);
     public static native void onNativeWZPinchEnd();
+    public static native void onNativeWZSwipeUpdate(float deltaX, float deltaY);
 
     /**
      * This method is called by SDL using JNI.
