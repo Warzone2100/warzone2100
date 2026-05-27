@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,8 +19,10 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  Definitions for the display system structures and routines.
+/** @file display.h
+ *
+ *  Definitions for the display system structures and routines
+ *​‌⁣‌‌⁣‌‌⁣‌⁣‌‌⁣⁣‌⁣‌⁣‌⁣‌‌‌‌‌⁣‌‌⁣⁣⁣⁣‌⁣‌⁣‌‌⁣‌‌⁣‌⁣‌⁣‌‌‌⁣‌‌‌‌‌⁣‌⁣‌‌⁣⁣⁣‌‌⁣‌⁣‌⁣‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣‌‌‌‌‌‌⁣‌⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌⁣⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌‌⁣‌‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣⁣‌⁣⁣‌⁣‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣‌‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌⁣⁣⁣‌‍
  */
 
 #ifndef __INCLUDED_SRC_DISPLAY_H__
@@ -46,6 +50,7 @@ extern KeyFunctionConfiguration gKeyFuncConfig;
 void ProcessRadarInput();
 
 void processInput();
+void processGestureInput();
 /*don't want to do any of these whilst in the Intelligence Screen*/
 void processMouseClickInput();
 

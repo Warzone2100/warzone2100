@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,9 +20,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /**
- * @file display.c
+ * @file display.cpp
  *
- * Display routines.
+ * Display routines​‌⁣‌‌⁣‌‌⁣‌⁣‌‌⁣⁣‌⁣‌⁣‌⁣‌‌‌‌‌⁣‌‌⁣⁣⁣⁣‌⁣‌⁣‌‌⁣‌‌⁣‌⁣‌⁣‌‌‌⁣‌‌‌‌‌⁣‌⁣‌‌⁣⁣⁣‌‌⁣‌⁣‌⁣‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣‌‌‌‌‌‌⁣‌⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌⁣⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌‌⁣‌‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣⁣‌⁣⁣‌⁣‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣‌‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌⁣⁣⁣‌‍
  *
  */
 
@@ -984,6 +986,30 @@ void processMouseClickInput()
 		          || ObjUnderMouse->type == OBJ_DROID))
 		{
 			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
+		}
+	}
+}
+
+void processGestureInput()
+{
+	// don't want to process gestures whilst in the Intelligence Screen
+	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)
+	{
+		return;
+	}
+
+	// consume pinch gesture updates
+	if (auto pinchScaleUpdate = consumePinchGestureScaleUpdate())
+	{
+		if (pinchScaleUpdate.value() != 1.0f)
+		{
+			float startingDistance = viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance();
+			float target = std::max<float>(startingDistance, 100.f) * pinchScaleUpdate.value();
+
+			target = std::clamp(target, static_cast<float>(MINDISTANCE), static_cast<float>((!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY));
+
+			animateToViewDistance(target, 0);
+			updateViewDistanceAnimation();
 		}
 	}
 }
