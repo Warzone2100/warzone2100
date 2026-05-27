@@ -254,3 +254,5 @@ warzone*.*build
 
 # android
 /output
+# CocoIndex Code (ccc)
+/.cocoindex_code/
