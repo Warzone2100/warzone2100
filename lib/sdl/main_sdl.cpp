@@ -35,6 +35,11 @@
 #include "src/configuration.h"
 #include "src/warzoneconfig.h"
 #include "src/game.h"
+#if defined(__ANDROID__)
+#include "src/display.h"
+#include "src/display3d.h"
+#include <jni.h>
+#endif
 #include "gfx_api_sdl.h"
 #include "gfx_api_gl_sdl.h"
 #include "sdl_backend_private.h"
@@ -3989,3 +3994,46 @@ EM_BOOL wz_emscripten_fullscreenchange_callback(int eventType, const EmscriptenF
 }
 
 #endif
+
+#if defined(__ANDROID__)
+
+// Pinch zoom state - only accessed from the main game thread via wzAsyncExecOnMainThread
+static float pinchInitialViewDistance = 0.f;
+static float pinchCumulativeScale = 1.f;
+static bool pinchActive = false;
+
+extern "C" {
+
+JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZPinchStart(JNIEnv*, jclass)
+{
+	wzAsyncExecOnMainThread([]() {
+		pinchInitialViewDistance = getViewDistance();
+		pinchCumulativeScale = 1.f;
+		pinchActive = true;
+	});
+}
+
+JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZPinchUpdate(JNIEnv*, jclass, jfloat scale)
+{
+	const float scaleFactor = static_cast<float>(scale);
+	wzAsyncExecOnMainThread([scaleFactor]() {
+		if (!pinchActive || scaleFactor <= 0.f) { return; }
+		pinchCumulativeScale *= scaleFactor;
+		if (pinchCumulativeScale <= 0.f) { return; }
+		float newDist = pinchInitialViewDistance / pinchCumulativeScale;
+		if (newDist < MINDISTANCE) { newDist = MINDISTANCE; }
+		if (newDist > MAXDISTANCE) { newDist = MAXDISTANCE; }
+		setViewDistance(newDist);
+	});
+}
+
+JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZPinchEnd(JNIEnv*, jclass)
+{
+	wzAsyncExecOnMainThread([]() {
+		pinchActive = false;
+	});
+}
+
+} // extern "C"
+
+#endif // defined(__ANDROID__)

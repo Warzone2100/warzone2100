@@ -431,19 +431,19 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
         float scale = detector.getScaleFactor();
-        SDLActivity.onNativePinchUpdate(scale);
+        SDLActivity.onNativeWZPinchUpdate(scale);
         return true;
     }
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        SDLActivity.onNativePinchStart();
+        SDLActivity.onNativeWZPinchStart();
         return true;
     }
 
     @Override
     public void onScaleEnd(ScaleGestureDetector detector) {
-        SDLActivity.onNativePinchEnd();
+        SDLActivity.onNativeWZPinchEnd();
     }
 
 }
