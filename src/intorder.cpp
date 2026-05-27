@@ -856,9 +856,16 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
+#if defined(__ANDROID__)
+	orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
+		int x = pie_GetVideoBufferWidth() - ORDER_WIDTH - ORDER_X;
+		psWidget->setGeometry(x, ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
+	});
+#else
 	orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
 		psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
 	});
+#endif
 
 	OrderUp = true;
 	setSecondaryWindowUp(true);
@@ -896,7 +903,22 @@ void intRunOrder()
 		// might have a factory selected
 		if (psSelectedFactory == nullptr)
 		{
+#if defined(__ANDROID__)
+			// On Android, try to repopulate from current game selection before closing.
+			if (BuildSelectedDroidList())
+			{
+				intAddOrder(nullptr);
+				return;
+			}
+#endif
 			intRemoveOrder();
+#if defined(__ANDROID__)
+			// Reset intMode so the next selection triggers auto-open in intRefreshOrder.
+			if (intMode == INT_ORDER)
+			{
+				intMode = INT_NORMAL;
+			}
+#endif
 			return;
 		}
 	}
@@ -1164,6 +1186,13 @@ bool intRefreshOrder()
 			{
 				// no units selected - quit
 				intRemoveOrder();
+#if defined(__ANDROID__)
+				// Reset intMode so the next selection triggers auto-open.
+				if (intMode == INT_ORDER)
+				{
+					intMode = INT_NORMAL;
+				}
+#endif
 				return true;
 			}
 		}
@@ -1184,6 +1213,29 @@ bool intRefreshOrder()
 		}
 		return Ret;
 	}
+
+#if defined(__ANDROID__)
+	// On Android, auto-open the order panel whenever droids are selected.
+	if (!OrderUp)
+	{
+		// Detect zombie state: intMode claims INT_ORDER but panel is gone.
+		if (intMode == INT_ORDER && widgGetFromID(psWScreen, IDORDER_FORM) == nullptr)
+		{
+			intMode = INT_NORMAL;
+		}
+		if (intMode == INT_NORMAL)
+		{
+			SelectedDroids.clear();
+			if (BuildSelectedDroidList())
+			{
+				if (intAddOrder(nullptr))
+				{
+					intMode = INT_ORDER;
+				}
+			}
+		}
+	}
+#endif
 
 	return true;
 }
