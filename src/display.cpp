@@ -154,6 +154,8 @@ bool	rotActive = false;
 bool	gameStats = false;
 bool	lockCameraScrollWhileRotating = false;
 
+bool	gestureActive = false;
+
 /* Hackety hack hack hack */
 static int screenShakeTable[100] =
 {
@@ -405,6 +407,7 @@ bool getEdgeScrollOutsideWindowBounds()
 void resetInput()
 {
 	rotActive = false;
+	gestureActive = false;
 	dragBox3D.status = DRAG_INACTIVE;
 	wallDrag.status = DRAG_INACTIVE;
 	gInputManager.contexts().resetStates();
@@ -480,7 +483,7 @@ void processInput()
 
 	if (!isInTextInputMode())
 	{
-		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction;
+		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction && !gestureActive;
 		gInputManager.processMappings(allowMouseWheelEvents);
 	}
 	/* Allow the user to clear the (Active) console if need be */
@@ -998,6 +1001,8 @@ void processGestureInput()
 		return;
 	}
 
+	bool processedGesture = false;
+
 	// consume pinch gesture updates
 	if (auto pinchScaleUpdate = consumePinchGestureScaleUpdate())
 	{
@@ -1011,7 +1016,10 @@ void processGestureInput()
 			animateToViewDistance(target, 0);
 			updateViewDistanceAnimation();
 		}
+		processedGesture = true;
 	}
+
+	gestureActive = processedGesture;
 }
 
 static void calcScroll(double *y, double *dydt, double accel, double decel, double targetVelocity, double dt)
@@ -1077,6 +1085,12 @@ static void handleCameraScrolling()
 	}
 
 	if (lockCameraScrollWhileRotating && rotActive && (scrollDirUpDown == 0 && scrollDirLeftRight == 0))
+	{
+		resetScroll();
+		return;
+	}
+
+	if (gestureActive)
 	{
 		resetScroll();
 		return;
