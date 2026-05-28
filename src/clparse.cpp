@@ -469,7 +469,13 @@ static const struct poptOption *getOptionsTable()
 		{ "videourl", POPT_ARG_STRING, CLI_VIDEOURL,   N_("Base URL for on-demand video downloads"), N_("Base video URL") },
 #endif
 		{ "host-connection-provider", POPT_ARG_STRING, CLI_HOST_CONNECTION_PROVIDER, N_("Specify connection provider type to use when hosting game sessions"), "[tcp]" },
-		{ "network-compression-adapter", POPT_ARG_STRING, CLI_NETWORK_COMPRESSION_ADAPTER, N_("Specify network compression adapter type to use"), "[zlib]" },
+		{ "network-compression-adapter", POPT_ARG_STRING, CLI_NETWORK_COMPRESSION_ADAPTER, N_("Specify network compression adapter type to use"),
+			"(zlib"
+#if defined (WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED)
+			", zstd"
+#endif
+			")"
+		},
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
