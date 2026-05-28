@@ -20,6 +20,7 @@
 */
 
 #include "zstd_compression_adapter.h"
+#include <cerrno>
 
 #ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
 
@@ -64,7 +65,7 @@ net::result<void> ZstdCompressionAdapter::initialize()
 	if (!compressCtx_)
 	{
 		debug(LOG_ERROR, "Failed to create ZSTD compression context");
-		return tl::make_unexpected(make_network_error_code(EBADF));
+		return tl::make_unexpected(make_network_error_code(ENOMEM));
 	}
 	const size_t setLevelRes = ZSTD_CCtx_setParameter(compressCtx_, ZSTD_c_compressionLevel, DEFAULT_COMPRESSION_LEVEL);
 	if (ZSTD_isError(setLevelRes))
@@ -81,7 +82,7 @@ net::result<void> ZstdCompressionAdapter::initialize()
 		ZSTD_freeCCtx(compressCtx_);
 		compressCtx_ = nullptr;
 		debug(LOG_ERROR, "Failed to create ZSTD decompression context");
-		return tl::make_unexpected(make_network_error_code(EBADF));
+		return tl::make_unexpected(make_network_error_code(ENOMEM));
 	}
 
 	inflateNeedInput_ = true;
