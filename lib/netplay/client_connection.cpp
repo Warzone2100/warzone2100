@@ -267,6 +267,11 @@ void IClientConnection::enableCompression()
 	pwm_->executeUnderLock([this]
 	{
 		compressionAdapter_ = compressionProvider_->newCompressionAdapter(war_getCompressionAdapterType());
+		if (!compressionAdapter_)
+		{
+			debug(LOG_NET, "Failed to create compression adapter - compression will be disabled.");
+			return;
+		}
 		const auto initRes = compressionAdapter_->initialize();
 		if (!initRes.has_value())
 		{
