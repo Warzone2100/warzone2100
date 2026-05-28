@@ -1985,7 +1985,17 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int width, unsigned 
 
 unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize()
 {
+#if defined(__ANDROID__)
+	// On Android devices can rotate, so evaluate the max scale using landscape
+	// orientation (wider dimension as width) to avoid filtering out valid scales
+	// that would be usable after rotation.
+	return wzGetMaximumDisplayScaleForWindowSize(
+		std::max(windowWidth, windowHeight),
+		std::min(windowWidth, windowHeight)
+	);
+#else
 	return wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
+#endif
 }
 
 unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension)

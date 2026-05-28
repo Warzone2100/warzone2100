@@ -53,7 +53,11 @@ struct WARZONE_GLOBALS
 	UDWORD width = 1024;
 	UDWORD height = 768;
 	UDWORD videoBufferDepth = 32;
+#if defined(__ANDROID__)
+	int displayScale = 200;
+#else
 	int displayScale = 100;
+#endif
 	int screen = 0;
 	int8_t SPcolor = 0;
 	int MPcolour = -1;

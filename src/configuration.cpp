@@ -587,7 +587,7 @@ bool loadConfig()
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
-	// the default (and minimum) display scale is 100 (%)
+	// the default (and minimum) display scale is 100% (200% on Android)
 	int displayScale = iniGetInteger("displayScale", war_GetDisplayScale()).value();
 	if (displayScale < 100)
 	{
