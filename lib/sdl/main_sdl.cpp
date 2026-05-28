@@ -4045,6 +4045,30 @@ JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZSwipeUpdate(JNI
 	});
 }
 
+JNIEXPORT void JNICALL Java_org_libsdl_app_SDLActivity_onNativeWZTwoFingerTap(JNIEnv*, jclass)
+{
+	wzAsyncExecOnMainThread([]() {
+		// Cancel any pending LMB synthesized from the first finger.
+		aMouseState[MOUSE_LMB].state = KEY_UP;
+		aMouseState[MOUSE_LMB].clickCount = 0;
+
+		// Inject RMB press+release at the current cursor position.
+		Vector2i pos(mouseXPos, mouseYPos);
+		aMouseState[MOUSE_RMB].pressPos = pos;
+		aMouseState[MOUSE_RMB].releasePos = pos;
+		aMouseState[MOUSE_RMB].state = KEY_PRESSRELEASE;
+		aMouseState[MOUSE_RMB].clickCount = 1;
+		aMouseState[MOUSE_RMB].lastdown = realTime;
+
+		MousePress press; press.key = MOUSE_RMB; press.pos = pos;
+		press.action = MousePress::Press;
+		mousePresses.push_back(press);
+		MousePress rel; rel.key = MOUSE_RMB; rel.pos = pos;
+		rel.action = MousePress::Release;
+		mousePresses.push_back(rel);
+	});
+}
+
 } // extern "C"
 
 #endif // defined(__ANDROID__)

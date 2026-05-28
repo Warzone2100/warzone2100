@@ -25,6 +25,7 @@ import android.view.WindowManager;
 
 import android.view.GestureDetector;
 import android.view.ScaleGestureDetector;
+import android.view.ViewConfiguration;
 
 /**
     SDLSurface. This is what we draw on, so we need to know when it's created
@@ -52,12 +53,24 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     // Swipe/pan events
     private final GestureDetector swipeGestureDetector;
 
+    // Two-finger tap → RMB synthesis
+    private long twoFingerDownTime = 0;
+    private float twoFingerStartX1, twoFingerStartY1;
+    private float twoFingerStartX2, twoFingerStartY2;
+    private boolean twoFingerActive = false;
+    private boolean pinchHappenedThisGesture = false;
+    private final long twoFingerTapTimeoutMs;
+    private final float touchSlop;
+
     // Startup
     protected SDLSurface(Context context) {
         super(context);
         getHolder().addCallback(this);
 
         scaleGestureDetector = new ScaleGestureDetector(context, this);
+
+        twoFingerTapTimeoutMs = ViewConfiguration.getTapTimeout() * 2;
+        touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         swipeGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -323,6 +336,45 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         scaleGestureDetector.onTouchEvent(event);
         swipeGestureDetector.onTouchEvent(event);
 
+        final int twoFingerAction = event.getActionMasked();
+        switch (twoFingerAction) {
+            case MotionEvent.ACTION_DOWN:
+                twoFingerActive = false;
+                pinchHappenedThisGesture = false;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (event.getPointerCount() == 2 && !pinchHappenedThisGesture) {
+                    twoFingerActive = true;
+                    twoFingerDownTime = event.getEventTime();
+                    twoFingerStartX1 = event.getX(0); twoFingerStartY1 = event.getY(0);
+                    twoFingerStartX2 = event.getX(1); twoFingerStartY2 = event.getY(1);
+                } else if (event.getPointerCount() > 2) {
+                    twoFingerActive = false;
+                }
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                if (twoFingerActive && event.getPointerCount() == 2 && !pinchHappenedThisGesture) {
+                    long dt = event.getEventTime() - twoFingerDownTime;
+                    float dx1 = event.getX(0) - twoFingerStartX1;
+                    float dy1 = event.getY(0) - twoFingerStartY1;
+                    float dx2 = event.getX(1) - twoFingerStartX2;
+                    float dy2 = event.getY(1) - twoFingerStartY2;
+                    float slop = touchSlop * 1.5f;
+                    if (dt < twoFingerTapTimeoutMs
+                        && Math.hypot(dx1, dy1) < slop
+                        && Math.hypot(dx2, dy2) < slop) {
+                        SDLActivity.onNativeWZTwoFingerTap();
+                    }
+                }
+                twoFingerActive = false;
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                twoFingerActive = false;
+                pinchHappenedThisGesture = false;
+                break;
+        }
+
         return true;
     }
 
@@ -454,6 +506,8 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
+        pinchHappenedThisGesture = true;
+        twoFingerActive = false;
         SDLActivity.onNativeWZPinchStart();
         return true;
     }
