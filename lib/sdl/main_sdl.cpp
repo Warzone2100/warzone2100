@@ -242,6 +242,10 @@ enum class PinchActiveState
 static optional<float> pinchScaleCumulative = nullopt;
 static PinchActiveState pinchActive = PinchActiveState::Inactive;
 
+// Pan gesture input status
+static optional<PanGestureDeltaScreenPts> panScreenPointsCumulative = nullopt;
+static bool panActive = false;
+
 static optional<int> wzQuitExitCode;
 
 bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight);
@@ -1439,6 +1443,7 @@ void inputNewFrame(void)
 
 	// handle gestures (consume any unconsumed updates)
 	std::ignore = consumePinchGestureScaleUpdate();
+	std::ignore = consumePanGestureDeltaUpdate();
 }
 
 /*!
@@ -1664,6 +1669,28 @@ static void inputHandleTouchFingerEvent(const SDL_TouchFingerEvent &touchFingerE
 						pinchActive = PinchActiveState::Active_SDLFingerEvents;
 					}
 				}
+
+				// CALCULATE PAN (CENTROID TRANSLATION DELTA)
+				// Find the average center midpoint of the old step vs the current step
+				float previousCenterY = (f1.previousY + f2.previousY) * 0.5f;
+				float previousCenterX = (f1.previousX + f2.previousX) * 0.5f;
+
+				float currentCenterX  = (f1.currentX + f2.currentX) * 0.5f;
+				float currentCenterY  = (f1.currentY + f2.currentY) * 0.5f;
+
+				float deltaX = currentCenterX - previousCenterX;
+				float deltaY = currentCenterY - previousCenterY;
+
+				float deltaXScreenPoints = (deltaX * screenWidth);
+				float deltaYScreenPoints = (deltaY * screenHeight);
+
+				debug(LOG_NEVER, "FingerEvent Pan: (deltaXScreenPts: %f, deltaYScreenPts: %f)", deltaXScreenPoints, deltaYScreenPoints);
+
+				auto updatedPanDelta = panScreenPointsCumulative.value_or(PanGestureDeltaScreenPts{0.f, 0.f});
+				updatedPanDelta.deltaX += deltaXScreenPoints;
+				updatedPanDelta.deltaY += deltaYScreenPoints;
+				panScreenPointsCumulative = updatedPanDelta;
+				panActive = true;
 			}
 			break;
 
@@ -1683,6 +1710,20 @@ optional<float> consumePinchGestureScaleUpdate()
 	else
 	{
 		pinchScaleCumulative.reset();
+	}
+	return result;
+}
+
+optional<PanGestureDeltaScreenPts> consumePanGestureDeltaUpdate()
+{
+	auto result = panScreenPointsCumulative;
+	if (panActive)
+	{
+		panScreenPointsCumulative = PanGestureDeltaScreenPts{0.f,0.f};
+	}
+	else
+	{
+		panScreenPointsCumulative.reset();
 	}
 	return result;
 }
