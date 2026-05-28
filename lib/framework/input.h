@@ -238,6 +238,14 @@ bool getMouseWarp();
 /** Returns a float if pinch gesture is in progress */
 optional<float> consumePinchGestureScaleUpdate();
 
+/** Returns a pair of floats if a pan gesture is in progress */
+struct PanGestureDeltaScreenPts
+{
+	float deltaX;
+	float deltaY;
+};
+optional<PanGestureDeltaScreenPts> consumePanGestureDeltaUpdate();
+
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW
 #define INPBUF_RIGHT		KEY_RIGHTARROW
