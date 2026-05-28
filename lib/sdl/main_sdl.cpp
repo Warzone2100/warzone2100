@@ -212,15 +212,35 @@ static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 void* GetTextEventsOwner = nullptr;
 
+/* Touch / finger handling */
+
+// Struct to store cached state of each active finger
+struct TrackedFinger
+{
+	SDL_FingerID id;
+	float currentX;
+	float currentY;
+	float previousX;
+	float previousY;
+};
+std::vector<TrackedFinger> touchPoints;
+
+/* Multi-finger gesture handling */
+
 #if SDL_VERSION_ATLEAST(3, 3, 4)
 # define WZ_SDL_PINCH_EVENTS_SUPPORTED
 #endif
 
-#if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
-/* Pinch input status */
+enum class PinchActiveState
+{
+	Inactive,
+	Active_SDLPinchEvent,
+	Active_SDLFingerEvents
+};
+
+// Pinch gesture input status
 static optional<float> pinchScaleCumulative = nullopt;
-static bool pinchActive = false;
-#endif
+static PinchActiveState pinchActive = PinchActiveState::Inactive;
 
 static optional<int> wzQuitExitCode;
 
@@ -1417,8 +1437,8 @@ void inputNewFrame(void)
 	mousePresses.clear();
 	mouseWheelSpeed = Vector2i(0, 0);
 
-	// handle gestures
-	std::ignore = consumePinchGestureScaleUpdate(); // consume any unconsumed update
+	// handle gestures (consume any unconsumed updates)
+	std::ignore = consumePinchGestureScaleUpdate();
 }
 
 /*!
@@ -1561,12 +1581,102 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	return false;
 }
 
+// Helper to compute Euclidean distance between two arbitrary points
+float calculateEuclideanDistance(float x1, float y1, float x2, float y2)
+{
+	return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+static void inputHandleTouchFingerEvent(const SDL_TouchFingerEvent &touchFingerEvent)
+{
+	switch (touchFingerEvent.type)
+	{
+		case SDL_EVENT_FINGER_DOWN:
+			// Register new finger contact. Store incoming position as both current and previous.
+			debug(LOG_NEVER, "Finger down: %" PRIu64, touchFingerEvent.fingerID);
+			touchPoints.push_back({
+				touchFingerEvent.fingerID,
+				touchFingerEvent.x, touchFingerEvent.y,
+				touchFingerEvent.x, touchFingerEvent.y
+			});
+			break;
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+		{
+			// Evict finger contact on lift
+			debug(LOG_NEVER, "Finger up: %" PRIu64, touchFingerEvent.fingerID);
+
+			// 1. Reorder elements and get the logical end
+			auto remove_it = std::remove_if(touchPoints.begin(), touchPoints.end(), [&](const TrackedFinger& f) { return f.id == touchFingerEvent.fingerID; });
+
+			// 2. Check if the iterator reached the end
+			bool items_erased = (remove_it != touchPoints.end());
+
+			// 3. Physically erase the elements
+			if (items_erased)
+			{
+				touchPoints.erase(remove_it, touchPoints.end());
+
+				if (pinchActive == PinchActiveState::Active_SDLFingerEvents)
+				{
+					pinchActive = PinchActiveState::Inactive;
+				}
+				panActive = false;
+			}
+			break;
+		}
+
+		case SDL_EVENT_FINGER_MOTION:
+			// Update specific finger positioning tracking matching this hardware interaction id
+			for (auto& f : touchPoints)
+			{
+				if (f.id == touchFingerEvent.fingerID)
+				{
+					f.previousX = f.currentX;
+					f.previousY = f.currentY;
+					f.currentX = touchFingerEvent.x;
+					f.currentY = touchFingerEvent.y;
+					break;
+				}
+			}
+
+			// If exactly two fingers are actively tracing the display screen, calculate two-finger gestures
+			if (touchPoints.size() == 2)
+			{
+				debug(LOG_NEVER, "FingerEvent: Moving %zu fingers", touchPoints.size());
+
+				const auto& f1 = touchPoints[0];
+				const auto& f2 = touchPoints[1];
+
+				if (pinchActive == PinchActiveState::Inactive || pinchActive == PinchActiveState::Active_SDLFingerEvents)
+				{
+					// CALCULATE PINCH (SCALE DELTA)
+					float previousDistance = calculateEuclideanDistance(f1.previousX, f1.previousY, f2.previousX, f2.previousY);
+					float currentDistance  = calculateEuclideanDistance(f1.currentX, f1.currentY, f2.currentX, f2.currentY);
+
+					// Prevent division-by-zero crashes if fingers overlap precisely
+					if (previousDistance > 0.0001f && currentDistance > 0.0001f)
+					{
+						float scaleFactor = currentDistance / previousDistance;
+						debug(LOG_INPUT, "FingerEvent Pinch Scale: %f", scaleFactor);
+
+						pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * scaleFactor;
+						pinchActive = PinchActiveState::Active_SDLFingerEvents;
+					}
+				}
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
 // Returns a float if pinch gesture is in progress
 optional<float> consumePinchGestureScaleUpdate()
 {
-#if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
 	auto result = pinchScaleCumulative;
-	if (pinchActive)
+	if (pinchActive != PinchActiveState::Inactive)
 	{
 		pinchScaleCumulative = 1.0f;
 	}
@@ -1575,9 +1685,6 @@ optional<float> consumePinchGestureScaleUpdate()
 		pinchScaleCumulative.reset();
 	}
 	return result;
-#else
-	return nullopt;
-#endif
 }
 
 #if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
@@ -1590,16 +1697,22 @@ static void inputHandlePinchEvent(SDL_PinchFingerEvent *pinchEvent)
 	{
 		case SDL_EVENT_PINCH_BEGIN:
 			debug(LOG_INPUT, "Pinch event: begin");
-			pinchActive = true;
-			pinchScaleCumulative = 1.0f;
+			pinchActive = PinchActiveState::Active_SDLPinchEvent; // native pinch events always take precedence over calculated finger pinch events
+			pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f);
 			break;
 		case SDL_EVENT_PINCH_UPDATE:
-			debug(LOG_INPUT, "Pinch event: update (scale: %f)", pinchEvent->scale);
-			pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * pinchEvent->scale;
+			if (pinchActive == PinchActiveState::Active_SDLPinchEvent)
+			{
+				debug(LOG_INPUT, "Pinch event: update (scale: %f)", pinchEvent->scale);
+				pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * pinchEvent->scale;
+			}
 			break;
 		case SDL_EVENT_PINCH_END:
-			debug(LOG_INPUT, "Pinch event: end");
-			pinchActive = false;
+			if (pinchActive == PinchActiveState::Active_SDLPinchEvent)
+			{
+				debug(LOG_INPUT, "Pinch event: end");
+				pinchActive = PinchActiveState::Inactive;
+			}
 			break;
 		default:
 			break;
@@ -3701,6 +3814,7 @@ static void handleActiveEvent(SDL_Event *event)
 				aKeyState[i].state = KEY_UP;
 				actualKeyState[i].state = KEY_UP;
 			}
+			touchPoints.clear();
 			break;
 		case SDL_EVENT_WINDOW_CLOSE_REQUESTED :
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
@@ -3761,6 +3875,12 @@ void wzEventLoopOneFrame(void* arg)
 			break;
 		case SDL_EVENT_TEXT_INPUT:	// SDL now handles text input differently
 			inputhandleText(&event.text);
+			break;
+		case SDL_EVENT_FINGER_DOWN:
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+		case SDL_EVENT_FINGER_MOTION:
+			inputHandleTouchFingerEvent(event.tfinger);
 			break;
 #if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
 		case SDL_EVENT_PINCH_BEGIN:
