@@ -148,7 +148,7 @@ function(WZ_BASIS_ENCODE_TEXTURES)
 		set(_output_name "${TEXTURE_FILE_NAME_WE}.ktx2")
 		add_custom_command(OUTPUT "${_parsedArguments_OUTPUT_DIR}/${_output_name}"
 			COMMAND "${BASIS_UNIVERSAL_CLI}"
-			ARGS -ktx2 -uastc -uastc_level ${_uastc_level} ${_rdo_arguments} -uastc_rdo_m ${_type_dependent_arguments} ${_resample_arguments} -output_file "${_parsedArguments_OUTPUT_DIR}/${_output_name}" -file "${TEXTURE}"
+			ARGS -ktx2 -uastc -uastc_level ${_uastc_level} ${_rdo_arguments} -uastc_rdo_m -no_multithreading ${_type_dependent_arguments} ${_resample_arguments} -output_file "${_parsedArguments_OUTPUT_DIR}/${_output_name}" -file "${TEXTURE}"
 			DEPENDS "${TEXTURE}"
 			VERBATIM
 		)
