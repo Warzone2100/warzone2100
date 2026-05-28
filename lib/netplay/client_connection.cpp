@@ -27,8 +27,6 @@
 #include "lib/netplay/wz_connection_provider.h"
 #include "lib/netplay/wz_compression_provider.h"
 
-#include "src/warzoneconfig.h"
-
 IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm)
 	: selfConnList_({ this }),
 	connProvider_(connProvider.shared_from_this()),
@@ -255,7 +253,7 @@ net::result<void> IClientConnection::flush(size_t* rawByteCount)
 	return {};
 }
 
-void IClientConnection::enableCompression()
+void IClientConnection::enableCompression(CompressionAdapterType adapterType)
 {
 	if (isCompressed_)
 	{
@@ -264,9 +262,9 @@ void IClientConnection::enableCompression()
 
 	ASSERT_OR_RETURN(, compressionProvider_ != nullptr, "Invalid compression provider");
 
-	pwm_->executeUnderLock([this]
+	pwm_->executeUnderLock([this, adapterType]
 	{
-		compressionAdapter_ = compressionProvider_->newCompressionAdapter(war_getCompressionAdapterType());
+		compressionAdapter_ = compressionProvider_->newCompressionAdapter(adapterType);
 		if (!compressionAdapter_)
 		{
 			debug(LOG_NET, "Failed to create compression adapter - compression will be disabled.");
