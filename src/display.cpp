@@ -120,6 +120,8 @@ static bool bInvertMouse = true;
 static bool bRightClickOrders = false;
 optional<MOUSE_KEY_CODE> rotateMouseKey = MOUSE_RMB;
 optional<MOUSE_KEY_CODE> panMouseKey = nullopt;
+static bool bPinchToZoomTouchGesture = true;
+static bool bPanTouchGesture = true;
 static bool bDrawShadows = true;
 static bool bEdgeScrollOutsideWindowBounds = DEFAULT_EDGE_SCROLL_OUTSIDE_WINDOW;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
@@ -380,6 +382,26 @@ bool setPanMouseKey(optional<MOUSE_KEY_CODE> key)
 
 	panMouseKey = key;
 	return true;
+}
+
+bool getPinchToZoomTouchGesture()
+{
+	return bPinchToZoomTouchGesture;
+}
+
+void setPinchToZoomTouchGesture(bool enabled)
+{
+	bPinchToZoomTouchGesture = enabled;
+}
+
+bool getPanTouchGesture()
+{
+	return bPanTouchGesture;
+}
+
+void setPanTouchGesture(bool enabled)
+{
+	bPanTouchGesture = enabled;
 }
 
 bool	getDrawShadows()
@@ -1006,35 +1028,41 @@ void processGestureInput()
 	// consume pinch gesture updates
 	if (auto pinchScaleUpdate = consumePinchGestureScaleUpdate())
 	{
-		if (pinchScaleUpdate.value() != 1.0f)
+		if (bPinchToZoomTouchGesture)
 		{
-			float startingDistance = viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance();
-			float target = std::max<float>(startingDistance, 100.f) * pinchScaleUpdate.value();
+			if (pinchScaleUpdate.value() != 1.0f)
+			{
+				float startingDistance = viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance();
+				float target = std::max<float>(startingDistance, 100.f) * pinchScaleUpdate.value();
 
-			target = std::clamp(target, static_cast<float>(MINDISTANCE), static_cast<float>((!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY));
+				target = std::clamp(target, static_cast<float>(MINDISTANCE), static_cast<float>((!NETisReplay()) ? MAXDISTANCE : MAXDISTANCE_REPLAY));
 
-			animateToViewDistance(target, 0);
-			updateViewDistanceAnimation();
+				animateToViewDistance(target, 0);
+				updateViewDistanceAnimation();
+			}
+			processedGesture = true;
 		}
-		processedGesture = true;
 	}
 
 	// consume pan gesture updates
 	if (auto panDeltaUpdate = consumePanGestureDeltaUpdate())
 	{
-		const double panZoomFactor = 1.0 + ((getViewDistance() - MINDISTANCE) / static_cast<double>(MAXDISTANCE - MINDISTANCE));
+		if (bPanTouchGesture)
+		{
+			const double panZoomFactor = 1.0 + ((getViewDistance() - MINDISTANCE) / static_cast<double>(MAXDISTANCE - MINDISTANCE));
 
-		const double worldDeltaX = panDeltaUpdate.value().deltaX * panZoomFactor;
-		const double worldDeltaY = panDeltaUpdate.value().deltaY * panZoomFactor;
+			const double worldDeltaX = panDeltaUpdate.value().deltaX * panZoomFactor;
+			const double worldDeltaY = panDeltaUpdate.value().deltaY * panZoomFactor;
 
-		const double rot = static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0);
-		playerPos.p.x -= static_cast<int>(cos(rot) * worldDeltaX - sin(rot) * worldDeltaY);
-		playerPos.p.z -= static_cast<int>(sin(rot) * worldDeltaX + cos(rot) * worldDeltaY);
+			const double rot = static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0);
+			playerPos.p.x -= static_cast<int>(cos(rot) * worldDeltaX - sin(rot) * worldDeltaY);
+			playerPos.p.z -= static_cast<int>(sin(rot) * worldDeltaX + cos(rot) * worldDeltaY);
 
-		setWarCamActive(false); // Don't let this thing override the user trying to scroll.
-		CheckScrollLimits(gameWorld.map);
+			setWarCamActive(false); // Don't let this thing override the user trying to scroll.
+			CheckScrollLimits(gameWorld.map);
 
-		processedGesture = true;
+			processedGesture = true;
+		}
 	}
 
 	gestureActive = processedGesture;

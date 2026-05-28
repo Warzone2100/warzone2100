@@ -456,6 +456,8 @@ bool loadConfig()
 	{
 		setRotateMouseKey(iniGetMouseKeyCode("mouseKeyRotate", getRotateMouseKey()));
 	}
+	setPinchToZoomTouchGesture(iniGetBool("pinchToZoom", getPinchToZoomTouchGesture()).value());
+	setPanTouchGesture(iniGetBool("touchPan", getPanTouchGesture()).value());
 	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
@@ -835,6 +837,8 @@ bool saveConfig()
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
 	iniSetMouseKeyOpt("mouseKeyPan", getPanMouseKey());
 	iniSetMouseKeyOpt("mouseKeyRotate", getRotateMouseKey());
+	iniSetInteger("pinchToZoom", (int)(getPinchToZoomTouchGesture()));
+	iniSetInteger("touchPan", (int)(getPanTouchGesture()));
 	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);

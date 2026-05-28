@@ -75,6 +75,12 @@ bool setRotateMouseKey(optional<MOUSE_KEY_CODE> key);
 optional<MOUSE_KEY_CODE> getPanMouseKey();
 bool setPanMouseKey(optional<MOUSE_KEY_CODE> key);
 
+bool	getPinchToZoomTouchGesture();
+void	setPinchToZoomTouchGesture(bool enabled);
+
+bool	getPanTouchGesture();
+void	setPanTouchGesture(bool enabled);
+
 void	setDrawShadows(bool val);
 bool	getDrawShadows();
 
