@@ -3933,7 +3933,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix)
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
 	Vector3i origin;
 	Vector2i center(0, 0);
-	int wsRadius = 22; // World space radius, 22 = magic minimum
+	int wsRadius = 44; // World space radius, minimum increased for touch/click sensitivity
 	float radius;
 
 	// NOTE: This only takes into account body, but seems "good enough"
@@ -3956,6 +3956,9 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix)
 	{
 		radius = 1; // 1 just in case some other code assumes radius != 0
 	}
+
+	// Enforce a minimum screen-space hit radius so units remain selectable when zoomed out
+	radius = MAX(radius, 20.0f);
 
 	/* Deselect all the droids if we've released the drag box */
 	if (dragBox3D.status == DRAG_RELEASED)
