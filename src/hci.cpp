@@ -901,6 +901,227 @@ bool createReplayControllerOverlay()
 	return true;
 }
 
+#if defined(__ANDROID__)
+
+#define SPEED_CTRL_BUTTON_SIZE  44
+#define SPEED_CTRL_SPACING       6
+#define SPEED_CTRL_LABEL_WIDTH  56
+
+class GameSpeedControlWidget : public W_FORM
+{
+public:
+	GameSpeedControlWidget() : W_FORM() {}
+	~GameSpeedControlWidget() {}
+
+	static std::shared_ptr<GameSpeedControlWidget> make();
+
+	virtual void display(int xOffset, int yOffset) override;
+	virtual void geometryChanged() override;
+	virtual void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
+	virtual void run(W_CONTEXT *psContext) override;
+
+private:
+	class W_SPEED_CTRL_BUTTON : public W_BUTTON
+	{
+	public:
+		W_SPEED_CTRL_BUTTON() : W_BUTTON() {}
+
+		void display(int xOffset, int yOffset) override
+		{
+			int x0 = x() + xOffset;
+			int y0 = y() + yOffset;
+			int x1 = x0 + width();
+			int y1 = y0 + height();
+
+			bool isDown     = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+			bool isDisabled = (getState() & WBUT_DISABLE) != 0;
+			bool isHighlight = !isDisabled && ((getState() & WBUT_HIGHLIGHT) != 0);
+
+			auto light_border = pal_RGBA(255, 255, 255, 100);
+			auto fill_color = (isDown || isDisabled) ? pal_RGBA(10, 0, 70, 200) : pal_RGBA(25, 0, 110, 175);
+			iV_ShadowBox(x0, y0, x1, y1, 0, isDown ? pal_RGBA(0, 0, 0, 0) : light_border,
+			             isDisabled ? light_border : WZCOL_FORM_DARK, fill_color);
+
+			if (isHighlight)
+			{
+				iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
+			}
+
+			WzString text = getString();
+			if (!text.isEmpty())
+			{
+				int fw = iV_GetTextWidth(text, FontID);
+				int fx = x0 + (width() - fw) / 2;
+				int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
+				iV_SetTextColour(isDisabled ? WZCOL_FORM_DISABLE : WZCOL_FORM_TEXT);
+				iV_DrawText(text.toUtf8().c_str(), fx, fy, FontID);
+			}
+		}
+	};
+
+	void refreshSpeedLabel()
+	{
+		if (!speedLabel) { return; }
+		Rational mod = gameTimeGetMod();
+		char buf[32];
+		if (mod.d != 1)
+		{
+			float speed = float(mod.n) / mod.d;
+			if (speed > 0.4f)
+				ssprintf(buf, "%.1fx", speed);
+			else if (speed > 0.15f)
+				ssprintf(buf, "%.2fx", speed);
+			else
+				ssprintf(buf, "%.3fx", speed);
+		}
+		else
+		{
+			ssprintf(buf, "%dx", static_cast<int>(mod.n));
+		}
+		speedLabel->setString(WzString::fromUtf8(buf));
+		lastUpdateTime = realTime;
+	}
+
+	void refreshButtonStates()
+	{
+		if (!slowButton || !fastButton) { return; }
+		bool allowed = !runningMultiplayer() && !bInTutorial;
+		slowButton->setState(allowed ? 0 : WBUT_DISABLE);
+		fastButton->setState(allowed ? 0 : WBUT_DISABLE);
+	}
+
+	std::shared_ptr<W_SPEED_CTRL_BUTTON> slowButton;
+	std::shared_ptr<W_SPEED_CTRL_BUTTON> fastButton;
+	std::shared_ptr<W_LABEL>             speedLabel;
+	UDWORD                               lastUpdateTime = 0;
+};
+
+std::shared_ptr<GameSpeedControlWidget> GameSpeedControlWidget::make()
+{
+	auto result = std::make_shared<GameSpeedControlWidget>();
+
+	// "-" / slow-down button
+	result->slowButton = std::make_shared<W_SPEED_CTRL_BUTTON>();
+	result->slowButton->setString(WzString::fromUtf8("\xe2\x88\x92")); // Unicode minus sign (−)
+	result->slowButton->FontID = font_large;
+	result->slowButton->setTip(_("Decrease Game Speed"));
+	result->slowButton->setGeometry(SPEED_CTRL_SPACING, SPEED_CTRL_SPACING, SPEED_CTRL_BUTTON_SIZE, SPEED_CTRL_BUTTON_SIZE);
+	result->attach(result->slowButton);
+	result->slowButton->addOnClickHandler([](W_BUTTON& button) {
+		kf_SlowDown();
+		auto psParent = std::dynamic_pointer_cast<GameSpeedControlWidget>(button.parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		widgScheduleTask([psParent]() {
+			psParent->refreshSpeedLabel();
+		});
+	});
+	result->slowButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(SPEED_CTRL_SPACING, SPEED_CTRL_SPACING,
+		                      SPEED_CTRL_BUTTON_SIZE, SPEED_CTRL_BUTTON_SIZE);
+	}));
+
+	// Speed label in the middle
+	result->speedLabel = std::make_shared<W_LABEL>();
+	result->speedLabel->setFont(font_regular_bold, WZCOL_FORM_TEXT);
+	result->speedLabel->setTextAlignment(WLAB_ALIGNCENTRE);
+	result->attach(result->speedLabel);
+	result->speedLabel->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = std::dynamic_pointer_cast<GameSpeedControlWidget>(psWidget->parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int x0 = psParent->slowButton->x() + psParent->slowButton->width() + SPEED_CTRL_SPACING;
+		psWidget->setGeometry(x0, SPEED_CTRL_SPACING, SPEED_CTRL_LABEL_WIDTH, SPEED_CTRL_BUTTON_SIZE);
+	}));
+
+	// "+" / speed-up button
+	result->fastButton = std::make_shared<W_SPEED_CTRL_BUTTON>();
+	result->fastButton->setString(WzString::fromUtf8("+"));
+	result->fastButton->FontID = font_large;
+	result->fastButton->setTip(_("Increase Game Speed"));
+	result->attach(result->fastButton);
+	result->fastButton->addOnClickHandler([](W_BUTTON& button) {
+		kf_SpeedUp();
+		auto psParent = std::dynamic_pointer_cast<GameSpeedControlWidget>(button.parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		widgScheduleTask([psParent]() {
+			psParent->refreshSpeedLabel();
+		});
+	});
+	result->fastButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = std::dynamic_pointer_cast<GameSpeedControlWidget>(psWidget->parent());
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int x0 = psParent->speedLabel->x() + psParent->speedLabel->width() + SPEED_CTRL_SPACING;
+		psWidget->setGeometry(x0, SPEED_CTRL_SPACING, SPEED_CTRL_BUTTON_SIZE, SPEED_CTRL_BUTTON_SIZE);
+	}));
+
+	int totalWidth  = SPEED_CTRL_SPACING + SPEED_CTRL_BUTTON_SIZE
+	                + SPEED_CTRL_SPACING + SPEED_CTRL_LABEL_WIDTH
+	                + SPEED_CTRL_SPACING + SPEED_CTRL_BUTTON_SIZE
+	                + SPEED_CTRL_SPACING;
+	int totalHeight = SPEED_CTRL_SPACING + SPEED_CTRL_BUTTON_SIZE + SPEED_CTRL_SPACING;
+	result->setGeometry(0, 0, totalWidth, totalHeight);
+
+	result->refreshSpeedLabel();
+	result->refreshButtonStates();
+
+	return result;
+}
+
+void GameSpeedControlWidget::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	iV_ShadowBox(x0, y0, x0 + width(), y0 + height(), 0,
+	             pal_RGBA(255, 255, 255, 60), WZCOL_FORM_DARK, pal_RGBA(0, 0, 0, 120));
+}
+
+void GameSpeedControlWidget::geometryChanged()
+{
+	if (slowButton) { slowButton->callCalcLayout(); }
+	if (speedLabel) { speedLabel->callCalcLayout(); }
+	if (fastButton) { fastButton->callCalcLayout(); }
+}
+
+void GameSpeedControlWidget::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	W_FORM::screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
+void GameSpeedControlWidget::run(W_CONTEXT *psContext)
+{
+	if (realTime - lastUpdateTime >= GAME_TICKS_PER_SEC)
+	{
+		auto self = std::dynamic_pointer_cast<GameSpeedControlWidget>(shared_from_this());
+		widgScheduleTask([self]() {
+			self->refreshSpeedLabel();
+			self->refreshButtonStates();
+		});
+		lastUpdateTime = realTime;
+	}
+}
+
+static std::shared_ptr<W_SCREEN> gameSpeedOverlayScreen;
+
+static bool createGameSpeedControlOverlay()
+{
+	ASSERT(psWScreen != nullptr, "psWScreen not initialized");
+	ASSERT_OR_RETURN(false, gameSpeedOverlayScreen == nullptr, "Already initialized");
+
+	gameSpeedOverlayScreen = W_SCREEN::make();
+	gameSpeedOverlayScreen->psForm->hide();
+
+	auto speedWidget = GameSpeedControlWidget::make();
+	gameSpeedOverlayScreen->psForm->attach(speedWidget);
+
+	speedWidget->setCalcLayout([](WIDGET *psWidget) {
+		psWidget->move(SPEED_CTRL_SPACING, SPEED_CTRL_SPACING);
+	});
+
+	widgRegisterOverlayScreenOnTopOfScreen(gameSpeedOverlayScreen, psWScreen);
+	return true;
+}
+
+#endif // defined(__ANDROID__)
+
 /* Initialise the in game interface */
 bool intInitialise()
 {
@@ -971,6 +1192,13 @@ bool intInitialise()
 		createReplayControllerOverlay();
 	}
 
+#if defined(__ANDROID__)
+	if (GetGameMode() == GS_NORMAL)
+	{
+		createGameSpeedControlOverlay();
+	}
+#endif
+
 	intUpdateFuncs.emplace_back([]() {
 		widgForEachOverlayScreen([](const std::shared_ptr<W_SCREEN> &pScreen, uint16_t order) -> bool {
 			if (pScreen != nullptr && order >= WIDG_SPEC_SCREEN_ORDER_START && order <= WIDG_SPEC_SCREEN_ORDER_END)
@@ -1003,6 +1231,14 @@ void interfaceShutDown()
 		widgRemoveOverlayScreen(replayOverlayScreen);
 		replayOverlayScreen = nullptr;
 	}
+
+#if defined(__ANDROID__)
+	if (gameSpeedOverlayScreen)
+	{
+		widgRemoveOverlayScreen(gameSpeedOverlayScreen);
+		gameSpeedOverlayScreen = nullptr;
+	}
+#endif
 
 	groupsUI = nullptr;
 
