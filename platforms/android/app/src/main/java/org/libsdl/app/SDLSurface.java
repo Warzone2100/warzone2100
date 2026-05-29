@@ -62,6 +62,9 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     private final long twoFingerTapTimeoutMs;
     private final float touchSlop;
 
+    // Long-press → box selection mode (suppresses swipe-to-pan until finger lifts)
+    private boolean selectionModeActive = false;
+
     // Startup
     protected SDLSurface(Context context) {
         super(context);
@@ -75,12 +78,22 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         swipeGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                // Only handle single-finger pans; ignore while a pinch zoom is in progress
+                // Only handle single-finger pans; ignore while a pinch zoom or box-selection is in progress
                 if (e2 != null && e2.getPointerCount() == 1 && !scaleGestureDetector.isInProgress()) {
-                    SDLActivity.onNativeWZSwipeUpdate(distanceX, distanceY);
+                    if (!selectionModeActive) {
+                        SDLActivity.onNativeWZSwipeUpdate(distanceX, distanceY);
+                    }
                     return true;
                 }
                 return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                // Long press activates box-selection mode: subsequent drag selects units instead of panning
+                if (e != null && e.getPointerCount() == 1 && !scaleGestureDetector.isInProgress()) {
+                    selectionModeActive = true;
+                }
             }
         });
 
@@ -341,6 +354,7 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             case MotionEvent.ACTION_DOWN:
                 twoFingerActive = false;
                 pinchHappenedThisGesture = false;
+                selectionModeActive = false;
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (event.getPointerCount() == 2 && !pinchHappenedThisGesture) {
@@ -372,6 +386,7 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             case MotionEvent.ACTION_CANCEL:
                 twoFingerActive = false;
                 pinchHappenedThisGesture = false;
+                selectionModeActive = false;
                 break;
         }
 
