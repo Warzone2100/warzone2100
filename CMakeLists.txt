@@ -6,7 +6,7 @@ include(WZVcpkgInit) # Must come before project() command
 set(CMAKE_MODULE_PATH "${_OLD_CMAKE_MODULE_PATH}")
 unset(_OLD_CMAKE_MODULE_PATH)
 
-project(warzone2100)
+project(warzone2100 LANGUAGES C CXX)
 
 include(CMakeDependentOption)
 
@@ -63,6 +63,7 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # Disable compiler-specific extensions
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 # Support folders (for nicer IDE organization)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
