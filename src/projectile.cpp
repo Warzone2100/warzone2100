@@ -487,7 +487,8 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	When we have been created by penetration (spawned from another projectile),
 	we shall live no longer than the original projectile may have lived
 	*/
-	if (psAttacker && psAttacker->type == OBJ_PROJECTILE)
+	const bool spawnedByPenetration = psAttacker && psAttacker->type == OBJ_PROJECTILE;
+	if (spawnedByPenetration)
 	{
 		PROJECTILE *psOldProjectile = (PROJECTILE *)psAttacker;
 		proj.born = psOldProjectile->born;
@@ -557,6 +558,12 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 		proj.rot.pitch = iAtan2(proj.vZ, proj.vXY);
 	}
 	proj.state = PROJ_INFLIGHT;
+
+	if (spawnedByPenetration)
+	{
+		proj.prevSpacetime.pos = proj.pos;
+		proj.prevSpacetime.rot = proj.rot;
+	}
 
 	// If droid or structure, set muzzle pitch.
 	// Don't allow pitching the muzzle above outside the weapon's limits.
