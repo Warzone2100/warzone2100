@@ -24,6 +24,10 @@
 
 #pragma once
 
+#include <optional>
+#include <type_traits>
+#include <utility>
+
 #include <tl/expected.hpp>
 
 struct LoadError
@@ -47,3 +51,47 @@ inline auto load_fail() noexcept
 {
 	return tl::unexpected(LoadError{});
 }
+
+/// Lazy promise-side storage: no `LoadResult<T>` until `set()`; consume with `take()`.
+template<typename T>
+	requires std::is_move_constructible_v<T> || std::is_void_v<T>
+struct LoadResultStorage
+{
+	std::optional<LoadResult<T>> value;
+
+	bool has_outcome() const noexcept
+	{
+		return value.has_value();
+	}
+
+	bool succeeded() const noexcept
+	{
+		return value && value->has_value();
+	}
+
+	void set(LoadResult<T> r) noexcept
+	{
+		value = std::move(r);
+	}
+
+	void set(tl::unexpected<LoadError> error) noexcept
+	{
+		value = std::move(error);
+	}
+
+	template <typename U = T>
+		requires (!std::is_void_v<U>)
+	void set(U v)
+	{
+		value = std::move(v);
+	}
+
+	LoadResult<T> take() noexcept
+	{
+		if (!value)
+		{
+			return load_fail();
+		}
+		return std::move(*std::exchange(value, std::nullopt));
+	}
+};

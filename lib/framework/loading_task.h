@@ -55,7 +55,7 @@ struct LoadingTaskPromiseBase
 template<typename T = void>
 struct LoadingTaskPromise : LoadingTaskPromiseBase
 {
-	LoadResult<T> result{};
+	LoadResultStorage<T> result;
 
 	LoadingTask<T> get_return_object() noexcept;
 
@@ -69,7 +69,7 @@ struct LoadingTaskPromise : LoadingTaskPromiseBase
 		{
 			auto& promise = h.promise();
 			loading_task_detail::notifyFrameFinished(
-			    &promise, h, promise.result.has_value());
+			    &promise, h, promise.result.succeeded());
 		}
 
 		void await_resume() const noexcept {}
@@ -77,23 +77,23 @@ struct LoadingTaskPromise : LoadingTaskPromiseBase
 
 	FinalAwaiter final_suspend() noexcept { return {}; }
 
-	void return_value(LoadResult<T> value) noexcept { result = std::move(value); }
+	void return_value(LoadResult<T> value) noexcept { result.set(std::move(value)); }
 
 	void return_value(tl::unexpected<LoadError> error) noexcept
 	{
-		result = std::move(error);
+		result.set(std::move(error));
 	}
 
 	template<typename U = T>
 	std::enable_if_t<!std::is_void_v<U>, void> return_value(U value)
 	{
-		result = std::move(value);
+		result.set(std::move(value));
 	}
 
 	void unhandled_exception() noexcept
 	{
 		exception = std::current_exception();
-		result = load_fail();
+		result.set(load_fail());
 	}
 };
 
@@ -109,6 +109,8 @@ struct LoadingTaskPromise : LoadingTaskPromiseBase
 /// * Nest with `co_await child_task`; the child shares the parent's controller binding.
 /// * Until `request()`, this RAII type owns the coroutine; after `release()` / submit, the
 ///   controller owns destruction. See `ResourceLoadingController` for scheduling and constraints.
+/// * Success payload `T` must be movable (not necessarily copyable). Use `take_result()` to move
+///   the outcome out once; it is not readable from a copying accessor.
 /// </summary>
 template<typename T>
 class LoadingTask
@@ -142,9 +144,9 @@ public:
 
 	bool done() const noexcept { return coro == nullptr || coro.done(); }
 
-	result_type result() const noexcept
+	result_type take_result() noexcept
 	{
-		return coro ? coro.promise().result : load_fail();
+		return coro ? coro.promise().result.take() : load_fail();
 	}
 
 	void setFramePolicy(ResourceLoadingFramePolicy policy) noexcept
@@ -171,17 +173,17 @@ public:
 			return child == nullptr || child->done();
 		}
 
-		LoadResult<T> await_resume() const noexcept
+		LoadResult<T> await_resume() noexcept
 		{
 			if (child_handle)
 			{
 				// Child handle destroyed here after controller stack pop (see controller ops).
 				ASSERT(child_handle.done(), "nested child must be done before destroy");
-				const LoadResult<T> outcome = child_handle.promise().result;
+				LoadResult<T> outcome = child_handle.promise().result.take();
 				child_handle.destroy();
 				return outcome;
 			}
-			return child ? child->result() : load_fail();
+			return child ? child->take_result() : load_fail();
 		}
 
 		void await_suspend(std::coroutine_handle<> parent)
