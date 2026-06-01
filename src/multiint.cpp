@@ -1872,16 +1872,47 @@ public:
 	}
 };
 
-std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t player)
+static bool isValidPlayerIdxTargetForPlayerPositionMove(uint32_t responsiblePlayerIdx, uint32_t targetPlayerIdx)
+{
+	// Target cannot be self, and target cannot be a spectator slot (for player position changes)
+	if (responsiblePlayerIdx == targetPlayerIdx || isSpectatorOnlySlot(targetPlayerIdx))
+	{
+		return false;
+	}
+
+	// Target is an AI slot
+	if (NetPlay.players[targetPlayerIdx].ai >= 0)
+	{
+		// Host/admin cannot swap with AI slots if locked
+		if (isPlayerHostOrAdmin(responsiblePlayerIdx) && locked.aipositionadmin)
+		{
+			return false;
+		}
+
+		// Non-admin players cannot swap with AI slots if locked
+		if (!isPlayerHostOrAdmin(responsiblePlayerIdx) && locked.aipositionplayer)
+		{
+			return false;
+		}
+	}
+
+	// Target is another player
+	if (isHumanPlayer(targetPlayerIdx) && !isPlayerHostOrAdmin(responsiblePlayerIdx))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+std::set<uint32_t> validPlayerIdxTargetsForPlayerPositionMove(uint32_t responsiblePlayerIdx)
 {
 	std::set<uint32_t> validTargetPlayerIdx;
-	for (uint32_t i = 0; i < game.maxPlayers; i++)
+	for (uint32_t targetPlayerIdx = 0; targetPlayerIdx < game.maxPlayers; targetPlayerIdx++)
 	{
-		if (player != i
-			&& (isHostOrAdmin() || !isHumanPlayer(i)) // host/admin can move a player to any slot, player can only move to empty slots
-			&& !isSpectatorOnlySlot(i)) // target cannot be a spectator only slot (for player position changes)
+		if (isValidPlayerIdxTargetForPlayerPositionMove(responsiblePlayerIdx, targetPlayerIdx))
 		{
-			validTargetPlayerIdx.insert(i);
+			validTargetPlayerIdx.insert(targetPlayerIdx);
 		}
 	}
 	return validTargetPlayerIdx;
@@ -2742,7 +2773,7 @@ static bool changePosition(UBYTE player, UBYTE position, uint32_t responsibleIdx
 	{
 		if (NetPlay.players[i].position == position)
 		{
-			if (!isHumanPlayer(i) || isPlayerHostOrAdmin(responsibleIdx))
+			if (isValidPlayerIdxTargetForPlayerPositionMove(responsibleIdx, i))
 			{
 				debug(LOG_NET, "Swapping positions between players %d(%d) and %d(%d)",
 					  player, NetPlay.players[player].position, i, NetPlay.players[i].position);
@@ -2763,7 +2794,7 @@ static bool changePosition(UBYTE player, UBYTE position, uint32_t responsibleIdx
 			}
 			else
 			{
-				debug(LOG_INFO, "Unable to swap positions between players %d(%d) and %d(%d) - lack of privileges",
+				debug(LOG_INFO, "Unable to swap positions between players %d(%d) and %d(%d) - lack of privileges (or invalid position)",
 					  player, NetPlay.players[player].position, i, NetPlay.players[i].position);
 				return false;
 			}
@@ -4856,6 +4887,8 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		locked.ai = ini.value("ai", challengeActive).toBool();
 		locked.scavengers = ini.value("scavengers", challengeActive).toBool();
 		locked.position = ini.value("position", challengeActive).toBool();
+		locked.aipositionplayer = ini.value("aipositionplayer", false).toBool();
+		locked.aipositionadmin = ini.value("aipositionadmin", false).toBool();
 		locked.bases = ini.value("bases", challengeActive).toBool();
 		locked.spectators = ini.value("spectators", challengeActive).toBool();
 		locked.name = ini.value("name", false).toBool();

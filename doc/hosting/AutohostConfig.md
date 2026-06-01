@@ -33,14 +33,20 @@ The `challenge` object defines the game parameters for a multiplayer game.
 
 The `locked` object sets which game parameters can be changed by the host and room administrators. Those values can be `true` or `1` if the parameter cannot be changed, or `false` or `0`. When an entry is not set, it is unlocked (same as `false`).
 
-* `power` locks the `powerLevel` value.
-* `alliances` locks to the `alliances` value.
-* `teams` prevents player from switching teams.
-* `difficulty` locks the AI difficulty.
 * `ai` locks AI scripts.
+* `aipositionplayer` prevents non-admin players from swapping starting locations with AI bots.
+* `aipositionadmin` prevents admin players from swapping starting locations with AI bots.
+* `alliances` locks the `alliances` value.
+* `bases` locks the `powerLevel` value.
+* `cheats` prevents players from enabling debug mode.
+* `difficulty` locks the AI difficulty.
+* `name` prevents players from changing their name.
+* `position` prevents players from changing their starting location.
+* `power` locks the `powerLevel` value.
+* `readybeforefull` ?
 * `scavengers` locks the `scavengers` value.
-* `position` prevents player from changing their starting location.
-* `bases` locks the `bases` value.
+* `spectators` prevents players from moving between player/spectator.
+* `teams` prevents players from changing their team.
 
 ## Player objects
 
@@ -65,6 +71,7 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 		"ai": false,
 		"scavengers": true,
 		"position": false,
+		"aiposition": false,
 		"bases": true
 	},
 	"challenge": {

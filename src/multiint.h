@@ -88,6 +88,8 @@ struct MultiplayOptionsLocked
 	bool difficulty;
 	bool ai;
 	bool position;
+	bool aipositionplayer;
+	bool aipositionadmin;
 	bool bases;
 	bool spectators;
 	bool name;
@@ -103,6 +105,8 @@ struct MultiplayOptionsLocked
 			&& difficulty == other.difficulty
 			&& ai == other.ai
 			&& position == other.position
+			&& aipositionplayer == other.aipositionplayer
+			&& aipositionadmin == other.aipositionadmin
 			&& bases == other.bases
 			&& spectators == other.spectators
 			&& name == other.name
