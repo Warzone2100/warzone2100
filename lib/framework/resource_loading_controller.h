@@ -92,7 +92,7 @@ public:
 
 	// Submit loading work. If there is an active submission, queue the follow-up;
 	// otherwise begin immediately.
-	template<typename T = void>
+	template <typename T = void>
 	void request(LoadingTask<T> task, FramePolicy policy);
 
 	// Returns true if there is an active submission.
@@ -103,7 +103,7 @@ public:
 
 	// Run a loading task to completion on the calling thread.
 	// Preconditions (debug ASSERT): !active(), !isExecutingLoadingCoroutine().
-	template<typename T = void>
+	template <typename T = void>
 	LoadResult<T> runTaskToCompletion(LoadingTask<T> task,
 	                                  FramePolicy policy = {FrameProcessingMode::ConsumeFrame, false},
 	                                  BetweenQuantumCallback betweenQuantum = nullptr);
@@ -123,9 +123,9 @@ public:
 private:
 
 	friend struct FrameYield;
-	template<typename T>
+	template <typename T>
 	friend class LoadingTask;
-	template<typename T>
+	template <typename T>
 	friend struct LoadingTaskPromise;
 
 	friend void loading_task_detail::notifyFrameFinished(
@@ -186,7 +186,7 @@ struct ResourceLoadingController::FrameYield
 	void await_resume() const noexcept {}
 };
 
-template<typename T>
+template <typename T>
 LoadResult<T> ResourceLoadingController::runTaskToCompletion(LoadingTask<T> task, FramePolicy policy,
                                                              BetweenQuantumCallback betweenQuantum)
 {
@@ -219,7 +219,7 @@ LoadResult<T> ResourceLoadingController::runTaskToCompletion(LoadingTask<T> task
 	return result;
 }
 
-template<typename T>
+template <typename T>
 void ResourceLoadingController::request(LoadingTask<T> task, FramePolicy policy)
 {
 	requestImpl(LoadingTaskHandle(std::move(task)), policy);
