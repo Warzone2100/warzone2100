@@ -525,15 +525,13 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 		proj.src = psOldProjectile->src;
 
 		proj.prevSpacetime.time = psOldProjectile->time;  // Have partially ticked already.
-		proj.time = gameTime;
-		proj.prevSpacetime.time -= proj.prevSpacetime.time == proj.time;  // Times should not be equal, for interpolation.
+		proj.time = psOldProjectile->time;
+		proj.prevSpacetime.time -= proj.prevSpacetime.time == gameTime;  // Times should not be equal, for interpolation.
 
 		setProjectileSource(&proj, psOldProjectile->psSource);
 		proj.psDamaged = psOldProjectile->psDamaged;
 
 		proj.penetratingProjectile = weapon_slot == PROJ_PENETRATE_SLOT; // Searching for PROJ_PENETRATE_SLOT just makes it easier to find where these are initially created from.
-
-		// TODO Should finish the tick, when penetrating.
 	}
 	else
 	{
@@ -1414,15 +1412,13 @@ static void proj_PostImpactFunc(PROJECTILE *psObj)
 
 /***************************************************************************/
 
-PROJECTILE* PROJECTILE::update()
+static PROJECTILE* proj_UpdateFrom(PROJECTILE *psObj, Spacetime const &startSpacetime)
 {
-	PROJECTILE *psObj = this;
-
 	CHECK_PROJECTILE(psObj);
 
 	syncDebugProjectile(psObj, '<');
 
-	psObj->prevSpacetime = getSpacetime(psObj);
+	psObj->prevSpacetime = startSpacetime;
 
 	/* See if any of the stored objects have died
 	 * since the projectile was created
@@ -1438,7 +1434,7 @@ PROJECTILE* PROJECTILE::update()
 		setProjectileDestination(psObj, nullptr);
 	}
 	// Remove dead objects from psDamaged.
-	psDamaged.erase(std::remove_if(psDamaged.begin(), psDamaged.end(), [](const BASE_OBJECT *psObj) { return ::isDead(psObj); }), psDamaged.end());
+	psObj->psDamaged.erase(std::remove_if(psObj->psDamaged.begin(), psObj->psDamaged.end(), [](const BASE_OBJECT *psObj) { return ::isDead(psObj); }), psObj->psDamaged.end());
 
 	// This extra check fixes a crash in cam2, mission1
 	if (worldOnMap(gameWorld.map, psObj->pos.x, psObj->pos.y) == false)
@@ -1478,6 +1474,11 @@ PROJECTILE* PROJECTILE::update()
 	return spawnedProjectile;
 }
 
+PROJECTILE* PROJECTILE::update()
+{
+	return proj_UpdateFrom(this, getSpacetime(this));
+}
+
 /***************************************************************************/
 
 // iterate through all projectiles and update their status
@@ -1499,6 +1500,22 @@ void proj_UpdateAll()
 		if (spawned)
 		{
 			spawnedProjectiles.emplace_back(spawned);
+		}
+	}
+
+	// Finish the current tick for penetrating projectiles spawned above.
+	for (size_t i = 0; i < spawnedProjectiles.size(); ++i)
+	{
+		PROJECTILE *spawned = spawnedProjectiles[i];
+		if (spawned->time >= gameTime)
+		{
+			continue;
+		}
+
+		PROJECTILE *continued = proj_UpdateFrom(spawned, spawned->prevSpacetime);
+		if (continued)
+		{
+			spawnedProjectiles.emplace_back(continued);
 		}
 	}
 
