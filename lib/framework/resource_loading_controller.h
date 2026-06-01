@@ -211,7 +211,7 @@ LoadResult<T> ResourceLoadingController::runTaskToCompletion(LoadingTask<T> task
 			{
 				result = std::coroutine_handle<LoadingTaskPromise<T>>::from_address(sessionRootHandle.address())
 				             .promise()
-				             .result;
+				             .result.take();
 			}
 			completeActiveSubmission(status);
 		}
