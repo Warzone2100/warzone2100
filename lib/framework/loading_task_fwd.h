@@ -25,5 +25,5 @@
 
 #pragma once
 
-template<typename T = void>
+template <typename T = void>
 class LoadingTask;

@@ -33,7 +33,7 @@
 struct LoadError
 {};
 
-template<typename T = void>
+template <typename T = void>
 using LoadResult = tl::expected<T, LoadError>;
 
 inline LoadResult<> load_ok() noexcept
@@ -53,7 +53,7 @@ inline auto load_fail() noexcept
 }
 
 /// Lazy promise-side storage: no `LoadResult<T>` until `set()`; consume with `take()`.
-template<typename T>
+template <typename T>
 	requires std::is_move_constructible_v<T> || std::is_void_v<T>
 struct LoadResultStorage
 {

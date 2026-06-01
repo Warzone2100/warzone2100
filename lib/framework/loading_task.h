@@ -52,7 +52,7 @@ struct LoadingTaskPromiseBase
 	std::optional<ResourceLoadingFramePolicy> framePolicy;
 };
 
-template<typename T = void>
+template <typename T = void>
 struct LoadingTaskPromise : LoadingTaskPromiseBase
 {
 	LoadResultStorage<T> result;
@@ -84,7 +84,7 @@ struct LoadingTaskPromise : LoadingTaskPromiseBase
 		result.set(std::move(error));
 	}
 
-	template<typename U = T>
+	template <typename U = T>
 	std::enable_if_t<!std::is_void_v<U>, void> return_value(U value)
 	{
 		result.set(std::move(value));
@@ -112,7 +112,7 @@ struct LoadingTaskPromise : LoadingTaskPromiseBase
 /// * Success payload `T` must be movable (not necessarily copyable). Use `take_result()` to move
 ///   the outcome out once; it is not readable from a copying accessor.
 /// </summary>
-template<typename T>
+template <typename T>
 class LoadingTask
 {
 public:
@@ -224,13 +224,13 @@ private:
 	std::coroutine_handle<promise_type> coro{};
 };
 
-template<typename T>
+template <typename T>
 LoadingTask<T> LoadingTaskPromise<T>::get_return_object() noexcept
 {
 	return LoadingTask<T>{std::coroutine_handle<LoadingTaskPromise<T>>::from_promise(*this)};
 }
 
-template<typename T>
+template <typename T>
 typename LoadingTask<T>::ChildTaskAwaiter LoadingTask<T>::operator co_await() &&
 {
 	return ChildTaskAwaiter{this};
@@ -244,7 +244,7 @@ class LoadingTaskHandle
 public:
 	LoadingTaskHandle() = default;
 
-	template<typename T>
+	template <typename T>
 	explicit LoadingTaskHandle(LoadingTask<T>&& task)
 	{
 		auto typedHandle = task.release();
