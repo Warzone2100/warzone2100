@@ -24,6 +24,8 @@
 
 #include "resource_loading_controller.h"
 
+#include <chrono>
+#include <ratio>
 #include <utility>
 
 struct ResourceLoadingController::ResourceLoadingSubmission
@@ -32,7 +34,10 @@ struct ResourceLoadingController::ResourceLoadingSubmission
 	FramePolicy policy{};
 };
 
-ResourceLoadingController::~ResourceLoadingController() = default;
+ResourceLoadingController::~ResourceLoadingController()
+{
+	resetTaskState();
+}
 
 ResourceLoadingController& ResourceLoadingController::instance()
 {
