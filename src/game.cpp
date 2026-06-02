@@ -4011,10 +4011,15 @@ static LoadingTask<> gameLoad(ResourceLoadingController& controller, const char 
 		loadMainFile(std::string(CurrentFileName) + "/main.json");
 
 		const LoadResult<> retVal = co_await gameLoadV(controller, fileHandle, fileHeader.version, gamJsonSave);
-		PHYSFS_close(fileHandle);
-
+		if (fileHandle)
+		{
+			PHYSFS_close(fileHandle);
+		}
+		if (!retVal)
+		{
+			co_return retVal;
+		}
 		loadMainFileFinal(std::string(CurrentFileName) + "/main.json");
-
 		co_return retVal;
 	}
 	else
