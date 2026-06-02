@@ -23,6 +23,7 @@
 #define _tex_
 
 #include "lib/framework/wzstring.h"
+#include "lib/framework/loading_task_fwd.h"
 #include "gfx_api.h"
 #include "png_util.h"
 
@@ -47,6 +48,8 @@ void pie_AssignTexture(size_t page, gfx_api::texture* texture);
 //*************************************************************************
 
 optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
+
+class ResourceLoadingController;
 
 LoadingTask<optional<size_t>> iV_GetTextureTask(ResourceLoadingController& controller, const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1);
 void iV_unloadImage(iV_Image *image);

@@ -2938,7 +2938,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 		if (!data)
 		{
 			debug(LOG_ERROR, "Failed to load map from path: %s", aFileName);
-			co_return load_fail();
+			co_return co_await loadGameCleanupOnFailure(controller, gameToLoad, keepObjects, freeMem);
 		}
 		//load the terrain type data
 		if (!loadTerrainTypeMap(data->mapTerrainTypes()))
