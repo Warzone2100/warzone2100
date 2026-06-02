@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020-2021  Warzone 2100 Project
+	Copyright (C) 2020-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -1123,7 +1125,7 @@ public:
 
 		auto texturesLabel = panel->createLabel(0, font_regular_bold, "Textures:");
 		auto prevButton = panel->createButton(0, "Reload Terrain & Water", [](){
-			loadTerrainTextures(currentMapTileset);
+			loadTerrainTexturesBlocking(currentMapTileset);
 			debug(LOG_INFO, "Done");
 		}, texturesLabel);
 		prevButton = panel->createButton(0, "Reload Decals", [](){

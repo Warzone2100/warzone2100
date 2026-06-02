@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,6 +41,9 @@ extern char* res_get_text(void);
 #include "lib/framework/frameresource.h"
 #include "lib/framework/resly.h"
 #include "lib/framework/physfs_ext.h"
+
+extern bool resParserSetDirectory(const char *directory);
+extern bool resParserAddFile(const char *type, const char *file);
 
 extern void yyerror(const char* msg);
 void yyerror(const char* msg)
@@ -84,40 +89,20 @@ res_line:			dir_line
 
 dir_line:			DIRECTORY QTEXT_T
 				{
-					UDWORD len;
-
-					// set a new input directory
-					debug(LOG_NEVER, "directory: %s", $2);
-					if (strncmp($2, "/:", strlen("/:")) == 0)
-					{
-						// the new dir is rooted
-						sstrcpy(aCurrResDir, $2);
-					}
-					else
-					{
-						sstrcpy(aCurrResDir, aResDir);
-						sstrcat(aCurrResDir, $2);
-					}
-					if (strlen($2) > 0)
-					{
-						ASSERT(WZ_PHYSFS_isDirectory(aCurrResDir), "%s is not a directory!", aCurrResDir);
-						// Add a trailing '/'
-						len = strlen(aCurrResDir);
-						aCurrResDir[len] = '/';
-						aCurrResDir[len+1] = 0;
-						debug(LOG_NEVER, "Current resource directory: %s", aCurrResDir);
-					}
+					bool success = resParserSetDirectory($2);
 					free($2);
+
+					if (!success)
+					{
+						YYABORT;
+					}
 				}
 				;
 
 
 file_line:			FILETOKEN TEXT_T QTEXT_T
 				{
-					bool success;
-					/* load a data file */
-					debug(LOG_NEVER, "file: %s %s", $2, $3);
-					success = resLoadFile($2, $3);
+					bool success = resParserAddFile($2, $3);
 					free($2);
 					free($3);
 

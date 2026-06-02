@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,10 +23,14 @@
 #define _imd_
 
 #include "lib/framework/wzstring.h"
+#include "lib/framework/loading_task_fwd.h"
 #include <functional>
+
+class ResourceLoadingController;
 
 struct iIMDShape;
 struct iIMDBaseShape;
+struct iIMDShapeTextures;
 
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define PIE_VER				2
@@ -60,6 +66,9 @@ void modelUpdateTilesetIdx(size_t tilesetIdx);
 
 // Enumerate over loaded models
 void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDBaseShape& model)>& func);
+
+LoadingTask<> imdLoadLevelTexturesTask(ResourceLoadingController& controller, const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output);
+LoadingTask<> preloadAllModelTexturesTask(ResourceLoadingController& controller);
 
 /// Get filename of model pointer. This is really slow, so do not abuse for logging
 /// purposes, for example.

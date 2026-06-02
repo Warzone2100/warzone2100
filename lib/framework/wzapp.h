@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -80,6 +82,9 @@ void wzResetGfxSettingsOnFailure();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage);
 void wzMainEventLoop(std::function<void()> onShutdown);
+/// Platform event pump for synchronous loading drains. Keeps the OS window responsive
+/// while `runTaskToCompletion` / `runBlockingResourceLoad` spin on the main thread.
+/// Called from game-layer loading housekeeping and lib/ivis_opengl blocking gfx loads.
 void wzPumpEventsWhileLoading();
 void wzQuit(int exitCode);              ///< Quit game
 int wzGetQuitExitCode();

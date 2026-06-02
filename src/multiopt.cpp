@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,6 +32,8 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "resource_loading_dispatch.h"
 
 #include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
@@ -265,15 +269,16 @@ bool recvOptions(NETQUEUE queue)
 		// Do not load limits if mods present because mods are not loaded yet
 		if (!modHashesSize && !bLimiterLoaded)
 		{
-			initLoadingScreen(true);
-			if (!resLoad("wrf/limiter_data.wrf", 503))
+			auto& controller = ResourceLoadingController::instance();
+			ResourceLoadingController::FramePolicy policy;
+			policy.showLoadingScreen = true;
+			if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 			{
 				debug(LOG_INFO, "Unable to load limiter_data during recvOptions!");
 			}
 			else
 			{
 				bLimiterLoaded = true;
-				closeLoadingScreen();
 			}
 		}
 	}
@@ -444,7 +449,7 @@ bool recvOptions(NETQUEUE queue)
 
 	if (mapData)
 	{
-		loadMapPreview(false);
+		requestMapPreviewLoad(false);
 	}
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
