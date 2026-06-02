@@ -31,7 +31,8 @@
 #include "levels.h"
 #include "missiondef.h"
 #include "group.h"
-#include "lib/framework/resource_loading_controller.h"
+#include "game.h"
+#include "lib/framework/loading_task_fwd.h"
 
 /**
  * The number of areas that can be defined to prevent buildings being placed -
@@ -58,8 +59,9 @@ void releaseMission();
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
-struct GameLoadDetails;
-LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, const GameLoadDetails& gameDetails);
+class ResourceLoadingController;
+
+LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, GameLoadDetails gameDetails);
 void endMission();
 
 /** Initialise the mission stuff for a save game. */
