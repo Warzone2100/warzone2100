@@ -156,12 +156,12 @@ static UBYTE   bPlayCountDown;
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
 static void resetHomeStructureObjects();
-static LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
-static LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
-static LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
-static LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
-static LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
-static LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
+static LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, GameLoadDetails gameToLoad);
 static bool startMissionBetween();
 static void endMissionCamChange();
 static void endMissionOffClear();
@@ -389,7 +389,7 @@ void setMissionCountDown()
 }
 
 
-LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
+LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, GameLoadDetails gameDetails)
 {
 	bool	loaded = true;
 
@@ -1066,7 +1066,7 @@ void saveCampaignData()
 
 
 //start an off world mission - clearing the object lists
-LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
@@ -1087,7 +1087,7 @@ LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, const 
 }
 
 //start an off world mission - keeping the object lists
-LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 	saveMissionData();
@@ -1106,7 +1106,7 @@ LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, const G
 	co_return load_ok();
 }
 
-LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
@@ -1127,7 +1127,7 @@ LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, c
 	co_return load_ok();
 }
 
-LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1154,7 +1154,7 @@ LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, 
 	co_return load_ok();
 }
 
-LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	//load in the new game details
 	if (!(co_await loadGame(controller, gameToLoad, KEEPOBJECTS, !FREEMEM)))
@@ -1166,7 +1166,7 @@ LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, 
 	co_return load_ok();
 }
 
-LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, GameLoadDetails gameToLoad)
 {
 	saveMissionLimboData();
 
