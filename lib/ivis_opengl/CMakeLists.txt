@@ -43,6 +43,7 @@ file(GLOB SRC
 	"bitimage.cpp"
 	"culling.cpp"
 	"gfx_api.cpp"
+	"gfx_api_texture_array_load.cpp"
 	"gfx_api_gl.cpp"
 	"gfx_api_image_basis_priv.cpp"
 	"gfx_api_image_compress_priv.cpp"

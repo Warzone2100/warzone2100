@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,7 +21,8 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
+#include "lib/framework/loading_task.h"
+#include "lib/framework/resource_loading_controller.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -190,6 +193,9 @@ gfx_api::texture* loadTextureHandleGraphicsOverrides(const char *filename, gfx_a
 	return pTexture;
 }
 
+namespace
+{
+
 /** Retrieve the texture number for a given texture resource.
  *
  *  @note We keep textures in a separate data structure _TEX_PAGE apart from the
@@ -203,7 +209,7 @@ gfx_api::texture* loadTextureHandleGraphicsOverrides(const char *filename, gfx_a
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> loadTexturePageSync(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(filename != nullptr, "filename must not be null");
 
@@ -222,8 +228,39 @@ optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textu
 	}
 
 	size_t page = pie_AddTexPage(pTexture, filename, textureType);
-	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
 	return optional<size_t>(page);
+}
+
+} // namespace
+
+optional<size_t> iV_GetTexture(const char *filename, gfx_api::texture_type textureType, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	return loadTexturePageSync(filename, textureType, maxWidth, maxHeight);
+}
+
+LoadingTask<optional<size_t>> iV_GetTextureTask(
+	ResourceLoadingController& controller,
+	const char *filename,
+	gfx_api::texture_type textureType,
+	int maxWidth /*= -1*/,
+	int maxHeight /*= -1*/)
+{
+	ASSERT(filename != nullptr, "filename must not be null");
+
+	const auto it = _NAME_TO_TEX_PAGE_MAP.find(filename);
+	if (it != _NAME_TO_TEX_PAGE_MAP.end())
+	{
+		co_return load_ok(optional<size_t>(it->second));
+	}
+
+	optional<size_t> page = loadTexturePageSync(filename, textureType, maxWidth, maxHeight);
+	if (!page.has_value())
+	{
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+	co_return load_ok(page);
 }
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)

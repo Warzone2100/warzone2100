@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +26,8 @@
  *
  */
 #include "frameresource.h"
+
+#include "resource_loading_controller.h"
 
 #include "string_ext.h"
 #include "physfs_ext.h"
@@ -48,8 +52,84 @@ static SDWORD resBlockID;
 // prototypes
 static void ResetResourceFile();
 
-// callback to resload screen.
-static RESLOAD_CALLBACK resLoadCallback = nullptr;
+static ResLoadPlan *activeResLoadPlan = nullptr;
+static size_t resLoadPlanEntriesPerStepSetting = 1;
+
+bool resParserBeginLoadPlanBuild(ResLoadPlan *plan)
+{
+	ASSERT(plan != nullptr, "resParserBeginLoadPlanBuild called with null plan");
+	ASSERT(activeResLoadPlan == nullptr, "res parser plan build already active");
+	if (plan == nullptr || activeResLoadPlan != nullptr)
+	{
+		return false;
+	}
+
+	activeResLoadPlan = plan;
+	activeResLoadPlan->entries.clear();
+	activeResLoadPlan->nextEntry = 0;
+	sstrcpy(aCurrResDir, aResDir);
+	return true;
+}
+
+void resParserEndLoadPlanBuild()
+{
+	activeResLoadPlan = nullptr;
+}
+
+bool resParserSetDirectory(const char *directory)
+{
+	size_t len;
+
+	ASSERT(activeResLoadPlan != nullptr, "resParserSetDirectory called without an active plan");
+	ASSERT(directory != nullptr, "resParserSetDirectory called with null directory");
+	if (activeResLoadPlan == nullptr || directory == nullptr)
+	{
+		return false;
+	}
+
+	debug(LOG_NEVER, "directory: %s", directory);
+	if (strncmp(directory, "/:", strlen("/:")) == 0)
+	{
+		sstrcpy(aCurrResDir, directory);
+	}
+	else
+	{
+		sstrcpy(aCurrResDir, aResDir);
+		sstrcat(aCurrResDir, directory);
+	}
+
+	if (strlen(directory) > 0)
+	{
+		ASSERT(WZ_PHYSFS_isDirectory(aCurrResDir), "%s is not a directory!", aCurrResDir);
+		if (!WZ_PHYSFS_isDirectory(aCurrResDir))
+		{
+			debug(LOG_ERROR, "Resource directory does not exist: %s", aCurrResDir);
+			return false;
+		}
+
+		len = strlen(aCurrResDir);
+		aCurrResDir[len] = '/';
+		aCurrResDir[len + 1] = 0;
+		debug(LOG_NEVER, "Current resource directory: %s", aCurrResDir);
+	}
+
+	return true;
+}
+
+bool resParserAddFile(const char *type, const char *file)
+{
+	ASSERT(activeResLoadPlan != nullptr, "resParserAddFile called without an active plan");
+	ASSERT(type != nullptr, "resParserAddFile called with null type");
+	ASSERT(file != nullptr, "resParserAddFile called with null file");
+	if (activeResLoadPlan == nullptr || type == nullptr || file == nullptr)
+	{
+		return false;
+	}
+
+	debug(LOG_NEVER, "file: %s %s", type, file);
+	activeResLoadPlan->entries.push_back({aCurrResDir, type, file});
+	return true;
+}
 
 
 /* next four used in HashPJW */
@@ -130,22 +210,6 @@ static UDWORD HashStringIgnoreCase(const char *c)
 	return iHashValue;
 }
 
-/* set the callback function for the res loader*/
-void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
-{
-	resLoadCallback = funcToCall;
-}
-
-/* do the callback for the resload display function */
-void resDoResLoadCallback()
-{
-	if (resLoadCallback)
-	{
-		resLoadCallback();
-	}
-}
-
-
 /* Initialise the resource module */
 bool resInitialise()
 {
@@ -153,7 +217,8 @@ bool resInitialise()
 	       "resInitialise: resource module hasn't been shut down??");
 	psResTypes.clear();
 	resBlockID = 0;
-	resLoadCallback = nullptr;
+	activeResLoadPlan = nullptr;
+	resLoadPlanEntriesPerStepSetting = 1;
 
 	ResetResourceFile();
 
@@ -184,8 +249,10 @@ void resSetBaseDir(const char *pResDir)
 	sstrcpy(aResDir, pResDir);
 }
 
-/* Parse the res file */
-bool resLoad(const char *pResFile, SDWORD blockID)
+namespace
+{
+
+bool resPrepareLoadPlan(const char *pResFile, SDWORD blockID, ResLoadPlan &plan)
 {
 	bool retval = true;
 	lexerinput_t input;
@@ -206,20 +273,81 @@ bool resLoad(const char *pResFile, SDWORD blockID)
 		return false;
 	}
 
-	// and parse it
+	plan = {};
+	plan.resourceFile = pResFile;
+	plan.blockID = blockID;
+	if (!resParserBeginLoadPlanBuild(&plan))
+	{
+		PHYSFS_close(input.input.physfsfile);
+		return false;
+	}
+
 	res_set_extra(&input);
+
+	// Parse the RES file
 	if (res_parse() != 0)
 	{
 		debug(LOG_FATAL, "Failed to parse %s", pResFile);
 		retval = false;
 	}
 
+	resParserEndLoadPlanBuild();
 	res_lex_destroy();
 	PHYSFS_close(input.input.physfsfile);
 
 	return retval;
 }
 
+bool resLoadPlanStep(ResLoadPlan &plan, size_t maxEntriesPerStep)
+{
+	resBlockID = plan.blockID;
+	for (size_t processed = 0; processed < maxEntriesPerStep && plan.nextEntry < plan.entries.size(); ++processed, ++plan.nextEntry)
+	{
+		const ResLoadPlanEntry &entry = plan.entries[plan.nextEntry];
+		sstrcpy(aCurrResDir, entry.resourceDirectory.c_str());
+		if (!resLoadFile(entry.type.c_str(), entry.file.c_str()))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool resLoadPlanComplete(const ResLoadPlan &plan)
+{
+	return plan.nextEntry >= plan.entries.size();
+}
+
+size_t resGetLoadPlanEntriesPerStep()
+{
+	return resLoadPlanEntriesPerStepSetting;
+}
+
+} // anonymous namespace
+
+/* Parse the res file */
+LoadingTask<> resLoad(ResourceLoadingController& controller, const char *pResFile, SDWORD blockID)
+{
+	ResLoadPlan plan;
+	if (!resPrepareLoadPlan(pResFile, blockID, plan))
+	{
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+
+	while (!resLoadPlanComplete(plan))
+	{
+		if (!resLoadPlanStep(plan, resGetLoadPlanEntriesPerStep()))
+		{
+			co_return load_fail();
+		}
+		co_await controller.yieldFrame();
+	}
+
+	co_return load_ok();
+}
 
 /* Allocate a RES_TYPE structure */
 static RES_TYPE *resAlloc(const char *pType)
@@ -554,8 +682,6 @@ bool resLoadFile(const char *pType, const char *pFile)
 			return false;
 		}
 	}
-
-	resDoResLoadCallback();		// do callback.
 
 	// Set up the resource structure if there is something to store
 	if (pData != nullptr)

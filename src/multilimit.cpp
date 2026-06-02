@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +26,8 @@
  */
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "resource_loading_dispatch.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/object_list_iteration.h"
 #include "lib/widget/slider.h"
@@ -110,19 +114,17 @@ void WzMultiLimitTitleUI::start()
 	// load stats...
 	if (!bLimiterLoaded)
 	{
-		initLoadingScreen(true);
-
-		if (!resLoad("wrf/limiter_data.wrf", 503))
+		auto& controller = ResourceLoadingController::instance();
+		ResourceLoadingController::FramePolicy policy;
+		policy.showLoadingScreen = true;
+		if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 		{
 			debug(LOG_INFO, "Unable to load limiter_data during WzMultiLimitTitleUI start; returning...");
 			changeTitleUI(parent);
-			closeLoadingScreen();
 			return;
 		}
 
 		bLimiterLoaded = true;
-
-		closeLoadingScreen();
 	}
 
 	if (challengeActive)

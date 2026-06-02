@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,6 +37,7 @@
 #include <wzmaplib/map.h>
 
 #include "map.h"
+#include "terrain.h"
 #include "hci.h"
 #include "projectile.h"
 #include "display3d.h"
@@ -1001,7 +1004,7 @@ void WzMapDebugLogger::printLog(WzMap::LoggingProtocol::LogLevel level, const ch
 }
 
 /* Initialise the map structure */
-bool mapLoad(char const *filename, WorldMapState& mapState)
+LoadingTask<> mapLoad(ResourceLoadingController& controller, char const *filename, WorldMapState& mapState)
 {
 	WzMapPhysFSIO mapIO;
 	WzMapDebugLogger debugLoggerInstance;
@@ -1010,10 +1013,9 @@ bool mapLoad(char const *filename, WorldMapState& mapState)
 	if (!loadedMap)
 	{
 		// loadMapData call handles logging errors
-		return false;
+		co_return load_fail();
 	}
-	return mapLoadFromWzMapData(loadedMap, mapState);
-
+	co_return co_await mapLoadFromWzMapData(controller, loadedMap, mapState);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -1047,7 +1049,7 @@ bool loadTerrainTypeMap(const std::shared_ptr<WzMap::TerrainTypeData>& ttypeData
 }
 
 ///* Initialise the map structure */
-bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap, WorldMapState& mapState)
+LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::shared_ptr<WzMap::MapData> loadedMap, WorldMapState& mapState)
 {
 	uint32_t		width, height;
 	const bool		preview = false;
@@ -1077,14 +1079,20 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap, WorldMapSta
 	// load the ground types
 	if (!mapLoadGroundTypes(preview))
 	{
-		return false;
+		co_return load_fail();
 	}
+
+	co_await controller.yieldFrame();
 
 	if (!preview)
 	{
-		//preload the terrain textures
-		loadTerrainTextures(currentMapTileset);
+		if (!(co_await loadTerrainTextures(controller, currentMapTileset)))
+		{
+			co_return load_fail();
+		}
 	}
+
+	co_await controller.yieldFrame();
 
 	//load in the map data itself
 
@@ -1107,8 +1115,10 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap, WorldMapSta
 	if (preview)
 	{
 		// no need to do anything else for the map preview
-		return true;
+		co_return load_ok();
 	}
+
+	co_await controller.yieldFrame();
 
 	size_t gwIdx = 0;
 	for (const auto gateway : loadedMap->mGateways)
@@ -1120,12 +1130,14 @@ bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap, WorldMapSta
 		gwIdx++;
 	}
 
+	co_await controller.yieldFrame();
+
 	if (!afterMapLoad(mapState))
 	{
-		return false;
+		co_return load_fail();
 	}
 
-	return true;
+	co_return load_ok();
 }
 
 static bool afterMapLoad(WorldMapState& mapState)

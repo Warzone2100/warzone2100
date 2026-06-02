@@ -4013,6 +4013,7 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 
 void wzPumpEventsWhileLoading()
 {
+	// SDL backend implementation of the platform hook documented in wzapp.h.
 	SDL_PumpEvents();
 }
 

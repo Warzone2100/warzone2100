@@ -41,7 +41,7 @@ inline LoadResult<> load_ok() noexcept
 	return {};
 }
 
-template<typename T>
+template <typename T>
 inline LoadResult<T> load_ok(T value)
 {
 	return value;

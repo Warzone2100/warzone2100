@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,12 +27,16 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include <wzmaplib/terrain_type.h>
 #include "terrain_defs.h"
+#include "lib/framework/loading_task_fwd.h"
 
 struct ShadowCascadesInfo;
 struct LightMap;
 struct WorldMapState;
 
-void loadTerrainTextures(MAP_TILESET mapTileset);
+class ResourceLoadingController;
+
+LoadingTask<> loadTerrainTextures(ResourceLoadingController& controller, MAP_TILESET mapTileset);
+void loadTerrainTexturesBlocking(MAP_TILESET mapTileset);
 
 bool initTerrain(WorldMapState& mapState);
 void shutdownTerrain();

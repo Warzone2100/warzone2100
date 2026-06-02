@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,6 +47,7 @@
 #include "challenge.h"
 #include "projectile.h"
 #include "power.h"
+#include "lib/framework/resource_loading_controller.h"
 #include "structure.h"
 #include "message.h"
 #include "research.h"
@@ -85,6 +88,7 @@
 #include "game_world.h"
 #include "wzapi.h"
 #include "screens/guidescreen.h"
+#include "lib/framework/loading_task.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -152,12 +156,12 @@ static UBYTE   bPlayCountDown;
 //FUNCTIONS**************
 static void addLandingLights(UDWORD x, UDWORD y);
 static void resetHomeStructureObjects();
-static bool startMissionOffClear(const GameLoadDetails& gameToLoad);
-static bool startMissionOffKeep(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignStart(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignChange(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad);
-static bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
+static LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
 static bool startMissionBetween();
 static void endMissionCamChange();
 static void endMissionOffClear();
@@ -385,7 +389,7 @@ void setMissionCountDown()
 }
 
 
-bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
+LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 {
 	bool	loaded = true;
 
@@ -406,7 +410,7 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 		/*mission type gets set to none when you have returned from a mission
 		so don't want to go another mission when already on one! - so ignore*/
 		debug(LOG_SAVE, "Already on a mission");
-		return true;
+		co_return load_ok();
 	}
 
 	initEffectsSystem();
@@ -414,7 +418,10 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 	//load the game file for all types of mission except a Between Mission
 	if (missionType != LEVEL_TYPE::LDS_BETWEEN)
 	{
-		loadGameInit(gameDetails);
+		if (!(co_await loadGameInit(controller, gameDetails)))
+		{
+			co_return load_fail();
+		}
 	}
 
 	//all proximity messages are removed between missions now
@@ -423,14 +430,14 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 	switch (missionType)
 	{
 	case LEVEL_TYPE::LDS_CAMSTART:
-		if (!startMissionCampaignStart(gameDetails))
+		if (!(co_await startMissionCampaignStart(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MKEEP:
 	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
-		if (!startMissionOffKeep(gameDetails))
+		if (!(co_await startMissionOffKeep(controller, gameDetails)))
 		{
 			loaded = false;
 		}
@@ -443,25 +450,25 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 		}
 		break;
 	case LEVEL_TYPE::LDS_CAMCHANGE:
-		if (!startMissionCampaignChange(gameDetails))
+		if (!(co_await startMissionCampaignChange(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND:
-		if (!startMissionCampaignExpand(gameDetails))
+		if (!(co_await startMissionCampaignExpand(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
-		if (!startMissionCampaignExpandLimbo(gameDetails))
+		if (!(co_await startMissionCampaignExpandLimbo(controller, gameDetails)))
 		{
 			loaded = false;
 		}
 		break;
 	case LEVEL_TYPE::LDS_MCLEAR:
-		if (!startMissionOffClear(gameDetails))
+		if (!(co_await startMissionOffClear(controller, gameDetails)))
 		{
 			loaded = false;
 		}
@@ -476,7 +483,7 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 	if (!loaded)
 	{
 		debug(LOG_ERROR, "Failed to start mission, missiontype = %d, game, %s", (int)missionType, gameDetails.filePath.c_str());
-		return false;
+		co_return load_fail();
 	}
 
 	mission.type = missionType;
@@ -498,7 +505,7 @@ bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails)
 
 	scoreInitSystem();
 
-	return true;
+	co_return load_ok();
 }
 
 
@@ -1059,16 +1066,16 @@ void saveCampaignData()
 
 
 //start an off world mission - clearing the object lists
-bool startMissionOffClear(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionOffClear(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
@@ -1076,19 +1083,19 @@ bool startMissionOffClear(const GameLoadDetails& gameToLoad)
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
 
-	return true;
+	co_return load_ok();
 }
 
 //start an off world mission - keeping the object lists
-bool startMissionOffKeep(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionOffKeep(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 	saveMissionData();
 
 	//load in the new game clearing the lists
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = true;
@@ -1096,10 +1103,10 @@ bool startMissionOffKeep(const GameLoadDetails& gameToLoad)
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
 
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignStart(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignStart(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
 {
 	debug(LOG_SAVE, "called for %s", gameToLoad.filePath.c_str());
 
@@ -1110,17 +1117,17 @@ bool startMissionCampaignStart(const GameLoadDetails& gameToLoad)
 	clearCampaignUnits();
 
 	// Load in the new game details
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
 
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignChange(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignChange(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
 {
 	// Clear out all intelligence screen messages
 	freeMessages();
@@ -1137,41 +1144,41 @@ bool startMissionCampaignChange(const GameLoadDetails& gameToLoad)
 	saveCampaignData();
 
 	//load in the new game details
-	if (!loadGame(gameToLoad, !KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, !KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
 
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignExpand(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignExpand(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
 {
 	//load in the new game details
-	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
-	return true;
+	co_return load_ok();
 }
 
-bool startMissionCampaignExpandLimbo(const GameLoadDetails& gameToLoad)
+LoadingTask<> startMissionCampaignExpandLimbo(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad)
 {
 	saveMissionLimboData();
 
 	//load in the new game details
-	if (!loadGame(gameToLoad, KEEPOBJECTS, !FREEMEM))
+	if (!(co_await loadGame(controller, gameToLoad, KEEPOBJECTS, !FREEMEM)))
 	{
-		return false;
+		co_return load_fail();
 	}
 
 	offWorldKeepLists = false;
 
-	return true;
+	co_return load_ok();
 }
 
 static bool startMissionBetween()

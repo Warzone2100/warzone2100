@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,9 +34,11 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
+#include "lib/framework/loading_task.h"
 #include "lib/framework/opengl.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "resource_loading_dispatch.h"
 #include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
@@ -619,8 +623,6 @@ void dirtyAllSectors()
 	}
 }
 
-void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSize = nullopt);
-
 bool setTerrainMappingTexturesMaxSize(int texSize)
 {
 	bool isPowerOfTwo = !(texSize == 0) && !(texSize & (texSize - 1));
@@ -694,7 +696,7 @@ gfx_api::texture* getWaterClassicTexture()
 	return waterClassicTexture;
 }
 
-void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSizeOpt)
+static LoadingTask<> loadWaterTexturesTask(ResourceLoadingController& controller, int maxTerrainTextureSize, optional<int> maxTerrainAuxTextureSizeOpt)
 {
 	waterTexturesNormal.clear();
 	waterTexturesHigh.clear();
@@ -745,10 +747,10 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 		if (!std::all_of(waterTextureFilenames.begin(), waterTextureFilenames.end(), [](const WzString& texturePath) -> bool { return !texturePath.isEmpty(); }))
 		{
 			debug(LOG_FATAL, "Missing one or more base water textures?");
-			return;
+			co_return load_fail();
 		}
 
-		waterTexturesHigh.tex = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize, nullptr, []() { resDoResLoadCallback(); });
+		waterTexturesHigh.tex = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, waterTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize)).value_or(nullptr);
 		waterTexturesHigh.tex_nm = nullptr;
 		waterTexturesHigh.tex_sm = nullptr;
 
@@ -758,7 +760,7 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 			return !filename.isEmpty();
 		}))
 		{
-			waterTexturesHigh.tex_nm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			waterTexturesHigh.tex_nm = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, waterTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultNormalMap = std::make_unique<iV_Image>();
 				pDefaultNormalMap->allocate(width, height, channels, true);
 				// default normal map: (0,0,1)
@@ -773,19 +775,19 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 					}
 				}
 				return pDefaultNormalMap;
-			}, []() { resDoResLoadCallback(); });
+			})).value_or(nullptr);
 			ASSERT(waterTexturesHigh.tex_nm != nullptr, "Failed to load water normals");
 		}
 		if (std::any_of(waterTextureFilenames_sm.begin(), waterTextureFilenames_sm.end(), [](const WzString& filename) {
 			return !filename.isEmpty();
 		}))
 		{
-			waterTexturesHigh.tex_sm = gfx_api::context::get().loadTextureArrayFromFiles(waterTextureFilenames_sm, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			waterTexturesHigh.tex_sm = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, waterTextureFilenames_sm, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::make_unique<iV_Image>();
 				// default specular map: 0
 				pDefaultSpecularMap->allocate(width, height, channels, true);
 				return pDefaultSpecularMap;
-			}, []() { resDoResLoadCallback(); });
+			})).value_or(nullptr);
 			ASSERT(waterTexturesHigh.tex_sm != nullptr, "Failed to load water specular maps");
 		}
 	}
@@ -793,17 +795,20 @@ void loadWaterTextures(int maxTerrainTextureSize, optional<int> maxTerrainAuxTex
 	{
 		// preload classic water texture
 		auto pWaterTexClassic = getWaterClassicTexture();
-		ASSERT_OR_RETURN(, pWaterTexClassic != nullptr, "Failed to load classic water texture?");
+		CORO_ASSERT_OR_RETURN(load_fail(), pWaterTexClassic != nullptr, "Failed to load classic water texture?");
 	}
 	else
 	{
-		ASSERT_OR_RETURN(, false, "Unexpected terrainShaderQuality: %u", static_cast<unsigned>(terrainShaderQuality));
+		CORO_ASSERT_OR_RETURN(load_fail(), false, "Unexpected terrainShaderQuality: %u", static_cast<unsigned>(terrainShaderQuality));
 	}
+
+	co_return load_ok();
 }
 
-void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
+static LoadingTask<> loadTerrainTexturesImpl(ResourceLoadingController& controller, MAP_TILESET mapTileset)
 {
-	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
+	(void)mapTileset;
+	CORO_ASSERT_OR_RETURN(load_fail(), getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -838,7 +843,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 	}
 
 	// load the textures into the texture arrays
-	groundTexArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize, nullptr, []() { resDoResLoadCallback(); });
+	groundTexArr = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, groundTextureFilenames, gfx_api::texture_type::game_texture, maxTerrainTextureSize, maxTerrainTextureSize)).value_or(nullptr);
 	ASSERT(groundTexArr != nullptr, "Failed to load terrain textures");
 
 	int maxTerrainAuxTextureSize = std::max(std::min({getTextureSize(), getTerrainMappingTexturesMaxSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -849,7 +854,7 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 			return !filename.isEmpty();
 		}))
 		{
-			groundNormalArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			groundNormalArr = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, groundTextureFilenames_nm, gfx_api::texture_type::normal_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultNormalMap = std::make_unique<iV_Image>();
 				pDefaultNormalMap->allocate(width, height, channels, true);
 				// default normal map: (0,0,1)
@@ -864,43 +869,58 @@ void loadTerrainTextures_SinglePass(MAP_TILESET mapTileset)
 					}
 				}
 				return pDefaultNormalMap;
-			}, []() { resDoResLoadCallback(); });
+			})).value_or(nullptr);
 			ASSERT(groundNormalArr != nullptr, "Failed to load terrain normals");
 		}
 		if (std::any_of(groundTextureFilenames_spec.begin(), groundTextureFilenames_spec.end(), [](const WzString& filename) {
 			return !filename.isEmpty();
 		}))
 		{
-			groundSpecularArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			groundSpecularArr = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, groundTextureFilenames_spec, gfx_api::texture_type::specular_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultSpecularMap = std::make_unique<iV_Image>();
 				// default specular map: 0
 				pDefaultSpecularMap->allocate(width, height, channels, true);
 				return pDefaultSpecularMap;
-			}, []() { resDoResLoadCallback(); });
+			})).value_or(nullptr);
 			ASSERT(groundSpecularArr != nullptr, "Failed to load terrain specular maps");
 		}
 		if (std::any_of(groundTextureFilenames_height.begin(), groundTextureFilenames_height.end(), [](const WzString& filename) {
 			return !filename.isEmpty();
 		}))
 		{
-			groundHeightArr = gfx_api::context::get().loadTextureArrayFromFiles(groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
+			groundHeightArr = (co_await gfx_api::context::get().loadTextureArrayFromFiles(controller, groundTextureFilenames_height, gfx_api::texture_type::height_map, maxTerrainAuxTextureSize, maxTerrainAuxTextureSize, [](int width, int height, int channels) -> std::unique_ptr<iV_Image> {
 				std::unique_ptr<iV_Image> pDefaultHeightMap = std::make_unique<iV_Image>();
 				// default height map: 0
 				pDefaultHeightMap->allocate(width, height, channels, true);
 				return pDefaultHeightMap;
-			}, []() { resDoResLoadCallback(); });
+			})).value_or(nullptr);
 			ASSERT(groundHeightArr != nullptr, "Failed to load terrain height maps");
 		}
 	}
 
 	// load water textures
-	loadWaterTextures(maxTerrainTextureSize, maxTerrainAuxTextureSize);
+	co_return co_await loadWaterTexturesTask(controller, maxTerrainTextureSize, maxTerrainAuxTextureSize);
 }
 
-void loadTerrainTextures(MAP_TILESET mapTileset)
+LoadingTask<> loadTerrainTextures(ResourceLoadingController& controller, MAP_TILESET mapTileset)
 {
-	ASSERT_OR_RETURN(, getNumGroundTypes(), "Ground type was not set, no textures will be seen.");
-	loadTerrainTextures_SinglePass(mapTileset);
+	if (getNumGroundTypes() == 0)
+	{
+		co_return load_fail();
+	}
+	co_return co_await loadTerrainTexturesImpl(controller, mapTileset);
+}
+
+void loadTerrainTexturesBlocking(MAP_TILESET mapTileset)
+{
+	if (getNumGroundTypes() == 0)
+	{
+		return;
+	}
+	auto& loadingController = ResourceLoadingController::instance();
+	ResourceLoadingController::FramePolicy policy;
+	policy.showLoadingScreen = false;
+	(void)runBlockingResourceLoad(loadTerrainTextures(loadingController, mapTileset), policy);
 }
 
 void reloadTerrainTextures()
@@ -910,7 +930,7 @@ void reloadTerrainTextures()
 		return; // nothing loaded yet
 	}
 
-	loadTerrainTextures(currentMapTileset);
+	loadTerrainTexturesBlocking(currentMapTileset);
 }
 
 /**
