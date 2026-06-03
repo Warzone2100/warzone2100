@@ -1397,7 +1397,8 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	}
 
 	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", params.name,
-	      params.hash == nullptr ? "builtin" : params.hash->toString().c_str(), params.pSaveName,
+	      params.hash == nullptr ? "builtin" : params.hash->toString().c_str(),
+	      params.pSaveName == nullptr ? "<none>" : params.pSaveName,
 	      static_cast<int>(params.saveType));
 
 	if (params.saveType == GTYPE_SAVE_START || params.saveType == GTYPE_SAVE_MIDMISSION)
