@@ -1375,11 +1375,17 @@ LoadingTask<> preloadAllModelTexturesTask(ResourceLoadingController& controller)
 			if (!(co_await imdLoadLevelTexturesTask(controller, *pDisplayShape, currentTilesetIdx, *pDisplayShape->m_textures)))
 			{
 				++modelTextureLoadingFailures;
+				continue;
 			}
 			pDisplayShape->m_textures->initialized = true;
 		}
 
 		co_await controller.yieldFrame();
+	}
+
+	if (modelTextureLoadingFailures > 0)
+	{
+		co_return load_fail();
 	}
 
 	co_return load_ok();
