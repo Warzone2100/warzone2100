@@ -34,6 +34,7 @@
 #include <string>
 #include <array>
 #include <memory>
+#include <optional>
 
 class ResourceLoadingController;
 
@@ -107,8 +108,8 @@ bool levInitialise();
 
 /// Cooperative level-load coroutine for nesting under another loading task on the same controller.
 LoadingTask<> makeLevLoadDataLoadingTask(ResourceLoadingController &controller,
-                                       char const *name,
-                                       Sha256 const *hash,
+                                       std::string name,
+                                       std::optional<Sha256> hash,
                                        char *pSaveName,
                                        GAME_TYPE saveType);
 

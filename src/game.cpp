@@ -4613,7 +4613,7 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 		sstrcpy(aLevelName, saveGameData.levelName);
 		//load up the level dataset
 		// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
-		if (!(co_await makeLevLoadDataLoadingTask(controller, aLevelName, &saveGameData.sGame.hash, saveGameName, (GAME_TYPE)gameType)))
+		if (!(co_await makeLevLoadDataLoadingTask(controller, aLevelName, std::make_optional(saveGameData.sGame.hash), saveGameName, static_cast<GAME_TYPE>(gameType))))
 		{
 			co_return load_fail();
 		}
