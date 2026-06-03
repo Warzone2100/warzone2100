@@ -5611,6 +5611,10 @@ void startMultiplayerGame()
 			{
 				debug(LOG_INFO, "Unable to load limiter_data.");
 			}
+			else
+			{
+				bLimiterLoaded = true;
+			}
 		}
 		else
 		{
