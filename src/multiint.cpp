@@ -5606,8 +5606,7 @@ void startMultiplayerGame()
 			auto& controller = ResourceLoadingController::instance();
 			ResourceLoadingController::FramePolicy policy;
 			policy.showLoadingScreen = true;
-			if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy,
-			                             CloseLoadingScreenOnComplete::No))
+			if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 			{
 				debug(LOG_INFO, "Unable to load limiter_data.");
 			}
