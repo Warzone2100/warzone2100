@@ -747,7 +747,7 @@ private:
 };
 
 /// Loads the entire map just to show a picture of it
-static void loadMapPreview(bool hideInterface, const char *mapName, const Sha256& mapHash)
+static void loadMapPreview(bool hideInterface, std::string mapName, const Sha256& mapHash)
 {
 	std::string		aFileName;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
@@ -764,16 +764,16 @@ static void loadMapPreview(bool hideInterface, const char *mapName, const Sha256
 	}
 
 	// load the terrain types
-	LEVEL_DATASET *psLevel = levFindDataSet(mapName, &mapHash);
+	LEVEL_DATASET *psLevel = levFindDataSet(mapName.c_str(), &mapHash);
 	if (psLevel == nullptr)
 	{
-		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", mapName, mapHash.toString().c_str(), !NET_getDownloadingWzFiles().empty() ? "are" : "aren't");
+		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", mapName.c_str(), mapHash.toString().c_str(), !NET_getDownloadingWzFiles().empty() ? "are" : "aren't");
 		loadEmptyMapPreview();
 		return;
 	}
 	if (psLevel->game < 0 || psLevel->game >= LEVEL_MAXFILES)
 	{
-		debug(LOG_ERROR, "apDataFiles index (%" PRIi16 ") is out of bounds for: \"%s\" %s.", psLevel->game, mapName, mapHash.toString().c_str());
+		debug(LOG_ERROR, "apDataFiles index (%" PRIi16 ") is out of bounds for: \"%s\" %s.", psLevel->game, mapName.c_str(), mapHash.toString().c_str());
 		loadEmptyMapPreview();
 		return;
 	}
@@ -911,7 +911,7 @@ LoadingTask<> mapPreviewLoadTaskImpl(bool hideInterface)
 
 LoadingTask<> mapPreviewLoadTaskImpl(bool hideInterface, std::string mapName, Sha256 mapHash)
 {
-	loadMapPreview(hideInterface, mapName.c_str(), mapHash);
+	loadMapPreview(hideInterface, std::move(mapName), mapHash);
 	co_return load_ok();
 }
 
@@ -6622,7 +6622,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 						game.maxPlayers = mapData->players;
 						game.isMapMod = CheckForMod(mapData->realFileName);
 						game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0].c_str());
-						requestMapPreviewLoad(false, mapData->pName.c_str(), game.hash);
+						requestMapPreviewLoad(false, mapData->pName, game.hash);
 
 						/* Change game info to match the previous selection if hover preview was displayed */
 						sstrcpy(game.map, oldGameMap);

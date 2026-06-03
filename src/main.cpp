@@ -1318,10 +1318,10 @@ void requestMapPreviewLoad(bool hideInterface)
 		ResourceLoadingController::FrameProcessingMode::ContinueMainLoop);
 }
 
-void requestMapPreviewLoad(bool hideInterface, const char *mapName, const Sha256& mapHash)
+void requestMapPreviewLoad(bool hideInterface, std::string mapName, const Sha256& mapHash)
 {
 	submitResourceLoadingTask(
-		[hideInterface, mapName = std::string(mapName), mapHash](ResourceLoadingController &c)
+		[hideInterface, mapName, mapHash](ResourceLoadingController &c)
 		{
 			return mapPreviewLoadTask(c, hideInterface, std::move(mapName), mapHash);
 		},

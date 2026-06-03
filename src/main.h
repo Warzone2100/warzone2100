@@ -70,7 +70,7 @@ void SetGameMode(GS_GAMEMODE status);
 void mainLoop();
 
 void requestMapPreviewLoad(bool hideInterface);
-void requestMapPreviewLoad(bool hideInterface, const char *mapName, const Sha256& mapHash);
+void requestMapPreviewLoad(bool hideInterface, std::string mapName, const Sha256& mapHash);
 
 extern char SaveGamePath[PATH_MAX];
 extern char ReplayPath[PATH_MAX];
