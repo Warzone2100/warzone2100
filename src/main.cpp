@@ -945,9 +945,7 @@ LoadingTask<> startGameResourceTaskImpl(ResourceLoadingController &controller)
 	co_await controller.yieldFrame();
 
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
-	LoadResult<> const lev =
-	    co_await makeLevLoadDataLoadingTask(controller, aLevelName, std::make_optional(game.hash), nullptr, GTYPE_SCENARIO_START);
-	if (!lev)
+	if (!(co_await makeLevLoadDataLoadingTask(controller, aLevelName, std::make_optional(game.hash), nullptr, GTYPE_SCENARIO_START)))
 	{
 		co_return load_fail();
 	}
