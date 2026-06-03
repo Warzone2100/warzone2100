@@ -1192,16 +1192,12 @@ void systemShutdown()
 namespace
 {
 
-LoadingTask<> frontendInitTaskImpl(ResourceLoadingController &controller, bool onInitialStartup)
+LoadingTask<> frontendInitTaskImpl(ResourceLoadingController &controller)
 {
 	SetGameMode(GS_TITLE_SCREEN);
 	frontendIsShuttingDown();
 	static constexpr char resourceFile[] = "wrf/frontend.wrf";
 	debug(LOG_WZ, "== Initializing frontend == : %s", resourceFile);
-	if (!onInitialStartup && !isLoadingScreenActive())
-	{
-		initLoadingScreen(true);
-	}
 	if (!frontendInitialiseSetup())
 	{
 		co_return load_fail();
@@ -1222,13 +1218,26 @@ LoadingTask<> frontendInitTaskImpl(ResourceLoadingController &controller, bool o
 
 LoadingTask<> frontendInitTask(ResourceLoadingController &controller, bool onInitialStartup)
 {
-	if (!(co_await frontendInitTaskImpl(controller, onInitialStartup)))
+	const bool openedLoadingScreen = !onInitialStartup && !isLoadingScreenActive();
+	if (openedLoadingScreen)
 	{
-		closeLoadingScreen();
+		initLoadingScreen(true);
+	}
+
+	if (!(co_await frontendInitTaskImpl(controller)))
+	{
+		if (openedLoadingScreen)
+		{
+			closeLoadingScreen();
+		}
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
 	}
-	closeLoadingScreen();
+
+	if (openedLoadingScreen)
+	{
+		closeLoadingScreen();
+	}
 	co_return load_ok();
 }
 
