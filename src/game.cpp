@@ -2666,7 +2666,8 @@ LoadingTask<> loadGameCleanupOnFailure(ResourceLoadingController& controller, co
 	freeAllStructs(gameWorld);
 	freeAllFeatures(gameWorld);
 	droidTemplateShutDown();
-	gameWorld.map.tiles = nullptr;
+	gwShutDown(gameWorld.map);
+	gameWorld.map = {};
 
 	/* Start the game clock */
 	gameTimeStart();
@@ -3045,6 +3046,8 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
+		gwShutDown(mission.gameWorld.map);
+		mission.gameWorld.map = {};
 		if (!(co_await mapLoad(controller, aFileName, mission.gameWorld.map)))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
@@ -3154,7 +3157,8 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
-		gameWorld.map.tiles = nullptr;
+		gwShutDown(gameWorld.map);
+		gameWorld.map = {};
 		// load in the map file
 		if (!data)
 		{
