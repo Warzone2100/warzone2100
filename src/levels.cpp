@@ -869,9 +869,9 @@ static GameLoadDetails levConstructGameLoadDetails(LEVEL_DATASET* psNewLevel, SW
 
 struct LevLoadContext
 {
-	std::string    name;
-	Sha256 const*  hash = nullptr;
-	char*          pSaveName = nullptr;
+	std::string              name;
+	std::optional<Sha256>    hash;
+	char*                    pSaveName = nullptr;
 	GAME_TYPE      saveType = GTYPE_SCENARIO_START;
 	LEVEL_DATASET* psNewLevel = nullptr;
 	LEVEL_DATASET* psChangeLevel = nullptr;
@@ -1076,7 +1076,7 @@ static LevDatasetResolveResult levResolveDatasetForLoad(LevLoadContext& ctx)
 	sstrcpy(currentLevelName, ctx.name.c_str());
 
 	// find the level dataset
-	ctx.psNewLevel = levFindDataSet(ctx.name.c_str(), ctx.hash);
+	ctx.psNewLevel = levFindDataSet(ctx.name.c_str(), ctx.hash.has_value() ? &ctx.hash.value() : nullptr);
 	if (ctx.psNewLevel == nullptr)
 	{
 		debug(LOG_INFO, "Dataset %s not found - trying to load as WRF", ctx.name.c_str());
@@ -1383,21 +1383,21 @@ namespace
 
 struct LevLoadJobParams
 {
-	char const *name = nullptr;
-	Sha256 const *hash = nullptr;
-	char *pSaveName = nullptr;
-	GAME_TYPE saveType = GTYPE_SCENARIO_START;
+	std::string              name;
+	std::optional<Sha256>    hash;
+	char                    *pSaveName = nullptr;
+	GAME_TYPE                saveType = GTYPE_SCENARIO_START;
 };
 
 LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobParams params)
 {
-	if (params.name == nullptr)
+	if (params.name.empty())
 	{
 		co_return load_fail();
 	}
 
-	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", params.name,
-	      params.hash == nullptr ? "builtin" : params.hash->toString().c_str(),
+	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", params.name.c_str(),
+	      !params.hash.has_value() ? "builtin" : params.hash->toString().c_str(),
 	      params.pSaveName == nullptr ? "<none>" : params.pSaveName,
 	      static_cast<int>(params.saveType));
 
@@ -1417,8 +1417,8 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	levelLoadType = params.saveType;
 
 	LevLoadContext ctx;
-	ctx.name = params.name;
-	ctx.hash = params.hash;
+	ctx.name = std::move(params.name);
+	ctx.hash = std::move(params.hash);
 	ctx.pSaveName = params.pSaveName;
 	ctx.saveType = params.saveType;
 
@@ -1470,13 +1470,13 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 } // anonymous namespace
 
 LoadingTask<> makeLevLoadDataLoadingTask(ResourceLoadingController &controller,
-                                       char const *name,
-                                       Sha256 const *hash,
+                                       std::string name,
+                                       std::optional<Sha256> hash,
                                        char *pSaveName,
                                        GAME_TYPE saveType)
 {
-	LevLoadJobParams params{name, hash, pSaveName, saveType};
-	return levLoadDataTask(controller, params);
+	LevLoadJobParams params{std::move(name), std::move(hash), pSaveName, saveType};
+	return levLoadDataTask(controller, std::move(params));
 }
 
 std::string mapNameWithoutTechlevel(const char *mapName)
