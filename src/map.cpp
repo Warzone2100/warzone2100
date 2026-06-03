@@ -56,6 +56,7 @@
 #include "fpath.h"
 #include "levels.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/load_result.h"
 #include "lib/ivis_opengl/pielighting.h"
 
 #define GAME_TICKS_FOR_DANGER (GAME_TICKS_PER_SEC * 2)
@@ -1003,9 +1004,27 @@ void WzMapDebugLogger::printLog(WzMap::LoggingProtocol::LogLevel level, const ch
 	}
 }
 
+namespace
+{
+
+static LoadResult<> mapLoadFail(WorldMapState& mapState)
+{
+	gwShutDown(mapState);
+	mapState = {};
+
+	shutdownTerrain();
+
+	return load_fail();
+}
+
+} // namespace
+
 /* Initialise the map structure */
 LoadingTask<> mapLoad(ResourceLoadingController& controller, char const *filename, WorldMapState& mapState)
 {
+	gwShutDown(mapState);
+	mapState = {};
+
 	WzMapPhysFSIO mapIO;
 	WzMapDebugLogger debugLoggerInstance;
 
@@ -1062,7 +1081,6 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 
 	/* Allocate the memory for the map */
 	mapState.tiles = std::make_unique<MAPTILE[]>(static_cast<size_t>(width) * height);
-	getCurrentLightmapData().reset(width, height);
 	ASSERT(mapState.tiles != nullptr, "Out of memory");
 
 	mapState.width = width;
@@ -1079,7 +1097,7 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 	// load the ground types
 	if (!mapLoadGroundTypes(preview))
 	{
-		co_return load_fail();
+		co_return mapLoadFail(mapState);
 	}
 
 	co_await controller.yieldFrame();
@@ -1088,7 +1106,7 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 	{
 		if (!(co_await loadTerrainTextures(controller, currentMapTileset)))
 		{
-			co_return load_fail();
+			co_return mapLoadFail(mapState);
 		}
 	}
 
@@ -1115,6 +1133,7 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 	if (preview)
 	{
 		// no need to do anything else for the map preview
+		getCurrentLightmapData().reset(width, height);
 		co_return load_ok();
 	}
 
@@ -1134,9 +1153,10 @@ LoadingTask<> mapLoadFromWzMapData(ResourceLoadingController& controller, std::s
 
 	if (!afterMapLoad(mapState))
 	{
-		co_return load_fail();
+		co_return mapLoadFail(mapState);
 	}
 
+	getCurrentLightmapData().reset(width, height);
 	co_return load_ok();
 }
 
@@ -1257,8 +1277,6 @@ bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState)
 /* Shutdown the map module */
 bool mapShutdown()
 {
-	int x;
-
 	if (dangerThread)
 	{
 		wzSemaphoreWait(dangerDoneSemaphore);
@@ -1273,21 +1291,14 @@ bool mapShutdown()
 	}
 
 	mapDecals = nullptr;
-	gameWorld.map.blockMap[AUX_MAP] = nullptr;
-	gameWorld.map.blockMap[AUX_ASTARMAP] = nullptr;
 	free(floodbucket);
-	gameWorld.map.blockMap[AUX_DANGERMAP] = nullptr;
-	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
-	{
-		gameWorld.map.auxMap[x].reset();
-	}
+	gwShutDown(gameWorld.map);
+	gameWorld.map = {};
 
 	map = nullptr;
 	floodbucket = nullptr;
 	groundTypes.clear();
 	mapDecals = nullptr;
-	gameWorld.map.tiles = nullptr;
-	gameWorld.map.width = gameWorld.map.height = 0;
 	numTile_names = 0;
 	Tile_names = nullptr;
 	if (tilesetDir)
