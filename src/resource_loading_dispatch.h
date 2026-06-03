@@ -57,17 +57,18 @@ LoadResult<T> runBlockingResourceLoad(
     ResourceLoadingController::FramePolicy policy,
     CloseLoadingScreenOnComplete closeOnComplete = CloseLoadingScreenOnComplete::Yes)
 {
+	bool openedScreen = false;
 	if (policy.showLoadingScreen && !isLoadingScreenActive())
 	{
 		initLoadingScreen(true);
+		openedScreen = true;
 	}
 
 	ResourceLoadingController& controller = ResourceLoadingController::instance();
 	LoadResult<T> result = controller.runTaskToCompletion(
 	    std::move(task), policy, pumpResourceLoadingHousekeeping);
 
-	if (closeOnComplete == CloseLoadingScreenOnComplete::Yes
-	    && policy.showLoadingScreen && isLoadingScreenActive())
+	if (openedScreen && closeOnComplete == CloseLoadingScreenOnComplete::Yes)
 	{
 		closeLoadingScreen();
 	}
