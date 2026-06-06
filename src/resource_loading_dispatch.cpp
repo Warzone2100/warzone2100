@@ -80,9 +80,9 @@ void pumpResourceLoadingHousekeeping(const ResourceLoadingController::FramePolic
 	}
 	lastPresentTime = now;
 
-	pie_ScreenFrameRenderBegin();
 	presentLoadingScreenForCurrentFrame();
 	pie_ScreenFrameRenderEnd();
+	pie_ScreenFrameRenderBegin();
 }
 
 bool tickResourceLoadingFrame()
