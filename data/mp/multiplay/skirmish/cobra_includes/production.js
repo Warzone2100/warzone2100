@@ -653,6 +653,7 @@ function produce()
 						highOilMap() &&
 						componentAvailable("MG1Mk1") &&
 						__attackers < 2 &&
+						countStruct(_STRUCTURES.hq, me) &&
 						(countStruct(_STRUCTURES.gen, me) && countStruct(_STRUCTURES.derrick, me)))
 					{
 						buildAttacker(_fc.id);
@@ -674,7 +675,7 @@ function produce()
 					}
 					else
 					{
-						if (!countStruct(_STRUCTURES.gen, me) || !countStruct(_STRUCTURES.derrick, me))
+						if (!countStruct(_STRUCTURES.gen, me) || !countStruct(_STRUCTURES.derrick, me) || !countStruct(_STRUCTURES.hq, me))
 						{
 							continue;
 						}
