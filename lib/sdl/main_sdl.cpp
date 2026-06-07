@@ -148,10 +148,6 @@ struct INPUT_STATE
 	Vector2i releasePos;  ///< Location of last mouse release event.
 };
 
-// Clipboard routines
-bool has_scrap(void);
-bool get_scrap(char **dst);
-
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
 #define DOUBLE_CLICK_INTERVAL 250
 
@@ -270,13 +266,30 @@ WzString wzGetPlatform()
 	return WzString::fromUtf8(SDL_GetPlatform());
 }
 
-// See if we have TEXT in the clipboard
-bool has_scrap(void)
+bool wzHasClipboardText()
 {
 	return SDL_HasClipboardText();
 }
 
-// Set the clipboard text
+WzString wzGetClipboardText()
+{
+	WzString retval;
+
+	if (wzHasClipboardText())
+	{
+		char *cliptext = SDL_GetClipboardText();
+		if (!cliptext)
+		{
+			debug(LOG_ERROR, "Could not get clipboard text because : %s", SDL_GetError());
+		}
+		else
+		{
+			retval = WzString::fromUtf8(cliptext);
+		}
+	}
+	return retval;
+}
+
 bool wzSetClipboardText(const char *src)
 {
 	if (SDL_SetClipboardText(src))
@@ -285,27 +298,6 @@ bool wzSetClipboardText(const char *src)
 		return false;
 	}
 	return true;
-}
-
-// Get text from the clipboard
-bool get_scrap(char **dst)
-{
-	if (has_scrap())
-	{
-		char *cliptext = SDL_GetClipboardText();
-		if (!cliptext)
-		{
-			debug(LOG_ERROR, "Could not get clipboard text because : %s", SDL_GetError());
-			return false;
-		}
-		*dst = cliptext;
-		return true;
-	}
-	else
-	{
-		// wasn't text or no text in the clipboard
-		return false;
-	}
 }
 
 void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect)
@@ -393,19 +385,6 @@ bool wzHasTouchInputDevices()
 bool wzSeemsLikeNonTouchPlatform()
 {
 	return !wzHasTouchInputDevices() || (SDL_HasScreenKeyboardSupport() == false);
-}
-
-/* Put a character into a text buffer overwriting any text under the cursor */
-WzString wzGetSelection()
-{
-	WzString retval;
-	static char *scrap = nullptr;
-
-	if (get_scrap(&scrap))
-	{
-		retval = WzString::fromUtf8(scrap);
-	}
-	return retval;
 }
 
 std::vector<optional<screeninfo>> wzAvailableResolutions()
