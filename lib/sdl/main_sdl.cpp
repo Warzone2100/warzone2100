@@ -292,7 +292,7 @@ WzString wzGetClipboardText()
 
 bool wzSetClipboardText(const char *src)
 {
-	if (SDL_SetClipboardText(src))
+	if (!SDL_SetClipboardText(src))
 	{
 		debug(LOG_ERROR, "Could not put clipboard text because : %s", SDL_GetError());
 		return false;
