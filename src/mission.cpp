@@ -66,6 +66,7 @@
 #include "intdisplay.h"
 #include "multimenu.h"		// for WzMultiMenuTabs.
 #include "playerstatsgraph.h"
+#include "researchlogviewer.h"
 #include "main.h"
 #include "display.h"
 #include "loadsave.h"
@@ -101,6 +102,7 @@
 #define		IDMISSIONRES_TITLE		11014
 #define		IDMISSIONRES_TABS		11015
 #define		IDMISSIONRES_STATSFORM		11016
+#define		IDMISSIONRES_RESEARCHFORM	11017
 
 /* Mission timer label position */
 #define		TIMER_LABELX			15
@@ -2163,9 +2165,12 @@ void intRemoveTransporterTimer()
 
 
 
-// Whether the mission results screen is currently showing the "Player Stats" tab
-// (which suppresses the score data painted onto the backdrop by the "Results" tab)
-static bool missionResShowingPlayerStats = false;
+// Inner padding of the research log viewer within its form
+constexpr int MISSIONRES_RESEARCH_PADDING = 10;
+
+// The currently-selected mission results screen tab (0 = "Results", 1 = "Player Stats", 2 = "Research")
+// (any tab but "Results" suppresses the score data painted onto the backdrop)
+static int missionResSelectedTab = 0;
 
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -2173,7 +2178,7 @@ static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 	assert(psWidget->pUserData != nullptr);
 	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
 
-	if (!missionResShowingPlayerStats)
+	if (missionResSelectedTab == 0)
 	{
 		scoreDataToScreen(psWidget, cache);
 	}
@@ -2205,11 +2210,12 @@ static void intDestroyMissionResultWidgets()
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
 	widgDelete(psWScreen, IDMISSIONRES_TABS);
 	widgDelete(psWScreen, IDMISSIONRES_STATSFORM);
+	widgDelete(psWScreen, IDMISSIONRES_RESEARCHFORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
-	missionResShowingPlayerStats = false;
+	missionResSelectedTab = 0;
 }
 
-// Add the "Results" / "Player Stats" tabs and the (initially hidden) player stats graph form
+// Add the "Results" / "Player Stats" / "Research" tabs and the (initially hidden) stats / research forms
 static void intAddMissionResultStats(W_FORM *missionResBackForm)
 {
 	// player stats form, shown when the "Player Stats" tab is selected
@@ -2225,6 +2231,20 @@ static void intAddMissionResultStats(W_FORM *missionResBackForm)
 	statsForm->attach(statsGraphForm);
 	statsGraphForm->setGeometry(0, 0, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
 
+	// research log form, shown when the "Research" tab is selected
+	auto researchForm = std::make_shared<IntFormAnimated>(false);
+	missionResBackForm->attach(researchForm);
+	researchForm->id = IDMISSIONRES_RESEARCHFORM;
+	researchForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_STATS_X, MISSIONRES_STATS_Y, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+	}));
+	researchForm->hide();
+
+	auto researchLogViewer = GameResearchLogViewerWidget::make();
+	researchForm->attach(researchLogViewer);
+	researchLogViewer->setGeometry(MISSIONRES_RESEARCH_PADDING, MISSIONRES_RESEARCH_PADDING,
+	                               MISSIONRES_STATS_W - MISSIONRES_RESEARCH_PADDING * 2, MISSIONRES_STATS_H - MISSIONRES_RESEARCH_PADDING * 2);
+
 	// tabs, above the title form
 	auto tabs = std::make_shared<WzMultiMenuTabs>(0);
 	missionResBackForm->attach(tabs);
@@ -2232,14 +2252,18 @@ static void intAddMissionResultStats(W_FORM *missionResBackForm)
 	tabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
 	tabs->addButton(0, WzPanelTabButton::make(_("Results")));
 	tabs->addButton(1, WzPanelTabButton::make(_("Player Stats")));
+	tabs->addButton(2, WzPanelTabButton::make(_("Research")));
 	tabs->choose(0);
 	tabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue) {
 		// Switch actively-displayed tab
 		widgScheduleTask([newValue]() {
-			missionResShowingPlayerStats = (newValue == 1);
+			missionResSelectedTab = newValue;
 			WIDGET *statsForm = widgGetFromID(psWScreen, IDMISSIONRES_STATSFORM);
 			ASSERT_OR_RETURN(, statsForm != nullptr, "No stats form?");
-			statsForm->show(missionResShowingPlayerStats);
+			statsForm->show(newValue == 1);
+			WIDGET *researchForm = widgGetFromID(psWScreen, IDMISSIONRES_RESEARCHFORM);
+			ASSERT_OR_RETURN(, researchForm != nullptr, "No research form?");
+			researchForm->show(newValue == 2);
 		});
 	});
 	tabs->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
