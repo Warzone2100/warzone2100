@@ -84,6 +84,7 @@
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
+#include "screens/replayendscreen.h"
 #include "hci/quickchat.h"
 #include "warzoneconfig.h"
 
@@ -1031,6 +1032,7 @@ void interfaceShutDown()
 
 	shutdownChatScreen();
 	closeGuideScreen();
+	closeReplayEndScreen();
 	ChatDialogUp = false;
 
 	bAllowOtherKeyPresses = true;
