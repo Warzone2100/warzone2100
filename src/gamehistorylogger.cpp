@@ -343,6 +343,21 @@ void GameStoryLogger::reset()
 	}
 }
 
+const std::vector<GameStoryLogger::FixedPlayerAttributes>& GameStoryLogger::getFixedPlayerAttributes()
+{
+	return startingPlayerAttributes;
+}
+
+const std::vector<GameStoryLogger::GameFrame>& GameStoryLogger::getGameFrames()
+{
+	return gameFrames;
+}
+
+const std::vector<GameStoryLogger::ResearchEvent>& GameStoryLogger::getResearchLog()
+{
+	return researchLog;
+}
+
 void GameStoryLogger::logStartGame()
 {
 	reset();

@@ -42,6 +42,7 @@
 #include "lib/sound/cdaudio.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/paneltabbutton.h"
 #include "lib/netplay/netplay.h"
 
 #include "game.h"
@@ -63,6 +64,8 @@
 #include "group.h"
 #include "frontend.h"		// for displaytextoption.
 #include "intdisplay.h"
+#include "multimenu.h"		// for WzMultiMenuTabs.
+#include "playerstatsgraph.h"
 #include "main.h"
 #include "display.h"
 #include "loadsave.h"
@@ -96,6 +99,8 @@
 #define		IDMISSIONRES_CONTINUE		11008
 #define		IDMISSIONRES_BACKFORM		11013
 #define		IDMISSIONRES_TITLE		11014
+#define		IDMISSIONRES_TABS		11015
+#define		IDMISSIONRES_STATSFORM		11016
 
 /* Mission timer label position */
 #define		TIMER_LABELX			15
@@ -2158,13 +2163,20 @@ void intRemoveTransporterTimer()
 
 
 
+// Whether the mission results screen is currently showing the "Player Stats" tab
+// (which suppresses the score data painted onto the backdrop by the "Results" tab)
+static bool missionResShowingPlayerStats = false;
+
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using intDisplayMissionBackDrop must have its pUserData initialized to a (ScoreDataToScreenCache*)
 	assert(psWidget->pUserData != nullptr);
 	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
 
-	scoreDataToScreen(psWidget, cache);
+	if (!missionResShowingPlayerStats)
+	{
+		scoreDataToScreen(psWidget, cache);
+	}
 }
 
 static void missionResetInGameState()
@@ -2191,7 +2203,51 @@ static void intDestroyMissionResultWidgets()
 {
 	widgDelete(psWScreen, IDMISSIONRES_TITLE);
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
+	widgDelete(psWScreen, IDMISSIONRES_TABS);
+	widgDelete(psWScreen, IDMISSIONRES_STATSFORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
+	missionResShowingPlayerStats = false;
+}
+
+// Add the "Results" / "Player Stats" tabs and the (initially hidden) player stats graph form
+static void intAddMissionResultStats(W_FORM *missionResBackForm)
+{
+	// player stats form, shown when the "Player Stats" tab is selected
+	auto statsForm = std::make_shared<IntFormAnimated>(false);
+	missionResBackForm->attach(statsForm);
+	statsForm->id = IDMISSIONRES_STATSFORM;
+	statsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_STATS_X, MISSIONRES_STATS_Y, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+	}));
+	statsForm->hide();
+
+	auto statsGraphForm = PlayerStatsGraphForm::make();
+	statsForm->attach(statsGraphForm);
+	statsGraphForm->setGeometry(0, 0, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+
+	// tabs, above the title form
+	auto tabs = std::make_shared<WzMultiMenuTabs>(0);
+	missionResBackForm->attach(tabs);
+	tabs->id = IDMISSIONRES_TABS;
+	tabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
+	tabs->addButton(0, WzPanelTabButton::make(_("Results")));
+	tabs->addButton(1, WzPanelTabButton::make(_("Player Stats")));
+	tabs->choose(0);
+	tabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue) {
+		// Switch actively-displayed tab
+		widgScheduleTask([newValue]() {
+			missionResShowingPlayerStats = (newValue == 1);
+			WIDGET *statsForm = widgGetFromID(psWScreen, IDMISSIONRES_STATSFORM);
+			ASSERT_OR_RETURN(, statsForm != nullptr, "No stats form?");
+			statsForm->show(missionResShowingPlayerStats);
+		});
+	});
+	tabs->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = psWidget->parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int tabsWidth = psWidget->idealWidth();
+		psWidget->setGeometry((psParent->width() - tabsWidth) / 2, 0, tabsWidth, MISSIONRES_TABS_H);
+	}));
 }
 
 static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
@@ -2250,6 +2306,12 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	missionResForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 	}));
+
+	// for non-campaign games, add the "Results" / "Player Stats" tabs and the stats graph
+	if (bMultiPlayer)
+	{
+		intAddMissionResultStats(missionResBackForm);
+	}
 
 	// description of success/fail
 	W_LABINIT sLabInit;
