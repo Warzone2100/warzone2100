@@ -380,6 +380,7 @@ void GameStoryLogger::logStartGame()
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
 		playerAttrib.publicKey = base64Encode(getOutputPlayerIdentity(i).toBytes(EcKey::Public));
+		playerAttrib.slotWasOccupied = NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0; // a human or an AI (open / closed slots have ai < 0)
 
 		if (NetPlay.players[i].ai >= 0 && NetPlay.players[i].ai != AI_CUSTOM)
 		{
@@ -618,6 +619,7 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::FixedPlayerAttribu
 	j["colour"] = p.colour;
 	j["faction"] = p.faction;
 	j["publicKey"] = p.publicKey;
+	j["slotWasOccupied"] = p.slotWasOccupied;
 
 	if (p.aiPlayerAttr.has_value())
 	{
@@ -632,6 +634,14 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttri
 	p.colour = j.at("colour").get<int32_t>();
 	p.faction = static_cast<FactionID>(j.at("faction").get<uint8_t>());
 	p.publicKey = j.at("publicKey").get<std::string>();
+
+	// older saves lack this key - fall back to treating any named slot as occupied
+	p.slotWasOccupied = !p.name.empty();
+	auto occupiedIt = j.find("slotWasOccupied");
+	if (occupiedIt != j.end())
+	{
+		p.slotWasOccupied = occupiedIt.value().get<bool>();
+	}
 
 	auto it = j.find("ai");
 	if (it != j.end())
