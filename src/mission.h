@@ -209,4 +209,11 @@ void setMissionCheatTime(bool bCheating);
 #define		MISSIONRES_TITLE_W		600
 #define		MISSIONRES_TITLE_H		40
 
+// pos & size of the multiplayer "Player Stats" graph box (between the title and the buttons form)
+#define		MISSIONRES_TABS_H		20
+#define		MISSIONRES_STATS_X		20
+#define		MISSIONRES_STATS_Y		64
+#define		MISSIONRES_STATS_W		600
+#define		MISSIONRES_STATS_H		300
+
 #endif // __INCLUDED_SRC_MISSION_H__
