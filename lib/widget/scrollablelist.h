@@ -106,6 +106,7 @@ private:
 	void updateLayout();
 	void resizeChildren(uint32_t width);
 	uint32_t getScrollPositionForItem(size_t itemNum);
+	bool canBeScrolledByMouseWheel();
 };
 
 class ClickableScrollableList : public ScrollableListWidget
