@@ -31,6 +31,7 @@
 #include "../levels.h"		// for LEVEL_DATASET (needed by multimenu.h)
 #include "../multimenu.h"	// for WzMultiMenuTabs
 #include "../playerstatsgraph.h"
+#include "../researchlogviewer.h"
 
 // layout within a centered 640x480 design space (mirrors the mission results screen)
 constexpr int REPLAYEND_BACKFORM_W = 640;
@@ -40,6 +41,7 @@ constexpr int REPLAYEND_STATS_X = 20;
 constexpr int REPLAYEND_STATS_Y = 64;
 constexpr int REPLAYEND_STATS_W = 600;
 constexpr int REPLAYEND_STATS_H = 300;
+constexpr int REPLAYEND_RESEARCH_PADDING = 10;
 
 static std::shared_ptr<W_SCREEN> replayEndScreen;
 static std::shared_ptr<WIDGET> replayEndBackForm;
@@ -72,12 +74,38 @@ void showReplayEndScreen()
 	statsForm->attach(statsGraphForm);
 	statsGraphForm->setGeometry(0, 0, REPLAYEND_STATS_W, REPLAYEND_STATS_H);
 
-	// single "Player Stats" tab, above the panel
+	// research log panel, shown when the "Research" tab is selected
+	auto researchForm = std::make_shared<IntFormAnimated>(false);
+	backForm->attach(researchForm);
+	researchForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(REPLAYEND_STATS_X, REPLAYEND_STATS_Y, REPLAYEND_STATS_W, REPLAYEND_STATS_H);
+	}));
+	researchForm->hide();
+
+	auto researchLogViewer = GameResearchLogViewerWidget::make();
+	researchForm->attach(researchLogViewer);
+	researchLogViewer->setGeometry(REPLAYEND_RESEARCH_PADDING, REPLAYEND_RESEARCH_PADDING,
+	                               REPLAYEND_STATS_W - REPLAYEND_RESEARCH_PADDING * 2, REPLAYEND_STATS_H - REPLAYEND_RESEARCH_PADDING * 2);
+
+	// "Player Stats" / "Research" tabs, above the panel
 	auto tabs = std::make_shared<WzMultiMenuTabs>(0);
 	backForm->attach(tabs);
 	tabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
 	tabs->addButton(0, WzPanelTabButton::make(_("Player Stats")));
+	tabs->addButton(1, WzPanelTabButton::make(_("Research")));
 	tabs->choose(0);
+	std::weak_ptr<WIDGET> weakStatsForm = statsForm;
+	std::weak_ptr<WIDGET> weakResearchForm = researchForm;
+	tabs->addOnChooseHandler([weakStatsForm, weakResearchForm](MultibuttonWidget& widget, int newValue) {
+		// Switch actively-displayed tab
+		widgScheduleTask([weakStatsForm, weakResearchForm, newValue]() {
+			auto strongStatsForm = weakStatsForm.lock();
+			auto strongResearchForm = weakResearchForm.lock();
+			ASSERT_OR_RETURN(, strongStatsForm != nullptr && strongResearchForm != nullptr, "No forms?");
+			strongStatsForm->show(newValue == 0);
+			strongResearchForm->show(newValue == 1);
+		});
+	});
 	tabs->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		auto psParent = psWidget->parent();
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
