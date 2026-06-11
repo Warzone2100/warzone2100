@@ -206,7 +206,7 @@ void animateToViewDistance(float target, float speed)
 
 void incrementViewDistance(float amount)
 {
-	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp || realTime < viewDistanceIncrementCooldownTime)
+	if (InGameOpUp || bDisplayMultiJoiningStatus || realTime < viewDistanceIncrementCooldownTime)
 	{
 		return;
 	}
@@ -464,7 +464,7 @@ static bool localPlayerHasSelection(const WorldObjectState& objState)
 /* Process the user input. This just processes the key input and jumping around the radar*/
 void processInput()
 {
-	if (InGameOpUp || isInGamePopupUp)
+	if (InGameOpUp)
 	{
 		dragBox3D.status = DRAG_INACTIVE;	// disengage the dragging since it stops menu input
 	}
@@ -1026,7 +1026,7 @@ void processMouseClickInput()
 void processGestureInput()
 {
 	// don't want to process gestures whilst in the Intelligence Screen
-	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)
+	if (InGameOpUp || bDisplayMultiJoiningStatus)
 	{
 		return;
 	}
@@ -1133,7 +1133,7 @@ static void handleCameraScrolling()
 	double scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2.0);
 	double scaled_accel = scaled_max_scroll_speed / 2.0;
 
-	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
+	if (InGameOpUp || bDisplayMultiJoiningStatus)		// cant scroll when menu up. or when over radar
 	{
 		return;
 	}

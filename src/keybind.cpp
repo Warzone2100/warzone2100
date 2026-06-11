@@ -1069,7 +1069,7 @@ void	kf_ResetPitch()
 /* Quickly access the in-game keymap */
 void kf_ShowMappings()
 {
-	if (!InGameOpUp && !isInGamePopupUp)
+	if (!InGameOpUp)
 	{
 		// Open new Options screen and jump to Controls section
 		auto optionsBrowser = createOptionsBrowser(true);
@@ -1194,11 +1194,8 @@ void	kf_ToggleDroidInfo()
 void	kf_addInGameOptions()
 {
 	setWidgetsStatus(true);
-	if (!isInGamePopupUp)	// they can *only* quit when popup is up.
-	{
-		intResetScreen(false);
-		intAddInGameOptions();
-	}
+	intResetScreen(false);
+	intAddInGameOptions();
 }
 
 // --------------------------------------------------------------------------
@@ -2616,7 +2613,7 @@ void kf_QuickSave()
 		console(_("QuickSave not allowed for multiplayer or tutorial games"));
 		return;
 	}
-	if (InGameOpUp || isInGamePopupUp)
+	if (InGameOpUp)
 	{
 		return;
 	}
@@ -2654,7 +2651,7 @@ void kf_QuickLoad()
 		console(_("QuickLoad not allowed for multiplayer or tutorial games"));
 		return;
 	}
-	if (InGameOpUp || isInGamePopupUp)
+	if (InGameOpUp)
 	{
 		return;
 	}

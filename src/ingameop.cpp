@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/label.h"
 #include "lib/netplay/netplay.h"
@@ -44,6 +45,8 @@
 #include "musicmanager.h"
 #include "ingameop.h"
 #include "mission.h"
+#include "notifications.h"
+#include "wrappers.h"
 #include "warzoneconfig.h"
 #include "qtscript.h"		// for bInTutorial
 #include "radar.h"
@@ -58,7 +61,7 @@
 bool hostQuitConfirmation = true;
 
 bool	InGameOpUp		= false;
-bool 	isInGamePopupUp = false;
+static bool inGameHostQuitHandled = false;
 static bool		isInGameConfirmQuitUp = false;
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -298,75 +301,55 @@ static bool runInGameConfirmQuit(UDWORD id)
 //
 // Quick hack to throw up a ingame 'popup' for when the host drops connection.
 //
-void intAddInGamePopup()
+void resetInGameHostQuit()
 {
-	//clear out any mission widgets - timers etc that may be on the screen
-	clearMissionWidgets();
-	setWidgetsStatus(true);
-	intResetScreen(false);
+	inGameHostQuitHandled = false;
+}
 
-	if (isInGamePopupUp)
+void handleInGameHostQuit()
+{
+	if (inGameHostQuitHandled)
 	{
 		return;
 	}
+	inGameHostQuitHandled = true;
 
-	intCloseInGameOptions(false, false); //clear out option-like menus
+	WZ_Notification notification;
+	notification.duration = GAME_TICKS_PER_SEC * 10;
+	notification.contentTitle = _("Host has quit the game!");
+	notification.contentText = _("The game can't continue without the host.");
+	notification.tag = "hostQuitInGame";
+	addNotification(notification, WZ_Notification_Trigger::Immediate());
+
+	addConsoleMessage(_("Host has quit the game!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+
+	if (!ingame.endTime.has_value())
+	{
+		ingame.endTime = std::chrono::steady_clock::now();
+	}
+
+	shutdownGameStartScreen();
+
+	if (MissionResUp || intMode == INT_MISSIONRES)
+	{
+		return;	// after-game results are already being displayed
+	}
+
+	if (NetPlay.players[selectedPlayer].isSpectator)
+	{
+		// Special message for spectators to inform them that the game is fully over
+		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
+		return;
+	}
 
 	audio_StopAll();
 
-	if (!gamePaused())
-	{
-		kf_TogglePauseMode();	// Pause the game.
-	}
+	//clear out any mission widgets - timers etc that may be on the screen
+	clearMissionWidgets();
 
-	auto const &parent = psWScreen->psForm;
-
-	auto ingamePopup = std::make_shared<IntFormAnimated>();
-	parent->attach(ingamePopup);
-	ingamePopup->id = INTINGAMEPOPUP;
-	ingamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
-	}));
-
-	// add the text "buttons" now
-	W_BUTINIT sButInit;
-
-	sButInit.formID		= INTINGAMEPOPUP;
-	sButInit.style		= OPALIGN;
-	sButInit.width		= 600;
-	sButInit.FontID		= font_large;
-	sButInit.x			= 0;
-	sButInit.height		= 10;
-	sButInit.pDisplay	= displayTextOption;
-	sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
-
-	sButInit.id			= INTINGAMEOP_POPUP_MSG2;
-	sButInit.y			= 20;
-	sButInit.pText		= _("Host has quit the game!");
-
-	widgAddButton(psWScreen, &sButInit);
-
-	sButInit.id			= INTINGAMEOP_POPUP_MSG1;
-	sButInit.y			= 60;
-	sButInit.pText		= _("The game can't continue without the host.");
-
-	widgAddButton(psWScreen, &sButInit);
-
-	sButInit.id			= INTINGAMEOP_POPUP_QUIT;
-	sButInit.y			= 124;
-	sButInit.pText		= _("-->  QUIT  <--");
-
-	widgAddButton(psWScreen, &sButInit);
-
-	intMode		= INT_POPUPMSG;			// change interface mode.
-	isInGamePopupUp = true;
-
-	shutdownGameStartScreen();
+	// Display the after-game results, without recording a win/loss for an aborted game
+	intAddMissionResult(testPlayerHasWon(), false, false, _("Host has quit the game!"));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -420,20 +403,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	{
 		// close the form.
 		// Start the window close animation.
-		IntFormAnimated *form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEPOPUP));
-		if (form)	// FIXME: we hijack this routine for the popup close.
-		{
-			form->closeAnimateDelete();
-			isInGamePopupUp = false;
-		}
-		form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEOP_POPUP_QUIT));
-		if (form)
-		{
-			form->closeAnimateDelete();
-			isInGamePopupUp = false;
-		}
-
-		form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEOP));
+		IntFormAnimated *form = dynamic_cast<IntFormAnimated *>(widgGetFromID(psWScreen, INTINGAMEOP));
 		if (form)
 		{
 			form->closeAnimateDelete();
@@ -507,7 +477,6 @@ void intProcessInGameOptions(UDWORD id)
 		isInGameConfirmQuitUp = true;
 		break;
 
-	case INTINGAMEOP_POPUP_QUIT:
 	case INTINGAMEOP_QUIT:		//quit was confirmed.
 		intCloseInGameOptions(false, false);
 		break;

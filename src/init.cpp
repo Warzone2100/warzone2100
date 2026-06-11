@@ -1894,7 +1894,7 @@ bool stageThreeShutDown()
 
 	challengesUp = false;
 	challengeActive = false;
-	isInGamePopupUp = false;
+	resetInGameHostQuit();
 	InGameOpUp = false;
 	bInTutorial = false;
 

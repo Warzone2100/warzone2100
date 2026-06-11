@@ -30,13 +30,13 @@ void intReopenMenuWithoutUnPausing();
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets);
 void intCloseInGameOptionsNoAnim();
 void intProcessInGameOptions(UDWORD);
-void intAddInGamePopup();
+void handleInGameHostQuit();
+void resetInGameHostQuit();
 
 extern bool hostQuitConfirmation;
 
 // status bools.
 extern bool	InGameOpUp;
-extern bool isInGamePopupUp;
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -99,9 +99,6 @@ enum
 	INTINGAMEOP_PAUSELABEL,                 ///< The paused message
 	INTINGAMEOP_CENTRESCREEN,
 	INTINGAMEOP_REPLAY,
-	INTINGAMEOP_POPUP_QUIT,
-	INTINGAMEOP_POPUP_MSG1,
-	INTINGAMEOP_POPUP_MSG2,
 	INTINGAMEOP_OPENGAMEGUIDE
 };
 
