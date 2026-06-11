@@ -189,7 +189,7 @@ void clearMissionWidgets();
 /** Resets if return to game after an ESC. */
 void resetMissionWidgets();
 
-bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop);
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle = nullptr);
 
 
 /** This is called via a script function to place the Limbo droids once the mission has started. */

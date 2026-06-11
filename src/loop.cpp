@@ -157,7 +157,7 @@ static GAMECODE renderLoop()
 	WZ_PROFILE_SCOPE(renderLoop);
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
-		intAddInGamePopup();
+		handleInGameHostQuit();
 	}
 
 	bool skipDrawing = !gfx_api::context::get().shouldDraw();
@@ -242,12 +242,12 @@ static GAMECODE renderLoop()
 		{
 			WidgetTriggers const &triggers = widgRunScreen(psWScreen);		// always run the screen, so overlays can process input
 
-			if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
+			if (InGameOpUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
 			{
 				unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 				intProcessInGameOptions(widgval);
-				if (widgval == INTINGAMEOP_QUIT || widgval == INTINGAMEOP_POPUP_QUIT)
+				if (widgval == INTINGAMEOP_QUIT)
 				{
 					if (gamePaused())
 					{
@@ -331,7 +331,7 @@ static GAMECODE renderLoop()
 			processGestureInput();
 
 			//no key clicks or in Intelligence Screen
-			if (!isMouseOverRadar() && !isDraggingInGameNotification() && !isMouseClickDownOnScreenOverlayChild() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
+			if (!isMouseOverRadar() && !isDraggingInGameNotification() && !isMouseClickDownOnScreenOverlayChild() && intRetVal == INT_NONE && !InGameOpUp)
 			{
 				processMouseClickInput();
 			}

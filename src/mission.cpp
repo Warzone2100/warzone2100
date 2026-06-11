@@ -42,6 +42,7 @@
 #include "lib/sound/cdaudio.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
+#include "lib/netplay/netplay.h"
 
 #include "game.h"
 #include "challenge.h"
@@ -2193,7 +2194,7 @@ static void intDestroyMissionResultWidgets()
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
 }
 
-static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
+static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	// ensure the guide screen is closed
 	closeGuideScreen();
@@ -2259,7 +2260,11 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sLabInit.y = 12;
 	sLabInit.width = MISSIONRES_TITLE_W;
 	sLabInit.height = 16;
-	if (result)
+	if (customTitle)
+	{
+		sLabInit.pText = WzString::fromUtf8(customTitle);
+	}
+	else if (result)
 	{
 
 		//don't bother adding the text if haven't played the audio
@@ -2291,11 +2296,14 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
 		psWidget->pUserData = nullptr;
 	};
+	// the game can't continue without the host
+	bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+
 	//if won
 	if (result || bMultiPlayer)
 	{
 		// Finished the mission, so display "Continue Game"
-		if (!testPlayerHasWon() || bMultiPlayer)
+		if ((!testPlayerHasWon() || bMultiPlayer) && !multiplayerHostQuit)
 		{
 			sButInit.x			= MISSION_1_X;
 			sButInit.y			= MISSION_1_Y;
@@ -2363,10 +2371,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 }
 
 
-bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	ActivityManager::instance().completedMission(result, collectEndGameStatsData(), Cheated);
-	return _intAddMissionResult(result, bPlaySuccess, showBackDrop);
+	return _intAddMissionResult(result, bPlaySuccess, showBackDrop, customTitle);
 }
 
 void intRemoveMissionResultNoAnim()
