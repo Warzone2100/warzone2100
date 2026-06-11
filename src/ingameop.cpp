@@ -56,6 +56,7 @@
 #include "screens/netpregamescreen.h"
 #include "screens/guidescreen.h"
 #include "screens/ingameopscreen.h"
+#include "screens/replayendscreen.h"
 #include "titleui/options/optionsforms.h"
 
 bool hostQuitConfirmation = true;
@@ -156,6 +157,9 @@ static bool _intAddInGameOptions()
 	}
 
 	setReticulesEnabled(false);
+
+	// hide the replay end screen (if it's up) while the menu is open, so it doesn't block the menu
+	setReplayEndScreenVisible(false);
 
 	// Pause the game.
 	if (!gamePaused())
@@ -364,6 +368,9 @@ static void ProcessOptionFinished()
 	}
 
 	setReticulesEnabled(true);
+
+	// re-show the replay end screen (if it's up)
+	setReplayEndScreenVisible(true);
 }
 
 void intCloseInGameOptionsNoAnim()
