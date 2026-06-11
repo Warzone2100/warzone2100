@@ -200,8 +200,32 @@ uint32_t ScrollableListWidget::calculateListViewWidth() const
 
 std::shared_ptr<WIDGET> ScrollableListWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
-	return WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
+	auto result = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
+
+	// scroll with the mouse wheel only if no nested scrollable list (between this widget and the
+	// mouse target) handles the wheel itself - the innermost scrollable under the mouse wins
+	bool nestedScrollableHandlesWheel = false;
+	for (auto widget = result; widget != nullptr && widget.get() != this; widget = widget->parent())
+	{
+		auto nestedList = std::dynamic_pointer_cast<ScrollableListWidget>(widget);
+		if (nestedList && nestedList->canBeScrolledByMouseWheel())
+		{
+			nestedScrollableHandlesWheel = true;
+			break;
+		}
+	}
+	if (!nestedScrollableHandlesWheel)
+	{
+		scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
+	}
+
+	return result;
+}
+
+bool ScrollableListWidget::canBeScrolledByMouseWheel()
+{
+	updateLayout();
+	return scrollBar->isEnabled() && scrollBar->visible();
 }
 
 void ScrollableListWidget::enableScroll()
