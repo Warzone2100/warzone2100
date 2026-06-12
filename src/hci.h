@@ -290,6 +290,9 @@ void intDoScreenRefresh();
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets();
 
+/* Request quitting the game to the main menu (processed by the next intRunWidgets() call) */
+void intRequestQuitToMainMenu();
+
 /* Display the widgets for the in game interface */
 void intDisplayWidgets();
 

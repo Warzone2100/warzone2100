@@ -52,7 +52,7 @@
 #include "power.h"
 #include "cmddroid.h"								//  for commanddroidupdatekills
 #include "wrappers.h"								// for game over
-#include "screens/replayendscreen.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "component.h"
 #include "frontend.h"
 #include "lib/sound/audio.h"
@@ -1534,7 +1534,7 @@ bool recvMessage()
 				}
 				addConsoleMessage(_("REPLAY HAS ENDED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 				addConsoleMessage(_("(Press ESC to quit.)"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-				showReplayEndScreen();
+				showSpectatorGameOverScreen();
 				break;
 			default:
 				processedMessage1 = false;
