@@ -17,16 +17,16 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file
- *  The overlay screen displayed when a replay ends (currently: a "Player Stats" graph panel)
+ *  The overlay screen displayed when the game is over for a spectator (including when a replay ends)
  */
 
-#ifndef __INCLUDED_SRC_SCREENS_REPLAYENDSCREEN_H__
-#define __INCLUDED_SRC_SCREENS_REPLAYENDSCREEN_H__
+#ifndef __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__
+#define __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__
 
-void showReplayEndScreen();
-void closeReplayEndScreen();
+void showSpectatorGameOverScreen();
+void closeSpectatorGameOverScreen();
 
-// Temporarily hide / re-show the replay end screen (if it's up) - e.g. while the in-game options menu is open
-void setReplayEndScreenVisible(bool visible);
+// Temporarily hide / re-show the spectator game over screen (if it's up) - ex. while the in-game options menu is open
+void setSpectatorGameOverScreenVisible(bool visible);
 
-#endif // __INCLUDED_SRC_SCREENS_REPLAYENDSCREEN_H__
+#endif // __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__

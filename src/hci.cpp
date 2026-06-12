@@ -84,7 +84,7 @@
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
-#include "screens/replayendscreen.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "hci/quickchat.h"
 #include "warzoneconfig.h"
 
@@ -133,6 +133,7 @@ static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states
 static UDWORD	keyButtonMapping = 0;
 static bool ReticuleUp = false;
 static bool Refreshing = false;
+static bool quitToMainMenuRequested = false;
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -931,6 +932,8 @@ bool intInitialise()
 
 	psSelectedBuilder = nullptr;
 
+	quitToMainMenuRequested = false;
+
 	if (!intInitialiseGraphics())
 	{
 		debug(LOG_ERROR, "Failed to initialize interface graphics");
@@ -1032,7 +1035,7 @@ void interfaceShutDown()
 
 	shutdownChatScreen();
 	closeGuideScreen();
-	closeReplayEndScreen();
+	closeSpectatorGameOverScreen();
 	ChatDialogUp = false;
 
 	bAllowOtherKeyPresses = true;
@@ -1386,10 +1389,27 @@ static void reticuleCallback(int retbut)
 	}
 }
 
+void intRequestQuitToMainMenu()
+{
+	quitToMainMenuRequested = true;
+	if (gamePaused())
+	{
+		kf_TogglePauseMode(); // intRunWidgets() (which processes the request) isn't called while the game is paused
+	}
+}
+
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
+
+	if (quitToMainMenuRequested)
+	{
+		quitToMainMenuRequested = false;
+		intCloseInGameOptions(false, false);
+		intResetScreen(false);
+		quitting = true;
+	}
 
 	if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult) > 0)
 	{
