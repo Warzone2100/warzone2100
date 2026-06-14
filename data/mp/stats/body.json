@@ -537,7 +537,7 @@
 			},
 			"V-Tol": {
 				"left": "prsvtl1.pie",
-				"moving": "fxvtl12.pie"
+				"moving": "fxvtl14.pie"
 			},
 			"hover01": {
 				"left": "prshov1.pie"
