@@ -2560,7 +2560,10 @@ generic_script_object scripting_engine::getObject(WZAPI_PARAMS(wzapi::object_req
 		OBJECT_TYPE type = std::get<0>(type_player_id);
 		int player = std::get<1>(type_player_id);
 		int id = std::get<2>(type_player_id);
-		SCRIPT_ASSERT_PLAYER({}, context, player);
+		if (type != OBJ_FEATURE)
+		{
+			SCRIPT_ASSERT_PLAYER({}, context, player);
+		}
 		return generic_script_object::fromObject(IdToObject(type, id, player));
 	}
 	else if (request.requestType == wzapi::object_request::RequestType::LABEL_REQUEST)
