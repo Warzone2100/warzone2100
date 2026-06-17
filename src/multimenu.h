@@ -28,7 +28,7 @@
 #include "stringdef.h"
 
 // requester
-void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD id, UBYTE numPlayers, std::string const &searchString = std::string());
+void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD id, UBYTE numPlayers, std::string const &searchString = std::string(), bool searchByAuthor = false);
 void closeMultiRequester();
 
 extern bool multiRequestUp;
