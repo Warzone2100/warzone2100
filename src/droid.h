@@ -200,6 +200,7 @@ unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brai
 UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck = true);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
+bool droidExpForScavengersOutsideLimits(DROID *psDroid);
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
 void giveExperienceForSquish(DROID *psDroid);
 

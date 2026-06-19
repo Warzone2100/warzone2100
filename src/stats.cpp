@@ -577,6 +577,32 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_TELEPORT_CAPTURE, true);
 		}
+		// Exp gain is based on damage from projectiles and all forms of damage allow it by default.
+		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_SPLASH_PENETRATE, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_PERIODICAL, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_SPLASH, true);
+		if (std::find(flags.begin(), flags.end(), "expnoimpactdamage") != flags.end()) // "ExpNoImpactDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnopenetrateimpactdamage") != flags.end()) // "ExpNoPenetrateImpactDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnopenetratesplashdamage") != flags.end()) // "ExpNoPenetrateSplashDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_SPLASH_PENETRATE, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnoperiodicaldamage") != flags.end()) // "ExpNoPeriodicalDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_PERIODICAL, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnosplashdamage") != flags.end()) // "ExpNoSplashDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_SPLASH, false);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -772,6 +798,8 @@ bool loadBrainStats(WzConfig &ini)
 				retVal = false;
 			}
 		}
+
+		psStats->scavengersGiveExpUntilLevel = ini.value("scavengersGiveExpUntilLevel", -1).toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 	}
