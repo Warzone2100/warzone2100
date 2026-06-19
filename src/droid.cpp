@@ -2590,6 +2590,23 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 	return count;
 }
 
+// Decides if a unit, after defeating a scavenger, gains exp.
+bool droidExpForScavengersOutsideLimits(DROID *psDroid)
+{
+	int limit = psDroid->getBrainStats()->scavengersGiveExpUntilLevel;
+
+	if (limit < 0)
+	{
+		return false; // Always give experience.
+	}
+	else if (limit == 0)
+	{
+		return true; // Give no experience.
+	}
+
+	return getDroidLevel(psDroid) >= limit;
+}
+
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
 {
@@ -2617,8 +2634,24 @@ void giveExperienceForSquish(DROID *psDroid)
 {
 	if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND)
 	{
+		if (droidExpForScavengersOutsideLimits(psDroid))
+		{
+			return;
+		}
+
 		const uint32_t expGain = std::max(65536 / 2, 65536 * getExpGain(psDroid->player) / 100);
 		droidIncreaseExperience(psDroid, expGain);
+
+		if (hasCommander(psDroid) && psDroid->psGroup->psCommander)
+		{
+			DROID *psCommander = psDroid->psGroup->psCommander;
+
+			if (droidExpForScavengersOutsideLimits(psCommander))
+			{
+				return;
+			}
+		}
+
 		cmdDroidUpdateExperience(psDroid, expGain);
 	}
 }
