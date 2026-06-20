@@ -7,6 +7,7 @@
 		"maxDroids": 6,
 		"maxDroidsMult": 2,
 		"name": "Command Turret",
+		"productionCommanderExpLimit": 10000,
 		"ranks": [ "Rookie", "Green", "Trained", "Regular", "Professional", "Veteran", "Elite", "Special", "Hero" ],
 		"thresholds": [ 0, 24, 48, 96, 192, 384, 768, 1536, 2048 ],
 		"turret": "CommandTurret1"

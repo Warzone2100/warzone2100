@@ -436,6 +436,8 @@ bool recvDroid(NETQUEUE queue)
 	// If we were able to build the droid set it up
 	if (psDroid)
 	{
+		limitCommanderExpForProduction(psDroid);
+
 		addDroid(psDroid, gameWorld.objects.droids);
 
 		if (haveInitialOrders)

@@ -1053,6 +1053,16 @@ void droidUpdate(DROID *psDroid)
 	CHECK_DROID(psDroid);
 }
 
+// Applies the exp cap on commanders when produced
+void limitCommanderExpForProduction(DROID *psCommander)
+{
+	if (!psCommander || psCommander->droidType != DROID_COMMAND)
+	{
+		return;
+	}
+	psCommander->experience = std::min(static_cast<uint32_t>(psCommander->getBrainStats()->productionCommanderExpLimit * 65536), psCommander->experience);
+}
+
 /* Check if droid is within commander's range */
 bool droidWithinCommanderRange(const DROID *psDroid)
 {

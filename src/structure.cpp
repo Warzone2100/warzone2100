@@ -2659,6 +2659,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		}
 		setFactorySecondaryState(psNewDroid, psStructure);
 		displayConstructionCloud(gameWorld.map, psNewDroid->pos);
+		limitCommanderExpForProduction(psNewDroid);
 		/* add the droid to the list */
 		addDroid(psNewDroid, gameWorld.objects.droids);
 		*ppsDroid = psNewDroid;

@@ -123,6 +123,9 @@ int32_t droidDamage(GameWorld& world, DROID *psDroid, PROJECTILE *psProjectile, 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
 
+/* Applies the exp cap on commanders when produced */
+void limitCommanderExpForProduction(DROID *psCommander);
+
 /* Check if droid is within commander's range */
 bool droidWithinCommanderRange(const DROID *psDroid);
 
