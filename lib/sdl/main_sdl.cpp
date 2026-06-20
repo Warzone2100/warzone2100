@@ -285,6 +285,7 @@ WzString wzGetClipboardText()
 		else
 		{
 			retval = WzString::fromUtf8(cliptext);
+			SDL_free(cliptext);
 		}
 	}
 	return retval;
