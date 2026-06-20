@@ -287,6 +287,13 @@ TITLECODE titleLoop()
 	{
 		return RetCode; // don't flip
 	}
+
+	if (!headlessGameMode() && RetCode == TITLECODE_CONTINUE && wzTitleUICurrent)
+	{
+		std::shared_ptr<WzTitleUI> currentForRender = wzTitleUICurrent;
+		currentForRender->render();
+	}
+
 	NETflush();  // Send any pending network data.
 
 	audio_Update();

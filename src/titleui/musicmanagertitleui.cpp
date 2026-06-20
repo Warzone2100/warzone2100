@@ -101,12 +101,15 @@ TITLECODE WzMusicManagerTitleUI::run()
 {
 	widgRunScreen(psWScreen);
 
-	widgDisplayScreen(psWScreen); // show the widgets currently running
-
 	if (CancelPressed())
 	{
 		changeTitleUI(parent);
 	}
 
 	return TITLECODE_CONTINUE;
+}
+
+void WzMusicManagerTitleUI::render()
+{
+	widgDisplayScreen(psWScreen); // show the widgets currently running
 }
