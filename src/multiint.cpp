@@ -204,6 +204,11 @@ static bool bInActualHostedLobby = false;
 static bool bRequestedSelfMoveToPlayers = false;
 static std::vector<bool> bHostRequestedMoveToPlayers = std::vector<bool>(MAX_CONNECTED_PLAYERS, false);
 
+static inline bool isFullscreenMapPreviewActive()
+{
+	return hideTime != 0 && gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME;
+}
+
 static std::weak_ptr<WzMultiplayerOptionsTitleUI> currentMultiOptionsTitleUI;
 
 /// end of globals.
@@ -6701,7 +6706,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		if (hideTime != 0)
 		{
 			// we abort the 'hidetime' on press of a mouse button.
-			if (gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
+			if (isFullscreenMapPreviewActive() && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
 			{
 				return TITLECODE_CONTINUE;
 			}
@@ -6720,13 +6725,6 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		}
 	}
 
-	widgDisplayScreen(psWScreen);									// show the widgets currently running
-
-	if (multiRequestUp)
-	{
-		widgDisplayScreen(psRScreen);								// show the Requester running
-	}
-
 	if (CancelPressed())
 	{
 		processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
@@ -6743,6 +6741,21 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 
 	return TITLECODE_CONTINUE;
+}
+
+void WzMultiplayerOptionsTitleUI::render()
+{
+	if (isFullscreenMapPreviewActive())
+	{
+		return;
+	}
+
+	widgDisplayScreen(psWScreen);									// show the widgets currently running
+
+	if (multiRequestUp)
+	{
+		widgDisplayScreen(psRScreen);								// show the Requester running
+	}
 }
 
 WzMultiplayerOptionsTitleUI::WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitleUI> parent)

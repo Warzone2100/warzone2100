@@ -310,9 +310,12 @@ bool runTitleMenu()
 		break;
 	}
 
-	widgDisplayScreen(psWScreen); // show the widgets currently running
-
 	return true;
+}
+
+void displayTitleMenu()
+{
+	widgDisplayScreen(psWScreen); // show the widgets currently running
 }
 
 
@@ -366,9 +369,12 @@ bool runTutorialMenu()
 		changeTitleMode(TITLE);
 	}
 
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
-
 	return true;
+}
+
+void displayTutorialMenu()
+{
+	widgDisplayScreen(psWScreen);						// show the widgets currently running
 }
 
 
@@ -507,6 +513,11 @@ bool runSinglePlayerMenu()
 		}
 	}
 
+	return true;
+}
+
+void displaySinglePlayerMenu()
+{
 	if (!bLoadSaveUp && !challengesUp)						// if save/load screen is up
 	{
 		widgDisplayScreen(psWScreen);						// show the widgets currently running
@@ -519,8 +530,6 @@ bool runSinglePlayerMenu()
 	{
 		displayChallenges();
 	}
-
-	return true;
 }
 
 
@@ -604,6 +613,11 @@ bool runMultiPlayerMenu()
 		}
 	}
 
+	return true;
+}
+
+void displayMultiPlayerMenu()
+{
 	if (!bLoadSaveUp)
 	{
 		widgDisplayScreen(psWScreen);		// show the widgets currently running
@@ -612,8 +626,6 @@ bool runMultiPlayerMenu()
 	{
 		displayLoadSave();
 	}
-
-	return true;
 }
 
 std::vector<unsigned int> availableDisplayScalesSorted()

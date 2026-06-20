@@ -38,6 +38,7 @@ public:
 	virtual ~WzOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	virtual void render() override;
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 
 	std::shared_ptr<WzTitleUI> getParentTitleUI();
