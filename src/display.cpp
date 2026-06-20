@@ -687,6 +687,14 @@ void processMouseClickInput()
 	selection = establishSelection(selectedPlayer);
 	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
+	if (gestureActive)
+	{
+		// clear certain mouse input state if gesture is active, and skip processing
+		kill3DBuilding();
+		cancelDeliveryRepos();
+		return;
+	}
+
 	ignoreOrder = CheckFinishedFindPosition();
 
 	CheckStartWallDrag();
