@@ -72,6 +72,7 @@
 
 #include "game_world.h"
 
+#include <algorithm>
 #include <cstdint>
 
 // TODO: Fix and remove after merging terrain rendering changes
@@ -101,6 +102,8 @@ struct Sector
 	int decalSize = 0;           ///< Size of the part of the decal VBO we are going to use
 	int terrainAndDecalOffset = 0;
 	int terrainAndDecalSize = 0;
+	int terrainAndDecalIndexOffset = 0; ///< The point in the terrain+decal index VBO where our triangles start
+	int terrainAndDecalIndexSize = 0;   ///< The size of our terrain+decal indices
 	bool draw;               ///< Do we draw this sector this frame?
 	bool dirty;              ///< Do we need to update the geometry for this sector?
 };
@@ -145,7 +148,7 @@ static const unsigned int LIGHTMAP_REFRESH = 80;
 static gfx_api::buffer *geometryVBO = nullptr, *geometryIndexVBO = nullptr;
 /// VBOs
 static gfx_api::buffer *waterVBO = nullptr, *waterIndexVBO = nullptr;
-static gfx_api::buffer *terrainDecalVBO = nullptr;
+static gfx_api::buffer *terrainDecalVBO = nullptr, *terrainDecalIndexVBO = nullptr;
 /// The amount we shift the water textures so the waves appear to be moving
 static float waterOffset;
 
@@ -489,41 +492,45 @@ static void setSectorDecalVertex_SinglePass(WorldMapState& mapState, int x, int 
 			vs[4].groundWeights = {0, 0, 0, 0}; // special value for shader.
 			for (int k = 0; k < 5; k++) vs[k].grounds = grounds.rgba();
 
-			terrainDecalData[(*terrainDecalSize)++] = vs[4];
-			terrainDecalData[(*terrainDecalSize)++] = vs[1];
-			terrainDecalData[(*terrainDecalSize)++] = vs[0];
-
-			terrainDecalData[(*terrainDecalSize)++] = vs[4];
-			terrainDecalData[(*terrainDecalSize)++] = vs[2];
-			terrainDecalData[(*terrainDecalSize)++] = vs[1];
-
-			terrainDecalData[(*terrainDecalSize)++] = vs[4];
-			terrainDecalData[(*terrainDecalSize)++] = vs[3];
-			terrainDecalData[(*terrainDecalSize)++] = vs[2];
-
-			terrainDecalData[(*terrainDecalSize)++] = vs[4];
-			terrainDecalData[(*terrainDecalSize)++] = vs[0];
-			terrainDecalData[(*terrainDecalSize)++] = vs[3];
-
 			// calc tangents
-			for (int idx = *terrainDecalSize - 3*4; idx < *terrainDecalSize; idx+=3) {
-				auto p = terrainDecalData + idx;
-				auto e1 = p[1].pos - p[0].pos;
-				auto e2 = p[2].pos - p[0].pos;
-				auto uv1 = p[1].decalUv - p[0].decalUv;
-				auto uv2 = p[2].decalUv - p[0].decalUv;
+			// vertices are shared between the tile's 4 triangles (fanned from the center vertex vs[4]),
+			// so each vertex gets the accumulated tangent of the triangles it belongs to
+			static const int tileTris[4][3] = {{4, 1, 0}, {4, 2, 1}, {4, 3, 2}, {4, 0, 3}};
+			Vector3f tangentSum[5] = {};
+			Vector3f bitangentSum[5] = {};
+			for (int t = 0; t < 4; t++) {
+				const auto &p0 = vs[tileTris[t][0]];
+				const auto &p1 = vs[tileTris[t][1]];
+				const auto &p2 = vs[tileTris[t][2]];
+				auto e1 = p1.pos - p0.pos;
+				auto e2 = p2.pos - p0.pos;
+				auto uv1 = p1.decalUv - p0.decalUv;
+				auto uv2 = p2.decalUv - p0.decalUv;
 				float r = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
 				Vector3f tangent = glm::normalize(r * (uv2.y * e1 - uv1.y * e2));
 				Vector3f bitangent = glm::normalize(r * (-uv2.x * e1 + uv1.x * e2));
-				for (int k=0; k<3; k++) {
-					auto &n = p[k].normal;
-					const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
-					float w = 1.0f; // not mirrored
-					if (glm::dot(glm::cross(n, t), bitangent) < 0.0f) {
-						w = -1.0f; // we're mirrored
-					}
-					p[k].decalTangent = glm::vec4(t, w);
+				if (glm::any(glm::isnan(tangent)) || glm::any(glm::isnan(bitangent))) {
+					continue; // degenerate decal UVs
 				}
+				for (int k = 0; k < 3; k++) {
+					tangentSum[tileTris[t][k]] += tangent;
+					bitangentSum[tileTris[t][k]] += bitangent;
+				}
+			}
+			for (int k = 0; k < 5; k++) {
+				const auto &n = vs[k].normal;
+				const auto tangent = glm::normalize(tangentSum[k]);
+				const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
+				float w = 1.0f; // not mirrored
+				if (glm::dot(glm::cross(n, t), glm::normalize(bitangentSum[k])) < 0.0f) {
+					w = -1.0f; // we're mirrored
+				}
+				vs[k].decalTangent = glm::vec4(t, w);
+			}
+
+			// emit the 5 unique vertices (4 corners + center). Triangles are formed by the index buffer.
+			for (int k = 0; k < 5; k++) {
+				terrainDecalData[(*terrainDecalSize)++] = vs[k];
 			}
 		}
 	}
@@ -959,7 +966,10 @@ bool initTerrain(WorldMapState& mapState)
 	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
 
 	// now we know these values, determine the maximum sector size achievable
-	maxSectorSizeVertices = iSqrt(GLmaxElementsVertices / 2) - 1;
+	// (the geometry buffer uses (sectorSize+1)^2 * 2 vertices per sector,
+	//  the terrain+decal buffer uses sectorSize^2 * 5 vertices per sector,
+	//  both index buffers use sectorSize^2 * 12 indices per sector)
+	maxSectorSizeVertices = std::min(iSqrt(GLmaxElementsVertices / 2) - 1, iSqrt(GLmaxElementsVertices / 5));
 	maxSectorSizeIndices = iSqrt(GLmaxElementsIndices / 12);
 
 	debug(LOG_TERRAIN, "preferred sector size: %i", sectorSize);
@@ -1132,8 +1142,10 @@ bool initTerrain(WorldMapState& mapState)
 
 
 	// and finally the decals
-	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapState.width * mapState.height * 12);
+	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapState.width * mapState.height * 5);
+	GLuint *terrainDecalIndex = (GLuint *)malloc(sizeof(GLuint) * mapState.width * mapState.height * 12);
 	int terrainDecalSize = 0;
+	int terrainDecalIndexSize = 0;
 
 	for (x = 0; x < xSectors; x++)
 	{
@@ -1143,26 +1155,56 @@ bool initTerrain(WorldMapState& mapState)
 				sectors[x * ySectors + y].terrainAndDecalSize = 0;
 				setSectorDecalVertex_SinglePass(mapState, x, y, terrainDecalData, &terrainDecalSize);
 				sectors[x * ySectors + y].terrainAndDecalSize = terrainDecalSize - sectors[x * ySectors + y].terrainAndDecalOffset;
+
+				// each tile emitted 5 vertices (4 corners + center).
+				// Form its 4 triangles fanned from the center vertex (base + 4).
+				sectors[x * ySectors + y].terrainAndDecalIndexOffset = terrainDecalIndexSize;
+				for (int base = sectors[x * ySectors + y].terrainAndDecalOffset; base < terrainDecalSize; base += 5)
+				{
+					terrainDecalIndex[terrainDecalIndexSize + 0]  = base + 4;
+					terrainDecalIndex[terrainDecalIndexSize + 1]  = base + 1;
+					terrainDecalIndex[terrainDecalIndexSize + 2]  = base + 0;
+
+					terrainDecalIndex[terrainDecalIndexSize + 3]  = base + 4;
+					terrainDecalIndex[terrainDecalIndexSize + 4]  = base + 2;
+					terrainDecalIndex[terrainDecalIndexSize + 5]  = base + 1;
+
+					terrainDecalIndex[terrainDecalIndexSize + 6]  = base + 4;
+					terrainDecalIndex[terrainDecalIndexSize + 7]  = base + 3;
+					terrainDecalIndex[terrainDecalIndexSize + 8]  = base + 2;
+
+					terrainDecalIndex[terrainDecalIndexSize + 9]  = base + 4;
+					terrainDecalIndex[terrainDecalIndexSize + 10] = base + 0;
+					terrainDecalIndex[terrainDecalIndexSize + 11] = base + 3;
+					terrainDecalIndexSize += 12;
+				}
+				sectors[x * ySectors + y].terrainAndDecalIndexSize = terrainDecalIndexSize - sectors[x * ySectors + y].terrainAndDecalIndexOffset;
 		}
 	}
-	debug(LOG_TERRAIN, "%i decals found", terrainDecalSize / 12);
+	debug(LOG_TERRAIN, "%i decals found", terrainDecalSize / 5);
 
 	if (terrainDecalVBO)
 		delete terrainDecalVBO;
+	if (terrainDecalIndexVBO)
+		delete terrainDecalIndexVBO;
 	if (terrainDecalSize > 0)
 	{
 		terrainDecalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::terrainDecalVBO");
 		terrainDecalVBO->upload(sizeof(gfx_api::TerrainDecalVertex)*terrainDecalSize, terrainDecalData);
+		terrainDecalIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::terrainDecalIndexVBO");
+		terrainDecalIndexVBO->upload(sizeof(GLuint)*terrainDecalIndexSize, terrainDecalIndex);
 	}
 	else
 	{
 		terrainDecalVBO = nullptr;
+		terrainDecalIndexVBO = nullptr;
 	}
 	if (terrainDecalData)
 	{
 		free(terrainDecalData);
 		terrainDecalData = nullptr;
 	}
+	free(terrainDecalIndex);
 
 	lightmapLastUpdate = 0;
 	lightmapWidth = 1;
@@ -1213,6 +1255,8 @@ void shutdownTerrain()
 	waterIndexVBO = nullptr;
 	delete terrainDecalVBO;
 	terrainDecalVBO = nullptr;
+	delete terrainDecalIndexVBO;
+	terrainDecalIndexVBO = nullptr;
 
 	sectors.reset();
 
@@ -1441,6 +1485,10 @@ glm::vec4 getFogColorVec4()
 template<typename PSO>
 static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
 {
+	if (!terrainDecalVBO || !terrainDecalIndexVBO)
+	{
+		return; // no terrain+decal geometry (empty map)
+	}
 	const auto &renderState = getCurrentRenderState();
 	PSO::get().bind();
 	PSO::get().bind_textures(
@@ -1449,6 +1497,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
 		shadowMap);
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
+	gfx_api::context::get().bind_index_buffer(*terrainDecalIndexVBO, gfx_api::index_type::u32);
 	glm::mat4 groundScale = glm::mat4(0);
 	for (int i = 0; i < getNumGroundTypes(); i++) {
 		groundScale[i/4][i%4] = 1.0f / (getGroundType(i).textureSize * world_coord(1));
@@ -1465,33 +1514,23 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 	};
 	PSO::get().set_uniforms(uniforms);
 
-	int size = 0;
-	int offset = 0;
 	for (int x = 0; x < xSectors; x++)
 	{
-		for (int y = 0; y < ySectors + 1; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
-			bool drawSector = y < ySectors && sectors[x * ySectors + y].draw;
-			if (drawSector && offset + size == sectors[x * ySectors + y].terrainAndDecalOffset)
+			if (sectors[x * ySectors + y].draw)
 			{
-				// append
-				size += sectors[x * ySectors + y].terrainAndDecalSize;
-				continue;
-			}
-			// can't append, so draw what we have and start anew
-			if (size > 0)
-			{
-				PSO::get().draw(size, offset);
-			}
-			size = 0;
-			if (drawSector)
-			{
-				offset = sectors[x * ySectors + y].terrainAndDecalOffset;
-				size = sectors[x * ySectors + y].terrainAndDecalSize;
+				addDrawRangeElements<PSO>(
+					sectors[x * ySectors + y].terrainAndDecalOffset,
+					sectors[x * ySectors + y].terrainAndDecalOffset + sectors[x * ySectors + y].terrainAndDecalSize,
+					sectors[x * ySectors + y].terrainAndDecalIndexSize,
+					sectors[x * ySectors + y].terrainAndDecalIndexOffset);
 			}
 		}
 	}
+	finishDrawRangeElements<PSO>();
 	PSO::get().unbind_vertex_buffers(terrainDecalVBO);
+	gfx_api::context::get().unbind_index_buffer(*terrainDecalIndexVBO);
 }
 
 static void drawTerrainCombined(const glm::mat4 &ModelViewProjection, const glm::mat4& ViewMatrix, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades, gfx_api::abstract_texture* shadowMap)
