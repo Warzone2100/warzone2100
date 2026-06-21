@@ -835,6 +835,8 @@ static void NETlockedOptions(MessageWriter& w, const MultiplayOptionsLocked& loc
 	NETbool(w, lockedOpts.difficulty);
 	NETbool(w, lockedOpts.ai);
 	NETbool(w, lockedOpts.position);
+	NETbool(w, lockedOpts.aipositionplayer);
+	NETbool(w, lockedOpts.aipositionadmin);
 	NETbool(w, lockedOpts.bases);
 	NETbool(w, lockedOpts.spectators);
 	NETbool(w, lockedOpts.name);
@@ -851,6 +853,8 @@ static void NETlockedOptions(MessageReader &r, MultiplayOptionsLocked& lockedOpt
 	NETbool(r, lockedOpts.difficulty);
 	NETbool(r, lockedOpts.ai);
 	NETbool(r, lockedOpts.position);
+	NETbool(r, lockedOpts.aipositionplayer);
+	NETbool(r, lockedOpts.aipositionadmin);
 	NETbool(r, lockedOpts.bases);
 	NETbool(r, lockedOpts.spectators);
 	NETbool(r, lockedOpts.name);

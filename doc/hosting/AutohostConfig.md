@@ -33,14 +33,20 @@ The `challenge` object defines the game parameters for a multiplayer game.
 
 The `locked` object sets which game parameters can be changed by the host and room administrators. Those values can be `true` or `1` if the parameter cannot be changed, or `false` or `0`. When an entry is not set, it is unlocked (same as `false`).
 
-* `power` locks the `powerLevel` value.
-* `alliances` locks to the `alliances` value.
-* `teams` prevents player from switching teams.
-* `difficulty` locks the AI difficulty.
 * `ai` locks AI scripts.
+* `aipositionadmin` prevents admin players from swapping starting locations with AI bots.
+* `aipositionplayer` prevents non-admin players from swapping starting locations with AI bots.
+* `alliances` locks the `alliances` value.
+* `bases` locks the `powerLevel` value.
+* `cheats` prevents players from enabling debug mode.
+* `difficulty` locks the AI difficulty.
+* `name` prevents players from changing their name.
+* `position` prevents players from changing their starting location.
+* `power` locks the `powerLevel` value.
+* `readybeforefull` prevent players from checking ready before the room is full. Also prevent ready statuses from being reset if the `--startplayers` command line option is set.
 * `scavengers` locks the `scavengers` value.
-* `position` prevents player from changing their starting location.
-* `bases` locks the `bases` value.
+* `spectators` prevents players from moving between player/spectator.
+* `teams` prevents players from changing their team.
 
 ## Player objects
 
@@ -58,39 +64,50 @@ Each player slot can be customized, starting from 0. The first slot will be defi
 ```json
 {
 	"locked": {
-		"power": false,
-		"alliances": true,
-		"teams": true,
-		"difficulty": false,
 		"ai": false,
-		"scavengers": true,
+		"aipositionadmin": false,
+		"aipositionplayer": false,
+		"alliances": true,
+		"bases": true,
+		"cheats": true,
+		"difficulty": false,
+		"name": false,
 		"position": false,
-		"bases": true
+		"power": false,
+		"readybeforefull": false,
+		"scavengers": true,
+		"spectators": false,
+		"teams": true
 	},
 	"challenge": {
-		"map": "Sk-Mountain",
-		"maxPlayers": 4,
-		"scavengers": 0,
-		"alliances": 2,
-		"powerLevel": 1,
-		"bases": 1,
-		"name": "2v2 sample game",
-		"techLevel": 1,
-		"spectatorHost": true,
-		"openSpectatorSlots": 2,
+		"alliances": 0,
+		"bases": 3,
 		"blindMode": "none",
-		"allowPositionChange": true
+		"gamePassword": null,
+		"map": "Sk-Rush",
+		"maxPlayers": 4,
+		"name": "My Game",
+		"openSpectatorSlots": 10,
+		"powerLevel": 2,
+		"scavengers": 0,
+		"spectatorHost": true,
+		"techLevel": 1,
+		"version": 2
 	},
 	"player_0": {
+		"position": 0,
 		"team": 0
 	},
 	"player_1": {
+		"position": 1,
 		"team": 0
 	},
 	"player_2": {
+		"position": 2,
 		"team": 1
 	},
 	"player_3": {
+		"position": 3,
 		"team": 1
 	}
 }
