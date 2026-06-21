@@ -810,6 +810,10 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 	{
 		*type = PROPULSION_TYPE_HALF_TRACKED;
 	}
+	else if (strcmp(typeName, "Legged-Super") == 0)
+	{
+		*type = PROPULSION_TYPE_LEGGED_SUPER;
+	}
 	else
 	{
 		debug(LOG_ERROR, "getPropulsionType: Invalid Propulsion type %s - assuming Hover", typeName);
@@ -1101,7 +1105,7 @@ bool loadPropulsionTypes(WzConfig &ini)
 	ASSERT(ini.isAtDocumentRoot(), "WzConfig instance is in the middle of traversal");
 	std::vector<WzString> list = ini.childGroups();
 
-	for (int i = 0; i < NumTypes; ++i)
+	for (size_t i = 0; i < list.size(); ++i)
 	{
 		PROPULSION_TYPE type;
 
@@ -1172,6 +1176,7 @@ bool loadTerrainTable(WzConfig &ini)
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_LIFT] = ini.value("lift", 100).toUInt();
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_PROPELLOR] = ini.value("propellor", 100).toUInt();
 		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_HALF_TRACKED] = ini.value("half-tracked", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_LEGGED_SUPER] = ini.value("legged-super", 100).toUInt();
 		ini.endGroup();
 		ini.endGroup();
 	}
@@ -1604,64 +1609,77 @@ bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model)
 
 const StringToEnum<WEAPON_EFFECT> mapUnsorted_WEAPON_EFFECT[] =
 {
-	{"ANTI PERSONNEL",      WE_ANTI_PERSONNEL       },
-	{"ANTI TANK",           WE_ANTI_TANK            },
-	{"BUNKER BUSTER",       WE_BUNKER_BUSTER        },
-	{"ARTILLERY ROUND",     WE_ARTILLERY_ROUND      },
-	{"FLAMER",              WE_FLAMER               },
-	{"ANTI AIRCRAFT",       WE_ANTI_AIRCRAFT        },
-	{"ALL ROUNDER",         WE_ANTI_AIRCRAFT        },  // Alternative name for WE_ANTI_AIRCRAFT.
+	{"ANTI PERSONNEL",         WE_ANTI_PERSONNEL          },
+	{"ANTI TANK",              WE_ANTI_TANK               },
+	{"BUNKER BUSTER",          WE_BUNKER_BUSTER           },
+	{"ARTILLERY ROUND",        WE_ARTILLERY_ROUND         },
+	{"FLAMER",                 WE_FLAMER                  },
+	{"ANTI AIRCRAFT",          WE_ANTI_AIRCRAFT           },
+	{"ALL ROUNDER",            WE_ANTI_AIRCRAFT           },  // Alternative name for WE_ANTI_AIRCRAFT.
+	{"BOMB",                   WE_BOMB                    },
+	{"FIRE BOMB",              WE_FIRE_BOMB               },
+	{"EMP BOMB",               WE_EMP_BOMB                },
+	{"MACHINEGUN",             WE_MACHINEGUN              },
+	{"ASSAULT MACHINEGUN",     WE_ASSAULT_MACHINEGUN      },
+	{"CANNON",                 WE_CANNON                  },
+	{"SLOW CANNON",            WE_SLOW_CANNON             },
+	{"ASSAULT CANNON",         WE_ASSAULT_CANNON          },
+	{"PLASMA CANNON",          WE_PLASMA_CANNON           },
+	{"ROCKET",                 WE_ROCKET                  },
+	{"SLOW ROCKET",            WE_SLOW_ROCKET             },
+	{"GAUSS",                  WE_GAUSS                   },
+	{"SLOW GAUSS",             WE_SLOW_GAUSS              },
+	{"MISSILE",                WE_MISSILE                 },
+	{"SLOW MISSILE",           WE_SLOW_MISSILE            },
+	{"LASER",                  WE_LASER                   },
+	{"SLOW LASER",             WE_SLOW_LASER              },
+	{"MORTAR",                 WE_MORTAR_ARTILLERY        },
+	{"FIRE MORTAR",            WE_FIRE_MORTAR_ARTILLERY   },
+	{"HOWITZER",               WE_HOWITZER_ARTILLERY      },
+	{"FIRE HOWITZER",          WE_FIRE_HOWITZER_ARTILLERY },
+	{"ROCKET ARTILLERY",       WE_ROCKET_ARTILLERY        },
+	{"SLOW ROCKET ARTILLERY",  WE_SLOW_ROCKET_ARTILLERY   },
+	{"MISSILE ARTILLERY",      WE_MISSILE_ARTILLERY       },
+	{"SLOW MISSILE ARTILLERY", WE_SLOW_MISSILE_ARTILLERY  },
+	{"PLASMA",                 WE_PLASMA                  },
+	{"PLASMA FLAMER",          WE_PLASMA_FLAMER           },
+	{"PLASMA ARTILLERY",       WE_PLASMA_ARTILLERY        },
+	{"SLOW PLASMA ARTILLERY",  WE_SLOW_PLASMA_ARTILLERY   },
+	{"ELECTRONIC",             WE_ELECTRONIC              },
+	{"NEXUS LINK",             WE_NEXUS_LINK              },
+	{"EMP",                    WE_EMP                     },
+	{"EMP ARTILLERY",          WE_EMP_ARTILLERY           },
+	{"SLOW EMP ARTILLERY",     WE_SLOW_EMP_ARTILLERY      },
+	{"LASSAT",                 WE_LASSAT                  },
 };
 const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT = mapUnsorted_WEAPON_EFFECT;
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect)
 {
-	if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI PERSONNEL") == 0)
+	for (const auto& weapon : map_WEAPON_EFFECT)
 	{
-		*effect = WE_ANTI_PERSONNEL;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI TANK") == 0)
-	{
-		*effect = WE_ANTI_TANK;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "BUNKER BUSTER") == 0)
-	{
-		*effect = WE_BUNKER_BUSTER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ARTILLERY ROUND") == 0)
-	{
-		*effect = WE_ARTILLERY_ROUND;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "FLAMER") == 0)
-	{
-		*effect = WE_FLAMER;
-	}
-	else if (strcmp(weaponEffect.toUtf8().c_str(), "ANTI AIRCRAFT") == 0 || strcmp(weaponEffect.toUtf8().c_str(), "ALL ROUNDER") == 0)
-	{
-		*effect = WE_ANTI_AIRCRAFT;
-	}
-	else
-	{
-		ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect.toUtf8().c_str());
-		return false;
+		if (strcmp(weaponEffect.toUtf8().c_str(), weapon.first) == 0)
+		{
+			*effect = static_cast<WEAPON_EFFECT>(weapon.second);
+			return true;
+		}
 	}
 
-	return true;
+	ASSERT(!"Invalid weapon effect", "Invalid weapon effect: %s", weaponEffect.toUtf8().c_str());
+	return false;
 }
 
 /*returns the weapon effect string based on the enum passed in */
 const char *getWeaponEffect(WEAPON_EFFECT effect)
 {
-	switch (effect)
+	for (const auto& weapon : map_WEAPON_EFFECT)
 	{
-	case WE_ANTI_PERSONNEL: return "ANTI PERSONNEL";
-	case WE_ANTI_TANK: return "ANTI TANK";
-	case WE_BUNKER_BUSTER: return "BUNKER BUSTER";
-	case WE_ARTILLERY_ROUND: return "ARTILLERY ROUND";
-	case WE_FLAMER: return "FLAMER";
-	case WE_ANTI_AIRCRAFT: return "ANTI AIRCRAFT";
-	case WE_NUMEFFECTS: break;
+		if (effect == weapon.second)
+		{
+			return weapon.first;
+		}
 	}
+
 	ASSERT(false, "No such weapon effect");
 	return "Bad weapon effect";
 }

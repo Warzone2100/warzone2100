@@ -1973,7 +1973,7 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 		{
 			iAudioID = ID_SOUND_BLIMP_FLIGHT;
 		}
-		else if (iPropType == PROPULSION_TYPE_LEGGED && psDroid->isCyborg() && psPropType->moveID == NO_SOUND)
+		else if ((iPropType == PROPULSION_TYPE_LEGGED || iPropType == PROPULSION_TYPE_LEGGED_SUPER) && psDroid->isCyborg() && psPropType->moveID == NO_SOUND)
 		{
 			iAudioID = ID_SOUND_CYBORG_MOVE;
 		}

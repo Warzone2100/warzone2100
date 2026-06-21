@@ -773,6 +773,7 @@ bool fpathCheck(WorldMapState& mapState, Position orig, Position dest, PROPULSIO
 	case PROPULSION_TYPE_TRACKED:
 	case PROPULSION_TYPE_LEGGED:
 	case PROPULSION_TYPE_HALF_TRACKED:
+	case PROPULSION_TYPE_LEGGED_SUPER:
 		return origTile->limitedContinent == destTile->limitedContinent;
 	case PROPULSION_TYPE_HOVER:
 		return origTile->hoverContinent == destTile->hoverContinent;

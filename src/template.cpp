@@ -293,8 +293,7 @@ bool designableTemplate(const DROID_TEMPLATE *psTempl, int player)
 			   !designablePart(*psTempl->getBodyStats(), "Body")
 			&& (strcmp(psTempl->getBodyStats()->bodyClass.toStdString().c_str(), "Cyborgs") == 0)
 			&& !designablePart(*psTempl->getPropulsionStats(), "Propulsion")
-			&& psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LEGGED
-			&& psTempl->getPropulsionStats()->usageClass == UsageClass::Cyborg
+			&& ((!isSuperCyborg && psTempl->getPropulsionStats()->usageClass == UsageClass::Cyborg && psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LEGGED) || (isSuperCyborg && psTempl->getPropulsionStats()->usageClass == UsageClass::SuperCyborg && psTempl->getPropulsionStats()->propulsionType == PROPULSION_TYPE_LEGGED_SUPER))
 			&& repair
 			&& ((psTempl->asParts[COMP_BRAIN] == 0) || (!designablePart(*psTempl->getBrainStats(), "Brain") && psTempl->getBrainStats()->usageClass == UsageClass::Cyborg))
 			&& ((psTempl->asParts[COMP_ECM] == 0) || (!designablePart(*psTempl->getECMStats(), "ECM") && psTempl->getECMStats()->usageClass == UsageClass::Cyborg))
