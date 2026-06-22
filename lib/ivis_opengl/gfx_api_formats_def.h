@@ -33,6 +33,7 @@ namespace gfx_api
 		FORMAT_RGB8_UNORM_PACK8,
 		FORMAT_RG8_UNORM,			// not guaranteed support
 		FORMAT_R8_UNORM,
+		FORMAT_D24_UNORM_S8,		// depth/stencil attachment (transient pool)
 
 		// [COMPRESSED FORMATS]
 
@@ -76,9 +77,13 @@ namespace gfx_api
 		return false;
 	}
 
+	static inline bool is_transient_render_target_format(const pixel_format& format)
+	{
+		return is_uncompressed_format(format) || format == pixel_format::FORMAT_D24_UNORM_S8;
+	}
+
 	const char* format_to_str(gfx_api::pixel_format format);
 	unsigned int format_channels(gfx_api::pixel_format format);
-	size_t format_texel_block_width(gfx_api::pixel_format format);
 	size_t format_memory_size(gfx_api::pixel_format format, size_t width, size_t height);
 
 	namespace pixel_format_usage

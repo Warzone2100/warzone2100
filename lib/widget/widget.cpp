@@ -1640,7 +1640,8 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	debugLoc = debugLoc[1] == -1 ? debugSequence : debugLoc[0] == debugCode ? debugLoc : debugLoc[1] == debugCode ? debugLoc + 1 : debugSequence;
 	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
 
-	bool skipDrawing = !gfx_api::context::get().shouldDraw();
+	bool skipDrawing = !gfx_api::context::get().shouldDraw()
+		|| !gfx_api::context::get().canRecordDrawCommands();
 
 	cleanupDeletedOverlays();
 

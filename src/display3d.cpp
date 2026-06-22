@@ -1556,6 +1556,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	}
 
 	// Draw the scene to the default framebuffer
+	if (gfx_api::context::get().canRecordDrawCommands())
 	{
 		WZ_PROFILE_SCOPE(copyToFBO);
 		gfx_api::WorldToScreenPSO::get().bind();

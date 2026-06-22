@@ -20,6 +20,10 @@
 #pragma once
 
 #include "gfx_api.h"
+#include "gfx_api_frame_resource_cache.h"
+#include "render_graph/pass_resolve.h"
+#include "render_graph/pipeline_surfaces.h"
+#include "render_graph/render_pass.h"
 
 #if defined(__EMSCRIPTEN__)
 # define WZ_STATIC_GL_BINDINGS
@@ -129,6 +133,8 @@ private:
 	GLuint _id;
 	bool gles = false;
 	bool _isArray = false;
+	uint32_t tex_width = 0;
+	uint32_t tex_height = 0;
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	std::string debugName;
 #endif
@@ -142,6 +148,46 @@ public:
 	GLenum target() const;
 	unsigned id() const;
 	void unbind();
+};
+
+struct gl_gpurendered_renderbuffer final : public gfx_api::abstract_texture
+{
+	friend struct gl_context;
+	GLuint _id = 0;
+	GLsizei _samples = 0;
+	uint32_t _width = 0;
+	uint32_t _height = 0;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	std::string debugName;
+#endif
+
+	gl_gpurendered_renderbuffer() = default;
+	~gl_gpurendered_renderbuffer() override;
+public:
+	virtual void bind() override;
+	virtual bool isArray() const override { return false; }
+	virtual size_t backend_internal_value() const override;
+	GLuint id() const { return _id; }
+	GLsizei samples() const { return _samples; }
+	bool isMultisampled() const { return _samples > 1; }
+};
+
+enum class GLPipelineSurfaceKind : size_t
+{
+	SwapchainColor = 200,
+	SwapchainDepth = 201,
+};
+
+/// Sentinel pipeline surface for the default framebuffer (no GL texture object).
+struct gl_pipeline_surface_proxy final : public gfx_api::abstract_texture
+{
+	GLPipelineSurfaceKind kind = GLPipelineSurfaceKind::SwapchainColor;
+
+	explicit gl_pipeline_surface_proxy(GLPipelineSurfaceKind surfaceKind);
+	~gl_pipeline_surface_proxy() override;
+	void bind() override;
+	bool isArray() const override { return false; }
+	size_t backend_internal_value() const override;
 };
 
 struct gl_buffer final : public gfx_api::buffer
@@ -322,15 +368,29 @@ struct gl_context final : public gfx_api::context
 
 	virtual size_t numDepthPasses() override;
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
+	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void submitFrame() override;
 	virtual void beginDepthPass(size_t idx) override;
-	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual void endCurrentDepthPass() override;
-	virtual gfx_api::abstract_texture* getDepthTexture() override;
 	virtual void beginSceneRenderPass() override;
 	virtual void endSceneRenderPass() override;
-	virtual gfx_api::abstract_texture* getSceneTexture() override;
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
+	virtual size_t getDepthPassDimensions(size_t idx) override;
+	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
+	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;
+	virtual nonstd::optional<gfx_api::PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const override;
+	virtual bool isSceneMSAAEnabled() const override;
+	virtual bool isSwapchainMSAAEnabled() const override;
+	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;
+	virtual gfx_api::pixel_format getDepthStencilFormat() const override;
+	virtual gfx_api::abstract_texture* acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height) override;
+	virtual void releaseTransientRenderTargets() override;
+	virtual void purgeFrameResources() override;
+	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
+	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
+		gfx_api::PassGraphCompileResult& compileResult) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;
@@ -347,6 +407,7 @@ struct gl_context final : public gfx_api::context
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
 	bool isYAxisInverted() const override { return false; }
 	virtual bool shouldDraw() override;
+	bool canRecordDrawCommands() const override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
@@ -374,10 +435,15 @@ private:
 	gl_gpurendered_texture* create_gpurendered_texture_array(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const size_t& layer_count, const std::string& filename);
 	gl_gpurendered_texture* create_depthmap_texture(const size_t& layer_count, const size_t& width, const size_t& height, const std::string& filename);
 	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
+	std::unique_ptr<gl_gpurendered_renderbuffer> create_framebuffer_renderbuffer(GLenum internalFormat, GLsizei samples,
+		uint32_t width, uint32_t height, const std::string& filename);
+	std::unique_ptr<gfx_api::abstract_texture> createTransientColorRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height, const std::string& debugName);
+	std::unique_ptr<gfx_api::abstract_texture> createTransientDepthRenderTarget(uint32_t width, uint32_t height, const std::string& debugName);
 	bool createDefaultTextures();
 	bool createSceneRenderpass();
+	void registerSwapchainPipelineSurfaces();
+	void destroySwapchainPipelineSurfaces();
 	void deleteSceneRenderpass();
-	void _beginRenderPassImpl();
 
 protected:
 	friend struct gl_pipeline_state_object;
@@ -396,9 +462,18 @@ private:
 	uint32_t getSuggestedDefaultDepthBufferResolution() const;
 	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 
+	void applyAttachmentStoreOps(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight);
+	bool openLegacySwapchainPass(gfx_api::AttachmentLoadOp colorLoad, gfx_api::AttachmentLoadOp depthLoad);
+	static void applyAttachmentClears(const gfx_api::RenderPassDesc& pass);
+	void resolveMsaaColorAttachment(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight);
+	void invalidateDepthStencilAttachment(const gfx_api::RenderPassDesc& pass);
+	void clearDynamicFBOCache();
+
 	uint32_t viewportWidth = 0;
 	uint32_t viewportHeight = 0;
 	std::vector<bool> enabledVertexAttribIndexes;
+	bool hasActivePass = false;
+	bool frameHasDrawCommands = false;
 	size_t frameNum = 0;
 	std::string formattedRendererInfoString;
 	std::array<std::vector<gfx_api::pixel_format_usage::flags>, gfx_api::PIXEL_FORMAT_TARGET_COUNT> textureFormatsSupport;
@@ -425,7 +500,6 @@ private:
 	gl_gpurendered_texture *pDefaultDepthTexture = nullptr;
 
 	gl_gpurendered_texture* depthTexture = nullptr;
-	std::vector<GLuint> depthFBO;
 	size_t depthBufferResolution = 4096;
 	size_t depthPassCount = WZ_MAX_SHADOW_CASCADES;
 
@@ -436,9 +510,15 @@ private:
 	GLint maxMultiSampleBufferFormatSamples = 0;
 	uint32_t multisamples = 0;
 	gl_gpurendered_texture* sceneTexture = nullptr;
-	std::vector<GLuint> sceneFBO;
-	std::vector<GLuint> sceneResolveFBO;
-	GLuint sceneMsaaRBO = 0;
-	GLuint sceneDepthStencilRBO = 0;
-	size_t sceneFBOIdx = 0;
+	std::unique_ptr<gl_gpurendered_renderbuffer> _sceneMsaaSurface;
+	std::unique_ptr<gl_gpurendered_renderbuffer> _sceneDepthStencilSurface;
+	std::unique_ptr<gl_pipeline_surface_proxy> _swapchainColorSurface;
+	std::unique_ptr<gl_pipeline_surface_proxy> _swapchainDepthSurface;
+
+	gfx_api::PipelineSurfaceRegistry _pipelineSurfaces;
+	gfx_api::FrameResourceCache _frameResourceCache;
+	gfx_api::DynamicFBOCache _dynamicFBOCache;
+
+	GLuint _dynamicPassFBO = 0;
+	gfx_api::RenderPassDesc _activePassDesc;
 };
