@@ -101,7 +101,7 @@ function setCrashedTeamExp()
 	for (let i = 0; i < droids.length; ++i)
 	{
 		const droid = droids[i];
-		setDroidExperience(droid, DROID_EXP);
+		camSetDroidExperience(droid, DROID_EXP);
 	}
 
 	preDamageUnits();

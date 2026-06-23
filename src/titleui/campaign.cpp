@@ -1701,6 +1701,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 	);
 
 	results.emplace_back(
+		"noExp",
+		_("No EXP gain"),
+		_("No experience gained. Relive a semblence of your first playthrough again."),
+		false, true
+	);
+
+	results.emplace_back(
 		"towerWars",
 		_("Tower Wars"),
 		_("Player gets significantly stronger structures."),

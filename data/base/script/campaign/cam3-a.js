@@ -93,7 +93,7 @@ function setUnitRank(transport)
 		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			setDroidExperience(droid, droidExp[transporterIndex - 1]);
+			camSetDroidExperience(droid, droidExp[transporterIndex - 1]);
 		}
 	}
 }
