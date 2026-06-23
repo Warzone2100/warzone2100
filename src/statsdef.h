@@ -496,6 +496,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 	std::vector<int> cmdExpRange;
 	int scavengersGiveExpUntilLevel; ///< maximum rank level the droid can have until scavengers stop awarding any experience
 	int productionCommanderExpLimit; ///< maximum exp commanders can be built with
+	bool autoRewardRankFromAttach;   ///< Attached unit effective rank will consider the unit as one rank above itself when assigning the final rank outcome
 };
 
 /*

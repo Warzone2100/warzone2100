@@ -2538,7 +2538,10 @@ UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck)
 		cmdLevel = cmdGetCommanderLevel(psDroid);
 
 		// Commanders boost units' effectiveness just by being assigned to it
-		level++;
+		if (psDroid->psGroup->psCommander->getBrainStats()->autoRewardRankFromAttach)
+		{
+			level++;
+		}
 	}
 
 	return MAX(level, cmdLevel);
