@@ -796,6 +796,7 @@ bool loadBrainStats(WzConfig &ini)
 
 		psStats->scavengersGiveExpUntilLevel = ini.value("scavengersGiveExpUntilLevel", -1).toInt();
 		psStats->productionCommanderExpLimit = ini.value("productionCommanderExpLimit", 10000).toInt();
+		psStats->autoRewardRankFromAttach = ini.value("autoRewardRankFromAttach", true).toBool();
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 	}

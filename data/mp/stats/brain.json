@@ -1,5 +1,6 @@
 {
 	"CommandBrain01": {
+		"autoRewardRankFromAttach": true,
 		"designable": 1,
 		"droidType": "DROID_COMMAND",
 		"hitpoints": 500,
