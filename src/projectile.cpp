@@ -1748,10 +1748,9 @@ static bool isFriendlyFire(DAMAGE* psDamage)
 	return psDamage->psDest && psDamage->psProjectile->psSource->player == psDamage->psDest->player;
 }
 
-// NOTE: The isFeature() here prevents any exp gain at all, even if the projectile does more than just direct impact damage to non-feature objects.
 static bool mayIncreaseExperience(DAMAGE *psDamage)
 {
-	return psDamage->psProjectile->psSource && !isFeature(psDamage->psProjectile->psDest) && !isFriendlyFire(psDamage);
+	return psDamage->psProjectile->psSource && !isFeature(psDamage->psDest) && !isFriendlyFire(psDamage);
 }
 
 static bool damageTypeAllowsExpGain(DAMAGE *psDamage)
