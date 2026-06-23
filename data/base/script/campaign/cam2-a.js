@@ -120,7 +120,7 @@ function sendPlayerTransporter()
 		tWeap.tank.heavyCannon, tWeap.tank.heavyCannon, tWeap.tank.heavyCannon,
 		tWeap.tank.lancer, tWeap.tank.lancer, tWeap.tank.bombard, tWeap.tank.miniRocketArray
 	];
-	const specialList = [tSensor.sensor, tCommand.commander];
+	const specialList = (tweakOptions.noCommander) ? [tSensor.sensor] : [tSensor.sensor, tCommand.commander];
 	const BODY = bodyList[camRand(bodyList.length)];
 	const PROP = propulsionList[camRand(propulsionList.length)];
 

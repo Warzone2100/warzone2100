@@ -1728,6 +1728,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		false, true
 	);
 
+	results.emplace_back(
+		"noCommander",
+		_("No Commanders"),
+		_("Prevent the production of Commanders to test your multitasking capabilities."),
+		false, true
+	);
+
 	if (modInfo.has_value())
 	{
 		for (auto it = results.begin(); it != results.end(); )
