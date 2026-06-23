@@ -90,6 +90,11 @@
             "id": "unexploredMapOpacity",
             "default": false,
             "userEditable": true
+        },
+        {
+            "id": "noCommander",
+            "default": false,
+            "userEditable": true
         }
     ],
     "customTweakOptions": [
