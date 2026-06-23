@@ -323,7 +323,7 @@ function setUnitRank(transport)
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
 			const USE_COMMAND_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
-			setDroidExperience(droid, camGetRankThreshold(ranks[mapRun ? 0 : (transporterIndex - 1)], USE_COMMAND_RANK));
+			camSetDroidExperience(droid, camGetRankThreshold(ranks[mapRun ? 0 : (transporterIndex - 1)], USE_COMMAND_RANK));
 		}
 	}
 }

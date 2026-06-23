@@ -72,6 +72,11 @@
             "userEditable": true
         },
         {
+            "id": "noExp",
+            "default": false,
+            "userEditable": true
+        },
+        {
             "id": "towerWars",
             "default": false,
             "userEditable": true

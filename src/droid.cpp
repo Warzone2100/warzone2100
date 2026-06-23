@@ -2623,9 +2623,16 @@ bool droidExpForScavengersOutsideLimits(DROID *psDroid)
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
 {
-	if (!bMultiPlayer && getCamTweakOption_FastExp())
+	if (!bMultiPlayer)
 	{
-		experienceInc = experienceInc * 2;
+		if (getCamTweakOption_NoExp())
+		{
+			return;
+		}
+		if (getCamTweakOption_FastExp())
+		{
+			experienceInc = experienceInc * 2;
+		}
 	}
 
 	ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");

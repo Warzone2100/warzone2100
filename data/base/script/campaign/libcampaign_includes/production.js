@@ -243,7 +243,7 @@ function camUpgradeOnMapTemplates(template1, template2, playerId, excluded)
 			camSafeRemoveObject(dr, false);
 			const droid = addDroid(playerId, droidInfo.x, droidInfo.y, droidInfo.name, template2.body,
 				__camChangePropulsion(template2.prop, playerId), "", "", template2.weap);
-			camSetDroidExperience(droid);
+			camSetEnemyDroidExperience(droid);
 		}
 	}
 }
