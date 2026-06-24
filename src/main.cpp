@@ -203,7 +203,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 static bool ignoredSIGPIPE = false;
 #endif
 
-static void stopGameLoop();
+static void stopGameLoop(bool onWzShutdown = false);
 static void startTitleLoop(bool onInitialStartup = false);
 static LoadingTask<> startTitleLoopTask(ResourceLoadingController& controller, bool onInitialStartup = false);
 
@@ -1058,7 +1058,7 @@ static bool saveGameLoadAfter()
  * Shutdown/cleanup after the game loop
  * Would stop the timer
  */
-static void stopGameLoop()
+static void stopGameLoop(bool onWzShutdown)
 {
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
 
@@ -1070,9 +1070,12 @@ static void stopGameLoop()
 	{
 		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
-		presentLoadingScreenForCurrentFrame();
-		pie_ScreenFrameRenderEnd();
-		pie_ScreenFrameRenderBegin();
+		if (!onWzShutdown)
+		{
+			presentLoadingScreenForCurrentFrame();
+			pie_ScreenFrameRenderEnd();
+			pie_ScreenFrameRenderBegin();
+		}
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
 			game.modHashes.clear(); // must clear this before calling levReleaseAll so that when search paths are reloaded we don't reload mods downloaded for the last game (or loaded for the last replay)
@@ -1829,7 +1832,7 @@ void mainShutdown()
 		case GS_NORMAL:
 			// if running a game while quitting, stop the game loop
 			// (currently required for some cleanup) (should modelShutdown() be added to systemShutdown?)
-			stopGameLoop();
+			stopGameLoop(true);
 			break;
 		case GS_TITLE_SCREEN:
 			// if showing the title / menus while quitting, stop the title loop
