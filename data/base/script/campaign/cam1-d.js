@@ -313,6 +313,6 @@ function eventStartLevel()
 	queue("setupPatrols", camMinutesToMilliseconds(2.5));
 	if (camAllowInsaneSpawns())
 	{
-		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(7.5));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(3));
 	}
 }

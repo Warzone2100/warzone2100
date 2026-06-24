@@ -465,6 +465,12 @@ bool iV_Image::convert_to_single_channel(unsigned int channel /*= 0*/)
 	// copy just the desired channel over
 	m_channels = 1;
 	m_bmp = (unsigned char *)malloc(numPixels);
+	if (!m_bmp)
+	{
+		m_bmp = originalBmpData;
+		m_channels = originalChannels;
+		return false;
+	}
 	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
 	{
 		m_bmp[pixelIdx] = originalBmpData[(pixelIdx * originalChannels) + channel];

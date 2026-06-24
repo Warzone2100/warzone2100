@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -82,6 +84,10 @@
 #include "frontend.h"
 #include "game.h"
 #include "init.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "lib/framework/loading_task.h"
+#include "resource_loading_dispatch.h"
+#include "multiint.h"
 #include "levels.h"
 #include "lighting.h"
 #include "loadsave.h"
@@ -198,6 +204,8 @@ static bool ignoredSIGPIPE = false;
 #endif
 
 static void stopGameLoop();
+static void startTitleLoop(bool onInitialStartup = false);
+static LoadingTask<> startTitleLoopTask(ResourceLoadingController& controller, bool onInitialStartup = false);
 
 #if defined(WZ_OS_WIN)
 
@@ -730,23 +738,25 @@ static void make_dir(char *dest, const char *dirname, const char *subdir)
  * Preparations before entering the title (mainmenu) loop
  * Would start the timer in an event based mainloop
  */
-static void startTitleLoop(bool onInitialStartup = false)
+static void startTitleLoop(bool onInitialStartup)
+{
+	auto& controller = ResourceLoadingController::instance();
+	ResourceLoadingController::FramePolicy policy;
+	policy.showLoadingScreen = !onInitialStartup;
+	(void)runBlockingResourceLoad(startTitleLoopTask(controller, onInitialStartup), policy);
+}
+
+static LoadingTask<> startTitleLoopTask(ResourceLoadingController& controller, bool onInitialStartup /* = false */)
 {
 	SetGameMode(GS_TITLE_SCREEN);
 
-	if (!onInitialStartup)
-	{
-		initLoadingScreen(true);
-	}
-	if (!frontendInitialise("wrf/frontend.wrf"))
-	{
+	if (!(co_await frontendInitTask(controller, onInitialStartup))) {
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
 	}
 
-	closeLoadingScreen(); // always ensure the loading screen is closed
+	co_return load_ok();
 }
-
 
 /*!
  * Shutdown/cleanup after the title (mainmenu) loop
@@ -784,11 +794,14 @@ static void setCDAudioForCurrentGameMode()
 	}
 }
 
-/*!
- * Preparations before entering the game loop
- * Would start the timer in an event based mainloop
- */
-static bool startGameLoop()
+static bool saveGameLoadAfter();
+
+namespace
+{
+
+// Prepares entering a new match (multiplayer timeouts, `setGameMode(GS_NORMAL)`,
+// loading screen, activity / CD-audio) before `levLoadData()`.
+void startGameBeforeLevelLoad()
 {
 	if (runningMultiplayer())
 	{
@@ -804,25 +817,33 @@ static bool startGameLoop()
 
 	// set up CD audio for game mode
 	setCDAudioForCurrentGameMode();
+}
 
-	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
-	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
+// Tears down after a failed start-game load and returns to the title loop.
+LoadingTask<> startGameAbortLevelLoadFailure(ResourceLoadingController& controller)
+{
+	debug(LOG_ERROR, "Failed to load level data / map: %s %s", aLevelName, (!game.hash.isZero()) ? game.hash.toString().c_str() : "");
+	if (bMultiPlayer)
 	{
-		debug(LOG_ERROR, "Failed to load level data / map: %s %s", aLevelName, (!game.hash.isZero()) ? game.hash.toString().c_str() : "");
-		if (bMultiPlayer)
-		{
-			multiGameShutdown();
-		}
-		levReleaseAll();
-		closeLoadingScreen();
-		cdAudio_SetGameMode(MusicGameMode::MENUS);
-		stopGameLoop();
-		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-		startTitleLoop(); // Restart into titleloop
-		gameLoopStatus = GAMECODE_CONTINUE;
-		return false;
+		multiGameShutdown();
 	}
+	levReleaseAll();
+	closeLoadingScreen();
+	cdAudio_SetGameMode(MusicGameMode::MENUS);
+	stopGameLoop();
+	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+	if (!(co_await startTitleLoopTask(controller))) // Restart into titleloop
+	{
+		co_return load_fail();
+	}
+	gameLoopStatus = GAMECODE_CONTINUE;
 
+	co_return load_ok();
+}
+
+// Post-success setup after `levLoadData()` (UI, gameInitialised, triggers, replay-related, etc.).
+bool startGameAfterLevelLoad()
+{
 	screen_StopBackDrop();
 	closeLoadingScreen();
 
@@ -907,6 +928,131 @@ static bool startGameLoop()
 	return true;
 }
 
+/*!
+ * Preparations before entering the game loop
+ * Would start the timer in an event based mainloop
+ */
+LoadingTask<> startGameResourceTaskImpl(ResourceLoadingController &controller)
+{
+	co_await controller.yieldFrame();
+
+	initLoadingScreen(true);
+
+	co_await controller.yieldFrame();
+
+	startGameBeforeLevelLoad();
+
+	co_await controller.yieldFrame();
+
+	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
+	if (!(co_await makeLevLoadDataLoadingTask(controller, aLevelName, std::make_optional(game.hash), nullptr, GTYPE_SCENARIO_START)))
+	{
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+
+	co_return startGameAfterLevelLoad() ? load_ok() : load_fail();
+}
+
+// On save load failure: log/popup, fast-exit game loop, return to title.
+LoadingTask<> saveGameLoadAbortOnFailure(ResourceLoadingController& controller)
+{
+	// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
+	debug(LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
+	debug(LOG_POPUP, _("Failed to load a save game! It is either corrupted or a unsupported format.\n\nRestarting main menu."));
+	// FIXME: If we bomb out on a in game load, then we would crash if we don't do the next two calls
+	// Doesn't seem to be a way to tell where we are in game loop to determine if/when we should do the two calls.
+	gameLoopStatus = GAMECODE_FASTEXIT;
+	// we had a error loading savegame (corrupt?), so go back to title screen?
+	stopGameLoop();
+	if (!(co_await startTitleLoopTask(controller))) // Restart into titleloop
+	{
+		co_return load_fail();
+	}
+	changeTitleMode(TITLE);
+	SetGameMode(GS_TITLE_SCREEN);
+
+	co_return load_ok();
+}
+
+LoadingTask<> loadSaveGameResourceTaskImpl(ResourceLoadingController &controller)
+{
+	co_await controller.yieldFrame();
+
+	SetGameMode(GS_NORMAL);
+
+	co_await controller.yieldFrame();
+
+	if (!(co_await loadGameInit(controller, GameLoadDetails::makeUserSaveGameLoad(saveGameName)))) {
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+
+	co_return saveGameLoadAfter() ? load_ok() : load_fail();
+}
+
+} // anonymous namespace
+
+LoadingTask<> startGameResourceTask(ResourceLoadingController &controller)
+{
+	if (co_await startGameResourceTaskImpl(controller))
+	{
+		closeLoadingScreen();
+		co_return load_ok();
+	}
+	if (!(co_await startGameAbortLevelLoadFailure(controller)))
+	{
+		closeLoadingScreen();
+		co_return load_fail();
+	}
+	closeLoadingScreen();
+	debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
+	co_return load_fail();
+}
+
+LoadingTask<> loadSaveGameResourceTask(ResourceLoadingController &controller)
+{
+	if (co_await loadSaveGameResourceTaskImpl(controller))
+	{
+		closeLoadingScreen();
+		co_return load_ok();
+	}
+	if (!(co_await saveGameLoadAbortOnFailure(controller)))
+	{
+		closeLoadingScreen();
+		co_return load_fail();
+	}
+	closeLoadingScreen();
+	co_return load_fail();
+}
+
+static bool saveGameLoadAfter()
+{
+	ActivityManager::instance().startingSavedGame();
+	// set up CD audio for game mode
+	// (must come after savegame is loaded so that proper game mode can be determined)
+	setCDAudioForCurrentGameMode();
+
+	screen_StopBackDrop();
+	closeLoadingScreen();
+
+	// Trap the cursor if cursor snapping is enabled
+	if (shouldTrapCursor())
+	{
+		wzGrabMouse();
+	}
+	if (challengeActive)
+	{
+		addMissionTimerInterface();
+	}
+
+	// set a flag for the trigger/event system to indicate initialisation is complete
+	gameInitialised = true;
+
+	return true;
+}
 
 /*!
  * Shutdown/cleanup after the game loop
@@ -924,6 +1070,9 @@ static void stopGameLoop()
 	{
 		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
+		presentLoadingScreenForCurrentFrame();
+		pie_ScreenFrameRenderEnd();
+		pie_ScreenFrameRenderBegin();
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
 			game.modHashes.clear(); // must clear this before calling levReleaseAll so that when search paths are reloaded we don't reload mods downloaded for the last game (or loaded for the last replay)
@@ -966,57 +1115,6 @@ static void stopGameLoop()
 
 
 /*!
- * Load a savegame and start into the game loop
- * Game data should be initialised afterwards, so that startGameLoop is not necessary anymore.
- */
-static bool initSaveGameLoad()
-{
-	// NOTE: always setGameMode correctly before *any* loading routines!
-	SetGameMode(GS_NORMAL);
-	initLoadingScreen(true);
-
-	// load up a save game
-	if (!loadGameInit(GameLoadDetails::makeUserSaveGameLoad(saveGameName)))
-	{
-		// FIXME: we really should throw up a error window, but we can't (easily) so I won't.
-		debug(LOG_ERROR, "Trying to load Game %s failed!", saveGameName);
-		debug(LOG_POPUP, "Failed to load a save game! It is either corrupted or a unsupported format.\n\nRestarting main menu.");
-		// FIXME: If we bomb out on a in game load, then we would crash if we don't do the next two calls
-		// Doesn't seem to be a way to tell where we are in game loop to determine if/when we should do the two calls.
-		gameLoopStatus = GAMECODE_FASTEXIT;	// clear out all old data
-		stopGameLoop();
-		startTitleLoop(); // Restart into titleloop
-		SetGameMode(GS_TITLE_SCREEN);
-		return false;
-	}
-
-	ActivityManager::instance().startingSavedGame();
-
-	// set up CD audio for game mode
-	// (must come after savegame is loaded so that proper game mode can be determined)
-	setCDAudioForCurrentGameMode();
-
-	screen_StopBackDrop();
-	closeLoadingScreen();
-
-	// Trap the cursor if cursor snapping is enabled
-	if (shouldTrapCursor())
-	{
-		wzGrabMouse();
-	}
-	if (challengeActive)
-	{
-		addMissionTimerInterface();
-	}
-
-	// set a flag for the trigger/event system to indicate initialisation is complete
-	gameInitialised = true;
-
-	return true;
-}
-
-
-/*!
  * Run the code inside the gameloop
  */
 static void runGameLoop()
@@ -1036,20 +1134,16 @@ static void runGameLoop()
 	case GAMECODE_LOADGAME:
 		debug(LOG_MAIN, "GAMECODE_LOADGAME");
 		stopGameLoop();
-		initSaveGameLoad(); // Restart and load a savegame
+		// Restart and load a savegame
+		submitResourceLoadingTask(loadSaveGameResourceTask);
 		gameLoopStatus = GAMECODE_CONTINUE;
 		return;
 	case GAMECODE_NEWLEVEL:
 		debug(LOG_MAIN, "GAMECODE_NEWLEVEL");
 		stopGameLoop();
-		if (startGameLoop()) // Restart gameloop
-		{
-			gameLoopStatus = GAMECODE_CONTINUE;
-		}
-		else
-		{
-			debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
-		}
+		// Restart gameloop
+		submitResourceLoadingTask(startGameResourceTask);
+		gameLoopStatus = GAMECODE_CONTINUE;
 		return;
 	default:
 		// ignore other values, and proceed with gameLoop
@@ -1105,27 +1199,14 @@ static void runTitleLoop()
 				debug(LOG_MAIN, "TITLECODE_SAVEGAMELOAD");
 				// Restart into gameloop and load a savegame, ONLY on a good savegame load!
 				stopTitleLoop();
-				if (!initSaveGameLoad())
-				{
-					// we had a error loading savegame (corrupt?), so go back to title screen?
-					stopGameLoop();
-					startTitleLoop();
-					changeTitleMode(TITLE);
-				}
-				closeLoadingScreen();
+				submitResourceLoadingTask(loadSaveGameResourceTask);
 				return;
 			}
 		case TITLECODE_STARTGAME:
 			debug(LOG_MAIN, "TITLECODE_STARTGAME");
 			stopTitleLoop();
-			if (startGameLoop()) // Restart into gameloop
-			{
-				closeLoadingScreen();
-			}
-			else
-			{
-				debug(LOG_POPUP, _("Failed to load level data or map. Exiting to main menu."));
-			}
+			// Restart into gameloop
+			submitResourceLoadingTask(startGameResourceTask);
 			return;
 		default:
 			// ignore unexpected value
@@ -1188,12 +1269,18 @@ void mainLoop()
 
 	if (NetPlay.bComms || focusState == FOCUS_IN || !war_GetPauseOnFocusLoss())
 	{
-		if (loop_GetVideoStatus())
+		bool frameEnded = false;
+		if (tickResourceLoadingFrame())
+		{
+			pie_ScreenFrameRenderEnd();
+			frameEnded = true;
+		}
+		if (!frameEnded && loop_GetVideoStatus())
 		{
 			videoLoop(); // Display the video if necessary
 			pie_ScreenFrameRenderEnd();
 		}
-		else switch (GetGameMode())
+		else if (!frameEnded) switch (GetGameMode())
 			{
 			case GS_NORMAL: // Run the gameloop code
 				runGameLoop();
@@ -1221,6 +1308,27 @@ void mainLoop()
 #if defined(ENABLE_DISCORD)
 	discordRPCPerFrame();
 #endif
+}
+
+void requestMapPreviewLoad(bool hideInterface)
+{
+	submitResourceLoadingTask(
+		[hideInterface](ResourceLoadingController &c) { return mapPreviewLoadTask(c, hideInterface); },
+		false,
+		false,
+		ResourceLoadingController::FrameProcessingMode::ContinueMainLoop);
+}
+
+void requestMapPreviewLoad(bool hideInterface, std::string mapName, const Sha256& mapHash)
+{
+	submitResourceLoadingTask(
+		[hideInterface, mapName, mapHash](ResourceLoadingController &c)
+		{
+			return mapPreviewLoadTask(c, hideInterface, std::move(mapName), mapHash);
+		},
+		false,
+		false,
+		ResourceLoadingController::FrameProcessingMode::ContinueMainLoop);
 }
 
 bool getUTF8CmdLine(int *const _utfargc WZ_DECL_UNUSED, char *** const _utfargv WZ_DECL_UNUSED) // explicitely pass by reference
@@ -1737,8 +1845,8 @@ void mainShutdown()
 	discordRPCShutdown();
 #endif
 	wzCmdInterfaceShutdown();
-	urlRequestShutdown();
 	cleanupOldLogFiles();
+	// NOTE: urlRequestShutdown is called inside systemShutdown, as it must happen after certain other calls
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < utfargc; i++)
@@ -2089,22 +2197,17 @@ int realmain(int argc, char *argv[])
 	{
 	case GS_TITLE_SCREEN:
 		// The usual case (unless command-line flags specify otherwise): Load into the title menu
-		startTitleLoop(true);
+		submitResourceLoadingTask([](ResourceLoadingController &c) { return frontendInitTask(c, true); }, false, false);
 		break;
 	case GS_SAVEGAMELOAD:
 		if (headlessGameMode())
 		{
 			fprintf(stdout, "Loading savegame ...\n");
 		}
-		initSaveGameLoad();
+		submitResourceLoadingTask(loadSaveGameResourceTask);
 		break;
 	case GS_NORMAL:
-		if (!startGameLoop())
-		{
-			// Attempted to load straight into a game from the command-line, but starting the game loop (loading the map, etc) failed
-			// Treat this as a failure and queue an exit
-			wzQuit(EXIT_FAILURE);
-		}
+		submitResourceLoadingTask(startGameResourceTask);
 		break;
 	default:
 		debug(LOG_ERROR, "Weirdy game status, I'm afraid!!");

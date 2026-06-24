@@ -75,21 +75,23 @@
 #include "multilobbycommands.h"
 #include "stdinreader.h"
 #include "hci/quickchat.h"
+#include "game_world.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Functions
 
 static void resetMultiVisibility(UDWORD player);
-void destroyPlayerResources(UDWORD player, bool quietly);
+void destroyPlayerResources(GameWorld& world, UDWORD player, bool quietly);
 
 //////////////////////////////////////////////////////////////////////////////
 /*
 ** when a remote player leaves an arena game do this!
 **
+** @param world : the game world to destroy the resources for `player` from
 ** @param player -- the one we need to clear
 ** @param quietly -- true means without any visible effects
 */
-void clearPlayer(UDWORD player, bool quietly)
+void clearPlayer(GameWorld& world, UDWORD player, bool quietly)
 {
 	ASSERT_OR_RETURN(, player < MAX_CONNECTED_PLAYERS, "Invalid player: %" PRIu32 "", player);
 
@@ -111,10 +113,10 @@ void clearPlayer(UDWORD player, bool quietly)
 		return; // no more to do
 	}
 
-	destroyPlayerResources(player, quietly);
+	destroyPlayerResources(world, player, quietly);
 }
 
-void destroyPlayerResources(UDWORD player, bool quietly)
+void destroyPlayerResources(GameWorld& world, UDWORD player, bool quietly)
 {
 	UDWORD			i;
 
@@ -138,31 +140,31 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
 	// delete all droids
-	mutating_list_iterate(apsDroidLists[player], [quietly](DROID* d)
+	mutating_list_iterate(world.objects.droids[player], [quietly, &world](DROID* d)
 	{
 		if (quietly)			// don't show effects
 		{
-			killDroid(d);
+			killDroid(d, world.objects);
 		}
 		else				// show effects
 		{
-			destroyDroid(d, gameTime);
+			destroyDroid(d, gameTime, world);
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
 	// delete all structs
-	mutating_list_iterate(apsStructLists[player], [quietly](STRUCTURE* psStruct)
+	mutating_list_iterate(world.objects.structures[player], [quietly, &world](STRUCTURE* psStruct)
 	{
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
-			removeStruct(psStruct, true);
+			removeStruct(psStruct, true, world);
 		}
 		else			// show effects
 		{
-			destroyStruct(psStruct, gameTime);
+			destroyStruct(psStruct, gameTime, world);
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
@@ -173,18 +175,18 @@ void destroyPlayerResources(UDWORD player, bool quietly)
 static bool destroyMatchingStructs(UDWORD player, std::function<bool (STRUCTURE *)> cmp, bool quietly)
 {
 	bool destroyedAnyStructs = false;
-	mutating_list_iterate(apsStructLists[player], [quietly, &cmp, &destroyedAnyStructs](STRUCTURE* psStruct)
+	mutating_list_iterate(gameWorld.objects.structures[player], [quietly, &cmp, &destroyedAnyStructs](STRUCTURE* psStruct)
 	{
 		if (cmp(psStruct))
 		{
 			// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
 			if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 			{
-				removeStruct(psStruct, true);
+				removeStruct(psStruct, true, gameWorld);
 			}
 			else			// show effects
 			{
-				destroyStruct(psStruct, gameTime);
+				destroyStruct(psStruct, gameTime, gameWorld);
 			}
 			destroyedAnyStructs = true;
 		}
@@ -256,7 +258,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 			return a.itemsRecv < b.itemsRecv;
 		});
 	};
-	mutating_list_iterate(apsDroidLists[player], [&droidsGiftedPerTarget, &incrRecvItem](DROID* d)
+	mutating_list_iterate(gameWorld.objects.droids[player], [&droidsGiftedPerTarget, &incrRecvItem](DROID* d)
 	{
 		bool transferredDroid = false;
 		if (!isDead(d))
@@ -275,7 +277,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 
 		if (!transferredDroid)
 		{
-			destroyDroid(d, gameTime);
+			destroyDroid(d, gameTime, gameWorld);
 		}
 		return IterationResult::CONTINUE_ITERATION;
 	});
@@ -294,7 +296,7 @@ bool splitResourcesAmongTeam(UDWORD player)
 			});
 		};
 
-		mutating_list_iterate(apsStructLists[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
+		mutating_list_iterate(gameWorld.objects.structures[player], [&cmp, &structsGiftedPerTarget, &incrRecvStruct](STRUCTURE* psStruct)
 		{
 			if (psStruct && cmp(psStruct))
 			{
@@ -356,14 +358,14 @@ void handlePlayerLeftInGame(UDWORD player)
 	switch (mode)
 	{
 		case PLAYER_LEAVE_MODE::DESTROY_RESOURCES:
-			destroyPlayerResources(player, false);
+			destroyPlayerResources(gameWorld, player, false);
 			break;
 		case PLAYER_LEAVE_MODE::SPLIT_WITH_TEAM:
 			if (!splitResourcesAmongTeam(player))
 			{
 				// no valid targets to split resources among
 				// instead, destroy the player
-				destroyPlayerResources(player, false);
+				destroyPlayerResources(gameWorld, player, false);
 			}
 			break;
 	}
@@ -384,13 +386,13 @@ static void resetMultiVisibility(UDWORD player)
 		if (owned != player)								// done reset own stuff..
 		{
 			//droids
-			for (DROID* pDroid : apsDroidLists[owned])
+			for (DROID* pDroid : gameWorld.objects.droids[owned])
 			{
 				pDroid->visible[player] = false;
 			}
 
 			//structures
-			for (STRUCTURE* pStruct : apsStructLists[owned])
+			for (STRUCTURE* pStruct : gameWorld.objects.structures[owned])
 			{
 				pStruct->visible[player] = false;
 			}
@@ -518,7 +520,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	if (ingame.localJoiningInProgress)
 	{
 		addConsolePlayerLeftMessage(playerIndex);
-		clearPlayer(playerIndex, false);
+		clearPlayer(gameWorld, playerIndex, false);
 		clearPlayerMultiStats(playerIndex); // local only
 		NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 	}
@@ -743,29 +745,23 @@ void setupNewPlayer(UDWORD player)
 
 // While not the perfect place for this, it has to do when a HOST joins (hosts) game
 // unfortunately, we don't get the message until after the setup is done.
-void ShowMOTD()
+void ShowLobbyStatusMessage(const std::vector<std::string>& msgs)
 {
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	if (!NetPlay.MOTD.empty())
+	if (!msgs.empty())
 	{
-		addConsoleMessage(NetPlay.MOTD.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		for (const auto& msg : msgs)
+		{
+			addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		}
 	}
 	else
 	{
 		ssprintf(buf, "%s", "Null message");
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
-	if (NetPlay.HaveUpgrade)
-	{
-		audio_PlayBuildFailedOnce();
-		ssprintf(buf, "%s", _("There is an update to the game, please visit https://wz2100.net to download new version."));
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	}
-	else
-	{
-		audio_PlayTrack(FE_AUDIO_MESSAGEEND);
-	}
+	audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 
 }

@@ -35,6 +35,10 @@ std::shared_ptr<OptionsForm> makeAudioOptionsForm();
 std::shared_ptr<OptionsForm> makeControlsOptionsForm();
 std::shared_ptr<OptionsForm> makeWindowOptionsForm();
 
+OptionsDropdown<uint32_t>::PopulateFunc makeInactivityTimeoutOptionsDropdownPopulateFunc();
+OptionsDropdown<int>::PopulateFunc makeLagKickOptionsDropdownPopulateFunc();
+OptionsDropdown<uint32_t>::PopulateFunc makeGameTimeLimitOptionsDropdownPopulateFunc();
+
 class OptionsBrowserForm : public WIDGET
 {
 protected:

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 //
 // Warzone 2100 Inno Setup Script
-// Copyright (c) 2025 Warzone 2100 Project
+// Copyright (c) 2025-2026 Warzone 2100 Project
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -225,7 +225,7 @@ AppUpdatesURL={#MyAppURL}
 
 // File VersionInfo
 VersionInfoCompany={#MyAppPublisher}
-VersionInfoCopyright=Copyright © 2024-2025 Warzone 2100 Project (https://github.com/Warzone2100)
+VersionInfoCopyright=Copyright © 2024-2026 Warzone 2100 Project (https://github.com/Warzone2100)
 VersionInfoDescription={#MyAppName} Installer
 VersionInfoProductName={#MyAppName}
 VersionInfoProductTextVersion={#MyAppInstallerProductTextVersion}
@@ -275,6 +275,7 @@ WizardSizePercent=110
 AlwaysShowComponentsList=yes
 AlwaysShowDirOnReadyPage=yes
 WizardImageFile={#AddBackslash(SourcePath) + "resources\wzwizardimage.bmp"}
+WizardImageFileDynamicDark={#AddBackslash(SourcePath) + "resources\wzwizardimage.bmp"}
 
 // Install Pages
 // - Show the welcome page - it's where we provide the "Advanced" button
@@ -334,6 +335,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl,{#SourcePath}\i18n\win_installer
 #emit AddTranslation("sl_SI", "compiler:Languages\Slovenian.isl")
 #emit AddTranslation("sv_SE", "compiler:Languages\Swedish.isl")
 #emit AddTranslation("ta_IN", "compiler:Languages\Tamil.isl")
+#emit AddTranslation("th_TH", "compiler:Languages\Thai.isl")
 #emit AddTranslation("tr_TR", "compiler:Languages\Turkish.isl")
 #emit AddTranslation("uk_UA", "compiler:Languages\Ukrainian.isl")
 
@@ -402,8 +404,10 @@ Source: "{#WZ_DATADIR}\*"; Excludes: "\mods\*,\music\*,\terrain_overrides*"; Des
 Source: "{#WZ_LOCALEDIR}\*"; DestDir: "{app}\{#WZ_LOCALEDIR}"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
 // Core Data: Documentation
 Source: "{#WZ_DOCDIR}\*"; DestDir: "{app}\{#WZ_DOCDIR}"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
-// Core Data: Classic Campaign Mod
+// Core Data: Classic Campaign Balance Mod
 Source: "{#WZ_DATADIR}\mods\campaign\wz2100_camclassic.wz"; DestDir: "{app}\{#WZ_DATADIR}\mods\campaign"; Components: core; Flags: ignoreversion
+// Core Data: Pumpkin Campaign Balance Mod
+Source: "{#WZ_DATADIR}\mods\campaign\wz2100_campumpkin.wz"; DestDir: "{app}\{#WZ_DATADIR}\mods\campaign"; Components: core; Flags: ignoreversion
 // Core Data: Classic Terrain Pack
 Source: "{#WZ_DATADIR}\terrain_overrides\classic.wz"; DestDir: "{app}\{#WZ_DATADIR}\terrain_overrides"; Components: core; Flags: ignoreversion
 // Core Data: Base Music
@@ -415,7 +419,7 @@ Source: "{#AddBackslash(SourcePath) + "launch_warzone.bat"}"; DestDir: "{app}"; 
 // Addon: High Quality Terrain
 Source: "{#WZ_DATADIR}\terrain_overrides\high.wz"; DestDir: "{app}\{#WZ_DATADIR}\terrain_overrides"; Components: addons\terrain_hq; Flags: ignoreversion
 // Addon Mods
-Source: "{#WZ_DATADIR}\mods\*"; Excludes: "\campaign\wz2100_camclassic.wz"; DestDir: "{app}\{#WZ_DATADIR}\mods"; Components: addons\campaigns; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#WZ_DATADIR}\mods\*"; Excludes: "\campaign\wz2100_camclassic.wz,\campaign\wz2100_campumpkin.wz"; DestDir: "{app}\{#WZ_DATADIR}\mods"; Components: addons\campaigns; Flags: ignoreversion recursesubdirs createallsubdirs
 // Addon Music
 Source: "{#WZ_DATADIR}\music\albums\*"; Excludes: "\original_soundtrack\*"; DestDir: "{app}\{#WZ_DATADIR}\music\albums"; Components: addons\music; Flags: ignoreversion recursesubdirs createallsubdirs
 // Sequences (only one will be selected and downloaded on-demand)

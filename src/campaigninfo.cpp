@@ -201,3 +201,13 @@ bool getCamTweakOption_FastExp()
 	}
 	return val.get<bool>();
 }
+
+bool getCamTweakOption_heavilyDamagedPenalty()
+{
+	auto val = getCamTweakOptionsValue("heavilyDamagedPenalty", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}

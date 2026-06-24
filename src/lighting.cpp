@@ -41,6 +41,7 @@
 #include "display3d.h"
 #include "terrain.h"
 #include "warzoneconfig.h"
+#include "game_world.h"
 
 // These magic values determine the fog
 #define FOG_ALTITUDE_COEFFICIENT 1.3f
@@ -63,7 +64,7 @@ void setTheSun(Vector3f newSun)
 	if(oldSun != theSun)
 	{
 		// The sun has changed - must relcalulate lighting
-		initLighting(0, 0, mapWidth, mapHeight);
+		initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	}
 }
 
@@ -80,10 +81,10 @@ Vector3f getTheSun()
 
 //By passing in params - it means that if the scroll limits are changed mid-mission
 //we can re-do over the area that hasn't been seen
-void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
+void initLighting(WorldMapState& mapState, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
-	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
+	if (x1 > mapState.width || x2 > mapState.width || y1 > mapState.height || y2 > mapState.height)
 	{
 		ASSERT(false, "initLighting: coords off edge of map");
 		return;
@@ -93,10 +94,10 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 	{
 		for (unsigned i = x1; i < x2; i++)
 		{
-			MAPTILE	*psTile = mapTile(i, j);
+			MAPTILE	*psTile = mapTile(mapState, i, j);
 
 			// always make the edge tiles dark
-			if (i == 0 || j == 0 || i >= mapWidth - 1 || j >= mapHeight - 1)
+			if (i == 0 || j == 0 || i >= mapState.width - 1 || j >= mapState.height - 1)
 			{
 				psTile->illumination = 16;
 				psTile->ambientOcclusion = 16.0;
@@ -107,8 +108,8 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			}
 			// Basically darkens down the tiles that are outside the scroll
 			// limits - thereby emphasising the cannot-go-there-ness of them
-			if ((SDWORD)i < scrollMinX + 4 || (SDWORD)i > scrollMaxX - 4
-			    || (SDWORD)j < scrollMinY + 4 || (SDWORD)j > scrollMaxY - 4)
+			if ((SDWORD)i < mapState.scroll.minX + 4 || (SDWORD)i > mapState.scroll.maxX - 4
+			    || (SDWORD)j < mapState.scroll.minY + 4 || (SDWORD)j > mapState.scroll.maxY - 4)
 			{
 				psTile->illumination /= 3;
 				psTile->ambientOcclusion /= 3;
@@ -130,7 +131,7 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 			tiles[i][j] = Vector2i(tileX + i, tileY + j);
 			/* Get a pointer to our tile */
 			/* And to the ones to the east, south and southeast of it */
-			psTiles[i][j] = mapTile(tiles[i][j]);
+			psTiles[i][j] = mapTile(gameWorld.map, tiles[i][j]);
 			corners[i][j] = Vector3f(world_coord(tiles[i][j]), psTiles[i][j]->height);
 		}
 
@@ -214,8 +215,8 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 
 	// Primitive ambient occlusion calculation.
 	float ao = 0;
-	const int cx = world_coord(tileX), cy = world_coord(tileY), maxX = world_coord(mapWidth), maxY = world_coord(mapHeight);
-	float height = map_Height(clip<int>(cx, 0, maxX), clip<int>(cy, 0, maxY));
+	const int cx = world_coord(tileX), cy = world_coord(tileY), maxX = world_coord(gameWorld.map.width), maxY = world_coord(gameWorld.map.height);
+	float height = map_Height(gameWorld.map, clip<int>(cx, 0, maxX), clip<int>(cy, 0, maxY));
 	constexpr float I = 100;
 	constexpr float H = I*0.70710678118654752440f;  // √½
 	constexpr int Dirs = 8;
@@ -225,7 +226,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	for (int dir = 0; dir < Dirs; ++dir) {
 		float maxTangent = 0;
 		for (int dist = 1; dist < 9; ++dist) {
-			float tangent = (map_Height(clip<int>(static_cast<int>(cx + dx[dir]*dist), 0, maxX), clip<int>(static_cast<int>(cy + dy[dir]*dist), 0, maxY)) - height)/(I*dist);
+			float tangent = (map_Height(gameWorld.map, clip<int>(static_cast<int>(cx + dx[dir]*dist), 0, maxX), clip<int>(static_cast<int>(cy + dy[dir]*dist), 0, maxY)) - height)/(I*dist);
 			maxTangent = std::max(maxTangent, tangent);
 		}
 		// Ambient light in this direction is proportional to the integral from tan(φ) = tangent to tan(φ) = ∞ of dφ cos(φ).
@@ -235,7 +236,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	ao *= 1.f/Dirs;
 	ao = clip<float>(ao, 0.25f, 1.f);
 
-	MAPTILE *tile = mapTile(tileX, tileY);
+	MAPTILE *tile = mapTile(gameWorld.map, tileX, tileY);
 	tile->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 24, 254));
 	tile->ambientOcclusion = static_cast<uint8_t>(clip<float>(254.f*ao, 60.f, 254.f));
 }
@@ -273,11 +274,11 @@ void rendering1999::LightingManager::ComputeFrameData(const LightingData& data, 
 		/* Clip to grid limits */
 		startX = MAX(startX, 0);
 		endX = MAX(endX, 0);
-		endX = MIN(endX, mapWidth - 1);
+		endX = MIN(endX, gameWorld.map.width - 1);
 		startX = MIN(startX, endX);
 		startY = MAX(startY, 0);
 		endY = MAX(endY, 0);
-		endY = MIN(endY, mapHeight - 1);
+		endY = MIN(endY, gameWorld.map.height - 1);
 		startY = MIN(startY, endY);
 
 		for (int i = startX; i <= endX; i++)
@@ -306,7 +307,7 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 
 	/* The coordinates of the tile corner */
 	x1 = tileX * TILE_UNITS;
-	y1 = map_TileHeight(tileX, tileY);
+	y1 = map_TileHeight(gameWorld.map, tileX, tileY);
 	z1 = tileY * TILE_UNITS;
 
 	return iHypot3(x1 - pos->x, y1 - pos->y, z1 - pos->z);
@@ -351,23 +352,23 @@ void calcDroidIllumination(DROID *psDroid)
 	const int tileY = map_coord(psDroid->pos.y);
 
 	/* Are we at the edge, or even on the map */
-	if (!tileOnMap(tileX, tileY))
+	if (!tileOnMap(gameWorld.map, tileX, tileY))
 	{
 		psDroid->illumination = UBYTE_MAX;
 		return;
 	}
-	else if (tileX <= 1 || tileX >= mapWidth - 2 || tileY <= 1 || tileY >= mapHeight - 2)
+	else if (tileX <= 1 || tileX >= gameWorld.map.width - 2 || tileY <= 1 || tileY >= gameWorld.map.height - 2)
 	{
-		lightVal = mapTile(tileX, tileY)->illumination;
+		lightVal = mapTile(gameWorld.map, tileX, tileY)->illumination;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
 	}
 	else
 	{
-		lightVal = mapTile(tileX, tileY)->illumination +		 //
-		           mapTile(tileX - 1, tileY)->illumination +	 //		 *
-		           mapTile(tileX, tileY - 1)->illumination +	 //		***		pattern
-		           mapTile(tileX + 1, tileY)->illumination +	 //		 *
-		           mapTile(tileX + 1, tileY + 1)->illumination;	 //
+		lightVal = mapTile(gameWorld.map, tileX, tileY)->illumination +		 //
+		           mapTile(gameWorld.map, tileX - 1, tileY)->illumination +	 //		 *
+		           mapTile(gameWorld.map, tileX, tileY - 1)->illumination +	 //		***		pattern
+		           mapTile(gameWorld.map, tileX + 1, tileY)->illumination +	 //		 *
+		           mapTile(gameWorld.map, tileX + 1, tileY + 1)->illumination;	 //
 		lightVal /= 5;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
 	}

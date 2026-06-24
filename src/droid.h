@@ -69,7 +69,7 @@ void add_to_experience_queue(int player, int value);
 // initialise droid module
 bool droidInit();
 
-bool removeDroidBase(DROID *psDel);
+bool removeDroidBase(DROID *psDel, WorldObjectState& objState);
 
 struct INITIAL_DROID_ORDERS
 {
@@ -78,12 +78,17 @@ struct INITIAL_DROID_ORDERS
 	int32_t moveToY;
 	uint32_t factoryId;
 };
+
+struct GameWorld;
+struct WorldMapState;
+struct WorldObjectState;
+
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
-DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot = Rotation());
+DROID *buildDroid(GameWorld& world, DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot = Rotation());
 /// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
-DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
-DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot, uint32_t id);
+DROID *reallyBuildDroid(GameWorld& world, const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
+DROID *reallyBuildDroid(GameWorld& world, const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot, uint32_t id);
 
 /* Set the asBits in a DROID structure given it's template. */
 void droidSetBits(const DROID_TEMPLATE *pTemplate, DROID *psDroid);
@@ -113,7 +118,7 @@ UDWORD calcTemplateBuild(const DROID_TEMPLATE *psTemplate);
 UDWORD calcTemplatePower(const DROID_TEMPLATE *psTemplate);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t droidDamage(GameWorld& world, DROID *psDroid, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
@@ -156,10 +161,10 @@ bool droidUpdateRestore(DROID *psDroid);
 void recycleDroid(DROID *psDel);
 
 /* Remove a droid and free it's memory */
-bool destroyDroid(DROID *psDel, unsigned impactTime);
+bool destroyDroid(DROID *psDel, unsigned impactTime, GameWorld& world);
 
 /* Same as destroy droid except no graphical effects */
-void vanishDroid(DROID *psDel);
+void vanishDroid(DROID *psDel, WorldObjectState& objState);
 
 /* Remove a droid from the apsDroidLists so doesn't update or get drawn etc*/
 //returns true if successfully removed from the list
@@ -175,7 +180,7 @@ DROID_TYPE droidType(const DROID *psDroid);
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
 void assignObjectToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
-void removeObjectFromGroup(UDWORD playerNumber);
+void removeObjectFromGroup(WorldObjectState& objState, UDWORD playerNumber);
 
 bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);
 
@@ -204,15 +209,20 @@ const char *droidGetName(const DROID *psDroid);
 // Set a droid's name.
 void droidSetName(DROID *psDroid, const char *pName);
 
+struct GameWorld;
+
 // returns true when no droid on x,y square.
-bool noDroid(UDWORD x, UDWORD y);				// true if no droid at x,y
+bool noDroid(const GameWorld& world, UDWORD x, UDWORD y);				// true if no droid at x,y
+
+using pickATileFn = bool (*)(const GameWorld& world, UDWORD x, UDWORD y);
+
 // returns an x/y coord to place a droid
-PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations);
-bool zonedPAT(UDWORD x, UDWORD y);
-bool pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations, bool (*function)(UDWORD x, UDWORD y));
-bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD x, UDWORD y));
-bool pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
-                                   SDWORD player, bool (*function)(UDWORD x, UDWORD y));
+PICKTILE pickHalfATile(GameWorld& world, UDWORD *x, UDWORD *y, UBYTE numIterations);
+bool zonedPAT(const GameWorld& world, UDWORD x, UDWORD y);
+bool pickATileGen(GameWorld& world, UDWORD *x, UDWORD *y, UBYTE numIterations, pickATileFn function);
+bool pickATileGen(GameWorld& world, Vector2i *pos, unsigned numIterations, pickATileFn function);
+bool pickATileGenThreat(GameWorld& world, UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
+                        SDWORD player, pickATileFn function);
 
 
 //initialises the droid movement model
@@ -305,7 +315,7 @@ bool isConstructionDroid(BASE_OBJECT const *psObject);
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */
 bool droidOnMap(const DROID *psDroid);
 
-void droidSetPosition(DROID *psDroid, int x, int y);
+void droidSetPosition(DROID *psDroid, WorldMapState& mapState, int x, int y);
 
 /// Return a percentage of how fully armed the object is, or -1 if N/A.
 int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_slot);

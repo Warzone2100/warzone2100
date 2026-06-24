@@ -38,6 +38,7 @@
 #include "map.h"
 #include "formationdef.h"
 #include "formation.h"
+#include "objmem.h"
 #include "projectile.h"
 #include "effects.h"	// for waypoint display
 #include "lib/gamelib/gtime.h"
@@ -744,7 +745,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					yoffset = iCosR(angle, 1500);
 					angle -= DEG(10);
 				}
-				while (!worldOnMap(psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));    // Don't try to fly off map.
+				while (!worldOnMap(gameWorld.map, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));    // Don't try to fly off map.
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset);
 			}
 
@@ -923,7 +924,7 @@ bool orderUpdateDroid(DROID *psDroid)
 					orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 					setDroidTarget(psDroid, nullptr);
 					psDroid->order.psObj = nullptr;
-					secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+					secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 					moveReallyStopDroid(psDroid);
 
 					// Fire off embark event
@@ -966,7 +967,7 @@ bool orderUpdateDroid(DROID *psDroid)
 		if (psDroid->action == DACTION_NONE)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
+			secondarySetState(psDroid, gameWorld.objects, DSO_RETURN_TO_LOC, DSS_NONE);
 		}
 		break;
 	case DORDER_RTR:
@@ -1399,7 +1400,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	if (psOrder->type != DORDER_TRANSPORTIN         // transporters special
 	    && psOrder->psObj == nullptr			// location-type order
 	    && (validOrderForLoc(psOrder->type) || psOrder->type == DORDER_BUILD)
-	    && !fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType))
+	    && !fpathCheck(gameWorld.map, psDroid->pos, rPos, psPropStats->propulsionType))
 	{
 		if (!isHumanPlayer(psDroid->player))
 		{
@@ -1487,14 +1488,14 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_SCOUT:
 		// can't move vtols to blocking tiles
 		if (psDroid->isVtol()
-		    && fpathBlockingTile(map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
+		    && fpathBlockingTile(gameWorld.map, map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
 		{
 			break;
 		}
 		//in multiPlayer, cannot move Transporter to blocking tile either
 		if (game.type == LEVEL_TYPE::SKIRMISH
 		    && psDroid->isTransporter()
-		    && fpathBlockingTile(map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
+		    && fpathBlockingTile(gameWorld.map, map_coord(psOrder->pos), psDroid->getPropulsionStats()->propulsionType))
 		{
 			break;
 		}
@@ -1681,12 +1682,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_RTB:
-		for (const STRUCTURE* psStruct : apsStructLists[psDroid->player])
+		for (const STRUCTURE* psStruct : gameWorld.objects.structures[psDroid->player])
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
 				Vector2i pos = psStruct->pos.xy();
-				if (!CheckInScrollLimits(pos.x, pos.y))
+				if (!CheckInScrollLimits(gameWorld.map, pos.x, pos.y))
 				{
 					continue;
 				}
@@ -1714,12 +1715,12 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			int iDY = getLandingY(psDroid->player);
 			Vector2i startPos = getPlayerStartPosition(psDroid->player);
 
-			if (iDX && iDY && CheckInScrollLimits(iDX, iDY))
+			if (iDX && iDY && CheckInScrollLimits(gameWorld.map, iDX, iDY))
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, iDX, iDY);
 			}
-			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0) && CheckInScrollLimits(startPos.x, startPos.y))
+			else if (bMultiPlayer && (startPos.x != 0 && startPos.y != 0) && CheckInScrollLimits(gameWorld.map, startPos.x, startPos.y))
 			{
 				psDroid->order = *psOrder;
 				actionDroid(psDroid, DACTION_MOVE, startPos.x, startPos.y);
@@ -1867,7 +1868,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_RECYCLE:
 		psFactory = nullptr;
 		iFactoryDistSq = 0;
-		for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
+		for (STRUCTURE* psStruct : gameWorld.objects.structures[psDroid->player])
 		{
 			// Look for nearest factory or repair facility
 			if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
@@ -2296,7 +2297,7 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			position = psOrder->psObj->pos.xzy();
 		}
-		position.y = map_Height(position.x, position.z) + 32;
+		position.y = map_Height(gameWorld.map, position.x, position.z) + 32;
 		if (psOrder->psObj != nullptr && psOrder->psObj->sDisplay.imd != nullptr)
 		{
 			position.y += psOrder->psObj->sDisplay.imd->max.y;
@@ -2509,7 +2510,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	{
 		propulsion = PROPULSION_TYPE_WHEELED;
 	}
-	if (!fpathBlockingTile(map_coord(x), map_coord(y), propulsion))
+	if (!fpathBlockingTile(gameWorld.map, map_coord(x), map_coord(y), propulsion))
 	{
 		order = DORDER_MOVE;
 	}
@@ -2538,12 +2539,12 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	else if (secondaryGetState(psDroid, DSO_CIRCLE, ModeQueue) == DSS_CIRCLE_SET)  // ModeQueue here means to check whether we pressed the circle button, whether or not it synched yet. The reason for this weirdness is that a circle order makes no sense as a secondary state in the first place (the circle button _should_ have been only in the UI, not in the game state..!), so anything dealing with circle orders will necessarily be weird.
 	{
 		order = DORDER_CIRCLE;
-		secondarySetState(psDroid, DSO_CIRCLE, DSS_NONE);
+		secondarySetState(psDroid, gameWorld.objects, DSO_CIRCLE, DSS_NONE);
 	}
 	else if (secondaryGetState(psDroid, DSO_PATROL, ModeQueue) == DSS_PATROL_SET)  // ModeQueue here means to check whether we pressed the patrol button, whether or not it synched yet. The reason for this weirdness is that a patrol order makes no sense as a secondary state in the first place (the patrol button _should_ have been only in the UI, not in the game state..!), so anything dealing with patrol orders will necessarily be weird.
 	{
 		order = DORDER_PATROL;
-		secondarySetState(psDroid, DSO_PATROL, DSS_NONE);
+		secondarySetState(psDroid, gameWorld.objects, DSO_PATROL, DSS_NONE);
 	}
 
 	return order;
@@ -2569,7 +2570,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID* psCurr : apsDroidLists[player])
+	for (DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2611,7 +2612,7 @@ static int highestQueuedModule(DroidOrder const &order, STRUCTURE const *structu
 		{
 			// Current order is weird, the DORDER_BUILDMODULE mutates into a DORDER_BUILD, and we use the order.pos instead of order.psObj.
 			// Also, might be DORDER_BUILD if selecting the module from the menu before clicking on the structure.
-			STRUCTURE *orderStructure = castStructure(worldTile(order.pos)->psObject);
+			STRUCTURE *orderStructure = castStructure(worldTile(gameWorld.map, order.pos)->psObject);
 			if (orderStructure == structure && (order.psStats == orderStructure->pStructureType || order.psStats == getModuleStat(orderStructure)))  // Order must be for this structure.
 			{
 				thisQueuedModule = nextModuleToBuild(structure, prevHighestQueuedModule);
@@ -2873,7 +2874,7 @@ static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 	ASSERT_PLAYER_OR_RETURN(, player);
 
 	/* loop over selected droids */
-	for (const DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->selected)
 		{
@@ -2908,7 +2909,7 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -2966,7 +2967,7 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected && psCurr->isConstructionDroid())
 		{
@@ -2990,7 +2991,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->selected)
 		{
@@ -3015,7 +3016,7 @@ DROID *FindATransporter(DROID const *embarkee)
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;
 
-	for (DROID *psDroid : apsDroidLists[embarkee->player])
+	for (DROID *psDroid : gameWorld.objects.droids[embarkee->player])
 	{
 		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
@@ -3041,7 +3042,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct : apsStructLists[player])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
 	{
 		if (psStruct->pStructureType->type == factoryType)
 		{
@@ -3058,7 +3059,7 @@ static STRUCTURE *FindARepairFacility(unsigned player)
 {
 	ASSERT_PLAYER_OR_RETURN(nullptr, player);
 
-	for (STRUCTURE *psStruct : apsStructLists[player])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
 	{
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
@@ -3298,7 +3299,7 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected && selectedPlayer < MAX_PLAYERS)
 		{
-			for (DROID* psTempDroid : apsDroidLists[selectedPlayer])
+			for (DROID* psTempDroid : gameWorld.objects.droids[selectedPlayer])
 			{
 				if (psTempDroid != psDroid && psTempDroid->selected)
 				{
@@ -3391,11 +3392,11 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 	vDroidPos.clear();
 	vDroid.clear();
 
-	for (STRUCTURE *psStruct : apsStructLists[psDroid->player])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[psDroid->player])
 	{
 		if (psStruct->pStructureType->type == REF_HQ)
 		{
-			if (CheckInScrollLimits(psStruct->pos.x, psStruct->pos.y))
+			if (CheckInScrollLimits(gameWorld.map, psStruct->pos.x, psStruct->pos.y))
 			{
 				psHq = psStruct;
 			}
@@ -3403,7 +3404,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		}
 		if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->status == SS_BUILT)
 		{
-			if (!CheckInScrollLimits(psStruct->pos.x, psStruct->pos.y))
+			if (!CheckInScrollLimits(gameWorld.map, psStruct->pos.x, psStruct->pos.y))
 			{
 				continue;
 			}
@@ -3430,7 +3431,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 		&& secondaryGetState(psDroid, DSO_ACCEPT_RETREP)))
 	{
 		// one of these lists is empty when on mission
-		DroidList* psdroidList = !apsDroidLists[psDroid->player].empty() ? &apsDroidLists[psDroid->player] : &mission.apsDroidLists[psDroid->player];
+		DroidList* psdroidList = !gameWorld.objects.droids[psDroid->player].empty() ? &gameWorld.objects.droids[psDroid->player] : &mission.gameWorld.objects.droids[psDroid->player];
 		if (!psdroidList->empty())
 		{
 			for (DROID* psCurr : *psdroidList)
@@ -3439,7 +3440,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 				if ((psCurr->droidType == DROID_REPAIR || psCurr->droidType == DROID_CYBORG_REPAIR)
 					&& secondaryGetState(psCurr, DSO_ACCEPT_RETREP))
 				{
-					if (!CheckInScrollLimits(psCurr->pos.x, psCurr->pos.y))
+					if (!CheckInScrollLimits(gameWorld.map, psCurr->pos.x, psCurr->pos.y))
 					{
 						continue;
 					}
@@ -3518,7 +3519,7 @@ static inline RtrBestResult decideWhereToRepairAndBalance(DROID *psDroid)
 
 /** This function assigns a state to a droid. It returns true if it assigned and false if it failed to assign.
     Note that this also modifies primary order in some cases */
-bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
+bool secondarySetState(DROID *psDroid, WorldObjectState& objState, SECONDARY_ORDER sec, SECONDARY_STATE State, QUEUE_MODE mode)
 {
 	UDWORD		CurrState, factType, prodType;
 	SDWORD		factoryInc;
@@ -3725,7 +3726,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			// look for the factories
-			for (STRUCTURE* psStruct : apsStructLists[psDroid->player])
+			for (STRUCTURE* psStruct : objState.structures[psDroid->player])
 			{
 				factType = psStruct->pStructureType->type;
 				if (factType == REF_FACTORY ||
@@ -3974,12 +3975,12 @@ static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER 
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (DROID *psCurr : apsDroidLists[player])
+	for (DROID *psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->group == group &&
 		    secondaryGetState(psCurr, sec) != state)
 		{
-			secondarySetState(psCurr, sec, state);
+			secondarySetState(psCurr, gameWorld.objects, sec, state);
 		}
 	}
 }
@@ -4003,7 +4004,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 	// count the number of units for each state
 	numStates = 0;
 	memset(aStateCount, 0, sizeof(aStateCount));
-	for (const DROID* psCurr : apsDroidLists[player])
+	for (const DROID* psCurr : gameWorld.objects.droids[player])
 	{
 		if (psCurr->group == group)
 		{
@@ -4184,7 +4185,7 @@ void orderStructureObj(UDWORD player, BASE_OBJECT *psObj)
 {
 	ASSERT_PLAYER_OR_RETURN(, player);
 
-	for (STRUCTURE* psStruct : apsStructLists[player])
+	for (STRUCTURE* psStruct : gameWorld.objects.structures[player])
 	{
 		if (lasSatStructSelected(psStruct))
 		{

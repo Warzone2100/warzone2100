@@ -272,3 +272,30 @@ const char *version_getFormattedVersionString(bool translated /* = true */)
 
 	return versionString;
 }
+
+// Returns a user-agent string, following typical formats & best-practices for HTTP(S) requests
+std::string version_getHTTPUserAgentString()
+{
+	std::string userAgentString = "Warzone2100/";
+	bool includeCompatible = false;
+	if (strlen(vcs_tag))
+	{
+		userAgentString += vcs_tag;
+	}
+	else
+	{
+		// use VCS_MOST_RECENT_TAGGED_VERSION
+		userAgentString += VCS_MOST_RECENT_TAGGED_VERSION;
+		includeCompatible = true;
+	}
+
+	// following best-practices, include a comment with details & descriptive url
+	userAgentString += " (";
+	if (includeCompatible)
+	{
+		userAgentString += "compatible; ";
+	}
+	userAgentString += "+https://github.com/Warzone2100/warzone2100)";
+
+	return userAgentString;
+}

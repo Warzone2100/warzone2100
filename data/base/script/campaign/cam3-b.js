@@ -7,7 +7,7 @@ var gammaAttackCount;
 var truckLocCounter;
 const MIS_GAMMA_PLAYER = 1; // Player 1 is Gamma team.
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade08", "R-Struc-Materials08",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials08",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
@@ -326,24 +326,32 @@ function eventStartLevel()
 		camClassicResearch(mis_nexusResClassic, CAM_NEXUS);
 		camClassicResearch(mis_gammaAllyResClassic, MIS_GAMMA_PLAYER);
 		camClassicResearch(mis_nexusResClassic, MIS_GAMMA_PLAYER); //They get even more research.
+
+		camSetArtifacts({
+			"NXCommandCenter": { tech: "R-Struc-Research-Upgrade07" },
+			"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
+			"gammaResLabArti": { tech: "R-Wpn-Mortar-Acc03" },
+			"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
+			"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
+		});
 	}
 	else
 	{
 		camCompleteRequiredResearch(mis_nexusRes, CAM_NEXUS);
 		camCompleteRequiredResearch(mis_gammaAllyRes, MIS_GAMMA_PLAYER);
 		camCompleteRequiredResearch(mis_nexusRes, MIS_GAMMA_PLAYER); //They get even more research.
+
+		camSetArtifacts({
+			"NXCommandCenter": { tech: "R-Struc-Research-Upgrade07" },
+			"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
+			"gammaResLabArti": { tech: "R-Wpn-Bomb-Damage03" },
+			"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
+			"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
+		});
 	}
 
 	setAlliance(MIS_GAMMA_PLAYER, CAM_HUMAN_PLAYER, false);
 	setAlliance(MIS_GAMMA_PLAYER, CAM_NEXUS, true);
-
-	camSetArtifacts({
-		"NXCommandCenter": { tech: "R-Struc-Research-Upgrade07" },
-		"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
-		"gammaResLabArti": { tech: "R-Wpn-Mortar-Acc03" },
-		"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
-		"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
-	});
 
 	camSetEnemyBases({
 		"GammaBase": {

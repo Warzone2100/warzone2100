@@ -38,8 +38,6 @@
 #include "../../frend.h"
 #include "../../main.h"
 
-#include <fmt/core.h>
-
 // MARK: -
 
 static std::map<WzString, const char *> languageIconsMap()

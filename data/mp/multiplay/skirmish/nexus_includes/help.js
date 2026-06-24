@@ -111,14 +111,14 @@ function attemptToHelp(player, x, y)
 	{
 		if (!HELPING_SELF && !haveHelpers())
 		{
-			chat(ALL_PLAYERS, CHAT_RESPONSE.noHelp);
+			chat(ALLIES, CHAT_RESPONSE.noHelp);
 		}
 
 		helpPlayer(player, x, y);
 	}
 	else if (defined(helpInfo.lastHelpPlayer))
 	{
-		chat(ALL_PLAYERS, "Helping " + getPlayerName(helpInfo.lastHelpPlayer) + " already");
+		chat(ALLIES, "Helping " + getPlayerName(helpInfo.lastHelpPlayer) + " already");
 	}
 
 	return false;

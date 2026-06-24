@@ -31,6 +31,7 @@ Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997
 #include "objects.h"
 #include "display.h"
 #include "hci.h"
+#include "game_world.h"
 
 /*
 Definition of a tile to highlight - presently more than is required
@@ -54,38 +55,38 @@ void Edit3DInitVars()
 }
 
 /* Raises a tile by a #defined height */
-void raiseTile(int tile3dX, int tile3dY)
+void raiseTile(WorldMapState& mapState, int tile3dX, int tile3dY)
 {
 	int i, j;
 
-	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	if (tile3dX < 0 || tile3dX > mapState.width - 1 || tile3dY < 0 || tile3dY > mapState.height - 1)
 	{
 		return;
 	}
-	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	for (i = tile3dX; i <= MIN(mapState.width - 1, tile3dX + brushSize); i++)
 	{
-		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		for (j = tile3dY; j <= MIN(mapState.height - 1, tile3dY + brushSize); j++)
 		{
-			adjustTileHeight(mapTile(i, j), TILE_RAISE);
+			adjustTileHeight(mapTile(mapState, i, j), TILE_RAISE);
 			markTileDirty(i, j);
 		}
 	}
 }
 
 /* Lowers a tile by a #defined height */
-void lowerTile(int tile3dX, int tile3dY)
+void lowerTile(WorldMapState& mapState, int tile3dX, int tile3dY)
 {
 	int i, j;
 
-	if (tile3dX < 0 || tile3dX > mapWidth - 1 || tile3dY < 0 || tile3dY > mapHeight - 1)
+	if (tile3dX < 0 || tile3dX > mapState.width - 1 || tile3dY < 0 || tile3dY > mapState.height - 1)
 	{
 		return;
 	}
-	for (i = tile3dX; i <= MIN(mapWidth - 1, tile3dX + brushSize); i++)
+	for (i = tile3dX; i <= MIN(mapState.width - 1, tile3dX + brushSize); i++)
 	{
-		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
+		for (j = tile3dY; j <= MIN(mapState.height - 1, tile3dY + brushSize); j++)
 		{
-			adjustTileHeight(mapTile(i, j), TILE_LOWER);
+			adjustTileHeight(mapTile(mapState, i, j), TILE_LOWER);
 			markTileDirty(i, j);
 		}
 	}
@@ -160,7 +161,7 @@ bool process3DBuilding()
 
 	/* Need to update the building locations if we're building */
 	int border = 5*TILE_UNITS/2;
-	Vector2i bv = {clip(mousePos.x, border, mapWidth*TILE_UNITS - border), clip(mousePos.y, border, mapHeight*TILE_UNITS - border)};
+	Vector2i bv = {clip(mousePos.x, border, gameWorld.map.width*TILE_UNITS - border), clip(mousePos.y, border, gameWorld.map.height*TILE_UNITS - border)};
 	Vector2i size = getStatsSize(sBuildDetails.psStats, getBuildingDirection());
 	Vector2i worldSize = world_coord(size);
 	bv = round_to_nearest_tile(bv - worldSize/2) + worldSize/2;
@@ -175,12 +176,12 @@ bool process3DBuilding()
 			auto lb = calcLineBuild(static_cast<STRUCTURE_STATS *>(sBuildDetails.psStats), getBuildingDirection(), wallDrag.pos, wallDrag.pos2);
 			for (int i = 0; i < lb.count && isValid; ++i)
 			{
-				isValid &= validLocation(sBuildDetails.psStats, lb[i], getBuildingDirection(), selectedPlayer, true);
+				isValid &= validLocation(gameWorld, sBuildDetails.psStats, lb[i], getBuildingDirection(), selectedPlayer, true);
 			}
 		}
 		else
 		{
-			isValid = validLocation(sBuildDetails.psStats, bv, getBuildingDirection(), selectedPlayer, true);
+			isValid = validLocation(gameWorld, sBuildDetails.psStats, bv, getBuildingDirection(), selectedPlayer, true);
 		}
 
 		buildState = isValid? BUILD3D_VALID : BUILD3D_POS;

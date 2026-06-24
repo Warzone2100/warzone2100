@@ -4602,8 +4602,10 @@
 		"statID": "Emplacement-Rocket06-IDF"
 	},
 	"R-Defense-Pillbox-RotMG": {
+		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Pillbox-RotMG",
 		"keyTopic": 1,
+		"msgName": "RES_PB_RotMG",
 		"name": "Assault Gun Bunker",
 		"redStructures": [
 			"PillBox1"
@@ -6363,7 +6365,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
@@ -6386,7 +6388,6 @@
 	"R-Wpn-Howitzer-Damage02": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Damage02",
-		"keyTopic": 1,
 		"name": "HE Howitzer Shells Mk2",
 		"requiredResearch": [
 			"R-Wpn-Howitzer-Damage01"
@@ -6399,7 +6400,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
@@ -6423,7 +6424,6 @@
 	"R-Wpn-Howitzer-Damage03": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Damage03",
-		"keyTopic": 1,
 		"name": "HE Howitzer Shells Mk3",
 		"requiredResearch": [
 			"R-Wpn-HvyHowitzer",
@@ -6437,7 +6437,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
@@ -8966,7 +8966,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
@@ -9001,7 +9001,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
@@ -9037,7 +9037,7 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "Damage",
-				"value": 25
+				"value": 30
 			},
 			{
 				"class": "Weapon",
@@ -9064,8 +9064,7 @@
 		"msgName": "RES_W_HOWRF4",
 		"name": "Fast Loader",
 		"requiredResearch": [
-			"R-Wpn-Mortar-ROF04",
-			"R-Wpn-Howitzer-ROF03"
+			"R-Wpn-Mortar-ROF04"
 		],
 		"researchPoints": 12000,
 		"researchPower": 375,
@@ -9075,14 +9074,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "FirePause",
-				"value": -20
+				"value": -60
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "HOWITZERS",
 				"parameter": "ReloadTime",
-				"value": -20
+				"value": -60
 			}
 		],
 		"statID": "Howitzer105Mk1",
@@ -9477,6 +9476,7 @@
 	"R-Wpn-Missile2A-T": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Missile2A-T",
+		"msgName": "RES_W_ASM_AT",
 		"name": "Scourge Missile",
 		"redComponents": [
 			"Rocket-HvyA-T",

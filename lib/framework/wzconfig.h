@@ -59,6 +59,8 @@ using json = nlohmann::json;
 #include <vector>
 #include <list>
 
+#include "lib/framework/wzstring_json.h"
+
 class json_variant {
 	// Wraps a json object and provides conversion methods that conform to older (QVariant) syntax and behavior
 public:
@@ -168,16 +170,6 @@ public:
 };
 
 // Enable JSON support for custom types
-
-// WzString
-inline void to_json(json& j, const WzString& p) {
-	j = json(p.toUtf8());
-}
-
-inline void from_json(const json& j, WzString& p) {
-	std::string str = j.get<std::string>();
-	p = WzString::fromUtf8(str.c_str());
-}
 
 namespace glm
 {

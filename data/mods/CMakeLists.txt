@@ -8,6 +8,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 endif()
 
 OPTION(WZ_BUILTIN_MODS_CAMCLASSIC "Include the classic campaign balance mod" ON)
+OPTION(WZ_BUILTIN_MODS_CAMPUMPKIN "Include the pumpkin campaign balance mod" ON)
 OPTION(WZ_BUILTIN_MODS_RECLAMATION "Include the addon campaign: Reclamation" ${_default_bundled_addon_mod_option_value})
 OPTION(WZ_BUILTIN_MODS_FRACTUREDKINGDOM "Include the addon campaign: Fractured Kingdom" ${_default_bundled_addon_mod_option_value})
 
@@ -194,6 +195,36 @@ if (WZ_BUILTIN_MODS_CAMCLASSIC)
 	add_dependencies(data_mods data_mods_campaign_wz2100_camclassic)
 
 endif(WZ_BUILTIN_MODS_CAMCLASSIC)
+
+if (WZ_BUILTIN_MODS_CAMPUMPKIN)
+
+	# Pumpkin campaign balance mod
+
+	file(REMOVE "${CMAKE_CURRENT_BINARY_DIR}/campaign/wz2100_campumpkin.wz")
+
+	GENERATE_MOD_INFO_JSON(
+		"${CMAKE_CURRENT_SOURCE_DIR}/campaign/wz2100_campumpkin/mod-info.json.in"
+		"${CMAKE_CURRENT_BINARY_DIR}/generated_info_json/wz2100_campumpkin/mod-info.json"
+	)
+
+	COMPRESS_ZIP(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/campaign/wz2100_campumpkin.wz"
+		COMPRESSION_LEVEL 7
+		PATHS
+			"mod-info.json"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/generated_info_json/wz2100_campumpkin"
+		PATHS
+			"stats"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/campaign/wz2100_campumpkin"
+		BUILD_ALWAYS_TARGET data_mods_campaign_wz2100_campumpkin
+		IGNORE_GIT
+		QUIET
+	)
+	add_dependencies(data_mods_campaign_wz2100_campumpkin mod_info_gen)
+	set_property(TARGET data_mods_campaign_wz2100_campumpkin PROPERTY FOLDER "data")
+	list(APPEND wz2100_mods_FILES "${CMAKE_CURRENT_BINARY_DIR}/campaign/wz2100_campumpkin.wz")
+	add_dependencies(data_mods data_mods_campaign_wz2100_campumpkin)
+
+endif(WZ_BUILTIN_MODS_CAMPUMPKIN)
 
 if (WZ_BUILTIN_MODS_RECLAMATION)
 

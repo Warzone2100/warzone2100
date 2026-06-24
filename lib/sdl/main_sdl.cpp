@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2011-2020  Warzone 2100 Project
+	Copyright (C) 2011-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +22,7 @@
  * @file main_sdl.cpp
  *
  * SDL backend code
+ * ​‌⁣‌‌⁣‌‌⁣‌⁣‌‌⁣⁣‌⁣‌⁣‌⁣‌‌‌‌‌⁣‌‌⁣⁣⁣⁣‌⁣‌⁣‌‌⁣‌‌⁣‌⁣‌⁣‌‌‌⁣‌‌‌‌‌⁣‌⁣‌‌⁣⁣⁣‌‌⁣‌⁣‌⁣‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣‌‌‌‌‌‌⁣‌⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌⁣⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌‌⁣‌‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌‌‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣⁣‌‌⁣⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣⁣⁣‌⁣⁣‌⁣‌‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌⁣‌‌‌‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣⁣‌⁣‌⁣‌⁣⁣‌⁣⁣⁣‌‌⁣⁣⁣‌‌⁣‌‌⁣⁣‌‌⁣‌⁣‌⁣⁣⁣‌‌⁣⁣‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣‌⁣⁣‌‌⁣⁣‌‌‌‌⁣‌⁣⁣‌‌‌⁣‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌‌⁣‌⁣‌‌⁣‌‌‌‌‌‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣⁣⁣⁣‌⁣⁣‌⁣⁣‌⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣⁣‌⁣‌‌‌⁣⁣‌⁣‌‌⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌‌⁣‌⁣⁣‌⁣⁣‌‌‌⁣⁣‌⁣⁣‌‌‌⁣⁣⁣⁣‌‌⁣‌‌⁣‌⁣⁣⁣‌‍
  */
 
 // Get platform defines before checking for them!
@@ -145,10 +148,6 @@ struct INPUT_STATE
 	Vector2i releasePos;  ///< Location of last mouse release event.
 };
 
-// Clipboard routines
-bool has_scrap(void);
-bool get_scrap(char **dst);
-
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
 #define DOUBLE_CLICK_INTERVAL 250
 
@@ -209,6 +208,40 @@ static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 void* GetTextEventsOwner = nullptr;
 
+/* Touch / finger handling */
+
+// Struct to store cached state of each active finger
+struct TrackedFinger
+{
+	SDL_FingerID id;
+	float currentX;
+	float currentY;
+	float previousX;
+	float previousY;
+};
+std::vector<TrackedFinger> touchPoints;
+
+/* Multi-finger gesture handling */
+
+#if SDL_VERSION_ATLEAST(3, 3, 4)
+# define WZ_SDL_PINCH_EVENTS_SUPPORTED
+#endif
+
+enum class PinchActiveState
+{
+	Inactive,
+	Active_SDLPinchEvent,
+	Active_SDLFingerEvents
+};
+
+// Pinch gesture input status
+static optional<float> pinchScaleCumulative = nullopt;
+static PinchActiveState pinchActive = PinchActiveState::Inactive;
+
+// Pan gesture input status
+static optional<PanGestureDeltaScreenPts> panScreenPointsCumulative = nullopt;
+static bool panActive = false;
+
 static optional<int> wzQuitExitCode;
 
 bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight);
@@ -233,42 +266,39 @@ WzString wzGetPlatform()
 	return WzString::fromUtf8(SDL_GetPlatform());
 }
 
-// See if we have TEXT in the clipboard
-bool has_scrap(void)
+bool wzHasClipboardText()
 {
 	return SDL_HasClipboardText();
 }
 
-// Set the clipboard text
-bool wzSetClipboardText(const char *src)
+WzString wzGetClipboardText()
 {
-	if (SDL_SetClipboardText(src))
-	{
-		debug(LOG_ERROR, "Could not put clipboard text because : %s", SDL_GetError());
-		return false;
-	}
-	return true;
-}
+	WzString retval;
 
-// Get text from the clipboard
-bool get_scrap(char **dst)
-{
-	if (has_scrap())
+	if (wzHasClipboardText())
 	{
 		char *cliptext = SDL_GetClipboardText();
 		if (!cliptext)
 		{
 			debug(LOG_ERROR, "Could not get clipboard text because : %s", SDL_GetError());
-			return false;
 		}
-		*dst = cliptext;
-		return true;
+		else
+		{
+			retval = WzString::fromUtf8(cliptext);
+			SDL_free(cliptext);
+		}
 	}
-	else
+	return retval;
+}
+
+bool wzSetClipboardText(const char *src)
+{
+	if (!SDL_SetClipboardText(src))
 	{
-		// wasn't text or no text in the clipboard
+		debug(LOG_ERROR, "Could not put clipboard text because : %s", SDL_GetError());
 		return false;
 	}
+	return true;
 }
 
 void StartTextInput(void* pTextInputRequester, const WzTextInputRect& textInputRect)
@@ -356,19 +386,6 @@ bool wzHasTouchInputDevices()
 bool wzSeemsLikeNonTouchPlatform()
 {
 	return !wzHasTouchInputDevices() || (SDL_HasScreenKeyboardSupport() == false);
-}
-
-/* Put a character into a text buffer overwriting any text under the cursor */
-WzString wzGetSelection()
-{
-	WzString retval;
-	static char *scrap = nullptr;
-
-	if (get_scrap(&scrap))
-	{
-		retval = WzString::fromUtf8(scrap);
-	}
-	return retval;
 }
 
 std::vector<optional<screeninfo>> wzAvailableResolutions()
@@ -1012,6 +1029,11 @@ void wzSemaphoreWait(WZ_SEMAPHORE *semaphore)
 	SDL_WaitSemaphore((SDL_Semaphore *)semaphore);
 }
 
+bool wzSemaphoreWaitTimeout(WZ_SEMAPHORE *semaphore, int32_t timeoutMS)
+{
+	return SDL_WaitSemaphoreTimeout((SDL_Semaphore *)semaphore, timeoutMS);
+}
+
 void wzSemaphorePost(WZ_SEMAPHORE *semaphore)
 {
 	SDL_SignalSemaphore((SDL_Semaphore *)semaphore);
@@ -1398,6 +1420,10 @@ void inputNewFrame(void)
 	}
 	mousePresses.clear();
 	mouseWheelSpeed = Vector2i(0, 0);
+
+	// handle gestures (consume any unconsumed updates)
+	std::ignore = consumePinchGestureScaleUpdate();
+	std::ignore = consumePanGestureDeltaUpdate();
 }
 
 /*!
@@ -1539,6 +1565,181 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 
 	return false;
 }
+
+// Helper to compute Euclidean distance between two arbitrary points
+float calculateEuclideanDistance(float x1, float y1, float x2, float y2)
+{
+	return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+static void inputHandleTouchFingerEvent(const SDL_TouchFingerEvent &touchFingerEvent)
+{
+	switch (touchFingerEvent.type)
+	{
+		case SDL_EVENT_FINGER_DOWN:
+			// Register new finger contact. Store incoming position as both current and previous.
+			debug(LOG_NEVER, "Finger down: %" PRIu64, touchFingerEvent.fingerID);
+			touchPoints.push_back({
+				touchFingerEvent.fingerID,
+				touchFingerEvent.x, touchFingerEvent.y,
+				touchFingerEvent.x, touchFingerEvent.y
+			});
+			break;
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+		{
+			// Evict finger contact on lift
+			debug(LOG_NEVER, "Finger up: %" PRIu64, touchFingerEvent.fingerID);
+
+			// 1. Reorder elements and get the logical end
+			auto remove_it = std::remove_if(touchPoints.begin(), touchPoints.end(), [&](const TrackedFinger& f) { return f.id == touchFingerEvent.fingerID; });
+
+			// 2. Check if the iterator reached the end
+			bool items_erased = (remove_it != touchPoints.end());
+
+			// 3. Physically erase the elements
+			if (items_erased)
+			{
+				touchPoints.erase(remove_it, touchPoints.end());
+
+				if (pinchActive == PinchActiveState::Active_SDLFingerEvents)
+				{
+					pinchActive = PinchActiveState::Inactive;
+				}
+				panActive = false;
+			}
+			break;
+		}
+
+		case SDL_EVENT_FINGER_MOTION:
+			// Update specific finger positioning tracking matching this hardware interaction id
+			for (auto& f : touchPoints)
+			{
+				if (f.id == touchFingerEvent.fingerID)
+				{
+					f.previousX = f.currentX;
+					f.previousY = f.currentY;
+					f.currentX = touchFingerEvent.x;
+					f.currentY = touchFingerEvent.y;
+					break;
+				}
+			}
+
+			// If exactly two fingers are actively tracing the display screen, calculate two-finger gestures
+			if (touchPoints.size() == 2)
+			{
+				debug(LOG_NEVER, "FingerEvent: Moving %zu fingers", touchPoints.size());
+
+				const auto& f1 = touchPoints[0];
+				const auto& f2 = touchPoints[1];
+
+				if (pinchActive == PinchActiveState::Inactive || pinchActive == PinchActiveState::Active_SDLFingerEvents)
+				{
+					// CALCULATE PINCH (SCALE DELTA)
+					float previousDistance = calculateEuclideanDistance(f1.previousX, f1.previousY, f2.previousX, f2.previousY);
+					float currentDistance  = calculateEuclideanDistance(f1.currentX, f1.currentY, f2.currentX, f2.currentY);
+
+					// Prevent division-by-zero crashes if fingers overlap precisely
+					if (previousDistance > 0.0001f && currentDistance > 0.0001f)
+					{
+						float scaleFactor = currentDistance / previousDistance;
+						debug(LOG_INPUT, "FingerEvent Pinch Scale: %f", scaleFactor);
+
+						pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * scaleFactor;
+						pinchActive = PinchActiveState::Active_SDLFingerEvents;
+					}
+				}
+
+				// CALCULATE PAN (CENTROID TRANSLATION DELTA)
+				// Find the average center midpoint of the old step vs the current step
+				float previousCenterY = (f1.previousY + f2.previousY) * 0.5f;
+				float previousCenterX = (f1.previousX + f2.previousX) * 0.5f;
+
+				float currentCenterX  = (f1.currentX + f2.currentX) * 0.5f;
+				float currentCenterY  = (f1.currentY + f2.currentY) * 0.5f;
+
+				float deltaX = currentCenterX - previousCenterX;
+				float deltaY = currentCenterY - previousCenterY;
+
+				float deltaXScreenPoints = (deltaX * screenWidth);
+				float deltaYScreenPoints = (deltaY * screenHeight);
+
+				debug(LOG_NEVER, "FingerEvent Pan: (deltaXScreenPts: %f, deltaYScreenPts: %f)", deltaXScreenPoints, deltaYScreenPoints);
+
+				auto updatedPanDelta = panScreenPointsCumulative.value_or(PanGestureDeltaScreenPts{0.f, 0.f});
+				updatedPanDelta.deltaX += deltaXScreenPoints;
+				updatedPanDelta.deltaY += deltaYScreenPoints;
+				panScreenPointsCumulative = updatedPanDelta;
+				panActive = true;
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
+// Returns a float if pinch gesture is in progress
+optional<float> consumePinchGestureScaleUpdate()
+{
+	auto result = pinchScaleCumulative;
+	if (pinchActive != PinchActiveState::Inactive)
+	{
+		pinchScaleCumulative = 1.0f;
+	}
+	else
+	{
+		pinchScaleCumulative.reset();
+	}
+	return result;
+}
+
+optional<PanGestureDeltaScreenPts> consumePanGestureDeltaUpdate()
+{
+	auto result = panScreenPointsCumulative;
+	if (panActive)
+	{
+		panScreenPointsCumulative = PanGestureDeltaScreenPts{0.f,0.f};
+	}
+	else
+	{
+		panScreenPointsCumulative.reset();
+	}
+	return result;
+}
+
+#if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
+/*!
+ * Handle pinch events
+ */
+static void inputHandlePinchEvent(SDL_PinchFingerEvent *pinchEvent)
+{
+	switch (pinchEvent->type)
+	{
+		case SDL_EVENT_PINCH_BEGIN:
+			debug(LOG_INPUT, "Pinch event: begin");
+			pinchActive = PinchActiveState::Active_SDLPinchEvent; // native pinch events always take precedence over calculated finger pinch events
+			pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f);
+			break;
+		case SDL_EVENT_PINCH_UPDATE:
+			if (pinchActive == PinchActiveState::Active_SDLPinchEvent)
+			{
+				debug(LOG_INPUT, "Pinch event: update (scale: %f)", pinchEvent->scale);
+				pinchScaleCumulative = pinchScaleCumulative.value_or(1.0f) * pinchEvent->scale;
+			}
+			break;
+		case SDL_EVENT_PINCH_END:
+			if (pinchActive == PinchActiveState::Active_SDLPinchEvent)
+			{
+				debug(LOG_INPUT, "Pinch event: end");
+				pinchActive = PinchActiveState::Inactive;
+			}
+			break;
+		default:
+			break;
+	}
+}
+#endif
 
 /*!
  * Handle keyboard events
@@ -2566,6 +2767,12 @@ bool wzSDLPreWindowCreate_InitOpenGLAttributes(int antialiasing, bool useOpenGLE
 	}
 #endif
 
+	// Do *not* request sRGB framebuffer
+	if (!SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 0))
+	{
+		debug(LOG_ERROR, "Failed to set SDL_GL_FRAMEBUFFER_SRGB_CAPABLE: %s", SDL_GetError());
+	}
+
 	// Set the double buffer OpenGL attribute.
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -3277,6 +3484,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES");
 	}
 #endif
+
 #if defined(WZ_OS_WIN)
 	// on Windows, opt-in to SDL 2.24.0+'s DPI scaling support
 	// SDL_HINT_WINDOWS_DPI_AWARENESS does not appear to be needed if SDL_HINT_WINDOWS_DPI_SCALING is set
@@ -3286,6 +3494,15 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_WINDOWS_DPI_AWARENESS");
 	}
 #endif
+
+#if defined(SDL_HINT_MOUSE_DPI_SCALE_CURSORS)
+	// set SDL_HINT_MOUSE_DPI_SCALE_CURSORS to 1, to enable auto-scaling of cursors to display content scale by default
+	if (!SDL_SetHint(SDL_HINT_MOUSE_DPI_SCALE_CURSORS, "1"))
+	{
+		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_MOUSE_DPI_SCALE_CURSORS");
+	}
+#endif
+
 	int minOnFocusLossSettingVal = war_getMinimizeOnFocusLoss();
 	if (minOnFocusLossSettingVal < -1 || minOnFocusLossSettingVal > 1)
 	{
@@ -3618,6 +3835,7 @@ static void handleActiveEvent(SDL_Event *event)
 				aKeyState[i].state = KEY_UP;
 				actualKeyState[i].state = KEY_UP;
 			}
+			touchPoints.clear();
 			break;
 		case SDL_EVENT_WINDOW_CLOSE_REQUESTED :
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
@@ -3679,6 +3897,19 @@ void wzEventLoopOneFrame(void* arg)
 		case SDL_EVENT_TEXT_INPUT:	// SDL now handles text input differently
 			inputhandleText(&event.text);
 			break;
+		case SDL_EVENT_FINGER_DOWN:
+		case SDL_EVENT_FINGER_UP:
+		case SDL_EVENT_FINGER_CANCELED:
+		case SDL_EVENT_FINGER_MOTION:
+			inputHandleTouchFingerEvent(event.tfinger);
+			break;
+#if defined(WZ_SDL_PINCH_EVENTS_SUPPORTED)
+		case SDL_EVENT_PINCH_BEGIN:
+		case SDL_EVENT_PINCH_UPDATE:
+		case SDL_EVENT_PINCH_END:
+			inputHandlePinchEvent(&event.pinch);
+			break;
+#endif
 		case SDL_EVENT_QUIT:
 #if defined(__EMSCRIPTEN__)
 			// Exit "soft fullscreen" - (as long as we aren't in "real" fullscreen mode)
@@ -3762,6 +3993,7 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 
 void wzPumpEventsWhileLoading()
 {
+	// SDL backend implementation of the platform hook documented in wzapp.h.
 	SDL_PumpEvents();
 }
 

@@ -1079,7 +1079,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 {
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
+	for (const auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 	{
 		if (psFlag->selected && psFlag->type == POS_DELIVERY)
 		{
@@ -1677,7 +1677,7 @@ INT_RETVAL intRunWidgets()
 					// Don't allow derrick to be built on burning ground.
 					if (((STRUCTURE_STATS *)psPositionStats)->type == REF_RESOURCE_EXTRACTOR)
 					{
-						if (fireOnLocation(pos.x, pos.y))
+						if (fireOnLocation(gameWorld.map, pos.x, pos.y))
 						{
 							AddDerrickBurningMessage();
 						}
@@ -1743,7 +1743,7 @@ INT_RETVAL intRunWidgets()
 
 						if (psBuilding->type == REF_DEMOLISH)
 						{
-							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
+							MAPTILE *psTile = mapTile(gameWorld.map, map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
 
@@ -1754,7 +1754,7 @@ INT_RETVAL intRunWidgets()
 							}
 							else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 							{
-								removeFeature(psFeature);
+								removeFeature(psFeature, gameWorld);
 							}
 						}
 						else
@@ -1763,7 +1763,7 @@ INT_RETVAL intRunWidgets()
 							STRUCTURE *psStructure = &tmp;
 							tmp.state = SAS_NORMAL;
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
-							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
+							tmp.pos = {pos.x, pos.y, map_Height(gameWorld.map, pos.x, pos.y) + world_coord(1) / 10};
 
 							// In multiplayer games be sure to send a message to the
 							// other players, telling them a new structure has been
@@ -1792,11 +1792,11 @@ INT_RETVAL intRunWidgets()
 					else if (psPositionStats->hasType(STAT_TEMPLATE))
 					{
 						std::string msg;
-						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
+						DROID *psDroid = buildDroid(gameWorld, (DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
 						cancelDeliveryRepos();
 						if (psDroid)
 						{
-							addDroid(psDroid, apsDroidLists);
+							addDroid(psDroid, gameWorld.objects.droids);
 
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new droid.
@@ -1835,7 +1835,7 @@ INT_RETVAL intRunWidgets()
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if ((testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && intMode != INT_MISSIONRES && !dbgInputManager.debugMappingsAllowed())
 	{
-		debug(LOG_ERROR, "PlayerHasLost Or Won");
+		debug(LOG_INFO, "PlayerHasLost Or Won");
 		intResetScreen(true);
 		retCode = INT_QUIT;
 	}
@@ -2724,11 +2724,11 @@ StructureList *interfaceStructList()
 
 	if (offWorldKeepLists)
 	{
-		return &mission.apsStructLists[selectedPlayer];
+		return &mission.gameWorld.objects.structures[selectedPlayer];
 	}
 	else
 	{
-		return &apsStructLists[selectedPlayer];
+		return &gameWorld.objects.structures[selectedPlayer];
 	}
 }
 
@@ -2958,7 +2958,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	}
 
 	num = 0;
-	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->droidType == droidType)
 		{
@@ -3096,7 +3096,7 @@ bool isSecondaryWindowUp()
 
 void setSecondaryWindowUp(bool value)
 {
-	secondaryWindowUp = true;
+	secondaryWindowUp = value;
 }
 
 void intSetShouldShowRedundantDesign(bool value)

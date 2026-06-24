@@ -22,6 +22,43 @@
 #include "urlrequest_private.h"
 #include "lib/framework/wzapp.h"
 
+const char* to_string(URLRequestFailureType val)
+{
+	switch (val)
+	{
+		case URLRequestFailureType::INITIALIZE_REQUEST_ERROR: return "INITIALIZE_REQUEST_ERROR";
+		case URLRequestFailureType::OPERATION_TIMEOUT: return "OPERATION_TIMEOUT";
+		case URLRequestFailureType::COULDNT_CONNECT: return "COULDNT_CONNECT";
+		case URLRequestFailureType::TRANSFER_FAILED: return "TRANSFER_FAILED";
+		case URLRequestFailureType::CANCELLED: return "CANCELLED";
+		case URLRequestFailureType::CANCELLED_BY_SHUTDOWN: return "CANCELLED_BY_SHUTDOWN";
+	}
+	return nullptr;
+}
+
+const char* to_string(InternetProtocol protocol)
+{
+	switch (protocol)
+	{
+		case InternetProtocol::IP_ANY: return "IP_ANY";
+		case InternetProtocol::IPv4: return "IPv4";
+		case InternetProtocol::IPv6: return "IPv6";
+	}
+	return "";
+}
+
+const char* to_string(URLRequestMethod method)
+{
+	switch (method)
+	{
+		case URLRequestMethod::Get: return "GET";
+		case URLRequestMethod::Post: return "POST";
+		case URLRequestMethod::Patch: return "PATCH";
+		case URLRequestMethod::Delete: return "DELETE";
+	}
+	return nullptr;
+}
+
 MemoryStruct::MemoryStruct()
 {
 	memory = (char *) malloc(1);
@@ -60,4 +97,33 @@ bool HTTPResponseHeadersContainer::getHeader(const std::string& name, std::strin
 	if (it == responseHeaders.end()) { return false; }
 	output_value = it->second;
 	return true;
+}
+
+void URLDataRequest::setPost(std::string&& jsonData)
+{
+	m_method = URLRequestMethod::Post;
+	m_requestBody = std::move(jsonData);
+	setRequestHeader("Content-Type", "application/json");
+}
+
+void URLDataRequest::setPatch(std::string&& jsonData)
+{
+	m_method = URLRequestMethod::Patch;
+	m_requestBody = std::move(jsonData);
+	setRequestHeader("Content-Type", "application/json");
+}
+
+void URLDataRequest::setDelete()
+{
+	m_method = URLRequestMethod::Delete;
+}
+
+URLRequestMethod URLDataRequest::method() const
+{
+	return m_method;
+}
+
+const std::string& URLDataRequest::requestBody() const
+{
+	return m_requestBody;
 }

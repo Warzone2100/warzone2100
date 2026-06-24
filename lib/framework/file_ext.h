@@ -56,11 +56,21 @@ bool loadFileToBufferVectorT(const char *pFileName, std::vector<T>& outputBuffer
 		return false;
 	}
 
+	const size_t dataSize = static_cast<size_t>(filesize);
+	const size_t bufferSize = dataSize + (appendNullCharacter ? 1u : 0u);
 	outputBuffer.clear();
-	outputBuffer.resize(static_cast<size_t>(filesize + ((appendNullCharacter) ? 1 : 0)));
+	// GCC 12+ treats vector::resize(0) as a stringop-overflow under -Werror (false positive).
+	if (bufferSize > 0)
+	{
+		outputBuffer.resize(bufferSize);
+	}
 
 	/* Load the file data */
-	PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(pfile, outputBuffer.data(), static_cast<PHYSFS_uint32>(filesize));
+	PHYSFS_sint64 length_read = 0;
+	if (filesize > 0)
+	{
+		length_read = WZ_PHYSFS_readBytes(pfile, outputBuffer.data(), static_cast<PHYSFS_uint32>(filesize));
+	}
 	if (length_read != filesize)
 	{
 		outputBuffer.clear();

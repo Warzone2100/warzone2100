@@ -122,6 +122,7 @@ static const char *code_part_names[] =
 	"research",
 	"savegame",
 	"repairs",
+	"lobby",
 	"last"
 };
 

@@ -1501,7 +1501,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				JSValue droidVal = argv[idx++];
 				int id = QuickJS_GetInt32(ctx, droidVal, "id");
 				int player = QuickJS_GetInt32(ctx, droidVal, "player");
-				DROID *psDroid = IdToDroid(id, player);
+				DROID *psDroid = IdToDroid(gameWorld.objects, id, player);
 				UNBOX_SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
 				return psDroid;
 			}
@@ -3224,6 +3224,7 @@ IMPL_JS_FUNC(centreView, wzapi::centreView)
 IMPL_JS_FUNC(hackPlayIngameAudio, wzapi::hackPlayIngameAudio)
 IMPL_JS_FUNC(hackStopIngameAudio, wzapi::hackStopIngameAudio)
 IMPL_JS_FUNC(playSound, wzapi::playSound)
+IMPL_JS_FUNC(emitSound, wzapi::emitSound)
 IMPL_JS_FUNC_DEBUGMSGUPDATE(gameOverMessage, wzapi::gameOverMessage)
 IMPL_JS_FUNC(completeResearch, wzapi::completeResearch)
 IMPL_JS_FUNC(completeAllResearch, wzapi::completeAllResearch)
@@ -3283,11 +3284,6 @@ IMPL_JS_FUNC(enumRange, wzapi::enumRange)
 IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
 IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
-//-- ## removeBeacon(playerFilter)
-//--
-//-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
-//-- Returns a boolean that is true on success. (3.2+ only)
-//--
 static JSValue js_removeBeacon(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	JSValue retVal = wrap_(wzapi::removeBeacon, ctx, argc, argv);
@@ -3640,6 +3636,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(applyLimitSet, 0); // WZAPI
+	JS_REGISTER_FUNC(emitSound, 3); // WZAPI
 	JS_REGISTER_FUNC(setMissionTime, 1); // WZAPI
 	JS_REGISTER_FUNC(getMissionTime, 0); // WZAPI
 	JS_REGISTER_FUNC2(setReinforcementTime, 1, 2); // WZAPI

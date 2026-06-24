@@ -37,6 +37,7 @@
 #include "objmem.h"
 #include "droid.h"
 #include "hci.h"
+#include "game_world.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;
@@ -110,9 +111,9 @@ bool cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 		// set the secondary states for the unit
 		// dont reset DSO_ATTACK_RANGE, because there is no way to modify it under commander
-		secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK), ModeImmediate);
-		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK), ModeImmediate);
-		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK), ModeImmediate);
+		secondarySetState(psDroid, gameWorld.objects, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK), ModeImmediate);
+		secondarySetState(psDroid, gameWorld.objects, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK), ModeImmediate);
+		secondarySetState(psDroid, gameWorld.objects, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK), ModeImmediate);
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 	}
@@ -175,7 +176,7 @@ SDWORD cmdDroidGetIndex(const DROID *psCommander)
 		return 0;
 	}
 
-	for (const DROID* psCurr : apsDroidLists[psCommander->player])
+	for (const DROID* psCurr : gameWorld.objects.droids[psCommander->player])
 	{
 		if (psCurr->droidType == DROID_COMMAND &&
 		    psCurr->id < psCommander->id)

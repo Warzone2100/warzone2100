@@ -111,6 +111,11 @@
 		"pos1": [6272, 896],
 		"pos2": [6528, 1152]
 	},
+	"area_10": {
+		"label": "insaneExtraVtolPadArea",
+		"pos1": [7040, 1152],
+		"pos2": [7552, 1920]
+	},
 
 	"object_0": {
 		"label": "COMediumFactory",

@@ -144,7 +144,36 @@ void PendingWritesManager::threadImplFunction()
 				ConnectionWriteQueue& writeQueue = currentIt->second;
 				ASSERT(!writeQueue.empty(), "writeQueue[sock] must not be empty.");
 
-				if (!writableSet_->isSet(conn) || writeQueue.empty())
+				auto isSetResult = writableSet_->isSet(conn);
+				if (!isSetResult.has_value())
+				{
+					// Poll returned some fatal error state for the connection
+					switch (isSetResult.error())
+					{
+					case IDescriptorSet::ErroredState::InvalidConn:
+						// Connection is somehow invalid?
+						debug(LOG_ERROR, "Socket error: PollInvalidConn?");
+						conn->setWriteErrorCode(make_network_error_code(EBADF));
+						break;
+					case IDescriptorSet::ErroredState::Error:
+						debug(LOG_INFO, "Socket error: PollError");
+						conn->setWriteErrorCode(make_network_error_code(EBADF));
+						break;
+					case IDescriptorSet::ErroredState::HangUp:
+						debug(LOG_NET, "Socket error: PollHangUp");
+						conn->setWriteErrorCode(make_network_error_code(ECONNRESET));
+						break;
+					}
+
+					pendingWrites_.erase(currentIt);  // Connection broken, don't try writing to it again.
+					if (conn->deleteLaterRequested())
+					{
+						delete conn;
+					}
+					continue;
+				}
+
+				if (!isSetResult.value() || writeQueue.empty())
 				{
 					continue;  // This connection is not ready for writing, or we don't have anything to write.
 				}

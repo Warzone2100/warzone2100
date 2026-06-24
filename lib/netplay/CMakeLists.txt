@@ -28,13 +28,18 @@ add_dependencies(autorevision_netcodeversion autorevision) # Ensure ordering and
 
 file(GLOB_RECURSE HEADERS "*.h")
 
+file(GLOB_RECURSE EXCLUDED_HEADERS "3rdparty/miniupnp/*.h")
+list(REMOVE_ITEM HEADERS ${EXCLUDED_HEADERS})
+
 set (SRC
 	"byteorder_funcs_wrapper.cpp"
 	"client_connection.cpp"
 	"connection_provider_registry.cpp"
 	"error_categories.cpp"
+	"ip_helpers.cpp"
 	"listen_socket.cpp"
-	"netjoin_stub.cpp"
+	"netjoin.cpp"
+	"netlobby.cpp"
 	"netlog.cpp"
 	"netpermissions.cpp"
 	"netplay.cpp"

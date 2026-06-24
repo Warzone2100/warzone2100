@@ -2,7 +2,7 @@
 
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2024-2025  Warzone 2100 Project
+	Copyright (C) 2024-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
 #include "src/multiplay.h"
 #include "src/multivote.h"
 #include "src/multilimit.h"
+#include "src/main.h"
 #include "src/frend.h"
 #include "src/loadsave.h"
 #include "src/intimage.h"
@@ -830,7 +831,6 @@ static void gameNameEditHandlerFunc(W_EDITBOX& widg)
 	{
 		NETsetLobbyOptField(game.name, NET_LOBBY_OPT_FIELD::GNAME);
 		sendOptions();
-		NETregisterServer(WZ_SERVER_UPDATE);
 
 		displayRoomSystemMessage(_("Game Name Updated."));
 	}
@@ -946,7 +946,7 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 		mapViewButton->setTip(_("Click to see Map"));
 		mapViewButton->addOnClickHandler([](W_BUTTON&) {
 			widgScheduleTask([]{
-				loadMapPreview(true);
+				requestMapPreviewLoad(true);
 			});
 		});
 		auto mapChangeButton = addSectionImageButton(mapWidget, IMAGE_GLOBE, 2);
@@ -1038,7 +1038,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				sendOptions();
 
 				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1066,7 +1065,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				sendOptions();
 
 				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1095,7 +1093,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 				sendOptions();
 
 				NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-				NETregisterServer(WZ_SERVER_UPDATE);
 			}
 		}
 	});
@@ -1124,7 +1121,6 @@ void WzMultiLobbyOptionsImpl::initialize(bool _isChallenge, const std::shared_pt
 					sendOptions();
 
 					NETsetLobbyConfigFlagsFields(game.alliance, game.techLevel, game.power, game.base);
-					NETregisterServer(WZ_SERVER_UPDATE);
 				}
 			}
 		});

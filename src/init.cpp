@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +28,7 @@
 #include "lib/framework/frame.h"
 
 #include <string.h>
+#include <utility>
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
@@ -85,6 +88,9 @@
 #include "order.h"
 #include "radar.h"
 #include "research.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "lib/framework/loading_task.h"
+#include "wrappers.h"
 #include "lib/framework/cursors.h"
 #include "text.h"
 #include "transporter.h"
@@ -103,6 +109,7 @@
 #include "screens/guidescreen.h"
 #include "titleui/widgets/gamebrowserform.h"
 #include "wzapi.h"
+#include "urlrequest.h"
 
 #include "wzphysfszipioprovider.h"
 #include <wzmaplib/map_package.h>
@@ -1122,6 +1129,8 @@ void systemShutdown()
 
 	NETclose();
 
+	urlRequestShutdown(); // MUST come after NETclose(), as hosts need a chance to inform lobby they are gone
+
 	seqReleaseAll();
 
 	pie_ShutdownRadar();
@@ -1166,7 +1175,6 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
-	shutdownLobbyBrowserFetches();
 	netplayShutDown();	// MUST come after widgShutDown (as widget screens might have connections, etc)
 	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
@@ -1181,12 +1189,60 @@ void systemShutdown()
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
 
-bool frontendInitialise(const char *ResourceFile)
+namespace
 {
+
+LoadingTask<> frontendInitTaskImpl(ResourceLoadingController &controller)
+{
+	SetGameMode(GS_TITLE_SCREEN);
 	frontendIsShuttingDown();
+	static constexpr char resourceFile[] = "wrf/frontend.wrf";
+	debug(LOG_WZ, "== Initializing frontend == : %s", resourceFile);
+	if (!frontendInitialiseSetup())
+	{
+		co_return load_fail();
+	}
 
-	debug(LOG_WZ, "== Initializing frontend == : %s", ResourceFile);
+	co_await controller.yieldFrame();
 
+	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
+	if (!(co_await resLoad(controller, resourceFile, 0)))
+	{
+		co_return load_fail();
+	}
+
+	co_return frontendInitialiseFinalize() ? load_ok() : load_fail();
+}
+
+} // anonymous namespace
+
+LoadingTask<> frontendInitTask(ResourceLoadingController &controller, bool onInitialStartup)
+{
+	const bool openedLoadingScreen = !onInitialStartup && !isLoadingScreenActive();
+	if (openedLoadingScreen)
+	{
+		initLoadingScreen(true);
+	}
+
+	if (!(co_await frontendInitTaskImpl(controller)))
+	{
+		if (openedLoadingScreen)
+		{
+			closeLoadingScreen();
+		}
+		debug(LOG_FATAL, "Shutting down after failure");
+		exit(EXIT_FAILURE);
+	}
+
+	if (openedLoadingScreen)
+	{
+		closeLoadingScreen();
+	}
+	co_return load_ok();
+}
+
+bool frontendInitialiseSetup()
+{
 	if (!InitialiseGlobals())				// Initialise all globals and statics everywhere.
 	{
 		return false;
@@ -1207,13 +1263,11 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
-	if (!resLoad(ResourceFile, 0))
-	{
-		//need the object heaps to have been set up before loading in the save game
-		return false;
-	}
+	return true;
+}
 
+bool frontendInitialiseFinalize()
+{
 	if (!dispInitialise())					// Initialise the display system
 	{
 		return false;
@@ -1432,7 +1486,7 @@ bool stageOneShutDown()
 	ResearchRelease();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	shutdownTerrain();
 
@@ -1529,7 +1583,7 @@ bool stageTwoInitialise()
 		return false;
 	}
 
-	if (!gwInitialise())
+	if (!gwInitialise(gameWorld.map))
 	{
 		return false;
 	}
@@ -1599,10 +1653,10 @@ bool stageTwoShutDown()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 
 	if (!messageShutdown())
 	{
@@ -1619,7 +1673,7 @@ bool stageTwoShutDown()
 	cmdDroidShutDown();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	if (!mapShutdown())
 	{
@@ -1681,24 +1735,9 @@ static void displayLoadingErrors()
 	}
 }
 
-bool stageThreeInitialise()
+static bool stageThreeInitialiseSync()
 {
 	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
-
-	debug(LOG_WZ, "== stageThreeInitialise ==");
-
-	loopMissionState = LMS_NORMAL;
-
-	// preload model textures for current tileset
-	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
-	modelUpdateTilesetIdx(modelTilesetIdx);
-	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
-		for (const iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
-		{
-			pDisplayShape->getTextures();
-		}
-	});
-	resDoResLoadCallback();		// do callback.
 
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
@@ -1714,9 +1753,9 @@ bool stageThreeInitialise()
 	}
 
 	effectResetUpdates();
-	initLighting(0, 0, mapWidth, mapHeight);
+	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	pie_InitLighting();
-	getCurrentLightmapData().reset(mapWidth, mapHeight);
+	getCurrentLightmapData().reset(gameWorld.map.width, gameWorld.map.height);
 
 	if (fromSave)
 	{
@@ -1733,7 +1772,7 @@ bool stageThreeInitialise()
 		initTemplates();
 	}
 
-	preProcessVisibility();
+	preProcessVisibility(gameWorld.map);
 
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
 
@@ -1742,8 +1781,8 @@ bool stageThreeInitialise()
 		return false;
 	}
 
-	mapInit();
-	gridReset();
+	mapInit(gameWorld);
+	gridReset(gameWorld);
 
 	//if mission screen is up, close it.
 	if (MissionResUp)
@@ -1763,7 +1802,7 @@ bool stageThreeInitialise()
 
 	// add radar to interface screen, and resize
 	intAddRadarWidget();
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 
 	setAllPauseStates(false);
 
@@ -1786,7 +1825,7 @@ bool stageThreeInitialise()
 		}
 
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_INIT); });
-		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
+		playerBuiltHQ = structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true);
 	}
 
 	// Start / randomize in-game music
@@ -1812,6 +1851,25 @@ bool stageThreeInitialise()
 	countUpdate(false);
 
 	return true;
+}
+
+LoadingTask<> stageThreeInitialiseTask(ResourceLoadingController& controller)
+{
+	debug(LOG_WZ, "== stageThreeInitialise ==");
+
+	loopMissionState = LMS_NORMAL;
+
+	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
+	modelUpdateTilesetIdx(modelTilesetIdx);
+	if (!headlessGameMode())
+	{
+		if (!(co_await preloadAllModelTexturesTask(controller)))
+		{
+			co_return load_fail();
+		}
+	}
+
+	co_return stageThreeInitialiseSync() ? load_ok() : load_fail();
 }
 
 /*****************************************************************************/
@@ -1874,7 +1932,7 @@ bool stageThreeShutDown()
 bool campaignReset()
 {
 	debug(LOG_MAIN, "campaignReset");
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	mapShutdown();
 	shutdownTerrain();
 	// when the terrain textures are reloaded we need to reset the radar
@@ -1891,15 +1949,15 @@ bool saveGameReset()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 	initMission();
 	initTransporters();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	intResetScreen(true);
 
 	if (!mapShutdown())

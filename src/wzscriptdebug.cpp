@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020-2021  Warzone 2100 Project
+	Copyright (C) 2020-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -58,6 +60,7 @@
 #include "lib/widget/table.h"
 #include "lib/widget/jsontable.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "intdisplay.h"
 
 #include "action.h"
@@ -912,7 +915,7 @@ static bool debugReloadSelectedObjectDisplayModels()
 		return false;
 	}
 
-	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -1026,7 +1029,7 @@ static bool debugReloadSelectedObjectDisplayModels()
 		}
 	};
 
-	for (const STRUCTURE* psStructure : apsStructLists[selectedPlayer])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStructure->selected)
 		{
@@ -1122,7 +1125,7 @@ public:
 
 		auto texturesLabel = panel->createLabel(0, font_regular_bold, "Textures:");
 		auto prevButton = panel->createButton(0, "Reload Terrain & Water", [](){
-			loadTerrainTextures(currentMapTileset);
+			loadTerrainTexturesBlocking(currentMapTileset);
 			debug(LOG_INFO, "Done");
 		}, texturesLabel);
 		prevButton = panel->createButton(0, "Reload Decals", [](){
@@ -1191,32 +1194,18 @@ public:
 		}, prevButton);
 
 		auto miscLabel = panel->createLabel(3, font_regular_bold, "Other:");
-		prevButton = panel->createButton(3, "Rotate sun", [](){
+		prevButton = panel->createButton(3, "Reset Sun", [](){
+			setTheSun(getDefaultSunPosition());
+			debug(LOG_INFO, "Sun set to default position");
+		}, miscLabel);
+		prevButton = panel->createButton(3, "Rotate Sun", [](){
 			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
-		}, miscLabel);
+		}, prevButton);
 
 		auto dropdownWidget = panel->makeTerrainQualityDropdown(4);
-
-#if defined(DEBUG)
-		// Ideally, the fallback terrain renderer will be removed soon - so don't even offer this toggle outside of debug builds
-		auto pWeakTerrainQualityDropdown = std::weak_ptr<DropdownWidget>(dropdownWidget);
-		prevButton = panel->createButton(3, "Toggle Old / New Shaders", [pWeakTerrainQualityDropdown](){
-			if (debugToggleTerrainShaderType())
-			{
-				auto updateMsg = std::string("Switched terrain shader type to: ") + ((getTerrainShaderType() == TerrainShaderType::SINGLE_PASS) ? "New Shader (Single-Pass)" : "Old (Fallback) Shader");
-				addConsoleMessage(updateMsg.c_str(), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-
-				if (auto pStrongDropdown = pWeakTerrainQualityDropdown.lock())
-				{
-					pStrongDropdown->setSelectedIndex(static_cast<size_t>(getTerrainShaderQuality()));
-				}
-			}
-		}, dropdownWidget);
-#else
 		(void)dropdownWidget;
-#endif
 
 		auto shadowsLabel = panel->createLabel(5, font_regular_bold, "Shadow Mapping:");
 		auto shadowFilterDropdownWidget = panel->makeShadowFilterSizeDropdown(5, shadowsLabel);

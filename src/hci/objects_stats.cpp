@@ -61,7 +61,7 @@ void BaseObjectsController::prepareToClose()
 void BaseObjectsController::jumpToObject(BASE_OBJECT *object)
 {
 	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
-	setPlayerPos(object->pos.x, object->pos.y);
+	setPlayerPos(gameWorld.map, object->pos.x, object->pos.y);
 	setWarCamActive(false);
 }
 
@@ -202,7 +202,7 @@ void ObjectButton::jump()
 	}
 	else
 	{
-		setPlayerPos(jumpPosition.x, jumpPosition.y);
+		setPlayerPos(gameWorld.map, jumpPosition.x, jumpPosition.y);
 		setWarCamActive(false);
 		jumpPosition = {0, 0};
 	}

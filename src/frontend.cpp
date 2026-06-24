@@ -79,14 +79,13 @@
 #include "titleui/titleui.h"
 #include "titleui/campaign.h"
 #include "titleui/optionstitleui.h"
+#include "titleui/gamebrowser.h"
 #include "urlhelpers.h"
 #include "game.h"
 #include "map.h" //for builtInMap and useTerrainOverrides
 #include "notifications.h"
 #include "activity.h"
 #include "hci/groups.h"
-
-#include <fmt/core.h>
 
 #if defined(__EMSCRIPTEN__)
 # include "emscripten_helpers.h"
@@ -583,7 +582,7 @@ bool runMultiPlayerMenu()
 		case FRONTEND_JOIN:
 			// Don't call `NETinit()` just yet.
 			// It will be called automatically during join attempts.
-			changeTitleUI(std::make_shared<WzProtocolTitleUI>());
+			changeTitleUI(std::make_shared<WzGameBrowserTitleUI>(wzTitleUICurrent));
 			break;
 		case FRONTEND_REPLAY:
 			SPinit(LEVEL_TYPE::SKIRMISH);

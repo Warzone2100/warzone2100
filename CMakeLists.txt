@@ -6,7 +6,7 @@ include(WZVcpkgInit) # Must come before project() command
 set(CMAKE_MODULE_PATH "${_OLD_CMAKE_MODULE_PATH}")
 unset(_OLD_CMAKE_MODULE_PATH)
 
-project(warzone2100)
+project(warzone2100 LANGUAGES C CXX)
 
 include(CMakeDependentOption)
 
@@ -60,9 +60,10 @@ else()
 endif()
 
 # CXX Standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # Disable compiler-specific extensions
+set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 # Support folders (for nicer IDE organization)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -412,6 +413,8 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
 		elseif (CMAKE_CXX_STANDARD EQUAL 17)
 			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++1z")
+		elseif (CMAKE_CXX_STANDARD EQUAL 20)
+			set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++2a")
 		else()
 			# Additional mapping required for CMAKE_CXX_STANDARD => Xcode's CLANG_CXX_LANGUAGE_STANDARD attribute (above)
 			# Also may need to bump the minimum supported version of Xcode for compilation
@@ -722,6 +725,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Handle -Wunused-but-set-variable (warning-only for now)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}unused-but-set-variable" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}unused-but-set-variable -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}unused-but-set-variable" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		# Handle -Wpsabi (GCC, warning-only)
+		check_compiler_flags_output("-Werror ${WZ_Wno_}psabi -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}psabi" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror ${WZ_Wno_}psabi -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}psabi" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# Disable -Wsign-compare (FIXME)
 		check_compiler_flags_output("-Werror -Wno-sign-compare -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-sign-compare" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)

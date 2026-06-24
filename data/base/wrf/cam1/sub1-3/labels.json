@@ -43,6 +43,10 @@
 		"label": "ScavAssemblySouth",
 		"pos": [6400, 7296]
 	},
+	"position_11": {
+		"label": "NPReinforcementPosWest",
+		"pos": [128, 6656]
+	},
 
 	"area_0": {
 		"label": "LandingZone",

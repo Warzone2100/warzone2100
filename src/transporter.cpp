@@ -605,7 +605,7 @@ bool intAddDroidsAvailForm()
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	//add droids built before the mission
-	for (DROID *psDroid : mission.apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : mission.gameWorld.objects.droids[selectedPlayer])
 	{
 		//stop adding the buttons once IDTRANS_DROIDEND has been reached
 		if (nextButtonId == IDTRANS_DROIDEND)
@@ -938,12 +938,12 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 			//pick a tile because save games won't remember where the droid was when it was loaded
 			droidPos = map_coord(Vector2i(getLandingX(0), getLandingY(0)));
 		}
-		if (!pickATileGen(&droidPos, LOOK_FOR_EMPTY_TILE, zonedPAT))
+		if (!pickATileGen(gameWorld, &droidPos, LOOK_FOR_EMPTY_TILE, zonedPAT))
 		{
 			ASSERT(false, "Unable to find a valid location");
 		}
-		droidSetPosition(psDroid, world_coord(droidPos.x), world_coord(droidPos.y));
-		updateDroidOrientation(psDroid);
+		droidSetPosition(psDroid, gameWorld.map, world_coord(droidPos.x), world_coord(droidPos.y));
+		updateDroidOrientation(psDroid, gameWorld.map);
 	}
 
 	// remove it from the transporter group
@@ -952,19 +952,19 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 	//add it back into apsDroidLists
 	if (onMission)
 	{
-		addDroid(psDroid, mission.apsDroidLists);
+		addDroid(psDroid, mission.gameWorld.objects.droids);
 	}
 	else
 	{
 		// add the droid back onto the droid list
-		addDroid(psDroid, apsDroidLists);
+		addDroid(psDroid, gameWorld.objects.droids);
 	}
 
 	if (psDroid->pos.x != INVALID_XY)
 	{
 		// We can update the orders now, since everyone has been
 		// notified of the droid exiting the transporter
-		updateDroidOrientation(psDroid);
+		updateDroidOrientation(psDroid, gameWorld.map);
 	}
 	//initialise the movement data
 	initDroidMovement(psDroid);
@@ -1039,15 +1039,24 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 		if (bMultiPlayer)
 		{
 			// search for the nearest transporter if the current one is already full
-			for (auto psOtherDroid : apsDroidLists[psTransporter->player])
+			for (auto psOtherDroid : gameWorld.objects.droids[psTransporter->player])
 			{
-				if (psOtherDroid->isTransporter() && checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
+				if (psOtherDroid->isTransporter() &&
+					checkTransporterSpace(psOtherDroid, psDroidToAdd) &&
 					droidSqDist(psOtherDroid, psTransporter) < MAX_NEAREST_TRANSPORT_SQ_DIST)
 				{
+					if (psOtherDroid->droidType == DROID_TRANSPORTER && !psDroidToAdd->isCyborg())
+					{
+						continue; // Only send cyborgs to a cyborg transporter.
+					}
 					orderDroidObj(psDroidToAdd, DORDER_EMBARK, psOtherDroid, ModeQueue);
 					return;
 				}
 			}
+		}
+		if (!onMission && psDroidToAdd->isVtol())
+		{
+			moveStopDroid(psDroidToAdd); // So VTOLs are put into a MOVEHOVER status from the prior moveReallyStopDroid() in order.cpp's embark section.
 		}
 		if (psTransporter->player == selectedPlayer)
 		{
@@ -1066,12 +1075,12 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	if (onMission)
 	{
 		// removing from droid mission list
-		bDroidRemoved = droidRemove(psDroidToAdd, mission.apsDroidLists);
+		bDroidRemoved = droidRemove(psDroidToAdd, mission.gameWorld.objects.droids);
 	}
 	else
 	{
 		// removing from droid list
-		bDroidRemoved = droidRemove(psDroidToAdd, apsDroidLists);
+		bDroidRemoved = droidRemove(psDroidToAdd, gameWorld.objects.droids);
 	}
 
 	if (bDroidRemoved)
@@ -1090,7 +1099,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	}
 	else
 	{
-		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd);
+		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd, gameWorld.map);
 	}
 	fpathRemoveDroidData(psDroidToAdd->id);
 
@@ -1147,11 +1156,11 @@ DroidList* transInterfaceDroidList()
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Cannot be called for selectedPlayer: %" PRIu32 "", selectedPlayer);
 	if (onMission)
 	{
-		return &mission.apsDroidLists[selectedPlayer];
+		return &mission.gameWorld.objects.droids[selectedPlayer];
 	}
 	else
 	{
-		return &apsDroidLists[selectedPlayer];
+		return &gameWorld.objects.droids[selectedPlayer];
 	}
 }
 
@@ -1248,7 +1257,7 @@ bool updateTransporter(DROID *psTransporter)
 		//Remove visibility so tiles are not bright around where the transporter left the map
 		if (psTransporter->action != DACTION_TRANSPORTIN)
 		{
-			visRemoveVisibility((BASE_OBJECT *) psTransporter);
+			visRemoveVisibility((BASE_OBJECT *) psTransporter, gameWorld.map);
 		}
 
 		// Got to destination

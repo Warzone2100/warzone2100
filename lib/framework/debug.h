@@ -135,6 +135,12 @@ extern bool assertEnabled;
 #define ASSERT_OR_RETURN(retval, expr, ...) \
 	do { bool _wzeval = debug_likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
 
+/**
+ * Coroutine version of ASSERT_OR_RETURN.
+ */
+#define CORO_ASSERT_OR_RETURN(retval, expr, ...) \
+	do { bool _wzeval = debug_likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); co_return retval; } } while (0)
+
 #define ASSERT_NOT_NULLPTR_OR_RETURN(retval, ptrexpr) \
 	ASSERT_OR_RETURN(retval, (ptrexpr) != nullptr, "%s should not be nullptr", #ptrexpr)
 
@@ -209,6 +215,7 @@ enum code_part
 	LOG_RESEARCH,
 	LOG_SAVEGAME,
 	LOG_REPAIRS,
+	LOG_LOBBY,
 	LOG_LAST /**< _must_ be last! */
 };
 

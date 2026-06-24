@@ -28,6 +28,7 @@
 
 #include <memory>
 
+struct WorldMapState;
 
 /** Return values for routing
  *
@@ -78,7 +79,7 @@ void fpathUpdate();
 
 /** Find a route for a droid to a location.
  */
-FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
 /// Returns true iff the parameters have equivalent behaviour in fpathBaseBlockingTile.
 bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
@@ -96,13 +97,13 @@ bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_M
  *
  *  @return true if the given tile is blocking for this droid
  */
-bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
-bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
-bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
+bool fpathBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
+bool fpathDroidBlockingTile(DROID *psDroid, const WorldMapState& mapState, int x, int y, FPATH_MOVETYPE moveType);
+bool fpathBaseBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
-static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion)
+static inline bool fpathBlockingTile(const WorldMapState& mapState, Vector2i tile, PROPULSION_TYPE propulsion)
 {
-	return fpathBlockingTile(tile.x, tile.y, propulsion);
+	return fpathBlockingTile(mapState, tile.x, tile.y, propulsion);
 }
 
 /** Set a direct path to position.
@@ -119,7 +120,7 @@ void fpathRemoveDroidData(int id);
 
 /** Quick O(1) test of whether it is theoretically possible to go from origin to destination
  *  using the given propulsion type. orig and dest are in world coordinates. */
-bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion);
+bool fpathCheck(WorldMapState& mapState, Position orig, Position dest, PROPULSION_TYPE propulsion);
 
 /** Unit testing. */
 void fpathTest(int x, int y, int x2, int y2);

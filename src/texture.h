@@ -51,7 +51,6 @@ int getTextureSize();
 // decal size
 int getCurrentTileTextureSize();
 
-gfx_api::texture* getFallbackTerrainDecalsPage();
 bool reloadTileTextures();
 
 #endif // __INCLUDED_SRC_TEXTURE_H__

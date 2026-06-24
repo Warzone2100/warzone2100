@@ -99,6 +99,10 @@
 		"label": "southWestSpawnPos",
 		"pos": [384, 14336]
 	},
+	"position_25": {
+		"label": "insaneNorthSpawnPos",
+		"pos": [12160, 384]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -236,6 +240,12 @@
 	"object_10": {
 		"label": "COInfernoEmplacement-Arti",
 		"id": 4308,
+		"player": 2,
+		"type": 1
+	},
+	"object_11": {
+		"label": "COPepperpotPitNE",
+		"id": 4752,
 		"player": 2,
 		"type": 1
 	}

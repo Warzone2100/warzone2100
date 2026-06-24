@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "97bbb13b57ea5ae4e9edd851601f36a1acb3868a",
+	"builtin-baseline": "77df67cfff9c12ccfdb52284e07c87c75092f723",
 	"dependencies": [
 		"physfs",
 		{
@@ -29,6 +29,7 @@
 			"name": "freetype",
 			"platform": "!emscripten"
 		},
+		"libjpeg-turbo",
 		"libogg",
 		"libtheora",
 		"libvorbis",
@@ -99,9 +100,7 @@
 		}
 	],
 	"overrides": [
-		{ "name": "openal-soft", "version": "1.24.3" },
-		{ "name": "sqlite3", "version": "3.49.2" },
-		{ "name": "abseil", "version": "20250127.1", "port-version": 4}
+		{ "name": "sqlite3", "version": "3.49.2" }
 	],
 	"default-features": [
 		"vulkan"

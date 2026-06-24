@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-02-01 03:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -213,10 +213,10 @@ msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusivel
 msgstr "半机械人工厂的运作方式与标准工厂类似，但专门用于生产半机械人单位。"
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "每座工厂同一时间只能生产一个半机械人，但您可以将多个半机械人加入生产队列。"
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "当半机械人单位生产完成后，它将自动接收半机械人工厂预设的出击指令，并前往该工厂设定的集结地点。"
 
 msgid "Demolishing Structures"
 msgstr "拆除建筑物"
@@ -414,16 +414,16 @@ msgid "Recycling"
 msgstr "回收"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "回收单位会将其送至最近的工厂或修理设施，并在此处被移出战场。"
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "返还一半的能源 (如单位受损，返还能源将减少)。"
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "被回收单位的经验值将转移至下一个生产出的单位。"
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "当回收多个有经验的单位时，将优先转移经验值最高的单位的经验值。"
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr "您可以通过单位命令菜单或“返回以回收”快捷键命令使单位返回回收。"
@@ -501,16 +501,16 @@ msgid "Attaching Units"
 msgstr "指派单位"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "若要将单位编入指挥官麾下，需先选中目标单位，再左键点击你想要编入的指挥官。编队完成后，已编入单位的旁侧会出现标识，以示编队状态。"
 
 msgid "## Limits:"
 msgstr "## 限制："
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "指挥官可指挥的单位数量存在上限，该上限受其等级影响。指挥官积累到指定的经验值后，即可获得晋升。"
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "每次晋升后，指挥官可指挥的单位数量将增加 2 个。"
 
 msgid "Detaching Units"
 msgstr "分离单位"
@@ -537,7 +537,7 @@ msgid "Targeting"
 msgstr "单位锁定"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "选中指挥官并锁定敌方单位或建筑为目标后，其麾下的附属单位将自动移动并向该目标开火。"
 
 msgid "The attached units will have greater accuracy when firing."
 msgstr "指派给指挥官的单位在射击时更准确。"
@@ -552,7 +552,7 @@ msgid "Commanders provide an accuracy, armor, and movement speed bonus to all un
 msgstr "指挥官为指派给它们的所有单位提供射击精度、装甲和移动速度加成，这种加成随着指挥官等级的增加而提升。"
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "指挥官初始最多可编入 6 个攻击单位，每晋升一级，该指挥上限将提升 2 个。"
 
 msgid "Designing Units"
 msgstr "设计单位"
@@ -630,7 +630,7 @@ msgid "However, they come at a higher production cost, provide little hitpoints,
 msgstr "然而，气垫载具的制造成本更高，耐久度较低，且对多数攻击类型抗性较弱。"
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "气垫载具凭借其高速特性与水上通行能力，非常适合执行“打了就跑”的战术。"
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
 msgstr "然而，与轮式车辆类似，气垫载具极不适合在前线进行持久战斗。"
@@ -843,7 +843,7 @@ msgid "Artillery weapons, by themselves, cannot fire more than their own sensor 
 msgstr "炮兵武器本身的射击不能超过自己的传感器射程 (未升级时为8个格子)。"
 
 msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "然而，即便是最基础的火炮武器，其射程也超出了自身的内置传感器范围。若要使用火炮，你需在战场上建造并部署传感器（可为传感器塔，也可为搭载传感器炮塔的坦克）。"
 
 msgid "Kinetic & Thermal Damage"
 msgstr "动能与热能伤害"
@@ -915,10 +915,10 @@ msgid "All-Rounder"
 msgstr "多面手"
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr ""
+msgstr "通用型武器的效果不如专用武器。"
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr ""
+msgstr "但通用型武器对所有类型的目标均具备中等效能，这一点与专用武器有所不同。"
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
 msgstr "“多面手”武器还会为装备它的单位提供可观的生命值加成，但代价是自身具有更高的重量值。"
@@ -1026,7 +1026,7 @@ msgid "Flamer"
 msgstr "火焰武器"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "燃烧型 “火焰喷射” 武器对步兵单位及防护较弱的推进动力坦克效果显著。"
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
 msgstr "火焰喷射武器在对抗碉堡和拾荒者建筑方面同样表现出色，但对其他建筑的效果相对较弱。"

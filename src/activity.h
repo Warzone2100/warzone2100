@@ -132,8 +132,7 @@ public:
 		std::string hostName;		// host player name
 		ListeningInterfaces listeningInterfaces;
 		std::string lobbyAddress;
-		unsigned int lobbyPort;
-		uint32_t lobbyGameId = 0;
+		std::string lobbyGameId;
 
 		uint32_t hostPlayer = 0;
 		bool isHost;	// whether the current client is the game host
@@ -219,15 +218,15 @@ public:
 	void rebuiltSearchPath();
 
 	// called when a joinable multiplayer game is hosted
-	// lobbyGameId is 0 if the lobby can't be contacted / the game is not registered with the lobby
-	void hostGame(const char *SessionName, const char *PlayerName, const char* lobbyAddress, unsigned int lobbyPort, const ActivitySink::ListeningInterfaces& listeningInterfaces, uint32_t lobbyGameId = 0);
+	// lobbyGameId is empty if the lobby can't be contacted / the game is not registered with the lobby
+	void hostGame(const char *SessionName, const char *PlayerName, const std::string& lobbyAddress, const ActivitySink::ListeningInterfaces& listeningInterfaces, std::string lobbyGameId = "");
 	void hostGameLobbyServerDisconnect();
 	void hostLobbyQuit(LOBBY_ERROR_TYPES errorResult);
-	// called when attempting to join a lobby game
-	void willAttemptToJoinLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId, const std::vector<JoinConnectionDescription>& connections);
 	// called when an attempt to join fails
-	void joinGameFailed(const std::vector<JoinConnectionDescription>& connection_list);
-	// called when joining a multiplayer game
+	void joinGameFailed();
+	// called when joining a multiplayer game (lobby)
+	void joinLobbyGameSucceeded(const std::string& lobbyAddress, const std::string& gameId, const char *host, uint32_t port);
+	// called when joining a multiplayer game (direct)
 	void joinGameSucceeded(const char *host, uint32_t port);
 	void joinedLobbyQuit(LOBBY_ERROR_TYPES errorResult);
 	// for skirmish / multiplayer, provide additional data / state
@@ -265,23 +264,6 @@ private:
 	LoadedLevelEvent* cachedLoadedLevelEvent = nullptr;
 
 	LoadedLevelEvent lastLoadedLevelEvent;
-
-	struct FoundLobbyGameDetails
-	{
-		std::string lobbyAddress;
-		unsigned int lobbyPort;
-		uint32_t lobbyGameId;
-		std::vector<JoinConnectionDescription> connections;
-
-		void clear()
-		{
-			lobbyAddress.clear();
-			lobbyPort = 0;
-			lobbyGameId = 0;
-			connections.clear();
-		}
-	};
-	FoundLobbyGameDetails lastLobbyGameJoinAttempt;
 
 	optional<std::vector<Sha256>> lastLoadedMods;
 };

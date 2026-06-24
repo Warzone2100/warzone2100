@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,10 +33,12 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
-#include "lib/framework/frameresource.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/loading_task.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "lib/framework/debug.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/pienormalize.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -1211,67 +1215,180 @@ static void _imd_determine_tileset_texture_files(iIMDShape& s, const LevelSettin
 	}
 }
 
-static bool _imd_load_level_textures(const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output)
+struct ImdResolvedLevelTextureFiles
+{
+	std::string diffuseFile;
+	optional<std::string> tcmaskFile;
+	optional<std::string> normalFile;
+	optional<std::string> specularFile;
+};
+
+static bool imdResolveLevelTextureFiles(const iIMDShape& s, size_t tilesetIdx, ImdResolvedLevelTextureFiles& resolved)
 {
 	const auto& defaultSettings = s.tilesetTextureFiles[0];
 	const auto& tilesetSettings = s.tilesetTextureFiles[tilesetIdx];
 
-	const WzString &filename = s.modelName;
 	const TilesetTextureFiles* pLevelSettingsToUseForTextures = (!tilesetSettings.texfile.empty()) ? &tilesetSettings : &defaultSettings;
-	if (!pLevelSettingsToUseForTextures->texfile.empty())
+	if (pLevelSettingsToUseForTextures->texfile.empty())
 	{
-		optional<size_t> texpage = iV_GetTexture(pLevelSettingsToUseForTextures->texfile.c_str(), gfx_api::texture_type::game_texture);
-		optional<size_t> tcmaskpage;
-		optional<size_t> normalpage;
-		optional<size_t> specpage;
+		return false;
+	}
 
-		ASSERT_OR_RETURN(false, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTextures->texfile.c_str());
+	resolved.diffuseFile = pLevelSettingsToUseForTextures->texfile;
 
-		const TilesetTextureFiles* pLevelSettingsToUseForTCMask = (!tilesetSettings.tcmaskfile.empty()) ? &tilesetSettings : &defaultSettings;
-		if (!pLevelSettingsToUseForTCMask->tcmaskfile.empty())
-		{
-			// load explicitly specified tcmask file
-			debug(LOG_TEXTURE, "Loading tcmask %s for %s", pLevelSettingsToUseForTCMask->tcmaskfile.c_str(), filename.toUtf8().c_str());
-			tcmaskpage = iV_GetTexture(pLevelSettingsToUseForTCMask->tcmaskfile.c_str(), gfx_api::texture_type::alpha_mask);
-			ASSERT_OR_RETURN(false, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), pLevelSettingsToUseForTCMask->tcmaskfile.c_str());
-		}
-		else
-		{
-			// BACKWARDS-COMPATIBILITY (PIE 2/3 compatibility)
-			// check if model should use team colour mask
-			if (s.flags & iV_IMD_TCMASK)
-			{
-				std::string tcmask_name = pie_MakeTexPageTCMaskName(pLevelSettingsToUseForTextures->texfile.c_str());
-				tcmask_name += ".png";
-				tcmaskpage = iV_GetTexture(tcmask_name.c_str(), gfx_api::texture_type::alpha_mask);
-				ASSERT_OR_RETURN(false, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
-			}
-		}
+	const TilesetTextureFiles* pLevelSettingsToUseForTCMask = (!tilesetSettings.tcmaskfile.empty()) ? &tilesetSettings : &defaultSettings;
+	if (!pLevelSettingsToUseForTCMask->tcmaskfile.empty())
+	{
+		resolved.tcmaskFile = pLevelSettingsToUseForTCMask->tcmaskfile;
+	}
+	else if (s.flags & iV_IMD_TCMASK)
+	{
+		// BACKWARDS-COMPATIBILITY (PIE 2/3 compatibility)
+		std::string tcmask_name = pie_MakeTexPageTCMaskName(pLevelSettingsToUseForTextures->texfile.c_str());
+		tcmask_name += ".png";
+		resolved.tcmaskFile = std::move(tcmask_name);
+	}
 
-		const TilesetTextureFiles* pLevelSettingsToUseForNormals = (!tilesetSettings.normalfile.empty()) ? &tilesetSettings : &defaultSettings;
-		if (!pLevelSettingsToUseForNormals->normalfile.empty())
-		{
-			debug(LOG_TEXTURE, "Loading normal map %s for %s", pLevelSettingsToUseForNormals->normalfile.c_str(), filename.toUtf8().c_str());
-			normalpage = iV_GetTexture(pLevelSettingsToUseForNormals->normalfile.c_str(), gfx_api::texture_type::normal_map);
-			ASSERT_OR_RETURN(false, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForNormals->normalfile.c_str());
-		}
+	const TilesetTextureFiles* pLevelSettingsToUseForNormals = (!tilesetSettings.normalfile.empty()) ? &tilesetSettings : &defaultSettings;
+	if (!pLevelSettingsToUseForNormals->normalfile.empty())
+	{
+		resolved.normalFile = pLevelSettingsToUseForNormals->normalfile;
+	}
 
-		const TilesetTextureFiles* pLevelSettingsToUseForSpecular = (!tilesetSettings.specfile.empty()) ? &tilesetSettings : &defaultSettings;
-		if (!pLevelSettingsToUseForSpecular->specfile.empty())
-		{
-			debug(LOG_TEXTURE, "Loading specular map %s for %s", pLevelSettingsToUseForSpecular->specfile.c_str(), filename.toUtf8().c_str());
-			specpage = iV_GetTexture(pLevelSettingsToUseForSpecular->specfile.c_str(), gfx_api::texture_type::specular_map);
-			ASSERT_OR_RETURN(false, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), pLevelSettingsToUseForSpecular->specfile.c_str());
-		}
-
-		// assign tex pages and flags for this level
-		output.texpage = texpage.value();
-		output.tcmaskpage = (tcmaskpage.has_value()) ? tcmaskpage.value() : iV_TEX_INVALID;
-		output.normalpage = (normalpage.has_value()) ? normalpage.value() : iV_TEX_INVALID;
-		output.specularpage = (specpage.has_value()) ? specpage.value() : iV_TEX_INVALID;
+	const TilesetTextureFiles* pLevelSettingsToUseForSpecular = (!tilesetSettings.specfile.empty()) ? &tilesetSettings : &defaultSettings;
+	if (!pLevelSettingsToUseForSpecular->specfile.empty())
+	{
+		resolved.specularFile = pLevelSettingsToUseForSpecular->specfile;
 	}
 
 	return true;
+}
+
+static void imdAssignLoadedLevelTexturePages(iIMDShapeTextures& output, size_t texpage, const optional<size_t>& tcmaskpage, const optional<size_t>& normalpage, const optional<size_t>& specpage)
+{
+	output.texpage = texpage;
+	output.tcmaskpage = tcmaskpage.value_or(iV_TEX_INVALID);
+	output.normalpage = normalpage.value_or(iV_TEX_INVALID);
+	output.specularpage = specpage.value_or(iV_TEX_INVALID);
+}
+
+static bool _imd_load_level_textures(const iIMDShape& s, size_t tilesetIdx, iIMDShapeTextures& output)
+{
+	ImdResolvedLevelTextureFiles resolved;
+	if (!imdResolveLevelTextureFiles(s, tilesetIdx, resolved))
+	{
+		return true;
+	}
+
+	const WzString &filename = s.modelName;
+	optional<size_t> texpage = iV_GetTexture(resolved.diffuseFile.c_str(), gfx_api::texture_type::game_texture);
+	ASSERT_OR_RETURN(false, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.diffuseFile.c_str());
+
+	optional<size_t> tcmaskpage;
+	if (resolved.tcmaskFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading tcmask %s for %s", resolved.tcmaskFile->c_str(), filename.toUtf8().c_str());
+		tcmaskpage = iV_GetTexture(resolved.tcmaskFile->c_str(), gfx_api::texture_type::alpha_mask);
+		ASSERT_OR_RETURN(false, tcmaskpage.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), resolved.tcmaskFile->c_str());
+	}
+
+	optional<size_t> normalpage;
+	if (resolved.normalFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading normal map %s for %s", resolved.normalFile->c_str(), filename.toUtf8().c_str());
+		normalpage = iV_GetTexture(resolved.normalFile->c_str(), gfx_api::texture_type::normal_map);
+		ASSERT_OR_RETURN(false, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.normalFile->c_str());
+	}
+
+	optional<size_t> specpage;
+	if (resolved.specularFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading specular map %s for %s", resolved.specularFile->c_str(), filename.toUtf8().c_str());
+		specpage = iV_GetTexture(resolved.specularFile->c_str(), gfx_api::texture_type::specular_map);
+		ASSERT_OR_RETURN(false, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.specularFile->c_str());
+	}
+
+	imdAssignLoadedLevelTexturePages(output, texpage.value(), tcmaskpage, normalpage, specpage);
+	return true;
+}
+
+LoadingTask<> imdLoadLevelTexturesTask(
+	ResourceLoadingController& controller,
+	const iIMDShape& s,
+	size_t tilesetIdx,
+	iIMDShapeTextures& output)
+{
+	ImdResolvedLevelTextureFiles resolved;
+	if (!imdResolveLevelTextureFiles(s, tilesetIdx, resolved))
+	{
+		co_return load_ok();
+	}
+
+	const WzString &filename = s.modelName;
+	const auto texpageResult = co_await iV_GetTextureTask(controller, resolved.diffuseFile.c_str(), gfx_api::texture_type::game_texture);
+	CORO_ASSERT_OR_RETURN(load_fail(), texpageResult.has_value() && texpageResult->has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.diffuseFile.c_str());
+	optional<size_t> texpage = texpageResult.value();
+	optional<size_t> tcmaskpage;
+	optional<size_t> normalpage;
+	optional<size_t> specpage;
+
+	if (resolved.tcmaskFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading tcmask %s for %s", resolved.tcmaskFile->c_str(), filename.toUtf8().c_str());
+		const auto tcmaskpageResult = co_await iV_GetTextureTask(controller, resolved.tcmaskFile->c_str(), gfx_api::texture_type::alpha_mask);
+		CORO_ASSERT_OR_RETURN(load_fail(), tcmaskpageResult.has_value() && tcmaskpageResult->has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), resolved.tcmaskFile->c_str());
+		tcmaskpage = tcmaskpageResult.value();
+	}
+
+	if (resolved.normalFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading normal map %s for %s", resolved.normalFile->c_str(), filename.toUtf8().c_str());
+		const auto normalpageResult = co_await iV_GetTextureTask(controller, resolved.normalFile->c_str(), gfx_api::texture_type::normal_map);
+		CORO_ASSERT_OR_RETURN(load_fail(), normalpageResult.has_value() && normalpageResult->has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.normalFile->c_str());
+		normalpage = normalpageResult.value();
+	}
+
+	if (resolved.specularFile.has_value())
+	{
+		debug(LOG_TEXTURE, "Loading specular map %s for %s", resolved.specularFile->c_str(), filename.toUtf8().c_str());
+		const auto specpageResult = co_await iV_GetTextureTask(controller, resolved.specularFile->c_str(), gfx_api::texture_type::specular_map);
+		CORO_ASSERT_OR_RETURN(load_fail(), specpageResult.has_value() && specpageResult->has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), resolved.specularFile->c_str());
+		specpage = specpageResult.value();
+	}
+
+	imdAssignLoadedLevelTexturePages(output, texpage.value(), tcmaskpage, normalpage, specpage);
+	co_return load_ok();
+}
+
+LoadingTask<> preloadAllModelTexturesTask(ResourceLoadingController& controller)
+{
+	for (auto& keyvaluepair : models)
+	{
+		iIMDBaseShape& baseModel = *keyvaluepair.second.get();
+		for (iIMDShape *pDisplayShape = baseModel.mutableDisplayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
+		{
+			if (pDisplayShape->m_textures->initialized)
+			{
+				continue;
+			}
+
+			if (!(co_await imdLoadLevelTexturesTask(controller, *pDisplayShape, currentTilesetIdx, *pDisplayShape->m_textures)))
+			{
+				++modelTextureLoadingFailures;
+				continue;
+			}
+			pDisplayShape->m_textures->initialized = true;
+		}
+
+		co_await controller.yieldFrame();
+	}
+
+	if (modelTextureLoadingFailures > 0)
+	{
+		co_return load_fail();
+	}
+
+	co_return load_ok();
 }
 
 // performance hack
@@ -1444,11 +1561,11 @@ void finishTangentsGeneration()
 	   // Calculate handedness
 	   if (glm::dot(glm::cross(n, t), b) < 0.f)
 	   {
-		   tangentsAsVec4[i] = Vector4f(-t, 1.f);
+		   tangentsAsVec4[i] = Vector4f(t, 1.f);
 	   }
 	   else
 	   {
-		   tangentsAsVec4[i] = Vector4f(-t, -1.f);
+		   tangentsAsVec4[i] = Vector4f(t, -1.f);
 	   }
    }
 }

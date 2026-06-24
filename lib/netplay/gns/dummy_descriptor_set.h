@@ -35,7 +35,7 @@ class DummyDescriptorSet : public IDescriptorSet
 
 	virtual net::result<int> poll(std::chrono::milliseconds timeout) override { return 1; }
 
-	virtual bool isSet(const IClientConnection*) const override { return true; }
+	virtual ::tl::expected<bool, ErroredState> isSet(const IClientConnection* conn) const override { return true; }
 };
 
 } // namespace gns

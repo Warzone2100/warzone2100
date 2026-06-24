@@ -31,6 +31,7 @@
 #include "lib/widget/margin.h"
 #include "lib/widget/paragraph.h"
 #include "lib/widget/popovermenu.h"
+#include "lib/widget/editbox.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "src/multiplay.h"
@@ -42,68 +43,38 @@
 #include "frontendimagebutton.h"
 #include "advcheckbox.h"
 #include "src/screens/joiningscreen.h"
+#include "lib/netplay/netlobby.h"
+#include "src/warzoneconfig.h"
+#include "optionsform.h"
+#include "src/multijoin_helpers.h"
 
 #include <numeric>
 #include <vector>
 #include <optional>
 #include <unordered_set>
 
-// MARK: - Global status of fetch threads
-
-static std::unordered_set<WZ_THREAD*> pendingFetchThreads;
-
-static void registerCreatedFetchThread(WZ_THREAD *thread)
-{
-	pendingFetchThreads.insert(thread);
-}
-
-static int joinFetchThread(WZ_THREAD *thread)
-{
-	auto erased = pendingFetchThreads.erase(thread);
-	ASSERT_OR_RETURN(-1, erased > 0, "Could not find pending fetch thread");
-	return wzThreadJoin(thread);
-}
-
-// MARK: - LobbyGameInfo struct
-
-class LobbyGameInfo
-{
-public:
-	uint32_t gameId = 0;
-	WzString name;
-	WzString hostName;
-	WzString mapName;
-	uint32_t netcode_version_major = 0;
-	uint32_t netcode_version_minor = 0;
-	WzString gameVersionStr;
-	std::vector<WzString> mods;
-	uint8_t joinedPlayers = 0;
-	uint8_t maxPlayers = 0;
-	SpectatorInfo spectatorInfo;
-	bool isPrivate = false;
-	optional<AllianceType> alliancesMode = nullopt;
-	BLIND_MODE blindMode = BLIND_MODE::NONE;
-	uint32_t limits = 0;	// holds limits bitmask (NO_VTOL|NO_TANKS|NO_BORGS)
-	std::vector<JoinConnectionDescription> connectionDesc;
-};
+static constexpr uint32_t LOB_DEFAULT_BEHAVIOR_CHECKSUM = 2462613339;
 
 // MARK: - Lobby Status Overlay Widget
 
 class LobbyStatusOverlayWidget : public WIDGET
 {
+public:
+	typedef std::function<void()> OnResetLobbyAddressClickFunc;
 protected:
-	void initialize();
+	void initialize(const OnResetLobbyAddressClickFunc& onResetLobbyAddressClickFunc);
 	virtual void geometryChanged() override;
 	virtual void display(int xOffset, int yOffset) override;
 public:
-	static std::shared_ptr<LobbyStatusOverlayWidget> make()
+	static std::shared_ptr<LobbyStatusOverlayWidget> make(const OnResetLobbyAddressClickFunc& onResetLobbyAddressClickFunc)
 	{
 		class make_shared_enabler: public LobbyStatusOverlayWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize();
+		widget->initialize(onResetLobbyAddressClickFunc);
 		return widget;
 	}
 	void showIndeterminateIndicator(bool show);
+	void showResetLobbyAddressButton(bool show);
 	virtual void setString(WzString string) override;
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
@@ -112,10 +83,17 @@ private:
 private:
 	std::shared_ptr<W_LABEL> textLabel;
 	std::shared_ptr<WIDGET> indeterminateIndicator;
+	std::shared_ptr<WzFrontendImageButton> resetLobbyAddressButton;
+
+	OnResetLobbyAddressClickFunc onResetLobbyAddressClickFunc;
+
+	const int verticalBetweenItemsPadding = 20;
 };
 
-void LobbyStatusOverlayWidget::initialize()
+void LobbyStatusOverlayWidget::initialize(const OnResetLobbyAddressClickFunc& _onResetLobbyAddressClickFunc)
 {
+	onResetLobbyAddressClickFunc = _onResetLobbyAddressClickFunc;
+
 	textLabel = std::make_shared<W_LABEL>();
 	textLabel->setFont(font_medium_bold, WZCOL_TEXT_MEDIUM);
 	textLabel->setTextAlignment(WLAB_ALIGNTOP);
@@ -126,6 +104,21 @@ void LobbyStatusOverlayWidget::initialize()
 	indeterminateIndicator = createJoiningIndeterminateProgressWidget(font_medium_bold);
 	indeterminateIndicator->show(false);
 	attach(indeterminateIndicator);
+
+	resetLobbyAddressButton = WzFrontendImageButton::make(IMAGE_ARROW_UNDO);
+	resetLobbyAddressButton->setString(_("Reset Lobby Address to Default"));
+	resetLobbyAddressButton->setPadding(6, 5);
+	resetLobbyAddressButton->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
+	resetLobbyAddressButton->setGeometry(0, 0, resetLobbyAddressButton->idealWidth(), resetLobbyAddressButton->idealHeight());
+	auto weakSelf = std::weak_ptr<LobbyStatusOverlayWidget>(std::dynamic_pointer_cast<LobbyStatusOverlayWidget>(shared_from_this()));
+	resetLobbyAddressButton->addOnClickHandler([weakSelf](W_BUTTON& but) {
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent?");
+		ASSERT_OR_RETURN(, strongSelf->onResetLobbyAddressClickFunc != nullptr, "Func is null?");
+		strongSelf->onResetLobbyAddressClickFunc();
+	});
+	resetLobbyAddressButton->show(false);
+	attach(resetLobbyAddressButton);
 }
 
 int32_t LobbyStatusOverlayWidget::idealWidth()
@@ -135,7 +128,28 @@ int32_t LobbyStatusOverlayWidget::idealWidth()
 
 int32_t LobbyStatusOverlayWidget::idealHeight()
 {
-	return iV_GetTextLineSize(font_medium_bold) + indeterminateIndicator->idealHeight();
+	auto result = 0;
+	if (!textLabel->getString().isEmpty())
+	{
+		result += iV_GetTextLineSize(font_medium_bold);
+	}
+	if (indeterminateIndicator->visible())
+	{
+		if (result > 0)
+		{
+			result += verticalBetweenItemsPadding;
+		}
+		result += indeterminateIndicator->idealHeight();
+	}
+	if (resetLobbyAddressButton->visible())
+	{
+		if (result > 0)
+		{
+			result += verticalBetweenItemsPadding;
+		}
+		result += resetLobbyAddressButton->idealHeight();
+	}
+	return result;
 }
 
 void LobbyStatusOverlayWidget::recalcLayout()
@@ -148,11 +162,22 @@ void LobbyStatusOverlayWidget::recalcLayout()
 		int labelWidth = std::min(w, textLabel->idealWidth());
 		int labelX0 = (w - labelWidth) / 2;
 		textLabel->setGeometry(labelX0, nextWidgY0, labelWidth, textLabel->idealHeight());
-		nextWidgY0 = textLabel->height();
+		nextWidgY0 = textLabel->height() + verticalBetweenItemsPadding;
 	}
 
-	int indicatorX0 = (w - indeterminateIndicator->idealWidth()) / 2;
-	indeterminateIndicator->setGeometry(indicatorX0, nextWidgY0, indeterminateIndicator->idealWidth(), indeterminateIndicator->idealHeight());
+	if (indeterminateIndicator->visible())
+	{
+		int indicatorX0 = (w - indeterminateIndicator->idealWidth()) / 2;
+		indeterminateIndicator->setGeometry(indicatorX0, nextWidgY0, indeterminateIndicator->idealWidth(), indeterminateIndicator->idealHeight());
+		nextWidgY0 = indeterminateIndicator->y() + indeterminateIndicator->height() + verticalBetweenItemsPadding;
+	}
+
+	if (resetLobbyAddressButton->visible())
+	{
+		int resetButtonWidth = std::min<int>(resetLobbyAddressButton->idealWidth(), w);
+		int resetButtonX0 = (w - resetButtonWidth) / 2;
+		resetLobbyAddressButton->setGeometry(resetButtonX0, nextWidgY0, resetButtonWidth, resetLobbyAddressButton->idealHeight());
+	}
 }
 
 void LobbyStatusOverlayWidget::geometryChanged()
@@ -178,12 +203,23 @@ void LobbyStatusOverlayWidget::display(int xOffset, int yOffset)
 
 void LobbyStatusOverlayWidget::showIndeterminateIndicator(bool show)
 {
+	if (indeterminateIndicator->visible() == show)
+	{
+		return;
+	}
 	indeterminateIndicator->show(show);
+	recalcLayout();
 }
 
 void LobbyStatusOverlayWidget::setString(WzString string)
 {
 	textLabel->setString(string);
+	recalcLayout();
+}
+
+void LobbyStatusOverlayWidget::showResetLobbyAddressButton(bool show)
+{
+	resetLobbyAddressButton->show(show);
 	recalcLayout();
 }
 
@@ -361,14 +397,14 @@ class LobbyGameNameWidget : public WIDGET
 {
 protected:
 	LobbyGameNameWidget() { }
-	void initialize(const WzString& roomName, const WzString& hostName);
+	void initialize(const WzString& roomName, const WzString& hostName, const std::string& hostPublicIdentity);
 	virtual void geometryChanged() override;
 public:
-	static std::shared_ptr<LobbyGameNameWidget> make(const WzString& roomName, const WzString& hostName)
+	static std::shared_ptr<LobbyGameNameWidget> make(const WzString& roomName, const WzString& hostName, const std::string& hostPublicIdentity)
 	{
 		class make_shared_enabler: public LobbyGameNameWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(roomName, hostName);
+		widget->initialize(roomName, hostName, hostPublicIdentity);
 		return widget;
 	}
 	void updateValue(const WzString& roomName, const WzString& hostName);
@@ -379,7 +415,7 @@ private:
 	std::shared_ptr<W_LABEL> hostNameWidg;
 };
 
-void LobbyGameNameWidget::initialize(const WzString& roomName, const WzString& hostName)
+void LobbyGameNameWidget::initialize(const WzString& roomName, const WzString& hostName, const std::string& hostPublicIdentity)
 {
 	roomNameWidg = std::make_shared<W_LABEL>();
 	roomNameWidg->setFont(font_regular, WZCOL_TEXT_BRIGHT);
@@ -392,6 +428,13 @@ void LobbyGameNameWidget::initialize(const WzString& roomName, const WzString& h
 	hostNameWidg->setCanTruncate(true);
 	hostNameWidg->setTransparentToClicks(true);
 	attach(hostNameWidg);
+	if (!hostPublicIdentity.empty())
+	{
+		auto tipStr = astringf(_("Host Name: %s"), hostName.toUtf8().c_str());
+		tipStr += "\n";
+		tipStr += astringf(_("ID: %s"), hostPublicIdentity.c_str());
+		hostNameWidg->setTip(tipStr);
+	}
 
 	updateValue(roomName, hostName);
 	setGeometry(0, 0, idealWidth(), idealHeight());
@@ -548,17 +591,17 @@ class LobbyGameModsWidget : public WIDGET
 {
 protected:
 	LobbyGameModsWidget() { }
-	void initialize(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
+	void initialize(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
 	virtual void geometryChanged() override;
 public:
-	static std::shared_ptr<LobbyGameModsWidget> make(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
+	static std::shared_ptr<LobbyGameModsWidget> make(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
 	{
 		class make_shared_enabler: public LobbyGameModsWidget {};
 		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize(modsList, noVtol, noTanks, noCyborgs);
 		return widget;
 	}
-	void updateValue(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
+	void updateValue(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs);
 	virtual int32_t idealWidth() override;
 	virtual int32_t idealHeight() override;
 private:
@@ -567,7 +610,7 @@ private:
 	std::shared_ptr<W_LABEL> limitsListWidg;
 };
 
-void LobbyGameModsWidget::initialize(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
+void LobbyGameModsWidget::initialize(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
 {
 	modsListWidg = std::make_shared<W_LABEL>();
 	modsListWidg->setFont(font_small, pal_RGBA(255,50,50,255));
@@ -613,7 +656,7 @@ int32_t LobbyGameModsWidget::idealHeight()
 	return result;
 }
 
-void LobbyGameModsWidget::updateValue(const std::vector<WzString>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
+void LobbyGameModsWidget::updateValue(const std::vector<netlobby::ModDetails>& modsList, bool noVtol, bool noTanks, bool noCyborgs)
 {
 	WzString modsListStr;
 	for (const auto& mod : modsList)
@@ -622,7 +665,7 @@ void LobbyGameModsWidget::updateValue(const std::vector<WzString>& modsList, boo
 		{
 			modsListStr.append(", ");
 		}
-		modsListStr.append(mod);
+		modsListStr.append(mod.name);
 	}
 	modsListWidg->setString(modsListStr);
 
@@ -718,6 +761,518 @@ int32_t LobbyActionWidgets::idealHeight()
 	return watchButton->idealHeight() + (WZLOBBY_WIDG_PADDING_Y * 2);
 }
 
+// MARK: - ConnectToForm
+
+class ConnectToForm : public W_BUTTON
+{
+public:
+	typedef std::function<void(WzString inputStr, bool asSpectator)> OnSubmitFunc;
+protected:
+	ConnectToForm() { }
+	~ConnectToForm();
+	void initialize(const OnSubmitFunc& onSubmitFunc);
+
+	virtual void geometryChanged() override;
+	virtual void display(int xOffset, int yOffset) override;
+	virtual void highlight(W_CONTEXT *psContext) override;
+
+public:
+	static std::shared_ptr<ConnectToForm> make(const OnSubmitFunc& onSubmitFunc)
+	{
+		class make_shared_enabler: public ConnectToForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize(onSubmitFunc);
+		return widget;
+	}
+
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
+	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
+private:
+	bool isMouseOverFormOrChildren() const;
+	int32_t buttonAreaWidth();
+	void recalcLayout();
+
+	void submitInputBox(bool asSpectator);
+	void submit(WzString inputStr, bool asSpectator);
+
+	std::shared_ptr<PopoverMenuWidget> buildJoinOptionsMenu();
+	void displayJoinOptionsMenu(const std::shared_ptr<WIDGET> &psParent);
+
+private:
+	OnSubmitFunc onSubmitFunc;
+	optional<UWORD> frontendImgID = nullopt;
+	WzString joinTextStr;
+
+	PIELIGHT inputBoxBackground;
+	PIELIGHT inputBoxBackgroundHighlight;
+
+	std::shared_ptr<W_EDITBOX> inputBox;
+	WzText wzText;
+
+	std::shared_ptr<PopoverWidget> optionsPopover;
+
+	optional<UDWORD> lastFrameMouseIsOverRowOrChildren = nullopt;
+
+	const int32_t minInputBoxHeight = 16;
+	const int32_t inputBoxHorizontalPadding = 6;
+
+	const int32_t verticalPadding = 5;
+	const int32_t horizontalPadding = 8;
+
+	const int32_t maxButtonTextAreaWidth = 100;
+
+	const int32_t imageDimensions = 12;
+	const int32_t horizontalPaddingBetweenButtonSplit = 6;
+};
+
+ConnectToForm::~ConnectToForm()
+{
+	if (optionsPopover)
+	{
+		optionsPopover->close();
+	}
+}
+
+static std::shared_ptr<WzClickableOptionsChoiceWidget> addClickableJoinMenuItem(const std::shared_ptr<PopoverMenuWidget>& menu, const WzString& text, const std::function<void (WIDGET_KEY)>& onClick, bool disabled = false, iV_fonts fontId = font_regular)
+{
+	auto result = WzClickableOptionsChoiceWidget::make(fontId);
+	result->setString(text);
+	result->setTextAlignment(WLAB_ALIGNRIGHT);
+	if (onClick)
+	{
+		result->addOnClickHandler([onClick](WzClickableOptionsChoiceWidget&, WIDGET_KEY key) {
+			onClick(key);
+		});
+	}
+	result->setDisabled(disabled);
+	result->setGeometry(0, 0, result->idealWidth(), result->idealHeight());
+	menu->addMenuItem(result, true);
+	return result;
+}
+
+std::shared_ptr<PopoverMenuWidget> ConnectToForm::buildJoinOptionsMenu()
+{
+	std::weak_ptr<ConnectToForm> weakSelf = std::dynamic_pointer_cast<ConnectToForm>(shared_from_this());
+
+	auto popoverMenu = PopoverMenuWidget::make();
+
+	auto addSpacerWidget = [&popoverMenu](int height){
+		auto spacerWidget = std::make_shared<WIDGET>();
+		spacerWidget->setGeometry(0, 0, 10, height);
+		popoverMenu->addMenuItem(spacerWidget);
+	};
+
+	std::string lastIPServerName = war_getLastIpServerConnect();
+	bool inputItemsDisabled = (inputBox->getString().isEmpty());
+	bool displayStandardInputJoinItems = (!inputItemsDisabled || lastIPServerName.empty());
+
+	if (displayStandardInputJoinItems)
+	{
+		addClickableJoinMenuItem(popoverMenu, _("Join as Player"), [weakSelf](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submitInputBox(false);
+		})->setDisabled(inputItemsDisabled);
+		addClickableJoinMenuItem(popoverMenu, _("Join as Spectator"), [weakSelf](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submitInputBox(true);
+		})->setDisabled(inputItemsDisabled);
+	}
+
+	if (!lastIPServerName.empty())
+	{
+		if (displayStandardInputJoinItems)
+		{
+			addSpacerWidget(10);
+		}
+
+		// [Last IP: %s]
+		addClickableJoinMenuItem(popoverMenu, WzString::format(_("Last IP: %s"), lastIPServerName.c_str()), nullptr, true);
+
+		addClickableJoinMenuItem(popoverMenu, _("Join as Player"), [weakSelf, lastIPServerName](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submit(WzString::fromUtf8(lastIPServerName), false);
+		});
+
+		addClickableJoinMenuItem(popoverMenu, _("Join as Spectator"), [weakSelf, lastIPServerName](WIDGET_KEY) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Null widget?");
+			strongSelf->submit(WzString::fromUtf8(lastIPServerName), true);
+		});
+
+		addSpacerWidget(2);
+
+		addClickableJoinMenuItem(popoverMenu, _("Clear Last IP"), [](WIDGET_KEY) {
+			war_setLastIpServerConnect("");
+		}, false, font_small);
+	}
+
+	int32_t idealMenuHeight = popoverMenu->idealHeight();
+	int32_t menuHeight = idealMenuHeight;
+	if (menuHeight > screenHeight)
+	{
+		menuHeight = screenHeight;
+	}
+	popoverMenu->setGeometry(popoverMenu->x(), popoverMenu->y(), popoverMenu->idealWidth(), menuHeight);
+
+	return popoverMenu;
+}
+
+void ConnectToForm::displayJoinOptionsMenu(const std::shared_ptr<WIDGET> &psParent)
+{
+	auto popoverMenu = buildJoinOptionsMenu();
+
+	std::weak_ptr<ConnectToForm> weakSelf = std::dynamic_pointer_cast<ConnectToForm>(shared_from_this());
+	setState(WBUT_CLICKLOCK);
+
+	if (optionsPopover)
+	{
+		optionsPopover->close();
+	}
+	optionsPopover = popoverMenu->openMenu(psParent, PopoverWidget::Alignment::RightOfParent, Vector2i(0, 1), [weakSelf]() {
+		// close handler
+		if (auto strongConnectToForm = weakSelf.lock())
+		{
+			strongConnectToForm->setState(0); // clear clicklock state
+		}
+	});
+}
+
+void displayConnectToEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	// do not draw any background
+}
+
+constexpr int maxConnectToInputLength = 256;
+
+static WzString removeLobbyGameIdPrefixPattern(const WzString& input)
+{
+	const std::string& stdStrInput = input.toStdString();
+
+	// Find the first colon
+	size_t colonPos = stdStrInput.find(':');
+
+	// Must be at least one character before the colon
+	if (colonPos == std::string::npos || colonPos == 0)
+	{
+		return input;
+	}
+
+	// Check for 1 or more characters of whitespace after the colon
+	size_t afterColon = colonPos + 1;
+	size_t firstNonSpace = afterColon;
+
+	while (firstNonSpace < stdStrInput.length() && std::isspace(static_cast<unsigned char>(stdStrInput[firstNonSpace])))
+	{
+		firstNonSpace++;
+	}
+
+	// Must have at least one whitespace character after the colon
+	// (This is to exclude detection of ip:port combinations)
+	if (firstNonSpace == afterColon)
+	{
+		return input;
+	}
+
+	// Only return the remaining substring if it is non-empty
+	if (firstNonSpace < stdStrInput.length())
+	{
+		return WzString::fromUtf8(stdStrInput.substr(firstNonSpace));
+	}
+
+	// Otherwise, return original
+	return input;
+}
+
+void ConnectToForm::initialize(const OnSubmitFunc& _onSubmitFunc)
+{
+	onSubmitFunc = _onSubmitFunc;
+
+	if (FrontImages != nullptr)
+	{
+		frontendImgID = IMAGE_CARET_DOWN_FILL;
+	}
+
+	inputBoxBackground = WZCOL_TRANSPARENT_BOX;
+	inputBoxBackground.byte.a = inputBoxBackground.byte.a / 3;
+
+	inputBoxBackgroundHighlight = WZCOL_TRANSPARENT_BOX;
+	inputBoxBackgroundHighlight.byte.a = inputBoxBackgroundHighlight.byte.a / 2;
+
+	auto weakSelf = std::weak_ptr<ConnectToForm>(std::dynamic_pointer_cast<ConnectToForm>(shared_from_this()));
+
+	inputBox = std::make_shared<W_EDITBOX>();
+	attach(inputBox);
+	inputBox->setGeometry(horizontalPadding, 0, 280, minInputBoxHeight);
+	inputBox->pBoxDisplay = displayConnectToEditBox;
+	inputBox->setMaxStringSize(maxConnectToInputLength);
+	inputBox->setPlaceholder(_("GameID or IP:port"));
+	inputBox->setPlaceholderTextColor(WZCOL_TEXT_MEDIUM);
+
+	inputBox->setOnPasteTransformFunc([](const WzString& pastedString) -> WzString {
+		WzString result = pastedString;
+
+		// Replace any \r, \n chars with a space
+		result.replace(WzUniCodepoint::fromASCII('\r'), " ");
+		result.replace(WzUniCodepoint::fromASCII('\n'), " ");
+
+		// Trim any whitespace
+		result = result.trimmed();
+
+		// Check if text begins with "Lobby GameId: ", the standard prefix used when outputting the GameId on host / join
+		// NOTE: The translated version of this prefix is output - someone might copy it to another who uses a different language
+		// So use a heuristic: Check for "<prefix>: <possible gameid>" (key being the ":" followed by a space), then remove that prefix if found
+		// (This should avoid interfering with ip:port or hostname:port strings, which fortunately should not have a space in them)
+		auto withRemovedPrefix = removeLobbyGameIdPrefixPattern(result).trimmed();
+		if (!withRemovedPrefix.isEmpty())
+		{
+			result = withRemovedPrefix;
+		}
+
+		return result;
+	});
+
+	inputBox->setOnReturnHandler([weakSelf](W_EDITBOX& widg) {
+		auto strongParent = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongParent != nullptr, "No parent?");
+		strongParent->submitInputBox(false);
+	});
+
+	joinTextStr = _("Join");
+	wzText.setText(joinTextStr, font_regular);
+
+	addOnClickHandler([weakSelf](W_BUTTON&) {
+		auto strongConnectToForm = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongConnectToForm != nullptr, "Null form?");
+		strongConnectToForm->displayJoinOptionsMenu(strongConnectToForm);
+	});
+}
+
+void ConnectToForm::geometryChanged()
+{
+	recalcLayout();
+}
+
+void ConnectToForm::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	int clickLocationX = psContext->mx - x();
+
+	// If click is over button area, forward to W_BUTTON impl
+	if (clickLocationX >= (width() - buttonAreaWidth()))
+	{
+		W_BUTTON::clicked(psContext, key);
+	}
+	else if (clickLocationX <= inputBoxHorizontalPadding)
+	{
+		// padding area for left of input box - simulate click
+		auto weakSelf = std::weak_ptr<ConnectToForm>(std::dynamic_pointer_cast<ConnectToForm>(shared_from_this()));
+		widgScheduleTask([weakSelf]() {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Widget gone?");
+			W_CONTEXT context = W_CONTEXT::ZeroContext();
+			strongSelf->inputBox->simulateClick(&context);
+		});
+	}
+}
+
+std::shared_ptr<WIDGET> ConnectToForm::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+{
+	auto mouseOverWidget = WIDGET::findMouseTargetRecursive(psContext, key, wasPressed);
+	if (mouseOverWidget != nullptr)
+	{
+		// if findMouseTargetRecursive was called for this row, it means the mouse is over it
+		// (see WIDGET::findMouseTargetRecursive)
+		lastFrameMouseIsOverRowOrChildren = frameGetFrameNumber();
+	}
+	else
+	{
+		lastFrameMouseIsOverRowOrChildren = nullopt;
+	}
+	return mouseOverWidget;
+}
+
+bool ConnectToForm::isMouseOverFormOrChildren() const
+{
+	if (!lastFrameMouseIsOverRowOrChildren.has_value())
+	{
+		return false;
+	}
+	return lastFrameMouseIsOverRowOrChildren.value() == frameGetFrameNumber();
+}
+
+void ConnectToForm::highlight(W_CONTEXT *psContext)
+{
+	int mouseXLoc = psContext->mx - x();
+	if (mouseXLoc <= inputBoxHorizontalPadding)
+	{
+		// silently ignoring button highlight when over this padding area that "belongs" to the inputBox
+		return;
+	}
+	W_BUTTON::highlight(psContext);
+}
+
+void ConnectToForm::display(int xOffset, int yOffset)
+{
+	int x0 = xOffset + x();
+	int y0 = yOffset + y();
+	int w = width();
+
+	bool isDown = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (state & WBUT_DISABLE) != 0;
+	bool isMouseOverButtonArea = ((state & WBUT_HIGHLIGHT) != 0);
+	bool isInputEditing = inputBox->isEditing();
+	bool isHighlight = isMouseOverFormOrChildren() || isInputEditing;
+	bool isMouseOverInputBoxArea = isMouseOverFormOrChildren() && !isMouseOverButtonArea;
+
+	int buttonAreaW = buttonAreaWidth();
+
+	// Draw background for input box area
+	{
+		int boxX0 = x0;
+		int boxY0 = y0;
+		int boxX1 = boxX0 + (width() - buttonAreaW);
+		int boxY1 = boxY0 + height();
+		pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY1, (isInputEditing) ? WZCOL_TRANSPARENT_BOX : (isHighlight) ? inputBoxBackgroundHighlight : inputBoxBackground);
+	}
+
+	// Draw background for button
+	{
+		int boxX0 = x0 + (w - buttonAreaW);
+		int boxY0 = y0;
+		int boxX1 = boxX0 + buttonAreaW;
+		int boxY1 = boxY0 + height();
+		pie_UniTransBoxFill(boxX0, boxY0, boxX1, boxY1, WZCOL_TRANSPARENT_BOX);
+	}
+
+	// Draw entire outer border
+	{
+		PIELIGHT borderColor = WZCOL_TEXT_MEDIUM;
+		if (isInputEditing || isMouseOverInputBoxArea)
+		{
+			borderColor = WZCOL_TEXT_BRIGHT;
+		}
+
+		if (isDisabled)
+		{
+			borderColor.byte.a = (borderColor.byte.a / 2);
+		}
+		int boxX0 = x0;
+		int boxY0 = y0;
+		int boxX1 = boxX0 + width();
+		int boxY1 = boxY0 + height();
+		iV_Box(boxX0 + 1, boxY0 + 1, boxX1, boxY1, borderColor);
+	}
+
+	// Draw Button area outer border
+	if (!isInputEditing && !isMouseOverInputBoxArea)
+	{
+		PIELIGHT borderColor = (isDown) ? WZCOL_TEXT_DARK : ((isMouseOverButtonArea) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
+		if (isDisabled)
+		{
+			borderColor.byte.a = (borderColor.byte.a / 2);
+		}
+		int boxX0 = x0 + (w - buttonAreaW);
+		int boxY0 = y0;
+		int boxX1 = boxX0 + buttonAreaW;
+		int boxY1 = boxY0 + height();
+		iV_Box(boxX0 + 1, boxY0 + 1, boxX1, boxY1, borderColor);
+	}
+	else
+	{
+		// outer border handled by the "entire" case - just draw the dividing line
+		int boxX0 = x0 + (w - buttonAreaW);
+		int boxY0 = y0;
+		int boxY1 = boxY0 + height();
+		iV_Line(boxX0 + 1, boxY0, boxX0 + 1, boxY1, (isMouseOverButtonArea) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
+	}
+
+	PIELIGHT textColor = (isMouseOverButtonArea) ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM;
+	if (isDisabled)
+	{
+		textColor.byte.a = (textColor.byte.a / 2);
+	}
+
+	// Draw image portion of button
+	const int splitButtonImageAreaX0 = x0 + (w - horizontalPadding - imageDimensions - (horizontalPaddingBetweenButtonSplit / 2));
+	{
+		// Display the image centered in the image split area
+		int imgPosX0 = splitButtonImageAreaX0 + (horizontalPaddingBetweenButtonSplit / 2);
+		int imgPosY0 = y0 + (height() - imageDimensions) / 2;
+
+		if (frontendImgID.has_value())
+		{
+			PIELIGHT imgColor = textColor;
+			iV_DrawImageFileAnisotropicTint(FrontImages, frontendImgID.value(), imgPosX0, imgPosY0, Vector2f(imageDimensions, imageDimensions), imgColor);
+		}
+	}
+
+	// Draw text portion of button
+	{
+		// Draw the main text
+		int textX0 = std::max<int>(x0 + horizontalPadding, splitButtonImageAreaX0 - wzText.width());
+		int textY0 = static_cast<int>(y0 + (height() - wzText.lineSize()) / 2 - float(wzText.aboveBase()));
+
+		const int maxTextDisplayableWidth = splitButtonImageAreaX0 - textX0;
+		int maxDisplayableMainTextWidth = maxTextDisplayableWidth;
+		bool isTruncated = maxDisplayableMainTextWidth < wzText.width();
+		if (isTruncated)
+		{
+			maxDisplayableMainTextWidth -= (iV_GetEllipsisWidth(wzText.getFontID()) + 2);
+		}
+		wzText.render(textX0, textY0, textColor, 0.0f, maxDisplayableMainTextWidth);
+		if (isTruncated)
+		{
+			// Render ellipsis
+			iV_DrawEllipsis(wzText.getFontID(), Vector2f(textX0 + maxDisplayableMainTextWidth + 2, textY0), textColor);
+		}
+	}
+}
+
+int32_t ConnectToForm::idealWidth()
+{
+	return 360;
+}
+
+int32_t ConnectToForm::idealHeight()
+{
+	return (verticalPadding * 2) + std::max<int>(iV_GetTextLineSize(font_regular), minInputBoxHeight);
+}
+
+int32_t ConnectToForm::buttonAreaWidth()
+{
+	return horizontalPadding + std::min<int32_t>(wzText.width(), maxButtonTextAreaWidth) + horizontalPaddingBetweenButtonSplit + imageDimensions + horizontalPadding;
+}
+
+void ConnectToForm::recalcLayout()
+{
+	int w = width();
+	int h = height();
+
+	// input box takes up the leftmost portion, minus the space reserved for the button area
+	int inputBoxWidth = w - buttonAreaWidth() - (inputBoxHorizontalPadding * 2);
+	if (inputBoxWidth > 0)
+	{
+		inputBox->setGeometry(inputBoxHorizontalPadding, 0, inputBoxWidth, h);
+	}
+}
+
+void ConnectToForm::submit(WzString inputStr, bool asSpectator)
+{
+	ASSERT_OR_RETURN(, onSubmitFunc != nullptr, "Missing onSubmitFunc");
+	onSubmitFunc(inputStr, asSpectator);
+}
+
+void ConnectToForm::submitInputBox(bool asSpectator)
+{
+	submit(inputBox->getString(), asSpectator);
+	inputBox->setString("");
+}
+
 // MARK: - LobbyBrowser Form
 
 class LobbyBrowser : public WIDGET
@@ -745,21 +1300,24 @@ protected:
 
 private:
 	void joinLobbyGame(size_t idx, bool asSpectator);
+	void setMotd(const std::string& motd);
+	void recalcLobbyStatusOverlayLayout();
 
 private:
 	std::shared_ptr<W_BUTTON> makeBackButton();
 	std::shared_ptr<WIDGET> createColumnHeaderLabel(const char* text, WzTextAlignment align, int minLeftPadding);
 	std::shared_ptr<ScrollableTableWidget> createGamesList();
 	void triggerAsyncGameListFetch();
-	void processAsyncGameListFetchResults(bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD);
-	void populateTableFromGameList();
-	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(size_t idx, const LobbyGameInfo& gameInfo);
+	void processAsyncGameListFetchResults(netlobby::ListResult&& results);
+	void populateTableFromGameList(bool force = false);
+	std::vector<std::shared_ptr<WIDGET>> createLobbyGameRowColumnWidgets(size_t idx, const netlobby::GameListing& listing);
 
 	std::shared_ptr<PopoverMenuWidget> createFiltersPopoverForm();
 	void displayFiltersOverlay(const std::shared_ptr<WIDGET>& psParent);
 
 private:
 	std::shared_ptr<W_BUTTON> backButton;
+	std::shared_ptr<ConnectToForm> connectToForm;
 	std::shared_ptr<WzFrontendImageButton> filtersButton;
 	std::shared_ptr<WzFrontendImageButton> refreshButton;
 	std::shared_ptr<ScrollableTableWidget> table;
@@ -768,121 +1326,18 @@ private:
 	std::shared_ptr<LobbyStatusOverlayWidget> lobbyStatusOverlayWidg;
 	std::shared_ptr<ScrollableListWidget> lobbyStatusMessageContainer;
 
-	std::vector<LobbyGameInfo> currentResults;
+	std::vector<netlobby::GameListing> currentResults;
 	bool filterIncompatible = true;
 	bool filterEmpty = false;
 	bool filterModded = false;
+	bool filterIPv6Only = false;
 
 	std::shared_ptr<PopoverMenuWidget> currentPopoverMenu;
 
-	WZ_THREAD* currentFetchThread = nullptr;
+	bool hasPendingFetchRequest = false;
+
+	const int connectToFormHorizontalPadding = 15;
 };
-
-class AsyncListLobbyGamesParams
-{
-public:
-	typedef std::function<void(bool, std::vector<LobbyGameInfo>&&, std::string&& lobbyMOTD)> CompletionHandlerFunc;
-public:
-	AsyncListLobbyGamesParams(size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion, const CompletionHandlerFunc& completionHandler)
-	: startingIndex(startingIndex)
-	, resultsLimit(resultsLimit)
-	, onlyMatchingLocalVersion(onlyMatchingLocalVersion)
-	, completionHandler(completionHandler)
-	{
-		connProvider = NET_getLobbyConnectionProvider();
-	}
-public:
-	size_t startingIndex = 0;
-	size_t resultsLimit = 100;
-	bool onlyMatchingLocalVersion = false;
-	std::shared_ptr<WzConnectionProvider> connProvider = nullptr;
-	CompletionHandlerFunc completionHandler;
-};
-
-static inline LobbyGameInfo lobbyGAMESTRUCTtoLobbyGameInfo(const GAMESTRUCT &lobbyGame)
-{
-	LobbyGameInfo info;
-	info.gameId = lobbyGame.gameId;
-	info.name = lobbyGame.name;
-	info.hostName = lobbyGame.hostname;
-	info.mapName = lobbyGame.mapname;
-	info.netcode_version_major = lobbyGame.game_version_major;
-	info.netcode_version_minor = lobbyGame.game_version_minor;
-	info.gameVersionStr = lobbyGame.versionstring;
-	info.mods = WzString(lobbyGame.modlist).split(", ");
-	info.joinedPlayers = lobbyGame.desc.dwCurrentPlayers;
-	info.maxPlayers = lobbyGame.desc.dwMaxPlayers;
-	info.spectatorInfo = SpectatorInfo::fromUint32(lobbyGame.desc.dwUserFlags[1]);
-	info.isPrivate = lobbyGame.privateGame != 0;
-	info.limits = lobbyGame.limits;
-
-	if (NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
-	{
-		if (lobbyGame.desc.alliances <= ALLIANCE_TYPE_MAX)
-		{
-			info.alliancesMode = static_cast<AllianceType>(lobbyGame.desc.alliances);
-		}
-		if (lobbyGame.desc.dwUserFlags[2] <= static_cast<uint32_t>(BLIND_MODE_MAX))
-		{
-			info.blindMode = static_cast<BLIND_MODE>(lobbyGame.desc.dwUserFlags[2]);
-		}
-	}
-
-	info.connectionDesc.emplace_back(JoinConnectionDescription::JoinConnectionType::TCP_DIRECT, lobbyGame.desc.host, lobbyGame.hostPort);
-
-	return info;
-}
-
-/** This runs in a separate thread */
-static int fetchLobbyListingThreadFunc(void *data)
-{
-	AsyncListLobbyGamesParams* fetchInfo = static_cast<AsyncListLobbyGamesParams*>(data);
-	auto startingIndex = fetchInfo->startingIndex;
-	auto resultsLimit = fetchInfo->resultsLimit;
-	auto onlyMatchingLocalVersion = fetchInfo->onlyMatchingLocalVersion;
-
-	size_t gamecount = 0;
-	std::vector<LobbyGameInfo> results;
-	std::string lobbyMOTD;
-	bool success = NETenumerateGames(fetchInfo->connProvider, [&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
-		if (gamecount++ < startingIndex)
-		{
-			// skip this item, continue
-			return true;
-		}
-		if ((resultsLimit > 0) && (results.size() >= resultsLimit))
-		{
-			// stop processing games
-			return false;
-		}
-		if (onlyMatchingLocalVersion && !NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
-		{
-			// skip this non-matching version, continue
-			return true;
-		}
-		results.push_back(lobbyGAMESTRUCTtoLobbyGameInfo(lobbyGame));
-		return true;
-	},
-	[&lobbyMOTD](std::string&& lobbyMOTDResult) {
-		lobbyMOTD = std::move(lobbyMOTDResult);
-	});
-
-	if (fetchInfo->completionHandler)
-	{
-		fetchInfo->completionHandler(success, std::move(results), std::move(lobbyMOTD));
-	}
-
-	delete fetchInfo;
-	return 0;
-}
-
-static WZ_THREAD* NETcreateFindGamesAsyncThread(size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion, const AsyncListLobbyGamesParams::CompletionHandlerFunc& completionHandler)
-{
-	AsyncListLobbyGamesParams *params = new AsyncListLobbyGamesParams(startingIndex, resultsLimit, onlyMatchingLocalVersion, completionHandler);
-
-	auto thread = wzThreadCreate(fetchLobbyListingThreadFunc, params, "wzFetchLobbyGameList");
-	return thread;
-}
 
 void LobbyBrowser::triggerRefresh()
 {
@@ -891,114 +1346,162 @@ void LobbyBrowser::triggerRefresh()
 
 void LobbyBrowser::triggerAsyncGameListFetch()
 {
-	if (currentFetchThread) { return; }
+	if (hasPendingFetchRequest) { return; }
 
 	if (NET_getLobbyDisabled())
 	{
 		lobbyStatusOverlayWidg->setString(_("There appears to be a game update available!"));
+		recalcLobbyStatusOverlayLayout();
 		lobbyStatusOverlayWidg->show();
 		return;
 	}
 
 	refreshButton->setState(WBUT_DISABLE);
 	lobbyStatusOverlayWidg->showIndeterminateIndicator(true);
+	lobbyStatusOverlayWidg->showResetLobbyAddressButton(false);
 	lobbyStatusOverlayWidg->setString("");
+	recalcLobbyStatusOverlayLayout();
 	lobbyStatusOverlayWidg->show(true);
 
-	struct ThreadDetails
-	{
-		WZ_THREAD* pThread = nullptr;
-	};
-	auto pThreadDetails = new ThreadDetails();
-
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
-	currentFetchThread = NETcreateFindGamesAsyncThread(0, 100, false, [weakSelf, pThreadDetails](bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD) {
-		wzAsyncExecOnMainThread([weakSelf, success, results = std::move(results), lobbyMOTD = std::move(lobbyMOTD), pThreadDetails]() mutable {
+	auto dispatchedListRequest = netlobby::EnumerateGames(NETgetLobbyserverAddress(), [weakSelf](netlobby::ListResult results) {
+		wzAsyncExecOnMainThread([weakSelf, results = std::move(results)]() mutable {
 			auto strongSelf = weakSelf.lock();
 			if (strongSelf == nullptr)
 			{
 				debug(LOG_WZ, "Widget gone");
-				// Parent widget is gone - attempt immediate cleanup of the thread
+				// Parent widget is gone
 				// (Can happen if the user closes this form before the async task returns results)
-				if (pThreadDetails && pThreadDetails->pThread)
-				{
-					if (joinFetchThread(pThreadDetails->pThread) >= 0)
-					{
-						pThreadDetails->pThread = nullptr;
-					}
-				}
-				delete pThreadDetails;
 				return;
 			}
-			strongSelf->processAsyncGameListFetchResults(success, std::move(results), std::move(lobbyMOTD));
-			delete pThreadDetails;
+			strongSelf->processAsyncGameListFetchResults(std::move(results));
 		});
-	});
-	pThreadDetails->pThread = currentFetchThread;
-	registerCreatedFetchThread(currentFetchThread);
-	wzThreadStart(currentFetchThread);
+	}, 200);
+
+	if (!dispatchedListRequest)
+	{
+		// Restore widgets config
+		refreshButton->setState(0);
+		lobbyStatusOverlayWidg->showIndeterminateIndicator(false);
+
+		debug(LOG_INFO, "Failed to dispatch lobby list request");
+
+		// Display error if no results
+		if (currentResults.empty())
+		{
+			lobbyStatusOverlayWidg->setString(_("Error dispatching request"));
+			lobbyStatusOverlayWidg->show();
+		}
+		recalcLobbyStatusOverlayLayout();
+		return;
+	}
+
+	hasPendingFetchRequest = true;
 }
 
 void LobbyBrowser::joinLobbyGame(size_t idx, bool asSpectator)
 {
 	ASSERT_OR_RETURN(, idx < currentResults.size(), "Invalid idx: %zu", idx);
 
-	const std::vector<JoinConnectionDescription>& connectionDesc = currentResults[idx].connectionDesc;
-	ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), currentResults[idx].gameId, connectionDesc);
-
 	clearActiveConsole();
 
-	// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 	ingame.localOptionsReceived = false;								// note, we are awaiting options
-	sstrcpy(game.name, currentResults[idx].name.toUtf8().c_str());		// store name
-	joinGame(connectionDesc, asSpectator);
+	sstrcpy(game.name, currentResults[idx].details.name.toUtf8().c_str());		// store name
+
+	ExpectedHostProperties expectedHostProps;
+	expectedHostProps.hostPublicKey = base64Decode(currentResults[idx].details.host.publicIdentity);
+
+	startLobbyJoiningAttempt(sPlayer, NETgetLobbyserverAddress(), currentResults[idx].gameId, asSpectator, expectedHostProps, &currentResults[idx].availableConnectionTypes);
 }
 
-void LobbyBrowser::processAsyncGameListFetchResults(bool success, std::vector<LobbyGameInfo>&& results, std::string&& lobbyMOTD)
+void LobbyBrowser::setMotd(const std::string &motd)
 {
-	if (currentFetchThread)
-	{
-		if (joinFetchThread(currentFetchThread) >= 0)
-		{
-			currentFetchThread = nullptr;
-		}
-		else
-		{
-			ASSERT(false, "Logic error: currentFetchThread not in the registered set?");
-		}
-	}
+	auto lobbyMOTDParagraph = std::make_shared<Paragraph>();
+	lobbyMOTDParagraph->setGeometry(0, 0, lobbyStatusMessageContainer->calculateListViewWidth(), lobbyStatusMessageContainer->calculateListViewHeight());
+	lobbyMOTDParagraph->setFont(font_regular);
+	lobbyMOTDParagraph->setFontColour(WZCOL_TEXT_MEDIUM);
+	lobbyMOTDParagraph->setTransparentToMouse(true);
+	lobbyMOTDParagraph->addText(WzString::fromUtf8(motd));
+	lobbyStatusMessageContainer->addItem(lobbyMOTDParagraph);
+}
+
+void LobbyBrowser::processAsyncGameListFetchResults(netlobby::ListResult&& results)
+{
+	hasPendingFetchRequest = false;
 
 	refreshButton->setState(0);
 	lobbyStatusOverlayWidg->showIndeterminateIndicator(false);
 
-	table->clearRows();
-	lobbyStatusMessageContainer->clear();
-
-	if (!success)
+	if (!results.has_value())
 	{
+		if (results.error().errCode == "RATE_LIMITED" && !currentResults.empty())
+		{
+			// Have prior results, hit temporary rate limit - silently ignore
+			return;
+		}
+
 		lobbyStatusOverlayWidg->setString(_("Failed to connect to lobby server"));
+		if constexpr (fnv1a_hash(netlobby::GetDefaultLobbyAddress()) == LOB_DEFAULT_BEHAVIOR_CHECKSUM)
+		{
+			if (NETgetLobbyserverAddress() != netlobby::GetDefaultLobbyAddress())
+			{
+				lobbyStatusOverlayWidg->showResetLobbyAddressButton(true);
+			}
+		}
+		recalcLobbyStatusOverlayLayout();
+
+		table->clearRows();
+		lobbyStatusMessageContainer->clear();
 		currentResults.clear();
 		return;
 	}
 
-	currentResults = std::move(results);
-	populateTableFromGameList();
+	table->clearRows();
+	lobbyStatusMessageContainer->clear();
+
+	currentResults = std::move(results.value().games);
+	populateTableFromGameList(true);
 
 	// Display the lobby MOTD
-	if (!lobbyMOTD.empty())
+	if (!results.value().lobbyMOTD.empty())
 	{
-		auto lobbyMOTDParagraph = std::make_shared<Paragraph>();
-		lobbyMOTDParagraph->setGeometry(0, 0, lobbyStatusMessageContainer->calculateListViewWidth(), lobbyStatusMessageContainer->calculateListViewHeight());
-		lobbyMOTDParagraph->setFont(font_regular);
-		lobbyMOTDParagraph->setFontColour(WZCOL_TEXT_MEDIUM);
-		lobbyMOTDParagraph->setTransparentToMouse(true);
-		lobbyMOTDParagraph->addText(WzString::fromUtf8(lobbyMOTD));
-		lobbyStatusMessageContainer->addItem(lobbyMOTDParagraph);
+		setMotd(results.value().lobbyMOTD);
 	}
 }
 
-void LobbyBrowser::populateTableFromGameList()
+static inline optional<AllianceType> alliancesModeFromLobbyGameDetails(uint8_t alliancesMode)
 {
+	if (alliancesMode <= ALLIANCE_TYPE_MAX)
+	{
+		return static_cast<AllianceType>(alliancesMode);
+	}
+	return nullopt;
+}
+
+static inline optional<BLIND_MODE> blindModeFromLobbyGameDetails(uint8_t blindMode)
+{
+	if (blindMode <= static_cast<uint8_t>(BLIND_MODE_MAX))
+	{
+		return static_cast<BLIND_MODE>(blindMode);
+	}
+	return nullopt;
+}
+
+static bool isIPv6Only(const std::vector<netlobby::ConnectionType>& availableConnectionTypes)
+{
+	return !std::any_of(availableConnectionTypes.begin(), availableConnectionTypes.end(), [](const netlobby::ConnectionType& connType) -> bool {
+		return connType.ipVersion.value_or(netlobby::IPVersion::IPv4) == netlobby::IPVersion::IPv4;
+	});
+}
+
+void LobbyBrowser::populateTableFromGameList(bool force)
+{
+	if (!force && currentResults.empty())
+	{
+		// do nothing, so we don't clear any lobby error status message (ex. when changing filters)
+		return;
+	}
+
 	table->clearRows();
 
 	std::vector<size_t> currentMaxColumnWidths;
@@ -1006,21 +1509,23 @@ void LobbyBrowser::populateTableFromGameList()
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
 
+	bool disableIPv6Listings = war_getLobbyDisableIPv6();
 	bool foundGreaterVersion = false;
 
 	// Populate table with the results
 	for (size_t idx = 0; idx < currentResults.size(); idx++)
 	{
-		const auto& gameInfo = currentResults[idx];
+		const auto& listing = currentResults[idx];
+		const auto& gameInfo = listing.details;
 
-		foundGreaterVersion = foundGreaterVersion || NETisGreaterVersion(gameInfo.netcode_version_major, gameInfo.netcode_version_minor);
+		foundGreaterVersion = foundGreaterVersion || NETisGreaterVersion(gameInfo.netcodeVer.major, gameInfo.netcodeVer.minor);
 
-		bool isCompatibleGame = NETisCorrectVersion(gameInfo.netcode_version_major, gameInfo.netcode_version_minor);
+		bool isCompatibleGame = NETisCorrectVersion(gameInfo.netcodeVer.major, gameInfo.netcodeVer.minor);
 		if (filterIncompatible && !isCompatibleGame)
 		{
 			continue;
 		}
-		if (filterEmpty && gameInfo.joinedPlayers == 0 && !isBlindSimpleLobby(gameInfo.blindMode))
+		if (filterEmpty && gameInfo.players.current == 0 && !isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE)))
 		{
 			continue;
 		}
@@ -1028,8 +1533,13 @@ void LobbyBrowser::populateTableFromGameList()
 		{
 			continue;
 		}
+		bool isIPv6OnlyGame = isIPv6Only(listing.availableConnectionTypes);
+		if (filterIPv6Only && isIPv6OnlyGame)
+		{
+			continue;
+		}
 
-		auto columnWidgets = createLobbyGameRowColumnWidgets(idx, gameInfo);
+		auto columnWidgets = createLobbyGameRowColumnWidgets(idx, listing);
 		int32_t rowHeight = 0;
 		for (size_t i = 0; i < columnWidgets.size(); ++i)
 		{
@@ -1039,20 +1549,32 @@ void LobbyBrowser::populateTableFromGameList()
 
 		auto row = TableRow::make(columnWidgets, rowHeight);
 		row->setDisabledColor(pal_RGBA(0, 0, 0, 100));
-		if (isCompatibleGame)
+		const bool isEnabledListing = isCompatibleGame && (!disableIPv6Listings || !isIPv6OnlyGame);
+		if (isEnabledListing)
 		{
+			const bool blindSimpleLobby = isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE));
 			row->setHighlightsOnMouseOver(true);
 			row->setHighlightColor(pal_RGBA(5,29,245,200));
-			row->setBackgroundColor(isBlindSimpleLobby(gameInfo.blindMode) ? pal_RGBA(0,20,130,50) : pal_RGBA(0,0,0,50));
+			row->setBackgroundColor(blindSimpleLobby ? pal_RGBA(0,20,130,50) : pal_RGBA(0,0,0,50));
 		}
 		else
 		{
-			row->setDisabled(true);
-			row->setDisabledColor(pal_RGBA(0,0,0,120));
-			WzString tooltip = _("Your version of Warzone is incompatible with this game.");
-			tooltip += "\n";
-			tooltip += WzString::format(_("Host Version: %s"), gameInfo.gameVersionStr.toUtf8().c_str());
-			row->setTip(tooltip.toUtf8());
+			if (isCompatibleGame && disableIPv6Listings && isIPv6OnlyGame)
+			{
+				row->setDisabled(true);
+				row->setDisabledColor(pal_RGBA(0,0,0,120));
+				WzString tooltip = _("This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults.");
+				row->setTip(tooltip.toUtf8());
+			}
+			else
+			{
+				row->setDisabled(true);
+				row->setDisabledColor(pal_RGBA(0,0,0,120));
+				WzString tooltip = _("Your version of Warzone is incompatible with this game.");
+				tooltip += "\n";
+				tooltip += WzString::format(_("Host Version: %s"), gameInfo.versionStr.toUtf8().c_str());
+				row->setTip(tooltip.toUtf8());
+			}
 		}
 		row->addOnClickHandler([weakSelf, idx](W_BUTTON&) {
 			auto strongSelf = weakSelf.lock();
@@ -1096,10 +1618,13 @@ void LobbyBrowser::populateTableFromGameList()
 	{
 		lobbyStatusOverlayWidg->hide();
 	}
+
+	recalcLobbyStatusOverlayLayout();
 }
 
-std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(size_t idx, const LobbyGameInfo& gameInfo)
+std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidgets(size_t idx, const netlobby::GameListing& listing)
 {
+	const auto& gameInfo = listing.details;
 	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
 
 	std::shared_ptr<LobbyGameIconWidget> privateGameWidg;
@@ -1114,19 +1639,19 @@ std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidge
 	privateGameWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(privateGameWidg);
 
-	if (!isBlindSimpleLobby(gameInfo.blindMode))
+	if (!isBlindSimpleLobby(blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE)))
 	{
-		auto playersWidg = LobbyGamePlayersWidget::make(gameInfo.joinedPlayers, gameInfo.maxPlayers);
+		auto playersWidg = LobbyGamePlayersWidget::make(gameInfo.players.current, gameInfo.players.max);
 		playersWidg->setTransparentToClicks(true);
 		columnWidgets.push_back(playersWidg);
 	}
 	else
 	{
-		UWORD frontendImgID = (gameInfo.joinedPlayers > 0) ? IMAGE_PERSON_FILL : IMAGE_PERSON;
+		UWORD frontendImgID = (gameInfo.players.current > 0) ? IMAGE_PERSON_FILL : IMAGE_PERSON;
 		auto playersWidg = LobbyGameIconWidget::make(frontendImgID);
-		if (gameInfo.joinedPlayers > 0)
+		if (gameInfo.players.current > 0)
 		{
-			playersWidg->setTip(astringf(_("%d players queued"), static_cast<int>(gameInfo.joinedPlayers)));
+			playersWidg->setTip(astringf(_("%d players queued"), static_cast<int>(gameInfo.players.current)));
 		}
 		else
 		{
@@ -1137,22 +1662,27 @@ std::vector<std::shared_ptr<WIDGET>> LobbyBrowser::createLobbyGameRowColumnWidge
 		columnWidgets.push_back(playersWidg);
 	}
 
-	auto nameWidg = LobbyGameNameWidget::make(gameInfo.name, gameInfo.hostName);
+	auto nameWidg = LobbyGameNameWidget::make(gameInfo.name, gameInfo.host.name, gameInfo.host.publicIdentity);
 	nameWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(nameWidg);
 
-	auto mapWidg = LobbyGameMapWidget::make(gameInfo.mapName, gameInfo.alliancesMode, gameInfo.blindMode);
+	auto mapWidg = LobbyGameMapWidget::make(gameInfo.map.name, alliancesModeFromLobbyGameDetails(gameInfo.alliancesMode), blindModeFromLobbyGameDetails(gameInfo.blindMode).value_or(BLIND_MODE::NONE));
 	mapWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(mapWidg);
 
-	auto modsWidg = LobbyGameModsWidget::make(gameInfo.mods, gameInfo.limits & NO_VTOLS, gameInfo.limits & NO_TANKS, gameInfo.limits & NO_BORGS);
+	auto modsWidg = LobbyGameModsWidget::make(
+		gameInfo.mods,
+		gameInfo.limits & static_cast<uint8_t>(netlobby::StructureLimits::NO_VTOLS),
+		gameInfo.limits & static_cast<uint8_t>(netlobby::StructureLimits::NO_TANKS),
+		gameInfo.limits & static_cast<uint8_t>(netlobby::StructureLimits::NO_BORGS)
+	);
 	modsWidg->setTransparentToClicks(true);
 	columnWidgets.push_back(modsWidg);
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
 
 	LobbyActionWidgets::OnSpectateHandlerFunc onSpectateFunc = nullptr;
-	if (gameInfo.spectatorInfo.availableSpectatorSlots() > 0)
+	if (gameInfo.spectators.availableSlots() > 0)
 	{
 		onSpectateFunc = [weakSelf, idx]() {
 			auto strongSelf = weakSelf.lock();
@@ -1179,6 +1709,8 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 {
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
 
+	filterIPv6Only = war_getLobbyFilterIPv6Only();
+
 	backButton = makeBackButton();
 	if (onBackButtonFunc)
 	{
@@ -1190,9 +1722,24 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 	}
 	attach(backButton);
 
+	connectToForm = ConnectToForm::make([](WzString inputStr, bool asSpectator) {
+		if (inputStr.isEmpty())
+		{
+			return;
+		}
+		auto result = joinGameFromConnectionStr(inputStr.toUtf8(), asSpectator);
+		if (result.has_value() && result.value() == JoinGameFromConnectionStrOutcome::Attempting_IP_Join)
+		{
+			// Persist the input IP address
+			war_setLastIpServerConnect(inputStr.toUtf8());
+		}
+	});
+	connectToForm->setGeometry(0, 0, connectToForm->idealWidth(), connectToForm->idealHeight());
+	attach(connectToForm);
+
 	filtersButton = WzFrontendImageButton::make(IMAGE_GEAR);
 	filtersButton->setString(_("Filters"));
-	filtersButton->setPadding(6, 5);
+	filtersButton->setPadding(7, 5);
 	filtersButton->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
 	filtersButton->setGeometry(0, 0, filtersButton->idealWidth(), filtersButton->idealHeight());
 	filtersButton->addOnClickHandler([weakSelf](W_BUTTON& but) {
@@ -1219,7 +1766,14 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 	attach(table);
 
 	// Create progress widget
-	lobbyStatusOverlayWidg = LobbyStatusOverlayWidget::make();
+	lobbyStatusOverlayWidg = LobbyStatusOverlayWidget::make([weakSelf]() {
+		// on reset lobby address button click
+		NETsetLobbyserverAddress(netlobby::GetDefaultLobbyAddress());
+		// trigger lobby re-fetch
+		auto strongSelf = weakSelf.lock();
+		ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent?");
+		strongSelf->triggerAsyncGameListFetch();
+	});
 	attach(lobbyStatusOverlayWidg, ChildZPos::Front);
 
 	lobbyStatusMessageContainer = ScrollableListWidget::make();
@@ -1236,9 +1790,21 @@ void LobbyBrowser::initialize(const std::function<void()>& onBackButtonFunc)
 	{
 		lobbyStatusOverlayWidg->setString(_("There appears to be a game update available!"));
 		lobbyStatusOverlayWidg->show();
+		recalcLobbyStatusOverlayLayout();
 
 		displayLobbyDisabledNotification();
 	}
+}
+
+void LobbyBrowser::recalcLobbyStatusOverlayLayout()
+{
+	int w = width();
+
+	int tableHeight = table->height();
+
+	int lobbyStatusOverlayHeight = lobbyStatusOverlayWidg->idealHeight();
+	int lobbyStatusOverlayY0 = (tableHeight - lobbyStatusOverlayHeight) / 2;
+	lobbyStatusOverlayWidg->setGeometry(0, lobbyStatusOverlayY0, w, lobbyStatusOverlayHeight);
 }
 
 void LobbyBrowser::geometryChanged()
@@ -1248,8 +1814,14 @@ void LobbyBrowser::geometryChanged()
 
 	int topButtonsY0 = 10;
 
+	// left-aligned buttons
+
 	int backButtonX0 = 10;
 	backButton->setGeometry(backButtonX0, topButtonsY0, backButton->width(), backButton->height());
+
+	// right-aligned buttons
+
+	int buttonMaxHeight = std::max<int>(refreshButton->idealHeight(), filtersButton->idealHeight());
 
 	int refreshButtonX0 = w - 10 - refreshButton->idealWidth();
 	refreshButton->setGeometry(refreshButtonX0, topButtonsY0, refreshButton->idealWidth(), refreshButton->idealHeight());
@@ -1257,15 +1829,23 @@ void LobbyBrowser::geometryChanged()
 	int filtersButtonX0 = refreshButton->x() - 5 - filtersButton->idealWidth();
 	filtersButton->setGeometry(filtersButtonX0, topButtonsY0, filtersButton->idealWidth(), filtersButton->idealHeight());
 
-	int maxTopAreaY1 = std::max<int>({backButton->y() + backButton->height(), refreshButton->y() + refreshButton->height(), filtersButton->y() + filtersButton->height()});
+	// connect-to form
+
+	int connectWidgetX0 = backButton->x() + backButton->width() + connectToFormHorizontalPadding;
+	int maxAvailableConnectToFormWidget = filtersButton->x() - connectWidgetX0 - connectToFormHorizontalPadding;
+	connectToForm->setGeometry(connectWidgetX0, topButtonsY0, std::min<int>(connectToForm->idealWidth(), maxAvailableConnectToFormWidget), buttonMaxHeight);
+
+	// top area height
+
+	int maxTopAreaY1 = std::max<int>({backButton->y() + backButton->height(), connectToForm->y() + connectToForm->height(), refreshButton->y() + refreshButton->height(), filtersButton->y() + filtersButton->height()});
+
+	// table
 
 	int tablePosY0 = maxTopAreaY1 + 10;
 	int tableHeight = h - tablePosY0 - lobbyStatusMessageContainer->height();
 	table->setGeometry(0, tablePosY0, w, tableHeight);
 
-	int lobbyStatusOverlayHeight = lobbyStatusOverlayWidg->idealHeight();
-	int lobbyStatusOverlayY0 = (tableHeight - lobbyStatusOverlayHeight) / 2;
-	lobbyStatusOverlayWidg->setGeometry(0, lobbyStatusOverlayY0, w, lobbyStatusOverlayHeight);
+	recalcLobbyStatusOverlayLayout(); // after modifying table layout + height
 
 	// recalc column widths
 	table->setMinimumColumnWidths(minimumColumnWidths);
@@ -1302,7 +1882,7 @@ int32_t LobbyBrowser::idealWidth()
 
 int32_t LobbyBrowser::idealHeight()
 {
-	return 600;
+	return 700;
 }
 
 #define WZLOBBY_TABLE_COL_PADDING_X 5
@@ -1364,31 +1944,36 @@ std::shared_ptr<ScrollableTableWidget> LobbyBrowser::createGamesList()
 	return table;
 }
 
+static std::shared_ptr<WzAdvCheckbox> addPopoverMenuOptionsCheckbox(const std::shared_ptr<PopoverMenuWidget>& popoverMenu, const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc)
+{
+	auto pCheckbox = WzAdvCheckbox::make(text, "");
+	pCheckbox->FontID = font_regular;
+	pCheckbox->setOuterVerticalPadding(4);
+	pCheckbox->setInnerHorizontalPadding(5);
+	pCheckbox->setIsChecked(isChecked);
+	if (isDisabled)
+	{
+		pCheckbox->setState(WBUT_DISABLE);
+	}
+	pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
+	if (onClickFunc)
+	{
+		pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
+			auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
+			ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
+			onClickFunc(*checkBoxButton);
+		});
+	}
+	popoverMenu->addMenuItem(pCheckbox, false);
+	return pCheckbox;
+}
+
 std::shared_ptr<PopoverMenuWidget> LobbyBrowser::createFiltersPopoverForm()
 {
 	auto popoverMenu = PopoverMenuWidget::make();
 
 	auto addOptionsCheckbox = [&popoverMenu](const WzString& text, bool isChecked, bool isDisabled, const std::function<void (WzAdvCheckbox& button)>& onClickFunc) -> std::shared_ptr<WzAdvCheckbox> {
-		auto pCheckbox = WzAdvCheckbox::make(text, "");
-		pCheckbox->FontID = font_regular;
-		pCheckbox->setOuterVerticalPadding(4);
-		pCheckbox->setInnerHorizontalPadding(5);
-		pCheckbox->setIsChecked(isChecked);
-		if (isDisabled)
-		{
-			pCheckbox->setState(WBUT_DISABLE);
-		}
-		pCheckbox->setGeometry(0, 0, pCheckbox->idealWidth(), pCheckbox->idealHeight());
-		if (onClickFunc)
-		{
-			pCheckbox->addOnClickHandler([onClickFunc](W_BUTTON& button){
-				auto checkBoxButton = std::dynamic_pointer_cast<WzAdvCheckbox>(button.shared_from_this());
-				ASSERT_OR_RETURN(, checkBoxButton != nullptr, "checkBoxButton is null");
-				onClickFunc(*checkBoxButton);
-			});
-		}
-		popoverMenu->addMenuItem(pCheckbox, false);
-		return pCheckbox;
+		return addPopoverMenuOptionsCheckbox(popoverMenu, text, isChecked, isDisabled, onClickFunc);
 	};
 
 	auto weakSelf = std::weak_ptr<LobbyBrowser>(std::static_pointer_cast<LobbyBrowser>(shared_from_this()));
@@ -1411,6 +1996,15 @@ std::shared_ptr<PopoverMenuWidget> LobbyBrowser::createFiltersPopoverForm()
 		if (auto strongSelf = weakSelf.lock())
 		{
 			strongSelf->filterModded = button.isChecked();
+			strongSelf->populateTableFromGameList();
+		}
+	});
+	addOptionsCheckbox(_("Hide IPv6-Only"), filterIPv6Only, false, [weakSelf](WzAdvCheckbox& button){
+		if (auto strongSelf = weakSelf.lock())
+		{
+			bool newValue = button.isChecked();
+			strongSelf->filterIPv6Only = newValue;
+			war_setLobbyFilterIPv6Only(newValue);
 			strongSelf->populateTableFromGameList();
 		}
 	});
@@ -1457,16 +2051,4 @@ bool refreshLobbyBrowser(const std::shared_ptr<WIDGET>& lobbyBrowserWidg)
 	ASSERT_OR_RETURN(false, lobbyBrowser != nullptr, "Not a LobbyBrowser");
 	lobbyBrowser->triggerRefresh();
 	return true;
-}
-
-// Needed because of current lobby server (which uses TCP connections / connection provider)
-// Ensure that all pending fetches have finished (before anything might clean up the connection provider)
-void shutdownLobbyBrowserFetches()
-{
-	// Force-wait for any background fetch threads
-	for (const auto thread : pendingFetchThreads)
-	{
-		wzThreadJoin(thread);
-	}
-	pendingFetchThreads.clear();
 }

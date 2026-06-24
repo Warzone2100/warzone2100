@@ -82,6 +82,9 @@ public:
 	void setOnEscapeHandler(const OnReturnHandler& func);
 	void setOnEditingStoppedHandler(const OnReturnHandler& func);
 
+	typedef std::function<WzString (const WzString&)> OnPasteTransformFunc;
+	void setOnPasteTransformFunc(const OnPasteTransformFunc& func);
+
 	typedef std::function<bool (W_EDITBOX&)> OnTabHandler; // Returns true if the editbox should be done processing the current input
 	void setOnTabHandler(const OnTabHandler& func);
 
@@ -119,6 +122,7 @@ private:
 	OnTabHandler onTabHandler = nullptr;
 	OnReturnHandler onEscHandler = nullptr;
 	OnReturnHandler onEditingStoppedHandler = nullptr;
+	OnPasteTransformFunc onPasteTransformFunc = nullptr;
 	std::string pTip;	// The tool tip for the edit box
 };
 

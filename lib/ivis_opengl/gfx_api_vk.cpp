@@ -827,6 +827,7 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
 	);
+	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 }
 
 perFrameResources_t::DescriptorPoolDetails perFrameResources_t::createNewDescriptorPool(vk::DescriptorType type, uint32_t maxSets, uint32_t descriptorCount)
@@ -977,6 +978,7 @@ perFrameResources_t::~perFrameResources_t()
 		dev.destroyDescriptorPool(descriptorPoolDetails.poolHandle, nullptr, *pVkDynLoader);
 	}
 	dev.destroyFence(previousSubmission, nullptr, *pVkDynLoader);
+	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
 	clean();
 }
 
@@ -1003,10 +1005,11 @@ perFrameResources_t& buffering_mechanism::get_current_resources()
 	return *perFrameResources[currentFrame];
 }
 
-perSwapchainImageResources_t& buffering_mechanism::get_current_swapchain_resources()
+perSwapchainImageResources_t& buffering_mechanism::get_swapchain_resources(uint32_t swapchainIndex)
 {
-	ASSERT(!perFrameResources.empty(), "perSwapchainImageResources are not initialized??");
-	return *perSwapchainImageResources[currentSwapchainImageResourcesFrame];
+	ASSERT(!perSwapchainImageResources.empty(), "perSwapchainImageResources are not initialized??");
+	ASSERT(swapchainIndex < perSwapchainImageResources.size(), "Invalid swapchainIndex (%" PRIu32 ")", swapchainIndex);
+	return *perSwapchainImageResources[swapchainIndex];
 }
 
 bool buffering_mechanism::isInitialized()
@@ -1018,13 +1021,11 @@ perSwapchainImageResources_t::perSwapchainImageResources_t(vk::Device& _dev, con
 	: dev(_dev)
 	, pVkDynLoader(&vkDynLoader)
 {
-	imageAcquireSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 	renderFinishedSemaphore = dev.createSemaphore(vk::SemaphoreCreateInfo(), nullptr, *pVkDynLoader);
 }
 
 perSwapchainImageResources_t::~perSwapchainImageResources_t()
 {
-	dev.destroySemaphore(imageAcquireSemaphore, nullptr, *pVkDynLoader);
 	dev.destroySemaphore(renderFinishedSemaphore, nullptr, *pVkDynLoader);
 }
 
@@ -1033,11 +1034,13 @@ perSwapchainImageResources_t::~perSwapchainImageResources_t()
 void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = 0;
-	currentSwapchainImageResourcesFrame = 0;
 
-	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
+	for (size_t i = 0; i < std::min<size_t>(MAX_FRAMES_IN_FLIGHT, swapChainImageCount); ++i)
 	{
 		perFrameResources.emplace_back(new perFrameResources_t(dev, allocator, graphicsQueueFamilyIndex, vkDynLoader));
+	}
+	for (size_t i = 0; i < swapChainImageCount; ++i)
+	{
 		perSwapchainImageResources.emplace_back(new perSwapchainImageResources_t(dev, vkDynLoader));
 	}
 
@@ -1060,16 +1063,11 @@ void buffering_mechanism::destroy(vk::Device dev, const WZ_vk::DispatchLoaderDyn
 	perFrameResources.clear();
 	perSwapchainImageResources.clear();
 	currentFrame = 0;
-	currentSwapchainImageResourcesFrame = 0;
 }
 
-void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader, bool skipAcquireNewSwapchainImage)
+void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	currentFrame = (currentFrame < (perFrameResources.size() - 1)) ? currentFrame + 1 : 0;
-	if (!skipAcquireNewSwapchainImage)
-	{
-		currentSwapchainImageResourcesFrame = (currentSwapchainImageResourcesFrame < (perSwapchainImageResources.size() - 1)) ? currentSwapchainImageResourcesFrame + 1 : 0;
-	}
 
 	const auto fences = std::array<vk::Fence, 1> { buffering_mechanism::get_current_resources().previousSubmission };
 	auto waitResult = dev.waitForFences(fences, true, -1, vkDynLoader);
@@ -1091,7 +1089,6 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 std::vector<std::unique_ptr<perFrameResources_t>> buffering_mechanism::perFrameResources;
 std::vector<std::unique_ptr<perSwapchainImageResources_t>> buffering_mechanism::perSwapchainImageResources;
 size_t buffering_mechanism::currentFrame;
-size_t buffering_mechanism::currentSwapchainImageResourcesFrame;
 
 // MARK: Debug Callback
 
@@ -1211,10 +1208,8 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
-	std::make_pair(SHADER_TERRAIN, shader_infos{ "shaders/vk/terrain.vert.spv", "shaders/vk/terrain.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
-	std::make_pair(SHADER_DECALS, shader_infos{ "shaders/vk/decals.vert.spv", "shaders/vk/decals.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, true }),
@@ -1983,7 +1978,6 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 #if defined(DEBUG)
 	ASSERT(flag == update_flag::non_overlapping_updates_promise || (lastUploaded_FrameNum != current_FrameNum), "Attempt to upload to buffer more than once per frame");
 #endif
-	lastUploaded_FrameNum = current_FrameNum;
 
 	ASSERT(start < buffer_size, "Starting offset (%zu) is past end of buffer (length: %zu)", start, buffer_size);
 	ASSERT(start + size <= buffer_size, "Attempt to write past end of buffer");
@@ -1994,15 +1988,33 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	}
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
+	const auto cmdBuffer = frameResources.currentCopyCmdBuffer();
+
+	if (lastUploaded_FrameNum != current_FrameNum)
+	{
+		// First upload this frame - add barrier to ensure that any reads/writes from prior frames are finished
+		const auto bufferMemoryBarrier_BeforeCopy = std::array<vk::BufferMemoryBarrier, 1> {
+			vk::BufferMemoryBarrier()
+				.setSrcAccessMask(vk::AccessFlagBits::eVertexAttributeRead | vk::AccessFlagBits::eTransferWrite)
+				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
+				.setBuffer(object)
+				.setOffset(0)
+				.setSize(vk::WholeSize)
+		};
+
+		cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_BeforeCopy, nullptr, root->vkDynLoader);
+	}
 
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(size), 2);
 	const auto mappedMem = frameResources.stagingBufferAllocator.mapMemory(stagingMemory);
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
 	memcpy(mappedMem, data, size);
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
-	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto copyRegions = std::array<vk::BufferCopy, 1> { vk::BufferCopy(stagingMemory.offset, start, size) };
 	cmdBuffer->copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
+
+	lastUploaded_FrameNum = current_FrameNum;
 }
 
 size_t VkBuf::current_buffer_size()
@@ -3266,10 +3278,10 @@ void VkRoot::createSceneRenderpass(vk::Format sceneFormat, vk::Format depthForma
 		vk::SubpassDependency()
 			.setSrcSubpass(VK_SUBPASS_EXTERNAL)
 			.setDstSubpass(0)
-			.setSrcStageMask(vk::PipelineStageFlagBits::eFragmentShader)
-			.setDstStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput)
-			.setSrcAccessMask(vk::AccessFlagBits::eShaderRead)
-			.setDstAccessMask(vk::AccessFlagBits::eColorAttachmentWrite)
+			.setSrcStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eLateFragmentTests)
+			.setDstStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests)
+			.setSrcAccessMask(vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite)
+			.setDstAccessMask(vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentRead)
 			.setDependencyFlags(vk::DependencyFlagBits::eByRegion)
 		, vk::SubpassDependency()
 			.setSrcSubpass(0)
@@ -4243,10 +4255,10 @@ void VkRoot::createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reaso
 vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
 {
 	const auto desiredFormats = std::array<vk::SurfaceFormatKHR, 4> {
-		vk::SurfaceFormatKHR{ vk::Format::eA2B10G10R10UnormPack32, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
-		vk::SurfaceFormatKHR{ vk::Format::eA2R10G10B10UnormPack32, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
-		vk::SurfaceFormatKHR{ vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear },
-		vk::SurfaceFormatKHR{ vk::Format::eR8G8B8A8Unorm, vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear }
+		vk::SurfaceFormatKHR{ vk::Format::eA2B10G10R10UnormPack32, vk::ColorSpaceKHR::eSrgbNonlinear },
+		vk::SurfaceFormatKHR{ vk::Format::eA2R10G10B10UnormPack32, vk::ColorSpaceKHR::eSrgbNonlinear },
+		vk::SurfaceFormatKHR{ vk::Format::eB8G8R8A8Unorm, vk::ColorSpaceKHR::eSrgbNonlinear },
+		vk::SurfaceFormatKHR{ vk::Format::eR8G8B8A8Unorm, vk::ColorSpaceKHR::eSrgbNonlinear }
 	};
 
 	if(availableFormats.size() == 1
@@ -4254,7 +4266,7 @@ vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormat
 	{
 		// don't appear to be any preferred formats, so create one
 		vk::SurfaceFormatKHR format;
-		format.colorSpace = vk::ColorSpaceKHR::eVkColorspaceSrgbNonlinear;
+		format.colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
 		format.format = vk::Format::eB8G8R8A8Unorm;
 		return format;
 	}
@@ -4485,12 +4497,17 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 			  swapchainSize.width, swapchainSize.height);
 	}
 
-	// pick swapchain image count
-	uint32_t swapchainDesiredImageCount = swapChainSupport.capabilities.minImageCount + 1;
-	if(swapchainDesiredImageCount > swapChainSupport.capabilities.maxImageCount
-	   && swapChainSupport.capabilities.maxImageCount > 0)
+	// pick swapchain image count (triple-buffering, if possible)
+	uint32_t swapchainDesiredImageCount = std::max<uint32_t>(3, swapChainSupport.capabilities.minImageCount);
+	if (swapChainSupport.capabilities.maxImageCount > 0) // maxImageCount may be 0, in which case there is no defined upper limit
 	{
-		swapchainDesiredImageCount = swapChainSupport.capabilities.maxImageCount;
+		swapchainDesiredImageCount = std::min<uint32_t>(swapchainDesiredImageCount, swapChainSupport.capabilities.maxImageCount);
+	}
+	ASSERT(swapchainDesiredImageCount >= 2, "swapchainDesiredImageCount: %" PRIu32, swapchainDesiredImageCount);
+	if (swapchainDesiredImageCount != 3)
+	{
+		debug(LOG_3D, "Clamped swapchainDesiredImageCount: %" PRIu32" (minImageCount: %" PRIu32", maxImageCount: %" PRIu32")",
+			  swapchainDesiredImageCount, swapChainSupport.capabilities.minImageCount, swapChainSupport.capabilities.maxImageCount);
 	}
 
 	// pick surface format
@@ -4578,7 +4595,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	//
 
 	try {
-		buffering_mechanism::init(dev, allocator, MAX_FRAMES_IN_FLIGHT, queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
+		buffering_mechanism::init(dev, allocator, swapchainImages.size(), queueFamilyIndices.graphicsFamily.value(), vkDynLoader);
 	}
 	catch (const vk::SystemError &e) {
 		auto resultErr = static_cast<vk::Result>(e.code().value());
@@ -5909,7 +5926,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
-		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
+		acquireNextImageResult = dev.acquireNextImageKHR(swapchain, -1, buffering_mechanism::get_current_resources().imageAcquireSemaphore, vk::Fence(), vkDynLoader);
 	}
 	catch (const vk::OutOfDateKHRError&)
 	{
@@ -6043,6 +6060,40 @@ void VkRoot::beginRenderPass()
 	startRenderPass();
 }
 
+bool VkRoot::endRenderPass_RecreateSwapchain(const vk::Result& reason)
+{
+	try {
+		createNewSwapchainAndSwapchainSpecificStuff(reason);
+
+		if (queuedSwapModeChange.has_value())
+		{
+			if (queuedSwapModeChange.value().completionHandler)
+			{
+				queuedSwapModeChange.value().completionHandler();
+			}
+			queuedSwapModeChange.reset();
+		}
+		return true;
+	}
+	catch (const vk::SystemError& e)
+	{
+		auto resultErr = static_cast<vk::Result>(e.code().value());
+		debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "createNewSwapchainAndSwapchainSpecificStuff failed: %s", vk::to_string(resultErr).c_str());
+		if (resultErr == vk::Result::eSuboptimalKHR)
+		{
+			// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
+			swapchainSize.width = 1;
+			swapchainSize.height = 1;
+		}
+		else
+		{
+			queuedSwapModeChange.reset();
+			handleUnrecoverableError(resultErr);
+		}
+	}
+	return false;
+}
+
 void VkRoot::endRenderPass()
 {
 	frameNum = std::max<size_t>(frameNum + 1, 1);
@@ -6109,7 +6160,7 @@ void VkRoot::endRenderPass()
 	{
 		submitInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().imageAcquireSemaphore)
+			.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
 			.setPWaitDstStageMask(&waitStage);
 	}
 
@@ -6118,17 +6169,19 @@ void VkRoot::endRenderPass()
 		.setSwapchainCount(1)
 		.setPImageIndices(&currentSwapchainIndex);
 
-	if ((graphicsQueue != presentQueue) && !mustSkipDrawing)
+	if (!mustSkipDrawing)
 	{
-		// for handling separate graphics and presentation queues
+		// Add synchronization to:
+		// - handle separate graphics and presentation queues
+		// - ensure a swapchain present operation does not conflict with a prior layout transition
+
 		submitInfo
 			.setSignalSemaphoreCount(1)
-			.setPSignalSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
+			.setPSignalSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
 
-		// for handling separate graphics and presentation queues
 		presentInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_swapchain_resources().renderFinishedSemaphore);
+			.setPWaitSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
 	}
 
 	try {
@@ -6164,34 +6217,7 @@ void VkRoot::endRenderPass()
 
 	if (mustRecreateSwapchain)
 	{
-		try {
-			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-
-			if (queuedSwapModeChange.has_value())
-			{
-				if (queuedSwapModeChange.value().completionHandler)
-				{
-					queuedSwapModeChange.value().completionHandler();
-				}
-				queuedSwapModeChange.reset();
-			}
-		}
-		catch (const vk::SystemError& e)
-		{
-			auto resultErr = static_cast<vk::Result>(e.code().value());
-			debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-			if (resultErr == vk::Result::eSuboptimalKHR)
-			{
-				// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
-				swapchainSize.width = 1;
-				swapchainSize.height = 1;
-			}
-			else
-			{
-				queuedSwapModeChange.reset();
-				handleUnrecoverableError(resultErr);
-			}
-		}
+		endRenderPass_RecreateSwapchain(vk::Result::eErrorOutOfDateKHR);
 		return; // end processing this flip
 	}
 
@@ -6204,8 +6230,8 @@ void VkRoot::endRenderPass()
 		catch (const vk::OutOfDateKHRError&)
 		{
 			debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
-			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-			return; // end processing this flip
+			presentResult = vk::Result::eErrorOutOfDateKHR;
+			mustRecreateSwapchain = true;
 		}
 		catch (const vk::SurfaceLostKHRError&)
 		{
@@ -6228,12 +6254,19 @@ void VkRoot::endRenderPass()
 		}
 		if (presentResult == vk::Result::eSuboptimalKHR)
 		{
-			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
+			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
+			mustRecreateSwapchain = true;
+		}
+
+		if (mustRecreateSwapchain)
+		{
+			endRenderPass_RecreateSwapchain(presentResult);
+			return; // end processing this flip
 		}
 	}
 
 	try {
-		buffering_mechanism::swap(dev, vkDynLoader, mustSkipDrawing); // must be called *before* acquireNextSwapchainImage()
+		buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
 	}
 	catch (const vk::OutOfHostMemoryError& e)
 	{
@@ -6288,24 +6321,8 @@ void VkRoot::endRenderPass()
 			{
 				// Must re-create swapchain
 				debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-				try {
-					createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
-				}
-				catch (const vk::SystemError& e)
-				{
-					auto resultErr = static_cast<vk::Result>(e.code().value());
-					debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_INFO, "createNewSwapchainAndSwapchainSpecificStuff failed: %s", vk::to_string(resultErr).c_str());
-					if (resultErr == vk::Result::eSuboptimalKHR)
-					{
-						// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
-						swapchainSize.width = 1;
-						swapchainSize.height = 1;
-					}
-					else
-					{
-						handleUnrecoverableError(resultErr);
-					}
-				}
+
+				endRenderPass_RecreateSwapchain(vk::Result::eErrorOutOfDateKHR);
 				return; // end processing this flip
 			}
 		}

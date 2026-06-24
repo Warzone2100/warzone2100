@@ -159,9 +159,10 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
-	if (writeErrorCode().has_value())
+	auto writeErr = writeErrorCode();
+	if (writeErr.has_value())
 	{
-		return tl::make_unexpected(writeErrorCode().value());
+		return tl::make_unexpected(writeErr.value());
 	}
 
 	if (rawByteCount)
@@ -216,11 +217,12 @@ net::result<void> IClientConnection::flush(size_t* rawByteCount)
 		return {};  // Not compressed, so don't mess with compression.
 	}
 
-	if (writeErrorCode().has_value())
+	auto writeErr = writeErrorCode();
+	if (writeErr.has_value())
 	{
-		const auto errMsg = writeErrorCode().value().message();
+		const auto errMsg = writeErr.value().message();
 		debug(LOG_ERROR, "Socket write error encountered in flush: %s", errMsg.c_str());
-		return tl::make_unexpected(writeErrorCode().value());
+		return tl::make_unexpected(writeErr.value());
 	}
 
 	auto flushCompressionRes = compressionAdapter_->flushCompressionStream();
@@ -277,4 +279,13 @@ void IClientConnection::enableCompression()
 void IClientConnection::close()
 {
 	pwm_->safeDispose(this);
+}
+
+void IClientConnection::setWriteErrorCode(optional<std::error_code> ec)
+{
+	{
+		const std::lock_guard<std::mutex> guard {writeErrorMtx_};
+		writeErrorCode_ = std::move(ec);
+	}
+	writeErrorSet_.store(true, std::memory_order_relaxed);
 }

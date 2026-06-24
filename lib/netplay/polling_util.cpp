@@ -86,7 +86,7 @@ net::result<int> checkConnectionsReadable(const std::vector<IClientConnection*>&
 
 	for (auto& conn : conns)
 	{
-		conn->setReadReady(readableSet.isSet(conn));
+		conn->setReadReady(readableSet.isSet(conn).value_or(false));
 	}
 	return pollRes.value();
 }

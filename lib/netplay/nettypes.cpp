@@ -465,10 +465,44 @@ bool NETend(MessageWriter& w)
 		msg = encryptedNetMessage.build();
 	}
 
-	optional<NetMessage> shareGameQueueMsg;
-	if (w.queueInfo.queueType == QUEUE_GAME_FORCED)
+	if (w.queueInfo.queueType == QUEUE_GAME_FORCED)  // If true, we must be the host, inserting a GAME_PLAYER_LEFT into the other player's game queue. Since they left, they're not around to complain about us messing with their queue, which would normally cause a desynch.
 	{
-		shareGameQueueMsg = msg;
+		// Almost duplicate code from NETflushGameQueues() in here.
+		// Message must be sent as message in a NET_SHARE_GAME_QUEUE in a NET_SEND_TO_PLAYER.
+		// If not sent inside a NET_SEND_TO_PLAYER, and the message arrives at the same time as a real message from that player, then the messages may be processed in an unexpected order.
+		// See NETrecvNet, in the for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current) loop.
+		// Assume dropped client sends a NET_SENT_TO_PLAYERS(broadcast, NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE)), and then drops.
+		// The host then sends the NET_SEND_TO_PLAYER(broadcast, NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE)) to everyone. If the host then spoofs a NET_SHARE_GAME_QUEUE(GAME_PLAYER_LEFT) without
+		// wrapping it in a NET_SEND_TO_PLAYER from that player, then the client may sometimes unwrap the real NET_SEND_TO_PLAYER message, then process the host's spoofed NET_SHARE_GAME_QUEUE
+		// message, and then after that process the previously unwrapped NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE) message, such that the GAME_PLAYER_LEFT appears on the queue before the
+		// GAME_REALMESSAGE.
+
+		// Decoded in NETprocessSystemMessage in netplay.cpp.
+		uint8_t player = w.queueInfo.index;
+		auto shareQueueWriter = NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
+		NETuint8_t(shareQueueWriter, player);
+		NETuint32_t(shareQueueWriter, 1);
+		NETnetMessage(shareQueueWriter, msg);
+
+		auto builtShareGameQueueMessage = shareQueueWriter.msgBuilder.build();
+
+		uint8_t allPlayers = NET_ALL_PLAYERS;
+		auto sendToPlayerWriter = NETbeginEncode(NETbroadcastQueue(), NET_SEND_TO_PLAYER);
+		NETuint8_t(sendToPlayerWriter, player);
+		NETuint8_t(sendToPlayerWriter, allPlayers);
+		NETnetMessage(sendToPlayerWriter, builtShareGameQueueMessage);
+		NETend(sendToPlayerWriter);  // This time we actually send it.
+
+		// Also insert the NET_SEND_TO_PLAYER into the ** host queue **
+		// - The broadcast above doesn't do this, since broadcasts don't get sent to self
+		// - Insert into the host queue so that it gets processed just like on the clients
+		auto sendToHostSelfWriter = NETbeginEncode(NETnetQueue(NetPlay.hostPlayer), NET_SEND_TO_PLAYER);
+		NETuint8_t(sendToHostSelfWriter, player);
+		NETuint8_t(sendToHostSelfWriter, allPlayers);
+		NETnetMessage(sendToHostSelfWriter, builtShareGameQueueMessage);
+		NETinsertMessageFromNet(NETnetQueue(NetPlay.hostPlayer), sendToHostSelfWriter.msgBuilder.build());
+
+		return true;
 	}
 
 	auto msgType = msg.type();
@@ -495,33 +529,6 @@ bool NETend(MessageWriter& w)
 
 	// Process any delayed actions from the NETsend call
 	NETsendProcessDelayedActions();
-
-	if (w.queueInfo.queueType == QUEUE_GAME_FORCED)  // If true, we must be the host, inserting a GAME_PLAYER_LEFT into the other player's game queue. Since they left, they're not around to complain about us messing with their queue, which would normally cause a desynch.
-	{
-		// Almost duplicate code from NETflushGameQueues() in here.
-		// Message must be sent as message in a NET_SHARE_GAME_QUEUE in a NET_SEND_TO_PLAYER.
-		// If not sent inside a NET_SEND_TO_PLAYER, and the message arrives at the same time as a real message from that player, then the messages may be processed in an unexpected order.
-		// See NETrecvNet, in the for (current = 0; current < MAX_CONNECTED_PLAYERS; ++current) loop.
-		// Assume dropped client sends a NET_SENT_TO_PLAYERS(broadcast, NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE)), and then drops.
-		// The host then sends the NET_SEND_TO_PLAYER(broadcast, NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE)) to everyone. If the host then spoofs a NET_SHARE_GAME_QUEUE(GAME_PLAYER_LEFT) without
-		// wrapping it in a NET_SEND_TO_PLAYER from that player, then the client may sometimes unwrap the real NET_SEND_TO_PLAYER message, then process the host's spoofed NET_SHARE_GAME_QUEUE
-		// message, and then after that process the previously unwrapped NET_SHARE_GAME_QUEUE(GAME_REALMESSAGE) message, such that the GAME_PLAYER_LEFT appears on the queue before the
-		// GAME_REALMESSAGE.
-
-		// Decoded in NETprocessSystemMessage in netplay.cpp.
-		uint8_t player = w.queueInfo.index;
-		auto shareQueueWriter = NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
-		NETuint8_t(shareQueueWriter, player);
-		NETuint32_t(shareQueueWriter, 1);
-		NETnetMessage(shareQueueWriter, *shareGameQueueMsg);
-
-		uint8_t allPlayers = NET_ALL_PLAYERS;
-		auto sendToPlayerWriter = NETbeginEncode(NETbroadcastQueue(), NET_SEND_TO_PLAYER);
-		NETuint8_t(sendToPlayerWriter, player);
-		NETuint8_t(sendToPlayerWriter, allPlayers);
-		NETnetMessage(sendToPlayerWriter, shareQueueWriter.msgBuilder.build());
-		NETend(sendToPlayerWriter);  // This time we actually send it.
-	}
 
 	return true;  // Serialising never fails.
 }

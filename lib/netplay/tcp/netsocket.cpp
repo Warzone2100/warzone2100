@@ -61,7 +61,7 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	SOCKET fd[SOCK_COUNT];
+	SOCKET fd[SOCK_COUNT] = {INVALID_SOCKET, INVALID_SOCKET};
 	bool ready = false;
 	char textAddress[40] = {};
 };

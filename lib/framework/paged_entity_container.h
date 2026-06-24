@@ -424,7 +424,7 @@ public:
 
 		// Either advance slot generation number or invalidate the slot right away,
 		// the behavior depends on whether we reuse the slots or not.
-		advance_slot_generation<ReuseSlots>(slotMetadata);
+		advance_slot_generation(slotMetadata);
 
 		// Ensure that the element pointed-to by this slot is dead.
 		slotMetadata.set_dead();
@@ -444,10 +444,7 @@ public:
 			// Increase counters for expired slots tracking.
 			_pages[pageIdx.first].increase_expired_slots_count();
 			++_expiredSlotsCount;
-			// Looks like at least GCC is smart enough to optimize the following
-			// instructions away, even when this is not a `constexpr if`, but a regular `if`,
-			// See https://godbolt.org/z/bY8oEYsdz.
-			if (!ReuseSlots)
+			if constexpr (!ReuseSlots)
 			{
 				if (_pages[pageIdx.first].is_expired())
 				{
@@ -729,7 +726,7 @@ public:
 		_capacity = MaxElementsPerPage;
 		// No valid items in the container now.
 		_maxIndex = INVALID_SLOT_IDX;
-		if (!ReuseSlots)
+		if constexpr (!ReuseSlots)
 		{
 			// If the first page is in the expired state, then
 			// its storage is deallocated, too. So, reallocate it.
@@ -772,16 +769,12 @@ private:
 		return new (address) T(std::forward<Args>(args)...);
 	}
 
-	// Use some hacks for SFINAE to make it compliant to C++ standard,
-	// see https://stackoverflow.com/a/11056319 for details.
-	template <typename U = T, std::enable_if_t<std::is_trivially_destructible<U>::value, bool> = true>
-	void deallocate_element_impl(T* /*element*/)
-	{}
-
-	template <typename U = T, std::enable_if_t<!std::is_trivially_destructible<U>::value, bool> = true>
 	void deallocate_element_impl(T* element)
 	{
-		element->~T();
+		if constexpr (!std::is_trivially_destructible<T>::value)
+		{
+			element->~T();
+		}
 	}
 
 	SlotMetadata& get_slot_metadata(const PageIndex& idx)
@@ -806,18 +799,16 @@ private:
 		return idx.first * MaxElementsPerPage + idx.second;
 	}
 
-	// No need to call destructors manually for trivially destructible types.
-	template <typename U = T, std::enable_if_t<std::is_trivially_destructible<U>::value, bool> = true>
-	void destroy_live_elements()
-	{}
-
-	template <typename U = T, std::enable_if_t<!std::is_trivially_destructible<U>::value, bool> = true>
 	void destroy_live_elements()
 	{
-		for (auto it = begin(), endIt = end(); it != endIt; ++it)
+		if constexpr (!std::is_trivially_destructible<T>::value)
 		{
-			deallocate_element_impl(&*it);
+			for (auto it = begin(), endIt = end(); it != endIt; ++it)
+			{
+				deallocate_element_impl(&*it);
+			}
 		}
+		// No need to call destructors manually for trivially destructible types.
 	}
 
 	size_t find_first_page_with_recycled_ids() const
@@ -842,19 +833,18 @@ private:
 		return (reinterpret_cast<uintptr_t>(addr) % alignof(T)) == 0;
 	}
 
-	template <bool ReuseSlotsAux = ReuseSlots, std::enable_if_t<ReuseSlotsAux, bool> = true>
 	void advance_slot_generation(SlotMetadata& meta)
 	{
-		// Advance slot generation number, when `ReuseSlots=true`.
-		meta.advance_generation();
-	}
-
-	// Specialization for the case when `ReuseSlots=false`.
-	template <bool ReuseSlotsAux = ReuseSlots, std::enable_if_t<!ReuseSlotsAux, bool> = true>
-	void advance_slot_generation(SlotMetadata& meta)
-	{
-		// Invalidate slot right away so that it cannot be reused anymore.
-		meta.invalidate();
+		if constexpr (ReuseSlots)
+		{
+			// Advance slot generation number, when `ReuseSlots=true`.
+			meta.advance_generation();
+		}
+		else
+		{
+			// Invalidate slot right away so that it cannot be reused anymore.
+			meta.invalidate();
+		}
 	}
 
 	std::vector<Page> _pages;

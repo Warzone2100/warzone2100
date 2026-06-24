@@ -62,23 +62,6 @@ private:
 	tMode mode;
 };
 
-// - protocol.cpp -
-class WzProtocolTitleUI: public WzTitleUI
-{
-public:
-	WzProtocolTitleUI();
-	virtual void start() override;
-	virtual TITLECODE run() override;
-	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
-private:
-	void openIPDialog();
-	void closeIPDialog();
-	// Not-null: the settings screen is up
-	std::shared_ptr<W_SCREEN> psSettingsScreen = nullptr;
-	// If true, there's an IP address waiting to be used.
-	bool hasWaitingIP = false;
-};
-
 // - multiint.cpp (defined in titleui/multiplayer.h) -
 class WzMultiplayerOptionsTitleUI;
 
@@ -109,8 +92,5 @@ private:
 };
 
 #define WZ_MSGBOX_TUI_LEAVE 4597000
-
-void mpSetServerName(const std::string& hostname);
-const std::string& mpGetServerName();
 
 #endif

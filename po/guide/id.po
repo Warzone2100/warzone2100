@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-04-06 21:19\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -18,19 +18,19 @@ msgstr ""
 "X-Crowdin-File-ID: 360\n"
 
 msgid "Artifacts"
-msgstr "Artefak"
+msgstr "Artifact"
 
 msgid "As you progress through the campaign, you will collect Artifacts from enemy bases (and specific enemy units)."
-msgstr "Begitu kamu menjalankan misi, kamu dapat mengambil Artefak dari markas musuh (beberapa ada di unit musuh)"
+msgstr "Begitu kamu menjalankan misi, kamu dapat mengambil Artifact dari Base musuh (beberapa disimpan di dalam Unit musuh)"
 
 msgid "These will unlock valuable technologies that you can research in a Research Facility."
-msgstr "Kamu dapat meneliti Artefak itu di Laboratorium agar dapat membuka berbagai teknologi yang akan berguna kedepannya."
+msgstr "Kamu dapat meneliti Artifact itu di Research Facility. Artifact yang berhasil dipulihkan dapat digunakan membuka berbagai Technology yang akan berguna untuk kelancaran misimu."
 
 msgid "Artifacts are small white boxes with a green indicator above, and can be picked up by moving any unit close enough."
-msgstr "Artefak itu berbentuk kotak kecil warna putih yang ditandai dengan tanda hijau diatasnya, kamu dapat mengambilnya dengan menggerakkan unit manapun ke sana."
+msgstr "Artifact berbentuk kotak kecil berwarna putih yang ditandai dengan tanda hijau diatasnya, kamu dapat mengambilnya dengan menggerakkan Unit manapun ke sana."
 
 msgid "All artifacts must be picked up as part of each level's victory conditions."
-msgstr "Semua artefak wajib diambil karena itu adalah salah satu objektif misi."
+msgstr "Semua Artefak wajib diambil karena itu adalah salah satu objektif misi."
 
 msgid "Backstory"
 msgstr "Backstory"
@@ -57,7 +57,7 @@ msgid "## Present Day:"
 msgstr "## Masa Kini:"
 
 msgid "The player (referred to as \"the Commander\") is part of a group of survivors that sought shelter in a military base in the Rocky Mountains."
-msgstr "Kamu disini akan berperan sebagai \"Sang Komandan\", yang menjadi salah satu bagian dari sekumpulan orang yang berhasil bertahan hidup dengan berlindung di pangkalan militer di Pegunungan Rocky."
+msgstr "Kamu disini akan berperan sebagai \"the Commander\", yang menjadi salah satu bagian dari sekumpulan orang yang berhasil bertahan hidup dengan berlindung di pangkalan militer di Pegunungan Rocky."
 
 msgid "They emerge from the base with the goal of rebuilding the world, adopting the name \"The Project\"."
 msgstr "Kamu dan orang-orangmu memiliki ambisi untuk membangun tatanan dunia baru, dibawah nama \"The Project\""
@@ -78,13 +78,13 @@ msgid "Command Panel"
 msgstr "Panel Perintah"
 
 msgid "There are six different command panel interfaces, plus a central button. You open up a command interface by pressing the appropriate button."
-msgstr "Di sini terdapat enam menu perintah. Kamu dapat membuka salah satu menu perintah dengan menge-kliknya."
+msgstr "Di sini terdapat enam menu perintah. Kamu dapat membuka salah satu menu perintah dengan mengekliknya."
 
 msgid "The middle / central button closes any open command interface."
-msgstr "Tombol tengah berfungsi untuk menutup menu perintah"
+msgstr "Tombol tengah berfungsi untuk menutup menu perintah."
 
 msgid "Defending Your Base"
-msgstr "Mempertahankan Pangkalanmu"
+msgstr "Mempertahankan Base mu"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
 msgstr ""
@@ -99,175 +99,175 @@ msgid "Build defensive structures that provide cover, restrict access, sense ene
 msgstr ""
 
 msgid "Intelligence Display"
-msgstr ""
+msgstr "Intelligence Display"
 
 msgid "The Intelligence Display is where you can find your current mission objectives, replay your current mission briefing, and read more about completed research projects."
-msgstr ""
+msgstr "Intelligence Display adalah tampilan di mana kamu dapat mengecek objektif misi mu, membaca ulang detail misi, dan melihat rekap dari misi sebelumnya."
 
 msgid "When you open the Intelligence Display, two rows of icons appear on the bottom of the screen."
-msgstr ""
+msgstr "Saat kamu membuka Intelligence Display, akan ada dua baris menu yang akan muncul dibawah layarmu."
 
 msgid "Selecting an icon will display information about that research or mission objective in the middle of the screen."
-msgstr ""
+msgstr "Mengeklik salah satu menu akan menampilkan informasi tentang objektif misi mu di tengah layar."
 
 msgid "Using the Mission Timer"
-msgstr ""
+msgstr "Menggunakan Mission Timer"
 
 msgid "Much of the time, you'll be on the clock. Sometimes, you'll find yourself wishing you had more time. Other times you might think you have too much."
-msgstr ""
+msgstr "Mungkin, kamu terbiasa tepat waktu. Tapi lebih mungkin lagi, suatu saat kamu akan merasa kekurangan waktu. Dan lebih lebih lagi kamu akan merasa kelebihan waktu."
 
 msgid "There are always smart ways to make use of extra time to prepare for battles ahead."
-msgstr ""
+msgstr "Ada banyak cara untuk menggunakan waktumu untuk menyiapkan pertempuran selanjutnya."
 
 msgid "Whether it's completing new research, building defenses, or recycling & replacing units with new weapons and technologies... don't let good time go to waste."
-msgstr ""
+msgstr "Apapun itu. Menyelesaikan penelitian, membangun pertahanan, atau mendaur ulang Unit-Unit mu dengan Technology atau Weapon baru... jangan terlalu asyik membuang-buang waktumu."
 
 msgid "(If you have the Timer Power Bonus tweak enabled - which is the default - you don't need to wait out the timer to grant power. You'll automatically be granted the power you would have gained if you'd let the timer run. But the rest of the uses still apply!)"
-msgstr ""
+msgstr "(Kalau kamu menyalakan tweak Bonus Power Timer di Pengaturan Tweak - btw, ini default nya auto nyala, ya - kamu tidak perlu menunggu timer nya habis untuk dapat Power. Kamu akan tetap mendapat jumlah Power yang setara dengan waktu tersisa yang kamu miliki, jadi tidak perlu menghabiskan waktumu hanya untuk farming Power. Tapi jangan ekspek hal lain, semua fungsi tidak ada yang berubah.)"
 
 msgid "Power"
-msgstr ""
+msgstr "Power"
 
 msgid "In Warzone 2100, power is your key resource."
-msgstr ""
+msgstr "Di Warzone 2100, Power adalah koentji untuk segalanya."
 
 msgid "You spend power to build structures, manufacture units, and research upgrades / new technology."
-msgstr ""
+msgstr "Untuk membangun Structure, Manifacture Unit, Research Upgrade, dan Technology baru. Kamu membutuhkan Power untuk melakukan semua itu."
 
 msgid "Power is generated by Power Generators that are fed by Oil Derricks."
-msgstr ""
+msgstr "Power diproduksi oleh Power Generator yang diberdayai oleh Oil Derrick."
 
 msgid "Researching Technology"
-msgstr ""
+msgstr "Meneliti Technology"
 
 msgid "Researching technologies is accomplished using Research Facilities."
-msgstr ""
+msgstr "Meneliti Technology dapat dilakukan menggunakan Research Facility."
 
 msgid "When a Research Facility is selected, all available options are displayed on the left side of the screen."
-msgstr ""
+msgstr "Begitu kamu memilih Research Facility, semua opsi yang tersedia akan muncul di kiri layar."
 
 msgid "Each research project requires a certain amount of power and time to complete. The power investment is non-refundable."
-msgstr ""
+msgstr "Setiap proyek penelitian membutuhkan waktu dan Power agar bisa selesai. Power yang digunakan tidak dapat dikembalikan."
 
 msgid "But research progress is never lost, even if the Research Facility is destroyed - the project only needs to be re-assigned to another facility."
-msgstr ""
+msgstr "Meski Research Facility dihancurkan, progres penelitian tidak akan hilang. Itu akan dipindahtangankan untuk  diteliti oleh Facility lain."
 
 msgid "Completing research of a new technology may:"
-msgstr ""
+msgstr "Menyelesaikan penelitian Technology baru akan memberimu:"
 
 msgid "- Make available new weapons, structures, unit bodies, propulsion, etc"
-msgstr ""
+msgstr "- Weapon, Structure, Unit Body, Propulsion, dll. baru tersedia untuk diproduksi"
 
 msgid "- Upgrade the effectiveness of existing weapons, structures, unit bodies, etc"
-msgstr ""
+msgstr "- Meningkatkan efektivitas Weapon, Structure, Unit Body, dll. yang sudah ada."
 
 msgid "- Enable the research of additional technologies"
-msgstr ""
+msgstr "- Memungkinkan untuk meneliti Technology selanjutnya"
 
 msgid "General"
-msgstr ""
+msgstr "Umum"
 
 msgid "In Warzone 2100, you command the forces of \"The Project\" in a battle to rebuild the world, after mankind has been nearly destroyed by nuclear missiles."
-msgstr ""
+msgstr "Di Warzone 2100, kamu akan memimpin pasukan \"The Project\" dalam pertempuran untuk membangun ulang dunia, setelah kemanusiaan hampir dibumihanguskan oleh misil nuklir."
 
 msgid "This guide will help walk you through key facets of the game."
-msgstr ""
+msgstr "Petunjuk ini akan membantumu memahami mekanik dari game ini."
 
 msgid "(If you are playing the campaign, new guide topics may be unlocked as you progress through the game.)"
-msgstr ""
+msgstr "(Jika kamu memainkan mode Misi, petunjuk baru mungkin akan terbuka begitu game berjalan.)"
 
 msgid "Building Structures"
-msgstr ""
+msgstr "Membangun Structure"
 
 msgid "Click the \"Build\" button on the Command Panel."
-msgstr ""
+msgstr "Klik tombol \"Build\" di Panel Command."
 
 msgid "This will open the Structures menu on the left side of screen, with a button for each structure you can build."
-msgstr ""
+msgstr "Itu akan membuka menu Structure di kiri layar yang akan menunjukkan Structure apa saja yang bisa kamu bangun."
 
 msgid "Select the desired structure button. A silhouette will appear in the game world - this is where your structure will be placed once you confirm."
-msgstr ""
+msgstr "Pilih Structure yang ingin kamu bangun. Sebuah siluet akan muncul, itu adalah dimana struktur akan dibangun bila kamu mengonfirmasinya."
 
 msgid "Move the silhouette by moving the input device."
-msgstr ""
+msgstr "Pindahkan siluet dengan menggerakan mouse atau trackpad."
 
 msgid "- If a structure is buildable in a location, the silhouette will be colored green when you hover over a location."
-msgstr ""
+msgstr "- Bila Structure boleh dibangun di lokasi tersebut, itu akan berwarna hijau."
 
 msgid "- If a structure is not buildable in a location, the silhouette will be colored red."
-msgstr ""
+msgstr "Dan sebaliknya, itu akan berwarna merah bila tidak boleh dibangun disitu."
 
 msgid "Once you've chosen a viable location, select to confirm the placement of the build site. A truck will move to the location and begin construction."
-msgstr ""
+msgstr "Bila lokasi pembangunan sudah sesuai keinginanmu, pilih konfirmasi. Sebuah Truck akan berpindah ke lokasi untuk memulai pembangunan."
 
 msgid "You can order additional trucks to help out (and build the structure faster) by selecting them and ordering them to target the structure under construction."
-msgstr ""
+msgstr "Kamu juga bisa memerintah Truck lain yang menganggur untuk membantu dengan memilihnya dan mengarahkannya ke tempat konstruksi. (Itu akan membuat pembangunan lebih cepat)."
 
 msgid "Tip: To build \"walls\" (once they are available), you can click and drag to draw a wall in a line."
-msgstr ""
+msgstr "Tips: Untuk membangun \"Wall\" (bila sudah tersedia), kamu dapat mengeklik dan tarik untuk mengatur Wall."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Cyborg Factory"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Cybrog Factory bekerja layaknya Factory biasa, namun dikhususkan untuk membangun Cyborg"
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Setiap Factory hanya dapat membangun satu Cyborg dalam satu waktu, tapi kamu boleh memasukkan jumlah yang kamu mau, mereka akan mengantrekannya untuk diproduksi."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Begitu selesai diproduksi, Cyborg akan segera bergerak ke Titik Kumpul milik Factory."
 
 msgid "Demolishing Structures"
-msgstr ""
+msgstr "Menghancurkan Structure"
 
 msgid "Demolishing a building is almost as simple as building one."
-msgstr ""
+msgstr "Menghancurkan Structure itu sangat mudah"
 
 msgid "Select \"Demolish Structure\" in the Structures menu and click a building to demolish."
-msgstr ""
+msgstr "Pilih \"Hancurkan Structure\" di menu Structure dan klik salah satu Structure yang ingin dihancurkan."
 
 msgid "A unit will move to the building and destroy it."
-msgstr ""
+msgstr "Unit akan bergerak ke Structure untuk menghancurkannya."
 
 msgid "Demolished structures return half the power used to build the structure."
-msgstr ""
+msgstr "Structure yang dihancurkan akan mengembalikan setengah dari Power yang digunakan untuk membangunnya."
 
 msgid "Factory"
-msgstr ""
+msgstr "Factory"
 
 msgid "A Factory is used to build units. Each Factory can build one unit at a time, but you can queue multiple units for production."
-msgstr ""
+msgstr "Factory digunakan untuk memproduksi Unit. Setiap Factory hanya dapat memproduksi satu Unit dalam satu waktu, tapi kamu dapat mengantrekan lebih banyak Unit agar segera diproduksi."
 
 msgid "When a unit is produced, it receives the Factory’s Unit Orders and proceeds to the Factory's Rally Point."
-msgstr ""
+msgstr "Begitu selesai diproduksi, Unit akan segera bergerak ke Titik Kumpul Factory."
 
 msgid "Note: The base Factory is only able to produce units with Light bodies. Factory modules must be discovered and built to upgrade Factory production capabilities."
-msgstr ""
+msgstr "Catatan: Factory dengan kemampuan dasar hanya dapat memproduksi Unit-Unit ringan. Kamu harus mencari Module Factory untuk mengupgrade kemampuan produksinya."
 
 msgid "Command Center"
-msgstr ""
+msgstr "Command Center"
 
 msgid "The Command Center is the headquarters of your base."
-msgstr ""
+msgstr "Command Center adalah HQ dari Base mu."
 
 msgid "It provides access to the mini-map / radar, and the ability to design units."
-msgstr ""
+msgstr "Ia menyediakan akses mini-map / radar, dan kemampuan untuk mendesain Unit."
 
 msgid "To build a Command Center, click the \"Build\" button on the command panel and select the Command Center structure."
-msgstr ""
+msgstr "Untuk membangun Command Center, klik tombol \"Build\" di Command Panel dan pilih Structure nya Command Center."
 
 msgid "Then, click where you want your builders to construct it."
-msgstr ""
+msgstr "Lalu, pilih lokasi manapun untuk membangunnya."
 
 msgid "Structure Modules"
-msgstr ""
+msgstr "Module Structure"
 
 msgid "Power Generators, Factories, and Research Facilities can be upgraded with their respective structure modules."
-msgstr ""
+msgstr "Power Generator, Factory, dan Research Unit dapat diupgrade dengan Module Structure nya masing-masing."
 
 msgid "Once researched, you can access these modules from the Build menu to apply them to the structures in question."
-msgstr ""
+msgstr "Bila sudah melakukan Research, kamu dapat melihat Module ini ada di menu Build, kamu dapat membangun Module itu ke Structure yang berkaitan."
 
 msgid "Alternatively, you can select a Truck or a Combat Engineer and click on the structure in order to begin its construction."
 msgstr ""

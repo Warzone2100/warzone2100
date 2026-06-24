@@ -164,6 +164,10 @@ uint16_t war_getMPopenSpectatorSlots();
 void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
 PLAYER_LEAVE_MODE war_getMPPlayerLeaveMode();
 void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE);
+
+void war_setLastIpServerConnect(const std::string& serverName);
+const std::string& war_getLastIpServerConnect();
+
 int war_getFogEnd();
 int war_getFogStart();
 void war_setFogEnd(int end);
@@ -198,6 +202,11 @@ enum class ConnectionProviderType : uint8_t;
 
 void war_setHostConnectionProvider(ConnectionProviderType pt);
 ConnectionProviderType war_getHostConnectionProvider();
+
+bool war_getLobbyDisableIPv6();
+void war_setLobbyDisableIPv6(bool enabled);
+bool war_getLobbyFilterIPv6Only();
+void war_setLobbyFilterIPv6Only(bool enabled);
 
 bool net_backend_from_str(const char* str, ConnectionProviderType& pt);
 std::string to_string(ConnectionProviderType pt);

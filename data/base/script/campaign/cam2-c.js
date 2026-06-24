@@ -82,7 +82,7 @@ function insaneReinforcementSpawn()
 {
 	const units = [cTempl.comatt, cTempl.comit, cTempl.cohct, cTempl.commrl, cTempl.comhpv, cTempl.npcybc];
 	const limits = {minimum: 8, maxRandom: 8};
-	const location = camMakePos(getObject("southWestSpawnPos"));
+	const location = ["southWestSpawnPos", "insaneNorthSpawnPos"];
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_UNITS, location, units, limits.minimum, limits.maxRandom);
 }
 
@@ -93,6 +93,18 @@ function insaneTransporterAttack()
 	const limits = {minimum: 10, maxRandom: 0};
 	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
 	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneAttackRandom()
+{
+	const SCAN_DISTANCE = 2;
+	const DISTANCE_FROM_POS = 40;
+	const list = [cTempl.npcybr, cTempl.npcybc, cTempl.comorb, cTempl.comhpv, cTempl.comhpv, cTempl.comatt, cTempl.comatt];
+	const extraUnits = [cTempl.cohct, cTempl.cohct, cTempl.comsens, cTempl.comsens];
+	const units = {units: list, appended: extraUnits};
+	const limits = {minimum: 10, maxRandom: 4};
+	const location = camMakePos(camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS, SCAN_DISTANCE));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
 
 function enableFactories()
@@ -274,6 +286,22 @@ function sendCOTransporter()
 	}
 }
 
+// Removes the pepperpot pits in the transporter base for Classic.
+function removeTransportBasePepperpots()
+{
+	const objects = enumArea("transportBaseCleanup", CAM_THE_COLLECTIVE, false);
+
+	for (let i = 0, len = objects.length; i < len; ++i)
+	{
+		const obj = objects[i];
+
+		if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.hasIndirect)
+		{
+			camSafeRemoveObject(obj, false);
+		}
+	}
+}
+
 //Check if too many civilians have been captured by the Collective.
 //This will automatically check for civs near landing zones and remove them.
 function extraVictoryCondition()
@@ -322,6 +350,11 @@ function eventStartLevel()
 			"COHeavyFac-Leopard": { tech: "R-Vehicle-Body02" }, //Leopard
 			"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 		});
+
+		if (!camAllowInsaneSpawns())
+		{
+			removeTransportBasePepperpots();
+		}
 	}
 	else
 	{
@@ -341,6 +374,7 @@ function eventStartLevel()
 			"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
 			"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 			"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
+			"COPepperpotPitNE": { tech: "R-Wpn-Mortar3" },
 		});
 	}
 
@@ -456,6 +490,7 @@ function eventStartLevel()
 	if (camAllowInsaneSpawns())
 	{
 		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
+		setTimer("insaneAttackRandom", camMinutesToMilliseconds(4.5));
 		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
 	}
 

@@ -43,6 +43,7 @@
 #include "mapgrid.h"
 #include "multirecv.h"
 #include "transporter.h"
+#include "game_world.h"
 
 #include <vector>
 #include <algorithm>
@@ -256,7 +257,7 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 		NETend(r);
 
 		// find the transporter first
-		psTransporterDroid = IdToDroid(transporterID, player);
+		psTransporterDroid = IdToDroid(gameWorld.objects, transporterID, player);
 		if (!psTransporterDroid)
 		{
 			// Possible it already died? (sync error?)
@@ -421,7 +422,7 @@ bool recvDroid(NETQUEUE queue)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	debug(LOG_LIFE, "<=== getting Droid from %u id of %u ", player, id);
-	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(mapWidth) || pos.y > world_coord(mapHeight))
+	if ((pos.x == 0 && pos.y == 0) || pos.x > world_coord(gameWorld.map.width) || pos.y > world_coord(gameWorld.map.height))
 	{
 		debug(LOG_ERROR, "Received bad droid position (%d, %d) from %d about p%d (%s)", (int)pos.x, (int)pos.y,
 		      queue.index, player, isHumanPlayer(player) ? "Human" : "AI");
@@ -430,12 +431,12 @@ bool recvDroid(NETQUEUE queue)
 
 	// Create that droid on this machine.
 	const auto rot = Rotation();
-	psDroid = reallyBuildDroid(pT, pos, player, false, rot, id);
+	psDroid = reallyBuildDroid(gameWorld, pT, pos, player, false, rot, id);
 
 	// If we were able to build the droid set it up
 	if (psDroid)
 	{
-		addDroid(psDroid, apsDroidLists);
+		addDroid(psDroid, gameWorld.objects.droids);
 
 		if (haveInitialOrders)
 		{
@@ -675,7 +676,7 @@ bool recvDroidInfo(NETQUEUE queue)
 			NETuint32_t(r, deltaDroidId);
 			info.droidId += deltaDroidId;
 
-			DROID *psDroid = IdToDroid(info.droidId, info.player);
+			DROID *psDroid = IdToDroid(gameWorld.objects, info.droidId, info.player);
 			if (!psDroid)
 			{
 				debug(LOG_NEVER, "Packet from %d refers to non-existent droid %u, [%s : p%d]",
@@ -725,7 +726,7 @@ bool recvDroidInfo(NETQUEUE queue)
 			case SecondaryOrder:
 				// Set the droids secondary order
 				turnOffMultiMsg(true);
-				secondarySetState(psDroid, info.secOrder, info.secState);
+				secondarySetState(psDroid, gameWorld.objects, info.secOrder, info.secState);
 				turnOffMultiMsg(false);
 				break;
 			}
@@ -757,13 +758,13 @@ static BASE_OBJECT *processDroidTarget(OBJECT_TYPE desttype, uint32_t destid)
 		switch (desttype)
 		{
 		case OBJ_DROID:
-			psObj = IdToDroid(destid, ANYPLAYER);
+			psObj = IdToDroid(gameWorld.objects, destid, ANYPLAYER);
 			break;
 		case OBJ_STRUCTURE:
 			psObj = IdToStruct(destid, ANYPLAYER);
 			break;
 		case OBJ_FEATURE:
-			psObj = IdToFeature(destid, ANYPLAYER);
+			psObj = IdToFeature(gameWorld.objects, destid, ANYPLAYER);
 			break;
 
 		// We should not get this!
@@ -814,7 +815,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 
 		// Retrieve the droid
 		NETuint32_t(r, id);
-		psDroid = IdToDroid(id, ANYPLAYER);
+		psDroid = IdToDroid(gameWorld.objects, id, ANYPLAYER);
 		if (!psDroid)
 		{
 			debug(LOG_DEATH, "droid %d on request from player %d can't be found? Must be dead already?",
@@ -836,7 +837,7 @@ bool recvDestroyDroid(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		debug(LOG_DEATH, "Killing droid %d on request from player %d - huh?", psDroid->id, queue.index);
-		destroyDroid(psDroid, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+		destroyDroid(psDroid, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 		turnOffMultiMsg(false);
 	}
 	else

@@ -1025,7 +1025,7 @@ public:
 	static constexpr int DrawParts_All = DrawParts::ShadowCastingShapes | DrawParts::TranslucentShapes | DrawParts::AdditiveShapes;
 
 	// Draws all queued meshes, given a projection + view matrix
-	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, int drawParts = DrawParts_All, bool depthPass = false);
+	bool DrawAll(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4 &viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, int drawParts = DrawParts_All, bool depthPass = false);
 public:
 	// New, instanced rendering
 	void Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, int drawParts = DrawParts_All, bool depthPass = false);
@@ -1412,7 +1412,7 @@ void pie_FinalizeMeshes(uint64_t currentGameFrame)
 	instancedMeshRenderer.FinalizeInstances();
 }
 
-void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const ShadowCascadesInfo& shadowMVPMatrix, bool depthPass)
+void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowMVPMatrix, bool depthPass)
 {
 	int drawParts = InstancedMeshRenderer::DrawParts_All;
 	if (shadowMode == ShadowMode::Fallback_Stencil_Shadows)
@@ -1432,7 +1432,7 @@ void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMat
 	{
 		return;
 	}
-	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix, shadowMVPMatrix, drawParts, depthPass);
+	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix, cameraPos, shadowMVPMatrix, drawParts, depthPass);
 }
 
 bool InstancedMeshRenderer::FinalizeInstances()
@@ -1516,7 +1516,7 @@ bool InstancedMeshRenderer::FinalizeInstances()
 	return true;
 }
 
-bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, const ShadowCascadesInfo& shadowCascades, int drawParts, bool depthPass)
+bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const ShadowCascadesInfo& shadowCascades, int drawParts, bool depthPass)
 {
 	perFrameUniformsShaderOnce.reset();
 
@@ -1537,7 +1537,8 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		auto dimension = gfx_api::context::get().getDrawableDimensions();
 		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
-			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
+			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
+			sceneColor, ambient, diffuse, specular, fogColor,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
 			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 		};

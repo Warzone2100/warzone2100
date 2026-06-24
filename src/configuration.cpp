@@ -56,6 +56,7 @@
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
 #include "terrain.h"
+#include "lib/netplay/netlobby.h"
 #include "hci/groups.h"
 
 #include <type_traits>
@@ -67,7 +68,6 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 
-#define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 #define BASECONFVERSION		1
 #define CURRCONFVERSION		4
@@ -341,6 +341,10 @@ bool loadConfig()
 		{
 			return defaultValue;
 		}
+		if (intVal.value() == 0)
+		{
+			return nullopt; // 0 represents "disabled"
+		}
 		if (intVal.value() >= MOUSE_LMB && intVal.value() <= MOUSE_X2) // deliberately exclude mouse MOUSE_WUP + MOUSE_WDN
 		{
 			return static_cast<MOUSE_KEY_CODE>(intVal.value());
@@ -452,6 +456,8 @@ bool loadConfig()
 	{
 		setRotateMouseKey(iniGetMouseKeyCode("mouseKeyRotate", getRotateMouseKey()));
 	}
+	setPinchToZoomTouchGesture(iniGetBool("pinchToZoom", getPinchToZoomTouchGesture()).value());
+	setPanTouchGesture(iniGetBool("touchPan", getPanTouchGesture()).value());
 	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
@@ -469,12 +475,11 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
-	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
-	mpSetServerName(iniGetString("server_name", "").value());
+	NETsetLobbyserverAddress(iniGetString("lobbyserver", std::string(netlobby::GetDefaultLobbyAddress())).value());
+	war_setLastIpServerConnect(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 //	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 //	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
-	NETsetMasterserverPort(iniGetInteger("masterserver_port", MASTERSERVERPORT).value());
 	if(!netGameserverPortOverride)  // do not load the config port setting if there's a command-line override
 	{
 		NETsetGameserverPort(iniGetInteger("gameserver_port", GAMESERVERPORT).value());
@@ -482,6 +487,22 @@ bool loadConfig()
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
 	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
 	NETsetEnableTCPNoDelay(iniGetBool("tcp_nodelay", NETgetEnableTCPNoDelay()).value());
+	{
+		auto lobbyHostJoinOpts = NETgetLobbyHostJoinOptions();
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_botProt"))
+		{
+			lobbyHostJoinOpts.botProt = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_proxyIPs"))
+		{
+			lobbyHostJoinOpts.proxyIPs = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_hostingIPs"))
+		{
+			lobbyHostJoinOpts.hostingIPs = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		NETsetLobbyHostJoinOptions(lobbyHostJoinOpts);
+	}
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
@@ -696,6 +717,7 @@ bool loadConfig()
 			debug(LOG_WARNING, "Unsupported / invalid terrainShadingQuality value: %d; using default", intValue);
 		}
 	}
+	setDrawTerrainShadows(iniGetBool("terrainShadows", true).value());
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
 	if (auto value = iniGetIntegerOpt("shadowMapResolution"))
 	{
@@ -725,6 +747,9 @@ bool loadConfig()
 		}
 		war_setHostConnectionProvider(hostConnProvider);
 	}
+
+	war_setLobbyDisableIPv6(iniGetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6()).value());
+	war_setLobbyFilterIPv6Only(iniGetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only()).value());
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;
@@ -812,6 +837,8 @@ bool saveConfig()
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
 	iniSetMouseKeyOpt("mouseKeyPan", getPanMouseKey());
 	iniSetMouseKeyOpt("mouseKeyRotate", getRotateMouseKey());
+	iniSetInteger("pinchToZoom", (int)(getPinchToZoomTouchGesture()));
+	iniSetInteger("touchPan", (int)(getPanTouchGesture()));
 	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
@@ -835,9 +862,8 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
-	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
-	iniSetString("server_name", mpGetServerName());
+	iniSetString("lobbyserver", NETgetLobbyserverAddress());
+	iniSetString("server_name", war_getLastIpServerConnect());
 	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
 	{
 		iniSetInteger("gameserver_port", (int)NETgetGameserverPort());
@@ -902,11 +928,16 @@ bool saveConfig()
 	iniSetInteger("fogStart", war_getFogStart());
 	iniSetInteger("terrainMode", getTerrainShaderQuality());
 	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
+	iniSetInteger("terrainShadows", (int)(getDrawTerrainShadows()));
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
+
+	iniSetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6());
+	iniSetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only());
+
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

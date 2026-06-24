@@ -278,6 +278,7 @@ nphct: { body: tBody.tank.mantis, prop: tProp.tank.tracks, weap: tWeap.tank.heav
 npmsens: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tSensor.sensor },
 
 // SUB_1_7
+npmrlsh: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.miniRocketArray },
 
 // CAM_1_D
 npcybr: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.lancer },
@@ -392,6 +393,9 @@ nxlpulsev: { body: tBody.tank.retaliation, prop: tProp.air.vtol2, weap: tWeap.ai
 // SUB_3_4
 nxllinkh: { body: tBody.tank.retaliation, prop: tProp.tank.hover2, weap: tWeap.tank.nexusLink },
 nxmpulsev: { body: tBody.tank.retribution, prop: tProp.air.vtol2, weap: tWeap.air.pulseLaser },
+nxhvscourge: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.scourgeMissile },
+nxhvpulse: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.pulseLaser },
+nxhvarch: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.archAngel },
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -59,5 +59,6 @@ nlohmann::json getCamTweakOptionsValue(const std::string& identifier, nlohmann::
 bool getCamTweakOption_AutosavesOnly();
 bool getCamTweakOption_PS1Modifiers();
 bool getCamTweakOption_FastExp();
+bool getCamTweakOption_heavilyDamagedPenalty();
 
 #endif // __INCLUDED_SRC_CAMPAIGNINFO_H__

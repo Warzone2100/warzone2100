@@ -25,41 +25,12 @@
 #define __INCLUDED_SRC_OBJMEM_H__
 
 #include "objectdef.h"
+#include "object_lists_types.h"
 
-#include <array>
 #include <list>
 
-/* The lists of objects allocated */
-template <typename ObjectType, unsigned PlayerCount>
-using PerPlayerObjectLists = std::array<std::list<ObjectType*>, PlayerCount>;
-
-using PerPlayerDroidLists = PerPlayerObjectLists<DROID, MAX_PLAYERS>;
-using DroidList = typename PerPlayerDroidLists::value_type;
-extern PerPlayerDroidLists apsDroidLists;
-
-using PerPlayerStructureLists = PerPlayerObjectLists<STRUCTURE, MAX_PLAYERS>;
-using StructureList = typename PerPlayerStructureLists::value_type;
-extern PerPlayerStructureLists apsStructLists;
-
-using PerPlayerFeatureLists = PerPlayerObjectLists<FEATURE, MAX_PLAYERS>;
-using FeatureList = typename PerPlayerFeatureLists::value_type;
-extern PerPlayerFeatureLists apsFeatureLists;
-
-using PerPlayerFlagPositionLists = PerPlayerObjectLists<FLAG_POSITION, MAX_PLAYERS>;
-using FlagPositionList = typename PerPlayerFlagPositionLists::value_type;
-extern PerPlayerFlagPositionLists apsFlagPosLists;
-
-using PerPlayerExtractorLists = PerPlayerStructureLists;
-using ExtractorList = typename PerPlayerExtractorLists::value_type;
-extern PerPlayerExtractorLists apsExtractorLists;
-
-using GlobalSensorList = PerPlayerObjectLists<BASE_OBJECT, 1>;
-using SensorList = typename GlobalSensorList::value_type;
-extern GlobalSensorList apsSensorList;
-
-using GlobalOilList = PerPlayerObjectLists<FEATURE, 1>;
-using OilList = typename GlobalOilList::value_type;
-extern GlobalOilList apsOilList;
+struct GameWorld;
+struct WorldObjectState;
 
 /* The list of destroyed objects */
 using DestroyedObjectsList = std::list<BASE_OBJECT*>;
@@ -87,53 +58,48 @@ uint32_t generateSynchronisedObjectId();
 void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList);
 
 /*destroy a droid */
-void killDroid(DROID *psDel);
+void killDroid(DROID *psDel, WorldObjectState& objState);
 
 /* Remove all droids */
-void freeAllDroids();
+void freeAllDroids(GameWorld& world);
 
 /*Remove a single Droid from its list*/
 void removeDroid(DROID *psDroidToRemove, PerPlayerDroidLists& pList);
-
-/*Removes all droids that may be stored in the mission lists*/
-void freeAllMissionDroids();
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids();
 
 /* add the structure to the Structure Lists */
-void addStructure(STRUCTURE *psStructToAdd);
+void addStructure(STRUCTURE *psStructToAdd, WorldObjectState& objState);
 
 /* Destroy a structure */
-void killStruct(STRUCTURE *psDel);
+void killStruct(STRUCTURE *psDel, WorldObjectState& objState);
 
 /* Remove all structures */
-void freeAllStructs();
+void freeAllStructs(GameWorld& world);
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList);
+void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objState);
 
 /* add the feature to the Feature Lists */
-void addFeature(FEATURE *psFeatureToAdd);
+void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState);
 
 /* Destroy a feature */
-void killFeature(FEATURE *psDel);
+void killFeature(FEATURE *psDel, WorldObjectState& objState);
 
 /* Remove all features */
-void freeAllFeatures();
+void freeAllFeatures(GameWorld& world);
 
 /* Create a new Flag Position */
 bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player);
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPosition(FLAG_POSITION *psFlagPosToAdd);
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState);
 /* Remove a Flag Position from the Lists */
 void removeFlagPosition(FLAG_POSITION *psDel);
 /* Transfer a Flag Position to a new player */
-void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
+void transferFlagPositionToPlayer(WorldObjectState& objState, FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer);
 // free all flag positions
-void freeAllFlagPositions();
-// used to add flag position to a specific list (ex. from assignFactoryCommandDroid)
-void addFlagPositionToList(FLAG_POSITION* psFlagPosToAdd, PerPlayerFlagPositionLists& list);
+void freeAllFlagPositions(WorldObjectState& objState);
 
 // Find a base object from it's id
 template <typename ObjectType>

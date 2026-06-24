@@ -41,6 +41,7 @@ public:
 
 	virtual IClientConnection* accept() override;
 	virtual IPVersionsMask supportedIpVersions() const override;
+	virtual ConnectionProviderType type() const noexcept override;
 
 private:
 

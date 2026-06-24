@@ -229,9 +229,10 @@ void WzBlindRoomHostInfo::initialize()
 			{
 				hostTipStr += "\n";
 			}
-			std::string hash = identity.publicHashString(20);
+			std::string b64Identity = base64Encode(identity.toBytes(EcKey::Public));
 			hostTipStr += _("Player ID: ");
-			hostTipStr += hash.empty()? _("(none)") : hash;
+			hostTipStr += "\n";
+			hostTipStr += b64Identity.empty()? _("(none)") : b64Identity;
 		}
 	}
 	hostName->setTip(hostTipStr);

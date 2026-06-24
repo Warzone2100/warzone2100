@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +31,8 @@
 #include "levels.h"
 #include "missiondef.h"
 #include "group.h"
+#include "game.h"
+#include "lib/framework/loading_task_fwd.h"
 
 /**
  * The number of areas that can be defined to prevent buildings being placed -
@@ -36,6 +40,8 @@
  */
 #define         MAX_NOGO_AREAS          (MAX_PLAYERS + 1)
 #define         LIMBO_LANDING           MAX_PLAYERS
+
+struct WorldMapState;
 
 extern MISSION		mission;
 extern bool			offWorldKeepLists;
@@ -53,8 +59,9 @@ void releaseMission();
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
-struct GameLoadDetails;
-bool startMission(LEVEL_TYPE missionType, const GameLoadDetails& gameDetails);
+class ResourceLoadingController;
+
+LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, GameLoadDetails gameDetails);
 void endMission();
 
 /** Initialise the mission stuff for a save game. */
@@ -78,8 +85,6 @@ bool missionLimboExpand();
 
 /** This is called mid Limbo mission via the script. */
 void resetLimboMission();
-
-void swapMissionPointers();
 
 // mission results.
 #define		IDTIMER_FORM			11000
@@ -134,7 +139,7 @@ void setPlayCountDown(UBYTE set);
 bool getPlayCountDown();
 
 /** Checks the x,y passed in are not within the boundary of the Landing Zone x and y in tile coords. */
-bool withinLandingZone(UDWORD x, UDWORD y);
+bool withinLandingZone(const WorldMapState& mapState, UDWORD x, UDWORD y);
 
 //sets the coords for the Transporter to land
 LANDING_ZONE *getLandingZone(SDWORD i);

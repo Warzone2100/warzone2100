@@ -109,7 +109,13 @@ size_t loopPolyCount;
  */
 static bool paused = false;
 static bool video = false;
-static unsigned short int skipCounter = 0;
+
+// Time data for skipping videos.
+struct VIDEO_TIME_SKIP_STATE
+{
+	std::chrono::steady_clock::time_point begin;
+	bool canSkip;
+};
 
 //holds which pause is valid at any one time
 struct PAUSE_STATE
@@ -121,8 +127,10 @@ struct PAUSE_STATE
 	bool consolePause;
 };
 static PAUSE_STATE pauseState;
+static VIDEO_TIME_SKIP_STATE videoTimeSkipState;
 static size_t maxFastForwardTicks = WZ_DEFAULT_MAX_FASTFORWARD_TICKS;
 static bool fastForwardTicksFixedToNormalTickRate = true; // can be set to false to "catch-up" as quickly as possible (but this may result in more jerky behavior)
+static std::chrono::milliseconds sequenceMinSkipTime = std::chrono::milliseconds(800);
 
 static unsigned numDroids[MAX_PLAYERS];
 static unsigned numMissionDroids[MAX_PLAYERS];
@@ -137,6 +145,12 @@ LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 LEVEL_TYPE prevMissionType = LEVEL_TYPE::LDS_NONE;
+
+static void resetVideoSkipStates()
+{
+	videoTimeSkipState.begin = std::chrono::steady_clock::now();
+	videoTimeSkipState.canSkip = false;
+}
 
 static GAMECODE renderLoop()
 {
@@ -196,7 +210,7 @@ static GAMECODE renderLoop()
 
 			for (unsigned i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (DROID *psCurr : apsDroidLists[i])
+				for (DROID *psCurr : gameWorld.objects.droids[i])
 				{
 					// Don't copy the next pointer - if droids somehow get destroyed in the graphics rendering loop, who cares if we crash.
 					calcDroidIllumination(psCurr);
@@ -314,6 +328,8 @@ static GAMECODE renderLoop()
 		{
 			processInput();
 
+			processGestureInput();
+
 			//no key clicks or in Intelligence Screen
 			if (!isMouseOverRadar() && !isDraggingInGameNotification() && !isMouseClickDownOnScreenOverlayChild() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
@@ -397,7 +413,7 @@ void countUpdate(bool synch)
 		numMissionDroids[i] = 0;
 		numTransporterDroids[i] = 0;
 
-		for (DROID *psCurr : apsDroidLists[i])
+		for (DROID *psCurr : gameWorld.objects.droids[i])
 		{
 			numDroids[i]++;
 			switch (psCurr->droidType)
@@ -417,7 +433,7 @@ void countUpdate(bool synch)
 				break;
 			}
 		}
-		for (DROID *psCurr : mission.apsDroidLists[i])
+		for (DROID *psCurr : mission.gameWorld.objects.droids[i])
 		{
 			numMissionDroids[i]++;
 			switch (psCurr->droidType)
@@ -455,7 +471,7 @@ void countUpdate(bool synch)
 		}
 		// FIXME: These for-loops are code duplicationo
 		setLasSatExists(false, i);
-		for (const STRUCTURE *psCBuilding : apsStructLists[i])
+		for (const STRUCTURE *psCBuilding : gameWorld.objects.structures[i])
 		{
 			if (psCBuilding == nullptr || isDead(psCBuilding))
 			{
@@ -471,7 +487,7 @@ void countUpdate(bool synch)
 				setLasSatExists(true, i);
 			}
 		}
-		for (const STRUCTURE *psCBuilding : mission.apsStructLists[i])
+		for (const STRUCTURE *psCBuilding : mission.gameWorld.objects.structures[i])
 		{
 			if (psCBuilding == nullptr || isDead(psCBuilding))
 			{
@@ -530,13 +546,13 @@ static void gameStateUpdate()
 	visUpdateLevel();
 
 	// Put all droids/structures/features into the grid.
-	gridReset();
+	gridReset(gameWorld);
 
 	// Check which objects are visible.
 	processVisibility();
 
 	// Update the map.
-	mapUpdate();
+	mapUpdate(gameWorld);
 
 	//update the findpath system
 	fpathUpdate();
@@ -550,14 +566,14 @@ static void gameStateUpdate()
 		updatePlayerPower(i);
 
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(apsDroidLists[i], [](DROID* d)
+			mutating_list_iterate(gameWorld.objects.droids[i], [](DROID* d)
 			{
 				droidUpdate(d);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(mission.apsDroidLists[i], [](DROID* d)
+			mutating_list_iterate(mission.gameWorld.objects.droids[i], [](DROID* d)
 			{
 				missionDroidUpdate(d);
 				return IterationResult::CONTINUE_ITERATION;
@@ -565,16 +581,16 @@ static void gameStateUpdate()
 		});
 		// FIXME: These for-loops are code duplication
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(apsStructLists[i], [](STRUCTURE* s)
+			mutating_list_iterate(gameWorld.objects.structures[i], [](STRUCTURE* s)
 			{
-				structureUpdate(s, false);
+				structureUpdate(s, gameWorld);
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
 		executeFnAndProcessScriptQueuedRemovals([i]() {
-			mutating_list_iterate(mission.apsStructLists[i], [](STRUCTURE* s)
+			mutating_list_iterate(mission.gameWorld.objects.structures[i], [](STRUCTURE* s)
 			{
-				structureUpdate(s, true); // update for mission
+				structureUpdate(s, mission.gameWorld); // update for mission
 				return IterationResult::CONTINUE_ITERATION;
 			});
 		});
@@ -584,7 +600,7 @@ static void gameStateUpdate()
 
 	executeFnAndProcessScriptQueuedRemovals([]() { proj_UpdateAll(); });
 
-	for (FEATURE *psCFeat : apsFeatureLists[0])
+	for (FEATURE *psCFeat : gameWorld.objects.features[0])
 	{
 		featureUpdate(psCFeat);
 	}
@@ -741,20 +757,21 @@ void videoLoop()
 	// display a frame of the FMV
 	videoFinished = !seq_UpdateFullScreenVideo();
 
-	if (skipCounter <= SEQUENCE_MIN_SKIP_DELAY)
+	if (!videoTimeSkipState.canSkip &&
+		(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - videoTimeSkipState.begin) > sequenceMinSkipTime))
 	{
-		skipCounter += 1; // "time" is stopped so we will count via loop iterations.
+		videoTimeSkipState.canSkip = true;
 	}
 
 	// should we stop playing?
-	if (videoFinished || (skipCounter > SEQUENCE_MIN_SKIP_DELAY && (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))))
+	if (videoFinished || (videoTimeSkipState.canSkip && (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))))
 	{
 		seq_StopFullScreenVideo();
 
 		//set the next video off - if any
 		if (seq_AnySeqLeft())
 		{
-			skipCounter = 0;
+			resetVideoSkipStates();
 			seq_StartNextFullScreenVideo();
 		}
 		else
@@ -777,10 +794,10 @@ void videoLoop()
 
 void loop_SetVideoPlaybackMode()
 {
-	skipCounter = 0;
 	videoMode += 1;
 	paused = true;
 	video = true;
+	resetVideoSkipStates();
 	gameTimeStop();
 	pie_SetFogStatus(false);
 	audio_StopAll();
@@ -791,10 +808,10 @@ void loop_SetVideoPlaybackMode()
 
 void loop_ClearVideoPlaybackMode()
 {
-	skipCounter = 0;
 	videoMode -= 1;
 	paused = false;
 	video = false;
+	resetVideoSkipStates();
 	gameTimeStart();
 	pie_SetFogStatus(true);
 	cdAudio_Resume();

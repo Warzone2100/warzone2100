@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,16 +27,21 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include <wzmaplib/terrain_type.h>
 #include "terrain_defs.h"
+#include "lib/framework/loading_task_fwd.h"
 
 struct ShadowCascadesInfo;
 struct LightMap;
+struct WorldMapState;
 
-void loadTerrainTextures(MAP_TILESET mapTileset);
+class ResourceLoadingController;
 
-bool initTerrain();
+LoadingTask<> loadTerrainTextures(ResourceLoadingController& controller, MAP_TILESET mapTileset);
+void loadTerrainTexturesBlocking(MAP_TILESET mapTileset);
+
+bool initTerrain(WorldMapState& mapState);
 void shutdownTerrain();
 
-void perFrameTerrainUpdates(const LightMap& lightData);
+void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightData);
 void drawTerrainDepthOnly(const glm::mat4 &mvp);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowMVPMatrix);
 void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos, const ShadowCascadesInfo& shadowCascades);
@@ -59,7 +66,6 @@ enum TerrainShaderType
 extern TerrainShaderType terrainShaderType;
 
 TerrainShaderQuality getTerrainShaderQuality();
-TerrainShaderType getTerrainShaderType();
 bool setTerrainShaderQuality(TerrainShaderQuality newValue);
 std::vector<TerrainShaderQuality> getAllTerrainShaderQualityOptions();
 bool isSupportedTerrainShaderQualityOption(TerrainShaderQuality value);
@@ -69,7 +75,5 @@ bool setTerrainMappingTexturesMaxSize(int texSize);
 int getTerrainMappingTexturesMaxSize();
 
 void initTerrainShaderType(); // must be called after the graphics context is initialized
-
-bool debugToggleTerrainShaderType();
 
 #endif

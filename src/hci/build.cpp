@@ -28,6 +28,7 @@
 #include "../qtscript.h"
 #include "../power.h"
 #include "../map.h"
+#include "../game_world.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
 bool BuildController::showFavorites = false;
@@ -45,7 +46,7 @@ void BuildController::updateBuildersList()
 
 	ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "selectedPlayer = %" PRIu32 "", selectedPlayer);
 
-	for (DROID *droid : apsDroidLists[selectedPlayer])
+	for (DROID *droid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (droid->isConstructionDroid() && droid->died == 0)
 		{
@@ -58,7 +59,7 @@ void BuildController::updateBuildersList()
 
 void BuildController::updateBuildOptionsList()
 {
-	auto newBuildOptions = fillStructureList(selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
+	auto newBuildOptions = fillStructureList(gameWorld.objects, selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
 
 	stats = std::vector<STRUCTURE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
 }

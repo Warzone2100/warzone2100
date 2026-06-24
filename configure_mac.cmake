@@ -247,12 +247,13 @@ else()
 endif()
 
 set(_overlay_ports_path "${_repoBase}/.ci/vcpkg/overlay-ports")
+set(_overlay_triplets_path "${_repoBase}/.ci/vcpkg/overlay-triplets")
 
 set(_vcpkgInstallResult -1)
 set(_vcpkgAttempts 0)
 while(NOT _vcpkgInstallResult EQUAL 0 AND _vcpkgAttempts LESS 3)
 	execute_process(
-		COMMAND ./vcpkg install --vcpkg-root=./ --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} ${_additional_vcpkg_flags}
+		COMMAND ./vcpkg install --vcpkg-root=./ --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ --overlay-ports=${_overlay_ports_path} --overlay-triplets=${_overlay_triplets_path} ${_additional_vcpkg_flags}
 		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg"
 		RESULT_VARIABLE _vcpkgInstallResult
 	)

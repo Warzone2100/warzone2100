@@ -51,6 +51,10 @@
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0
 
+struct GameWorld;
+struct WorldMapState;
+struct WorldObjectState;
+
 extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
 
 //Value is stored for easy access to this structure stat
@@ -80,7 +84,7 @@ void setMaxDroids(UDWORD player, int value);
 void setMaxCommanders(UDWORD player, int value);
 void setMaxConstructors(UDWORD player, int value);
 
-bool structureExists(int player, STRUCTURE_TYPE type, bool built, bool isMission);
+bool structureExists(const WorldObjectState& objState, int player, STRUCTURE_TYPE type, bool built);
 
 bool IsPlayerDroidLimitReached(int player);
 
@@ -95,9 +99,9 @@ bool structureStatsShutDown();
 int requestOpenGate(STRUCTURE *psStructure);
 int gateCurrentOpenHeight(const STRUCTURE *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
 
-int32_t structureDamage(STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
-void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
-void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
+int32_t structureDamage(GameWorld& world, STRUCTURE *psStructure, PROJECTILE *psProjectile, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+void structureBuild(GameWorld& world, STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
+void structureDemolish(GameWorld& world, STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate);
 /* Set the type of droid for a factory to build */
 bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
@@ -105,51 +109,51 @@ uint32_t structureBuildPointsToCompletion(const STRUCTURE & structure);
 float structureCompletionProgress(const STRUCTURE & structure);
 
 //builds a specified structure at a given location
-STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
-STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id);
-STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
+STRUCTURE *buildStructure(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave, uint32_t id, bool forceWallOrientation = false);
+STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
 /// Create a blueprint structure, with just enough information to render it
 /// IMPORTANT: Do not save the reference to this instance anywhere, since it's
 /// not heap-allocated and thus doesn't have a stable address!
-nonstd::optional<STRUCTURE> buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
+nonstd::optional<STRUCTURE> buildBlueprint(WorldMapState& mapState, STRUCTURE_STATS const *psStats, Vector3i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state, uint8_t ownerPlayer);
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding, bool bMission);
+void structureUpdate(STRUCTURE *psBuilding, GameWorld& world);
 
 /* Remove a structure and free it's memory */
-bool destroyStruct(STRUCTURE *psDel, unsigned impactTime);
+bool destroyStruct(STRUCTURE *psDel, unsigned impactTime, GameWorld& world);
 
 // remove a structure from a game without any visible effects
 // bDestroy = true if the object is to be destroyed
 // (for example used to change the type of wall at a location)
-bool removeStruct(STRUCTURE *psDel, bool bDestroy);
+bool removeStruct(STRUCTURE *psDel, bool bDestroy, GameWorld& world);
 
 //fills the list with Structures that can be built
-std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD limit, bool showFavorites);
+std::vector<STRUCTURE_STATS *> fillStructureList(const WorldObjectState& objState, UDWORD selectedPlayer, UDWORD limit, bool showFavorites);
 
 /// Checks if the two structures would be too close to build together.
 bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t dir1, STRUCTURE_STATS const *stats2, Vector2i pos2, uint16_t dir2);
 
 /// Checks that the location is valid to build on.
 /// pos in world coords
-bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue);
+bool validLocation(GameWorld& world, BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue);
 
 bool isWall(STRUCTURE_TYPE type);                                    ///< Structure is a wall. Not completely sure it handles all cases.
 bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Structure can be built on walls. Not completely sure it handles all cases.
 
-void alignStructure(STRUCTURE *psBuilding);
+void alignStructure(STRUCTURE *psBuilding, WorldMapState& mapState);
 
 /* set the current number of structures of each type built */
-void setCurrentStructQuantity(bool displayError);
+void setCurrentStructQuantity(const WorldObjectState& objState, bool displayError);
 /* get a stat inc based on the name */
 int32_t getStructStatFromName(const WzString &name);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
-void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, UDWORD player, bool bCheck);
+void setAssemblyPoint(GameWorld& world, FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, UDWORD player, bool bCheck);
 
 /*initialises the flag before a new data set is loaded up*/
 void initFactoryNumFlag();
 
 //called at start of missions
-void resetFactoryNumFlag();
+void resetFactoryNumFlag(const WorldObjectState& objState);
 
 /* get demolish stat */
 STRUCTURE_STATS *structGetDemolishStat();
@@ -183,13 +187,13 @@ bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle,
 bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
 
 /*this is called whenever a structure has finished building*/
-void buildingComplete(STRUCTURE *psBuilding);
+void buildingComplete(STRUCTURE *psBuilding, GameWorld& world);
 
 // these functions are used in game.c inplace of  building complete
-void checkForResExtractors(STRUCTURE *psPowerGen);
-void checkForPowerGen(STRUCTURE *psPowerGen);
+void checkForResExtractors(STRUCTURE *psPowerGen, WorldObjectState& objState);
+void checkForPowerGen(STRUCTURE *psPowerGen, WorldObjectState& objState);
 
-uint16_t countPlayerUnusedDerricks();
+uint16_t countPlayerUnusedDerricks(const WorldObjectState& objState);
 
 // Set the command droid that factory production should go to struct _command_droid;
 void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
@@ -203,12 +207,12 @@ STRUCTURE_STATS *getModuleStat(const STRUCTURE *psStruct);
 /*called when a Res extractor is destroyed or runs out of power or is disconnected
 adjusts the owning Power Gen so that it can link to a different Res Extractor if one
 is available*/
-void releaseResExtractor(STRUCTURE *psRelease);
+void releaseResExtractor(STRUCTURE *psRelease, WorldObjectState& objState);
 
 /*called when a Power Gen is destroyed or is disconnected
 adjusts the associated Res Extractors so that they can link to different Power
 Gens if any are available*/
-void releasePowerGen(STRUCTURE *psRelease);
+void releasePowerGen(STRUCTURE *psRelease, WorldObjectState& objState);
 
 //print some info at the top of the screen dependent on the structure
 void printStructureInfo(STRUCTURE *psStructure);
@@ -218,21 +222,21 @@ if not a good combination!*/
 bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
 
 /*calculates the damage caused to the resistance levels of structures*/
-bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer);
+bool electronicDamage(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker, UDWORD damage, UBYTE attackPlayer, bool tpCapture);
 
 /* EW works differently in multiplayer mode compared with single player.*/
 bool validStructResistance(const STRUCTURE *psStruct);
 
 /*checks to see if a specific structure type exists -as opposed to a structure
 stat type*/
-bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
+bool checkSpecificStructExists(const WorldObjectState& objState, UDWORD structInc, UDWORD player);
 
 int32_t getStructureDamage(const STRUCTURE *psStructure);
 
 unsigned structureBodyBuilt(const STRUCTURE *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 UDWORD structureResistance(const STRUCTURE_STATS *psStats, UBYTE player);
 
-void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
+void hqReward(GameWorld& world, UBYTE losingPlayer, UBYTE rewardPlayer);
 
 // Is a flag a factory delivery point?
 bool FlagIsFactory(const FLAG_POSITION *psCurrFlag);
@@ -254,7 +258,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate);
 
 //check that delivery points haven't been put down in invalid location
-void checkDeliveryPoints(UDWORD version);
+void checkDeliveryPoints(GameWorld& world, UDWORD version);
 
 //adjust the loop quantity for this factory
 void factoryLoopAdjust(STRUCTURE *psStruct, bool add);

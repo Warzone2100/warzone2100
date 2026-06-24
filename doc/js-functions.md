@@ -90,11 +90,6 @@ Return an array containing all the buildable templates for the given player. (3.
 
 Remove reticule button. DO NOT USE FOR ANYTHING.
 
-## removeBeacon(playerFilter)
-
-Remove a beacon message sent to target player. Target may also be ```ALLIES```.
-Returns a boolean that is true on success. (3.2+ only)
-
 ## resetLabel(labelName[, playerFilter])
 
 Reset the trigger on an label. Next time a unit enters the area, it will trigger
@@ -651,6 +646,10 @@ Center the player's camera at the given position.
 ## playSound(sound[, x, y, z])
 
 Play a sound, optionally at a location.
+
+## emitSound(sound, x, y)
+
+Emit a sound from an in-game location.
 
 ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
 

@@ -20,6 +20,7 @@ file(GLOB HEADERS
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
+	"jpeg_util.h"
 	"pieblitfunc.h"
 	"pieclip.h"
 	"piedef.h"
@@ -42,6 +43,7 @@ file(GLOB SRC
 	"bitimage.cpp"
 	"culling.cpp"
 	"gfx_api.cpp"
+	"gfx_api_texture_array_load.cpp"
 	"gfx_api_gl.cpp"
 	"gfx_api_image_basis_priv.cpp"
 	"gfx_api_image_compress_priv.cpp"
@@ -49,6 +51,7 @@ file(GLOB SRC
 	"gfx_api_vk.cpp"
 	"imdload.cpp"
 	"jpeg_encoder.cpp"
+	"jpeg_util.cpp"
 	"pieblitfunc.cpp"
 	"pieclip.cpp"
 	"piedraw.cpp"
@@ -167,3 +170,68 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 	endif()
 endif()
 
+# Unfortunately, some distribution packages seem to have broken CMake Config files for libjpeg-turbo, which simply don't work
+# Default to using the vendored version, but provide an option for those building who wish to use the system library version
+set(_DEFAULT_WZ_USE_SYSTEM_LIBJPEG_TURBO_VALUE OFF)
+if (VCPKG_TOOLCHAIN)
+	set(_DEFAULT_WZ_USE_SYSTEM_LIBJPEG_TURBO_VALUE ON)
+endif()
+option(WZ_USE_SYSTEM_LIBJPEG_TURBO "Build with the system libjpeg-turbo library" ${_DEFAULT_WZ_USE_SYSTEM_LIBJPEG_TURBO_VALUE})
+
+if (WZ_USE_SYSTEM_LIBJPEG_TURBO)
+	find_package(libjpeg-turbo CONFIG REQUIRED)
+	target_link_libraries(ivis-opengl PRIVATE $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
+
+else()
+	include(ExternalProject)
+
+	set(LIBJPEG_TURBO_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turboinstall")
+	set(LIBJPEG_TURBO_INCLUDE_DIR "${LIBJPEG_TURBO_INSTALL_DIR}/include")
+	set(LIBJPEG_TURBO_LIB_PATH "${LIBJPEG_TURBO_INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}turbojpeg${CMAKE_STATIC_LIBRARY_SUFFIX}")
+
+	set(_additional_ext_proj_cmake_args)
+	if (CMAKE_TOOLCHAIN_FILE)
+		get_filename_component(_absolute_cmake_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
+		set(_additional_ext_proj_cmake_args "-DCMAKE_TOOLCHAIN_FILE=${_absolute_cmake_toolchain_file}")
+	endif()
+
+	ExternalProject_Add(libjpeg-turbo-ext
+		SOURCE_DIR		"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libjpeg-turbo"
+		BINARY_DIR		"${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo"
+		INSTALL_DIR		"${LIBJPEG_TURBO_INSTALL_DIR}"
+		# DOWNLOAD_COMMAND  ""  # Explicitly skip download for local sources
+		CMAKE_ARGS		"-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" -DWITH_TOOLS=OFF -DENABLE_STATIC=ON -DENABLE_SHARED=OFF "-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib" ${_additional_ext_proj_cmake_args}
+		BUILD_BYPRODUCTS "${LIBJPEG_TURBO_LIB_PATH}"
+	)
+
+	# Create the imported library
+	add_library(libjpeg-turbo::turbojpeg-static STATIC IMPORTED GLOBAL)
+	add_dependencies(libjpeg-turbo::turbojpeg-static libjpeg-turbo-ext)
+
+	# Set the library path and include directory
+
+	# This is a workaround for the fact that included directories of an imported
+	# target should exist in the filesystem already at the configuration time.
+	# ref: https://gitlab.kitware.com/cmake/cmake/-/issues/15052
+	file(MAKE_DIRECTORY "${LIBJPEG_TURBO_INCLUDE_DIR}")
+
+	set_target_properties(libjpeg-turbo::turbojpeg-static PROPERTIES
+		IMPORTED_LOCATION "${LIBJPEG_TURBO_LIB_PATH}"
+		INTERFACE_INCLUDE_DIRECTORIES "${LIBJPEG_TURBO_INCLUDE_DIR}"
+	)
+
+	add_dependencies(ivis-opengl libjpeg-turbo-ext) # Ensure libjpeg-turbo builds first
+	target_link_libraries(ivis-opengl PRIVATE $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
+endif()
+
+if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
+	# Workaround for Apple requiring min macOS version 13.3 when C++20 is used.
+	# Temporarily require C++17 for ivis-opengl for all platforms, for the sake
+	# of uniformity.
+	set(cpp17_source_files
+		"3rdparty/vkh_renderpasscompat.cpp"
+		"3rdparty/vkh_info.cpp"
+		"gfx_api_vk.cpp"
+		"gfx_api.cpp")
+	set_source_files_properties(${cpp17_source_files} PROPERTIES COMPILE_FLAGS "-std=c++17")
+endif()

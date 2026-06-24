@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2020  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +33,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzstring.h"
+#include "lib/framework/loading_task_fwd.h"
 #include "screen.h"
 #include "pietypes.h"
 #include "gfx_api_formats_def.h"
@@ -42,6 +45,8 @@
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
+
+class ResourceLoadingController;
 
 namespace gfx_api
 {
@@ -447,7 +452,8 @@ namespace gfx_api
 		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool quiet = false);
 		gfx_api::texture* loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 		typedef std::function<std::unique_ptr<iV_Image> (int width, int height, int channels)> GenerateDefaultTextureFunc;
-		gfx_api::texture_array* loadTextureArrayFromFiles(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::function<void ()>& progressCallback = nullptr, const std::string& debugName = "");
+		LoadingTask<gfx_api::texture_array*> loadTextureArrayFromFiles(ResourceLoadingController& controller, const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::string& debugName = "");
+		gfx_api::texture_array* loadTextureArrayFromFilesBlocking(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::string& debugName = "");
 
 		bool loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 		bool loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, size_t mipmap_levels, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
@@ -753,6 +759,7 @@ namespace gfx_api
 		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
 		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos;
 		glm::vec4 sceneColor;
 		glm::vec4 ambient;
@@ -927,17 +934,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>
 	{
 		glm::mat4 transform_matrix;
-//		glm::vec4 paramX;
-//		glm::vec4 paramY;
-//		glm::vec4 paramXLight;
-//		glm::vec4 paramYLight;
-//		glm::mat4 unused;
-//		glm::mat4 texture_matrix;
-//		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-//		int texture0;
 	};
 
 	using TerrainDepthOnlyForDepthMap = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u32,
@@ -946,54 +945,6 @@ namespace gfx_api
 		TerrainVertexVBODescription
 	>, std::tuple<texture_description<0, sampler_type::bilinear_repeat>>, SHADER_TERRAIN_DEPTHMAP>;
 
-	template<>
-	struct constant_buffer_type<SHADER_TERRAIN>
-	{
-		glm::mat4 transform_matrix;
-		glm::vec4 paramX;
-		glm::vec4 paramY;
-		glm::vec4 paramXLight;
-		glm::vec4 paramYLight;
-		glm::mat4 unused;
-		glm::mat4 texture_matrix;
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
-		int texture0;
-		int texture1;
-	};
-
-	using TerrainLayer = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ADDITIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_TERRAIN>>,
-	std::tuple<
-	TerrainVertexVBODescription,
-	vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic_repeat>, texture_description<1, sampler_type::bilinear>>, SHADER_TERRAIN>;
-
-	template<>
-	struct constant_buffer_type<SHADER_DECALS>
-	{
-		glm::mat4 transform_matrix;
-		glm::mat4 texture_matrix;
-		glm::vec4 param1;
-		glm::vec4 param2;
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
-		int texture0;
-		int texture1;
-	};
-
-	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
-	std::tuple<constant_buffer_type<SHADER_DECALS>>,
-	std::tuple<
-	vertex_buffer_description<sizeof(glm::vec3) + sizeof(glm::vec2), gfx_api::vertex_attribute_input_rate::vertex,
-	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
-	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>
-	>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic>, texture_description<1, sampler_type::bilinear>>, SHADER_DECALS>;
 
 	struct TerrainDecalVertex
 	{

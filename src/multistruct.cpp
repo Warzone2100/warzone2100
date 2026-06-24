@@ -109,7 +109,7 @@ bool recvBuildFinished(NETQUEUE queue)
 		{
 			debug(LOG_SYNC, "Synch error, structure %u was not complete, and should have been.", structId);
 			psStruct->status = SS_BUILT;
-			buildingComplete(psStruct);
+			buildingComplete(psStruct, gameWorld);
 		}
 		debug(LOG_SYNC, "Created normal building %u for player %u", psStruct->id, player);
 		return true;
@@ -121,11 +121,11 @@ bool recvBuildFinished(NETQUEUE queue)
 	for (typeindex = 0; typeindex < numStructureStats && asStructureStats[typeindex].ref != type; typeindex++) {}	// Find structure target
 
 	// Build the structure
-	psStruct = buildStructureDir(&(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId);
+	psStruct = buildStructureDir(gameWorld, &(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId, true);
 	if (psStruct)
 	{
 		psStruct->status	= SS_BUILT;
-		buildingComplete(psStruct);
+		buildingComplete(psStruct, gameWorld);
 		debug(LOG_SYNC, "Huge synch error, forced to create building %u for player %u", psStruct->id, player);
 #if defined (DEBUG)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
@@ -179,7 +179,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
-		destroyStruct(psStruct, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+		destroyStruct(psStruct, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 		turnOffMultiMsg(false);
 	}
 
@@ -227,9 +227,8 @@ bool recvLasSat(NETQUEUE queue)
 	{
 		// Lassats have just one weapon
 		unsigned firePause = weaponFirePause(*psStruct->getWeaponStats(0), player);
-		unsigned damLevel = PERCENT(psStruct->body, psStruct->structureBody());
 
-		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		if (objectBelowHealthLevel(psStruct, HEAVY_DAMAGE_LEVEL))
 		{
 			firePause += firePause;
 		}
