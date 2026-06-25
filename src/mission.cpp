@@ -2274,6 +2274,22 @@ static void intAddMissionResultStats(W_FORM *missionResBackForm)
 	}));
 }
 
+void intMissionResultsUpdateButtons()
+{
+	if (!MissionResUp)
+	{
+		return;
+	}
+
+	const bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+
+	if (multiplayerHostQuit)
+	{
+		// the game can't continue without the host
+		widgDeleteLater(psWScreen, IDMISSIONRES_CONTINUE);
+	}
+}
+
 static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	// ensure the guide screen is closed
