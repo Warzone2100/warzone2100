@@ -336,7 +336,9 @@ void handleInGameHostQuit()
 
 	if (MissionResUp || intMode == INT_MISSIONRES)
 	{
-		return;	// after-game results are already being displayed
+		// after-game results are already being displayed
+		intMissionResultsUpdateButtons();
+		return;
 	}
 
 	if (NetPlay.players[selectedPlayer].isSpectator)

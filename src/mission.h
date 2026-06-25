@@ -190,7 +190,7 @@ void clearMissionWidgets();
 void resetMissionWidgets();
 
 bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle = nullptr);
-
+void intMissionResultsUpdateButtons();
 
 /** This is called via a script function to place the Limbo droids once the mission has started. */
 void placeLimboDroids();
