@@ -2168,8 +2168,8 @@ void intRemoveTransporterTimer()
 // Inner padding of the research log viewer within its form
 constexpr int MISSIONRES_RESEARCH_PADDING = 10;
 
-// The currently-selected mission results screen tab (0 = "Results", 1 = "Player Stats", 2 = "Research")
-// (any tab but "Results" suppresses the score data painted onto the backdrop)
+// The currently-selected mission results screen tab (0 = "Summary", 1 = "Player Stats", 2 = "Research")
+// (any tab but "Summary" suppresses the score data painted onto the backdrop)
 static int missionResSelectedTab = 0;
 
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -2215,7 +2215,7 @@ static void intDestroyMissionResultWidgets()
 	missionResSelectedTab = 0;
 }
 
-// Add the "Results" / "Player Stats" / "Research" tabs and the (initially hidden) stats / research forms
+// Add the "Summary" / "Player Stats" / "Research" tabs and the (initially hidden) stats / research forms
 static void intAddMissionResultStats(W_FORM *missionResBackForm)
 {
 	// player stats form, shown when the "Player Stats" tab is selected
@@ -2250,7 +2250,7 @@ static void intAddMissionResultStats(W_FORM *missionResBackForm)
 	missionResBackForm->attach(tabs);
 	tabs->id = IDMISSIONRES_TABS;
 	tabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
-	tabs->addButton(0, WzPanelTabButton::make(_("Results")));
+	tabs->addButton(0, WzPanelTabButton::make(_("Summary")));
 	tabs->addButton(1, WzPanelTabButton::make(_("Player Stats")));
 	tabs->addButton(2, WzPanelTabButton::make(_("Research")));
 	tabs->choose(0);
@@ -2331,7 +2331,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 	}));
 
-	// for non-campaign games, add the "Results" / "Player Stats" tabs and the stats graph
+	// for non-campaign games, add the "Summary" / "Player Stats" / "Research" tabs and the stats graph / research log view
 	if (bMultiPlayer)
 	{
 		intAddMissionResultStats(missionResBackForm);
