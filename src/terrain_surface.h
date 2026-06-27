@@ -64,8 +64,8 @@ float cornerSharpness(const WorldMapState& mapState, int x, int y);
 
 /// Smooth surface height at a map-space position in world units
 /// (same x/y convention as map_Height() - the renderer's z = -y flip is NOT
-/// applied here). C1-continuous where sharpness is 0, exactly equal to the
-/// legacy fan surface where sharpness is 1.
+/// applied here). C1-continuous where sharpness is 0. Follows the
+/// (crease-filleted) legacy fan surface where sharpness is 1.
 float heightAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode);
 
 /// Surface normal at a map-space position, returned in the renderer's world

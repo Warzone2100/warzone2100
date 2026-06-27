@@ -127,6 +127,47 @@ inline float bilinear(float s00, float s10, float s01, float s11, float tx, floa
 	return b + (t - b) * ty;
 }
 
+/// One-sided crease fillet helper: remaps a non-negative height drop d below a
+/// plateau (equivalently: rise above a floor) within 2*r of it so the surface
+/// leaves the plateau tangentially - g(0) = g'(0) = 0 turns the crease into a
+/// C1 junction - and is exactly d beyond (g(2r) = 2r, g'(2r) = 1).
+/// Result is in [0, d]: heights only move toward the plateau, never past it,
+/// so the plateau side itself is untouched (no "moat" below cliff lips).
+inline float filletDrop(float d, float r)
+{
+	if (r <= 0.f || d >= 2.f * r)
+	{
+		return d;
+	}
+	if (d <= 0.f)
+	{
+		return 0.f;
+	}
+	const float t = d / r; // in (0, 2)
+	return r * t * t * (1.f - 0.25f * t);
+}
+
+/// The legacy fan surface with its step creases filleted: the face is eased
+/// tangentially into the local plateau top (hi) and floor (lo) levels within a
+/// fillet radius of min(rMax, (hi - lo) / 4) - which is zero on flat ground, so
+/// this equals fanSurface() away from steps, and the two fillet zones can never
+/// overlap. Requires lo <= all corner heights <= hi.
+inline float filletedFanSurface(float h00, float h10, float h01, float h11,
+                                float hi, float lo, float rMax,
+                                float tx, float ty)
+{
+	const float fan = fanSurface(h00, h10, h01, h11, tx, ty);
+	const float r = std::min(rMax, (hi - lo) * 0.25f);
+	if (r <= 0.f)
+	{
+		return fan;
+	}
+	// round the lip (approach to the plateau top), then the foot (approach to the floor)
+	float h = hi - filletDrop(hi - fan, r);
+	h = lo + filletDrop(h - lo, r);
+	return h;
+}
+
 /// The blended surface height for the central cell of a 4x4 lattice patch:
 /// monotone bicubic, lerped toward the legacy fan surface by the bilinearly
 /// interpolated per-corner sharpness s (s = 1 => exactly the legacy surface).
