@@ -1753,7 +1753,14 @@ STRUCTURE *buildStructureDir(GameWorld& world, STRUCTURE_STATS *pStructureType, 
 		if (!setFunctionality(psBuilding, pStructureType->type, world))
 		{
 			removeStructFromMap(psBuilding, world.map);
+
+			// visTilesUpdate() above populated watchedTiles - this object is destroyed directly
+			// (it was never killed via killStruct, so it isn't on the pending-vis-removal queue),
+			// so remove its tile visibility here, against this world's map, before deletion
+			visRemoveVisibility(psBuilding, world.map);
+
 			objmemDestroy(psBuilding, false);
+
 			//better reset these if you couldn't build the structure!
 			if (FromSave && player == selectedPlayer && missionLimboExpand())
 			{
