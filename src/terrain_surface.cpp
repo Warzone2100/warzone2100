@@ -124,6 +124,51 @@ static void cornerPlateauRange(const WorldMapState& mapState, int x, int y, Heig
 	}
 }
 
+/// Does lattice corner (x, y) touch a water tile? Only these corners' waterLevel
+/// values are treated as meaningful by the renderer.
+static bool cornerTouchesWater(const WorldMapState& mapState, int x, int y)
+{
+	for (int dy = -1; dy <= 0; dy++)
+	{
+		for (int dx = -1; dx <= 0; dx++)
+		{
+			if (tileOnMap(mapState, x + dx, y + dy) && terrainType(mapTile(mapState, x + dx, y + dy)) == TER_WATER)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/// The water lattice sanitized for smoothing: corners that don't touch water
+/// take the highest touching-water level in their 3x3 neighborhood (one ring of
+/// extension covers the bicubic stencil), so meaningless inland waterLevel
+/// values can never drag the smoothed water surface below the water body's
+/// level near shorelines.
+static float waterCornerHeight(const WorldMapState& mapState, int x, int y)
+{
+	if (cornerTouchesWater(mapState, x, y))
+	{
+		return cornerHeight(mapState, x, y, HeightMode::Water);
+	}
+	bool found = false;
+	float best = 0.f;
+	for (int dy = -1; dy <= 1; dy++)
+	{
+		for (int dx = -1; dx <= 1; dx++)
+		{
+			if ((dx != 0 || dy != 0) && cornerTouchesWater(mapState, x + dx, y + dy))
+			{
+				const float h = cornerHeight(mapState, x + dx, y + dy, HeightMode::Water);
+				best = found ? std::max(best, h) : h;
+				found = true;
+			}
+		}
+	}
+	return found ? best : cornerHeight(mapState, x, y, HeightMode::Water);
+}
+
 float heightAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode)
 {
 	const float fx = worldX / static_cast<float>(TILE_UNITS);
@@ -132,6 +177,23 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 	const int j = static_cast<int>(std::floor(fy));
 	const float tx = fx - static_cast<float>(i);
 	const float ty = fy - static_cast<float>(j);
+
+	if (mode == HeightMode::Water)
+	{
+		// Smooth over the sanitized water lattice (see waterCornerHeight): over
+		// open water the lattice is locally constant and the monotone bicubic
+		// reproduces it exactly (drawn water == simulation water level), while
+		// shorelines get a smooth waterline instead of tile-resolution kinks.
+		float p[4][4];
+		for (int a = 0; a < 4; a++)
+		{
+			for (int b = 0; b < 4; b++)
+			{
+				p[a][b] = waterCornerHeight(mapState, i - 1 + a, j - 1 + b);
+			}
+		}
+		return terrainSurfaceMath::monotoneBicubic(p, tx, ty);
+	}
 
 	float p[4][4];
 	for (int a = 0; a < 4; a++)
@@ -223,6 +285,11 @@ Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y)
 	else if (c10 == minority) { dir = Vector2f( 1.f, -1.f); }
 	else if (c01 == minority) { dir = Vector2f(-1.f,  1.f); }
 	else                      { dir = Vector2f( 1.f,  1.f); }
+	// NOTE: at concave lip corners this pulls the (lower) cliff face under
+	// positions on the passable plateau - rendered objects standing there are
+	// settled onto the drawn surface via drawnHeightAt() (see terrain.cpp's
+	// getTerrainVisualObjectHeightDelta) rather than by weakening the rounding:
+	// a warp-direction rule cannot both smooth the outline and avoid the overlap.
 	return dir * (cliffOutlineRoundingWorld() * 0.70710678f); // normalize the diagonal
 }
 
@@ -246,6 +313,22 @@ Vector2f outlineOffsetAt(const WorldMapState& mapState, float worldX, float worl
 	const Vector2f b = o00 + (o10 - o00) * tx;
 	const Vector2f t = o01 + (o11 - o01) * tx;
 	return b + (t - b) * ty;
+}
+
+float drawnHeightAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode)
+{
+	// The renderers draw the height sampled at u at the displaced position
+	// u + outlineOffsetAt(u), so the drawn height at a fixed position P is
+	// heightAt(u) with u + off(u) = P. Invert with two fixed-point steps -
+	// off is small (well under half a tile) and smooth, so this converges
+	// to sub-unit accuracy on standable ground.
+	Vector2f u(worldX, worldY);
+	for (int iteration = 0; iteration < 2; iteration++)
+	{
+		const Vector2f off = outlineOffsetAt(mapState, u.x, u.y);
+		u = Vector2f(worldX - off.x, worldY - off.y);
+	}
+	return heightAt(mapState, u.x, u.y, mode);
 }
 
 void debugLogSurfaceStats(const WorldMapState& mapState)
