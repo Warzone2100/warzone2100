@@ -77,6 +77,14 @@ std::string to_display_string(TerrainShaderQuality value);
 bool setTerrainMappingTexturesMaxSize(int texSize);
 int getTerrainMappingTexturesMaxSize();
 
+// Terrain mesh subdivision factor (1 = legacy geometry, up to MAX_TERRAIN_MESH_SUBDIVISION).
+// Values > 1 render each tile as N x N sub-quads sampled from the smooth
+// terrain surface (terrain_surface.h). Rendering only - no simulation impact.
+// Takes effect on the next initTerrain() (i.e. map load / terrain re-init).
+#define MAX_TERRAIN_MESH_SUBDIVISION 4
+bool setTerrainMeshSubdivision(int factor);
+int getTerrainMeshSubdivision();
+
 void initTerrainShaderType(); // must be called after the graphics context is initialized
 
 #endif

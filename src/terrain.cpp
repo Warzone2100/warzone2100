@@ -59,6 +59,8 @@
 #endif
 #include <glm/gtx/transform.hpp>
 
+#include "lib/framework/math_ext.h"
+
 #include "terrain.h"
 #include "terrain_surface.h"
 #include "map.h"
@@ -158,8 +160,16 @@ static int32_t GLmaxElementsVertices, GLmaxElementsIndices;
 
 /// The sectors are stored here
 static std::unique_ptr<Sector[]> sectors;
-/// The default sector size (a sector is sectorSize x sectorSize)
-static int sectorSize = 15;
+/// The preferred sector size (a sector is sectorSize x sectorSize)
+#define PREFERRED_SECTOR_SIZE 15
+/// The sector size in use, recomputed from PREFERRED_SECTOR_SIZE each initTerrain
+/// (may be clamped down to fit GL_MAX_ELEMENTS_* limits, which depend on the
+/// subdivision factor - so it must not carry over from a previous map load)
+static int sectorSize = PREFERRED_SECTOR_SIZE;
+/// Requested mesh subdivision factor (applied on the next initTerrain)
+static int terrainSubdivisionSetting = 1;
+/// The mesh subdivision factor the current buffers were built with (1 = legacy geometry)
+static int terrainSubdivision = 1;
 /// What is the distance we can see
 static int terrainDistance;
 /// How many sectors have we actually got?
@@ -409,6 +419,32 @@ static Vector3f getGridNormal(const WorldMapState& mapState, int x, int y, bool 
 	}
 }
 
+/// Emit the 2 triangles of one subdivided sub-quad. qA is the vertex at the
+/// sub-quad's (0,0) corner. gridStride is the index distance of one step in the
+/// grid's x direction (+1 in y is always adjacent).
+/// NOTE: must stay in sync with the tangent triangulation in setTileDecalVertex_Subdivided
+static inline void emitSubQuadIndices(GLuint *indices, int &indexSize, GLuint qA, GLuint gridStride)
+{
+	const GLuint qB = qA + gridStride;     // (+1, 0)
+	const GLuint qC = qA + 1;              // (0, +1)
+	const GLuint qD = qA + gridStride + 1; // (+1, +1)
+	indices[indexSize + 0] = qA;
+	indices[indexSize + 1] = qB;
+	indices[indexSize + 2] = qD;
+	indices[indexSize + 3] = qA;
+	indices[indexSize + 4] = qD;
+	indices[indexSize + 5] = qC;
+	indexSize += 6;
+}
+
+/// The height mode matching the ground heights getGridPos() produces for the current quality
+static terrainSurface::HeightMode groundHeightMode()
+{
+	return (terrainShaderQuality != TerrainShaderQuality::CLASSIC)
+		? terrainSurface::HeightMode::Ground
+		: terrainSurface::HeightMode::Surface;
+}
+
 /**
  * Set the terrain and water geometry for the specified sector
  */
@@ -416,6 +452,31 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 							  TerrainVertex *geometry, WaterVertex *water,
 							  int *geometrySize, int *waterSize)
 {
+	if (terrainSubdivision > 1)
+	{
+		// subdivided: a regular (sectorSize*N+1)^2 grid sampled from the smooth surface,
+		// no per-tile center vertices
+		const int N = terrainSubdivision;
+		const float step = static_cast<float>(TILE_UNITS) / N;
+		const auto hMode = groundHeightMode();
+		const int gridSize = sectorSize * N;
+		for (int gx = 0; gx <= gridSize; gx++)
+		{
+			for (int gy = 0; gy <= gridSize; gy++)
+			{
+				// NOTE: this expression must stay bit-identical with the combined
+				// terrain+decal builder so the depth prepass matches the color pass
+				const float wx = (sx * sectorSize * N + gx) * step;
+				const float wy = (sy * sectorSize * N + gy) * step;
+				const float groundY = terrainSurface::heightAt(mapState, wx, wy, hMode);
+				const float waterY = terrainSurface::heightAt(mapState, wx, wy, terrainSurface::HeightMode::Water);
+				geometry[(*geometrySize)++].pos = Vector3f(wx, groundY, -wy);
+				water[(*waterSize)++] = glm::vec4(wx, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterY : groundY, -wy, waterY - groundY);
+			}
+		}
+		return;
+	}
+
 	for (int x = sx*sectorSize; x < (sx+1)*sectorSize + 1; x++)
 	{
 		for (int y = sy * sectorSize; y < (sy+1) * sectorSize + 1; y++)
@@ -439,10 +500,171 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 	}
 }
 
+/// Decal/ground info for one tile, shared by the legacy and subdivided builders
+struct TileDecalInfo
+{
+	Vector2f uv[2][2];
+	Vector2f centerUv;
+	int decalNo;
+	uint32_t grounds;
+};
+
+static TileDecalInfo getTileDecalInfo(WorldMapState& mapState, int i, int j)
+{
+	TileDecalInfo info;
+	MAPTILE *tile = mapTile(mapState, i, j);
+	info.centerUv = getTileTexArrCoords(*info.uv, tile->texture);
+	info.decalNo = static_cast<int>(TileNumber_tile(tile->texture));
+	bool skipDecalDraw = !TILE_HAS_DECAL(tile);
+	if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+	{
+		// in Classic mode, skip drawing any that are the "water only" decal (water is handled separately as a prior pass)
+		skipDecalDraw = skipDecalDraw || (isOnlyWater(mapState, i, j) && info.decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
+	}
+	if (skipDecalDraw)
+	{
+		info.decalNo = -1;
+	}
+
+	uint8_t groundsBytes[4];
+	static const int dxdy[4][2] = {{0,0}, {0,1}, {1,1}, {1,0}};
+	for (int k = 0; k < 4; k++)
+	{
+		groundsBytes[k] = mapTile(mapState, i + dxdy[k][0], j + dxdy[k][1])->ground;
+	}
+	PIELIGHT grounds;
+	grounds.fromRGBA(groundsBytes[0], groundsBytes[1], groundsBytes[2], groundsBytes[3]);
+	info.grounds = grounds.rgba();
+	return info;
+}
+
+/// Calc decal tangents: accumulate the per-triangle tangents at each vertex
+/// (vertices shared between triangles get the average of their triangles'), then
+/// orthonormalize against each vertex normal and store with the mirror handedness
+static void calcDecalTangents(gfx_api::TerrainDecalVertex *vs, int numVerts, const int (*tris)[3], int numTris)
+{
+	constexpr int maxVerts = (MAX_TERRAIN_MESH_SUBDIVISION + 1) * (MAX_TERRAIN_MESH_SUBDIVISION + 1);
+	ASSERT_OR_RETURN(, numVerts <= maxVerts, "too many vertices (%d)", numVerts);
+	Vector3f tangentSum[maxVerts] = {};
+	Vector3f bitangentSum[maxVerts] = {};
+	for (int t = 0; t < numTris; t++) {
+		const auto &p0 = vs[tris[t][0]];
+		const auto &p1 = vs[tris[t][1]];
+		const auto &p2 = vs[tris[t][2]];
+		auto e1 = p1.pos - p0.pos;
+		auto e2 = p2.pos - p0.pos;
+		auto uv1 = p1.decalUv - p0.decalUv;
+		auto uv2 = p2.decalUv - p0.decalUv;
+		float r = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
+		Vector3f tangent = glm::normalize(r * (uv2.y * e1 - uv1.y * e2));
+		Vector3f bitangent = glm::normalize(r * (-uv2.x * e1 + uv1.x * e2));
+		if (glm::any(glm::isnan(tangent)) || glm::any(glm::isnan(bitangent))) {
+			continue; // degenerate decal UVs
+		}
+		for (int k = 0; k < 3; k++) {
+			tangentSum[tris[t][k]] += tangent;
+			bitangentSum[tris[t][k]] += bitangent;
+		}
+	}
+	for (int k = 0; k < numVerts; k++) {
+		const auto &n = vs[k].normal;
+		const auto tangent = glm::normalize(tangentSum[k]);
+		const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
+		float w = 1.0f; // not mirrored
+		if (glm::dot(glm::cross(n, t), glm::normalize(bitangentSum[k])) < 0.0f) {
+			w = -1.0f; // we're mirrored
+		}
+		vs[k].decalTangent = glm::vec4(t, w);
+	}
+}
+
+/// Subdivided (N > 1) terrain+decal vertices for one tile: (N+1)^2 vertices on a
+/// regular grid sampled from the smooth surface. Triangles come from the index buffer.
+static void setTileDecalVertex_Subdivided(WorldMapState& mapState, int i, int j, gfx_api::TerrainDecalVertex *terrainDecalData, int *terrainDecalSize)
+{
+	const int N = terrainSubdivision;
+	const float step = static_cast<float>(TILE_UNITS) / N;
+	const auto hMode = groundHeightMode();
+	const TileDecalInfo info = getTileDecalInfo(mapState, i, j);
+
+	// heights on the tile's vertex grid plus a 1-sample ring, for central-difference normals
+	float hgt[MAX_TERRAIN_MESH_SUBDIVISION + 3][MAX_TERRAIN_MESH_SUBDIVISION + 3];
+	for (int a = -1; a <= N + 1; a++)
+	{
+		for (int b = -1; b <= N + 1; b++)
+		{
+			// NOTE: this expression must stay bit-identical with setSectorGeometry
+			// so the depth prepass matches the color pass
+			const float wx = (i * N + a) * step;
+			const float wy = (j * N + b) * step;
+			hgt[a + 1][b + 1] = terrainSurface::heightAt(mapState, wx, wy, hMode);
+		}
+	}
+
+	gfx_api::TerrainDecalVertex vs[(MAX_TERRAIN_MESH_SUBDIVISION + 1) * (MAX_TERRAIN_MESH_SUBDIVISION + 1)];
+	for (int a = 0; a <= N; a++)
+	{
+		for (int b = 0; b <= N; b++)
+		{
+			auto &v = vs[a * (N + 1) + b];
+			const float tx = static_cast<float>(a) / N;
+			const float ty = static_cast<float>(b) / N;
+			v.pos = Vector3f((i * N + a) * step, hgt[a + 1][b + 1], -((j * N + b) * step));
+			// central-difference normal from the height grid (renderer world space: z = -map y)
+			const float hx = (hgt[a + 2][b + 1] - hgt[a][b + 1]) / (2.f * step);
+			const float hy = (hgt[a + 1][b + 2] - hgt[a + 1][b]) / (2.f * step);
+			v.normal = glm::normalize(Vector3f(-hx, 1.f, hy));
+			// bilinear decal UV between the tile's (flip/rotated) corner UVs
+			const Vector2f uvB = info.uv[0][0] + (info.uv[1][0] - info.uv[0][0]) * tx;
+			const Vector2f uvT = info.uv[0][1] + (info.uv[1][1] - info.uv[0][1]) * tx;
+			v.decalUv = uvB + (uvT - uvB) * ty;
+			v.decalNo = info.decalNo;
+			v.grounds = info.grounds;
+			// bilinear ground splat weights between the one-hot corner weights
+			// (corner order k: {0,0}, {0,1}, {1,1}, {1,0} - see getTileDecalInfo)
+			const float wk[4] = {(1.f - tx) * (1.f - ty), (1.f - tx) * ty, tx * ty, tx * (1.f - ty)};
+			int wb[4];
+			int wSum = 0, wMax = 0;
+			for (int k = 0; k < 4; k++)
+			{
+				wb[k] = static_cast<int>(wk[k] * 255.f + 0.5f);
+				wSum += wb[k];
+				if (wb[k] > wb[wMax]) { wMax = k; }
+			}
+			wb[wMax] += 255 - wSum; // keep the weights summing to exactly 1
+			v.groundWeights = {static_cast<uint8_t>(wb[0]), static_cast<uint8_t>(wb[1]), static_cast<uint8_t>(wb[2]), static_cast<uint8_t>(wb[3])};
+		}
+	}
+
+	// calc tangents over the same triangulation as the index buffer
+	// (2 triangles per sub-quad, A-D diagonal - see emitSubQuadIndices)
+	int tris[2 * MAX_TERRAIN_MESH_SUBDIVISION * MAX_TERRAIN_MESH_SUBDIVISION][3];
+	int numTris = 0;
+	for (int a = 0; a < N; a++)
+	{
+		for (int b = 0; b < N; b++)
+		{
+			const int qA = a * (N + 1) + b;
+			const int qB = qA + (N + 1);
+			const int qC = qA + 1;
+			const int qD = qA + (N + 1) + 1;
+			tris[numTris][0] = qA; tris[numTris][1] = qB; tris[numTris][2] = qD;
+			numTris++;
+			tris[numTris][0] = qA; tris[numTris][1] = qD; tris[numTris][2] = qC;
+			numTris++;
+		}
+	}
+	calcDecalTangents(vs, (N + 1) * (N + 1), tris, numTris);
+
+	for (int k = 0; k < (N + 1) * (N + 1); k++)
+	{
+		terrainDecalData[(*terrainDecalSize)++] = vs[k];
+	}
+}
+
 static void setSectorDecalVertex_SinglePass(WorldMapState& mapState, int x, int y, gfx_api::TerrainDecalVertex *terrainDecalData, int *terrainDecalSize)
 {
 	Vector3i pos;
-	Vector2f uv[2][2], center;
 	int i, j;
 
 	for (i = x * sectorSize; i < x * sectorSize + sectorSize; i++)
@@ -454,80 +676,38 @@ static void setSectorDecalVertex_SinglePass(WorldMapState& mapState, int x, int 
 				continue;
 			}
 
-			MAPTILE *tile = mapTile(mapState, i, j);
-			center = getTileTexArrCoords(*uv, tile->texture);
-			int decalNo = static_cast<int>(TileNumber_tile(tile->texture));
-			bool skipDecalDraw = !TILE_HAS_DECAL(tile);
-			if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+			if (terrainSubdivision > 1)
 			{
-				// in Classic mode, skip drawing any that are the "water only" decal (water is handled separately as a prior pass)
-				skipDecalDraw = skipDecalDraw || (isOnlyWater(mapState, i, j) && decalNo == 17); // Magic number hack, but decal # 17 is always the *water only* tile in the legacy terrain tilesets we ship // TODO: Figure out a better way of determining this from the tileset data?
-			}
-			if (skipDecalDraw)
-			{
-				decalNo = -1;
+				setTileDecalVertex_Subdivided(mapState, i, j, terrainDecalData, terrainDecalSize);
+				continue;
 			}
 
-			int dxdy[4][2] = {{0,0}, {0,1}, {1,1}, {1,0}};
-			uint8_t groundsBytes[4];
+			const TileDecalInfo info = getTileDecalInfo(mapState, i, j);
+
+			static const int dxdy[4][2] = {{0,0}, {0,1}, {1,1}, {1,0}};
 			gfx_api::TerrainDecalVertex vs[5];
 			for (int k = 0; k<4; k++) {
 				int dx = dxdy[k][0], dy = dxdy[k][1];
 				getGridPos(mapState, &pos, i + dx, j + dy, false, false);
 				vs[k].pos = pos;
-				vs[k].decalUv = uv[dx][dy];
+				vs[k].decalUv = info.uv[dx][dy];
 				vs[k].normal = getGridNormal(mapState, i + dx, j + dy);
-				vs[k].decalNo = decalNo;
-				groundsBytes[k] = mapTile(mapState, i + dx, j + dy)->ground;
+				vs[k].decalNo = info.decalNo;
 				vs[k].groundWeights.clear();
 				vs[k].groundWeights.setByte(k, 255);
 			}
-			PIELIGHT grounds;
-			grounds.fromRGBA(groundsBytes[0], groundsBytes[1], groundsBytes[2], groundsBytes[3]);
 			// 4 = center;
 			getGridPos(mapState, &pos, i, j, true, false);
 			vs[4].pos = pos;
-			vs[4].decalUv = center;
+			vs[4].decalUv = info.centerUv;
 			vs[4].normal = getGridNormal(mapState, i, j, true);
-			vs[4].decalNo = decalNo;
+			vs[4].decalNo = info.decalNo;
 			vs[4].groundWeights = {0, 0, 0, 0}; // special value for shader.
-			for (int k = 0; k < 5; k++) vs[k].grounds = grounds.rgba();
+			for (int k = 0; k < 5; k++) vs[k].grounds = info.grounds;
 
-			// calc tangents
-			// vertices are shared between the tile's 4 triangles (fanned from the center vertex vs[4]),
-			// so each vertex gets the accumulated tangent of the triangles it belongs to
+			// vertices are shared between the tile's 4 triangles (fanned from the center vertex vs[4])
 			static const int tileTris[4][3] = {{4, 1, 0}, {4, 2, 1}, {4, 3, 2}, {4, 0, 3}};
-			Vector3f tangentSum[5] = {};
-			Vector3f bitangentSum[5] = {};
-			for (int t = 0; t < 4; t++) {
-				const auto &p0 = vs[tileTris[t][0]];
-				const auto &p1 = vs[tileTris[t][1]];
-				const auto &p2 = vs[tileTris[t][2]];
-				auto e1 = p1.pos - p0.pos;
-				auto e2 = p2.pos - p0.pos;
-				auto uv1 = p1.decalUv - p0.decalUv;
-				auto uv2 = p2.decalUv - p0.decalUv;
-				float r = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
-				Vector3f tangent = glm::normalize(r * (uv2.y * e1 - uv1.y * e2));
-				Vector3f bitangent = glm::normalize(r * (-uv2.x * e1 + uv1.x * e2));
-				if (glm::any(glm::isnan(tangent)) || glm::any(glm::isnan(bitangent))) {
-					continue; // degenerate decal UVs
-				}
-				for (int k = 0; k < 3; k++) {
-					tangentSum[tileTris[t][k]] += tangent;
-					bitangentSum[tileTris[t][k]] += bitangent;
-				}
-			}
-			for (int k = 0; k < 5; k++) {
-				const auto &n = vs[k].normal;
-				const auto tangent = glm::normalize(tangentSum[k]);
-				const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
-				float w = 1.0f; // not mirrored
-				if (glm::dot(glm::cross(n, t), glm::normalize(bitangentSum[k])) < 0.0f) {
-					w = -1.0f; // we're mirrored
-				}
-				vs[k].decalTangent = glm::vec4(t, w);
-			}
+			calcDecalTangents(vs, 5, tileTris, 4);
 
 			// emit the 5 unique vertices (4 corners + center). Triangles are formed by the index buffer.
 			for (int k = 0; k < 5; k++) {
@@ -586,6 +766,29 @@ void markTileDirty(int i, int j)
 		return; // will be updated anyway
 	}
 
+	if (terrainSubdivision > 1)
+	{
+		// the smooth surface's bicubic stencil (plus the sharpness factor) extends a
+		// height change's influence to tiles [i-2, i+1] x [j-2, j+1]. Dirty their sectors.
+		for (int tj = j - 2; tj <= j + 1; tj++)
+		{
+			for (int ti = i - 2; ti <= i + 1; ti++)
+			{
+				if (ti < 0 || tj < 0)
+				{
+					continue;
+				}
+				const int sx = ti / sectorSize;
+				const int sy = tj / sectorSize;
+				if (sx < xSectors && sy < ySectors)
+				{
+					sectors[sx * ySectors + sy].dirty = true;
+				}
+			}
+		}
+		return;
+	}
+
 	x = i / sectorSize;
 	y = j / sectorSize;
 	if (x < xSectors && y < ySectors) // could be on the lower or left edge of the map
@@ -629,6 +832,22 @@ void dirtyAllSectors()
 			sectors[i].dirty = true;
 		}
 	}
+}
+
+bool setTerrainMeshSubdivision(int factor)
+{
+	if (factor < 1 || factor > MAX_TERRAIN_MESH_SUBDIVISION)
+	{
+		debug(LOG_ERROR, "Attempted to set bad terrain mesh subdivision factor %d! Ignored.", factor);
+		return false;
+	}
+	terrainSubdivisionSetting = factor;
+	return true;
+}
+
+int getTerrainMeshSubdivision()
+{
+	return terrainSubdivisionSetting;
 }
 
 bool setTerrainMappingTexturesMaxSize(int texSize)
@@ -958,6 +1177,14 @@ bool initTerrain(WorldMapState& mapState)
 	int maxSectorSizeIndices, maxSectorSizeVertices;
 	bool decreasedSize = false;
 
+	// start from the preferred sector size: the clamping below depends on the
+	// subdivision factor, so a clamped value must not leak into the next map load
+	sectorSize = PREFERRED_SECTOR_SIZE;
+
+	terrainSubdivision = terrainSubdivisionSetting;
+	debug(LOG_TERRAIN, "terrain mesh subdivision factor: %d", terrainSubdivision);
+	const int N = terrainSubdivision;
+
 	// this information is useful to prevent crashes with buggy opengl implementations
 	GLmaxElementsVertices = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ELEMENTS_VERTICES);
 	GLmaxElementsIndices = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ELEMENTS_INDICES);
@@ -967,11 +1194,24 @@ bool initTerrain(WorldMapState& mapState)
 	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
 
 	// now we know these values, determine the maximum sector size achievable
-	// (the geometry buffer uses (sectorSize+1)^2 * 2 vertices per sector,
-	//  the terrain+decal buffer uses sectorSize^2 * 5 vertices per sector,
-	//  both index buffers use sectorSize^2 * 12 indices per sector)
-	maxSectorSizeVertices = std::min(iSqrt(GLmaxElementsVertices / 2) - 1, iSqrt(GLmaxElementsVertices / 5));
-	maxSectorSizeIndices = iSqrt(GLmaxElementsIndices / 12);
+	if (N == 1)
+	{
+		// legacy geometry:
+		// - the geometry buffer uses (sectorSize+1)^2 * 2 vertices per sector
+		// - the terrain+decal buffer uses sectorSize^2 * 5 vertices per sector
+		// - both index buffers use sectorSize^2 * 12 indices per sector
+		maxSectorSizeVertices = std::min(iSqrt(GLmaxElementsVertices / 2) - 1, iSqrt(GLmaxElementsVertices / 5));
+		maxSectorSizeIndices = iSqrt(GLmaxElementsIndices / 12);
+	}
+	else
+	{
+		// subdivided geometry:
+		// - the geometry buffer uses (sectorSize*N+1)^2 vertices per sector
+		// - the terrain+decal buffer uses sectorSize^2 * (N+1)^2 vertices per sector
+		// - both index buffers use sectorSize^2 * 6*N^2 indices per sector
+		maxSectorSizeVertices = std::min((iSqrt(GLmaxElementsVertices) - 1) / N, iSqrt(GLmaxElementsVertices) / (N + 1));
+		maxSectorSizeIndices = iSqrt(GLmaxElementsIndices / (6 * N * N));
+	}
 
 	debug(LOG_TERRAIN, "preferred sector size: %i", sectorSize);
 	debug(LOG_TERRAIN, "maximum sector size due to vertices: %i", maxSectorSizeVertices);
@@ -1017,14 +1257,17 @@ bool initTerrain(WorldMapState& mapState)
 
 	////////////////////
 	// fill the geometry part of the sectors
-	const int vertSize = xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2;
+	const int vertSize = (N == 1)
+		? xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2
+		: xSectors * ySectors * (sectorSize * N + 1) * (sectorSize * N + 1);
+	const int indexAllocPerSector = sectorSize * sectorSize * ((N == 1) ? 12 : 6 * N * N);
 	geometry = new TerrainVertex[vertSize];
-	geometryIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
+	geometryIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * indexAllocPerSector);
 	geometrySize = 0;
 	geometryIndexSize = 0;
 
 	water = (WaterVertex *)malloc(sizeof(WaterVertex) * vertSize);
-	waterIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
+	waterIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * indexAllocPerSector);
 	waterSize = 0;
 	waterIndexSize = 0;
 	for (x = 0; x < xSectors; x++)
@@ -1046,6 +1289,39 @@ bool initTerrain(WorldMapState& mapState)
 			sectors[x * ySectors + y].geometryIndexSize = 0;
 			sectors[x * ySectors + y].waterIndexOffset = waterIndexSize;
 			sectors[x * ySectors + y].waterIndexSize = 0;
+
+			if (N > 1)
+			{
+				// subdivided: 2 triangles per sub-quad on the sector's (sectorSize*N+1)^2 grid
+				const int gridStride = sectorSize * N + 1;
+				const GLuint sectorBase = (x * ySectors + y) * gridStride * gridStride;
+				for (i = 0; i < sectorSize; i++)
+				{
+					for (j = 0; j < sectorSize; j++)
+					{
+						if (x * sectorSize + i >= mapState.width || y * sectorSize + j >= mapState.height)
+						{
+							continue; // off map, so skip
+						}
+						const bool tileIsWater = isWater(mapState, i + x * sectorSize, j + y * sectorSize);
+						for (int a = 0; a < N; a++)
+						{
+							for (int b = 0; b < N; b++)
+							{
+								const GLuint qA = sectorBase + (i * N + a) * gridStride + (j * N + b);
+								emitSubQuadIndices(geometryIndex, geometryIndexSize, qA, gridStride);
+								if (tileIsWater)
+								{
+									emitSubQuadIndices(waterIndex, waterIndexSize, qA, gridStride);
+								}
+							}
+						}
+					}
+				}
+				sectors[x * ySectors + y].geometryIndexSize = geometryIndexSize - sectors[x * ySectors + y].geometryIndexOffset;
+				sectors[x * ySectors + y].waterIndexSize = waterIndexSize - sectors[x * ySectors + y].waterIndexOffset;
+				continue;
+			}
 
 			for (i = 0; i < sectorSize; i++)
 			{
@@ -1143,8 +1419,10 @@ bool initTerrain(WorldMapState& mapState)
 
 
 	// and finally the decals
-	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapState.width * mapState.height * 5);
-	GLuint *terrainDecalIndex = (GLuint *)malloc(sizeof(GLuint) * mapState.width * mapState.height * 12);
+	const int decalVertsPerTile = (N == 1) ? 5 : (N + 1) * (N + 1);
+	const int decalIndicesPerTile = (N == 1) ? 12 : 6 * N * N;
+	gfx_api::TerrainDecalVertex *terrainDecalData = (gfx_api::TerrainDecalVertex *)malloc(sizeof(gfx_api::TerrainDecalVertex) * mapState.width * mapState.height * decalVertsPerTile);
+	GLuint *terrainDecalIndex = (GLuint *)malloc(sizeof(GLuint) * mapState.width * mapState.height * decalIndicesPerTile);
 	int terrainDecalSize = 0;
 	int terrainDecalIndexSize = 0;
 
@@ -1157,32 +1435,46 @@ bool initTerrain(WorldMapState& mapState)
 				setSectorDecalVertex_SinglePass(mapState, x, y, terrainDecalData, &terrainDecalSize);
 				sectors[x * ySectors + y].terrainAndDecalSize = terrainDecalSize - sectors[x * ySectors + y].terrainAndDecalOffset;
 
-				// each tile emitted 5 vertices (4 corners + center).
-				// Form its 4 triangles fanned from the center vertex (base + 4).
 				sectors[x * ySectors + y].terrainAndDecalIndexOffset = terrainDecalIndexSize;
-				for (int base = sectors[x * ySectors + y].terrainAndDecalOffset; base < terrainDecalSize; base += 5)
+				for (int base = sectors[x * ySectors + y].terrainAndDecalOffset; base < terrainDecalSize; base += decalVertsPerTile)
 				{
-					terrainDecalIndex[terrainDecalIndexSize + 0]  = base + 4;
-					terrainDecalIndex[terrainDecalIndexSize + 1]  = base + 1;
-					terrainDecalIndex[terrainDecalIndexSize + 2]  = base + 0;
+					if (N == 1)
+					{
+						// each tile emitted 5 vertices (4 corners + center).
+						// Form its 4 triangles fanned from the center vertex (base + 4).
+						terrainDecalIndex[terrainDecalIndexSize + 0]  = base + 4;
+						terrainDecalIndex[terrainDecalIndexSize + 1]  = base + 1;
+						terrainDecalIndex[terrainDecalIndexSize + 2]  = base + 0;
 
-					terrainDecalIndex[terrainDecalIndexSize + 3]  = base + 4;
-					terrainDecalIndex[terrainDecalIndexSize + 4]  = base + 2;
-					terrainDecalIndex[terrainDecalIndexSize + 5]  = base + 1;
+						terrainDecalIndex[terrainDecalIndexSize + 3]  = base + 4;
+						terrainDecalIndex[terrainDecalIndexSize + 4]  = base + 2;
+						terrainDecalIndex[terrainDecalIndexSize + 5]  = base + 1;
 
-					terrainDecalIndex[terrainDecalIndexSize + 6]  = base + 4;
-					terrainDecalIndex[terrainDecalIndexSize + 7]  = base + 3;
-					terrainDecalIndex[terrainDecalIndexSize + 8]  = base + 2;
+						terrainDecalIndex[terrainDecalIndexSize + 6]  = base + 4;
+						terrainDecalIndex[terrainDecalIndexSize + 7]  = base + 3;
+						terrainDecalIndex[terrainDecalIndexSize + 8]  = base + 2;
 
-					terrainDecalIndex[terrainDecalIndexSize + 9]  = base + 4;
-					terrainDecalIndex[terrainDecalIndexSize + 10] = base + 0;
-					terrainDecalIndex[terrainDecalIndexSize + 11] = base + 3;
-					terrainDecalIndexSize += 12;
+						terrainDecalIndex[terrainDecalIndexSize + 9]  = base + 4;
+						terrainDecalIndex[terrainDecalIndexSize + 10] = base + 0;
+						terrainDecalIndex[terrainDecalIndexSize + 11] = base + 3;
+						terrainDecalIndexSize += 12;
+					}
+					else
+					{
+						// each tile emitted an (N+1)^2 vertex grid, 2 triangles per sub-quad
+						for (int a = 0; a < N; a++)
+						{
+							for (int b = 0; b < N; b++)
+							{
+								emitSubQuadIndices(terrainDecalIndex, terrainDecalIndexSize, base + a * (N + 1) + b, N + 1);
+							}
+						}
+					}
 				}
 				sectors[x * ySectors + y].terrainAndDecalIndexSize = terrainDecalIndexSize - sectors[x * ySectors + y].terrainAndDecalIndexOffset;
 		}
 	}
-	debug(LOG_TERRAIN, "%i decals found", terrainDecalSize / 5);
+	debug(LOG_TERRAIN, "%i decals found", terrainDecalSize / decalVertsPerTile);
 
 	if (terrainDecalVBO)
 		delete terrainDecalVBO;
