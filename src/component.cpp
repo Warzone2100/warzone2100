@@ -36,6 +36,7 @@
 #include "map.h"
 #include "miscimd.h"
 #include "projectile.h"
+#include "terrain.h"
 #include "transporter.h"
 #include "mission.h"
 #include "faction.h"
@@ -927,6 +928,10 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const g
 	position.x = st.pos.x;
 	position.z = -(st.pos.y);
 	position.y = st.pos.z;
+
+	// settle ground units onto the drawn terrain surface, which can deviate
+	// slightly from the gameplay surface when terrain mesh smoothing is active
+	position.y += static_cast<int>(getTerrainVisualObjectHeightDelta(gameWorld.map, st.pos.x, st.pos.y, st.pos.z));
 
 	if (psDroid->isTransporter())
 	{
