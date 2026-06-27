@@ -349,6 +349,9 @@ bool missionShutDown()
 		releaseAllProxDisp();
 		gwShutDown(gameWorld.map);
 
+		// freeAll*() above flushed gameWorld's pending visibility removals
+		// nothing should be left to strand when this world is overwritten by the swap
+		ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
 		gameWorld = std::move(mission.gameWorld);
 		mission.gameWorld = {};
 	}
@@ -760,6 +763,11 @@ static void saveMissionData()
 	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
+	// NOTE:
+	// - gameWorld's queue is preserved by the move into mission.gameWorld, but the (stale)
+	//   mission.gameWorld being overwritten must have its own queue flushed first so nothing is
+	//   stranded
+	flushPendingVisRemoval(mission.gameWorld);
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
 
@@ -810,6 +818,9 @@ void restoreMissionData()
 	}
 	//restore the game pointers.
 	//swap mission data over
+	// freeAllXXX above flushed gameWorld's pending visibility removals; nothing should be
+	// left to strand when this world is overwritten by the swap.
+	ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
 	gameWorld = std::move(mission.gameWorld);
 	mission.gameWorld = {};
 	for (inc = 0; inc < MAX_PLAYERS; inc++)

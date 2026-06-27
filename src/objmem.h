@@ -45,6 +45,10 @@ void objmemShutdown();
 /* General housekeeping for the object system */
 void objmemUpdate();
 
+/* Remove tile visibility for objects killed this tick in the given world, against that
+ * world's own map. Safe to call repeatedly; clears the world's pending-removal queue. */
+void flushPendingVisRemoval(GameWorld& world);
+
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
 bool objmemDestroy(BASE_OBJECT* psObj, bool checkRefs);
