@@ -464,14 +464,17 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 		{
 			for (int gy = 0; gy <= gridSize; gy++)
 			{
-				// NOTE: this expression must stay bit-identical with the combined
+				// NOTE: these expressions must stay bit-identical with the combined
 				// terrain+decal builder so the depth prepass matches the color pass
 				const float wx = (sx * sectorSize * N + gx) * step;
 				const float wy = (sy * sectorSize * N + gy) * step;
 				const float groundY = terrainSurface::heightAt(mapState, wx, wy, hMode);
 				const float waterY = terrainSurface::heightAt(mapState, wx, wy, terrainSurface::HeightMode::Water);
-				geometry[(*geometrySize)++].pos = Vector3f(wx, groundY, -wy);
-				water[(*waterSize)++] = glm::vec4(wx, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterY : groundY, -wy, waterY - groundY);
+				// heights are sampled at the undisplaced position. The horizontal
+				// offset warps the drawn field, rounding cliff outlines
+				const Vector2f off = terrainSurface::outlineOffsetAt(mapState, wx, wy);
+				geometry[(*geometrySize)++].pos = Vector3f(wx + off.x, groundY, -(wy + off.y));
+				water[(*waterSize)++] = glm::vec4(wx + off.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterY : groundY, -(wy + off.y), waterY - groundY);
 			}
 		}
 		return;
@@ -609,7 +612,12 @@ static void setTileDecalVertex_Subdivided(WorldMapState& mapState, int i, int j,
 			auto &v = vs[a * (N + 1) + b];
 			const float tx = static_cast<float>(a) / N;
 			const float ty = static_cast<float>(b) / N;
-			v.pos = Vector3f((i * N + a) * step, hgt[a + 1][b + 1], -((j * N + b) * step));
+			// heights come from the undisplaced grid (see setSectorGeometry). The
+			// horizontal offset rounds cliff outlines
+			const float wx = (i * N + a) * step;
+			const float wy = (j * N + b) * step;
+			const Vector2f off = terrainSurface::outlineOffsetAt(mapState, wx, wy);
+			v.pos = Vector3f(wx + off.x, hgt[a + 1][b + 1], -(wy + off.y));
 			// central-difference normal from the height grid (renderer world space: z = -map y)
 			const float hx = (hgt[a + 2][b + 1] - hgt[a][b + 1]) / (2.f * step);
 			const float hy = (hgt[a + 1][b + 2] - hgt[a + 1][b]) / (2.f * step);

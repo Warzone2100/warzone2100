@@ -29,7 +29,9 @@
 
 #include <glm/geometric.hpp>
 
+#include <algorithm>
 #include <cmath>
+#include <cstdlib>
 
 namespace terrainSurface
 {
@@ -120,6 +122,77 @@ Vector3f worldNormalAt(const WorldMapState& mapState, float worldX, float worldY
 	const float hy = (heightAt(mapState, worldX, worldY + eps, mode) - heightAt(mapState, worldX, worldY - eps, mode)) / (2.f * eps);
 	// renderer world space: world x = map x, world z = -map y, +y up
 	return glm::normalize(Vector3f(-hx, 1.f, hy));
+}
+
+// MARK: - Cliff outline rounding
+
+// How far outline corners are pulled, in tiles. Must stay well below 0.5 so
+// opposing offsets on a 1-tile-wide cliff strip can neither cross nor fold the
+// warped mesh (worst-case component is this / sqrt(2) per corner).
+static constexpr float CLIFF_OUTLINE_ROUNDING_TILES = 0.3f;
+
+static float cliffOutlineRoundingWorld()
+{
+	// dev override for visual tuning: WZ_TERRAIN_CLIFF_ROUND=<tiles> (0 disables)
+	static const float value = []() {
+		float tiles = CLIFF_OUTLINE_ROUNDING_TILES;
+		if (const char* env = getenv("WZ_TERRAIN_CLIFF_ROUND"))
+		{
+			tiles = std::min(0.45f, std::max(0.f, static_cast<float>(atof(env))));
+		}
+		return tiles * static_cast<float>(TILE_UNITS);
+	}();
+	return value;
+}
+
+static bool isCliffTile(const WorldMapState& mapState, int i, int j)
+{
+	return tileOnMap(mapState, i, j) && terrainType(mapTile(mapState, i, j)) == TER_CLIFFFACE;
+}
+
+Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y)
+{
+	// corner (x, y) touches tiles (x-1, y-1) .. (x, y)
+	const bool c00 = isCliffTile(mapState, x - 1, y - 1);
+	const bool c10 = isCliffTile(mapState, x,     y - 1);
+	const bool c01 = isCliffTile(mapState, x - 1, y);
+	const bool c11 = isCliffTile(mapState, x,     y);
+	const int count = static_cast<int>(c00) + static_cast<int>(c10) + static_cast<int>(c01) + static_cast<int>(c11);
+	if (count != 1 && count != 3)
+	{
+		return Vector2f(0.f, 0.f); // not on the outline, a straight run, or an ambiguous saddle
+	}
+	// cut the outline corner by pulling it diagonally toward the minority tile:
+	// the lone cliff tile at convex corners (count 1), the lone gap at concave ones (count 3)
+	const bool minority = (count == 1);
+	Vector2f dir;
+	if (c00 == minority)      { dir = Vector2f(-1.f, -1.f); }
+	else if (c10 == minority) { dir = Vector2f( 1.f, -1.f); }
+	else if (c01 == minority) { dir = Vector2f(-1.f,  1.f); }
+	else                      { dir = Vector2f( 1.f,  1.f); }
+	return dir * (cliffOutlineRoundingWorld() * 0.70710678f); // normalize the diagonal
+}
+
+Vector2f outlineOffsetAt(const WorldMapState& mapState, float worldX, float worldY)
+{
+	if (cliffOutlineRoundingWorld() <= 0.f)
+	{
+		return Vector2f(0.f, 0.f);
+	}
+	const float fx = worldX / static_cast<float>(TILE_UNITS);
+	const float fy = worldY / static_cast<float>(TILE_UNITS);
+	const int i = static_cast<int>(std::floor(fx));
+	const int j = static_cast<int>(std::floor(fy));
+	const float tx = fx - static_cast<float>(i);
+	const float ty = fy - static_cast<float>(j);
+
+	const Vector2f o00 = cornerOutlineOffset(mapState, i, j);
+	const Vector2f o10 = cornerOutlineOffset(mapState, i + 1, j);
+	const Vector2f o01 = cornerOutlineOffset(mapState, i, j + 1);
+	const Vector2f o11 = cornerOutlineOffset(mapState, i + 1, j + 1);
+	const Vector2f b = o00 + (o10 - o00) * tx;
+	const Vector2f t = o01 + (o11 - o01) * tx;
+	return b + (t - b) * ty;
 }
 
 void debugLogSurfaceStats(const WorldMapState& mapState)

@@ -73,6 +73,19 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 /// TerrainDecalVertex normal.
 Vector3f worldNormalAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode);
 
+/// Horizontal displacement of a lattice corner, in map-space world
+/// units, used to round the cliff outline: corners where the 4 adjacent tiles
+/// are 1-vs-3 cliff/non-cliff are pulled toward the minority tile
+/// (marching-squares-style corner cutting). Zero away from cliff outlines.
+Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y);
+
+/// Bilinear interpolation of cornerOutlineOffset at a map-space position.
+/// Renderers add this to vertex x/y (z = -y in renderer world space) while
+/// sampling heightAt() at the UNDISPLACED position - warping the drawn height
+/// field so cliff lip/foot contours round. Bounded magnitude
+/// (well below half a tile) keeps the warped mesh fold-free.
+Vector2f outlineOffsetAt(const WorldMapState& mapState, float worldX, float worldY);
+
 /// Log (LOG_TERRAIN) deviation statistics between the smooth surface and the
 /// legacy fan surface over the whole map - cheap sanity metric for tuning.
 void debugLogSurfaceStats(const WorldMapState& mapState);
