@@ -85,6 +85,14 @@ int getTerrainMappingTexturesMaxSize();
 bool setTerrainMeshSubdivision(int factor);
 int getTerrainMeshSubdivision();
 
+// Visual-only height correction for settling a rendered object onto the drawn
+// terrain surface, which deviates from the gameplay surface (map_Height) when
+// terrain mesh subdivision is active. (x, y) is the object's map position in
+// world units, z its gameplay height. Zero when subdivision is off, when the
+// object is airborne, or when the surfaces agree. NEVER feed the result back
+// into simulation state.
+float getTerrainVisualObjectHeightDelta(WorldMapState& mapState, int x, int y, int z);
+
 void initTerrainShaderType(); // must be called after the graphics context is initialized
 
 #endif

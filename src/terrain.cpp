@@ -858,6 +858,43 @@ int getTerrainMeshSubdivision()
 	return terrainSubdivisionSetting;
 }
 
+float getTerrainVisualObjectHeightDelta(WorldMapState& mapState, int x, int y, int z)
+{
+	if (!terrainInitialised || terrainSubdivision <= 1)
+	{
+		return 0.f;
+	}
+	// off-map render positions (e.g. transporters flying in from off-map) have
+	// no drawn terrain to settle onto (and map_Height asserts on them)
+	if (x < 0 || y < 0 || x >= world_coord(mapState.width) || y >= world_coord(mapState.height))
+	{
+		return 0.f;
+	}
+	// the gameplay standing surface (map_Height) is max(ground, water)
+	const int groundZ = map_Height(mapState, x, y);
+	const float aboveGround = static_cast<float>(z - groundZ);
+	if (aboveGround >= 16.f)
+	{
+		return 0.f; // airborne - the ground correction doesn't apply
+	}
+	// Settle onto the smooth analogue of the sim's standing surface: map_Height()
+	// fans the per-corner max(ground, water) lattice (map_TileHeightSurface), so
+	// smoothing that same lattice gives a drawn standing surface that is
+	// continuous everywhere - no water-adjacency gate whose boundary can pop the
+	// unit. Over open water every water cell's corners sit at the water level and
+	// the monotone bicubic reproduces locally constant lattices exactly, so hover
+	// units still sit precisely on the drawn water plane. Across a shoreline cell
+	// the surface slopes like the legacy fan (smoothed), so units pitch through
+	// the crossing instead of stepping between ground and water levels.
+	const float drawn = terrainSurface::drawnHeightAt(mapState, static_cast<float>(x), static_cast<float>(y), terrainSurface::HeightMode::Surface);
+	float delta = drawn - static_cast<float>(groundZ);
+	if (aboveGround > 0.f)
+	{
+		delta *= 1.f - aboveGround / 16.f; // fade out as the object leaves the ground
+	}
+	return delta;
+}
+
 bool setTerrainMappingTexturesMaxSize(int texSize)
 {
 	bool isPowerOfTwo = !(texSize == 0) && !(texSize & (texSize - 1));

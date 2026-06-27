@@ -48,7 +48,7 @@ enum class HeightMode
 {
 	Ground,   ///< tile ground heights (map_TileHeight)
 	Water,    ///< water surface heights (map_WaterHeight)
-	Surface,  ///< max(ground, water) (map_TileHeightSurface) - used by Classic mode
+	Surface,  ///< max(ground, water) (map_TileHeightSurface) - used by the unit ground settle and Classic mode
 };
 
 /// Height of a lattice corner as the renderer defines it:
@@ -85,6 +85,11 @@ Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y);
 /// field so cliff lip/foot contours round. Bounded magnitude
 /// (well below half a tile) keeps the warped mesh fold-free.
 Vector2f outlineOffsetAt(const WorldMapState& mapState, float worldX, float worldY);
+
+/// The height the renderer actually draws at a fixed map-space position:
+/// heightAt() with the horizontal outline warp inverted. Use this (not
+/// heightAt) when settling rendered objects onto the drawn ground.
+float drawnHeightAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode);
 
 /// Log (LOG_TERRAIN) deviation statistics between the smooth surface and the
 /// legacy fan surface over the whole map - cheap sanity metric for tuning.
