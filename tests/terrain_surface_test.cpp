@@ -307,6 +307,84 @@ static void testFanSurface()
 	}
 }
 
+// MARK: - Crease fillet
+
+static void testFilletDrop()
+{
+	const float r = 20.f;
+	// identity beyond the fillet zone (and continuous at its boundary)
+	CHECK_NEAR(filletDrop(100.f, r), 100.f, 1e-4f, "far field identity");
+	CHECK_NEAR(filletDrop(2.f * r, r), 2.f * r, 1e-3f, "zone boundary value");
+	// pinned at the plateau, clamped for out-of-range input
+	CHECK_NEAR(filletDrop(0.f, r), 0.f, 1e-6f, "zero at plateau");
+	CHECK_NEAR(filletDrop(-5.f, r), 0.f, 1e-6f, "clamped for negative drop");
+	CHECK_NEAR(filletDrop(50.f, 0.f), 50.f, 1e-6f, "disabled at r=0");
+	// tangent to the plateau (g'(0) = 0) and C1 at the zone boundary (g'(2r) = 1)
+	const float eps = 1e-2f;
+	CHECK_NEAR(filletDrop(eps, r) / eps, 0.f, 0.01f, "tangent at plateau");
+	CHECK_NEAR((filletDrop(2.f * r, r) - filletDrop(2.f * r - eps, r)) / eps, 1.f, 0.01f, "C1 at zone boundary");
+	// one-sided and monotone: 0 <= fillet(d) <= d, nondecreasing
+	float prev = 0.f;
+	for (int k = 0; k <= 100; k++)
+	{
+		float d = k * 0.5f;
+		float f = filletDrop(d, r);
+		CHECK_TRUE(f >= -1e-4f && f <= d + 1e-4f, "one-sided: %g not in [0, %g]", f, d);
+		CHECK_TRUE(f >= prev - 1e-4f, "monotone: %g < %g at d=%g", f, prev, d);
+		prev = f;
+	}
+}
+
+static void testFilletedFanSurface()
+{
+	const float rMax = 20.f;
+	// flat ground (hi == lo): exactly the fan surface
+	for (int k = 0; k < 16; k++)
+	{
+		float tx = (k % 4) / 3.f, ty = (k / 4) / 3.f;
+		CHECK_NEAR(filletedFanSurface(80.f, 80.f, 80.f, 80.f, 80.f, 80.f, rMax, tx, ty), 80.f, 1e-3f, "flat identity");
+	}
+	// a cliff cell: face from hi=200 (x=0 side) down to lo=0 (x=1 side)
+	const float hi = 200.f, lo = 0.f;
+	for (int k = 0; k <= 8; k++)
+	{
+		float ty = k / 8.f;
+		// corner/edge exactness at plateau and floor
+		CHECK_NEAR(filletedFanSurface(hi, lo, hi, lo, hi, lo, rMax, 0.f, ty), hi, 1e-3f, "lip edge exact");
+		CHECK_NEAR(filletedFanSurface(hi, lo, hi, lo, hi, lo, rMax, 1.f, ty), lo, 1e-3f, "foot edge exact");
+		// mid-face far from both fillet zones: unchanged
+		CHECK_NEAR(filletedFanSurface(hi, lo, hi, lo, hi, lo, rMax, 0.5f, ty),
+		           fanSurface(hi, lo, hi, lo, 0.5f, ty), 1e-3f, "mid-face identity");
+	}
+	// stays within [lo, hi] and only moves heights toward the nearer plateau
+	for (int a = 0; a <= 16; a++)
+	{
+		for (int b = 0; b <= 16; b++)
+		{
+			float tx = a / 16.f, ty = b / 16.f;
+			float fan = fanSurface(hi, lo, hi, lo, tx, ty);
+			float h = filletedFanSurface(hi, lo, hi, lo, hi, lo, rMax, tx, ty);
+			CHECK_TRUE(h >= lo - 1e-3f && h <= hi + 1e-3f, "fillet bounds: %g", h);
+			// lip zone raises toward hi, foot zone lowers toward lo, else identity
+			if (hi - fan < 2.f * rMax)
+			{
+				CHECK_TRUE(h >= fan - 1e-3f, "lip fillet one-sided: %g < %g", h, fan);
+			}
+			else if (fan - lo < 2.f * rMax)
+			{
+				CHECK_TRUE(h <= fan + 1e-3f, "foot fillet one-sided: %g > %g", h, fan);
+			}
+			else
+			{
+				CHECK_NEAR(h, fan, 1e-3f, "identity between fillet zones");
+			}
+		}
+	}
+	// short step (hi - lo < 4*rMax): fillet radius shrinks, corners stay exact
+	CHECK_NEAR(filletedFanSurface(30.f, 0.f, 30.f, 0.f, 30.f, 0.f, rMax, 0.f, 0.5f), 30.f, 1e-3f, "short step lip exact");
+	CHECK_NEAR(filletedFanSurface(30.f, 0.f, 30.f, 0.f, 30.f, 0.f, rMax, 1.f, 0.5f), 0.f, 1e-3f, "short step foot exact");
+}
+
 // MARK: - Blended surface
 
 static void testBlendedSharpnessExtremes()
@@ -367,6 +445,8 @@ int main()
 	testBicubicCrackFreeAcrossCells();
 	testBicubicC1AcrossCells();
 	testFanSurface();
+	testFilletDrop();
+	testFilletedFanSurface();
 	testBlendedSharpnessExtremes();
 	testBlendedBounds();
 

@@ -87,6 +87,43 @@ float cornerSharpness(const WorldMapState& mapState, int x, int y)
 	return s * s * (3.f - 2.f * s); // smoothstep
 }
 
+// Fillet radius (in height units) for rounding the lip/foot creases of the
+// sharp (legacy-geometry) regions. Each rounded zone spans 2x this. Tunable.
+static constexpr float CLIFF_FILLET_RADIUS = 20.f;
+
+static float cliffFilletRadius()
+{
+	// dev override for visual tuning: WZ_TERRAIN_CLIFF_FILLET=<height units> (0 disables)
+	static const float value = []() {
+		float r = CLIFF_FILLET_RADIUS;
+		if (const char* env = getenv("WZ_TERRAIN_CLIFF_FILLET"))
+		{
+			r = std::min(64.f, std::max(0.f, static_cast<float>(atof(env))));
+		}
+		return r;
+	}();
+	return value;
+}
+
+// Min/max corner height over the 3x3 corner neighborhood - the local floor and
+// plateau reference levels for crease filleting. Lattice fields (bilinearly
+// interpolated by the caller), so adjacent cells always agree. Every corner of
+// a cell lies within every other corner's 3x3 neighborhood, so the interpolated
+// range always brackets the cell's fan surface.
+static void cornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi)
+{
+	lo = hi = cornerHeight(mapState, x, y, mode);
+	for (int dy = -1; dy <= 1; dy++)
+	{
+		for (int dx = -1; dx <= 1; dx++)
+		{
+			const float h = cornerHeight(mapState, x + dx, y + dy, mode);
+			lo = std::min(lo, h);
+			hi = std::max(hi, h);
+		}
+	}
+}
+
 float heightAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode)
 {
 	const float fx = worldX / static_cast<float>(TILE_UNITS);
@@ -110,7 +147,23 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 	const float s01 = cornerSharpness(mapState, i, j + 1);
 	const float s11 = cornerSharpness(mapState, i + 1, j + 1);
 
-	return terrainSurfaceMath::blendedSurfaceHeight(p, s00, s10, s01, s11, tx, ty);
+	// same blend as terrainSurfaceMath::blendedSurfaceHeight, but with the
+	// sharp component's lip/foot creases filleted against the local plateau levels
+	const float smooth = terrainSurfaceMath::monotoneBicubic(p, tx, ty);
+	const float sharp = terrainSurfaceMath::bilinear(s00, s10, s01, s11, tx, ty);
+	if (sharp <= 0.f)
+	{
+		return smooth;
+	}
+	float lo00, hi00, lo10, hi10, lo01, hi01, lo11, hi11;
+	cornerPlateauRange(mapState, i, j, mode, lo00, hi00);
+	cornerPlateauRange(mapState, i + 1, j, mode, lo10, hi10);
+	cornerPlateauRange(mapState, i, j + 1, mode, lo01, hi01);
+	cornerPlateauRange(mapState, i + 1, j + 1, mode, lo11, hi11);
+	const float hi = terrainSurfaceMath::bilinear(hi00, hi10, hi01, hi11, tx, ty);
+	const float lo = terrainSurfaceMath::bilinear(lo00, lo10, lo01, lo11, tx, ty);
+	const float fan = terrainSurfaceMath::filletedFanSurface(p[1][1], p[2][1], p[1][2], p[2][2], hi, lo, cliffFilletRadius(), tx, ty);
+	return smooth + (fan - smooth) * sharp;
 }
 
 Vector3f worldNormalAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode)
