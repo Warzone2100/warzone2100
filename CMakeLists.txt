@@ -900,6 +900,13 @@ add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(pkg)
 
+# Standalone unit test for the (dependency-free) terrain surface interpolation math
+option(WZ_BUILD_TERRAIN_SURFACE_TEST "Build the terrain surface math unit test (tests/terrain_surface_test.cpp)" OFF)
+if(WZ_BUILD_TERRAIN_SURFACE_TEST)
+	add_executable(terrain_surface_test "${PROJECT_SOURCE_DIR}/tests/terrain_surface_test.cpp")
+	target_include_directories(terrain_surface_test PRIVATE "${PROJECT_SOURCE_DIR}/src")
+endif()
+
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	# Target system is Windows
