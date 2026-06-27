@@ -60,6 +60,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "terrain.h"
+#include "terrain_surface.h"
 #include "map.h"
 #include "texture.h"
 #include "display3d.h"
@@ -1238,6 +1239,11 @@ bool initTerrain(WorldMapState& mapState)
 
 	lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	terrainInitialised = true;
+
+	if (enabled_debug[LOG_TERRAIN])
+	{
+		terrainSurface::debugLogSurfaceStats(mapState);
+	}
 
 	return true;
 }
