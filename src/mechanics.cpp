@@ -33,6 +33,7 @@
 #include "objmem.h"
 #include "research.h"
 #include "structure.h"
+#include "visibility.h"
 
 /* Shutdown the mechanics system */
 bool mechanicsShutdown()
@@ -43,6 +44,9 @@ bool mechanicsShutdown()
 	}
 	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
+		// Force-destroying everything: clear any not-yet-removed tile visibility (the owning
+		// map may already be gone, so don't touch it) so the destructor's assert is satisfied
+		visRemoveVisibilityOffWorld(psObj);
 		objmemDestroy(psObj, true);
 	}
 	psDestroyedObj.clear();

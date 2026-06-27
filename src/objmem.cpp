@@ -45,6 +45,7 @@
 #include "order.h"
 #include "wzcrashhandlingproviders.h"
 #include "world_object_state.h"
+#include "game_world.h"
 
 #include <algorithm>
 
@@ -316,6 +317,13 @@ void objmemUpdate()
 	objListIntegCheck();
 #endif
 
+	// Remove tile visibility for objects killed this tick, each against its own world's map
+	//
+	// This is done here (rather than in the object destructor) so that the correct map is used
+	// even for the inactive (offworld / home-base) world
+	flushPendingVisRemoval(gameWorld);
+	flushPendingVisRemoval(mission.gameWorld);
+
 	/* Go through the destroyed objects list looking for objects that
 	   were destroyed before this turn */
 
@@ -378,11 +386,17 @@ static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int p
 }
 
 /* Move an object from the active list to the destroyed list.
+ * \param objState is the world object state that owns the list (and the pending-vis-removal queue)
  * \param list is a pointer to the object list
- * \param del is a pointer to the object to remove
+ * \param object is a pointer to the object to remove
+ *
+ * Note: Tile visibility is NOT removed here. Instead the object is queued on
+ * objState.pendingVisRemoval and processed (against this world's own map) by
+ * flushPendingVisRemoval() at the end of the tick, so that the rest of this tick still sees
+ * the object's visibility and removal always targets the correct map
  */
 template <typename OBJECT, size_t PlayerCount = MAX_PLAYERS>
-static inline void destroyObject(PerPlayerObjectLists<OBJECT, PlayerCount>& list, OBJECT* object)
+static inline void destroyObject(WorldObjectState& objState, PerPlayerObjectLists<OBJECT, PlayerCount>& list, OBJECT* object)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
 	ASSERT_OR_RETURN(, object->player < PlayerCount, "Invalid player index: %d", object->player);
@@ -398,10 +412,23 @@ static inline void destroyObject(PerPlayerObjectLists<OBJECT, PlayerCount>& list
 		// Prepend the object to the destruction list
 		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
 
+		// Queue tile-visibility removal against this world's map (done at end of tick)
+		objState.pendingVisRemoval.emplace_back((BASE_OBJECT*)object);
+
 		// Set destruction time
 		object->died = gameTime;
 	}
 	scriptRemoveObject(object);
+}
+
+/* Remove tile visibility for objects killed this tick in the given world, against that world's own map */
+void flushPendingVisRemoval(GameWorld& world)
+{
+	for (BASE_OBJECT* psObj : world.objects.pendingVisRemoval)
+	{
+		visRemoveVisibility(psObj, world.map);
+	}
+	world.objects.pendingVisRemoval.clear();
 }
 
 /* Remove an object from the active list
@@ -517,7 +544,7 @@ void killDroid(DROID *psDel, WorldObjectState& objState)
 		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psDel, 0);
 	}
 
-	destroyObject(objState.droids, psDel);
+	destroyObject(objState, objState.droids, psDel);
 }
 
 template <typename EntityType>
@@ -571,8 +598,15 @@ struct GlobalEntityContainerTraits<FEATURE>
 	}
 };
 
+// Frees every object in entityLists directly (bypassing the kill*()/destroyObject() path)
+//
+// These objects are deleted immediately, so their tile visibility must be removed first or
+// the BASE_OBJECT destructor's "watchedTiles empty" assert would trip
+//
+// When map is non-null the removal updates that map's counters,
+// when map is null (e.g. limbo droids, with no associated map) visibility is just cleared
 template <typename Entity, unsigned PlayerCount>
-static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists)
+static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists, WorldMapState* map)
 {
 	using Traits = GlobalEntityContainerTraits<Entity>;
 	auto& entityContainer = Traits::getContainer();
@@ -580,6 +614,14 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 	{
 		for (auto* ent : list)
 		{
+			if (map != nullptr)
+			{
+				visRemoveVisibility((BASE_OBJECT*)ent, *map);
+			}
+			else
+			{
+				visRemoveVisibilityOffWorld((BASE_OBJECT*)ent);
+			}
 			auto it = entityContainer.find(*ent);
 			if (it == entityContainer.end()) {
 				ASSERT(false, "%s not found in the global container!", Traits::entityName());
@@ -594,7 +636,9 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 /* Remove all droids */
 void freeAllDroids(GameWorld& world)
 {
-	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(world.objects.droids);
+	// objects killed but not yet vis-removed would be stranded by the world teardown - flush first
+	flushPendingVisRemoval(world);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(world.objects.droids, &world.map);
 }
 
 /*Remove a single Droid from a list*/
@@ -627,7 +671,8 @@ void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids()
 {
-	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsLimboDroids);
+	// limbo droids have no associated map; their tile visibility was already removed off-world
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsLimboDroids, nullptr);
 }
 
 /**************************  STRUCTURE  *******************************/
@@ -704,13 +749,15 @@ void killStruct(STRUCTURE *psBuilding, WorldObjectState& objState)
 		}
 	}
 
-	destroyObject(objState.structures, psBuilding);
+	destroyObject(objState, objState.structures, psBuilding);
 }
 
 /* Remove heapall structures */
 void freeAllStructs(GameWorld& world)
 {
-	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(world.objects.structures);
+	// objects killed but not yet vis-removed would be stranded by the world teardown - flush first
+	flushPendingVisRemoval(world);
+	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(world.objects.structures, &world.map);
 }
 
 /*Remove a single Structure from a list*/
@@ -752,7 +799,7 @@ void killFeature(FEATURE *psDel, WorldObjectState& objState)
 	ASSERT(psDel->type == OBJ_FEATURE,
 	       "killFeature: pointer is not a feature");
 	psDel->player = 0;
-	destroyObject(objState.features, psDel);
+	destroyObject(objState, objState.features, psDel);
 
 	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
@@ -763,7 +810,9 @@ void killFeature(FEATURE *psDel, WorldObjectState& objState)
 /* Remove all features */
 void freeAllFeatures(GameWorld& world)
 {
-	freeAllEntitiesImpl<FEATURE, 1>(world.objects.features);
+	// objects killed but not yet vis-removed would be stranded by the world teardown - flush first
+	flushPendingVisRemoval(world);
+	freeAllEntitiesImpl<FEATURE, 1>(world.objects.features, &world.map);
 }
 
 /**************************  FLAG_POSITION ********************************/
