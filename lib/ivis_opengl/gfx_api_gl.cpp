@@ -306,6 +306,8 @@ static GLenum to_gl(const gfx_api::primitive_type& primitive)
 			return GL_TRIANGLES;
 		case gfx_api::primitive_type::triangle_strip:
 			return GL_TRIANGLE_STRIP;
+		case gfx_api::primitive_type::patch_list_4:
+			return GL_PATCHES;
 		default:
 			debug(LOG_FATAL, "Unrecognised primitive type");
 	}
@@ -853,6 +855,9 @@ struct program_data
 	std::string fragment_file;
 	std::vector<std::string> uniform_names;
 	std::vector<std::tuple<std::string, GLint>> additional_samplers = {};
+	// optional tessellation stages (require supportsTessellationShaders() and shaders targeting GLSL >= 4.00 core)
+	std::string tess_control_file = {};
+	std::string tess_evaluation_file = {};
 };
 
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
@@ -967,6 +972,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "texture" } }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, program_data{ "Debug texture array quad program", "shaders/quad_texture2darray.vert", "shaders/quad_texture2darray.frag",
 		{ "transformationMatrix", "uvTransformMatrix", "swizzle", "color", "layer", "texture" } }),
+	std::make_pair(SHADER_DEBUG_TESS_QUAD, program_data{ "Debug tessellated quad program", "shaders/tess_quad.vert", "shaders/tess_quad.frag",
+		{ "transformationMatrix", "color", "tessLevel" }, {},
+		"shaders/tess_quad.tesc", "shaders/tess_quad.tese" }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
 		{ "gamma" } })
 };
@@ -1187,7 +1195,12 @@ gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmen
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
+	std::string tessShaderHeader;
 	std::string fragmentShaderHeader;
+
+	const program_data& programInfo = shader_to_file_table.at(createInfo.shader_mode);
+	const bool hasTessStages = !programInfo.tess_control_file.empty() || !programInfo.tess_evaluation_file.empty();
+	ASSERT(!hasTessStages || ctx.supportsTessellationShaders(), "Tessellation pipeline requested without tessellation support: %s", programInfo.friendly_name.c_str());
 
 	if (!ctx.gles)
 	{
@@ -1197,6 +1210,29 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
+
+		if (hasTessStages)
+		{
+#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (GLAD_GL_VERSION_4_0)
+#else
+			if (false)
+#endif
+			{
+				// Tessellation stages are core with GLSL >= 4.00, and all stages of the program must match versions
+				const char *tessVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLContext(VERSION_400_CORE, VERSION_410_CORE));
+				vertexShaderHeader = tessVersionStr;
+				tessShaderHeader = tessVersionStr;
+				fragmentShaderHeader = tessVersionStr;
+			}
+			else
+			{
+				// GL < 4.0 with GL_ARB_tessellation_shader: keep the context's GLSL version,
+				// and enable the extension in the tessellation stages
+				tessShaderHeader = shaderVersionStr;
+				tessShaderHeader += "#extension GL_ARB_tessellation_shader : require\n";
+			}
+		}
 	}
 	else
 	{
@@ -1225,13 +1261,16 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 
 	build_program(ctx,
 				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
-				  shader_to_file_table.at(createInfo.shader_mode).friendly_name,
+				  programInfo.friendly_name,
 				  vertexShaderHeader.c_str(),
-				  shader_to_file_table.at(createInfo.shader_mode).vertex_file,
+				  programInfo.vertex_file,
+				  tessShaderHeader.c_str(),
+				  programInfo.tess_control_file,
+				  programInfo.tess_evaluation_file,
 				  fragmentShaderHeader.c_str(),
-				  shader_to_file_table.at(createInfo.shader_mode).fragment_file,
-				  shader_to_file_table.at(createInfo.shader_mode).uniform_names,
-				  shader_to_file_table.at(createInfo.shader_mode).additional_samplers,
+				  programInfo.fragment_file,
+				  programInfo.uniform_names,
+				  programInfo.additional_samplers,
 				  mipLodBias, shadowConstants);
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
@@ -1259,6 +1298,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_binding_entry<SHADER_TEXT>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>(),
+		uniform_binding_entry<SHADER_DEBUG_TESS_QUAD>(),
 		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>()
 	};
 
@@ -1739,6 +1779,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 											 bool patchFragmentShaderMipLodBias,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
+											 const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames,
 											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
@@ -1815,6 +1856,48 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 			ctx.wzGLObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 #endif
 		}
+	}
+
+	// optional tessellation stages
+	auto compileSimpleStage = [&](GLenum stageType, const char* stage_header, const std::string& stagePath, const char* stageTypeName, GLuint& outShader) -> bool {
+		std::string stageContents = readShaderBuf(stagePath);
+		if (stageContents.empty())
+		{
+			debug(LOG_ERROR, "Failed to read %s shader [%s]", stageTypeName, stagePath.c_str());
+			return false;
+		}
+		GLuint shader = glCreateShader(stageType);
+		outShader = shader;
+
+		const char* ShaderStrings[2] = { stage_header, stageContents.c_str() };
+
+		glShaderSource(shader, 2, ShaderStrings, nullptr);
+		glCompileShader(shader);
+
+		// Check for compilation errors
+		GLint stageStatus = GL_FALSE;
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &stageStatus);
+		if (!stageStatus)
+		{
+			debug(LOG_ERROR, "%s shader compilation has failed [%s]", stageTypeName, stagePath.c_str());
+			printShaderInfoLog(LOG_ERROR, shader);
+			return false;
+		}
+		printShaderInfoLog(LOG_3D, shader);
+		glAttachShader(program, shader);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+		ctx.wzGLObjectLabel(GL_SHADER, shader, -1, stagePath.c_str());
+#endif
+		return true;
+	};
+
+	if (success && !tessControlPath.empty())
+	{
+		success = compileSimpleStage(GL_TESS_CONTROL_SHADER, tess_header, tessControlPath, "Tessellation control", tessControlShader);
+	}
+	if (success && !tessEvalPath.empty())
+	{
+		success = compileSimpleStage(GL_TESS_EVALUATION_SHADER, tess_header, tessEvalPath, "Tessellation evaluation", tessEvalShader);
 	}
 
 	std::vector<std::string> duplicateFragmentUniformNames;
@@ -2073,6 +2156,8 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
 gl_pipeline_state_object::~gl_pipeline_state_object()
 {
 	if (this->vertexShader) glDeleteShader(this->vertexShader);
+	if (this->tessControlShader) glDeleteShader(this->tessControlShader);
+	if (this->tessEvalShader) glDeleteShader(this->tessEvalShader);
 	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
 	glDeleteProgram(this->program);
 }
@@ -2367,6 +2452,13 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(3, cbuf.color);
 	setUniforms(4, cbuf.layer);
 	setUniforms(5, cbuf.texture);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.color);
+	setUniforms(2, cbuf.tessLevel);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
@@ -2925,10 +3017,30 @@ void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<
 	current_program->set_uniforms(first, uniform_blocks);
 }
 
+bool gl_context::ensurePatchVertices4()
+{
+	ASSERT_OR_RETURN(false, hasTessellationSupport, "Tessellation is unavailable");
+#if !defined(WZ_STATIC_GL_BINDINGS)
+	// GL_PATCH_VERTICES is context state (and nothing else sets it) - set once
+	if (!patchVertices4Set)
+	{
+		glPatchParameteri(GL_PATCH_VERTICES, 4);
+		patchVertices4Set = true;
+	}
+	return true;
+#else
+	return false;
+#endif
+}
+
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset (%zu) exceeds GLint max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
+	if (primitive == gfx_api::primitive_type::patch_list_4)
+	{
+		ASSERT_OR_RETURN(, ensurePatchVertices4(), "Tessellation is unavailable");
+	}
 	glDrawArrays(to_gl(primitive), static_cast<GLint>(offset), static_cast<GLsizei>(count));
 }
 
@@ -2944,6 +3056,10 @@ void gl_context::draw_instanced(const std::size_t& offset, const std::size_t &co
 void gl_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
 {
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
+	if (primitive == gfx_api::primitive_type::patch_list_4)
+	{
+		ASSERT_OR_RETURN(, ensurePatchVertices4(), "Tessellation is unavailable");
+	}
 	glDrawElements(to_gl(primitive), static_cast<GLsizei>(count), to_gl(index), reinterpret_cast<void*>(offset));
 }
 
@@ -2981,6 +3097,12 @@ int32_t gl_context::get_context_value(const context_value property)
 	{
 		case gfx_api::context::context_value::MAX_SAMPLES:
 			return maxMultiSampleBufferFormatSamples;
+		case gfx_api::context::context_value::MAX_TESS_GEN_LEVEL:
+			if (hasTessellationSupport)
+			{
+				glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &value);
+			}
+			return value;
 		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
 			// special-handling for MAX_VERTEX_OUTPUT_COMPONENTS
 #if !defined(__EMSCRIPTEN__)
@@ -3549,6 +3671,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	hasInstancedRenderingSupport = initInstancedFunctions();
 	debug(LOG_INFO, "  * Instanced rendering support %s detected", hasInstancedRenderingSupport ? "was" : "was NOT");
 	hasBorderClampSupport = initCheckBorderClampSupport();
+	hasTessellationSupport = initTessellationSupport();
+	debug(LOG_INFO, "  * Tessellation shader support %s detected", hasTessellationSupport ? "was" : "was NOT");
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -5222,6 +5346,33 @@ bool gl_context::initInstancedFunctions()
 	}
 #endif
 	return true;
+}
+
+bool gl_context::initTessellationSupport()
+{
+#if defined(WZ_OS_MAC)
+	// Apple's OpenGL tessellation implementation is notoriously problematic
+	// macOS gets tessellation via Vulkan (MoltenVK), or falls back
+	return false;
+#elif defined(WZ_STATIC_GL_BINDINGS)
+	return false;
+#else
+	if (gles)
+	{
+		// GLES: excluded (ES 3.2 / EXT_tessellation_shader support with the current loader is unverified)
+		return false;
+	}
+	if (!GLAD_GL_VERSION_4_0 && !GLAD_GL_ARB_tessellation_shader)
+	{
+		return false;
+	}
+	return glPatchParameteri != nullptr;
+#endif
+}
+
+bool gl_context::supportsTessellationShaders() const
+{
+	return hasTessellationSupport;
 }
 
 bool gl_context::initCheckBorderClampSupport()
