@@ -330,10 +330,6 @@ static GLenum to_gl(const gfx_api::context::context_value property)
 {
 	switch (property)
 	{
-		case gfx_api::context::context_value::MAX_ELEMENTS_VERTICES:
-			return GL_MAX_ELEMENTS_VERTICES;
-		case gfx_api::context::context_value::MAX_ELEMENTS_INDICES:
-			return GL_MAX_ELEMENTS_INDICES;
 		case gfx_api::context::context_value::MAX_TEXTURE_SIZE:
 			return GL_MAX_TEXTURE_SIZE;
 		case gfx_api::context::context_value::MAX_SAMPLES:

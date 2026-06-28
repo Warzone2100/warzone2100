@@ -319,10 +319,6 @@ int32_t null_context::get_context_value(const context_value property)
 	// provide some fake, large-enough values to avoid issues
 	switch(property)
 	{
-		case gfx_api::context::context_value::MAX_ELEMENTS_VERTICES:
-			return 32000;
-		case gfx_api::context::context_value::MAX_ELEMENTS_INDICES:
-			return 32000;
 		case gfx_api::context::context_value::MAX_TEXTURE_SIZE:
 			return 4096;
 		case gfx_api::context::context_value::MAX_SAMPLES:
