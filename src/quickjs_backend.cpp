@@ -194,6 +194,12 @@ struct JSToJsonContext
 	{
 		return stack.empty();
 	}
+
+	// For safety, we really don't want JSToJsonContext to be copied or moved (just passed down through a function hierarchy)
+	JSToJsonContext(const JSToJsonContext&) = delete;
+	JSToJsonContext& operator=(const JSToJsonContext&) = delete;
+	JSToJsonContext(JSToJsonContext&&) = delete;
+	JSToJsonContext& operator=(JSToJsonContext&&) = delete;
 };
 
 // Reserved JSON keys used to encode rich JS values (class instances, shared references) within the otherwise-plain-JSON global save format.
