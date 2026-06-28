@@ -166,8 +166,8 @@ static std::unique_ptr<Sector[]> sectors;
 /// (may be clamped down to fit GL_MAX_ELEMENTS_* limits, which depend on the
 /// subdivision factor - so it must not carry over from a previous map load)
 static int sectorSize = PREFERRED_SECTOR_SIZE;
-/// Requested mesh subdivision factor (applied on the next initTerrain)
-static int terrainSubdivisionSetting = 1;
+/// Requested mesh subdivision factor (0 = uninitialized - pick default on first run)
+static int terrainSubdivisionSetting = 0;
 /// The mesh subdivision factor the current buffers were built with (1 = legacy geometry)
 static int terrainSubdivision = 1;
 /// What is the distance we can see
@@ -842,6 +842,19 @@ void dirtyAllSectors()
 	}
 }
 
+static TerrainShaderQuality determineDefaultTerrainQuality();
+
+/// The subdivision factor the next terrain (re)build will actually use
+static int effectiveTerrainMeshSubdivision()
+{
+	int factor = (terrainSubdivisionSetting > 0) ? terrainSubdivisionSetting : 1;
+	if (terrainShaderQuality == TerrainShaderQuality::CLASSIC)
+	{
+		factor = 1; // preserve the classic low-poly appearance
+	}
+	return factor;
+}
+
 bool setTerrainMeshSubdivision(int factor)
 {
 	if (factor < 1 || factor > MAX_TERRAIN_MESH_SUBDIVISION)
@@ -850,12 +863,38 @@ bool setTerrainMeshSubdivision(int factor)
 		return false;
 	}
 	terrainSubdivisionSetting = factor;
+	// apply live when in-game: buffer sizes change with the factor, so this
+	// needs a full terrain re-init, not just dirty sectors
+	if (terrainInitialised && effectiveTerrainMeshSubdivision() != terrainSubdivision)
+	{
+		if (!initTerrain(gameWorld.map))
+		{
+			debug(LOG_ERROR, "Failed to re-initialize terrain for mesh subdivision change");
+			return false;
+		}
+	}
 	return true;
 }
 
 int getTerrainMeshSubdivision()
 {
 	return terrainSubdivisionSetting;
+}
+
+static int determineDefaultTerrainMeshSubdivision()
+{
+	// Subdivision multiplies terrain vertex data and map load time, so be
+	// conservative on the systems the terrain quality heuristic already flags
+	// as lower-spec (RAM / VRAM / renderer / 32-bit checks).
+#if defined(__EMSCRIPTEN__)
+	return 2;
+#else
+	if (determineDefaultTerrainQuality() != TerrainShaderQuality::NORMAL_MAPPING)
+	{
+		return 1;
+	}
+	return 3;
+#endif
 }
 
 float getTerrainVisualObjectHeightDelta(WorldMapState& mapState, int x, int y, int z)
@@ -1226,7 +1265,8 @@ bool initTerrain(WorldMapState& mapState)
 	// subdivision factor, so a clamped value must not leak into the next map load
 	sectorSize = PREFERRED_SECTOR_SIZE;
 
-	terrainSubdivision = terrainSubdivisionSetting;
+	// apply the effective mesh subdivision factor (setting + Classic policy)
+	terrainSubdivision = effectiveTerrainMeshSubdivision();
 	debug(LOG_TERRAIN, "terrain mesh subdivision factor: %d", terrainSubdivision);
 	const int N = terrainSubdivision;
 
@@ -2259,6 +2299,16 @@ bool setTerrainShaderQuality(TerrainShaderQuality newValue, bool force, bool for
 		{
 			reloadTerrainTextures();
 		}
+
+		// switching to/from Classic can change the effective mesh subdivision -
+		// buffer sizes change with it, so this needs a full terrain re-init
+		if (terrainInitialised && effectiveTerrainMeshSubdivision() != terrainSubdivision)
+		{
+			if (!initTerrain(gameWorld.map))
+			{
+				debug(LOG_ERROR, "Failed to re-initialize terrain for mesh subdivision change");
+			}
+		}
 	}
 
 	return success;
@@ -2417,6 +2467,11 @@ void initTerrainShaderType()
 	if (maxTerrainMappingTextureSize == 0)
 	{
 		maxTerrainMappingTextureSize = determineDefaultTerrainMappingTextureSize();
+	}
+	if (getTerrainMeshSubdivision() == 0)
+	{
+		setTerrainMeshSubdivision(determineDefaultTerrainMeshSubdivision());
+		debug(LOG_INFO, "Defaulting terrain detail to: %d", getTerrainMeshSubdivision());
 	}
 	setTerrainShaderQuality(terrainShaderQuality, true); // checks and resets unsupported values
 }
