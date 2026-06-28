@@ -989,6 +989,11 @@ struct JsonToJSContext
 			JS_FreeValue(ctx, kv.second);
 		}
 	}
+
+	JsonToJSContext(const JsonToJSContext&) = delete;
+	JsonToJSContext& operator=(const JsonToJSContext&) = delete;
+	JsonToJSContext(JsonToJSContext&&) = delete;
+	JsonToJSContext& operator=(JsonToJSContext&&) = delete;
 };
 
 // Resolves the prototype object for a script-defined class by name.
