@@ -155,17 +155,10 @@ static gfx_api::buffer *terrainDecalVBO = nullptr, *terrainDecalIndexVBO = nullp
 /// The amount we shift the water textures so the waves appear to be moving
 static float waterOffset;
 
-/// These are properties of your videocard and hardware
-static int32_t GLmaxElementsVertices, GLmaxElementsIndices;
-
 /// The sectors are stored here
 static std::unique_ptr<Sector[]> sectors;
-/// The preferred sector size (a sector is sectorSize x sectorSize)
-#define PREFERRED_SECTOR_SIZE 15
-/// The sector size in use, recomputed from PREFERRED_SECTOR_SIZE each initTerrain
-/// (may be clamped down to fit GL_MAX_ELEMENTS_* limits, which depend on the
-/// subdivision factor - so it must not carry over from a previous map load)
-static int sectorSize = PREFERRED_SECTOR_SIZE;
+/// The sector size (a sector is sectorSize x sectorSize tiles)
+static constexpr int sectorSize = 15;
 /// Requested mesh subdivision factor (0 = uninitialized - pick default on first run)
 static int terrainSubdivisionSetting = 0;
 /// The mesh subdivision factor the current buffers were built with (1 = legacy geometry)
@@ -183,11 +176,11 @@ static std::vector<gfx_api::TerrainDecalVertex> terrainDecalVertexUpdateBuffer;
 /// Helper to specify the offset in a VBO
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 
-/// Helper variables for the DrawRangeElements functions
-GLuint dreStart, dreEnd, dreOffset;
-GLsizei dreCount;
-/// Are we actually drawing something using the DrawRangeElements functions?
-bool drawRangeElementsStarted = false;
+/// Helper variables for the draw-elements batching functions
+static GLuint batchedIndexOffset;
+static GLsizei batchedIndexCount;
+/// Are we accumulating a draw-elements batch?
+static bool drawElementsBatchActive = false;
 
 TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::UNINITIALIZED_PICK_DEFAULT;
 bool initializedTerrainShaderType = false;
@@ -197,68 +190,34 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 
 #define MIN_TERRAIN_TEXTURE_SIZE 512
 
-/// Pass all remaining triangles to OpenGL
+/// Pass the accumulated batch to the graphics backend
 template<typename PSO>
-static void finishDrawRangeElements()
+static void flushDrawElementsBatch()
 {
-	if (drawRangeElementsStarted && dreCount > 0)
+	if (drawElementsBatchActive && batchedIndexCount > 0)
 	{
-		ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", (int)(dreEnd - dreStart + 1));
-		ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)dreCount);
-		PSO::get().draw_elements(dreCount, sizeof(GLuint)*dreOffset);
+		PSO::get().draw_elements(batchedIndexCount, sizeof(GLuint)*batchedIndexOffset);
 	}
-	drawRangeElementsStarted = false;
+	drawElementsBatchActive = false;
 }
 
 /**
- * Either draw the elements or batch them to be sent to OpenGL later
- * This improves performance by reducing the amount of OpenGL calls.
+ * Merge contiguous index ranges into a single draw call.
+ * This improves performance by reducing the number of draw calls.
  */
 template<typename PSO>
-static void addDrawRangeElements(GLuint start,
-                                 GLuint end,
-                                 GLsizei count,
-                                 GLuint offset)
+static void batchDrawElements(GLsizei count, GLuint offset)
 {
-
-	if (end - start + 1 > GLmaxElementsVertices)
+	if (drawElementsBatchActive && batchedIndexOffset + batchedIndexCount == offset)
 	{
-		debug(LOG_WARNING, "A single call provided too much vertices, will operate at reduced performance or crash. Decrease the sector size to fix this.");
-	}
-	if (count > GLmaxElementsIndices)
-	{
-		debug(LOG_WARNING, "A single call provided too much indices, will operate at reduced performance or crash. Decrease the sector size to fix this.");
-	}
-
-	if (!drawRangeElementsStarted)
-	{
-		dreStart  = start;
-		dreEnd    = end;
-		dreCount  = count;
-		dreOffset = offset;
-		drawRangeElementsStarted = true;
+		// contiguous with the current batch - append
+		batchedIndexCount += count;
 		return;
 	}
-
-	// check if we can append theoretically and
-	// check if this will not go over the bounds advised by the opengl implementation
-	if (dreOffset + dreCount != offset ||
-	    dreCount + count > GLmaxElementsIndices ||
-	    end - dreStart + 1 > GLmaxElementsVertices)
-	{
-		finishDrawRangeElements<PSO>();
-		// start anew
-		addDrawRangeElements<PSO>(start, end, count, offset);
-	}
-	else
-	{
-		// OK to append
-		dreCount += count;
-		dreEnd = end;
-	}
-	// make sure we did everything right
-	ASSERT(dreEnd - dreStart + 1 <= GLmaxElementsVertices, "too many vertices (%i)", (int)(dreEnd - dreStart + 1));
-	ASSERT(dreCount <= GLmaxElementsIndices, "too many indices (%i)", (int)(dreCount));
+	flushDrawElementsBatch<PSO>();
+	batchedIndexOffset = offset;
+	batchedIndexCount = count;
+	drawElementsBatchActive = true;
 }
 
 
@@ -1258,76 +1217,12 @@ bool initTerrain(WorldMapState& mapState)
 	int waterSize, waterIndexSize;
 	GLuint *geometryIndex = nullptr;
 	GLuint *waterIndex = nullptr;
-	int maxSectorSizeIndices, maxSectorSizeVertices;
-	bool decreasedSize = false;
-
-	// start from the preferred sector size: the clamping below depends on the
-	// subdivision factor, so a clamped value must not leak into the next map load
-	sectorSize = PREFERRED_SECTOR_SIZE;
 
 	// apply the effective mesh subdivision factor (setting + Classic policy)
 	terrainSubdivision = effectiveTerrainMeshSubdivision();
 	debug(LOG_TERRAIN, "terrain mesh subdivision factor: %d", terrainSubdivision);
+	debug(LOG_TERRAIN, "sector size: %i", sectorSize);
 	const int N = terrainSubdivision;
-
-	// this information is useful to prevent crashes with buggy opengl implementations
-	GLmaxElementsVertices = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ELEMENTS_VERTICES);
-	GLmaxElementsIndices = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_ELEMENTS_INDICES);
-
-	// testing for crappy cards
-	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_VERTICES: %i", (int)GLmaxElementsVertices);
-	debug(LOG_TERRAIN, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
-
-	// now we know these values, determine the maximum sector size achievable
-	if (N == 1)
-	{
-		// legacy geometry:
-		// - the geometry buffer uses (sectorSize+1)^2 * 2 vertices per sector
-		// - the terrain+decal buffer uses sectorSize^2 * 5 vertices per sector
-		// - both index buffers use sectorSize^2 * 12 indices per sector
-		maxSectorSizeVertices = std::min(iSqrt(GLmaxElementsVertices / 2) - 1, iSqrt(GLmaxElementsVertices / 5));
-		maxSectorSizeIndices = iSqrt(GLmaxElementsIndices / 12);
-	}
-	else
-	{
-		// subdivided geometry:
-		// - the geometry buffer uses (sectorSize*N+1)^2 vertices per sector
-		// - the terrain+decal buffer uses sectorSize^2 * (N+1)^2 vertices per sector
-		// - both index buffers use sectorSize^2 * 6*N^2 indices per sector
-		maxSectorSizeVertices = std::min((iSqrt(GLmaxElementsVertices) - 1) / N, iSqrt(GLmaxElementsVertices) / (N + 1));
-		maxSectorSizeIndices = iSqrt(GLmaxElementsIndices / (6 * N * N));
-	}
-
-	debug(LOG_TERRAIN, "preferred sector size: %i", sectorSize);
-	debug(LOG_TERRAIN, "maximum sector size due to vertices: %i", maxSectorSizeVertices);
-	debug(LOG_TERRAIN, "maximum sector size due to indices: %i", maxSectorSizeIndices);
-
-	if (sectorSize > maxSectorSizeVertices)
-	{
-		sectorSize = maxSectorSizeVertices;
-		decreasedSize = true;
-	}
-	if (sectorSize > maxSectorSizeIndices)
-	{
-		sectorSize = maxSectorSizeIndices;
-		decreasedSize = true;
-	}
-	if (decreasedSize)
-	{
-		if (sectorSize < 1)
-		{
-			debug(LOG_WARNING, "GL_MAX_ELEMENTS_VERTICES: %i", (int)GLmaxElementsVertices);
-			debug(LOG_WARNING, "GL_MAX_ELEMENTS_INDICES:  %i", (int)GLmaxElementsIndices);
-			debug(LOG_WARNING, "maximum sector size due to vertices: %i", maxSectorSizeVertices);
-			debug(LOG_WARNING, "maximum sector size due to indices: %i", maxSectorSizeIndices);
-			debug(LOG_ERROR, "Your graphics card and/or drivers do not seem to support glDrawRangeElements, needed for the terrain renderer.");
-			debug(LOG_ERROR, "- Do other 3D games work?");
-			debug(LOG_ERROR, "- Did you install the latest drivers correctly?");
-			debug(LOG_ERROR, "- Do you have a 3D window manager (Aero/Compiz) running?");
-			return false;
-		}
-		debug(LOG_WARNING, "decreasing sector size to %i to fit graphics card constraints", sectorSize);
-	}
 
 	// +4 = +1 for iHypot rounding, +1 for sector size rounding, +2 for edge of visibility
 	terrainDistance = iHypot(visibleTiles.x / 2, visibleTiles.y / 2) + 4 + sectorSize / 2;
@@ -1800,15 +1695,13 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<gfx_api::TerrainDepth>(
-					sectors[x * ySectors + y].geometryOffset,
-					sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+				batchDrawElements<gfx_api::TerrainDepth>(
 					sectors[x * ySectors + y].geometryIndexSize,
 					sectors[x * ySectors + y].geometryIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements<gfx_api::TerrainDepth>();
+	flushDrawElementsBatch<gfx_api::TerrainDepth>();
 	if (withOffset)
 	{
 		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
@@ -1842,15 +1735,13 @@ static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<gfx_api::TerrainDepthOnlyForDepthMap>(
-					sectors[x * ySectors + y].geometryOffset,
-					sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+				batchDrawElements<gfx_api::TerrainDepthOnlyForDepthMap>(
 					sectors[x * ySectors + y].geometryIndexSize,
 					sectors[x * ySectors + y].geometryIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements<gfx_api::TerrainDepthOnlyForDepthMap>();
+	flushDrawElementsBatch<gfx_api::TerrainDepthOnlyForDepthMap>();
 //	if (withOffset)
 //	{
 //		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
@@ -1903,15 +1794,13 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<PSO>(
-					sectors[x * ySectors + y].terrainAndDecalOffset,
-					sectors[x * ySectors + y].terrainAndDecalOffset + sectors[x * ySectors + y].terrainAndDecalSize,
+				batchDrawElements<PSO>(
 					sectors[x * ySectors + y].terrainAndDecalIndexSize,
 					sectors[x * ySectors + y].terrainAndDecalIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements<PSO>();
+	flushDrawElementsBatch<PSO>();
 	PSO::get().unbind_vertex_buffers(terrainDecalVBO);
 	gfx_api::context::get().unbind_index_buffer(*terrainDecalIndexVBO);
 }
@@ -2044,15 +1933,13 @@ void drawWaterNormalImpl(const glm::mat4 &ModelViewProjection, const Vector3f &c
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<PSO>(
-				                     sectors[x * ySectors + y].geometryOffset,
-				                     sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+				batchDrawElements<PSO>(
 				                     sectors[x * ySectors + y].waterIndexSize,
 				                     sectors[x * ySectors + y].waterIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements<PSO>();
+	flushDrawElementsBatch<PSO>();
 	PSO::get().unbind_vertex_buffers(waterVBO);
 	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
 
@@ -2103,15 +1990,13 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<PSO>(
-									 sectors[x * ySectors + y].geometryOffset,
-									 sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+				batchDrawElements<PSO>(
 									 sectors[x * ySectors + y].waterIndexSize,
 									 sectors[x * ySectors + y].waterIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements<PSO>();
+	flushDrawElementsBatch<PSO>();
 	PSO::get().unbind_vertex_buffers(waterVBO);
 	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
 
@@ -2159,15 +2044,13 @@ void drawWaterClassic(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mod
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
-				addDrawRangeElements<gfx_api::WaterClassicPSO>(
-									 sectors[x * ySectors + y].geometryOffset,
-									 sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+				batchDrawElements<gfx_api::WaterClassicPSO>(
 									 sectors[x * ySectors + y].waterIndexSize,
 									 sectors[x * ySectors + y].waterIndexOffset);
 			}
 		}
 	}
-	finishDrawRangeElements<gfx_api::WaterClassicPSO>();
+	flushDrawElementsBatch<gfx_api::WaterClassicPSO>();
 	gfx_api::WaterClassicPSO::get().unbind_vertex_buffers(waterVBO);
 	gfx_api::context::get().unbind_index_buffer(*waterIndexVBO);
 

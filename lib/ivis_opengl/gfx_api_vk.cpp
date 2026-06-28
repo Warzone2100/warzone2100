@@ -6994,10 +6994,6 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 {
 	switch(property)
 	{
-		case gfx_api::context::context_value::MAX_ELEMENTS_VERTICES:
-			return 32000;
-		case gfx_api::context::context_value::MAX_ELEMENTS_INDICES:
-			return 32000;
 		case gfx_api::context::context_value::MAX_TEXTURE_SIZE:
 			return physDeviceProps.limits.maxImageDimension2D;
 		case gfx_api::context::context_value::MAX_SAMPLES:
