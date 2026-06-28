@@ -319,6 +319,42 @@ static bool isOwnAccessorProperty(JSContext* ctx, JSValue obj, JSAtom atom)
 	return isAccessor;
 }
 
+// If `value` is an instance of a built-in exotic type (Map/Set/Date/RegExp/typed array/...),
+// this function returns its constructor name.
+//
+// Such objects currently serialize to an essentially empty object (i.e. their contents are lost)
+// because their internal state does not live in own properties, and specialized handling would be
+// required to round-trip them properly.
+//
+// Returns empty for plain objects and script-defined classes (which are handled separately).
+// Used purely to emit a diagnostic for script authors.
+static std::string getBuiltinExoticClassName(JSToJsonContext& c, JSValue value)
+{
+	JSContext* ctx = c.ctx;
+	JSValue proto = JS_GetPrototype(ctx, value);
+	if (!JS_IsObject(proto) || JS_SameValueZero(ctx, proto, c.objectProto()))
+	{
+		JS_FreeValue(ctx, proto);
+		return std::string();
+	}
+	std::string result;
+	JSValue ctor = JS_GetPropertyStr(ctx, proto, "constructor");
+	if (JS_IsConstructor(ctx, ctor))
+	{
+		JSValue nameVal = JS_GetPropertyStr(ctx, ctor, "name");
+		const char* nameStr = JS_ToCString(ctx, nameVal);
+		if (nameStr && nameStr[0] != '\0' && isBuiltinConstructorName(nameStr))
+		{
+			result = nameStr;
+		}
+		if (nameStr) { JS_FreeCString(ctx, nameStr); }
+		JS_FreeValue(ctx, nameVal);
+	}
+	JS_FreeValue(ctx, ctor);
+	JS_FreeValue(ctx, proto);
+	return result;
+}
+
 // NOTE: May throw if there is a circular reference!
 nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
@@ -4149,6 +4185,14 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				else
 				{
 					j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_OBJECT;
+					// Warn script authors when a built-in exotic object (Map/Set/Date/...) is
+					// being saved: its internal state lives in internal slots, not own
+					// properties, so it degrades to an (essentially empty) plain object.
+					std::string builtinName = getBuiltinExoticClassName(c, value);
+					if (!builtinName.empty())
+					{
+						debug(LOG_SCRIPT, "Cannot fully save script global of built-in type \"%s\": its internal state is not serializable; it will be restored as a plain object (%zu own propert%s preserved)", builtinName.c_str(), static_cast<size_t>(data.size()), (data.size() == 1) ? "y" : "ies");
+					}
 				}
 				j[WZ_JSON_DATA_KEY] = std::move(data);
 			}
