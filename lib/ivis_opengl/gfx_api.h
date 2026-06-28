@@ -194,6 +194,7 @@ namespace gfx_api
 		triangles,
 		triangle_strip,
 		// NOTE: Do *NOT* support triangle_fan, for portability reasons
+		patch_list_4, // 4-control-point patches (requires context::supportsTessellationShaders())
 	};
 
 	enum class index_type
@@ -367,6 +368,7 @@ namespace gfx_api
 			MAX_ARRAY_TEXTURE_LAYERS,
 			MAX_VERTEX_ATTRIBS,
 			MAX_VERTEX_OUTPUT_COMPONENTS,
+			MAX_TESS_GEN_LEVEL, // 0 if supportsTessellationShaders() is false
 		};
 
 		enum class swap_interval_mode
@@ -525,6 +527,8 @@ namespace gfx_api
 
 		/// Monotonic counter bumped when render-graph topology inputs change (resize, depth passes, swapchain recreate, etc.).
 		uint64_t getRenderGraphEpoch() const { return _renderGraphEpoch; }
+		// tessellation shader support (primitive_type::patch_list_4 + TCS/TES pipeline stages)
+		virtual bool supportsTessellationShaders() const { return false; }
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -1426,6 +1430,21 @@ namespace gfx_api
 		vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
 	>,
 	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d_array>>, SHADER_DEBUG_TEXTURE2DARRAY_QUAD>;
+
+	template<>
+	struct constant_buffer_type<SHADER_DEBUG_TESS_QUAD>
+	{
+		glm::mat4 transform_matrix;
+		glm::vec4 color;
+		float tessLevel;
+	};
+
+	// Dev-only tessellation smoke-test pipeline (only usable when context::supportsTessellationShaders())
+	using DebugDrawTessQuad = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::patch_list_4, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_DEBUG_TESS_QUAD>>,
+	std::tuple<
+		vertex_buffer_description<sizeof(glm::vec2), gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
+	>, notexture, SHADER_DEBUG_TESS_QUAD>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WORLD_TO_SCREEN>

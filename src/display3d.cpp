@@ -4651,4 +4651,6 @@ void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext&)
 	{
 		showDroidPaths(gameWorld);
 	}
+
+	pie_DebugDrawTessellationTestPatch(); // dev-only (no-op unless WZ_DEBUG_TESS_TEST=1)
 }

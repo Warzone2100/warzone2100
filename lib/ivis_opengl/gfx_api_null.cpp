@@ -329,6 +329,8 @@ int32_t null_context::get_context_value(const context_value property)
 			return 16;
 		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
 			return 64;
+		case gfx_api::context::context_value::MAX_TESS_GEN_LEVEL:
+			return 0; // no tessellation support
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;
