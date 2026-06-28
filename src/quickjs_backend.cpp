@@ -296,6 +296,29 @@ static std::string getSerializableClassName(JSToJsonContext& c, JSValue value)
 	return result;
 }
 
+// Returns true if `atom` is an own accessor (getter/setter) property of `obj`.
+//
+// Such properties are skipped when serializing globals: the getter/setter are arbitrary
+// closures that cannot be serialized, and snapshotting the getter's current value as plain
+// data would be misleading (it would mask a prototype accessor of the same name, or freeze
+// derived state).
+//
+// NOTE: class/prototype accessors are not "own" and are unaffected.
+static bool isOwnAccessorProperty(JSContext* ctx, JSValue obj, JSAtom atom)
+{
+	JSPropertyDescriptor desc;
+	int ret = JS_GetOwnProperty(ctx, &desc, obj, atom);
+	if (ret != 1)
+	{
+		return false; // not an own property, or an error occurred
+	}
+	bool isAccessor = (desc.flags & JS_PROP_GETSET) != 0;
+	JS_FreeValue(ctx, desc.value);
+	JS_FreeValue(ctx, desc.getter);
+	JS_FreeValue(ctx, desc.setter);
+	return isAccessor;
+}
+
 // NOTE: May throw if there is a circular reference!
 nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
@@ -4093,6 +4116,12 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				std::string className = getSerializableClassName(c, value);
 				nlohmann::json data = nlohmann::json::object();
 				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &data](const char *key, JSAtom &atom) {
+					if (isOwnAccessorProperty(c.ctx, value, atom))
+					{
+						// can't serialize getter/setter closures
+						debug(LOG_SCRIPT, "Skipping own accessor property \"%s\" when saving script global: getter/setter closures cannot be serialized", key);
+						return;
+					}
 					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
 					std::string nameStr = key;
 					if (!JS_IsException(jsVal))
