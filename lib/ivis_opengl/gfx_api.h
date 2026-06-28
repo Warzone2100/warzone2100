@@ -362,8 +362,6 @@ namespace gfx_api
 
 		enum class context_value
 		{
-			MAX_ELEMENTS_VERTICES,
-			MAX_ELEMENTS_INDICES,
 			MAX_TEXTURE_SIZE,
 			MAX_SAMPLES, // max antialiasing
 			MAX_ARRAY_TEXTURE_LAYERS,
