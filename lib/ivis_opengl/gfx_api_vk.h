@@ -391,6 +391,8 @@ struct VkPSO final
 	vk::DescriptorSetLayout textures_set_layout;
 	vk::PipelineLayout layout;
 	vk::ShaderModule vertexShader;
+	vk::ShaderModule tessControlShader; // optional (only for tessellation pipelines)
+	vk::ShaderModule tessEvalShader; // optional (only for tessellation pipelines)
 	vk::ShaderModule fragmentShader;
 	vk::Device dev;
 	const WZ_vk::DispatchLoaderDynamic* pVkDynLoader;
@@ -406,7 +408,7 @@ private:
 
 	vk::ShaderModule get_module(const std::string& name, const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 
-	static std::array<vk::PipelineShaderStageCreateInfo, 2> get_stages(const vk::ShaderModule& vertexModule, const vk::ShaderModule& fragmentModule);
+	static std::vector<vk::PipelineShaderStageCreateInfo> get_stages(const vk::ShaderModule& vertexModule, const vk::ShaderModule& tessControlModule, const vk::ShaderModule& tessEvalModule, const vk::ShaderModule& fragmentModule);
 
 	static std::array<vk::PipelineColorBlendAttachmentState, 1> to_vk(const REND_MODE& blend_state, const uint8_t& color_mask);
 
@@ -991,6 +993,8 @@ public:
 	virtual size_t maxFramesInFlight() const override;
 	virtual gfx_api::lighting_constants getShadowConstants() override;
 	virtual bool setShadowConstants(gfx_api::lighting_constants values) override;
+	// tessellation shaders
+	virtual bool supportsTessellationShaders() const override;
 	// instanced rendering APIs
 	virtual bool supportsInstancedRendering() override;
 	virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const gfx_api::primitive_type &primitive, std::size_t instance_count) override;

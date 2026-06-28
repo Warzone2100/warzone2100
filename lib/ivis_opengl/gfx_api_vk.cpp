@@ -1233,6 +1233,11 @@ struct shader_infos
 	bool specializationConstant_2_shadowFilterSize = false;
 	bool specializationConstant_3_shadowCascadesCount = false;
 	bool specializationConstant_4_pointLightEnabled = false;
+	// optional tessellation stages (requires supportsTessellationShaders())
+	std::string tessControlSpv = {};
+	std::string tessEvalSpv = {};
+
+	bool hasTessellationStages() const { return !tessControlSpv.empty() || !tessEvalSpv.empty(); }
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
@@ -1261,7 +1266,8 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_TEXT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/text.frag.spv" }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/world_to_screen.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
-	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" })
+	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" }),
+	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
 };
 
 std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
@@ -1293,18 +1299,37 @@ vk::ShaderModule VkPSO::get_module(const std::string& name, const WZ_vk::Dispatc
 	);
 }
 
-std::array<vk::PipelineShaderStageCreateInfo, 2> VkPSO::get_stages(const vk::ShaderModule& vertexModule, const vk::ShaderModule& fragmentModule)
+std::vector<vk::PipelineShaderStageCreateInfo> VkPSO::get_stages(const vk::ShaderModule& vertexModule, const vk::ShaderModule& tessControlModule, const vk::ShaderModule& tessEvalModule, const vk::ShaderModule& fragmentModule)
 {
-	return std::array<vk::PipelineShaderStageCreateInfo, 2> {
+	std::vector<vk::PipelineShaderStageCreateInfo> stages;
+	stages.push_back(
 		vk::PipelineShaderStageCreateInfo()
 			.setModule(vertexModule)
 			.setPName("main")
-			.setStage(vk::ShaderStageFlagBits::eVertex),
+			.setStage(vk::ShaderStageFlagBits::eVertex));
+	if (tessControlModule)
+	{
+		stages.push_back(
 			vk::PipelineShaderStageCreateInfo()
+				.setModule(tessControlModule)
+				.setPName("main")
+				.setStage(vk::ShaderStageFlagBits::eTessellationControl));
+	}
+	if (tessEvalModule)
+	{
+		stages.push_back(
+			vk::PipelineShaderStageCreateInfo()
+				.setModule(tessEvalModule)
+				.setPName("main")
+				.setStage(vk::ShaderStageFlagBits::eTessellationEvaluation));
+	}
+	// NOTE: The fragment stage must be last (specialization constants are applied to stages.back())
+	stages.push_back(
+		vk::PipelineShaderStageCreateInfo()
 			.setModule(fragmentModule)
 			.setPName("main")
-			.setStage(vk::ShaderStageFlagBits::eFragment)
-	};
+			.setStage(vk::ShaderStageFlagBits::eFragment));
+	return stages;
 }
 
 std::array<vk::PipelineColorBlendAttachmentState, 1> VkPSO::to_vk(const REND_MODE& blend_state, const uint8_t& color_mask)
@@ -1685,6 +1710,8 @@ vk::PrimitiveTopology VkPSO::to_vk(const gfx_api::primitive_type& primitive)
 		return vk::PrimitiveTopology::eTriangleList;
 	case gfx_api::primitive_type::triangle_strip:
 		return vk::PrimitiveTopology::eTriangleStrip;
+	case gfx_api::primitive_type::patch_list_4:
+		return vk::PrimitiveTopology::ePatchList;
 	// NOTE: triangle_fan is explicitly *NOT* supported, as it is not part of the Vulkan Portable Subset
 	//       (And is not supported on portability layers, like Vulkan -> DX, or Vulkan -> Metal)
 	//       See: https://www.khronos.org/vulkan/portability-initiative
@@ -1710,6 +1737,11 @@ VkPSO::VkPSO(vk::Device _dev,
 	const std::vector<gfx_api::texture_input>& texture_desc = createInfo.texture_desc;
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions = createInfo.attribute_descriptions;
 
+	const auto& shaderInfo = spv_files.at(shader_mode);
+	const bool hasTessStages = shaderInfo.hasTessellationStages();
+	ASSERT(!hasTessStages || root->supportsTessellationShaders(), "Tessellation pipeline requested without tessellation support (SHADER_MODE: %d)", (int)shader_mode);
+	ASSERT((primitive == gfx_api::primitive_type::patch_list_4) == hasTessStages, "patch_list_4 topology and tessellation stages must be used together (SHADER_MODE: %d)", (int)shader_mode);
+
 	auto layout_desc = std::vector<vk::DescriptorSetLayout>();
 
 	for (size_t i = 0; i < uniform_blocks.size(); i++)
@@ -1730,6 +1762,9 @@ VkPSO::VkPSO(vk::Device _dev,
 		layout_desc.push_back(set_layout);
 	}
 
+	// Tessellation pipelines may sample textures from the tessellation stages too
+	const auto textureStageFlags = (hasTessStages) ? vk::ShaderStageFlagBits::eAllGraphics : vk::ShaderStageFlagBits::eFragment;
+
 	auto textures_layout_desc = std::vector<vk::DescriptorSetLayoutBinding>();
 	samplers.reserve(texture_desc.size());
 	for (const auto& texture : texture_desc)
@@ -1742,7 +1777,7 @@ VkPSO::VkPSO(vk::Device _dev,
 				.setDescriptorCount(1)
 				.setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
 				.setPImmutableSamplers(&samplers.back())
-				.setStageFlags(vk::ShaderStageFlagBits::eFragment)
+				.setStageFlags(textureStageFlags)
 		);
 	}
 	textures_set_layout = dev.createDescriptorSetLayout(
@@ -1827,10 +1862,17 @@ VkPSO::VkPSO(vk::Device _dev,
 
 	const auto depthStencilState = to_vk(state_desc.depth_mode, state_desc.stencil);
 	const auto rasterizationState = to_vk(state_desc.offset, state_desc.cull);
-	const auto& shaderInfo = spv_files.at(shader_mode);
 	vertexShader = get_module(shaderInfo.vertexSpv, *pVkDynLoader);
+	if (!shaderInfo.tessControlSpv.empty())
+	{
+		tessControlShader = get_module(shaderInfo.tessControlSpv, *pVkDynLoader);
+	}
+	if (!shaderInfo.tessEvalSpv.empty())
+	{
+		tessEvalShader = get_module(shaderInfo.tessEvalSpv, *pVkDynLoader);
+	}
 	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
-	auto pipelineStages = get_stages(vertexShader, fragmentShader);
+	auto pipelineStages = get_stages(vertexShader, tessControlShader, tessEvalShader, fragmentShader);
 
 	std::vector<char> specializationConstantsDataBuffer;
 	std::vector<vk::SpecializationMapEntry> specializationEntries;
@@ -1871,15 +1913,19 @@ VkPSO::VkPSO(vk::Device _dev,
 	}
 	if (!specializationEntries.empty())
 	{
-		ASSERT(pipelineStages[1].pSpecializationInfo == nullptr, "get_stages unexpectedly set pSpecializationInfo - this will overwrite!");
+		// the fragment stage is always last in pipelineStages
+		ASSERT(pipelineStages.back().pSpecializationInfo == nullptr, "get_stages unexpectedly set pSpecializationInfo - this will overwrite!");
 		spec_info
 			.setMapEntryCount(static_cast<uint32_t>(specializationEntries.size()))
 			.setPMapEntries(specializationEntries.data())
 			.setDataSize(static_cast<uint32_t>(specializationConstantsDataBuffer.size()))
 			.setPData(specializationConstantsDataBuffer.data())
 		;
-		pipelineStages[1].setPSpecializationInfo(&spec_info);
+		pipelineStages.back().setPSpecializationInfo(&spec_info);
 	}
+
+	const auto tessellationState = vk::PipelineTessellationStateCreateInfo()
+		.setPatchControlPoints(4);
 
 	const auto pso = vk::GraphicsPipelineCreateInfo()
 		.setPColorBlendState(&color_blend_state)
@@ -1889,7 +1935,8 @@ VkPSO::VkPSO(vk::Device _dev,
 		.setPViewportState(&viewportState)
 		.setLayout(layout)
 		.setPStages(pipelineStages.data())
-		.setStageCount(2)
+		.setStageCount(static_cast<uint32_t>(pipelineStages.size()))
+		.setPTessellationState((hasTessStages) ? &tessellationState : nullptr)
 		.setSubpass(0)
 		.setPInputAssemblyState(&iassembly)
 		.setPVertexInputState(&vertex_desc)
@@ -1911,6 +1958,14 @@ VkPSO::~VkPSO()
 {
 	dev.destroyPipeline(object, nullptr, *pVkDynLoader);
 	dev.destroyShaderModule(vertexShader, nullptr, *pVkDynLoader);
+	if (tessControlShader)
+	{
+		dev.destroyShaderModule(tessControlShader, nullptr, *pVkDynLoader);
+	}
+	if (tessEvalShader)
+	{
+		dev.destroyShaderModule(tessEvalShader, nullptr, *pVkDynLoader);
+	}
 	dev.destroyShaderModule(fragmentShader, nullptr, *pVkDynLoader);
 	dev.destroyPipelineLayout(layout, nullptr, *pVkDynLoader);
 	dev.destroyDescriptorSetLayout(textures_set_layout, nullptr, *pVkDynLoader);
@@ -5155,8 +5210,10 @@ bool VkRoot::createLogicalDevice()
 	ASSERT(physDeviceFeatures.samplerAnisotropy, "samplerAnisotropy is required, but not available");
 	const auto enabledFeatures = vk::PhysicalDeviceFeatures()
 								.setSamplerAnisotropy(true)
-								.setDepthBiasClamp(physDeviceFeatures.depthBiasClamp);
-	debug(LOG_3D, "With features config: samplerAnisotropy(%d), depthBiasClamp(%d)", (int)enabledFeatures.samplerAnisotropy, (int)enabledFeatures.depthBiasClamp);
+								.setDepthBiasClamp(physDeviceFeatures.depthBiasClamp)
+								// optional - enabled if supported (not a device requirement)
+								.setTessellationShader(physDeviceFeatures.tessellationShader);
+	debug(LOG_3D, "With features config: samplerAnisotropy(%d), depthBiasClamp(%d), tessellationShader(%d)", (int)enabledFeatures.samplerAnisotropy, (int)enabledFeatures.depthBiasClamp, (int)enabledFeatures.tessellationShader);
 
 	std::string layersAsString;
 	std::for_each(layers.begin(), layers.end(), [&layersAsString](const char *layer) {
@@ -5580,6 +5637,12 @@ bool VkRoot::textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_a
 	size_t formatIdx = static_cast<size_t>(format);
 	ASSERT_OR_RETURN(false, formatIdx < texture2DFormatsSupport.size(), "Invalid format index: %zu", formatIdx);
 	return (texture2DFormatsSupport[formatIdx] & usage) == usage;
+}
+
+bool VkRoot::supportsTessellationShaders() const
+{
+	// enabled at device creation whenever the physical device supports it
+	return physDeviceFeatures.tessellationShader;
 }
 
 bool VkRoot::supportsInstancedRendering()
@@ -7005,6 +7068,8 @@ int32_t VkRoot::get_context_value(const gfx_api::context::context_value property
 			return physDeviceProps.limits.maxVertexInputAttributes;
 		case gfx_api::context::context_value::MAX_VERTEX_OUTPUT_COMPONENTS:
 			return std::min(physDeviceProps.limits.maxVertexOutputComponents, physDeviceProps.limits.maxFragmentInputComponents);
+		case gfx_api::context::context_value::MAX_TESS_GEN_LEVEL:
+			return (physDeviceFeatures.tessellationShader) ? static_cast<int32_t>(physDeviceProps.limits.maxTessellationGenerationLevel) : 0;
 	}
 	debug(LOG_FATAL, "Unsupported property");
 	return 0;

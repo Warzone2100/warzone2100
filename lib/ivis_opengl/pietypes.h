@@ -128,6 +128,7 @@ enum SHADER_MODE
 	// Debugging
 	SHADER_DEBUG_TEXTURE2D_QUAD,
 	SHADER_DEBUG_TEXTURE2DARRAY_QUAD,
+	SHADER_DEBUG_TESS_QUAD, // requires supportsTessellationShaders()
 	SHADER_MAX
 };
 
