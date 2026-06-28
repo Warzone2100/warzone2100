@@ -549,20 +549,6 @@ static void setTileDecalVertex_Subdivided(WorldMapState& mapState, int i, int j,
 	const auto hMode = groundHeightMode();
 	const TileDecalInfo info = getTileDecalInfo(mapState, i, j);
 
-	// heights on the tile's vertex grid plus a 1-sample ring, for central-difference normals
-	float hgt[MAX_TERRAIN_MESH_SUBDIVISION + 3][MAX_TERRAIN_MESH_SUBDIVISION + 3];
-	for (int a = -1; a <= N + 1; a++)
-	{
-		for (int b = -1; b <= N + 1; b++)
-		{
-			// NOTE: this expression must stay bit-identical with setSectorGeometry
-			// so the depth prepass matches the color pass
-			const float wx = (i * N + a) * step;
-			const float wy = (j * N + b) * step;
-			hgt[a + 1][b + 1] = terrainSurface::heightAt(mapState, wx, wy, hMode);
-		}
-	}
-
 	gfx_api::TerrainDecalVertex vs[(MAX_TERRAIN_MESH_SUBDIVISION + 1) * (MAX_TERRAIN_MESH_SUBDIVISION + 1)];
 	for (int a = 0; a <= N; a++)
 	{
@@ -571,16 +557,16 @@ static void setTileDecalVertex_Subdivided(WorldMapState& mapState, int i, int j,
 			auto &v = vs[a * (N + 1) + b];
 			const float tx = static_cast<float>(a) / N;
 			const float ty = static_cast<float>(b) / N;
-			// heights come from the undisplaced grid (see setSectorGeometry). The
-			// horizontal offset rounds cliff outlines
+			// heights come from the undisplaced grid (this expression must stay
+			// bit-identical with setSectorGeometry so the depth prepass matches
+			// the color pass). The horizontal offset rounds cliff outlines.
 			const float wx = (i * N + a) * step;
 			const float wy = (j * N + b) * step;
 			const Vector2f off = terrainSurface::outlineOffsetAt(mapState, wx, wy);
-			v.pos = Vector3f(wx + off.x, hgt[a + 1][b + 1], -(wy + off.y));
-			// central-difference normal from the height grid (renderer world space: z = -map y)
-			const float hx = (hgt[a + 2][b + 1] - hgt[a][b + 1]) / (2.f * step);
-			const float hy = (hgt[a + 1][b + 2] - hgt[a + 1][b]) / (2.f * step);
-			v.normal = glm::normalize(Vector3f(-hx, 1.f, hy));
+			v.pos = Vector3f(wx + off.x, terrainSurface::heightAt(mapState, wx, wy, hMode), -(wy + off.y));
+			// normals are sampled over a fixed world-space radius (independent of
+			// the mesh density) so lighting stays consistent across detail levels
+			v.normal = terrainSurface::worldNormalAt(mapState, wx, wy, hMode);
 			// bilinear decal UV between the tile's (flip/rotated) corner UVs
 			const Vector2f uvB = info.uv[0][0] + (info.uv[1][0] - info.uv[0][0]) * tx;
 			const Vector2f uvT = info.uv[0][1] + (info.uv[1][1] - info.uv[0][1]) * tx;

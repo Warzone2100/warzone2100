@@ -228,11 +228,19 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 	return smooth + (fan - smooth) * sharp;
 }
 
+// Sampling radius (in tiles) for the central-difference vertex normals.
+// This intentionally does NOT scale with the mesh subdivision factor: the
+// legacy renderer's angle-weighted normals average over roughly a tile of
+// neighborhood, and normals sampled at the (finer) subdivided mesh spacing
+// make shadow-side slopes noticeably darker as the detail setting increases.
+// A fixed radius keeps terrain lighting consistent across detail levels -
+// the value is a middle ground between the subdivided mesh spacing (1/3 tile
+// at High) and the legacy normals' averaging neighborhood (~1 tile).
+static constexpr float NORMAL_SMOOTHING_RADIUS_TILES = 0.5f;
+
 Vector3f worldNormalAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode)
 {
-	// central differences. The surface is piecewise-polynomial so a fixed
-	// fraction of a tile is plenty of resolution
-	const float eps = static_cast<float>(TILE_UNITS) / 8.f;
+	const float eps = NORMAL_SMOOTHING_RADIUS_TILES * static_cast<float>(TILE_UNITS);
 	const float hx = (heightAt(mapState, worldX + eps, worldY, mode) - heightAt(mapState, worldX - eps, worldY, mode)) / (2.f * eps);
 	const float hy = (heightAt(mapState, worldX, worldY + eps, mode) - heightAt(mapState, worldX, worldY - eps, mode)) / (2.f * eps);
 	// renderer world space: world x = map x, world z = -map y, +y up
