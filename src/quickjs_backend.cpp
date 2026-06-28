@@ -80,6 +80,7 @@
 #include "lib/framework/file.h"
 #include <unordered_map>
 #include <limits>
+#include <cmath>
 
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic push
@@ -200,15 +201,17 @@ struct JSToJsonContext
 // NOTES:
 // - Script globals are not expected to use property names beginning with "@@".
 //
-static const char* WZ_JSON_TAG_KEY    = "@@wztype"; // "class" / "object" / "array" / "ref"
+static const char* WZ_JSON_TAG_KEY    = "@@wztype"; // "class" / "object" / "array" / "ref" / "number"
 static const char* WZ_JSON_TAG_CLASS  = "class";
 static const char* WZ_JSON_TAG_OBJECT = "object";
 static const char* WZ_JSON_TAG_ARRAY  = "array";
 static const char* WZ_JSON_TAG_REF    = "ref";
+static const char* WZ_JSON_TAG_NUMBER = "number";   // a non-finite double (NaN / Infinity / -Infinity)
 static const char* WZ_JSON_ID_KEY     = "@@id";     // reference identity (int)
 static const char* WZ_JSON_CLASS_KEY  = "@@class";  // class name (string)
 static const char* WZ_JSON_DATA_KEY   = "@@data";   // own data properties (object) / elements (array)
 static const char* WZ_JSON_ARR_KEY    = "@@arr";    // on a "ref": true if the target is an array
+static const char* WZ_JSON_VALUE_KEY  = "@@value";  // on a "number": "NaN" / "Infinity" / "-Infinity"
 
 // NOTE ON SAVE FORMAT COMPATIBILITY:
 // - When tagging is enabled (the save / restore path), *every* object and array is wrapped in a tag object
@@ -972,6 +975,19 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 		if (tagIt != instance.end() && tagIt->is_string())
 		{
 			const std::string tag = tagIt->get<std::string>();
+
+			// Non-finite number (NaN / Infinity / -Infinity)
+			if (tag == WZ_JSON_TAG_NUMBER)
+			{
+				std::string token;
+				auto valIt = instance.find(WZ_JSON_VALUE_KEY);
+				if (valIt != instance.end() && valIt->is_string()) { token = valIt->get<std::string>(); }
+				double dblVal = std::numeric_limits<double>::quiet_NaN();
+				if (token == "Infinity") { dblVal = std::numeric_limits<double>::infinity(); }
+				else if (token == "-Infinity") { dblVal = -std::numeric_limits<double>::infinity(); }
+				return JS_NewFloat64(ctx, dblVal);
+			}
+
 			int id = -1;
 			auto idIt = instance.find(WZ_JSON_ID_KEY);
 			if (idIt != instance.end() && idIt->is_number_integer()) { id = idIt->get<int>(); }
@@ -4176,6 +4192,16 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			{
 				// Failed
 				debug(LOG_SCRIPT, "Failed to convert to double");
+			}
+			if (c.tag_class_instances && !std::isfinite(dblVal))
+			{
+				// JSON cannot represent NaN / Infinity (nlohmann::json serializes them as null, which would reload as undefined).
+				// Encode them as a tagged value so they round-trip. (Only done on the tagged save / restore path.)
+				nlohmann::json num = nlohmann::json::object();
+				num[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_NUMBER;
+				if (std::isnan(dblVal)) { num[WZ_JSON_VALUE_KEY] = "NaN"; }
+				else { num[WZ_JSON_VALUE_KEY] = (dblVal < 0.0) ? "-Infinity" : "Infinity"; }
+				return num;
 			}
 			return dblVal;
 		}
