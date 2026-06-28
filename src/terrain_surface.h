@@ -70,7 +70,9 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 
 /// Surface normal at a map-space position, returned in the renderer's world
 /// space (world x = map x, world z = -map y, +y up) - directly usable as a
-/// TerrainDecalVertex normal.
+/// TerrainDecalVertex normal. Sampled over a fixed world-space radius
+/// (independent of the mesh density) so terrain lighting stays consistent
+/// across Terrain Detail levels.
 Vector3f worldNormalAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode);
 
 /// Horizontal displacement of a lattice corner, in map-space world
