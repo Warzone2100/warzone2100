@@ -41,6 +41,14 @@ OptionInfo::AvailabilityResult TerrainShadingQualityAvailable(const OptionInfo&)
 	return result;
 }
 
+OptionInfo::AvailabilityResult TerrainDetailAvailable(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = (getTerrainShaderQuality() != TerrainShaderQuality::CLASSIC);
+	result.localizedUnavailabilityReason = _("Terrain Detail is not available when using terrain appearance: Classic");
+	return result;
+}
+
 OptionInfo::AvailabilityResult ShadowsEnabled(const OptionInfo&)
 {
 	OptionInfo::AvailabilityResult result;
@@ -121,6 +129,35 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				if (!setTerrainMappingTexturesMaxSize(newValue))
 				{
 					debug(LOG_ERROR, "Failed to set terrain mapping texture quality: %d", newValue);
+					return false;
+				}
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.terrainDetail", N_("Terrain Detail"), N_("The geometric detail of the terrain. Higher settings smooth the terrain mesh, at the expense of memory usage and map load time."));
+		optionInfo.addAvailabilityCondition(TerrainDetailAvailable);
+		auto valueChanger = OptionsDropdown<int32_t>::make(
+			[]() {
+				OptionChoices<int32_t> result;
+				result.choices = {
+					{ _("Off"), _("The classic, low-poly terrain mesh."), 1 },
+					{ _("Medium"), _("Smoothed terrain mesh."), 2 },
+					{ _("High"), _("Smoothed terrain mesh, higher detail."), 3 },
+					{ _("Ultra"), _("Smoothed terrain mesh, highest detail. Uses more memory."), 4 },
+				};
+				if (!result.setCurrentIdxForValue(getTerrainMeshSubdivision()))
+				{
+					result.currentIdx = 0;
+				}
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				if (!setTerrainMeshSubdivision(newValue))
+				{
+					debug(LOG_ERROR, "Failed to set terrain detail: %d", newValue);
 					return false;
 				}
 				return true;
