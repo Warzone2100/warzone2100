@@ -25,6 +25,7 @@
 #include "random.h"
 #include "wzapi.h"
 #include <chrono>
+#include <functional>
 #include <memory>
 #include <unordered_set>
 #include <unordered_map>
@@ -286,7 +287,14 @@ public:
 	};
 private:
 	typedef std::map<std::string, LABEL> LABELMAP;
-	LABELMAP labels;
+	// Label scoping:
+	//
+	// - Map-authored and legacy labels live in the global bucket (visible to every instance)
+	// - Labels a script creates via addLabel are owned by their creating instance
+	// - Lookups for an instance resolve own-first, then global
+	// (ownedLabels is not yet populated - addLabel still targets the global bucket - so behavior is identical to the previous single map)
+	LABELMAP globalLabels;
+	std::map<wzapi::scripting_instance *, LABELMAP> ownedLabels;
 
 	typedef std::map<wzapi::scripting_instance *, GROUPMAP *> ENGINEMAP;
 	ENGINEMAP groups;
@@ -408,7 +416,7 @@ public:
 	generic_script_object getObjectFromLabel(WZAPI_PARAMS(const std::string& label));
 	wzapi::no_return_value hackMarkTiles_ByLabel(WZAPI_PARAMS(const std::string& label));
 private:
-	static optional<std::string> _findMatchingLabel(wzapi::game_object_identifier obj_id);
+	static optional<std::string> _findMatchingLabel(wzapi::scripting_instance *instance, wzapi::game_object_identifier obj_id);
 public:
 
 	static generic_script_object getObject(WZAPI_PARAMS(wzapi::object_request request));
@@ -491,6 +499,7 @@ public:
 		WzString trigger;
 		WzString owner;
 		WzString subscriber;
+		WzString scope; // owning script for an owned label, or "global"
 	};
 
 	class DebugInterface
@@ -530,6 +539,22 @@ private:
 	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, const BASE_OBJECT *seen, const BASE_OBJECT *viewer);
 	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, const BASE_OBJECT *psObj);
 	bool groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
+
+	// Label-scoping helpers: encode the own-first-then-global resolution in one place
+	// Find a label visible to `instance` (its own bucket first, then global), nullptr if none
+	LABEL* findScopedLabel(wzapi::scripting_instance *instance, const std::string &name);
+	// Erase a label visible to `instance` (own first, then global)
+	// Returns the number erased (0 or 1)
+	size_t eraseScopedLabel(wzapi::scripting_instance *instance, const std::string &name);
+	// The bucket a new label created by 'instance' is stored in (its own bucket, or global if no instance)
+	LABELMAP& labelCreationBucket(wzapi::scripting_instance *instance);
+	// Visit every label visible to 'instance' - its own labels, then global labels not shadowed by an
+	// own label of the same name (own-first / own-shadows-global)
+	//
+	// NOTES:
+	// - `fn` may mutate the LABEL
+	// - `fn` returns true to keep enumerating, false to stop early
+	void forEachScopedLabel(wzapi::scripting_instance *instance, const std::function<bool(const std::string&, LABEL&)>& fn);
 };
 
 /// Clear all map markers (used by label marking, for instance)
