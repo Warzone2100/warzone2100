@@ -219,11 +219,13 @@ public:
 	LABEL toNewLabel() const;
 };
 
-/// Load map labels
+/// Load map labels (from a file, or from an already-parsed in-memory JSON document)
 bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
+bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
-/// Write map labels to savegame
+/// Write map labels to savegame (to a file, or into an in-memory JSON document)
 bool writeLabels(const char *filename);
+bool writeLabels(nlohmann::json &result);
 
 class scripting_engine
 {
@@ -322,11 +324,15 @@ public:
 
 // MARK: LABELS
 public:
-	/// Load map labels
+	/// Load map labels - from a file, or from an already-parsed in-memory JSON document.
+	/// The file variant reads the document and delegates to the JSON variant.
 	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
+	bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
-	/// Write map labels to savegame
+	/// Write map labels to savegame - to a file, or into an in-memory JSON document.
+	/// The file variant builds the document and saves it.
 	bool writeLabels(const char *filename);
+	bool writeLabels(nlohmann::json &result);
 
 // MARK: GROUPS
 public:

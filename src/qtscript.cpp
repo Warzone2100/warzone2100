@@ -2233,76 +2233,110 @@ bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& 
 	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 }
 
-// Load labels
+bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
+{
+	return scripting_engine::instance().loadLabels(result, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
+}
+
+// Load labels from a file - reads the JSON document and delegates to the in-memory loader.
 bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
-	int groupidx = -1;
-
 	if (!PHYSFS_exists(filename))
 	{
 		debug(LOG_SAVE, "No %s found -- not adding any labels", filename);
 		return false;
 	}
 	WzConfig ini(filename, WzConfig::ReadOnly);
+	return loadLabels(ini.currentJsonValue(), fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
+}
+
+// Load labels from an in-memory JSON object. The object's keys are section names
+// ("position_<n>" / "area_<n>" / "radius_<n>" / "object_<n>" / "group_<n>"), matching writeLabels.
+bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
+{
+	int groupidx = -1;
+
+	ASSERT_OR_RETURN(false, result.is_object(), "Labels JSON is not an object");
 	labels.clear();
-	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", list.size(), fixedMapIdToGeneratedId.size());
-	for (int i = 0; i < list.size(); ++i)
+	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", result.size(), fixedMapIdToGeneratedId.size());
+
+	// matches WzConfig::vector2i: a [x, y] array, defaulting to (0, 0) if missing / malformed
+	auto jsonVector2i = [](const nlohmann::json &section, const char *key) -> Vector2i {
+		Vector2i r(0, 0);
+		auto it = section.find(key);
+		if (it == section.end() || !it->is_array() || it->size() != 2) { return r; }
+		try {
+			r.x = (*it)[0].get<int>();
+			r.y = (*it)[1].get<int>();
+		} catch (const std::exception &) { /* leave as (0, 0) */ }
+		return r;
+	};
+	auto startsWith = [](const std::string &s, const char *prefix) -> bool {
+		return s.rfind(prefix, 0) == 0;
+	};
+
+	// Iterate section objects (matches WzConfig::childGroups, which only returns object-valued keys)
+	for (auto it = result.begin(); it != result.end(); ++it)
 	{
-		ini.beginGroup(list[i]);
+		if (!it->is_object())
+		{
+			continue;
+		}
+		const std::string &sectionName = it.key();
+		const nlohmann::json &section = it.value();
 		LABEL p;
-		std::string label = ini.value("label").toWzString().toUtf8();
+		std::string label = section.value("label", std::string());
 		if (labels.count(label) > 0)
 		{
 			debug(LOG_ERROR, "Duplicate label found");
 		}
-		else if (list[i].startsWith("position"))
+		else if (startsWith(sectionName, "position"))
 		{
-			p.p1 = ini.vector2i("pos");
+			p.p1 = jsonVector2i(section, "pos");
 			p.p2 = p.p1;
 			p.type = SCRIPT_POSITION;
 			p.player = ALL_PLAYERS;
 			p.id = -1;
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+			p.triggered = section.value("triggered", -1); // deactivated by default
 			p.subscriber = ALL_PLAYERS;
 			labels[label] = p;
 		}
-		else if (list[i].startsWith("area"))
+		else if (startsWith(sectionName, "area"))
 		{
-			p.p1 = ini.vector2i("pos1");
-			p.p2 = ini.vector2i("pos2");
+			p.p1 = jsonVector2i(section, "pos1");
+			p.p2 = jsonVector2i(section, "pos2");
 			p.type = SCRIPT_AREA;
-			p.player = ini.value("player", ALL_PLAYERS).toInt();
-			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
+			p.player = section.value("player", ALL_PLAYERS);
+			p.triggered = section.value("triggered", 0); // activated by default
 			p.id = -1;
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			labels[label] = p;
 		}
-		else if (list[i].startsWith("radius"))
+		else if (startsWith(sectionName, "radius"))
 		{
-			p.p1 = ini.vector2i("pos");
-			p.p2.x = ini.value("radius").toInt();
+			p.p1 = jsonVector2i(section, "pos");
+			p.p2.x = section.value("radius", 0);
 			p.p2.y = 0; // unused
 			p.type = SCRIPT_RADIUS;
-			p.player = ini.value("player", ALL_PLAYERS).toInt();
-			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.player = section.value("player", ALL_PLAYERS);
+			p.triggered = section.value("triggered", 0); // activated by default
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			p.id = -1;
 			labels[label] = p;
 		}
-		else if (list[i].startsWith("object"))
+		else if (startsWith(sectionName, "object"))
 		{
-			auto id = ini.value("id").toInt();
+			auto id = section.value("id", 0);
 			ASSERT(id > 0, "Unexpected id %d for object label", id);
-			auto it = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
-			if (it != fixedMapIdToGeneratedId.end())
+			auto itr = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
+			if (itr != fixedMapIdToGeneratedId.end())
 			{
 				// replace fixed hard-coded map-load id with its new generated (synchronized) id
 				// note: must come *before* the moduleToBuilding call below
-				debug(LOG_MAP, "replaced fixed map id %d with %d", id, it->second);
-				id = it->second;
+				debug(LOG_MAP, "replaced fixed map id %d with %d", id, itr->second);
+				id = itr->second;
 			}
-			const auto player = ini.value("player").toInt();
+			const auto player = section.value("player", 0);
 			const auto it_modulemap = moduleToBuilding[player].find(id);
 			if (it_modulemap != moduleToBuilding[player].end())
 			{
@@ -2311,10 +2345,10 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 				id = it_modulemap->second;
 			}
 			p.id = id;
-			p.type = ini.value("type").toInt();
+			p.type = section.value("type", 0);
 			p.player = player;
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.triggered = section.value("triggered", -1); // deactivated by default
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			auto checkFoundObject = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
 			if (!UserSaveGame)
 			{
@@ -2326,37 +2360,41 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			}
 			labels[label] = p;
 		}
-		else if (list[i].startsWith("group"))
+		else if (startsWith(sectionName, "group"))
 		{
 			p.id = groupidx--;
 			p.type = SCRIPT_GROUP;
-			p.player = ini.value("player").toInt();
-			std::vector<WzString> memberList = ini.value("members").toWzStringList();
-			for (WzString const &j : memberList)
+			p.player = section.value("player", 0);
+			auto membersIt = section.find("members");
+			if (membersIt != section.end() && membersIt->is_array())
 			{
-				int id = j.toInt();
-				ASSERT(id > 0, "Unexpected id %d for group member", id);
-				auto it = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
-				if (it != fixedMapIdToGeneratedId.end())
+				for (const auto &j : *membersIt)
 				{
-					// replace fixed hard-coded map-load id with its new generated (synchronized) id
-					debug(LOG_NEVER, "replaced fixed map id %d with %d", id, it->second);
-					id = it->second;
+					int id = 0;
+					if (j.is_string()) { id = WzString::fromUtf8(j.get<std::string>()).toInt(); }
+					else if (j.is_number_integer()) { id = j.get<int>(); }
+					ASSERT(id > 0, "Unexpected id %d for group member", id);
+					auto itr = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
+					if (itr != fixedMapIdToGeneratedId.end())
+					{
+						// replace fixed hard-coded map-load id with its new generated (synchronized) id
+						debug(LOG_NEVER, "replaced fixed map id %d with %d", id, itr->second);
+						id = itr->second;
+					}
+					BASE_OBJECT *psObj = IdToPointer(id, p.player);
+					ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
+					       id, p.player, sectionName.c_str());
+					p.idlist.push_back(id);
 				}
-				BASE_OBJECT *psObj = IdToPointer(id, p.player);
-				ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
-				       id, p.player, list[i].toUtf8().c_str());
-				p.idlist.push_back(id);
 			}
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.triggered = section.value("triggered", -1); // deactivated by default
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			labels[label] = p;
 		}
 		else
 		{
-			debug(LOG_ERROR, "Misnamed group in %s", filename);
+			debug(LOG_ERROR, "Misnamed group in labels (section: %s)", sectionName.c_str());
 		}
-		ini.endGroup();
 	}
 	return true;
 }
@@ -2366,72 +2404,85 @@ bool writeLabels(const char *filename)
 	return scripting_engine::instance().writeLabels(filename);
 }
 
+bool writeLabels(nlohmann::json &result)
+{
+	return scripting_engine::instance().writeLabels(result);
+}
+
+// Write labels to a file - builds the in-memory JSON document and saves it.
 bool scripting_engine::writeLabels(const char *filename)
+{
+	nlohmann::json result = nlohmann::json::object();
+	if (!writeLabels(result))
+	{
+		return false;
+	}
+	return saveJSONToFile(result, filename);
+}
+
+// Write labels into an in-memory JSON object, keyed by incremental section names.
+bool scripting_engine::writeLabels(nlohmann::json &result)
 {
 	int c[5]; // make unique, incremental section names
 	memset(c, 0, sizeof(c));
-	WzConfig ini(filename, WzConfig::ReadAndWrite);
 	for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
 	{
 		const std::string& key = i->first;
 		const LABEL &l = i->second;
 		if (l.type == SCRIPT_POSITION)
 		{
-			ini.beginGroup("position_" + WzString::number(c[0]++));
-			ini.setVector2i("pos", l.p1);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("triggered", l.triggered);
-			ini.endGroup();
+			nlohmann::json section = nlohmann::json::object();
+			section["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			section["label"] = key;
+			section["triggered"] = l.triggered;
+			result["position_" + std::to_string(c[0]++)] = std::move(section);
 		}
 		else if (l.type == SCRIPT_AREA)
 		{
-			ini.beginGroup("area_" + WzString::number(c[1]++));
-			ini.setVector2i("pos1", l.p1);
-			ini.setVector2i("pos2", l.p2);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.triggered);
-			ini.setValue("subscriber", l.subscriber);
-			ini.endGroup();
+			nlohmann::json section = nlohmann::json::object();
+			section["pos1"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			section["pos2"] = nlohmann::json::array({ l.p2.x, l.p2.y });
+			section["label"] = key;
+			section["player"] = l.player;
+			section["triggered"] = l.triggered;
+			section["subscriber"] = l.subscriber;
+			result["area_" + std::to_string(c[1]++)] = std::move(section);
 		}
 		else if (l.type == SCRIPT_RADIUS)
 		{
-			ini.beginGroup("radius_" + WzString::number(c[2]++));
-			ini.setVector2i("pos", l.p1);
-			ini.setValue("radius", l.p2.x);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.triggered);
-			ini.setValue("subscriber", l.subscriber);
-			ini.endGroup();
+			nlohmann::json section = nlohmann::json::object();
+			section["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			section["radius"] = l.p2.x;
+			section["label"] = key;
+			section["player"] = l.player;
+			section["triggered"] = l.triggered;
+			section["subscriber"] = l.subscriber;
+			result["radius_" + std::to_string(c[2]++)] = std::move(section);
 		}
 		else if (l.type == SCRIPT_GROUP)
 		{
-			ini.beginGroup("group_" + WzString::number(c[3]++));
-			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.triggered);
-			std::vector<WzString> list;
-			list.reserve(l.idlist.size());
+			nlohmann::json section = nlohmann::json::object();
+			section["player"] = l.player;
+			section["triggered"] = l.triggered;
+			nlohmann::json members = nlohmann::json::array();
 			for (int val : l.idlist)
 			{
-				list.push_back(WzString::number(val));
+				members.push_back(std::to_string(val));
 			}
-			ini.setValue("members", list);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("subscriber", l.subscriber);
-			ini.endGroup();
+			section["members"] = std::move(members);
+			section["label"] = key;
+			section["subscriber"] = l.subscriber;
+			result["group_" + std::to_string(c[3]++)] = std::move(section);
 		}
 		else
 		{
-			auto id = l.id;
-			auto player = l.player;
-			ini.beginGroup("object_" + WzString::number(c[4]++));
-			ini.setValue("id", id);
-			ini.setValue("player", player);
-			ini.setValue("type", l.type);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("triggered", l.triggered);
-			ini.endGroup();
+			nlohmann::json section = nlohmann::json::object();
+			section["id"] = l.id;
+			section["player"] = l.player;
+			section["type"] = l.type;
+			section["label"] = key;
+			section["triggered"] = l.triggered;
+			result["object_" + std::to_string(c[4]++)] = std::move(section);
 		}
 	}
 	return true;
