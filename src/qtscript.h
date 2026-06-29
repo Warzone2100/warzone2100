@@ -311,6 +311,11 @@ public:
 	// but before triggering any events.
 	bool loadScriptStates(const char *filename);
 	bool saveScriptStates(const char *filename);
+private:
+	// Script-state save format v2: a single structured JSON document (top-level "instances" and "timers" arrays, etc)
+	bool saveScriptStates2(const char *filename);
+	bool loadScriptStates2(const nlohmann::json &root);
+public:
 
 	bool unregisterFunctions(wzapi::scripting_instance *instance);
 	void prepareLabels();

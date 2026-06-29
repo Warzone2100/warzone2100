@@ -695,34 +695,60 @@ bool saveScriptStates(const char *filename)
 	return scripting_engine::instance().saveScriptStates(filename);
 }
 
+// Script-state save format version:
+// 1 (or absent): Legacy flat layout (globals_<i> / groups_<i> / triggers_<i> keys, matched back
+//                to instances by embedded "me"/"scriptName"), written via WzConfig
+// 2: A single structured JSON document with top-level "instances" and "timers" arrays
+//    Each instance bundles its own "globals", "groups" and per-instance flags
+//    (ex. "isReceivingAllEvents"). "timers" is an ordered array restored in-order.
+static const int SCRIPTSTATE_VERSION = 2;
+
 bool scripting_engine::saveScriptStates(const char *filename)
 {
-	WzConfig ini(filename, WzConfig::ReadAndWrite);
+	return saveScriptStates2(filename);
+}
+
+bool scripting_engine::saveScriptStates2(const char *filename)
+{
+	nlohmann::json root = nlohmann::json::object();
+	root["version"] = SCRIPTSTATE_VERSION;
+
+	// One object per script instance, bundling its globals, group memberships, and per-instance flags
+	nlohmann::json instancesArray = nlohmann::json::array();
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		wzapi::scripting_instance* instance = scripts.at(i);
 
+		nlohmann::json instanceObj = nlohmann::json::object();
+		// 'me'/'scriptName' identify the instance on load (findInstanceForPlayer)
+		instanceObj["me"] = instance->player();
+		instanceObj["scriptName"] = instance->scriptName();
+
 		nlohmann::json globalsResult = nlohmann::json::object();
 		instance->saveScriptGlobals(globalsResult);
-		// 'scriptName' and 'me' should be saved implicitly by the backend's saveScriptGlobals
+		// 'scriptName' and 'me' are also saved implicitly inside globals by the backend's saveScriptGlobals
 		ASSERT(globalsResult.contains("me"), "Missing required global \"me\"");
 		ASSERT(globalsResult.contains("scriptName"), "Missing required global \"scriptName\"");
-		ini.setValue("globals_" + WzString::number(i), globalsResult);
+		instanceObj["globals"] = std::move(globalsResult);
 
-		// we have to save 'scriptName' and 'me' explicitly
 		nlohmann::json groupsResult = nlohmann::json::object();
 		saveGroups(groupsResult, instance);
-		groupsResult["me"] = instance->player();
-		groupsResult["scriptName"] = instance->scriptName();
-		ini.setValue("groups_" + WzString::number(i), std::move(groupsResult));
+		instanceObj["groups"] = std::move(groupsResult);
+
+		instanceObj["isReceivingAllEvents"] = instance->isReceivingAllEvents();
+
+		instancesArray.push_back(std::move(instanceObj));
 	}
-	size_t timerIdx = 0;
+	root["instances"] = std::move(instancesArray);
+
+	// Timers as an ordered array - serialized (and thus restored) in the same order as the timers list
+	nlohmann::json timersArray = nlohmann::json::array();
 	for (const auto& node : timers)
 	{
 		nlohmann::json nodeInfo = nlohmann::json::object();
-		nodeInfo["timerID"] = node->timerID;
-		nodeInfo["timerName"] = node->timerName;
-		// we have to save 'scriptName' and 'me' explicitly
+		nodeInfo["id"] = node->timerID;
+		nodeInfo["name"] = node->timerName;
+		// 'me'/'scriptName' identify the owning instance on load
 		nodeInfo["me"] = node->player;
 		nodeInfo["scriptName"] = node->instance->scriptName();
 		nodeInfo["functionRestoreInfo"] = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam.get());
@@ -736,10 +762,11 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		nodeInfo["calls"] = node->calls;
 		nodeInfo["type"] = (int)node->type;
 
-		ini.setValue("triggers_" + WzString::number(timerIdx), std::move(nodeInfo));
-		++timerIdx;
+		timersArray.push_back(std::move(nodeInfo));
 	}
-	return true;
+	root["timers"] = std::move(timersArray);
+
+	return saveJSONToFile(root, filename);
 }
 
 wzapi::scripting_instance* scripting_engine::findInstanceForPlayer(int match, const WzString& _scriptName)
@@ -766,8 +793,16 @@ bool loadScriptStates(const char *filename)
 
 bool scripting_engine::loadScriptStates(const char *filename)
 {
-	uniqueTimerID maxRestoredTimerID = 0;
 	WzConfig ini(filename, WzConfig::ReadOnly);
+	const int version = ini.value("version", 1).toInt();
+	if (version >= 2)
+	{
+		debug(LOG_SAVE, "Loading script states (v%d) for %zu script contexts", version, scripts.size());
+		return loadScriptStates2(ini.currentJsonValue());
+	}
+
+	// ---- Legacy v1 loader (flat globals_<i> / groups_<i> / triggers_<i> layout) ----
+	uniqueTimerID maxRestoredTimerID = 0;
 	std::vector<WzString> list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %zu script contexts", scripts.size());
 	for (size_t i = 0; i < list.size(); ++i)
@@ -800,7 +835,8 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			node->instance = instance;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, player, scriptName.toUtf8().c_str());
-			node->baseobj = ini.value("baseobj", -1).toInt();
+			// NOTE: the save side has always written this under the "object" key (never "baseobj")
+			node->baseobj = ini.value("object", -1).toInt();
 			node->baseobjtype = (OBJECT_TYPE)ini.value("objectType", (int)OBJ_NUM_TYPES).toInt();
 			node->frameTime = ini.value("frame").toInt();
 			node->ms = ini.value("ms").toInt();
@@ -886,6 +922,161 @@ bool scripting_engine::loadScriptStates(const char *filename)
 		}
 		ini.endGroup();
 	}
+	lastTimerID = maxRestoredTimerID;
+	return true;
+}
+
+// Loader for save format v2 (see SCRIPTSTATE_VERSION): a structured JSON document with top-level
+// "instances" and "triggers" arrays - 'root' is the parsed document object
+bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
+{
+	uniqueTimerID maxRestoredTimerID = 0;
+
+	// Instances: per-instance globals + group memberships + flags
+	auto instancesIt = root.find("instances");
+	if (instancesIt != root.end() && instancesIt->is_array())
+	{
+		for (const auto& instanceObj : *instancesIt)
+		{
+			if (!instanceObj.is_object())
+			{
+				ASSERT(false, "Malformed instance entry in script states (not an object)");
+				continue;
+			}
+			int player = instanceObj.value("me", -1);
+			WzString scriptName = WzString::fromUtf8(instanceObj.value("scriptName", std::string()));
+			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
+			if (!instance)
+			{
+				continue;
+			}
+
+			// Globals
+			auto globalsIt = instanceObj.find("globals");
+			if (globalsIt != instanceObj.end() && globalsIt->is_object())
+			{
+				nlohmann::json globals = *globalsIt;
+				debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
+				      instance->player(), instance->scriptName().c_str(), globals.size());
+				// filter out "scriptName" and "me" variables (saved implicitly inside globals)
+				globals.erase("me");
+				globals.erase("scriptName");
+				instance->loadScriptGlobals(globals);
+			}
+
+			// Group memberships: { "lastNewGroupId": <int>, "<droidId>": ["<groupId>", ...], ... }
+			auto groupsIt = instanceObj.find("groups");
+			if (groupsIt != instanceObj.end() && groupsIt->is_object())
+			{
+				for (auto it = groupsIt->begin(); it != groupsIt->end(); ++it)
+				{
+					if (it.key() == "lastNewGroupId" || !it->is_array())
+					{
+						continue;
+					}
+					bool ok = false; // check if the key is a (droid) id number
+					int droidId = WzString::fromUtf8(it.key()).toInt(&ok);
+					if (!ok)
+					{
+						continue;
+					}
+					for (const auto& groupIdVal : *it)
+					{
+						int groupId = 0;
+						if (groupIdVal.is_number_integer())
+						{
+							groupId = groupIdVal.get<int>();
+						}
+						else if (groupIdVal.is_string())
+						{
+							groupId = WzString::fromUtf8(groupIdVal.get<std::string>()).toInt();
+						}
+						else
+						{
+							continue;
+						}
+						loadGroup(instance, groupId, droidId);
+					}
+				}
+				auto lastNewIt = groupsIt->find("lastNewGroupId");
+				if (lastNewIt != groupsIt->end() && lastNewIt->is_number_integer())
+				{
+					GROUPMAP *psMap = getGroupMap(instance);
+					if (psMap)
+					{
+						psMap->saveLoadSetLastNewGroupId(lastNewIt->get<int>());
+					}
+				}
+			}
+
+			// Per-instance flags
+			auto recvIt = instanceObj.find("isReceivingAllEvents");
+			if (recvIt != instanceObj.end() && recvIt->is_boolean())
+			{
+				instance->setReceiveAllEvents(recvIt->get<bool>());
+			}
+		}
+	}
+
+	// Timers: ordered array of timer nodes, restored in-order
+	auto timersIt = root.find("timers");
+	if (timersIt != root.end() && timersIt->is_array())
+	{
+		for (const auto& nodeInfo : *timersIt)
+		{
+			if (!nodeInfo.is_object())
+			{
+				ASSERT(false, "Malformed timer entry in script states (not an object)");
+				continue;
+			}
+			int player = nodeInfo.value("me", -1);
+			WzString scriptName = WzString::fromUtf8(nodeInfo.value("scriptName", std::string()));
+			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
+			if (!instance)
+			{
+				continue;
+			}
+
+			std::shared_ptr<timerNode> node = std::make_shared<timerNode>();
+			node->timerID = nodeInfo.contains("id") ? nodeInfo["id"].get<int>() : getNextAvailableTimerID();
+			node->timerName = nodeInfo.value("name", std::string());
+			node->instance = instance;
+			debug(LOG_SAVE, "Registering timer for player %d, script %s",
+			      player, scriptName.toUtf8().c_str());
+			node->baseobj = nodeInfo.value("object", -1);
+			node->baseobjtype = (OBJECT_TYPE)nodeInfo.value("objectType", (int)OBJ_NUM_TYPES);
+			node->frameTime = nodeInfo.value("frame", 0);
+			node->ms = nodeInfo.value("ms", 0);
+			node->player = player;
+			node->calls = nodeInfo.value("calls", 0);
+			node->type = (timerType)nodeInfo.value("type", (int)TIMER_REPEAT);
+
+			std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoredTimerInfo;
+			try
+			{
+				auto friIt = nodeInfo.find("functionRestoreInfo");
+				if (friIt == nodeInfo.end())
+				{
+					ASSERT(false, "Invalid trigger in save - missing functionRestoreInfo block");
+					continue;
+				}
+				restoredTimerInfo = instance->restoreTimerFunction(*friIt);
+			}
+			catch (const std::exception& e)
+			{
+				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				continue;
+			}
+
+			node->function = std::get<0>(restoredTimerInfo);
+			node->additionalTimerFuncParam = std::move(std::get<1>(restoredTimerInfo));
+
+			maxRestoredTimerID = std::max<uniqueTimerID>(maxRestoredTimerID, node->timerID);
+
+			addTimerNode(std::move(node));
+		}
+	}
+
 	lastTimerID = maxRestoredTimerID;
 	return true;
 }
