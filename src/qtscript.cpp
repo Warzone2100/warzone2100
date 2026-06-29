@@ -2254,8 +2254,6 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 // ("position_<n>" / "area_<n>" / "radius_<n>" / "object_<n>" / "group_<n>"), matching writeLabels.
 bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
-	int groupidx = -1;
-
 	ASSERT_OR_RETURN(false, result.is_object(), "Labels JSON is not an object");
 	labels.clear();
 	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", result.size(), fixedMapIdToGeneratedId.size());
@@ -2274,6 +2272,20 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 	auto startsWith = [](const std::string &s, const char *prefix) -> bool {
 		return s.rfind(prefix, 0) == 0;
 	};
+
+	// Group labels carry a persisted "id" (new saves). Those that don't (legacy saves / map files) fall back
+	// to a synthetic negative id assigned positionally.
+	// Pre-scan so the fallback counter starts below the most-negative persisted id and can't collide with one.
+	int groupidx = -1;
+	for (auto it = result.begin(); it != result.end(); ++it)
+	{
+		if (!it->is_object() || !startsWith(it.key(), "group")) { continue; }
+		auto idIt = it->find("id");
+		if (idIt != it->end() && idIt->is_number_integer())
+		{
+			groupidx = std::min(groupidx, idIt->get<int>() - 1);
+		}
+	}
 
 	// Iterate section objects (matches WzConfig::childGroups, which only returns object-valued keys)
 	for (auto it = result.begin(); it != result.end(); ++it)
@@ -2362,7 +2374,17 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 		}
 		else if (startsWith(sectionName, "group"))
 		{
-			p.id = groupidx--;
+			// Use the persisted id if present (so it matches the saved group memberships),
+			// otherwise fall back to a synthetic negative id (legacy saves / map files)
+			auto idIt = section.find("id");
+			if (idIt != section.end() && idIt->is_number_integer())
+			{
+				p.id = idIt->get<int>();
+			}
+			else
+			{
+				p.id = groupidx--;
+			}
 			p.type = SCRIPT_GROUP;
 			p.player = section.value("player", 0);
 			auto membersIt = section.find("members");
@@ -2462,6 +2484,7 @@ bool scripting_engine::writeLabels(nlohmann::json &result)
 		else if (l.type == SCRIPT_GROUP)
 		{
 			nlohmann::json section = nlohmann::json::object();
+			section["id"] = l.id; // Persist the group id so it round-trips
 			section["player"] = l.player;
 			section["triggered"] = l.triggered;
 			nlohmann::json members = nlohmann::json::array();
