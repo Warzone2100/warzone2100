@@ -218,12 +218,32 @@ static const char* WZ_JSON_CLASS_KEY  = "@@class";  // class name (string)
 static const char* WZ_JSON_DATA_KEY   = "@@data";   // own data properties (object) / elements (array)
 static const char* WZ_JSON_ARR_KEY    = "@@arr";    // on a "ref": true if the target is an array
 static const char* WZ_JSON_VALUE_KEY  = "@@value";  // on a "number": "NaN" / "Infinity" / "-Infinity"
+static const char* WZ_JSON_PROPS_KEY  = "@@props";  // on an "array": named (non-index) own properties (object)
 
 // NOTE ON SAVE FORMAT COMPATIBILITY:
 // - When tagging is enabled (the save / restore path), *every* object and array is wrapped in a tag object
 //   carrying an "@@id", so that shared references and cycles of any kind round-trip correctly.
 // - Older saves wrote bare objects and arrays with no tags - the loader detects the absence of "@@wztype"
 //   and falls back to the legacy plain-object / plain-array decoding, so old saves continue to load.
+
+// True if `key` is a canonical array index string ("0", "1", ... - no leading zeros, and
+// strictly less than 2^32-1, the max array index). Such keys are array *elements* (already
+// captured in @@data). Everything else on an array (e.g. "length", "meta") is a named
+// property.
+static bool isCanonicalArrayIndexKey(const std::string& key)
+{
+	if (key.empty()) { return false; }
+	if (key == "0") { return true; }
+	if (key[0] < '1' || key[0] > '9') { return false; } // reject leading zero / non-digit
+	unsigned long long v = 0;
+	for (char ch : key)
+	{
+		if (ch < '0' || ch > '9') { return false; }
+		v = v * 10 + static_cast<unsigned long long>(ch - '0');
+		if (v >= 4294967295ULL) { return false; } // >= 2^32-1 -> not a valid array index
+	}
+	return true;
+}
 
 // Built-in global constructors that must never be treated as restorable script classes.
 static bool isBuiltinConstructorName(const std::string& name)
@@ -1132,6 +1152,17 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 						populateObjectProperties(c, obj, *dataIt, prop_flags);
 					}
 				}
+
+				// Restore named (non-index) own properties attached to an array
+				if (isArray)
+				{
+					auto propsIt = instance.find(WZ_JSON_PROPS_KEY);
+					if (propsIt != instance.end() && propsIt->is_object())
+					{
+						populateObjectProperties(c, obj, *propsIt, prop_flags);
+					}
+				}
+
 				return obj;
 			}
 			// Unknown tag: fall through and treat as a legacy plain object.
@@ -4157,6 +4188,37 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				}
 				j[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_ARRAY;
 				j[WZ_JSON_DATA_KEY] = std::move(data);
+
+				// Preserve any *named* (non-index) own properties a script attached to the array (e.g. `arr.meta = ...`).
+				// The 0..length-1 elements above are skipped here ("length" is intrinsic), & own accessors can't be serialized.
+				nlohmann::json props = nlohmann::json::object();
+				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &props](const char *key, JSAtom &atom) {
+					std::string nameStr = key;
+					if (nameStr == "length" || isCanonicalArrayIndexKey(nameStr)) { return; }
+					if (isOwnAccessorProperty(c.ctx, value, atom))
+					{
+						debug(LOG_SCRIPT, "Skipping own accessor property \"%s\" when saving script global: getter/setter closures cannot be serialized", key);
+						return;
+					}
+					JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
+					if (!JS_IsException(jsVal))
+					{
+						if (!JS_IsConstructor(c.ctx, jsVal))
+						{
+							debug(LOG_SCRIPT, "Serializing named property \"%s\" attached to array", nameStr.c_str());
+							props[nameStr] = wz_qjs_to_json(c, jsVal);
+						}
+						else if (!c.skip_constructors)
+						{
+							props[nameStr] = "<constructor>";
+						}
+					}
+					JS_FreeValue(c.ctx, jsVal);
+				}, false);
+				if (!props.empty())
+				{
+					j[WZ_JSON_PROPS_KEY] = std::move(props);
+				}
 			}
 			else
 			{
