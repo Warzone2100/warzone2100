@@ -5,8 +5,8 @@ debugMsg('Module: performance.js', 'init');
 
 // }
 
-var perfFunc = [];
-var perfOrder = [];
+var perfFunc = {};
+var perfOrder = {};
 
 function distBetweenTwoPoints_p(x1, y1, x2, y2)
 {
