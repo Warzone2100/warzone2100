@@ -3243,30 +3243,36 @@ bool scripting_engine::unregisterFunctions(wzapi::scripting_instance *instance)
 // since all game state may not be fully loaded by then
 void scripting_engine::prepareLabels()
 {
-	// load the label group data into every scripting context, with the same negative group id
+	// Load the group-label seed data into every scripting context, with the same negative group id
 	//
 	// Only map-authored (global) group labels exist at this point - owned labels are created later
 	// via runtime addLabel - so iterating globalLabels is the full set (unchanged behavior)
-	for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+	//
+	// idlist is a one-time seed: once its members are materialized into the per-instance group maps
+	// (which saveGroups persists), it is consumed (cleared). It would otherwise go stale (it never
+	// tracks units added/removed during play) and be redundantly re-serialized by writeLabels.
+	for (LABELMAP::iterator i = globalLabels.begin(); i != globalLabels.end(); ++i)
 	{
-		wzapi::scripting_instance *instance = iter->first;
-		for (LABELMAP::iterator i = globalLabels.begin(); i != globalLabels.end(); ++i)
+		LABEL &l = i->second;
+		if (l.type != SCRIPT_GROUP)
 		{
-			const LABEL &l = i->second;
-			if (l.type == SCRIPT_GROUP)
+			continue;
+		}
+		for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+		{
+			wzapi::scripting_instance *instance = iter->first;
+			for (std::vector<int>::const_iterator j = l.idlist.begin(); j != l.idlist.end(); j++)
 			{
-				for (std::vector<int>::const_iterator j = l.idlist.begin(); j != l.idlist.end(); j++)
+				int id = (*j);
+				BASE_OBJECT *psObj = IdToPointer(id, l.player);
+				ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
+				if (psObj)
 				{
-					int id = (*j);
-					BASE_OBJECT *psObj = IdToPointer(id, l.player);
-					ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
-					if (psObj)
-					{
-						groupAddObject(psObj, l.id, instance);
-					}
+					groupAddObject(psObj, l.id, instance);
 				}
 			}
 		}
+		l.idlist.clear(); // consume the seed - the live membership now lives in the group maps
 	}
 	jsDebugUpdateLabels();
 }
