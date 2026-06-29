@@ -216,7 +216,8 @@ static const char* WZ_JSON_TAG_NUMBER = "number";   // a non-finite double (NaN 
 static const char* WZ_JSON_ID_KEY     = "@@id";     // reference identity (int)
 static const char* WZ_JSON_CLASS_KEY  = "@@class";  // class name (string)
 static const char* WZ_JSON_DATA_KEY   = "@@data";   // own data properties (object) / elements (array)
-static const char* WZ_JSON_ARR_KEY    = "@@arr";    // on a "ref": true if the target is an array
+static const char* WZ_JSON_KIND_KEY   = "@@kind";   // on a "ref": type ("array", possibly others in the future). Absent = object.
+static const char* WZ_JSON_KIND_ARRAY = "array";
 static const char* WZ_JSON_VALUE_KEY  = "@@value";  // on a "number": "NaN" / "Infinity" / "-Infinity"
 static const char* WZ_JSON_PROPS_KEY  = "@@props";  // on an "array": named (non-index) own properties (object)
 
@@ -1090,13 +1091,14 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 				{
 					return JS_DupValue(ctx, found->second);
 				}
-				// Forward reference: create a placeholder of the correct kind (object or
-				// array) that the matching definition will populate in-place later, so all
-				// holders share one identity.
-				bool refIsArray = false;
-				auto arrIt = instance.find(WZ_JSON_ARR_KEY);
-				if (arrIt != instance.end() && arrIt->is_boolean()) { refIsArray = arrIt->get<bool>(); }
-				JSValue placeholder = refIsArray ? JS_NewArray(ctx) : JS_NewObject(ctx);
+				// Forward reference: create a placeholder of the correct kind that the
+				// matching definition will populate in-place later, so all holders share one
+				// identity. The kind comes from @@kind ("array"; possibly others later). An
+				// absent @@kind means a plain object.
+				std::string refKind;
+				auto kindIt = instance.find(WZ_JSON_KIND_KEY);
+				if (kindIt != instance.end() && kindIt->is_string()) { refKind = kindIt->get<std::string>(); }
+				JSValue placeholder = (refKind == WZ_JSON_KIND_ARRAY) ? JS_NewArray(ctx) : JS_NewObject(ctx);
 				if (id >= 0) { c.idMap[id] = JS_DupValue(ctx, placeholder); }
 				return placeholder;
 			}
@@ -4145,7 +4147,9 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				nlohmann::json ref = nlohmann::json::object();
 				ref[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_REF;
 				ref[WZ_JSON_ID_KEY] = refIt->second;
-				if (isArray) { ref[WZ_JSON_ARR_KEY] = true; }
+				// Record the targets's kind so a forward reference can build a matching
+				// placeholder. Object is the default (no @@kind).
+				if (isArray) { ref[WZ_JSON_KIND_KEY] = WZ_JSON_KIND_ARRAY; }
 				return ref;
 			}
 		}
