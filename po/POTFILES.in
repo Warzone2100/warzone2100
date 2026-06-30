@@ -267,9 +267,11 @@ lib/framework/frameresource.cpp
 lib/framework/geometry.cpp
 lib/framework/i18n.cpp
 lib/framework/lexer_input.cpp
+lib/framework/loading_task_controller_ops.cpp
 lib/framework/mac_wrapper.cpp
 lib/framework/memory_pool.cpp
 lib/framework/physfs_ext.cpp
+lib/framework/resource_loading_controller.cpp
 lib/framework/stdio_ext.cpp
 lib/framework/stringsearch.cpp
 lib/framework/strres.cpp
@@ -288,6 +290,7 @@ lib/ivis_opengl/gfx_api_gl.cpp
 lib/ivis_opengl/gfx_api_image_basis_priv.cpp
 lib/ivis_opengl/gfx_api_image_compress_priv.cpp
 lib/ivis_opengl/gfx_api_null.cpp
+lib/ivis_opengl/gfx_api_texture_array_load.cpp
 lib/ivis_opengl/gfx_api_vk.cpp
 lib/ivis_opengl/imdload.cpp
 lib/ivis_opengl/jpeg_encoder.cpp
@@ -371,6 +374,7 @@ lib/widget/bar.cpp
 lib/widget/button.cpp
 lib/widget/checkbox.cpp
 lib/widget/cliprect.cpp
+lib/widget/datagraph.cpp
 lib/widget/dropdown.cpp
 lib/widget/editbox.cpp
 lib/widget/form.cpp
@@ -448,6 +452,7 @@ src/formation.cpp
 src/fpath.cpp
 src/frontend.cpp
 src/game.cpp
+src/game_world.cpp
 src/gamehistorylogger.cpp
 src/gateway.cpp
 src/geometry.cpp
@@ -511,6 +516,7 @@ src/objects.cpp
 src/objmem.cpp
 src/oprint.cpp
 src/order.cpp
+src/playerstatsgraph.cpp
 src/pointtree.cpp
 src/power.cpp
 src/profiling.cpp
@@ -521,6 +527,8 @@ src/radar.cpp
 src/random.cpp
 src/raycast.cpp
 src/research.cpp
+src/researchlogviewer.cpp
+src/resource_loading_dispatch.cpp
 src/scores.cpp
 src/screens/chatscreen.cpp
 src/screens/guidescreen.cpp
@@ -528,12 +536,15 @@ src/screens/helpscreen.cpp
 src/screens/ingameopscreen.cpp
 src/screens/joiningscreen.cpp
 src/screens/netpregamescreen.cpp
+src/screens/spectatorgameoverscreen.cpp
 src/selection.cpp
 src/seqdisp.cpp
 src/shadowcascades.cpp
 src/spectatorwidgets.cpp
 src/stats.cpp
 src/stdinreader.cpp
+src/steering/collision_avoidance_behavior.cpp
+src/steering/steering.cpp
 src/structure.cpp
 src/template.cpp
 src/terrain.cpp
