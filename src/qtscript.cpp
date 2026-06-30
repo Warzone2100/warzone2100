@@ -775,6 +775,9 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 	}
 	root["timers"] = std::move(timersArray);
 
+	// Persist the monotonic timer-id counter
+	root["lastTimerID"] = lastTimerID;
+
 	// Global (map-authored / legacy / unowned) labels go at the top level
 	nlohmann::json globalLabelsArr = nlohmann::json::array();
 	writeLabelMap(globalLabels, globalLabelsArr);
@@ -944,8 +947,6 @@ bool scripting_engine::loadScriptStates(const char *filename)
 // "instances" and "triggers" arrays - 'root' is the parsed document object
 bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 {
-	uniqueTimerID maxRestoredTimerID = 0;
-
 	// Labels: a v2 save is the authoritative source, so clear and rebuild both buckets here
 	// - Global (map-authored / legacy / unowned) labels live at the top level
 	// - Each instance's owned labels are nested under it (loaded in the instance loop below)
@@ -1104,13 +1105,12 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 			node->function = std::get<0>(restoredTimerInfo);
 			node->additionalTimerFuncParam = std::move(std::get<1>(restoredTimerInfo));
 
-			maxRestoredTimerID = std::max<uniqueTimerID>(maxRestoredTimerID, node->timerID);
-
 			addTimerNode(std::move(node));
 		}
 	}
 
-	lastTimerID = maxRestoredTimerID;
+	// Restore the monotonic timer-id counter
+	lastTimerID = root.value("lastTimerID", static_cast<uniqueTimerID>(0));
 
 	return true;
 }
