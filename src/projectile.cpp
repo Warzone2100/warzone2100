@@ -525,7 +525,11 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	}
 	else
 	{
-		if (psAttacker == nullptr)
+		if (spawnedByPenetration)
+		{
+			proj.dst.z = target.z;
+		}
+		else if (psAttacker == nullptr)
 		{
 			proj.dst.z = target.z - LINE_OF_FIRE_MINIMUM;
 		}
