@@ -903,7 +903,8 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			// filter out "scriptName" and "me" variables
 			result.erase("me");
 			result.erase("scriptName");
-			instance->loadScriptGlobals(result);
+			// v1 (this legacy loader): undefined was stored as JSON null, so null -> undefined
+			instance->loadScriptGlobals(result, /*fixedNulls=*/false);
 		}
 		else if (instance && list[i].startsWith("groups_"))
 		{
@@ -988,7 +989,8 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 				// filter out "scriptName" and "me" variables (saved implicitly inside globals)
 				globals.erase("me");
 				globals.erase("scriptName");
-				instance->loadScriptGlobals(globals);
+				// v2 saves tag undefined explicitly, so a bare JSON null means JS null
+				instance->loadScriptGlobals(globals, /*fixedNulls=*/true);
 			}
 
 			// Group memberships: { "lastNewGroupId": <int>, "<droidId>": ["<groupId>", ...], ... }
