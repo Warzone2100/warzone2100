@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2026-04-04 02:03+0000\n"
-"PO-Revision-Date: 2026-04-04 03:52\n"
+"PO-Revision-Date: 2026-05-25 03:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1776,7 +1776,7 @@ msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Найдите и спасите ваших юнитов из подбитого транспорта"
 
 msgid "Destroy all enemy bases"
-msgstr ""
+msgstr "Уничтожить все вражеские базы"
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Спасите гражданских от Альянса, прежде чем большинство попадёт в плен"
@@ -2949,26 +2949,26 @@ msgid "System locale"
 msgstr "Системный язык"
 
 msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
-msgstr ""
+msgstr "Этот хост запретил подключение через некоторых хостинг-провайдеров, VPN и/или прокси сервера."
 
 msgid "Please try another room or disable any proxies / VPNs and try again."
-msgstr ""
+msgstr "Пожалуйста, попробуйте другую комнату или отключите прокси / VPN и повторите попытку."
 
 msgid "Game not found in lobby."
-msgstr ""
+msgstr "Игра не найдена в лобби."
 
 msgid "The game may have already started, or the host may have disbanded the game lobby."
 msgstr "Возможно, игра уже началась, или хост распустил лобби игры."
 
 msgid "Error hosting game in lobby server"
-msgstr ""
+msgstr "Ошибка при хостинге игры на сервере лобби"
 
 #, c-format
 msgid "Make sure port %d can receive incoming connections."
-msgstr ""
+msgstr "Убедитесь, что порт %d может принимать входящие подключения."
 
 msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
-msgstr ""
+msgstr "Если вы используете маршрутизатор, настройте его, чтобы включить UPnP/NAT-PMP/PCP или перевести порт в вашу систему."
 
 msgid "Failed to create port mapping"
 msgstr "Не удалось создать переадресацию портов"
@@ -2979,7 +2979,7 @@ msgstr "Настройте ваш роутер/сетевой экран, что
 
 #, c-format
 msgid "Port mapping opened external port: %u"
-msgstr ""
+msgstr "Назначен внешний порт: %u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2996,31 +2996,31 @@ msgid "Client failed to ack player index swap"
 msgstr "Клиент не подтвердил смену индекса игрока"
 
 msgid "Game is listed in the lobby"
-msgstr ""
+msgstr "Игра занесена в списки в лобби"
 
 msgid "Lobby GameId"
-msgstr ""
+msgstr "GameId Лобби"
 
 msgid "Game not listed in the lobby."
-msgstr ""
+msgstr "Игра не занесена в списки в лобби."
 
 msgid "Error connecting to the lobby server."
-msgstr ""
+msgstr "Ошибка соединения с лобби сервером."
 
 msgid "Please check your internet connection, or wait a short while and try hosting again."
-msgstr ""
+msgstr "Пожалуйста, проверьте подключение к Интернету, или немного подождите и попробуйте захостить снова."
 
 msgid "Your game will only be accessible via direct connection (or local LAN)."
-msgstr ""
+msgstr "Ваша игра будет доступна только через прямое подключение (или локальную LAN)."
 
 msgid "Multiplayer lobby support unavailable. Please update your client."
-msgstr ""
+msgstr "Не поддерживается лобби сетевой игры. Пожалуйста, обновите ваш клиент."
 
 msgid "Game not listed in the lobby:"
-msgstr ""
+msgstr "Игра не занесена в списки в лобби:"
 
 msgid "Failed to create game listing. Check WZ logs."
-msgstr ""
+msgstr "Не удалось создать листинг игры. Проверьте логи WZ."
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Формат файла реплея новее, чем эта версия Warzone 2100."
@@ -3103,16 +3103,16 @@ msgid "Tab Scroll right"
 msgstr "К правой вкладке"
 
 msgid "Please enter the text below"
-msgstr ""
+msgstr "Пожалуйста, введите текст внизу"
 
 msgid "Enter the text"
-msgstr ""
+msgstr "Введите текст"
 
 msgid "Please drag the slider to verify"
-msgstr ""
+msgstr "Перетащите слайдер для верификации"
 
 msgid "Please drag the tile to verify"
-msgstr ""
+msgstr "Перетащите тайл для верификации"
 
 msgid ".50-calibre heavy machinegun"
 msgstr "Тяжёлый пулемёт калибра .50"
@@ -3298,7 +3298,7 @@ msgid "All rail guns upgraded automatically"
 msgstr "Все рельсотроны улучшены автоматически"
 
 msgid "All Ripple Rockets upgraded automatically"
-msgstr ""
+msgstr "Все ракеты Дрожь улучшены автоматически"
 
 msgid "All sensors upgraded automatically"
 msgstr "Все радары улучшены автоматически"
@@ -3447,7 +3447,7 @@ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Бронебойные оперённые снаряды с отбрасываемым поддоном"
 
 msgid "Armored bunker with Assault Gun"
-msgstr ""
+msgstr "Укреплённый бункер с роторным пулемётом"
 
 msgid "Armored bunker with Flamer"
 msgstr "Укреплённый бункер с огнемётом"
@@ -4832,22 +4832,22 @@ msgid "Hero and Special rank units are protected"
 msgstr "Юниты ранга Герой и Специалист защищены"
 
 msgid "HESC Mortar Shells Mk2"
-msgstr ""
+msgstr "Снаряды миномёта в мягкой оболочке Мk2"
 
 msgid "HESC Mortar Shells Mk3"
-msgstr ""
+msgstr "Снаряды миномёта в мягкой оболочке Мk3"
 
 msgid "HESC Mortar Shells"
-msgstr ""
+msgstr "Снаряды миномёта в мягкой оболочке"
 
 msgid "HESCHC Mortar Shells Mk2"
-msgstr ""
+msgstr "Высокоёмкие снаряды миномёта Мk2"
 
 msgid "HESCHC Mortar Shells Mk3"
-msgstr ""
+msgstr "Высокоёмкие снаряды миномёта Мk3"
 
 msgid "HESCHC Mortar Shells"
-msgstr ""
+msgstr "Высокоёмкие снаряды миномёта"
 
 msgid "HESH Rocket Warhead Mk2"
 msgstr "Бронебойно-фугасная боеголовка Мk2"
@@ -4898,10 +4898,10 @@ msgid "High explosive shaped charge missile"
 msgstr "Управляемая ракета с кумулятивным зарядом"
 
 msgid "High Explosive Soft Casing High Capacity Shells"
-msgstr ""
+msgstr "Осколочные снаряды повышенной ёмкости в мягкой оболочке"
 
 msgid "High Explosive Soft Casing Shells"
-msgstr ""
+msgstr "Осколочные снаряды в мягкой оболочке"
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Усиленная термоброня Mk2"
@@ -5198,7 +5198,7 @@ msgid "Increases Rail Gun ROF"
 msgstr "Увеличение скорострельности рельсотрона"
 
 msgid "Increases Ripple Rocket ROF"
-msgstr ""
+msgstr "Повышает скорострельность ракет Дрожь"
 
 msgid "Increases Rocket accuracy"
 msgstr "Увеличение точности неуправляемых ракет"
@@ -5646,10 +5646,10 @@ msgid "Mortar Damage"
 msgstr "Миномёт: урон"
 
 msgid "Mortar Fast Loader Mk2"
-msgstr ""
+msgstr "Быстрая зарядка миномёта Mk2"
 
 msgid "Mortar Fast Loader Mk3"
-msgstr ""
+msgstr "Быстрая зарядка миномёта Mk3"
 
 msgid "Mortar Fast Loader"
 msgstr "Быстрая зарядка миномёта"
@@ -6742,7 +6742,7 @@ msgid "Target Acquisition Artillery Shells"
 msgstr "Целеуказание артиллерии"
 
 msgid "Target Acquisition Mortar Shells Mk2"
-msgstr ""
+msgstr "Целеуказание миномётов Mk2"
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "Целеуказание миномётов"
@@ -7360,7 +7360,7 @@ msgid "You have sent too many messages in the last few seconds. Please wait and 
 msgstr "Вы отправили слишком много сообщений за последние несколько секунд. Подождите и повторите попытку."
 
 msgid "The host has disabled debug mode / cheats for this game."
-msgstr ""
+msgstr "Хост отключил режим отладки / читы для этой игры."
 
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
@@ -7486,13 +7486,13 @@ msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Подключиться напрямую к IP/hostname как зритель"
 
 msgid "Connect to lobby game"
-msgstr ""
+msgstr "Подключиться к лобби игры"
 
 msgid "lobbyGameId"
-msgstr ""
+msgstr "lobbyGameId"
 
 msgid "Connect to lobby game as a spectator"
-msgstr ""
+msgstr "Подключиться к лобби игры как зритель"
 
 msgid "Go directly to host screen"
 msgstr "Сразу перейти к экрану хоста"
@@ -8076,15 +8076,15 @@ msgstr "Выбрать / назначить номер группы: "
 
 #, c-format
 msgid "Group %zu"
-msgstr ""
+msgstr "Группа %zu"
 
 #, c-format
 msgid "Select the Units in Group %zu"
-msgstr ""
+msgstr "Выбрать юнитов в группе %zu"
 
 #, c-format
 msgid "Assign Selected Units to Group %zu"
-msgstr ""
+msgstr "Назначить выбранных юнитов в группу %zu"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Центрировать камеру на этой группе по клику или двойному нажатию"
@@ -9114,7 +9114,7 @@ msgstr "Энергия в секунду"
 
 #, c-format
 msgid "%u derrick(s) inactive"
-msgstr ""
+msgstr "Нефтяных вышек неактивно: %u"
 
 msgid "Need more resources!"
 msgstr "Нужно больше ресурсов!"
@@ -9711,7 +9711,7 @@ msgid "- Player names will not be visible to other players (until the game has s
 msgstr "- Имена игроков не будут видны другим игрокам (пока игра не начнётся)"
 
 msgid "OPTIONS"
-msgstr "ПАРАМЕТРЫ"
+msgstr "НАСТРОЙКИ"
 
 msgid "Return To Previous Screen"
 msgstr "Назад"
@@ -10242,7 +10242,7 @@ msgstr "[%d] Лимит [%s]: %u (по умолчанию: без огранич
 
 #, c-format
 msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
+msgstr "[%zu] Лимит, который больше чем numStructureStats (%u): %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10604,7 +10604,7 @@ msgid "Error:"
 msgstr "Ошибка:"
 
 msgid "Message from Lobby:"
-msgstr ""
+msgstr "Сообщение от лобби:"
 
 msgid "Join Attempt Rejected"
 msgstr "Запрос на подключение отклонен"
@@ -10631,22 +10631,22 @@ msgid "Connection Error"
 msgstr "Ошибка соединения"
 
 msgid "Gathering connection details"
-msgstr ""
+msgstr "Сбор данных о соединении"
 
 msgid "Could Not Connect"
-msgstr ""
+msgstr "Не удалось подключиться"
 
 msgid "Timeout"
-msgstr ""
+msgstr "Время ожидания истекло"
 
 msgid "Error"
-msgstr ""
+msgstr "Ошибка"
 
 msgid "The host has requested additional verification"
-msgstr ""
+msgstr "Хост запросил дополнительную верификацию"
 
 msgid "No supported connection details"
-msgstr ""
+msgstr "Нет поддерживаемых данных о подключении"
 
 msgid "No connections available"
 msgstr "Нет доступных подключений"
@@ -10655,10 +10655,10 @@ msgid "Synchronizing data with host ..."
 msgstr "Синхронизация данных с хостом..."
 
 msgid "Waiting for lobby error resolution"
-msgstr ""
+msgstr "Ожидание разрешения ошибок в лобби"
 
 msgid "Waiting for join info"
-msgstr ""
+msgstr "Ожидание информации о присоединении"
 
 msgid "Waiting for correct join password"
 msgstr "Ожидание правильного пароля для входа"
@@ -11087,34 +11087,34 @@ msgid "\"Classic\" campaign balance"
 msgstr "Классический баланс кампании"
 
 msgid "Pumpkin"
-msgstr ""
+msgstr "Pumpkin"
 
 msgid "\"Pumpkin\" campaign balance"
-msgstr ""
+msgstr "Баланс кампании \"Pumpkin\""
 
 msgid "About Balance Options"
-msgstr ""
+msgstr "Об опциях баланса"
 
 msgid "Balance"
-msgstr ""
+msgstr "Баланс"
 
 msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
-msgstr ""
+msgstr "Warzone 2100 предлагает несколько вариантов баланса для оригинальной кампании, отражающие различный опыт за долгую историю игры."
 
 msgid "The remastered campaign experience"
 msgstr "Обновлённый баланс кампании"
 
 msgid "Increases the viability of weaponry and designs on a per mission basis."
-msgstr ""
+msgstr "Повышает эффективность вооружения и дизайнов в рамках каждой миссии."
 
 msgid "Stats of game versions ~2.x - 3.x."
-msgstr ""
+msgstr "Характеристики как в версиях ~2.x - 3.x."
 
 msgid "Unintentionally affected by game patches over the years."
-msgstr ""
+msgstr "Косвенно изменились из-за игровых патчей на протяжении многих лет."
 
 msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
-msgstr ""
+msgstr "Совпадает с версией 1.10. Наиболее близкое представление характеристик от оригинальных разработчиков (Pumpkin Studios)."
 
 msgid "Remastered"
 msgstr "Обновлённый"
@@ -11261,7 +11261,7 @@ msgid "Reset Keys to: Defaults"
 msgstr "Сбросить клавиши на: По умолчанию"
 
 msgid "Only useful if Enable IPv6 is On."
-msgstr ""
+msgstr "Полезно только если включить IPv6."
 
 #, c-format
 msgid "%u minutes"
@@ -11285,25 +11285,25 @@ msgid "Default AI"
 msgstr "ИИ по умолчанию"
 
 msgid "Lobby Options"
-msgstr ""
+msgstr "Настройки лобби"
 
 msgid "Enable IPv6"
-msgstr ""
+msgstr "Включить IPv6"
 
 msgid "Whether to list and try connecting via IPv6 (if available)."
-msgstr ""
+msgstr "Будут ли отображаться в списке и пытаться ли подключиться через IPv6 (если доступно)."
 
 msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
-msgstr ""
+msgstr "Запретить подключение через IPv6 и листинг только IPv6 игр. Рекомендуется только если у вашей системы есть проблемы с подключением через IPv6."
 
 msgid "Enable IPv6. If your system supports it, this is the recommended option."
-msgstr ""
+msgstr "Включить IPv6. Если ваша система поддерживает его, это рекомендуемый вариант."
 
 msgid "Prefer IPv6 over IPv4"
-msgstr ""
+msgstr "Предпочитать IPv6 вместо IPv4"
 
 msgid "Prefer connecting via IPv6 over IPv4 when a game is available via both."
-msgstr ""
+msgstr "Предпочитать подключение через IPv6 вместо IPv4, когда игра доступна через в обоих."
 
 msgid "Hosting Options"
 msgstr "Настройки хостинга"
@@ -11393,10 +11393,10 @@ msgid "Draw Shadows"
 msgstr "Отрисовка теней"
 
 msgid "Terrain Shadows"
-msgstr ""
+msgstr "Тени ландшафта"
 
 msgid "Whether terrain casts shadows."
-msgstr ""
+msgstr "Отбрасывать ли тени от ландшафта."
 
 msgid "Shadow Resolution"
 msgstr "Разрешение теней"
@@ -11679,15 +11679,15 @@ msgid "Waiting Room"
 msgstr "Комната ожидания"
 
 msgid "Reset Lobby Address to Default"
-msgstr ""
+msgstr "Восстановить адрес лобби по умолчанию"
 
 #, c-format
 msgid "Host Name: %s"
-msgstr ""
+msgstr "Имя хоста: %s"
 
 #, c-format
 msgid "ID: %s"
-msgstr ""
+msgstr "ID: %s"
 
 msgid "FFA"
 msgstr "FFA"
@@ -11723,35 +11723,35 @@ msgid "Spectate Game"
 msgstr "Наблюдать за игрой"
 
 msgid "Join as Player"
-msgstr ""
+msgstr "Присоединиться как игрок"
 
 msgid "Join as Spectator"
-msgstr ""
+msgstr "Присоединиться как зритель"
 
 #, c-format
 msgid "Last IP: %s"
-msgstr ""
+msgstr "Последний IP: %s"
 
 msgid "Clear Last IP"
-msgstr ""
+msgstr "Очистить последний IP"
 
 msgid "GameID or IP:port"
-msgstr ""
+msgstr "GameID или IP:порт"
 
 msgid "Join"
-msgstr ""
+msgstr "Присоединиться"
 
 msgid "There appears to be a game update available!"
 msgstr "Похоже, доступно обновление игры!"
 
 msgid "Error dispatching request"
-msgstr ""
+msgstr "Ошибка при отправке запроса"
 
 msgid "Failed to connect to lobby server"
 msgstr "Не удалось соединиться с лобби сервера"
 
 msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
-msgstr ""
+msgstr "Эта игра только через IPv6, и у вас отключен параметр \"Включить IPv6\" в Настройках > По умолчанию."
 
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Ваша версия Warzone несовместима с этой игрой."
@@ -11802,103 +11802,103 @@ msgid "Hide Modded Games"
 msgstr "Скрыть модифицированные игры"
 
 msgid "Hide IPv6-Only"
-msgstr ""
+msgstr "Скрыть только IPv6"
 
 msgid "Host Lobby Options"
-msgstr ""
+msgstr "Настройки лобби хоста"
 
 msgid "Game must be listed in lobby to support this option."
-msgstr ""
+msgstr "Игра должна быть в списке лобби для поддержки этой настройки."
 
 msgid "This option is not supported by the current lobby."
-msgstr ""
+msgstr "Эта настройки не поддерживается текущим лобби."
 
 msgid "Awaiting lobby information..."
-msgstr ""
+msgstr "Ожидание информации лобби..."
 
 msgid "Slot Options"
-msgstr ""
+msgstr "Настройки слота"
 
 msgid "Spectator Join"
-msgstr ""
+msgstr "Присоединие зрителя"
 
 msgid "Locked"
-msgstr ""
+msgstr "Зафиксировано"
 
 msgid "Allow Change"
-msgstr ""
+msgstr "Разрешить изменение"
 
 msgid "Position"
-msgstr ""
+msgstr "Позиция"
 
 msgid "Game Options"
-msgstr ""
+msgstr "Настройки игры"
 
 msgid "Lobby Join Options"
-msgstr ""
+msgstr "Настройки подключения к лобби"
 
 msgid "Bot Protection"
-msgstr ""
+msgstr "Защита от ботов"
 
 msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
-msgstr ""
+msgstr "Смогут ли автоматизированные боты или инструменты присоединиться или получить информацию о подключении хоста (включая ваш IP-адрес). Если вы сталкиваетесь с нежелательными соединениями, спамерами или другими злоупотреблениями, вы можете включить эту опцию."
 
 msgid "Block Known Bots"
-msgstr ""
+msgstr "Блокировать известных ботов"
 
 msgid "Block known bots or automated tools."
-msgstr ""
+msgstr "Блокировать известных ботов или автоматические инструменты."
 
 msgid "Proxy / VPN Connections"
-msgstr ""
+msgstr "Прокси / VPN соединения"
 
 msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
-msgstr ""
+msgstr "Прокси / VPN скрывают реальный источник подключений. Может использоваться игроками, пытающимися уклоняться от банов или чтобы скрыть свою личность."
 
 msgid "Block suspicious connections from proxies / VPNs."
-msgstr ""
+msgstr "Блокировать подозрительные соединения через прокси / VPN."
 
 msgid "(Recommended)"
-msgstr ""
+msgstr "(Рекомендуется)"
 
 msgid "Block All"
-msgstr ""
+msgstr "Блокировать все"
 
 msgid "Block all connections from proxies / VPNs."
-msgstr ""
+msgstr "Блокировать все соединения через прокси / VPN."
 
 msgid "Block Suspicious"
-msgstr ""
+msgstr "Блокировать подозрительные"
 
 msgid "Hosting Provider IPs"
-msgstr ""
+msgstr "IP хостинг-провайдера"
 
 msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
-msgstr ""
+msgstr "Серверные хостинг-провайдеры. Может использоваться автоматизированными инструментами, сканерами портов или игроками, пытающимися избежать банов."
 
 msgid "Block all connections from hosting provider IPs."
-msgstr ""
+msgstr "Блокировать все соединения от IP-адресов хостинг-провайдеров."
 
 msgid "Block suspicious connections from hosting provider IPs."
-msgstr ""
+msgstr "Блокировать подозрительные соединения от IP-адресов хостинг-провайдеров."
 
 msgid "Lobby Join Bypass"
-msgstr ""
+msgstr "Обход присоединения через лобби"
 
 msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
-msgstr ""
+msgstr "Позволить клиентам обойти присоединие через лобби, подключаясь напрямую через порт:ip. (Может позволить троллям обойти лобби через защиту от злоупотреблений.)"
 
 msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
-msgstr ""
+msgstr "Позволить любому IP подключаться напрямую. Обходит защиту лобби от злоупотреблений."
 
 msgid "(Not Recommended)"
-msgstr ""
+msgstr "(Не рекомендуется)"
 
 msgid "Do not allow direct joins. Require joining through the lobby."
-msgstr ""
+msgstr "Не позволять подключаться напрямую. Требует присоединения через лобби."
 
 msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
-msgstr ""
+msgstr "Позволить локальным / LAN IP-адресам подключаться напрямую. Другим придётся присоединяться через лобби."
 
 msgid "Joined:"
 msgstr "Присоединился:"
