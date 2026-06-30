@@ -97,10 +97,16 @@
 		{
 			"name": "protobuf",
 			"platform": "!emscripten"
+		},
+		{
+			"name": "zstd",
+			"version>=": "1.4.0",
+			"platform": "!emscripten"
 		}
 	],
 	"overrides": [
-		{ "name": "sqlite3", "version": "3.49.2" }
+		{ "name": "sqlite3", "version": "3.49.2" },
+		{ "name": "zstd", "version": "1.5.7" }
 	],
 	"default-features": [
 		"vulkan"

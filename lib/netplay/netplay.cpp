@@ -3827,7 +3827,7 @@ static void NETallowJoining()
 						{
 							debug(LOG_NET, "writeAll to tmpSocket[%u] failed with error?: %d", i, writeResult.error().value());
 						}
-						tmp_socket[i]->enableCompression();
+						tmp_socket[i]->enableCompression(war_getCompressionAdapterType());
 
 						// Connection is successful.
 						connectFailed = false;

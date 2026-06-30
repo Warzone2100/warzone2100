@@ -32,6 +32,7 @@
 #include "lib/framework/types.h" // bring in `ssize_t` for MSVC
 #include "lib/netplay/net_result.h"
 #include "lib/netplay/compression_adapter.h"
+#include "lib/netplay/wz_compression_provider.h"
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
@@ -149,8 +150,9 @@ public:
 	///
 	/// This makes all subsequent write operations asynchronous, plus
 	/// the written data will need to be flushed explicitly at some point.
+	/// <param name="adapterType">The type of compression adapter to use.</param>
 	/// </summary>
-	void enableCompression();
+	void enableCompression(CompressionAdapterType adapterType);
 
 	bool isCompressed() const
 	{

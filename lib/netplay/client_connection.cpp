@@ -253,7 +253,7 @@ net::result<void> IClientConnection::flush(size_t* rawByteCount)
 	return {};
 }
 
-void IClientConnection::enableCompression()
+void IClientConnection::enableCompression(CompressionAdapterType adapterType)
 {
 	if (isCompressed_)
 	{
@@ -262,9 +262,14 @@ void IClientConnection::enableCompression()
 
 	ASSERT_OR_RETURN(, compressionProvider_ != nullptr, "Invalid compression provider");
 
-	pwm_->executeUnderLock([this]
+	pwm_->executeUnderLock([this, adapterType]
 	{
-		compressionAdapter_ = compressionProvider_->newCompressionAdapter();
+		compressionAdapter_ = compressionProvider_->newCompressionAdapter(adapterType);
+		if (!compressionAdapter_)
+		{
+			debug(LOG_NET, "Failed to create compression adapter - compression will be disabled.");
+			return;
+		}
 		const auto initRes = compressionAdapter_->initialize();
 		if (!initRes.has_value())
 		{
