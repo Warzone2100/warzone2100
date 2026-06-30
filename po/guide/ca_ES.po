@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2025-11-26 19:48+0000\n"
-"PO-Revision-Date: 2025-11-26 20:49\n"
+"PO-Revision-Date: 2026-06-10 03:13\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca_ES\n"
@@ -84,19 +84,19 @@ msgid "The middle / central button closes any open command interface."
 msgstr "El botó central tanca qualsevol interfície de comanda oberta."
 
 msgid "Defending Your Base"
-msgstr ""
+msgstr "Defensant la teva base"
 
 msgid "In Warzone 2100, your home base persists throughout the campaign."
-msgstr ""
+msgstr "A Warzone 2100, la teva base operativa persisteix durant tota la campanya."
 
 msgid "As such, preparing for the future defense of your home base is essential."
-msgstr ""
+msgstr "Per tant, preparar-se per a la futura defensa de la vostra base és essencial."
 
 msgid "While units are obviously helpful to defend your base, the design of your base is also critical."
-msgstr ""
+msgstr "Tot i que les unitats són evidentment útils per defensar la teva base, el disseny de la teva base també és crític."
 
 msgid "Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks."
-msgstr ""
+msgstr "Construeix estructures defensives que proporcionin cobertura, restringeixin l'accés, detectin els enemics i infligeixin danys, per tal de poder contrarestar millor els atacs enemics."
 
 msgid "Intelligence Display"
 msgstr "Informe d'intel·ligència"
@@ -207,16 +207,16 @@ msgid "Tip: To build \"walls\" (once they are available), you can click and drag
 msgstr "Consell: Per construir \"murs\" (un cop siguin desbloquejats), podeu clicar i arrossegar per dibuixar una línia de paret."
 
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Fàbrica de cíborgs"
 
 msgid "A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs."
-msgstr ""
+msgstr "Una fàbrica cíborg funciona de manera similar a una fàbrica estàndard, però construeix exclusivament cíborgs."
 
 msgid "Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production."
-msgstr ""
+msgstr "Cada fàbrica pot construir un cíborg alhora, però podeu posar en cua diversos cíborgs per a la producció."
 
 msgid "When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point."
-msgstr ""
+msgstr "Quan es produeix un Cyborg, rep les ordres d'unitat de la fàbrica de Cyborg i es dirigeix ​​al punt de reunió de la fàbrica."
 
 msgid "Demolishing Structures"
 msgstr "Demolició d'estructures"
@@ -414,16 +414,16 @@ msgid "Recycling"
 msgstr "Reciclatge"
 
 msgid "Recycling a unit will send it to the nearest Factory or Repair Facility, where it will be removed from play."
-msgstr ""
+msgstr "Reciclar una unitat l'enviarà a la fàbrica o instal·lació de reparació més propera, on es retirarà del joc."
 
 msgid "Half the power used in making the unit will be refunded to you (although this will be reduced if the unit is damaged)."
 msgstr "La meitat de l'energia usada per fabricar la unitat se us retorna (tot i que pot ser menor si la unitat està malmesa)."
 
 msgid "The experience points of the recycled unit will be transferred to the next unit that is manufactured."
-msgstr ""
+msgstr "Els punts d'experiència de la unitat reciclada es transferiran a la següent unitat que es fabriqui."
 
 msgid "When multiple experienced units are recycled, the highest amount of experience points is transferred first."
-msgstr ""
+msgstr "Quan es reciclen diverses unitats experimentades, la quantitat més alta de punts d'experiència es transfereix primer."
 
 msgid "You can order the selected units to return for recycling via the Unit Orders menu or the \"Return for Recycling\" keybind."
 msgstr "Podeu ordenar el reciclatge a les unitats seleccionades via el menú d'Ordres de la Unitat o amb la tecla \"Torna per ser reciclat\"."
@@ -501,16 +501,16 @@ msgid "Attaching Units"
 msgstr "Lligar una unitat"
 
 msgid "To attach units to a Commander, select the unit(s), then left-click the Commander you want to attach them to. A symbol will appear next to the assigned unit(s) to signify the attachment."
-msgstr ""
+msgstr "Per adjuntar unitats a un comandant, seleccioneu la unitat o unitats i feu clic amb el botó esquerre al comandant al qual les voleu adjuntar. Apareixerà un símbol al costat de la unitat o unitats assignades per indicar l'adjuntació."
 
 msgid "## Limits:"
 msgstr "## Límits:"
 
 msgid "Commanders have a limit to the amount of units they can control, which is affected by their rank. Promotions are earned by the Commander reaching a dedicated amount of experience points."
-msgstr ""
+msgstr "Els comandants tenen un límit en la quantitat d'unitats que poden controlar, que es veu afectat pel seu rang. Els ascensos s'aconsegueixen quan el comandant arriba a una quantitat específica de punts d'experiència."
 
 msgid "After each promotion, the Commander is able to control 2 more units."
-msgstr ""
+msgstr "Després de cada ascens, el comandant pot controlar 2 unitats més."
 
 msgid "Detaching Units"
 msgstr "Deslligar una unitat"
@@ -537,7 +537,7 @@ msgid "Targeting"
 msgstr "Objectiu"
 
 msgid "When you select a Commander and target an enemy unit or structure, attached units will move to fire on the target."
-msgstr ""
+msgstr "Quan seleccioneu un comandant i apunteu a una unitat o estructura enemiga, les unitats adjuntes es mouran per disparar a l'objectiu."
 
 msgid "The attached units will have greater accuracy when firing."
 msgstr "Les unitats lligades tindran una millor precisió disparant."
@@ -552,7 +552,7 @@ msgid "Commanders provide an accuracy, armor, and movement speed bonus to all un
 msgstr "Els comandants els donen un bonus de precisió, d'armadura i de velocitat de desplaçament, que incrementen segons el ranc del comandant."
 
 msgid "They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
-msgstr ""
+msgstr "Al principi estan limitats a 6 unitats d'atac assignades, però aquest límit augmenta en 2 cada vegada que el comandant guanya un rang."
 
 msgid "Designing Units"
 msgstr "Disseny d'unitats"
@@ -588,76 +588,76 @@ msgid "Units with higher experience levels can make all the difference in battle
 msgstr "Les unitats amb nivells d'experiència més elevats poden fer tota la diferència en la batalla!"
 
 msgid "Cyborgs"
-msgstr ""
+msgstr "Cíborgs"
 
 msgid "Cyborgs are your main infantry units."
-msgstr ""
+msgstr "Els cíborgs són les teves principals unitats d'infanteria."
 
 msgid "They are fast and reliable units, and are extremely resistant to Anti-Tank weapons."
-msgstr ""
+msgstr "Són unitats ràpides i fiables, i extremadament resistents a les armes antitanc."
 
 msgid "However, they are more vulnerable to Anti-Personnel and Artillery weapons."
-msgstr ""
+msgstr "No obstant això, són més vulnerables a les armes antipersonal i d'artilleria."
 
 msgid "Note that Cyborgs cannot be designed. Cyborg templates are researched independently, and require a Cyborg Factory to produce."
-msgstr ""
+msgstr "Tingueu en compte que els cíborgs no es poden dissenyar. Les plantilles de cíborg s'investiguen de manera independent i requereixen una fàbrica de cíborgs per produir-les."
 
 msgid "Half-tracks"
-msgstr ""
+msgstr "Semiviatgeres"
 
 msgid "Half-tracks are a hybrid propulsion between Wheels and Tracks."
-msgstr ""
+msgstr "Les Semiviatgeres són una propulsió híbrida entre rodes i erutes"
 
 msgid "They have a moderate cost and speed, and provide a moderate amount of hitpoints."
-msgstr ""
+msgstr "Tenen un cost i una velocitat moderats, i proporcionen una quantitat moderada de punts de vida."
 
 msgid "They also provide resistance against Anti-Personnel and Artillery damage, but are still quite vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "També proporcionen resistència contra els danys antipersones i d'artilleria, però encara són força vulnerables a les armes antitanc."
 
 msgid "Half-tracks are excellent for general-purpose units, but don't quite provide the high durability of Tracks or the high speeds of Wheels."
-msgstr ""
+msgstr "Les Semiviatgeres són excel·lents per a unitats d'ús general, però no ofereixen la gran durabilitat de les erues ni les altes velocitats de les rodes."
 
 msgid "Hover"
-msgstr ""
+msgstr "Aerolliscador"
 
 msgid "Hover is a fast, amphibious propulsion for vehicles."
-msgstr ""
+msgstr "L'Aerolliscador és un sistema de propulsió ràpid i amfíbia per a vehicles."
 
 msgid "Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes."
-msgstr ""
+msgstr "L'Aerolliscador proporciona velocitats màximes molt elevades i la capacitat de travessar lliurement l'aigua, cosa que pot ser indispensable per trobar rutes d'atac úniques."
 
 msgid "However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage."
-msgstr ""
+msgstr "No obstant això, tenen un cost de producció més elevat, proporcionen pocs punts de vida i són vulnerables a la majoria de tipus de danys."
 
 msgid "Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics."
-msgstr ""
+msgstr "Les altes velocitats de l'Aerolliscador  i la seva capacitat de travessar l'aigua el fan adequat per a tàctiques d'atropellament i fugida."
 
 msgid "Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line."
-msgstr ""
+msgstr "De la mateixa manera que les Erugues, però, no són gaire adequades per a combats prolongats al front."
 
 msgid "Tracks"
-msgstr ""
+msgstr "Erugues"
 
 msgid "Tracks are a highly-armored propulsion for vehicles."
-msgstr ""
+msgstr "Les erugues són un sistema de propulsió altament blindat per a vehicles."
 
 msgid "They provide a large amount of hitpoints, as well as high resistances against Anti-Personnel and Artillery damage."
-msgstr ""
+msgstr "Proporcionen una gran quantitat de punts de vida, així com altes resistències contra danys antipersonal i d'artilleria."
 
 msgid "However, they come at a higher production cost, have longer build times, and are still very vulnerable to Anti-Tank weapons."
-msgstr ""
+msgstr "No obstant això, tenen un cost de producció més elevat, temps de construcció més llargs i encara són molt vulnerables a les armes antitanc."
 
 msgid "Additionally, Tracks come with a hefty penalty to their maximum speed."
-msgstr ""
+msgstr "A més, les erugues tenen una forta penalització a la seva velocitat màxima."
 
 msgid "Due to their high durability, Tracks are perfect for vehicles designed for combat on the front lines."
-msgstr ""
+msgstr "A causa de la seva alta durabilitat, les erugues són perfectes per a vehicles dissenyats per al combat al front."
 
 msgid "Care must be taken, however. Their slow movement speed can make escaping unfavorable situations very difficult."
-msgstr ""
+msgstr "Cal anar amb compte, però. La seva lenta velocitat de moviment pot fer que escapar de situacions desfavorables sigui molt difícil."
 
 msgid "Attacking with VTOLs"
-msgstr ""
+msgstr "Atac amb VTOLs"
 
 msgid "To attack with a VTOL, select it and click an enemy like normal."
 msgstr "Per atacar amb un VTOL, seleccioni'l i cliqui sobre un enemic com de costum."
@@ -678,16 +678,16 @@ msgid "Alternatively, VTOLs can be assigned to VTOL Strike Towers and VTOL CB To
 msgstr "D'altra banda, els VTOL es poden assignar a torres d'atac VTOL i torres AB VTOL, que els faran funcionar similarment a l'artilleria assignada a torres de sensors."
 
 msgid "Defending with VTOLs"
-msgstr ""
+msgstr "Defensa amb VTOLs"
 
 msgid "VTOL units may also be used to defend areas of the map."
-msgstr ""
+msgstr "Les unitats VTOL també es poden utilitzar per defensar zones del mapa."
 
 msgid "VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor)."
-msgstr ""
+msgstr "Els VTOL es poden assignar a una torreta d'atac VTOL o a una torre de radar VTOL, i atacaran automàticament qualsevol cosa que sigui objectiu del sensor (de manera molt semblant a l'artilleria assignada a un sensor estàndard)."
 
 msgid "VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
-msgstr ""
+msgstr "També es pot ordenar als VTOL que patrullin o encerclin una zona. En fer-ho, atacaran automàticament qualsevol enemic que trobin al seu camí."
 
 msgid "Defending Against VTOLs"
 msgstr "Defensar-se dels VTOL"
@@ -711,7 +711,7 @@ msgid "In addition to being uncommon, versatile weapons do not do as much damage
 msgstr "A més de ser rares, les armes versàtils no provoquen tants danys als VTOL com els AA, es recomana doncs tenir AA contra els VTOL."
 
 msgid "Using VTOLs"
-msgstr ""
+msgstr "Ús de VTOLs"
 
 msgid "Designing VTOL units is similar to designing ground units."
 msgstr "Dissenyar unitats VTOL és similar a dissenyar unitats terrestres."
@@ -723,16 +723,16 @@ msgid "You will then be able to select from the available VTOL Weapons."
 msgstr "Aleshores podrà escollir entre les armes VTOL disponibles."
 
 msgid "To produce your VTOL designs, you will need to construct a VTOL Factory."
-msgstr ""
+msgstr "Per produir els vostres dissenys VTOL, haureu de construir una fàbrica VTOL."
 
 msgid "In order to repair, rearm, and maintain your VTOL units, you will need to construct one or more VTOL Rearming Pads."
-msgstr ""
+msgstr "Per reparar, rearmar i mantenir les vostres unitats VTOL, haureu de construir una o més plataformes de rearmament VTOL."
 
 msgid "VTOL Weapons"
-msgstr ""
+msgstr "Armes VTOL"
 
 msgid "Most weapons have a VTOL equivalent, which does increased damage, but has limited ammo."
-msgstr ""
+msgstr "La majoria d'armes tenen un equivalent VTOL, que fa més danys, però té munició limitada."
 
 msgid "VTOL versions of regular weapons do not need to be researched separately."
 msgstr "No cal fer recerca separada de les armes ordinàries VTOL."
@@ -747,43 +747,43 @@ msgid "VTOL (Vertical Take-Off and Landing) units are the main aerial instrument
 msgstr "Les unitats VTOL (Vertical Take-Off and Landing) són els instruments aeris principals per dominar el cel."
 
 msgid "VTOLs have an extremely high maximum speed and can traverse all types of terrain."
-msgstr ""
+msgstr "Els VTOL tenen una velocitat màxima extremadament alta i poden travessar tot tipus de terreny."
 
 msgid "Additionally, they cannot be targeted by most weapons while airborne."
-msgstr ""
+msgstr "A més, no poden ser objectiu de la majoria d'armes mentre estan a l'aire."
 
 msgid "Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory."
-msgstr ""
+msgstr "Tingueu en compte que, si bé les unitats VTOL es poden dissenyar com altres vehicles, només es poden produir des d'una fàbrica VTOL especialitzada."
 
 msgid "Wheels"
 msgstr "Rodes"
 
 msgid "Wheels are the most basic vehicle propulsion."
-msgstr ""
+msgstr "Les Rodes són el sistema de propulsió més bàsic dels vehicles."
 
 msgid "They are inexpensive and fast to produce, and also have a high maximum speed."
-msgstr ""
+msgstr "Són econòmics i ràpids de produir, i també tenen una velocitat màxima elevada."
 
 msgid "However, they are vulnerable to most types of damage, and don't provide many hitpoints."
-msgstr ""
+msgstr "No obstant això, són vulnerables a la majoria de tipus de danys i no proporcionen molts punts de vida."
 
 msgid "Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
-msgstr ""
+msgstr "Les rodes s'utilitzen millor en vehicles que operen darrere de les línies del front o en vehicles que exploten la seva alta velocitat per a atacs d'atropellament i fugida."
 
 msgid "Propulsions"
 msgstr "Propulsions"
 
 msgid "Just as with weapons, you may also discover new types of vehicle propulsions that can be used in designs."
-msgstr ""
+msgstr "Igual que amb les armes, també podeu descobrir nous tipus de propulsió de vehicles que es poden utilitzar en dissenys."
 
 msgid "When you complete research on a new propulsion, an Intelligence Display message will provide some information on its attributes."
-msgstr ""
+msgstr "Quan completeu la investigació sobre una nova propulsió, un missatge de la Pantalla d'Intel·ligència proporcionarà informació sobre els seus atributs."
 
 msgid "Additionally, you can find descriptions of each propulsion in this guide."
-msgstr ""
+msgstr "A més, podeu trobar descripcions de cada propulsió en aquesta guia."
 
 msgid "Understanding the advantages and disadvantages of each propulsion is essential to both designing your own units and combating enemy units."
-msgstr ""
+msgstr "Comprendre els avantatges i els desavantatges de cada propulsió és essencial tant per dissenyar les teves pròpies unitats com per combatre les unitats enemigues."
 
 msgid "Repairing Units"
 msgstr "Reparar unitats"
@@ -843,25 +843,25 @@ msgid "Artillery weapons, by themselves, cannot fire more than their own sensor 
 msgstr "Les armes d'artilleria, per se, no poden disparar més enllà de l'abast de llurs sensors (8 caselles sense millores)."
 
 msgid "However, even the most basic artillery weapon has a weapon range that exceeds its built-in sensor range. To use it, you will need to build and deploy sensors on the battlefield (either sensor towers or tanks with sensor turrets)."
-msgstr ""
+msgstr "No obstant això, fins i tot l'arma d'artilleria més bàsica té un abast que supera el seu abast de sensors integrats. Per utilitzar-la, haureu de construir i desplegar sensors al camp de batalla (ja siguin torres de sensors o tancs amb torretes de sensors)."
 
 msgid "Kinetic & Thermal Damage"
 msgstr "Danys cinètics i tèrmics"
 
 msgid "Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating."
-msgstr ""
+msgstr "La majoria d'armes infligeixen danys per mitjans cinètics (bales, coets, etc.) i, per tant, es veuen afectades per l'armadura cinètica estàndard."
 
 msgid "However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor."
-msgstr ""
+msgstr "No obstant això, algunes armes infligeixen dany tèrmic, que no es veu afectat per l'armadura cinètica de l'objectiu."
 
 msgid "Instead, thermal weapons are mitigated by a target's thermal armor."
-msgstr ""
+msgstr "En canvi, les armes tèrmiques es mitiguen amb l'armadura tèrmica d'un objectiu."
 
 msgid "A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen."
-msgstr ""
+msgstr "L'armadura cinètica i tèrmica d'una unitat es pot veure al menú de disseny, a la pantalla de selecció del cos."
 
 msgid "Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
-msgstr ""
+msgstr "Tingueu en compte que totes les unitats tenen menys armadura tèrmica que armadura cinètica. Això vol dir que el dany tèrmic es reduirà menys que el dany cinètic!"
 
 msgid "Attacking"
 msgstr "Atacar"
@@ -912,127 +912,127 @@ msgid "To be able to design units, a Command Center is required."
 msgstr "Per dissenyar unitats, es necessita un Centre de Comandament."
 
 msgid "All-Rounder"
-msgstr ""
+msgstr "Polivalents"
 
 msgid "\"All-Rounder\" weapons are less effective than specialized weapons."
-msgstr ""
+msgstr "Les armes \"polivalents\" són menys efectives que les armes especialitzades."
 
 msgid "However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons."
-msgstr ""
+msgstr "No obstant això, les armes polivalents són moderadament efectives contra tots els tipus d'objectius, a diferència de les armes especialitzades."
 
 msgid "All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
-msgstr ""
+msgstr "Les armes polivalents també donen punts de vida addicionals significatius a la unitat a la qual estan equipades, a costa de tenir valors de pes més alts."
 
 msgid "Anti-Air"
-msgstr ""
+msgstr "Antiaèries"
 
 msgid "Anti-Air (or AA) weapons are specialized againt all types of flying units."
-msgstr ""
+msgstr "Les armes antiaèries (o AA) estan especialitzades contra tot tipus d'unitats voladores."
 
 msgid "However, AA weapons are incapable of attacking structures or units on the ground."
-msgstr ""
+msgstr "Tanmateix, les armes antiaèries són incapaces d'atacar estructures o unitats a terra."
 
 msgid "While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
-msgstr ""
+msgstr "Tot i que les armes antiaèries són excel·lents per fer front a amenaces aèries, s'han de protegir de les amenaces terrestres."
 
 msgid "Anti-Personnel"
-msgstr ""
+msgstr "Antipersona"
 
 msgid "Anti-Personnel weapons are extremely effective at mowing down enemy infantry and light vehicles."
-msgstr ""
+msgstr "Les armes antipersona són extremadament efectives per destruir la infanteria i els vehicles lleugers enemics."
 
 msgid "However, these weapons are less effective against structures and heavily armored targets."
-msgstr ""
+msgstr "No obstant això, aquestes armes són menys efectives contra estructures i objectius fortament blindats."
 
 msgid "Anti-Tank"
-msgstr ""
+msgstr "Antitanc"
 
 msgid "Anti-Tank weapons are specialized against all types of enemy vehicles."
-msgstr ""
+msgstr "Les armes antitanc estan especialitzades contra tot tipus de vehicles enemics."
 
 msgid "However, Anti-Tank weapons are less effective against structures, and especially ineffective against infantry."
-msgstr ""
+msgstr "No obstant això, les armes antitanc són menys efectives contra les estructures i especialment ineficaces contra la infanteria."
 
 msgid "Generally, Anti-Tank weapons are lightweight, but provide very little hitpoints. Vehicles with these weapons will be more frail than ones equipped with most other weapon types."
-msgstr ""
+msgstr "Generalment, les armes antitanc són lleugeres, però proporcionen molt pocs punts de vida. Els vehicles amb aquestes armes seran més fràgils que els equipats amb la majoria d'altres tipus d'armes."
 
 msgid "Artillery"
-msgstr ""
+msgstr "Artilleria"
 
 msgid "Artillery weapons are devastating against infantry and most structures."
-msgstr ""
+msgstr "Les armes d'artilleria són devastadores contra la infanteria i la majoria d'estructures."
 
 msgid "However, Artillery weapons are less effective against bunkers and tracked vehicles."
-msgstr ""
+msgstr "No obstant això, les armes d'artilleria són menys efectives contra búnquers i vehicles erugats."
 
 msgid "Most (but not all) Artillery weapons must be stationary in order to fire. This combined with the very low amount of hitpoints provided by Artillery weapons means Artillery-equipped units are vulnerable on their own."
-msgstr ""
+msgstr "La majoria (però no totes) de les armes d'artilleria han d'estar estacionàries per poder disparar. Això, combinat amb la quantitat molt baixa de punts de vida que proporcionen les armes d'artilleria, fa que les unitats equipades amb artilleria siguin vulnerables per si soles."
 
 msgid "Thus, Artillery weapons are best used to support other units or structures while avoiding direct confrontation."
-msgstr ""
+msgstr "Per tant, les armes d'artilleria s'utilitzen millor per donar suport a altres unitats o estructures evitant la confrontació directa."
 
 msgid "High-Explosive Bombs"
-msgstr ""
+msgstr "Bombes d'alt explosiu"
 
 msgid "Explosive bombs act similarly to ground-based Artillery weapons (such as Mortars)."
-msgstr ""
+msgstr "Les bombes explosives actuen de manera similar a les armes d'artilleria terrestres (com ara els morters)."
 
 msgid "These bombs explode on impact, damaging everything caught in the blast."
-msgstr ""
+msgstr "Aquestes bombes exploten en l'impacte, fent malbé tot el que queda atrapat per l'explosió."
 
 msgid "Like Artillery weapons, explosive bombs excel at destroying most structures and groups of infantry and light vehicles, but struggle against bunkers and heavily armored tanks."
-msgstr ""
+msgstr "Igual que les armes d'artilleria, les bombes explosives són excel·lents per destruir la majoria d'estructures i grups d'infanteria i vehicles lleugers, però tenen dificultats contra els búnquers i els tancs fortament blindats."
 
 msgid "Just make sure your own units and structures aren't caught in the blast!"
-msgstr ""
+msgstr "Només assegureu-vos que les vostres pròpies unitats i estructures no quedin atrapades per l'explosió!"
 
 msgid "Incendiary Bombs"
-msgstr ""
+msgstr "Bombes incendiàries"
 
 msgid "Incendiary bombs act somewhat similarly to ground-based Flamer weapons."
-msgstr ""
+msgstr "Les bombes incendiàries actuen de manera similar a les armes de flameres terrestres."
 
 msgid "Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site."
-msgstr ""
+msgstr "Les bombes incendiàries infligeixen pocs danys en impactar, però incendiaran instantàniament una gran àrea al voltant del lloc de l'impacte."
 
 msgid "Enemy units and structures that linger within this area will take a large amount of damage over time."
-msgstr ""
+msgstr "Les unitats i estructures enemigues que romanguin en aquesta zona rebran una gran quantitat de danys amb el pas del temps."
 
 msgid "Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
-msgstr ""
+msgstr "Igual que les armes de flama, les bombes incendiàries són excel·lents contra tots els tipus d'unitats i búnquers, però són febles contra estructures endurides."
 
 msgid "Bomb Bays"
-msgstr ""
+msgstr "Bodegues de bombes"
 
 msgid "Bomb bays are a unique weapon type that can only be equipped onto VTOLs."
-msgstr ""
+msgstr "Les bodegues de bombes són un tipus d'arma únic que només es pot equipar en VTOLs."
 
 msgid "While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons."
-msgstr ""
+msgstr "Tot i que el seu abast d'atac és curt i la seva capacitat de munició és baixa, les bodegues de bombes atorguen punts de vida addicionals i generalment contenen una càrrega útil més potent en comparació amb altres armes VTOL."
 
 msgid "Like all other weapons, different bombs have different effects, strengths, and applications."
-msgstr ""
+msgstr "Com totes les altres armes, les diferents bombes tenen efectes, potències i aplicacions diferents."
 
 msgid "Bunker Buster"
-msgstr ""
+msgstr "Destructor de búnquers"
 
 msgid "The Bunker Buster is a unique weapon that is exceptionally effective against all structures."
-msgstr ""
+msgstr "El destructor de búnquers és una arma única que és excepcionalment efectiva contra totes les estructures."
 
 msgid "However, the Bunker Buster is extremely weak against any non-structure target."
-msgstr ""
+msgstr "No obstant això, el destructor de búnquers és extremadament feble contra qualsevol objectiu no estructural."
 
 msgid "Flamer"
-msgstr ""
+msgstr "Flamer"
 
 msgid "Incendiary \"Flamer\" weapons are effective against infantry and weaker propulsion tanks."
-msgstr ""
+msgstr "Les armes incendiàries \"Flamer\" són efectives contra la infanteria i els tancs de propulsió més febles."
 
 msgid "Flamer weapons are also excellent against bunkers and scavenger structures, but weaker against other structures."
-msgstr ""
+msgstr "Les armes de flames també són excel·lents contra búnquers i estructures de recollida de residus, però més febles contra altres estructures."
 
 msgid "Flamers can \"penetrate\" units, damaging and possibly igniting multiple units in a single burst, thus making Flamer weapons excellent crowd-killers."
-msgstr ""
+msgstr "Els Flamers poden \"penetrar\" unitats, danyant i possiblement incendiant diverses unitats en una sola ràfega, cosa que converteix les armes Flamer en excel·lents assassins de multituds."
 
 msgid "However, due to their short attack ranges, Flamer weapons can be risky to use."
-msgstr ""
+msgstr "No obstant això, a causa del seu curt abast d'atac, les armes Flamer poden ser arriscades d'utilitzar."
