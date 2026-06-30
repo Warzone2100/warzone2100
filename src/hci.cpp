@@ -1420,7 +1420,9 @@ INT_RETVAL intRunWidgets()
 		}
 		else
 		{
-			if (saveGame(sRequestResult, GTYPE_SAVE_START))
+			// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+			// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+			if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
 			{
 				char msg[256] = {'\0'};
 

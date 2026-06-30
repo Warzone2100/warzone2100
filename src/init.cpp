@@ -1737,7 +1737,7 @@ static void displayLoadingErrors()
 
 static bool stageThreeInitialiseSync()
 {
-	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
+	bool fromSave = (getSaveGameType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
@@ -1774,7 +1774,7 @@ static bool stageThreeInitialiseSync()
 
 	preProcessVisibility(gameWorld.map);
 
-	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
+	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!fpathInitialise())
 	{
@@ -1808,7 +1808,7 @@ static bool stageThreeInitialiseSync()
 
 	countUpdate();
 
-	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
+	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
 	}

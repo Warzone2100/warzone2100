@@ -1342,7 +1342,8 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 
 	if ((trigger == TRIGGER_START_LEVEL || trigger == TRIGGER_GAME_LOADED) && !saveandquit_enabled().empty())
 	{
-		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_START);
+		// --saveandquit produces a normal mid-mission save (which, unlike the old START path, also captures script state)
+		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_MIDMISSION);
 		wzQuit(0);
 	}
 

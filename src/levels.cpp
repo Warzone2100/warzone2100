@@ -875,7 +875,6 @@ struct LevLoadContext
 	GAME_TYPE      saveType = GTYPE_SCENARIO_START;
 	LEVEL_DATASET* psNewLevel = nullptr;
 	LEVEL_DATASET* psChangeLevel = nullptr;
-	bool           bCamChangeSaveGame = false;
 };
 
 enum class LevDatasetResolveResult
@@ -1084,15 +1083,9 @@ static LevDatasetResolveResult levResolveDatasetForLoad(LevLoadContext& ctx)
 	}
 	debug(LOG_WZ, "** Data set found is %s type %d", ctx.psNewLevel->pName.c_str(), (int)ctx.psNewLevel->type);
 
-	ctx.bCamChangeSaveGame = ctx.pSaveName != nullptr && ctx.saveType == GTYPE_SAVE_START && ctx.psNewLevel->psChange != nullptr;
-	if (ctx.bCamChangeSaveGame)
-	{
-		debug(LOG_WZ, "** CAMCHANGE FOUND");
-	}
-
 	// select the change dataset if there is one
 	ctx.psChangeLevel = nullptr;
-	if (((ctx.psNewLevel->psChange != nullptr) && (psCurrLevel != nullptr)) || ctx.bCamChangeSaveGame)
+	if ((ctx.psNewLevel->psChange != nullptr) && (psCurrLevel != nullptr))
 	{
 		//store the level name
 		debug(LOG_WZ, "Found CAMCHANGE dataset");
@@ -1195,7 +1188,7 @@ static LoadingTask<> levLoadMissionBranchesBeforeMainLoop(ResourceLoadingControl
 			}
 		}
 
-		if (ctx.pSaveName == nullptr || ctx.saveType == GTYPE_SAVE_START)
+		if (ctx.pSaveName == nullptr)
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
 			if (!(co_await startMission(controller, (LEVEL_TYPE)psNewLevel->type, GameLoadDetails::makeLevelFileLoad(""))))
@@ -1203,31 +1196,6 @@ static LoadingTask<> levLoadMissionBranchesBeforeMainLoop(ResourceLoadingControl
 				debug(LOG_ERROR, "Failed startMission(%d)!", static_cast<int8_t>(psNewLevel->type));
 				co_return load_fail();
 			}
-		}
-	}
-
-	//we need to load up the save game data here for a camchange
-	if (ctx.bCamChangeSaveGame)
-	{
-		if (ctx.pSaveName != nullptr)
-		{
-			if (psBaseData != nullptr)
-			{
-				if (!stageTwoInitialise())
-				{
-					debug(LOG_ERROR, "Failed stageTwoInitialise() [camchange]!");
-					co_return load_fail();
-				}
-			}
-
-			debug(LOG_NEVER, "loading savegame: %s", ctx.pSaveName);
-			if (!(co_await loadGame(controller, GameLoadDetails::makeUserSaveGameLoad(ctx.pSaveName), false, true)))
-			{
-				debug(LOG_ERROR, "Failed loadGame(%s)!", ctx.pSaveName);
-				co_return load_fail();
-			}
-
-			campaignReset();
 		}
 	}
 
@@ -1245,7 +1213,7 @@ static LoadingTask<> levLoadMissionDataLoop(ResourceLoadingController& controlle
 		if (psNewLevel->game == i)
 		{
 			// do some more initialising if necessary
-			if (psNewLevel->type == LEVEL_TYPE::LDS_COMPLETE || psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START || (psBaseData != nullptr && !ctx.bCamChangeSaveGame))
+			if (psNewLevel->type == LEVEL_TYPE::LDS_COMPLETE || psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START || (psBaseData != nullptr))
 			{
 				if (!stageTwoInitialise())
 				{
@@ -1255,7 +1223,7 @@ static LoadingTask<> levLoadMissionDataLoop(ResourceLoadingController& controlle
 			}
 
 			// load a savegame if there is one - but not if already done so
-			if (ctx.pSaveName != nullptr && !ctx.bCamChangeSaveGame)
+			if (ctx.pSaveName != nullptr)
 			{
 				//set the mission type before the saveGame data is loaded
 				if (ctx.saveType == GTYPE_SAVE_MIDMISSION)
@@ -1279,7 +1247,7 @@ static LoadingTask<> levLoadMissionDataLoop(ResourceLoadingController& controlle
 				}
 			}
 
-			if (ctx.pSaveName == nullptr || ctx.saveType == GTYPE_SAVE_START)
+			if (ctx.pSaveName == nullptr)
 			{
 				// load the game
 				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i].c_str());
@@ -1401,7 +1369,7 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	      params.pSaveName == nullptr ? "<none>" : params.pSaveName,
 	      static_cast<int>(params.saveType));
 
-	if (params.saveType == GTYPE_SAVE_START || params.saveType == GTYPE_SAVE_MIDMISSION)
+	if (params.saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		if (!levReleaseAll())
 		{

@@ -271,7 +271,9 @@ static GAMECODE renderLoop()
 
 				if (saveInMissionRes())
 				{
-					if (saveGame(sRequestResult, GTYPE_SAVE_START))
+					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
 					{
 						sstrcpy(msgbuffer, _("GAME SAVED: "));
 						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
