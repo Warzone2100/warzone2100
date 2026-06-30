@@ -737,6 +737,15 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 
 		instanceObj["isReceivingAllEvents"] = instance->isReceivingAllEvents();
 
+		// This instance's owned (script-created) labels - (Omitted entirely when the instance has none)
+		auto ownedIt = ownedLabels.find(instance);
+		if (ownedIt != ownedLabels.end() && !ownedIt->second.empty())
+		{
+			nlohmann::json instanceLabels = nlohmann::json::array();
+			writeLabelMap(ownedIt->second, instanceLabels);
+			instanceObj["labels"] = std::move(instanceLabels);
+		}
+
 		instancesArray.push_back(std::move(instanceObj));
 	}
 	root["instances"] = std::move(instancesArray);
@@ -765,6 +774,11 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 		timersArray.push_back(std::move(nodeInfo));
 	}
 	root["timers"] = std::move(timersArray);
+
+	// Global (map-authored / legacy / unowned) labels go at the top level
+	nlohmann::json globalLabelsArr = nlohmann::json::array();
+	writeLabelMap(globalLabels, globalLabelsArr);
+	root["labels"] = std::move(globalLabelsArr);
 
 	return saveJSONToFile(root, filename);
 }
@@ -932,6 +946,18 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 {
 	uniqueTimerID maxRestoredTimerID = 0;
 
+	// Labels: a v2 save is the authoritative source, so clear and rebuild both buckets here
+	// - Global (map-authored / legacy / unowned) labels live at the top level
+	// - Each instance's owned labels are nested under it (loaded in the instance loop below)
+	// - No map->id remapping is needed - savegame labels store already-synchronized runtime ids
+	globalLabels.clear();
+	ownedLabels.clear();
+	auto topLabelsIt = root.find("labels");
+	if (topLabelsIt != root.end() && topLabelsIt->is_array())
+	{
+		loadLabelMap(*topLabelsIt, globalLabels);
+	}
+
 	// Instances: per-instance globals + group memberships + flags
 	auto instancesIt = root.find("instances");
 	if (instancesIt != root.end() && instancesIt->is_array())
@@ -1015,6 +1041,13 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 			{
 				instance->setReceiveAllEvents(recvIt->get<bool>());
 			}
+
+			// This instance's owned labels
+			auto instLabelsIt = instanceObj.find("labels");
+			if (instLabelsIt != instanceObj.end() && instLabelsIt->is_array())
+			{
+				loadLabelMap(*instLabelsIt, ownedLabels[instance]);
+			}
 		}
 	}
 
@@ -1078,6 +1111,7 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 	}
 
 	lastTimerID = maxRestoredTimerID;
+
 	return true;
 }
 
@@ -2390,8 +2424,10 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 	return loadLabels(ini.currentJsonValue(), fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 }
 
-// Load labels from an in-memory JSON object. The object's keys are section names
-// ("position_<n>" / "area_<n>" / "radius_<n>" / "object_<n>" / "group_<n>"), matching writeLabels.
+// Loader A: load flat labels.json (map/scenario data or an old v1 savegame) from an in-memory JSON object
+// - The object's keys are section names ("position_<n>" / "area_<n>" / "radius_<n>" / "object_<n>" / "group_<n>")
+// - All labels are global (this format has no ownership)
+// - Object/group ids are remapped via the map-load tables
 bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
 	ASSERT_OR_RETURN(false, result.is_object(), "Labels JSON is not an object");
@@ -2440,36 +2476,12 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 		LABEL p;
 		std::string label = section.value("label", std::string());
 
-		// Resolve which bucket this label belongs to:
-		// - Owner keys (ownerPlayer/ownerScript) are written only for script-created labels and are honored only on savegame loads
-		// - Map/scenario labels are always global
-		LABELMAP* targetBucket = &globalLabels;
-		auto ownerScriptIt = section.find("ownerScript");
-		if (ownerScriptIt != section.end() && ownerScriptIt->is_string())
+		// The flat labels.json format (map/scenario data and old v1 savegames) has no concept of
+		// per-instance ownership - every label is global. (Owned labels are a v2 feature and travel
+		// inside the script state, loaded by loadLabelMap, not here)
+		if (globalLabels.count(label) > 0)
 		{
-			if (!UserSaveGame)
-			{
-				// A map/scenario labels file must never carry owners - log, keep global
-				debug(LOG_ERROR, "Label '%s' (section %s) carries an owner on a non-savegame load; treating as global",
-				      label.c_str(), sectionName.c_str());
-			}
-			else
-			{
-				int ownerPlayer = section.value("ownerPlayer", -1);
-				WzString ownerScript = WzString::fromUtf8(ownerScriptIt->get<std::string>());
-				// fall back to global bucket if the owner instance can't be found
-				// (findInstanceForPlayer will ASSERT and log)
-				wzapi::scripting_instance* ownerInstance = findInstanceForPlayer(ownerPlayer, ownerScript);
-				if (ownerInstance)
-				{
-					targetBucket = &ownedLabels[ownerInstance];
-				}
-			}
-		}
-
-		if (targetBucket->count(label) > 0)
-		{
-			debug(LOG_ERROR, "Duplicate label found");
+			debug(LOG_ERROR, "Duplicate label found: \"%s\"", label.c_str());
 		}
 		else if (startsWith(sectionName, "position"))
 		{
@@ -2480,7 +2492,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			p.id = -1;
 			p.triggered = section.value("triggered", -1); // deactivated by default
 			p.subscriber = ALL_PLAYERS;
-			(*targetBucket)[label] = p;
+			globalLabels[label] = p;
 		}
 		else if (startsWith(sectionName, "area"))
 		{
@@ -2491,7 +2503,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			p.triggered = section.value("triggered", 0); // activated by default
 			p.id = -1;
 			p.subscriber = section.value("subscriber", ALL_PLAYERS);
-			(*targetBucket)[label] = p;
+			globalLabels[label] = p;
 		}
 		else if (startsWith(sectionName, "radius"))
 		{
@@ -2503,7 +2515,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			p.triggered = section.value("triggered", 0); // activated by default
 			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			p.id = -1;
-			(*targetBucket)[label] = p;
+			globalLabels[label] = p;
 		}
 		else if (startsWith(sectionName, "object"))
 		{
@@ -2539,7 +2551,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			{
 				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
 			}
-			(*targetBucket)[label] = p;
+			globalLabels[label] = p;
 		}
 		else if (startsWith(sectionName, "group"))
 		{
@@ -2556,8 +2568,12 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			}
 			p.type = SCRIPT_GROUP;
 			p.player = section.value("player", 0);
+			// 'members' is a map-load seed consumed by prepareLabels()
+			// - For savegame loads prepareLabels does not run and the live membership is restored
+			//   from the saved groups, so the seed is dead data - skip it (keeping savegame
+			//   group-label idlist empty) to handle the case of v1 saves that still wrote it
 			auto membersIt = section.find("members");
-			if (membersIt != section.end() && membersIt->is_array())
+			if (!UserSaveGame && membersIt != section.end() && membersIt->is_array())
 			{
 				for (const auto &j : *membersIt)
 				{
@@ -2580,7 +2596,7 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 			}
 			p.triggered = section.value("triggered", -1); // deactivated by default
 			p.subscriber = section.value("subscriber", ALL_PLAYERS);
-			(*targetBucket)[label] = p;
+			globalLabels[label] = p;
 		}
 		else
 		{
@@ -2590,114 +2606,192 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 	return true;
 }
 
-bool writeLabels(const char *filename)
+// Loader for the script-state v2 embedded label format: a JSON array of label objects, each
+// self-described by a "type" field
+//
+// Loaded into a single, caller-chosen bucket (does *not* clear it), so it can be called once
+// per bucket (top-level globals, then each instance's owned labels)
+//
+// Unlike loadLabels (Loader A, for map/scenario + old v1 labels.json) there is deliberately:
+// - no map->id remapping (a v2 save stores already-synchronized runtime ids)
+// Object/group ids are resolved as-is, tolerating an object destroyed before save
+// (v2 labels only ever come from savegames)
+bool scripting_engine::loadLabelMap(const nlohmann::json &labelArray, LABELMAP &target)
 {
-	return scripting_engine::instance().writeLabels(filename);
-}
+	ASSERT_OR_RETURN(false, labelArray.is_array(), "v2 labels is not an array");
 
-bool writeLabels(nlohmann::json &result)
-{
-	return scripting_engine::instance().writeLabels(result);
-}
+	auto jsonVector2i = [](const nlohmann::json &entry, const char *key) -> Vector2i {
+		Vector2i r(0, 0);
+		auto it = entry.find(key);
+		if (it == entry.end() || !it->is_array() || it->size() != 2) { return r; }
+		try {
+			r.x = (*it)[0].get<int>();
+			r.y = (*it)[1].get<int>();
+		} catch (const std::exception &) { /* leave as (0, 0) */ }
+		return r;
+	};
+	// A label's player/subscriber must be a real player slot or ALL_PLAYERS
+	// The upper bound is MAX_PLAYER_SLOTS (see: PLAYER_FEATURE, scavenger player slot)
+	auto isValidLabelPlayer = [](int v) -> bool {
+		return v == ALL_PLAYERS || (v >= 0 && v < MAX_PLAYER_SLOTS);
+	};
 
-// Write labels to a file - builds the in-memory JSON document and saves it.
-bool scripting_engine::writeLabels(const char *filename)
-{
-	nlohmann::json result = nlohmann::json::object();
-	if (!writeLabels(result))
+	for (const auto& entry : labelArray)
 	{
-		return false;
-	}
-	return saveJSONToFile(result, filename);
-}
+		if (!entry.is_object()) { continue; }
+		LABEL p;
+		std::string label = entry.value("label", std::string());
+		std::string type = entry.value("type", std::string());
 
-// Write labels into an in-memory JSON object, keyed by incremental section names.
-bool scripting_engine::writeLabels(nlohmann::json &result)
-{
-	int c[5]; // make unique, incremental section names
-	memset(c, 0, sizeof(c));
+		// Sanity-check player/subscriber up-front (Absent keys default to ALL_PLAYERS, which is valid)
+		int entryPlayer = entry.value("player", ALL_PLAYERS);
+		int entrySubscriber = entry.value("subscriber", ALL_PLAYERS);
+		if (!isValidLabelPlayer(entryPlayer) || !isValidLabelPlayer(entrySubscriber))
+		{
+			debug(LOG_ERROR, "Invalid player/subscriber (%d/%d) for label '%s' - skipping", entryPlayer, entrySubscriber, label.c_str());
+			continue;
+		}
 
-	// Write a single label section:
-	// - 'owner' is the creating instance for an owned (script-created) label, or nullptr for a global (map-authored / legacy) label
-	// Owned labels are tagged with ownerPlayer/ownerScript so they round-trip back into the right bucket on load (savegames only)
-	auto writeOne = [&](const std::string& key, const LABEL& l, const wzapi::scripting_instance* owner)
-	{
-		nlohmann::json section = nlohmann::json::object();
-		std::string sectionName;
-		if (l.type == SCRIPT_POSITION)
+		if (target.count(label) > 0)
 		{
-			section["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
-			section["label"] = key;
-			section["triggered"] = l.triggered;
-			sectionName = "position_" + std::to_string(c[0]++);
+			debug(LOG_ERROR, "Duplicate label found: %s", label.c_str());
 		}
-		else if (l.type == SCRIPT_AREA)
+		else if (type == "position")
 		{
-			section["pos1"] = nlohmann::json::array({ l.p1.x, l.p1.y });
-			section["pos2"] = nlohmann::json::array({ l.p2.x, l.p2.y });
-			section["label"] = key;
-			section["player"] = l.player;
-			section["triggered"] = l.triggered;
-			section["subscriber"] = l.subscriber;
-			sectionName = "area_" + std::to_string(c[1]++);
+			p.p1 = jsonVector2i(entry, "pos");
+			p.p2 = p.p1;
+			p.type = SCRIPT_POSITION;
+			p.player = ALL_PLAYERS;
+			p.id = -1;
+			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.subscriber = ALL_PLAYERS;
+			target[label] = p;
 		}
-		else if (l.type == SCRIPT_RADIUS)
+		else if (type == "area")
 		{
-			section["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
-			section["radius"] = l.p2.x;
-			section["label"] = key;
-			section["player"] = l.player;
-			section["triggered"] = l.triggered;
-			section["subscriber"] = l.subscriber;
-			sectionName = "radius_" + std::to_string(c[2]++);
+			p.p1 = jsonVector2i(entry, "pos1");
+			p.p2 = jsonVector2i(entry, "pos2");
+			p.type = SCRIPT_AREA;
+			p.player = entryPlayer;
+			p.triggered = entry.value("triggered", 0); // activated by default
+			p.id = -1;
+			p.subscriber = entrySubscriber;
+			target[label] = p;
 		}
-		else if (l.type == SCRIPT_GROUP)
+		else if (type == "radius")
 		{
-			section["id"] = l.id; // Persist the group id so it round-trips
-			section["player"] = l.player;
-			section["triggered"] = l.triggered;
-			nlohmann::json members = nlohmann::json::array();
-			for (int val : l.idlist)
+			p.p1 = jsonVector2i(entry, "pos");
+			p.p2.x = entry.value("radius", 0);
+			p.p2.y = 0; // unused
+			p.type = SCRIPT_RADIUS;
+			p.player = entryPlayer;
+			p.triggered = entry.value("triggered", 0); // activated by default
+			p.subscriber = entrySubscriber;
+			p.id = -1;
+			target[label] = p;
+		}
+		else if (type == "object")
+		{
+			int objectType = entry.value("objectType", -1); // the OBJECT_TYPE
+			if (objectType < 0 || objectType >= OBJ_NUM_TYPES)
 			{
-				members.push_back(std::to_string(val));
+				debug(LOG_ERROR, "Invalid objectType %d for object label '%s' - skipping", objectType, label.c_str());
+				continue;
 			}
-			section["members"] = std::move(members);
-			section["label"] = key;
-			section["subscriber"] = l.subscriber;
-			sectionName = "group_" + std::to_string(c[3]++);
+			auto id = entry.value("id", 0);
+			ASSERT(id > 0, "Unexpected id %d for object label", id);
+			p.id = id; // already a runtime id - no map remapping for savegame labels
+			p.type = objectType;
+			p.player = entryPlayer;
+			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.subscriber = ALL_PLAYERS; // object labels do not carry a subscriber
+			if (IdToObject((OBJECT_TYPE)p.type, p.id, p.player) == nullptr)
+			{
+				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
+			}
+			target[label] = p;
+		}
+		else if (type == "group")
+		{
+			// v2 always persists the group id (writeLabelMap), so the label matches the saved group memberships
+			auto idIt = entry.find("id");
+			ASSERT(idIt != entry.end() && idIt->is_number_integer(), "Group label '%s' missing persisted id", label.c_str());
+			p.id = (idIt != entry.end() && idIt->is_number_integer()) ? idIt->get<int>() : 0;
+			p.type = SCRIPT_GROUP;
+			p.player = entryPlayer;
+			// NOTE: No members to read - a group label's idlist is only a map-load seed for prepareLabels
+			// (which does not run for savegames), and the live membership is restored from the saved groups
+			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.subscriber = entrySubscriber;
+			target[label] = p;
 		}
 		else
 		{
-			section["id"] = l.id;
-			section["player"] = l.player;
-			section["type"] = l.type;
-			section["label"] = key;
-			section["triggered"] = l.triggered;
-			sectionName = "object_" + std::to_string(c[4]++);
+			debug(LOG_ERROR, "Unknown label type '%s' (label: %s)", type.c_str(), label.c_str());
 		}
-		if (owner)
-		{
-			section["ownerPlayer"] = owner->player();
-			section["ownerScript"] = owner->scriptName();
-		}
-		result[sectionName] = std::move(section);
-	};
-
-	// Global (map-authored / legacy) labels: no owner key
-	for (const auto& it : globalLabels)
-	{
-		writeOne(it.first, it.second, nullptr);
 	}
-	// Owned (script-created) labels: tagged with their creating instance
-	// (ownedLabels is not yet populated - addLabel does not assign owners yet - so the output is
-	// currently identical to before: global labels only, no owner keys)
-	for (const auto& bucket : ownedLabels)
+	return true;
+}
+
+// Serialize one bucket of labels into a JSON array (one object per label), each self-described by a
+// "type" field ("position" / "area" / "radius" / "group" / "object").
+// Ownership is conveyed by which bucket is serialized and where the caller places the array in the
+// v2 script state (top-level "labels" for globals, an instance's "labels" for its owned labels)
+bool scripting_engine::writeLabelMap(const LABELMAP& labels, nlohmann::json& result)
+{
+	for (const auto& it : labels)
 	{
-		const wzapi::scripting_instance* owner = bucket.first;
-		for (const auto& it : bucket.second)
+		const std::string& key = it.first;
+		const LABEL& l = it.second;
+		nlohmann::json entry = nlohmann::json::object();
+		entry["label"] = key;
+		if (l.type == SCRIPT_POSITION)
 		{
-			writeOne(it.first, it.second, owner);
+			entry["type"] = "position";
+			entry["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			entry["triggered"] = l.triggered;
 		}
+		else if (l.type == SCRIPT_AREA)
+		{
+			entry["type"] = "area";
+			entry["pos1"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			entry["pos2"] = nlohmann::json::array({ l.p2.x, l.p2.y });
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber;
+		}
+		else if (l.type == SCRIPT_RADIUS)
+		{
+			entry["type"] = "radius";
+			entry["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			entry["radius"] = l.p2.x;
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber;
+		}
+		else if (l.type == SCRIPT_GROUP)
+		{
+			entry["type"] = "group";
+			entry["id"] = l.id; // Persist the group id so it round-trips
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber;
+			// No members:
+			// 1. a group label's idlist is only a map-load seed, consumed (cleared) by prepareLabels
+			// 2. the live membership is persisted separately (saveGroups)
+			// So it must be empty here - assert to catch any future change that leaves stale seed data on a label
+			ASSERT(l.idlist.empty(), "Group label '%s' has %zu stale idlist member(s) at save time (expected prepareLabels to have consumed them)", key.c_str(), l.idlist.size());
+		}
+		else
+		{
+			// Object label: l.type is the OBJECT_TYPE (< OBJ_NUM_TYPES), stored as "objectType"
+			entry["type"] = "object";
+			entry["objectType"] = l.type;
+			entry["id"] = l.id;
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+		}
+		result.push_back(std::move(entry));
 	}
 	return true;
 }
@@ -3251,7 +3345,7 @@ void scripting_engine::prepareLabels()
 	//
 	// idlist is a one-time seed: once its members are materialized into the per-instance group maps
 	// (which saveGroups persists), it is consumed (cleared). It would otherwise go stale (it never
-	// tracks units added/removed during play) and be redundantly re-serialized by writeLabels.
+	// tracks units added/removed during play) and be redundantly re-serialized by writeLabelMap.
 	for (LABELMAP::iterator i = globalLabels.begin(); i != globalLabels.end(); ++i)
 	{
 		LABEL &l = i->second;

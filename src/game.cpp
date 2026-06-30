@@ -3611,10 +3611,9 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	strcat(CurrentFileName, "gameinfo.json");
 	writeGameInfo(CurrentFileName);
 
-	// Save labels
-	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "labels.json");
-	writeLabels(CurrentFileName);
+	// NOTE:
+	// Savegame labels are embedded in the script state (see saveScriptStates2), not written to a separate labels.json
+	// (Map/scenario labels.json is authored externally and is loaded for non-savegame loads)
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';

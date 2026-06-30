@@ -224,10 +224,6 @@ public:
 bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
-/// Write map labels to savegame (to a file, or into an in-memory JSON document)
-bool writeLabels(const char *filename);
-bool writeLabels(nlohmann::json &result);
-
 class scripting_engine
 {
 public:
@@ -332,15 +328,16 @@ public:
 
 // MARK: LABELS
 public:
-	/// Load map labels - from a file, or from an already-parsed in-memory JSON document.
-	/// The file variant reads the document and delegates to the JSON variant.
+	/// Loader A - flat labels.json (map/scenario data and old v1 savegames):
+	/// - Applies map->id remapping and UserSaveGame object-existence tolerance
+	/// - All labels are global
 	bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 	bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame);
 
-	/// Write map labels to savegame - to a file, or into an in-memory JSON document.
-	/// The file variant builds the document and saves it.
-	bool writeLabels(const char *filename);
-	bool writeLabels(nlohmann::json &result);
+	/// Loader B / writer for the script-state v2 embedded label format:
+	/// - A JSON array of label objects (each with a "type" field) for one ownership bucket
+	bool writeLabelMap(const LABELMAP& labels, nlohmann::json& result);
+	bool loadLabelMap(const nlohmann::json& labelArray, LABELMAP& target);
 
 // MARK: GROUPS
 public:
