@@ -4515,6 +4515,11 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["NoFriendlyFire"] = psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE);
 			weap["AllowedOnTransporter"] = psStats->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER);
 			weap["TeleportCapture"] = psStats->flags.test(WEAPON_FLAG_TELEPORT_CAPTURE);
+			weap["ExpNoImpactDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_NO_IMPACT);
+			weap["ExpNoPenetrateImpactDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_NO_IMPACT_PENETRATE);
+			weap["ExpNoPenetrateSplashDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_NO_SPLASH_PENETRATE);
+			weap["ExpNoPeriodicalDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_NO_PERIODICAL);
+			weap["ExpNoSplashDamage"] = psStats->flags.test(WEAPON_FLAG_EXP_NO_SPLASH);
 			weap["FlightSpeed"] = psStats->flightSpeed;
 			weap["Rotate"] = psStats->rotate;
 			weap["MinElevation"] = psStats->minElevation;

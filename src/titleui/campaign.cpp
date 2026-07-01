@@ -1701,6 +1701,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 	);
 
 	results.emplace_back(
+		"noExp",
+		_("No EXP gain"),
+		_("No experience gained. Relive a semblence of your first playthrough again."),
+		false, true
+	);
+
+	results.emplace_back(
 		"towerWars",
 		_("Tower Wars"),
 		_("Player gets significantly stronger structures."),
@@ -1718,6 +1725,13 @@ static std::vector<WzCampaignTweakOptionSetting> buildTweakOptionSettings(option
 		"unexploredMapOpacity",
 		_("Unexplored Map Opacity"),
 		_("Partially reveal the layout of the map without exploration."),
+		false, true
+	);
+
+	results.emplace_back(
+		"noCommander",
+		_("No Commanders"),
+		_("Prevent the production of Commanders to test your multitasking capabilities."),
 		false, true
 	);
 

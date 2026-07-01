@@ -1053,6 +1053,16 @@ void droidUpdate(DROID *psDroid)
 	CHECK_DROID(psDroid);
 }
 
+// Applies the exp cap on commanders when produced
+void limitCommanderExpForProduction(DROID *psCommander)
+{
+	if (!psCommander || psCommander->droidType != DROID_COMMAND)
+	{
+		return;
+	}
+	psCommander->experience = std::min(static_cast<uint32_t>(psCommander->getBrainStats()->productionCommanderExpLimit * 65536), psCommander->experience);
+}
+
 /* Check if droid is within commander's range */
 bool droidWithinCommanderRange(const DROID *psDroid)
 {
@@ -2528,7 +2538,10 @@ UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck)
 		cmdLevel = cmdGetCommanderLevel(psDroid);
 
 		// Commanders boost units' effectiveness just by being assigned to it
-		level++;
+		if (psDroid->psGroup->psCommander->getBrainStats()->autoRewardRankFromAttach)
+		{
+			level++;
+		}
 	}
 
 	return MAX(level, cmdLevel);
@@ -2590,12 +2603,36 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 	return count;
 }
 
+// Decides if a unit, after defeating a scavenger, gains exp.
+bool droidExpForScavengersOutsideLimits(DROID *psDroid)
+{
+	int limit = psDroid->getBrainStats()->scavengersGiveExpUntilLevel;
+
+	if (limit < 0)
+	{
+		return false; // Always give experience.
+	}
+	else if (limit == 0)
+	{
+		return true; // Give no experience.
+	}
+
+	return getDroidLevel(psDroid) >= limit;
+}
+
 // Increase the experience of a droid (and handle events, if needed).
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc)
 {
-	if (!bMultiPlayer && getCamTweakOption_FastExp())
+	if (!bMultiPlayer)
 	{
-		experienceInc = experienceInc * 2;
+		if (getCamTweakOption_NoExp())
+		{
+			return;
+		}
+		if (getCamTweakOption_FastExp())
+		{
+			experienceInc = experienceInc * 2;
+		}
 	}
 
 	ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
@@ -2617,8 +2654,24 @@ void giveExperienceForSquish(DROID *psDroid)
 {
 	if (psDroid->droidType == DROID_WEAPON || psDroid->droidType == DROID_SENSOR || psDroid->droidType == DROID_COMMAND)
 	{
+		if (droidExpForScavengersOutsideLimits(psDroid))
+		{
+			return;
+		}
+
 		const uint32_t expGain = std::max(65536 / 2, 65536 * getExpGain(psDroid->player) / 100);
 		droidIncreaseExperience(psDroid, expGain);
+
+		if (hasCommander(psDroid) && psDroid->psGroup->psCommander)
+		{
+			DROID *psCommander = psDroid->psGroup->psCommander;
+
+			if (droidExpForScavengersOutsideLimits(psCommander))
+			{
+				return;
+			}
+		}
+
 		cmdDroidUpdateExperience(psDroid, expGain);
 	}
 }

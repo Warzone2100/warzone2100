@@ -356,15 +356,20 @@ protected:
 			return;
 		}
 		const auto player = factory->player;
-		const auto exp = getTopExperience(player);
+		auto exp = getTopExperience(player);
 		unsigned int lvl = 0;
 		if (!factory->pFunctionality->factory.psSubject)
 		{
 			// not showing icon when nothing is being built
 			return;
 		}
-		if (factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND || factory->pFunctionality->factory.psSubject->droidType == DROID_SENSOR)
+		bool isCommander = factory->pFunctionality->factory.psSubject->droidType == DROID_COMMAND;
+		if (isCommander || factory->pFunctionality->factory.psSubject->droidType == DROID_SENSOR)
 		{
+			if (isCommander)
+			{
+				exp = std::min(factory->pFunctionality->factory.psSubject->getBrainStats()->productionCommanderExpLimit * 65536, exp);
+			}
 			lvl = getDroidLevel(exp, player, commandBrainComponent);
 		}
 		else if (factory->pFunctionality->factory.psSubject->droidType == DROID_CONSTRUCT

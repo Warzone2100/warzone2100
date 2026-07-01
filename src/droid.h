@@ -123,6 +123,9 @@ int32_t droidDamage(GameWorld& world, DROID *psDroid, PROJECTILE *psProjectile, 
 /* The main update routine for all droids */
 void droidUpdate(DROID *psDroid);
 
+/* Applies the exp cap on commanders when produced */
+void limitCommanderExpForProduction(DROID *psCommander);
+
 /* Check if droid is within commander's range */
 bool droidWithinCommanderRange(const DROID *psDroid);
 
@@ -200,6 +203,7 @@ unsigned int getDroidLevel(unsigned int experience, uint8_t player, uint8_t brai
 UDWORD getDroidEffectiveLevel(const DROID *psDroid, bool commanderDistanceCheck = true);
 const char *getDroidLevelName(const DROID *psDroid);
 // Increase the experience of a droid (and handle events, if needed).
+bool droidExpForScavengersOutsideLimits(DROID *psDroid);
 void droidIncreaseExperience(DROID *psDroid, uint32_t experienceInc);
 void giveExperienceForSquish(DROID *psDroid);
 

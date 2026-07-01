@@ -110,6 +110,11 @@ enum WEAPON_FLAGS
 	WEAPON_FLAG_NO_FRIENDLY_FIRE,
 	WEAPON_FLAG_ALLOWED_ON_TRANSPORTER,
 	WEAPON_FLAG_TELEPORT_CAPTURE,
+	WEAPON_FLAG_EXP_NO_IMPACT,
+	WEAPON_FLAG_EXP_NO_SPLASH,
+	WEAPON_FLAG_EXP_NO_IMPACT_PENETRATE,
+	WEAPON_FLAG_EXP_NO_SPLASH_PENETRATE,
+	WEAPON_FLAG_EXP_NO_PERIODICAL,
 	WEAPON_FLAG_COUNT
 };
 
@@ -489,6 +494,9 @@ struct BRAIN_STATS : public COMPONENT_STATS
 	} upgrade[MAX_PLAYERS], base;
 	std::vector<std::string> rankNames;
 	std::vector<int> cmdExpRange;
+	int scavengersGiveExpUntilLevel; ///< maximum rank level the droid can have until scavengers stop awarding any experience
+	int productionCommanderExpLimit; ///< maximum exp commanders can be built with
+	bool autoRewardRankFromAttach;   ///< Attached unit effective rank will consider the unit as one rank above itself when assigning the final rank outcome
 };
 
 /*
