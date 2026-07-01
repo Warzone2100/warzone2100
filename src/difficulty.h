@@ -30,10 +30,11 @@ enum DIFFICULTY_LEVEL
 	DL_INSANE
 };
 
-void setDamageModifiers(int playerModifier, int enemyModifier);
+void setDamageModifiers(int player, int percentDamage);
+int getDamageModifiers(int player);
 void setDifficultyLevel(DIFFICULTY_LEVEL lev);
 DIFFICULTY_LEVEL getDifficultyLevel();
-int modifyForDifficultyLevel(int basicVal, bool IsPlayer);
+int modifyForDifficultyLevel(int basicVal, int targetPlayer);
 void resetDamageModifiers();
 
 #endif // __INCLUDED_SRC_DIFFICULTY_H__
