@@ -71,6 +71,7 @@
 #include <unordered_map>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 #include <queue>
 #include <limits>
 
@@ -114,8 +115,13 @@ void scripting_engine::GROUPMAP::insertObjectIntoGroup(const BASE_OBJECT *psObj,
 	std::pair<ObjectToGroupMap::iterator,bool> result = m_map.insert(std::pair<const BASE_OBJECT *, scripting_engine::GROUPMAP::groupID>(psObj, groupId));
 	if (result.second)
 	{
-		auto groupSetResult = m_groups[groupId].insert(psObj);
-		ASSERT(groupSetResult.second, "Object already exists in group!");
+		// Keep the member list sorted by object id
+		// - The m_map insert above already guarantees psObj is not in any group, so this is always a new element
+		auto &groupSet = m_groups[groupId];
+		auto insertIt = std::lower_bound(groupSet.begin(), groupSet.end(), psObj,
+			[](const BASE_OBJECT *a, const BASE_OBJECT *b) { return a->id < b->id; });
+		ASSERT(insertIt == groupSet.end() || (*insertIt)->id != psObj->id, "Object already exists in group!");
+		groupSet.insert(insertIt, psObj);
 	}
 }
 
@@ -137,8 +143,15 @@ optional<scripting_engine::GROUPMAP::groupID> scripting_engine::GROUPMAP::remove
 		groupID groupId = it->second;
 		m_map.erase(it);
 
-		size_t numItemsErased = m_groups[groupId].erase(psObj);
-		ASSERT(numItemsErased == 1, "Object did not exist in group set??");
+		auto &groupSet = m_groups[groupId];
+		auto eraseIt = std::lower_bound(groupSet.begin(), groupSet.end(), psObj,
+			[](const BASE_OBJECT *a, const BASE_OBJECT *b) { return a->id < b->id; });
+		bool erased = (eraseIt != groupSet.end() && *eraseIt == psObj);
+		if (erased)
+		{
+			groupSet.erase(eraseIt);
+		}
+		ASSERT(erased, "Object did not exist in group set??");
 		return optional<groupID>(groupId);
 	}
 	return optional<groupID>();

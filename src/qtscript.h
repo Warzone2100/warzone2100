@@ -233,7 +233,8 @@ public:
 		typedef std::unordered_map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
 	private:
 		ObjectToGroupMap m_map;
-		typedef std::unordered_set<const BASE_OBJECT *> GroupSet;
+		// Members are kept sorted by object id so enumeration order is deterministic
+		typedef std::vector<const BASE_OBJECT *> GroupSet;
 		std::unordered_map<groupID, GroupSet> m_groups;
 		int lastNewGroupId = 0;
 	protected:
