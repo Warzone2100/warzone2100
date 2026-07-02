@@ -90,6 +90,7 @@
 #include "multiint.h"
 #include "wrappers.h"
 #include "challenge.h"
+#include "gamestate_savegame.h"
 #include "combat.h"
 #include "template.h"
 #include "version.h"
@@ -2573,6 +2574,11 @@ GameLoadDetails& GameLoadDetails::setLogger(const std::shared_ptr<WzMap::Logging
 	m_logger = logger;
 	return *this;
 }
+GameLoadDetails& GameLoadDetails::setSkipObjectPlacement(bool skip)
+{
+	skipObjectPlacement = skip;
+	return *this;
+}
 
 std::string GameLoadDetails::getMapFolderPath() const
 {
@@ -3225,7 +3231,12 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	//adjust the scroll range for the new map or the expanded map
 	setMapScroll(gameWorld.map);
 
-	if (IsScenario)
+	if (gameToLoad.skipObjectPlacement)
+	{
+		// Cold-load reconstruct: the GameState snapshot supplies every droid, so skip the scenario's own
+		// droid placement.
+	}
+	else if (IsScenario)
 	{
 		//load in the droids
 		aFileName[fileExten] = '\0';
@@ -3316,7 +3327,11 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 
 	//load in the features -do before the structures
 	aFileName[fileExten] = '\0';
-	if (!UserSaveGame)
+	if (gameToLoad.skipObjectPlacement)
+	{
+		// Cold-load reconstruct: features come from the snapshot, skip scenario feature placement.
+	}
+	else if (!UserSaveGame)
 	{
 		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
 		if (!loadWzMapFeature(*(data.get()), fixedMapIdToGeneratedId))
@@ -3342,7 +3357,12 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.json");
-	if (!UserSaveGame)
+	if (gameToLoad.skipObjectPlacement)
+	{
+		// Cold-load reconstruct: structures come from the snapshot, skip scenario structure placement.
+		// initStructLimits() above still runs (the restored structures need the limits set up).
+	}
+	else if (!UserSaveGame)
 	{
 		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
 		if (game.type != LEVEL_TYPE::CAMPAIGN)
@@ -3492,10 +3512,15 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 		loadFixupResearchPendingStates();
 	}
 
-	// Load labels
-	aFileName[fileExten] = '\0';
-	strcat(aFileName, "labels.json");
-	loadLabels(aFileName, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
+	// Load labels. Skipped for a cold-load reconstruct: its scenario objects were not placed (so this
+	// labels.json would fail to resolve the objects it references), and the GameState snapshot restores
+	// the labels itself, bound to the snapshot's own objects.
+	if (!gameToLoad.skipObjectPlacement)
+	{
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "labels.json");
+		loadLabels(aFileName, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
+	}
 
 	//if user save game then reset the time - BEWARE IF YOU USE IT
 	if (gameType == GTYPE_SAVE_MIDMISSION)
@@ -3852,6 +3877,26 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 
 	// strip the last filename
 	CurrentFileName[fileExtension - 1] = '\0';
+
+	// Coexistence: always write the self-contained GameState blob (gamestate.wz) into this same
+	// folder, alongside the legacy files. The load path prefers the blob when present; the legacy files
+	// remain so the save is still loadable the old way (see war_getDevForceOldSavegameLoad).
+	{
+		gamestate::savegame::SaveType sgType = gamestate::savegame::SaveType::Skirmish;
+		if (game.type == LEVEL_TYPE::CAMPAIGN)
+		{
+			sgType = gamestate::savegame::SaveType::Campaign;
+		}
+		else if (challengeActive)
+		{
+			sgType = gamestate::savegame::SaveType::Challenge;
+		}
+		if (!gamestate::savegame::writeGameStateBlobToFolder(CurrentFileName, sgType))
+		{
+			debug(LOG_ERROR, "Failed to write GameState savegame blob for %s", CurrentFileName);
+			// Non-fatal: the legacy save above already succeeded.
+		}
+	}
 
 #if defined(__EMSCRIPTEN__)
 	WZ_EmscriptenSyncPersistFSChanges(!isAutoSave); // NOTE: Will block main loop iterations until it finishes (asynchronously)
@@ -4747,6 +4792,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(save.value("playerLeaveMode").toInt());
 	}
+	if (save.contains("playerReconnectWaitSeconds"))
+	{
+		game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(save.value("playerReconnectWaitSeconds").toUInt());
+	}
 	if (save.contains("blindMode"))
 	{
 		game.blindMode = static_cast<BLIND_MODE>(save.value("blindMode").toInt());
@@ -4993,6 +5042,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("inactivityMinutes", game.inactivityMinutes);
 	save.setValue("gameTimeLimitMinutes", game.gameTimeLimitMinutes);
 	save.setValue("playerLeaveMode", game.playerLeaveMode);
+	save.setValue("playerReconnectWaitSeconds", game.playerReconnectWaitSeconds);
 	save.setValue("blindMode", game.blindMode);
 	save.setValue("tweakOptions", getCamTweakOptions());
 

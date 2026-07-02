@@ -45,6 +45,7 @@
 #include "mission.h"
 #include "levelint.h"
 #include "game.h"
+#include "gamestate_savegame.h"
 #include "lib/framework/resource_loading_controller.h"
 #include "lib/framework/loading_task.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -859,13 +860,12 @@ const char *getLevelName()
 	return currentLevelName;
 }
 
-static GameLoadDetails levConstructGameLoadDetails(LEVEL_DATASET* psNewLevel, SWORD scenarioIndex)
+static GameLoadDetails levConstructGameLoadDetails(LEVEL_DATASET* psNewLevel, SWORD scenarioIndex, bool skipObjectPlacement)
 {
-	if (psNewLevel->realFileName != nullptr)
-	{
-		return GameLoadDetails::makeMapPackageLoad(psNewLevel->realFileName);
-	}
-	return GameLoadDetails::makeLevelFileLoad(psNewLevel->apDataFiles[scenarioIndex]);
+	GameLoadDetails details = (psNewLevel->realFileName != nullptr)
+		? GameLoadDetails::makeMapPackageLoad(psNewLevel->realFileName)
+		: GameLoadDetails::makeLevelFileLoad(psNewLevel->apDataFiles[scenarioIndex]);
+	return details.setSkipObjectPlacement(skipObjectPlacement);
 }
 
 struct LevLoadContext
@@ -876,6 +876,7 @@ struct LevLoadContext
 	GAME_TYPE      saveType = GTYPE_SCENARIO_START;
 	LEVEL_DATASET* psNewLevel = nullptr;
 	LEVEL_DATASET* psChangeLevel = nullptr;
+	bool           reconstructFromSnapshot = false; ///< New-format cold load: rebuild the world from the GameState snapshot instead of placing scenario units.
 };
 
 enum class LevDatasetResolveResult
@@ -918,14 +919,14 @@ static void levPreloadFactionModelsFromLoadedSet()
 	}
 }
 
-static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& controller, LEVEL_DATASET* psNewLevel, SWORD i)
+static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& controller, LEVEL_DATASET* psNewLevel, SWORD i, bool reconstructFromSnapshot)
 {
 	switch (psNewLevel->type)
 	{
 	case LEVEL_TYPE::LDS_COMPLETE:
 	case LEVEL_TYPE::LDS_CAMSTART:
 		debug(LOG_WZ, "LDS_COMPLETE / LDS_CAMSTART");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -933,7 +934,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 		co_return load_ok();
 	case LEVEL_TYPE::LDS_BETWEEN:
 		debug(LOG_WZ, "LDS_BETWEEN");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_BETWEEN, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_BETWEEN, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_BETWEEN), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -942,7 +943,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 
 	case LEVEL_TYPE::LDS_MKEEP:
 		debug(LOG_WZ, "LDS_MKEEP");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_MKEEP, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_MKEEP, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -950,7 +951,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 		co_return load_ok();
 	case LEVEL_TYPE::LDS_CAMCHANGE:
 		debug(LOG_WZ, "LDS_CAMCHANGE");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_CAMCHANGE, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_CAMCHANGE, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMCHANGE), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -959,7 +960,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 
 	case LEVEL_TYPE::LDS_EXPAND:
 		debug(LOG_WZ, "LDS_EXPAND");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_EXPAND, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_EXPAND, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -967,7 +968,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 		co_return load_ok();
 	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
 		debug(LOG_WZ, "LDS_LIMBO");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_EXPAND_LIMBO, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_EXPAND_LIMBO, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -976,7 +977,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 
 	case LEVEL_TYPE::LDS_MCLEAR:
 		debug(LOG_WZ, "LDS_MCLEAR");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_MCLEAR, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_MCLEAR, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MCLEAR), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -984,7 +985,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 		co_return load_ok();
 	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
 		debug(LOG_WZ, "LDS_MKEEP_LIMBO");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_MKEEP_LIMBO, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_MKEEP_LIMBO, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s)!", static_cast<int8_t>(LEVEL_TYPE::LDS_MKEEP_LIMBO), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -993,7 +994,7 @@ static LoadingTask<> levStartMissionForLevelType(ResourceLoadingController& cont
 	default:
 		ASSERT(psNewLevel->type >= LEVEL_TYPE::LDS_MULTI_TYPE_START, "Unexpected mission type");
 		debug(LOG_WZ, "default (MULTIPLAYER)");
-		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i))))
+		if (!(co_await startMission(controller, LEVEL_TYPE::LDS_CAMSTART, levConstructGameLoadDetails(psNewLevel, i, reconstructFromSnapshot))))
 		{
 			debug(LOG_ERROR, "Failed startMission(%d, %s) (default)!", static_cast<int8_t>(LEVEL_TYPE::LDS_CAMSTART), psNewLevel->apDataFiles[i].c_str());
 			co_return load_fail();
@@ -1252,7 +1253,21 @@ static LoadingTask<> levLoadMissionDataLoop(ResourceLoadingController& controlle
 			{
 				// load the game
 				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i].c_str());
-				if (!(co_await levStartMissionForLevelType(controller, psNewLevel, i)))
+				if (!(co_await levStartMissionForLevelType(controller, psNewLevel, i, ctx.reconstructFromSnapshot)))
+				{
+					co_return load_fail();
+				}
+			}
+
+			// New-format cold load (RECONSTRUCT mode): the scenario load above placed the map (so the display
+			// layer - tileset/textures/ground/lightmap - comes from the proven map-load path) plus its
+			// starting units. Now replace the world from the GameState snapshot: clear those units +
+			// overwrite the terrain in place + rebuild the saved objects. Runs here, before
+			// stageThreeInitialise in levFinalizeLevelLoad, so prepareScripts/TRIGGER_GAME_LOADED see the
+			// restored world, exactly as a legacy save load does.
+			if (ctx.reconstructFromSnapshot)
+			{
+				if (!gamestate::savegame::coldLoadRestoreWorld())
 				{
 					co_return load_fail();
 				}
@@ -1282,6 +1297,14 @@ static LoadingTask<> levFinalizeLevelLoad(ResourceLoadingController& controller,
 		loadMultiScripts();
 	}
 
+	// New-format cold load: the messages section was deferred during the early world restore (its VIEWDATA
+	// was not yet loaded). Replay it now that all level data has loaded, matching the legacy loadSaveMessage
+	// timing below and before the deferred scripting pass in stageThreeInitialise.
+	if (ctx.reconstructFromSnapshot)
+	{
+		gamestate::savegame::applyDeferredColdLoadMessages();
+	}
+
 	if (ctx.pSaveName != nullptr)
 	{
 		//load MidMission Extras
@@ -1302,6 +1325,15 @@ static LoadingTask<> levFinalizeLevelLoad(ResourceLoadingController& controller,
 			debug(LOG_ERROR, "Failed loadScriptState(%s)!", ctx.pSaveName);
 			co_return load_fail();
 		}
+	}
+
+	// New-format cold load: restore the scripting section now, at the same point the legacy loadScriptState
+	// above runs. All level data (and thus the script instances) is loaded, but this is still before
+	// stageThreeInitialise/prepareScripts, so prepareScripts' queued research-event replay sees the restored
+	// script globals (the campaign eventResearched handlers depend on them).
+	if (ctx.reconstructFromSnapshot)
+	{
+		gamestate::savegame::applyDeferredScripting();
 	}
 	// this will trigger upgrades
 	if (!(co_await stageThreeInitialiseTask(controller)))
@@ -1356,6 +1388,7 @@ struct LevLoadJobParams
 	std::optional<Sha256>    hash;
 	char                    *pSaveName = nullptr;
 	GAME_TYPE                saveType = GTYPE_SCENARIO_START;
+	bool                     reconstructFromSnapshot = false;
 };
 
 LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobParams params)
@@ -1390,6 +1423,7 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	ctx.hash = std::move(params.hash);
 	ctx.pSaveName = params.pSaveName;
 	ctx.saveType = params.saveType;
+	ctx.reconstructFromSnapshot = params.reconstructFromSnapshot;
 
 	co_await controller.yieldFrame();
 
@@ -1448,9 +1482,10 @@ LoadingTask<> makeLevLoadDataLoadingTask(ResourceLoadingController &controller,
                                        std::string name,
                                        std::optional<Sha256> hash,
                                        char *pSaveName,
-                                       GAME_TYPE saveType)
+                                       GAME_TYPE saveType,
+                                       bool reconstructFromSnapshot)
 {
-	LevLoadJobParams params{std::move(name), std::move(hash), pSaveName, saveType};
+	LevLoadJobParams params{std::move(name), std::move(hash), pSaveName, saveType, reconstructFromSnapshot};
 	return levLoadDataTask(controller, std::move(params));
 }
 

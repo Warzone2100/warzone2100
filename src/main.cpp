@@ -84,6 +84,7 @@
 #include "frontend.h"
 #include "frame_render_init.h"
 #include "game.h"
+#include "gamestate_savegame.h"
 #include "init.h"
 #include "lib/framework/resource_loading_controller.h"
 #include "lib/framework/loading_task.h"
@@ -985,7 +986,16 @@ LoadingTask<> loadSaveGameResourceTaskImpl(ResourceLoadingController &controller
 
 	co_await controller.yieldFrame();
 
-	if (!(co_await loadGameInit(controller, GameLoadDetails::makeUserSaveGameLoad(saveGameName)))) {
+	// When this folder has a GameState state blob, route to the new cold-load path (the default). The
+	// devForceOldSavegameLoad config option forces the legacy loadGameInit even for a dual-written folder
+	// (its legacy .json files are always still present); a folder without a blob always takes the legacy path.
+	if (!war_getDevForceOldSavegameLoad() && gamestate::savegame::isNewFormatSaveFolder(saveGameName))
+	{
+		if (!(co_await gamestate::savegame::coldLoadGameInit(controller, saveGameName))) {
+			co_return load_fail();
+		}
+	}
+	else if (!(co_await loadGameInit(controller, GameLoadDetails::makeUserSaveGameLoad(saveGameName)))) {
 		co_return load_fail();
 	}
 

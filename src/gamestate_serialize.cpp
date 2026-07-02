@@ -3408,14 +3408,19 @@ static nlohmann::ordered_json writeScripting(ScriptScope scriptScope)
 	return j;
 }
 
-static void readScripting(const nlohmann::ordered_json &j, uint32_t version, ScriptScope scriptScope)
+// requireScriptsReady gates the state restore on scriptsAreReady(). The general restore (gameStateFromJson)
+// keeps it true: during a disk cold load it runs mid-way through the world reconstruct, before the scripts
+// are instantiated, so scripting must be skipped there and replayed later. The explicit deferred replay
+// (applyGameStateScripting) passes false: its caller guarantees the script instances exist (all level data
+// is loaded) even though scriptsReady is not set yet, mirroring the legacy loadScriptState timing.
+static void readScripting(const nlohmann::ordered_json &j, uint32_t version, ScriptScope scriptScope, bool requireScriptsReady = true)
 {
 	if (version != SCRIPTING_SECTION_VERSION)
 	{
 		throw StateError("unsupported scripting section version");
 	}
 	bInTutorial = j.value("inTutorial", false);
-	if (j.contains("states") && scriptsAreReady())
+	if (j.contains("states") && (!requireScriptsReady || scriptsAreReady()))
 	{
 		// AllInstances: restore every script verbatim per saved player (targetPlayer = -1) - rules + every AI bot.
 		// LocalPlayerOnly: rebind the single saved rules/global script onto this selectedPlayer.
@@ -3444,7 +3449,7 @@ void applyGameStateScripting(const nlohmann::ordered_json &gameStateDoc, ScriptS
 		return;
 	}
 	const nlohmann::ordered_json &sec = gameStateDoc.at("scripting");
-	readScripting(sec, sec.value("version", 0u), scriptScope);
+	readScripting(sec, sec.value("version", 0u), scriptScope, /*requireScriptsReady=*/false);
 }
 
 // MARK: - Section: win/lose flags, mission stats, score stats

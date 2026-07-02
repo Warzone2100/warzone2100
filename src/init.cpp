@@ -42,6 +42,7 @@
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h" // resetSyncDebug (clear cold-load reconstruction syncDebug)
 #include "lib/sound/audio_id.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
@@ -100,6 +101,7 @@
 #include "terrain.h"
 #include "ingameop.h"
 #include "qtscript.h"
+#include "gamestate_savegame.h"
 #include "template.h"
 #include "activity.h"
 #include "spectatorwidgets.h"
@@ -1774,6 +1776,12 @@ static bool stageThreeInitialiseSync()
 
 	preProcessVisibility(gameWorld.map);
 
+	// A new-format (GameState) cold load already restored its scripting section during the level load
+	// (applyDeferredScripting in levFinalizeLevelLoad, before this), so prepareScripts' queued
+	// research-event replay below sees the restored script globals. Consume the reconstruct marker to
+	// learn it was a cold load (ex. so the bInTutorial reset further down does not clobber the restored value).
+	const bool wasColdLoad = gamestate::savegame::takeColdLoadReconstructFlag();
+
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!fpathInitialise())
@@ -1792,7 +1800,11 @@ static bool stageThreeInitialiseSync()
 
 	// Re-inititialise some static variables.
 
-	bInTutorial = false;
+	// A snapshot cold-load restored bInTutorial during its scripting restore in the level load; don't clobber it.
+	if (!wasColdLoad)
+	{
+		bInTutorial = false;
+	}
 	rangeOnScreen = false;
 
 	if (fromSave && ActivityManager::instance().getCurrentGameMode() == ActivitySink::GameMode::CHALLENGE)
@@ -1849,6 +1861,35 @@ static bool stageThreeInitialiseSync()
 
 	// Call once again to update counts (if modified by earlier wzapi events)
 	countUpdate(false);
+
+	// For a GameState cold load, discard all the syncDebug accumulated while RECONSTRUCTING the world
+	// (object/alliance/script restoration: generateSynchronisedObjectId, formAlliance, group joins, the
+	// TRIGGER_GAME_LOADED/INIT events, ...). A continuously-playing client never produces those in its
+	// current tick, so leaving them in the first post-load sync bucket guarantees a spurious CRC
+	// mismatch (and desync-log dump) on the resume tick and pollutes the first detailed sync log. The
+	// normal game start already does this via gameTimeReset()->resetSyncDebug(), but that runs BEFORE
+	// the cold-load reconstruction; reset once more here, after all load activity and before the first
+	// game tick. (The resume tick's CRC still cannot match the original by construction - a tick's
+	// object syncDebug is attributed to the next boundary - so the acceptance comparison starts from the
+	// first fully-simulated tick after resume.)
+	if (wasColdLoad)
+	{
+		resetSyncDebug();
+		// A tick's object syncDebug is attributed to the NEXT sync boundary's CRC (sendPlayerGameTime runs
+		// mid-gameStateUpdate, after the headers but before the object updates). resetSyncDebug() above
+		// empties the log, so the first post-resume boundary would otherwise hash an empty log where a
+		// continuously-playing host hashed the saved tick's object updates - diverging on that one boundary
+		// and the GAME_GAME_TIME checkCrc that echoes it. Re-seed the accumulator with the CRC captured at
+		// the save boundary (determinismCore.syncDebugCrc) so the first post-resume boundary reproduces the
+		// host's CRC exactly. No-op for snapshots without the field.
+		applyResumeSyncDebugCrc();
+		// This client resumed from a GameState snapshot at gameTime; it cannot reproduce the sync CRC of
+		// any tick at or before the resume tick (those were never simulated here), so suppress incoming
+		// GAME_GAME_TIME CRC checks for those (else a reconnect / mid-match join would spuriously flag a
+		// desync). The first post-resume boundary (> gameTime) is reproduced by applyResumeSyncDebugCrc()
+		// above and so is left verifiable. See setSyncCheckFloorTime.
+		setSyncCheckFloorTime(gameTime);
+	}
 
 	return true;
 }

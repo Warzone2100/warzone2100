@@ -108,11 +108,15 @@ void levShutDown();
 bool levInitialise();
 
 /// Cooperative level-load coroutine for nesting under another loading task on the same controller.
+/// When reconstructFromSnapshot is true (new-format cold load), the scenario load still runs (for the
+/// map's display layer), then coldLoadRestoreWorld() replaces the world from the GameState snapshot -
+/// before stageThreeInitialise, so the load finalizes on the restored world.
 LoadingTask<> makeLevLoadDataLoadingTask(ResourceLoadingController &controller,
                                        std::string name,
                                        std::optional<Sha256> hash,
                                        char *pSaveName,
-                                       GAME_TYPE saveType);
+                                       GAME_TYPE saveType,
+                                       bool reconstructFromSnapshot = false);
 
 // find the level dataset
 LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = nullptr);
