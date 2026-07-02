@@ -85,14 +85,8 @@ bool passNeedsMsaaResolve(const RenderPassDesc& pass);
 /// True when resolved depth includes stencil (scene depth, not shadow map).
 bool attachmentDepthHasStencil(const AttachmentDesc& attachment);
 
-/// True when the texture is the shadow-map pipeline surface.
-bool isDepthShaderSampledSurface(abstract_texture* texture);
-
 /// True when the texture is the swapchain presentable color surface.
 bool isSwapchainPresentableColorSurface(abstract_texture* texture);
-
-/// All non-null color, depth, and resolve textures referenced by the pass.
-std::unordered_set<abstract_texture*> getPassAttachmentTextures(const RenderPassDesc& pass);
 
 /// Resolve which texture/subresource a producer pass exposes for a given `AttachmentRole`.
 std::optional<PassOutputView> getPassOutputAttachment(

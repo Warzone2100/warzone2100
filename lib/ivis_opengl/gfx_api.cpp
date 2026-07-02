@@ -829,14 +829,3 @@ void gfx_api::context::executeCompiledRenderGraph(std::vector<RenderPassDesc>& p
 
 	setRenderGraphExecuting(false);
 }
-
-void gfx_api::context::executeRenderGraph(std::vector<RenderPassDesc>& passes)
-{
-	PassGraphCompileResult compileResult;
-	if (!compilePassGraph(passes, compileResult))
-	{
-		return;
-	}
-
-	executeCompiledRenderGraph(passes, compileResult);
-}

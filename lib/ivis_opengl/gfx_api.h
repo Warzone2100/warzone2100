@@ -443,7 +443,6 @@ namespace gfx_api
 
 		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }
 
-		virtual void executeRenderGraph(std::vector<RenderPassDesc>& passes);
 		virtual void executeCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
 			const PassGraphCompileResult& compileResult);
 		virtual void warmCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
@@ -506,7 +505,7 @@ namespace gfx_api
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
 
 	protected:
-		// True while executeRenderGraph() is running. Draw/bind APIs must only be called from record callbacks.
+		// True while executeCompiledRenderGraph() is running. Draw/bind APIs must only be called from record callbacks.
 		bool renderGraphExecuting() const { return _renderGraphExecuting; }
 		void setRenderGraphExecuting(bool executing) { _renderGraphExecuting = executing; }
 		void bumpRenderGraphEpoch() { ++_renderGraphEpoch; }

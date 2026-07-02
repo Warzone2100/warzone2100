@@ -615,18 +615,6 @@ std::optional<PassOutputView> getPassOutputAttachment(
 	return view;
 }
 
-bool isDepthShaderSampledSurface(abstract_texture* texture)
-{
-	if (texture == nullptr)
-	{
-		return false;
-	}
-	auto& ctx = gfx_api::context::get();
-	const auto surfaceId = ctx.findPipelineSurfaceId(texture);
-	return surfaceId.has_value()
-		&& ctx.pipelineSurfaceMeta(surfaceId.value()).usage == PipelineSurfaceUsage::DepthOnly;
-}
-
 bool isSwapchainPresentableColorSurface(abstract_texture* texture)
 {
 	if (texture == nullptr)
@@ -663,27 +651,6 @@ bool passTargetsSwapchainColor(const RenderPassDesc& pass)
 		}
 	}
 	return false;
-}
-
-std::unordered_set<abstract_texture*> getPassAttachmentTextures(const RenderPassDesc& pass)
-{
-	std::unordered_set<abstract_texture*> textures;
-	for (const auto& colorAttachment : pass.colorAttachments)
-	{
-		if (colorAttachment.texture != nullptr)
-		{
-			textures.insert(colorAttachment.texture);
-		}
-	}
-	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
-	{
-		textures.insert(pass.depthAttachment->texture);
-	}
-	if (pass.resolveAttachment.has_value() && pass.resolveAttachment->texture != nullptr)
-	{
-		textures.insert(pass.resolveAttachment->texture);
-	}
-	return textures;
 }
 
 } // namespace gfx_api
