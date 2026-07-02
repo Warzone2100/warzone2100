@@ -329,7 +329,13 @@ bool intAddTransporterLaunch(DROID *psDroid)
 {
 	UDWORD          capacity;
 
-	if (bMultiPlayer)
+	// The transporter launch button is a campaign-only reinforcement mechanic.
+	// Guard on game.type (a stable value) rather than only bMultiPlayer: mods
+	// wrap desync-unsafe script calls such as addDroid() in hackNetOff() /
+	// hackNetOn(), which temporarily sets bMultiPlayer = false. A transporter
+	// spawned inside that window would otherwise create this button (and set
+	// psCurrTransporter) in a skirmish/multiplayer game.
+	if (bMultiPlayer || game.type != LEVEL_TYPE::CAMPAIGN)
 	{
 		return true;
 	}
