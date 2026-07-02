@@ -206,7 +206,8 @@ private:
 };
 
 /// Append the standard offscreen scene pass (MSAA or single-sample) to `builder`.
-void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa);
+void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
+	uint32_t numShadowCascades);
 /// Append a swapchain-target pass (MSAA resolve when enabled) with shared depth setup.
 void addSwapchainPassToBuilder(BlueprintBuilder& builder, PassId id, std::string debugName,
 	bool swapchainMsaa, AttachmentLoadOp colorLoad,

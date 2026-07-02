@@ -54,7 +54,7 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 			.viewport(ViewportRule::DepthCascade, i);
 	}
 
-	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa);
+	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
 
 	builder.beginPass(PassId::SceneBlit, std::string("SceneBlit"));
 	if (snapshot.swapchainMsaa)

@@ -179,7 +179,8 @@ uint64_t PassGraphTopologyBlueprint::topologyHash() const
 	return static_cast<uint64_t>(h);
 }
 
-void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa)
+void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa,
+	uint32_t numShadowCascades)
 {
 	builder.beginPass(id, "ScenePass");
 	if (sceneMsaa)
@@ -193,6 +194,11 @@ void addScenePassToBuilder(BlueprintBuilder& builder, PassId id, bool sceneMsaa)
 	}
 	builder.depth(PipelineSurfaceId::SceneDepth, AttachmentLoadOp::Clear, AttachmentStoreOp::Invalidate)
 		.viewport(ViewportRule::SceneColorTarget);
+
+	for (uint32_t i = 0; i < numShadowCascades; ++i)
+	{
+		builder.readFrom(shadowCascadePassId(i), AttachmentRole::Depth);
+	}
 }
 
 void addSwapchainPassToBuilder(BlueprintBuilder& builder, PassId id, std::string debugName,
