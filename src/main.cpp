@@ -1311,6 +1311,11 @@ void mainLoop()
 #if defined(ENABLE_DISCORD)
 	discordRPCPerFrame();
 #endif
+
+	if (pie_IsScreenFrameRendering())
+	{
+		pie_ScreenFrameRenderEnd();
+	}
 }
 
 void requestMapPreviewLoad(bool hideInterface)
@@ -2171,6 +2176,7 @@ int realmain(int argc, char *argv[])
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(false);
 
+	pie_ScreenFrameRenderBegin();
 	pie_ScreenFrameRenderEnd();
 
 	if (!systemInitialise(horizScaleFactor, vertScaleFactor))

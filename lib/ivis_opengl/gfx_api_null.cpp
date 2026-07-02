@@ -427,19 +427,69 @@ bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_
 	return true;
 }
 
-void null_context::beginRenderPass()
+void null_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /*passes*/,
+	gfx_api::PassGraphCompileResult& /*compileResult*/)
 {
-	// no-op
 }
 
-void null_context::endRenderPass()
+void null_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
+	(void)pass;
+	frameHasDrawCommands = true;
+}
+
+void null_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
+{
+}
+
+void null_context::submitFrame()
+{
+	if (!frameHasDrawCommands)
+	{
+		return;
+	}
+
 	frameNum = std::max<size_t>(frameNum + 1, 1);
+	frameHasDrawCommands = false;
 
 	// Backend is expected to handle throttling / sleeping
 	backend_impl->swapWindow();
 
 	current_program = nullptr;
+}
+
+void null_context::beginDepthPass(size_t /*idx*/)
+{
+	setRenderGraphExecuting(true);
+}
+
+void null_context::endCurrentDepthPass()
+{
+}
+
+void null_context::beginSceneRenderPass()
+{
+	setRenderGraphExecuting(true);
+}
+
+void null_context::endSceneRenderPass()
+{
+}
+
+void null_context::beginRenderPass()
+{
+	setRenderGraphExecuting(true);
+	frameHasDrawCommands = true;
+}
+
+void null_context::endRenderPass()
+{
+	setRenderGraphExecuting(false);
+	submitFrame();
+}
+
+void null_context::purgeFrameResources()
+{
 }
 
 void null_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)

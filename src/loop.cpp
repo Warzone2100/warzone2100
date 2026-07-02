@@ -160,7 +160,12 @@ static GAMECODE renderLoop()
 		handleInGameHostQuit();
 	}
 
-	bool skipDrawing = !gfx_api::context::get().shouldDraw();
+	const auto shouldSkipDrawing = []() {
+		auto& ctx = gfx_api::context::get();
+		return !ctx.shouldDraw() || !ctx.canRecordDrawCommands();
+	};
+
+	bool skipDrawing = shouldSkipDrawing();
 
 	audio_Update();
 
@@ -322,9 +327,9 @@ static GAMECODE renderLoop()
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode() && !skipDrawing)
+	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode())
 	{
-		if (!gameUpdatePaused())
+		if (!skipDrawing && !gameUpdatePaused())
 		{
 			processInput();
 
@@ -337,17 +342,20 @@ static GAMECODE renderLoop()
 			}
 			displayWorld();
 		}
-		wzPerfBegin(PERF_GUI, "User interface");
-		WZ_PROFILE_SCOPE(DrawUI);
-		/* Display the in game interface */
-		pie_SetFogStatus(false);
-
-		if (getWidgetsStatus())
+		if (!shouldSkipDrawing())
 		{
-			intDisplayWidgets();
+			wzPerfBegin(PERF_GUI, "User interface");
+			WZ_PROFILE_SCOPE(DrawUI);
+			/* Display the in game interface */
+			pie_SetFogStatus(false);
+
+			if (getWidgetsStatus())
+			{
+				intDisplayWidgets();
+			}
+			pie_SetFogStatus(true);
+			wzPerfEnd(PERF_GUI);
 		}
-		pie_SetFogStatus(true);
-		wzPerfEnd(PERF_GUI);
 	}
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount);

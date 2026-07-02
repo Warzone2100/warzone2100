@@ -30,6 +30,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"	// multiplayer
@@ -320,6 +321,11 @@ bool isLoadingScreenActive()
 void presentLoadingScreenForCurrentFrame()
 {
 	if (!loadingScreenSessionActive || headlessGameMode())
+	{
+		return;
+	}
+
+	if (!gfx_api::context::get().canRecordDrawCommands())
 	{
 		return;
 	}

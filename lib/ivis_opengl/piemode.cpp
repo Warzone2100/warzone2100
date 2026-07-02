@@ -92,7 +92,12 @@ void pie_ShutDown()
 
 /***************************************************************************/
 
-static bool renderingFrame = true; // starts off true
+static bool renderingFrame = false;
+
+bool pie_IsScreenFrameRendering()
+{
+	return renderingFrame;
+}
 
 void pie_ScreenFrameRenderBegin()
 {
@@ -103,7 +108,7 @@ void pie_ScreenFrameRenderBegin()
 	}
 	renderingFrame = true;
 	gfx_api::context::get().beginRenderPass();
-	if (screen_GetBackDrop())
+	if (screen_GetBackDrop() && gfx_api::context::get().canRecordDrawCommands())
 	{
 		screen_Display();
 	}

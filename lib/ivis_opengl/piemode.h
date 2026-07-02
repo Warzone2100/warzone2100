@@ -51,6 +51,7 @@ bool pie_Initialise();
 void pie_ShutDown();
 void pie_ScreenFrameRenderBegin();
 void pie_ScreenFrameRenderEnd();
+bool pie_IsScreenFrameRendering();
 void pie_UpdateSurfaceGeometry();
 UDWORD pie_GetResScalingFactor();
 

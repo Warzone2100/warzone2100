@@ -22,6 +22,8 @@
 #include "gfx_api_vk.h"
 #include "gfx_api_gl.h"
 #include "gfx_api_null.h"
+#include "render_graph/pass_resolve.h"
+#include "render_graph/compile.h"
 #include "gfx_api_image_compress_priv.h"
 #include "gfx_api_image_basis_priv.h"
 #include "gfx_api_mipmap_priv.h"
@@ -614,6 +616,7 @@ const char* gfx_api::format_to_str(gfx_api::pixel_format format)
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8: return "RGB8_UNORM";
 		case gfx_api::pixel_format::FORMAT_RG8_UNORM: return "RG8_UNORM";
 		case gfx_api::pixel_format::FORMAT_R8_UNORM: return "R8_UNORM";
+		case gfx_api::pixel_format::FORMAT_D24_UNORM_S8: return "D24_UNORM_S8";
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM: return "RGB_BC1_UNORM";
 		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM: return "RGBA_BC2_UNORM";
@@ -650,6 +653,8 @@ unsigned int gfx_api::format_channels(gfx_api::pixel_format format)
 			return 2;
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			return 1;
+		case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+			return 0;
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			return 3;
@@ -685,41 +690,6 @@ static inline size_t calculate_astc_size(size_t width, size_t height)
 	return ((width + blockWidth - 1) / blockWidth) * ((height + blockHeight - 1) / blockHeight) * 16;
 }
 
-size_t gfx_api::format_texel_block_width(gfx_api::pixel_format format)
-{
-	switch (format)
-	{
-		case gfx_api::pixel_format::invalid:
-			return 1; // just return 1 for now...
-		// UNCOMPRESSED FORMATS
-		case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
-		case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:
-		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
-		case gfx_api::pixel_format::FORMAT_RG8_UNORM:
-		case gfx_api::pixel_format::FORMAT_R8_UNORM:
-			return 1;
-		// COMPRESSED FORMAT
-		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
-		case gfx_api::pixel_format::FORMAT_RGBA_BC2_UNORM:
-		case gfx_api::pixel_format::FORMAT_RGBA_BC3_UNORM:
-		case gfx_api::pixel_format::FORMAT_R_BC4_UNORM:
-		case gfx_api::pixel_format::FORMAT_RG_BC5_UNORM:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_RGBA_BPTC_UNORM:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_RGB8_ETC1:
-		case gfx_api::pixel_format::FORMAT_RGB8_ETC2:
-		case gfx_api::pixel_format::FORMAT_RGBA8_ETC2_EAC:
-		case gfx_api::pixel_format::FORMAT_R11_EAC:
-		case gfx_api::pixel_format::FORMAT_RG11_EAC:
-			return 4;
-		case gfx_api::pixel_format::FORMAT_ASTC_4x4_UNORM:
-			return 4;
-	}
-
-	return 1; // silence warning
-}
-
 size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, size_t height)
 {
 	switch (format)
@@ -736,6 +706,8 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 			return width * height * 2;
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			return width * height;
+		case gfx_api::pixel_format::FORMAT_D24_UNORM_S8:
+			return width * height * 4;
 		// [COMPRESSED FORMATS]
 		// BC / DXT formats
 		// 4x4 blocks, each block having a certain number of bytes
@@ -771,52 +743,6 @@ size_t gfx_api::format_memory_size(gfx_api::pixel_format format, size_t width, s
 
 // texture arrays
 
-// loads an image into a texture array, generating mip levels as needed (based on textureType)
-bool gfx_api::context::loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
-{
-	size_t mipmap_levels = calcMipmapLevelsForUncompressedImage(image, textureType);
-	return loadTextureArrayLayerFromUncompressedImage(array, layer, image, textureType, mipmap_levels, uploadFormat, filename, maxWidth, maxHeight);
-}
-bool gfx_api::context::loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& rootImage, gfx_api::texture_type textureType, size_t mipmap_levels, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
-{
-	auto miplevels = generateMipMapsFromUncompressedImage(rootImage, mipmap_levels, textureType);
-
-	auto uploadMipLevel = [&](const iV_Image* image, size_t level) {
-		if (uploadFormat == image->pixel_format())
-		{
-			bool uploadResult = array.upload_layer(layer, level, *image);
-			ASSERT_OR_RETURN(false, uploadResult, "Failed to upload buffer to image");
-		}
-		else
-		{
-			// Run-time compression
-			auto compressedImage = gfx_api::compressImage(*image, uploadFormat);
-			ASSERT_OR_RETURN(false, compressedImage != nullptr, "Failed to compress image to format: %zu", static_cast<size_t>(uploadFormat));
-			bool uploadResult = array.upload_layer(layer, level, *compressedImage);
-			ASSERT_OR_RETURN(false, uploadResult, "Failed to upload buffer to image");
-		}
-		return true;
-	};
-
-	if (!uploadMipLevel(&rootImage, 0))
-	{
-		return false;
-	}
-
-	for (size_t level = 1; level <= miplevels.size(); ++level)
-	{
-		const iV_Image* image = dynamic_cast<iV_Image*>(miplevels[level - 1].get());
-		ASSERT_OR_RETURN(false, image != nullptr, "Image wasn't an iV_Image?");
-
-		if (!uploadMipLevel(image, level))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
 // used to load basis mip levels (already encoded in the desired target format) into a texture array
 bool gfx_api::context::loadTextureArrayLayerFromBaseImages(gfx_api::texture_array& array, size_t layer, const std::vector<std::unique_ptr<iV_BaseImage>>& images, const std::string& filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
@@ -829,4 +755,77 @@ bool gfx_api::context::loadTextureArrayLayerFromBaseImages(gfx_api::texture_arra
 	}
 
 	return true;
+}
+
+void gfx_api::context::warmCompiledRenderGraph(std::vector<RenderPassDesc>& /*passes*/,
+	PassGraphCompileResult& /*compileResult*/)
+{
+}
+
+void gfx_api::context::executeCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
+	const PassGraphCompileResult& compileResult)
+{
+	ASSERT(compileResult.passes.size() == passes.size(),
+	       "executeCompiledRenderGraph: pass count mismatch (descs=%zu compiled=%zu)",
+	       passes.size(), compileResult.passes.size());
+
+	setRenderGraphExecuting(true);
+
+	bool executedAnyPass = false;
+
+	ASSERT(compileResult.executionBatches.size() > 0
+		|| std::none_of(compileResult.passes.begin(), compileResult.passes.end(),
+			[](const CompiledPass& p) { return !p.skipped; }),
+		"executeCompiledRenderGraph: non-skipped passes but no execution batches");
+
+	for (const ExecutionBatch& batch : compileResult.executionBatches)
+	{
+		ASSERT(batch.startIndex <= compileResult.passes.size()
+			&& batch.count <= compileResult.passes.size() - batch.startIndex,
+			"executeCompiledRenderGraph: batch range out of bounds (start=%zu count=%zu compiled=%zu)",
+			batch.startIndex, batch.count, compileResult.passes.size());
+
+		const CompiledPass& head = compileResult.passes[batch.startIndex];
+		const size_t batchEnd = batch.startIndex + batch.count;
+
+#if defined(DEBUG)
+		ASSERT(passes[head.graphIndex].debugName == head.desc.debugName,
+			"CompiledPass.desc diverged from descs[graphIndex] for pass %zu", head.graphIndex);
+#endif
+
+		debugStringMarker(head.desc.debugName.c_str());
+
+		// Out-of-graph pre-pass barriers must be emitted before the render pass begins (layout
+		// transitions are illegal inside an active render pass) and are coalesced into a single
+		// pipelineBarrier for the whole batch.
+		emitPrePassBarriers(batch, compileResult.passes);
+
+		beginPass(head.desc, &head);
+
+		for (size_t j = batch.startIndex; j < batchEnd; ++j)
+		{
+			const CompiledPass& batchPass = compileResult.passes[j];
+			if (j != batch.startIndex)
+			{
+				debugStringMarker(batchPass.desc.debugName.c_str());
+			}
+			if (batchPass.desc.recordFunc)
+			{
+				const RenderPassContext batchContext = buildRenderPassContext(batchPass);
+				batchPass.desc.recordFunc(batchContext);
+			}
+		}
+
+		endPass(&head);
+		executedAnyPass = true;
+	}
+
+	if (executedAnyPass)
+	{
+		submitFrame();
+	}
+
+	purgeFrameResources();
+
+	setRenderGraphExecuting(false);
 }
