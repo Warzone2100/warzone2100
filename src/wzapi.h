@@ -631,7 +631,9 @@ namespace wzapi
 	public:
 		// save / restore state
 		virtual bool saveScriptGlobals(nlohmann::json &result) = 0;
-		virtual bool loadScriptGlobals(const nlohmann::json &result) = 0;
+		// fixedNulls: true if the save distinguishes JS null from undefined (save format
+		// version >= 2). When false (older saves), JSON null is mapped to JS undefined.
+		virtual bool loadScriptGlobals(const nlohmann::json &result, bool fixedNulls) = 0;
 
 		virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) = 0;
 

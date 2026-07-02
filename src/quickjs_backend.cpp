@@ -213,6 +213,7 @@ static const char* WZ_JSON_TAG_OBJECT = "object";
 static const char* WZ_JSON_TAG_ARRAY  = "array";
 static const char* WZ_JSON_TAG_REF    = "ref";
 static const char* WZ_JSON_TAG_NUMBER = "number";   // a non-finite double (NaN / Infinity / -Infinity)
+static const char* WZ_JSON_TAG_UNDEF  = "undef";    // JS undefined (distinct from JSON null == JS null)
 static const char* WZ_JSON_ID_KEY     = "@@id";     // reference identity (int)
 static const char* WZ_JSON_CLASS_KEY  = "@@class";  // class name (string)
 static const char* WZ_JSON_DATA_KEY   = "@@data";   // own data properties (object) / elements (array)
@@ -470,7 +471,7 @@ private:
 public:
 	// save / restore state
 	virtual bool saveScriptGlobals(nlohmann::json &result) override;
-	virtual bool loadScriptGlobals(const nlohmann::json &result) override;
+	virtual bool loadScriptGlobals(const nlohmann::json &result, bool fixedNulls) override;
 
 	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
 
@@ -998,9 +999,14 @@ struct JsonToJSContext
 {
 	JSContext* ctx;
 	std::unordered_map<int, JSValue> idMap; // reference id -> created object (owned)
+	// When true (save format version >= 2), the save distinguishes null from undefined:
+	// a bare JSON null maps to JS null, and the "undef" tag maps to JS undefined. When
+	// false (older saves, which stored undefined as null), JSON null maps to undefined.
+	bool fixedNulls = false;
 
-	JsonToJSContext(JSContext* ctx)
+	JsonToJSContext(JSContext* ctx, bool fixedNulls = false)
 	: ctx(ctx)
+	, fixedNulls(fixedNulls)
 	{ }
 
 	~JsonToJSContext()
@@ -1077,6 +1083,12 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 				if (token == "Infinity") { dblVal = std::numeric_limits<double>::infinity(); }
 				else if (token == "-Infinity") { dblVal = -std::numeric_limits<double>::infinity(); }
 				return JS_NewFloat64(ctx, dblVal);
+			}
+
+			// JS undefined (a bare JSON null means JS null in this format - see fixedNulls)
+			if (tag == WZ_JSON_TAG_UNDEF)
+			{
+				return JS_UNDEFINED;
 			}
 
 			int id = -1;
@@ -1184,6 +1196,12 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 			JS_DefinePropertyValueUint32(ctx, value, i, mapJsonToQuickJSValueWithContext(c, instance.at(i), prop_flags), prop_flags);
 		}
 		return value;
+	}
+	// In the version-2 format, a bare JSON null means JS null (undefined is tagged)
+	// Older saves stored undefined as null, so without fixedNulls a null still maps to undefined
+	if (instance.is_null())
+	{
+		return c.fixedNulls ? JS_NULL : JS_UNDEFINED;
 	}
 	// Scalars (and anything else) cannot carry tags - delegate to the plain mapper.
 	return mapJsonToQuickJSValue(ctx, instance, prop_flags);
@@ -3286,15 +3304,12 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 	return true;
 }
 
-bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result)
+bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result, bool fixedNulls)
 {
 	ASSERT_OR_RETURN(false, result.is_object(), "Can't load script globals from non-json-object");
-	JsonToJSContext loadCtx(ctx);
+	JsonToJSContext loadCtx(ctx, fixedNulls);
 	for (auto it : result.items())
 	{
-		// IMPORTANT: "null" JSON values *MUST* map to JS_UNDEFINED.
-		//			  If they are set to JS_NULL, it causes issues for libcampaign.js. (As the values become "defined".)
-		//			  (mapJsonToQuickJSValue handles this properly.)
 		// NOTE: Properties created on the JS global object (as "global variables") should be non-configurable.
 		//		 However *their* properties should probably be C_W_E.
 		int ret = JS_DefinePropertyValueStr(ctx, global_obj, it.key().c_str(), mapJsonToQuickJSValueWithContext(loadCtx, it.value(), JS_PROP_C_W_E), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE | JS_PROP_THROW);
@@ -4356,7 +4371,16 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			return dblVal;
 		}
 		case JS_TAG_UNDEFINED:
-			return nlohmann::json(); // null value // ???
+			if (c.tag_class_instances)
+			{
+				// On the save path, distinguish undefined from null:
+				// - undefined is tagged, so a bare JSON null unambiguously means JS null
+				// - (Legacy/non-tag callers keep collapsing both to JSON null)
+				nlohmann::json undef = nlohmann::json::object();
+				undef[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_UNDEF;
+				return undef;
+			}
+			return nlohmann::json(); // null value
 		case JS_TAG_STRING:
 		{
 			const char* pStr = JS_ToCString(c.ctx, value);

@@ -2340,7 +2340,9 @@ LoadingTask<> loadGameInit(ResourceLoadingController& controller, const GameLoad
 		//set IsScenario to true if not a user saved game
 		if (gameType == GTYPE_SAVE_START)
 		{
-			debug(LOG_FATAL, "Should not be called with gameType GTYPE_SAVE_START");
+			// GTYPE_SAVE_START is deprecated/unsupported and must never be loaded
+			debug(LOG_FATAL, "GTYPE_SAVE_START is deprecated/unsupported and cannot be loaded");
+			co_return load_fail();
 		}
 		IsScenario = true;
 		co_return load_ok();
@@ -2397,7 +2399,7 @@ bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType)
 	if (saveGameVersion >= VERSION_11)
 	{
 		//if user save game then load up the messages AFTER any droids or structures are loaded
-		if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
+		if (gameType == GTYPE_SAVE_MIDMISSION)
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
@@ -2705,8 +2707,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	/* Stop the game clock */
 	gameTimeStop();
 
-	if ((gameType == GTYPE_SAVE_START) ||
-	    (gameType == GTYPE_SAVE_MIDMISSION))
+	if (gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
 	}
@@ -2908,7 +2909,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	getPlayerNames();
 
 	//clear the player Power structs
-	if ((gameType != GTYPE_SAVE_START) && (gameType != GTYPE_SAVE_MIDMISSION) &&
+	if ((gameType != GTYPE_SAVE_MIDMISSION) &&
 	    (!keepObjects))
 	{
 		clearPlayerPower();
@@ -3016,7 +3017,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	}
 
 	//if user save game then load up the research BEFORE any droids or structures are loaded
-	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
+	if (gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load in the research list file
 		aFileName[fileExten] = '\0';
@@ -3195,8 +3196,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	if (saveGameVersion > VERSION_12)
 	{
 		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if (gameType == GTYPE_SAVE_MIDMISSION)
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
@@ -3373,7 +3373,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	co_await controller.yieldFrame();
 
 	//if user save game then load up the current level for structs and components
-	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
+	if (gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load in the component list file
 		aFileName[fileExten] = '\0';
@@ -3405,8 +3405,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	if (saveGameVersion >= VERSION_11)
 	{
 		//if user save game then load up the Visibility
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if (gameType == GTYPE_SAVE_MIDMISSION)
 		{
 			//load in the visibility file
 			aFileName[fileExten] = '\0';
@@ -3424,8 +3423,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	if (saveGameVersion >= VERSION_16)
 	{
 		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if (gameType == GTYPE_SAVE_MIDMISSION)
 		{
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "score.json");
@@ -3442,8 +3440,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	if (saveGameVersion >= VERSION_21)
 	{
 		//rebuild the apsCommandDesignation AFTER all droids and structures are loaded
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if (gameType == GTYPE_SAVE_MIDMISSION)
 		{
 			//load in the command list file
 			aFileName[fileExten] = '\0';
@@ -3501,8 +3498,7 @@ LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDeta
 	loadLabels(aFileName, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 
 	//if user save game then reset the time - BEWARE IF YOU USE IT
-	if ((gameType == GTYPE_SAVE_START) ||
-	    (gameType == GTYPE_SAVE_MIDMISSION))
+	if (gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		ASSERT(gameTime == savedGameTime, "loadGame; game time modified during load");
 		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
@@ -3615,10 +3611,9 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave)
 	strcat(CurrentFileName, "gameinfo.json");
 	writeGameInfo(CurrentFileName);
 
-	// Save labels
-	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "labels.json");
-	writeLabels(CurrentFileName);
+	// NOTE:
+	// Savegame labels are embedded in the script state (see saveScriptStates2), not written to a separate labels.json
+	// (Map/scenario labels.json is authored externally and is loaded for non-savegame loads)
 
 	//create the droids filename
 	CurrentFileName[fileExtension] = '\0';
@@ -4209,7 +4204,9 @@ bool gameLoadV7(PHYSFS_file *fileHandle, nonstd::optional<nlohmann::json> &gamJs
 	//set IsScenario to true if not a user saved game
 	if (gameType == GTYPE_SAVE_START)
 	{
-		debug(LOG_FATAL, "Should not be called with gameType GTYPE_SAVE_START");
+		// GTYPE_SAVE_START is deprecated/unsupported and must never be loaded
+		debug(LOG_FATAL, "GTYPE_SAVE_START is deprecated/unsupported and cannot be loaded");
+		return false;
 	}
 	IsScenario = true;
 
@@ -4498,6 +4495,14 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 	height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
 	gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
 
+	if (gameType == GTYPE_SAVE_START)
+	{
+		// GTYPE_SAVE_START is deprecated/unsupported
+		// Reject any (legacy) savegame of this type rather than attempting to load it
+		debug(LOG_FATAL, "GTYPE_SAVE_START is deprecated/unsupported and cannot be loaded");
+		co_return load_fail();
+	}
+
 	if (version >= VERSION_11)
 	{
 		//camera position
@@ -4601,8 +4606,7 @@ LoadingTask<> gameLoadV(ResourceLoadingController& controller, PHYSFS_file *file
 	droidInit();
 
 	//set IsScenario to true if not a user saved game
-	if ((gameType == GTYPE_SAVE_START) ||
-	    (gameType == GTYPE_SAVE_MIDMISSION))
+	if (gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		for (i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -4843,7 +4847,7 @@ static bool loadMainFileFinal(const std::string &fileName)
 // binary blobbery, for future usage.
 static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 {
-	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
+	ASSERT(saveType == GTYPE_SAVE_MIDMISSION, "invalid save type (GTYPE_SAVE_START is deprecated)");
 
 	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadAndWrite);
 
@@ -5023,7 +5027,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 
 	debug(LOG_SAVE, "fileversion is %u, (%s) ", fileHeader.version, fileName);
 
-	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
+	ASSERT(saveType == GTYPE_SAVE_MIDMISSION, "invalid save type (GTYPE_SAVE_START is deprecated)");
 	saveGame.saveKey = getCampaignNumber();
 	if (missionIsOffworld())
 	{
@@ -7821,14 +7825,6 @@ bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 	if (gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		freeMessages();
-	}
-	else if (gameType == GTYPE_SAVE_START)
-	{
-		// If we are loading in a CamStart or a CamChange then we are not interested in any saved messages
-		if (levelType == LEVEL_TYPE::LDS_CAMSTART || levelType == LEVEL_TYPE::LDS_CAMCHANGE)
-		{
-			return true;
-		}
 	}
 
 	WzConfig ini(pFileName, WzConfig::ReadOnly);

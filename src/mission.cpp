@@ -2435,25 +2435,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 			widgAddButton(psWScreen, &sButInit);
 		}
 
-		// FIXME, We got serious issues with savegames at the *END* of some missions, and while they
-		// will load, they don't have the correct state information or other settings.
-		// See transition from CAM2->CAM3 for a example.
-		/* Only add save option if in the game for real, ie, not fastplay.
-		* And the player hasn't just completed the whole game
-		* Don't add save option if just lost and in debug mode.
-		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
-		{
-			//save
-			sButInit.id			= IDMISSIONRES_SAVE;
-			sButInit.x			= MISSION_1_X;
-			sButInit.y			= MISSION_1_Y;
-			sButInit.pText		= _("Save Game");//"Save Game";
-			widgAddButton(psWScreen, &sButInit);
-
-			// automatically save the game to be able to restart a mission
-			saveGame((char *)"savegames/Autosave.gam", GTYPE_SAVE_START);
-		}
-		*/
+		// NOTE: There used to be a "Save Game" option here, but it was long disabled because of
+		// serious issues with savegames at the *END* of some missions (example: the CAM2->CAM3
+		// transition) that loaded but had incorrect state. It used the now-deprecated
+		// GTYPE_SAVE_START path and has been removed.
 	}
 	else
 	{
@@ -2525,7 +2510,10 @@ void intRunMissionResult()
 				{
 					char msg[256] = {'\0'};
 
-					saveGame(sRequestResult, GTYPE_SAVE_START);
+					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+					// (the "Save Game" button is no longer added)
+					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+					saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION);
 					sstrcpy(msg, _("GAME SAVED :"));
 					sstrcat(msg, savegameWithoutExtension(sRequestResult));
 					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);

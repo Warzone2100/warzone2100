@@ -695,34 +695,69 @@ bool saveScriptStates(const char *filename)
 	return scripting_engine::instance().saveScriptStates(filename);
 }
 
+// Script-state save format version:
+// 1 (or absent): Legacy flat layout (globals_<i> / groups_<i> / triggers_<i> keys, matched back
+//                to instances by embedded "me"/"scriptName"), written via WzConfig
+// 2: A single structured JSON document with top-level "instances" and "timers" arrays
+//    Each instance bundles its own "globals", "groups" and per-instance flags
+//    (ex. "isReceivingAllEvents"). "timers" is an ordered array restored in-order.
+static const int SCRIPTSTATE_VERSION = 2;
+
 bool scripting_engine::saveScriptStates(const char *filename)
 {
-	WzConfig ini(filename, WzConfig::ReadAndWrite);
+	return saveScriptStates2(filename);
+}
+
+bool scripting_engine::saveScriptStates2(const char *filename)
+{
+	nlohmann::json root = nlohmann::json::object();
+	root["version"] = SCRIPTSTATE_VERSION;
+
+	// One object per script instance, bundling its globals, group memberships, and per-instance flags
+	nlohmann::json instancesArray = nlohmann::json::array();
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		wzapi::scripting_instance* instance = scripts.at(i);
 
+		nlohmann::json instanceObj = nlohmann::json::object();
+		// 'me'/'scriptName' identify the instance on load (findInstanceForPlayer)
+		instanceObj["me"] = instance->player();
+		instanceObj["scriptName"] = instance->scriptName();
+
 		nlohmann::json globalsResult = nlohmann::json::object();
 		instance->saveScriptGlobals(globalsResult);
-		// 'scriptName' and 'me' should be saved implicitly by the backend's saveScriptGlobals
+		// 'scriptName' and 'me' are also saved implicitly inside globals by the backend's saveScriptGlobals
 		ASSERT(globalsResult.contains("me"), "Missing required global \"me\"");
 		ASSERT(globalsResult.contains("scriptName"), "Missing required global \"scriptName\"");
-		ini.setValue("globals_" + WzString::number(i), globalsResult);
+		instanceObj["globals"] = std::move(globalsResult);
 
-		// we have to save 'scriptName' and 'me' explicitly
 		nlohmann::json groupsResult = nlohmann::json::object();
 		saveGroups(groupsResult, instance);
-		groupsResult["me"] = instance->player();
-		groupsResult["scriptName"] = instance->scriptName();
-		ini.setValue("groups_" + WzString::number(i), std::move(groupsResult));
+		instanceObj["groups"] = std::move(groupsResult);
+
+		instanceObj["isReceivingAllEvents"] = instance->isReceivingAllEvents();
+
+		// This instance's owned (script-created) labels - (Omitted entirely when the instance has none)
+		auto ownedIt = ownedLabels.find(instance);
+		if (ownedIt != ownedLabels.end() && !ownedIt->second.empty())
+		{
+			nlohmann::json instanceLabels = nlohmann::json::array();
+			writeLabelMap(ownedIt->second, instanceLabels);
+			instanceObj["labels"] = std::move(instanceLabels);
+		}
+
+		instancesArray.push_back(std::move(instanceObj));
 	}
-	size_t timerIdx = 0;
+	root["instances"] = std::move(instancesArray);
+
+	// Timers as an ordered array - serialized (and thus restored) in the same order as the timers list
+	nlohmann::json timersArray = nlohmann::json::array();
 	for (const auto& node : timers)
 	{
 		nlohmann::json nodeInfo = nlohmann::json::object();
-		nodeInfo["timerID"] = node->timerID;
-		nodeInfo["timerName"] = node->timerName;
-		// we have to save 'scriptName' and 'me' explicitly
+		nodeInfo["id"] = node->timerID;
+		nodeInfo["name"] = node->timerName;
+		// 'me'/'scriptName' identify the owning instance on load
 		nodeInfo["me"] = node->player;
 		nodeInfo["scriptName"] = node->instance->scriptName();
 		nodeInfo["functionRestoreInfo"] = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam.get());
@@ -736,10 +771,19 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		nodeInfo["calls"] = node->calls;
 		nodeInfo["type"] = (int)node->type;
 
-		ini.setValue("triggers_" + WzString::number(timerIdx), std::move(nodeInfo));
-		++timerIdx;
+		timersArray.push_back(std::move(nodeInfo));
 	}
-	return true;
+	root["timers"] = std::move(timersArray);
+
+	// Persist the monotonic timer-id counter
+	root["lastTimerID"] = lastTimerID;
+
+	// Global (map-authored / legacy / unowned) labels go at the top level
+	nlohmann::json globalLabelsArr = nlohmann::json::array();
+	writeLabelMap(globalLabels, globalLabelsArr);
+	root["labels"] = std::move(globalLabelsArr);
+
+	return saveJSONToFile(root, filename);
 }
 
 wzapi::scripting_instance* scripting_engine::findInstanceForPlayer(int match, const WzString& _scriptName)
@@ -766,8 +810,16 @@ bool loadScriptStates(const char *filename)
 
 bool scripting_engine::loadScriptStates(const char *filename)
 {
-	uniqueTimerID maxRestoredTimerID = 0;
 	WzConfig ini(filename, WzConfig::ReadOnly);
+	const int version = ini.value("version", 1).toInt();
+	if (version >= 2)
+	{
+		debug(LOG_SAVE, "Loading script states (v%d) for %zu script contexts", version, scripts.size());
+		return loadScriptStates2(ini.currentJsonValue());
+	}
+
+	// ---- Legacy v1 loader (flat globals_<i> / groups_<i> / triggers_<i> layout) ----
+	uniqueTimerID maxRestoredTimerID = 0;
 	std::vector<WzString> list = ini.childGroups();
 	debug(LOG_SAVE, "Loading script states for %zu script contexts", scripts.size());
 	for (size_t i = 0; i < list.size(); ++i)
@@ -800,7 +852,8 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			node->instance = instance;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, player, scriptName.toUtf8().c_str());
-			node->baseobj = ini.value("baseobj", -1).toInt();
+			// NOTE: the save side has always written this under the "object" key (never "baseobj")
+			node->baseobj = ini.value("object", -1).toInt();
 			node->baseobjtype = (OBJECT_TYPE)ini.value("objectType", (int)OBJ_NUM_TYPES).toInt();
 			node->frameTime = ini.value("frame").toInt();
 			node->ms = ini.value("ms").toInt();
@@ -850,7 +903,8 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			// filter out "scriptName" and "me" variables
 			result.erase("me");
 			result.erase("scriptName");
-			instance->loadScriptGlobals(result);
+			// v1 (this legacy loader): undefined was stored as JSON null, so null -> undefined
+			instance->loadScriptGlobals(result, /*fixedNulls=*/false);
 		}
 		else if (instance && list[i].startsWith("groups_"))
 		{
@@ -887,6 +941,189 @@ bool scripting_engine::loadScriptStates(const char *filename)
 		ini.endGroup();
 	}
 	lastTimerID = maxRestoredTimerID;
+	return true;
+}
+
+// Loader for save format v2 (see SCRIPTSTATE_VERSION): a structured JSON document with top-level
+// "instances" and "triggers" arrays - 'root' is the parsed document object
+bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
+{
+	const int version = root.value("version", 1);
+	ASSERT_OR_RETURN(false, root >= 2, "Invalid version: %d", version);
+
+	if (version > SCRIPTSTATE_VERSION)
+	{
+		// script state version is newer than this version of WZ can support
+		debug(LOG_ERROR, "The scriptState version is newer than this version of WZ can support: %d", version);
+		return false;
+	}
+
+	// Labels: a v2 save is the authoritative source, so clear and rebuild both buckets here
+	// - Global (map-authored / legacy / unowned) labels live at the top level
+	// - Each instance's owned labels are nested under it (loaded in the instance loop below)
+	// - No map->id remapping is needed - savegame labels store already-synchronized runtime ids
+	globalLabels.clear();
+	ownedLabels.clear();
+	auto topLabelsIt = root.find("labels");
+	if (topLabelsIt != root.end() && topLabelsIt->is_array())
+	{
+		loadLabelMap(*topLabelsIt, globalLabels);
+	}
+
+	// Instances: per-instance globals + group memberships + flags
+	auto instancesIt = root.find("instances");
+	if (instancesIt != root.end() && instancesIt->is_array())
+	{
+		for (const auto& instanceObj : *instancesIt)
+		{
+			if (!instanceObj.is_object())
+			{
+				ASSERT(false, "Malformed instance entry in script states (not an object)");
+				continue;
+			}
+			int player = instanceObj.value("me", -1);
+			WzString scriptName = WzString::fromUtf8(instanceObj.value("scriptName", std::string()));
+			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
+			if (!instance)
+			{
+				continue;
+			}
+
+			// Globals
+			auto globalsIt = instanceObj.find("globals");
+			if (globalsIt != instanceObj.end() && globalsIt->is_object())
+			{
+				nlohmann::json globals = *globalsIt;
+				debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
+				      instance->player(), instance->scriptName().c_str(), globals.size());
+				// filter out "scriptName" and "me" variables (saved implicitly inside globals)
+				globals.erase("me");
+				globals.erase("scriptName");
+				// v2 saves tag undefined explicitly, so a bare JSON null means JS null
+				instance->loadScriptGlobals(globals, /*fixedNulls=*/true);
+			}
+
+			// Group memberships: { "lastNewGroupId": <int>, "<droidId>": ["<groupId>", ...], ... }
+			auto groupsIt = instanceObj.find("groups");
+			if (groupsIt != instanceObj.end() && groupsIt->is_object())
+			{
+				for (auto it = groupsIt->begin(); it != groupsIt->end(); ++it)
+				{
+					if (it.key() == "lastNewGroupId" || !it->is_array())
+					{
+						continue;
+					}
+					bool ok = false; // check if the key is a (droid) id number
+					int droidId = WzString::fromUtf8(it.key()).toInt(&ok);
+					if (!ok)
+					{
+						continue;
+					}
+					for (const auto& groupIdVal : *it)
+					{
+						int groupId = 0;
+						if (groupIdVal.is_number_integer())
+						{
+							groupId = groupIdVal.get<int>();
+						}
+						else if (groupIdVal.is_string())
+						{
+							groupId = WzString::fromUtf8(groupIdVal.get<std::string>()).toInt();
+						}
+						else
+						{
+							continue;
+						}
+						loadGroup(instance, groupId, droidId);
+					}
+				}
+				auto lastNewIt = groupsIt->find("lastNewGroupId");
+				if (lastNewIt != groupsIt->end() && lastNewIt->is_number_integer())
+				{
+					GROUPMAP *psMap = getGroupMap(instance);
+					if (psMap)
+					{
+						psMap->saveLoadSetLastNewGroupId(lastNewIt->get<int>());
+					}
+				}
+			}
+
+			// Per-instance flags
+			auto recvIt = instanceObj.find("isReceivingAllEvents");
+			if (recvIt != instanceObj.end() && recvIt->is_boolean())
+			{
+				instance->setReceiveAllEvents(recvIt->get<bool>());
+			}
+
+			// This instance's owned labels
+			auto instLabelsIt = instanceObj.find("labels");
+			if (instLabelsIt != instanceObj.end() && instLabelsIt->is_array())
+			{
+				loadLabelMap(*instLabelsIt, ownedLabels[instance]);
+			}
+		}
+	}
+
+	// Timers: ordered array of timer nodes, restored in-order
+	auto timersIt = root.find("timers");
+	if (timersIt != root.end() && timersIt->is_array())
+	{
+		for (const auto& nodeInfo : *timersIt)
+		{
+			if (!nodeInfo.is_object())
+			{
+				ASSERT(false, "Malformed timer entry in script states (not an object)");
+				continue;
+			}
+			int player = nodeInfo.value("me", -1);
+			WzString scriptName = WzString::fromUtf8(nodeInfo.value("scriptName", std::string()));
+			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
+			if (!instance)
+			{
+				continue;
+			}
+
+			std::shared_ptr<timerNode> node = std::make_shared<timerNode>();
+			node->timerID = nodeInfo.contains("id") ? nodeInfo["id"].get<int>() : getNextAvailableTimerID();
+			node->timerName = nodeInfo.value("name", std::string());
+			node->instance = instance;
+			debug(LOG_SAVE, "Registering timer for player %d, script %s",
+			      player, scriptName.toUtf8().c_str());
+			node->baseobj = nodeInfo.value("object", -1);
+			node->baseobjtype = (OBJECT_TYPE)nodeInfo.value("objectType", (int)OBJ_NUM_TYPES);
+			node->frameTime = nodeInfo.value("frame", 0);
+			node->ms = nodeInfo.value("ms", 0);
+			node->player = player;
+			node->calls = nodeInfo.value("calls", 0);
+			node->type = (timerType)nodeInfo.value("type", (int)TIMER_REPEAT);
+
+			std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoredTimerInfo;
+			try
+			{
+				auto friIt = nodeInfo.find("functionRestoreInfo");
+				if (friIt == nodeInfo.end())
+				{
+					ASSERT(false, "Invalid trigger in save - missing functionRestoreInfo block");
+					continue;
+				}
+				restoredTimerInfo = instance->restoreTimerFunction(*friIt);
+			}
+			catch (const std::exception& e)
+			{
+				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				continue;
+			}
+
+			node->function = std::get<0>(restoredTimerInfo);
+			node->additionalTimerFuncParam = std::move(std::get<1>(restoredTimerInfo));
+
+			addTimerNode(std::move(node));
+		}
+	}
+
+	// Restore the monotonic timer-id counter
+	lastTimerID = root.value("lastTimerID", static_cast<uniqueTimerID>(0));
+
 	return true;
 }
 
@@ -1151,7 +1388,8 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 
 	if ((trigger == TRIGGER_START_LEVEL || trigger == TRIGGER_GAME_LOADED) && !saveandquit_enabled().empty())
 	{
-		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_START);
+		// --saveandquit produces a normal mid-mission save (which, unlike the old START path, also captures script state)
+		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_MIDMISSION);
 		wzQuit(0);
 	}
 
@@ -1742,11 +1980,11 @@ scripting_engine& scripting_engine::instance()
 std::vector<scripting_engine::LabelInfo> scripting_engine::debug_GetLabelInfo() const
 {
 	std::vector<scripting_engine::LabelInfo> results;
-	for (LABELMAP::const_iterator i = labels.cbegin(); i != labels.cend(); i++)
+	// 'scope' is the owning script for an owned label, or "global" for a map-authored / legacy label
+	auto addLabelInfo = [&](const std::string& name, const LABEL& l, const WzString& scope)
 	{
-		const LABEL &l = i->second;
 		scripting_engine::LabelInfo labelInfo;
-		labelInfo.label = WzString::fromUtf8(i->first);
+		labelInfo.label = WzString::fromUtf8(name);
 		const char *c = "?";
 		switch (l.type)
 		{
@@ -1769,23 +2007,22 @@ std::vector<scripting_engine::LabelInfo> scripting_engine::debug_GetLabelInfo() 
 		case 0: labelInfo.trigger = "Active"; break;
 		default: labelInfo.trigger = "Done"; break;
 		}
-		if (l.player == ALL_PLAYERS)
-		{
-			labelInfo.owner = "ALL";
-		}
-		else
-		{
-			labelInfo.owner = WzString::number(l.player);
-		}
-		if (l.subscriber == ALL_PLAYERS)
-		{
-			labelInfo.subscriber = "ALL";
-		}
-		else
-		{
-			labelInfo.subscriber = WzString::number(l.subscriber);
-		}
+		labelInfo.owner = (l.player == ALL_PLAYERS) ? WzString("ALL") : WzString::number(l.player);
+		labelInfo.subscriber = (l.subscriber == ALL_PLAYERS) ? WzString("ALL") : WzString::number(l.subscriber);
+		labelInfo.scope = scope;
 		results.push_back(std::move(labelInfo));
+	};
+	for (const auto &it : globalLabels)
+	{
+		addLabelInfo(it.first, it.second, WzString("global"));
+	}
+	for (const auto &bucket : ownedLabels)
+	{
+		WzString scope = WzString::fromUtf8(bucket.first->scriptName());
+		for (const auto &it : bucket.second)
+		{
+			addLabelInfo(it.first, it.second, scope);
+		}
 	}
 	return results;
 }
@@ -1804,14 +2041,20 @@ void clearMarks()
 
 void scripting_engine::markAllLabels(bool only_active)
 {
-	for (const auto &it : labels)
+	auto markBucket = [&](const LABELMAP& bucket)
 	{
-		const auto &key = it.first;
-		const LABEL &l = it.second;
-		if (!only_active || l.triggered <= 0)
+		for (const auto &it : bucket)
 		{
-			showLabel(key, false, false);
+			if (!only_active || it.second.triggered <= 0)
+			{
+				showLabel(it.first, false, false);
+			}
 		}
+	};
+	markBucket(globalLabels);
+	for (const auto &bucket : ownedLabels)
+	{
+		markBucket(bucket.second);
 	}
 }
 
@@ -1819,12 +2062,31 @@ void scripting_engine::markAllLabels(bool only_active)
 
 void scripting_engine::showLabel(const std::string &key, bool clear_old, bool jump_to)
 {
-	if (labels.count(key) == 0)
+	// Search all scopes (global, then any owned bucket) for the label by name
+	const LABEL *pLabel = nullptr;
+	auto globalIt = globalLabels.find(key);
+	if (globalIt != globalLabels.end())
+	{
+		pLabel = &globalIt->second;
+	}
+	else
+	{
+		for (const auto &bucket : ownedLabels)
+		{
+			auto ownedIt = bucket.second.find(key);
+			if (ownedIt != bucket.second.end())
+			{
+				pLabel = &ownedIt->second;
+				break;
+			}
+		}
+	}
+	if (pLabel == nullptr)
 	{
 		debug(LOG_ERROR, "label %s not found", key.c_str());
 		return;
 	}
-	LABEL &l = labels[key];
+	const LABEL &l = *pLabel;
 	if (clear_old)
 	{
 		clearMarks();
@@ -1915,12 +2177,12 @@ std::pair<bool, int> scripting_engine::seenLabelCheck(wzapi::scripting_instance 
 	auto seenObjIt = psMap->map().find(seen);
 	int groupId = (seenObjIt != psMap->map().end()) ? seenObjIt->second : 0;
 	bool foundObj = false, foundGroup = false;
-	for (auto &it : labels)
+	// Only union(this instance's own, global) labels - never another instance's owned labels
+	forEachScopedLabel(instance, [&](const std::string& /*name*/, LABEL& l) -> bool
 	{
-		LABEL &l = it.second;
 		if (l.triggered != 0 || !(l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
 		{
-			continue;
+			return true; // not a candidate - keep enumerating
 		}
 
 		// Don't let a seen game object ID which matches a group label ID to prematurely
@@ -1935,7 +2197,8 @@ std::pair<bool, int> scripting_engine::seenLabelCheck(wzapi::scripting_instance 
 			l.triggered = viewer->id; // record who made the discovery
 			foundGroup = true;
 		}
-	}
+		return true; // check every visible label
+	});
 	if (foundObj || foundGroup)
 	{
 		jsDebugUpdateLabels();
@@ -1948,17 +2211,40 @@ bool scripting_engine::areaLabelCheck(DROID *psDroid)
 	int x = psDroid->pos.x;
 	int y = psDroid->pos.y;
 	bool activated = false;
-	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	// Trip any untriggered area/radius label the droid has entered
+	// - A global (map-authored) label fires eventArea to every instance (triggerEventArea)
+	// - An owned label fires only to its owner
+	auto checkBucket = [&](LABELMAP& bucket, wzapi::scripting_instance* owner)
 	{
-		LABEL &l = i->second;
-		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
-		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
-		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy()) < l.p2.x)))
+		for (auto& it : bucket)
 		{
-			// We're inside an untriggered area
-			activated = true;
-			l.triggered = psDroid->id;
-			triggerEventArea(i->first, psDroid);
+			LABEL& l = it.second;
+			if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
+			    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
+			        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy()) < l.p2.x)))
+			{
+				// We're inside an untriggered area
+				activated = true;
+				l.triggered = psDroid->id;
+				if (owner)
+				{
+					owner->handle_eventArea(it.first, psDroid); // owned label - only its creating instance
+				}
+				else
+				{
+					triggerEventArea(it.first, psDroid); // global/map label - all instances
+				}
+			}
+		}
+	};
+	checkBucket(globalLabels, nullptr);
+	// Iterate owners in `scripts` order (deterministic across clients)
+	for (auto* instance : scripts)
+	{
+		auto bucketIt = ownedLabels.find(instance);
+		if (bucketIt != ownedLabels.end())
+		{
+			checkBucket(bucketIt->second, instance);
 		}
 	}
 	if (activated)
@@ -1966,6 +2252,97 @@ bool scripting_engine::areaLabelCheck(DROID *psDroid)
 		jsDebugUpdateLabels();
 	}
 	return activated;
+}
+
+// ----------------------------------------------------------------------------------------
+// Label scoping helpers
+//
+// Resolve own-first, then global
+// (ownedLabels is not yet populated, so these currently reduce to the global bucket - i.e. identical to the previous single-map behavior)
+
+LABEL* scripting_engine::findScopedLabel(wzapi::scripting_instance *instance, const std::string &name)
+{
+	if (instance)
+	{
+		auto bucketIt = ownedLabels.find(instance);
+		if (bucketIt != ownedLabels.end())
+		{
+			auto labelIt = bucketIt->second.find(name);
+			if (labelIt != bucketIt->second.end())
+			{
+				return &labelIt->second;
+			}
+		}
+	}
+	auto globalIt = globalLabels.find(name);
+	if (globalIt != globalLabels.end())
+	{
+		return &globalIt->second;
+	}
+	return nullptr;
+}
+
+size_t scripting_engine::eraseScopedLabel(wzapi::scripting_instance *instance, const std::string &name)
+{
+	if (instance)
+	{
+		auto bucketIt = ownedLabels.find(instance);
+		if (bucketIt != ownedLabels.end())
+		{
+			size_t erased = bucketIt->second.erase(name);
+			if (erased > 0)
+			{
+				return erased;
+			}
+		}
+	}
+	return globalLabels.erase(name);
+}
+
+scripting_engine::LABELMAP& scripting_engine::labelCreationBucket(wzapi::scripting_instance *instance)
+{
+	// A script-created label is owned by its creating instance
+	// (No instance context - which should not happen for addLabel - falls back to the global bucket)
+	if (instance)
+	{
+		return ownedLabels[instance];
+	}
+	return globalLabels;
+}
+
+void scripting_engine::forEachScopedLabel(wzapi::scripting_instance *instance, const std::function<bool(const std::string&, LABEL&)>& fn)
+{
+	LABELMAP *ownBucket = nullptr;
+	if (instance)
+	{
+		auto bucketIt = ownedLabels.find(instance);
+		if (bucketIt != ownedLabels.end())
+		{
+			ownBucket = &bucketIt->second;
+		}
+	}
+	if (ownBucket)
+	{
+		for (auto &it : *ownBucket)
+		{
+			if (!fn(it.first, it.second))
+			{
+				return; // fn requested early stop
+			}
+		}
+	}
+	for (auto &it : globalLabels)
+	{
+		// own-shadows-global: skip a global label whose name the instance overrides with its own
+		if (ownBucket && ownBucket->count(it.first) > 0)
+		{
+			continue;
+		}
+		if (!fn(it.first, it.second))
+		{
+			return; // fn requested early stop
+		}
+	}
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2042,76 +2419,129 @@ bool loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& 
 	return scripting_engine::instance().loadLabels(filename, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
 }
 
-// Load labels
+bool loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
+{
+	return scripting_engine::instance().loadLabels(result, fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
+}
+
+// Load labels from a file - reads the JSON document and delegates to the in-memory loader.
 bool scripting_engine::loadLabels(const char *filename, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
 {
-	int groupidx = -1;
-
 	if (!PHYSFS_exists(filename))
 	{
 		debug(LOG_SAVE, "No %s found -- not adding any labels", filename);
 		return false;
 	}
 	WzConfig ini(filename, WzConfig::ReadOnly);
-	labels.clear();
-	std::vector<WzString> list = ini.childGroups();
-	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", list.size(), fixedMapIdToGeneratedId.size());
-	for (int i = 0; i < list.size(); ++i)
+	return loadLabels(ini.currentJsonValue(), fixedMapIdToGeneratedId, moduleToBuilding, UserSaveGame);
+}
+
+// Loader A: load flat labels.json (map/scenario data or an old v1 savegame) from an in-memory JSON object
+// - The object's keys are section names ("position_<n>" / "area_<n>" / "radius_<n>" / "object_<n>" / "group_<n>")
+// - All labels are global (this format has no ownership)
+// - Object/group ids are remapped via the map-load tables
+bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unordered_map<UDWORD, UDWORD>& fixedMapIdToGeneratedId, std::array<std::unordered_map<UDWORD, UDWORD>, MAX_PLAYER_SLOTS>& moduleToBuilding, bool UserSaveGame)
+{
+	ASSERT_OR_RETURN(false, result.is_object(), "Labels JSON is not an object");
+	globalLabels.clear();
+	ownedLabels.clear();
+	debug(LOG_SAVE, "Loading %zu labels... (fixedMapToGeneratedId.count = %zu)", result.size(), fixedMapIdToGeneratedId.size());
+
+	// matches WzConfig::vector2i: a [x, y] array, defaulting to (0, 0) if missing / malformed
+	auto jsonVector2i = [](const nlohmann::json &section, const char *key) -> Vector2i {
+		Vector2i r(0, 0);
+		auto it = section.find(key);
+		if (it == section.end() || !it->is_array() || it->size() != 2) { return r; }
+		try {
+			r.x = (*it)[0].get<int>();
+			r.y = (*it)[1].get<int>();
+		} catch (const std::exception &) { /* leave as (0, 0) */ }
+		return r;
+	};
+	auto startsWith = [](const std::string &s, const char *prefix) -> bool {
+		return s.rfind(prefix, 0) == 0;
+	};
+
+	// Group labels carry a persisted "id" (new saves). Those that don't (legacy saves / map files) fall back
+	// to a synthetic negative id assigned positionally.
+	// Pre-scan so the fallback counter starts below the most-negative persisted id and can't collide with one.
+	int groupidx = -1;
+	for (auto it = result.begin(); it != result.end(); ++it)
 	{
-		ini.beginGroup(list[i]);
-		LABEL p;
-		std::string label = ini.value("label").toWzString().toUtf8();
-		if (labels.count(label) > 0)
+		if (!it->is_object() || !startsWith(it.key(), "group")) { continue; }
+		auto idIt = it->find("id");
+		if (idIt != it->end() && idIt->is_number_integer())
 		{
-			debug(LOG_ERROR, "Duplicate label found");
+			groupidx = std::min(groupidx, idIt->get<int>() - 1);
 		}
-		else if (list[i].startsWith("position"))
+	}
+
+	// Iterate section objects (matches WzConfig::childGroups, which only returns object-valued keys)
+	for (auto it = result.begin(); it != result.end(); ++it)
+	{
+		if (!it->is_object())
 		{
-			p.p1 = ini.vector2i("pos");
+			continue;
+		}
+		const std::string &sectionName = it.key();
+		const nlohmann::json &section = it.value();
+		LABEL p;
+		std::string label = section.value("label", std::string());
+
+		// The flat labels.json format (map/scenario data and old v1 savegames) has no concept of
+		// per-instance ownership - every label is global. (Owned labels are a v2 feature and travel
+		// inside the script state, loaded by loadLabelMap, not here)
+		if (globalLabels.count(label) > 0)
+		{
+			debug(LOG_ERROR, "Duplicate label found: \"%s\"", label.c_str());
+		}
+		else if (startsWith(sectionName, "position"))
+		{
+			p.p1 = jsonVector2i(section, "pos");
 			p.p2 = p.p1;
 			p.type = SCRIPT_POSITION;
 			p.player = ALL_PLAYERS;
 			p.id = -1;
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+			p.triggered = section.value("triggered", -1); // deactivated by default
 			p.subscriber = ALL_PLAYERS;
-			labels[label] = p;
+			globalLabels[label] = p;
 		}
-		else if (list[i].startsWith("area"))
+		else if (startsWith(sectionName, "area"))
 		{
-			p.p1 = ini.vector2i("pos1");
-			p.p2 = ini.vector2i("pos2");
+			p.p1 = jsonVector2i(section, "pos1");
+			p.p2 = jsonVector2i(section, "pos2");
 			p.type = SCRIPT_AREA;
-			p.player = ini.value("player", ALL_PLAYERS).toInt();
-			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
+			p.player = section.value("player", ALL_PLAYERS);
+			p.triggered = section.value("triggered", 0); // activated by default
 			p.id = -1;
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
-			labels[label] = p;
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
+			globalLabels[label] = p;
 		}
-		else if (list[i].startsWith("radius"))
+		else if (startsWith(sectionName, "radius"))
 		{
-			p.p1 = ini.vector2i("pos");
-			p.p2.x = ini.value("radius").toInt();
+			p.p1 = jsonVector2i(section, "pos");
+			p.p2.x = section.value("radius", 0);
 			p.p2.y = 0; // unused
 			p.type = SCRIPT_RADIUS;
-			p.player = ini.value("player", ALL_PLAYERS).toInt();
-			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.player = section.value("player", ALL_PLAYERS);
+			p.triggered = section.value("triggered", 0); // activated by default
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			p.id = -1;
-			labels[label] = p;
+			globalLabels[label] = p;
 		}
-		else if (list[i].startsWith("object"))
+		else if (startsWith(sectionName, "object"))
 		{
-			auto id = ini.value("id").toInt();
+			auto id = section.value("id", 0);
 			ASSERT(id > 0, "Unexpected id %d for object label", id);
-			auto it = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
-			if (it != fixedMapIdToGeneratedId.end())
+			auto itr = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
+			if (itr != fixedMapIdToGeneratedId.end())
 			{
 				// replace fixed hard-coded map-load id with its new generated (synchronized) id
 				// note: must come *before* the moduleToBuilding call below
-				debug(LOG_MAP, "replaced fixed map id %d with %d", id, it->second);
-				id = it->second;
+				debug(LOG_MAP, "replaced fixed map id %d with %d", id, itr->second);
+				id = itr->second;
 			}
-			const auto player = ini.value("player").toInt();
+			const auto player = section.value("player", 0);
 			const auto it_modulemap = moduleToBuilding[player].find(id);
 			if (it_modulemap != moduleToBuilding[player].end())
 			{
@@ -2120,10 +2550,10 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 				id = it_modulemap->second;
 			}
 			p.id = id;
-			p.type = ini.value("type").toInt();
+			p.type = section.value("type", 0);
 			p.player = player;
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.triggered = section.value("triggered", -1); // deactivated by default
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
 			auto checkFoundObject = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
 			if (!UserSaveGame)
 			{
@@ -2133,115 +2563,247 @@ bool scripting_engine::loadLabels(const char *filename, const std::unordered_map
 			{
 				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
 			}
-			labels[label] = p;
+			globalLabels[label] = p;
 		}
-		else if (list[i].startsWith("group"))
+		else if (startsWith(sectionName, "group"))
 		{
-			p.id = groupidx--;
-			p.type = SCRIPT_GROUP;
-			p.player = ini.value("player").toInt();
-			std::vector<WzString> memberList = ini.value("members").toWzStringList();
-			for (WzString const &j : memberList)
+			// Use the persisted id if present (so it matches the saved group memberships),
+			// otherwise fall back to a synthetic negative id (legacy saves / map files)
+			auto idIt = section.find("id");
+			if (idIt != section.end() && idIt->is_number_integer())
 			{
-				int id = j.toInt();
-				ASSERT(id > 0, "Unexpected id %d for group member", id);
-				auto it = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
-				if (it != fixedMapIdToGeneratedId.end())
-				{
-					// replace fixed hard-coded map-load id with its new generated (synchronized) id
-					debug(LOG_NEVER, "replaced fixed map id %d with %d", id, it->second);
-					id = it->second;
-				}
-				BASE_OBJECT *psObj = IdToPointer(id, p.player);
-				ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
-				       id, p.player, list[i].toUtf8().c_str());
-				p.idlist.push_back(id);
+				p.id = idIt->get<int>();
 			}
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
-			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
-			labels[label] = p;
+			else
+			{
+				p.id = groupidx--;
+			}
+			p.type = SCRIPT_GROUP;
+			p.player = section.value("player", 0);
+			// 'members' is a map-load seed consumed by prepareLabels()
+			// - For savegame loads prepareLabels does not run and the live membership is restored
+			//   from the saved groups, so the seed is dead data - skip it (keeping savegame
+			//   group-label idlist empty) to handle the case of v1 saves that still wrote it
+			auto membersIt = section.find("members");
+			if (!UserSaveGame && membersIt != section.end() && membersIt->is_array())
+			{
+				for (const auto &j : *membersIt)
+				{
+					int id = 0;
+					if (j.is_string()) { id = WzString::fromUtf8(j.get<std::string>()).toInt(); }
+					else if (j.is_number_integer()) { id = j.get<int>(); }
+					ASSERT(id > 0, "Unexpected id %d for group member", id);
+					auto itr = fixedMapIdToGeneratedId.find(static_cast<uint32_t>(id));
+					if (itr != fixedMapIdToGeneratedId.end())
+					{
+						// replace fixed hard-coded map-load id with its new generated (synchronized) id
+						debug(LOG_NEVER, "replaced fixed map id %d with %d", id, itr->second);
+						id = itr->second;
+					}
+					BASE_OBJECT *psObj = IdToPointer(id, p.player);
+					ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
+					       id, p.player, sectionName.c_str());
+					p.idlist.push_back(id);
+				}
+			}
+			p.triggered = section.value("triggered", -1); // deactivated by default
+			p.subscriber = section.value("subscriber", ALL_PLAYERS);
+			globalLabels[label] = p;
 		}
 		else
 		{
-			debug(LOG_ERROR, "Misnamed group in %s", filename);
+			debug(LOG_ERROR, "Misnamed group in labels (section: %s)", sectionName.c_str());
 		}
-		ini.endGroup();
 	}
 	return true;
 }
 
-bool writeLabels(const char *filename)
+// Loader for the script-state v2 embedded label format: a JSON array of label objects, each
+// self-described by a "type" field
+//
+// Loaded into a single, caller-chosen bucket (does *not* clear it), so it can be called once
+// per bucket (top-level globals, then each instance's owned labels)
+//
+// Unlike loadLabels (Loader A, for map/scenario + old v1 labels.json) there is deliberately:
+// - no map->id remapping (a v2 save stores already-synchronized runtime ids)
+// Object/group ids are resolved as-is, tolerating an object destroyed before save
+// (v2 labels only ever come from savegames)
+bool scripting_engine::loadLabelMap(const nlohmann::json &labelArray, LABELMAP &target)
 {
-	return scripting_engine::instance().writeLabels(filename);
-}
+	ASSERT_OR_RETURN(false, labelArray.is_array(), "v2 labels is not an array");
 
-bool scripting_engine::writeLabels(const char *filename)
-{
-	int c[5]; // make unique, incremental section names
-	memset(c, 0, sizeof(c));
-	WzConfig ini(filename, WzConfig::ReadAndWrite);
-	for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
+	auto jsonVector2i = [](const nlohmann::json &entry, const char *key) -> Vector2i {
+		Vector2i r(0, 0);
+		auto it = entry.find(key);
+		if (it == entry.end() || !it->is_array() || it->size() != 2) { return r; }
+		try {
+			r.x = (*it)[0].get<int>();
+			r.y = (*it)[1].get<int>();
+		} catch (const std::exception &) { /* leave as (0, 0) */ }
+		return r;
+	};
+	// A label's player/subscriber must be a real player slot or ALL_PLAYERS
+	// The upper bound is MAX_PLAYER_SLOTS (see: PLAYER_FEATURE, scavenger player slot)
+	auto isValidLabelPlayer = [](int v) -> bool {
+		return v == ALL_PLAYERS || (v >= 0 && v < MAX_PLAYER_SLOTS);
+	};
+
+	for (const auto& entry : labelArray)
 	{
-		const std::string& key = i->first;
-		const LABEL &l = i->second;
-		if (l.type == SCRIPT_POSITION)
+		if (!entry.is_object()) { continue; }
+		LABEL p;
+		std::string label = entry.value("label", std::string());
+		std::string type = entry.value("type", std::string());
+
+		// Sanity-check player/subscriber up-front (Absent keys default to ALL_PLAYERS, which is valid)
+		int entryPlayer = entry.value("player", ALL_PLAYERS);
+		int entrySubscriber = entry.value("subscriber", ALL_PLAYERS);
+		if (!isValidLabelPlayer(entryPlayer) || !isValidLabelPlayer(entrySubscriber))
 		{
-			ini.beginGroup("position_" + WzString::number(c[0]++));
-			ini.setVector2i("pos", l.p1);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("triggered", l.triggered);
-			ini.endGroup();
+			debug(LOG_ERROR, "Invalid player/subscriber (%d/%d) for label '%s' - skipping", entryPlayer, entrySubscriber, label.c_str());
+			continue;
 		}
-		else if (l.type == SCRIPT_AREA)
+
+		if (target.count(label) > 0)
 		{
-			ini.beginGroup("area_" + WzString::number(c[1]++));
-			ini.setVector2i("pos1", l.p1);
-			ini.setVector2i("pos2", l.p2);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.triggered);
-			ini.setValue("subscriber", l.subscriber);
-			ini.endGroup();
+			debug(LOG_ERROR, "Duplicate label found: %s", label.c_str());
 		}
-		else if (l.type == SCRIPT_RADIUS)
+		else if (type == "position")
 		{
-			ini.beginGroup("radius_" + WzString::number(c[2]++));
-			ini.setVector2i("pos", l.p1);
-			ini.setValue("radius", l.p2.x);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.triggered);
-			ini.setValue("subscriber", l.subscriber);
-			ini.endGroup();
+			p.p1 = jsonVector2i(entry, "pos");
+			p.p2 = p.p1;
+			p.type = SCRIPT_POSITION;
+			p.player = ALL_PLAYERS;
+			p.id = -1;
+			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.subscriber = ALL_PLAYERS;
+			target[label] = p;
 		}
-		else if (l.type == SCRIPT_GROUP)
+		else if (type == "area")
 		{
-			ini.beginGroup("group_" + WzString::number(c[3]++));
-			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.triggered);
-			std::vector<WzString> list;
-			list.reserve(l.idlist.size());
-			for (int val : l.idlist)
+			p.p1 = jsonVector2i(entry, "pos1");
+			p.p2 = jsonVector2i(entry, "pos2");
+			p.type = SCRIPT_AREA;
+			p.player = entryPlayer;
+			p.triggered = entry.value("triggered", 0); // activated by default
+			p.id = -1;
+			p.subscriber = entrySubscriber;
+			target[label] = p;
+		}
+		else if (type == "radius")
+		{
+			p.p1 = jsonVector2i(entry, "pos");
+			p.p2.x = entry.value("radius", 0);
+			p.p2.y = 0; // unused
+			p.type = SCRIPT_RADIUS;
+			p.player = entryPlayer;
+			p.triggered = entry.value("triggered", 0); // activated by default
+			p.subscriber = entrySubscriber;
+			p.id = -1;
+			target[label] = p;
+		}
+		else if (type == "object")
+		{
+			int objectType = entry.value("objectType", -1); // the OBJECT_TYPE
+			if (objectType < 0 || objectType >= OBJ_NUM_TYPES)
 			{
-				list.push_back(WzString::number(val));
+				debug(LOG_ERROR, "Invalid objectType %d for object label '%s' - skipping", objectType, label.c_str());
+				continue;
 			}
-			ini.setValue("members", list);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("subscriber", l.subscriber);
-			ini.endGroup();
+			auto id = entry.value("id", 0);
+			ASSERT(id > 0, "Unexpected id %d for object label", id);
+			p.id = id; // already a runtime id - no map remapping for savegame labels
+			p.type = objectType;
+			p.player = entryPlayer;
+			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.subscriber = ALL_PLAYERS; // object labels do not carry a subscriber
+			if (IdToObject((OBJECT_TYPE)p.type, p.id, p.player) == nullptr)
+			{
+				debug(LOG_SAVEGAME, "Failed to find object that label references (probably destroyed before save): %s", label.c_str());
+			}
+			target[label] = p;
+		}
+		else if (type == "group")
+		{
+			// v2 always persists the group id (writeLabelMap), so the label matches the saved group memberships
+			auto idIt = entry.find("id");
+			ASSERT(idIt != entry.end() && idIt->is_number_integer(), "Group label '%s' missing persisted id", label.c_str());
+			p.id = (idIt != entry.end() && idIt->is_number_integer()) ? idIt->get<int>() : 0;
+			p.type = SCRIPT_GROUP;
+			p.player = entryPlayer;
+			// NOTE: No members to read - a group label's idlist is only a map-load seed for prepareLabels
+			// (which does not run for savegames), and the live membership is restored from the saved groups
+			p.triggered = entry.value("triggered", -1); // deactivated by default
+			p.subscriber = entrySubscriber;
+			target[label] = p;
 		}
 		else
 		{
-			auto id = l.id;
-			auto player = l.player;
-			ini.beginGroup("object_" + WzString::number(c[4]++));
-			ini.setValue("id", id);
-			ini.setValue("player", player);
-			ini.setValue("type", l.type);
-			ini.setValue("label", WzString::fromUtf8(key));
-			ini.setValue("triggered", l.triggered);
-			ini.endGroup();
+			debug(LOG_ERROR, "Unknown label type '%s' (label: %s)", type.c_str(), label.c_str());
 		}
+	}
+	return true;
+}
+
+// Serialize one bucket of labels into a JSON array (one object per label), each self-described by a
+// "type" field ("position" / "area" / "radius" / "group" / "object").
+// Ownership is conveyed by which bucket is serialized and where the caller places the array in the
+// v2 script state (top-level "labels" for globals, an instance's "labels" for its owned labels)
+bool scripting_engine::writeLabelMap(const LABELMAP& labels, nlohmann::json& result)
+{
+	for (const auto& it : labels)
+	{
+		const std::string& key = it.first;
+		const LABEL& l = it.second;
+		nlohmann::json entry = nlohmann::json::object();
+		entry["label"] = key;
+		if (l.type == SCRIPT_POSITION)
+		{
+			entry["type"] = "position";
+			entry["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			entry["triggered"] = l.triggered;
+		}
+		else if (l.type == SCRIPT_AREA)
+		{
+			entry["type"] = "area";
+			entry["pos1"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			entry["pos2"] = nlohmann::json::array({ l.p2.x, l.p2.y });
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber;
+		}
+		else if (l.type == SCRIPT_RADIUS)
+		{
+			entry["type"] = "radius";
+			entry["pos"] = nlohmann::json::array({ l.p1.x, l.p1.y });
+			entry["radius"] = l.p2.x;
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber;
+		}
+		else if (l.type == SCRIPT_GROUP)
+		{
+			entry["type"] = "group";
+			entry["id"] = l.id; // Persist the group id so it round-trips
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+			entry["subscriber"] = l.subscriber;
+			// No members:
+			// 1. a group label's idlist is only a map-load seed, consumed (cleared) by prepareLabels
+			// 2. the live membership is persisted separately (saveGroups)
+			// So it must be empty here - assert to catch any future change that leaves stale seed data on a label
+			ASSERT(l.idlist.empty(), "Group label '%s' has %zu stale idlist member(s) at save time (expected prepareLabels to have consumed them)", key.c_str(), l.idlist.size());
+		}
+		else
+		{
+			// Object label: l.type is the OBJECT_TYPE (< OBJ_NUM_TYPES), stored as "objectType"
+			entry["type"] = "object";
+			entry["objectType"] = l.type;
+			entry["id"] = l.id;
+			entry["player"] = l.player;
+			entry["triggered"] = l.triggered;
+		}
+		result.push_back(std::move(entry));
 	}
 	return true;
 }
@@ -2280,11 +2842,11 @@ bool scripting_engine::writeLabels(const char *filename)
 //--
 wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter))
 {
-	LABELMAP& labels = scripting_engine::instance().labels;
-	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
-	LABEL &label = labels[labelName];
-	label.triggered = 0; // make active again
-	label.subscriber = playerFilter.value_or(ALL_PLAYERS);
+	// own-first, then global (so a script can still reset map/global labels - campaign relies on this)
+	LABEL *label = scripting_engine::instance().findScopedLabel(context.currentInstance(), labelName);
+	SCRIPT_ASSERT({}, context, label != nullptr, "Label %s not found", labelName.c_str());
+	label->triggered = 0; // make active again
+	label->subscriber = playerFilter.value_or(ALL_PLAYERS);
 	return {};
 }
 
@@ -2295,28 +2857,17 @@ wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string lab
 //--
 std::vector<std::string> scripting_engine::enumLabels(WZAPI_PARAMS(optional<int> filterLabelType))
 {
-	const LABELMAP& labels = scripting_engine::instance().labels;
+	// Enumerate union(the caller's own, global) labels (own-shadows-global handled by forEachScopedLabel)
+	optional<SCRIPT_TYPE> filter = filterLabelType.has_value() ? optional<SCRIPT_TYPE>((SCRIPT_TYPE)filterLabelType.value()) : nullopt;
 	std::vector<std::string> matches;
-	if (filterLabelType.has_value()) // filter
+	scripting_engine::instance().forEachScopedLabel(context.currentInstance(), [&](const std::string& name, LABEL& label) -> bool
 	{
-		SCRIPT_TYPE type = (SCRIPT_TYPE)filterLabelType.value();
-		for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
+		if (!filter.has_value() || label.type == filter.value())
 		{
-			const LABEL &label = i->second;
-			if (label.type == type)
-			{
-				matches.push_back(i->first);
-			}
+			matches.push_back(name);
 		}
-	}
-	else // fast path, give all
-	{
-		matches.reserve(labels.size());
-		for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
-		{
-			matches.push_back(i->first);
-		}
-	}
+		return true; // collect every visible label
+	});
 	return matches;
 }
 
@@ -2445,7 +2996,6 @@ LABEL generic_script_object::toNewLabel() const
 //--
 wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered))
 {
-	LABELMAP& labels = scripting_engine::instance().labels;
 	LABEL value = object.toNewLabel();
 
 	if (value.type == OBJ_DROID || value.type == OBJ_STRUCTURE || value.type == OBJ_FEATURE)
@@ -2461,7 +3011,8 @@ wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_ob
 		value.triggered = _triggered.value();
 	}
 
-	labels[label] = value;
+	// Store the label in the creating instance's own bucket (scoped to that script)
+	scripting_engine::instance().labelCreationBucket(context.currentInstance())[label] = value;
 	jsDebugUpdateLabels();
 	return {};
 }
@@ -2473,8 +3024,8 @@ wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_ob
 //--
 int scripting_engine::removeLabel(WZAPI_PARAMS(std::string label))
 {
-	LABELMAP& labels = scripting_engine::instance().labels;
-	int result = labels.erase(label);
+	// own-first, then global (so a script can still remove a global/map label if it has no own one)
+	int result = static_cast<int>(scripting_engine::instance().eraseScopedLabel(context.currentInstance(), label));
 	jsDebugUpdateLabels();
 	return result;
 }
@@ -2492,29 +3043,30 @@ optional<std::string> scripting_engine::getLabel(WZAPI_PARAMS(const BASE_OBJECT 
 	tmp.id = psObj->id;
 	tmp.player = psObj->player;
 	tmp.type = psObj->type;
-	return _findMatchingLabel(tmp);
+	return _findMatchingLabel(context.currentInstance(), tmp);
 }
 optional<std::string> scripting_engine::getLabelJS(WZAPI_PARAMS(wzapi::game_object_identifier obj_id))
 {
-	return _findMatchingLabel(obj_id);
+	return _findMatchingLabel(context.currentInstance(), obj_id);
 }
-optional<std::string> scripting_engine::_findMatchingLabel(wzapi::game_object_identifier obj_id)
+optional<std::string> scripting_engine::_findMatchingLabel(wzapi::scripting_instance *instance, wzapi::game_object_identifier obj_id)
 {
-	const LABELMAP& labels = scripting_engine::instance().labels;
+	// Search union(the caller's own, global) labels (own-first), returning the first matching label name
 	LABEL value;
 	value.id = obj_id.id;
 	value.player = obj_id.player;
 	value.type = obj_id.type;
 	debug(LOG_NEVER, "looking for label %i;%i;%i", obj_id.id, obj_id.player, obj_id.type);
 	std::string label;
-	for (const auto &it : labels)
+	scripting_engine::instance().forEachScopedLabel(instance, [&](const std::string& name, LABEL& l) -> bool
 	{
-		if (it.second == value)
+		if (l == value)
 		{
-			label = it.first;
-			break;
+			label = name; // own labels are visited first, so they take priority
+			return false; // first match found - stop enumerating
 		}
-	}
+		return true;
+	});
 
 	optional<std::string> retLabel;
 	if (!label.empty())
@@ -2575,11 +3127,12 @@ generic_script_object scripting_engine::getObject(WZAPI_PARAMS(wzapi::object_req
 
 generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const std::string& label))
 {
-	// get by label case
+	// get by label case (own-first, then global)
 	BASE_OBJECT *psObj = nullptr;
-	if (labels.count(label) > 0)
+	const LABEL *pLabel = findScopedLabel(context.currentInstance(), label);
+	if (pLabel != nullptr)
 	{
-		const LABEL &p = labels[label];
+		const LABEL &p = *pLabel;
 		switch (p.type)
 		{
 		case SCRIPT_RADIUS:
@@ -2622,8 +3175,9 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 //--
 std::vector<const BASE_OBJECT *> scripting_engine::enumAreaByLabel(WZAPI_PARAMS(std::string label, optional<int> _playerFilter, optional<bool> _seen))
 {
-	SCRIPT_ASSERT({}, context, instance().labels.count(label) > 0, "Label %s not found", label.c_str());
-	const LABEL &p = instance().labels[label];
+	const LABEL *pLabel = instance().findScopedLabel(context.currentInstance(), label); // own-first, then global
+	SCRIPT_ASSERT({}, context, pLabel != nullptr, "Label %s not found", label.c_str());
+	const LABEL &p = *pLabel;
 	SCRIPT_ASSERT({}, context, p.type == SCRIPT_AREA, "Wrong label type for %s", label.c_str());
 	int x1 = p.p1.x;
 	int y1 = p.p1.y;
@@ -2785,7 +3339,10 @@ bool scripting_engine::unregisterFunctions(wzapi::scripting_instance *instance)
 		num = 1;
 	}
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
-	labels.clear();
+	// TODO: erase only this instance's owned bucket - clear globalLabels on the last teardown
+	// For now this preserves the existing blanket clear (ownedLabels is empty anyway, currently)
+	globalLabels.clear();
+	ownedLabels.erase(instance);
 	return true;
 }
 
@@ -2793,36 +3350,46 @@ bool scripting_engine::unregisterFunctions(wzapi::scripting_instance *instance)
 // since all game state may not be fully loaded by then
 void scripting_engine::prepareLabels()
 {
-	// load the label group data into every scripting context, with the same negative group id
-	for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+	// Load the group-label seed data into every scripting context, with the same negative group id
+	//
+	// Only map-authored (global) group labels exist at this point - owned labels are created later
+	// via runtime addLabel - so iterating globalLabels is the full set (unchanged behavior)
+	//
+	// idlist is a one-time seed: once its members are materialized into the per-instance group maps
+	// (which saveGroups persists), it is consumed (cleared). It would otherwise go stale (it never
+	// tracks units added/removed during play) and be redundantly re-serialized by writeLabelMap.
+	for (LABELMAP::iterator i = globalLabels.begin(); i != globalLabels.end(); ++i)
 	{
-		wzapi::scripting_instance *instance = iter->first;
-		for (LABELMAP::iterator i = labels.begin(); i != labels.end(); ++i)
+		LABEL &l = i->second;
+		if (l.type != SCRIPT_GROUP)
 		{
-			const LABEL &l = i->second;
-			if (l.type == SCRIPT_GROUP)
+			continue;
+		}
+		for (ENGINEMAP::iterator iter = groups.begin(); iter != groups.end(); ++iter)
+		{
+			wzapi::scripting_instance *instance = iter->first;
+			for (std::vector<int>::const_iterator j = l.idlist.begin(); j != l.idlist.end(); j++)
 			{
-				for (std::vector<int>::const_iterator j = l.idlist.begin(); j != l.idlist.end(); j++)
+				int id = (*j);
+				BASE_OBJECT *psObj = IdToPointer(id, l.player);
+				ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
+				if (psObj)
 				{
-					int id = (*j);
-					BASE_OBJECT *psObj = IdToPointer(id, l.player);
-					ASSERT(psObj, "Unit %d belonging to player %d not found", id, l.player);
-					if (psObj)
-					{
-						groupAddObject(psObj, l.id, instance);
-					}
+					groupAddObject(psObj, l.id, instance);
 				}
 			}
 		}
+		l.idlist.clear(); // consume the seed - the live membership now lives in the group maps
 	}
 	jsDebugUpdateLabels();
 }
 
 wzapi::no_return_value scripting_engine::hackMarkTiles_ByLabel(WZAPI_PARAMS(const std::string& label))
 {
-	SCRIPT_ASSERT({}, context, labels.count(label) > 0, "Label %s not found", label.c_str());
+	const LABEL *pLabel = findScopedLabel(context.currentInstance(), label); // own-first, then global
+	SCRIPT_ASSERT({}, context, pLabel != nullptr, "Label %s not found", label.c_str());
 
-	const LABEL &l = labels[label];
+	const LABEL &l = *pLabel;
 	if (l.type == SCRIPT_AREA)
 	{
 		for (int x = map_coord(l.p1.x); x < map_coord(l.p2.x); x++)
