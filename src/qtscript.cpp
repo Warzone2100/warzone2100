@@ -948,6 +948,16 @@ bool scripting_engine::loadScriptStates(const char *filename)
 // "instances" and "triggers" arrays - 'root' is the parsed document object
 bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 {
+	const int version = root.value("version", 1);
+	ASSERT_OR_RETURN(false, root >= 2, "Invalid version: %d", version);
+
+	if (version > SCRIPTSTATE_VERSION)
+	{
+		// script state version is newer than this version of WZ can support
+		debug(LOG_ERROR, "The scriptState version is newer than this version of WZ can support: %d", version);
+		return false;
+	}
+
 	// Labels: a v2 save is the authoritative source, so clear and rebuild both buckets here
 	// - Global (map-authored / legacy / unowned) labels live at the top level
 	// - Each instance's owned labels are nested under it (loaded in the instance loop below)
