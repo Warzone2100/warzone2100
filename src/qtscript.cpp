@@ -283,7 +283,7 @@ bool bInTutorial = false;
 // ----------------------------------------------------------
 
 Vector2i positions[MAX_PLAYERS];
-static std::unordered_set<uint16_t> derricks;
+static std::set<uint16_t> derricks;
 
 void scriptSetStartPos(int position, int x, int y)
 {
@@ -312,7 +312,6 @@ bool scriptInit()
 		scriptSetStartPos(i, 0, 0);
 	}
 	derricks.clear();
-	derricks.reserve(8 * MAX_PLAYERS);
 	return true;
 }
 
