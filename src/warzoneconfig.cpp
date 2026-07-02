@@ -103,6 +103,9 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
+	uint32_t rayShadows = 0; // ray-traced shadows: 0 = off, 1 = half resolution, 2 = full resolution, 3 = quarter resolution
+	bool rayShadowsAO = true; // ray-traced contact shadows / ambient occlusion
+	bool rayShadowsPointLights = false; // ray-traced point-light shadows + reflections (expensive)
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -755,6 +758,41 @@ bool war_getPointLightPerPixelLighting()
 void war_setPointLightPerPixelLighting(bool perPixelEnabled)
 {
 	warGlobs.pointLightLighting = perPixelEnabled;
+}
+
+uint32_t war_getRayShadows()
+{
+	return warGlobs.rayShadows;
+}
+
+void war_setRayShadows(uint32_t mode)
+{
+	if (mode > 3)
+	{
+		debug(LOG_ERROR, "Ray shadows mode %" PRIu32 " is unsupported: must be 0 (off), 1 (half res), 2 (full res) or 3 (quarter res)", mode);
+		return;
+	}
+	warGlobs.rayShadows = mode;
+}
+
+bool war_getRayShadowsAO()
+{
+	return warGlobs.rayShadowsAO;
+}
+
+void war_setRayShadowsAO(bool enabled)
+{
+	warGlobs.rayShadowsAO = enabled;
+}
+
+bool war_getRayShadowsPointLights()
+{
+	return warGlobs.rayShadowsPointLights;
+}
+
+void war_setRayShadowsPointLights(bool enabled)
+{
+	warGlobs.rayShadowsPointLights = enabled;
 }
 
 bool war_getGroupsMenuEnabled()

@@ -132,28 +132,92 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/world_to_screen.frag"
 )
 
+if(NOT GLSLC)
+	# Fall back to glslangValidator (ships with many distros / the Vulkan SDK)
+	find_program( GLSLANG_VALIDATOR "glslangValidator"
+				  PATHS "$ENV{VULKAN_SDK}/bin"
+	)
+endif()
+
+# _wz_add_vk_shader_compile_command(<shader source path> <output dir> <output var for output file>
+#                                   TARGET_ENV <vulkan1.0|vulkan1.2> [OUTPUT_NAME <name.spv>] [DEFINES <MACRO=VALUE>...])
+function(_wz_add_vk_shader_compile_command SHADER _output_dir _outputfile_var)
+	set(_options)
+	set(_oneValueArgs TARGET_ENV OUTPUT_NAME)
+	set(_multiValueArgs DEFINES)
+	cmake_parse_arguments(PARSE_ARGV 3 "shdr" "${_options}" "${_oneValueArgs}" "${_multiValueArgs}")
+	if(NOT DEFINED shdr_TARGET_ENV)
+		set(shdr_TARGET_ENV "vulkan1.0")
+	endif()
+	get_filename_component(SHADER_FILE ${SHADER} NAME)
+	if(DEFINED shdr_OUTPUT_NAME)
+		set(_output_name "${shdr_OUTPUT_NAME}")
+	else()
+		set(_output_name "${SHADER_FILE}.spv")
+	endif()
+	set(_define_args)
+	foreach(_define ${shdr_DEFINES})
+		list(APPEND _define_args "-D${_define}")
+	endforeach()
+	if(GLSLC)
+		set(_compile_command "${GLSLC}")
+		set(_compile_args "-c" "${SHADER}" "--target-env=${shdr_TARGET_ENV}" ${_define_args} "-o" "${_output_dir}/${_output_name}")
+	else()
+		set(_compile_command "${GLSLANG_VALIDATOR}")
+		# glslangValidator requires the include directive extension to be explicitly enabled
+		set(_compile_args "-V" "-P#extension GL_GOOGLE_include_directive : enable" "--target-env" "${shdr_TARGET_ENV}" ${_define_args} "${SHADER}" "-o" "${_output_dir}/${_output_name}")
+	endif()
+	add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
+		COMMAND "${_compile_command}"
+		ARGS ${_compile_args}
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
+		DEPENDS "${SHADER}"
+		VERBATIM
+	)
+	set(${_outputfile_var} "${_output_dir}/${_output_name}" PARENT_SCOPE)
+endfunction()
+
 set(SHADER_LIST "")
-if(GLSLC)
-	message(STATUS "Found glslc: ${GLSLC}")
+if(GLSLC OR GLSLANG_VALIDATOR)
+	if(GLSLC)
+		message(STATUS "Found glslc: ${GLSLC}")
+	else()
+		message(STATUS "Found glslangValidator: ${GLSLANG_VALIDATOR}")
+	endif()
 	set(_output_dir "${CMAKE_CURRENT_BINARY_DIR}/base/shaders/vk")
 	file(MAKE_DIRECTORY "${_output_dir}")
 	foreach(SHADER ${VK_SHADERS})
-		get_filename_component(SHADER_FILE_PATH ${SHADER} DIRECTORY)
-		get_filename_component(SHADER_FILE ${SHADER} NAME)
-		set(_output_name "${SHADER_FILE}.spv")
-		add_custom_command(OUTPUT "${_output_dir}/${_output_name}"
-			COMMAND "${GLSLC}"
-			ARGS "-c" "${SHADER}" "-o" "${_output_dir}/${_output_name}"
-			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk"
-			DEPENDS "${SHADER}"
-			VERBATIM
-		)
-		list(APPEND SHADER_LIST "${_output_dir}/${_output_name}")
+		_wz_add_vk_shader_compile_command("${SHADER}" "${_output_dir}" _shader_output_file TARGET_ENV "vulkan1.0")
+		list(APPEND SHADER_LIST "${_shader_output_file}")
+	endforeach()
+	# Ray-query (ray-traced shadows) shaders require SPIR-V >= 1.4, hence target env vulkan1.2
+	set(VK_SHADERS_RAYQUERY
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rayshadow_fullscreen.vert"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rayshadow_mask.frag"
+		"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/rayshadow_blur.frag"
+	)
+	foreach(SHADER ${VK_SHADERS_RAYQUERY})
+		_wz_add_vk_shader_compile_command("${SHADER}" "${_output_dir}" _shader_output_file TARGET_ENV "vulkan1.2")
+		list(APPEND SHADER_LIST "${_shader_output_file}")
+	endforeach()
+	# Ray-query variants of material shaders (ray-traced point-light shadows / reflection occlusion),
+	# compiled from the same sources with WZ_RAYQUERY_SHADERS=1; selected at pipeline-build time
+	# when ray-traced shadows are active
+	set(VK_SHADERS_RAYQUERY_VARIANTS
+		"tcmask_instanced.frag"
+		"terrain_combined_high.frag"
+		"terrain_water_high.frag"
+	)
+	foreach(SHADER_NAME ${VK_SHADERS_RAYQUERY_VARIANTS})
+		string(REPLACE ".frag" "_rq.frag.spv" _rq_output_name "${SHADER_NAME}")
+		_wz_add_vk_shader_compile_command("${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/${SHADER_NAME}" "${_output_dir}" _shader_output_file
+			TARGET_ENV "vulkan1.2" OUTPUT_NAME "${_rq_output_name}" DEFINES "WZ_RAYQUERY_SHADERS=1")
+		list(APPEND SHADER_LIST "${_shader_output_file}")
 	endforeach()
 	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})
 	set_property(TARGET glsl_compilation PROPERTY FOLDER "data")
 else()
-	message(STATUS "Unable to find glslc")
+	message(STATUS "Unable to find glslc or glslangValidator")
 endif()
 
 set(_glsl_generatedfiles_PATHS)

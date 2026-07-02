@@ -338,14 +338,40 @@ namespace gfx_api
 		uint32_t shadowFilterSize = 5;
 		uint32_t shadowCascadesCount = WZ_MAX_SHADOW_CASCADES;
 		bool isPointLightPerPixelEnabled = false;
+		uint32_t rayShadows = 0; // 1 = sample ray-traced shadow mask instead of shadow map
+		uint32_t rayQueryMaterials = 0; // 1 = use ray-query material shader variants (point-light shadows, reflections)
 
 		bool operator==(const lighting_constants& rhs) const
 		{
 			return shadowMode == rhs.shadowMode
 			&& shadowFilterSize == rhs.shadowFilterSize
 			&& shadowCascadesCount == rhs.shadowCascadesCount
-			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled;
+			&& isPointLightPerPixelEnabled == rhs.isPointLightPerPixelEnabled
+			&& rayShadows == rhs.rayShadows
+			&& rayQueryMaterials == rhs.rayQueryMaterials;
 		}
+	};
+
+	// Parameters for the per-frame ray-traced shadow mask trace + filter passes
+	enum class ray_shadow_mode : uint32_t
+	{
+		Off = 0,
+		HalfRes = 1,
+		FullRes = 2,
+		QuarterRes = 3,
+	};
+	struct ray_shadow_frame_params
+	{
+		glm::mat4 inverseProjectionViewMatrix = glm::mat4(1.f);
+		glm::vec4 sunDirectionWorld = glm::vec4(0.f, 1.f, 0.f, 0.f); // direction *toward* the sun, render/world space
+		glm::vec4 cameraPositionWorld = glm::vec4(0.f); // camera position, render/world space (for surface-normal orientation)
+		float rayTMin = 4.f;
+		float rayTMax = 8000.f; // sun-ray range; misses pay for the whole traversal, so keep this tight
+		float normalOffsetScale = 4.f;
+		float sunConeAngle = 0.025f; // angular radius (radians) of the sun for soft shadows / penumbra
+		uint32_t aoRayCount = 3; // ambient occlusion rays per pixel: 3 = fixed cone, 4 = +normal ray (0 = AO disabled)
+		float aoMaxDistance = 160.f; // AO ray length in world units (128 = one tile)
+		float aoStrength = 0.55f; // how dark full occlusion gets (0..1)
 	};
 
 	struct context
@@ -411,6 +437,27 @@ namespace gfx_api
 		virtual void beginSceneRenderPass() { }
 		virtual void endSceneRenderPass() { }
 		virtual gfx_api::abstract_texture* getSceneTexture() { return nullptr; }
+		// Optional ray-traced (ray query) sun shadow support - currently Vulkan-only.
+		// Default implementations are no-ops so backends without support need not override.
+		virtual bool supportsRayTracedShadows() const { return false; }
+		virtual bool rayShadows_setMode(ray_shadow_mode mode) { return mode == ray_shadow_mode::Off; }
+		virtual ray_shadow_mode rayShadows_getMode() const { return ray_shadow_mode::Off; }
+		// Terrain geometry (positions: tightly-packed float3, world space; indices: u32)
+		virtual void rayShadows_setTerrainGeometry(const float* vertices, size_t vertexCount, const uint32_t* indices, size_t indexCount) { }
+		virtual void rayShadows_updateTerrainVertices(size_t startVertex, const float* vertices, size_t vertexCount) { }
+		virtual void rayShadows_clearTerrainGeometry() { }
+		// Mesh geometry, registered lazily per (meshKey, variant); variant encodes vertex-shader
+		// deformation (e.g. structure "stretch") already applied to the supplied positions
+		virtual bool rayShadows_hasMeshBLAS(const void* meshKey, int32_t variant) { return true; }
+		virtual void rayShadows_registerMeshGeometry(const void* meshKey, int32_t variant, const float* vertices, size_t vertexCount, const uint32_t* indices, size_t indexCount) { }
+		virtual void rayShadows_invalidateMesh(const void* meshKey) { }
+		// Per-frame instance list + passes
+		virtual void rayShadows_beginFrame() { }
+		virtual void rayShadows_addInstance(const void* meshKey, int32_t variant, const glm::mat4& worldTransform) { }
+		virtual void rayShadows_addTerrainInstance() { }
+		virtual void rayShadows_beginDepthPass() { }
+		virtual void rayShadows_traceAndFilter(const ray_shadow_frame_params& params) { }
+		virtual gfx_api::abstract_texture* rayShadows_getMaskTexture() { return nullptr; }
 		virtual void beginRenderPass() = 0;
 		virtual void endRenderPass() = 0;
 		virtual void debugStringMarker(const char *str) = 0;
@@ -836,7 +883,8 @@ namespace gfx_api
 	texture_description<2, sampler_type::anisotropic>, // normal map
 	texture_description<3, sampler_type::anisotropic>, // specular map
 	texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
-	texture_description<5, sampler_type::bilinear> // lightmap
+	texture_description<5, sampler_type::bilinear>, // lightmap
+	texture_description<6, sampler_type::bilinear> // ray-traced shadow mask (or 1x1 white fallback)
 	>, shader>;
 
 	using Draw3DShapeOpaque_Instanced = Draw3DShapeInstanced<REND_OPAQUE, SHADER_COMPONENT_INSTANCED, DEPTH_CMP_LEQ_WRT_ON>;
@@ -870,6 +918,28 @@ namespace gfx_api
 	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
 //	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float4, 0>>,
 //	vertex_buffer_description<16, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<tangent, gfx_api::vertex_attribute_type::float4, 0>>,
+	// instance data
+	vertex_buffer_description<sizeof(Draw3DShapePerInstanceInterleavedData), gfx_api::vertex_attribute_input_rate::instance,
+		vertex_attribute_description<instance_modelMatrix, gfx_api::vertex_attribute_type::float4, 0>,
+		vertex_attribute_description<instance_modelMatrix + 1, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)>,
+		vertex_attribute_description<instance_modelMatrix + 2, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*2>,
+		vertex_attribute_description<instance_modelMatrix + 3, gfx_api::vertex_attribute_type::float4, sizeof(glm::vec4)*3>,
+		vertex_attribute_description<instance_packedValues, gfx_api::vertex_attribute_type::float4, offsetof(Draw3DShapePerInstanceInterleavedData, shaderStretch_ecmState_alphaTest_animFrameNumber)>,
+		vertex_attribute_description<instance_Colour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, colour)>,
+		vertex_attribute_description<instance_TeamColour, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(Draw3DShapePerInstanceInterleavedData, teamcolour)>
+		>
+	>, notexture, SHADER_COMPONENT_DEPTH_INSTANCED>;
+
+	// Camera depth prepass variant (for ray-traced shadows): the shadow_mapping cull mode
+	// intentionally rasterizes the *far* face set (shadow-map acne trick), which is wrong for
+	// reconstructing the camera-visible surface - use no culling instead
+	using Draw3DShapeCameraDepth_Instanced = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<
+	Draw3DShapeInstancedDepthOnlyGlobalUniforms
+	>,
+	std::tuple<
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
+	vertex_buffer_description<12, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,
 	// instance data
 	vertex_buffer_description<sizeof(Draw3DShapePerInstanceInterleavedData), gfx_api::vertex_attribute_input_rate::instance,
 		vertex_attribute_description<instance_modelMatrix, gfx_api::vertex_attribute_type::float4, 0>,
@@ -1013,7 +1083,8 @@ namespace gfx_api
 	texture_description<6, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal normal
 	texture_description<7, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal specular
 	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>,  // decal height
-	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
+	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+	texture_description<10, sampler_type::bilinear> // ray-traced shadow mask (or 1x1 white fallback)
 	>, shader>;
 
 	using TerrainCombined_Classic = TerrainCombinedTemplate<REND_ALPHA, SHADER_TERRAIN_COMBINED_CLASSIC>;
@@ -1070,6 +1141,8 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
+		int viewportWidth;
+		int viewportHeight;
 	};
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1081,7 +1154,8 @@ namespace gfx_api
 		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // normal maps
 		texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // specular maps
 		texture_description<3, sampler_type::bilinear>, // lightmap
-		texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
+		texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+		texture_description<5, sampler_type::bilinear> // ray-traced shadow mask (or 1x1 white fallback)
 	>, SHADER_WATER_HIGH>;
 
 	template<>

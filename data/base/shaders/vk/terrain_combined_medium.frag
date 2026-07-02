@@ -6,6 +6,7 @@ layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 5) const uint WZ_RAY_SHADOWS = 0;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -23,6 +24,7 @@ layout(set = 1, binding = 8) uniform sampler2DArray decalHeight;
 
 // depth map
 layout(set = 1, binding = 9) uniform sampler2DArrayShadow shadowMap;
+layout(set = 1, binding = 10) uniform sampler2D rayShadowMask; // ray-traced shadow visibility mask
 
 layout(location = 0) in FragData frag;
 layout(location = 10) flat in FragFlatData fragf;
@@ -56,7 +58,7 @@ vec4 main_medium() {
 	float visibility = getShadowVisibility(frag.posModelSpace, frag.posViewSpace, diffuseFactor, 0.001f);
 
 	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap);
-	vec4 light = (visibility*diffuseLight*0.8*(diffuseFactor*diffuseFactor) + ambientLight*0.2) * lightmap_vec4.a; // ... * tile brightness / ambient occlusion (stored in lightmap.a)
+	vec4 light = (visibility*diffuseLight*0.8*(diffuseFactor*diffuseFactor) + ambientLight*0.2*mix(1.0, getRayAmbientOcclusion(), 0.5)) * lightmap_vec4.a; // lightmap.a already bakes AO - apply ray AO at half strength // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.5f)); // additive color (from environmental point lights / effects)
 	light.a = 1.f;
 

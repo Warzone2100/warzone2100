@@ -40,6 +40,7 @@
 //
 
 #include "gfx_api_vk.h"
+#include "gfx_api_vk_rt.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -66,11 +67,13 @@
 #endif
 
 const uint32_t minSupportedVulkanVersion = VK_API_VERSION_1_0;
-#if defined(DEBUG)
-// For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
+// Currently limit to: Vulkan 1.3
+// Note: Optional features (like ray-query shadows) require instance versions above the 1.0
+// minimum, so debug builds also default to 1.3. Define WZ_VK_MAX_INSTANCE_VERSION_1_0 to
+// limit debug builds to Vulkan 1.0 (the minimum this backend supports) for testing purposes.
+#if defined(DEBUG) && defined(WZ_VK_MAX_INSTANCE_VERSION_1_0)
 const uint32_t maxRequestableInstanceVulkanVersion = VK_API_VERSION_1_0;
 #else
-// For regular builds, currently limit to: Vulkan 1.3
 const uint32_t maxRequestableInstanceVulkanVersion = (uint32_t)VK_MAKE_VERSION(1, 3, 0);
 #endif
 
@@ -97,6 +100,18 @@ const std::vector<const char*> optionalDeviceExtensions = {
 	VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
 	"VK_KHR_portability_subset" // According to VUID-VkDeviceCreateInfo-pProperties-04451, if device supports this extension it *must* be enabled
 };
+
+#if defined(WZ_VK_RAY_QUERY_POSSIBLE)
+// Used for optional ray-traced shadows support.
+// Only enabled (together as a set) on devices with apiVersion >= 1.2 whose features check out,
+// since VK_KHR_acceleration_structure's other dependencies (descriptor indexing, buffer device
+// address) are only satisfied via Vulkan 1.2 core here.
+const std::vector<const char*> rayQueryDeviceExtensions = {
+	VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME,
+	VK_KHR_RAY_QUERY_EXTENSION_NAME,
+	VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME
+};
+#endif
 
 const std::vector<vk::Format> supportedDepthStencilFormats = {
 	vk::Format::eD32SfloatS8Uint,
@@ -941,6 +956,20 @@ void perFrameResources_t::clean()
 		dev.destroyFramebuffer(fbo, nullptr, *pVkDynLoader);
 	}
 	fbo_to_delete.clear();
+#if defined(VK_KHR_acceleration_structure)
+	if (!as_to_delete.empty())
+	{
+		ASSERT(pVkDynLoader->vkDestroyAccelerationStructureKHR != nullptr, "Acceleration structures queued for deletion, but extension entry point unavailable?");
+		if (pVkDynLoader->vkDestroyAccelerationStructureKHR != nullptr)
+		{
+			for (auto as : as_to_delete)
+			{
+				dev.destroyAccelerationStructureKHR(as, nullptr, *pVkDynLoader);
+			}
+		}
+		as_to_delete.clear();
+	}
+#endif
 	for (auto buffer : buffer_to_delete)
 	{
 		dev.destroyBuffer(buffer, nullptr, *pVkDynLoader);
@@ -1199,22 +1228,26 @@ struct shader_infos
 	bool specializationConstant_2_shadowFilterSize = false;
 	bool specializationConstant_3_shadowCascadesCount = false;
 	bool specializationConstant_4_pointLightEnabled = false;
+	bool specializationConstant_5_rayShadows = false;
+	// optional ray-query fragment shader variant (WZ_RAYQUERY_SHADERS=1, SPIR-V 1.4+),
+	// selected at pipeline-build time when ray-traced shadows are active
+	std::string rayQueryFragmentSpv = {};
 };
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
 	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true, true }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true, true, true, "shaders/vk/tcmask_instanced_rq.frag.spv" }),
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
 	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true, false, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true, false, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, true, true, "shaders/vk/terrain_combined_high_rq.frag.spv" }),
 	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
-	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water_high.vert.spv", "shaders/vk/terrain_water_high.frag.spv", true, true, true, true }),
+	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water_high.vert.spv", "shaders/vk/terrain_water_high.frag.spv", true, true, true, true, false, true, "shaders/vk/terrain_water_high_rq.frag.spv" }),
 	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv", true }),
 	std::make_pair(SHADER_RECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_RECT_INSTANCED, shader_infos{ "shaders/vk/rect_instanced.vert.spv", "shaders/vk/rect_instanced.frag.spv" }),
@@ -1719,6 +1752,21 @@ VkPSO::VkPSO(vk::Device _dev,
 	textures_first_set = static_cast<uint32_t>(layout_desc.size()); // Store descriptor set index for textures
 	layout_desc.push_back(textures_set_layout);
 
+	// Use the ray-query fragment shader variant (with the extra TLAS descriptor set) when
+	// ray-traced shadows are active and this shader has one
+	usesRayQueryTLAS = false;
+	{
+		const auto& shaderVariantInfo = spv_files.at(shader_mode);
+		if (!shaderVariantInfo.rayQueryFragmentSpv.empty()
+			&& root->rayQuerySupported
+			&& root->shadowConstants.rayShadows == 1
+			&& root->shadowConstants.rayQueryMaterials == 1
+			&& root->materialTlasSetLayout)
+		{
+			usesRayQueryTLAS = true;
+			layout_desc.push_back(root->materialTlasSetLayout);
+		}
+	}
 
 	const auto layoutCreateInfo = vk::PipelineLayoutCreateInfo()
 		.setPSetLayouts(layout_desc.data())
@@ -1795,7 +1843,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	const auto rasterizationState = to_vk(state_desc.offset, state_desc.cull);
 	const auto& shaderInfo = spv_files.at(shader_mode);
 	vertexShader = get_module(shaderInfo.vertexSpv, *pVkDynLoader);
-	fragmentShader = get_module(shaderInfo.fragmentSpv, *pVkDynLoader);
+	fragmentShader = get_module((usesRayQueryTLAS) ? shaderInfo.rayQueryFragmentSpv : shaderInfo.fragmentSpv, *pVkDynLoader);
 	auto pipelineStages = get_stages(vertexShader, fragmentShader);
 
 	std::vector<char> specializationConstantsDataBuffer;
@@ -1834,6 +1882,11 @@ VkPSO::VkPSO(vk::Device _dev,
 	{
 		appendSpecializationConstant_uint32(4, static_cast<uint32_t>(root->shadowConstants.isPointLightPerPixelEnabled));
 		hasSpecializationConstant_PointLightConstants = true;
+	}
+	if (shaderInfo.specializationConstant_5_rayShadows)
+	{
+		appendSpecializationConstant_uint32(5, root->shadowConstants.rayShadows);
+		hasSpecializationConstant_ShadowConstants = true;
 	}
 	if (!specializationEntries.empty())
 	{
@@ -3735,6 +3788,22 @@ int rateDeviceSuitability(const vk::PhysicalDevice &device, const vk::SurfaceKHR
 	// Maximum possible size of textures affects graphics quality
 	score += deviceProperties.limits.maxImageDimension2D;
 
+	// Prefer devices with more device-local memory (differentiates between multiple discrete
+	// GPUs - e.g. a flagship dGPU + a small secondary dGPU would otherwise tie)
+	{
+		const auto memProperties = device.getMemoryProperties(vkDynLoader);
+		vk::DeviceSize largestDeviceLocalHeap = 0;
+		for (uint32_t i = 0; i < memProperties.memoryHeapCount; ++i)
+		{
+			if (memProperties.memoryHeaps[i].flags & vk::MemoryHeapFlagBits::eDeviceLocal)
+			{
+				largestDeviceLocalHeap = std::max(largestDeviceLocalHeap, memProperties.memoryHeaps[i].size);
+			}
+		}
+		// in MB, capped so this never outweighs the discrete-vs-integrated tier bonus
+		score += static_cast<int>(std::min<vk::DeviceSize>(largestDeviceLocalHeap / (1024 * 1024), 500000));
+	}
+
 	// Requires: deviceProperties.apiVersion >= minSupportedVulkanVersion
 	if (!VK_VERSION_GREATER_THAN_OR_EQUAL(deviceProperties.apiVersion, minSupportedVulkanVersion))
 	{
@@ -3911,6 +3980,13 @@ void VkRoot::shutdown()
 {
 	destroySwapchainAndSwapchainSpecificStuff(true);
 
+	if (rayShadowBackend)
+	{
+		// must destroy immediately (the buffering_mechanism is gone at this point, but the device is still alive)
+		rayShadowBackend->destroyNow();
+		rayShadowBackend.reset();
+	}
+
 	if (dev)
 	{
 		for (auto& pipelineInfo : createdPipelines)
@@ -4035,6 +4111,8 @@ void VkRoot::waitForAllIdle()
 
 void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 {
+	discardPendingScreenshots();
+	swapchainImages.clear();
 	if (!dev)
 	{
 		// Logical device is null - return
@@ -4514,6 +4592,9 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 	debug(LOG_3D, "Using surface format: %s - %s", to_string(surfaceFormat.format).c_str(), to_string(surfaceFormat.colorSpace).c_str());
 
+	// screenshots require copying from the swapchain images
+	swapchainSupportsScreenshotCopy = static_cast<bool>(swapChainSupport.capabilities.supportedUsageFlags & vk::ImageUsageFlagBits::eTransferSrc);
+
 	// pick compositeAlpha
 	vk::CompositeAlphaFlagBitsKHR compositeAlphaMode = vk::CompositeAlphaFlagBitsKHR::eOpaque;
 	if (swapChainSupport.capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eOpaque)
@@ -4534,7 +4615,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		.setSurface(surface)
 		.setMinImageCount(swapchainDesiredImageCount)
 		.setPresentMode(presentMode)
-		.setImageUsage(vk::ImageUsageFlagBits::eColorAttachment)
+		.setImageUsage(vk::ImageUsageFlagBits::eColorAttachment | ((swapchainSupportsScreenshotCopy) ? vk::ImageUsageFlagBits::eTransferSrc : vk::ImageUsageFlags()))
 		.setImageArrayLayers(1)
 		.setCompositeAlpha(compositeAlphaMode)
 		.setClipped(true)
@@ -4571,7 +4652,7 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	}
 
 	// createSwapchainImageViews
-	std::vector<vk::Image> swapchainImages = dev.getSwapchainImagesKHR(swapchain, vkDynLoader);
+	swapchainImages = dev.getSwapchainImagesKHR(swapchain, vkDynLoader);
 	debug(LOG_3D, "Requested swapchain minImageCount: %" PRIu32", received: %zu", swapchainDesiredImageCount, swapchainImages.size());
 	try {
 		std::transform(swapchainImages.begin(), swapchainImages.end(), std::back_inserter(swapchainImageView),
@@ -5276,6 +5357,33 @@ bool VkRoot::createLogicalDevice()
 	auto supportedOptionalExtensions = findSupportedDeviceExtensions(physicalDevice, optionalDeviceExtensions, vkDynLoader);
 	enabledDeviceExtensions.insert(std::end(enabledDeviceExtensions), supportedOptionalExtensions.begin(), supportedOptionalExtensions.end());
 
+	// determine whether ray query (for optional ray-traced shadows) can be enabled
+	rayQuerySupported = false;
+#if defined(WZ_VK_RAY_QUERY_POSSIBLE)
+	if (canUseVulkanDeviceAPI(VK_MAKE_VERSION(1, 2, 0)) && canUseVulkanInstanceAPI(VK_MAKE_VERSION(1, 1, 0)))
+	{
+		auto supportedRayQueryExtensions = findSupportedDeviceExtensions(physicalDevice, rayQueryDeviceExtensions, vkDynLoader);
+		if (supportedRayQueryExtensions.size() == rayQueryDeviceExtensions.size())
+		{
+			auto rayQueryFeaturesChain = physicalDevice.getFeatures2<vk::PhysicalDeviceFeatures2, vk::PhysicalDeviceVulkan12Features, vk::PhysicalDeviceAccelerationStructureFeaturesKHR, vk::PhysicalDeviceRayQueryFeaturesKHR>(vkDynLoader);
+			const auto& vk12Features = rayQueryFeaturesChain.get<vk::PhysicalDeviceVulkan12Features>();
+			const auto& asFeatures = rayQueryFeaturesChain.get<vk::PhysicalDeviceAccelerationStructureFeaturesKHR>();
+			const auto& rqFeatures = rayQueryFeaturesChain.get<vk::PhysicalDeviceRayQueryFeaturesKHR>();
+			if (vk12Features.bufferDeviceAddress && asFeatures.accelerationStructure && rqFeatures.rayQuery)
+			{
+				rayQuerySupported = true;
+				enabledDeviceExtensions.insert(std::end(enabledDeviceExtensions), supportedRayQueryExtensions.begin(), supportedRayQueryExtensions.end());
+			}
+			else
+			{
+				debug(LOG_3D, "Vulkan: ray query extensions present but required features unavailable (bufferDeviceAddress: %d, accelerationStructure: %d, rayQuery: %d)",
+					  (int)vk12Features.bufferDeviceAddress, (int)asFeatures.accelerationStructure, (int)rqFeatures.rayQuery);
+			}
+		}
+	}
+	debug(LOG_3D, "Vulkan: ray query support: %s", (rayQuerySupported) ? "yes" : "no");
+#endif
+
 	// create logical device
 	std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos;
 	debug(LOG_3D, "Using queue family indicies: <graphics: %" PRIu32">, <presentation: %" PRIu32">", queueFamilyIndices.graphicsFamily.value(), queueFamilyIndices.presentFamily.value());
@@ -5308,12 +5416,28 @@ bool VkRoot::createLogicalDevice()
 	});
 	debug(LOG_3D, "Using device extensions: %s", deviceExtensionsAsString.c_str());
 
-	const auto deviceCreateInfo = vk::DeviceCreateInfo()
+	auto deviceCreateInfo = vk::DeviceCreateInfo()
 		.setEnabledExtensionCount(static_cast<uint32_t>(enabledDeviceExtensions.size()))
 		.setPpEnabledExtensionNames(enabledDeviceExtensions.data())
 		.setPEnabledFeatures(&enabledFeatures)
 		.setQueueCreateInfoCount(static_cast<uint32_t>(queueCreateInfos.size()))
 		.setPQueueCreateInfos(queueCreateInfos.data());
+
+#if defined(WZ_VK_RAY_QUERY_POSSIBLE)
+	// feature structs for ray query support, chained into deviceCreateInfo.pNext when supported
+	auto enabledVk12Features = vk::PhysicalDeviceVulkan12Features()
+		.setBufferDeviceAddress(true);
+	auto enabledASFeatures = vk::PhysicalDeviceAccelerationStructureFeaturesKHR()
+		.setAccelerationStructure(true);
+	auto enabledRQFeatures = vk::PhysicalDeviceRayQueryFeaturesKHR()
+		.setRayQuery(true);
+	if (rayQuerySupported)
+	{
+		enabledVk12Features.setPNext(&enabledASFeatures);
+		enabledASFeatures.setPNext(&enabledRQFeatures);
+		deviceCreateInfo.setPNext(&enabledVk12Features);
+	}
+#endif
 
 	try {
 		dev = physicalDevice.createDevice(deviceCreateInfo, nullptr, vkDynLoader);
@@ -5371,6 +5495,11 @@ bool VkRoot::createAllocator()
 	if (enabled_VK_KHR_get_memory_requirements2 && enabled_VK_KHR_dedicated_allocation)
 	{
 		allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT;
+	}
+	if (rayQuerySupported)
+	{
+		// the bufferDeviceAddress device feature was enabled (required for acceleration structure builds)
+		allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
 	}
 
 	VmaVulkanFunctions vulkanFunctions = {};
@@ -5833,6 +5962,15 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 	}
 	dev.updateDescriptorSets(write_info, nullptr, vkDynLoader);
 	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set, set, nullptr, vkDynLoader);
+
+	if (currentPSO->usesRayQueryTLAS && rayShadowBackend)
+	{
+		vk::DescriptorSet tlasSet = rayShadowBackend->getMaterialTlasDescSet();
+		if (tlasSet)
+		{
+			buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set + 1, 1, &tlasSet, 0, nullptr, vkDynLoader);
+		}
+	}
 }
 
 void VkRoot::set_constants(const void* buffer, const std::size_t& size)
@@ -6104,6 +6242,19 @@ void VkRoot::endRenderPass()
 	buffering_mechanism::get_current_resources().scenePassDrawCmdBuffer().end(vkDynLoader);
 
 	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().endRenderPass(vkDynLoader);
+
+	bool recordedScreenshotThisFrame = false;
+	if (saveScreenshotCallback)
+	{
+		recordedScreenshotThisFrame = recordScreenshotReadback();
+		if (!recordedScreenshotThisFrame)
+		{
+			// unable to record - fail the request
+			saveScreenshotCallback(nullptr);
+			saveScreenshotCallback = nullptr;
+		}
+	}
+
 	buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer().end(vkDynLoader);
 
 	startedRenderPass = false;
@@ -6141,6 +6292,16 @@ void VkRoot::endRenderPass()
 			// Must re-create swapchain
 			debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
 			mustRecreateSwapchain = true;
+		}
+	}
+
+	if (recordedScreenshotThisFrame && mustSkipDrawing)
+	{
+		// the draw cmd buffer (with the readback) will not be submitted this frame
+		ASSERT(!pendingScreenshots.empty(), "Recorded screenshot but no pending entry?");
+		if (!pendingScreenshots.empty())
+		{
+			pendingScreenshots.back().submitted = false;
 		}
 	}
 
@@ -6266,7 +6427,8 @@ void VkRoot::endRenderPass()
 	}
 
 	try {
-		buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
+		buffering_mechanism::swap(dev, vkDynLoader);
+	processPendingScreenshots(); // must be called *before* acquireNextSwapchainImage()
 	}
 	catch (const vk::OutOfHostMemoryError& e)
 	{
@@ -6614,11 +6776,172 @@ std::string VkRoot::calculateFormattedRendererInfoString() const
 	return std::string("Vulkan ") + VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion) + " (" + static_cast<const char*>(physDeviceProps.deviceName) + ")";
 }
 
+bool VkRoot::recordScreenshotReadback()
+{
+	if (!swapchainSupportsScreenshotCopy || currentSwapchainIndex >= swapchainImages.size())
+	{
+		return false;
+	}
+
+	const vk::DeviceSize bufferSize = static_cast<vk::DeviceSize>(swapchainSize.width) * swapchainSize.height * 4;
+	auto bufferCreateInfo = vk::BufferCreateInfo()
+		.setSize(bufferSize)
+		.setUsage(vk::BufferUsageFlagBits::eTransferDst)
+		.setSharingMode(vk::SharingMode::eExclusive);
+	VmaAllocationCreateInfo allocCreateInfo = {};
+	allocCreateInfo.usage = VMA_MEMORY_USAGE_GPU_TO_CPU;
+	allocCreateInfo.flags = VMA_ALLOCATION_CREATE_MAPPED_BIT;
+	VmaAllocationInfo allocInfo = {};
+	PendingScreenshotReadback readback;
+	VkResult result = vmaCreateBuffer(allocator, reinterpret_cast<const VkBufferCreateInfo*>(&bufferCreateInfo), &allocCreateInfo, reinterpret_cast<VkBuffer*>(&readback.buffer), &readback.allocation, &allocInfo);
+	if (result != VK_SUCCESS || allocInfo.pMappedData == nullptr)
+	{
+		debug(LOG_ERROR, "Failed to create screenshot readback buffer: %s", to_string(static_cast<vk::Result>(result)).c_str());
+		if (result == VK_SUCCESS)
+		{
+			vmaDestroyBuffer(allocator, static_cast<VkBuffer>(readback.buffer), readback.allocation);
+		}
+		return false;
+	}
+	readback.pMapped = allocInfo.pMappedData;
+	readback.width = swapchainSize.width;
+	readback.height = swapchainSize.height;
+	readback.format = surfaceFormat.format;
+	readback.callback = std::move(saveScreenshotCallback);
+	saveScreenshotCallback = nullptr;
+	readback.frameIdx = buffering_mechanism::get_current_frame_num();
+
+	auto cmdBuffer = buffering_mechanism::get_current_resources().renderPassDrawCmdBuffer();
+	vk::Image swapchainImage = swapchainImages[currentSwapchainIndex];
+
+	const auto toTransferBarrier = vk::ImageMemoryBarrier()
+		.setSrcAccessMask(vk::AccessFlagBits::eColorAttachmentWrite)
+		.setDstAccessMask(vk::AccessFlagBits::eTransferRead)
+		.setOldLayout(vk::ImageLayout::ePresentSrcKHR)
+		.setNewLayout(vk::ImageLayout::eTransferSrcOptimal)
+		.setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+		.setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+		.setImage(swapchainImage)
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
+	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eTransfer,
+							  vk::DependencyFlags(), nullptr, nullptr, toTransferBarrier, vkDynLoader);
+
+	const auto copyRegion = vk::BufferImageCopy()
+		.setBufferOffset(0)
+		.setBufferRowLength(0)
+		.setBufferImageHeight(0)
+		.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, 0, 0, 1))
+		.setImageOffset(vk::Offset3D(0, 0, 0))
+		.setImageExtent(vk::Extent3D(swapchainSize.width, swapchainSize.height, 1));
+	cmdBuffer.copyImageToBuffer(swapchainImage, vk::ImageLayout::eTransferSrcOptimal, readback.buffer, 1, &copyRegion, vkDynLoader);
+
+	const auto toPresentBarrier = vk::ImageMemoryBarrier()
+		.setSrcAccessMask(vk::AccessFlagBits::eTransferRead)
+		.setDstAccessMask(vk::AccessFlags())
+		.setOldLayout(vk::ImageLayout::eTransferSrcOptimal)
+		.setNewLayout(vk::ImageLayout::ePresentSrcKHR)
+		.setSrcQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+		.setDstQueueFamilyIndex(VK_QUEUE_FAMILY_IGNORED)
+		.setImage(swapchainImage)
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
+	cmdBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eBottomOfPipe,
+							  vk::DependencyFlags(), nullptr, nullptr, toPresentBarrier, vkDynLoader);
+
+	pendingScreenshots.push_back(std::move(readback));
+	return true;
+}
+
+void VkRoot::processPendingScreenshots()
+{
+	if (pendingScreenshots.empty())
+	{
+		return;
+	}
+	// entries recorded with frameIdx == the (new) current frame index have had their fence waited
+	size_t currFrame = buffering_mechanism::get_current_frame_num();
+	for (auto it = pendingScreenshots.begin(); it != pendingScreenshots.end(); )
+	{
+		if (it->frameIdx != currFrame)
+		{
+			++it;
+			continue;
+		}
+		if (it->submitted && it->pMapped)
+		{
+			vmaInvalidateAllocation(allocator, it->allocation, 0, VK_WHOLE_SIZE);
+			auto image = std::make_unique<iV_Image>();
+			image->allocate(it->width, it->height, 3, false);
+			const uint8_t* srcData = reinterpret_cast<const uint8_t*>(it->pMapped);
+			uint8_t* dstData = image->bmp_w();
+			const bool swapRB = (it->format == vk::Format::eB8G8R8A8Unorm || it->format == vk::Format::eB8G8R8A8Srgb);
+			const bool packed101010 = (it->format == vk::Format::eA2B10G10R10UnormPack32 || it->format == vk::Format::eA2R10G10B10UnormPack32);
+			const bool packedSwapRB = (it->format == vk::Format::eA2R10G10B10UnormPack32);
+			for (size_t dstY = 0; dstY < it->height; ++dstY)
+			{
+				// the screenshot save path expects GL-convention (bottom-up) row order
+				const size_t srcY = (it->height - 1) - dstY;
+				const uint8_t* srcRow = srcData + (srcY * static_cast<size_t>(it->width) * 4);
+				uint8_t* dstRow = dstData + (dstY * static_cast<size_t>(it->width) * 3);
+				for (size_t x = 0; x < it->width; ++x)
+				{
+					if (packed101010)
+					{
+						uint32_t packedValue;
+						memcpy(&packedValue, srcRow + (x * 4), sizeof(uint32_t));
+						uint8_t c0 = static_cast<uint8_t>(((packedValue >> 0) & 0x3FF) >> 2);
+						uint8_t c1 = static_cast<uint8_t>(((packedValue >> 10) & 0x3FF) >> 2);
+						uint8_t c2 = static_cast<uint8_t>(((packedValue >> 20) & 0x3FF) >> 2);
+						dstRow[x * 3 + 0] = (packedSwapRB) ? c2 : c0;
+						dstRow[x * 3 + 1] = c1;
+						dstRow[x * 3 + 2] = (packedSwapRB) ? c0 : c2;
+					}
+					else
+					{
+						dstRow[x * 3 + 0] = srcRow[x * 4 + ((swapRB) ? 2 : 0)];
+						dstRow[x * 3 + 1] = srcRow[x * 4 + 1];
+						dstRow[x * 3 + 2] = srcRow[x * 4 + ((swapRB) ? 0 : 2)];
+					}
+				}
+			}
+			it->callback(std::move(image));
+		}
+		else
+		{
+			it->callback(nullptr);
+		}
+		vmaDestroyBuffer(allocator, static_cast<VkBuffer>(it->buffer), it->allocation);
+		it = pendingScreenshots.erase(it);
+	}
+}
+
+void VkRoot::discardPendingScreenshots()
+{
+	for (auto& pending : pendingScreenshots)
+	{
+		if (pending.callback)
+		{
+			pending.callback(nullptr);
+		}
+		vmaDestroyBuffer(allocator, static_cast<VkBuffer>(pending.buffer), pending.allocation);
+	}
+	pendingScreenshots.clear();
+	if (saveScreenshotCallback)
+	{
+		saveScreenshotCallback(nullptr);
+		saveScreenshotCallback = nullptr;
+	}
+}
+
 bool VkRoot::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback)
 {
-	// TODO: Implement - save the callback, and trigger a screenshot save at the next opportunity
-	// saveScreenshotCallback = callback;
-	return false;
+	if (!swapchainSupportsScreenshotCopy)
+	{
+		return false;
+	}
+	// the readback is recorded at the end of the current frame (endRenderPass) and the
+	// callback fires once that frame's fence has been waited (maxFramesInFlight later)
+	saveScreenshotCallback = std::move(callback);
+	return true;
 }
 
 const size_t& VkRoot::current_FrameNum() const

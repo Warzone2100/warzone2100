@@ -728,6 +728,12 @@ bool loadConfig()
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
 		war_setPointLightPerPixelLighting(value.value_or(false));
 	}
+	if (auto value = iniGetIntegerOpt("rayShadows"))
+	{
+		war_setRayShadows(static_cast<uint32_t>(std::max(value.value(), 0)));
+	}
+	war_setRayShadowsAO(iniGetBool("rayShadowsAO", true).value());
+	war_setRayShadowsPointLights(iniGetBool("rayShadowsPointLights", false).value());
 
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
@@ -932,6 +938,9 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
+	iniSetInteger("rayShadows", (int)war_getRayShadows());
+	iniSetBool("rayShadowsAO", war_getRayShadowsAO());
+	iniSetBool("rayShadowsPointLights", war_getRayShadowsPointLights());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
 

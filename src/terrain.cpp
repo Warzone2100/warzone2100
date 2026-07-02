@@ -51,6 +51,7 @@
 #include "lib/ivis_opengl/pielighting.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piedraw.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/pielight_convert.h"
 #include "world_map_state.h"
 #include <glm/mat4x4.hpp>
@@ -552,6 +553,10 @@ static void updateSectorGeometry(WorldMapState& mapState, int x, int y)
 	waterVBO->update(sizeof(WaterVertex)*sectors[x * ySectors + y].waterOffset,
 					 sizeof(WaterVertex)*sectors[x * ySectors + y].waterSize, water,
 					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
+
+	static_assert(sizeof(TerrainVertex) == sizeof(float) * 3, "TerrainVertex is expected to be a tightly-packed float3");
+	gfx_api::context::get().rayShadows_updateTerrainVertices(sectors[x * ySectors + y].geometryOffset,
+							reinterpret_cast<const float*>(geometry), sectors[x * ySectors + y].geometrySize);
 
 	delete[] geometry;
 	free(water);
@@ -1103,12 +1108,19 @@ bool initTerrain(WorldMapState& mapState)
 		delete geometryVBO;
 	geometryVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::geometryVBO");
 	geometryVBO->upload(sizeof(TerrainVertex)*geometrySize, geometry);
-	delete[] geometry;
 
 	if (geometryIndexVBO)
 		delete geometryIndexVBO;
 	geometryIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::geometryIndexVBO");
 	geometryIndexVBO->upload(sizeof(GLuint)*geometryIndexSize, geometryIndex);
+
+	// hand the terrain geometry to the (optional) ray-traced shadows backend before freeing it
+	static_assert(sizeof(TerrainVertex) == sizeof(float) * 3, "TerrainVertex is expected to be a tightly-packed float3");
+	static_assert(sizeof(GLuint) == sizeof(uint32_t), "GLuint is expected to match uint32_t");
+	gfx_api::context::get().rayShadows_setTerrainGeometry(reinterpret_cast<const float*>(geometry), geometrySize,
+														  reinterpret_cast<const uint32_t*>(geometryIndex), geometryIndexSize);
+
+	delete[] geometry;
 	free(geometryIndex);
 
 	if (waterVBO)
@@ -1203,6 +1215,10 @@ bool initTerrain(WorldMapState& mapState)
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain()
 {
+	if (gfx_api::context::isInitialized())
+	{
+		gfx_api::context::get().rayShadows_clearTerrainGeometry();
+	}
 	delete geometryVBO;
 	geometryVBO = nullptr;
 	delete geometryIndexVBO;
@@ -1442,7 +1458,8 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
-		gfx_api::context::get().getDepthTexture());
+		gfx_api::context::get().getDepthTexture(),
+		pie_GetRayShadowMaskTexture());
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	glm::mat4 groundScale = glm::mat4(0);
 	for (int i = 0; i < getNumGroundTypes(); i++) {
@@ -1658,14 +1675,16 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		waterTexturesHigh.tex_nm,
 		waterTexturesHigh.tex_sm,
 		lightmap_texture,
-		gfx_api::context::get().getDepthTexture());
+		gfx_api::context::get().getDepthTexture(),
+		pie_GetRayShadowMaskTexture());
 	PSO::get().bind_vertex_buffers(waterVBO);
+	auto dimension = gfx_api::context::get().getDrawableDimensions();
 	PSO::get().bind_constants({
 		ModelViewProjection, viewMatrix, lightmapValues.ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
-		waterOffset*10
+		waterOffset*10, static_cast<int>(dimension.first), static_cast<int>(dimension.second)
 	});
 
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);

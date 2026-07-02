@@ -86,6 +86,12 @@ void iIMDShape::freeInternalResources()
 		delete buffer;
 		buffer = nullptr;
 	}
+	if (gfx_api::context::isInitialized())
+	{
+		// invalidate any cached ray-tracing geometry keyed on this shape
+		// (covers both destruction and in-place geometry replacement via move-assignment)
+		gfx_api::context::get().rayShadows_invalidateMesh(this);
+	}
 }
 
 iIMDShape& iIMDShape::operator=(iIMDShape&& other) noexcept

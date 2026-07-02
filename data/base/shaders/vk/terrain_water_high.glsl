@@ -20,6 +20,8 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	float timeSec;
+	int viewportWidth;
+	int viewportHeight;
 };
 
 // interpolated data. location count = 2

@@ -1,4 +1,7 @@
-#version 450
+#version 460
+#if WZ_RAYQUERY_SHADERS
+#extension GL_EXT_ray_query : require
+#endif
 
 #include "terrain_combined.glsl"
 
@@ -7,6 +10,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_RAY_SHADOWS = 0;
 
 layout(set = 1, binding = 0) uniform sampler2D lightmap_tex;
 
@@ -24,6 +28,10 @@ layout(set = 1, binding = 8) uniform sampler2DArray decalHeight;
 
 // depth map
 layout(set = 1, binding = 9) uniform sampler2DArrayShadow shadowMap;
+layout(set = 1, binding = 10) uniform sampler2D rayShadowMask; // ray-traced shadow visibility mask
+#if WZ_RAYQUERY_SHADERS
+layout(set = 2, binding = 0) uniform accelerationStructureEXT wzTopLevelAS;
+#endif
 
 layout(location = 0) in FragData frag;
 layout(location = 10) flat in FragFlatData fragf;
@@ -72,7 +80,7 @@ vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
 
 	float adjustedTileBrightness = pow(lightmap_vec4.a, 2.f-lightmap_vec4.a); // ... * tile brightness / ambient occlusion (stored in lightmap.a)
 
-	vec4 adjustedAmbientLight = ambientLight * adjustedTileBrightness;
+	vec4 adjustedAmbientLight = ambientLight * min(adjustedTileBrightness, getRayAmbientOcclusion()); // lightmap.a already bakes tile AO - take the stronger of the two, don't stack them
 	vec4 light = adjustedAmbientLight + diffuseLight * diffuseFactor;
 	light.rgb = blendAddEffectLighting(light.rgb, (lightmap_vec4.rgb / 1.4f)); // additive color (from environmental point lights / effects)
 

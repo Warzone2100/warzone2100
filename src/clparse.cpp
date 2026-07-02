@@ -29,6 +29,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/png_util.h"
 
 #include "levels.h"
@@ -322,6 +323,7 @@ typedef enum
 	CLI_RESOLUTION,
 	CLI_SHADOWS,
 	CLI_NOSHADOWS,
+	CLI_RAYSHADOWS_DEBUG,
 	CLI_SOUND,
 	CLI_NOSOUND,
 	CLI_CONNECTTOIP,
@@ -408,6 +410,7 @@ static const struct poptOption *getOptionsTable()
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
 		{ "shadows", POPT_ARG_NONE, CLI_SHADOWS,    N_("Enable shadows"),                    nullptr },
 		{ "noshadows", POPT_ARG_NONE, CLI_NOSHADOWS,  N_("Disable shadows"),                   nullptr },
+		{ "rayshadows-debug", POPT_ARG_STRING, CLI_RAYSHADOWS_DEBUG, N_("Debug-visualize the ray-traced shadow mask"), "shadow|ao" },
 		{ "sound", POPT_ARG_NONE, CLI_SOUND,      N_("Enable sound"),                      nullptr },
 		{ "nosound", POPT_ARG_NONE, CLI_NOSOUND,    N_("Disable sound"),                     nullptr },
 		{ "join", POPT_ARG_STRING, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host") },
@@ -998,6 +1001,26 @@ bool ParseCommandLine(int argc, const char * const *argv)
 
 		case CLI_NOSHADOWS:
 			setDrawShadows(false);
+			break;
+
+		case CLI_RAYSHADOWS_DEBUG:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad rayshadows-debug argument");
+			}
+			if (strcmp(token, "shadow") == 0)
+			{
+				pie_setRayShadowsDebugMode(2);
+			}
+			else if (strcmp(token, "ao") == 0)
+			{
+				pie_setRayShadowsDebugMode(3);
+			}
+			else
+			{
+				qFatal("Unsupported rayshadows-debug value (expected: shadow|ao)");
+			}
 			break;
 
 		case CLI_SOUND:

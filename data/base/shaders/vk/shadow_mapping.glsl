@@ -6,8 +6,37 @@ float getShadowMapDepthComp(vec2 base_uv, float u, float v, vec2 shadowMapSizeIn
 	return texture( shadowMap, vec4(uv, cascadeIndex, z) );
 }
 
+// Ray-traced ambient occlusion (contact shadows) - stored in the mask's green channel.
+// Returns 1.0 (no occlusion) when ray-traced shadows are inactive.
+float getRayAmbientOcclusion()
+{
+	if (WZ_RAY_SHADOWS == 1)
+	{
+		vec2 uv = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+		return texture(rayShadowMask, uv).g;
+	}
+	// modes 2/3 are channel-isolation debug views handled in getShadowVisibility
+	return 1.0;
+}
+
 float getShadowVisibility(vec3 fragPosModelSpace, vec3 fragPosViewSpace, float NdotL, float offset)
 {
+	if (WZ_RAY_SHADOWS >= 1)
+	{
+		// ray-traced sun shadows: sample the screen-space visibility mask instead of the shadow map
+		vec2 uv = gl_FragCoord.xy / vec2(viewportWidth, viewportHeight);
+		vec2 rayMask = texture(rayShadowMask, uv).rg;
+		if (WZ_RAY_SHADOWS == 2)
+		{
+			return rayMask.r; // debug: raw sun-shadow channel, no visibility floor
+		}
+		if (WZ_RAY_SHADOWS == 3)
+		{
+			return rayMask.g; // debug: raw ambient-occlusion channel
+		}
+		// same visibility floor as the shadow-mapping path below
+		return clamp(rayMask.r, 0.5, 1.0);
+	}
 	if (WZ_SHADOW_MODE == 0 || WZ_SHADOW_FILTER_SIZE == 0)
 	{
 		// no shadow-mapping

@@ -1,4 +1,7 @@
-#version 450
+#version 460
+#if WZ_RAYQUERY_SHADERS
+#extension GL_EXT_ray_query : require
+#endif
 
 #include "terrain_water_high.glsl"
 
@@ -6,6 +9,7 @@ layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
+layout (constant_id = 5) const uint WZ_RAY_SHADOWS = 0;
 
 layout(set = 1, binding = 0) uniform sampler2DArray tex;
 layout(set = 1, binding = 1) uniform sampler2DArray tex_nm;
@@ -13,6 +17,10 @@ layout(set = 1, binding = 2) uniform sampler2DArray tex_sm;
 layout(set = 1, binding = 3) uniform sampler2D lightmap_tex;
 // depth map
 layout(set = 1, binding = 4) uniform sampler2DArrayShadow shadowMap;
+layout(set = 1, binding = 5) uniform sampler2D rayShadowMask; // ray-traced shadow visibility mask
+#if WZ_RAYQUERY_SHADERS
+layout(set = 2, binding = 0) uniform accelerationStructureEXT wzTopLevelAS;
+#endif
 
 layout(location = 1) in vec4 uv1_uv2;
 layout(location = 2) in vec2 uvLightmap;
@@ -67,13 +75,35 @@ vec4 main_bumpMapping()
 	float r = pow(max(dot(reflectLight, halfVec), 0.0), 14.0);
 	specularFactor = (specularFactor + r) * 0.5;
 
-	vec4 ambientColor = vec4(ambientLight.rgb * foam, 0.15);
+	vec4 ambientColor = vec4(ambientLight.rgb * foam, 0.15); // no ray AO: the mask holds the submerged terrain's values, not the water surface's
 	vec4 diffuseColor = vec4(diffuseLight.rgb * diffuseFactor * waterColor+noise*noise*0.5, 0.35);
 	vec4 specColor = vec4(specularLight.rgb * specularFactor * diffuseFactor, fresnel_alpha);
 
 	vec4 finalColor = vec4(0.0);
 	finalColor.rgb = ambientColor.rgb + diffuseColor.rgb + specColor.rgb;
-	finalColor.rgb = mix(finalColor.rgb, (finalColor.rgb+vec3(1.0,0.8,0.63))*0.5, fresnel);
+	float skyReflectionVisibility = 1.0;
+#if WZ_RAYQUERY_SHADERS
+	{
+		// ray-traced reflection occlusion: dim the sky reflection where geometry (cliffs,
+		// structures) blocks it, so reflections ground the water into the scene
+		vec3 reflDir = reflect(-normalize(eyeVec), normalize(N));
+		bool reflectionBlocked = (reflDir.y <= 0.01);
+		if (!reflectionBlocked)
+		{
+			rayQueryEXT rayQuery;
+			rayQueryInitializeEXT(rayQuery, wzTopLevelAS,
+								  gl_RayFlagsTerminateOnFirstHitEXT | gl_RayFlagsOpaqueEXT,
+								  0xFF, frag.posModelSpace + vec3(0.0, 4.0, 0.0), 2.0, reflDir, 6000.0);
+			rayQueryProceedEXT(rayQuery);
+			reflectionBlocked = (rayQueryGetIntersectionTypeEXT(rayQuery, true) != gl_RayQueryCommittedIntersectionNoneEXT);
+		}
+		if (reflectionBlocked)
+		{
+			skyReflectionVisibility = 0.35;
+		}
+	}
+#endif
+	finalColor.rgb = mix(finalColor.rgb, (finalColor.rgb+vec3(1.0,0.8,0.63))*0.5, fresnel * skyReflectionVisibility);
 	finalColor.a = (ambientColor.a + diffuseColor.a + specColor.a) * (1.0-depth);
 
 	vec4 lightmap = texture(lightmap_tex, uvLightmap, 0.0);

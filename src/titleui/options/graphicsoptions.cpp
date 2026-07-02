@@ -66,6 +66,14 @@ OptionInfo::AvailabilityResult PerPixelLightingAvailable(const OptionInfo&)
 	return result;
 }
 
+OptionInfo::AvailabilityResult SupportsRayShadows(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = pie_supportsRayShadows().value_or(false);
+	result.localizedUnavailabilityReason = _("Ray-traced shadows require the Vulkan graphics backend and a GPU with ray tracing support.");
+	return result;
+}
+
 // MARK: -
 
 std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
@@ -241,6 +249,82 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 					return false;
 				}
 				war_setShadowFilterSize(newFilterSize);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.rayShadows", N_("Ray-Traced Shadows"), N_("Use hardware ray tracing to render sun shadows, instead of shadow maps. Half resolution traces one ray per half-resolution pixel for better performance."));
+		optionInfo.addAvailabilityCondition(ShadowsEnabled);
+		optionInfo.addAvailabilityCondition(SupportsRayShadows);
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			[]() {
+				OptionChoices<uint32_t> result;
+				result.choices = {
+					{ _("Off"), "", 0 },
+					{ _("Quarter Resolution"), "", 3 },
+					{ _("Half Resolution"), "", 1 },
+					{ _("Full Resolution"), "", 2 },
+				};
+				result.setCurrentIdxForValue(static_cast<uint32_t>(pie_getRayShadowsMode()));
+				return result;
+			},
+			[](const auto& newMode) -> bool {
+				if (newMode != 0 && !pie_supportsRayShadows().value_or(false))
+				{
+					return false;
+				}
+				if (!pie_setRayShadowsMode(static_cast<gfx_api::ray_shadow_mode>(newMode)))
+				{
+					debug(LOG_ERROR, "Failed to set ray shadows mode: %" PRIu32, newMode);
+					return false;
+				}
+				war_setRayShadows(newMode);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.rayShadowsAO", N_("RT Contact Shadows"), N_("Ray-traced ambient occlusion: contact shadows under units and structures, and terrain crevice shading."));
+		optionInfo.addAvailabilityCondition(ShadowsEnabled);
+		optionInfo.addAvailabilityCondition(SupportsRayShadows);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(pie_getRayShadowsAOEnabled());
+				return result;
+			},
+			[](const auto& enabled) -> bool {
+				pie_setRayShadowsEffects(enabled, pie_getRayShadowsPointLightsEnabled());
+				war_setRayShadowsAO(enabled);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.rayShadowsPointLights", N_("RT Light & Reflection Effects"), N_("Ray-traced shadows from point lights (searchlights, muzzle flashes, explosions) and water reflection occlusion. Expensive - can significantly reduce performance on some GPUs."));
+		optionInfo.addAvailabilityCondition(ShadowsEnabled);
+		optionInfo.addAvailabilityCondition(SupportsRayShadows);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(pie_getRayShadowsPointLightsEnabled());
+				return result;
+			},
+			[](const auto& enabled) -> bool {
+				pie_setRayShadowsEffects(pie_getRayShadowsAOEnabled(), enabled);
+				war_setRayShadowsPointLights(enabled);
 				return true;
 			}, false
 		);

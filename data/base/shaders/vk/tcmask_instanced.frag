@@ -1,5 +1,8 @@
-#version 450
+#version 460
 //#pragma debug(on)
+#if WZ_RAYQUERY_SHADERS
+#extension GL_EXT_ray_query : require
+#endif
 
 #include "tcmask_instanced.glsl"
 
@@ -8,6 +11,7 @@ layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;
 layout (constant_id = 4) const uint WZ_POINT_LIGHT_ENABLED = 0;
+layout (constant_id = 5) const uint WZ_RAY_SHADOWS = 0;
 
 layout(set = 2, binding = 0) uniform sampler2D Texture; // diffuse
 layout(set = 2, binding = 1) uniform sampler2D TextureTcmask; // tcmask
@@ -15,6 +19,10 @@ layout(set = 2, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 2, binding = 3) uniform sampler2D TextureSpecular; // specular map
 layout(set = 2, binding = 4) uniform sampler2DArrayShadow shadowMap; // shadow map
 layout(set = 2, binding = 5) uniform sampler2D lightmap_tex;
+layout(set = 2, binding = 6) uniform sampler2D rayShadowMask; // ray-traced shadow visibility mask
+#if WZ_RAYQUERY_SHADERS
+layout(set = 3, binding = 0) uniform accelerationStructureEXT wzTopLevelAS;
+#endif
 
 layout(location = 0) in vec3 normal;
 layout(location = 1) in vec3 lightDir;
@@ -122,7 +130,7 @@ void main()
 
 	vec4 ambientLight = vec4(blendAddEffectLighting(ambient.rgb, ((lightmap_vec4.rgb * lightmapFactor) / 3.f)), ambient.a) * diffuseMap;
 	// ambient light maxed for classic models to keep results similar to original
-	light += ambientLight * (1.0 + (1.0 - float(specularmap))) * visibility;
+	light += ambientLight * (1.0 + (1.0 - float(specularmap))) * max(visibility * getRayAmbientOcclusion(), 0.5); // joint floor: shadow+AO never remove more than half of ambient
 
 	if (WZ_POINT_LIGHT_ENABLED == 1)
 	{

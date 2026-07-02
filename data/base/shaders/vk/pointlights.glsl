@@ -1,3 +1,28 @@
+// Ray-traced point-light shadow: 1.0 = unoccluded, 0.0 = shadowed.
+// Only available in the ray-query shader variants (requires the wzTopLevelAS declaration).
+float wzPointLightOcclusion(vec3 fragWorldPos, vec3 lightWorldPos)
+{
+#if WZ_RAYQUERY_SHADERS
+	vec3 v = lightWorldPos - fragWorldPos;
+	float dist = length(v);
+	if (dist < 16.0)
+	{
+		return 1.0; // fragment is essentially at the light
+	}
+	vec3 dir = v / dist;
+	rayQueryEXT rayQuery;
+	// offset the origin along the ray (we may not have a world-space normal here), and stop
+	// short of the light so emitter geometry (muzzles, lamps) doesn't shadow its own light
+	rayQueryInitializeEXT(rayQuery, wzTopLevelAS,
+						  gl_RayFlagsTerminateOnFirstHitEXT | gl_RayFlagsOpaqueEXT,
+						  0xFF, fragWorldPos + dir * 4.0, 0.0, dir, max(dist - 24.0, 0.0));
+	rayQueryProceedEXT(rayQuery);
+	return (rayQueryGetIntersectionTypeEXT(rayQuery, true) == gl_RayQueryCommittedIntersectionNoneEXT) ? 1.0 : 0.0;
+#else
+	return 1.0;
+#endif
+}
+
 // See https://lisyarus.github.io/blog/graphics/2022/07/30/point-light-attenuation.html for explanation
 // we want something that looks somewhat physically correct, but must absolutely be 0 past range
 float pointLightEnergyAtPosition(vec3 pointLightVector, float range)
@@ -49,7 +74,18 @@ vec4 iterateOverAllPointLights(
 		vec4 position = PointLightsPosition[lightIndex];
 		vec4 colorAndEnergy = PointLightsColorAndEnergy[lightIndex];
 		vec3 tmp = position.xyz * vec3(1., 1., -1.);
-		light += processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, spaceMatrix);
+		// skip the (expensive) shadow ray entirely for lights whose energy at this fragment
+		// is zero or negligible - the attenuation is hard-zero past the light's range
+		float energy = pointLightEnergyAtPosition(tmp - WorldFragPos, colorAndEnergy.w);
+		if (energy <= 0.004)
+		{
+			continue;
+		}
+		float occlusion = wzPointLightOcclusion(WorldFragPos, tmp);
+		if (occlusion > 0.0)
+		{
+			light += occlusion * processPointLight(WorldFragPos, fragNormal, viewVector, albedo, gloss, tmp, colorAndEnergy.w, colorAndEnergy.xyz, spaceMatrix);
+		}
 	}
 	return light;
 }

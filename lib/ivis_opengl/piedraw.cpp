@@ -120,14 +120,26 @@ static inline bool isShadowMappingEnabled()
 	return (shadows && shadowMode == ShadowMode::Shadow_Mapping);
 }
 
+static inline bool isRayShadowsActive()
+{
+	return isShadowMappingEnabled() && (gfx_api::context::get().rayShadows_getMode() != gfx_api::ray_shadow_mode::Off);
+}
+
+// individual ray-traced effect toggles (the master mode switch is rayShadows_setMode)
+static bool rayShadowsAOEnabled = true;
+static bool rayShadowsPointLightsEnabled = false; // expensive material-shader variants; opt-in
+static uint32_t rayShadowsDebugMode = 0; // 0 = off, 2 = raw shadow channel, 3 = raw AO channel
+
 static void refreshShadowShaders()
 {
 	if (gfx_api::context::isInitialized())
 	{
 		auto shadowConstants = gfx_api::context::get().getShadowConstants();
 		bool bShadowMappingEnabled = isShadowMappingEnabled();
-		uint32_t actualNumCascadesAndPasses = (bShadowMappingEnabled) ? numShadowCascades : 0;
-		if (bShadowMappingEnabled)
+		bool bRayShadowsActive = isRayShadowsActive();
+		// when ray-traced shadows are active, the shadow-map cascade depth passes are replaced by the ray-query passes
+		uint32_t actualNumCascadesAndPasses = (bShadowMappingEnabled && !bRayShadowsActive) ? numShadowCascades : 0;
+		if (bShadowMappingEnabled && !bRayShadowsActive)
 		{
 			shadowConstants.shadowMode = 1; // Possible future TODO: Could get this from the config file to allow testing alternative filter methods
 			shadowConstants.shadowCascadesCount = actualNumCascadesAndPasses;
@@ -136,6 +148,10 @@ static void refreshShadowShaders()
 		{
 			shadowConstants.shadowMode = 0; // Disable shader-drawn / shadow-mapping shadows
 		}
+		shadowConstants.rayShadows = (bRayShadowsActive) ? ((rayShadowsDebugMode != 0) ? rayShadowsDebugMode : 1) : 0;
+		// ray-query material shader variants (point-light shadow rays, water reflection occlusion)
+		// carry a whole-scene occupancy cost on some GPUs - only used when explicitly enabled
+		shadowConstants.rayQueryMaterials = (bRayShadowsActive && rayShadowsPointLightsEnabled) ? 1 : 0;
 
 		// Preserve existing shadowFilterSize
 
@@ -212,6 +228,93 @@ ShadowMode pie_getShadowMode()
 	return shadowMode;
 }
 
+optional<bool> pie_supportsRayShadows()
+{
+	if (!gfx_api::context::isInitialized())
+	{
+		// can't determine support yet
+		return nullopt;
+	}
+	return gfx_api::context::get().supportsRayTracedShadows() && pie_supportsShadowMapping().value_or(false);
+}
+
+bool pie_setRayShadowsMode(gfx_api::ray_shadow_mode mode)
+{
+	ASSERT_OR_RETURN(false, gfx_api::context::isInitialized(), "Can't set ray shadows mode until gfx backend is initialized");
+	bool successfulChangeToInputMode = true;
+	if (mode != gfx_api::ray_shadow_mode::Off && !pie_supportsRayShadows().value_or(false))
+	{
+		// gracefully fall back to the regular shadow-mapping path
+		mode = gfx_api::ray_shadow_mode::Off;
+		successfulChangeToInputMode = false;
+	}
+	if (!gfx_api::context::get().rayShadows_setMode(mode))
+	{
+		// backend could not enable the requested mode (e.g. required shaders unavailable)
+		gfx_api::context::get().rayShadows_setMode(gfx_api::ray_shadow_mode::Off);
+		successfulChangeToInputMode = false;
+	}
+	refreshShadowShaders();
+	return successfulChangeToInputMode;
+}
+
+gfx_api::ray_shadow_mode pie_getRayShadowsMode()
+{
+	if (!gfx_api::context::isInitialized())
+	{
+		return gfx_api::ray_shadow_mode::Off;
+	}
+	return gfx_api::context::get().rayShadows_getMode();
+}
+
+bool pie_rayShadowsActive()
+{
+	if (!gfx_api::context::isInitialized())
+	{
+		return false;
+	}
+	return isRayShadowsActive();
+}
+
+void pie_setRayShadowsEffects(bool aoEnabled, bool pointLightShadowsEnabled)
+{
+	if (rayShadowsAOEnabled == aoEnabled && rayShadowsPointLightsEnabled == pointLightShadowsEnabled)
+	{
+		return;
+	}
+	rayShadowsAOEnabled = aoEnabled;
+	rayShadowsPointLightsEnabled = pointLightShadowsEnabled;
+	refreshShadowShaders();
+}
+
+bool pie_getRayShadowsAOEnabled()
+{
+	return rayShadowsAOEnabled;
+}
+
+bool pie_getRayShadowsPointLightsEnabled()
+{
+	return rayShadowsPointLightsEnabled;
+}
+
+void pie_setRayShadowsDebugMode(uint32_t mode)
+{
+	if (mode != 0 && mode != 2 && mode != 3)
+	{
+		debug(LOG_ERROR, "Invalid ray shadows debug mode: %" PRIu32, mode);
+		return;
+	}
+	if (rayShadowsDebugMode == mode)
+	{
+		return;
+	}
+	rayShadowsDebugMode = mode;
+	if (gfx_api::context::isInitialized())
+	{
+		refreshShadowShaders();
+	}
+}
+
 bool pie_setShadowCascades(uint32_t newValue)
 {
 	if (newValue == 0 || newValue > WZ_MAX_SHADOW_CASCADES)
@@ -286,6 +389,34 @@ static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
 		currentSize = size;
 	}
 	return pZeroedVertexBuffer;
+}
+
+static gfx_api::texture* pWhiteFallbackTexture = nullptr;
+
+static gfx_api::texture* getWhiteFallbackTexture()
+{
+	if (!pWhiteFallbackTexture)
+	{
+		pWhiteFallbackTexture = gfx_api::context::get().create_texture(1, 1, 1, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, "<white fallback texture>");
+		iV_Image whiteImage;
+		whiteImage.allocate(1, 1, 4, true);
+		memset(whiteImage.bmp_w(), 255, 4);
+		pWhiteFallbackTexture->upload(0, whiteImage);
+	}
+	return pWhiteFallbackTexture;
+}
+
+gfx_api::abstract_texture* pie_GetRayShadowMaskTexture()
+{
+	if (pie_rayShadowsActive())
+	{
+		auto* mask = gfx_api::context::get().rayShadows_getMaskTexture();
+		if (mask)
+		{
+			return mask;
+		}
+	}
+	return getWhiteFallbackTexture();
 }
 
 void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix)
@@ -1293,6 +1424,11 @@ void pie_CleanUp()
 		delete pZeroedVertexBuffer;
 		pZeroedVertexBuffer = nullptr;
 	}
+	if (pWhiteFallbackTexture)
+	{
+		delete pWhiteFallbackTexture;
+		pWhiteFallbackTexture = nullptr;
+	}
 }
 
 bool pie_Draw3DShape(const iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelMatrix, const glm::mat4 &viewMatrix, float stretchDepth, bool onlySingleLevel)
@@ -1435,6 +1571,36 @@ void pie_DrawAllMeshes(uint64_t currentGameFrame, const glm::mat4 &projectionMat
 	instancedMeshRenderer.DrawAll(currentGameFrame, projectionMatrix, viewMatrix, cameraPos, shadowMVPMatrix, drawParts, depthPass);
 }
 
+static void registerShapeGeometryForRayShadows(const iIMDShape* shape, int32_t variant, float stretch)
+{
+	std::vector<float> positions;
+	positions.reserve(shape->points.size() * 3);
+	for (const auto& p : shape->points)
+	{
+		float y = p.y;
+		if (stretch > 0.f && y <= 0.f)
+		{
+			y -= stretch;
+		}
+		positions.push_back(p.x);
+		positions.push_back(y);
+		positions.push_back(p.z);
+	}
+	std::vector<uint32_t> indices;
+	indices.reserve(shape->polys.size() * 3);
+	for (const auto& poly : shape->polys)
+	{
+		indices.push_back(poly.pindex[0]);
+		indices.push_back(poly.pindex[1]);
+		indices.push_back(poly.pindex[2]);
+	}
+	if (positions.empty() || indices.empty())
+	{
+		return;
+	}
+	gfx_api::context::get().rayShadows_registerMeshGeometry(shape, variant, positions.data(), shape->points.size(), indices.data(), indices.size());
+}
+
 bool InstancedMeshRenderer::FinalizeInstances()
 {
 	if (!useInstancedRendering)
@@ -1445,6 +1611,12 @@ bool InstancedMeshRenderer::FinalizeInstances()
 
 	instancesData.clear();
 	finalizedDrawCalls.clear();
+
+	const bool bRayShadowsActive = pie_rayShadowsActive();
+	if (bRayShadowsActive)
+	{
+		gfx_api::context::get().rayShadows_beginFrame();
+	}
 
 	if (instancesCount + translucentInstancesCount + additiveInstancesCount == 0)
 	{
@@ -1462,6 +1634,25 @@ bool InstancedMeshRenderer::FinalizeInstances()
 			instancesData.push_back(GenerateInstanceData(instance.frame, instance.colour, instance.teamcolour, instance.flag, instance.flag_data, instance.modelMatrix, instance.stretch));
 		}
 		finalizedDrawCalls.emplace_back(mesh.first, meshInstances.size(), startingIdxInInstancesBuffer);
+
+		// mirror the shadow-map caster set into the ray-tracing acceleration structure instance list
+		if (bRayShadowsActive && (mesh.first.pieFlag & (pie_SHADOW | pie_STATIC_SHADOW)))
+		{
+			auto& ctx = gfx_api::context::get();
+			const iIMDShape* shape = mesh.first.shape;
+			for (const auto& instance : meshInstances)
+			{
+				// structure "stretch" (positive values pull y<=0 vertices down in the vertex
+				// shader) is baked into per-variant BLAS geometry; negative values are metadata
+				// for droids and cause no deformation
+				const int32_t variant = (instance.stretch > 0.f) ? static_cast<int32_t>(lroundf(instance.stretch)) : 0;
+				if (!ctx.rayShadows_hasMeshBLAS(shape, variant))
+				{
+					registerShapeGeometryForRayShadows(shape, variant, (variant > 0) ? instance.stretch : 0.f);
+				}
+				ctx.rayShadows_addInstance(shape, variant, instance.modelMatrix);
+			}
+		}
 	}
 
 	startIdxTranslucentDrawCalls = finalizedDrawCalls.size();
@@ -1584,24 +1775,25 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 		std::make_tuple(shape->buffers[VBO_TEXCOORD], 0),
 		std::make_tuple(pTangentBuffer, 0),
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
-	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getDepthTexture(), lightmapTexture);
+	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getDepthTexture(), lightmapTexture, pie_GetRayShadowMaskTexture());
 
 	Draw3DInstancedPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 }
 
-static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
+template<typename DepthPSO>
+static void drawInstanced3dShapeDepthOnlyT(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count)
 {
 	if (pieFlag & pie_NODEPTHWRITE)
 	{
 		return;
 	}
 
-	gfx_api::Draw3DShapeDepthOnly_Instanced::get().bind();
+	DepthPSO::get().bind();
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
-	globalsOnce.perform_once<gfx_api::Draw3DShapeDepthOnly_Instanced>([&globalUniforms]{
+	globalsOnce.perform_once<DepthPSO>([&globalUniforms]{
 		gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms depthGlobals = {globalUniforms.ProjectionMatrix, globalUniforms.ViewMatrix};
-		gfx_api::Draw3DShapeDepthOnly_Instanced::get().set_uniforms_at(0, depthGlobals);
+		DepthPSO::get().set_uniforms_at(0, depthGlobals);
 	});
 
 //	gfx_api::Draw3DShapeDepthOnly_Instanced::get().set_uniforms_at(1, meshUniforms);
@@ -1613,8 +1805,22 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
 //	gfx_api::Draw3DShapeDepthOnly_Instanced::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 
-	gfx_api::Draw3DShapeDepthOnly_Instanced::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
+	DepthPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+}
+
+static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, const iIMDShape * shape, int pieFlag, gfx_api::buffer* instanceDataBuffer, size_t instanceBufferOffset, size_t instance_count, bool cameraDepthPass)
+{
+	if (cameraDepthPass)
+	{
+		// camera-visible surface depth (for ray-traced shadow reconstruction)
+		drawInstanced3dShapeDepthOnlyT<gfx_api::Draw3DShapeCameraDepth_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
+	else
+	{
+		// shadow-map depth (intentionally rasterizes the far face set)
+		drawInstanced3dShapeDepthOnlyT<gfx_api::Draw3DShapeDepthOnly_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+	}
 }
 
 template<SHADER_MODE shader, typename AdditivePSO, typename AdditiveNoDepthWRTPSO, typename AlphaPSO, typename AlphaNoDepthWRTPSO, typename PremultipliedPSO, typename PremultipliedNoDepthWRTPSO, typename OpaquePSO>
@@ -1706,7 +1912,10 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 
 	if (depthPass)
 	{
-		drawInstanced3dShapeDepthOnly(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count);
+		// when ray-traced shadows are active the cascade passes are skipped entirely, so any
+		// depth pass is the RT camera prepass (which needs camera-visible faces, not the
+		// shadow-map far-face trick)
+		drawInstanced3dShapeDepthOnly(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count, isRayShadowsActive());
 	}
 	else if (light)
 	{

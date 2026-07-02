@@ -187,6 +187,13 @@ void war_setShadowMapResolution(uint32_t resolution);
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
+uint32_t war_getRayShadows();
+void war_setRayShadows(uint32_t mode);
+bool war_getRayShadowsAO();
+void war_setRayShadowsAO(bool enabled);
+bool war_getRayShadowsPointLights();
+void war_setRayShadowsPointLights(bool enabled);
+
 bool war_getGroupsMenuEnabled();
 void war_setGroupsMenuEnabled(bool enabled);
 uint8_t war_getOptionsButtonVisibility();

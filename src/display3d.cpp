@@ -1341,9 +1341,10 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 	// Calculate shadow mapping cascades
 	glm::vec3 lightInvDir = getTheSun();
+	const bool bRayShadowsActive = pie_rayShadowsActive();
 	size_t numShadowCascades = std::min<size_t>(gfx_api::context::get().numDepthPasses(), WZ_MAX_SHADOW_CASCADES);
 	std::vector<Cascade> shadowCascades;
-	if (currShadowMode == ShadowMode::Shadow_Mapping)
+	if (currShadowMode == ShadowMode::Shadow_Mapping && !bRayShadowsActive)
 	{
 		calculateShadowCascades(player, distance, baseViewMatrix, lightInvDir, numShadowCascades, shadowCascades);
 	}
@@ -1499,7 +1500,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 		shadowCascadesInfo.shadowCascadeSplit[i] = shadowCascades[i].splitDepth;
 	}
 
-	if (currShadowMode == ShadowMode::Shadow_Mapping)
+	if (currShadowMode == ShadowMode::Shadow_Mapping && !bRayShadowsActive)
 	{
 		WZ_PROFILE_SCOPE(ShadowMapping);
 		for (size_t i = 0; i < numShadowCascades; ++i)
@@ -1512,6 +1513,31 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, cameraPos, shadowCascadesInfo, true);
 			gfx_api::context::get().endCurrentDepthPass();
 		}
+	}
+
+	if (bRayShadowsActive)
+	{
+		WZ_PROFILE_SCOPE(RayShadows);
+		// ray-traced sun shadows: camera depth prepass (reusing the depth-only PSOs with camera
+		// matrices), then the ray-query trace + blur passes producing the screen-space mask
+		if (bDrawTerrainShadows)
+		{
+			gfx_api::context::get().rayShadows_addTerrainInstance();
+		}
+		gfx_api::context::get().rayShadows_beginDepthPass();
+		drawTerrainDepthOnly(perspectiveViewMatrix);
+		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, cameraPos, shadowCascadesInfo, true);
+		gfx_api::ray_shadow_frame_params rayShadowParams;
+		rayShadowParams.inverseProjectionViewMatrix = glm::inverse(perspectiveViewMatrix);
+		// The raster lighting's toward-the-sun direction is -getTheSun():
+		// tcmask_instanced.vert computes lightDir = -normalize(inverse(ViewMatrix) * (ViewMatrix * getTheSun()))
+		rayShadowParams.sunDirectionWorld = glm::vec4(glm::normalize(-getTheSun()), 0.f);
+		rayShadowParams.cameraPositionWorld = glm::vec4(cameraPos, 0.f);
+		if (!pie_getRayShadowsAOEnabled())
+		{
+			rayShadowParams.aoRayCount = 0;
+		}
+		gfx_api::context::get().rayShadows_traceAndFilter(rayShadowParams);
 	}
 	// start main render pass
 

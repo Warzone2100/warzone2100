@@ -103,6 +103,11 @@ namespace gfx_api
 	};
 }
 
+// Whether the Vulkan headers in use support the extensions needed for optional ray-traced shadows
+#if defined(VK_KHR_acceleration_structure) && defined(VK_KHR_ray_query) && defined(VK_KHR_deferred_host_operations)
+#define WZ_VK_RAY_QUERY_POSSIBLE 1
+#endif
+
 namespace WZ_vk {
 #if VK_HEADER_VERSION >= 301
 	using DispatchLoaderDynamic = vk::detail::DispatchLoaderDynamic;
@@ -199,6 +204,7 @@ private:
 struct VkRoot; // forward-declare
 struct VkPSO; // forward-declare
 struct buffering_mechanism;
+struct VkRayShadowBackend; // forward-declare (gfx_api_vk_rt.h)
 
 struct perFrameResources_t
 {
@@ -246,6 +252,9 @@ struct perFrameResources_t
 	std::vector<VmaAllocation> vmamemory_to_free;
 	std::vector<VkPSO*> pso_to_delete;
 	std::vector<vk::Framebuffer> fbo_to_delete;
+#if defined(VK_KHR_acceleration_structure)
+	std::vector<vk::AccelerationStructureKHR> as_to_delete;
+#endif
 
 	BlockBufferAllocator stagingBufferAllocator;
 	BlockBufferAllocator streamedVertexBufferAllocator;
@@ -379,6 +388,7 @@ struct VkPSO final
 	std::shared_ptr<VkhRenderPassCompat> renderpass_compat;
 	bool hasSpecializationConstant_ShadowConstants = false;
 	bool hasSpecializationConstant_PointLightConstants = false;
+	bool usesRayQueryTLAS = false; // pipeline layout includes the TLAS descriptor set (at textures_first_set + 1)
 
 private:
 	// Read shader into text buffer
@@ -609,6 +619,8 @@ struct SwapChainSupportDetails
 
 struct VkRoot final : gfx_api::context
 {
+	friend struct VkRayShadowBackend;
+
 	std::unique_ptr<gfx_api::backend_Vulkan_Impl> backend_impl;
 	VkhInfo debugInfo;
 	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
@@ -649,6 +661,13 @@ struct VkRoot final : gfx_api::context
 	vk::Queue presentQueue;
 	bool queueSupportsTimestamps = false;
 
+	// ray-traced shadows (VK_KHR_ray_query) support
+	bool rayQuerySupported = false;
+	std::unique_ptr<VkRayShadowBackend> rayShadowBackend;
+	// descriptor set layout for the TLAS set appended to ray-query material pipelines
+	// (owned by the ray shadow backend; set/cleared with its pipelines)
+	vk::DescriptorSetLayout materialTlasSetLayout;
+
 	// allocator
 	VmaAllocator allocator = VK_NULL_HANDLE;
 
@@ -659,6 +678,24 @@ struct VkRoot final : gfx_api::context
 	vk::SwapchainKHR swapchain;
 	uint32_t currentSwapchainIndex = 0;
 	std::vector<vk::ImageView> swapchainImageView;
+	std::vector<vk::Image> swapchainImages;
+	bool swapchainSupportsScreenshotCopy = false;
+
+	// screenshot readback support
+	struct PendingScreenshotReadback
+	{
+		vk::Buffer buffer;
+		VmaAllocation allocation = VK_NULL_HANDLE;
+		void* pMapped = nullptr;
+		uint32_t width = 0;
+		uint32_t height = 0;
+		vk::Format format = vk::Format::eUndefined;
+		std::function<void (std::unique_ptr<iV_Image>)> callback;
+		size_t frameIdx = 0;
+		bool submitted = true;
+	};
+	std::vector<PendingScreenshotReadback> pendingScreenshots;
+	std::function<void (std::unique_ptr<iV_Image>)> saveScreenshotCallback;
 
 	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1; // msaaSamples used for scene
 	vk::SampleCountFlagBits msaaSamplesSwapchain = vk::SampleCountFlagBits::e1; // msaaSamples used for swapchain assets (should generally be 1)
@@ -831,6 +868,23 @@ public:
 	virtual void endSceneRenderPass() override;
 	virtual gfx_api::abstract_texture* getSceneTexture() override;
 
+	// ray-traced shadows (implemented in gfx_api_vk_rt.cpp)
+	virtual bool supportsRayTracedShadows() const override;
+	virtual bool rayShadows_setMode(gfx_api::ray_shadow_mode mode) override;
+	virtual gfx_api::ray_shadow_mode rayShadows_getMode() const override;
+	virtual void rayShadows_setTerrainGeometry(const float* vertices, size_t vertexCount, const uint32_t* indices, size_t indexCount) override;
+	virtual void rayShadows_updateTerrainVertices(size_t startVertex, const float* vertices, size_t vertexCount) override;
+	virtual void rayShadows_clearTerrainGeometry() override;
+	virtual bool rayShadows_hasMeshBLAS(const void* meshKey, int32_t variant) override;
+	virtual void rayShadows_registerMeshGeometry(const void* meshKey, int32_t variant, const float* vertices, size_t vertexCount, const uint32_t* indices, size_t indexCount) override;
+	virtual void rayShadows_invalidateMesh(const void* meshKey) override;
+	virtual void rayShadows_beginFrame() override;
+	virtual void rayShadows_addInstance(const void* meshKey, int32_t variant, const glm::mat4& worldTransform) override;
+	virtual void rayShadows_addTerrainInstance() override;
+	virtual void rayShadows_beginDepthPass() override;
+	virtual void rayShadows_traceAndFilter(const gfx_api::ray_shadow_frame_params& params) override;
+	virtual gfx_api::abstract_texture* rayShadows_getMaskTexture() override;
+
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;
@@ -893,6 +947,9 @@ private:
 	std::string calculateFormattedRendererInfoString() const;
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
 	const RenderPassDetails& currentRenderPass();
+	bool recordScreenshotReadback(); // records a swapchain->buffer copy into the default cmd buffer
+	void processPendingScreenshots(); // delivers readbacks whose frame fence has been waited
+	void discardPendingScreenshots(); // fails + frees all pending readbacks
 	RenderPassDetails& defaultRenderpass() { return renderPasses[DEFAULT_RENDER_PASS_ID]; }
 	bool endRenderPass_RecreateSwapchain(const vk::Result& reason);
 private:

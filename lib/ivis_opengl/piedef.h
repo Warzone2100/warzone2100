@@ -78,4 +78,23 @@ optional<bool> pie_supportsShadowMapping();
 bool pie_setShadowMapResolution(uint32_t resolution);
 uint32_t pie_getShadowMapResolution();
 
+// Ray-traced (ray query) sun shadows - requires backend support (currently Vulkan-only)
+namespace gfx_api
+{
+	enum class ray_shadow_mode : uint32_t;
+	struct abstract_texture;
+}
+optional<bool> pie_supportsRayShadows();
+bool pie_setRayShadowsMode(gfx_api::ray_shadow_mode mode);
+gfx_api::ray_shadow_mode pie_getRayShadowsMode();
+bool pie_rayShadowsActive();
+// Individual ray-traced effect toggles (applied on top of the master mode)
+void pie_setRayShadowsEffects(bool aoEnabled, bool pointLightShadowsEnabled);
+bool pie_getRayShadowsAOEnabled();
+bool pie_getRayShadowsPointLightsEnabled();
+// Debug visualization: 0 = off, 2 = raw sun-shadow channel, 3 = raw AO channel
+void pie_setRayShadowsDebugMode(uint32_t mode);
+// Returns the ray-traced shadow visibility mask when active, else a 1x1 white fallback texture
+gfx_api::abstract_texture* pie_GetRayShadowMaskTexture();
+
 #endif // _piedef_h

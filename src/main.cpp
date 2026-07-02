@@ -2158,6 +2158,12 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
+	if (war_getRayShadows() != 0)
+	{
+		// apply persisted ray-traced shadows settings (gracefully falls back to off when unsupported)
+		pie_setRayShadowsEffects(war_getRayShadowsAO(), war_getRayShadowsPointLights());
+		pie_setRayShadowsMode(static_cast<gfx_api::ray_shadow_mode>(war_getRayShadows()));
+	}
 	if (!screenInitialise())
 	{
 		return EXIT_FAILURE;
