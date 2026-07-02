@@ -195,6 +195,11 @@ const char *version_getLatestTag()
 	return VCS_MOST_RECENT_TAGGED_VERSION;
 }
 
+const char *version_getVcsFullHash()
+{
+	return VCS_FULL_HASH;
+}
+
 // Should follow the form:
 // - warzone2100@TAG_NAME (for tagged builds)
 // - warzone2100@FULL_COMMIT_HASH (for other builds)

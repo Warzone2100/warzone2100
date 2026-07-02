@@ -37,6 +37,7 @@
 #include "display3d.h"
 #include "frontend.h"
 #include "gamestate_serialize.h"
+#include "gamestate_savegame.h"
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
@@ -652,6 +653,14 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 
 		case CLI_GAMESTATE_SELFTEST:
 			if (!gamestate::runGameStateSelfTest())
+			{
+				exit(EXIT_FAILURE);
+			}
+			if (!gamestate::savegame::runSavegameHeaderSelfTest())
+			{
+				exit(EXIT_FAILURE);
+			}
+			if (!gamestate::savegame::runSavegameContainerSelfTest())
 			{
 				exit(EXIT_FAILURE);
 			}

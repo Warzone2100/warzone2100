@@ -79,6 +79,7 @@ struct WARZONE_GLOBALS
 	int autoDesyncKickSeconds = 10;
 	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
+	bool devForceOldSavegameLoad = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
 	uint32_t MPinactivityMinutes = 5;
@@ -555,6 +556,16 @@ bool war_getDisableReplayRecording()
 void war_setDisableReplayRecording(bool disable)
 {
 	warGlobs.disableReplayRecording = disable;
+}
+
+bool war_getDevForceOldSavegameLoad()
+{
+	return warGlobs.devForceOldSavegameLoad;
+}
+
+void war_setDevForceOldSavegameLoad(bool force)
+{
+	warGlobs.devForceOldSavegameLoad = force;
 }
 
 int war_getMaxReplaysSaved()

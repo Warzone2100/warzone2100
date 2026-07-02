@@ -152,6 +152,9 @@ int war_getAutoNotReadyKickSeconds();
 void war_setAutoNotReadyKickSeconds(int seconds);
 bool war_getDisableReplayRecording();
 void war_setDisableReplayRecording(bool disable);
+// Dev-only: force preferring the legacy folder savegame over the new GameState blob when a save has both.
+bool war_getDevForceOldSavegameLoad();
+void war_setDevForceOldSavegameLoad(bool force);
 int war_getMaxReplaysSaved();
 void war_setMaxReplaysSaved(int maxReplaysSaved);
 int war_getOldLogsLimit();

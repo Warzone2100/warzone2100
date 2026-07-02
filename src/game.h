@@ -67,6 +67,9 @@ public:
 	static GameLoadDetails makeMapPackageLoad(const std::string& mapPackageFilePath);
 	static GameLoadDetails makeLevelFileLoad(const std::string& levelFileName);
 	GameLoadDetails& setLogger(const std::shared_ptr<WzMap::LoggingProtocol>& logger);
+	// Load the level's map / display layer but skip placing the scenario's own objects (droids/structures/
+	// features). Used by the new-format cold load, whose objects all come from the GameState snapshot.
+	GameLoadDetails& setSkipObjectPlacement(bool skip);
 public:
 	std::string getMapFolderPath() const;
 	std::shared_ptr<WzMap::Map> getMap(uint32_t mapSeed) const;
@@ -76,6 +79,7 @@ private:
 public:
 	GameLoadType loadType;
 	std::string filePath;
+	bool skipObjectPlacement = false;
 private:
 	std::shared_ptr<WzMap::LoggingProtocol> m_logger;
 	mutable std::shared_ptr<WzMap::MapPackage> m_loadedPackage;
