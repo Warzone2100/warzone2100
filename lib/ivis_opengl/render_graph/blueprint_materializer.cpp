@@ -41,39 +41,22 @@ BlueprintMaterializer::BlueprintMaterializer(const RenderTopologySnapshot& snaps
 
 AttachmentDesc BlueprintMaterializer::resolveAttachment(const BlueprintAttachment& attachment) const
 {
-	switch (attachment.target)
+	ASSERT(attachment.target == BlueprintAttachment::Target::PipelineSurface,
+		"BlueprintMaterializer: only PipelineSurface attachments are supported");
+	auto& ctx = gfx_api::context::get();
+	abstract_texture* texture = ctx.getPipelineSurface(attachment.surfaceId);
+	const PipelineSurfaceMeta meta = ctx.pipelineSurfaceMeta(attachment.surfaceId);
+	const bool isDepth = meta.usage == PipelineSurfaceUsage::DepthStencil
+		|| meta.usage == PipelineSurfaceUsage::DepthOnly;
+	AttachmentDesc desc = isDepth
+		? AttachmentDesc::depth(texture, attachment.loadOp, attachment.clearValue)
+		: AttachmentDesc::color(texture, attachment.loadOp, attachment.clearValue);
+	desc.storeOp = attachment.storeOp;
+	if (attachment.arrayLayer.has_value())
 	{
-	case BlueprintAttachment::Target::PipelineSurface:
-	{
-		auto& ctx = gfx_api::context::get();
-		abstract_texture* texture = ctx.getPipelineSurface(attachment.surfaceId);
-		const PipelineSurfaceMeta meta = ctx.pipelineSurfaceMeta(attachment.surfaceId);
-		const bool isDepth = meta.usage == PipelineSurfaceUsage::DepthStencil
-			|| meta.usage == PipelineSurfaceUsage::DepthOnly;
-		AttachmentDesc desc = isDepth
-			? AttachmentDesc::depth(texture, attachment.loadOp, attachment.clearValue)
-			: AttachmentDesc::color(texture, attachment.loadOp, attachment.clearValue);
-		desc.storeOp = attachment.storeOp;
-		if (attachment.arrayLayer.has_value())
-		{
-			desc.arrayLayer = attachment.arrayLayer.value();
-		}
-		return desc;
+		desc.arrayLayer = attachment.arrayLayer.value();
 	}
-	case BlueprintAttachment::Target::TransientColor:
-	{
-		AttachmentDesc desc = AttachmentDesc::transientColor(attachment.loadOp, attachment.clearValue);
-		desc.storeOp = attachment.storeOp;
-		return desc;
-	}
-	case BlueprintAttachment::Target::TransientDepth:
-	{
-		AttachmentDesc desc = AttachmentDesc::transientDepth(attachment.loadOp, attachment.clearValue);
-		desc.storeOp = attachment.storeOp;
-		return desc;
-	}
-	}
-	return {};
+	return desc;
 }
 
 std::pair<uint32_t, uint32_t> BlueprintMaterializer::resolveViewport(const BlueprintPass& pass) const

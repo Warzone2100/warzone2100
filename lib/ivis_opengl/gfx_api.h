@@ -436,10 +436,9 @@ namespace gfx_api
 		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
 		virtual pixel_format getDepthStencilFormat() const { return pixel_format::invalid; }
 
-		// Transient offscreen render targets pooled via FrameResourceCache.
-		// releaseTransientRenderTargets() at graph reset; purgeFrameResources() after submitFrame().
-		virtual abstract_texture* acquireTransientRenderTarget(pixel_format format, uint32_t width, uint32_t height) { return nullptr; }
-		virtual void releaseTransientRenderTargets() {}
+		/// Purge unused pooled framebuffers after frame submit (FBO cache only).
+		/// `beginRenderPass()` resets FBO pool use counts; `endRenderPass()` and
+		/// `executeCompiledRenderGraph()` call this after submit.
 		virtual void purgeFrameResources() {}
 
 		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }

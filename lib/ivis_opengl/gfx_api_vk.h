@@ -629,32 +629,7 @@ struct VkSwapchainDepthSurface final : public gfx_api::abstract_texture
 	virtual ~VkSwapchainDepthSurface() override;
 	virtual void bind() override;
 	virtual bool isArray() const override { return false; }
-	virtual size_t backend_internal_value() const override;
-};
-
-/// Owned depth/stencil image for per-frame transient pool allocations.
-struct VkTransientDepthStencilImage final : public gfx_api::abstract_texture
-{
-	vk::Device dev;
-	vk::Image image = {};
-	vk::DeviceMemory memory = {};
-	/// Depth+stencil view for framebuffer attachment.
-	vk::ImageView view = {};
-	/// Depth-only view for shader sampling (descriptor sets require a single aspect).
-	vk::ImageView depthSampleView = {};
-	vk::Format imageFormat = vk::Format::eUndefined;
-	uint32_t width = 0;
-	uint32_t height = 0;
-
-#if defined(WZ_DEBUG_GFX_API_LEAKS)
-	std::string debugName;
-#endif
-
-	VkTransientDepthStencilImage(const VkRoot& root, uint32_t w, uint32_t h, vk::Format format, const std::string& filename);
-	~VkTransientDepthStencilImage() override;
-	void bind() override;
-	bool isArray() const override { return false; }
-	size_t backend_internal_value() const override;
+	virtual 	size_t backend_internal_value() const override;
 };
 
 struct QueueFamilyIndices
@@ -905,8 +880,6 @@ public:
 	virtual bool isSwapchainMSAAEnabled() const override;
 	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;
 	virtual gfx_api::pixel_format getDepthStencilFormat() const override;
-	virtual gfx_api::abstract_texture* acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height) override;
-	virtual void releaseTransientRenderTargets() override;
 	virtual void purgeFrameResources() override;
 	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
@@ -1054,7 +1027,6 @@ private:
 	std::unique_ptr<VkSwapchainMsaaColorSurface> _swapchainMsaaColorSurface;
 	std::unique_ptr<VkSwapchainDepthSurface> _swapchainDepthSurface;
 	gfx_api::PipelineSurfaceRegistry _pipelineSurfaces;
-	gfx_api::FrameResourceCache _frameResourceCache;
 	gfx_api::FramebufferResourceCache _framebufferCache;
 
 	/// Reusable `PassLayoutKey` buffer for `buildPassLayoutKey` / cache lookup at call sites.

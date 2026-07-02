@@ -40,14 +40,7 @@ namespace
 
 bool attachmentIsResolved(const AttachmentDesc& attachment)
 {
-	switch (attachment.source)
-	{
-	case AttachmentSource::Texture:
-		return attachment.texture != nullptr;
-	case AttachmentSource::Transient:
-		return true;
-	}
-	return false;
+	return attachment.texture != nullptr;
 }
 
 bool passHasResolvedAttachments(const RenderPassDesc& pass)
@@ -114,58 +107,6 @@ void tryInferPassDimensions(RenderPassDesc& pass, gfx_api::context& ctx, uint32_
 	{
 		pass.viewportSize = std::make_pair(width, height);
 	}
-}
-
-bool resolveTransientAttachment(gfx_api::context& ctx, AttachmentDesc& attachment,
-	uint32_t width, uint32_t height, pixel_format format)
-{
-	if (!attachment.isTransient())
-	{
-		return true;
-	}
-	if (attachment.texture != nullptr)
-	{
-		return true;
-	}
-
-	attachment.source = AttachmentSource::Texture;
-	attachment.texture = ctx.acquireTransientRenderTarget(format, width, height);
-	return attachment.texture != nullptr;
-}
-
-bool resolveTransientAttachments(RenderPassDesc& pass, gfx_api::context& ctx, uint32_t width, uint32_t height)
-{
-	static constexpr auto COLOR_FORMAT = pixel_format::FORMAT_RGBA8_UNORM_PACK8;
-
-	for (auto& colorAttachment : pass.colorAttachments)
-	{
-		if (!resolveTransientAttachment(ctx, colorAttachment, width, height, COLOR_FORMAT))
-		{
-			return false;
-		}
-	}
-
-	if (pass.depthAttachment.has_value() && pass.depthAttachment->isTransient())
-	{
-		const auto depthFormat = ctx.getDepthStencilFormat();
-		ASSERT_OR_RETURN(false, depthFormat != pixel_format::invalid,
-			"Transient depth attachment on pass \"%s\" requires a valid depth/stencil format",
-			pass.debugName.c_str());
-		if (!resolveTransientAttachment(ctx, pass.depthAttachment.value(), width, height, depthFormat))
-		{
-			return false;
-		}
-	}
-
-	if (pass.resolveAttachment.has_value())
-	{
-		if (!resolveTransientAttachment(ctx, pass.resolveAttachment.value(), width, height, COLOR_FORMAT))
-		{
-			return false;
-		}
-	}
-
-	return true;
 }
 
 void setDefaultStoreOpIfUnset(AttachmentDesc& attachment, AttachmentStoreOp storeOp)
@@ -268,12 +209,6 @@ bool resolvePassDescription(RenderPassDesc& pass)
 		"Pass \"%s\" requires at least one resolved color or depth attachment", pass.debugName.c_str());
 	ASSERT_OR_RETURN(false, width > 0 && height > 0,
 		"Pass \"%s\" requires viewportSize or inferrable attachment dimensions", pass.debugName.c_str());
-
-	if (!resolveTransientAttachments(pass, ctx, width, height))
-	{
-		ASSERT(false, "Failed to resolve transient attachments for pass \"%s\"", pass.debugName.c_str());
-		return false;
-	}
 
 	applyDefaultAttachmentStoreOps(pass);
 
@@ -593,38 +528,6 @@ bool passNeedsMsaaResolve(const RenderPassDesc& pass)
 	return gfx_api::context::get().isMultisampledColorAttachment(pass.colorAttachments[0].texture);
 }
 
-bool passHasTransientAttachment(const RenderPassDesc& pass)
-{
-	for (const AttachmentDesc& attachment : pass.colorAttachments)
-	{
-		if (attachment.isTransient())
-		{
-			return true;
-		}
-	}
-	if (pass.depthAttachment.has_value() && pass.depthAttachment->isTransient())
-	{
-		return true;
-	}
-	if (pass.resolveAttachment.has_value() && pass.resolveAttachment->isTransient())
-	{
-		return true;
-	}
-	return false;
-}
-
-bool passesHaveTransientAttachments(const std::vector<RenderPassDesc>& passes)
-{
-	for (const RenderPassDesc& pass : passes)
-	{
-		if (passHasTransientAttachment(pass))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 bool attachmentDepthHasStencil(const AttachmentDesc& attachment)
 {
 	if (attachment.texture == nullptr)
@@ -637,8 +540,7 @@ bool attachmentDepthHasStencil(const AttachmentDesc& attachment)
 	{
 		return ctx.pipelineSurfaceMeta(surfaceId.value()).usage == PipelineSurfaceUsage::DepthStencil;
 	}
-	// Transient depth attachments use D24S8.
-	return true;
+	return false;
 }
 
 std::optional<PassOutputView> getPassOutputAttachment(

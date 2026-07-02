@@ -67,7 +67,7 @@ struct RecordFuncTable
 ///
 /// Describes *what kind* of attachment to bind, not a resolved `AttachmentDesc`.
 /// `BlueprintMaterializer` turns each slot into a concrete texture using the current
-/// `RenderTopologySnapshot` (pipeline surfaces) or transient pool (offscreen targets).
+/// `RenderTopologySnapshot` (pipeline surfaces only).
 /// </summary>
 struct BlueprintAttachment
 {
@@ -76,14 +76,10 @@ struct BlueprintAttachment
 	{
 		/// Named surface from `PipelineSurfaceId` (scene, swapchain, shadow map, …).
 		PipelineSurface,
-		/// Per-frame pooled color target; dimensions come from the pass viewport.
-		TransientColor,
-		/// Per-frame pooled depth target; dimensions come from the pass viewport.
-		TransientDepth,
 	};
 
 	Target target = Target::PipelineSurface;
-	/// Used when `target == PipelineSurface`; ignored for transient targets.
+	/// Used when `target == PipelineSurface`.
 	PipelineSurfaceId surfaceId = PipelineSurfaceId::SceneColor;
 	AttachmentLoadOp loadOp = AttachmentLoadOp::Clear;
 	AttachmentStoreOp storeOp = AttachmentStoreOp::Store;

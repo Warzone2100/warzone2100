@@ -2609,29 +2609,6 @@ std::unique_ptr<gl_gpurendered_renderbuffer> gl_context::create_framebuffer_rend
 	return surface;
 }
 
-std::unique_ptr<gfx_api::abstract_texture> gl_context::createTransientColorRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height, const std::string& debugName)
-{
-	ASSERT(is_uncompressed_format(format), "Transient render targets require an uncompressed format");
-	const GLenum internalFormat = to_gl_internalformat(format, gles);
-	const GLenum glFormat = to_gl_format(format, gles);
-	return std::unique_ptr<gfx_api::abstract_texture>(
-		create_framebuffer_color_texture(internalFormat, glFormat, GL_UNSIGNED_BYTE, width, height, debugName));
-}
-
-std::unique_ptr<gfx_api::abstract_texture> gl_context::createTransientDepthRenderTarget(uint32_t width, uint32_t height, const std::string& debugName)
-{
-	gl_gpurendered_texture* depthTex = create_gpurendered_texture(
-		GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, width, height, debugName);
-	ASSERT_OR_RETURN(nullptr, depthTex != nullptr, "Failed to create transient depth texture");
-	depthTex->bind();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	depthTex->unbind();
-	return std::unique_ptr<gfx_api::abstract_texture>(depthTex);
-}
-
 gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
 {
 	return new gl_buffer(usage, hint);
@@ -4541,6 +4518,7 @@ bool gl_context::openLegacySwapchainPass(gfx_api::AttachmentLoadOp colorLoad, gf
 
 void gl_context::beginRenderPass()
 {
+	_dynamicFBOCache.releaseAll();
 	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Clear, gfx_api::AttachmentLoadOp::Clear))
 	{
 		debug(LOG_ERROR, "Failed to begin legacy swapchain render pass");
@@ -4574,6 +4552,7 @@ void gl_context::endRenderPass()
 	}
 #endif
 
+	purgeFrameResources();
 	setRenderGraphExecuting(false);
 }
 
@@ -5421,7 +5400,6 @@ bool gl_context::canRecordDrawCommands() const
 
 void gl_context::shutdown()
 {
-	_frameResourceCache.clear();
 	clearDynamicFBOCache();
 
 #if !defined(WZ_STATIC_GL_BINDINGS)
@@ -5833,33 +5811,8 @@ bool gl_context::createSceneRenderpass()
 	return !encounteredError;
 }
 
-gfx_api::abstract_texture* gl_context::acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height)
-{
-	ASSERT_OR_RETURN(nullptr, width > 0 && height > 0, "Invalid transient render target dimensions");
-	ASSERT_OR_RETURN(nullptr, is_transient_render_target_format(format), "Unsupported transient render target format");
-
-	static uint32_t transientTargetId = 0;
-	const gfx_api::ImageResourceKey key = gfx_api::ImageResourceKey::color2d(format, width, height);
-	const std::string debugName = "<transient_rt_" + std::to_string(transientTargetId++) + ">";
-
-	return _frameResourceCache.acquire(key, [this, format, width, height, debugName]() {
-		if (format == gfx_api::pixel_format::FORMAT_D24_UNORM_S8)
-		{
-			return createTransientDepthRenderTarget(width, height, debugName);
-		}
-		return createTransientColorRenderTarget(format, width, height, debugName);
-	});
-}
-
-void gl_context::releaseTransientRenderTargets()
-{
-	_frameResourceCache.releaseAll();
-	_dynamicFBOCache.releaseAll();
-}
-
 void gl_context::purgeFrameResources()
 {
-	_frameResourceCache.purgeUnused();
 	_dynamicFBOCache.purgeUnused([](uint32_t fboHandle) {
 		if (fboHandle == 0)
 		{

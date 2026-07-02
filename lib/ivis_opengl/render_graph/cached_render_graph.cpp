@@ -26,7 +26,6 @@
 
 #include "gfx_api.h"
 #include "blueprint_materializer.h"
-#include "pass_resolve.h"
 #include "topology.h"
 
 #include "lib/framework/wzapp.h"
@@ -121,16 +120,7 @@ void CachedRenderGraph::execute()
 	{
 		return;
 	}
-
-	gfx_api::context& ctx = gfx_api::context::get();
-	if (passesHaveTransientAttachments(_passes))
-	{
-		ctx.executeRenderGraph(_passes);
-	}
-	else
-	{
-		ctx.executeCompiledRenderGraph(_passes, _compileResult);
-	}
+	gfx_api::context::get().executeCompiledRenderGraph(_passes, _compileResult);
 }
 
 } // namespace gfx_api

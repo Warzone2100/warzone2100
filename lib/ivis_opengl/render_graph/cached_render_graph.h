@@ -41,7 +41,7 @@ namespace gfx_api
 ///
 /// `ensureBuilt` compares `RenderTopologySnapshot::topologyHash` and `materializeHash`
 /// to avoid rebuilding blueprint vs rematerializing passes. `execute` runs the graph
-/// via `executeCompiledRenderGraph` (or `executeRenderGraph` when transients are present).
+/// via `executeCompiledRenderGraph`.
 /// </summary>
 class CachedRenderGraph
 {

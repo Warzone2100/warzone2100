@@ -385,8 +385,6 @@ struct gl_context final : public gfx_api::context
 	virtual bool isSwapchainMSAAEnabled() const override;
 	virtual bool isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const override;
 	virtual gfx_api::pixel_format getDepthStencilFormat() const override;
-	virtual gfx_api::abstract_texture* acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height) override;
-	virtual void releaseTransientRenderTargets() override;
 	virtual void purgeFrameResources() override;
 	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
@@ -437,8 +435,6 @@ private:
 	gl_gpurendered_texture* create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename);
 	std::unique_ptr<gl_gpurendered_renderbuffer> create_framebuffer_renderbuffer(GLenum internalFormat, GLsizei samples,
 		uint32_t width, uint32_t height, const std::string& filename);
-	std::unique_ptr<gfx_api::abstract_texture> createTransientColorRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height, const std::string& debugName);
-	std::unique_ptr<gfx_api::abstract_texture> createTransientDepthRenderTarget(uint32_t width, uint32_t height, const std::string& debugName);
 	bool createDefaultTextures();
 	bool createSceneRenderpass();
 	void registerSwapchainPipelineSurfaces();
@@ -516,7 +512,6 @@ private:
 	std::unique_ptr<gl_pipeline_surface_proxy> _swapchainDepthSurface;
 
 	gfx_api::PipelineSurfaceRegistry _pipelineSurfaces;
-	gfx_api::FrameResourceCache _frameResourceCache;
 	gfx_api::DynamicFBOCache _dynamicFBOCache;
 
 	GLuint _dynamicPassFBO = 0;

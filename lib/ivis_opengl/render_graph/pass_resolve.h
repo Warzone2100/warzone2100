@@ -52,8 +52,8 @@ struct PassOutputView
 };
 
 /// <summary>
-/// Materialize a `RenderPassDesc` for GPU recording: resolve attachment sources,
-/// allocate transients, and set `viewportSize` when inferrable.
+/// Materialize a `RenderPassDesc` for GPU recording: resolve attachment sources
+/// and set `viewportSize` when inferrable.
 ///
 /// Single entry point used by legacy pass factories and `compilePassGraph` (via
 /// `resolvePassDescription` before compile). Mutates `pass` in place; returns false
@@ -81,12 +81,6 @@ bool passIsDepthOnly(const RenderPassDesc& pass);
 
 /// True when `resolveAttachment` is set and the first color attachment is multisampled.
 bool passNeedsMsaaResolve(const RenderPassDesc& pass);
-
-/// True when any attachment uses `AttachmentSource::Transient`.
-bool passHasTransientAttachment(const RenderPassDesc& pass);
-
-/// True when any pass in the list has a transient attachment.
-bool passesHaveTransientAttachments(const std::vector<RenderPassDesc>& passes);
 
 /// True when resolved depth includes stencil (scene depth, not shadow map).
 bool attachmentDepthHasStencil(const AttachmentDesc& attachment);

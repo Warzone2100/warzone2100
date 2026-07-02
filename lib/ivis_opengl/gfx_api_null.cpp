@@ -488,15 +488,6 @@ void null_context::endRenderPass()
 	submitFrame();
 }
 
-gfx_api::abstract_texture* null_context::acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height)
-{
-	return nullptr;
-}
-
-void null_context::releaseTransientRenderTargets()
-{
-}
-
 void null_context::purgeFrameResources()
 {
 }

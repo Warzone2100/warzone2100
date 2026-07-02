@@ -49,7 +49,7 @@ enum class AttachmentLoadOp
 /// </summary>
 enum class AttachmentStoreOp : uint8_t
 {
-	Store,      // keep contents (shadow depth, resolve output, transient scratch)
+	Store,      // keep contents (shadow depth, resolve output)
 	DontCare,   // contents not needed after pass (MSAA intermediate color)
 	Resolve,    // MSAA color → resolve attachment (VK subpass; GL blit target)
 	Invalidate, // tile-friendly discard (scene depth/stencil after scene pass)
@@ -81,20 +81,10 @@ struct ClearValue
 };
 
 /// <summary>
-/// Where an attachment's backing storage comes from at execute time.
-/// </summary>
-enum class AttachmentSource
-{
-	Texture,          // explicit abstract_texture* or pipeline surface
-	Transient,        // per-frame cache allocation (texture resolved at execute)
-};
-
-/// <summary>
 /// Describes a color, depth, or resolve attachment for a render pass.
 /// </summary>
 struct AttachmentDesc
 {
-	AttachmentSource source = AttachmentSource::Texture;
 	abstract_texture* texture = nullptr;
 	AttachmentLoadOp loadOp = AttachmentLoadOp::Clear;
 	/// When unset, resolved during pass resolution.
@@ -108,16 +98,10 @@ struct AttachmentDesc
 		return loadOp == AttachmentLoadOp::Clear;
 	}
 
-	bool isTransient() const
-	{
-		return source == AttachmentSource::Transient;
-	}
-
 	static AttachmentDesc color(abstract_texture* tex, AttachmentLoadOp op = AttachmentLoadOp::Clear,
 		ClearValue clear = ClearValue::colorClear())
 	{
 		AttachmentDesc desc;
-		desc.source = AttachmentSource::Texture;
 		desc.texture = tex;
 		desc.loadOp = op;
 		desc.clearValue = clear;
@@ -128,30 +112,7 @@ struct AttachmentDesc
 		ClearValue clear = ClearValue::depthStencilClear())
 	{
 		AttachmentDesc desc;
-		desc.source = AttachmentSource::Texture;
 		desc.texture = tex;
-		desc.loadOp = op;
-		desc.clearValue = clear;
-		return desc;
-	}
-
-	/// Per-frame pooled color target; texture is filled in during pass resolution.
-	static AttachmentDesc transientColor(AttachmentLoadOp op = AttachmentLoadOp::Clear,
-		ClearValue clear = ClearValue::colorClear())
-	{
-		AttachmentDesc desc;
-		desc.source = AttachmentSource::Transient;
-		desc.loadOp = op;
-		desc.clearValue = clear;
-		return desc;
-	}
-
-	/// Per-frame pooled depth/stencil target; texture is filled in during pass resolution.
-	static AttachmentDesc transientDepth(AttachmentLoadOp op = AttachmentLoadOp::Clear,
-		ClearValue clear = ClearValue::depthStencilClear())
-	{
-		AttachmentDesc desc;
-		desc.source = AttachmentSource::Transient;
 		desc.loadOp = op;
 		desc.clearValue = clear;
 		return desc;

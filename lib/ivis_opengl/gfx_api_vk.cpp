@@ -215,7 +215,6 @@ enum class VulkanBackendInternalTextureType : size_t
 	DepthMap,
 	RenderedImage,
 	AttachmentImage,
-	TransientDepthStencil,
 	SwapchainColorSurface,
 	SwapchainMsaaColorSurface,
 	SwapchainDepthSurface,
@@ -2996,66 +2995,6 @@ static void createDepthStencilImage(const vk::PhysicalDevice& physicalDevice, co
 										 vkDynLoader, loggingKey);
 }
 
-// MARK: VkTransientDepthStencilImage
-
-VkTransientDepthStencilImage::VkTransientDepthStencilImage(const VkRoot& root, uint32_t w, uint32_t h, vk::Format format, const std::string& filename)
-	: dev(root.dev)
-	, imageFormat(format)
-	, width(w)
-	, height(h)
-{
-#if defined(WZ_DEBUG_GFX_API_LEAKS)
-	debugName = filename;
-#endif
-
-	createDepthStencilImage(root.physicalDevice, root.memprops, root.dev,
-		vk::Extent2D(w, h), vk::SampleCountFlagBits::e1, format,
-		image, memory, view, root.vkDynLoader, filename.c_str(), true);
-
-	const auto depthSampleViewCreateInfo = vk::ImageViewCreateInfo()
-		.setImage(image)
-		.setViewType(vk::ImageViewType::e2D)
-		.setFormat(format)
-		.setComponents(vk::ComponentMapping())
-		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eDepth, 0, 1, 0, 1));
-	depthSampleView = dev.createImageView(depthSampleViewCreateInfo, nullptr, root.vkDynLoader);
-}
-
-VkTransientDepthStencilImage::~VkTransientDepthStencilImage()
-{
-	if (buffering_mechanism::isInitialized())
-	{
-		auto& frameResources = buffering_mechanism::get_current_resources();
-		if (view)
-		{
-			frameResources.image_view_to_delete.emplace_back(view);
-			view = vk::ImageView();
-		}
-		if (depthSampleView)
-		{
-			frameResources.image_view_to_delete.emplace_back(depthSampleView);
-			depthSampleView = vk::ImageView();
-		}
-		if (image)
-		{
-			frameResources.image_to_delete.emplace_back(image);
-			image = vk::Image();
-		}
-		if (memory)
-		{
-			frameResources.devicememory_to_free.emplace_back(memory);
-			memory = vk::DeviceMemory();
-		}
-	}
-}
-
-void VkTransientDepthStencilImage::bind() { }
-
-size_t VkTransientDepthStencilImage::backend_internal_value() const
-{
-	return static_cast<size_t>(VulkanBackendInternalTextureType::TransientDepthStencil);
-}
-
 void VkRoot::destroySwapchainPipelineSurfaces()
 {
 	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainColor);
@@ -3798,12 +3737,6 @@ bool VkRoot::canRecordDrawCommands() const
 
 void VkRoot::shutdown()
 {
-	_frameResourceCache.clear([this](gfx_api::abstract_texture* texture) {
-		if (texture != nullptr)
-		{
-			_frameLayoutTracker.erase(texture);
-		}
-	});
 	clearFramebufferCache();
 
 	destroySwapchainAndSwapchainSpecificStuff(true);
@@ -5706,11 +5639,6 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 					ASSERT(target_type == gfx_api::pixel_format_target::texture_2d, "Unexpected target type: (%d)", static_cast<int>(target_type));
 					imageView = static_cast<VkAttachmentImage*>(texture)->view;
 					break;
-				case VulkanBackendInternalTextureType::TransientDepthStencil:
-					ASSERT(target_type == gfx_api::pixel_format_target::texture_2d, "Unexpected target type: (%d)", static_cast<int>(target_type));
-					imageView = static_cast<VkTransientDepthStencilImage*>(texture)->depthSampleView;
-					imageLayout = vk::ImageLayout::eDepthStencilReadOnlyOptimal;
-					break;
 				case VulkanBackendInternalTextureType::SwapchainColorSurface:
 				case VulkanBackendInternalTextureType::SwapchainMsaaColorSurface:
 				case VulkanBackendInternalTextureType::SwapchainDepthSurface:
@@ -5985,46 +5913,8 @@ gfx_api::pixel_format VkRoot::getDepthStencilFormat() const
 	return gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
 }
 
-gfx_api::abstract_texture* VkRoot::acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height)
-{
-	ASSERT_OR_RETURN(nullptr, width > 0 && height > 0, "Invalid transient render target dimensions");
-	ASSERT_OR_RETURN(nullptr, is_transient_render_target_format(format), "Unsupported transient render target format");
-
-	static uint32_t transientTargetId = 0;
-	const gfx_api::ImageResourceKey key = gfx_api::ImageResourceKey::color2d(format, width, height);
-	const std::string debugName = "<transient_rt_" + std::to_string(transientTargetId++) + ">";
-
-	gfx_api::abstract_texture* texture = _frameResourceCache.acquire(key, [this, format, width, height, debugName]() -> std::unique_ptr<gfx_api::abstract_texture> {
-		if (format == gfx_api::pixel_format::FORMAT_D24_UNORM_S8)
-		{
-			return std::unique_ptr<gfx_api::abstract_texture>(
-				new VkTransientDepthStencilImage(*this, width, height, depthBufferFormat, debugName));
-		}
-		const vk::Format vkFormat = get_format(format);
-		return std::unique_ptr<gfx_api::abstract_texture>(new VkRenderedImage(*this, width, height, vkFormat, debugName));
-	});
-	if (texture != nullptr)
-	{
-		setImageLayout(texture, vk::ImageLayout::eUndefined);
-	}
-	return texture;
-}
-
-void VkRoot::releaseTransientRenderTargets()
-{
-	_frameResourceCache.releaseAll();
-	_framebufferCache.releaseAll();
-	resetImageLayoutTracker();
-}
-
 void VkRoot::purgeFrameResources()
 {
-	_frameResourceCache.purgeUnused([this](gfx_api::abstract_texture* texture) {
-		if (texture != nullptr)
-		{
-			_frameLayoutTracker.erase(texture);
-		}
-	});
 	_framebufferCache.purgeUnused([this](uint64_t framebufferHandle) {
 		deferDestroyFramebuffer(vk::Framebuffer(gfx_api::vk::decodeHandle<VkFramebuffer>(framebufferHandle)));
 	});
@@ -6076,10 +5966,6 @@ vk::Image VkRoot::getVkImageHandle(gfx_api::abstract_texture* texture) const
 	{
 		return attachmentImage->image;
 	}
-	if (auto* transientDepth = dynamic_cast<VkTransientDepthStencilImage*>(texture))
-	{
-		return transientDepth->image;
-	}
 	if (auto* vkTexture = dynamic_cast<VkTexture*>(texture))
 	{
 		return vkTexture->object;
@@ -6103,12 +5989,6 @@ vk::ImageAspectFlags VkRoot::getVkImageAspect(gfx_api::abstract_texture* texture
 	if (dynamic_cast<VkDepthMapImage*>(texture) != nullptr)
 	{
 		return vk::ImageAspectFlagBits::eDepth;
-	}
-	if (dynamic_cast<VkTransientDepthStencilImage*>(texture) != nullptr)
-	{
-		// Combined D/S images require both aspects in pipeline barriers unless
-		// separateDepthStencilLayouts is enabled. Shader sampling uses depthSampleView instead.
-		return vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil;
 	}
 	if (auto* attachmentImage = dynamic_cast<VkAttachmentImage*>(texture))
 	{
@@ -6245,10 +6125,6 @@ vk::Format VkRoot::getAttachmentVkFormat(gfx_api::abstract_texture* texture) con
 	{
 		return swapchainDepth->imageFormat;
 	}
-	if (auto* transientDepth = dynamic_cast<VkTransientDepthStencilImage*>(texture))
-	{
-		return transientDepth->imageFormat;
-	}
 	debug(LOG_FATAL, "Unsupported attachment texture type for dynamic pass");
 	return vk::Format::eUndefined;
 }
@@ -6300,10 +6176,6 @@ vk::ImageView VkRoot::getAttachmentImageView(const gfx_api::AttachmentDesc& atta
 	if (dynamic_cast<VkSwapchainDepthSurface*>(attachment.texture) != nullptr)
 	{
 		return depthStencilView;
-	}
-	if (auto* transientDepth = dynamic_cast<VkTransientDepthStencilImage*>(attachment.texture))
-	{
-		return transientDepth->view;
 	}
 	debug(LOG_FATAL, "Unsupported attachment texture type for dynamic pass");
 	return vk::ImageView();
@@ -6398,13 +6270,6 @@ optional<std::pair<uint32_t, uint32_t>> VkRoot::getRenderTargetDimensions(gfx_ap
 		if (attachmentImage->width > 0 && attachmentImage->height > 0)
 		{
 			return std::make_pair(attachmentImage->width, attachmentImage->height);
-		}
-	}
-	if (auto* transientDepth = dynamic_cast<VkTransientDepthStencilImage*>(texture))
-	{
-		if (transientDepth->width > 0 && transientDepth->height > 0)
-		{
-			return std::make_pair(transientDepth->width, transientDepth->height);
 		}
 	}
 	if (dynamic_cast<VkSwapchainColorSurface*>(texture) != nullptr
@@ -6564,6 +6429,8 @@ void VkRoot::beginRenderPass()
 	{
 		return;
 	}
+	_framebufferCache.releaseAll();
+	resetImageLayoutTracker();
 	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Clear, gfx_api::AttachmentLoadOp::Clear))
 	{
 		debug(LOG_ERROR, "Failed to begin legacy swapchain render pass");
@@ -6584,6 +6451,7 @@ void VkRoot::endRenderPass()
 	setRenderGraphExecuting(false);
 	_legacyFrameStarted = false;
 	submitFrame();
+	purgeFrameResources();
 }
 
 void VkRoot::submitFrame()
@@ -6916,10 +6784,6 @@ void VkRoot::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passe
 			compiledPass.graphIndex, passes.size());
 
 		gfx_api::RenderPassDesc& passDesc = passes[compiledPass.graphIndex];
-		if (gfx_api::passHasTransientAttachment(passDesc))
-		{
-			continue;
-		}
 
 		ASSERT_OR_RETURN(, buildPassLayoutKey(_passLayoutScratch, passDesc, &compiledPass),
 			"Failed to build pass layout key for warm-up");

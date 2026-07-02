@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file gfx_api_frame_resource_cache.h
- * Per-frame pooled caches for transient render targets and dynamic framebuffers.
+ * Per-frame pooled caches for dynamic framebuffers/FBOs.
  */
 
 #pragma once
@@ -47,58 +47,9 @@ namespace gfx_api
 struct abstract_texture;
 
 /// <summary>
-/// Identity for pooled 2D transient images (format, dimensions, layers, samples).
-///
-/// Used by `FrameResourceCache` and built via `color2d` in backend
-/// `acquireTransientRenderTarget`. `debugName` is diagnostic only (not part of equality).
-/// </summary>
-struct ImageResourceKey
-{
-	/// Pool lookup pixel format.
-	pixel_format format = pixel_format::invalid;
-	/// Pool lookup width.
-	uint32_t width = 0;
-	/// Pool lookup height.
-	uint32_t height = 0;
-	/// Subresource array layers; defaults to single-layer.
-	uint32_t arrayLayers = 1;
-	/// Sample count; defaults to non-MSAA.
-	uint32_t samples = 1;
-	/// Optional label for backend object creation (excluded from equality).
-	std::string debugName;
-
-	bool operator<(const ImageResourceKey& other) const
-	{
-		return std::tie(format, width, height, arrayLayers, samples)
-			< std::tie(other.format, other.width, other.height, other.arrayLayers, other.samples);
-	}
-
-	bool operator==(const ImageResourceKey& other) const
-	{
-		return format == other.format
-			&& width == other.width
-			&& height == other.height
-			&& arrayLayers == other.arrayLayers
-			&& samples == other.samples;
-	}
-
-	/// Factory for the common single-layer color/depth transient key.
-	static ImageResourceKey color2d(pixel_format fmt, uint32_t w, uint32_t h, uint32_t sampleCount = 1)
-	{
-		ImageResourceKey key;
-		key.format = fmt;
-		key.width = w;
-		key.height = h;
-		key.arrayLayers = 1;
-		key.samples = sampleCount;
-		return key;
-	}
-};
-
-/// <summary>
 /// Per-frame pool of reusable GPU resources keyed by attachment/layout.
 ///
-/// Backends own one or more specializations (`FrameResourceCache`, …).
+/// Backends own one or more specializations (`FramebufferResourceCache`, `DynamicFBOCache`, …).
 /// Lifecycle (callers must preserve this ordering):
 /// 1. releaseAll() at frame graph reset (start of accumulation).
 /// 2. acquire() while recording.
@@ -252,9 +203,6 @@ void PooledResourceCache<Key, Storage, Handle>::dropExcess(std::vector<Storage>&
 	}
 }
 
-/// `PooledResourceCache` specialization for transient `abstract_texture*` (see `acquireTransientRenderTarget`).
-using FrameResourceCache = PooledResourceCache<ImageResourceKey, std::unique_ptr<abstract_texture>, abstract_texture*>;
-
 /// <summary>
 /// Key for pooled Vulkan framebuffer instances (render pass + attachment views + size).
 ///
@@ -285,7 +233,6 @@ struct FramebufferResourceKey
 	}
 };
 
-/// VK-only; paired with `FrameResourceCache` in `releaseTransientRenderTargets` / `purgeFrameResources`.
 using FramebufferResourceCache = PooledResourceCache<FramebufferResourceKey, uint64_t, uint64_t>;
 
 /// <summary>

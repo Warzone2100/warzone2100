@@ -137,8 +137,6 @@ public:
 	virtual void endSceneRenderPass() override;
 	virtual void beginRenderPass() override;
 	virtual void endRenderPass() override;
-	virtual gfx_api::abstract_texture* acquireTransientRenderTarget(gfx_api::pixel_format format, uint32_t width, uint32_t height) override;
-	virtual void releaseTransientRenderTargets() override;
 	virtual void purgeFrameResources() override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
 		gfx_api::PassGraphCompileResult& compileResult) override;

@@ -129,7 +129,6 @@ nonstd::optional<PipelineSurfaceId> PipelineSurfaceRegistry::findSurfaceId(abstr
 AttachmentDesc makePipelineSurfaceAttachment(PipelineSurfaceId id, AttachmentLoadOp op, ClearValue clear)
 {
 	AttachmentDesc desc;
-	desc.source = AttachmentSource::Texture;
 	desc.texture = context::get().getPipelineSurface(id);
 	ASSERT(desc.texture != nullptr, "Pipeline surface %u is not registered", static_cast<unsigned>(id));
 	desc.loadOp = op;
