@@ -183,6 +183,39 @@ void populateCompiledPassLayoutMetadata(CompiledPass& compiledPass,
 	}
 }
 
+void advanceLayoutStateForPassAttachments(const RenderPassDesc& pass,
+	const CompiledPassLayoutMetadata& metadata,
+	LayoutStateMap& layoutState)
+{
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		const AttachmentDesc& attachment = pass.colorAttachments[i];
+		if (attachment.texture == nullptr || i >= metadata.colorFinalLayouts.size())
+		{
+			continue;
+		}
+		layoutState[layoutSubresourceKey(attachment)] = metadata.colorFinalLayouts[i];
+	}
+
+	if (pass.resolveAttachment.has_value())
+	{
+		const AttachmentDesc& attachment = pass.resolveAttachment.value();
+		if (attachment.texture != nullptr && metadata.resolveFinalLayout.has_value())
+		{
+			layoutState[layoutSubresourceKey(attachment)] = metadata.resolveFinalLayout.value();
+		}
+	}
+
+	if (pass.depthAttachment.has_value())
+	{
+		const AttachmentDesc& attachment = pass.depthAttachment.value();
+		if (attachment.texture != nullptr)
+		{
+			layoutState[layoutSubresourceKey(attachment)] = metadata.depthFinalLayout;
+		}
+	}
+}
+
 void applyPostPassLayoutUpdates(CompiledPass& compiledPass, LayoutStateMap& layoutState,
 	const LayoutSubresourceSet& sampledAfter)
 {
@@ -313,6 +346,10 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 		// previous frame's single present transition). This only matters for a Load.
 		layoutState[layoutSubresourceKey(swapchainColor)] = CompileImageLayout::Present;
 	}
+	if (gfx_api::abstract_texture* swapchainDepth = ctx.getPipelineSurface(PipelineSurfaceId::SwapchainDepth))
+	{
+		layoutState[layoutSubresourceKey(swapchainDepth)] = CompileImageLayout::DepthAttachment;
+	}
 
 	const auto sampledAfter = computeSampledAfter(passes);
 
@@ -386,11 +423,10 @@ bool planLayoutTimeline(std::vector<CompiledPass>& passes)
 			}
 		}
 
-		// Record the layout each attachment is in as the pass begins (before this pass
-		// mutates the tracker), then advance the tracker / record final layouts.
 		populateCompiledPassInitialLayouts(compiledPass, layoutState);
-		applyPostPassLayoutUpdates(compiledPass, layoutState, sampledAfter[passIndex]);
 		populateCompiledPassLayoutMetadata(compiledPass, sampledAfter[passIndex]);
+		advanceLayoutStateForPassAttachments(pass, compiledPass.renderPassLayouts, layoutState);
+		applyPostPassLayoutUpdates(compiledPass, layoutState, sampledAfter[passIndex]);
 	}
 
 	return true;

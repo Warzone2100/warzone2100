@@ -85,6 +85,11 @@ void clearPassLayoutKey(PassLayoutKey& layoutKey)
 		: ::vk::ImageLayout::eDepthStencilAttachmentOptimal;
 }
 
+bool isUsableCompiledInitialLayout(::vk::ImageLayout layout)
+{
+	return layout != ::vk::ImageLayout::eUndefined;
+}
+
 void applyCompiledRenderPassLayoutsToKey(PassLayoutKey& layoutKey, const gfx_api::CompiledPass& compiledPass,
 	const gfx_api::RenderPassDesc& pass)
 {
@@ -98,7 +103,15 @@ void applyCompiledRenderPassLayoutsToKey(PassLayoutKey& layoutKey, const gfx_api
 	}
 	if (metadata.resolveInitialLayout.has_value())
 	{
-		layoutKey.resolveInitialLayout = toVkImageLayout(metadata.resolveInitialLayout.value());
+		const auto layout = toVkImageLayout(metadata.resolveInitialLayout.value());
+		if (isUsableCompiledInitialLayout(layout))
+		{
+			layoutKey.resolveInitialLayout = layout;
+		}
+		else
+		{
+			layoutKey.resolveInitialLayout.reset();
+		}
 	}
 	else
 	{
@@ -106,7 +119,15 @@ void applyCompiledRenderPassLayoutsToKey(PassLayoutKey& layoutKey, const gfx_api
 	}
 	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
 	{
-		layoutKey.depthInitialLayout = toVkImageLayout(metadata.depthInitialLayout);
+		const auto layout = toVkImageLayout(metadata.depthInitialLayout);
+		if (isUsableCompiledInitialLayout(layout))
+		{
+			layoutKey.depthInitialLayout = layout;
+		}
+		else
+		{
+			layoutKey.depthInitialLayout.reset();
+		}
 	}
 
 	layoutKey.colorFinalLayouts.clear();
@@ -211,16 +232,28 @@ void ensurePassLayoutFinalLayouts(PassLayoutKey& layoutKey, const gfx_api::Rende
 {
 	if (colorIndex < key.colorInitialLayouts.size())
 	{
-		return key.colorInitialLayouts[colorIndex];
+		const ::vk::ImageLayout layout = key.colorInitialLayouts[colorIndex];
+		if (isUsableCompiledInitialLayout(layout))
+		{
+			return layout;
+		}
 	}
-	return initialColorAttachmentLayout(key.colorLoadOps[colorIndex]);
+	if (colorIndex < key.colorLoadOps.size())
+	{
+		return initialColorAttachmentLayout(key.colorLoadOps[colorIndex]);
+	}
+	return ::vk::ImageLayout::eUndefined;
 }
 
 ::vk::ImageLayout resolveResolveInitialLayout(const PassLayoutKey& key)
 {
 	if (key.resolveInitialLayout.has_value())
 	{
-		return key.resolveInitialLayout.value();
+		const ::vk::ImageLayout layout = key.resolveInitialLayout.value();
+		if (isUsableCompiledInitialLayout(layout))
+		{
+			return layout;
+		}
 	}
 	return initialResolveAttachmentLayout(key.resolveLoadOp);
 }
@@ -229,7 +262,11 @@ void ensurePassLayoutFinalLayouts(PassLayoutKey& layoutKey, const gfx_api::Rende
 {
 	if (key.depthInitialLayout.has_value())
 	{
-		return key.depthInitialLayout.value();
+		const ::vk::ImageLayout layout = key.depthInitialLayout.value();
+		if (isUsableCompiledInitialLayout(layout))
+		{
+			return layout;
+		}
 	}
 	return initialDepthAttachmentLayout(key.depthLoadOp);
 }
