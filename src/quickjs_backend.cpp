@@ -478,6 +478,9 @@ public:
 	// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
 	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
 
+	virtual uint64_t saveMathRandomState() const override;
+	virtual void restoreMathRandomState(uint64_t state) override;
+
 public:
 	// get state for debugging
 	nlohmann::json debugGetAllScriptGlobals() override;
@@ -3329,6 +3332,16 @@ bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result,
 		}
 	}
 	return true;
+}
+
+uint64_t quickjs_scripting_instance::saveMathRandomState() const
+{
+	return JS_GetRandomState(ctx);
+}
+
+void quickjs_scripting_instance::restoreMathRandomState(uint64_t state)
+{
+	JS_SetRandomState(ctx, state);
 }
 
 nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)

@@ -640,6 +640,12 @@ namespace wzapi
 		// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
 		virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) = 0;
 
+		// save / restore the script engine's Math.random() PRNG state
+		// - Restoring it lets a resumed instance continue the identical Math.random() sequence instead of re-seeding from wall-clock
+		//   time at context creation (otherwise AI bots that call Math.random() diverge across a save/restore)
+		virtual uint64_t saveMathRandomState() const = 0;
+		virtual void restoreMathRandomState(uint64_t state) = 0;
+
 	public:
 		// get state for debugging
 		virtual nlohmann::json debugGetAllScriptGlobals() = 0;

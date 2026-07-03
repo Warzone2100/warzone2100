@@ -750,6 +750,10 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 
 		instanceObj["isReceivingAllEvents"] = instance->isReceivingAllEvents();
 
+		// Math.random() PRNG state, so a resumed instance continues the identical sequence rather than
+		// re-seeding from wall-clock time (which would desync host-side AI decisions across a restore)
+		instanceObj["mathRandomState"] = instance->saveMathRandomState();
+
 		// This instance's owned (script-created) labels - (Omitted entirely when the instance has none)
 		auto ownedIt = ownedLabels.find(instance);
 		if (ownedIt != ownedLabels.end() && !ownedIt->second.empty())
@@ -1066,6 +1070,13 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 			if (recvIt != instanceObj.end() && recvIt->is_boolean())
 			{
 				instance->setReceiveAllEvents(recvIt->get<bool>());
+			}
+
+			// Math.random() PRNG state (see saveScriptStates2)
+			auto rngIt = instanceObj.find("mathRandomState");
+			if (rngIt != instanceObj.end() && rngIt->is_number())
+			{
+				instance->restoreMathRandomState(rngIt->get<uint64_t>());
 			}
 
 			// This instance's owned labels
