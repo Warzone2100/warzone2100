@@ -7,7 +7,7 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-var forcedResearch;
+_global.forcedResearch = undefined;
 
 _global.setForcedResearch = function(list) {
 	forcedResearch = list;
