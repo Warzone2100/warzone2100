@@ -995,12 +995,37 @@ void kf_MaxScrollLimits()
 }
 
 // --------------------------------------------------------------------------
+/* Rotates and pitches the camera by the given amounts, wrapping yaw and clamping pitch */
+void cameraRotate(int deltaYaw, int deltaPitch)
+{
+	playerPos.r.y += deltaYaw;
+	while (playerPos.r.y < 0)
+	{
+		playerPos.r.y += DEG(360);
+	}
+	while (playerPos.r.y >= DEG(360))
+	{
+		playerPos.r.y -= DEG(360);
+	}
+
+	playerPos.r.x += deltaPitch;
+	if (playerPos.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+	{
+		playerPos.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+	}
+	else if (playerPos.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
+	{
+		playerPos.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
+	}
+}
+
+// --------------------------------------------------------------------------
 /* Spins the world round left */
 void	kf_RotateLeft()
 {
 	int rotAmount = static_cast<int>(realTimeAdjustedIncrement(MAP_SPIN_RATE));
 
-	playerPos.r.y += rotAmount;
+	cameraRotate(rotAmount, 0);
 }
 
 // --------------------------------------------------------------------------
@@ -1009,11 +1034,7 @@ void	kf_RotateRight()
 {
 	int rotAmount = static_cast<int>(realTimeAdjustedIncrement(MAP_SPIN_RATE));
 
-	playerPos.r.y -= rotAmount;
-	if (playerPos.r.y < 0)
-	{
-		playerPos.r.y += DEG(360);
-	}
+	cameraRotate(-rotAmount, 0);
 }
 
 // --------------------------------------------------------------------------
@@ -1036,12 +1057,7 @@ void	kf_PitchBack()
 {
 	int pitchAmount = static_cast<int>(realTimeAdjustedIncrement(MAP_PITCH_RATE));
 
-	playerPos.r.x += pitchAmount;
-
-	if (playerPos.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
-	{
-		playerPos.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
-	}
+	cameraRotate(0, pitchAmount);
 }
 
 // --------------------------------------------------------------------------
@@ -1050,11 +1066,7 @@ void	kf_PitchForward()
 {
 	int pitchAmount = static_cast<int>(realTimeAdjustedIncrement(MAP_PITCH_RATE));
 
-	playerPos.r.x -= pitchAmount;
-	if (playerPos.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
-	{
-		playerPos.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
-	}
+	cameraRotate(0, -pitchAmount);
 }
 
 // --------------------------------------------------------------------------
