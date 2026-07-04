@@ -56,6 +56,7 @@ static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
 static auto psMouseOverWidget = std::weak_ptr<WIDGET>();
+static bool bMouseOverWheelScrollConsumer = false;
 static auto psClickDownWidgetScreen = std::shared_ptr<W_SCREEN>();
 static auto psMouseOverWidgetScreen = std::shared_ptr<W_SCREEN>();
 
@@ -436,6 +437,13 @@ bool isMouseOverScreenOverlayChild(int mx, int my)
 		});
 	}
 	return bMouseIsOverOverlayChild;
+}
+
+// Returns whether the current mouse position is over a widget (or an ancestor of it) that consumes mouse wheel scroll
+// When multiple screens are run in a frame, the answer reflects the most recent widgRunScreen call
+bool isMouseOverWheelScrollConsumingWidget()
+{
+	return bMouseOverWheelScrollConsumer;
 }
 
 bool isMouseClickDownOnScreenOverlayChild()
@@ -1529,6 +1537,16 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	else
 	{
 		psMouseOverWidgetScreen.reset();
+	}
+
+	bMouseOverWheelScrollConsumer = false;
+	for (auto widget = mouseOverWidget; widget != nullptr; widget = widget->parent())
+	{
+		if (widget->canConsumeWheelScroll())
+		{
+			bMouseOverWheelScrollConsumer = true;
+			break;
+		}
 	}
 
 	// reset context to screen context

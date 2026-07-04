@@ -245,6 +245,7 @@ void widgForEachOverlayScreen(const std::function<bool (const std::shared_ptr<W_
 bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
 bool isMouseClickDownOnScreenOverlayChild();
+bool isMouseOverWheelScrollConsumingWidget(); // reflects the most recent widgRunScreen call
 bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
 void widgScheduleTask(std::function<void ()> f);
 
