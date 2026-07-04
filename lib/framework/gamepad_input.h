@@ -74,6 +74,9 @@ enum GAMEPAD_AXIS
 // State queries. All return inert values (false or 0) when gamepad support is
 // disabled or no controller is connected.
 bool gamepadIsConnected();
+
+// Whether the gamepad is the most recent input source (vs the mouse/keyboard)
+bool isGamepadActiveInput();
 bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame

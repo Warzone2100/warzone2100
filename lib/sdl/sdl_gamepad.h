@@ -53,4 +53,10 @@ void wzGamepadResetInputState();
 // device state that drives click/key synthesis is unaffected
 void wzGamepadClearButtonStates();
 
+// Called from the SDL mouse/keyboard handlers when physical input arrives.
+// If the gamepad was the active input source, this hands control back to the
+// mouse/keyboard - warping the system pointer to the current cursor position -
+// and returns true, meaning the caller should discard the event's stale position.
+bool wzGamepadNotifyNonGamepadInput();
+
 #endif // __INCLUDED_LIB_SDL_SDL_GAMEPAD_H__
