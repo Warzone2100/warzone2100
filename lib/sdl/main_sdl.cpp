@@ -1869,6 +1869,8 @@ void inputSetKey(KEY_CODE code, bool pressed)
  */
 static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 {
+	wzGamepadNotifyNonGamepadInput();
+
 	switch (keyEvent->type)
 	{
 	case SDL_EVENT_KEY_DOWN :
@@ -1984,6 +1986,8 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
  */
 static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 {
+	wzGamepadNotifyNonGamepadInput();
+
 	mouseWheelSpeed += Vector2i(wheel->integer_x, wheel->integer_y);
 
 	if (wheel->x > 0 || wheel->y > 0)
@@ -2067,6 +2071,11 @@ void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i log
 static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 {
 	Vector2i logicalPos((int)((float)buttonEvent->x / current_displayScaleFactor), (int)((float)buttonEvent->y / current_displayScaleFactor));
+	if (wzGamepadNotifyNonGamepadInput())
+	{
+		// the event position predates the pointer warp - click where the cursor is shown
+		logicalPos = Vector2i(mouseXPos, mouseYPos);
+	}
 
 	MOUSE_KEY_CODE mouseKeyCode;
 	switch (buttonEvent->button)
@@ -2119,6 +2128,11 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	switch (motionEvent->type)
 	{
 	case SDL_EVENT_MOUSE_MOTION :
+		if (wzGamepadNotifyNonGamepadInput())
+		{
+			// discard the stale pre-warp position - the warp's own motion event follows
+			break;
+		}
 		inputSetMousePos((int)((float)motionEvent->x / current_displayScaleFactor), (int)((float)motionEvent->y / current_displayScaleFactor));
 		break;
 	default:

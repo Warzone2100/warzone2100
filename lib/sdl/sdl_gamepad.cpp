@@ -51,6 +51,7 @@ static INPUT_STATE aGamepadState[GPAD_BTN_MAX] = {};
 // Raw device button state, feeding click/key synthesis. Only reset on focus
 // loss or device removal, so held synthetic input always completes
 static INPUT_STATE actualGamepadState[GPAD_BTN_MAX] = {};
+static bool gamepadIsActiveInput = false;
 static float aGamepadAxisValues[GPAD_AXIS_MAX] = {};
 // Hysteresis latches for the buttons synthesized from axis thresholds
 static bool axisButtonHeld[GPAD_BTN_MAX] = {};
@@ -59,6 +60,33 @@ static float lastLoggedAxisValues[GPAD_AXIS_MAX] = {};
 bool gamepadIsConnected()
 {
 	return !openGamepads.empty();
+}
+
+bool isGamepadActiveInput()
+{
+	return gamepadIsActiveInput;
+}
+
+static void markGamepadActive()
+{
+	if (!gamepadIsActiveInput)
+	{
+		gamepadIsActiveInput = true;
+		debug(LOG_INPUT, "Gamepad is now the active input source");
+	}
+}
+
+bool wzGamepadNotifyNonGamepadInput()
+{
+	if (!gamepadIsActiveInput)
+	{
+		return false;
+	}
+	gamepadIsActiveInput = false;
+	// hand the pointer back where the cursor currently is, so the switch is seamless
+	wzWarpMouseToLogicalPos(mouseX(), mouseY());
+	debug(LOG_INPUT, "Mouse/keyboard is now the active input source");
+	return true;
 }
 
 bool gamepadButtonDown(GAMEPAD_INPUT button)
@@ -187,6 +215,7 @@ static void closeGamepadDevice(SDL_JoystickID id)
 	if (openGamepads.empty())
 	{
 		wzGamepadResetInputState();
+		wzGamepadNotifyNonGamepadInput();
 	}
 }
 
@@ -260,6 +289,7 @@ void wzGamepadHandleSDLEvent(const SDL_Event& event)
 		const bool pressed = (event.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN);
 		setGamepadButtonState(button.value(), pressed);
 		activeGamepadId = event.gbutton.which;
+		markGamepadActive();
 		debug(LOG_INPUT, "Gamepad button %d %s", (int)button.value(), pressed ? "pressed" : "released");
 		break;
 	}
@@ -342,6 +372,10 @@ void wzGamepadUpdate()
 
 	for (unsigned int i = 0; i < GPAD_AXIS_MAX; ++i)
 	{
+		if (aGamepadAxisValues[i] != 0.f)
+		{
+			markGamepadActive();
+		}
 		if (std::abs(aGamepadAxisValues[i] - lastLoggedAxisValues[i]) > 0.05f)
 		{
 			debug(LOG_INPUT, "Gamepad axis %u: %.2f", i, aGamepadAxisValues[i]);
