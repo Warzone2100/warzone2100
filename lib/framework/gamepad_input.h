@@ -78,6 +78,9 @@ bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame
 
+// Raw device state, unaffected by overlays swallowing the logical input state
+bool gamepadButtonPhysicallyDown(GAMEPAD_INPUT button);
+
 // Deadzone-adjusted axis value. Sticks are -1..1 and triggers are 0..1
 float gamepadAxis(GAMEPAD_AXIS axis);
 

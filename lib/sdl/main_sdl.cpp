@@ -60,6 +60,7 @@
 
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
+#include "sdl_gamepad.h"
 #include <algorithm>
 #include <map>
 #include <locale.h>
@@ -177,26 +178,6 @@ std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
 enum wzSDLAppEventCodes
 {
 	MAINTHREADEXEC
-};
-
-/* The possible states for keys */
-enum KEY_STATE
-{
-	KEY_UP,
-	KEY_PRESSED,
-	KEY_DOWN,
-	KEY_RELEASED,
-	KEY_PRESSRELEASE,	// When a key goes up and down in a frame
-	KEY_DOUBLECLICK,	// Only used by mouse keys
-	KEY_DRAG			// Only used by mouse keys
-};
-
-struct INPUT_STATE
-{
-	KEY_STATE state; /// Last key/mouse state
-	UDWORD lastdown; /// last key/mouse button down timestamp
-	Vector2i pressPos;    ///< Location of last mouse press event.
-	Vector2i releasePos;  ///< Location of last mouse release event.
 };
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
@@ -4146,6 +4127,12 @@ void wzEventLoopOneFrame(void* arg)
 			inputHandlePinchEvent(&event.pinch);
 			break;
 #endif
+		case SDL_EVENT_GAMEPAD_ADDED:
+		case SDL_EVENT_GAMEPAD_REMOVED:
+		case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+		case SDL_EVENT_GAMEPAD_BUTTON_UP:
+			wzGamepadHandleSDLEvent(event);
+			break;
 		case SDL_EVENT_QUIT:
 #if defined(__EMSCRIPTEN__)
 			// Exit "soft fullscreen" - (as long as we aren't in "real" fullscreen mode)
@@ -4209,6 +4196,8 @@ void wzMainEventLoop(std::function<void()> onShutdown)
 {
 	event.type = 0;
 
+	wzGamepadInit();
+
 #if defined(__EMSCRIPTEN__)
 	saved_onShutdown = onShutdown;
 	// Receives a function to call and some user data to provide it.
@@ -4236,6 +4225,7 @@ void wzPumpEventsWhileLoading()
 void wzShutdown()
 {
 	// order is important!
+	wzGamepadShutdown();
 	sdlFreeCursors();
 	if (WZwindow != nullptr)
 	{
