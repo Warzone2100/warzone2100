@@ -23,6 +23,7 @@
 #pragma once
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include <vector>
 #include <memory>
 #include <nonstd/optional.hpp>
@@ -31,6 +32,21 @@ using nonstd::nullopt;
 
 void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 float wzGetDisplayContentScale();
+
+// Input state setters shared by the SDL event handlers and other backend input sources
+// Positions are in logical screen coordinates - i.e. those returned from mouseX()/mouseY()
+void inputSetKey(KEY_CODE code, bool pressed);
+void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos);
+void inputSetMousePos(int logicalX, int logicalY);
+
+// Adds an editing key press (enter, escape, arrows, etc) to the text input buffer
+void inputAddEditingKey(KEY_CODE code);
+
+// Initializes an SDL subsystem the first time it is requested
+bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag);
+
+// Moves the system mouse pointer to the given logical screen coordinates
+void wzWarpMouseToLogicalPos(int logicalX, int logicalY);
 
 class VideoInitProgress
 {

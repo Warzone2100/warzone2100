@@ -1308,6 +1308,36 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 	pEndBuffer = pNext;
 }
 
+/* Adds an editing key press to the text input buffer for text editing control handling */
+void inputAddEditingKey(KEY_CODE code)
+{
+	switch (code)
+	{
+	case KEY_ESC:
+	case KEY_RETURN:
+	case KEY_TAB:
+	case KEY_BACKSPACE:
+	case KEY_LEFTARROW:
+	case KEY_RIGHTARROW:
+	case KEY_UPARROW:
+	case KEY_DOWNARROW:
+	case KEY_HOME:
+	case KEY_END:
+	case KEY_INSERT:
+	case KEY_DELETE:
+	case KEY_PAGEUP:
+	case KEY_PAGEDOWN:
+		// the editing key INPBUF values alias the same KEY_CODE values
+		inputAddBuffer(code, 0);
+		break;
+	case KEY_KPENTER:
+		inputAddBuffer(INPBUF_CR, 0);
+		break;
+	default:
+		break;
+	}
+}
+
 // Returns the human-readable name for the key *in the current keyboard layout*
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
@@ -1814,7 +1844,7 @@ static void inputHandlePinchEvent(SDL_PinchFingerEvent *pinchEvent)
 /*!
  * Update keyboard key state from a press or release
  */
-static void inputSetKey(KEY_CODE code, bool pressed)
+void inputSetKey(KEY_CODE code, bool pressed)
 {
 	if (code >= KEY_MAXSCAN)
 	{
@@ -1984,7 +2014,7 @@ static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 /*!
  * Update mouse button state from a press or release at the given logical position
  */
-static void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos)
+void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos)
 {
 	mouseXPos = logicalPos.x;
 	mouseYPos = logicalPos.y;
@@ -2078,7 +2108,7 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 /*!
  * Update the logical mouse position and promote a held button to a drag once it moves far enough
  */
-static void inputSetMousePos(int logicalX, int logicalY)
+void inputSetMousePos(int logicalX, int logicalY)
 {
 	/* store the current mouse position */
 	mouseXPos = logicalX;
@@ -2107,6 +2137,15 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	default:
 		break;
 	}
+}
+
+/*!
+ * Move the system mouse pointer to the given logical screen coordinates
+ */
+void wzWarpMouseToLogicalPos(int logicalX, int logicalY)
+{
+	ASSERT_OR_RETURN(, WZwindow != nullptr, "No window available");
+	SDL_WarpMouseInWindow(WZwindow, (float)logicalX * current_displayScaleFactor, (float)logicalY * current_displayScaleFactor);
 }
 
 static int copied_argc = 0;
@@ -2915,7 +2954,7 @@ bool wzSDLOneTimeInit()
 	return true;
 }
 
-static bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
+bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
 {
 	if (SDL_WasInit(subsystem_flag) == subsystem_flag)
 	{
