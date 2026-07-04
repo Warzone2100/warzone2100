@@ -51,6 +51,7 @@ public:
 	const std::vector<std::shared_ptr<WIDGET>>& getItems() const;
 	void clear();
 	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	bool canConsumeWheelScroll() override;
 	void enableScroll();
 	void disableScroll();
 	void setStickToBottom(bool value);
@@ -106,7 +107,6 @@ private:
 	void updateLayout();
 	void resizeChildren(uint32_t width);
 	uint32_t getScrollPositionForItem(size_t itemNum);
-	bool canBeScrolledByMouseWheel();
 };
 
 class ClickableScrollableList : public ScrollableListWidget
