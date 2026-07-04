@@ -1812,6 +1812,42 @@ static void inputHandlePinchEvent(SDL_PinchFingerEvent *pinchEvent)
 #endif
 
 /*!
+ * Update keyboard key state from a press or release
+ */
+static void inputSetKey(KEY_CODE code, bool pressed)
+{
+	if (code >= KEY_MAXSCAN)
+	{
+		return;
+	}
+	if (pressed)
+	{
+		if (aKeyState[code].state == KEY_UP ||
+		    aKeyState[code].state == KEY_RELEASED ||
+		    aKeyState[code].state == KEY_PRESSRELEASE)
+		{
+			// whether double key press or not
+			aKeyState[code].state = KEY_PRESSED;
+			aKeyState[code].lastdown = 0;
+			actualKeyState[code].state = KEY_PRESSED;
+			actualKeyState[code].lastdown = 0;
+		}
+	}
+	else
+	{
+		actualKeyState[code].state = KEY_UP;
+		if (aKeyState[code].state == KEY_PRESSED)
+		{
+			aKeyState[code].state = KEY_PRESSRELEASE;
+		}
+		else if (aKeyState[code].state == KEY_DOWN)
+		{
+			aKeyState[code].state = KEY_RELEASED;
+		}
+	}
+}
+
+/*!
  * Handle keyboard events
  */
 static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
@@ -1886,21 +1922,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		SDL_Scancode currentKey = keyEvent->scancode;
 		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
 
-		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
-		if (code >= KEY_MAXSCAN)
-		{
-			break;
-		}
-		if (aKeyState[code].state == KEY_UP ||
-		    aKeyState[code].state == KEY_RELEASED ||
-		    aKeyState[code].state == KEY_PRESSRELEASE)
-		{
-			// whether double key press or not
-			aKeyState[code].state = KEY_PRESSED;
-			aKeyState[code].lastdown = 0;
-			actualKeyState[code].state = KEY_PRESSED;
-			actualKeyState[code].lastdown = 0;
-		}
+		inputSetKey(sdlScancodeToKeyCode(currentKey), true);
 		break;
 	}
 
@@ -1908,20 +1930,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 	{
 		SDL_Scancode currentKey = keyEvent->scancode;
 		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, SDLscancode=[%s]", currentKey, currentKey, SDL_GetScancodeName(currentKey));
-		KEY_CODE code = sdlScancodeToKeyCode(currentKey);
-		if (code >= KEY_MAXSCAN)
-		{
-			break;
-		}
-		actualKeyState[code].state = KEY_UP;
-		if (aKeyState[code].state == KEY_PRESSED)
-		{
-			aKeyState[code].state = KEY_PRESSRELEASE;
-		}
-		else if (aKeyState[code].state == KEY_DOWN)
-		{
-			aKeyState[code].state = KEY_RELEASED;
-		}
+		inputSetKey(sdlScancodeToKeyCode(currentKey), false);
 		break;
 	}
 	default:
@@ -1973,31 +1982,19 @@ static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 }
 
 /*!
- * Handle mouse button events (We can handle up to 5)
+ * Update mouse button state from a press or release at the given logical position
  */
-static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
+static void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos)
 {
-	mouseXPos = (int)((float)buttonEvent->x / current_displayScaleFactor);
-	mouseYPos = (int)((float)buttonEvent->y / current_displayScaleFactor);
-
-	MOUSE_KEY_CODE mouseKeyCode;
-	switch (buttonEvent->button)
-	{
-	case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
-	case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
-	case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
-	case SDL_BUTTON_X1: mouseKeyCode = MOUSE_X1; break;
-	case SDL_BUTTON_X2: mouseKeyCode = MOUSE_X2; break;
-	default: return;  // Unknown button.
-	}
+	mouseXPos = logicalPos.x;
+	mouseYPos = logicalPos.y;
 
 	MousePress mousePress;
 	mousePress.key = mouseKeyCode;
-	mousePress.pos = Vector2i(mouseXPos, mouseYPos);
+	mousePress.pos = logicalPos;
 
-	switch (buttonEvent->type)
+	if (pressed)
 	{
-	case SDL_EVENT_MOUSE_BUTTON_DOWN :
 		mousePress.action = MousePress::Press;
 		mousePresses.push_back(mousePress);
 
@@ -2026,8 +2023,9 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 				dragY = mouseYPos;
 			}
 		}
-		break;
-	case SDL_EVENT_MOUSE_BUTTON_UP :
+	}
+	else
+	{
 		mousePress.action = MousePress::Release;
 		mousePresses.push_back(mousePress);
 
@@ -2043,9 +2041,56 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 		{
 			aMouseState[mouseKeyCode].state = KEY_RELEASED;
 		}
+	}
+}
+
+/*!
+ * Handle mouse button events (We can handle up to 5)
+ */
+static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
+{
+	Vector2i logicalPos((int)((float)buttonEvent->x / current_displayScaleFactor), (int)((float)buttonEvent->y / current_displayScaleFactor));
+
+	MOUSE_KEY_CODE mouseKeyCode;
+	switch (buttonEvent->button)
+	{
+	case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
+	case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
+	case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
+	case SDL_BUTTON_X1: mouseKeyCode = MOUSE_X1; break;
+	case SDL_BUTTON_X2: mouseKeyCode = MOUSE_X2; break;
+	default: return;  // Unknown button.
+	}
+
+	switch (buttonEvent->type)
+	{
+	case SDL_EVENT_MOUSE_BUTTON_DOWN :
+		inputSetMouseButton(mouseKeyCode, true, logicalPos);
+		break;
+	case SDL_EVENT_MOUSE_BUTTON_UP :
+		inputSetMouseButton(mouseKeyCode, false, logicalPos);
 		break;
 	default:
 		break;
+	}
+}
+
+/*!
+ * Update the logical mouse position and promote a held button to a drag once it moves far enough
+ */
+static void inputSetMousePos(int logicalX, int logicalY)
+{
+	/* store the current mouse position */
+	mouseXPos = logicalX;
+	mouseYPos = logicalY;
+
+	/* now see if a drag has started */
+	if ((aMouseState[dragKey].state == KEY_PRESSED ||
+	     aMouseState[dragKey].state == KEY_DOWN) &&
+	    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
+	     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
+	{
+		aMouseState[dragKey].state = KEY_DRAG;
 	}
 }
 
@@ -2057,18 +2102,7 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	switch (motionEvent->type)
 	{
 	case SDL_EVENT_MOUSE_MOTION :
-		/* store the current mouse position */
-		mouseXPos = (int)((float)motionEvent->x / current_displayScaleFactor);
-		mouseYPos = (int)((float)motionEvent->y / current_displayScaleFactor);
-
-		/* now see if a drag has started */
-		if ((aMouseState[dragKey].state == KEY_PRESSED ||
-		     aMouseState[dragKey].state == KEY_DOWN) &&
-		    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
-		     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
-		{
-			aMouseState[dragKey].state = KEY_DRAG;
-		}
+		inputSetMousePos((int)((float)motionEvent->x / current_displayScaleFactor), (int)((float)motionEvent->y / current_displayScaleFactor));
 		break;
 	default:
 		break;
