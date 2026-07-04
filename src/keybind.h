@@ -62,6 +62,7 @@ void kf_RaiseTile();
 void kf_LowerTile();
 void kf_MapCheck();
 MappableFunction kf_Zoom(const int multiplier);
+void cameraRotate(int deltaYaw, int deltaPitch);
 void kf_RotateLeft();
 void kf_RotateRight();
 void kf_RotateBuildingCW();
