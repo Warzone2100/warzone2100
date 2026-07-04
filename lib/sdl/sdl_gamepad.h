@@ -32,6 +32,10 @@ void wzGamepadInit();
 // Closes any open devices and shuts down the SDL gamepad subsystem
 void wzGamepadShutdown();
 
+// Applies the current gamepad mode setting, initializing or shutting down the
+// subsystem as needed. Call after changing the mode at runtime
+void wzGamepadApplyMode();
+
 // Handles gamepad device and button events from the SDL event loop
 void wzGamepadHandleSDLEvent(const SDL_Event& event);
 
