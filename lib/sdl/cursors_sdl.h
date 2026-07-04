@@ -26,10 +26,15 @@
 
 #include "lib/framework/cursors.h"
 
+class iV_Image;
+
 void sdlInitCursors();
 void sdlInitColoredCursors();
 void sdlFreeCursors();
 void wzSDLReinitCursors();
 void wzQueueRefreshCursor();
+
+// Returns the image and hotspot for a loaded cursor, or nullptr if unavailable
+const iV_Image* wzGetCursorImage(CURSOR cur, int& hotX, int& hotY);
 
 #endif // __INCLUDED_LIB_SDL_CURSORS_SDL_H__

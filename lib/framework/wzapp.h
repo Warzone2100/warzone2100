@@ -122,6 +122,7 @@ bool wzHasClipboardText();
 WzString wzGetClipboardText();
 bool wzSetClipboardText(const char *text);
 void wzSetCursor(CURSOR index);
+CURSOR wzGetCursor();
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window

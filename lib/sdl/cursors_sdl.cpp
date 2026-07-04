@@ -39,6 +39,14 @@ static SDL_Cursor *aCursors[CURSOR_MAX] = {};
 static bool monoCursor = false;
 static bool cursorsEnabled = false;
 
+struct CursorImageInfo
+{
+	iV_Image image;
+	int hotX = 0;
+	int hotY = 0;
+};
+static CursorImageInfo aCursorImages[CURSOR_MAX];
+
 /* TODO: do bridge and attach need swapping? */
 static const char *cursor_arrow[] =
 {
@@ -1306,7 +1314,7 @@ SDL_Surface *SDL_CreateRGBSurfaceFrom(void *pixels, int width, int height, int d
 								 pixels, pitch);
 }
 
-SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
+SDL_Cursor* init_cursor_from_image(CURSOR cur, iV_Image&& sprite, int hot_x, int hot_y)
 {
 	scaleCursorImageForUpload(sprite, hot_x, hot_y);
 
@@ -1336,9 +1344,11 @@ SDL_Cursor* init_cursor_from_image(iV_Image&& sprite, int hot_x, int hot_y)
 		exit(-1);
 	}
 
-	// free up surface & image data
+	// free up the surface, and keep the image and hotspot available for queries
 	SDL_DestroySurface(surface);
-	sprite.clear();
+	aCursorImages[cur].image = std::move(sprite);
+	aCursorImages[cur].hotX = hot_x;
+	aCursorImages[cur].hotY = hot_y;
 
 	return pointer;
 }
@@ -1359,7 +1369,7 @@ SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
 	int hot_x = sprite.width() / 2;
 	int hot_y = sprite.height() / 2;
 
-	return init_cursor_from_image(std::move(sprite), hot_x, hot_y);
+	return init_cursor_from_image(cur, std::move(sprite), hot_x, hot_y);
 }
 
 /**
@@ -1417,7 +1427,7 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 		abort();
 	}
 
-	return init_cursor_from_image(std::move(cursorImage), hot_x, hot_y);
+	return init_cursor_from_image(cur, std::move(cursorImage), hot_x, hot_y);
 }
 
 /**
@@ -1430,11 +1440,35 @@ void wzSetCursor(CURSOR cur)
 	currentCursor = cur;
 }
 
+CURSOR wzGetCursor()
+{
+	return currentCursor;
+}
+
+const iV_Image* wzGetCursorImage(CURSOR cur, int& hotX, int& hotY)
+{
+	ASSERT_OR_RETURN(nullptr, cur < CURSOR_MAX, "Invalid cursor: %d", (int)cur);
+	const auto& info = aCursorImages[cur];
+	if (info.image.width() == 0 || info.image.height() == 0)
+	{
+		return nullptr;
+	}
+	hotX = info.hotX;
+	hotY = info.hotY;
+	return &info.image;
+}
+
+/* Applies the current cursor selection to the system mouse pointer */
+static void applyCursorToSystem(CURSOR cur)
+{
+	SDL_SetCursor(aCursors[cur]);
+}
+
 void wzSDLReinitCursors()
 {
 	sdlFreeCursors();
 	war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
-	SDL_SetCursor(aCursors[currentCursor]);
+	applyCursorToSystem(currentCursor);
 }
 
 void wzQueueRefreshCursor()
@@ -1460,7 +1494,7 @@ void wzApplyCursor()
 		return;
 	}
 
-	SDL_SetCursor(aCursors[currentCursor]);
+	applyCursorToSystem(currentCursor);
 	lastAppliedCursor = currentCursor;
 }
 
@@ -1550,6 +1584,10 @@ void sdlFreeCursors()
 		}
 		SDL_DestroyCursor(aCursors[i]);
 		aCursors[i] = nullptr;
+	}
+	for (i = 0 ; i < ARRAY_SIZE(aCursorImages); ++i)
+	{
+		aCursorImages[i] = CursorImageInfo();
 	}
 	cursorsEnabled = false;
 }
