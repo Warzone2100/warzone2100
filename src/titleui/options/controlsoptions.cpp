@@ -147,10 +147,10 @@ private:
 class OptionsKeyBindingsEdit : public WIDGET, public OptionValueChangerInterface
 {
 protected:
-	OptionsKeyBindingsEdit(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info);
+	OptionsKeyBindingsEdit(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info, const std::vector<KeyMappingSlot>& displayedSlots);
 	void initialize();
 public:
-	static std::shared_ptr<OptionsKeyBindingsEdit> make(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info);
+	static std::shared_ptr<OptionsKeyBindingsEdit> make(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info, const std::vector<KeyMappingSlot>& displayedSlots = {KeyMappingSlot::PRIMARY, KeyMappingSlot::SECONDARY});
 
 	void display(int xOffset, int yOffset) override;
 	void geometryChanged() override;
@@ -178,6 +178,8 @@ private:
 	std::weak_ptr<KeyOptionsForm> parentOptionsForm;
 	InputManager& inputManager;
 	const KeyFunctionInfo& info;
+	// Which mapping slots this widget shows - the arrays below stay sized and indexed by slot, with unused entries null
+	const std::vector<KeyMappingSlot> displayedSlots;
 	std::array<nonstd::optional<std::reference_wrapper<KeyMapping>>, static_cast<size_t>(KeyMappingSlot::LAST)> mappings;
 
 	std::array<std::shared_ptr<OptionsKeyBindingWidget>, static_cast<size_t>(KeyMappingSlot::LAST)> keyMappingSlotButtons;
@@ -366,21 +368,21 @@ void OptionsKeyBindingWidget::highlightLost()
 
 // MARK: - OptionsKeyBindingsEdit
 
-std::shared_ptr<OptionsKeyBindingsEdit> OptionsKeyBindingsEdit::make(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info)
+std::shared_ptr<OptionsKeyBindingsEdit> OptionsKeyBindingsEdit::make(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info, const std::vector<KeyMappingSlot>& displayedSlots)
 {
 	class make_shared_enabler : public OptionsKeyBindingsEdit {
 	public:
-		make_shared_enabler(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info)
-		: OptionsKeyBindingsEdit(parentForm, inputManager, info)
+		make_shared_enabler(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info, const std::vector<KeyMappingSlot>& displayedSlots)
+		: OptionsKeyBindingsEdit(parentForm, inputManager, info, displayedSlots)
 		{ }
 	};
-	auto result = std::make_shared<make_shared_enabler>(parentForm, inputManager, info);
+	auto result = std::make_shared<make_shared_enabler>(parentForm, inputManager, info, displayedSlots);
 	result->initialize();
 	return result;
 }
 
-OptionsKeyBindingsEdit::OptionsKeyBindingsEdit(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info)
-: parentOptionsForm(parentForm), inputManager(inputManager), info(info)
+OptionsKeyBindingsEdit::OptionsKeyBindingsEdit(const std::shared_ptr<KeyOptionsForm>& parentForm, InputManager& inputManager, const KeyFunctionInfo& info, const std::vector<KeyMappingSlot>& displayedSlots)
+: parentOptionsForm(parentForm), inputManager(inputManager), info(info), displayedSlots(displayedSlots)
 { }
 
 void OptionsKeyBindingsEdit::initialize()
@@ -389,10 +391,9 @@ void OptionsKeyBindingsEdit::initialize()
 
 	auto weakSelf = std::weak_ptr<OptionsKeyBindingsEdit>(std::dynamic_pointer_cast<OptionsKeyBindingsEdit>(shared_from_this()));
 
-	const unsigned int numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
-	for (unsigned int slotIndex = 0; slotIndex < numSlots; ++slotIndex)
+	for (const auto slot : displayedSlots)
 	{
-		const auto slot = static_cast<KeyMappingSlot>(slotIndex);
+		const auto slotIndex = static_cast<size_t>(slot);
 		auto button = OptionsKeyBindingWidget::make(std::static_pointer_cast<OptionsKeyBindingsEdit>(shared_from_this()), slot);
 		attach(button);
 		keyMappingSlotButtons[slotIndex] = button;
@@ -420,15 +421,17 @@ void OptionsKeyBindingsEdit::updateData()
 void OptionsKeyBindingsEdit::updateButton(KeyMappingSlot slot)
 {
 	auto slotIndex = static_cast<size_t>(slot);
+	if (!keyMappingSlotButtons[slotIndex])
+	{
+		return;
+	}
 	keyMappingSlotButtons[slotIndex]->update(std::static_pointer_cast<OptionsKeyBindingsEdit>(shared_from_this()), slot);
 }
 
 void OptionsKeyBindingsEdit::updateButtons()
 {
-	const unsigned int numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
-	for (unsigned int slotIndex = 0; slotIndex < numSlots; ++slotIndex)
+	for (const auto slot : displayedSlots)
 	{
-		const auto slot = static_cast<KeyMappingSlot>(slotIndex);
 		updateButton(slot);
 	}
 }
@@ -463,12 +466,19 @@ void OptionsKeyBindingsEdit::updateLayout()
 	int availableWidth = w;
 	int nextPosX0 = availableWidth - buttonWidth;
 
+	// The first displayed slot's button is always shown, even with nothing bound to it
+	const size_t alwaysShownSlotIndex = displayedSlots.empty() ? mappings.size() : static_cast<size_t>(displayedSlots.front());
+
 	int numButtonsShown = 0;
 	for (size_t i = 0; i < mappings.size(); ++i)
 	{
+		if (!keyMappingSlotButtons[i])
+		{
+			continue;
+		}
 		const bool slotHasMapping = mappings[i] && !mappings[i]->get().keys.input.isCleared();
 		const bool slotHasDefaultMapping = hasDefaultMapping(i);
-		if (slotHasMapping || slotHasDefaultMapping || i == 0)
+		if (slotHasMapping || slotHasDefaultMapping || i == alwaysShownSlotIndex)
 		{
 			++numButtonsShown;
 		}
@@ -477,10 +487,14 @@ void OptionsKeyBindingsEdit::updateLayout()
 	int32_t actualButtonWidth = std::min<int32_t>((numButtonsShown > 0) ? availableWidth / numButtonsShown : 0, buttonWidth);
 	for (size_t i = 0; i < mappings.size(); ++i)
 	{
+		if (!keyMappingSlotButtons[i])
+		{
+			continue;
+		}
 		const bool slotHasMapping = mappings[i] && !mappings[i]->get().keys.input.isCleared();
 		const bool slotHasDefaultMapping = hasDefaultMapping(i);
 		const auto buttonIdealHeight = keyMappingSlotButtons[i]->idealHeight();
-		if (slotHasMapping || slotHasDefaultMapping || i == 0)
+		if (slotHasMapping || slotHasDefaultMapping || i == alwaysShownSlotIndex)
 		{
 			int buttonY0 = (h - buttonIdealHeight) / 2;
 			keyMappingSlotButtons[i]->setGeometry(nextPosX0, buttonY0, actualButtonWidth, buttonIdealHeight);
@@ -901,7 +915,7 @@ KeyFunctionEntries getVisibleKeyFunctionEntries(const KeyFunctionConfiguration& 
 	return visible;
 }
 
-size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result, InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig)
+size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result, InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, const std::vector<KeyMappingSlot>& displayedSlots = {KeyMappingSlot::PRIMARY, KeyMappingSlot::SECONDARY})
 {
 	auto infos = getVisibleKeyFunctionEntries(keyFuncConfig);
 	std::sort(infos.begin(), infos.end(), [&](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
@@ -925,7 +939,7 @@ size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result
 		}
 
 		auto optionInfo = OptionInfo(keyFunctionInfoToOptionId(info), WzString::fromUtf8(info.displayName), "");
-		auto valueChanger = OptionsKeyBindingsEdit::make(result, inputManager, info);
+		auto valueChanger = OptionsKeyBindingsEdit::make(result, inputManager, info, displayedSlots);
 		result->addOption(optionInfo, valueChanger, true);
 	}
 
