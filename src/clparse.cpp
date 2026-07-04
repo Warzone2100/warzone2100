@@ -344,6 +344,7 @@ typedef enum
 	CLI_NOTEXTURECOMPRESSION,
 	CLI_GFXBACKEND,
 	CLI_GFXDEBUG,
+	CLI_GAMEPAD,
 	CLI_JSBACKEND,
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
@@ -443,6 +444,7 @@ static const struct poptOption *getOptionsTable()
 			")"
 		},
 		{ "gfxdebug", POPT_ARG_NONE, CLI_GFXDEBUG, N_("Use gfx backend debug"), nullptr },
+		{ "gamepad", POPT_ARG_STRING, CLI_GAMEPAD, N_("Set gamepad support mode"), "(auto, on, off)" },
 		{ "jsbackend", POPT_ARG_STRING, CLI_JSBACKEND, N_("Set JS backend"),
 					"("
 					"quickjs"
@@ -1101,6 +1103,32 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_GFXDEBUG:
 			uses_gfx_debug = true;
 			break;
+
+		case CLI_GAMEPAD:
+			{
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Missing gamepad mode value");
+				}
+				if (strcmp(token, "auto") == 0)
+				{
+					war_SetGamepadMode(GamepadMode::Automatic);
+				}
+				else if (strcmp(token, "on") == 0)
+				{
+					war_SetGamepadMode(GamepadMode::Enabled);
+				}
+				else if (strcmp(token, "off") == 0)
+				{
+					war_SetGamepadMode(GamepadMode::Disabled);
+				}
+				else
+				{
+					qFatal("Unsupported / invalid gamepad mode value (supported: auto, on, off)");
+				}
+				break;
+			}
 
 		case CLI_JSBACKEND:
 			{

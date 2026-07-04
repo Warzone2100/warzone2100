@@ -588,6 +588,12 @@ bool loadConfig()
 		}
 		war_SetTrapCursor(static_cast<TrapCursorMode>(intTrapCursorValue));
 	}
+	auto intGamepadModeValue = iniGetInteger("gamepadMode", static_cast<int>(GamepadMode::Automatic)).value();
+	if (intGamepadModeValue < static_cast<int>(GamepadMode::Disabled) || intGamepadModeValue > static_cast<int>(GamepadMode::Automatic))
+	{
+		intGamepadModeValue = static_cast<int>(GamepadMode::Automatic);
+	}
+	war_SetGamepadMode(static_cast<GamepadMode>(intGamepadModeValue));
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -855,6 +861,7 @@ bool saveConfig()
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
 	iniSetInteger("trapCursor", (int)war_GetTrapCursor());
+	iniSetInteger("gamepadMode", (int)war_GetGamepadMode());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());

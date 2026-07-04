@@ -70,6 +70,13 @@ enum class TrapCursorMode : uint8_t
 	Automatic
 };
 
+enum class GamepadMode : uint8_t
+{
+	Disabled = 0,   // gamepad support fully off - the SDL gamepad subsystem is never initialized
+	Enabled,        // gamepad support always active
+	Automatic       // gamepad support active while a controller is connected (default)
+};
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -86,6 +93,8 @@ void war_setAntialiasing(int);
 int war_getAntialiasing();
 void war_SetTrapCursor(TrapCursorMode v);
 TrapCursorMode war_GetTrapCursor();
+void war_SetGamepadMode(GamepadMode v);
+GamepadMode war_GetGamepadMode();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(int value);

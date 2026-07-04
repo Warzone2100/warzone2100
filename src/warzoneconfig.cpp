@@ -61,6 +61,7 @@ struct WARZONE_GLOBALS
 	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
 	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
+	GamepadMode gamepadMode = GamepadMode::Automatic;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -222,6 +223,17 @@ void war_SetTrapCursor(TrapCursorMode v)
 TrapCursorMode war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
+}
+
+void war_SetGamepadMode(GamepadMode v)
+{
+	warGlobs.gamepadMode = v;
+	ActivityManager::instance().changedSetting("gamepadMode", std::to_string(static_cast<int>(v)));
+}
+
+GamepadMode war_GetGamepadMode()
+{
+	return warGlobs.gamepadMode;
 }
 
 void war_SetVsync(int value)
