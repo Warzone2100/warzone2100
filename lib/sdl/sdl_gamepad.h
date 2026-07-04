@@ -48,7 +48,9 @@ void wzGamepadNewFrame();
 // Releases all buttons and zeroes all axes (e.g. on window focus loss)
 void wzGamepadResetInputState();
 
-// Drops queued gamepad button and axis events, keeping device add/remove events
-void wzGamepadFlushPendingEvents();
+// Clears the logical gamepad button states seen by game input handling, so
+// remaining input processing this frame sees no gamepad buttons. The raw
+// device state that drives click/key synthesis is unaffected
+void wzGamepadClearButtonStates();
 
 #endif // __INCLUDED_LIB_SDL_SDL_GAMEPAD_H__

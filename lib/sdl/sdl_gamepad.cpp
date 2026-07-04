@@ -31,6 +31,14 @@
 
 #include <vector>
 #include <utility>
+#include <cmath>
+#include <algorithm>
+
+// Radial deadzone applied to stick deflection before values are exposed
+static const float GAMEPAD_STICK_DEADZONE = 0.15f;
+// Axis thresholds for the synthesized trigger and stick-direction buttons, with hysteresis
+static const float GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD = 0.5f;
+static const float GAMEPAD_AXIS_BUTTON_RELEASE_THRESHOLD = 0.45f;
 
 static bool subsystemInitialized = false;
 static std::vector<std::pair<SDL_JoystickID, SDL_Gamepad*>> openGamepads;
@@ -43,6 +51,10 @@ static INPUT_STATE aGamepadState[GPAD_BTN_MAX] = {};
 // Raw device button state, feeding click/key synthesis. Only reset on focus
 // loss or device removal, so held synthetic input always completes
 static INPUT_STATE actualGamepadState[GPAD_BTN_MAX] = {};
+static float aGamepadAxisValues[GPAD_AXIS_MAX] = {};
+// Hysteresis latches for the buttons synthesized from axis thresholds
+static bool axisButtonHeld[GPAD_BTN_MAX] = {};
+static float lastLoggedAxisValues[GPAD_AXIS_MAX] = {};
 
 bool gamepadIsConnected()
 {
@@ -75,7 +87,8 @@ bool gamepadButtonPhysicallyDown(GAMEPAD_INPUT button)
 
 float gamepadAxis(GAMEPAD_AXIS axis)
 {
-	return 0.f;
+	ASSERT_OR_RETURN(0.f, axis < GPAD_AXIS_MAX, "Invalid gamepad axis: %d", (int)axis);
+	return aGamepadAxisValues[axis];
 }
 
 static optional<GAMEPAD_INPUT> gamepadInputFromSDLButton(Uint8 sdlButton)
@@ -255,25 +268,131 @@ void wzGamepadHandleSDLEvent(const SDL_Event& event)
 	}
 }
 
+static SDL_Gamepad* activeGamepadHandle()
+{
+	for (const auto& pad : openGamepads)
+	{
+		if (pad.first == activeGamepadId)
+		{
+			return pad.second;
+		}
+	}
+	return nullptr;
+}
+
+// Applies a radial deadzone to a stick, rescaling the remaining range to 0..1
+static void applyStickDeadzone(float rawX, float rawY, GAMEPAD_AXIS axisX, GAMEPAD_AXIS axisY)
+{
+	const float magnitude = std::sqrt(rawX * rawX + rawY * rawY);
+	if (magnitude < GAMEPAD_STICK_DEADZONE)
+	{
+		aGamepadAxisValues[axisX] = 0.f;
+		aGamepadAxisValues[axisY] = 0.f;
+		return;
+	}
+	const float scale = ((magnitude - GAMEPAD_STICK_DEADZONE) / (1.f - GAMEPAD_STICK_DEADZONE)) / magnitude;
+	aGamepadAxisValues[axisX] = std::clamp(rawX * scale, -1.f, 1.f);
+	aGamepadAxisValues[axisY] = std::clamp(rawY * scale, -1.f, 1.f);
+}
+
+static void updateAxisButton(GAMEPAD_INPUT button, float deflection)
+{
+	if (!axisButtonHeld[button] && deflection >= GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD)
+	{
+		axisButtonHeld[button] = true;
+		setGamepadButtonState(button, true);
+		debug(LOG_INPUT, "Gamepad axis button %d pressed", (int)button);
+	}
+	else if (axisButtonHeld[button] && deflection < GAMEPAD_AXIS_BUTTON_RELEASE_THRESHOLD)
+	{
+		axisButtonHeld[button] = false;
+		setGamepadButtonState(button, false);
+		debug(LOG_INPUT, "Gamepad axis button %d released", (int)button);
+	}
+}
+
 void wzGamepadUpdate()
 {
+	SDL_Gamepad* pad = activeGamepadHandle();
+	if (!pad)
+	{
+		return;
+	}
+
+	const auto rawAxis = [pad](SDL_GamepadAxis axis) -> float {
+		return std::clamp((float)SDL_GetGamepadAxis(pad, axis) / 32767.f, -1.f, 1.f);
+	};
+
+	applyStickDeadzone(rawAxis(SDL_GAMEPAD_AXIS_LEFTX), rawAxis(SDL_GAMEPAD_AXIS_LEFTY), GPAD_AXIS_LEFT_X, GPAD_AXIS_LEFT_Y);
+	applyStickDeadzone(rawAxis(SDL_GAMEPAD_AXIS_RIGHTX), rawAxis(SDL_GAMEPAD_AXIS_RIGHTY), GPAD_AXIS_RIGHT_X, GPAD_AXIS_RIGHT_Y);
+	aGamepadAxisValues[GPAD_AXIS_LEFT_TRIGGER] = std::clamp(rawAxis(SDL_GAMEPAD_AXIS_LEFT_TRIGGER), 0.f, 1.f);
+	aGamepadAxisValues[GPAD_AXIS_RIGHT_TRIGGER] = std::clamp(rawAxis(SDL_GAMEPAD_AXIS_RIGHT_TRIGGER), 0.f, 1.f);
+
+	updateAxisButton(GPAD_BTN_LEFT_TRIGGER, aGamepadAxisValues[GPAD_AXIS_LEFT_TRIGGER]);
+	updateAxisButton(GPAD_BTN_RIGHT_TRIGGER, aGamepadAxisValues[GPAD_AXIS_RIGHT_TRIGGER]);
+	// positive stick Y is downwards
+	updateAxisButton(GPAD_BTN_LSTICK_UP, -aGamepadAxisValues[GPAD_AXIS_LEFT_Y]);
+	updateAxisButton(GPAD_BTN_LSTICK_DOWN, aGamepadAxisValues[GPAD_AXIS_LEFT_Y]);
+	updateAxisButton(GPAD_BTN_LSTICK_LEFT, -aGamepadAxisValues[GPAD_AXIS_LEFT_X]);
+	updateAxisButton(GPAD_BTN_LSTICK_RIGHT, aGamepadAxisValues[GPAD_AXIS_LEFT_X]);
+	updateAxisButton(GPAD_BTN_RSTICK_UP, -aGamepadAxisValues[GPAD_AXIS_RIGHT_Y]);
+	updateAxisButton(GPAD_BTN_RSTICK_DOWN, aGamepadAxisValues[GPAD_AXIS_RIGHT_Y]);
+	updateAxisButton(GPAD_BTN_RSTICK_LEFT, -aGamepadAxisValues[GPAD_AXIS_RIGHT_X]);
+	updateAxisButton(GPAD_BTN_RSTICK_RIGHT, aGamepadAxisValues[GPAD_AXIS_RIGHT_X]);
+
+	for (unsigned int i = 0; i < GPAD_AXIS_MAX; ++i)
+	{
+		if (std::abs(aGamepadAxisValues[i] - lastLoggedAxisValues[i]) > 0.05f)
+		{
+			debug(LOG_INPUT, "Gamepad axis %u: %.2f", i, aGamepadAxisValues[i]);
+			lastLoggedAxisValues[i] = aGamepadAxisValues[i];
+		}
+	}
+}
+
+static void ageButtonStates(INPUT_STATE* states)
+{
+	for (unsigned int i = 0; i < GPAD_BTN_MAX; ++i)
+	{
+		if (states[i].state == KEY_PRESSED)
+		{
+			states[i].state = KEY_DOWN;
+		}
+		else if (states[i].state == KEY_RELEASED ||
+		         states[i].state == KEY_PRESSRELEASE)
+		{
+			states[i].state = KEY_UP;
+		}
+	}
 }
 
 void wzGamepadNewFrame()
 {
+	ageButtonStates(aGamepadState);
+	ageButtonStates(actualGamepadState);
 }
 
-void wzGamepadResetInputState()
+void wzGamepadClearButtonStates()
 {
 	for (unsigned int i = 0; i < GPAD_BTN_MAX; ++i)
 	{
 		aGamepadState[i].state = KEY_UP;
 		aGamepadState[i].lastdown = 0;
-		actualGamepadState[i].state = KEY_UP;
-		actualGamepadState[i].lastdown = 0;
 	}
 }
 
-void wzGamepadFlushPendingEvents()
+void wzGamepadResetInputState()
 {
+	wzGamepadClearButtonStates();
+	for (unsigned int i = 0; i < GPAD_BTN_MAX; ++i)
+	{
+		actualGamepadState[i].state = KEY_UP;
+		actualGamepadState[i].lastdown = 0;
+		axisButtonHeld[i] = false;
+	}
+	for (unsigned int i = 0; i < GPAD_AXIS_MAX; ++i)
+	{
+		aGamepadAxisValues[i] = 0.f;
+	}
 }
+

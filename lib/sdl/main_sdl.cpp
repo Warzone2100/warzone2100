@@ -1505,6 +1505,8 @@ void inputNewFrame(void)
 	// handle gestures (consume any unconsumed updates)
 	std::ignore = consumePinchGestureScaleUpdate();
 	std::ignore = consumePanGestureDeltaUpdate();
+
+	wzGamepadNewFrame();
 }
 
 /*!
@@ -1522,6 +1524,10 @@ void inputLoseFocus(void)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
+	// inputLoseFocus is also used by game code to swallow pending input, not just
+	// on actual focus loss - so clear only the logical gamepad button states here,
+	// leaving the raw device state driving click/key synthesis intact
+	wzGamepadClearButtonStates();
 }
 
 static void restoreKeyDownState(KEY_CODE code)
@@ -4053,6 +4059,7 @@ static void handleActiveEvent(SDL_Event *event)
 				actualKeyState[i].state = KEY_UP;
 			}
 			touchPoints.clear();
+			wzGamepadResetInputState();
 			break;
 		case SDL_EVENT_WINDOW_CLOSE_REQUESTED :
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
@@ -4184,6 +4191,7 @@ void wzEventLoopOneFrame(void* arg)
 	}
 
 	processScreenSizeChangeNotificationIfNeeded();
+	wzGamepadUpdate();			// poll gamepad axis state
 	mainLoop();				// WZ does its thing
 	inputNewFrame();			// reset input states
 #if defined(__EMSCRIPTEN__)
