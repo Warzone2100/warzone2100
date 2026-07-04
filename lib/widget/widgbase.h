@@ -227,6 +227,9 @@ public:
 	virtual void highlight(W_CONTEXT *) {}
 	virtual void highlightLost() {}
 
+	// Whether this widget scrolls its contents in response to mouse wheel input over it
+	virtual bool canConsumeWheelScroll() { return false; }
+
 protected:
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
