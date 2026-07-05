@@ -826,7 +826,10 @@ void OptionsKeyBindingsEdit::closeEditModeOverlay()
 
 	for (const auto& b : keyMappingSlotButtons)
 	{
-		b->setIsEditingMode(false);
+		if (b)
+		{
+			b->setIsEditingMode(false);
+		}
 	}
 }
 

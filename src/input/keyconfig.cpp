@@ -485,6 +485,10 @@ KeyMappingSlot keyMappingSlotByName(std::string const& name)
 	{
 		return KeyMappingSlot::SECONDARY;
 	}
+	else if (name == "gamepad")
+	{
+		return KeyMappingSlot::GAMEPAD;
+	}
 	else
 	{
 		debug(LOG_WZ, "Encountered invalid key mapping slot name '%s', falling back to using 'primary'", name.c_str());

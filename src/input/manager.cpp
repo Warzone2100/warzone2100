@@ -104,6 +104,9 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 		}
 	}
 
+	/* Files saved before the gamepad slot existed get the default gamepad mappings seeded in once */
+	const bool bSeedGamepadDefaults = !bForceDefaults && keyMappings.loadedFileVersion() < KEYMAP_FORMAT_VERSION;
+
 	/* Add in the default mappings if we are forcing defaults (e.g. "reset to defaults" button was pressed from the UI) or loading key map failed. */
 	for (const KeyFunctionInfo& info : keyFuncConfig.allKeyFunctionEntries())
 	{
@@ -112,7 +115,7 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 			const auto slot = mapping.first;
 			const auto keys = mapping.second;
 			/* Always add non-assignable mappings as they are not saved. */
-			if (bForceDefaults || info.type != KeyMappingType::ASSIGNABLE)
+			if (bForceDefaults || info.type != KeyMappingType::ASSIGNABLE || (bSeedGamepadDefaults && slot == KeyMappingSlot::GAMEPAD))
 			{
 				addDefaultMapping(keys.meta, keys.input, keys.action, info, slot);
 			}
