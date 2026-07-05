@@ -155,6 +155,7 @@ enum class KeyMappingSlot
 {
 	PRIMARY,
 	SECONDARY,
+	GAMEPAD,
 	LAST
 };
 

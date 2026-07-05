@@ -275,6 +275,11 @@ bool KeyMappings::isDirty() const
 	return bDirty;
 }
 
+int KeyMappings::loadedFileVersion() const
+{
+	return fileVersion;
+}
+
 void KeyMappings::clear(nonstd::optional<KeyMappingType> filter)
 {
 	if (!filter.has_value())
@@ -343,6 +348,8 @@ bool KeyMappings::load(const char* path, const KeyFunctionConfiguration& keyFunc
 		return false;
 	}
 
+	fileVersion = ini.value("version", 1).toInt();
+
 	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
 		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
@@ -385,7 +392,7 @@ bool KeyMappings::save(const char* path) const
 		return false;
 	}
 
-	ini.setValue("version", 2);
+	ini.setValue("version", KEYMAP_FORMAT_VERSION);
 
 	ini.beginArray("mappings");
 	for (const KeyMapping& mapping : keyMappings)
@@ -423,6 +430,9 @@ bool KeyMappings::save(const char* path) const
 			break;
 		case KeyMappingSlot::SECONDARY:
 			ini.setValue("slot", "secondary");
+			break;
+		case KeyMappingSlot::GAMEPAD:
+			ini.setValue("slot", "gamepad");
 			break;
 		default:
 			debug(LOG_WZ, "Encountered invalid key mapping slot %u while saving keymap!", static_cast<unsigned int>(mapping.slot));

@@ -32,6 +32,9 @@
 #include "keyconfig.h"
 #include "context.h"
 
+// keymap.json format version written on save. Version 3 added the gamepad slot
+static const int KEYMAP_FORMAT_VERSION = 3;
+
 struct KeyMapping
 {
 	const KeyFunctionInfo& info;
@@ -85,8 +88,11 @@ private:
 
 	bool isDirty() const;
 
+	int loadedFileVersion() const;
+
 	std::list<KeyMapping> keyMappings;
 	bool bDirty = true;
+	int fileVersion = 0;
 
 	friend class InputManager;
 
