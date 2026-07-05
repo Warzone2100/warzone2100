@@ -474,7 +474,8 @@ static void handleClickButton(GAMEPAD_INPUT gamepadButton, MOUSE_KEY_CODE mouseB
 {
 	const Vector2i pos((int)mouseX(), (int)mouseY());
 
-	if (actualButtonPressed(gamepadButton) && !state.held)
+	// holding the right shoulder reserves the face buttons for chorded actions
+	if (actualButtonPressed(gamepadButton) && !state.held && !actualButtonDown(GPAD_BTN_RIGHT_SHOULDER))
 	{
 		// holding the left shoulder makes this an additive/queueing click - assert
 		// shift so the existing modifier checks in the click handling apply, unless
@@ -506,9 +507,9 @@ static void handleClickButton(GAMEPAD_INPUT gamepadButton, MOUSE_KEY_CODE mouseB
 	}
 }
 
-static void handleKeyButton(GAMEPAD_INPUT gamepadButton, KEY_CODE key)
+static void handleKeyButton(GAMEPAD_INPUT gamepadButton, KEY_CODE key, bool suppressPress = false)
 {
-	if (actualButtonPressed(gamepadButton))
+	if (actualButtonPressed(gamepadButton) && !suppressPress)
 	{
 		inputSetKey(key, true);
 		inputAddEditingKey(key);
@@ -536,7 +537,8 @@ static void updateSyntheticInput()
 	handleClickButton(GPAD_BTN_EAST, MOUSE_RMB, syntheticRightClick);
 
 	handleKeyButton(GPAD_BTN_START, KEY_ESC);
-	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN);
+	// the right shoulder reserves west for its chorded action
+	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN, actualButtonDown(GPAD_BTN_RIGHT_SHOULDER));
 }
 
 void wzGamepadUpdate()
