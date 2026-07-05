@@ -711,7 +711,7 @@ static void updateSectorGeometry(WorldMapState& mapState, int x, int y)
 	ASSERT(geometrySize == sectors[x * ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
 	ASSERT(waterSize    == sectors[x * ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
-	if (geometryVBO) // absent under HardwareTess (the depth passes draw tessellated patches)
+	if (geometryVBO) // absent under HardwareTess (the shadow pass draws tessellated patches and the color pass writes depth)
 	{
 		geometryVBO->update(sizeof(TerrainVertex)*sectors[x * ySectors + y].geometryOffset,
 								sizeof(TerrainVertex)*sectors[x * ySectors + y].geometrySize, geometry,
@@ -1471,9 +1471,9 @@ bool initTerrain(WorldMapState& mapState)
 	geometryIndexVBO = nullptr;
 	if (terrainMeshStrategy != TerrainMeshStrategy::HardwareTess)
 	{
-		// under HardwareTess the depth passes draw tessellated patches instead,
-		// so the geometry buffers would be dead weight (the vertex grid is still
-		// computed above - the water build shares it)
+		// under HardwareTess the shadow pass draws tessellated patches and the
+		// color pass writes depth, so the geometry buffers would be dead weight
+		// (the vertex grid is still computed above - the water build shares it)
 		geometryVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw, "terrain::geometryVBO");
 		geometryVBO->upload(sizeof(TerrainVertex)*geometrySize, geometry);
 		geometryIndexVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::index_buffer, gfx_api::context::buffer_storage_hint::static_draw, "terrain::geometryIndexVBO");
@@ -1823,55 +1823,8 @@ static glm::vec4 terrainTessParams()
 	return glm::vec4(terrainTessMaxLevel(), static_cast<float>(dimension.second), 0.f, 0.f);
 }
 
-static void drawDepthOnlyTess(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
-{
-	if (!terrainDecalVBO || !terrainPatchIndexVBO)
-	{
-		return;
-	}
-	const auto &renderState = getCurrentRenderState();
-
-	gfx_api::TerrainDepthTess::get().bind();
-	gfx_api::TerrainDepthTess::get().bind_textures(lightmap_texture, terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
-	gfx_api::TerrainDepthTess::get().bind_vertex_buffers(terrainDecalVBO);
-	// the depth prepass uses the main camera itself, so tessCameraMVP == this pass's MVP
-	gfx_api::TerrainDepthTess::get().bind_constants({ ModelViewProjection, ModelViewProjection, paramsXLight, paramsYLight, glm::mat4(1.f),
-	terrainTessParams(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0.f });
-	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
-
-	if (withOffset)
-	{
-		gfx_api::context::get().set_polygon_offset(0.1f, 1.f);
-	}
-
-	for (int x = 0; x < xSectors; x++)
-	{
-		for (int y = 0; y < ySectors; y++)
-		{
-			if (sectors[x * ySectors + y].draw)
-			{
-				batchDrawElements<gfx_api::TerrainDepthTess>(
-					sectors[x * ySectors + y].patchIndexSize,
-					sectors[x * ySectors + y].patchIndexOffset);
-			}
-		}
-	}
-	flushDrawElementsBatch<gfx_api::TerrainDepthTess>();
-	if (withOffset)
-	{
-		gfx_api::context::get().set_polygon_offset(0.f, 0.f);
-	}
-	gfx_api::TerrainDepthTess::get().unbind_vertex_buffers(terrainDecalVBO);
-	gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
-}
-
 static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
-	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
-	{
-		drawDepthOnlyTess(ModelViewProjection, paramsXLight, paramsYLight, withOffset);
-		return;
-	}
 	const auto &renderState = getCurrentRenderState();
 
 	// bind the vertex buffer
@@ -1922,8 +1875,8 @@ static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection, c
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_textures(lightmap_texture, terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_vertex_buffers(terrainDecalVBO);
 	// this pass renders from the light, but the tessellation factors must come from the main camera so the shadow geometry matches the color pass
-	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_constants({{ ModelViewProjection, tessCameraMVP, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f),
-	terrainTessParams(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0.f }});
+	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_constants({ ModelViewProjection, tessCameraMVP, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f),
+	terrainTessParams(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0.f });
 	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
 
 	for (int x = 0; x < xSectors; x++)
@@ -2076,6 +2029,13 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 	};
 	PSO::get().set_uniforms(uniforms);
 
+	// This pass also writes terrain depth (there is no separate depth prepass under
+	// hardware tessellation, avoiding a second tessellated pass). Keep the prepass's
+	// polygon offset: structure baseplates rely on terrain depth being biased
+	// slightly farther to avoid z-fighting, and the offset biases depth only, not
+	// the rasterized position, so the drawn terrain is unaffected.
+	gfx_api::context::get().set_polygon_offset(0.1f, 1.f);
+
 	for (int x = 0; x < xSectors; x++)
 	{
 		for (int y = 0; y < ySectors; y++)
@@ -2089,6 +2049,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		}
 	}
 	flushDrawElementsBatch<PSO>();
+	gfx_api::context::get().set_polygon_offset(0.f, 0.f);
 	PSO::get().unbind_vertex_buffers(terrainDecalVBO);
 	gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
 }
@@ -2174,10 +2135,12 @@ void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector
 	const glm::vec4& paramsYLight = lightmapValues.paramsYLight;
 	const glm::mat4& ModelUVLightmap = lightmapValues.ModelUVLightmap;
 
-	if (true)
+	if (terrainMeshStrategy != TerrainMeshStrategy::HardwareTess)
 	{
 		//////////////////////////////////////
 		// canvas to draw on
+		// (under hardware tessellation the combined pass writes depth itself,
+		// with the prepass's polygon offset, so no separate depth prepass is needed)
 		drawDepthOnly(mvp, paramsXLight, paramsYLight, true);
 	}
 

@@ -23,7 +23,7 @@ void main()
 	{
 		float outerLevels[4];
 		float innerLevels[2];
-		// the color/depth-prepass passes ARE the main camera, so the pass and factor transforms coincide here
+		// the color pass IS the main camera, so the pass and factor transforms coincide here
 		wz_terrainTessLevels(ModelViewProjectionMatrix, ModelViewProjectionMatrix, float(viewportHeight), tessMaxLevel,
 							 gl_in[0].gl_Position.xyz, gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz, gl_in[3].gl_Position.xyz,
 							 outerLevels, innerLevels);

@@ -953,10 +953,6 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH_TESS, program_data{ "terrain_depth tess program", "shaders/terrain_depth_tess.vert", "shaders/terraindepth.frag",
-		{ "ModelViewProjectionMatrix", "tessCameraMVP", "paramx2", "paramy2", "textureMatrix2", "tessParams", "fogEnabled", "fogEnd", "fogStart" },
-		{ {"lightmap_tex", 0}, {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
-		"shaders/terrain_depth_tess.tesc", "shaders/terrain_depth_tess.tese" }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ "terrain_depthmap tess program", "shaders/terrain_depth_tess.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "tessCameraMVP", "paramx2", "paramy2", "textureMatrix2", "tessParams", "fogEnabled", "fogEnd", "fogStart" },
 		{ {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
@@ -1331,7 +1327,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
-		uniform_setting_func<gfx_api::TerrainDepthTessUniforms>(),
+		uniform_setting_func<gfx_api::TerrainDepthMapTessUniforms>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
 		uniform_binding_entry<SHADER_WATER_HIGH>(),
@@ -2504,7 +2500,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(5, cbuf.texture);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthTessUniforms& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::TerrainDepthMapTessUniforms& cbuf)
 {
 	setUniforms(0, cbuf.ModelViewProjectionMatrix);
 	setUniforms(1, cbuf.tessCameraMVP);

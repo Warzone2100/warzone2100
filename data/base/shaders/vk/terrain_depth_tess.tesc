@@ -6,7 +6,7 @@ layout(vertices = 4) out;
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
-	mat4 tessCameraMVP; // the MAIN camera's MVP (equals ModelViewProjectionMatrix for the depth prepass)
+	mat4 tessCameraMVP; // the MAIN camera's MVP: tessellation factors must match the color pass
 	vec4 paramx2;
 	vec4 paramy2;
 	mat4 textureMatrix2;

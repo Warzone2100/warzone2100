@@ -139,7 +139,6 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.tese"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.vert"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.tesc"
-	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.tese"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depthmap_tess.tese"
 )
 
