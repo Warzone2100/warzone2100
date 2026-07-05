@@ -64,11 +64,11 @@ public:
 	nonstd::optional<std::reference_wrapper<KeyMapping>> get(const std::string& name, const KeyMappingSlot slot);
 
 	/* Finds all mappings with matching meta and input */
-	std::vector<std::reference_wrapper<KeyMapping>> find(const KEY_CODE meta, const KeyMappingInput input);
+	std::vector<std::reference_wrapper<KeyMapping>> find(const KeyMappingMeta meta, const KeyMappingInput input);
 
-	std::vector<std::reference_wrapper<KeyMapping>> findConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId contextId, const ContextManager& contexts);
+	std::vector<std::reference_wrapper<KeyMapping>> findConflicting(const KeyMappingMeta meta, const KeyMappingInput input, const ContextId contextId, const ContextManager& contexts);
 
-	std::vector<KeyMapping> removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId& contextId, const ContextManager& contexts);
+	std::vector<KeyMapping> removeConflicting(const KeyMappingMeta meta, const KeyMappingInput input, const ContextId& contextId, const ContextManager& contexts);
 
 	/* Removes a mapping specified by a pointer */
 	bool remove(const KeyMapping& mappingToRemove);
