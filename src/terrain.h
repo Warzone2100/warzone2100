@@ -78,8 +78,10 @@ bool setTerrainMappingTexturesMaxSize(int texSize);
 int getTerrainMappingTexturesMaxSize();
 
 // Terrain mesh subdivision factor / "Terrain Detail" (1 = legacy geometry, up
-// to MAX_TERRAIN_MESH_SUBDIVISION). Values > 1 render each tile as N x N
-// sub-quads sampled from the smooth terrain surface (terrain_surface.h).
+// to MAX_TERRAIN_MESH_SUBDIVISION). Values > 1 render a dense mesh sampled
+// from the smooth terrain surface (terrain_surface.h) - N x N sub-quads per
+// tile on the CPU strategy, GPU-generated triangles under hardware
+// tessellation.
 // Rendering only - no simulation impact. Takes effect immediately when
 // in-game (full terrain re-init), otherwise at the next initTerrain().
 // Classic terrain quality always renders with the legacy geometry regardless
@@ -88,6 +90,19 @@ int getTerrainMappingTexturesMaxSize();
 #define MAX_TERRAIN_MESH_SUBDIVISION 4
 bool setTerrainMeshSubdivision(int factor);
 int getTerrainMeshSubdivision();
+
+// How the dense terrain mesh is produced when Terrain Detail is above Off:
+// CPU-subdivided vertex buffers, or hardware tessellation (per-tile patches evaluating baked surface fields on the GPU).
+// Internal strategy behind the same Terrain Detail setting.
+// Auto currently resolves to the CPU mesh.
+enum class TerrainTessellationPreference
+{
+	Auto = 0,
+	ForceCPU = 1,
+	ForceHardware = 2,
+};
+bool setTerrainTessellationPreference(TerrainTessellationPreference pref);
+TerrainTessellationPreference getTerrainTessellationPreference();
 
 // Visual-only height correction for settling a rendered object onto the drawn
 // terrain surface, which deviates from the gameplay surface (map_Height) when

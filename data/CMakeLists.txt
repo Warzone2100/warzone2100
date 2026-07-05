@@ -134,6 +134,13 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.tesc"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.tese"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/tess_quad.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_combined_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_tess.tese"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depthmap_tess.tese"
 )
 
 set(SHADER_LIST "")
