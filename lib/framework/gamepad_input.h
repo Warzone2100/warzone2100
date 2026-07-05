@@ -84,6 +84,11 @@ bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame
 // Raw device state, unaffected by overlays swallowing the logical input state
 bool gamepadButtonPhysicallyDown(GAMEPAD_INPUT button);
 
+// Whether a synthetic mouse button press from a gamepad button is still held.
+// More reliable than mouseDown for drag detection, since a double-click press
+// ages out of the mouse state while the button remains held
+bool gamepadSyntheticClickHeld();
+
 // Deadzone-adjusted axis value. Sticks are -1..1 and triggers are 0..1
 float gamepadAxis(GAMEPAD_AXIS axis);
 
