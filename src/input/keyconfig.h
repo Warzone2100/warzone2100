@@ -26,13 +26,15 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/gamepad_input.h"
 
 #include "context.h"
 
 enum class KeyMappingInputSource
 {
 	KEY_CODE = 1,
-	MOUSE_KEY_CODE
+	MOUSE_KEY_CODE,
+	GAMEPAD
 };
 
 KeyMappingInputSource keyMappingSourceByName(const std::string& name);
@@ -41,9 +43,11 @@ union KeyMappingInputValue
 {
 	KEY_CODE       keyCode;
 	MOUSE_KEY_CODE mouseKeyCode;
+	GAMEPAD_INPUT  gamepadInput;
 
 	KeyMappingInputValue(const KEY_CODE keyCode);
 	KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode);
+	KeyMappingInputValue(const GAMEPAD_INPUT gamepadInput);
 };
 
 struct KeyMappingInput
@@ -59,12 +63,15 @@ struct KeyMappingInput
 
 	bool is(const KEY_CODE keyCode) const;
 	bool is(const MOUSE_KEY_CODE mouseKeyCode) const;
+	bool is(const GAMEPAD_INPUT gamepadInput) const;
 
 	nonstd::optional<KEY_CODE> asKeyCode() const;
 	nonstd::optional<MOUSE_KEY_CODE> asMouseKeyCode() const;
+	nonstd::optional<GAMEPAD_INPUT> asGamepadInput() const;
 
 	KeyMappingInput(const KEY_CODE keyCode);
 	KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode);
+	KeyMappingInput(const GAMEPAD_INPUT gamepadInput);
 
 	KeyMappingInput();
 
@@ -82,6 +89,9 @@ struct KeyMappingInput
 			case KeyMappingInputSource::MOUSE_KEY_CODE:
 				// Offset by large value to avoid conflicts with KEY_CODEs
 				hValue += 10000 + static_cast<unsigned int>(kmi.value.mouseKeyCode);
+				break;
+			case KeyMappingInputSource::GAMEPAD:
+				hValue += 20000 + static_cast<unsigned int>(kmi.value.gamepadInput);
 				break;
 			}
 			return hSource ^ (hValue << 1);

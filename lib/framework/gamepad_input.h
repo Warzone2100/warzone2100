@@ -95,4 +95,7 @@ bool gamepadSyntheticClickHeld();
 // Deadzone-adjusted axis value. Sticks are -1..1 and triggers are 0..1
 float gamepadAxis(GAMEPAD_AXIS axis);
 
+// Generic display name for a button, using Xbox-style labels
+const char* gamepadButtonName(GAMEPAD_INPUT button);
+
 #endif // __INCLUDED_LIB_FRAMEWORK_GAMEPAD_INPUT_H__

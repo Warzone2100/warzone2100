@@ -300,6 +300,8 @@ bool KeyMappingInput::isPressed() const
 		return keyPressed(value.keyCode);
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return mousePressed(value.mouseKeyCode);
+	case KeyMappingInputSource::GAMEPAD:
+		return gamepadButtonPressed(value.gamepadInput);
 	default:
 		return false;
 	}
@@ -312,6 +314,8 @@ bool KeyMappingInput::isDown() const
 		return keyDown(value.keyCode);
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return mouseDown(value.mouseKeyCode);
+	case KeyMappingInputSource::GAMEPAD:
+		return gamepadButtonDown(value.gamepadInput);
 	default:
 		return false;
 	}
@@ -324,6 +328,8 @@ bool KeyMappingInput::isReleased() const
 		return keyReleased(value.keyCode);
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return mouseReleased(value.mouseKeyCode);
+	case KeyMappingInputSource::GAMEPAD:
+		return gamepadButtonReleased(value.gamepadInput);
 	default:
 		return false;
 	}
@@ -342,6 +348,11 @@ bool KeyMappingInput::is(const KEY_CODE keyCode) const
 bool KeyMappingInput::is(const MOUSE_KEY_CODE mouseKeyCode) const
 {
 	return source == KeyMappingInputSource::MOUSE_KEY_CODE && value.mouseKeyCode == mouseKeyCode;
+}
+
+bool KeyMappingInput::is(const GAMEPAD_INPUT gamepadInput) const
+{
+	return source == KeyMappingInputSource::GAMEPAD && value.gamepadInput == gamepadInput;
 }
 
 nonstd::optional<KEY_CODE> KeyMappingInput::asKeyCode() const
@@ -368,6 +379,18 @@ nonstd::optional<MOUSE_KEY_CODE> KeyMappingInput::asMouseKeyCode() const
 	}
 }
 
+nonstd::optional<GAMEPAD_INPUT> KeyMappingInput::asGamepadInput() const
+{
+	if (source == KeyMappingInputSource::GAMEPAD)
+	{
+		return value.gamepadInput;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
 KeyMappingInput::KeyMappingInput()
 	: source(KeyMappingInputSource::KEY_CODE)
 	, value(KEY_CODE::KEY_IGNORE)
@@ -386,6 +409,12 @@ KeyMappingInput::KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode)
 {
 }
 
+KeyMappingInput::KeyMappingInput(const GAMEPAD_INPUT gamepadInput)
+	: source(KeyMappingInputSource::GAMEPAD)
+	, value(KeyMappingInputValue(gamepadInput))
+{
+}
+
 KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)
 	: keyCode(keyCode)
 {
@@ -393,6 +422,11 @@ KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)
 
 KeyMappingInputValue::KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode)
 	: mouseKeyCode(mouseKeyCode)
+{
+}
+
+KeyMappingInputValue::KeyMappingInputValue(const GAMEPAD_INPUT gamepadInput)
+	: gamepadInput(gamepadInput)
 {
 }
 
@@ -407,6 +441,8 @@ bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs)
 		return lhs.value.keyCode == rhs.value.keyCode;
 	case KeyMappingInputSource::MOUSE_KEY_CODE:
 		return lhs.value.mouseKeyCode == rhs.value.mouseKeyCode;
+	case KeyMappingInputSource::GAMEPAD:
+		return lhs.value.gamepadInput == rhs.value.gamepadInput;
 	default:
 		return false;
 	}
@@ -427,6 +463,10 @@ KeyMappingInputSource keyMappingSourceByName(std::string const& name)
 	else if (name == "mouse_key")
 	{
 		return KeyMappingInputSource::MOUSE_KEY_CODE;
+	}
+	else if (name == "gamepad")
+	{
+		return KeyMappingInputSource::GAMEPAD;
 	}
 	else
 	{

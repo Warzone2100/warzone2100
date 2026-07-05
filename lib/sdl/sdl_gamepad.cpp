@@ -143,6 +143,40 @@ float gamepadAxis(GAMEPAD_AXIS axis)
 	return aGamepadAxisValues[axis];
 }
 
+const char* gamepadButtonName(GAMEPAD_INPUT button)
+{
+	switch (button)
+	{
+	case GPAD_BTN_SOUTH: return "A";
+	case GPAD_BTN_EAST: return "B";
+	case GPAD_BTN_WEST: return "X";
+	case GPAD_BTN_NORTH: return "Y";
+	case GPAD_BTN_BACK: return "Back";
+	case GPAD_BTN_GUIDE: return "Guide";
+	case GPAD_BTN_START: return "Start";
+	case GPAD_BTN_LEFT_STICK: return "L3";
+	case GPAD_BTN_RIGHT_STICK: return "R3";
+	case GPAD_BTN_LEFT_SHOULDER: return "LB";
+	case GPAD_BTN_RIGHT_SHOULDER: return "RB";
+	case GPAD_BTN_DPAD_UP: return "D-Pad Up";
+	case GPAD_BTN_DPAD_DOWN: return "D-Pad Down";
+	case GPAD_BTN_DPAD_LEFT: return "D-Pad Left";
+	case GPAD_BTN_DPAD_RIGHT: return "D-Pad Right";
+	case GPAD_BTN_LEFT_TRIGGER: return "LT";
+	case GPAD_BTN_RIGHT_TRIGGER: return "RT";
+	case GPAD_BTN_LSTICK_UP: return "LS Up";
+	case GPAD_BTN_LSTICK_DOWN: return "LS Down";
+	case GPAD_BTN_LSTICK_LEFT: return "LS Left";
+	case GPAD_BTN_LSTICK_RIGHT: return "LS Right";
+	case GPAD_BTN_RSTICK_UP: return "RS Up";
+	case GPAD_BTN_RSTICK_DOWN: return "RS Down";
+	case GPAD_BTN_RSTICK_LEFT: return "RS Left";
+	case GPAD_BTN_RSTICK_RIGHT: return "RS Right";
+	case GPAD_BTN_MAX: break;
+	}
+	return "?";
+}
+
 static optional<GAMEPAD_INPUT> gamepadInputFromSDLButton(Uint8 sdlButton)
 {
 	switch (sdlButton)
