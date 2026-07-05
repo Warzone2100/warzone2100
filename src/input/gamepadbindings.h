@@ -27,4 +27,8 @@
 // from the game input processing
 void gamepadProcessBindings();
 
+// The slice of the dispatch that must keep working while the game update is
+// paused, when the input processing above does not run
+void gamepadProcessPausedBindings();
+
 #endif // __INCLUDED_SRC_INPUT_GAMEPADBINDINGS_H__
