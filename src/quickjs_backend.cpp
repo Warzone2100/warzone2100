@@ -1035,6 +1035,12 @@ struct JsonToJSContext
 // Returns JS_UNINITIALIZED if not resolvable.
 static JSValue resolveClassPrototype(JSContext* ctx, const std::string& className)
 {
+	// Mirror the save side (getSerializableClassName), which only serializes script-defined classes
+	// (and never a built-in constructor name)
+	if (className.empty() || isBuiltinConstructorName(className))
+	{
+		return JS_UNINITIALIZED;
+	}
 	JSValue ctor = resolveGlobalBindingByName(ctx, className);
 	if (!JS_IsConstructor(ctx, ctor))
 	{
@@ -1159,9 +1165,9 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 				{
 					if (isArray && dataIt->is_array())
 					{
-						for (int i = 0; i < dataIt->size(); i++)
+						for (size_t i = 0; i < dataIt->size(); i++)
 						{
-							JS_DefinePropertyValueUint32(ctx, obj, i, mapJsonToQuickJSValueWithContext(c, dataIt->at(i), prop_flags), prop_flags);
+							JS_DefinePropertyValueUint32(ctx, obj, static_cast<uint32_t>(i), mapJsonToQuickJSValueWithContext(c, dataIt->at(i), prop_flags), prop_flags);
 						}
 					}
 					else if (!isArray && dataIt->is_object())
@@ -1194,9 +1200,9 @@ JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::jso
 	{
 		// Legacy bare array.
 		JSValue value = JS_NewArray(ctx);
-		for (int i = 0; i < instance.size(); i++)
+		for (size_t i = 0; i < instance.size(); i++)
 		{
-			JS_DefinePropertyValueUint32(ctx, value, i, mapJsonToQuickJSValueWithContext(c, instance.at(i), prop_flags), prop_flags);
+			JS_DefinePropertyValueUint32(ctx, value, static_cast<uint32_t>(i), mapJsonToQuickJSValueWithContext(c, instance.at(i), prop_flags), prop_flags);
 		}
 		return value;
 	}
@@ -2974,6 +2980,7 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
 	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	int32_t ms = JSValueToInt32(ctx, argv[1]);
+	SCRIPT_ASSERT(ctx, ms >= 0, "Timer delay must be non-negative");
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
@@ -3313,9 +3320,39 @@ bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result,
 	JsonToJSContext loadCtx(ctx, fixedNulls);
 	for (auto it : result.items())
 	{
+		const std::string &key = it.key();
+		// Mirror the saveScriptGlobals filter so restored data cannot clobber engine bindings or built-ins:
+		// skip internal-namespace names, and any existing global binding that is a function / constructor,
+		// an accessor, or a non-enumerable built-in (none of which a legitimate save holds)
+		bool skip = (internalNamespace.count(key) != 0);
+		if (!skip)
+		{
+			JSAtom atom = JS_NewAtom(ctx, key.c_str());
+			JSPropertyDescriptor desc;
+			int has = JS_GetOwnProperty(ctx, &desc, global_obj, atom);
+			JS_FreeAtom(ctx, atom);
+			if (has == 1)
+			{
+				// Overwritable only if it is currently an enumerable data property that is not callable
+				skip = JS_IsFunction(ctx, desc.value) || JS_IsConstructor(ctx, desc.value)
+					|| (desc.flags & (JS_PROP_GETSET | JS_PROP_ENUMERABLE)) != JS_PROP_ENUMERABLE;
+				JS_FreeValue(ctx, desc.value);
+				JS_FreeValue(ctx, desc.getter);
+				JS_FreeValue(ctx, desc.setter);
+			}
+			else if (has < 0)
+			{
+				skip = true; // error probing the property - be conservative
+			}
+		}
+		if (skip)
+		{
+			debug(LOG_ERROR, "[script: %s] Skipping restore of protected/internal global: \"%s\"", scriptName().c_str(), key.c_str());
+			continue;
+		}
 		// NOTE: Properties created on the JS global object (as "global variables") should be non-configurable.
 		//		 However *their* properties should probably be C_W_E.
-		int ret = JS_DefinePropertyValueStr(ctx, global_obj, it.key().c_str(), mapJsonToQuickJSValueWithContext(loadCtx, it.value(), JS_PROP_C_W_E), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE | JS_PROP_THROW);
+		int ret = JS_DefinePropertyValueStr(ctx, global_obj, key.c_str(), mapJsonToQuickJSValueWithContext(loadCtx, it.value(), JS_PROP_C_W_E), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE | JS_PROP_THROW);
 		if (ret != 1)
 		{
 			// Failed to load script global

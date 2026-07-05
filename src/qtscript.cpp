@@ -253,7 +253,12 @@ uniqueTimerID scripting_engine::setTimer(wzapi::scripting_instance *caller, cons
 // internal-only function that adds a Timer node (used for restoring saved games)
 void scripting_engine::addTimerNode(std::shared_ptr<scripting_engine::timerNode>&& node)
 {
-	ASSERT(timerIDMap.count(node->timerID) == 0, "Duplicate timerID found: %s", WzString::number(node->timerID).toUtf8().c_str());
+	if (timerIDMap.count(node->timerID) != 0)
+	{
+		// Skip a colliding id - should never happen for live timers
+		ASSERT(false, "Duplicate timerID found: %s", WzString::number(node->timerID).toUtf8().c_str());
+		return;
+	}
 	auto inserted_iter = timers.emplace(timers.end(), std::move(node));
 	timerIDMap[(*inserted_iter)->timerID] = inserted_iter;
 }
@@ -1092,8 +1097,16 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 	auto timersIt = root.find("timers");
 	if (timersIt != root.end() && timersIt->is_array())
 	{
+		// Bound the number of restored timers to something far above any real game
+		constexpr size_t MAX_RESTORED_TIMERS = 100000;
+		size_t restoredTimerCount = 0;
 		for (const auto& nodeInfo : *timersIt)
 		{
+			if (restoredTimerCount >= MAX_RESTORED_TIMERS)
+			{
+				debug(LOG_ERROR, "Too many timers in script state (> %zu); ignoring the rest", MAX_RESTORED_TIMERS);
+				break;
+			}
 			if (!nodeInfo.is_object())
 			{
 				ASSERT(false, "Malformed timer entry in script states (not an object)");
@@ -1117,6 +1130,11 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 			node->baseobjtype = (OBJECT_TYPE)nodeInfo.value("objectType", (int)OBJ_NUM_TYPES);
 			node->frameTime = nodeInfo.value("frame", 0);
 			node->ms = nodeInfo.value("ms", 0);
+			if (node->ms < 0)
+			{
+				debug(LOG_ERROR, "Skipping restore of timer with negative ms (%d)", node->ms);
+				continue;
+			}
 			node->player = player;
 			node->calls = nodeInfo.value("calls", 0);
 			node->type = (timerType)nodeInfo.value("type", (int)TIMER_REPEAT);
@@ -1142,6 +1160,7 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 			node->additionalTimerFuncParam = std::move(std::get<1>(restoredTimerInfo));
 
 			addTimerNode(std::move(node));
+			++restoredTimerCount;
 		}
 	}
 
