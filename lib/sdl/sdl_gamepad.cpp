@@ -26,6 +26,7 @@
 #include "sdl_backend_private.h"
 #include "src/warzoneconfig.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/widget/widget.h"
 
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_hints.h>
@@ -41,6 +42,8 @@
 static const float GAMEPAD_STICK_DEADZONE = 0.15f;
 // Cursor speed at full stick deflection, in logical pixels per second
 static const float GAMEPAD_CURSOR_SPEED = 800.f;
+// Widget scroll speed at full stick deflection, in wheel units per second
+static const float GAMEPAD_SCROLL_SPEED = 18.f;
 // Cursor speed multiplier while the left stick is clicked in
 static const float GAMEPAD_CURSOR_PRECISION_FACTOR = 0.5f;
 // Axis thresholds for the synthesized trigger and stick-direction buttons, with hysteresis
@@ -59,6 +62,7 @@ static INPUT_STATE aGamepadState[GPAD_BTN_MAX] = {};
 // loss or device removal, so held synthetic input always completes
 static INPUT_STATE actualGamepadState[GPAD_BTN_MAX] = {};
 static bool gamepadIsActiveInput = false;
+static bool rightStickScrollingWidget = false;
 // Cursor position with subpixel precision, valid while the gamepad is the active input source
 static float virtualCursorX = 0.f;
 static float virtualCursorY = 0.f;
@@ -75,6 +79,11 @@ bool gamepadIsConnected()
 bool isGamepadActiveInput()
 {
 	return gamepadIsActiveInput;
+}
+
+bool gamepadRightStickConsumedByUI()
+{
+	return rightStickScrollingWidget;
 }
 
 static void markGamepadActive()
@@ -373,14 +382,8 @@ static void updateAxisButton(GAMEPAD_INPUT button, float deflection)
 }
 
 // Moves the cursor from left-stick deflection while the gamepad is the active input source
-static void updateVirtualCursor()
+static void updateVirtualCursor(float dt)
 {
-	static Uint64 lastTick = 0;
-	const Uint64 now = SDL_GetTicks();
-	// clamp dt so a long stall cannot fling the cursor
-	const float dt = (lastTick != 0) ? std::min((float)(now - lastTick) / 1000.f, 0.1f) : 0.f;
-	lastTick = now;
-
 	if (!gamepadIsActiveInput)
 	{
 		return;
@@ -406,6 +409,47 @@ static void updateVirtualCursor()
 	virtualCursorY = std::clamp(virtualCursorY, 0.f, (float)(screenHeight > 0 ? screenHeight - 1 : 0));
 
 	inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
+}
+
+// Scrolls the widget under the cursor with the right stick. The camera skips
+// consuming the stick while this captures it
+static void updateRightStickScroll(float dt)
+{
+	rightStickScrollingWidget = false;
+
+	if (!gamepadIsActiveInput)
+	{
+		return;
+	}
+	// holding the right shoulder routes the stick to camera rotation regardless of hover
+	if (actualButtonDown(GPAD_BTN_RIGHT_SHOULDER))
+	{
+		return;
+	}
+	const float deflectionX = aGamepadAxisValues[GPAD_AXIS_RIGHT_X];
+	const float deflectionY = aGamepadAxisValues[GPAD_AXIS_RIGHT_Y];
+	static float wheelAccumulatorX = 0.f;
+	static float wheelAccumulatorY = 0.f;
+	if ((deflectionX == 0.f && deflectionY == 0.f) || !isMouseOverWheelScrollConsumingWidget())
+	{
+		wheelAccumulatorX = 0.f;
+		wheelAccumulatorY = 0.f;
+		return;
+	}
+	rightStickScrollingWidget = true;
+
+	// stick up scrolls up and stick right scrolls right - accumulate
+	// fractional wheel units across frames
+	wheelAccumulatorX += deflectionX * GAMEPAD_SCROLL_SPEED * dt;
+	wheelAccumulatorY += -deflectionY * GAMEPAD_SCROLL_SPEED * dt;
+	const int wholeUnitsX = (int)wheelAccumulatorX;
+	const int wholeUnitsY = (int)wheelAccumulatorY;
+	if (wholeUnitsX != 0 || wholeUnitsY != 0)
+	{
+		wheelAccumulatorX -= (float)wholeUnitsX;
+		wheelAccumulatorY -= (float)wholeUnitsY;
+		inputAddMouseWheelScroll(Vector2i(wholeUnitsX, wholeUnitsY));
+	}
 }
 
 // Synthetic mouse click driven by a gamepad face button
@@ -537,7 +581,14 @@ void wzGamepadUpdate()
 		}
 	}
 
-	updateVirtualCursor();
+	static Uint64 lastTick = 0;
+	const Uint64 now = SDL_GetTicks();
+	// clamp dt so a long stall cannot fling the cursor or scroll
+	const float dt = (lastTick != 0) ? std::min((float)(now - lastTick) / 1000.f, 0.1f) : 0.f;
+	lastTick = now;
+
+	updateVirtualCursor(dt);
+	updateRightStickScroll(dt);
 	updateSyntheticInput();
 }
 

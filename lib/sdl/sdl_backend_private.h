@@ -58,6 +58,7 @@ struct INPUT_STATE
 void inputSetKey(KEY_CODE code, bool pressed);
 void inputSetMouseButton(MOUSE_KEY_CODE mouseKeyCode, bool pressed, Vector2i logicalPos);
 void inputSetMousePos(int logicalX, int logicalY);
+void inputAddMouseWheelScroll(Vector2i delta);
 
 // Adds an editing key press (enter, escape, arrows, etc) to the text input buffer
 void inputAddEditingKey(KEY_CODE code);

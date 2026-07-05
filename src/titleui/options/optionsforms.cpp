@@ -290,6 +290,7 @@ public:
 	void informLanguageDidChange();
 protected:
 	virtual std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	virtual bool canConsumeWheelScroll() override;
 	virtual void geometryChanged() override;
 	virtual void display(int xOffset, int yOffset) override;
 	virtual void displayRecursive(WidgetGraphicsContext const &context) override;
@@ -682,6 +683,12 @@ void HorizontalButtonsWidget::updateScrollButtonsState()
 	bool buttonsVisible = (!leftScrollButtonDisabled || !rightScrollButtonDisabled);
 	scrollLeftButton->show(buttonsVisible);
 	scrollRightButton->show(buttonsVisible);
+}
+
+bool HorizontalButtonsWidget::canConsumeWheelScroll()
+{
+	updateLayout();
+	return scrollableWidth > width();
 }
 
 std::shared_ptr<WIDGET> HorizontalButtonsWidget::findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)

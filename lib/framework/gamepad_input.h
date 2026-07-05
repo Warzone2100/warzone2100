@@ -77,6 +77,9 @@ bool gamepadIsConnected();
 
 // Whether the gamepad is the most recent input source (vs the mouse/keyboard)
 bool isGamepadActiveInput();
+
+// Whether the right stick is currently scrolling the widget under the cursor
+bool gamepadRightStickConsumedByUI();
 bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame
