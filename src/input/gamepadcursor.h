@@ -1,7 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008  Giel van Schijndel
-	Copyright (C) 2008-2020  Warzone 2100 Project
+	Copyright (C) 2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,18 +17,15 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file
- *  SDL black/white cursor access functions.
+ *  Cursor drawing for gamepad input.
  */
 
-#ifndef __INCLUDED_LIB_SDL_CURSORS_SDL_H__
-#define __INCLUDED_LIB_SDL_CURSORS_SDL_H__
+#ifndef __INCLUDED_SRC_INPUT_GAMEPADCURSOR_H__
+#define __INCLUDED_SRC_INPUT_GAMEPADCURSOR_H__
 
-#include "lib/framework/cursors.h"
+// Registers the overlay screen that draws the cursor while the gamepad is the
+// active input source. Call once the widget system is initialized
+bool gamepadCursorInit();
+void gamepadCursorShutdown();
 
-void sdlInitCursors();
-void sdlInitColoredCursors();
-void sdlFreeCursors();
-void wzSDLReinitCursors();
-void wzQueueRefreshCursor();
-
-#endif // __INCLUDED_LIB_SDL_CURSORS_SDL_H__
+#endif // __INCLUDED_SRC_INPUT_GAMEPADCURSOR_H__

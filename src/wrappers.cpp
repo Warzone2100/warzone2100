@@ -26,6 +26,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/gamepad_input.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piemode.h"
@@ -220,7 +221,7 @@ TITLECODE titleLoop()
 	{
 		screen_RestartBackDrop();
 	}
-	wzShowMouse(true);
+	wzShowMouse(!isGamepadActiveInput());
 
 	// When we first init the game, firstcall is true.
 	if (firstcall)
