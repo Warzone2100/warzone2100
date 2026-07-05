@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
 
 namespace terrainSurface
 {
@@ -58,7 +59,7 @@ float cornerHeight(const WorldMapState& mapState, int x, int y, HeightMode mode)
 	return 0.f;
 }
 
-float cornerSharpness(const WorldMapState& mapState, int x, int y)
+static float computeCornerSharpness(const WorldMapState& mapState, int x, int y)
 {
 	// cliffs must stay sharp: check the (up to) 4 tiles sharing this corner
 	for (int dy = -1; dy <= 0; dy++)
@@ -87,6 +88,134 @@ float cornerSharpness(const WorldMapState& mapState, int x, int y)
 	return s * s * (3.f - 2.f * s); // smoothstep
 }
 
+// Per-corner surface caches. heightAt() reads four corner sharpness values
+// per evaluation (and, in water mode, a 4x4 stencil of sanitized water
+// levels). Computing each touches several neighboring corners and tiles, so
+// recomputation dominates the dense mesh / field bake build cost. The caches
+// are rebuilt in bulk on the main thread (full map at terrain init, dirty
+// regions on deformation, before any surface evaluation runs) and are
+// strictly read-only during evaluation - which keeps evaluation safe for the
+// parallel bake workers. Out-of-range corners (the map border ring) fall back
+// to direct computation.
+struct PlateauRange
+{
+	float lo;
+	float hi;
+};
+
+static std::vector<float> sharpnessCache;
+static std::vector<float> waterLatticeCache;
+// plateau ranges are mode-dependent. Only Ground (mesh builds, field bake)
+// and Surface (unit settle, Classic) reach them - the water branch of
+// heightAt() returns before the plateau lookup
+static std::vector<PlateauRange> plateauGroundCache;
+static std::vector<PlateauRange> plateauSurfaceCache;
+static int surfaceCacheCornersX = 0;
+static int surfaceCacheCornersY = 0;
+
+static float computeWaterCornerHeight(const WorldMapState& mapState, int x, int y);
+static void computeCornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi);
+
+float cornerSharpness(const WorldMapState& mapState, int x, int y)
+{
+	if (x >= 0 && y >= 0 && x < surfaceCacheCornersX && y < surfaceCacheCornersY)
+	{
+		return sharpnessCache[static_cast<size_t>(y) * surfaceCacheCornersX + x];
+	}
+	return computeCornerSharpness(mapState, x, y);
+}
+
+static float waterCornerHeight(const WorldMapState& mapState, int x, int y)
+{
+	if (x >= 0 && y >= 0 && x < surfaceCacheCornersX && y < surfaceCacheCornersY)
+	{
+		return waterLatticeCache[static_cast<size_t>(y) * surfaceCacheCornersX + x];
+	}
+	return computeWaterCornerHeight(mapState, x, y);
+}
+
+static void cornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi)
+{
+	if (x >= 0 && y >= 0 && x < surfaceCacheCornersX && y < surfaceCacheCornersY)
+	{
+		if (mode == HeightMode::Ground)
+		{
+			const PlateauRange& r = plateauGroundCache[static_cast<size_t>(y) * surfaceCacheCornersX + x];
+			lo = r.lo;
+			hi = r.hi;
+			return;
+		}
+		if (mode == HeightMode::Surface)
+		{
+			const PlateauRange& r = plateauSurfaceCache[static_cast<size_t>(y) * surfaceCacheCornersX + x];
+			lo = r.lo;
+			hi = r.hi;
+			return;
+		}
+	}
+	computeCornerPlateauRange(mapState, x, y, mode, lo, hi);
+}
+
+void rebuildSurfaceCaches(const WorldMapState& mapState)
+{
+	surfaceCacheCornersX = mapState.width + 1;
+	surfaceCacheCornersY = mapState.height + 1;
+	const size_t corners = static_cast<size_t>(surfaceCacheCornersX) * surfaceCacheCornersY;
+	sharpnessCache.resize(corners);
+	waterLatticeCache.resize(corners);
+	plateauGroundCache.resize(corners);
+	plateauSurfaceCache.resize(corners);
+	for (int y = 0; y < surfaceCacheCornersY; y++)
+	{
+		for (int x = 0; x < surfaceCacheCornersX; x++)
+		{
+			const size_t idx = static_cast<size_t>(y) * surfaceCacheCornersX + x;
+			sharpnessCache[idx] = computeCornerSharpness(mapState, x, y);
+			waterLatticeCache[idx] = computeWaterCornerHeight(mapState, x, y);
+			computeCornerPlateauRange(mapState, x, y, HeightMode::Ground, plateauGroundCache[idx].lo, plateauGroundCache[idx].hi);
+			computeCornerPlateauRange(mapState, x, y, HeightMode::Surface, plateauSurfaceCache[idx].lo, plateauSurfaceCache[idx].hi);
+		}
+	}
+}
+
+void rebuildSurfaceCachesRegion(const WorldMapState& mapState, int minCornerX, int minCornerY, int maxCornerX, int maxCornerY)
+{
+	if (surfaceCacheCornersX != mapState.width + 1 || surfaceCacheCornersY != mapState.height + 1)
+	{
+		rebuildSurfaceCaches(mapState);
+		return;
+	}
+	minCornerX = std::max(minCornerX, 0);
+	minCornerY = std::max(minCornerY, 0);
+	maxCornerX = std::min(maxCornerX, surfaceCacheCornersX - 1);
+	maxCornerY = std::min(maxCornerY, surfaceCacheCornersY - 1);
+	for (int y = minCornerY; y <= maxCornerY; y++)
+	{
+		for (int x = minCornerX; x <= maxCornerX; x++)
+		{
+			const size_t idx = static_cast<size_t>(y) * surfaceCacheCornersX + x;
+			sharpnessCache[idx] = computeCornerSharpness(mapState, x, y);
+			waterLatticeCache[idx] = computeWaterCornerHeight(mapState, x, y);
+			computeCornerPlateauRange(mapState, x, y, HeightMode::Ground, plateauGroundCache[idx].lo, plateauGroundCache[idx].hi);
+			computeCornerPlateauRange(mapState, x, y, HeightMode::Surface, plateauSurfaceCache[idx].lo, plateauSurfaceCache[idx].hi);
+		}
+	}
+}
+
+void clearSurfaceCaches()
+{
+	sharpnessCache.clear();
+	sharpnessCache.shrink_to_fit();
+	waterLatticeCache.clear();
+	waterLatticeCache.shrink_to_fit();
+	plateauGroundCache.clear();
+	plateauGroundCache.shrink_to_fit();
+	plateauSurfaceCache.clear();
+	plateauSurfaceCache.shrink_to_fit();
+	surfaceCacheCornersX = 0;
+	surfaceCacheCornersY = 0;
+}
+
 // Fillet radius (in height units) for rounding the lip/foot creases of the
 // sharp (legacy-geometry) regions. Each rounded zone spans 2x this. Tunable.
 static constexpr float CLIFF_FILLET_RADIUS = 20.f;
@@ -110,7 +239,7 @@ static float cliffFilletRadius()
 // interpolated by the caller), so adjacent cells always agree. Every corner of
 // a cell lies within every other corner's 3x3 neighborhood, so the interpolated
 // range always brackets the cell's fan surface.
-static void cornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi)
+static void computeCornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi)
 {
 	lo = hi = cornerHeight(mapState, x, y, mode);
 	for (int dy = -1; dy <= 1; dy++)
@@ -145,8 +274,8 @@ static bool cornerTouchesWater(const WorldMapState& mapState, int x, int y)
 /// take the highest touching-water level in their 3x3 neighborhood (one ring of
 /// extension covers the bicubic stencil), so meaningless inland waterLevel
 /// values can never drag the smoothed water surface below the water body's
-/// level near shorelines.
-static float waterCornerHeight(const WorldMapState& mapState, int x, int y)
+/// level near shorelines. (Normally served from the surface caches above.)
+static float computeWaterCornerHeight(const WorldMapState& mapState, int x, int y)
 {
 	if (cornerTouchesWater(mapState, x, y))
 	{

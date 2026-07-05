@@ -695,6 +695,15 @@ static void updateSectorGeometry(WorldMapState& mapState, int x, int y)
 	int geometrySize = 0;
 	int waterSize = 0;
 
+	if (terrainSubdivision > 1)
+	{
+		// refresh the per-corner surface caches before re-evaluating the surface:
+		// a corner's cached values depend on its +-1 neighbors, so expand the sector's corner
+		// rect by 1 (markTileDirty's widening guarantees every affected sector gets here)
+		terrainSurface::rebuildSurfaceCachesRegion(mapState, x * sectorSize - 1, y * sectorSize - 1,
+													(x + 1) * sectorSize + 1, (y + 1) * sectorSize + 1);
+	}
+
 	geometry = new TerrainVertex[sectors[x * ySectors + y].geometrySize];
 	water = (WaterVertex *)malloc(sizeof(WaterVertex) * sectors[x * ySectors + y].waterSize);
 
@@ -1260,6 +1269,7 @@ void reloadTerrainTextures()
  */
 bool initTerrain(WorldMapState& mapState)
 {
+	const uint32_t initStartTime = wzGetTicks();
 	int i, j, x, y;
 
 	TerrainVertex *geometry = nullptr;
@@ -1277,6 +1287,18 @@ bool initTerrain(WorldMapState& mapState)
 
 	// resolve the mesh strategy ("terrainTessellation" config key)
 	terrainMeshStrategy = resolveTerrainMeshStrategy(terrainSubdivision);
+
+	// the smooth surface reads the per-corner sharpness and sanitized water
+	// lattices constantly - cache them before the dense builds/bakes below
+	// (and the per-frame unit settle) evaluate
+	if (terrainSubdivision > 1)
+	{
+		terrainSurface::rebuildSurfaceCaches(mapState);
+	}
+	else
+	{
+		terrainSurface::clearSurfaceCaches();
+	}
 
 	// bake the surface fields before any strategy-dependent buffer choices:
 	// a bake failure falls back to the CPU mesh, which needs the buffers the
@@ -1619,6 +1641,7 @@ bool initTerrain(WorldMapState& mapState)
 
 	lightmap_texture->upload(0, *(lightmapPixmap.get()));
 	terrainInitialised = true;
+	debug(LOG_TERRAIN, "initTerrain took %u ms", wzGetTicks() - initStartTime);
 
 	if (enabled_debug[LOG_TERRAIN])
 	{
@@ -1646,6 +1669,7 @@ void shutdownTerrain()
 	delete terrainPatchIndexVBO;
 	terrainPatchIndexVBO = nullptr;
 	terrainBake::shutdown();
+	terrainSurface::clearSurfaceCaches();
 
 	sectors.reset();
 
