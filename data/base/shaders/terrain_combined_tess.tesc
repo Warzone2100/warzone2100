@@ -5,6 +5,10 @@
 
 layout(vertices = 4) out;
 
+uniform mat4 ModelViewProjectionMatrix;
+uniform float tessMaxLevel;
+uniform int viewportHeight;
+
 in vec2 tcTexCoord[];
 in vec4 tcTangent[];
 in int tcTileNo[];
@@ -21,12 +25,18 @@ void main()
 {
 	if (gl_InvocationID == 0)
 	{
-		gl_TessLevelOuter[0] = WZ_TESS_LEVEL;
-		gl_TessLevelOuter[1] = WZ_TESS_LEVEL;
-		gl_TessLevelOuter[2] = WZ_TESS_LEVEL;
-		gl_TessLevelOuter[3] = WZ_TESS_LEVEL;
-		gl_TessLevelInner[0] = WZ_TESS_LEVEL;
-		gl_TessLevelInner[1] = WZ_TESS_LEVEL;
+		float outerLevels[4];
+		float innerLevels[2];
+		// the color/depth-prepass passes ARE the main camera, so the pass and factor transforms coincide here
+		wz_terrainTessLevels(ModelViewProjectionMatrix, ModelViewProjectionMatrix, float(viewportHeight), tessMaxLevel,
+							 gl_in[0].gl_Position.xyz, gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz, gl_in[3].gl_Position.xyz,
+							 outerLevels, innerLevels);
+		gl_TessLevelOuter[0] = outerLevels[0];
+		gl_TessLevelOuter[1] = outerLevels[1];
+		gl_TessLevelOuter[2] = outerLevels[2];
+		gl_TessLevelOuter[3] = outerLevels[3];
+		gl_TessLevelInner[0] = innerLevels[0];
+		gl_TessLevelInner[1] = innerLevels[1];
 	}
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 	teTexCoord[gl_InvocationID] = tcTexCoord[gl_InvocationID];

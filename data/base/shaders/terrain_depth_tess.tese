@@ -7,7 +7,7 @@
 
 #include "terrain_tess.glsl"
 
-layout(quads, equal_spacing, ccw) in;
+layout(quads, fractional_odd_spacing, ccw) in;
 
 uniform mat4 ModelViewProjectionMatrix;
 

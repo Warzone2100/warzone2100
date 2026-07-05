@@ -11,17 +11,15 @@
 // normal draws, patch triangles get their winding from this declaration, not
 // from vertex order). The pipeline declares clockwise front faces to match
 // Y-flipped vertex-buffer geometry, so the domain winding must be cw here.
-layout(quads, equal_spacing, cw) in;
+layout(quads, fractional_odd_spacing, cw) in;
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
-	vec4 paramx1;
-	vec4 paramy1;
+	mat4 tessCameraMVP;
 	vec4 paramx2;
 	vec4 paramy2;
-	mat4 textureMatrix1;
 	mat4 textureMatrix2;
-	vec4 fogColor;
+	vec4 tessParams;
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
@@ -31,7 +29,6 @@ layout(set = 1, binding = 1) uniform sampler2D terrainBakedHeight;
 layout(set = 1, binding = 2) uniform sampler2D terrainBakedOffset;
 layout(set = 1, binding = 3) uniform sampler2D terrainBakedNormal;
 
-layout(location = 1) out vec2 uv1;
 layout(location = 2) out vec2 uv2;
 layout(location = 3) out float vertexDistance;
 
@@ -47,8 +44,6 @@ void main()
 	// ---- same computations as terrain_depth.vert ----
 	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;
-	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vertex), dot(paramy1, vertex), 0., 1.);
-	uv1 = uv1_tmp.xy / uv1_tmp.w;
 	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vertex), dot(paramy2, vertex), 0., 1.);
 	uv2 = uv2_tmp.xy / uv2_tmp.w;
 	vertexDistance = position.z;
