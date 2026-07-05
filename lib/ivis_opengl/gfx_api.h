@@ -1089,7 +1089,7 @@ namespace gfx_api
 		int quality;
 		int viewportWidth;
 		int viewportheight;
-		float  unused2;
+		float tessMaxLevel; // hardware-tessellated terrain only
 		std::array<glm::vec4, max_lights> PointLightsPosition;
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
 		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
@@ -1166,14 +1166,27 @@ namespace gfx_api
 		vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>
 	>;
 
-	// the tessellated depth passes take the same uniforms as their non-tess counterparts
+	// shared by both tessellated depth passes (prepass + shadow/depth map)
 	template<>
-	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_TESS> : public constant_buffer_type<SHADER_TERRAIN_DEPTH> {};
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_TESS>
+	{
+		glm::mat4 ModelViewProjectionMatrix; // this pass's MVP (the light's, for shadow cascades)
+		glm::mat4 tessCameraMVP; // the MAIN camera's MVP: tessellation factors must match the color pass
+		glm::vec4 paramX; // lightmap uv generation (depth prepass, unused by the shadow pass)
+		glm::vec4 paramY;
+		glm::mat4 texture_matrix;
+		glm::vec4 tessParams; // x = max tess level, y = viewport height (pixels)
+		int fog_enabled;
+		float fog_begin;
+		float fog_end;
+		float unused;
+	};
+	using TerrainDepthTessUniforms = constant_buffer_type<SHADER_TERRAIN_DEPTH_TESS>;
 	template<>
-	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS> : public constant_buffer_type<SHADER_TERRAIN_DEPTHMAP> {};
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS> : public TerrainDepthTessUniforms {};
 
 	using TerrainDepthTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTH>>,
+	std::tuple<TerrainDepthTessUniforms>,
 	std::tuple<
 		TerrainPatchCornerVBODescription
 	>, std::tuple<
@@ -1184,7 +1197,7 @@ namespace gfx_api
 	>, SHADER_TERRAIN_DEPTH_TESS>;
 
 	using TerrainDepthOnlyForDepthMapTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::patch_list_4, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>>,
+	std::tuple<TerrainDepthTessUniforms>,
 	std::tuple<
 		TerrainPatchCornerVBODescription
 	>, std::tuple<

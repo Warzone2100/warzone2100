@@ -1781,6 +1781,24 @@ static void cullTerrain(WorldMapState& mapState)
 	}
 }
 
+/// Near-camera tessellation level for the Terrain Detail setting
+/// (Medium/High/Ultra -> 2/4/8)
+static float terrainTessMaxLevel()
+{
+	switch (terrainSubdivision)
+	{
+		case 2: return 2.f;
+		case 3: return 4.f;
+		default: return 8.f;
+	}
+}
+
+static glm::vec4 terrainTessParams()
+{
+	auto dimension = gfx_api::context::get().getDrawableDimensions();
+	return glm::vec4(terrainTessMaxLevel(), static_cast<float>(dimension.second), 0.f, 0.f);
+}
+
 static void drawDepthOnlyTess(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
 	if (!terrainDecalVBO || !terrainPatchIndexVBO)
@@ -1792,8 +1810,9 @@ static void drawDepthOnlyTess(const glm::mat4 &ModelViewProjection, const glm::v
 	gfx_api::TerrainDepthTess::get().bind();
 	gfx_api::TerrainDepthTess::get().bind_textures(lightmap_texture, terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
 	gfx_api::TerrainDepthTess::get().bind_vertex_buffers(terrainDecalVBO);
-	gfx_api::TerrainDepthTess::get().bind_constants({{ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f),
-	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 }});
+	// the depth prepass uses the main camera itself, so tessCameraMVP == this pass's MVP
+	gfx_api::TerrainDepthTess::get().bind_constants({ ModelViewProjection, ModelViewProjection, paramsXLight, paramsYLight, glm::mat4(1.f),
+	terrainTessParams(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0.f });
 	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
 
 	if (withOffset)
@@ -1867,7 +1886,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
-static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection)
+static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection, const glm::mat4 &tessCameraMVP)
 {
 	if (!terrainDecalVBO || !terrainPatchIndexVBO)
 	{
@@ -1878,7 +1897,9 @@ static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection)
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind();
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_textures(lightmap_texture, terrainBake::heightTexture(), terrainBake::offsetTexture(), terrainBake::normalTexture());
 	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_vertex_buffers(terrainDecalVBO);
-	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_constants({{ ModelViewProjection, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd }});
+	// this pass renders from the light, but the tessellation factors must come from the main camera so the shadow geometry matches the color pass
+	gfx_api::TerrainDepthOnlyForDepthMapTess::get().bind_constants({{ ModelViewProjection, tessCameraMVP, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f),
+	terrainTessParams(), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0.f }});
 	gfx_api::context::get().bind_index_buffer(*terrainPatchIndexVBO, gfx_api::index_type::u32);
 
 	for (int x = 0; x < xSectors; x++)
@@ -1898,11 +1919,11 @@ static void drawDepthOnlyForDepthMapTess(const glm::mat4 &ModelViewProjection)
 	gfx_api::context::get().unbind_index_buffer(*terrainPatchIndexVBO);
 }
 
-static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
+static void drawDepthOnlyForDepthMap(const glm::mat4 &ModelViewProjection, const glm::mat4 &tessCameraMVP, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, bool withOffset)
 {
 	if (terrainMeshStrategy == TerrainMeshStrategy::HardwareTess)
 	{
-		drawDepthOnlyForDepthMapTess(ModelViewProjection);
+		drawDepthOnlyForDepthMapTess(ModelViewProjection, tessCameraMVP);
 		return;
 	}
 	const auto &renderState = getCurrentRenderState();
@@ -2027,7 +2048,7 @@ static void drawTerrainCombinedTessImpl(const glm::mat4 &ModelViewProjection, co
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		getFogColorVec4(), {shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality, static_cast<int>(dimension.first), static_cast<int>(dimension.second), terrainTessMaxLevel(), bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 	};
 	PSO::get().set_uniforms(uniforms);
 
@@ -2112,9 +2133,9 @@ const glm::mat4& getModelUVLightmapMatrix()
 	return lightmapValues.ModelUVLightmap;
 }
 
-void drawTerrainDepthOnly(const glm::mat4 &mvp)
+void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP)
 {
-	drawDepthOnlyForDepthMap(mvp, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
+	drawDepthOnlyForDepthMap(mvp, tessCameraMVP, lightmapValues.paramsXLight, lightmapValues.paramsYLight, false);
 }
 
 /**
