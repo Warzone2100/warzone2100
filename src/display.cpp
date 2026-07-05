@@ -28,6 +28,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/gamepad_input.h"
 #include "lib/framework/strres.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pietypes.h"
@@ -119,6 +120,9 @@ static bool	anyDroidSelected(const WorldObjectState& objState, UDWORD player);
 static bool cyborgDroidSelected(const WorldObjectState& objState, UDWORD player);
 static bool bInvertMouse = true;
 static bool bRightClickOrders = false;
+// The click semantics actually in effect. Gamepad clicks always use
+// select-on-left / order-on-right, regardless of the stored mouse option
+static bool bEffectiveRightClickOrders = false;
 optional<MOUSE_KEY_CODE> rotateMouseKey = MOUSE_RMB;
 optional<MOUSE_KEY_CODE> panMouseKey = nullopt;
 static bool bPinchToZoomTouchGesture = true;
@@ -685,6 +689,13 @@ void processMouseClickInput()
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item = MT_NOTARGET;
 	bool OverRadar = OverRadarAndNotDragging();
+
+	// latched while a button is held, so an input device switch mid-interaction
+	// cannot flip the click semantics between press and release
+	if (!mouseDown(MOUSE_LMB) && !mouseDown(MOUSE_RMB))
+	{
+		bEffectiveRightClickOrders = bRightClickOrders || isGamepadActiveInput();
+	}
 	selection = establishSelection(selectedPlayer);
 	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
@@ -712,7 +723,7 @@ void processMouseClickInput()
 
 	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
-		if (bRightClickOrders)
+		if (bEffectiveRightClickOrders)
 		{
 			dealWithRMB();
 		}
@@ -740,7 +751,7 @@ void processMouseClickInput()
 		dragBox3D.status = DRAG_INACTIVE;
 		// Pretty sure we wan't set walldrag status here aswell.
 		wallDrag.status = DRAG_INACTIVE;
-		if (bRightClickOrders)
+		if (bEffectiveRightClickOrders)
 		{
 			dealWithLMB();
 		}
@@ -1767,7 +1778,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 	ownDroid = (selectedPlayer == psDroid->player);
 	// Hack to detect if sensor was assigned
 	bSensorAssigned = true;
-	if (!bRightClickOrders && ctrlShiftDown() && ownDroid)
+	if (!bEffectiveRightClickOrders && ctrlShiftDown() && ownDroid)
 	{
 		// select/deselect etc. the droid
 		dealWithDroidSelect(psDroid, false);
@@ -1783,7 +1794,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		if (selection == SC_INVALID)
 		{
 			//in multiPlayer mode we RMB to get the interface up
-			if (bMultiPlayer && !bRightClickOrders)
+			if (bMultiPlayer && !bEffectiveRightClickOrders)
 			{
 				psDroid->selected = true;
 				triggerEventSelected();
@@ -1872,7 +1883,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
 		FeedbackOrderGiven();
 	}
-	else if (bRightClickOrders && ownDroid)
+	else if (bEffectiveRightClickOrders && ownDroid)
 	{
 		if (!(psDroid->selected))
 		{
@@ -1928,7 +1939,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	/* We've clicked on allied or own building */
 
 	//print some info at the top of the screen for the specific structure
-	if (!bRightClickOrders)
+	if (!bEffectiveRightClickOrders)
 	{
 		printStructureInfo(psStructure);
 	}
@@ -1942,7 +1953,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	if (!specialOrderKeyDown() && (psStructure->status == SS_BUILT) && !psStructure->flags.test(OBJECT_FLAG_UNSELECTABLE) &&
 	    (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
 	{
-		if (bRightClickOrders)
+		if (bEffectiveRightClickOrders)
 		{
 			if (psStructure->isFactory() && selection != SC_DROID_CONSTRUCT)
 			{
@@ -2148,7 +2159,7 @@ void	dealWithLMB()
 	if (auto deliveryPoint = findMouseDeliveryPoint())
 	{
 		if (selNumSelected(gameWorld.objects, selectedPlayer) == 0) {
-			if (bRightClickOrders)
+			if (bEffectiveRightClickOrders)
 			{
 				//centre the view on the owning Factory
 				psStructure = findDeliveryFactory(deliveryPoint);
@@ -2310,14 +2321,14 @@ static void dealWithRMB()
 			psDroid = (DROID *) psClickedOn;
 			if (psDroid->player == selectedPlayer)
 			{
-				if (bRightClickOrders && ctrlShiftDown())
+				if (bEffectiveRightClickOrders && ctrlShiftDown())
 				{
 					dealWithDroidSelect(psDroid, false);
 				}
 				// Not a transporter
 				else if (!psDroid->isTransporter())
 				{
-					if (bRightClickOrders)
+					if (bEffectiveRightClickOrders)
 					{
 						/* We've clicked on one of our own droids */
 						printDroidClickInfo(psDroid);
@@ -2337,7 +2348,7 @@ static void dealWithRMB()
 				{
 					if (bMultiPlayer)
 					{
-						if (bRightClickOrders && !(psDroid->selected))
+						if (bEffectiveRightClickOrders && !(psDroid->selected))
 						{
 							clearSelection();
 							SelectDroid(psDroid);
@@ -2367,7 +2378,7 @@ static void dealWithRMB()
 			if (psStructure->player == selectedPlayer)
 			{
 				/* We've clicked on our own building */
-				if (bRightClickOrders && intDemolishSelectMode())
+				if (bEffectiveRightClickOrders && intDemolishSelectMode())
 				{
 					orderSelectedObjAdd(selectedPlayer, psClickedOn, ctrlShiftDown());
 					FeedbackOrderGiven();
@@ -2392,7 +2403,7 @@ static void dealWithRMB()
 				{
 					clearSelection();
 
-					if (bRightClickOrders)
+					if (bEffectiveRightClickOrders)
 					{
 						if ((psStructure->status == SS_BUILT) &&
 						    (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR))
@@ -2432,7 +2443,7 @@ static void dealWithRMB()
 	{
 		if (auto deliveryPoint = findMouseDeliveryPoint())
 		{
-			if (bRightClickOrders)
+			if (bEffectiveRightClickOrders)
 			{
 				startDeliveryPosition(deliveryPoint);
 			}
