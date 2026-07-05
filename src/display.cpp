@@ -1115,7 +1115,7 @@ void processGamepadCameraInput()
 			cameraRotate(deltaYaw, deltaPitch);
 		}
 	}
-	else if (rightX != 0.f || rightY != 0.f)
+	else if ((rightX != 0.f || rightY != 0.f) && !gamepadRightStickConsumedByUI())
 	{
 		// pan in the stick direction, faster when zoomed out
 		const double panZoomFactor = 1.0 + ((getViewDistance() - MINDISTANCE) / static_cast<double>(MAXDISTANCE - MINDISTANCE));

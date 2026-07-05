@@ -1984,12 +1984,32 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
 /*!
  * Handle mouse wheel events
  */
+/*!
+ * Add wheel scroll movement to the mouse wheel state
+ */
+void inputAddMouseWheelScroll(Vector2i delta)
+{
+	mouseWheelSpeed += delta;
+
+	if (delta.x > 0 || delta.y > 0)
+	{
+		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
+		aMouseState[MOUSE_WUP].lastdown = 0;
+	}
+	else if (delta.x < 0 || delta.y < 0)
+	{
+		aMouseState[MOUSE_WDN].state = KEY_PRESSED;
+		aMouseState[MOUSE_WDN].lastdown = 0;
+	}
+}
+
 static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 {
 	wzGamepadNotifyNonGamepadInput();
 
-	mouseWheelSpeed += Vector2i(wheel->integer_x, wheel->integer_y);
+	inputAddMouseWheelScroll(Vector2i(wheel->integer_x, wheel->integer_y));
 
+	// sub-integer wheel movement still registers a direction press
 	if (wheel->x > 0 || wheel->y > 0)
 	{
 		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
