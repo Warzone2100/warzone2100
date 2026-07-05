@@ -777,13 +777,13 @@ void processMouseClickInput()
 	{
 		cancelDeliveryRepos();
 	}
-	if (rotateMouseKey.has_value() && mouseDrag(rotateMouseKey.value(), (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !isRadarDragging() && !getRadarTrackingStatus())
+	if (!isGamepadActiveInput() && rotateMouseKey.has_value() && mouseDrag(rotateMouseKey.value(), (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
 		rotationVerticalTracker->startTracking((UWORD)playerPos.r.x);
 		rotationHorizontalTracker->startTracking((UWORD)playerPos.r.y); // negative values caused problems with float conversion
 		rotActive = true;
 	}
-	if (panMouseKey.has_value() && mouseDrag(panMouseKey.value(), (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !isRadarDragging() && !getRadarTrackingStatus())
+	if (!isGamepadActiveInput() && panMouseKey.has_value() && mouseDrag(panMouseKey.value(), (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !isRadarDragging() && !getRadarTrackingStatus())
 	{
 		panXTracker->startTracking(playerPos.p.x);
 		panZTracker->startTracking(playerPos.p.z);
@@ -1086,6 +1086,56 @@ void processGestureInput()
 	}
 
 	gestureActive = processedGesture;
+}
+
+// Camera pan speed at full right-stick deflection, in screen units per second
+static const float GAMEPAD_CAMERA_PAN_SPEED = 1200.f;
+
+void processGamepadCameraInput()
+{
+	if (InGameOpUp || bDisplayMultiJoiningStatus)
+	{
+		return;
+	}
+	if (!isGamepadActiveInput())
+	{
+		return;
+	}
+
+	const float rightX = gamepadAxis(GPAD_AXIS_RIGHT_X);
+	const float rightY = gamepadAxis(GPAD_AXIS_RIGHT_Y);
+
+	if (gamepadButtonDown(GPAD_BTN_RIGHT_SHOULDER))
+	{
+		// holding the right shoulder makes the right stick rotate and pitch the camera
+		if (rightX != 0.f || rightY != 0.f)
+		{
+			const int deltaYaw = static_cast<int>(-rightX * realTimeAdjustedIncrement(MAP_SPIN_RATE));
+			const int deltaPitch = static_cast<int>(-rightY * realTimeAdjustedIncrement(MAP_PITCH_RATE));
+			cameraRotate(deltaYaw, deltaPitch);
+		}
+	}
+	else if (rightX != 0.f || rightY != 0.f)
+	{
+		// pan in the stick direction, faster when zoomed out
+		const double panZoomFactor = 1.0 + ((getViewDistance() - MINDISTANCE) / static_cast<double>(MAXDISTANCE - MINDISTANCE));
+		const double worldDeltaX = static_cast<double>(rightX) * realTimeAdjustedIncrement(GAMEPAD_CAMERA_PAN_SPEED) * panZoomFactor;
+		const double worldDeltaY = static_cast<double>(rightY) * realTimeAdjustedIncrement(GAMEPAD_CAMERA_PAN_SPEED) * panZoomFactor;
+
+		const double rot = static_cast<double>(-playerPos.r.y) * (M_PI / 32768.0);
+		playerPos.p.x += static_cast<int>(cos(rot) * worldDeltaX - sin(rot) * worldDeltaY);
+		playerPos.p.z += static_cast<int>(sin(rot) * worldDeltaX + cos(rot) * worldDeltaY);
+
+		setWarCamActive(false);
+		CheckScrollLimits(gameWorld.map);
+	}
+
+	// the triggers zoom the view - left out, right in
+	const float zoomDirection = gamepadAxis(GPAD_AXIS_LEFT_TRIGGER) - gamepadAxis(GPAD_AXIS_RIGHT_TRIGGER);
+	if (zoomDirection != 0.f)
+	{
+		incrementViewDistance(zoomDirection * war_GetMapZoomRate());
+	}
 }
 
 static void calcScroll(double *y, double *dydt, double accel, double decel, double targetVelocity, double dt)
