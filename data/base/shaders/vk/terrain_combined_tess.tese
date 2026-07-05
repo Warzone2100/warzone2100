@@ -12,7 +12,7 @@
 // normal draws, patch triangles get their winding from this declaration, not
 // from vertex order). The pipeline declares clockwise front faces to match
 // Y-flipped vertex-buffer geometry, so the domain winding must be cw here.
-layout(quads, equal_spacing, cw) in;
+layout(quads, fractional_odd_spacing, cw) in;
 
 layout(set = 1, binding = 10) uniform sampler2D terrainBakedHeight;
 layout(set = 1, binding = 11) uniform sampler2D terrainBakedOffset;

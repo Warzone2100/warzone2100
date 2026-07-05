@@ -48,7 +48,10 @@ namespace gfx_api
 }
 
 void perFrameTerrainUpdates(WorldMapState& mapState, const LightMap& lightData);
-void drawTerrainDepthOnly(const glm::mat4 &mvp);
+// tessCameraMVP: the MAIN camera's MVP for this frame
+// under the hardware tessellation strategy, every pass must derive tessellation factors from the
+// same camera or the passes rasterize different terrain geometry
+void drawTerrainDepthOnly(const glm::mat4 &mvp, const glm::mat4 &tessCameraMVP);
 void drawTerrain(const glm::mat4 &mvp, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
 	const ShadowCascadesInfo& shadowMVPMatrix, gfx_api::abstract_texture* shadowMap);
 void drawWater(const glm::mat4 &ModelViewProjection, const glm::mat4& viewMatrix, const Vector3f &cameraPos, const Vector3f &sunPos,
