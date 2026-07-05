@@ -33,6 +33,8 @@ namespace gfx_api
 		FORMAT_RGB8_UNORM_PACK8,
 		FORMAT_RG8_UNORM,			// not guaranteed support
 		FORMAT_R8_UNORM,
+		FORMAT_R16_UNORM,			// desktop only (not supported on GLES)
+		FORMAT_RG16_UNORM,			// desktop only (not supported on GLES)
 		FORMAT_D24_UNORM_S8,		// depth/stencil attachment
 
 		// [COMPRESSED FORMATS]
@@ -76,6 +78,8 @@ namespace gfx_api
 			case gfx_api::pixel_format::FORMAT_RG8_UNORM:
 			case gfx_api::pixel_format::FORMAT_R8_UNORM:
 			case gfx_api::pixel_format::FORMAT_A2B10G10R10_UNORM_PACK32:
+			case gfx_api::pixel_format::FORMAT_R16_UNORM:
+			case gfx_api::pixel_format::FORMAT_RG16_UNORM:
 				return true;
 			default:
 				return false;
