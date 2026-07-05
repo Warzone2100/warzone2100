@@ -184,6 +184,22 @@ static void setGamepadButtonState(GAMEPAD_INPUT button, bool pressed)
 	applyButtonTransition(actualGamepadState[button], pressed);
 }
 
+// Raw device state queries for the synthesis layer, unaffected by input swallowing
+static bool actualButtonDown(GAMEPAD_INPUT button)
+{
+	return (actualGamepadState[button].state != KEY_UP);
+}
+
+static bool actualButtonPressed(GAMEPAD_INPUT button)
+{
+	return ((actualGamepadState[button].state == KEY_PRESSED) || (actualGamepadState[button].state == KEY_PRESSRELEASE));
+}
+
+static bool actualButtonReleased(GAMEPAD_INPUT button)
+{
+	return ((actualGamepadState[button].state == KEY_RELEASED) || (actualGamepadState[button].state == KEY_PRESSRELEASE));
+}
+
 static void openGamepadDevice(SDL_JoystickID id)
 {
 	for (const auto& pad : openGamepads)
@@ -374,7 +390,7 @@ static void updateVirtualCursor()
 	}
 
 	float speed = GAMEPAD_CURSOR_SPEED;
-	if (gamepadButtonDown(GPAD_BTN_LEFT_STICK))
+	if (actualButtonDown(GPAD_BTN_LEFT_STICK))
 	{
 		speed *= GAMEPAD_CURSOR_PRECISION_FACTOR;
 	}
@@ -386,6 +402,93 @@ static void updateVirtualCursor()
 	virtualCursorY = std::clamp(virtualCursorY, 0.f, (float)(screenHeight > 0 ? screenHeight - 1 : 0));
 
 	inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
+}
+
+// Synthetic mouse click driven by a gamepad face button
+struct SyntheticClickState
+{
+	bool held = false;       // the synthetic mouse button is currently pressed
+	bool ownsShift = false;  // this interaction asserted the shift key
+};
+static SyntheticClickState syntheticLeftClick;
+static SyntheticClickState syntheticRightClick;
+
+bool gamepadSyntheticClickHeld()
+{
+	return syntheticLeftClick.held || syntheticRightClick.held;
+}
+// Count of interactions holding a synthetic shift, and releases deferred by a
+// frame so the release-frame click processing still sees the modifier
+static int shiftAssertCount = 0;
+static int shiftReleaseQueue = 0;
+
+static void handleClickButton(GAMEPAD_INPUT gamepadButton, MOUSE_KEY_CODE mouseButton, SyntheticClickState& state)
+{
+	const Vector2i pos((int)mouseX(), (int)mouseY());
+
+	if (actualButtonPressed(gamepadButton) && !state.held)
+	{
+		// holding the left shoulder makes this an additive/queueing click - assert
+		// shift so the existing modifier checks in the click handling apply, unless
+		// the physical shift key is already doing the job
+		if (actualButtonDown(GPAD_BTN_LEFT_SHOULDER))
+		{
+			if (shiftAssertCount > 0 || !keyDown(KEY_LSHIFT))
+			{
+				if (shiftAssertCount == 0)
+				{
+					inputSetKey(KEY_LSHIFT, true);
+				}
+				++shiftAssertCount;
+				state.ownsShift = true;
+			}
+		}
+		state.held = true;
+		inputSetMouseButton(mouseButton, true, pos);
+	}
+	if (actualButtonReleased(gamepadButton) && state.held)
+	{
+		state.held = false;
+		inputSetMouseButton(mouseButton, false, pos);
+		if (state.ownsShift)
+		{
+			state.ownsShift = false;
+			++shiftReleaseQueue;
+		}
+	}
+}
+
+static void handleKeyButton(GAMEPAD_INPUT gamepadButton, KEY_CODE key)
+{
+	if (actualButtonPressed(gamepadButton))
+	{
+		inputSetKey(key, true);
+		inputAddEditingKey(key);
+	}
+	if (actualButtonReleased(gamepadButton))
+	{
+		inputSetKey(key, false);
+	}
+}
+
+static void updateSyntheticInput()
+{
+	// apply shift releases deferred from the previous frame
+	while (shiftReleaseQueue > 0)
+	{
+		--shiftReleaseQueue;
+		--shiftAssertCount;
+		if (shiftAssertCount == 0)
+		{
+			inputSetKey(KEY_LSHIFT, false);
+		}
+	}
+
+	handleClickButton(GPAD_BTN_SOUTH, MOUSE_LMB, syntheticLeftClick);
+	handleClickButton(GPAD_BTN_EAST, MOUSE_RMB, syntheticRightClick);
+
+	handleKeyButton(GPAD_BTN_START, KEY_ESC);
+	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN);
 }
 
 void wzGamepadUpdate()
@@ -431,6 +534,7 @@ void wzGamepadUpdate()
 	}
 
 	updateVirtualCursor();
+	updateSyntheticInput();
 }
 
 static void ageButtonStates(INPUT_STATE* states)
@@ -466,6 +570,25 @@ void wzGamepadClearButtonStates()
 
 void wzGamepadResetInputState()
 {
+	// release any synthetic input still held
+	const Vector2i pos((int)mouseX(), (int)mouseY());
+	if (syntheticLeftClick.held)
+	{
+		inputSetMouseButton(MOUSE_LMB, false, pos);
+	}
+	if (syntheticRightClick.held)
+	{
+		inputSetMouseButton(MOUSE_RMB, false, pos);
+	}
+	syntheticLeftClick = SyntheticClickState();
+	syntheticRightClick = SyntheticClickState();
+	if (shiftAssertCount > 0)
+	{
+		inputSetKey(KEY_LSHIFT, false);
+	}
+	shiftAssertCount = 0;
+	shiftReleaseQueue = 0;
+
 	wzGamepadClearButtonStates();
 	for (unsigned int i = 0; i < GPAD_BTN_MAX; ++i)
 	{
