@@ -24,10 +24,12 @@
 #include "sdl_gamepad.h"
 #include "sdl_backend_private.h"
 #include "src/warzoneconfig.h"
+#include "lib/ivis_opengl/screen.h"
 
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_hints.h>
 #include <SDL3/SDL_init.h>
+#include <SDL3/SDL_timer.h>
 
 #include <vector>
 #include <utility>
@@ -36,6 +38,10 @@
 
 // Radial deadzone applied to stick deflection before values are exposed
 static const float GAMEPAD_STICK_DEADZONE = 0.15f;
+// Cursor speed at full stick deflection, in logical pixels per second
+static const float GAMEPAD_CURSOR_SPEED = 800.f;
+// Cursor speed multiplier while the left stick is clicked in
+static const float GAMEPAD_CURSOR_PRECISION_FACTOR = 0.5f;
 // Axis thresholds for the synthesized trigger and stick-direction buttons, with hysteresis
 static const float GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD = 0.5f;
 static const float GAMEPAD_AXIS_BUTTON_RELEASE_THRESHOLD = 0.45f;
@@ -52,6 +58,9 @@ static INPUT_STATE aGamepadState[GPAD_BTN_MAX] = {};
 // loss or device removal, so held synthetic input always completes
 static INPUT_STATE actualGamepadState[GPAD_BTN_MAX] = {};
 static bool gamepadIsActiveInput = false;
+// Cursor position with subpixel precision, valid while the gamepad is the active input source
+static float virtualCursorX = 0.f;
+static float virtualCursorY = 0.f;
 static float aGamepadAxisValues[GPAD_AXIS_MAX] = {};
 // Hysteresis latches for the buttons synthesized from axis thresholds
 static bool axisButtonHeld[GPAD_BTN_MAX] = {};
@@ -72,6 +81,8 @@ static void markGamepadActive()
 	if (!gamepadIsActiveInput)
 	{
 		gamepadIsActiveInput = true;
+		virtualCursorX = (float)mouseX();
+		virtualCursorY = (float)mouseY();
 		debug(LOG_INPUT, "Gamepad is now the active input source");
 	}
 }
@@ -341,6 +352,42 @@ static void updateAxisButton(GAMEPAD_INPUT button, float deflection)
 	}
 }
 
+// Moves the cursor from left-stick deflection while the gamepad is the active input source
+static void updateVirtualCursor()
+{
+	static Uint64 lastTick = 0;
+	const Uint64 now = SDL_GetTicks();
+	// clamp dt so a long stall cannot fling the cursor
+	const float dt = (lastTick != 0) ? std::min((float)(now - lastTick) / 1000.f, 0.1f) : 0.f;
+	lastTick = now;
+
+	if (!gamepadIsActiveInput)
+	{
+		return;
+	}
+
+	const float deflectionX = aGamepadAxisValues[GPAD_AXIS_LEFT_X];
+	const float deflectionY = aGamepadAxisValues[GPAD_AXIS_LEFT_Y];
+	if (deflectionX == 0.f && deflectionY == 0.f)
+	{
+		return;
+	}
+
+	float speed = GAMEPAD_CURSOR_SPEED;
+	if (gamepadButtonDown(GPAD_BTN_LEFT_STICK))
+	{
+		speed *= GAMEPAD_CURSOR_PRECISION_FACTOR;
+	}
+
+	// quadratic response gives finer control near the center
+	virtualCursorX += deflectionX * std::abs(deflectionX) * speed * dt;
+	virtualCursorY += deflectionY * std::abs(deflectionY) * speed * dt;
+	virtualCursorX = std::clamp(virtualCursorX, 0.f, (float)(screenWidth > 0 ? screenWidth - 1 : 0));
+	virtualCursorY = std::clamp(virtualCursorY, 0.f, (float)(screenHeight > 0 ? screenHeight - 1 : 0));
+
+	inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
+}
+
 void wzGamepadUpdate()
 {
 	SDL_Gamepad* pad = activeGamepadHandle();
@@ -382,6 +429,8 @@ void wzGamepadUpdate()
 			lastLoggedAxisValues[i] = aGamepadAxisValues[i];
 		}
 	}
+
+	updateVirtualCursor();
 }
 
 static void ageButtonStates(INPUT_STATE* states)
