@@ -109,14 +109,37 @@ enum class KeyAction
 	RELEASED
 };
 
+enum class KeyMappingMetaSource
+{
+	NONE,
+	KEY_CODE,
+	GAMEPAD
+};
+
+struct KeyMappingMeta
+{
+	KeyMappingMetaSource source;
+	KeyMappingInputValue value;
+
+	nonstd::optional<KEY_CODE> asKeyCode() const;
+	nonstd::optional<GAMEPAD_INPUT> asGamepadInput() const;
+
+	KeyMappingMeta();
+	KeyMappingMeta(const KEY_CODE keyCode);
+	KeyMappingMeta(const GAMEPAD_INPUT gamepadInput);
+};
+
+bool operator==(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs);
+bool operator!=(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs);
+
 struct KeyCombination
 {
-	KEY_CODE        meta;
+	KeyMappingMeta  meta;
 	KeyMappingInput input;
 	KeyAction       action;
 
 	KeyCombination(
-		const KEY_CODE        meta,
+		const KeyMappingMeta  meta,
 		const KeyMappingInput input,
 		const KeyAction       action
 	);
@@ -127,7 +150,7 @@ struct KeyCombination
 	);
 
 	KeyCombination(
-		const KEY_CODE        meta,
+		const KeyMappingMeta  meta,
 		const KeyMappingInput input
 	);
 

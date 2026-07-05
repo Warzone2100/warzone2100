@@ -496,8 +496,71 @@ KeyMappingSlot keyMappingSlotByName(std::string const& name)
 	}
 }
 
+nonstd::optional<KEY_CODE> KeyMappingMeta::asKeyCode() const
+{
+	if (source == KeyMappingMetaSource::KEY_CODE)
+	{
+		return value.keyCode;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
+nonstd::optional<GAMEPAD_INPUT> KeyMappingMeta::asGamepadInput() const
+{
+	if (source == KeyMappingMetaSource::GAMEPAD)
+	{
+		return value.gamepadInput;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
+KeyMappingMeta::KeyMappingMeta()
+	: source(KeyMappingMetaSource::NONE)
+	, value(KEY_CODE::KEY_IGNORE)
+{
+}
+
+KeyMappingMeta::KeyMappingMeta(const KEY_CODE keyCode)
+	: source(keyCode != KEY_CODE::KEY_IGNORE ? KeyMappingMetaSource::KEY_CODE : KeyMappingMetaSource::NONE)
+	, value(keyCode)
+{
+}
+
+KeyMappingMeta::KeyMappingMeta(const GAMEPAD_INPUT gamepadInput)
+	: source(gamepadInput != GPAD_BTN_MAX ? KeyMappingMetaSource::GAMEPAD : KeyMappingMetaSource::NONE)
+	, value(gamepadInput)
+{
+}
+
+bool operator==(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs)
+{
+	if (lhs.source != rhs.source) {
+		return false;
+	}
+
+	switch (lhs.source) {
+	case KeyMappingMetaSource::KEY_CODE:
+		return lhs.value.keyCode == rhs.value.keyCode;
+	case KeyMappingMetaSource::GAMEPAD:
+		return lhs.value.gamepadInput == rhs.value.gamepadInput;
+	default:
+		return true;
+	}
+}
+
+bool operator!=(const KeyMappingMeta& lhs, const KeyMappingMeta& rhs)
+{
+	return !(lhs == rhs);
+}
+
 KeyCombination::KeyCombination(
-	const KEY_CODE        meta,
+	const KeyMappingMeta  meta,
 	const KeyMappingInput input,
 	const KeyAction       action
 )
@@ -515,12 +578,12 @@ KeyCombination::KeyCombination(
 	const KeyMappingInput input,
 	const KeyAction       action
 )
-	: KeyCombination(KEY_CODE::KEY_IGNORE, input, action)
+	: KeyCombination(KeyMappingMeta(), input, action)
 {
 }
 
 KeyCombination::KeyCombination(
-	const KEY_CODE        meta,
+	const KeyMappingMeta  meta,
 	const KeyMappingInput input
 )
 	: KeyCombination(meta, input, KeyAction::PRESSED)
