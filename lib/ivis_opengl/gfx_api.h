@@ -112,7 +112,7 @@ namespace gfx_api
 	struct texture : abstract_texture
 	{
 		virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) = 0;
-		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) = 0;
+		virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) = 0;
 		virtual unsigned id() = 0;
 		virtual texture2dDimensions get_dimensions() const = 0;
 		bool isArray() const { return false; }
@@ -1126,6 +1126,73 @@ namespace gfx_api
 	using TerrainCombined_Classic = TerrainCombinedTemplate<REND_ALPHA, SHADER_TERRAIN_COMBINED_CLASSIC>;
 	using TerrainCombined_Medium = TerrainCombinedTemplate<REND_OPAQUE, SHADER_TERRAIN_COMBINED_MEDIUM>;
 	using TerrainCombined_High = TerrainCombinedTemplate<REND_OPAQUE, SHADER_TERRAIN_COMBINED_HIGH>;
+
+	// Hardware-tessellated terrain variants: one patch per tile over the tile-corner
+	// vertices, with the TES evaluating the baked surface fields (requires
+	// context::supportsTessellationShaders())
+	template<SHADER_MODE shader>
+	using TerrainCombinedTessTemplate = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
+	std::tuple<TerrainCombinedUniforms>,
+	std::tuple<
+	vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex, // TerrainDecalVertex struct
+	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
+	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, offsetof(TerrainDecalVertex, decalUv)>,
+	vertex_attribute_description<tangent,  gfx_api::vertex_attribute_type::float4, offsetof(TerrainDecalVertex, decalTangent)>,
+	vertex_attribute_description<terrain_tileNo,   gfx_api::vertex_attribute_type::int1, offsetof(TerrainDecalVertex, decalNo)>,
+	vertex_attribute_description<terrain_grounds,  gfx_api::vertex_attribute_type::u8x4_uint, offsetof(TerrainDecalVertex, grounds)>,
+	vertex_attribute_description<terrain_groundWeights, gfx_api::vertex_attribute_type::u8x4_norm, offsetof(TerrainDecalVertex, groundWeights)>
+	>
+	>, std::tuple<
+	texture_description<0, sampler_type::bilinear>, // lightmap
+	texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // ground
+	texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // ground normal
+	texture_description<3, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // ground specular
+	texture_description<4, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // ground height
+	texture_description<5, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal
+	texture_description<6, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal normal
+	texture_description<7, sampler_type::anisotropic, pixel_format_target::texture_2d_array>, // decal specular
+	texture_description<8, sampler_type::anisotropic, pixel_format_target::texture_2d_array>,  // decal height
+	texture_description<9, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>,  // depth / shadow map
+	texture_description<10, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
+	texture_description<11, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
+	texture_description<12, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+	>, shader>;
+
+	using TerrainCombinedTess_Medium = TerrainCombinedTessTemplate<SHADER_TERRAIN_COMBINED_MEDIUM_TESS>;
+	using TerrainCombinedTess_High = TerrainCombinedTessTemplate<SHADER_TERRAIN_COMBINED_HIGH_TESS>;
+
+	// position-only view of the TerrainDecalVertex buffer, for the tessellated depth passes
+	using TerrainPatchCornerVBODescription = vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex,
+		vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>
+	>;
+
+	// the tessellated depth passes take the same uniforms as their non-tess counterparts
+	template<>
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_TESS> : public constant_buffer_type<SHADER_TERRAIN_DEPTH> {};
+	template<>
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS> : public constant_buffer_type<SHADER_TERRAIN_DEPTHMAP> {};
+
+	using TerrainDepthTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTH>>,
+	std::tuple<
+		TerrainPatchCornerVBODescription
+	>, std::tuple<
+		texture_description<0, sampler_type::bilinear_repeat>,
+		texture_description<1, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
+		texture_description<2, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
+		texture_description<3, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+	>, SHADER_TERRAIN_DEPTH_TESS>;
+
+	using TerrainDepthOnlyForDepthMapTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::patch_list_4, index_type::u32,
+	std::tuple<constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>>,
+	std::tuple<
+		TerrainPatchCornerVBODescription
+	>, std::tuple<
+		texture_description<0, sampler_type::bilinear_repeat>,
+		texture_description<1, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
+		texture_description<2, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
+		texture_description<3, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
+	>, SHADER_TERRAIN_DEPTHMAP_TESS>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER>

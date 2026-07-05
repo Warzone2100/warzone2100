@@ -171,6 +171,12 @@ static GLenum to_gl_internalformat(const gfx_api::pixel_format& format, bool gle
 			// WebGL 2.0
 			return GL_R8;
 #endif
+		case gfx_api::pixel_format::FORMAT_R16_UNORM:
+			// desktop OpenGL only (not supported on OpenGL ES)
+			return (!gles) ? GL_R16 : GL_INVALID_ENUM;
+		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			// desktop OpenGL only (not supported on OpenGL ES)
+			return (!gles) ? GL_RG16 : GL_INVALID_ENUM;
 		// COMPRESSED FORMAT
 		case gfx_api::pixel_format::FORMAT_RGB_BC1_UNORM:
 			return GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
@@ -257,11 +263,27 @@ static GLenum to_gl_format(const gfx_api::pixel_format& format, bool gles)
 			// WebGL 2.0
 			return GL_RED;
 #endif
+		case gfx_api::pixel_format::FORMAT_R16_UNORM:
+			return (!gles) ? GL_RED : GL_INVALID_ENUM;
+		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			return (!gles) ? GL_RG : GL_INVALID_ENUM;
 		// COMPRESSED FORMAT
 		default:
 			return to_gl_internalformat(format, gles);
 	}
 	return GL_INVALID_ENUM;
+}
+
+static GLenum to_gl_pixel_data_type(const gfx_api::pixel_format& format)
+{
+	switch (format)
+	{
+		case gfx_api::pixel_format::FORMAT_R16_UNORM:
+		case gfx_api::pixel_format::FORMAT_RG16_UNORM:
+			return GL_UNSIGNED_SHORT;
+		default:
+			return GL_UNSIGNED_BYTE;
+	}
 }
 
 static GLenum to_gl(const gfx_api::context::buffer_storage_hint& hint)
@@ -562,7 +584,7 @@ bool gl_texture::upload_internal(const size_t& mip_level, const size_t& offset_x
 	ASSERT(gfx_api::format_memory_size(image.pixel_format(), width, height) == image.data_size(), "data_size (%zu) does not match expected format_memory_size(%s, %zu, %zu)=%zu", image.data_size(), gfx_api::format_to_str(image.pixel_format()), width, height, gfx_api::format_memory_size(image.pixel_format(), width, height));
 	if (is_uncompressed_format(image.pixel_format()))
 	{
-		glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), to_gl_format(image.pixel_format(), gles), GL_UNSIGNED_BYTE, image.data());
+		glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), to_gl_format(image.pixel_format(), gles), to_gl_pixel_data_type(image.pixel_format()), image.data());
 	}
 	else
 	{
@@ -579,7 +601,7 @@ bool gl_texture::upload(const size_t& mip_level, const iV_BaseImage& image)
 	return upload_internal(mip_level, 0, 0, image);
 }
 
-bool gl_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image)
+bool gl_texture::upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image)
 {
 	return upload_internal(mip_level, offset_x, offset_y, image);
 }
@@ -931,6 +953,32 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
 				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+	std::make_pair(SHADER_TERRAIN_DEPTH_TESS, program_data{ "terrain_depth tess program", "shaders/terrain_depth_tess.vert", "shaders/terraindepth.frag",
+		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" },
+		{ {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
+		"shaders/terrain_depth_tess.tesc", "shaders/terrain_depth_tess.tese" }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ "terrain_depthmap tess program", "shaders/terrain_depth_tess.vert", "shaders/terrain_depth_only.frag",
+		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" },
+		{ {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
+		"shaders/terrain_depth_tess.tesc", "shaders/terrain_depthmap_tess.tese" }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, program_data{ "terrain decals tess program", "shaders/terrain_combined_tess.vert", "shaders/terrain_combined_medium.frag",
+			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
+				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+				"lightmap_tex",
+				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" },
+			{ {"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12} },
+			"shaders/terrain_combined_tess.tesc", "shaders/terrain_combined_tess.tese" }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, program_data{ "terrain decals tess program", "shaders/terrain_combined_tess.vert", "shaders/terrain_combined_high.frag",
+			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
+				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+				"lightmap_tex",
+				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" },
+			{ {"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12} },
+			"shaders/terrain_combined_tess.tesc", "shaders/terrain_combined_tess.tese" }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -5126,6 +5174,14 @@ void gl_context::initPixelFormatsSupport()
 		{
 			PIXEL_2D_TEXTURE_ARRAY_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG8_UNORM)
 		}
+	}
+
+	// R16 / RG16
+	// (desktop OpenGL 3.0+ only - not supported on OpenGL ES)
+	if (!gles && GLAD_GL_VERSION_3_0)
+	{
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_R16_UNORM)
+		PIXEL_2D_FORMAT_SUPPORT_SET(gfx_api::pixel_format::FORMAT_RG16_UNORM)
 	}
 
 	// S3TC

@@ -90,7 +90,7 @@ public:
 	virtual size_t backend_internal_value() const override;
 	void unbind();
 	virtual bool upload(const size_t& mip_level, const iV_BaseImage& image) override;
-	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_Image& image) override;
+	virtual bool upload_sub(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const iV_BaseImage& image) override;
 	virtual unsigned id() override;
 	virtual gfx_api::texture2dDimensions get_dimensions() const override;
 private:

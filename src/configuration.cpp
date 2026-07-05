@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -743,6 +743,26 @@ bool loadConfig()
 			debug(LOG_WARNING, "Unsupported / invalid terrainMeshDetail value: %d; using default", intValue);
 		}
 	}
+	{
+		// mesh-strategy override (not in the options UI)
+		auto strValue = iniGetString("terrainTessellation", "auto").value();
+		if (strValue == "auto")
+		{
+			setTerrainTessellationPreference(TerrainTessellationPreference::Auto);
+		}
+		else if (strValue == "cpu")
+		{
+			setTerrainTessellationPreference(TerrainTessellationPreference::ForceCPU);
+		}
+		else if (strValue == "hw")
+		{
+			setTerrainTessellationPreference(TerrainTessellationPreference::ForceHardware);
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainTessellation value: \"%s\"; using \"auto\"", strValue.c_str());
+		}
+	}
 	setDrawTerrainShadows(iniGetBool("terrainShadows", true).value());
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
 	if (auto value = iniGetIntegerOpt("shadowMapResolution"))
@@ -970,6 +990,12 @@ bool saveConfig()
 	if (getTerrainMeshSubdivision() > 0) // 0 = default not yet picked, so don't persist it
 	{
 		iniSetInteger("terrainMeshDetail", getTerrainMeshSubdivision());
+	}
+	switch (getTerrainTessellationPreference())
+	{
+		case TerrainTessellationPreference::Auto: iniSetString("terrainTessellation", "auto"); break;
+		case TerrainTessellationPreference::ForceCPU: iniSetString("terrainTessellation", "cpu"); break;
+		case TerrainTessellationPreference::ForceHardware: iniSetString("terrainTessellation", "hw"); break;
 	}
 	iniSetInteger("terrainShadows", (int)(getDrawTerrainShadows()));
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
