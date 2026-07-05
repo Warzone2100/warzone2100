@@ -1,5 +1,5 @@
 // Shared tessellation math for the hardware-tessellated terrain strategy.
-// Every terrain TES variant (color, depth prepass, shadow/depth map) includes
+// Every terrain TES variant (color, shadow/depth map) includes
 // this file: the position expressions MUST stay identical between them so all
 // passes rasterize the exact same surface.
 //

@@ -1129,9 +1129,14 @@ namespace gfx_api
 
 	// Hardware-tessellated terrain variants: one patch per tile over the tile-corner
 	// vertices, with the TES evaluating the baked surface fields (requires
-	// context::supportsTessellationShaders())
+	// context::supportsTessellationShaders()).
+	// Unlike the CPU path there is no separate terrain depth prepass: this pass
+	// writes depth itself, with a polygon offset applied at draw time
+	// so the depth buffer contents stay biased slightly farther than the terrain.
+	// Structure baseplates rely on that bias to avoid z-fighting. The offset
+	// biases depth only, not the rasterized position.
 	template<SHADER_MODE shader>
-	using TerrainCombinedTessTemplate = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
+	using TerrainCombinedTessTemplate = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
 	std::tuple<TerrainCombinedUniforms>,
 	std::tuple<
 	vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex, // TerrainDecalVertex struct
@@ -1161,18 +1166,17 @@ namespace gfx_api
 	using TerrainCombinedTess_Medium = TerrainCombinedTessTemplate<SHADER_TERRAIN_COMBINED_MEDIUM_TESS>;
 	using TerrainCombinedTess_High = TerrainCombinedTessTemplate<SHADER_TERRAIN_COMBINED_HIGH_TESS>;
 
-	// position-only view of the TerrainDecalVertex buffer, for the tessellated depth passes
+	// position-only view of the TerrainDecalVertex buffer, for the tessellated shadow/depth map pass
 	using TerrainPatchCornerVBODescription = vertex_buffer_description<sizeof(TerrainDecalVertex), gfx_api::vertex_attribute_input_rate::vertex,
 		vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>
 	>;
 
-	// shared by both tessellated depth passes (prepass + shadow/depth map)
 	template<>
-	struct constant_buffer_type<SHADER_TERRAIN_DEPTH_TESS>
+	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS>
 	{
 		glm::mat4 ModelViewProjectionMatrix; // this pass's MVP (the light's, for shadow cascades)
 		glm::mat4 tessCameraMVP; // the MAIN camera's MVP: tessellation factors must match the color pass
-		glm::vec4 paramX; // lightmap uv generation (depth prepass, unused by the shadow pass)
+		glm::vec4 paramX; // unused by this pass (retained to match the terrain depth shader interface)
 		glm::vec4 paramY;
 		glm::mat4 texture_matrix;
 		glm::vec4 tessParams; // x = max tess level, y = viewport height (pixels)
@@ -1181,23 +1185,10 @@ namespace gfx_api
 		float fog_end;
 		float unused;
 	};
-	using TerrainDepthTessUniforms = constant_buffer_type<SHADER_TERRAIN_DEPTH_TESS>;
-	template<>
-	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS> : public TerrainDepthTessUniforms {};
-
-	using TerrainDepthTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::enabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::patch_list_4, index_type::u32,
-	std::tuple<TerrainDepthTessUniforms>,
-	std::tuple<
-		TerrainPatchCornerVBODescription
-	>, std::tuple<
-		texture_description<0, sampler_type::bilinear_repeat>,
-		texture_description<1, sampler_type::bilinear>, // baked terrain height (sampled in the TES)
-		texture_description<2, sampler_type::bilinear>, // baked terrain outline offset (sampled in the TES)
-		texture_description<3, sampler_type::bilinear>  // baked terrain normal (sampled in the TES)
-	>, SHADER_TERRAIN_DEPTH_TESS>;
+	using TerrainDepthMapTessUniforms = constant_buffer_type<SHADER_TERRAIN_DEPTHMAP_TESS>;
 
 	using TerrainDepthOnlyForDepthMapTess = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::patch_list_4, index_type::u32,
-	std::tuple<TerrainDepthTessUniforms>,
+	std::tuple<TerrainDepthMapTessUniforms>,
 	std::tuple<
 		TerrainPatchCornerVBODescription
 	>, std::tuple<

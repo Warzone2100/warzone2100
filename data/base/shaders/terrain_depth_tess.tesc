@@ -6,7 +6,7 @@
 layout(vertices = 4) out;
 
 uniform mat4 ModelViewProjectionMatrix;
-uniform mat4 tessCameraMVP; // the MAIN camera's MVP (equals ModelViewProjectionMatrix for the depth prepass)
+uniform mat4 tessCameraMVP; // the MAIN camera's MVP: tessellation factors must match the color pass
 uniform vec4 tessParams; // x = max tess level, y = viewport height (pixels)
 
 void main()
