@@ -22,6 +22,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/tex.h"
 #include "src/warzoneconfig.h"
@@ -46,6 +47,12 @@ struct CursorImageInfo
 	int hotY = 0;
 };
 static CursorImageInfo aCursorImages[CURSOR_MAX];
+static unsigned int cursorImagesGeneration = 0;
+
+unsigned int wzGetCursorImagesGeneration()
+{
+	return cursorImagesGeneration;
+}
 
 /* TODO: do bridge and attach need swapping? */
 static const char *cursor_arrow[] =
@@ -1504,6 +1511,7 @@ void wzApplyCursor()
 void sdlInitColoredCursors()
 {
 	monoCursor = false;
+	++cursorImagesGeneration;
 	aCursors[CURSOR_ARROW]       = init_system_cursor32(CURSOR_ARROW);
 	aCursors[CURSOR_DEST]        = init_system_ColorCursor(CURSOR_DEST, "images/intfac/image_cursor_dest.png");
 	aCursors[CURSOR_SIGHT]       = init_system_cursor32(CURSOR_SIGHT);
@@ -1541,6 +1549,7 @@ void sdlInitColoredCursors()
 void sdlInitCursors()
 {
 	monoCursor = true;
+	++cursorImagesGeneration;
 	aCursors[CURSOR_ARROW]       = init_system_cursor32(CURSOR_ARROW);
 	aCursors[CURSOR_DEST]        = init_system_cursor32(CURSOR_DEST);
 	aCursors[CURSOR_SIGHT]       = init_system_cursor32(CURSOR_SIGHT);

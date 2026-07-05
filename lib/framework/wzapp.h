@@ -123,6 +123,11 @@ WzString wzGetClipboardText();
 bool wzSetClipboardText(const char *text);
 void wzSetCursor(CURSOR index);
 CURSOR wzGetCursor();
+class iV_Image;
+// Returns the image and hotspot for a loaded cursor, or nullptr if unavailable
+const iV_Image* wzGetCursorImage(CURSOR cur, int& hotX, int& hotY);
+// Incremented whenever the cursor image set is rebuilt (e.g. coloured/mono or scale changes)
+unsigned int wzGetCursorImagesGeneration();
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window

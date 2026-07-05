@@ -50,6 +50,7 @@
 #include "init.h"
 
 #include "input/manager.h"
+#include "input/gamepadcursor.h"
 #include "advvis.h"
 #include "atmos.h"
 #include "campaigninfo.h"
@@ -1067,6 +1068,12 @@ bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScaleP
 		return false;
 	}
 
+	// registered before notifications so the cursor overlay draws above them
+	if (!gamepadCursorInit())
+	{
+		return false;
+	}
+
 	if (!notificationsInitialize())
 	{
 		return false;
@@ -1169,6 +1176,7 @@ void systemShutdown()
 	debug(LOG_MAIN, "shutting down graphics subsystem");
 	levShutDown();
 	notificationsShutDown();
+	gamepadCursorShutdown();
 	widgShutDown();
 	fpathShutdown();
 	mapShutdown();

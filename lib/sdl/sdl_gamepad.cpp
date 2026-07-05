@@ -21,6 +21,7 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "sdl_gamepad.h"
 #include "sdl_backend_private.h"
 #include "src/warzoneconfig.h"
@@ -83,6 +84,8 @@ static void markGamepadActive()
 		gamepadIsActiveInput = true;
 		virtualCursorX = (float)mouseX();
 		virtualCursorY = (float)mouseY();
+		// the cursor is drawn as part of the frame while the gamepad is active
+		wzShowMouse(false);
 		debug(LOG_INPUT, "Gamepad is now the active input source");
 	}
 }
@@ -96,6 +99,7 @@ bool wzGamepadNotifyNonGamepadInput()
 	gamepadIsActiveInput = false;
 	// hand the pointer back where the cursor currently is, so the switch is seamless
 	wzWarpMouseToLogicalPos(mouseX(), mouseY());
+	wzShowMouse(true);
 	debug(LOG_INPUT, "Mouse/keyboard is now the active input source");
 	return true;
 }
