@@ -29,6 +29,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/gamepad_input.h"
+#include "input/gamepadbindings.h"
 #include "lib/framework/strres.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pietypes.h"
@@ -512,6 +513,7 @@ void processInput()
 	{
 		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction && !gestureActive;
 		gInputManager.processMappings(allowMouseWheelEvents);
+		gamepadProcessBindings();
 	}
 	/* Allow the user to clear the (Active) console if need be */
 	if (!mouseIsOverScreenOverlayChild && mouseOverConsoleBox() && mousePressed(MOUSE_LMB))
