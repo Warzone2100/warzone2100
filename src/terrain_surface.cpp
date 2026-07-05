@@ -76,12 +76,17 @@ static float computeCornerSharpness(const WorldMapState& mapState, int x, int y)
 	// steep non-cliff steps fade toward the legacy linear geometry, both to
 	// avoid smoothing away deliberate map features and to bound the visual
 	// deviation from map_Height() where the terrain is dramatic.
-	const float h = cornerHeight(mapState, x, y, HeightMode::Ground);
+	// Deltas are measured on the standing surface (max(ground, water)), not
+	// the raw ground: a shore step's height is mostly hidden under water, and
+	// what remains visible is the waterline, which should smooth rather than
+	// keep the legacy faceting. Steps that stay large above the water level
+	// (real cliffs with a submerged foot) still measure large and stay sharp.
+	const float h = cornerHeight(mapState, x, y, HeightMode::Surface);
 	float maxDelta = 0.f;
-	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x - 1, y, HeightMode::Ground) - h));
-	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x + 1, y, HeightMode::Ground) - h));
-	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x, y - 1, HeightMode::Ground) - h));
-	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x, y + 1, HeightMode::Ground) - h));
+	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x - 1, y, HeightMode::Surface) - h));
+	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x + 1, y, HeightMode::Surface) - h));
+	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x, y - 1, HeightMode::Surface) - h));
+	maxDelta = std::max(maxDelta, std::fabs(cornerHeight(mapState, x, y + 1, HeightMode::Surface) - h));
 
 	float s = (maxDelta - SHARPNESS_DELTA_SMOOTH) / (SHARPNESS_DELTA_SHARP - SHARPNESS_DELTA_SMOOTH);
 	s = std::min(1.f, std::max(0.f, s));
