@@ -51,6 +51,7 @@ void ProcessRadarInput();
 
 void processInput();
 void processGestureInput();
+void processGamepadCameraInput();
 /*don't want to do any of these whilst in the Intelligence Screen*/
 void processMouseClickInput();
 
