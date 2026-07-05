@@ -60,7 +60,21 @@ float cornerHeight(const WorldMapState& mapState, int x, int y, HeightMode mode)
 /// the legacy piecewise-linear geometry (cliffs, extreme steps),
 /// 0 = fully smooth. Continuous in between, based on adjacent-tile terrain
 /// type (TER_CLIFFFACE) and local corner-height deltas.
+/// Served from the sharpness cache when one is built (see below).
 float cornerSharpness(const WorldMapState& mapState, int x, int y);
+
+/// Per-corner surface cache lifecycle (corner sharpness, the sanitized water
+/// lattice, and the plateau min/max ranges). heightAt() reads four sharpness
+/// values per evaluation - and, in water mode, a 4x4 stencil of sanitized
+/// water levels - so the terrain
+/// renderer builds the caches before dense evaluation runs (full map at
+/// terrain init, and the changed corner rect, expanded by 1 for the neighborhood
+/// dependencies, on deformation). Rebuilds must happen on the main thread
+/// while no surface evaluation is running - evaluation (including the
+/// parallel field bake workers) only reads.
+void rebuildSurfaceCaches(const WorldMapState& mapState);
+void rebuildSurfaceCachesRegion(const WorldMapState& mapState, int minCornerX, int minCornerY, int maxCornerX, int maxCornerY);
+void clearSurfaceCaches();
 
 /// Smooth surface height at a map-space position in world units
 /// (same x/y convention as map_Height() - the renderer's z = -y flip is NOT
