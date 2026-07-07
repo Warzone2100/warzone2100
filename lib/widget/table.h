@@ -173,8 +173,8 @@ public:
 
 	void setItemSpacing(uint32_t value);
 
-	uint16_t getScrollPosition() const;
-	void setScrollPosition(uint16_t newPosition);
+	uint32_t getScrollPosition() const;
+	void setScrollPosition(uint32_t newPosition);
 
 	bool isUserDraggingColumnHeader() const;
 

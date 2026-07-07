@@ -26,6 +26,9 @@
 #include "cliprect.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
+#include <algorithm>
+#include <cstdint>
+
 void ClipRectWidget::runRecursive(W_CONTEXT *psContext)
 {
 	W_CONTEXT newContext(psContext);
@@ -82,28 +85,30 @@ bool ClipRectWidget::isChildVisible(const std::shared_ptr<WIDGET>& child)
 	return childrenContext.clipContains(child->geometry());
 }
 
-bool ClipRectWidget::setTopOffset(uint16_t value)
+bool ClipRectWidget::setTopOffset(uint32_t value)
 {
-	if (value == offset.y)
+	int newOffset = static_cast<int>(std::min<uint32_t>(value, INT32_MAX));
+	if (newOffset == offset.y)
 	{
 		return false;
 	}
-	offset.y = value;
+	offset.y = newOffset;
 	return true;
 }
 
-uint16_t ClipRectWidget::getTopOffset()
+uint32_t ClipRectWidget::getTopOffset()
 {
-	return offset.y;
+	return static_cast<uint32_t>(std::max(offset.y, 0));
 }
 
-bool ClipRectWidget::setLeftOffset(uint16_t value)
+bool ClipRectWidget::setLeftOffset(uint32_t value)
 {
-	if (value == offset.x)
+	int newOffset = static_cast<int>(std::min<uint32_t>(value, INT32_MAX));
+	if (newOffset == offset.x)
 	{
 		return false;
 	}
-	offset.x = value;
+	offset.x = newOffset;
 	return true;
 }
 
