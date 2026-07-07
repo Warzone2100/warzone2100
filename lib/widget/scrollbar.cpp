@@ -36,7 +36,7 @@ static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, slider->width(), slider->height());
 	// pie_UniTransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height(), WZCOL_DBLUE);
 
-	auto sliderY = slider->numStops > 0 ? (slider->height() - slider->barSize) * slider->pos / slider->numStops: 0;
+	auto sliderY = slider->numStops > 0 ? static_cast<int>(static_cast<int64_t>(slider->height() - slider->barSize) * slider->pos / slider->numStops) : 0;
 	int sliderDrawY0 = y0 + sliderY+2;
 	int sliderDrawY1 = y0 + sliderY + std::max<int>(slider->barSize,5)-2;
 	if (sliderDrawY1 - sliderDrawY0 <= 2)
@@ -63,12 +63,12 @@ void ScrollBarWidget::geometryChanged()
 	slider->setGeometry(0, 0, width(), height());
 }
 
-uint16_t ScrollBarWidget::position() const
+uint32_t ScrollBarWidget::position() const
 {
 	return slider->pos;
 }
 
-void ScrollBarWidget::setPosition(uint16_t newPosition)
+void ScrollBarWidget::setPosition(uint32_t newPosition)
 {
 	slider->pos = std::min(newPosition, slider->numStops);
 }
@@ -76,13 +76,13 @@ void ScrollBarWidget::setPosition(uint16_t newPosition)
 void ScrollBarWidget::incrementPosition(int32_t amount)
 {
 	if (isEnabled()) {
-		auto pos = amount + slider->pos;
-		CLIP(pos, 0, slider->numStops);
-		slider->pos = pos;
+		// signed 64-bit intermediate: a negative amount must not wrap the unsigned pos
+		int64_t pos = static_cast<int64_t>(slider->pos) + amount;
+		slider->pos = static_cast<uint32_t>(std::max<int64_t>(0, std::min<int64_t>(pos, slider->numStops)));
 	}
 }
 
-void ScrollBarWidget::setScrollableSize(uint16_t value)
+void ScrollBarWidget::setScrollableSize(uint32_t value)
 {
 	auto moveToBottom = stickToBottom && slider->pos == slider->numStops;
 	scrollableSize = value;
@@ -92,9 +92,15 @@ void ScrollBarWidget::setScrollableSize(uint16_t value)
 	}
 }
 
-void ScrollBarWidget::setViewSize(uint16_t value)
+void ScrollBarWidget::setViewSize(uint32_t value)
 {
 	viewSize = value;
+	updateSlider();
+}
+
+void ScrollBarWidget::setMinimumSliderSize(uint32_t value)
+{
+	minimumSliderSize = value;
 	updateSlider();
 }
 
@@ -105,8 +111,12 @@ void ScrollBarWidget::setStickToBottom(bool value)
 
 void ScrollBarWidget::updateSlider()
 {
-	slider->barSize = scrollableSize > 0 ? viewSize * height() / scrollableSize : 0;
-	slider->numStops = MAX(0, scrollableSize - viewSize);
+	uint32_t trackSize = static_cast<uint32_t>(std::max(height(), 0));
+	uint32_t barSize = scrollableSize > 0 ? viewSize * trackSize / scrollableSize : 0;
+	barSize = std::min(trackSize, std::max<uint32_t>(barSize, std::min<uint32_t>(minimumSliderSize, trackSize)));
+	slider->barSize = static_cast<UWORD>(std::min<uint32_t>(barSize, UINT16_MAX));
+	// unsigned now: MAX(0, a - b) would wrap instead of clamping
+	slider->numStops = (scrollableSize > viewSize) ? (scrollableSize - viewSize) : 0;
 	slider->pos = std::min(slider->pos, slider->numStops);
 }
 

@@ -36,9 +36,9 @@ public:
 	void runRecursive(W_CONTEXT *psContext) override;
 	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
-	bool setTopOffset(uint16_t value);
-	bool setLeftOffset(uint16_t value);
-	uint16_t getTopOffset();
+	bool setTopOffset(uint32_t value);
+	bool setLeftOffset(uint32_t value);
+	uint32_t getTopOffset();
 	bool isChildVisible(const std::shared_ptr<WIDGET>& child);
 	int parentRelativeXOffset(int coord) const override;
 	int parentRelativeYOffset(int coord) const override;

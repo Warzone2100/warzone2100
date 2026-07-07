@@ -62,9 +62,9 @@ public:
 	void mouseDragged(WIDGET_KEY, W_CONTEXT *start, W_CONTEXT *current) override;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
-	UWORD		numStops;			// Number of stop positions on the slider
+	uint32_t	numStops;			// Number of stop positions on the slider
 	UWORD		barSize;			// Thickness of slider bar
-	UWORD		pos;				// Current stop position of the slider
+	uint32_t	pos;				// Current stop position of the slider
 	UWORD		state;				// Slider state
 	std::string pTip;                           // Tool tip
 private:

@@ -42,10 +42,14 @@ public:
 		return widget;
 	}
 
-	uint16_t position() const;
-	void setPosition(uint16_t newPosition);
-	void setScrollableSize(uint16_t value);
-	void setViewSize(uint16_t value);
+	uint32_t position() const;
+	void setPosition(uint32_t newPosition);
+	void setScrollableSize(uint32_t value);
+	void setViewSize(uint32_t value);
+	// Optional floor for the slider handle, in pixels (default 0 = purely
+	// proportional). Useful for very tall content, where the proportional
+	// handle shrinks to a sliver.
+	void setMinimumSliderSize(uint32_t value);
 	void setStickToBottom(bool value);
 	void incrementPosition(int32_t amount);
 	void enable();
@@ -57,8 +61,9 @@ protected:
 
 private:
 	std::shared_ptr<W_SLIDER> slider;
-	uint16_t scrollableSize = 1;
-	uint16_t viewSize = 1;
+	uint32_t scrollableSize = 1;
+	uint32_t viewSize = 1;
+	uint32_t minimumSliderSize = 0;
 	bool stickToBottom = false;
 
 	void updateSlider();
