@@ -88,6 +88,17 @@ IMGSaveError iV_saveImage_PNG(const char *fileName, const iV_Image *image);
  */
 IMGSaveError iV_saveImage_PNG_Gray(const char *fileName, const iV_Image *image);
 
+/*!
+ * Encodes an image to PNG in memory (rows in natural top-down order, so the
+ * result round-trips with iV_loadImage_PNG).
+ * Supports 3-channel (RGB) and 4-channel (RGBA) images.
+ * \param image The image to encode
+ * \param output Receives the encoded PNG bytes (any prior contents replaced)
+ * \return an IMGSaveError struct. If no error occurred, its noError() method will return true.
+ * Note: This function must be thread-safe.
+ */
+IMGSaveError iV_encodeImage_PNG(const iV_Image *image, std::vector<unsigned char>& output);
+
 void iV_saveImage_JPEG(const char *fileName, const iV_Image *image);
 
 // For loading and outputting multi-channel (ex. RGB) specular maps as WZ-converted single-channel luma grayscale PNGs

@@ -357,9 +357,11 @@ err:
 
 // Note: This function must be thread-safe.
 //       It does not call the debug() macro directly, but instead returns an IMGSaveError structure with the text of any error.
-static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image *image, bool bottom_up_write = true)
+static IMGSaveError internal_encodeImage_PNG(const iV_Image *image, std::vector<unsigned char>& output, bool bottom_up_write = true)
 {
 	IMGSaveError errorResult;
+
+	output.clear();
 
 	spng_color_type color_type;
 	switch (image->pixel_format())
@@ -379,7 +381,7 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 		default:
 			// not supported
 			IMGSaveError error;
-			error.text = "internal_saveImage_PNG: Unsupported input image format: ";
+			error.text = "internal_encodeImage_PNG: Unsupported input image format: ";
 			error.text += gfx_api::format_to_str(image->pixel_format());
 			return error;
 	}
@@ -409,7 +411,7 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	int ret = spng_encode_image(ctx, nullptr, 0, fmt, SPNG_ENCODE_PROGRESSIVE | SPNG_ENCODE_FINALIZE);
 	if (ret)
 	{
-		errorResult.text = "internal_saveImage_PNG: spng_encode_image error: ";
+		errorResult.text = "internal_encodeImage_PNG: spng_encode_image error: ";
 		const char* pErrStr = spng_strerror(ret);
 		if (pErrStr)
 		{
@@ -442,7 +444,7 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 			break;
 		if (err)
 		{
-			errorResult.text = "internal_saveImage_PNG: spng_encode_scanline(row=" + std::to_string(currentRow) + ") error: ";
+			errorResult.text = "internal_encodeImage_PNG: spng_encode_scanline(row=" + std::to_string(currentRow) + ") error: ";
 			const char* pErrStr = spng_strerror(ret);
 			if (pErrStr)
 			{
@@ -458,7 +460,7 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	void *png_buf = spng_get_png_buffer(ctx, &output_size, &ret);
 	if (!png_buf)
 	{
-		errorResult.text = "internal_saveImage_PNG: spng_get_png_buffer error: ";
+		errorResult.text = "internal_encodeImage_PNG: spng_get_png_buffer error: ";
 		const char* pErrStr = spng_strerror(ret);
 		if (pErrStr)
 		{
@@ -468,6 +470,27 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 		return errorResult;
 	}
 
+	// Copy the encoded buffer to the output
+	output.assign(static_cast<unsigned char *>(png_buf), static_cast<unsigned char *>(png_buf) + output_size);
+	free(png_buf);
+
+	spng_ctx_free(ctx);
+	return errorResult;
+}
+
+// Note: This function must be thread-safe.
+//       It does not call the debug() macro directly, but instead returns an IMGSaveError structure with the text of any error.
+static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image *image, bool bottom_up_write = true)
+{
+	std::vector<unsigned char> encoded;
+	IMGSaveError encodeResult = internal_encodeImage_PNG(image, encoded, bottom_up_write);
+	if (!encodeResult.noError())
+	{
+		return encodeResult;
+	}
+
+	IMGSaveError errorResult;
+
 	// Write out the file
 	PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName);
 	if (fileHandle == nullptr)
@@ -476,14 +499,10 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 		errorResult.text += fileName;
 		errorResult.text += ") with error: ";
 		errorResult.text += WZ_PHYSFS_getLastError();
-		free(png_buf);
-		spng_ctx_free(ctx);
 		return errorResult;
 	}
 
-	WZ_PHYSFS_writeBytes(fileHandle, png_buf, static_cast<PHYSFS_uint32>(output_size));
-
-	if (WZ_PHYSFS_writeBytes(fileHandle, png_buf, static_cast<PHYSFS_uint32>(output_size)) != static_cast<PHYSFS_sint64>(output_size))
+	if (WZ_PHYSFS_writeBytes(fileHandle, encoded.data(), static_cast<PHYSFS_uint32>(encoded.size())) != static_cast<PHYSFS_sint64>(encoded.size()))
 	{
 		// Failed to write png data to file
 		errorResult.text = "internal_saveImage_PNG: could not write data to ";
@@ -494,10 +513,14 @@ static IMGSaveError internal_saveImage_PNG(const char *fileName, const iV_Image 
 	}
 
 	PHYSFS_close(fileHandle);
-	free(png_buf);
 
-	spng_ctx_free(ctx);
 	return errorResult;
+}
+
+// Note: This function must be thread-safe.
+IMGSaveError iV_encodeImage_PNG(const iV_Image *image, std::vector<unsigned char>& output)
+{
+	return internal_encodeImage_PNG(image, output, /*bottom_up_write=*/false);
 }
 
 // Note: This function must be thread-safe.
