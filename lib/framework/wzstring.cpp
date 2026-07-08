@@ -66,6 +66,11 @@ std::vector<WzUniCodepoint> WzUniCodepoint::caseFolded() const
 	return resultCodepoints;
 }
 
+WzUniCodepoint WzUniCodepoint::toUpper() const
+{
+	return WzUniCodepoint(static_cast<uint32_t>(utf8proc_toupper(static_cast<utf8proc_int32_t>(_codepoint))));
+}
+
 WzString WzString::fromCodepoint(const WzUniCodepoint& codepoint)
 {
 	uint32_t utf32string[] = {codepoint.UTF32(), 0};
@@ -398,6 +403,19 @@ WzString WzString::toLower() const
 		ch = std::tolower(ch, std::locale::classic());
 	}
 	return WzString::fromUtf8(lowercasedUtf8String);
+}
+
+// Returns an uppercase copy of the string, using per-codepoint Unicode
+// uppercasing via utf8proc (codepoints without a 1:1 uppercase mapping, ex.
+// "ß", are left unchanged).
+WzString WzString::toUpper() const
+{
+	std::vector<uint32_t> utf32 = toUtf32();
+	for (auto &cp : utf32)
+	{
+		cp = static_cast<uint32_t>(utf8proc_toupper(static_cast<utf8proc_int32_t>(cp)));
+	}
+	return WzString::fromUtf32(utf32);
 }
 
 // Trim whitespace from start (in place)
