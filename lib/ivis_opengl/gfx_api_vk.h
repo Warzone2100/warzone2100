@@ -32,7 +32,6 @@
 #include "render_graph/pass_resolve.h"
 #include "render_graph/pipeline_surfaces.h"
 #include "vk/frame_layout_tracker.h"
-#include "vk/legacy_pass_layout_commit.h"
 #include "vk/layout_key_builder.h"
 #include "vk/pass_layout_key.h"
 #include "vk/pre_pass_barrier_emitter.h"
@@ -866,12 +865,6 @@ public:
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void submitFrame() override;
-	virtual void beginDepthPass(size_t idx) override;
-	virtual void endCurrentDepthPass() override;
-	virtual void beginSceneRenderPass() override;
-	virtual void endSceneRenderPass() override;
-	virtual void beginRenderPass() override;
-	virtual void endRenderPass() override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
 	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;
@@ -920,7 +913,6 @@ public:
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
 	bool isYAxisInverted() const override { return true; }
 	virtual bool shouldDraw() override;
-	bool canRecordDrawCommands() const override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
@@ -949,8 +941,6 @@ private:
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
 	const RenderPassDetails& currentRenderPass();
 	bool recreateSwapchainAfterPresentError(const vk::Result& reason);
-	bool openLegacySwapchainPass(gfx_api::AttachmentLoadOp colorLoad, gfx_api::AttachmentLoadOp depthLoad);
-	void bootstrapLegacySwapchainPass();
 	void ensureRenderPassPSOCapacity(size_t requiredCount);
 	void destroyRenderPassIndexedPSOs(size_t fromIndex);
 	size_t getOrCreatePassRenderPassId(const gfx_api::vk::PassLayoutKey& key);
@@ -1046,9 +1036,6 @@ private:
 	float _viewportMinDepth = 0.f;
 	float _viewportMaxDepth = 1.f;
 	bool _activePassTargetsSwapchain = false;
-	bool _legacyFrameStarted = false;
-	/// Captures out-of-graph final layouts at `beginPass`, commits at `endPass`.
-	gfx_api::vk::LegacyPassLayoutCommit _legacyPassLayoutCommit;
 	vk::Framebuffer _activeDynamicFramebuffer;
 };
 

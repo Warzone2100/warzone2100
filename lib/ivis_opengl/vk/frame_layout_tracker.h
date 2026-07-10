@@ -30,7 +30,6 @@
 
 #include "render_graph/compile.h"
 #include "render_graph/layout_subresource.h"
-#include "vk/legacy_layout_final.h"
 
 #include <unordered_map>
 #include <utility>
@@ -46,7 +45,7 @@ namespace gfx_api::vk
 ///
 /// Separate from compile-time `LayoutStateMap` in `layout_timeline`. Consumed by
 /// `PrePassBarrierEmitter` (External read old layouts), post-pass updates from
-/// `CompiledPass`, `LegacyPassLayoutCommit`, and the single swapchain present transition.
+/// `CompiledPass` and the single swapchain present transition.
 /// </summary>
 class FrameLayoutTracker
 {
@@ -67,8 +66,6 @@ public:
 
 	/// Applies `CompiledPass::postPassLayoutUpdates` after a graph pass ends.
 	void applyPostPassUpdates(const gfx_api::CompiledPass& pass);
-	/// Commits out-of-graph final layouts captured by `LegacyPassLayoutCommit`.
-	void commitLegacyFinalLayouts(const std::vector<LegacyLayoutFinal>& finals);
 
 	/// Single frame-level swapchain -> Present transition. No-op if swapchain not touched or texture is null.
 	void transitionSwapchainToPresent(VkRoot& root, ::vk::CommandBuffer cmd,

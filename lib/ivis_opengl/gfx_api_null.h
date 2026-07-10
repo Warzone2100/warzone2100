@@ -131,12 +131,6 @@ public:
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void submitFrame() override;
-	virtual void beginDepthPass(size_t idx) override;
-	virtual void endCurrentDepthPass() override;
-	virtual void beginSceneRenderPass() override;
-	virtual void endSceneRenderPass() override;
-	virtual void beginRenderPass() override;
-	virtual void endRenderPass() override;
 	virtual void purgeFrameResources() override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
 		gfx_api::PassGraphCompileResult& compileResult) override;

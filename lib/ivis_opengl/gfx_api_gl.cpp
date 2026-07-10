@@ -21,7 +21,6 @@
 #include "lib/framework/wzapp.h"
 #include "screen.h"
 #include "gfx_api_gl.h"
-#include "gfx_api_legacy_pass_compat.h"
 #include "render_graph/pass_resolve.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
@@ -4419,143 +4418,6 @@ void gl_context::submitFrame()
 #endif
 }
 
-namespace
-{
-
-void glLegacyClearDefaultFramebuffer(gl_context& ctx)
-{
-	const auto dims = ctx.getDrawableDimensions();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, static_cast<GLsizei>(dims.first), static_cast<GLsizei>(dims.second));
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glDepthMask(GL_TRUE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
-bool glLegacyBeginResolvedPass(gl_context& ctx, gfx_api::RenderPassDesc pass)
-{
-	if (!gfx_api::resolvePassDescription(pass))
-	{
-		return false;
-	}
-	ctx.beginPass(pass);
-	return true;
-}
-
-} // anonymous namespace
-
-void gl_context::beginDepthPass(size_t idx)
-{
-	ASSERT_OR_RETURN(, idx < depthPassCount, "Invalid depth pass #: %zu", idx);
-	setRenderGraphExecuting(true);
-
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	gfx_api::RenderPassDesc pass = gfx_api::legacy_pass::buildShadowCascadePassDesc(idx);
-	if (!glLegacyBeginResolvedPass(*this, std::move(pass)))
-	{
-		debug(LOG_ERROR, "Failed to begin legacy shadow cascade pass");
-		setRenderGraphExecuting(false);
-	}
-}
-
-void gl_context::endCurrentDepthPass()
-{
-	if (hasActivePass)
-	{
-		endPass();
-	}
-}
-
-void gl_context::beginSceneRenderPass()
-{
-	setRenderGraphExecuting(true);
-
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	gfx_api::RenderPassDesc pass = gfx_api::legacy_pass::buildScenePassDesc();
-	if (!glLegacyBeginResolvedPass(*this, std::move(pass)))
-	{
-		debug(LOG_ERROR, "Failed to begin legacy scene pass");
-		setRenderGraphExecuting(false);
-	}
-}
-
-void gl_context::endSceneRenderPass()
-{
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Load, gfx_api::AttachmentLoadOp::Clear))
-	{
-		debug(LOG_ERROR, "Failed to reopen legacy swapchain pass after scene pass");
-		setRenderGraphExecuting(false);
-	}
-	else
-	{
-		setRenderGraphExecuting(true);
-	}
-}
-
-bool gl_context::openLegacySwapchainPass(gfx_api::AttachmentLoadOp colorLoad, gfx_api::AttachmentLoadOp depthLoad)
-{
-	gfx_api::RenderPassDesc pass = gfx_api::legacy_pass::buildSwapchainPassDesc(colorLoad, depthLoad);
-	if (!glLegacyBeginResolvedPass(*this, std::move(pass)))
-	{
-		debug(LOG_ERROR, "Failed to resolve legacy swapchain pass");
-		return false;
-	}
-	return true;
-}
-
-void gl_context::beginRenderPass()
-{
-	_dynamicFBOCache.releaseAll();
-	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Clear, gfx_api::AttachmentLoadOp::Clear))
-	{
-		debug(LOG_ERROR, "Failed to begin legacy swapchain render pass");
-		setRenderGraphExecuting(false);
-		return;
-	}
-	setRenderGraphExecuting(true);
-}
-
-void gl_context::endRenderPass()
-{
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	frameNum = std::max<size_t>(frameNum + 1, 1);
-	backend_impl->swapWindow();
-	glUseProgram(0);
-	current_program = nullptr;
-#if !defined(__EMSCRIPTEN__)
-	glLegacyClearDefaultFramebuffer(*this);
-#endif
-
-#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khrCallbackOomDetected.load())
-	{
-		wzDisplayFatalGfxBackendFailure("GL_OUT_OF_MEMORY");
-		wzResetGfxSettingsOnFailure();
-		abort();
-	}
-#endif
-
-	purgeFrameResources();
-	setRenderGraphExecuting(false);
-}
-
 void gl_context::applyAttachmentClears(const gfx_api::RenderPassDesc& pass)
 {
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -5391,11 +5253,6 @@ std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
 bool gl_context::shouldDraw()
 {
 	return viewportWidth > 0 && viewportHeight > 0;
-}
-
-bool gl_context::canRecordDrawCommands() const
-{
-	return renderGraphExecuting() && hasActivePass;
 }
 
 void gl_context::shutdown()

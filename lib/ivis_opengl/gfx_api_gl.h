@@ -371,12 +371,6 @@ struct gl_context final : public gfx_api::context
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void submitFrame() override;
-	virtual void beginDepthPass(size_t idx) override;
-	virtual void endCurrentDepthPass() override;
-	virtual void beginSceneRenderPass() override;
-	virtual void endSceneRenderPass() override;
-	virtual void beginRenderPass() override;
-	virtual void endRenderPass() override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
 	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;
@@ -405,7 +399,6 @@ struct gl_context final : public gfx_api::context
 	virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() override;
 	bool isYAxisInverted() const override { return false; }
 	virtual bool shouldDraw() override;
-	bool canRecordDrawCommands() const override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
 	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
@@ -459,7 +452,6 @@ private:
 	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 
 	void applyAttachmentStoreOps(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight);
-	bool openLegacySwapchainPass(gfx_api::AttachmentLoadOp colorLoad, gfx_api::AttachmentLoadOp depthLoad);
 	static void applyAttachmentClears(const gfx_api::RenderPassDesc& pass);
 	void resolveMsaaColorAttachment(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight);
 	void invalidateDepthStencilAttachment(const gfx_api::RenderPassDesc& pass);

@@ -1442,7 +1442,7 @@ static void drawTerrainCombinedmpl(const glm::mat4 &ModelViewProjection, const g
 		lightmap_texture,
 		groundTexArr, groundNormalArr, groundSpecularArr, groundHeightArr,
 		decalTexArr, decalNormalArr, decalSpecularArr, decalHeightArr,
-		gfx_api::context::get().getDepthTexture());
+		gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::ShadowMap));
 	PSO::get().bind_vertex_buffers(terrainDecalVBO);
 	glm::mat4 groundScale = glm::mat4(0);
 	for (int i = 0; i < getNumGroundTypes(); i++) {
@@ -1658,7 +1658,7 @@ void drawWaterHighImpl(const glm::mat4 &ModelViewProjection, const glm::mat4& vi
 		waterTexturesHigh.tex_nm,
 		waterTexturesHigh.tex_sm,
 		lightmap_texture,
-		gfx_api::context::get().getDepthTexture());
+		gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::ShadowMap));
 	PSO::get().bind_vertex_buffers(waterVBO);
 	PSO::get().bind_constants({
 		ModelViewProjection, viewMatrix, lightmapValues.ModelUVLightmap, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},

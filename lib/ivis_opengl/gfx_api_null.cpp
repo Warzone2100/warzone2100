@@ -458,36 +458,6 @@ void null_context::submitFrame()
 	current_program = nullptr;
 }
 
-void null_context::beginDepthPass(size_t /*idx*/)
-{
-	setRenderGraphExecuting(true);
-}
-
-void null_context::endCurrentDepthPass()
-{
-}
-
-void null_context::beginSceneRenderPass()
-{
-	setRenderGraphExecuting(true);
-}
-
-void null_context::endSceneRenderPass()
-{
-}
-
-void null_context::beginRenderPass()
-{
-	setRenderGraphExecuting(true);
-	frameHasDrawCommands = true;
-}
-
-void null_context::endRenderPass()
-{
-	setRenderGraphExecuting(false);
-	submitFrame();
-}
-
 void null_context::purgeFrameResources()
 {
 }

@@ -107,14 +107,6 @@ void FrameLayoutTracker::applyPostPassUpdates(const gfx_api::CompiledPass& pass)
 	}
 }
 
-void FrameLayoutTracker::commitLegacyFinalLayouts(const std::vector<LegacyLayoutFinal>& finals)
-{
-	for (const LegacyLayoutFinal& entry : finals)
-	{
-		set(entry.subresource, entry.layout);
-	}
-}
-
 void FrameLayoutTracker::transitionSwapchainToPresent(VkRoot& root, ::vk::CommandBuffer cmd,
 	gfx_api::abstract_texture* swapchainColor)
 {

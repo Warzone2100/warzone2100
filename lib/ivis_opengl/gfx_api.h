@@ -411,22 +411,6 @@ namespace gfx_api
 		virtual void endPass(const CompiledPass* compiledPass = nullptr) = 0;
 		virtual void submitFrame() = 0;
 
-		// Legacy direct-recording pass API (game code until render-graph migration).
-		virtual void beginDepthPass(size_t idx) { }
-		virtual void endCurrentDepthPass() { }
-		virtual gfx_api::abstract_texture* getDepthTexture()
-		{
-			return getPipelineSurface(PipelineSurfaceId::ShadowMap);
-		}
-		virtual void beginSceneRenderPass() { }
-		virtual void endSceneRenderPass() { }
-		virtual gfx_api::abstract_texture* getSceneTexture()
-		{
-			return getPipelineSurface(PipelineSurfaceId::SceneColor);
-		}
-		virtual void beginRenderPass() = 0;
-		virtual void endRenderPass() = 0;
-
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
 		virtual gfx_api::abstract_texture* getPipelineSurface(PipelineSurfaceId id) { return nullptr; }
 		virtual PipelineSurfaceMeta pipelineSurfaceMeta(PipelineSurfaceId id) const { return getPipelineSurfaceMeta(id); }
@@ -467,7 +451,6 @@ namespace gfx_api
 		virtual std::pair<uint32_t, uint32_t> getDrawableDimensions() = 0;
 		virtual bool isYAxisInverted() const = 0;
 		virtual bool shouldDraw() = 0;
-		virtual bool canRecordDrawCommands() const { return renderGraphExecuting(); }
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
 		typedef std::function<void()> SetSwapIntervalCompletionHandler;

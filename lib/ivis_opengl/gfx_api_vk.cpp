@@ -50,12 +50,10 @@
 //   vk/frame_layout_tracker        runtime per-frame layout map + present transition
 //   vk/pre_pass_barrier_emitter    batched pre-pass image barriers
 //   vk/warm_entry.h                warm render-pass layout ids per graphIndex
-//   vk/legacy_pass_layout_commit   out-of-graph final layout capture/commit
 // VkRoot orchestrates the above and owns scratch buffers, FBO setup, and pass begin/end.
 // transitionImageLayout, getVkImageHandle, and getVkImageAspect remain here as facades for vk/ friends.
 
 #include "gfx_api_vk.h"
-#include "gfx_api_legacy_pass_compat.h"
 #include "render_graph/layout_subresource.h"
 #include "render_graph/pass_resolve.h"
 #include "vk/handle_storage.h"
@@ -3729,12 +3727,6 @@ bool VkRoot::shouldDraw()
 		&& swapchainSize.height > 1;
 }
 
-bool VkRoot::canRecordDrawCommands() const
-{
-	return renderGraphExecuting() && hasActivePass;
-}
-
-
 void VkRoot::shutdown()
 {
 	clearFramebufferCache();
@@ -3877,9 +3869,6 @@ void VkRoot::finalizeActiveRecording()
 			_frameLayoutTracker.noteSwapchainWrite();
 		}
 
-		// Teardown may occur on legacy path (compiledPass unknown); commit is no-op if empty.
-		_legacyPassLayoutCommit.commitTo(_frameLayoutTracker);
-
 		if (_activePassTargetsSwapchain && _swapchainColorSurface != nullptr)
 		{
 			setImageLayout(_swapchainColorSurface.get(), vk::ImageLayout::eColorAttachmentOptimal);
@@ -3974,7 +3963,6 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 	// Swapchain resources are gone; mark the drawable invalid so shouldDraw() and game
 	// code skip recording until createSwapchain() restores a live swapchain.
 	swapchainSize = vk::Extent2D{1, 1};
-	_legacyFrameStarted = false;
 	setRenderGraphExecuting(false);
 }
 
@@ -4551,8 +4539,6 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		debug(LOG_ERROR, "Failed to upload default array texture??");
 	}
 	pDefaultArrayTexture->flush();
-
-	bootstrapLegacySwapchainPass();
 }
 
 static optional<uint32_t> getVKLargestDeviceLocalMemoryHeapIndex(const vk::PhysicalDeviceMemoryProperties& memprops)
@@ -6322,138 +6308,6 @@ bool VkRoot::recreateSwapchainAfterPresentError(const vk::Result& reason)
 	return false;
 }
 
-namespace
-{
-
-bool vkLegacyBeginResolvedPass(VkRoot& ctx, gfx_api::RenderPassDesc pass)
-{
-	if (!gfx_api::resolvePassDescription(pass))
-	{
-		debug(LOG_ERROR, "Failed to resolve legacy pass \"%s\"", pass.debugName.c_str());
-		return false;
-	}
-	ctx.beginPass(pass);
-	return true;
-}
-
-} // anonymous namespace
-
-void VkRoot::beginDepthPass(size_t idx)
-{
-	ASSERT_OR_RETURN(, idx < depthPassCount, "Invalid depth pass #: %zu", idx);
-	setRenderGraphExecuting(true);
-
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	gfx_api::RenderPassDesc pass = gfx_api::legacy_pass::buildShadowCascadePassDesc(idx);
-	if (!vkLegacyBeginResolvedPass(*this, std::move(pass)))
-	{
-		debug(LOG_ERROR, "Failed to begin legacy depth pass #%zu", idx);
-		setRenderGraphExecuting(false);
-	}
-}
-
-void VkRoot::endCurrentDepthPass()
-{
-	if (hasActivePass)
-	{
-		endPass();
-	}
-}
-
-void VkRoot::beginSceneRenderPass()
-{
-	setRenderGraphExecuting(true);
-
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	gfx_api::RenderPassDesc pass = gfx_api::legacy_pass::buildScenePassDesc();
-	if (!vkLegacyBeginResolvedPass(*this, std::move(pass)))
-	{
-		debug(LOG_ERROR, "Failed to begin legacy scene render pass");
-		setRenderGraphExecuting(false);
-	}
-}
-
-void VkRoot::endSceneRenderPass()
-{
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Load, gfx_api::AttachmentLoadOp::Clear))
-	{
-		debug(LOG_ERROR, "Failed to reopen legacy swapchain pass after scene pass");
-		setRenderGraphExecuting(false);
-	}
-	else
-	{
-		setRenderGraphExecuting(true);
-	}
-}
-
-bool VkRoot::openLegacySwapchainPass(gfx_api::AttachmentLoadOp colorLoad, gfx_api::AttachmentLoadOp depthLoad)
-{
-	gfx_api::RenderPassDesc pass = gfx_api::legacy_pass::buildSwapchainPassDesc(colorLoad, depthLoad);
-	if (!gfx_api::resolvePassDescription(pass))
-	{
-		debug(LOG_ERROR, "Failed to resolve legacy swapchain pass");
-		return false;
-	}
-	beginPass(pass);
-	return true;
-}
-
-void VkRoot::bootstrapLegacySwapchainPass()
-{
-	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Clear, gfx_api::AttachmentLoadOp::Clear))
-	{
-		debug(LOG_ERROR, "Failed to bootstrap legacy swapchain pass after swapchain creation");
-		setRenderGraphExecuting(false);
-		return;
-	}
-	setRenderGraphExecuting(true);
-	_legacyFrameStarted = true;
-}
-
-void VkRoot::beginRenderPass()
-{
-	if (_legacyFrameStarted)
-	{
-		return;
-	}
-	_framebufferCache.releaseAll();
-	resetImageLayoutTracker();
-	if (!openLegacySwapchainPass(gfx_api::AttachmentLoadOp::Clear, gfx_api::AttachmentLoadOp::Clear))
-	{
-		debug(LOG_ERROR, "Failed to begin legacy swapchain render pass");
-		setRenderGraphExecuting(false);
-		return;
-	}
-	setRenderGraphExecuting(true);
-	_legacyFrameStarted = true;
-}
-
-void VkRoot::endRenderPass()
-{
-	if (hasActivePass)
-	{
-		endPass();
-	}
-
-	setRenderGraphExecuting(false);
-	_legacyFrameStarted = false;
-	submitFrame();
-	purgeFrameResources();
-}
-
 void VkRoot::submitFrame()
 {
 	if (!frameHasDrawCommands)
@@ -6852,17 +6706,6 @@ void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::Compi
 		renderPassId = getOrCreatePassRenderPassId(_passLayoutScratch);
 	}
 
-	// Out-of-graph (legacy) passes: _legacyPassLayoutCommit captures final layouts from the pass key here.
-	// Graph passes rely on CompiledPass::postPassLayoutUpdates applied in endPass via applyCompiledPostPassLayouts.
-	if (compiledPass == nullptr)
-	{
-		_legacyPassLayoutCommit.captureFromPassKey(pass, _passLayoutScratch);
-	}
-	else
-	{
-		_legacyPassLayoutCommit.clear();
-	}
-
 	buffering_mechanism::get_current_resources().ensureDrawCmdBufferBegun();
 	frameHasDrawCommands = true;
 
@@ -6949,11 +6792,6 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 	if (compiledPass != nullptr)
 	{
 		applyCompiledPostPassLayouts(*compiledPass);
-	}
-	else
-	{
-		// Legacy path: commit captured finals into _frameLayoutTracker.
-		_legacyPassLayoutCommit.commitTo(_frameLayoutTracker);
 	}
 	if (_activePassTargetsSwapchain && _swapchainColorSurface != nullptr)
 	{
