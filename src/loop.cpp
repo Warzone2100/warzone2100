@@ -161,12 +161,6 @@ static GAMECODE renderLoop()
 		handleInGameHostQuit();
 	}
 
-	const auto shouldSkipDrawing = []() {
-		return !gfx_api::context::get().shouldDraw();
-	};
-
-	bool skipDrawing = shouldSkipDrawing();
-
 	audio_Update();
 
 	wzShowMouse(true);
@@ -329,7 +323,7 @@ static GAMECODE renderLoop()
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode() && !skipDrawing)
+	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode())
 	{
 		if (!gameUpdatePaused())
 		{
