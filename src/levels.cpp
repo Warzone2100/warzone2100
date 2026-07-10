@@ -41,6 +41,7 @@
 #include "objects.h"
 #include "hci.h"
 #include "levels.h"
+#include "map.h"
 #include "mission.h"
 #include "levelint.h"
 #include "game.h"
@@ -1401,6 +1402,12 @@ LoadingTask<> levLoadDataTask(ResourceLoadingController &controller, LevLoadJobP
 	case LevDatasetResolveResult::Ok:
 		break;
 	}
+
+	// The map load consults these when loading terrain types (see mapLoadTertiles), so they must be set from
+	// the resolved level dataset on every path that loads a level, or a multiplayer desync could occur.
+	// (Loading a savegame may overwrite them with the values stored in the save file.)
+	builtInMap = (ctx.psNewLevel->realFileName == nullptr);
+	useTerrainOverrides = builtInMap && shouldLoadTerrainTypeOverrides(ctx.psNewLevel->pName);
 
 	co_await controller.yieldFrame();
 

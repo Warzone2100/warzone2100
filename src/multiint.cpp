@@ -784,14 +784,10 @@ static void loadMapPreview(bool hideInterface, std::string mapName, const Sha256
 	}
 	if (psLevel->realFileName == nullptr)
 	{
-		builtInMap = true;
-		useTerrainOverrides = shouldLoadTerrainTypeOverrides(psLevel->pName);
-		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d override %d", psLevel->pName.c_str(), psLevel->dataDir, (int)useTerrainOverrides);
+		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName.c_str(), psLevel->dataDir);
 	}
 	else
 	{
-		builtInMap = false;
-		useTerrainOverrides = false;
 		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName.c_str(), WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false);
@@ -8131,10 +8127,6 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 		debug(LOG_POPUP, "Missing map used for replay: \"%s\" (hash: %s)", game.map, game.hash.toString().c_str());
 		return false;
 	}
-	// Must restore `useTerrainOverrides` (this matters for re-loading the map!) - see loadMapPreview() in multiint.cpp
-	builtInMap = (mapData->realFileName == nullptr);
-	useTerrainOverrides = builtInMap && shouldLoadTerrainTypeOverrides(mapData->pName);
-
 	for (Sha256 &hash : game.modHashes)
 	{
 		// TODO: Actually check the loaded mods??
