@@ -95,12 +95,17 @@ void pie_ShutDown()
 
 /***************************************************************************/
 
-static bool renderingFrame = true;
+static bool renderingFrame = true; // true: realmain() ends one bootstrap frame before mainLoop's first Begin
 static gfx_api::CachedRenderGraph g_cachedFrameRenderGraph;
 
 gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph()
 {
 	return g_cachedFrameRenderGraph;
+}
+
+bool pie_IsScreenFrameRendering()
+{
+	return renderingFrame;
 }
 
 void pie_ScreenFrameRenderBegin()

@@ -1251,6 +1251,23 @@ static void runTitleLoop()
 	}
 }
 
+namespace
+{
+
+// Ensures every mainLoop Begin is paired with End when focus-loss or early-return paths skip explicit End calls.
+struct ScreenFrameScope
+{
+	~ScreenFrameScope()
+	{
+		if (pie_IsScreenFrameRendering())
+		{
+			pie_ScreenFrameRenderEnd();
+		}
+	}
+};
+
+} // namespace
+
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
@@ -1259,6 +1276,7 @@ void mainLoop()
 {
 	frameUpdate(); // General housekeeping
 
+	ScreenFrameScope frameScope;
 	pie_ScreenFrameRenderBegin();
 
 	// Screenshot key is now available globally
