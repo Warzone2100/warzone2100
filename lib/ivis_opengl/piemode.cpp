@@ -129,8 +129,6 @@ void pie_ScreenFrameRenderEnd()
 		return;
 	}
 
-	screenDoDumpToDiskIfRequired();
-
 	const gfx_api::IRenderTopologyQuery& query = gfx_api::getGameRenderTopologyQuery();
 	if (!query.headlessOrSkipDrawing())
 	{
@@ -138,6 +136,7 @@ void pie_ScreenFrameRenderEnd()
 		gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
 		graph.ensureBuilt(snapshot);
 		graph.execute();
+		screenDoDumpToDiskIfRequired();
 	}
 
 	renderingFrame = false;
