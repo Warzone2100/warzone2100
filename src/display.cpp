@@ -31,6 +31,7 @@
 #include "lib/framework/strres.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pietypes.h"
+#include "lib/ivis_opengl/render_graph/render_pass.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp.h"
 #include "profiling.h"
@@ -1367,17 +1368,10 @@ void displayWorld()
 
 	draw3DScene();
 
-	if (fadeEndTime)
+	if (fadeEndTime && graphicsTime >= fadeEndTime)
 	{
-		if (graphicsTime < fadeEndTime)
-		{
-			fadeStartOfGame();
-		}
-		else
-		{
-			// ensure the fade only happens once (per call to transitionInit() & graphicsTime init) - i.e. at game start - regardless of graphicsTime wrap-around
-			fadeEndTime = 0;
-		}
+		// ensure the fade only happens once (per call to transitionInit() & graphicsTime init) - i.e. at game start - regardless of graphicsTime wrap-around
+		fadeEndTime = 0;
 	}
 }
 
@@ -1393,6 +1387,14 @@ static void fadeStartOfGame()
 	float delta = (static_cast<float>(graphicsTime) / static_cast<float>(fadeEndTime) - 1.f);
 	color.byte.a = static_cast<uint8_t>(std::min<uint32_t>(255, static_cast<uint32_t>(std::ceil(255.f * (1.f - (delta * delta * delta + 1.f)))))); // cubic easing
 	pie_UniTransBoxFill(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight(), color);
+}
+
+void display_recordGameStartFade(const gfx_api::RenderPassContext&)
+{
+	if (fadeEndTime != 0 && graphicsTime < fadeEndTime)
+	{
+		fadeStartOfGame();
+	}
 }
 
 static bool mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1)

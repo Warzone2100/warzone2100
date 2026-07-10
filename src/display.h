@@ -96,6 +96,13 @@ bool	getEdgeScrollOutsideWindowBounds();
 /* Do the 3D display */
 void displayWorld();
 
+namespace gfx_api
+{
+class RenderPassContext;
+}
+
+void display_recordGameStartFade(const gfx_api::RenderPassContext& passCtx);
+
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
 
 enum DragState

@@ -589,12 +589,8 @@ void screen_FlipIfBackDropTransition()
 	static auto hadBackDrop = false;
 	if (hadBackDrop != screen_GetBackDrop())
 	{
-		auto& ctx = gfx_api::context::get();
-		if (ctx.shouldDraw() && ctx.canRecordDrawCommands())
-		{
-			pie_ScreenFrameRenderEnd();
-			pie_ScreenFrameRenderBegin();
-		}
+		pie_ScreenFrameRenderEnd();
+		pie_ScreenFrameRenderBegin();
 		hadBackDrop = screen_GetBackDrop();
 	}
 }

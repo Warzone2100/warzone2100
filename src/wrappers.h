@@ -62,7 +62,13 @@ TITLECODE titleLoop();
 void initLoadingScreen(bool drawbdrop);
 void closeLoadingScreen();
 bool isLoadingScreenActive();
-void presentLoadingScreenForCurrentFrame();
+
+namespace gfx_api
+{
+class RenderPassContext;
+}
+
+void wrappers_recordLoadingScreen(const gfx_api::RenderPassContext& passCtx);
 
 bool displayGameOver(bool success, bool showBackDrop);
 void setPlayerHasLost(bool val);

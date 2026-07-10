@@ -82,6 +82,7 @@
 #include "display.h"
 #include "display3d.h"
 #include "frontend.h"
+#include "frame_render_init.h"
 #include "game.h"
 #include "init.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -1072,7 +1073,6 @@ static void stopGameLoop(bool onWzShutdown)
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
 		if (!onWzShutdown)
 		{
-			presentLoadingScreenForCurrentFrame();
 			pie_ScreenFrameRenderEnd();
 			pie_ScreenFrameRenderBegin();
 		}
@@ -1280,7 +1280,6 @@ void mainLoop()
 		}
 		if (!frameEnded && loop_GetVideoStatus())
 		{
-			videoLoop(); // Display the video if necessary
 			pie_ScreenFrameRenderEnd();
 		}
 		else if (!frameEnded) switch (GetGameMode())
@@ -1311,11 +1310,6 @@ void mainLoop()
 #if defined(ENABLE_DISCORD)
 	discordRPCPerFrame();
 #endif
-
-	if (pie_IsScreenFrameRendering())
-	{
-		pie_ScreenFrameRenderEnd();
-	}
 }
 
 void requestMapPreviewLoad(bool hideInterface)
@@ -2168,6 +2162,8 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	pie_InitRenderGraphs();
+
 	bool fogConfigOption = pie_GetFogEnabled();
 	pie_SetFogStatus(false);
 
@@ -2176,7 +2172,6 @@ int realmain(int argc, char *argv[])
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	pie_SetFogStatus(false);
 
-	pie_ScreenFrameRenderBegin();
 	pie_ScreenFrameRenderEnd();
 
 	if (!systemInitialise(horizScaleFactor, vertScaleFactor))

@@ -216,11 +216,9 @@ TITLECODE titleLoop()
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetFogStatus(false);
-	if (!headlessGameMode() && screen_RestartBackDrop())
+	if (!headlessGameMode())
 	{
-		// changed value - draw the backdrop
-		// otherwise, pie_ScreenFrameRenderBegin handles drawing it
-		screen_Display();
+		screen_RestartBackDrop();
 	}
 	wzShowMouse(true);
 
@@ -290,12 +288,6 @@ TITLECODE titleLoop()
 		return RetCode; // don't flip
 	}
 
-	if (!headlessGameMode() && RetCode == TITLECODE_CONTINUE && wzTitleUICurrent)
-	{
-		std::shared_ptr<WzTitleUI> currentForRender = wzTitleUICurrent;
-		currentForRender->render();
-	}
-
 	NETflush();  // Send any pending network data.
 
 	audio_Update();
@@ -318,23 +310,8 @@ bool isLoadingScreenActive()
 	return loadingScreenSessionActive;
 }
 
-void presentLoadingScreenForCurrentFrame()
+void wrappers_recordLoadingScreen(const gfx_api::RenderPassContext&)
 {
-	if (!loadingScreenSessionActive || headlessGameMode())
-	{
-		return;
-	}
-
-	if (!gfx_api::context::get().canRecordDrawCommands())
-	{
-		return;
-	}
-
-	if (screen_GetBackDrop())
-	{
-		screen_Display();
-	}
-
 	renderLoadingScreenPass();
 }
 

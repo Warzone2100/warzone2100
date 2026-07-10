@@ -51,8 +51,19 @@ bool pie_Initialise();
 void pie_ShutDown();
 void pie_ScreenFrameRenderBegin();
 void pie_ScreenFrameRenderEnd();
-bool pie_IsScreenFrameRendering();
 void pie_UpdateSurfaceGeometry();
 UDWORD pie_GetResScalingFactor();
+
+namespace gfx_api
+{
+
+class CachedRenderGraph;
+
+} // namespace gfx_api
+
+gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph();
+
+void pie_ResetInGame3DFrameContextForFrame();
+bool pie_IsInGame3DFrameContextReady();
 
 #endif

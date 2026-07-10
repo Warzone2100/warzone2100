@@ -32,6 +32,9 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/render_graph/cached_render_graph.h"
+#include "lib/ivis_opengl/render_graph/topology.h"
 #include "piematrix.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/tex.h"
@@ -92,11 +95,12 @@ void pie_ShutDown()
 
 /***************************************************************************/
 
-static bool renderingFrame = false;
+static bool renderingFrame = true;
+static gfx_api::CachedRenderGraph g_cachedFrameRenderGraph;
 
-bool pie_IsScreenFrameRendering()
+gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph()
 {
-	return renderingFrame;
+	return g_cachedFrameRenderGraph;
 }
 
 void pie_ScreenFrameRenderBegin()
@@ -107,11 +111,9 @@ void pie_ScreenFrameRenderBegin()
 		return;
 	}
 	renderingFrame = true;
-	gfx_api::context::get().beginRenderPass();
-	if (screen_GetBackDrop() && gfx_api::context::get().canRecordDrawCommands())
-	{
-		screen_Display();
-	}
+
+	pie_ResetInGame3DFrameContextForFrame();
+	gfx_api::context::get().purgeFrameResources();
 }
 
 void pie_ScreenFrameRenderEnd()
@@ -121,9 +123,19 @@ void pie_ScreenFrameRenderEnd()
 		debug(LOG_WZ, "Call to pie_ScreenFrameRenderEnd without matching pie_ScreenFrameRenderBegin");
 		return;
 	}
-	renderingFrame = false;
+
 	screenDoDumpToDiskIfRequired();
-	gfx_api::context::get().endRenderPass();
+
+	const gfx_api::IRenderTopologyQuery& query = gfx_api::getGameRenderTopologyQuery();
+	if (!query.headlessOrSkipDrawing())
+	{
+		const gfx_api::RenderTopologySnapshot snapshot = gfx_api::render_topology::snapshot(query);
+		gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
+		graph.ensureBuilt(snapshot);
+		graph.execute();
+	}
+
+	renderingFrame = false;
 	wzPerfFrame();
 }
 

@@ -53,11 +53,13 @@ struct RenderFeatures
 	enum : uint32_t
 	{
 		/// Include a backdrop swapchain pass before main content.
-		Backdrop          = 1u << 0,
+		Backdrop           = 1u << 0,
 		/// Reserve the in-game start fade pass slot (in-game topology only).
-		GameStartFadeSlot = 1u << 1,
+		GameStartFadeSlot  = 1u << 1,
 		/// Include the debug overlay pass slot (in-game topology only).
-		DebugOverlays     = 1u << 2,
+		DebugOverlays      = 1u << 2,
+		/// In-game world frozen: UI/backdrop-only pass graph (no 3D scene passes).
+		FrozenWorldOverlay = 1u << 3,
 	};
 };
 
@@ -128,6 +130,8 @@ public:
 	virtual uint32_t shadowMapSize() const = 0;
 	/// True when the in-game debug overlay pass slot should exist (persistent toggles only).
 	virtual bool debugOverlaysEnabled() const = 0;
+	/// True when in-game simulation/rendering is frozen but UI overlays still need to draw.
+	virtual bool inGameWorldFrozen() const = 0;
 };
 
 namespace render_topology

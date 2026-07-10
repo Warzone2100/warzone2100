@@ -2002,11 +2002,6 @@ void intDisplayWidgets()
 		// When will they ever learn!!!!
 		if (!bMultiPlayer)
 		{
-			if (!bInTutorial)
-			{
-				screen_RestartBackDrop();
-			}
-
 			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
 			if ((intMode == INT_DESIGN) || (bInTutorial && intMode == INT_INTELMAP))
 			{

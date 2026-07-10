@@ -42,6 +42,15 @@ namespace
 size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 {
 	ASSERT(snapshot.screenKind == RenderScreenKind::InGame, "expectedInGamePassCount: wrong screen kind");
+	if (snapshot.features & RenderFeatures::FrozenWorldOverlay)
+	{
+		size_t count = 1; // InGameUI
+		if (snapshot.features & RenderFeatures::Backdrop)
+		{
+			++count;
+		}
+		return count;
+	}
 	size_t count = 6; // Scene, SceneBlit, Targetting, overlays, fade slot, UI
 	if (snapshot.features & RenderFeatures::DebugOverlays)
 	{
@@ -141,6 +150,10 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 
 	if (snapshot.screenKind == RenderScreenKind::InGame)
 	{
+		if (query.inGameWorldFrozen())
+		{
+			snapshot.features |= RenderFeatures::FrozenWorldOverlay;
+		}
 		snapshot.features |= RenderFeatures::GameStartFadeSlot;
 		if (query.debugOverlaysEnabled())
 		{

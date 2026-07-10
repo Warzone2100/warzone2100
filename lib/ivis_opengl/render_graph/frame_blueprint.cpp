@@ -39,6 +39,22 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 {
 	ASSERT(snapshot.screenKind == RenderScreenKind::InGame, "buildInGameBlueprint: wrong screen kind");
 
+	if (snapshot.features & RenderFeatures::FrozenWorldOverlay)
+	{
+		BlueprintBuilder builder;
+
+		if (snapshot.features & RenderFeatures::Backdrop)
+		{
+			addSwapchainPassToBuilder(builder, PassId::Backdrop, "Backdrop", snapshot.swapchainMsaa,
+				AttachmentLoadOp::Clear, AttachmentLoadOp::Clear);
+		}
+
+		addSwapchainPassToBuilder(builder, PassId::InGameUI, "InGameUI", snapshot.swapchainMsaa,
+			AttachmentLoadOp::Load, AttachmentLoadOp::Clear);
+
+		return builder.build();
+	}
+
 	BlueprintBuilder builder;
 
 	if (snapshot.features & RenderFeatures::Backdrop)

@@ -139,6 +139,7 @@ static unsigned numCommandDroids[MAX_PLAYERS];
 static unsigned numConstructorDroids[MAX_PLAYERS];
 
 static SDWORD videoMode = 0;
+static bool backdropWasActiveBeforeVideo = false;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
@@ -161,8 +162,7 @@ static GAMECODE renderLoop()
 	}
 
 	const auto shouldSkipDrawing = []() {
-		auto& ctx = gfx_api::context::get();
-		return !ctx.shouldDraw() || !ctx.canRecordDrawCommands();
+		return !gfx_api::context::get().shouldDraw();
 	};
 
 	bool skipDrawing = shouldSkipDrawing();
@@ -329,9 +329,9 @@ static GAMECODE renderLoop()
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode())
+	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode() && !skipDrawing)
 	{
-		if (!skipDrawing && !gameUpdatePaused())
+		if (!gameUpdatePaused())
 		{
 			processInput();
 
@@ -343,20 +343,6 @@ static GAMECODE renderLoop()
 				processMouseClickInput();
 			}
 			displayWorld();
-		}
-		if (!shouldSkipDrawing())
-		{
-			wzPerfBegin(PERF_GUI, "User interface");
-			WZ_PROFILE_SCOPE(DrawUI);
-			/* Display the in game interface */
-			pie_SetFogStatus(false);
-
-			if (getWidgetsStatus())
-			{
-				intDisplayWidgets();
-			}
-			pie_SetFogStatus(true);
-			wzPerfEnd(PERF_GUI);
 		}
 	}
 
@@ -804,6 +790,7 @@ void videoLoop()
 
 void loop_SetVideoPlaybackMode()
 {
+	backdropWasActiveBeforeVideo = screen_GetBackDrop();
 	videoMode += 1;
 	paused = true;
 	video = true;
@@ -827,6 +814,11 @@ void loop_ClearVideoPlaybackMode()
 	cdAudio_Resume();
 	wzShowMouse(true);
 	ASSERT(videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync.");
+	if (backdropWasActiveBeforeVideo)
+	{
+		screen_RestartBackDrop();
+		backdropWasActiveBeforeVideo = false;
+	}
 }
 
 

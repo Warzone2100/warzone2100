@@ -111,6 +111,11 @@ public:
 		// SceneDebugOverlays pass is always present; record func is a no-op when toggles are off.
 		return true;
 	}
+
+	bool inGameWorldFrozen() const override
+	{
+		return gameUpdatePaused();
+	}
 };
 
 gfx_api::IRenderTopologyQuery& gfx_api::getGameRenderTopologyQuery()
