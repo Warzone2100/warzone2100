@@ -459,8 +459,11 @@ void OptionsKeyBindingsEdit::updateLayout()
 	cachedIdealWidth = 0;
 	cachedIdealHeight = 0;
 
-	auto hasDefaultMapping = [&](size_t slot) -> bool {
-		return (slot < info.defaultMappings.size()) && !info.defaultMappings[slot].second.input.isCleared();
+	auto hasDefaultMapping = [&](size_t slotIndex) -> bool {
+		const auto slot = static_cast<KeyMappingSlot>(slotIndex);
+		return std::any_of(info.defaultMappings.begin(), info.defaultMappings.end(), [slot](const std::pair<KeyMappingSlot, KeyCombination>& mapping) {
+			return mapping.first == slot && !mapping.second.input.isCleared();
+		});
 	};
 
 	int availableWidth = w;
