@@ -513,6 +513,12 @@ private:
 
 public:
 
+	// True if `name` is a reserved engine/native/built-in global - i.e. it was present on the global object
+	// before the script's own top-level code ran (see the internalNamespace snapshot in
+	// prepareInstanceForExecution). Such a name is never a legitimate timer/queue callback, so both live
+	// registration and save-restore reject it.
+	bool isReservedGlobalName(const std::string &name) const { return internalNamespace.count(name) != 0; }
+
 	void doNotSaveGlobal(const std::string &global);
 
 private:
@@ -2989,6 +2995,8 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
 	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
+	SCRIPT_ASSERT(ctx, !engineToInstanceMap.at(ctx)->isReservedGlobalName(functionName),
+		"Cannot set a timer on a reserved function: %s", functionName.c_str());
 
 	std::string stringArg;
 	BASE_OBJECT *psObj = nullptr;
@@ -3068,6 +3076,8 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
 	auto free_func_obj = gsl::finally([ctx, funcObj] { JS_FreeValue(ctx, funcObj); });  // establish exit action
 	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
+	SCRIPT_ASSERT(ctx, !engineToInstanceMap.at(ctx)->isReservedGlobalName(functionName),
+		"Cannot queue a reserved function: %s", functionName.c_str());
 
 	int32_t ms = 0;
 	if (argc > 1)
@@ -3400,6 +3410,13 @@ std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_in
 	if (funcName.empty())
 	{
 		throw std::runtime_error("Invalid timer restore data");
+	}
+	// A legitimate timer callback is one of the script's own functions; a reserved engine/native/built-in
+	// name is never a valid target, so reject it rather than schedule a native binding by name. Mirrors the
+	// live-registration check in js_setTimer / js_queue.
+	if (isReservedGlobalName(funcName))
+	{
+		throw std::runtime_error("Timer restore names a reserved binding: " + funcName);
 	}
 	std::string stringArg = json_getValue(savedTimerFuncData, WzString::fromUtf8("stringArg")).toWzString().toStdString();
 

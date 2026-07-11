@@ -1291,7 +1291,7 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 				auto friIt = nodeInfo.find("functionRestoreInfo");
 				if (friIt == nodeInfo.end())
 				{
-					ASSERT(false, "Invalid trigger in save - missing functionRestoreInfo block");
+					debug(LOG_ERROR, "Skipping timer restore - missing functionRestoreInfo block");
 					anySkipped = true;
 					continue;
 				}
@@ -1299,7 +1299,9 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 			}
 			catch (const std::exception& e)
 			{
-				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				// Reachable from a malformed/crafted document (e.g. restoreTimerFunction rejecting a
+				// reserved callback name), so log and skip rather than assert.
+				debug(LOG_ERROR, "Skipping timer restore - invalid function info: %s", e.what());
 				anySkipped = true;
 				continue;
 			}
