@@ -84,6 +84,18 @@ bool gamepadRightStickConsumedByUI()
 	return rightStickScrollingWidget;
 }
 
+static bool captureModeActive = false;
+
+void gamepadSetCaptureMode(bool enabled)
+{
+	captureModeActive = enabled;
+}
+
+bool gamepadInCaptureMode()
+{
+	return captureModeActive;
+}
+
 static void markGamepadActive()
 {
 	if (!gamepadIsActiveInput)
@@ -548,7 +560,7 @@ static void handleClickButton(GAMEPAD_INPUT gamepadButton, MOUSE_KEY_CODE mouseB
 	const Vector2i pos((int)mouseX(), (int)mouseY());
 
 	// holding the right shoulder reserves the face buttons for chorded actions
-	if (actualButtonPressed(gamepadButton) && !state.held && !actualButtonDown(GPAD_BTN_RIGHT_SHOULDER))
+	if (actualButtonPressed(gamepadButton) && !state.held && !actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) && !captureModeActive)
 	{
 		// holding the left shoulder makes this an additive/queueing click - assert
 		// shift so the existing modifier checks in the click handling apply, unless
@@ -609,9 +621,9 @@ static void updateSyntheticInput()
 	handleClickButton(GPAD_BTN_SOUTH, MOUSE_LMB, syntheticLeftClick);
 	handleClickButton(GPAD_BTN_EAST, MOUSE_RMB, syntheticRightClick);
 
-	handleKeyButton(GPAD_BTN_START, KEY_ESC);
+	handleKeyButton(GPAD_BTN_START, KEY_ESC, captureModeActive);
 	// the right shoulder reserves west for its chorded action
-	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN, actualButtonDown(GPAD_BTN_RIGHT_SHOULDER));
+	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN, actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) || captureModeActive);
 }
 
 void wzGamepadUpdate()
@@ -706,6 +718,17 @@ void wzGamepadClearButtonStates()
 	{
 		aGamepadState[i].state = KEY_UP;
 		aGamepadState[i].lastdown = 0;
+	}
+}
+
+void wzGamepadRestoreMetaButtonState()
+{
+	for (GAMEPAD_INPUT button : { GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_RIGHT_SHOULDER })
+	{
+		if (actualGamepadState[button].state != KEY_UP)
+		{
+			aGamepadState[button] = actualGamepadState[button];
+		}
 	}
 }
 

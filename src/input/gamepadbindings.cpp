@@ -73,6 +73,12 @@ static void updateGroupButton(GAMEPAD_INPUT button, unsigned int baseGroup, Grou
 
 void gamepadProcessBindings()
 {
+	// a binding-capture UI owns all button presses while it is up
+	if (gamepadInCaptureMode())
+	{
+		return;
+	}
+
 	static GroupButtonState dpadUp, dpadRight, dpadDown, dpadLeft;
 	updateGroupButton(GPAD_BTN_DPAD_UP, 1, dpadUp);
 	updateGroupButton(GPAD_BTN_DPAD_RIGHT, 2, dpadRight);
