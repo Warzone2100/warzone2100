@@ -79,40 +79,6 @@ void gamepadProcessBindings()
 	updateGroupButton(GPAD_BTN_DPAD_DOWN, 3, dpadDown);
 	updateGroupButton(GPAD_BTN_DPAD_LEFT, 4, dpadLeft);
 
-	// clicking the right stick centers the camera on the last event
-	if (gamepadButtonPressed(GPAD_BTN_RIGHT_STICK))
-	{
-		kf_MoveToLastMessagePos();
-	}
-
-	// holding the right shoulder chords the face buttons to the command panels
-	// (click and key synthesis for these buttons is suppressed while it is held)
-	const bool rightShoulderHeld = gamepadButtonDown(GPAD_BTN_RIGHT_SHOULDER);
-	if (rightShoulderHeld)
-	{
-		if (gamepadButtonPressed(GPAD_BTN_SOUTH))
-		{
-			kf_ChooseBuild();
-		}
-		if (gamepadButtonPressed(GPAD_BTN_WEST))
-		{
-			kf_ChooseManufacture();
-		}
-		if (gamepadButtonPressed(GPAD_BTN_NORTH))
-		{
-			kf_ChooseResearch();
-		}
-		if (gamepadButtonPressed(GPAD_BTN_EAST))
-		{
-			kf_ChooseCommand();
-		}
-	}
-	// north cycles through the player's factories
-	else if (gamepadButtonPressed(GPAD_BTN_NORTH))
-	{
-		kf_SelectNextFactory(REF_FACTORY, true)();
-	}
-
 	// back toggles game info - the objectives screen in campaign and the
 	// multiplayer options / alliances dialog in multiplayer
 	if (gamepadButtonPressed(GPAD_BTN_BACK))
