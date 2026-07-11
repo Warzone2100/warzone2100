@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/gamepad_input.h"
 #include "lib/framework/wzapp.h"
+#include "../console.h"
 #include "../hci.h"
 #include "../keybind.h"
 #include "../levels.h"
@@ -73,6 +74,14 @@ static void updateGroupButton(GAMEPAD_INPUT button, unsigned int baseGroup, Grou
 
 void gamepadProcessBindings()
 {
+	// point at the new options page the first time a controller shows up
+	static bool announcedGamepad = false;
+	if (!announcedGamepad && gamepadIsConnected())
+	{
+		announcedGamepad = true;
+		addConsoleMessage(_("Gamepad detected - configure it on the Gamepad tab in Options"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+
 	// a binding-capture UI owns all button presses while it is up
 	if (gamepadInCaptureMode())
 	{
