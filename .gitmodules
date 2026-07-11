@@ -89,3 +89,6 @@
 [submodule "lib/ivis_opengl/3rdparty/libjpeg-turbo"]
 	path = lib/ivis_opengl/3rdparty/libjpeg-turbo
 	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git
+[submodule "3rdparty/ControllerImage"]
+	path = 3rdparty/ControllerImage
+	url = https://github.com/icculus/ControllerImage.git

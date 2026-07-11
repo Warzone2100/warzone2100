@@ -133,6 +133,10 @@ Files: 3rdparty/discord-rpc/*
 Copyright: 2017 Discord, Inc.
 License: Expat
 
+Files: 3rdparty/ControllerImage/*
+Copyright: 2023-2025 Ryan C. Gordon and others
+License: Zlib
+
 Files: 3rdparty/EmbeddedJSONSignature/*
 Copyright: 2020 past-due
 License: Expat
