@@ -143,8 +143,44 @@ float gamepadAxis(GAMEPAD_AXIS axis)
 	return aGamepadAxisValues[axis];
 }
 
+static SDL_Gamepad* activeGamepadHandle();
+
 const char* gamepadButtonName(GAMEPAD_INPUT button)
 {
+	// face buttons take the connected controller's labels, so an Xbox pad
+	// reads A/B/X/Y and a PlayStation pad reads Cross/Circle/Square/Triangle
+	if (button == GPAD_BTN_SOUTH || button == GPAD_BTN_EAST || button == GPAD_BTN_WEST || button == GPAD_BTN_NORTH)
+	{
+		SDL_Gamepad* pad = activeGamepadHandle();
+		if (!pad && !openGamepads.empty())
+		{
+			pad = openGamepads.front().second;
+		}
+		if (pad)
+		{
+			SDL_GamepadButton sdlButton = SDL_GAMEPAD_BUTTON_SOUTH;
+			switch (button)
+			{
+			case GPAD_BTN_EAST: sdlButton = SDL_GAMEPAD_BUTTON_EAST; break;
+			case GPAD_BTN_WEST: sdlButton = SDL_GAMEPAD_BUTTON_WEST; break;
+			case GPAD_BTN_NORTH: sdlButton = SDL_GAMEPAD_BUTTON_NORTH; break;
+			default: break;
+			}
+			switch (SDL_GetGamepadButtonLabel(pad, sdlButton))
+			{
+			case SDL_GAMEPAD_BUTTON_LABEL_A: return "A";
+			case SDL_GAMEPAD_BUTTON_LABEL_B: return "B";
+			case SDL_GAMEPAD_BUTTON_LABEL_X: return "X";
+			case SDL_GAMEPAD_BUTTON_LABEL_Y: return "Y";
+			case SDL_GAMEPAD_BUTTON_LABEL_CROSS: return "Cross";
+			case SDL_GAMEPAD_BUTTON_LABEL_CIRCLE: return "Circle";
+			case SDL_GAMEPAD_BUTTON_LABEL_SQUARE: return "Square";
+			case SDL_GAMEPAD_BUTTON_LABEL_TRIANGLE: return "Triangle";
+			default: break;
+			}
+		}
+	}
+
 	switch (button)
 	{
 	case GPAD_BTN_SOUTH: return "A";
