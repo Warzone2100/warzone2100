@@ -130,6 +130,7 @@ const iV_Image* wzGetCursorImage(CURSOR cur, int& hotX, int& hotY);
 unsigned int wzGetCursorImagesGeneration();
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
+void wzGamepadApplyMode(); ///< Applies the current gamepad mode setting, initializing or shutting down the subsystem as needed
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation
 uint32_t wzGetTicks();		///< Milliseconds since start of game

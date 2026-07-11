@@ -1119,6 +1119,7 @@ std::shared_ptr<OptionsBrowserForm> createOptionsBrowser(bool inGame, const std:
 	result->addOptionsForm(OptionsBrowserForm::Modes::Graphics, makeGraphicsOptionsForm, N_("Graphics"));
 	result->addOptionsForm(OptionsBrowserForm::Modes::Audio, makeAudioOptionsForm, N_("Audio"));
 	result->addOptionsForm(OptionsBrowserForm::Modes::Controls, makeControlsOptionsForm, N_("Controls"));
+	result->addOptionsForm(OptionsBrowserForm::Modes::Gamepad, makeGamepadOptionsForm, N_("Gamepad"));
 
 #if !defined(__EMSCRIPTEN__) // For now, Emscripten always uses soft-fullscreen mode
 	result->addOptionsForm(OptionsBrowserForm::Modes::Window, makeWindowOptionsForm, N_("Window"));

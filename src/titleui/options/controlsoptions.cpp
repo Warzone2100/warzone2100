@@ -54,8 +54,13 @@ public:
 	void runRecursive(W_CONTEXT *psContext) override;
 
 	void informDidEditKeybinding();
+
+	// re-evaluates row availability whenever a controller connects or disconnects
+	void setRefreshOnGamepadConnectionChanges(bool enabled);
 private:
 	bool didEditKeybinding = false;
+	bool refreshOnGamepadConnectionChanges = false;
+	bool lastGamepadConnected = false;
 };
 
 std::shared_ptr<KeyOptionsForm> KeyOptionsForm::make()
@@ -80,8 +85,24 @@ void KeyOptionsForm::runRecursive(W_CONTEXT *psContext)
 	OptionsForm::runRecursive(psContext);
 }
 
+void KeyOptionsForm::setRefreshOnGamepadConnectionChanges(bool enabled)
+{
+	refreshOnGamepadConnectionChanges = enabled;
+	lastGamepadConnected = gamepadIsConnected();
+}
+
 void KeyOptionsForm::run(W_CONTEXT *psContext)
 {
+	if (refreshOnGamepadConnectionChanges)
+	{
+		const bool connected = gamepadIsConnected();
+		if (connected != lastGamepadConnected)
+		{
+			lastGamepadConnected = connected;
+			refreshOptions(true);
+		}
+	}
+
 	auto currMapping = gInputManager.findCurrentMapping(false, true);
 	if (currMapping)
 	{
@@ -111,6 +132,7 @@ protected:
 	}
 public:
 	static std::shared_ptr<OptionsKeyBindingWidget> make(const std::shared_ptr<OptionsKeyBindingsEdit>& parent, KeyMappingSlot slot);
+	static std::shared_ptr<OptionsKeyBindingWidget> makeFixed(const WzString& text);
 
 	void display(int xOffset, int yOffset) override;
 	void run(W_CONTEXT *psContext) override;
@@ -122,6 +144,7 @@ public:
 	void setIsEditingMode(bool val);
 
 	void update(const std::shared_ptr<OptionsKeyBindingsEdit>& parent, KeyMappingSlot slot);
+	void updateFixed(const WzString& newText);
 
 protected:
 	void highlight(W_CONTEXT *psContext) override;
@@ -207,6 +230,23 @@ std::shared_ptr<OptionsKeyBindingWidget> OptionsKeyBindingWidget::make(const std
 	return result;
 }
 
+std::shared_ptr<OptionsKeyBindingWidget> OptionsKeyBindingWidget::makeFixed(const WzString& text)
+{
+	class make_shared_enabler : public OptionsKeyBindingWidget { };
+	auto result = std::make_shared<make_shared_enabler>();
+	result->updateFixed(text);
+	return result;
+}
+
+void OptionsKeyBindingWidget::updateFixed(const WzString& newText)
+{
+	bEditable = false;
+	setState(WBUT_DISABLE);
+	bindingColor = WZCOL_TEXT_BRIGHT;
+	text = newText;
+	cachedIdealTextWidth = iV_GetTextWidth(text, FontID);
+}
+
 void OptionsKeyBindingWidget::setIsEditingMode(bool val)
 {
 	isEditingMode = val;
@@ -225,7 +265,7 @@ void OptionsKeyBindingWidget::update(const std::shared_ptr<OptionsKeyBindingsEdi
 	{
 		setState(WBUT_DISABLE);
 	}
-	else if (bEditable && (getState() & WBUT_DISABLE))
+	else if (getState() & WBUT_DISABLE)
 	{
 		setState(0);
 	}
@@ -987,8 +1027,16 @@ static bool entryHasBindingInSlots(InputManager& inputManager, const KeyFunction
 	});
 }
 
+static OptionInfo::AvailabilityResult GamepadIsConnectedAvailability(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = gamepadIsConnected();
+	return result;
+}
+
 size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result, InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, const std::vector<KeyMappingSlot>& displayedSlots = {KeyMappingSlot::PRIMARY, KeyMappingSlot::SECONDARY})
 {
+	const bool displaysGamepadSlot = std::find(displayedSlots.begin(), displayedSlots.end(), KeyMappingSlot::GAMEPAD) != displayedSlots.end();
 	auto infos = getVisibleKeyFunctionEntries(keyFuncConfig);
 	std::sort(infos.begin(), infos.end(), [&](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
 		const bool bContextsAreSame = a.context == b.context;
@@ -1017,6 +1065,11 @@ size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result
 		}
 
 		auto optionInfo = OptionInfo(keyFunctionInfoToOptionId(info), WzString::fromUtf8(info.displayName), "");
+		if (displaysGamepadSlot)
+		{
+			// editing gamepad bindings requires a connected controller
+			optionInfo.addAvailabilityCondition(GamepadIsConnectedAvailability);
+		}
 		auto valueChanger = OptionsKeyBindingsEdit::make(result, inputManager, info, displayedSlots);
 		result->addOption(optionInfo, valueChanger, true);
 	}
@@ -1295,6 +1348,198 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}
+
+	return result;
+}
+
+// MARK: - Gamepad options form
+
+// A fixed-control row value - a read-only binding button, right-aligned like
+// the editable binding rows
+class OptionsFixedControlBinding : public WIDGET, public OptionValueChangerInterface
+{
+public:
+	typedef std::function<WzString()> ValueFunc;
+
+	static std::shared_ptr<OptionsFixedControlBinding> make(const ValueFunc& valueFunc)
+	{
+		class make_shared_enabler : public OptionsFixedControlBinding { };
+		auto result = std::make_shared<make_shared_enabler>();
+		result->valueFunc = valueFunc;
+		result->lastValue = valueFunc();
+		result->button = OptionsKeyBindingWidget::makeFixed(result->lastValue);
+		result->attach(result->button);
+		return result;
+	}
+
+	void geometryChanged() override
+	{
+		if (width() == 0 || height() == 0)
+		{
+			return;
+		}
+		const int32_t buttonW = std::min<int32_t>(width(), buttonWidth);
+		const int32_t buttonH = button->idealHeight();
+		button->setGeometry(width() - buttonW, (height() - buttonH) / 2, buttonW, buttonH);
+	}
+
+	int32_t idealWidth() override
+	{
+		return buttonWidth;
+	}
+
+	int32_t idealHeight() override
+	{
+		return button->idealHeight();
+	}
+
+	// re-polls the value so rows tracking settings or the connected device stay current
+	void update(bool force) override
+	{
+		WzString newValue = valueFunc();
+		if (force || newValue != lastValue)
+		{
+			lastValue = newValue;
+			button->updateFixed(newValue);
+		}
+	}
+	void informAvailable(bool isAvailable) override { }
+	void addOnChangeHandler(std::function<void(WIDGET&)> handler) override { }
+
+private:
+	ValueFunc valueFunc;
+	WzString lastValue;
+	std::shared_ptr<OptionsKeyBindingWidget> button;
+	const int32_t buttonWidth = 110;
+};
+
+static OptionInfo::AvailabilityResult GamepadModeNotDisabled(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = war_GetGamepadMode() != GamepadMode::Disabled;
+	return result;
+}
+
+std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
+{
+	auto result = KeyOptionsForm::make();
+	result->setRefreshOnGamepadConnectionChanges(true);
+
+	result->addSection(OptionsSection(N_("Gamepad"), ""), true);
+	{
+		auto optionInfo = OptionInfo("gamepad.mode", N_("Gamepad Support"), "");
+		auto valueChanger = OptionsDropdown<GamepadMode>::make(
+			[]() {
+				OptionChoices<GamepadMode> result;
+				result.choices = {
+					{ _("Off"), _("Gamepad support is never initialized"), GamepadMode::Disabled },
+					{ _("On"), _("Gamepad support is always active"), GamepadMode::Enabled },
+					{ _("Auto"), _("Gamepad features engage while a controller is connected"), GamepadMode::Automatic },
+				};
+				result.setCurrentIdxForValue(war_GetGamepadMode());
+				return result;
+			},
+			[](const auto& newMode) -> bool {
+				war_SetGamepadMode(newMode);
+				wzGamepadApplyMode();
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.cursorSpeed", N_("Cursor Speed"), "");
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsSlider::make(GAMEPAD_CURSOR_SPEED_MIN, GAMEPAD_CURSOR_SPEED_MAX, GAMEPAD_CURSOR_SPEED_STEP,
+			[]() { return war_GetGamepadCursorSpeed(); },
+			[](int32_t newValue) { war_SetGamepadCursorSpeed(newValue); }, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.stickDeadzone", N_("Stick Dead Zone"), "");
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsSlider::make(GAMEPAD_DEADZONE_MIN, GAMEPAD_DEADZONE_MAX, 1,
+			[]() { return war_GetGamepadStickDeadzone(); },
+			[](int32_t newValue) { war_SetGamepadStickDeadzone(newValue); }, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.triggerThreshold", N_("Trigger Press Threshold"), "");
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsSlider::make(GAMEPAD_TRIGGER_THRESHOLD_MIN, GAMEPAD_TRIGGER_THRESHOLD_MAX, 5,
+			[]() { return war_GetGamepadTriggerThreshold(); },
+			[](int32_t newValue) { war_SetGamepadTriggerThreshold(newValue); }, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.invertRightStick", N_("Invert Right Stick Vertical"), "");
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_GetGamepadInvertRightStick());
+				return result;
+			},
+			[](const auto& newValue) -> bool { war_SetGamepadInvertRightStick(newValue); return true; }, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.swapSticks", N_("Swap Sticks"), N_("Moves the cursor with the right stick and the camera with the left stick"));
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_GetGamepadSwapSticks());
+				return result;
+			},
+			[](const auto& newValue) -> bool { war_SetGamepadSwapSticks(newValue); return true; }, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
+	result->addSection(OptionsSection(N_("Core Controls"), N_("Fixed controls that make cursor, camera, and menu interaction work everywhere")), true);
+	auto addFixedRow = [&result](const char* id, const char* displayName, const OptionsFixedControlBinding::ValueFunc& valueFunc, const char* help = "") {
+		auto optionInfo = OptionInfo(id, displayName, help);
+		result->addOption(optionInfo, OptionsFixedControlBinding::make(valueFunc), true);
+	};
+	const auto buttonName = [](GAMEPAD_INPUT button) -> OptionsFixedControlBinding::ValueFunc {
+		return [button]() -> WzString { return gamepadButtonName(button); };
+	};
+	const auto chord = [](GAMEPAD_INPUT metaButton, GAMEPAD_INPUT button) -> OptionsFixedControlBinding::ValueFunc {
+		return [metaButton, button]() -> WzString {
+			return WzString::fromUtf8(astringf("%s %s", gamepadButtonName(metaButton), gamepadButtonName(button)));
+		};
+	};
+	const auto cursorStickName = []() -> WzString { return war_GetGamepadSwapSticks() ? _("Right Stick") : _("Left Stick"); };
+	const auto cameraStickName = []() -> WzString { return war_GetGamepadSwapSticks() ? _("Left Stick") : _("Right Stick"); };
+	addFixedRow("gamepadCore.moveCursor", N_("Move Cursor"), cursorStickName, N_("Click the stick in for slower, precise movement"));
+	addFixedRow("gamepadCore.primaryClick", N_("Left Click / Select"), buttonName(GPAD_BTN_SOUTH));
+	addFixedRow("gamepadCore.secondaryClick", N_("Right Click / Order"), buttonName(GPAD_BTN_EAST));
+	addFixedRow("gamepadCore.addToSelection", N_("Add to Selection"), chord(GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_SOUTH));
+	addFixedRow("gamepadCore.queueOrder", N_("Queue Move / Order"), chord(GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_EAST));
+	addFixedRow("gamepadCore.menu", N_("Menu / Back"), buttonName(GPAD_BTN_START));
+	addFixedRow("gamepadCore.confirm", N_("Confirm / Chat"), buttonName(GPAD_BTN_WEST));
+	addFixedRow("gamepadCore.panCamera", N_("Pan Camera / Scroll"), cameraStickName, N_("Scrolls instead when the cursor is over a scrollable list"));
+	addFixedRow("gamepadCore.rotateCamera", N_("Rotate / Pitch Camera"), [cameraStickName]() -> WzString {
+		return WzString::fromUtf8(astringf("%s + %s", gamepadButtonName(GPAD_BTN_RIGHT_SHOULDER), cameraStickName().toUtf8().c_str()));
+	});
+	addFixedRow("gamepadCore.zoom", N_("Zoom"), []() -> WzString { return "LT / RT"; });
+	addFixedRow("gamepadCore.unitGroups", N_("Unit Groups 1-4"), []() -> WzString { return _("D-Pad"); }, N_("Tap to recall a group and hold to assign. Hold LB for groups 5-8"));
+	addFixedRow("gamepadCore.infoScreen", N_("Objectives / Alliances"), buttonName(GPAD_BTN_BACK));
+
+	addKeyBindingsToOptionsForm(result, gInputManager, gKeyFuncConfig, {KeyMappingSlot::GAMEPAD});
 
 	return result;
 }
