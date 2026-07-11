@@ -2954,7 +2954,11 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 		{
 			args.push_back(JS_NewStringLen(ctx, pData->stringArg.c_str(), pData->stringArg.length()));
 		}
-		callFunction(ctx, funcName, args, true);
+		// event=false: a setTimer/queue callback invokes only the exact named function, not the
+		// namespace() event variants (fan-out is for event handling; a caller wanting a namespaced
+		// target passes its full name). Must match restoreTimerFunction so live and restored timers behave
+		// identically.
+		callFunction(ctx, funcName, args, false);
 		std::for_each(args.begin(), args.end(), [ctx](JSValue& val) { JS_FreeValue(ctx, val); });
 	}
 	, player, ms, funcName, psObj, type
@@ -3435,7 +3439,9 @@ std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_in
 			{
 				args.push_back(JS_NewStringLen(pContext, pData->stringArg.c_str(), pData->stringArg.length()));
 			}
-			callFunction(pContext, funcName, args, true);
+			// event=false: match the live SetQuickJSTimer path - invoke only the exact named function, not
+			// the namespace() event variants.
+			callFunction(pContext, funcName, args, false);
 			std::for_each(args.begin(), args.end(), [pContext](JSValue& val) { JS_FreeValue(pContext, val); });
 		}
 		// additionalParams
