@@ -7,6 +7,15 @@ endif()
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
+# ControllerImage provides per-device controller button glyph rendering (vendored, single C file, requires only SDL3)
+set(CONTROLLERIMAGE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/ControllerImage/src")
+list(APPEND SRC "${CONTROLLERIMAGE_DIR}/controllerimage.c")
+if(MSVC)
+	set_source_files_properties("${CONTROLLERIMAGE_DIR}/controllerimage.c" PROPERTIES COMPILE_OPTIONS "/w")
+else()
+	set_source_files_properties("${CONTROLLERIMAGE_DIR}/controllerimage.c" PROPERTIES COMPILE_OPTIONS "-w")
+endif()
+
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	list(APPEND SRC "cocoa_sdl_helpers.mm" "cocoa_wz_menus.mm")
 endif()
@@ -20,6 +29,8 @@ WZ_TARGET_CONFIGURATION(sdl-backend)
 
 target_link_libraries(sdl-backend PRIVATE framework ivis-opengl optional-lite)
 set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
+
+target_include_directories(sdl-backend PRIVATE "${CONTROLLERIMAGE_DIR}")
 
 message( STATUS "Linking to SDL3 library" )
 target_link_libraries(sdl-backend PRIVATE SDL3::SDL3)
