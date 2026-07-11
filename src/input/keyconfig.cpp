@@ -233,6 +233,15 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 
 	// Hidden/"Hardcoded" mappings
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      kf_ToggleFullscreen,                                           "ToggleFullscreen",             N_("Toggle fullscreen"),                            {{ KeyMappingSlot::PRIMARY, { KEY_CODE::KEY_LALT,       KEY_CODE::KEY_RETURN        } }}));
+
+	// Gamepad core inputs, handled by the SDL backend's cursor and click/key
+	// synthesis. Registered here so conflict checks treat them as taken
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadPrimaryClick",          N_("Left Click / Select"),                          {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_SOUTH                                        } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadSecondaryClick",        N_("Right Click / Order"),                          {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_EAST                                         } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadAddToSelection",        N_("Add to Selection"),                             {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_LEFT_SHOULDER,   GPAD_BTN_SOUTH              } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadQueueOrder",            N_("Queue Move / Order"),                           {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_LEFT_SHOULDER,   GPAD_BTN_EAST               } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadMenu",                  N_("Menu / Back"),                                  {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_START                                        } }}));
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadConfirm",               N_("Confirm / Chat"),                               {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_WEST                                         } }}));
 }
 
 KeyFunctionConfiguration::KeyFunctionConfiguration()
