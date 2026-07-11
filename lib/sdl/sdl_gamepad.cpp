@@ -38,17 +38,15 @@
 #include <cmath>
 #include <algorithm>
 
-// Radial deadzone applied to stick deflection before values are exposed
-static const float GAMEPAD_STICK_DEADZONE = 0.15f;
-// Cursor speed at full stick deflection, in logical pixels per second
-static const float GAMEPAD_CURSOR_SPEED = 800.f;
 // Widget scroll speed at full stick deflection, in wheel units per second
 static const float GAMEPAD_SCROLL_SPEED = 18.f;
 // Cursor speed multiplier while the left stick is clicked in
 static const float GAMEPAD_CURSOR_PRECISION_FACTOR = 0.5f;
-// Axis thresholds for the synthesized trigger and stick-direction buttons, with hysteresis
+// Press threshold for the synthesized stick-direction buttons - triggers use
+// the configured threshold instead
 static const float GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD = 0.5f;
-static const float GAMEPAD_AXIS_BUTTON_RELEASE_THRESHOLD = 0.45f;
+// Release thresholds sit this far below the press threshold
+static const float GAMEPAD_AXIS_BUTTON_HYSTERESIS = 0.05f;
 
 static bool subsystemInitialized = false;
 static std::vector<std::pair<SDL_JoystickID, SDL_Gamepad*>> openGamepads;
@@ -224,8 +222,10 @@ static optional<GAMEPAD_INPUT> gamepadInputFromSDLButton(Uint8 sdlButton)
 	case SDL_GAMEPAD_BUTTON_BACK: return GPAD_BTN_BACK;
 	case SDL_GAMEPAD_BUTTON_GUIDE: return GPAD_BTN_GUIDE;
 	case SDL_GAMEPAD_BUTTON_START: return GPAD_BTN_START;
-	case SDL_GAMEPAD_BUTTON_LEFT_STICK: return GPAD_BTN_LEFT_STICK;
-	case SDL_GAMEPAD_BUTTON_RIGHT_STICK: return GPAD_BTN_RIGHT_STICK;
+	// stick clicks follow the swap-sticks setting so the cursor stick's click
+	// always maps to the logical left stick button
+	case SDL_GAMEPAD_BUTTON_LEFT_STICK: return war_GetGamepadSwapSticks() ? GPAD_BTN_RIGHT_STICK : GPAD_BTN_LEFT_STICK;
+	case SDL_GAMEPAD_BUTTON_RIGHT_STICK: return war_GetGamepadSwapSticks() ? GPAD_BTN_LEFT_STICK : GPAD_BTN_RIGHT_STICK;
 	case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER: return GPAD_BTN_LEFT_SHOULDER;
 	case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER: return GPAD_BTN_RIGHT_SHOULDER;
 	case SDL_GAMEPAD_BUTTON_DPAD_UP: return GPAD_BTN_DPAD_UP;
@@ -423,27 +423,30 @@ static SDL_Gamepad* activeGamepadHandle()
 // Applies a radial deadzone to a stick, rescaling the remaining range to 0..1
 static void applyStickDeadzone(float rawX, float rawY, GAMEPAD_AXIS axisX, GAMEPAD_AXIS axisY)
 {
+	const float deadzone = (float)war_GetGamepadStickDeadzone() / 100.f;
 	const float magnitude = std::sqrt(rawX * rawX + rawY * rawY);
-	if (magnitude < GAMEPAD_STICK_DEADZONE)
+	if (magnitude < deadzone)
 	{
 		aGamepadAxisValues[axisX] = 0.f;
 		aGamepadAxisValues[axisY] = 0.f;
 		return;
 	}
-	const float scale = ((magnitude - GAMEPAD_STICK_DEADZONE) / (1.f - GAMEPAD_STICK_DEADZONE)) / magnitude;
+	const float scale = ((magnitude - deadzone) / (1.f - deadzone)) / magnitude;
 	aGamepadAxisValues[axisX] = std::clamp(rawX * scale, -1.f, 1.f);
 	aGamepadAxisValues[axisY] = std::clamp(rawY * scale, -1.f, 1.f);
 }
 
 static void updateAxisButton(GAMEPAD_INPUT button, float deflection)
 {
-	if (!axisButtonHeld[button] && deflection >= GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD)
+	const bool isTrigger = (button == GPAD_BTN_LEFT_TRIGGER || button == GPAD_BTN_RIGHT_TRIGGER);
+	const float pressThreshold = isTrigger ? (float)war_GetGamepadTriggerThreshold() / 100.f : GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD;
+	if (!axisButtonHeld[button] && deflection >= pressThreshold)
 	{
 		axisButtonHeld[button] = true;
 		setGamepadButtonState(button, true);
 		debug(LOG_INPUT, "Gamepad axis button %d pressed", (int)button);
 	}
-	else if (axisButtonHeld[button] && deflection < GAMEPAD_AXIS_BUTTON_RELEASE_THRESHOLD)
+	else if (axisButtonHeld[button] && deflection < pressThreshold - GAMEPAD_AXIS_BUTTON_HYSTERESIS)
 	{
 		axisButtonHeld[button] = false;
 		setGamepadButtonState(button, false);
@@ -466,7 +469,7 @@ static void updateVirtualCursor(float dt)
 		return;
 	}
 
-	float speed = GAMEPAD_CURSOR_SPEED;
+	float speed = (float)war_GetGamepadCursorSpeed();
 	if (actualButtonDown(GPAD_BTN_LEFT_STICK))
 	{
 		speed *= GAMEPAD_CURSOR_PRECISION_FACTOR;
@@ -623,8 +626,19 @@ void wzGamepadUpdate()
 		return std::clamp((float)SDL_GetGamepadAxis(pad, axis) / 32767.f, -1.f, 1.f);
 	};
 
-	applyStickDeadzone(rawAxis(SDL_GAMEPAD_AXIS_LEFTX), rawAxis(SDL_GAMEPAD_AXIS_LEFTY), GPAD_AXIS_LEFT_X, GPAD_AXIS_LEFT_Y);
-	applyStickDeadzone(rawAxis(SDL_GAMEPAD_AXIS_RIGHTX), rawAxis(SDL_GAMEPAD_AXIS_RIGHTY), GPAD_AXIS_RIGHT_X, GPAD_AXIS_RIGHT_Y);
+	// swapping exchanges the sticks at the device level, so the logical left
+	// stick is always the one that moves the cursor
+	const bool swapSticks = war_GetGamepadSwapSticks();
+	applyStickDeadzone(rawAxis(swapSticks ? SDL_GAMEPAD_AXIS_RIGHTX : SDL_GAMEPAD_AXIS_LEFTX),
+	                   rawAxis(swapSticks ? SDL_GAMEPAD_AXIS_RIGHTY : SDL_GAMEPAD_AXIS_LEFTY),
+	                   GPAD_AXIS_LEFT_X, GPAD_AXIS_LEFT_Y);
+	applyStickDeadzone(rawAxis(swapSticks ? SDL_GAMEPAD_AXIS_LEFTX : SDL_GAMEPAD_AXIS_RIGHTX),
+	                   rawAxis(swapSticks ? SDL_GAMEPAD_AXIS_LEFTY : SDL_GAMEPAD_AXIS_RIGHTY),
+	                   GPAD_AXIS_RIGHT_X, GPAD_AXIS_RIGHT_Y);
+	if (war_GetGamepadInvertRightStick())
+	{
+		aGamepadAxisValues[GPAD_AXIS_RIGHT_Y] = -aGamepadAxisValues[GPAD_AXIS_RIGHT_Y];
+	}
 	aGamepadAxisValues[GPAD_AXIS_LEFT_TRIGGER] = std::clamp(rawAxis(SDL_GAMEPAD_AXIS_LEFT_TRIGGER), 0.f, 1.f);
 	aGamepadAxisValues[GPAD_AXIS_RIGHT_TRIGGER] = std::clamp(rawAxis(SDL_GAMEPAD_AXIS_RIGHT_TRIGGER), 0.f, 1.f);
 

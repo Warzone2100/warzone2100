@@ -594,6 +594,11 @@ bool loadConfig()
 		intGamepadModeValue = static_cast<int>(GamepadMode::Automatic);
 	}
 	war_SetGamepadMode(static_cast<GamepadMode>(intGamepadModeValue));
+	war_SetGamepadCursorSpeed(iniGetInteger("gamepadCursorSpeed", GAMEPAD_CURSOR_SPEED_DEFAULT).value());
+	war_SetGamepadStickDeadzone(iniGetInteger("gamepadStickDeadzone", GAMEPAD_DEADZONE_DEFAULT).value());
+	war_SetGamepadTriggerThreshold(iniGetInteger("gamepadTriggerThreshold", GAMEPAD_TRIGGER_THRESHOLD_DEFAULT).value());
+	war_SetGamepadInvertRightStick(iniGetBool("gamepadInvertRightStick", false).value());
+	war_SetGamepadSwapSticks(iniGetBool("gamepadSwapSticks", false).value());
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -862,6 +867,11 @@ bool saveConfig()
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
 	iniSetInteger("trapCursor", (int)war_GetTrapCursor());
 	iniSetInteger("gamepadMode", (int)war_GetGamepadMode());
+	iniSetInteger("gamepadCursorSpeed", war_GetGamepadCursorSpeed());
+	iniSetInteger("gamepadStickDeadzone", war_GetGamepadStickDeadzone());
+	iniSetInteger("gamepadTriggerThreshold", war_GetGamepadTriggerThreshold());
+	iniSetBool("gamepadInvertRightStick", war_GetGamepadInvertRightStick());
+	iniSetBool("gamepadSwapSticks", war_GetGamepadSwapSticks());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
