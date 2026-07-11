@@ -1551,6 +1551,8 @@ void inputRestoreMetaKeyState()
 
 	restoreKeyDownState(KEY_RMETA);
 	restoreKeyDownState(KEY_LMETA);
+
+	wzGamepadRestoreMetaButtonState();
 }
 
 /* This returns true if the key is currently depressed */

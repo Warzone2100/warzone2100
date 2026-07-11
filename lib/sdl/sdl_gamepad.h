@@ -53,6 +53,10 @@ void wzGamepadResetInputState();
 // device state that drives click/key synthesis is unaffected
 void wzGamepadClearButtonStates();
 
+// Restores the logical state of held shoulder modifiers from the raw device
+// state, the gamepad counterpart of restoring held keyboard meta keys
+void wzGamepadRestoreMetaButtonState();
+
 // Called from the SDL mouse/keyboard handlers when physical input arrives.
 // If the gamepad was the active input source, this hands control back to the
 // mouse/keyboard - warping the system pointer to the current cursor position -

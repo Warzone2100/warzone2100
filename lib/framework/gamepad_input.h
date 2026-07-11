@@ -80,6 +80,12 @@ bool isGamepadActiveInput();
 
 // Whether the right stick is currently scrolling the widget under the cursor
 bool gamepadRightStickConsumedByUI();
+
+// While capture mode is on, no new click or key synthesis starts from gamepad
+// buttons, so a binding-capture UI can read raw presses. In-flight synthetic
+// input still releases normally
+void gamepadSetCaptureMode(bool enabled);
+bool gamepadInCaptureMode();
 bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame

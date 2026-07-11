@@ -28,6 +28,7 @@
 #include "../../keybind.h"
 #include "../../display.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/gamepad_input.h"
 #include "lib/sound/audio.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
@@ -169,7 +170,7 @@ private:
 	void updateButtons();
 	bool triggerEditModeForSlot(KeyMappingSlot slot);
 	void closeEditModeOverlay();
-	bool onPushedKeyCombo(KeyMappingSlot slot, const KeyMappingInput input, optional<KEY_CODE> metaKey);
+	bool onPushedKeyCombo(KeyMappingSlot slot, const KeyMappingInput input, const KeyMappingMeta meta);
 	void updateLayout();
 
 private:
@@ -593,6 +594,35 @@ static nonstd::optional<MOUSE_KEY_CODE> scanMouseForPressedBindableKey()
 	return nonstd::nullopt;
 }
 
+static optional<GAMEPAD_INPUT> scanGamepadForPressedBindableButton()
+{
+	// the shoulders act as modifiers, start cancels the capture, and the
+	// buttons consumed by the cursor, groups, zoom, and info screen are not
+	// bindable
+	static const GAMEPAD_INPUT bindableButtons[] = { GPAD_BTN_SOUTH, GPAD_BTN_EAST, GPAD_BTN_WEST, GPAD_BTN_NORTH, GPAD_BTN_RIGHT_STICK };
+	for (GAMEPAD_INPUT button : bindableButtons)
+	{
+		if (gamepadButtonPressed(button))
+		{
+			return button;
+		}
+	}
+	return nonstd::nullopt;
+}
+
+static KeyMappingMeta scanForPressedGamepadMeta()
+{
+	if (gamepadButtonDown(GPAD_BTN_LEFT_SHOULDER))
+	{
+		return GPAD_BTN_LEFT_SHOULDER;
+	}
+	if (gamepadButtonDown(GPAD_BTN_RIGHT_SHOULDER))
+	{
+		return GPAD_BTN_RIGHT_SHOULDER;
+	}
+	return KeyMappingMeta();
+}
+
 static optional<KEY_CODE> scanForPressedMetaKey()
 {
 	optional<KEY_CODE> metakey;
@@ -624,7 +654,7 @@ protected:
 	: W_FULLSCREENOVERLAY_CLICKFORM(init)
 	{ }
 public:
-	typedef std::function<void(const KeyMappingInput input, optional<KEY_CODE> metaKey)> OnPushedKeyComboFunc;
+	typedef std::function<void(const KeyMappingInput input, const KeyMappingMeta meta)> OnPushedKeyComboFunc;
 
 	static std::shared_ptr<WzFullscreenKeyBindingEditingOverlay> make()
 	{
@@ -691,6 +721,23 @@ public:
 	{
 		inputRestoreMetaKeyState(); // HACK: to ensure meta keys are set to down if physically down (regardless of prior calls to clear logical input state)
 
+		if (captureGamepadButtons)
+		{
+			// start doubles as cancel, matching its menu-back role
+			if (keyPressed(KEY_ESC) || gamepadButtonPressed(GPAD_BTN_START))
+			{
+				inputLoseFocus();	// clear the input buffer.
+				if (onCancelPressed) { onCancelPressed(); }
+				return;
+			}
+			if (const optional<GAMEPAD_INPUT> button = scanGamepadForPressedBindableButton())
+			{
+				onPushedKeyCombo(KeyMappingInput(button.value()), scanForPressedGamepadMeta());
+			}
+			inputLoseFocus();	// clear the input buffer.
+			return;
+		}
+
 		auto metaKey = scanForPressedMetaKey();
 
 		if (const optional<KEY_CODE> kc = scanKeyBoardForPressedBindableKey())
@@ -702,12 +749,12 @@ public:
 				if (onCancelPressed) { onCancelPressed(); }
 				return;
 			}
-			onPushedKeyCombo(*kc, metaKey);
+			onPushedKeyCombo(*kc, metaKey.value_or(KEY_CODE::KEY_IGNORE));
 		}
 
 		if (const optional<MOUSE_KEY_CODE> mkc = scanMouseForPressedBindableKey())
 		{
-			onPushedKeyCombo(*mkc, metaKey);
+			onPushedKeyCombo(*mkc, metaKey.value_or(KEY_CODE::KEY_IGNORE));
 		}
 
 		inputLoseFocus();	// clear the input buffer.
@@ -715,6 +762,7 @@ public:
 
 public:
 	OnPushedKeyComboFunc onPushedKeyCombo;
+	bool captureGamepadButtons = false;
 
 private:
 	void updateSavedMetaKeyState(KEY_CODE key, bool& s)
@@ -782,10 +830,15 @@ bool OptionsKeyBindingsEdit::triggerEditModeForSlot(KeyMappingSlot slot)
 	overlayScreen = W_SCREEN::make();
 	auto newRootFrm = WzFullscreenKeyBindingEditingOverlay::make();
 	std::weak_ptr<W_SCREEN> psWeakOverlayScreen(overlayScreen);
-	newRootFrm->onPushedKeyCombo = [weakSelf, slot](const KeyMappingInput input, optional<KEY_CODE> metaKey) {
+	newRootFrm->captureGamepadButtons = (slot == KeyMappingSlot::GAMEPAD);
+	if (newRootFrm->captureGamepadButtons)
+	{
+		gamepadSetCaptureMode(true);
+	}
+	newRootFrm->onPushedKeyCombo = [weakSelf, slot](const KeyMappingInput input, const KeyMappingMeta meta) {
 		auto strongSelf = weakSelf.lock();
 		ASSERT_OR_RETURN(, strongSelf != nullptr, "Widget already gone");
-		if (strongSelf->onPushedKeyCombo(slot, input, metaKey))
+		if (strongSelf->onPushedKeyCombo(slot, input, meta))
 		{
 			if (auto strongParentOptionsForm = strongSelf->parentOptionsForm.lock())
 			{
@@ -816,6 +869,7 @@ bool OptionsKeyBindingsEdit::triggerEditModeForSlot(KeyMappingSlot slot)
 
 void OptionsKeyBindingsEdit::closeEditModeOverlay()
 {
+	gamepadSetCaptureMode(false);
 	if (overlayScreen)
 	{
 		if (onEndEditingHandler)
@@ -836,10 +890,8 @@ void OptionsKeyBindingsEdit::closeEditModeOverlay()
 	}
 }
 
-bool OptionsKeyBindingsEdit::onPushedKeyCombo(KeyMappingSlot slot, const KeyMappingInput input, optional<KEY_CODE> metaKeyOpt)
+bool OptionsKeyBindingsEdit::onPushedKeyCombo(KeyMappingSlot slot, const KeyMappingInput input, const KeyMappingMeta meta)
 {
-	KEY_CODE metakey = metaKeyOpt.value_or(KEY_IGNORE);
-
 	const auto selectedInfo = &info;
 	/* Disallow modifying non-assignable mappings. (Null-check the `info` in case assertions are disabled) */
 	if (!selectedInfo || selectedInfo->type != KeyMappingType::ASSIGNABLE)
@@ -847,9 +899,16 @@ bool OptionsKeyBindingsEdit::onPushedKeyCombo(KeyMappingSlot slot, const KeyMapp
 		return false;
 	}
 
+	/* The gamepad slot holds only gamepad inputs and the other slots only keyboard or mouse */
+	const bool bIsGamepadInput = input.source == KeyMappingInputSource::GAMEPAD;
+	if ((slot == KeyMappingSlot::GAMEPAD) != bIsGamepadInput)
+	{
+		return false;
+	}
+
 	/* Disallow conflicts with ALWAYS_ACTIVE keybinds, as that context always has max priority, preventing
 	   any conflicting keys from triggering. */
-	for (const KeyMapping& mapping : inputManager.mappings().findConflicting(metakey, input, selectedInfo->context, inputManager.contexts()))
+	for (const KeyMapping& mapping : inputManager.mappings().findConflicting(meta, input, selectedInfo->context, inputManager.contexts()))
 	{
 		const InputContext context = inputManager.contexts().get(mapping.info.context);
 		if (context.isAlwaysActive())
@@ -860,7 +919,7 @@ bool OptionsKeyBindingsEdit::onPushedKeyCombo(KeyMappingSlot slot, const KeyMapp
 	}
 
 	/* Clear conflicting mappings using these keys */
-	inputManager.mappings().removeConflicting(metakey, input, selectedInfo->context, inputManager.contexts());
+	inputManager.mappings().removeConflicting(meta, input, selectedInfo->context, inputManager.contexts());
 
 	/* Try and see if the mapping already exists. Remove the old mapping if one does exist */
 	const auto maybeOld = inputManager.mappings().get(*selectedInfo, slot);
@@ -891,7 +950,7 @@ bool OptionsKeyBindingsEdit::onPushedKeyCombo(KeyMappingSlot slot, const KeyMapp
 
 
 	/* Finally, create the new mapping */
-	KeyMapping& newMapping = inputManager.mappings().add({ metakey, input, action }, *selectedInfo, slot);
+	KeyMapping& newMapping = inputManager.mappings().add({ meta, input, action }, *selectedInfo, slot);
 
 	auto slotIndex = static_cast<size_t>(slot);
 	mappings[slotIndex] = newMapping;
