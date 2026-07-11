@@ -921,6 +921,13 @@ KeyFunctionEntries getVisibleKeyFunctionEntries(const KeyFunctionConfiguration& 
 	return visible;
 }
 
+static bool entryHasBindingInSlots(InputManager& inputManager, const KeyFunctionInfo& info, const std::vector<KeyMappingSlot>& slots)
+{
+	return std::any_of(slots.begin(), slots.end(), [&](KeyMappingSlot slot) {
+		return inputManager.mappings().get(info, slot).has_value();
+	});
+}
+
 size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result, InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, const std::vector<KeyMappingSlot>& displayedSlots = {KeyMappingSlot::PRIMARY, KeyMappingSlot::SECONDARY})
 {
 	auto infos = getVisibleKeyFunctionEntries(keyFuncConfig);
@@ -936,6 +943,12 @@ size_t addKeyBindingsToOptionsForm(const std::shared_ptr<KeyOptionsForm>& result
 	for (KeyFunctionEntries::const_iterator i = infos.begin(); i != infos.end(); ++i)
 	{
 		const KeyFunctionInfo& info = *i;
+
+		/* Rows for non-assignable entries only appear on pages displaying one of their bound slots */
+		if (info.type != KeyMappingType::ASSIGNABLE && !entryHasBindingInSlots(inputManager, info, displayedSlots))
+		{
+			continue;
+		}
 
 		/* Add separator if changing categories */
 		const bool bShouldAddSeparator = i == infos.begin() || std::prev(i)->get().context != info.context;
