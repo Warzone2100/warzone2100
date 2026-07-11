@@ -171,6 +171,8 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.tesc"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.tese"
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depth_prepass_tess.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/uibox.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/uibox.frag"
 )
 
 # A shader stage file that exists on disk but is missing from VK_SHADERS would not be
