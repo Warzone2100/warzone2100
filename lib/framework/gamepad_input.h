@@ -23,6 +23,8 @@
 #ifndef __INCLUDED_LIB_FRAMEWORK_GAMEPAD_INPUT_H__
 #define __INCLUDED_LIB_FRAMEWORK_GAMEPAD_INPUT_H__
 
+#include <vector>
+
 enum GAMEPAD_INPUT
 {
 	// physical buttons, following the SDL gamepad layout
@@ -104,5 +106,13 @@ float gamepadAxis(GAMEPAD_AXIS axis);
 // Display name for a button. Face buttons use the connected controller's
 // labels, everything else falls back to generic Xbox-style names
 const char* gamepadButtonName(GAMEPAD_INPUT button);
+
+// Name of the connected controller, or an empty string with none present
+const char* gamepadDeviceName();
+
+// Renders a glyph image for a button on the connected controller into tightly
+// packed RGBA pixels. Stick-direction buttons render the whole stick and the
+// triggers render their trigger art. Returns false when no glyph is available
+bool gamepadGetButtonGlyph(GAMEPAD_INPUT button, unsigned int size, std::vector<unsigned char>& outRGBA, unsigned int& outWidth, unsigned int& outHeight);
 
 #endif // __INCLUDED_LIB_FRAMEWORK_GAMEPAD_INPUT_H__
