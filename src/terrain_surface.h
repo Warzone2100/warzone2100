@@ -64,9 +64,9 @@ float cornerHeight(const WorldMapState& mapState, int x, int y, HeightMode mode)
 float cornerSharpness(const WorldMapState& mapState, int x, int y);
 
 /// Per-corner surface cache lifecycle (corner sharpness, the sanitized water
-/// lattice, and the plateau min/max ranges). heightAt() reads four sharpness
-/// values per evaluation - and, in water mode, a 4x4 stencil of sanitized
-/// water levels - so the terrain
+/// lattice, the shore-proximity weights, and the plateau min/max ranges).
+/// heightAt() reads four sharpness values per evaluation, plus sanitized
+/// water levels and shore weights near the waterline, so the terrain
 /// renderer builds the caches before dense evaluation runs (full map at
 /// terrain init, and the changed corner rect, expanded by 1 for the neighborhood
 /// dependencies, on deformation). Rebuilds must happen on the main thread
@@ -89,16 +89,17 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 /// across Terrain Detail levels.
 Vector3f worldNormalAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode);
 
-/// Horizontal displacement of a lattice corner, in map-space world
-/// units, used to round the cliff outline: corners where the 4 adjacent tiles
-/// are 1-vs-3 cliff/non-cliff are pulled toward the minority tile
-/// (marching-squares-style corner cutting). Zero away from cliff outlines.
+/// Horizontal displacement of a lattice corner, in map-space world units,
+/// used to round cliff and shoreline outlines: corners where the 4 adjacent
+/// tiles split 1-vs-3 cliff/non-cliff (or water/land) are pulled toward the
+/// minority tile (marching-squares-style corner cutting), with cliff cuts
+/// winning where both apply. Zero away from outlines.
 Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y);
 
 /// Bilinear interpolation of cornerOutlineOffset at a map-space position.
 /// Renderers add this to vertex x/y (z = -y in renderer world space) while
 /// sampling heightAt() at the UNDISPLACED position - warping the drawn height
-/// field so cliff lip/foot contours round. Bounded magnitude
+/// field so cliff lip/foot and shoreline contours round. Bounded magnitude
 /// (well below half a tile) keeps the warped mesh fold-free.
 Vector2f outlineOffsetAt(const WorldMapState& mapState, float worldX, float worldY);
 
