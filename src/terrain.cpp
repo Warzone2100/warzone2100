@@ -445,7 +445,7 @@ static void setSectorGeometry(const WorldMapState& mapState, int sx, int sy,
 				const float groundY = terrainSurface::heightAt(mapState, wx, wy, hMode);
 				const float waterY = terrainSurface::heightAt(mapState, wx, wy, terrainSurface::HeightMode::Water);
 				// heights are sampled at the undisplaced position. The horizontal
-				// offset warps the drawn field, rounding cliff outlines
+				// offset warps the drawn field, rounding cliff and shoreline outlines
 				const Vector2f off = terrainSurface::outlineOffsetAt(mapState, wx, wy);
 				geometry[(*geometrySize)++].pos = Vector3f(wx + off.x, groundY, -(wy + off.y));
 				water[(*waterSize)++] = glm::vec4(wx + off.x, (terrainShaderQuality != TerrainShaderQuality::CLASSIC) ? waterY : groundY, -(wy + off.y), waterY - groundY);
@@ -574,7 +574,7 @@ static void setTileDecalVertex_Subdivided(WorldMapState& mapState, int i, int j,
 			const float ty = static_cast<float>(b) / N;
 			// heights come from the undisplaced grid (this expression must stay
 			// bit-identical with setSectorGeometry so the depth prepass matches
-			// the color pass). The horizontal offset rounds cliff outlines.
+			// the color pass). The horizontal offset rounds cliff and shoreline outlines.
 			const float wx = (i * N + a) * step;
 			const float wy = (j * N + b) * step;
 			const Vector2f off = terrainSurface::outlineOffsetAt(mapState, wx, wy);
@@ -942,8 +942,8 @@ float getTerrainVisualObjectHeightDelta(WorldMapState& mapState, int x, int y, i
 	// unit. Over open water every water cell's corners sit at the water level and
 	// the monotone bicubic reproduces locally constant lattices exactly, so hover
 	// units still sit precisely on the drawn water plane. Across a shoreline cell
-	// the surface slopes like the legacy fan (smoothed), so units pitch through
-	// the crossing instead of stepping between ground and water levels.
+	// the surface slopes continuously, so units pitch through the crossing
+	// instead of stepping between ground and water levels.
 	const float drawn = terrainSurface::drawnHeightAt(mapState, static_cast<float>(x), static_cast<float>(y), terrainSurface::HeightMode::Surface);
 	float delta = drawn - static_cast<float>(groundZ);
 	if (aboveGround > 0.f)
