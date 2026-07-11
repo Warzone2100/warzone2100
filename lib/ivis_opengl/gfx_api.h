@@ -1498,6 +1498,36 @@ namespace gfx_api
 	vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
 	>, notexture, SHADER_RECT>;
 
+	// Styled UI box: gradient fill (with shaped falloff + dithering) and optional
+	// SDF rounded corners / border, all in a single draw over the shared unit quad.
+	// NOTE: layout must match the std140 uniform block in shaders/vk/uibox.{vert,frag}.
+	template<>
+	struct constant_buffer_type<SHADER_UI_BOX>
+	{
+		glm::mat4 transform_matrix;
+		glm::vec2 size;				// quad size in pixels (for SDF / border math)
+		glm::vec2 gradient_dir;		// (0,1)=vertical, (1,0)=horizontal, (0,0)=flat fill
+		glm::vec4 colour_a;			// fill at gradient start
+		glm::vec4 colour_b;			// fill at gradient end
+		glm::vec4 border_colour;
+		glm::vec4 corner_radii;		// px per corner: (topLeft, topRight, bottomLeft, bottomRight) - 0 = sharp
+		glm::vec4 clip_rect;		// visible region in quad-local pixels (x0, y0, x1, y1) - x1 <= x0 = no clipping
+		float gradient_exponent;	// 1.0 = linear, 2.0 matches an (1-t)^2 falloff from colour_a
+		float border_width;			// in pixels, 0 = no border
+		float edge_softness;		// alpha fade width at the SDF edge, in pixels (1.0 = crisp AA)
+		float _padding = 0.f;		// std140 block size alignment
+	};
+	static_assert(sizeof(constant_buffer_type<SHADER_UI_BOX>) % 16 == 0, "Must match std140 layout size");
+	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, colour_a) == 80, "Must match std140 layout");
+	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, corner_radii) == 128, "Must match std140 layout");
+	static_assert(offsetof(constant_buffer_type<SHADER_UI_BOX>, gradient_exponent) == 160, "Must match std140 layout");
+
+	using UIBoxPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangle_strip, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_UI_BOX>>,
+	std::tuple<
+	vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
+	>, notexture, SHADER_UI_BOX>;
+
 	template<>
 	struct constant_buffer_type<SHADER_TEXRECT>
 	{
