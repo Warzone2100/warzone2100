@@ -33,6 +33,7 @@ std::shared_ptr<OptionsForm> makeDefaultsOptionsForm();
 std::shared_ptr<OptionsForm> makeGraphicsOptionsForm();
 std::shared_ptr<OptionsForm> makeAudioOptionsForm();
 std::shared_ptr<OptionsForm> makeControlsOptionsForm();
+std::shared_ptr<OptionsForm> makeGamepadOptionsForm();
 std::shared_ptr<OptionsForm> makeWindowOptionsForm();
 
 OptionsDropdown<uint32_t>::PopulateFunc makeInactivityTimeoutOptionsDropdownPopulateFunc();
@@ -54,6 +55,7 @@ public:
 		Graphics,
 		Audio,
 		Controls,
+		Gamepad,
 		Window
 	};
 
