@@ -94,8 +94,10 @@ static float computeCornerSharpness(const WorldMapState& mapState, int x, int y)
 }
 
 // Per-corner surface caches. heightAt() reads four corner sharpness values
-// per evaluation (and, in water mode, a 4x4 stencil of sanitized water
-// levels). Computing each touches several neighboring corners and tiles, so
+// per evaluation, a 4x4 stencil of sanitized water levels in water mode, and
+// the shore weights (plus the water reference they gate) near the waterline
+// in Ground/Surface modes. Computing each touches several neighboring
+// corners and tiles, so
 // recomputation dominates the dense mesh / field bake build cost. The caches
 // are rebuilt in bulk on the main thread (full map at terrain init, dirty
 // regions on deformation, before any surface evaluation runs) and are
@@ -110,6 +112,9 @@ struct PlateauRange
 
 static std::vector<float> sharpnessCache;
 static std::vector<float> waterLatticeCache;
+// 1.0 within one corner ring of real water, 0.0 elsewhere (bilinearly
+// interpolated by heightAt into a continuous shore-proximity weight)
+static std::vector<float> shoreWeightCache;
 // plateau ranges are mode-dependent. Only Ground (mesh builds, field bake)
 // and Surface (unit settle, Classic) reach them - the water branch of
 // heightAt() returns before the plateau lookup
@@ -119,6 +124,7 @@ static int surfaceCacheCornersX = 0;
 static int surfaceCacheCornersY = 0;
 
 static float computeWaterCornerHeight(const WorldMapState& mapState, int x, int y);
+static float computeCornerShoreWeight(const WorldMapState& mapState, int x, int y);
 static void computeCornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi);
 
 float cornerSharpness(const WorldMapState& mapState, int x, int y)
@@ -137,6 +143,15 @@ static float waterCornerHeight(const WorldMapState& mapState, int x, int y)
 		return waterLatticeCache[static_cast<size_t>(y) * surfaceCacheCornersX + x];
 	}
 	return computeWaterCornerHeight(mapState, x, y);
+}
+
+static float cornerShoreWeight(const WorldMapState& mapState, int x, int y)
+{
+	if (x >= 0 && y >= 0 && x < surfaceCacheCornersX && y < surfaceCacheCornersY)
+	{
+		return shoreWeightCache[static_cast<size_t>(y) * surfaceCacheCornersX + x];
+	}
+	return computeCornerShoreWeight(mapState, x, y);
 }
 
 static void cornerPlateauRange(const WorldMapState& mapState, int x, int y, HeightMode mode, float &lo, float &hi)
@@ -168,6 +183,7 @@ void rebuildSurfaceCaches(const WorldMapState& mapState)
 	const size_t corners = static_cast<size_t>(surfaceCacheCornersX) * surfaceCacheCornersY;
 	sharpnessCache.resize(corners);
 	waterLatticeCache.resize(corners);
+	shoreWeightCache.resize(corners);
 	plateauGroundCache.resize(corners);
 	plateauSurfaceCache.resize(corners);
 	for (int y = 0; y < surfaceCacheCornersY; y++)
@@ -177,6 +193,7 @@ void rebuildSurfaceCaches(const WorldMapState& mapState)
 			const size_t idx = static_cast<size_t>(y) * surfaceCacheCornersX + x;
 			sharpnessCache[idx] = computeCornerSharpness(mapState, x, y);
 			waterLatticeCache[idx] = computeWaterCornerHeight(mapState, x, y);
+			shoreWeightCache[idx] = computeCornerShoreWeight(mapState, x, y);
 			computeCornerPlateauRange(mapState, x, y, HeightMode::Ground, plateauGroundCache[idx].lo, plateauGroundCache[idx].hi);
 			computeCornerPlateauRange(mapState, x, y, HeightMode::Surface, plateauSurfaceCache[idx].lo, plateauSurfaceCache[idx].hi);
 		}
@@ -201,6 +218,7 @@ void rebuildSurfaceCachesRegion(const WorldMapState& mapState, int minCornerX, i
 			const size_t idx = static_cast<size_t>(y) * surfaceCacheCornersX + x;
 			sharpnessCache[idx] = computeCornerSharpness(mapState, x, y);
 			waterLatticeCache[idx] = computeWaterCornerHeight(mapState, x, y);
+			shoreWeightCache[idx] = computeCornerShoreWeight(mapState, x, y);
 			computeCornerPlateauRange(mapState, x, y, HeightMode::Ground, plateauGroundCache[idx].lo, plateauGroundCache[idx].hi);
 			computeCornerPlateauRange(mapState, x, y, HeightMode::Surface, plateauSurfaceCache[idx].lo, plateauSurfaceCache[idx].hi);
 		}
@@ -213,6 +231,8 @@ void clearSurfaceCaches()
 	sharpnessCache.shrink_to_fit();
 	waterLatticeCache.clear();
 	waterLatticeCache.shrink_to_fit();
+	shoreWeightCache.clear();
+	shoreWeightCache.shrink_to_fit();
 	plateauGroundCache.clear();
 	plateauGroundCache.shrink_to_fit();
 	plateauSurfaceCache.clear();
@@ -303,6 +323,101 @@ static float computeWaterCornerHeight(const WorldMapState& mapState, int x, int 
 	return found ? best : cornerHeight(mapState, x, y, HeightMode::Water);
 }
 
+/// 1.0 for corners within one ring of a touching-water corner, 0.0 beyond.
+/// Bilinear interpolation turns this into a continuous shore-proximity weight
+/// that confines the shore profile fillet to real shorelines - inland terrain
+/// that merely sits near the (extended) water level is untouched, and one ring
+/// of extension keeps every weighted corner's sanitized water level meaningful.
+static float computeCornerShoreWeight(const WorldMapState& mapState, int x, int y)
+{
+	for (int dy = -1; dy <= 1; dy++)
+	{
+		for (int dx = -1; dx <= 1; dx++)
+		{
+			if (cornerTouchesWater(mapState, x + dx, y + dy))
+			{
+				return 1.f;
+			}
+		}
+	}
+	return 0.f;
+}
+
+// MARK: - Shore profile fillet
+
+// Height band around the waterline (in height units, each side) within which
+// the ground profile is eased into the water plane, and the profile's slope
+// multiplier right at the waterline. The remap is C1: slope reaches 1 again at
+// the band edges, so terrain outside the band is untouched. Tunable.
+static constexpr float SHORE_FILLET_BAND = 24.f;
+static constexpr float SHORE_FILLET_ENTRY_SLOPE = 0.35f;
+
+static float shoreFilletBand()
+{
+	// dev override for visual tuning: WZ_TERRAIN_SHORE_FILLET=<height units> (0 disables)
+	static const float value = []() {
+		float r = SHORE_FILLET_BAND;
+		if (const char* env = getenv("WZ_TERRAIN_SHORE_FILLET"))
+		{
+			r = std::min(64.f, std::max(0.f, static_cast<float>(atof(env))));
+		}
+		return r;
+	}();
+	return value;
+}
+
+/// Ease the evaluated ground/surface height into the waterline: within the
+/// fillet band around the local water level, remap the height so the profile
+/// crosses the water plane at a reduced slope (a beach-like entry) instead of
+/// the raw step gradient - softening the knee where terrain meets the water.
+static float applyShoreFillet(const WorldMapState& mapState, int i, int j, float tx, float ty, float h)
+{
+	const float band = shoreFilletBand();
+	if (band <= 0.f)
+	{
+		return h;
+	}
+	const float g00 = cornerShoreWeight(mapState, i, j);
+	const float g10 = cornerShoreWeight(mapState, i + 1, j);
+	const float g01 = cornerShoreWeight(mapState, i, j + 1);
+	const float g11 = cornerShoreWeight(mapState, i + 1, j + 1);
+	const float weight = terrainSurfaceMath::bilinear(g00, g10, g01, g11, tx, ty);
+	if (weight <= 0.f)
+	{
+		return h;
+	}
+	// weight-masked bilinear of the sanitized water levels: only corners with
+	// meaningful water values contribute, and the masked blend still agrees
+	// across cell edges (the bilinear basis weights of excluded corners vanish
+	// exactly where a neighboring cell would disagree about excluding them)
+	const float b00 = (1.f - tx) * (1.f - ty) * g00;
+	const float b10 = tx * (1.f - ty) * g10;
+	const float b01 = (1.f - tx) * ty * g01;
+	const float b11 = tx * ty * g11;
+	const float bSum = b00 + b10 + b01 + b11;
+	if (bSum <= 0.f)
+	{
+		return h;
+	}
+	const float water = (b00 * waterCornerHeight(mapState, i, j)
+						 + b10 * waterCornerHeight(mapState, i + 1, j)
+						 + b01 * waterCornerHeight(mapState, i, j + 1)
+						 + b11 * waterCornerHeight(mapState, i + 1, j + 1)) / bSum;
+	const float d = h - water;
+	if (d <= -band || d >= band)
+	{
+		return h;
+	}
+	// cubic Hermite on |d|/band: p(0) = 0 with slope SHORE_FILLET_ENTRY_SLOPE,
+	// p(1) = 1 with slope 1. C1 at the band edges and across the waterline,
+	// monotone for any entry slope in (0, 1]
+	const float s0 = SHORE_FILLET_ENTRY_SLOPE;
+	const float t = std::fabs(d) / band;
+	const float pt = ((s0 - 1.f) * t + (2.f - 2.f * s0)) * t * t + s0 * t;
+	const float remapped = water + (d < 0.f ? -band * pt : band * pt);
+	return h + (remapped - h) * weight;
+}
+
 float heightAt(const WorldMapState& mapState, float worldX, float worldY, HeightMode mode)
 {
 	const float fx = worldX / static_cast<float>(TILE_UNITS);
@@ -347,19 +462,23 @@ float heightAt(const WorldMapState& mapState, float worldX, float worldY, Height
 	// sharp component's lip/foot creases filleted against the local plateau levels
 	const float smooth = terrainSurfaceMath::monotoneBicubic(p, tx, ty);
 	const float sharp = terrainSurfaceMath::bilinear(s00, s10, s01, s11, tx, ty);
-	if (sharp <= 0.f)
+	float result = smooth;
+	if (sharp > 0.f)
 	{
-		return smooth;
+		float lo00, hi00, lo10, hi10, lo01, hi01, lo11, hi11;
+		cornerPlateauRange(mapState, i, j, mode, lo00, hi00);
+		cornerPlateauRange(mapState, i + 1, j, mode, lo10, hi10);
+		cornerPlateauRange(mapState, i, j + 1, mode, lo01, hi01);
+		cornerPlateauRange(mapState, i + 1, j + 1, mode, lo11, hi11);
+		const float hi = terrainSurfaceMath::bilinear(hi00, hi10, hi01, hi11, tx, ty);
+		const float lo = terrainSurfaceMath::bilinear(lo00, lo10, lo01, lo11, tx, ty);
+		const float fan = terrainSurfaceMath::filletedFanSurface(p[1][1], p[2][1], p[1][2], p[2][2], hi, lo, cliffFilletRadius(), tx, ty);
+		result = smooth + (fan - smooth) * sharp;
 	}
-	float lo00, hi00, lo10, hi10, lo01, hi01, lo11, hi11;
-	cornerPlateauRange(mapState, i, j, mode, lo00, hi00);
-	cornerPlateauRange(mapState, i + 1, j, mode, lo10, hi10);
-	cornerPlateauRange(mapState, i, j + 1, mode, lo01, hi01);
-	cornerPlateauRange(mapState, i + 1, j + 1, mode, lo11, hi11);
-	const float hi = terrainSurfaceMath::bilinear(hi00, hi10, hi01, hi11, tx, ty);
-	const float lo = terrainSurfaceMath::bilinear(lo00, lo10, lo01, lo11, tx, ty);
-	const float fan = terrainSurfaceMath::filletedFanSurface(p[1][1], p[2][1], p[1][2], p[2][2], hi, lo, cliffFilletRadius(), tx, ty);
-	return smooth + (fan - smooth) * sharp;
+	// Ground and Surface get the same shore remap from the same water
+	// reference, so the drawn ground and the unit-settle surface stay
+	// consistent across the shore band.
+	return applyShoreFillet(mapState, i, j, tx, ty, result);
 }
 
 // Sampling radius (in tiles) for the central-difference vertex normals.
@@ -407,37 +526,78 @@ static bool isCliffTile(const WorldMapState& mapState, int i, int j)
 	return tileOnMap(mapState, i, j) && terrainType(mapTile(mapState, i, j)) == TER_CLIFFFACE;
 }
 
-Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y)
+static bool isWaterTile(const WorldMapState& mapState, int i, int j)
 {
-	// corner (x, y) touches tiles (x-1, y-1) .. (x, y)
-	const bool c00 = isCliffTile(mapState, x - 1, y - 1);
-	const bool c10 = isCliffTile(mapState, x,     y - 1);
-	const bool c01 = isCliffTile(mapState, x - 1, y);
-	const bool c11 = isCliffTile(mapState, x,     y);
+	return tileOnMap(mapState, i, j) && terrainType(mapTile(mapState, i, j)) == TER_WATER;
+}
+
+// How far shoreline outline corners are pulled, in tiles (same fold-safety
+// bound as the cliff rounding above). Tunable.
+static constexpr float SHORE_OUTLINE_ROUNDING_TILES = 0.3f;
+
+static float shoreOutlineRoundingWorld()
+{
+	// dev override for visual tuning: WZ_TERRAIN_SHORE_ROUND=<tiles> (0 disables)
+	static const float value = []() {
+		float tiles = SHORE_OUTLINE_ROUNDING_TILES;
+		if (const char* env = getenv("WZ_TERRAIN_SHORE_ROUND"))
+		{
+			tiles = std::min(0.45f, std::max(0.f, static_cast<float>(atof(env))));
+		}
+		return tiles * static_cast<float>(TILE_UNITS);
+	}();
+	return value;
+}
+
+/// The minority-diagonal corner cut shared by cliff and shoreline outline
+/// rounding: at a corner where exactly 1 (convex) or 3 (concave) of the 4
+/// touching tiles match, pull the corner diagonally toward the minority tile.
+static Vector2f outlineCornerCut(bool c00, bool c10, bool c01, bool c11, float magnitudeWorld)
+{
 	const int count = static_cast<int>(c00) + static_cast<int>(c10) + static_cast<int>(c01) + static_cast<int>(c11);
 	if (count != 1 && count != 3)
 	{
 		return Vector2f(0.f, 0.f); // not on the outline, a straight run, or an ambiguous saddle
 	}
-	// cut the outline corner by pulling it diagonally toward the minority tile:
-	// the lone cliff tile at convex corners (count 1), the lone gap at concave ones (count 3)
 	const bool minority = (count == 1);
 	Vector2f dir;
 	if (c00 == minority)      { dir = Vector2f(-1.f, -1.f); }
 	else if (c10 == minority) { dir = Vector2f( 1.f, -1.f); }
 	else if (c01 == minority) { dir = Vector2f(-1.f,  1.f); }
 	else                      { dir = Vector2f( 1.f,  1.f); }
-	// NOTE: at concave lip corners this pulls the (lower) cliff face under
-	// positions on the passable plateau - rendered objects standing there are
-	// settled onto the drawn surface via drawnHeightAt() (see terrain.cpp's
+	return dir * (magnitudeWorld * 0.70710678f); // normalize the diagonal
+}
+
+Vector2f cornerOutlineOffset(const WorldMapState& mapState, int x, int y)
+{
+	// corner (x, y) touches tiles (x-1, y-1) .. (x, y)
+	// NOTE: at concave lip corners the cliff cut pulls the (lower) cliff face
+	// under positions on the passable plateau - rendered objects standing there
+	// are settled onto the drawn surface via drawnHeightAt() (see terrain.cpp's
 	// getTerrainVisualObjectHeightDelta) rather than by weakening the rounding:
 	// a warp-direction rule cannot both smooth the outline and avoid the overlap.
-	return dir * (cliffOutlineRoundingWorld() * 0.70710678f); // normalize the diagonal
+	const Vector2f cliffCut = outlineCornerCut(
+		isCliffTile(mapState, x - 1, y - 1), isCliffTile(mapState, x, y - 1),
+		isCliffTile(mapState, x - 1, y),     isCliffTile(mapState, x, y),
+		cliffOutlineRoundingWorld());
+	if (cliffCut.x != 0.f || cliffCut.y != 0.f)
+	{
+		// cliffs win where both would apply, keeping the total displacement
+		// inside the no-fold bound
+		return cliffCut;
+	}
+	// the same cut keyed on water tiles rounds the shoreline's horizontal
+	// outline: pointy inlet tips and land fingers get cut instead of following
+	// the tile grid's stair-steps
+	return outlineCornerCut(
+		isWaterTile(mapState, x - 1, y - 1), isWaterTile(mapState, x, y - 1),
+		isWaterTile(mapState, x - 1, y),     isWaterTile(mapState, x, y),
+		shoreOutlineRoundingWorld());
 }
 
 Vector2f outlineOffsetAt(const WorldMapState& mapState, float worldX, float worldY)
 {
-	if (cliffOutlineRoundingWorld() <= 0.f)
+	if (cliffOutlineRoundingWorld() <= 0.f && shoreOutlineRoundingWorld() <= 0.f)
 	{
 		return Vector2f(0.f, 0.f);
 	}
