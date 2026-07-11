@@ -24,6 +24,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
+#include "lib/framework/gamepad_input.h"
 
 #include "manager.h"
 #include "context.h"
@@ -258,6 +259,13 @@ static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseW
 	}
 
 	if (!bAllowMouseWheelEvents && (mapping.keys.input.is(MOUSE_KEY_CODE::MOUSE_WUP) || mapping.keys.input.is(MOUSE_KEY_CODE::MOUSE_WDN)))
+	{
+		return true;
+	}
+
+	/* Gamepad mappings cannot fire without a connected gamepad, so skip the state checks entirely */
+	const bool bUsesGamepad = mapping.keys.input.source == KeyMappingInputSource::GAMEPAD || mapping.keys.meta.source == KeyMappingMetaSource::GAMEPAD;
+	if (bUsesGamepad && !gamepadIsConnected())
 	{
 		return true;
 	}
