@@ -526,6 +526,119 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 	pie_DrawRect<gfx_api::UniTransBoxPSO>(x0, y0, x1, y1, light);
 }
 
+static void pie_DrawUIBoxWithMVP(const glm::mat4& mvp, float w, float h, PIELIGHT from, PIELIGHT to, glm::vec2 gradientDir, float falloffExponent, glm::vec4 cornerRadii, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f, glm::vec4 clipRectLocal = glm::vec4(0.f))
+{
+	gfx_api::UIBoxPSO::get().bind();
+	gfx_api::UIBoxPSO::get().bind_constants({ mvp, Vector2f(w, h), gradientDir,
+		pielightToRGBAVec4(from), pielightToRGBAVec4(to), pielightToRGBAVec4(borderColour),
+		cornerRadii, clipRectLocal, std::max(falloffExponent, 0.001f), borderWidth, std::max(edgeSoftness, 1.f) });
+	gfx_api::UIBoxPSO::get().bind_vertex_buffers(pie_internal::rectBuffer);
+	gfx_api::UIBoxPSO::get().draw(4, 0);
+	gfx_api::UIBoxPSO::get().unbind_vertex_buffers(pie_internal::rectBuffer);
+}
+
+// screenClip (optional): the visible region in the same (screen) space as
+// x0/y0/x1/y1 - the box's shape is computed for the full rect, then cut at
+// the clip edges (partially visible corners render as truncated arcs)
+static void pie_DrawUIBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, glm::vec2 gradientDir, float falloffExponent, glm::vec4 cornerRadii, PIELIGHT borderColour, float borderWidth, float edgeSoftness = 1.f, const WzRect* screenClip = nullptr)
+{
+	if (x0 > x1)
+	{
+		std::swap(x0, x1);
+	}
+	if (y0 > y1)
+	{
+		std::swap(y0, y1);
+	}
+	const float w = x1 - x0;
+	const float h = y1 - y0;
+	if (w <= 0.f || h <= 0.f)
+	{
+		return;
+	}
+	glm::vec4 clipRectLocal(0.f); // (x1 <= x0): clipping disabled
+	if (screenClip != nullptr)
+	{
+		float cx0 = std::max(static_cast<float>(screenClip->x()), x0);
+		float cy0 = std::max(static_cast<float>(screenClip->y()), y0);
+		float cx1 = std::min(static_cast<float>(screenClip->x() + screenClip->width()), x1);
+		float cy1 = std::min(static_cast<float>(screenClip->y() + screenClip->height()), y1);
+		if (cx0 >= cx1 || cy0 >= cy1)
+		{
+			return; // fully clipped away
+		}
+		if (cx0 > x0 || cy0 > y0 || cx1 < x1 || cy1 < y1)
+		{
+			clipRectLocal = glm::vec4(cx0 - x0, cy0 - y0, cx1 - x0, cy1 - y0); // quad-local pixels
+		}
+		// else: fully visible - leave clipping disabled
+	}
+	const auto& mvp = defaultProjectionMatrix() * glm::translate(Vector3f(x0, y0, 0.f)) * glm::scale(glm::vec3(w, h, 1.f));
+	pie_DrawUIBoxWithMVP(mvp, w, h, from, to, gradientDir, falloffExponent, cornerRadii, borderColour, borderWidth, edgeSoftness, clipRectLocal);
+}
+
+void pie_FillGradientBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontal /*= false*/, float falloffExponent /*= 1.f*/)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, from, to, horizontal ? glm::vec2(1.f, 0.f) : glm::vec2(0.f, 1.f), falloffExponent, glm::vec4(0.f), pal_RGBA(0, 0, 0, 0), 0.f);
+}
+
+void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), pal_RGBA(0, 0, 0, 0), 0.f);
+}
+
+void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), borderColour, borderWidth);
+}
+
+void pie_DrawSoftRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, float edgeSoftness)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), pal_RGBA(0, 0, 0, 0), 0.f, edgeSoftness);
+}
+
+void pie_DrawSoftRoundedBoxRotated(float centerX, float centerY, float width, float height, float angleRadians, PIELIGHT fill, float cornerRadius, float edgeSoftness)
+{
+	if (width <= 0.f || height <= 0.f)
+	{
+		return;
+	}
+	// Rotation about the box center. The SDF runs in quad-local space (the
+	// vertex shader passes the unit-quad uv through), so the soft shape is
+	// unaffected by the clip-space rotation.
+	const auto& mvp = defaultProjectionMatrix()
+		* glm::translate(Vector3f(centerX, centerY, 0.f))
+		* glm::rotate(angleRadians, glm::vec3(0.f, 0.f, 1.f))
+		* glm::translate(Vector3f(-width / 2.f, -height / 2.f, 0.f))
+		* glm::scale(glm::vec3(width, height, 1.f));
+	pie_DrawUIBoxWithMVP(mvp, width, height, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), pal_RGBA(0, 0, 0, 0), 0.f, edgeSoftness);
+}
+
+void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, float cornerRadius, PIELIGHT borderColour, float borderWidth)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, from, to, horizontalGradient ? glm::vec2(1.f, 0.f) : glm::vec2(0.f, 1.f), falloffExponent, glm::vec4(cornerRadius), borderColour, borderWidth);
+}
+
+void pie_DrawGradientRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, from, to, horizontalGradient ? glm::vec2(1.f, 0.f) : glm::vec2(0.f, 1.f), falloffExponent, cornerRadii, borderColour, borderWidth);
+}
+
+void pie_DrawRoundedBox(float x0, float y0, float x1, float y1, PIELIGHT fill, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, cornerRadii, borderColour, borderWidth);
+}
+
+void pie_DrawRoundedBoxClipped(float x0, float y0, float x1, float y1, PIELIGHT fill, float cornerRadius, PIELIGHT borderColour, float borderWidth, const WzRect& clipRect)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, fill, fill, glm::vec2(0.f, 0.f), 1.f, glm::vec4(cornerRadius), borderColour, borderWidth, 1.f, &clipRect);
+}
+
+void pie_DrawGradientRoundedBoxClipped(float x0, float y0, float x1, float y1, PIELIGHT from, PIELIGHT to, bool horizontalGradient, float falloffExponent, const glm::vec4& cornerRadii, PIELIGHT borderColour, float borderWidth, const WzRect& clipRect)
+{
+	pie_DrawUIBox(x0, y0, x1, y1, from, to, horizontalGradient ? glm::vec2(1.f, 0.f) : glm::vec2(0.f, 1.f), falloffExponent, cornerRadii, borderColour, borderWidth, 1.f, &clipRect);
+}
+
 /***************************************************************************/
 
 bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
