@@ -36,6 +36,17 @@
 #define	CAMERASPEED_DEFAULT	(2500)
 #define	CAMERASPEED_STEP	(100)
 
+#define GAMEPAD_CURSOR_SPEED_MIN          (200)
+#define GAMEPAD_CURSOR_SPEED_MAX          (2000)
+#define GAMEPAD_CURSOR_SPEED_DEFAULT      (1000)
+#define GAMEPAD_CURSOR_SPEED_STEP         (100)
+#define GAMEPAD_DEADZONE_MIN              (5)
+#define GAMEPAD_DEADZONE_MAX              (40)
+#define GAMEPAD_DEADZONE_DEFAULT          (15)
+#define GAMEPAD_TRIGGER_THRESHOLD_MIN     (20)
+#define GAMEPAD_TRIGGER_THRESHOLD_MAX     (90)
+#define GAMEPAD_TRIGGER_THRESHOLD_DEFAULT (50)
+
 #define MIN_MPINACTIVITY_MINUTES 4
 #define MIN_MPGAMETIMELIMIT_MINUTES 30
 
@@ -95,6 +106,16 @@ void war_SetTrapCursor(TrapCursorMode v);
 TrapCursorMode war_GetTrapCursor();
 void war_SetGamepadMode(GamepadMode v);
 GamepadMode war_GetGamepadMode();
+void war_SetGamepadCursorSpeed(int speed);
+int war_GetGamepadCursorSpeed();
+void war_SetGamepadStickDeadzone(int percent);
+int war_GetGamepadStickDeadzone();
+void war_SetGamepadTriggerThreshold(int percent);
+int war_GetGamepadTriggerThreshold();
+void war_SetGamepadInvertRightStick(bool inverted);
+bool war_GetGamepadInvertRightStick();
+void war_SetGamepadSwapSticks(bool swapped);
+bool war_GetGamepadSwapSticks();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
 void war_SetVsync(int value);

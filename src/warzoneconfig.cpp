@@ -62,6 +62,11 @@ struct WARZONE_GLOBALS
 	bool soundEnabled = true;
 	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
 	GamepadMode gamepadMode = GamepadMode::Automatic;
+	int gamepadCursorSpeed = GAMEPAD_CURSOR_SPEED_DEFAULT;
+	int gamepadStickDeadzone = GAMEPAD_DEADZONE_DEFAULT;
+	int gamepadTriggerThreshold = GAMEPAD_TRIGGER_THRESHOLD_DEFAULT;
+	bool gamepadInvertRightStick = false;
+	bool gamepadSwapSticks = false;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -234,6 +239,56 @@ void war_SetGamepadMode(GamepadMode v)
 GamepadMode war_GetGamepadMode()
 {
 	return warGlobs.gamepadMode;
+}
+
+void war_SetGamepadCursorSpeed(int speed)
+{
+	warGlobs.gamepadCursorSpeed = MAX(GAMEPAD_CURSOR_SPEED_MIN, MIN(GAMEPAD_CURSOR_SPEED_MAX, speed));
+}
+
+int war_GetGamepadCursorSpeed()
+{
+	return warGlobs.gamepadCursorSpeed;
+}
+
+void war_SetGamepadStickDeadzone(int percent)
+{
+	warGlobs.gamepadStickDeadzone = MAX(GAMEPAD_DEADZONE_MIN, MIN(GAMEPAD_DEADZONE_MAX, percent));
+}
+
+int war_GetGamepadStickDeadzone()
+{
+	return warGlobs.gamepadStickDeadzone;
+}
+
+void war_SetGamepadTriggerThreshold(int percent)
+{
+	warGlobs.gamepadTriggerThreshold = MAX(GAMEPAD_TRIGGER_THRESHOLD_MIN, MIN(GAMEPAD_TRIGGER_THRESHOLD_MAX, percent));
+}
+
+int war_GetGamepadTriggerThreshold()
+{
+	return warGlobs.gamepadTriggerThreshold;
+}
+
+void war_SetGamepadInvertRightStick(bool inverted)
+{
+	warGlobs.gamepadInvertRightStick = inverted;
+}
+
+bool war_GetGamepadInvertRightStick()
+{
+	return warGlobs.gamepadInvertRightStick;
+}
+
+void war_SetGamepadSwapSticks(bool swapped)
+{
+	warGlobs.gamepadSwapSticks = swapped;
+}
+
+bool war_GetGamepadSwapSticks()
+{
+	return warGlobs.gamepadSwapSticks;
 }
 
 void war_SetVsync(int value)
