@@ -1006,6 +1006,7 @@ namespace wzapi
 	bool useSafetyTransport(WZAPI_PARAMS(bool flag));
 	bool restoreLimboMissionData(WZAPI_NO_PARAMS);
 	uint32_t getMultiTechLevel(WZAPI_NO_PARAMS);
+	uint32_t benchArrangement(WZAPI_NO_PARAMS);
 	bool setCampaignNumber(WZAPI_PARAMS(int campaignNumber));
 	int32_t getMissionType(WZAPI_NO_PARAMS);
 	bool getRevealStatus(WZAPI_NO_PARAMS);

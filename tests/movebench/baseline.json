@@ -1,325 +1,772 @@
 {
-  "_comment": "Baseline movement bench scorecards. Regenerate with tests/movebench/run.sh --baseline after an intentional behavior change, and review the diff.",
+  "_comment": "STALE. Recorded before the scenario tick budgets were raised, so the counter-flow cells were cut off before a slow solution could finish and their figures understate what the baseline achieves. Regenerate with tests/movebench/run.sh --baseline before comparing anything against it.",
+  "arrangements": [
+    0,
+    3,
+    6,
+    9,
+    12,
+    15,
+    18,
+    21,
+    24,
+    27,
+    30,
+    33,
+    36,
+    39,
+    42,
+    45,
+    48,
+    51,
+    54,
+    57,
+    60,
+    63,
+    66,
+    69,
+    72,
+    75,
+    78
+  ],
   "scenarios": {
     "blob": {
-      "arrival_p50": 271,
-      "arrival_p95": 665,
-      "bumps": 1961,
-      "bumpsRepeat": 40239,
-      "completed": false,
-      "finalPositionsCrc": 534210217,
-      "formationSpreadTiles": 2,
-      "giveUps": 889,
-      "hardStops": 18667,
-      "repaths": 165,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 3,
-      "stuckRemainingTiles_p95": 6,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 11,
-      "unitsOrdered": 100
+      "arrival_p50": {
+        "max": 300,
+        "median": 238,
+        "min": 227
+      },
+      "arrival_p95": {
+        "max": 725,
+        "median": 528,
+        "min": 325
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 1002,
+        "median": 996,
+        "min": 896
+      },
+      "hardStops": {
+        "max": 26530,
+        "median": 25867,
+        "min": 23206
+      },
+      "repaths": {
+        "max": 218,
+        "median": 168,
+        "min": 148
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 12,
+        "median": 9,
+        "min": 8
+      }
     },
     "corner": {
-      "arrival_p50": 918,
-      "arrival_p95": 1192,
-      "bumps": 159,
-      "bumpsRepeat": 1800,
-      "completed": false,
-      "finalPositionsCrc": 4061967628,
-      "formationSpreadTiles": 2,
-      "giveUps": 21,
-      "hardStops": 328,
-      "repaths": 29,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 5,
-      "stuckRemainingTiles_p95": 7,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 16,
-      "unitsOrdered": 24
+      "arrival_p50": {
+        "max": 937,
+        "median": 914,
+        "min": 897
+      },
+      "arrival_p95": {
+        "max": 1174,
+        "median": 1116,
+        "min": 1105
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 17,
+        "median": 7,
+        "min": 6
+      },
+      "hardStops": {
+        "max": 252,
+        "median": 207,
+        "min": 58
+      },
+      "repaths": {
+        "max": 27,
+        "median": 23,
+        "min": 22
+      },
+      "resolved": {
+        "count": 9,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 18,
+        "median": 17,
+        "min": 16
+      }
     },
     "corner_mixed": {
-      "arrival_p50": 1052,
-      "arrival_p95": 1181,
-      "bumps": 112,
-      "bumpsRepeat": 1031,
-      "completed": false,
-      "finalPositionsCrc": 1701241144,
-      "formationSpreadTiles": 4,
-      "giveUps": 6,
-      "hardStops": 93,
-      "repaths": 33,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 6,
-      "stuckRemainingTiles_p95": 18,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 9,
-      "unitsOrdered": 24
+      "arrival_p50": {
+        "max": 866,
+        "median": 853,
+        "min": 775
+      },
+      "arrival_p95": {
+        "max": 1192,
+        "median": 1184,
+        "min": 1078
+      },
+      "formationSpreadTiles": {
+        "max": 4,
+        "median": 4,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 6,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 95,
+        "median": 48,
+        "min": 42
+      },
+      "repaths": {
+        "max": 36,
+        "median": 26,
+        "min": 19
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 9,
+        "median": 9,
+        "min": 6
+      }
     },
     "counterflow_cyborg": {
-      "arrival_p50": 942,
-      "arrival_p95": 1117,
-      "bumps": 1128,
-      "bumpsRepeat": 25827,
-      "completed": true,
-      "finalPositionsCrc": 1487637685,
-      "formationSpreadTiles": 11,
-      "giveUps": 0,
-      "hardStops": 14323,
-      "repaths": 355,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 0,
-      "stuckRemainingTiles_p95": 0,
-      "tickBudget": 1200,
-      "ticks": 1148,
-      "timedOut": false,
-      "unitsArrived": 48,
-      "unitsOrdered": 48
+      "arrival_p50": {
+        "max": 1084,
+        "median": 640,
+        "min": 290
+      },
+      "arrival_p95": {
+        "max": 1189,
+        "median": 830,
+        "min": 378
+      },
+      "formationSpreadTiles": {
+        "max": 11,
+        "median": 11,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 8,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 33758,
+        "median": 9858,
+        "min": 2944
+      },
+      "repaths": {
+        "max": 602,
+        "median": 213,
+        "min": 53
+      },
+      "resolved": {
+        "count": 23,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 48,
+        "median": 48,
+        "min": 12
+      }
     },
     "counterflow_tracked": {
-      "arrival_p50": 1016,
-      "arrival_p95": 1016,
-      "bumps": 514,
-      "bumpsRepeat": 23547,
-      "completed": false,
-      "finalPositionsCrc": 1012298652,
-      "formationSpreadTiles": 2,
-      "giveUps": 0,
-      "hardStops": 12138,
-      "repaths": 426,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 11,
-      "stuckRemainingTiles_p95": 14,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 2,
-      "unitsOrdered": 32
+      "arrival_p50": {
+        "max": 1171,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 1171,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 1,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 17043,
+        "median": 13923,
+        "min": 9513
+      },
+      "repaths": {
+        "max": 467,
+        "median": 440,
+        "min": 414
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 3,
+        "median": 0,
+        "min": 0
+      }
     },
     "counterflow_w1": {
-      "arrival_p50": 0,
-      "arrival_p95": 0,
-      "bumps": 537,
-      "bumpsRepeat": 24622,
-      "completed": false,
-      "finalPositionsCrc": 3847951400,
-      "formationSpreadTiles": 1,
-      "giveUps": 0,
-      "hardStops": 12147,
-      "repaths": 459,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 12,
-      "stuckRemainingTiles_p95": 14,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 0,
-      "unitsOrdered": 32
+      "arrival_p50": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 15010,
+        "median": 12814,
+        "min": 10076
+      },
+      "repaths": {
+        "max": 461,
+        "median": 438,
+        "min": 422
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      }
     },
     "counterflow_w3": {
-      "arrival_p50": 1134,
-      "arrival_p95": 1134,
-      "bumps": 516,
-      "bumpsRepeat": 23460,
-      "completed": false,
-      "finalPositionsCrc": 262898743,
-      "formationSpreadTiles": 2,
-      "giveUps": 0,
-      "hardStops": 13320,
-      "repaths": 426,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 11,
-      "stuckRemainingTiles_p95": 13,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 2,
-      "unitsOrdered": 32
+      "arrival_p50": {
+        "max": 1089,
+        "median": 671,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 1188,
+        "median": 721,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 6,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 17093,
+        "median": 12651,
+        "min": 5864
+      },
+      "repaths": {
+        "max": 452,
+        "median": 398,
+        "min": 284
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 17,
+        "median": 4,
+        "min": 0
+      }
     },
     "counterflow_w4": {
-      "arrival_p50": 580,
-      "arrival_p95": 901,
-      "bumps": 211,
-      "bumpsRepeat": 5366,
-      "completed": false,
-      "finalPositionsCrc": 441434810,
-      "formationSpreadTiles": 9,
-      "giveUps": 28,
-      "hardStops": 1379,
-      "repaths": 104,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 2,
-      "stuckRemainingTiles_p95": 4,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 23,
-      "unitsOrdered": 32
+      "arrival_p50": {
+        "max": 988,
+        "median": 770,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 1198,
+        "median": 1085,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 9,
+        "median": 9,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 30,
+        "median": 17,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 17687,
+        "median": 3076,
+        "min": 691
+      },
+      "repaths": {
+        "max": 475,
+        "median": 185,
+        "min": 65
+      },
+      "resolved": {
+        "count": 11,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 28,
+        "median": 23,
+        "min": 0
+      }
+    },
+    "counterflow_w6": {
+      "arrival_p50": {
+        "max": 619,
+        "median": 498,
+        "min": 421
+      },
+      "arrival_p95": {
+        "max": 941,
+        "median": 744,
+        "min": 633
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 9,
+        "min": 9
+      },
+      "giveUps": {
+        "max": 35,
+        "median": 19,
+        "min": 10
+      },
+      "hardStops": {
+        "max": 1214,
+        "median": 367,
+        "min": 91
+      },
+      "repaths": {
+        "max": 63,
+        "median": 37,
+        "min": 15
+      },
+      "resolved": {
+        "count": 19,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 28,
+        "median": 25,
+        "min": 21
+      }
+    },
+    "counterflow_w8": {
+      "arrival_p50": {
+        "max": 495,
+        "median": 445,
+        "min": 385
+      },
+      "arrival_p95": {
+        "max": 814,
+        "median": 636,
+        "min": 516
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 9,
+        "min": 9
+      },
+      "giveUps": {
+        "max": 25,
+        "median": 13,
+        "min": 6
+      },
+      "hardStops": {
+        "max": 389,
+        "median": 101,
+        "min": 21
+      },
+      "repaths": {
+        "max": 22,
+        "median": 13,
+        "min": 2
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 30,
+        "median": 28,
+        "min": 25
+      }
     },
     "crossing": {
-      "arrival_p50": 0,
-      "arrival_p95": 0,
-      "bumps": 529,
-      "bumpsRepeat": 24213,
-      "completed": false,
-      "finalPositionsCrc": 2098950779,
-      "formationSpreadTiles": 1,
-      "giveUps": 0,
-      "hardStops": 15252,
-      "repaths": 421,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 15,
-      "stuckRemainingTiles_p95": 17,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 0,
-      "unitsOrdered": 32
+      "arrival_p50": {
+        "max": 658,
+        "median": 0,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 937,
+        "median": 0,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 4,
+        "median": 1,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 17547,
+        "median": 14628,
+        "min": 9453
+      },
+      "repaths": {
+        "max": 431,
+        "median": 409,
+        "min": 320
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 7,
+        "median": 0,
+        "min": 0
+      }
     },
     "enemyblock": {
-      "arrival_p50": 0,
-      "arrival_p95": 0,
-      "bumps": 71,
-      "bumpsRepeat": 2034,
-      "completed": false,
-      "finalPositionsCrc": 1140575409,
-      "formationSpreadTiles": 0,
-      "giveUps": 0,
-      "hardStops": 666,
-      "repaths": 26,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 10,
-      "stuckRemainingTiles_p95": 10,
-      "tickBudget": 900,
-      "ticks": 900,
-      "timedOut": true,
-      "unitsArrived": 0,
-      "unitsOrdered": 4
+      "arrival_p50": {
+        "max": 592,
+        "median": 397,
+        "min": 0
+      },
+      "arrival_p95": {
+        "max": 592,
+        "median": 397,
+        "min": 0
+      },
+      "formationSpreadTiles": {
+        "max": 5,
+        "median": 4,
+        "min": 0
+      },
+      "giveUps": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 630,
+        "median": 355,
+        "min": 288
+      },
+      "repaths": {
+        "max": 32,
+        "median": 25,
+        "min": 20
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      }
     },
     "enemyblock_press": {
-      "arrival_p50": 618,
-      "arrival_p95": 896,
-      "bumps": 252,
-      "bumpsRepeat": 9399,
-      "completed": false,
-      "finalPositionsCrc": 1435562923,
-      "formationSpreadTiles": 5,
-      "giveUps": 2,
-      "hardStops": 5647,
-      "repaths": 113,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 12,
-      "stuckRemainingTiles_p95": 12,
-      "tickBudget": 900,
-      "ticks": 900,
-      "timedOut": true,
-      "unitsArrived": 9,
-      "unitsOrdered": 16
+      "arrival_p50": {
+        "max": 670,
+        "median": 545,
+        "min": 462
+      },
+      "arrival_p95": {
+        "max": 883,
+        "median": 832,
+        "min": 824
+      },
+      "formationSpreadTiles": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
+      "giveUps": {
+        "max": 2,
+        "median": 1,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 5519,
+        "median": 5400,
+        "min": 4044
+      },
+      "repaths": {
+        "max": 117,
+        "median": 116,
+        "min": 96
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 10,
+        "median": 8,
+        "min": 7
+      }
     },
     "oneway_tracked": {
-      "arrival_p50": 433,
-      "arrival_p95": 692,
-      "bumps": 34,
-      "bumpsRepeat": 153,
-      "completed": false,
-      "finalPositionsCrc": 378880848,
-      "formationSpreadTiles": 2,
-      "giveUps": 8,
-      "hardStops": 1,
-      "repaths": 2,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 1,
-      "stuckRemainingTiles_p95": 1,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 15,
-      "unitsOrdered": 16
+      "arrival_p50": {
+        "max": 428,
+        "median": 406,
+        "min": 368
+      },
+      "arrival_p95": {
+        "max": 682,
+        "median": 663,
+        "min": 608
+      },
+      "formationSpreadTiles": {
+        "max": 2,
+        "median": 2,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 29,
+        "median": 19,
+        "min": 13
+      },
+      "hardStops": {
+        "max": 42,
+        "median": 9,
+        "min": 9
+      },
+      "repaths": {
+        "max": 8,
+        "median": 7,
+        "min": 5
+      },
+      "resolved": {
+        "count": 9,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 12,
+        "median": 11,
+        "min": 11
+      }
     },
     "openfield": {
-      "arrival_p50": 675,
-      "arrival_p95": 709,
-      "bumps": 3,
-      "bumpsRepeat": 5,
-      "completed": true,
-      "finalPositionsCrc": 1638889781,
-      "formationSpreadTiles": 3,
-      "giveUps": 0,
-      "hardStops": 0,
-      "repaths": 0,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 0,
-      "stuckRemainingTiles_p95": 0,
-      "tickBudget": 900,
-      "ticks": 711,
-      "timedOut": false,
-      "unitsArrived": 40,
-      "unitsOrdered": 40
+      "arrival_p50": {
+        "max": 699,
+        "median": 684,
+        "min": 668
+      },
+      "arrival_p95": {
+        "max": 774,
+        "median": 740,
+        "min": 738
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 3,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "repaths": {
+        "max": 0,
+        "median": 0,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 40,
+        "median": 40,
+        "min": 39
+      }
     },
     "parking": {
-      "arrival_p50": 629,
-      "arrival_p95": 726,
-      "bumps": 23,
-      "bumpsRepeat": 318,
-      "completed": true,
-      "finalPositionsCrc": 1170773097,
-      "formationSpreadTiles": 2,
-      "giveUps": 2,
-      "hardStops": 8,
-      "repaths": 8,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 0,
-      "stuckRemainingTiles_p95": 0,
-      "tickBudget": 900,
-      "ticks": 728,
-      "timedOut": false,
-      "unitsArrived": 8,
-      "unitsOrdered": 8
+      "arrival_p50": {
+        "max": 600,
+        "median": 489,
+        "min": 425
+      },
+      "arrival_p95": {
+        "max": 884,
+        "median": 634,
+        "min": 493
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 2,
+        "min": 1
+      },
+      "giveUps": {
+        "max": 8,
+        "median": 3,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 166,
+        "median": 3,
+        "min": 0
+      },
+      "repaths": {
+        "max": 8,
+        "median": 2,
+        "min": 0
+      },
+      "resolved": {
+        "count": 27,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 8,
+        "median": 8,
+        "min": 6
+      }
     },
     "separating": {
-      "arrival_p50": 811,
-      "arrival_p95": 1104,
-      "bumps": 264,
-      "bumpsRepeat": 7294,
-      "completed": false,
-      "finalPositionsCrc": 732993211,
-      "formationSpreadTiles": 11,
-      "giveUps": 0,
-      "hardStops": 1541,
-      "repaths": 150,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 3,
-      "stuckRemainingTiles_p95": 11,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 22,
-      "unitsOrdered": 32
+      "arrival_p50": {
+        "max": 1088,
+        "median": 863,
+        "min": 428
+      },
+      "arrival_p95": {
+        "max": 1195,
+        "median": 1158,
+        "min": 428
+      },
+      "formationSpreadTiles": {
+        "max": 12,
+        "median": 7,
+        "min": 2
+      },
+      "giveUps": {
+        "max": 9,
+        "median": 0,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 12823,
+        "median": 3773,
+        "min": 619
+      },
+      "repaths": {
+        "max": 389,
+        "median": 227,
+        "min": 73
+      },
+      "resolved": {
+        "count": 6,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 29,
+        "median": 16,
+        "min": 2
+      }
     },
     "strafe": {
-      "arrival_p50": 114,
-      "arrival_p95": 140,
-      "bumps": 740,
-      "bumpsRepeat": 8879,
-      "completed": false,
-      "finalPositionsCrc": 3922743399,
-      "formationSpreadTiles": 3,
-      "giveUps": 36,
-      "hardStops": 2229,
-      "repaths": 36,
-      "seed": 1592639215,
-      "stuckRemainingTiles_p50": 9,
-      "stuckRemainingTiles_p95": 17,
-      "tickBudget": 1200,
-      "ticks": 1200,
-      "timedOut": true,
-      "unitsArrived": 4,
-      "unitsOrdered": 60
+      "arrival_p50": {
+        "max": 106,
+        "median": 104,
+        "min": 94
+      },
+      "arrival_p95": {
+        "max": 149,
+        "median": 144,
+        "min": 142
+      },
+      "formationSpreadTiles": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
+      "giveUps": {
+        "max": 39,
+        "median": 38,
+        "min": 35
+      },
+      "hardStops": {
+        "max": 2207,
+        "median": 1944,
+        "min": 1651
+      },
+      "repaths": {
+        "max": 43,
+        "median": 41,
+        "min": 38
+      },
+      "resolved": {
+        "count": 0,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 7,
+        "median": 4,
+        "min": 3
+      }
     }
   }
 }

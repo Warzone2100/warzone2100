@@ -45,11 +45,14 @@ function benchEnable(player, kind)
 	makeComponentAvailable(k.weap, player);
 }
 
-// Lays `count` units in a `cols`-wide block anchored at (x0, y0), with rows
-// receding in `rowDir`. `spacing` (default 1) is the tile pitch between units,
-// so a field can be laid out loosely enough to be negotiable rather than solid.
-// Returns the droids actually created, in spawn order.
-function benchSpawnBlock(player, kind, x0, y0, cols, rowDir, count, spacing)
+// Lays `count` units in a `cols`-wide block anchored exactly at (x0, y0), with
+// rows receding in `rowDir`. `spacing` (default 1) is the tile pitch between
+// units, so a field can be laid out loosely enough to be negotiable rather than
+// solid. Returns the droids actually created, in spawn order.
+//
+// Use this only where the exact tiles matter, ex. units plugging a gap. Most
+// scenarios want benchSpawnBlock so their results carry an error bar.
+function benchSpawnFixed(player, kind, x0, y0, cols, rowDir, count, spacing)
 {
 	var k = ROSTER[kind];
 	var step = spacing || 1;
@@ -67,12 +70,49 @@ function benchSpawnBlock(player, kind, x0, y0, cols, rowDir, count, spacing)
 	return made;
 }
 
+// Number of lateral and forward offsets a spawn block can take. Three of each
+// gives nine placements per block, so a two-block scenario has 81 arrangements
+// in total, which is small enough to enumerate rather than sample.
+const ARRANGE_STEPS = 3;
+
+var benchBlockIndex = 0;
+
+// As benchSpawnFixed, but offsets the block according to the arrangement index
+// chosen for this run. Successive calls take successive digits of the index, so
+// each block moves independently and every combination is reachable by counting
+// upward from zero.
+//
+// This is enumerated rather than random on purpose. Drawing offsets from the
+// synchronised RNG covered the same small space unevenly and produced identical
+// arrangements from different seeds, which made two seed families disagree about
+// a cell's range while both looked like fair samples.
+//
+// A single arrangement is one trajectory, not a sample. Shifting a spawn block
+// by a tile with no other change moves arrival p95 by around a quarter, and some
+// cells are bistable and simply resolve or jam depending on it.
+function benchSpawnBlock(player, kind, x0, y0, cols, rowDir, count, spacing)
+{
+	var digit = ARRANGE_STEPS * ARRANGE_STEPS;
+	var index = Math.floor(benchArrangement() / Math.pow(digit, benchBlockIndex)) % digit;
+	benchBlockIndex++;
+
+	var dx = (index % ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+	var dy = Math.floor(index / ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+	return benchSpawnFixed(player, kind, x0 + dx, y0 + dy, cols, rowDir, count, spacing);
+}
+
 // As benchSpawnBlock, but cycles through a list of kinds so a cluster contains
 // units of differing speed and turn rate. Speed heterogeneity is the point:
 // faster units catch up to slower ones and stack behind them, which is a
 // distinct congestion source from geometry.
 function benchSpawnMixedBlock(player, kinds, x0, y0, cols, rowDir, count)
 {
+	var digit = ARRANGE_STEPS * ARRANGE_STEPS;
+	var index = Math.floor(benchArrangement() / Math.pow(digit, benchBlockIndex)) % digit;
+	benchBlockIndex++;
+	x0 += (index % ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+	y0 += Math.floor(index / ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+
 	var made = [];
 	for (var i = 0; i < count; i++)
 	{

@@ -422,3 +422,21 @@ players 2
 type    15
 dataset MULTI_CAM_1
 game    "multiplay/maps/MoveBench-Corridor-W4.gam"
+
+level   MoveBench-Corridor-W6
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corridor-W6.gam"
+
+level   MoveBench-Corridor-W8
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corridor-W8.gam"
+
+level   MoveBench-TwoRoute
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-TwoRoute.gam"
