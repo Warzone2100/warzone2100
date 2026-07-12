@@ -407,7 +407,7 @@ bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen)
 	return psMouseOverWidgetScreen == psScreen;
 }
 
-static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, const WzRect& clipRect, Vector2i screenPos, Vector2f moveDir, float moveMagnitude, int searchRange, optional<WidgetMagnetTarget>& best, float& bestScore)
+static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, const WzRect& clipRect, Vector2i screenPos, Vector2f moveDir, float moveMagnitude, int searchRange, float minAlongMotion, bool excludeContainingPoint, optional<WidgetMagnetTarget>& best, float& bestScore)
 {
 	// clip to the ancestors so scrolled-away widgets are not candidates
 	const WzRect geometry = psWidget->screenGeometry();
@@ -421,7 +421,8 @@ static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, c
 	}
 	const WzRect visibleRect(clippedLeft, clippedTop, clippedRight - clippedLeft, clippedBottom - clippedTop);
 
-	if (psWidget->visible() && psWidget->isGamepadCursorMagnetTarget())
+	if (psWidget->visible() && psWidget->isGamepadCursorMagnetTarget()
+		&& !(excludeContainingPoint && visibleRect.contains(screenPos.x, screenPos.y)))
 	{
 		float centerX = (float)(visibleRect.left() + visibleRect.right()) / 2.f;
 		float centerY = (float)(visibleRect.top() + visibleRect.bottom()) / 2.f;
@@ -432,20 +433,22 @@ static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, c
 			centerX = (float)std::clamp(geometry.left() + magnetPoint->x, visibleRect.left(), visibleRect.right());
 			centerY = (float)std::clamp(geometry.top() + magnetPoint->y, visibleRect.top(), visibleRect.bottom());
 		}
-		const float dx = centerX - (float)screenPos.x;
-		const float dy = centerY - (float)screenPos.y;
-		const float distance = std::sqrt(dx * dx + dy * dy);
-		// score by distance to the widget's edge so large widgets compete
-		// fairly with small ones
-		const float edgeDistance = std::max(0.f, distance - radius);
+		// score by distance and direction to the nearest point of the visible
+		// rect, so wide widgets are reached by their near edge rather than
+		// their far-away center
+		const float nearestX = (float)std::clamp(screenPos.x, visibleRect.left(), visibleRect.right() - 1);
+		const float nearestY = (float)std::clamp(screenPos.y, visibleRect.top(), visibleRect.bottom() - 1);
+		const float dx = nearestX - (float)screenPos.x;
+		const float dy = nearestY - (float)screenPos.y;
+		const float edgeDistance = std::sqrt(dx * dx + dy * dy);
 		if (edgeDistance <= (float)searchRange)
 		{
 			bool candidateOk = true;
 			float score = edgeDistance;
-			if (moveMagnitude > 0.01f && distance > 1.f)
+			if (moveMagnitude > 0.01f && edgeDistance > 1.f)
 			{
-				const float alongMotion = ((dx * moveDir.x) + (dy * moveDir.y)) / (distance * moveMagnitude);
-				if (alongMotion < -0.2f)
+				const float alongMotion = ((dx * moveDir.x) + (dy * moveDir.y)) / (edgeDistance * moveMagnitude);
+				if (alongMotion < minAlongMotion)
 				{
 					candidateOk = false;
 				}
@@ -471,14 +474,18 @@ static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, c
 
 	// hidden children prune their subtree, but a hidden root form still walks
 	// its visible children, matching the mouse-target recursion (notifications
-	// hide their overlay's root form for mouse transparency)
-	for (const auto& psChild : psWidget->children())
+	// hide their overlay's root form for mouse transparency). Children walk
+	// top-down like mouse targeting, so equal scores - e.g. overlapping
+	// widgets both containing the point - resolve to the one a click would hit
+	const auto& childWidgets = psWidget->children();
+	for (auto i = childWidgets.size(); i--;)
 	{
+		const auto& psChild = childWidgets[i];
 		if (!psChild->visible())
 		{
 			continue;
 		}
-		findMagnetTargetRecursive(psChild, visibleRect, screenPos, moveDir, moveMagnitude, searchRange, best, bestScore);
+		findMagnetTargetRecursive(psChild, visibleRect, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
 	}
 }
 
@@ -487,20 +494,30 @@ std::shared_ptr<W_SCREEN> widgGetLastRunScreen()
 	return psLastRunScreen.lock();
 }
 
-optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange)
+std::shared_ptr<W_SCREEN> widgGetMouseOverScreen()
+{
+	return psMouseOverWidgetScreen;
+}
+
+optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange, float minAlongMotion, bool excludeContainingPoint, const std::shared_ptr<W_SCREEN>& onlyScreen)
 {
 	optional<WidgetMagnetTarget> best;
 	float bestScore = 0.f;
 	const float moveMagnitude = std::sqrt(moveDir.x * moveDir.x + moveDir.y * moveDir.y);
 	const WzRect unclipped(-1000000, -1000000, 2000000, 2000000);
 
+	if (onlyScreen)
+	{
+		findMagnetTargetRecursive(onlyScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
+		return best;
+	}
 	for (const auto& overlay : overlays)
 	{
-		findMagnetTargetRecursive(overlay.psScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, best, bestScore);
+		findMagnetTargetRecursive(overlay.psScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
 	}
 	if (baseScreen)
 	{
-		findMagnetTargetRecursive(baseScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, best, bestScore);
+		findMagnetTargetRecursive(baseScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, minAlongMotion, excludeContainingPoint, best, bestScore);
 	}
 	return best;
 }
