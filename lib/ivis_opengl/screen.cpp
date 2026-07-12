@@ -416,6 +416,7 @@ static void screen_RefreshBackdropGeometry()
 	screen_GenerateCoordinatesAndVBOs();
 }
 
+// Deferred when the screen frame is closed (next pie_ScreenFrameRenderBegin); immediate when mid-frame.
 static void screen_RequestBackdropGeometryRefresh()
 {
 	if (backdropGfx == nullptr)

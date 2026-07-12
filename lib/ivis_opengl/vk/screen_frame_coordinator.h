@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file screen_frame_coordinator.h
- * Screen-frame finish path: commit inputs, present/acquire, ring advance, and tail.
+ * Screen-frame finish path: commit inputs, present/acquire, ring advance, and frame epilogue.
  */
 
 #pragma once
@@ -37,12 +37,10 @@ namespace gfx_api::vk
 ///
 /// Owns `SwapchainPresentationState` and implements `finishScreenFrame()`:
 /// * build commit inputs
-/// * seal/submit via `perFrameResources_t`
+/// * seal/submit via `VkRoot::sealAndSubmitTransferGraphics`
 /// * present/acquire
 /// * ring advance
-/// * tail
-///   * `frameNum++`
-///   * copy CB restart
+/// * frame epilogue (`frameNum++`, close screen frame, purge FBO pool)
 /// `prepareSwapchainForDrawing()` performs late swapchain acquire before render-graph
 /// record (called from piemode).
 /// </summary>
@@ -66,7 +64,7 @@ private:
 	void presentAndAcquireScreenFrame(ScreenFramePipelineState& state);
 	void throttleSkippedDrawingFrame();
 	void advanceRingBufferAfterSubmit(ScreenFramePipelineState& state);
-	void completeScreenFrameFinishTail(const ScreenFramePipelineState& state);
+	void completeScreenFrameFinishTail();
 
 	VkRoot& _root;
 	SwapchainPresentationState _presentation;

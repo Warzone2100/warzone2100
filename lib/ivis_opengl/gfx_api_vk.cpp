@@ -849,8 +849,6 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 	cmdDraw = buffer[0];
 	cmdCopy = buffer[1];
 	pCurrentDrawCmdBuffer = &cmdDraw;
-	cmdCopy.begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
-	copyCmdBufferBegun = true;
 	previousSubmission = dev.createFence(
 		vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled),
 		nullptr, *pVkDynLoader
@@ -1101,6 +1099,7 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
 	buffering_mechanism::get_current_resources().drawCmdBufferBegun = false;
 	buffering_mechanism::get_current_resources().copyCmdBufferBegun = false;
+	buffering_mechanism::get_current_resources().copyCmdBufferSubmittedSincePoolReset = false;
 	buffering_mechanism::get_current_resources().swapchainImageAcquired = false;
 
 	buffering_mechanism::get_current_resources().clean();
@@ -6353,7 +6352,22 @@ void perFrameResources_t::ensureTransferRecordingBegun(const WZ_vk::DispatchLoad
 	{
 		return;
 	}
-	copyCmdBuffer().begin(
+
+	if (copyCmdBufferSubmittedSincePoolReset)
+	{
+		const auto fences = std::array<vk::Fence, 1>{ previousSubmission };
+		auto waitResult = dev.waitForFences(fences, VK_TRUE, UINT64_MAX, vkDynLoader);
+		if (waitResult == vk::Result::eTimeout)
+		{
+			debug(LOG_ERROR, "ensureTransferRecordingBegun: waitForFences resulted in vk::Result::eTimeout");
+			handleUnrecoverableError(vk::Result::eTimeout);
+		}
+		dev.resetFences(fences, vkDynLoader);
+		cmdCopy.reset(vk::CommandBufferResetFlagBits::eReleaseResources, vkDynLoader);
+		copyCmdBufferSubmittedSincePoolReset = false;
+	}
+
+	cmdCopy.begin(
 		vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit),
 		vkDynLoader);
 	copyCmdBufferBegun = true;
@@ -6401,6 +6415,7 @@ void perFrameResources_t::submitCommandBuffers(const FrameQueueSubmitParams& sub
 	try {
 		submit.graphicsQueue.submit(submitInfo, previousSubmission, submit.vkDynLoader);
 		state.submittedQueueWork = true;
+		copyCmdBufferSubmittedSincePoolReset = true;
 		if (state.submitDrawBuffer)
 		{
 			swapchainImageAcquired = false;
@@ -6445,7 +6460,6 @@ void VkRoot::sealAndSubmitTransferGraphics(ScreenFramePipelineState& state)
 	if (frameResources.transferWorkRecorded || state.submitDrawBuffer)
 	{
 		frameResources.sealTransferStream(vkDynLoader);
-		state.copyBufferWasSealed = true;
 
 		const bool ringSlotWillAdvance = state.submitDrawBuffer
 			|| (!state.mustSkipDrawing && !state.mustRecreateSwapchain);
@@ -6511,6 +6525,7 @@ void VkRoot::beginScreenFrame()
 	frameHasDrawCommands = false;
 	ASSERT(!hasActivePass, "Active pass at screen frame open");
 
+	frameResources.ensureTransferRecordingBegun(vkDynLoader);
 	purgeFrameResources();
 }
 

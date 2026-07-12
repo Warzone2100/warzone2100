@@ -95,7 +95,7 @@ void pie_ShutDown()
 
 /***************************************************************************/
 
-static bool renderingFrame = true; // true: realmain() ends one bootstrap frame before mainLoop's first Begin
+static bool renderingFrame = false;
 static gfx_api::CachedRenderGraph g_cachedFrameRenderGraph;
 
 gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph()

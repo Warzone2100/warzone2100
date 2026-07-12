@@ -413,7 +413,8 @@ namespace gfx_api
 		/// Screen-frame lifecycle (owned by piemode / main loop):
 		///
 		///   pie_ScreenFrameRenderBegin()
-		///     -> beginScreenFrame()          // per-frame flag reset; purge unused FBO pool entries
+		///     -> beginScreenFrame()          // per-frame flag reset; purge unused FBO pool entries;
+		///                                     // Vulkan: open transfer (copy) command buffer
 		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
 		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
 		///   pie_ScreenFrameRenderEnd()
@@ -432,6 +433,7 @@ namespace gfx_api
 		/// Acquire a swapchain image for draw recording when the drawable is in sync (Vulkan).
 		virtual void prepareSwapchainForDrawing() {}
 		/// Mark UI/backdrop geometry stale after a drawable resize (called from backends).
+		/// Consumed at pie_ScreenFrameRenderBegin(); do not call screen_updateGeometry() directly on resize.
 		void markScreenGeometryDirty() { _screenGeometryDirty = true; }
 		/// Returns true once per dirty signal; used to refresh backdrop VBOs without per-frame work.
 		bool consumeScreenGeometryDirty()

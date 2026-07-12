@@ -200,7 +200,6 @@ struct ScreenFramePipelineState
 	bool submitDrawBuffer = false;
 	bool submittedQueueWork = false;
 	bool shouldPresent = false;
-	bool copyBufferWasSealed = false;
 	bool ringSwapped = false;
 };
 
@@ -290,8 +289,10 @@ public:
 	bool swapchainImageAcquired = false;
 	/// True when TransferRecorder recorded copy/barrier work this screen frame.
 	bool transferWorkRecorded = false;
+	/// True after cmdCopy was queue-submitted without a subsequent command-pool reset on this slot.
+	bool copyCmdBufferSubmittedSincePoolReset = false;
 
-	/// Restart transfer recording after a sealed submit (frame-finish tail helper).
+	/// Open the copy command buffer for recording on the current ring slot.
 	void ensureTransferRecordingBegun(const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
 
 	/// Flush CPU-side automapped allocators before queue submit.

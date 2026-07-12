@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file screen_frame_coordinator.cpp
- * Screen-frame finish path: commit inputs, present/acquire, ring advance, and tail.
+ * Screen-frame finish path: commit inputs, present/acquire, ring advance, and frame epilogue.
  */
 
 #include "screen_frame_coordinator.h"
@@ -176,7 +176,7 @@ void ScreenFrameCoordinator::finishFrame()
 	_root.sealAndSubmitTransferGraphics(state);
 	logScreenFrameDrawSubmitSkip(state);
 
-	const bool needsQueueSubmit = state.copyBufferWasSealed || state.submitDrawBuffer;
+	const bool needsQueueSubmit = state.submittedQueueWork;
 	if (needsQueueSubmit)
 	{
 		handleSwapchainPostSubmit(state);
@@ -192,7 +192,7 @@ void ScreenFrameCoordinator::finishFrame()
 	}
 
 	advanceRingBufferAfterSubmit(state);
-	completeScreenFrameFinishTail(state);
+	completeScreenFrameFinishTail();
 }
 
 void ScreenFrameCoordinator::presentAndAcquireScreenFrame(ScreenFramePipelineState& state)
@@ -344,16 +344,10 @@ void ScreenFrameCoordinator::advanceRingBufferAfterSubmit(ScreenFramePipelineSta
 	}
 }
 
-void ScreenFrameCoordinator::completeScreenFrameFinishTail(const ScreenFramePipelineState& state)
+void ScreenFrameCoordinator::completeScreenFrameFinishTail()
 {
-	auto& frameResources = buffering_mechanism::get_current_resources();
-	if (state.copyBufferWasSealed && !frameResources.copyCmdBufferBegun)
-	{
-		frameResources.ensureTransferRecordingBegun(_root.vkDynLoader);
-	}
-
 	_root.frameNum = std::max<size_t>(_root.frameNum + 1, 1);
-	frameResources.transferWorkRecorded = false;
+	buffering_mechanism::get_current_resources().transferWorkRecorded = false;
 	_root.purgeFrameResources();
 	_root._screenFrameOpen = false;
 }
