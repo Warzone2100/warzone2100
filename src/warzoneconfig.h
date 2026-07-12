@@ -46,6 +46,8 @@
 #define GAMEPAD_TRIGGER_THRESHOLD_MIN     (20)
 #define GAMEPAD_TRIGGER_THRESHOLD_MAX     (90)
 #define GAMEPAD_TRIGGER_THRESHOLD_DEFAULT (50)
+#define GAMEPAD_MAGNETISM_MAX             (100)
+#define GAMEPAD_MAGNETISM_DEFAULT         (50)
 
 #define MIN_MPINACTIVITY_MINUTES 4
 #define MIN_MPGAMETIMELIMIT_MINUTES 30
@@ -112,6 +114,8 @@ void war_SetGamepadStickDeadzone(int percent);
 int war_GetGamepadStickDeadzone();
 void war_SetGamepadTriggerThreshold(int percent);
 int war_GetGamepadTriggerThreshold();
+void war_SetGamepadCursorMagnetism(int percent);
+int war_GetGamepadCursorMagnetism();
 void war_SetGamepadInvertRightStick(bool inverted);
 bool war_GetGamepadInvertRightStick();
 void war_SetGamepadSwapSticks(bool swapped);

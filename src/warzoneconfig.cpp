@@ -65,6 +65,7 @@ struct WARZONE_GLOBALS
 	int gamepadCursorSpeed = GAMEPAD_CURSOR_SPEED_DEFAULT;
 	int gamepadStickDeadzone = GAMEPAD_DEADZONE_DEFAULT;
 	int gamepadTriggerThreshold = GAMEPAD_TRIGGER_THRESHOLD_DEFAULT;
+	int gamepadCursorMagnetism = GAMEPAD_MAGNETISM_DEFAULT;
 	bool gamepadInvertRightStick = false;
 	bool gamepadSwapSticks = false;
 	bool gamepadShowLayoutOnConnect = true;
@@ -271,6 +272,16 @@ void war_SetGamepadTriggerThreshold(int percent)
 int war_GetGamepadTriggerThreshold()
 {
 	return warGlobs.gamepadTriggerThreshold;
+}
+
+void war_SetGamepadCursorMagnetism(int percent)
+{
+	warGlobs.gamepadCursorMagnetism = MAX(0, MIN(GAMEPAD_MAGNETISM_MAX, percent));
+}
+
+int war_GetGamepadCursorMagnetism()
+{
+	return warGlobs.gamepadCursorMagnetism;
 }
 
 void war_SetGamepadInvertRightStick(bool inverted)

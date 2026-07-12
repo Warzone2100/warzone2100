@@ -1458,6 +1458,15 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("gamepad.cursorMagnetism", N_("Cursor Magnetism"), N_("Pulls the cursor toward nearby objects while aiming slowly. 0 disables"));
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsSlider::make(0, GAMEPAD_MAGNETISM_MAX, 5,
+			[]() { return war_GetGamepadCursorMagnetism(); },
+			[](int32_t newValue) { war_SetGamepadCursorMagnetism(newValue); }, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
 		auto optionInfo = OptionInfo("gamepad.stickDeadzone", N_("Stick Dead Zone"), "");
 		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
 		auto valueChanger = OptionsSlider::make(GAMEPAD_DEADZONE_MIN, GAMEPAD_DEADZONE_MAX, 1,

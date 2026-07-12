@@ -597,6 +597,7 @@ bool loadConfig()
 	war_SetGamepadCursorSpeed(iniGetInteger("gamepadCursorSpeed", GAMEPAD_CURSOR_SPEED_DEFAULT).value());
 	war_SetGamepadStickDeadzone(iniGetInteger("gamepadStickDeadzone", GAMEPAD_DEADZONE_DEFAULT).value());
 	war_SetGamepadTriggerThreshold(iniGetInteger("gamepadTriggerThreshold", GAMEPAD_TRIGGER_THRESHOLD_DEFAULT).value());
+	war_SetGamepadCursorMagnetism(iniGetInteger("gamepadCursorMagnetism", GAMEPAD_MAGNETISM_DEFAULT).value());
 	war_SetGamepadInvertRightStick(iniGetBool("gamepadInvertRightStick", false).value());
 	war_SetGamepadSwapSticks(iniGetBool("gamepadSwapSticks", false).value());
 	war_SetGamepadShowLayoutOnConnect(iniGetBool("gamepadShowLayoutOnConnect", true).value());
@@ -872,6 +873,7 @@ bool saveConfig()
 	iniSetInteger("gamepadCursorSpeed", war_GetGamepadCursorSpeed());
 	iniSetInteger("gamepadStickDeadzone", war_GetGamepadStickDeadzone());
 	iniSetInteger("gamepadTriggerThreshold", war_GetGamepadTriggerThreshold());
+	iniSetInteger("gamepadCursorMagnetism", war_GetGamepadCursorMagnetism());
 	iniSetBool("gamepadInvertRightStick", war_GetGamepadInvertRightStick());
 	iniSetBool("gamepadSwapSticks", war_GetGamepadSwapSticks());
 	iniSetBool("gamepadShowLayoutOnConnect", war_GetGamepadShowLayoutOnConnect());
