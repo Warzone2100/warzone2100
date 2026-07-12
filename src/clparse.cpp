@@ -356,6 +356,9 @@ typedef enum
 	CLI_AUTOHOST,
 	CLI_AUTOHEADLESS,
 	CLI_MOVEMENTBENCH,
+	CLI_MOVEMENTSEED,
+	CLI_MOVEMENTARRANGE,
+	CLI_MOVEMENTWATCH,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
@@ -462,6 +465,9 @@ static const struct poptOption *getOptionsTable()
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
 		{ "movementbench", POPT_ARG_STRING, CLI_MOVEMENTBENCH,   N_("Run the named deterministic movement benchmark scenario and quit"), N_("scenario") },
+		{ "movementbenchwatch", POPT_ARG_STRING, CLI_MOVEMENTWATCH,   N_("Run a movement benchmark scenario on screen at normal speed"), N_("scenario") },
+		{ "movementseed", POPT_ARG_STRING, CLI_MOVEMENTSEED,   N_("Override the benchmark scenario seed"), N_("seed") },
+		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1209,6 +1215,42 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_AUTOHEADLESS:
 			wz_cli_headless = true;
 			setHeadlessGameMode(true);
+			break;
+
+		case CLI_MOVEMENTWATCH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench scenario name");
+			}
+			if (!movementBenchSelectScenario(token))
+			{
+				qFatal("Unknown movement bench scenario: %s", token);
+			}
+			// Same scenario setup as the benchmark, but keeps its window and
+			// runs at normal speed so it can be followed.
+			movementBenchSetWatching();
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = movementBenchTestConfig();
+			wz_autogame = true;
+			break;
+
+		case CLI_MOVEMENTSEED:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench seed");
+			}
+			movementBenchSetSeed((uint32_t)strtoul(token, nullptr, 0));
+			break;
+
+		case CLI_MOVEMENTARRANGE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench arrangement index");
+			}
+			movementBenchSetArrangement((uint32_t)strtoul(token, nullptr, 0));
 			break;
 
 		case CLI_MOVEMENTBENCH:

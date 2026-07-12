@@ -34,7 +34,7 @@ function eventStartLevel()
 
 	// Defenders plug the 2-wide gap across all three wall rows. They must be
 	// heavy-bodied to actually seal it - see the roster note on clearance.
-	benchSpawnBlock(DEFENDER, "heavytruck", X_GAP - 1, Y_WALL, 2, +1, N_DEFEND);
+	benchSpawnFixed(DEFENDER, "heavytruck", X_GAP - 1, Y_WALL, 2, +1, N_DEFEND);
 
 	var attackers = benchSpawnBlock(ATTACKER, "truck", X_GAP - 2, Y_NORTH, 4, -1, N_ATTACK);
 	hackNetOn();

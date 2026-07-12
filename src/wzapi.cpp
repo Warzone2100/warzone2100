@@ -44,6 +44,7 @@
 #include "map.h"
 #include "mission.h"
 #include "campaigninfo.h"
+#include "movebench.h"
 #include "move.h"
 #include "order.h"
 #include "transporter.h"
@@ -666,6 +667,17 @@ bool wzapi::restoreLimboMissionData(WZAPI_NO_PARAMS)
 uint32_t wzapi::getMultiTechLevel(WZAPI_NO_PARAMS)
 {
 	return game.techLevel;
+}
+
+//-- ## benchArrangement()
+//--
+//-- Returns the arrangement index for a movement benchmark run, or 0 outside
+//-- one. Bench scenarios use it to vary where their spawn blocks are placed, so
+//-- a cell can be run as an enumerated family rather than a single layout.
+//--
+uint32_t wzapi::benchArrangement(WZAPI_NO_PARAMS)
+{
+	return movementBenchArrangement();
 }
 
 //-- ## setCampaignNumber(campaignNumber)

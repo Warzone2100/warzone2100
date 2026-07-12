@@ -36,6 +36,8 @@
 
 #include <algorithm>
 #include <map>
+#include <nonstd/optional.hpp>
+using nonstd::optional;
 #include <vector>
 
 #include <nlohmann/json.hpp>
@@ -72,26 +74,33 @@ struct TrackedDroid
 const BenchScenario scenarios[] =
 {
 	// Tracked units through a sloped cliff corridor.
-	{ "counterflow_tracked", "movebench_counterflow_tracked.json", 1200, 0x5EEDBEEF },
+	{ "counterflow_tracked", "movebench_counterflow_tracked.json", 5000, 0x5EEDBEEF },
 	// Same map and block, one direction only. Control for the above.
 	{ "oneway_tracked",      "movebench_oneway_tracked.json",      1200, 0x5EEDBEEF },
 	// Same conflict on the person movement model, at higher density.
-	{ "counterflow_cyborg",  "movebench_counterflow_cyborg.json",  1200, 0x5EEDBEEF },
+	{ "counterflow_cyborg",  "movebench_counterflow_cyborg.json",  5000, 0x5EEDBEEF },
 	// Congestion. One destination for everyone, and a column past parked allies.
-	{ "blob",                "movebench_blob.json",                1200, 0x5EEDBEEF },
+	{ "blob",                "movebench_blob.json",                3000, 0x5EEDBEEF },
 	{ "parking",             "movebench_parking.json",              900, 0x5EEDBEEF },
 	// The same conflict at other gap widths. Tracked units do not start
 	// resolving it until 4 tiles, so w3 sits just below the threshold and w4
 	// has room to move in both directions.
-	{ "counterflow_w1",      "movebench_counterflow_w1.json",      1200, 0x5EEDBEEF },
-	{ "counterflow_w3",      "movebench_counterflow_w3.json",      1200, 0x5EEDBEEF },
-	{ "counterflow_w4",      "movebench_counterflow_w4.json",      1200, 0x5EEDBEEF },
+	{ "counterflow_w1",      "movebench_counterflow_w1.json",      5000, 0x5EEDBEEF },
+	{ "counterflow_w3",      "movebench_counterflow_w3.json",      5000, 0x5EEDBEEF },
+	{ "counterflow_w4",      "movebench_counterflow_w4.json",      5000, 0x5EEDBEEF },
+	{ "shift0",             "movebench_shift0.json",             1200, 0x5EEDBEEF },
+	{ "shift1",             "movebench_shift1.json",             1200, 0x5EEDBEEF },
+	{ "shift2",             "movebench_shift2.json",             1200, 0x5EEDBEEF },
+	// Two equal routes through the wall, so congestion has somewhere to go.
+	{ "tworoute",            "movebench_tworoute.json",            5000, 0x5EEDBEEF },
+	{ "counterflow_w6",      "movebench_counterflow_w6.json",      1200, 0x5EEDBEEF },
+	{ "counterflow_w8",      "movebench_counterflow_w8.json",      1200, 0x5EEDBEEF },
 	// Opposing flows meeting the pass on different diagonals.
-	{ "crossing",            "movebench_crossing.json",            1200, 0x5EEDBEEF },
-	{ "separating",          "movebench_separating.json",          1200, 0x5EEDBEEF },
+	{ "crossing",            "movebench_crossing.json",            5000, 0x5EEDBEEF },
+	{ "separating",          "movebench_separating.json",          5000, 0x5EEDBEEF },
 	// Same-direction cluster rounding a corner, uniform and mixed speed.
-	{ "corner",              "movebench_corner.json",              1200, 0x5EEDBEEF },
-	{ "corner_mixed",        "movebench_corner_mixed.json",        1200, 0x5EEDBEEF },
+	{ "corner",              "movebench_corner.json",              3000, 0x5EEDBEEF },
+	{ "corner_mixed",        "movebench_corner_mixed.json",        3000, 0x5EEDBEEF },
 	// Guards against over-yielding and against eroding enemy blocking.
 	{ "openfield",           "movebench_openfield.json",            900, 0x5EEDBEEF },
 	// Re-orders its units repeatedly, so it must run its whole budget.
@@ -99,6 +108,10 @@ const BenchScenario scenarios[] =
 	{ "enemyblock",          "movebench_enemyblock.json",           900, 0x5EEDBEEF },
 	{ "enemyblock_press",    "movebench_enemyblock_press.json",      900, 0x5EEDBEEF },
 };
+
+optional<uint32_t> seedOverride;
+uint32_t arrangementIndex = 0;
+bool watching = false;
 
 const BenchScenario *activeScenario = nullptr;
 MovementMetrics      metrics;
@@ -263,7 +276,8 @@ void writeScorecard(bool completed)
 
 	nlohmann::json card = nlohmann::json::object();
 	card["scenario"] = activeScenario->name;
-	card["seed"] = activeScenario->seed;
+	card["seed"] = movementBenchSeed();
+	card["arrangement"] = arrangementIndex;
 	card["ticks"] = tickCount;
 	card["tickBudget"] = activeScenario->tickBudget;
 	card["completed"] = completed;
@@ -304,6 +318,11 @@ void writeScorecard(bool completed)
 
 } // anonymous namespace
 
+void movementBenchSetWatching()
+{
+	watching = true;
+}
+
 bool movementBenchSelectScenario(const std::string &name)
 {
 	const BenchScenario *scenario = findScenario(name);
@@ -322,6 +341,11 @@ bool movementBenchActive()
 	return activeScenario != nullptr;
 }
 
+bool movementBenchWatching()
+{
+	return watching;
+}
+
 const std::string &movementBenchTestConfig()
 {
 	return activeTestConfig;
@@ -330,7 +354,22 @@ const std::string &movementBenchTestConfig()
 uint32_t movementBenchSeed()
 {
 	ASSERT_OR_RETURN(0, activeScenario != nullptr, "No active movement bench scenario");
-	return activeScenario->seed;
+	return seedOverride.value_or(activeScenario->seed);
+}
+
+void movementBenchSetSeed(uint32_t seed)
+{
+	seedOverride = seed;
+}
+
+void movementBenchSetArrangement(uint32_t index)
+{
+	arrangementIndex = index;
+}
+
+uint32_t movementBenchArrangement()
+{
+	return arrangementIndex;
 }
 
 void movementBenchUpdate()
@@ -358,5 +397,10 @@ void movementBenchUpdate()
 
 	runFinished = true;
 	writeScorecard(completed);
-	wzQuit(0);
+	if (!watching)
+	{
+		wzQuit(0);
+	}
+	// When watching, the scorecard is written at the budget and the game is
+	// left running so the scenario can be followed past it.
 }

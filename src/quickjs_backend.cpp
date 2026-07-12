@@ -3853,6 +3853,7 @@ IMPL_JS_FUNC(transformPlayerToSpectator, wzapi::transformPlayerToSpectator)
 IMPL_JS_FUNC(isSpectator, wzapi::isSpectator)
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
+IMPL_JS_FUNC(benchArrangement, wzapi::benchArrangement)
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
 IMPL_JS_FUNC(getMissionType, wzapi::getMissionType)
 IMPL_JS_FUNC(getRevealStatus, wzapi::getRevealStatus)
@@ -4067,6 +4068,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(useSafetyTransport, 1); // WZAPI
 	JS_REGISTER_FUNC(restoreLimboMissionData, 0); // WZAPI
 	JS_REGISTER_FUNC(getMultiTechLevel, 0); // WZAPI
+	JS_REGISTER_FUNC(benchArrangement, 0); // WZAPI
 	JS_REGISTER_FUNC(setCampaignNumber, 1); // WZAPI
 	JS_REGISTER_FUNC(getMissionType, 0); // WZAPI
 	JS_REGISTER_FUNC(getRevealStatus, 0); // WZAPI

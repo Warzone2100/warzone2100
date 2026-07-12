@@ -56,6 +56,9 @@ struct MovementMetrics
 /// Non-null only while a bench scenario is running.
 extern MovementMetrics *g_moveMetrics;
 
+/// Marks this run as one to watch rather than benchmark.
+void movementBenchSetWatching();
+
 /// Selects the scenario to run. Returns false if the name is not a known scenario.
 bool movementBenchSelectScenario(const std::string &name);
 
@@ -67,6 +70,22 @@ const std::string &movementBenchTestConfig();
 
 /// Fixed seed for the synchronised RNG, so a run is reproducible.
 uint32_t movementBenchSeed();
+
+/// True when the scenario is being watched rather than benchmarked. The run
+/// keeps its window, runs at normal speed, and does not quit at the budget.
+bool movementBenchWatching();
+
+/// Selects which arrangement of a scenario to run. Scenarios read this through
+/// benchArrangement() to place their spawn blocks, so the small space of
+/// arrangements can be enumerated instead of sampled through an RNG that
+/// scatters unevenly and collides.
+void movementBenchSetArrangement(uint32_t index);
+
+/// The arrangement selected for this run. Zero means the nominal layout.
+uint32_t movementBenchArrangement();
+
+/// Overrides the scenario's fixed seed, to gauge how sensitive a result is.
+void movementBenchSetSeed(uint32_t seed);
 
 /// Samples sim state and ends the run once complete. Called once per game state update.
 void movementBenchUpdate();

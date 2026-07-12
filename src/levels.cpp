@@ -41,6 +41,7 @@
 #include "objects.h"
 #include "hci.h"
 #include "levels.h"
+#include "movebench.h"
 #include "map.h"
 #include "mission.h"
 #include "levelint.h"
@@ -1388,7 +1389,8 @@ static LoadingTask<> levFinalizeLevelLoad(ResourceLoadingController& controller,
 
 	if (autogame_enabled() && getHostLaunch() != HostLaunch::LoadReplay)
 	{
-		gameTimeSetMod(Rational(500));
+		// Watched bench runs are meant to be followed, so they keep normal speed.
+		gameTimeSetMod(Rational(movementBenchWatching() ? 1 : 500));
 		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 		{
 			if (selectedPlayer < MAX_PLAYERS && !NetPlay.players[selectedPlayer].isSpectator)
