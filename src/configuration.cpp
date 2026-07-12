@@ -599,6 +599,8 @@ bool loadConfig()
 	war_SetGamepadTriggerThreshold(iniGetInteger("gamepadTriggerThreshold", GAMEPAD_TRIGGER_THRESHOLD_DEFAULT).value());
 	war_SetGamepadInvertRightStick(iniGetBool("gamepadInvertRightStick", false).value());
 	war_SetGamepadSwapSticks(iniGetBool("gamepadSwapSticks", false).value());
+	war_SetGamepadShowLayoutOnConnect(iniGetBool("gamepadShowLayoutOnConnect", true).value());
+	war_SetGamepadLayoutSeenDevices(iniGetString("gamepadLayoutSeenDevices", "").value());
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -872,6 +874,8 @@ bool saveConfig()
 	iniSetInteger("gamepadTriggerThreshold", war_GetGamepadTriggerThreshold());
 	iniSetBool("gamepadInvertRightStick", war_GetGamepadInvertRightStick());
 	iniSetBool("gamepadSwapSticks", war_GetGamepadSwapSticks());
+	iniSetBool("gamepadShowLayoutOnConnect", war_GetGamepadShowLayoutOnConnect());
+	iniSetString("gamepadLayoutSeenDevices", war_GetGamepadLayoutSeenDevices());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());

@@ -31,4 +31,8 @@ void closeGamepadLayoutScreen();
 
 bool isGamepadLayoutScreenUp();
 
+// Shows the layout once per controller model when one connects, called each
+// frame from the main loop. Gated on the show-on-connect setting
+void gamepadLayoutMaybeAutoShow();
+
 #endif // __INCLUDED_SRC_SCREENS_GAMEPADLAYOUTSCREEN_H__

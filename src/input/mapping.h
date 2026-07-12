@@ -75,6 +75,11 @@ public:
 
 	void clear(nonstd::optional<KeyMappingType> filter = nonstd::nullopt);
 
+	bool empty() const
+	{
+		return keyMappings.empty();
+	}
+
 	// I/O
 public:
 	/* Loads the key mappings from disk */

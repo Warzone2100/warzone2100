@@ -560,6 +560,19 @@ const char* gamepadDeviceName()
 	return name ? name : "";
 }
 
+const char* gamepadDeviceGUID()
+{
+	static char guidString[33] = {0};
+	SDL_Gamepad* pad = displayGamepadHandle();
+	if (!pad)
+	{
+		return "";
+	}
+	const SDL_GUID guid = SDL_GetJoystickGUIDForID(SDL_GetGamepadID(pad));
+	SDL_GUIDToString(guid, guidString, sizeof(guidString));
+	return guidString;
+}
+
 bool gamepadGetButtonGlyph(GAMEPAD_INPUT button, unsigned int size, std::vector<unsigned char>& outRGBA, unsigned int& outWidth, unsigned int& outHeight)
 {
 	if (!ensureGlyphData())

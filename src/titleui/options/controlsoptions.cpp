@@ -27,6 +27,7 @@
 #include "../../warzoneconfig.h"
 #include "../../keybind.h"
 #include "../../display.h"
+#include "../../screens/gamepadlayoutscreen.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/gamepad_input.h"
 #include "lib/sound/audio.h"
@@ -1506,6 +1507,36 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 			},
 			[](const auto& newValue) -> bool { war_SetGamepadSwapSticks(newValue); return true; }, true
 		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.showLayoutOnConnect", N_("Show Layout On Connect"), N_("Show the controller layout overlay the first time a controller model is connected"));
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_GetGamepadShowLayoutOnConnect());
+				return result;
+			},
+			[](const auto& newValue) -> bool { war_SetGamepadShowLayoutOnConnect(newValue); return true; }, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.viewLayout", N_("Controller Layout"), N_("View the connected controller's layout and current bindings"));
+		optionInfo.addAvailabilityCondition(GamepadIsConnectedAvailability);
+		auto valueChanger = OptionsButton::make(
+			[](OptionsButton& but) {
+				but.setString(_("View Controller Layout"));
+			}, false
+		);
+		valueChanger->addOnClickHandler([](W_BUTTON&) {
+			showGamepadLayoutScreen();
+		});
 		result->addOption(optionInfo, valueChanger, true);
 	}
 
