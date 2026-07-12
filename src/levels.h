@@ -60,6 +60,7 @@ enum class LEVEL_TYPE : uint8_t
 
 	CAMPAIGN = 12,
 	SKIRMISH = 14,
+	SKIRMISH_HIDDEN = 15,           ///< loads like SKIRMISH but is excluded from map-list enumeration, so it resolves by name only (benchmark maps)
 	MULTI_SKIRMISH2 = 18,
 	MULTI_SKIRMISH3 = 19,
 	MULTI_SKIRMISH4 = 20

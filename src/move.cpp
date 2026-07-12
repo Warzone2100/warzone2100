@@ -60,6 +60,7 @@
 #include "steering/steering.h"
 #include "steering/collision_avoidance_behavior.h"
 #include "combat.h"
+#include "movebench.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
@@ -863,9 +864,17 @@ bool moveBlocked(DROID *psDroid)
 		{
 			objTrace(psDroid->id, "Trying to reroute to (%d,%d)", psDroid->sMove.destination.x, psDroid->sMove.destination.y);
 			moveDroidTo(psDroid, psDroid->sMove.destination.x, psDroid->sMove.destination.y);
+			if (g_moveMetrics)
+			{
+				g_moveMetrics->repaths++;
+			}
 			return false;
 		}
 
+		if (g_moveMetrics)
+		{
+			g_moveMetrics->giveUps++;
+		}
 		return true;
 	}
 
@@ -1277,6 +1286,10 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				*pmx = 0;
 				*pmy = 0;
 				psObst = nullptr;
+				if (g_moveMetrics)
+				{
+					g_moveMetrics->hardStops++;
+				}
 				break;
 			}
 			else
@@ -1291,10 +1304,18 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 					psDroid->sMove.pauseTime = 0;
 					psDroid->sMove.bumpPos = psDroid->pos;
 					psDroid->sMove.bumpDir = psDroid->rot.direction;
+					if (g_moveMetrics)
+					{
+						g_moveMetrics->bumps++;
+					}
 				}
 				else
 				{
 					psDroid->sMove.lastBump = (UWORD)(gameTime - psDroid->sMove.bumpTime);
+					if (g_moveMetrics)
+					{
+						g_moveMetrics->bumpsRepeat++;
+					}
 				}
 
 				// tell inactive droids to get out the way

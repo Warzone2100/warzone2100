@@ -43,6 +43,7 @@
 #include "loadsave.h"
 #include "main.h"
 #include "modding.h"
+#include "movebench.h"
 #include "multiplay.h"
 #include "version.h"
 #include "warzoneconfig.h"
@@ -354,6 +355,7 @@ typedef enum
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
 	CLI_AUTOHEADLESS,
+	CLI_MOVEMENTBENCH,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
@@ -459,6 +461,7 @@ static const struct poptOption *getOptionsTable()
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
+		{ "movementbench", POPT_ARG_STRING, CLI_MOVEMENTBENCH,   N_("Run the named deterministic movement benchmark scenario and quit"), N_("scenario") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1204,6 +1207,25 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_AUTOHEADLESS:
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
+			break;
+
+		case CLI_MOVEMENTBENCH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad movement bench scenario name");
+			}
+			if (!movementBenchSelectScenario(token))
+			{
+				qFatal("Unknown movement bench scenario: %s", token);
+			}
+			// The bench runs as an autostarted headless skirmish, so it reuses the
+			// existing --skirmish plumbing rather than adding a launch path.
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = movementBenchTestConfig();
+			wz_autogame = true;
 			wz_cli_headless = true;
 			setHeadlessGameMode(true);
 			break;
