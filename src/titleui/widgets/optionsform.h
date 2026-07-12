@@ -107,6 +107,41 @@ private:
 	bool needsStateUpdates;
 };
 
+class OptionsButton : public W_BUTTON, public OptionValueChangerInterface
+{
+protected:
+	OptionsButton();
+public:
+	typedef std::function<void(OptionsButton&)> UpdateButtonFunc;
+public:
+	static std::shared_ptr<OptionsButton> make(UpdateButtonFunc updateButtonFunc, bool needsStateUpdates);
+
+	void setString(WzString string) override;
+	void setFont(iV_fonts font);
+
+	void display(int xOffset, int yOffset) override;
+	void geometryChanged() override;
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+
+	void update(bool force) override;
+	void informAvailable(bool isAvailable) override;
+	void addOnChangeHandler(std::function<void(WIDGET&)> handler) override;
+
+private:
+	WzCachedText wzText;
+	iV_fonts FontID = font_regular;
+	PIELIGHT bindingColor = WZCOL_FORM_TEXT;
+	PIELIGHT highlightBackgroundColor;
+	int32_t cachedIdealTextWidth = 0;
+	int32_t lastWidgetWidth = 0;
+	int verticalPadding = 10;
+	int horizontalPadding = 14;
+	bool isTruncated = false;
+	UpdateButtonFunc updateButtonFunc;
+	bool needsStateUpdates;
+};
+
 class WzOptionsChoiceWidget : public WIDGET
 {
 protected:
