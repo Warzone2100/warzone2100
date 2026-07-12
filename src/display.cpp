@@ -684,6 +684,133 @@ std::unique_ptr<ValueTracker> panXTracker = std::make_unique<ValueTracker>();
 std::unique_ptr<ValueTracker> panZTracker = std::make_unique<ValueTracker>();
 bool panActive;
 
+// Feeds the virtual cursor's attraction target - the interactive object
+// nearest the cursor, favoring ones ahead of the stick's motion and never
+// ones behind it
+static void updateGamepadCursorMagnet()
+{
+	if (!isGamepadActiveInput() || war_GetGamepadCursorMagnetism() == 0 || selectedPlayer >= MAX_PLAYERS)
+	{
+		return;
+	}
+	// never tug the cursor during drags or structure placement - the
+	// synthetic click check catches double-click presses, which age out of
+	// the mouse state while the button remains held
+	if (mouseDown(MOUSE_LMB) || mouseDown(MOUSE_RMB) || gamepadSyntheticClickHeld() || tryingToGetLocation())
+	{
+		return;
+	}
+
+	// screen-space sizes shrink as the view zooms out, so the reach follows
+	// the current zoom to feel consistent at any view distance
+	const float zoomScale = std::clamp((float)STARTDISTANCE / getViewDistance(), 0.6f, 2.f);
+	const float captureRange = 64.f * zoomScale;
+	const float tileScreenSize = 64.f * zoomScale;
+	const float fallbackScreenRadius = 24.f * zoomScale;
+	// all else being equal, prefer droids over structures and features
+	const float nonDroidScoreBias = 12.f;
+	const float cursorX = (float)mouseX();
+	const float cursorY = (float)mouseY();
+	const float moveX = gamepadAxis(GPAD_AXIS_LEFT_X);
+	const float moveY = gamepadAxis(GPAD_AXIS_LEFT_Y);
+	const float moveMagnitude = std::sqrt(moveX * moveX + moveY * moveY);
+	const bool haveDirection = moveMagnitude > 0.01f;
+
+	BASE_OBJECT* bestObject = nullptr;
+	float bestScore = 0.f;
+	int bestRadius = 0;
+
+	const auto considerObject = [&](BASE_OBJECT* psObj, float screenRadius, float scoreBias) {
+		if (!psObj->visibleForLocalDisplay() || !DrawnInLastFrame(psObj->sDisplay.frameNumber))
+		{
+			return;
+		}
+		const float dx = (float)psObj->sDisplay.screenX - cursorX;
+		const float dy = (float)psObj->sDisplay.screenY - cursorY;
+		const float distance = std::sqrt(dx * dx + dy * dy);
+		// score by distance to the object's edge so large footprints compete
+		// fairly with small ones
+		const float edgeDistance = std::max(0.f, distance - screenRadius);
+		if (edgeDistance > captureRange)
+		{
+			return;
+		}
+		float score = edgeDistance + scoreBias;
+		if (haveDirection && distance > 1.f)
+		{
+			const float alongMotion = ((dx * moveX) + (dy * moveY)) / (distance * moveMagnitude);
+			if (alongMotion < -0.2f)
+			{
+				return;
+			}
+			score *= (2.f - alongMotion);
+		}
+		if (!bestObject || score < bestScore)
+		{
+			bestObject = psObj;
+			bestScore = score;
+			bestRadius = (int)screenRadius;
+		}
+	};
+
+	// droids pick by their screen box, matching itemUnderMouse
+	for (unsigned int player = 0; player < MAX_PLAYERS; ++player)
+	{
+		for (DROID* psDroid : gameWorld.objects.droids[player])
+		{
+			const float screenRadius = (psDroid->sDisplay.screenR > 0) ? (float)psDroid->sDisplay.screenR : fallbackScreenRadius;
+			considerObject(psDroid, screenRadius, 0.f);
+		}
+	}
+
+	// structures and features pick by tile occupancy, so discover them from
+	// the tiles around the cursor the same way, with the reach radius derived
+	// from their footprint
+	for (int tileDY = -2; tileDY <= 2; ++tileDY)
+	{
+		for (int tileDX = -2; tileDX <= 2; ++tileDX)
+		{
+			const int tileX = mouseTileX + tileDX;
+			const int tileY = mouseTileY + tileDY;
+			if (tileX < 0 || tileY < 0 || tileX > (int)(gameWorld.map.width - 1) || tileY > (int)(gameWorld.map.height - 1))
+			{
+				continue;
+			}
+			BASE_OBJECT* psOccupier = getTileOccupier(gameWorld.map, tileX, tileY);
+			if (!psOccupier)
+			{
+				continue;
+			}
+			int footprintTiles = 1;
+			if (psOccupier->type == OBJ_STRUCTURE)
+			{
+				const STRUCTURE_STATS* psStats = ((STRUCTURE*)psOccupier)->pStructureType;
+				footprintTiles = MAX(psStats->baseWidth, psStats->baseBreadth);
+			}
+			else if (psOccupier->type == OBJ_FEATURE)
+			{
+				const FEATURE_STATS* psStats = ((FEATURE*)psOccupier)->psStats;
+				if (psStats->subType != FEAT_OIL_RESOURCE && psStats->subType != FEAT_GEN_ARTE && psStats->subType != FEAT_OIL_DRUM)
+				{
+					continue;
+				}
+				footprintTiles = MAX(psStats->baseWidth, psStats->baseBreadth);
+			}
+			else
+			{
+				continue;
+			}
+			const float screenRadius = 0.5f * tileScreenSize * (float)MAX(footprintTiles, 1);
+			considerObject(psOccupier, screenRadius, nonDroidScoreBias);
+		}
+	}
+
+	if (bestObject)
+	{
+		gamepadSetCursorMagnetTarget(bestObject->sDisplay.screenX, bestObject->sDisplay.screenY, bestRadius);
+	}
+}
+
 //don't want to do any of these whilst in the Intelligence Screen
 void processMouseClickInput()
 {
@@ -1035,6 +1162,8 @@ void processMouseClickInput()
 			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
 		}
 	}
+
+	updateGamepadCursorMagnet();
 }
 
 void processGestureInput()
