@@ -46,6 +46,17 @@
 static const float GAMEPAD_SCROLL_SPEED = 18.f;
 // Cursor speed multiplier while the left stick is clicked in
 static const float GAMEPAD_CURSOR_PRECISION_FACTOR = 0.5f;
+// Cursor magnetism tuning. The assist reaches full strength below the first
+// deflection and fades to nothing at the second, so full-tilt travel across
+// other objects is never slowed or pulled
+static const float GAMEPAD_MAGNET_FULL_ASSIST_DEFLECTION = 0.4f;
+static const float GAMEPAD_MAGNET_NO_ASSIST_DEFLECTION = 0.85f;
+static const float GAMEPAD_MAGNET_MAX_FRICTION = 0.45f;
+static const float GAMEPAD_MAGNET_MAX_PULL_FRACTION = 0.5f;
+static const float GAMEPAD_MAGNET_CAPTURE_SLACK = 24.f;
+static const float GAMEPAD_MAGNET_SETTLE_RADIUS = 20.f;
+static const float GAMEPAD_MAGNET_SETTLE_SPEED = 280.f;
+static const uint32_t GAMEPAD_MAGNET_SETTLE_WINDOW_MS = 250;
 // Press threshold for the synthesized stick-direction buttons - triggers use
 // the configured threshold instead
 static const float GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD = 0.5f;
@@ -98,6 +109,19 @@ void gamepadSetCaptureMode(bool enabled)
 bool gamepadInCaptureMode()
 {
 	return captureModeActive;
+}
+
+static bool magnetTargetFresh = false;
+static float magnetTargetX = 0.f;
+static float magnetTargetY = 0.f;
+static float magnetTargetRadius = 0.f;
+
+void gamepadSetCursorMagnetTarget(int screenX, int screenY, int screenRadius)
+{
+	magnetTargetFresh = true;
+	magnetTargetX = (float)screenX;
+	magnetTargetY = (float)screenY;
+	magnetTargetRadius = (float)std::max(screenRadius, 1);
 }
 
 static void markGamepadActive()
@@ -691,10 +715,30 @@ static void updateVirtualCursor(float dt)
 
 	const float deflectionX = aGamepadAxisValues[GPAD_AXIS_LEFT_X];
 	const float deflectionY = aGamepadAxisValues[GPAD_AXIS_LEFT_Y];
-	if (deflectionX == 0.f && deflectionY == 0.f)
+	const float deflection = std::sqrt(deflectionX * deflectionX + deflectionY * deflectionY);
+	static uint32_t lastMovementTick = 0;
+
+	const float magnetStrength = (float)war_GetGamepadCursorMagnetism() / 100.f;
+	const float targetDX = magnetTargetX - virtualCursorX;
+	const float targetDY = magnetTargetY - virtualCursorY;
+	const float targetDistance = std::sqrt(targetDX * targetDX + targetDY * targetDY);
+	const bool magnetUsable = magnetTargetFresh && magnetStrength > 0.f && targetDistance > 0.5f;
+
+	if (deflection == 0.f)
 	{
+		// glide onto a near target right after the stick releases, so slow
+		// acquisitions finish centered without the cursor ever being held
+		if (magnetUsable && targetDistance <= GAMEPAD_MAGNET_SETTLE_RADIUS
+			&& lastMovementTick != 0 && SDL_GetTicks() - lastMovementTick <= GAMEPAD_MAGNET_SETTLE_WINDOW_MS)
+		{
+			const float step = std::min(targetDistance, GAMEPAD_MAGNET_SETTLE_SPEED * dt);
+			virtualCursorX += (targetDX / targetDistance) * step;
+			virtualCursorY += (targetDY / targetDistance) * step;
+			inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
+		}
 		return;
 	}
+	lastMovementTick = (uint32_t)SDL_GetTicks();
 
 	float speed = (float)war_GetGamepadCursorSpeed();
 	if (actualButtonDown(GPAD_BTN_LEFT_STICK))
@@ -703,8 +747,34 @@ static void updateVirtualCursor(float dt)
 	}
 
 	// quadratic response gives finer control near the center
-	virtualCursorX += deflectionX * std::abs(deflectionX) * speed * dt;
-	virtualCursorY += deflectionY * std::abs(deflectionY) * speed * dt;
+	float velX = deflectionX * std::abs(deflectionX) * speed;
+	float velY = deflectionY * std::abs(deflectionY) * speed;
+
+	if (magnetUsable)
+	{
+		const float assistWeight = magnetStrength * std::clamp((GAMEPAD_MAGNET_NO_ASSIST_DEFLECTION - deflection) / (GAMEPAD_MAGNET_NO_ASSIST_DEFLECTION - GAMEPAD_MAGNET_FULL_ASSIST_DEFLECTION), 0.f, 1.f);
+		const float captureRange = magnetTargetRadius + GAMEPAD_MAGNET_CAPTURE_SLACK;
+		// motion away from the target releases the assist entirely, so small
+		// nudges escape without fighting the friction
+		const bool movingToward = (velX * targetDX + velY * targetDY) > 0.f;
+		if (assistWeight > 0.f && movingToward && targetDistance < captureRange)
+		{
+			// slow over the target and bend the path toward it - the pull is
+			// capped well below the commanded speed, so it can never stop or
+			// reverse the stick's motion
+			const float proximity = 1.f - (targetDistance / captureRange);
+			const float frictionScale = 1.f - GAMEPAD_MAGNET_MAX_FRICTION * assistWeight * proximity;
+			velX *= frictionScale;
+			velY *= frictionScale;
+			const float commandedSpeed = std::sqrt(velX * velX + velY * velY);
+			const float pullSpeed = commandedSpeed * GAMEPAD_MAGNET_MAX_PULL_FRACTION * assistWeight * proximity;
+			velX += (targetDX / targetDistance) * pullSpeed;
+			velY += (targetDY / targetDistance) * pullSpeed;
+		}
+	}
+
+	virtualCursorX += velX * dt;
+	virtualCursorY += velY * dt;
 	virtualCursorX = std::clamp(virtualCursorX, 0.f, (float)(screenWidth > 0 ? screenWidth - 1 : 0));
 	virtualCursorY = std::clamp(virtualCursorY, 0.f, (float)(screenHeight > 0 ? screenHeight - 1 : 0));
 
@@ -903,6 +973,9 @@ void wzGamepadUpdate()
 	updateVirtualCursor(dt);
 	updateRightStickScroll(dt);
 	updateSyntheticInput();
+
+	// the magnet target is only valid for the frame it was set in
+	magnetTargetFresh = false;
 }
 
 static void ageButtonStates(INPUT_STATE* states)
@@ -979,5 +1052,6 @@ void wzGamepadResetInputState()
 	{
 		aGamepadAxisValues[i] = 0.f;
 	}
+	magnetTargetFresh = false;
 }
 

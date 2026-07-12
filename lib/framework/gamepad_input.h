@@ -88,6 +88,11 @@ bool gamepadRightStickConsumedByUI();
 // input still releases normally
 void gamepadSetCaptureMode(bool enabled);
 bool gamepadInCaptureMode();
+
+// Sets this frame's cursor attraction target in logical screen coordinates.
+// The target expires after the next cursor update, so callers refresh it
+// every frame it should apply
+void gamepadSetCursorMagnetTarget(int screenX, int screenY, int screenRadius);
 bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame
