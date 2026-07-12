@@ -554,6 +554,11 @@ void OptionsKeyBindingsEdit::updateLayout()
 		cachedIdealHeight = std::max(cachedIdealHeight, buttonIdealHeight);
 	}
 
+	if (numButtonsShown > 0)
+	{
+		// spacing goes between buttons only, so the widget hugs its content
+		cachedIdealWidth -= buttonSpacing;
+	}
 	cachedIdealWidth = std::max(cachedIdealWidth, minimumWidth);
 }
 
