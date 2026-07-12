@@ -259,11 +259,16 @@ struct WidgetMagnetTarget
 	int screenRadius;
 };
 
+// The screen containing the widget the mouse is currently over, or nullptr
+std::shared_ptr<W_SCREEN> widgGetMouseOverScreen();
+
 // Finds the best clickable widget near a screen point for the gamepad
 // cursor's attraction assist, searching the overlay screens and the given
-// base screen. Candidates ahead of the motion direction are favored and
-// ones behind it are excluded
-optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange);
+// base screen - or only onlyScreen when one is given. Candidates ahead of the
+// motion direction are favored and ones with a motion alignment below
+// minAlongMotion are excluded. Directed hops pass a tighter cone and skip the
+// widget already containing the point
+optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange, float minAlongMotion = -0.2f, bool excludeContainingPoint = false, const std::shared_ptr<W_SCREEN>& onlyScreen = nullptr);
 
 void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
