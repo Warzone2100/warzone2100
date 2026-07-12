@@ -37,6 +37,8 @@
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/screen.h"
 
+#include "../warzoneconfig.h"
+
 #include <array>
 #include <memory>
 #include <limits>
@@ -131,5 +133,29 @@ void gamepadCursorShutdown()
 	for (auto& texture : cursorTextures)
 	{
 		texture.reset();
+	}
+}
+
+void gamepadCursorUpdateWidgetMagnet()
+{
+	if (!isGamepadActiveInput() || war_GetGamepadCursorMagnetism() == 0 || gamepadInCaptureMode())
+	{
+		return;
+	}
+	// never tug the cursor while a button is held, e.g. dragging a slider -
+	// the synthetic click check catches double-click presses, which age out
+	// of the mouse state while the button remains held
+	if (mouseDown(MOUSE_LMB) || mouseDown(MOUSE_RMB) || gamepadSyntheticClickHeld())
+	{
+		return;
+	}
+
+	// walk the screen currently processing input, so title screens hosting
+	// their own W_SCREEN attract the cursor too
+	const Vector2f moveDir(gamepadAxis(GPAD_AXIS_LEFT_X), gamepadAxis(GPAD_AXIS_LEFT_Y));
+	const auto target = widgFindGamepadCursorMagnetTarget(widgGetLastRunScreen(), Vector2i(mouseX(), mouseY()), moveDir, 48);
+	if (target.has_value())
+	{
+		gamepadSetCursorMagnetTarget(target->screenPos.x, target->screenPos.y, target->screenRadius);
 	}
 }
