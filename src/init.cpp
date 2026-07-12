@@ -51,6 +51,7 @@
 
 #include "input/manager.h"
 #include "input/gamepadcursor.h"
+#include "screens/gamepadlayoutscreen.h"
 #include "advvis.h"
 #include "atmos.h"
 #include "campaigninfo.h"
@@ -1176,6 +1177,7 @@ void systemShutdown()
 	debug(LOG_MAIN, "shutting down graphics subsystem");
 	levShutDown();
 	notificationsShutDown();
+	closeGamepadLayoutScreen();
 	gamepadCursorShutdown();
 	widgShutDown();
 	fpathShutdown();

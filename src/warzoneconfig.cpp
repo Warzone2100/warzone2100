@@ -67,6 +67,8 @@ struct WARZONE_GLOBALS
 	int gamepadTriggerThreshold = GAMEPAD_TRIGGER_THRESHOLD_DEFAULT;
 	bool gamepadInvertRightStick = false;
 	bool gamepadSwapSticks = false;
+	bool gamepadShowLayoutOnConnect = true;
+	std::string gamepadLayoutSeenDevices;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -289,6 +291,26 @@ void war_SetGamepadSwapSticks(bool swapped)
 bool war_GetGamepadSwapSticks()
 {
 	return warGlobs.gamepadSwapSticks;
+}
+
+void war_SetGamepadShowLayoutOnConnect(bool enabled)
+{
+	warGlobs.gamepadShowLayoutOnConnect = enabled;
+}
+
+bool war_GetGamepadShowLayoutOnConnect()
+{
+	return warGlobs.gamepadShowLayoutOnConnect;
+}
+
+void war_SetGamepadLayoutSeenDevices(const std::string& deviceGUIDs)
+{
+	warGlobs.gamepadLayoutSeenDevices = deviceGUIDs;
+}
+
+const std::string& war_GetGamepadLayoutSeenDevices()
+{
+	return warGlobs.gamepadLayoutSeenDevices;
 }
 
 void war_SetVsync(int value)

@@ -110,6 +110,10 @@ const char* gamepadButtonName(GAMEPAD_INPUT button);
 // Name of the connected controller, or an empty string with none present
 const char* gamepadDeviceName();
 
+// Stable GUID string identifying the connected controller model, or an empty
+// string with none present
+const char* gamepadDeviceGUID();
+
 // Renders a glyph image for a button on the connected controller into tightly
 // packed RGBA pixels. Stick-direction buttons render the whole stick and the
 // triggers render their trigger art. Returns false when no glyph is available

@@ -39,6 +39,7 @@
 #include "../input/manager.h"
 #include "../input/keyconfig.h"
 #include "../warzoneconfig.h"
+#include "../loop.h"
 
 #include <limits>
 #include <cstring>
@@ -807,4 +808,53 @@ void closeGamepadLayoutScreen()
 bool isGamepadLayoutScreenUp()
 {
 	return gamepadLayoutScreen != nullptr;
+}
+
+void gamepadLayoutMaybeAutoShow()
+{
+	if (!war_GetGamepadShowLayoutOnConnect() || !gamepadIsConnected() || isGamepadLayoutScreenUp())
+	{
+		return;
+	}
+	if (loop_GetVideoStatus())
+	{
+		return;
+	}
+	// the keymap-driven labels are empty until the initial mappings load runs
+	// during frontend init, so hold off until then
+	if (gInputManager.cmappings().empty())
+	{
+		return;
+	}
+	const char* deviceGUID = gamepadDeviceGUID();
+	if (deviceGUID[0] == '\0')
+	{
+		return;
+	}
+	// once a device has been handled skip the seen-list copy and search below
+	static std::string handledGUID;
+	if (handledGUID == deviceGUID)
+	{
+		return;
+	}
+	const std::string& seen = war_GetGamepadLayoutSeenDevices();
+	if (seen.find(deviceGUID) != std::string::npos)
+	{
+		handledGUID = deviceGUID;
+		return;
+	}
+	// remember a bounded number of device models, dropping the oldest
+	std::string updated = seen.empty() ? deviceGUID : seen + "," + deviceGUID;
+	while (updated.size() > 512)
+	{
+		const size_t comma = updated.find(',');
+		if (comma == std::string::npos)
+		{
+			break;
+		}
+		updated.erase(0, comma + 1);
+	}
+	war_SetGamepadLayoutSeenDevices(updated);
+	handledGUID = deviceGUID;
+	showGamepadLayoutScreen();
 }
