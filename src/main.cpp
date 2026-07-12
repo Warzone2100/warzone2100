@@ -99,6 +99,7 @@
 #include "multiplay.h"
 #include "notifications.h"
 #include "screens/gamepadlayoutscreen.h"
+#include "input/gamepadcursor.h"
 #include "qtscript.h"
 #include "research.h"
 #include "seqdisp.h"
@@ -1335,6 +1336,7 @@ void mainLoop()
 	}
 
 	wzApplyCursor();
+	gamepadCursorUpdateWidgetMagnet();
 	gamepadLayoutMaybeAutoShow();
 	runNotifications();
 	wz_command_interface_process_queued_status_output();

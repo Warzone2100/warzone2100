@@ -28,4 +28,8 @@
 bool gamepadCursorInit();
 void gamepadCursorShutdown();
 
+// Feeds the cursor's attraction target from clickable widgets near the
+// cursor, called each frame from the main loop
+void gamepadCursorUpdateWidgetMagnet();
+
 #endif // __INCLUDED_SRC_INPUT_GAMEPADCURSOR_H__
