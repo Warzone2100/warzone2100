@@ -64,6 +64,10 @@ public:
 	unsigned getState() const override;
 	void setState(unsigned state) override;
 	void setFlash(bool enable) override;
+	bool isGamepadCursorMagnetTarget() const override
+	{
+		return (getState() & WBUT_DISABLE) == 0;
+	}
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setTip(std::string string) override;

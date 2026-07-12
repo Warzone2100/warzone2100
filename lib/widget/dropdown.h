@@ -98,6 +98,7 @@ public:
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void run(W_CONTEXT *) override;
 	void geometryChanged() override;
+	bool isGamepadCursorMagnetTarget() const override { return true; }
 	void open();
 	bool isOpen() const;
 	void close();

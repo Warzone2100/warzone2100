@@ -249,6 +249,22 @@ bool isMouseOverWheelScrollConsumingWidget(); // reflects the most recent widgRu
 bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
 void widgScheduleTask(std::function<void ()> f);
 
+// The base screen most recently passed to widgRunScreen - i.e. the screen
+// currently processing input - or nullptr if it no longer exists
+std::shared_ptr<W_SCREEN> widgGetLastRunScreen();
+
+struct WidgetMagnetTarget
+{
+	Vector2i screenPos;
+	int screenRadius;
+};
+
+// Finds the best clickable widget near a screen point for the gamepad
+// cursor's attraction assist, searching the overlay screens and the given
+// base screen. Candidates ahead of the motion direction are favored and
+// ones behind it are excluded
+optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange);
+
 void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
 
 /** Add a form to the widget screen */
