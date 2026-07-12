@@ -383,3 +383,42 @@ players 7
 type    14
 dataset MULTI_CAM_1
 game    "multiplay/maps/7c-Thales.gam"
+
+/*  Movement benchmark test map (--movementbench). Deliberately NOT type 14:
+    enumerateMultiMaps() builds the multiplayer map list and accepts only types
+    14/18/19/20, so type 15 (LEVEL_TYPE::SKIRMISH_HIDDEN)
+    keeps this out of map selection, while levFindDataSet() still resolves it
+    by name for the bench configs.  */
+
+level   MoveBench-Corridor
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corridor.gam"
+
+/*  Movement benchmark L-shaped passage. type 15 for the same reason as above:
+    hidden from map selection, still resolvable by name.  */
+
+level   MoveBench-Corner
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corner.gam"
+
+level   MoveBench-Corridor-W1
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corridor-W1.gam"
+
+level   MoveBench-Corridor-W3
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corridor-W3.gam"
+
+level   MoveBench-Corridor-W4
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-Corridor-W4.gam"

@@ -44,6 +44,7 @@
 
 #include "loop.h"
 #include "gamestate_serialize.h"
+#include "movebench.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -610,6 +611,7 @@ static void gameStateUpdate()
 	if (!paused && !scriptPaused())
 	{
 		GameStoryLogger::instance().logGameFrame();
+		movementBenchUpdate();
 	}
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.

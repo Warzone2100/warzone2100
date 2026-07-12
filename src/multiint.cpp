@@ -93,6 +93,7 @@
 #include "game.h"
 #include "warzoneconfig.h"
 #include "modding.h"
+#include "movebench.h"
 #include "qtscript.h"
 #include "random.h"
 #include "notifications.h"
@@ -3842,7 +3843,9 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
  */
 static void SendFireUp()
 {
-	uint32_t randomSeed = rand();  // Pick a random random seed for the synchronised random number generator.
+	// Pick a random random seed for the synchronised random number generator.
+	// The movement benchmark pins it instead, so a scenario reproduces exactly.
+	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : rand();
 
 	debug(LOG_INFO, "Sending NET_FIREUP");
 
