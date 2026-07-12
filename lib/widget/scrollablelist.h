@@ -122,6 +122,7 @@ protected:
 	void released(W_CONTEXT *, WIDGET_KEY) override;
 	void highlight(W_CONTEXT *) override;
 	void highlightLost() override;
+	bool isGamepadCursorMagnetTarget() const override { return true; }
 private:
 	ClickableScrollableList_OnClick_Func onClickFunc;
 	ClickableScrollableList_OnHighlight_Func onHighlightFunc;

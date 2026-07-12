@@ -48,6 +48,7 @@
 #include "tip.h"
 
 #include <algorithm>
+#include <cmath>
 #include <unordered_set>
 #include <deque>
 
@@ -59,6 +60,7 @@ static auto psMouseOverWidget = std::weak_ptr<WIDGET>();
 static bool bMouseOverWheelScrollConsumer = false;
 static auto psClickDownWidgetScreen = std::shared_ptr<W_SCREEN>();
 static auto psMouseOverWidgetScreen = std::shared_ptr<W_SCREEN>();
+static auto psLastRunScreen = std::weak_ptr<W_SCREEN>();
 
 struct WIDGET_KEYSTATE
 {
@@ -403,6 +405,104 @@ static bool isScreenARegisteredOverlay(const std::shared_ptr<W_SCREEN> &psScreen
 bool isMouseOverScreen(const std::shared_ptr<W_SCREEN>& psScreen)
 {
 	return psMouseOverWidgetScreen == psScreen;
+}
+
+static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, const WzRect& clipRect, Vector2i screenPos, Vector2f moveDir, float moveMagnitude, int searchRange, optional<WidgetMagnetTarget>& best, float& bestScore)
+{
+	// clip to the ancestors so scrolled-away widgets are not candidates
+	const WzRect geometry = psWidget->screenGeometry();
+	const int clippedLeft = std::max(clipRect.left(), geometry.left());
+	const int clippedTop = std::max(clipRect.top(), geometry.top());
+	const int clippedRight = std::min(clipRect.right(), geometry.right());
+	const int clippedBottom = std::min(clipRect.bottom(), geometry.bottom());
+	if (clippedRight <= clippedLeft || clippedBottom <= clippedTop)
+	{
+		return;
+	}
+	const WzRect visibleRect(clippedLeft, clippedTop, clippedRight - clippedLeft, clippedBottom - clippedTop);
+
+	if (psWidget->visible() && psWidget->isGamepadCursorMagnetTarget())
+	{
+		float centerX = (float)(visibleRect.left() + visibleRect.right()) / 2.f;
+		float centerY = (float)(visibleRect.top() + visibleRect.bottom()) / 2.f;
+		const float radius = (float)std::min(visibleRect.width(), visibleRect.height()) / 2.f;
+		if (const auto magnetPoint = psWidget->gamepadCursorMagnetPoint())
+		{
+			// widget-supplied grab point, kept inside the visible area
+			centerX = (float)std::clamp(geometry.left() + magnetPoint->x, visibleRect.left(), visibleRect.right());
+			centerY = (float)std::clamp(geometry.top() + magnetPoint->y, visibleRect.top(), visibleRect.bottom());
+		}
+		const float dx = centerX - (float)screenPos.x;
+		const float dy = centerY - (float)screenPos.y;
+		const float distance = std::sqrt(dx * dx + dy * dy);
+		// score by distance to the widget's edge so large widgets compete
+		// fairly with small ones
+		const float edgeDistance = std::max(0.f, distance - radius);
+		if (edgeDistance <= (float)searchRange)
+		{
+			bool candidateOk = true;
+			float score = edgeDistance;
+			if (moveMagnitude > 0.01f && distance > 1.f)
+			{
+				const float alongMotion = ((dx * moveDir.x) + (dy * moveDir.y)) / (distance * moveMagnitude);
+				if (alongMotion < -0.2f)
+				{
+					candidateOk = false;
+				}
+				else
+				{
+					score *= (2.f - alongMotion);
+				}
+			}
+			if (candidateOk && (!best.has_value() || score < bestScore))
+			{
+				best = WidgetMagnetTarget{Vector2i((int)centerX, (int)centerY), (int)radius};
+				bestScore = score;
+			}
+		}
+	}
+
+	// minimized forms and forms with disabled children cannot deliver clicks
+	// to their descendants, so none of them attract
+	if (!psWidget->allowChildGamepadCursorMagnetTargets())
+	{
+		return;
+	}
+
+	// hidden children prune their subtree, but a hidden root form still walks
+	// its visible children, matching the mouse-target recursion (notifications
+	// hide their overlay's root form for mouse transparency)
+	for (const auto& psChild : psWidget->children())
+	{
+		if (!psChild->visible())
+		{
+			continue;
+		}
+		findMagnetTargetRecursive(psChild, visibleRect, screenPos, moveDir, moveMagnitude, searchRange, best, bestScore);
+	}
+}
+
+std::shared_ptr<W_SCREEN> widgGetLastRunScreen()
+{
+	return psLastRunScreen.lock();
+}
+
+optional<WidgetMagnetTarget> widgFindGamepadCursorMagnetTarget(const std::shared_ptr<W_SCREEN>& baseScreen, Vector2i screenPos, Vector2f moveDir, int searchRange)
+{
+	optional<WidgetMagnetTarget> best;
+	float bestScore = 0.f;
+	const float moveMagnitude = std::sqrt(moveDir.x * moveDir.x + moveDir.y * moveDir.y);
+	const WzRect unclipped(-1000000, -1000000, 2000000, 2000000);
+
+	for (const auto& overlay : overlays)
+	{
+		findMagnetTargetRecursive(overlay.psScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, best, bestScore);
+	}
+	if (baseScreen)
+	{
+		findMagnetTargetRecursive(baseScreen->psForm, unclipped, screenPos, moveDir, moveMagnitude, searchRange, best, bestScore);
+	}
+	return best;
 }
 
 bool isMouseOverScreenOverlayChild(int mx, int my)
@@ -1427,6 +1527,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 {
 	static WidgetTriggers assertReturn;
 	ASSERT_OR_RETURN(assertReturn, psScreen != nullptr, "Invalid screen pointer");
+	psLastRunScreen = psScreen;
 	psScreen->retWidgets.clear();
 	cleanupDeletedOverlays();
 

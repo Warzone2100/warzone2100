@@ -177,6 +177,22 @@ WidgetHelp const * W_SLIDER::getHelp() const
 	return &(help.value());
 }
 
+optional<Vector2i> W_SLIDER::gamepadCursorMagnetPoint() const
+{
+	// pull toward the handle rather than the middle of the track
+	const bool horizontal = (orientation == WSLD_LEFT || orientation == WSLD_RIGHT);
+	const int trackLength = (horizontal ? width() : height()) - barSize;
+	const int along = trackLength * pos / std::max<int>(numStops, 1) + barSize / 2;
+	switch (orientation)
+	{
+	case WSLD_LEFT: return Vector2i(along, height() / 2);
+	case WSLD_RIGHT: return Vector2i(width() - along, height() / 2);
+	case WSLD_TOP: return Vector2i(width() / 2, along);
+	case WSLD_BOTTOM: return Vector2i(width() / 2, height() - along);
+	}
+	return nullopt;
+}
+
 bool W_SLIDER::capturesMouseDrag(WIDGET_KEY)
 {
 	return true;

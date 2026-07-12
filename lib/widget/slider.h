@@ -43,6 +43,11 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void setTip(std::string string) override;
 	void setHelp(optional<WidgetHelp> help) override;
+	bool isGamepadCursorMagnetTarget() const override { return bGamepadCursorMagnetTarget; }
+	// scrollbars opt out - lists already scroll via the right stick, so their
+	// scrollbar should not attract the cursor
+	void setIsGamepadCursorMagnetTarget(bool val) { bGamepadCursorMagnetTarget = val; }
+	optional<Vector2i> gamepadCursorMagnetPoint() const override;
 	void enable();
 	void disable();
 	bool isHighlighted() const;
@@ -64,6 +69,7 @@ public:
 	std::string pTip;                           // Tool tip
 private:
 	optional<WidgetHelp> help;
+	bool		bGamepadCursorMagnetTarget = true;
 	bool		isHandlingDrag = false;
 	std::vector<SliderOnChangeFunc> onChangeFuncs;
 private:

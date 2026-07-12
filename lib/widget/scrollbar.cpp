@@ -55,6 +55,7 @@ void ScrollBarWidget::initialize()
 	slider->barSize = 0;
 	slider->orientation = WSLD_TOP;
 	slider->displayFunction = displayScrollBar;
+	slider->setIsGamepadCursorMagnetTarget(false);
 }
 
 void ScrollBarWidget::geometryChanged()

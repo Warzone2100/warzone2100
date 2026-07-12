@@ -229,6 +229,16 @@ public:
 
 	// Whether this widget scrolls its contents in response to mouse wheel input over it
 	virtual bool canConsumeWheelScroll() { return false; }
+	// Whether the gamepad cursor's attraction assist may target this widget
+	virtual bool isGamepadCursorMagnetTarget() const { return false; }
+	// The local-coordinate point the attraction assist pulls toward, for
+	// widgets whose natural grab point is not their center (e.g. a slider's
+	// handle) - nullopt uses the center of the widget's visible area
+	virtual optional<Vector2i> gamepadCursorMagnetPoint() const { return nullopt; }
+	// Whether descendants may be attraction targets - forms suppress them
+	// while minimized or while their children are disabled, since clicks
+	// cannot reach them either
+	virtual bool allowChildGamepadCursorMagnetTargets() const { return true; }
 
 protected:
 	virtual void run(W_CONTEXT *) {}

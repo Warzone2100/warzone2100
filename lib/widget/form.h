@@ -53,6 +53,10 @@ public:
 	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
 	bool hitTest(int x, int y) const override;
 	std::shared_ptr<WIDGET> findMouseTargetRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	bool allowChildGamepadCursorMagnetTargets() const override
+	{
+		return (!minimizable || formState != FormState::MINIMIZED) && !disableChildren;
+	}
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 	using WIDGET::displayRecursive;
 
