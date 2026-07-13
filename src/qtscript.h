@@ -115,6 +115,26 @@ wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AI
 bool loadScriptStates(const char *filename);
 bool saveScriptStates(const char *filename);
 
+// In-memory (JSON) variants, for match-state serialization. Same content as the file-based
+// versions, but to/from a nlohmann::json object instead of a WzConfig file.
+//
+// Unlike the file-based versions (which run against freshly-created instances when loading a
+// savegame), these are designed for snapshotting a *running* match for transfer to another
+// client, where the rules/global script runs in the context of each client's local
+// selectedPlayer and the AI scripts only exist on the host:
+//   - saveScriptStates: when onlyPlayer >= 0, serializes only the instance(s) belonging to that
+//     player (the local rules/global script), excluding host-only AI instances. -1 saves all.
+//   - loadScriptStates: when targetPlayer >= 0, the saved rules/global script is matched to the
+//     live instance by scriptName and rebound onto targetPlayer (remapping the host's
+//     selectedPlayer to this client's), and that instance's existing timers/groups are cleared
+//     first so restoring onto the running match does not duplicate them. -1 matches the saved
+//     "me"/scriptName verbatim (savegame-style).
+bool saveScriptStates(nlohmann::json &result, int onlyPlayer = -1);
+bool loadScriptStates(const nlohmann::json &result, int targetPlayer = -1);
+
+/// Whether the script subsystem is initialized and scripts are running.
+bool scriptsAreReady();
+
 /// Tell script system that an object has been removed.
 void scriptRemoveObject(const BASE_OBJECT *psObj);
 
@@ -248,6 +268,9 @@ public:
 		size_t groupSize(groupID groupId) const;
 		optional<groupID> removeObjectFromGroup(const BASE_OBJECT *psObj);
 		std::vector<const BASE_OBJECT *> getGroupObjects(groupID groupId) const;
+		// Drops all group memberships without firing group-loss events. Used to reset an
+		// instance's groups before restoring a match snapshot on top of a running game.
+		void clear() { m_map.clear(); m_groups.clear(); lastNewGroupId = 0; }
 	};
 
 	struct timerNode
@@ -318,11 +341,13 @@ public:
 	// but before triggering any events.
 	bool loadScriptStates(const char *filename);
 	bool saveScriptStates(const char *filename);
-private:
-	// Script-state save format v2: a single structured JSON document (top-level "instances" and "timers" arrays, etc)
+	// Script-state save format v2: a single structured JSON document (top-level "instances" and "timers" arrays, etc).
+	// The in-memory json overloads are used by the match-state (GameState) serializer, which also drives the
+	// per-client scope: onlyPlayer/targetPlayer >= 0 serialize/rebind just the local rules script (see the free
+	// saveScriptStates(json&, ...)/loadScriptStates(json&, ...) wrappers); -1 saves/restores every instance verbatim.
 	bool saveScriptStates2(const char *filename);
-	bool loadScriptStates2(const nlohmann::json &root);
-public:
+	bool saveScriptStates2(nlohmann::json &root, int onlyPlayer = -1);
+	bool loadScriptStates2(const nlohmann::json &root, int targetPlayer = -1);
 
 	bool unregisterFunctions(wzapi::scripting_instance *instance);
 	void prepareLabels();
