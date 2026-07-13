@@ -61,6 +61,7 @@ struct MISSION
 	UDWORD				startTime;			//time the mission started
 	SDWORD				time;				//how long the mission can last
 	// < 0 = no limit
+	bool				timerCountUp;		//mission timer counts up (elapsed time since startTime) instead of down; challenges use this by default
 	SDWORD				ETA;				//time taken for reinforcements to arrive
 	// < 0 = none allowed
 	UDWORD				cheatTime;			//time the cheating started (mission time-wise!)

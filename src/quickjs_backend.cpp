@@ -4121,7 +4121,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC2(setStructureLimits, 2, 3); // WZAPI
 	JS_REGISTER_FUNC(applyLimitSet, 0); // WZAPI
 	JS_REGISTER_FUNC(emitSound, 3); // WZAPI
-	JS_REGISTER_FUNC(setMissionTime, 1); // WZAPI
+	JS_REGISTER_FUNC2(setMissionTime, 1, 2); // WZAPI
 	JS_REGISTER_FUNC(getMissionTime, 0); // WZAPI
 	JS_REGISTER_FUNC2(setReinforcementTime, 1, 2); // WZAPI
 	JS_REGISTER_FUNC2(completeResearch, 1, 3); // WZAPI

@@ -4805,6 +4805,17 @@ static bool loadMainFileFinal(const std::string &fileName)
 		game.techLevel = save.value("techLevel").toInt();
 	}
 
+	// note: applied here (and not in loadMainFile) because the level load resets the mission data
+	if (save.contains("missionTimerCountUp"))
+	{
+		mission.timerCountUp = save.value("missionTimerCountUp").toBool();
+	}
+	else
+	{
+		// older saves did not store the timer mode; challenges used a count-up (elapsed time) timer
+		mission.timerCountUp = challengeActive;
+	}
+
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
 	{
@@ -4877,6 +4888,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("radarPermitted", radarPermitted);
 	save.setValue("allowDesign", allowDesign);
 	save.setValue("missionOffTime", mission.time);
+	save.setValue("missionTimerCountUp", mission.timerCountUp);
 	save.setValue("missionETA", mission.ETA);
 	save.setValue("missionCheatTime", mission.cheatTime);
 	save.setVector2i("missionHomeLZ", Vector2i(mission.homeLZ_X, mission.homeLZ_Y));

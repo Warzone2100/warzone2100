@@ -684,13 +684,16 @@ Set build limits for a structure.
 
 Mix user set limits with script set limits and defaults.
 
-## setMissionTime(time)
+## setMissionTime(time[, countUp])
 
-Set mission countdown in seconds.
+Set mission countdown in seconds. If time is negative, the mission timer is removed.
+If countUp is true, the mission timer instead counts up, starting from the given number
+of elapsed seconds, and never expires. (countUp parameter is 4.8+ only.)
 
 ## getMissionTime()
 
 Get time remaining on mission countdown in seconds. (3.2+ only)
+If the mission timer is counting up, returns the elapsed time in seconds instead. (4.8+ only.)
 
 ## setReinforcementTime(time[, removeLaunch])
 

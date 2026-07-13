@@ -2615,19 +2615,30 @@ bool wzapi::applyLimitSet(WZAPI_NO_PARAMS)
 	return ::applyLimitSet();
 }
 
-//-- ## setMissionTime(time)
+//-- ## setMissionTime(time[, countUp])
 //--
-//-- Set mission countdown in seconds.
+//-- Set mission countdown in seconds. If time is negative, the mission timer is removed.
+//-- If countUp is true, the mission timer instead counts up, starting from the given number
+//-- of elapsed seconds, and never expires. (countUp parameter is 4.8+ only.)
 //--
-wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
+wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<bool> _countUp))
 {
 	int time = _time * GAME_TICKS_PER_SEC;
-	mission.startTime = gameTime;
-	mission.time = time;
-	setMissionCountDown();
-	if (mission.time >= 0)
+	mission.timerCountUp = _countUp.value_or(false) && time >= 0;
+	if (mission.timerCountUp)
+	{
+		// a count-up timer has no limit; offset startTime so the timer begins at the given elapsed time
+		mission.startTime = gameTime - time;
+		mission.time = -1;
+	}
+	else
 	{
 		mission.startTime = gameTime;
+		mission.time = time;
+	}
+	setMissionCountDown();
+	if (mission.time >= 0 || mission.timerCountUp)
+	{
 		addMissionTimerInterface();
 	}
 	else
@@ -2641,9 +2652,14 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
 //-- ## getMissionTime()
 //--
 //-- Get time remaining on mission countdown in seconds. (3.2+ only)
+//-- If the mission timer is counting up, returns the elapsed time in seconds instead. (4.8+ only.)
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
+	if (mission.timerCountUp)
+	{
+		return (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
+	}
 	if (mission.time < 0)
 	{
 		return -1;

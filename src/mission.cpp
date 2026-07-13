@@ -46,7 +46,6 @@
 #include "lib/netplay/netplay.h"
 
 #include "game.h"
-#include "challenge.h"
 #include "projectile.h"
 #include "power.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -297,6 +296,7 @@ void initMission()
 	mission.gameWorld.objects.oils[0].clear();
 	offWorldKeepLists = false;
 	mission.time = -1;
+	mission.timerCountUp = false;
 	setMissionCountDown();
 
 	mission.ETA = -1;
@@ -534,7 +534,7 @@ the display*/
 void addMissionTimerInterface()
 {
 	//don't add if the timer hasn't been set
-	if (mission.time < 0 && !challengeActive)
+	if (mission.time < 0 && !mission.timerCountUp)
 	{
 		return;
 	}
@@ -1991,7 +1991,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 		timeElapsed = gameTime - mission.startTime;
 	}
 
-	if (!challengeActive)
+	if (!mission.timerCountUp)
 	{
 		timeRemaining = mission.time - timeElapsed;
 		if (timeRemaining < 0)
@@ -2007,9 +2007,9 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 	fillTimeDisplay(*Label, timeRemaining, true);
 	Label->show();  // Make sure its visible
 
-	if (challengeActive)
+	if (mission.timerCountUp)
 	{
-		return;	// all done
+		return;	// all done - no flashing or countdown audio for a count-up timer
 	}
 
 	//make timer flash if time remaining < 5 minutes
@@ -3190,7 +3190,7 @@ void resetMissionWidgets()
 	}
 
 	//add back any widgets that should be up due to the missions
-	if (mission.time > 0)
+	if (mission.time > 0 || mission.timerCountUp)
 	{
 		intAddMissionTimer();
 		//make sure its not flashing when added
