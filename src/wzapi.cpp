@@ -2615,17 +2615,22 @@ bool wzapi::applyLimitSet(WZAPI_NO_PARAMS)
 	return ::applyLimitSet();
 }
 
-//-- ## setMissionTime(time[, countUp])
+//-- ## setMissionTime(time[, mode])
 //--
 //-- Set mission countdown in seconds. If time is negative, the mission timer is removed.
-//-- If countUp is true, the mission timer instead counts up, starting from the given number
-//-- of elapsed seconds, and never expires. (countUp parameter is 4.8+ only.)
+//-- The optional mode parameter (4.8+ only) selects how the timer behaves, and is one of:
+//-- * ```TIMER_COUNTDOWN``` Timer counts down from the given time and expires when it reaches zero (default).
+//-- * ```TIMER_COUNTUP``` Timer counts up, starting from the given number of elapsed seconds, and never expires.
+//-- * ```TIMER_PAUSE``` Timer is frozen at the given time and never expires.
 //--
-wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<bool> _countUp))
+wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<int> _mode))
 {
 	int time = _time * GAME_TICKS_PER_SEC;
-	mission.timerCountUp = _countUp.value_or(false) && time >= 0;
-	if (mission.timerCountUp)
+	int mode = _mode.value_or(TIMER_COUNTDOWN);
+	SCRIPT_ASSERT({}, context, mode >= TIMER_COUNTDOWN && mode <= TIMER_PAUSE, "Invalid mission timer mode %d", mode);
+	// a negative time always removes the timer, whatever the requested mode
+	mission.timerMode = time >= 0 ? (MISSION_TIMER_MODE)mode : TIMER_COUNTDOWN;
+	if (mission.timerMode == TIMER_COUNTUP)
 	{
 		// a count-up timer has no limit; offset startTime so the timer begins at the given elapsed time
 		mission.startTime = gameTime - time;
@@ -2637,7 +2642,7 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<bo
 		mission.time = time;
 	}
 	setMissionCountDown();
-	if (mission.time >= 0 || mission.timerCountUp)
+	if (mission.time >= 0 || mission.timerMode == TIMER_COUNTUP)
 	{
 		addMissionTimerInterface();
 	}
@@ -2652,13 +2657,19 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<bo
 //-- ## getMissionTime()
 //--
 //-- Get time remaining on mission countdown in seconds. (3.2+ only)
-//-- If the mission timer is counting up, returns the elapsed time in seconds instead. (4.8+ only.)
+//-- If the mission timer is counting up, returns the elapsed time in seconds;
+//-- if it is paused, returns the time it is frozen at. (4.8+ only.)
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
-	if (mission.timerCountUp)
+	switch (mission.timerMode)
 	{
+	case TIMER_COUNTUP:
 		return (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
+	case TIMER_PAUSE:
+		return mission.time / GAME_TICKS_PER_SEC;
+	case TIMER_COUNTDOWN:
+		break;
 	}
 	if (mission.time < 0)
 	{
@@ -4642,6 +4653,9 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["WEATHER_RAIN"] = WT_RAINING;
 	constants["WEATHER_SNOW"] = WT_SNOWING;
 	constants["WEATHER_CLEAR"] = WT_NONE;
+	constants["TIMER_COUNTDOWN"] = TIMER_COUNTDOWN;
+	constants["TIMER_COUNTUP"] = TIMER_COUNTUP;
+	constants["TIMER_PAUSE"] = TIMER_PAUSE;
 	constants["DORDER_STOP"] = DORDER_STOP;
 	constants["DORDER_MOVE"] = DORDER_MOVE;
 	constants["DORDER_ATTACK"] = DORDER_ATTACK;

@@ -4806,14 +4806,16 @@ static bool loadMainFileFinal(const std::string &fileName)
 	}
 
 	// note: applied here (and not in loadMainFile) because the level load resets the mission data
-	if (save.contains("missionTimerCountUp"))
+	if (save.contains("missionTimerMode"))
 	{
-		mission.timerCountUp = save.value("missionTimerCountUp").toBool();
+		int timerMode = save.value("missionTimerMode").toInt();
+		// a save from a newer version may hold a mode this build doesn't know; fall back to a countdown
+		mission.timerMode = (timerMode >= TIMER_COUNTDOWN && timerMode <= TIMER_PAUSE) ? (MISSION_TIMER_MODE)timerMode : TIMER_COUNTDOWN;
 	}
 	else
 	{
 		// older saves did not store the timer mode; challenges used a count-up (elapsed time) timer
-		mission.timerCountUp = challengeActive;
+		mission.timerMode = challengeActive ? TIMER_COUNTUP : TIMER_COUNTDOWN;
 	}
 
 	save.beginArray("players");
@@ -4888,7 +4890,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("radarPermitted", radarPermitted);
 	save.setValue("allowDesign", allowDesign);
 	save.setValue("missionOffTime", mission.time);
-	save.setValue("missionTimerCountUp", mission.timerCountUp);
+	save.setValue("missionTimerMode", (int)mission.timerMode);
 	save.setValue("missionETA", mission.ETA);
 	save.setValue("missionCheatTime", mission.cheatTime);
 	save.setVector2i("missionHomeLZ", Vector2i(mission.homeLZ_X, mission.homeLZ_Y));

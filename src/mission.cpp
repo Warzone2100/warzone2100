@@ -296,7 +296,7 @@ void initMission()
 	mission.gameWorld.objects.oils[0].clear();
 	offWorldKeepLists = false;
 	mission.time = -1;
-	mission.timerCountUp = false;
+	mission.timerMode = TIMER_COUNTDOWN;
 	setMissionCountDown();
 
 	mission.ETA = -1;
@@ -533,8 +533,8 @@ bool startMissionSave(LEVEL_TYPE missionType)
 the display*/
 void addMissionTimerInterface()
 {
-	//don't add if the timer hasn't been set
-	if (mission.time < 0 && !mission.timerCountUp)
+	//don't add if the timer hasn't been set (a count-up timer has no limit, so no time)
+	if (mission.time < 0 && mission.timerMode != TIMER_COUNTUP)
 	{
 		return;
 	}
@@ -1991,25 +1991,30 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 		timeElapsed = gameTime - mission.startTime;
 	}
 
-	if (!mission.timerCountUp)
+	switch (mission.timerMode)
 	{
+	case TIMER_COUNTUP:
+		timeRemaining = timeElapsed;
+		break;
+	case TIMER_PAUSE:
+		timeRemaining = mission.time;
+		break;
+	case TIMER_COUNTDOWN:
+	default:
 		timeRemaining = mission.time - timeElapsed;
 		if (timeRemaining < 0)
 		{
 			timeRemaining = 0;
 		}
-	}
-	else
-	{
-		timeRemaining = timeElapsed;
+		break;
 	}
 
 	fillTimeDisplay(*Label, timeRemaining, true);
 	Label->show();  // Make sure its visible
 
-	if (mission.timerCountUp)
+	if (mission.timerMode != TIMER_COUNTDOWN)
 	{
-		return;	// all done - no flashing or countdown audio for a count-up timer
+		return;	// all done - flashing and countdown audio only apply to a countdown timer
 	}
 
 	//make timer flash if time remaining < 5 minutes
@@ -2939,7 +2944,8 @@ void missionTimerUpdate()
 	{
 		//Want a mission timer on all types of missions now - AB 26/01/99
 		//only interested in off world missions (so far!) and if timer has been set
-		if (mission.time >= 0)  //&& (
+		//only a countdown timer can expire (a paused timer holds mission.time but never runs out)
+		if (mission.time >= 0 && mission.timerMode == TIMER_COUNTDOWN)  //&& (
 			//mission.type == LDS_MKEEP || mission.type == LDS_MKEEP_LIMBO ||
 			//mission.type == LDS_MCLEAR || mission.type == LDS_BETWEEN))
 		{
@@ -3190,7 +3196,7 @@ void resetMissionWidgets()
 	}
 
 	//add back any widgets that should be up due to the missions
-	if (mission.time > 0 || mission.timerCountUp)
+	if (mission.time > 0 || mission.timerMode != TIMER_COUNTDOWN)
 	{
 		intAddMissionTimer();
 		//make sure its not flashing when added

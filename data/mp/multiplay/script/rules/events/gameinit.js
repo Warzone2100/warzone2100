@@ -59,6 +59,6 @@ function eventGameInit()
 
 	if (challenge)
 	{
-		setMissionTime(0, true);
+		setMissionTime(0, TIMER_COUNTUP);
 	}
 }
