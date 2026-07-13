@@ -1004,11 +1004,44 @@ bool scripting_engine::loadScriptStates(const char *filename)
 	return true;
 }
 
+// Non-throwing JSON field accessor for the restore path: returns the field as T, or `fallback` when the
+// key is absent OR present-but-wrong-typed. nlohmann's value()/get<T>() throw on a type mismatch, which -
+// since the restore wipes live state up front - would leave the engine half-restored; defaulting instead
+// keeps the restore total. When a wrong type is encountered *mismatch is set, so the caller can note the
+// document was not fully faithful.
+template <typename T>
+static T jsonValueOr(const nlohmann::json &j, const char *key, T fallback, bool *mismatch = nullptr)
+{
+	auto it = j.find(key);
+	if (it == j.end())
+	{
+		return fallback;
+	}
+	try
+	{
+		return it->get<T>();
+	}
+	catch (const nlohmann::json::exception &e)
+	{
+		debug(LOG_ERROR, "Wrong-typed field \"%s\" in script state; using default (%s)", key, e.what());
+		if (mismatch) { *mismatch = true; }
+		return fallback;
+	}
+}
+
 // Loader for save format v2 (see SCRIPTSTATE_VERSION): a structured JSON document with top-level
-// "instances" and "triggers" arrays - 'root' is the parsed document object
+// "instances" and "triggers" arrays - 'root' is the parsed document object.
+//
+// The restore is total: it wipes each restored instance's live timers/groups and the label maps up front,
+// then rebuilds from the document. Because that wipe happens before the rebuild, every field read is
+// non-throwing (via jsonValueOr / type-guarded) and every mutating step is fault-tolerant, so a malformed
+// entry is skipped rather than aborting the whole restore and leaving the engine half-wiped. If anything
+// was skipped this returns false (the input was not fully faithful) so a caller restoring from an untrusted
+// source can choose to reject it; a returned true means a byte-faithful restore.
 bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetPlayer)
 {
-	const int version = root.value("version", 1);
+	bool anySkipped = false;
+	const int version = jsonValueOr(root, "version", 1);
 	ASSERT_OR_RETURN(false, version >= 2, "Invalid version: %d", version);
 
 	if (version > SCRIPTSTATE_VERSION)
@@ -1039,9 +1072,9 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 					continue;
 				}
 				// targetPlayer >= 0: rebind onto this client's selectedPlayer; otherwise match saved "me".
-				const int savedPlayer = instanceObj.value("me", -1);
+				const int savedPlayer = jsonValueOr(instanceObj, "me", -1, &anySkipped);
 				const int player = (targetPlayer >= 0) ? targetPlayer : savedPlayer;
-				const WzString scriptName = WzString::fromUtf8(instanceObj.value("scriptName", std::string()));
+				const WzString scriptName = WzString::fromUtf8(jsonValueOr<std::string>(instanceObj, "scriptName", std::string(), &anySkipped));
 				wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 				if (instance)
 				{
@@ -1081,13 +1114,14 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 			if (!instanceObj.is_object())
 			{
 				ASSERT(false, "Malformed instance entry in script states (not an object)");
+				anySkipped = true;
 				continue;
 			}
 			// targetPlayer >= 0: ignore the saved "me" (the host's selectedPlayer) and rebind onto this
 			// client's selectedPlayer. Otherwise (savegame-style) match the saved player verbatim.
-			const int savedPlayer = instanceObj.value("me", -1);
+			const int savedPlayer = jsonValueOr(instanceObj, "me", -1, &anySkipped);
 			int player = (targetPlayer >= 0) ? targetPlayer : savedPlayer;
-			WzString scriptName = WzString::fromUtf8(instanceObj.value("scriptName", std::string()));
+			WzString scriptName = WzString::fromUtf8(jsonValueOr<std::string>(instanceObj, "scriptName", std::string(), &anySkipped));
 			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 			if (!instance)
 			{
@@ -1104,8 +1138,19 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 				// filter out "scriptName" and "me" variables (saved implicitly inside globals)
 				globals.erase("me");
 				globals.erase("scriptName");
-				// v2 saves tag undefined explicitly, so a bare JSON null means JS null
-				instance->loadScriptGlobals(globals, /*fixedNulls=*/true);
+				// v2 saves tag undefined explicitly, so a bare JSON null means JS null. Guard against a
+				// malformed globals blob (e.g. a wrong-typed field the converter rejects, or over-deep
+				// nesting) so a single bad instance's globals are skipped rather than aborting the restore.
+				try
+				{
+					instance->loadScriptGlobals(globals, /*fixedNulls=*/true);
+				}
+				catch (const std::exception &e)
+				{
+					debug(LOG_ERROR, "Skipping malformed script globals for player %d, script %s: %s",
+					      instance->player(), instance->scriptName().c_str(), e.what());
+					anySkipped = true;
+				}
 			}
 
 			// Group memberships: { "lastNewGroupId": <int>, "<droidId>": ["<groupId>", ...], ... }
@@ -1188,17 +1233,19 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 			if (restoredTimerCount >= MAX_RESTORED_TIMERS)
 			{
 				debug(LOG_ERROR, "Too many timers in script state (> %zu); ignoring the rest", MAX_RESTORED_TIMERS);
+				anySkipped = true;
 				break;
 			}
 			if (!nodeInfo.is_object())
 			{
 				ASSERT(false, "Malformed timer entry in script states (not an object)");
+				anySkipped = true;
 				continue;
 			}
 			// Rebind onto targetPlayer when restoring a snapshot onto a running match (see instance loop).
-			const int savedTimerPlayer = nodeInfo.value("me", -1);
+			const int savedTimerPlayer = jsonValueOr(nodeInfo, "me", -1, &anySkipped);
 			int player = (targetPlayer >= 0) ? targetPlayer : savedTimerPlayer;
-			WzString scriptName = WzString::fromUtf8(nodeInfo.value("scriptName", std::string()));
+			WzString scriptName = WzString::fromUtf8(jsonValueOr<std::string>(nodeInfo, "scriptName", std::string(), &anySkipped));
 			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 			if (!instance)
 			{
@@ -1206,23 +1253,37 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 			}
 
 			std::shared_ptr<timerNode> node = std::make_shared<timerNode>();
-			node->timerID = nodeInfo.contains("id") ? nodeInfo["id"].get<int>() : getNextAvailableTimerID();
-			node->timerName = nodeInfo.value("name", std::string());
+			if (nodeInfo.contains("id"))
+			{
+				bool idMismatch = false;
+				node->timerID = jsonValueOr<int>(nodeInfo, "id", -1, &idMismatch);
+				if (idMismatch)
+				{
+					node->timerID = getNextAvailableTimerID();
+					anySkipped = true;
+				}
+			}
+			else
+			{
+				node->timerID = getNextAvailableTimerID();
+			}
+			node->timerName = jsonValueOr<std::string>(nodeInfo, "name", std::string(), &anySkipped);
 			node->instance = instance;
 			debug(LOG_SAVE, "Registering timer for player %d, script %s",
 			      player, scriptName.toUtf8().c_str());
-			node->baseobj = nodeInfo.value("object", -1);
-			node->baseobjtype = (OBJECT_TYPE)nodeInfo.value("objectType", (int)OBJ_NUM_TYPES);
-			node->frameTime = nodeInfo.value("frame", 0);
-			node->ms = nodeInfo.value("ms", 0);
+			node->baseobj = jsonValueOr(nodeInfo, "object", -1, &anySkipped);
+			node->baseobjtype = (OBJECT_TYPE)jsonValueOr(nodeInfo, "objectType", (int)OBJ_NUM_TYPES, &anySkipped);
+			node->frameTime = jsonValueOr(nodeInfo, "frame", 0, &anySkipped);
+			node->ms = jsonValueOr(nodeInfo, "ms", 0, &anySkipped);
 			if (node->ms < 0)
 			{
 				debug(LOG_ERROR, "Skipping restore of timer with negative ms (%d)", node->ms);
+				anySkipped = true;
 				continue;
 			}
 			node->player = player;
-			node->calls = nodeInfo.value("calls", 0);
-			node->type = (timerType)nodeInfo.value("type", (int)TIMER_REPEAT);
+			node->calls = jsonValueOr(nodeInfo, "calls", 0, &anySkipped);
+			node->type = (timerType)jsonValueOr(nodeInfo, "type", (int)TIMER_REPEAT, &anySkipped);
 
 			std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoredTimerInfo;
 			try
@@ -1231,6 +1292,7 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 				if (friIt == nodeInfo.end())
 				{
 					ASSERT(false, "Invalid trigger in save - missing functionRestoreInfo block");
+					anySkipped = true;
 					continue;
 				}
 				restoredTimerInfo = instance->restoreTimerFunction(*friIt);
@@ -1238,6 +1300,7 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 			catch (const std::exception& e)
 			{
 				ASSERT(false, "Failed to restore saved timer function info: %s", e.what());
+				anySkipped = true;
 				continue;
 			}
 
@@ -1250,9 +1313,12 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 	}
 
 	// Restore the monotonic timer-id counter
-	lastTimerID = root.value("lastTimerID", static_cast<uniqueTimerID>(0));
+	lastTimerID = jsonValueOr(root, "lastTimerID", static_cast<uniqueTimerID>(0), &anySkipped);
 
-	return true;
+	// false => at least one malformed/skipped entry: the restore completed and is self-consistent, but is
+	// not byte-faithful to the document. A caller loading from an untrusted source can treat that as reason
+	// to reject; the disk-savegame path accepts the repaired result and proceeds.
+	return !anySkipped;
 }
 
 std::unordered_map<wzapi::scripting_instance *, nlohmann::json> scripting_engine::debug_GetGlobalsSnapshot() const
