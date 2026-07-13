@@ -639,6 +639,8 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["gameTimeLimit"] = game.gameTimeLimitMinutes * 60 * 1000;
 	//== * ```playerLeaveMode``` The mode used to handle human players leaving a multiplayer game in progress. (0 = destroy resources, 1 = split resources with team) (4.4.0+ only)
 	globalVars["playerLeaveMode"] = static_cast<uint8_t>(game.playerLeaveMode);
+	//== * ```playerReconnectWaitSeconds``` The maximum number of seconds the host will hold a dropped player's slot for a mid-match reconnect before considering them to have left (and applying playerLeaveMode). (0 = do not wait) (4.6.0+ only)
+	globalVars["playerReconnectWaitSeconds"] = static_cast<uint32_t>(game.playerReconnectWaitSeconds);
 	//== * ```tweakOptions``` The tweakOptions offered by the current mod / mode, as configured by the user. (4.5.0+ only)
 	globalVars["tweakOptions"] = getCamTweakOptions();
 
@@ -712,6 +714,23 @@ bool saveScriptStates(const char *filename)
 	return scripting_engine::instance().saveScriptStates(filename);
 }
 
+// In-memory (JSON) variants, for match-state serialization. Same v2 content as the file-based
+// versions, but to/from a nlohmann::json object instead of a WzConfig file.
+bool saveScriptStates(nlohmann::json &result, int onlyPlayer)
+{
+	return scripting_engine::instance().saveScriptStates2(result, onlyPlayer);
+}
+
+bool loadScriptStates(const nlohmann::json &result, int targetPlayer)
+{
+	return scripting_engine::instance().loadScriptStates2(result, targetPlayer);
+}
+
+bool scriptsAreReady()
+{
+	return scriptsReady;
+}
+
 // Script-state save format version:
 // 1 (or absent): Legacy flat layout (globals_<i> / groups_<i> / triggers_<i> keys, matched back
 //                to instances by embedded "me"/"scriptName"), written via WzConfig
@@ -727,7 +746,15 @@ bool scripting_engine::saveScriptStates(const char *filename)
 
 bool scripting_engine::saveScriptStates2(const char *filename)
 {
-	nlohmann::json root = nlohmann::json::object();
+	nlohmann::json root;
+	saveScriptStates2(root);
+	return saveJSONToFile(root, filename);
+}
+
+// In-memory (json) variant: builds the v2 document into 'root' (used by the match-state serializer).
+bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
+{
+	root = nlohmann::json::object();
 	root["version"] = SCRIPTSTATE_VERSION;
 
 	// One object per script instance, bundling its globals, group memberships, and per-instance flags
@@ -735,6 +762,13 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		wzapi::scripting_instance* instance = scripts.at(i);
+		// For a match snapshot bound to a single client (onlyPlayer >= 0) we only serialize the local
+		// rules/global script (player == onlyPlayer). Host-only AI instances belong to other players and
+		// must not be shipped to a joining client (where they do not exist). onlyPlayer < 0 saves all.
+		if (onlyPlayer >= 0 && instance->player() != onlyPlayer)
+		{
+			continue;
+		}
 
 		nlohmann::json instanceObj = nlohmann::json::object();
 		// 'me'/'scriptName' identify the instance on load (findInstanceForPlayer)
@@ -775,6 +809,11 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 	nlohmann::json timersArray = nlohmann::json::array();
 	for (const auto& node : timers)
 	{
+		// Match the instance filter above: a per-client snapshot carries only its own timers.
+		if (onlyPlayer >= 0 && node->player != onlyPlayer)
+		{
+			continue;
+		}
 		nlohmann::json nodeInfo = nlohmann::json::object();
 		nodeInfo["id"] = node->timerID;
 		nodeInfo["name"] = node->timerName;
@@ -804,7 +843,7 @@ bool scripting_engine::saveScriptStates2(const char *filename)
 	writeLabelMap(globalLabels, globalLabelsArr);
 	root["labels"] = std::move(globalLabelsArr);
 
-	return saveJSONToFile(root, filename);
+	return true;
 }
 
 wzapi::scripting_instance* scripting_engine::findInstanceForPlayer(int match, const WzString& _scriptName)
@@ -967,7 +1006,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 
 // Loader for save format v2 (see SCRIPTSTATE_VERSION): a structured JSON document with top-level
 // "instances" and "triggers" arrays - 'root' is the parsed document object
-bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
+bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetPlayer)
 {
 	const int version = root.value("version", 1);
 	ASSERT_OR_RETURN(false, version >= 2, "Invalid version: %d", version);
@@ -977,6 +1016,48 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 		// script state version is newer than this version of WZ can support
 		debug(LOG_ERROR, "The scriptState version is newer than this version of WZ can support: %d", version);
 		return false;
+	}
+
+	// Clear each restored instance's existing timers/groups before reloading, so saved state replaces
+	// rather than duplicates the instance's live state. Needed wherever the restore lands on a world that
+	// already has running script state:
+	//  - network snapshot (targetPlayer >= 0): the running game's rules script already has timers/groups
+	//    (rebound onto targetPlayer, matched by scriptName);
+	//  - in-process round-trip (targetPlayer == -1): gameStateFromJson deserializes onto the LIVE world,
+	//    whose instances still hold their running timers/groups, which the saved state must replace.
+	// (On a disk cold-load, also targetPlayer == -1, this is a no-op: it is a fresh process, so instances
+	// have no script-registered timers/groups yet - eventGameInit/eventStartLevel do NOT fire on load.)
+	{
+		std::set<wzapi::scripting_instance *> instancesToReset;
+		auto resetInstancesIt = root.find("instances");
+		if (resetInstancesIt != root.end() && resetInstancesIt->is_array())
+		{
+			for (const auto& instanceObj : *resetInstancesIt)
+			{
+				if (!instanceObj.is_object() || !instanceObj.contains("scriptName"))
+				{
+					continue;
+				}
+				// targetPlayer >= 0: rebind onto this client's selectedPlayer; otherwise match saved "me".
+				const int savedPlayer = instanceObj.value("me", -1);
+				const int player = (targetPlayer >= 0) ? targetPlayer : savedPlayer;
+				const WzString scriptName = WzString::fromUtf8(instanceObj.value("scriptName", std::string()));
+				wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
+				if (instance)
+				{
+					instancesToReset.insert(instance);
+				}
+			}
+		}
+		for (wzapi::scripting_instance* instance : instancesToReset)
+		{
+			removeTimersIf([instance](const timerNode& node) { return node.instance == instance; });
+			GROUPMAP *psMap = getGroupMap(instance);
+			if (psMap)
+			{
+				psMap->clear();
+			}
+		}
 	}
 
 	// Labels: a v2 save is the authoritative source, so clear and rebuild both buckets here
@@ -1002,7 +1083,10 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 				ASSERT(false, "Malformed instance entry in script states (not an object)");
 				continue;
 			}
-			int player = instanceObj.value("me", -1);
+			// targetPlayer >= 0: ignore the saved "me" (the host's selectedPlayer) and rebind onto this
+			// client's selectedPlayer. Otherwise (savegame-style) match the saved player verbatim.
+			const int savedPlayer = instanceObj.value("me", -1);
+			int player = (targetPlayer >= 0) ? targetPlayer : savedPlayer;
 			WzString scriptName = WzString::fromUtf8(instanceObj.value("scriptName", std::string()));
 			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 			if (!instance)
@@ -1111,7 +1195,9 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root)
 				ASSERT(false, "Malformed timer entry in script states (not an object)");
 				continue;
 			}
-			int player = nodeInfo.value("me", -1);
+			// Rebind onto targetPlayer when restoring a snapshot onto a running match (see instance loop).
+			const int savedTimerPlayer = nodeInfo.value("me", -1);
+			int player = (targetPlayer >= 0) ? targetPlayer : savedTimerPlayer;
 			WzString scriptName = WzString::fromUtf8(nodeInfo.value("scriptName", std::string()));
 			wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 			if (!instance)
