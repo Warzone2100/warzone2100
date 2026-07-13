@@ -457,6 +457,9 @@ static bool startIGOptionsMenu()
 	showInGameOptionsScreen(psWScreen, createOptionsBrowser(true), []() {
 		// the setting for group menu display may have been modified
 		intShowGroupSelectionMenu();
+
+		// put back the mission widgets
+		resetMissionWidgets();
 	});
 	return true;
 }
@@ -492,7 +495,12 @@ void intProcessInGameOptions(UDWORD id)
 
 	case INTINGAMEOP_OPENGAMEGUIDE:
 		intCloseInGameOptions(false, false);
-		showGuideScreen([]() { /* no=op on close func */ }, true);
+		showGuideScreen([]() {
+			if (psWScreen != nullptr)
+			{
+				resetMissionWidgets();
+			}
+		}, true);
 		break;
 
 	case INTINGAMEOP_OPTIONS:			//game options  was pressed

@@ -56,6 +56,20 @@ void missionDestroyObjects();
 /** This is called everytime the game is quit. */
 void releaseMission();
 
+/** Returns the current mode-aware mission timer value in game ticks:
+ *  - the time elapsed for a count-up timer
+ *  - the frozen time for a paused timer
+ *  - the time remaining (clamped to >= 0) for a countdown timer
+ *  - or 0 if there is no timer
+ */
+SDWORD missionTimeRemaining();
+
+/** Whether a mission timer currently exists (in any mode). */
+bool missionTimerActive();
+
+/** Derive MISSION::timerMode for a save that predates it, from the already-restored mission.time / mission.startTime and the legacyCheatTime encoding. */
+void missionTimerRestoreFromLegacySave(bool wasChallenge, UDWORD legacyCheatTime);
+
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
@@ -201,8 +215,8 @@ void intMissionResultsUpdateButtons();
 /** This is called via a script function to place the Limbo droids once the mission has started. */
 void placeLimboDroids();
 
-/** bCheating = true == start of cheat, bCheating = false == end of cheat. */
-void setMissionCheatTime(bool bCheating);
+/** The 'time toggle' cheat; returns false if there is no countdown timer to pause or resume. */
+bool toggleMissionTimerPause();
 
 
 #define		MISSIONRES_X			20	// pos & size of box.

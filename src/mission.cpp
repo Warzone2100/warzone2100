@@ -46,7 +46,6 @@
 #include "lib/netplay/netplay.h"
 
 #include "game.h"
-#include "challenge.h"
 #include "projectile.h"
 #include "power.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -297,6 +296,7 @@ void initMission()
 	mission.gameWorld.objects.oils[0].clear();
 	offWorldKeepLists = false;
 	mission.time = -1;
+	mission.timerMode = TIMER_NONE;
 	setMissionCountDown();
 
 	mission.ETA = -1;
@@ -319,9 +319,6 @@ void initMission()
 
 	bDroidsToSafety = false;
 	setPlayCountDown(true);
-
-	//start as not cheating!
-	mission.cheatTime = 0;
 }
 
 //this is called everytime the game is quit
@@ -364,16 +361,77 @@ bool missionShutDown()
 }
 
 
+// returns the current mode-aware mission timer value in game ticks
+// - the time elapsed for a count-up timer
+// - the frozen time for a paused timer
+// - the time remaining (clamped to >= 0) for a countdown timer
+// - or 0 if there is no timer
+SDWORD missionTimeRemaining()
+{
+	switch (mission.timerMode)
+	{
+	case TIMER_COUNTUP:
+		return (SDWORD)(gameTime - mission.startTime);
+	case TIMER_PAUSE:
+		return mission.time;
+	case TIMER_NONE:
+		return 0;
+	case TIMER_COUNTDOWN:
+	default:
+		return MAX(mission.time - (SDWORD)(gameTime - mission.startTime), 0);
+	}
+}
+
+// whether a mission timer currently exists (in any mode)
+bool missionTimerActive()
+{
+	return mission.timerMode != TIMER_NONE;
+}
+
+// derive timerMode for a save written before it existed - see mission.h
+void missionTimerRestoreFromLegacySave(bool wasChallenge, UDWORD legacyCheatTime)
+{
+	// older saves did not store the timer mode - challenges used a count-up (elapsed time) display,
+	// and "no timer" was encoded as a countdown with a negative time value
+	if (wasChallenge)
+	{
+		mission.timerMode = TIMER_COUNTUP;
+	}
+	else
+	{
+		mission.timerMode = (mission.time < 0) ? TIMER_NONE : TIMER_COUNTDOWN;
+	}
+
+	// old saves stored the 'time toggle' cheat as a separate frozen clock
+	// convert it into a paused timer holding the value that was frozen on screen
+	if (legacyCheatTime != 0)
+	{
+		// the cheat froze the clock by treating the cheat time as "now", so the
+		// frozen value is whatever the timer displayed at that instant
+		const SDWORD elapsedAtFreeze = (SDWORD)(legacyCheatTime - mission.startTime);
+		switch (mission.timerMode)
+		{
+		case TIMER_COUNTDOWN:
+			mission.time = MAX(mission.time - elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		case TIMER_COUNTUP:
+			mission.time = MAX(elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		default:
+			// TIMER_NONE: nothing to convert
+			break;
+		}
+	}
+}
+
 /*on the PC - sets the countdown played flag*/
 void setMissionCountDown()
 {
 	SDWORD		timeRemaining;
 
-	timeRemaining = mission.time - (gameTime - mission.startTime);
-	if (timeRemaining < 0)
-	{
-		timeRemaining = 0;
-	}
+	timeRemaining = missionTimeRemaining();
 
 	// Need to init the countdown played each time the mission time is changed
 	missionCountDown = NOT_PLAYED_ONE | NOT_PLAYED_TWO | NOT_PLAYED_THREE | NOT_PLAYED_FIVE | NOT_PLAYED_TEN | NOT_PLAYED_ACTIVATED;
@@ -545,7 +603,7 @@ the display*/
 void addMissionTimerInterface()
 {
 	//don't add if the timer hasn't been set
-	if (mission.time < 0 && !challengeActive)
+	if (!missionTimerActive())
 	{
 		return;
 	}
@@ -1389,10 +1447,13 @@ void endMission()
 	//at end of mission always do this
 	intRemoveTransporterLaunch();
 
-	//and this...
-	//make sure the cheat time is not set for the next mission
-	mission.cheatTime = 0;
-
+	// NOTE: A running timer deliberately carries over into the next mission (ex: the campaign's "between" levels)
+	// Only clear an expired timer (frozen at zero by missionTimerUpdate) here
+	if (mission.timerMode == TIMER_PAUSE && mission.time <= 0)
+	{
+		mission.time = -1;
+		mission.timerMode = TIMER_NONE;
+	}
 
 	//reset the bSetPlayCountDown flag
 	setPlayCountDown(true);
@@ -1989,38 +2050,16 @@ static void fillTimeDisplay(W_LABEL &Label, UDWORD time, bool bHours)
 void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		timeElapsed;
 	SDWORD		timeRemaining;
 
-	// If the cheatTime has been set, then don't want the timer to countdown until stop cheating
-	if (mission.cheatTime)
-	{
-		timeElapsed = mission.cheatTime - mission.startTime;
-	}
-	else
-	{
-		timeElapsed = gameTime - mission.startTime;
-	}
-
-	if (!challengeActive)
-	{
-		timeRemaining = mission.time - timeElapsed;
-		if (timeRemaining < 0)
-		{
-			timeRemaining = 0;
-		}
-	}
-	else
-	{
-		timeRemaining = timeElapsed;
-	}
+	timeRemaining = missionTimeRemaining();
 
 	fillTimeDisplay(*Label, timeRemaining, true);
 	Label->show();  // Make sure its visible
 
-	if (challengeActive)
+	if (mission.timerMode != TIMER_COUNTDOWN)
 	{
-		return;	// all done
+		return;	// all done - flashing and countdown audio only apply to a countdown timer
 	}
 
 	//make timer flash if time remaining < 5 minutes
@@ -2945,21 +2984,20 @@ void missionGetTransporterExit(SDWORD iPlayer, UDWORD *iX, UDWORD *iY)
 /*update routine for mission details */
 void missionTimerUpdate()
 {
-	//don't bother with the time check if have 'cheated'
-	if (!mission.cheatTime)
+	//Want a mission timer on all types of missions now - AB 26/01/99
+	//only a countdown timer can expire (a paused timer holds mission.time but never runs out)
+	if (mission.timerMode == TIMER_COUNTDOWN)
 	{
-		//Want a mission timer on all types of missions now - AB 26/01/99
-		//only interested in off world missions (so far!) and if timer has been set
-		if (mission.time >= 0)  //&& (
-			//mission.type == LDS_MKEEP || mission.type == LDS_MKEEP_LIMBO ||
-			//mission.type == LDS_MCLEAR || mission.type == LDS_BETWEEN))
+		//check if time is up
+		if ((SDWORD)(gameTime - mission.startTime) > mission.time)
 		{
-			//check if time is up
-			if ((SDWORD)(gameTime - mission.startTime) > mission.time)
-			{
-				//the script can call the end game cos have failed!
-				executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_MISSION_TIMEOUT); });
-			}
+			// freeze the expired timer at zero so the timeout only triggers once and getMissionTime() cannot go negative
+			// scripts can still set a new timer from the event handler
+			mission.timerMode = TIMER_PAUSE;
+			mission.time = 0;
+			mission.startTime = gameTime;
+			// the script can call the end game cos have failed!
+			executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_MISSION_TIMEOUT); });
 		}
 	}
 }
@@ -3152,7 +3190,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 void clearMissionWidgets()
 {
 	//remove any widgets that are up due to the missions
-	if (mission.time > 0)
+	if (missionTimerActive())
 	{
 		intRemoveMissionTimer();
 	}
@@ -3201,7 +3239,7 @@ void resetMissionWidgets()
 	}
 
 	//add back any widgets that should be up due to the missions
-	if (mission.time > 0)
+	if (missionTimerActive())
 	{
 		intAddMissionTimer();
 		//make sure its not flashing when added
@@ -3310,18 +3348,29 @@ void emptyTransporters(bool bOffWorld)
 	});
 }
 
-/*bCheating = true == start of cheat
-bCheating = false == end of cheat */
-void setMissionCheatTime(bool bCheating)
+// the 'time toggle' cheat:
+// freeze a running countdown by converting it into a paused timer holding the remaining time, and convert back to resume it
+bool toggleMissionTimerPause()
 {
-	if (bCheating)
+	if (mission.timerMode != TIMER_COUNTDOWN && mission.timerMode != TIMER_PAUSE)
 	{
-		mission.cheatTime = gameTime;
+		return false;	// only a countdown timer can be paused and resumed
+	}
+	if (mission.timerMode == TIMER_PAUSE && mission.time <= 0)
+	{
+		// an expired timer freezes at TIMER_PAUSE/time 0, and a countdown paused at exactly 0 would expire the instant it resumed
+		// refuse either so we never fire TRIGGER_MISSION_TIMEOUT a second time
+		return false;
+	}
+	if (mission.timerMode == TIMER_COUNTDOWN)
+	{
+		mission.time = missionTimeRemaining();
+		mission.timerMode = TIMER_PAUSE;
 	}
 	else
 	{
-		//adjust the mission start time for the duration of the cheat!
-		mission.startTime += gameTime - mission.cheatTime;
-		mission.cheatTime = 0;
+		mission.timerMode = TIMER_COUNTDOWN;
 	}
+	mission.startTime = gameTime;
+	return true;
 }

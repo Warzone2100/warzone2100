@@ -3365,8 +3365,8 @@ static nlohmann::ordered_json writeMission()
 	j["type"] = static_cast<int>(mission.type);
 	j["startTime"] = mission.startTime;
 	j["time"] = mission.time;
+	j["timerMode"] = static_cast<int>(mission.timerMode);
 	j["ETA"] = mission.ETA;
-	j["cheatTime"] = mission.cheatTime;
 	j["homeLZ_X"] = mission.homeLZ_X;
 	j["homeLZ_Y"] = mission.homeLZ_Y;
 	j["playerX"] = mission.playerX;
@@ -3423,7 +3423,7 @@ static void readMission(const nlohmann::ordered_json &j, uint32_t version)
 	mission.startTime = j.at("startTime").get<uint32_t>();
 	mission.time = j.at("time").get<int32_t>();
 	mission.ETA = j.at("ETA").get<int32_t>();
-	mission.cheatTime = j.at("cheatTime").get<uint32_t>();
+	mission.timerMode = static_cast<MISSION_TIMER_MODE>(reqRange(j.at("timerMode").get<int>(), static_cast<int>(TIMER_NONE), static_cast<int>(TIMER_PAUSE)));
 	mission.homeLZ_X = j.at("homeLZ_X").get<uint16_t>();
 	mission.homeLZ_Y = j.at("homeLZ_Y").get<uint16_t>();
 	mission.playerX = j.at("playerX").get<int32_t>();
@@ -4905,6 +4905,11 @@ bool runGameStateSelfTest()
 		asProductionRun[0][1].push_back(e);
 	}
 
+	// Known mission timer: a paused countdown holding 4242 ticks.
+	mission.timerMode = TIMER_PAUSE;
+	mission.time = 4242;
+	mission.startTime = 100u;
+
 	// Capture the reference RNG state, and the exact sequence that must follow it.
 	const GameRandomState refRng = getGameRandomState();
 	constexpr int kDraws = 32;
@@ -4935,6 +4940,9 @@ bool runGameStateSelfTest()
 	setMaxCommanders(0, 1);
 	setMaxConstructors(0, 1);
 	asProductionRun[0].clear();
+	mission.timerMode = TIMER_NONE;
+	mission.time = -1;
+	mission.startTime = 0u;
 
 	try
 	{
@@ -4971,6 +4979,11 @@ bool runGameStateSelfTest()
 	check(getMaxDroids(0) == 4242, "limits.maxDroids not restored");
 	check(getMaxCommanders(0) == 17, "limits.maxCommanders not restored");
 	check(getMaxConstructors(0) == 99, "limits.maxConstructors not restored");
+
+	// Assert: mission timer restored.
+	check(mission.timerMode == TIMER_PAUSE, "mission.timerMode not restored");
+	check(mission.time == 4242, "mission.time not restored");
+	check(mission.startTime == 100u, "mission.startTime not restored");
 
 	// Assert: production restored.
 	if (asProductionRun[0].size() == 2 && asProductionRun[0][1].size() == 1)
