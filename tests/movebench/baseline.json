@@ -1,5 +1,5 @@
 {
-  "_comment": "STALE. Recorded before the scenario tick budgets were raised, so the counter-flow cells were cut off before a slow solution could finish and their figures understate what the baseline achieves. Regenerate with tests/movebench/run.sh --baseline before comparing anything against it.",
+  "_comment": "Baseline movement bench scorecards, each metric as min/median/max across spawn arrangements. Regenerate with tests/movebench/run.sh --baseline and review the diff. A difference inside a metric's spread is not a result.",
   "arrangements": [
     0,
     3,
@@ -33,13 +33,13 @@
     "blob": {
       "arrival_p50": {
         "max": 300,
-        "median": 238,
-        "min": 227
+        "median": 269,
+        "min": 245
       },
       "arrival_p95": {
-        "max": 725,
-        "median": 528,
-        "min": 325
+        "max": 2482,
+        "median": 1399,
+        "min": 528
       },
       "formationSpreadTiles": {
         "max": 2,
@@ -47,19 +47,19 @@
         "min": 2
       },
       "giveUps": {
-        "max": 1002,
-        "median": 996,
-        "min": 896
+        "max": 3045,
+        "median": 2789,
+        "min": 2538
       },
       "hardStops": {
-        "max": 26530,
-        "median": 25867,
-        "min": 23206
+        "max": 89926,
+        "median": 67743,
+        "min": 60613
       },
       "repaths": {
-        "max": 218,
-        "median": 168,
-        "min": 148
+        "max": 423,
+        "median": 403,
+        "min": 324
       },
       "resolved": {
         "count": 0,
@@ -67,102 +67,102 @@
       },
       "unitsArrived": {
         "max": 12,
-        "median": 9,
-        "min": 8
+        "median": 12,
+        "min": 10
       }
     },
     "corner": {
       "arrival_p50": {
-        "max": 937,
-        "median": 914,
-        "min": 897
+        "max": 990,
+        "median": 924,
+        "min": 922
       },
       "arrival_p95": {
-        "max": 1174,
-        "median": 1116,
-        "min": 1105
+        "max": 1450,
+        "median": 1349,
+        "min": 1280
       },
       "formationSpreadTiles": {
-        "max": 3,
+        "max": 2,
         "median": 2,
         "min": 2
       },
       "giveUps": {
-        "max": 17,
-        "median": 7,
-        "min": 6
+        "max": 32,
+        "median": 30,
+        "min": 20
       },
       "hardStops": {
-        "max": 252,
-        "median": 207,
-        "min": 58
+        "max": 384,
+        "median": 239,
+        "min": 74
       },
       "repaths": {
-        "max": 27,
-        "median": 23,
-        "min": 22
+        "max": 44,
+        "median": 28,
+        "min": 23
       },
       "resolved": {
-        "count": 9,
+        "count": 27,
         "of": 27
       },
       "unitsArrived": {
-        "max": 18,
-        "median": 17,
-        "min": 16
+        "max": 23,
+        "median": 20,
+        "min": 20
       }
     },
     "corner_mixed": {
       "arrival_p50": {
-        "max": 866,
-        "median": 853,
-        "min": 775
+        "max": 1285,
+        "median": 1236,
+        "min": 1091
       },
       "arrival_p95": {
-        "max": 1192,
-        "median": 1184,
-        "min": 1078
+        "max": 2027,
+        "median": 2015,
+        "min": 1318
       },
       "formationSpreadTiles": {
-        "max": 4,
-        "median": 4,
-        "min": 3
+        "max": 2,
+        "median": 2,
+        "min": 2
       },
       "giveUps": {
-        "max": 6,
-        "median": 0,
-        "min": 0
+        "max": 149,
+        "median": 73,
+        "min": 45
       },
       "hardStops": {
-        "max": 95,
-        "median": 48,
-        "min": 42
+        "max": 1133,
+        "median": 675,
+        "min": 233
       },
       "repaths": {
-        "max": 36,
-        "median": 26,
-        "min": 19
+        "max": 72,
+        "median": 62,
+        "min": 30
       },
       "resolved": {
-        "count": 0,
+        "count": 18,
         "of": 27
       },
       "unitsArrived": {
-        "max": 9,
-        "median": 9,
-        "min": 6
+        "max": 20,
+        "median": 19,
+        "min": 13
       }
     },
     "counterflow_cyborg": {
       "arrival_p50": {
         "max": 1084,
         "median": 640,
-        "min": 290
+        "min": 309
       },
       "arrival_p95": {
-        "max": 1189,
-        "median": 830,
-        "min": 378
+        "max": 3325,
+        "median": 863,
+        "min": 474
       },
       "formationSpreadTiles": {
         "max": 11,
@@ -175,12 +175,12 @@
         "min": 0
       },
       "hardStops": {
-        "max": 33758,
+        "max": 159158,
         "median": 9858,
         "min": 2944
       },
       "repaths": {
-        "max": 602,
+        "max": 2835,
         "median": 213,
         "min": 53
       },
@@ -196,41 +196,41 @@
     },
     "counterflow_tracked": {
       "arrival_p50": {
-        "max": 1171,
+        "max": 4137,
         "median": 0,
         "min": 0
       },
       "arrival_p95": {
-        "max": 1171,
+        "max": 4587,
         "median": 0,
         "min": 0
       },
       "formationSpreadTiles": {
-        "max": 2,
+        "max": 9,
         "median": 1,
         "min": 1
       },
       "giveUps": {
-        "max": 1,
+        "max": 20,
         "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 17043,
-        "median": 13923,
-        "min": 9513
+        "max": 100383,
+        "median": 80681,
+        "min": 25664
       },
       "repaths": {
-        "max": 467,
-        "median": 440,
-        "min": 414
+        "max": 2365,
+        "median": 2271,
+        "min": 828
       },
       "resolved": {
-        "count": 0,
+        "count": 1,
         "of": 27
       },
       "unitsArrived": {
-        "max": 3,
+        "max": 24,
         "median": 0,
         "min": 0
       }
@@ -247,7 +247,7 @@
         "min": 0
       },
       "formationSpreadTiles": {
-        "max": 2,
+        "max": 1,
         "median": 1,
         "min": 1
       },
@@ -257,14 +257,14 @@
         "min": 0
       },
       "hardStops": {
-        "max": 15010,
-        "median": 12814,
-        "min": 10076
+        "max": 100372,
+        "median": 79848,
+        "min": 67033
       },
       "repaths": {
-        "max": 461,
-        "median": 438,
-        "min": 422
+        "max": 2351,
+        "median": 2290,
+        "min": 2202
       },
       "resolved": {
         "count": 0,
@@ -278,83 +278,83 @@
     },
     "counterflow_w3": {
       "arrival_p50": {
-        "max": 1089,
-        "median": 671,
+        "max": 3453,
+        "median": 1356,
         "min": 0
       },
       "arrival_p95": {
-        "max": 1188,
-        "median": 721,
+        "max": 4980,
+        "median": 2417,
         "min": 0
       },
       "formationSpreadTiles": {
-        "max": 6,
+        "max": 10,
         "median": 2,
         "min": 1
       },
       "giveUps": {
-        "max": 0,
+        "max": 25,
         "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 17093,
-        "median": 12651,
-        "min": 5864
+        "max": 103491,
+        "median": 73128,
+        "min": 5914
       },
       "repaths": {
-        "max": 452,
-        "median": 398,
-        "min": 284
+        "max": 2352,
+        "median": 1934,
+        "min": 293
       },
       "resolved": {
-        "count": 0,
+        "count": 9,
         "of": 27
       },
       "unitsArrived": {
-        "max": 17,
-        "median": 4,
+        "max": 30,
+        "median": 5,
         "min": 0
       }
     },
     "counterflow_w4": {
       "arrival_p50": {
-        "max": 988,
-        "median": 770,
+        "max": 3704,
+        "median": 862,
         "min": 0
       },
       "arrival_p95": {
-        "max": 1198,
-        "median": 1085,
+        "max": 3899,
+        "median": 1201,
         "min": 0
       },
       "formationSpreadTiles": {
-        "max": 9,
+        "max": 10,
         "median": 9,
         "min": 1
       },
       "giveUps": {
-        "max": 30,
-        "median": 17,
+        "max": 37,
+        "median": 23,
         "min": 0
       },
       "hardStops": {
-        "max": 17687,
+        "max": 98718,
         "median": 3076,
         "min": 691
       },
       "repaths": {
-        "max": 475,
+        "max": 2415,
         "median": 185,
         "min": 65
       },
       "resolved": {
-        "count": 11,
+        "count": 21,
         "of": 27
       },
       "unitsArrived": {
-        "max": 28,
-        "median": 23,
+        "max": 29,
+        "median": 25,
         "min": 0
       }
     },
@@ -442,41 +442,41 @@
     },
     "crossing": {
       "arrival_p50": {
-        "max": 658,
+        "max": 4715,
         "median": 0,
         "min": 0
       },
       "arrival_p95": {
-        "max": 937,
+        "max": 4966,
         "median": 0,
         "min": 0
       },
       "formationSpreadTiles": {
-        "max": 4,
+        "max": 10,
         "median": 1,
         "min": 1
       },
       "giveUps": {
-        "max": 0,
+        "max": 4,
         "median": 0,
         "min": 0
       },
       "hardStops": {
-        "max": 17547,
-        "median": 14628,
-        "min": 9453
+        "max": 111635,
+        "median": 96731,
+        "min": 48467
       },
       "repaths": {
-        "max": 431,
-        "median": 409,
-        "min": 320
+        "max": 2357,
+        "median": 2275,
+        "min": 1269
       },
       "resolved": {
-        "count": 0,
+        "count": 1,
         "of": 27
       },
       "unitsArrived": {
-        "max": 7,
+        "max": 29,
         "median": 0,
         "min": 0
       }
@@ -688,43 +688,43 @@
     },
     "separating": {
       "arrival_p50": {
-        "max": 1088,
-        "median": 863,
-        "min": 428
+        "max": 3235,
+        "median": 1137,
+        "min": 778
       },
       "arrival_p95": {
-        "max": 1195,
-        "median": 1158,
-        "min": 428
+        "max": 3450,
+        "median": 1523,
+        "min": 1024
       },
       "formationSpreadTiles": {
         "max": 12,
-        "median": 7,
-        "min": 2
+        "median": 12,
+        "min": 12
       },
       "giveUps": {
-        "max": 9,
-        "median": 0,
-        "min": 0
+        "max": 28,
+        "median": 16,
+        "min": 6
       },
       "hardStops": {
-        "max": 12823,
-        "median": 3773,
-        "min": 619
+        "max": 41615,
+        "median": 4053,
+        "min": 623
       },
       "repaths": {
-        "max": 389,
-        "median": 227,
+        "max": 1148,
+        "median": 237,
         "min": 73
       },
       "resolved": {
-        "count": 6,
+        "count": 27,
         "of": 27
       },
       "unitsArrived": {
-        "max": 29,
-        "median": 16,
-        "min": 2
+        "max": 31,
+        "median": 28,
+        "min": 25
       }
     },
     "strafe": {
@@ -766,6 +766,47 @@
         "max": 7,
         "median": 4,
         "min": 3
+      }
+    },
+    "tworoute": {
+      "arrival_p50": {
+        "max": 870,
+        "median": 697,
+        "min": 559
+      },
+      "arrival_p95": {
+        "max": 4896,
+        "median": 1101,
+        "min": 791
+      },
+      "formationSpreadTiles": {
+        "max": 10,
+        "median": 10,
+        "min": 6
+      },
+      "giveUps": {
+        "max": 8,
+        "median": 1,
+        "min": 0
+      },
+      "hardStops": {
+        "max": 61335,
+        "median": 1000,
+        "min": 253
+      },
+      "repaths": {
+        "max": 1438,
+        "median": 89,
+        "min": 50
+      },
+      "resolved": {
+        "count": 24,
+        "of": 27
+      },
+      "unitsArrived": {
+        "max": 32,
+        "median": 31,
+        "min": 12
       }
     }
   }
