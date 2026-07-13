@@ -614,6 +614,10 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 	{
 		for (auto* ent : list)
 		{
+			// Make sure to get rid of some final references in the sound code to this object first
+			// (e.g. a droid's looping dynamic track), so a queued audio callback cannot later fire on
+			// the freed object - matching objmemDestroy's single-object teardown.
+			audio_RemoveObj((BASE_OBJECT*)ent);
 			if (map != nullptr)
 			{
 				visRemoveVisibility((BASE_OBJECT*)ent, *map);
