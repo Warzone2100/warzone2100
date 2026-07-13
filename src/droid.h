@@ -65,6 +65,7 @@ extern DROID	*psLastDroidHit;
 std::priority_queue<int> copy_experience_queue(int player);
 int getTopExperience(int player);
 void add_to_experience_queue(int player, int value);
+void clear_experience_queue(int player); // empties a player's recycled-experience queue (state restore)
 
 // initialise droid module
 bool droidInit();

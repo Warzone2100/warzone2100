@@ -405,6 +405,50 @@ void fpathRemoveDroidData(int id)
 	pathResults.erase(id);
 }
 
+// Build an already-completed future holding `r`, so a single get() returns it immediately. Used to
+// restore a serialized path result (and to put one back after force-completing it for serialization).
+// Built via packaged_task (run inline) so it works for all wz::future variants.
+static wz::future<PATHRESULT> fpathMakeReadyResult(const PATHRESULT &r)
+{
+	wz::packaged_task<PATHRESULT()> task([r]() { return r; });
+	wz::future<PATHRESULT> f = task.get_future();
+	task();  // fulfill immediately
+	return f;
+}
+
+bool fpathTakePendingResult(uint32_t droidID, FPathPendingResult &out)
+{
+	auto I = pathResults.find(droidID);
+	if (I == pathResults.end())
+	{
+		return false;
+	}
+	// Force the in-flight job to completion (blocks until the worker posts) and consume the future. The
+	// value is already determined by the frozen end-of-tick context, so this is deterministic.
+	PATHRESULT r = I->second.get();
+	// Re-populate so a host that keeps simulating after serializing can still consume the same result.
+	I->second = fpathMakeReadyResult(r);
+	out.destination = r.sMove.destination;
+	out.originalDest = r.originalDest;
+	out.path = r.sMove.asPath;
+	out.retval = r.retval;
+	return true;
+}
+
+void fpathSetPendingResult(uint32_t droidID, const FPathPendingResult &in)
+{
+	PATHRESULT r;
+	r.droidID = droidID;
+	r.sMove.destination = in.destination;
+	r.sMove.asPath = in.path;
+	r.originalDest = in.originalDest;
+	r.retval = in.retval;
+	// Only sMove.destination, sMove.asPath, originalDest and retval are read back by fpathRoute; the rest
+	// of the MOVE_CONTROL is left default. Replace any existing job/result so there is exactly one.
+	fpathRemoveDroidData(static_cast<int>(droidID));
+	pathResults[droidID] = fpathMakeReadyResult(r);
+}
+
 static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {

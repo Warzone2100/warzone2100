@@ -58,6 +58,15 @@ NETQUEUE NETgameQueue(unsigned player);       ///< The game action queue. (See c
 NETQUEUE NETgameQueueForced(unsigned player); ///< Only used by the host, to force-feed a GAME_PLAYER_LEFT message into someone's game queue.
 NETQUEUE NETbroadcastQueue(unsigned excludePlayer = NET_NO_EXCLUDE);  ///< The queue for sending data directly to the netQueues of all clients, not just a specific one. (See comments on broadcastQueue in nettypes.cpp.)
 
+/// Capture the pending (sim-unread) game-action messages for a player's game queue, in read order, as raw
+/// bytes. For disk savegames: a disk cold-load has no relay, so the backlog must be persisted and re-injected.
+/// Empty for an unallocated slot.
+std::vector<std::vector<uint8_t>> NETgameQueueCapturePending(unsigned player);
+/// Re-inject captured pending game-action messages (from NETgameQueueCapturePending) into a player's game
+/// queue, in the given order. Must be called while the queue is empty (before the first post-load tick).
+/// Returns the number restored; 0 if the queue slot is not allocated (caller should treat as "not restored").
+size_t NETgameQueueRestorePending(unsigned player, const std::vector<std::vector<uint8_t>> &rawMessages);
+
 void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen);  ///< Dump raw data from sockets and raw data sent via host here.
 void NETinsertMessageFromNet(NETQUEUE queue, NetMessage&& message);     ///< Dump whole NetMessages into the queue.
 bool NETisMessageReady(NETQUEUE queue);       ///< Returns true if there is a complete message ready to deserialise in this queue.

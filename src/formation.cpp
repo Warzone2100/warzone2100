@@ -157,6 +157,28 @@ bool formationNew(FORMATION **ppsFormation, uint32_t player, FORMATION_TYPE type
 	return true;
 }
 
+std::vector<FORMATION *> formationEnumerateAll()
+{
+	std::vector<FORMATION *> all;
+	for (auto &psFormationList : psFormationLists)
+	{
+		for (FORMATION *psFormation : psFormationList)
+		{
+			all.push_back(psFormation);
+		}
+	}
+	return all;
+}
+
+void formationRestoreInsert(FORMATION *psFormation)
+{
+	ASSERT_OR_RETURN(, psFormation != nullptr, "Null restored formation");
+	ASSERT_OR_RETURN(, psFormation->player < MAX_PLAYERS, "Invalid restored formation player: %" PRIu32, psFormation->player);
+	// push_front, like formationNew: the serializer inserts in reverse serialized order so the
+	// per-player list order round-trips exactly (same idiom as the object lists).
+	psFormationLists[psFormation->player].push_front(psFormation);
+}
+
 
 /** Try to find a formation near a location
  */

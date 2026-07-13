@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_POWER_H__
 #define __INCLUDED_SRC_POWER_H__
 
+#include <vector>
+#include <cstdint>
+
 /** Free power on collection of oildrum. */
 #define OILDRUM_POWER		100
 
@@ -77,5 +80,32 @@ void powerCalc(bool on);
 
 /** Flag used to check for power calculations to be done or not. */
 extern bool powerCalculated;
+
+/** The serializable scalar power state for one player (excludes the powerQueue, which
+  * references structures and is restored/rebuilt once objects exist). */
+struct PlayerPowerState
+{
+	int64_t currentPower;
+	int64_t maxStorage;
+	int64_t extractedPower;
+	int64_t wastedPower;
+	int64_t powerGeneratedLastUpdate;
+	int     powerModifier;
+};
+
+/** Capture/restore the scalar power state for a player, for match-state serialization. */
+PlayerPowerState getPlayerPowerState(unsigned player);
+void setPlayerPowerState(unsigned player, const PlayerPowerState &state);
+
+/** One pending power request (a structure waiting for power), for serialization. */
+struct PowerRequestSave
+{
+	uint32_t structId;
+	int64_t  amount;
+};
+
+/** Capture/restore the per-player pending power request queue (order is significant). */
+std::vector<PowerRequestSave> getPlayerPowerQueue(unsigned player);
+void setPlayerPowerQueue(unsigned player, const std::vector<PowerRequestSave> &queue);
 
 #endif // __INCLUDED_SRC_POWER_H__

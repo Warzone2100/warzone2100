@@ -79,6 +79,24 @@ DROID_GROUP *grpCreate()
 	return rawPsGroup;
 }
 
+// reassign an existing group's id (keeping grpGlobalManager keyed correctly)
+void grpReassignId(DROID_GROUP *psGroup, int newId)
+{
+	ASSERT_OR_RETURN(, grpInitialized, "Group code not initialized yet");
+	ASSERT_OR_RETURN(, psGroup != nullptr, "null group");
+	if (psGroup->id == newId)
+	{
+		return;
+	}
+	auto it = grpGlobalManager.find(psGroup->id);
+	ASSERT_OR_RETURN(, it != grpGlobalManager.end() && it->second.get() == psGroup, "group not registered under its id %d", psGroup->id);
+	ASSERT_OR_RETURN(, grpGlobalManager.find(newId) == grpGlobalManager.end(), "target group id %d already in use", newId);
+	std::unique_ptr<DROID_GROUP> owned = std::move(it->second);
+	grpGlobalManager.erase(it);
+	owned->id = newId;
+	grpGlobalManager.emplace(newId, std::move(owned));
+}
+
 // add a droid to a group
 void DROID_GROUP::add(DROID *psDroid)
 {

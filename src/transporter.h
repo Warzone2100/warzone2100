@@ -90,6 +90,11 @@ UDWORD transporterGetLaunchTime();
 /*set the time for the Launch*/
 void transporterSetLaunchTime(UDWORD time);
 
+/* Transporter UI-context flag (off-world reinforcement mode) read by the synchronised embark/
+ * disembark/launch paths. Accessors exist for GameState save/restore. */
+bool transporterGetOnMission();
+void transporterRestoreOnMission(bool onMissionState);
+
 void flashMissionButton(UDWORD buttonID);
 void stopMissionButtonFlash(UDWORD buttonID);
 /*checks the order of the droid to see if its currently flying*/

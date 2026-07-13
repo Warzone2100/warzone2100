@@ -63,6 +63,8 @@
 #include "activity.h"
 #include "main.h"					// for GetGameMode
 
+#include <chrono>
+
 #include "multimenu.h"
 #include "multiplay.h"
 #include "multirecv.h"
@@ -354,6 +356,7 @@ void handlePlayerLeftInGame(UDWORD player)
 		return; // no more to do
 	}
 
+	// Apply the configured leave behavior to their resources.
 	PLAYER_LEAVE_MODE mode = game.playerLeaveMode;
 	switch (mode)
 	{

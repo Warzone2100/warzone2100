@@ -399,6 +399,16 @@ void setMissionCountDown()
 	}
 }
 
+UBYTE getMissionCountDown()
+{
+	return missionCountDown;
+}
+
+void setMissionCountDownValue(UBYTE value)
+{
+	missionCountDown = value;
+}
+
 
 LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, GameLoadDetails gameDetails)
 {

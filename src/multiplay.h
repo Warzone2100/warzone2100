@@ -80,6 +80,7 @@ struct MULTIPLAYERGAME
 	uint32_t	inactivityMinutes;			// The number of minutes without active play before a player should be considered "inactive". (0 = disable activity alerts)
 	uint32_t	gameTimeLimitMinutes;		// The number of minutes before the game automatically ends (0 = disable time limit)
 	PLAYER_LEAVE_MODE	playerLeaveMode;	// The behavior used for when players leave a game
+	uint16_t	playerReconnectWaitSeconds = PLAYER_RECONNECT_WAIT_SECONDS_DEFAULT;	// Max seconds the host holds a dropped player's slot for a mid-match reconnect before declaring them left (0 = do not wait)
 	BLIND_MODE	blindMode = BLIND_MODE::NONE;
 
 	// NOTE: If adding to this struct, a lot of things probably require changing
@@ -125,7 +126,6 @@ struct MULTIPLAYERINGAME
 	std::array<optional<std::chrono::steady_clock::time_point>, MAX_CONNECTED_PLAYERS> lastNotReadyTimes;
 	std::array<uint64_t, MAX_CONNECTED_PLAYERS> secondsNotReady; // updated when player status switches to ready
 	std::array<optional<uint32_t>, MAX_CONNECTED_PLAYERS> playerLeftGameTime; // records when the player leaves the game (as a player)
-	//
 
 	InGameSide			side;
 	optional<int32_t>	TimeEveryoneIsInGame;

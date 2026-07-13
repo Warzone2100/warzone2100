@@ -164,6 +164,8 @@ uint16_t war_getMPopenSpectatorSlots();
 void war_setMPopenSpectatorSlots(uint16_t spectatorSlots);
 PLAYER_LEAVE_MODE war_getMPPlayerLeaveMode();
 void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE);
+uint16_t war_getMPPlayerReconnectWaitSeconds();
+void war_setMPPlayerReconnectWaitSeconds(uint16_t seconds);
 
 void war_setLastIpServerConnect(const std::string& serverName);
 const std::string& war_getLastIpServerConnect();

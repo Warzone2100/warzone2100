@@ -7621,6 +7621,7 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
 	j["inactivityMinutes"] = p.inactivityMinutes;
 	j["gameTimeLimitMinutes"] = p.gameTimeLimitMinutes;
 	j["playerLeaveMode"] = p.playerLeaveMode;
+	j["playerReconnectWaitSeconds"] = p.playerReconnectWaitSeconds;
 	j["blindMode"] = p.blindMode;
 }
 
@@ -7667,6 +7668,15 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 	{
 		// default to the old (pre-4.4.0) behavior of destroy resources
 		p.playerLeaveMode = PLAYER_LEAVE_MODE::DESTROY_RESOURCES;
+	}
+	if (j.contains("playerReconnectWaitSeconds"))
+	{
+		p.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(j.at("playerReconnectWaitSeconds").get<uint32_t>());
+	}
+	else
+	{
+		// default to no reconnect wait (prior behavior: a dropped player was declared left immediately)
+		p.playerReconnectWaitSeconds = 0;
 	}
 	if (j.contains("blindMode"))
 	{

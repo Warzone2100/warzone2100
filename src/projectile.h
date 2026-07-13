@@ -56,6 +56,10 @@ PROJECTILE *proj_GetNext();		///< Get next projectile in the list.
 
 void proj_AddActiveProjectile(PROJECTILE* p); ///< Add allocated projectile `p` to the list of active projectiles
 
+/// Allocate a projectile in the global storage for restoration from a saved match state.
+/// Caller fills in the remaining fields and then calls proj_AddActiveProjectile().
+PROJECTILE* proj_AllocForRestore(uint32_t id, unsigned player);
+
 void	proj_FreeAllProjectiles();	///< Free all projectiles in the list.
 
 void setExpGain(int player, int gain);

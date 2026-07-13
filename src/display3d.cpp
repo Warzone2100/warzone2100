@@ -174,6 +174,7 @@ bool	showPath = false;
 static float wind = 0.0f;
 static float windSpeed = 0.0f;
 static float skybox_scale = 10000.0f;
+static std::string skybox_page; // current skybox texture (for save/restore)
 
 //
 static bool bDrawTerrainShadows = true;
@@ -667,7 +668,24 @@ void setSkyBox(const char *page, float mywind, float myscale)
 	windSpeed = mywind;
 	wind = 0.0f;
 	skybox_scale = myscale;
+	skybox_page = page;
 	pie_Skybox_Texture(page);
+}
+
+// Accessors for the current skybox parameters (used by GameState presentation serialization).
+const std::string &getCurrentSkyboxPage()
+{
+	return skybox_page;
+}
+
+float getCurrentSkyboxWindSpeed()
+{
+	return windSpeed;
+}
+
+float getCurrentSkyboxScale()
+{
+	return skybox_scale;
 }
 
 static inline void rotateSomething(int &x, int &y, uint16_t angle)

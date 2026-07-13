@@ -189,6 +189,9 @@ bool calcStructureMuzzleBaseLocation(const STRUCTURE *psStructure, Vector3i *muz
 /*this is called whenever a structure has finished building*/
 void buildingComplete(STRUCTURE *psBuilding, GameWorld& world);
 
+// Reapply a gate's tile blocking bits to match its restored SAS_* animation state (GameState restore).
+void structureApplyGateStateBlocking(STRUCTURE *psStructure, WorldMapState& mapState);
+
 // these functions are used in game.c inplace of  building complete
 void checkForResExtractors(STRUCTURE *psPowerGen, WorldObjectState& objState);
 void checkForPowerGen(STRUCTURE *psPowerGen, WorldObjectState& objState);

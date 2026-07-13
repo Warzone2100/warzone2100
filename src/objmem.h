@@ -36,6 +36,18 @@ struct WorldObjectState;
 using DestroyedObjectsList = std::list<BASE_OBJECT*>;
 extern DestroyedObjectsList psDestroyedObj;
 
+/* The allocation state for synchronised/unsynchronised object IDs.
+ * Must be snapshotted/restored so a resumed client keeps allocating unique, in-sync IDs. */
+struct ObjectIdState
+{
+	uint32_t synchObjID;
+	uint32_t unsynchObjID;
+};
+
+/* Capture/restore the object ID allocation counters */
+ObjectIdState getObjectIdState();
+void setObjectIdState(const ObjectIdState &s);
+
 /* Initialise the object heaps */
 bool objmemInitialise();
 

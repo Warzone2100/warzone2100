@@ -36,12 +36,8 @@
 #include "visibility.h"
 
 /* Shutdown the mechanics system */
-bool mechanicsShutdown()
+void mechanicsPurgeDestroyedObjects()
 {
-	if (!psDestroyedObj.empty())
-	{
-		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
-	}
 	for (BASE_OBJECT* psObj : psDestroyedObj)
 	{
 		// Force-destroying everything: clear any not-yet-removed tile visibility (the owning
@@ -50,6 +46,15 @@ bool mechanicsShutdown()
 		objmemDestroy(psObj, true);
 	}
 	psDestroyedObj.clear();
+}
+
+bool mechanicsShutdown()
+{
+	if (!psDestroyedObj.empty())
+	{
+		debug(LOG_INFO, "%zu destroyed objects", psDestroyedObj.size());
+	}
+	mechanicsPurgeDestroyedObjects();
 
 	return true;
 }

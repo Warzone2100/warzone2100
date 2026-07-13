@@ -73,6 +73,81 @@ static struct floodtile *floodbucket = nullptr;
 static int bucketcounter;
 static UDWORD lastDangerUpdate = 0;
 static int lastDangerPlayer = -1;
+// Set by the GameState restore pass (mapRestoreDangerMaps) to tell the next mapInit() that the
+// danger-map content + schedule were already restored from a snapshot, so it must NOT recompute them
+// fresh (which would overwrite the staggered round-robin state with an all-fresh tick-T recompute and
+// reset the schedule). Consumed (and cleared) by mapInit(). (See gamestate_serialize.cpp.)
+static bool dangerRestoredFromSnapshot = false;
+
+// GameState (de)serialization accessors for the danger-map recompute schedule. mapUpdate() runs the
+// SKIRMISH AI threat-map round-robin gated on these file-statics; restoring them lets a loaded game
+// recompute the same player's danger map at the same tick as the original (else the schedule is
+// phase-shifted - a "Do danger maps." sync divergence on the first post-load tick).
+UDWORD getLastDangerUpdate() { return lastDangerUpdate; }
+void setLastDangerUpdate(UDWORD value) { lastDangerUpdate = value; }
+int getLastDangerPlayer() { return lastDangerPlayer; }
+void setLastDangerPlayer(int value) { lastDangerPlayer = value; }
+
+// Cleanly stop and tear down the danger worker thread (if running). Wakes it from its wait, lets it
+// observe lastDangerPlayer == -1 to exit its loop, joins it, and destroys the semaphores. Shared by
+// mapShutdown() and the GameState restore path.
+static void stopDangerThread()
+{
+	if (dangerThread)
+	{
+		wzSemaphoreWait(dangerDoneSemaphore);
+		lastDangerPlayer = -1;
+		wzSemaphorePost(dangerSemaphore);
+		wzThreadJoin(dangerThread);
+		wzSemaphoreDestroy(dangerSemaphore);
+		wzSemaphoreDestroy(dangerDoneSemaphore);
+		dangerThread = nullptr;
+		dangerSemaphore = nullptr;
+		dangerDoneSemaphore = nullptr;
+	}
+}
+
+// GameState reconstruct: stop the danger thread before the world is torn down and the aux/block maps
+// are reallocated (readMapTerrain). Only the in-process round-trip / in-place resume has a live thread
+// here; the disk cold-load runs before mapInit ever started one, so this is then a no-op. Eliminates a
+// realloc-vs-flood race on auxMap[MAX_PLAYERS+AUX_DANGERMAP] / blockMap[AUX_DANGERMAP]. NB this sets
+// lastDangerPlayer = -1; the snapshot's value is reapplied afterwards by the determinism-core restore.
+void mapStopDangerThreadForReconstruct()
+{
+	stopDangerThread();
+}
+
+// GameState reconstruct: note that the danger-map content was restored from the snapshot, so the next
+// mapInit() must preserve it (and the restored schedule) rather than recompute fresh. See mapInit().
+void mapNoteDangerRestoredFromSnapshot()
+{
+	dangerRestoredFromSnapshot = true;
+}
+
+// GameState serialize: temporarily park the danger worker so the in-flight working buffer
+// (auxMap[MAX_PLAYERS+AUX_DANGERMAP], which dangerThreadFunc writes) can be read without a data race.
+// Borrows the worker's "done" token: after this returns the worker has finished its current flood and is
+// blocked on dangerSemaphore, so it will not touch the buffer until mapDangerSerializeEnd() / the next
+// mapUpdate. Returns true if it parked a live worker (pair with End); false if none was running (no-op).
+bool mapDangerSerializeBegin()
+{
+	if (!dangerThread)
+	{
+		return false;
+	}
+	wzSemaphoreWait(dangerDoneSemaphore);
+	return true;
+}
+
+// GameState serialize: give the worker's "done" token back, restoring the mapUpdate semaphore accounting
+// (the worker stays blocked on dangerSemaphore; it was never woken). Pairs with mapDangerSerializeBegin().
+void mapDangerSerializeEnd(bool parked)
+{
+	if (parked)
+	{
+		wzSemaphorePost(dangerDoneSemaphore);
+	}
+}
 
 //For saves to determine if loading the terrain type override should occur
 bool builtInMap;
@@ -1229,6 +1304,57 @@ static bool afterMapLoad(WorldMapState& mapState)
 	return true;
 }
 
+bool mapReinitGameStateAfterTerrainRestore(WorldMapState& mapState)
+{
+	ASSERT_OR_RETURN(false, mapState.tiles != nullptr, "No tiles allocated");
+	// Must be strictly positive: a degenerate (zero-area) map has nothing to reinitialize, and the
+	// aux/blocking allocations below would otherwise be zero-sized (-Werror=alloc-zero under GCC 15).
+	ASSERT_OR_RETURN(false, mapState.width > 0 && mapState.height > 0, "Invalid map size (%d x %d)", mapState.width, mapState.height);
+
+	// Mirrors the game-authoritative half of afterMapLoad() (aux maps + blocking bits + continents).
+	// Static terrain (texture/height/water) is supplied by the snapshot, so the texture->ground and
+	// riverbed/display steps are intentionally omitted here.
+	const size_t mapSize = static_cast<size_t>(mapState.width) * static_cast<size_t>(mapState.height);
+	mapState.blockMap[AUX_MAP] = std::make_unique<uint8_t[]>(mapSize);
+	mapState.blockMap[AUX_ASTARMAP] = std::make_unique<uint8_t[]>(mapSize);
+	mapState.blockMap[AUX_DANGERMAP] = std::make_unique<uint8_t[]>(mapSize);
+	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
+	{
+		mapState.auxMap[x] = std::make_unique<uint8_t[]>(mapSize);
+	}
+
+	for (int y = 0; y < mapState.height; ++y)
+	{
+		for (int x = 0; x < mapState.width; ++x)
+		{
+			MAPTILE *psTile = mapTile(mapState, x, y);
+
+			auxClearBlocking(mapState, x, y, AUXBITS_ALL);
+			auxClearAll(mapState, x, y, AUXBITS_ALL);
+
+			if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
+			{
+				auxSetBlocking(mapState, x, y, AUXBITS_ALL);
+			}
+			if (terrainType(psTile) == TER_WATER)
+			{
+				auxSetBlocking(mapState, x, y, WATER_BLOCKED);
+			}
+			else
+			{
+				auxSetBlocking(mapState, x, y, LAND_BLOCKED);
+			}
+			if (terrainType(psTile) == TER_CLIFFFACE)
+			{
+				auxSetBlocking(mapState, x, y, FEATURE_BLOCKED);
+			}
+		}
+	}
+
+	mapFloodFillContinents(mapState);
+	return true;
+}
+
 /* Save the map data */
 bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState)
 {
@@ -1277,18 +1403,7 @@ bool mapSaveToWzMapData(WzMap::MapData& output, const WorldMapState& mapState)
 /* Shutdown the map module */
 bool mapShutdown()
 {
-	if (dangerThread)
-	{
-		wzSemaphoreWait(dangerDoneSemaphore);
-		lastDangerPlayer = -1;
-		wzSemaphorePost(dangerSemaphore);
-		wzThreadJoin(dangerThread);
-		wzSemaphoreDestroy(dangerSemaphore);
-		wzSemaphoreDestroy(dangerDoneSemaphore);
-		dangerThread = nullptr;
-		dangerSemaphore = nullptr;
-		dangerDoneSemaphore = nullptr;
-	}
+	stopDangerThread();
 
 	mapDecals = nullptr;
 	free(floodbucket);
@@ -2202,21 +2317,35 @@ void mapInit(GameWorld& world)
 	free(floodbucket);
 	floodbucket = (struct floodtile *)malloc(world.map.width * world.map.height * sizeof(*floodbucket));
 
-	lastDangerUpdate = 0;
-	lastDangerPlayer = -1;
+	// When restoring from a GameState snapshot the danger-map content + schedule were already applied
+	// (mapRestoreDangerMaps, run during the world reconstruction that precedes this call on the cold-load
+	// path). Preserve them: skip the all-fresh per-player recompute and the schedule reset, but still
+	// (re)start the worker thread. On start the thread re-floods lastDangerPlayer from the restored
+	// working THREAT bits + blockMap[AUX_DANGERMAP], reproducing the in-flight DANGER deterministically.
+	const bool fromSnapshot = dangerRestoredFromSnapshot;
+	dangerRestoredFromSnapshot = false; // consume
+
+	if (!fromSnapshot)
+	{
+		lastDangerUpdate = 0;
+		lastDangerPlayer = -1;
+	}
 
 	// Start danger thread (not used for campaign for now - mission map swaps too icky)
 	ASSERT(dangerSemaphore == nullptr && dangerThread == nullptr, "Map data not cleaned up before starting!");
 	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
-		for (player = 0; player < MAX_PLAYERS; player++)
+		if (!fromSnapshot)
 		{
-			auxMapStore(world.map, player, AUX_DANGERMAP);
-			threatUpdate(world, player);
-			dangerFloodFill(world.map, player);
-			auxMapRestore(world.map, player, AUX_DANGERMAP, AUXBITS_DANGER | AUXBITS_THREAT | AUXBITS_AATHREAT);
+			for (player = 0; player < MAX_PLAYERS; player++)
+			{
+				auxMapStore(world.map, player, AUX_DANGERMAP);
+				threatUpdate(world, player);
+				dangerFloodFill(world.map, player);
+				auxMapRestore(world.map, player, AUX_DANGERMAP, AUXBITS_DANGER | AUXBITS_THREAT | AUXBITS_AATHREAT);
+			}
+			lastDangerPlayer = 0;
 		}
-		lastDangerPlayer = 0;
 		dangerSemaphore = wzSemaphoreCreate(0);
 		dangerDoneSemaphore = wzSemaphoreCreate(0);
 		dangerThread = wzThreadCreate(dangerThreadFunc, nullptr, "wzDanger");

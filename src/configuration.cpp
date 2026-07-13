@@ -544,6 +544,8 @@ bool loadConfig()
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	war_setMPPlayerLeaveMode(iniGetPlayerLeaveMode("playerLeaveModeMP", war_getMPPlayerLeaveMode()).value());
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+	war_setMPPlayerReconnectWaitSeconds(iniGetInteger("playerReconnectWaitSecondsMP", war_getMPPlayerReconnectWaitSeconds()).value());
+	game.playerReconnectWaitSeconds = war_getMPPlayerReconnectWaitSeconds();
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -890,6 +892,7 @@ bool saveConfig()
 				war_setMPInactivityMinutes(game.inactivityMinutes);
 				war_setMPGameTimeLimitMinutes(game.gameTimeLimitMinutes);
 				war_setMPPlayerLeaveMode(game.playerLeaveMode);
+				war_setMPPlayerReconnectWaitSeconds(game.playerReconnectWaitSeconds);
 
 				// remember number of spectator slots in MP games
 				auto currentSpectatorSlotInfo = SpectatorInfo::currentNetPlayState();
@@ -909,6 +912,7 @@ bool saveConfig()
 	iniSetInteger("inactivityMinutesMP", war_getMPInactivityMinutes());
 	iniSetInteger("gameTimeLimitMinutesMP", war_getMPGameTimeLimitMinutes());
 	iniSetInteger("playerLeaveModeMP", (int)war_getMPPlayerLeaveMode());
+	iniSetInteger("playerReconnectWaitSecondsMP", (int)war_getMPPlayerReconnectWaitSeconds());
 	iniSetInteger("openSpectatorSlotsMP", war_getMPopenSpectatorSlots());
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetInteger("minimizeOnFocusLoss", war_getMinimizeOnFocusLoss());
@@ -1063,6 +1067,7 @@ bool reloadMPConfig()
 	game.inactivityMinutes = war_getMPInactivityMinutes();
 	game.gameTimeLimitMinutes = war_getMPGameTimeLimitMinutes();
 	game.playerLeaveMode = war_getMPPlayerLeaveMode();
+	game.playerReconnectWaitSeconds = war_getMPPlayerReconnectWaitSeconds();
 	game.blindMode = BLIND_MODE::NONE;
 
 	// restore group menus enabled setting (as tutorial may override it)

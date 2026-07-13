@@ -59,6 +59,12 @@ void releaseMission();
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
 
+/** Raw accessors for the mission-countdown bitfield (which audio warnings have played + the
+ *  ACTIVATED bit), for exact save/restore. setMissionCountDown() only recomputes the time-derived
+ *  bits and cannot reproduce the live ACTIVATED state, so the GameState serializer round-trips it. */
+UBYTE getMissionCountDown();
+void setMissionCountDownValue(UBYTE value);
+
 class ResourceLoadingController;
 
 LoadingTask<> startMission(ResourceLoadingController& controller, LEVEL_TYPE missionType, GameLoadDetails gameDetails);

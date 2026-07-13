@@ -216,6 +216,7 @@ enum code_part
 	LOG_SAVEGAME,
 	LOG_REPAIRS,
 	LOG_LOBBY,
+	LOG_GAMESTATE_SERIAL, /**< GameState (match-state) serialize/deserialize tracing */
 	LOG_LAST /**< _must_ be last! */
 };
 

@@ -597,6 +597,25 @@ void syncDebugSetCrc(uint32_t crc)
 	syncDebugLog[syncDebugNext].setCrc(crc);
 }
 
+static uint32_t g_resumeSyncDebugCrc = 0;
+static bool g_resumeSyncDebugCrcPending = false;
+
+void setResumeSyncDebugCrc(uint32_t crc)
+{
+	g_resumeSyncDebugCrc = crc;
+	g_resumeSyncDebugCrcPending = true;
+}
+
+void applyResumeSyncDebugCrc()
+{
+	if (!g_resumeSyncDebugCrcPending)
+	{
+		return;
+	}
+	syncDebugSetCrc(g_resumeSyncDebugCrc);
+	g_resumeSyncDebugCrcPending = false;
+}
+
 void resetSyncDebug()
 {
 	for (unsigned i = 0; i < MAX_SYNC_HISTORY; ++i)
@@ -629,6 +648,120 @@ GameCrcType nextDebugSync()
 	syncDebugLog[syncDebugNext].clear();
 
 	return (GameCrcType)ret;
+}
+
+// --- Per-tick sync-CRC trace ---
+
+static FILE *g_syncCrcTraceFile = nullptr;
+static std::string g_syncCrcTraceFilename;
+static uint32_t g_syncCrcDetailTick = 0;        // exact gameTime to dump (manual --gamestate-crc-detail-tick), 0 = off
+static int g_syncCrcDetailOnSaveWindow = 0;     // # of ticks to auto-dump on save/load (--gamestate-crc-detail-on-save), 0 = off
+static int g_syncCrcDetailCountdown = 0;        // remaining auto-dump ticks (armed by syncCrcDetailArmOnSaveOrLoad)
+static bool g_syncCrcDetailFileStarted = false; // whether <tracefile>.detail.txt has been truncated this run
+
+static size_t dumpLocalDebugSyncLogByTime(uint32_t time); // defined below; fills debugSyncTmpBuf
+
+void setSyncCrcTraceFile(const std::string &filename)
+{
+	if (g_syncCrcTraceFile != nullptr)
+	{
+		fclose(g_syncCrcTraceFile);
+		g_syncCrcTraceFile = nullptr;
+	}
+	g_syncCrcTraceFilename = filename;
+	if (filename.empty())
+	{
+		return;
+	}
+	g_syncCrcTraceFile = fopen(filename.c_str(), "w");
+	if (g_syncCrcTraceFile == nullptr)
+	{
+		debug(LOG_ERROR, "Failed to open sync-CRC trace file for writing: %s", filename.c_str());
+	}
+	else
+	{
+		debug(LOG_INFO, "Writing per-tick sync-CRC trace to: %s", filename.c_str());
+	}
+}
+
+bool syncCrcTraceActive()
+{
+	return g_syncCrcTraceFile != nullptr;
+}
+
+void setSyncCrcDetailTick(uint32_t tick)
+{
+	g_syncCrcDetailTick = tick;
+}
+
+void setSyncCrcDetailOnSave(int numTicks)
+{
+	g_syncCrcDetailOnSaveWindow = (numTicks > 0) ? numTicks : 0;
+}
+
+void syncCrcDetailArmOnSaveOrLoad()
+{
+	// Called when a GameState savegame is written (original run) or restored (loaded run). Arms the
+	// auto-dump so the next g_syncCrcDetailOnSaveWindow traced ticks' full sync-debug logs are written,
+	// without the operator having to compute/pass the save tick. A WINDOW (not a single tick) is used
+	// because a tick's object updates are attributed to the next sync boundary (sendPlayerGameTime runs
+	// at the start of gameStateUpdate, before the object updates), so the first fully-simulated tick
+	// after the snapshot lands one boundary later on the saving run than on the loaded run. The window
+	// guarantees the two runs' .detail.txt files overlap at matching gameTimes for a clean diff.
+	if (g_syncCrcDetailOnSaveWindow > 0)
+	{
+		g_syncCrcDetailCountdown = g_syncCrcDetailOnSaveWindow;
+	}
+}
+
+// Append the FULL per-tick sync-debug log (every syncDebug/syncDebugObject entry for atGameTime, with a
+// "BEGIN/END gameTime=..." header) to "<tracefile>.detail.txt", truncating on the first dump this run.
+// Run on both the original game and the loaded save, then diff the two .detail.txt files at a shared
+// gameTime block: the first differing line is the exact object/subsystem/field that diverges - i.e. the
+// sync-relevant state the snapshot did not restore identically.
+static void appendSyncCrcDetail(uint32_t atGameTime)
+{
+	if (g_syncCrcTraceFilename.empty())
+	{
+		return;
+	}
+	const size_t len = dumpLocalDebugSyncLogByTime(atGameTime);
+	if (len == 0)
+	{
+		return;
+	}
+	const std::string detailName = g_syncCrcTraceFilename + ".detail.txt";
+	FILE *f = fopen(detailName.c_str(), g_syncCrcDetailFileStarted ? "a" : "w");
+	if (f == nullptr)
+	{
+		debug(LOG_ERROR, "Failed to open sync detail file for writing: %s", detailName.c_str());
+		return;
+	}
+	g_syncCrcDetailFileStarted = true;
+	fwrite(debugSyncTmpBuf.data(), 1, len, f);
+	fclose(f);
+	debug(LOG_INFO, "Wrote detailed sync log for gameTime %u (%zu bytes) to: %s", atGameTime, len, detailName.c_str());
+}
+
+void syncCrcTraceRecord(uint32_t atGameTime, GameCrcType crc)
+{
+	if (g_syncCrcTraceFile == nullptr)
+	{
+		return;
+	}
+	fprintf(g_syncCrcTraceFile, "%" PRIu32 " %" PRIu32 "\n", atGameTime, (uint32_t)crc);
+	fflush(g_syncCrcTraceFile); // flush each tick so an aborted/desynced run still leaves a usable trace
+
+	bool dumpDetail = (g_syncCrcDetailTick != 0 && atGameTime == g_syncCrcDetailTick);
+	if (g_syncCrcDetailCountdown > 0)
+	{
+		dumpDetail = true;
+		--g_syncCrcDetailCountdown;
+	}
+	if (dumpDetail)
+	{
+		appendSyncCrcDetail(atGameTime);
+	}
 }
 
 static void dbgOutputDumpedSyncLog(uint32_t time, uint32_t player, bool partial = false, bool syncError = true)

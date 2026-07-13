@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_DISPLAY3D_H__
 #define __INCLUDED_SRC_DISPLAY3D_H__
 
+#include <string>
+
 #include "display.h"
 #include "display3ddef.h"	// This should be the only place including this file
 #include "lib/ivis_opengl/pietypes.h"
@@ -130,6 +132,9 @@ UDWORD  getDroidRankGraphic(const DROID *psDroid);
 UDWORD  getDroidRankGraphicFromLevel(unsigned int level);
 
 void setSkyBox(const char *page, float mywind, float myscale);
+const std::string &getCurrentSkyboxPage();
+float getCurrentSkyboxWindSpeed();
+float getCurrentSkyboxScale();
 
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128

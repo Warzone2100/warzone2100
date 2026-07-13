@@ -64,6 +64,7 @@ enum class LEVEL_TYPE : uint8_t
 	MULTI_SKIRMISH3 = 19,
 	MULTI_SKIRMISH4 = 20
 };
+constexpr LEVEL_TYPE LEVEL_TYPE_MAX = LEVEL_TYPE::MULTI_SKIRMISH4; ///< highest valid LEVEL_TYPE value (update when adding entries)
 
 struct LEVEL_DATASET
 {

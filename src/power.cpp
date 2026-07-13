@@ -362,6 +362,62 @@ int64_t getWastedPower(unsigned player)
 	return asPower[player].wastedPower / FP_ONE;
 }
 
+PlayerPowerState getPlayerPowerState(unsigned player)
+{
+	ASSERT_OR_RETURN(PlayerPowerState{}, player < MAX_PLAYERS, "Invalid player (%u)", player);
+
+	const PlayerPower &p = asPower[player];
+	PlayerPowerState s;
+	s.currentPower = p.currentPower;
+	s.maxStorage = p.maxStorage;
+	s.extractedPower = p.extractedPower;
+	s.wastedPower = p.wastedPower;
+	s.powerGeneratedLastUpdate = p.powerGeneratedLastUpdate;
+	s.powerModifier = p.powerModifier;
+	return s;
+}
+
+void setPlayerPowerState(unsigned player, const PlayerPowerState &s)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%u)", player);
+
+	PlayerPower &p = asPower[player];
+	p.currentPower = s.currentPower;
+	p.maxStorage = s.maxStorage;
+	p.extractedPower = s.extractedPower;
+	p.wastedPower = s.wastedPower;
+	p.powerGeneratedLastUpdate = s.powerGeneratedLastUpdate;
+	p.powerModifier = s.powerModifier;
+	// Note: the powerQueue is restored separately via setPlayerPowerQueue().
+}
+
+std::vector<PowerRequestSave> getPlayerPowerQueue(unsigned player)
+{
+	std::vector<PowerRequestSave> out;
+	ASSERT_OR_RETURN(out, player < MAX_PLAYERS, "Invalid player (%u)", player);
+	out.reserve(asPower[player].powerQueue.size());
+	for (const PowerRequest &r : asPower[player].powerQueue)
+	{
+		out.push_back(PowerRequestSave{ r.id, r.amount });
+	}
+	return out;
+}
+
+void setPlayerPowerQueue(unsigned player, const std::vector<PowerRequestSave> &queue)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%u)", player);
+	auto &q = asPower[player].powerQueue;
+	q.clear();
+	q.reserve(queue.size());
+	for (const PowerRequestSave &r : queue)
+	{
+		PowerRequest pr;
+		pr.amount = r.amount;
+		pr.id = r.structId;
+		q.push_back(pr);
+	}
+}
+
 int32_t getPowerMinusQueued(unsigned player)
 {
 	if (player >= MAX_PLAYERS)

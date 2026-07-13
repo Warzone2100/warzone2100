@@ -139,6 +139,40 @@ NETQUEUE NETgameQueue(unsigned player)
 	return ret;
 }
 
+std::vector<std::vector<uint8_t>> NETgameQueueCapturePending(unsigned player)
+{
+	ASSERT_OR_RETURN({}, player < MAX_GAMEQUEUE_SLOTS, "Invalid game queue slot %u", player);
+	NetQueue *queue = gameQueues[player];
+	if (queue == nullptr)
+	{
+		return {};
+	}
+	return queue->snapshotUnreadMessages();
+}
+
+size_t NETgameQueueRestorePending(unsigned player, const std::vector<std::vector<uint8_t>> &rawMessages)
+{
+	ASSERT_OR_RETURN(0, player < MAX_GAMEQUEUE_SLOTS, "Invalid game queue slot %u", player);
+	NetQueue *queue = gameQueues[player];
+	if (queue == nullptr)
+	{
+		return 0;  // queues not yet allocated (caller should treat as "could not restore")
+	}
+	size_t restored = 0;
+	for (const std::vector<uint8_t> &raw : rawMessages)
+	{
+		optional<NetMessage> msg = NetMessage::tryFromRawData(raw.data(), raw.size());
+		if (!msg.has_value())
+		{
+			debug(LOG_ERROR, "Discarding malformed pending game-queue message for slot %u", player);
+			continue;
+		}
+		queue->pushMessage(std::move(msg.value()));
+		++restored;
+	}
+	return restored;
+}
+
 bool NETgameIsBehindPlayersByAtLeast(size_t numGameTimeUpdates /*= 2*/)
 {
 	// if we should be waited on, then there's no reason we should be behind other players
