@@ -25,6 +25,8 @@
 
 #include "formationdef.h"
 
+#include <vector>
+
 enum FORMATION_TYPE
 {
 	FT_LINE,
@@ -59,3 +61,11 @@ bool formationGetPos(FORMATION *psFormation, DROID* psDroid,
 
 // See if a unit is a member of a formation (i.e. it has a position assigned)
 bool formationMember(FORMATION *psFormation, const DROID* psDroid);
+
+// GameState serializer support: every live formation, ascending player then per-player list order
+// (deterministic; the restore reproduces this order for byte-stable re-serialization).
+std::vector<FORMATION *> formationEnumerateAll();
+
+// GameState serializer support: insert a verbatim-restored formation (fully populated except the
+// member DROID pointers, which the serializer resolves as droids re-attach during restore).
+void formationRestoreInsert(FORMATION *psFormation);

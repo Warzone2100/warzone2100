@@ -85,6 +85,7 @@ struct WARZONE_GLOBALS
 	uint32_t MPgameTimeLimitMinutes = 0; // default to unlimited
 	uint8_t MPopenSpectatorSlots = 0;
 	PLAYER_LEAVE_MODE MPplayerLeaveMode = PLAYER_LEAVE_MODE_DEFAULT;
+	uint16_t MPplayerReconnectWaitSeconds = PLAYER_RECONNECT_WAIT_SECONDS_DEFAULT;
 	std::string lastIPConnectServerName;
 	int fogStart = 4000;
 	int fogEnd = 8000;
@@ -623,6 +624,16 @@ PLAYER_LEAVE_MODE war_getMPPlayerLeaveMode()
 void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE mode)
 {
 	warGlobs.MPplayerLeaveMode = mode;
+}
+
+uint16_t war_getMPPlayerReconnectWaitSeconds()
+{
+	return warGlobs.MPplayerReconnectWaitSeconds;
+}
+
+void war_setMPPlayerReconnectWaitSeconds(uint16_t seconds)
+{
+	warGlobs.MPplayerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(seconds);
 }
 
 void war_setLastIpServerConnect(const std::string& serverName)

@@ -115,6 +115,8 @@ void sendOptions()
 	}
 	NETuint32_t(w, game.gameTimeLimitMinutes);
 	NETuint8_t(w, static_cast<uint8_t>(game.playerLeaveMode));
+	game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(game.playerReconnectWaitSeconds);
+	NETuint16_t(w, game.playerReconnectWaitSeconds);
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -220,6 +222,14 @@ bool recvOptions(NETQUEUE queue)
 		return false;
 	}
 	game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(tempPlayerLeaveModeValue);
+	uint16_t tempPlayerReconnectWaitSeconds = 0;
+	NETuint16_t(r, tempPlayerReconnectWaitSeconds);
+	if (tempPlayerReconnectWaitSeconds > PLAYER_RECONNECT_WAIT_SECONDS_MAX)
+	{
+		debug(LOG_ERROR, "Invalid playerReconnectWaitSeconds value specified: %" PRIu16, tempPlayerReconnectWaitSeconds);
+		return false;
+	}
+	game.playerReconnectWaitSeconds = tempPlayerReconnectWaitSeconds;
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{

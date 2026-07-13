@@ -27,6 +27,7 @@
 #include "droiddef.h"
 
 #include <memory>
+#include <vector>
 
 struct WorldMapState;
 
@@ -74,6 +75,26 @@ bool fpathInitialise();
 /** Shutdown the path-finding module.
  */
 void fpathShutdown();
+
+/** A completed pathfinding result captured for GameState serialization. A droid restored in MOVEWAITROUTE
+ *  consumes this directly on its first resumed tick (fpathRoute), reproducing the exact host path without
+ *  re-running the order-/context-sensitive pathfinder. */
+struct FPathPendingResult
+{
+	Vector2i destination = Vector2i(0, 0);   ///< result.sMove.destination (path's actual destination)
+	Vector2i originalDest = Vector2i(0, 0);  ///< result.originalDest (the requested destination)
+	std::vector<Vector2i> path;              ///< result.sMove.asPath (computed waypoints)
+	FPATH_RETVAL retval = FPR_FAILED;        ///< result.retval
+};
+
+/** Serialize side: if droid `droidID` has an in-flight path result, force it to completion and return it
+ *  in `out`, re-populating the stored result so a host that keeps simulating can still consume it.
+ *  Returns false if there is no pending result. Blocks the caller until the worker finishes that job. */
+bool fpathTakePendingResult(uint32_t droidID, FPathPendingResult &out);
+
+/** Restore side: pre-populate droid `droidID`'s path result so its first resumed MOVEWAITROUTE tick
+ *  consumes it directly (no re-derivation). Replaces any existing result/job for that droid. */
+void fpathSetPendingResult(uint32_t droidID, const FPathPendingResult &result);
 
 void fpathUpdate();
 

@@ -42,6 +42,7 @@
 #include "lib/netplay/netplay.h"
 
 #include "loop.h"
+#include "gamestate_serialize.h"
 #include "objects.h"
 #include "display.h"
 #include "map.h"
@@ -609,6 +610,9 @@ static void gameStateUpdate()
 
 	// Must be at the end of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls, but should have no effect if we already called it, and recvMessage requires consistent counts on all clients.
 	countUpdate(true);
+
+	// Optional GameState reconstruct-fidelity test (no-op unless --gamestate-roundtrip was set).
+	gamestate::gamestateMaybeRunRoundTripTest();
 }
 
 size_t getMaxFastForwardTicks()
@@ -661,7 +665,7 @@ GAMECODE gameLoop()
 		bool selectedPlayerIsSpectator = bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator;
 		bool multiplayerHostDisconnected = bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost; // do not fast-forward after the host has disconnected
 		bool canFastForwardGameTime =
-			selectedPlayerIsSpectator 			// current player must be a spectator
+			selectedPlayerIsSpectator			// current player must be a spectator
 			&& !NetPlay.isHost					// AND NOT THE HOST (!)
 			&& !multiplayerHostDisconnected		// and the multiplayer host must not be disconnected ("host quit")
 			&& numFastForwardTicks < maxFastForwardTicks // and the number of forced updates this call of gameLoop must not exceed the max allowed

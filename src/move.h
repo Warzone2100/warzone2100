@@ -64,6 +64,8 @@ const char *moveDescription(MOVE_STATUS status);
 bool moveSetFormationSpeedLimiting(uint32_t player, bool enabled);
 bool moveToggleFormationSpeedLimiting(uint32_t player, bool *pBoolResultingValue);
 bool moveFormationSpeedLimitingOn(uint32_t player);
+// Set the flag directly with no synchronising net message, for GameState restore only.
+void moveRestoreFormationSpeedLimiting(uint32_t player, bool enabled);
 bool recvSyncOptChange(NETQUEUE queue);
 
 void moveInit();

@@ -46,6 +46,10 @@ void gwShutDown(WorldMapState& mapState);
 /// Add a gateway to the system
 bool gwNewGateway(WorldMapState& mapState, int x1, int y1, int x2, int y2);
 
+/// Restore a gateway verbatim from a saved GameState (no reorder/clamp), so the gateway list and tile
+/// flags round-trip exactly. gwNewGateway is not idempotent on its own clamped output - see the impl.
+bool gwRestoreGateway(WorldMapState& mapState, int x1, int y1, int x2, int y2);
+
 /// Get number of gateways.
 size_t gwNumGateways(const WorldMapState& mapState);
 

@@ -27,6 +27,9 @@
 #include "lib/framework/vector.h"
 #include "lib/framework/rational.h"
 
+#include <cstdint>
+#include <vector>
+
 
 struct NETQUEUE;
 
@@ -62,6 +65,31 @@ void gameTimeInit();
 
 /// Changes the game (and graphics) time.
 void setGameTime(uint32_t newGameTime);
+
+/// Set the resume sync-check floor: incoming GAME_GAME_TIME CRC checks for checkTime <= gameTimeValue
+/// are not treated as a desync. Call with the resume gameTime after restoring a GameState snapshot
+/// (cold load / mid-match join), since the resumed client cannot reproduce pre-resume tick CRCs.
+/// 0 disables. gameTimeInit() resets it to 0 for a normal game start.
+void setSyncCheckFloorTime(uint32_t gameTimeValue);
+
+/// Lockstep network-timing state captured for a GameState snapshot, so a resumed client continues
+/// with the same latency negotiation and per-queue command scheduling instead of starting from
+/// defaults (which would shift the `lat` in GAME_GAME_TIME and the tick at which queued commands
+/// apply). The smoothed `chosenLatency` accumulator in particular must be restored - it converges from
+/// its own previous value. Real-time-derived performance fields (updateReadyTime/updateWantedTime) are
+/// intentionally excluded (recomputed each tick). The vectors hold MAX_GAMEQUEUE_SLOTS entries.
+struct GameTimeNetState
+{
+	uint16_t chosenLatency = 0;
+	uint16_t discreteChosenLatency = 0;
+	uint16_t wantedLatency = 0;
+	std::vector<uint16_t> wantedLatencies;
+	std::vector<uint32_t> gameQueueTime;
+	std::vector<uint32_t> gameQueueCheckTime;
+	std::vector<uint32_t> gameQueueCheckCrc;
+};
+GameTimeNetState getGameTimeNetState();
+void setGameTimeNetState(const GameTimeNetState &state);
 
 /// Called before the first call to gameTimeUpdate in gameLoop
 void gameTimeUpdateBegin();

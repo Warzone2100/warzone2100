@@ -499,6 +499,11 @@ void add_to_experience_queue(int player, int value)
 	recycled_experience[player].push(value);
 }
 
+void clear_experience_queue(int player)
+{
+	recycled_experience[player] = std::priority_queue<int>();
+}
+
 // recycle a droid (retain it's experience and some of it's cost)
 void recycleDroid(DROID *psDroid)
 {

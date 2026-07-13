@@ -131,10 +131,10 @@ static inline void updateTileVis(MAPTILE *psTile, int player)
 	}
 }
 
-uint32_t addSpotter(WorldMapState& mapState, int x, int y, int player, int radius, bool radar, uint32_t expiry)
+// Set up the watched-tile list for a freshly-constructed spotter and register it. Shared by
+// addSpotter (new script spotter) and spotterRestore (GameState reload).
+static void spotterWatchAndRegister(SPOTTER *psSpot, WorldMapState& mapState, int x, int y, int player, int radius, bool radar)
 {
-	ASSERT_OR_RETURN(0, player >= 0 && player < MAX_PLAYERS, "invalid player: %d", player);
-	SPOTTER *psSpot = new SPOTTER(mapState, x, y, player, radius, (int)radar, expiry);
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
 	psSpot->watchedTiles = (TILEPOS *)malloc(size * sizeof(*psSpot->watchedTiles));
@@ -158,7 +158,34 @@ uint32_t addSpotter(WorldMapState& mapState, int x, int y, int player, int radiu
 		}
 	}
 	apsInvisibleViewers.push_back(psSpot);
+}
+
+uint32_t addSpotter(WorldMapState& mapState, int x, int y, int player, int radius, bool radar, uint32_t expiry)
+{
+	ASSERT_OR_RETURN(0, player >= 0 && player < MAX_PLAYERS, "invalid player: %d", player);
+	SPOTTER *psSpot = new SPOTTER(mapState, x, y, player, radius, (int)radar, expiry);
+	spotterWatchAndRegister(psSpot, mapState, x, y, player, radius, radar);
 	return psSpot->id;
+}
+
+std::vector<SpotterSaveData> spotterEnumerateForSave()
+{
+	std::vector<SpotterSaveData> out;
+	out.reserve(apsInvisibleViewers.size());
+	for (const SPOTTER *psSpot : apsInvisibleViewers)
+	{
+		out.push_back({ psSpot->pos.x, psSpot->pos.y, psSpot->player, psSpot->sensorRadius,
+		                psSpot->sensorType, psSpot->expiryTime, psSpot->id });
+	}
+	return out;
+}
+
+void spotterRestore(WorldMapState& mapState, const SpotterSaveData& d)
+{
+	ASSERT_OR_RETURN(, d.player >= 0 && d.player < MAX_PLAYERS, "invalid player: %d", d.player);
+	SPOTTER *psSpot = new SPOTTER(mapState, d.x, d.y, d.player, d.sensorRadius, d.sensorType, d.expiryTime);
+	psSpot->id = d.id;  // keep the saved synchronised id; the ctor's id-bump is undone by counters-restored-last
+	spotterWatchAndRegister(psSpot, mapState, d.x, d.y, d.player, d.sensorRadius, d.sensorType != 0);
 }
 
 bool removeSpotter(uint32_t id)

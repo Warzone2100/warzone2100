@@ -235,6 +235,13 @@ void proj_AddActiveProjectile(PROJECTILE* p)
 	psProjectileList.emplace_back(p);
 }
 
+PROJECTILE* proj_AllocForRestore(uint32_t id, unsigned player)
+{
+	PROJECTILE proj(id, player);
+	PROJECTILE& stableProj = globalProjectileStorage.emplace(std::move(proj));
+	return &stableProj;
+}
+
 /***************************************************************************/
 
 // Clean out all projectiles from the system, and properly decrement

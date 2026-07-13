@@ -1174,6 +1174,16 @@ void transporterSetLaunchTime(UDWORD time)
 	g_iLaunchTime = time;
 }
 
+bool transporterGetOnMission()
+{
+	return onMission;
+}
+
+void transporterRestoreOnMission(bool onMissionState)
+{
+	onMission = onMissionState;
+}
+
 /*launches the defined transporter to the offworld map*/
 bool launchTransporter(DROID *psTransporter)
 {

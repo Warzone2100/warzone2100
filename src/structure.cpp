@@ -227,6 +227,25 @@ static void auxStructureClosedGate(STRUCTURE *psStructure, WorldMapState& mapSta
 	}
 }
 
+// Reapply a gate's tile blocking bits to match its (restored) animation state. buildingComplete
+// forces every gate closed+blocking; a gate saved SAS_OPEN must clear the block so the deterministic
+// pathfinder sees the same passability as the continuously-running game. No-op for non-gates.
+void structureApplyGateStateBlocking(STRUCTURE *psStructure, WorldMapState& mapState)
+{
+	if (psStructure->pStructureType->type != REF_GATE)
+	{
+		return;
+	}
+	if (psStructure->state == SAS_OPEN)
+	{
+		auxStructureOpenGate(psStructure, mapState);
+	}
+	else  // SAS_NORMAL / SAS_OPENING / SAS_CLOSING all block
+	{
+		auxStructureClosedGate(psStructure, mapState);
+	}
+}
+
 bool IsStatExpansionModule(const STRUCTURE_STATS *psStats)
 {
 	// If the stat is any of the 3 expansion types ... then return true

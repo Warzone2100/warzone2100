@@ -170,6 +170,13 @@ bool moveFormationSpeedLimitingOn(uint32_t player)
 	return playerFormationSpeedLimiting[player];
 }
 
+void moveRestoreFormationSpeedLimiting(uint32_t player, bool enabled)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player: %u", player);
+	// Restore the synchronised value verbatim - no net message (every client restores from the snapshot).
+	playerFormationSpeedLimiting[player] = enabled;
+}
+
 bool recvSyncOptChange(NETQUEUE queue)
 {
 	uint8_t player;

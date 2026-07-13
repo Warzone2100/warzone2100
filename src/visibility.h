@@ -119,4 +119,21 @@ void removeSpotters();
 bool removeSpotter(uint32_t id);
 uint32_t addSpotter(WorldMapState& mapState, int x, int y, int player, int radius, bool radar, uint32_t expiry = 0);
 
+/// Plain snapshot of a live script spotter (apsInvisibleViewers) for GameState serialization.
+struct SpotterSaveData
+{
+	int x;
+	int y;
+	int player;
+	int sensorRadius;
+	int sensorType;      ///< 0 = vision, 1 = radar
+	uint32_t expiryTime; ///< when to self-destruct, 0 = never
+	uint32_t id;
+};
+/// Enumerate all live spotters (any player) as plain data, in list order.
+std::vector<SpotterSaveData> spotterEnumerateForSave();
+/// Recreate a spotter from saved data, preserving its synchronised id (the ctor's fresh id-bump of
+/// the object-ID counter is corrected by the counters-restored-last rule). Mirrors addSpotter's watch.
+void spotterRestore(WorldMapState& mapState, const SpotterSaveData& d);
+
 #endif // __INCLUDED_SRC_VISIBILITY__

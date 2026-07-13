@@ -224,6 +224,21 @@ size_t NetQueue::currentIncompleteDataBuffered() const
 	return incompleteReceivedMessageData.size();
 }
 
+std::vector<std::vector<uint8_t>> NetQueue::snapshotUnreadMessages() const
+{
+	// Unread messages occupy [messages.begin(), messagePos). They are read back-to-front (the message
+	// just before messagePos is read first), so walking from messagePos toward begin() yields read order.
+	std::vector<std::vector<uint8_t>> out;
+	for (List::const_iterator i = messagePos; i != messages.begin(); )
+	{
+		--i;
+		std::vector<uint8_t> raw;
+		i->rawDataAppendToVector(raw);
+		out.push_back(std::move(raw));
+	}
+	return out;
+}
+
 void NetQueue::setWillNeverGetMessagesForNet()
 {
 	canGetMessagesForNet = false;

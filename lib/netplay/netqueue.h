@@ -282,6 +282,12 @@ public:
 
 	size_t currentIncompleteDataBuffered() const;
 
+	/// Capture the raw bytes of every message not yet read by the sim (the range [begin, messagePos)),
+	/// in read (FIFO) order, without modifying the queue. Used to persist the pending game-action backlog
+	/// into a disk savegame (where there is no host relay to re-feed in-flight commands on restore).
+	/// Restore by pushMessage()ing the captured messages back, in the returned order, into a fresh queue.
+	std::vector<std::vector<uint8_t>> snapshotUnreadMessages() const;
+
 	inline size_t numPendingGameTimeUpdateMessages() const
 	{
 		return pendingGameTimeUpdateMessages;

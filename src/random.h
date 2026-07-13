@@ -31,12 +31,31 @@ public:
 	MersenneTwister(uint32_t seed = 42);
 	uint32_t u32();  ///< Generates a random number in the interval [0...UINT32_MAX].
 
+	/// Exports the full internal generator state, for snapshotting.
+	void getInternalState(uint32_t (&outState)[624], int32_t &outOffset) const;
+	/// Restores the full internal generator state, from a snapshot.
+	void setInternalState(const uint32_t (&inState)[624], int32_t inOffset);
+
 private:
 	void generate();  ///< Generates more random numbers.
 
 	int offset;  ///< Index in state.
 	uint32_t state[624];  ///< 19937 bit state, rounded up to next 32 bits.
 };
+
+/// The complete, restorable state of the game's synchronised RNG (live internal state, not just the seed).
+/// Required to snapshot/restore the RNG mid-game so a resumed client generates an identical number sequence.
+struct GameRandomState
+{
+	uint32_t state[624];
+	int32_t  offset;
+	uint32_t lastSeed;
+};
+
+/// Captures the live state of the game's synchronised random number generator.
+GameRandomState getGameRandomState();
+/// Restores the live state of the game's synchronised random number generator.
+void setGameRandomState(const GameRandomState &s);
 
 /// Seeds the random number generator. The seed is sent over the network, such that all clients generate the same number sequence, without the number sequence being the same each game.
 void gameSRand(uint32_t seed);

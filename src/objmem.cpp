@@ -67,6 +67,17 @@ static void objListIntegCheck();
 #endif
 
 
+ObjectIdState getObjectIdState()
+{
+	return ObjectIdState{ synchObjID, unsynchObjID };
+}
+
+void setObjectIdState(const ObjectIdState &s)
+{
+	synchObjID = s.synchObjID;
+	unsynchObjID = s.unsynchObjID;
+}
+
 /* Initialise the object heaps */
 bool objmemInitialise()
 {

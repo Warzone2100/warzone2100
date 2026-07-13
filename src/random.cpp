@@ -78,10 +78,42 @@ void MersenneTwister::generate()
 	}
 }
 
+void MersenneTwister::getInternalState(uint32_t (&outState)[624], int32_t &outOffset) const
+{
+	for (unsigned i = 0; i != 624; ++i)
+	{
+		outState[i] = state[i];
+	}
+	outOffset = offset;
+}
+
+void MersenneTwister::setInternalState(const uint32_t (&inState)[624], int32_t inOffset)
+{
+	for (unsigned i = 0; i != 624; ++i)
+	{
+		state[i] = inState[i];
+	}
+	offset = inOffset;
+}
+
 void gameSRand(uint32_t seed)
 {
 	lastSeed = seed;
 	gamePseudorandomNumberGenerator = MersenneTwister(seed);
+}
+
+GameRandomState getGameRandomState()
+{
+	GameRandomState s;
+	gamePseudorandomNumberGenerator.getInternalState(s.state, s.offset);
+	s.lastSeed = lastSeed;
+	return s;
+}
+
+void setGameRandomState(const GameRandomState &s)
+{
+	gamePseudorandomNumberGenerator.setInternalState(s.state, s.offset);
+	lastSeed = s.lastSeed;
 }
 
 uint32_t gameRand_GetSeed()

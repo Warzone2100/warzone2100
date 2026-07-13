@@ -114,7 +114,7 @@ constexpr size_t NET_BUFFER_SIZE = (MaxMsgSize * 8);	// Would be 256K
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerCloseSocket(UDWORD index, bool quietSocketClose);
-static void NETplayerLeaving(UDWORD player, bool quietSocketClose = false);		// Cleanup sockets on player leaving (nicely)
+static void NETplayerLeaving(UDWORD player, bool quietSocketClose = false);		// Cleanup sockets on player leaving (nicely).
 static void NETplayerDropped(UDWORD player);		// Broadcast NET_PLAYER_DROPPED & cleanup
 static void NETallowJoining();
 static void NETfixPlayerCount();

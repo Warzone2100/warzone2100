@@ -28,6 +28,7 @@
 #include "lib/framework/string_ext.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/sync_debug.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/png_util.h"
 
@@ -35,6 +36,7 @@
 #include "clparse.h"
 #include "display3d.h"
 #include "frontend.h"
+#include "gamestate_serialize.h"
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
@@ -319,6 +321,11 @@ typedef enum
 	CLI_LOADREPLAY,
 	CLI_WINDOW,
 	CLI_VERSION,
+	CLI_GAMESTATE_SELFTEST,
+	CLI_GAMESTATE_ROUNDTRIP,
+	CLI_GAMESTATE_CRCTRACE,
+	CLI_GAMESTATE_CRCDETAIL,
+	CLI_GAMESTATE_CRCDETAIL_ONSAVE,
 	CLI_RESOLUTION,
 	CLI_SHADOWS,
 	CLI_NOSHADOWS,
@@ -405,6 +412,11 @@ static const struct poptOption *getOptionsTable()
 		{ "loadreplay", POPT_ARG_STRING, CLI_LOADREPLAY, N_("Load a replay"),     N_("replay file") },
 		{ "window", POPT_ARG_NONE, CLI_WINDOW,     N_("Play in windowed mode"),             nullptr },
 		{ "version", POPT_ARG_NONE, CLI_VERSION,    N_("Show version information and exit"), nullptr },
+		{ "gamestate-selftest", POPT_ARG_NONE, CLI_GAMESTATE_SELFTEST, N_("Run the GameState serialization determinism self-test and exit"), nullptr },
+		{ "gamestate-roundtrip", POPT_ARG_STRING, CLI_GAMESTATE_ROUNDTRIP, N_("Run the GameState reconstruct round-trip test at the given game tick and exit"), N_("game tick") },
+		{ "gamestate-crc-trace", POPT_ARG_STRING, CLI_GAMESTATE_CRCTRACE, N_("Write a per-tick sync-CRC trace to the given file (for the load sync test)"), N_("file") },
+		{ "gamestate-crc-detail-tick", POPT_ARG_STRING, CLI_GAMESTATE_CRCDETAIL, N_("At this game tick, dump the full sync-debug log to <crc-trace-file>.detail.txt (diff original vs loaded run to pinpoint a divergence)"), N_("game tick") },
+		{ "gamestate-crc-detail-on-save", POPT_ARG_NONE, CLI_GAMESTATE_CRCDETAIL_ONSAVE, N_("Auto-dump a window of full sync-debug logs to <crc-trace-file>.detail.txt around each GameState save/load (no need to know the save tick)"), nullptr },
 		{ "resolution", POPT_ARG_STRING, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
 		{ "shadows", POPT_ARG_NONE, CLI_SHADOWS,    N_("Enable shadows"),                    nullptr },
 		{ "noshadows", POPT_ARG_NONE, CLI_NOSHADOWS,  N_("Disable shadows"),                   nullptr },
@@ -638,6 +650,13 @@ ParseCLIEarlyResult ParseCommandLineEarly(int argc, const char * const *argv)
 			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
 			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
 
+		case CLI_GAMESTATE_SELFTEST:
+			if (!gamestate::runGameStateSelfTest())
+			{
+				exit(EXIT_FAILURE);
+			}
+			return ParseCLIEarlyResult::HANDLED_QUIT_EARLY_COMMAND;
+
 #if defined(WZ_OS_WIN)
 		case CLI_WIN_ENABLE_CONSOLE:
 			SetStdOutToConsole_Win();
@@ -757,6 +776,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_CONFIGDIR:
 		case CLI_HELP:
 		case CLI_VERSION:
+		case CLI_GAMESTATE_SELFTEST:
 #if defined(WZ_OS_WIN)
 		case CLI_WIN_ENABLE_CONSOLE:
 #endif
@@ -819,6 +839,34 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			// go directly to host screen, bypass all others.
 			setHostLaunch(HostLaunch::Host);
 			break;
+		case CLI_GAMESTATE_ROUNDTRIP:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing game tick value for --gamestate-roundtrip");
+			}
+			gamestate::gamestateSetRoundTripTestTick(static_cast<uint32_t>(atoi(token)));
+			break;
+		case CLI_GAMESTATE_CRCTRACE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing file path for --gamestate-crc-trace");
+			}
+			setSyncCrcTraceFile(token);
+			break;
+		case CLI_GAMESTATE_CRCDETAIL:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Missing game tick value for --gamestate-crc-detail-tick");
+			}
+			setSyncCrcDetailTick(static_cast<uint32_t>(atoi(token)));
+			break;
+		case CLI_GAMESTATE_CRCDETAIL_ONSAVE:
+			setSyncCrcDetailOnSave(20); // dump a 20-tick window around each save/load (overlaps saving vs loaded run, with headroom for debugging divergences a few ticks past resume)
+			break;
+
 		case CLI_GAME:
 			// retrieve the game name
 			token = poptGetOptArg(poptCon);
