@@ -32,6 +32,7 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/widget/button.h"
@@ -42,7 +43,6 @@
 #include "intdisplay.h"
 #include "loadsave.h"
 #include "multiplay.h"
-#include "mission.h"
 #include "lib/framework/wztime.h"
 #include "titleui/titleui.h"
 #include "titleui/multiplayer.h"
@@ -101,7 +101,7 @@ const char* currentChallengeName()
 void updateChallenge(bool gameWon)
 {
 	std::string fullName = challengeFileName.toStdString();
-	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
+	int seconds = 0, newtime = gameTime / GAME_TICKS_PER_SEC;
 	bool victory = false;
 	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
 	ASSERT_OR_RETURN(, fullName.length() > 0, "Empty challengeFileName");
