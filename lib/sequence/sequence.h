@@ -35,6 +35,11 @@ typedef enum
 
 bool seq_Play(std::shared_ptr<VideoProvider> video);
 bool seq_Playing();
+/** Set the preferred FMV audio-track language (a WZ locale code, e.g. "de").
+ * Empty / nullptr (the default) = automatic: follow the game language.
+ * Takes effect from the next seq_Play(). Videos without a matching track
+ * fall back to their English track. */
+void seq_SetPreferredAudioLanguage(const char *languageCode);
 bool seq_Update();
 void seq_Shutdown();
 int seq_GetFrameNumber();
