@@ -26,11 +26,14 @@
  * converts YUV to RGBA (with optional scanline emulation), and streams decoded
  * PCM to OpenAL.
  *
- * Clock design: when audio is playing, playback time is derived from the
- * number of samples OpenAL has actually consumed (audio-master); video and
- * subtitles follow it, so main-loop stalls (e.g. modal window resizes)
- * pause the whole presentation instead of desynchronizing it. Without audio, a
- * monotonic clock with stall clamping is used.
+ * Clock design: the presentation clock is a monotonic clock with stall clamping
+ * - gaps between engine ticks beyond a threshold (ex. a modal window
+ * resize blocking the main loop) pause the clock, so the presentation resumes
+ * where it left off instead of skipping ahead
+ * - audio follows this clock: if the audio playhead falls too far behind (a
+ * stuttering audio device) the sink skips ahead in the audio to re-align, if
+ * it gets ahead (audio kept playing through a main-loop stall) the sink holds
+ * off queueing until the clock catches up
  */
 
 #include "lib/framework/frame.h"
@@ -54,6 +57,7 @@
 
 #include <algorithm>
 #include <array>
+#include <deque>
 #include <chrono>
 #include <limits>
 #include <vector>
@@ -72,18 +76,22 @@ static bool scanlinesDisabled = false;
 const size_t texture_width = 1024;
 const size_t texture_height = 1024;
 
-/** Streams decoded PCM to a dedicated OpenAL source.
+/** Streams decoded PCM to a dedicated OpenAL source, kept in sync with the playback clock.
  *
- * Keeps a rotation of NUM_BUFFERS small buffers (~125ms each) queued, and acts
- * as the playback master clock: playbackTime() reports how much audio the
- * listener has actually heard, derived from consumed samples. On main-loop
- * stalls the source underruns and the clock stops advancing; update() restarts
- * playback and the presentation resumes in sync.
+ * Keeps a rotation of NUM_BUFFERS small buffers (~125ms each) queued.
+ * playbackTime() reports the presentation time of the audio playhead (what the
+ * listener is hearing right now); update() compares it against the playback
+ * clock and resyncs when they diverge:
+ *  - playhead more than SKIP_THRESHOLD behind the clock (stuttering audio
+ *    device): flush the queue and skip ahead in the decoded stream
+ *  - playhead ahead of the clock (audio kept playing while the clock was
+ *    stall-clamped): hold off queueing until the clock catches up
  */
 class VideoAudioSink
 {
 	static const size_t NUM_BUFFERS = 8;
 	static const size_t BUFFERS_PER_SECOND = 8;
+	static constexpr double SKIP_THRESHOLD = 0.25;	// max seconds audio may lag before skipping ahead
 public:
 	static std::unique_ptr<VideoAudioSink> create(unsigned channels, unsigned sampleRate)
 	{
@@ -125,24 +133,45 @@ public:
 		}
 	}
 
-	/** Reclaim played buffers, refill from the decoder, and (re)start playback */
-	void update(WZVideoDecoder& decoder)
+	/** Reclaim played buffers, resync to the playback clock, refill from the
+	 * decoder, and (re)start playback */
+	void update(WZVideoDecoder& decoder, double clockNow)
 	{
-		// reclaim processed buffers, crediting them to the playback clock
+		// reclaim processed buffers: the remaining queue's start pts advances past them
 		ALint processed = 0;
 		alGetSourcei(m_source, AL_BUFFERS_PROCESSED, &processed);
 		while (processed-- > 0)
 		{
 			ALuint buf = 0;
 			alSourceUnqueueBuffers(m_source, 1, &buf);
-			ALint bytes = 0;
-			alGetBufferi(buf, AL_SIZE, &bytes);
-			m_samplesConsumed += static_cast<uint64_t>(bytes) / (m_channels * sizeof(int16_t));
+			ASSERT(!m_queued.empty() && m_queued.front().id == buf, "OpenAL unqueue order mismatch");
+			if (!m_queued.empty())
+			{
+				m_queueStartPts = m_queued.front().endPts;
+				m_queued.pop_front();
+			}
 			m_freeBuffers.push_back(buf);
 		}
 
+		// resync to the playback clock
+		bool holdRefill = false;
+		if (m_started && m_playheadValid && !m_inputExhausted)
+		{
+			const double lag = clockNow - playbackTime();
+			if (lag > SKIP_THRESHOLD)
+			{
+				skipTo(decoder, clockNow);
+			}
+			else if (lag < 0.0)
+			{
+				// audio playhead is ahead of the (stall-clamped) clock:
+				// stop feeding until the clock catches up
+				holdRefill = true;
+			}
+		}
+
 		// refill & queue
-		while (!m_freeBuffers.empty() && !m_inputExhausted)
+		while (!holdRefill && !m_freeBuffers.empty() && !m_inputExhausted)
 		{
 			while (m_stagingFill < m_samplesPerBuffer && !m_inputExhausted)
 			{
@@ -154,10 +183,9 @@ public:
 					m_inputExhausted = true;
 					break;
 				}
-				if (!m_havePts)
+				if (m_stagingFill == 0)
 				{
-					m_firstPts = pts;
-					m_havePts = true;
+					m_stagingStartPts = pts;
 				}
 				m_stagingFill += samples;
 			}
@@ -173,6 +201,13 @@ public:
 			             m_staging.data(), static_cast<ALsizei>(m_stagingFill * m_channels * sizeof(int16_t)),
 			             static_cast<ALsizei>(m_rate));
 			alSourceQueueBuffers(m_source, 1, &buf);
+			m_queued.push_back({buf, m_stagingStartPts, m_stagingStartPts + static_cast<double>(m_stagingFill) / m_rate});
+			if (!m_playheadValid)
+			{
+				// first data: the queue now starts at the pts of what we just staged
+				m_queueStartPts = m_stagingStartPts;
+				m_playheadValid = true;
+			}
 			m_stagingFill = 0;
 		}
 
@@ -207,21 +242,89 @@ public:
 		return queued == 0 && state != AL_PLAYING;
 	}
 
-	/** Presentation time (seconds) of the audio the listener has heard so far */
+	/** Presentation time (seconds) of the audio playhead.
+	 *
+	 * The remaining OpenAL queue is always contiguous stream data (a skip
+	 * flushes the queue first), so playhead pts = queue start pts + offset. */
 	double playbackTime()
 	{
-		if (!m_started)
+		if (!m_playheadValid)
 		{
-			return m_firstPts;
+			return 0.0;
 		}
 		ALint sampleOffset = 0;
 		alGetSourcei(m_source, AL_SAMPLE_OFFSET, &sampleOffset);	// position within the currently-queued buffers
-		double t = m_firstPts + static_cast<double>(m_samplesConsumed + static_cast<uint64_t>(std::max(sampleOffset, 0))) / m_rate;
-		m_lastTime = std::max(m_lastTime, t);	// guard against small backwards steps around buffer requeueing
-		return m_lastTime;
+		return m_queueStartPts + static_cast<double>(std::max(sampleOffset, 0)) / m_rate;
 	}
 
 private:
+	/** Skip ahead in the audio so the playhead re-aligns with the clock
+	 * - Drop the late leading portion of the queue and re-queue the rest
+	 * - If even the newest queued data is late, skip within the decoded stream too
+	 * The buffer/chunk straddling the target is kept, so we resume at most one
+	 * buffer (~125ms, < SKIP_THRESHOLD) early, never late. */
+	void skipTo(WZVideoDecoder& decoder, double targetPts)
+	{
+		const double skippedFrom = playbackTime();
+
+		// stop and unqueue everything (only possible wholesale)
+		// late buffers are dropped, still-due ones re-queued below
+		alSourceStop(m_source);
+		ALint processed = 0;
+		alGetSourcei(m_source, AL_BUFFERS_PROCESSED, &processed);	// after stop, all queued buffers are processed
+		ASSERT(static_cast<size_t>(std::max(processed, 0)) == m_queued.size(), "OpenAL queue count mismatch");
+		while (processed-- > 0)
+		{
+			ALuint buf = 0;
+			alSourceUnqueueBuffers(m_source, 1, &buf);
+		}
+
+		while (!m_queued.empty() && m_queued.front().endPts <= targetPts)
+		{
+			m_freeBuffers.push_back(m_queued.front().id);
+			m_queued.pop_front();
+		}
+
+		if (!m_queued.empty())
+		{
+			// part of the queue is still due: re-queue it (buffer data is untouched)
+			for (const QueuedBuffer& qb : m_queued)
+			{
+				ALuint buf = qb.id;
+				alSourceQueueBuffers(m_source, 1, &buf);
+			}
+			m_queueStartPts = m_queued.front().startPts;
+		}
+		else
+		{
+			// the whole queue was late: skip within the decoded stream as well
+			m_stagingFill = 0;
+			double pts = 0.0;
+			size_t samples = 0;
+			while ((samples = decoder.decodeAudio(m_staging.data(), m_samplesPerBuffer, pts)) > 0)
+			{
+				if (pts + static_cast<double>(samples) / m_rate >= targetPts)
+				{
+					break;
+				}
+			}
+			if (samples == 0)
+			{
+				m_inputExhausted = true;
+				m_queueStartPts = std::max(m_queueStartPts, targetPts);
+				sound_GetError();
+				return;
+			}
+			// keep the boundary chunk: it becomes the start of the new queue
+			m_stagingStartPts = pts;
+			m_stagingFill = samples;
+			m_queueStartPts = pts;
+		}
+
+		debug(LOG_VIDEO, "audio resync: skipped %.3fs -> %.3fs (clock %.3fs)", skippedFrom, m_queueStartPts, targetPts);
+		sound_GetError();
+	}
+
 	VideoAudioSink(unsigned channels, unsigned sampleRate)
 	: m_channels(channels)
 	, m_rate(sampleRate)
@@ -231,34 +334,44 @@ private:
 	}
 
 private:
+	struct QueuedBuffer
+	{
+		ALuint id;
+		double startPts;
+		double endPts;
+	};
+
+private:
 	ALuint m_source = 0;
 	std::array<ALuint, NUM_BUFFERS> m_buffers;
 	std::vector<ALuint> m_freeBuffers;
+	std::deque<QueuedBuffer> m_queued;	// in-flight buffers, oldest first (always contiguous stream data)
 	unsigned m_channels;
 	unsigned m_rate;
 	size_t m_samplesPerBuffer;		// per channel
 	std::vector<int16_t> m_staging;
 	size_t m_stagingFill = 0;		// samples (per channel) currently staged
-	uint64_t m_samplesConsumed = 0;	// samples (per channel) of fully-played, unqueued buffers
-	double m_firstPts = 0.0;
-	double m_lastTime = 0.0;
-	bool m_havePts = false;
+	double m_stagingStartPts = 0.0;	// pts of the first staged sample
+	double m_queueStartPts = 0.0;	// pts of the first sample of the remaining OpenAL queue
+	bool m_playheadValid = false;
 	bool m_started = false;
 	bool m_inputExhausted = false;
 };
 
 /** The playback clock (seconds since the start of the video).
  *
- * Audio-master while audio is playing; otherwise a monotonic clock that clamps
- * away main-loop stalls (so a blocked event loop pauses rather than skips the
- * presentation), staying continuous with the audio clock when audio ends.
+ * A monotonic clock that clamps away main-loop stalls: a blocked event loop
+ * (modal window resize, load hitch, ...) pauses the presentation rather than
+ * skipping it. Audio is resynced to this clock by the sink (see
+ * VideoAudioSink::update), so video pacing never depends on audio-device
+ * behavior.
  */
 class PlaybackClock
 {
 	static constexpr double STALL_THRESHOLD = 0.2;	// seconds between ticks considered a stall
 public:
 	/** Advance the clock; call once per seq_Update() tick before reading now() */
-	void tick(VideoAudioSink *audioSink)
+	void tick()
 	{
 		const auto realNow = std::chrono::steady_clock::now();
 		if (!m_epochValid)
@@ -276,18 +389,7 @@ public:
 		}
 		m_lastTick = realNow;
 
-		const double wallTime = std::chrono::duration<double>(realNow - m_epoch).count() - m_stallAdjustment;
-		if (audioSink && audioSink->started() && !audioSink->finished())
-		{
-			// audio-master: drive the presentation from what the listener actually hears
-			const double audioTime = audioSink->playbackTime();
-			m_wallOffset = audioTime - wallTime;	// keep the fallback clock continuous with audio
-			m_current = std::max(m_current, audioTime);
-		}
-		else
-		{
-			m_current = std::max(m_current, wallTime + m_wallOffset);
-		}
+		m_current = std::chrono::duration<double>(realNow - m_epoch).count() - m_stallAdjustment;
 	}
 
 	double now() const { return m_current; }
@@ -297,7 +399,6 @@ private:
 	std::chrono::steady_clock::time_point m_lastTick;
 	bool m_epochValid = false;
 	double m_stallAdjustment = 0.0;
-	double m_wallOffset = 0.0;
 	double m_current = 0.0;
 };
 
@@ -553,15 +654,14 @@ bool seq_Update()
 	}
 	VideoPlayback& pb = *playback;
 
-	/* keep the audio sink topped up (this also reclaims played buffers,
-	   which is what advances the audio-master clock) */
+	pb.clock.tick();
+	const double now = pb.clock.now();
+
+	/* keep the audio sink topped up and resynced to the clock */
 	if (pb.audioSink)
 	{
-		pb.audioSink->update(*pb.decoder);
+		pb.audioSink->update(*pb.decoder, now);
 	}
-
-	pb.clock.tick(pb.audioSink.get());
-	const double now = pb.clock.now();
 
 	/* make sure a decoded frame is pending */
 	if (!pb.havePendingFrame && !pb.videoExhausted && pb.decoder->hasVideo())
