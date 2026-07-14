@@ -442,20 +442,24 @@ void null_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
 {
 }
 
-void null_context::submitFrame()
+void null_context::beginScreenFrame()
 {
-	if (!frameHasDrawCommands)
+	frameHasDrawCommands = false;
+	purgeFrameResources();
+}
+
+void null_context::finishScreenFrame()
+{
+	if (frameHasDrawCommands)
 	{
-		return;
+		// Backend is expected to handle throttling / sleeping
+		backend_impl->swapWindow();
+		current_program = nullptr;
 	}
 
-	frameNum = std::max<size_t>(frameNum + 1, 1);
 	frameHasDrawCommands = false;
-
-	// Backend is expected to handle throttling / sleeping
-	backend_impl->swapWindow();
-
-	current_program = nullptr;
+	frameNum = std::max<size_t>(frameNum + 1, 1);
+	purgeFrameResources();
 }
 
 void null_context::purgeFrameResources()
@@ -464,7 +468,7 @@ void null_context::purgeFrameResources()
 
 void null_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
-	// no-op
+	markScreenGeometryDirty();
 }
 
 std::pair<uint32_t, uint32_t> null_context::getDrawableDimensions()

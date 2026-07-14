@@ -2035,6 +2035,7 @@ void handleGameScreenSizeChange(unsigned int oldWidth, unsigned int oldHeight, u
 	pie_SetVideoBufferWidth(screenWidth);
 	pie_SetVideoBufferHeight(screenHeight);
 	pie_UpdateSurfaceGeometry();
+	screen_updateGeometry();
 
 	if (currentScreenResizingStatus == nullptr)
 	{

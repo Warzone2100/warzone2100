@@ -130,8 +130,9 @@ struct ExecutionBatch
 /// `passes` mirrors the materialized `RenderPassDesc` list (same order and count); each
 /// `CompiledPass` holds pre-resolved reads, layout barriers, and attachment final layouts
 /// so execution does not repeat that work every frame. Consumed by `warmCompiledRenderGraph`
-/// (Vulkan warm render-pass layout ids on `VkRoot`) and `executeCompiledRenderGraph`.
-/// Cached on `CachedRenderGraph` and reused until `compilePassGraph` runs again.
+/// (Vulkan warm render-pass layout ids on `VkRoot`) and `executeCompiledRenderGraph`
+/// (record-only; no submit/present). Cached on `CachedRenderGraph` and reused until
+/// `compilePassGraph` runs again inside `ensureBuilt`.
 /// </summary>
 struct PassGraphCompileResult
 {

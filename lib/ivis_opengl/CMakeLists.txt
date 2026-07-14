@@ -38,6 +38,10 @@ file(GLOB HEADERS
 	"vk/pass_layout_key.h"
 	"vk/pre_pass_barrier_emitter.h"
 	"vk/render_pass_layout_cache.h"
+	"vk/screen_frame_coordinator.h"
+	"vk/swapchain_presentation_state.h"
+	"vk/transfer_recorder.h"
+	"vk/transfer_recording_context.h"
 	"vk/warm_entry.h"
 	"imd.h"
 	"ivisdef.h"
@@ -194,7 +198,10 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 			"vk/layout_translation.cpp"
 			"vk/pass_layout_key.cpp"
 			"vk/pre_pass_barrier_emitter.cpp"
-			"vk/render_pass_layout_cache.cpp")
+			"vk/render_pass_layout_cache.cpp"
+			"vk/screen_frame_coordinator.cpp"
+			"vk/swapchain_presentation_state.cpp"
+			"vk/transfer_recorder.cpp")
 		CHECK_CXX_COMPILER_FLAG(-Wno-pedantic COMPILER_SUPPORTS_WNO_PEDANTIC)
 		if(COMPILER_SUPPORTS_WNO_PEDANTIC)
 			set_source_files_properties("3rdparty/vk_mem_alloc.cpp" PROPERTIES COMPILE_FLAGS -Wno-pedantic)
@@ -285,6 +292,9 @@ if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
 		"vk/layout_translation.cpp"
 		"vk/pass_layout_key.cpp"
 		"vk/pre_pass_barrier_emitter.cpp"
-		"vk/render_pass_layout_cache.cpp")
+		"vk/render_pass_layout_cache.cpp"
+		"vk/screen_frame_coordinator.cpp"
+		"vk/swapchain_presentation_state.cpp"
+		"vk/transfer_recorder.cpp")
 	set_source_files_properties(${cpp17_source_files} PROPERTIES COMPILE_FLAGS "-std=c++17")
 endif()

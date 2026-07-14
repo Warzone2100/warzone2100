@@ -771,8 +771,6 @@ void gfx_api::context::executeCompiledRenderGraph(std::vector<RenderPassDesc>& p
 
 	setRenderGraphExecuting(true);
 
-	bool executedAnyPass = false;
-
 	ASSERT(compileResult.executionBatches.size() > 0
 		|| std::none_of(compileResult.passes.begin(), compileResult.passes.end(),
 			[](const CompiledPass& p) { return !p.skipped; }),
@@ -817,15 +815,7 @@ void gfx_api::context::executeCompiledRenderGraph(std::vector<RenderPassDesc>& p
 		}
 
 		endPass(&head);
-		executedAnyPass = true;
 	}
-
-	if (executedAnyPass)
-	{
-		submitFrame();
-	}
-
-	purgeFrameResources();
 
 	setRenderGraphExecuting(false);
 }

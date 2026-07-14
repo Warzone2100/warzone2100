@@ -60,6 +60,8 @@
 #include "vk/layout_key_builder.h"
 #include "vk/layout_sync.h"
 #include "vk/layout_translation.h"
+#include "vk/transfer_recorder.h"
+#include "vk/transfer_recording_context.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -294,7 +296,7 @@ static uint32_t findProperties(const vk::PhysicalDeviceMemoryProperties& memprop
 	return -1;
 }
 
-[[noreturn]] static void handleUnrecoverableError(vk::Result reason)
+[[noreturn]] void handleUnrecoverableError(vk::Result reason)
 {
 	debug(LOG_ERROR, "Vulkan backend encountered error: %s", vk::to_string(reason).c_str());
 
@@ -760,6 +762,11 @@ void BlockBufferAllocator::flushAutomappedMemory()
 
 void BlockBufferAllocator::clean()
 {
+	if (autoMap)
+	{
+		unmapAutomappedMemory();
+	}
+
 	uint64_t totalMemoryAllocated = 0;
 	uint64_t totalMemoryUsed = 0;
 	for (auto& block : blocks)
@@ -890,11 +897,6 @@ void perFrameResources_t::endDrawCmdBufferIfRecording()
 	}
 }
 
-vk::CommandBuffer* perFrameResources_t::currentCopyCmdBuffer()
-{
-	return &cmdCopy;
-}
-
 vk::CommandBuffer* perFrameResources_t::currentDrawCmdBuffer()
 {
 	return pCurrentDrawCmdBuffer;
@@ -951,7 +953,9 @@ vk::DescriptorPool perFrameResources_t::getDescriptorPool(uint32_t numSets, vk::
 void perFrameResources_t::clean()
 {
 	stagingBufferAllocator.clean();
+	streamedVertexBufferAllocator.unmapAutomappedMemory();
 	streamedVertexBufferAllocator.clean();
+	uniformBufferAllocator.unmapAutomappedMemory();
 	uniformBufferAllocator.clean();
 
 	for (auto fbo : fbo_to_delete)
@@ -1097,6 +1101,7 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
 	buffering_mechanism::get_current_resources().drawCmdBufferBegun = false;
 	buffering_mechanism::get_current_resources().copyCmdBufferBegun = false;
+	buffering_mechanism::get_current_resources().swapchainImageAcquired = false;
 
 	buffering_mechanism::get_current_resources().clean();
 	buffering_mechanism::get_current_resources().numalloc = 0;
@@ -1104,6 +1109,11 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 
 void buffering_mechanism::destroy(vk::Device dev, const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
 {
+	for (auto& frameResources : perFrameResources)
+	{
+		frameResources->streamedVertexBufferAllocator.unmapAutomappedMemory();
+		frameResources->uniformBufferAllocator.unmapAutomappedMemory();
+	}
 	perFrameResources.clear();
 	perSwapchainImageResources.clear();
 	currentFrame = 0;
@@ -2013,7 +2023,7 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	}
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
-	const auto cmdBuffer = frameResources.currentCopyCmdBuffer();
+	auto transfer = root->transferRecorder();
 
 	if (lastUploaded_FrameNum != current_FrameNum)
 	{
@@ -2027,8 +2037,8 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 				.setSize(vk::WholeSize)
 		};
 
-		cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
-			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_BeforeCopy, nullptr, root->vkDynLoader);
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_BeforeCopy, nullptr);
 	}
 
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(size), 2);
@@ -2037,7 +2047,7 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 	memcpy(mappedMem, data, size);
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 	const auto copyRegions = std::array<vk::BufferCopy, 1> { vk::BufferCopy(stagingMemory.offset, start, size) };
-	cmdBuffer->copyBuffer(stagingMemory.buffer, object, copyRegions, root->vkDynLoader);
+	transfer.copyBuffer(stagingMemory.buffer, object, copyRegions);
 
 	lastUploaded_FrameNum = current_FrameNum;
 }
@@ -2314,7 +2324,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 
-	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
+	auto transfer = root->transferRecorder();
 	const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
@@ -2324,8 +2334,8 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 	};
 	// TODO: Should this be eBottomOfPipe, eTopOfPipe, or something else? // FIXME
-	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
-		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy, root->vkDynLoader);
+	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy);
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
 			.setBufferOffset(stagingMemory.offset)
@@ -2335,7 +2345,7 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 0, 1))
 			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	};
-	cmdBuffer->copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
+	transfer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions);
 	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
@@ -2345,8 +2355,8 @@ bool VkTexture::upload_internal(const std::size_t& mip_level, const std::size_t&
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 	};
-	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
-		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
+	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
 
 	root->noteExternalSubresourceLayout(
 		gfx_api::layoutSubresourceKey(static_cast<gfx_api::abstract_texture*>(this),
@@ -2676,6 +2686,8 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 
 	frameResources.stagingBufferAllocator.unmapMemory(stagingMemory);
 
+	auto transfer = root->transferRecorder();
+
 	if (!transitionedToTransferDstFormat)
 	{
 		const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
@@ -2686,14 +2698,12 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 				.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
 		};
-		const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
-		cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
-			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy, root->vkDynLoader);
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+			vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_BeforeCopy);
 
 		transitionedToTransferDstFormat = true;
 	}
 
-	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
 			.setBufferOffset(stagingMemory.offset)
@@ -2703,14 +2713,14 @@ bool VkTextureArray::upload_layer(const size_t& layer, const size_t& mip_level, 
 			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), static_cast<uint32_t>(layer), 1))
 			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	};
-	cmdBuffer->copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
+	transfer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions);
 
 	return true;
 }
 
 void VkTextureArray::flush()
 {
-	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
+	auto transfer = root->transferRecorder();
 	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
@@ -2720,8 +2730,8 @@ void VkTextureArray::flush()
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 	};
-	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
-		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy, root->vkDynLoader);
+	transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader,
+		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_AfterCopy);
 	transitionedToTransferDstFormat = false;
 
 	for (uint32_t layer = 0; layer < static_cast<uint32_t>(layer_count); ++layer)
@@ -2744,6 +2754,7 @@ size_t VkTextureArray::backend_internal_value() const
 
 VkRoot::VkRoot(bool _debug)
 	: validationLayer(_debug)
+	, _screenFrameCoordinator(*this)
 	, _renderPassLayoutCache(*this)
 	, _barrierEmitter(*this, _frameLayoutTracker)
 {
@@ -3702,16 +3713,13 @@ vk::PhysicalDevice VkRoot::pickPhysicalDevice()
 
 void VkRoot::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
-	ASSERT(!swapchainImageView.empty(), "Swapchain does not appear to be set up yet?");
-	int w, h;
-	backend_impl->getDrawableSize(&w, &h);
-	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
-	{
-		// Theoretically, one could recreate swapchain here.
-		// However this currently causes issues in practice / Vulkan validation layer errors in certain circumstances / (on certain menu screens?)
-		// Relying on the DrawableSize versus swapchainSize check in flip() seems to work fine and doesn't have the same issues.
-		return;
-	}
+	(void)oldWidth;
+	(void)oldHeight;
+	(void)newWidth;
+	(void)newHeight;
+	_screenFrameCoordinator.markDrawableSizeDirty();
+	// Do not recreate swapchain here (causes validation issues on some screens).
+	// finishScreenFrame() detects the mismatch and recreates safely.
 }
 
 std::pair<uint32_t, uint32_t> VkRoot::getDrawableDimensions()
@@ -3880,9 +3888,12 @@ void VkRoot::finalizeActiveRecording()
 	frameHasDrawCommands = false;
 	currentPSO = nullptr;
 	currentRenderPassId = INVALID_RENDER_PASS_ID;
+	_screenFrameOpen = false;
 
 	frameResources.endDrawCmdBufferIfRecording();
 	frameResources.endCopyCmdBufferIfRecording();
+	frameResources.streamedVertexBufferAllocator.unmapAutomappedMemory();
+	frameResources.uniformBufferAllocator.unmapAutomappedMemory();
 }
 
 void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
@@ -3963,6 +3974,8 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 	// Swapchain resources are gone; mark the drawable invalid so shouldDraw() and game
 	// code skip recording until createSwapchain() restores a live swapchain.
 	swapchainSize = vk::Extent2D{1, 1};
+	_screenFrameCoordinator.presentation().invalidateCachedExtentLimits();
+	_screenFrameCoordinator.markDrawableSizeDirty();
 	setRenderGraphExecuting(false);
 }
 
@@ -4295,6 +4308,8 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		throw;
 	}
 
+	_screenFrameCoordinator.presentation().updateCachedExtentLimits(swapChainSupport.capabilities);
+
 	if (!findBestAvailablePresentModeForSwapMode(swapChainSupport.presentModes, swapMode, presentMode))
 	{
 		debug(LOG_WARNING, "Unable to find best available presentation mode for swapmode: %s", to_string(swapMode).c_str());
@@ -4314,35 +4329,22 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	int w, h;
 	backend_impl->getDrawableSize(&w, &h);
 	ASSERT(w > 0 && h > 0, "getDrawableSize returned: %d x %d", w, h);
-	vk::Extent2D drawableSize;
-	drawableSize.width = static_cast<uint32_t>(w);
-	drawableSize.height = static_cast<uint32_t>(h);
+	const uint32_t drawableW = static_cast<uint32_t>(w);
+	const uint32_t drawableH = static_cast<uint32_t>(h);
 	// clamp drawableSize to VkSurfaceCapabilitiesKHR minImageExtent / maxImageExtent
 	// see: https://bugzilla.libsdl.org/show_bug.cgi?id=4671
-	swapchainSize.width = clamp(drawableSize.width, swapChainSupport.capabilities.minImageExtent.width, swapChainSupport.capabilities.maxImageExtent.width);
-	swapchainSize.height = clamp(drawableSize.height, swapChainSupport.capabilities.minImageExtent.height, swapChainSupport.capabilities.maxImageExtent.height);
+	swapchainSize = _screenFrameCoordinator.presentation().clampDrawableToSwapchainExtent(drawableW, drawableH);
 	if (swapchainSize.width == 0 || swapchainSize.height == 0)
 	{
 		debug(LOG_3D, "swapchain dimensions: %" PRIu32" x %" PRIu32"", swapchainSize.width, swapchainSize.height);
 	}
-	// Some drivers may return 0 for swapchain min/maxImageExtent height/width in certain circumstances
-	// (ex. some Nvidia drivers on Windows when minimizing the window)
-	// but attempting to create a swapchain with extents of 0 is invalid
-	if (swapchainSize.width == 0)
-	{
-		swapchainSize.width = std::max(drawableSize.width, static_cast<uint32_t>(1)); // ensure there's never a 0 swapchain width
-	}
-	if (swapchainSize.height == 0)
-	{
-		swapchainSize.height = std::max(drawableSize.height, static_cast<uint32_t>(1)); // ensure there's never a 0 swapchain height
-	}
-	if (drawableSize != swapchainSize)
+	if (drawableW != swapchainSize.width || drawableH != swapchainSize.height)
 	{
 		debug(LOG_3D, "Clamped drawableSize (%" PRIu32" x %" PRIu32") to minImageExtent (%" PRIu32" x %" PRIu32") & maxImageExtent (%" PRIu32" x %" PRIu32"): swapchainSize (%" PRIu32" x %" PRIu32")",
-			  drawableSize.width, drawableSize.height,
-			  swapChainSupport.capabilities.minImageExtent.width, swapChainSupport.capabilities.minImageExtent.height,
-			  swapChainSupport.capabilities.maxImageExtent.width, swapChainSupport.capabilities.maxImageExtent.height,
-			  swapchainSize.width, swapchainSize.height);
+			drawableW, drawableH,
+			swapChainSupport.capabilities.minImageExtent.width, swapChainSupport.capabilities.minImageExtent.height,
+			swapChainSupport.capabilities.maxImageExtent.width, swapChainSupport.capabilities.maxImageExtent.height,
+			swapchainSize.width, swapchainSize.height);
 	}
 
 	// pick swapchain image count (triple-buffering, if possible)
@@ -4539,6 +4541,8 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		debug(LOG_ERROR, "Failed to upload default array texture??");
 	}
 	pDefaultArrayTexture->flush();
+
+	_screenFrameCoordinator.presentation().syncDrawableSize(w, h);
 }
 
 static optional<uint32_t> getVKLargestDeviceLocalMemoryHeapIndex(const vk::PhysicalDeviceMemoryProperties& memprops)
@@ -4951,8 +4955,9 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 			.setNewLayout(vk::ImageLayout::eDepthStencilReadOnlyOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eShaderRead)
 	};
-	const auto cmdBuffer = buffering_mechanism::get_current_resources().currentCopyCmdBuffer();
-	cmdBuffer->pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eAllGraphics,
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	frameResources.ensureTransferRecordingBegun(vkDynLoader);
+	frameResources.copyCmdBuffer().pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eAllGraphics,
 		vk::DependencyFlags(), nullptr, nullptr, imageMemoryBarriers_TransitionDefaultDepthImage, vkDynLoader);
 
 	return true;
@@ -5827,6 +5832,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 	if (acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
 		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - should probably recreate swapchain (in the future)");
+		_screenFrameCoordinator.markDrawableSizeDirty();
 #ifdef WZ_OS_MAC
 		// Workaround MoltenVK issue: https://github.com/KhronosGroup/MoltenVK/issues/2542
 		if (!onCreate)
@@ -5852,6 +5858,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 	}
 
 	currentSwapchainIndex = acquireNextImageResult.value;
+	buffering_mechanism::get_current_resources().swapchainImageAcquired = true;
 	_frameLayoutTracker.beginFrame();
 	return AcquireNextSwapchainImageResult::eSuccess;
 }
@@ -6308,131 +6315,81 @@ bool VkRoot::recreateSwapchainAfterPresentError(const vk::Result& reason)
 	return false;
 }
 
-void VkRoot::submitFrame()
+gfx_api::vk::TransferRecorder VkRoot::transferRecorder() const
 {
-	if (!frameHasDrawCommands)
+	return gfx_api::vk::TransferRecorder(
+		const_cast<perFrameResources_t&>(buffering_mechanism::get_current_resources()),
+		gfx_api::vk::TransferRecordingContext{ vkDynLoader, _screenFrameOpen });
+}
+
+// MARK: perFrameResources_t screen-frame commit
+
+void perFrameResources_t::flushMappedAllocators()
+{
+	uniformBufferAllocator.flushAutomappedMemory();
+	uniformBufferAllocator.unmapAutomappedMemory();
+	streamedVertexBufferAllocator.flushAutomappedMemory();
+	streamedVertexBufferAllocator.unmapAutomappedMemory();
+}
+
+void perFrameResources_t::ensureTransferRecordingBegun(const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
+{
+	if (copyCmdBufferBegun)
 	{
 		return;
 	}
+	copyCmdBuffer().begin(
+		vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit),
+		vkDynLoader);
+	copyCmdBufferBegun = true;
+}
 
-	frameNum = std::max<size_t>(frameNum + 1, 1);
-
-	currentPSO = nullptr;
-
-	const bool hadDrawCmdBufferRecording = buffering_mechanism::get_current_resources().drawCmdBufferBegun;
-
-	if (hasActivePass)
-	{
-		buffering_mechanism::get_current_resources().drawCmdBuffer().endRenderPass(vkDynLoader);
-		_activeDynamicFramebuffer = vk::Framebuffer();
-		if (_activePassTargetsSwapchain)
-		{
-			_frameLayoutTracker.noteSwapchainWrite();
-			// The render pass left the swapchain in ColorAttachmentOptimal (its final layout).
-			setImageLayout(_swapchainColorSurface.get(), vk::ImageLayout::eColorAttachmentOptimal);
-		}
-		hasActivePass = false;
-		_activePassTargetsSwapchain = false;
-	}
-	if (buffering_mechanism::get_current_resources().drawCmdBufferBegun)
-	{
-		// Single per-frame transition of the swapchain image to PresentSrcKHR. Render passes
-		// keep the swapchain in ColorAttachmentOptimal, so this is the only present-related
-		// layout transition in the frame (no per-pass Present <-> ColorAttachment ping-pong).
-		if (_swapchainColorSurface)
-		{
-			vk::CommandBuffer drawCmdBuffer = buffering_mechanism::get_current_resources().drawCmdBuffer();
-			_frameLayoutTracker.transitionSwapchainToPresent(*this, drawCmdBuffer, _swapchainColorSurface.get());
-		}
-		buffering_mechanism::get_current_resources().drawCmdBuffer().end(vkDynLoader);
-		buffering_mechanism::get_current_resources().drawCmdBufferBegun = false;
-	}
-
-	frameHasDrawCommands = false;
-
-	// Add memory barrier at end of cmdCopy
+void perFrameResources_t::sealTransferStream(const WZ_vk::DispatchLoaderDynamic& vkDynLoader)
+{
 	const auto memoryBarriers = std::array<vk::MemoryBarrier, 1> {
 		vk::MemoryBarrier()
 			.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
-			.setDstAccessMask(vk::AccessFlagBits::eIndexRead | vk::AccessFlagBits::eVertexAttributeRead | vk::AccessFlagBits::eUniformRead )
+			.setDstAccessMask(vk::AccessFlagBits::eIndexRead | vk::AccessFlagBits::eVertexAttributeRead | vk::AccessFlagBits::eUniformRead)
 	};
 
-	buffering_mechanism::get_current_resources().copyCmdBuffer().pipelineBarrier(vk::PipelineStageFlagBits::eTransfer,
-																				 vk::PipelineStageFlagBits::eDrawIndirect | vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eVertexShader,
-																				 vk::DependencyFlagBits(), memoryBarriers, nullptr, nullptr, vkDynLoader);
+	copyCmdBuffer().pipelineBarrier(vk::PipelineStageFlagBits::eTransfer,
+		vk::PipelineStageFlagBits::eDrawIndirect | vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eVertexShader,
+		vk::DependencyFlagBits(), memoryBarriers, nullptr, nullptr, vkDynLoader);
 
-	buffering_mechanism::get_current_resources().copyCmdBuffer().end(vkDynLoader);
-	buffering_mechanism::get_current_resources().copyCmdBufferBegun = false;
+	copyCmdBuffer().end(vkDynLoader);
+	copyCmdBufferBegun = false;
+}
 
-	buffering_mechanism::get_current_resources().uniformBufferAllocator.flushAutomappedMemory();
-	buffering_mechanism::get_current_resources().uniformBufferAllocator.unmapAutomappedMemory();
-	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.flushAutomappedMemory();
-	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.unmapAutomappedMemory();
-
-	bool mustSkipDrawing = !shouldDraw();
-	bool mustRecreateSwapchain = false;
-	int w, h;
-	backend_impl->getDrawableSize(&w, &h);
-	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
-	{
-		// Ignore graphics instructions this time around (as there are issues on certain drivers like MoltenVK)
-		// but *must* still submit the cmdCopy CommandBuffer
-		mustSkipDrawing = true;
-
-		if (w > 0 || h > 0 || swapchainSize.width > 1 || swapchainSize.height > 1)
-		{
-			// Must re-create swapchain
-			debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-			mustRecreateSwapchain = true;
-		}
-	}
-
-	const bool submitDrawBuffer = !mustSkipDrawing && hadDrawCmdBufferRecording;
-	if (!mustSkipDrawing && !hadDrawCmdBufferRecording)
-	{
-		debug(LOG_ERROR, "submitFrame: skipping draw command buffer submit (draw command buffer was not recording)");
-	}
-
+void perFrameResources_t::submitCommandBuffers(const FrameQueueSubmitParams& submit, ScreenFramePipelineState& state)
+{
 	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 2>{
-		buffering_mechanism::get_current_resources().copyCmdBuffer(), // copy before render
-		buffering_mechanism::get_current_resources().drawCmdBuffer(),
+		copyCmdBuffer(),
+		drawCmdBuffer(),
 	};
-	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; //vk::PipelineStageFlagBits::eAllCommands;
+	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput;
 
 	auto submitInfo = vk::SubmitInfo()
-		.setCommandBufferCount(submitDrawBuffer ? static_cast<uint32_t>(executableCmdBuffer.size()) : 1)
+		.setCommandBufferCount(state.submitDrawBuffer ? static_cast<uint32_t>(executableCmdBuffer.size()) : 1)
 		.setPCommandBuffers(executableCmdBuffer.data());
 
-	if (submitDrawBuffer)
+	if (state.submitDrawBuffer)
 	{
+		ASSERT(submit.renderFinishedSemaphore != nullptr, "submitDrawBuffer requires renderFinishedSemaphore");
 		submitInfo
 			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
-			.setPWaitDstStageMask(&waitStage);
-	}
-
-	auto presentInfo = vk::PresentInfoKHR()
-		.setPSwapchains(&swapchain)
-		.setSwapchainCount(1)
-		.setPImageIndices(&currentSwapchainIndex);
-
-	if (submitDrawBuffer)
-	{
-		// Add synchronization to:
-		// - handle separate graphics and presentation queues
-		// - ensure a swapchain present operation does not conflict with a prior layout transition
-
-		submitInfo
+			.setPWaitSemaphores(&imageAcquireSemaphore)
+			.setPWaitDstStageMask(&waitStage)
 			.setSignalSemaphoreCount(1)
-			.setPSignalSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
-
-		presentInfo
-			.setWaitSemaphoreCount(1)
-			.setPWaitSemaphores(&buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore);
+			.setPSignalSemaphores(submit.renderFinishedSemaphore);
 	}
 
 	try {
-		graphicsQueue.submit(submitInfo, buffering_mechanism::get_current_resources().previousSubmission, vkDynLoader);
+		submit.graphicsQueue.submit(submitInfo, previousSubmission, submit.vkDynLoader);
+		state.submittedQueueWork = true;
+		if (state.submitDrawBuffer)
+		{
+			swapchainImageAcquired = false;
+		}
 	}
 	catch (const vk::OutOfHostMemoryError& e)
 	{
@@ -6455,142 +6412,101 @@ void VkRoot::submitFrame()
 		debug(LOG_FATAL, "vk::Queue::submit: %s: %s", vk::to_string(resultErr).c_str(), e.what());
 		handleUnrecoverableError(resultErr);
 	}
+}
 
-	if (queuedSwapModeChange.has_value())
-	{
-		swapMode = queuedSwapModeChange.value().newMode;
-		mustRecreateSwapchain = true;
-	}
+void VkRoot::sealAndSubmitTransferGraphics(ScreenFramePipelineState& state)
+{
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	state.hadDrawCmdBufferRecording = frameResources.drawCmdBufferBegun;
 
-	if (mustRecreateSwapchain)
-	{
-		recreateSwapchainAfterPresentError(vk::Result::eErrorOutOfDateKHR);
-		return; // end processing this flip
-	}
+	sealActivePassForFrameFinish();
+	sealDrawCommandBufferForPresent();
+	frameHasDrawCommands = false;
 
-	if (submitDrawBuffer)
+	state.hasCopyWork = frameResources.transferWorkRecorded;
+	state.submitDrawBuffer = !state.mustSkipDrawing && state.hadDrawCmdBufferRecording && frameResources.swapchainImageAcquired;
+	state.shouldPresent = state.submitDrawBuffer;
+
+	if (frameResources.transferWorkRecorded || state.submitDrawBuffer)
 	{
-		vk::Result presentResult;
-		try {
-			presentResult = presentQueue.presentKHR(presentInfo, vkDynLoader);
-		}
-		catch (const vk::OutOfDateKHRError&)
+		frameResources.sealTransferStream(vkDynLoader);
+		state.copyBufferWasSealed = true;
+
+		const bool ringSlotWillAdvance = state.submitDrawBuffer
+			|| (!state.mustSkipDrawing && !state.mustRecreateSwapchain);
+		if (ringSlotWillAdvance)
 		{
-			debug(LOG_3D, "vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
-			presentResult = vk::Result::eErrorOutOfDateKHR;
-			mustRecreateSwapchain = true;
-		}
-		catch (const vk::SurfaceLostKHRError&)
-		{
-			debug(LOG_3D, "vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
-			// recreate surface + swapchain
-			try {
-				handleSurfaceLost();
-			}
-			catch (const vk::SystemError& e) {
-				auto resultErr = static_cast<vk::Result>(e.code().value());
-				debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-				handleUnrecoverableError(resultErr);
-			}
-			return; // end processing this flip (assuming handleSurfaceLost didn't throw - handleUnrecoverableError will abort, if so)
-		}
-		catch (const vk::SystemError& e)
-		{
-			debug(LOG_FATAL, "vk::Queue::presentKHR: unhandled error: %s", e.what());
-			presentResult = vk::Result::eErrorUnknown;
-		}
-		if (presentResult == vk::Result::eSuboptimalKHR)
-		{
-			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
-			mustRecreateSwapchain = true;
+			frameResources.flushMappedAllocators();
 		}
 
-		if (mustRecreateSwapchain)
-		{
-			recreateSwapchainAfterPresentError(presentResult);
-			return; // end processing this flip
-		}
+		FrameQueueSubmitParams submitParams{
+			graphicsQueue,
+			vkDynLoader,
+			state.submitDrawBuffer
+				? &buffering_mechanism::get_swapchain_resources(currentSwapchainIndex).renderFinishedSemaphore
+				: nullptr,
+		};
+		frameResources.submitCommandBuffers(submitParams, state);
+	}
+}
+
+void VkRoot::sealActivePassForFrameFinish()
+{
+	if (!hasActivePass)
+	{
+		return;
 	}
 
-	try {
-		buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
-	}
-	catch (const vk::OutOfHostMemoryError& e)
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	frameResources.drawCmdBuffer().endRenderPass(vkDynLoader);
+	_activeDynamicFramebuffer = vk::Framebuffer();
+	if (_activePassTargetsSwapchain)
 	{
-		debug(LOG_ERROR, "buffering swap: OutOfHostMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfHostMemory);
+		_frameLayoutTracker.noteSwapchainWrite();
+		setImageLayout(_swapchainColorSurface.get(), vk::ImageLayout::eColorAttachmentOptimal);
 	}
-	catch (const vk::OutOfDeviceMemoryError& e)
+	hasActivePass = false;
+	_activePassTargetsSwapchain = false;
+}
+
+void VkRoot::sealDrawCommandBufferForPresent()
+{
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	if (!frameResources.drawCmdBufferBegun)
 	{
-		debug(LOG_ERROR, "buffering swap: OutOfDeviceMemoryError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorOutOfDeviceMemory);
-	}
-	catch (const vk::DeviceLostError& e)
-	{
-		debug(LOG_ERROR, "buffering swap: DeviceLostError: %s", e.what());
-		handleUnrecoverableError(vk::Result::eErrorDeviceLost);
-	}
-	catch (const vk::SystemError& e)
-	{
-		debug(LOG_FATAL, "buffering swap: unhandled error: %s", e.what());
-		auto resultErr = static_cast<vk::Result>(e.code().value());
-		handleUnrecoverableError(resultErr);
+		return;
 	}
 
-	if (submitDrawBuffer)
+	if (_swapchainColorSurface)
 	{
-		try {
-			if (acquireNextSwapchainImage(true) != AcquireNextSwapchainImageResult::eSuccess)
-			{
-				return; // end processing this flip
-			}
-		}
-		catch (const vk::SystemError& e) {
-			// acquireNextSwapchainImage failed, and couldn't recover
-			auto resultErr = static_cast<vk::Result>(e.code().value());
-			debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
-			if (resultErr == vk::Result::eSuboptimalKHR)
-			{
-				// wait for a future go-around, and hopefully it can be recreated (skip drawing in the interim)
-				swapchainSize.width = 1;
-				swapchainSize.height = 1;
-			}
-			else
-			{
-				handleUnrecoverableError(resultErr);
-			}
-		}
-
-		backend_impl->getDrawableSize(&w, &h);
-		if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
-		{
-			if (w > 0 || h > 0 || swapchainSize.width > 1 || swapchainSize.height > 1)
-			{
-				// Must re-create swapchain
-				debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-
-				recreateSwapchainAfterPresentError(vk::Result::eErrorOutOfDateKHR);
-				return; // end processing this flip
-			}
-		}
+		vk::CommandBuffer drawCmdBuffer = frameResources.drawCmdBuffer();
+		_frameLayoutTracker.transitionSwapchainToPresent(*this, drawCmdBuffer, _swapchainColorSurface.get());
 	}
-	else if (mustSkipDrawing)
-	{
-		// since we skipped drawing, don't bother acquiring a new swapchain image
-		// however, to avoid endless CPU drain, add a delay in here
-		const uint32_t minFrameInterval = 1000 / 120; // limit to approx 120 FPS
-		uint32_t renderPassEndTime = wzGetTicks();
-		const uint32_t frameTime = renderPassEndTime - lastRenderPassEndTime;
-		if (frameTime < minFrameInterval)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
-			renderPassEndTime = wzGetTicks();
-		}
-		lastRenderPassEndTime = renderPassEndTime;
-	}
+	frameResources.drawCmdBuffer().end(vkDynLoader);
+	frameResources.drawCmdBufferBegun = false;
+}
 
-	buffering_mechanism::get_current_resources().copyCmdBuffer().begin(vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eOneTimeSubmit), vkDynLoader);
-	buffering_mechanism::get_current_resources().copyCmdBufferBegun = true;
+void VkRoot::beginScreenFrame()
+{
+	ASSERT(!_screenFrameOpen, "beginScreenFrame without prior finishScreenFrame");
+	_screenFrameOpen = true;
+
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	frameResources.transferWorkRecorded = false;
+	frameHasDrawCommands = false;
+	ASSERT(!hasActivePass, "Active pass at screen frame open");
+
+	purgeFrameResources();
+}
+
+void VkRoot::prepareSwapchainForDrawing()
+{
+	_screenFrameCoordinator.prepareSwapchainForDrawing();
+}
+
+void VkRoot::finishScreenFrame()
+{
+	_screenFrameCoordinator.finishFrame();
 }
 
 bool VkRoot::buildPassLayoutKey(gfx_api::vk::PassLayoutKey& out, const gfx_api::RenderPassDesc& pass,
@@ -6795,7 +6711,7 @@ void VkRoot::endPass(const gfx_api::CompiledPass* compiledPass)
 	}
 	if (_activePassTargetsSwapchain && _swapchainColorSurface != nullptr)
 	{
-		// Render passes leave the swapchain in ColorAttachmentOptimal; mirror submitFrame force-end
+		// Render passes leave the swapchain in ColorAttachmentOptimal; mirror finishScreenFrame force-end
 		// so present transition never no-ops with a stale PresentSrcKHR tracker entry.
 		setImageLayout(_swapchainColorSurface.get(), vk::ImageLayout::eColorAttachmentOptimal);
 #if defined(DEBUG)

@@ -159,7 +159,7 @@ void ensurePassLayoutFinalLayouts(PassLayoutKey& layoutKey, const gfx_api::Rende
 
 	// Legacy (out-of-graph / ReadProducerScope::External) fallback: derive final layouts from store ops.
 	// The swapchain is left in ColorAttachmentOptimal (the layout it is rendered in) so the only
-	// swapchain transition is the single PresentSrcKHR barrier emitted once per frame in submitFrame().
+	// swapchain transition is the single PresentSrcKHR barrier emitted once per frame in finishScreenFrame().
 	layoutKey.colorFinalLayouts.reserve(layoutKey.colorFormats.size());
 	for (size_t i = 0; i < layoutKey.colorFormats.size(); ++i)
 	{

@@ -39,9 +39,10 @@ namespace gfx_api
 /// <summary>
 /// Frame render-graph cache: blueprint, materialized passes, and compile result.
 ///
-/// `ensureBuilt` compares `RenderTopologySnapshot::topologyHash` and `materializeHash`
-/// to avoid rebuilding blueprint vs rematerializing passes. `execute` runs the graph
-/// via `executeCompiledRenderGraph`.
+/// Owned by piemode (`pie_GetCachedFrameRenderGraph`). `ensureBuilt` rebuilds when
+/// `RenderTopologySnapshot::materializeHash` changes (includes topology, sizes, and
+/// `backendEpoch`). `execute` records via `executeCompiledRenderGraph`; GPU submit and
+/// present are handled by `finishScreenFrame()` in piemode.
 /// </summary>
 class CachedRenderGraph
 {
@@ -55,7 +56,7 @@ public:
 
 	/// Rebuild or rematerialize if snapshot hashes differ; compile and warm backend layouts.
 	void ensureBuilt(const RenderTopologySnapshot& snapshot);
-	/// Record and submit the cached pass list for the current frame.
+	/// Record the cached pass list for the current frame (no submit/present).
 	void execute();
 
 private:

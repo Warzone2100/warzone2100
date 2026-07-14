@@ -36,6 +36,7 @@
 #include "vk/pass_layout_key.h"
 #include "vk/pre_pass_barrier_emitter.h"
 #include "vk/render_pass_layout_cache.h"
+#include "vk/screen_frame_coordinator.h"
 #include "vk/warm_entry.h"
 #include <algorithm>
 #include <sstream>
@@ -178,6 +179,39 @@ struct VkRoot; // forward-declare
 struct VkPSO; // forward-declare
 struct buffering_mechanism;
 
+namespace gfx_api::vk
+{
+class TransferRecorder;
+class ScreenFrameCoordinator;
+} // namespace gfx_api::vk
+
+[[noreturn]] void handleUnrecoverableError(vk::Result reason);
+
+/// Per-frame screen commit state: swapchain inputs plus slot seal/submit/present flow.
+struct ScreenFramePipelineState
+{
+	bool mustSkipDrawing = false;
+	bool mustRecreateSwapchain = false;
+	int drawableWidth = 0;
+	int drawableHeight = 0;
+
+	bool hadDrawCmdBufferRecording = false;
+	bool hasCopyWork = false;
+	bool submitDrawBuffer = false;
+	bool submittedQueueWork = false;
+	bool shouldPresent = false;
+	bool copyBufferWasSealed = false;
+	bool ringSwapped = false;
+};
+
+/// Queue submit inputs for `perFrameResources_t::submitCommandBuffers`.
+struct FrameQueueSubmitParams
+{
+	vk::Queue& graphicsQueue;
+	const WZ_vk::DispatchLoaderDynamic& vkDynLoader;
+	vk::Semaphore* renderFinishedSemaphore = nullptr;
+};
+
 struct perFrameResources_t
 {
 	vk::Device dev;
@@ -241,7 +275,6 @@ struct perFrameResources_t
 	~perFrameResources_t();
 
 public:
-	vk::CommandBuffer* currentCopyCmdBuffer();
 	vk::CommandBuffer* currentDrawCmdBuffer();
 
 	vk::CommandBuffer copyCmdBuffer();
@@ -253,8 +286,24 @@ public:
 
 	bool drawCmdBufferBegun = false;
 	bool copyCmdBufferBegun = false;
+	/// True after acquireNextSwapchainImage() signals imageAcquireSemaphore for this slot.
+	bool swapchainImageAcquired = false;
+	/// True when TransferRecorder recorded copy/barrier work this screen frame.
+	bool transferWorkRecorded = false;
 
-protected:
+	/// Restart transfer recording after a sealed submit (frame-finish tail helper).
+	void ensureTransferRecordingBegun(const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
+
+	/// Flush CPU-side automapped allocators before queue submit.
+	void flushMappedAllocators();
+
+	/// End the copy stream with the standard upload -> draw barrier.
+	void sealTransferStream(const WZ_vk::DispatchLoaderDynamic& vkDynLoader);
+
+	/// Submit copy and optionally draw command buffers to the graphics queue.
+	void submitCommandBuffers(const FrameQueueSubmitParams& submit, ScreenFramePipelineState& state);
+
+private:
 	friend struct buffering_mechanism;
 
 	// upload / transfer commands
@@ -789,6 +838,8 @@ struct VkRoot final : gfx_api::context
 	std::vector<vk::Result> errorHandlingDepth;
 
 	size_t frameNum = 0;
+	bool _screenFrameOpen = false;
+	gfx_api::vk::ScreenFrameCoordinator _screenFrameCoordinator;
 
 public:
 	VkRoot(bool _debug);
@@ -864,7 +915,13 @@ public:
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
-	virtual void submitFrame() override;
+	virtual void beginScreenFrame() override;
+	virtual void finishScreenFrame() override;
+	virtual void prepareSwapchainForDrawing() override;
+	/// True between beginScreenFrame() and finishScreenFrame().
+	bool isScreenFrameOpen() const { return _screenFrameOpen; }
+	/// Typed wrapper for per-frame GPU upload / copy command recording.
+	gfx_api::vk::TransferRecorder transferRecorder() const;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
 	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;
@@ -941,6 +998,10 @@ private:
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
 	const RenderPassDetails& currentRenderPass();
 	bool recreateSwapchainAfterPresentError(const vk::Result& reason);
+	void sealActivePassForFrameFinish();
+	void sealDrawCommandBufferForPresent();
+	void sealAndSubmitTransferGraphics(ScreenFramePipelineState& state);
+
 	void ensureRenderPassPSOCapacity(size_t requiredCount);
 	void destroyRenderPassIndexedPSOs(size_t fromIndex);
 	size_t getOrCreatePassRenderPassId(const gfx_api::vk::PassLayoutKey& key);
@@ -991,6 +1052,7 @@ private:
 	friend class gfx_api::vk::RenderPassLayoutCache;
 	friend class gfx_api::vk::FrameLayoutTracker;
 	friend class gfx_api::vk::PrePassBarrierEmitter;
+	friend class gfx_api::vk::ScreenFrameCoordinator;
 	friend bool gfx_api::vk::populatePassLayoutKeyFormats(gfx_api::vk::PassLayoutKey&,
 		const gfx_api::RenderPassDesc&, const VkRoot&);
 	friend bool gfx_api::vk::populatePassLayoutKeyLayouts(gfx_api::vk::PassLayoutKey&,

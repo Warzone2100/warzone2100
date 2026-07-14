@@ -4397,18 +4397,24 @@ void configureDynamicPassDrawBuffers(const gfx_api::RenderPassDesc& pass)
 
 } // anonymous namespace
 
-void gl_context::submitFrame()
+void gl_context::beginScreenFrame()
 {
-	if (!frameHasDrawCommands)
+	frameHasDrawCommands = false;
+	purgeFrameResources();
+}
+
+void gl_context::finishScreenFrame()
+{
+	if (frameHasDrawCommands)
 	{
-		return;
+		backend_impl->swapWindow();
+		glUseProgram(0);
+		current_program = nullptr;
 	}
 
-	frameNum = std::max<size_t>(frameNum + 1, 1);
-	backend_impl->swapWindow();
-	glUseProgram(0);
-	current_program = nullptr;
 	frameHasDrawCommands = false;
+	frameNum = std::max<size_t>(frameNum + 1, 1);
+	purgeFrameResources();
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khrCallbackOomDetected.load())
@@ -5209,6 +5215,8 @@ bool gl_context::initCheckBorderClampSupport()
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
+	markScreenGeometryDirty();
+
 	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
 	// if SDL's built-in high-DPI support is enabled and functioning).
 	int drawableWidth = 0, drawableHeight = 0;

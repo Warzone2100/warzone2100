@@ -118,7 +118,14 @@ void pie_ScreenFrameRenderBegin()
 	renderingFrame = true;
 
 	pie_ResetInGame3DFrameContextForFrame();
-	gfx_api::context::get().purgeFrameResources();
+	if (!gfx_api::context::isInitialized() || gfx_api::context::get().consumeScreenGeometryDirty())
+	{
+		screen_updateGeometry();
+	}
+	if (gfx_api::context::isInitialized())
+	{
+		gfx_api::context::get().beginScreenFrame();
+	}
 }
 
 void pie_ScreenFrameRenderEnd()
@@ -132,11 +139,20 @@ void pie_ScreenFrameRenderEnd()
 	const gfx_api::IRenderTopologyQuery& query = gfx_api::getGameRenderTopologyQuery();
 	if (!query.headlessOrSkipDrawing())
 	{
+		if (gfx_api::context::isInitialized())
+		{
+			gfx_api::context::get().prepareSwapchainForDrawing();
+		}
 		const gfx_api::RenderTopologySnapshot snapshot = gfx_api::render_topology::snapshot(query);
 		gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
 		graph.ensureBuilt(snapshot);
 		graph.execute();
 		screenDoDumpToDiskIfRequired();
+	}
+
+	if (gfx_api::context::isInitialized())
+	{
+		gfx_api::context::get().finishScreenFrame();
 	}
 
 	renderingFrame = false;

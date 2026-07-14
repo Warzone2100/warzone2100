@@ -49,12 +49,11 @@ struct abstract_texture;
 /// <summary>
 /// Per-frame pool of reusable GPU resources keyed by attachment/layout.
 ///
-/// Backends own one or more specializations (`FramebufferResourceCache`, `DynamicFBOCache`, …).
+/// Backends own one or more specializations (`FramebufferResourceCache`, `DynamicFBOCache`, ...).
 /// Lifecycle (callers must preserve this ordering):
-/// 1. releaseAll() at frame graph reset (start of accumulation).
-/// 2. acquire() while recording.
-/// 3. submitFrame() on the backend.
-/// 4. purgeUnused() after submit - drop resources not acquired this frame.
+/// 1. acquire() while recording passes (during executeCompiledRenderGraph).
+/// 2. purgeUnused() from purgeFrameResources() at beginScreenFrame() and finishScreenFrame().
+///    Drops pool entries that were not acquired since the last purge.
 /// </summary>
 template <typename Key, typename Storage, typename Handle>
 class PooledResourceCache

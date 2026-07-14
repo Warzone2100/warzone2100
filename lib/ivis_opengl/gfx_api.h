@@ -409,7 +409,37 @@ namespace gfx_api
 		virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) { return false; }
 		virtual void beginPass(const RenderPassDesc& pass, const CompiledPass* compiledPass = nullptr) = 0;
 		virtual void endPass(const CompiledPass* compiledPass = nullptr) = 0;
-		virtual void submitFrame() = 0;
+
+		/// Screen-frame lifecycle (owned by piemode / main loop):
+		///
+		///   pie_ScreenFrameRenderBegin()
+		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
+		///     -> beginScreenFrame()          // per-frame flag reset; purge unused FBO pool entries
+		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
+		///   pie_ScreenFrameRenderEnd()
+		///     ... when !headlessOrSkipDrawing() ...
+		///     -> prepareSwapchainForDrawing() // late swapchain acquire (Vulkan; no-op elsewhere)
+		///     -> CachedRenderGraph::ensureBuilt(snapshot)
+		///     -> CachedRenderGraph::execute() // RECORD only (executeCompiledRenderGraph)
+		///     -> finishScreenFrame()          // ALWAYS when gfx initialized: seal/submit/present,
+		///                                     // ring advance, frameNum++, purge FBO pool
+		///
+		/// Upload paths record into the current frame's copy command buffer throughout the
+		/// screen frame. finishScreenFrame() must NOT be gated on graph execution or shouldDraw().
+		/// Must pair beginScreenFrame() with finishScreenFrame().
+		virtual void beginScreenFrame() = 0;
+		virtual void finishScreenFrame() = 0;
+		/// Acquire a swapchain image for draw recording when the drawable is in sync (Vulkan).
+		virtual void prepareSwapchainForDrawing() {}
+		/// Mark UI/backdrop geometry stale after a drawable resize (called from backends).
+		void markScreenGeometryDirty() { _screenGeometryDirty = true; }
+		/// Returns true once per dirty signal; used to refresh backdrop VBOs without per-frame work.
+		bool consumeScreenGeometryDirty()
+		{
+			const bool dirty = _screenGeometryDirty;
+			_screenGeometryDirty = false;
+			return dirty;
+		}
 
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
 		virtual gfx_api::abstract_texture* getPipelineSurface(PipelineSurfaceId id) { return nullptr; }
@@ -420,15 +450,18 @@ namespace gfx_api
 		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
 		virtual pixel_format getDepthStencilFormat() const { return pixel_format::invalid; }
 
-		/// Purge unused pooled framebuffers after frame submit (FBO cache only).
-		/// `beginRenderPass()` resets FBO pool use counts; `endRenderPass()` and
-		/// `executeCompiledRenderGraph()` call this after submit.
+		/// Purge unused pooled framebuffers (FBO cache only).
+		/// Called from beginScreenFrame() and finishScreenFrame() (after queue submit).
 		virtual void purgeFrameResources() {}
 
 		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }
 
+		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
+		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
+		/// afterward for GPU commit.
 		virtual void executeCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
 			const PassGraphCompileResult& compileResult);
+		/// Pre-warm backend pass resources after compile (e.g. Vulkan render-pass layout ids).
 		virtual void warmCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
 			PassGraphCompileResult& compileResult);
 		// Emit any out-of-graph pre-pass layout/sync barriers for a batch of passes (the passes
@@ -496,6 +529,7 @@ namespace gfx_api
 	private:
 		bool _renderGraphExecuting = false;
 		uint64_t _renderGraphEpoch = 1;
+		bool _screenGeometryDirty = true;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 

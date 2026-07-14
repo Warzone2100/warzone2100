@@ -370,7 +370,8 @@ struct gl_context final : public gfx_api::context
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
-	virtual void submitFrame() override;
+	virtual void beginScreenFrame() override;
+	virtual void finishScreenFrame() override;
 	virtual size_t getDepthPassDimensions(size_t idx) override;
 	virtual gfx_api::abstract_texture* getPipelineSurface(gfx_api::PipelineSurfaceId id) override;
 	virtual gfx_api::PipelineSurfaceMeta pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const override;

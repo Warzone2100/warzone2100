@@ -130,7 +130,8 @@ public:
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
-	virtual void submitFrame() override;
+	virtual void beginScreenFrame() override;
+	virtual void finishScreenFrame() override;
 	virtual void purgeFrameResources() override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
 		gfx_api::PassGraphCompileResult& compileResult) override;
