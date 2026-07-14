@@ -122,6 +122,11 @@ public:
 		return m_audioTracks;
 	}
 
+	size_t selectedAudioTrack() const override
+	{
+		return 0;
+	}
+
 	bool selectAudioTrack(size_t index) override
 	{
 		// ogg FMVs only ever have the single (already-selected) vorbis track

@@ -78,6 +78,8 @@ public:
 
 	virtual const std::vector<WZAudioTrackMetadata>& audioTracks() const = 0;
 	bool hasAudio() const { return !audioTracks().empty(); }
+	/** The audioTracks() index of the currently selected audio track */
+	virtual size_t selectedAudioTrack() const = 0;
 	/** Select which audio track to decode. Must be called before the first
 	 * decodeAudio() call; the default is the container's default track. */
 	virtual bool selectAudioTrack(size_t index) = 0;
@@ -96,3 +98,6 @@ public:
 /** Open a video: sniffs the container format from the provider's first bytes
  * and returns the appropriate decoder, or nullptr (with a logged error). */
 std::unique_ptr<WZVideoDecoder> videoDecoderOpen(std::shared_ptr<VideoProvider> provider);
+
+/** Whether this build includes WebM (VP8/VP9) support (WZ_ENABLE_WEBM) */
+bool videoDecoderWebmSupported();
