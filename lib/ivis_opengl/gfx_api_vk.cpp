@@ -2040,6 +2040,21 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eVertexInput | vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
 			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_BeforeCopy, nullptr);
 	}
+	else
+	{
+		// Same frame, same buffer — explicit transfer WAW barrier (sync2 validation).
+		const auto bufferMemoryBarrier_WAW = std::array<vk::BufferMemoryBarrier, 1> {
+			vk::BufferMemoryBarrier()
+				.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
+				.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
+				.setBuffer(object)
+				.setOffset(start)
+				.setSize(size)
+		};
+
+		transfer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+			vk::DependencyFlags(), nullptr, bufferMemoryBarrier_WAW, nullptr);
+	}
 
 	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(size), 2);
 	const auto mappedMem = frameResources.stagingBufferAllocator.mapMemory(stagingMemory);
