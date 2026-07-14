@@ -57,6 +57,10 @@
 #include "lib/netplay/sync_debug.h"
 #include "game_world.h"
 
+#if WZ_PATHFINDING_INSTRUMENTATION
+uint64_t *g_pathNodesExpanded = nullptr;
+#endif
+
 /// A coordinate.
 struct PathCoord
 {
@@ -367,6 +371,13 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 			continue;  // Already been here.
 		}
 		context.map[node.p.x + node.p.y * gameWorld.map.width].visited = true;
+
+#if WZ_PATHFINDING_INSTRUMENTATION
+		if (g_pathNodesExpanded)
+		{
+			++*g_pathNodesExpanded;
+		}
+#endif
 
 		// note the nearest node to the target so far
 		if (node.est - node.dist < nearestDist)
