@@ -185,6 +185,7 @@ parts:
       - libphysfs-dev
       - libpng-dev
       - libtheora-dev
+      - libvpx-dev
       - libogg-dev
       - libopus-dev
       - libvorbis-dev
@@ -215,6 +216,7 @@ parts:
       - libphysfs1
       - libpng16-16
       - libtheora0
+      - libvpx9
       - libvorbis0a
       - libvorbisenc2
       - libvorbisfile3
