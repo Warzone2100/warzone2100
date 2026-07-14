@@ -26,10 +26,120 @@
 # include "webm_decoder.h"
 #endif
 
+#include <algorithm>
+#include <cctype>
 #include <cstring>
+#include <string>
 
 WZVideoDecoder::~WZVideoDecoder()
 { }
+
+namespace
+{
+
+struct LanguageCodes
+{
+	const char *iso639_1;
+	const char *iso639_2t;
+	const char *iso639_2b;	// only set where it differs from the /T form
+};
+
+// Languages WZ ships translations for. Sufficient for canonicalizing both the
+// game-language side (639-1 style locale codes) and the container side
+// (Matroska uses 639-2, historically the /B forms).
+constexpr LanguageCodes languageCodeTable[] = {
+	{"bg", "bul", nullptr}, {"ca", "cat", nullptr}, {"cs", "ces", "cze"},
+	{"da", "dan", nullptr}, {"de", "deu", "ger"},   {"el", "ell", "gre"},
+	{"en", "eng", nullptr}, {"es", "spa", nullptr}, {"et", "est", nullptr},
+	{"eu", "eus", "baq"},   {"fi", "fin", nullptr}, {"fr", "fra", "fre"},
+	{"fy", "fry", nullptr}, {"ga", "gle", nullptr}, {"hr", "hrv", nullptr},
+	{"hu", "hun", nullptr}, {"id", "ind", nullptr}, {"it", "ita", nullptr},
+	{"ja", "jpn", nullptr}, {"ko", "kor", nullptr}, {"la", "lat", nullptr},
+	{"lt", "lit", nullptr}, {"lv", "lav", nullptr}, {"nb", "nob", nullptr},
+	{"nl", "nld", "dut"},   {"pl", "pol", nullptr}, {"pt", "por", nullptr},
+	{"ro", "ron", "rum"},   {"ru", "rus", nullptr}, {"sk", "slk", "slo"},
+	{"sl", "slv", nullptr}, {"sv", "swe", nullptr}, {"tr", "tur", nullptr},
+	{"uk", "ukr", nullptr}, {"zh", "zho", "chi"},
+};
+
+// lowercase primary language subtag: "pt_BR" / "de-DE" / "GER" -> "pt" / "de" / "ger"
+std::string normalizeLanguageCode(const WzString& code)
+{
+	std::string s = code.toUtf8();
+	size_t delim = s.find_first_of("-_");
+	if (delim != std::string::npos)
+	{
+		s.resize(delim);
+	}
+	std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+	return s;
+}
+
+// canonical ISO 639-1 form where known; otherwise the normalized input
+std::string canonicalLanguageCode(const WzString& code)
+{
+	std::string s = normalizeLanguageCode(code);
+	if (s.length() == 3)
+	{
+		for (const auto& entry : languageCodeTable)
+		{
+			if (s == entry.iso639_2t || (entry.iso639_2b && s == entry.iso639_2b))
+			{
+				return entry.iso639_1;
+			}
+		}
+	}
+	return s;
+}
+
+bool languageMatches(const WzString& a, const WzString& b)
+{
+	std::string ca = canonicalLanguageCode(a);
+	return !ca.empty() && ca == canonicalLanguageCode(b);
+}
+
+} // anonymous namespace
+
+size_t videoDecoderChooseAudioTrack(const std::vector<WZAudioTrackMetadata>& tracks, const WzString& preferredLanguage)
+{
+	if (tracks.empty())
+	{
+		return 0;
+	}
+
+	// 1. the preferred language, if we have it
+	if (!preferredLanguage.isEmpty())
+	{
+		for (size_t i = 0; i < tracks.size(); ++i)
+		{
+			if (languageMatches(tracks[i].languageCode, preferredLanguage))
+			{
+				return i;
+			}
+		}
+	}
+
+	// 2. English - by language tag, not track order (untagged tracks are
+	// reported as "eng": the Matroska default language is English)
+	for (size_t i = 0; i < tracks.size(); ++i)
+	{
+		if (languageMatches(tracks[i].languageCode, "en"))
+		{
+			return i;
+		}
+	}
+
+	// 3. the container default (or, failing that, the first) track, so a file
+	// with no English track at all still plays something
+	for (size_t i = 0; i < tracks.size(); ++i)
+	{
+		if (tracks[i].isDefault)
+		{
+			return i;
+		}
+	}
+	return 0;
+}
 
 bool videoDecoderWebmSupported()
 {
