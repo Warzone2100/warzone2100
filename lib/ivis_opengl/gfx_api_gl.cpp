@@ -4400,7 +4400,7 @@ void configureDynamicPassDrawBuffers(const gfx_api::RenderPassDesc& pass)
 void gl_context::beginScreenFrame()
 {
 	frameHasDrawCommands = false;
-	purgeFrameResources();
+	_dynamicFBOCache.releaseAll();
 }
 
 void gl_context::finishScreenFrame()

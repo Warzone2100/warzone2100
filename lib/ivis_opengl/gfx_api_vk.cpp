@@ -6526,7 +6526,7 @@ void VkRoot::beginScreenFrame()
 	ASSERT(!hasActivePass, "Active pass at screen frame open");
 
 	frameResources.ensureTransferRecordingBegun(vkDynLoader);
-	purgeFrameResources();
+	_framebufferCache.releaseAll();
 }
 
 void VkRoot::prepareSwapchainForDrawing()

@@ -413,7 +413,7 @@ namespace gfx_api
 		/// Screen-frame lifecycle (owned by piemode / main loop):
 		///
 		///   pie_ScreenFrameRenderBegin()
-		///     -> beginScreenFrame()          // per-frame flag reset; purge unused FBO pool entries;
+		///     -> beginScreenFrame()           // per-frame flag reset; releaseAll() on FBO pool;
 		///                                     // Vulkan: open transfer (copy) command buffer
 		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
 		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
@@ -452,8 +452,8 @@ namespace gfx_api
 		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
 		virtual pixel_format getDepthStencilFormat() const { return pixel_format::invalid; }
 
-		/// Purge unused pooled framebuffers (FBO cache only).
-		/// Called from beginScreenFrame() and finishScreenFrame() (after queue submit).
+		/// Purge unused pooled framebuffers/FBOs after the frame accumulation window.
+		/// Backends call releaseAll() at beginScreenFrame() and purgeFrameResources() at finish.
 		virtual void purgeFrameResources() {}
 
 		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }

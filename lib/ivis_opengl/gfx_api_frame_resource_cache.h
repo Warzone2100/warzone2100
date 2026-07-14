@@ -51,9 +51,9 @@ struct abstract_texture;
 ///
 /// Backends own one or more specializations (`FramebufferResourceCache`, `DynamicFBOCache`, ...).
 /// Lifecycle (callers must preserve this ordering):
-/// 1. acquire() while recording passes (during executeCompiledRenderGraph).
-/// 2. purgeUnused() from purgeFrameResources() at beginScreenFrame() and finishScreenFrame().
-///    Drops pool entries that were not acquired since the last purge.
+/// 1. releaseAll() at beginScreenFrame() - reset per-key use counts for this frame.
+/// 2. acquire() while recording passes (during graph execution).
+/// 3. purgeUnused() at finishScreenFrame() - trim pools; drop keys with usedCount==0.
 /// </summary>
 template <typename Key, typename Storage, typename Handle>
 class PooledResourceCache
@@ -86,6 +86,7 @@ public:
 	}
 
 	/// Reset per-key use counts at the start of frame accumulation.
+	/// Must not be paired with purgeUnused() in the same call; that would erase the entire pool.
 	void releaseAll()
 	{
 		for (auto& cacheEntry : _cache)
