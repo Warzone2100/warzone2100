@@ -69,13 +69,21 @@ void ScreenFrameCoordinator::tryAcquireSwapchainImageForDrawing()
 	catch (const ::vk::SystemError& e)
 	{
 		auto resultErr = static_cast<::vk::Result>(e.code().value());
-		debug((resultErr == ::vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR,
+		const bool isRecoverableError =
+			resultErr == ::vk::Result::eSuboptimalKHR ||
+			resultErr == ::vk::Result::eErrorOutOfDateKHR ||
+			resultErr == ::vk::Result::eErrorSurfaceLostKHR;
+		debug(isRecoverableError ? LOG_3D : LOG_ERROR,
 			"tryAcquireSwapchainImageForDrawing failed: %s", ::vk::to_string(resultErr).c_str());
-		if (resultErr == ::vk::Result::eSuboptimalKHR)
+		if (isRecoverableError)
 		{
 			_root.swapchainSize.width = 1;
 			_root.swapchainSize.height = 1;
 			markDrawableSizeDirty();
+		}
+		else
+		{
+			handleUnrecoverableError(resultErr);
 		}
 	}
 }
@@ -232,7 +240,7 @@ void ScreenFrameCoordinator::presentAndAcquireScreenFrame(ScreenFramePipelineSta
 	catch (const ::vk::SystemError& e)
 	{
 		debug(LOG_FATAL, "::vk::Queue::presentKHR: unhandled error: %s", e.what());
-		presentResult = ::vk::Result::eErrorUnknown;
+		handleUnrecoverableError(static_cast<::vk::Result>(e.code().value()));
 	}
 
 	if (presentResult == ::vk::Result::eSuboptimalKHR)
