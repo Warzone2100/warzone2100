@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2008-2020  Warzone 2100 Project
+	Copyright (C) 2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,20 +19,10 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_LIB_SEQUENCE_TIMER_H__
-#define __INCLUDED_LIB_SEQUENCE_TIMER_H__
+#pragma once
 
-void   Timer_Init();
-void   Timer_start();					// start timer
-void   Timer_stop();					// stop the timer
-double Timer_getElapsedMilliSecs();		// get elapsed time in milliseconds
-double Timer_getElapsedMicroSecs();		// get elapsed time in microseconds
+#include "video_decoder.h"
 
-#if defined(WZ_OS_WIN)
-# include <winsock2.h> /* for struct timeval */
-
-struct timezone;
-int gettimeofday(struct timeval *tv, struct timezone *tz);
-#endif
-
-#endif // __INCLUDED_LIB_SEQUENCE_TIMER_H__
+/** Open an Ogg container holding a Theora video stream and (optionally) a
+ * Vorbis audio stream. \returns nullptr (with a logged error) on failure. */
+std::unique_ptr<WZVideoDecoder> oggTheoraDecoderOpen(std::shared_ptr<VideoProvider> provider);
