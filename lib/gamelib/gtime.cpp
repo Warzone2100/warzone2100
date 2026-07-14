@@ -386,6 +386,11 @@ void gameTimeStart(void)
 	stopCount = std::max<int>(stopCount - 1, 0);
 }
 
+void gameTimeRebaseRealTimeBase()
+{
+	prevRealTime = wzGetTicks();
+}
+
 /* Call this to reset the game timer */
 void gameTimeReset(UDWORD time)
 {

@@ -927,6 +927,13 @@ bool startGameAfterLevelLoad()
 		}
 	}
 
+	// Rebase the game clock's real-time reference: the clock started at the
+	// beginning of level loading (gameTimeInit in stageOneInitialise), and
+	// without this the entire load duration would be converted into game-time
+	// catch-up ticks on the first frames - fast-forwarding the start of the
+	// mission and skipping the start-of-game fade.
+	gameTimeRebaseRealTimeBase();
+
 	return true;
 }
 

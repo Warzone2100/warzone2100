@@ -121,6 +121,12 @@ void gameTimeStop();
 /** Call this to restart the game timer after a call to gameTimeStop. */
 void gameTimeStart();
 
+/** Rebase the game/graphics clock's real-time reference to "now", so real time
+ *  that has already elapsed (e.g. level loading) is not converted into game
+ *  time catch-up ticks. Does not modify gameTime / graphicsTime or the
+ *  synchronized game time queues. */
+void gameTimeRebaseRealTimeBase();
+
 /** Call this to set the game time and to reset the time modifier, and to update the real time, setting the delta to 0. */
 void gameTimeReset(UDWORD time);
 
