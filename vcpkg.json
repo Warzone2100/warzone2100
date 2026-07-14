@@ -33,6 +33,7 @@
 		"libogg",
 		"libtheora",
 		"libvorbis",
+		"libvpx",
 		"opus",
 		{
 			"name": "libpng",

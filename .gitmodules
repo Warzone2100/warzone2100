@@ -92,3 +92,6 @@
 [submodule "3rdparty/ControllerImage"]
 	path = 3rdparty/ControllerImage
 	url = https://github.com/icculus/ControllerImage.git
+[submodule "3rdparty/libwebm"]
+	path = 3rdparty/libwebm
+	url = https://github.com/webmproject/libwebm.git

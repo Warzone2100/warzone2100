@@ -73,8 +73,9 @@ static SCANLINE_MODE scanMode = SCANLINES_OFF;
 static SCANLINE_MODE use_scanlines = SCANLINES_OFF;
 static bool scanlinesDisabled = false;
 
-const size_t texture_width = 1024;
-const size_t texture_height = 1024;
+// dimensions of the video texture (allocated to fit the current video)
+static unsigned videoTextureWidth = 0;
+static unsigned videoTextureHeight = 0;
 
 /** Streams decoded PCM to a dedicated OpenAL source, kept in sync with the playback clock.
  *
@@ -548,7 +549,7 @@ static void video_draw()
 
 void update_buffers()
 {
-	if (videoGfx == nullptr || !playback)
+	if (videoGfx == nullptr || !playback || videoTextureWidth == 0 || videoTextureHeight == 0)
 	{
 		return;
 	}
@@ -557,8 +558,8 @@ void update_buffers()
 
 	// when using scanlines we need to double the height
 	const uint32_t height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
-	const gfx_api::gfxFloat vtwidth = (float)vmeta.width / (float)texture_width;
-	const gfx_api::gfxFloat vtheight = (float)vmeta.height * height_factor / (float)texture_height;
+	const gfx_api::gfxFloat vtwidth = (float)vmeta.width / (float)videoTextureWidth;
+	const gfx_api::gfxFloat vtheight = (float)vmeta.height * height_factor / (float)videoTextureHeight;
 	gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = {0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight};
 	videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 }
@@ -589,38 +590,47 @@ bool seq_Play(std::shared_ptr<VideoProvider> video)
 	}
 	session->videoExhausted = !session->decoder->hasVideo();	// audio-only: end when audio ends
 
-	/* open audio (the sink is also the playback master clock) */
+	/* open audio */
 	if (session->decoder->hasAudio() && !audio_Disabled())
 	{
 		// play the container's default audio track
-		const WZAudioTrackMetadata& track = session->decoder->audioTracks().front();
+		const WZAudioTrackMetadata& track = session->decoder->audioTracks()[session->decoder->selectedAudioTrack()];
 		session->audioSink = VideoAudioSink::create(track.channels, track.sampleRate);
 		// a null sink (OpenAL sources exhausted) means we play silently, on the fallback clock
 	}
 
 	/* open video */
 	videoGfx = std::make_unique<GFX>(GFX_TEXTURE, 2);
+	videoTextureWidth = 0;
+	videoTextureHeight = 0;
 	if (session->decoder->hasVideo())
 	{
 		const WZVideoTrackMetadata& vmeta = session->decoder->videoMetadata();
-		if (vmeta.width > texture_width || vmeta.height > texture_height)
+		const int32_t maxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+		if (vmeta.width == 0 || vmeta.height == 0
+		    || vmeta.width > static_cast<unsigned>(maxTextureSize) || vmeta.height > static_cast<unsigned>(maxTextureSize))
 		{
-			debug(LOG_ERROR, "Video size too large, must be below %zu x %zu!",
-			      texture_width, texture_height);
+			debug(LOG_ERROR, "Video size (%u x %u) is not supported (max texture size: %d)",
+			      vmeta.width, vmeta.height, maxTextureSize);
 			videoGfx = nullptr;
 			return false;
 		}
 
-		iV_Image blackFrame;
-		blackFrame.allocate(texture_width, texture_height, 4, true);
-
-		// disable scanlines temporarily if the video is too large for the texture or shown too small
-		if (vmeta.height * 2 > texture_height || vertices[3][1] < vmeta.height * 2)
+		// scanlines are a retro effect for the original low-res assets
+		// disable them when doubling would exceed limits, or when shown too small
+		if (vmeta.height * 2 > static_cast<unsigned>(maxTextureSize)
+		    || vertices[3][1] < vmeta.height * 2)
 		{
 			seq_setScanlinesDisabled(true);
 		}
 
 		Allocate_videoFrame(vmeta.width, vmeta.height);
+
+		// the texture is allocated to exactly fit the (possibly height-doubled) frame bitmap
+		videoTextureWidth = VideoFrameBitmap.width();
+		videoTextureHeight = VideoFrameBitmap.height();
+		iV_Image blackFrame;
+		blackFrame.allocate(videoTextureWidth, videoTextureHeight, 4, true);
 		videoGfx->makeCompatibleTexture(&blackFrame, "mem::blackframe");
 		videoGfx->updateTexture(blackFrame);
 		blackFrame.clear();
@@ -720,6 +730,8 @@ void seq_Shutdown()
 
 	videoGfx = nullptr;
 	VideoFrameBitmap.clear();
+	videoTextureWidth = 0;
+	videoTextureHeight = 0;
 	playback.reset();	// tears down the audio sink (OpenAL source/buffers), decoder, and provider
 
 	seq_setScanlinesDisabled(false);

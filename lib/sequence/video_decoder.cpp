@@ -22,11 +22,23 @@
 #include "lib/framework/frame.h"
 #include "video_decoder.h"
 #include "ogg_decoder.h"
+#if defined(WZ_ENABLE_WEBM)
+# include "webm_decoder.h"
+#endif
 
 #include <cstring>
 
 WZVideoDecoder::~WZVideoDecoder()
 { }
+
+bool videoDecoderWebmSupported()
+{
+#if defined(WZ_ENABLE_WEBM)
+	return true;
+#else
+	return false;
+#endif
+}
 
 std::unique_ptr<WZVideoDecoder> videoDecoderOpen(std::shared_ptr<VideoProvider> provider)
 {
@@ -52,8 +64,12 @@ std::unique_ptr<WZVideoDecoder> videoDecoderOpen(std::shared_ptr<VideoProvider> 
 	if (memcmp(magic, ebmlMagic, 4) == 0)
 	{
 		// EBML magic: a WebM (Matroska) container
-		debug(LOG_ERROR, "WebM videos are not (yet) supported: %s", provider->filename().toUtf8().c_str());
+#if defined(WZ_ENABLE_WEBM)
+		return webmVideoDecoderOpen(std::move(provider));
+#else
+		debug(LOG_ERROR, "This build does not include WebM video support: %s", provider->filename().toUtf8().c_str());
 		return nullptr;
+#endif
 	}
 
 	debug(LOG_ERROR, "Unrecognized video container format: %s", provider->filename().toUtf8().c_str());

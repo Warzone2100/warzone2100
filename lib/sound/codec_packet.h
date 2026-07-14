@@ -66,3 +66,9 @@ protected:
  * \returns nullptr if the header packets fail to parse */
 std::unique_ptr<WZPacketAudioDecoder> wzVorbisPacketDecoderCreate(
 	const std::array<std::pair<const uint8_t*, size_t>, 3>& headerPackets);
+
+/** Create an Opus packet decoder from an OpusHead header (RFC 7845), as carried
+ * in a WebM audio track's CodecPrivate data. Handles pre-skip, output gain, and
+ * multistream channel mappings. Output is always 48kHz.
+ * \returns nullptr if the header fails to parse */
+std::unique_ptr<WZPacketAudioDecoder> wzOpusPacketDecoderCreate(const uint8_t *opusHead, size_t opusHeadLen);
