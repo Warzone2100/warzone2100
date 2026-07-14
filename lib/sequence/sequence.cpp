@@ -44,6 +44,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/framework/i18n.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
@@ -427,6 +428,14 @@ struct VideoPlayback
 
 static std::unique_ptr<VideoPlayback> playback;
 
+// preferred FMV audio language override (empty = automatic = follow the game language)
+static WzString preferredAudioLanguage;
+
+void seq_SetPreferredAudioLanguage(const char *languageCode)
+{
+	preferredAudioLanguage = (languageCode != nullptr) ? languageCode : "";
+}
+
 /** Allocates memory to hold the decoded video frame */
 static void Allocate_videoFrame(unsigned videoWidth, unsigned videoHeight)
 {
@@ -593,8 +602,20 @@ bool seq_Play(std::shared_ptr<VideoProvider> video)
 	/* open audio */
 	if (session->decoder->hasAudio() && !audio_Disabled())
 	{
-		// play the container's default audio track
+		// pick the audio track by language: the explicit preference if set, else the game language
+		const WzString preferredLang = !preferredAudioLanguage.isEmpty() ? preferredAudioLanguage : WzString(getLanguage());
+		const size_t chosenTrack = videoDecoderChooseAudioTrack(session->decoder->audioTracks(), preferredLang);
+		if (chosenTrack != session->decoder->selectedAudioTrack() && !session->decoder->selectAudioTrack(chosenTrack))
+		{
+			debug(LOG_WARNING, "Failed to select audio track %zu; using track %zu", chosenTrack, session->decoder->selectedAudioTrack());
+		}
 		const WZAudioTrackMetadata& track = session->decoder->audioTracks()[session->decoder->selectedAudioTrack()];
+		if (session->decoder->audioTracks().size() > 1)
+		{
+			debug(LOG_VIDEO, "selected audio track %zu of %zu (lang=%s, preferred=%s)",
+			      session->decoder->selectedAudioTrack(), session->decoder->audioTracks().size(),
+			      track.languageCode.toUtf8().c_str(), preferredLang.toUtf8().c_str());
+		}
 		session->audioSink = VideoAudioSink::create(track.channels, track.sampleRate);
 		// a null sink (OpenAL sources exhausted) means we play silently, on the fallback clock
 	}

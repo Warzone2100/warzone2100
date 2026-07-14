@@ -101,3 +101,13 @@ std::unique_ptr<WZVideoDecoder> videoDecoderOpen(std::shared_ptr<VideoProvider> 
 
 /** Whether this build includes WebM (VP8/VP9) support (WZ_ENABLE_WEBM) */
 bool videoDecoderWebmSupported();
+
+/** Choose which audio track to play, by language:
+ *  1. the track matching preferredLanguage (if non-empty),
+ *  2. else the track tagged English (untagged tracks count as English),
+ *  3. else the container default / first track.
+ * preferredLanguage is a WZ locale code ("de", "pt_BR", ...); track languages
+ * are ISO 639-2 (B or T form) or BCP-47 codes; matching handles all of these,
+ * case-insensitively, on the primary language subtag.
+ * \returns an index into tracks (0 if tracks is empty) */
+size_t videoDecoderChooseAudioTrack(const std::vector<WZAudioTrackMetadata>& tracks, const WzString& preferredLanguage);
