@@ -413,8 +413,8 @@ namespace gfx_api
 		/// Screen-frame lifecycle (owned by piemode / main loop):
 		///
 		///   pie_ScreenFrameRenderBegin()
-		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
 		///     -> beginScreenFrame()          // per-frame flag reset; purge unused FBO pool entries
+		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
 		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
 		///   pie_ScreenFrameRenderEnd()
 		///     ... when !headlessOrSkipDrawing() ...

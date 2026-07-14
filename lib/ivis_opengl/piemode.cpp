@@ -118,13 +118,15 @@ void pie_ScreenFrameRenderBegin()
 	renderingFrame = true;
 
 	pie_ResetInGame3DFrameContextForFrame();
-	if (!gfx_api::context::isInitialized() || gfx_api::context::get().consumeScreenGeometryDirty())
-	{
-		screen_updateGeometry();
-	}
+
 	if (gfx_api::context::isInitialized())
 	{
 		gfx_api::context::get().beginScreenFrame();
+	}
+
+	if (!gfx_api::context::isInitialized() || gfx_api::context::get().consumeScreenGeometryDirty())
+	{
+		screen_updateGeometry();
 	}
 }
 

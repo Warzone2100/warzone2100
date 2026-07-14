@@ -36,6 +36,7 @@
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "lib/framework/physfs_ext.h"
 
 #include "screen.h"
@@ -82,6 +83,8 @@ static WzText player_Text[MAX_PLAYERS];
 static bool mappreview = false;
 
 static void screen_GenerateCoordinatesAndVBOs();
+static void screen_RefreshBackdropGeometry();
+static void screen_RequestBackdropGeometryRefresh();
 
 /* Initialise the double buffered display */
 bool screenInitialise()
@@ -286,8 +289,7 @@ void screen_SetBackDropFromFile(const char *filename)
 	backdropGfx->loadTexture(filename, gfx_api::texture_type::user_interface, maxTextureSize, maxTextureSize);
 	backdropIsMapPreview = false;
 	bBackDrop = true;
-	// Generate coordinates and put them into VBOs
-	screen_GenerateCoordinatesAndVBOs();
+	screen_RequestBackdropGeometryRefresh();
 }
 
 void screen_StopBackDrop()
@@ -402,17 +404,44 @@ void screen_Upload(iV_Image&& newBackdropImage)
 	backdropGfx->loadTexture(std::move(newBackdropImage), gfx_api::texture_type::user_interface, "mem::generated_map_preview");
 	backdropIsMapPreview = true;
 	bBackDrop = true;
+	screen_RequestBackdropGeometryRefresh();
+}
 
-	// Generate coordinates and put them into VBOs
+static void screen_RefreshBackdropGeometry()
+{
+	if (backdropGfx == nullptr)
+	{
+		return;
+	}
 	screen_GenerateCoordinatesAndVBOs();
+}
+
+static void screen_RequestBackdropGeometryRefresh()
+{
+	if (backdropGfx == nullptr)
+	{
+		return;
+	}
+
+	if (pie_IsScreenFrameRendering())
+	{
+		screen_RefreshBackdropGeometry();
+		return;
+	}
+
+	if (gfx_api::context::isInitialized())
+	{
+		gfx_api::context::get().markScreenGeometryDirty();
+	}
+	else
+	{
+		screen_RefreshBackdropGeometry();
+	}
 }
 
 void screen_updateGeometry()
 {
-	if (backdropGfx != nullptr)
-	{
-		screen_GenerateCoordinatesAndVBOs();
-	}
+	screen_RefreshBackdropGeometry();
 }
 
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)
