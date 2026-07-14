@@ -652,14 +652,6 @@ bool seq_UpdateFullScreenVideo()
 					}
 				}
 			}
-
-			if (frameTime >= seqtext.endTime && frameTime < seqtext.endTime)
-			{
-//				if (pbClear != nullptr)
-//				{
-//					*pbClear = CLEAR_BLACK;
-//				}
-			}
 		}
 	}
 
