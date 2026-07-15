@@ -52,6 +52,11 @@ IListenSocket::IPVersionsMask GNSListenSocket::supportedIpVersions() const
 	return static_cast<MaskT>(IListenSocket::IPVersions::IPV4) | static_cast<MaskT>(IListenSocket::IPVersions::IPV6);
 }
 
+ConnectionProviderType GNSListenSocket::type() const noexcept
+{
+	return ConnectionProviderType::GNS_DIRECT;
+}
+
 IClientConnection* GNSListenSocket::accept()
 {
 	if (pendingAcceptedConnections_.empty())

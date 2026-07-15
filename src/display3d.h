@@ -30,6 +30,8 @@
 
 #define HEIGHT_TRACK_INCREMENTS (50)
 
+struct WorldMapState;
+
 /*!
  * Special tile types
  */
@@ -72,7 +74,7 @@ bool radarVisible();
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
 void setViewPos(UDWORD x, UDWORD y, bool Pan);
 Vector2i    getPlayerPos();
-void setPlayerPos(SDWORD x, SDWORD y);
+void setPlayerPos(const WorldMapState& mapState, SDWORD x, SDWORD y);
 void disp3d_setView(iView *newView);
 void disp3d_oldView(); // for save games <= 10
 void disp3d_getView(iView *newView);
@@ -141,6 +143,6 @@ extern bool tuiTargetOrigin;
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
 bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, float stretchDepth = 0.f);
 
-int calculateCameraHeightAt(int tileX, int tileY);
+int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

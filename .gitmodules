@@ -16,9 +16,6 @@
 [submodule "3rdparty/EmbeddedJSONSignature"]
 	path = 3rdparty/EmbeddedJSONSignature
 	url = https://github.com/past-due/EmbeddedJSONSignature.git
-[submodule "3rdparty/date"]
-	path = 3rdparty/date
-	url = https://github.com/HowardHinnant/date.git
 [submodule "data/base/texpages"]
 	path = data/base/texpages
 	url = https://github.com/Warzone2100/data-texpages.git
@@ -89,3 +86,6 @@
 [submodule "tools/blender/pie-addon"]
 	path = tools/blender/pie-addon
 	url = https://github.com/Warzone2100/blender-pie-addon.git
+[submodule "lib/ivis_opengl/3rdparty/libjpeg-turbo"]
+	path = lib/ivis_opengl/3rdparty/libjpeg-turbo
+	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git

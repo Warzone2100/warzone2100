@@ -132,6 +132,38 @@ TITLECODE WzOldTitleUI::run()
 	return TITLECODE_CONTINUE;
 }
 
+void WzOldTitleUI::render()
+{
+	switch (mode)
+	{
+	case MULTI:
+		displayMultiPlayerMenu();
+		break;
+
+	case TITLE:
+		displayTitleMenu();
+		break;
+
+	case SINGLE:
+		displaySinglePlayerMenu();
+		break;
+
+	case TUTORIAL:
+		displayTutorialMenu();
+		break;
+
+	case QUIT:
+	case STARTGAME:
+	case LOADSAVEGAME:
+	case SHOWINTRO:
+		break;
+
+	default:
+		debug(LOG_FATAL, "unknown title screen mode");
+		abort();
+	}
+}
+
 void WzOldTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	// no-op

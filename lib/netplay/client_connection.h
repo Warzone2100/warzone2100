@@ -256,7 +256,7 @@ protected:
 
 private:
 
-	std::atomic<bool> writeErrorSet_; // set when writeErrorCode_ is set
+	std::atomic<bool> writeErrorSet_{false}; // set when writeErrorCode_ is set
 	mutable std::mutex writeErrorMtx_; // protects access to writeErrorCode_
 	optional<std::error_code> writeErrorCode_;
 

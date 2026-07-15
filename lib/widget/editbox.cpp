@@ -495,20 +495,38 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				switch (key)
 				{
 				case KEY_V:
-					aText = wzGetSelection();
-					// remove any \r, \n chars
-					aText.replace(WzUniCodepoint::fromASCII('\r'), "");
-					aText.replace(WzUniCodepoint::fromASCII('\n'), "");
-					// truncate if too long
-					if (aText.length() >= maxStringSize)
+				{
+					if (!wzHasClipboardText())
 					{
-						aText.truncate(maxStringSize);
+						break;
 					}
-					insPos = aText.length();
+					WzString clipText = wzGetClipboardText();
+					if (onPasteTransformFunc)
+					{
+						// call custom onPasteTransformFunc to process the pasted data
+						clipText = onPasteTransformFunc(clipText);
+					}
+					else
+					{
+						// default behavior:
+						// remove any \r, \n chars
+						clipText.replace(WzUniCodepoint::fromASCII('\r'), "");
+						clipText.replace(WzUniCodepoint::fromASCII('\n'), "");
+					}
+					// Truncate the clipboard text if it will overflow
+					int newLength = aText.length() + clipText.length();
+					if (newLength >= maxStringSize)
+					{
+						clipText.truncate(maxStringSize - aText.length());
+					}
+					aText.insert(insPos, clipText);
+					insPos += clipText.length();
+
 					/* Update the printable text */
 					fitStringEnd();
 					debug(LOG_INPUT, "EditBox paste");
 					break;
+				}
 				default:
 					break;
 				}
@@ -831,4 +849,9 @@ void W_EDITBOX::setOnEscapeHandler(const OnReturnHandler& func)
 void W_EDITBOX::setOnEditingStoppedHandler(const OnReturnHandler& func)
 {
 	onEditingStoppedHandler = func;
+}
+
+void W_EDITBOX::setOnPasteTransformFunc(const OnPasteTransformFunc& func)
+{
+	onPasteTransformFunc = func;
 }

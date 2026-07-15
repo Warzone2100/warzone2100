@@ -17,7 +17,7 @@ function exposeNorthBase()
 	if (camAllowInsaneSpawns())
 	{
 		insaneReinforcementSpawn();
-		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(50));
+		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(35));
 	}
 }
 

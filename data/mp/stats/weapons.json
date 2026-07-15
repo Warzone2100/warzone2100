@@ -4569,6 +4569,7 @@
 		"facePlayer": 1,
 		"fireOnMove": 0,
 		"firePause": 1,
+		"flags": "TeleportCapture",
 		"flightGfx": "FXBeam.PIE",
 		"flightSpeed": 2500,
 		"hitGfx": "FXSFlms.PIE",

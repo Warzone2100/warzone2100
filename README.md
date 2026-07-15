@@ -241,6 +241,7 @@ Do **not** use GitHub's "Download Zip" option, as it **does not contain submodul
       * [SDL](https://www.libsdl.org) ≥ 3.2.12 _(strongly recommended: ≥ 3.2.26)_
       * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.1 _(strongly recommended: ≥ 3.0.2)_
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
+      * [libjpeg-turbo](https://github.com/libjpeg-turbo/libjpeg-turbo) ≥ 2.1
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
       * [libogg](https://xiph.org/ogg/)

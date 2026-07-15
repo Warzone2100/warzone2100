@@ -3123,7 +3123,7 @@
 		"hitpoints": 60,
 		"id": "Mortar3ROTARYMk1",
 		"lightWorld": 1,
-		"longHit": 50,
+		"longHit": 60,
 		"longRange": 2304,
 		"maxElevation": 90,
 		"minRange": 128,

@@ -89,7 +89,9 @@ static std::string wz_test;
 static bool wz_cli_headless = false;
 static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
+static bool wz_lobby_slashcommands_hostexit = false;
 static int wz_min_autostart_players = -1;
+static std::string wz_lobby_game_to_connect_str;
 
 #if defined(WZ_OS_WIN)
 
@@ -324,6 +326,8 @@ typedef enum
 	CLI_NOSOUND,
 	CLI_CONNECTTOIP,
 	CLI_CONNECTTOIP_SPECTATE,
+	CLI_CONNECTTOLOBBYGAME,
+	CLI_CONNECTTOLOBBYGAME_SPECTATE,
 	CLI_HOSTLAUNCH,
 	CLI_NOASSERT,
 	CLI_CRASH,
@@ -347,6 +351,7 @@ typedef enum
 	CLI_WZ_DEBUG_CRASH_HANDLER,
 	CLI_STREAMER_SPECTATOR,
 	CLI_LOBBY_SLASHCOMMANDS,
+	CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT,
 	CLI_ADD_LOBBY_ADMINHASH,
 	CLI_ADD_LOBBY_ADMINPUBLICKEY,
 	CLI_COMMAND_INTERFACE,
@@ -407,6 +412,8 @@ static const struct poptOption *getOptionsTable()
 		{ "nosound", POPT_ARG_NONE, CLI_NOSOUND,    N_("Disable sound"),                     nullptr },
 		{ "join", POPT_ARG_STRING, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),  N_("host") },
 		{ "spectate", POPT_ARG_STRING, CLI_CONNECTTOIP_SPECTATE, N_("Connect directly to IP/hostname as a spectator"),  N_("host") },
+		{ "lobbyjoin", POPT_ARG_STRING, CLI_CONNECTTOLOBBYGAME, N_("Connect to lobby game"),  N_("lobbyGameId") },
+		{ "lobbyspectate", POPT_ARG_STRING, CLI_CONNECTTOLOBBYGAME_SPECTATE, N_("Connect to lobby game as a spectator"),  N_("lobbyGameId") },
 		{ "host", POPT_ARG_NONE, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
 		{ "texturecompression", POPT_ARG_NONE, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
@@ -441,6 +448,7 @@ static const struct poptOption *getOptionsTable()
 		{ "wz-debug-crash-handler", POPT_ARG_NONE, CLI_WZ_DEBUG_CRASH_HANDLER, nullptr, nullptr },
 		{ "spectator-min-ui", POPT_ARG_NONE, CLI_STREAMER_SPECTATOR, nullptr, nullptr},
 		{ "enablelobbyslashcmd", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS, N_("Enable lobby slash commands (for connecting clients)"), nullptr},
+		{ "enablelobbyslashcmdhostexit", POPT_ARG_NONE, CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT, N_("Enable lobby hostexit slash command (for connecting admins)"), nullptr},
 		{ "addlobbyadminhash", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINHASH, N_("Add a lobby admin identity hash (for slash commands)"), _("hash string")},
 		{ "addlobbyadminpublickey", POPT_ARG_STRING, CLI_ADD_LOBBY_ADMINPUBLICKEY, N_("Add a lobby admin public key (for slash commands)"), N_("b64-pub-key")},
 		{ "enablecmdinterface", POPT_ARG_STRING, CLI_COMMAND_INTERFACE, N_("Enable command interface"), N_("(stdin, unixsocket:path)")},
@@ -794,7 +802,18 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			sstrcpy(iptoconnect, token);
 			// also set spectate flag
-			cliConnectToIpAsSpectator = (option == CLI_CONNECTTOIP_SPECTATE);
+			cliConnectAsSpectator = (option == CLI_CONNECTTOIP_SPECTATE);
+			break;
+		case CLI_CONNECTTOLOBBYGAME:
+		case CLI_CONNECTTOLOBBYGAME_SPECTATE:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("No lobbyGameId given");
+			}
+			wz_lobby_game_to_connect_str = token;
+			// also set spectate flag
+			cliConnectAsSpectator = (option == CLI_CONNECTTOLOBBYGAME_SPECTATE);
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
@@ -1119,6 +1138,10 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			wz_lobby_slashcommands = true;
 			break;
 
+		case CLI_LOBBY_SLASHCOMMANDS_HOSTEXIT:
+			wz_lobby_slashcommands_hostexit = true;
+			break;
+
 		case CLI_ADD_LOBBY_ADMINHASH:
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr || strlen(token) == 0)
@@ -1396,7 +1419,17 @@ bool lobby_slashcommands_enabled()
 	return wz_lobby_slashcommands;
 }
 
+bool lobby_slashcommands_hostexit_enabled()
+{
+	return wz_lobby_slashcommands_hostexit;
+}
+
 int min_autostart_player_count()
 {
 	return wz_min_autostart_players;
+}
+
+const std::string& cli_lobby_game_to_connect_str()
+{
+	return wz_lobby_game_to_connect_str;
 }

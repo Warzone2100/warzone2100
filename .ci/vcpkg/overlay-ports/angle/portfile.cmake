@@ -148,7 +148,7 @@ endfunction()
 
 checkout_in_path(
     "${SOURCE_PATH}/third_party/zlib"
-    "https://chromium.googlesource.com/chromium/src/third_party/zlib"
+    "https://github.com/past-due/chromium-src-third_party-zlib"
     "${ANGLE_THIRDPARTY_ZLIB_COMMIT}"
 )
 

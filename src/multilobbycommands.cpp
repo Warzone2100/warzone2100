@@ -297,6 +297,11 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	else if (strcmp(&message.text[startingCommandPosition], "hostexit") == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("hostexit");
+		if (message.sender != NetPlay.hostPlayer && !lobby_slashcommands_hostexit_enabled())
+		{
+			sendRoomSystemMessageToSingleReceiver("Only host can use the \"hostexit\" command", static_cast<uint32_t>(message.sender), true);
+			return false;
+		}
 		cmdInterface.quitGame(5);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "kick ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "ban ", 4) == 0)

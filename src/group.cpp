@@ -32,6 +32,7 @@
 #include "droid.h"
 #include "order.h"
 #include "hci.h"
+#include "game_world.h"
 #include <map>
 
 // Group system variables: grpGlobalManager enables to remove all the groups to Shutdown the system
@@ -232,6 +233,6 @@ void DROID_GROUP::setSecondary(SECONDARY_ORDER sec, SECONDARY_STATE state)
 
 	for (DROID* psCurr : psList)
 	{
-		secondarySetState(psCurr, sec, state);
+		secondarySetState(psCurr, gameWorld.objects, sec, state);
 	}
 }

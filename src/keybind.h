@@ -207,6 +207,8 @@ void enableGodMode();
 
 void keybindShutdown();
 
-void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor);
+struct WorldObjectState;
+
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor, const WorldObjectState& objState);
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

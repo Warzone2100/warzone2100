@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 #include <type_traits>
+#include "connection_provider_registry.h"
 
 class IClientConnection;
 class PendingWritesManager;
@@ -48,6 +49,8 @@ public:
 	/// </summary>
 	virtual IClientConnection* accept() = 0;
 	virtual IPVersionsMask supportedIpVersions() const = 0;
+
+	virtual ConnectionProviderType type() const noexcept = 0;
 
 protected:
 

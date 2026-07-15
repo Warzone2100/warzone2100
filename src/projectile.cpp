@@ -59,6 +59,7 @@
 #include "random.h"
 #include "display3d.h"
 #include "profiling.h"
+#include "game_world.h"
 
 #include <algorithm>
 #include <functional>
@@ -79,6 +80,18 @@ struct INTERVAL
 	int begin, end;  // Time 1 = 0, time 2 = 1024. Or begin >= end if empty.
 };
 
+enum DAMAGE_EXP_SOURCE_TYPE
+{
+	// These happen once for the original projectile.
+	DAM_IMPACT, 			// Damage from the original projectile making a direct impact.
+	DAM_SPLASH,				// Splash damage from the original projectile.
+	// Traveling spawned penetrating projectile(s). Likely hitting multiple targets.
+	DAM_PENETRATE_IMPACT,	// Spawned penetrating projectile -- Impact type making a direct hit.
+	DAM_PENETRATE_SPLASH,	// Spawned penetrating projectile -- Splash radius type.
+	// Damage potentially done to multiple units at the same time.
+	DAM_PERIOD				// Residual Periodical damage lingering over tiles for a time (not the additional hardcoded afterburn damage effect).
+};
+
 struct DAMAGE
 {
 	PROJECTILE *psProjectile;
@@ -90,6 +103,7 @@ struct DAMAGE
 	bool isDamagePerSecond;
 	int minDamage;
 	bool empRadiusHit;
+	int damageSourceType;
 };
 
 // Watermelon:they are from droid.c
@@ -122,7 +136,7 @@ static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
 
-static int32_t objectDamage(DAMAGE *psDamage);
+static int32_t objectDamage(GameWorld& world, DAMAGE *psDamage);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -312,8 +326,18 @@ DROID *getDesignatorAttackingObject(int player, BASE_OBJECT *target)
 		: nullptr;
 }
 
+static bool shouldGiveExpGain(DAMAGE *psDamage, DROID *psDroid)
+{
+	if (bMultiPlayer && psDamage && psDamage->psDest && psDamage->psDest->player == scavengerPlayer())
+	{
+		return psDroid != nullptr && !droidExpForScavengersOutsideLimits(psDroid);
+	}
+
+	return true;
+}
+
 // update the source experience after a target is damaged/destroyed
-static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
+static void proj_UpdateExperience(PROJECTILE *psObj, DAMAGE *psDamage, uint32_t experienceInc)
 {
 	DROID	        *psDroid;
 	BASE_OBJECT     *psSensor;
@@ -326,9 +350,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		// If it is 'droid-on-droid' then modify the experience by the Quality factor
 		// Only do this in MP so to not un-balance the campaign
-		if (psObj->psDest != nullptr
-		    && psObj->psDest->type == OBJ_DROID
-		    && bMultiPlayer)
+		if (psObj->psDest != nullptr && psObj->psDest->type == OBJ_DROID && bMultiPlayer)
 		{
 			// Modify the experience gained by the 'quality factor' of the units
 			experienceInc = (uint64_t)experienceInc * qualityFactor(psDroid, (DROID *)psObj->psDest) / 65536;
@@ -336,12 +358,21 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
 
-		droidIncreaseExperience(psDroid, experienceInc);
-
-		cmdDroidUpdateExperience(psDroid, experienceInc);
+		if (shouldGiveExpGain(psDamage, psDroid))
+		{
+			droidIncreaseExperience(psDroid, experienceInc);
+		}
+		if (hasCommander(psDroid))
+		{
+			DROID *psCommander = psDroid->psGroup->psCommander;
+			if (shouldGiveExpGain(psDamage, psCommander))
+			{
+				cmdDroidUpdateExperience(psDroid, experienceInc);
+			}
+		}
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
-		if (psSensor && psSensor->type == OBJ_DROID)
+		if (psSensor && psSensor->type == OBJ_DROID && shouldGiveExpGain(psDamage, (DROID *)psSensor))
 		{
 			droidIncreaseExperience((DROID *)psSensor, experienceInc);
 		}
@@ -352,7 +383,7 @@ static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 
 		psDroid = getDesignatorAttackingObject(psObj->psSource->player, psObj->psDest);
 
-		if (psDroid != nullptr)
+		if (psDroid != nullptr && shouldGiveExpGain(psDamage, psDroid))
 		{
 			droidIncreaseExperience(psDroid, experienceInc);
 		}
@@ -476,6 +507,7 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 	proj.dst             = target;
 
 	proj.bVisible = false;
+	proj.penetratingProjectile = false;
 
 	// Must set ->psDest and ->expectedDamageCaused before first call to setProjectileDestination().
 	proj.psDest = nullptr;
@@ -498,6 +530,8 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 
 		setProjectileSource(&proj, psOldProjectile->psSource);
 		proj.psDamaged = psOldProjectile->psDamaged;
+
+		proj.penetratingProjectile = weapon_slot == PROJ_PENETRATE_SLOT; // Searching for PROJ_PENETRATE_SLOT just makes it easier to find where these are initially created from.
 
 		// TODO Should finish the tick, when penetrating.
 	}
@@ -556,6 +590,12 @@ static PROJECTILE* proj_SendProjectileAngledInternal(WEAPON* psWeap, SIMPLE_OBJE
 		proj.rot.pitch = iAtan2(proj.vZ, proj.vXY);
 	}
 	proj.state = PROJ_INFLIGHT;
+
+	if (proj.penetratingProjectile)
+	{
+		proj.prevSpacetime.pos = proj.pos;
+		proj.prevSpacetime.rot = proj.rot;
+	}
 
 	// If droid or structure, set muzzle pitch.
 	// Don't allow pitching the muzzle above outside the weapon's limits.
@@ -817,17 +857,17 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 					int flightTime = iHypot(delta.xy()) * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 					psProj->dst += Vector3i(iSinCosR(targetDroid->sMove.moveDir, std::min<int>(targetDroid->sMove.speed, psStats->flightSpeed * 3 / 4) * flightTime / GAME_TICKS_PER_SEC), 0);
 				}
-				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(mapWidth) - 1);
-				psProj->dst.y = clip(psProj->dst.y, 0, world_coord(mapHeight) - 1);
+				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(gameWorld.map.width) - 1);
+				psProj->dst.y = clip(psProj->dst.y, 0, world_coord(gameWorld.map.height) - 1);
 			}
 			if (psStats->movementModel == MM_HOMINGINDIRECT)
 			{
 				if (psProj->psDest == nullptr)
 				{
-					psProj->dst.z = map_Height(psProj->pos.xy()) - 1;  // Target missing, so just home in on the ground under where the target was.
+					psProj->dst.z = map_Height(gameWorld.map, psProj->pos.xy()) - 1;  // Target missing, so just home in on the ground under where the target was.
 				}
 				int horizontalTargetDistance = iHypot((psProj->dst - psProj->pos).xy());
-				int terrainHeight = std::max(map_Height(psProj->pos.xy()), map_Height(psProj->pos.xy() + iSinCosR(iAtan2((psProj->dst - psProj->pos).xy()), psStats->flightSpeed * 2 * deltaProjectileTime / GAME_TICKS_PER_SEC)));
+				int terrainHeight = std::max(map_Height(gameWorld.map, psProj->pos.xy()), map_Height(gameWorld.map, psProj->pos.xy() + iSinCosR(iAtan2((psProj->dst - psProj->pos).xy()), psStats->flightSpeed * 2 * deltaProjectileTime / GAME_TICKS_PER_SEC)));
 				int desiredMinHeight = terrainHeight + std::min(horizontalTargetDistance / 4, HOMINGINDIRECT_HEIGHT_MIN);
 				int desiredMaxHeight = std::max(psProj->dst.z, terrainHeight + HOMINGINDIRECT_HEIGHT_MAX);
 				int heightError = psProj->pos.z - clip(psProj->pos.z, desiredMinHeight, desiredMaxHeight);
@@ -952,7 +992,7 @@ static PROJECTILE* proj_InFlightFunc(PROJECTILE *psProj)
 			// Assume we damaged the chosen target
 			psProj->psDamaged.push_back(closestCollisionObject);
 
-			spawnedProjectile = proj_SendProjectileInternal(&asWeap, psProj, psProj->player, psProj->dst, nullptr, true, -1);
+			spawnedProjectile = proj_SendProjectileInternal(&asWeap, psProj, psProj->player, psProj->dst, nullptr, true, PROJ_PENETRATE_SLOT);
 		}
 
 		psProj->state = PROJ_IMPACT;
@@ -1085,10 +1125,11 @@ static void proj_radiusSweep(PROJECTILE *psObj, WEAPON_STATS *psStats, Vector3i 
 			psObj->time,
 			false,
 			(int)psStats->upgrade[psObj->player].minimumDamage,
-			empRadius
+			empRadius,
+			((psObj->penetratingProjectile) ? DAM_PENETRATE_SPLASH : DAM_SPLASH)
 		};
 
-		objectDamage(&sDamage);
+		objectDamage(gameWorld, &sDamage);
 	}
 }
 
@@ -1133,7 +1174,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		{
 			position.x = psObj->pos.x;
 			position.z = psObj->pos.y; // z = y [sic] intentional
-			position.y = map_Height(position.x, position.z);
+			position.y = map_Height(gameWorld.map, position.x, position.z);
 			effectGiveAuxVar(psStats->upgrade[psObj->player].periodicalDamageRadius);
 			effectGiveAuxVarSec(psStats->upgrade[psObj->player].periodicalDamageTime);
 			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, nullptr, 0, psObj->time);
@@ -1144,7 +1185,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		{
 			position.x = psObj->pos.x;
 			position.z = psObj->pos.y;  // z = y [sic] intentional
-			position.y = map_Height(position.x, position.z);
+			position.y = map_Height(gameWorld.map, position.x, position.z);
 			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, nullptr, 0, psObj->time);
 
 			if (clipXY(psObj->pos.x, psObj->pos.y))
@@ -1156,7 +1197,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 
 	if (psStats->upgrade[psObj->player].periodicalDamageRadius && psStats->upgrade[psObj->player].periodicalDamageTime)
 	{
-		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->upgrade[psObj->player].periodicalDamageTime);
+		tileSetFire(gameWorld.map, psObj->pos.x, psObj->pos.y, psStats->upgrade[psObj->player].periodicalDamageTime);
 	}
 
 	// Set the effects position and radius
@@ -1176,7 +1217,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			EFFECT_TYPE facing = (psStats->facePlayer ? EXPLOSION_TYPE_SPECIFIED : EXPLOSION_TYPE_NOT_FACING);
 
 			// The graphic to show depends on if we hit water or not
-			if (terrainType(mapTile(map_coord(psObj->pos.x), map_coord(psObj->pos.y))) == TER_WATER)
+			if (terrainType(mapTile(gameWorld.map, map_coord(psObj->pos.x), map_coord(psObj->pos.y))) == TER_WATER)
 			{
 				imd = psStats->pWaterHitGraphic;
 			}
@@ -1232,14 +1273,13 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		}
 
 		// Check for electronic warfare damage where we know the subclass and source
-		if (proj_Direct(psStats)
-		    && psStats->weaponSubClass == WSC_ELECTRONIC
+		if (psStats->weaponSubClass == WSC_ELECTRONIC
 		    && psObj->psSource)
 		{
 			// If we did enough `damage' to capture the target
 			if (electronicDamage(psObj->psDest, psObj->psSource,
 			                     calcDamage(weaponDamage(*psStats, psObj->player), psStats->weaponEffect, psObj->psDest),
-			                     psObj->player))
+			                     psObj->player, psStats->flags.test(WEAPON_FLAG_TELEPORT_CAPTURE)))
 			{
 				switch (psObj->psSource->type)
 				{
@@ -1283,11 +1323,12 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 				psObj->time,
 				false,
 				(int)psStats->upgrade[psObj->player].minimumDamage,
-				false
+				false,
+				((psObj->penetratingProjectile)) ? DAM_PENETRATE_IMPACT : DAM_IMPACT
 			};
 
 			// Damage the object
-			relativeDamage = objectDamage(&sDamage);
+			relativeDamage = objectDamage(gameWorld, &sDamage);
 
 			if (relativeDamage >= 0)	// So long as the target wasn't killed
 			{
@@ -1400,7 +1441,7 @@ PROJECTILE* PROJECTILE::update()
 	psDamaged.erase(std::remove_if(psDamaged.begin(), psDamaged.end(), [](const BASE_OBJECT *psObj) { return ::isDead(psObj); }), psDamaged.end());
 
 	// This extra check fixes a crash in cam2, mission1
-	if (worldOnMap(psObj->pos.x, psObj->pos.y) == false)
+	if (worldOnMap(gameWorld.map, psObj->pos.x, psObj->pos.y) == false)
 	{
 		psObj->died = true;
 		return nullptr;
@@ -1535,10 +1576,11 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 			gameTime - deltaGameTime / 2 + 1,
 			true,
 			(int)psStats->upgrade[psProj->player].minimumDamage,
-			false
+			false,
+			DAM_PERIOD
 		};
 
-		objectDamage(&sDamage);
+		objectDamage(gameWorld, &sDamage);
 	}
 }
 
@@ -1675,20 +1717,20 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, const BASE_OBJE
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamageDispatch(DAMAGE *psDamage)
+static int32_t objectDamageDispatch(GameWorld& world, DAMAGE *psDamage)
 {
 	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return droidDamage(world, (DROID *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return structureDamage(world, (STRUCTURE *)psDamage->psDest, psDamage->psProjectile, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_FEATURE:
-		return featureDamage((FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
+		return featureDamage(world, (FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage, psDamage->empRadiusHit);
 		break;
 
 	case OBJ_PROJECTILE:
@@ -1706,9 +1748,19 @@ static bool isFriendlyFire(DAMAGE* psDamage)
 	return psDamage->psDest && psDamage->psProjectile->psSource->player == psDamage->psDest->player;
 }
 
-static bool shouldIncreaseExperience(DAMAGE *psDamage)
+// NOTE: The isFeature() here prevents any exp gain at all, even if the projectile does more than just direct impact damage to non-feature objects.
+static bool mayIncreaseExperience(DAMAGE *psDamage)
 {
 	return psDamage->psProjectile->psSource && !isFeature(psDamage->psProjectile->psDest) && !isFriendlyFire(psDamage);
+}
+
+static bool damageTypeAllowsExpGain(DAMAGE *psDamage)
+{
+	return ((psDamage->damageSourceType == DAM_IMPACT && psDamage->psProjectile->psWStats->flags.test(WEAPON_FLAG_EXP_IMPACT)) ||
+		(psDamage->damageSourceType == DAM_SPLASH && psDamage->psProjectile->psWStats->flags.test(WEAPON_FLAG_EXP_SPLASH)) ||
+		(psDamage->damageSourceType == DAM_PERIOD && psDamage->psProjectile->psWStats->flags.test(WEAPON_FLAG_EXP_PERIODICAL)) ||
+		(psDamage->damageSourceType == DAM_PENETRATE_IMPACT && psDamage->psProjectile->psWStats->flags.test(WEAPON_FLAG_EXP_IMPACT_PENETRATE)) ||
+		(psDamage->damageSourceType == DAM_PENETRATE_SPLASH && psDamage->psProjectile->psWStats->flags.test(WEAPON_FLAG_EXP_SPLASH_PENETRATE)));
 }
 
 static void updateKills(DAMAGE* psDamage)
@@ -1740,16 +1792,19 @@ static void updateKills(DAMAGE* psDamage)
 	}
 }
 
-static int32_t objectDamage(DAMAGE *psDamage)
+static int32_t objectDamage(GameWorld& world, DAMAGE *psDamage)
 {
-	int32_t relativeDamage = objectDamageDispatch(psDamage);
+	int32_t relativeDamage = objectDamageDispatch(world, psDamage);
 
-	if (shouldIncreaseExperience(psDamage)) {
-		proj_UpdateExperience(psDamage->psProjectile, abs(relativeDamage) * getExpGain(psDamage->psProjectile->psSource->player) / 100);
+	if (mayIncreaseExperience(psDamage))
+	{
+		if (damageTypeAllowsExpGain(psDamage))
+		{
+			proj_UpdateExperience(psDamage->psProjectile, psDamage, abs(relativeDamage) * getExpGain(psDamage->psProjectile->psSource->player) / 100);
+		}
 
-		bool isTargetDestroyed = relativeDamage < 0;
-
-		if (isTargetDestroyed) {
+		if (relativeDamage < 0)
+		{
 			updateKills(psDamage);
 		}
 	}

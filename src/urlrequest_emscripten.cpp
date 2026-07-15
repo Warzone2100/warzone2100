@@ -23,6 +23,7 @@
 #include "urlrequest_private.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/string_ext.h"
 #include <list>
 #include <memory>
 
@@ -54,6 +55,11 @@ public:
 	{ }
 	virtual ~EmFetchHTTPResponseDetails()
 	{ }
+
+	optional<std::string> getPrimaryIP() const override
+	{
+		return nullopt; // not implemented for fetch backend
+	}
 
 	std::string getInternalResultDescription() const override
 	{
@@ -130,11 +136,12 @@ public:
 		handle = nullptr;
 	}
 
+	virtual URLRequestMethod method() const = 0;
 	virtual const std::string& url() const = 0;
-	virtual const char* requestMethod() const { return "GET"; }
 	virtual InternetProtocol protocol() const = 0;
 	virtual bool noProxy() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
+	virtual const char* requestBody() const = 0;
 	virtual uint64_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
 
 	virtual emscripten_fetch_t* initiateFetch()
@@ -144,7 +151,8 @@ public:
 		emscripten_fetch_attr_init(&attr);
 
 		// Set request method
-		strcpy(attr.requestMethod, requestMethod());
+		auto requestMethod = method();
+		strlcpy(attr.requestMethod, to_string(requestMethod), sizeof(attr.requestMethod));
 
 		// Always load to memory
 		attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
@@ -158,6 +166,16 @@ public:
 
 		formattedRequestHeaders = std::make_shared<FetchRequestHeaders>(requestHeaders());
 		attr.requestHeaders = formattedRequestHeaders->getPointer();
+
+		if (requestMethod == URLRequestMethod::Post || requestMethod == URLRequestMethod::Patch)
+		{
+			const char* pRequestBody = requestBody();
+			if (pRequestBody != nullptr)
+			{
+				attr.requestData = pRequestBody;
+				attr.requestDataSize = strlen(pRequestBody);
+			}
+		}
 
 		// Set callbacks
 		attr.onsuccess = wz_fetch_success;
@@ -183,7 +201,7 @@ public:
 
 	virtual bool waitOnShutdown() const { return false; }
 
-	virtual void handleRequestSuccess(unsigned short status) { }
+	virtual void handleRequestDone(unsigned short status) { }
 	virtual void handleRequestError(unsigned short status) { }
 	virtual void requestFailedToFinish(URLRequestFailureType type) { }
 
@@ -208,7 +226,7 @@ void wz_fetch_success(emscripten_fetch_t *fetch)
 			pRequest->writeMemoryCallback(fetch->data, fetch->numBytes, fetch->dataOffset);
 		}
 
-		pRequest->handleRequestSuccess(fetch->status);
+		pRequest->handleRequestDone(fetch->status);
 
 		// now remove from the list of activeURLRequests
 		pSharedRequest = pRequest->shared_from_this();
@@ -298,6 +316,11 @@ public:
 	: URLTransferRequest()
 	{ }
 
+	virtual URLRequestMethod method() const override
+	{
+		return URLRequestMethod::Get;
+	}
+
 	virtual const std::string& url() const override
 	{
 		return getBaseRequest().url;
@@ -318,6 +341,11 @@ public:
 		return getBaseRequest().getRequestHeaders();
 	}
 
+	virtual const char* requestBody() const override
+	{
+		return nullptr;
+	}
+
 	virtual bool onProgressUpdate(uint64_t dltotal, uint64_t dlnow) override
 	{
 		auto request = getBaseRequest();
@@ -328,9 +356,9 @@ public:
 		return false;
 	}
 
-	virtual void handleRequestSuccess(unsigned short status) override
+	virtual void handleRequestDone(unsigned short status) override
 	{
-		onSuccess(EmFetchHTTPResponseDetails(true, status, responseHeaders));
+		onResponse(EmFetchHTTPResponseDetails(true, status, responseHeaders));
 	}
 
 	virtual void handleRequestError(unsigned short status) override
@@ -345,7 +373,7 @@ public:
 	}
 
 private:
-	virtual void onSuccess(const HTTPResponseDetails& responseDetails) = 0;
+	virtual void onResponse(const HTTPResponseDetails& responseDetails) = 0;
 
 	void onFailure(URLRequestFailureType type, const std::shared_ptr<EmFetchHTTPResponseDetails>& transferDetails)
 	{
@@ -357,6 +385,16 @@ private:
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
 				wzAsyncExecOnMainThread([url]{
 					debug(LOG_NET, "Fetch: Failed to initialize request for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::OPERATION_TIMEOUT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Request timeout for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::COULDNT_CONNECT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Couldn't connect for (%s)", url.c_str());
 				});
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
@@ -413,6 +451,20 @@ public:
 		}
 	}
 
+	virtual URLRequestMethod method() const override
+	{
+		return request.method();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		if (request.requestBody().empty())
+		{
+			return nullptr;
+		}
+		return request.requestBody().c_str();
+	}
+
 	virtual const URLRequestBase& getBaseRequest() const override
 	{
 		return request;
@@ -463,19 +515,19 @@ public:
 	}
 
 private:
-	void onSuccess(const HTTPResponseDetails& responseDetails) override
+	void onResponse(const HTTPResponseDetails& responseDetails) override
 	{
-		if (request.onSuccess)
+		if (request.onResponse)
 		{
-			request.onSuccess(request.url, responseDetails, chunk);
+			request.onResponse(request.url, responseDetails, chunk);
 		}
 	}
 };
 
 
 // Request data from a URL (stores the response in memory)
-// Generally, you should define both onSuccess and onFailure callbacks
-// If you want to actually process the response, you *must* define an onSuccess callback
+// Generally, you should define both onResponse and onFailure callbacks
+// If you want to actually process the response, you *must* define an onResponse callback
 //
 // IMPORTANT: Callbacks may be called on a background thread
 AsyncURLRequestHandle urlRequestData(const URLDataRequest& request)
@@ -503,7 +555,7 @@ AsyncURLRequestHandle urlRequestData(const URLDataRequest& request)
 }
 
 // Download a file (stores the response in the outFilePath)
-// Generally, you should define both onSuccess and onFailure callbacks
+// Generally, you should define both onResponse and onFailure callbacks
 //
 // IMPORTANT: Callbacks may be called on a background thread
 AsyncURLRequestHandle urlDownloadFile(const URLFileDownloadRequest& request)

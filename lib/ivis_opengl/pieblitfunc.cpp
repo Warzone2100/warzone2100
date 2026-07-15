@@ -106,6 +106,7 @@ void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& 
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
 		delete mTexture;
+	mTexture = nullptr;
 	if (width > 0 && height > 0)
 	{
 		mTexture = gfx_api::context::get().create_texture(1, width, height, format, debugName);
@@ -117,6 +118,7 @@ void GFX::makeCompatibleTexture(const iV_Image* image /*= nullptr*/, const std::
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
 		delete mTexture;
+	mTexture = nullptr;
 	if (!image)
 	{
 		return;

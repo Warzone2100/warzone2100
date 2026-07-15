@@ -149,6 +149,7 @@ unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID);
 unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID);
 void iV_SetTextColour(PIELIGHT colour);
 
+optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold);
 optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID);
 
 struct WzTextRun

@@ -29,8 +29,8 @@ fi
 echo "Downloading SDL3 source"
 
 # Download, build, & install SDL3 from source
-SDL3_VERSION="3.4.0"
-SDL3_SHA256="082cbf5f429e0d80820f68dc2b507a94d4cc1b4e70817b119bbb8ec6a69584b8"
+SDL3_VERSION="3.4.4"
+SDL3_SHA256="ee712dbe6a89bb140bbfc2ce72358fb5ee5cc2240abeabd54855012db30b3864"
 SDL3_DLURL="https://github.com/libsdl-org/SDL/releases/download/release-${SDL3_VERSION}/SDL3-${SDL3_VERSION}.tar.gz"
 
 mkdir tmp_sdl3_build

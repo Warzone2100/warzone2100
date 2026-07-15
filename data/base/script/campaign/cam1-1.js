@@ -87,7 +87,7 @@ function eventAttacked(victim, attacker)
 function insaneReinforcementSpawn()
 {
 	const units = (!camClassicMode()) ? [cTempl.blokeheavy, cTempl.trikeheavy, cTempl.buggyheavy, cTempl.bjeepheavy] : [cTempl.bloke, cTempl.trike, cTempl.buggy, cTempl.bjeep];
-	const limits = {minimum: 8, maxRandom: 2};
+	const limits = {minimum: 5, maxRandom: 3};
 	const location = camMakePos(camGenerateRandomMapEdgeCoordinate(getObject("landingZone")));
 	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_SCAV_7, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
@@ -201,6 +201,6 @@ function eventStartLevel()
 
 	if (camAllowInsaneSpawns())
 	{
-		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(30));
+		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(40));
 	}
 }

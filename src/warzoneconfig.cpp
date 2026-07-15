@@ -85,6 +85,7 @@ struct WARZONE_GLOBALS
 	uint32_t MPgameTimeLimitMinutes = 0; // default to unlimited
 	uint8_t MPopenSpectatorSlots = 0;
 	PLAYER_LEAVE_MODE MPplayerLeaveMode = PLAYER_LEAVE_MODE_DEFAULT;
+	std::string lastIPConnectServerName;
 	int fogStart = 4000;
 	int fogEnd = 8000;
 	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
@@ -111,6 +112,10 @@ struct WARZONE_GLOBALS
 
 	// Connection provider used for hosting games
 	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
+
+	// lobby
+	bool lobbyDisableIPv6 = false;
+	bool lobbyFilterIPv6Only = false;
 
 	// audio cues
 	bool playAudioCue_GroupReporting = true;
@@ -620,6 +625,16 @@ void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE mode)
 	warGlobs.MPplayerLeaveMode = mode;
 }
 
+void war_setLastIpServerConnect(const std::string& serverName)
+{
+	warGlobs.lastIPConnectServerName = serverName;
+}
+
+const std::string& war_getLastIpServerConnect()
+{
+	return warGlobs.lastIPConnectServerName;
+}
+
 int war_getFogEnd()
 {
 	return warGlobs.fogEnd;
@@ -817,6 +832,26 @@ std::string to_string(ConnectionProviderType pt)
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
+}
+
+bool war_getLobbyDisableIPv6()
+{
+	return warGlobs.lobbyDisableIPv6;
+}
+
+void war_setLobbyDisableIPv6(bool enabled)
+{
+	warGlobs.lobbyDisableIPv6 = enabled;
+}
+
+bool war_getLobbyFilterIPv6Only()
+{
+	return warGlobs.lobbyFilterIPv6Only;
+}
+
+void war_setLobbyFilterIPv6Only(bool enabled)
+{
+	warGlobs.lobbyFilterIPv6Only = enabled;
 }
 
 bool war_getPlayAudioCue_GroupReporting()

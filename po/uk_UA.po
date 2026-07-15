@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2026-02-03 01:34+0000\n"
-"PO-Revision-Date: 2026-02-03 21:43\n"
+"POT-Creation-Date: 2026-04-04 02:03+0000\n"
+"PO-Revision-Date: 2026-04-04 03:52\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -1775,6 +1775,9 @@ msgstr "Побудувати на плато не менше 7 захисних 
 msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Знайдіть та врятуйте ваші одиниці зі збитого транспорту"
 
+msgid "Destroy all enemy bases"
+msgstr ""
+
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Врятуйте мирних жителів від Колективу, поки їх не захопили надто багато"
 
@@ -2945,6 +2948,28 @@ msgstr "Будь-коли, великий бос!"
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
+msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
+msgstr ""
+
+msgid "Please try another room or disable any proxies / VPNs and try again."
+msgstr ""
+
+msgid "Game not found in lobby."
+msgstr ""
+
+msgid "The game may have already started, or the host may have disbanded the game lobby."
+msgstr "Можливо, гра вже розпочалася, або ведучий розпустив ігрове лобі."
+
+msgid "Error hosting game in lobby server"
+msgstr ""
+
+#, c-format
+msgid "Make sure port %d can receive incoming connections."
+msgstr ""
+
+msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
+msgstr ""
+
 msgid "Failed to create port mapping"
 msgstr "Не вдалося прив'язати порт"
 
@@ -2970,20 +2995,32 @@ msgstr ""
 msgid "Client failed to ack player index swap"
 msgstr "Клієнт не зміг отримати підкачування індексу гравця"
 
-#, c-format
-msgid "Could not resolve masterserver name (%s)!"
-msgstr "Неможливо отримати ім'я основного сервера (%s)!"
-
-#, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
-"Make sure port %d can receive incoming connections.\n"
-"If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
-" or to forward the port to your system."
+msgid "Game is listed in the lobby"
 msgstr ""
-"Помилка підключення до сервера лоббі: %s.\n"
-"Переконайтеся, що порт %d може приймати вхідні з'єднання.\n"
-"Якщо ви використовуєте маршрутизатор, налаштуйте його для увімкнення UPnP/NAT-PMP/PCP або для перенаправлення порту на вашу систему."
+
+msgid "Lobby GameId"
+msgstr ""
+
+msgid "Game not listed in the lobby."
+msgstr ""
+
+msgid "Error connecting to the lobby server."
+msgstr ""
+
+msgid "Please check your internet connection, or wait a short while and try hosting again."
+msgstr ""
+
+msgid "Your game will only be accessible via direct connection (or local LAN)."
+msgstr ""
+
+msgid "Multiplayer lobby support unavailable. Please update your client."
+msgstr ""
+
+msgid "Game not listed in the lobby:"
+msgstr ""
+
+msgid "Failed to create game listing. Check WZ logs."
+msgstr ""
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Формат файлу відтворення є новішим, ніж може підтримувати ця версія Warzone 2100."
@@ -3064,6 +3101,18 @@ msgstr "Прогорнути Вкладку ліворуч"
 
 msgid "Tab Scroll right"
 msgstr "Прогорнути Вкладку праворуч"
+
+msgid "Please enter the text below"
+msgstr ""
+
+msgid "Enter the text"
+msgstr ""
+
+msgid "Please drag the slider to verify"
+msgstr ""
+
+msgid "Please drag the tile to verify"
+msgstr ""
 
 msgid ".50-calibre heavy machinegun"
 msgstr "Важкий кулемет .50-калібру"
@@ -3248,6 +3297,9 @@ msgstr "Всі Енергогенератори покращуються авт�
 msgid "All rail guns upgraded automatically"
 msgstr "Всі рейкові гармати покращуються автоматично"
 
+msgid "All Ripple Rockets upgraded automatically"
+msgstr ""
+
 msgid "All sensors upgraded automatically"
 msgstr "Всі сенсори покращуються автоматично"
 
@@ -3338,11 +3390,11 @@ msgstr "Кіборг озброєний ПУ 'Батіг'"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "Кіборг, озброєний ПУ 'Вбивця Танків'"
 
-msgid "Armed with Cyborg Thermite flamer"
-msgstr "Кіборг, озброєний Термічним Вогнеметом"
-
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Кіборг озброєний Термітним Вогнеметом"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr "Кіборг, озброєний Термічним Вогнеметом"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Кіборг озброєний лазером 'Спалах'"
@@ -3393,6 +3445,9 @@ msgstr "Бронебійні Підкаліберні Кулі"
 
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Бронебійний Стабілізований Підкаліберний Набій"
+
+msgid "Armored bunker with Assault Gun"
+msgstr ""
 
 msgid "Armored bunker with Flamer"
 msgstr "Броньований бункер з Вогнеметом"
@@ -3656,11 +3711,11 @@ msgstr "Найкраще Уражає: Будівлі бази"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Найкращі цілі: Базові споруди, пускові установки, кіборги"
 
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Найкраще Уражає: Бункери та Вогневі позиції"
-
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Найкраще Уражає: Бункери та укріплення"
+
+msgid "Best Targets: Bunkers and hardpoints"
+msgstr "Найкраще Уражає: Бункери та Вогневі позиції"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr "Найкраще Уражає: Бункери, захист, базові споруди"
@@ -4275,9 +4330,6 @@ msgstr "Швидкострільні Міні-Ракети"
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "Швидкострільні легкі ракети для ураження техніки"
 
-msgid "Fast Loader"
-msgstr "Швидкий Зарядний Пристрій"
-
 msgid "Faster than Cobra"
 msgstr "Швидший за Кобру"
 
@@ -4779,6 +4831,24 @@ msgstr "Гаубиця 'Пекельний Шторм'"
 msgid "Hero and Special rank units are protected"
 msgstr "Герої та юніти особливого рангу захищені"
 
+msgid "HESC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESC Mortar Shells"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESCHC Mortar Shells"
+msgstr ""
+
 msgid "HESH Rocket Warhead Mk2"
 msgstr "Вдосконалена Вибухова Ракетна Боєголовка Мк2"
 
@@ -4826,6 +4896,12 @@ msgstr "Важка вибухова ракета аритилерії "
 
 msgid "High explosive shaped charge missile"
 msgstr "Потужна ракета з комулятивним зарядом"
+
+msgid "High Explosive Soft Casing High Capacity Shells"
+msgstr ""
+
+msgid "High Explosive Soft Casing Shells"
+msgstr ""
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Високоефективна Термальна Броня Мк2"
@@ -5120,6 +5196,9 @@ msgstr "Підвищується сила Рейкових Гармат"
 
 msgid "Increases Rail Gun ROF"
 msgstr "Підвищується швидкострільність Рейкових Гармат"
+
+msgid "Increases Ripple Rocket ROF"
+msgstr ""
 
 msgid "Increases Rocket accuracy"
 msgstr "Підвищується Точність Ракет"
@@ -5565,6 +5644,12 @@ msgstr "Сила Мортири +25%"
 
 msgid "Mortar Damage"
 msgstr "Шкода від Мортири"
+
+msgid "Mortar Fast Loader Mk2"
+msgstr ""
+
+msgid "Mortar Fast Loader Mk3"
+msgstr ""
 
 msgid "Mortar Fast Loader"
 msgstr "Автозярядник Мортири Мк3"
@@ -6656,6 +6741,9 @@ msgstr "Самонавідні Артилерійські Заряди Мк2"
 msgid "Target Acquisition Artillery Shells"
 msgstr "Самонавідні Артилерійські Заряди"
 
+msgid "Target Acquisition Mortar Shells Mk2"
+msgstr ""
+
 msgid "Target Acquisition Mortar Shells"
 msgstr "Самонавідні Заряди Мортири"
 
@@ -7396,6 +7484,15 @@ msgstr "хост"
 
 msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Підключатися безпосередньо до IP/hostname в якості глядача"
+
+msgid "Connect to lobby game"
+msgstr ""
+
+msgid "lobbyGameId"
+msgstr ""
+
+msgid "Connect to lobby game as a spectator"
+msgstr ""
 
 msgid "Go directly to host screen"
 msgstr "Перейти безпосередньо на головний екран"
@@ -9028,24 +9125,6 @@ msgstr "Discord: Неможливо приєднатися до гри"
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
 msgstr "Ви не можете приєднатися до гри під час гри в грі. Будь ласка, збережіть/вийдіть з поточної гри, вийдіть з головного меню та повторіть спробу."
 
-msgid "Discord: Finding & Connecting to Game"
-msgstr "Discord: Пошук і підключення до гри"
-
-msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr "Спроба знайти та підключитися до гри, вказаної запрошенням до Discord."
-
-msgid "This may take a moment..."
-msgstr "Це може зайняти деякий час"
-
-msgid "Failed to find game in the lobby server: "
-msgstr "Не вдалося знайти гру в лобі сервера:"
-
-msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr "Можливо, гра вже розпочалася, або ведучий розпустив ігрове лобі."
-
-msgid "Failed to Find Game"
-msgstr "Не вдалося знайти гру"
-
 msgid "Failed to join the game from the specified invite link, with error:"
 msgstr "Не вдалося приєднатися до гри за вказаним посиланням на запрошення, з помилкою:"
 
@@ -9784,27 +9863,6 @@ msgstr ""
 msgid "You have been assigned the codename: \"%s\""
 msgstr ""
 
-msgid "Joined:"
-msgstr "Приєднався:"
-
-msgid "Ready:"
-msgstr "Готовий:"
-
-msgid "Players"
-msgstr "Гравці"
-
-msgid "Host Options"
-msgstr ""
-
-msgid "Enable Spectator Join"
-msgstr ""
-
-msgid "Lock Teams"
-msgstr ""
-
-msgid "Lock Position"
-msgstr ""
-
 msgid "For Spectator:"
 msgstr "Для глядачів:"
 
@@ -10027,9 +10085,6 @@ msgstr "%s приєднується до гри"
 
 msgid "Server message:"
 msgstr "Повідомлення сервера"
-
-msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "Оновлення гри, будь ласка, відвідайте https://wz2100.net для завантаження нової версії."
 
 msgid "LIMITS"
 msgstr "ліміт"
@@ -10548,6 +10603,9 @@ msgstr ""
 msgid "Error:"
 msgstr ""
 
+msgid "Message from Lobby:"
+msgstr ""
+
 msgid "Join Attempt Rejected"
 msgstr ""
 
@@ -10572,10 +10630,34 @@ msgstr "Хост обірвав з'єднання!"
 msgid "Connection Error"
 msgstr "Помилка З’єднання"
 
+msgid "Gathering connection details"
+msgstr ""
+
+msgid "Could Not Connect"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "The host has requested additional verification"
+msgstr ""
+
+msgid "No supported connection details"
+msgstr ""
+
 msgid "No connections available"
 msgstr ""
 
 msgid "Synchronizing data with host ..."
+msgstr ""
+
+msgid "Waiting for lobby error resolution"
+msgstr ""
+
+msgid "Waiting for join info"
 msgstr ""
 
 msgid "Waiting for correct join password"
@@ -11004,10 +11086,37 @@ msgstr ""
 msgid "\"Classic\" campaign balance"
 msgstr "\"Класичний\" баланс кампанії"
 
-msgid "Remastered"
+msgid "Pumpkin"
+msgstr ""
+
+msgid "\"Pumpkin\" campaign balance"
+msgstr ""
+
+msgid "About Balance Options"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
 msgstr ""
 
 msgid "The remastered campaign experience"
+msgstr ""
+
+msgid "Increases the viability of weaponry and designs on a per mission basis."
+msgstr ""
+
+msgid "Stats of game versions ~2.x - 3.x."
+msgstr ""
+
+msgid "Unintentionally affected by game patches over the years."
+msgstr ""
+
+msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
+msgstr ""
+
+msgid "Remastered"
 msgstr ""
 
 msgid "Difficulty:"
@@ -11151,6 +11260,21 @@ msgstr ""
 msgid "Reset Keys to: Defaults"
 msgstr ""
 
+msgid "Only useful if Enable IPv6 is On."
+msgstr ""
+
+#, c-format
+msgid "%u minutes"
+msgstr "%u хвилин"
+
+#, c-format
+msgid "%u seconds"
+msgstr "%u секунд"
+
+#, c-format
+msgid "%s hours"
+msgstr "%s годин(и)"
+
 msgid "Unit Color"
 msgstr "Колір юнітів"
 
@@ -11158,6 +11282,27 @@ msgid "Difficulty Level"
 msgstr "Рівень складності"
 
 msgid "Default AI"
+msgstr ""
+
+msgid "Lobby Options"
+msgstr ""
+
+msgid "Enable IPv6"
+msgstr ""
+
+msgid "Whether to list and try connecting via IPv6 (if available)."
+msgstr ""
+
+msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
+msgstr ""
+
+msgid "Enable IPv6. If your system supports it, this is the recommended option."
+msgstr ""
+
+msgid "Prefer IPv6 over IPv4"
+msgstr ""
+
+msgid "Prefer connecting via IPv6 over IPv4 when a game is available via both."
 msgstr ""
 
 msgid "Hosting Options"
@@ -11181,16 +11326,8 @@ msgstr "Дозволити Все"
 msgid "Inactivity Timeout"
 msgstr "Час бездіяльності"
 
-#, c-format
-msgid "%u minutes"
-msgstr "%u хвилин"
-
 msgid "Lag Kick"
 msgstr "Видалити через затримку"
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u секунд"
 
 msgid "Spectator Slots"
 msgstr "Місця спостерігачів"
@@ -11209,10 +11346,6 @@ msgstr "Зруйнувати (Класичний метод)"
 
 msgid "Game Time Limit"
 msgstr "Ліміт часу гри"
-
-#, c-format
-msgid "%s hours"
-msgstr "%s годин(и)"
 
 msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
 msgstr ""
@@ -11257,6 +11390,12 @@ msgid "Shadows"
 msgstr "Тіні"
 
 msgid "Draw Shadows"
+msgstr ""
+
+msgid "Terrain Shadows"
+msgstr ""
+
+msgid "Whether terrain casts shadows."
 msgstr ""
 
 msgid "Shadow Resolution"
@@ -11478,18 +11617,6 @@ msgstr "Чи слід автоматично мінімізувати вікно
 msgid "On (Fullscreen)"
 msgstr "Ввімкнено (Повний екран)"
 
-msgid "CONNECTION"
-msgstr "З’ЄДНАННЯ"
-
-msgid "Lobby"
-msgstr "Лоббі"
-
-msgid "IP"
-msgstr ""
-
-msgid "IP Address or Machine Name"
-msgstr "IP Адреса або Ім’я Машини"
-
 msgid "Host:"
 msgstr ""
 
@@ -11551,6 +11678,17 @@ msgstr ""
 msgid "Waiting Room"
 msgstr ""
 
+msgid "Reset Lobby Address to Default"
+msgstr ""
+
+#, c-format
+msgid "Host Name: %s"
+msgstr ""
+
+#, c-format
+msgid "ID: %s"
+msgstr ""
+
 msgid "FFA"
 msgstr ""
 
@@ -11584,10 +11722,35 @@ msgstr ""
 msgid "Spectate Game"
 msgstr ""
 
+msgid "Join as Player"
+msgstr ""
+
+msgid "Join as Spectator"
+msgstr ""
+
+#, c-format
+msgid "Last IP: %s"
+msgstr ""
+
+msgid "Clear Last IP"
+msgstr ""
+
+msgid "GameID or IP:port"
+msgstr ""
+
+msgid "Join"
+msgstr ""
+
 msgid "There appears to be a game update available!"
 msgstr "Здається, наявне оновлення гри!"
 
+msgid "Error dispatching request"
+msgstr ""
+
 msgid "Failed to connect to lobby server"
+msgstr ""
+
+msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
 msgstr ""
 
 msgid "Your version of Warzone is incompatible with this game."
@@ -11636,6 +11799,117 @@ msgid "Hide Empty Games"
 msgstr ""
 
 msgid "Hide Modded Games"
+msgstr ""
+
+msgid "Hide IPv6-Only"
+msgstr ""
+
+msgid "Host Lobby Options"
+msgstr ""
+
+msgid "Game must be listed in lobby to support this option."
+msgstr ""
+
+msgid "This option is not supported by the current lobby."
+msgstr ""
+
+msgid "Awaiting lobby information..."
+msgstr ""
+
+msgid "Slot Options"
+msgstr ""
+
+msgid "Spectator Join"
+msgstr ""
+
+msgid "Locked"
+msgstr ""
+
+msgid "Allow Change"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Game Options"
+msgstr ""
+
+msgid "Lobby Join Options"
+msgstr ""
+
+msgid "Bot Protection"
+msgstr ""
+
+msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
+msgstr ""
+
+msgid "Block Known Bots"
+msgstr ""
+
+msgid "Block known bots or automated tools."
+msgstr ""
+
+msgid "Proxy / VPN Connections"
+msgstr ""
+
+msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
+msgstr ""
+
+msgid "Block suspicious connections from proxies / VPNs."
+msgstr ""
+
+msgid "(Recommended)"
+msgstr ""
+
+msgid "Block All"
+msgstr ""
+
+msgid "Block all connections from proxies / VPNs."
+msgstr ""
+
+msgid "Block Suspicious"
+msgstr ""
+
+msgid "Hosting Provider IPs"
+msgstr ""
+
+msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
+msgstr ""
+
+msgid "Block all connections from hosting provider IPs."
+msgstr ""
+
+msgid "Block suspicious connections from hosting provider IPs."
+msgstr ""
+
+msgid "Lobby Join Bypass"
+msgstr ""
+
+msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
+msgstr ""
+
+msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
+msgstr ""
+
+msgid "(Not Recommended)"
+msgstr ""
+
+msgid "Do not allow direct joins. Require joining through the lobby."
+msgstr ""
+
+msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
+msgstr ""
+
+msgid "Joined:"
+msgstr "Приєднався:"
+
+msgid "Ready:"
+msgstr "Готовий:"
+
+msgid "Players"
+msgstr "Гравці"
+
+msgid "Host Options"
 msgstr ""
 
 #, c-format

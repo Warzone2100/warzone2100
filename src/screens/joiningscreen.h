@@ -24,13 +24,21 @@
 
 #include <functional>
 
-#include "../multiplay.h"	// for JoinConnectionDescription
+#include "lib/netplay/netjoin.h"	// for JoinConnectionDescription
+#include "lib/framework/crc.h"
 
 struct ExpectedHostProperties
 {
 	optional<EcKey::Key> hostPublicKey;
 	optional<std::string> gamePassword;
 };
+
+namespace netlobby
+{
+	struct ConnectionType;
+}
+
+bool startLobbyJoiningAttempt(char* playerName, const std::string& lobbyAddress, const std::string& gameId, bool asSpectator = false, const ExpectedHostProperties& expectedHostProps = ExpectedHostProperties(), const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes = nullptr);
 
 bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false, const ExpectedHostProperties& expectedHostProps = ExpectedHostProperties());
 bool startJoinRedirectAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator = false, const ExpectedHostProperties& expectedHostProps = ExpectedHostProperties());

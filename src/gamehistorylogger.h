@@ -57,6 +57,14 @@ public:
 		inline bool anyEnabled() const { return cmdInterface || logFile; }
 	};
 
+	struct AIPlayerAttributes
+	{
+		AIPlayerAttributes();
+
+		std::string scriptName;
+		int8_t difficulty = -1;
+	};
+
 	struct FixedPlayerAttributes
 	{
 		std::string name;
@@ -65,6 +73,8 @@ public:
 		int32_t colour;
 		FactionID faction;
 		std::string publicKey;
+		bool slotWasOccupied = false;	///< whether the slot was filled (by a human player or an AI) at game start - false for open / closed slots
+		optional<AIPlayerAttributes> aiPlayerAttr = nullopt;
 	};
 
 	struct GameFrame

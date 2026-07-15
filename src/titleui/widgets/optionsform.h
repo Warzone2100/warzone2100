@@ -565,3 +565,21 @@ private:
 
 	bool isInRefreshOptionsInternal = false;
 };
+
+// WzHelpPopoverWidget
+class WzHelpPopoverWidget : public WIDGET
+{
+protected:
+	WzHelpPopoverWidget();
+	bool initialize(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth, iV_fonts baseFontId);
+public:
+	static std::shared_ptr<WzHelpPopoverWidget> make(const OptionInfo& optionInfo, const std::vector<OptionChoiceHelpDescription>& choiceHelpDescriptions, int32_t paragraphWidth, iV_fonts baseFontId = font_small);
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
+protected:
+	void display(int xOffset, int yOffset) override;
+	void geometryChanged() override;
+private:
+	std::shared_ptr<Paragraph> paragraph;
+	const int32_t outerPadding = 10;
+};

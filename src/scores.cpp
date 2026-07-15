@@ -299,8 +299,8 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 			DroidList* dList = nullptr;
 			switch (idx)
 			{
-				case 0: dList = &apsDroidLists[selectedPlayer]; break;
-				case 1: dList = &mission.apsDroidLists[selectedPlayer]; break;
+				case 0: dList = &gameWorld.objects.droids[selectedPlayer]; break;
+				case 1: dList = &mission.gameWorld.objects.droids[selectedPlayer]; break;
 				case 2: if (prevMissionType == LEVEL_TYPE::LDS_MKEEP_LIMBO) { dList = &apsLimboDroids[selectedPlayer]; } break;
 				default: dList = nullptr;
 			}
@@ -624,12 +624,12 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = tr
 				continue;
 			}
 			uint32_t unitsKilled = getMultiPlayUnitsKilled(n);
-			uint32_t numUnits = apsDroidLists[n].size();
-			uint32_t numStructs = apsStructLists[n].size();
+			uint32_t numUnits = gameWorld.objects.droids[n].size();
+			uint32_t numStructs = gameWorld.objects.structures[n].size();
 			uint32_t numFactories = 0;
 			uint32_t numResearch = 0;
 			uint32_t numFactoriesThatCanProduceConstructionUnits = 0;
-			for (const STRUCTURE *psStruct : apsStructLists[n])
+			for (const STRUCTURE *psStruct : gameWorld.objects.structures[n])
 			{
 				if (psStruct->status != SS_BUILT || psStruct->died != 0)
 				{

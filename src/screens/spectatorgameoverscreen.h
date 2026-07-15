@@ -1,7 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2026  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -17,17 +16,17 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/*
- * Net join.
- * join related stuff
+/** @file
+ *  The overlay screen displayed when the game is over for a spectator (including when a replay ends)
  */
 
-#include "lib/framework/frame.h"
-#include "netplay.h"
+#ifndef __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__
+#define __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__
 
-uint32_t NETgetGameUserFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag)
-{
-	ASSERT_OR_RETURN(0, flag < ARRAY_SIZE(game.desc.dwUserFlags), "Out of range flag number: %u", flag);
+void showSpectatorGameOverScreen();
+void closeSpectatorGameOverScreen();
 
-	return game.desc.dwUserFlags[flag];
-}
+// Temporarily hide / re-show the spectator game over screen (if it's up) - ex. while the in-game options menu is open
+void setSpectatorGameOverScreenVisible(bool visible);
+
+#endif // __INCLUDED_SRC_SCREENS_SPECTATORGAMEOVERSCREEN_H__

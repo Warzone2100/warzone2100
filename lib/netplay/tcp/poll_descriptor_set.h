@@ -136,6 +136,11 @@ public:
 			return tl::make_unexpected(ErroredState::HangUp);
 		}
 
+		if (it->revents & POLLNVAL)
+		{
+			return tl::make_unexpected(ErroredState::InvalidConn);
+		}
+
 		return false;
 	}
 

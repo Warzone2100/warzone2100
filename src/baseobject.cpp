@@ -29,6 +29,7 @@
 #include "feature.h"
 #include "intdisplay.h"
 #include "map.h"
+#include "game_world.h"
 
 
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
@@ -94,8 +95,20 @@ SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 SIMPLE_OBJECT::~SIMPLE_OBJECT()
 {
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvolatile"
+#endif
 	const_cast<OBJECT_TYPE volatile &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
 	const_cast<UBYTE volatile &>(player) += 100;                                  // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
+#ifdef __clang__
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
@@ -120,7 +133,14 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 BASE_OBJECT::~BASE_OBJECT()
 {
-	visRemoveVisibility(this);
+	// Tile visibility must already have been removed (against the object's own world map) by
+	// the time we get here.
+	//
+	// See flushPendingVisRemoval(), the killXXX + objmemUpdate path, and the freeAllXXX teardown path.
+	//
+	// The destructor cannot do it itself because it has no reliable way to know which world's map this
+	// object belonged to.
+	ASSERT(watchedTiles.empty(), "watchedTiles not removed before destruction (player %d)", (int)player);
 }
 
 

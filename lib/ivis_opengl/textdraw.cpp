@@ -1482,6 +1482,61 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
+optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
+{
+	if (bold)
+	{
+		switch (fontID)
+		{
+			// bold fonts
+			case font_large: // is actually bold
+			case font_medium_bold:
+			case font_regular_bold:
+			case font_bar:	// small_bold
+				return fontID; // already bolded
+
+			// regular fonts
+			case font_medium:
+				return font_medium_bold;
+			case font_scaled: // treated the same as font_regular
+			case font_regular:
+				return font_regular_bold;
+			case font_small:
+				return font_bar;
+
+			case font_count:
+				return nullopt;
+		}
+	}
+	else
+	{
+		switch (fontID)
+		{
+			// bold fonts
+			case font_large: // is actually bold
+				return nullopt; // no non-bold option for this size
+			case font_medium_bold:
+				return font_medium;
+			case font_regular_bold:
+				return font_regular;
+			case font_bar:	// small_bold
+				return font_small;
+
+			// regular fonts
+			case font_medium:
+			case font_scaled: // treated the same as font_regular
+			case font_regular:
+			case font_small:
+				return fontID; // already non-bolded
+
+			case font_count:
+				return nullopt;
+		}
+	}
+
+	return nullopt; // silence compiler warning
+}
+
 optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID)
 {
 	switch (fontID)

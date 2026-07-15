@@ -26,6 +26,7 @@
 #include "intorder.h"
 #include "objects.h"
 #include "order.h"
+#include "game_world.h"
 
 #include <set>
 #include <algorithm>
@@ -410,7 +411,7 @@ static bool BuildSelectedDroidList()
 		return false;
 	}
 
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -915,7 +916,7 @@ static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 			//Only set the state if it's not a transporter.
 			if (!SelectedDroid->isTransporter())
 			{
-				if (!secondarySetState(SelectedDroid, sec, (SECONDARY_STATE)State))
+				if (!secondarySetState(SelectedDroid, gameWorld.objects, sec, (SECONDARY_STATE)State))
 				{
 					return false;
 				}

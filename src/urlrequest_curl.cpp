@@ -90,7 +90,7 @@
 #undef max
 #undef min
 
-#define MAX_WAIT_ON_SHUTDOWN_SECONDS 60
+#define MAX_WAIT_ON_SHUTDOWN_SECONDS 15
 
 static volatile bool urlRequestQuit = false;
 
@@ -107,14 +107,21 @@ public:
 
 class CURLHTTPResponseDetails : public HTTPResponseDetails {
 public:
-	CURLHTTPResponseDetails(CURLcode curlResult, long httpStatusCode, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
+	CURLHTTPResponseDetails(CURLcode curlResult, long httpStatusCode, optional<std::string> primaryIp, std::shared_ptr<HTTPResponseHeaders> responseHeaders)
 	: HTTPResponseDetails(httpStatusCode, responseHeaders)
 	, _curlResult(curlResult)
+	, primaryIp(primaryIp)
 	{ }
 	virtual ~CURLHTTPResponseDetails()
 	{ }
 
 	CURLcode curlResult() const { return _curlResult; }
+
+	optional<std::string> getPrimaryIP() const override
+	{
+		return primaryIp;
+	}
+
 	std::string getInternalResultDescription() const override
 	{
 		const char *pStrError = curl_easy_strerror(_curlResult);
@@ -127,6 +134,7 @@ public:
 
 private:
 	CURLcode _curlResult;
+	optional<std::string> primaryIp;
 };
 
 // MARK: - Handle thread-safety for cURL
@@ -417,16 +425,33 @@ public:
 		{
 			curl_slist_free_all(request_header_list);
 		}
+		if (handle != nullptr)
+		{
+			curl_easy_cleanup(handle);
+			handle = nullptr;
+		}
 	}
 
+	virtual URLRequestMethod method() const = 0;
 	virtual const std::string& url() const = 0;
 	virtual InternetProtocol protocol() const = 0;
 	virtual bool noProxy() const = 0;
+	virtual bool noFollowRedirects() const = 0;
+	virtual uint32_t connectTimeoutMs() const = 0;
+	virtual std::string userAgent() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
+	virtual const char* requestBody() const = 0;
 	virtual curl_off_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
+	virtual URLRequestAutoRetryStrategy retryStrategy() const = 0;
 
 	virtual CURL* createCURLHandle()
 	{
+		if (handle != nullptr)
+		{
+			// reuse already-created handle
+			return handle;
+		}
+
 		// Create cURL easy handle
 		handle = curl_easy_init();
 		if (!handle)
@@ -434,6 +459,10 @@ public:
 			// Something went wrong with curl_easy_init
 			return nullptr;
 		}
+
+		auto requestMethod = method();
+		curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, to_string(requestMethod));
+
 		curl_easy_setopt(handle, CURLOPT_URL, url().c_str());
 
 #if LIBCURL_VERSION_NUM >= 0x071000	// cURL 7.16.0+
@@ -462,6 +491,15 @@ public:
 				break;
 		}
 #endif
+
+		auto connectTimeoutMsVal = connectTimeoutMs();
+		if (connectTimeoutMsVal > 0)
+		{
+#if LIBCURL_VERSION_NUM >= 0x071002 // cURL 7.16.2+
+			curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT_MS, static_cast<long>(connectTimeoutMsVal));
+#endif
+		}
+
 		if (noProxy())
 		{
 #if LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
@@ -480,6 +518,10 @@ public:
 #endif
 		}
 
+		/* enable all supported built-in compressions */
+		curl_easy_setopt(handle, CURLOPT_ACCEPT_ENCODING, "");
+		curl_easy_setopt(handle, CURLOPT_HTTP_CONTENT_DECODING, 1L);
+
 		const auto& _requestHeaders = requestHeaders();
 		for (auto it : _requestHeaders)
 		{
@@ -491,6 +533,22 @@ public:
 		if (request_header_list != nullptr)
 		{
 			curl_easy_setopt(handle, CURLOPT_HTTPHEADER, request_header_list);
+		}
+
+		auto specifiedUserAgent = userAgent();
+		if (!specifiedUserAgent.empty())
+		{
+			curl_easy_setopt(handle, CURLOPT_USERAGENT, specifiedUserAgent.c_str());
+		}
+
+		if (requestMethod == URLRequestMethod::Post || requestMethod == URLRequestMethod::Patch)
+		{
+			const char* pRequestBody = requestBody();
+			if (pRequestBody != nullptr)
+			{
+				/* pass in a pointer to the data - libcurl does not copy */
+				curl_easy_setopt(handle, CURLOPT_POSTFIELDS, pRequestBody);
+			}
 		}
 
 		if (hasWriteMemoryCallback())
@@ -507,10 +565,24 @@ public:
 		/* only allow HTTP and HTTPS */
 		curl_easy_setopt(handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 	#endif
-		/* tell libcurl to follow redirection */
-		curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
-		/* set max redirects */
-		curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10L);
+
+		if (noFollowRedirects())
+		{
+			/* tell libcurl to NOT automatically follow redirection */
+			curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 0L);
+		}
+		else
+		{
+			/* tell libcurl to follow redirection */
+			curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
+			/* set max redirects */
+			curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10L);
+		}
+
+	#if LIBCURL_VERSION_NUM >= 0x075500		// cURL 7.85.0+
+		/* only allow HTTP and HTTPS for redirections */
+		curl_easy_setopt(handle, CURLOPT_REDIR_PROTOCOLS_STR, "http,https");
+	#endif
 
 		progress.request = this;
 	#if LIBCURL_VERSION_NUM >= 0x072000
@@ -556,21 +628,30 @@ public:
 		return handle;
 	}
 
-	virtual bool hasWriteMemoryCallback() { return false; }
-	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) { return 0; }
+	virtual bool hasWriteMemoryCallback() = 0;
+	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) = 0;
+	virtual void resetWriteMemory() = 0;
 
 	virtual bool onProgressUpdate(int64_t dltotal, int64_t dlnow, int64_t ultotal, int64_t ulnow) { return false; }
 
-	virtual bool waitOnShutdown() const { return false; }
+	virtual bool waitOnShutdown() const { return method() != URLRequestMethod::Get; }
 
-	virtual void handleRequestDone(CURLcode result) { }
+	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) { return URLRequestHandlingBehavior::Done(); }
 	virtual void requestFailedToFinish(URLRequestFailureType type) { }
+
+	size_t getNumRetries() const { return numRetries; }
+	void incrementNumRetries()
+	{
+		resetWriteMemory();
+		numRetries++;
+	}
 
 protected:
 	friend size_t header_callback(char *buffer, size_t size, size_t nitems, void *userdata);
 	std::shared_ptr<HTTPResponseHeadersContainer> responseHeaders = std::make_shared<HTTPResponseHeadersContainer>();
 private:
 	struct curl_slist *request_header_list = nullptr;
+	size_t numRetries = 0;
 };
 
 static size_t
@@ -664,6 +745,11 @@ public:
 	: URLTransferRequest(requestHandle)
 	{ }
 
+	virtual URLRequestMethod method() const override
+	{
+		return URLRequestMethod::Get;
+	}
+
 	virtual const std::string& url() const override
 	{
 		return getBaseRequest().url;
@@ -679,9 +765,34 @@ public:
 		return getBaseRequest().noProxy;
 	}
 
+	virtual bool noFollowRedirects() const override
+	{
+		return getBaseRequest().noFollowRedirects;
+	}
+
+	virtual uint32_t connectTimeoutMs() const override
+	{
+		return getBaseRequest().connectTimeoutMs;
+	}
+
+	virtual std::string userAgent() const override
+	{
+		return getBaseRequest().userAgent;
+	}
+
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const override
 	{
 		return getBaseRequest().getRequestHeaders();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		return nullptr;
+	}
+
+	virtual URLRequestAutoRetryStrategy retryStrategy() const override
+	{
+		return URLRequestAutoRetryStrategy::None();
 	}
 
 	virtual bool onProgressUpdate(int64_t dltotal, int64_t dlnow, int64_t ultotal, int64_t ulnow) override
@@ -694,7 +805,7 @@ public:
 		return false;
 	}
 
-	virtual void handleRequestDone(CURLcode result) override
+	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) override
 	{
 		long code;
 		if (curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &code) != CURLE_OK)
@@ -702,13 +813,36 @@ public:
 			code = 0;
 		}
 
+		optional<std::string> primaryIp;
+		char *tmpIp = nullptr;
+		if (curl_easy_getinfo(handle, CURLINFO_PRIMARY_IP, &tmpIp) == CURLE_OK && tmpIp)
+		{
+			primaryIp = std::string(tmpIp);
+			tmpIp = nullptr;
+		}
+
 		if (result == CURLE_OK)
 		{
-			onSuccess(CURLHTTPResponseDetails(result, code, responseHeaders));
+			return onResponse(CURLHTTPResponseDetails(result, code, primaryIp, responseHeaders));
 		}
 		else
 		{
-			onFailure(URLRequestFailureType::TRANSFER_FAILED, std::make_shared<CURLHTTPResponseDetails>(result, code, responseHeaders));
+			URLRequestFailureType failureType = URLRequestFailureType::TRANSFER_FAILED;
+			switch (result)
+			{
+				case CURLE_OPERATION_TIMEOUTED:
+					failureType = URLRequestFailureType::OPERATION_TIMEOUT;
+					break;
+				case CURLE_COULDNT_RESOLVE_HOST:
+				case CURLE_COULDNT_CONNECT:
+				case CURLE_SSL_CONNECT_ERROR:
+					failureType = URLRequestFailureType::COULDNT_CONNECT;
+					break;
+				default:
+					break;
+			}
+			onFailure(failureType, std::make_shared<CURLHTTPResponseDetails>(result, code, primaryIp, responseHeaders));
+			return URLRequestHandlingBehavior::Done();
 		}
 	}
 
@@ -719,7 +853,7 @@ public:
 	}
 
 private:
-	virtual void onSuccess(const CURLHTTPResponseDetails& responseDetails) = 0;
+	virtual URLRequestHandlingBehavior onResponse(const CURLHTTPResponseDetails& responseDetails) = 0;
 
 	void onFailure(URLRequestFailureType type, const std::shared_ptr<CURLHTTPResponseDetails>& transferDetails)
 	{
@@ -731,6 +865,16 @@ private:
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
 				wzAsyncExecOnMainThread([url]{
 					debug(LOG_NET, "cURL: Failed to initialize request for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::OPERATION_TIMEOUT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Request timeout for (%s)", url.c_str());
+				});
+				break;
+			case URLRequestFailureType::COULDNT_CONNECT:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Couldn't connect for (%s)", url.c_str());
 				});
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
@@ -788,6 +932,25 @@ public:
 		}
 	}
 
+	virtual URLRequestMethod method() const override
+	{
+		return request.method();
+	}
+
+	virtual const char* requestBody() const override
+	{
+		if (request.requestBody().empty())
+		{
+			return nullptr;
+		}
+		return request.requestBody().c_str();
+	}
+
+	virtual URLRequestAutoRetryStrategy retryStrategy() const override
+	{
+		return request.autoRetryStrategy;
+	}
+
 	virtual const URLRequestBase& getBaseRequest() const override
 	{
 		return request;
@@ -803,29 +966,48 @@ public:
 	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) override
 	{
 		size_t realsize = size * nmemb;
+		if (realsize == 0) {
+			return 0;
+		}
+
 		MemoryStruct *mem = chunk.get();
 
-		char *ptr = (char*) realloc(mem->memory, mem->size + realsize + 1);
-		if(ptr == NULL) {
+		const size_t maxSize = static_cast<size_t>(maxDownloadSize());
+		size_t neededBufferSize = mem->size + realsize + 1;
+		size_t newBufferSize = std::min<size_t>(neededBufferSize, maxSize); // prevent allocating more than maxDownloadSize buffer size
+		if (newBufferSize <= mem->size) {
+			/* can't allocate any more */
+			return 0;
+		}
+
+		char *ptr = (char*) realloc(mem->memory, newBufferSize);
+		if (ptr == NULL) {
 			/* out of memory! */
 			return 0;
 		}
 
 		mem->memory = ptr;
-		memcpy(&(mem->memory[mem->size]), contents, realsize);
-		mem->size += realsize;
+		size_t bytesToWrite = std::min<size_t>(realsize, (newBufferSize > mem->size) ? (newBufferSize - mem->size - 1) : 0);
+		ASSERT(bytesToWrite == realsize, "Writing partial data - reached max size");
+		memcpy(&(mem->memory[mem->size]), contents, bytesToWrite);
+		mem->size += bytesToWrite;
 		mem->memory[mem->size] = 0;
 
-		return realsize;
+		return bytesToWrite;
+	}
+	virtual void resetWriteMemory() override
+	{
+		chunk = std::make_shared<MemoryStruct>();
 	}
 
 private:
-	void onSuccess(const CURLHTTPResponseDetails& responseDetails) override
+	URLRequestHandlingBehavior onResponse(const CURLHTTPResponseDetails& responseDetails) override
 	{
-		if (request.onSuccess)
+		if (request.onResponse)
 		{
-			request.onSuccess(request.url, responseDetails, chunk);
+			return request.onResponse(request.url, responseDetails, chunk);
 		}
+		return URLRequestHandlingBehavior::Done();
 	}
 };
 
@@ -833,12 +1015,63 @@ class RunningURLFileDownloadRequest : public RunningURLTransferRequestBase
 {
 public:
 	URLFileDownloadRequest request;
-	FILE *outFile;
+	FILE *outFile = nullptr;
 
 	RunningURLFileDownloadRequest(const URLFileDownloadRequest& request, const std::shared_ptr<AsyncRequestImpl>& requestHandle)
 	: RunningURLTransferRequestBase(requestHandle)
 	, request(request)
 	{
+		openFileForWriting();
+	}
+
+	virtual const URLRequestBase& getBaseRequest() const override
+	{
+		return request;
+	}
+
+	virtual bool hasWriteMemoryCallback() override { return true; }
+	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) override
+	{
+		if (!outFile) return 0;
+		size_t written = fwrite(contents, size, nmemb, outFile);
+		return written;
+	}
+	virtual void resetWriteMemory() override
+	{
+		if (!outFile) return;
+
+		// reopen file for writing
+		openFileForWriting();
+	}
+
+	virtual URLRequestHandlingBehavior handleRequestDone(CURLcode result) override
+	{
+		if (outFile)
+		{
+			fclose(outFile);
+		}
+
+		return RunningURLTransferRequestBase::handleRequestDone(result);
+	}
+
+private:
+	URLRequestHandlingBehavior onResponse(const CURLHTTPResponseDetails& responseDetails) override
+	{
+		if (request.onResponse)
+		{
+			request.onResponse(request.url, responseDetails, request.outFilePath);
+		}
+		return URLRequestHandlingBehavior::Done();
+	}
+
+	void openFileForWriting()
+	{
+		if (outFile)
+		{
+			fclose(outFile);
+			outFile = nullptr;
+		}
+
 #if defined(WZ_OS_WIN)
 		// On Windows, path strings passed to fopen() are interpreted using the ANSI or OEM codepage
 		// (and not as UTF-8). To support Unicode paths, the string must be converted to a wide-char
@@ -880,38 +1113,6 @@ public:
 		}
 #endif
 	}
-
-	virtual const URLRequestBase& getBaseRequest() const override
-	{
-		return request;
-	}
-
-	virtual bool hasWriteMemoryCallback() override { return true; }
-	virtual size_t writeMemoryCallback(void *contents, size_t size, size_t nmemb) override
-	{
-		if (!outFile) return 0;
-		size_t written = fwrite(contents, size, nmemb, outFile);
-		return written;
-	}
-
-	virtual void handleRequestDone(CURLcode result) override
-	{
-		if (outFile)
-		{
-			fclose(outFile);
-		}
-
-		RunningURLTransferRequestBase::handleRequestDone(result);
-	}
-
-private:
-	void onSuccess(const CURLHTTPResponseDetails& responseDetails) override
-	{
-		if (request.onSuccess)
-		{
-			request.onSuccess(request.url, responseDetails, request.outFilePath);
-		}
-	}
 };
 
 static std::list<URLTransferRequest*> newUrlRequests;
@@ -922,11 +1123,12 @@ static int urlRequestThreadFunc(void *)
 	// initialize cURL
 	CURLM *multi_handle = curl_multi_init();
 
+	std::list<std::pair<URLTransferRequest*, std::chrono::steady_clock::time_point>> delayedTransfers;
 	std::list<URLTransferRequest*> runningTransfers;
 	int transfers_running = 0;
 	CURLMcode multiCode = CURLM_OK;
 
-	auto performTransfers = [&]() -> bool {
+	auto performTransfers = [&](bool shuttingDown) -> bool {
 		multiCode = curl_multi_perform ( multi_handle, &transfers_running );
 		if (multiCode == CURLM_OK )
 		{
@@ -951,6 +1153,8 @@ static int urlRequestThreadFunc(void *)
 				CURL *e = msg->easy_handle;
 				CURLcode result = msg->data.result;
 
+				curl_multi_remove_handle(multi_handle, e);
+
 				// printf("HTTP transfer completed with status %d\n", msg->data.result);
 
 				/* Find out which handle this message is about */
@@ -961,9 +1165,54 @@ static int urlRequestThreadFunc(void *)
 				if (it != runningTransfers.end())
 				{
 					URLTransferRequest* urlTransfer = *it;
-					urlTransfer->handleRequestDone(result);
-					delete urlTransfer;
 					runningTransfers.erase(it);
+
+					auto retryStrategy = urlTransfer->retryStrategy();
+					if (!shuttingDown && retryStrategy.maxRetries() > 0)
+					{
+						if (result == CURLE_OK)
+						{
+							long httpResponseCode = 0;
+							if (curl_easy_getinfo(urlTransfer->handle, CURLINFO_RESPONSE_CODE, &httpResponseCode) != CURLE_OK)
+							{
+								httpResponseCode = 0;
+							}
+
+							if (retryStrategy.shouldRetryOnHttpResponseCode(httpResponseCode) && urlTransfer->getNumRetries() < retryStrategy.maxRetries())
+							{
+								urlTransfer->incrementNumRetries();
+
+								curl_off_t retryAfterSeconds = 0;
+								curl_easy_getinfo(urlTransfer->handle, CURLINFO_RETRY_AFTER, &retryAfterSeconds);
+								retryAfterSeconds = std::clamp<curl_off_t>(retryAfterSeconds, 0, 3600);
+
+								auto minRetryDelay = std::min(retryStrategy.minDelay() * static_cast<std::chrono::milliseconds::rep>(urlTransfer->getNumRetries()), retryStrategy.maxDelay());
+
+								auto delayMS = std::clamp(std::chrono::milliseconds(retryAfterSeconds * 1000), minRetryDelay, retryStrategy.maxDelay());
+								auto retryAfterTime = std::chrono::steady_clock::now() + delayMS;
+
+								delayedTransfers.push_back({urlTransfer, retryAfterTime});
+								continue;
+							}
+						}
+					}
+
+					auto responseBehavior = urlTransfer->handleRequestDone(result);
+					switch (responseBehavior.strategy())
+					{
+						case URLRequestHandlingBehavior::Strategy::RetryAfter:
+							if (!shuttingDown)
+							{
+								urlTransfer->incrementNumRetries();
+								delayedTransfers.push_back({urlTransfer, std::chrono::steady_clock::now() + responseBehavior.delay()});
+								break;
+							}
+							// If shutting down, don't retry!
+							// fall-through
+						case URLRequestHandlingBehavior::Strategy::Done:
+							delete urlTransfer;
+							break;
+					}
 				}
 				else
 				{
@@ -971,32 +1220,63 @@ static int urlRequestThreadFunc(void *)
 					wzAsyncExecOnMainThread([]{
 						debug(LOG_ERROR, "Failed to find request in running transfers list");
 					});
+					curl_easy_cleanup(e);
 				}
-
-				curl_multi_remove_handle(multi_handle, e);
-				curl_easy_cleanup(e);
 			}
 		}
 
 		return true;
 	};
 
-	wzMutexLock(urlRequestMutex);
-	while (!urlRequestQuit)
-	{
-		if (newUrlRequests.empty() && transfers_running == 0)
+	// must be called while urlRequestMutex is held!
+	auto processDelayedTransfers_WhileLockIsHeld = [&]() -> int32_t {
+		int32_t minDelayMS = std::numeric_limits<int32_t>::max();
+		if (!delayedTransfers.empty())
 		{
-			wzMutexUnlock(urlRequestMutex);
-			wzSemaphoreWait(urlRequestSemaphore);  // Go to sleep until needed.
-			wzMutexLock(urlRequestMutex);
-			continue;
-		}
+			// Check if any have reached their delay, and if so re-add to newUrlRequests
+			auto now = std::chrono::steady_clock::now();
+			for (auto it = delayedTransfers.begin(); it != delayedTransfers.end(); /* no increment here */)
+			{
+				if (it->first->requestHandle->cancelFlag) // must be checked while holding the urlRequestMutex
+				{
+					delete it->first;
+					it = delayedTransfers.erase(it);
+					continue;
+				}
 
+				if (it->second < now)
+				{
+					newUrlRequests.push_back(it->first);
+					it = delayedTransfers.erase(it);
+				}
+				else
+				{
+
+					auto millisecondsToWait = std::chrono::duration_cast<std::chrono::milliseconds>(it->second - now).count();
+					millisecondsToWait = std::min(millisecondsToWait, static_cast<std::chrono::milliseconds::rep>(std::numeric_limits<int32_t>::max()));
+					minDelayMS = std::min<int32_t>(minDelayMS, static_cast<int32_t>(millisecondsToWait));
+					++it;
+				}
+			}
+		}
+		return minDelayMS;
+	};
+
+	// must be called while urlRequestMutex is held!
+	auto processNewUrlRequests_WhileLockIsHeld = [&](bool shuttingDown) {
 		// Start handling new requests
-		while(!newUrlRequests.empty())
+		while (!newUrlRequests.empty())
 		{
 			URLTransferRequest* newRequest = newUrlRequests.front();
 			newUrlRequests.pop_front();
+
+			// if shuttingDown, only process waitOnShutdown requests
+			if (shuttingDown && !newRequest->waitOnShutdown())
+			{
+				newRequest->requestFailedToFinish(URLRequestFailureType::CANCELLED_BY_SHUTDOWN);
+				delete newRequest;
+				continue; // skip to next request
+			}
 
 			// Create cURL easy handle
 			if (!newRequest->createCURLHandle())
@@ -1016,13 +1296,38 @@ static int urlRequestThreadFunc(void *)
 					debug(LOG_ERROR, "curl_multi_add_handle failed: %d", multiCode);
 				});
 				newRequest->requestFailedToFinish(URLRequestFailureType::INITIALIZE_REQUEST_ERROR);
-				curl_easy_cleanup(newRequest->handle);
 				delete newRequest;
 				continue; // skip to next request
 			}
 			runningTransfers.push_back(newRequest);
 		}
 		newUrlRequests.clear();
+	};
+
+	wzMutexLock(urlRequestMutex);
+	while (!urlRequestQuit)
+	{
+		int32_t minDelayMS = processDelayedTransfers_WhileLockIsHeld();
+
+		if (newUrlRequests.empty() && transfers_running == 0)
+		{
+			wzMutexUnlock(urlRequestMutex);
+			if (delayedTransfers.empty())
+			{
+				wzSemaphoreWait(urlRequestSemaphore);  // Go to sleep until needed.
+			}
+			else
+			{
+				// Wait for a specific limited time for a new transfer request
+				// (or loop and recheck if delayedTransfers have reached their delay)
+				wzSemaphoreWaitTimeout(urlRequestSemaphore, minDelayMS);
+			}
+			wzMutexLock(urlRequestMutex);
+			continue;
+		}
+
+		// Start handling new requests
+		processNewUrlRequests_WhileLockIsHeld(false);
 
 		// cancel any requests that have been signaled to cancel
 		auto it = runningTransfers.begin();
@@ -1033,7 +1338,6 @@ static int urlRequestThreadFunc(void *)
 			{
 				curl_multi_remove_handle(multi_handle, runningTransfer->handle);
 				runningTransfer->requestFailedToFinish(URLRequestFailureType::CANCELLED);
-				curl_easy_cleanup(runningTransfer->handle);
 				delete runningTransfer;
 				it = runningTransfers.erase(it);
 			}
@@ -1045,12 +1349,20 @@ static int urlRequestThreadFunc(void *)
 
 		wzMutexUnlock(urlRequestMutex); // when performing / waiting on curl requests, unlock the mutex
 
-		performTransfers();
+		performTransfers(false);
 
 		wzMutexLock(urlRequestMutex);
 	}
+
+	// while signaled to quit, there might be one or more new requests that have yet to be started,
+	// which need to be processed before fully shutting down
+	processDelayedTransfers_WhileLockIsHeld();
+	processNewUrlRequests_WhileLockIsHeld(true);
+
+	// unlock the mutex - we're now done with protected state
 	wzMutexUnlock(urlRequestMutex);
 
+	// cancel any running transfers which are *not* flagged to waitOnShutdown()
 	auto it = runningTransfers.begin();
 	while (it != runningTransfers.end())
 	{
@@ -1059,7 +1371,6 @@ static int urlRequestThreadFunc(void *)
 		{
 			curl_multi_remove_handle(multi_handle, runningTransfer->handle);
 			runningTransfer->requestFailedToFinish(URLRequestFailureType::CANCELLED_BY_SHUTDOWN);
-			curl_easy_cleanup(runningTransfer->handle);
 			delete runningTransfer;
 			it = runningTransfers.erase(it);
 		}
@@ -1073,7 +1384,7 @@ static int urlRequestThreadFunc(void *)
 	auto waitForTransfersStart = std::chrono::high_resolution_clock::now();
 	while (!runningTransfers.empty())
 	{
-		performTransfers();
+		performTransfers(true);
 		auto currentWaitDuration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - waitForTransfersStart);
 		if (currentWaitDuration.count() > MAX_WAIT_ON_SHUTDOWN_SECONDS)
 		{
@@ -1086,12 +1397,20 @@ static int urlRequestThreadFunc(void *)
 	{
 		curl_multi_remove_handle(multi_handle, runningTransfer->handle);
 		runningTransfer->requestFailedToFinish(URLRequestFailureType::CANCELLED_BY_SHUTDOWN);
-		curl_easy_cleanup(runningTransfer->handle);
 		delete runningTransfer;
 	}
 	runningTransfers.clear();
 
 	curl_multi_cleanup(multi_handle);
+
+	for (auto delayed : delayedTransfers)
+	{
+		auto runningTransfer = delayed.first;
+		runningTransfer->requestFailedToFinish(URLRequestFailureType::CANCELLED_BY_SHUTDOWN);
+		delete runningTransfer;
+	}
+	delayedTransfers.clear();
+
 	return 0;
 }
 

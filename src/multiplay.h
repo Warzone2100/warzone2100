@@ -29,6 +29,7 @@
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
 #include "lib/netplay/nettypes.h"
+#include "lib/netplay/netjoin.h"
 #include "multiplaydefs.h"
 #include "orderdef.h"
 #include "stringdef.h"
@@ -55,6 +56,7 @@ struct DROID_TEMPLATE;
 struct FEATURE;
 struct INITIAL_DROID_ORDERS;
 struct STRUCTURE;
+struct WorldObjectState;
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Game Options Structure. Enough info to completely describe the static stuff in a multiplayer game.
@@ -138,6 +140,7 @@ struct MULTIPLAYERINGAME
 	bool				muteChat[MAX_CONNECTED_PLAYERS] = {false};		// the local client-set mute status for this player
 	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
+	// NOTE: Must match up with limitIcons in multilobbyoptions.h !!!
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
 #define MPFLAGS_NO_CYBORGS	0x02  		///< Flag for cyborgs disabled
 #define MPFLAGS_NO_VTOLS	0x04  		///< Flag for VTOLs disabled
@@ -198,13 +201,6 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-// Bitmask for client lobby
-
-#define NO_VTOLS  1
-#define NO_TANKS 2
-#define NO_BORGS 4
-
-
 #define ANYPLAYER				99
 
 enum ScavType
@@ -251,9 +247,8 @@ constexpr TechLevel TECH_LEVEL_MAX = TechLevel::TECH_4;
 
 WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
-WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(const WorldObjectState& objState, UDWORD id, UDWORD player);
+WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(const WorldObjectState& objState, UDWORD id, UDWORD player);
 WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
 const char *getPlayerName(uint32_t player, bool treatAsNonHost = false);
@@ -321,48 +316,13 @@ bool sendDroidDisembark(const DROID *psTransporter, DROID const *psDroid);
 bool multiShutdown();
 bool sendLeavingMsg();
 
-bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs);
-struct JoinConnectionDescription
-{
-public:
-	JoinConnectionDescription()
-	{ }
-public:
-	enum class JoinConnectionType
-	{
-		TCP_DIRECT,
-#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
-		GNS_DIRECT,
-#endif
-	};
-public:
-	JoinConnectionDescription(const std::string& host, uint32_t port)
-	: host(host)
-	, port(port)
-	, type(JoinConnectionType::TCP_DIRECT)
-	{ }
-	JoinConnectionDescription(JoinConnectionType t, const std::string& host, uint32_t port)
-	: host(host)
-	, port(port)
-	, type(t)
-	{ }
-public:
-	static std::string connectiontype_to_string(JoinConnectionType type);
-	static optional<JoinConnectionType> connectiontype_from_string(const std::string& str);
-public:
-	std::string host;
-	uint32_t port = 0;
-	JoinConnectionType type = JoinConnectionType::TCP_DIRECT;
-};
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool spectatorHost, bool skipResetAIs, uint16_t desiredOpenSpectatorSlots);
+
 void to_json(nlohmann::json& j, const JoinConnectionDescription::JoinConnectionType& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription::JoinConnectionType& v);
 void to_json(nlohmann::json& j, const JoinConnectionDescription& v);
 void from_json(const nlohmann::json& j, JoinConnectionDescription& v);
 
-std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
-void joinGame(const char *connectionString, bool asSpectator = false);
-void joinGame(const char *host, uint32_t port, bool asSpectator = false);
-void joinGame(const std::vector<JoinConnectionDescription>& connection_list, bool asSpectator = false);
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

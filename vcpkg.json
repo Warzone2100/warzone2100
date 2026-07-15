@@ -1,7 +1,7 @@
 {
 	"name": "warzone2100",
 	"version-string": "master-branch",
-	"builtin-baseline": "1d483bc44f8c35627407d7024e0045743829c2e8",
+	"builtin-baseline": "77df67cfff9c12ccfdb52284e07c87c75092f723",
 	"dependencies": [
 		"physfs",
 		{
@@ -29,6 +29,7 @@
 			"name": "freetype",
 			"platform": "!emscripten"
 		},
+		"libjpeg-turbo",
 		"libogg",
 		"libtheora",
 		"libvorbis",

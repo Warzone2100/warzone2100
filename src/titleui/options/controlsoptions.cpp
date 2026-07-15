@@ -1039,6 +1039,47 @@ std::shared_ptr<OptionsForm> makeControlsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 
+	// Touch:
+	result->addSection(OptionsSection(N_("Touch"), ""), true);
+	{
+		auto optionInfo = OptionInfo("controls.touch.pinchToZoomGesture", N_("Pinch to Zoom"), N_("Enable pinch-to-zoom for the camera (if two-finger / multi-touch input is supported)."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(getPinchToZoomTouchGesture());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				setPinchToZoomTouchGesture(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("controls.touch.twoFingerPan", N_("Two-Finger Pan"), N_("Enable panning the camera by dragging two fingers (if two-finger / multi-touch input is supported)."));
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(getPanTouchGesture());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				setPanTouchGesture(newValue);
+				return true;
+			}, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+
 	// Camera:
 	result->addSection(OptionsSection(N_("Camera"), ""), true);
 	{
