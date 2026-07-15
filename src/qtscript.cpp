@@ -716,12 +716,12 @@ bool saveScriptStates(const char *filename)
 
 // In-memory (JSON) variants, for match-state serialization. Same v2 content as the file-based
 // versions, but to/from a nlohmann::json object instead of a WzConfig file.
-bool saveScriptStates(nlohmann::json &result, int onlyPlayer)
+bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer)
 {
 	return scripting_engine::instance().saveScriptStates2(result, onlyPlayer);
 }
 
-bool loadScriptStates(const nlohmann::json &result, int targetPlayer)
+bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer)
 {
 	return scripting_engine::instance().loadScriptStates2(result, targetPlayer);
 }
@@ -746,19 +746,19 @@ bool scripting_engine::saveScriptStates(const char *filename)
 
 bool scripting_engine::saveScriptStates2(const char *filename)
 {
-	nlohmann::json root;
+	nlohmann::ordered_json root;
 	saveScriptStates2(root);
 	return saveJSONToFile(root, filename);
 }
 
 // In-memory (json) variant: builds the v2 document into 'root' (used by the match-state serializer).
-bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
+bool scripting_engine::saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer)
 {
-	root = nlohmann::json::object();
+	root = nlohmann::ordered_json::object();
 	root["version"] = SCRIPTSTATE_VERSION;
 
 	// One object per script instance, bundling its globals, group memberships, and per-instance flags
-	nlohmann::json instancesArray = nlohmann::json::array();
+	nlohmann::ordered_json instancesArray = nlohmann::ordered_json::array();
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		wzapi::scripting_instance* instance = scripts.at(i);
@@ -770,19 +770,19 @@ bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
 			continue;
 		}
 
-		nlohmann::json instanceObj = nlohmann::json::object();
+		nlohmann::ordered_json instanceObj = nlohmann::ordered_json::object();
 		// 'me'/'scriptName' identify the instance on load (findInstanceForPlayer)
 		instanceObj["me"] = instance->player();
 		instanceObj["scriptName"] = instance->scriptName();
 
-		nlohmann::json globalsResult = nlohmann::json::object();
+		nlohmann::ordered_json globalsResult = nlohmann::ordered_json::object();
 		instance->saveScriptGlobals(globalsResult);
 		// 'scriptName' and 'me' are also saved implicitly inside globals by the backend's saveScriptGlobals
 		ASSERT(globalsResult.contains("me"), "Missing required global \"me\"");
 		ASSERT(globalsResult.contains("scriptName"), "Missing required global \"scriptName\"");
 		instanceObj["globals"] = std::move(globalsResult);
 
-		nlohmann::json groupsResult = nlohmann::json::object();
+		nlohmann::ordered_json groupsResult = nlohmann::ordered_json::object();
 		saveGroups(groupsResult, instance);
 		instanceObj["groups"] = std::move(groupsResult);
 
@@ -796,7 +796,7 @@ bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
 		auto ownedIt = ownedLabels.find(instance);
 		if (ownedIt != ownedLabels.end() && !ownedIt->second.empty())
 		{
-			nlohmann::json instanceLabels = nlohmann::json::array();
+			nlohmann::ordered_json instanceLabels = nlohmann::ordered_json::array();
 			writeLabelMap(ownedIt->second, instanceLabels);
 			instanceObj["labels"] = std::move(instanceLabels);
 		}
@@ -806,7 +806,7 @@ bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
 	root["instances"] = std::move(instancesArray);
 
 	// Timers as an ordered array - serialized (and thus restored) in the same order as the timers list
-	nlohmann::json timersArray = nlohmann::json::array();
+	nlohmann::ordered_json timersArray = nlohmann::ordered_json::array();
 	for (const auto& node : timers)
 	{
 		// Match the instance filter above: a per-client snapshot carries only its own timers.
@@ -814,7 +814,7 @@ bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
 		{
 			continue;
 		}
-		nlohmann::json nodeInfo = nlohmann::json::object();
+		nlohmann::ordered_json nodeInfo = nlohmann::ordered_json::object();
 		nodeInfo["id"] = node->timerID;
 		nodeInfo["name"] = node->timerName;
 		// 'me'/'scriptName' identify the owning instance on load
@@ -839,7 +839,7 @@ bool scripting_engine::saveScriptStates2(nlohmann::json &root, int onlyPlayer)
 	root["lastTimerID"] = lastTimerID;
 
 	// Global (map-authored / legacy / unowned) labels go at the top level
-	nlohmann::json globalLabelsArr = nlohmann::json::array();
+	nlohmann::ordered_json globalLabelsArr = nlohmann::ordered_json::array();
 	writeLabelMap(globalLabels, globalLabelsArr);
 	root["labels"] = std::move(globalLabelsArr);
 
@@ -1010,7 +1010,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 // keeps the restore total. When a wrong type is encountered *mismatch is set, so the caller can note the
 // document was not fully faithful.
 template <typename T>
-static T jsonValueOr(const nlohmann::json &j, const char *key, T fallback, bool *mismatch = nullptr)
+static T jsonValueOr(const nlohmann::ordered_json &j, const char *key, T fallback, bool *mismatch = nullptr)
 {
 	auto it = j.find(key);
 	if (it == j.end())
@@ -1038,7 +1038,7 @@ static T jsonValueOr(const nlohmann::json &j, const char *key, T fallback, bool 
 // entry is skipped rather than aborting the whole restore and leaving the engine half-wiped. If anything
 // was skipped this returns false (the input was not fully faithful) so a caller restoring from an untrusted
 // source can choose to reject it; a returned true means a byte-faithful restore.
-bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetPlayer)
+bool scripting_engine::loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer)
 {
 	bool anySkipped = false;
 	const int version = jsonValueOr(root, "version", 1);
@@ -1132,7 +1132,7 @@ bool scripting_engine::loadScriptStates2(const nlohmann::json &root, int targetP
 			auto globalsIt = instanceObj.find("globals");
 			if (globalsIt != instanceObj.end() && globalsIt->is_object())
 			{
-				nlohmann::json globals = *globalsIt;
+				nlohmann::ordered_json globals = *globalsIt;
 				debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
 				      instance->player(), instance->scriptName().c_str(), globals.size());
 				// filter out "scriptName" and "me" variables (saved implicitly inside globals)
@@ -2589,19 +2589,26 @@ bool scripting_engine::loadGroup(wzapi::scripting_instance *instance, int groupI
 	return groupAddObject(psObj, groupId, instance);
 }
 
-bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_instance *instance)
+bool scripting_engine::saveGroups(nlohmann::ordered_json &result, wzapi::scripting_instance *instance)
 {
 	// Save group info as a list of group memberships for each droid
 	GROUPMAP *psMap = getGroupMap(instance);
 	ASSERT_OR_RETURN(false, psMap, "Non-existent groupmap for engine");
 	result["lastNewGroupId"] = psMap->getLastNewGroupId();
+	// m_map is keyed by BASE_OBJECT* and iterates in hash-of-pointer order, which is not stable across a
+	// save/restore (objects re-allocate at new addresses). Collect the per-droid group lists keyed by
+	// object id (std::map, sorted) so the serialized key order is deterministic and round-trips; group
+	// membership semantics are unaffected by the key order.
+	std::map<UDWORD, std::vector<WzString>> byId;
 	for (auto i = psMap->map().begin(); i != psMap->map().end(); ++i)
 	{
 		const BASE_OBJECT *psObj = i->first;
 		ASSERT(!isDead(psObj), "Wanted to save dead %s to savegame!", objInfo(psObj));
-		std::vector<WzString> value = json_getValue(result, WzString::number(psObj->id)).toWzStringList();
-		value.push_back(WzString::number(i->second));
-		result[WzString::number(psObj->id).toUtf8()] = value;
+		byId[psObj->id].push_back(WzString::number(i->second));
+	}
+	for (const auto &kv : byId)
+	{
+		result[WzString::number(kv.first).toUtf8()] = kv.second;
 	}
 	return true;
 }
@@ -2824,11 +2831,11 @@ bool scripting_engine::loadLabels(const nlohmann::json &result, const std::unord
 // - no map->id remapping (a v2 save stores already-synchronized runtime ids)
 // Object/group ids are resolved as-is, tolerating an object destroyed before save
 // (v2 labels only ever come from savegames)
-bool scripting_engine::loadLabelMap(const nlohmann::json &labelArray, LABELMAP &target)
+bool scripting_engine::loadLabelMap(const nlohmann::ordered_json &labelArray, LABELMAP &target)
 {
 	ASSERT_OR_RETURN(false, labelArray.is_array(), "v2 labels is not an array");
 
-	auto jsonVector2i = [](const nlohmann::json &entry, const char *key) -> Vector2i {
+	auto jsonVector2i = [](const nlohmann::ordered_json &entry, const char *key) -> Vector2i {
 		Vector2i r(0, 0);
 		auto it = entry.find(key);
 		if (it == entry.end() || !it->is_array() || it->size() != 2) { return r; }
@@ -2945,13 +2952,13 @@ bool scripting_engine::loadLabelMap(const nlohmann::json &labelArray, LABELMAP &
 // "type" field ("position" / "area" / "radius" / "group" / "object").
 // Ownership is conveyed by which bucket is serialized and where the caller places the array in the
 // v2 script state (top-level "labels" for globals, an instance's "labels" for its owned labels)
-bool scripting_engine::writeLabelMap(const LABELMAP& labels, nlohmann::json& result)
+bool scripting_engine::writeLabelMap(const LABELMAP& labels, nlohmann::ordered_json& result)
 {
 	for (const auto& it : labels)
 	{
 		const std::string& key = it.first;
 		const LABEL& l = it.second;
-		nlohmann::json entry = nlohmann::json::object();
+		nlohmann::ordered_json entry = nlohmann::ordered_json::object();
 		entry["label"] = key;
 		if (l.type == SCRIPT_POSITION)
 		{

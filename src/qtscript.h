@@ -129,8 +129,8 @@ bool saveScriptStates(const char *filename);
 //     selectedPlayer to this client's), and that instance's existing timers/groups are cleared
 //     first so restoring onto the running match does not duplicate them. -1 matches the saved
 //     "me"/scriptName verbatim (savegame-style).
-bool saveScriptStates(nlohmann::json &result, int onlyPlayer = -1);
-bool loadScriptStates(const nlohmann::json &result, int targetPlayer = -1);
+bool saveScriptStates(nlohmann::ordered_json &result, int onlyPlayer = -1);
+bool loadScriptStates(const nlohmann::ordered_json &result, int targetPlayer = -1);
 
 /// Whether the script subsystem is initialized and scripts are running.
 bool scriptsAreReady();
@@ -346,8 +346,8 @@ public:
 	// per-client scope: onlyPlayer/targetPlayer >= 0 serialize/rebind just the local rules script (see the free
 	// saveScriptStates(json&, ...)/loadScriptStates(json&, ...) wrappers); -1 saves/restores every instance verbatim.
 	bool saveScriptStates2(const char *filename);
-	bool saveScriptStates2(nlohmann::json &root, int onlyPlayer = -1);
-	bool loadScriptStates2(const nlohmann::json &root, int targetPlayer = -1);
+	bool saveScriptStates2(nlohmann::ordered_json &root, int onlyPlayer = -1);
+	bool loadScriptStates2(const nlohmann::ordered_json &root, int targetPlayer = -1);
 
 	bool unregisterFunctions(wzapi::scripting_instance *instance);
 	void prepareLabels();
@@ -362,15 +362,15 @@ public:
 
 	/// Loader B / writer for the script-state v2 embedded label format:
 	/// - A JSON array of label objects (each with a "type" field) for one ownership bucket
-	bool writeLabelMap(const LABELMAP& labels, nlohmann::json& result);
-	bool loadLabelMap(const nlohmann::json& labelArray, LABELMAP& target);
+	bool writeLabelMap(const LABELMAP& labels, nlohmann::ordered_json& result);
+	bool loadLabelMap(const nlohmann::ordered_json& labelArray, LABELMAP& target);
 
 // MARK: GROUPS
 public:
 	GROUPMAP* getGroupMap(wzapi::scripting_instance *instance);
 
 	bool loadGroup(wzapi::scripting_instance *instance, int groupId, int objId);
-	bool saveGroups(nlohmann::json &result, wzapi::scripting_instance *instance);
+	bool saveGroups(nlohmann::ordered_json &result, wzapi::scripting_instance *instance);
 
 // MARK: TIMERS
 public:
