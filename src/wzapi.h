@@ -630,15 +630,15 @@ namespace wzapi
 
 	public:
 		// save / restore state
-		virtual bool saveScriptGlobals(nlohmann::json &result) = 0;
+		virtual bool saveScriptGlobals(nlohmann::ordered_json &result) = 0;
 		// fixedNulls: true if the save distinguishes JS null from undefined (save format
 		// version >= 2). When false (older saves), JSON null is mapped to JS undefined.
-		virtual bool loadScriptGlobals(const nlohmann::json &result, bool fixedNulls) = 0;
+		virtual bool loadScriptGlobals(const nlohmann::ordered_json &result, bool fixedNulls) = 0;
 
-		virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) = 0;
+		virtual nlohmann::ordered_json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) = 0;
 
 		// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-		virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) = 0;
+		virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::ordered_json& savedTimerFuncData) = 0;
 
 		// save / restore the script engine's Math.random() PRNG state
 		// - Restoring it lets a resumed instance continue the identical Math.random() sequence instead of re-seeding from wall-clock

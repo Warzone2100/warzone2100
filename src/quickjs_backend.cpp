@@ -384,7 +384,7 @@ static std::string getBuiltinExoticClassName(JSToJsonContext& c, JSValue value)
 }
 
 // NOTE: May throw if there is a circular reference!
-nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
+nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value); // forward-declare
 
 bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::function<void (const char *key, JSAtom& atom)>& func, bool enumerableOnly = true); // forward-declare
 
@@ -470,13 +470,13 @@ private:
 
 public:
 	// save / restore state
-	virtual bool saveScriptGlobals(nlohmann::json &result) override;
-	virtual bool loadScriptGlobals(const nlohmann::json &result, bool fixedNulls) override;
+	virtual bool saveScriptGlobals(nlohmann::ordered_json &result) override;
+	virtual bool loadScriptGlobals(const nlohmann::ordered_json &result, bool fixedNulls) override;
 
-	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
+	virtual nlohmann::ordered_json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
 
 	// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
+	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::ordered_json& savedTimerFuncData) override;
 
 	virtual uint64_t saveMathRandomState() const override;
 	virtual void restoreMathRandomState(uint64_t state) override;
@@ -1074,9 +1074,9 @@ static JSValue resolveClassPrototype(JSContext* ctx, const std::string& classNam
 	return proto; // owned
 }
 
-JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::json& instance, uint8_t prop_flags); // forward-declare
+JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ordered_json& instance, uint8_t prop_flags); // forward-declare
 
-static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nlohmann::json& obj_json, uint8_t prop_flags)
+static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nlohmann::ordered_json& obj_json, uint8_t prop_flags)
 {
 	for (auto it = obj_json.begin(); it != obj_json.end(); ++it)
 	{
@@ -1089,7 +1089,7 @@ static void populateObjectProperties(JsonToJSContext& c, JSValue obj, const nloh
 // wz_qjs_to_json on the save path (class instances, plain objects, arrays and shared
 // references). JSON values without an "@@wztype" tag are decoded the legacy way, so older
 // saves (which wrote bare objects/arrays) continue to load.
-JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::json& instance, uint8_t prop_flags)
+JSValue mapJsonToQuickJSValueWithContext(JsonToJSContext& c, const nlohmann::ordered_json& instance, uint8_t prop_flags)
 {
 	JSContext* ctx = c.ctx;
 	if (instance.is_object())
@@ -3307,7 +3307,7 @@ bool quickjs_scripting_instance::readyInstanceForExecution()
 	return true;
 }
 
-bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
+bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::ordered_json &result)
 {
 	auto toJsonContext = JSToJsonContext(ctx, true, /*tag_class_instances=*/true);
 
@@ -3339,7 +3339,7 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
 	return true;
 }
 
-bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result, bool fixedNulls)
+bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::ordered_json &result, bool fixedNulls)
 {
 	ASSERT_OR_RETURN(false, result.is_object(), "Can't load script globals from non-json-object");
 	JsonToJSContext loadCtx(ctx, fixedNulls);
@@ -3406,9 +3406,9 @@ void quickjs_scripting_instance::restoreMathRandomState(uint64_t state)
 	JS_SetRandomState(ctx, state);
 }
 
-nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
+nlohmann::ordered_json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
 {
-	nlohmann::json result = nlohmann::json::object();
+	nlohmann::ordered_json result = nlohmann::ordered_json::object();
 	result["function"] = timerName;
 	const quickjs_timer_additionaldata* pData = static_cast<const quickjs_timer_additionaldata*>(additionalParam);
 	if (pData)
@@ -3419,7 +3419,7 @@ nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timer
 }
 
 // recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
-std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
+std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::ordered_json& savedTimerFuncData)
 {
 	std::string funcName = json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString();
 	if (funcName.empty())
@@ -4211,7 +4211,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 // Enable JSON support for custom types
 
 // NOTE: May throw if there is a circular reference!
-nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
+nlohmann::ordered_json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 {
 	// IMPORTANT: This largely follows the Qt documentation on QJsonValue::fromVariant
 	// See: http://doc.qt.io/qt-5/qjsonvalue.html#fromVariant
@@ -4224,14 +4224,14 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 	//		 so check value.isNull() instead.
 	if (JS_IsNull(value))
 	{
-		return nlohmann::json(); // null value
+		return nlohmann::ordered_json(); // null value
 	}
 
 	if (JS_IsObject(value))
 	{
 		if (JS_IsConstructor(c.ctx, value))
 		{
-			return (!c.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
+			return (!c.skip_constructors) ? "<constructor>" : nlohmann::ordered_json() /* null value */;
 		}
 
 		bool isArray = WZ_QJS_IsArray(c.ctx, value) != 0;
@@ -4244,7 +4244,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			auto refIt = c.refIds.find(JS_VALUE_GET_PTR(value));
 			if (refIt != c.refIds.end())
 			{
-				nlohmann::json ref = nlohmann::json::object();
+				nlohmann::ordered_json ref = nlohmann::ordered_json::object();
 				ref[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_REF;
 				ref[WZ_JSON_ID_KEY] = refIt->second;
 				// Record the targets's kind so a forward reference can build a matching
@@ -4264,7 +4264,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			}
 		}
 
-		nlohmann::json j;
+		nlohmann::ordered_json j;
 		c.stack.push_back(value);
 
 		if (c.tag_class_instances)
@@ -4274,12 +4274,12 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			int id = c.nextRefId++;
 			c.refIds[JS_VALUE_GET_PTR(value)] = id;
 
-			j = nlohmann::json::object();
+			j = nlohmann::ordered_json::object();
 			j[WZ_JSON_ID_KEY] = id;
 
 			if (isArray)
 			{
-				nlohmann::json data = nlohmann::json::array();
+				nlohmann::ordered_json data = nlohmann::ordered_json::array();
 				uint64_t length = 0;
 				if (QuickJS_GetArrayLength(c.ctx, value, length))
 				{
@@ -4295,7 +4295,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 
 				// Preserve any *named* (non-index) own properties a script attached to the array (e.g. `arr.meta = ...`).
 				// The 0..length-1 elements above are skipped here ("length" is intrinsic), & own accessors can't be serialized.
-				nlohmann::json props = nlohmann::json::object();
+				nlohmann::ordered_json props = nlohmann::ordered_json::object();
 				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &props](const char *key, JSAtom &atom) {
 					std::string nameStr = key;
 					if (nameStr == "length" || isCanonicalArrayIndexKey(nameStr)) { return; }
@@ -4327,7 +4327,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			else
 			{
 				std::string className = getSerializableClassName(c, value);
-				nlohmann::json data = nlohmann::json::object();
+				nlohmann::ordered_json data = nlohmann::ordered_json::object();
 				QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &data](const char *key, JSAtom &atom) {
 					if (isOwnAccessorProperty(c.ctx, value, atom))
 					{
@@ -4377,14 +4377,14 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 		else if (isArray)
 		{
 			// Legacy bare array
-			j = nlohmann::json::array();
+			j = nlohmann::ordered_json::array();
 			uint64_t length = 0;
 			if (QuickJS_GetArrayLength(c.ctx, value, length))
 			{
 				for (uint64_t k = 0; k < length; k++) // TODO: uint64_t isn't correct here, as we call GetUint32...
 				{
 					JSValue jsVal = JS_GetPropertyUint32(c.ctx, value, k);
-					nlohmann::json jsonValue = wz_qjs_to_json(c, jsVal);
+					nlohmann::ordered_json jsonValue = wz_qjs_to_json(c, jsVal);
 					j.push_back(jsonValue);
 					JS_FreeValue(c.ctx, jsVal);
 				}
@@ -4393,7 +4393,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 		else
 		{
 			// Legacy bare object
-			j = nlohmann::json::object();
+			j = nlohmann::ordered_json::object();
 			QuickJS_EnumerateObjectProperties(c.ctx, value, [&c, value, &j](const char *key, JSAtom &atom) {
 				JSValue jsVal = JS_GetProperty(c.ctx, value, atom);
 				std::string nameStr = key;
@@ -4447,7 +4447,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			{
 				// JSON cannot represent NaN / Infinity (nlohmann::json serializes them as null, which would reload as undefined).
 				// Encode them as a tagged value so they round-trip. (Only done on the tagged save / restore path.)
-				nlohmann::json num = nlohmann::json::object();
+				nlohmann::ordered_json num = nlohmann::ordered_json::object();
 				num[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_NUMBER;
 				if (std::isnan(dblVal)) { num[WZ_JSON_VALUE_KEY] = "NaN"; }
 				else { num[WZ_JSON_VALUE_KEY] = (dblVal < 0.0) ? "-Infinity" : "Infinity"; }
@@ -4461,11 +4461,11 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 				// On the save path, distinguish undefined from null:
 				// - undefined is tagged, so a bare JSON null unambiguously means JS null
 				// - (Legacy/non-tag callers keep collapsing both to JSON null)
-				nlohmann::json undef = nlohmann::json::object();
+				nlohmann::ordered_json undef = nlohmann::ordered_json::object();
 				undef[WZ_JSON_TAG_KEY] = WZ_JSON_TAG_UNDEF;
 				return undef;
 			}
-			return nlohmann::json(); // null value
+			return nlohmann::ordered_json(); // null value
 		case JS_TAG_STRING:
 		{
 			const char* pStr = JS_ToCString(c.ctx, value);
@@ -4478,13 +4478,13 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			// In every other case, a conversion to a string will be attempted
 			const char* pStr = JS_ToCString(c.ctx, value);
 			// If the returned string is empty, a Null QJsonValue will be stored, otherwise a String value using the returned QString.
-			auto j = nlohmann::json();
+			auto j = nlohmann::ordered_json();
 			if (pStr)
 			{
 				std::string str(pStr);
 				if (str.empty())
 				{
-					j = nlohmann::json(); // null value
+					j = nlohmann::ordered_json(); // null value
 				}
 				else
 				{
@@ -4494,7 +4494,7 @@ nlohmann::json wz_qjs_to_json(JSToJsonContext &c, JSValue value)
 			}
 			else
 			{
-				j = nlohmann::json(); // null value
+				j = nlohmann::ordered_json(); // null value
 			}
 			return j;
 		}
