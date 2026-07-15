@@ -597,7 +597,7 @@ function attackerCountsGood(recycle)
 }
 
 //Next 3 functions adapted from NullBot
-/*function cancelAllProduction () 
+function cancelAllProduction () 
 {//just iterates over all factories and cancels production
     const _list = enumStruct(_STRUCTURES.factory).concat(enumStruct(_STRUCTURES.cyborgFactory).concat(enumStruct(_STRUCTURES.vtolFactory)));
     let result = false;
@@ -615,7 +615,7 @@ function attackerCountsGood(recycle)
         }
     }
     return result;
-}*/
+}
 
 function emergencyRecycleTank() 
 {
