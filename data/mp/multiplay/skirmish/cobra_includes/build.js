@@ -71,6 +71,12 @@ function unfinishedStructures()
 	return _unfinished;
 }
 
+//adapted from NullBot
+function countFinishedStructures(player, structureType)
+{
+    return enumStruct(player, structureType).filter((element) => (element["status"] === BUILT)).length;
+}
+
 
 //Can a construction droid do something right now.
 function conCanHelp(mydroidID, bx, by)
@@ -997,14 +1003,111 @@ function strangeBuildOrder()
 	return false;
 }
 
+//Next 2 functions are adapted from functions made for NullBot
+function emergencyRecycleBase(lastResort)//use with care, it's nearly indiscriminate when set to true
+{
+    //all trucks since it's emergency
+    const _trucks = enumGroup(constructGroup).concat(enumGroup(oilGrabberGroup)).concat(enumGroup(constructGroupNTWExtra));
+
+    if (_trucks.length <= 0)
+	{
+		return false;
+	}
+
+    if (!isDefined(lastResort))
+    {
+        lastResort = false;    
+    }
+
+    const _list = enumStruct(me);
+    let closestTruck;
+    let closestStruct;
+    let minDist = Infinity;
+
+	for (let i = 0; i < _list.length; ++i)
+	{
+        if(_list[i].stattype !== RESOURCE_EXTRACTOR &&//derricks are free (and most needed now) so leave them
+           _list[i].stattype !== POWER_GEN && //also don't demolish new generator
+          (lastResort || 
+          (_list[i].stattype !== FACTORY && 
+           _list[i].stattype !== CYBORG_FACTORY)))
+        {                                       
+		    for (let j = 0; j < _trucks.length; ++j)
+		    {
+			    if (_trucks[j].id !== null && isDefined(_trucks[j]) && _trucks[j].order !== DORDER_DEMOLISH
+                && distBetweenTwoPoints(_trucks[j].x, _trucks[j].y, _list[i].x, _list[i].y) < minDist
+                && droidCanReach(_trucks[j], _list[i].x, _list[i].y))
+			    {
+			    	closestTruck = j;
+                    closestStruct = i;
+                    minDist = distBetweenTwoPoints(_trucks[j].x,_trucks[j].y, _list[i].x, _list[i].y);
+			    }
+		    }
+        }
+	}
+    if (closestTruck !== null && isDefined(closestTruck) && isDefined(closestStruct))
+    {
+        return (orderDroidObj(_trucks[closestTruck], DORDER_DEMOLISH, _list[closestStruct]));
+    }
+    return false;
+}
+
+function checkPowerIncome()
+{
+    if (getRealPower() < 50 && countStruct(_STRUCTURES.derrick, me) > 0 && countFinishedStructures(me,_STRUCTURES.gen) === 0)
+    {   
+        if (/*!cancelAllProduction() &&*/ !emergencyRecycleBase(false) && !emergencyRecycleTank())
+        {
+            return emergencyRecycleBase(true);//we can't do much more currently        
+        }
+
+		return countAndBuild(_STRUCTURES.gen, 1);
+    }
+    else if(getRealPower() < 100 && countStruct(_STRUCTURES.derrick) === 0)
+    {
+        if (!emergencyRecycleBase(false) && !emergencyRecycleTruck())//we are so low on power that trucks and most base structures are useless either.
+        {
+            return false;    
+        }    
+        return true;
+    }
+    return false;
+}
+
+//checks whether groups are acceptably distibuted. Now only used for rebalancing groups when dealing with no income.
+function checkGroups()
+{
+    const __constructTrucks = enumGroup(constructGroup).concat(enumGroup(constructGroupNTWExtra)).length;
+    const _grabberTrucks = enumGroup(oilGrabberGroup);
+    
+    if(isDefined(_grabberTrucks) && __constructTrucks < _grabberTrucks.length)
+    {
+        groupAdd(constructGroup, _grabberTrucks[0]);
+    }
+}
+
 //Cobra's unique build decisions
 function buildOrders()
 {
+
 	const __isNTW = highOilMap();
 	const __superDefense = (subPersonalities[personality].defensePriority >= 75);
+    
+    //Dead.
+    if (currently_dead)
+    {
+        return;
+    }
 
-	// No idle truck or dead.
-	if (currently_dead || (!findIdleTrucks(constructGroup).length && (!__isNTW || !findIdleTrucks(constructGroupNTWExtra).length)))
+    //Checks whether no power and no income. If both true tries fixing that.
+    if(checkPowerIncome())
+    {
+        queue("checkGroups",5000);
+        queue("checkGrups", 15000);
+    }
+
+	// No idle truck.
+	if ((!findIdleTrucks(constructGroup).length && (!__isNTW || !findIdleTrucks(constructGroupNTWExtra).length)))
 	{
 		return;
 	}
