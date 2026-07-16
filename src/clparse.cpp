@@ -44,6 +44,7 @@
 #include "main.h"
 #include "modding.h"
 #include "movebench.h"
+#include "pathbench.h"
 #include "multiplay.h"
 #include "version.h"
 #include "warzoneconfig.h"
@@ -359,6 +360,8 @@ typedef enum
 	CLI_MOVEMENTSEED,
 	CLI_MOVEMENTARRANGE,
 	CLI_MOVEMENTWATCH,
+	CLI_PATHBENCH,
+	CLI_PATHBENCHREPEATS,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
@@ -468,6 +471,8 @@ static const struct poptOption *getOptionsTable()
 		{ "movementbenchwatch", POPT_ARG_STRING, CLI_MOVEMENTWATCH,   N_("Run a movement benchmark scenario on screen at normal speed"), N_("scenario") },
 		{ "movementseed", POPT_ARG_STRING, CLI_MOVEMENTSEED,   N_("Override the benchmark scenario seed"), N_("seed") },
 		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
+		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
+		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1267,6 +1272,33 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			// existing --skirmish plumbing rather than adding a launch path.
 			setHostLaunch(HostLaunch::Skirmish);
 			wz_test = movementBenchTestConfig();
+			wz_autogame = true;
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
+			break;
+
+		case CLI_PATHBENCHREPEATS:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad path bench repeat count");
+			}
+			pathBenchSetRepeats((uint32_t)strtoul(token, nullptr, 0));
+			break;
+
+		case CLI_PATHBENCH:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad path bench name");
+			}
+			if (!pathBenchSelect(token))
+			{
+				qFatal("Unknown path bench: %s", token);
+			}
+			// Launched the same way as the movement bench, for the same reason.
+			setHostLaunch(HostLaunch::Skirmish);
+			wz_test = pathBenchTestConfig();
 			wz_autogame = true;
 			wz_cli_headless = true;
 			setHeadlessGameMode(true);

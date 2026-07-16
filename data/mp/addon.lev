@@ -440,3 +440,12 @@ players 2
 type    15
 dataset MULTI_CAM_1
 game    "multiplay/maps/MoveBench-TwoRoute.gam"
+
+/*  Pathfinding benchmark map. type 15 for the same reason as the movement
+    bench maps: hidden from map selection, still resolvable by name.  */
+
+level   PathBench
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/PathBench.gam"
