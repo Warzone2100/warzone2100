@@ -22,6 +22,7 @@
 #if defined(WZ_VULKAN_ENABLED)
 
 #include "vk/vulkan_hpp_include.h"
+#include "vk/wz_vk.h"
 
 #include "lib/framework/frame.h"
 #include "lib/framework/hash_combine.h"
@@ -37,6 +38,7 @@
 #include "vk/pre_pass_barrier_emitter.h"
 #include "vk/render_pass_layout_cache.h"
 #include "vk/screen_frame_coordinator.h"
+#include "vk/screenshot_readback.h"
 #include "vk/warm_entry.h"
 #include <algorithm>
 #include <sstream>
@@ -92,19 +94,6 @@ namespace gfx_api
 
 		virtual bool allowImplicitLayers() const = 0;
 	};
-}
-
-namespace WZ_vk {
-#if VK_HEADER_VERSION >= 301
-	using DispatchLoaderDynamic = vk::detail::DispatchLoaderDynamic;
-#else
-	using DispatchLoaderDynamic = vk::DispatchLoaderDynamic;
-#endif
-	using UniqueBuffer = vk::UniqueHandle<vk::Buffer, WZ_vk::DispatchLoaderDynamic>;
-	using UniqueDeviceMemory = vk::UniqueHandle<vk::DeviceMemory, WZ_vk::DispatchLoaderDynamic>;
-	using UniqueImage = vk::UniqueHandle<vk::Image, WZ_vk::DispatchLoaderDynamic>;
-	using UniqueImageView = vk::UniqueHandle<vk::ImageView, WZ_vk::DispatchLoaderDynamic>;
-	using UniqueSemaphore = vk::UniqueHandle<vk::Semaphore, WZ_vk::DispatchLoaderDynamic>;
 }
 
 namespace std {
@@ -183,6 +172,7 @@ namespace gfx_api::vk
 {
 class TransferRecorder;
 class ScreenFrameCoordinator;
+class ScreenshotReadback;
 } // namespace gfx_api::vk
 
 [[noreturn]] void handleUnrecoverableError(vk::Result reason);
@@ -755,6 +745,7 @@ struct VkRoot final : gfx_api::context
 	uint32_t currentSwapchainIndex = 0;
 	std::vector<vk::Image> swapchainImages;
 	std::vector<vk::ImageView> swapchainImageView;
+	bool _swapchainSupportsScreenshotReadback = false;
 
 	vk::SampleCountFlagBits msaaSamples = vk::SampleCountFlagBits::e1; // msaaSamples used for scene
 	vk::SampleCountFlagBits msaaSamplesSwapchain = vk::SampleCountFlagBits::e1; // msaaSamples used for swapchain assets (should generally be 1)
@@ -1071,6 +1062,7 @@ private:
 	friend class gfx_api::vk::FrameLayoutTracker;
 	friend class gfx_api::vk::PrePassBarrierEmitter;
 	friend class gfx_api::vk::ScreenFrameCoordinator;
+	friend class gfx_api::vk::ScreenshotReadback;
 	friend bool gfx_api::vk::populatePassLayoutKeyFormats(gfx_api::vk::PassLayoutKey&,
 		const gfx_api::RenderPassDesc&, const VkRoot&);
 	friend bool gfx_api::vk::populatePassLayoutKeyLayouts(gfx_api::vk::PassLayoutKey&,
@@ -1105,6 +1097,8 @@ private:
 	gfx_api::vk::RenderPassLayoutCache _renderPassLayoutCache;
 	/// Runtime per-texture layout map and swapchain present transition.
 	mutable gfx_api::vk::FrameLayoutTracker _frameLayoutTracker;
+	/// Swapchain screenshot readback.
+	gfx_api::vk::ScreenshotReadback _screenshotReadback;
 	/// Batched pre-pass barriers from `CompiledPass::prePassBarriers`.
 	gfx_api::vk::PrePassBarrierEmitter _barrierEmitter;
 	/// Warm render-pass layout ids keyed by `CompiledPass::graphIndex`.

@@ -514,6 +514,9 @@ void ScreenFrameCoordinator::advanceRingBufferAfterSubmit(ScreenFramePipelineSta
 	try {
 		buffering_mechanism::swap(_root.dev, _root.vkDynLoader); // must be called *before* End tryAcquireSwapchainImage()
 		state.ringSwapped = true;
+
+		const uint32_t readySlot = static_cast<uint32_t>(buffering_mechanism::get_current_frame_num());
+		_root._screenshotReadback.completeReadyForRingSlot(_root.dev, readySlot, _root.vkDynLoader);
 	}
 	catch (const ::vk::OutOfHostMemoryError& e)
 	{
