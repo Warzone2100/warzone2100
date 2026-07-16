@@ -1,0 +1,64 @@
+{
+  "_comment": "Baseline pathfinding benchmark scorecard. Nodes expanded is exact and must not move for a change that is meant to leave the search alone. Microseconds are indicative only. Regenerate with tests/pathbench/run.sh --baseline.",
+  "card": {
+    "batchSize": 32,
+    "direct": {
+      "distinct": {
+        "micros_max": 243955,
+        "micros_median": 221243,
+        "micros_min": 218383,
+        "nodesExpanded": 1348955,
+        "requests": 32,
+        "routesFailed": 0,
+        "routesFound": 32,
+        "routesNearest": 0
+      },
+      "long": {
+        "micros_max": 6968,
+        "micros_median": 6849,
+        "micros_min": 6791,
+        "nodesExpanded": 42058,
+        "requests": 1,
+        "routesFailed": 0,
+        "routesFound": 1,
+        "routesNearest": 0
+      },
+      "reuse": {
+        "micros_max": 16551,
+        "micros_median": 15995,
+        "micros_min": 15816,
+        "nodesExpanded": 94927,
+        "requests": 32,
+        "routesFailed": 0,
+        "routesFound": 32,
+        "routesNearest": 0
+      },
+      "short": {
+        "micros_max": 50,
+        "micros_median": 44,
+        "micros_min": 41,
+        "nodesExpanded": 33,
+        "requests": 1,
+        "routesFailed": 0,
+        "routesFound": 1,
+        "routesNearest": 0
+      },
+      "unreachable": {
+        "micros_max": 9695,
+        "micros_median": 9473,
+        "micros_min": 9288,
+        "nodesExpanded": 58835,
+        "requests": 1,
+        "routesFailed": 0,
+        "routesFound": 0,
+        "routesNearest": 1
+      }
+    },
+    "queued": {
+      "drainMicros": 18178,
+      "drainTicks": 2,
+      "requests": 32
+    },
+    "repeats": 5
+  }
+}
