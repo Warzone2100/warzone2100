@@ -56,6 +56,8 @@ public:
 	void beginFrame();
 	/// Marks that the swapchain color surface was written this frame.
 	void noteSwapchainWrite();
+	/// True when a render pass wrote to the swapchain color surface this frame.
+	bool swapchainTouchedThisFrame() const { return _swapchainTouchedThisFrame; }
 	void set(gfx_api::abstract_texture* texture, ::vk::ImageLayout layout);
 	void set(const gfx_api::LayoutSubresourceKey& subresource, ::vk::ImageLayout layout);
 	void erase(gfx_api::abstract_texture* texture);

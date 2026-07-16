@@ -3951,6 +3951,7 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 	submitPendingTransferWork();
 	finalizeActiveRecording();
 	waitForAllIdle();
+	_screenshotReadback.shutdown(vkDynLoader);
 	destroyDynamicRenderPasses();
 
 	if (pDefaultTexture)
@@ -4420,11 +4421,22 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 	}
 	debug(LOG_3D, "Using supportedCompositeAlpha: %s", to_string(compositeAlphaMode).c_str());
 
+	const vk::ImageUsageFlags desiredScreenshotUsage =
+		vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransferSrc;
+	_swapchainSupportsScreenshotReadback =
+		(swapChainSupport.capabilities.supportedUsageFlags & desiredScreenshotUsage) == desiredScreenshotUsage;
+	if (!_swapchainSupportsScreenshotReadback)
+	{
+		debug(LOG_WARNING, "Swapchain does not support TRANSFER_SRC; Vulkan screenshots disabled");
+	}
+
 	vk::SwapchainCreateInfoKHR createSwapchainInfo = vk::SwapchainCreateInfoKHR()
 		.setSurface(surface)
 		.setMinImageCount(swapchainDesiredImageCount)
 		.setPresentMode(presentMode)
-		.setImageUsage(vk::ImageUsageFlagBits::eColorAttachment)
+		.setImageUsage(_swapchainSupportsScreenshotReadback
+			? desiredScreenshotUsage
+			: vk::ImageUsageFlagBits::eColorAttachment)
 		.setImageArrayLayers(1)
 		.setCompositeAlpha(compositeAlphaMode)
 		.setClipped(true)
@@ -6471,6 +6483,20 @@ void VkRoot::sealAndSubmitTransferGraphics(ScreenFramePipelineState& state)
 				: nullptr,
 		};
 		frameResources.submitCommandBuffers(submitParams, state);
+
+		if (state.submitDrawBuffer)
+		{
+			_screenshotReadback.markCurrentCaptureSubmitted(
+				static_cast<uint32_t>(buffering_mechanism::get_current_frame_num()), vkDynLoader);
+		}
+		else
+		{
+			_screenshotReadback.cancelPendingSubmit(vkDynLoader);
+		}
+	}
+	else
+	{
+		_screenshotReadback.cancelPendingSubmit(vkDynLoader);
 	}
 }
 
@@ -6498,15 +6524,26 @@ void VkRoot::sealDrawCommandBufferForPresent()
 	auto& frameResources = buffering_mechanism::get_current_resources();
 	if (!frameResources.drawCmdBufferBegun)
 	{
+		_screenshotReadback.cancelAwaitingRecord(vkDynLoader);
 		return;
 	}
 
-	if (_swapchainColorSurface)
+	vk::CommandBuffer drawCmdBuffer = frameResources.drawCmdBuffer();
+
+	if (_screenshotReadback.hasAwaitingRecord() && _swapchainColorSurface
+		&& _frameLayoutTracker.swapchainTouchedThisFrame())
 	{
-		vk::CommandBuffer drawCmdBuffer = frameResources.drawCmdBuffer();
+		ASSERT(currentSwapchainIndex < swapchainImages.size(),
+		       "Swapchain image index out of range for screenshot");
+		const vk::Image swapchainImage = swapchainImages[currentSwapchainIndex];
+		_screenshotReadback.recordCopy(*this, drawCmdBuffer, _swapchainColorSurface.get(), swapchainImage);
+	}
+	else if (_swapchainColorSurface && _frameLayoutTracker.swapchainTouchedThisFrame())
+	{
 		_frameLayoutTracker.transitionSwapchainToPresent(*this, drawCmdBuffer, _swapchainColorSurface.get());
 	}
-	frameResources.drawCmdBuffer().end(vkDynLoader);
+
+	drawCmdBuffer.end(vkDynLoader);
 	frameResources.drawCmdBufferBegun = false;
 }
 
@@ -6951,9 +6988,46 @@ std::string VkRoot::calculateFormattedRendererInfoString() const
 
 bool VkRoot::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback)
 {
-	// TODO: Implement - save the callback, and trigger a screenshot save at the next opportunity
-	// saveScreenshotCallback = callback;
-	return false;
+	if (!callback)
+	{
+		return false;
+	}
+	if (!_swapchainSupportsScreenshotReadback)
+	{
+		debug(LOG_3D, "getScreenshot: swapchain lacks TRANSFER_SRC support");
+		return false;
+	}
+
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	if (!frameResources.swapchainImageAcquired)
+	{
+		debug(LOG_3D, "getScreenshot: no swapchain image acquired");
+		return false;
+	}
+	if (!_frameLayoutTracker.swapchainTouchedThisFrame())
+	{
+		debug(LOG_3D, "getScreenshot: swapchain not written this frame");
+		return false;
+	}
+	if (swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		return false;
+	}
+	if (currentSwapchainIndex >= swapchainImages.size())
+	{
+		return false;
+	}
+
+	return _screenshotReadback.requestCapture(
+		std::move(callback),
+		dev,
+		memprops,
+		physDeviceProps.limits.bufferImageGranularity,
+		swapchainSize,
+		surfaceFormat.format,
+		currentSwapchainIndex,
+		static_cast<uint32_t>(buffering_mechanism::get_current_frame_num()),
+		vkDynLoader);
 }
 
 const size_t& VkRoot::current_FrameNum() const
