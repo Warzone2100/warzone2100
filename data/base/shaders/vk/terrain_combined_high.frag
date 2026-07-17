@@ -32,7 +32,7 @@ layout(location = 12) in mat3 ModelTangentMatrix;
 layout(location = 0) out vec4 FragColor;
 
 #include "shadow_mapping.glsl"
-#include "light.glsl"
+#include "light.glsl" // updated (temp: comment here to trigger shader rebuild)
 #include "pointlights.glsl"
 
 vec3 getGroundUv(int i) {
@@ -46,12 +46,17 @@ struct BumpData {
 	float gloss;
 };
 
+vec3 safe_normalize(vec3 v) {
+	float lenSq = dot(v, v);
+	return (lenSq > 0.00001) ? v * inversesqrt(lenSq) : vec3(0.0, 0.0, 1.0);
+}
+
 void getGroundBM(int i, inout BumpData res) {
 	vec3 uv = getGroundUv(i);
 	float w = frag.groundWeights[i];
 	res.color += texture(groundTex, uv, WZ_MIP_LOAD_BIAS) * w;
-	vec3 N = texture(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
-	N = mix(normalize(N * 2.f - 1.f), vec3(0.f,0.f,1.f), vec3(float(N == vec3(0.f,0.f,0.f))));
+	vec3 rawN = texture(groundNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
+	vec3 N = (dot(rawN, rawN) < 0.00001) ? vec3(0.0, 0.0, 1.0) : safe_normalize(rawN * 2.0 - 1.0);
 	res.N += N * w;
 	res.gloss += texture(groundSpecular, uv, WZ_MIP_LOAD_BIAS).r * w;
 }
@@ -61,12 +66,12 @@ vec3 blendAddEffectLighting(vec3 a, vec3 b) {
 }
 
 vec4 doBumpMapping(BumpData b, vec3 groundLightDir, vec3 groundHalfVec) {
-	vec3 L = normalize(groundLightDir);
+	vec3 L = safe_normalize(groundLightDir);
 	float diffuseFactor = lambertTerm(b.N, L); // diffuse lighting
 	float visibility = getShadowVisibility(frag.posModelSpace, frag.posViewSpace, diffuseFactor, 0.001f);
 	diffuseFactor = min(diffuseFactor, visibility*diffuseFactor);
 
-	float specularFactor = blinnTerm(b.N, normalize(groundHalfVec), b.gloss, 16.f);
+	float specularFactor = blinnTerm(b.N, safe_normalize(groundHalfVec), b.gloss, 16.f);
 
 	vec4 lightmap_vec4 = texture(lightmap_tex, frag.uvLightmap, 0.f);
 
@@ -114,17 +119,22 @@ vec4 main_bumpMapping() {
 	getGroundBM(2, bump);
 	getGroundBM(3, bump);
 
+	// compute decal partial derivatives in uniform control flow
+	vec3 uv = vec3(frag.uvDecal, fragf.tileNo);
+	float decalBiasScale = pow(2.0, WZ_MIP_LOAD_BIAS);
+	vec2 decalDx = dFdx(uv.xy) * decalBiasScale;
+	vec2 decalDy = dFdy(uv.xy) * decalBiasScale;
+
 	if (fragf.tileNo >= 0) {
-		vec3 uv = vec3(frag.uvDecal, fragf.tileNo);
-		vec4 decalColor = texture(decalTex, uv, WZ_MIP_LOAD_BIAS);
+		vec4 decalColor = textureGrad(decalTex, uv, decalDx, decalDy);
 		float a = decalColor.a;
 		// blend color, normal and gloss with ground ones based on alpha
 		bump.color = (1-a)*bump.color + a*vec4(decalColor.rgb, 1);
-		vec3 n = texture(decalNormal, uv, WZ_MIP_LOAD_BIAS).xyz;
+		vec3 n = textureGrad(decalNormal, uv, decalDx, decalDy).xyz;
 		vec3 n_normalized = normalize(n * 2.f - 1.f);
 		n = mix(vec3(n_normalized.xy * frag.decal2groundMat2, n_normalized.z), vec3(0.f,0.f,1.f), vec3(float(n == vec3(0.f,0.f,0.f))));
 		bump.N = (1-a)*bump.N + a*n;
-		bump.gloss = (1-a)*bump.gloss + a*texture(decalSpecular, uv, WZ_MIP_LOAD_BIAS).r;
+		bump.gloss = (1-a)*bump.gloss + a*textureGrad(decalSpecular, uv, decalDx, decalDy).r;
 	}
 	return doBumpMapping(bump, frag.groundLightDir, frag.groundHalfVec);
 }
