@@ -13,6 +13,7 @@ include(CMakeDependentOption)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 OPTION(WZ_ENABLE_BASIS_UNIVERSAL "Enable Basis Universal texture support" ON)
+OPTION(WZ_ENABLE_ZSTD_COMPRESSION_ADAPTER "Enable the Zstd-based network compression adapter support (requires zstd >= 1.4.0)" OFF)
 OPTION(WZ_DEBUG_GFX_API_LEAKS "Enable debugging for graphics API leaks" ON)
 OPTION(WZ_FORCE_MINIMAL_OPUSFILE "Force a minimal build of Opusfile, since WZ does not need (or want) HTTP stream support" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
@@ -876,9 +877,6 @@ CHECK_IS_ABSOLUTE_PATH(WZ_LOCALEDIR WZ_LOCALEDIR_ISABSOLUTE)
 
 add_subdirectory(3rdparty)
 
-# This should come after `add_subdirectory(3rdparty)` to capture submodule-specific vars
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
-
 # Determine distribution license
 set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
 if(WZ_ENABLE_BACKEND_VULKAN OR WZ_ENABLE_BASIS_UNIVERSAL)
@@ -899,6 +897,9 @@ add_subdirectory(doc)
 add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(pkg)
+
+# This should come after all subdirectories to capture submodule-specific vars
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz2100-generated-config.h")
 
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

@@ -371,6 +371,7 @@ typedef enum
 	CLI_VIDEOURL,
 #endif
 	CLI_HOST_CONNECTION_PROVIDER,
+	CLI_NETWORK_COMPRESSION_ADAPTER,
 } CLI_OPTIONS;
 
 // Separate table that avoids *any* translated strings, to avoid any risk of gettext / libintl function calls
@@ -468,6 +469,13 @@ static const struct poptOption *getOptionsTable()
 		{ "videourl", POPT_ARG_STRING, CLI_VIDEOURL,   N_("Base URL for on-demand video downloads"), N_("Base video URL") },
 #endif
 		{ "host-connection-provider", POPT_ARG_STRING, CLI_HOST_CONNECTION_PROVIDER, N_("Specify connection provider type to use when hosting game sessions"), "[tcp]" },
+		{ "network-compression-adapter", POPT_ARG_STRING, CLI_NETWORK_COMPRESSION_ADAPTER, N_("Specify network compression adapter type to use"),
+			"(zlib"
+#if defined (WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED)
+			", zstd"
+#endif
+			")"
+		},
 
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
@@ -1386,6 +1394,20 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Unsupported / invalid network backend");
 			}
 			war_setHostConnectionProvider(pt);
+			break;
+
+		case CLI_NETWORK_COMPRESSION_ADAPTER:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr || strlen(token) == 0)
+			{
+				qFatal("Missing value for the network compression adapter argument");
+			}
+			CompressionAdapterType t;
+			if (!net_compression_adapter_from_str(token, t))
+			{
+				qFatal("Unsupported / invalid network compression adapter");
+			}
+			war_setCompressionAdapterType(t);
 			break;
 
 		} // switch (option)

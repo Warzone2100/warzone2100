@@ -2002,7 +2002,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				}
 
 				// transition to net message mode (enable compression, wait for messages)
-				client_transient_socket->enableCompression();
+				client_transient_socket->enableCompression(war_getCompressionAdapterType());
 				currentJoiningState = JoiningState::ProcessingJoinMessages;
 				// permit fall-through to currentJoiningState == JoiningState::ProcessingJoinMessage case below
 			}

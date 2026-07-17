@@ -225,4 +225,12 @@ void war_setSoundEnabled(bool soundEnabled);
  */
 bool war_getSoundEnabled();
 
+enum class CompressionAdapterType : uint8_t;
+
+void war_setCompressionAdapterType(CompressionAdapterType t);
+CompressionAdapterType war_getCompressionAdapterType();
+
+bool net_compression_adapter_from_str(const char* str, CompressionAdapterType& t);
+std::string to_string(CompressionAdapterType t);
+
 #endif // __INCLUDED_SRC_WARZONECONFIG_H__

@@ -21,7 +21,12 @@
 
 #include "wz_compression_provider.h"
 
+#include "lib/framework/frame.h" // for ASSERT
+
 #include "lib/netplay/zlib_compression_adapter.h"
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+# include "lib/netplay/zstd_compression_adapter.h"
+#endif
 
 WzCompressionProvider& WzCompressionProvider::Instance()
 {
@@ -29,11 +34,18 @@ WzCompressionProvider& WzCompressionProvider::Instance()
 	return instance;
 }
 
-std::unique_ptr<ICompressionAdapter> WzCompressionProvider::newCompressionAdapter()
+std::unique_ptr<ICompressionAdapter> WzCompressionProvider::newCompressionAdapter(CompressionAdapterType t)
 {
-	// Only support Zlib for the time being.
-	// TODO: in the future, we might want to support more compression algorithms, e.g. Zstd.
-	// In this case, we would need to somehow configure `WzCompressionAdapter` from
-	// the global WZ config to specify compression algorithm to use.
-	return std::make_unique<ZlibCompressionAdapter>();
+	switch (t)
+	{
+		case CompressionAdapterType::Zlib:
+			return std::make_unique<ZlibCompressionAdapter>();
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+		case CompressionAdapterType::Zstd:
+			return std::make_unique<ZstdCompressionAdapter>();
+#endif
+		default:
+			ASSERT(false, "Invalid compression adapter type %d", static_cast<int>(t));
+	}
+	return nullptr;
 }

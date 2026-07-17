@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "lib/framework/wzglobal.h" // for WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+
 #include <string>
 #include <system_error>
 
@@ -88,10 +90,41 @@ public:
 	std::string message(int ev) const override;
 };
 
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+/// <summary>
+/// Custom error category which maps zstd error codes (values from
+/// the `ZSTD_ErrorCode` enum) to human-readable error messages via
+/// `ZSTD_getErrorString()`.
+///
+/// Callers should convert a `size_t` returned by streaming zstd functions
+/// to the stable enum value with `ZSTD_getErrorCode(res)` before passing
+/// it to `make_zstd_error_code()`.
+/// </summary>
+class ZstdErrorCategory : public std::error_category
+{
+public:
+
+	constexpr ZstdErrorCategory() = default;
+
+	const char* name() const noexcept override
+	{
+		return "zstd";
+	}
+
+	std::string message(int ev) const override;
+};
+#endif // WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+
 const std::error_category& generic_system_error_category();
 const std::error_category& getaddrinfo_error_category();
 const std::error_category& zlib_error_category();
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+const std::error_category& zstd_error_category();
+#endif
 
 std::error_code make_network_error_code(int ev);
 std::error_code make_getaddrinfo_error_code(int ev);
 std::error_code make_zlib_error_code(int ev);
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+std::error_code make_zstd_error_code(int ev);
+#endif

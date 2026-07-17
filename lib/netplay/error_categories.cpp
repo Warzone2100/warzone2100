@@ -30,6 +30,10 @@
 #endif
 
 #include <zlib.h>
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+# include <zstd.h>
+# include <zstd_errors.h>
+#endif
 
 std::string GenericSystemErrorCategory::message(int ev) const
 {
@@ -122,6 +126,18 @@ std::string ZlibErrorCategory::message(int ev) const
 	}
 }
 
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+std::string ZstdErrorCategory::message(int ev) const
+{
+	const char* msg = ZSTD_getErrorString(static_cast<ZSTD_ErrorCode>(ev));
+	if (!msg)
+	{
+		return "Unknown zstd error";
+	}
+	return msg;
+}
+#endif // WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+
 const std::error_category& generic_system_error_category()
 {
 	static GenericSystemErrorCategory instance;
@@ -140,6 +156,14 @@ const std::error_category& zlib_error_category()
 	return instance;
 }
 
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+const std::error_category& zstd_error_category()
+{
+	static ZstdErrorCategory instance;
+	return instance;
+}
+#endif // WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+
 std::error_code make_network_error_code(int ev)
 {
 	return { ev, generic_system_error_category() };
@@ -154,3 +178,10 @@ std::error_code make_zlib_error_code(int ev)
 {
 	return { ev, zlib_error_category() };
 }
+
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+std::error_code make_zstd_error_code(int ev)
+{
+	return { ev, zstd_error_category() };
+}
+#endif // WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED

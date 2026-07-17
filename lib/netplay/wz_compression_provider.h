@@ -21,12 +21,26 @@
 
 #pragma once
 
+#include <stdint.h>
 #include <memory>
+
+#include "lib/framework/wzglobal.h" // for WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+
+/// <summary>
+/// This enum is used to specify the type of compression adapter to use.
+/// </summary>
+enum class CompressionAdapterType : uint8_t
+{
+	Zlib,
+#ifdef WZ_ZSTD_COMPRESSION_ADAPTER_ENABLED
+	Zstd
+#endif
+};
 
 class ICompressionAdapter;
 
 /// <summary>
-/// This class provides is responsible for creating `ICompressionAdapter:s`,
+/// This class is responsible for creating `ICompressionAdapter` instances,
 /// which are thin wrappers over some compression algorithm, intended for
 /// use in `IClientConnection` to provide compression over raw net messages.
 /// </summary>
@@ -36,7 +50,7 @@ public:
 
 	static WzCompressionProvider& Instance();
 
-	std::unique_ptr<ICompressionAdapter> newCompressionAdapter();
+	std::unique_ptr<ICompressionAdapter> newCompressionAdapter(CompressionAdapterType t);
 
 private:
 

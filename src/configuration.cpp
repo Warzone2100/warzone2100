@@ -29,6 +29,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"
+#include "lib/netplay/wz_compression_provider.h"
 #include "lib/sound/mixer.h"
 #include "lib/sound/sounddefs.h"
 #include "lib/ivis_opengl/screen.h"
@@ -750,6 +751,20 @@ bool loadConfig()
 
 	war_setLobbyDisableIPv6(iniGetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6()).value());
 	war_setLobbyFilterIPv6Only(iniGetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only()).value());
+
+	auto compressionAdapterType = war_getCompressionAdapterType();
+	if (iniGeneral.has("networkCompressionAdapter"))
+	{
+		std::string compAdapterStr = iniGetString("networkCompressionAdapter", "zlib").value();
+		if (!net_compression_adapter_from_str(compAdapterStr.c_str(), compressionAdapterType))
+		{
+			compressionAdapterType = CompressionAdapterType::Zlib; // fall back to using Zlib
+			const auto defCompAdapterStr = to_string(compressionAdapterType);
+			debug(LOG_WARNING, "Unsupported / invalid network compression adapter: %s; defaulting to: %s",
+				compAdapterStr.c_str(), defCompAdapterStr.c_str());
+		}
+		war_setCompressionAdapterType(compressionAdapterType);
+	}
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;
