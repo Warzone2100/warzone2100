@@ -692,6 +692,10 @@ The optional mode parameter (4.8+ only) selects how the timer behaves, and is on
 * ```TIMER_COUNTUP``` Timer counts up, starting from the given number of elapsed seconds, and never expires.
 * ```TIMER_PAUSE``` Timer is frozen at the given time and never expires.
 
+When a countdown timer expires, ```eventMissionTimeout``` is triggered once and the
+timer freezes at zero, as if ```setMissionTime(0, TIMER_PAUSE)``` had been called;
+the event handler may set a new timer.
+
 ## getMissionTime()
 
 Get time remaining on mission countdown in seconds. (3.2+ only)

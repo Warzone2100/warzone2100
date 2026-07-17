@@ -2623,6 +2623,10 @@ bool wzapi::applyLimitSet(WZAPI_NO_PARAMS)
 //-- * ```TIMER_COUNTUP``` Timer counts up, starting from the given number of elapsed seconds, and never expires.
 //-- * ```TIMER_PAUSE``` Timer is frozen at the given time and never expires.
 //--
+//-- When a countdown timer expires, ```eventMissionTimeout``` is triggered once and the
+//-- timer freezes at zero, as if ```setMissionTime(0, TIMER_PAUSE)``` had been called;
+//-- the event handler may set a new timer.
+//--
 wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<int> _mode))
 {
 	int time = _time * GAME_TICKS_PER_SEC;
@@ -2675,7 +2679,7 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 	{
 		return -1;
 	}
-	return (mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC;
+	return std::max<SDWORD>(mission.time - (SDWORD)(gameTime - mission.startTime), 0) / GAME_TICKS_PER_SEC;
 }
 
 //-- ## setReinforcementTime(time[, removeLaunch])

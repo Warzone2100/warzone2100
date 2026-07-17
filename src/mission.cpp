@@ -368,7 +368,7 @@ void setMissionCountDown()
 {
 	SDWORD		timeRemaining;
 
-	timeRemaining = mission.time - (gameTime - mission.startTime);
+	timeRemaining = mission.time - (SDWORD)(gameTime - mission.startTime);
 	if (timeRemaining < 0)
 	{
 		timeRemaining = 0;
@@ -2001,7 +2001,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, const W_CONTEXT *psContext)
 		break;
 	case TIMER_COUNTDOWN:
 	default:
-		timeRemaining = mission.time - timeElapsed;
+		timeRemaining = mission.time - (SDWORD)timeElapsed;
 		if (timeRemaining < 0)
 		{
 			timeRemaining = 0;
@@ -2952,6 +2952,12 @@ void missionTimerUpdate()
 			//check if time is up
 			if ((SDWORD)(gameTime - mission.startTime) > mission.time)
 			{
+				// freeze the expired timer at zero so the timeout only triggers once
+				// and getMissionTime() cannot go negative; scripts can still set a
+				// new timer from the event handler
+				mission.timerMode = TIMER_PAUSE;
+				mission.time = 0;
+				mission.startTime = gameTime;
 				//the script can call the end game cos have failed!
 				executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_MISSION_TIMEOUT); });
 			}
