@@ -89,9 +89,20 @@ FIELDS = ["unitsArrived", "arrival_p50", "arrival_p95", "hardStops",
 RESOLVED_SHARE = 0.75
 
 def run(scenario, index):
+    # A run that prints no scorecard is a process-level failure, not a sim
+    # result: the scenario is deterministic, so a crash or startup hiccup that
+    # yields no JSON is a flake to retry, not a number to record. Retrying does
+    # not paper over sim nondeterminism, which --check guards separately. A run
+    # that fails every attempt is a real break and is left to raise.
     cmd = [wz, "--movementbench=" + scenario, "--movementarrangement=%d" % index] + passthrough
-    raw = subprocess.run(cmd, capture_output=True, text=True).stdout
-    return json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
+    for attempt in range(4):
+        raw = subprocess.run(cmd, capture_output=True, text=True).stdout
+        start = raw.find("{")
+        if start != -1:
+            return json.loads(raw[start:raw.rindex("}") + 1])
+        print("retry %s arr=%d (attempt %d produced no scorecard)"
+              % (scenario, index, attempt + 1), file=sys.stderr)
+    raise RuntimeError("%s arr=%d produced no scorecard in 4 attempts" % (scenario, index))
 
 results = {}
 for s in scenarios:

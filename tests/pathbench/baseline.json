@@ -4,9 +4,9 @@
     "batchSize": 32,
     "direct": {
       "distinct": {
-        "micros_max": 243955,
-        "micros_median": 221243,
-        "micros_min": 218383,
+        "micros_max": 214217,
+        "micros_median": 214099,
+        "micros_min": 213419,
         "nodesExpanded": 1348955,
         "requests": 32,
         "routesFailed": 0,
@@ -14,9 +14,9 @@
         "routesNearest": 0
       },
       "long": {
-        "micros_max": 6968,
-        "micros_median": 6849,
-        "micros_min": 6791,
+        "micros_max": 6825,
+        "micros_median": 6672,
+        "micros_min": 6658,
         "nodesExpanded": 42058,
         "requests": 1,
         "routesFailed": 0,
@@ -24,9 +24,9 @@
         "routesNearest": 0
       },
       "reuse": {
-        "micros_max": 16551,
-        "micros_median": 15995,
-        "micros_min": 15816,
+        "micros_max": 15810,
+        "micros_median": 15634,
+        "micros_min": 15614,
         "nodesExpanded": 94927,
         "requests": 32,
         "routesFailed": 0,
@@ -34,8 +34,8 @@
         "routesNearest": 0
       },
       "short": {
-        "micros_max": 50,
-        "micros_median": 44,
+        "micros_max": 43,
+        "micros_median": 42,
         "micros_min": 41,
         "nodesExpanded": 33,
         "requests": 1,
@@ -44,9 +44,9 @@
         "routesNearest": 0
       },
       "unreachable": {
-        "micros_max": 9695,
-        "micros_median": 9473,
-        "micros_min": 9288,
+        "micros_max": 9387,
+        "micros_median": 9208,
+        "micros_min": 9151,
         "nodesExpanded": 58835,
         "requests": 1,
         "routesFailed": 0,
@@ -55,7 +55,7 @@
       }
     },
     "queued": {
-      "drainMicros": 18178,
+      "drainMicros": 17485,
       "drainTicks": 2,
       "requests": 32
     },
