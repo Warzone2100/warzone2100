@@ -120,7 +120,13 @@ std::string          activeTestConfig;
 uint32_t tickCount = 0;
 std::map<uint32_t, TrackedDroid> tracked;   ///< keyed by droid id, ordered for determinism
 std::vector<uint32_t> arrivalTicks;         ///< every arrival, including repeat legs
+std::vector<uint32_t> tickPeakDensity;      ///< per tick, the size of the largest cluster of tracked droids
 bool     runFinished = false;
+
+/// Two tracked droids within this of each other count as packed together. At a
+/// tile and a half it catches touching neighbours without counting a whole open
+/// field, so a tight blob reads high and two clean lanes read low.
+const int32_t DENSITY_RADIUS = 3 * TILE_UNITS / 2;
 
 /// A droid counts as arrived once it is within this of its ordered destination.
 /// Units settle next to a goal tile rather than on it when it is taken, so this
@@ -192,6 +198,33 @@ void sampleDroids()
 			}
 		}
 	}
+}
+
+// Records how tightly the tracked droids are packed this tick, as the size of
+// the largest cluster within DENSITY_RADIUS of any one of them. A slow untangle
+// keeps this high for a long time, so the sustained value tells apart a scenario
+// that clears quickly from one that jams into a blob and only slowly resolves.
+void sampleDensity()
+{
+	uint32_t peak = 0;
+	for (const auto &a : tracked)
+	{
+		uint32_t neighbours = 0;
+		for (const auto &b : tracked)
+		{
+			if (a.first == b.first)
+			{
+				continue;
+			}
+			const Vector2i d = a.second.lastPos - b.second.lastPos;
+			if (dot(d, d) <= DENSITY_RADIUS * DENSITY_RADIUS)
+			{
+				++neighbours;
+			}
+		}
+		peak = std::max(peak, neighbours);
+	}
+	tickPeakDensity.push_back(peak);
 }
 
 /// CRC of every live droid's final position, taken in id order.
@@ -287,6 +320,10 @@ void writeScorecard(bool completed)
 	card["formationSpreadTiles"] = formationSpreadTiles();
 	card["arrival_p50"] = percentile(arrivals, 50);
 	card["arrival_p95"] = percentile(arrivals, 95);
+	std::vector<uint32_t> density = tickPeakDensity;
+	std::sort(density.begin(), density.end());
+	card["peakDensity"] = density.empty() ? 0 : density.back();
+	card["density_p95"] = percentile(density, 95);
 	// Distance still to go for whatever did not arrive, in tiles. Separates
 	// "jammed at the pass" from "never left the start".
 	card["stuckRemainingTiles_p50"] = percentile(remaining, 50);
@@ -381,6 +418,7 @@ void movementBenchUpdate()
 
 	++tickCount;
 	sampleDroids();
+	sampleDensity();
 
 	// Finish early once everything ordered has arrived, so easy scenarios stay
 	// quick, but always stop at the budget so a jammed one still terminates.
