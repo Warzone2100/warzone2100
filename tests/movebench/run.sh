@@ -82,7 +82,8 @@ TOTAL_ARRANGEMENTS = 81
 n = max(1, min(int(arrangements), TOTAL_ARRANGEMENTS))
 indices = [i * TOTAL_ARRANGEMENTS // n for i in range(n)]
 FIELDS = ["unitsArrived", "arrival_p50", "arrival_p95", "hardStops",
-          "repaths", "giveUps", "yieldsIssued", "formationSpreadTiles"]
+          "repaths", "giveUps", "formationSpreadTiles",
+          "peakDensity", "density_p95"]
 
 # Share of a cell's ordered units that must arrive for that arrangement to count
 # as resolved rather than jammed.
@@ -120,14 +121,17 @@ def print_table():
     # p95 gets equal billing with throughput. Judging on how many units
     # eventually arrive hides a mechanism taking twice as long to get them there,
     # and time is what anyone watching actually notices.
-    print("%-20s %9s %14s %18s" % ("SCENARIO", "RESOLVED", "ARRIVED", "ARRIVAL p95"))
+    # arrival p95 and peak packing get billing beside resolved. A blob that
+    # eventually clears still reads as resolved, so the time it took and how
+    # tightly it packed are what tell a clean flow from a slow untangle.
+    print("%-20s %9s %18s %14s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95", "peakDensity"))
     for s in scenarios:
         def rng(field):
             v = results[s][field]
             return "%d [%d-%d]" % (v["median"], v["min"], v["max"])
         r = results[s]["resolved"]
-        print("%-20s %9s %14s %18s" % (s, "%d/%d" % (r["count"], r["of"]),
-                                       rng("unitsArrived"), rng("arrival_p95")))
+        print("%-20s %9s %18s %14s" % (s, "%d/%d" % (r["count"], r["of"]),
+                                       rng("arrival_p95"), rng("peakDensity")))
 
 if sub == "--baseline":
     with open(out, "w") as f:
