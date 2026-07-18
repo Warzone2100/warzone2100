@@ -1388,6 +1388,10 @@ void endMission()
 	//at end of mission always do this
 	intRemoveTransporterLaunch();
 
+	// make sure a paused/expired timer does not leak into the next mission
+	mission.time = -1;
+	mission.timerMode = TIMER_COUNTDOWN;
+
 	//reset the bSetPlayCountDown flag
 	setPlayCountDown(true);
 
