@@ -336,7 +336,6 @@ private:
 	void set_constants(const gfx_api::TerrainDepthMapTessUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context

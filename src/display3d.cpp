@@ -4458,7 +4458,6 @@ void	setDrawTerrainShadows(bool val)
 static void drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
 {
 	gfx_api::WorldToScreenPSO::get().bind();
-	gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
 	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
 	gfx_api::WorldToScreenPSO::get().bind_textures(sourceTexture);
 	gfx_api::WorldToScreenPSO::get().draw(3, 0);

@@ -3,8 +3,6 @@
 
 uniform sampler2D Texture;
 
-uniform float gamma;
-
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
 #else
