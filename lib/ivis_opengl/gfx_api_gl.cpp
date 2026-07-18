@@ -1033,8 +1033,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_DEBUG_TESS_QUAD, program_data{ "Debug tessellated quad program", "shaders/tess_quad.vert", "shaders/tess_quad.frag",
 		{ "transformationMatrix", "color", "tessLevel" }, {},
 		"shaders/tess_quad.tesc", "shaders/tess_quad.tese" }),
-	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag",
-		{ "gamma" } })
+	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag", {} })
 };
 
 enum SHADER_VERSION
@@ -1357,8 +1356,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_binding_entry<SHADER_TEXT>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2D_QUAD>(),
 		uniform_binding_entry<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>(),
-		uniform_binding_entry<SHADER_DEBUG_TESS_QUAD>(),
-		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>()
+		uniform_binding_entry<SHADER_DEBUG_TESS_QUAD>()
 	};
 
 	for (auto& uniform_block : createInfo.uniform_blocks)
@@ -2537,11 +2535,6 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(0, cbuf.transform_matrix);
 	setUniforms(1, cbuf.color);
 	setUniforms(2, cbuf.tessLevel);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf)
-{
-	setUniforms(0, cbuf.gamma);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)

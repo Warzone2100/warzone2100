@@ -1517,14 +1517,8 @@ namespace gfx_api
 		vertex_buffer_description<sizeof(glm::vec2), gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
 	>, notexture, SHADER_DEBUG_TESS_QUAD>;
 
-	template<>
-	struct constant_buffer_type<SHADER_WORLD_TO_SCREEN>
-	{
-		float gamma;
-	};
-
 	using WorldToScreenPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
-	std::tuple<constant_buffer_type<SHADER_WORLD_TO_SCREEN>>,
+	std::tuple<>,
 	std::tuple<
 		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>

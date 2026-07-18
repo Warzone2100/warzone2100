@@ -1,9 +1,5 @@
 #version 450
 
-layout(std140, set = 0, binding = 0) uniform cbuffer {
-	float gamma;
-};
-
 layout(location = 0) in vec2 vertexPos;
 
 layout(location = 0) out vec2 texCoords;
