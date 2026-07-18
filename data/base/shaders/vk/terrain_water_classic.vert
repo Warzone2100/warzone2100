@@ -13,6 +13,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	float timeSec;
+	float WZ_MIP_LOAD_BIAS;
 };
 
 layout(location = 0) in vec4 vertex; // .w is depth

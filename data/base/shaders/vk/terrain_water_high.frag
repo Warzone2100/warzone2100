@@ -2,7 +2,6 @@
 
 #include "terrain_water_high.glsl"
 
-layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
 layout (constant_id = 1) const uint WZ_SHADOW_MODE = 1;
 layout (constant_id = 2) const uint WZ_SHADOW_FILTER_SIZE = 5;
 layout (constant_id = 3) const uint WZ_SHADOW_CASCADES_COUNT = 3;

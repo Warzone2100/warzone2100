@@ -1228,7 +1228,6 @@ struct shader_infos
 {
 	std::string vertexSpv;
 	std::string fragmentSpv;
-	bool specializationConstant_0_mipLoadBias = false;
 	bool specializationConstant_1_shadowMode = false;
 	bool specializationConstant_2_shadowFilterSize = false;
 	bool specializationConstant_3_shadowCascadesCount = false;
@@ -1242,22 +1241,22 @@ struct shader_infos
 
 static const std::map<SHADER_MODE, shader_infos> spv_files
 {
-	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv", true }),
-	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true, true }),
+	std::make_pair(SHADER_COMPONENT, shader_infos{ "shaders/vk/tcmask.vert.spv", "shaders/vk/tcmask.frag.spv" }),
+	std::make_pair(SHADER_COMPONENT_INSTANCED, shader_infos{ "shaders/vk/tcmask_instanced.vert.spv", "shaders/vk/tcmask_instanced.frag.spv", true, true, true, true }),
 	std::make_pair(SHADER_COMPONENT_DEPTH_INSTANCED, shader_infos{ "shaders/vk/tcmask_depth_instanced.vert.spv", "shaders/vk/tcmask_depth_instanced.frag.spv" }),
-	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv", true }),
-	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv", true }),
+	std::make_pair(SHADER_NOLIGHT, shader_infos{ "shaders/vk/nolight.vert.spv", "shaders/vk/nolight.frag.spv" }),
+	std::make_pair(SHADER_NOLIGHT_INSTANCED, shader_infos{ "shaders/vk/nolight_instanced.vert.spv", "shaders/vk/nolight_instanced.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, shader_infos{ "shaders/vk/terrain_depth.vert.spv", "shaders/vk/terraindepth.frag.spv" }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, shader_infos{ "shaders/vk/terrain_depth_only.vert.spv", "shaders/vk/terrain_depth_only.frag.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, true }),
-	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, shader_infos{ "shaders/vk/terrain_depth_tess.vert.spv", "shaders/vk/terrain_depth_only.frag.spv", false, false, false, false, false, "shaders/vk/terrain_depth_tess.tesc.spv", "shaders/vk/terrain_depthmap_tess.tese.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, shader_infos{ "shaders/vk/terrain_combined_tess.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, true, false, "shaders/vk/terrain_combined_tess.tesc.spv", "shaders/vk/terrain_combined_tess.tese.spv" }),
-	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, shader_infos{ "shaders/vk/terrain_combined_tess.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, true, "shaders/vk/terrain_combined_tess.tesc.spv", "shaders/vk/terrain_combined_tess.tese.spv" }),
-	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv", true }),
-	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water_high.vert.spv", "shaders/vk/terrain_water_high.frag.spv", true, true, true, true }),
-	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv", true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_classic.frag.spv", true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, shader_infos{ "shaders/vk/terrain_combined.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true }),
+	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, shader_infos{ "shaders/vk/terrain_depth_tess.vert.spv", "shaders/vk/terrain_depth_only.frag.spv", false, false, false, false, "shaders/vk/terrain_depth_tess.tesc.spv", "shaders/vk/terrain_depthmap_tess.tese.spv" }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM_TESS, shader_infos{ "shaders/vk/terrain_combined_tess.vert.spv", "shaders/vk/terrain_combined_medium.frag.spv", true, true, true, false, "shaders/vk/terrain_combined_tess.tesc.spv", "shaders/vk/terrain_combined_tess.tese.spv" }),
+	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, shader_infos{ "shaders/vk/terrain_combined_tess.vert.spv", "shaders/vk/terrain_combined_high.frag.spv", true, true, true, true, "shaders/vk/terrain_combined_tess.tesc.spv", "shaders/vk/terrain_combined_tess.tese.spv" }),
+	std::make_pair(SHADER_WATER, shader_infos{ "shaders/vk/terrain_water.vert.spv", "shaders/vk/water.frag.spv" }),
+	std::make_pair(SHADER_WATER_HIGH, shader_infos{ "shaders/vk/terrain_water_high.vert.spv", "shaders/vk/terrain_water_high.frag.spv", true, true, true }),
+	std::make_pair(SHADER_WATER_CLASSIC, shader_infos{ "shaders/vk/terrain_water_classic.vert.spv", "shaders/vk/terrain_water_classic.frag.spv" }),
 	std::make_pair(SHADER_RECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_RECT_INSTANCED, shader_infos{ "shaders/vk/rect_instanced.vert.spv", "shaders/vk/rect_instanced.frag.spv" }),
 	std::make_pair(SHADER_TEXRECT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/texturedrect.frag.spv" }),
@@ -1270,7 +1269,7 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_WORLD_TO_SCREEN, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/world_to_screen.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" }),
-	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
+	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
 };
 
 std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
@@ -1612,10 +1611,6 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 			.setAddressModeU(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeV(vk::SamplerAddressMode::eClampToEdge)
 			.setAddressModeW(vk::SamplerAddressMode::eClampToEdge);
-		if (root->lodBiasMethod == VkRoot::LodBiasMethod::SamplerMipLodBias)
-		{
-			result.setMipLodBias(root->mipLodBias.value_or(0.f));
-		}
 		return result;
 	}
 	case gfx_api::sampler_type::anisotropic_repeat:
@@ -1631,10 +1626,6 @@ vk::SamplerCreateInfo VkPSO::to_vk(const gfx_api::sampler_type& type, const gfx_
 			.setAddressModeU(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeV(vk::SamplerAddressMode::eRepeat)
 			.setAddressModeW(vk::SamplerAddressMode::eRepeat);
-		if (root->lodBiasMethod == VkRoot::LodBiasMethod::SamplerMipLodBias)
-		{
-			result.setMipLodBias(root->mipLodBias.value_or(0.f));
-		}
 		return result;
 	}
 	case gfx_api::sampler_type::nearest_clamped:
@@ -1880,14 +1871,6 @@ VkPSO::VkPSO(vk::Device _dev,
 	std::vector<char> specializationConstantsDataBuffer;
 	std::vector<vk::SpecializationMapEntry> specializationEntries;
 	vk::SpecializationInfo spec_info = vk::SpecializationInfo();
-	if (root->lodBiasMethod == VkRoot::LodBiasMethod::SpecializationConstant && shaderInfo.specializationConstant_0_mipLoadBias)
-	{
-		size_t copyIdx = specializationConstantsDataBuffer.size();
-		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + (sizeof(char) * sizeof(float)));
-		float cpyMipLodBias = root->mipLodBias.value_or(0.f);
-		memcpy(&specializationConstantsDataBuffer[copyIdx], &cpyMipLodBias, sizeof(float));
-		specializationEntries.emplace_back(0, static_cast<uint32_t>(sizeof(char) * copyIdx), sizeof(float));
-	}
 	auto appendSpecializationConstant_uint32 = [&specializationConstantsDataBuffer, &specializationEntries](uint32_t constantID, uint32_t value) {
 		size_t copyIdx = specializationConstantsDataBuffer.size();
 		specializationConstantsDataBuffer.resize(specializationConstantsDataBuffer.size() + sizeof(uint32_t));
@@ -4699,13 +4682,12 @@ bool VkRoot::canUseVulkanDeviceAPI(uint32_t minVulkanAPICoreVersion) const
 	return VK_VERSION_GREATER_THAN_OR_EQUAL(appInfo.apiVersion, minVulkanAPICoreVersion) && VK_VERSION_GREATER_THAN_OR_EQUAL(physDeviceProps.apiVersion, minVulkanAPICoreVersion);
 }
 
-bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
+bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode requestedSwapMode, optional<float> /*mipLodBias*/, uint32_t _depthMapResolution)
 {
 	debug(LOG_3D, "VkRoot::initialize()");
 
 	frameNum = 1;
 	swapMode = requestedSwapMode;
-	mipLodBias = _mipLodBias;
 	depthMapSize = _depthMapResolution;
 
 	// obtain backend_Vulkan_Impl from impl
@@ -4913,21 +4895,6 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 		physDevicePortabilitySubsetFeatures = vk::PhysicalDevicePortabilitySubsetFeaturesKHR();
 	}
 #endif
-
-	if (!hasPortabilitySubset
-#if 0 // this is not a "stable" extension yet
-		|| physDevicePortabilitySubsetFeatures.samplerMipLodBias
-#endif
-		)
-	{
-		// Use setMipLodBias in vk::SamplerCreateInfo
-		lodBiasMethod = LodBiasMethod::SamplerMipLodBias;
-	}
-	else
-	{
-		// Otherwise, use specialization constants to provide the bias to do it in-shader
-		lodBiasMethod = LodBiasMethod::SpecializationConstant;
-	}
 
 	if (!initPixelFormatsSupport())
 	{
@@ -7255,7 +7222,8 @@ const size_t& VkRoot::current_FrameNum() const
 
 bool VkRoot::supportsMipLodBias() const
 {
-	return lodBiasMethod != LodBiasMethod::Unsupported;
+	// the bias is delivered to shaders as a uniform
+	return true;
 }
 
 bool VkRoot::supports2DTextureArrays() const

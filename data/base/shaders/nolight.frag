@@ -4,7 +4,7 @@
 //#pragma debug(on)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
+uniform float WZ_MIP_LOAD_BIAS;
 //
 
 uniform sampler2D Texture;
