@@ -803,11 +803,8 @@ void actionUpdateDroid(DROID *psDroid)
 		if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag())
 		{
 			// a negative mission.time means no time limit, and a count-up timer never expires
-			SDWORD timeRemaining = (mission.timerMode == TIMER_PAUSE)
-				? mission.time // frozen at the remaining time as of the pause
-				: (mission.time - (SDWORD)(gameTime - mission.startTime));
 			bool enoughTimeRemaining = mission.time < 0 || mission.timerMode == TIMER_COUNTUP
-				|| timeRemaining >= (60 * GAME_TICKS_PER_SEC);
+				|| missionTimeRemaining() >= (60 * GAME_TICKS_PER_SEC);
 			if (((SDWORD)(mission.ETA - (gameTime - missionGetReinforcementTime())) <= 0) && enoughTimeRemaining)
 			{
 				UDWORD droidX, droidY;

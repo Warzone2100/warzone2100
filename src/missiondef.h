@@ -73,7 +73,6 @@ struct MISSION
 	MISSION_TIMER_MODE	timerMode;			//how the mission timer behaves (countdown, count-up, ...)
 	SDWORD				ETA;				//time taken for reinforcements to arrive
 	// < 0 = none allowed
-	UDWORD				cheatTime;			//time the cheating started (mission time-wise!)
 
 	UWORD               homeLZ_X;           //selectedPlayer's LZ x and y
 	UWORD               homeLZ_Y;

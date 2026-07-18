@@ -2653,7 +2653,6 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<in
 	else
 	{
 		intRemoveMissionTimer();
-		mission.cheatTime = 0;
 	}
 	return {};
 }
@@ -2666,20 +2665,11 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<in
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
-	switch (mission.timerMode)
+	if (mission.timerMode == TIMER_COUNTDOWN && mission.time < 0)
 	{
-	case TIMER_COUNTUP:
-		return (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
-	case TIMER_PAUSE:
-		return mission.time / GAME_TICKS_PER_SEC;
-	case TIMER_COUNTDOWN:
-		break;
+		return -1;	// no timer
 	}
-	if (mission.time < 0)
-	{
-		return -1;
-	}
-	return std::max<SDWORD>(mission.time - (SDWORD)(gameTime - mission.startTime), 0) / GAME_TICKS_PER_SEC;
+	return missionTimeRemaining() / GAME_TICKS_PER_SEC;
 }
 
 //-- ## setReinforcementTime(time[, removeLaunch])

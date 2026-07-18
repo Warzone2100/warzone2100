@@ -175,8 +175,12 @@ void kf_AutoGame()
 
 void	kf_ToggleMissionTimer()
 {
-	addConsoleMessage(_("Warning! This cheat is buggy.  We recommend to NOT use it."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
-	setMissionCheatTime(!mission.cheatTime);
+	if (!toggleMissionTimerPause())
+	{
+		addConsoleMessage(_("There is no mission countdown timer to pause."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		return;
+	}
+	addConsoleMessage(mission.timerMode == TIMER_PAUSE ? _("Mission timer paused.") : _("Mission timer resumed."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 }
 
 void	kf_ToggleShowGateways()
