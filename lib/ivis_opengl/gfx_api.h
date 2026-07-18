@@ -484,6 +484,11 @@ namespace gfx_api
 
 		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }
 
+		/// Dimensions of the scene color render target, for shader inputs that map
+		/// gl_FragCoord within the scene pass (falls back to the drawable size when
+		/// no scene target exists).
+		std::pair<uint32_t, uint32_t> getSceneRenderTargetDimensions();
+
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
 		/// afterward for GPU commit.

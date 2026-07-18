@@ -781,6 +781,20 @@ bool gfx_api::context::loadTextureArrayLayerFromBaseImages(gfx_api::texture_arra
 	return true;
 }
 
+std::pair<uint32_t, uint32_t> gfx_api::context::getSceneRenderTargetDimensions()
+{
+	abstract_texture* sceneColor = getPipelineSurface(PipelineSurfaceId::SceneColor);
+	if (sceneColor != nullptr)
+	{
+		const auto dims = getRenderTargetDimensions(sceneColor);
+		if (dims.has_value())
+		{
+			return dims.value();
+		}
+	}
+	return getDrawableDimensions();
+}
+
 void gfx_api::context::warmCompiledRenderGraph(std::vector<RenderPassDesc>& /*passes*/,
 	PassGraphCompileResult& /*compileResult*/)
 {

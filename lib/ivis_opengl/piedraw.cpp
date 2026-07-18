@@ -1638,7 +1638,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 	{
 
 		auto bucketLight = getCurrentLightingManager().getPointLightBuckets();
-		auto dimension = gfx_api::context::get().getDrawableDimensions();
+		auto dimension = gfx_api::context::get().getSceneRenderTargetDimensions();
 		gfx_api::Draw3DShapeInstancedGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, modelUVLightmapMatrix, {shadowCascades.shadowMVPMatrix[0], shadowCascades.shadowMVPMatrix[1], shadowCascades.shadowMVPMatrix[2]},
 			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
