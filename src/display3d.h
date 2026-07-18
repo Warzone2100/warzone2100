@@ -150,4 +150,8 @@ bool drawShape(const iIMDShape *strImd, UDWORD timeAnimationStarted, int colour,
 
 int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY);
 
+// RCAS sharpness for FSR1 upscaling, in stops (0 is sharpest, 2 is the least sharp)
+void display3d_setUpscalingSharpness(float stops);
+float display3d_getUpscalingSharpness();
+
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

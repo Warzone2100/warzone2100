@@ -60,6 +60,8 @@ struct RenderFeatures
 		DebugOverlays      = 1u << 2,
 		/// In-game world frozen: UI/backdrop-only pass graph (no 3D scene passes).
 		FrozenWorldOverlay = 1u << 3,
+		/// Replace the scene blit with the FSR1 upscale + sharpen pass pair.
+		SceneUpscale       = 1u << 4,
 	};
 };
 
@@ -127,6 +129,8 @@ public:
 	virtual uint64_t backendEpoch() const = 0;
 	virtual std::pair<uint32_t, uint32_t> drawableDimensions() const = 0;
 	virtual std::pair<uint32_t, uint32_t> sceneColorDimensions() const = 0;
+	/// True when the backend has an upscale intermediate surface for the FSR1 pass pair.
+	virtual bool sceneUpscaleActive() const = 0;
 	virtual uint32_t shadowMapSize() const = 0;
 	/// True when the in-game debug overlay pass slot should exist (persistent toggles only).
 	virtual bool debugOverlaysEnabled() const = 0;

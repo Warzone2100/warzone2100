@@ -72,19 +72,45 @@ PassGraphTopologyBlueprint buildInGameBlueprint(const RenderTopologySnapshot& sn
 
 	addScenePassToBuilder(builder, PassId::ScenePass, snapshot.sceneMsaa, snapshot.numShadowCascades);
 
-	builder.beginPass(PassId::SceneBlit, std::string("SceneBlit"));
-	if (snapshot.swapchainMsaa)
+	if (snapshot.features & RenderFeatures::SceneUpscale)
 	{
-		builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
-			.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
+		// FSR1: edge adaptive upscale into a drawable-sized intermediate,
+		// then sharpen from the intermediate into the swapchain
+		builder.beginPass(PassId::SceneUpscaleEASU, std::string("SceneUpscaleEASU"));
+		builder.color(PipelineSurfaceId::UpscaledColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store)
+			.viewport(ViewportRule::Drawable)
+			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
+
+		builder.beginPass(PassId::SceneUpscaleRCAS, std::string("SceneUpscaleRCAS"));
+		if (snapshot.swapchainMsaa)
+		{
+			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
+				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
+		}
+		else
+		{
+			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
+		}
+		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+			.viewport(ViewportRule::Drawable)
+			.readFrom(PassId::SceneUpscaleEASU, AttachmentRole::PrimaryColor);
 	}
 	else
 	{
-		builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
+		builder.beginPass(PassId::SceneBlit, std::string("SceneBlit"));
+		if (snapshot.swapchainMsaa)
+		{
+			builder.color(PipelineSurfaceId::SwapchainMSAAColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::DontCare)
+				.resolve(PipelineSurfaceId::SwapchainColor, AttachmentLoadOp::DontCare, AttachmentStoreOp::Store);
+		}
+		else
+		{
+			builder.color(PipelineSurfaceId::SwapchainColor, snapshot.sceneBlitColorLoad, AttachmentStoreOp::Store);
+		}
+		builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
+			.viewport(ViewportRule::Drawable)
+			.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
 	}
-	builder.depth(PipelineSurfaceId::SwapchainDepth, AttachmentLoadOp::Load, AttachmentStoreOp::DontCare)
-		.viewport(ViewportRule::Drawable)
-		.readFrom(PassId::ScenePass, AttachmentRole::PrimaryColor);
 
 	addSwapchainPassToBuilder(builder, PassId::TargettingEffects, "TargettingEffects", snapshot.swapchainMsaa,
 		AttachmentLoadOp::Load, AttachmentLoadOp::Clear);

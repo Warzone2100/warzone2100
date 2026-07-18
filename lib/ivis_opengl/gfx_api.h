@@ -520,6 +520,21 @@ namespace gfx_api
 			return bias;
 		}
 
+		/// How the reduced-resolution scene is upscaled to the drawable
+		enum class scene_upscaling_mode : uint8_t
+		{
+			bilinear,
+			fsr1,
+		};
+		scene_upscaling_mode getSceneUpscalingMode() const { return _sceneUpscalingMode; }
+		/// Backend overrides store the value via this base implementation and rebuild
+		/// their scene targets, creating or dropping the upscale intermediate surface.
+		virtual bool setSceneUpscalingMode(scene_upscaling_mode mode)
+		{
+			_sceneUpscalingMode = mode;
+			return true;
+		}
+
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
 		/// afterward for GPU commit.
@@ -598,6 +613,7 @@ namespace gfx_api
 		bool _screenGeometryDirty = true;
 		optional<float> _mipLodBias;
 		uint32_t _sceneRenderScalePercent = 100;
+		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
@@ -1568,6 +1584,41 @@ namespace gfx_api
 		>
 	>,
 	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_WORLD_TO_SCREEN>;
+
+	template<>
+	struct constant_buffer_type<SHADER_FSR1_EASU>
+	{
+		// the standard FsrEasuCon constant vectors
+		glm::vec4 con0;
+		glm::vec4 con1;
+		glm::vec4 con2;
+		glm::vec4 con3;
+	};
+
+	using Fsr1EasuPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_FSR1_EASU>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_FSR1_EASU>;
+
+	template<>
+	struct constant_buffer_type<SHADER_FSR1_RCAS>
+	{
+		glm::vec4 con0; // x = exp2(-sharpness) per FsrRcasCon
+		glm::vec4 con1; // xy = input texel size
+	};
+
+	using Fsr1RcasPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_FSR1_RCAS>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_FSR1_RCAS>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)

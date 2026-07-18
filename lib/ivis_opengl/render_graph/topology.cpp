@@ -52,6 +52,10 @@ size_t expectedInGamePassCount(const RenderTopologySnapshot& snapshot)
 		return count;
 	}
 	size_t count = 6; // Scene, SceneBlit, Targetting, overlays, fade slot, UI
+	if (snapshot.features & RenderFeatures::SceneUpscale)
+	{
+		++count; // SceneBlit becomes the EASU and RCAS pass pair
+	}
 	if (snapshot.features & RenderFeatures::DebugOverlays)
 	{
 		++count;
@@ -158,6 +162,10 @@ RenderTopologySnapshot snapshot(const IRenderTopologyQuery& query)
 		if (query.debugOverlaysEnabled())
 		{
 			snapshot.features |= RenderFeatures::DebugOverlays;
+		}
+		if (query.sceneUpscaleActive())
+		{
+			snapshot.features |= RenderFeatures::SceneUpscale;
 		}
 	}
 
