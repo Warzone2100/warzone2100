@@ -3124,10 +3124,18 @@ void moveDroidsToSafety(DROID *psTransporter)
 	}
 }
 
+/** Whether the mission timer widget should currently be shown. A count-up
+ *  timer (mission.time == -1) or a countdown frozen at zero (TIMER_PAUSE with
+ *  mission.time == 0) stays visible even though mission.time <= 0. */
+static bool missionTimerShouldShow()
+{
+	return mission.time > 0 || mission.timerMode != TIMER_COUNTDOWN;
+}
+
 void clearMissionWidgets()
 {
 	//remove any widgets that are up due to the missions
-	if (mission.time > 0)
+	if (missionTimerShouldShow())
 	{
 		intRemoveMissionTimer();
 	}
@@ -3176,7 +3184,7 @@ void resetMissionWidgets()
 	}
 
 	//add back any widgets that should be up due to the missions
-	if (mission.time > 0 || mission.timerMode != TIMER_COUNTDOWN)
+	if (missionTimerShouldShow())
 	{
 		intAddMissionTimer();
 		//make sure its not flashing when added
