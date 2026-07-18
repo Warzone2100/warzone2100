@@ -4833,11 +4833,22 @@ static bool loadMainFileFinal(const std::string &fileName)
 	// convert it into a paused timer holding the remaining time
 	if (legacyMissionCheatTime != 0)
 	{
-		if (mission.timerMode == TIMER_COUNTDOWN)
+		// the cheat froze the clock by treating the cheat time as "now", so the
+		// frozen value is whatever the timer displayed at that instant
+		SDWORD elapsedAtFreeze = (SDWORD)(legacyMissionCheatTime - mission.startTime);
+		switch (mission.timerMode)
 		{
-			SDWORD timeRemaining = mission.time - (SDWORD)(legacyMissionCheatTime - mission.startTime);
-			mission.time = MAX(timeRemaining, 0);
+		case TIMER_COUNTDOWN:
+			mission.time = MAX(mission.time - elapsedAtFreeze, 0);
 			mission.timerMode = TIMER_PAUSE;
+			break;
+		case TIMER_COUNTUP:
+			mission.time = MAX(elapsedAtFreeze, 0);
+			mission.timerMode = TIMER_PAUSE;
+			break;
+		default:
+			// TIMER_PAUSE / TIMER_NONE: nothing to convert
+			break;
 		}
 		legacyMissionCheatTime = 0;
 	}
