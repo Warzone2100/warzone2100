@@ -2,7 +2,7 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
+uniform float WZ_MIP_LOAD_BIAS;
 //
 
 uniform sampler2D tex1;

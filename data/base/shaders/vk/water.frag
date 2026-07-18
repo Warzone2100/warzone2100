@@ -1,7 +1,5 @@
 #version 450
 
-layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
-
 layout(set = 1, binding = 0) uniform sampler2D tex1;
 layout(set = 1, binding = 1) uniform sampler2D tex2;
 layout(set = 1, binding = 2) uniform sampler2D lightmap_tex;
@@ -22,6 +20,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	float timeSec;
+	float WZ_MIP_LOAD_BIAS;
 };
 
 layout(location = 1) in vec4 uv1_uv2;

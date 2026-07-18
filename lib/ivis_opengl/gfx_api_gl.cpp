@@ -905,7 +905,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest"
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
+			// appended per-frame global uniforms
+			"WZ_MIP_LOAD_BIAS"
 		} }),
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
@@ -913,6 +915,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
+			// appended per-frame global uniforms
+			"WZ_MIP_LOAD_BIAS"
 		},
 		{
 			{"shadowMap", 4},
@@ -930,7 +934,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents",
 			// per-instance uniforms
-			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest"
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "animFrameNumber", "ecmEffect", "alphaTest",
+			// appended per-frame global uniforms
+			"WZ_MIP_LOAD_BIAS"
 		} }),
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
@@ -938,6 +944,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
 			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
+			// appended per-frame global uniforms
+			"WZ_MIP_LOAD_BIAS"
 		},
 		{
 			{"shadowMap", 4}
@@ -952,21 +960,21 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_MEDIUM, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_medium.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_high.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" } }),
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP_TESS, program_data{ "terrain_depthmap tess program", "shaders/terrain_depth_tess.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "tessCameraMVP", "paramx2", "paramy2", "textureMatrix2", "tessParams", "fogEnabled", "fogEnd", "fogStart" },
 		{ {"terrainBakedHeight", 1}, {"terrainBakedOffset", 2}, {"terrainBakedNormal", 3} },
@@ -977,7 +985,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" },
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" },
 			{ {"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12} },
 			"shaders/terrain_combined_tess.tesc", "shaders/terrain_combined_tess.tese" }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_HIGH_TESS, program_data{ "terrain decals tess program", "shaders/terrain_combined_tess.vert", "shaders/terrain_combined_high.frag",
@@ -986,7 +994,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 				"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "quality", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight", "tessMaxLevel",
 				"lightmap_tex",
 				"groundTex", "groundNormal", "groundSpecular", "groundHeight",
-				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap" },
+				"decalTex",  "decalNormal",  "decalSpecular",  "decalHeight", "shadowMap", "WZ_MIP_LOAD_BIAS" },
 			{ {"terrainBakedHeight", 10}, {"terrainBakedOffset", 11}, {"terrainBakedNormal", 12} },
 			"shaders/terrain_combined_tess.tesc", "shaders/terrain_combined_tess.tese" }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
@@ -994,13 +1002,13 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex1", "tex2", "lightmap_tex" } }),
+			"tex1", "tex2", "lightmap_tex", "WZ_MIP_LOAD_BIAS" } }),
 	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
 		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex", "tex_nm", "tex_sm", "lightmap_tex"
+			"tex", "tex_nm", "tex_sm", "lightmap_tex", "WZ_MIP_LOAD_BIAS"
 		},
 		{
 			{"shadowMap", 4}
@@ -1009,7 +1017,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"lightmap_tex", "tex2"} }),
+			"lightmap_tex", "tex2", "WZ_MIP_LOAD_BIAS"} }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
 	std::make_pair(SHADER_RECT_INSTANCED, program_data{ "Rect program", "shaders/rect_instanced.vert", "shaders/rect_instanced.frag",
@@ -1248,7 +1256,7 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
+gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::pipeline_create_info& createInfo, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
@@ -1317,7 +1325,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	}
 
 	build_program(ctx,
-				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
+				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable,
 				  programInfo.friendly_name,
 				  vertexShaderHeader.c_str(),
 				  programInfo.vertex_file,
@@ -1328,7 +1336,7 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 				  programInfo.fragment_file,
 				  programInfo.uniform_names,
 				  programInfo.additional_samplers,
-				  mipLodBias, shadowConstants);
+				  shadowConstants);
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
@@ -1772,28 +1780,6 @@ static bool regex_replace_wrapper(std::string& input, const std::regex& re, cons
 	return true;
 }
 
-static void patchFragmentShaderTextureLodBias(std::string& fragmentShaderStr, float mipLodBias)
-{
-	// Look for:
-	// #define WZ_MIP_LOAD_BIAS 0.f
-	const auto re = std::regex("#define WZ_MIP_LOAD_BIAS .*", std::regex_constants::ECMAScript);
-
-	std::string floatAsString = astringf("%f", mipLodBias);
-	size_t lastNon0Pos = floatAsString.find_last_not_of('0');
-	if (lastNon0Pos != std::string::npos)
-	{
-		floatAsString = floatAsString.substr(0, lastNon0Pos + 1);
-	}
-	else
-	{
-		// only 0?
-		return;
-	}
-	ASSERT(floatAsString.find_last_not_of("0123456789.-") == std::string::npos, "Found unexpected / invalid character in: %s", floatAsString.c_str());
-
-	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_MIP_LOAD_BIAS %s", floatAsString.c_str()));
-}
-
 static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
 {
 	const auto defines = {
@@ -1833,14 +1819,13 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 }
 
 void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
-											 bool patchFragmentShaderMipLodBias,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
 											 const char * tess_header, const std::string& tessControlPath, const std::string& tessEvalPath,
 											 const char * fragment_header, const std::string& fragmentPath,
 											 const std::vector<std::string> &uniformNames,
 											 const std::vector<std::tuple<std::string, GLint>> &samplersToBind,
-											 optional<float> mipLodBias, const gfx_api::lighting_constants& lightingConstants)
+											 const gfx_api::lighting_constants& lightingConstants)
 {
 	GLint status;
 	bool success = true; // Assume overall success
@@ -2001,10 +1986,6 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 				}
 			}
 
-			if (patchFragmentShaderMipLodBias && mipLodBias.has_value())
-			{
-				patchFragmentShaderTextureLodBias(fragmentShaderStr, mipLodBias.value());
-			}
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
 			hasSpecializationConstants_PointLights = patchFragmentShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
 
@@ -2239,6 +2220,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUni
 	setUniforms(10, cbuf.fogBegin);
 	setUniforms(11, cbuf.timeState);
 	setUniforms(12, cbuf.fogEnabled);
+	// index 25 is the appended name after the per mesh and per instance uniforms
+	setUniforms(25, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf)
@@ -2287,6 +2270,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(21, cbuf.bucketDimensionUsed);
 	setUniforms(22, cbuf.viewportWidth);
 	setUniforms(23, cbuf.viewportheight);
+	// index 29 is the appended name after the per mesh uniforms
+	setUniforms(29, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
@@ -2365,6 +2350,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUnifo
 	setUniforms(i++, 7); // decalSpecular
 	setUniforms(i++, 8); // decalHeight
 	setUniforms(i++, 9); // shadowMap
+	setUniforms(i++, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
@@ -2389,6 +2375,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, 0);
 	setUniforms(i++, 1);
 	setUniforms(i++, 2); // lightmap_tex
+	setUniforms(i++, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_HIGH>& cbuf)
@@ -2416,6 +2403,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, 1);
 	setUniforms(i++, 2);
 	setUniforms(i++, 3); // lightmap_tex
+	setUniforms(i++, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER_CLASSIC>& cbuf)
@@ -2436,6 +2424,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	 // textures:
 	setUniforms(i++, 0);
 	setUniforms(i++, 1);
+	setUniforms(i++, cbuf.mipLoadBias);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)
@@ -2781,8 +2770,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 		psoID = existingPSOId->psoID;
 	}
 
-	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	auto pipeline = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
+	auto pipeline = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, createInfo, shadowConstants);
 	if (!psoID.has_value())
 	{
 		createdPipelines.emplace_back(createInfo);
@@ -3712,7 +3700,7 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 	return 2048;
 }
 
-bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
+bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> /*mipLodBias*/, uint32_t _depthMapResolution)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	khrCallbackOomDetected.store(false);
@@ -3782,7 +3770,6 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		setSwapIntervalInternal(gfx_api::context::swap_interval_mode::vsync);
 	}
 
-	mipLodBias = _mipLodBias;
 	depthBufferResolution = _depthMapResolution;
 	if (depthBufferResolution == 0)
 	{
@@ -5708,14 +5695,13 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 	shadowConstants = newValues;
 
 	// Must recompile any shaders that used this value
-	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
 	for (auto& pipelineInfo : createdPipelines)
 	{
 		if (pipelineInfo.pso &&
 			(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, pipelineInfo.createInfo, shadowConstants);
 		}
 	}
 
@@ -5724,13 +5710,12 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 
 bool gl_context::debugRecompileAllPipelines()
 {
-	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
 	for (auto& pipelineInfo : createdPipelines)
 	{
 		if (pipelineInfo.pso)
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, pipelineInfo.createInfo, shadowConstants);
 		}
 	}
 	return true;

@@ -16,6 +16,7 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	float fogStart;
 	float graphicsCycle;
 	int fogEnabled;
+	float WZ_MIP_LOAD_BIAS;
 };
 
 layout(std140, set = 1, binding = 0) uniform meshuniforms

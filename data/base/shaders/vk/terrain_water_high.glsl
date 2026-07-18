@@ -20,6 +20,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	float timeSec;
+	float WZ_MIP_LOAD_BIAS;
 };
 
 // interpolated data. location count = 2

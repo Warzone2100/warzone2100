@@ -309,7 +309,8 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 		pie_UIPerspectiveGet(), viewMatrix, glm::mat4(1.f),
 		glm::vec4(getDefaultSunPosition(), 0.f),
 		sceneColor, ambient, diffuse, specular, glm::vec4(0.f),
-		0.f, 0.f, 0.f, 0
+		0.f, 0.f, 0.f, 0,
+		gfx_api::context::get().getMipLodBias()
 	};
 
 	gfx_api::Draw3DShapePerMeshUniforms meshUniforms {
@@ -1644,7 +1645,7 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 			glm::vec4(cameraPos, 0.f), glm::vec4(currentSunPosition, 0.f),
 			sceneColor, ambient, diffuse, specular, fogColor,
 			{shadowCascades.shadowCascadeSplit[0], shadowCascades.shadowCascadeSplit[1], shadowCascades.shadowCascadeSplit[2], pie_getPerspectiveZFar()}, shadowCascades.shadowMapSize,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), 0.f, bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled, static_cast<int>(dimension.first), static_cast<int>(dimension.second), gfx_api::context::get().getMipLodBias(), bucketLight.positions, bucketLight.colorAndEnergy, bucketLight.bucketOffsetAndSize, bucketLight.light_index, static_cast<int>(bucketLight.bucketDimensionUsed)
 		};
 		Draw3DShapes_Instanced(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, shadowMap, drawParts, depthPass);
 	}
@@ -1653,7 +1654,8 @@ bool InstancedMeshRenderer::DrawAll(uint64_t currentGameFrame, const glm::mat4& 
 		gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 			projectionMatrix, viewMatrix, shadowCascades.shadowMVPMatrix[0],
 			glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor,
-			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled
+			renderState.fogBegin, renderState.fogEnd, pie_GetShaderTime(), renderState.fogEnabled,
+			gfx_api::context::get().getMipLodBias()
 		};
 		Draw3DShapes_Old(currentGameFrame, perFrameUniformsShaderOnce, globalUniforms, drawParts);
 	}

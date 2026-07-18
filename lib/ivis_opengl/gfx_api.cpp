@@ -78,6 +78,7 @@ bool gfx_api::context::initialize(const gfx_api::backend_Impl_Factory& impl, int
 			break;
 	}
 	ASSERT_OR_RETURN(false, current_backend_context != nullptr, "Failed to initialize gfx backend context");
+	current_backend_context->setMipLodBias(mipLodBias);
 	bool result = gfx_api::context::get()._initialize(impl, antialiasing, swapMode, mipLodBias, depthMapResolution);
 	if (!result)
 	{

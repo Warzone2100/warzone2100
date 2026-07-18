@@ -3,8 +3,6 @@
 
 #include "tcmask_instanced.glsl"
 
-layout (constant_id = 0) const float WZ_MIP_LOAD_BIAS = 0.f;
-
 layout(set = 2, binding = 0) uniform sampler2D Texture;
 
 layout(location = 0) in vec4 texCoord_vertexDistance; // vec(2) texCoord, float vertexDistance, (unused float)

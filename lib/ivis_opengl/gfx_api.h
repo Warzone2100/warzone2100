@@ -489,6 +489,11 @@ namespace gfx_api
 		/// no scene target exists).
 		std::pair<uint32_t, uint32_t> getSceneRenderTargetDimensions();
 
+		/// The mip LOD bias applied by material shaders when sampling textures
+		/// (feeds the WZ_MIP_LOAD_BIAS uniform each frame)
+		float getMipLodBias() const { return _mipLodBias.value_or(0.f); }
+		void setMipLodBias(optional<float> bias) { _mipLodBias = bias; }
+
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
 		/// afterward for GPU commit.
@@ -565,6 +570,7 @@ namespace gfx_api
 		bool _renderGraphExecuting = false;
 		uint64_t _renderGraphEpoch = 1;
 		bool _screenGeometryDirty = true;
+		optional<float> _mipLodBias;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
@@ -803,6 +809,7 @@ namespace gfx_api
 		float fogBegin;
 		float timeState; // graphicsCycle
 		int fogEnabled;
+		float mipLoadBias;
 	};
 
 	// Only change per mesh
@@ -886,7 +893,7 @@ namespace gfx_api
 		int fogEnabled;
 		int viewportWidth;
 		int viewportheight;
-		float unused2;
+		float mipLoadBias;
 		std::array<glm::vec4, max_lights> PointLightsPosition;
 		std::array<glm::vec4, max_lights> PointLightsColorAndEnergy;
 		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
@@ -1100,6 +1107,7 @@ namespace gfx_api
 		std::array<glm::ivec4, bucket_dimension * bucket_dimension> bucketOffsetAndSize;
 		std::array<glm::ivec4, max_indexed_lights> indexed_lights;
 		int bucketDimensionUsed;
+		float mipLoadBias;
 	};
 
 	template<REND_MODE render_mode, SHADER_MODE shader>
@@ -1221,6 +1229,7 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
+		float mipLoadBias;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1253,6 +1262,7 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
+		float mipLoadBias;
 	};
 
 	using WaterHighPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
@@ -1282,6 +1292,7 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
+		float mipLoadBias;
 	};
 
 	using WaterClassicPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,

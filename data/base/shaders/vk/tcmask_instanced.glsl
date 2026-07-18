@@ -27,6 +27,7 @@ layout(std140, set = 0, binding = 0) uniform globaluniforms
 	int fogEnabled;
 	int viewportWidth;
 	int viewportHeight;
+	float WZ_MIP_LOAD_BIAS;
 
 	vec4 PointLightsPosition[WZ_MAX_POINT_LIGHTS];
 	vec4 PointLightsColorAndEnergy[WZ_MAX_POINT_LIGHTS];

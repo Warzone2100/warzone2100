@@ -12,7 +12,7 @@
 #endif
 
 // constants overridden by WZ when loading shaders (do not modify here in the shader source!)
-#define WZ_MIP_LOAD_BIAS 0.f
+uniform float WZ_MIP_LOAD_BIAS;
 #define WZ_SHADOW_MODE 1
 #define WZ_SHADOW_FILTER_SIZE 3
 #define WZ_SHADOW_CASCADES_COUNT 3
