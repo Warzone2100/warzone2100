@@ -769,6 +769,10 @@ bool loadConfig()
 	{
 		war_setShadowMapResolution(value.value());
 	}
+	if (auto value = iniGetIntegerOpt("renderResolution"))
+	{
+		war_setRenderResolutionPercent(value.value());
+	}
 
 	{
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
@@ -1000,6 +1004,7 @@ bool saveConfig()
 	iniSetInteger("terrainShadows", (int)(getDrawTerrainShadows()));
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
+	iniSetInteger("renderResolution", (int)war_getRenderResolutionPercent());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());

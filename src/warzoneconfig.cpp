@@ -115,6 +115,7 @@ struct WARZONE_GLOBALS
 	uint32_t shadowFilterSize = 5;
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
+	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -878,6 +879,21 @@ void war_setShadowMapResolution(uint32_t resolution)
 		debug(LOG_INFO, "Shadow map resolution %" PRIu32 " may not have the desired effect", resolution);
 	}
 	warGlobs.shadowMapResolution = resolution;
+}
+
+uint32_t war_getRenderResolutionPercent()
+{
+	return warGlobs.renderResolutionPercent;
+}
+
+void war_setRenderResolutionPercent(uint32_t percent)
+{
+	if (percent < 10 || percent > 100)
+	{
+		debug(LOG_INFO, "Render resolution %" PRIu32 "%% is out of range (10-100), clamping", percent);
+		percent = std::min<uint32_t>(std::max<uint32_t>(percent, 10), 100);
+	}
+	warGlobs.renderResolutionPercent = percent;
 }
 
 bool war_getPointLightPerPixelLighting()

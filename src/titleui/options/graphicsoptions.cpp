@@ -463,6 +463,40 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("gfx.renderResolution", N_("Render Resolution"), N_("The percentage of the display resolution used to render the 3D world, which is then upscaled to your display. Lower values improve performance at the cost of sharpness. The interface is always rendered at full resolution."));
+		auto valueChanger = OptionsDropdown<uint32_t>::make(
+			[]() {
+				OptionChoices<uint32_t> result;
+				result.choices = {
+					{ _("Native"), _("Render the 3D world at the full display resolution."), 100 },
+					{ WzString::fromUtf8("75%"), "", 75 },
+					{ WzString::fromUtf8("67%"), "", 67 },
+					{ WzString::fromUtf8("59%"), "", 59 },
+					{ WzString::fromUtf8("50%"), "", 50 },
+					{ WzString::fromUtf8("33%"), "", 33 },
+				};
+				uint32_t currValue = gfx_api::context::get().getSceneRenderScalePercent();
+				if (!result.setCurrentIdxForValue(currValue))
+				{
+					// add "Custom" item
+					result.choices.push_back({WzString::format("(Custom: %" PRIu32 "%%)", currValue), "", currValue});
+					result.currentIdx = result.choices.size() - 1;
+				}
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				if (!gfx_api::context::get().setSceneRenderScale(newValue))
+				{
+					debug(LOG_ERROR, "Failed to set render resolution: %" PRIu32 "%%", newValue);
+					return false;
+				}
+				war_setRenderResolutionPercent(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
 		auto optionInfo = OptionInfo("gfx.antialiasing", N_("Antialiasing"), "");
 		optionInfo.addAvailabilityCondition(IsNotInGame);
 		optionInfo.setRequiresRestart(true);

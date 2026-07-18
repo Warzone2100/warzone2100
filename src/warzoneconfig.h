@@ -229,6 +229,9 @@ void war_setShadowFilterSize(uint32_t filterSize);
 uint32_t war_getShadowMapResolution();
 void war_setShadowMapResolution(uint32_t resolution);
 
+uint32_t war_getRenderResolutionPercent();
+void war_setRenderResolutionPercent(uint32_t percent);
+
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
