@@ -23,6 +23,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/file.h"
+#include "lib/framework/input.h"
 #include "sdl_gamepad.h"
 #include "sdl_backend_private.h"
 #include "src/warzoneconfig.h"
@@ -57,6 +58,14 @@ static const float GAMEPAD_MAGNET_CAPTURE_SLACK = 24.f;
 static const float GAMEPAD_MAGNET_SETTLE_RADIUS = 20.f;
 static const float GAMEPAD_MAGNET_SETTLE_SPEED = 280.f;
 static const uint32_t GAMEPAD_MAGNET_SETTLE_WINDOW_MS = 250;
+// A quick press-and-release of the cursor stick counts as a flick, which
+// requests a hop to the next widget in the flicked direction. Once deflection
+// falls below this fraction of the gesture's peak the stick counts as
+// releasing, and the remaining travel is banked
+static const float GAMEPAD_FLICK_MIN_DEFLECTION = 0.6f;
+static const uint32_t GAMEPAD_FLICK_MAX_MS = 180;
+static const float GAMEPAD_FLICK_RELEASE_FRACTION = 0.7f;
+static const float GAMEPAD_HOP_SPEED = 2200.f;
 // Press threshold for the synthesized stick-direction buttons - triggers use
 // the configured threshold instead
 static const float GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD = 0.5f;
@@ -115,6 +124,35 @@ static bool magnetTargetFresh = false;
 static float magnetTargetX = 0.f;
 static float magnetTargetY = 0.f;
 static float magnetTargetRadius = 0.f;
+
+// A detected flick awaiting consumption, and a hop glide in progress
+static bool flickPending = false;
+static float flickDirX = 0.f;
+static float flickDirY = 0.f;
+static int flickStartPosX = 0;
+static int flickStartPosY = 0;
+
+// The movement gesture being watched for a flick
+static uint32_t flickStartTick = 0;
+static float flickPeakDeflection = 0.f;
+static float flickPeakDirX = 0.f;
+static float flickPeakDirY = 0.f;
+static float flickStartCursorX = 0.f;
+static float flickStartCursorY = 0.f;
+
+// This frame's prospective hop target - the cursor parks on it while the
+// gesture may still become a flick, so an actual flick lands with no jump
+static bool flickAnchorFresh = false;
+static float flickAnchorX = 0.f;
+static float flickAnchorY = 0.f;
+static bool hopActive = false;
+static float hopTargetX = 0.f;
+static float hopTargetY = 0.f;
+// Travel banked while the stick snaps back from a potential flick - dropped
+// when a hop claims it, drained back into the cursor otherwise
+static float bankedTravelX = 0.f;
+static float bankedTravelY = 0.f;
+static bool bankAwaitingHop = false;
 
 void gamepadSetCursorMagnetTarget(int screenX, int screenY, int screenRadius)
 {
@@ -705,6 +743,26 @@ static void updateAxisButton(GAMEPAD_INPUT button, float deflection)
 	}
 }
 
+// Returns banked flick travel to the cursor over roughly a tenth of a second
+static bool drainBankedTravel(float dt)
+{
+	if (bankedTravelX == 0.f && bankedTravelY == 0.f)
+	{
+		return false;
+	}
+	const float drain = std::min(1.f, dt * 10.f);
+	virtualCursorX += bankedTravelX * drain;
+	virtualCursorY += bankedTravelY * drain;
+	bankedTravelX *= (1.f - drain);
+	bankedTravelY *= (1.f - drain);
+	if (std::abs(bankedTravelX) < 0.5f && std::abs(bankedTravelY) < 0.5f)
+	{
+		bankedTravelX = 0.f;
+		bankedTravelY = 0.f;
+	}
+	return true;
+}
+
 // Moves the cursor from left-stick deflection while the gamepad is the active input source
 static void updateVirtualCursor(float dt)
 {
@@ -718,6 +776,34 @@ static void updateVirtualCursor(float dt)
 	const float deflection = std::sqrt(deflectionX * deflectionX + deflectionY * deflectionY);
 	static uint32_t lastMovementTick = 0;
 
+	if (hopActive)
+	{
+		// new stick input or a button press cancels the hop and returns
+		// control to the stick
+		if (deflection > 0.f || mouseDown(MOUSE_LMB) || mouseDown(MOUSE_RMB) || gamepadSyntheticClickHeld())
+		{
+			hopActive = false;
+		}
+		else
+		{
+			const float hopDX = hopTargetX - virtualCursorX;
+			const float hopDY = hopTargetY - virtualCursorY;
+			const float hopDistance = std::sqrt(hopDX * hopDX + hopDY * hopDY);
+			const float step = std::min(hopDistance, GAMEPAD_HOP_SPEED * dt);
+			if (hopDistance > 0.f)
+			{
+				virtualCursorX += (hopDX / hopDistance) * step;
+				virtualCursorY += (hopDY / hopDistance) * step;
+			}
+			if (step >= hopDistance)
+			{
+				hopActive = false;
+			}
+			inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
+			return;
+		}
+	}
+
 	const float magnetStrength = (float)war_GetGamepadCursorMagnetism() / 100.f;
 	const float targetDX = magnetTargetX - virtualCursorX;
 	const float targetDY = magnetTargetY - virtualCursorY;
@@ -726,6 +812,36 @@ static void updateVirtualCursor(float dt)
 
 	if (deflection == 0.f)
 	{
+		// a short sharp press-and-release is a flick, requesting a hop to the
+		// next widget in the flicked direction
+		if (flickStartTick != 0)
+		{
+			if (flickPeakDeflection >= GAMEPAD_FLICK_MIN_DEFLECTION && SDL_GetTicks() - flickStartTick <= GAMEPAD_FLICK_MAX_MS
+				&& !mouseDown(MOUSE_LMB) && !mouseDown(MOUSE_RMB) && !gamepadSyntheticClickHeld())
+			{
+				flickPending = true;
+				flickDirX = flickPeakDirX;
+				flickDirY = flickPeakDirY;
+				// hops search from where the gesture began, so the manual
+				// travel during the flick does not compound with the hop
+				flickStartPosX = (int)std::lround(flickStartCursorX);
+				flickStartPosY = (int)std::lround(flickStartCursorY);
+				// hold the banked release tail until a hop can claim it
+				bankAwaitingHop = true;
+			}
+			flickStartTick = 0;
+			flickPeakDeflection = 0.f;
+		}
+		else if (bankAwaitingHop)
+		{
+			// no hop claimed the flick, so the banked tail returns
+			bankAwaitingHop = false;
+		}
+		bool cursorMoved = false;
+		if (!bankAwaitingHop)
+		{
+			cursorMoved = drainBankedTravel(dt);
+		}
 		// glide onto a near target right after the stick releases, so slow
 		// acquisitions finish centered without the cursor ever being held
 		if (magnetUsable && targetDistance <= GAMEPAD_MAGNET_SETTLE_RADIUS
@@ -734,11 +850,28 @@ static void updateVirtualCursor(float dt)
 			const float step = std::min(targetDistance, GAMEPAD_MAGNET_SETTLE_SPEED * dt);
 			virtualCursorX += (targetDX / targetDistance) * step;
 			virtualCursorY += (targetDY / targetDistance) * step;
+			cursorMoved = true;
+		}
+		if (cursorMoved)
+		{
 			inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
 		}
 		return;
 	}
 	lastMovementTick = (uint32_t)SDL_GetTicks();
+	if (flickStartTick == 0)
+	{
+		flickStartTick = lastMovementTick;
+		flickPeakDeflection = 0.f;
+		flickStartCursorX = virtualCursorX;
+		flickStartCursorY = virtualCursorY;
+	}
+	if (deflection > flickPeakDeflection)
+	{
+		flickPeakDeflection = deflection;
+		flickPeakDirX = deflectionX / deflection;
+		flickPeakDirY = deflectionY / deflection;
+	}
 
 	float speed = (float)war_GetGamepadCursorSpeed();
 	if (actualButtonDown(GPAD_BTN_LEFT_STICK))
@@ -772,6 +905,48 @@ static void updateVirtualCursor(float dt)
 			velY += (targetDY / targetDistance) * pullSpeed;
 		}
 	}
+
+	bankAwaitingHop = false;
+	// a held button means a drag is in progress, so no flick handling may
+	// park or bank the cursor
+	const bool inFlickWindow = lastMovementTick - flickStartTick <= GAMEPAD_FLICK_MAX_MS;
+	const bool flickQualifies = inFlickWindow && flickPeakDeflection >= GAMEPAD_FLICK_MIN_DEFLECTION
+		&& !mouseDown(MOUSE_LMB) && !mouseDown(MOUSE_RMB) && !gamepadSyntheticClickHeld();
+	if (flickQualifies && flickAnchorFresh)
+	{
+		// ride the movement onto the prospective hop target and park there
+		// until the flick window passes - an actual flick then releases with
+		// the cursor already in place
+		const float oldDX = flickAnchorX - virtualCursorX;
+		const float oldDY = flickAnchorY - virtualCursorY;
+		float newX = virtualCursorX + velX * dt;
+		float newY = virtualCursorY + velY * dt;
+		const float newDX = flickAnchorX - newX;
+		const float newDY = flickAnchorY - newY;
+		const bool crossedAnchor = (oldDX * newDX + oldDY * newDY) <= 0.f;
+		const bool nearAnchor = (newDX * newDX + newDY * newDY) <= 16.f;
+		if (crossedAnchor || nearAnchor)
+		{
+			newX = flickAnchorX;
+			newY = flickAnchorY;
+		}
+		virtualCursorX = newX;
+		virtualCursorY = newY;
+		virtualCursorX = std::clamp(virtualCursorX, 0.f, (float)(screenWidth > 0 ? screenWidth - 1 : 0));
+		virtualCursorY = std::clamp(virtualCursorY, 0.f, (float)(screenHeight > 0 ? screenHeight - 1 : 0));
+		inputSetMousePos((int)std::lround(virtualCursorX), (int)std::lround(virtualCursorY));
+		return;
+	}
+	// with no target to park on, once the stick starts snapping back bank the
+	// tail of the travel - a resulting hop drops it, trimming the visible
+	// overshoot, and it drains back if the gesture is not a flick after all
+	if (flickQualifies && deflection < flickPeakDeflection * GAMEPAD_FLICK_RELEASE_FRACTION)
+	{
+		bankedTravelX += velX * dt;
+		bankedTravelY += velY * dt;
+		return;
+	}
+	drainBankedTravel(dt);
 
 	virtualCursorX += velX * dt;
 	virtualCursorY += velY * dt;
@@ -970,12 +1145,66 @@ void wzGamepadUpdate()
 	const float dt = (lastTick != 0) ? std::min((float)(now - lastTick) / 1000.f, 0.1f) : 0.f;
 	lastTick = now;
 
+	// a flick not consumed in the frame it was detected in expires
+	flickPending = false;
+
 	updateVirtualCursor(dt);
 	updateRightStickScroll(dt);
 	updateSyntheticInput();
 
-	// the magnet target is only valid for the frame it was set in
+	// the magnet target and flick anchor are only valid for the frame they
+	// were set in
 	magnetTargetFresh = false;
+	flickAnchorFresh = false;
+}
+
+bool gamepadConsumePendingCursorFlick(float& outDirX, float& outDirY, int& outStartX, int& outStartY)
+{
+	if (!flickPending)
+	{
+		return false;
+	}
+	flickPending = false;
+	outDirX = flickDirX;
+	outDirY = flickDirY;
+	outStartX = flickStartPosX;
+	outStartY = flickStartPosY;
+	return true;
+}
+
+bool gamepadGetActiveCursorFlick(float& outDirX, float& outDirY, int& outStartX, int& outStartY)
+{
+	if (flickStartTick == 0 || flickPeakDeflection < GAMEPAD_FLICK_MIN_DEFLECTION)
+	{
+		return false;
+	}
+	if (SDL_GetTicks() - flickStartTick > GAMEPAD_FLICK_MAX_MS)
+	{
+		return false;
+	}
+	outDirX = flickPeakDirX;
+	outDirY = flickPeakDirY;
+	outStartX = (int)std::lround(flickStartCursorX);
+	outStartY = (int)std::lround(flickStartCursorY);
+	return true;
+}
+
+void gamepadSetCursorFlickAnchor(int screenX, int screenY)
+{
+	flickAnchorFresh = true;
+	flickAnchorX = (float)screenX;
+	flickAnchorY = (float)screenY;
+}
+
+void gamepadCursorHopTo(int screenX, int screenY)
+{
+	hopActive = true;
+	hopTargetX = (float)screenX;
+	hopTargetY = (float)screenY;
+	// the hop claims any release travel banked during the flick
+	bankedTravelX = 0.f;
+	bankedTravelY = 0.f;
+	bankAwaitingHop = false;
 }
 
 static void ageButtonStates(INPUT_STATE* states)
@@ -1053,5 +1282,13 @@ void wzGamepadResetInputState()
 		aGamepadAxisValues[i] = 0.f;
 	}
 	magnetTargetFresh = false;
+	flickPending = false;
+	flickStartTick = 0;
+	flickPeakDeflection = 0.f;
+	flickAnchorFresh = false;
+	hopActive = false;
+	bankedTravelX = 0.f;
+	bankedTravelY = 0.f;
+	bankAwaitingHop = false;
 }
 
