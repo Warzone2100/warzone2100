@@ -72,6 +72,7 @@ static uint16_t chosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t discreteChosenLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatency = GAME_TICKS_PER_UPDATE;
 static uint16_t wantedLatencies[MAX_GAMEQUEUE_SLOTS];
+static bool deterministicLatency = false;
 
 static optional<uint32_t> waitingOnPlayersStartTime;
 #define MIN_WAITONPLAYERS_DISPLAYTIME_FOR_SPECTATORS GAME_TICKS_PER_UPDATE
@@ -415,6 +416,11 @@ void getTimeComponents(unsigned time, int *hours, int *minutes, int *seconds, in
 	*hours = time;
 }
 
+void gameTimeSetDeterministicLatency(bool enabled)
+{
+	deterministicLatency = enabled;
+}
+
 static void updateLatency()
 {
 	uint16_t maxWantedLatency = 0;
@@ -450,8 +456,10 @@ static void updateLatency()
 	// broadcast value) but makes two independent runs' --gamestate-crc-trace outputs diverge from the first
 	// post-load tick regardless of snapshot fidelity. When a trace is active, drop the wall-clock terms so the
 	// latency negotiation is deterministic and both runs stay comparable; any remaining CRC divergence is then
-	// genuine sim non-determinism. (No effect on normal play.)
-	const bool traceDeterministic = syncCrcTraceActive();
+	// genuine sim non-determinism. (No effect on normal play.) Benchmark modes opt in for the same reason,
+	// mid-run orders otherwise apply on a load-dependent tick and a watched run cannot reproduce a headless
+	// one.
+	const bool traceDeterministic = syncCrcTraceActive() || deterministicLatency;
 	const uint32_t readyTime = traceDeterministic ? 0u : updateReadyTime;
 	const uint32_t wantedTime = traceDeterministic ? 0u : updateWantedTime;
 	wantedLatency = static_cast<uint16_t>(clip<int>((int)(discreteChosenLatency + readyTime - wantedTime + 10), 0, UINT16_MAX));
