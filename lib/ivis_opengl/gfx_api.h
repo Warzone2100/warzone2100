@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <algorithm>
+#include <cmath>
 #include <memory>
 #include <string>
 #include <map>
@@ -494,6 +496,30 @@ namespace gfx_api
 		float getMipLodBias() const { return _mipLodBias.value_or(0.f); }
 		void setMipLodBias(optional<float> bias) { _mipLodBias = bias; }
 
+		static constexpr uint32_t minSceneRenderScalePercent = 10;
+		static constexpr uint32_t maxSceneRenderScalePercent = 100;
+		/// Percentage of the drawable size used for the scene render targets (100 = native)
+		uint32_t getSceneRenderScalePercent() const { return _sceneRenderScalePercent; }
+		/// Resize the scene render targets to a percentage of the drawable size.
+		/// Backend overrides store the clamped value via this base implementation
+		/// and then rebuild their scene targets to match.
+		virtual bool setSceneRenderScale(uint32_t scalePercent)
+		{
+			_sceneRenderScalePercent = std::min(std::max(scalePercent, minSceneRenderScalePercent), maxSceneRenderScalePercent);
+			return true;
+		}
+		/// The mip LOD bias for material shaders sampling in the scene pass, adding
+		/// log2 of the scene render scale so texture detail matches the output size
+		float getSceneMipLodBias() const
+		{
+			float bias = getMipLodBias();
+			if (_sceneRenderScalePercent != 100)
+			{
+				bias += std::log2(static_cast<float>(_sceneRenderScalePercent) / 100.f);
+			}
+			return bias;
+		}
+
 		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
 		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
 		/// afterward for GPU commit.
@@ -571,6 +597,7 @@ namespace gfx_api
 		uint64_t _renderGraphEpoch = 1;
 		bool _screenGeometryDirty = true;
 		optional<float> _mipLodBias;
+		uint32_t _sceneRenderScalePercent = 100;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
