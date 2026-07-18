@@ -139,6 +139,12 @@ void gameTimeResetMod();
 /** Set the time modifier. Used to speed up the game. */
 void gameTimeSetMod(Rational mod);
 
+/** Drop the wall-clock terms from the order-queue latency negotiation so the
+ *  latency settles at a fixed value and order-apply ticks become reproducible
+ *  across runs regardless of host speed or load. Used by benchmark modes that
+ *  compare runs against each other. */
+void gameTimeSetDeterministicLatency(bool enabled);
+
 /** Get the current time modifier. */
 Rational gameTimeGetMod();
 

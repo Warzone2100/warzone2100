@@ -28,6 +28,7 @@
 #include "lib/framework/crc.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzapp.h"
+#include "lib/gamelib/gtime.h"
 
 #include "droid.h"
 #include "game_world.h"
@@ -396,6 +397,9 @@ bool movementBenchSelectScenario(const std::string &name)
 	activeScenario = scenario;
 	activeTestConfig = scenario->testConfig;
 	g_moveMetrics = &metrics;
+	// Watched and headless runs of a scenario must be the same simulation, so
+	// the order-queue latency negotiation goes wall-clock-free for the bench.
+	gameTimeSetDeterministicLatency(true);
 	return true;
 }
 
