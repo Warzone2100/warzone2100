@@ -146,9 +146,24 @@ std::vector<RenderPassDesc> BlueprintMaterializer::materialize(const PassGraphTo
 		passes.emplace_back(std::move(desc));
 	}
 
-	ASSERT(passes.size() == expectedPassCount(_snapshot),
-	       "BlueprintMaterializer: materialized %zu passes, expected %zu",
-	       passes.size(), expectedPassCount(_snapshot));
+	const size_t expectedCount = expectedPassCount(_snapshot);
+	if (passes.size() != expectedCount)
+	{
+		// expectedPassCount is a hand maintained cross check of the blueprint,
+		// so name the materialized passes to make a mismatch diagnosable
+		std::string passNames;
+		for (const auto& pass : passes)
+		{
+			if (!passNames.empty())
+			{
+				passNames += ", ";
+			}
+			passNames += pass.debugName;
+		}
+		ASSERT(false, "BlueprintMaterializer: materialized %zu passes, expected %zu (screenKind=%u features=0x%x cascades=%u) passes: [%s]",
+		       passes.size(), expectedCount, static_cast<unsigned>(_snapshot.screenKind), static_cast<unsigned>(_snapshot.features),
+		       static_cast<unsigned>(_snapshot.numShadowCascades), passNames.c_str());
+	}
 
 	return passes;
 }
