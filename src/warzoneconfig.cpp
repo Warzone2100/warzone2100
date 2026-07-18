@@ -116,6 +116,8 @@ struct WARZONE_GLOBALS
 	uint32_t shadowMapResolution = 0; // this defaults to 0, which causes the gfx backend to figure out a recommended default based on the system properties
 	bool pointLightLighting = false;
 	uint32_t renderResolutionPercent = 100; // percentage of the display resolution the 3D scene is rendered at
+	SCENE_UPSCALING_MODE sceneUpscalingMode = SCENE_UPSCALING_MODE::BILINEAR;
+	int upscalingSharpness = 25; // RCAS sharpness in hundredths of stops
 	// UI config
 	bool groupsMenuEnabled = true;
 	uint8_t optionsButtonVisibility = 100;
@@ -894,6 +896,26 @@ void war_setRenderResolutionPercent(uint32_t percent)
 		percent = std::min<uint32_t>(std::max<uint32_t>(percent, 10), 100);
 	}
 	warGlobs.renderResolutionPercent = percent;
+}
+
+SCENE_UPSCALING_MODE war_getSceneUpscalingMode()
+{
+	return warGlobs.sceneUpscalingMode;
+}
+
+void war_setSceneUpscalingMode(SCENE_UPSCALING_MODE mode)
+{
+	warGlobs.sceneUpscalingMode = mode;
+}
+
+int war_getUpscalingSharpness()
+{
+	return warGlobs.upscalingSharpness;
+}
+
+void war_setUpscalingSharpness(int hundredthsOfStops)
+{
+	warGlobs.upscalingSharpness = std::min(std::max(hundredthsOfStops, 0), 200);
 }
 
 bool war_getPointLightPerPixelLighting()

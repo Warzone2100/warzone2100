@@ -27,6 +27,7 @@
 #include "../../warzoneconfig.h"
 #include "../../terrain.h"
 #include "../../display.h"
+#include "../../display3d.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "../../texture.h"
 #include "lib/framework/wzapp.h"
@@ -71,6 +72,14 @@ OptionInfo::AvailabilityResult PerPixelLightingAvailable(const OptionInfo&)
 	OptionInfo::AvailabilityResult result;
 	result.available = (getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING);
 	result.localizedUnavailabilityReason = _("Advanced lighting is only available when using terrain appearance: Remastered (HQ)");
+	return result;
+}
+
+OptionInfo::AvailabilityResult UpscalingSharpnessAvailable(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1);
+	result.localizedUnavailabilityReason = _("Sharpness applies when Upscaling is set to FSR 1.0.");
 	return result;
 }
 
@@ -495,6 +504,62 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 			}, false
 		);
 		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.upscaling", N_("Upscaling"), N_("How the 3D world is upscaled to your display when Render Resolution is below Native. FSR 1.0 (AMD FidelityFX Super Resolution) preserves edges and detail better than bilinear filtering."));
+		auto valueChanger = OptionsDropdown<SCENE_UPSCALING_MODE>::make(
+			[]() {
+				OptionChoices<SCENE_UPSCALING_MODE> result;
+				result.choices = {
+					{ _("Bilinear"), _("Simple bilinear filtering."), SCENE_UPSCALING_MODE::BILINEAR },
+					{ WzString::fromUtf8("FSR 1.0"), _("AMD FidelityFX Super Resolution 1.0, an edge adaptive upscaler with sharpening. Works best combined with antialiasing."), SCENE_UPSCALING_MODE::FSR1 },
+				};
+				result.setCurrentIdxForValue(war_getSceneUpscalingMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				auto gfxMode = (newValue == SCENE_UPSCALING_MODE::FSR1)
+					? gfx_api::context::scene_upscaling_mode::fsr1
+					: gfx_api::context::scene_upscaling_mode::bilinear;
+				if (!gfx_api::context::get().setSceneUpscalingMode(gfxMode))
+				{
+					debug(LOG_ERROR, "Failed to set upscaling mode");
+					return false;
+				}
+				war_setSceneUpscalingMode(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
+	}
+	{
+		auto optionInfo = OptionInfo("gfx.upscalingSharpness", N_("Upscaling Sharpness"), N_("How much sharpening FSR 1.0 applies to the upscaled image."));
+		optionInfo.addAvailabilityCondition(UpscalingSharpnessAvailable);
+		auto valueChanger = OptionsDropdown<int>::make(
+			[]() {
+				OptionChoices<int> result;
+				result.choices = {
+					{ _("Maximum"), "", 0 },
+					{ _("High"), "", 25 },
+					{ _("Medium"), "", 50 },
+					{ _("Low"), "", 100 },
+				};
+				int currValue = war_getUpscalingSharpness();
+				if (!result.setCurrentIdxForValue(currValue))
+				{
+					// add "Custom" item
+					result.choices.push_back({WzString::format("(Custom: %d)", currValue), "", currValue});
+					result.currentIdx = result.choices.size() - 1;
+				}
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				war_setUpscalingSharpness(newValue);
+				display3d_setUpscalingSharpness(war_getUpscalingSharpness() / 100.f);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true, 1);
 	}
 	{
 		auto optionInfo = OptionInfo("gfx.antialiasing", N_("Antialiasing"), "");

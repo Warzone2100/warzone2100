@@ -773,6 +773,22 @@ bool loadConfig()
 	{
 		war_setRenderResolutionPercent(value.value());
 	}
+	{
+		std::string upscalingValue = iniGetString("upscaling", "bilinear").value();
+		if (upscalingValue == "fsr1")
+		{
+			war_setSceneUpscalingMode(SCENE_UPSCALING_MODE::FSR1);
+		}
+		else
+		{
+			if (upscalingValue != "bilinear")
+			{
+				debug(LOG_WARNING, "Unsupported / invalid upscaling value: \"%s\"; using \"bilinear\"", upscalingValue.c_str());
+			}
+			war_setSceneUpscalingMode(SCENE_UPSCALING_MODE::BILINEAR);
+		}
+	}
+	war_setUpscalingSharpness(iniGetInteger("upscalingSharpness", war_getUpscalingSharpness()).value());
 
 	{
 		auto value = iniGetBoolOpt("pointLightsPerpixel");
@@ -1005,6 +1021,8 @@ bool saveConfig()
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetInteger("renderResolution", (int)war_getRenderResolutionPercent());
+	iniSetString("upscaling", (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1) ? "fsr1" : "bilinear");
+	iniSetInteger("upscalingSharpness", war_getUpscalingSharpness());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
 	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());

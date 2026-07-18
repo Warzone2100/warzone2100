@@ -2175,6 +2175,15 @@ int realmain(int argc, char *argv[])
 			war_setRenderResolutionPercent(gfx_api::context::get().getSceneRenderScalePercent());
 		}
 	}
+	if (war_getSceneUpscalingMode() == SCENE_UPSCALING_MODE::FSR1)
+	{
+		if (!gfx_api::context::get().setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode::fsr1))
+		{
+			debug(LOG_ERROR, "Failed to apply FSR 1.0 upscaling");
+			war_setSceneUpscalingMode(SCENE_UPSCALING_MODE::BILINEAR);
+		}
+	}
+	display3d_setUpscalingSharpness(war_getUpscalingSharpness() / 100.f);
 
 	initializeCrashHandlingContext(wzGetInitializedGfxBackend());
 
