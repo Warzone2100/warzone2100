@@ -3293,6 +3293,13 @@ bool toggleMissionTimerPause()
 	{
 		return false;	// only a countdown timer can be paused and resumed
 	}
+	if (mission.timerMode == TIMER_PAUSE && mission.time <= 0)
+	{
+		// an expired timer freezes at TIMER_PAUSE/time 0, and a countdown paused at
+		// exactly 0 would expire the instant it resumed; refuse either so we never
+		// fire TRIGGER_MISSION_TIMEOUT a second time
+		return false;
+	}
 	if (mission.timerMode == TIMER_COUNTDOWN)
 	{
 		mission.time = missionTimeRemaining();
