@@ -93,6 +93,25 @@ bool gamepadInCaptureMode();
 // The target expires after the next cursor update, so callers refresh it
 // every frame it should apply
 void gamepadSetCursorMagnetTarget(int screenX, int screenY, int screenRadius);
+
+// A quick flick of the cursor stick requests a hop to whatever lies in the
+// flicked direction. Returns the normalized direction and the cursor position
+// where the gesture began, once per flick - an unconsumed flick expires after
+// a frame
+bool gamepadConsumePendingCursorFlick(float& outDirX, float& outDirY, int& outStartX, int& outStartY);
+
+// While a movement gesture may still become a flick, reports its direction
+// and starting cursor position so the prospective hop target can be anchored
+bool gamepadGetActiveCursorFlick(float& outDirX, float& outDirY, int& outStartX, int& outStartY);
+
+// Sets this frame's prospective hop target - the cursor parks on it when the
+// gesture reaches it, so an actual flick lands with no jump. Expires after
+// the next cursor update, like the magnet target
+void gamepadSetCursorFlickAnchor(int screenX, int screenY);
+
+// Glides the cursor to the given logical screen position - any new stick
+// input cancels the glide
+void gamepadCursorHopTo(int screenX, int screenY);
 bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame
