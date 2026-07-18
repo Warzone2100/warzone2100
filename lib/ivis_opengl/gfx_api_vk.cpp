@@ -6009,8 +6009,9 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	{
 		inputs.drawableW = w;
 		inputs.drawableH = h;
-		inputs.sceneW = std::max(w, 2u);
-		inputs.sceneH = std::max(h, 2u);
+		const uint32_t scalePercent = getSceneRenderScalePercent();
+		inputs.sceneW = std::max((w * scalePercent) / 100u, 2u);
+		inputs.sceneH = std::max((h * scalePercent) / 100u, 2u);
 	}
 	inputs.shadowMapSize = depthMapSize;
 	inputs.numShadowCascades = static_cast<uint32_t>(std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES));
@@ -7006,6 +7007,35 @@ bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferR
 		return false;
 	}
 
+	return true;
+}
+
+bool VkRoot::setSceneRenderScale(uint32_t scalePercent)
+{
+	const uint32_t oldScalePercent = getSceneRenderScalePercent();
+	gfx_api::context::setSceneRenderScale(scalePercent);
+	if (getSceneRenderScalePercent() == oldScalePercent)
+	{
+		return true;
+	}
+	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		// no surfaces exist yet, the scale applies when they are created
+		return true;
+	}
+
+	invalidateWarmEntries();
+	if (!syncPipelineSurfaces())
+	{
+		debug(LOG_ERROR, "Failed to apply scene render scale %" PRIu32 "%% - restoring %" PRIu32 "%%", getSceneRenderScalePercent(), oldScalePercent);
+		gfx_api::context::setSceneRenderScale(oldScalePercent);
+		invalidateWarmEntries();
+		if (!syncPipelineSurfaces())
+		{
+			debug(LOG_ERROR, "Failed to restore previous scene surfaces after sync failure");
+		}
+		return false;
+	}
 	return true;
 }
 

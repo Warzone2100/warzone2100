@@ -379,6 +379,7 @@ struct gl_context final : public gfx_api::context
 
 	virtual size_t numDepthPasses() override;
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
+	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;
@@ -521,6 +522,7 @@ private:
 
 	uint32_t sceneFramebufferWidth = 0;
 	uint32_t sceneFramebufferHeight = 0;
+	uint32_t scaledSceneDimension(uint32_t drawableDimension) const;
 	GLenum multiSampledBufferInternalFormat = GL_INVALID_ENUM;
 	GLenum multiSampledBufferBaseFormat = GL_INVALID_ENUM;
 	GLint maxMultiSampleBufferFormatSamples = 0;

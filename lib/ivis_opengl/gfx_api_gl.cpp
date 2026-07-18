@@ -3751,8 +3751,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	//	glEnable(GL_CULL_FACE);
 	wzGLCheckErrors();
 
-	sceneFramebufferWidth = std::max<uint32_t>(viewportWidth, 2);
-	sceneFramebufferHeight = std::max<uint32_t>(viewportHeight, 2);
+	sceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+	sceneFramebufferHeight = scaledSceneDimension(viewportHeight);
 
 	// initialize default (0) textures
 	if (!createDefaultTextures())
@@ -5485,8 +5485,8 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 	// Re-create scene FBOs using new size (if drawable size is of reasonable dimensions)
 	if (viewportWidth > 0 && viewportHeight > 0)
 	{
-		uint32_t newSceneFramebufferWidth = std::max<uint32_t>(viewportWidth, 2);
-		uint32_t newSceneFramebufferHeight = std::max<uint32_t>(viewportHeight, 2);
+		uint32_t newSceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+		uint32_t newSceneFramebufferHeight = scaledSceneDimension(viewportHeight);
 
 		if (sceneFramebufferWidth != newSceneFramebufferWidth || sceneFramebufferHeight != newSceneFramebufferHeight)
 		{
@@ -5504,6 +5504,43 @@ void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldH
 		// In this case, don't bother recreating the scene framebuffer (until it changes to something sensible)
 		debug(LOG_INFO, "Delaying scene framebuffer recreation (current Drawable Size: %d x %d)", drawableWidth, drawableHeight);
 	}
+}
+
+uint32_t gl_context::scaledSceneDimension(uint32_t drawableDimension) const
+{
+	const uint64_t scaled = static_cast<uint64_t>(drawableDimension) * getSceneRenderScalePercent() / 100u;
+	return std::max<uint32_t>(static_cast<uint32_t>(scaled), 2);
+}
+
+bool gl_context::setSceneRenderScale(uint32_t scalePercent)
+{
+	const uint32_t oldScalePercent = getSceneRenderScalePercent();
+	gfx_api::context::setSceneRenderScale(scalePercent);
+	if (getSceneRenderScalePercent() == oldScalePercent)
+	{
+		return true;
+	}
+	if (viewportWidth == 0 || viewportHeight == 0)
+	{
+		// no usable drawable right now, the scale applies when the scene framebuffer is next created
+		return true;
+	}
+
+	sceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+	sceneFramebufferHeight = scaledSceneDimension(viewportHeight);
+	if (!syncPipelineSurfaces())
+	{
+		debug(LOG_ERROR, "Failed to apply scene render scale %" PRIu32 "%% - restoring %" PRIu32 "%%", getSceneRenderScalePercent(), oldScalePercent);
+		gfx_api::context::setSceneRenderScale(oldScalePercent);
+		sceneFramebufferWidth = scaledSceneDimension(viewportWidth);
+		sceneFramebufferHeight = scaledSceneDimension(viewportHeight);
+		if (!syncPipelineSurfaces())
+		{
+			debug(LOG_ERROR, "Failed to restore previous scene surfaces after sync failure");
+		}
+		return false;
+	}
+	return true;
 }
 
 std::pair<uint32_t, uint32_t> gl_context::getDrawableDimensions()
