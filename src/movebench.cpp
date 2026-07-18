@@ -88,6 +88,17 @@ const BenchScenario scenarios[] =
 	// resolving it until 4 tiles, so w3 sits just below the threshold and w4
 	// has room to move in both directions.
 	{ "counterflow_w1",      "movebench_counterflow_w1.json",      5000, 0x5EEDBEEF },
+	// Real-map acceptance pair. Opposing tank and cyborg flows with mid-transit
+	// re-orders, through Sk-Mountain's chained winding passes and Sk-Rush's
+	// centre corridor with its mid-corridor departure turn. Between them they
+	// cover chains, pockets, pinch threading, S-bends and lane handedness, and
+	// they test complementary halves: what fixes one has repeatedly broken the
+	// other, so neither alone is evidence.
+	{ "mountain_chain",      "movebench_mountain_chain.json",      4000, 0x5EEDBEEF, false },
+	// As mountain_chain with the cyborg destination on the near side of the
+	// tank intake, crossing the exit stream against the entering queue.
+	{ "mountain_chain_cross", "movebench_mountain_chain_cross.json", 4000, 0x5EEDBEEF, false },
+	{ "rush_turn",           "movebench_rush_turn.json",           4000, 0x5EEDBEEF, false },
 	{ "counterflow_w3",      "movebench_counterflow_w3.json",      5000, 0x5EEDBEEF },
 	{ "counterflow_w4",      "movebench_counterflow_w4.json",      5000, 0x5EEDBEEF },
 	{ "shift0",             "movebench_shift0.json",             1200, 0x5EEDBEEF },

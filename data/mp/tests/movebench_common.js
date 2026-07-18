@@ -24,6 +24,9 @@ const ROSTER = {
 	// Person model: no squish path, no pitch from slope, much smaller radius so
 	// a given gap is far roomier. A different code path, not just a smaller unit.
 	cyborg: { name: "Bench Cyborg", body: "CyborgLightBody", prop: "CyborgLegs", weap: "CyborgChaingun" },
+	// The real-map acceptance pair's tank: the classic early-game clone-wars
+	// composition the corridor scenarios were manually tested with.
+	lightcannonht: { name: "Bench Light Cannon Halftrack", body: "Body1REC", prop: "HalfTrack", weap: "Cannon1Mk1" },
 	// Unarmed, for the enemy-blocking scenario. Two hostile armed blocks would
 	// resolve the choke by shooting each other, which measures combat rather
 	// than whether enemies remain solid obstacles.
@@ -142,6 +145,42 @@ function benchOrderFanOut(droids, x0, y0, cols, rowDir)
 		var y = y0 + Math.floor(i / cols) * rowDir * 2;   // 2-tile row spacing
 		orderDroidLoc(droids[i], DORDER_MOVE, x, y);
 	}
+}
+
+// Packs `count` units in concentric rings around (cx, cy), nearest ring
+// first, the shape a clone-wars spawn takes around a selected unit. Use it
+// where the open ground is an island, ex. a raised area, so the intended
+// tiles crowd the anchor instead of a block's far rows running off the edge.
+// Applies the same per-arrangement shift as benchSpawnBlock.
+function benchSpawnCluster(player, kind, cx, cy, count)
+{
+	var digit = ARRANGE_STEPS * ARRANGE_STEPS;
+	var index = Math.floor(benchArrangement() / Math.pow(digit, benchBlockIndex)) % digit;
+	benchBlockIndex++;
+	var ax = cx + (index % ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+	var ay = cy + Math.floor(index / ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+
+	var k = ROSTER[kind];
+	var made = [];
+	for (var r = 0; made.length < count; r++)
+	{
+		for (var dy = -r; dy <= r && made.length < count; dy++)
+		{
+			for (var dx = -r; dx <= r && made.length < count; dx++)
+			{
+				if (Math.max(Math.abs(dx), Math.abs(dy)) != r)
+				{
+					continue;
+				}
+				var d = addDroid(player, ax + dx, ay + dy, k.name, k.body, k.prop, "", "", k.weap);
+				if (d)
+				{
+					made.push(d);
+				}
+			}
+		}
+	}
+	return made;
 }
 
 // Orders every droid to a single destination. Used by the blob scenario, where
