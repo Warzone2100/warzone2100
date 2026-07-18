@@ -4816,19 +4816,24 @@ static bool loadMainFileFinal(const std::string &fileName)
 	{
 		int timerMode = save.value("missionTimerMode").toInt();
 		// a save from a newer version may hold a mode this build doesn't know; fall back to a countdown
-		mission.timerMode = (timerMode >= TIMER_COUNTDOWN && timerMode <= TIMER_PAUSE) ? (MISSION_TIMER_MODE)timerMode : TIMER_COUNTDOWN;
+		mission.timerMode = (timerMode >= TIMER_COUNTDOWN && timerMode <= TIMER_NONE) ? (MISSION_TIMER_MODE)timerMode : TIMER_COUNTDOWN;
 	}
 	else
 	{
 		// older saves did not store the timer mode; challenges used a count-up (elapsed time) timer
 		mission.timerMode = challengeActive ? TIMER_COUNTUP : TIMER_COUNTDOWN;
 	}
+	// saves that predate TIMER_NONE encoded "no timer" as a countdown with a negative time
+	if (mission.timerMode == TIMER_COUNTDOWN && mission.time < 0)
+	{
+		mission.timerMode = TIMER_NONE;
+	}
 
 	// old saves stored the 'time toggle' cheat as a separate frozen clock;
 	// convert it into a paused timer holding the remaining time
 	if (legacyMissionCheatTime != 0)
 	{
-		if (mission.timerMode == TIMER_COUNTDOWN && mission.time >= 0)
+		if (mission.timerMode == TIMER_COUNTDOWN)
 		{
 			SDWORD timeRemaining = mission.time - (SDWORD)(legacyMissionCheatTime - mission.startTime);
 			mission.time = MAX(timeRemaining, 0);

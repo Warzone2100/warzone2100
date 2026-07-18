@@ -296,7 +296,7 @@ void initMission()
 	mission.gameWorld.objects.oils[0].clear();
 	offWorldKeepLists = false;
 	mission.time = -1;
-	mission.timerMode = TIMER_COUNTDOWN;
+	mission.timerMode = TIMER_NONE;
 	setMissionCountDown();
 
 	mission.ETA = -1;
@@ -361,8 +361,8 @@ bool missionShutDown()
 
 
 /*returns the current mode-aware mission timer value in game ticks - the time
-elapsed for a count-up timer, the frozen time for a paused timer, or the time
-remaining (clamped to >= 0) for a countdown timer*/
+elapsed for a count-up timer, the frozen time for a paused timer, the time
+remaining (clamped to >= 0) for a countdown timer, or 0 if there is no timer*/
 SDWORD missionTimeRemaining()
 {
 	switch (mission.timerMode)
@@ -371,10 +371,19 @@ SDWORD missionTimeRemaining()
 		return (SDWORD)(gameTime - mission.startTime);
 	case TIMER_PAUSE:
 		return mission.time;
+	case TIMER_NONE:
+		return 0;
 	case TIMER_COUNTDOWN:
 	default:
 		return MAX(mission.time - (SDWORD)(gameTime - mission.startTime), 0);
 	}
+}
+
+/*whether a mission timer currently exists (in any mode); the single predicate
+for showing/hiding the timer widget and accepting the pause cheat*/
+bool missionTimerActive()
+{
+	return mission.timerMode != TIMER_NONE;
 }
 
 /*on the PC - sets the countdown played flag*/
@@ -543,8 +552,8 @@ bool startMissionSave(LEVEL_TYPE missionType)
 the display*/
 void addMissionTimerInterface()
 {
-	//don't add if the timer hasn't been set (a count-up timer has no limit, so no time)
-	if (mission.time < 0 && mission.timerMode != TIMER_COUNTUP)
+	//don't add if the timer hasn't been set
+	if (!missionTimerActive())
 	{
 		return;
 	}
@@ -1390,7 +1399,7 @@ void endMission()
 
 	// make sure a paused/expired timer does not leak into the next mission
 	mission.time = -1;
-	mission.timerMode = TIMER_COUNTDOWN;
+	mission.timerMode = TIMER_NONE;
 
 	//reset the bSetPlayCountDown flag
 	setPlayCountDown(true);
@@ -2922,11 +2931,8 @@ void missionGetTransporterExit(SDWORD iPlayer, UDWORD *iX, UDWORD *iY)
 void missionTimerUpdate()
 {
 	//Want a mission timer on all types of missions now - AB 26/01/99
-	//only interested in off world missions (so far!) and if timer has been set
 	//only a countdown timer can expire (a paused timer holds mission.time but never runs out)
-	if (mission.time >= 0 && mission.timerMode == TIMER_COUNTDOWN)  //&& (
-		//mission.type == LDS_MKEEP || mission.type == LDS_MKEEP_LIMBO ||
-		//mission.type == LDS_MCLEAR || mission.type == LDS_BETWEEN))
+	if (mission.timerMode == TIMER_COUNTDOWN)
 	{
 		//check if time is up
 		if ((SDWORD)(gameTime - mission.startTime) > mission.time)
@@ -3128,18 +3134,10 @@ void moveDroidsToSafety(DROID *psTransporter)
 	}
 }
 
-/** Whether the mission timer widget should currently be shown. A count-up
- *  timer (mission.time == -1) or a countdown frozen at zero (TIMER_PAUSE with
- *  mission.time == 0) stays visible even though mission.time <= 0. */
-static bool missionTimerShouldShow()
-{
-	return mission.time > 0 || mission.timerMode != TIMER_COUNTDOWN;
-}
-
 void clearMissionWidgets()
 {
 	//remove any widgets that are up due to the missions
-	if (missionTimerShouldShow())
+	if (missionTimerActive())
 	{
 		intRemoveMissionTimer();
 	}
@@ -3188,7 +3186,7 @@ void resetMissionWidgets()
 	}
 
 	//add back any widgets that should be up due to the missions
-	if (missionTimerShouldShow())
+	if (missionTimerActive())
 	{
 		intAddMissionTimer();
 		//make sure its not flashing when added
@@ -3301,7 +3299,7 @@ void emptyTransporters(bool bOffWorld)
 paused timer holding the remaining time, and convert back to resume it */
 bool toggleMissionTimerPause()
 {
-	if (mission.time < 0 || mission.timerMode == TIMER_COUNTUP)
+	if (mission.timerMode != TIMER_COUNTDOWN && mission.timerMode != TIMER_PAUSE)
 	{
 		return false;	// only a countdown timer can be paused and resumed
 	}

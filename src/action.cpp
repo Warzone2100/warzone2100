@@ -802,8 +802,8 @@ void actionUpdateDroid(DROID *psDroid)
 		//if we're moving droids to safety and currently waiting to fly back in, see if time is up
 		if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag())
 		{
-			// a negative mission.time means no time limit, and a count-up timer never expires
-			bool enoughTimeRemaining = mission.time < 0 || mission.timerMode == TIMER_COUNTUP
+			// no timer means no time limit, and a count-up timer never expires
+			bool enoughTimeRemaining = !missionTimerActive() || mission.timerMode == TIMER_COUNTUP
 				|| missionTimeRemaining() >= (60 * GAME_TICKS_PER_SEC);
 			if (((SDWORD)(mission.ETA - (gameTime - missionGetReinforcementTime())) <= 0) && enoughTimeRemaining)
 			{

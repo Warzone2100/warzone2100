@@ -2633,7 +2633,7 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<in
 	int mode = _mode.value_or(TIMER_COUNTDOWN);
 	SCRIPT_ASSERT({}, context, mode >= TIMER_COUNTDOWN && mode <= TIMER_PAUSE, "Invalid mission timer mode %d", mode);
 	// a negative time always removes the timer, whatever the requested mode
-	mission.timerMode = time >= 0 ? (MISSION_TIMER_MODE)mode : TIMER_COUNTDOWN;
+	mission.timerMode = time >= 0 ? (MISSION_TIMER_MODE)mode : TIMER_NONE;
 	if (mission.timerMode == TIMER_COUNTUP)
 	{
 		// a count-up timer has no limit; offset startTime so the timer begins at the given elapsed time
@@ -2646,7 +2646,7 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<in
 		mission.time = time;
 	}
 	setMissionCountDown();
-	if (mission.time >= 0 || mission.timerMode == TIMER_COUNTUP)
+	if (missionTimerActive())
 	{
 		addMissionTimerInterface();
 	}
@@ -2665,7 +2665,7 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time, optional<in
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
-	if (mission.timerMode == TIMER_COUNTDOWN && mission.time < 0)
+	if (!missionTimerActive())
 	{
 		return -1;	// no timer
 	}

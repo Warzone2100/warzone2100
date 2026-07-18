@@ -58,9 +58,12 @@ void releaseMission();
 
 /** Returns the current mode-aware mission timer value in game ticks - elapsed
  * time for a count-up timer, the frozen time for a paused timer, or the time
- * remaining (clamped to >= 0) for a countdown timer.
+ * remaining (clamped to >= 0) for a countdown timer, or 0 if there is no timer.
  */
 SDWORD missionTimeRemaining();
+
+/** Whether a mission timer currently exists (in any mode). */
+bool missionTimerActive();
 
 /** On the PC - sets the countdown played flag. */
 void setMissionCountDown();
