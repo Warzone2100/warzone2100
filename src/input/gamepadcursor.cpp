@@ -38,10 +38,19 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "../warzoneconfig.h"
+#include "../main.h"
+#include "../loop.h"
 
 #include <array>
 #include <memory>
 #include <limits>
+
+// How far a stick flick may hop the cursor to reach the next widget. With a
+// running simulation there are no world-object flick targets, so long hops
+// would grab the cursor away toward distant widgets when flicking near them -
+// keep in-game hops short
+static const int GAMEPAD_FLICK_HOP_RANGE = 220;
+static const int GAMEPAD_FLICK_HOP_RANGE_INGAME = 100;
 
 static std::shared_ptr<W_SCREEN> gamepadCursorOverlayScreen = nullptr;
 static std::array<std::unique_ptr<gfx_api::texture>, CURSOR_MAX> cursorTextures;
@@ -148,6 +157,35 @@ void gamepadCursorUpdateWidgetMagnet()
 	if (mouseDown(MOUSE_LMB) || mouseDown(MOUSE_RMB) || gamepadSyntheticClickHeld())
 	{
 		return;
+	}
+
+	// a stick flick hops the cursor to the next widget in the flicked
+	// direction, searching from where the gesture began, skipping the widget
+	// it began inside, and staying on the screen the cursor is over
+	const bool simulationRunning = (GetGameMode() == GS_NORMAL) && !gamePaused();
+	const int hopRange = simulationRunning ? GAMEPAD_FLICK_HOP_RANGE_INGAME : GAMEPAD_FLICK_HOP_RANGE;
+	float flickDirX = 0.f;
+	float flickDirY = 0.f;
+	int flickStartX = 0;
+	int flickStartY = 0;
+	if (gamepadConsumePendingCursorFlick(flickDirX, flickDirY, flickStartX, flickStartY))
+	{
+		const auto hopTarget = widgFindGamepadCursorMagnetTarget(widgGetLastRunScreen(), Vector2i(flickStartX, flickStartY), Vector2f(flickDirX, flickDirY), hopRange, 0.5f, true, widgGetMouseOverScreen());
+		if (hopTarget.has_value())
+		{
+			gamepadCursorHopTo(hopTarget->screenPos.x, hopTarget->screenPos.y);
+			return;
+		}
+	}
+	else if (gamepadGetActiveCursorFlick(flickDirX, flickDirY, flickStartX, flickStartY))
+	{
+		// while the gesture may still become a flick, anchor the prospective
+		// hop target so the cursor parks on it instead of overshooting
+		const auto anchorTarget = widgFindGamepadCursorMagnetTarget(widgGetLastRunScreen(), Vector2i(flickStartX, flickStartY), Vector2f(flickDirX, flickDirY), hopRange, 0.5f, true, widgGetMouseOverScreen());
+		if (anchorTarget.has_value())
+		{
+			gamepadSetCursorFlickAnchor(anchorTarget->screenPos.x, anchorTarget->screenPos.y);
+		}
 	}
 
 	// walk the screen currently processing input, so title screens hosting
