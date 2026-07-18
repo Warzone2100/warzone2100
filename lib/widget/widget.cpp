@@ -421,7 +421,9 @@ static void findMagnetTargetRecursive(const std::shared_ptr<WIDGET>& psWidget, c
 	}
 	const WzRect visibleRect(clippedLeft, clippedTop, clippedRight - clippedLeft, clippedBottom - clippedTop);
 
-	if (psWidget->visible() && psWidget->isGamepadCursorMagnetTarget()
+	// mouse-transparent widgets cannot be clicked, e.g. decorative section
+	// header buttons, so they are never attraction candidates
+	if (psWidget->visible() && !psWidget->transparentToMouse() && psWidget->isGamepadCursorMagnetTarget()
 		&& !(excludeContainingPoint && visibleRect.contains(screenPos.x, screenPos.y)))
 	{
 		float centerX = (float)(visibleRect.left() + visibleRect.right()) / 2.f;
