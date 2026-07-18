@@ -67,6 +67,7 @@ struct TrackedDroid
 	Vector2i goal = Vector2i(0, 0);
 	Vector2i lastPos = Vector2i(0, 0);
 	uint32_t startTick = 0;
+	uint32_t startDistTiles = 0;   ///< straight-line distance to the goal when this leg began, in tiles
 	uint32_t arrivalTick = 0;
 	bool     arrived = false;
 };
@@ -120,6 +121,7 @@ std::string          activeTestConfig;
 uint32_t tickCount = 0;
 std::map<uint32_t, TrackedDroid> tracked;   ///< keyed by droid id, ordered for determinism
 std::vector<uint32_t> arrivalTicks;         ///< every arrival, including repeat legs
+std::vector<uint32_t> arrivalDistTiles;     ///< leg distance for each arrival, parallel to arrivalTicks
 std::vector<uint32_t> tickPeakDensity;      ///< per tick, the size of the largest cluster of tracked droids
 bool     runFinished = false;
 
@@ -165,6 +167,7 @@ void sampleDroids()
 				t.goal = psDroid->order.pos;
 				t.lastPos = psDroid->pos.xy();
 				t.startTick = tickCount;
+				t.startDistTiles = static_cast<uint32_t>(iHypot(psDroid->order.pos - psDroid->pos.xy()) / TILE_UNITS);
 				tracked[psDroid->id] = t;
 				continue;
 			}
@@ -179,6 +182,7 @@ void sampleDroids()
 			{
 				t.goal = psDroid->order.pos;
 				t.startTick = tickCount;
+				t.startDistTiles = static_cast<uint32_t>(iHypot(psDroid->order.pos - psDroid->pos.xy()) / TILE_UNITS);
 				t.arrived = false;
 			}
 
@@ -195,6 +199,7 @@ void sampleDroids()
 				t.arrived = true;
 				t.arrivalTick = tickCount - t.startTick;
 				arrivalTicks.push_back(t.arrivalTick);
+				arrivalDistTiles.push_back(t.startDistTiles);
 			}
 		}
 	}
@@ -320,6 +325,27 @@ void writeScorecard(bool completed)
 	card["formationSpreadTiles"] = formationSpreadTiles();
 	card["arrival_p50"] = percentile(arrivals, 50);
 	card["arrival_p95"] = percentile(arrivals, 95);
+	// The same arrivals in seconds at normal play speed, since a game update is
+	// a tenth of a second. This is the number that reads as how long a player
+	// waits, where the update count on its own hides a multi-minute crawl inside
+	// a budget measured in thousands of updates.
+	card["arrival_p50_s"] = percentile(arrivals, 50) / static_cast<double>(GAME_UPDATES_PER_SEC);
+	card["arrival_p95_s"] = percentile(arrivals, 95) / static_cast<double>(GAME_UPDATES_PER_SEC);
+	// Arrival normalized by the straight-line distance of each leg, in seconds
+	// per tile, so scenarios of different lengths compare on one scale. Free
+	// travel sits near the open-field value and contention shows up as a multiple
+	// of it, which the raw arrival time cannot separate from a longer route.
+	std::vector<uint32_t> perTileCs;   // centiseconds of arrival per tile of leg distance
+	for (size_t i = 0; i < arrivalTicks.size(); ++i)
+	{
+		if (arrivalDistTiles[i] > 0)
+		{
+			perTileCs.push_back(arrivalTicks[i] * 10 / arrivalDistTiles[i]);
+		}
+	}
+	std::sort(perTileCs.begin(), perTileCs.end());
+	card["secPerTile_p50"] = percentile(perTileCs, 50) / 100.0;
+	card["secPerTile_p95"] = percentile(perTileCs, 95) / 100.0;
 	std::vector<uint32_t> density = tickPeakDensity;
 	std::sort(density.begin(), density.end());
 	card["peakDensity"] = density.empty() ? 0 : density.back();

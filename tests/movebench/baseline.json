@@ -29,6 +29,7 @@
     75,
     78
   ],
+  "freeTravelFloorSecPerTile": 1.8,
   "scenarios": {
     "blob": {
       "arrival_p50": {
@@ -40,6 +41,11 @@
         "max": 2482,
         "median": 1399,
         "min": 528
+      },
+      "density_p95": {
+        "max": 15,
+        "median": 14,
+        "min": 13
       },
       "formationSpreadTiles": {
         "max": 2,
@@ -56,6 +62,11 @@
         "median": 67743,
         "min": 60613
       },
+      "peakDensity": {
+        "max": 15,
+        "median": 14,
+        "min": 14
+      },
       "repaths": {
         "max": 423,
         "median": 403,
@@ -64,6 +75,11 @@
       "resolved": {
         "count": 0,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 20.68,
+        "median": 10.76,
+        "min": 2.7
       },
       "unitsArrived": {
         "max": 12,
@@ -82,6 +98,11 @@
         "median": 1349,
         "min": 1280
       },
+      "density_p95": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
       "formationSpreadTiles": {
         "max": 2,
         "median": 2,
@@ -97,6 +118,11 @@
         "median": 239,
         "min": 74
       },
+      "peakDensity": {
+        "max": 10,
+        "median": 9,
+        "min": 9
+      },
       "repaths": {
         "max": 44,
         "median": 28,
@@ -105,6 +131,11 @@
       "resolved": {
         "count": 27,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.53,
+        "median": 4.21,
+        "min": 4.12
       },
       "unitsArrived": {
         "max": 23,
@@ -123,6 +154,11 @@
         "median": 2015,
         "min": 1318
       },
+      "density_p95": {
+        "max": 7,
+        "median": 7,
+        "min": 7
+      },
       "formationSpreadTiles": {
         "max": 2,
         "median": 2,
@@ -138,6 +174,11 @@
         "median": 675,
         "min": 233
       },
+      "peakDensity": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
       "repaths": {
         "max": 72,
         "median": 62,
@@ -146,6 +187,11 @@
       "resolved": {
         "count": 18,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 6.53,
+        "median": 6.29,
+        "min": 4.25
       },
       "unitsArrived": {
         "max": 20,
@@ -164,6 +210,11 @@
         "median": 863,
         "min": 474
       },
+      "density_p95": {
+        "max": 38,
+        "median": 32,
+        "min": 29
+      },
       "formationSpreadTiles": {
         "max": 11,
         "median": 11,
@@ -179,6 +230,11 @@
         "median": 9858,
         "min": 2944
       },
+      "peakDensity": {
+        "max": 39,
+        "median": 33,
+        "min": 29
+      },
       "repaths": {
         "max": 2835,
         "median": 213,
@@ -187,6 +243,11 @@
       "resolved": {
         "count": 23,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 13.3,
+        "median": 3.93,
+        "min": 2.25
       },
       "unitsArrived": {
         "max": 48,
@@ -205,6 +266,11 @@
         "median": 0,
         "min": 0
       },
+      "density_p95": {
+        "max": 16,
+        "median": 14,
+        "min": 13
+      },
       "formationSpreadTiles": {
         "max": 9,
         "median": 1,
@@ -220,6 +286,11 @@
         "median": 80681,
         "min": 25664
       },
+      "peakDensity": {
+        "max": 17,
+        "median": 15,
+        "min": 13
+      },
       "repaths": {
         "max": 2365,
         "median": 2271,
@@ -228,6 +299,11 @@
       "resolved": {
         "count": 1,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 24.58,
+        "median": 0.0,
+        "min": 0.0
       },
       "unitsArrived": {
         "max": 24,
@@ -246,6 +322,11 @@
         "median": 0,
         "min": 0
       },
+      "density_p95": {
+        "max": 16,
+        "median": 13,
+        "min": 12
+      },
       "formationSpreadTiles": {
         "max": 1,
         "median": 1,
@@ -261,6 +342,11 @@
         "median": 79848,
         "min": 67033
       },
+      "peakDensity": {
+        "max": 16,
+        "median": 14,
+        "min": 12
+      },
       "repaths": {
         "max": 2351,
         "median": 2290,
@@ -269,6 +355,11 @@
       "resolved": {
         "count": 0,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 0.0,
+        "median": 0.0,
+        "min": 0.0
       },
       "unitsArrived": {
         "max": 0,
@@ -287,6 +378,11 @@
         "median": 2417,
         "min": 0
       },
+      "density_p95": {
+        "max": 15,
+        "median": 14,
+        "min": 11
+      },
       "formationSpreadTiles": {
         "max": 10,
         "median": 2,
@@ -302,6 +398,11 @@
         "median": 73128,
         "min": 5914
       },
+      "peakDensity": {
+        "max": 15,
+        "median": 14,
+        "min": 12
+      },
       "repaths": {
         "max": 2352,
         "median": 1934,
@@ -310,6 +411,11 @@
       "resolved": {
         "count": 9,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 31.12,
+        "median": 13.16,
+        "min": 0.0
       },
       "unitsArrived": {
         "max": 30,
@@ -328,6 +434,11 @@
         "median": 1201,
         "min": 0
       },
+      "density_p95": {
+        "max": 14,
+        "median": 10,
+        "min": 8
+      },
       "formationSpreadTiles": {
         "max": 10,
         "median": 9,
@@ -343,6 +454,11 @@
         "median": 3076,
         "min": 691
       },
+      "peakDensity": {
+        "max": 14,
+        "median": 12,
+        "min": 10
+      },
       "repaths": {
         "max": 2415,
         "median": 185,
@@ -351,6 +467,11 @@
       "resolved": {
         "count": 21,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 21.66,
+        "median": 5.73,
+        "min": 0.0
       },
       "unitsArrived": {
         "max": 29,
@@ -369,6 +490,11 @@
         "median": 744,
         "min": 633
       },
+      "density_p95": {
+        "max": 11,
+        "median": 8,
+        "min": 8
+      },
       "formationSpreadTiles": {
         "max": 10,
         "median": 9,
@@ -384,6 +510,11 @@
         "median": 367,
         "min": 91
       },
+      "peakDensity": {
+        "max": 13,
+        "median": 9,
+        "min": 8
+      },
       "repaths": {
         "max": 63,
         "median": 37,
@@ -392,6 +523,11 @@
       "resolved": {
         "count": 19,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.09,
+        "median": 3.46,
+        "min": 2.87
       },
       "unitsArrived": {
         "max": 28,
@@ -410,6 +546,11 @@
         "median": 636,
         "min": 516
       },
+      "density_p95": {
+        "max": 8,
+        "median": 8,
+        "min": 7
+      },
       "formationSpreadTiles": {
         "max": 10,
         "median": 9,
@@ -425,6 +566,11 @@
         "median": 101,
         "min": 21
       },
+      "peakDensity": {
+        "max": 10,
+        "median": 9,
+        "min": 8
+      },
       "repaths": {
         "max": 22,
         "median": 13,
@@ -433,6 +579,11 @@
       "resolved": {
         "count": 27,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 3.7,
+        "median": 3.0,
+        "min": 2.63
       },
       "unitsArrived": {
         "max": 30,
@@ -451,6 +602,11 @@
         "median": 0,
         "min": 0
       },
+      "density_p95": {
+        "max": 16,
+        "median": 14,
+        "min": 13
+      },
       "formationSpreadTiles": {
         "max": 10,
         "median": 1,
@@ -466,6 +622,11 @@
         "median": 96731,
         "min": 48467
       },
+      "peakDensity": {
+        "max": 16,
+        "median": 14,
+        "min": 13
+      },
       "repaths": {
         "max": 2357,
         "median": 2275,
@@ -474,6 +635,11 @@
       "resolved": {
         "count": 1,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 21.59,
+        "median": 0.0,
+        "min": 0.0
       },
       "unitsArrived": {
         "max": 29,
@@ -492,6 +658,11 @@
         "median": 397,
         "min": 0
       },
+      "density_p95": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
       "formationSpreadTiles": {
         "max": 5,
         "median": 4,
@@ -507,6 +678,11 @@
         "median": 355,
         "min": 288
       },
+      "peakDensity": {
+        "max": 3,
+        "median": 3,
+        "min": 3
+      },
       "repaths": {
         "max": 32,
         "median": 25,
@@ -515,6 +691,11 @@
       "resolved": {
         "count": 0,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 3.48,
+        "median": 2.48,
+        "min": 0.0
       },
       "unitsArrived": {
         "max": 2,
@@ -533,6 +714,11 @@
         "median": 832,
         "min": 824
       },
+      "density_p95": {
+        "max": 12,
+        "median": 12,
+        "min": 11
+      },
       "formationSpreadTiles": {
         "max": 5,
         "median": 5,
@@ -548,6 +734,11 @@
         "median": 5400,
         "min": 4044
       },
+      "peakDensity": {
+        "max": 13,
+        "median": 12,
+        "min": 12
+      },
       "repaths": {
         "max": 117,
         "median": 116,
@@ -556,6 +747,11 @@
       "resolved": {
         "count": 0,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.84,
+        "median": 4.41,
+        "min": 3.97
       },
       "unitsArrived": {
         "max": 10,
@@ -574,6 +770,11 @@
         "median": 663,
         "min": 608
       },
+      "density_p95": {
+        "max": 7,
+        "median": 6,
+        "min": 6
+      },
       "formationSpreadTiles": {
         "max": 2,
         "median": 2,
@@ -589,6 +790,11 @@
         "median": 9,
         "min": 9
       },
+      "peakDensity": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
       "repaths": {
         "max": 8,
         "median": 7,
@@ -597,6 +803,11 @@
       "resolved": {
         "count": 9,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 3.24,
+        "median": 3.01,
+        "min": 2.9
       },
       "unitsArrived": {
         "max": 12,
@@ -615,6 +826,11 @@
         "median": 740,
         "min": 738
       },
+      "density_p95": {
+        "max": 6,
+        "median": 5,
+        "min": 5
+      },
       "formationSpreadTiles": {
         "max": 3,
         "median": 3,
@@ -630,6 +846,11 @@
         "median": 0,
         "min": 0
       },
+      "peakDensity": {
+        "max": 8,
+        "median": 8,
+        "min": 8
+      },
       "repaths": {
         "max": 0,
         "median": 0,
@@ -638,6 +859,11 @@
       "resolved": {
         "count": 27,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 2.03,
+        "median": 1.94,
+        "min": 1.94
       },
       "unitsArrived": {
         "max": 40,
@@ -656,6 +882,11 @@
         "median": 634,
         "min": 493
       },
+      "density_p95": {
+        "max": 5,
+        "median": 5,
+        "min": 3
+      },
       "formationSpreadTiles": {
         "max": 3,
         "median": 2,
@@ -671,6 +902,11 @@
         "median": 3,
         "min": 0
       },
+      "peakDensity": {
+        "max": 5,
+        "median": 5,
+        "min": 5
+      },
       "repaths": {
         "max": 8,
         "median": 2,
@@ -679,6 +915,11 @@
       "resolved": {
         "count": 27,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 4.64,
+        "median": 3.34,
+        "min": 2.59
       },
       "unitsArrived": {
         "max": 8,
@@ -697,6 +938,11 @@
         "median": 1523,
         "min": 1024
       },
+      "density_p95": {
+        "max": 14,
+        "median": 11,
+        "min": 8
+      },
       "formationSpreadTiles": {
         "max": 12,
         "median": 12,
@@ -712,6 +958,11 @@
         "median": 4053,
         "min": 623
       },
+      "peakDensity": {
+        "max": 15,
+        "median": 12,
+        "min": 9
+      },
       "repaths": {
         "max": 1148,
         "median": 237,
@@ -720,6 +971,11 @@
       "resolved": {
         "count": 27,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 18.01,
+        "median": 7.96,
+        "min": 5.12
       },
       "unitsArrived": {
         "max": 31,
@@ -738,6 +994,11 @@
         "median": 144,
         "min": 142
       },
+      "density_p95": {
+        "max": 11,
+        "median": 11,
+        "min": 11
+      },
       "formationSpreadTiles": {
         "max": 3,
         "median": 3,
@@ -753,6 +1014,11 @@
         "median": 1944,
         "min": 1651
       },
+      "peakDensity": {
+        "max": 12,
+        "median": 12,
+        "min": 12
+      },
       "repaths": {
         "max": 43,
         "median": 41,
@@ -761,6 +1027,11 @@
       "resolved": {
         "count": 0,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 8.5,
+        "median": 3.9,
+        "min": 3.03
       },
       "unitsArrived": {
         "max": 7,
@@ -779,6 +1050,11 @@
         "median": 1101,
         "min": 791
       },
+      "density_p95": {
+        "max": 14,
+        "median": 9,
+        "min": 7
+      },
       "formationSpreadTiles": {
         "max": 10,
         "median": 10,
@@ -794,6 +1070,11 @@
         "median": 1000,
         "min": 253
       },
+      "peakDensity": {
+        "max": 15,
+        "median": 10,
+        "min": 8
+      },
       "repaths": {
         "max": 1438,
         "median": 89,
@@ -802,6 +1083,11 @@
       "resolved": {
         "count": 24,
         "of": 27
+      },
+      "secPerTile_p95": {
+        "max": 30.28,
+        "median": 5.96,
+        "min": 4.75
       },
       "unitsArrived": {
         "max": 32,

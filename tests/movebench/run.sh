@@ -84,6 +84,10 @@ indices = [i * TOTAL_ARRANGEMENTS // n for i in range(n)]
 FIELDS = ["unitsArrived", "arrival_p50", "arrival_p95", "hardStops",
           "repaths", "giveUps", "formationSpreadTiles",
           "peakDensity", "density_p95"]
+# Reported as a float, so kept out of FIELDS above, which casts its medians to
+# int. secPerTile is arrival normalized by leg distance, the number the grind
+# column scores against the open-field floor.
+FLOAT_FIELDS = ["secPerTile_p95"]
 
 # Share of a cell's ordered units that must arrive for that arrangement to count
 # as resolved rather than jammed.
@@ -105,12 +109,23 @@ def run(scenario, index):
               % (scenario, index, attempt + 1), file=sys.stderr)
     raise RuntimeError("%s arr=%d produced no scorecard in 4 attempts" % (scenario, index))
 
+# Free-travel floor, in seconds per tile, from the open-field scenario over the
+# same arrangements. A cell's grind is its loaded secPerTile against this, so a
+# mechanism only counts when it pulls a pinch back toward free travel rather than
+# merely arriving before the budget runs out.
+floor_cards = [run("openfield", i) for i in indices]
+floor = statistics.median(c["secPerTile_p50"] for c in floor_cards)
+
 results = {}
 for s in scenarios:
     cards = [run(s, i) for i in indices]
     results[s] = {f: {"min": min(c[f] for c in cards),
                       "median": int(statistics.median(c[f] for c in cards)),
                       "max": max(c[f] for c in cards)} for f in FIELDS}
+    for f in FLOAT_FIELDS:
+        results[s][f] = {"min": min(c[f] for c in cards),
+                         "median": statistics.median(c[f] for c in cards),
+                         "max": max(c[f] for c in cards)}
     results[s]["resolved"] = {
         "count": sum(1 for c in cards
                      if c["unitsArrived"] >= RESOLVED_SHARE * max(1, c["unitsOrdered"])),
@@ -118,26 +133,37 @@ for s in scenarios:
     }
 
 def print_table():
-    # p95 gets equal billing with throughput. Judging on how many units
-    # eventually arrive hides a mechanism taking twice as long to get them there,
-    # and time is what anyone watching actually notices.
-    # arrival p95 and peak packing get billing beside resolved. A blob that
-    # eventually clears still reads as resolved, so the time it took and how
-    # tightly it packed are what tell a clean flow from a slow untangle.
-    print("%-20s %9s %18s %14s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95", "peakDensity"))
+    # Time gets equal billing with throughput. Judging on how many units
+    # eventually arrive hides a mechanism taking minutes to get them there, and
+    # time is what anyone watching actually notices. Arrival p95 is shown in
+    # seconds at normal speed, and grind is that time per tile against the
+    # free-travel floor, so a slow untangle reads as a large multiple where the
+    # raw arrival time cannot tell it apart from a longer route.
+    print("free-travel floor: %.2f s/tile (open field)" % floor)
+    print("%-20s %9s %14s %14s %12s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95 s",
+                                        "GRIND xfloor", "peakDensity"))
     for s in scenarios:
         def rng(field):
             v = results[s][field]
             return "%d [%d-%d]" % (v["median"], v["min"], v["max"])
+        def rng_seconds(field):
+            v = results[s][field]
+            return "%.0f [%.0f-%.0f]" % (v["median"] / 10.0, v["min"] / 10.0, v["max"] / 10.0)
+        def rng_grind(field):
+            v = results[s][field]
+            return "%.1f [%.1f-%.1f]" % (v["median"] / floor, v["min"] / floor, v["max"] / floor)
         r = results[s]["resolved"]
-        print("%-20s %9s %18s %14s" % (s, "%d/%d" % (r["count"], r["of"]),
-                                       rng("arrival_p95"), rng("peakDensity")))
+        print("%-20s %9s %14s %14s %12s" % (s, "%d/%d" % (r["count"], r["of"]),
+                                            rng_seconds("arrival_p95"),
+                                            rng_grind("secPerTile_p95"),
+                                            rng("peakDensity")))
 
 if sub == "--baseline":
     with open(out, "w") as f:
         json.dump({
             "_comment": "Baseline movement bench scorecards, each metric as min/median/max across spawn arrangements. Regenerate with tests/movebench/run.sh --baseline and review the diff. A difference inside a metric's spread is not a result.",
             "arrangements": indices,
+            "freeTravelFloorSecPerTile": floor,
             "scenarios": results,
         }, f, indent=2, sort_keys=True)
         f.write("\n")
