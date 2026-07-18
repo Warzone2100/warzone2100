@@ -99,6 +99,18 @@ const PipelineSurfaceCatalogTable PIPELINE_SURFACE_CATALOG = {{
 		SurfaceProvisionMode::Allocate,
 		SurfaceStorageKind::DepthStencilAttachment,
 		SurfaceLifetimePolicy::SwapchainBound),
+	// UpscaledColor
+	makeCatalogEntry(
+		PipelineSurfaceUsage::ColorResolve,
+		SurfaceExtentPolicy::MatchDrawable,
+		SurfaceSamplePolicy::One,
+		SurfaceFormatClass::SceneColor,
+		SurfaceGpuUsage::ColorAttachment | SurfaceGpuUsage::Sampled,
+		SurfaceArrayLayerPolicy::One,
+		SurfaceEnablePolicy::FsrUpscaleActive,
+		SurfaceProvisionMode::Allocate,
+		SurfaceStorageKind::SampledColor2D,
+		SurfaceLifetimePolicy::SwapchainBound),
 	// ShadowMap
 	makeCatalogEntry(
 		PipelineSurfaceUsage::DepthOnly,
@@ -230,6 +242,9 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 		return inputs.swapchainMsaaSamples > 1u;
 	case SurfaceEnablePolicy::ShadowCascadesNonZero:
 		return inputs.numShadowCascades > 0u;
+	case SurfaceEnablePolicy::FsrUpscaleActive:
+		return inputs.fsr1SceneUpscale
+			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH);
 	}
 	return false;
 }

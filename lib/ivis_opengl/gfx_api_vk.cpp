@@ -1267,6 +1267,8 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_LINE, shader_infos{ "shaders/vk/line.vert.spv", "shaders/vk/rect.frag.spv" }),
 	std::make_pair(SHADER_TEXT, shader_infos{ "shaders/vk/rect.vert.spv", "shaders/vk/text.frag.spv" }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/world_to_screen.frag.spv" }),
+	std::make_pair(SHADER_FSR1_EASU, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/fsr1_easu.frag.spv" }),
+	std::make_pair(SHADER_FSR1_RCAS, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/fsr1_rcas.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
@@ -6022,6 +6024,7 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 	{
 		inputs.presentColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	}
+	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
 	return inputs;
 }
 
@@ -7008,6 +7011,22 @@ bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferR
 	}
 
 	return true;
+}
+
+bool VkRoot::setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode)
+{
+	if (mode == getSceneUpscalingMode())
+	{
+		return true;
+	}
+	gfx_api::context::setSceneUpscalingMode(mode);
+	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
+		// no surfaces exist yet, the mode applies when they are created
+		return true;
+	}
+	invalidateWarmEntries();
+	return syncPipelineSurfaces();
 }
 
 bool VkRoot::setSceneRenderScale(uint32_t scalePercent)

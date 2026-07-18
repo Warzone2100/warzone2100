@@ -336,6 +336,8 @@ private:
 	void set_constants(const gfx_api::TerrainDepthMapTessUniforms& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TESS_QUAD>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DEBUG_TEXTURE2DARRAY_QUAD>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_EASU>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_RCAS>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context
@@ -380,6 +382,7 @@ struct gl_context final : public gfx_api::context
 	virtual size_t numDepthPasses() override;
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
+	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;

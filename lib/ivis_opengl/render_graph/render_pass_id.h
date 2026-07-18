@@ -45,6 +45,8 @@ enum class PassId : uint16_t
 	ShadowCascade3,
 	ScenePass,
 	SceneBlit,
+	SceneUpscaleEASU,
+	SceneUpscaleRCAS,
 	TargettingEffects,
 	SceneOverlays,
 	SceneDebugOverlays,

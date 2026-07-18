@@ -63,6 +63,8 @@ enum class PipelineSurfaceId : uint8_t
 	SceneColor,
 	SceneMSAAColor,
 	SceneDepth,
+	/// Drawable-sized intermediate between the scene upscale and sharpen passes.
+	UpscaledColor,
 	ShadowMap,
 	SwapchainColor,
 	SwapchainMSAAColor,
@@ -154,6 +156,8 @@ enum class SurfaceEnablePolicy : uint8_t
 	SceneMsaaActive,
 	SwapchainMsaaActive,
 	ShadowCascadesNonZero,
+	/// FSR 1.0 upscaling selected and the scene renders below the drawable size.
+	FsrUpscaleActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).
@@ -226,6 +230,7 @@ struct PipelineSurfaceSyncInputs
 	uint32_t sceneMsaaSamples = 1;
 	uint32_t swapchainMsaaSamples = 1;
 	pixel_format presentColorFormat = pixel_format::FORMAT_RGBA8_UNORM_PACK8;
+	bool fsr1SceneUpscale = false;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.

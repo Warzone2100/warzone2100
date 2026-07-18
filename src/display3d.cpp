@@ -4464,6 +4464,63 @@ static void drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
 	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
 }
 
+// RCAS sharpness in stops (0 is sharpest, 2 is the least sharp)
+static float upscalingSharpnessStops = 0.25f;
+
+void display3d_setUpscalingSharpness(float stops)
+{
+	upscalingSharpnessStops = glm::clamp(stops, 0.f, 2.f);
+}
+
+float display3d_getUpscalingSharpness()
+{
+	return upscalingSharpnessStops;
+}
+
+static void drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)
+{
+	const auto inputDims = gfx_api::context::get().getRenderTargetDimensions(sourceTexture);
+	const auto outputDims = gfx_api::context::get().getDrawableDimensions();
+	ASSERT_OR_RETURN(, inputDims.has_value(), "Unknown upscale input dimensions");
+	ASSERT_OR_RETURN(, outputDims.first > 0 && outputDims.second > 0, "Invalid drawable dimensions");
+	const float inW = static_cast<float>(inputDims->first);
+	const float inH = static_cast<float>(inputDims->second);
+	const float outW = static_cast<float>(outputDims.first);
+	const float outH = static_cast<float>(outputDims.second);
+
+	// FsrEasuCon (the input viewport is the whole scene texture)
+	gfx_api::constant_buffer_type<SHADER_FSR1_EASU> cbuf;
+	cbuf.con0 = glm::vec4(inW / outW, inH / outH, 0.5f * inW / outW - 0.5f, 0.5f * inH / outH - 0.5f);
+	cbuf.con1 = glm::vec4(1.f / inW, 1.f / inH, 1.f / inW, -1.f / inH);
+	cbuf.con2 = glm::vec4(-1.f / inW, 2.f / inH, 1.f / inW, 2.f / inH);
+	cbuf.con3 = glm::vec4(0.f, 4.f / inH, 0.f, 0.f);
+
+	gfx_api::Fsr1EasuPSO::get().bind();
+	gfx_api::Fsr1EasuPSO::get().bind_constants(cbuf);
+	gfx_api::Fsr1EasuPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+	gfx_api::Fsr1EasuPSO::get().bind_textures(sourceTexture);
+	gfx_api::Fsr1EasuPSO::get().draw(3, 0);
+	gfx_api::Fsr1EasuPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+}
+
+static void drawFsr1Rcas(gfx_api::abstract_texture* sourceTexture)
+{
+	const auto inputDims = gfx_api::context::get().getRenderTargetDimensions(sourceTexture);
+	ASSERT_OR_RETURN(, inputDims.has_value(), "Unknown sharpen input dimensions");
+
+	// FsrRcasCon
+	gfx_api::constant_buffer_type<SHADER_FSR1_RCAS> cbuf;
+	cbuf.con0 = glm::vec4(exp2f(-upscalingSharpnessStops), 0.f, 0.f, 0.f);
+	cbuf.con1 = glm::vec4(1.f / static_cast<float>(inputDims->first), 1.f / static_cast<float>(inputDims->second), 0.f, 0.f);
+
+	gfx_api::Fsr1RcasPSO::get().bind();
+	gfx_api::Fsr1RcasPSO::get().bind_constants(cbuf);
+	gfx_api::Fsr1RcasPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+	gfx_api::Fsr1RcasPSO::get().bind_textures(sourceTexture);
+	gfx_api::Fsr1RcasPSO::get().draw(3, 0);
+	gfx_api::Fsr1RcasPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+}
+
 void display3d_renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4& skyboxViewMatrix)
 {
 	renderSurroundings(projectionMatrix, skyboxViewMatrix);
@@ -4482,6 +4539,16 @@ void display3d_locateMouse()
 void display3d_drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
 {
 	drawWorldToScreenBlit(sourceTexture);
+}
+
+void display3d_drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)
+{
+	drawFsr1Easu(sourceTexture);
+}
+
+void display3d_drawFsr1Rcas(gfx_api::abstract_texture* sourceTexture)
+{
+	drawFsr1Rcas(sourceTexture);
 }
 
 void display3d_processSensorTarget()

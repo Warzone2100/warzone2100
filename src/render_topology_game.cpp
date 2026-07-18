@@ -100,6 +100,11 @@ public:
 		return {0, 0};
 	}
 
+	bool sceneUpscaleActive() const override
+	{
+		return gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::UpscaledColor) != nullptr;
+	}
+
 	uint32_t shadowMapSize() const override
 	{
 		return static_cast<uint32_t>(gfx_api::context::get().getDepthPassDimensions(0));
