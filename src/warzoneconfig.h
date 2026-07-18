@@ -192,6 +192,17 @@ void war_setShadowMapResolution(uint32_t resolution);
 uint32_t war_getRenderResolutionPercent();
 void war_setRenderResolutionPercent(uint32_t percent);
 
+enum class SCENE_UPSCALING_MODE
+{
+	BILINEAR,
+	FSR1,
+};
+SCENE_UPSCALING_MODE war_getSceneUpscalingMode();
+void war_setSceneUpscalingMode(SCENE_UPSCALING_MODE mode);
+// RCAS sharpness in hundredths of stops (0 is sharpest, 200 is the least sharp)
+int war_getUpscalingSharpness();
+void war_setUpscalingSharpness(int hundredthsOfStops);
+
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 
