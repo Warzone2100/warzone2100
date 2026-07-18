@@ -142,6 +142,20 @@ file(GLOB VK_SHADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/terrain_depthmap_tess.tese"
 )
 
+# A shader stage file that exists on disk but is missing from VK_SHADERS would not be
+# compiled to SPIR-V and would only fail at runtime, so catch that at configure time
+file(GLOB _vk_shader_stage_files
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.vert"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.frag"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.tesc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/base/shaders/vk/*.tese"
+)
+foreach(_vk_shader_file ${_vk_shader_stage_files})
+	if(NOT _vk_shader_file IN_LIST VK_SHADERS)
+		message(FATAL_ERROR "Vulkan shader file is not listed in VK_SHADERS (it would never be compiled): ${_vk_shader_file}")
+	endif()
+endforeach()
+
 set(SHADER_LIST "")
 if(GLSLC)
 	message(STATUS "Found glslc: ${GLSLC}")
@@ -163,7 +177,7 @@ if(GLSLC)
 	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})
 	set_property(TARGET glsl_compilation PROPERTY FOLDER "data")
 else()
-	message(STATUS "Unable to find glslc")
+	message(STATUS "Unable to find glslc - Vulkan shaders will not be compiled")
 endif()
 
 set(_glsl_generatedfiles_PATHS)
