@@ -1434,6 +1434,16 @@ static void widgProcessMouseOver(const std::shared_ptr<WIDGET>& widget, W_CONTEX
 		else
 		{
 			// Note: There are rare exceptions where this can happen, if a WIDGET is doing something funky like drawing widgets it hasn't attached.
+			// (e.g. a dropdown forwarding highlight targeting to its displayed selected item)
+			// Still deliver highlightLost to the prior highlight, so it is not left stuck highlighted
+			if (psMouseOverWidgetScreen)
+			{
+				if (auto lockedLastHighlight = psMouseOverWidgetScreen->lastHighlight.lock())
+				{
+					lockedLastHighlight->highlightLost();
+				}
+				psMouseOverWidgetScreen->lastHighlight.reset();
+			}
 			psMouseOverWidgetScreen = nullptr;
 		}
 	}
@@ -1656,6 +1666,16 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	}
 	else
 	{
+		if (psMouseOverWidgetScreen)
+		{
+			// deliver highlightLost before forgetting the screen, so no
+			// widget is left stuck in its highlighted state
+			if (auto lockedLastHighlight = psMouseOverWidgetScreen->lastHighlight.lock())
+			{
+				lockedLastHighlight->highlightLost();
+			}
+			psMouseOverWidgetScreen->lastHighlight.reset();
+		}
 		psMouseOverWidgetScreen.reset();
 	}
 
