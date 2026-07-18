@@ -2163,6 +2163,15 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	if (war_getRenderResolutionPercent() != 100)
+	{
+		if (!gfx_api::context::get().setSceneRenderScale(war_getRenderResolutionPercent()))
+		{
+			debug(LOG_ERROR, "Failed to apply render resolution: %" PRIu32 "%%", war_getRenderResolutionPercent());
+			war_setRenderResolutionPercent(gfx_api::context::get().getSceneRenderScalePercent());
+		}
+	}
+
 	initializeCrashHandlingContext(wzGetInitializedGfxBackend());
 
 	wzCmdInterfaceInit();

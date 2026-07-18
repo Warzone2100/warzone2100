@@ -331,7 +331,15 @@ void collectPipelineSurfaceIdsByLifetime(SurfaceLifetimePolicy policy,
 
 bool context::syncPipelineSurfaces()
 {
-	return ensurePipelineSurfaces(resolvePipelineSurfaces(pipelineSurfaceSyncInputs(), surfaceCapabilities()));
+	const PipelineSurfaceSyncInputs inputs = pipelineSurfaceSyncInputs();
+	const ResolvedSurfaceTable specs = resolvePipelineSurfaces(inputs, surfaceCapabilities());
+	const ResolvedSurfaceSpec& scene = specs[static_cast<size_t>(PipelineSurfaceId::SceneColor)];
+	const ResolvedSurfaceSpec& current = resolvedPipelineSurface(PipelineSurfaceId::SceneColor);
+	if (scene.enabled && (scene.width != current.width || scene.height != current.height))
+	{
+		debug(LOG_3D, "Creating scene targets: %" PRIu32 " x %" PRIu32 " (drawable: %" PRIu32 " x %" PRIu32 ")", scene.width, scene.height, inputs.drawableW, inputs.drawableH);
+	}
+	return ensurePipelineSurfaces(specs);
 }
 
 PipelineSurfaceUsage context::pipelineSurfaceUsage(PipelineSurfaceId id) const
