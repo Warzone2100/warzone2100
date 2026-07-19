@@ -22,6 +22,12 @@
 # of the ordered units arrived, so a mechanism that helps such a cell shows up as
 # a higher fraction rather than as a shifted average.
 #
+# --score reports each metric beside its change against the recorded baseline,
+# or against a live reference run when --against='<args>' names one, ex.
+#   run.sh --score --markdown --pathfindingbackend=2
+# scores that feature set against the plain baseline and prints the table as
+# GitHub markdown, ready to paste into a pull request.
+#
 # --check verifies every arrangement is reproducible, which catches anything
 # that broke sync, ex. a stray rand(), a float in a position path, or a live
 # read from a worker thread.
@@ -33,6 +39,7 @@
 set -e
 
 WZ=${WZ:-build/src/warzone2100}
+
 # Arrangements are enumerated, not sampled. A two-block scenario has 81 of them
 # (nine placements per block), so ARRANGEMENTS evenly strides that space. Use 81
 # for exhaustive coverage when a decision rests on the result.
@@ -45,12 +52,21 @@ if [ ! -x "$WZ" ]; then
 	exit 1
 fi
 
-# Arguments after the subcommand are passed through, so a mechanism can be
-# scored against the baseline, ex. run.sh --movementspread=field
+# Arguments after the mode flags are passed through, so a mechanism can be
+# scored against the baseline, ex. run.sh --score --movementspread=field
 SUB=""
-case "$1" in
-	--baseline|--check) SUB="$1"; shift ;;
-esac
+MARKDOWN=0
+HAVE_AGAINST=0
+AGAINST=""
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--baseline|--check|--score) SUB="$1" ;;
+		--markdown) MARKDOWN=1 ;;
+		--against=*) AGAINST="${1#--against=}"; HAVE_AGAINST=1 ;;
+		*) break ;;
+	esac
+	shift
+done
 
 if [ "$SUB" = "--check" ]; then
 	rc=0
@@ -70,11 +86,15 @@ if [ "$SUB" = "--check" ]; then
 	exit $rc
 fi
 
-python3 - "$WZ" "$SUB" "$HERE/baseline.json" "$ARRANGEMENTS" "$SCENARIOS" "$@" <<'PYEOF'
+python3 - "$WZ" "$SUB" "$HERE/baseline.json" "$ARRANGEMENTS" "$SCENARIOS" \
+	"$MARKDOWN" "$HAVE_AGAINST" "$AGAINST" "$@" <<'PYEOF'
 import json, statistics, subprocess, sys
 
-wz, sub, out, arrangements, scenarios = sys.argv[1:6]
-passthrough = sys.argv[6:]
+wz, sub, baseline_path, arrangements, scenarios = sys.argv[1:6]
+markdown = sys.argv[6] == "1"
+have_against = sys.argv[7] == "1"
+against_args = sys.argv[8].split()
+passthrough = sys.argv[9:]
 scenarios = scenarios.split()
 
 # Stride evenly through the 81 arrangements a two-block scenario can take.
@@ -93,13 +113,13 @@ FLOAT_FIELDS = ["secPerTile_p95"]
 # as resolved rather than jammed.
 RESOLVED_SHARE = 0.75
 
-def run(scenario, index):
+def run(scenario, index, extra):
     # A run that prints no scorecard is a process-level failure, not a sim
     # result: the scenario is deterministic, so a crash or startup hiccup that
     # yields no JSON is a flake to retry, not a number to record. Retrying does
     # not paper over sim nondeterminism, which --check guards separately. A run
     # that fails every attempt is a real break and is left to raise.
-    cmd = [wz, "--movementbench=" + scenario, "--movementarrangement=%d" % index] + passthrough
+    cmd = [wz, "--movementbench=" + scenario, "--movementarrangement=%d" % index] + extra
     for attempt in range(4):
         raw = subprocess.run(cmd, capture_output=True, text=True).stdout
         start = raw.find("{")
@@ -109,28 +129,48 @@ def run(scenario, index):
               % (scenario, index, attempt + 1), file=sys.stderr)
     raise RuntimeError("%s arr=%d produced no scorecard in 4 attempts" % (scenario, index))
 
-# Free-travel floor, in seconds per tile, from the open-field scenario over the
-# same arrangements. A cell's grind is its loaded secPerTile against this, so a
-# mechanism only counts when it pulls a pinch back toward free travel rather than
-# merely arriving before the budget runs out.
-floor_cards = [run("openfield", i) for i in indices]
-floor = statistics.median(c["secPerTile_p50"] for c in floor_cards)
+def delta(value, ref):
+    # Change against the reference, as a percentage when the reference can
+    # carry one and as an absolute step from zero when it cannot. One decimal,
+    # truncated toward zero rather than rounded, so -100.0% always means all
+    # of it gone and never a nonzero residue rounded away.
+    if ref == 0:
+        return "(%+.0f)" % (value - ref) if value != ref else "(=)"
+    return "(%+.1f%%)" % (int(1000.0 * (value - ref) / ref) / 10.0)
 
-results = {}
-for s in scenarios:
-    cards = [run(s, i) for i in indices]
-    results[s] = {f: {"min": min(c[f] for c in cards),
-                      "median": int(statistics.median(c[f] for c in cards)),
-                      "max": max(c[f] for c in cards)} for f in FIELDS}
-    for f in FLOAT_FIELDS:
-        results[s][f] = {"min": min(c[f] for c in cards),
-                         "median": statistics.median(c[f] for c in cards),
-                         "max": max(c[f] for c in cards)}
-    results[s]["resolved"] = {
-        "count": sum(1 for c in cards
-                     if c["unitsArrived"] >= RESOLVED_SHARE * max(1, c["unitsOrdered"])),
-        "of": len(cards),
-    }
+def sweep(extra):
+    # Free-travel floor, in seconds per tile, from the open-field scenario over
+    # the same arrangements. A cell's grind is its loaded secPerTile against
+    # this, so a mechanism only counts when it pulls a pinch back toward free
+    # travel rather than merely arriving before the budget runs out.
+    floor_cards = [run("openfield", i, extra) for i in indices]
+    floor = statistics.median(c["secPerTile_p50"] for c in floor_cards)
+    results = {}
+    for s in scenarios:
+        cards = [run(s, i, extra) for i in indices]
+        results[s] = {f: {"min": min(c[f] for c in cards),
+                          "median": int(statistics.median(c[f] for c in cards)),
+                          "max": max(c[f] for c in cards)} for f in FIELDS}
+        for f in FLOAT_FIELDS:
+            results[s][f] = {"min": min(c[f] for c in cards),
+                             "median": statistics.median(c[f] for c in cards),
+                             "max": max(c[f] for c in cards)}
+        results[s]["resolved"] = {
+            "count": sum(1 for c in cards
+                         if c["unitsArrived"] >= RESOLVED_SHARE * max(1, c["unitsOrdered"])),
+            "of": len(cards),
+        }
+    return floor, results
+
+floor, results = sweep(passthrough)
+
+ref_floor, ref = None, None
+if have_against:
+    ref_floor, ref = sweep(against_args)
+elif sub == "--score":
+    with open(baseline_path) as f:
+        b = json.load(f)
+    ref_floor, ref = b["freeTravelFloorSecPerTile"], b["scenarios"]
 
 def print_table():
     # Time gets equal billing with throughput. Judging on how many units
@@ -140,8 +180,8 @@ def print_table():
     # free-travel floor, so a slow untangle reads as a large multiple where the
     # raw arrival time cannot tell it apart from a longer route.
     print("free-travel floor: %.2f s/tile (open field)" % floor)
-    print("%-20s %9s %14s %14s %12s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95 s",
-                                        "GRIND xfloor", "peakDensity"))
+    print("%-20s %9s %14s %14s %12s %16s" % ("SCENARIO", "RESOLVED", "ARRIVAL p95 s",
+                                             "GRIND xfloor", "peakDensity", "hardStops"))
     for s in scenarios:
         def rng(field):
             v = results[s][field]
@@ -153,13 +193,44 @@ def print_table():
             v = results[s][field]
             return "%.1f [%.1f-%.1f]" % (v["median"] / floor, v["min"] / floor, v["max"] / floor)
         r = results[s]["resolved"]
-        print("%-20s %9s %14s %14s %12s" % (s, "%d/%d" % (r["count"], r["of"]),
-                                            rng_seconds("arrival_p95"),
-                                            rng_grind("secPerTile_p95"),
-                                            rng("peakDensity")))
+        print("%-20s %9s %14s %14s %12s %16s" % (s, "%d/%d" % (r["count"], r["of"]),
+                                                 rng_seconds("arrival_p95"),
+                                                 rng_grind("secPerTile_p95"),
+                                                 rng("peakDensity"),
+                                                 rng("hardStops")))
+
+def print_score():
+    # Scored mode trades the ranges for change columns: medians beside their
+    # movement against the reference. Ranges still matter for a close call, so
+    # rerun without --score when a delta sits near the spread.
+    rows = []
+    for s in scenarios:
+        r = results[s]["resolved"]
+        rr = ref[s]["resolved"]
+        med = lambda f: results[s][f]["median"]
+        rmed = lambda f: ref[s][f]["median"]
+        rows.append((s,
+                     "%d/%d (ref %d/%d)" % (r["count"], r["of"], rr["count"], rr["of"]),
+                     "%.0f %s" % (med("arrival_p95") / 10.0,
+                                  delta(med("arrival_p95") / 10.0, rmed("arrival_p95") / 10.0)),
+                     "%.1f %s" % (med("secPerTile_p95") / floor,
+                                  delta(med("secPerTile_p95") / floor, rmed("secPerTile_p95") / ref_floor)),
+                     "%d %s" % (med("peakDensity"), delta(med("peakDensity"), rmed("peakDensity"))),
+                     "%d %s" % (med("hardStops"), delta(med("hardStops"), rmed("hardStops")))))
+    if markdown:
+        print("| scenario | resolved | arrival p95 s | grind xfloor | peak density | hard stops |")
+        print("|---|---|---|---|---|---|")
+        for row in rows:
+            print("| %s | %s | %s | %s | %s | %s |" % row)
+    else:
+        print("free-travel floor: %.2f s/tile (reference %.2f)" % (floor, ref_floor))
+        print("%-20s %18s %16s %14s %16s %18s" % ("SCENARIO", "RESOLVED", "ARR p95 s",
+                                                  "GRIND", "peakDensity", "hardStops"))
+        for row in rows:
+            print("%-20s %18s %16s %14s %16s %18s" % row)
 
 if sub == "--baseline":
-    with open(out, "w") as f:
+    with open(baseline_path, "w") as f:
         json.dump({
             "_comment": "Baseline movement bench scorecards, each metric as min/median/max across spawn arrangements. Regenerate with tests/movebench/run.sh --baseline and review the diff. A difference inside a metric's spread is not a result.",
             "arrangements": indices,
@@ -167,7 +238,10 @@ if sub == "--baseline":
             "scenarios": results,
         }, f, indent=2, sort_keys=True)
         f.write("\n")
-    print("wrote", out, file=sys.stderr)
+    print("wrote", baseline_path, file=sys.stderr)
 
-print_table()
+if ref is not None:
+    print_score()
+else:
+    print_table()
 PYEOF
