@@ -1,0 +1,105 @@
+# Movement and Pathfinding Benchmarks
+
+Two deterministic benchmark harnesses score pathfinding and movement changes
+as numbers instead of impressions. Every run is tick-reproducible: the RNG is
+seeded per scenario, droid orders apply on fixed ticks, and repeating a run
+byte-reproduces it, so any difference between two runs is a real difference
+between two builds.
+
+## Movement bench
+
+    tests/movebench/run.sh                 # scorecard table for the current build
+    tests/movebench/run.sh --score         # each metric beside its change vs the baseline
+    tests/movebench/run.sh --score --markdown   # the same as a GitHub-ready table
+    tests/movebench/run.sh --acceptance --score # the heavy real-map scenarios, judged by sums
+    tests/movebench/run.sh --check         # verify every arrangement reproduces
+    tests/movebench/run.sh --baseline      # regenerate the recorded baseline
+    tests/movebench/crcs.sh                # capture every finalPositionsCrc, for refactors
+
+Arguments after the mode flags pass through to the game binary, so a mechanism
+under test rides along, ex. `run.sh --score --movementspread=field`. To score
+against something other than the recorded baseline, name a live reference:
+`--against='<args>'` runs a second sweep with those arguments and reports
+changes against it.
+
+Sweeps take `--concurrent=N` to keep that many game processes running at
+once. Runs are independent processes collected in order, so the results are
+identical and only wall-clock changes. Two or three suits a six-core machine.
+
+A single scenario runs headless with `--movementbench=<name>` and prints a JSON
+scorecard, `--movementarrangement=N` picks the spawn arrangement, and
+`--movementbenchwatch=<name>` runs one on screen at normal speed. A watched run
+bit-reproduces the headless run as long as no input is given, input forks the
+sim from that point.
+
+### Reading the numbers
+
+Compare ranges, not numbers. Every cell runs over a family of spawn
+arrangements because a single arrangement is one trajectory, not a sample:
+shifting a spawn block by one tile moves arrival p95 by around a quarter, and
+some cells resolve or jam depending on it. A change is only interesting when it
+moves a metric clear of the recorded spread. Some cells are bimodal rather than
+spread, a corridor either resolves or it jams, so RESOLVED counts arrangements
+where most ordered units arrived instead of averaging across the modes.
+
+The headline metrics: hardStops counts contact chain-stops (the "hit more than
+one droid, stop dead" branch), grind is arrival seconds per tile against the
+free-travel floor from the open-field scenario in the same run, and peak
+density is the largest cluster of tracked droids within a tile and a half.
+
+Five cells read inverted. enemyblock and enemyblock_press park units to deny a
+chokepoint and measure that the denial holds, so a low RESOLVED count is the
+pass condition. blob and strafe cannot reach the resolved threshold by
+construction. counterflow_w1 is the ceiling case, opposing columns in a
+single-file pass with nowhere to yield.
+
+### The acceptance tier
+
+`--acceptance` switches to the real-map scenarios: opposing cyborg and tank
+flows with mid-transit re-orders through Sk-Mountain's chained passes
+(mountain_chain, mountain_chain_cross) and Sk-Rush's center corridor
+(rush_turn), plus the mass corner cases (rush_corner on Sk-Rush, open_corner
+isolated on flat ground). These encode the manual test conditions for congested
+opposing flows, they are heavy, and they are judged by hard stops summed across
+arrangements, never a single arrangement, because several are bimodal and a
+single-arrangement jump can be pure mode reshuffling. The converging
+destinations park most units outside the arrival tolerance, the known base-game
+parking behavior, so judge by density and hard stops, not RESOLVED.
+
+### Adding a scenario
+
+A scenario is a script and a config in data/mp/tests/, ex.
+movebench_crossing.js with movebench_crossing.json, plus a row in the
+BenchScenario table in src/movebench.cpp naming its config, tick budget and
+seed. Scenarios run on shipped skirmish maps or on purpose-built ones under
+data/mp/multiplay/maps/. A purpose-built bench map is registered in
+data/mp/addon.lev with `type 15`, LEVEL_TYPE::SKIRMISH_HIDDEN, deliberately
+not 14: the multiplayer map list accepts only the SKIRMISH and
+MULTI_SKIRMISH2-4 types, so a hidden map stays out of skirmish and
+multiplayer map selection while levFindDataSet() still resolves it by name
+for the bench configs.
+
+## Pathfinding bench
+
+    tests/pathbench/run.sh                 # scorecard for canned route requests
+    tests/pathbench/run.sh --baseline      # record it
+
+Nodes expanded is exact and reproduces run to run, so it can say a change moved
+nothing at all, which is the claim a planner refactor needs to make.
+Microsecond timings are indicative only and move with machine load. The reuse
+and distinct cases guard PathfindContext sharing, anything that makes search
+cost depend on the individual unit collapses that sharing and shows up as the
+pair diverging.
+
+## Invariants for any change
+
+A change meant to alter nothing must prove it: capture
+`tests/movebench/crcs.sh` before and after, and an identical set means every
+unit finished on the tile it finished on before, across the whole suite. A
+change meant to alter behavior must still reproduce, `run.sh --check` runs
+every arrangement twice and flags any mismatch, which catches a stray rand(), a
+float in a position path, or a live read from a worker thread.
+
+Scenario data lives in data/mp/tests/ and only takes effect after a full
+`ninja -C build`. Building just the warzone2100 target leaves the packaged
+mp.wz stale, and a scenario edit silently appears to have no effect.
