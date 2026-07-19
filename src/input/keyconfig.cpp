@@ -243,6 +243,8 @@ static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadMenu",                  N_("Menu / Back"),                                  {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_START                                        } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadConfirm",               N_("Confirm / Chat"),                               {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_WEST                                         } }}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      nullptr,                                                       "GamepadResetCursor",           N_("Reset Cursor To Center"),                       {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER,  GPAD_BTN_LEFT_STICK         } }}));
+	// Unlike the rest of the core block this one dispatches through its mapped function, since the camera only exists in-game
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,       KeyMappingType::HIDDEN,      kf_ResetCamera,                                                "GamepadResetCamera",           N_("Reset Camera"),                                 {{ KeyMappingSlot::GAMEPAD, { GPAD_BTN_RIGHT_SHOULDER,  GPAD_BTN_RIGHT_STICK        } }}));
 }
 
 KeyFunctionConfiguration::KeyFunctionConfiguration()

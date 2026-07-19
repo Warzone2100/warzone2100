@@ -1078,6 +1078,19 @@ void	kf_ResetPitch()
 }
 
 // --------------------------------------------------------------------------
+/* Resets pitch, rotation, and zoom to their defaults */
+void	kf_ResetCamera()
+{
+	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH);
+	playerPos.r.y = 0;
+	if (getWarCamStatus())
+	{
+		camToggleStatus();
+	}
+	setViewDistance(war_GetMapZoom());
+}
+
+// --------------------------------------------------------------------------
 /* Quickly access the in-game keymap */
 void kf_ShowMappings()
 {

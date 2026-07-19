@@ -124,6 +124,7 @@ static BindingLabels buildBindingLabels()
 	setBindingLabel(labels, MetaLayer::LB, GPAD_BTN_EAST, _("Queue Move / Order"));
 	setBindingLabel(labels, MetaLayer::RB, GPAD_BTN_RSTICK_UP, _("Rotate / Pitch Camera"));
 	setBindingLabel(labels, MetaLayer::RB, GPAD_BTN_LEFT_STICK, _("Reset Cursor To Center"));
+	setBindingLabel(labels, MetaLayer::RB, GPAD_BTN_RIGHT_STICK, _("Reset Camera"));
 
 	// d-pad directions map to unit groups clockwise from up, the left shoulder
 	// shifts to the second bank
