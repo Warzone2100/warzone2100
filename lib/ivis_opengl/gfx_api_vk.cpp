@@ -6968,9 +6968,11 @@ size_t VkRoot::getDepthPassDimensions(size_t idx)
 	return depthMapSize;
 }
 
-void VkRoot::set_polygon_offset(const float& offset, const float& slope)
+void VkRoot::set_polygon_offset(const float& factor, const float& units)
 {
-	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->setDepthBias(offset, (physDeviceFeatures.depthBiasClamp) ? 1.0f : 0.f, slope, vkDynLoader);
+	// vkCmdSetDepthBias takes (constantFactor, clamp, slopeFactor) - the reverse
+	// of this function's glPolygonOffset-style (factor, units) order
+	buffering_mechanism::get_current_resources().currentDrawCmdBuffer()->setDepthBias(units, (physDeviceFeatures.depthBiasClamp) ? 1.0f : 0.f, factor, vkDynLoader);
 }
 
 void VkRoot::set_depth_range(const float& min, const float& max)

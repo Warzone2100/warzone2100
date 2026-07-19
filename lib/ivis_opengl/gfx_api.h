@@ -398,7 +398,10 @@ namespace gfx_api
 		virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) = 0;
 		virtual void draw(const std::size_t& offset, const std::size_t&, const primitive_type&) = 0;
 		virtual void draw_elements(const std::size_t& offset, const std::size_t&, const primitive_type&, const index_type&) = 0;
-		virtual void set_polygon_offset(const float& offset, const float& slope) = 0;
+		// Depth-only polygon offset with glPolygonOffset(factor, units) semantics:
+		// factor scales the primitive's max depth slope, units scales the minimum
+		// resolvable depth difference. (Vulkan: slopeFactor / constantFactor.)
+		virtual void set_polygon_offset(const float& factor, const float& units) = 0;
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) = 0;
