@@ -3770,6 +3770,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	debug(LOG_INFO, "  * Tessellation shader support %s detected", hasTessellationSupport ? "was" : "was NOT");
 	hasTextureGatherSupport = initTextureGatherSupport();
 	debug(LOG_INFO, "  * Texture gather support %s detected", hasTextureGatherSupport ? "was" : "was NOT");
+	hasGpuTimestampSupport = initGpuTimestampSupport();
+	debug(LOG_INFO, "  * GPU timestamp query support %s detected", hasGpuTimestampSupport ? "was" : "was NOT");
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -4653,10 +4655,37 @@ void gl_context::beginScreenFrame()
 {
 	frameHasDrawCommands = false;
 	_dynamicFBOCache.releaseAll();
+
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (_gpuFrameTimingEnabled && gpuTimingQueriesCreated)
+	{
+		pollGpuFrameTimings();
+		auto& slot = gpuTimingSlots[gpuTimingWriteIdx];
+		if (!slot.inFlight)
+		{
+			if (gles) { glQueryCounterEXT(slot.beginQuery, GL_TIMESTAMP_EXT); }
+			else { glQueryCounter(slot.beginQuery, GL_TIMESTAMP); }
+			gpuTimingFrameOpen = true;
+		}
+	}
+#endif
 }
 
 void gl_context::finishScreenFrame()
 {
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (gpuTimingFrameOpen)
+	{
+		auto& slot = gpuTimingSlots[gpuTimingWriteIdx];
+		if (gles) { glQueryCounterEXT(slot.endQuery, GL_TIMESTAMP_EXT); }
+		else { glQueryCounter(slot.endQuery, GL_TIMESTAMP); }
+		slot.frameNum = frameNum;
+		slot.inFlight = true;
+		gpuTimingWriteIdx = (gpuTimingWriteIdx + 1) % gpuTimingSlots.size();
+		gpuTimingFrameOpen = false;
+	}
+#endif
+
 	if (frameHasDrawCommands)
 	{
 		backend_impl->swapWindow();
@@ -5469,6 +5498,164 @@ bool gl_context::initTextureGatherSupport()
 #endif
 }
 
+bool gl_context::initGpuTimestampSupport()
+{
+#if !defined(WZ_GL_TIMER_QUERY_SUPPORTED) || defined(WZ_STATIC_GL_BINDINGS)
+	return false;
+#else
+	GLint timestampBits = 0;
+	if (gles)
+	{
+		if (GLAD_GL_EXT_disjoint_timer_query == 0
+			|| !glQueryCounterEXT || !glGetQueryObjectui64vEXT || !glGetQueryObjectuivEXT
+			|| !glGenQueriesEXT || !glDeleteQueriesEXT || !glGetQueryivEXT)
+		{
+			return false;
+		}
+		glGetQueryivEXT(GL_TIMESTAMP_EXT, GL_QUERY_COUNTER_BITS_EXT, &timestampBits);
+	}
+	else
+	{
+		if ((!GLAD_GL_VERSION_3_3 && !GLAD_GL_ARB_timer_query)
+			|| !glQueryCounter || !glGetQueryObjectui64v || !glGetQueryObjectuiv
+			|| !glGenQueries || !glDeleteQueries || !glGetQueryiv)
+		{
+			return false;
+		}
+		glGetQueryiv(GL_TIMESTAMP, GL_QUERY_COUNTER_BITS, &timestampBits);
+	}
+	// implementations may accept timestamp queries but report 0 counter bits,
+	// in which case every result is meaningless (always zero)
+	if (timestampBits <= 0)
+	{
+		debug(LOG_3D, "GPU timestamp queries unusable (GL_QUERY_COUNTER_BITS is %d)", timestampBits);
+		return false;
+	}
+	return true;
+#endif
+}
+
+bool gl_context::supportsGpuFrameTiming() const
+{
+	return hasGpuTimestampSupport;
+}
+
+bool gl_context::setGpuFrameTimingEnabled(bool enabled)
+{
+	if (!hasGpuTimestampSupport)
+	{
+		_gpuFrameTimingEnabled = false;
+		return !enabled;
+	}
+	if (enabled == _gpuFrameTimingEnabled)
+	{
+		return true;
+	}
+	if (enabled)
+	{
+		createGpuTimingQueries();
+	}
+	else
+	{
+		destroyGpuTimingQueries();
+	}
+	_gpuFrameTimingEnabled = enabled;
+	return true;
+}
+
+void gl_context::createGpuTimingQueries()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (gpuTimingQueriesCreated)
+	{
+		return;
+	}
+	for (auto& slot : gpuTimingSlots)
+	{
+		GLuint ids[2] = {0, 0};
+		if (gles) { glGenQueriesEXT(2, ids); } else { glGenQueries(2, ids); }
+		slot.beginQuery = ids[0];
+		slot.endQuery = ids[1];
+		slot.inFlight = false;
+	}
+	gpuTimingWriteIdx = 0;
+	gpuTimingReadIdx = 0;
+	gpuTimingFrameOpen = false;
+	gpuTimingQueriesCreated = true;
+#endif
+}
+
+void gl_context::destroyGpuTimingQueries()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	if (!gpuTimingQueriesCreated)
+	{
+		return;
+	}
+	for (auto& slot : gpuTimingSlots)
+	{
+		GLuint ids[2] = {slot.beginQuery, slot.endQuery};
+		if (gles) { glDeleteQueriesEXT(2, ids); } else { glDeleteQueries(2, ids); }
+		slot = GpuTimingSlot();
+	}
+	gpuTimingFrameOpen = false;
+	gpuTimingQueriesCreated = false;
+#endif
+}
+
+void gl_context::pollGpuFrameTimings()
+{
+#if defined(WZ_GL_TIMER_QUERY_SUPPORTED) && !defined(WZ_STATIC_GL_BINDINGS)
+	while (gpuTimingSlots[gpuTimingReadIdx].inFlight)
+	{
+		auto& slot = gpuTimingSlots[gpuTimingReadIdx];
+		GLuint resultAvailable = 0;
+		if (gles) { glGetQueryObjectuivEXT(slot.endQuery, GL_QUERY_RESULT_AVAILABLE, &resultAvailable); }
+		else { glGetQueryObjectuiv(slot.endQuery, GL_QUERY_RESULT_AVAILABLE, &resultAvailable); }
+		if (!resultAvailable)
+		{
+			// drop very old measurements so a frame that was never flushed cannot wedge the ring
+			if (frameNum > slot.frameNum + 64)
+			{
+				slot.inFlight = false;
+				gpuTimingReadIdx = (gpuTimingReadIdx + 1) % gpuTimingSlots.size();
+				continue;
+			}
+			break;
+		}
+		GLuint64 beginTime = 0;
+		GLuint64 endTime = 0;
+		if (gles)
+		{
+			glGetQueryObjectui64vEXT(slot.beginQuery, GL_QUERY_RESULT, &beginTime);
+			glGetQueryObjectui64vEXT(slot.endQuery, GL_QUERY_RESULT, &endTime);
+		}
+		else
+		{
+			glGetQueryObjectui64v(slot.beginQuery, GL_QUERY_RESULT, &beginTime);
+			glGetQueryObjectui64v(slot.endQuery, GL_QUERY_RESULT, &endTime);
+		}
+		bool validResult = (endTime >= beginTime);
+		if (gles)
+		{
+			// a disjoint event (GPU clock change etc.) invalidates any interval spanning it
+			GLint disjointOccurred = 0;
+			glGetIntegerv(GL_GPU_DISJOINT_EXT, &disjointOccurred);
+			if (disjointOccurred)
+			{
+				validResult = false;
+			}
+		}
+		if (validResult)
+		{
+			_lastGpuFrameTiming = gfx_api::context::GpuFrameTiming{slot.frameNum, static_cast<uint64_t>(endTime - beginTime)};
+		}
+		slot.inFlight = false;
+		gpuTimingReadIdx = (gpuTimingReadIdx + 1) % gpuTimingSlots.size();
+	}
+#endif
+}
+
 bool gl_context::initTessellationSupport()
 {
 #if defined(WZ_OS_MAC)
@@ -5664,6 +5851,9 @@ void gl_context::shutdown()
 		glDeleteQueries(PERF_COUNT, perfpos);
 	}
 #endif
+
+	destroyGpuTimingQueries();
+	_gpuFrameTimingEnabled = false;
 
 #if !defined(__EMSCRIPTEN__)
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+

@@ -774,6 +774,22 @@ struct VkRoot final : gfx_api::context
 	vk::Format sceneColorVkFormat = vk::Format::eUndefined;
 	uint32_t depthMapSize = 4096;
 
+	// GPU frame timing
+	static constexpr size_t GPU_TIMING_SLOTS = 8;
+	struct GpuTimingSlot
+	{
+		size_t frameNum = 0;
+		bool inFlight = false;
+	};
+	vk::QueryPool gpuTimingQueryPool; // 2 timestamp queries per slot
+	std::array<GpuTimingSlot, GPU_TIMING_SLOTS> gpuTimingSlots;
+	size_t gpuTimingWriteIdx = 0;
+	size_t gpuTimingReadIdx = 0;
+	bool gpuTimingFrameOpen = false;
+	bool hasGpuTimestampSupport = false;
+	float gpuTimestampPeriod = 0.f;
+	uint64_t gpuTimestampMask = ~uint64_t(0);
+
 	// default textures
 	VkTexture* pDefaultTexture = nullptr;
 	VkTextureArray* pDefaultArrayTexture = nullptr;
@@ -882,6 +898,15 @@ private:
 		void onChanged() override;
 	};
 
+	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
+	bool initGpuTimestampSupport();
+	void destroyGpuTimingQueryPool();
+	void pollGpuFrameTimings();
+	/// Write the frame's begin timestamp on first use of the draw command buffer (must be outside a render pass)
+	void writeGpuTimingBeginIfNeeded(vk::CommandBuffer cmdBuffer);
+	/// Write the frame's end timestamp before the draw command buffer ends (must be outside a render pass)
+	void writeGpuTimingEndIfOpen(vk::CommandBuffer cmdBuffer);
+
 public:
 	vk::Format get_format(const gfx_api::pixel_format& format) const;
 
@@ -904,6 +929,8 @@ public:
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
 	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
+	virtual bool supportsGpuFrameTiming() const override;
+	virtual bool setGpuFrameTimingEnabled(bool enabled) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;
