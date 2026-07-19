@@ -34,6 +34,7 @@
 #include "warzoneconfig.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/gfx_api.h"
 
 #include <algorithm>
@@ -64,7 +65,14 @@ DynamicResolutionState drsState;
 
 double targetFrameTimeNs()
 {
-	float refreshRate = war_GetFullscreenModeRefreshRate();
+	// the display the window is currently on is the authority on the frame
+	// budget (cached by the SDL layer and invalidated by display events, so
+	// querying per evaluation is cheap)
+	float refreshRate = wzGetCurrentDisplayRefreshRate();
+	if (!(refreshRate > 0.f))
+	{
+		refreshRate = war_GetFullscreenModeRefreshRate();
+	}
 	if (!(refreshRate > 0.f))
 	{
 		refreshRate = 60.f;
