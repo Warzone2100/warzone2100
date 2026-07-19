@@ -73,7 +73,14 @@ static const float GAMEPAD_AXIS_BUTTON_PRESS_THRESHOLD = 0.5f;
 static const float GAMEPAD_AXIS_BUTTON_HYSTERESIS = 0.05f;
 
 static bool subsystemInitialized = false;
-static std::vector<std::pair<SDL_JoystickID, SDL_Gamepad*>> openGamepads;
+struct OpenGamepad
+{
+	SDL_JoystickID id;
+	SDL_Gamepad* handle;
+	// queried once at open - a device's rumble capability never changes
+	bool hasRumble;
+};
+static std::vector<OpenGamepad> openGamepads;
 // All connected gamepads feed the same input state. The most recent device to
 // send input is the one polled for axis values.
 static SDL_JoystickID activeGamepadId = 0;
@@ -358,11 +365,16 @@ static bool actualButtonReleased(GAMEPAD_INPUT button)
 	return ((actualGamepadState[button].state == KEY_RELEASED) || (actualGamepadState[button].state == KEY_PRESSRELEASE));
 }
 
+static bool padHasRumble(SDL_Gamepad* pad)
+{
+	return SDL_GetBooleanProperty(SDL_GetGamepadProperties(pad), SDL_PROP_GAMEPAD_CAP_RUMBLE_BOOLEAN, false);
+}
+
 static void openGamepadDevice(SDL_JoystickID id)
 {
 	for (const auto& pad : openGamepads)
 	{
-		if (pad.first == id)
+		if (pad.id == id)
 		{
 			return;
 		}
@@ -373,21 +385,22 @@ static void openGamepadDevice(SDL_JoystickID id)
 		debug(LOG_INFO, "Failed to open gamepad (id %u): %s", (unsigned)id, SDL_GetError());
 		return;
 	}
-	openGamepads.emplace_back(id, pad);
+	const bool hasRumble = padHasRumble(pad);
+	openGamepads.push_back({id, pad, hasRumble});
 	if (activeGamepadId == 0)
 	{
 		activeGamepadId = id;
 	}
-	debug(LOG_INFO, "Gamepad connected: %s (id %u)", SDL_GetGamepadName(pad), (unsigned)id);
+	debug(LOG_INFO, "Gamepad connected: %s (id %u)%s", SDL_GetGamepadName(pad), (unsigned)id, hasRumble ? "" : ", no rumble support");
 }
 
 static void closeGamepadDevice(SDL_JoystickID id)
 {
 	for (auto it = openGamepads.begin(); it != openGamepads.end(); ++it)
 	{
-		if (it->first == id)
+		if (it->id == id)
 		{
-			SDL_CloseGamepad(it->second);
+			SDL_CloseGamepad(it->handle);
 			openGamepads.erase(it);
 			debug(LOG_INFO, "Gamepad disconnected (id %u)", (unsigned)id);
 			break;
@@ -395,7 +408,7 @@ static void closeGamepadDevice(SDL_JoystickID id)
 	}
 	if (activeGamepadId == id)
 	{
-		activeGamepadId = openGamepads.empty() ? 0 : openGamepads.front().first;
+		activeGamepadId = openGamepads.empty() ? 0 : openGamepads.front().id;
 	}
 	if (openGamepads.empty())
 	{
@@ -429,7 +442,7 @@ void wzGamepadShutdown()
 {
 	for (const auto& pad : openGamepads)
 	{
-		SDL_CloseGamepad(pad.second);
+		SDL_CloseGamepad(pad.handle);
 	}
 	openGamepads.clear();
 	activeGamepadId = 0;
@@ -484,13 +497,13 @@ void wzGamepadHandleSDLEvent(const SDL_Event& event)
 	}
 }
 
-static SDL_Gamepad* activeGamepadHandle()
+static const OpenGamepad* activeGamepadEntry()
 {
 	for (const auto& pad : openGamepads)
 	{
-		if (pad.first == activeGamepadId)
+		if (pad.id == activeGamepadId)
 		{
-			return pad.second;
+			return &pad;
 		}
 	}
 	return nullptr;
@@ -498,13 +511,19 @@ static SDL_Gamepad* activeGamepadHandle()
 
 // The device that labels and glyphs describe - the active pad, or the first
 // connected one before any gamepad input arrives
-static SDL_Gamepad* displayGamepadHandle()
+static const OpenGamepad* displayGamepadEntry()
 {
-	if (SDL_Gamepad* pad = activeGamepadHandle())
+	if (const OpenGamepad* pad = activeGamepadEntry())
 	{
 		return pad;
 	}
-	return openGamepads.empty() ? nullptr : openGamepads.front().second;
+	return openGamepads.empty() ? nullptr : &openGamepads.front();
+}
+
+static SDL_Gamepad* displayGamepadHandle()
+{
+	const OpenGamepad* pad = displayGamepadEntry();
+	return pad ? pad->handle : nullptr;
 }
 
 // ControllerImage glyph rendering, initialized on first glyph request so the
@@ -633,6 +652,38 @@ const char* gamepadDeviceGUID()
 	const SDL_GUID guid = SDL_GetJoystickGUIDForID(SDL_GetGamepadID(pad));
 	SDL_GUIDToString(guid, guidString, sizeof(guidString));
 	return guidString;
+}
+
+bool gamepadHasRumble()
+{
+	const OpenGamepad* pad = displayGamepadEntry();
+	return pad != nullptr && pad->hasRumble;
+}
+
+void gamepadRumble(float lowFrequencyStrength, float highFrequencyStrength, unsigned int durationMs)
+{
+	if (!war_GetGamepadRumble() || !gamepadIsActiveInput)
+	{
+		return;
+	}
+	const OpenGamepad* pad = displayGamepadEntry();
+	if (!pad || !pad->hasRumble)
+	{
+		return;
+	}
+	const Uint16 low = (Uint16)(std::clamp(lowFrequencyStrength, 0.f, 1.f) * 65535.f);
+	const Uint16 high = (Uint16)(std::clamp(highFrequencyStrength, 0.f, 1.f) * 65535.f);
+	if (!SDL_RumbleGamepad(pad->handle, low, high, durationMs))
+	{
+		// a pad advertising rumble but rejecting it is worth diagnosing, but
+		// only log the first failure per device to avoid spam
+		static SDL_JoystickID lastFailedRumbleId = 0;
+		if (lastFailedRumbleId != pad->id)
+		{
+			lastFailedRumbleId = pad->id;
+			debug(LOG_INFO, "SDL_RumbleGamepad failed for %s: %s", SDL_GetGamepadName(pad->handle), SDL_GetError());
+		}
+	}
 }
 
 bool gamepadGetButtonGlyph(GAMEPAD_INPUT button, unsigned int size, std::vector<unsigned char>& outRGBA, unsigned int& outWidth, unsigned int& outHeight)
@@ -1088,11 +1139,12 @@ static void updateSyntheticInput()
 
 void wzGamepadUpdate()
 {
-	SDL_Gamepad* pad = activeGamepadHandle();
-	if (!pad)
+	const OpenGamepad* activePad = activeGamepadEntry();
+	if (!activePad)
 	{
 		return;
 	}
+	SDL_Gamepad* pad = activePad->handle;
 
 	const auto rawAxis = [pad](SDL_GamepadAxis axis) -> float {
 		return std::clamp((float)SDL_GetGamepadAxis(pad, axis) / 32767.f, -1.f, 1.f);

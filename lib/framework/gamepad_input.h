@@ -112,6 +112,15 @@ void gamepadSetCursorFlickAnchor(int screenX, int screenY);
 // Glides the cursor to the given logical screen position - any new stick
 // input cancels the glide
 void gamepadCursorHopTo(int screenX, int screenY);
+
+// Whether the connected controller reports rumble support
+bool gamepadHasRumble();
+
+// Rumbles the connected controller, strengths 0..1 per motor. A no-op when
+// rumble is disabled, unsupported, or the gamepad is not the active input
+// source
+void gamepadRumble(float lowFrequencyStrength, float highFrequencyStrength, unsigned int durationMs);
+
 bool gamepadButtonDown(GAMEPAD_INPUT button);      // held this frame
 bool gamepadButtonPressed(GAMEPAD_INPUT button);   // went down this frame
 bool gamepadButtonReleased(GAMEPAD_INPUT button);  // went up this frame
