@@ -94,14 +94,45 @@ void appendCrossFrameIncomingDependencies(
 			::vk::AccessFlagBits::eColorAttachmentWrite));
 	}
 
-	// Cross-frame WAW on reused attachment writes (initialLayout is Undefined after Clear).
-	if (hasColor)
+	// Attachment reuse: prior-frame attachment writes and beginRP layout-transition
+	// writes -> this subpass's attachment Read|Write (covers Clear WAW and LOAD_OP_LOAD RAW,
+	// including Present->ColorAttachment on FrozenWorldOverlay). Destination scope comes from
+	// layoutConsumerSync so Load/blend stay aligned with explicit barriers and outgoing
+	// 0->EXTERNAL deps.
+	if (hasColor || hasDepth)
 	{
+		::vk::PipelineStageFlags dstStage {};
+		::vk::AccessFlags dstAccess {};
+		if (hasColor)
+		{
+			const gfx_api::vk::LayoutSync colorConsumer =
+				gfx_api::vk::layoutConsumerSync(::vk::ImageLayout::eColorAttachmentOptimal);
+			dstStage |= colorConsumer.stage;
+			dstAccess |= colorConsumer.access;
+		}
+		if (hasDepth)
+		{
+			const gfx_api::vk::LayoutSync depthConsumer =
+				gfx_api::vk::layoutConsumerSync(::vk::ImageLayout::eDepthStencilAttachmentOptimal);
+			dstStage |= depthConsumer.stage;
+			dstAccess |= depthConsumer.access;
+		}
+
+		::vk::PipelineStageFlags srcStage {};
+		::vk::AccessFlags srcAccess {};
+		if (hasColor)
+		{
+			srcStage |= ::vk::PipelineStageFlagBits::eColorAttachmentOutput;
+			srcAccess |= ::vk::AccessFlagBits::eColorAttachmentWrite;
+		}
+		if (hasDepth)
+		{
+			srcStage |= ::vk::PipelineStageFlagBits::eLateFragmentTests;
+			srcAccess |= ::vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+		}
+
 		dependencies.push_back(crossFrameExternalToSubpass0(
-			::vk::PipelineStageFlagBits::eColorAttachmentOutput | ::vk::PipelineStageFlagBits::eLateFragmentTests,
-			::vk::PipelineStageFlagBits::eColorAttachmentOutput | ::vk::PipelineStageFlagBits::eEarlyFragmentTests,
-			::vk::AccessFlagBits::eColorAttachmentWrite | ::vk::AccessFlagBits::eDepthStencilAttachmentWrite,
-			::vk::AccessFlagBits::eColorAttachmentWrite | ::vk::AccessFlagBits::eDepthStencilAttachmentWrite | ::vk::AccessFlagBits::eDepthStencilAttachmentRead));
+			srcStage, dstStage, srcAccess, dstAccess));
 	}
 }
 
@@ -332,10 +363,9 @@ size_t RenderPassLayoutCache::getOrCreate(const PassLayoutKey& key)
 		addReadOnlyFinal(::vk::ImageLayout::eDepthStencilAttachmentOptimal, key.depthFinalLayout);
 	}
 
-	// Incoming consumer synchronization stays conservative (not table-derived). Reused render
-	// targets are Cleared each frame, so their initialLayout is Undefined and cannot express the
-	// cross-frame WAR/WAW hazard against the previous frame's access to the same image; these
-	// templates encode that worst-case prior access (prior sample and/or prior attachment write).
+	// Incoming EXTERNAL templates stay conservative for worst-case prior access (prior sample
+	// and/or prior attachment write). Attachment-reuse destination stage/access is table-derived
+	// via layoutConsumerSync so LOAD_OP_LOAD after a beginRP layout transition is covered.
 	std::vector<::vk::SubpassDependency> dependencies;
 	appendCrossFrameIncomingDependencies(key, dependencies);
 
