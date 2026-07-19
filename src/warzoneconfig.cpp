@@ -779,7 +779,8 @@ uint32_t war_getRenderResolutionPercent()
 
 void war_setRenderResolutionPercent(uint32_t percent)
 {
-	if (percent < 10 || percent > 100)
+	// 0 selects dynamic resolution
+	if (percent != 0 && (percent < 10 || percent > 100))
 	{
 		debug(LOG_INFO, "Render resolution %" PRIu32 "%% is out of range (10-100), clamping", percent);
 		percent = std::min<uint32_t>(std::max<uint32_t>(percent, 10), 100);

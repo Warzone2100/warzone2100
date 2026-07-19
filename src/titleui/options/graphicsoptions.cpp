@@ -483,8 +483,9 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 					{ WzString::fromUtf8("59%"), "", 59 },
 					{ WzString::fromUtf8("50%"), "", 50 },
 					{ WzString::fromUtf8("33%"), "", 33 },
+					{ _("Dynamic"), _("Automatically adjusts render resolution to keep GPU frame times within the display's budget. Requires GPU timing support."), 0 },
 				};
-				uint32_t currValue = gfx_api::context::get().getSceneRenderScalePercent();
+				uint32_t currValue = war_getRenderResolutionPercent();
 				if (!result.setCurrentIdxForValue(currValue))
 				{
 					// add "Custom" item
@@ -494,9 +495,12 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 				return result;
 			},
 			[](const auto& newValue) -> bool {
-				if (!gfx_api::context::get().setSceneRenderScale(newValue))
+				// dynamic resolution keeps the scene targets at native size,
+				// the controller drives the per frame fraction from there
+				const uint32_t scalePercent = (newValue == 0) ? 100 : newValue;
+				if (!gfx_api::context::get().setSceneRenderScale(scalePercent))
 				{
-					debug(LOG_ERROR, "Failed to set render resolution: %" PRIu32 "%%", newValue);
+					debug(LOG_ERROR, "Failed to set render resolution: %" PRIu32 "%%", scalePercent);
 					return false;
 				}
 				war_setRenderResolutionPercent(newValue);
