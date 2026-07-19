@@ -304,7 +304,7 @@ void null_context::draw_elements_instanced(const std::size_t& offset, const std:
 	// no-op
 }
 
-void null_context::set_polygon_offset(const float& offset, const float& slope)
+void null_context::set_polygon_offset(const float& factor, const float& units)
 {
 	// no-op
 }

@@ -369,7 +369,7 @@ struct gl_context final : public gfx_api::context
 	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
 	virtual void draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive) override;
 	virtual void draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index) override;
-	virtual void set_polygon_offset(const float& offset, const float& slope) override;
+	virtual void set_polygon_offset(const float& factor, const float& units) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;

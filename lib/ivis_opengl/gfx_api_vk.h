@@ -934,7 +934,7 @@ public:
 	virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(gfx_api::abstract_texture* texture) override;
 	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
 		gfx_api::PassGraphCompileResult& compileResult) override;
-	virtual void set_polygon_offset(const float& offset, const float& slope) override;
+	virtual void set_polygon_offset(const float& factor, const float& units) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 private:
 	enum class SwapchainAcquireStatus
