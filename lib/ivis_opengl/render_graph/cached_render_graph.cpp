@@ -120,7 +120,28 @@ void CachedRenderGraph::execute()
 	{
 		return;
 	}
-	gfx_api::context::get().executeCompiledRenderGraph(_passes, _compileResult);
+	auto& ctx = gfx_api::context::get();
+	// Dynamic resolution: the scene pass viewport tracks the per frame render
+	// fraction here, at execute time, so fraction changes never rematerialize
+	// the graph (the value is idempotent at a fraction of 1).
+	const auto sceneDims = ctx.getSceneRenderTargetDimensions();
+	auto applySceneFractionViewport = [&](RenderPassDesc& pass) {
+		if (pass.passId == PassId::ScenePass)
+		{
+			pass.viewportSize = sceneDims;
+		}
+	};
+	for (auto& pass : _passes)
+	{
+		applySceneFractionViewport(pass);
+	}
+	// execution reads the compiled pass description copies, not the
+	// materialized descriptions, so the rewrite must reach both
+	for (auto& compiled : _compileResult.passes)
+	{
+		applySceneFractionViewport(compiled.desc);
+	}
+	ctx.executeCompiledRenderGraph(_passes, _compileResult);
 }
 
 } // namespace gfx_api

@@ -4457,7 +4457,19 @@ void	setDrawTerrainShadows(bool val)
 
 static void drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
 {
+	// the rendered area may be a sub-rect of the source under dynamic resolution
+	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
+	const auto textureDims = gfx_api::context::get().getRenderTargetDimensions(sourceTexture).value_or(renderedDims);
+	const float texW = static_cast<float>(std::max<uint32_t>(textureDims.first, 1));
+	const float texH = static_cast<float>(std::max<uint32_t>(textureDims.second, 1));
+
+	gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN> cbuf;
+	cbuf.uvScaleClamp = glm::vec4(
+		renderedDims.first / texW, renderedDims.second / texH,
+		(renderedDims.first - 0.5f) / texW, (renderedDims.second - 0.5f) / texH);
+
 	gfx_api::WorldToScreenPSO::get().bind();
+	gfx_api::WorldToScreenPSO::get().bind_constants(cbuf);
 	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
 	gfx_api::WorldToScreenPSO::get().bind_textures(sourceTexture);
 	gfx_api::WorldToScreenPSO::get().draw(3, 0);
@@ -4483,17 +4495,22 @@ static void drawFsr1Easu(gfx_api::abstract_texture* sourceTexture)
 	const auto outputDims = gfx_api::context::get().getDrawableDimensions();
 	ASSERT_OR_RETURN(, inputDims.has_value(), "Unknown upscale input dimensions");
 	ASSERT_OR_RETURN(, outputDims.first > 0 && outputDims.second > 0, "Invalid drawable dimensions");
+	// the rendered viewport may be a sub-rect of the input texture under dynamic resolution
+	const auto renderedDims = gfx_api::context::get().getSceneRenderTargetDimensions();
+	const float vpW = static_cast<float>(std::min(renderedDims.first, inputDims->first));
+	const float vpH = static_cast<float>(std::min(renderedDims.second, inputDims->second));
 	const float inW = static_cast<float>(inputDims->first);
 	const float inH = static_cast<float>(inputDims->second);
 	const float outW = static_cast<float>(outputDims.first);
 	const float outH = static_cast<float>(outputDims.second);
 
-	// FsrEasuCon (the input viewport is the whole scene texture)
+	// FsrEasuCon
 	gfx_api::constant_buffer_type<SHADER_FSR1_EASU> cbuf;
-	cbuf.con0 = glm::vec4(inW / outW, inH / outH, 0.5f * inW / outW - 0.5f, 0.5f * inH / outH - 0.5f);
+	cbuf.con0 = glm::vec4(vpW / outW, vpH / outH, 0.5f * vpW / outW - 0.5f, 0.5f * vpH / outH - 0.5f);
 	cbuf.con1 = glm::vec4(1.f / inW, 1.f / inH, 1.f / inW, -1.f / inH);
 	cbuf.con2 = glm::vec4(-1.f / inW, 2.f / inH, 1.f / inW, 2.f / inH);
 	cbuf.con3 = glm::vec4(0.f, 4.f / inH, 0.f, 0.f);
+	cbuf.con4 = glm::vec4((vpW - 0.5f) / inW, (vpH - 0.5f) / inH, (vpW - 1.5f) / inW, (vpH - 1.5f) / inH);
 
 	gfx_api::Fsr1EasuPSO::get().bind();
 	gfx_api::Fsr1EasuPSO::get().bind_constants(cbuf);

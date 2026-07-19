@@ -34,12 +34,16 @@
 uniform sampler2D Texture;
 
 // standard FsrEasuCon constants
-// con0.xy = input size / output size, con0.zw = 0.5 * con0.xy - 0.5
+// con0.xy = input viewport size / output size, con0.zw = 0.5 * con0.xy - 0.5
 // con1.xy = input texel size, con1.zw / con2 / con3 position the gather path's quad fetches
 uniform vec4 con0;
 uniform vec4 con1;
 uniform vec4 con2;
 uniform vec4 con3;
+// keeps edge taps inside the rendered input viewport, which may be a sub-rect
+// of the input texture under dynamic resolution
+// con4.xy clamps plain tap UVs, con4.zw clamps gather quad centers
+uniform vec4 con4;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -154,10 +158,10 @@ void main()
 	// Four gather4 quad fetches (each component mapping matches the reference),
 	//  w z
 	//  x y
-	vec2 p0 = fp * con1.xy + con1.zw;
-	vec2 p1 = p0 + con2.xy;
-	vec2 p2 = p0 + con2.zw;
-	vec2 p3 = p0 + con3.xy;
+	vec2 p0 = min(fp * con1.xy + con1.zw, con4.zw);
+	vec2 p1 = min(p0 + con2.xy, con4.zw);
+	vec2 p2 = min(p0 + con2.zw, con4.zw);
+	vec2 p3 = min(p0 + con3.xy, con4.zw);
 	vec4 bczzR = textureGather(Texture, p0, 0);
 	vec4 bczzG = textureGather(Texture, p0, 1);
 	vec4 bczzB = textureGather(Texture, p0, 2);
@@ -185,18 +189,18 @@ void main()
 #else
 	vec2 texelSize = con1.xy;
 	vec2 basePos = (fp + vec2(0.5, 0.5)) * texelSize;
-	vec3 cB = texture(Texture, basePos + vec2( 0.0, -1.0) * texelSize).rgb;
-	vec3 cC = texture(Texture, basePos + vec2( 1.0, -1.0) * texelSize).rgb;
-	vec3 cE = texture(Texture, basePos + vec2(-1.0,  0.0) * texelSize).rgb;
-	vec3 cF = texture(Texture, basePos                                ).rgb;
-	vec3 cG = texture(Texture, basePos + vec2( 1.0,  0.0) * texelSize).rgb;
-	vec3 cH = texture(Texture, basePos + vec2( 2.0,  0.0) * texelSize).rgb;
-	vec3 cI = texture(Texture, basePos + vec2(-1.0,  1.0) * texelSize).rgb;
-	vec3 cJ = texture(Texture, basePos + vec2( 0.0,  1.0) * texelSize).rgb;
-	vec3 cK = texture(Texture, basePos + vec2( 1.0,  1.0) * texelSize).rgb;
-	vec3 cL = texture(Texture, basePos + vec2( 2.0,  1.0) * texelSize).rgb;
-	vec3 cN = texture(Texture, basePos + vec2( 0.0,  2.0) * texelSize).rgb;
-	vec3 cO = texture(Texture, basePos + vec2( 1.0,  2.0) * texelSize).rgb;
+	vec3 cB = texture(Texture, min(basePos + vec2( 0.0, -1.0) * texelSize, con4.xy)).rgb;
+	vec3 cC = texture(Texture, min(basePos + vec2( 1.0, -1.0) * texelSize, con4.xy)).rgb;
+	vec3 cE = texture(Texture, min(basePos + vec2(-1.0,  0.0) * texelSize, con4.xy)).rgb;
+	vec3 cF = texture(Texture, min(basePos                               , con4.xy)).rgb;
+	vec3 cG = texture(Texture, min(basePos + vec2( 1.0,  0.0) * texelSize, con4.xy)).rgb;
+	vec3 cH = texture(Texture, min(basePos + vec2( 2.0,  0.0) * texelSize, con4.xy)).rgb;
+	vec3 cI = texture(Texture, min(basePos + vec2(-1.0,  1.0) * texelSize, con4.xy)).rgb;
+	vec3 cJ = texture(Texture, min(basePos + vec2( 0.0,  1.0) * texelSize, con4.xy)).rgb;
+	vec3 cK = texture(Texture, min(basePos + vec2( 1.0,  1.0) * texelSize, con4.xy)).rgb;
+	vec3 cL = texture(Texture, min(basePos + vec2( 2.0,  1.0) * texelSize, con4.xy)).rgb;
+	vec3 cN = texture(Texture, min(basePos + vec2( 0.0,  2.0) * texelSize, con4.xy)).rgb;
+	vec3 cO = texture(Texture, min(basePos + vec2( 1.0,  2.0) * texelSize, con4.xy)).rgb;
 #endif
 	//------------------------------------------------------------------------------------------------------------------------------
 	// Simplest multi-channel approximate luma possible (luma times 2, in 2 FMA/MAD).

@@ -6034,6 +6034,7 @@ gfx_api::PipelineSurfaceSyncInputs VkRoot::pipelineSurfaceSyncInputs() const
 		inputs.presentColorFormat = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	}
 	inputs.fsr1SceneUpscale = (getSceneUpscalingMode() == gfx_api::context::scene_upscaling_mode::fsr1);
+	inputs.sceneDynamicResolution = sceneDynamicResolutionEnabled();
 	return inputs;
 }
 
@@ -7187,6 +7188,21 @@ bool VkRoot::setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode)
 	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
 	{
 		// no surfaces exist yet, the mode applies when they are created
+		return true;
+	}
+	invalidateWarmEntries();
+	return syncPipelineSurfaces();
+}
+
+bool VkRoot::setSceneDynamicResolution(bool enabled)
+{
+	if (enabled == sceneDynamicResolutionEnabled())
+	{
+		return true;
+	}
+	gfx_api::context::setSceneDynamicResolution(enabled);
+	if (!dev || swapchainSize.width == 0 || swapchainSize.height == 0)
+	{
 		return true;
 	}
 	invalidateWarmEntries();

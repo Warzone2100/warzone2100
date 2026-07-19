@@ -231,6 +231,8 @@ struct PipelineSurfaceSyncInputs
 	uint32_t swapchainMsaaSamples = 1;
 	pixel_format presentColorFormat = pixel_format::FORMAT_RGBA8_UNORM_PACK8;
 	bool fsr1SceneUpscale = false;
+	/// Dynamic resolution keeps scene-sized intermediates alive even at a 1:1 scene size.
+	bool sceneDynamicResolution = false;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.
