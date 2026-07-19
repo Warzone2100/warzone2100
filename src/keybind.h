@@ -70,6 +70,7 @@ void kf_RotateBuildingACW();
 void kf_PitchBack();
 void kf_PitchForward();
 void kf_ResetPitch();
+void kf_ResetCamera();
 void kf_ShowMappings();
 void kf_SelectGrouping(UDWORD groupNumber);
 MappableFunction kf_SelectGrouping_N(const unsigned int n);

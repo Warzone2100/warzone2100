@@ -1612,6 +1612,9 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 		return WzString::fromUtf8(astringf("%s + %s", gamepadButtonName(GPAD_BTN_RIGHT_SHOULDER), cameraStickName().toUtf8().c_str()));
 	});
 	addFixedRow("gamepadCore.zoom", N_("Zoom"), []() -> WzString { return "LT / RT"; });
+	addFixedRow("gamepadCore.resetCamera", N_("Reset Camera"), []() -> WzString {
+		return WzString::fromUtf8(astringf("%s %s", gamepadButtonName(GPAD_BTN_RIGHT_SHOULDER), war_GetGamepadSwapSticks() ? "L3" : "R3"));
+	});
 	addFixedRow("gamepadCore.unitGroups", N_("Unit Groups 1-4"), []() -> WzString { return _("D-Pad"); }, N_("Tap to recall a group and hold to assign. Hold LB for groups 5-8"));
 	addFixedRow("gamepadCore.infoScreen", N_("Objectives / Alliances"), buttonName(GPAD_BTN_BACK));
 
