@@ -441,6 +441,12 @@ type    15
 dataset MULTI_CAM_1
 game    "multiplay/maps/MoveBench-TwoRoute.gam"
 
+level   MoveBench-OpenCorner
+players 2
+type    15
+dataset MULTI_CAM_1
+game    "multiplay/maps/MoveBench-OpenCorner.gam"
+
 /*  Pathfinding benchmark map. type 15 for the same reason as the movement
     bench maps: hidden from map selection, still resolvable by name.  */
 

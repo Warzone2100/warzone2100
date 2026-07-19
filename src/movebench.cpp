@@ -103,6 +103,10 @@ const BenchScenario scenarios[] =
 	// both flows cutting the same open corner from opposite directions at a
 	// scale where the corner scrum dominates the whole run.
 	{ "rush_corner",         "movebench_rush_corner.json",         4000, 0x5EEDBEEF, false },
+	// The same head-on with the corridors stripped: the Sk-Rush corner mass
+	// alone on open ground, so the corner scrum is isolated from every piece
+	// of corridor machinery.
+	{ "open_corner",         "movebench_open_corner.json",         4000, 0x5EEDBEEF, false },
 	{ "counterflow_w3",      "movebench_counterflow_w3.json",      5000, 0x5EEDBEEF },
 	{ "counterflow_w4",      "movebench_counterflow_w4.json",      5000, 0x5EEDBEEF },
 	{ "shift0",             "movebench_shift0.json",             1200, 0x5EEDBEEF },
