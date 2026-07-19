@@ -183,6 +183,37 @@ function benchSpawnCluster(player, kind, cx, cy, count)
 	return made;
 }
 
+// As benchSpawnCluster, but packed the way the cloning cheat packs a droid
+// army: a golden-angle spiral at 50 world-unit radius steps, several units to
+// a tile, a dense disc rather than one body per tile. 136 units span roughly
+// nine tiles across. Spiral points landing on blocked ground are skipped, the
+// same behaviour as the cheat, so the count can fall slightly short there.
+// Applies the same per-arrangement shift as benchSpawnBlock.
+function benchSpawnClones(player, kind, cx, cy, count)
+{
+	var digit = ARRANGE_STEPS * ARRANGE_STEPS;
+	var index = Math.floor(benchArrangement() / Math.pow(digit, benchBlockIndex)) % digit;
+	benchBlockIndex++;
+	var ax = cx + (index % ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+	var ay = cy + Math.floor(index / ARRANGE_STEPS) - Math.floor(ARRANGE_STEPS / 2);
+
+	var k = ROSTER[kind];
+	var made = [];
+	for (var i = 0; made.length < count && i < count * 3; i++)
+	{
+		var ang = (40503 * i % 65536) * Math.PI / 32768;
+		var rad = 50 * Math.sqrt(i + 1);
+		var tx = Math.floor((ax * 128 + 64 + rad * Math.sin(ang)) / 128);
+		var ty = Math.floor((ay * 128 + 64 + rad * Math.cos(ang)) / 128);
+		var d = addDroid(player, tx, ty, k.name, k.body, k.prop, "", "", k.weap);
+		if (d)
+		{
+			made.push(d);
+		}
+	}
+	return made;
+}
+
 // Orders every droid to a single destination. Used by the blob scenario, where
 // converging on one point is the phenomenon under test rather than an artifact.
 function benchOrderAllTo(droids, x, y)
