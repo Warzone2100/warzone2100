@@ -2167,7 +2167,9 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (war_getRenderResolutionPercent() != 100)
+	// 0 selects dynamic resolution, which keeps the scene targets at native size
+	// and is driven per frame by the dynamic resolution controller
+	if (war_getRenderResolutionPercent() != 100 && war_getRenderResolutionPercent() != 0)
 	{
 		if (!gfx_api::context::get().setSceneRenderScale(war_getRenderResolutionPercent()))
 		{
