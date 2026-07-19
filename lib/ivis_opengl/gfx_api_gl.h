@@ -473,6 +473,7 @@ protected:
 private:
 	bool initGLContext();
 	bool initTessellationSupport();
+	bool initTextureGatherSupport();
 	bool ensurePatchVertices4();
 	bool enableDebugMessageCallbacks();
 	void enableVertexAttribArray(GLuint index);
@@ -500,6 +501,7 @@ private:
 	bool hasInstancedRenderingSupport = false;
 	bool hasBorderClampSupport = false;
 	bool hasTessellationSupport = false;
+	bool hasTextureGatherSupport = false;
 	bool patchVertices4Set = false;
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;

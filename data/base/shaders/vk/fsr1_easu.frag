@@ -24,7 +24,7 @@
 
 // standard FsrEasuCon constants
 // con0.xy = input size / output size, con0.zw = 0.5 * con0.xy - 0.5
-// con1.xy = input texel size (con1.zw, con2, con3 exist for the gather path and are unused here)
+// con1.xy = input texel size, con1.zw / con2 / con3 position the gather quad fetches
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 con0;
 	vec4 con1;
@@ -130,21 +130,38 @@ void main()
 	vec2 fp = floor(pp);
 	pp -= fp;
 	//------------------------------------------------------------------------------------------------------------------------------
-	// The 12 tap colors (tap centers relative to 'f').
-	vec2 texelSize = con1.xy;
-	vec2 basePos = (fp + vec2(0.5, 0.5)) * texelSize;
-	vec3 cB = texture(Texture, basePos + vec2( 0.0, -1.0) * texelSize).rgb;
-	vec3 cC = texture(Texture, basePos + vec2( 1.0, -1.0) * texelSize).rgb;
-	vec3 cE = texture(Texture, basePos + vec2(-1.0,  0.0) * texelSize).rgb;
-	vec3 cF = texture(Texture, basePos                                ).rgb;
-	vec3 cG = texture(Texture, basePos + vec2( 1.0,  0.0) * texelSize).rgb;
-	vec3 cH = texture(Texture, basePos + vec2( 2.0,  0.0) * texelSize).rgb;
-	vec3 cI = texture(Texture, basePos + vec2(-1.0,  1.0) * texelSize).rgb;
-	vec3 cJ = texture(Texture, basePos + vec2( 0.0,  1.0) * texelSize).rgb;
-	vec3 cK = texture(Texture, basePos + vec2( 1.0,  1.0) * texelSize).rgb;
-	vec3 cL = texture(Texture, basePos + vec2( 2.0,  1.0) * texelSize).rgb;
-	vec3 cN = texture(Texture, basePos + vec2( 0.0,  2.0) * texelSize).rgb;
-	vec3 cO = texture(Texture, basePos + vec2( 1.0,  2.0) * texelSize).rgb;
+	// The 12 tap colors (tap centers relative to 'f'), via four gather4 quad fetches.
+	// Each gather's component mapping matches the reference,
+	//  w z
+	//  x y
+	vec2 p0 = fp * con1.xy + con1.zw;
+	vec2 p1 = p0 + con2.xy;
+	vec2 p2 = p0 + con2.zw;
+	vec2 p3 = p0 + con3.xy;
+	vec4 bczzR = textureGather(Texture, p0, 0);
+	vec4 bczzG = textureGather(Texture, p0, 1);
+	vec4 bczzB = textureGather(Texture, p0, 2);
+	vec4 ijfeR = textureGather(Texture, p1, 0);
+	vec4 ijfeG = textureGather(Texture, p1, 1);
+	vec4 ijfeB = textureGather(Texture, p1, 2);
+	vec4 klhgR = textureGather(Texture, p2, 0);
+	vec4 klhgG = textureGather(Texture, p2, 1);
+	vec4 klhgB = textureGather(Texture, p2, 2);
+	vec4 zzonR = textureGather(Texture, p3, 0);
+	vec4 zzonG = textureGather(Texture, p3, 1);
+	vec4 zzonB = textureGather(Texture, p3, 2);
+	vec3 cB = vec3(bczzR.x, bczzG.x, bczzB.x);
+	vec3 cC = vec3(bczzR.y, bczzG.y, bczzB.y);
+	vec3 cI = vec3(ijfeR.x, ijfeG.x, ijfeB.x);
+	vec3 cJ = vec3(ijfeR.y, ijfeG.y, ijfeB.y);
+	vec3 cF = vec3(ijfeR.z, ijfeG.z, ijfeB.z);
+	vec3 cE = vec3(ijfeR.w, ijfeG.w, ijfeB.w);
+	vec3 cK = vec3(klhgR.x, klhgG.x, klhgB.x);
+	vec3 cL = vec3(klhgR.y, klhgG.y, klhgB.y);
+	vec3 cH = vec3(klhgR.z, klhgG.z, klhgB.z);
+	vec3 cG = vec3(klhgR.w, klhgG.w, klhgB.w);
+	vec3 cO = vec3(zzonR.z, zzonG.z, zzonB.z);
+	vec3 cN = vec3(zzonR.w, zzonG.w, zzonB.w);
 	//------------------------------------------------------------------------------------------------------------------------------
 	// Simplest multi-channel approximate luma possible (luma times 2, in 2 FMA/MAD).
 	float lB = fsrLuma(cB);

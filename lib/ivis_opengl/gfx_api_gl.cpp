@@ -884,6 +884,13 @@ size_t gl_buffer::current_buffer_size()
 
 // MARK: gl_pipeline_state_object
 
+enum SHADER_VERSION_ES
+{
+	VERSION_ES_100,
+	VERSION_ES_300,
+	VERSION_ES_310
+};
+
 struct program_data
 {
 	std::string friendly_name;
@@ -894,6 +901,8 @@ struct program_data
 	// optional tessellation stages (require supportsTessellationShaders() and shaders targeting GLSL >= 4.00 core)
 	std::string tess_control_file = {};
 	std::string tess_evaluation_file = {};
+	// the highest GLSL ES version this program may target (most shaders are only tested up to 300 es)
+	SHADER_VERSION_ES maxShaderVersionES = VERSION_ES_300;
 };
 
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
@@ -1043,7 +1052,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		"shaders/tess_quad.tesc", "shaders/tess_quad.tese" }),
 	std::make_pair(SHADER_WORLD_TO_SCREEN, program_data{ "World to screen quad program", "shaders/world_to_screen.vert", "shaders/world_to_screen.frag", {} }),
 	std::make_pair(SHADER_FSR1_EASU, program_data{ "FSR1 EASU program", "shaders/world_to_screen.vert", "shaders/fsr1_easu.frag",
-		{ "con0", "con1", "con2", "con3" } }),
+		{ "con0", "con1", "con2", "con3" }, {}, "", "", VERSION_ES_310 }),
 	std::make_pair(SHADER_FSR1_RCAS, program_data{ "FSR1 RCAS program", "shaders/world_to_screen.vert", "shaders/fsr1_rcas.frag",
 		{ "con0", "con1" } })
 };
@@ -1059,12 +1068,6 @@ enum SHADER_VERSION
 	VERSION_410_CORE,
 	VERSION_FIXED_IN_FILE,
 	VERSION_AUTODETECT_FROM_LEVEL_LOAD
-};
-
-enum SHADER_VERSION_ES
-{
-	VERSION_ES_100,
-	VERSION_ES_300
 };
 
 const char * shaderVersionString(SHADER_VERSION version)
@@ -1102,6 +1105,8 @@ const char * shaderVersionString(SHADER_VERSION_ES version)
 			return "#version 100\n";
 		case VERSION_ES_300:
 			return "#version 300 es\n";
+		case VERSION_ES_310:
+			return "#version 310 es\n";
 			// Deliberately omit "default:" case to trigger a compiler warning if the SHADER_VERSION_ES enum is expanded but the new cases aren't handled here
 	}
 	return ""; // Should not reach here - silence a GCC warning
@@ -1222,18 +1227,17 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 	// use the known (and explicit) mapping table between OpenGL version and supported GLSL version.
 
 	GLint gl_majorversion = wz_GetGLIntegerv(GL_MAJOR_VERSION, 0);
-	//GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
+	GLint gl_minorversion = wz_GetGLIntegerv(GL_MINOR_VERSION, 0);
 
 	// For OpenGL ES < 3.0, default to VERSION_ES_100 shaders
 	SHADER_VERSION_ES version = VERSION_ES_100;
-	if(gl_majorversion == 3)
+	if (gl_majorversion == 3)
 	{
-		return VERSION_ES_300;
+		version = (gl_minorversion >= 1) ? VERSION_ES_310 : VERSION_ES_300;
 	}
 	else if (gl_majorversion > 3)
 	{
-		// Return the OpenGL ES 3.0 value (for now)
-		version = VERSION_ES_300;
+		version = VERSION_ES_310;
 	}
 
 	version = std::max(version, minSupportedShaderVersion);
@@ -1306,8 +1310,9 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 	else
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL ES context
-		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300)
-		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_100, VERSION_ES_300));
+		// (The built-in shaders support (and have been tested with) VERSION_ES_100 and VERSION_ES_300,
+		// individual programs can opt in to higher versions via program_data::maxShaderVersionES)
+		const char *shaderVersionStr = shaderVersionString(getMaximumShaderVersionForCurrentGLESContext(VERSION_ES_100, programInfo.maxShaderVersionES));
 
 		vertexShaderHeader = shaderVersionStr;
 		fragmentShaderHeader = shaderVersionStr;
@@ -1786,6 +1791,14 @@ static bool regex_replace_wrapper(std::string& input, const std::regex& re, cons
 	return true;
 }
 
+static void patchFragmentShaderTextureGather(std::string& fragmentShaderStr, bool hasTextureGatherSupport)
+{
+	// Look for:
+	// #define WZ_FSR_EASU_GATHER 0
+	const auto re = std::regex("#define WZ_FSR_EASU_GATHER .*", std::regex_constants::ECMAScript);
+	fragmentShaderStr = std::regex_replace(fragmentShaderStr, re, astringf("#define WZ_FSR_EASU_GATHER %d", hasTextureGatherSupport ? 1 : 0));
+}
+
 static bool patchFragmentShaderPointLightsDefines(std::string& fragmentShaderStr, const gfx_api::lighting_constants& lightingConstants)
 {
 	const auto defines = {
@@ -1992,6 +2005,7 @@ void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighp
 				}
 			}
 
+			patchFragmentShaderTextureGather(fragmentShaderStr, ctx.hasTextureGatherSupport);
 			hasSpecializationConstant_ShadowConstants = patchFragmentShaderShadowConstants(fragmentShaderStr, lightingConstants);
 			hasSpecializationConstants_PointLights = patchFragmentShaderPointLightsDefines(fragmentShaderStr, lightingConstants);
 
@@ -3754,6 +3768,8 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	hasBorderClampSupport = initCheckBorderClampSupport();
 	hasTessellationSupport = initTessellationSupport();
 	debug(LOG_INFO, "  * Tessellation shader support %s detected", hasTessellationSupport ? "was" : "was NOT");
+	hasTextureGatherSupport = initTextureGatherSupport();
+	debug(LOG_INFO, "  * Texture gather support %s detected", hasTextureGatherSupport ? "was" : "was NOT");
 
 	int width, height = 0;
 	backend_impl->getDrawableSize(&width, &height);
@@ -5435,6 +5451,22 @@ bool gl_context::initInstancedFunctions()
 	}
 #endif
 	return true;
+}
+
+bool gl_context::initTextureGatherSupport()
+{
+#if defined(WZ_STATIC_GL_BINDINGS)
+	return false;
+#else
+	if (gles)
+	{
+		// texture gather is core in GLSL ES 3.10, targeted when the context is OpenGL ES 3.1+
+		// (see program_data::maxShaderVersionES)
+		return GLAD_GL_ES_VERSION_3_1;
+	}
+	// core in GLSL 4.00, otherwise available via the GL_ARB_gpu_shader5 extension
+	return GLAD_GL_VERSION_4_0 || GLAD_GL_ARB_gpu_shader5;
+#endif
 }
 
 bool gl_context::initTessellationSupport()
