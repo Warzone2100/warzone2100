@@ -2959,9 +2959,9 @@ void gl_context::draw_elements_instanced(const std::size_t& offset, const std::s
 	wz_dyn_glDrawElementsInstanced(to_gl(primitive), static_cast<GLsizei>(count), to_gl(index), reinterpret_cast<void*>(offset),  static_cast<GLsizei>(instance_count));
 }
 
-void gl_context::set_polygon_offset(const float& offset, const float& slope)
+void gl_context::set_polygon_offset(const float& factor, const float& units)
 {
-	glPolygonOffset(offset, slope);
+	glPolygonOffset(factor, units);
 }
 
 void gl_context::set_depth_range(const float& min, const float& max)
