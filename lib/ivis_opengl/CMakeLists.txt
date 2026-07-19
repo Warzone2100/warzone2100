@@ -63,8 +63,11 @@ file(GLOB HEADERS
 	"pietypes.h"
 	"png_util.h"
 	"screen.h"
+	"smaa_luts.h"
 	"tex.h"
 	"textdraw.h"
+	"3rdparty/AreaTex.h"
+	"3rdparty/SearchTex.h"
 	"3rdparty/stb_image_resize.h"
 )
 
@@ -104,6 +107,7 @@ file(GLOB SRC
 	"piestate.cpp"
 	"${_png_util_cpp}"
 	"screen.cpp"
+	"smaa_luts.cpp"
 	"tex.cpp"
 	"textdraw.cpp"
 	"3rdparty/stb_image_resize.cpp"

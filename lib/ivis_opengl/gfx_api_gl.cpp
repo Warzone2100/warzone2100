@@ -1055,7 +1055,16 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_FSR1_EASU, program_data{ "FSR1 EASU program", "shaders/world_to_screen.vert", "shaders/fsr1_easu.frag",
 		{ "con0", "con1", "con2", "con3", "con4" }, {}, "", "", VERSION_ES_310 }),
 	std::make_pair(SHADER_FSR1_RCAS, program_data{ "FSR1 RCAS program", "shaders/world_to_screen.vert", "shaders/fsr1_rcas.frag",
-		{ "con0", "con1" } })
+		{ "con0", "con1" } }),
+	std::make_pair(SHADER_SMAA_EDGES, program_data{ "SMAA edge detection program", "shaders/smaa_edges.vert", "shaders/smaa_edges.frag",
+		{ "rtMetrics", "uvScaleClamp", "params" },
+		{ {"colorTex", 0} } }),
+	std::make_pair(SHADER_SMAA_WEIGHTS, program_data{ "SMAA blending weights program", "shaders/smaa_weights.vert", "shaders/smaa_weights.frag",
+		{ "rtMetrics", "uvScaleClamp", "params" },
+		{ {"edgesTex", 0}, {"areaTex", 1}, {"searchTex", 2} } }),
+	std::make_pair(SHADER_SMAA_BLEND, program_data{ "SMAA neighborhood blending program", "shaders/smaa_blend.vert", "shaders/smaa_blend.frag",
+		{ "rtMetrics", "uvScaleClamp" },
+		{ {"colorTex", 0}, {"blendTex", 1} } })
 };
 
 enum SHADER_VERSION
@@ -1377,7 +1386,10 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_binding_entry<SHADER_DEBUG_TESS_QUAD>(),
 		uniform_binding_entry<SHADER_WORLD_TO_SCREEN>(),
 		uniform_binding_entry<SHADER_FSR1_EASU>(),
-		uniform_binding_entry<SHADER_FSR1_RCAS>()
+		uniform_binding_entry<SHADER_FSR1_RCAS>(),
+		uniform_binding_entry<SHADER_SMAA_EDGES>(),
+		uniform_binding_entry<SHADER_SMAA_WEIGHTS>(),
+		uniform_binding_entry<SHADER_SMAA_BLEND>()
 	};
 
 	for (auto& uniform_block : createInfo.uniform_blocks)
@@ -2566,6 +2578,26 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	setUniforms(0, cbuf.con0);
 	setUniforms(1, cbuf.con1);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_EDGES>& cbuf)
+{
+	setUniforms(0, cbuf.rtMetrics);
+	setUniforms(1, cbuf.uvScaleClamp);
+	setUniforms(2, cbuf.params);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_WEIGHTS>& cbuf)
+{
+	setUniforms(0, cbuf.rtMetrics);
+	setUniforms(1, cbuf.uvScaleClamp);
+	setUniforms(2, cbuf.params);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_BLEND>& cbuf)
+{
+	setUniforms(0, cbuf.rtMetrics);
+	setUniforms(1, cbuf.uvScaleClamp);
 }
 
 GLint get_size(const gfx_api::vertex_attribute_type& type)

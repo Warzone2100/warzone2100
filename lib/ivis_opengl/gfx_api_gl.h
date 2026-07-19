@@ -339,6 +339,9 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_WORLD_TO_SCREEN>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_EASU>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_FSR1_RCAS>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_EDGES>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_WEIGHTS>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMAA_BLEND>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context

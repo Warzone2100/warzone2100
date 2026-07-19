@@ -63,6 +63,21 @@ data/base/shaders/fsr1_rcas.frag
 data/base/shaders/vk/fsr1_easu.frag
 data/base/shaders/vk/fsr1_rcas.frag
 	- MIT License, based on AMD FidelityFX Super Resolution 1.0, Copyright (c) 2021 Advanced Micro Devices, Inc. (https://github.com/GPUOpen-Effects/FidelityFX-FSR)
+data/base/shaders/smaa_edges.vert
+data/base/shaders/smaa_edges.frag
+data/base/shaders/smaa_weights.vert
+data/base/shaders/smaa_weights.frag
+data/base/shaders/smaa_blend.vert
+data/base/shaders/smaa_blend.frag
+data/base/shaders/vk/smaa_edges.vert
+data/base/shaders/vk/smaa_edges.frag
+data/base/shaders/vk/smaa_weights.vert
+data/base/shaders/vk/smaa_weights.frag
+data/base/shaders/vk/smaa_blend.vert
+data/base/shaders/vk/smaa_blend.frag
+lib/ivis_opengl/3rdparty/AreaTex.h
+lib/ivis_opengl/3rdparty/SearchTex.h
+	- MIT License, based on SMAA (Enhanced Subpixel Morphological Antialiasing), Copyright (c) 2013 Jorge Jimenez, Jose I. Echevarria, Belen Masia, Fernando Navarro and Diego Gutierrez (https://github.com/iryoku/smaa)
 data/base/images/frontend/image_cam_universe_stars.png
 data/base/images/frontend/image_check_circle.png
 data/base/images/frontend/image_question_circle.png

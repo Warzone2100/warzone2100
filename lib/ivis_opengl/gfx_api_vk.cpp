@@ -1269,6 +1269,9 @@ static const std::map<SHADER_MODE, shader_infos> spv_files
 	std::make_pair(SHADER_WORLD_TO_SCREEN, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/world_to_screen.frag.spv" }),
 	std::make_pair(SHADER_FSR1_EASU, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/fsr1_easu.frag.spv" }),
 	std::make_pair(SHADER_FSR1_RCAS, shader_infos{ "shaders/vk/world_to_screen.vert.spv", "shaders/vk/fsr1_rcas.frag.spv" }),
+	std::make_pair(SHADER_SMAA_EDGES, shader_infos{ "shaders/vk/smaa_edges.vert.spv", "shaders/vk/smaa_edges.frag.spv" }),
+	std::make_pair(SHADER_SMAA_WEIGHTS, shader_infos{ "shaders/vk/smaa_weights.vert.spv", "shaders/vk/smaa_weights.frag.spv" }),
+	std::make_pair(SHADER_SMAA_BLEND, shader_infos{ "shaders/vk/smaa_blend.vert.spv", "shaders/vk/smaa_blend.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2D_QUAD, shader_infos{ "shaders/vk/quad_texture2d.vert.spv", "shaders/vk/quad_texture2d.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TEXTURE2DARRAY_QUAD, shader_infos{ "shaders/vk/quad_texture2darray.vert.spv", "shaders/vk/quad_texture2darray.frag.spv" }),
 	std::make_pair(SHADER_DEBUG_TESS_QUAD, shader_infos{ "shaders/vk/tess_quad.vert.spv", "shaders/vk/tess_quad.frag.spv", false, false, false, false, "shaders/vk/tess_quad.tesc.spv", "shaders/vk/tess_quad.tese.spv" })
