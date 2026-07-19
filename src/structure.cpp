@@ -29,6 +29,7 @@
 #include <algorithm>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/gamepad_input.h"
 #include "lib/framework/geometry.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/imd.h"
@@ -4712,6 +4713,27 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy, GameWorld& world)
 	return resourceFound;
 }
 
+// Only losing a key base structure warrants the strong rumble - walls and
+// lone defense towers fall too often to buzz about
+static bool structureLossRumbles(STRUCTURE_TYPE type)
+{
+	switch (type)
+	{
+	case REF_HQ:
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+	case REF_POWER_GEN:
+	case REF_RESEARCH:
+	case REF_SAT_UPLINK:
+	case REF_LASSAT:
+	case REF_FORTRESS:
+		return true;
+	default:
+		return false;
+	}
+}
+
 /* Remove a structure */
 bool destroyStruct(STRUCTURE *psDel, unsigned impactTime, GameWorld& world)
 {
@@ -4861,6 +4883,10 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime, GameWorld& world)
 		if (psDel->player == selectedPlayer)
 		{
 			scoreUpdateVar(WD_STR_LOST);
+			if (structureLossRumbles(psDel->pStructureType->type))
+			{
+				gamepadRumble(0.9f, 0.7f, 450);
+			}
 		}
 		// only counts as a kill if structure doesn't belong to our ally
 		else if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psDel->player, selectedPlayer))
