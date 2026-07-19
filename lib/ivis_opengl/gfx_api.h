@@ -1676,6 +1676,72 @@ namespace gfx_api
 		>
 	>,
 	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_FSR1_RCAS>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SMAA_EDGES>
+	{
+		// xy = 1 / input size, zw = input size
+		glm::vec4 rtMetrics;
+		// xy = rendered sub-rect fraction of the input, zw = UV clamp inside its edge
+		glm::vec4 uvScaleClamp;
+		// x = luma contrast threshold
+		glm::vec4 params;
+	};
+
+	using SmaaEdgesPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SMAA_EDGES>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>>, SHADER_SMAA_EDGES>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SMAA_WEIGHTS>
+	{
+		// xy = 1 / input size, zw = input size
+		glm::vec4 rtMetrics;
+		// xy = rendered sub-rect fraction of the input, zw = UV clamp inside its edge
+		glm::vec4 uvScaleClamp;
+		// x = max orthogonal search steps, y = max diagonal search steps (0 disables
+		// diagonal processing), z = corner rounding [0..1] (1 disables corner processing)
+		glm::vec4 params;
+	};
+
+	using SmaaWeightsPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SMAA_WEIGHTS>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<2, sampler_type::nearest_clamped, pixel_format_target::texture_2d>
+	>, SHADER_SMAA_WEIGHTS>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SMAA_BLEND>
+	{
+		// xy = 1 / input size, zw = input size
+		glm::vec4 rtMetrics;
+		// xy = rendered sub-rect fraction of the input, zw = UV clamp inside its edge
+		glm::vec4 uvScaleClamp;
+	};
+
+	using SmaaBlendPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<constant_buffer_type<SHADER_SMAA_BLEND>>,
+	std::tuple<
+		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
+			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
+		>
+	>,
+	std::tuple<
+		texture_description<0, sampler_type::bilinear, pixel_format_target::texture_2d>,
+		texture_description<1, sampler_type::bilinear, pixel_format_target::texture_2d>
+	>, SHADER_SMAA_BLEND>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)
