@@ -1,0 +1,37 @@
+{
+  "_comment": "Acceptance scenario sums across arrangements 0-4, recorded with no pathfinding features. Regenerate with tests/movebench/run.sh --acceptance --baseline.",
+  "arrangements": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "scenarios": {
+    "mountain_chain": {
+      "hardStops": 636429,
+      "repaths": 10744,
+      "unitsArrived": 121
+    },
+    "mountain_chain_cross": {
+      "hardStops": 660055,
+      "repaths": 11759,
+      "unitsArrived": 120
+    },
+    "open_corner": {
+      "hardStops": 4487878,
+      "repaths": 77626,
+      "unitsArrived": 99
+    },
+    "rush_corner": {
+      "hardStops": 4721283,
+      "repaths": 79695,
+      "unitsArrived": 47
+    },
+    "rush_turn": {
+      "hardStops": 103043,
+      "repaths": 1301,
+      "unitsArrived": 157
+    }
+  }
+}
