@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/gamepad_input.h"
 #include "lib/netplay/sync_debug.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
@@ -487,6 +488,19 @@ int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage,
 		triggerEventAttacked(psObj, (psProjectile != nullptr) ? psProjectile->psSource : nullptr, lastHit);
 
 		bMultiMessages = bMultiMessagesBackup;
+
+		// a light controller pulse when our forces come under fire after a
+		// quiet spell - continuous battle stays silent instead of buzzing
+		// periodically
+		if (psObj->player == selectedPlayer)
+		{
+			static UDWORD lastOwnForcesHitTime = 0;
+			if (realTime - lastOwnForcesHitTime > 15000)
+			{
+				gamepadRumble(0.3f, 0.2f, 200);
+			}
+			lastOwnForcesHitTime = realTime;
+		}
 	}
 
 	if (psObj->type == OBJ_DROID)

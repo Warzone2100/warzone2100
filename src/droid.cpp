@@ -24,6 +24,7 @@
  *
  */
 #include "lib/framework/frame.h"
+#include "lib/framework/gamepad_input.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/geometry.h"
 #include "lib/framework/strres.h"
@@ -347,6 +348,7 @@ int32_t droidDamage(GameWorld& world, DROID *psDroid, PROJECTILE *psProjectile, 
 			scoreUpdateVar(WD_UNITS_LOST);
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED, UNIT_LOST_DELAY,
 										psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
+			gamepadRumble(0.6f, 0.5f, 300);
 		}
 		// only counts as a kill if it's not our ally
 		else if (selectedPlayer < MAX_PLAYERS && !aiCheckAlliances(psDroid->player, selectedPlayer))
