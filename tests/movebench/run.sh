@@ -28,6 +28,10 @@
 # scores that feature set against the plain baseline and prints the table as
 # GitHub markdown, ready to paste into a pull request.
 #
+# --acceptance switches to the real-map acceptance scenarios, judged by summed
+# hard stops over their arrangements rather than medians, against
+# tests/movebench/acceptance-baseline.json. These are heavy runs.
+#
 # --check verifies every arrangement is reproducible, which catches anything
 # that broke sync, ex. a stray rand(), a float in a position path, or a live
 # read from a worker thread.
@@ -56,12 +60,14 @@ fi
 # scored against the baseline, ex. run.sh --score --movementspread=field
 SUB=""
 MARKDOWN=0
+ACCEPTANCE=0
 HAVE_AGAINST=0
 AGAINST=""
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--baseline|--check|--score) SUB="$1" ;;
 		--markdown) MARKDOWN=1 ;;
+		--acceptance) ACCEPTANCE=1 ;;
 		--against=*) AGAINST="${1#--against=}"; HAVE_AGAINST=1 ;;
 		*) break ;;
 	esac
@@ -87,14 +93,16 @@ if [ "$SUB" = "--check" ]; then
 fi
 
 python3 - "$WZ" "$SUB" "$HERE/baseline.json" "$ARRANGEMENTS" "$SCENARIOS" \
-	"$MARKDOWN" "$HAVE_AGAINST" "$AGAINST" "$@" <<'PYEOF'
+	"$MARKDOWN" "$ACCEPTANCE" "$HAVE_AGAINST" "$AGAINST" "$HERE/acceptance-baseline.json" "$@" <<'PYEOF'
 import json, statistics, subprocess, sys
 
 wz, sub, baseline_path, arrangements, scenarios = sys.argv[1:6]
 markdown = sys.argv[6] == "1"
-have_against = sys.argv[7] == "1"
-against_args = sys.argv[8].split()
-passthrough = sys.argv[9:]
+acceptance = sys.argv[7] == "1"
+have_against = sys.argv[8] == "1"
+against_args = sys.argv[9].split()
+acceptance_baseline_path = sys.argv[10]
+passthrough = sys.argv[11:]
 scenarios = scenarios.split()
 
 # Stride evenly through the 81 arrangements a two-block scenario can take.
@@ -112,6 +120,15 @@ FLOAT_FIELDS = ["secPerTile_p95"]
 # Share of a cell's ordered units that must arrive for that arrangement to count
 # as resolved rather than jammed.
 RESOLVED_SHARE = 0.75
+
+# The real-map acceptance pair plus the corner cases, judged by summed hard
+# stops across their arrangements, never a single arrangement: several of these
+# are bimodal, and a single-arrangement jump can be pure mode reshuffling while
+# the sums sit within noise.
+ACCEPTANCE_SCENARIOS = ["mountain_chain", "mountain_chain_cross", "rush_turn",
+                        "rush_corner", "open_corner"]
+ACCEPTANCE_INDICES = [0, 1, 2, 3, 4]
+ACCEPTANCE_FIELDS = ["hardStops", "unitsArrived", "repaths"]
 
 def run(scenario, index, extra):
     # A run that prints no scorecard is a process-level failure, not a sim
@@ -137,6 +154,51 @@ def delta(value, ref):
     if ref == 0:
         return "(%+.0f)" % (value - ref) if value != ref else "(=)"
     return "(%+.1f%%)" % (int(1000.0 * (value - ref) / ref) / 10.0)
+
+if acceptance:
+    def sweep(extra):
+        out = {}
+        for s in ACCEPTANCE_SCENARIOS:
+            cards = [run(s, i, extra) for i in ACCEPTANCE_INDICES]
+            out[s] = {f: sum(c[f] for c in cards) for f in ACCEPTANCE_FIELDS}
+        return out
+
+    results = sweep(passthrough)
+    if sub == "--baseline":
+        with open(acceptance_baseline_path, "w") as f:
+            json.dump({
+                "_comment": "Acceptance scenario sums across arrangements 0-4, recorded with no pathfinding features. Regenerate with tests/movebench/run.sh --acceptance --baseline.",
+                "arrangements": ACCEPTANCE_INDICES,
+                "scenarios": results,
+            }, f, indent=2, sort_keys=True)
+            f.write("\n")
+        print("wrote", acceptance_baseline_path, file=sys.stderr)
+
+    ref = None
+    if have_against:
+        ref = sweep(against_args)
+    elif sub == "--score":
+        with open(acceptance_baseline_path) as f:
+            ref = json.load(f)["scenarios"]
+
+    def cell(s, field):
+        v = results[s][field]
+        if ref is None:
+            return "%d" % v
+        return "%d %s" % (v, delta(v, ref[s][field]))
+
+    if markdown:
+        print("| scenario | hard stops (sum) | arrived | repaths |")
+        print("|---|---|---|---|")
+        for s in ACCEPTANCE_SCENARIOS:
+            print("| %s | %s | %s | %s |" % (s, cell(s, "hardStops"),
+                                             cell(s, "unitsArrived"), cell(s, "repaths")))
+    else:
+        print("%-22s %22s %14s %16s" % ("SCENARIO", "hardStops (sum)", "arrived", "repaths"))
+        for s in ACCEPTANCE_SCENARIOS:
+            print("%-22s %22s %14s %16s" % (s, cell(s, "hardStops"),
+                                            cell(s, "unitsArrived"), cell(s, "repaths")))
+    sys.exit(0)
 
 def sweep(extra):
     # Free-travel floor, in seconds per tile, from the open-field scenario over
