@@ -23,13 +23,16 @@
 // THE SOFTWARE.
 
 // standard FsrEasuCon constants
-// con0.xy = input size / output size, con0.zw = 0.5 * con0.xy - 0.5
+// con0.xy = input viewport size / output size, con0.zw = 0.5 * con0.xy - 0.5
 // con1.xy = input texel size, con1.zw / con2 / con3 position the gather quad fetches
+// con4.zw clamps gather quad centers inside the rendered input viewport, which
+// may be a sub-rect of the input texture under dynamic resolution
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	vec4 con0;
 	vec4 con1;
 	vec4 con2;
 	vec4 con3;
+	vec4 con4;
 };
 
 layout(set = 1, binding = 0) uniform sampler2D Texture;
@@ -134,10 +137,10 @@ void main()
 	// Each gather's component mapping matches the reference,
 	//  w z
 	//  x y
-	vec2 p0 = fp * con1.xy + con1.zw;
-	vec2 p1 = p0 + con2.xy;
-	vec2 p2 = p0 + con2.zw;
-	vec2 p3 = p0 + con3.xy;
+	vec2 p0 = min(fp * con1.xy + con1.zw, con4.zw);
+	vec2 p1 = min(p0 + con2.xy, con4.zw);
+	vec2 p2 = min(p0 + con2.zw, con4.zw);
+	vec2 p3 = min(p0 + con3.xy, con4.zw);
 	vec4 bczzR = textureGather(Texture, p0, 0);
 	vec4 bczzG = textureGather(Texture, p0, 1);
 	vec4 bczzB = textureGather(Texture, p0, 2);

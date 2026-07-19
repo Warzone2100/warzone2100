@@ -784,16 +784,27 @@ bool gfx_api::context::loadTextureArrayLayerFromBaseImages(gfx_api::texture_arra
 
 std::pair<uint32_t, uint32_t> gfx_api::context::getSceneRenderTargetDimensions()
 {
+	std::pair<uint32_t, uint32_t> targetDims = {0, 0};
 	abstract_texture* sceneColor = getPipelineSurface(PipelineSurfaceId::SceneColor);
 	if (sceneColor != nullptr)
 	{
 		const auto dims = getRenderTargetDimensions(sceneColor);
 		if (dims.has_value())
 		{
-			return dims.value();
+			targetDims = dims.value();
 		}
 	}
-	return getDrawableDimensions();
+	if (targetDims.first == 0 || targetDims.second == 0)
+	{
+		targetDims = getDrawableDimensions();
+	}
+	const float fraction = getSceneRenderFraction();
+	if (fraction < 1.f && targetDims.first > 0 && targetDims.second > 0)
+	{
+		targetDims.first = std::min(targetDims.first, std::max<uint32_t>(static_cast<uint32_t>(std::lround(targetDims.first * fraction)), 2));
+		targetDims.second = std::min(targetDims.second, std::max<uint32_t>(static_cast<uint32_t>(std::lround(targetDims.second * fraction)), 2));
+	}
+	return targetDims;
 }
 
 void gfx_api::context::warmCompiledRenderGraph(std::vector<RenderPassDesc>& /*passes*/,

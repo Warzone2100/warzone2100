@@ -244,7 +244,8 @@ bool evalEnablePolicy(SurfaceEnablePolicy policy, const PipelineSurfaceSyncInput
 		return inputs.numShadowCascades > 0u;
 	case SurfaceEnablePolicy::FsrUpscaleActive:
 		return inputs.fsr1SceneUpscale
-			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH);
+			&& (inputs.sceneW != inputs.drawableW || inputs.sceneH != inputs.drawableH
+				|| inputs.sceneDynamicResolution);
 	}
 	return false;
 }

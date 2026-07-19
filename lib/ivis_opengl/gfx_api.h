@@ -486,9 +486,10 @@ namespace gfx_api
 
 		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }
 
-		/// Dimensions of the scene color render target, for shader inputs that map
-		/// gl_FragCoord within the scene pass (falls back to the drawable size when
-		/// no scene target exists).
+		/// Dimensions of the scene area rendered this frame (the scene color target
+		/// scaled by the dynamic render fraction), for the scene pass viewport and
+		/// shader inputs that map gl_FragCoord within the scene pass. Falls back to
+		/// the drawable size when no scene target exists.
 		std::pair<uint32_t, uint32_t> getSceneRenderTargetDimensions();
 
 		/// The mip LOD bias applied by material shaders when sampling textures
@@ -508,14 +509,36 @@ namespace gfx_api
 			_sceneRenderScalePercent = std::min(std::max(scalePercent, minSceneRenderScalePercent), maxSceneRenderScalePercent);
 			return true;
 		}
+		static constexpr float minSceneRenderFraction = 0.5f;
+		/// Dynamic resolution: the fraction of the scene render targets actually
+		/// rendered to this frame. Changing it never reallocates targets and never
+		/// rebuilds the render graph (the scene pass viewport, the scene shader
+		/// dimensions, and the upscale constants all track it at execute time).
+		float getSceneRenderFraction() const { return _sceneRenderFraction; }
+		void setSceneRenderFraction(float fraction)
+		{
+			_sceneRenderFraction = std::min(std::max(fraction, minSceneRenderFraction), 1.f);
+		}
+		/// Marks dynamic resolution active. Backend overrides keep the FSR1 upscale
+		/// chain and its intermediate surface alive even while the scene targets
+		/// match the drawable size, so the pass topology stays stable per frame.
+		virtual bool setSceneDynamicResolution(bool enabled)
+		{
+			_sceneDynamicResolution = enabled;
+			return true;
+		}
+		bool sceneDynamicResolutionEnabled() const { return _sceneDynamicResolution; }
+
 		/// The mip LOD bias for material shaders sampling in the scene pass, adding
-		/// log2 of the scene render scale so texture detail matches the output size
+		/// log2 of the effective scene render scale so texture detail matches the
+		/// output size
 		float getSceneMipLodBias() const
 		{
 			float bias = getMipLodBias();
-			if (_sceneRenderScalePercent != 100)
+			const float effectiveScale = (static_cast<float>(_sceneRenderScalePercent) / 100.f) * _sceneRenderFraction;
+			if (effectiveScale < 1.f)
 			{
-				bias += std::log2(static_cast<float>(_sceneRenderScalePercent) / 100.f);
+				bias += std::log2(effectiveScale);
 			}
 			return bias;
 		}
@@ -636,6 +659,8 @@ namespace gfx_api
 		optional<float> _mipLodBias;
 		uint32_t _sceneRenderScalePercent = 100;
 		scene_upscaling_mode _sceneUpscalingMode = scene_upscaling_mode::bilinear;
+		float _sceneRenderFraction = 1.f;
+		bool _sceneDynamicResolution = false;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
@@ -1598,8 +1623,15 @@ namespace gfx_api
 		vertex_buffer_description<sizeof(glm::vec2), gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>>
 	>, notexture, SHADER_DEBUG_TESS_QUAD>;
 
+	template<>
+	struct constant_buffer_type<SHADER_WORLD_TO_SCREEN>
+	{
+		// xy = rendered sub-rect fraction of the source, zw = UV clamp inside its edge
+		glm::vec4 uvScaleClamp;
+	};
+
 	using WorldToScreenPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
-	std::tuple<>,
+	std::tuple<constant_buffer_type<SHADER_WORLD_TO_SCREEN>>,
 	std::tuple<
 		vertex_buffer_description<2 * sizeof(gfxFloat), gfx_api::vertex_attribute_input_rate::vertex,
 			vertex_attribute_description<position, gfx_api::vertex_attribute_type::float2, 0>
@@ -1615,6 +1647,9 @@ namespace gfx_api
 		glm::vec4 con1;
 		glm::vec4 con2;
 		glm::vec4 con3;
+		// UV clamps keeping taps inside the rendered input viewport
+		// (xy for plain taps, zw for gather quad centers)
+		glm::vec4 con4;
 	};
 
 	using Fsr1EasuPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
