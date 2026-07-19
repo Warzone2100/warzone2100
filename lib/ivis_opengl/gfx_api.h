@@ -520,6 +520,24 @@ namespace gfx_api
 			return bias;
 		}
 
+		/// A completed GPU frame timing measurement from timestamp queries
+		struct GpuFrameTiming
+		{
+			/// The frame the measurement belongs to (current_FrameNum numbering)
+			size_t frameNum = 0;
+			/// GPU time between the frame's first and last rendering commands
+			uint64_t durationNs = 0;
+		};
+		/// True when the backend can measure GPU frame time with timestamp queries
+		virtual bool supportsGpuFrameTiming() const { return false; }
+		/// Enable or disable per frame GPU timestamp queries.
+		/// Results are read without stalling, so each measurement becomes
+		/// available a few frames after the frame it measures.
+		virtual bool setGpuFrameTimingEnabled(bool enabled) { return !enabled; }
+		bool gpuFrameTimingEnabled() const { return _gpuFrameTimingEnabled; }
+		/// The most recently completed measurement (compare frameNum to detect new samples)
+		optional<GpuFrameTiming> getLastGpuFrameTiming() const { return _lastGpuFrameTiming; }
+
 		/// How the reduced-resolution scene is upscaled to the drawable
 		enum class scene_upscaling_mode : uint8_t
 		{
@@ -606,6 +624,10 @@ namespace gfx_api
 		bool renderGraphExecuting() const { return _renderGraphExecuting; }
 		void setRenderGraphExecuting(bool executing) { _renderGraphExecuting = executing; }
 		void bumpRenderGraphEpoch() { ++_renderGraphEpoch; }
+
+		// GPU frame timing state maintained by the backends
+		bool _gpuFrameTimingEnabled = false;
+		optional<GpuFrameTiming> _lastGpuFrameTiming;
 
 	private:
 		bool _renderGraphExecuting = false;

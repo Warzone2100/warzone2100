@@ -383,6 +383,8 @@ struct gl_context final : public gfx_api::context
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
 	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
+	virtual bool supportsGpuFrameTiming() const override;
+	virtual bool setGpuFrameTimingEnabled(bool enabled) override;
 	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;
@@ -474,6 +476,10 @@ private:
 	bool initGLContext();
 	bool initTessellationSupport();
 	bool initTextureGatherSupport();
+	bool initGpuTimestampSupport();
+	void createGpuTimingQueries();
+	void destroyGpuTimingQueries();
+	void pollGpuFrameTimings();
 	bool ensurePatchVertices4();
 	bool enableDebugMessageCallbacks();
 	void enableVertexAttribArray(GLuint index);
@@ -502,6 +508,21 @@ private:
 	bool hasBorderClampSupport = false;
 	bool hasTessellationSupport = false;
 	bool hasTextureGatherSupport = false;
+
+	// GPU frame timing (a ring of timestamp query pairs, read a few frames late)
+	bool hasGpuTimestampSupport = false;
+	struct GpuTimingSlot
+	{
+		GLuint beginQuery = 0;
+		GLuint endQuery = 0;
+		size_t frameNum = 0;
+		bool inFlight = false;
+	};
+	std::array<GpuTimingSlot, 8> gpuTimingSlots;
+	size_t gpuTimingWriteIdx = 0;
+	size_t gpuTimingReadIdx = 0;
+	bool gpuTimingQueriesCreated = false;
+	bool gpuTimingFrameOpen = false;
 	bool patchVertices4Set = false;
 	int32_t maxArrayTextureLayers = 0;
 	GLfloat maxTextureAnisotropy = 0.f;

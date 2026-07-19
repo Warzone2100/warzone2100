@@ -3848,6 +3848,8 @@ void VkRoot::shutdown()
 	// ShadowMap and other non-swapchain surfaces after swapchain/buffering teardown (GPU idle, FBs flushed).
 	resetAllPipelineSurfaceSlots();
 
+	destroyGpuTimingQueryPool();
+
 	if (dev)
 	{
 		for (auto& pipelineInfo : createdPipelines)
@@ -3987,6 +3989,10 @@ void VkRoot::finalizeActiveRecording()
 	currentPSO = nullptr;
 	currentRenderPassId = INVALID_RENDER_PASS_ID;
 
+	if (frameResources.drawCmdBufferBegun)
+	{
+		writeGpuTimingEndIfOpen(frameResources.drawCmdBuffer());
+	}
 	frameResources.endDrawCmdBufferIfRecording();
 	frameResources.endCopyCmdBufferIfRecording();
 	frameResources.streamedVertexBufferAllocator.unmapAutomappedMemory();
@@ -4969,6 +4975,9 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 	}
 
 	getQueues();
+
+	hasGpuTimestampSupport = initGpuTimestampSupport();
+	debug(LOG_3D, "* GPU timestamp query support: %s", hasGpuTimestampSupport ? "true" : "false");
 
 	ASSERT(renderPasses.empty(), "Non-empty renderPasses vector?");
 	renderPasses.clear();
@@ -6703,6 +6712,8 @@ void VkRoot::sealDrawCommandBufferForPresent()
 	vk::CommandBuffer drawCmdBuffer = frameResources.drawCmdBuffer();
 	auto* swapchainColor = getPipelineSurface(gfx_api::PipelineSurfaceId::SwapchainColor);
 
+	writeGpuTimingEndIfOpen(drawCmdBuffer);
+
 	if (_screenshotReadback.hasAwaitingRecord() && swapchainColor
 		&& _frameLayoutTracker.swapchainTouchedThisFrame())
 	{
@@ -6731,6 +6742,12 @@ void VkRoot::beginScreenFrame()
 
 	frameResources.ensureTransferRecordingBegun(vkDynLoader);
 	_framebufferCache.releaseAll();
+
+	gpuTimingFrameOpen = false;
+	if (_gpuFrameTimingEnabled)
+	{
+		pollGpuFrameTimings();
+	}
 }
 
 void VkRoot::reconcileSwapchainAtFrameOpen()
@@ -6870,6 +6887,8 @@ void VkRoot::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::Compi
 	frameHasDrawCommands = true;
 
 	vk::CommandBuffer drawCmdBuffer = buffering_mechanism::get_current_resources().drawCmdBuffer();
+
+	writeGpuTimingBeginIfNeeded(drawCmdBuffer);
 
 	_fboAttachmentsScratch.clear();
 	const size_t resolveAttachmentCount = pass.resolveAttachment.has_value() ? 1 : 0;
@@ -7011,6 +7030,151 @@ bool VkRoot::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferR
 	}
 
 	return true;
+}
+
+bool VkRoot::initGpuTimestampSupport()
+{
+	ASSERT_OR_RETURN(false, physicalDevice, "No physical device");
+	ASSERT_OR_RETURN(false, queueFamilyIndices.graphicsFamily.has_value(), "No graphics queue family");
+	const auto queueFamilies = physicalDevice.getQueueFamilyProperties(vkDynLoader);
+	const uint32_t graphicsFamily = queueFamilyIndices.graphicsFamily.value();
+	if (graphicsFamily >= queueFamilies.size())
+	{
+		return false;
+	}
+	const uint32_t timestampValidBits = queueFamilies[graphicsFamily].timestampValidBits;
+	gpuTimestampPeriod = physDeviceProps.limits.timestampPeriod;
+	if (timestampValidBits == 0 || !(gpuTimestampPeriod > 0.f))
+	{
+		return false;
+	}
+	gpuTimestampMask = (timestampValidBits >= 64) ? ~uint64_t(0) : ((uint64_t(1) << timestampValidBits) - 1);
+	return true;
+}
+
+bool VkRoot::supportsGpuFrameTiming() const
+{
+	return hasGpuTimestampSupport;
+}
+
+bool VkRoot::setGpuFrameTimingEnabled(bool enabled)
+{
+	if (!hasGpuTimestampSupport || !dev)
+	{
+		_gpuFrameTimingEnabled = false;
+		return !enabled;
+	}
+	if (enabled == _gpuFrameTimingEnabled)
+	{
+		return true;
+	}
+	if (enabled && !gpuTimingQueryPool)
+	{
+		try {
+			gpuTimingQueryPool = dev.createQueryPool(
+				vk::QueryPoolCreateInfo()
+					.setQueryType(vk::QueryType::eTimestamp)
+					.setQueryCount(static_cast<uint32_t>(2 * GPU_TIMING_SLOTS))
+				, nullptr, vkDynLoader);
+		}
+		catch (const vk::SystemError& e)
+		{
+			debug(LOG_ERROR, "Failed to create timestamp query pool: %s", e.what());
+			return false;
+		}
+	}
+	// the pool is kept until shutdown when disabling, since in flight
+	// command buffers may still reference it
+	_gpuFrameTimingEnabled = enabled;
+	return true;
+}
+
+void VkRoot::destroyGpuTimingQueryPool()
+{
+	if (gpuTimingQueryPool && dev)
+	{
+		dev.destroyQueryPool(gpuTimingQueryPool, nullptr, vkDynLoader);
+		gpuTimingQueryPool = vk::QueryPool();
+	}
+	for (auto& slot : gpuTimingSlots)
+	{
+		slot = GpuTimingSlot();
+	}
+	gpuTimingWriteIdx = 0;
+	gpuTimingReadIdx = 0;
+	gpuTimingFrameOpen = false;
+	_gpuFrameTimingEnabled = false;
+}
+
+void VkRoot::pollGpuFrameTimings()
+{
+	if (!gpuTimingQueryPool)
+	{
+		return;
+	}
+	while (gpuTimingSlots[gpuTimingReadIdx].inFlight)
+	{
+		auto& slot = gpuTimingSlots[gpuTimingReadIdx];
+		// per query pair: value and availability (non zero when the result has landed)
+		uint64_t results[4] = {0, 0, 0, 0};
+		const vk::Result queryResult = dev.getQueryPoolResults(
+			gpuTimingQueryPool, static_cast<uint32_t>(2 * gpuTimingReadIdx), 2,
+			sizeof(results), results, 2 * sizeof(uint64_t),
+			vk::QueryResultFlagBits::e64 | vk::QueryResultFlagBits::eWithAvailability, vkDynLoader);
+		const bool available = (queryResult == vk::Result::eSuccess) && results[1] != 0 && results[3] != 0;
+		if (!available)
+		{
+			// drop very old measurements so a frame that was never submitted cannot wedge the ring
+			if (frameNum > slot.frameNum + 64)
+			{
+				slot.inFlight = false;
+				gpuTimingReadIdx = (gpuTimingReadIdx + 1) % GPU_TIMING_SLOTS;
+				continue;
+			}
+			break;
+		}
+		const uint64_t beginTicks = results[0] & gpuTimestampMask;
+		const uint64_t endTicks = results[2] & gpuTimestampMask;
+		const uint64_t deltaTicks = (endTicks - beginTicks) & gpuTimestampMask;
+		_lastGpuFrameTiming = gfx_api::context::GpuFrameTiming{
+			slot.frameNum,
+			static_cast<uint64_t>(static_cast<double>(deltaTicks) * static_cast<double>(gpuTimestampPeriod))};
+		slot.inFlight = false;
+		gpuTimingReadIdx = (gpuTimingReadIdx + 1) % GPU_TIMING_SLOTS;
+	}
+}
+
+void VkRoot::writeGpuTimingBeginIfNeeded(vk::CommandBuffer cmdBuffer)
+{
+	if (!_gpuFrameTimingEnabled || !gpuTimingQueryPool || gpuTimingFrameOpen)
+	{
+		return;
+	}
+	auto& slot = gpuTimingSlots[gpuTimingWriteIdx];
+	if (slot.inFlight)
+	{
+		// the ring is full, skip measuring this frame
+		return;
+	}
+	const uint32_t firstQuery = static_cast<uint32_t>(2 * gpuTimingWriteIdx);
+	cmdBuffer.resetQueryPool(gpuTimingQueryPool, firstQuery, 2, vkDynLoader);
+	cmdBuffer.writeTimestamp(vk::PipelineStageFlagBits::eTopOfPipe, gpuTimingQueryPool, firstQuery, vkDynLoader);
+	gpuTimingFrameOpen = true;
+}
+
+void VkRoot::writeGpuTimingEndIfOpen(vk::CommandBuffer cmdBuffer)
+{
+	if (!gpuTimingFrameOpen)
+	{
+		return;
+	}
+	auto& slot = gpuTimingSlots[gpuTimingWriteIdx];
+	cmdBuffer.writeTimestamp(vk::PipelineStageFlagBits::eBottomOfPipe, gpuTimingQueryPool,
+		static_cast<uint32_t>(2 * gpuTimingWriteIdx + 1), vkDynLoader);
+	slot.frameNum = frameNum;
+	slot.inFlight = true;
+	gpuTimingWriteIdx = (gpuTimingWriteIdx + 1) % GPU_TIMING_SLOTS;
+	gpuTimingFrameOpen = false;
 }
 
 bool VkRoot::setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode)
