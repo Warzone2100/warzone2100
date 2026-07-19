@@ -32,6 +32,10 @@
 # hard stops over their arrangements rather than medians, against
 # tests/movebench/acceptance-baseline.json. These are heavy runs.
 #
+# --concurrent=N keeps up to N game processes running at once. Every run is an
+# independent deterministic process whose scorecard comes back on its own
+# stdout, so concurrency changes wall-clock and nothing else.
+#
 # --check verifies every arrangement is reproducible, which catches anything
 # that broke sync, ex. a stray rand(), a float in a position path, or a live
 # read from a worker thread.
@@ -63,12 +67,14 @@ MARKDOWN=0
 ACCEPTANCE=0
 HAVE_AGAINST=0
 AGAINST=""
+CONCURRENT=1
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--baseline|--check|--score) SUB="$1" ;;
 		--markdown) MARKDOWN=1 ;;
 		--acceptance) ACCEPTANCE=1 ;;
 		--against=*) AGAINST="${1#--against=}"; HAVE_AGAINST=1 ;;
+		--concurrent=*) CONCURRENT="${1#--concurrent=}" ;;
 		*) break ;;
 	esac
 	shift
@@ -93,8 +99,9 @@ if [ "$SUB" = "--check" ]; then
 fi
 
 python3 - "$WZ" "$SUB" "$HERE/baseline.json" "$ARRANGEMENTS" "$SCENARIOS" \
-	"$MARKDOWN" "$ACCEPTANCE" "$HAVE_AGAINST" "$AGAINST" "$HERE/acceptance-baseline.json" "$@" <<'PYEOF'
+	"$MARKDOWN" "$ACCEPTANCE" "$HAVE_AGAINST" "$AGAINST" "$HERE/acceptance-baseline.json" "$CONCURRENT" "$@" <<'PYEOF'
 import json, statistics, subprocess, sys
+from concurrent.futures import ThreadPoolExecutor
 
 wz, sub, baseline_path, arrangements, scenarios = sys.argv[1:6]
 markdown = sys.argv[6] == "1"
@@ -102,7 +109,8 @@ acceptance = sys.argv[7] == "1"
 have_against = sys.argv[8] == "1"
 against_args = sys.argv[9].split()
 acceptance_baseline_path = sys.argv[10]
-passthrough = sys.argv[11:]
+workers = max(1, int(sys.argv[11]))
+passthrough = sys.argv[12:]
 scenarios = scenarios.split()
 
 # Stride evenly through the 81 arrangements a two-block scenario can take.
@@ -146,6 +154,15 @@ def run(scenario, index, extra):
               % (scenario, index, attempt + 1), file=sys.stderr)
     raise RuntimeError("%s arr=%d produced no scorecard in 4 attempts" % (scenario, index))
 
+# Runs are independent processes collected by index, so the pool changes
+# wall-clock and nothing else.
+pool = ThreadPoolExecutor(workers) if workers > 1 else None
+
+def run_all(scenario, idxs, extra):
+    if pool is None:
+        return [run(scenario, i, extra) for i in idxs]
+    return list(pool.map(lambda i: run(scenario, i, extra), idxs))
+
 def delta(value, ref):
     # Change against the reference, as a percentage when the reference can
     # carry one and as an absolute step from zero when it cannot. One decimal,
@@ -159,7 +176,7 @@ if acceptance:
     def sweep(extra):
         out = {}
         for s in ACCEPTANCE_SCENARIOS:
-            cards = [run(s, i, extra) for i in ACCEPTANCE_INDICES]
+            cards = run_all(s, ACCEPTANCE_INDICES, extra)
             out[s] = {f: sum(c[f] for c in cards) for f in ACCEPTANCE_FIELDS}
         return out
 
@@ -205,11 +222,11 @@ def sweep(extra):
     # the same arrangements. A cell's grind is its loaded secPerTile against
     # this, so a mechanism only counts when it pulls a pinch back toward free
     # travel rather than merely arriving before the budget runs out.
-    floor_cards = [run("openfield", i, extra) for i in indices]
+    floor_cards = run_all("openfield", indices, extra)
     floor = statistics.median(c["secPerTile_p50"] for c in floor_cards)
     results = {}
     for s in scenarios:
-        cards = [run(s, i, extra) for i in indices]
+        cards = run_all(s, indices, extra)
         results[s] = {f: {"min": min(c[f] for c in cards),
                           "median": int(statistics.median(c[f] for c in cards)),
                           "max": max(c[f] for c in cards)} for f in FIELDS}
