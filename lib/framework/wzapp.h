@@ -117,6 +117,8 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, uns
 unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize();
 unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension);
 unsigned int wzGetCurrentDisplayScale();
+/// The active refresh rate of the display the window is currently on (0 when unknown)
+float wzGetCurrentDisplayRefreshRate();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
 bool wzHasClipboardText();
 WzString wzGetClipboardText();

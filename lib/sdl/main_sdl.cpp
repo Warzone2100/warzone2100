@@ -607,6 +607,41 @@ unsigned int wzGetCurrentDisplayScale()
 	return current_displayScale;
 }
 
+// Cached until a display or window-display event invalidates it, since callers
+// may poll frequently while the underlying value changes rarely
+static optional<float> cachedDisplayRefreshRate;
+
+static void markDisplayRefreshRateCacheDirty()
+{
+	cachedDisplayRefreshRate = nullopt;
+}
+
+float wzGetCurrentDisplayRefreshRate()
+{
+	if (WZwindow == nullptr)
+	{
+		return 0.f;
+	}
+	if (cachedDisplayRefreshRate.has_value())
+	{
+		return cachedDisplayRefreshRate.value();
+	}
+	const SDL_DisplayID displayID = SDL_GetDisplayForWindow(WZwindow);
+	if (displayID == 0)
+	{
+		// leave the cache empty so the query is retried
+		return 0.f;
+	}
+	const SDL_DisplayMode* currentMode = SDL_GetCurrentDisplayMode(displayID);
+	if (currentMode == nullptr)
+	{
+		return 0.f;
+	}
+	// may be 0 when the refresh rate is unspecified
+	cachedDisplayRefreshRate = currentMode->refresh_rate;
+	return cachedDisplayRefreshRate.value();
+}
+
 void wzShowMouse(bool visible)
 {
 	if (visible)
@@ -4113,6 +4148,10 @@ static void handleActiveEvent(SDL_Event *event)
 			}
 			break;
 		}
+		case SDL_EVENT_WINDOW_DISPLAY_CHANGED :
+			debug(LOG_WZ, "Window %d moved to display %d", event->window.windowID, (int)event->window.data1);
+			markDisplayRefreshRateCacheDirty();
+			break;
 		default:
 			debug(LOG_WZ, "Window %d got unknown event %d", event->window.windowID, event->window.type);
 			break;
@@ -4203,6 +4242,11 @@ void wzEventLoopOneFrame(void* arg)
 			if (event.type >= SDL_EVENT_WINDOW_FIRST && event.type <= SDL_EVENT_WINDOW_LAST)
 			{
 				handleActiveEvent(&event);
+			}
+			else if (event.type >= SDL_EVENT_DISPLAY_FIRST && event.type <= SDL_EVENT_DISPLAY_LAST)
+			{
+				// any display topology or mode change may affect the current refresh rate
+				markDisplayRefreshRateCacheDirty();
 			}
 			break;
 		}
