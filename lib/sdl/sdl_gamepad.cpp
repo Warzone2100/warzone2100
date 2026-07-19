@@ -1135,6 +1135,21 @@ static void updateSyntheticInput()
 	handleKeyButton(GPAD_BTN_START, KEY_ESC, captureModeActive);
 	// the right shoulder reserves west for its chorded action
 	handleKeyButton(GPAD_BTN_WEST, KEY_RETURN, actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) || captureModeActive);
+
+	// the right shoulder chords the cursor stick click into a recenter, for
+	// when the cursor gets lost along a screen edge. An instant jump - a
+	// glide would need the chord held for its whole travel, and any stick
+	// motion would cancel it
+	if (actualButtonPressed(GPAD_BTN_LEFT_STICK) && actualButtonDown(GPAD_BTN_RIGHT_SHOULDER) && !captureModeActive)
+	{
+		virtualCursorX = (float)(screenWidth / 2);
+		virtualCursorY = (float)(screenHeight / 2);
+		hopActive = false;
+		bankedTravelX = 0.f;
+		bankedTravelY = 0.f;
+		bankAwaitingHop = false;
+		inputSetMousePos(screenWidth / 2, screenHeight / 2);
+	}
 }
 
 void wzGamepadUpdate()

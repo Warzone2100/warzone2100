@@ -1598,6 +1598,9 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 	const auto cursorStickName = []() -> WzString { return war_GetGamepadSwapSticks() ? _("Right Stick") : _("Left Stick"); };
 	const auto cameraStickName = []() -> WzString { return war_GetGamepadSwapSticks() ? _("Left Stick") : _("Right Stick"); };
 	addFixedRow("gamepadCore.moveCursor", N_("Move Cursor"), cursorStickName, N_("Click the stick in for slower, precise movement"));
+	addFixedRow("gamepadCore.resetCursor", N_("Reset Cursor To Center"), []() -> WzString {
+		return WzString::fromUtf8(astringf("%s %s", gamepadButtonName(GPAD_BTN_RIGHT_SHOULDER), war_GetGamepadSwapSticks() ? "R3" : "L3"));
+	});
 	addFixedRow("gamepadCore.primaryClick", N_("Left Click / Select"), buttonName(GPAD_BTN_SOUTH));
 	addFixedRow("gamepadCore.secondaryClick", N_("Right Click / Order"), buttonName(GPAD_BTN_EAST));
 	addFixedRow("gamepadCore.addToSelection", N_("Add to Selection"), chord(GPAD_BTN_LEFT_SHOULDER, GPAD_BTN_SOUTH));
