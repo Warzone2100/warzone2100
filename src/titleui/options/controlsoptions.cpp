@@ -1426,6 +1426,16 @@ static OptionInfo::AvailabilityResult GamepadModeNotDisabled(const OptionInfo&)
 	return result;
 }
 
+// The setting stays editable with no controller present - it only greys out
+// when the connected controller reports no rumble support
+static OptionInfo::AvailabilityResult GamepadSupportsRumble(const OptionInfo&)
+{
+	OptionInfo::AvailabilityResult result;
+	result.available = !gamepadIsConnected() || gamepadHasRumble();
+	result.localizedUnavailabilityReason = _("The connected controller does not support vibration");
+	return result;
+}
+
 std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 {
 	auto result = KeyOptionsForm::make();
@@ -1520,6 +1530,24 @@ std::shared_ptr<OptionsForm> makeGamepadOptionsForm()
 				return result;
 			},
 			[](const auto& newValue) -> bool { war_SetGamepadSwapSticks(newValue); return true; }, true
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
+		auto optionInfo = OptionInfo("gamepad.rumble", N_("Vibration"), N_("Rumble the controller when your forces come under attack or are destroyed"));
+		optionInfo.addAvailabilityCondition(GamepadModeNotDisabled);
+		optionInfo.addAvailabilityCondition(GamepadSupportsRumble);
+		auto valueChanger = OptionsDropdown<bool>::make(
+			[]() {
+				OptionChoices<bool> result;
+				result.choices = {
+					{ _("Off"), "", false },
+					{ _("On"), "", true },
+				};
+				result.setCurrentIdxForValue(war_GetGamepadRumble());
+				return result;
+			},
+			[](const auto& newValue) -> bool { war_SetGamepadRumble(newValue); return true; }, true
 		);
 		result->addOption(optionInfo, valueChanger, true);
 	}

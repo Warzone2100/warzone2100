@@ -68,6 +68,7 @@ struct WARZONE_GLOBALS
 	int gamepadCursorMagnetism = GAMEPAD_MAGNETISM_DEFAULT;
 	bool gamepadInvertRightStick = false;
 	bool gamepadSwapSticks = false;
+	bool gamepadRumble = true;
 	bool gamepadShowLayoutOnConnect = true;
 	std::string gamepadLayoutSeenDevices;
 	int vsync = 1;
@@ -302,6 +303,16 @@ void war_SetGamepadSwapSticks(bool swapped)
 bool war_GetGamepadSwapSticks()
 {
 	return warGlobs.gamepadSwapSticks;
+}
+
+void war_SetGamepadRumble(bool enabled)
+{
+	warGlobs.gamepadRumble = enabled;
+}
+
+bool war_GetGamepadRumble()
+{
+	return warGlobs.gamepadRumble;
 }
 
 void war_SetGamepadShowLayoutOnConnect(bool enabled)

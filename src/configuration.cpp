@@ -600,6 +600,7 @@ bool loadConfig()
 	war_SetGamepadCursorMagnetism(iniGetInteger("gamepadCursorMagnetism", GAMEPAD_MAGNETISM_DEFAULT).value());
 	war_SetGamepadInvertRightStick(iniGetBool("gamepadInvertRightStick", false).value());
 	war_SetGamepadSwapSticks(iniGetBool("gamepadSwapSticks", false).value());
+	war_SetGamepadRumble(iniGetBool("gamepadRumble", true).value());
 	war_SetGamepadShowLayoutOnConnect(iniGetBool("gamepadShowLayoutOnConnect", true).value());
 	war_SetGamepadLayoutSeenDevices(iniGetString("gamepadLayoutSeenDevices", "").value());
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
@@ -876,6 +877,7 @@ bool saveConfig()
 	iniSetInteger("gamepadCursorMagnetism", war_GetGamepadCursorMagnetism());
 	iniSetBool("gamepadInvertRightStick", war_GetGamepadInvertRightStick());
 	iniSetBool("gamepadSwapSticks", war_GetGamepadSwapSticks());
+	iniSetBool("gamepadRumble", war_GetGamepadRumble());
 	iniSetBool("gamepadShowLayoutOnConnect", war_GetGamepadShowLayoutOnConnect());
 	iniSetString("gamepadLayoutSeenDevices", war_GetGamepadLayoutSeenDevices());
 	iniSetInteger("vsync", war_GetVsync());

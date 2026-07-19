@@ -120,6 +120,8 @@ void war_SetGamepadInvertRightStick(bool inverted);
 bool war_GetGamepadInvertRightStick();
 void war_SetGamepadSwapSticks(bool swapped);
 bool war_GetGamepadSwapSticks();
+void war_SetGamepadRumble(bool enabled);
+bool war_GetGamepadRumble();
 void war_SetGamepadShowLayoutOnConnect(bool enabled);
 bool war_GetGamepadShowLayoutOnConnect();
 void war_SetGamepadLayoutSeenDevices(const std::string& deviceGUIDs);
