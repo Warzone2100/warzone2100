@@ -99,6 +99,10 @@ const BenchScenario scenarios[] =
 	// tank intake, crossing the exit stream against the entering queue.
 	{ "mountain_chain_cross", "movebench_mountain_chain_cross.json", 4000, 0x5EEDBEEF, false },
 	{ "rush_turn",           "movebench_rush_turn.json",           4000, 0x5EEDBEEF, false },
+	// Mass corner head-on: two full clusters swap across Sk-Rush's north-west,
+	// both flows cutting the same open corner from opposite directions at a
+	// scale where the corner scrum dominates the whole run.
+	{ "rush_corner",         "movebench_rush_corner.json",         4000, 0x5EEDBEEF, false },
 	{ "counterflow_w3",      "movebench_counterflow_w3.json",      5000, 0x5EEDBEEF },
 	{ "counterflow_w4",      "movebench_counterflow_w4.json",      5000, 0x5EEDBEEF },
 	{ "shift0",             "movebench_shift0.json",             1200, 0x5EEDBEEF },
