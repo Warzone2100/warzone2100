@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file screen_frame_coordinator.h
- * Screen-frame finish path: commit inputs, present/acquire, ring advance, and frame epilogue.
+ * Vulkan screen-frame coordinator: Begin reconcile, End acquire, finish submit/present.
  */
 
 #pragma once
@@ -33,16 +33,14 @@ namespace gfx_api::vk
 {
 
 /// <summary>
-/// Vulkan screen-frame finish coordinator owned by `VkRoot`.
+/// Vulkan screen-frame coordinator owned by `VkRoot`.
 ///
-/// Owns `SwapchainPresentationState` and implements `finishScreenFrame()`:
-/// * build commit inputs
-/// * seal/submit via `VkRoot::sealAndSubmitTransferGraphics`
-/// * present/acquire
-/// * ring advance
-/// * frame epilogue (`frameNum++`, close screen frame, purge FBO pool)
-/// `prepareSwapchainForDrawing()` performs late swapchain acquire before render-graph
-/// record (called from piemode).
+/// Lifecycle:
+/// * `reconcileSwapchainAtFrameOpen()` at Begin (recreate / surface-lost only; no acquire)
+/// * `acquireSwapchainForFrameDraw()` at End before graph (acquire; recreate only via
+///   WsiPlatformPolicy macOS suboptimal)
+/// * `finishFrame()`: seal/submit/present/advance; WSI recovery deferred to next Begin
+///   (macOS present suboptimal via WsiPlatformPolicy is the sole mid-finish recreate exception)
 /// </summary>
 class ScreenFrameCoordinator
 {
@@ -53,21 +51,35 @@ public:
 	const SwapchainPresentationState& presentation() const { return _presentation; }
 
 	void markDrawableSizeDirty();
-	void prepareSwapchainForDrawing();
+	void requestSwapchainRecreate();
+	void requestSurfaceLostRecovery();
+	void reconcileSwapchainAtFrameOpen();
+	bool reconcileSucceededAtFrameOpen() const { return _frameGate.reconcileOk; }
+	void acquireSwapchainForFrameDraw();
+	bool canRecordSwapchainDraws() const;
 	ScreenFramePipelineState buildCommitInputs();
 	void finishFrame();
 
 private:
-	void tryAcquireSwapchainImageForDrawing();
+	struct FrameSwapchainGate
+	{
+		bool reconcileOk = false;
+	};
+
+	static bool shouldAdvanceRingAfterSubmit(const ScreenFramePipelineState& state);
+
 	void logScreenFrameDrawSubmitSkip(const ScreenFramePipelineState& state) const;
 	void handleSwapchainPostSubmit(ScreenFramePipelineState& state);
-	void presentAndAcquireScreenFrame(ScreenFramePipelineState& state);
+	void presentAndAdvanceRing(ScreenFramePipelineState& state);
+	void deferSwapchainRecreate(ScreenFramePipelineState& state);
+	void advanceRingIfSubmittedDraw(ScreenFramePipelineState& state);
 	void throttleSkippedDrawingFrame();
 	void advanceRingBufferAfterSubmit(ScreenFramePipelineState& state);
 	void completeScreenFrameFinishTail();
 
 	VkRoot& _root;
 	SwapchainPresentationState _presentation;
+	FrameSwapchainGate _frameGate;
 };
 
 } // namespace gfx_api::vk

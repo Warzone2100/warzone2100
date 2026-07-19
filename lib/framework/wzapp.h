@@ -94,6 +94,7 @@ bool wzIsSupportedWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
+void wzProcessPendingWindowChanges();
 WINDOW_MODE wzGetCurrentWindowMode();
 bool wzIsMaximized();
 bool wzIsFullscreen();

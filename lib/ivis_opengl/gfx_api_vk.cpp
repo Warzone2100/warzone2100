@@ -3751,6 +3751,7 @@ bool VkRoot::shouldDraw()
 
 void VkRoot::shutdown()
 {
+	_screenFrameOpen = false;
 	clearFramebufferCache();
 
 	destroySwapchainAndSwapchainSpecificStuff(true);
@@ -3902,7 +3903,6 @@ void VkRoot::finalizeActiveRecording()
 	frameHasDrawCommands = false;
 	currentPSO = nullptr;
 	currentRenderPassId = INVALID_RENDER_PASS_ID;
-	_screenFrameOpen = false;
 
 	frameResources.endDrawCmdBufferIfRecording();
 	frameResources.endCopyCmdBufferIfRecording();
@@ -4277,11 +4277,6 @@ gfx_api::context::swap_interval_mode VkRoot::getSwapInterval() const
 	return from_vk_presentmode(presentMode);
 }
 
-template <typename T>
-T clamp(const T& n, const T& lower, const T& upper) {
-	return std::max(lower, std::min(n, upper));
-}
-
 // throws a vk::SystemError on an unrecoverable error (like OOM)
 void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 {
@@ -4518,25 +4513,12 @@ void VkRoot::createSwapchain(bool allowHandleSurfaceLost)
 		throw;
 	}
 
-	try {
-		auto acquireNextResult = acquireNextSwapchainImage(allowHandleSurfaceLost, true);
-		switch (acquireNextResult)
-		{
-			case AcquireNextSwapchainImageResult::eSuccess:
-				// continue on with processing
-				break;
-			case AcquireNextSwapchainImageResult::eRecoveredFromError:
-				// acquireNextSwapchainImage recovered from an error - that means it succeeded at re-setting things up
-				// return immediately (this iteration is no longer responsible for creating the swapchain)
-				return;
-		}
+	// End acquireSwapchainForFrameDraw() owns the first image for this swapchain.
+	if (buffering_mechanism::isInitialized())
+	{
+		buffering_mechanism::get_current_resources().swapchainImageAcquired = false;
 	}
-	catch (const vk::SystemError& e) {
-		// acquireNextSwapchainImage failed, and couldn't recover
-		auto resultErr = static_cast<vk::Result>(e.code().value());
-		debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "acquireNextSwapchainImage failed: %s", vk::to_string(resultErr).c_str());
-		throw;
-	}
+	currentSwapchainIndex = 0;
 
 	// create defaultTexture (2x2, all initialized to 0)
 	const size_t defaultTexture_width = 2;
@@ -5796,7 +5778,7 @@ void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notexture
 }
 
 // throws a vk::SystemError on an unrecoverable error (like OOM)
-VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool allowHandleSurfaceLost, bool onCreate)
+VkRoot::SwapchainAcquireStatus VkRoot::tryAcquireSwapchainImage()
 {
 	vk::ResultValue<uint32_t> acquireNextImageResult = vk::ResultValue<uint32_t>(vk::Result::eNotReady, 0);
 	try {
@@ -5804,34 +5786,13 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 	}
 	catch (const vk::OutOfDateKHRError&)
 	{
-		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorOutOfDateKHR - must recreate swapchain");
-		try {
-			createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR); // throws on failure
-			return AcquireNextSwapchainImageResult::eRecoveredFromError;
-		}
-		catch (const vk::SystemError& e) {
-			auto resultErr = static_cast<vk::Result>(e.code().value());
-			debug(LOG_ERROR, "Failed to recreate out-of-date swapchain: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-			throw;
-		}
+		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorOutOfDateKHR");
+		return SwapchainAcquireStatus::OutOfDate;
 	}
 	catch (const vk::SurfaceLostKHRError&)
 	{
-		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
-		// recreate surface + swapchain
-		if (allowHandleSurfaceLost)
-		{
-			try {
-				handleSurfaceLost();
-				return AcquireNextSwapchainImageResult::eRecoveredFromError;
-			}
-			catch (const vk::SystemError& e) {
-				auto resultErr = static_cast<vk::Result>(e.code().value());
-				debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-				throw;
-			}
-		}
-		throw;
+		debug(LOG_3D, "vk::Device::acquireNextImageKHR: ErrorSurfaceLostKHR");
+		return SwapchainAcquireStatus::SurfaceLost;
 	}
 	catch (const vk::DeviceLostError& e)
 	{
@@ -5843,38 +5804,39 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage(bool a
 		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: unhandled error: %s", e.what());
 		throw;
 	}
+
 	if (acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
-		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - should probably recreate swapchain (in the future)");
-		_screenFrameCoordinator.markDrawableSizeDirty();
-#ifdef WZ_OS_MAC
-		// Workaround MoltenVK issue: https://github.com/KhronosGroup/MoltenVK/issues/2542
-		if (!onCreate)
-		{
-			debug(LOG_INFO, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - immediately recreate");
-			try {
-				createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eSuboptimalKHR); // throws on failure
-				return AcquireNextSwapchainImageResult::eRecoveredFromError;
-			}
-			catch (const vk::SystemError& e) {
-				auto resultErr = static_cast<vk::Result>(e.code().value());
-				debug((resultErr == vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "Failed to recreate out-of-date swapchain: %s: %s", vk::to_string(resultErr).c_str(), e.what());
-				throw;
-			}
-		}
-		else
-		{
-			// Can't recreate (already attempting to), so throw eSuboptimalKHR as an exception,
-			// and rely on calling code to skip drawing until the swapchain can be properly recreated...
-			WZ_THROW_VK_RESULT_EXCEPTION(vk::Result::eSuboptimalKHR, "acquireNextImageKHR failed");
-		}
-#endif
+		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR");
+		// Do not consume the image index - coordinator decides defer vs recreate+retry.
+		return SwapchainAcquireStatus::Suboptimal;
+	}
+
+	if (acquireNextImageResult.result != vk::Result::eSuccess)
+	{
+		debug(LOG_ERROR, "vk::Device::acquireNextImageKHR: unexpected result: %s",
+			vk::to_string(acquireNextImageResult.result).c_str());
+		WZ_THROW_VK_RESULT_EXCEPTION(acquireNextImageResult.result, "acquireNextImageKHR unexpected result");
 	}
 
 	currentSwapchainIndex = acquireNextImageResult.value;
 	buffering_mechanism::get_current_resources().swapchainImageAcquired = true;
 	_frameLayoutTracker.beginFrame();
-	return AcquireNextSwapchainImageResult::eSuccess;
+	return SwapchainAcquireStatus::Success;
+}
+
+void VkRoot::rebindOpenScreenFrameResources()
+{
+	ASSERT(_screenFrameOpen, "rebindOpenScreenFrameResources requires an open screen frame");
+	ASSERT(buffering_mechanism::isInitialized(), "rebindOpenScreenFrameResources: buffering not initialized");
+
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	frameResources.transferWorkRecorded = false;
+	frameHasDrawCommands = false;
+	ASSERT(!hasActivePass, "Active pass at open-screen-frame rebind");
+
+	frameResources.ensureTransferRecordingBegun(vkDynLoader);
+	_framebufferCache.releaseAll();
 }
 
 gfx_api::abstract_texture* VkRoot::getPipelineSurface(gfx_api::PipelineSurfaceId id)
@@ -6295,7 +6257,7 @@ optional<std::pair<uint32_t, uint32_t>> VkRoot::getRenderTargetDimensions(gfx_ap
 	return nullopt;
 }
 
-bool VkRoot::recreateSwapchainAfterPresentError(const vk::Result& reason)
+bool VkRoot::recreateSwapchain(const vk::Result& reason)
 {
 	try {
 		createNewSwapchainAndSwapchainSpecificStuff(reason);
@@ -6461,8 +6423,10 @@ void VkRoot::sealAndSubmitTransferGraphics(ScreenFramePipelineState& state)
 	{
 		frameResources.sealTransferStream(vkDynLoader);
 
+		const bool drawSkippedButRecorded = state.hadDrawCmdBufferRecording && !state.submitDrawBuffer;
 		const bool ringSlotWillAdvance = state.submitDrawBuffer
-			|| (!state.mustSkipDrawing && !state.mustRecreateSwapchain);
+			|| (state.hasCopyWork && !drawSkippedButRecorded
+				&& !state.mustSkipDrawing && !state.swapchainRecreatePending);
 		if (ringSlotWillAdvance)
 		{
 			frameResources.flushMappedAllocators();
@@ -6529,9 +6493,19 @@ void VkRoot::beginScreenFrame()
 	_framebufferCache.releaseAll();
 }
 
-void VkRoot::prepareSwapchainForDrawing()
+void VkRoot::reconcileSwapchainAtFrameOpen()
 {
-	_screenFrameCoordinator.prepareSwapchainForDrawing();
+	_screenFrameCoordinator.reconcileSwapchainAtFrameOpen();
+}
+
+void VkRoot::acquireSwapchainForFrameDraw()
+{
+	_screenFrameCoordinator.acquireSwapchainForFrameDraw();
+}
+
+bool VkRoot::canRecordSwapchainDraws() const
+{
+	return _screenFrameCoordinator.canRecordSwapchainDraws();
 }
 
 void VkRoot::finishScreenFrame()

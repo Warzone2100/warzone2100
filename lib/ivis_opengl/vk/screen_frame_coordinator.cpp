@@ -20,9 +20,18 @@
 */
 /** @file screen_frame_coordinator.cpp
  * Screen-frame finish path: commit inputs, present/acquire, ring advance, and frame epilogue.
+ *
+ * Screen-frame swapchain invariants (Vulkan):
+ *   Phase              | recreate          | acquire | present
+ *   Begin reconcile    | yes               | no      | no
+ *   End acquire        | no*               | yes     | no
+ *   finish present     | no*               | no      | yes
+ *   * macOS suboptimal acquire/present only, via WsiPlatformPolicy.
  */
 
 #include "screen_frame_coordinator.h"
+
+#include "wsi_platform_policy.h"
 
 #include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/gfx_api_vk.h"
@@ -44,16 +53,100 @@ void ScreenFrameCoordinator::markDrawableSizeDirty()
 	_root.markScreenGeometryDirty();
 }
 
-void ScreenFrameCoordinator::tryAcquireSwapchainImageForDrawing()
+void ScreenFrameCoordinator::requestSwapchainRecreate()
 {
-	if (!_root.shouldDraw())
+	_presentation.requestSwapchainRecreate();
+	_root.markScreenGeometryDirty();
+}
+
+void ScreenFrameCoordinator::requestSurfaceLostRecovery()
+{
+	_presentation.requestSurfaceLostRecovery();
+	_root.markScreenGeometryDirty();
+}
+
+void ScreenFrameCoordinator::reconcileSwapchainAtFrameOpen()
+{
+	_frameGate.reconcileOk = false;
+
+	if (!buffering_mechanism::isInitialized() || !_root.backend_impl)
+	{
+		return;
+	}
+
+	ASSERT(!_root._screenFrameOpen, "reconcileSwapchainAtFrameOpen while screen frame is open");
+
+	if (_presentation.surfaceLostPending())
+	{
+		try {
+			_root.handleSurfaceLost();
+			_presentation.clearSurfaceLostPending();
+			_presentation.clearSwapchainRecreatePending();
+		}
+		catch (const ::vk::SystemError& e)
+		{
+			auto resultErr = static_cast<::vk::Result>(e.code().value());
+			debug(LOG_ERROR, "reconcileSwapchainAtFrameOpen: handleSurfaceLost failed: %s: %s",
+				::vk::to_string(resultErr).c_str(), e.what());
+			return;
+		}
+	}
+
+	int drawableWidth = 0;
+	int drawableHeight = 0;
+	_root.backend_impl->getDrawableSize(&drawableWidth, &drawableHeight);
+
+	const bool drawableMismatch = _presentation.drawableRequiresSwapchainRecreate(drawableWidth, drawableHeight,
+		_root.swapchainSize, _root.swapchain);
+	const bool forceRecreate = _presentation.swapchainRecreatePending();
+
+	if (!drawableMismatch && !forceRecreate)
+	{
+		if (_presentation.drawableSizeDirty())
+		{
+			_presentation.syncDrawableSize(drawableWidth, drawableHeight);
+		}
+		_frameGate.reconcileOk = _root.shouldDraw();
+		return;
+	}
+
+	if (forceRecreate && !drawableMismatch)
+	{
+		debug(LOG_3D, "reconcileSwapchainAtFrameOpen: recreating swapchain (pending, drawable %d x %d, swapchain %d x %d)",
+			drawableWidth, drawableHeight, (int)_root.swapchainSize.width, (int)_root.swapchainSize.height);
+	}
+	else
+	{
+		debug(LOG_3D, "reconcileSwapchainAtFrameOpen: recreating swapchain (drawable %d x %d, swapchain %d x %d)",
+			drawableWidth, drawableHeight, (int)_root.swapchainSize.width, (int)_root.swapchainSize.height);
+	}
+
+	if (!_root.recreateSwapchain(::vk::Result::eErrorOutOfDateKHR))
+	{
+		return;
+	}
+
+	_presentation.syncDrawableSize(drawableWidth, drawableHeight);
+	_presentation.clearSwapchainRecreatePending();
+	// createSwapchain never acquires: End acquireSwapchainForFrameDraw() owns the image.
+	_frameGate.reconcileOk = _root.shouldDraw();
+}
+
+void ScreenFrameCoordinator::acquireSwapchainForFrameDraw()
+{
+	if (!buffering_mechanism::isInitialized() || !_root.backend_impl)
+	{
+		return;
+	}
+
+	if (!_frameGate.reconcileOk || !_root.shouldDraw())
 	{
 		return;
 	}
 
 	if (_presentation.drawableSizeDirty())
 	{
-		// Drawable size not synced with swapchain; finishFrame() handles recreate.
+		debug(LOG_3D, "acquireSwapchainForFrameDraw: drawable dirty mid-frame, skipping draw");
 		return;
 	}
 
@@ -63,49 +156,98 @@ void ScreenFrameCoordinator::tryAcquireSwapchainImageForDrawing()
 		return;
 	}
 
+	const auto deferWithPlaceholderExtents = [this](bool surfaceLost) {
+		if (surfaceLost)
+		{
+			requestSurfaceLostRecovery();
+		}
+		else
+		{
+			requestSwapchainRecreate();
+		}
+		_root.swapchainSize.width = 1;
+		_root.swapchainSize.height = 1;
+	};
+
 	try {
-		_root.acquireNextSwapchainImage(true);
+		auto status = _root.tryAcquireSwapchainImage();
+		switch (status)
+		{
+		case VkRoot::SwapchainAcquireStatus::Success:
+			return;
+
+		case VkRoot::SwapchainAcquireStatus::OutOfDate:
+			deferWithPlaceholderExtents(false);
+			return;
+
+		case VkRoot::SwapchainAcquireStatus::SurfaceLost:
+			deferWithPlaceholderExtents(true);
+			return;
+
+		case VkRoot::SwapchainAcquireStatus::Suboptimal:
+			requestSwapchainRecreate();
+			switch (WsiPlatformPolicy::suboptimalAcquireAction())
+			{
+			case SuboptimalAcquireAction::DeferToNextBegin:
+				return;
+
+			case SuboptimalAcquireAction::RecreateAndRetryOnce:
+				debug(LOG_INFO, "acquireSwapchainForFrameDraw: eSuboptimalKHR - immediately recreate");
+				if (!_root.recreateSwapchain(::vk::Result::eSuboptimalKHR))
+				{
+					return;
+				}
+				_root.rebindOpenScreenFrameResources();
+				status = _root.tryAcquireSwapchainImage();
+				if (status == VkRoot::SwapchainAcquireStatus::Success)
+				{
+					return;
+				}
+				if (status == VkRoot::SwapchainAcquireStatus::SurfaceLost)
+				{
+					requestSurfaceLostRecovery();
+				}
+				else
+				{
+					requestSwapchainRecreate();
+				}
+				if (status == VkRoot::SwapchainAcquireStatus::OutOfDate
+					|| status == VkRoot::SwapchainAcquireStatus::SurfaceLost)
+				{
+					_root.swapchainSize.width = 1;
+					_root.swapchainSize.height = 1;
+				}
+				return;
+			}
+			return;
+		}
 	}
 	catch (const ::vk::SystemError& e)
 	{
 		auto resultErr = static_cast<::vk::Result>(e.code().value());
-		const bool isRecoverableError =
-			resultErr == ::vk::Result::eSuboptimalKHR ||
-			resultErr == ::vk::Result::eErrorOutOfDateKHR ||
-			resultErr == ::vk::Result::eErrorSurfaceLostKHR;
-		debug(isRecoverableError ? LOG_3D : LOG_ERROR,
-			"tryAcquireSwapchainImageForDrawing failed: %s", ::vk::to_string(resultErr).c_str());
-		if (isRecoverableError)
-		{
-			_root.swapchainSize.width = 1;
-			_root.swapchainSize.height = 1;
-			markDrawableSizeDirty();
-		}
-		else
-		{
-			handleUnrecoverableError(resultErr);
-		}
+		debug(LOG_ERROR, "acquireSwapchainForFrameDraw failed: %s", ::vk::to_string(resultErr).c_str());
+		handleUnrecoverableError(resultErr);
 	}
 }
 
-void ScreenFrameCoordinator::prepareSwapchainForDrawing()
+bool ScreenFrameCoordinator::canRecordSwapchainDraws() const
 {
-	tryAcquireSwapchainImageForDrawing();
+	return _frameGate.reconcileOk
+		&& buffering_mechanism::isInitialized()
+		&& buffering_mechanism::get_current_resources().swapchainImageAcquired;
 }
 
 ScreenFramePipelineState ScreenFrameCoordinator::buildCommitInputs()
 {
 	ScreenFramePipelineState state;
-	state.mustSkipDrawing = !_root.shouldDraw();
-	state.mustRecreateSwapchain = false;
+	state.swapchainRecreatePending = false;
+	state.acquiredSwapchainImage = buffering_mechanism::isInitialized()
+		&& buffering_mechanism::get_current_resources().swapchainImageAcquired;
+	state.mustSkipDrawing = !_root.shouldDraw() || !state.acquiredSwapchainImage;
 
-	auto& frameResources = buffering_mechanism::get_current_resources();
-
-	// Steady state: drawable unchanged and swapchain image already acquired for this slot.
-	if (!_presentation.drawableSizeDirty() && frameResources.swapchainImageAcquired)
+	if (!buffering_mechanism::isInitialized() || !_root.backend_impl)
 	{
-		state.drawableWidth = _presentation.lastKnownDrawableWidth();
-		state.drawableHeight = _presentation.lastKnownDrawableHeight();
+		state.mustSkipDrawing = true;
 		return state;
 	}
 
@@ -114,11 +256,12 @@ ScreenFramePipelineState ScreenFrameCoordinator::buildCommitInputs()
 		_root.swapchainSize, _root.swapchain))
 	{
 		state.mustSkipDrawing = true;
-		debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain",
+		debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - defer recreate to next Begin",
 			state.drawableWidth, state.drawableHeight, (int)_root.swapchainSize.width, (int)_root.swapchainSize.height);
-		state.mustRecreateSwapchain = true;
+		state.swapchainRecreatePending = true;
+		requestSwapchainRecreate();
 	}
-	else
+	else if (_presentation.drawableSizeDirty())
 	{
 		_presentation.syncDrawableSize(state.drawableWidth, state.drawableHeight);
 	}
@@ -126,14 +269,48 @@ ScreenFramePipelineState ScreenFrameCoordinator::buildCommitInputs()
 	return state;
 }
 
+bool ScreenFrameCoordinator::shouldAdvanceRingAfterSubmit(const ScreenFramePipelineState& state)
+{
+	if (!state.submittedQueueWork || state.ringSwapped)
+	{
+		return false;
+	}
+
+	// Draw was recorded but not submitted - hold the ring slot (loading/resync path).
+	if (state.hadDrawCmdBufferRecording && !state.submitDrawBuffer)
+	{
+		return false;
+	}
+
+	// Successful present path advances the ring in presentAndAdvanceRing().
+	if (state.submitDrawBuffer)
+	{
+		return false;
+	}
+
+	// Copy-only upload with no draw recording may advance to chain on the slot fence.
+	if (state.hasCopyWork && !state.hadDrawCmdBufferRecording)
+	{
+		return !state.mustSkipDrawing && !state.swapchainRecreatePending;
+	}
+
+	return false;
+}
+
 void ScreenFrameCoordinator::logScreenFrameDrawSubmitSkip(const ScreenFramePipelineState& state) const
 {
-	const auto& frameResources = buffering_mechanism::get_current_resources();
-	if (!state.mustSkipDrawing && state.hadDrawCmdBufferRecording && !frameResources.swapchainImageAcquired)
+	// submitCommandBuffers clears swapchainImageAcquired after a successful draw submit -
+	// only diagnose actual skips; use the pre-submit snapshot for acquire state.
+	if (state.submitDrawBuffer || state.mustSkipDrawing)
 	{
-		debug(LOG_3D, "finishScreenFrame: skipping draw command buffer submit (swapchain image not acquired for current frame slot)");
+		return;
 	}
-	else if (!state.mustSkipDrawing && !state.hadDrawCmdBufferRecording)
+
+	if (state.hadDrawCmdBufferRecording && !state.acquiredSwapchainImage)
+	{
+		debug(LOG_ERROR, "finishScreenFrame: skipping draw command buffer submit (swapchain image not acquired for current frame slot)");
+	}
+	else if (!state.hadDrawCmdBufferRecording)
 	{
 		debug(LOG_ERROR, "finishScreenFrame: skipping draw command buffer submit (draw command buffer was not recording)");
 	}
@@ -144,30 +321,36 @@ void ScreenFrameCoordinator::handleSwapchainPostSubmit(ScreenFramePipelineState&
 	if (_root.queuedSwapModeChange.has_value())
 	{
 		_root.swapMode = _root.queuedSwapModeChange.value().newMode;
-		state.mustRecreateSwapchain = true;
+		requestSwapchainRecreate();
+		state.swapchainRecreatePending = true;
+		// Keep queuedSwapModeChange until Begin recreateSwapchain runs the completion handler.
+		// Present this frame if draw was already submitted - do not destroy the swapchain here.
 	}
 
-	if (state.mustRecreateSwapchain)
+	if (state.shouldPresent)
 	{
-		_root.recreateSwapchainAfterPresentError(::vk::Result::eErrorOutOfDateKHR);
-		state.submittedQueueWork = false;
-		state.ringSwapped = true;
+		presentAndAdvanceRing(state);
+		return;
 	}
-	else if (state.shouldPresent)
+
+	if (state.swapchainRecreatePending)
 	{
-		presentAndAcquireScreenFrame(state);
+		// Draw was skipped; recovery is next Begin. Hold ring if copy submitted.
+		if (state.submittedQueueWork)
+		{
+			state.ringSwapped = true;
+		}
+		return;
+	}
+
+	if (shouldAdvanceRingAfterSubmit(state))
+	{
+		advanceRingBufferAfterSubmit(state);
 	}
 	else if (state.submittedQueueWork)
 	{
-		if (!state.mustSkipDrawing && !state.mustRecreateSwapchain)
-		{
-			advanceRingBufferAfterSubmit(state);
-		}
-		else
-		{
-			// Copy-only while skipping draw (resize): keep the ring slot, chain on its fence.
-			state.ringSwapped = true;
-		}
+		// Copy-only while skipping draw (resize): keep the ring slot, chain on its fence.
+		state.ringSwapped = true;
 	}
 }
 
@@ -189,9 +372,10 @@ void ScreenFrameCoordinator::finishFrame()
 	{
 		handleSwapchainPostSubmit(state);
 	}
-	else if (state.mustRecreateSwapchain)
+	else if (state.swapchainRecreatePending)
 	{
-		_root.recreateSwapchainAfterPresentError(::vk::Result::eErrorOutOfDateKHR);
+		// Already requested via buildCommitInputs / presentation flags - next Begin reconciles.
+		state.ringSwapped = true;
 	}
 
 	if (!state.submitDrawBuffer && state.mustSkipDrawing)
@@ -199,11 +383,42 @@ void ScreenFrameCoordinator::finishFrame()
 		throttleSkippedDrawingFrame();
 	}
 
-	advanceRingBufferAfterSubmit(state);
+	if (shouldAdvanceRingAfterSubmit(state))
+	{
+#if defined(DEBUG)
+		ASSERT(!(state.submitDrawBuffer && state.ringSwapped),
+			"double ring buffer advance (present path already advanced)");
+#endif
+		advanceRingBufferAfterSubmit(state);
+	}
+
+#if defined(DEBUG)
+	// Acquire implies present this frame unless WSI recovery was requested or drawing is disabled.
+	ASSERT(!state.acquiredSwapchainImage
+		|| state.submitDrawBuffer
+		|| state.swapchainRecreatePending
+		|| !_root.shouldDraw(),
+		"swapchain acquired for draw but not submitted for present");
+#endif
+
 	completeScreenFrameFinishTail();
 }
 
-void ScreenFrameCoordinator::presentAndAcquireScreenFrame(ScreenFramePipelineState& state)
+void ScreenFrameCoordinator::deferSwapchainRecreate(ScreenFramePipelineState& state)
+{
+	requestSwapchainRecreate();
+	state.swapchainRecreatePending = true;
+}
+
+void ScreenFrameCoordinator::advanceRingIfSubmittedDraw(ScreenFramePipelineState& state)
+{
+	if (state.submittedQueueWork && state.submitDrawBuffer)
+	{
+		advanceRingBufferAfterSubmit(state);
+	}
+}
+
+void ScreenFrameCoordinator::presentAndAdvanceRing(ScreenFramePipelineState& state)
 {
 	auto presentInfo = ::vk::PresentInfoKHR()
 		.setPSwapchains(&_root.swapchain)
@@ -212,29 +427,23 @@ void ScreenFrameCoordinator::presentAndAcquireScreenFrame(ScreenFramePipelineSta
 		.setWaitSemaphoreCount(1)
 		.setPWaitSemaphores(&buffering_mechanism::get_swapchain_resources(_root.currentSwapchainIndex).renderFinishedSemaphore);
 
-	::vk::Result presentResult;
+	::vk::Result presentResult = ::vk::Result::eSuccess;
 	try {
 		presentResult = _root.presentQueue.presentKHR(presentInfo, _root.vkDynLoader);
 	}
 	catch (const ::vk::OutOfDateKHRError&)
 	{
-		debug(LOG_3D, "::vk::Queue::presentKHR: ErrorOutOfDateKHR - must recreate swapchain");
+		debug(LOG_3D, "::vk::Queue::presentKHR: ErrorOutOfDateKHR - defer recreate to next frame Begin");
 		presentResult = ::vk::Result::eErrorOutOfDateKHR;
-		state.mustRecreateSwapchain = true;
-		markDrawableSizeDirty();
 	}
 	catch (const ::vk::SurfaceLostKHRError&)
 	{
-		debug(LOG_3D, "::vk::Queue::presentKHR: ErrorSurfaceLostKHR - must recreate surface + swapchain");
-		try {
-			_root.handleSurfaceLost();
-		}
-		catch (const ::vk::SystemError& e) {
-			auto resultErr = static_cast<::vk::Result>(e.code().value());
-			debug(LOG_ERROR, "handleSurfaceLost failed: %s: %s", ::vk::to_string(resultErr).c_str(), e.what());
-			handleUnrecoverableError(resultErr);
-		}
+		debug(LOG_3D, "::vk::Queue::presentKHR: ErrorSurfaceLostKHR - defer surface recovery to next frame Begin");
+		requestSurfaceLostRecovery();
+		state.swapchainRecreatePending = true;
 		state.shouldPresent = false;
+		// Submit already signaled renderFinished; present attempted the wait - advance ring.
+		advanceRingIfSubmittedDraw(state);
 		return;
 	}
 	catch (const ::vk::SystemError& e)
@@ -243,64 +452,35 @@ void ScreenFrameCoordinator::presentAndAcquireScreenFrame(ScreenFramePipelineSta
 		handleUnrecoverableError(static_cast<::vk::Result>(e.code().value()));
 	}
 
-	if (presentResult == ::vk::Result::eSuboptimalKHR)
+	if (presentResult == ::vk::Result::eErrorOutOfDateKHR)
 	{
-		debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
-		state.mustRecreateSwapchain = true;
-		markDrawableSizeDirty();
-	}
-
-	if (state.mustRecreateSwapchain)
-	{
-		_root.recreateSwapchainAfterPresentError(presentResult);
-		state.shouldPresent = false;
+		deferSwapchainRecreate(state);
+		advanceRingIfSubmittedDraw(state);
 		return;
 	}
 
-	if (state.submittedQueueWork)
+	if (presentResult == ::vk::Result::eSuboptimalKHR)
 	{
-		advanceRingBufferAfterSubmit(state);
-	}
-
-	try {
-		if (_root.acquireNextSwapchainImage(true) != VkRoot::AcquireNextSwapchainImageResult::eSuccess)
+		requestSwapchainRecreate();
+		switch (WsiPlatformPolicy::suboptimalPresentAction())
 		{
+		case SuboptimalPresentAction::RecreateInline:
+			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
+			_root.recreateSwapchain(presentResult);
+			state.shouldPresent = false;
+			state.submittedQueueWork = false;
+			state.ringSwapped = true;
+			return;
+		case SuboptimalPresentAction::DeferToNextBegin:
+			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - defer swapchain recreate to next frame Begin", (int)presentResult);
+			state.swapchainRecreatePending = true;
+			advanceRingIfSubmittedDraw(state);
 			return;
 		}
 	}
-	catch (const ::vk::SystemError& e) {
-		auto resultErr = static_cast<::vk::Result>(e.code().value());
-		debug((resultErr == ::vk::Result::eSuboptimalKHR) ? LOG_3D : LOG_ERROR, "acquireNextSwapchainImage failed: %s", ::vk::to_string(resultErr).c_str());
-		if (resultErr == ::vk::Result::eSuboptimalKHR)
-		{
-			_root.swapchainSize.width = 1;
-			_root.swapchainSize.height = 1;
-			markDrawableSizeDirty();
-		}
-		else
-		{
-			handleUnrecoverableError(resultErr);
-		}
-		return;
-	}
 
-	if (!_presentation.drawableSizeDirty())
-	{
-		return;
-	}
-
-	int w, h;
-	_root.backend_impl->getDrawableSize(&w, &h);
-	if (_presentation.drawableRequiresSwapchainRecreate(w, h, _root.swapchainSize, _root.swapchain))
-	{
-		debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)_root.swapchainSize.width, (int)_root.swapchainSize.height);
-		markDrawableSizeDirty();
-		_root.recreateSwapchainAfterPresentError(::vk::Result::eErrorOutOfDateKHR);
-	}
-	else
-	{
-		_presentation.syncDrawableSize(w, h);
-	}
+	// Success
+	advanceRingIfSubmittedDraw(state);
 }
 
 void ScreenFrameCoordinator::throttleSkippedDrawingFrame()
@@ -326,7 +506,7 @@ void ScreenFrameCoordinator::advanceRingBufferAfterSubmit(ScreenFramePipelineSta
 	}
 
 	try {
-		buffering_mechanism::swap(_root.dev, _root.vkDynLoader); // must be called *before* acquireNextSwapchainImage()
+		buffering_mechanism::swap(_root.dev, _root.vkDynLoader); // must be called *before* End tryAcquireSwapchainImage()
 		state.ringSwapped = true;
 	}
 	catch (const ::vk::OutOfHostMemoryError& e)

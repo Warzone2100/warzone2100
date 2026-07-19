@@ -19,7 +19,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /** @file swapchain_presentation_state.h
- * Drawable/swapchain sync state: cached surface extents and last-known drawable size.
+ * Drawable/swapchain sync state: cached surface extents, dirty flags, and deferred WSI recovery.
  */
 
 #pragma once
@@ -32,18 +32,42 @@ namespace gfx_api::vk
 /// <summary>
 /// Drawable vs swapchain sync state for resize and WSI handling.
 ///
-/// Tracks drawable dirty flag, last-known drawable size, and cached surface min/max extents.
-/// Owned by `ScreenFrameCoordinator`; supports O(1) recreate checks and extent clamping at
-/// swapchain create/finish without querying WSI every frame.
+/// Separates:
+/// * drawable dirty - cached drawable size / UI geometry may be stale (does not imply recreate)
+/// * swapchain recreate pending - WSI reported stale swapchain or present-mode change
+/// * surface lost pending - surface must be recreated at frame Begin
+///
+/// Owned by `ScreenFrameCoordinator`.
 /// </summary>
 class SwapchainPresentationState
 {
 public:
 	bool drawableSizeDirty() const { return _drawableSizeDirty; }
+	bool swapchainRecreatePending() const { return _swapchainRecreatePending; }
+	bool surfaceLostPending() const { return _surfaceLostPending; }
 	int lastKnownDrawableWidth() const { return _lastKnownDrawableWidth; }
 	int lastKnownDrawableHeight() const { return _lastKnownDrawableHeight; }
 
 	void markDrawableSizeDirty() { _drawableSizeDirty = true; }
+
+	/// Request swapchain recreate at next frame Begin (even if drawable extents still match).
+	void requestSwapchainRecreate()
+	{
+		_swapchainRecreatePending = true;
+		_drawableSizeDirty = true;
+	}
+
+	/// Request surface + swapchain recovery at next frame Begin.
+	void requestSurfaceLostRecovery()
+	{
+		_surfaceLostPending = true;
+		_swapchainRecreatePending = true;
+		_drawableSizeDirty = true;
+	}
+
+	void clearSwapchainRecreatePending() { _swapchainRecreatePending = false; }
+	void clearSurfaceLostPending() { _surfaceLostPending = false; }
+
 	void syncDrawableSize(int drawableWidth, int drawableHeight);
 	void updateCachedExtentLimits(const ::vk::SurfaceCapabilitiesKHR& capabilities);
 	void invalidateCachedExtentLimits();
@@ -54,6 +78,8 @@ public:
 
 private:
 	bool _drawableSizeDirty = true;
+	bool _swapchainRecreatePending = false;
+	bool _surfaceLostPending = false;
 	int _lastKnownDrawableWidth = 0;
 	int _lastKnownDrawableHeight = 0;
 	::vk::Extent2D _cachedMinImageExtent{};
