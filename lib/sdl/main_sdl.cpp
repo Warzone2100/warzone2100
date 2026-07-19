@@ -120,6 +120,57 @@ struct QueuedWindowDimensions
 };
 optional<QueuedWindowDimensions> deferredDimensionReset = nullopt;
 
+struct QueuedWindowModeChange
+{
+	WINDOW_MODE mode = WINDOW_MODE::windowed;
+	bool silent = false;
+};
+
+struct QueuedDrawableResize
+{
+	unsigned int oldWidth = 0;
+	unsigned int oldHeight = 0;
+	unsigned int newWidth = 0;
+	unsigned int newHeight = 0;
+};
+
+struct QueuedDisplayScaleChange
+{
+	unsigned int displayScale = 100;
+};
+
+static optional<QueuedWindowModeChange> queuedWindowModeChange = nullopt;
+static optional<QueuedDrawableResize> queuedDrawableResize = nullopt;
+static optional<optional<screeninfo>> queuedFullscreenDisplayModeChange = nullopt;
+static optional<QueuedDisplayScaleChange> queuedDisplayScaleChange = nullopt;
+
+static bool shouldDeferSurfaceMutation()
+{
+	return pie_IsScreenFrameRendering();
+}
+
+static void queueDrawableResize(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
+{
+	if (oldWidth == newWidth && oldHeight == newHeight)
+	{
+		return;
+	}
+
+	if (queuedDrawableResize.has_value())
+	{
+		queuedDrawableResize->newWidth = newWidth;
+		queuedDrawableResize->newHeight = newHeight;
+	}
+	else
+	{
+		queuedDrawableResize = QueuedDrawableResize{oldWidth, oldHeight, newWidth, newHeight};
+	}
+}
+
+static bool wzChangeWindowModeImmediate(WINDOW_MODE mode, bool silent);
+static bool wzChangeFullscreenDisplayModeImmediate(optional<screeninfo> config);
+static bool wzChangeDisplayScaleImmediate(unsigned int displayScale);
+
 static std::vector<optional<screeninfo>> displaylist;	// holds all our possible display lists
 
 std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
@@ -783,6 +834,30 @@ void wzPostChangedSwapInterval()
 }
 
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
+{
+	auto previousMode = wzGetCurrentWindowMode();
+	if (previousMode == mode)
+	{
+		return true;
+	}
+
+	if (!wzIsSupportedWindowMode(mode))
+	{
+		return false;
+	}
+
+	if (shouldDeferSurfaceMutation())
+	{
+		queuedWindowModeChange = QueuedWindowModeChange{mode, silent};
+		debug(LOG_WZ, "Deferring window mode change: %s -> %s",
+			to_display_string(previousMode).c_str(), to_display_string(mode).c_str());
+		return true;
+	}
+
+	return wzChangeWindowModeImmediate(mode, silent);
+}
+
+static bool wzChangeWindowModeImmediate(WINDOW_MODE mode, bool silent)
 {
 	auto previousMode = wzGetCurrentWindowMode();
 	if (previousMode == mode)
@@ -2063,6 +2138,48 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 	gfx_api::context::get().handleWindowSizeChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
+void wzProcessPendingWindowChanges()
+{
+	if (queuedWindowModeChange.has_value())
+	{
+		const QueuedWindowModeChange queued = queuedWindowModeChange.value();
+		queuedWindowModeChange.reset();
+		if (!wzChangeWindowModeImmediate(queued.mode, queued.silent))
+		{
+			debug(LOG_ERROR, "Deferred window mode change failed: %s",
+				to_display_string(queued.mode).c_str());
+		}
+	}
+
+	if (queuedFullscreenDisplayModeChange.has_value())
+	{
+		optional<screeninfo> config = queuedFullscreenDisplayModeChange.value();
+		queuedFullscreenDisplayModeChange.reset();
+		if (!wzChangeFullscreenDisplayModeImmediate(std::move(config)))
+		{
+			debug(LOG_ERROR, "Deferred fullscreen display mode change failed");
+		}
+	}
+
+	// Display scale before drawable resize - scale affects logical mapping / min window size.
+	if (queuedDisplayScaleChange.has_value())
+	{
+		const QueuedDisplayScaleChange queued = queuedDisplayScaleChange.value();
+		queuedDisplayScaleChange.reset();
+		if (!wzChangeDisplayScaleImmediate(queued.displayScale))
+		{
+			debug(LOG_ERROR, "Deferred display scale change failed: %u%%", queued.displayScale);
+		}
+	}
+
+	if (queuedDrawableResize.has_value())
+	{
+		const QueuedDrawableResize queued = queuedDrawableResize.value();
+		queuedDrawableResize.reset();
+		handleWindowSizeChange(queued.oldWidth, queued.oldHeight, queued.newWidth, queued.newHeight);
+	}
+}
+
 
 void wzGetMinimumWindowSizeForDisplayScaleFactor(unsigned int *minWindowWidth, unsigned int *minWindowHeight, float displayScaleFactor = current_displayScaleFactor)
 {
@@ -2217,6 +2334,24 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 		return false;
 	}
 
+	if (shouldDeferSurfaceMutation())
+	{
+		queuedDisplayScaleChange = QueuedDisplayScaleChange{displayScale};
+		debug(LOG_WZ, "Deferring display scale change to %u%%", displayScale);
+		return true; // optimistic, same as deferred window mode
+	}
+
+	return wzChangeDisplayScaleImmediate(displayScale);
+}
+
+static bool wzChangeDisplayScaleImmediate(unsigned int displayScale)
+{
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeDisplayScale called when window is not available");
+		return false;
+	}
+
 	float newDisplayScaleFactor = (float)displayScale / 100.f;
 
 	if (wzWindowSizeIsSmallerThanMinimumRequired(windowWidth, windowHeight, newDisplayScaleFactor))
@@ -2312,6 +2447,24 @@ bool wzReduceDisplayScalingIfNeeded(int currWidth, int currHeight)
 }
 
 bool wzChangeFullscreenDisplayMode(optional<screeninfo> config)
+{
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeFullscreenDisplayMode called when window is not available");
+		return false;
+	}
+
+	if (shouldDeferSurfaceMutation())
+	{
+		queuedFullscreenDisplayModeChange = std::move(config);
+		debug(LOG_WZ, "Deferring fullscreen display mode change");
+		return true;
+	}
+
+	return wzChangeFullscreenDisplayModeImmediate(std::move(config));
+}
+
+static bool wzChangeFullscreenDisplayModeImmediate(optional<screeninfo> config)
 {
 	if (WZwindow == nullptr)
 	{
@@ -3762,7 +3915,8 @@ static void handleActiveEvent(SDL_Event *event)
 
 				int newWindowWidth = 0, newWindowHeight = 0;
 				SDL_GetWindowSize(WZwindow, &newWindowWidth, &newWindowHeight);
-				handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+				windowWidth = static_cast<unsigned int>(newWindowWidth);
+				windowHeight = static_cast<unsigned int>(newWindowHeight);
 
 				// Store the new values (in case the user manually resized the window bounds)
 				if (wzGetCurrentWindowMode() == WINDOW_MODE::windowed)
@@ -3770,6 +3924,8 @@ static void handleActiveEvent(SDL_Event *event)
 					war_SetWidth(newWindowWidth);
 					war_SetHeight(newWindowHeight);
 				}
+
+				queueDrawableResize(oldWindowWidth, oldWindowHeight, static_cast<unsigned int>(newWindowWidth), static_cast<unsigned int>(newWindowHeight));
 
 				// Handle deferred size reset
 				if (deferredDimensionReset.has_value())
@@ -3814,7 +3970,9 @@ static void handleActiveEvent(SDL_Event *event)
 					|| oldDrawableDimensions.first != newDrawableWidth || oldDrawableDimensions.second != newDrawableHeight)
 				{
 					debug(LOG_WZ, "Triggering handleWindowSizeChange from window restore event");
-					handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+					windowWidth = static_cast<unsigned int>(newWindowWidth);
+					windowHeight = static_cast<unsigned int>(newWindowHeight);
+					queueDrawableResize(oldWindowWidth, oldWindowHeight, static_cast<unsigned int>(newWindowWidth), static_cast<unsigned int>(newWindowHeight));
 				}
 			}
 			break;
@@ -4078,7 +4236,9 @@ EM_BOOL wz_emscripten_window_resized_callback(int eventType, const void *reserve
 
 		unsigned int oldWindowWidth = windowWidth;
 		unsigned int oldWindowHeight = windowHeight;
-		handleWindowSizeChange(oldWindowWidth, oldWindowHeight, newWindowWidth, newWindowHeight);
+		windowWidth = static_cast<unsigned int>(newWindowWidth);
+		windowHeight = static_cast<unsigned int>(newWindowHeight);
+		queueDrawableResize(oldWindowWidth, oldWindowHeight, static_cast<unsigned int>(newWindowWidth), static_cast<unsigned int>(newWindowHeight));
 		// Store the new values (in case the user manually resized the window bounds)
 		war_SetWidth(newWindowWidth);
 		war_SetHeight(newWindowHeight);

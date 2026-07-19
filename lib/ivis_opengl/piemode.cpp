@@ -119,8 +119,11 @@ void pie_ScreenFrameRenderBegin()
 
 	pie_ResetInGame3DFrameContextForFrame();
 
+	wzProcessPendingWindowChanges();
+
 	if (gfx_api::context::isInitialized())
 	{
+		gfx_api::context::get().reconcileSwapchainAtFrameOpen();
 		gfx_api::context::get().beginScreenFrame();
 	}
 
@@ -141,15 +144,21 @@ void pie_ScreenFrameRenderEnd()
 	const gfx_api::IRenderTopologyQuery& query = gfx_api::getGameRenderTopologyQuery();
 	if (!query.headlessOrSkipDrawing())
 	{
+		bool drawSwapchain = true;
 		if (gfx_api::context::isInitialized())
 		{
-			gfx_api::context::get().prepareSwapchainForDrawing();
+			gfx_api::context::get().acquireSwapchainForFrameDraw();
+			drawSwapchain = gfx_api::context::get().canRecordSwapchainDraws();
 		}
-		const gfx_api::RenderTopologySnapshot snapshot = gfx_api::render_topology::snapshot(query);
-		gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
-		graph.ensureBuilt(snapshot);
-		graph.execute();
-		screenDoDumpToDiskIfRequired();
+
+		if (drawSwapchain)
+		{
+			const gfx_api::RenderTopologySnapshot snapshot = gfx_api::render_topology::snapshot(query);
+			gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
+			graph.ensureBuilt(snapshot);
+			graph.execute();
+			screenDoDumpToDiskIfRequired();
+		}
 	}
 
 	if (gfx_api::context::isInitialized())

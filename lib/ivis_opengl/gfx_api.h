@@ -413,25 +413,33 @@ namespace gfx_api
 		/// Screen-frame lifecycle (owned by piemode / main loop):
 		///
 		///   pie_ScreenFrameRenderBegin()
-		///     -> beginScreenFrame()           // per-frame flag reset; releaseAll() on FBO pool;
-		///                                     // Vulkan: open transfer (copy) command buffer
+		///     -> wzProcessPendingWindowChanges() // apply queued window mode / resize / display scale
+		///     -> reconcileSwapchainAtFrameOpen()  // Vulkan: recreate/surface-lost only; no acquire
+		///                                         // (before beginScreenFrame; !_screenFrameOpen)
+		///     -> beginScreenFrame()               // per-frame flag reset; releaseAll() on FBO pool;
+		///                                         // Vulkan: open transfer (copy) command buffer
 		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
 		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
 		///   pie_ScreenFrameRenderEnd()
 		///     ... when !headlessOrSkipDrawing() ...
-		///     -> prepareSwapchainForDrawing() // late swapchain acquire (Vulkan; no-op elsewhere)
-		///     -> CachedRenderGraph::ensureBuilt(snapshot)
-		///     -> CachedRenderGraph::execute() // RECORD only (executeCompiledRenderGraph)
-		///     -> finishScreenFrame()          // ALWAYS when gfx initialized: seal/submit/present,
-		///                                     // ring advance, frameNum++, purge FBO pool
+		///     -> acquireSwapchainForFrameDraw()   // Vulkan: acquire only; never recreate
+		///     -> CachedRenderGraph::ensureBuilt(snapshot) + execute() when canRecordSwapchainDraws()
+		///     -> finishScreenFrame()              // ALWAYS when gfx initialized: seal/submit/present,
+		///                                         // ring advance; WSI recovery deferred to next Begin
 		///
 		/// Upload paths record into the current frame's copy command buffer throughout the
 		/// screen frame. finishScreenFrame() must NOT be gated on graph execution or shouldDraw().
 		/// Must pair beginScreenFrame() with finishScreenFrame().
 		virtual void beginScreenFrame() = 0;
 		virtual void finishScreenFrame() = 0;
-		/// Acquire a swapchain image for draw recording when the drawable is in sync (Vulkan).
-		virtual void prepareSwapchainForDrawing() {}
+		/// Vulkan: recreate swapchain / recover surface at frame open when needed.
+		/// Must be called before beginScreenFrame() while no screen frame is open. Does not acquire.
+		virtual void reconcileSwapchainAtFrameOpen() {}
+		/// Vulkan: acquire a swapchain image immediately before render-graph record.
+		/// Must not destroy/recreate the swapchain (defer WSI errors to next Begin reconcile).
+		virtual void acquireSwapchainForFrameDraw() {}
+		/// True when swapchain image is acquired and safe to record swapchain-targeting passes (Vulkan).
+		virtual bool canRecordSwapchainDraws() const { return true; }
 		/// Mark UI/backdrop geometry stale after a drawable resize (called from backends).
 		/// Consumed at pie_ScreenFrameRenderBegin(); do not call screen_updateGeometry() directly on resize.
 		void markScreenGeometryDirty() { _screenGeometryDirty = true; }

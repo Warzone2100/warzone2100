@@ -40,6 +40,7 @@ file(GLOB HEADERS
 	"vk/render_pass_layout_cache.h"
 	"vk/screen_frame_coordinator.h"
 	"vk/swapchain_presentation_state.h"
+	"vk/wsi_platform_policy.h"
 	"vk/transfer_recorder.h"
 	"vk/transfer_recording_context.h"
 	"vk/warm_entry.h"
@@ -201,6 +202,7 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 			"vk/render_pass_layout_cache.cpp"
 			"vk/screen_frame_coordinator.cpp"
 			"vk/swapchain_presentation_state.cpp"
+			"vk/wsi_platform_policy.cpp"
 			"vk/transfer_recorder.cpp")
 		CHECK_CXX_COMPILER_FLAG(-Wno-pedantic COMPILER_SUPPORTS_WNO_PEDANTIC)
 		if(COMPILER_SUPPORTS_WNO_PEDANTIC)
@@ -295,6 +297,7 @@ if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
 		"vk/render_pass_layout_cache.cpp"
 		"vk/screen_frame_coordinator.cpp"
 		"vk/swapchain_presentation_state.cpp"
+		"vk/wsi_platform_policy.cpp"
 		"vk/transfer_recorder.cpp")
 	set_source_files_properties(${cpp17_source_files} PROPERTIES COMPILE_FLAGS "-std=c++17")
 endif()

@@ -191,7 +191,10 @@ class ScreenFrameCoordinator;
 struct ScreenFramePipelineState
 {
 	bool mustSkipDrawing = false;
-	bool mustRecreateSwapchain = false;
+	/// Signal only - recreate is deferred to next Begin reconcile (except macOS present suboptimal).
+	bool swapchainRecreatePending = false;
+	/// Snapshot of ring-slot acquire before seal/submit clears swapchainImageAcquired.
+	bool acquiredSwapchainImage = false;
 	int drawableWidth = 0;
 	int drawableHeight = 0;
 
@@ -285,7 +288,7 @@ public:
 
 	bool drawCmdBufferBegun = false;
 	bool copyCmdBufferBegun = false;
-	/// True after acquireNextSwapchainImage() signals imageAcquireSemaphore for this slot.
+	/// True after tryAcquireSwapchainImage() signals imageAcquireSemaphore for this slot.
 	bool swapchainImageAcquired = false;
 	/// True when TransferRecorder recorded copy/barrier work this screen frame.
 	bool transferWorkRecorded = false;
@@ -884,6 +887,8 @@ private:
 	bool createLogicalDevice();
 	bool createAllocator();
 	void getQueues();
+	/// Create the swapchain and swapchain-specific resources.
+	/// Does not acquire an image; End acquireSwapchainForFrameDraw() owns acquire.
 	void createSwapchain(bool allowHandleSurfaceLost = true); // Throws on failure
 	void rebuildPipelinesIfNecessary();
 
@@ -918,7 +923,9 @@ public:
 	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
 	virtual void beginScreenFrame() override;
 	virtual void finishScreenFrame() override;
-	virtual void prepareSwapchainForDrawing() override;
+	virtual void reconcileSwapchainAtFrameOpen() override;
+	virtual void acquireSwapchainForFrameDraw() override;
+	virtual bool canRecordSwapchainDraws() const override;
 	/// True between beginScreenFrame() and finishScreenFrame().
 	bool isScreenFrameOpen() const { return _screenFrameOpen; }
 	/// Typed wrapper for per-frame GPU upload / copy command recording.
@@ -938,16 +945,24 @@ public:
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;
 	virtual void set_depth_range(const float& min, const float& max) override;
 private:
-	enum AcquireNextSwapchainImageResult
+	enum class SwapchainAcquireStatus
 	{
-		eSuccess,
-		eRecoveredFromError
+		Success,      // eSuccess - image acquired
+		Suboptimal,   // eSuboptimalKHR - index returned by Vulkan, but not consumed here
+		OutOfDate,
+		SurfaceLost
 	};
-	AcquireNextSwapchainImageResult acquireNextSwapchainImage(bool allowHandleSurfaceLost, bool onCreate = false);
+	/// acquireNextImageKHR only. Never recreates, never sets pending WSI flags (coordinator owns that).
+	/// On Success: sets currentSwapchainIndex, swapchainImageAcquired, beginFrame().
+	/// On Suboptimal/OutOfDate/SurfaceLost: does not mark acquired (image abandoned until recreate).
+	SwapchainAcquireStatus tryAcquireSwapchainImage();
+	/// Re-attach an already-open screen frame to buffering after mid-frame swapchain recreate.
+	void rebindOpenScreenFrameResources();
 
 	void handleSurfaceLost(); // Throws on failure
 	void waitForAllIdle(); // Throws on failure
 	/// Close any in-progress command buffer / render pass recording before GPU teardown.
+	/// Does not clear _screenFrameOpen (owned by beginScreenFrame / finish / shutdown).
 	void finalizeActiveRecording();
 	void destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain);
 	void createNewSwapchainAndSwapchainSpecificStuff(const vk::Result& reason); // Throws on failure
@@ -998,7 +1013,7 @@ private:
 	std::string calculateFormattedRendererInfoString() const;
 	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
 	const RenderPassDetails& currentRenderPass();
-	bool recreateSwapchainAfterPresentError(const vk::Result& reason);
+	bool recreateSwapchain(const vk::Result& reason);
 	void sealActivePassForFrameFinish();
 	void sealDrawCommandBufferForPresent();
 	void sealAndSubmitTransferGraphics(ScreenFramePipelineState& state);
