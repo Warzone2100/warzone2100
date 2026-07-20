@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("VTOL")
+_("VTOL (Vertical Take-Off and Landing) units are the main aerial instruments in dominating the skies.")
+_("VTOLs have an extremely high maximum speed and can traverse all types of terrain.")
+_("Additionally, they cannot be targeted by most weapons while airborne.")
+_("Note that while VTOL units can be designed like other vehicles, they can only be produced from a specialized VTOL Factory.")

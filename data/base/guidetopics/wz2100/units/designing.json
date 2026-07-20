@@ -27,6 +27,6 @@
 		"wz2100::general::commandpanel",
 		"wz2100::structures::factory",
 		"wz2100::units::building",
-		"wz2100::units::weaponselection"
+		"wz2100::weapons"
 	]
 }

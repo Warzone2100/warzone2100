@@ -38,7 +38,33 @@
 #include <string>
 #include <tuple>
 
-constexpr size_t CurrentGameLogOutputJSONVersion = 11;
+constexpr size_t CurrentGameLogOutputJSONVersion = 12;
+
+GameStoryLogger::AIPlayerAttributes::AIPlayerAttributes()
+: difficulty(-1)
+{ }
+
+void to_json(nlohmann::json& j, const GameStoryLogger::AIPlayerAttributes& p) {
+	j = nlohmann::json::object();
+	j["scriptName"] = p.scriptName;
+	j["difficulty"] = p.difficulty;
+}
+
+void from_json(const nlohmann::json& j, GameStoryLogger::AIPlayerAttributes& p) {
+	p.scriptName.clear();
+	auto it = j.find("scriptName");
+	if (it != j.end())
+	{
+		p.scriptName = it.value().get<std::string>();
+	}
+
+	p.difficulty = -1;
+	it = j.find("difficulty");
+	if (it != j.end())
+	{
+		p.difficulty = it.value().get<int8_t>();
+	}
+}
 
 static uint32_t countAllStructures(uint32_t player)
 {
@@ -65,7 +91,7 @@ static std::tuple<uint32_t, uint32_t> getDroidHPPercentageAndExperience(uint32_t
 	uint64_t totalHP = 0;
 	uint64_t totalExp = 0;
 	uint64_t numDroids = 0;
-	for (const DROID *psDroid : apsDroidLists[player])
+	for (const DROID *psDroid : gameWorld.objects.droids[player])
 	{
 		if (psDroid->died)
 		{
@@ -89,7 +115,7 @@ static uint32_t getNumOilRigs(uint32_t player)
 	}
 
 	uint32_t result = 0;
-	for (const STRUCTURE *psStruct : apsStructLists[player])
+	for (const STRUCTURE *psStruct : gameWorld.objects.structures[player])
 	{
 		if (!psStruct->died
 			&& (REF_RESOURCE_EXTRACTOR == psStruct->pStructureType->type))
@@ -105,6 +131,10 @@ static nlohmann::json buildGameDetailsOutputJSON(std::chrono::system_clock::time
 	nlohmann::json gameObj = nlohmann::json::object();
 	gameObj["version"] = version_getVersionString();
 	gameObj["mapName"] = game.map;
+	if (!game.hash.isZero())
+	{
+		gameObj["mapHash"] = game.hash.toString();
+	}
 	gameObj["baseType"] = game.base;
 	gameObj["alliancesType"] = game.alliance;
 	gameObj["powerType"] = game.power;
@@ -238,6 +268,10 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j["colour"] = f.colour;
 		j["faction"] = f.faction;
 		j["publicKey"] = f.publicKey;
+		if (f.aiPlayerAttr.has_value())
+		{
+			j["ai"] = f.aiPlayerAttr.value();
+		}
 		// data from the frame
 		j[mapPlayerDataOutputName("droidsLost", naming)] = p.droidsLost;
 		j[mapPlayerDataOutputName("structuresLost", naming)] = p.structuresLost;
@@ -260,6 +294,11 @@ static nlohmann::json convertToOutputJSON(const GameStoryLogger::GameFrame& fram
 		j[mapPlayerDataOutputName("recentResearchPotential", naming)] = p.recentResearchPotential;
 		j[mapPlayerDataOutputName("recentResearchPerformance", naming)] = p.recentResearchPerformance;
 		j[mapPlayerDataOutputName("usertype", naming)] = mapPlayerUserTypeOutputValue(p.usertype, naming);
+
+		if (p.playerLeftGameTime.has_value())
+		{
+			j["playerLeftGameTime"] = p.playerLeftGameTime.value();
+		}
 
 		size_t outputIndex = idx;
 		switch (outputKey)
@@ -304,6 +343,21 @@ void GameStoryLogger::reset()
 	}
 }
 
+const std::vector<GameStoryLogger::FixedPlayerAttributes>& GameStoryLogger::getFixedPlayerAttributes()
+{
+	return startingPlayerAttributes;
+}
+
+const std::vector<GameStoryLogger::GameFrame>& GameStoryLogger::getGameFrames()
+{
+	return gameFrames;
+}
+
+const std::vector<GameStoryLogger::ResearchEvent>& GameStoryLogger::getResearchLog()
+{
+	return researchLog;
+}
+
 void GameStoryLogger::logStartGame()
 {
 	reset();
@@ -330,6 +384,8 @@ void GameStoryLogger::logStartGame()
 		}
 	}
 
+	const auto aidata = getAIData();
+
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		FixedPlayerAttributes playerAttrib;
@@ -339,6 +395,23 @@ void GameStoryLogger::logStartGame()
 		playerAttrib.colour = NetPlay.players[i].colour;
 		playerAttrib.faction = NetPlay.players[i].faction;
 		playerAttrib.publicKey = base64Encode(getOutputPlayerIdentity(i).toBytes(EcKey::Public));
+		playerAttrib.slotWasOccupied = NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0; // a human or an AI (open / closed slots have ai < 0)
+
+		if (NetPlay.players[i].ai >= 0 && NetPlay.players[i].ai != AI_CUSTOM)
+		{
+			AIPlayerAttributes aiAttr;
+			if (NetPlay.players[i].ai < aidata.size())
+			{
+				aiAttr.scriptName = aidata[NetPlay.players[i].ai].js;
+			}
+			else
+			{
+				aiAttr.scriptName = "<unknown ai>";
+			}
+			aiAttr.difficulty = static_cast<int8_t>(NetPlay.players[i].difficulty);
+
+			playerAttrib.aiPlayerAttr = aiAttr;
+		}
 
 		startingPlayerAttributes.push_back(playerAttrib);
 	}
@@ -358,7 +431,8 @@ void GameStoryLogger::logGameFrame()
 	}
 
 	// throttle recording of game frames
-	if (lastRecordedGameFrameTime > 0 && (gameTime - lastRecordedGameFrameTime < frameLoggingInterval))
+	// (if frameLoggingInterval == 0, ongoing frame logging is disabled - however, always output the first frame regardless!)
+	if (lastRecordedGameFrameTime > 0 && ((frameLoggingInterval == 0) || (gameTime - lastRecordedGameFrameTime < frameLoggingInterval)))
 	{
 		return;
 	}
@@ -482,7 +556,7 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 		playerStats.structs = countAllStructures(i);
 		playerStats.researchComplete = mStats.recentResearchComplete;
 		playerStats.power = getPower(i);
-		playerStats.score = mStats.recentScore;
+		playerStats.score = static_cast<int32_t>(mStats.recentScore);
 		auto hpAndSummExp = getDroidHPPercentageAndExperience(i);
 		playerStats.hp = std::get<0>(hpAndSummExp);
 		playerStats.summExp = std::get<1>(hpAndSummExp);
@@ -502,6 +576,11 @@ GameStoryLogger::GameFrame GameStoryLogger::genCurrentFrame() const
 			{
 				playerStats.usertype = it->second;
 			}
+		}
+
+		if (i < ingame.playerLeftGameTime.size() && ingame.playerLeftGameTime[i].has_value())
+		{
+			playerStats.playerLeftGameTime = ingame.playerLeftGameTime[i];
 		}
 
 		frame.playerData.push_back(playerStats);
@@ -527,9 +606,9 @@ nlohmann::json GameStoryLogger::genFrameReport(const GameFrame& frame, OutputKey
 	return report;
 }
 
-nlohmann::json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const
+nlohmann::ordered_json GameStoryLogger::genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const
 {
-	nlohmann::json report = nlohmann::json::object();
+	nlohmann::ordered_json report = nlohmann::json::object();
 
 	report["JSONversion"] = CurrentGameLogOutputJSONVersion;
 	report["gameTime"] = gameTime;
@@ -555,6 +634,12 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::FixedPlayerAttribu
 	j["colour"] = p.colour;
 	j["faction"] = p.faction;
 	j["publicKey"] = p.publicKey;
+	j["slotWasOccupied"] = p.slotWasOccupied;
+
+	if (p.aiPlayerAttr.has_value())
+	{
+		j["ai"] = p.aiPlayerAttr.value();
+	}
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttributes& p) {
@@ -564,6 +649,20 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::FixedPlayerAttri
 	p.colour = j.at("colour").get<int32_t>();
 	p.faction = static_cast<FactionID>(j.at("faction").get<uint8_t>());
 	p.publicKey = j.at("publicKey").get<std::string>();
+
+	// older saves lack this key - fall back to treating any named slot as occupied
+	p.slotWasOccupied = !p.name.empty();
+	auto occupiedIt = j.find("slotWasOccupied");
+	if (occupiedIt != j.end())
+	{
+		p.slotWasOccupied = occupiedIt.value().get<bool>();
+	}
+
+	auto it = j.find("ai");
+	if (it != j.end())
+	{
+		p.aiPlayerAttr = it.value().get<GameStoryLogger::AIPlayerAttributes>();
+	}
 }
 
 inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerStats& p) {
@@ -589,6 +688,10 @@ inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame::PlayerS
 	j["recentResearchPotential"] = p.recentResearchPotential;
 	j["recentResearchPerformance"] = p.recentResearchPerformance;
 	j["usertype"] = p.usertype;
+	if (p.playerLeftGameTime.has_value())
+	{
+		j["playerLeftGameTime"] = p.playerLeftGameTime.value();
+	}
 }
 
 inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::PlayerStats& p) {
@@ -602,7 +705,7 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::Playe
 	p.structs = j.at("structs").get<uint32_t>();
 	p.researchComplete = j.at("researchComplete").get<uint32_t>();
 	p.power = j.at("power").get<uint32_t>();
-	p.score = j.at("score").get<uint32_t>();
+	p.score = j.at("score").get<int32_t>();
 	p.hp = j.at("hp").get<uint32_t>();
 	p.summExp = j.at("summExp").get<uint32_t>();
 	p.oilRigs = j.at("oilRigs").get<uint32_t>();
@@ -613,6 +716,13 @@ inline void from_json(const nlohmann::json& j, GameStoryLogger::GameFrame::Playe
 	p.recentResearchPotential = j.at("recentResearchPotential").get<uint64_t>();
 	p.recentResearchPerformance = j.at("recentResearchPerformance").get<uint64_t>();
 	p.usertype = j.at("usertype").get<std::string>();
+
+	p.playerLeftGameTime = nullopt;
+	auto it = j.find("playerLeftGameTime");
+	if (it != j.end())
+	{
+		p.playerLeftGameTime = it.value().get<uint32_t>();
+	}
 }
 
 inline void to_json(nlohmann::json& j, const GameStoryLogger::GameFrame& p) {

@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020  Warzone 2100 Project
+	Copyright (C) 2020-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,15 +22,9 @@
 #ifndef __INCLUDED_SRC_MUSICMANAGER_H__
 #define __INCLUDED_SRC_MUSICMANAGER_H__
 
-#define MM_FORM			10200
-#define MM_RETURN			10202
-constexpr int MM_GO_BACK = 10203;
+#include <memory>
+class WIDGET;
 
-class InputManager;
-
-bool runMusicManager();
-bool runInGameMusicManager(unsigned id, InputManager& inputManager);
-bool startMusicManager();
-bool startInGameMusicManager(InputManager& inputManager);
+std::shared_ptr<WIDGET> makeMusicManagerForm(bool ingame);
 
 #endif // __INCLUDED_SRC_MUSICMANAGER_H__

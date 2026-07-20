@@ -78,15 +78,15 @@ ValueTracker* ValueTracker::update()
 	}
 
 	auto deltaRemaining = (this->initial + this->targetDelta - this->current);
-	auto adjustedChange = deltaRemaining * realTimeAdjustedIncrement(this->speed);
+	auto adjustedChange = deltaRemaining * static_cast<double>(realTimeAdjustedIncrement(this->speed));
 
 	// prevent "over-shooting" / rubber-banding
-	if (deltaRemaining >= 0.f && adjustedChange > deltaRemaining)
+	if (deltaRemaining >= 0.0 && adjustedChange > deltaRemaining)
 	{
 		adjustedChange = deltaRemaining;
 		this->_reachedTarget = true;
 	}
-	else if (deltaRemaining < 0.f && adjustedChange < deltaRemaining)
+	else if (deltaRemaining < 0.0 && adjustedChange < deltaRemaining)
 	{
 		adjustedChange = deltaRemaining;
 		this->_reachedTarget = true;

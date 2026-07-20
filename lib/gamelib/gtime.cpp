@@ -413,17 +413,17 @@ void sendPlayerGameTime()
 
 	for (player = 0; player < MAX_CONNECTED_PLAYERS; ++player)
 	{
-		if (!myResponsibility(player))
+		if (!myResponsibility(player) || !isHumanPlayer(player))
 		{
 			continue;
 		}
 
-		NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
-		NETuint32_t(&latencyTicks);
-		NETuint32_t(&checkTime);
-		NETuint16_t(&checkCrc);
-		NETuint16_t(&wantedLatency);
-		NETend();
+		auto w = NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
+		NETuint32_t(w, latencyTicks);
+		NETuint32_t(w, checkTime);
+		NETuint16_t(w, checkCrc);
+		NETuint16_t(w, wantedLatency);
+		NETend(w);
 	}
 
 	debugVerboseLogSyncIfNeeded();
@@ -456,12 +456,12 @@ void recvPlayerGameTime(NETQUEUE queue)
 	uint32_t checkTime = 0;
 	GameCrcType checkCrc = 0;
 
-	NETbeginDecode(queue, GAME_GAME_TIME);
-	NETuint32_t(&latencyTicks);
-	NETuint32_t(&checkTime);
-	NETuint16_t(&checkCrc);
-	NETuint16_t(&wantedLatencies[queue.index]);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_GAME_TIME);
+	NETuint32_t(r, latencyTicks);
+	NETuint32_t(r, checkTime);
+	NETuint16_t(r, checkCrc);
+	NETuint16_t(r, wantedLatencies[queue.index]);
+	NETend(r);
 
 	gameQueueTime[queue.index] = checkTime + latencyTicks * GAME_TICKS_PER_UPDATE;  // gameTime when future messages shall be processed.
 

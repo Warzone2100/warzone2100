@@ -68,8 +68,29 @@ camAreaEvent("NPSensorTurn", function(droid)
 
 camAreaEvent("NPSensorRemove", function(droid)
 {
-	removeObject(NPScout, false);
+	if (camDef(NPScout) && NPScout && (droid.player === CAM_NEW_PARADIGM) && (droid.id === NPScout.id))
+	{
+		removeObject(NPScout, false);
+		camCallOnce("setupInsaneSpawn");
+	}
 });
+
+// If the player didn't destroy the NP sensor then the valley will spawn scavengers.
+function setupInsaneSpawn()
+{
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(100));
+	}
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = (!camClassicMode()) ? [cTempl.bloketwin, cTempl.triketwin, cTempl.buggytwin, cTempl.bjeeptwin] : [cTempl.bloke, cTempl.trike, cTempl.buggy, cTempl.bjeep];
+	const limits = {minimum: 15, maxRandom: 5};
+	const location = camMakePos(getObject("insaneSpawnPoint"));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_SCAV_7, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
 
 function eventStartLevel()
 {
@@ -79,7 +100,7 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(1)));
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_6, true);
 	setAlliance(CAM_NEW_PARADIGM, CAM_SCAV_7, true);
 	setAlliance(CAM_SCAV_6, CAM_SCAV_7, true);
@@ -103,7 +124,7 @@ function eventStartLevel()
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01-ScavReduce-Undo", CAM_SCAV_7);
 		}
-		else if (difficulty === INSANE)
+		else if (difficulty >= INSANE)
 		{
 			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_6);
 			completeResearch("R-Wpn-Flamer-Range01", CAM_SCAV_7);

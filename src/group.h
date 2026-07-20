@@ -65,10 +65,6 @@ bool grpInitialise();
 // shutdown the group system
 void grpShutDown();
 
-/// create a new group, use -1 to generate a new ID. never use id != -1 unless loading from a savegame.
-DROID_GROUP *grpCreate(int id = -1);
-
-/// lookup group by its unique id, or create it if not found
-DROID_GROUP *grpFind(int id);
+DROID_GROUP *grpCreate();
 
 #endif // __INCLUDED_SRC_GROUP_H__

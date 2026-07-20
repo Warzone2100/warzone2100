@@ -19,12 +19,15 @@
 
 #pragma once
 
+#include <chrono>
 #include <memory>
 #include <string>
 #include <system_error>
 #include <vector>
 #include <stddef.h>
 #include <stdint.h>
+#include <atomic>
+#include <mutex>
 
 #include "lib/framework/types.h" // bring in `ssize_t` for MSVC
 #include "lib/netplay/net_result.h"
@@ -32,6 +35,7 @@
 
 #include <nonstd/optional.hpp>
 using nonstd::optional;
+using nonstd::nullopt;
 
 class IDescriptorSet;
 class PendingWritesManager;
@@ -139,7 +143,7 @@ public:
 	/// </summary>
 	/// <param name="rawByteCount">Raw count of bytes (after compression) as written
 	/// to the submission queue by the flush operation.</param>
-	void flush(size_t* rawByteCount);
+	net::result<void> flush(size_t* rawByteCount);
 	/// <summary>
 	/// Enables compression for the current socket.
 	///
@@ -207,15 +211,7 @@ public:
 		deleteLater_ = true;
 	}
 
-	const optional<std::error_code>& writeErrorCode() const
-	{
-		return writeErrorCode_;
-	}
-
-	void setWriteErrorCode(optional<std::error_code> ec)
-	{
-		writeErrorCode_ = std::move(ec);
-	}
+	virtual void setConnectedTimeout(std::chrono::milliseconds timeout) = 0;
 
 protected:
 
@@ -238,16 +234,32 @@ protected:
 	// memory allocations.
 	const std::vector<IClientConnection*> selfConnList_;
 	// Connection provider used to create internal descriptor sets.
-	WzConnectionProvider* connProvider_ = nullptr;
+	std::weak_ptr<WzConnectionProvider> connProvider_;
 	// Compression provider which is used to initialize compression algorithm in `enableCompression()`.
 	WzCompressionProvider* compressionProvider_ = nullptr;
 	// Pending writes manager instance, specific to a particular connection provider,
 	// which is used to schedule all write operations for this connection.
 	PendingWritesManager* pwm_ = nullptr;
 
+
+	inline optional<std::error_code> writeErrorCode() const
+	{
+		if (!writeErrorSet_.load(std::memory_order_relaxed))
+		{
+			return nullopt;
+		}
+		const std::lock_guard<std::mutex> guard {writeErrorMtx_};
+		return writeErrorCode_;
+	}
+
+	void setWriteErrorCode(optional<std::error_code> ec);
+
 private:
 
+	std::atomic<bool> writeErrorSet_{false}; // set when writeErrorCode_ is set
+	mutable std::mutex writeErrorMtx_; // protects access to writeErrorCode_
 	optional<std::error_code> writeErrorCode_;
+
 	std::unique_ptr<ICompressionAdapter> compressionAdapter_;
 	std::unique_ptr<IDescriptorSet> readAllDescriptorSet_;
 	bool deleteLater_ = false;

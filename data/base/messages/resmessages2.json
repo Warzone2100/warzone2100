@@ -285,6 +285,17 @@
 			"All half-tracks upgraded automatically"
 		]
 	},
+	"RES_PB_RotMG": {
+		"id": "RES_PB_RotMG",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_struttech.ogg",
+		"text": [
+			"New Defensive Structure Available",
+			"Armored bunker with Assault Gun",
+			"Automatically targets enemies in range",
+			"Defensive Strength: High"
+		]
+	},
 	"RES_ST_FCY4": {
 		"id": "RES_ST_FCY4",
 		"imdName": "MICAPSUL.pie",
@@ -786,7 +797,7 @@
 		"sequenceName": "res_weapons.ogg",
 		"text": [
 			"Mortar Upgrade",
-			"High Explosive Armor-Piercing Shells",
+			"High Explosive Soft Casing Shells",
 			"Increases Mortar damage",
 			"All mortars upgraded automatically"
 		]

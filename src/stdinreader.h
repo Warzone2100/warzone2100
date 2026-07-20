@@ -37,13 +37,9 @@ void cmdInterfaceThreadShutdown();
 
 bool wz_command_interface_enabled();
 
-#if defined(WZ_CC_MINGW)
-#include <cstdio> // For __MINGW_PRINTF_FORMAT define
-void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 1, 2);
-#else
-void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(printf, 1, 2);
-#endif
+void wz_command_interface_output(const char *str, ...) WZ_DECL_FORMAT(WZ_PRINTF_FORMAT, 1, 2);
 
 void wz_command_interface_output_str(const char *str);
 
-void wz_command_interface_output_room_status_json();
+void wz_command_interface_output_room_status_json(bool queued = false);
+void wz_command_interface_process_queued_status_output();

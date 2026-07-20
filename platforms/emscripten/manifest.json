@@ -24,7 +24,7 @@
             "url": "https://apps.microsoft.com/detail/9MW0Z4MPCS8C"
         }
     ],
-    "prefer_related_applications": true,
+    "prefer_related_applications": false,
     "start_url": "./",
     "scope": "."
 }

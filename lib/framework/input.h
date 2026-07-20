@@ -35,6 +35,10 @@
 #include "vector.h"
 #include <vector>
 
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 
 /** Defines for all the key codes used. */
 enum KEY_CODE
@@ -182,6 +186,8 @@ void StopTextInput();
 WZ_DECL_NONNULL(2) void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 WZ_DECL_NONNULL(2) void mouseKeyCodeToString(const MOUSE_KEY_CODE code, char *ascii, const int maxStringLength);
 
+void inputRestoreMetaKeyState();
+
 /** Initialise the input module. */
 void inputInitialise();
 
@@ -228,6 +234,17 @@ WZ_DECL_NONNULL(2, 3) bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py
 
 void setMouseWarp(bool value);
 bool getMouseWarp();
+
+/** Returns a float if pinch gesture is in progress */
+optional<float> consumePinchGestureScaleUpdate();
+
+/** Returns a pair of floats if a pan gesture is in progress */
+struct PanGestureDeltaScreenPts
+{
+	float deltaX;
+	float deltaY;
+};
+optional<PanGestureDeltaScreenPts> consumePanGestureDeltaUpdate();
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW

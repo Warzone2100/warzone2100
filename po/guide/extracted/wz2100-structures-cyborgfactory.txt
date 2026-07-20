@@ -1,0 +1,6 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Cyborg Factory")
+_("A Cyborg Factory operates similarly to a standard Factory, but exclusively builds Cyborgs.")
+_("Each Factory can build one Cyborg at a time, but you can queue multiple Cyborgs for production.")
+_("When a Cyborg is produced, it receives the Cyborg Factory’s Unit Orders and proceeds to the factory's Rally Point.")

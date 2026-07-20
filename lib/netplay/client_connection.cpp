@@ -29,10 +29,10 @@
 
 IClientConnection::IClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm)
 	: selfConnList_({ this }),
-	connProvider_(&connProvider),
+	connProvider_(connProvider.shared_from_this()),
 	compressionProvider_(&compressionProvider),
 	pwm_(&pwm),
-	readAllDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
+	readAllDescriptorSet_(connProvider.newDescriptorSet(PollEventType::READABLE))
 {}
 
 net::result<ssize_t> IClientConnection::readAll(void* buf, size_t size, unsigned timeout)
@@ -42,7 +42,7 @@ net::result<ssize_t> IClientConnection::readAll(void* buf, size_t size, unsigned
 
 	if (!isValid())
 	{
-		debug(LOG_ERROR, "Invalid socket (%p) (error: EBADF)", static_cast<void*>(this));
+		debug(LOG_ERROR, "IClientConnection::readAll: Invalid socket (%p) (error: EBADF)", static_cast<void*>(this));
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
@@ -94,7 +94,7 @@ net::result<ssize_t> IClientConnection::readNoInt(void* buf, size_t max_size, si
 
 	if (!isValid())
 	{
-		debug(LOG_ERROR, "Invalid socket");
+		debug(LOG_ERROR, "IClientConnection::readNoInt: Invalid socket");
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
@@ -155,13 +155,14 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 {
 	if (!isValid())
 	{
-		debug(LOG_ERROR, "Invalid socket (EBADF)");
+		debug(LOG_ERROR, "IClientConnection::writeAll: Invalid socket (EBADF)");
 		return tl::make_unexpected(make_network_error_code(EBADF));
 	}
 
-	if (writeErrorCode().has_value())
+	auto writeErr = writeErrorCode();
+	if (writeErr.has_value())
 	{
-		return tl::make_unexpected(writeErrorCode().value());
+		return tl::make_unexpected(writeErr.value());
 	}
 
 	if (rawByteCount)
@@ -187,31 +188,55 @@ net::result<ssize_t> IClientConnection::writeAll(const void* buf, size_t size, s
 	}
 	else
 	{
-		compressionAdapter_->compress(buf, size);
+		auto compressRes = compressionAdapter_->compress(buf, size);
+		if (!compressRes.has_value())
+		{
+			// compress failed?
+			debug(LOG_ERROR, "IClientConnection::writeAll: compress failed?");
+			return tl::make_unexpected(compressRes.error());
+		}
 	}
 
 	return size;
 }
 
-void IClientConnection::flush(size_t* rawByteCount)
+net::result<void> IClientConnection::flush(size_t* rawByteCount)
 {
+	if (!isValid())
+	{
+		debug(LOG_ERROR, "IClientConnection::flush: Invalid socket (EBADF)");
+		return tl::make_unexpected(make_network_error_code(EBADF));
+	}
+
 	if (rawByteCount)
 	{
 		*rawByteCount = 0;
 	}
 	if (!isCompressed())
 	{
-		return;  // Not compressed, so don't mess with compression.
+		return {};  // Not compressed, so don't mess with compression.
 	}
 
-	ASSERT(!writeErrorCode().has_value(), "Socket write error encountered in flush");
+	auto writeErr = writeErrorCode();
+	if (writeErr.has_value())
+	{
+		const auto errMsg = writeErr.value().message();
+		debug(LOG_ERROR, "Socket write error encountered in flush: %s", errMsg.c_str());
+		return tl::make_unexpected(writeErr.value());
+	}
 
-	compressionAdapter_->flushCompressionStream();
+	auto flushCompressionRes = compressionAdapter_->flushCompressionStream();
+	if (!flushCompressionRes.has_value())
+	{
+		// flushCompressionStream failed
+		debug(LOG_ERROR, "Socket write error encountered flushing compression stream");
+		return tl::make_unexpected(flushCompressionRes.error());
+	}
 
 	auto& compressionBuf = compressionAdapter_->compressionOutBuffer();
 	if (compressionBuf.empty())
 	{
-		return;  // No data to flush out.
+		return {};  // No data to flush out.
 	}
 
 	pwm_->append(this, [&compressionBuf] (PendingWritesManager::ConnectionWriteQueue& writeQueue)
@@ -225,6 +250,7 @@ void IClientConnection::flush(size_t* rawByteCount)
 		*rawByteCount = compressionBuf.size();
 	}
 	compressionBuf.clear();
+	return {};
 }
 
 void IClientConnection::enableCompression()
@@ -253,4 +279,13 @@ void IClientConnection::enableCompression()
 void IClientConnection::close()
 {
 	pwm_->safeDispose(this);
+}
+
+void IClientConnection::setWriteErrorCode(optional<std::error_code> ec)
+{
+	{
+		const std::lock_guard<std::mutex> guard {writeErrorMtx_};
+		writeErrorCode_ = std::move(ec);
+	}
+	writeErrorSet_.store(true, std::memory_order_relaxed);
 }

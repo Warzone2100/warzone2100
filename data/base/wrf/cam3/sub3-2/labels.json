@@ -16,62 +16,58 @@
 		"pos": [192, 11456]
 	},
 	"position_4": {
-		"label": "vtolRemovePos",
-		"pos": [1792, 11648]
-	},
-	"position_5": {
 		"label": "healthRetreatPos",
 		"pos": [4928, 10816]
 	},
-	"position_6": {
+	"position_5": {
 		"label": "NE-PhantomFactory",
 		"pos": [5440, 3136]
 	},
-	"position_7": {
+	"position_6": {
 		"label": "SW-PhantomFactory",
 		"pos": [64, 10816]
 	},
-	"position_8": {
+	"position_7": {
 		"label": "SE-PhantomFactory",
 		"pos": [5440, 10432]
 	},
-	"position_9": {
+	"position_8": {
 		"label": "upperMiddlePos",
 		"pos": [2112, 2240]
 	},
-	"position_10": {
+	"position_9": {
 		"label": "upperMiddleEastPos",
 		"pos": [3136, 2496]
 	},
-	"position_11": {
+	"position_10": {
 		"label": "playerLZ",
 		"pos": [1728, 448]
 	},
-	"position_12": {
+	"position_11": {
 		"label": "upperMiddleWest",
 		"pos": [1856, 4288]
 	},
-	"position_13": {
+	"position_12": {
 		"label": "upperMiddleHill",
 		"pos": [1344, 4160]
 	},
-	"position_14": {
+	"position_13": {
 		"label": "lowerMiddleEast",
 		"pos": [4032, 6976]
 	},
-	"position_15": {
+	"position_14": {
 		"label": "lowerMiddleHill",
 		"pos": [2752, 7616]
 	},
-	"position_16": {
+	"position_15": {
 		"label": "lowerMiddleWest",
 		"pos": [1472, 7872]
 	},
-	"position_17": {
+	"position_16": {
 		"label": "SWCorner",
 		"pos": [1216, 9920]
 	},
-	"position_18": {
+	"position_17": {
 		"label": "alphaDoorway",
 		"pos": [4288, 9792]
 	},

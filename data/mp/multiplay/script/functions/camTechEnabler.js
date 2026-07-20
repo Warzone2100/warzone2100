@@ -383,6 +383,8 @@ var allRes = {
 	"R-Wpn-Howitzer-Damage06": 3009,
 	"R-Wpn-Energy-ROF03": 3014,
 	"R-Wpn-Missile-Damage03": 3048,
+	"R-Wpn-ParticleGun": 3123,
+	"R-Defense-ParticleGun": 3146,
 	"R-Vehicle-Body13": 3191,
 	"R-Defense-WallUpgrade12": 3203,
 	"R-Wpn-Rail-ROF03": 3243,

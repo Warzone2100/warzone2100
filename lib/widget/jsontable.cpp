@@ -68,6 +68,7 @@ void PathBarWidget::display(int xOffset, int yOffset)
 	// Draw the path separator between all path components
 	WidgetGraphicsContext baseContext;
 	baseContext = baseContext.translatedBy(x() + xOffset, y() + yOffset);
+	baseContext = baseContext.clippedBy(WzRect(0, 0, width(), height()));
 	for (size_t idx = 0; idx < (pathComponents.size() - 1); idx++)
 	{
 		auto& button = componentButtons[idx];

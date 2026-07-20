@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,10 +26,16 @@
 #ifndef __INCLUDED_SRC_INIT_H__
 #define __INCLUDED_SRC_INIT_H__
 
+#include <cstdint>
+#include <memory>
+#include <string>
 #include <vector>
 #include "terrain_defs.h"
+#include "lib/framework/loading_task_fwd.h"
 
 struct IMAGEFILE;
+class ResourceLoadingController;
+class WzMapZipIO;
 
 // the size of the file loading buffer
 // FIXME Totally inappropriate place for this.
@@ -36,13 +44,15 @@ extern char fileLoadBuffer[];
 
 bool systemInitialise(unsigned int horizScalePercentage, unsigned int vertScalePercentage);
 void systemShutdown();
-bool frontendInitialise(const char *ResourceFile);
+LoadingTask<> frontendInitTask(ResourceLoadingController &controller, bool onInitialStartup = false);
+bool frontendInitialiseSetup();
+bool frontendInitialiseFinalize();
 bool frontendShutdown();
 bool stageOneInitialise();
 bool stageOneShutDown();
 bool stageTwoInitialise();
 bool stageTwoShutDown();
-bool stageThreeInitialise();
+LoadingTask<> stageThreeInitialiseTask(ResourceLoadingController& controller);
 bool stageThreeShutDown();
 
 // Reset the game between campaigns
@@ -62,13 +72,15 @@ void registerSearchPath(const std::string& path, unsigned int priority);
 void unregisterSearchPath(const std::string& path);
 void debugOutputSearchPaths();
 void debugOutputSearchPathMountErrors();
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL, const char* current_map_mount_point = NULL);
+bool rebuildSearchPath(searchPathMode mode, bool force);
 bool rebuildExistingSearchPathWithGraphicsOptionChange();
 
 bool buildMapList(bool campaignOnly = false);
 bool CheckForMod(char const *mapFile);
 bool CheckForRandom(char const *mapFile, char const *mapDataFile0);
 bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData);
+std::shared_ptr<WzMapZipIO> getSpecialInMemoryMapArchive(const std::string& mapName);
+bool clearSpecialInMemoryMap();
 
 std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures();
 

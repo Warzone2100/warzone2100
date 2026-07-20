@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,18 +67,24 @@ struct screeninfo
 {
 	int width;
 	int height;
-	int refresh_rate;
-	int screen;
+	float pixel_density;
+	float refresh_rate;
+	uint32_t screen;
 };
 
 void wzMain(int &argc, char **argv);
 bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, WINDOW_MODE fullscreen = WINDOW_MODE::windowed, int vsync = 1, int lodDistanceBiasPercentage = 0, uint32_t depthMapResolution = 0, bool highDPI = true);
+optional<video_backend> wzGetInitializedGfxBackend();
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
-bool wzPromptToChangeGfxBackendOnFailure(std::string additionalErrorDetails = "");
+bool wzPromptToChangeGfxBackendOnFailure(const std::string& additionalErrorDetails = "");
+void wzDisplayFatalGfxBackendFailure(const std::string& additionalErrorDetails = "");
 void wzResetGfxSettingsOnFailure();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzGetGameToRendererScaleFactorInt(unsigned int *horizScalePercentage, unsigned int *vertScalePercentage);
 void wzMainEventLoop(std::function<void()> onShutdown);
+/// Platform event pump for synchronous loading drains. Keeps the OS window responsive
+/// while `runTaskToCompletion` / `runBlockingResourceLoad` spin on the main thread.
+/// Called from game-layer loading housekeeping and lib/ivis_opengl blocking gfx loads.
 void wzPumpEventsWhileLoading();
 void wzQuit(int exitCode);              ///< Quit game
 int wzGetQuitExitCode();
@@ -85,18 +93,17 @@ std::vector<WINDOW_MODE> wzSupportedWindowModes();
 bool wzIsSupportedWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
-bool wzSetToggleFullscreenMode(WINDOW_MODE fullscreenMode);
-WINDOW_MODE wzGetToggleFullscreenMode();
 bool wzChangeWindowMode(WINDOW_MODE mode, bool silent = false);
 WINDOW_MODE wzGetCurrentWindowMode();
+bool wzIsMaximized();
 bool wzIsFullscreen();
+bool wzWindowHasFocus();
 void wzSetWindowIsResizable(bool resizable);
 void wzPostChangedSwapInterval();
 bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
 bool wzChangeCursorScale(unsigned int cursorScale);
-bool wzChangeFullscreenDisplayMode(int screen, unsigned int width, unsigned int height);
-bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
+bool wzChangeFullscreenDisplayMode(optional<screeninfo> config);
 enum class MinimizeOnFocusLossBehavior
 {
 	Auto = -1,
@@ -110,13 +117,15 @@ unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize();
 unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension);
 unsigned int wzGetCurrentDisplayScale();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
+bool wzHasClipboardText();
+WzString wzGetClipboardText();
 bool wzSetClipboardText(const char *text);
 void wzSetCursor(CURSOR index);
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
 void wzGrabMouse();		///< Trap mouse cursor in application window
 void wzReleaseMouse();	///< Undo the wzGrabMouse operation
-int wzGetTicks();		///< Milliseconds since start of game
+uint32_t wzGetTicks();		///< Milliseconds since start of game
 enum DialogType {
 	Dialog_Error,
 	Dialog_Warning,
@@ -126,11 +135,10 @@ WZ_DECL_NONNULL(2, 3) void wzDisplayDialog(DialogType type, const char *title, c
 WZ_DECL_NONNULL(2, 3) size_t wzDisplayDialogAdvanced(DialogType type, const char *title, const char *message, std::vector<std::string> buttonsText);
 
 WzString wzGetPlatform();
-std::vector<screeninfo> wzAvailableResolutions();
-screeninfo wzGetCurrentFullscreenDisplayMode();
+std::vector<optional<screeninfo>> wzAvailableResolutions();
+optional<screeninfo> wzGetCurrentFullscreenDisplayMode();
 std::vector<unsigned int> wzAvailableDisplayScales();
 std::vector<video_backend> wzAvailableGfxBackends();
-WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support
@@ -151,6 +159,7 @@ bool wzBackendAttemptOpenURL(const char *url);
 
 // System information related
 uint64_t wzGetCurrentSystemRAM(); // gets the system RAM in MiB
+uint32_t wzGetLogicalCPUCount();
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data, const char* name = nullptr);
@@ -166,6 +175,7 @@ WZ_DECL_NONNULL(1) void wzMutexUnlock(WZ_MUTEX *mutex);
 WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
 WZ_DECL_NONNULL(1) void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
+WZ_DECL_NONNULL(1) bool wzSemaphoreWaitTimeout(WZ_SEMAPHORE *semaphore, int32_t timeoutMS);
 WZ_DECL_NONNULL(1) void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
 WZ_DECL_NONNULL(1) void wzAsyncExecOnMainThread(WZ_MAINTHREADEXEC *exec);
 

@@ -8,52 +8,64 @@
 		"pos": [832, 6464]
 	},
 	"position_2": {
-		"label": "vtolRemovePos",
-		"pos": [128, 10240]
-	},
-	"position_3": {
 		"label": "healthRetreatPos",
 		"pos": [6848, 23232]
 	},
-	"position_4": {
+	"position_3": {
 		"label": "southBaseRetreat",
 		"pos": [6848, 23232]
 	},
-	"position_5": {
+	"position_4": {
 		"label": "southOfVtolBase",
 		"pos": [4416, 23232]
 	},
-	"position_6": {
+	"position_5": {
 		"label": "SWrampToGammaBase",
 		"pos": [1600, 18752]
 	},
-	"position_7": {
+	"position_6": {
 		"label": "eastRidgeGammaBase",
 		"pos": [2112, 22208]
 	},
-	"position_8": {
+	"position_7": {
 		"label": "NXHeavyAssembly",
 		"pos": [6848, 21952]
 	},
-	"position_9": {
+	"position_8": {
 		"label": "NXcybFacArtiAssembly",
 		"pos": [3776, 17600]
 	},
-	"position_10": {
+	"position_9": {
 		"label": "NXsouthCybFacAssembly",
 		"pos": [6720, 23360]
 	},
-	"position_11": {
+	"position_10": {
 		"label": "NXvtolAssembly",
 		"pos": [4288, 21314]
 	},
-	"position_12": {
+	"position_11": {
 		"label": "buildPos1",
 		"pos": [3456, 23424]
 	},
-	"position_13": {
+	"position_12": {
 		"label": "buildPos2",
 		"pos": [5120, 22912]
+	},
+	"position_13": {
+		"label": "southSpawnPos",
+		"pos": [3328, 24320]
+	},
+	"position_14": {
+		"label": "eastSpawnPos",
+		"pos": [8000, 21440]
+	},
+	"position_15": {
+		"label": "vtolSpawnPos1",
+		"pos": [3840, 24704]
+	},
+	"position_16": {
+		"label": "vtolSpawnPos2",
+		"pos": [7808, 22400]
 	},
 
 	"area_0": {
@@ -157,7 +169,7 @@
 	"radius_0": {
 		"label": "vtolRemoveZone",
 		"subscriber": 3,
-		"pos": [128, 10240],
+		"pos": [1536, 24320],
 		"radius": 250
 	}
 }

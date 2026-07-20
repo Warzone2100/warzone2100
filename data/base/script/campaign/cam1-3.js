@@ -65,9 +65,10 @@ function enableNP(args)
 		camEnableFactory("ScavFactorySouth");
 	}
 
-	if (difficulty === INSANE)
+	if (camAllowInsaneSpawns())
 	{
-		queue("NPReinforce", camSecondsToMilliseconds(10));
+		queue("insaneReinforcementSpawn", camSecondsToMilliseconds(10));
+		setTimer("insaneReinforcementSpawn", camSecondsToMilliseconds(180));
 	}
 
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
@@ -90,27 +91,13 @@ function enableNP(args)
 	camPlayVideos([cam_sounds.incoming.incomingTransmission, {video: "SB1_3_MSG4", type: MISS_MSG}]);
 }
 
-function NPReinforce()
+function insaneReinforcementSpawn()
 {
-	if (getObject("NPHQ") !== null)
-	{
-		const list = [];
-		const COUNT = 5 + camRand(5);
-		const scouts = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
-
-		for (let i = 0; i < COUNT; ++i)
-		{
-			list.push(scouts[camRand(scouts.length)]);
-		}
-		camSendReinforcement(CAM_NEW_PARADIGM, camMakePos("NPReinforcementPos"), list, CAM_REINFORCE_GROUND, {
-			data: {
-				regroup: false,
-				repair: 66,
-				count: -1,
-			},
-		});
-		queue("NPReinforce", camSecondsToMilliseconds(180));
-	}
+	const units = [cTempl.nphmg, cTempl.npblc, cTempl.nppod, cTempl.nphmg, cTempl.npblc];
+	const limits = {minimum: 5, maxRandom: 5};
+	const condition = {condition: CAM_REINFORCE_CONDITION_OBJECT, object: "NPHQ"};
+	const location = ["NPReinforcementPos", "NPReinforcementPosWest"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, condition, location, units, limits.minimum, limits.maxRandom);
 }
 
 function sendScouts()
@@ -261,6 +248,11 @@ function eventStartLevel()
 	{
 		camCompleteRequiredResearch(mis_newParadigmRes, CAM_NEW_PARADIGM);
 		camCompleteRequiredResearch(mis_scavengerRes, CAM_SCAV_7);
+
+		if (difficulty >= HARD)
+		{
+			completeResearch("R-Defense-WallUpgrade02", CAM_NEW_PARADIGM);
+		}
 
 		camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, CAM_SCAV_7);
 		camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, CAM_SCAV_7);

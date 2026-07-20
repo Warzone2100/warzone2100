@@ -25,6 +25,7 @@
 #include "lib/netplay/descriptor_set.h"
 #include "lib/netplay/client_connection.h"
 #include "lib/netplay/wz_connection_provider.h"
+#include "lib/netplay/error_categories.h"
 
 #include <system_error>
 
@@ -143,7 +144,36 @@ void PendingWritesManager::threadImplFunction()
 				ConnectionWriteQueue& writeQueue = currentIt->second;
 				ASSERT(!writeQueue.empty(), "writeQueue[sock] must not be empty.");
 
-				if (!writableSet_->isSet(conn) || writeQueue.empty())
+				auto isSetResult = writableSet_->isSet(conn);
+				if (!isSetResult.has_value())
+				{
+					// Poll returned some fatal error state for the connection
+					switch (isSetResult.error())
+					{
+					case IDescriptorSet::ErroredState::InvalidConn:
+						// Connection is somehow invalid?
+						debug(LOG_ERROR, "Socket error: PollInvalidConn?");
+						conn->setWriteErrorCode(make_network_error_code(EBADF));
+						break;
+					case IDescriptorSet::ErroredState::Error:
+						debug(LOG_INFO, "Socket error: PollError");
+						conn->setWriteErrorCode(make_network_error_code(EBADF));
+						break;
+					case IDescriptorSet::ErroredState::HangUp:
+						debug(LOG_NET, "Socket error: PollHangUp");
+						conn->setWriteErrorCode(make_network_error_code(ECONNRESET));
+						break;
+					}
+
+					pendingWrites_.erase(currentIt);  // Connection broken, don't try writing to it again.
+					if (conn->deleteLaterRequested())
+					{
+						delete conn;
+					}
+					continue;
+				}
+
+				if (!isSetResult.value() || writeQueue.empty())
 				{
 					continue;  // This connection is not ready for writing, or we don't have anything to write.
 				}
@@ -173,9 +203,17 @@ void PendingWritesManager::threadImplFunction()
 					const auto connStatus = conn->connectionStatus();
 					if (!conn->isValid() || !connStatus.has_value()) // Check if the connection is still open
 					{
-						const auto errMsg = connStatus.error().message();
-						debug(LOG_NET, "Socket error: %s", errMsg.c_str());
-						conn->setWriteErrorCode(connStatus.error());
+						if (!connStatus.has_value())
+						{
+							const auto errMsg = connStatus.error().message();
+							debug(LOG_NET, "Socket error: %s", errMsg.c_str());
+							conn->setWriteErrorCode(connStatus.error());
+						}
+						else
+						{
+							debug(LOG_NET, "Socket error: connection is not valid");
+							conn->setWriteErrorCode(make_network_error_code(ECONNRESET));
+						}
 						pendingWrites_.erase(currentIt);  // Connection broken, don't try writing to it again.
 						if (conn->deleteLaterRequested())
 						{
@@ -208,6 +246,15 @@ void PendingWritesManager::safeDispose(IClientConnection* conn)
 		}
 		else
 		{
+			// Notify the owning connection provider to properly dispose of the connection object.
+			if (auto connProvider = conn->connProvider_.lock())
+			{
+				connProvider->disposeConnection(conn);
+			}
+			else
+			{
+				ASSERT(false, "IClientConnection::connProvider_ has gone away before safeDispose!");
+			}
 			// Delete the socket and destroy the connection right away.
 			delete conn;
 		}

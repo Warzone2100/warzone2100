@@ -15,6 +15,14 @@
 		"szShutDown": "hovstop.ogg",
 		"szStart": "hovstart.ogg"
 	},
+	"Legged": {
+		"szHiss": -1,
+		"szIdle": -1,
+		"szMove": "cyber-move.ogg",
+		"szMoveOff": -1,
+		"szShutDown": -1,
+		"szStart": -1
+	},
 	"Lift": {
 		"szHiss": -1,
 		"szIdle": -1,

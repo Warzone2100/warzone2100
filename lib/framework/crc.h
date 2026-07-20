@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include <memory>
 #include <nlohmann/json_fwd.hpp>
 
 namespace wz {
@@ -61,6 +62,12 @@ struct std::hash<Sha256>
 };
 void to_json(nlohmann::json& j, const Sha256& k);
 
+class OpaqueKeyData
+{
+public:
+	virtual ~OpaqueKeyData();
+};
+
 class EcKey
 {
 public:
@@ -69,11 +76,6 @@ public:
 	enum Privacy { Public, Private };
 
 	EcKey();
-	EcKey(EcKey const &b);
-	EcKey(EcKey &&b);
-	~EcKey();
-	EcKey &operator =(EcKey const &b);
-	EcKey &operator =(EcKey &&b);
 
 	void clear();
 
@@ -109,7 +111,7 @@ public:
 	std::string publicKeyHexString(size_t truncateToLength = 0) const;
 
 private:
-	void *vKey;
+	std::shared_ptr<OpaqueKeyData> vKey;
 	static const int curveId;
 };
 

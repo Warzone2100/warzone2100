@@ -5,7 +5,7 @@ const mis_newParadigmRes = [
 	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
 	"R-Sys-Engineering01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Cannon-Damage03",
 	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
-	"R-Defense-WallUpgrade02", "R-Struc-Materials02", "R-Vehicle-Engine02",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials02", "R-Vehicle-Engine02",
 	"R-Struc-RprFac-Upgrade03", "R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF03",
 	"R-Vehicle-Metals02", "R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
 	"R-Wpn-RocketSlow-Damage02", "R-Wpn-Mortar-ROF01", "R-Cyborg-Metals03",
@@ -45,7 +45,7 @@ function getDroidsForNPLZ(args)
 		lightAttackerLimit = 9;
 		heavyAttackerLimit = (camClassicMode()) ? 4 : 7;
 	}
-	else if (difficulty === INSANE)
+	else if (difficulty >= INSANE)
 	{
 		lightAttackerLimit = 10;
 		heavyAttackerLimit = (camClassicMode()) ? 5 : 8;
@@ -88,6 +88,22 @@ function getDroidsForNPLZ(args)
 	return list;
 }
 
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.npcybc, cTempl.npcybr];
+	const limits = {minimum: 6, maxRandom: 4};
+	const location = ["insaneSpawnPos1", "insaneSpawnPos2", "insaneSpawnPos3", "insaneSpawnPos4"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEW_PARADIGM, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneSetupSpawns()
+{
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(2.5));
+	}
+}
+
 //These enable Scav and NP factories when close enough
 camAreaEvent("NorthScavFactoryTrigger", function(droid)
 {
@@ -114,6 +130,7 @@ camAreaEvent("NPFactoryTrigger", function(droid)
 		camEnableFactory("NPCyborgFactory");
 		camEnableFactory("NPLeftFactory");
 		camEnableFactory("NPRightFactory");
+		camCallOnce("insaneSetupSpawns");
 	}
 	else
 	{
@@ -170,6 +187,7 @@ function enableNPFactories()
 	camEnableFactory("NPCyborgFactory");
 	camEnableFactory("NPLeftFactory");
 	camEnableFactory("NPRightFactory");
+	camCallOnce("insaneSetupSpawns");
 }
 
 //Destroying the New Paradigm base will activate all scav factories
@@ -267,6 +285,12 @@ function eventStartLevel()
 			detectSnd: cam_sounds.baseDetection.enemyBaseDetected,
 			eliminateSnd: cam_sounds.baseElimination.enemyBaseEradicated,
 			player: CAM_NEW_PARADIGM
+		},
+		"ScavOutpostGroup": {
+			cleanup: "ScavMiddle",
+			detectMsg: "C1-5_BASE4",
+			detectSnd: cam_sounds.baseDetection.scavengerOutpostDetected,
+			eliminateSnd: cam_sounds.baseElimination.scavengerOutpostEradicated
 		},
 	});
 

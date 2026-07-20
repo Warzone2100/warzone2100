@@ -71,6 +71,7 @@
 #include "multiplay.h"
 #include "component.h"
 #include "profiling.h"
+#include "game_world.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -965,12 +966,12 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it's bounced/drifted off the map then kill it */
-	if (map_coord(static_cast<int32_t>(psEffect->position.x)) >= mapWidth || map_coord(static_cast<int32_t>(psEffect->position.z)) >= mapHeight)
+	if (map_coord(static_cast<int32_t>(psEffect->position.x)) >= gameWorld.map.width || map_coord(static_cast<int32_t>(psEffect->position.z)) >= gameWorld.map.height)
 	{
 		return false;
 	}
 
-	int groundHeight = map_Height(static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z));
+	int groundHeight = map_Height(gameWorld.map, static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z));
 
 	/* If it's going up and it's still under the landscape, then remove it... */
 	if (psEffect->position.y < groundHeight && psEffect->velocity.y > 0)
@@ -1032,7 +1033,7 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 	/* Are we below it? - Hit the ground? */
 	if ((int)psEffect->position.y < (int)groundHeight)
 	{
-		psTile = mapTile(map_coord(static_cast<int32_t>(psEffect->position.x)), map_coord(static_cast<int32_t>(psEffect->position.z)));
+		psTile = mapTile(gameWorld.map, map_coord(static_cast<int32_t>(psEffect->position.x)), map_coord(static_cast<int32_t>(psEffect->position.z)));
 		if (terrainType(psTile) == TER_WATER)
 		{
 			return false;
@@ -1046,6 +1047,10 @@ static bool updateGraviton(EFFECT *psEffect, LightingData& lightData)
 
 				/* Half it's velocity */
 				psEffect->velocity.y /= (float)(-2); // only y gets flipped
+
+				/* Also decrease other velocities */
+				psEffect->velocity.x *= 0.5f;
+				psEffect->velocity.z *= 0.5f;
 
 				/* Set it at ground level - may have gone through */
 				psEffect->position.y = (float)groundHeight;
@@ -1074,7 +1079,7 @@ static bool updateDestruction(EFFECT *psEffect, LightingData& lightData)
 {
 	Vector3i pos;
 	UDWORD	effectType;
-	UDWORD	widthScatter = 0, breadthScatter = 0, heightScatter = 0;
+	UDWORD	widthScatter = 1, breadthScatter = 1, heightScatter = 1;
 	SDWORD	iX, iY;
 	LIGHT	light;
 	int     percent;
@@ -1277,7 +1282,7 @@ static bool updateConstruction(EFFECT *psEffect)
 	if (TEST_CYCLIC(psEffect))
 	{
 		/* Has it hit the ground */
-		if (static_cast<int>(psEffect->position.y) <= map_Height(static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z)))
+		if (static_cast<int>(psEffect->position.y) <= map_Height(gameWorld.map, static_cast<int>(psEffect->position.x), static_cast<int>(psEffect->position.z)))
 		{
 			return false;
 		}
@@ -1319,12 +1324,12 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 		pos.z = static_cast<int>(psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
 		// Effect is off map, no need to update it anymore
-		if (!worldOnMap(pos.x, pos.z))
+		if (!worldOnMap(gameWorld.map, pos.x, pos.z))
 		{
 			return false;
 		}
 
-		pos.y = map_Height(pos.x, pos.z);
+		pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 
 		if (psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
@@ -1339,7 +1344,7 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 		{
 			pos.x = static_cast<int>(psEffect->position.x + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
 			pos.z = static_cast<int>(psEffect->position.z + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
-			pos.y = map_Height(pos.x, pos.z);
+			pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING_HIGH, false, nullptr, 0);
 		}
 		else
@@ -1348,12 +1353,12 @@ static bool updateFire(EFFECT *psEffect, LightingData& lightData)
 			pos.z = static_cast<int>(psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
 			// Effect is off map, no need to update it anymore
-			if (!worldOnMap(pos.x, pos.z))
+			if (!worldOnMap(gameWorld.map, pos.x, pos.z))
 			{
 				return false;
 			}
 
-			pos.y = map_Height(pos.x, pos.z);
+			pos.y = map_Height(gameWorld.map, pos.x, pos.z);
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, nullptr, 0);
 		}
 
@@ -1878,8 +1883,8 @@ void	effectSetupGraviton(EFFECT& effect)
 	switch (effect.type)
 	{
 	case GRAVITON_TYPE_GIBLET:
-		effect.velocity.x = GIBLET_INIT_VEL_X;
-		effect.velocity.z = GIBLET_INIT_VEL_Z;
+		effect.velocity.x += GIBLET_INIT_VEL_X;
+		effect.velocity.z += GIBLET_INIT_VEL_Z;
 		effect.velocity.y = GIBLET_INIT_VEL_Y;
 		break;
 	case GRAVITON_TYPE_EMITTING_ST:
@@ -1889,8 +1894,8 @@ void	effectSetupGraviton(EFFECT& effect)
 		effect.size = (UWORD)(120 + rand() % 30);
 		break;
 	case GRAVITON_TYPE_EMITTING_DR:
-		effect.velocity.x = GRAVITON_INIT_VEL_X / 2;
-		effect.velocity.z = GRAVITON_INIT_VEL_Z / 2;
+		effect.velocity.x += GRAVITON_INIT_VEL_X / 2;
+		effect.velocity.z += GRAVITON_INIT_VEL_Z / 2;
 		effect.velocity.y = GRAVITON_INIT_VEL_Y;
 		break;
 	default:
@@ -2239,7 +2244,7 @@ static void effectStructureUpdates()
 	/* Go thru' all players */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (STRUCTURE *psStructure : apsStructLists[player])
+		for (STRUCTURE *psStructure : gameWorld.objects.structures[player])
 		{
 			// Find its group.
 			unsigned int partition = psStructure->id % EFFECT_STRUCTURE_DIVISION;
@@ -2365,9 +2370,14 @@ bool writeFXData(const char *fileName)
 		// Move on to reading the next effect
 	}
 
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString;
+	try {
+		jsonString = mRoot.dump(4);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", fileName, e.what());
+		return false;
+	}
 	debug(LOG_SAVE, "%s %s", "Saving", fileName);
 	saveFile(fileName, jsonString.c_str(), jsonString.size());
 
@@ -2376,7 +2386,7 @@ bool writeFXData(const char *fileName)
 }
 
 /** This will read in the effects data */
-bool readFXData(const char *fileName)
+bool readFXData(const char *fileName, WorldMapState& mapState)
 {
 	// Clear out anything that's there already!
 	initEffectsSystem();
@@ -2429,7 +2439,7 @@ bool readFXData(const char *fileName)
 			// Sanity check - don't allow a negative time to wrap to a huge positive unsigned value.
 			if (timeLeftToRun > 0)
 			{
-				tileSetFire(static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
+				tileSetFire(mapState, static_cast<int32_t>(curEffect.position.x), static_cast<int32_t>(curEffect.position.z), static_cast<uint32_t>(timeLeftToRun));
 			}
 		}
 

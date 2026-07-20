@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +28,7 @@
 #include "lib/framework/frame.h"
 
 #include <string.h>
+#include <utility>
 
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
@@ -85,6 +88,9 @@
 #include "order.h"
 #include "radar.h"
 #include "research.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "lib/framework/loading_task.h"
+#include "wrappers.h"
 #include "lib/framework/cursors.h"
 #include "text.h"
 #include "transporter.h"
@@ -101,7 +107,12 @@
 #include "version.h"
 #include "hci/teamstrategy.h"
 #include "screens/guidescreen.h"
+#include "titleui/widgets/gamebrowserform.h"
 #include "wzapi.h"
+#include "urlrequest.h"
+
+#include "wzphysfszipioprovider.h"
+#include <wzmaplib/map_package.h>
 
 #include <algorithm>
 #include <unordered_map>
@@ -120,8 +131,7 @@ static std::vector<std::unique_ptr<wzSearchPath>> searchPathRegistry;
 static std::vector<std::string> searchPathMountErrors;
 
 static std::string inMemoryMapVirtualFilenameUID;
-static std::vector<uint8_t> inMemoryMapArchiveData;
-static size_t inMemoryMapArchiveMounted = 0;
+static std::shared_ptr<WzMapZipIO> inMemoryMapArchive;
 
 static optional<std::vector<TerrainShaderQuality>> cachedAvailableTerrainShaderQualityTextures;
 
@@ -392,23 +402,20 @@ static void clearAllPhysFSSearchPaths()
 
 static void clearInMemoryMapFile(void *pData)
 {
-	ASSERT_OR_RETURN(, !inMemoryMapArchiveData.empty(), "Already freed??");
-	ASSERT_OR_RETURN(, inMemoryMapArchiveData.data() == pData, "Unexpected pointer received?");
+	ASSERT_OR_RETURN(, inMemoryMapArchive != nullptr, "Already freed??");
+	ASSERT_OR_RETURN(, inMemoryMapArchive.get() == pData, "Unexpected pointer received?");
 	if (!inMemoryMapVirtualFilenameUID.empty())
 	{
 		levRemoveDataSetByRealFileName(inMemoryMapVirtualFilenameUID.c_str(), nullptr);
 		WZ_Maps.erase(inMemoryMapVirtualFilenameUID);
 	}
 	inMemoryMapVirtualFilenameUID.clear();
-	inMemoryMapArchiveData.clear();
-	if (inMemoryMapArchiveMounted > 0)
-	{
-		--inMemoryMapArchiveMounted;
-	}
+	inMemoryMapArchive.reset();
 }
 
 static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mountPoint, int appendToPath)
 {
+	ASSERT_OR_RETURN(false, newDir != nullptr, "Null newDir");
 	if (PHYSFS_mount(newDir, mountPoint, appendToPath) != 0)
 	{
 		return true;
@@ -416,14 +423,12 @@ static bool WZ_PHYSFS_MountSearchPathWrapper(const char *newDir, const char *mou
 	else
 	{
 		// mount failed
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 		auto errorCode = PHYSFS_getLastErrorCode();
 		if (errorCode != PHYSFS_ERR_NOT_FOUND)
 		{
 			const char* errorStr = PHYSFS_getErrorByCode(errorCode);
-			searchPathMountErrors.push_back(astringf("Failed to mount \"%s\" @ \"%s\": %s", newDir, mountPoint, (errorStr) ? errorStr : "<no details available?>"));
+			searchPathMountErrors.push_back(astringf("Failed to mount \"%s\" @ \"%s\": %s", newDir, (mountPoint) ? mountPoint : "/", (errorStr) ? errorStr : "<no details available?>"));
 		}
-#endif
 		return false;
 	}
 }
@@ -432,8 +437,6 @@ struct RebuildSearchPathCommand
 {
 	searchPathMode mode = mod_clean;
 	bool force = false;
-	optional<std::string> current_map;
-	optional<std::string> current_map_mount_point;
 	TerrainShaderQuality lastTerrainShaderQuality = TerrainShaderQuality::MEDIUM;
 };
 
@@ -441,20 +444,7 @@ static RebuildSearchPathCommand lastCommand;
 
 bool rebuildExistingSearchPathWithGraphicsOptionChange()
 {
-	char* current_map = nullptr;
-	char* current_map_mount_point = nullptr;
-	if (lastCommand.current_map.has_value())
-	{
-		current_map = strdup(lastCommand.current_map.value().c_str());
-	}
-	if (lastCommand.current_map_mount_point.has_value())
-	{
-		current_map_mount_point = strdup(lastCommand.current_map_mount_point.value().c_str());
-	}
-	bool result = rebuildSearchPath(lastCommand.mode, false /* do not force */, current_map, current_map_mount_point);
-	free(current_map);
-	free(current_map_mount_point);
-	return result;
+	return rebuildSearchPath(lastCommand.mode, false /* do not force */);
 }
 
 optional<std::string> getTerrainOverrideBaseSourcePath(TerrainShaderQuality quality)
@@ -576,14 +566,13 @@ std::vector<TerrainShaderQuality> getAvailableTerrainShaderQualityTextures()
  * Priority:
  * maps > mods > base > base.wz
  */
-bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map, const char* current_map_mount_point)
+bool rebuildSearchPath(searchPathMode mode, bool force)
 {
 	std::string tmpstr;
 	static searchPathMode current_mode = mod_clean;
 	auto currentTerrainShaderQuality = getTerrainShaderQuality();
 
 	if (mode != current_mode
-		|| (current_map != nullptr ? current_map : "") != lastCommand.current_map.value_or("")
 		|| force
 		|| lastCommand.lastTerrainShaderQuality != currentTerrainShaderQuality
 		|| (use_override_mods && override_mod_list != getModList()))
@@ -596,16 +585,6 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 		current_mode = mode;
 		lastCommand.mode = mode; // store this separately, so it doesn't get overridden by anything below
 		lastCommand.force = force;
-		lastCommand.current_map.reset();
-		if (current_map != nullptr)
-		{
-			lastCommand.current_map = current_map;
-		}
-		lastCommand.current_map_mount_point.reset();
-		if (current_map_mount_point != nullptr)
-		{
-			lastCommand.current_map_mount_point = current_map_mount_point;
-		}
 		lastCommand.lastTerrainShaderQuality = currentTerrainShaderQuality;
 
 		auto terrainQualityOverrideBasePath = getCurrentTerrainOverrideBaseSourcePath();
@@ -716,29 +695,6 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map,
 				// make sure videos override included files
 				tmpstr = curSearchPath->path + "sequences.wz";
 				WZ_PHYSFS_MountSearchPathWrapper(tmpstr.c_str(), NULL, PHYSFS_APPEND);
-			}
-			// Add the selected map first, for mapmod support
-			if (current_map != nullptr)
-			{
-				if (inMemoryMapVirtualFilenameUID.empty() || current_map != inMemoryMapVirtualFilenameUID)
-				{
-					// mount it as a normal physical map path
-					WzString realPathAndDir = WzString::fromUtf8(PHYSFS_getRealDir(current_map)) + current_map;
-					realPathAndDir.replace("/", PHYSFS_getDirSeparator()); // Windows fix
-					WZ_PHYSFS_MountSearchPathWrapper(realPathAndDir.toUtf8().c_str(), current_map_mount_point, PHYSFS_APPEND);
-				}
-				else if (!inMemoryMapArchiveData.empty())
-				{
-					// mount the in-memory map archive as a virtual file
-					if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), clearInMemoryMapFile, inMemoryMapVirtualFilenameUID.c_str(), current_map_mount_point, PHYSFS_APPEND) != 0)
-					{
-						inMemoryMapArchiveMounted++;
-					}
-				}
-				else
-				{
-					debug(LOG_ERROR, "Specified virtual map file, but no data?");
-				}
 			}
 			for (const auto& curSearchPath : searchPathRegistry)
 			{
@@ -863,85 +819,7 @@ static MapFileList listMapFiles()
 		return true; // continue
 	});
 
-	// save our current search path(s)
-	debug(LOG_WZ, "Map search paths:");
-	char **searchPath = PHYSFS_getSearchPath();
-	for (char **i = searchPath; *i != nullptr; i++)
-	{
-		debug(LOG_WZ, "    [%s]", *i);
-		oldSearchPath.push_back(*i);
-		WZ_PHYSFS_unmount(*i);
-	}
-	PHYSFS_freeList(searchPath);
-
-	for (const auto &realFileName : ret)
-	{
-		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName.platformDependent;
-		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
-		{
-			size_t numMapGamFiles = 0;
-			size_t numMapFolders = 0;
-			const std::string baseMapsPath("multiplay/maps/");
-			bool enumSuccess = WZ_PHYSFS_enumerateFiles("multiplay/maps", [&numMapGamFiles, &numMapFolders, &baseMapsPath, &realFilePathAndName](const char *file) -> bool {
-				if (!file)
-				{
-					return true; // continue
-				}
-				std::string isDir = baseMapsPath + file;
-				if (WZ_PHYSFS_isDirectory(isDir.c_str()))
-				{
-					if (baseMapsPath.size() == isDir.size())
-					{
-						// for some reason, file is an empty string - just skip
-						return true; // continue;
-					}
-					if (++numMapFolders > 1)
-					{
-						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-						return false; // break;
-					}
-					return true; // continue;
-				}
-				std::string checkfile = file;
-				debug(LOG_WZ, "checking ... %s", file);
-				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
-				{
-					if (++numMapGamFiles > 1)
-					{
-						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-						return false; // break;
-					}
-				}
-				return true; // continue
-			});
-			if (!enumSuccess)
-			{
-				// Failed to enumerate contents - corrupt map archive (ignore it)
-				debug(LOG_ERROR, "Failed to enumerate - ignoring corrupt map file: %s", realFilePathAndName.c_str());
-				numMapGamFiles = std::numeric_limits<size_t>::max() - 1;
-				numMapFolders = std::numeric_limits<size_t>::max() - 1;
-			}
-			if (numMapGamFiles < 2 && numMapFolders < 2)
-			{
-				filtered.push_back(realFileName);
-			}
-			WZ_PHYSFS_unmount(realFilePathAndName.c_str());
-		}
-		else
-		{
-			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
-		}
-	}
-
-	// restore our search path(s) again
-	for (const auto &restorePaths : oldSearchPath)
-	{
-		PHYSFS_mount(restorePaths.c_str(), NULL, PHYSFS_APPEND);
-	}
-	debug(LOG_WZ, "Search paths restored");
-	printSearchPath();
-
-	return filtered;
+	return ret;
 }
 
 // Map processing
@@ -988,163 +866,17 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 	return false;
 }
 
-// Mount the archive under the mountpoint, and enumerate the archive according to lookin
-static inline optional<WZmapInfo> CheckInMap(const char *archive, const std::string& mountpoint, const std::vector<std::string>& lookin_list)
+static inline WZmapInfo CheckInMap(WzMap::MapPackage& mapPackage)
 {
-	bool mapmod = false;
-	bool isRandom = false;
-
-	for (auto lookin_subdir : lookin_list)
-	{
-		std::string lookin = mountpoint;
-		if (!lookin_subdir.empty())
-		{
-			lookin.append("/");
-			lookin.append(lookin_subdir);
-		}
-		bool enumResult = WZ_PHYSFS_enumerateFolders(lookin, [&](const char *file) -> bool {
-			std::string checkfile = file;
-			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-				|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
-				|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
-				|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
-				|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-				|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
-				|| checkfile.compare("icons") == 0)
-			{
-				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
-				mapmod = true;
-				return false; // break;
-			}
-			return true; // continue
-		});
-		if (!enumResult)
-		{
-			// failed to enumerate - just exit out
-			return nullopt;
-		}
-
-		std::string maps = lookin + "/multiplay/maps";
-		enumResult = WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
-			if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
-			{
-				isRandom = true;
-				return false; // break;
-			}
-			return true; // continue
-		});
-		if (!enumResult)
-		{
-			// failed to enumerate - just exit out
-			return nullopt;
-		}
-	}
-
+	bool mapmod = mapPackage.packageType() == WzMap::MapPackage::MapPackageType::Map_Mod;
+	bool isRandom = mapPackage.isScriptGeneratedMap();
 	return WZmapInfo(mapmod, isRandom);
 }
 
-static std::vector<std::string> map_lookin_list = { "", "multiplay" };
-
-// Process a map that has been mounted in the PhysFS virtual filesystem
-//
-// Verifies the index data, determines attributes, and adds to the level loading system so it can be loaded
-//
-// - archive: Directory or archive added to the path, in platform-dependent notation
-// - realFileName_platformIndependent:
-//     For actual map archives, this is the platform independent unique filename + parent path for the map
-//     For "virtual" map archives this is basically a lookup key that should be unique
-// - mountPoint: Location in the interpolated PhysFS tree that this archive was "mounted" (in platform-independent notation)
-bool processMap(const char* archive, const char* realFileName_platformIndependent, const std::string& mountPoint, bool rejectMapMods = false)
-{
-	auto WZmapInfoResult = CheckInMap(archive, mountPoint, map_lookin_list);
-	if (!WZmapInfoResult.has_value())
-	{
-		// failed to enumerate contents
-		return false;
-	}
-	if (rejectMapMods && WZmapInfoResult.value().isMapMod)
-	{
-		debug(LOG_WZ, "Rejecting map mod: %s", archive);
-		return false;
-	}
-
-	WzMapPhysFSIO mapIO;
-
-	bool containsMap = false;
-
-	// First pass: Look for new level.json (which are in multiplay/maps/<map name>)
-	std::string mapsDirPath = mapIO.pathJoin(mountPoint.c_str(), "multiplay/maps");
-	bool enumSuccess = WZ_PHYSFS_enumerateFolders(mapsDirPath, [&](const char *folder) -> bool {
-		if (!folder) { return true; }
-		if (*folder == '\0') { return true; }
-
-		std::string levelJSONPath = std::string("multiplay/maps/") + folder + "/level.json";
-		if (PHYSFS_exists(WzString::fromUtf8(mountPoint + "/" + levelJSONPath)) && loadLevFile_JSON(mountPoint, levelJSONPath, mod_multiplay, realFileName_platformIndependent))
-		{
-			containsMap = true;
-			return false; // stop enumerating
-		}
-		return true;
-	});
-	if (!enumSuccess)
-	{
-		// Failed to enumerate contents - corrupt map archive
-		return false;
-	}
-
-	// Or "flattened" self-contained maps (where level.json is in the root)
-	if (!containsMap)
-	{
-		if (PHYSFS_exists(WzString::fromUtf8(mountPoint + "/" + "level.json")) && loadLevFile_JSON(mountPoint, "level.json", mod_multiplay, realFileName_platformIndependent))
-		{
-			containsMap = true;
-		}
-	}
-
-	if (containsMap)
-	{
-		std::string MapName = realFileName_platformIndependent;
-		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
-		return true;
-	}
-
-	// Second pass: Look for older / classic maps (with *.addon.lev / *.xplayers.lev in the root)
-	enumSuccess = WZ_PHYSFS_enumerateFiles(mountPoint.c_str(), [&](const char *file) -> bool {
-		size_t len = strlen(file);
-		if ((len > 10 && !strcasecmp(file + (len - 10), ".addon.lev"))  // Do not add addon.lev again // <--- Err, what? The code has loaded .addon.lev for a while...
-			|| (len > 13 && !strcasecmp(file + (len - 13), ".xplayers.lev"))) // add support for X player maps using a new name to prevent conflicts.
-		{
-			std::string fullPath = mountPoint + "/" + file;
-			if (loadLevFile(mountPoint + "/" + file, mod_multiplay, true, realFileName_platformIndependent))
-			{
-				containsMap = true;
-				return false; // stop enumerating
-			}
-		}
-		return true; // continue
-	});
-
-	if (!enumSuccess)
-	{
-		// Failed to enumerate contents - corrupt map archive
-		return false;
-	}
-
-	if (containsMap)
-	{
-		std::string MapName = realFileName_platformIndependent;
-		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, WZmapInfoResult.value()));
-		return true;
-	}
-
-	return false;
-}
-
-#if defined(HAS_PHYSFS_IO_SUPPORT)
 bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
 {
 	ASSERT_OR_RETURN(false, !mapArchiveData.empty(), "Null map archive data passed?");
-	ASSERT_OR_RETURN(false, inMemoryMapArchiveMounted == 0, "In-memory map archive already mounted");
+	ASSERT_OR_RETURN(false, inMemoryMapArchive == nullptr, "In-memory map archive already set?");
 
 	// calculate a hash for the map data
 	Sha256 mapHash = sha256Sum(mapArchiveData.data(), mapArchiveData.size());
@@ -1152,47 +884,108 @@ bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
 	// generate a new unique filename UID for the in-memory map
 	inMemoryMapVirtualFilenameUID = "<in-memory>::mapArchive::" + mapHash.toString();
 
-	// store the map archive data
-	inMemoryMapArchiveData = std::move(mapArchiveData);
-
-	// try to mount the in-memory archive
-	if (PHYSFS_mountMemory_fixed(inMemoryMapArchiveData.data(), inMemoryMapArchiveData.size(), nullptr, inMemoryMapVirtualFilenameUID.c_str(), "WZMap", PHYSFS_APPEND) == 0)
+	// open the in-memory zip archive
+	std::unique_ptr<std::vector<uint8_t>> pMapArchiveData = std::make_unique<std::vector<uint8_t>>(std::move(mapArchiveData));
+	inMemoryMapArchive = WzMapZipIO::openZipArchiveMemory(std::move(pMapArchiveData), false);
+	if (!inMemoryMapArchive)
 	{
-		// Failed to mount data - corrupt map archive
+		debug(LOG_ERROR, "Failed to mount - corrupt / invalid map archive: %s", inMemoryMapVirtualFilenameUID.c_str());
+		inMemoryMapVirtualFilenameUID.clear();
+		return false;
+	}
+
+	// open the map package
+	auto mapPackage = WzMap::MapPackage::loadPackage("", nullptr, inMemoryMapArchive);
+	if (!mapPackage)
+	{
 		debug(LOG_ERROR, "Failed to mount - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
 		inMemoryMapVirtualFilenameUID.clear();
-		inMemoryMapArchiveData.clear();
+		inMemoryMapArchive.reset();
 		return false;
 	}
 
 	// load it into the level-loading system
-	if (!processMap(inMemoryMapVirtualFilenameUID.c_str(), inMemoryMapVirtualFilenameUID.c_str(), "WZMap", true))
+	// (and put it at the front of the list, to ensure it's enumerated over any local copy of the map)
+	if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, inMemoryMapVirtualFilenameUID.c_str(), true))
 	{
 		// Failed to enumerate contents - corrupt map archive
 		debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", inMemoryMapVirtualFilenameUID.c_str());
 		inMemoryMapVirtualFilenameUID.clear();
-		inMemoryMapArchiveData.clear();
+		inMemoryMapArchive.reset();
 		return false;
 	}
 
-	if (WZ_PHYSFS_unmount(inMemoryMapVirtualFilenameUID.c_str()) == 0)
-	{
-		debug(LOG_ERROR, "Could not unmount %s, %s", inMemoryMapVirtualFilenameUID.c_str(), WZ_PHYSFS_getLastError());
-	}
+	auto WZmapInfoResult = CheckInMap(*mapPackage);
+	WZ_Maps.insert(WZMapInfo_Map::value_type(inMemoryMapVirtualFilenameUID, WZmapInfoResult));
 
 	// fix-up level hash
 	levSetFileHashByRealFileName(inMemoryMapVirtualFilenameUID.c_str(), mapHash);
 
 	return true;
 }
-#else
-bool setSpecialInMemoryMap(std::vector<uint8_t>&& mapArchiveData)
+
+std::shared_ptr<WzMapZipIO> getSpecialInMemoryMapArchive(const std::string& mapName)
 {
-	// Sadly, the version of PhysFS used for compilation is too old
-	debug(LOG_INFO, "The version of PhysFS used for compilation is too old, and does not support PHYSFS_Io");
-	return false;
+	if (inMemoryMapVirtualFilenameUID.empty())
+	{
+		// no special in-memory map file loaded
+		return nullptr;
+	}
+	ASSERT_OR_RETURN(nullptr, inMemoryMapVirtualFilenameUID == mapName, "mapName (%s) does not match currently-loaded in-memory map: %s", mapName.c_str(), inMemoryMapVirtualFilenameUID.c_str());
+	return inMemoryMapArchive;
 }
-#endif
+
+bool clearSpecialInMemoryMap()
+{
+	if (inMemoryMapVirtualFilenameUID.empty())
+	{
+		return false;
+	}
+
+	if (inMemoryMapArchive == nullptr)
+	{
+		return false;
+	}
+
+	debug(LOG_INFO, "Clearing in-memory map archive");
+	clearInMemoryMapFile(inMemoryMapArchive.get());
+	return true;
+}
+
+class WzMapLoadDebugLogger : public WzMap::LoggingProtocol
+{
+public:
+	virtual ~WzMapLoadDebugLogger() { }
+	virtual void printLog(WzMap::LoggingProtocol::LogLevel level, const char *function, int line, const char *str) override
+	{
+		code_part logPart = LOG_MAP;
+		switch (level)
+		{
+			case WzMap::LoggingProtocol::LogLevel::Info_Verbose:
+				logPart = LOG_NEVER;
+				break;
+			case WzMap::LoggingProtocol::LogLevel::Info:
+				logPart = LOG_NEVER;
+				break;
+			case WzMap::LoggingProtocol::LogLevel::Warning:
+				logPart = LOG_MAP;
+				break;
+			case WzMap::LoggingProtocol::LogLevel::Error:
+				logPart = (m_logErrors) ? LOG_ERROR : LOG_MAP;
+				break;
+		}
+		if (enabled_debug[logPart])
+		{
+			_debug(line, logPart, function, "%s", str);
+		}
+	}
+	void setLogErrors(bool enabled)
+	{
+		m_logErrors = enabled;
+	}
+private:
+	bool m_logErrors = false;
+};
 
 bool buildMapList(bool campaignOnly)
 {
@@ -1205,16 +998,17 @@ bool buildMapList(bool campaignOnly)
 		loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	}
 	WZ_Maps.clear();
-	if (!inMemoryMapArchiveMounted && !inMemoryMapArchiveData.empty())
+	if (inMemoryMapArchive != nullptr)
 	{
-		debug(LOG_INFO, "Clearing in-memory map archive (since it isn't currently loaded)");
-		clearInMemoryMapFile(inMemoryMapArchiveData.data());
+		debug(LOG_INFO, "Clearing in-memory map archive");
+		clearInMemoryMapFile(inMemoryMapArchive.get());
 	}
 	if (campaignOnly)
 	{
 		return true;
 	}
 	MapFileList realFileNames = listMapFiles();
+	auto debugLoggerInstance = std::make_shared<WzMapLoadDebugLogger>();
 	for (auto &realFileName : realFileNames)
 	{
 		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
@@ -1225,22 +1019,36 @@ bool buildMapList(bool campaignOnly)
 		}
 		std::string realFilePathAndName = pRealDirStr + realFileName.platformDependent;
 
-		if (PHYSFS_mount(realFilePathAndName.c_str(), "WZMap", PHYSFS_APPEND) == 0)
+		auto zipReadSource = WzZipIOPHYSFSSourceReadProvider::make(realFileName.platformIndependent);
+		if (!zipReadSource)
 		{
-			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
-			continue; // skip
+			debug(LOG_ERROR, "Failed to open: %s", realFileName.platformIndependent.c_str());
+			continue;
 		}
 
-		if (!processMap(realFilePathAndName.c_str(), realFileName.platformIndependent.c_str(), "WZMap"))
+		debugLoggerInstance->setLogErrors(true);
+		auto mapZipIO = WzMapZipIO::openZipArchiveReadIOProvider(zipReadSource, debugLoggerInstance.get());
+		if (!mapZipIO)
 		{
-			// Failed to enumerate contents - corrupt map archive
-			debug(LOG_ERROR, "Failed to enumerate - corrupt / invalid map file: %s", realFilePathAndName.c_str());
+			debug(LOG_INFO, "Failed to open archive: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			continue;
+		}
+		debugLoggerInstance->setLogErrors(false);
+		auto mapPackage = WzMap::MapPackage::loadPackage("", debugLoggerInstance, mapZipIO);
+		if (!mapPackage)
+		{
+			debug(LOG_INFO, "Failed to load %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str());
+			continue;
 		}
 
-		if (WZ_PHYSFS_unmount(realFilePathAndName.c_str()) == 0)
+		if (!levAddWzMap(mapPackage->levelDetails(), mod_multiplay, realFileName.platformIndependent.c_str()))
 		{
-			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
+			debug(LOG_ERROR, "Corrupt / invalid map file: %s", realFilePathAndName.c_str());
+			continue;
 		}
+
+		auto WZmapInfoResult = CheckInMap(*mapPackage);
+		WZ_Maps.insert(WZMapInfo_Map::value_type(realFileName.platformIndependent, WZmapInfoResult));
 	}
 
 	return true;
@@ -1319,6 +1127,10 @@ void systemShutdown()
 		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
 	}
 
+	NETclose();
+
+	urlRequestShutdown(); // MUST come after NETclose(), as hosts need a chance to inform lobby they are gone
+
 	seqReleaseAll();
 
 	pie_ShutdownRadar();
@@ -1363,6 +1175,7 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
+	netplayShutDown();	// MUST come after widgShutDown (as widget screens might have connections, etc)
 	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
@@ -1376,10 +1189,60 @@ void systemShutdown()
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
 
-bool frontendInitialise(const char *ResourceFile)
+namespace
 {
-	debug(LOG_WZ, "== Initializing frontend == : %s", ResourceFile);
 
+LoadingTask<> frontendInitTaskImpl(ResourceLoadingController &controller)
+{
+	SetGameMode(GS_TITLE_SCREEN);
+	frontendIsShuttingDown();
+	static constexpr char resourceFile[] = "wrf/frontend.wrf";
+	debug(LOG_WZ, "== Initializing frontend == : %s", resourceFile);
+	if (!frontendInitialiseSetup())
+	{
+		co_return load_fail();
+	}
+
+	co_await controller.yieldFrame();
+
+	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
+	if (!(co_await resLoad(controller, resourceFile, 0)))
+	{
+		co_return load_fail();
+	}
+
+	co_return frontendInitialiseFinalize() ? load_ok() : load_fail();
+}
+
+} // anonymous namespace
+
+LoadingTask<> frontendInitTask(ResourceLoadingController &controller, bool onInitialStartup)
+{
+	const bool openedLoadingScreen = !onInitialStartup && !isLoadingScreenActive();
+	if (openedLoadingScreen)
+	{
+		initLoadingScreen(true);
+	}
+
+	if (!(co_await frontendInitTaskImpl(controller)))
+	{
+		if (openedLoadingScreen)
+		{
+			closeLoadingScreen();
+		}
+		debug(LOG_FATAL, "Shutting down after failure");
+		exit(EXIT_FAILURE);
+	}
+
+	if (openedLoadingScreen)
+	{
+		closeLoadingScreen();
+	}
+	co_return load_ok();
+}
+
+bool frontendInitialiseSetup()
+{
 	if (!InitialiseGlobals())				// Initialise all globals and statics everywhere.
 	{
 		return false;
@@ -1400,13 +1263,11 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	debug(LOG_MAIN, "frontEndInitialise: loading resource file .....");
-	if (!resLoad(ResourceFile, 0))
-	{
-		//need the object heaps to have been set up before loading in the save game
-		return false;
-	}
+	return true;
+}
 
+bool frontendInitialiseFinalize()
+{
 	if (!dispInitialise())					// Initialise the display system
 	{
 		return false;
@@ -1477,6 +1338,7 @@ bool frontendShutdown()
 
 	//do this before shutting down the iV library
 	resReleaseAllData();
+	FrontImages = nullptr;
 	frontendIsShuttingDown();
 
 	if (!objShutdown())
@@ -1624,7 +1486,7 @@ bool stageOneShutDown()
 	ResearchRelease();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	shutdownTerrain();
 
@@ -1658,6 +1520,8 @@ bool stageOneShutDown()
 			debug(LOG_FATAL, "Failed to rebuild map / level list?");
 		}
 	}
+
+	clearSpecialInMemoryMap();
 
 	pie_TexInit(); // restart it
 
@@ -1719,7 +1583,7 @@ bool stageTwoInitialise()
 		return false;
 	}
 
-	if (!gwInitialise())
+	if (!gwInitialise(gameWorld.map))
 	{
 		return false;
 	}
@@ -1789,10 +1653,10 @@ bool stageTwoShutDown()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 
 	if (!messageShutdown())
 	{
@@ -1809,7 +1673,7 @@ bool stageTwoShutDown()
 	cmdDroidShutDown();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 
 	if (!mapShutdown())
 	{
@@ -1871,24 +1735,9 @@ static void displayLoadingErrors()
 	}
 }
 
-bool stageThreeInitialise()
+static bool stageThreeInitialiseSync()
 {
-	bool fromSave = (getSaveGameType() == GTYPE_SAVE_START || getSaveGameType() == GTYPE_SAVE_MIDMISSION);
-
-	debug(LOG_WZ, "== stageThreeInitialise ==");
-
-	loopMissionState = LMS_NORMAL;
-
-	// preload model textures for current tileset
-	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
-	modelUpdateTilesetIdx(modelTilesetIdx);
-	enumerateLoadedModels([](const std::string &modelName, iIMDBaseShape &s){
-		for (const iIMDShape *pDisplayShape = s.displayModel(); pDisplayShape != nullptr; pDisplayShape = pDisplayShape->next.get())
-		{
-			pDisplayShape->getTextures();
-		}
-	});
-	resDoResLoadCallback();		// do callback.
+	bool fromSave = (getSaveGameType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!InitRadar()) 	// After resLoad cause it needs the game palette initialised.
 	{
@@ -1904,9 +1753,9 @@ bool stageThreeInitialise()
 	}
 
 	effectResetUpdates();
-	initLighting(0, 0, mapWidth, mapHeight);
+	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	pie_InitLighting();
-	getCurrentLightmapData().reset(mapWidth, mapHeight);
+	getCurrentLightmapData().reset(gameWorld.map.width, gameWorld.map.height);
 
 	if (fromSave)
 	{
@@ -1923,17 +1772,17 @@ bool stageThreeInitialise()
 		initTemplates();
 	}
 
-	preProcessVisibility();
+	preProcessVisibility(gameWorld.map);
 
-	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
+	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
 	if (!fpathInitialise())
 	{
 		return false;
 	}
 
-	mapInit();
-	gridReset();
+	mapInit(gameWorld);
+	gridReset(gameWorld);
 
 	//if mission screen is up, close it.
 	if (MissionResUp)
@@ -1953,13 +1802,13 @@ bool stageThreeInitialise()
 
 	// add radar to interface screen, and resize
 	intAddRadarWidget();
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 
 	setAllPauseStates(false);
 
 	countUpdate();
 
-	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START)
+	if (getLevelLoadType() == GTYPE_SAVE_MIDMISSION)
 	{
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_LOADED); });
 	}
@@ -1976,7 +1825,7 @@ bool stageThreeInitialise()
 		}
 
 		executeFnAndProcessScriptQueuedRemovals([]() { triggerEvent(TRIGGER_GAME_INIT); });
-		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
+		playerBuiltHQ = structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true);
 	}
 
 	// Start / randomize in-game music
@@ -1998,7 +1847,29 @@ bool stageThreeInitialise()
 		}
 	}
 
+	// Call once again to update counts (if modified by earlier wzapi events)
+	countUpdate(false);
+
 	return true;
+}
+
+LoadingTask<> stageThreeInitialiseTask(ResourceLoadingController& controller)
+{
+	debug(LOG_WZ, "== stageThreeInitialise ==");
+
+	loopMissionState = LMS_NORMAL;
+
+	size_t modelTilesetIdx = static_cast<size_t>(currentMapTileset);
+	modelUpdateTilesetIdx(modelTilesetIdx);
+	if (!headlessGameMode())
+	{
+		if (!(co_await preloadAllModelTexturesTask(controller)))
+		{
+			co_return load_fail();
+		}
+	}
+
+	co_return stageThreeInitialiseSync() ? load_ok() : load_fail();
 }
 
 /*****************************************************************************/
@@ -2023,7 +1894,7 @@ bool stageThreeShutDown()
 
 	challengesUp = false;
 	challengeActive = false;
-	isInGamePopupUp = false;
+	resetInGameHostQuit();
 	InGameOpUp = false;
 	bInTutorial = false;
 
@@ -2061,7 +1932,7 @@ bool stageThreeShutDown()
 bool campaignReset()
 {
 	debug(LOG_MAIN, "campaignReset");
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	mapShutdown();
 	shutdownTerrain();
 	// when the terrain textures are reloaded we need to reset the radar
@@ -2078,15 +1949,15 @@ bool saveGameReset()
 
 	cdAudio_Stop();
 
-	freeAllStructs();
-	freeAllDroids();
-	freeAllFeatures();
-	freeAllFlagPositions();
+	freeAllStructs(gameWorld);
+	freeAllDroids(gameWorld);
+	freeAllFeatures(gameWorld);
+	freeAllFlagPositions(gameWorld.objects);
 	initMission();
 	initTransporters();
 
 	//free up the gateway stuff?
-	gwShutDown();
+	gwShutDown(gameWorld.map);
 	intResetScreen(true);
 
 	if (!mapShutdown())

@@ -569,6 +569,40 @@ bool loadWeaponStats(WzConfig &ini)
 		{
 			psStats->flags.set(WEAPON_FLAG_NO_FRIENDLY_FIRE, true);
 		}
+		if (std::find(flags.begin(), flags.end(), "allowedontransporter") != flags.end()) // "AllowedOnTransporter"
+		{
+			psStats->flags.set(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER, true);
+		}
+		if (std::find(flags.begin(), flags.end(), "teleportcapture") != flags.end()) // "TeleportCapture"
+		{
+			psStats->flags.set(WEAPON_FLAG_TELEPORT_CAPTURE, true);
+		}
+		// Exp gain is based on damage from projectiles and all forms of damage allow it by default.
+		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_SPLASH_PENETRATE, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_PERIODICAL, true);
+		psStats->flags.set(WEAPON_FLAG_EXP_SPLASH, true);
+		if (std::find(flags.begin(), flags.end(), "expnoimpactdamage") != flags.end()) // "ExpNoImpactDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_IMPACT, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnopenetrateimpactdamage") != flags.end()) // "ExpNoPenetrateImpactDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_IMPACT_PENETRATE, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnopenetratesplashdamage") != flags.end()) // "ExpNoPenetrateSplashDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_SPLASH_PENETRATE, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnoperiodicaldamage") != flags.end()) // "ExpNoPeriodicalDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_PERIODICAL, false);
+		}
+		if (std::find(flags.begin(), flags.end(), "expnosplashdamage") != flags.end()) // "ExpNoSplashDamage"
+		{
+			psStats->flags.set(WEAPON_FLAG_EXP_SPLASH, false);
+		}
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -720,6 +754,17 @@ bool loadBrainStats(WzConfig &ini)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.maxDroids = ini.value("maxDroids").toInt();
 		psStats->base.maxDroidsMult = ini.value("maxDroidsMult").toInt();
+
+		auto cmdExpRange = ini.json("cmdExpRange");
+		if (!cmdExpRange.is_null())
+		{
+			ASSERT(cmdExpRange.is_array(), "cmdExpRange is not an array");
+			for (const auto& v : cmdExpRange)
+			{
+				psStats->cmdExpRange.push_back(v.get<int>());
+			}
+		}
+
 		auto rankNames = ini.json("ranks");
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)
@@ -753,6 +798,10 @@ bool loadBrainStats(WzConfig &ini)
 				retVal = false;
 			}
 		}
+
+		psStats->scavengersGiveExpUntilLevel = ini.value("scavengersGiveExpUntilLevel", -1).toInt();
+		psStats->productionCommanderExpLimit = ini.value("productionCommanderExpLimit", 10000).toInt();
+		psStats->autoRewardRankFromAttach = ini.value("autoRewardRankFromAttach", true).toBool();
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
 	}

@@ -161,10 +161,27 @@ public:
 	// Returns the y-coordinate of the rectangle's top edge. Equivalent to top().
 	int y(void) const { return top(); }
 
-	void setHeight(int height) { _bottomRight.y = y() + height; }
-	void setWidth(int width) { _bottomRight.x = x() + width; }
+	WzRect& setHeight(int height) { _bottomRight.y = y() + height; return *this; }
+	WzRect& setWidth(int width) { _bottomRight.x = x() + width; return *this; }
 	void setX(int x) { _topLeft.x = x; }
 	void setY(int y) { _topLeft.y = y; }
+
+	WzRect& translateBy(int x, int y)
+	{
+		_topLeft.x += x;
+		_topLeft.y += y;
+		_bottomRight.x += x;
+		_bottomRight.y += y;
+		return *this;
+	}
+
+	bool intersects(const WzRect& other) const
+	{
+		return (left() < other.right())
+			&& (right() > other.left())
+			&& (top() < other.bottom())
+			&& (bottom() > other.top());
+	}
 
 	WzRect intersectionWith(const WzRect &other) const
 	{
@@ -191,6 +208,29 @@ public:
 private:
 	glm::ivec2 _topLeft;
 	glm::ivec2 _bottomRight;
+};
+
+class WzClippingRectF
+{
+public:
+	WzClippingRectF(float x, float y, float width, float height)
+	: _topLeft(x, y)
+	, _width(width)
+	, _height(height)
+	{ }
+public:
+	// Returns the x-coordinate of the rectangle's left edge. Equivalent to left().
+	float x() const { return _topLeft.x; }
+
+	// Returns the y-coordinate of the rectangle's top edge. Equivalent to top().
+	float y() const { return _topLeft.y; }
+
+	float width() const { return _width; }
+	float height() const { return _height; }
+private:
+	glm::vec2 _topLeft;
+	float _width;
+	float _height;
 };
 
 #endif // _LIB_FRAMEWORK_GEOMETRY_H

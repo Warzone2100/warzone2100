@@ -38,10 +38,12 @@
 	</description>
 	<url type="homepage">https://wz2100.net/</url>
 	<url type="bugtracker">https://github.com/Warzone2100/warzone2100/issues/new</url>
+	<url type="vcs-browser">https://github.com/Warzone2100/warzone2100</url>
 	<url type="faq">https://wz2100.net/#faq</url>
 	<url type="translate">https://github.com/Warzone2100/warzone2100/blob/master/doc/Translations.md</url>
 	<url type="help">https://betaguide.wz2100.net/</url>
 	<url type="donation">https://opencollective.com/warzone2100</url>
+	<url type="contact">https://github.com/Warzone2100/warzone2100/discussions</url>
 	<recommends>
 		<control>keyboard</control>
 		<control>pointing</control>

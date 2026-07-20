@@ -29,14 +29,33 @@ const mis_newParadigmResClassic = [
 	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Accuracy01",
 	"R-Wpn-RocketSlow-Damage02"
 ];
-var index; //Current LZ (SE, N, canyon, south hill, road north of base)
-var switchLZ; //Counter for incrementing index every third landing
+const MIS_TOTAL_TRANSPORTS = 15; // Total transporter loads that can be dropped off.
+const MIS_TOTAL_PER_INDEX = 3; // How many times transporter can drop at an LZ.
+var index; // Current LZ (SE, N, canyon, south hill, road north of base)
+var switchLZ; // Counter for incrementing index every third landing
+var sentTransports; // Keeps track of how much the transporter dropped off at a specific LZ, and the overall total.
+
+// Remove this function some time far after 4.6.4 since this just serves to allow old saves on this mission to function without victory problems.
+function eventGameLoaded()
+{
+	if (!camDef(sentTransports))
+	{
+		dump("Old Alpha 10 internal data format detected"); // Save to WZ log file.
+		sentTransports = {
+			timesSentAtIndex: [MIS_TOTAL_PER_INDEX, MIS_TOTAL_PER_INDEX, MIS_TOTAL_PER_INDEX, MIS_TOTAL_PER_INDEX, MIS_TOTAL_PER_INDEX],
+			total: MIS_TOTAL_TRANSPORTS
+		};
+		// Simulates last transport load.
+		index = sentTransports.timesSentAtIndex.length - 1;
+		switchLZ = 2;
+	}
+}
 
 //Check if all enemies are gone and win after 15 transports
 function extraVictoryCondition()
 {
 	const enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
-	if (index === 5 && enemies.length === 0)
+	if (sentTransports.total >= MIS_TOTAL_TRANSPORTS && enemies.length === 0)
 	{
 		return true;
 	}
@@ -45,38 +64,57 @@ function extraVictoryCondition()
 //Makes a large group of ground units appear on map
 function checkForGroundForces()
 {
-	if (index < 2 && switchLZ === 3)
+	const __REGULAR_SPAWN_CONDITION = ((index < 2) && (switchLZ === MIS_TOTAL_PER_INDEX));
+	const __INSANE_SPAWN_CONDITION = (camAllowInsaneSpawns() && (sentTransports.total % 2 === 0));
+
+	if (__REGULAR_SPAWN_CONDITION || __INSANE_SPAWN_CONDITION)
 	{
 		//Amounts for the ground force
-		const MAX_TANKS = 16;
-		const FIRST_AMOUNT = 10;
+		const MAX_CANNON_TANKS = 10;
+		const MAX_ARTILLERY_TANKS = 6;
+		const MAX_INSANE_ADDITIONAL_UNITS = 2 + camRand(3);
 
-		const droidGroup1 = []; //Heavy cannon mantis track units
-		const droidGroup2 = []; //Sensor and heavy mortar units
-		const templates = [ cTempl.nphct, cTempl.npmsens, cTempl.npmorb ];
-
-		for (let i = 0; i <= MAX_TANKS; ++i)
+		const droids = [];
+		const insaneTemplates = [ cTempl.npcybr, cTempl.nphct, cTempl.nphmgt ];
+		if (sentTransports.total > (MIS_TOTAL_PER_INDEX * 3))
 		{
-			if (i <= FIRST_AMOUNT)
-			{
-				droidGroup1[i] = templates[0];
-			}
-			if (i === FIRST_AMOUNT + 1)
-			{
-				droidGroup2[i - 1 - FIRST_AMOUNT] = templates[1];
-			}
-			else
-			{
-				droidGroup2[i - 1 - FIRST_AMOUNT] = templates[2];
-			}
+			insaneTemplates.push(cTempl.npsbb); //Bring in BBs
 		}
 
-		//What part of map to appear at
-		const pos = (index === 0) ? camMakePos("reinforceSouthEast") : camMakePos("reinforceNorth");
-		camSendReinforcement(CAM_NEW_PARADIGM, pos, droidGroup1, CAM_REINFORCE_GROUND, {
-			data: {regroup: false, count: -1,},
-		});
-		camSendReinforcement(CAM_NEW_PARADIGM, pos, droidGroup2, CAM_REINFORCE_GROUND);
+		for (let i = 0; i < MAX_CANNON_TANKS; ++i)
+		{
+			droids.push(cTempl.nphct);
+		}
+		for (let i = 0; i < MAX_ARTILLERY_TANKS; ++i)
+		{
+			droids.push(cTempl.npmorb);
+		}
+		if (camAllowInsaneSpawns())
+		{
+			for (let i = 0; i < MAX_INSANE_ADDITIONAL_UNITS; ++i)
+			{
+				droids.push(insaneTemplates[camRand(insaneTemplates.length)]);
+			}
+		}
+		droids.push(cTempl.npsens);
+
+		//What part of the map to appear at
+		let pos;
+		if (camAllowInsaneSpawns())
+		{
+			const positions = ["reinforceSouthEast", "reinforceNorth", "reinforceNorthEast"];
+			pos = positions[camRand(positions.length)];
+		}
+		else if (index === 0)
+		{
+			pos = camMakePos("reinforceSouthEast");
+		}
+		else if (index === 1)
+		{
+			pos = camMakePos("reinforceNorth");
+		}
+
+		camSendReinforcement(CAM_NEW_PARADIGM, pos, droids, CAM_REINFORCE_GROUND);
 	}
 }
 
@@ -84,8 +122,28 @@ function checkForGroundForces()
 //New Paradigm transport appears fifteen times before mission win
 function sendTransport()
 {
+	if (camAllowInsaneSpawns())
+	{
+		const availableLZs = [];
+		for (let i = 0, len = mis_landingZoneList.length; i < len; ++i)
+		{
+			if (sentTransports.timesSentAtIndex[i] < MIS_TOTAL_PER_INDEX)
+			{
+				availableLZs.push(mis_landingZoneList[i]);
+			}
+		}
+		if (!availableLZs.length)
+		{
+			return; // Sending transporters is over with.
+		}
+		const RND_LZ_STR = availableLZs[camRand(availableLZs.length)];
+		index = mis_landingZoneList.indexOf(RND_LZ_STR);
+	}
+
 	const position = camMakePos(mis_landingZoneList[index]);
 	switchLZ += 1;
+	sentTransports.total += 1;
+	sentTransports.timesSentAtIndex[index] += 1;
 
 	// (2, 3, 4, or 5) pairs of each droid template.
 	// This emulates wzcam's droid count distribution.
@@ -93,6 +151,10 @@ function sendTransport()
 	const COUNT = unitDistribution[camRand(unitDistribution.length)];
 
 	const templates = [ cTempl.npcybc, cTempl.npcybf, cTempl.npcybm ];
+	if (camAllowInsaneSpawns())
+	{
+		templates.push(cTempl.npcybr);
+	}
 
 	const droids = [];
 	for (let i = 0; i < COUNT; ++i)
@@ -123,14 +185,14 @@ function sendTransport()
 
 	checkForGroundForces();
 
-	//Switch to a different LZ every third landing
-	if (switchLZ === 3)
+	// Switch to a different LZ every third landing -- Insane+ randomizes it so skip this.
+	if (!camAllowInsaneSpawns() && (switchLZ === MIS_TOTAL_PER_INDEX))
 	{
 		index += 1;
 		switchLZ = 0;
 	}
 
-	if (index === 5)
+	if (sentTransports.total >= MIS_TOTAL_TRANSPORTS)
 	{
 		removeTimer("sendTransport");
 	}
@@ -155,7 +217,7 @@ function eventStartLevel()
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(1)));
 
 	if (camClassicMode())
 	{
@@ -170,6 +232,7 @@ function eventStartLevel()
 
 	index = 0;
 	switchLZ = 0;
+	sentTransports = {timesSentAtIndex: [0, 0, 0, 0, 0], total: 0};
 
 	queue("startTransporterAttack", camSecondsToMilliseconds(10));
 }

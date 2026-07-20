@@ -51,6 +51,14 @@
 		"label": "hillGroupPos",
 		"pos": [1728, 7744]
 	},
+	"position_13": {
+		"label": "vtolAppearPos1",
+		"pos": [2560, 256]
+	},
+	"position_14": {
+		"label": "vtolAppearPos2",
+		"pos": [7808, 769]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -103,6 +111,11 @@
 		"pos1": [6272, 896],
 		"pos2": [6528, 1152]
 	},
+	"area_10": {
+		"label": "insaneExtraVtolPadArea",
+		"pos1": [7040, 1152],
+		"pos2": [7552, 1920]
+	},
 
 	"object_0": {
 		"label": "COMediumFactory",
@@ -139,5 +152,12 @@
 		"id": 402,
 		"player": 2,
 		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 2,
+		"pos": [7802, 1920],
+		"radius": 128
 	}
 }

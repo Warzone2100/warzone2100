@@ -32,7 +32,7 @@ jobs:
       # Get a token using a GitHub App that has appropriate permissions *and* will trigger subsequent CI workflows
       # (Since we want to run normal CI passes to catch translation string format errors that break builds)
       - name: Get GH App Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ vars.WZ_CROWDIN_SYNC_GH_APP_ID }}
@@ -41,7 +41,7 @@ jobs:
           repositories: "warzone2100"
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: 'master'
           token: ${{ steps.app-token.outputs.token }}
@@ -109,6 +109,14 @@ jobs:
           find po/guide -name '*.po' -type f -maxdepth 1 \
             -exec \
             .ci/githubactions/check_po_base_unchanged.sh 'po/guide/warzone2100_guide.pot' '{}' ';' | xargs -r0 -I {} rm -v "{}"
+
+      - name: Cleanup .isl files
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          # Cleanup untranslated .isl files
+          find pkg/win_installer/i18n -name '*.isl' ! -name 'win_installer_base.isl' -type f -maxdepth 1 \
+            -exec \
+            .ci/githubactions/check_isl_base_unchanged.sh 'pkg/win_installer/i18n/win_installer_base.isl' '{}' ';' | xargs -r0 -I {} rm -v "{}"
 
       - name: Publish any changes to translations to l10n_master branch
         if: success() && (github.repository == 'Warzone2100/warzone2100')

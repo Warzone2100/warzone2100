@@ -27,9 +27,13 @@ const randomTemplates = 0;
 
 // this function is used for avoiding AI cheats that appear due to
 // being able to build droids before designing them
-function iCanDesign() {
+function iCanDesign()
+{
 	if (difficulty === INSANE) // won't make INSANE much worse ...
+	{
 		return true;
+	}
+
 	return countFinishedStructList(structures.hqs) > 0;
 }
 

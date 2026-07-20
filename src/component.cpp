@@ -71,11 +71,10 @@ bool setPlayerColour(UDWORD player, UDWORD col)
 
 UBYTE getPlayerColour(UDWORD pl)
 {
-	if (pl == MAX_PLAYERS)
+	if (pl >= MAX_PLAYERS)
 	{
-		return 0; // baba
+		return 0; // baba, or spectator slot
 	}
-	ASSERT_OR_RETURN(0, pl < MAX_PLAYERS, "Invalid player number %u", pl);
 	return NetPlay.players[pl].colour;
 }
 
@@ -427,10 +426,18 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				pieFlag, iPieData;
+	SDWORD				shieldPieFlag = 0, iShieldPieData = 0;
 	PIELIGHT			brightness;
 	UDWORD				colour;
 	size_t	i = 0;
 	bool				didDrawSomething = false;
+
+	if (!bButton && psDroid->shieldPoints > 0 && droidGetMaxShieldPoints(psDroid) > 0)
+	{
+		float factor = static_cast<float>(psDroid->shieldPoints) / droidGetMaxShieldPoints(psDroid);
+		iShieldPieData = static_cast<SDWORD>(std::round(255.0f * factor));
+		shieldPieFlag = pie_FORCELIGHT | pie_TRANSLUCENT | pie_SHIELD;
+	}
 
 	glm::mat4 modifiedModelMatrix = modelMatrix2;
 
@@ -460,7 +467,7 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 		// NOTE: Beware of transporters that are offscreen, on a mission!  We should *not* be checking tiles at this point in time!
 		if (!psDroid->isTransporter() && !missionIsOffworld())
 		{
-			MAPTILE *psTile = worldTile(psDroid->pos.x, psDroid->pos.y);
+			MAPTILE *psTile = worldTile(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 			if (psTile->jammerBits & alliancebits[psDroid->player])
 			{
 				pieFlag |= pie_ECM;
@@ -491,6 +498,13 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 		if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 		{
 			didDrawSomething = true;
+		}
+		if (!bButton && psDroid->shieldPoints > 0)
+		{
+			if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, shieldPieFlag, iShieldPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
+			{
+				didDrawSomething = true;
+			}
 		}
 	}
 
@@ -525,6 +539,13 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 			if (drawShape(strImd, psDroid->timeAnimationStarted, colour, brightness, pieFlag, iPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
 			{
 				didDrawSomething = true;
+			}
+			if (!bButton && psDroid->shieldPoints > 0)
+			{
+				if (drawShape(strImd, psDroid->timeAnimationStarted, colour, brightness, shieldPieFlag, iShieldPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
+				{
+					didDrawSomething = true;
+				}
 			}
 			strImd = strImd->next.get();
 		}
@@ -640,6 +661,13 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 						{
 							didDrawSomething = true;
 						}
+						if (!bButton && psDroid->shieldPoints > 0)
+						{
+							if (pie_Draw3DShape(psShape, 0, colour, brightness, shieldPieFlag, iShieldPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
+							{
+								didDrawSomething = true;
+							}
+						}
 					}
 					localModelMatrix *= glm::translate(glm::vec3(0, 0, recoilValue));
 
@@ -672,6 +700,13 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 						if (pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
 						{
 							didDrawSomething = true;
+						}
+						if (!bButton && psDroid->shieldPoints > 0)
+						{
+							if (pie_Draw3DShape(psShape, 0, colour, brightness, shieldPieFlag, iShieldPieData, localModelMatrix, viewMatrix, -localHeightAboveTerrain))
+							{
+								didDrawSomething = true;
+							}
 						}
 						auto flashBaseModel = MUZZLE_FLASH_PIE(psDroid, i);
 						const iIMDShape *pMuzzleFlash = (flashBaseModel) ? flashBaseModel->displayModel() : nullptr;
@@ -827,6 +862,13 @@ static bool displayCompObj(const DROID *psDroid, bool bButton, const glm::mat4& 
 		{
 			didDrawSomething = true;
 		}
+		if (!bButton && psDroid->shieldPoints > 0)
+		{
+			if (pie_Draw3DShape(psShapeProp->displayModel(), 0, colour, brightness, shieldPieFlag, iShieldPieData, modifiedModelMatrix, viewMatrix, -(psDroid->heightAboveMap)))
+			{
+				didDrawSomething = true;
+			}
+		}
 	}
 
 	return didDrawSomething;
@@ -909,7 +951,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const g
 	}
 
 	// now check if the projected circle is within the screen boundaries
-	if(!clipDroidOnScreen(psDroid, perspectiveViewMatrix * modelMatrix))
+	if(!clipDroidOnScreen(psDroid, perspectiveViewMatrix * modelMatrix, (getIsCloseDistance()) ? 150 : 25))
 	{
 		return;
 	}
@@ -950,7 +992,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix, const g
 }
 
 
-void destroyFXDroid(DROID *psDroid, unsigned impactTime)
+void destroyFXDroid(DROID *psDroid, unsigned impactTime, Vector3f &velocity)
 {
 	for (int i = 0; i < 5; ++i)
 	{
@@ -1012,12 +1054,12 @@ void destroyFXDroid(DROID *psDroid, unsigned impactTime)
 		}
 		// Tell the effect system that it needs to use this player's color for the next effect
 		SetEffectForPlayer(psDroid->player);
-		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd->displayModel(), getPlayerColour(psDroid->player), impactTime);
+		addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, psImd->displayModel(), getPlayerColour(psDroid->player), impactTime, nullptr, &velocity);
 	}
 }
 
 
-void	compPersonToBits(DROID *psDroid)
+void	compPersonToBits(DROID *psDroid, Vector3f &velocity)
 {
 	Vector3i position;	//,rotation,velocity;
 	iIMDBaseShape	*headImd, *legsImd, *armImd, *bodyImd;
@@ -1053,10 +1095,10 @@ void	compPersonToBits(DROID *psDroid)
 	/* Tell about player colour */
 	col = getPlayerColour(psDroid->player);
 
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, headImd->displayModel(), col, gameTime - deltaGameTime + 1);
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, legsImd->displayModel(), col, gameTime - deltaGameTime + 1);
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, armImd->displayModel(), col, gameTime - deltaGameTime + 1);
-	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, bodyImd->displayModel(), col, gameTime - deltaGameTime + 1);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, headImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, legsImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, armImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
+	addEffect(&position, EFFECT_GRAVITON, GRAVITON_TYPE_GIBLET, true, bodyImd->displayModel(), col, gameTime - deltaGameTime + 1, nullptr, &velocity);
 }
 
 

@@ -16,6 +16,6 @@
 		"wz2100::general::researching",
 		"wz2100::structures::building",
 		"wz2100::units::modules",
-		"wz2100::units::weaponselection"
+		"wz2100::weapons"
 	]
 }

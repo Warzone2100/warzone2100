@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-06 02:25\n"
+"POT-Creation-Date: 2026-04-04 02:03+0000\n"
+"PO-Revision-Date: 2026-04-04 03:52\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -33,7 +33,7 @@ msgid "Scavenger raiders are approaching our base."
 msgstr "Мусорщики приближаются к нашей базе."
 
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Защитите базу, затем уничтожьте лагеря мусорщиков."
+msgstr "Защитите базу, затем уничтожьте лагеря Мусорщиков."
 
 msgid "ALPHA BASE MISSION: Power Surge Detected"
 msgstr "МИССИЯ НА БАЗЕ АЛЬФА: Обнаружен выброс энергии"
@@ -1155,7 +1155,7 @@ msgid "New Cyborg Available"
 msgstr "Доступен новый тип киборгов"
 
 msgid "Armed with Bunker Buster rocket"
-msgstr "Вооружён ракетницей Антибункер"
+msgstr "Вооружён неуправляемыми ракетами Антибункер"
 
 msgid "Body Points: Medium"
 msgstr "Прочность корпуса: средняя"
@@ -1170,7 +1170,7 @@ msgid "New Jump Cyborg Available"
 msgstr "Доступен новый киборг-прыгун"
 
 msgid "Armed with Revenger Surface-to-Air missile"
-msgstr "Вооружён ракетой Мститель класса земля-воздух"
+msgstr "Вооружён управляемой ракетой Мститель класса земля-воздух"
 
 msgid "Defenses Improved"
 msgstr "Защитные сооружения улучшены"
@@ -1242,7 +1242,7 @@ msgid "Defensive Strength: High"
 msgstr "Сила защиты: высокая"
 
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Укреплённая установка с огнемётом Инферно"
+msgstr "Усиленная точка с огнемётом Инферно"
 
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Укреплённая установка с роторной пушкой"
@@ -1752,16 +1752,16 @@ msgid "Increases Mini-Rocket ROF"
 msgstr "Повышает скорострельность миниракет"
 
 msgid "Rocket Upgrade"
-msgstr "Улучшение ракет"
+msgstr "Улучшение неуправляемых ракет"
 
 msgid "High Explosive Squash Head warhead"
 msgstr "Пластичная бронебойно-фугасная боеголовка"
 
 msgid "Increases Rocket damage"
-msgstr "Увеличение урона ракет"
+msgstr "Увеличение урона неуправляемых ракет"
 
 msgid "All rockets upgraded automatically"
-msgstr "Все ракеты улучшены автоматически"
+msgstr "Все неуправляемые ракеты улучшены автоматически"
 
 msgid "Destroy all New Paradigm units"
 msgstr "Уничтожьте всех юнитов Новой Парадигмы"
@@ -1774,6 +1774,9 @@ msgstr "Постройте, помимо стен, не менее семи со
 
 msgid "Locate and rescue your units from the shot down transporter"
 msgstr "Найдите и спасите ваших юнитов из подбитого транспорта"
+
+msgid "Destroy all enemy bases"
+msgstr ""
 
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "Спасите гражданских от Альянса, прежде чем большинство попадёт в плен"
@@ -1796,6 +1799,9 @@ msgstr "Уничтожьте ракетные шахты"
 msgid "Rescue Alpha team from Nexus"
 msgstr "Спасите команду Альфа от НЕКСУС"
 
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr "Не дайте ни одному ховеру Нексуса сбежать из зоны"
+
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "Уничтожьте командный центр, чтобы остановить программу вторжения НЕКСУС"
 
@@ -1817,8 +1823,8 @@ msgstr "Проведите группу Бета к аванпосту груп�
 msgid "Return to LZ"
 msgstr "Вернитесь к зоне высадки"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "Подсказка для тяжёлой/безумной сложности:"
+msgid "Insane difficulty hint:"
+msgstr "Подсказка для безумной сложности:"
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "Разместите и укрепите базу, чтобы защититься от атак Альянса"
@@ -2005,6 +2011,9 @@ msgstr "Подождите, пока завод не произведёт нов
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "Поздравляем, Командир - теперь вы готовы к своей первой миссии"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr "Обучение завершено. Нажмите Esc или на иконку шестерёнки, чтобы выйти в главное меню."
 
 msgid "CAMPAIGN ONE"
 msgstr "ПЕРВАЯ КАМПАНИЯ"
@@ -2939,6 +2948,28 @@ msgstr "В любое время, босс!"
 msgid "System locale"
 msgstr "Системный язык"
 
+msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
+msgstr ""
+
+msgid "Please try another room or disable any proxies / VPNs and try again."
+msgstr ""
+
+msgid "Game not found in lobby."
+msgstr ""
+
+msgid "The game may have already started, or the host may have disbanded the game lobby."
+msgstr "Возможно, игра уже началась, или хост распустил лобби игры."
+
+msgid "Error hosting game in lobby server"
+msgstr ""
+
+#, c-format
+msgid "Make sure port %d can receive incoming connections."
+msgstr ""
+
+msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
+msgstr ""
+
 msgid "Failed to create port mapping"
 msgstr "Не удалось создать переадресацию портов"
 
@@ -2947,8 +2978,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "Настройте ваш роутер/сетевой экран, чтобы открыть порт %d!"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "Назначен внешний порт: %d"
+msgid "Port mapping opened external port: %u"
+msgstr ""
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2957,27 +2988,39 @@ msgstr "Ваш внеший IP-адрес: %s"
 msgid "Failed to create port mapping (timeout)"
 msgstr "Не удалось создать переадресацию портов (таймаут)"
 
+#, c-format
+msgid "Using %s network backend."
+msgstr "Используется сетевой движок %s."
+
 msgid "Client failed to ack player index swap"
 msgstr "Клиент не подтвердил смену индекса игрока"
 
-#, c-format
-msgid "Could not resolve masterserver name (%s)!"
-msgstr "Не могу получить имя основного сервера (%s)!"
-
-#, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
-"Make sure port %d can receive incoming connections.\n"
-"If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
-" or to forward the port to your system."
+msgid "Game is listed in the lobby"
 msgstr ""
-"Ошибка в ходе подключения к лобби серверу: %s.\n"
-"Убедитесь, что порт %d открыт для входящих подключений.\n"
-"Если у вас есть роутер, включите UPnP/NAT-PMP/PVP соединения\n"
-"или перенаправьте порт напрямую на ваш компьютер."
 
-msgid "Failed to get a lobby response!"
-msgstr "Не получилось получить ответ от лобби!"
+msgid "Lobby GameId"
+msgstr ""
+
+msgid "Game not listed in the lobby."
+msgstr ""
+
+msgid "Error connecting to the lobby server."
+msgstr ""
+
+msgid "Please check your internet connection, or wait a short while and try hosting again."
+msgstr ""
+
+msgid "Your game will only be accessible via direct connection (or local LAN)."
+msgstr ""
+
+msgid "Multiplayer lobby support unavailable. Please update your client."
+msgstr ""
+
+msgid "Game not listed in the lobby:"
+msgstr ""
+
+msgid "Failed to create game listing. Check WZ logs."
+msgstr ""
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "Формат файла реплея новее, чем эта версия Warzone 2100."
@@ -2989,8 +3032,39 @@ msgstr "Версия формата реплея: %u"
 msgid "Replay File Format Unsupported"
 msgstr "Формат реплея не поддерживается"
 
+msgid "The replay file format is older than this version of Warzone 2100 can support."
+msgstr "Формат файла реплея старше, чем эта версия Warzone 2100."
+
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "Не удается загрузить реплей: файл незавершен или поврежден."
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr "Warzone 2100: Не удалось инициализировать графику"
+
+msgid "Failed to initialize graphics for all backends."
+msgstr "Не удалось инициализировать графику для всех движков."
+
+msgid "Error Details:"
+msgstr "Подробности ошибки:"
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr "Пожалуйста, обновите и/или переустановите графические драйверы, и проверьте настройки системы."
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "Warzone 2100: Prior launch failed"
+msgstr "Warzone 2100: предыдущий запуск не удался"
+
+msgid "The prior attempt to initialize the following graphics backend caused a crash:"
+msgstr "Предыдущая попытка инициализировать графический движок крашнулась:"
+
+#, c-format
+msgid "Graphics Backend: %s"
+msgstr "Графический движок: %s"
+
+msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
+msgstr "Warzone 2100 теперь попытается запуститься с помощью другого графического движка."
 
 msgid "Menu"
 msgstr "Меню"
@@ -3027,6 +3101,18 @@ msgstr "К левой вкладке"
 
 msgid "Tab Scroll right"
 msgstr "К правой вкладке"
+
+msgid "Please enter the text below"
+msgstr ""
+
+msgid "Enter the text"
+msgstr ""
+
+msgid "Please drag the slider to verify"
+msgstr ""
+
+msgid "Please drag the tile to verify"
+msgstr ""
 
 msgid ".50-calibre heavy machinegun"
 msgstr "Тяжёлый пулемёт калибра .50"
@@ -3203,13 +3289,16 @@ msgid "All lasers upgraded automatically"
 msgstr "Все лазеры улучшены автоматически"
 
 msgid "All missiles upgraded automatically"
-msgstr "Все ракеты улучшены автоматически"
+msgstr "Все управляемые ракеты улучшены автоматически"
 
 msgid "All power generators upgraded automatically"
 msgstr "Все генераторы энергии улучшены автоматически"
 
 msgid "All rail guns upgraded automatically"
 msgstr "Все рельсотроны улучшены автоматически"
+
+msgid "All Ripple Rockets upgraded automatically"
+msgstr ""
 
 msgid "All sensors upgraded automatically"
 msgstr "Все радары улучшены автоматически"
@@ -3242,10 +3331,10 @@ msgid "Angel Missile"
 msgstr "Батарея Ангел"
 
 msgid "Anti-tank missile"
-msgstr "Противотанковая ракета"
+msgstr "Противотанковая управляемая ракета"
 
 msgid "Anti-tank rocket"
-msgstr "Противотанковая ракета"
+msgstr "Противотанковая неуправляемая ракета"
 
 msgid "APDSB MG Bullets Mk2"
 msgstr "Бронебойные пули Мk2"
@@ -3260,7 +3349,7 @@ msgid "APFSDS Cannon Rounds Mk2"
 msgstr "Стреловидные снаряды Mk2"
 
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Стреловидные снаряды Mk3"
+msgstr "Подкалиберные снаряды для пушки Mk3"
 
 msgid "APFSDS Cannon Rounds"
 msgstr "Стреловидные снаряды"
@@ -3296,16 +3385,16 @@ msgid "Armed with Cyborg Rail Gun"
 msgstr "Вооружён рельсотроном"
 
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Вооружён противотанковой ракетницей Кнут"
+msgstr "Вооружён противотанковыми управляемыми ракетами Кнут"
 
 msgid "Armed with Cyborg Tank Killer rocket"
-msgstr "Вооружён ракетой Танк-Киллер для киборгов"
-
-msgid "Armed with Cyborg Thermite flamer"
-msgstr "Вооружён термитным огнемётом для киборгов"
+msgstr "Вооружён неуправляемой ракетой Танк-Киллер для киборгов"
 
 msgid "Armed with Cyborg Thermite Flamer"
 msgstr "Вооружён термитным огнемётом Инферно"
+
+msgid "Armed with Cyborg Thermite flamer"
+msgstr "Вооружён термитным огнемётом для киборгов"
 
 msgid "Armed with Flashlight Laser"
 msgstr "Вооружён лазером Вспышка"
@@ -3323,10 +3412,10 @@ msgid "Armed with hyper velocity quad-barrel automatic-cannon"
 msgstr "Вооружён четырёхствольной автоматической гиперскоростной пушкой"
 
 msgid "Armed with Lancer anti-tank missile"
-msgstr "Вооружён противотанковой ракетницей Лансер"
+msgstr "Вооружён противотанковыми управляемыми ракетами Лансер"
 
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr "Вооружён противотанковой ракетницей Лансер"
+msgstr "Вооружён противотанковыми управляемыми ракетами Лансер"
 
 msgid "Armed with Machinegun"
 msgstr "Вооружён пулемётом"
@@ -3338,10 +3427,10 @@ msgid "Armed with Needle Gun"
 msgstr "Вооружён игломётом"
 
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Вооружён противотанковой ракетницей Кнут"
+msgstr "Вооружён противотанковыми управляемыми ракетами Кнут"
 
 msgid "Armed with tank killer rockets"
-msgstr "Вооружён ракетницей Танк Киллер"
+msgstr "Вооружён неуправляемыми ракетами Танк Киллер"
 
 #, no-c-format
 msgid "Armor +120%, Body Points +90%"
@@ -3356,6 +3445,9 @@ msgstr "Бронебойные патроны с отбрасываемым по
 
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "Бронебойные оперённые снаряды с отбрасываемым поддоном"
+
+msgid "Armored bunker with Assault Gun"
+msgstr ""
 
 msgid "Armored bunker with Flamer"
 msgstr "Укреплённый бункер с огнемётом"
@@ -3443,6 +3535,9 @@ msgstr "Укреплённая установка с пушкой Гаусса"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "Укреплённая установка с тяжёлым лазером"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr "Укреплённая установка c пучковой пушкой"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "Укреплённая установка с плазменным огнемётом"
@@ -3616,10 +3711,10 @@ msgstr "Лучшие цели: основные постройки"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "Лучшие цели: основные постройки, установки, киборги"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "Лучшие цели: бункеры и укрепточки"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Лучшие цели: бункеры и укрепточки"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -3672,6 +3767,9 @@ msgstr "Урон бомб +10%"
 msgid "Bomb damage +25%"
 msgstr "Урон бомб +25%"
 
+msgid "Bomb Damage"
+msgstr "Бомбы: урон"
+
 msgid "Bomb Upgrade"
 msgstr "Улучшение бомб"
 
@@ -3696,6 +3794,9 @@ msgstr "Жук"
 msgid "Buggy"
 msgstr "Багги"
 
+msgid "Buildings"
+msgstr "Постройки"
+
 msgid "Built-in diagnostic and repair systems"
 msgstr "Встроенные системы диагностики и ремонта"
 
@@ -3712,7 +3813,7 @@ msgid "Bunker buster missile"
 msgstr "Ракета Антибункер"
 
 msgid "Bunker Buster Rocket"
-msgstr "Ракета Антибункер"
+msgstr "Неуправляемая ракета Антибункер"
 
 msgid "Bunker Buster Rockets Viper Wheels"
 msgstr "Антибункер Гадюка Колёса"
@@ -3736,6 +3837,9 @@ msgstr "Сжигает нефть более эффективно"
 msgid "Cannon accuracy +10%"
 msgstr "Точность пушки +10%"
 
+msgid "Cannon Accuracy"
+msgstr "Пушка: точность"
+
 msgid "Cannon Autoloader Mk2"
 msgstr "Автозарядка пушки Mk2"
 
@@ -3748,6 +3852,9 @@ msgstr "Автозарядка пушки"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "Урон пушки +25%"
+
+msgid "Cannon Damage"
+msgstr "Пушка: урон"
 
 msgid "Cannon Fire Truck"
 msgstr "Пожарная машина с пушкой"
@@ -3762,17 +3869,20 @@ msgid "Cannon Laser Rangefinder"
 msgstr "Лазерный дальномер пушки"
 
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Быстрая зарядка пушки Мk2"
+msgstr "Автомат заряжания Пушки Мk2"
 
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Быстрая зарядка пушки Мk3"
+msgstr "Автомат заряжания Пушки Мk3"
 
 msgid "Cannon Rapid Loader"
-msgstr "Быстрая зарядка пушки"
+msgstr "Автомат заряжания Пушки"
 
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "Перезарядка пушки -10%"
+
+msgid "Cannon Reload"
+msgstr "Пушка: перезарядка"
 
 msgid "Cannon Tower"
 msgstr "Башня с пушкой"
@@ -3879,6 +3989,12 @@ msgstr "Командир ведёт группу как точка сбора з
 msgid "Complete battlefield visibility"
 msgstr "Полная видимость поля битвы"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr "Композитный сплав, усиление ИИ Mk2"
+
+msgid "Composite Alloys Buff AI"
+msgstr "Композитный сплав, усиление ИИ"
+
 msgid "Composite Alloys Mk2"
 msgstr "Композитный сплав Mk2"
 
@@ -3937,6 +4053,15 @@ msgstr "Кран1"
 
 msgid "Crane2"
 msgstr "Кран2"
+
+msgid "Cyborg Alloys"
+msgstr "Киборг: сплавы"
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr "Композитный сплав киборгов, усиление ИИ Mk2"
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr "Композитный сплав киборгов, усиление ИИ"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Композитный сплав киборгов Mk2"
@@ -4004,6 +4129,12 @@ msgstr "Сверхплотная термоброня киборгов"
 msgid "Cyborg Tank Killer"
 msgstr "Киборг с Танк-Киллером"
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr "Термоброня киборгов, усиление ИИ Mk2"
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr "Термоброня киборгов, усиление ИИ"
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Термоброня киборгов Mk2"
 
@@ -4012,6 +4143,9 @@ msgstr "Термоброня киборгов Mk3"
 
 msgid "Cyborg Thermal Armor"
 msgstr "Термоброня киборгов"
+
+msgid "Cyborg Thermal"
+msgstr "Киборг: термоброня"
 
 msgid "Cyborg Thermite"
 msgstr "Киборг с термитным огнемётом"
@@ -4139,6 +4273,9 @@ msgstr "Позволяет самовосстанавливаться"
 msgid "Enemy"
 msgstr "Враг"
 
+msgid "Engine"
+msgstr "Движитель"
+
 msgid "Engineering"
 msgstr "Инженерия"
 
@@ -4191,10 +4328,7 @@ msgid "Fast Fire Mini-Rockets"
 msgstr "Быстрая зарядка миниракет"
 
 msgid "Fast firing light anti-vehicle rockets"
-msgstr "Лёгкие скорострельные ракеты"
-
-msgid "Fast Loader"
-msgstr "Быстрая зарядка гаубицы"
+msgstr "Быстро стреляет лёгкими противотранспортными неуправляемыми ракетами"
 
 msgid "Faster than Cobra"
 msgstr "Быстрее Кобры"
@@ -4211,6 +4345,9 @@ msgstr "Оперение улучшает траекторию полёта"
 msgid "Fire Truck"
 msgstr "Пожарная машина"
 
+msgid "Fires beams of subatomic particle"
+msgstr "Стреляет лучом из субатомных частиц"
+
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "Стреляет ракетами вызывающими электронно-магнитный импульс"
 
@@ -4221,7 +4358,7 @@ msgid "Fires pulses of laser light"
 msgstr "Стреляет импульсами лазерного света"
 
 msgid "Fires salvoes of mini-rockets"
-msgstr "Стреляет залпами миниракет"
+msgstr "Стреляет залпами неуправляемых миниракет"
 
 msgid "Flame-thrower firing Propylene Oxide gel"
 msgstr "Огнемёт, выпрыскивающий гель из оксида пропилена"
@@ -4245,12 +4382,18 @@ msgstr "Огнемёт Кобра Гусеницы"
 msgid "Flamer damage +25%"
 msgstr "Урон огнемёта +25%"
 
+msgid "Flamer Damage"
+msgstr "Огнемёт: урон"
+
 msgid "Flamer Fast Loader"
 msgstr "Быстрая зарядка огнемёта"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "Перезарядка огнемёта -15%"
+
+msgid "Flamer Reload"
+msgstr "Огнемёт: перезарядка"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "Огнемёт Гадюка Полугусеницы"
@@ -4476,13 +4619,13 @@ msgid "HE Mortar Shells"
 msgstr "Разрывные снаряды миномёта"
 
 msgid "HE Rockets Mk2"
-msgstr "Разрывные ракеты Мk2"
+msgstr "Разрывные неуправляемые ракеты Мk2"
 
 msgid "HE Rockets Mk3"
-msgstr "Разрывные ракеты Мk3"
+msgstr "Разрывные неуправляемые ракеты Мk3"
 
 msgid "HE Rockets"
-msgstr "Разрывные ракеты"
+msgstr "Разрывные неуправляемые ракеты"
 
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "Бронебойные бомбы Богомол СВВП"
@@ -4521,13 +4664,13 @@ msgid "HEAP Mortar Shells"
 msgstr "Бронебойные снаряды миномёта"
 
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Противотанковые снаряды Mk2"
+msgstr "Кумулятивные снаряды Mk2"
 
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Противотанковые снаряды Mk3"
+msgstr "Кумулятивные снаряды Mk3"
 
 msgid "HEAT Cannon Shells"
-msgstr "Противотанковые снаряды"
+msgstr "Кумулятивные снаряды"
 
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "Противотанковая боеголовка Мk2"
@@ -4539,7 +4682,7 @@ msgid "HEAT Rocket Warhead"
 msgstr "Противотанковая боеголовка"
 
 msgid "Heavy anti-tank rocket"
-msgstr "Тяжёлая противотанковая ракета"
+msgstr "Тяжёлая неуправляемая противотанковая ракета"
 
 msgid "Heavy Body - Mantis"
 msgstr "Тяжёлый корпус - Богомол"
@@ -4688,6 +4831,24 @@ msgstr "Адский шторм"
 msgid "Hero and Special rank units are protected"
 msgstr "Юниты ранга Герой и Специалист защищены"
 
+msgid "HESC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESC Mortar Shells"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESCHC Mortar Shells"
+msgstr ""
+
 msgid "HESH Rocket Warhead Mk2"
 msgstr "Бронебойно-фугасная боеголовка Мk2"
 
@@ -4734,7 +4895,13 @@ msgid "High explosive heavy artillery missile"
 msgstr "Тяжёлые фугасные артиллерийские ракеты"
 
 msgid "High explosive shaped charge missile"
-msgstr "Ракета с кумулятивным зарядом"
+msgstr "Управляемая ракета с кумулятивным зарядом"
+
+msgid "High Explosive Soft Casing High Capacity Shells"
+msgstr ""
+
+msgid "High Explosive Soft Casing Shells"
+msgstr ""
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Усиленная термоброня Mk2"
@@ -4801,6 +4968,15 @@ msgstr "Автозарядка гаубицы"
 msgid "Howitzer damage +25%"
 msgstr "Урон гаубиц +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr "Гаубица: урон, усиление ИИ Mk2"
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr "Гаубица: урон, усиление ИИ Mk3"
+
+msgid "Howitzer Damage Buff AI"
+msgstr "Гаубица: урон, усиление ИИ"
+
 msgid "Howitzer Fast Loader"
 msgstr "Быстрая зарядка гаубицы"
 
@@ -4810,6 +4986,15 @@ msgstr "Перезарядка гаубиц -10%"
 
 msgid "Howitzer"
 msgstr "Гаубица"
+
+msgid "Howitzers Accuracy"
+msgstr "Гаубица: точность"
+
+msgid "Howitzers Damage"
+msgstr "Гаубица: урон"
+
+msgid "Howitzers Reload"
+msgstr "Гаубица: перезарядка"
 
 msgid "Hurricane AA Site"
 msgstr "Зенитная установка Ураган"
@@ -4874,6 +5059,9 @@ msgstr "Улучшенная инженерия"
 msgid "Improved fire detection systems"
 msgstr "Улучшеные системы обнаружения огня"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr "Улучшенный хардкрит, усиление ИИ"
+
 msgid "Improved Hardcrete Mk2"
 msgstr "Улучшенный хардкрит Мk2"
 
@@ -4896,7 +5084,7 @@ msgid "Improved Power Generator Performance"
 msgstr "Повышена производительность генератора"
 
 msgid "Improved Rocket Wire Guidance"
-msgstr "Улучшенное наведение ракет"
+msgstr "Улучшенное наведение неуправляемых ракет"
 
 msgid "Improved sensor range"
 msgstr "Улучшенный радиус обзора"
@@ -4925,10 +5113,10 @@ msgstr "Улучшение в лазерной оптики снижает ра�
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Установка зажигательной гаубицы 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "Установка зажигательной гаубицы"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Установка зажигательной гаубицы"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -4986,13 +5174,13 @@ msgid "Increases Mini-Rockets ROF"
 msgstr "Увеличение скорострельности миниракет"
 
 msgid "Increases Missile accuracy"
-msgstr "Увеличение точности ракет"
+msgstr "Увеличение точности управляемых ракет"
 
 msgid "Increases Missile damage"
-msgstr "Увеличение урона ракет"
+msgstr "Увеличение урона управляемых ракет"
 
 msgid "Increases Missile ROF"
-msgstr "Увеличение скорострельности ракет"
+msgstr "Увеличение скорострельности управляемых ракет"
 
 msgid "Increases Mortar accuracy"
 msgstr "Увеличение точности миномёта"
@@ -5009,11 +5197,14 @@ msgstr "Увеличение урона рельсотрона"
 msgid "Increases Rail Gun ROF"
 msgstr "Увеличение скорострельности рельсотрона"
 
+msgid "Increases Ripple Rocket ROF"
+msgstr ""
+
 msgid "Increases Rocket accuracy"
-msgstr "Увеличение точности ракет"
+msgstr "Увеличение точности неуправляемых ракет"
 
 msgid "Increases Rocket ROF"
-msgstr "Увеличение скорострельности ракет"
+msgstr "Увеличение скорострельности неуправляемых ракет"
 
 msgid "Indirectweaponslab"
 msgstr "Лаборатория вооружения непрямого огня"
@@ -5082,7 +5273,7 @@ msgid "Laminated alloys bonded with energy-deflecting optic bundles"
 msgstr "Ламинированные сплавы, скрепленные энергоотражающими оптическими пучками"
 
 msgid "Lancer AT Rocket"
-msgstr "Противотанковая ракета Лансер"
+msgstr "Противотанковая неуправляемая ракета Лансер"
 
 msgid "Lancer Bunker"
 msgstr "Бункер с ракетами Лансер"
@@ -5133,9 +5324,15 @@ msgstr "Доступно лазерное орудие ПВО"
 msgid "Laser accuracy +10%"
 msgstr "Точность лазера +10%"
 
+msgid "Laser Accuracy"
+msgstr "Лазер: точность"
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "Урон лазера +25%"
+
+msgid "Laser Damage"
+msgstr "Лазер: урон"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "Лазерный целеуказатель наводит снаряд на цель"
@@ -5143,6 +5340,9 @@ msgstr "Лазерный целеуказатель наводит снаряд 
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "Перезарядка лазера -15%"
+
+msgid "Laser Reload"
+msgstr "Лазер: перезарядка"
 
 msgid "Laser Satellite Command Post"
 msgstr "Центр управления лазерными спутниками"
@@ -5320,6 +5520,12 @@ msgstr "Средняя пушка"
 msgid "Medium Super Heavy Body"
 msgstr "Средний сверхтяжёлый корпус"
 
+msgid "MG Damage"
+msgstr "Пулемёт: урон"
+
+msgid "MG Reload"
+msgstr "Пулемёт: перезарядка"
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "Укреплённая установка с миниракетами"
 
@@ -5373,24 +5579,33 @@ msgstr "Миниракеты Гадюка Колёса"
 
 #, no-c-format
 msgid "Missile accuracy +10%"
-msgstr "Точность ракет +10%"
+msgstr "Точность управляемых ракет +10%"
+
+msgid "Missile Accuracy"
+msgstr "Управляемые ракеты: точность"
 
 msgid "Missile actively seeks and homes on targets"
 msgstr "Ракета активно ищет и наводится на цель"
 
 #, no-c-format
 msgid "Missile damage +25%"
-msgstr "Урон ракеты +25%"
+msgstr "Урон управляемых ракет +25%"
+
+msgid "Missile Damage"
+msgstr "Управляемые ракеты: урон"
 
 msgid "Missile Fortress"
 msgstr "Крепость с ракетами"
 
 #, no-c-format
 msgid "Missile reload time -15%"
-msgstr "Перезарядка ракет -15%"
+msgstr "Перезарядка управляемых ракет -15%"
+
+msgid "Missile Reload"
+msgstr "Управляемые ракеты: перезарядка"
 
 msgid "Missile Upgrade"
-msgstr "Улучшение ракет"
+msgstr "Улучшение управляемых ракет"
 
 msgid "Missiles detect and lock-on to targets while loading"
 msgstr "Ракеты определяют и наводятся на цель во время зарядки"
@@ -5408,6 +5623,9 @@ msgstr "Броня и прочность выше, чем у Мести"
 msgid "Mortar accuracy +10%"
 msgstr "Точность миномёта +10%"
 
+msgid "Mortar Accuracy"
+msgstr "Миномёт: точность"
+
 msgid "Mortar Autoloader Mk2"
 msgstr "Автозарядка миномёта Мk2"
 
@@ -5424,6 +5642,15 @@ msgstr "Миномёт Кобра Полугусеницы"
 msgid "Mortar damage +25%"
 msgstr "Урон миномёта +25%"
 
+msgid "Mortar Damage"
+msgstr "Миномёт: урон"
+
+msgid "Mortar Fast Loader Mk2"
+msgstr ""
+
+msgid "Mortar Fast Loader Mk3"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "Быстрая зарядка миномёта"
 
@@ -5433,6 +5660,9 @@ msgstr "Позиция миномёта"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "Перезарядка миномёта -10%"
+
+msgid "Mortar Reload"
+msgstr "Миномёт: перезарядка"
 
 msgid "Mortar Targeting Computer"
 msgstr "Компьютерное наведение миномёта"
@@ -5549,7 +5779,7 @@ msgid "New research options available"
 msgstr "Доступны новые возможности исследования"
 
 msgid "New Rocket Available"
-msgstr "Доступны новые ракеты"
+msgstr "Доступна новая неуправляемая ракета"
 
 msgid "New SAM Turret Available"
 msgstr "Доступна новая турель с ЗУР"
@@ -5566,10 +5796,10 @@ msgstr "Доступна новая системная структура"
 msgid "New Systems Tower Available"
 msgstr "Доступна новая системная башня"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "Доступна новая системная турель для дизайна"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "Доступна новая системная турель для дизайна"
 
 msgid "New Thermal Emissions detection"
@@ -5668,6 +5898,12 @@ msgstr "Оригинальная схватка"
 msgid "Panther"
 msgstr "Пантера"
 
+msgid "Particle Gun Emplacement"
+msgstr "Установка пучковой пушки"
+
+msgid "Particle Gun"
+msgstr "Пучковая пушка"
+
 msgid "Pepperpot Pit"
 msgstr "Позиция миномёта Пепперпот"
 
@@ -5757,6 +5993,9 @@ msgstr "Выходная мощность +30%"
 msgid "Power Research Completed"
 msgstr "Исследование генератора завершено"
 
+msgid "Power"
+msgstr "Энергия"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "Мощное импульсное электромагнитное оружие"
 
@@ -5765,6 +6004,9 @@ msgstr "Энерголаборатория"
 
 msgid "Produces Cyborgs"
 msgstr "Производит киборгов"
+
+msgid "Production"
+msgstr "Производство"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "Юниты ранга Профессионал и Опытный защищены"
@@ -5782,7 +6024,7 @@ msgid "Propylene Oxide gel treated to burn at higher temperatures"
 msgstr "Смесь оксида пропилена горит при гораздо более высокой температуре"
 
 msgid "Prototypical AI focusing on rockets/missiles"
-msgstr "Прототип ИИ с упором на использование ракет"
+msgstr "Прототип ИИ с упором на использование неуправляемых/управляемых ракет"
 
 msgid "Pulse Laser Emplacement"
 msgstr "Установка импульсного лазера"
@@ -5838,6 +6080,12 @@ msgstr "Башня с детектором радаров"
 msgid "Radar Detector"
 msgstr "Детектор радаров"
 
+msgid "Rail Accuracy"
+msgstr "Рельсотрон: точность"
+
+msgid "Rail Damage"
+msgstr "Рельсотрон: урон"
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "Точность рельсотрона +10%"
@@ -5880,6 +6128,9 @@ msgstr "Улучшение рельсотрона"
 msgid "Rail Gun"
 msgstr "Рельсотрон"
 
+msgid "Rail Reload"
+msgstr "Рельсотрон: перезарядка"
+
 msgid "Rail Target Prediction Computer"
 msgstr "Компьютерное наведение рельсотронов"
 
@@ -5910,6 +6161,12 @@ msgstr "Уменьшает шансы захвата НЕКСУС"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "Заправляет, заряжает и ремонтирует СВВП"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr "Армированные стройматериалы, усиление ИИ Mk2"
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr "Армированные стройматериалы, усиление ИИ"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Армированные стройматериалы Мk2"
@@ -5989,6 +6246,9 @@ msgstr "Скорость исследования +30%"
 msgid "Research speed +85%"
 msgstr "Скорость исследования +85%"
 
+msgid "Research"
+msgstr "Исследования"
+
 msgid "Retaliation"
 msgstr "Возмездие"
 
@@ -6045,7 +6305,10 @@ msgstr "Роботизированное оснащение СВВП"
 
 #, no-c-format
 msgid "Rocket accuracy +10%"
-msgstr "Точность ракет +10%"
+msgstr "Точность неуправляемых ракет +10%"
+
+msgid "Rocket Accuracy"
+msgstr "Неуправляемые ракеты: точность"
 
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "Ракетная артиллерия, можно привязать к радару"
@@ -6064,7 +6327,10 @@ msgstr "Ракетный багги"
 
 #, no-c-format
 msgid "Rocket damage +25%"
-msgstr "Урон ракет +25%"
+msgstr "Урон неуправляемых ракет +25%"
+
+msgid "Rocket Damage"
+msgstr "Неуправляемые ракеты: урон"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "Обнаруживает и берёт на прицел, отслеживая выхлопы двигателей"
@@ -6086,7 +6352,10 @@ msgstr "Быстрый загрузчик ракет"
 
 #, no-c-format
 msgid "Rocket reload time -15%"
-msgstr "Перезарядка ракет -15%"
+msgstr "Перезарядка неуправляемых ракет -15%"
+
+msgid "Rocket Reload"
+msgstr "Неуправляемые ракеты: перезарядка"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "Ракета следует лазерному целеуказателю до цели"
@@ -6243,6 +6512,9 @@ msgstr "Улучшение радара Мk3"
 
 msgid "Sensor Upgrade"
 msgstr "Улучшение радара"
+
+msgid "Sensor"
+msgstr "Радар"
 
 msgid "Sensors Improved"
 msgstr "Радар улучшен"
@@ -6409,11 +6681,11 @@ msgstr "Анализ нейросвязи Мk2"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Анализ нейросвязи Мk3"
 
-msgid "Synaptic Link Data Analysis"
-msgstr "Анализ нейросвязи"
-
 msgid "Synaptic link data analysis"
 msgstr "Анализ данных о нейросвязи"
+
+msgid "Synaptic Link Data Analysis"
+msgstr "Анализ нейросвязи"
 
 msgid "Synaptic Link Scrambler technology"
 msgstr "Технология шифратора с помощью нейросвязи"
@@ -6426,6 +6698,9 @@ msgstr "Нейросвязь"
 
 msgid "Systems Research Completed"
 msgstr "Исследование систем завершено"
+
+msgid "Tank Alloys"
+msgstr "Танк: сплавы"
 
 msgid "Tank Killer Cyborg"
 msgstr "Киборг с Танк-Киллером"
@@ -6446,13 +6721,16 @@ msgid "Tank Killer Python Tracks"
 msgstr "Танк Киллер Питон Гусеницы"
 
 msgid "Tank Killer Rocket"
-msgstr "Ракета Танк Киллер"
+msgstr "Неуправляемая ракета Танк Киллер"
 
 msgid "Tank Killer Vengeance Tracks"
 msgstr "Танк Киллер Месть Гусеницы"
 
 msgid "Tank Killer"
 msgstr "Танк Киллер"
+
+msgid "Tank Thermal"
+msgstr "Танк: термоброня"
 
 msgid "Tank Traps"
 msgstr "Танковое заграждение"
@@ -6462,6 +6740,9 @@ msgstr "Целеуказание артиллерии Мk2"
 
 msgid "Target Acquisition Artillery Shells"
 msgstr "Целеуказание артиллерии"
+
+msgid "Target Acquisition Mortar Shells Mk2"
+msgstr ""
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "Целеуказание миномётов"
@@ -6496,6 +6777,12 @@ msgstr "Термоброня +40%"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "Термоброня +45%"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr "Термоброня, усиление ИИ Mk2"
+
+msgid "Thermal Armor Buff AI"
+msgstr "Термоброня, усиление ИИ"
 
 msgid "Thermal Armor Mk2"
 msgstr "Термоброня Mk2"
@@ -6541,6 +6828,9 @@ msgstr "Укреплённый титаном бетон"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "ИИ с фокусом на возведение обороны, основан на NullBot"
+
+msgid "Tower Wars Buff"
+msgstr "Усиление от башненной войны"
 
 msgid "Tracked Propulsion"
 msgstr "Гусеничный движитель"
@@ -6864,6 +7154,9 @@ msgstr "Миниракеты СВВП"
 msgid "VTOL Needle Gun"
 msgstr "Игломёт СВВП"
 
+msgid "VTOL Particle Gun"
+msgstr "Пучковая пушка СВВП"
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "Фосфорные бомбы"
 
@@ -6887,6 +7180,9 @@ msgstr "Посадочная площадка"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "Посадочные площадки требуются для постоянного поддержания боеготовности СВВП"
+
+msgid "VTOL Rearming"
+msgstr "СВВП: переоснащение"
 
 msgid "VTOL Scourge Missile"
 msgstr "Кнут СВВП"
@@ -7060,6 +7356,12 @@ msgstr " и "
 msgid "Spectators"
 msgstr "Зрители"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "Вы отправили слишком много сообщений за последние несколько секунд. Подождите и повторите попытку."
+
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s хочет включить режим отладки. Включён: %s, Отключён: %s."
@@ -7183,6 +7485,15 @@ msgstr "хост"
 msgid "Connect directly to IP/hostname as a spectator"
 msgstr "Подключиться напрямую к IP/hostname как зритель"
 
+msgid "Connect to lobby game"
+msgstr ""
+
+msgid "lobbyGameId"
+msgstr ""
+
+msgid "Connect to lobby game as a spectator"
+msgstr ""
+
 msgid "Go directly to host screen"
 msgstr "Сразу перейти к экрану хоста"
 
@@ -7227,12 +7538,6 @@ msgstr "Запустить хостинг с указанным файлом н�
 
 msgid "autohost"
 msgstr "автохост"
-
-msgid "Query ratings from given server url, when hosting"
-msgstr "Запрашивать при хостинге рейтинги с заданного адреса сервера"
-
-msgid "autorating"
-msgstr "авторейтинг"
 
 msgid "Attach or create a console window and display console output (Windows only)"
 msgstr "Прикрепить или создать окно консоли и выводить информацию в него (только для Windows)"
@@ -7309,11 +7614,17 @@ msgstr "Установить настройки/разрешения чата д
 msgid "Enable async join approval (for connecting clients)"
 msgstr "Включить асинхронное одобрение подключения (для подключающихся клиентов)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "Запускает хост (автохост), как не готовый, даже если это хост-зритель"
+
 msgid "Base URL for on-demand video downloads"
 msgstr "URL-адрес для загрузки видео"
 
 msgid "Base video URL"
 msgstr "URL-адрес видео"
+
+msgid "Specify connection provider type to use when hosting game sessions"
+msgstr "Укажите тип провайдера подключения, для использования при хостинге игры"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "Командиру нужен ранг выше, чтобы командовать большим кол-вом юнитов"
@@ -7630,423 +7941,12 @@ msgstr "TCP порт %d должен быть открыт в вашем бра�
 msgid "Load Multiplayer Replay"
 msgstr "Загрузить реплей сетевой игры"
 
-msgid "Game Options"
-msgstr "Настройки игры"
-
-msgid "Graphics Options"
-msgstr "Настройки графики"
-
-msgid "Video Options"
-msgstr "Настройки видео"
-
-msgid "Audio / Zoom Options"
-msgstr "Настройки звука/масштаба"
-
-msgid "Mouse Options"
-msgstr "Настройки мыши"
-
-msgid "Key Mappings"
-msgstr "Настройки клавиш"
-
-msgid "Music Manager"
-msgstr "Менеджер музыки"
-
-msgid "Multiplay Options"
-msgstr "Настройки сетевой игры"
-
-msgid "OPTIONS"
-msgstr "ПАРАМЕТРЫ"
-
-msgid "Open Configuration Directory"
-msgstr "Открыть папку конфигурации"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "Не удалось открыть папку конфигурации в системном файловом менеджере."
-
-msgid "Configuration directory is reported as:"
-msgstr "Директория конфигурации указана как:"
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "При работе в контейнере / изолированной среде этот путь может отличаться от фактического пути на диске."
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "Более подробную информацию о том, как найти это вручную, см. в документации."
-
-msgid "Failed to open configuration directory"
-msgstr "Не удалось открыть папку конфигурации"
-
-msgid "1×"
-msgstr "1×"
-
-msgid "2×"
-msgstr "2×"
-
-msgid "Fullscreen"
-msgstr "Полный экран"
-
-msgid "Unsupported"
-msgstr "Не поддерживается"
-
-msgid "Off"
-msgstr "Выкл"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "Чёрный"
-
-msgid "On"
-msgstr "Вкл"
-
-msgid "Per Pixel"
-msgstr "Попиксельное"
-
-msgid "Lightmap"
-msgstr "Карта освещения"
-
-msgid "Rotating"
-msgstr "Вращающаяся"
-
-msgid "Fixed"
-msgstr "Фиксированная"
-
-msgid "Instant"
-msgstr "Мгновенный"
-
-msgid "Tracked"
-msgstr "Плавный"
-
-msgid "High"
-msgstr "Высоко"
-
-msgid "Default"
-msgstr "По умолчанию"
-
-msgid "Terrain quality mode not available."
-msgstr "Режим качества ландшафта недоступен."
-
-msgid "Medium Quality"
-msgstr "Среднее качество"
-
-msgid "High Quality"
-msgstr "Высокое качество"
-
-msgid "Shadow mapping not available on this system."
-msgstr "Карты теней недоступны в этой системе."
-
-msgid "Low"
-msgstr "Низко"
-
-msgid "Ultra"
-msgstr "Ультра"
-
-msgid "Shadow filtering not available on this system."
-msgstr "Фильтрация теней недоступна в этой системе."
-
-msgid "Opacity: 50%"
-msgstr "Прозрачность: 50%"
-
-msgid "* Takes effect on game restart"
-msgstr "* Вступит в силу после перезагрузки игры"
-
-msgid "Terrain Quality"
-msgstr "Качество ландшафта"
-
-msgid "Terrain Shading"
-msgstr "Затенение ландшафта"
-
-msgid "Shadows"
-msgstr "Тени"
-
-msgid "Shadow Resolution"
-msgstr "Разрешение теней"
-
-msgid "Shadow Filtering"
-msgstr "Фильтрация теней"
-
-msgid "Per Pixel point lights"
-msgstr "Попиксельное точечное освещение"
-
-msgid "LOD Distance"
-msgstr "Дистанция LOD"
-
-msgid "Fog"
-msgstr "Туман"
-
-msgid "Radar"
-msgstr "Миникарта"
-
-msgid "Radar Jump"
-msgstr "Переход по миникарте"
-
-msgid "Video Playback"
-msgstr "Видео"
-
-msgid "Scanlines"
-msgstr "ТВ развёртка"
-
-msgid "Screen Shake"
-msgstr "Тряска экрана"
-
-msgid "Groups Menu"
-msgstr "Меню групп"
-
-msgid "Options Button"
-msgstr "Кнопка настроек"
-
-msgid "GRAPHICS OPTIONS"
-msgstr "НАСТРОЙКИ ГРАФИКИ"
-
-msgid "Disabled"
-msgstr "Отключено"
-
-msgid "Enabled"
-msgstr "Включено"
-
-msgid "Auto"
-msgstr "Авто"
-
-msgid "Voice Volume"
-msgstr "Громкость голоса"
-
-msgid "FX Volume"
-msgstr "Громкость эффектов"
-
-msgid "Music Volume"
-msgstr "Громкость музыки"
-
-msgid "Subtitles"
-msgstr "Субтитры"
-
-msgid "HRTF"
-msgstr "Объёмный звук"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "Объёмный звук не поддерживается на вашем устройстве / системе / библиотеке OpenAL"
-
-msgid "Map Zoom"
-msgstr "Масштаб карты"
-
-msgid "Map Zoom Rate"
-msgstr "Скорость масштаба"
-
-msgid "Radar Zoom"
-msgstr "Масштаб миникарты"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "НАСТРОЙКИ\\nЗВУКА / МИНИКАРТЫ"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"В полноэкранном режиме разрешение соответствует разрешению рабочего стола \n"
-"(или как позволит оконный менеджер)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "Вы можете изменить разрешение, изменив размер окна в обычном режиме. (Попробуйте перетащить угол / край.)"
-
-msgid "Graphics Mode"
-msgstr "Режим отображения"
-
-msgid "Resolution"
-msgstr "Разрешение"
-
-msgid "Display Scale"
-msgstr "Масштаб дисплея"
-
-msgid "Adaptive"
-msgstr "Адаптивный"
-
-msgid "Windowed"
-msgstr "В окне"
-
-msgid "Desktop Full"
-msgstr "Окно без границ"
-
-msgid "On (Fullscreen)"
-msgstr "Вкл (полноэкранный)"
-
-msgid "Texture size"
-msgstr "Размер текстур"
-
-msgid "Vertical sync"
-msgstr "Верт. синхронизация"
-
-msgid "Antialiasing*"
-msgstr "Сглаживание*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Внимание: сглаживание может вызвать краш, особенно при значениях > 16"
-
-msgid "Graphics Backend*"
-msgstr "Графический движок*"
-
-msgid "Min on Focus Loss"
-msgstr "Сворачивать при потере фокуса"
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr "Должно ли окно автоматически сворачиваться при потере фокуса"
-
-msgid "Alt+Enter Toggle"
-msgstr "Переключение по Alt+Enter"
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr "Переключать полноэкранный режим по Alt+Enter"
-
-msgid "VIDEO OPTIONS"
-msgstr "НАСТРОЙКИ ВИДЕО"
-
-msgid "Unable to change Vertical Sync"
-msgstr "Не удалось изменить вертикальную синхронизацию"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"Не удалось сменить вертикальную синхронизацию.\n"
-"Ваша система / драйверы могут не поддерживать другие режимы."
-
-msgid "Middle Mouse"
-msgstr "Средняя кнопка мыши"
-
-msgid "Right Mouse"
-msgstr "Правая кнопка мыши"
-
-msgid "Reverse Rotation"
-msgstr "Инверсия вращения"
-
-msgid "Trap Cursor"
-msgstr "Захват курсора"
-
-msgid "Switch Mouse Buttons"
-msgstr "Поменять кнопки мыши"
-
-msgid "Rotate Screen"
-msgstr "Вращение камеры"
-
-msgid "Colored Cursors"
-msgstr "Цветные курсоры"
-
-msgid "Cursor Size"
-msgstr "Размер курсора"
-
-msgid "MOUSE OPTIONS"
-msgstr "НАСТРОЙКИ МЫШИ"
-
-msgid "Super Easy"
-msgstr "Очень легко"
-
-msgid "Easy"
-msgstr "Легко"
-
-msgid "Hard"
-msgstr "Тяжело"
-
-msgid "Insane"
-msgstr "Безумно"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr "Не удается загрузить: %s."
 
 msgid "Please remove all incompatible mods."
 msgstr "Пожалуйста, удалите все несовместимые моды."
-
-msgid "GAME OPTIONS"
-msgstr "НАСТРОЙКИ ИГРЫ"
-
-msgid "Language"
-msgstr "Язык"
-
-msgid "Unit Colour:"
-msgstr "Цвет юнитов:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "Сражение/Мультиплеер"
-
-msgid "Campaign Difficulty"
-msgstr "Сложность кампании"
-
-msgid "Camera Speed"
-msgstr "Скорость камеры"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "Помогите нам улучшить переводы Warzone 2100: %s"
-
-msgid "Click to open webpage."
-msgstr "Открыть веб-страницу."
-
-msgid "Insane Difficulty"
-msgstr "Безумная сложность"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "Эта сложность для очень опытных игроков!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u минут"
-
-#, c-format
-msgid "%s hours"
-msgstr "%s часов"
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u секунд"
-
-msgid "None"
-msgstr "Нет"
-
-msgid "Distribute to Team"
-msgstr "Раздать команде"
-
-msgid "Destroy (Classic)"
-msgstr "Уничтожить (классика)"
-
-msgid "Allow All"
-msgstr "Разрешить всё"
-
-msgid "Quick Chat Only"
-msgstr "Только Быстрые сообщения"
-
-msgid "Hosting Options:"
-msgstr "Настройки хостинга:"
-
-msgid "Game Port"
-msgstr "Порт игры"
-
-msgid "Port Mapping"
-msgstr "Переадресация портов"
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr "Используйте PCP, NAT-PMP или UPnP, чтобы настроить роутер/сетевой экран на принятие соединений при хостинге."
-
-msgid "Chat"
-msgstr "Чат"
-
-msgid "Inactivity Timeout"
-msgstr "Таймаут бездействия"
-
-msgid "Lag Kick"
-msgstr "Исключать из-за лагов"
-
-msgid "Spectator Slots"
-msgstr "Слоты зрителей"
-
-msgid "On Player Leave"
-msgstr "При выходе игрока"
-
-msgid "Game Time Limit"
-msgstr "Лимит времени"
-
-msgid "Enable Rating"
-msgstr "Включить рейтинг"
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "НАСТРОЙКИ МУЛЬТИПЛЕЕРА"
 
 msgid "Mod: "
 msgstr "Мод: "
@@ -8175,16 +8075,16 @@ msgid "Select / Assign Group Number: "
 msgstr "Выбрать / назначить номер группы: "
 
 #, c-format
-msgid "Group %u"
-msgstr "Группа %u"
+msgid "Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "Выбрать юнитов в группе %u"
+msgid "Select the Units in Group %zu"
+msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "Назначить выбранных юнитов в группу %u"
+msgid "Assign Selected Units to Group %zu"
+msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "Центрировать камеру на этой группе по клику или двойному нажатию"
@@ -8296,6 +8196,26 @@ msgstr "%s (%s) изменил цвет игрока (%s) на: %s"
 msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) изменил фракцию игрока (%s) на: %s"
 
+msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
+msgstr "ВНИМАНИЕ: если вы не нажмёте Готов в ближайшее время, вы будете выгнаны из комнаты"
+
+#, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr "Игрок будет выгнан, если он не установит Готов в ближайшее время: %s"
+
+#, c-format
+msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr "Игрок (%s) автоматически выгнан, потому что слишком долго не нажимал кнопку Готов"
+
+msgid "NOTICE: Please check Ready"
+msgstr "ВНИМАНИЕ: пожалуйста, нажмите кнопку Готов"
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr "ВНИМАНИЕ: пожалуйста, нажмите кнопку Готов, чтобы игра началась"
+
+msgid "Players who don't check Ready in time will be kicked."
+msgstr "Игроки, которые не установят Готов в ближайшее время, будут выгнаны."
+
 msgid "Can someone please transfer me some units?"
 msgstr "Может кто-нибудь передать мне юнитов?"
 
@@ -8303,7 +8223,7 @@ msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr "Может кто-нибудь передать мне грузовики для перестройки?"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрые сообщения)"
+msgstr "Извините, я не понимаю. (Пожалуйста, используйте Быстрый чат?)"
 
 msgid "I suggest: Building more units"
 msgstr "Я предлагаю: Строить больше юнитов"
@@ -8351,7 +8271,7 @@ msgid "I want to switch teams"
 msgstr "Я хочу сменить команду"
 
 msgid "Please check Ready so we can start"
-msgstr "Подтвердите готовность, чтобы мы начали"
+msgstr "Пожалуйста, нажмите Готов, чтобы мы начали играть"
 
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
@@ -8521,9 +8441,6 @@ msgstr "Боты-союзники"
 msgid "Human Allies"
 msgstr "Игроки-союзники"
 
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "Вы отправили слишком много сообщений за последние несколько секунд. Подождите и повторите попытку."
-
 msgid "Research Progress"
 msgstr "Прогресс исследования"
 
@@ -8557,15 +8474,6 @@ msgstr "Внимание: вы владелец этой игры. Если вы
 msgid "Host Quit"
 msgstr "Завершить хост"
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "Тактический интерфейс (иконка цели): показать"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "Тактический интерфейс (иконка цели): спрятать"
-
-msgid "Go Back"
-msgstr "Назад"
-
 msgid "View Guide"
 msgstr "Посмотреть руководство"
 
@@ -8598,15 +8506,6 @@ msgstr "Игра не может продолжаться без хоста."
 
 msgid "-->  QUIT  <--"
 msgstr "--> ВЫХОД <--"
-
-msgid "Audio Options"
-msgstr "Настройки звука"
-
-msgid "View Key Mappings"
-msgstr "Показать настройки клавиш"
-
-msgid "Shake"
-msgstr "Тряска"
 
 msgid "Save Campaign Game"
 msgstr "Сохранить кампанию"
@@ -8651,17 +8550,20 @@ msgstr "Основные файлы игры, вероятно, поврежде
 msgid "Error Loading Game Data"
 msgstr "Ошибка при загрузке данных игры"
 
-msgid "Global Hotkeys"
-msgstr "Глобальные горячие клавиши"
+msgid "Global Keys"
+msgstr "Глобальные клавиши"
 
-msgid "Other Hotkeys"
-msgstr "Другие горячие клавиши"
+msgid "Other Keys"
+msgstr "Другие клавиши"
 
-msgid "Gameplay"
-msgstr "Геймплей"
+msgid "Gameplay Keys"
+msgstr "Клавиши геймплея"
 
-msgid "Debug"
-msgstr "Отладка"
+msgid "Radar Keys"
+msgstr "Клавиши радара"
+
+msgid "Debug Keys"
+msgstr "Клавиши отладки"
 
 msgid "Debug (level editor)"
 msgstr "Отладка (редактор уровня)"
@@ -8671,9 +8573,6 @@ msgstr "Отладка (выбор)"
 
 msgid "Manufacture"
 msgstr "Производство"
-
-msgid "Research"
-msgstr "Исследования"
 
 msgid "Build"
 msgstr "Строительство"
@@ -9039,8 +8938,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "Выделить всех сильно повреждённых юнитов"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "Выделить всеx наземных боевыx юнитов без группы с прочностью >50%."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr "Выделить всех наземных боевых юнитов с >50% HP и без группы"
 
 msgid "Select all Half-tracks"
 msgstr "Выделить всю полугусеничную технику"
@@ -9210,15 +9109,12 @@ msgstr "Переключить полноэкранный режим"
 msgid "Waiting for Power"
 msgstr "Ожидать энергию"
 
-msgid "Power"
-msgstr "Энергия"
-
 msgid "Power Per Second"
 msgstr "Энергия в секунду"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "Нефтяных вышек неактивно: %d"
+msgid "%u derrick(s) inactive"
+msgstr ""
 
 msgid "Need more resources!"
 msgstr "Нужно больше ресурсов!"
@@ -9228,24 +9124,6 @@ msgstr "Discord: не удается подключиться к игре"
 
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
 msgstr "Вы не можете присоединиться к игре, пока вы в бою. Сохраните/выйдите из текущей игры, выйдите в главное меню и повторите попытку."
-
-msgid "Discord: Finding & Connecting to Game"
-msgstr "Discord: поиск и подключение к игре"
-
-msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr "Пытаемся найти и подключиться к игре, указанной в Discord приглашении."
-
-msgid "This may take a moment..."
-msgstr "Это может занять некоторое время..."
-
-msgid "Failed to find game in the lobby server: "
-msgstr "Не удалось найти игру на сервере лобби: "
-
-msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr "Возможно, игра уже началась, или хост распустил лобби игры."
-
-msgid "Failed to Find Game"
-msgstr "Не удалось найти игру"
 
 msgid "Failed to join the game from the specified invite link, with error:"
 msgstr "Не удалось присоединиться к игре по указанному приглашению, ошибка:"
@@ -9674,21 +9552,6 @@ msgstr "Быстрая загрузка недоступна в режиме Т�
 msgid "QuickSave file does not exist yet"
 msgstr "Файла быстрого сохранения не существует"
 
-msgid "<not bound>"
-msgstr "<не привязано>"
-
-msgid "<Fixed Key>"
-msgstr "<неизменяемая>"
-
-msgid "KEY MAPPING"
-msgstr "НАСТРОЙКИ КЛАВИШ"
-
-msgid "Return To Previous Screen"
-msgstr "Назад"
-
-msgid "Select Default"
-msgstr "Выбрать по умолчанию"
-
 msgid "Parent directory"
 msgstr "Верхняя директория"
 
@@ -9709,8 +9572,14 @@ msgstr "Автосохранение %s"
 msgid "AutoSave %s failed"
 msgstr "Автосохранение %s не удалось"
 
+msgid "AutoSaving..."
+msgstr "Автосохранение..."
+
 msgid "Could not save game!"
 msgstr "Не удалось сохранить игру!"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr "Не удалось загрузить данные или карту уровня. Выходим в главное меню."
 
 msgid "Load Transport"
 msgstr "Загрузить в транспорт"
@@ -9789,8 +9658,20 @@ msgstr "%s вступил в союз с %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Вы открыли чертежи: %s"
 
+msgid "Super Easy"
+msgstr "Очень легко"
+
+msgid "Easy"
+msgstr "Легко"
+
 msgid "Medium"
 msgstr "Средняя"
+
+msgid "Hard"
+msgstr "Тяжело"
+
+msgid "Insane"
+msgstr "Безумно"
 
 msgid "Commander"
 msgstr "Командир"
@@ -9805,103 +9686,35 @@ msgstr "ОТСУТСТВУЕТ ОПИСАНИЕ ИИ"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Состязание ИИ: %3.1f%% побед, %3.1f%% проиграно, %3.1f%% ничьих"
 
-msgid "Tanks disabled!!"
-msgstr "Танки отключены!!"
-
-msgid "Cyborgs disabled."
-msgstr "Киборги отключены."
-
-msgid "VTOLs disabled."
-msgstr "Самолёты отключены."
-
-msgid "Satellite Uplink disabled."
-msgstr "Центр связи со спутником отключён."
-
-msgid "Laser Satellite disabled."
-msgstr "Лазерный спутник отключён."
-
-msgid "Structure Limits Enforced."
-msgstr "Введён лимит строений."
-
 msgid "Not enough votes to randomize or change the map."
 msgstr "Недостаточно голосов для смены карты."
-
-msgid "Select Game Name"
-msgstr "Выбрать название игры"
-
-msgid "Game Name"
-msgstr "Название игры"
-
-msgid "One-Player Skirmish"
-msgstr "Одиночное сражение"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Выберите карту\n"
-"Может быть запрещено голосованием"
-
-msgid "Map-Mod!"
-msgstr "Карта-мод!"
-
-msgid "Random map!"
-msgstr "Случайная карта!"
-
-msgid "Click to set Password"
-msgstr "Кликните, чтобы задать пароль"
-
-msgid "Enter password here"
-msgstr "Введите пароль"
 
 msgid "Select Player Name"
 msgstr "Выберите имя игрока"
 
-msgid "Alliances"
-msgstr "Союзы"
+msgid "Player Name changes are not allowed when you are muted"
+msgstr "Запрещено изменять имя игрока, когда вы заглушены"
 
-msgid "Base"
-msgstr "База"
+msgid "Player Name changes are not allowed by the host"
+msgstr "Хостом запрещено изменять имя игрока"
 
-msgid "Map Preview"
-msgstr "Предпросмотр карты"
+msgid "Blind Game:"
+msgstr "Игра вслепую:"
 
-msgid "Click to see Map"
-msgstr "Нажмите для просмотра карты"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "- Имена игроков не будут видны другим игрокам (пока игра не закончится)"
 
-msgid "Show Structure Limits"
-msgstr "Показать лимиты построек"
+msgid "Blind Lobby:"
+msgstr "Лобби вслепую:"
 
-msgid "Set Structure Limits"
-msgstr "Лимиты построек"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "- Имена игроков не будут видны другим игрокам (пока игра не начнётся)"
 
-msgid "Random Game Options"
-msgstr "Случайные настройки игры"
+msgid "OPTIONS"
+msgstr "ПАРАМЕТРЫ"
 
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
-"Случайные настройки игры\n"
-"Может быть запрещено голосованием"
-
-msgid "Tech"
-msgstr "Прогресс"
-
-msgid "Technology Level 1"
-msgstr "Уровень технологий 1"
-
-msgid "Technology Level 2"
-msgstr "Уровень технологий 2"
-
-msgid "Technology Level 3"
-msgstr "Уровень технологий 3"
-
-msgid "Technology Level 4"
-msgstr "Уровень технологий 4"
-
-msgid "Start Hosting Game"
-msgstr "Начать хостинг игры"
+msgid "Return To Previous Screen"
+msgstr "Назад"
 
 msgid "DIFFICULTY"
 msgstr "СЛОЖНОСТЬ"
@@ -10043,81 +9856,12 @@ msgstr "Хотите поменять этого зрителя на игрок�
 msgid "Yes, select Player slot"
 msgstr "Да, выбрать слот игрока"
 
-msgid "Joined:"
-msgstr "Присоединился:"
-
-msgid "Ready:"
-msgstr "Готов:"
-
-msgid "Players"
-msgstr "Игроки"
-
-msgid "Host Options"
-msgstr "Настройки хоста"
-
-msgid "Enable Spectator Join"
-msgstr "Разрешить зрителям присоединяться"
-
-msgid "Lock Teams"
-msgstr "Закрыть команды"
-
-msgid "Choose Team"
-msgstr "Выбрать команду"
-
-msgid "Teams locked"
-msgstr "Команды зафиксированы"
-
-msgid "Click to change player colour"
-msgstr "Нажмите, чтобы изменить цвет игрока"
-
-msgid "Click to change player position"
-msgstr "Нажмите, чтобы изменить позицию игрока"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "Нажмите, чтобы изменить ИИ, ПКМ для копирования выбора"
-
-msgid "Click to close spectator slot"
-msgstr "Нажмите, чтобы закрыть слот зрителя"
-
-msgid "Player ID: "
-msgstr "ID игрока: "
-
-msgid "(none)"
-msgstr "(нет)"
-
-msgid "Alt Name:"
-msgstr "Альт. имя:"
-
-msgid "Player rating:"
-msgstr "Рейтинг игрока:"
-
-msgid "Host provided"
-msgstr "Хост предоставлен"
+msgid "BLIND LOBBY NOTICE:"
+msgstr "УВЕДОМЛЕНИЕ ОТ ЛОББИ ВСЛЕПУЮ:"
 
 #, c-format
-msgid "From: %s"
-msgstr "От: %s"
-
-msgid "Click to change difficulty"
-msgstr "Нажмите для изменения сложности"
-
-msgid "Waiting for player"
-msgstr "Ожидание игрока"
-
-msgid "Player is ready"
-msgstr "Игрок готов"
-
-msgid "Player is downloading"
-msgstr "Игрок загружает"
-
-msgid "Click when ready"
-msgstr "Нажмите, когда будете готовы"
-
-msgid "Waiting for download"
-msgstr "Ожидание загрузки"
-
-msgid "READY?"
-msgstr "ГОТОВ?"
+msgid "You have been assigned the codename: \"%s\""
+msgstr "Вам назначено кодовое имя: \"%s\""
 
 msgid "For Spectator:"
 msgstr "Для зрителя:"
@@ -10181,22 +9925,6 @@ msgstr "Подробнее"
 msgid "Sorry! Failed to host the game."
 msgstr "Извините! Не удалось создать игру."
 
-msgid "Game Name Updated."
-msgstr "Имя игры обновлено."
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** Теперь требуется пароль [%s]! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** Пароль не требуется! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "Это карта-мод, она может изменить ваш игровой опыт!"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "Это случайная карта, она может изменить ваш игровой опыт!"
-
 msgid "Host is Starting Game"
 msgstr "Хост начинает игру"
 
@@ -10218,6 +9946,15 @@ msgstr "Проcим %s переместить к игрокам..."
 
 msgid "Disconnected from host:"
 msgstr "Отключение от хоста:"
+
+msgid "Unable to handle host redirect"
+msgstr "Не удаётся разобрать перенаправление хоста"
+
+msgid "Unable to process redirect"
+msgstr "Не удаётся обработать перенаправление"
+
+msgid "Unable to process repeated or invalid redirects"
+msgstr "Не удаётся обработать повторяющиеся или неверные перенаправления"
 
 msgid "Host supplied invalid options"
 msgstr "Хост предоставил недопустимые настройки"
@@ -10262,6 +9999,21 @@ msgstr "Назначение внешнего порта..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "Переадресация портов отключена пользователем. Автонастройка порта %d не будет выполнена."
 
+msgid "BLIND GAME NOTICE:"
+msgstr "УВЕДОМЛЕНИЕ ОТ ИГРЫ ВСЛЕПУЮ:"
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "Имена игроков не будут видны другим игрокам (пока игра не закончится)"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "Имена игроков не будут видны другим игрокам (пока игра не начнётся)"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr "ВАЖНО: Хост также является игроком, и может видеть и настраивать других игроков (!)"
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr "Хост также является зрителем, и может видеть личности и настраивать других игроков / команды"
+
 msgid "Failed to load challenge:"
 msgstr "Не удалось загрузить испытание:"
 
@@ -10280,20 +10032,6 @@ msgstr "Закрыто"
 
 msgid "Open"
 msgstr "Открыть"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "Отправка карты: %u%% "
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "Карта: %u%% загружена"
-
-msgid "HOST"
-msgstr "ХОСТ"
-
-msgid "Ping"
-msgstr "Пинг"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "Версия Warzone 2100 в которой был записан этот файл реплея не совпадает с текущей версией Warzone 2100."
@@ -10324,6 +10062,10 @@ msgid "%s joined the Game"
 msgstr "%s присоединился к игре"
 
 #, c-format
+msgid "(codename: %s)"
+msgstr "(кодовое имя: %s)"
+
+#, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Передача файла была прервана на %d."
 
@@ -10343,9 +10085,6 @@ msgstr "%s присоединяется к игре"
 
 msgid "Server message:"
 msgstr "Сообщение сервера:"
-
-msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "Доступно обновление игры, пожалуйста, посетите https://wz2100.net, чтобы загрузить новую версию."
 
 msgid "LIMITS"
 msgstr "ЛИМИТЫ"
@@ -10385,8 +10124,14 @@ msgstr[1] "%d игрока"
 msgstr[2] "%d игроков"
 msgstr[3] "%d игроков"
 
+msgid "Ping"
+msgstr "Пинг"
+
 msgid "Structs"
 msgstr "Построек"
+
+msgid "Alliances"
+msgstr "Союзы"
 
 msgid "Score"
 msgstr "Счёт"
@@ -10443,25 +10188,6 @@ msgid "Team Strategy"
 msgstr "Стратегия команды"
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr "Лимиты построек изменились: [%d]:"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr "[%d] Лимит [%s]: %u (по умолчанию: %u)"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr "[%d] Лимит [%s]: %u (по умолчанию: без ограничения)"
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] Лимит, который больше чем numStructureStats (%u): %u"
-
-msgid "Limits were reset to default."
-msgstr "Лимиты сброшены по умолчанию."
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr "Хост инициализировал %u лимитов, нельзя показать их из-за модов"
 
@@ -10488,8 +10214,35 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "Хост разблокировал общий чат для игрока: %s"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr "Хост разблокировал общий чат для %d игроков"
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "Хост заблокировал общий чат для игрока: %s"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr "Хост заблокировал общий чат для %d игроков"
+
+msgid "Limits set to default."
+msgstr "Установлены лимиты по умолчанию."
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr "Лимиты построек изменились: [%u]:"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr "[%d] Лимит [%s]: %u (по умолчанию: %u)"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr "[%d] Лимит [%s]: %u (по умолчанию: без ограничения)"
+
+#, c-format
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr ""
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10543,6 +10296,9 @@ msgstr "Оранжевый"
 
 msgid "Grey"
 msgstr "Серый"
+
+msgid "Black"
+msgstr "Чёрный"
 
 msgid "Red"
 msgstr "Красный"
@@ -10661,9 +10417,6 @@ msgstr "Дата"
 
 msgid "Title"
 msgstr "Название"
-
-msgid "MUSIC MANAGER"
-msgstr "МЕНЕДЖЕР МУЗЫКИ"
 
 msgid "Dismiss"
 msgstr "Скрыть"
@@ -10832,9 +10585,6 @@ msgstr "Связанные клавиши:"
 msgid "Enter password"
 msgstr "Введите пароль"
 
-msgid "OK"
-msgstr "ОК"
-
 msgid "Connecting to Game"
 msgstr "Подключение к игре"
 
@@ -10852,6 +10602,9 @@ msgstr "Не удалось присоединиться к игре"
 
 msgid "Error:"
 msgstr "Ошибка:"
+
+msgid "Message from Lobby:"
+msgstr ""
 
 msgid "Join Attempt Rejected"
 msgstr "Запрос на подключение отклонен"
@@ -10877,11 +10630,35 @@ msgstr "Хост разорвал соединение!"
 msgid "Connection Error"
 msgstr "Ошибка соединения"
 
+msgid "Gathering connection details"
+msgstr ""
+
+msgid "Could Not Connect"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "The host has requested additional verification"
+msgstr ""
+
+msgid "No supported connection details"
+msgstr ""
+
 msgid "No connections available"
 msgstr "Нет доступных подключений"
 
 msgid "Synchronizing data with host ..."
 msgstr "Синхронизация данных с хостом..."
+
+msgid "Waiting for lobby error resolution"
+msgstr ""
+
+msgid "Waiting for join info"
+msgstr ""
 
 msgid "Waiting for correct join password"
 msgstr "Ожидание правильного пароля для входа"
@@ -10927,6 +10704,18 @@ msgstr "Некорретный ответ от хоста"
 
 msgid "Requesting to join game"
 msgstr "Отправлен запрос на присоединение к игре"
+
+msgid "Invalid host establishing data"
+msgstr "Неверные данные установки хоста"
+
+msgid "Invalid host identity"
+msgstr "Неверная личность хоста"
+
+msgid "Failed to establish session keys with host"
+msgstr "Не удалось установить ключи сессии с хостом"
+
+msgid "Failure to generate valid response"
+msgstr "Не удалось сгенерировать корректный ответ"
 
 msgid "Kick Spectator"
 msgstr "Выгнать зрителя"
@@ -11160,6 +10949,9 @@ msgstr "Трофей мастерской - ничего"
 msgid "Classic"
 msgstr "Классическое"
 
+msgid "Remastered (HQ)"
+msgstr "Обновлённое (HQ)"
+
 msgid "Additional Campaigns"
 msgstr "Дополнительные кампании"
 
@@ -11225,6 +11017,57 @@ msgstr "Модификаторы PS1"
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr "Уменьшает урон противников до одной третьей от текущего модификатора сложности."
 
+msgid "Infinite Time"
+msgstr "Бесконечное время"
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr "У миссий нет таймера, где это возможно (Бонус энергии за таймер заменяется небольшой наградой энергии, если включено)."
+
+msgid "Victory Hints"
+msgstr "Победные сообщения"
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr "Выводит сообщение в консоль каждые несколько минут с информацией о победе."
+
+msgid "Finale Fun"
+msgstr "Финальное веселье"
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr "Активирует бонусный контент финальной миссии Гамма."
+
+msgid "Gamma Bonus"
+msgstr "Бонус Гамма"
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr "Дополнительные миссии Гамма, использующие карту от команды разработчиков оригинала (карту обновил: DARwins)."
+
+msgid "Additional Spawns (Insane difficulty)"
+msgstr "Дополнительные спавны (Безумная сложность)"
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr "Включает дополнительные спавны противника и поведение для Безумной сложности (или выше)."
+
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr "Дополнительные спавны (Сложности ниже, чем Безумная)"
+
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr "Включает дополнительные спавны противника и поведение для Тяжёлой сложности или выше."
+
+msgid "Fast EXP gain"
+msgstr "Быстрое получение опыта"
+
+msgid "Increases unit experience point gain by 2x."
+msgstr "Увеличивает прирост очков опыта юнитов в 2 раза."
+
+msgid "Tower Wars"
+msgstr "Башенные войны"
+
+msgid "Player gets significantly stronger structures."
+msgstr "Постройки игрока значительно более крепкие."
+
+msgid "Unsupported"
+msgstr "Не поддерживается"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "Расслабленное прохождение - проще простого"
 
@@ -11243,11 +11086,38 @@ msgstr "Безжалостное испытание только для опыт
 msgid "\"Classic\" campaign balance"
 msgstr "Классический баланс кампании"
 
-msgid "Remastered"
-msgstr "Обновлённый"
+msgid "Pumpkin"
+msgstr ""
+
+msgid "\"Pumpkin\" campaign balance"
+msgstr ""
+
+msgid "About Balance Options"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
+msgstr ""
 
 msgid "The remastered campaign experience"
 msgstr "Обновлённый баланс кампании"
+
+msgid "Increases the viability of weaponry and designs on a per mission basis."
+msgstr ""
+
+msgid "Stats of game versions ~2.x - 3.x."
+msgstr ""
+
+msgid "Unintentionally affected by game patches over the years."
+msgstr ""
+
+msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
+msgstr ""
+
+msgid "Remastered"
+msgstr "Обновлённый"
 
 msgid "Difficulty:"
 msgstr "Сложность:"
@@ -11267,102 +11137,1000 @@ msgstr "КАМПАНИИ"
 msgid "GAMES"
 msgstr "ИГРЫ"
 
-msgid "Refresh Games List"
-msgstr "Обновить список игр"
+msgid "Continue"
+msgstr "Продолжить"
 
-msgid "Filter Games List"
-msgstr "Фильтр списка игр"
+msgid "MUSIC MANAGER"
+msgstr "МЕНЕДЖЕР МУЗЫКИ"
 
-msgid "Refreshing..."
-msgstr "Обновление..."
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "Объёмный звук не поддерживается на вашем устройстве / системе / библиотеке OpenAL"
 
-msgid "Searching"
-msgstr "Поиск"
+msgid "Volume"
+msgstr "Громкость"
 
-msgid "Connecting to the lobby server..."
-msgstr "Соединяемся с лобби сервером..."
+msgid "Voice Volume"
+msgstr "Громкость голоса"
 
-msgid "Map Name"
-msgstr "Название карты"
+msgid "FX Volume"
+msgstr "Громкость эффектов"
 
-msgid "Status"
-msgstr "Статус"
+msgid "Music Volume"
+msgstr "Громкость музыки"
 
-msgid "Can't connect to lobby server!"
-msgstr "Не могу соединиться с лобби сервером!"
+msgid "Output"
+msgstr "Вывод"
+
+msgid "HRTF"
+msgstr "Объёмный звук"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr "Объёмный звук может включить улучшенную пространственную обработку при использовании наушников или некоторых стерео выводов."
+
+msgid "Disabled"
+msgstr "Отключено"
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "Auto"
+msgstr "Авто"
+
+msgid "Subtitles"
+msgstr "Субтитры"
+
+msgid "Off"
+msgstr "Выкл"
+
+msgid "On"
+msgstr "Вкл"
+
+msgid "Music"
+msgstr "Музыка"
+
+msgid "Music Manager"
+msgstr "Менеджер музыки"
+
+msgid "Open Music Manager"
+msgstr "Открыть менеджер музыки"
+
+msgid "Audio Cues"
+msgstr "Аудио сигналы"
+
+msgid "Group Reporting"
+msgstr "Рапорты групп"
+
+msgid "Mouse"
+msgstr "Мышь"
+
+msgid "Right-Click Orders"
+msgstr "Приказы на правый клик"
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr "По умолчанию, Warzone 2100 использует левый клик и для выделения и для отдачи приказов / нацеливания. Включите эту опцию, если предпочитаете поведение мыши как в современных RTS. Если вы используете трекпад или тачскрин, возможно, вам лучше откючить это опцию."
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr "Использовать левый клик для выделения и приказов / нацеливания. (по умолчанию в классическом Warzone 2100.)"
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr "Приказывать юнитам двигаться или атаковать правым кликом. Выделение юнитов левым кликом. (Поведение как в других RTS по умолчанию.)"
+
+msgid "Trap Cursor"
+msgstr "Захват курсора"
+
+msgid "Colored Cursors"
+msgstr "Цветные курсоры"
+
+msgid "Cursor Size"
+msgstr "Размер курсора"
+
+msgid "Camera"
+msgstr "Камера"
+
+msgid "Camera Speed"
+msgstr "Скорость камеры"
+
+msgid "Camera Starting Zoom"
+msgstr "Начальный масштаб камеры"
+
+msgid "Camera Zoom Rate"
+msgstr "Скорость зума камеры"
+
+msgid "Mouse Rotate"
+msgstr "Вращение мышью"
+
+msgid "Reverse Rotation"
+msgstr "Инверсия вращения"
+
+msgid "Mouse Pan"
+msgstr "Передвижение мышью"
+
+msgid "Edge Scrolling"
+msgstr "Прокрутка по краю"
+
+msgid "Reset"
+msgstr "Сбросить"
+
+msgid "Reset Keys to:"
+msgstr "Сбросить клавиши на:"
+
+msgid "(Select Profile)"
+msgstr "(Выбрать профиль)"
+
+msgid "Reset Keys to: Defaults"
+msgstr "Сбросить клавиши на: По умолчанию"
+
+msgid "Only useful if Enable IPv6 is On."
+msgstr ""
 
 #, c-format
-msgid "Mods: %s"
-msgstr "Моды: %s"
-
-msgid "Mods: None!"
-msgstr "Моды: отсутствуют!"
+msgid "%u minutes"
+msgstr "%u минут"
 
 #, c-format
-msgid "Version: %s"
-msgstr "Версия: %s"
-
-msgid "Join as spectator"
-msgstr "Присоединиться как зритель"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "Ваша версия Warzone несовместима с этой игрой."
-
-msgid "[Password required]"
-msgstr "[Требуется пароль]"
-
-msgid "[No Tanks]"
-msgstr "[Без танков]"
-
-msgid "[No Cyborgs]"
-msgstr "[Без киборгов]"
-
-msgid "[No VTOLs]"
-msgstr "[Без СВВП]"
+msgid "%u seconds"
+msgstr "%u секунд"
 
 #, c-format
-msgid "Hosted by %s"
-msgstr "Создатель %s"
+msgid "%s hours"
+msgstr "%s часов"
+
+msgid "Unit Color"
+msgstr "Цвет юнитов"
+
+msgid "Difficulty Level"
+msgstr "Уровень сложности"
+
+msgid "Default AI"
+msgstr "ИИ по умолчанию"
+
+msgid "Lobby Options"
+msgstr ""
+
+msgid "Enable IPv6"
+msgstr ""
+
+msgid "Whether to list and try connecting via IPv6 (if available)."
+msgstr ""
+
+msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
+msgstr ""
+
+msgid "Enable IPv6. If your system supports it, this is the recommended option."
+msgstr ""
+
+msgid "Prefer IPv6 over IPv4"
+msgstr ""
+
+msgid "Prefer connecting via IPv6 over IPv4 when a game is available via both."
+msgstr ""
+
+msgid "Hosting Options"
+msgstr "Настройки хостинга"
+
+msgid "Port Mapping"
+msgstr "Переадресация портов"
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr "Используйте PCP, NAT-PMP или UPnP, чтобы настроить роутер/сетевой экран на принятие соединений при хостинге."
+
+msgid "Chat"
+msgstr "Чат"
+
+msgid "Quick Chat Only"
+msgstr "Только Быстрые сообщения"
+
+msgid "Allow All"
+msgstr "Разрешить всё"
+
+msgid "Inactivity Timeout"
+msgstr "Таймаут бездействия"
+
+msgid "Lag Kick"
+msgstr "Исключать из-за лагов"
+
+msgid "Spectator Slots"
+msgstr "Слоты зрителей"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "On Player Leave"
+msgstr "При выходе игрока"
+
+msgid "Distribute to Team"
+msgstr "Раздать команде"
+
+msgid "Destroy (Classic)"
+msgstr "Уничтожить (классика)"
+
+msgid "Game Time Limit"
+msgstr "Лимит времени"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr "Затенение ландшафта применяется только при использовании вида ландшафта: Обновлённое (HQ)"
+
+msgid "Shadows are not enabled."
+msgstr "Тени выключены."
+
+msgid "Shadow mapping not available on this system."
+msgstr "Карты теней недоступны в этой системе."
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr "Продвинутое освещение применяется только при использовании вида ландшафта: Обновлённое (HQ)"
+
+msgid "Terrain"
+msgstr "Ландшафт"
+
+msgid "Terrain Appearance"
+msgstr "Вид ландшафта"
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr "Классический вид ландшафта из исходного релиза. Пиксель-арт текстуры, низкое разрешение."
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr "Обычный вид ландшафта, используемый по умолчанию более десяти лет. Более высокое разрешение, пересозданные текстуры."
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr "Обновлённый, высококачественный внешний вид местности. Высокое разрешение с современными картами отражений и рельефным текстурированием. Требует больше памяти и хороший GPU."
+
+msgid "Terrain Shading Quality"
+msgstr "Качество затенения ландшафта"
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr "Качество затенения ландшафта (карты нормалей, зеркальные блики и т.д.). Более высокие настройки улучшают детализированность ландшафта ценой производительности и расхода памяти."
+
+msgid "Medium Quality"
+msgstr "Среднее качество"
+
+msgid "High Quality"
+msgstr "Высокое качество"
+
+msgid "Shadows"
+msgstr "Тени"
+
+msgid "Draw Shadows"
+msgstr "Отрисовка теней"
+
+msgid "Terrain Shadows"
+msgstr ""
+
+msgid "Whether terrain casts shadows."
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "Разрешение теней"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr "Внутреннее разрешение, используемое для отрисовки карт теней. Более высокие значения улучшают внешний вид теней ценой производительности и расхода памяти."
+
+msgid "High"
+msgstr "Высоко"
+
+msgid "Shadow Filtering"
+msgstr "Фильтрация теней"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr "Как сильно внешний вид теней фильтруется / сглаживается. Более высокие значения дают более гладкие тени ценой производительности."
+
+msgid "Low"
+msgstr "Низко"
+
+msgid "Ultra"
+msgstr "Ультра"
+
+msgid "Lighting"
+msgstr "Освещение"
+
+msgid "Point Lights"
+msgstr "Точечное освещение"
+
+msgid "Lightmap"
+msgstr "Карта освещения"
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr "Использовать классическую карту освещения для расчёта точечного освещения, влияющего на объекты и тайлы. (по умолчанию для Классического и Нормального. Самая высокая производительность.)"
+
+msgid "Per-Pixel (HQ)"
+msgstr "Попиксельное (HQ)"
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr "Использовать продвинутое попиксельное точечное освещение для улучшения графики. (Может повлиять на производительность. Требует более мощный GPU.)"
+
+msgid "Effects"
+msgstr "Эффекты"
+
+msgid "Fog"
+msgstr "Туман"
+
+msgid "Screen Shake"
+msgstr "Тряска экрана"
+
+msgid "Textures"
+msgstr "Текстуры"
+
+msgid "Texture Size Limit"
+msgstr "Лимит размера текстур"
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr "Текстуры, размер которых превышает установленный предел, будут уменьшены. Обычно должно быть установлено на максимальное значение, только если игра не запущена на системе с ограниченной доступной памятью."
+
+msgid "LOD Distance"
+msgstr "Дистанция LOD"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr "Как сохраняется уровень детализации (текстур) по мере увеличения расстояния."
+
+msgid "Default"
+msgstr "По умолчанию"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr "По умолчанию как в системе (без смещения уровня детализации, может привести к менее чёткой графике)."
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr "Использовать смещение уровня детализации на дистанции (LOD) для увеличения чёткости графики."
+
+msgid "Advanced"
+msgstr "Продвинутые"
+
+msgid "Graphics Backend"
+msgstr "Графический движок"
+
+msgid "Antialiasing"
+msgstr "Сглаживание"
+
+msgid "Vertical Sync"
+msgstr "Верт. синхронизация"
+
+msgid "Adaptive"
+msgstr "Адаптивный"
+
+msgid "General"
+msgstr "Общее"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Display Scale"
+msgstr "Масштаб дисплея"
+
+msgid "Game UI"
+msgstr "Игровой интерфейс"
+
+msgid "Show FPS"
+msgstr "Показывать FPS"
+
+msgid "Show Unit Counts"
+msgstr "Показать кол-во юнитов"
+
+msgid "Groups Menu"
+msgstr "Меню групп"
+
+msgid "Options Button"
+msgstr "Кнопка настроек"
+
+msgid "Opacity: 50%"
+msgstr "Прозрачность: 50%"
+
+msgid "Radar"
+msgstr "Миникарта"
+
+msgid "Radar Orientation"
+msgstr "Ориентация миникарты"
+
+msgid "Fixed"
+msgstr "Фиксированная"
+
+msgid "Rotating"
+msgstr "Вращающаяся"
+
+msgid "Radar Jump"
+msgstr "Переход по миникарте"
+
+msgid "Instant"
+msgstr "Мгновенный"
+
+msgid "Tracked"
+msgstr "Плавный"
+
+msgid "Radar Zoom"
+msgstr "Масштаб миникарты"
+
+msgid "Video Playback"
+msgstr "Видео"
+
+msgid "Video Size"
+msgstr "Размер видео"
+
+msgid "1×"
+msgstr "1×"
+
+msgid "2×"
+msgstr "2×"
+
+msgid "Fullscreen"
+msgstr "Полный экран"
+
+msgid "Scanlines"
+msgstr "ТВ развёртка"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "Открыть папку конфигурации"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "Не удалось открыть папку конфигурации в системном файловом менеджере."
+
+msgid "Configuration directory is reported as:"
+msgstr "Директория конфигурации указана как:"
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "При работе в контейнере / изолированной среде этот путь может отличаться от фактического пути на диске."
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "Более подробную информацию о том, как найти это вручную, см. в документации."
+
+msgid "Failed to open configuration directory"
+msgstr "Не удалось открыть папку конфигурации"
+
+msgid "Interface"
+msgstr "Интерфейс"
+
+msgid "Defaults"
+msgstr "По умолчанию"
+
+msgid "Graphics"
+msgstr "Графика"
+
+msgid "Audio"
+msgstr "Аудио"
+
+msgid "Controls"
+msgstr "Управление"
+
+msgid "Window"
+msgstr "Окно"
+
+msgid "Desktop Full"
+msgstr "Во весь экран"
+
+msgid "Window Mode"
+msgstr "Оконный режим"
+
+msgid "Windowed"
+msgstr "В окне"
+
+msgid "Fullscreen Mode"
+msgstr "Полноэкранный режим"
+
+msgid "Behaviors"
+msgstr "Поведение"
+
+msgid "Minimize on Focus Loss"
+msgstr "Минимизировать при потере фокуса"
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "Должно ли окно автоматически сворачиваться при потере фокуса"
+
+msgid "On (Fullscreen)"
+msgstr "Вкл (полноэкранный)"
+
+msgid "Host:"
+msgstr "Хост:"
+
+msgid "NOTE: Host is also a player."
+msgstr "ПРИМЕЧАНИЕ: Хост также является игроком."
+
+msgid "Player ID: "
+msgstr "ID игрока: "
+
+msgid "(none)"
+msgstr "(нет)"
+
+msgid "You:"
+msgstr "Вы:"
+
+msgid "Waiting for host to configure teams"
+msgstr "Ждём пока хост настраивает команды"
+
+msgid "Waiting for players"
+msgstr "Ждём игроков"
+
+msgid "Downloading map / mods"
+msgstr "Загрузка карты / модов"
+
+msgid "Waiting for you to check ready"
+msgstr "Ждём вас, когда вы отметите готовность"
+
+msgid "Waiting for host to start game"
+msgstr "Ждём пока хост запустит игру"
+
+msgid "Waiting for spectators"
+msgstr "Ждём зрителей"
+
+msgid "Players ready & waiting for match:"
+msgstr "Игроки готовы и ждут матча:"
 
 #, c-format
-msgid "Hosted by %s —%s"
-msgstr "Создатель %s —%s"
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr "Игроков: (%zu готово, %zu не готово)"
 
-msgid "Can't find any games for your version."
-msgstr "Не могу найти игры для вашей версии."
+#, c-format
+msgid "AI Bots: %zu"
+msgstr "ИИ ботов: %zu"
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr "Зрителей: (%zu готово, %zu не готово)"
+
+#, c-format
+msgid "Host: %s"
+msgstr "Хост: %s"
+
+msgid "ready"
+msgstr "готов"
+
+msgid "not ready"
+msgstr "не готов"
+
+msgid "Waiting Room"
+msgstr "Комната ожидания"
+
+msgid "Reset Lobby Address to Default"
+msgstr ""
+
+#, c-format
+msgid "Host Name: %s"
+msgstr ""
+
+#, c-format
+msgid "ID: %s"
+msgstr ""
+
+msgid "FFA"
+msgstr "FFA"
+
+msgid "Alliances Allowed"
+msgstr "Союзы разрешены"
+
+msgid "Teams"
+msgstr "Команды"
+
+msgid "Teams (No Shared Res)"
+msgstr "Команды (раздельные ресурсы)"
+
+msgid "Matchmaking"
+msgstr "Подбор игроков"
+
+msgid "Blind Lobby"
+msgstr "Лобби вслепую"
+
+msgid "Blind Game"
+msgstr "Игра вслепую"
+
+msgid "No Tanks"
+msgstr "Без танков"
+
+msgid "No VTOL"
+msgstr "Без СВВП"
+
+msgid "No Cyborgs"
+msgstr "Без киборгов"
+
+msgid "Spectate Game"
+msgstr "Наблюдать за игрой"
+
+msgid "Join as Player"
+msgstr ""
+
+msgid "Join as Spectator"
+msgstr ""
+
+#, c-format
+msgid "Last IP: %s"
+msgstr ""
+
+msgid "Clear Last IP"
+msgstr ""
+
+msgid "GameID or IP:port"
+msgstr ""
+
+msgid "Join"
+msgstr ""
 
 msgid "There appears to be a game update available!"
 msgstr "Похоже, доступно обновление игры!"
 
-msgid "No games are available for your version"
-msgstr "Нет доступных игр для вашей версии"
+msgid "Error dispatching request"
+msgstr ""
 
-msgid "Wrong Game Version!"
-msgstr "Неверная версия игры!"
+msgid "Failed to connect to lobby server"
+msgstr "Не удалось соединиться с лобби сервера"
 
-msgid "You have an incompatible mod."
-msgstr "У вас несовместимый мод."
+msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
+msgstr ""
 
-msgid "Host couldn't send file?"
-msgstr "Хост не может отправить файл?"
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "Ваша версия Warzone несовместима с этой игрой."
 
-msgid "Incorrect Password!"
-msgstr "Неверный пароль!"
+#, c-format
+msgid "Host Version: %s"
+msgstr "Версия хоста: %s"
 
-msgid "Continue"
-msgstr "Продолжить"
+msgid "(50+ omitted)"
+msgstr "(50+ пропущено)"
 
-msgid "CONNECTION"
-msgstr "СОЕДИНЕНИЕ"
+#, c-format
+msgid "(%u omitted)"
+msgstr "(%u пропущено)"
 
-msgid "Lobby"
-msgstr "Лобби"
+msgid "No games for your version"
+msgstr "Нет игр для вашей версии"
 
-msgid "IP"
-msgstr "IP"
+msgid "No games matching filters"
+msgstr "Нет игр, соответствующих фильтрам"
 
-msgid "IP Address or Machine Name"
-msgstr "IP-адрес или имя компьютера"
+#, c-format
+msgid "%d players queued"
+msgstr "Игроков в очереди: %d"
+
+msgid "Matchmaking Room: Open"
+msgstr "Комната подбора игроков: открыта"
+
+msgid "Filters"
+msgstr "Фильтры"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Mods"
+msgstr "Моды"
+
+msgid "Hide Incompatible Games"
+msgstr "Скрыть несовместимые игры"
+
+msgid "Hide Empty Games"
+msgstr "Скрыть пустые игры"
+
+msgid "Hide Modded Games"
+msgstr "Скрыть модифицированные игры"
+
+msgid "Hide IPv6-Only"
+msgstr ""
+
+msgid "Host Lobby Options"
+msgstr ""
+
+msgid "Game must be listed in lobby to support this option."
+msgstr ""
+
+msgid "This option is not supported by the current lobby."
+msgstr ""
+
+msgid "Awaiting lobby information..."
+msgstr ""
+
+msgid "Slot Options"
+msgstr ""
+
+msgid "Spectator Join"
+msgstr ""
+
+msgid "Locked"
+msgstr ""
+
+msgid "Allow Change"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Game Options"
+msgstr ""
+
+msgid "Lobby Join Options"
+msgstr ""
+
+msgid "Bot Protection"
+msgstr ""
+
+msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
+msgstr ""
+
+msgid "Block Known Bots"
+msgstr ""
+
+msgid "Block known bots or automated tools."
+msgstr ""
+
+msgid "Proxy / VPN Connections"
+msgstr ""
+
+msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
+msgstr ""
+
+msgid "Block suspicious connections from proxies / VPNs."
+msgstr ""
+
+msgid "(Recommended)"
+msgstr ""
+
+msgid "Block All"
+msgstr ""
+
+msgid "Block all connections from proxies / VPNs."
+msgstr ""
+
+msgid "Block Suspicious"
+msgstr ""
+
+msgid "Hosting Provider IPs"
+msgstr ""
+
+msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
+msgstr ""
+
+msgid "Block all connections from hosting provider IPs."
+msgstr ""
+
+msgid "Block suspicious connections from hosting provider IPs."
+msgstr ""
+
+msgid "Lobby Join Bypass"
+msgstr ""
+
+msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
+msgstr ""
+
+msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
+msgstr ""
+
+msgid "(Not Recommended)"
+msgstr ""
+
+msgid "Do not allow direct joins. Require joining through the lobby."
+msgstr ""
+
+msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
+msgstr ""
+
+msgid "Joined:"
+msgstr "Присоединился:"
+
+msgid "Ready:"
+msgstr "Готов:"
+
+msgid "Players"
+msgstr "Игроки"
+
+msgid "Host Options"
+msgstr "Настройки хоста"
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "Отправка карты: %u%% "
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "Карта: %u%% загружена"
+
+msgid "HOST"
+msgstr "ХОСТ"
+
+msgid "Choose Team"
+msgstr "Выбрать команду"
+
+msgid "Teams locked"
+msgstr "Команды зафиксированы"
+
+msgid "Click to change player colour"
+msgstr "Нажмите, чтобы изменить цвет игрока"
+
+msgid "Click to change player position"
+msgstr "Нажмите, чтобы изменить позицию игрока"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "Нажмите, чтобы изменить ИИ, ПКМ для копирования выбора"
+
+msgid "Click to close spectator slot"
+msgstr "Нажмите, чтобы закрыть слот зрителя"
+
+msgid "Click to change difficulty"
+msgstr "Нажмите для изменения сложности"
+
+msgid "Waiting for player"
+msgstr "Ожидание игрока"
+
+msgid "Player is ready"
+msgstr "Игрок готов"
+
+msgid "Player is downloading"
+msgstr "Игрок загружает"
+
+msgid "Click when ready"
+msgstr "Нажмите, когда будете готовы"
+
+msgid "Waiting for download"
+msgstr "Ожидание загрузки"
+
+msgid "READY?"
+msgstr "ГОТОВ?"
+
+msgid "Tanks disabled!!"
+msgstr "Танки отключены!!"
+
+msgid "Cyborgs disabled."
+msgstr "Киборги отключены."
+
+msgid "VTOLs disabled."
+msgstr "СВВП отключены."
+
+msgid "Satellite Uplink disabled."
+msgstr "Центр связи со спутником отключён."
+
+msgid "Laser Satellite disabled."
+msgstr "Лазерный спутник отключён."
+
+msgid "Structure Limits Enforced."
+msgstr "Введён лимит строений."
+
+msgid "Challenge:"
+msgstr "Испытание:"
+
+msgid "Skirmish:"
+msgstr "Схватка:"
+
+msgid "Local (Offline)"
+msgstr "Локальный (оффлайн)"
+
+msgid "Hosting:"
+msgstr "Хостинг:"
+
+msgid "Password-Protected (Private)"
+msgstr "Защищённый паролем (приватный)"
+
+msgid "Open (Public)"
+msgstr "Открытый (публичный)"
+
+msgid "Connected to Host:"
+msgstr "Подключено к хосту:"
+
+msgid "Set Password"
+msgstr "Установить пароль"
+
+msgid "Require Password to Join"
+msgstr "Запрашивать пароль для присоединения"
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** Теперь требуется пароль [%s]! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** Пароль не требуется! ***"
+
+msgid "Game Name Updated."
+msgstr "Имя игры обновлено."
+
+msgid "Set Game Name"
+msgstr "Задать название игры"
+
+msgid "One-Player Skirmish"
+msgstr "Одиночное сражение"
+
+msgid "Edit Game Name"
+msgstr "Изменить название игры"
+
+msgid "Game Name"
+msgstr "Название игры"
+
+msgid "Click to see Map"
+msgstr "Нажмите для просмотра карты"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"Выберите карту\n"
+"Может быть запрещено голосованием"
+
+msgid "Match Options"
+msgstr "Настройки матча"
+
+msgid "Base"
+msgstr "База"
+
+msgid "Tech"
+msgstr "Прогресс"
+
+msgid "Technology Level 1"
+msgstr "Уровень технологий 1"
+
+msgid "Technology Level 2"
+msgstr "Уровень технологий 2"
+
+msgid "Technology Level 3"
+msgstr "Уровень технологий 3"
+
+msgid "Technology Level 4"
+msgstr "Уровень технологий 4"
+
+msgid "Limits"
+msgstr "Лимиты"
+
+msgid "Randomize Options"
+msgstr "Настройки случайности"
+
+msgid "Match Option Preferences:"
+msgstr "Предпочтения настроек матча:"
+
+msgid "Star All"
+msgstr "Включить всё"
+
+msgid "Clear All"
+msgstr "Очистить всё"
+
+msgid "Show Player Preferences"
+msgstr "Показать предпочтения игрока"
+
+msgid "Hide Player Preferences"
+msgstr "Скрыть предпочтения игрока"
+
+msgid "Not editable while in a game."
+msgstr "Нельзя изменить, будучи в игре."
+
+msgid "Not editable while in a multiplayer game."
+msgstr "Нельзя изменить, будучи в сетевой игре."
+
+msgid "Takes effect on game restart"
+msgstr "Вступит в силу после перезагрузки игры"
+
+msgid "Advanced Hosting Options:"
+msgstr "Продвинутые настройки хостинга:"
+
+msgid "Host Role"
+msgstr "Роль хоста"
+
+msgid "Player Host"
+msgstr "Игрок-хост"
+
+msgid "Host is a player in the game (the default)."
+msgstr "Хост является игроком в игре (по умолчанию)."
+
+msgid "Spectator Host"
+msgstr "Зритель-хост"
+
+msgid "Host is a spectator in the game."
+msgstr "Хост является зрителем в игре."
+
+msgid "Blind Mode"
+msgstr "Режим вслепую"
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr "Как и когда личности других игроков не показываются другим игрокам."
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr "Режимы вслепую доступны только если хост — зритель."
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr "Личности игроков видны в лобби и в игре (по умолчанию)."
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr "Личности игроков скрыты от всех (кроме зрителя-хоста) до тех пор, пока игра не начнется."
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr "Личности игроков скрыты от всех (кроме зрителя-хоста) до тех пор, пока игра не закончится."
+
+msgid "Start Hosting"
+msgstr "Начать хостинг"
+
+msgid "Configure Advanced Hosting Options"
+msgstr "Изменить продвинутые настройки хостинга"
 
 msgid "Launch Transport"
 msgstr "Запустить транспорт"

@@ -1,0 +1,53 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::thermaldamage",
+	"title": "Kinetic & Thermal Damage",
+	"sort": "05",
+	"visual": [
+		{
+			"stat": {
+				"id": "Flame1Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Flame2",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Mortar-Incendiary",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Bomb3-VTOL-LtINC",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Bomb4-VTOL-HvyINC",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Most weapons deal damage through kinetic means (bullets, rockets, etc.), and are therefore affected by standard kinetic armor plating.",
+		"",
+		"However, some weapons instead deal thermal damage, which is unaffected by a target's kinetic armor.",
+		"",
+		"Instead, thermal weapons are mitigated by a target's thermal armor.",
+		"",
+		"A unit's kinetic and thermal armor can be seen in the design menu, on the body selection screen.",
+		"",
+		"Note that all units have less thermal armor than kinetic armor. This means thermal damage will be reduced less than kinetic damage!"
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::units::designing"
+	]
+}

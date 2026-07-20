@@ -23,6 +23,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include "lib/framework/wzglobal.h" // for WZ_GNS_NETWORK_BACKEND_ENABLED
+
 #include "lib/netplay/wz_connection_provider.h"
 
 /// <summary>
@@ -30,7 +32,10 @@
 /// </summary>
 enum class ConnectionProviderType : uint8_t
 {
-	TCP_DIRECT
+	TCP_DIRECT,
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	GNS_DIRECT,
+#endif
 };
 
 /// <summary>
@@ -42,11 +47,12 @@ public:
 
 	static ConnectionProviderRegistry& Instance();
 
-	WzConnectionProvider& Get(ConnectionProviderType pt);
+	std::shared_ptr<WzConnectionProvider> Get(ConnectionProviderType pt);
 	bool IsRegistered(ConnectionProviderType) const;
 
 	void Register(ConnectionProviderType pt);
-	void Deregister(ConnectionProviderType pt);
+
+	void Shutdown();
 
 private:
 
@@ -54,5 +60,5 @@ private:
 	ConnectionProviderRegistry(const ConnectionProviderRegistry&) = delete;
 	ConnectionProviderRegistry(ConnectionProviderRegistry&&) = delete;
 
-	std::unordered_map<ConnectionProviderType, std::unique_ptr<WzConnectionProvider>> registeredProviders_;
+	std::unordered_map<ConnectionProviderType, std::shared_ptr<WzConnectionProvider>> registeredProviders_;
 };

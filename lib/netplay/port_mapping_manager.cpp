@@ -361,6 +361,11 @@ void PortMappingManager::scheduleCallbacksOnMainThread(CallbacksPerRequest cbReq
 				}
 			});
 		}
+		else if (cb.first->status() == PortMappingDiscoveryStatus::NOT_STARTED)
+		{
+			// That would probably mean that the request in question has already been cancelled.
+			// Just ignore it and don't schedule any callbacks.
+		}
 		else
 		{
 			ASSERT(false, "Should be unreachable");
@@ -426,10 +431,10 @@ void PortMappingManager::thread_monitor_function()
 					++it;
 				}
 			}
+			// Schedule execution of registered callbacks for all requests, which have already
+			// transitioned to some terminal (either success or failure) state.
+			scheduleCallbacksOnMainThread(std::move(callbacksPerRequest));
 		}
-		// Schedule execution of registered callbacks for all requests, which have already
-		// transitioned to some terminal (either success or failure) state.
-		scheduleCallbacksOnMainThread(std::move(callbacksPerRequest));
 		callbacksPerRequest.clear();
 		// Move any requestsSwitchingImpl to the appropriate mapping entry in the activeDiscoveriesMap_
 		for (const auto& req : requestsSwitchingImpl)

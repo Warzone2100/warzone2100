@@ -55,8 +55,8 @@
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
-#include "clparse.h" // for autoratingUrl
 #include "terrain.h"
+#include "lib/netplay/netlobby.h"
 #include "hci/groups.h"
 
 #include <type_traits>
@@ -64,12 +64,13 @@
 #include "3rdparty/INIReaderWriter.h"
 #include "3rdparty/gsl_finally.h"
 
+#include <fmt/core.h>
+
 // ////////////////////////////////////////////////////////////////////////////
 
-#define MASTERSERVERPORT	9990
 #define GAMESERVERPORT		2100
 #define BASECONFVERSION		1
-#define CURRCONFVERSION		2
+#define CURRCONFVERSION		4
 
 static const char *fileName = "config";
 
@@ -88,7 +89,6 @@ static inline std::string WZ_PHYSFS_getRealPath(const char *filename)
 
 static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
 {
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	PHYSFS_Stat metaData = {};
 	if (PHYSFS_stat(filename, &metaData) == 0)
 	{
@@ -100,9 +100,6 @@ static inline optional<uint64_t> WZ_PHYSFS_getFileSize(const char *filename)
 		return nullopt;
 	}
 	return static_cast<uint64_t>(metaData.filesize);
-#else
-	return nullopt;
-#endif
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -128,6 +125,29 @@ static optional<int> iniSectionGetInteger(const INIReaderWriter::IniSection& ini
 static void iniSectionSetInteger(INIReaderWriter::IniSection& iniSection, const std::string& key, int value)
 {
 	iniSection.SetString(key, std::to_string(value));
+}
+
+static optional<float> iniSectionGetFloat(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<float> defaultValue = nullopt)
+{
+	if (!iniSection.HasValue(key))
+	{
+		return defaultValue;
+	}
+	try {
+		auto valueStr = iniSection.Get(key, "");
+		float valueFloat = std::stof(valueStr);
+		return valueFloat;
+	}
+	catch (const std::exception& e)
+	{
+		debug(LOG_ERROR, "Failed to convert value for key: \"%s\" to float; error: %s", key.c_str(), e.what());
+		return defaultValue;
+	}
+}
+
+static void iniSectionSetFloat(INIReaderWriter::IniSection& iniSection, const std::string& key, float value)
+{
+	iniSection.SetString(key, fmt::format("{:g}", value));
 }
 
 static optional<bool> iniSectionGetBool(const INIReaderWriter::IniSection& iniSection, const std::string& key, optional<bool> defaultValue = nullopt)
@@ -295,6 +315,10 @@ bool loadConfig()
 		return iniSectionGetInteger(iniGeneral, key, defaultValue);
 	};
 
+	auto iniGetFloat = [&iniGeneral](const std::string& key, optional<int> defaultValue) -> optional<int> {
+		return iniSectionGetFloat(iniGeneral, key, defaultValue);
+	};
+
 	auto iniGetIntegerOpt = [&iniGeneral](const std::string& key) -> optional<int> {
 		return iniSectionGetInteger(iniGeneral, key);
 	};
@@ -309,6 +333,27 @@ bool loadConfig()
 
 	auto iniGetString = [&iniGeneral](const std::string& key, optional<std::string> defaultValue) -> optional<std::string> {
 		return iniSectionGetString(iniGeneral, key, defaultValue);
+	};
+
+	auto iniGetMouseKeyCode = [&iniGeneral](const std::string& key, optional<MOUSE_KEY_CODE> defaultValue) -> optional<MOUSE_KEY_CODE> {
+		auto intVal = iniSectionGetInteger(iniGeneral, key);
+		if (!intVal.has_value())
+		{
+			return defaultValue;
+		}
+		if (intVal.value() == 0)
+		{
+			return nullopt; // 0 represents "disabled"
+		}
+		if (intVal.value() >= MOUSE_LMB && intVal.value() <= MOUSE_X2) // deliberately exclude mouse MOUSE_WUP + MOUSE_WDN
+		{
+			return static_cast<MOUSE_KEY_CODE>(intVal.value());
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid MOUSE_KEY_CODE value: %d", intVal.value());
+			return defaultValue;
+		}
 	};
 
 	auto iniGetPlayerLeaveMode = [&iniGeneral](const std::string& key, PLAYER_LEAVE_MODE defaultValue) -> optional<PLAYER_LEAVE_MODE> {
@@ -329,6 +374,8 @@ bool loadConfig()
 	};
 
 	ActivityManager::instance().beginLoadingSettings();
+
+	auto configVersion = iniGetInteger("configVersion", BASECONFVERSION).value();
 
 	if (auto value = iniGetIntegerOpt("voicevol"))
 	{
@@ -394,7 +441,24 @@ bool loadConfig()
 	war_setSoundEnabled(iniGetBool("sound", true).value());
 	setInvertMouseStatus(iniGetBool("mouseflip", true).value());
 	setRightClickOrders(iniGetBool("RightClickOrders", false).value());
-	setMiddleClickRotate(iniGetBool("MiddleClickRotate", false).value());
+	setPanMouseKey(iniGetMouseKeyCode("mouseKeyPan", getPanMouseKey()));
+	if (!createdConfigFile && configVersion < 3)
+	{
+		// Upgrade old MiddleClickRotate value
+		auto oldMiddleClickRotateValue = iniGetBool("MiddleClickRotate", false).value();
+		if (!setRotateMouseKey((oldMiddleClickRotateValue) ? MOUSE_MMB : MOUSE_RMB) && !oldMiddleClickRotateValue)
+		{
+			// if unable to set (because of conflict, presumably with RightClickOrders), default to MMB
+			setRotateMouseKey(MOUSE_MMB);
+		}
+	}
+	else
+	{
+		setRotateMouseKey(iniGetMouseKeyCode("mouseKeyRotate", getRotateMouseKey()));
+	}
+	setPinchToZoomTouchGesture(iniGetBool("pinchToZoom", getPinchToZoomTouchGesture()).value());
+	setPanTouchGesture(iniGetBool("touchPan", getPanTouchGesture()).value());
+	setEdgeScrollOutsideWindowBounds(iniGetBool("edgeScrollOutsideWindow", getEdgeScrollOutsideWindowBounds()).value());
 	if (auto value = iniGetIntegerOpt("cursorScale"))
 	{
 		war_setCursorScale(value.value());
@@ -411,14 +475,11 @@ bool loadConfig()
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
 	war_SetPauseOnFocusLoss(iniGetBool("PauseOnFocusLoss", false).value());
-	setAutoratingUrl(iniGetString("autoratingUrlV2", WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL).value());
-	setAutoratingEnable(iniGetBool("autorating", false).value());
-	NETsetMasterserverName(iniGetString("masterserver_name", "lobby.wz2100.net").value().c_str());
-	mpSetServerName(iniGetString("server_name", "").value());
+	NETsetLobbyserverAddress(iniGetString("lobbyserver", std::string(netlobby::GetDefaultLobbyAddress())).value());
+	war_setLastIpServerConnect(iniGetString("server_name", "").value());
 //	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
 //	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 //	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
-	NETsetMasterserverPort(iniGetInteger("masterserver_port", MASTERSERVERPORT).value());
 	if(!netGameserverPortOverride)  // do not load the config port setting if there's a command-line override
 	{
 		NETsetGameserverPort(iniGetInteger("gameserver_port", GAMESERVERPORT).value());
@@ -426,13 +487,29 @@ bool loadConfig()
 	NETsetJoinPreferenceIPv6(iniGetBool("prefer_ipv6", true).value());
 	NETsetDefaultMPHostFreeChatPreference(iniGetBool("hostingChatDefault", NETgetDefaultMPHostFreeChatPreference()).value());
 	NETsetEnableTCPNoDelay(iniGetBool("tcp_nodelay", NETgetEnableTCPNoDelay()).value());
+	{
+		auto lobbyHostJoinOpts = NETgetLobbyHostJoinOptions();
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_botProt"))
+		{
+			lobbyHostJoinOpts.botProt = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_proxyIPs"))
+		{
+			lobbyHostJoinOpts.proxyIPs = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		if (auto value = iniGetIntegerOpt("lobbyHostJoinOpts_hostingIPs"))
+		{
+			lobbyHostJoinOpts.hostingIPs = static_cast<netlobby::HostJoinOptionValue>(std::clamp<int>(value.value(), static_cast<int>(netlobby::HostJoinOptionValue::BlockAll), static_cast<int>(netlobby::HostJoinOptionValue::Allow)));
+		}
+		NETsetLobbyHostJoinOptions(lobbyHostJoinOpts);
+	}
 	setPublicIPv4LookupService(iniGetString("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).value());
 	setPublicIPv6LookupService(iniGetString("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).value(), iniGetString("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).value());
 	war_SetFMVmode((FMV_MODE)iniGetInteger("FMVmode", war_GetFMVmode()).value());
 	war_setScanlineMode((SCANLINE_MODE)iniGetInteger("scanlines", SCANLINES_OFF).value());
 	seq_SetSubtitles(iniGetBool("subtitles", true).value());
 	setDifficultyLevel((DIFFICULTY_LEVEL)iniGetInteger("difficulty", DL_NORMAL).value());
-	if (!createdConfigFile && iniGetInteger("configVersion", BASECONFVERSION).value() < CURRCONFVERSION)
+	if (!createdConfigFile && configVersion < 2)
 	{
 		int level = (int)getDifficultyLevel() + 1;
 		if (level > static_cast<int>(AIDifficulty::INSANE))
@@ -483,12 +560,32 @@ bool loadConfig()
 	if (auto value = iniGetIntegerOpt("fullscreen"))
 	{
 		int fullscreenmode_int = value.value();
+		// Handle porting from old fullscreen values
+		if (fullscreenmode_int != static_cast<int>(WINDOW_MODE::windowed))
+		{
+			fullscreenmode_int = static_cast<int>(WINDOW_MODE::fullscreen);
+		}
 		if (fullscreenmode_int >= static_cast<int>(MIN_VALID_WINDOW_MODE) && fullscreenmode_int <= static_cast<int>(MAX_VALID_WINDOW_MODE))
 		{
 			war_setWindowMode(static_cast<WINDOW_MODE>(fullscreenmode_int));
 		}
 	}
-	war_SetTrapCursor(iniGetBool("trapCursor", false).value());
+	if (!createdConfigFile && configVersion < 3)
+	{
+		// Upgrade old bool value to TrapCursorMode
+		// - map true -> Enabled and upgrade false -> Automatic
+		auto oldBoolValue = iniGetBool("trapCursor", false).value();
+		war_SetTrapCursor((oldBoolValue) ? TrapCursorMode::Enabled : TrapCursorMode::Automatic);
+	}
+	else
+	{
+		auto intTrapCursorValue = iniGetInteger("trapCursor", static_cast<int>(TrapCursorMode::Automatic)).value();
+		if (intTrapCursorValue < static_cast<int>(TrapCursorMode::Disabled) || intTrapCursorValue > static_cast<int>(TrapCursorMode::Automatic))
+		{
+			intTrapCursorValue = static_cast<int>(TrapCursorMode::Automatic);
+		}
+		war_SetTrapCursor(static_cast<TrapCursorMode>(intTrapCursorValue));
+	}
 	war_SetColouredCursor(iniGetBool("coloredCursor", true).value());
 	// this should be enabled on all systems by default
 	war_SetVsync(iniGetInteger("vsync", 1).value());
@@ -521,16 +618,22 @@ bool loadConfig()
 
 	int fullscreenWidth = iniGetInteger("fullscreenWidth", war_GetFullscreenModeWidth()).value();
 	int fullscreenHeight = iniGetInteger("fullscreenHeight", war_GetFullscreenModeHeight()).value();
+	float fullscreenPixelDensity = iniGetFloat("fullscreenPixelDensity", war_GetFullscreenModePixelDensity()).value();
+	float fullscreenRefreshRate = iniGetFloat("fullscreenRefreshRate", war_GetFullscreenModeRefreshRate()).value();
 	int fullscreenScreen = iniGetInteger("fullscreenScreen", 0).value();
-	if ((fullscreenWidth != 0 && fullscreenWidth < 640) || (fullscreenHeight != 0 && fullscreenHeight < 480))	// sanity check
+	bool ignoreOldFullscreenValues = (!createdConfigFile && configVersion <= 3);
+	if (ignoreOldFullscreenValues || (fullscreenWidth != 0 && fullscreenWidth < 640) || (fullscreenHeight != 0 && fullscreenHeight < 480))	// sanity check
 	{
 		// set to special value (0x0) that reverts to the default for this display
 		fullscreenWidth = 0;
 		fullscreenHeight = 0;
+		fullscreenRefreshRate = 0.f;
 	}
 	war_SetFullscreenModeWidth(fullscreenWidth);
 	war_SetFullscreenModeHeight(fullscreenHeight);
 	war_SetFullscreenModeScreen(fullscreenScreen);
+	war_SetFullscreenModePixelDensity(fullscreenPixelDensity);
+	war_SetFullscreenModeRefreshRate(fullscreenRefreshRate);
 
 	if (auto value = iniGetIntegerOpt("bpp"))
 	{
@@ -584,7 +687,9 @@ bool loadConfig()
 		pie_EnableFog(false);
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
+	war_setAutoLagKickAggressiveness(iniGetInteger("hostAutoLagKickAggressiveness", war_getAutoLagKickAggressiveness()).value());
 	war_setAutoDesyncKickSeconds(iniGetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds()).value());
+	war_setAutoNotReadyKickSeconds(iniGetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
 	war_setMaxReplaysSaved(iniGetInteger("maxReplaysSaved", war_getMaxReplaysSaved()).value());
 	war_setOldLogsLimit(iniGetInteger("oldLogsLimit", war_getOldLogsLimit()).value());
@@ -612,6 +717,7 @@ bool loadConfig()
 			debug(LOG_WARNING, "Unsupported / invalid terrainShadingQuality value: %d; using default", intValue);
 		}
 	}
+	setDrawTerrainShadows(iniGetBool("terrainShadows", true).value());
 	war_setShadowFilterSize(iniGetInteger("shadowFilterSize", (int)war_getShadowFilterSize()).value());
 	if (auto value = iniGetIntegerOpt("shadowMapResolution"))
 	{
@@ -626,6 +732,8 @@ bool loadConfig()
 	std::string defAI = iniGetString("defaultSkirmishAI", DEFAULT_SKIRMISH_AI_SCRIPT_NAME).value();
 	setDefaultSkirmishAI(defAI);
 
+	war_setPlayAudioCue_GroupReporting(iniGetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting()).value());
+
 	auto hostConnProvider = war_getHostConnectionProvider();
 	if (iniGeneral.has("hostConnectionProvider"))
 	{
@@ -639,6 +747,9 @@ bool loadConfig()
 		}
 		war_setHostConnectionProvider(hostConnProvider);
 	}
+
+	war_setLobbyDisableIPv6(iniGetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6()).value());
+	war_setLobbyFilterIPv6Only(iniGetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only()).value());
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;
@@ -663,6 +774,9 @@ bool saveConfig()
 	auto iniSetInteger = [&iniGeneral](const std::string& key, int value) {
 		iniSectionSetInteger(iniGeneral, key, value);
 	};
+	auto iniSetFloat = [&iniGeneral](const std::string& key, float value) {
+		iniSectionSetFloat(iniGeneral, key, value);
+	};
 	auto iniSetBool = [&iniGeneral](const std::string& key, bool value) {
 		iniSectionSetBool(iniGeneral, key, value);
 	};
@@ -678,6 +792,14 @@ bool saveConfig()
 			strVal.assign(value, len);
 		}
 		iniGeneral.SetString(key, strVal);
+	};
+	auto iniSetMouseKeyOpt = [&iniGeneral](const std::string& key, optional<MOUSE_KEY_CODE> code) {
+		if (!code.has_value())
+		{
+			iniSectionSetInteger(iniGeneral, key, 0);
+			return;
+		}
+		iniSectionSetInteger(iniGeneral, key, static_cast<int>(code.value()));
 	};
 
 	// //////////////////////////
@@ -696,6 +818,8 @@ bool saveConfig()
 	iniSetInteger("fullscreenWidth", war_GetFullscreenModeWidth());
 	iniSetInteger("fullscreenHeight", war_GetFullscreenModeHeight());
 	iniSetInteger("fullscreenScreen", war_GetFullscreenModeScreen());
+	iniSetFloat("fullscreenPixelDensity", war_GetFullscreenModePixelDensity());
+	iniSetFloat("fullscreenRefreshRate", war_GetFullscreenModeRefreshRate());
 	iniSetInteger("bpp", war_GetVideoBufferDepth());
 	iniSetInteger("fullscreen", static_cast<typename std::underlying_type<WINDOW_MODE>::type>(war_getWindowMode()));
 	iniSetString("language", getLanguage());
@@ -711,7 +835,11 @@ bool saveConfig()
 	iniSetInteger("nomousewarp", (int)getMouseWarp());		// mouse warp
 	iniSetInteger("coloredCursor", (int)war_GetColouredCursor());
 	iniSetInteger("RightClickOrders", (int)(getRightClickOrders()));
-	iniSetInteger("MiddleClickRotate", (int)(getMiddleClickRotate()));
+	iniSetMouseKeyOpt("mouseKeyPan", getPanMouseKey());
+	iniSetMouseKeyOpt("mouseKeyRotate", getRotateMouseKey());
+	iniSetInteger("pinchToZoom", (int)(getPinchToZoomTouchGesture()));
+	iniSetInteger("touchPan", (int)(getPanTouchGesture()));
+	iniSetInteger("edgeScrollOutsideWindow", (int)(getEdgeScrollOutsideWindowBounds()));
 	iniSetInteger("cursorScale", (int)war_getCursorScale());
 	iniSetInteger("textureCompression", (wz_texture_compression) ? 1 : 0);
 	iniSetInteger("showFPS", (int)showFPS);
@@ -723,7 +851,7 @@ bool saveConfig()
 	iniSetInteger("subtitles", (int)(seq_GetSubtitles()));		// subtitles
 	iniSetInteger("radarObjectMode", (int)bEnemyAllyRadarColor);   // enemy/allies radar view
 	iniSetInteger("radarTerrainMode", (int)radarDrawMode);
-	iniSetBool("trapCursor", war_GetTrapCursor());
+	iniSetInteger("trapCursor", (int)war_GetTrapCursor());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
 	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
@@ -734,11 +862,8 @@ bool saveConfig()
 	iniSetBool("radarRotationArrow", radarRotationArrow);
 	iniSetBool("hostQuitConfirmation", hostQuitConfirmation);
 	iniSetBool("PauseOnFocusLoss", war_GetPauseOnFocusLoss());
-	iniSetString("autoratingUrlV2", getAutoratingUrl());
-	iniSetBool("autorating", getAutoratingEnable());
-	iniSetFromCString("masterserver_name", NETgetMasterserverName(), 255);
-	iniSetInteger("masterserver_port", (int)NETgetMasterserverPort());
-	iniSetString("server_name", mpGetServerName());
+	iniSetString("lobbyserver", NETgetLobbyserverAddress());
+	iniSetString("server_name", war_getLastIpServerConnect());
 	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
 	{
 		iniSetInteger("gameserver_port", (int)NETgetGameserverPort());
@@ -795,6 +920,7 @@ bool saveConfig()
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
 	iniSetInteger("hostAutoDesyncKickSeconds", war_getAutoDesyncKickSeconds());
+	iniSetInteger("hostAutoNotReadyKickSeconds", war_getAutoNotReadyKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
 	iniSetInteger("maxReplaysSaved", war_getMaxReplaysSaved());
 	iniSetInteger("oldLogsLimit", war_getOldLogsLimit());
@@ -802,10 +928,16 @@ bool saveConfig()
 	iniSetInteger("fogStart", war_getFogStart());
 	iniSetInteger("terrainMode", getTerrainShaderQuality());
 	iniSetInteger("terrainShadingQuality", getTerrainMappingTexturesMaxSize());
+	iniSetInteger("terrainShadows", (int)(getDrawTerrainShadows()));
 	iniSetInteger("shadowFilterSize", (int)war_getShadowFilterSize());
 	iniSetInteger("shadowMapResolution", (int)war_getShadowMapResolution());
 	iniSetBool("pointLightsPerpixel", war_getPointLightPerPixelLighting());
 	iniSetString("defaultSkirmishAI", getDefaultSkirmishAI());
+	iniSetBool("audioCueGroupReporting", war_getPlayAudioCue_GroupReporting());
+
+	iniSetBool("lobbyDisableIPv6", war_getLobbyDisableIPv6());
+	iniSetBool("lobbyFilterIPv6Only", war_getLobbyFilterIPv6Only());
+
 	iniSetInteger("configVersion", CURRCONFVERSION);
 
 	// write out ini file changes

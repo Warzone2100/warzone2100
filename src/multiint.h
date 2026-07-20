@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,9 +32,12 @@
 #include "lib/widget/form.h"
 #include "lib/widget/button.h"
 #include <functional>
+#include <memory>
+#include <string>
 #include <vector>
 #include <set>
 #include "lib/framework/wzstring.h"
+#include "lib/framework/loading_task_fwd.h"
 #include "titleui/multiplayer.h"
 #include "faction.h"
 
@@ -90,8 +95,29 @@ struct MultiplayOptionsLocked
 	bool position;
 	bool bases;
 	bool spectators;
+	bool name;
+	bool readybeforefull;
+	bool cheats;
+
+	bool operator==(const MultiplayOptionsLocked& other) const
+	{
+		return scavengers == other.scavengers
+			&& alliances == other.alliances
+			&& teams == other.teams
+			&& power == other.power
+			&& difficulty == other.difficulty
+			&& ai == other.ai
+			&& position == other.position
+			&& bases == other.bases
+			&& spectators == other.spectators
+			&& name == other.name
+			&& readybeforefull == other.readybeforefull
+			&& cheats == other.cheats;
+	}
 };
 const MultiplayOptionsLocked& getLockedOptions();
+bool updateLockedOptionsOnHost(const MultiplayOptionsLocked& newOpts);
+bool updateLockedOptionsFromHost(const MultiplayOptionsLocked& newOpts);
 
 const char* getDifficultyListStr(size_t idx);
 size_t getDifficultyListCount();
@@ -111,13 +137,14 @@ void printBlindModeHelpMessagesToConsole();
  */
 int allPlayersOnSameTeam(int except);
 
+bool multiplayPlayersCanCheckReady();
+bool multiplayPlayersShouldCheckReady();
+void handlePossiblePlayersShouldCheckReadyChange(bool previousPlayersShouldCheckReadyValue);
+
 bool multiplayPlayersReady();
 bool multiplayIsStartingGame();
 
 bool sendReadyRequest(UBYTE player, bool bReady);
-
-LOBBY_ERROR_TYPES getLobbyError();
-void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
 /**
  * Updates structure limit flags. Flags indicate which structures are disabled.
@@ -147,7 +174,12 @@ std::string getDefaultSkirmishAI(const bool& displayNameOnly=false);
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type, bool banPlayer = false);
 void displayKickReasonPopup(const std::string &reason);
-void loadMapPreview(bool hideInterface);
+
+struct Sha256;
+class ResourceLoadingController;
+
+LoadingTask<> mapPreviewLoadTask(ResourceLoadingController &controller, bool hideInterface);
+LoadingTask<> mapPreviewLoadTask(ResourceLoadingController &controller, bool hideInterface, std::string mapName, Sha256 mapHash);
 
 bool changeReadyStatus(UBYTE player, bool bReady);
 WzString formatGameName(WzString name);
@@ -158,13 +190,15 @@ void displayRoomSystemMessage(char const *text);
 void displayRoomNotifyMessage(char const *text);
 void displayLobbyDisabledNotification();
 
+void multiLobbyHandleHostOptionsChanges(const std::array<bool, MAX_CONNECTED_PLAYERS>& priorHostChatPermissions);
+
+void multiLobbyRandomizeOptions();
+
 bool SendColourRequest(UBYTE player, UBYTE col);
 
 void handleAutoReadyRequest();
 
 void multiClearHostRequestMoveToPlayer(uint32_t playerIdx);
-
-bool autoBalancePlayersCmd();
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
@@ -264,21 +298,16 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_OPTIONSW		284
 #define MULTIOP_OPTIONSH		MULTIOP_PLAYERSH
 
-#define MULTIOP_EDITBOXW		196
+#define MULTIOP_EDITBOXW		201
 #define	MULTIOP_EDITBOXH		30
 
 #define MULTIOP_SEARCHBOXH		15
 
-#define	MULTIOP_BLUEFORMW		226
+#define	MULTIOP_BLUEFORMW		231
 
-#define	MROW1					4
-#define	MROW2					MROW1+MULTIOP_EDITBOXH
-#define	MROW3					MROW2+MULTIOP_EDITBOXH
-#define	MROW4					MROW3+MULTIOP_EDITBOXH
-#define MROW5					MROW4+38
-#define	MROW6					MROW5+29
+#define	MROW1					6
 
-#define MCOL0					50
+#define MCOL0					45
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
 #define MCOL2					(MCOL1+38)
 #define MCOL3					(MCOL2+38)
@@ -286,17 +315,9 @@ bool autoBalancePlayersCmd();
 
 #define MULTIOP_PNAME_ICON		10252
 #define MULTIOP_PNAME			10253
-#define MULTIOP_GNAME_ICON		10254
-#define MULTIOP_GNAME			10255
-#define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
-#define MULTIOP_MAP_MOD			21013	// Warning, do not use sequential numbers until code is fixed.
-#define MULTIOP_MAP_RANDOM      21014
 
 #define MULTIOP_REFRESH			10275
-
-#define MULTIOP_HOST			10276
-#define MULTIOP_HOSTX			5
 
 #define MULTIOP_FILTER_TOGGLE   30277
 
@@ -324,26 +345,6 @@ bool autoBalancePlayersCmd();
 #define MULTIOP_COLCHOOSER_FORM         10280
 #define MULTIOP_COLCHOOSER              102711 //10281
 #define MULTIOP_COLCHOOSER_END          102742 //10288
-
-#define MULTIOP_LIMIT			10292	// 2 for this (+label)
-#define MULTIOP_GAMETYPE		10294
-#define MULTIOP_POWER			10296
-#define MULTIOP_ALLIANCES		10298
-#define MULTIOP_RANDOM			10299
-#define MULTIOP_BASETYPE		10300
-#define MULTIOP_TECHLEVEL		10301
-
-#define MULTIOP_MAP_PREVIEW 920000
-
-#define MULTIOP_PASSWORD	920010
-#define MULTIOP_PASSWORD_BUT 920012
-#define MULTIOP_PASSWORD_EDIT 920013
-
-#define MULTIOP_NO_SOMETHING            10331
-#define MULTIOP_NO_SOMETHINGX           3
-#define MULTIOP_NO_SOMETHINGY           MROW5
-#define MULTIOP_ICON_LIMITS_X2		41
-#define MULTIOP_ICON_LIMITS_Y2		182
 
 #define MULTIOP_COLOUR_START		10332
 #define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)

@@ -366,7 +366,7 @@ protected:
 		auto x0 = xOffset + x() + PADDING;
 		auto y0 = yOffset + y() + PADDING;
 
-		valueText.setText(WzString::fromUtf8(astringf("%.*f", precision, majorValue / (float)denominator)), font_regular);
+		valueText.setText(WzString::format("%.*f", precision, majorValue / (float)denominator), font_regular);
 
 		/* indent to allow text value */
 		auto iX = x0 + maxValueTextWidth;
@@ -392,7 +392,7 @@ protected:
 		auto delta = minorValue - majorValue;
 		if (delta != 0)
 		{
-			deltaText.setText(WzString::fromUtf8(astringf("%+.*f", precision, delta / (float)denominator)), font_small);
+			deltaText.setText(WzString::format("%+.*f", precision, delta / (float)denominator), font_small);
 			auto xDeltaText = xOffset + x() + width() - deltaText.width() - PADDING;
 			deltaText.renderOutlined(xDeltaText, iY - 1, (delta < 0) == lessIsBetter ? WZCOL_LGREEN : WZCOL_LRED, {0, 0, 0, 192});
 		}
@@ -2826,6 +2826,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		return false;
 	}
 
+	const bool isTransportTempl = isTransporter(psTempl);
+
 	// Check a turret has been installed
 	if (psTempl->numWeaps == 0 &&
 	    psTempl->asParts[COMP_SENSOR] == 0 &&
@@ -2833,11 +2835,13 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	    psTempl->asParts[COMP_BRAIN] == 0 &&
 	    psTempl->asParts[COMP_REPAIRUNIT] == 0 &&
 	    psTempl->asParts[COMP_CONSTRUCT] == 0 &&
-	    !isTransporter(psTempl))
+		!isTransportTempl)
 	{
 		debug(level, "No turret for template");
 		return false;
 	}
+
+	const bool isVtolTemplate = checkTemplateIsVtol(psTempl); // True for transporters also.
 
 	// Check the weapons
 	for (int i = 0; i < psTempl->numWeaps; i++)
@@ -2853,10 +2857,22 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 			debug(level, "No weapon given for weapon droid, or wrong weapon size");
 			return false;
 		}
-		if (checkTemplateIsVtol(psTempl)
-		    && psTempl->getWeaponStats(i)->vtolAttackRuns <= 0)
+		if (isTransportTempl && !psTempl->getWeaponStats(i)->flags.test(WEAPON_FLAG_ALLOWED_ON_TRANSPORTER))
 		{
-			debug(level, "VTOL with non-VTOL turret, not possible");
+			debug(level, "Transporter with invalid turret, not possible");
+			return false;
+		}
+		if (isVtolTemplate)
+		{
+			if (psTempl->getWeaponStats(i)->vtolAttackRuns <= 0)
+			{
+				debug(level, "VTOL with non-VTOL turret, not possible");
+				return false;
+			}
+		}
+		else if (psTempl->getWeaponStats(i)->vtolAttackRuns > 0)
+		{
+			debug(level, "Non-VTOL with VTOL turret, not possible");
 			return false;
 		}
 	}
@@ -2885,7 +2901,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	//can only have a VTOL weapon on a VTOL propulsion
-	if (checkTemplateIsVtol(psTempl) && !isTransporter(psTempl) && psTempl->numWeaps == 0)
+	if (isVtolTemplate && !isTransportTempl && psTempl->numWeaps == 0)
 	{
 		debug(level, "VTOL with system turret, not possible");
 		return false;

@@ -417,34 +417,58 @@ bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_
 		return false;
 	}
 
-	if (!setSwapInterval(mode))
+	if (!setSwapIntervalInternal(mode))
 	{
 		// default to vsync on
 		debug(LOG_3D, "Failed to set swap interval: %d; defaulting to vsync on", to_int(mode));
-		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
+		setSwapIntervalInternal(gfx_api::context::swap_interval_mode::vsync);
 	}
 
 	return true;
 }
 
-void null_context::beginRenderPass()
+void null_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /*passes*/,
+	gfx_api::PassGraphCompileResult& /*compileResult*/)
 {
-	// no-op
 }
 
-void null_context::endRenderPass()
+void null_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
+	(void)pass;
+	frameHasDrawCommands = true;
+}
+
+void null_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
+{
+}
+
+void null_context::beginScreenFrame()
+{
+	frameHasDrawCommands = false;
+	purgeFrameResources();
+}
+
+void null_context::finishScreenFrame()
+{
+	if (frameHasDrawCommands)
+	{
+		// Backend is expected to handle throttling / sleeping
+		backend_impl->swapWindow();
+		current_program = nullptr;
+	}
+
+	frameHasDrawCommands = false;
 	frameNum = std::max<size_t>(frameNum + 1, 1);
+	purgeFrameResources();
+}
 
-	// Backend is expected to handle throttling / sleeping
-	backend_impl->swapWindow();
-
-	current_program = nullptr;
+void null_context::purgeFrameResources()
+{
 }
 
 void null_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
-	// no-op
+	markScreenGeometryDirty();
 }
 
 std::pair<uint32_t, uint32_t> null_context::getDrawableDimensions()
@@ -467,9 +491,19 @@ const size_t& null_context::current_FrameNum() const
 	return frameNum;
 }
 
-bool null_context::setSwapInterval(gfx_api::context::swap_interval_mode mode)
+bool null_context::setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode)
 {
 	return backend_impl->setSwapInterval(mode);
+}
+
+bool null_context::setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler)
+{
+	auto success = setSwapIntervalInternal(mode);
+	if (success && completionHandler)
+	{
+		completionHandler();
+	}
+	return success;
 }
 
 gfx_api::context::swap_interval_mode null_context::getSwapInterval() const

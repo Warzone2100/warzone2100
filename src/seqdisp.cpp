@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 
+#include <sstream>
 #include <string.h>
 #include <physfs.h>
 
@@ -228,7 +229,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 
 	URLDataRequest urlRequest;
 	urlRequest.url = baseURLPath.value().toUtf8() + urlEncodeVideoPathComponents(videoName).toUtf8();
-	urlRequest.onSuccess = [requestDetails](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	urlRequest.onResponse = [requestDetails](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) -> URLRequestHandlingBehavior {
 		std::string urlCopy = url;
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
@@ -245,7 +246,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 				debug(LOG_INFO, "Failed to load video: %s (no data)", urlCopy.c_str());
 				requestDetails->status = RequestDetails::RequestStatus::Failure;
 			});
-			return;
+			return URLRequestHandlingBehavior::Done();
 		}
 
 		auto memoryBuffer = std::make_shared<std::vector<char>>((char *)data->memory, ((char*)data->memory) + data->size);
@@ -254,6 +255,7 @@ bool OnDemandVideoDownloader::requestVideoData(const WzString& videoName)
 			requestDetails->status = RequestDetails::RequestStatus::Success;
 			requestDetails->responseData = memoryBuffer;
 		});
+		return URLRequestHandlingBehavior::Done();
 	};
 	urlRequest.onFailure = [requestDetails](const std::string& url, URLRequestFailureType type, std::shared_ptr<HTTPResponseDetails> transferDetails) {
 		std::string urlCopy = url;
@@ -613,7 +615,7 @@ bool seq_UpdateFullScreenVideo()
 			{
 				wzCachedSeqText.resize(2);
 			}
-			wzCachedSeqText[0].setText(WzString::fromUtf8(astringf("%s (%" PRIu32 "%%)...", _("Loading video"), onDemandVideoProvider.getVideoDataRequestProgress(currVideoName))), font_scaled);
+			wzCachedSeqText[0].setText(WzString::format("%s (%" PRIu32 "%%)...", _("Loading video"), onDemandVideoProvider.getVideoDataRequestProgress(currVideoName)), font_scaled);
 			wzCachedSeqText[0].render((pie_GetVideoBufferWidth() - wzCachedSeqText[0].width()) / 2, (pie_GetVideoBufferHeight() - wzCachedSeqText[0].height()) / 2, WZCOL_WHITE);
 			return true;
 		}
@@ -847,15 +849,13 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 	return true;
 }
 
-
 static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING textJustification)
 {
 	char aTextName[MAX_STR_LENGTH];
-	char *pTextBuffer, *pCurrentLine, *pText;
+	char *pTextBuffer;
 	UDWORD fileSize;
 	SDWORD xOffset, yOffset;
 	double startTime, endTime;
-	const char *seps = "\n";
 
 	// NOTE: The original game never had a fullscreen mode for FMVs on >640x480 screens.
 	// They would just use double sized videos, and move the text to that area.
@@ -871,12 +871,17 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	}
 
 	pTextBuffer = fileLoadBuffer;
-	pCurrentLine = strtok(pTextBuffer, seps);
-	while (pCurrentLine != nullptr)
+	std::istringstream stream(pTextBuffer);
+	stream.imbue(std::locale::classic());
+	std::string pCurrentLine;
+
+	while (std::getline(stream, pCurrentLine, '\n'))
 	{
-		if (*pCurrentLine != '/')
+		if (!pCurrentLine.empty() && pCurrentLine[0] != '/')
 		{
-			if (sscanf(pCurrentLine, "%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
+			std::istringstream lineStream(pCurrentLine);
+			lineStream.imbue(std::locale::classic());
+			if (lineStream >> xOffset >> yOffset >> startTime >> endTime)
 			{
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
@@ -884,22 +889,17 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				xOffset = static_cast<SDWORD>((double)pie_GetVideoBufferWidth() / 640. * (double)xOffset);
 				yOffset = static_cast<SDWORD>((double)pie_GetVideoBufferHeight() / 480. * (double)yOffset);
 				//get the text
-				pText = strrchr(pCurrentLine, '"');
-				ASSERT(pText != nullptr, "error parsing text file");
-				if (pText != nullptr)
+				size_t firstQuote = pCurrentLine.find('"');
+				size_t lastQuote = pCurrentLine.rfind('"');
+
+				ASSERT(firstQuote != std::string::npos && lastQuote != std::string::npos && firstQuote < lastQuote, "error parsing text file");
+				if (firstQuote != std::string::npos && lastQuote != std::string::npos && firstQuote < lastQuote)
 				{
-					*pText = (UBYTE)0;
-				}
-				pText = strchr(pCurrentLine, '"');
-				ASSERT(pText != nullptr, "error parsing text file");
-				if (pText != nullptr)
-				{
-					seq_AddTextForVideo(_(&pText[1]), xOffset, yOffset, startTime, endTime, textJustification);
+					std::string text = pCurrentLine.substr(firstQuote + 1, lastQuote - firstQuote - 1);
+					seq_AddTextForVideo(_(text.c_str()), xOffset, yOffset, startTime, endTime, textJustification);
 				}
 			}
 		}
-		//get next line
-		pCurrentLine = strtok(nullptr, seps);
 	}
 	return true;
 }

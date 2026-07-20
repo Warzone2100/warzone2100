@@ -20,7 +20,7 @@ function isPlayerAlive(player)
 //Return all enemy players that are still alive.
 function getAliveEnemyPlayers()
 {
-	var numEnemies = [];
+	const numEnemies = [];
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -30,7 +30,7 @@ function getAliveEnemyPlayers()
 		}
 	}
 
-	if (defined(scavengerPlayer) &&
+	if ((scavengers !== NO_SCAVENGERS) &&
 		(countStruct("A0BaBaFactory", scavengerPlayer) +
 		countStruct(BASE_STRUCTURES.derricks, scavengerPlayer) +
 		countDroid(DROID_ANY, scavengerPlayer)) > 0)
@@ -82,7 +82,7 @@ function resetTargetData()
 
 function chooseEnemy()
 {
-	var enemies = getAliveEnemyPlayers();
+	const enemies = getAliveEnemyPlayers();
 
 	if (enemies.length === 0)
 	{

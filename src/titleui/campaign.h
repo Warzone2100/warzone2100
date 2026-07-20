@@ -39,6 +39,7 @@ public:
 	virtual ~WzCampaignSelectorTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	virtual void render() override;
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 
 	std::shared_ptr<WzTitleUI> getParentTitleUI();
@@ -52,5 +53,8 @@ private:
 	std::shared_ptr<WzCampaignSelectorForm> campaignSelector;
 	std::shared_ptr<WIDGET> displayedPanel;
 };
+
+const char* difficultyLevelToString(DIFFICULTY_LEVEL difficulty);
+const char* getCampaignDifficultyDescriptionString(DIFFICULTY_LEVEL difficulty);
 
 #endif // __INCLUDED_SRC_TITLEUI_CAMPAIGN_H__

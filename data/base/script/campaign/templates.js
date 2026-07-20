@@ -278,6 +278,7 @@ nphct: { body: tBody.tank.mantis, prop: tProp.tank.tracks, weap: tWeap.tank.heav
 npmsens: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tSensor.sensor },
 
 // SUB_1_7
+npmrlsh: { body: tBody.tank.scorpion, prop: tProp.tank.halfTracks, weap: tWeap.tank.miniRocketArray },
 
 // CAM_1_D
 npcybr: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.lancer },
@@ -311,9 +312,10 @@ cocybth: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cy
 // SUB_2_2
 comtath: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.lancer },
 comtathh: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tWeap.tank.lancer },
+cohhch: { body: tBody.tank.tiger, prop: tProp.tank.hover, weap: tWeap.tank.heavyCannon },
 
 // CAM_2_C
-cohcv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.heavyCannon },
+comhcv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.heavyCannon },
 commorv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.heapBomb },
 colagv: { body: tBody.tank.leopard, prop: tProp.air.vtol, weap: tWeap.air.assaultGun },
 comhpv: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.hyperVelocityCannon },
@@ -324,6 +326,9 @@ cocybag: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cy
 cocybsn: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.sniperCannon },
 cocybtk: { body: tBody.cyborg.lightBody, prop: tProp.cyborg.legs, weap: tWeap.cyborg.tankKiller },
 comhltat: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.tankKiller },
+cohhvch: { body: tBody.tank.tiger, prop: tProp.tank.hover, weap: tWeap.tank.hyperVelocityCannon },
+comagh: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.assaultGun },
+comhvcv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.hyperVelocityCannon },
 
 // SUB_2_D
 commorvt: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.thermiteBomb },
@@ -340,6 +345,7 @@ comsensh: { body: tBody.tank.panther, prop: tProp.tank.halfTracks, weap: tSensor
 comrotmh: { body: tBody.tank.panther, prop: tProp.tank.tracks, weap: tWeap.tank.pepperpot },
 comltath: { body: tBody.tank.panther, prop: tProp.tank.hover, weap: tWeap.tank.tankKiller },
 comacv: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.assaultCannon },
+cohach: { body: tBody.tank.tiger, prop: tProp.tank.hover, weap: tWeap.tank.assaultCannon },
 
 // SUB_2_8
 comhvat: { body: tBody.tank.panther, prop: tProp.air.vtol, weap: tWeap.air.tankKiller },
@@ -387,6 +393,9 @@ nxlpulsev: { body: tBody.tank.retaliation, prop: tProp.air.vtol2, weap: tWeap.ai
 // SUB_3_4
 nxllinkh: { body: tBody.tank.retaliation, prop: tProp.tank.hover2, weap: tWeap.tank.nexusLink },
 nxmpulsev: { body: tBody.tank.retribution, prop: tProp.air.vtol2, weap: tWeap.air.pulseLaser },
+nxhvscourge: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.scourgeMissile },
+nxhvpulse: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.pulseLaser },
+nxhvarch: { body: tBody.tank.vengeance, prop: tProp.tank.hover2, weap: tWeap.tank.archAngel },
 
 
 ////////////////////////////////////////////////////////////////////////////////

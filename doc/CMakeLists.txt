@@ -13,6 +13,7 @@ set(wz2100_doc_FILES)
 
 add_custom_command(
 	TARGET wz2100_doc
+	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -DOUTPUT_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/build_tools/GenerateJSDocs.cmake
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM
@@ -36,7 +37,6 @@ list(APPEND wz2100_doc_FILES
 
 set(host_doc_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/hosting/AutohostConfig.md"
-	"${CMAKE_CURRENT_SOURCE_DIR}/hosting/AutoratingServer.md"
 	"${CMAKE_CURRENT_SOURCE_DIR}/hosting/DedicatedHost.md"
 	)
 set(host_doc_linux_scripts_FILES
@@ -121,6 +121,7 @@ if(Asciidoctor_FOUND)
 	# Quickstart Guide - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
+		POST_BUILD
 		COMMAND ${Asciidoctor_COMMAND}
 			-S server
 			${_asciidoctor_option_failurelevel}
@@ -137,6 +138,7 @@ if(Asciidoctor_FOUND)
 	# warzone2100.6 - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
+		POST_BUILD
 		COMMAND ${Asciidoctor_COMMAND}
 			-S server
 			${_asciidoctor_option_failurelevel}
@@ -150,6 +152,7 @@ if(Asciidoctor_FOUND)
 	# warzone2100.6 - man-page format
 	add_custom_command(
 		TARGET wz2100_doc
+		POST_BUILD
 		COMMAND ${Asciidoctor_COMMAND}
 			-S server
 			${_asciidoctor_option_failurelevel}
@@ -196,6 +199,7 @@ elseif(A2X_FOUND)
 	# Quickstart Guide - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
+		POST_BUILD
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f xhtml -D ${CMAKE_CURRENT_BINARY_DIR} ${_quickstart_asciidoc}
 		VERBATIM
 	)
@@ -204,12 +208,14 @@ elseif(A2X_FOUND)
 	# warzone2100.6 - HTML format
 	add_custom_command(
 		TARGET wz2100_doc
+		POST_BUILD
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f xhtml -D ${CMAKE_CURRENT_BINARY_DIR} ${_warzone2100_6_asciidoc}
 		VERBATIM
 	)
 	# warzone2100.6 - man-page format
 	add_custom_command(
 		TARGET wz2100_doc
+		POST_BUILD
 		COMMAND ${_cmd_prefix_set_env} ${A2X_COMMAND} -f manpage -D ${CMAKE_CURRENT_BINARY_DIR} ${_warzone2100_6_asciidoc}
 		VERBATIM
 	)
@@ -218,6 +224,7 @@ elseif(A2X_FOUND)
 
 		add_custom_command(
 			TARGET wz2100_doc
+			POST_BUILD
 			COMMAND "wkhtmltopdf"
 			ARGS
 				"${CMAKE_CURRENT_SOURCE_DIR}/quickstartguide.htm"
@@ -266,6 +273,7 @@ if(UNIX AND NOT EMSCRIPTEN AND NOT SKIPPED_DOC_GENERATION)
 		if (NOT "${_warzone2100_6_uncompressed_orig}" STREQUAL "${_warzone2100_6_uncompressed}")
 			add_custom_command(
 				TARGET wz2100_manpages
+				POST_BUILD
 				COMMAND ${CMAKE_COMMAND} -E copy "${_warzone2100_6_uncompressed_orig}" "${_warzone2100_6_uncompressed}"
 				COMMAND ${GZIP_BIN} -n -c ${_warzone2100_6_uncompressed} > ${_warzone2100_6_compressed}
 				VERBATIM
@@ -273,6 +281,7 @@ if(UNIX AND NOT EMSCRIPTEN AND NOT SKIPPED_DOC_GENERATION)
 		else()
 			add_custom_command(
 				TARGET wz2100_manpages
+				POST_BUILD
 				COMMAND ${GZIP_BIN} -n -c ${_warzone2100_6_uncompressed} > ${_warzone2100_6_compressed}
 				VERBATIM
 			)

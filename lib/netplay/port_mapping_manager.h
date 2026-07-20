@@ -32,6 +32,7 @@
 #include <unordered_map>
 #include <utility>
 #include <memory>
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -48,11 +49,15 @@ using SuccessCallback = std::function<void(std::string, uint16_t)>;
 // DiscoveryStatus can only be `FAILURE` or `TIMEOUT` in this case.
 using FailureCallback = std::function<void(PortMappingDiscoveryStatus)>;
 
-enum class PortMappingInternetProtocol
+enum class PortMappingInternetProtocol : uint8_t
 {
-	IPV4,
-	IPV6
+	TCP_IPV4 = 0b00000001,
+	TCP_IPV6 = 0b00000010,
+	UDP_IPV4 = 0b00000100,
+	UDP_IPV6 = 0b00001000
 };
+
+using PortMappingInternetProtocolMask = std::underlying_type_t<PortMappingInternetProtocol>;
 
 /// <summary>
 /// An opaque base class to represent asynchronous port mapping discovery request.
@@ -176,7 +181,7 @@ private:
 		std::string discoveredIPaddress;
 		uint16_t discoveredPort = 0;
 		uint16_t sourcePort = 0;
-		PortMappingInternetProtocol protocol = PortMappingInternetProtocol::IPV4;
+		PortMappingInternetProtocol protocol = PortMappingInternetProtocol::TCP_IPV4;
 		std::shared_ptr<PortMappingImpl> impl = nullptr;
 	};
 	using PortMappingAsyncRequestPtr = std::shared_ptr<PortMappingAsyncRequest>;

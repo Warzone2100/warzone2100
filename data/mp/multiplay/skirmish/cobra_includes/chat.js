@@ -6,6 +6,7 @@ function sendChatMessage(msg, receiver)
 	{
 		return;
 	}
+
 	if (!isDefined(receiver))
 	{
 		receiver = ALLIES;
@@ -18,14 +19,16 @@ function sendChatMessage(msg, receiver)
 
 		if (receiver === ALLIES || receiver === ENEMIES)
 		{
-			let players = playerAlliance(receiver === ALLIES);
-			for (let i = 0, len = players.length; i < len; ++i)
+			const _players = playerAlliance(receiver === ALLIES);
+
+			for (let i = 0, len = _players.length; i < len; ++i)
 			{
-				if (msg === "need power" && !playerData[players[i]].isAI)
+				if (msg === "need power" && !playerData[_players[i]].isAI)
 				{
 					continue; //don't spam humans with power requests.
 				}
-				chat(players[i], msg);
+
+				chat(_players[i], msg);
 			}
 		}
 		else if (receiver === ALL_PLAYERS)
@@ -53,13 +56,14 @@ function eventChat(from, to, message)
 	}
 	else if (message === "cobra strat list")
 	{
-		sendChatMessage("My strategies are: AC, AR, AB, AM, AA", ALLIES);
+		sendChatMessage("My strategies are: AC, AR, AB, AM, AA, AV", ALLIES);
 	}
 	else if (message === "AC" ||
 		message === "AR" ||
 		message === "AB" ||
 		message === "AM" ||
-		message === "AA")
+		message === "AA" ||
+		message === "AV")
 	{
 		if (personality !== message)
 		{
@@ -69,10 +73,12 @@ function eventChat(from, to, message)
 	else if (message === "toggle cyborg")
 	{
 		turnOffCyborgs = !turnOffCyborgs;
+
 		if (from !== me)
 		{
 			sendChatMessage("Cyborgs " + (turnOffCyborgs ? "off" : "on"), from);
 		}
+
 		sendChatMessage("Cyborgs " + (turnOffCyborgs ? "off" : "on"), me);
 	}
 	else if (message === "stats")
@@ -81,15 +87,18 @@ function eventChat(from, to, message)
 		{
 			sendChatMessage("Most harmful player: " + getMostHarmfulPlayer(), from);
 		}
+
 		sendChatMessage("Most harmful player: " + getMostHarmfulPlayer(), me);
 	}
 	else if (message === "toggle hover" && !checkIfSeaMap())
 	{
 		forceHover = !forceHover;
+
 		if (from !== me)
 		{
 			sendChatMessage("Forced hover " + (forceHover ? "on" : "off"), from);
 		}
+
 		sendChatMessage("Forced hover " + (forceHover ? "on" : "off"), me);
 	}
 	else if (message === "oil level")
@@ -98,29 +107,35 @@ function eventChat(from, to, message)
 		{
 			sendChatMessage("Map oil count is " + mapOilLevel(), from);
 		}
+
 		sendChatMessage("Map oil count is " + mapOilLevel(), me);
 	}
 	else if (message === "toggle arti")
 	{
 		useArti = !useArti;
+
 		if (from !== me)
 		{
 			sendChatMessage("Artillery " + (useArti ? "on" : "off"), from);
 		}
+
 		sendChatMessage("Artillery " + (useArti ? "on" : "off"), me);
 	}
 	else if (message === "toggle vtol")
 	{
 		useVtol = !useVtol;
+
 		if (from !== me)
 		{
 			sendChatMessage("VTOLs " + (useVtol ? "on" : "off"), from);
 		}
+
 		sendChatMessage("VTOLs " + (useVtol ? "on" : "off"), me);
 	}
 	else if (message === "resG" || message === "resO" || message === "resD" || message === "resA")
 	{
 		let pth = "";
+
 		if (message === "resG")
 		{
 			pth = "generic";
@@ -144,10 +159,12 @@ function eventChat(from, to, message)
 	else if (message === "toggle beacon")
 	{
 		beacon.disabled = !beacon.disabled;
+
 		if (from !== me)
 		{
 			sendChatMessage("Beacon behavior: " + (beacon.disabled ? "off" : "on"), from);
 		}
+
 		sendChatMessage("Beacon behavior: " + (beacon.disabled ? "off" : "on"), me);
 	}
 
@@ -174,6 +191,7 @@ function eventChat(from, to, message)
 		if (getRealPower(me) > 100)
 		{
 			donatePower(playerPower(me) / 5, from);
+
 			if (!playerData[from].isAI)
 			{
 				sendChatMessage("Here is some power", from);
@@ -222,24 +240,26 @@ function eventChat(from, to, message)
 	}
 
 	//Here be commands that do something to a specific enemy.
-	const REAL_MSG = message.slice(0, -1);
-	if (REAL_MSG === "target")
+	const __realMsg = message.slice(0, -1);
+
+	if (__realMsg === "target")
 	{
-		let num = message.slice(-1);
-		if (!allianceExistsBetween(num, me) && (num !== me))
+		const __num = message.slice(-1);
+
+		if (!allianceExistsBetween(__num, me) && (__num !== me))
 		{
-			if (targetPlayer(num))
+			if (targetPlayer(__num))
 			{
-				sendChatMessage("Target set to player " + num, from);
+				sendChatMessage("Target set to player " + __num, from);
 			}
 			else
 			{
-				sendChatMessage("Sorry, target not changed to player " + num + " (they may be my target already)", from);
+				sendChatMessage("Sorry, target not changed to player " + __num + " (they may be my target already)", from);
 			}
 		}
 		else
 		{
-			sendChatMessage("Can not attack myself or an ally which is player " + num, from);
+			sendChatMessage("Can not attack myself or an ally which is player " + __num, from);
 		}
 	}
 }

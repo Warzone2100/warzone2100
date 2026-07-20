@@ -67,22 +67,6 @@ static inline std::vector<std::string> split(std::string const &str, std::string
 	return strs;
 }
 
-static inline std::string join(std::vector<std::string> const &strs, std::string const &sep)
-{
-	std::string str;
-	bool first = true;
-	for (auto const &s : strs)
-	{
-		if (!first)
-		{
-			str += sep;
-		}
-		str += s;
-		first = false;
-	}
-	return str;
-}
-
 WzString convertToPlatformDependentPath(const char *platformIndependentPath)
 {
 	WzString path(platformIndependentPath);
@@ -144,7 +128,6 @@ size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPa
 			{
 				// failed to mount mod
 				code_part log_level = LOG_WZ;
-#if defined(WZ_PHYSFS_2_1_OR_GREATER)
 				auto errorCode = PHYSFS_getLastErrorCode();
 				switch (errorCode)
 				{
@@ -157,9 +140,6 @@ size_t addSubdirs(const char *basedir, const char *subdir, const bool appendToPa
 					break;
 				}
 				const char* pErrStr = PHYSFS_getErrorByCode(errorCode);
-#else
-				const char* pErrStr = WZ_PHYSFS_getLastError();
-#endif
 				if (!pErrStr)
 				{
 					pErrStr = "<unknown error>";
@@ -278,7 +258,7 @@ std::string const &getModList()
 		}
 		std::sort(mods.begin(), mods.end());
 		mods.erase(std::unique(mods.begin(), mods.end()), mods.end());
-		mod_list = join(mods, ", ");
+		mod_list = strJoin(mods, ", ");
 		mod_list.resize(std::min<size_t>(mod_list.size(), modlist_string_size - 1));  // Probably not needed.
 	}
 	return mod_list;

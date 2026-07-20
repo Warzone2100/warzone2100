@@ -1,0 +1,26 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::wheels",
+	"title": "Wheels",
+	"sort": "02",
+	"visual": {
+		"stat": {
+			"id": "wheeled01"
+		}
+	},
+	"contents": [
+		"Wheels are the most basic vehicle propulsion.",
+		"",
+		"They are inexpensive and fast to produce, and also have a high maximum speed.",
+		"",
+		"However, they are vulnerable to most types of damage, and don't provide many hitpoints.",
+		"",
+		"Wheels are best used on vehicles that operate behind the front lines, or vehicles that exploit their high speed for hit-and-run attacks."
+		],
+	"links": [
+		"wz2100::units::designing",
+		"wz2100::units::propulsions",
+		"wz2100::units::propulsions::halftracks",
+		"wz2100::units::propulsions::tracks"
+	]
+}

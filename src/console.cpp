@@ -28,6 +28,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "loadsave.h"
@@ -148,10 +149,11 @@ void	initConsoleMessages()
 	//	Set up the main console size and position x,y,width
 	setConsoleCalcLayout([]() {
 		setConsoleSizePos(16, (!challengeActive && (game.type == LEVEL_TYPE::SKIRMISH)) ? 32 : (32 + TIMER_Y), pie_GetVideoBufferWidth() - 32);
+
+		historyConsole.topX = HISTORYBOX_X;
+		historyConsole.topY = HISTORYBOX_Y;
+		historyConsole.width = pie_GetVideoBufferWidth() - 32;
 	});
-	historyConsole.topX = HISTORYBOX_X;
-	historyConsole.topY = HISTORYBOX_Y;
-	historyConsole.width = pie_GetVideoBufferWidth() - 32;
 	setConsoleLineInfo(MAX_CONSOLE_MESSAGES / 4 + 4);
 	setConsolePermanence(false, true);						// We're not initially having permanent messages
 	permitNewConsoleMessages(true);							// Allow new messages
@@ -353,7 +355,7 @@ PIELIGHT getConsoleTextColor(int player)
 	{
 		return WZCOL_CONS_TEXT_INFO;
 	}
-	else if (player == SPECTATOR_MESSAGE)
+	else if (player >= 0 && player < NetPlay.players.size() && NetPlay.players[player].isSpectator)
 	{
 		return WZCOL_TEXT_MEDIUM;
 	}

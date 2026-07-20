@@ -255,11 +255,11 @@ StructureList* powerStructList(int player)
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (offWorldKeepLists)
 	{
-		return &mission.apsStructLists[player];
+		return &mission.gameWorld.objects.structures[player];
 	}
 	else
 	{
-		return &apsStructLists[player];
+		return &gameWorld.objects.structures[player];
 	}
 }
 
@@ -377,7 +377,7 @@ std::string getApproxPowerGeneratedPerSecForDisplay(unsigned player)
 {
 	if (player >= MAX_PLAYERS)
 	{
-		return 0;
+		return "-";
 	}
 
 	double floatingValue = (static_cast<double>(asPower[player].powerGeneratedLastUpdate) / FP_ONE) * static_cast<double>(GAME_UPDATES_PER_SEC);

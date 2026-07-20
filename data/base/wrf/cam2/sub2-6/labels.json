@@ -67,6 +67,30 @@
 		"label": "buildPos2",
 		"pos": [5804, 512]
 	},
+	"position_17": {
+		"label": "insaneSouthEastSpawn",
+		"pos": [6272, 7808]
+	},
+	"position_18": {
+		"label": "insaneVtolAppearPos1",
+		"pos": [896, 256]
+	},
+	"position_19": {
+		"label": "insaneVtolAppearPos2",
+		"pos": [7808, 4992]
+	},
+	"position_20": {
+		"label": "insaneVtolAppearPos3",
+		"pos": [6144, 256]
+	},
+	"position_21": {
+		"label": "insaneWestSpawn",
+		"pos": [384, 3712]
+	},
+	"position_22": {
+		"label": "insaneNorthSpawn",
+		"pos": [3200, 384]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -136,6 +160,12 @@
 		"pos1": [2560, 5504],
 		"pos2": [8064, 6400]
 	},
+	"area_13": {
+		"label": "insaneExtraVtolPadArea",
+		"subscriber": 0,
+		"pos1": [384, 384],
+		"pos2": [6400, 2048]
+	},
 
 	"object_0": {
 		"label": "COCommandCenter",
@@ -190,5 +220,12 @@
 		"id": 262,
 		"player": 2,
 		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 2,
+		"pos": [4224, 256],
+		"radius": 300
 	}
 }

@@ -506,7 +506,7 @@ static bool dataFlicMsgLoad(const char *fileName, void **ppData)
 // release the message viewdata
 static void dataSMSGRelease(void *pData)
 {
-	ASSERT(pData, "pData unexpectedly null");
+	ASSERT_OR_RETURN(, pData, "pData unexpectedly null");
 	WzString *pFilename = static_cast<WzString *>(pData);
 	viewDataShutDown(pFilename->toUtf8().c_str());
 	delete pFilename;

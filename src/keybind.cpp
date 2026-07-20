@@ -82,6 +82,9 @@
 
 #include "activity.h"
 
+#include "screens/ingameopscreen.h"
+#include "titleui/options/optionsforms.h"
+
 /*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -124,6 +127,22 @@ bool runningMultiplayer()
 static void noMPCheatMsg()
 {
 	addConsoleMessage(_("Sorry, that cheat is disabled in multiplayer games."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+}
+
+bool shouldTrapCursor()
+{
+	auto result = war_GetTrapCursor();
+	switch (result)
+	{
+		case TrapCursorMode::Disabled:
+			return false;
+		case TrapCursorMode::Enabled:
+			return true;
+		case TrapCursorMode::Automatic:
+			// automatic mode - if in fullscreen mode (including desktop full), or maximized, trap the cursor
+			return (wzIsFullscreen() || wzIsMaximized());
+	}
+	return false; // silence compiler warning
 }
 
 // --------------------------------------------------------------------------
@@ -214,7 +233,7 @@ void kf_DamageMe()
 	{
 		return; // no-op
 	}
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -230,7 +249,7 @@ void kf_DamageMe()
 			}
 		}
 	}
-	for (STRUCTURE *psStruct : apsStructLists[selectedPlayer])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -255,7 +274,7 @@ void	kf_TraceObject()
 		return; // no-op
 	}
 
-	for (const DROID* psCDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psCDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psCDroid->selected)
 		{
@@ -264,7 +283,7 @@ void	kf_TraceObject()
 			return;
 		}
 	}
-	for (const STRUCTURE* psCStruct : apsStructLists[selectedPlayer])
+	for (const STRUCTURE* psCStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psCStruct->selected)
 		{
@@ -307,11 +326,11 @@ void	kf_HalveHeights()
 {
 	MAPTILE	*psTile;
 
-	for (int j = 0; j < mapHeight; ++j)
+	for (int j = 0; j < gameWorld.map.height; ++j)
 	{
-		for (int i = 0; i < mapWidth; ++i)
+		for (int i = 0; i < gameWorld.map.width; ++i)
 		{
-			psTile = mapTile(i, j);
+			psTile = mapTile(gameWorld.map, i, j);
 			psTile->height /= 2;
 		}
 	}
@@ -362,7 +381,7 @@ void	kf_DebugDroidInfo()
 		return; // no-op
 	}
 
-	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -390,7 +409,7 @@ void kf_CloneSelected(int limit)
 
 	bool selectedAnything = false;
 	const DROID* droidToClone = nullptr;
-	for (const DROID* d : apsDroidLists[selectedPlayer])
+	for (const DROID* d : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (!d->selected)
 		{
@@ -428,10 +447,10 @@ void kf_CloneSelected(int limit)
 	for (int i = 0; i < limit; i++)
 	{
 		Vector2i pos = droidToClone->pos.xy() + iSinCosR(40503 * i, iSqrt(50 * 50 * (i + 1)));  // 40503 = 65536/φ (A bit more than a right angle)
-		DROID* psNewDroid = buildDroid(sTemplate, pos.x, pos.y, droidToClone->player, false, nullptr);
+		DROID* psNewDroid = buildDroid(gameWorld, sTemplate, pos.x, pos.y, droidToClone->player, false, nullptr);
 		if (psNewDroid)
 		{
-			addDroid(psNewDroid, apsDroidLists);
+			addDroid(psNewDroid, gameWorld.objects.droids);
 			triggerEventDroidBuilt(psNewDroid, nullptr);
 		}
 		else if (!bMultiMessages)
@@ -460,7 +479,7 @@ void kf_MakeMeHero()
 		return; // no-op
 	}
 
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected && (psDroid->droidType == DROID_COMMAND || psDroid->droidType == DROID_SENSOR))
 		{
@@ -489,7 +508,7 @@ void kf_TeachSelected()
 		return; // no-op
 	}
 
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -514,7 +533,7 @@ void kf_Unselectable()
 		return; // no-op
 	}
 
-	for (DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected)
 		{
@@ -522,7 +541,7 @@ void kf_Unselectable()
 			psDroid->selected = false;
 		}
 	}
-	for (STRUCTURE *psStruct : apsStructLists[selectedPlayer])
+	for (STRUCTURE *psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psStruct->selected)
 		{
@@ -735,7 +754,7 @@ void kf_ListDroids()
 	}
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (const DROID *psDroid : apsDroidLists[i])
+		for (const DROID *psDroid : gameWorld.objects.droids[i])
 		{
 			const auto x = map_coord(psDroid->pos.x);
 			const auto y = map_coord(psDroid->pos.y);
@@ -786,7 +805,7 @@ void	kf_TogglePower()
 /* Recalculates the lighting values for a tile */
 void	kf_RecalcLighting()
 {
-	initLighting(0, 0, mapWidth, mapHeight);
+	initLighting(gameWorld.map, 0, 0, gameWorld.map.width, gameWorld.map.height);
 	addConsoleMessage(_("Lighting values for all tiles recalculated"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -827,7 +846,7 @@ void	kf_AllAvailable()
 void	kf_TriFlip()
 {
 	MAPTILE	*psTile;
-	psTile = mapTile(mouseTileX, mouseTileY);
+	psTile = mapTile(gameWorld.map, mouseTileX, mouseTileY);
 	TOGGLE_TRIFLIP(psTile);
 //	addConsoleMessage(_("Triangle flip status toggled"),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 }
@@ -837,7 +856,7 @@ void	kf_TriFlip()
 /* Debug info about a map tile */
 void	kf_TileInfo()
 {
-	MAPTILE	*psTile = mapTile(mouseTileX, mouseTileY);
+	MAPTILE	*psTile = mapTile(gameWorld.map, mouseTileX, mouseTileY);
 
 	debug(LOG_ERROR, "Tile position=(%d, %d) Terrain=%d Texture=%u Height=%d Illumination=%u",
 	      mouseTileX, mouseTileY, (int)terrainType(psTile), TileNumber_tile(psTile->texture), psTile->height,
@@ -881,7 +900,7 @@ void kf_RevealMapAtPos()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
-	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
+	addSpotter(gameWorld.map, mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
 }
 
 // --------------------------------------------------------------------------
@@ -899,19 +918,19 @@ void kf_MapCheck()
 
 	if (selectedPlayer >= MAX_PLAYERS) { return; }
 
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
-		psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);
+		psDroid->pos.z = map_Height(gameWorld.map, psDroid->pos.x, psDroid->pos.y);
 	}
 
-	for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
+	for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 	{
-		alignStructure(psStruct);
+		alignStructure(psStruct, gameWorld.map);
 	}
 
-	for (auto& psFlag : apsFlagPosLists[selectedPlayer])
+	for (auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 	{
-		psFlag->coords.z = map_Height(psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
+		psFlag->coords.z = map_Height(gameWorld.map, psFlag->coords.x, psFlag->coords.y) + ASSEMBLY_POINT_Z_PADDING;
 	}
 }
 
@@ -923,7 +942,7 @@ void	kf_RaiseTile()
 		return;  // Don't desynch if pressing 'W'...
 	}
 
-	raiseTile(mouseTileX, mouseTileY);
+	raiseTile(gameWorld.map, mouseTileX, mouseTileY);
 }
 
 // --------------------------------------------------------------------------
@@ -936,7 +955,7 @@ void	kf_LowerTile()
 		return;  // Don't desynch if pressing 'A'...
 	}
 
-	lowerTile(mouseTileX, mouseTileY);
+	lowerTile(gameWorld.map, mouseTileX, mouseTileY);
 }
 
 // --------------------------------------------------------------------------
@@ -959,8 +978,8 @@ MappableFunction kf_RadarZoom(const int multiplier)
 
 		if (newZoomLevel != oldZoomLevel)
 		{
-			CONPRINTF(_("Setting radar zoom to %u"), newZoomLevel);
-			SetRadarZoom(newZoomLevel);
+			CONPRINTF(_("Setting radar zoom to %u"), static_cast<unsigned>(newZoomLevel));
+			SetRadarZoom(gameWorld.map, newZoomLevel);
 			war_SetRadarZoom(GetRadarZoom()); // persist changed setting to config
 			audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 		}
@@ -970,9 +989,9 @@ MappableFunction kf_RadarZoom(const int multiplier)
 // --------------------------------------------------------------------------
 void kf_MaxScrollLimits()
 {
-	scrollMinX = scrollMinY = 0;
-	scrollMaxX = mapWidth;
-	scrollMaxY = mapHeight;
+	gameWorld.map.scroll.minX = gameWorld.map.scroll.minY = 0;
+	gameWorld.map.scroll.maxX = gameWorld.map.width;
+	gameWorld.map.scroll.maxY = gameWorld.map.height;
 }
 
 // --------------------------------------------------------------------------
@@ -1050,11 +1069,19 @@ void	kf_ResetPitch()
 /* Quickly access the in-game keymap */
 void kf_ShowMappings()
 {
-	if (!InGameOpUp && !isInGamePopupUp)
+	if (!InGameOpUp)
 	{
-		kf_addInGameOptions();
-		intProcessInGameOptions(INTINGAMEOP_OPTIONS);
-		intProcessInGameOptions(INTINGAMEOP_KEYMAP);
+		// Open new Options screen and jump to Controls section
+		auto optionsBrowser = createOptionsBrowser(true);
+		if (!optionsBrowser->switchToOptionsForm(OptionsBrowserForm::Modes::Controls))
+		{
+			debug(LOG_INFO, "Failed to open Controls options form?");
+			return;
+		}
+		showInGameOptionsScreen(psWScreen, optionsBrowser, []() {
+			// the setting for group menu display may have been modified
+			intShowGroupSelectionMenu();
+		});
 	}
 }
 
@@ -1070,7 +1097,7 @@ void kf_SelectGrouping(UDWORD groupNumber)
 	bool	Selected;
 
 	bAlreadySelected = false;
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		/* Wipe out the ones in the wrong group */
 		if (psDroid->selected && psDroid->group != groupNumber)
@@ -1097,7 +1124,7 @@ void kf_SelectGrouping(UDWORD groupNumber)
 	intGroupsChanged(groupNumber);
 
 	/* play group audio but only if they weren't already selected - AM */
-	if (Selected && !bAlreadySelected)
+	if (Selected && !bAlreadySelected && war_getPlayAudioCue_GroupReporting())
 	{
 		audio_QueueTrack(ID_SOUND_GROUP_0 + groupNumber);
 		audio_QueueTrack(ID_SOUND_REPORTING);
@@ -1144,7 +1171,7 @@ MappableFunction kf_RemoveFromGrouping()
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		removeObjectFromGroup(selectedPlayer);
+		removeObjectFromGroup(gameWorld.objects, selectedPlayer);
 	};
 }
 
@@ -1167,11 +1194,8 @@ void	kf_ToggleDroidInfo()
 void	kf_addInGameOptions()
 {
 	setWidgetsStatus(true);
-	if (!isInGamePopupUp)	// they can *only* quit when popup is up.
-	{
-		intResetScreen(false);
-		intAddInGameOptions();
-	}
+	intResetScreen(false);
+	intAddInGameOptions();
 }
 
 // --------------------------------------------------------------------------
@@ -1261,11 +1285,11 @@ void enableGodMode()
 	}
 
 	godMode = true; // view all structures and droids
-	revealAll(selectedPlayer);
+	revealAll(gameWorld.map, selectedPlayer);
 	setRevealStatus(true); // view the entire map
 	radarPermitted = true; //add minimap without CC building
 
-	preProcessVisibility();
+	preProcessVisibility(gameWorld.map);
 }
 
 void	kf_ToggleGodMode()
@@ -1291,7 +1315,7 @@ void	kf_ToggleGodMode()
 		godMode = false;
 		setRevealStatus(pastReveal);
 		// now hide the features
-		for (BASE_OBJECT* psFeat : apsFeatureLists[0])
+		for (BASE_OBJECT* psFeat : gameWorld.objects.features[0])
 		{
 			psFeat->visible[selectedPlayer] = 0;
 		}
@@ -1301,7 +1325,7 @@ void	kf_ToggleGodMode()
 		{
 			if (playerId != selectedPlayer)
 			{
-				for (STRUCTURE* psStruct : apsStructLists[playerId])
+				for (STRUCTURE* psStruct : gameWorld.objects.structures[playerId])
 				{
 					psStruct->visible[selectedPlayer] = 0;
 				}
@@ -1309,7 +1333,7 @@ void	kf_ToggleGodMode()
 		}
 		// remove all proximity messages
 		releaseAllProxDisp();
-		radarPermitted = structureExists(selectedPlayer, REF_HQ, true, false) || structureExists(selectedPlayer, REF_HQ, true, true);
+		radarPermitted = structureExists(gameWorld.objects, selectedPlayer, REF_HQ, true) || structureExists(mission.gameWorld.objects, selectedPlayer, REF_HQ, true);
 	}
 	else
 	{
@@ -1341,12 +1365,34 @@ MappableFunction kf_ScrollCamera(const int horizontal, const int vertical)
 	};
 }
 
+static TrapCursorMode oldTrapCursorEnabledValue = TrapCursorMode::Enabled;
 void kf_toggleTrapCursor()
 {
-	bool trap = !war_GetTrapCursor();
-	war_SetTrapCursor(trap);
-	(trap ? wzGrabMouse : wzReleaseMouse)();
-	std::string msg = astringf(_("Trap cursor %s"), trap ? "ON" : "OFF");
+	auto value = war_GetTrapCursor();
+	if (value == TrapCursorMode::Disabled)
+	{
+		value = oldTrapCursorEnabledValue;
+	}
+	else if (value == TrapCursorMode::Automatic && !shouldTrapCursor())
+	{
+		// set to auto, but will not automatically trap the cursor - toggle to enabled
+		value = TrapCursorMode::Enabled;
+	}
+	else
+	{
+		oldTrapCursorEnabledValue = value;
+		value = TrapCursorMode::Disabled;
+	}
+	war_SetTrapCursor(value);
+	(shouldTrapCursor() ? wzGrabMouse : wzReleaseMouse)();
+	const char* pValueStr = "";
+	switch (value)
+	{
+		case TrapCursorMode::Disabled: pValueStr = "OFF"; break;
+		case TrapCursorMode::Enabled: pValueStr = "ON"; break;
+		case TrapCursorMode::Automatic: pValueStr = "AUTO"; break;
+	}
+	std::string msg = astringf(_("Trap cursor %s"), pValueStr);
 	addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
@@ -1370,11 +1416,8 @@ void	kf_TogglePauseMode()
 		setAudioPause(true);
 		setScrollPause(true);
 
-		// If cursor trapping is enabled allow the cursor to leave the window
-		if (war_GetTrapCursor())
-		{
-			wzReleaseMouse();
-		}
+		// If cursor trapping is enabled, allow the cursor to leave the window when paused
+		wzReleaseMouse();
 
 		/* And stop the clock */
 		gameTimeStop();
@@ -1452,7 +1495,7 @@ void	kf_TogglePauseMode()
 		setScrollPause(false);
 
 		// Re-enable cursor trapping if it is enabled
-		if (war_GetTrapCursor())
+		if (shouldTrapCursor())
 		{
 			wzGrabMouse();
 		}
@@ -1631,16 +1674,16 @@ void	kf_JumpToResourceExtractor()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	if (apsExtractorLists[selectedPlayer].empty())
+	if (gameWorld.objects.extractors[selectedPlayer].empty())
 	{
 		addConsoleMessage(_("Unable to locate any oil derricks!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		return;
 	}
 
-	if (!psOldRE.has_value() || std::next(*psOldRE) == apsExtractorLists[selectedPlayer].end())
+	if (!psOldRE.has_value() || std::next(*psOldRE) == gameWorld.objects.extractors[selectedPlayer].end())
 	{
 		// Reset the pointer if `psOldRE` is either not initialized yet or points to the last element.
-		psOldRE.emplace(apsExtractorLists[selectedPlayer].begin());
+		psOldRE.emplace(gameWorld.objects.extractors[selectedPlayer].begin());
 	}
 	else
 	{
@@ -1658,9 +1701,22 @@ void	kf_JumpToResourceExtractor()
 	}
 }
 
-void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor)
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor, const WorldObjectState& objState)
 {
-	if (psOldRE.has_value() && *psOldRE != apsExtractorLists[selectedPlayer].end() && **psOldRE == psResourceExtractor)
+	if (selectedPlayer >= MAX_PLAYERS)
+	{
+		psOldRE.reset();
+		return;
+	}
+
+	// Only consider the case `objState` represents the currently active game world state.
+	const auto& activeExtractors = gameWorld.objects.extractors[selectedPlayer];
+	if (&objState.extractors[selectedPlayer] != &activeExtractors)
+	{
+		return;
+	}
+
+	if (psOldRE.has_value() && *psOldRE != activeExtractors.end() && **psOldRE == psResourceExtractor)
 	{
 		psOldRE.reset();
 	}
@@ -1673,7 +1729,7 @@ MappableFunction kf_JumpToUnits(const DROID_TYPE droidType)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedUnit(droidType);
+		selNextSpecifiedUnit(gameWorld.objects, droidType);
 	};
 }
 
@@ -1683,7 +1739,7 @@ void	kf_JumpToUnassignedUnits()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	selNextUnassignedUnit();
+	selNextUnassignedUnit(gameWorld.objects);
 }
 // --------------------------------------------------------------------------
 
@@ -1856,10 +1912,10 @@ MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bo
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedBuilding(factoryType, bJumpToSelected);
+		selNextSpecifiedBuilding(gameWorld.objects, factoryType, bJumpToSelected);
 
 		//deselect factories of other types
-		for (STRUCTURE* psCurrent : apsStructLists[selectedPlayer])
+		for (STRUCTURE* psCurrent : gameWorld.objects.structures[selectedPlayer])
 		{
 			const STRUCTURE_TYPE currentType = psCurrent->pStructureType->type;
 			const bool bIsAnotherTypeOfFactory = currentType != factoryType && std::any_of(FACTORY_TYPES.begin(), FACTORY_TYPES.end(), [currentType](const STRUCTURE_TYPE type) {
@@ -1886,7 +1942,7 @@ MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedBuilding(REF_RESEARCH, bJumpToSelected);
+		selNextSpecifiedBuilding(gameWorld.objects, REF_RESEARCH, bJumpToSelected);
 		if (intCheckReticuleButEnabled(IDRET_RESEARCH))
 		{
 			setKeyButtonMapping(IDRET_RESEARCH);
@@ -1902,7 +1958,7 @@ MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		selNextSpecifiedBuilding(REF_POWER_GEN, bJumpToSelected);
+		selNextSpecifiedBuilding(gameWorld.objects, REF_POWER_GEN, bJumpToSelected);
 		triggerEventSelected();
 	};
 }
@@ -1933,12 +1989,12 @@ void	kf_KillEnemy()
 		if (playerId != selectedPlayer && !aiCheckAlliances(selectedPlayer, playerId))
 		{
 			// wipe out all the droids
-			for (const DROID* psCDroid : apsDroidLists[playerId])
+			for (const DROID* psCDroid : gameWorld.objects.droids[playerId])
 			{
 				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
-			for (STRUCTURE* psCStruct : apsStructLists[playerId])
+			for (STRUCTURE* psCStruct : gameWorld.objects.structures[playerId])
 			{
 				SendDestroyStructure(psCStruct);
 			}
@@ -1969,14 +2025,14 @@ void kf_KillSelected()
 	audio_PlayTrack(ID_SOUND_COLL_DIE);
 	Cheated = true;
 
-	for (const DROID* psCDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psCDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psCDroid->selected)
 		{
 			SendDestroyDroid(psCDroid);
 		}
 	}
-	for (STRUCTURE* psCStruct : apsStructLists[selectedPlayer])
+	for (STRUCTURE* psCStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		if (psCStruct->selected)
 		{
@@ -2049,7 +2105,7 @@ void	kf_ToggleConsole()
 MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen)
 {
 	return [selectionClass, selectionType, bOnScreen]() {
-		selDroidSelection(selectedPlayer, selectionClass, selectionType, bOnScreen);
+		selDroidSelection(gameWorld.objects, selectedPlayer, selectionClass, selectionType, bOnScreen);
 	};
 }
 
@@ -2079,7 +2135,7 @@ MappableFunction kf_OrderDroid(const DroidOrderType order)
 		/* not supported if a spectator */
 		SPECTATOR_NO_OP();
 
-		for (DROID* psDroid : apsDroidLists[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			if (psDroid->selected)
 			{
@@ -2116,12 +2172,12 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 	// _not_ be disallowed in multiplayer games.
 
 	// This code is similar to SetSecondaryState() in intorder.cpp. Unfortunately, it seems hard to un-duplicate the code.
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		// Only set the state if it's not a transporter.
 		if (psDroid->selected && !psDroid->isTransporter())
 		{
-			secondarySetState(psDroid, sec, state);
+			secondarySetState(psDroid, gameWorld.objects, sec, state);
 		}
 	}
 	intRefreshOrder();
@@ -2133,12 +2189,12 @@ void	kf_TriggerRayCast()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	auto selectedDroidIt = std::find_if(apsDroidLists[selectedPlayer].begin(), apsDroidLists[selectedPlayer].end(), [](DROID* d)
+	auto selectedDroidIt = std::find_if(gameWorld.objects.droids[selectedPlayer].begin(), gameWorld.objects.droids[selectedPlayer].end(), [](DROID* d)
 	{
 		return d->selected;
 	});
 
-	if (selectedDroidIt != apsDroidLists[selectedPlayer].end())
+	if (selectedDroidIt != gameWorld.objects.droids[selectedPlayer].end())
 	{
 //		getBlockHeightDirToEdgeOfGrid(UDWORD x, UDWORD y, UBYTE direction, UDWORD *height, UDWORD *dist)
 //		getBlockHeightDirToEdgeOfGrid(psOther->pos.x,psOther->pos.y,psOther->direction,&height,&dist);
@@ -2156,7 +2212,7 @@ void	kf_CentreOnBase()
 	SPECTATOR_NO_OP();
 
 	/* Got through our buildings */
-	for (const STRUCTURE* pStruct : apsStructLists[selectedPlayer])
+	for (const STRUCTURE* pStruct : gameWorld.objects.structures[selectedPlayer])
 	{
 		/* Have we got a HQ? */
 		if (pStruct->pStructureType->type == REF_HQ)
@@ -2220,7 +2276,7 @@ void	kf_RightOrderMenu()
 	/* not supported if a spectator */
 	SPECTATOR_NO_OP();
 
-	for (DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected) // && droidOnScreen(psDroid,0))
 		{
@@ -2345,7 +2401,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 	}
 	else
 	{
-		ssprintf(modString, "%d", newMod.n);
+		ssprintf(modString, "%d", static_cast<int>(newMod.n));
 	}
 
 	if (newMod == 1)
@@ -2422,7 +2478,7 @@ void kf_ToggleRadarAllyEnemy()
 	{
 		CONPRINTF("%s", _("Radar showing player colors"));
 	}
-	resizeRadar();
+	resizeRadar(gameWorld.map);
 }
 
 void kf_ToggleRadarTerrain()
@@ -2475,7 +2531,7 @@ void	kf_AddHelpBlip()
 	y = mouseY();
 	if (isMouseOverRadar())
 	{
-		CalcRadarPosition(x, y, &worldX, &worldY);
+		CalcRadarPosition(gameWorld.map, x, y, &worldX, &worldY);
 		worldX = worldX * TILE_UNITS + TILE_UNITS / 2;
 		worldY = worldY * TILE_UNITS + TILE_UNITS / 2;
 	}
@@ -2557,7 +2613,7 @@ void kf_QuickSave()
 		console(_("QuickSave not allowed for multiplayer or tutorial games"));
 		return;
 	}
-	if (InGameOpUp || isInGamePopupUp)
+	if (InGameOpUp)
 	{
 		return;
 	}
@@ -2565,6 +2621,10 @@ void kf_QuickSave()
 	{
 		console(_("QuickSave not allowed in Autosaves-Only mode"));
 		return;
+	}
+	if (NETisReplay())
+	{
+		return; // Bail out if we're running a replay
 	}
 
 	const char *filename = bMultiPlayer ? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
@@ -2591,7 +2651,7 @@ void kf_QuickLoad()
 		console(_("QuickLoad not allowed for multiplayer or tutorial games"));
 		return;
 	}
-	if (InGameOpUp || isInGamePopupUp)
+	if (InGameOpUp)
 	{
 		return;
 	}

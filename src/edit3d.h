@@ -26,6 +26,8 @@
 #define TILE_RAISE	1
 #define TILE_LOWER	-1
 
+struct WorldMapState;
+
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos, void *UserData);
 
 void Edit3DInitVars();
@@ -38,8 +40,8 @@ void incrementBuildingDirection(uint16_t amount);
 uint16_t getBuildingDirection();
 
 void adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
-void raiseTile(int tile3dX, int tile3dY);
-void lowerTile(int tile3dX, int tile3dY);
+void raiseTile(WorldMapState& mapState, int tile3dX, int tile3dY);
+void lowerTile(WorldMapState& mapState, int tile3dX, int tile3dY);
 
 enum BuildState
 {

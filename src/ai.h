@@ -42,6 +42,7 @@ enum AllianceType
 	ALLIANCES_TEAMS,     // Alliances are set before the game.
 	ALLIANCES_UNSHARED,  // Alliances are set before the game. No shared research.
 };
+constexpr AllianceType ALLIANCE_TYPE_MAX = AllianceType::ALLIANCES_UNSHARED;
 
 /// Amount of time to rage at the world when frustrated (10 seconds)
 #define FRUSTRATED_TIME (1000 * 10)

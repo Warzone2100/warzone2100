@@ -84,6 +84,7 @@
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "hci/quickchat.h"
 #include "warzoneconfig.h"
 
@@ -132,6 +133,7 @@ static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states
 static UDWORD	keyButtonMapping = 0;
 static bool ReticuleUp = false;
 static bool Refreshing = false;
+static bool quitToMainMenuRequested = false;
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -930,6 +932,8 @@ bool intInitialise()
 
 	psSelectedBuilder = nullptr;
 
+	quitToMainMenuRequested = false;
+
 	if (!intInitialiseGraphics())
 	{
 		debug(LOG_ERROR, "Failed to initialize interface graphics");
@@ -1031,6 +1035,7 @@ void interfaceShutDown()
 
 	shutdownChatScreen();
 	closeGuideScreen();
+	closeSpectatorGameOverScreen();
 	ChatDialogUp = false;
 
 	bAllowOtherKeyPresses = true;
@@ -1056,6 +1061,16 @@ void intRefreshGroupsUI()
 	IntGroupsRefreshPending = true;
 }
 
+void intInformInterfaceObjectRemoved(const BASE_OBJECT *psObj)
+{
+	if (psSelectedBuilder == psObj)
+	{
+		debug(LOG_INFO, "Selected builder removed");
+		psSelectedBuilder = nullptr;
+	}
+	// intDoScreenRefresh handles refreshing the backing stores for any open interfaceController
+}
+
 bool intAddRadarWidget()
 {
 	auto radarWidget = getRadarWidget();
@@ -1069,7 +1084,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 {
 	ASSERT_OR_RETURN(nullptr, selectedPlayer < MAX_PLAYERS, "Not supported selectedPlayer: %" PRIu32 "", selectedPlayer);
 
-	for (const auto& psFlag : apsFlagPosLists[selectedPlayer])
+	for (const auto& psFlag : gameWorld.objects.flags[selectedPlayer])
 	{
 		if (psFlag->selected && psFlag->type == POS_DELIVERY)
 		{
@@ -1374,10 +1389,27 @@ static void reticuleCallback(int retbut)
 	}
 }
 
+void intRequestQuitToMainMenu()
+{
+	quitToMainMenuRequested = true;
+	if (gamePaused())
+	{
+		kf_TogglePauseMode(); // intRunWidgets() (which processes the request) isn't called while the game is paused
+	}
+}
+
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
+
+	if (quitToMainMenuRequested)
+	{
+		quitToMainMenuRequested = false;
+		intCloseInGameOptions(false, false);
+		intResetScreen(false);
+		quitting = true;
+	}
 
 	if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult) > 0)
 	{
@@ -1388,7 +1420,9 @@ INT_RETVAL intRunWidgets()
 		}
 		else
 		{
-			if (saveGame(sRequestResult, GTYPE_SAVE_START))
+			// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+			// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+			if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
 			{
 				char msg[256] = {'\0'};
 
@@ -1479,7 +1513,7 @@ INT_RETVAL intRunWidgets()
 		/*****************  Reticule buttons  *****************/
 
 		case IDRET_COMMAND:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1490,7 +1524,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_BUILD:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1501,7 +1535,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_MANUFACTURE:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1512,7 +1546,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_RESEARCH:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1523,10 +1557,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_INTEL_MAP:
-			if (isKeyMapEditorUp)
-			{
-				break;
-			}
 			// check if RMB was clicked
 			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 			{
@@ -1543,7 +1573,7 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_DESIGN:
-			if (isKeyMapEditorUp || selectedPlayerIsSpectator)
+			if (selectedPlayerIsSpectator)
 			{
 				break;
 			}
@@ -1560,10 +1590,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_CANCEL:
-			if (isKeyMapEditorUp)
-			{
-				break;
-			}
 			intResetScreen(false);
 			psCurrentMsg = nullptr;
 			reticuleCallback(RETBUT_CANCEL);
@@ -1579,7 +1605,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		/* Catch the quit button here */
-		case INTINGAMEOP_POPUP_QUIT:
 		case IDMISSIONRES_QUIT:			// mission quit
 		case INTINGAMEOP_QUIT:			// esc quit confirm
 		case IDOPT_QUIT:						// options screen quit
@@ -1675,7 +1700,7 @@ INT_RETVAL intRunWidgets()
 					// Don't allow derrick to be built on burning ground.
 					if (((STRUCTURE_STATS *)psPositionStats)->type == REF_RESOURCE_EXTRACTOR)
 					{
-						if (fireOnLocation(pos.x, pos.y))
+						if (fireOnLocation(gameWorld.map, pos.x, pos.y))
 						{
 							AddDerrickBurningMessage();
 						}
@@ -1741,7 +1766,7 @@ INT_RETVAL intRunWidgets()
 
 						if (psBuilding->type == REF_DEMOLISH)
 						{
-							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
+							MAPTILE *psTile = mapTile(gameWorld.map, map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
 
@@ -1752,7 +1777,7 @@ INT_RETVAL intRunWidgets()
 							}
 							else if (psFeature && psTile->psObject->type == OBJ_FEATURE)
 							{
-								removeFeature(psFeature);
+								removeFeature(psFeature, gameWorld);
 							}
 						}
 						else
@@ -1761,7 +1786,7 @@ INT_RETVAL intRunWidgets()
 							STRUCTURE *psStructure = &tmp;
 							tmp.state = SAS_NORMAL;
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
-							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
+							tmp.pos = {pos.x, pos.y, map_Height(gameWorld.map, pos.x, pos.y) + world_coord(1) / 10};
 
 							// In multiplayer games be sure to send a message to the
 							// other players, telling them a new structure has been
@@ -1790,11 +1815,11 @@ INT_RETVAL intRunWidgets()
 					else if (psPositionStats->hasType(STAT_TEMPLATE))
 					{
 						std::string msg;
-						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
+						DROID *psDroid = buildDroid(gameWorld, (DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
 						cancelDeliveryRepos();
 						if (psDroid)
 						{
-							addDroid(psDroid, apsDroidLists);
+							addDroid(psDroid, gameWorld.objects.droids);
 
 							// Send a text message to all players, notifying them of
 							// the fact that we're cheating ourselves a new droid.
@@ -1833,7 +1858,7 @@ INT_RETVAL intRunWidgets()
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if ((testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && intMode != INT_MISSIONRES && !dbgInputManager.debugMappingsAllowed())
 	{
-		debug(LOG_ERROR, "PlayerHasLost Or Won");
+		debug(LOG_INFO, "PlayerHasLost Or Won");
 		intResetScreen(true);
 		retCode = INT_QUIT;
 	}
@@ -1977,11 +2002,6 @@ void intDisplayWidgets()
 		// When will they ever learn!!!!
 		if (!bMultiPlayer)
 		{
-			if (!bInTutorial)
-			{
-				screen_RestartBackDrop();
-			}
-
 			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
 			if ((intMode == INT_DESIGN) || (bInTutorial && intMode == INT_INTELMAP))
 			{
@@ -2602,7 +2622,7 @@ static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
-		WzString costString = WzString::fromUtf8(astringf(_("Cost: %u"), powerCost));
+		WzString costString = WzString::format(_("Cost: %u"), powerCost);
 		tipString.append("\n");
 		tipString.append(costString);
 		button->setTip(tipString.toUtf8().c_str());
@@ -2722,11 +2742,11 @@ StructureList *interfaceStructList()
 
 	if (offWorldKeepLists)
 	{
-		return &mission.apsStructLists[selectedPlayer];
+		return &mission.gameWorld.objects.structures[selectedPlayer];
 	}
 	else
 	{
-		return &apsStructLists[selectedPlayer];
+		return &gameWorld.objects.structures[selectedPlayer];
 	}
 }
 
@@ -2756,11 +2776,6 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 // show selected widget from reticule menu
 void intShowWidget(int buttonID)
 {
-	if (isKeyMapEditorUp)
-	{
-		return;
-	}
-
 	switch (buttonID)
 	{
 	case RETBUT_FACTORY:
@@ -2961,7 +2976,7 @@ static SDWORD intNumSelectedDroids(UDWORD droidType)
 	}
 
 	num = 0;
-	for (const DROID* psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->droidType == droidType)
 		{
@@ -3099,7 +3114,7 @@ bool isSecondaryWindowUp()
 
 void setSecondaryWindowUp(bool value)
 {
-	secondaryWindowUp = true;
+	secondaryWindowUp = value;
 }
 
 void intSetShouldShowRedundantDesign(bool value)

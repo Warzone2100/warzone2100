@@ -20,6 +20,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/visitor_helper.h"
 #include "joiningscreen.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
@@ -34,6 +35,8 @@
 #include "lib/netplay/connection_poll_group.h"
 #include "lib/netplay/open_connection_result.h"
 #include "lib/netplay/connection_provider_registry.h"
+#include "lib/netplay/error_categories.h"
+#include "lib/netplay/netlobby.h"
 
 #include "../hci.h"
 #include "../activity.h"
@@ -43,6 +46,7 @@
 #include "../titleui/titleui.h"
 #include "../titleui/multiplayer.h"
 #include "../multiint.h"
+#include "../multivote.h"
 
 #include <chrono>
 #include <algorithm>
@@ -53,11 +57,11 @@ struct WzJoiningGameScreen;
 // MARK: - Globals
 
 static std::weak_ptr<WzJoiningGameScreen> psCurrentJoiningAttemptScreen;
+static size_t currentNumRedirectAttempts = 0;
 
 void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen);
 
 constexpr std::chrono::milliseconds NET_READ_TIMEOUT{ 0 };
-constexpr size_t NET_BUFFER_SIZE = MaxMsgSize;
 constexpr uint32_t HOST_RESPONSE_TIMEOUT = 10000;
 
 // MARK: - WzJoiningStatusForm
@@ -75,6 +79,8 @@ public:
 		widget->initialize(text);
 		return widget;
 	}
+
+	int32_t idealHeight() override;
 protected:
 	void display(int xOffset, int yOffset) override;
 private:
@@ -88,6 +94,11 @@ void WzJoiningActionButton::initialize(const WzString& text)
 	FontID = font_regular_bold;
 	int minButtonWidthForText = iV_GetTextWidth(pText, FontID);
 	setGeometry(0, 0, minButtonWidthForText + InternalPadding, iV_GetTextLineSize(FontID) + InternalPadding);
+}
+
+int32_t WzJoiningActionButton::idealHeight()
+{
+	return iV_GetTextLineSize(FontID) + InternalPadding;
 }
 
 void WzJoiningActionButton::display(int xOffset, int yOffset)
@@ -167,11 +178,12 @@ private:
 	std::shared_ptr<WzJoiningActionButton> okayButton;
 	OnSubmitFunc onSubmit;
 	bool invalidPasswordPlaceholder = false;
+	const int32_t minPasswordBoxHeight = 20;
 };
 
 int32_t WzJoiningPasswordPrompt::idealHeight()
 {
-	return std::max<int32_t>(passwordBox->height(), okayButton->height());
+	return std::max<int32_t>(minPasswordBoxHeight, okayButton->idealHeight());
 }
 
 void WzJoiningPasswordPrompt::givePasswordBoxFocus()
@@ -249,7 +261,7 @@ void WzJoiningPasswordPrompt::initialize(const OnSubmitFunc& _onSubmit)
 
 	passwordBox = std::make_shared<W_EDITBOX>();
 	attach(passwordBox);
-	passwordBox->setGeometry(0, 0, 280, 20);
+	passwordBox->setGeometry(0, 0, 280, minPasswordBoxHeight);
 	passwordBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 	passwordBox->setMaxStringSize(password_string_size);
 	passwordBox->setPlaceholder(_("Enter password"));
@@ -285,13 +297,16 @@ void WzJoiningPasswordPrompt::recalcLayout()
 	int w = width();
 	int h = height();
 
+	const int contentsIdealHeight = std::max<int>(okayButton->idealHeight(), minPasswordBoxHeight);
+	const int contentsActualHeight = std::min<int>(h, contentsIdealHeight);
+
 	int buttonX0 = w - okayButton->width();
-	int buttonY0 = (h - okayButton->height()) / 2;
-	okayButton->setGeometry(buttonX0, buttonY0, okayButton->width(), h);
+	int buttonY0 = std::max<int>((h - contentsActualHeight) / 2, 0);
+	okayButton->setGeometry(buttonX0, buttonY0, okayButton->width(), contentsActualHeight);
 
 	int passwordBoxWidth = std::max<int>(buttonX0 - 5, 0);
-	int passwordBoxY0 = (h - passwordBox->height()) / 2;
-	passwordBox->setGeometry(0, passwordBoxY0, passwordBoxWidth, h);
+	int passwordBoxY0 = std::max<int>((h - contentsActualHeight) / 2, 0);
+	passwordBox->setGeometry(0, passwordBoxY0, passwordBoxWidth, contentsActualHeight);
 }
 
 class WzJoiningIndeterminateIndicatorWidget : public WIDGET
@@ -354,10 +369,14 @@ public:
 	void displayProgressStatus(const WzString& statusDescription);
 	void displaySuccessStatus(const WzString& statusDescription);
 	void displayUnableToJoinError(const WzString& errorDetails);
+	void displayNetLobbyError(const WzString& errorDetails);
 	void displayRejectionMessage(const WzString& rejectionMessageFromHost);
 
 	typedef std::function<void (WzString)> PasswordSubmitFunc;
 	void displayPasswordPrompt(const PasswordSubmitFunc& submitFunc);
+
+	void displayResolvableJoinErrorWidget(const std::shared_ptr<WIDGET>& resolvableJoinErrorWidget);
+	void clearResolvableJoinErrorWidget();
 
 	int32_t idealWidth() override;
 	int32_t idealHeight() override;
@@ -386,7 +405,7 @@ private:
 	std::shared_ptr<Paragraph> detailsParagraph;
 	std::shared_ptr<ScrollableListWidget> scrollableParagraphContainer;
 
-	std::shared_ptr<WzJoiningPasswordPrompt> passwordPrompt;
+	std::shared_ptr<WIDGET> resolvableJoinErrorWidget;
 	std::shared_ptr<WzJoiningActionButton> actionButton;
 	std::chrono::steady_clock::time_point startTime;
 	static constexpr int TitleContentsPadding = 20;
@@ -426,9 +445,9 @@ int32_t WzJoiningStatusForm::calculateNeededHeight(bool withDetailsParagraph)
 		result += statusDetails->idealHeight();
 	}
 	result += InternalPadding;
-	if (passwordPrompt && passwordPrompt->visible())
+	if (resolvableJoinErrorWidget && resolvableJoinErrorWidget->visible())
 	{
-		result += passwordPrompt->idealHeight() + InternalPadding;
+		result += resolvableJoinErrorWidget->idealHeight() + InternalPadding;
 	}
 	result += actionButton->height();
 	return result;
@@ -506,7 +525,7 @@ void WzJoiningStatusForm::recalcLayout()
 
 	statusTitle->setGeometry(InternalPadding, lastLineY1 + TitleContentsPadding, usableWidth, statusTitle->height());
 	lastLineY1 = statusTitle->y() + statusTitle->height();
-	usableHeight -= TitleContentsPadding + titleLabel->height();
+	usableHeight -= TitleContentsPadding + statusTitle->height();
 
 	// position button at bottom
 	int actionButtonX0 = (width() - actionButton->width()) / 2;
@@ -514,11 +533,15 @@ void WzJoiningStatusForm::recalcLayout()
 	actionButton->setGeometry(actionButtonX0, actionButtonY0, actionButton->width(), actionButton->height());
 	usableHeight -= actionButton->height() + InternalPadding;
 
-	if (passwordPrompt && passwordPrompt->visible())
+	if (resolvableJoinErrorWidget && resolvableJoinErrorWidget->visible())
 	{
-		int passwordPromptY0 = actionButton->y() - InternalPadding - passwordPrompt->idealHeight();
-		passwordPrompt->setGeometry(InternalPadding, passwordPromptY0, usableWidth, passwordPrompt->idealHeight());
-		usableHeight -= passwordPrompt->height() + InternalPadding;
+		// determine available height for resolvableJoinErrorWidget
+		const int availableResolveErrorWidgetHeight = usableHeight - (DetailsLabelParagraphPadding + statusDetails->idealHeight() + InternalPadding);
+		const int resolveErrorWidgetHeight = std::min<int>(availableResolveErrorWidgetHeight, resolvableJoinErrorWidget->idealHeight());
+
+		int passwordPromptY0 = actionButton->y() - (InternalPadding + resolveErrorWidgetHeight);
+		resolvableJoinErrorWidget->setGeometry(InternalPadding, passwordPromptY0, usableWidth, resolveErrorWidgetHeight);
+		usableHeight -= resolvableJoinErrorWidget->height() + InternalPadding;
 	}
 
 	// both of these start at the same place, taking up the remaining vertical space, but only one is displayed at a time
@@ -602,31 +625,55 @@ void WzJoiningStatusForm::displayPasswordPrompt(const PasswordSubmitFunc& submit
 		auto strongSelf = weakSelf.lock();
 		if (strongSelf)
 		{
-			strongSelf->passwordPrompt->setDisabled(true);
+			auto passwordPrompt = std::dynamic_pointer_cast<WzJoiningPasswordPrompt>(strongSelf->resolvableJoinErrorWidget);
+			if (passwordPrompt)
+			{
+				passwordPrompt->setDisabled(true);
+			}
 		}
 	};
+
+	displayStatus(_("Game requires a password to join"));
+
+	auto passwordPrompt = std::dynamic_pointer_cast<WzJoiningPasswordPrompt>(resolvableJoinErrorWidget);
 	if (!passwordPrompt)
 	{
 		passwordPrompt = WzJoiningPasswordPrompt::make(wrappedSubmitFunc);
-		attach(passwordPrompt);
+		displayResolvableJoinErrorWidget(passwordPrompt);
 	}
 	else
 	{
 		passwordPrompt->setOnSubmit(wrappedSubmitFunc);
 		passwordPrompt->clearAndSetCurrentEntryAsInvalid();
+		passwordPrompt->show();
+		recalcLayout();
 	}
-	passwordPrompt->show();
 	passwordPrompt->setDisabled(false);
-	displayStatus(_("Game requires a password to join"));
 	passwordPrompt->givePasswordBoxFocus();
+}
+
+void WzJoiningStatusForm::displayResolvableJoinErrorWidget(const std::shared_ptr<WIDGET>& newResolvableJoinErrorWidget)
+{
+	if (newResolvableJoinErrorWidget != resolvableJoinErrorWidget)
+	{
+		if (resolvableJoinErrorWidget)
+		{
+			detach(resolvableJoinErrorWidget);
+			resolvableJoinErrorWidget = nullptr;
+		}
+		resolvableJoinErrorWidget = newResolvableJoinErrorWidget;
+		attach(resolvableJoinErrorWidget);
+	}
+
+	resolvableJoinErrorWidget->show();
 	recalcLayout();
 }
 
 void WzJoiningStatusForm::displayUnableToJoinError(const WzString& errorDetails)
 {
-	if (passwordPrompt)
+	if (resolvableJoinErrorWidget)
 	{
-		passwordPrompt->hide();
+		resolvableJoinErrorWidget->hide();
 	}
 	progressIndicator->hide();
 	titleLabel->setString(_("Unable to Join Game"));
@@ -635,11 +682,24 @@ void WzJoiningStatusForm::displayUnableToJoinError(const WzString& errorDetails)
 	actionButton->setString(_("Close"));
 }
 
+void WzJoiningStatusForm::displayNetLobbyError(const WzString& errorDetails)
+{
+	if (resolvableJoinErrorWidget)
+	{
+		resolvableJoinErrorWidget->hide();
+	}
+	progressIndicator->hide();
+	titleLabel->setString(_("Unable to Join Game"));
+	statusTitle->setString(_("Message from Lobby:"));
+	displayDetailsParagraph(errorDetails);
+	actionButton->setString(_("Close"));
+}
+
 void WzJoiningStatusForm::displayRejectionMessage(const WzString& rejectionMessageFromHost)
 {
-	if (passwordPrompt)
+	if (resolvableJoinErrorWidget)
 	{
-		passwordPrompt->hide();
+		resolvableJoinErrorWidget->hide();
 	}
 	progressIndicator->hide();
 	titleLabel->setString(_("Join Attempt Rejected"));
@@ -690,7 +750,9 @@ protected:
 	}
 
 public:
-	static std::shared_ptr<WzJoiningGameScreen> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+	static std::shared_ptr<WzJoiningGameScreen> makeWithLobbyGame(const std::string& lobbyAddress, const std::string& gameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+
+	static std::shared_ptr<WzJoiningGameScreen> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
 
 public:
 	void closeScreen();
@@ -712,7 +774,11 @@ protected:
 	void initialize();
 	void recalcLayout();
 public:
-	static std::shared_ptr<WzJoiningGameScreen_HandlerRoot> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+	// Make with lobby gameId
+	static std::shared_ptr<WzJoiningGameScreen_HandlerRoot> makeWithLobbyGame(const std::string& lobbyAddress, const std::string& gameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+
+	// Make with connectionList
+	static std::shared_ptr<WzJoiningGameScreen_HandlerRoot> make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void display(int xOffset, int yOffset) override;
 	void run(W_CONTEXT *psContext) override;
@@ -722,6 +788,16 @@ public:
 	}
 
 private:
+	static std::shared_ptr<WzJoiningGameScreen_HandlerRoot> makeInternal(const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc);
+
+	void handleLobbyErrorResolve(const std::shared_ptr<WIDGET>& lobbyErrorResolveWidget);
+
+	void requestLobbyJoin(std::string lobbyAddress, std::string gameId, optional<netlobby::IPVersion> specificIpVersion = nullopt, std::shared_ptr<netlobby::LobbyErrorResolutionData> lobbyErrorResolutionData = nullptr);
+	void handleLobbyRequestJoinResult(const std::string& lobbyAddress, const std::string& gameId, optional<netlobby::IPVersion> specificIpVersion, netlobby::JoinResult result);
+
+	void applyExpectedHostProps();
+	void startAttemptingConnections();
+
 	void attemptToOpenConnection(size_t connectionIdx);
 
 	// Process a connection result (to be called from non-main threads)
@@ -730,6 +806,8 @@ private:
 	// Process a connection result - **Only to be called on the main thread**
 	void processOpenConnectionResult(size_t connectionIdx, OpenConnectionResult&& result);
 
+	bool verifyEncryptedHostResponse(const std::vector<uint8_t>& encryptedHostChallengeResponse);
+
 	// called from run()
 	void processJoining();
 
@@ -737,6 +815,7 @@ private:
 	void closeConnectionAttempt();
 	bool joiningSocketNETsend();
 	void handleSuccess();
+	void tryNextConnectionOption(size_t connectionIdx, std::error_code ec, const std::string& errorString);
 
 	// displaying status info / state
 	void promptForPassword();
@@ -748,35 +827,60 @@ private:
 	protected:
 		FailureDetails() {}
 	public:
+		enum class Source {
+			NetLobby,
+			Host,
+			Other
+		};
+
+		static FailureDetails makeFromNetLobbyError(optional<netlobby::IPVersion>, const netlobby::LobbyError& error);
 		static FailureDetails makeFromLobbyError(LOBBY_ERROR_TYPES resultCode);
 		static FailureDetails makeFromInternalError(const WzString& details);
 		static FailureDetails makeFromHostRejectionMessage(const WzString& message);
-	public:
+		static FailureDetails makeFromMultipleFailureDetails(Source source, const std::vector<FailureDetails>& details);
+
+		WzString getResultMessage() const;
+		Source getSource() const;
+	private:
+		WzString context;
 		WzString resultMessage;
-		bool hostProvidedMessage = false;
+		Source source = Source::Other;
 	};
 	void handleFailure(const FailureDetails& failureDetails);
+
+	struct InternalConnectionInfo
+	{
+		JoinConnectionDescription conn;
+		std::string joinToken;
+	};
+	std::vector<InternalConnectionInfo> convertLobbyGameDetailsToInternalConnectionList(const netlobby::GameJoinDetails& joinDetails);
+	std::vector<InternalConnectionInfo> convertConnectionDescriptionsToInternalConnectionList(const std::vector<JoinConnectionDescription>& connectionList);
+	void setConnectionList(std::vector<InternalConnectionInfo> list);
 
 public:
 	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 80);
 	std::function<void ()> onClickedFunc;
 	std::function<void ()> onCancelPressed;
 private:
-	std::vector<JoinConnectionDescription> connectionList;
+	std::vector<InternalConnectionInfo> connectionList;
 	WzString playerName;
 	EcKey playerIdentity;
+	ExpectedHostProperties expectedHostProps;
 	EcKey hostIdentity;
 	std::unique_ptr<SessionKeys> connectionAuthSessionKeys;
 	std::vector<uint8_t> challengeForHost;
 	bool asSpectator = false;
 	char gamePassword[password_string_size] = {};
 	size_t currentConnectionIdx = 0;
+	size_t numJoinRedirects = 0;
 
 	JoinSuccessHandler onSuccessFunc;
 	JoinFailureHandler onFailureFunc;
 
 	enum class JoiningState
 	{
+		NeedsLobbyErrorResolve,						// Waiting for user to resolve the error
+		FetchingLobbyJoinInfo,						// Waiting for lobby to return join info
 		NeedsPassword,								// Waiting for user to enter a password
 		AwaitingConnection,							// Waiting for background thread to (hopefully) yield an open connection (socket)
 		AwaitingInitialNetcodeHandshakeAck,			// Waiting for response to initial netcode version handshake
@@ -806,6 +910,30 @@ private:
 
 	std::shared_ptr<WzJoiningStatusForm> joiningProgressForm;
 };
+
+WzJoiningGameScreen_HandlerRoot::FailureDetails WzJoiningGameScreen_HandlerRoot::FailureDetails::makeFromNetLobbyError(optional<netlobby::IPVersion> ipVer, const netlobby::LobbyError& error)
+{
+	auto localizedLobbyErrorDescription = netlobby::GetLocalizedLobbyErrorMessage(error);
+
+	auto result = FailureDetails();
+
+	if (ipVer.has_value())
+	{
+		result.context = netlobby::to_string(ipVer.value());
+	}
+	result.resultMessage = WzString::format("%s: ", error.errCode.c_str());
+	if (localizedLobbyErrorDescription.has_value())
+	{
+		result.resultMessage += localizedLobbyErrorDescription.value();
+	}
+	else
+	{
+		result.resultMessage += WzString::fromUtf8(error.errMessage);
+	}
+
+	result.source = Source::NetLobby;
+	return result;
+}
 
 WzJoiningGameScreen_HandlerRoot::FailureDetails WzJoiningGameScreen_HandlerRoot::FailureDetails::makeFromLobbyError(LOBBY_ERROR_TYPES resultCode)
 {
@@ -841,7 +969,7 @@ WzJoiningGameScreen_HandlerRoot::FailureDetails WzJoiningGameScreen_HandlerRoot:
 	}
 	auto result = FailureDetails();
 	result.resultMessage = txt;
-	result.hostProvidedMessage = false;
+	result.source = Source::Other;
 	return result;
 }
 
@@ -849,7 +977,7 @@ WzJoiningGameScreen_HandlerRoot::FailureDetails WzJoiningGameScreen_HandlerRoot:
 {
 	auto result = FailureDetails();
 	result.resultMessage = details;
-	result.hostProvidedMessage = false;
+	result.source = Source::Other;
 	return result;
 }
 
@@ -857,8 +985,63 @@ WzJoiningGameScreen_HandlerRoot::FailureDetails WzJoiningGameScreen_HandlerRoot:
 {
 	auto result = FailureDetails();
 	result.resultMessage = message;
-	result.hostProvidedMessage = true;
+	result.source = Source::Host;
 	return result;
+}
+
+WzJoiningGameScreen_HandlerRoot::FailureDetails WzJoiningGameScreen_HandlerRoot::FailureDetails::makeFromMultipleFailureDetails(Source source, const std::vector<FailureDetails>& details)
+{
+	if (details.size() == 1)
+	{
+		auto result = details.front();
+		result.source = source;
+		return result;
+	}
+
+	// filter duplicates (ignoring context)
+	auto filteredDetails = [&]() -> std::vector<FailureDetails> {
+		std::vector<FailureDetails> result;
+		std::unordered_map<WzString, size_t> seenResultMessageIdxMap;
+		for (const auto& item : details)
+		{
+			auto it = seenResultMessageIdxMap.find(item.resultMessage);
+			if (it != seenResultMessageIdxMap.end())
+			{
+				// already seen - clear the context of the first instance, and skip adding this one
+				result[it->second].context.clear();
+				continue;
+			}
+			seenResultMessageIdxMap[item.resultMessage] = result.size();
+			result.push_back(item);
+		}
+		return result;
+	}();
+
+	auto result = FailureDetails();
+	for (const auto& item : filteredDetails)
+	{
+		if (!result.resultMessage.isEmpty())
+		{
+			result.resultMessage.append("\n");
+		}
+		result.resultMessage.append(item.getResultMessage());
+	}
+	result.source = source;
+	return result;
+}
+
+WzString WzJoiningGameScreen_HandlerRoot::FailureDetails::getResultMessage() const
+{
+	if (context.isEmpty())
+	{
+		return resultMessage;
+	}
+	return WzString::format("[%s] ", context.toUtf8().c_str()) + resultMessage;
+}
+
+WzJoiningGameScreen_HandlerRoot::FailureDetails::Source WzJoiningGameScreen_HandlerRoot::FailureDetails::getSource() const
+{
+	return source;
 }
 
 WzJoiningGameScreen_HandlerRoot::WzJoiningGameScreen_HandlerRoot(W_FORMINIT const *init)
@@ -872,7 +1055,326 @@ WzJoiningGameScreen_HandlerRoot::~WzJoiningGameScreen_HandlerRoot()
 	currentJoiningState = JoiningState::Failure;
 }
 
-std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+static optional<netlobby::IPVersion> knownAvailableConnectionTypesToIPVersion(const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes)
+{
+	if (!pKnownAvailableConnectionTypes)
+	{
+		if (war_getLobbyDisableIPv6())
+		{
+			// IPv6 disabled, so just return IPv4
+			return netlobby::IPVersion::IPv4;
+		}
+		return nullopt;
+	}
+
+	bool hasIPv4 = false;
+	bool hasIPv6 = false;
+	bool hasIPUnspecified = false;
+	for (const auto& ct : *pKnownAvailableConnectionTypes)
+	{
+		if (!ct.ipVersion.has_value())
+		{
+			hasIPUnspecified = true;
+		}
+		else
+		{
+			switch (ct.ipVersion.value())
+			{
+				case netlobby::IPVersion::IPv4:
+					hasIPv4 = true;
+					break;
+				case netlobby::IPVersion::IPv6:
+					hasIPv6 = true;
+					break;
+			}
+		}
+	}
+
+	if (hasIPUnspecified)
+	{
+		if (war_getLobbyDisableIPv6())
+		{
+			// IPv6 disabled, so just return IPv4
+			return netlobby::IPVersion::IPv4;
+		}
+		return nullopt;
+	}
+	if (hasIPv4 && !hasIPv6)
+	{
+		return netlobby::IPVersion::IPv4;
+	}
+	if (!hasIPv4 && hasIPv6)
+	{
+		return netlobby::IPVersion::IPv6;
+	}
+
+	// in case both IPv4 and IPv6 are available...
+	if (war_getLobbyDisableIPv6())
+	{
+		// IPv6 disabled, so just return IPv4
+		return netlobby::IPVersion::IPv4;
+	}
+	return nullopt;
+}
+
+std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot::makeWithLobbyGame(const std::string& lobbyAddress, const std::string& gameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+{
+	auto widget = makeInternal(playerName, playerIdentity, asSpectator, expectedHostProps, onSuccessFunc, onFailureFunc);
+	widget->requestLobbyJoin(lobbyAddress, gameId, knownAvailableConnectionTypesToIPVersion(pKnownAvailableConnectionTypes));
+
+	return widget;
+}
+
+void WzJoiningGameScreen_HandlerRoot::requestLobbyJoin(std::string lobbyAddress, std::string gameId, optional<netlobby::IPVersion> specificIpVersion, std::shared_ptr<netlobby::LobbyErrorResolutionData> lobbyErrorResolutionData)
+{
+	currentJoiningState = JoiningState::FetchingLobbyJoinInfo;
+
+	// Kick off fetching lobby join info & update progress display
+	updateJoiningStatus(_("Gathering connection details"));
+
+	auto debugStr = astringf("Gathering connection details (lobby gameId: %s)", gameId.c_str());
+	if (specificIpVersion.has_value())
+	{
+		debugStr += astringf(" (%s)", netlobby::to_string(specificIpVersion.value()));
+	}
+	else
+	{
+		debugStr += " (ip4 + ip6)";
+	}
+	debug(LOG_INFO, "%s", debugStr.c_str());
+
+	auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
+	netlobby::RequestJoinDetails(lobbyAddress, gameId, playerName, playerIdentity, asSpectator,
+	[weakSelf, lobbyAddress, gameId, specificIpVersion](netlobby::JoinResult result) {
+		// Handle request join result
+		auto strongSelf = weakSelf.lock();
+		if (!strongSelf)
+		{
+			// background thread ultimately returned after the requester has gone away (join was cancelled?) - just return
+			return;
+		}
+		strongSelf->handleLobbyRequestJoinResult(lobbyAddress, gameId, specificIpVersion, result);
+	}, specificIpVersion, lobbyErrorResolutionData);
+}
+
+static const char* to_display_string(netlobby::RequestJoinDetailsResults::ConnectivityFailureType failureType)
+{
+	switch (failureType)
+	{
+		case netlobby::RequestJoinDetailsResults::ConnectivityFailureType::ERR_COULD_NOT_CONNECT:
+			return _("Could Not Connect");
+		case netlobby::RequestJoinDetailsResults::ConnectivityFailureType::ERR_TIMEOUT:
+			return _("Timeout");
+		case netlobby::RequestJoinDetailsResults::ConnectivityFailureType::ERR_OTHER:
+			return _("Error");
+	}
+	return "Unknown error";
+}
+
+static optional<JoinConnectionDescription::JoinConnectionType> lobby_connection_method_to_join_connection_type(netlobby::ConnectionMethod method)
+{
+	switch (method)
+	{
+		case netlobby::ConnectionMethod::TCP_DIRECT:
+			return JoinConnectionDescription::JoinConnectionType::TCP_DIRECT;
+		case netlobby::ConnectionMethod::GNS_DIRECT:
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+			return JoinConnectionDescription::JoinConnectionType::GNS_DIRECT;
+#else
+			return nullopt;
+#endif
+	}
+	return nullopt; // silence compiler warning
+}
+
+static optional<JoinConnectionDescription> ConvertToJoinConnectionDescription(const netlobby::ConnectionInfo& conn)
+{
+	ASSERT_OR_RETURN(nullopt, !conn.host.empty(), "Missing host");
+
+	auto tOpt = lobby_connection_method_to_join_connection_type(conn.type.method);
+	if (!tOpt.has_value())
+	{
+		// Unsupported connection type
+		return nullopt;
+	}
+	return JoinConnectionDescription(tOpt.value(), conn.host, conn.port);
+}
+
+std::vector<WzJoiningGameScreen_HandlerRoot::InternalConnectionInfo> WzJoiningGameScreen_HandlerRoot::convertLobbyGameDetailsToInternalConnectionList(const netlobby::GameJoinDetails& joinDetails)
+{
+	ASSERT_OR_RETURN({}, joinDetails.connections.size() == joinDetails.joinTokens.size(), "Not the same number of connections (%zu) and join info (%zu)", joinDetails.connections.size(), joinDetails.joinTokens.size());
+
+	std::vector<WzJoiningGameScreen_HandlerRoot::InternalConnectionInfo> result;
+	for (size_t i = 0; i < joinDetails.connections.size(); ++i)
+	{
+		auto optConvertedJoinConnDesc = ConvertToJoinConnectionDescription(joinDetails.connections[i]);
+		if (!optConvertedJoinConnDesc.has_value())
+		{
+			continue;
+		}
+		result.push_back({optConvertedJoinConnDesc.value(), joinDetails.joinTokens[i]});
+	}
+
+	return result;
+}
+
+std::vector<WzJoiningGameScreen_HandlerRoot::InternalConnectionInfo> WzJoiningGameScreen_HandlerRoot::convertConnectionDescriptionsToInternalConnectionList(const std::vector<JoinConnectionDescription>& newConnectionList)
+{
+	std::vector<WzJoiningGameScreen_HandlerRoot::InternalConnectionInfo> result;
+	for (size_t i = 0; i < newConnectionList.size(); ++i)
+	{
+		result.push_back({newConnectionList[i], ""});
+	}
+
+	return result;
+}
+
+void WzJoiningGameScreen_HandlerRoot::setConnectionList(std::vector<InternalConnectionInfo> newConnectionList)
+{
+	// sort the connection list by user prefs
+	if (newConnectionList.size() > 1)
+	{
+		// sort the list, based on NETgetJoinPreferenceIPv6
+		// preserve the original relative order amongst each class of IPv4/IPv6 addresses
+		bool bSortIPv6First = NETgetJoinPreferenceIPv6();
+		std::stable_sort(newConnectionList.begin(), newConnectionList.end(), [bSortIPv6First](const InternalConnectionInfo& a, const InternalConnectionInfo& b) -> bool {
+			bool a_isIPv6 = a.conn.host.find(":") != std::string::npos; // this is a very simplistic test - if the host contains ":" we treat it as IPv6
+			bool b_isIPv6 = b.conn.host.find(":") != std::string::npos;
+			return (bSortIPv6First) ? (a_isIPv6 && !b_isIPv6) : (!a_isIPv6 && b_isIPv6);
+		});
+	}
+
+	connectionList = newConnectionList;
+}
+
+void WzJoiningGameScreen_HandlerRoot::handleLobbyErrorResolve(const std::shared_ptr<WIDGET>& lobbyErrorResolveWidget)
+{
+	ASSERT(lobbyErrorResolveWidget != nullptr, "Null lobbyErrorResolveWidget");
+
+	// Transition to NeedsLobbyErrorResolve state
+	currentJoiningState = JoiningState::NeedsLobbyErrorResolve;
+
+	// Display the widget
+	updateJoiningStatus(_("The host has requested additional verification"));
+	joiningProgressForm->displayResolvableJoinErrorWidget(lobbyErrorResolveWidget);
+	joiningProgressForm->callCalcLayout();
+}
+
+void WzJoiningGameScreen_HandlerRoot::handleLobbyRequestJoinResult(const std::string& lobbyAddress, const std::string& gameId, optional<netlobby::IPVersion> specificIpVersion, netlobby::JoinResult result)
+{
+	if (!result.has_value())
+	{
+		handleFailure(FailureDetails::makeFromNetLobbyError(nullopt, result.error()));
+		return;
+	}
+
+	const auto& results = result.value();
+
+	auto convertedJoinDetails = convertLobbyGameDetailsToInternalConnectionList(results.joinDetails);
+
+	std::vector<FailureDetails> failureDetails;
+	bool hasResolvableLobbyError = false;
+	for (const auto& err : results.errors)
+	{
+		std::visit(overloaded{
+			[&](const netlobby::RequestJoinDetailsResults::ConnectivityFailure& arg) {
+				// TODO: Handle connectivityErrors (if no IPv6, but there *is* IPv4, for example, can avoid trying to request IPv6 for future joins this session?)
+				if (err.first == netlobby::IPVersion::IPv6)
+				{
+					if (results.errors.count(netlobby::IPVersion::IPv4) == 0 && !results.joinDetails.connections.empty())
+					{
+						// There was an IPv6 connectivity issue, but IPv4 was fine
+						// TODO: Suppress future lookups of IPv6 connectivity to avoid future delays
+					}
+				}
+				auto errStr = WzString::format("[%s] %s: %s", netlobby::to_string(err.first), to_display_string(arg.type), arg.details.c_str());
+				failureDetails.push_back(FailureDetails::makeFromInternalError(errStr));
+			},
+			[&](const netlobby::LobbyError& arg) {
+				debug(LOG_NET, "%s: %s", arg.errCode.c_str(), arg.errMessage.c_str());
+				// Check for resolvable lobby errors
+				hasResolvableLobbyError = hasResolvableLobbyError || arg.isResolvableLobbyError();
+				failureDetails.push_back(FailureDetails::makeFromNetLobbyError(err.first, arg));
+			}
+		}, err.second);
+	}
+
+	if (hasResolvableLobbyError)
+	{
+		// If there are *any* resolvable lobby error(s), prefer resolving that / those before attempting to join
+		// (since they might be preventing full retrieval of join details)
+
+		// Find first resolvable lobby error for which a resolve widget can be generated
+		auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
+		std::shared_ptr<WIDGET> lobbyErrorResolveWidget;
+		for (const auto& err : results.errors)
+		{
+			try
+			{
+				const auto& arg = std::get<netlobby::LobbyError>(err.second);
+				if (!lobbyErrorResolveWidget)
+				{
+					std::string lobbyAddressCopy = lobbyAddress;
+					std::string gameIdCopy = gameId;
+					lobbyErrorResolveWidget = netlobby::GetLobbyErrorResolveWidget(arg, [weakSelf, lobbyAddressCopy, gameIdCopy, specificIpVersion](std::shared_ptr<netlobby::LobbyErrorResolutionData> resolutionData) {
+						auto strongSelf = weakSelf.lock();
+						ASSERT_OR_RETURN(, strongSelf != nullptr, "No parent form?");
+						strongSelf->requestLobbyJoin(lobbyAddressCopy, gameIdCopy, specificIpVersion, resolutionData);
+					});
+				}
+			}
+			catch (const std::bad_variant_access&)
+			{
+				continue;
+			}
+		}
+
+		if (lobbyErrorResolveWidget)
+		{
+			handleLobbyErrorResolve(lobbyErrorResolveWidget);
+			return;
+		}
+		else
+		{
+			debug(LOG_LOBBY, "Have resolvable lobby error, but unable to create widget to resolve it - skipping");
+		}
+	}
+
+	if (convertedJoinDetails.empty())
+	{
+		// If no connections returned, presumably there were errors?
+		if (!results.errors.empty())
+		{
+			// No connections, but there were error(s) - just display those
+			handleFailure(FailureDetails::makeFromMultipleFailureDetails(FailureDetails::Source::NetLobby, failureDetails));
+		}
+		else
+		{
+			// No connections, but no errors fetching connections
+			//
+			// Game may have disappeared from lobby, or stopped hosting,
+			// or this copy of WZ might not be compiled with support for all connection types.
+			//
+			// In any case, treat as "Can't connect" state
+			handleFailure(FailureDetails::makeFromInternalError(_("No supported connection details")));
+		}
+		return;
+	}
+
+	setConnectionList(convertedJoinDetails);
+	startAttemptingConnections();
+}
+
+std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+{
+	auto widget = makeInternal(playerName, playerIdentity, asSpectator, expectedHostProps, onSuccessFunc, onFailureFunc);
+	widget->setConnectionList(widget->convertConnectionDescriptionsToInternalConnectionList(connectionList));
+
+	widget->startAttemptingConnections();
+	return widget;
+}
+
+std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot::makeInternal(const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
 {
 	W_FORMINIT sInit;
 	sInit.id = 0;
@@ -891,10 +1393,10 @@ std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot
 		make_shared_enabler(const W_FORMINIT *init) : WzJoiningGameScreen_HandlerRoot(init) {}
 	};
 	auto widget = std::make_shared<make_shared_enabler>(&sInit);
-	widget->connectionList = connectionList;
 	widget->playerName = playerName;
 	widget->playerIdentity = playerIdentity;
 	widget->asSpectator = asSpectator;
+	widget->expectedHostProps = expectedHostProps;
 	widget->onSuccessFunc = onSuccessFunc;
 	widget->onFailureFunc = onFailureFunc;
 
@@ -902,9 +1404,19 @@ std::shared_ptr<WzJoiningGameScreen_HandlerRoot> WzJoiningGameScreen_HandlerRoot
 	return widget;
 }
 
+void WzJoiningGameScreen_HandlerRoot::applyExpectedHostProps()
+{
+	if (expectedHostProps.gamePassword.has_value())
+	{
+		sstrcpy(gamePassword, expectedHostProps.gamePassword.value().c_str());
+	}
+}
+
 void WzJoiningGameScreen_HandlerRoot::initialize()
 {
 	timeStarted = std::chrono::steady_clock::now();
+
+	applyExpectedHostProps();
 
 	auto weakSelf = std::weak_ptr<WzJoiningGameScreen_HandlerRoot>(std::dynamic_pointer_cast<WzJoiningGameScreen_HandlerRoot>(shared_from_this()));
 
@@ -916,14 +1428,17 @@ void WzJoiningGameScreen_HandlerRoot::initialize()
 		auto psParent = psProgressForm->parent();
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent?");
 		int desiredWidth = psProgressForm->idealWidth();
-		int desiredHeight = psProgressForm->idealHeight();
+		int desiredHeight = std::min<int>(psProgressForm->idealHeight(), psParent->height());
 		int x0 = (psParent->width() - desiredWidth) / 2;
 		int y0 = (psParent->height() - psProgressForm->maximumHeight()) / 2;
-		psWidget->setGeometry(x0, y0, desiredWidth, desiredHeight);
+		psWidget->setGeometry(x0, std::max<int>(y0, 0), desiredWidth, desiredHeight);
 	}));
 
 	recalcLayout();
+}
 
+void WzJoiningGameScreen_HandlerRoot::startAttemptingConnections()
+{
 	// Kick-off the initial connection attempt
 	if (connectionList.empty())
 	{
@@ -931,6 +1446,10 @@ void WzJoiningGameScreen_HandlerRoot::initialize()
 		handleFailure(FailureDetails::makeFromInternalError(_("No connections available")));
 		return;
 	}
+
+	ASSERT_OR_RETURN(, currentJoiningState == JoiningState::AwaitingConnection || currentJoiningState == JoiningState::NeedsPassword || currentJoiningState == JoiningState::FetchingLobbyJoinInfo, "Unexpected joining state: %d", (int)currentJoiningState);
+	currentJoiningState = JoiningState::AwaitingConnection;
+
 	attemptToOpenConnection(0);
 }
 
@@ -940,7 +1459,7 @@ void WzJoiningGameScreen_HandlerRoot::handleSuccess()
 	joiningProgressForm->displaySuccessStatus(_("Synchronizing data with host ..."));
 	ASSERT_OR_RETURN(, onSuccessFunc != nullptr, "Missing success handler!");
 	const auto& connDesc = connectionList[currentConnectionIdx];
-	onSuccessFunc(connDesc);
+	onSuccessFunc(connDesc.conn);
 }
 
 void WzJoiningGameScreen_HandlerRoot::promptForPassword()
@@ -970,6 +1489,8 @@ void WzJoiningGameScreen_HandlerRoot::updateJoiningStatus(const WzString& status
 const char* WzJoiningGameScreen_HandlerRoot::to_string(JoiningState s)
 {
 	switch (s) {
+		case JoiningState::NeedsLobbyErrorResolve: return "NeedsLobbyErrorResolve";
+		case JoiningState::FetchingLobbyJoinInfo: return "FetchingJoinInfo";
 		case JoiningState::NeedsPassword: return "NeedsPassword";
 		case JoiningState::AwaitingConnection: return "AwaitingConnection";
 		case JoiningState::AwaitingInitialNetcodeHandshakeAck: return "AwaitingInitialNetcodeHandshakeAck";
@@ -984,6 +1505,8 @@ const char* WzJoiningGameScreen_HandlerRoot::to_string(JoiningState s)
 const char* WzJoiningGameScreen_HandlerRoot::to_display_str(JoiningState s)
 {
 	switch (s) {
+		case JoiningState::NeedsLobbyErrorResolve: return "NeedsLobbyErrorResolve";
+		case JoiningState::FetchingLobbyJoinInfo: return "FetchingJoinInfo";
 		case JoiningState::NeedsPassword: return "NeedsPassword";
 		case JoiningState::AwaitingConnection: return "PendingConnect";
 		case JoiningState::AwaitingInitialNetcodeHandshakeAck: return "NetcodeHandshake";
@@ -998,6 +1521,10 @@ const char* WzJoiningGameScreen_HandlerRoot::to_display_str(JoiningState s)
 const char* WzJoiningGameScreen_HandlerRoot::to_localized_state_fail_desc(JoiningState s)
 {
 	switch (s) {
+		case JoiningState::NeedsLobbyErrorResolve:
+			return _("Waiting for lobby error resolution");
+		case JoiningState::FetchingLobbyJoinInfo:
+			return _("Waiting for join info");
 		case JoiningState::NeedsPassword:
 			return _("Waiting for correct join password");
 		case JoiningState::AwaitingConnection:
@@ -1024,11 +1551,11 @@ void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 	WzString localizedJoinStateDesc = to_localized_state_fail_desc(currentJoiningState);
 	if (!localizedJoinStateDesc.isEmpty())
 	{
-		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s] - %s"), to_display_str(currentJoiningState), localizedJoinStateDesc.toUtf8().c_str()));
+		timeoutErrorDetails += WzString::format(_("Failed at: [%s] - %s"), to_display_str(currentJoiningState), localizedJoinStateDesc.toUtf8().c_str());
 	}
 	else
 	{
-		timeoutErrorDetails += WzString::fromUtf8(astringf(_("Failed at: [%s]"), to_display_str(currentJoiningState)));
+		timeoutErrorDetails += WzString::format(_("Failed at: [%s]"), to_display_str(currentJoiningState));
 	}
 
 	currentJoiningState = JoiningState::Failure;
@@ -1041,22 +1568,29 @@ void WzJoiningGameScreen_HandlerRoot::handleJoinTimeoutError()
 		onFailureFunc();
 	}
 
-	ActivityManager::instance().joinGameFailed(connectionList);
+	ActivityManager::instance().joinGameFailed();
 }
 
 void WzJoiningGameScreen_HandlerRoot::handleFailure(const FailureDetails& failureDetails)
 {
 	currentJoiningState = JoiningState::Failure;
 
-	debug(LOG_INFO, "Failed to join with error: %s", failureDetails.resultMessage.toUtf8().c_str());
-	if (!failureDetails.hostProvidedMessage)
+	WzString failureResultMessage = failureDetails.getResultMessage();
+	debug(LOG_INFO, "Failed to join with error: %s", failureResultMessage.toUtf8().c_str());
+
+	switch (failureDetails.getSource())
 	{
-		joiningProgressForm->displayUnableToJoinError(failureDetails.resultMessage);
+		case FailureDetails::Source::NetLobby:
+			joiningProgressForm->displayNetLobbyError(failureResultMessage);
+			break;
+		case FailureDetails::Source::Host:
+			joiningProgressForm->displayRejectionMessage(failureResultMessage);
+			break;
+		default:
+			joiningProgressForm->displayUnableToJoinError(failureResultMessage);
+			break;
 	}
-	else
-	{
-		joiningProgressForm->displayRejectionMessage(failureDetails.resultMessage);
-	}
+
 	joiningProgressForm->callCalcLayout();
 
 	if (onFailureFunc)
@@ -1064,7 +1598,7 @@ void WzJoiningGameScreen_HandlerRoot::handleFailure(const FailureDetails& failur
 		onFailureFunc();
 	}
 
-	ActivityManager::instance().joinGameFailed(connectionList);
+	ActivityManager::instance().joinGameFailed();
 }
 
 void WzJoiningGameScreen_HandlerRoot::recalcLayout()
@@ -1087,7 +1621,7 @@ void WzJoiningGameScreen_HandlerRoot::display(int xOffset, int yOffset)
 		return; // skip if hidden
 	}
 
-	if (backgroundColor.rgba == 0)
+	if (backgroundColor.isTransparent())
 	{
 		return;
 	}
@@ -1146,8 +1680,35 @@ static ConnectionProviderType toConnectionProviderType(JoinConnectionDescription
 	{
 	case JoinConnectionDescription::JoinConnectionType::TCP_DIRECT:
 		return ConnectionProviderType::TCP_DIRECT;
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case JoinConnectionDescription::JoinConnectionType::GNS_DIRECT:
+		return ConnectionProviderType::GNS_DIRECT;
+#endif
 	}
 	throw std::runtime_error(astringf("Invalid join connection type: %d", static_cast<int>(ct))); // prevent GCC warning
+}
+
+void WzJoiningGameScreen_HandlerRoot::tryNextConnectionOption(size_t connectionIdx, std::error_code ec, const std::string& errorString)
+{
+	if ((connectionIdx + 1) < connectionList.size())
+	{
+		// try the next connection
+		closeConnectionAttempt();
+		currentJoiningState = JoiningState::AwaitingConnection;
+		attemptToOpenConnection(++connectionIdx);
+	}
+	else if (ec == std::errc::timed_out)
+	{
+		handleJoinTimeoutError();
+	}
+	else
+	{
+		debug(LOG_ERROR, "%s", errorString.c_str());
+		// Done trying connections - all failed
+		const auto sockErrorMsg = ec.message();
+		auto localizedError = astringf(_("Failed to open connection: [%d] %s"), ec.value(), sockErrorMsg.c_str());
+		handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
+	}
 }
 
 void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connectionIdx, OpenConnectionResult&& result)
@@ -1157,22 +1718,7 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 
 	if (result.hasError())
 	{
-		NETshutdown();
-
-		if ((connectionIdx+1) < connectionList.size())
-		{
-			// try the next connection
-			attemptToOpenConnection(++connectionIdx);
-		}
-		else
-		{
-			debug(LOG_ERROR, "%s", result.errorString.c_str());
-			// Done trying connections - all failed
-			const auto errCode = result.errorCode.value();
-			const auto sockErrorMsg = errCode.message();
-			auto localizedError = astringf(_("Failed to open connection: [%d] %s"), errCode.value(), sockErrorMsg.c_str());
-			handleFailure(FailureDetails::makeFromInternalError(WzString::fromUtf8(localizedError)));
-		}
+		tryNextConnectionOption(connectionIdx, result.errorCode.value(), result.errorString);
 		return;
 	}
 
@@ -1205,8 +1751,8 @@ void WzJoiningGameScreen_HandlerRoot::processOpenConnectionResult(size_t connect
 		return;
 	}
 
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(toConnectionProviderType(connectionList[connectionIdx].type));
-	tmp_joining_socket_set = connProvider.newConnectionPollGroup();
+	auto connProvider = ConnectionProviderRegistry::Instance().Get(toConnectionProviderType(connectionList[connectionIdx].conn.type));
+	tmp_joining_socket_set = connProvider->newConnectionPollGroup();
 	if (tmp_joining_socket_set == nullptr)
 	{
 		debug(LOG_ERROR, "Cannot create socket set - out of memory?");
@@ -1244,7 +1790,7 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 	ASSERT_OR_RETURN(, currentJoiningState == JoiningState::AwaitingConnection || currentJoiningState == JoiningState::NeedsPassword, "Unexpected joining state: %d", (int)currentJoiningState);
 	currentJoiningState = JoiningState::AwaitingConnection;
 	currentConnectionIdx = connectionIdx;
-	JoinConnectionDescription& description = connectionList[connectionIdx];
+	JoinConnectionDescription& description = connectionList[connectionIdx].conn;
 	if (description.port == 0)
 	{
 		description.port = NETgetGameserverPort(); // use default configured port
@@ -1253,10 +1799,13 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 
 	constexpr std::chrono::milliseconds CLIENT_OPEN_ASYNC_TIMEOUT{ 15000 }; // Default timeout of 15s
 
+	// Reset any prior networking state before trying to connect
+	NETshutdown();
+
 	const auto ct = toConnectionProviderType(description.type);
 	NETinit(ct);
-	auto& connProvider = ConnectionProviderRegistry::Instance().Get(ct);
-	connProvider.openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
+	auto connProvider = ConnectionProviderRegistry::Instance().Get(ct);
+	connProvider->openClientConnectionAsync(description.host, description.port, CLIENT_OPEN_ASYNC_TIMEOUT,
 		[weakSelf, connectionIdx](OpenConnectionResult&& result) {
 		auto strongSelf = weakSelf.lock();
 		if (!strongSelf)
@@ -1272,12 +1821,13 @@ void WzJoiningGameScreen_HandlerRoot::attemptToOpenConnection(size_t connectionI
 bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 {
 	NetQueue *queue = &tmpJoiningQueuePair->send;
-	NetMessage const *message = &queue->getMessageForNet();
-	uint8_t *rawData = message->rawDataDup();
-	ssize_t rawLen   = message->rawLen();
+	const NetMessage& message = queue->getMessageForNet();
+	const auto& rawData = message.rawData();
+	ssize_t rawLen = rawData.size();
+	uint8_t msgType = message.type();
+
 	size_t compressedRawLen = 0;
-	const auto writeResult = client_transient_socket->writeAll(rawData, rawLen, &compressedRawLen);
-	delete[] rawData;  // Done with the data.
+	const auto writeResult = client_transient_socket->writeAll(rawData.data(), rawLen, &compressedRawLen);
 	queue->popMessageForNet();
 	if (writeResult.has_value())
 	{
@@ -1288,11 +1838,15 @@ bool WzJoiningGameScreen_HandlerRoot::joiningSocketNETsend()
 	{
 		const auto writeErrMsg = writeResult.error().message();
 		// Write error, most likely host disconnect.
-		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", message->type, message->rawLen(), compressedRawLen, writeErrMsg.c_str());
+		debug(LOG_ERROR, "Failed to send message (type: %" PRIu8 ", rawLen: %zu, compressedRawLen: %zu) to host: %s", msgType, rawLen, compressedRawLen, writeErrMsg.c_str());
 		return false;
 	}
-	client_transient_socket->flush(nullptr);  // Make sure the message was completely sent.
 	ASSERT(queue->numMessagesForNet() == 0, "Queue not empty (%u messages remaining).", queue->numMessagesForNet());
+	// Make sure the message was completely sent.
+	if (!client_transient_socket->flush(nullptr).has_value())
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -1328,6 +1882,26 @@ static std::vector<uint8_t> serializeConnectionDescription(const JoinConnectionD
 	return std::vector<uint8_t>(connDescJsonStr.begin(), connDescJsonStr.end());
 }
 
+bool WzJoiningGameScreen_HandlerRoot::verifyEncryptedHostResponse(const std::vector<uint8_t>& encryptedHostChallengeResponse)
+{
+	// Decrypt the encryptedHostChallengeResponse
+	std::vector<uint8_t> hostChallengeResponse;
+	if (!connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedHostChallengeResponse[0]), encryptedHostChallengeResponse.size(), hostChallengeResponse))
+	{
+		debug(LOG_ERROR, "Invalid host challenge response data received!");
+		return false;
+	}
+
+	// Verify the host identity challenge response
+	if (!hostIdentity.verify(hostChallengeResponse, challengeForHost.data(), challengeForHost.size()))
+	{
+		debug(LOG_ERROR, "Unable to verify host challenge response!");
+		return false;
+	}
+
+	return true;
+}
+
 void WzJoiningGameScreen_HandlerRoot::processJoining()
 {
 	if (currentJoiningState == JoiningState::Success)
@@ -1343,6 +1917,16 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			currentJoiningState = JoiningState::Success;
 			shutdownJoiningAttemptInternal(screenPointer.lock());
 		}
+		return;
+	}
+	if (currentJoiningState == JoiningState::NeedsLobbyErrorResolve)
+	{
+		// waiting for user to resolve the error
+		return;
+	}
+	if (currentJoiningState == JoiningState::FetchingLobbyJoinInfo)
+	{
+		// waiting for lobby to return join info
 		return;
 	}
 	if (currentJoiningState == JoiningState::NeedsPassword)
@@ -1368,7 +1952,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 	{
 		// exceeded timeout
 		closeConnectionAttempt();
-		handleJoinTimeoutError();
+		tryNextConnectionOption(currentConnectionIdx, make_network_error_code(ETIMEDOUT), "Timeout while waiting for host to respond");
 		return;
 	}
 
@@ -1436,7 +2020,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return; // wait for next check
 			}
 
-			uint8_t readBuffer[NET_BUFFER_SIZE];
+			uint8_t readBuffer[MaxMsgSize];
 			const auto readResult = client_transient_socket->readNoInt(readBuffer, sizeof(readBuffer), nullptr);
 			if (!readResult.has_value())
 			{
@@ -1466,7 +2050,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		{
 			// need to wait for a full and complete join message
 			// sanity check
-			if (NETincompleteMessageDataBuffered(tmpJoiningQUEUE) > (NET_BUFFER_SIZE * 16))	// something definitely big enough to encompass the expected message(s) at this point
+			if (NETincompleteMessageDataBuffered(tmpJoiningQUEUE) > (MaxMsgSize * 8))	// something definitely big enough to encompass the expected message(s) at this point
 			{
 				// host is sending data that doesn't appear to be a properly formatted message - cut it off
 				closeConnectionAttempt();
@@ -1476,7 +2060,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			return; // nothing to do until more data comes in
 		}
 
-		uint8_t msgType = NETgetMessage(tmpJoiningQUEUE)->type;
+		uint8_t msgType = NETgetMessage(tmpJoiningQUEUE)->type();
 
 		if (msgType == NET_ACCEPTED)
 		{
@@ -1486,13 +2070,13 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 			uint8_t blindModeVal = 0;
 			std::vector<uint8_t> encryptedHostChallengeResponse;
 
-			NETbeginDecode(tmpJoiningQUEUE, NET_ACCEPTED);
+			auto r = NETbeginDecode(tmpJoiningQUEUE, NET_ACCEPTED);
 			// Retrieve the player ID the game host arranged for us
-			NETuint8_t(&index);
-			NETuint32_t(&hostPlayer); // and the host player idx
-			NETuint8_t(&blindModeVal);
-			NETbytes(&encryptedHostChallengeResponse);
-			NETend();
+			NETuint8_t(r, index);
+			NETuint32_t(r, hostPlayer); // and the host player idx
+			NETuint8_t(r, blindModeVal);
+			NETbytes(r, encryptedHostChallengeResponse);
+			NETend(r);
 			NETpop(tmpJoiningQUEUE);
 
 			if (hostPlayer >= MAX_CONNECTED_PLAYERS)
@@ -1511,20 +2095,9 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return;
 			}
 
-			// Decrypt the encryptedHostChallengeResponse
-			std::vector<uint8_t> hostChallengeResponse;
-			if (!connectionAuthSessionKeys->decryptMessageFromOther(&(encryptedHostChallengeResponse[0]), encryptedHostChallengeResponse.size(), hostChallengeResponse))
-			{
-				debug(LOG_ERROR, "Invalid host challenge response data received!");
-				closeConnectionAttempt();
-				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
-				return;
-			}
-
 			// Verify the host identity challenge response
-			if (!hostIdentity.verify(hostChallengeResponse, challengeForHost.data(), challengeForHost.size()))
+			if (!verifyEncryptedHostResponse(encryptedHostChallengeResponse))
 			{
-				debug(LOG_ERROR, "Unable to verify host challenge response!");
 				closeConnectionAttempt();
 				handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
 				return;
@@ -1578,21 +2151,76 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 		{
 			uint8_t rejection = 0;
 			char reason[MAX_JOIN_REJECT_REASON] = {};
+			std::vector<uint8_t> encryptedHostChallengeResponse;
 
-			NETbeginDecode(tmpJoiningQUEUE, NET_REJECTED);
-			NETuint8_t(&rejection);
-			NETstring(reason, MAX_JOIN_REJECT_REASON);
-			NETend();
+			auto r = NETbeginDecode(tmpJoiningQUEUE, NET_REJECTED);
+			NETuint8_t(r, rejection);
+			NETstring(r, reason, MAX_JOIN_REJECT_REASON);
+			if (rejection == ERROR_REDIRECT)
+			{
+				NETbytes(r, encryptedHostChallengeResponse);
+			}
+			NETend(r);
 			NETpop(tmpJoiningQUEUE);
 
 			debug(LOG_NET, "NET_REJECTED received. Error code: %u", (unsigned int) rejection);
 
 			closeConnectionAttempt();
 
-			if (rejection == ERROR_WRONGPASSWORD)
+			if (rejection == ERROR_REDIRECT && numJoinRedirects == 0)
 			{
-				currentJoiningState = JoiningState::NeedsPassword;
-				promptForPassword();
+				numJoinRedirects++;
+
+				// Verify the host identity challenge response
+				if (!verifyEncryptedHostResponse(encryptedHostChallengeResponse))
+				{
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Invalid host response")));
+					return;
+				}
+
+				auto redirectInfo = parseKickRedirectInfo(reason, connectionList[currentConnectionIdx].conn.host);
+				if (!redirectInfo.has_value())
+				{
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Unable to process redirect")));
+					return;
+				}
+				if (redirectInfo->connList.empty())
+				{
+					// No valid connection descriptions!
+					debug(LOG_ERROR, "No valid connection descriptions in redirect: %s", reason);
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Unable to process redirect")));
+					return;
+				}
+
+				// Update expected host properties
+				expectedHostProps.hostPublicKey = hostIdentity.toBytes(EcKey::Public); // new join must match current hostPublicKey
+				expectedHostProps.gamePassword = redirectInfo->gamePassword;
+
+				closeConnectionAttempt();
+
+				// Attempt to join using the redirect connection details
+				setConnectionList(convertConnectionDescriptionsToInternalConnectionList(redirectInfo->connList));
+				asSpectator = redirectInfo->asSpectator;
+				applyExpectedHostProps();
+				currentJoiningState = JoiningState::AwaitingConnection;
+				attemptToOpenConnection(0);
+				return;
+			}
+			else if (rejection == ERROR_WRONGPASSWORD)
+			{
+				if (!expectedHostProps.gamePassword.has_value())
+				{
+					currentJoiningState = JoiningState::NeedsPassword;
+					promptForPassword();
+				}
+				else
+				{
+					// started join with expected game password, but the host rejected the password - treat as a failure
+					handleFailure(FailureDetails::makeFromLobbyError(ERROR_WRONGDATA));
+				}
 			}
 			else
 			{
@@ -1614,10 +2242,10 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 
 			std::vector<uint8_t> challengeFromHost(NETgetJoinConnectionNETPINGChallengeFromHostSize(), 0);
 			EcKey::Key hostPublicKey;
-			NETbeginDecode(tmpJoiningQUEUE, NET_PING);
-			NETbytes(&challengeFromHost, NETgetJoinConnectionNETPINGChallengeFromHostSize() * 4);
-			NETbytes(&hostPublicKey);
-			NETend();
+			auto r = NETbeginDecode(tmpJoiningQUEUE, NET_PING);
+			NETbytes(r, challengeFromHost, NETgetJoinConnectionNETPINGChallengeFromHostSize() * 4);
+			NETbytes(r, hostPublicKey);
+			NETend(r);
 			NETpop(tmpJoiningQUEUE);
 
 			if (!challengeFromHost.empty() && challengeFromHost.size() < NETgetJoinConnectionNETPINGChallengeFromHostSize())
@@ -1640,6 +2268,20 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return;
 			}
 
+			if (expectedHostProps.hostPublicKey.has_value())
+			{
+				// Verify that the sent host public key matches the expected
+				// (Note: Actual verification of the key itself comes later with a challenge/response)
+				if (hostPublicKey != expectedHostProps.hostPublicKey.value())
+				{
+					debug(LOG_ERROR, "Unexpected host identity");
+					// Disconnect and treat as a failure
+					closeConnectionAttempt();
+					handleFailure(FailureDetails::makeFromInternalError(_("Invalid host identity")));
+					return;
+				}
+			}
+
 			try {
 				connectionAuthSessionKeys = std::make_unique<SessionKeys>(playerIdentity, 1, hostIdentity, 0);
 			}
@@ -1651,7 +2293,7 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return;
 			}
 
-			std::vector<uint8_t> connectionDescriptionSerializedBytes = serializeConnectionDescription(connectionList[currentConnectionIdx]);
+			std::vector<uint8_t> connectionDescriptionSerializedBytes = serializeConnectionDescription(connectionList[currentConnectionIdx].conn);
 			EcKey::Sig challengeResponse;
 			if (!challengeFromHost.empty())
 			{
@@ -1680,14 +2322,20 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 				return;
 			}
 
-			NETbeginEncode(tmpJoiningQUEUE, NET_JOIN);
-			NETstring(playerName.toUtf8().c_str(), std::min<uint16_t>(StringSize, playerName.toUtf8().size() + 1));
-			NETstring(modListStr.c_str(), std::min<uint16_t>(modlist_string_size, modListStr.size() + 1));
-			NETstring(gamePassword, sizeof(gamePassword));
-			NETuint8_t(&playerType);
-			NETbytes(&identity);
-			NETbytes(&encryptedChallengeResponse);
-			NETend(); // because of QUEUE_TRANSIENT_JOIN type, this won't trigger a NETsend() - we must write ourselves
+			auto w = NETbeginEncode(tmpJoiningQUEUE, NET_JOIN);
+			NETstring(w, playerName.toUtf8().c_str(), std::min<uint16_t>(StringSize, playerName.toUtf8().size() + 1));
+			NETstring(w, modListStr.c_str(), std::min<uint16_t>(modlist_string_size, modListStr.size() + 1));
+			NETstring(w, gamePassword, static_cast<uint16_t>(sizeof(gamePassword)));
+			NETuint8_t(w, playerType);
+			NETbytes(w, identity);
+			NETbytes(w, encryptedChallengeResponse);
+			std::string joinToken;
+			if (currentConnectionIdx < connectionList.size())
+			{
+				joinToken = connectionList[currentConnectionIdx].joinToken;
+			}
+			NETstring(w, joinToken);
+			NETend(w); // because of QUEUE_TRANSIENT_JOIN type, this won't trigger a NETsend() - we must write ourselves
 			joiningSocketNETsend();
 			// and now we wait for the host to respond with a further message
 			return;
@@ -1706,10 +2354,28 @@ void WzJoiningGameScreen_HandlerRoot::processJoining()
 
 // MARK: - WzJoiningGameScreen
 
-std::shared_ptr<WzJoiningGameScreen> WzJoiningGameScreen::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+std::shared_ptr<WzJoiningGameScreen> WzJoiningGameScreen::makeWithLobbyGame(const std::string& lobbyAddress, const std::string& gameId, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
 {
 	class make_shared_enabler: public WzJoiningGameScreen {};
-	auto newRootFrm = WzJoiningGameScreen_HandlerRoot::make(connectionList, playerName, playerIdentity, asSpectator, onSuccessFunc, onFailureFunc);
+	auto newRootFrm = WzJoiningGameScreen_HandlerRoot::makeWithLobbyGame(lobbyAddress, gameId, playerName, playerIdentity, asSpectator, expectedHostProps, pKnownAvailableConnectionTypes, onSuccessFunc, onFailureFunc);
+	auto screen = std::make_shared<make_shared_enabler>();
+	screen->initialize(newRootFrm);
+	std::weak_ptr<WzJoiningGameScreen> psWeakHelpOverlayScreen(screen);
+	newRootFrm->onCancelPressed = [psWeakHelpOverlayScreen]() {
+		auto psOverlayScreen = psWeakHelpOverlayScreen.lock();
+		if (psOverlayScreen)
+		{
+			psOverlayScreen->closeScreen();
+		}
+	};
+
+	return screen;
+}
+
+std::shared_ptr<WzJoiningGameScreen> WzJoiningGameScreen::make(const std::vector<JoinConnectionDescription>& connectionList, const WzString& playerName, const EcKey& playerIdentity, bool asSpectator, const ExpectedHostProperties& expectedHostProps, const JoinSuccessHandler& onSuccessFunc, const JoinFailureHandler& onFailureFunc)
+{
+	class make_shared_enabler: public WzJoiningGameScreen {};
+	auto newRootFrm = WzJoiningGameScreen_HandlerRoot::make(connectionList, playerName, playerIdentity, asSpectator, expectedHostProps, onSuccessFunc, onFailureFunc);
 	auto screen = std::make_shared<make_shared_enabler>();
 	screen->initialize(newRootFrm);
 	std::weak_ptr<WzJoiningGameScreen> psWeakHelpOverlayScreen(screen);
@@ -1733,21 +2399,26 @@ void WzJoiningGameScreen::closeScreen()
 
 static void handleJoinSuccess(const JoinConnectionDescription& connection, const PLAYERSTATS& playerStats)
 {
+	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
+
 	ingame.localJoiningInProgress = true;
 
 	// send initial messages of player data (stats, color request, etc)
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
+	loadMultiOptionPrefValues(sPlayer, selectedPlayer);
+	sendPlayerMultiOptPreferencesBuiltin();
+
 	if (selectedPlayer < MAX_PLAYERS && war_getMPcolour() >= 0)
 	{
 		SendColourRequest(selectedPlayer, war_getMPcolour());
 	}
 
-	// switch the TitleUI to the multiplayer options (lobby), which will take over handling messages from the host
-	changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
-
-	ActivityManager::instance().joinGameSucceeded(connection.host.c_str(), connection.port);
+	widgScheduleTask([]() {
+		// switch the TitleUI to the multiplayer options (lobby), which will take over handling messages from the host
+		changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
+	});
 
 	// NOTE: Do *NOT* close the overlay screen here - this will be handled automatically after a minimum duration has passed
 }
@@ -1768,12 +2439,8 @@ void shutdownJoiningAttemptInternal(std::shared_ptr<W_SCREEN> expectedScreen)
 	}
 }
 
-// MARK: - Public API
-
-bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/)
+static bool prepareForJoiningAttemptInternal()
 {
-	ASSERT_OR_RETURN(false, !connection_list.empty(), "Empty connection_list?");
-
 	const auto currentGameMode = ActivityManager::instance().getCurrentGameMode();
 	if (currentGameMode != ActivitySink::GameMode::MENUS)
 	{
@@ -1791,29 +2458,29 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 
 	shutdownJoiningAttempt();
 
-	// sort the connection list
-	if (connection_list.size() > 1)
-	{
-		// sort the list, based on NETgetJoinPreferenceIPv6
-		// preserve the original relative order amongst each class of IPv4/IPv6 addresses
-		bool bSortIPv6First = NETgetJoinPreferenceIPv6();
-		std::stable_sort(connection_list.begin(), connection_list.end(), [bSortIPv6First](const JoinConnectionDescription& a, const JoinConnectionDescription& b) -> bool {
-			bool a_isIPv6 = a.host.find(":") != std::string::npos; // this is a very simplistic test - if the host contains ":" we treat it as IPv6
-			bool b_isIPv6 = b.host.find(":") != std::string::npos;
-			return (bSortIPv6First) ? (a_isIPv6 && !b_isIPv6) : (!a_isIPv6 && b_isIPv6);
-		});
-	}
-
 	// network communication preparation
 	NetPlay.bComms = true; // use network = true
+
+	return true;
+}
+
+static bool startJoiningAttemptInternal(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/)
+{
+	ASSERT_OR_RETURN(false, !connection_list.empty(), "Empty connection_list?");
+
+	if (!prepareForJoiningAttemptInternal())
+	{
+		return false;
+	}
 
 	PLAYERSTATS	playerStats;
 	loadMultiStats(playerName, &playerStats);
 
-	auto screen = WzJoiningGameScreen::make(connection_list, playerName, playerStats.identity, asSpectator,
+	auto screen = WzJoiningGameScreen::make(connection_list, playerName, playerStats.identity, asSpectator, expectedHostProps,
 		// onSuccessFunc
 		[playerStats](const JoinConnectionDescription& connection) {
 			handleJoinSuccess(connection, playerStats);
+			ActivityManager::instance().joinGameSucceeded(connection.host.c_str(), connection.port);
 		},
 		// onFailureFunc
 		[]() {
@@ -1828,15 +2495,96 @@ bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription
 	return true;
 }
 
+static bool startLobbyJoiningAttemptInternal(char* playerName, const std::string& lobbyAddress, const std::string& gameId, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/, const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes /*= nullptr*/)
+{
+	ASSERT_OR_RETURN(false, !gameId.empty(), "Empty gameId?");
+
+	if (!prepareForJoiningAttemptInternal())
+	{
+		return false;
+	}
+
+	PLAYERSTATS	playerStats;
+	loadMultiStats(playerName, &playerStats);
+
+	auto lobbyAddressCopy = lobbyAddress;
+	auto gameIdCopy = gameId;
+	auto screen = WzJoiningGameScreen::makeWithLobbyGame(lobbyAddress, gameId, playerName, playerStats.identity, asSpectator, expectedHostProps, pKnownAvailableConnectionTypes,
+		// onSuccessFunc
+		[lobbyAddressCopy, gameIdCopy, playerStats](const JoinConnectionDescription& connection) {
+			handleJoinSuccess(connection, playerStats);
+			ActivityManager::instance().joinLobbyGameSucceeded(lobbyAddressCopy, gameIdCopy, connection.host.c_str(), connection.port);
+
+			// used to schedule this after handleJoinSuccess's scheduled change of the TitleUI, to ensure that WzMultiplayerOptionsTitleUI::start() has been called first
+			widgScheduleTask([gameIdCopy]() {
+				std::string gameIdMsg = _("Lobby GameId");
+				gameIdMsg += ": "; // build this manually to ensure that the format always separates the prefix text from the gameId with ": ",  without relying on the translation
+				gameIdMsg += gameIdCopy;
+				addConsoleMessage(gameIdMsg.c_str(), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			});
+		},
+		// onFailureFunc
+		[]() {
+			handleJoinFailure();
+		}
+	);
+	// Use widgScheduleTask to ensure we never modify the registered overlays while they are being enumerated
+	widgScheduleTask([screen]() {
+		widgRegisterOverlayScreenOnTopOfScreen(screen, psWScreen);
+	});
+	psCurrentJoiningAttemptScreen = screen;
+	return true;
+}
+
+// MARK: - Public API
+
+bool startLobbyJoiningAttempt(char* playerName, const std::string& lobbyAddress, const std::string& gameId, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/, const std::vector<netlobby::ConnectionType>* pKnownAvailableConnectionTypes /*= nullptr*/)
+{
+	resetJoinRedirectTracking();
+	return startLobbyJoiningAttemptInternal(playerName, lobbyAddress, gameId, asSpectator, expectedHostProps, pKnownAvailableConnectionTypes);
+}
+
+bool startJoiningAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/)
+{
+	resetJoinRedirectTracking();
+	return startJoiningAttemptInternal(playerName, connection_list, asSpectator, expectedHostProps);
+}
+
 void shutdownJoiningAttempt()
 {
-	// Closes the overlay screen, cancelling whater join attempt is in progress (if one is in progress)
+	// Closes the overlay screen, cancelling whatever join attempt is in progress (if one is in progress)
 	if (auto strongJoiningAttemptScreen = psCurrentJoiningAttemptScreen.lock())
 	{
 		widgRemoveOverlayScreen(strongJoiningAttemptScreen);
 		strongJoiningAttemptScreen.reset();
 		psCurrentJoiningAttemptScreen.reset();
 	}
+}
+
+bool startJoinRedirectAttempt(char* playerName, std::vector<JoinConnectionDescription> connection_list, bool asSpectator /*= false*/, const ExpectedHostProperties& expectedHostProps /*= ExpectedHostProperties()*/)
+{
+	if (currentNumRedirectAttempts < std::numeric_limits<size_t>::max())
+	{
+		++currentNumRedirectAttempts;
+	}
+	// The intent is that this allows a host match-making lobby (joined by a client) to pair players and redirect them to another hosted instance
+	// We do not want to allow repeated redirects
+	if (currentNumRedirectAttempts > 1)
+	{
+		// POSSIBLE FUTURE TODO: Could prompt before additional redirects (if we wanted to support such a thing)
+		// For now, deny it
+		return false;
+	}
+	else
+	{
+		return startJoiningAttemptInternal(playerName, connection_list, asSpectator, expectedHostProps);
+	}
+}
+
+void resetJoinRedirectTracking()
+{
+	// Reset the internal counter that track redirects
+	currentNumRedirectAttempts = 0;
 }
 
 std::shared_ptr<WIDGET> createJoiningIndeterminateProgressWidget(iV_fonts fontID)

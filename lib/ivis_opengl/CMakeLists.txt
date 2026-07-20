@@ -12,14 +12,41 @@ file(GLOB HEADERS
 	"culling.h"
 	"gfx_api.h"
 	"gfx_api_formats_def.h"
+	"gfx_api_frame_resource_cache.h"
 	"gfx_api_gl.h"
 	"gfx_api_image_basis_priv.h"
 	"gfx_api_image_compress_priv.h"
 	"gfx_api_null.h"
 	"gfx_api_vk.h"
+	"render_graph/attachment.h"
+	"render_graph/blueprint.h"
+	"render_graph/blueprint_materializer.h"
+	"render_graph/cached_render_graph.h"
+	"render_graph/compile.h"
+	"render_graph/layout_subresource.h"
+	"render_graph/layout_timeline.h"
+	"render_graph/read_scope.h"
+	"render_graph/pass_resolve.h"
+	"render_graph/pipeline_surfaces.h"
+	"render_graph/render_pass.h"
+	"render_graph/render_pass_id.h"
+	"render_graph/topology.h"
+	"vk/frame_layout_tracker.h"
+	"vk/layout_key_builder.h"
+	"vk/layout_sync.h"
+	"vk/layout_translation.h"
+	"vk/pass_layout_key.h"
+	"vk/pre_pass_barrier_emitter.h"
+	"vk/render_pass_layout_cache.h"
+	"vk/screen_frame_coordinator.h"
+	"vk/swapchain_presentation_state.h"
+	"vk/transfer_recorder.h"
+	"vk/transfer_recording_context.h"
+	"vk/warm_entry.h"
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
+	"jpeg_util.h"
 	"pieblitfunc.h"
 	"pieclip.h"
 	"piedef.h"
@@ -42,13 +69,26 @@ file(GLOB SRC
 	"bitimage.cpp"
 	"culling.cpp"
 	"gfx_api.cpp"
+	"gfx_api_texture_array_load.cpp"
 	"gfx_api_gl.cpp"
 	"gfx_api_image_basis_priv.cpp"
 	"gfx_api_image_compress_priv.cpp"
 	"gfx_api_null.cpp"
+	"render_graph/blueprint.cpp"
+	"render_graph/blueprint_materializer.cpp"
+	"render_graph/cached_render_graph.cpp"
+	"render_graph/compile.cpp"
+	"render_graph/layout_subresource.cpp"
+	"render_graph/layout_timeline.cpp"
+	"render_graph/read_scope.cpp"
+	"render_graph/frame_blueprint.cpp"
+	"render_graph/pass_resolve.cpp"
+	"render_graph/pipeline_surfaces.cpp"
+	"render_graph/topology.cpp"
 	"gfx_api_vk.cpp"
 	"imdload.cpp"
 	"jpeg_encoder.cpp"
+	"jpeg_util.cpp"
 	"pieblitfunc.cpp"
 	"pieclip.cpp"
 	"piedraw.cpp"
@@ -85,6 +125,7 @@ include(CheckCXXCompilerFlag)
 
 add_library(ivis-opengl STATIC ${HEADERS} ${SRC})
 set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
+target_include_directories(ivis-opengl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(ivis-opengl)
 
@@ -124,51 +165,23 @@ else()
 endif()
 
 if(WZ_ENABLE_BACKEND_VULKAN)
-	find_package(VulkanHeaders 154) # minimum supported version of the Vulkan headers is 154
+	find_package(VulkanHeaders 290) # minimum supported version of the Vulkan headers is 290
 	set(_vulkanheaders_dl_gittag "vulkan-sdk-1.3.296.0")
-	if((NOT VulkanHeaders_FOUND AND NOT ${CMAKE_VERSION} VERSION_LESS "3.11.0") AND (NOT WZ_DISABLE_FETCHCONTENT_GIT_CLONE))
+	if(NOT VulkanHeaders_FOUND AND (NOT WZ_DISABLE_FETCHCONTENT_GIT_CLONE))
 		# Fetch newer Vulkan headers (using FetchContent, which requires CMake 3.11+)
 		include(FetchContent)
 		FetchContent_Declare(
 			vulkan_headers
 			GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers.git
 			GIT_TAG        ${_vulkanheaders_dl_gittag}
+			# Intentionally do not use the Vulkan-Headers build system
+			# Reference: https://discourse.cmake.org/t/prevent-fetchcontent-makeavailable-to-execute-cmakelists-txt/12704/3
+			SOURCE_SUBDIR dummy
 		)
-		FetchContent_GetProperties(vulkan_headers)
-		if(NOT vulkan_headers_POPULATED)
-			FetchContent_Populate(vulkan_headers)
-		endif()
+		FetchContent_MakeAvailable(vulkan_headers)
 		set(VulkanHeaders_FOUND TRUE)
 		set(VulkanHeaders_INCLUDE_DIRS "${vulkan_headers_SOURCE_DIR}/include")
 		message(STATUS "Using fetched Vulkan headers: ${VulkanHeaders_INCLUDE_DIRS}")
-	elseif((NOT VulkanHeaders_FOUND AND ${CMAKE_VERSION} VERSION_LESS "3.11.0") AND (NOT WZ_DISABLE_FETCHCONTENT_GIT_CLONE))
-		# Fetch newer Vulkan headers using Git directly (on CMake < 3.11)
-		find_package(Git QUIET)
-		if(Git_FOUND)
-			if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/vulkan_headers" AND IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/vulkan_headers")
-				# Because this branch is only executed for CMake < 3.11, use "remove_directory"
-				execute_process(
-					COMMAND ${CMAKE_COMMAND} "-E" "remove_directory" "vulkan_headers"
-					WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-			endif()
-			execute_process(
-				COMMAND ${GIT_EXECUTABLE} clone https://github.com/KhronosGroup/Vulkan-Headers.git "vulkan_headers"
-				WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-				RESULT_VARIABLE _git_exstatus
-				ERROR_QUIET)
-			if(_git_exstatus EQUAL 0)
-				execute_process(
-					COMMAND ${GIT_EXECUTABLE} checkout "tags/${_vulkanheaders_dl_gittag}" -b version_commit
-					WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/vulkan_headers"
-					RESULT_VARIABLE _git_exstatus
-					ERROR_QUIET)
-			endif()
-			if(_git_exstatus EQUAL 0)
-				set(VulkanHeaders_FOUND TRUE)
-				set(VulkanHeaders_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/vulkan_headers/include")
-				message(STATUS "Using (Git) fetched Vulkan headers: ${VulkanHeaders_INCLUDE_DIRS}")
-			endif()
-		endif()
 	endif()
 	if(VulkanHeaders_FOUND AND TARGET glsl_compilation)
 		target_compile_definitions(ivis-opengl PUBLIC "-DWZ_VULKAN_ENABLED")
@@ -178,6 +191,17 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 		target_sources(ivis-opengl PRIVATE "3rdparty/vkh_info.cpp" "3rdparty/vkh_info.hpp")
 
 		target_sources(ivis-opengl PRIVATE "3rdparty/vk_mem_alloc.cpp" "3rdparty/vk_mem_alloc.h")
+		target_sources(ivis-opengl PRIVATE
+			"vk/frame_layout_tracker.cpp"
+			"vk/layout_key_builder.cpp"
+			"vk/layout_sync.cpp"
+			"vk/layout_translation.cpp"
+			"vk/pass_layout_key.cpp"
+			"vk/pre_pass_barrier_emitter.cpp"
+			"vk/render_pass_layout_cache.cpp"
+			"vk/screen_frame_coordinator.cpp"
+			"vk/swapchain_presentation_state.cpp"
+			"vk/transfer_recorder.cpp")
 		CHECK_CXX_COMPILER_FLAG(-Wno-pedantic COMPILER_SUPPORTS_WNO_PEDANTIC)
 		if(COMPILER_SUPPORTS_WNO_PEDANTIC)
 			set_source_files_properties("3rdparty/vk_mem_alloc.cpp" PROPERTIES COMPILE_FLAGS -Wno-pedantic)
@@ -195,3 +219,82 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 	endif()
 endif()
 
+# Unfortunately, some distribution packages seem to have broken CMake Config files for libjpeg-turbo, which simply don't work
+# Default to using the vendored version, but provide an option for those building who wish to use the system library version
+set(_DEFAULT_WZ_USE_SYSTEM_LIBJPEG_TURBO_VALUE OFF)
+if (VCPKG_TOOLCHAIN)
+	set(_DEFAULT_WZ_USE_SYSTEM_LIBJPEG_TURBO_VALUE ON)
+endif()
+option(WZ_USE_SYSTEM_LIBJPEG_TURBO "Build with the system libjpeg-turbo library" ${_DEFAULT_WZ_USE_SYSTEM_LIBJPEG_TURBO_VALUE})
+
+if (WZ_USE_SYSTEM_LIBJPEG_TURBO)
+	find_package(libjpeg-turbo CONFIG REQUIRED)
+	target_link_libraries(ivis-opengl PRIVATE $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
+
+else()
+	include(ExternalProject)
+
+	set(LIBJPEG_TURBO_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turboinstall")
+	set(LIBJPEG_TURBO_INCLUDE_DIR "${LIBJPEG_TURBO_INSTALL_DIR}/include")
+	set(LIBJPEG_TURBO_LIB_PATH "${LIBJPEG_TURBO_INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}turbojpeg${CMAKE_STATIC_LIBRARY_SUFFIX}")
+
+	set(_additional_ext_proj_cmake_args)
+	if (CMAKE_TOOLCHAIN_FILE)
+		get_filename_component(_absolute_cmake_toolchain_file "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
+		set(_additional_ext_proj_cmake_args "-DCMAKE_TOOLCHAIN_FILE=${_absolute_cmake_toolchain_file}")
+	endif()
+
+	ExternalProject_Add(libjpeg-turbo-ext
+		SOURCE_DIR		"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/libjpeg-turbo"
+		BINARY_DIR		"${CMAKE_CURRENT_BINARY_DIR}/3rdparty/libjpeg-turbo"
+		INSTALL_DIR		"${LIBJPEG_TURBO_INSTALL_DIR}"
+		# DOWNLOAD_COMMAND  ""  # Explicitly skip download for local sources
+		CMAKE_ARGS		"-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" -DWITH_TOOLS=OFF -DENABLE_STATIC=ON -DENABLE_SHARED=OFF "-DCMAKE_INSTALL_DEFAULT_LIBDIR=lib" ${_additional_ext_proj_cmake_args}
+		BUILD_BYPRODUCTS "${LIBJPEG_TURBO_LIB_PATH}"
+	)
+
+	# Create the imported library
+	add_library(libjpeg-turbo::turbojpeg-static STATIC IMPORTED GLOBAL)
+	add_dependencies(libjpeg-turbo::turbojpeg-static libjpeg-turbo-ext)
+
+	# Set the library path and include directory
+
+	# This is a workaround for the fact that included directories of an imported
+	# target should exist in the filesystem already at the configuration time.
+	# ref: https://gitlab.kitware.com/cmake/cmake/-/issues/15052
+	file(MAKE_DIRECTORY "${LIBJPEG_TURBO_INCLUDE_DIR}")
+
+	set_target_properties(libjpeg-turbo::turbojpeg-static PROPERTIES
+		IMPORTED_LOCATION "${LIBJPEG_TURBO_LIB_PATH}"
+		INTERFACE_INCLUDE_DIRECTORIES "${LIBJPEG_TURBO_INCLUDE_DIR}"
+	)
+
+	add_dependencies(ivis-opengl libjpeg-turbo-ext) # Ensure libjpeg-turbo builds first
+	target_link_libraries(ivis-opengl PRIVATE $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
+endif()
+
+if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
+	# Workaround for Apple requiring min macOS version 13.3 when C++20 is used.
+	# Temporarily require C++17 for ivis-opengl for all platforms, for the sake
+	# of uniformity.
+	set(cpp17_source_files
+		"3rdparty/vkh_renderpasscompat.cpp"
+		"3rdparty/vkh_info.cpp"
+		"gfx_api_vk.cpp"
+		"gfx_api.cpp"
+		"render_graph/compile.cpp"
+		"render_graph/layout_subresource.cpp"
+		"render_graph/layout_timeline.cpp"
+		"render_graph/read_scope.cpp"
+		"vk/frame_layout_tracker.cpp"
+		"vk/layout_key_builder.cpp"
+		"vk/layout_sync.cpp"
+		"vk/layout_translation.cpp"
+		"vk/pass_layout_key.cpp"
+		"vk/pre_pass_barrier_emitter.cpp"
+		"vk/render_pass_layout_cache.cpp"
+		"vk/screen_frame_coordinator.cpp"
+		"vk/swapchain_presentation_state.cpp"
+		"vk/transfer_recorder.cpp")
+	set_source_files_properties(${cpp17_source_files} PROPERTIES COMPILE_FLAGS "-std=c++17")
+endif()

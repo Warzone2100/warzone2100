@@ -1,0 +1,7 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Defending Your Base")
+_("In Warzone 2100, your home base persists throughout the campaign.")
+_("As such, preparing for the future defense of your home base is essential.")
+_("While units are obviously helpful to defend your base, the design of your base is also critical.")
+_("Build defensive structures that provide cover, restrict access, sense enemies, and dispense damage, so that you can better counter enemy attacks.")

@@ -35,6 +35,9 @@ class IConnectionPollGroup;
 struct IConnectionAddress;
 
 enum class ConnectionProviderType : uint8_t;
+enum class PortMappingInternetProtocol : uint8_t;
+
+using PortMappingInternetProtocolMask = std::underlying_type_t<PortMappingInternetProtocol>;
 
 /// <summary>
 /// Abstraction layer to facilitate creating client/server connections and
@@ -51,7 +54,7 @@ enum class ConnectionProviderType : uint8_t;
 /// 4. Opening client-side connections (sync and async).
 /// 5. Creating connection poll groups.
 /// </summary>
-class WzConnectionProvider
+class WzConnectionProvider : public std::enable_shared_from_this<WzConnectionProvider>
 {
 public:
 
@@ -66,7 +69,7 @@ public:
 	/// Resolve host + port combination and return an opaque `ConnectionAddress` handle
 	/// representing the resolved network address.
 	/// </summary>
-	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) = 0;
+	virtual net::result<std::unique_ptr<IConnectionAddress>> resolveHost(const char* host, uint16_t port) const = 0;
 	/// <summary>
 	/// Open a listening socket bound to a specified local port.
 	/// </summary>
@@ -99,4 +102,21 @@ public:
 	/// * PollEventType::WRITABLE
 	/// </param>
 	virtual std::unique_ptr<IDescriptorSet> newDescriptorSet(PollEventType eventType) = 0;
+
+	/// <summary>
+	/// Process any pending connection state change events. This should be called regularly
+	/// at the beginning of each network game loop iteration to ensure that the connections
+	/// remain valid and synced properly with the underlying network backend.
+	/// </summary>
+	virtual void processConnectionStateChanges() = 0;
+
+	virtual PortMappingInternetProtocolMask portMappingProtocolTypes() const = 0;
+
+	/// <summary>
+	/// Perform generic cleanup actions for a given connection, i.e.: update the bookkeeping
+	/// information for the connection provider, flush any pending writes, remove the connection
+	/// from owning poll group (if there's any), etc.
+	/// </summary>
+	/// <param name="conn">Connection object to dispose of.</param>
+	virtual void disposeConnection(IClientConnection* conn) = 0;
 };

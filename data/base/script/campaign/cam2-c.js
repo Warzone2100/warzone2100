@@ -37,7 +37,7 @@ function videoTrigger()
 {
 	camSetExtraObjectiveMessage(_("Rescue the civilians from The Collective before too many are captured"));
 
-	setMissionTime(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
+	camSetMissionTimer(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
 	setTimer("civilianOrders", camSecondsToMilliseconds(2));
 	setTimer("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
 
@@ -76,6 +76,35 @@ function camEnemyBaseDetected_COAirBase()
 function camEnemyBaseEliminated_COAirBase()
 {
 	camCallOnce("videoTrigger");
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.comatt, cTempl.comit, cTempl.cohct, cTempl.commrl, cTempl.comhpv, cTempl.npcybc];
+	const limits = {minimum: 8, maxRandom: 8};
+	const location = ["southWestSpawnPos", "insaneNorthSpawnPos"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_UNITS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 40;
+	const units = [cTempl.cohct, cTempl.commrl, cTempl.comhpv, cTempl.comtathh];
+	const limits = {minimum: 10, maxRandom: 0};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneAttackRandom()
+{
+	const SCAN_DISTANCE = 2;
+	const DISTANCE_FROM_POS = 40;
+	const list = [cTempl.npcybr, cTempl.npcybc, cTempl.comorb, cTempl.comhpv, cTempl.comhpv, cTempl.comatt, cTempl.comatt];
+	const extraUnits = [cTempl.cohct, cTempl.cohct, cTempl.comsens, cTempl.comsens];
+	const units = {units: list, appended: extraUnits};
+	const limits = {minimum: 10, maxRandom: 4};
+	const location = camMakePos(camGenerateRandomMapEdgeCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS, SCAN_DISTANCE));
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_THE_COLLECTIVE, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
 
 function enableFactories()
@@ -224,10 +253,11 @@ function civilianOrders()
 //Capture civilans.
 function eventTransporterLanded(transport)
 {
+	const SCAN_RADIUS = 4;
 	const position = getObject("COTransportPos");
-	const civs = enumRange(position.x, position.y, 15, CAM_SCAV_7, false);
+	const civs = enumRange(position.x, position.y, SCAN_RADIUS, CAM_SCAV_7, false);
 
-	if (civs.length)
+	if ((civs.length > 0) && (camDist(transport, position) <= SCAN_RADIUS))
 	{
 		playSound(cam_sounds.enemyEscaping);
 		capturedCivCount += civs.length - 1;
@@ -253,6 +283,22 @@ function sendCOTransporter()
 				exit: { x: 2, y: 80 }
 			}
 		);
+	}
+}
+
+// Removes the pepperpot pits in the transporter base for Classic.
+function removeTransportBasePepperpots()
+{
+	const objects = enumArea("transportBaseCleanup", CAM_THE_COLLECTIVE, false);
+
+	for (let i = 0, len = objects.length; i < len; ++i)
+	{
+		const obj = objects[i];
+
+		if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.hasIndirect)
+		{
+			camSafeRemoveObject(obj, false);
+		}
 	}
 }
 
@@ -304,6 +350,11 @@ function eventStartLevel()
 			"COHeavyFac-Leopard": { tech: "R-Vehicle-Body02" }, //Leopard
 			"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 		});
+
+		if (!camAllowInsaneSpawns())
+		{
+			removeTransportBasePepperpots();
+		}
 	}
 	else
 	{
@@ -323,10 +374,11 @@ function eventStartLevel()
 			"COHeavyFac-Upgrade": { tech: "R-Struc-Factory-Upgrade04" },
 			"COVtolFacLeft-Prop": { tech: "R-Vehicle-Prop-VTOL" },
 			"COInfernoEmplacement-Arti": { tech: "R-Wpn-Flamer-ROF02" },
+			"COPepperpotPitNE": { tech: "R-Wpn-Mortar3" },
 		});
 	}
 
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(2)));
 
 	setAlliance(CAM_THE_COLLECTIVE, CAM_SCAV_7, true);
 	setAlliance(CAM_HUMAN_PLAYER, CAM_SCAV_7, true);
@@ -409,7 +461,7 @@ function eventStartLevel()
 				regroup: false,
 				count: -1,
 			},
-			templates: (!camClassicMode()) ? [cTempl.commorv, cTempl.cohcv, cTempl.commorv, cTempl.colpbv] : [cTempl.commorv, cTempl.colagv]
+			templates: (!camClassicMode()) ? [cTempl.commorv, cTempl.comhcv, cTempl.commorv, cTempl.colpbv] : [cTempl.commorv, cTempl.colagv]
 		},
 		"COVtolFacRight": {
 			order: CAM_ORDER_ATTACK,
@@ -435,6 +487,12 @@ function eventStartLevel()
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4));
+		setTimer("insaneAttackRandom", camMinutesToMilliseconds(4.5));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5));
+	}
 
 	truckDefense();
 }

@@ -27,7 +27,6 @@
 #import <Cocoa/Cocoa.h>
 #import <Availability.h>
 #import "cocoa_sdl_helpers.h"
-#include "SDL_syswm.h"
 #include <mach-o/dyld.h>
 
 bool cocoaIsNSWindowFullscreened(NSWindow __unsafe_unretained *window)
@@ -43,18 +42,13 @@ bool cocoaIsNSWindowFullscreened(NSWindow __unsafe_unretained *window)
 bool cocoaIsSDLWindowFullscreened(SDL_Window *window)
 {
 	if (window == nil) return false;
-	SDL_SysWMinfo info;
-	SDL_VERSION(&info.version); /* initialize info structure with SDL version info */
-	if(SDL_GetWindowWMInfo(window, &info) == SDL_FALSE) {
-		NSLog(@"Unable to get SDL_SysWMinfo, with error: %s", SDL_GetError());
+	NSWindow *nswindow = (__bridge NSWindow *)SDL_GetPointerProperty(SDL_GetWindowProperties(window), SDL_PROP_WINDOW_COCOA_WINDOW_POINTER, NULL);
+	if (nswindow) {
+		return cocoaIsNSWindowFullscreened(nswindow);
+	}
+	else {
 		return false;
 	}
-	if (info.subsystem != SDL_SYSWM_COCOA) {
-		NSLog(@"Unexpected SDL subsystem: %d", info.subsystem);
-		return false;
-	}
-	assert(info.info.cocoa.window != nil);
-	return cocoaIsNSWindowFullscreened(info.info.cocoa.window);
 }
 
 std::string cocoaGetCurrentExecutablePath()

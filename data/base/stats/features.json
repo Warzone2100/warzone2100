@@ -786,10 +786,9 @@
 		"width": 1
 	},
 	"Wreck0": {
-		"armour": 0,
+		"armour": 5,
 		"breadth": 1,
-		"damageable": 0,
-		"hitpoints": 0,
+		"hitpoints": 100,
 		"id": "Wreck0",
 		"lineOfSight": 0,
 		"model": "miwreck.pie",
@@ -799,10 +798,9 @@
 		"width": 1
 	},
 	"Wreck1": {
-		"armour": 0,
+		"armour": 5,
 		"breadth": 1,
-		"damageable": 0,
-		"hitpoints": 0,
+		"hitpoints": 100,
 		"id": "Wreck1",
 		"lineOfSight": 0,
 		"model": "miwrek1.pie",
@@ -812,10 +810,9 @@
 		"width": 1
 	},
 	"Wreck2": {
-		"armour": 0,
+		"armour": 5,
 		"breadth": 1,
-		"damageable": 0,
-		"hitpoints": 0,
+		"hitpoints": 100,
 		"id": "Wreck2",
 		"lineOfSight": 0,
 		"model": "miwrek2.pie",
@@ -825,10 +822,9 @@
 		"width": 1
 	},
 	"Wreck3": {
-		"armour": 0,
+		"armour": 5,
 		"breadth": 1,
-		"damageable": 0,
-		"hitpoints": 0,
+		"hitpoints": 100,
 		"id": "Wreck3",
 		"lineOfSight": 0,
 		"model": "miwrek3.pie",
@@ -838,10 +834,9 @@
 		"width": 1
 	},
 	"Wreck4": {
-		"armour": 0,
+		"armour": 5,
 		"breadth": 1,
-		"damageable": 0,
-		"hitpoints": 0,
+		"hitpoints": 100,
 		"id": "Wreck4",
 		"lineOfSight": 0,
 		"model": "miwrek4.pie",
@@ -851,10 +846,9 @@
 		"width": 1
 	},
 	"Wreck5": {
-		"armour": 0,
+		"armour": 5,
 		"breadth": 1,
-		"damageable": 0,
-		"hitpoints": 0,
+		"hitpoints": 100,
 		"id": "Wreck5",
 		"lineOfSight": 0,
 		"model": "miwrek5.pie",

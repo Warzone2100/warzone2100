@@ -34,8 +34,6 @@
 
 /***************************************************************************/
 
-extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - used by script functions
-
 #define PROJ_MAX_PITCH  45
 #define PROJ_ULTIMATE_PITCH  80
 
@@ -46,6 +44,8 @@ extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - us
 
 /** How long to display a single electronic warfare shimmmer. */
 #define ELEC_DAMAGE_DURATION    (GAME_TICKS_PER_SEC/5)
+
+#define PROJ_PENETRATE_SLOT -1731
 
 bool	proj_InitSystem();	///< Initialize projectiles subsystem.
 void	proj_UpdateAll();	///< Frame update for projectiles.

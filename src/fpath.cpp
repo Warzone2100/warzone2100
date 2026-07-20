@@ -29,6 +29,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/crc.h"
+#include "lib/framework/hash_combine.h"
 #include "lib/netplay/sync_debug.h"
 
 #include "lib/framework/wzapp.h"
@@ -40,6 +41,7 @@
 
 #include "fpath.h"
 #include "profiling.h"
+#include "game_world.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -57,34 +59,78 @@ struct PATHRESULT
 
 
 // threading stuff
-static WZ_THREAD        *fpathThread = nullptr;
-static WZ_MUTEX         *fpathMutex = nullptr;
-static WZ_SEMAPHORE     *fpathSemaphore = nullptr;
-using packagedPathJob = wz::packaged_task<PATHRESULT()>;
-static std::list<packagedPathJob>    pathJobs;
+using packagedPathJob = wz::packaged_task<PATHRESULT(const std::shared_ptr<FPathExecuteContext>& ctx)>;
+
+struct FpathThreadInfo
+{
+public:
+	FpathThreadInfo()
+	{
+		mutex = wzMutexCreate();
+		semaphore = wzSemaphoreCreate(0);
+	}
+
+	~FpathThreadInfo()
+	{
+		wzMutexDestroy(mutex);
+		mutex = nullptr;
+		wzSemaphoreDestroy(semaphore);
+		semaphore = nullptr;
+	}
+
+	FpathThreadInfo(FpathThreadInfo&&) = delete;
+	FpathThreadInfo& operator=(FpathThreadInfo&&) = delete;
+	FpathThreadInfo(const FpathThreadInfo&) = delete;
+	FpathThreadInfo& operator=(const FpathThreadInfo&) = delete;
+public:
+	WZ_SEMAPHORE *semaphore;
+	WZ_MUTEX *mutex;
+	std::list<packagedPathJob> pathJobs;
+};
+
+static std::vector<WZ_THREAD *> fpathThreads;
+static std::vector<std::unique_ptr<FpathThreadInfo>> fpathThreadsInfo;
 static std::unordered_map<uint32_t, wz::future<PATHRESULT>> pathResults;
 
-static bool             waitingForResult = false;
-static uint32_t         waitingForResultId;
-static WZ_SEMAPHORE     *waitingForResultSemaphore = nullptr;
+#ifdef DEBUG
+static std::vector<size_t> numJobsPerThreadThisTick;
+static uint32_t currentFpathTick = 0;
+#endif
 
-static PATHRESULT fpathExecute(PATHJOB psJob);
+constexpr size_t MAX_FPATH_THREADS = 2;
+
+static PATHRESULT fpathExecute(const std::shared_ptr<FPathExecuteContext>& ctx, PATHJOB psJob);
 
 
 /** This runs in a separate thread */
-static int fpathThreadFunc(void *)
+static int fpathThreadFunc(void *data)
 {
-	wzMutexLock(fpathMutex);
+	FpathThreadInfo* threadInfo = static_cast<FpathThreadInfo*>(data);
+	WZ_SEMAPHORE *fpathSemaphore = threadInfo->semaphore;
+	WZ_MUTEX *fpathMutex = threadInfo->mutex;
+	std::list<packagedPathJob>& pathJobs = threadInfo->pathJobs;
 
-	while (!fpathQuit)
+	// create an fpath astar job context
+	auto ctx = makeFPathExecuteContext();
+
+	while (true)
 	{
+		wzSemaphoreWait(fpathSemaphore);  // Wait until needed.
+		wzMutexLock(fpathMutex);
+
+		if (fpathQuit)
+		{
+			wzMutexUnlock(fpathMutex);
+			break;
+		}
+
 		if (pathJobs.empty())
 		{
-			ASSERT(!waitingForResult, "Waiting for a result (id %u) that doesn't exist.", waitingForResultId);
+			// should not happen - semaphore was signaled!
+			ASSERT(!pathJobs.empty(), "Received a signal but no job to consume!");
 			wzMutexUnlock(fpathMutex);
-			wzSemaphoreWait(fpathSemaphore);  // Go to sleep until needed.
-			wzMutexLock(fpathMutex);
 			continue;
+
 		}
 
 		WZ_PROFILE_SCOPE(fpathJob);
@@ -93,17 +139,22 @@ static int fpathThreadFunc(void *)
 		pathJobs.pop_front();
 
 		wzMutexUnlock(fpathMutex);
-		job();
-		wzMutexLock(fpathMutex);
 
-		waitingForResult = false;
-		objTrace(waitingForResultId, "These are the droids you are looking for.");
-		wzSemaphorePost(waitingForResultSemaphore);
+		job(ctx);
 	}
-	wzMutexUnlock(fpathMutex);
 	return 0;
 }
 
+static size_t fpathDetermineNumberOfThreads()
+{
+	auto logicalCPUCount = wzGetLogicalCPUCount();
+	if (logicalCPUCount <= 1)
+	{
+		return 1;
+	}
+	// subtract one for the main thread
+	return std::min<size_t>(logicalCPUCount - 1, MAX_FPATH_THREADS);
+}
 
 // initialise the findpath module
 bool fpathInitialise()
@@ -111,13 +162,21 @@ bool fpathInitialise()
 	// The path system is up
 	fpathQuit = false;
 
-	if (!fpathThread)
+	if (fpathThreads.empty())
 	{
-		fpathMutex = wzMutexCreate();
-		fpathSemaphore = wzSemaphoreCreate(0);
-		waitingForResultSemaphore = wzSemaphoreCreate(0);
-		fpathThread = wzThreadCreate(fpathThreadFunc, nullptr, "wzPath");
-		wzThreadStart(fpathThread);
+		auto numThreads = fpathDetermineNumberOfThreads();
+		debug(LOG_INFO, "Using threads: %zu", numThreads);
+		fpathThreads.resize(numThreads, nullptr);
+		fpathThreadsInfo.resize(numThreads);
+#ifdef DEBUG
+		numJobsPerThreadThisTick.resize(numThreads);
+#endif
+		for (size_t i = 0; i < fpathThreads.size(); ++i)
+		{
+			fpathThreadsInfo[i] = std::make_unique<FpathThreadInfo>();
+			fpathThreads[i] = wzThreadCreate(fpathThreadFunc, fpathThreadsInfo[i].get(), "wzPath");
+			wzThreadStart(fpathThreads[i]);
+		}
 	}
 
 	return true;
@@ -126,20 +185,25 @@ bool fpathInitialise()
 
 void fpathShutdown()
 {
-	if (fpathThread)
+	if (!fpathThreads.empty())
 	{
-		// Signal the path finding thread to quit
+		// Signal the path finding thread(s) to quit
 		fpathQuit = true;
-		wzSemaphorePost(fpathSemaphore);  // Wake up thread.
+		for (size_t i = 0; i < fpathThreadsInfo.size(); ++i)
+		{
+			wzSemaphorePost(fpathThreadsInfo[i]->semaphore);  // Wake up a thread
+		}
+		for (size_t i = 0; i < fpathThreads.size(); ++i)
+		{
+			wzThreadJoin(fpathThreads[i]);
+		}
+		fpathThreads.clear();
+		fpathThreadsInfo.clear();
 
-		wzThreadJoin(fpathThread);
-		fpathThread = nullptr;
-		wzMutexDestroy(fpathMutex);
-		fpathMutex = nullptr;
-		wzSemaphoreDestroy(fpathSemaphore);
-		fpathSemaphore = nullptr;
-		wzSemaphoreDestroy(waitingForResultSemaphore);
-		waitingForResultSemaphore = nullptr;
+#ifdef DEBUG
+		numJobsPerThreadThisTick.clear();
+		currentFpathTick = 0;
+#endif
 	}
 	fpathHardTableReset();
 }
@@ -154,32 +218,60 @@ void fpathUpdate()
 	// Nothing now
 }
 
+static constexpr size_t fpathPropulsionDomain(PROPULSION_TYPE propulsion)
+{
+	switch (propulsion)
+	{
+	default:                        return 0;  // Land
+	case PROPULSION_TYPE_LIFT:      return 1;  // Air
+	case PROPULSION_TYPE_PROPELLOR: return 2;  // Water
+	case PROPULSION_TYPE_HOVER:     return 3;  // Land and water
+	}
+	return 0; // silence compiler warning
+}
+
+static inline size_t fpathJobDispatchThreadId(const PATHJOB& job, size_t numThreads)
+{
+	if (numThreads == 1) { return 0; }
+
+	// Every job that matches a PathfindContext must be processed by the same thread, as the result of fpathAStarRoute is dependent upon jobs
+	// within each matching "cohort" having access to the same PathfindContext (and PathfindContexts are not shared between threads).
+	//
+	// (In other words, the results may slightly differ depending on whether an existing PathfindContext is reused versus starting from scratch.)
+
+	std::size_t h = 0;
+	auto domain = fpathPropulsionDomain(job.propulsion);
+	const Vector2i tileDest(map_coord(job.destX), map_coord(job.destY));
+
+	// Note: We use part of the behavior of PathfindContext::matches() (which is called by fpathAStarRoute)
+	// Specifically, we match using the same logic as fpathIsEquivalentBlocking, plus tileDest
+	if (domain == fpathPropulsionDomain(PROPULSION_TYPE_LIFT))
+	{
+		// Air units ignore move type and player (see: fpathIsEquivalentBlocking)
+		// So just use the domain + tileDest
+		hash_combine(h, domain, tileDest.x, tileDest.y);
+	}
+	else
+	{
+		// All other unit types care about domain + player + moveType (see: fpathIsEquivalentBlocking)
+		// So use those + tileDest
+		hash_combine(h, domain, job.owner, job.moveType, tileDest.x, tileDest.y);
+	}
+	return h % numThreads;
+}
 
 bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
                                PROPULSION_TYPE propulsion2, int player2, FPATH_MOVETYPE moveType2)
 {
-	int domain1, domain2;
-	switch (propulsion1)
-	{
-	default:                        domain1 = 0; break;  // Land
-	case PROPULSION_TYPE_LIFT:      domain1 = 1; break;  // Air
-	case PROPULSION_TYPE_PROPELLOR: domain1 = 2; break;  // Water
-	case PROPULSION_TYPE_HOVER:     domain1 = 3; break;  // Land and water
-	}
-	switch (propulsion2)
-	{
-	default:                        domain2 = 0; break;  // Land
-	case PROPULSION_TYPE_LIFT:      domain2 = 1; break;  // Air
-	case PROPULSION_TYPE_PROPELLOR: domain2 = 2; break;  // Water
-	case PROPULSION_TYPE_HOVER:     domain2 = 3; break;  // Land and water
-	}
+	auto domain1 = fpathPropulsionDomain(propulsion1);
+	auto domain2 = fpathPropulsionDomain(propulsion2);
 
 	if (domain1 != domain2)
 	{
 		return false;
 	}
 
-	if (domain1 == 1)
+	if (domain1 == fpathPropulsionDomain(PROPULSION_TYPE_LIFT))
 	{
 		return true;  // Air units ignore move type and player.
 	}
@@ -215,21 +307,21 @@ static uint8_t prop2bits(PROPULSION_TYPE propulsion)
 }
 
 // Check if the map tile at a location blocks a droid
-bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int mapIndex, FPATH_MOVETYPE moveType)
+bool fpathBaseBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int mapIndex, FPATH_MOVETYPE moveType)
 {
 	/* All tiles outside of the map and on map border are blocking. */
-	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+	if (x < 1 || y < 1 || x > mapState.width - 1 || y > mapState.height - 1)
 	{
 		return true;
 	}
 
 	/* Check scroll limits (used in campaign to partition the map. */
-	if (propulsion != PROPULSION_TYPE_LIFT && (x < scrollMinX + 1 || y < scrollMinY + 1 || x >= scrollMaxX - 1 || y >= scrollMaxY - 1))
+	if (propulsion != PROPULSION_TYPE_LIFT && (x < mapState.scroll.minX + 1 || y < mapState.scroll.minY + 1 || x >= mapState.scroll.maxX - 1 || y >= mapState.scroll.maxY - 1))
 	{
 		// coords off map - auto blocking tile
 		return true;
 	}
-	unsigned aux = auxTile(x, y, mapIndex);
+	unsigned aux = auxTile(mapState, x, y, mapIndex);
 
 	int auxMask = 0;
 	switch (moveType)
@@ -246,26 +338,26 @@ bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 	}
 
 	// the MAX hack below is because blockTile() range does not include player-specific versions...
-	return (blockTile(x, y, MAX(0, mapIndex - MAX_PLAYERS)) & unitbits) != 0;  // finally check if move is blocked by propulsion related factors
+	return (blockTile(mapState, x, y, MAX(0, mapIndex - MAX_PLAYERS)) & unitbits) != 0;  // finally check if move is blocked by propulsion related factors
 }
 
-bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType)
+bool fpathDroidBlockingTile(DROID *psDroid, const WorldMapState& mapState, int x, int y, FPATH_MOVETYPE moveType)
 {
-	return fpathBaseBlockingTile(x, y, psDroid->getPropulsionStats()->propulsionType, psDroid->player, moveType);
+	return fpathBaseBlockingTile(mapState, x, y, psDroid->getPropulsionStats()->propulsionType, psDroid->player, moveType);
 }
 
 // Check if the map tile at a location blocks a droid
-bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
+bool fpathBlockingTile(const WorldMapState& mapState, SDWORD x, SDWORD y, PROPULSION_TYPE propulsion)
 {
-	return fpathBaseBlockingTile(x, y, propulsion, 0, FMT_BLOCK);  // with FMT_BLOCK, it is irrelevant which player is passed in
+	return fpathBaseBlockingTile(mapState, x, y, propulsion, 0, FMT_BLOCK);  // with FMT_BLOCK, it is irrelevant which player is passed in
 }
 
 
 // Returns the closest non-blocking tile to pos, or returns pos if no non-blocking tiles are present within a 2 tile distance.
-static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion, int player = 0, FPATH_MOVETYPE moveType = FMT_BLOCK)
+static Position findNonblockingPosition(const WorldMapState& mapState, Position pos, PROPULSION_TYPE propulsion, int player = 0, FPATH_MOVETYPE moveType = FMT_BLOCK)
 {
 	Vector2i centreTile = map_coord(pos.xy());
-	if (!fpathBaseBlockingTile(centreTile.x, centreTile.y, propulsion, player, moveType))
+	if (!fpathBaseBlockingTile(mapState, centreTile.x, centreTile.y, propulsion, player, moveType))
 	{
 		return pos;  // Fast case, pos is not on a blocking tile.
 	}
@@ -278,7 +370,7 @@ static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion
 			Vector2i tile = centreTile + Vector2i(x, y);
 			Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2) - pos.xy();
 			int distSq = dot(diff, diff);
-			if (distSq < bestDistSq && !fpathBaseBlockingTile(tile.x, tile.y, propulsion, player, moveType))
+			if (distSq < bestDistSq && !fpathBaseBlockingTile(mapState, tile.x, tile.y, propulsion, player, moveType))
 			{
 				bestTile = tile;
 				bestDistSq = distSq;
@@ -313,12 +405,33 @@ void fpathRemoveDroidData(int id)
 	pathResults.erase(id);
 }
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
+static FPATH_RETVAL fpathRoute(const WorldMapState& mapState, MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
 
-	if (!worldOnMap(startX, startY) || !worldOnMap(tX, tY))
+#ifdef DEBUG
+	if (gameTime != currentFpathTick)
+	{
+		if (enabled_debug[currentFpathTick])
+		{
+			static std::string tmpDgbStr;
+			tmpDgbStr = "Last tick fpath jobs per thread:";
+			for (const auto& c : numJobsPerThreadThisTick)
+			{
+				tmpDgbStr += " " + std::to_string(c) + ",";
+			}
+			debug(LOG_MOVEMENT, "%s", tmpDgbStr.c_str());
+		}
+		currentFpathTick = gameTime;
+		for (auto& c : numJobsPerThreadThisTick)
+		{
+			c = 0;
+		}
+	}
+#endif
+
+	if (!worldOnMap(mapState, startX, startY) || !worldOnMap(mapState, tX, tY))
 	{
 		debug(LOG_ERROR, "Droid trying to find path to/from invalid location (%d %d) -> (%d %d).", startX, startY, tX, tY);
 		objTrace(id, "Invalid start/end.");
@@ -390,19 +503,24 @@ queuePathfinding:
 	// job or result for each droid in the system at any time.
 	fpathRemoveDroidData(id);
 
-	packagedPathJob task([job]() { return fpathExecute(job); });
+	packagedPathJob task([job](const std::shared_ptr<FPathExecuteContext>& ctx) { return fpathExecute(ctx, job); });
 	pathResults[id] = task.get_future();
 
-	// Add to end of list
-	wzMutexLock(fpathMutex);
-	bool isFirstJob = pathJobs.empty();
-	pathJobs.push_back(std::move(task));
-	wzMutexUnlock(fpathMutex);
+	// Get target thread for job
+	auto targetThreadId = fpathJobDispatchThreadId(job, fpathThreads.size());
+	auto& threadInfo = *fpathThreadsInfo[targetThreadId];
 
-	if (isFirstJob)
-	{
-		wzSemaphorePost(fpathSemaphore);  // Wake up processing thread.
-	}
+	// Add to end of appropriate list
+	wzMutexLock(threadInfo.mutex);
+	bool isFirstJob = threadInfo.pathJobs.empty();
+	threadInfo.pathJobs.push_back(std::move(task));
+	wzMutexUnlock(threadInfo.mutex);
+
+	wzSemaphorePost(threadInfo.semaphore);  // Increment semaphore
+
+#ifdef DEBUG
+	numJobsPerThreadThisTick[targetThreadId]++;
+#endif
 
 	objTrace(id, "Queued up a path-finding request to (%d, %d), at least %d items earlier in queue", tX, tY, isFirstJob);
 	syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_WAIT", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
@@ -411,7 +529,7 @@ queuePathfinding:
 
 
 // Find a route for an DROID to a location in world coordinates
-FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
 	bool acceptNearest;
 	PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
@@ -428,12 +546,12 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
 	Position startPos = psDroid->pos;
 	Position endPos = Position(tX, tY, 0);
-	StructureBounds dstStructure = getStructureBounds(worldTile(endPos.xy())->psObject);
+	StructureBounds dstStructure = getStructureBounds(worldTile(mapState, endPos.xy())->psObject);
 	const auto droidPropulsionType = psDroid->getPropulsionStats()->propulsionType;
-	startPos = findNonblockingPosition(startPos, droidPropulsionType, psDroid->player, moveType);
+	startPos = findNonblockingPosition(mapState, startPos, droidPropulsionType, psDroid->player, moveType);
 	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
 	{
-		endPos   = findNonblockingPosition(endPos, droidPropulsionType, psDroid->player, moveType);
+		endPos   = findNonblockingPosition(mapState, endPos, droidPropulsionType, psDroid->player, moveType);
 	}
 	objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
 	switch (psDroid->order.type)
@@ -451,19 +569,19 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		acceptNearest = true;
 		break;
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
+	return fpathRoute(mapState, &psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
 	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
 }
 
 // Run only from path thread
-PATHRESULT fpathExecute(PATHJOB job)
+PATHRESULT fpathExecute(const std::shared_ptr<FPathExecuteContext>& ctx, PATHJOB job)
 {
 	PATHRESULT result;
 	result.droidID = job.droidID;
 	result.retval = FPR_FAILED;
 	result.originalDest = Vector2i(job.destX, job.destY);
 
-	ASR_RETVAL retval = fpathAStarRoute(&result.sMove, &job);
+	ASR_RETVAL retval = fpathAStarRoute(ctx, &result.sMove, &job);
 
 	ASSERT(retval != ASR_OK || result.sMove.asPath.size() > 0, "Ok result but no path in result");
 	switch (retval)
@@ -507,21 +625,22 @@ static size_t fpathJobQueueLength()
 {
 	size_t count = 0;
 
-	wzMutexLock(fpathMutex);
-	count = pathJobs.size();  // O(N) function call for std::list. .empty() is faster, but this function isn't used except in tests.
-	wzMutexUnlock(fpathMutex);
+	for (const auto& threadInfo : fpathThreadsInfo)
+	{
+		wzMutexLock(threadInfo->mutex);
+		count += threadInfo->pathJobs.size(); // O(N) function call for std::list. .empty() is faster, but this function isn't used except in tests.
+		wzMutexUnlock(threadInfo->mutex);
+	}
 	return count;
 }
 
 
-/** Find the length of the result queue, excepting future results. Function is thread-safe. */
+/** Find the length of the result queue, excepting future results. Function must be called from the main thread.. */
 static size_t fpathResultQueueLength()
 {
 	size_t count = 0;
 
-	wzMutexLock(fpathMutex);
 	count = pathResults.size();  // O(N) function call for std::list. .empty() is faster, but this function isn't used except in tests.
-	wzMutexUnlock(fpathMutex);
 	return count;
 }
 
@@ -529,7 +648,7 @@ static size_t fpathResultQueueLength()
 // Only used by fpathTest.
 static FPATH_RETVAL fpathSimpleRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY)
 {
-	return fpathRoute(psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, getStructureBounds((BASE_OBJECT *)nullptr));
+	return fpathRoute(gameWorld.map, psMove, id, startX, startY, tX, tY, PROPULSION_TYPE_WHEELED, DROID_WEAPON, FMT_BLOCK, 0, true, getStructureBounds((BASE_OBJECT *)nullptr));
 }
 
 void fpathTest(int x, int y, int x2, int y2)
@@ -542,10 +661,13 @@ void fpathTest(int x, int y, int x2, int y2)
 	(void)fpathJobQueueLength();
 
 	/* Check initial state */
-	assert(fpathThread != nullptr);
-	assert(fpathMutex != nullptr);
-	assert(fpathSemaphore != nullptr);
-	assert(pathJobs.empty());
+	assert(!fpathThreads.empty());
+	for (const auto& threadInfo : fpathThreadsInfo)
+	{
+		ASSERT(threadInfo->mutex != nullptr, "Failed to initialize mutex?");
+		ASSERT(threadInfo->semaphore != nullptr, "Failed to initialize semaphore?");
+	}
+	assert(fpathJobQueueLength() == 0);
 	assert(pathResults.empty());
 	fpathRemoveDroidData(0);	// should not crash
 
@@ -616,18 +738,18 @@ void fpathTest(int x, int y, int x2, int y2)
 	(void)r;  // Squelch unused-but-set warning.
 }
 
-bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
+bool fpathCheck(WorldMapState& mapState, Position orig, Position dest, PROPULSION_TYPE propulsion)
 {
 	// We have to be careful with this check because it is called on
 	// load when playing campaign on droids that are on the other
 	// map during missions, and those maps are usually larger.
-	if (!worldOnMap(orig.xy()) || !worldOnMap(dest.xy()))
+	if (!worldOnMap(mapState, orig.xy()) || !worldOnMap(mapState, dest.xy()))
 	{
 		return false;
 	}
 
-	MAPTILE *origTile = worldTile(findNonblockingPosition(orig, propulsion).xy());
-	MAPTILE *destTile = worldTile(findNonblockingPosition(dest, propulsion).xy());
+	MAPTILE *origTile = worldTile(mapState, findNonblockingPosition(mapState, orig, propulsion).xy());
+	MAPTILE *destTile = worldTile(mapState, findNonblockingPosition(mapState, dest, propulsion).xy());
 
 	ASSERT_OR_RETURN(false, propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
 	ASSERT_OR_RETURN(false, origTile != nullptr && destTile != nullptr, "Bad tile parameter");

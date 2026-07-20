@@ -8,7 +8,7 @@ ${LangFileString} WZ_64BIT_AVAILABLE "È disponibile una versione a 64 bit di Wa
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Questa è la versione a 64 bit di Warzone 2100.$\r$\nScarica la versione a 32 bit da https://wz2100.net/ $\r$\nFai clic su OK per uscire dall'installazione."
 
-${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Questa è la versione ARM64 di Warzone 2100, ma questo dispositivo non ha un processore ARM64. $\r$\nVisita https://wz2100.net/ per scaricare la versione appropriata per il tuo sistema (ad esempio: x64).$\r$\nProcedere comunque con l'installazione ARM64?"
+${LangFileString} WZ_ARM64_INSTALL_NON_ARM64 "Questa è la versione ARM64 di Warzone 2100, ma questo dispositivo non ha un processore ARM64. $\r$\n Per favore visita https://wz2100.net/ per scaricare la versione appropriata per il tuo sistema (ad esempio: x64).$\r$\n Procedere comunque con l'installazione ARM64?"
 
 ${LangFileString} WZ_GPL_NEXT "Successivo"
 
@@ -22,7 +22,7 @@ ${LangFileString} TEXT_SecFMVs_EngHi "Inglese (HQ)"
 ${LangFileString} DESC_SecFMVs_EngHi "Scarica e installa filmati di gioco in inglese a qualità superiore."
 
 ${LangFileString} TEXT_SecFMVs_Eng "Inglese"
-${LangFileString} DESC_SecFMVs_Eng "Scarica e installa i filmati di gioco in inglese."
+${LangFileString} DESC_SecFMVs_Eng "Scarica e installa i filmati delle scene tagliate di gioco in inglese."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "Inglese (LQ)"
 ${LangFileString} DESC_SecFMVs_EngLo "Scarica e installa una versione a bassa qualità dei filmati di gioco in inglese."

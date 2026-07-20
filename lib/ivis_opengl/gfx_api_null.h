@@ -128,9 +128,13 @@ public:
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
-
-	virtual void beginRenderPass() override;
-	virtual void endRenderPass() override;
+	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void beginScreenFrame() override;
+	virtual void finishScreenFrame() override;
+	virtual void purgeFrameResources() override;
+	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
+		gfx_api::PassGraphCompileResult& compileResult) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;
@@ -149,7 +153,7 @@ public:
 	virtual bool shouldDraw() override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
-	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) override;
 	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 	virtual bool textureFormatIsSupported(gfx_api::pixel_format_target target, gfx_api::pixel_format format, gfx_api::pixel_format_usage::flags usage) override;
 	virtual bool supportsMipLodBias() const override;
@@ -166,7 +170,9 @@ public:
 	virtual bool debugRecompileAllPipelines() override;
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) override;
+	bool setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode);
 private:
 
 	size_t frameNum = 0;
+	bool frameHasDrawCommands = false;
 };

@@ -48,6 +48,9 @@
 # if !defined(WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN)
 #  define WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN ""
 # endif
+# if !defined(WZ_CRASHPAD_EXECUTABLE_NAME)
+#  error Missing WZ_CRASHPAD_EXECUTABLE_NAME
+# endif
 static bool enabledSentryProvider = false;
 # define WZ_SENTRY_MAX_BREADCRUMBS 60
 #endif
@@ -81,6 +84,7 @@ static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_
 		sentry_options_set_debug(options, 1);
 	}
 #endif
+
 	// for the temp path, always use a subdirectory of the default platform pref dir
 	// Make sure that we have a directory separator at the end of the string
 	std::string platformPrefDir = platformPrefDir_Input;
@@ -101,18 +105,40 @@ static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_
 #else
 	sentry_options_set_database_path(options, crashDbPath.c_str());
 #endif
+
+	// Set the path to the crashpad handler
+	std::string appBaseDir = PHYSFS_getBaseDir();
+	if (!strEndsWith(appBaseDir, PHYSFS_getDirSeparator()))
+	{
+		appBaseDir += PHYSFS_getDirSeparator();
+	}
+	std::string crashpadHandlerPath = appBaseDir + WZ_CRASHPAD_EXECUTABLE_NAME;
+	debug(LOG_WZ, "crashpadHandlerPath: \"%s\"", crashpadHandlerPath.c_str());
+#if defined(WZ_OS_WIN)
+	// On Windows: Convert UTF-8 path to UTF-16 and call sentry_options_set_handler_pathw
+	if (!win_utf8ToUtf16(crashpadHandlerPath.c_str(), wUtf16Path))
+	{
+		debug(LOG_FATAL, "Unable to convert path string (2) to UTF16 - fatal error");
+		abort();
+	}
+	sentry_options_set_handler_pathw(options, wUtf16Path.data());
+#else
+	sentry_options_set_handler_path(options, crashpadHandlerPath.c_str());
+#endif
+
 	std::string logFileFullPath = platformPrefDir + defaultLogFilePath;
 #if defined(WZ_OS_WIN)
 	// On Windows: Convert UTF-8 path to UTF-16 and call sentry_options_add_attachmentw
 	if (!win_utf8ToUtf16(logFileFullPath.c_str(), wUtf16Path))
 	{
-		debug(LOG_FATAL, "Unable to convert path string (2) to UTF16 - fatal error");
+		debug(LOG_FATAL, "Unable to convert path string (3) to UTF16 - fatal error");
 		abort();
 	}
 	sentry_options_add_attachmentw(options, wUtf16Path.data());
 #else
 	sentry_options_add_attachment(options, logFileFullPath.c_str());
 #endif
+
 	// limit max breadcrumbs to WZ_SENTRY_MAX_BREADCRUMBS (if default exceeds it)
 	size_t maxBreadcrumbs = sentry_options_get_max_breadcrumbs(options);
 	if (maxBreadcrumbs > WZ_SENTRY_MAX_BREADCRUMBS)

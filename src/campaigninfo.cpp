@@ -191,3 +191,33 @@ bool getCamTweakOption_PS1Modifiers()
 	}
 	return val.get<bool>();
 }
+
+bool getCamTweakOption_FastExp()
+{
+	auto val = getCamTweakOptionsValue("fastExp", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}
+
+bool getCamTweakOption_NoExp()
+{
+	auto val = getCamTweakOptionsValue("noExp", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}
+
+bool getCamTweakOption_heavilyDamagedPenalty()
+{
+	auto val = getCamTweakOptionsValue("heavilyDamagedPenalty", false);
+	if (!val.is_boolean())
+	{
+		return false;
+	}
+	return val.get<bool>();
+}

@@ -2,7 +2,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade10", "R-Struc-Materials09",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage10", "R-Wpn-Mortar-ROF04",
@@ -31,97 +31,87 @@ var winFlag;
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (droid.player !== CAM_HUMAN_PLAYER)
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
 	{
-		if (isVTOL(droid))
-		{
-			camSafeRemoveObject(droid, false);
-		}
+		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
-function sendEdgeMapDroids()
+function sendEdgeMapDroids(positions)
 {
-	let unitCount = 16 + camRand(5); // 16 - 20.
-	if (difficulty === INSANE)
+	const ADD_EXTRA = (!camClassicMode() && (difficulty >= HARD));
+	const units = {
+		units: [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxlflash,
+				cTempl.nxmrailh, cTempl.nxmlinkh, cTempl.nxmscouh, cTempl.nxmsamh],
+		appended: (ADD_EXTRA) ? cTempl.nxmsens : undefined
+	};
+	if (ADD_EXTRA)
 	{
-		unitCount = 14 + camRand(3); // 14 - 16.
+		units.units.push(cTempl.nxmangel);
 	}
-	const edge = ["SWPhantomFactory", "NWPhantomFactory"];
-	let list = [
-		cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,
-		cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh,
-		cTempl.nxmscouh, cTempl.nxmsamh,
-	];
-	if (difficulty >= HARD)
-	{
-		list = list.concat(cTempl.nxmangel);
-	}
-	let droids = [];
-
-	for (let i = 0; i < unitCount; ++i)
-	{
-		droids.push(list[camRand(list.length)]);
-	}
-
-	droids = droids.concat(cTempl.nxmsens);
-
-	camSendReinforcement(CAM_NEXUS, camMakePos(edge[camRand(edge.length)]), droids,
-		CAM_REINFORCE_GROUND, {
-			data: {regroup: false, count: -1}
-		}
-	);
+	const limits = {minimum: (difficulty >= INSANE) ? 14 : 16, maxRandom: (difficulty >= INSANE) ? 2 : 4};
+	const location = (camDef(positions) ? positions : ["SWPhantomFactory", "NWPhantomFactory"]);
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
 function wave2()
 {
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
 }
 
 function wave3()
 {
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
 }
 
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
 function vtolAttack()
 {
+	const APPEAR_POS = ((camAllowInsaneSpawns()) ? undefined : "vtolAppearPos");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxmheapv, cTempl.nxmheapv, cTempl.nxmtherv];
-		const ext = {
-			limit: [4, 4, 5], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
+		const ext = {limit: [4, 4, 5], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmtherv, cTempl.nxmheapv];
-		const ext = {
-			limit: [3, 3], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
+		const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, APPEAR_POS, "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3.5)), undefined, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
+}
+
+function insaneMapEdgeSpawn()
+{
+	if (getResearch(cam_resistance_circuits.third).done)
+	{
+		return;
+	}
+	const insanePositions = ["southSpawnPos", "eastPhantomFactory"];
+	sendEdgeMapDroids(insanePositions);
+}
+
+function insaneTransporterAttack()
+{
+	if (getResearch(cam_resistance_circuits.third).done)
+	{
+		return;
+	}
+	const DISTANCE_FROM_POS = 0;
+	const units = {units: [cTempl.nxmangel, cTempl.nxmangel], appended: cTempl.nxmsens};
+	const limits = {minimum: 9, maxRandom: 0};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_WATER_STAT, DISTANCE_FROM_POS);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
 // Order any absorbed trucks to start building defenses near themselves.
@@ -190,8 +180,8 @@ function nexusManufacture()
 
 function manualGrouping()
 {
-	const vtols = enumDroid(CAM_NEXUS).filter((obj) => (obj.group === null && isVTOL(obj)));
-	const nonVtols = enumDroid(CAM_NEXUS).filter((obj) => (obj.group === null && !isVTOL(obj)));
+	const vtols = enumDroid(CAM_NEXUS).filter((obj) => (obj.group === null && !camIsTransporter(obj) && isVTOL(obj)));
+	const nonVtols = enumDroid(CAM_NEXUS).filter((obj) => (obj.group === null && !camIsTransporter(obj) && !isVTOL(obj)));
 	if (vtols.length)
 	{
 		camManageGroup(camMakeGroup(vtols), CAM_ORDER_ATTACK, { regroup: false, count: -1 });
@@ -288,8 +278,9 @@ function eventStartLevel()
 
 	const startPos = getObject("startPosition");
 	const lz = getObject("landingZone");
+	const nextLev = ((camDef(tweakOptions.gammaBonusLevel) && tweakOptions.gammaBonusLevel) ? cam_levels.gammaBonus.pre : cam_levels.gamma6);
 
-	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma6, {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, nextLev, {
 		callback: "resistanceResearched"
 	});
 
@@ -298,7 +289,7 @@ function eventStartLevel()
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(1)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(1)));
 
 	if (camClassicMode())
 	{
@@ -311,7 +302,7 @@ function eventStartLevel()
 
 	enableResearch(cam_resistance_circuits.first, CAM_HUMAN_PLAYER);
 	winFlag = false;
-	hackFailChance = (difficulty <= EASY) ? 45 : 33;
+	hackFailChance = (difficulty <= EASY) ? 40 : 30;
 
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
 
@@ -320,7 +311,12 @@ function eventStartLevel()
 	queue("sendEdgeMapDroids", camSecondsToMilliseconds(15));
 
 	setTimer("truckDefense", camSecondsToMilliseconds(2));
-	setTimer("hackPlayer", camChangeOnDiff(camSecondsToMilliseconds(8)));
+	setTimer("hackPlayer", camSecondsToMilliseconds((difficulty <= MEDIUM) ? 8 : 5));
 	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
-	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3.5)));
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneMapEdgeSpawn", camMinutesToMilliseconds(4));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(5));
+	}
 }

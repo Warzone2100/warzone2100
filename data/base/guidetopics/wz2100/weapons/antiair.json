@@ -1,0 +1,37 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::antiair",
+	"title": "Anti-Air",
+	"sort": "07",
+	"visual": [
+		{
+			"stat": {
+				"id": "QuadMg1AAGun",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "AAGun2Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "QuadRotAAGun",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Anti-Air (or AA) weapons are specialized againt all types of flying units.",
+		"",
+		"However, AA weapons are incapable of attacking structures or units on the ground.",
+		"",
+		"While AA weapons are excellent for dealing with airborne threats, they must be protected from threats on the ground."
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::units::propulsions::vtols"
+	]
+}

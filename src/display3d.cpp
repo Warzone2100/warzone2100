@@ -69,6 +69,8 @@
 #include "intdisplay.h"
 #include "radar.h"
 #include "display3d.h"
+#include "display3d_render_graph.h"
+#include "display3d_render_internal.h"
 #include "lighting.h"
 #include "console.h"
 #include "projectile.h"
@@ -90,6 +92,7 @@
 #include "wzcrashhandlingproviders.h"
 #include "shadowcascades.h"
 #include "profiling.h"
+#include "game_world.h"
 
 
 /********************  Prototypes  ********************/
@@ -126,7 +129,7 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
-static	int	calcAverageTerrainHeight(int tileX, int tileZ);
+static	int	calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ);
 static	int	calculateCameraHeight(int height);
 static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
@@ -172,6 +175,9 @@ static float wind = 0.0f;
 static float windSpeed = 0.0f;
 static float skybox_scale = 10000.0f;
 
+//
+static bool bDrawTerrainShadows = true;
+
 /// When to display HP bars
 UWORD barMode;
 
@@ -183,6 +189,7 @@ iView	playerPos;
 
 /// How far away are we from the terrain
 static float distance;
+static bool bIsCloseDistance = false;
 
 /// Stores the screen coordinates of the transformed terrain tiles
 static Vector3i tileScreenInfo[VISIBLE_YTILES + 1][VISIBLE_XTILES + 1];
@@ -354,7 +361,7 @@ struct Blueprint
 	}
 	optional<STRUCTURE> buildBlueprint() const
 	{
-		return ::buildBlueprint(stats, pos, dir, index, state, player);
+		return ::buildBlueprint(gameWorld.map, stats, pos, dir, index, state, player);
 	}
 	void renderBlueprint(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix) const
 	{
@@ -390,7 +397,7 @@ static const int BLUEPRINT_OPACITY = 120;
 void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	if (psWScreen == nullptr) return;
-	resizeRadar(); // recalculate radar position
+	resizeRadar(gameWorld.map); // recalculate radar position
 }
 
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup);
@@ -408,7 +415,7 @@ public:
 		bool bDrawAll = barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES;
 
 		// first, for all droids, queue the various rects
-		for (DROID *psDroid : apsDroidLists[player])
+		for (DROID *psDroid : gameWorld.objects.droids[player])
 		{
 			if (psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -449,7 +456,7 @@ public:
 	void addStructureSelectionsToRender(uint32_t player, BASE_OBJECT *psClickedOn, bool bMouseOverOwnStructure)
 	{
 		/* Go thru' all the buildings */
-		for (STRUCTURE *psStruct : apsStructLists[player])
+		for (STRUCTURE *psStruct : gameWorld.objects.structures[player])
 		{
 			if (psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
@@ -530,7 +537,7 @@ public:
 			SDWORD scrX, scrY;
 			for (uint32_t i = 0; i < MAX_PLAYERS; i++)
 			{
-				for (const STRUCTURE* psStruct : apsStructLists[i])
+				for (const STRUCTURE* psStruct : gameWorld.objects.structures[i])
 				{
 					/* If it's targetted and on-screen */
 					if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
@@ -779,7 +786,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 		{
 			buildingBrightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT *)psStructure, buildingBrightness.byte.r));
 		}
-		if (!hasSensorOnTile(mapTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), selectedPlayer))
+		if (!hasSensorOnTile(mapTile(gameWorld.map, map_coord(psStructure->pos.x), map_coord(psStructure->pos.y)), selectedPlayer))
 		{
 			buildingBrightness.byte.r /= 2;
 			buildingBrightness.byte.g /= 2;
@@ -791,7 +798,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 
 
 /// Show all droid movement parts by displaying an explosion at every step
-static void showDroidPaths()
+static void showDroidPaths(const GameWorld& world)
 {
 	if ((graphicsTime / 250 % 2) != 0)
 	{
@@ -803,7 +810,7 @@ static void showDroidPaths()
 		return; // no-op for now
 	}
 
-	for (const DROID *psDroid : apsDroidLists[selectedPlayer])
+	for (const DROID *psDroid : world.objects.droids[selectedPlayer])
 	{
 		if (psDroid->selected && psDroid->sMove.Status != MOVEINACTIVE)
 		{
@@ -812,10 +819,10 @@ static void showDroidPaths()
 			{
 				Vector3i pos;
 
-				ASSERT(worldOnMap(psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
+				ASSERT(worldOnMap(world.map, psDroid->sMove.asPath[i].x, psDroid->sMove.asPath[i].y), "Path off map!");
 				pos.x = psDroid->sMove.asPath[i].x;
 				pos.z = psDroid->sMove.asPath[i].y;
-				pos.y = map_Height(pos.x, pos.z) + 16;
+				pos.y = map_Height(world.map, pos.x, pos.z) + 16;
 
 				effectGiveAuxVar(80);
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
@@ -1034,118 +1041,6 @@ void draw3DScene()
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
-	pie_BeginInterface();
-
-	/* Show the drag Box if necessary */
-	drawDragBox();
-
-	/* Have we released the drag box? */
-	if (dragBox3D.status == DRAG_RELEASED)
-	{
-		dragBox3D.status = DRAG_INACTIVE;
-	}
-
-	drawDroidAndStructureSelections();
-
-	pie_SetFogStatus(false);
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-
-	/* Dont remove this folks!!!! */
-	if (errorWaiting)
-	{
-		// print the error message if none have been printed for one minute
-		if (lastErrorTime == 0 || lastErrorTime + (60 * GAME_TICKS_PER_SEC) < realTime)
-		{
-			char trimMsg[255];
-			audio_PlayBuildFailedOnce();
-			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorWaiting);
-			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-			errorWaiting = nullptr;
-			lastErrorTime = realTime;
-		}
-	}
-	else
-	{
-		errorWaiting = debugLastError();
-	}
-	if (showSAMPLES)		//Displays the number of sound samples we currently have
-	{
-		unsigned int width, height;
-		std::string Qbuf, Lbuf, Abuf;
-
-		Qbuf = astringf("Que: %04u", audio_GetSampleQueueCount());
-		Lbuf = astringf("Lst: %04u", audio_GetSampleListCount());
-		Abuf = astringf("Act: %04u", sound_GetActiveSamplesCount());
-		txtShowSamples_Que.setText(WzString::fromUtf8(Qbuf), font_regular);
-		txtShowSamples_Lst.setText(WzString::fromUtf8(Lbuf), font_regular);
-		txtShowSamples_Act.setText(WzString::fromUtf8(Abuf), font_regular);
-
-		width = txtShowSamples_Que.width() + 11;
-		height = txtShowSamples_Que.height();
-
-		txtShowSamples_Que.render(pie_GetVideoBufferWidth() - width, height + 2, WZCOL_TEXT_BRIGHT);
-		txtShowSamples_Lst.render(pie_GetVideoBufferWidth() - width, height + 48, WZCOL_TEXT_BRIGHT);
-		txtShowSamples_Act.render(pie_GetVideoBufferWidth() - width, height + 59, WZCOL_TEXT_BRIGHT);
-	}
-	if (showFPS)
-	{
-		std::string fps = astringf("FPS: %d", frameRate());
-		txtShowFPS.setText(WzString::fromUtf8(fps), font_regular);
-		const unsigned width = txtShowFPS.width() + 10;
-		const unsigned height = 9; //txtShowFPS.height();
-		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
-	}
-	if (showUNITCOUNT && selectedPlayer < MAX_PLAYERS)
-	{
-		std::string killdiff = astringf("Units: %u lost / %u built / %u killed", missionData.unitsLost, missionData.unitsBuilt, getSelectedPlayerUnitsKilled());
-		txtUnits.setText(WzString::fromUtf8(killdiff), font_regular);
-		const unsigned width = txtUnits.width() + 10;
-		const unsigned height = 9; //txtUnits.height();
-		txtUnits.render(pie_GetVideoBufferWidth() - width - ((showFPS) ? txtShowFPS.width() + 10 : 0), pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
-	}
-	if (showORDERS)
-	{
-		unsigned int height;
-		txtShowOrders.setText(DROIDDOING, font_regular);
-		height = txtShowOrders.height();
-		txtShowOrders.render(0, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
-	}
-	if (showDROIDcounts && selectedPlayer < MAX_PLAYERS)
-	{
-		int visibleDroids = 0;
-		int undrawnDroids = 0;
-		for (const DROID *psDroid : apsDroidLists[selectedPlayer])
-		{
-			if (psDroid->sDisplay.frameNumber != currentGameFrame)
-			{
-				++undrawnDroids;
-				continue;
-			}
-			++visibleDroids;
-		}
-		char droidCounts[255];
-		sprintf(droidCounts, "Droids: %d drawn, %d undrawn", visibleDroids, undrawnDroids);
-		droidText.setText(droidCounts, font_regular);
-		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
-	}
-
-	setupConnectionStatusForm();
-
-	if (getWidgetsStatus() && !gamePaused())
-	{
-		char buildInfo[255];
-		bool showMs = (gameTimeGetMod() < Rational(1, 4));
-		getAsciiTime(buildInfo, showMs ? graphicsTime : gameTime, showMs);
-		txtLevelName.render(RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
-		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-		if (dbgInputManager.debugMappingsAllowed())
-		{
-			txtDebugStatus.render(RET_X + 134, 436 + E_H, WZCOL_TEXT_MEDIUM);
-		}
-		txtCurrentTime.setText(buildInfo, font_small);
-		txtCurrentTime.render(RET_X + 134, 422 + E_H, WZCOL_TEXT_MEDIUM);
-	}
-
 	while (playerPos.r.y > DEG(360))
 	{
 		playerPos.r.y -= DEG(360);
@@ -1163,48 +1058,7 @@ void draw3DScene()
 		processWarCam();
 	}
 
-	processSensorTarget();
-	processDestinationTarget();
-
 	structureEffects(); // add fancy effects to structures
-
-	showDroidSensorRanges(); //shows sensor data for units/droids/whatever...-Q 5-10-05
-	if (CauseCrash)
-	{
-		char *crash = nullptr;
-#ifdef DEBUG
-		ASSERT(false, "Yes, this is a assert.  This should not happen on release builds! Use --noassert to bypass in debug builds.");
-		debug(LOG_WARNING, " *** Warning!  You have compiled in debug mode! ***");
-#endif
-		writeGameInfo("WZdebuginfo.txt");		//also test writing out this file.
-		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
-		// and here comes the crash
-		if (!crashHandlingProviderTestCrash())
-		{
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wnull-dereference"
-#endif
-			*crash = 0x3; // deliberate null-dereference
-#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
-# pragma GCC diagnostic pop
-#endif
-		}
-#if defined(__EMSCRIPTEN__)
-		abort();
-#endif
-		exit(-1);	// should never reach this, but just in case...
-	}
-	//visualize radius if needed
-	if (bRangeDisplay)
-	{
-		drawRangeAtPos(rangeCenterX, rangeCenterY, rangeRadius);
-	}
-
-	if (showPath)
-	{
-		showDroidPaths();
-	}
 
 	wzPerfEnd(PERF_MISC);
 }
@@ -1222,7 +1076,7 @@ void	setProximityDraw(bool val)
 }
 /***************************************************************************/
 /// Calculate the average terrain height for the area directly below the tile
-static int calcAverageTerrainHeight(int tileX, int tileZ)
+static int calcAverageTerrainHeight(WorldMapState& mapState, int tileX, int tileZ)
 {
 	int numTilesAveraged = 0;
 
@@ -1235,10 +1089,10 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 	{
 		for (int j = -4; j <= 4; j++)
 		{
-			if (tileOnMap(tileX + j, tileZ + i))
+			if (tileOnMap(mapState, tileX + j, tileZ + i))
 			{
 				/* Get a pointer to the tile at this location */
-				MAPTILE *psTile = mapTile(tileX + j, tileZ + i);
+				MAPTILE *psTile = mapTile(mapState, tileX + j, tileZ + i);
 
 				result += std::max(psTile->height, psTile->waterLevel);
 				numTilesAveraged++;
@@ -1254,7 +1108,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 	 * Work out the average height.
 	 * We use this information to keep the player camera above the terrain.
 	 */
-	MAPTILE *psTile = mapTile(tileX, tileZ);
+	MAPTILE *psTile = mapTile(mapState, tileX, tileZ);
 
 	result /= numTilesAveraged;
 	if (result < psTile->height)
@@ -1267,7 +1121,7 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 
 static void updatePlayerAverageCentreTerrainHeight()
 {
-	averageCentreTerrainHeight = calcAverageTerrainHeight(playerXTile, playerZTile);
+	averageCentreTerrainHeight = calcAverageTerrainHeight(gameWorld.map, playerXTile, playerZTile);
 }
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
@@ -1377,7 +1231,6 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 
 	// update the fog of war... FIXME: Remove this
 	const glm::mat4 tileCalcPerspectiveViewMatrix = perspectiveMatrix * baseViewMatrix;
-	auto currTerrainShaderType = getTerrainShaderType();
 	{
 		WZ_PROFILE_SCOPE(init_lightmap);
 		for (int i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
@@ -1388,16 +1241,14 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 				Vector2i screen(0, 0);
 				Position pos;
 
-				pos.x = world_coord(j);
-				pos.z = -world_coord(i);
+				pos.x = world_coord(j) - (playerPos.p.x % TILE_WIDTH);
+				pos.z = -world_coord(i) + (playerPos.p.z % TILE_HEIGHT);
 				pos.y = 0;
 
-				if (tileOnMap(playerXTile + j, playerZTile + i))
+				if (tileOnMap(gameWorld.map, playerXTile + j, playerZTile + i))
 				{
-					MAPTILE* psTile = mapTile(playerXTile + j, playerZTile + i);
-
-					pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-					auto color = pal_SetBrightness((currTerrainShaderType == TerrainShaderType::SINGLE_PASS) ? 0 : static_cast<UBYTE>(psTile->level));
+					pos.y = map_TileHeightSurface(gameWorld.map, playerXTile + j, playerZTile + i);
+					auto color = pal_SetBrightness(0);
 					lightmap(playerXTile + j, playerZTile + i) = color;
 				}
 				tileScreenInfo[idx][jdx].z = pie_RotateProjectWithPerspective(&pos, tileCalcPerspectiveViewMatrix, &screen);
@@ -1441,8 +1292,8 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
 	processEffects(perspectiveViewMatrix, lightData);
-	atmosUpdateSystem();
-	avUpdateTiles();
+	atmosUpdateSystem(gameWorld.map);
+	avUpdateTiles(gameWorld.map);
 	wzPerfEnd(PERF_EFFECTS);
 
 	// The lightmap need to be ready at this point
@@ -1452,7 +1303,7 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	}
 
 	// prepare terrain for drawing
-	perFrameTerrainUpdates(lightmap);
+	perFrameTerrainUpdates(gameWorld.map, lightmap);
 
 	// and prepare for rendering the models
 	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
@@ -1488,77 +1339,28 @@ static void drawTiles(iView *player, LightingData& lightData, LightMap& lightmap
 	pie_FinalizeMeshes(currentGameFrame);
 
 
-	// shadow/depth-mapping passes
 	ShadowCascadesInfo shadowCascadesInfo;
-	shadowCascadesInfo.shadowMapSize = gfx_api::context::get().getDepthPassDimensions(0); // Note: Currently assumes that every depth pass has the same dimensions
+	shadowCascadesInfo.shadowMapSize = gfx_api::context::get().getDepthPassDimensions(0);
 	for (size_t i = 0; i < std::min<size_t>(shadowCascades.size(), WZ_MAX_SHADOW_CASCADES); ++i)
 	{
 		shadowCascadesInfo.shadowMVPMatrix[i] = getBiasedShadowMapMVPMatrix(shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix);
 		shadowCascadesInfo.shadowCascadeSplit[i] = shadowCascades[i].splitDepth;
 	}
 
-	if (currShadowMode == ShadowMode::Shadow_Mapping)
+	InGame3DFrameContext& ctx = pie_GetInGame3DFrameContext();
+	ctx.perspectiveViewMatrix = perspectiveViewMatrix;
+	ctx.viewMatrix = viewMatrix;
+	ctx.baseViewMatrix = baseViewMatrix;
+	ctx.perspectiveMatrix = perspectiveMatrix;
+	ctx.cameraPos = cameraPos;
+	ctx.currentGameFrame = currentGameFrame;
+	ctx.shadowCascadesInfo = shadowCascadesInfo;
+	for (size_t i = 0; i < shadowCascades.size() && i < WZ_MAX_SHADOW_CASCADES; ++i)
 	{
-		WZ_PROFILE_SCOPE(ShadowMapping);
-		for (size_t i = 0; i < numShadowCascades; ++i)
-		{
-			gfx_api::context::get().beginDepthPass(i);
-			pie_DrawAllMeshes(currentGameFrame, shadowCascades[i].projectionMatrix, shadowCascades[i].viewMatrix, shadowCascadesInfo, true);
-			gfx_api::context::get().endCurrentDepthPass();
-		}
+		ctx.cascadeProj[i] = shadowCascades[i].projectionMatrix;
+		ctx.cascadeView[i] = shadowCascades[i].viewMatrix;
 	}
-	// start main render pass
-
-
-	gfx_api::context::get().beginSceneRenderPass();
-
-	// now we are about to draw the terrain
-	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
-	pie_SetFogStatus(true);
-	drawTerrain(perspectiveViewMatrix, viewMatrix, cameraPos, -getTheSun(), shadowCascadesInfo);
-	wzPerfEnd(PERF_TERRAIN);
-
-	// draw skybox
-	// NOTE: Must come *after* drawTerrain *if* using the fallback (old) terrain shaders
-	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
-	renderSurroundings(pie_SkyboxPerspectiveGet(), baseViewMatrix);
-	wzPerfEnd(PERF_SKYBOX);
-
-	wzPerfBegin(PERF_WATER, "3D scene - water");
-	// prepare for the water and the lightmap
-	pie_SetFogStatus(true);
-	// also, make sure we can use world coordinates directly
-	drawWater(perspectiveViewMatrix, cameraPos, -getTheSun());
-	wzPerfEnd(PERF_WATER);
-
-	wzPerfBegin(PERF_MODELS, "3D scene - models");
-	{
-		WZ_PROFILE_SCOPE(pie_DrawAllMeshes);
-		pie_DrawAllMeshes(currentGameFrame, perspectiveMatrix, viewMatrix, shadowCascadesInfo, false);
-	}
-	wzPerfEnd(PERF_MODELS);
-
-	if (!gamePaused())
-	{
-		doConstructionLines(viewMatrix);
-	}
-	locateMouse();
-
-	{
-		WZ_PROFILE_SCOPE(endSceneRenderPass);
-		gfx_api::context::get().endSceneRenderPass();
-	}
-
-	// Draw the scene to the default framebuffer
-	{
-		WZ_PROFILE_SCOPE(copyToFBO);
-		gfx_api::WorldToScreenPSO::get().bind();
-		gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
-		gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
-		gfx_api::WorldToScreenPSO::get().bind_textures(gfx_api::context::get().getSceneTexture());
-		gfx_api::WorldToScreenPSO::get().draw(3, 0);
-		gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
-	}
+	pie_BindInGame3DFrameContext(&ctx);
 }
 
 /// Initialise the fog, skybox and some other stuff
@@ -1596,7 +1398,7 @@ bool init3DView()
 	playerPos.r.y = 0; // rotation
 	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
 
-	if (!initTerrain())
+	if (!initTerrain(gameWorld.map))
 	{
 		return false;
 	}
@@ -1777,6 +1579,12 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4 &perspectiveViewModelMatr
 	const BODY_STATS *psBStats = psDroid->getBodyStats();
 	const iIMDShape * pIMD = (psBStats != nullptr && psBStats->pIMD != nullptr) ? psBStats->pIMD->displayModel() : nullptr;
 
+	if (psDroid->heightAboveMap > 0)
+	{
+		// clipShapeOnScreen is noticeably insufficient if it's a flying unit - we have to care about both shadows and the unit itself...
+		// HACK: boost the overdrawScreenPoints by a factor based on the heightAboveMap
+		overdrawScreenPoints *= std::max<int>(1, (psDroid->heightAboveMap / 20));
+	}
 	return clipShapeOnScreen(pIMD, perspectiveViewModelMatrix, overdrawScreenPoints);
 }
 
@@ -1784,10 +1592,18 @@ bool clipStructureOnScreen(STRUCTURE *psStructure)
 {
 	StructureBounds b = getStructureBounds(psStructure);
 	assert(b.size.x != 0 && b.size.y != 0);
-	for (int breadth = 0; breadth < b.size.y + 2; ++breadth) // +2 to make room for shadows on the terrain
+	// +4 to make room for shadows on the terrain
+	int start = -2;
+	int endB = (b.size.y + 2) - 1;
+	int endW = (b.size.x + 2) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
 	{
-		for (int width = 0; width < b.size.x + 2; ++width)
+		for (int width = start; width <= endW; ++width)
 		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
 			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
 			{
 				return true;
@@ -2003,10 +1819,11 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	for (unsigned aPlayer = 0; aPlayer < MAX_PLAYERS; ++aPlayer)
 	{
 		/* Now go all buildings for that player */
-		for (BASE_OBJECT* obj : apsStructLists[aPlayer])
+		for (BASE_OBJECT* obj : gameWorld.objects.structures[aPlayer])
 		{
 			/* Worth rendering the structure? */
-			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+			if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+				|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 			{
 				continue;
 			}
@@ -2027,7 +1844,8 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix, const glm::mat4 &p
 	for (BASE_OBJECT* obj : psDestroyedObj)
 	{
 		/* Worth rendering the structure? */
-		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime))
+		if (obj->type != OBJ_STRUCTURE || (obj->died != 0 && obj->died < graphicsTime)
+			|| !quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			continue;
 		}
@@ -2073,7 +1891,7 @@ static void drawLineBuild(uint8_t player, STRUCTURE_STATS const *psStats, Vector
 	for (int i = 0; i < lb.count; ++i)
 	{
 		Vector2i cur = lb[i];
-		if (tileHasIncompatibleStructure(worldTile(cur), psStats, 0))
+		if (tileHasIncompatibleStructure(worldTile(gameWorld.map, cur), psStats, 0))
 		{
 			continue;  // construction has started
 		}
@@ -2083,7 +1901,7 @@ static void drawLineBuild(uint8_t player, STRUCTURE_STATS const *psStats, Vector
 		for (int j = 0; j <= b.size.y; ++j)
 			for (int k = 0; k <= b.size.x; ++k)
 			{
-				z = std::max(z, map_TileHeight(b.map.x + k, b.map.y + j));
+				z = std::max(z, map_TileHeight(gameWorld.map, b.map.x + k, b.map.y + j));
 			}
 		Blueprint blueprint(psStats, Vector3i(cur, z), snapDirection(direction), 0, state, player); // snapDirection may be unnecessary here
 		blueprints.push_back(blueprint);
@@ -2119,14 +1937,14 @@ static void renderBuildOrder(uint8_t droidPlayer, DroidOrder const &order, STRUC
 	{
 		drawLineBuild(droidPlayer, stats, pos, order.pos2, order.direction, state);
 	}
-	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats, order.index))
+	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(gameWorld.map, map_coord(pos)), stats, order.index))
 	{
 		StructureBounds b = getStructureBounds(stats, pos, order.direction);
 		int z = 0;
 		for (int j = 0; j <= b.size.y; ++j)
 			for (int i = 0; i <= b.size.x; ++i)
 			{
-				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
+				z = std::max(z, map_TileHeight(gameWorld.map, b.map.x + i, b.map.y + j));
 			}
 		Blueprint blueprint(stats, Vector3i(pos, z), snapDirection(order.direction), order.index, state, droidPlayer);
 		blueprints.push_back(blueprint);
@@ -2144,8 +1962,8 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 	blueprints.clear();  // Delete old blueprints and draw new ones.
 
 	if ((buildState == BUILD3D_VALID || buildState == BUILD3D_POS) &&
-	    sBuildDetails.x > 0 && sBuildDetails.x < (int)mapWidth &&
-	    sBuildDetails.y > 0 && sBuildDetails.y < (int)mapHeight)
+	    sBuildDetails.x > 0 && sBuildDetails.x < (int)gameWorld.map.width &&
+	    sBuildDetails.y > 0 && sBuildDetails.y < (int)gameWorld.map.height)
 	{
 		STRUCT_STATES state;
 		if (buildState == BUILD3D_VALID)
@@ -2187,7 +2005,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 				for (int j = 0; j <= b.size.y; ++j)
 					for (int i = 0; i <= b.size.x; ++i)
 					{
-						z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
+						z = std::max(z, map_TileHeight(gameWorld.map, b.map.x + i, b.map.y + j));
 					}
 
 				if(!playerBlueprintX->isTracking()){
@@ -2233,7 +2051,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix, const glm::mat4 &perspective
 			continue;
 		}
 		STRUCT_STATES state = player == selectedPlayer ? SS_BLUEPRINT_PLANNED : SS_BLUEPRINT_PLANNED_BY_ALLY;
-		for (const DROID *psDroid : apsDroidLists[player])
+		for (const DROID *psDroid : gameWorld.objects.droids[player])
 		{
 			if (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
@@ -2265,13 +2083,39 @@ static void displayDelivPoints(const glm::mat4& viewMatrix, const glm::mat4 &per
 {
 	WZ_PROFILE_SCOPE(displayDelivPoints);
 	if (selectedPlayer >= MAX_PLAYERS) { return; /* no-op */ }
-	for (const auto& psDelivPoint : apsFlagPosLists[selectedPlayer])
+	for (const auto& psDelivPoint : gameWorld.objects.flags[selectedPlayer])
 	{
 		if (clipXY(psDelivPoint->coords.x, psDelivPoint->coords.y))
 		{
 			renderDeliveryPoint(psDelivPoint, false, viewMatrix, perspectiveViewMatrix);
 		}
 	}
+}
+
+bool clipFeatureOnScreen(FEATURE *psFeature)
+{
+	StructureBounds b = getStructureBounds(psFeature);
+	assert(b.size.x != 0 && b.size.y != 0);
+	int overdrawTiles = (b.size.x < 2 && b.size.y < 2) ? 1 : 2; // make room for shadows on the terrain
+	int start = -overdrawTiles;
+	int endB = (b.size.y + overdrawTiles) - 1;
+	int endW = (b.size.x + overdrawTiles) - 1;
+	for (int breadth = start; breadth <= endB; ++breadth)
+	{
+		for (int width = start; width <= endW; ++width)
+		{
+			if (width != start && width != endW && breadth != start && breadth != endB)
+			{
+				continue; // skip interior
+			}
+			if (clipXY(world_coord(b.map.x + width), world_coord(b.map.y + breadth)))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 /// Draw the features
@@ -2281,14 +2125,17 @@ static void displayFeatures(const glm::mat4 &viewMatrix, const glm::mat4 &perspe
 	// player can only be 0 for the features.
 
 	/* Go through all the features */
-	for (BASE_OBJECT* obj : apsFeatureLists[0])
+	for (BASE_OBJECT* obj : gameWorld.objects.features[0])
 	{
 		if (obj->type == OBJ_FEATURE
 			&& (obj->died == 0 || obj->died > graphicsTime)
-			&& clipXY(obj->pos.x, obj->pos.y))
+			&& quickClipXYToMaximumTilesFromCurrentPosition(obj->pos.x, obj->pos.y))
 		{
 			FEATURE* psFeature = castFeature(obj);
-			renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			if (clipFeatureOnScreen(psFeature))
+			{
+				renderFeature(psFeature, viewMatrix, perspectiveViewMatrix);
+			}
 		}
 	}
 
@@ -2357,7 +2204,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix, const glm::mat4 &
 	/* Need to go through all the droid lists */
 	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		for (DROID* psDroid : apsDroidLists[player])
+		for (DROID* psDroid : gameWorld.objects.droids[player])
 		{
 			if (!psDroid || (psDroid->died != 0 && psDroid->died < graphicsTime)
 			    || !quickClipXYToMaximumTilesFromCurrentPosition(psDroid->pos.x, psDroid->pos.y))
@@ -2418,9 +2265,9 @@ Vector2i getPlayerPos()
 }
 
 /// Set the player position
-void setPlayerPos(SDWORD x, SDWORD y)
+void setPlayerPos(const WorldMapState& mapState, SDWORD x, SDWORD y)
 {
-	ASSERT(x >= 0 && x < world_coord(mapWidth) && y >= 0 && y < world_coord(mapHeight), "Position off map");
+	ASSERT(x >= 0 && x < world_coord(mapState.width) && y >= 0 && y < world_coord(mapState.height), "Position off map");
 	playerPos.p.x = x;
 	playerPos.p.z = y;
 	playerPos.r.z = 0;
@@ -2432,10 +2279,16 @@ float getViewDistance()
 	return distance;
 }
 
+bool getIsCloseDistance()
+{
+	return bIsCloseDistance;
+}
+
 /// Set the distance at which the player views the world
 void setViewDistance(float dist)
 {
 	distance = dist;
+	bIsCloseDistance = (distance < 750.f);
 	debug(LOG_WZ, _("Setting zoom to %.0f"), distance);
 }
 
@@ -2455,7 +2308,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	psFeature->sDisplay.frameNumber = currentGameFrame;
 
 	/* Daft hack to get around the oil derrick issue */
-	if (!TileHasFeature(mapTile(map_coord(psFeature->pos.xy()))))
+	if (!TileHasFeature(mapTile(gameWorld.map, map_coord(psFeature->pos.xy()))))
 	{
 		return;
 	}
@@ -2486,7 +2339,7 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix, const glm::m
 	{
 		brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT *)psFeature, brightness.byte.r));
 	}
-	if (!hasSensorOnTile(mapTile(map_coord(psFeature->pos.x), map_coord(psFeature->pos.y)), selectedPlayer))
+	if (!hasSensorOnTile(mapTile(gameWorld.map, map_coord(psFeature->pos.x), map_coord(psFeature->pos.y)), selectedPlayer))
 	{
 		brightness.byte.r /= 2;
 		brightness.byte.g /= 2;
@@ -2541,6 +2394,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 	/* Get it's x and y coordinates so we don't have to deref. struct later */
 	if (psProxDisp->type == POS_PROXDATA)
 	{
+		if (psProxDisp->psMessage->pViewData == nullptr)
+		{
+			return; // if no data - ignore message
+		}
 		pViewProximity = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 		if (pViewProximity)
 		{
@@ -2552,7 +2409,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 			/* in case of a beacon message put above objects */
 			if (psProxDisp->psMessage->pViewData->type == VIEW_BEACON)
 			{
-				if (TileIsOccupied(mapTile(msgX / TILE_UNITS, msgY / TILE_UNITS)))
+				if (TileIsOccupied(mapTile(gameWorld.map, msgX / TILE_UNITS, msgY / TILE_UNITS)))
 				{
 					dv.y = pViewProximity->z + 150;
 				}
@@ -2854,7 +2711,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix, const 
 	bool defensive = false;
 	const FACTION *faction = getPlayerFaction(psStructure->player);
 	const iIMDShape *strImd = getFactionDisplayIMD(faction, psStructure->sDisplay.imd->displayModel());
-	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+	MAPTILE *psTile = worldTile(gameWorld.map, psStructure->pos.x, psStructure->pos.y);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
@@ -3045,7 +2902,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	PIELIGHT		brightness;
 	Vector3i			dv;
 	int				pieFlag, pieFlagData;
-	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+	MAPTILE			*psTile = worldTile(gameWorld.map, psStructure->pos.x, psStructure->pos.y);
 	const FACTION *faction = getPlayerFaction(psStructure->player);
 
 	if (!psStructure->visibleForLocalDisplay())
@@ -3432,6 +3289,18 @@ bool	eitherSelected(DROID *psDroid)
 static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
 {
 	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+	UDWORD shields = 0;
+
+	if (psDroid->shieldPoints >= 0)
+	{
+		int maxShieldPoints = droidGetMaxShieldPoints(psDroid);
+
+		if (maxShieldPoints > 0)
+		{
+			shields = PERCENT(psDroid->shieldPoints, maxShieldPoints);
+			shields = static_cast<UDWORD>((float)psDroid->shieldPoints / (float)maxShieldPoints * (float)psDroid->sDisplay.screenR);
+		}
+	}
 
 	PIELIGHT powerCol = WZCOL_BLACK;
 	PIELIGHT powerColShadow = WZCOL_BLACK;
@@ -3472,6 +3341,18 @@ static void queueDroidPowerBarsRects(DROID *psDroid, bool drawBox, BatchedMultiR
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol), rectGroup);
 	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow), rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 3,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_LBLUE),
+	rectGroup);
+	batchedMultiRectRenderer.addRect(PIERECT_DrawRequest(
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 2,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenX - psDroid->sDisplay.screenR,
+		psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - shields, WZCOL_BLACK),
+	rectGroup);
 }
 
 static void queueDroidEnemyHealthBarsRects(DROID *psDroid, BatchedMultiRectRenderer& batchedMultiRectRenderer, size_t rectGroup)
@@ -3609,7 +3490,7 @@ static void	drawDroidSelections()
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go thru' all the droids */
-		for (const DROID *psDroid : apsDroidLists[i])
+		for (const DROID *psDroid : gameWorld.objects.droids[i])
 		{
 			if (showORDERS)
 			{
@@ -3627,7 +3508,7 @@ static void	drawDroidSelections()
 		}
 	}
 
-	for (const FEATURE *psFeature : apsFeatureLists[0])
+	for (const FEATURE *psFeature : gameWorld.objects.features[0])
 	{
 		if (!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
 		{
@@ -3918,24 +3799,24 @@ void screenCoordToWorld(Vector2i screenCoord, Vector2i &worldCoord, SDWORD &tile
 				/* We've got a match for our mouse coords */
 				if (inQuad(&screenCoord, &quad))
 				{
-					outMousePos.x = playerPos.p.x + world_coord(j);
-					outMousePos.y = playerPos.p.z + world_coord(i);
+					outMousePos.x = playerPos.p.x + (world_coord(j) - (playerPos.p.x % TILE_WIDTH));
+					outMousePos.y = playerPos.p.z + (world_coord(i) - (playerPos.p.z % TILE_HEIGHT));
 					outMousePos += positionInQuad(screenCoord, quad);
 					if (outMousePos.x < 0)
 					{
 						outMousePos.x = 0;
 					}
-					else if (outMousePos.x > world_coord(mapWidth - 1))
+					else if (outMousePos.x > world_coord(gameWorld.map.width - 1))
 					{
-						outMousePos.x = world_coord(mapWidth - 1);
+						outMousePos.x = world_coord(gameWorld.map.width - 1);
 					}
 					if (outMousePos.y < 0)
 					{
 						outMousePos.y = 0;
 					}
-					else if (outMousePos.y > world_coord(mapHeight - 1))
+					else if (outMousePos.y > world_coord(gameWorld.map.height - 1))
 					{
-						outMousePos.y = world_coord(mapHeight - 1);
+						outMousePos.y = world_coord(gameWorld.map.height - 1);
 					}
 					tileX = map_coord(outMousePos.x);
 					tileY = map_coord(outMousePos.y);
@@ -3980,9 +3861,9 @@ static int calculateCameraHeight(int _mapHeight)
 	return static_cast<int>(std::ceil(static_cast<float>(_mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
 }
 
-int calculateCameraHeightAt(int tileX, int tileY)
+int calculateCameraHeightAt(WorldMapState& mapState, int tileX, int tileY)
 {
-	return calculateCameraHeight(calcAverageTerrainHeight(tileX, tileY));
+	return calculateCameraHeight(calcAverageTerrainHeight(mapState, tileX, tileY));
 }
 
 /// Smoothly adjust player height to match the desired height
@@ -4150,7 +4031,7 @@ static void structureEffectsPlayer(UDWORD player)
 		return;  // Don't add effects this frame.
 	}
 
-	for (const STRUCTURE *psStructure : apsStructLists[player])
+	for (const STRUCTURE *psStructure : gameWorld.objects.structures[player])
 	{
 		if (psStructure->status != SS_BUILT)
 		{
@@ -4195,7 +4076,7 @@ static void structureEffectsPlayer(UDWORD player)
 
 				pos.x = psStructure->pos.x + xDif;
 				pos.z = psStructure->pos.y + yDif;
-				pos.y = map_Height(pos.x, pos.z) + 64 + (i * 20);	// 64 up to get to base of spire
+				pos.y = map_Height(gameWorld.map, pos.x, pos.z) + 64 + (i * 20);	// 64 up to get to base of spire
 				effectGiveAuxVar(50);	// half normal plasma size...
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 
@@ -4227,7 +4108,7 @@ static void structureEffectsPlayer(UDWORD player)
 				yDif = iCosSR(effectTime, 720, radius);
 				pos.x = psStructure->pos.x + xDif;
 				pos.z = psStructure->pos.y + yDif;
-				pos.y = map_Height(pos.x, pos.z) + pDisplayModel->max.y;
+				pos.y = map_Height(gameWorld.map, pos.x, pos.z) + pDisplayModel->max.y;
 				effectGiveAuxVar(30 + bFXSize);	// half normal plasma size...
 				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, nullptr, 0);
 				pos.x = psStructure->pos.x - xDif;
@@ -4244,7 +4125,7 @@ static void structureEffects()
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (!apsStructLists[i].empty())
+		if (!gameWorld.objects.structures[i].empty())
 		{
 			structureEffectsPlayer(i);
 		}
@@ -4261,7 +4142,7 @@ static void	showDroidSensorRanges()
 	if (rangeOnScreen
 		&& (graphicsTime - lastRangeUpdateTime) >= 50)		// note, we still have to decide what to do with multiple units selected, since it will draw it for all of them! -Q 5-10-05
 	{
-		for (DROID* psDroid : apsDroidLists[selectedPlayer])
+		for (DROID* psDroid : gameWorld.objects.droids[selectedPlayer])
 		{
 			if (psDroid->selected)
 			{
@@ -4269,7 +4150,7 @@ static void	showDroidSensorRanges()
 			}
 		}
 
-		for (STRUCTURE* psStruct : apsStructLists[selectedPlayer])
+		for (STRUCTURE* psStruct : gameWorld.objects.structures[selectedPlayer])
 		{
 			if (psStruct->selected)
 			{
@@ -4291,9 +4172,9 @@ static void showEffectCircle(Position centre, int32_t radius, uint32_t auxVar, E
 		pos.z = centre.y - iCosSR(i, circumference, radius);  // [sic] y -> z
 
 		// Check if it's actually on map
-		if (worldOnMap(pos.x, pos.z))
+		if (worldOnMap(gameWorld.map, pos.x, pos.z))
 		{
-			pos.y = map_Height(pos.x, pos.z) + 16;
+			pos.y = map_Height(gameWorld.map, pos.x, pos.z) + 16;
 			effectGiveAuxVar(auxVar);
 			addEffect(&pos, group, type, false, nullptr, 0);
 		}
@@ -4441,7 +4322,7 @@ static void doConstructionLines(const glm::mat4 &viewMatrix)
 	WZ_PROFILE_SCOPE(doConstructionLines);
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID *psDroid : apsDroidLists[i])
+		for (DROID *psDroid : gameWorld.objects.droids[i])
 		{
 			if (clipXY(psDroid->pos.x, psDroid->pos.y)
 			    && psDroid->visibleForLocalDisplay() == UBYTE_MAX
@@ -4540,4 +4421,212 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	PIELIGHT colour = psDroid->action == DACTION_DEMOLISH? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
 	pie_TransColouredTriangle({pt0, pt1, pt2}, colour, viewMatrix);
 	pie_TransColouredTriangle({pt0, pt2, pt1}, colour, viewMatrix);
+}
+
+bool	getDrawTerrainShadows()
+{
+	return (bDrawTerrainShadows);
+}
+
+void	setDrawTerrainShadows(bool val)
+{
+	bDrawTerrainShadows = val;
+}
+
+static void drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
+{
+	gfx_api::WorldToScreenPSO::get().bind();
+	gfx_api::WorldToScreenPSO::get().bind_constants({1.0f});
+	gfx_api::WorldToScreenPSO::get().bind_vertex_buffers(pScreenTriangleVBO);
+	gfx_api::WorldToScreenPSO::get().bind_textures(sourceTexture);
+	gfx_api::WorldToScreenPSO::get().draw(3, 0);
+	gfx_api::WorldToScreenPSO::get().unbind_vertex_buffers(pScreenTriangleVBO);
+}
+
+void display3d_renderSurroundings(const glm::mat4& projectionMatrix, const glm::mat4& skyboxViewMatrix)
+{
+	renderSurroundings(projectionMatrix, skyboxViewMatrix);
+}
+
+void display3d_doConstructionLines(const glm::mat4& viewMatrix)
+{
+	doConstructionLines(viewMatrix);
+}
+
+void display3d_locateMouse()
+{
+	locateMouse();
+}
+
+void display3d_drawWorldToScreenBlit(gfx_api::abstract_texture* sourceTexture)
+{
+	drawWorldToScreenBlit(sourceTexture);
+}
+
+void display3d_processSensorTarget()
+{
+	processSensorTarget();
+}
+
+void display3d_processDestinationTarget()
+{
+	processDestinationTarget();
+}
+
+void display3d_recordSceneOverlays(const gfx_api::RenderPassContext&)
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	pie_BeginInterface();
+
+	drawDragBox();
+
+	if (dragBox3D.status == DRAG_RELEASED)
+	{
+		dragBox3D.status = DRAG_INACTIVE;
+	}
+
+	drawDroidAndStructureSelections();
+
+	pie_SetFogStatus(false);
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+	if (errorWaiting)
+	{
+		if (lastErrorTime == 0 || lastErrorTime + (60 * GAME_TICKS_PER_SEC) < realTime)
+		{
+			char trimMsg[255];
+			audio_PlayBuildFailedOnce();
+			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorWaiting);
+			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			errorWaiting = nullptr;
+			lastErrorTime = realTime;
+		}
+	}
+	else
+	{
+		errorWaiting = debugLastError();
+	}
+	if (showSAMPLES)
+	{
+		unsigned int width, height;
+		std::string Qbuf, Lbuf, Abuf;
+
+		Qbuf = astringf("Que: %04u", audio_GetSampleQueueCount());
+		Lbuf = astringf("Lst: %04u", audio_GetSampleListCount());
+		Abuf = astringf("Act: %04u", sound_GetActiveSamplesCount());
+		txtShowSamples_Que.setText(WzString::fromUtf8(Qbuf), font_regular);
+		txtShowSamples_Lst.setText(WzString::fromUtf8(Lbuf), font_regular);
+		txtShowSamples_Act.setText(WzString::fromUtf8(Abuf), font_regular);
+
+		width = txtShowSamples_Que.width() + 11;
+		height = txtShowSamples_Que.height();
+
+		txtShowSamples_Que.render(pie_GetVideoBufferWidth() - width, height + 2, WZCOL_TEXT_BRIGHT);
+		txtShowSamples_Lst.render(pie_GetVideoBufferWidth() - width, height + 48, WZCOL_TEXT_BRIGHT);
+		txtShowSamples_Act.render(pie_GetVideoBufferWidth() - width, height + 59, WZCOL_TEXT_BRIGHT);
+	}
+	if (showFPS)
+	{
+		std::string fps = astringf("FPS: %d", frameRate());
+		txtShowFPS.setText(WzString::fromUtf8(fps), font_regular);
+		const unsigned width = txtShowFPS.width() + 10;
+		const unsigned height = 9;
+		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
+	}
+	if (showUNITCOUNT && selectedPlayer < MAX_PLAYERS)
+	{
+		std::string killdiff = astringf("Units: %u lost / %u built / %u killed", missionData.unitsLost, missionData.unitsBuilt, getSelectedPlayerUnitsKilled());
+		txtUnits.setText(WzString::fromUtf8(killdiff), font_regular);
+		const unsigned width = txtUnits.width() + 10;
+		const unsigned height = 9;
+		txtUnits.render(pie_GetVideoBufferWidth() - width - ((showFPS) ? txtShowFPS.width() + 10 : 0), pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
+	}
+	if (showORDERS)
+	{
+		unsigned int height;
+		txtShowOrders.setText(DROIDDOING, font_regular);
+		height = txtShowOrders.height();
+		txtShowOrders.render(0, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
+	}
+	if (showDROIDcounts && selectedPlayer < MAX_PLAYERS)
+	{
+		int visibleDroids = 0;
+		int undrawnDroids = 0;
+		for (const DROID *psDroid : gameWorld.objects.droids[selectedPlayer])
+		{
+			if (psDroid->sDisplay.frameNumber != currentGameFrame)
+			{
+				++undrawnDroids;
+				continue;
+			}
+			++visibleDroids;
+		}
+		char droidCounts[255];
+		ssprintf(droidCounts, "Droids: %d drawn, %d undrawn", visibleDroids, undrawnDroids);
+		droidText.setText(droidCounts, font_regular);
+		droidText.render(pie_GetVideoBufferWidth() - droidText.width() - 10, droidText.height() + 2, WZCOL_TEXT_BRIGHT);
+	}
+
+	setupConnectionStatusForm();
+
+	if (getWidgetsStatus() && !gamePaused())
+	{
+		char buildInfo[255];
+		bool showMs = (gameTimeGetMod() < Rational(1, 4));
+		getAsciiTime(buildInfo, showMs ? graphicsTime : gameTime, showMs);
+		txtLevelName.render(RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (dbgInputManager.debugMappingsAllowed())
+		{
+			txtDebugStatus.render(RET_X + 134, 436 + E_H, WZCOL_TEXT_MEDIUM);
+		}
+		txtCurrentTime.setText(buildInfo, font_small);
+		txtCurrentTime.render(RET_X + 134, 422 + E_H, WZCOL_TEXT_MEDIUM);
+	}
+}
+
+void display3d_recordSceneDebugOverlays(const gfx_api::RenderPassContext&)
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	showDroidSensorRanges();
+	if (CauseCrash)
+	{
+		char *crash = nullptr;
+#ifdef DEBUG
+		ASSERT(false, "Yes, this is a assert.  This should not happen on release builds! Use --noassert to bypass in debug builds.");
+		debug(LOG_WARNING, " *** Warning!  You have compiled in debug mode! ***");
+#endif
+		writeGameInfo("WZdebuginfo.txt");
+		debug(LOG_FATAL, "Forcing a segfault! (crash handler test)");
+		if (!crashHandlingProviderTestCrash())
+		{
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+			*crash = 0x3;
+#if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
+# pragma GCC diagnostic pop
+#endif
+		}
+#if defined(__EMSCRIPTEN__)
+		abort();
+#endif
+		exit(-1);
+	}
+	if (bRangeDisplay)
+	{
+		drawRangeAtPos(rangeCenterX, rangeCenterY, rangeRadius);
+	}
+
+	if (showPath)
+	{
+		showDroidPaths(gameWorld);
+	}
 }

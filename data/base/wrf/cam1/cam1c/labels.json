@@ -27,6 +27,34 @@
 		"label": "AmbushTarget",
 		"pos": [8352, 13880]
 	},
+	"position_7": {
+		"label": "reinforceSouthEast",
+		"pos": [15424, 16064]
+	},
+	"position_8": {
+		"label": "reinforceNorth",
+		"pos": [12736, 128]
+	},
+	"position_9": {
+		"label": "defensePos",
+		"pos": [11648, 13952]
+	},
+	"position_10": {
+		"label": "PatrolPos1",
+		"pos": [14720, 3712]
+	},
+	"position_11": {
+		"label": "PatrolPos2",
+		"pos": [14720, 6016]
+	},
+	"position_12": {
+		"label": "PatrolPos3",
+		"pos": [12672, 3712]
+	},
+	"position_13": {
+		"label": "PatrolPos4",
+		"pos": [12672, 6016]
+	},
 
 	"area_0": {
 		"label": "landingZone",
@@ -35,13 +63,13 @@
 	},
 	"area_1": {
 		"label": "EastNPLZ",
-		"pos1": [13504, 4672],
-		"pos2": [13760, 4928]
+		"pos1": [13440, 4608],
+		"pos2": [13696, 4864]
 	},
 	"area_2": {
 		"label": "WestNPLZ",
-		"pos1": [8896, 10048],
-		"pos2": [9152, 10304]
+		"pos1": [8832, 9984],
+		"pos2": [9088, 10240]
 	},
 	"area_3": {
 		"label": "PhantomLZ1",
@@ -160,6 +188,16 @@
 		"subscriber": 0,
 		"pos1": [7616, 4800],
 		"pos2": [9408, 5696]
+	},
+	"area_26": {
+		"label": "DefendForce",
+		"pos1": [11136, 13568],
+		"pos2": [11648, 14208]
+	},
+	"area_27": {
+		"label": "PatrolForce",
+		"pos1": [14464, 3072],
+		"pos2": [14976, 3584]
 	},
 
 	"object_0": {

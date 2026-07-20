@@ -13,12 +13,13 @@ function checkIfSeaMap()
 
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
+			if (!propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, startPositions[i].x, startPositions[i].y))
 			{
 
 				//Check if it is a map 'spotter' pit
 				//Cyborgs will turn off in divided maps with a physical barrier still
 				let temp = 0;
+
 				for (let t = 0; t < maxPlayers; ++t)
 				{
 					if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
@@ -40,7 +41,7 @@ function checkIfSeaMap()
 		{
 			for (let i = 0; i < maxPlayers; ++i)
 			{
-				if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, startPositions[i].x, startPositions[i].y))
+				if ((i !== me) && !allianceExistsBetween(i, me) && propulsionCanReach("wheeled01", _MY_BASE.x, _MY_BASE.y, startPositions[i].x, startPositions[i].y))
 				{
 					//Check to see if it is a closed player slot
 					if (countDroid(DROID_ANY, i) > 0)
@@ -49,6 +50,7 @@ function checkIfSeaMap()
 						break;
 					}
 				}
+
 				if (seaMapWithLandEnemy === true)
 				{
 					break;
@@ -67,15 +69,16 @@ function countAllResources()
 {
 	function uncached()
 	{
-		let amount = enumFeature(ALL_PLAYERS, OIL_RES).length;
+		let amount = enumFeature(ALL_PLAYERS, __OIL_RES).length;
+
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			amount += enumStruct(i, structures.derrick).length;
+			amount += enumStruct(i, _STRUCTURES.derrick).length;
 		}
 
-		if (isDefined(scavengerPlayer))
+		if (scavengers !== NO_SCAVENGERS)
 		{
-			amount += enumStruct(scavengerPlayer, structures.derrick).length;
+			amount += enumStruct(scavengerPlayer, _STRUCTURES.derrick).length;
 		}
 
 		return amount;
@@ -93,8 +96,9 @@ function averageOilPerPlayer()
 		//maxPlayers is useless here in case there are some empty slots.
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			let data = playerData[i];
-			players += ((data.isHuman || data.isAI) ? 1 : 0);
+			const _data = playerData[i];
+
+			players += ((_data.isHuman || _data.isAI) ? 1 : 0);
 		}
 
 		return Math.floor(countAllResources() / players);
@@ -109,16 +113,17 @@ function mapOilLevel()
 	function uncached()
 	{
 		let str;
-		let perPlayer = averageOilPerPlayer();
-		if (perPlayer <= 10)
+		const __perPlayer = averageOilPerPlayer();
+
+		if (__perPlayer <= 10)
 		{
 			str = "LOW";
 		}
-		else if ((perPlayer > 10) && (perPlayer < 20))
+		else if ((__perPlayer > 10) && (__perPlayer < 20))
 		{
 			str = "MEDIUM";
 		}
-		else if ((perPlayer >= 20) && (perPlayer < 30))
+		else if ((__perPlayer >= 20) && (__perPlayer < 30))
 		{
 			str = "HIGH";
 		}
@@ -137,9 +142,9 @@ function highOilMap()
 {
 	function uncached()
 	{
-		let oil = mapOilLevel();
+		const __oil = mapOilLevel();
 
-		if (oil === "HIGH" || oil === "NTW")
+		if (__oil === "HIGH" || __oil === "NTW")
 		{
 			return true;
 		}
@@ -155,71 +160,63 @@ function cobraBaseArea()
 {
 	function uncached()
 	{
-		const EXTRA_TILES = 20;
-		let area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
-		let baseStructures = [
-			structures.factory,
-			structures.cyborgFactory,
-			structures.vtolFactory,
-			structures.lab,
-			structures.gen,
-			structures.hq,
-			structures.repair,
-			structures.uplink,
-			structures.lassat,
+		const __extraTiles = 20;
+		const __clipOffset = 0;
+		const _area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
+		const _baseStructures = [
+			_STRUCTURES.factory,
+			_STRUCTURES.cyborgFactory,
+			_STRUCTURES.vtolFactory,
+			_STRUCTURES.lab,
+			_STRUCTURES.gen,
+			_STRUCTURES.hq,
+			_STRUCTURES.repair,
+			_STRUCTURES.uplink,
+			_STRUCTURES.lassat,
 		];
 
-		for (let i = 0, len = baseStructures.length; i < len; ++i)
+		for (let i = 0, len = _baseStructures.length; i < len; ++i)
 		{
-			let structureType = baseStructures[i];
-			let objects = enumStruct(me, structureType);
+			const __structureType = _baseStructures[i];
+			const _objects = enumStruct(me, __structureType);
 
-			for (let j = 0, len2 = objects.length; j < len2; ++j)
+			for (let j = 0, len2 = _objects.length; j < len2; ++j)
 			{
-				let structure = objects[j];
+				const _structure = _objects[j];
 
-				if (structure.x < area.x1)
+				if (_structure.x < _area.x1)
 				{
-					area.x1 = structure.x;
+					_area.x1 = _structure.x;
 				}
-				if (structure.x > area.x2)
+				if (_structure.x > _area.x2)
 				{
-					area.x2 = structure.x;
+					_area.x2 = _structure.x;
 				}
-				if (structure.y < area.y1)
+				if (_structure.y < _area.y1)
 				{
-					area.y1 = structure.y;
+					_area.y1 = _structure.y;
 				}
-				if (structure.y > area.y2)
+				if (_structure.y > _area.y2)
 				{
-					area.y2 = structure.y;
+					_area.y2 = _structure.y;
 				}
 			}
 		}
 
-		area.x1 = area.x1 - EXTRA_TILES;
-		area.y1 = area.y1 - EXTRA_TILES;
-		area.x2 = area.x2 + EXTRA_TILES;
-		area.y2 = area.y2 + EXTRA_TILES;
+		_area.x1 = _area.x1 - __extraTiles;
+		_area.y1 = _area.y1 - __extraTiles;
+		_area.x2 = _area.x2 + __extraTiles;
+		_area.y2 = _area.y2 + __extraTiles;
 
-		if (area.x1 < 0)
-		{
-			area.x1 = 0;
-		}
-		if (area.y1 < 0)
-		{
-			area.y1 = 0;
-		}
-		if (area.x2 > mapWidth)
-		{
-			area.x2 = mapWidth;
-		}
-		if (area.y2 > mapHeight)
-		{
-			area.y2 = mapHeight;
-		}
+		const _clipFirstCoords = clipToMapBounds({x: _area.x1, y: _area.y1}, __clipOffset);
+		const _clipSecondCoords = clipToMapBounds({x: _area.x2, y: _area.y2}, __clipOffset);
 
-		return area;
+		_area.x1 = _clipFirstCoords.x;
+		_area.y1 = _clipFirstCoords.y;
+		_area.x2 = _clipSecondCoords.x;
+		_area.y2 = _clipSecondCoords.y;
+
+		return _area;
 	}
 
 	return cacheThis(uncached, [], "cobraBaseArea" + me, 70000);

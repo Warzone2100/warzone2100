@@ -1,0 +1,18 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::bombs",
+	"title": "Bomb Bays",
+	"sort": "08",
+	"contents": [
+		"Bomb bays are a unique weapon type that can only be equipped onto VTOLs.",
+		"",
+		"While their attack range is short and their ammo capacity is low, bomb bays grant bonus hitpoints and generally pack a more powerful payload compared to other VTOL weapons.",
+		"",
+		"Like all other weapons, different bombs have different effects, strengths, and applications."
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::weapons::bombs::explosive",
+		"wz2100::weapons::bombs::incendiary"
+	]
+}

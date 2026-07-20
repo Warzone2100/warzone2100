@@ -1,0 +1,24 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons",
+	"title": "Weapons",
+	"sort": "4",
+	"visual": {
+		"stat": {
+			"id": "ZNULLWEAPON"
+		}
+	},
+	"contents": [
+		"As you discover and research more weapons, you'll also discover that certain weapons may work dramatically better for certain situations than others (or versus certain enemy units or structures).",
+		"",
+		"When you complete research on a new weapon, an Intelligence Display message will provide some information on its attributes.",
+		"",
+		"It is to your advantage to experiment with different weapon types. If you're having trouble and haven't re-evaluated your force's composition in a while, it might be time to consider changing the weapons for stronger ones, or new varieties!"
+	],
+	"links": [
+		"wz2100::general::intelmap",
+		"wz2100::units::designing",
+		"wz2100::unitorders::recycling",
+		"wz2100::units::propulsions"
+	]
+}

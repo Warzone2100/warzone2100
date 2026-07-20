@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-09 02:23\n"
+"POT-Creation-Date: 2026-04-04 02:03+0000\n"
+"PO-Revision-Date: 2026-04-04 03:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1775,6 +1775,9 @@ msgstr "在高原上建造 7 座非墙体建筑，并摧毁所有的“新范式
 msgid "Locate and rescue your units from the shot down transporter"
 msgstr "找到被击落的运输舰并从中营救你的部队"
 
+msgid "Destroy all enemy bases"
+msgstr ""
+
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "在太多人被俘之前，从“集体”营救平民。"
 
@@ -1795,6 +1798,9 @@ msgstr "摧毁导弹发射井"
 
 msgid "Rescue Alpha team from Nexus"
 msgstr "从“枢纽”手中营救 Alpha 中队"
+
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr "阻止所有“枢纽”气垫坦克逃离任务区域"
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "摧毁“枢纽”总部，停止“枢纽”入侵程序"
@@ -1817,8 +1823,8 @@ msgstr "在 Gamma 中队前哨站重整 Beta 中队残部"
 msgid "Return to LZ"
 msgstr "回到降落点"
 
-msgid "Hard / Insane difficulty hint:"
-msgstr "困难/疯狂难度提示："
+msgid "Insane difficulty hint:"
+msgstr "疯狂难度提示："
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
 msgstr "在地图各处建立强大的基地以抵御“集体”"
@@ -2005,6 +2011,9 @@ msgstr "请等待工厂生产新单位"
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜指挥官，您已准备好完成第一次任务"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr "教程已经结束，按 Esc 或齿轮图标退回主菜单。"
 
 msgid "CAMPAIGN ONE"
 msgstr "战役一"
@@ -2941,6 +2950,28 @@ msgstr "随时可以，老大!"
 msgid "System locale"
 msgstr "系统语系"
 
+msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
+msgstr ""
+
+msgid "Please try another room or disable any proxies / VPNs and try again."
+msgstr ""
+
+msgid "Game not found in lobby."
+msgstr ""
+
+msgid "The game may have already started, or the host may have disbanded the game lobby."
+msgstr "游戏可能已经开始，或者主机已经解散游戏大厅。"
+
+msgid "Error hosting game in lobby server"
+msgstr ""
+
+#, c-format
+msgid "Make sure port %d can receive incoming connections."
+msgstr ""
+
+msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
+msgstr ""
+
 msgid "Failed to create port mapping"
 msgstr "创建端口映射失败"
 
@@ -2949,8 +2980,8 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr "手动配置您的路由器/防火墙来打开端口 %d！"
 
 #, c-format
-msgid "Port mapping opened external port: %d"
-msgstr "端口映射已打开外部端口：%d"
+msgid "Port mapping opened external port: %u"
+msgstr "端口映射已打开外部端口：%u"
 
 #, c-format
 msgid "Your external IP is: %s"
@@ -2959,27 +2990,39 @@ msgstr "您的外部 IP 地址是： %s"
 msgid "Failed to create port mapping (timeout)"
 msgstr "创建端口映射失败 (超时)"
 
+#, c-format
+msgid "Using %s network backend."
+msgstr "正在使用 %s 网络后端"
+
 msgid "Client failed to ack player index swap"
 msgstr "客户端未能确认玩家索引交换。"
 
-#, c-format
-msgid "Could not resolve masterserver name (%s)!"
-msgstr "不能解析游戏主机名(%s)!"
-
-#, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
-"Make sure port %d can receive incoming connections.\n"
-"If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
-" or to forward the port to your system."
+msgid "Game is listed in the lobby"
 msgstr ""
-"无法连接到游戏大厅服务器: %s。\n"
-"请确认端口 %d 可以收到传入连接。\n"
-"如果你正在使用路由器，请启用 UPNP/NAT-PMP/PCP\n"
-" 或者转发端口到你的系统"
 
-msgid "Failed to get a lobby response!"
-msgstr "游戏响应失败!"
+msgid "Lobby GameId"
+msgstr ""
+
+msgid "Game not listed in the lobby."
+msgstr ""
+
+msgid "Error connecting to the lobby server."
+msgstr ""
+
+msgid "Please check your internet connection, or wait a short while and try hosting again."
+msgstr ""
+
+msgid "Your game will only be accessible via direct connection (or local LAN)."
+msgstr ""
+
+msgid "Multiplayer lobby support unavailable. Please update your client."
+msgstr ""
+
+msgid "Game not listed in the lobby:"
+msgstr ""
+
+msgid "Failed to create game listing. Check WZ logs."
+msgstr ""
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
 msgstr "回放文件格式比此版本的 Warzone 2100 能够支持的更新。"
@@ -2991,8 +3034,39 @@ msgstr "回放格式版本： %u"
 msgid "Replay File Format Unsupported"
 msgstr "不支持的回放文件格式"
 
+msgid "The replay file format is older than this version of Warzone 2100 can support."
+msgstr "此回放文件的格式版本过旧，当前版本的 Warzone 2100 无法支持。"
+
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
 msgstr "无法加载回放：回放文件不完整或已损坏。"
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr "Warzone 2100: 初始化图形失败"
+
+msgid "Failed to initialize graphics for all backends."
+msgstr "图形后端初始化失败！"
+
+msgid "Error Details:"
+msgstr "错误详情："
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr "请更新或重装图形驱动程序，并检查系统设置。"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "Warzone 2100: Prior launch failed"
+msgstr "Warzone 2100：上一次启动失败"
+
+msgid "The prior attempt to initialize the following graphics backend caused a crash:"
+msgstr "先前尝试初始化以下图形后端时引发了崩溃："
+
+#, c-format
+msgid "Graphics Backend: %s"
+msgstr "图形后端： %s"
+
+msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
+msgstr "Warzone 2100 现在将尝试使用其他图形后端启动。"
 
 msgid "Menu"
 msgstr "菜单"
@@ -3029,6 +3103,18 @@ msgstr "选项卡向左滚动"
 
 msgid "Tab Scroll right"
 msgstr "选项卡向右滚动"
+
+msgid "Please enter the text below"
+msgstr ""
+
+msgid "Enter the text"
+msgstr ""
+
+msgid "Please drag the slider to verify"
+msgstr ""
+
+msgid "Please drag the tile to verify"
+msgstr ""
 
 msgid ".50-calibre heavy machinegun"
 msgstr "点 50 口径重机枪"
@@ -3213,6 +3299,9 @@ msgstr "自动升级所有的能源产生器"
 msgid "All rail guns upgraded automatically"
 msgstr "自动升级所有轨道炮"
 
+msgid "All Ripple Rockets upgraded automatically"
+msgstr ""
+
 msgid "All sensors upgraded automatically"
 msgstr "自动升级所有雷达"
 
@@ -3232,7 +3321,7 @@ msgid "Alpha"
 msgstr "Alpha"
 
 msgid "Amphibious hover propulsion"
-msgstr "两栖气垫推进动力"
+msgstr "两栖气垫推进系统"
 
 msgid "Angel Missile Battery"
 msgstr "“天使”导弹炮组"
@@ -3303,10 +3392,10 @@ msgstr "装备半机械人“天谴”导弹发射器"
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr "装备半机械人坦克杀手火箭"
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr "装备半机械人铝热火焰喷射器"
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr "装备半机械人铝热火焰喷射器"
 
 msgid "Armed with Flashlight Laser"
@@ -3358,6 +3447,9 @@ msgstr "脱壳穿甲弹"
 
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "尾翼稳定脱壳穿甲弹"
+
+msgid "Armored bunker with Assault Gun"
+msgstr ""
 
 msgid "Armored bunker with Flamer"
 msgstr "装甲火焰喷射器碉堡"
@@ -3435,7 +3527,7 @@ msgid "Armored Incendiary Mortar battery pit"
 msgstr "装甲燃烧迫击炮散兵坑"
 
 msgid "Armored Mortar battery pit"
-msgstr "装备有迫击炮之阵地"
+msgstr "装甲迫击炮散兵坑"
 
 msgid "Armored strongpoint with Flashlight laser"
 msgstr "装甲“手电筒”激光加强火力点"
@@ -3445,6 +3537,9 @@ msgstr "装甲高斯加农炮加强火力点"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "装甲重型激光加强火力点"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr "粒子炮加强火力点"
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "装甲等离子火焰喷射器加强火力点"
@@ -3618,10 +3713,10 @@ msgstr "最佳目标：基本建筑物"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "最佳目标：基本建筑物，炮位与半机械人"
 
-msgid "Best Targets: Bunkers and hardpoints"
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "最佳目标：碉堡与火力点"
 
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目标：碉堡与火力点"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
@@ -3674,6 +3769,9 @@ msgstr "炸弹伤害 +10%"
 msgid "Bomb damage +25%"
 msgstr "炸弹攻击力 +25%"
 
+msgid "Bomb Damage"
+msgstr "炸弹攻击力"
+
 msgid "Bomb Upgrade"
 msgstr "炸弹升级"
 
@@ -3697,6 +3795,9 @@ msgstr "毒虫"
 
 msgid "Buggy"
 msgstr "越野车"
+
+msgid "Buildings"
+msgstr "建筑物"
 
 msgid "Built-in diagnostic and repair systems"
 msgstr "内置诊断及修理系统"
@@ -3738,6 +3839,9 @@ msgstr "更有效率的燃烧石油"
 msgid "Cannon accuracy +10%"
 msgstr "加农炮命中率 +10%"
 
+msgid "Cannon Accuracy"
+msgstr "加农炮命中率"
+
 msgid "Cannon Autoloader Mk2"
 msgstr "加农炮自动装填系统二型"
 
@@ -3750,6 +3854,9 @@ msgstr "加农炮自动装填系统一型"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "加农炮伤害 +25%"
+
+msgid "Cannon Damage"
+msgstr "加农炮攻击力"
 
 msgid "Cannon Fire Truck"
 msgstr "大炮消防车"
@@ -3775,6 +3882,9 @@ msgstr "加农炮高速装填系统一型"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "加农炮装填时间 -10%"
+
+msgid "Cannon Reload"
+msgstr "加农炮装填速度"
 
 msgid "Cannon Tower"
 msgstr "加农炮防卫塔"
@@ -3881,6 +3991,12 @@ msgstr "指挥官组织小组作战并作为工厂集合点"
 msgid "Complete battlefield visibility"
 msgstr "整个战场可见性"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr "复合合金加成 AI 二型"
+
+msgid "Composite Alloys Buff AI"
+msgstr "复合合金加成 AI"
+
 msgid "Composite Alloys Mk2"
 msgstr "复合合金二型"
 
@@ -3939,6 +4055,15 @@ msgstr "起重机 1"
 
 msgid "Crane2"
 msgstr "起重机 2"
+
+msgid "Cyborg Alloys"
+msgstr "半机械人合金"
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr "半机械人复合合金加成 AI 二型"
+
+msgid "Cyborg Composite Alloys Buff AI"
+msgstr "半机械人复合合金加成 AI"
 
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "半机械人复合合金二型"
@@ -4006,6 +4131,12 @@ msgstr "半机械人超紧密隔热装甲"
 msgid "Cyborg Tank Killer"
 msgstr "半机械人 (“坦克杀手”)"
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr "半机械人隔热装甲加成 AI 二型"
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr "半机械人隔热装甲加成 AI"
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "半机械人隔热装甲二型"
 
@@ -4013,6 +4144,9 @@ msgid "Cyborg Thermal Armor Mk3"
 msgstr "半机械人隔热装甲三型"
 
 msgid "Cyborg Thermal Armor"
+msgstr "半机械人隔热装甲"
+
+msgid "Cyborg Thermal"
 msgstr "半机械人隔热装甲"
 
 msgid "Cyborg Thermite"
@@ -4141,6 +4275,9 @@ msgstr "可使单位进行自行修理"
 msgid "Enemy"
 msgstr "敌人"
 
+msgid "Engine"
+msgstr "引擎"
+
 msgid "Engineering"
 msgstr "工程技术"
 
@@ -4195,9 +4332,6 @@ msgstr "快速射击迷你火箭一型"
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "能够快速射击的轻型反车辆火箭"
 
-msgid "Fast Loader"
-msgstr "榴弹炮快速装填"
-
 msgid "Faster than Cobra"
 msgstr "移动速度比眼镜蛇快"
 
@@ -4212,6 +4346,9 @@ msgstr "尾翼稳定装置改善了飞行的轨迹"
 
 msgid "Fire Truck"
 msgstr "消防车"
+
+msgid "Fires beams of subatomic particle"
+msgstr "发射亚原子粒子束"
 
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "发射电磁脉冲导弹"
@@ -4247,12 +4384,18 @@ msgstr "眼镜蛇坦克 (火焰喷射)"
 msgid "Flamer damage +25%"
 msgstr "火焰喷射伤害 +25%"
 
+msgid "Flamer Damage"
+msgstr "火焰喷射器攻击力"
+
 msgid "Flamer Fast Loader"
 msgstr "火焰喷射快速装填"
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "火焰喷射自动装填时间 -15%"
+
+msgid "Flamer Reload"
+msgstr "火焰喷射器装填速度"
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "响尾蛇半履带车 (火焰喷射)"
@@ -4690,6 +4833,24 @@ msgstr "地狱风暴"
 msgid "Hero and Special rank units are protected"
 msgstr "英雄和特种兵等级单位受保护"
 
+msgid "HESC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESC Mortar Shells"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESCHC Mortar Shells"
+msgstr ""
+
 msgid "HESH Rocket Warhead Mk2"
 msgstr "碎甲火箭弹头二型"
 
@@ -4737,6 +4898,12 @@ msgstr "高爆重型炮兵导弹"
 
 msgid "High explosive shaped charge missile"
 msgstr "高爆聚能装药导弹"
+
+msgid "High Explosive Soft Casing High Capacity Shells"
+msgstr ""
+
+msgid "High Explosive Soft Casing Shells"
+msgstr ""
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "高强度热能装甲二型"
@@ -4803,6 +4970,15 @@ msgstr "榴弹炮自动装填器一型"
 msgid "Howitzer damage +25%"
 msgstr "榴弹炮伤害 +25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr "榴弹炮攻击力加成 AI 二型"
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr "榴弹炮攻击力加成 AI 三型"
+
+msgid "Howitzer Damage Buff AI"
+msgstr "榴弹炮攻击力加成 AI"
+
 msgid "Howitzer Fast Loader"
 msgstr "迫击炮快速装载系统"
 
@@ -4812,6 +4988,15 @@ msgstr "榴弹炮装填时间 -10%"
 
 msgid "Howitzer"
 msgstr "榴弹炮"
+
+msgid "Howitzers Accuracy"
+msgstr "榴弹炮命中率"
+
+msgid "Howitzers Damage"
+msgstr "榴弹炮攻击力"
+
+msgid "Howitzers Reload"
+msgstr "榴弹炮装填速度"
 
 msgid "Hurricane AA Site"
 msgstr "飓风级高射炮台"
@@ -4876,6 +5061,9 @@ msgstr "改进型工程科技"
 msgid "Improved fire detection systems"
 msgstr "改进型火焰探测系统"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr "改进型硬化混凝土加成 AI"
+
 msgid "Improved Hardcrete Mk2"
 msgstr "改进型硬化混凝土墙体二型"
 
@@ -4927,10 +5115,10 @@ msgstr "改善激光系统的光学结构使之不易发散"
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "燃烧榴弹炮炮位 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "燃烧榴弹炮炮位"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "燃烧榴弹炮炮位"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5010,6 +5198,9 @@ msgstr "增加轨道炮系武器攻击力"
 
 msgid "Increases Rail Gun ROF"
 msgstr "增加轨道炮系武器射速"
+
+msgid "Increases Ripple Rocket ROF"
+msgstr ""
 
 msgid "Increases Rocket accuracy"
 msgstr "增加火箭命中率"
@@ -5135,9 +5326,15 @@ msgstr "可使用防空激光武器"
 msgid "Laser accuracy +10%"
 msgstr "激光命中率 +10%"
 
+msgid "Laser Accuracy"
+msgstr "激光命中率"
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "激光伤害 +25%"
+
+msgid "Laser Damage"
+msgstr "激光攻击力"
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "激光指向器提供武器导引指向目标功能"
@@ -5145,6 +5342,9 @@ msgstr "激光指向器提供武器导引指向目标功能"
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "激光武器装填时间 -15%"
+
+msgid "Laser Reload"
+msgstr "激光充能速度"
 
 msgid "Laser Satellite Command Post"
 msgstr "激光卫星指挥中心"
@@ -5322,6 +5522,12 @@ msgstr "中型加农炮"
 msgid "Medium Super Heavy Body"
 msgstr "中型超重量级车身"
 
+msgid "MG Damage"
+msgstr "机枪攻击力"
+
+msgid "MG Reload"
+msgstr "机枪装填速度"
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "迷你火箭装甲加强火力点"
 
@@ -5377,6 +5583,9 @@ msgstr "轮式响尾蛇坦克 (迷你火箭) "
 msgid "Missile accuracy +10%"
 msgstr "导弹命中率 +10%"
 
+msgid "Missile Accuracy"
+msgstr "导弹命中率"
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "导弹主动搜索并导向目标"
 
@@ -5384,12 +5593,18 @@ msgstr "导弹主动搜索并导向目标"
 msgid "Missile damage +25%"
 msgstr "导弹攻击力 +25%"
 
+msgid "Missile Damage"
+msgstr "导弹攻击力"
+
 msgid "Missile Fortress"
 msgstr "导弹堡垒"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "导弹装填时间 -15%"
+
+msgid "Missile Reload"
+msgstr "导弹装填速度"
 
 msgid "Missile Upgrade"
 msgstr "导弹升级"
@@ -5410,6 +5625,9 @@ msgstr "比清算者更强的防御与耐久"
 msgid "Mortar accuracy +10%"
 msgstr "迫击炮命中率 +10%"
 
+msgid "Mortar Accuracy"
+msgstr "迫击炮命中率"
+
 msgid "Mortar Autoloader Mk2"
 msgstr "迫击炮自动装载系统二型"
 
@@ -5426,6 +5644,15 @@ msgstr "半履带式眼镜蛇坦克 (迫击炮) "
 msgid "Mortar damage +25%"
 msgstr "迫击炮伤害 +25%"
 
+msgid "Mortar Damage"
+msgstr "迫击炮攻击力"
+
+msgid "Mortar Fast Loader Mk2"
+msgstr ""
+
+msgid "Mortar Fast Loader Mk3"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "迫击炮快速装载系统"
 
@@ -5435,6 +5662,9 @@ msgstr "迫击炮散兵坑"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "迫击炮自动装填时间 -15%"
+
+msgid "Mortar Reload"
+msgstr "迫击炮装填速度"
 
 msgid "Mortar Targeting Computer"
 msgstr "迫击炮目标锁定计算机"
@@ -5527,16 +5757,16 @@ msgid "New Paradigm Medium body"
 msgstr "“新范式”中型车体"
 
 msgid "New power efficient propulsion"
-msgstr "新的高效能推进动力"
+msgstr "新的高效能推进系统"
 
 msgid "New Power Generation Technology"
 msgstr "新的发电技术"
 
 msgid "New Propulsion Available for Design"
-msgstr "可在设计选单中选用新的推进动力"
+msgstr "可在设计选单中选用新的推进系统"
 
 msgid "New Propulsion Available"
-msgstr "可搭载新的推进动力"
+msgstr "可搭载新的推进系统"
 
 msgid "New Rail Gun Available"
 msgstr "可搭载新的武器系统：轨道炮"
@@ -5568,11 +5798,11 @@ msgstr "可建筑新的系统建筑"
 msgid "New Systems Tower Available"
 msgstr "可建造新的系统防御工事"
 
-msgid "New Systems Turret Available For Design"
-msgstr "可在设计选单中使用新的系统装备"
-
 msgid "New Systems Turret Available for Design"
 msgstr "可搭载新的系统装备"
+
+msgid "New Systems Turret Available For Design"
+msgstr "可在设计选单中使用新的系统装备"
 
 msgid "New Thermal Emissions detection"
 msgstr "可侦测热能放射"
@@ -5670,6 +5900,12 @@ msgstr "原版遭遇战"
 msgid "Panther"
 msgstr "黑豹"
 
+msgid "Particle Gun Emplacement"
+msgstr "粒子炮炮位"
+
+msgid "Particle Gun"
+msgstr "粒子炮"
+
 msgid "Pepperpot Pit"
 msgstr "“胡椒瓶”散兵坑"
 
@@ -5750,14 +5986,17 @@ msgstr "发电模组"
 
 #, no-c-format
 msgid "Power output +25%"
-msgstr "电力输出 +25%"
+msgstr "能源输出 +25%"
 
 #, no-c-format
 msgid "Power output +30%"
-msgstr "电力输出 +30%"
+msgstr "能源输出 +30%"
 
 msgid "Power Research Completed"
 msgstr "能源科技研发完成"
+
+msgid "Power"
+msgstr "能源"
 
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "强力的电磁脉冲武器"
@@ -5767,6 +6006,9 @@ msgstr "能源实验室"
 
 msgid "Produces Cyborgs"
 msgstr "生产半机械人"
+
+msgid "Production"
+msgstr "生产"
 
 msgid "Professional and Regular rank units are protected"
 msgstr "专家和正规军单位受到保护"
@@ -5840,6 +6082,12 @@ msgstr "雷达探测器塔"
 msgid "Radar Detector"
 msgstr "雷达检测器"
 
+msgid "Rail Accuracy"
+msgstr "轨道炮命中率"
+
+msgid "Rail Damage"
+msgstr "轨道炮攻击力"
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "轨道炮命中率 +10%"
@@ -5882,6 +6130,9 @@ msgstr "轨道炮系武器升级"
 msgid "Rail Gun"
 msgstr "轨道炮"
 
+msgid "Rail Reload"
+msgstr "轨道炮装填时间"
+
 msgid "Rail Target Prediction Computer"
 msgstr "轨道目标预测计算机"
 
@@ -5912,6 +6163,12 @@ msgstr "降低“枢纽”接管的几率"
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "重新加油、补充弹药及修理VTOL"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr "强化基地结构材料AI加成二型"
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr "强化基地结构材料AI加成"
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "强化基地建材二型"
@@ -5991,6 +6248,9 @@ msgstr "研究速度 +30%"
 msgid "Research speed +85%"
 msgstr "研究速度 +85%"
 
+msgid "Research"
+msgstr "研发新科技"
+
 msgid "Retaliation"
 msgstr "反击者"
 
@@ -6049,6 +6309,9 @@ msgstr "智械化 VTOL 补给"
 msgid "Rocket accuracy +10%"
 msgstr "火箭命中率 +10%"
 
+msgid "Rocket Accuracy"
+msgstr "火箭命中率"
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "火箭阵列部队，可指派给雷达导引"
 
@@ -6067,6 +6330,9 @@ msgstr "火箭越野车"
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "火箭伤害 +25%"
+
+msgid "Rocket Damage"
+msgstr "火箭攻击力"
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "火箭会自动侦测与锁定引擎发出的热源"
@@ -6089,6 +6355,9 @@ msgstr "火箭快速装载系统"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "火箭重加载时间 -15%"
+
+msgid "Rocket Reload"
+msgstr "火箭装填速度"
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "火箭会跟随激光指向器的轨迹攻击目标"
@@ -6245,6 +6514,9 @@ msgstr "雷达升级三型"
 
 msgid "Sensor Upgrade"
 msgstr "雷达升级一型"
+
+msgid "Sensor"
+msgstr "雷达"
 
 msgid "Sensors Improved"
 msgstr "改善雷达"
@@ -6411,10 +6683,10 @@ msgstr "突触连结数据分析二型"
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突触连结数据分析三型"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "突触连结数据分析"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "突触连结数据分析"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6428,6 +6700,9 @@ msgstr "突触连结"
 
 msgid "Systems Research Completed"
 msgstr "系统科技研发完成"
+
+msgid "Tank Alloys"
+msgstr "坦克合金"
 
 msgid "Tank Killer Cyborg"
 msgstr "半机械人 (坦克杀手火箭)"
@@ -6456,6 +6731,9 @@ msgstr "清算者坦克 (“坦克杀手”)"
 msgid "Tank Killer"
 msgstr "“坦克杀手”"
 
+msgid "Tank Thermal"
+msgstr "坦克隔热装甲"
+
 msgid "Tank Traps"
 msgstr "坦克陷阱"
 
@@ -6464,6 +6742,9 @@ msgstr "目标追踪炮弹二型"
 
 msgid "Target Acquisition Artillery Shells"
 msgstr "目标追踪炮弹"
+
+msgid "Target Acquisition Mortar Shells Mk2"
+msgstr ""
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "目标追踪迫击炮弹"
@@ -6498,6 +6779,12 @@ msgstr "热能装甲 +40%"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "热能装甲 +45%"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr "隔热装甲加成 AI 二型"
+
+msgid "Thermal Armor Buff AI"
+msgstr "隔热装甲加成 AI"
 
 msgid "Thermal Armor Mk2"
 msgstr "热能装甲二型"
@@ -6543,6 +6830,9 @@ msgstr "钛钢筋强化混凝土"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "塔防人工智能，基于 NullBot"
+
+msgid "Tower Wars Buff"
+msgstr "塔防战争加成"
 
 msgid "Tracked Propulsion"
 msgstr "推进动力：履带"
@@ -6644,7 +6934,7 @@ msgid "Twin Multi-barrel, rapid-fire machinegun"
 msgstr "双管多膛快速击发的机枪"
 
 msgid "Two-faced"
-msgstr "两面夹击"
+msgstr "双面夹击"
 
 msgid "Undo Reduce Scavenger Flamer Range"
 msgstr "撤销减少拾荒者喷火器射程"
@@ -6866,6 +7156,9 @@ msgstr "VTOL HE迷你火箭"
 msgid "VTOL Needle Gun"
 msgstr "VTOL 针刺炮"
 
+msgid "VTOL Particle Gun"
+msgstr "VTOL 粒子炮"
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL 白磷炸弹舱"
 
@@ -6889,6 +7182,9 @@ msgstr "VTOL 补给平台"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "要使 VTOL 拥有持续攻击的能力，需建造 VTOL 补给平台"
+
+msgid "VTOL Rearming"
+msgstr "VTOL 弹药补给"
 
 msgid "VTOL Scourge Missile"
 msgstr "VTOL “天谴”导弹"
@@ -7062,13 +7358,19 @@ msgstr " 和 "
 msgid "Spectators"
 msgstr "旁观者"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr "您在过去几秒内发送了太多消息。请稍后重试。"
+
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr "主机已为此游戏禁用调试模式/作弊。"
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s 想启用调试模式，激活：%s，关闭：%s。"
+msgstr "%s 想启用调试模式，已启用：%s，已禁用：%s。"
 
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s 不希望使用调试模式。激活：%s，关闭：%s。"
+msgstr "%s 想禁用调试模式，已启用：%s，已禁用：%s。"
 
 msgid "Debug mode now enabled!"
 msgstr "调试模式开启"
@@ -7185,6 +7487,15 @@ msgstr "主机"
 msgid "Connect directly to IP/hostname as a spectator"
 msgstr "直接连接到 IP /主机名作为旁观者"
 
+msgid "Connect to lobby game"
+msgstr ""
+
+msgid "lobbyGameId"
+msgstr ""
+
+msgid "Connect to lobby game as a spectator"
+msgstr ""
+
 msgid "Go directly to host screen"
 msgstr "直接转到主持游戏屏幕"
 
@@ -7229,12 +7540,6 @@ msgstr "使用给定的设置文件启动主机游戏"
 
 msgid "autohost"
 msgstr "自动主机配置"
-
-msgid "Query ratings from given server url, when hosting"
-msgstr "作为主机时从指定的服务器 URL 查询评分"
-
-msgid "autorating"
-msgstr "自动评分"
 
 msgid "Attach or create a console window and display console output (Windows only)"
 msgstr "附加或创建控制台窗口并显示控制台输出 (仅适用于Windows)"
@@ -7311,11 +7616,17 @@ msgstr "设置默认主机聊天配置/权限"
 msgid "Enable async join approval (for connecting clients)"
 msgstr "允许异步加入 (用于连接客户端)"
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr "以未就绪状态启动主机 (自动主机)，即使主机是旁观者"
+
 msgid "Base URL for on-demand video downloads"
 msgstr "按需下载视频的基础 URL"
 
 msgid "Base video URL"
 msgstr "视频基础 URL"
+
+msgid "Specify connection provider type to use when hosting game sessions"
+msgstr "指定主持游戏时使用的连接提供商类型"
 
 msgid "Commander needs a higher level to command more units"
 msgstr "指挥官需要更高等级才能指挥更多单位"
@@ -7369,7 +7680,7 @@ msgid "Sensor Range"
 msgstr "雷达可视距离"
 
 msgid "ECM Power"
-msgstr "电子对抗功率"
+msgstr "ECM 功率"
 
 msgid "Build Points"
 msgstr "建筑物耐久度"
@@ -7412,23 +7723,23 @@ msgstr "油田燃烧中，无法建造钻油井"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr "%s - 耐久度 %d/%d - 经验 %.1f，%s，杀敌 %d"
+msgstr "%s - 生命值 %d/%d - 经验值 %.1f，%s，击杀数 %d"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d - ID %d - %s"
-msgstr "%s - 耐久度 %d/%d - ID %d - %s"
+msgstr "%s - 生命值 %d/%d - ID %d - %s"
 
 #, c-format
 msgid "(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f"
-msgstr "(敌人!) %s - 耐久度 %d/%d - ID %d - 经验 %f，%s - 命令 %s - 动作 %s - 传感器范围 %d - 电子对抗 %d - 仰角 %.0f"
+msgstr "(敌人！) %s - 生命值 %d/%d - ID %d - 经验值 %f, %s - 命令 %s - 动作 %s - 雷达范围 %d - ECM %d - 俯仰角 %.0f"
 
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr "%s - 盟军 - 耐久度 - %d/%d - 经验 %d, %s"
+msgstr "%s - 联盟 - 生命值 %d/%d - 经验值 %d, %s"
 
 #, c-format
 msgid "(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d"
-msgstr "(敌人!) %s，建筑类型索引：%d，ID： %d 耐久度： %d/%d"
+msgstr "(敌人！) %s，索引：%d，ID：%d 生命值：%d/%d"
 
 msgid "Player left"
 msgstr "玩家已经离开"
@@ -7614,423 +7925,12 @@ msgstr "TCP 端口 %d 必须在您的防火墙或路由器中打开才能主持�
 msgid "Load Multiplayer Replay"
 msgstr "加载多人游戏回放"
 
-msgid "Game Options"
-msgstr "游戏选项"
-
-msgid "Graphics Options"
-msgstr "图形选项"
-
-msgid "Video Options"
-msgstr "显示选项"
-
-msgid "Audio / Zoom Options"
-msgstr "音频/缩放选项"
-
-msgid "Mouse Options"
-msgstr "鼠标选项"
-
-msgid "Key Mappings"
-msgstr "键盘配置"
-
-msgid "Music Manager"
-msgstr "音乐管理器"
-
-msgid "Multiplay Options"
-msgstr "多人游戏选项"
-
-msgid "OPTIONS"
-msgstr "选项"
-
-msgid "Open Configuration Directory"
-msgstr "打开配置目录"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "无法使用系统默认文件浏览器打开配置目录。"
-
-msgid "Configuration directory is reported as:"
-msgstr "配置目录为："
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "如果在容器/孤立环境中运行，这可能不同于磁盘上的实际路径。"
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "请参阅文档以获取有关如何手动定位的更多信息。"
-
-msgid "Failed to open configuration directory"
-msgstr "无法打开配置目录"
-
-msgid "1×"
-msgstr "1×"
-
-msgid "2×"
-msgstr "2×"
-
-msgid "Fullscreen"
-msgstr "全屏"
-
-msgid "Unsupported"
-msgstr "不支持的"
-
-msgid "Off"
-msgstr "关闭"
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "黑色"
-
-msgid "On"
-msgstr "开启"
-
-msgid "Per Pixel"
-msgstr "逐像素"
-
-msgid "Lightmap"
-msgstr "光照贴图"
-
-msgid "Rotating"
-msgstr "旋转"
-
-msgid "Fixed"
-msgstr "固定"
-
-msgid "Instant"
-msgstr "立即"
-
-msgid "Tracked"
-msgstr "跟踪"
-
-msgid "High"
-msgstr "高"
-
-msgid "Default"
-msgstr "默认"
-
-msgid "Terrain quality mode not available."
-msgstr "高质量地形模式不可用。"
-
-msgid "Medium Quality"
-msgstr "中等画质"
-
-msgid "High Quality"
-msgstr "高画质"
-
-msgid "Shadow mapping not available on this system."
-msgstr "阴影贴图在此系统上不可用。"
-
-msgid "Low"
-msgstr "低"
-
-msgid "Ultra"
-msgstr "最高"
-
-msgid "Shadow filtering not available on this system."
-msgstr "阴影过滤在此系统上不可用。"
-
-msgid "Opacity: 50%"
-msgstr "透明度：50%"
-
-msgid "* Takes effect on game restart"
-msgstr "*重启游戏后生效"
-
-msgid "Terrain Quality"
-msgstr "地形质量"
-
-msgid "Terrain Shading"
-msgstr "地形阴影"
-
-msgid "Shadows"
-msgstr "阴影"
-
-msgid "Shadow Resolution"
-msgstr "阴影分辨率"
-
-msgid "Shadow Filtering"
-msgstr "阴影过滤"
-
-msgid "Per Pixel point lights"
-msgstr "逐像素渲染点光源"
-
-msgid "LOD Distance"
-msgstr "LOD 距离"
-
-msgid "Fog"
-msgstr "迷雾"
-
-msgid "Radar"
-msgstr "雷达"
-
-msgid "Radar Jump"
-msgstr "雷达跳转"
-
-msgid "Video Playback"
-msgstr "播放影片"
-
-msgid "Scanlines"
-msgstr "扫描线"
-
-msgid "Screen Shake"
-msgstr "屏幕晃动"
-
-msgid "Groups Menu"
-msgstr "编队菜单"
-
-msgid "Options Button"
-msgstr "选项按钮"
-
-msgid "GRAPHICS OPTIONS"
-msgstr "图形选项"
-
-msgid "Disabled"
-msgstr "禁用"
-
-msgid "Enabled"
-msgstr "启用"
-
-msgid "Auto"
-msgstr "自动"
-
-msgid "Voice Volume"
-msgstr "语音音量"
-
-msgid "FX Volume"
-msgstr "音效音量"
-
-msgid "Music Volume"
-msgstr "背景音乐音量"
-
-msgid "Subtitles"
-msgstr "字幕"
-
-msgid "HRTF"
-msgstr "HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "您的设备/系统或 OpenAL 库不支持 HRTF"
-
-msgid "Map Zoom"
-msgstr "地图缩放"
-
-msgid "Map Zoom Rate"
-msgstr "地图缩放率"
-
-msgid "Radar Zoom"
-msgstr "雷达缩放"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "音频/缩放选项"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"在桌面全屏模式下，分辨率匹配您的桌面大小\n"
-"(或窗口管理器允许的大小)。"
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "您可以通过正常调整窗口大小更改分辨率。(尝试拖动一个角/边)"
-
-msgid "Graphics Mode"
-msgstr "图形模式"
-
-msgid "Resolution"
-msgstr "分辨率"
-
-msgid "Display Scale"
-msgstr "显示比例"
-
-msgid "Adaptive"
-msgstr "自适应"
-
-msgid "Windowed"
-msgstr "窗口模式"
-
-msgid "Desktop Full"
-msgstr "全桌面"
-
-msgid "On (Fullscreen)"
-msgstr "开(全屏)"
-
-msgid "Texture size"
-msgstr "贴图精细度"
-
-msgid "Vertical sync"
-msgstr "垂直同步*"
-
-msgid "Antialiasing*"
-msgstr "抗锯齿*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "警告：抗锯齿可能导致崩溃，特别是值 >16 时"
-
-msgid "Graphics Backend*"
-msgstr "图形后端*"
-
-msgid "Min on Focus Loss"
-msgstr "在失去焦点时最小化"
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr "失去焦点时是否自动最小化窗口"
-
-msgid "Alt+Enter Toggle"
-msgstr "Alt+Enter 切换"
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr "使用 Alt + Enter 按键切换全屏模式"
-
-msgid "VIDEO OPTIONS"
-msgstr "视频选项"
-
-msgid "Unable to change Vertical Sync"
-msgstr "无法更改垂直同步"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"Warzone 更改垂直同步模式失败。\n"
-"您的系统/驱动程序可能不支持其他模式。"
-
-msgid "Middle Mouse"
-msgstr "鼠标中键"
-
-msgid "Right Mouse"
-msgstr "鼠标右键"
-
-msgid "Reverse Rotation"
-msgstr "反向旋转"
-
-msgid "Trap Cursor"
-msgstr "捕捉光标"
-
-msgid "Switch Mouse Buttons"
-msgstr "交换鼠标按钮"
-
-msgid "Rotate Screen"
-msgstr "旋转屏幕"
-
-msgid "Colored Cursors"
-msgstr "彩色光标"
-
-msgid "Cursor Size"
-msgstr "光标尺寸"
-
-msgid "MOUSE OPTIONS"
-msgstr "鼠标选项"
-
-msgid "Super Easy"
-msgstr "超级简单"
-
-msgid "Easy"
-msgstr "容易"
-
-msgid "Hard"
-msgstr "困难"
-
-msgid "Insane"
-msgstr "疯狂的"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr "无法加载：%s."
 
 msgid "Please remove all incompatible mods."
 msgstr "请移除所有不兼容的模组。"
-
-msgid "GAME OPTIONS"
-msgstr "游戏选项"
-
-msgid "Language"
-msgstr "语言"
-
-msgid "Unit Colour:"
-msgstr "玩家颜色"
-
-msgid "Skirmish/Multiplayer"
-msgstr "练习/多人"
-
-msgid "Campaign Difficulty"
-msgstr "战役难度"
-
-msgid "Camera Speed"
-msgstr "镜头速度"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "帮助我们改进 Warzone 2100 的翻译： %s"
-
-msgid "Click to open webpage."
-msgstr "点击打开网页。"
-
-msgid "Insane Difficulty"
-msgstr "疯狂难度"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "这个难度仅适合经验丰富的玩家！"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u 分钟"
-
-#, c-format
-msgid "%s hours"
-msgstr "%s 小时"
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u 秒"
-
-msgid "None"
-msgstr "无"
-
-msgid "Distribute to Team"
-msgstr "分配至队伍"
-
-msgid "Destroy (Classic)"
-msgstr "摧毁 (经典)"
-
-msgid "Allow All"
-msgstr "允许全部"
-
-msgid "Quick Chat Only"
-msgstr "仅快速聊天"
-
-msgid "Hosting Options:"
-msgstr "主机选项："
-
-msgid "Game Port"
-msgstr "游戏端口"
-
-msgid "Port Mapping"
-msgstr "端口映射"
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr "使用 PCP、NAT-PMP 或 UPnP 来帮助配置您的路由器/防火墙，以便在作为主机时允许连接。"
-
-msgid "Chat"
-msgstr "聊天"
-
-msgid "Inactivity Timeout"
-msgstr "挂机超时"
-
-msgid "Lag Kick"
-msgstr "踢出延迟玩家"
-
-msgid "Spectator Slots"
-msgstr "旁观者槽位"
-
-msgid "On Player Leave"
-msgstr "当玩家离开时"
-
-msgid "Game Time Limit"
-msgstr "游戏时间限制"
-
-msgid "Enable Rating"
-msgstr "启用评分"
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "多人游戏选项"
 
 msgid "Mod: "
 msgstr "模组： "
@@ -8078,7 +7978,7 @@ msgstr "游戏已保存： "
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "玩家 %u 利用作弊 (调试菜单) 模式建立了一个新建筑物: %s."
+msgstr "玩家 %u 正在作弊(调试菜单)，为他/她自己建造了一个新建筑：%s。"
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
@@ -8086,11 +7986,11 @@ msgstr "玩家%u 利用作弊 (调试菜单) 模式建立了一个新的地表�
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新单位：%s."
+msgstr "玩家 %u 正在作弊(调试菜单)，为他/她自己建造了一个新机器人：%s。"
 
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "玩家 %u 利用作弊 (调式菜单) 模式建立了一个新机器人"
+msgstr "玩家 %u 正在作弊(调试菜单)，为他/她自己建造了一个新机器人。"
 
 msgid "Open In-Game Options"
 msgstr "打开游戏菜单"
@@ -8126,7 +8026,7 @@ msgstr ""
 "右键从收藏中移除"
 
 msgid "New Joins"
-msgstr "新加入玩家"
+msgstr "新加入者"
 
 msgid "Refresh"
 msgstr "刷新"
@@ -8159,16 +8059,16 @@ msgid "Select / Assign Group Number: "
 msgstr "选择/分配编队号： "
 
 #, c-format
-msgid "Group %u"
-msgstr "%u 号编队"
+msgid "Group %zu"
+msgstr "%zu 号编队"
 
 #, c-format
-msgid "Select the Units in Group %u"
-msgstr "选择 %u 号编队中的单位"
+msgid "Select the Units in Group %zu"
+msgstr "选择 %zu 号编队中的单位"
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
-msgstr "分配单位至 %u 号编队"
+msgid "Assign Selected Units to Group %zu"
+msgstr "分配单位至 %zu 号编队"
 
 msgid "Center Camera on this Group by clicking or tapping twice"
 msgstr "通过点击或双击将相机居中至该编队"
@@ -8266,7 +8166,7 @@ msgstr "管理员"
 
 #, c-format
 msgid "%s (%s) changed team of player (%s) to: %d"
-msgstr "%s (%s) 将玩家 (%s) 的团队更改为： %d"
+msgstr "%s (%s) 将玩家 (%s) 的队伍更改为：%d"
 
 #, c-format
 msgid "%s (%s) changed position of player (%s) to: %d"
@@ -8280,14 +8180,34 @@ msgstr "%s (%s) 将玩家 (%s) 的颜色更改为： %s"
 msgid "%s (%s) changed faction of player (%s) to: %s"
 msgstr "%s (%s) 将玩家 (%s) 的阵营更改为： %s"
 
+msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
+msgstr "注意：请尽快准备，超时将被踢出房间"
+
+#, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr "若玩家未尽快勾选就绪，将被踢出：%s"
+
+#, c-format
+msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr "正在自动踢除玩家（%s），原因：准备超时"
+
+msgid "NOTICE: Please check Ready"
+msgstr "注意：请打勾准备"
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr "注意：请打勾准备就绪以便游戏开始"
+
+msgid "Players who don't check Ready in time will be kicked."
+msgstr "未及时勾选就绪的玩家将被踢出。"
+
 msgid "Can someone please transfer me some units?"
-msgstr "有人能给我一些单位吗？"
+msgstr "有人能给我转移一些单位吗？"
 
 msgid "Can someone please transfer me trucks so I can rebuild?"
 msgstr "有人能给我工程车让我重建吗？"
 
 msgid "Sorry, I don't understand. (Please use Quick Chat?)"
-msgstr "对不起，我不明白。(请使用快速聊天？)"
+msgstr "抱歉，我不太明白。(请问能否使用快速聊天？)"
 
 msgid "I suggest: Building more units"
 msgstr "我建议：造更多单位"
@@ -8383,7 +8303,7 @@ msgid "@#%*!"
 msgstr "@#%*!"
 
 msgid "Sorry, I don't understand. (Use Quick Chat?)"
-msgstr "对不起，我不明白。(使用快速聊天？)"
+msgstr "抱歉，我不太明白。(请问能否使用快速聊天？)"
 
 msgid "Get ready..."
 msgstr "做好准备..."
@@ -8398,13 +8318,13 @@ msgid "Attack now?"
 msgstr "现在攻击吗？"
 
 msgid "Group up"
-msgstr "一起上"
+msgstr "集结队伍"
 
 msgid "Split up"
 msgstr "分头行动"
 
 msgid "Focus attacks where marked"
-msgstr "集中攻击标记位置"
+msgstr "集中攻击标记的地方"
 
 msgid "Retreat!"
 msgstr "撤退！"
@@ -8437,13 +8357,13 @@ msgid "I'm being attacked!"
 msgstr "我正遭到攻击！"
 
 msgid "I'm rushing oils"
-msgstr "我去摧毁钻油井"
+msgstr "我正在抢夺油田！"
 
 msgid "They're rushing oils!"
-msgstr "他们正在摧毁钻油井！"
+msgstr "他们正在抢夺油田！"
 
 msgid "I don't have enough power"
-msgstr "我的能源不够"
+msgstr "我的能源不足！"
 
 msgid "Build more units"
 msgstr "生产更多单位"
@@ -8482,7 +8402,7 @@ msgid "I have another plan"
 msgstr "我有另一个计划"
 
 msgid "Good game"
-msgstr "好游戏"
+msgstr "精彩！"
 
 msgid "I give up"
 msgstr "我投降了"
@@ -8505,9 +8425,6 @@ msgstr "电脑盟友"
 msgid "Human Allies"
 msgstr "人类盟友"
 
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr "您在过去几秒内发送了太多消息。请稍后重试。"
-
 msgid "Research Progress"
 msgstr "研究进展"
 
@@ -8524,7 +8441,7 @@ msgid "No teammates."
 msgstr "没有队友。"
 
 msgid "Waiting for other teams to finish planning."
-msgstr "正在等待其他队伍完成计划。"
+msgstr "等待其他队伍完成计划。"
 
 msgid "Weapons:"
 msgstr "武器："
@@ -8540,15 +8457,6 @@ msgstr "警告：你是房主，如果退出、所有玩家都将停止游戏！
 
 msgid "Host Quit"
 msgstr "主机退出"
-
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr "战术界面 (原始目标图标) ：显示"
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr "战术界面 (原始目标图标) ：隐藏"
-
-msgid "Go Back"
-msgstr "返回"
 
 msgid "View Guide"
 msgstr "查看指南"
@@ -8583,15 +8491,6 @@ msgstr "没有主玩家游戏不能继续"
 msgid "-->  QUIT  <--"
 msgstr "--> 退出 <--"
 
-msgid "Audio Options"
-msgstr "音频选项"
-
-msgid "View Key Mappings"
-msgstr "查看键盘映射"
-
-msgid "Shake"
-msgstr "摇晃"
-
 msgid "Save Campaign Game"
 msgstr "保存战役游戏"
 
@@ -8604,21 +8503,21 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
-"这个模组不能加载： %s\n"
+"无法加载所需的模组：%s\n"
 "\n"
-"Warzone 将尝试继续加载游戏"
+"Warzone 将尝试在没有该模组的情况下加载游戏。"
 
 #, c-format
 msgid "Failure to load %zu game model(s)"
-msgstr "%zu 个游戏模型加载失败"
+msgstr "无法加载 %zu 个模组"
 
 #, c-format
 msgid "Failure to load textures for %zu model(s)"
-msgstr "%zu 个模型的纹理加载失败"
+msgstr "无法加载 %zu 个模组纹理"
 
 #, c-format
 msgid "Failure to load model for %zu stat(s)"
-msgstr "%zu 个状态的模型加载失败"
+msgstr "无法加载 %zu 个状态模组"
 
 msgid "Warzone 2100 encountered error(s) loading game data:"
 msgstr "Warzone 2100 在加载游戏数据时遇到错误："
@@ -8635,17 +8534,20 @@ msgstr "基础游戏文件可能已损坏或已经过时，请尝试重新安装
 msgid "Error Loading Game Data"
 msgstr "加载游戏数据出错"
 
-msgid "Global Hotkeys"
-msgstr "全局热键"
+msgid "Global Keys"
+msgstr "全局按键"
 
-msgid "Other Hotkeys"
-msgstr "其他热键"
+msgid "Other Keys"
+msgstr "其他按键"
 
-msgid "Gameplay"
-msgstr "游戏"
+msgid "Gameplay Keys"
+msgstr "游戏控制按键"
 
-msgid "Debug"
-msgstr "调试"
+msgid "Radar Keys"
+msgstr "雷达控制按键"
+
+msgid "Debug Keys"
+msgstr "调试按键"
 
 msgid "Debug (level editor)"
 msgstr "调试 (关卡编辑器)"
@@ -8655,9 +8557,6 @@ msgstr "调试 (选择)"
 
 msgid "Manufacture"
 msgstr "生产新单位"
-
-msgid "Research"
-msgstr "研发新科技"
 
 msgid "Build"
 msgstr "建筑新建筑物"
@@ -8837,7 +8736,7 @@ msgid "Move Camera Left"
 msgstr "镜头左移"
 
 msgid "Snap View to North"
-msgstr "吸附视图到北方"
+msgstr "视角对准北方"
 
 msgid "Toggle Tracking Camera"
 msgstr "开启或关闭追踪视角"
@@ -8915,10 +8814,10 @@ msgid "Toggle Overlays"
 msgstr "开启或关闭叠层显示"
 
 msgid "Toggle Console History "
-msgstr "切换控制台历史 "
+msgstr "切换控制台历史记录 "
 
 msgid "Toggle Team Chat History"
-msgstr "切换队伍聊天历史"
+msgstr "切换队伍聊天记录"
 
 msgid "Rotate Building Clockwise"
 msgstr "顺时针旋转建筑"
@@ -8966,7 +8865,7 @@ msgid "Return For Repair"
 msgstr "返回修理"
 
 msgid "Stop Droid"
-msgstr "停止单位"
+msgstr "停止机器人"
 
 msgid "Go to Transport"
 msgstr "前往运输舰"
@@ -9002,7 +8901,7 @@ msgid "Toggle ally-enemy radar view"
 msgstr "切换 盟友-敌人 雷达视图"
 
 msgid "Show all keyboard mappings"
-msgstr "显示所有按键映射"
+msgstr "显示所有键盘映射"
 
 msgid "Retreat at Medium Damage"
 msgstr "中度损伤时撤退"
@@ -9023,8 +8922,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "选择所有重度损伤单位"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "选择所有耐久度 >50% 且未编队的地面战斗单位。"
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr "选中所有生命值 >50% 且未编组的陆战单位"
 
 msgid "Select all Half-tracks"
 msgstr "选择所有半履带单位"
@@ -9066,7 +8965,7 @@ msgid "Show frame rate"
 msgstr "显示帧率"
 
 msgid "Select all units with the same components"
-msgstr "选择所有具有相同组件的部队"
+msgstr "选择所有相同组件的单位"
 
 msgid "Select all Combat Cyborgs"
 msgstr "选择所有正在战斗的半机械人"
@@ -9135,7 +9034,7 @@ msgid "Toggle Debug Mappings"
 msgstr "切换调试映射"
 
 msgid "Prioritize Debug Mappings"
-msgstr "优先处理调试用按键映射"
+msgstr "优先考虑调试映射"
 
 msgid "Toggle Level Editor"
 msgstr "切换关卡编辑器"
@@ -9194,15 +9093,12 @@ msgstr "切换全屏"
 msgid "Waiting for Power"
 msgstr "等待能源"
 
-msgid "Power"
-msgstr "能源"
-
 msgid "Power Per Second"
 msgstr "每秒能源收入"
 
 #, c-format
-msgid "%d derrick(s) inactive"
-msgstr "%d 个闲置钻油井"
+msgid "%u derrick(s) inactive"
+msgstr "%u 个油井未激活"
 
 msgid "Need more resources!"
 msgstr "需要更多资源！"
@@ -9211,28 +9107,10 @@ msgid "Discord: Can't Join Game"
 msgstr "Discord：无法加入游戏"
 
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr "在游戏中不能再加入游戏，请保存/退出当前游戏，退出至主菜单，然后重试。"
-
-msgid "Discord: Finding & Connecting to Game"
-msgstr "Discord：查找并连接到游戏"
-
-msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr "尝试查找并连接到 Discord 邀请中指定的游戏。"
-
-msgid "This may take a moment..."
-msgstr "这可能需要一些时间..."
-
-msgid "Failed to find game in the lobby server: "
-msgstr "在大厅服务器中寻找游戏失败： "
-
-msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr "游戏可能已经开始，或者主机已经解散游戏大厅。"
-
-msgid "Failed to Find Game"
-msgstr "无法查找游戏"
+msgstr "您无法在游戏进行时加入另一场游戏。请保存/退出当前游戏，返回主菜单，然后再试一次。"
 
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr "从指定的邀请链接加入游戏出错："
+msgstr "未能从指定的邀请链接加入游戏，错误信息："
 
 msgid "Failed to Join Game"
 msgstr "无法加入游戏"
@@ -9403,7 +9281,7 @@ msgstr "视角对准西方"
 
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "玩家 %u 使用作弊批量建立单位： %d × %s。"
+msgstr "玩家 %u 正在作弊，创建了一个新的机器人军队：%d × %s。"
 
 #, c-format
 msgid "(Player %u) is using cheat :%s"
@@ -9422,7 +9300,7 @@ msgid "A power fantasy!"
 msgstr "力量幻想！"
 
 msgid "Taking things easy!"
-msgstr "让事情变简单！"
+msgstr "轻松应对！"
 
 msgid "Back to normality!"
 msgstr "回到正常状态"
@@ -9443,10 +9321,10 @@ msgid "FPS display is disabled."
 msgstr "FPS显示关闭"
 
 msgid "Unit count display is enabled."
-msgstr "单位数量显示已启用。"
+msgstr "单位计数显示已启用。"
 
 msgid "Unit count display is disabled."
-msgstr "单位数量显示已禁用。"
+msgstr "单位计数显示已禁用。"
 
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
@@ -9459,13 +9337,13 @@ msgid "Infinite power enabled"
 msgstr "无限制能源：开"
 
 msgid "Lighting values for all tiles recalculated"
-msgstr "重新计算的所有格子的亮度值"
+msgstr "所有格子的高度已重新计算。"
 
 msgid "All items made available"
 msgstr "可使用所有的项目"
 
 msgid "Tile info dumped into log"
-msgstr "地图区块信息已导出到日志"
+msgstr "信息已导出到日志。"
 
 msgid "Fog on"
 msgstr "战争迷雾开启"
@@ -9475,10 +9353,10 @@ msgstr "战争迷雾关闭"
 
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr "设置雷达缩放为 %u"
+msgstr "将雷达缩放设置为 %u"
 
 msgid "Toggling debug mapping priority: "
-msgstr "切换调试按键映射优先级： "
+msgstr "切换调试映射优先级： "
 
 msgid "Disabling level editor"
 msgstr "禁用关卡编辑器"
@@ -9588,10 +9466,10 @@ msgid "Unable to locate HQ!"
 msgstr "无法定位到指挥中心！"
 
 msgid "Formation speed limiting ON"
-msgstr "队形速度限制打开"
+msgstr "阵型速度限制已开启"
 
 msgid "Formation speed limiting OFF"
-msgstr "队形速度限制关闭"
+msgstr "阵型速度限制已关闭"
 
 msgid "Vertical rotation direction: Normal"
 msgstr "上下垂直方向：正常"
@@ -9638,40 +9516,25 @@ msgid "Radar showing height"
 msgstr "雷达显示高度"
 
 msgid "Asserts turned off"
-msgstr "断言关闭"
+msgstr "关闭断言"
 
 msgid "QuickSave not allowed for multiplayer or tutorial games"
-msgstr "多人游戏或教程游戏不允许快速保存"
+msgstr "多人游戏或教程游戏中不允许快速保存"
 
 msgid "QuickSave not allowed in Autosaves-Only mode"
-msgstr "仅自动存档模式下不允许快速保存"
+msgstr "在仅自动存档模式下不允许快速保存"
 
 msgid "QuickSave failed"
 msgstr "快速保存失败"
 
 msgid "QuickLoad not allowed for multiplayer or tutorial games"
-msgstr "多人游戏或教程游戏不允许快速加载"
+msgstr "多人游戏或教程游戏中不允许快速加载"
 
 msgid "QuickLoad not allowed in Autosaves-Only mode"
-msgstr "仅自动存档模式下不允许快速加载"
+msgstr "在仅自动存档模式下不允许快速加载"
 
 msgid "QuickSave file does not exist yet"
 msgstr "快速存档文件不存在"
-
-msgid "<not bound>"
-msgstr "<未绑定>"
-
-msgid "<Fixed Key>"
-msgstr "<固定键>"
-
-msgid "KEY MAPPING"
-msgstr "键盘配置"
-
-msgid "Return To Previous Screen"
-msgstr "回到前一个画面"
-
-msgid "Select Default"
-msgstr "选择预设"
 
 msgid "Parent directory"
 msgstr "上级目录"
@@ -9693,8 +9556,14 @@ msgstr "自动保存 %s"
 msgid "AutoSave %s failed"
 msgstr "自动保存 %s 失败"
 
+msgid "AutoSaving..."
+msgstr "正在自动保存…"
+
 msgid "Could not save game!"
 msgstr "游戏储存失败！"
+
+msgid "Failed to load level data or map. Exiting to main menu."
+msgstr "加载关卡数据或地图失败。正在返回主菜单。"
 
 msgid "Load Transport"
 msgstr "送上运输舰"
@@ -9773,8 +9642,20 @@ msgstr "%s 与 %s 结盟"
 msgid "You Discover Blueprints For %s"
 msgstr "你发现一个用作于 %s 的蓝图"
 
+msgid "Super Easy"
+msgstr "超级简单"
+
+msgid "Easy"
+msgstr "容易"
+
 msgid "Medium"
 msgstr "中等"
+
+msgid "Hard"
+msgstr "困难"
+
+msgid "Insane"
+msgstr "疯狂的"
 
 msgid "Commander"
 msgstr "指挥官"
@@ -9789,109 +9670,41 @@ msgstr "缺少 AI 描述"
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "AI 评估：胜率 %3.1f%%，负率 %3.1f%%，平局 %3.1f%%"
 
-msgid "Tanks disabled!!"
-msgstr "坦克被禁用"
-
-msgid "Cyborgs disabled."
-msgstr "半机械人无法使用。"
-
-msgid "VTOLs disabled."
-msgstr "能见度低，VTOL 无法起飞"
-
-msgid "Satellite Uplink disabled."
-msgstr "卫星上传受到干扰"
-
-msgid "Laser Satellite disabled."
-msgstr "激光卫星损坏"
-
-msgid "Structure Limits Enforced."
-msgstr "执行建筑数量限制。"
-
 msgid "Not enough votes to randomize or change the map."
-msgstr "没有足够的选票来随机或更改地图。"
-
-msgid "Select Game Name"
-msgstr "选择游戏名称"
-
-msgid "Game Name"
-msgstr "游戏名称"
-
-msgid "One-Player Skirmish"
-msgstr "单人遭遇战"
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"选择地图\n"
-"可以通过玩家投票阻止"
-
-msgid "Map-Mod!"
-msgstr "地图模组！"
-
-msgid "Random map!"
-msgstr "随机地图！"
-
-msgid "Click to set Password"
-msgstr "点击设置密码"
-
-msgid "Enter password here"
-msgstr "在这里输入密码"
+msgstr "投票不足，无法随机或更改地图。"
 
 msgid "Select Player Name"
 msgstr "选择玩家名称"
 
-msgid "Alliances"
-msgstr "同盟"
+msgid "Player Name changes are not allowed when you are muted"
+msgstr "静音时不允许更改玩家姓名"
 
-msgid "Base"
-msgstr "基地"
+msgid "Player Name changes are not allowed by the host"
+msgstr "主机不允许更改玩家名称"
 
-msgid "Map Preview"
-msgstr "预览地图"
+msgid "Blind Game:"
+msgstr "盲目游戏："
 
-msgid "Click to see Map"
-msgstr "点击查看地图"
+msgid "- Player names will not be visible to other players (until the game is over)"
+msgstr "- 玩家名对其他玩家不可见 (直到游戏结束)"
 
-msgid "Show Structure Limits"
-msgstr "显示建筑物数量限制"
+msgid "Blind Lobby:"
+msgstr "盲目大厅："
 
-msgid "Set Structure Limits"
-msgstr "设置建筑限制"
+msgid "- Player names will not be visible to other players (until the game has started)"
+msgstr "- 玩家名对其他玩家不可见 (直到游戏开始)"
 
-msgid "Random Game Options"
-msgstr "随机游戏选项"
+msgid "OPTIONS"
+msgstr "选项"
 
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
-"随机游戏选项\n"
-"可以被玩家投票阻止"
-
-msgid "Tech"
-msgstr "技术水平"
-
-msgid "Technology Level 1"
-msgstr "技术级别 1"
-
-msgid "Technology Level 2"
-msgstr "技术级别 2"
-
-msgid "Technology Level 3"
-msgstr "技术级别 3"
-
-msgid "Technology Level 4"
-msgstr "技术级别 4"
-
-msgid "Start Hosting Game"
-msgstr "开始游戏"
+msgid "Return To Previous Screen"
+msgstr "回到前一个画面"
 
 msgid "DIFFICULTY"
 msgstr "难度"
 
 msgid "Starts disadvantaged"
-msgstr "以劣势开局"
+msgstr "劣势开局"
 
 msgid "Plays nice"
 msgstr "玩得好"
@@ -9912,7 +9725,7 @@ msgid "Leave this slot unused"
 msgstr "不使用此位置"
 
 msgid "Allow spectators to join in this slot"
-msgstr "允许旁观者加入此槽位"
+msgstr "允许观众加入"
 
 msgid "Click to change to this slot"
 msgstr "切到此处"
@@ -10027,81 +9840,12 @@ msgstr "您想要将此旁观者与玩家交换吗？"
 msgid "Yes, select Player slot"
 msgstr "是的，选择玩家栏位"
 
-msgid "Joined:"
-msgstr "已加入："
-
-msgid "Ready:"
-msgstr "已准备："
-
-msgid "Players"
-msgstr "玩家"
-
-msgid "Host Options"
-msgstr "主机选项"
-
-msgid "Enable Spectator Join"
-msgstr "启用旁观者加入"
-
-msgid "Lock Teams"
-msgstr "锁定盟友"
-
-msgid "Choose Team"
-msgstr "选择队伍"
-
-msgid "Teams locked"
-msgstr "团队已锁定"
-
-msgid "Click to change player colour"
-msgstr "调整颜色"
-
-msgid "Click to change player position"
-msgstr "调整位置"
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr "点击更改AI, 右键点击以分发选择"
-
-msgid "Click to close spectator slot"
-msgstr "点击关闭旁观者栏位"
-
-msgid "Player ID: "
-msgstr "玩家 ID： "
-
-msgid "(none)"
-msgstr "(无)"
-
-msgid "Alt Name:"
-msgstr "备选名称："
-
-msgid "Player rating:"
-msgstr "玩家评分："
-
-msgid "Host provided"
-msgstr "主机提供"
+msgid "BLIND LOBBY NOTICE:"
+msgstr "盲目大厅提示："
 
 #, c-format
-msgid "From: %s"
-msgstr "来自：%s"
-
-msgid "Click to change difficulty"
-msgstr "调整难度"
-
-msgid "Waiting for player"
-msgstr "等待其他玩家"
-
-msgid "Player is ready"
-msgstr "玩家已准备好"
-
-msgid "Player is downloading"
-msgstr "玩家正在下载"
-
-msgid "Click when ready"
-msgstr "准备好就点一下"
-
-msgid "Waiting for download"
-msgstr "等待下载"
-
-msgid "READY?"
-msgstr "准备？"
+msgid "You have been assigned the codename: \"%s\""
+msgstr "你的代号是: \"%s\""
 
 msgid "For Spectator:"
 msgstr "作为旁观者："
@@ -10165,22 +9909,6 @@ msgstr "更多信息"
 msgid "Sorry! Failed to host the game."
 msgstr "对不起！本机无法作为游戏主要服务器"
 
-msgid "Game Name Updated."
-msgstr "游戏名称已更新。"
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** 现在需要密码 [%s] ！***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** 不需要密码 ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr "这是一个地图模组，它可以改变您的游戏体验！"
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr "这是一个随机地图，可以提供多样化的游戏体验！"
-
 msgid "Host is Starting Game"
 msgstr "主机正在开始游戏"
 
@@ -10202,6 +9930,15 @@ msgstr "正在请求 %s 移动到玩家..."
 
 msgid "Disconnected from host:"
 msgstr "已断开与主机的连接："
+
+msgid "Unable to handle host redirect"
+msgstr "无法处理主机重定向"
+
+msgid "Unable to process redirect"
+msgstr "无法处理重定向"
+
+msgid "Unable to process repeated or invalid redirects"
+msgstr "无法处理重复或无效的重定向"
 
 msgid "Host supplied invalid options"
 msgstr "主机提供了无效选项"
@@ -10246,6 +9983,21 @@ msgstr "正在创建端口映射..."
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr "用户已禁用端口映射。端口 %d 将不会自动配置。"
 
+msgid "BLIND GAME NOTICE:"
+msgstr "盲目游戏提示："
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr "玩家名对其他玩家不可见 (直到游戏结束)"
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr "玩家名对其他玩家不可见 (直到游戏开始)"
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr "重要：主机是一个玩家，可以查看和配置其他玩家 (!)"
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr "主机是一个旁观者，可以看到玩家身份并配置玩家/队伍"
+
 msgid "Failed to load challenge:"
 msgstr "加载挑战失败："
 
@@ -10264,20 +10016,6 @@ msgstr "关闭"
 
 msgid "Open"
 msgstr "打开"
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr "发送地图：%u%%"
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr "地图：已下载 %u%%"
-
-msgid "HOST"
-msgstr "主玩家"
-
-msgid "Ping"
-msgstr "Ping"
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
 msgstr "用于保存此回放文件的 Warzone 2100 版本与当前运行的版本不匹配。"
@@ -10308,6 +10046,10 @@ msgid "%s joined the Game"
 msgstr "%s 加入了游戏"
 
 #, c-format
+msgid "(codename: %s)"
+msgstr "(代号：%s)"
+
+#, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "由于%d，文件传输中断"
 
@@ -10327,9 +10069,6 @@ msgstr "%s 正在加入游戏"
 
 msgid "Server message:"
 msgstr "服务器信息："
-
-msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "游戏有更新，请访问 https://wz2100.net 下载新版本。"
 
 msgid "LIMITS"
 msgstr "限制"
@@ -10366,8 +10105,14 @@ msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d 个玩家"
 
+msgid "Ping"
+msgstr "Ping"
+
 msgid "Structs"
 msgstr "建筑"
+
+msgid "Alliances"
+msgstr "同盟"
 
 msgid "Score"
 msgstr "分数"
@@ -10424,25 +10169,6 @@ msgid "Team Strategy"
 msgstr "队伍策略"
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr "变更建筑数量限制 [%d]:"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr "[%d] 限制 [%s]: %u (默认: %u)"
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr "[%d] 限制 [%s]: %u (默认：无限制)"
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr "[%d] 限制大于numStructureStats (%u)： %u"
-
-msgid "Limits were reset to default."
-msgstr "限制被重置为默认值。"
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr "主机初始化了 %u 个建筑数量限制，由于模组无法显示这些限制。"
 
@@ -10469,8 +10195,35 @@ msgid "The host has enabled free chat for player: %s"
 msgstr "主机已允许 %s 玩家自由聊天"
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr "主机已允许 %d 个玩家自由聊天"
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
 msgstr "主机已禁止 %s 玩家自由聊天"
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr "主机已禁止 %d 个玩家自由聊天"
+
+msgid "Limits set to default."
+msgstr "限制已重置为默认值。"
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr "建筑限制已更改 [%u]:"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr "[%d] 限制 [%s]: %u (默认: %u)"
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr "[%d] 限制 [%s]: %u (默认：无限制)"
+
+#, c-format
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
+msgstr "[%zu] 大于数字结构统计数据的限制(%u)： %u"
 
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
@@ -10524,6 +10277,9 @@ msgstr "橙色"
 
 msgid "Grey"
 msgstr "灰色"
+
+msgid "Black"
+msgstr "黑色"
 
 msgid "Red"
 msgstr "红色"
@@ -10642,9 +10398,6 @@ msgstr "日期"
 
 msgid "Title"
 msgstr "标题"
-
-msgid "MUSIC MANAGER"
-msgstr "音乐管理器"
 
 msgid "Dismiss"
 msgstr "关闭"
@@ -10813,9 +10566,6 @@ msgstr "相关的按键映射:"
 msgid "Enter password"
 msgstr "输入密码"
 
-msgid "OK"
-msgstr "确定"
-
 msgid "Connecting to Game"
 msgstr "连接到游戏"
 
@@ -10833,6 +10583,9 @@ msgstr "无法加入游戏"
 
 msgid "Error:"
 msgstr "错误："
+
+msgid "Message from Lobby:"
+msgstr ""
 
 msgid "Join Attempt Rejected"
 msgstr "加入尝试被拒绝"
@@ -10858,11 +10611,35 @@ msgstr "主玩家掉线了！"
 msgid "Connection Error"
 msgstr "连接错误"
 
+msgid "Gathering connection details"
+msgstr ""
+
+msgid "Could Not Connect"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "The host has requested additional verification"
+msgstr ""
+
+msgid "No supported connection details"
+msgstr ""
+
 msgid "No connections available"
 msgstr "无可用连接"
 
 msgid "Synchronizing data with host ..."
 msgstr "正在与主机同步数据..."
+
+msgid "Waiting for lobby error resolution"
+msgstr ""
+
+msgid "Waiting for join info"
+msgstr ""
 
 msgid "Waiting for correct join password"
 msgstr "等待正确的加入密码"
@@ -10908,6 +10685,18 @@ msgstr "无效的主机响应"
 
 msgid "Requesting to join game"
 msgstr "正在请求加入游戏"
+
+msgid "Invalid host establishing data"
+msgstr "无效的主机连接数据"
+
+msgid "Invalid host identity"
+msgstr "无效的主机身份"
+
+msgid "Failed to establish session keys with host"
+msgstr "无法与主机建立会话密钥"
+
+msgid "Failure to generate valid response"
+msgstr "无法生成有效响应"
 
 msgid "Kick Spectator"
 msgstr "踢出旁观者"
@@ -10973,7 +10762,7 @@ msgid "Kinetic Armor"
 msgstr "动能装甲"
 
 msgid "(Tanks / Cyborgs)"
-msgstr "(坦克/半机械人)"
+msgstr "（坦克/半机械人）"
 
 msgid "Cannons"
 msgstr "加农炮"
@@ -11036,19 +10825,19 @@ msgid "EMP"
 msgstr "电磁脉冲"
 
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr "无法建造更多部队，单位数量已达上限 -- 生产停止"
+msgstr "无法再建造任何单位，已达到单位上限 — 生产暂停"
 
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr "没有命令中继中心无法制造“%s” -- 生产停止"
+msgstr "无法在没有指挥中继中心的情况下建造 “%s” — 生产暂停"
 
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr "无法制造“%s”，指挥官数量已达上限 -- 生产停止"
+msgstr "无法建造 “%s”，指挥官上限已达到 — 生产暂停"
 
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "无法制造“%s”，建造单位数量已达上线 -- 生产停止"
+msgstr "无法建造 “%s”，建造单位数量已达上线 -- 生产停止"
 
 msgid "Laser Satellite is ready to fire!"
 msgstr "激光卫星已准备好开火！"
@@ -11056,20 +10845,20 @@ msgstr "激光卫星已准备好开火！"
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u 已分配单位 - 耐久度 %d/%d"
+msgstr[0] "%s - %u 单位分配 - 生命值 %d/%d"
 
 #, c-format
 msgid "ID %d - sensor range %d - ECM %d"
-msgstr "ID %d - 传感器范围 %d - 电子对抗 %d"
+msgstr "ID %d - 探测范围 %d - 电子对抗 %d"
 
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u 已分配单位 - 耐久度 %d/%d"
+msgstr[0] "%s - %u 单位分配 - 伤害 %d/%d"
 
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr "%s - 耐久度 %d/%d"
+msgstr "%s - 生命值 %d/%d"
 
 #, c-format
 msgid "ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f"
@@ -11085,7 +10874,7 @@ msgstr "ID %d - %s"
 
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr "%s - 连接 %u of %u - 耐久度 %d/%d"
+msgstr "%s - 已连接 %u / %u - 生命值 %d/%d"
 
 #, c-format
 msgid "ID %u - Multiplier: %u"
@@ -11105,7 +10894,7 @@ msgstr "坐标 %d,%d - 补给目标 %s"
 
 #, c-format
 msgid "ID %u - sensor range %d - ECM %d"
-msgstr "ID %u - 传感器范围 %d - 电子干扰 %d"
+msgstr "ID %u - 探测范围 %d - 电子对抗 %d"
 
 #, c-format
 msgid "%s - Electronically Damaged"
@@ -11115,7 +10904,7 @@ msgid "Electronic Reward - Visibility Report"
 msgstr "电子回馈 - 可见性报告"
 
 msgid "Factory Reward - Propulsion"
-msgstr "工厂奖励 - 推进动力"
+msgstr "工厂奖励 - 推进系统"
 
 msgid "Factory Reward - Body"
 msgstr "工厂奖励 - 车身"
@@ -11134,6 +10923,9 @@ msgstr "修理设施奖励 - 无"
 
 msgid "Classic"
 msgstr "经典"
+
+msgid "Remastered (HQ)"
+msgstr "重制版（高画质）"
 
 msgid "Additional Campaigns"
 msgstr "附加战役"
@@ -11200,6 +10992,57 @@ msgstr "PS1 属性修正"
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr "将敌人造成的伤害降低到当前难度的三分之一。"
 
+msgid "Infinite Time"
+msgstr "无限时间"
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr "任务（在可能的情况下）无时间限制（若启用此选项，计时器能源奖励将被替换为少量能源奖励）。"
+
+msgid "Victory Hints"
+msgstr "胜利提示"
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr "每隔几分钟在控制台显示一次与胜利条件相关的信息。"
+
+msgid "Finale Fun"
+msgstr "终极趣味"
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr "启用终极 Gamma 任务的奖励内容。"
+
+msgid "Gamma Bonus"
+msgstr "Gamma 奖励"
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr "额外的 Gamma 任务，使用由原开发团队创作的地图（地图更新者：DARwins）。"
+
+msgid "Additional Spawns (Insane difficulty)"
+msgstr "额外刷新单位（疯狂难度）"
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr "启用更强大的敌军生成与行为，适用于“疯狂”（或更高）难度。"
+
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr "额外刷新单位（比疯狂难度简单点）"
+
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr "为困难难度及以下模式，启用额外的敌人刷新机制与敌人行为设定。"
+
+msgid "Fast EXP gain"
+msgstr "快速经验值增益"
+
+msgid "Increases unit experience point gain by 2x."
+msgstr "单位所获经验值提升至2倍。"
+
+msgid "Tower Wars"
+msgstr "塔防战争"
+
+msgid "Player gets significantly stronger structures."
+msgstr "玩家建筑强度大幅提升。"
+
+msgid "Unsupported"
+msgstr "不支持的"
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr "更放松的游戏体验 - 不能再简单了"
 
@@ -11218,11 +11061,38 @@ msgstr "仅适合有经验玩家的极限挑战"
 msgid "\"Classic\" campaign balance"
 msgstr "“经典”战役平衡"
 
-msgid "Remastered"
-msgstr "重制版"
+msgid "Pumpkin"
+msgstr ""
+
+msgid "\"Pumpkin\" campaign balance"
+msgstr ""
+
+msgid "About Balance Options"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
+msgstr ""
 
 msgid "The remastered campaign experience"
 msgstr "重制版战役体验"
+
+msgid "Increases the viability of weaponry and designs on a per mission basis."
+msgstr ""
+
+msgid "Stats of game versions ~2.x - 3.x."
+msgstr ""
+
+msgid "Unintentionally affected by game patches over the years."
+msgstr ""
+
+msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
+msgstr ""
+
+msgid "Remastered"
+msgstr "重制版"
 
 msgid "Difficulty:"
 msgstr "难度："
@@ -11242,102 +11112,1000 @@ msgstr "战役"
 msgid "GAMES"
 msgstr "游戏"
 
-msgid "Refresh Games List"
-msgstr "刷新游戏列表"
+msgid "Continue"
+msgstr "继续"
 
-msgid "Filter Games List"
-msgstr "筛选游戏列表"
+msgid "MUSIC MANAGER"
+msgstr "音乐管理器"
 
-msgid "Refreshing..."
-msgstr "正在刷新..."
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "您的设备/系统或 OpenAL 库不支持 HRTF"
 
-msgid "Searching"
-msgstr "正在搜索"
+msgid "Volume"
+msgstr "音量"
 
-msgid "Connecting to the lobby server..."
-msgstr "连接大厅服务器中..."
+msgid "Voice Volume"
+msgstr "语音音量"
 
-msgid "Map Name"
-msgstr "地图名称"
+msgid "FX Volume"
+msgstr "音效音量"
 
-msgid "Status"
-msgstr "状态"
+msgid "Music Volume"
+msgstr "背景音乐音量"
 
-msgid "Can't connect to lobby server!"
-msgstr "无法连接到大厅服务器！"
+msgid "Output"
+msgstr "输出"
+
+msgid "HRTF"
+msgstr "HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr "当与耳机或某些立体声输出设备一起使用时，HRTF可以启用强化空间化。"
+
+msgid "Disabled"
+msgstr "禁用"
+
+msgid "Enabled"
+msgstr "启用"
+
+msgid "Auto"
+msgstr "自动"
+
+msgid "Subtitles"
+msgstr "字幕"
+
+msgid "Off"
+msgstr "关闭"
+
+msgid "On"
+msgstr "开启"
+
+msgid "Music"
+msgstr "音乐"
+
+msgid "Music Manager"
+msgstr "音乐管理器"
+
+msgid "Open Music Manager"
+msgstr "打开音乐管理器"
+
+msgid "Audio Cues"
+msgstr "音频提示"
+
+msgid "Group Reporting"
+msgstr "小组报告"
+
+msgid "Mouse"
+msgstr "鼠标设置"
+
+msgid "Right-Click Orders"
+msgstr "右键命令"
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr "默认情况下，《Warzone 2100》使用左键同时进行选择单位与下达指令/锁定目标。如果您更习惯现代即时战略游戏的鼠标操作方式，请将此选项设为“开”。如果您正在使用触控板或触摸屏输入，则建议将其设为“关”。"
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr "使用左键同时进行选择与下达指令/攻击目标。（此为《Warzone 2100》的经典默认设置。）"
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr "左键选择单位，右键命令移动或攻击目标。（符合其他主流即时战略游戏的默认设置。）"
+
+msgid "Trap Cursor"
+msgstr "捕捉光标"
+
+msgid "Colored Cursors"
+msgstr "彩色光标"
+
+msgid "Cursor Size"
+msgstr "光标尺寸"
+
+msgid "Camera"
+msgstr "视野"
+
+msgid "Camera Speed"
+msgstr "镜头速度"
+
+msgid "Camera Starting Zoom"
+msgstr "开局默认视角高度"
+
+msgid "Camera Zoom Rate"
+msgstr "镜头缩放速度"
+
+msgid "Mouse Rotate"
+msgstr "鼠标旋转"
+
+msgid "Reverse Rotation"
+msgstr "反向旋转"
+
+msgid "Mouse Pan"
+msgstr "鼠标平移"
+
+msgid "Edge Scrolling"
+msgstr "边缘滚动"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "Reset Keys to:"
+msgstr "重置按键为："
+
+msgid "(Select Profile)"
+msgstr "(选择配置)"
+
+msgid "Reset Keys to: Defaults"
+msgstr "重置按键为默认值"
+
+msgid "Only useful if Enable IPv6 is On."
+msgstr ""
 
 #, c-format
-msgid "Mods: %s"
-msgstr "模组：%s"
-
-msgid "Mods: None!"
-msgstr "模组：无！"
+msgid "%u minutes"
+msgstr "%u 分钟"
 
 #, c-format
-msgid "Version: %s"
-msgstr "版本：%s"
-
-msgid "Join as spectator"
-msgstr "作为旁观者加入"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "你的 Warzone 版本与这个游戏不兼容。"
-
-msgid "[Password required]"
-msgstr "[需要密码]"
-
-msgid "[No Tanks]"
-msgstr "[没有坦克]"
-
-msgid "[No Cyborgs]"
-msgstr "[没有半机械人]"
-
-msgid "[No VTOLs]"
-msgstr "[没有 VTOL]"
+msgid "%u seconds"
+msgstr "%u 秒"
 
 #, c-format
-msgid "Hosted by %s"
-msgstr "由 %s 主持"
+msgid "%s hours"
+msgstr "%s 小时"
+
+msgid "Unit Color"
+msgstr "单位颜色"
+
+msgid "Difficulty Level"
+msgstr "难度等级"
+
+msgid "Default AI"
+msgstr "默认 AI"
+
+msgid "Lobby Options"
+msgstr ""
+
+msgid "Enable IPv6"
+msgstr ""
+
+msgid "Whether to list and try connecting via IPv6 (if available)."
+msgstr ""
+
+msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
+msgstr ""
+
+msgid "Enable IPv6. If your system supports it, this is the recommended option."
+msgstr ""
+
+msgid "Prefer IPv6 over IPv4"
+msgstr ""
+
+msgid "Prefer connecting via IPv6 over IPv4 when a game is available via both."
+msgstr ""
+
+msgid "Hosting Options"
+msgstr "主机选项"
+
+msgid "Port Mapping"
+msgstr "端口映射"
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr "使用 PCP、NAT-PMP 或 UPnP 帮助配置您的路由器/防火墙，以便作为主机时允许连接。"
+
+msgid "Chat"
+msgstr "聊天"
+
+msgid "Quick Chat Only"
+msgstr "仅快速聊天"
+
+msgid "Allow All"
+msgstr "允许全部"
+
+msgid "Inactivity Timeout"
+msgstr "挂机超时"
+
+msgid "Lag Kick"
+msgstr "延迟踢出"
+
+msgid "Spectator Slots"
+msgstr "旁观者槽位"
+
+msgid "None"
+msgstr "无"
+
+msgid "On Player Leave"
+msgstr "当玩家离开时"
+
+msgid "Distribute to Team"
+msgstr "分配至队伍"
+
+msgid "Destroy (Classic)"
+msgstr "摧毁 (经典)"
+
+msgid "Game Time Limit"
+msgstr "游戏时间限制"
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr "“地形阴影质量”仅在使用“地形外观：重制版（高品质）”时生效"
+
+msgid "Shadows are not enabled."
+msgstr "阴影未启用。"
+
+msgid "Shadow mapping not available on this system."
+msgstr "阴影贴图在此系统上不可用。"
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr "“高级光照”效果仅在使用“地形外观：重制版（高品质）”时可用"
+
+msgid "Terrain"
+msgstr "地形"
+
+msgid "Terrain Appearance"
+msgstr "地形外观"
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr "此为游戏初始版本中的经典地形外观。采用低分辨率像素艺术纹理。"
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr "此为过去十余年间一直作为默认设置的常规地形外观。采用更高分辨率的重制纹理。"
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr "此为重制版的高品质地形外观。采用高分辨率纹理及现代凹凸映射+高光映射技术。需要占用更多内存并对 GPU 有更高要求。"
+
+msgid "Terrain Shading Quality"
+msgstr "地形阴影质量"
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr "地形阴影质量决定了地形着色效果（包含法线贴图、高光效果等）的精细程度。设置越高，地形细节越丰富，但会占用更多性能与内存资源。"
+
+msgid "Medium Quality"
+msgstr "中等画质"
+
+msgid "High Quality"
+msgstr "高画质"
+
+msgid "Shadows"
+msgstr "阴影"
+
+msgid "Draw Shadows"
+msgstr "绘制阴影"
+
+msgid "Terrain Shadows"
+msgstr ""
+
+msgid "Whether terrain casts shadows."
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr "阴影分辨率"
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr "此项设置了用于渲染阴影贴图的内部分辨率。数值越高，阴影外观越精细，但同时会消耗更多性能与内存资源。"
+
+msgid "High"
+msgstr "高"
+
+msgid "Shadow Filtering"
+msgstr "阴影过滤"
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr "此项控制阴影外观的过滤/平滑程度。设置越高，阴影边缘越平滑，但同时会消耗更多性能。"
+
+msgid "Low"
+msgstr "低"
+
+msgid "Ultra"
+msgstr "最高"
+
+msgid "Lighting"
+msgstr "光照"
+
+msgid "Point Lights"
+msgstr "点光源"
+
+msgid "Lightmap"
+msgstr "光照贴图"
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr "使用经典光照贴图来计算物体与地砖上的点光源效果。（此为“经典”与“常规”外观模式的默认设置，性能开销最低。）"
+
+msgid "Per-Pixel (HQ)"
+msgstr "每像素 （高清）"
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr "使用先进的逐像素点光源光照技术来提升画面效果。（可能会影响性能，需要更强大的 GPU 支持。）"
+
+msgid "Effects"
+msgstr "效果"
+
+msgid "Fog"
+msgstr "迷雾"
+
+msgid "Screen Shake"
+msgstr "屏幕晃动"
+
+msgid "Textures"
+msgstr "纹理"
+
+msgid "Texture Size Limit"
+msgstr "纹理尺寸限制"
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr "对于大于设定限制的纹理，系统将对其进行降采样处理。除非在可用内存有限的系统上运行，否则此项通常应设置为最大值。"
+
+msgid "LOD Distance"
+msgstr "LOD 距离"
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr "此项控制了（纹理的）细节层次随距离增加而保留的程度。"
+
+msgid "Default"
+msgstr "默认"
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr "系统默认（无附加偏移，可能导致画面清晰度下降）。"
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr "使用 LOD 距离偏移来提升视觉清晰度。"
+
+msgid "Advanced"
+msgstr "高级"
+
+msgid "Graphics Backend"
+msgstr "图形后端"
+
+msgid "Antialiasing"
+msgstr "抗锯齿"
+
+msgid "Vertical Sync"
+msgstr "垂直同步"
+
+msgid "Adaptive"
+msgstr "自适应"
+
+msgid "General"
+msgstr "通用"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "Display Scale"
+msgstr "显示比例"
+
+msgid "Game UI"
+msgstr "游戏界面"
+
+msgid "Show FPS"
+msgstr "显示 FPS"
+
+msgid "Show Unit Counts"
+msgstr "显示单位数量"
+
+msgid "Groups Menu"
+msgstr "编队菜单"
+
+msgid "Options Button"
+msgstr "选项"
+
+msgid "Opacity: 50%"
+msgstr "透明度：50%"
+
+msgid "Radar"
+msgstr "雷达"
+
+msgid "Radar Orientation"
+msgstr "雷达方向"
+
+msgid "Fixed"
+msgstr "固定"
+
+msgid "Rotating"
+msgstr "旋转"
+
+msgid "Radar Jump"
+msgstr "雷达跳转"
+
+msgid "Instant"
+msgstr "立即"
+
+msgid "Tracked"
+msgstr "跟踪"
+
+msgid "Radar Zoom"
+msgstr "雷达缩放"
+
+msgid "Video Playback"
+msgstr "播放影片"
+
+msgid "Video Size"
+msgstr "视频尺寸"
+
+msgid "1×"
+msgstr "1×"
+
+msgid "2×"
+msgstr "2×"
+
+msgid "Fullscreen"
+msgstr "全屏"
+
+msgid "Scanlines"
+msgstr "扫描线"
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "打开配置目录"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "无法使用系统默认文件浏览器打开配置目录。"
+
+msgid "Configuration directory is reported as:"
+msgstr "配置目录为："
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr "如果在容器/隔离环境中运行，实际磁盘路径可能与此不同。"
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "请参阅文档以获取有关如何手动定位的更多信息。"
+
+msgid "Failed to open configuration directory"
+msgstr "无法打开配置目录"
+
+msgid "Interface"
+msgstr "界面"
+
+msgid "Defaults"
+msgstr "默认"
+
+msgid "Graphics"
+msgstr "图形"
+
+msgid "Audio"
+msgstr "音效"
+
+msgid "Controls"
+msgstr "控制"
+
+msgid "Window"
+msgstr "窗口"
+
+msgid "Desktop Full"
+msgstr "全桌面"
+
+msgid "Window Mode"
+msgstr "窗口模式"
+
+msgid "Windowed"
+msgstr "窗口模式"
+
+msgid "Fullscreen Mode"
+msgstr "全屏模式"
+
+msgid "Behaviors"
+msgstr "行为"
+
+msgid "Minimize on Focus Loss"
+msgstr "失去焦点时最小化"
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr "窗口是否应在失去焦点时自动最小化"
+
+msgid "On (Fullscreen)"
+msgstr "开(全屏)"
+
+msgid "Host:"
+msgstr "主机："
+
+msgid "NOTE: Host is also a player."
+msgstr "注意：主机也是玩家。"
+
+msgid "Player ID: "
+msgstr "玩家 ID： "
+
+msgid "(none)"
+msgstr "(无)"
+
+msgid "You:"
+msgstr "你："
+
+msgid "Waiting for host to configure teams"
+msgstr "等待主机配置队伍"
+
+msgid "Waiting for players"
+msgstr "等待其他玩家"
+
+msgid "Downloading map / mods"
+msgstr "正在下载地图/模组"
+
+msgid "Waiting for you to check ready"
+msgstr "等待你点击准备"
+
+msgid "Waiting for host to start game"
+msgstr "等待主机开始游戏"
+
+msgid "Waiting for spectators"
+msgstr "等待旁观者"
+
+msgid "Players ready & waiting for match:"
+msgstr "已准备好并等待比赛的玩家："
 
 #, c-format
-msgid "Hosted by %s —%s"
-msgstr "由 %s 主持—%s"
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr "玩家：(%zu 就绪，%zu 未就绪)"
 
-msgid "Can't find any games for your version."
-msgstr "找不到此版本的游戏"
+#, c-format
+msgid "AI Bots: %zu"
+msgstr "AI 机器人：%zu"
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr "旁观者：(%zu 就绪，%zu 未就绪)"
+
+#, c-format
+msgid "Host: %s"
+msgstr "主机：%s"
+
+msgid "ready"
+msgstr "已就绪"
+
+msgid "not ready"
+msgstr "未就绪"
+
+msgid "Waiting Room"
+msgstr "等候室"
+
+msgid "Reset Lobby Address to Default"
+msgstr ""
+
+#, c-format
+msgid "Host Name: %s"
+msgstr ""
+
+#, c-format
+msgid "ID: %s"
+msgstr ""
+
+msgid "FFA"
+msgstr "混战"
+
+msgid "Alliances Allowed"
+msgstr "允许联盟"
+
+msgid "Teams"
+msgstr "团队"
+
+msgid "Teams (No Shared Res)"
+msgstr "团队 (无资源共享)"
+
+msgid "Matchmaking"
+msgstr "匹配"
+
+msgid "Blind Lobby"
+msgstr "盲选大厅"
+
+msgid "Blind Game"
+msgstr "盲选模式"
+
+msgid "No Tanks"
+msgstr "没有坦克"
+
+msgid "No VTOL"
+msgstr "没有 VTOL"
+
+msgid "No Cyborgs"
+msgstr "没有半机械人"
+
+msgid "Spectate Game"
+msgstr "观看战局"
+
+msgid "Join as Player"
+msgstr ""
+
+msgid "Join as Spectator"
+msgstr ""
+
+#, c-format
+msgid "Last IP: %s"
+msgstr ""
+
+msgid "Clear Last IP"
+msgstr ""
+
+msgid "GameID or IP:port"
+msgstr ""
+
+msgid "Join"
+msgstr ""
 
 msgid "There appears to be a game update available!"
 msgstr "有新更新可用"
 
-msgid "No games are available for your version"
-msgstr "没有对于你的版本可用的游戏"
+msgid "Error dispatching request"
+msgstr ""
 
-msgid "Wrong Game Version!"
-msgstr "错误的游戏版本"
+msgid "Failed to connect to lobby server"
+msgstr "无法连接到大厅服务器"
 
-msgid "You have an incompatible mod."
-msgstr "您有一个不兼容的模组"
+msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
+msgstr ""
 
-msgid "Host couldn't send file?"
-msgstr "主玩家不能发送文件？"
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "你的 Warzone 版本与这个游戏不兼容。"
 
-msgid "Incorrect Password!"
-msgstr "密码错误！"
+#, c-format
+msgid "Host Version: %s"
+msgstr "主机版本: %s"
 
-msgid "Continue"
-msgstr "继续"
+msgid "(50+ omitted)"
+msgstr "(50+ 个省略)"
 
-msgid "CONNECTION"
-msgstr "连接"
+#, c-format
+msgid "(%u omitted)"
+msgstr "(%u 个省略)"
 
-msgid "Lobby"
-msgstr "游戏大厅"
+msgid "No games for your version"
+msgstr "没有适合您的版本的游戏"
 
-msgid "IP"
-msgstr "IP"
+msgid "No games matching filters"
+msgstr "没有匹配的游戏"
 
-msgid "IP Address or Machine Name"
-msgstr "IP 地址或电脑名称"
+#, c-format
+msgid "%d players queued"
+msgstr "%d 个玩家已排队"
+
+msgid "Matchmaking Room: Open"
+msgstr "匹配房间：开放"
+
+msgid "Filters"
+msgstr "过滤器"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Details"
+msgstr "详情"
+
+msgid "Mods"
+msgstr "模组"
+
+msgid "Hide Incompatible Games"
+msgstr "隐藏不兼容的游戏"
+
+msgid "Hide Empty Games"
+msgstr "隐藏空游戏"
+
+msgid "Hide Modded Games"
+msgstr "隐藏加载模组的游戏"
+
+msgid "Hide IPv6-Only"
+msgstr ""
+
+msgid "Host Lobby Options"
+msgstr ""
+
+msgid "Game must be listed in lobby to support this option."
+msgstr ""
+
+msgid "This option is not supported by the current lobby."
+msgstr ""
+
+msgid "Awaiting lobby information..."
+msgstr ""
+
+msgid "Slot Options"
+msgstr ""
+
+msgid "Spectator Join"
+msgstr ""
+
+msgid "Locked"
+msgstr ""
+
+msgid "Allow Change"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Game Options"
+msgstr ""
+
+msgid "Lobby Join Options"
+msgstr ""
+
+msgid "Bot Protection"
+msgstr ""
+
+msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
+msgstr ""
+
+msgid "Block Known Bots"
+msgstr ""
+
+msgid "Block known bots or automated tools."
+msgstr ""
+
+msgid "Proxy / VPN Connections"
+msgstr ""
+
+msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
+msgstr ""
+
+msgid "Block suspicious connections from proxies / VPNs."
+msgstr ""
+
+msgid "(Recommended)"
+msgstr ""
+
+msgid "Block All"
+msgstr ""
+
+msgid "Block all connections from proxies / VPNs."
+msgstr ""
+
+msgid "Block Suspicious"
+msgstr ""
+
+msgid "Hosting Provider IPs"
+msgstr ""
+
+msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
+msgstr ""
+
+msgid "Block all connections from hosting provider IPs."
+msgstr ""
+
+msgid "Block suspicious connections from hosting provider IPs."
+msgstr ""
+
+msgid "Lobby Join Bypass"
+msgstr ""
+
+msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
+msgstr ""
+
+msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
+msgstr ""
+
+msgid "(Not Recommended)"
+msgstr ""
+
+msgid "Do not allow direct joins. Require joining through the lobby."
+msgstr ""
+
+msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
+msgstr ""
+
+msgid "Joined:"
+msgstr "已加入："
+
+msgid "Ready:"
+msgstr "已准备："
+
+msgid "Players"
+msgstr "玩家"
+
+msgid "Host Options"
+msgstr "主机选项"
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr "发送地图：%u%%"
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr "地图：已下载 %u%%"
+
+msgid "HOST"
+msgstr "主玩家"
+
+msgid "Choose Team"
+msgstr "选择队伍"
+
+msgid "Teams locked"
+msgstr "团队已锁定"
+
+msgid "Click to change player colour"
+msgstr "调整颜色"
+
+msgid "Click to change player position"
+msgstr "调整位置"
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr "点击更改AI, 右键点击以分发选择"
+
+msgid "Click to close spectator slot"
+msgstr "点击关闭旁观者栏位"
+
+msgid "Click to change difficulty"
+msgstr "调整难度"
+
+msgid "Waiting for player"
+msgstr "等待其他玩家"
+
+msgid "Player is ready"
+msgstr "玩家已准备好"
+
+msgid "Player is downloading"
+msgstr "玩家正在下载"
+
+msgid "Click when ready"
+msgstr "准备好就点一下"
+
+msgid "Waiting for download"
+msgstr "等待下载"
+
+msgid "READY?"
+msgstr "准备？"
+
+msgid "Tanks disabled!!"
+msgstr "坦克被禁用"
+
+msgid "Cyborgs disabled."
+msgstr "半机械人无法使用。"
+
+msgid "VTOLs disabled."
+msgstr "能见度低，VTOL 无法起飞"
+
+msgid "Satellite Uplink disabled."
+msgstr "卫星上传受到干扰"
+
+msgid "Laser Satellite disabled."
+msgstr "激光卫星损坏"
+
+msgid "Structure Limits Enforced."
+msgstr "已执行建筑数量限制。"
+
+msgid "Challenge:"
+msgstr "挑战："
+
+msgid "Skirmish:"
+msgstr "遭遇战："
+
+msgid "Local (Offline)"
+msgstr "本地(离线)"
+
+msgid "Hosting:"
+msgstr "主机："
+
+msgid "Password-Protected (Private)"
+msgstr "密码保护（私人）"
+
+msgid "Open (Public)"
+msgstr "开放（公开）"
+
+msgid "Connected to Host:"
+msgstr "已连接到主机："
+
+msgid "Set Password"
+msgstr "设置密码"
+
+msgid "Require Password to Join"
+msgstr "需要密码才能加入"
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** 现在需要密码 [%s] ！***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** 不需要密码 ***"
+
+msgid "Game Name Updated."
+msgstr "游戏名称已更新。"
+
+msgid "Set Game Name"
+msgstr "设置游戏名称"
+
+msgid "One-Player Skirmish"
+msgstr "单人遭遇战"
+
+msgid "Edit Game Name"
+msgstr "编辑游戏名称"
+
+msgid "Game Name"
+msgstr "游戏名称"
+
+msgid "Click to see Map"
+msgstr "点击查看地图"
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"选择地图\n"
+"玩家可以投票阻止"
+
+msgid "Match Options"
+msgstr "对局选项"
+
+msgid "Base"
+msgstr "基地"
+
+msgid "Tech"
+msgstr "技术水平"
+
+msgid "Technology Level 1"
+msgstr "一阶"
+
+msgid "Technology Level 2"
+msgstr "二阶"
+
+msgid "Technology Level 3"
+msgstr "三阶"
+
+msgid "Technology Level 4"
+msgstr "四阶"
+
+msgid "Limits"
+msgstr "限制"
+
+msgid "Randomize Options"
+msgstr "随机游戏选项"
+
+msgid "Match Option Preferences:"
+msgstr "匹配选项偏好设置："
+
+msgid "Star All"
+msgstr "全部星标"
+
+msgid "Clear All"
+msgstr "清除所有"
+
+msgid "Show Player Preferences"
+msgstr "显示玩家首选项"
+
+msgid "Hide Player Preferences"
+msgstr "隐藏玩家首选项"
+
+msgid "Not editable while in a game."
+msgstr "游戏进行中不可编辑。"
+
+msgid "Not editable while in a multiplayer game."
+msgstr "在多人游戏中不可编辑。"
+
+msgid "Takes effect on game restart"
+msgstr "重启游戏后生效"
+
+msgid "Advanced Hosting Options:"
+msgstr "高级主机选项："
+
+msgid "Host Role"
+msgstr "主机角色"
+
+msgid "Player Host"
+msgstr "玩家主机"
+
+msgid "Host is a player in the game (the default)."
+msgstr "主机是游戏中的一名玩家（默认设置）。"
+
+msgid "Spectator Host"
+msgstr "旁观者主机"
+
+msgid "Host is a spectator in the game."
+msgstr "主机是游戏中的旁观者。"
+
+msgid "Blind Mode"
+msgstr "盲选模式"
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr "玩家是否以及何时对其他玩家的身份不知情。"
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr "只有当主机为“旁观者主机”时，盲选模式才可用。"
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr "玩家的身份在大厅和游戏中均可见（默认设置）。"
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr "在游戏开始前，所有玩家的身份对所有人（除旁观者主机外）均处于隐藏状态。"
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr "直到游戏结束，所有玩家的身份对所有人（除旁观者主机外）均处于隐藏状态。"
+
+msgid "Start Hosting"
+msgstr "开始创建主机"
+
+msgid "Configure Advanced Hosting Options"
+msgstr "配置高级主机设置选项"
 
 msgid "Launch Transport"
 msgstr "发射运输舰"

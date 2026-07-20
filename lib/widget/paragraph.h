@@ -80,10 +80,39 @@ public:
 		}
 		text = _text;
 		font = _fontID;
+		cachedTextWidth.reset();
 		if (cachedText)
 		{
 			cachedText->setText(text, font);
 		}
+	}
+
+	void resetCachedDimensions()
+	{
+		cachedTextWidth.reset();
+	}
+
+	inline const WzString& getText() const { return text; }
+	inline iV_fonts getFontID() const { return font; }
+	inline int32_t getTextWidth()
+	{
+		if (!cachedText)
+		{
+			if (!cachedTextWidth.has_value())
+			{
+				cachedTextWidth = iV_GetTextWidth(text, font);
+			}
+			return cachedTextWidth.value();
+		}
+		return cachedText->width();
+	}
+	inline int32_t getTextLineSize() const
+	{
+		if (!cachedText)
+		{
+			return iV_GetTextLineSize(font);
+		}
+		return cachedText->lineSize();
 	}
 
 	WzText *operator ->()
@@ -100,6 +129,7 @@ public:
 private:
 	WzString text;
 	iV_fonts font;
+	optional<unsigned int> cachedTextWidth = nullopt;
 	uint32_t cacheDurationMs;
 	std::unique_ptr<WzText> cachedText = nullptr;
 	uint32_t cacheExpireAt = 0;

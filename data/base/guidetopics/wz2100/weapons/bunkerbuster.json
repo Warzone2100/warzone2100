@@ -1,0 +1,22 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::bunkerbuster",
+	"title": "Bunker Buster",
+	"sort": "06",
+	"visual": [
+		{
+			"stat": {
+				"id": "Rocket-BB",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"The Bunker Buster is a unique weapon that is exceptionally effective against all structures.",
+		"",
+		"However, the Bunker Buster is extremely weak against any non-structure target."
+	],
+	"links": [
+		"wz2100::weapons"
+	]
+}

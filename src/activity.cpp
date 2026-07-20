@@ -176,7 +176,7 @@ public:
 	// multiplayer
 	virtual void hostingMultiplayerGame(const MultiplayerGameInfo& info) override
 	{
-		debug(LOG_ACTIVITY, "- hostingMultiplayerGame: %s; isLobbyGame: %s", info.game.name, (info.lobbyGameId != 0) ? "true" : "false");
+		debug(LOG_ACTIVITY, "- hostingMultiplayerGame: %s; isLobbyGame: %s", info.game.name, (!info.lobbyGameId.empty()) ? "true" : "false");
 	}
 	virtual void joinedMultiplayerGame(const MultiplayerGameInfo& info) override
 	{
@@ -503,6 +503,7 @@ void ActivityManager::shutdown()
 
 void ActivityManager::addActivitySink(std::shared_ptr<ActivitySink> sink)
 {
+	ASSERT_OR_RETURN(, sink != nullptr, "sink is null?");
 	activitySinks.push_back(sink);
 }
 
@@ -604,8 +605,6 @@ void ActivityManager::_endedMission(ActivitySink::GameEndReason result, END_GAME
 {
 	if (bEndedCurrentMission) return;
 
-	lastLobbyGameJoinAttempt.clear();
-
 	switch (currentMode)
 	{
 		case ActivitySink::GameMode::CAMPAIGN:
@@ -695,8 +694,8 @@ void ActivityManager::rebuiltSearchPath()
 }
 
 // called when a joinable multiplayer game is hosted
-// lobbyGameId is 0 if the lobby can't be contacted / the game is not registered with the lobby
-void ActivityManager::hostGame(const char *SessionName, const char *PlayerName, const char *lobbyAddress, unsigned int lobbyPort, const ActivitySink::ListeningInterfaces& listeningInterfaces, uint32_t lobbyGameId /*= 0*/)
+// lobbyGameId is empty if the lobby can't be contacted / the game is not registered with the lobby
+void ActivityManager::hostGame(const char *SessionName, const char *PlayerName, const std::string& lobbyAddress, const ActivitySink::ListeningInterfaces& listeningInterfaces, std::string lobbyGameId /*= ""*/)
 {
 	currentMode = ActivitySink::GameMode::HOSTING_IN_LOBBY;
 
@@ -704,8 +703,7 @@ void ActivityManager::hostGame(const char *SessionName, const char *PlayerName, 
 
 	currentMultiplayGameInfo.hostName = PlayerName;
 	currentMultiplayGameInfo.listeningInterfaces = listeningInterfaces;
-	currentMultiplayGameInfo.lobbyAddress = (lobbyAddress != nullptr) ? lobbyAddress : std::string();
-	currentMultiplayGameInfo.lobbyPort = lobbyPort;
+	currentMultiplayGameInfo.lobbyAddress = lobbyAddress;
 	currentMultiplayGameInfo.lobbyGameId = lobbyGameId;
 	currentMultiplayGameInfo.isHost = true;
 
@@ -720,24 +718,23 @@ void ActivityManager::hostGameLobbyServerDisconnect()
 		return;
 	}
 
-	if (currentMultiplayGameInfo.lobbyGameId == 0)
+	if (currentMultiplayGameInfo.lobbyGameId.empty())
 	{
-		debug(LOG_ACTIVITY, "Unexpected call to hostGameLobbyServerDisconnect - prior lobbyGameId is %u - ignoring", currentMultiplayGameInfo.lobbyGameId);
+		debug(LOG_ACTIVITY, "Unexpected call to hostGameLobbyServerDisconnect - prior lobbyGameId is empty - ignoring");
 		return;
 	}
 
 	// The lobby server has disconnected the host (us)
 	// Hence any prior lobbyGameId, etc is now invalid
 	currentMultiplayGameInfo.lobbyAddress.clear();
-	currentMultiplayGameInfo.lobbyPort = 0;
-	currentMultiplayGameInfo.lobbyGameId = 0;
+	currentMultiplayGameInfo.lobbyGameId.clear();
 
 	// Inform the ActivitySinks
 	// Trigger a new hostingMultiplayerGame event
 	for (auto sink : activitySinks) { sink->hostingMultiplayerGame(currentMultiplayGameInfo); }
 }
 
-void ActivityManager::hostLobbyQuit()
+void ActivityManager::hostLobbyQuit(LOBBY_ERROR_TYPES errorResult)
 {
 	if (currentMode != ActivitySink::GameMode::HOSTING_IN_LOBBY)
 	{
@@ -747,54 +744,39 @@ void ActivityManager::hostLobbyQuit()
 	currentMode = ActivitySink::GameMode::MENUS;
 
 	// Notify the ActivitySink that we've left the game lobby
-	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(true, getLobbyError()); }
-}
-
-// called when attempting to join a lobby game
-void ActivityManager::willAttemptToJoinLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId, const std::vector<JoinConnectionDescription>& connections)
-{
-	lastLobbyGameJoinAttempt.lobbyAddress = lobbyAddress;
-	lastLobbyGameJoinAttempt.lobbyPort = lobbyPort;
-	lastLobbyGameJoinAttempt.lobbyGameId = lobbyGameId;
-	lastLobbyGameJoinAttempt.connections = connections;
+	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(true, errorResult); }
 }
 
 // called when an attempt to join fails
-void ActivityManager::joinGameFailed(const std::vector<JoinConnectionDescription>& connection_list)
+void ActivityManager::joinGameFailed()
 {
-	lastLobbyGameJoinAttempt.clear();
+	// currently, no-op
 }
 
-// called when joining a multiplayer game
+// called when joining a multiplayer game (direct)
 void ActivityManager::joinGameSucceeded(const char *host, uint32_t port)
 {
 	currentMode = ActivitySink::GameMode::JOINING_IN_PROGRESS;
 	currentMultiplayGameInfo.isHost = false;
 
-	// If the host and port match information in the lastLobbyGameJoinAttempt.connections,
-	// store the lastLobbyGameJoinAttempt lookup info in currentMultiplayGameInfo
-	bool joinedLobbyGame = false;
-	for (const auto& connection : lastLobbyGameJoinAttempt.connections)
-	{
-		if ((connection.host == host) && (connection.port == port))
-		{
-			joinedLobbyGame = true;
-			break;
-		}
-	}
-	if (joinedLobbyGame)
-	{
-		currentMultiplayGameInfo.lobbyAddress = lastLobbyGameJoinAttempt.lobbyAddress;
-		currentMultiplayGameInfo.lobbyPort = lastLobbyGameJoinAttempt.lobbyPort;
-		currentMultiplayGameInfo.lobbyGameId = lastLobbyGameJoinAttempt.lobbyGameId;
-	}
-	lastLobbyGameJoinAttempt.clear();
+	// NOTE: This is called once the join is accepted, but before all game information has been received from the host
+	// Therefore, delay ActivitySink::joinedMultiplayerGame until after we receive the initial game data
+}
+
+// called when joining a multiplayer game (lobby)
+void ActivityManager::joinLobbyGameSucceeded(const std::string& lobbyAddress, const std::string& gameId, const char *host, uint32_t port)
+{
+	currentMode = ActivitySink::GameMode::JOINING_IN_PROGRESS;
+	currentMultiplayGameInfo.isHost = false;
+
+	currentMultiplayGameInfo.lobbyAddress = lobbyAddress;
+	currentMultiplayGameInfo.lobbyGameId = gameId;
 
 	// NOTE: This is called once the join is accepted, but before all game information has been received from the host
 	// Therefore, delay ActivitySink::joinedMultiplayerGame until after we receive the initial game data
 }
 
-void ActivityManager::joinedLobbyQuit()
+void ActivityManager::joinedLobbyQuit(LOBBY_ERROR_TYPES errorResult)
 {
 	if (currentMode != ActivitySink::GameMode::JOINING_IN_PROGRESS && currentMode != ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
@@ -807,7 +789,7 @@ void ActivityManager::joinedLobbyQuit()
 	currentMode = ActivitySink::GameMode::MENUS;
 
 	// Notify the ActivitySink that we've left the game lobby
-	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(false, getLobbyError()); }
+	for (auto sink : activitySinks) { sink->leftMultiplayerGameLobby(false, errorResult); }
 }
 
 // for skirmish / multiplayer, provide additional data / state

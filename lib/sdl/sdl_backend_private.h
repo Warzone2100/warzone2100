@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2022  Warzone 2100 Project
+	Copyright (C) 2022-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,4 +22,23 @@
 
 #pragma once
 
+#include "lib/framework/frame.h"
+#include <vector>
+#include <memory>
+#include <nonstd/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
+float wzGetDisplayContentScale();
+
+class VideoInitProgress
+{
+public:
+	virtual ~VideoInitProgress();
+	virtual void RecordAttemptingBackend(optional<video_backend> backend) = 0;
+	virtual void RecordFailedBackend(optional<video_backend> backend, const char* errorMessage) = 0;
+	virtual void RecordInitFinished(bool success) = 0;
+};
+
+std::unique_ptr<VideoInitProgress> wzResumeFailedVideoInit(optional<video_backend>& backend, std::vector<video_backend>& availableBackends, std::vector<std::string>& backendInitErrors);

@@ -47,6 +47,10 @@
 		"label": "NPSensorWatch",
 		"pos": [4800, 9200]
 	},
+	"position_12": {
+		"label": "insaneSpawnPoint",
+		"pos": [6400, 13824]
+	},
 
 	"area_0": {
 		"label": "landingZone",

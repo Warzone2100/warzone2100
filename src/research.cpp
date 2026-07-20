@@ -278,6 +278,44 @@ static bool isResAPrereqForResB(size_t resAIndex, size_t resBIndex)
 	return false;
 }
 
+static bool isResearchListValidConnectedDependencyGraph(const std::vector<size_t>& researchIndexes)
+{
+	if (researchIndexes.size() == 0)
+	{
+		return false;
+	}
+
+	std::unordered_map<size_t, size_t> in_degree;
+	std::vector<size_t> source_nodes;
+
+	for (const auto resIdxA : researchIndexes)
+	{
+		for (const auto resIdxB : researchIndexes)
+		{
+			if (isResAPrereqForResB(resIdxA, resIdxB))
+			{
+				in_degree[resIdxA]++;
+			}
+		}
+	}
+
+	for (const auto resIdx : researchIndexes)
+	{
+		if (in_degree.count(resIdx) == 0)
+		{
+			source_nodes.push_back(resIdx);
+		}
+	}
+
+	if (source_nodes.size() != 1)
+	{
+		debug(LOG_WZ, "Category graph has %zu potential source / edge nodes.", source_nodes.size());
+		return false;
+	}
+
+	return true;
+}
+
 static optional<ResearchUpgradeCalculationMode> resCalcModeStringToValue(const WzString& calcModeStr)
 {
 	if (calcModeStr.compare("compat") == 0)
@@ -626,9 +664,21 @@ bool loadResearch(WzConfig &ini)
 		}
 		resCategories[cat].push_back(inc);
 	}
-	for (auto& cat : resCategories)
+	for (auto it = resCategories.begin(); it != resCategories.end(); /* no increment here */)
 	{
-		auto& membersOfCategory = cat.second;
+		auto& membersOfCategory = it->second;
+
+		if (!isResearchListValidConnectedDependencyGraph(membersOfCategory))
+		{
+			debug(LOG_ERROR, "Research category items do not exist on a valid connected dependency graph: \"%s\"", it->first.toUtf8().c_str());
+			for (const auto& inc : membersOfCategory)
+			{
+				asResearch[inc].category.clear();
+			}
+			it = resCategories.erase(it);
+			continue;
+		}
+
 		std::stable_sort(membersOfCategory.begin(), membersOfCategory.end(), [](size_t idxA, size_t idxB) -> bool {
 			return isResAPrereqForResB(idxA, idxB);
 		});
@@ -640,6 +690,8 @@ bool loadResearch(WzConfig &ini)
 			asResearch[inc].categoryMax = categorySize;
 			prog++;
 		}
+
+		++it;
 	}
 
 	// If the first research json file does not explicitly set calculationMode, default to compat
@@ -738,7 +790,7 @@ bool researchAvailable(int inc, UDWORD playerID, QUEUE_MODE mode)
 		bStructFound = true;
 		for (incS = 0; incS < asResearch[inc].pStructList.size(); incS++)
 		{
-			if (!checkSpecificStructExists(asResearch[inc].pStructList[incS], playerID))
+			if (!checkSpecificStructExists(gameWorld.objects, asResearch[inc].pStructList[incS], playerID))
 			{
 				//if not built, quit checking
 				bStructFound = false;
@@ -1318,7 +1370,7 @@ void CancelAllResearch(UDWORD pl)
 {
 	if (pl >= MAX_PLAYERS) { return; }
 
-	for (STRUCTURE* psCurr : apsStructLists[pl])
+	for (STRUCTURE* psCurr : gameWorld.objects.structures[pl])
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
@@ -1603,8 +1655,8 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 		return;
 	}
 
-	replaceDroidComponent(apsDroidLists[player], oldType, oldCompInc, newCompInc);
-	replaceDroidComponent(mission.apsDroidLists[player], oldType, oldCompInc, newCompInc);
+	replaceDroidComponent(gameWorld.objects.droids[player], oldType, oldCompInc, newCompInc);
+	replaceDroidComponent(mission.gameWorld.objects.droids[player], oldType, oldCompInc, newCompInc);
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
 	const auto replaceComponentInTemplate = [oldType, oldCompInc, newCompInc](DROID_TEMPLATE* psTemplates) {
 		switch (oldType)
@@ -1640,7 +1692,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	//check thru the templates
 	enumerateTemplates(player, replaceComponentInTemplate);
 	// also check build queues
-	for (STRUCTURE *psCBuilding : apsStructLists[player])
+	for (STRUCTURE *psCBuilding : gameWorld.objects.structures[player])
 	{
 		if ((psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_FACTORY ||
 			psCBuilding->pStructureType->type == STRUCTURE_TYPE::REF_CYBORG_FACTORY ||
@@ -1650,8 +1702,8 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 			replaceComponentInTemplate(psCBuilding->pFunctionality->factory.psSubject);
 		}
 	}
-	replaceStructureComponent(apsStructLists[player], oldType, oldCompInc, newCompInc, player);
-	replaceStructureComponent(mission.apsStructLists[player], oldType, oldCompInc, newCompInc, player);
+	replaceStructureComponent(gameWorld.objects.structures[player], oldType, oldCompInc, newCompInc, player);
+	replaceStructureComponent(mission.gameWorld.objects.structures[player], oldType, oldCompInc, newCompInc, player);
 }
 
 /*Looks through all the currently allocated stats to check the name is not
@@ -1704,7 +1756,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	UDWORD topicIndex = 0, researchPoints = 0, rewardID = 0;
 
 	//look through the losing players structures to find a research facility
-	for (const STRUCTURE *psStruct : apsStructLists[losingPlayer])
+	for (const STRUCTURE *psStruct : gameWorld.objects.structures[losingPlayer])
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
@@ -1910,7 +1962,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 			}
 
 			// Check each research facility to see if they are doing this topic. (As opposed to having started the topic, but stopped researching it.)
-			for (const STRUCTURE *psStruct : apsStructLists[player])
+			for (const STRUCTURE *psStruct : gameWorld.objects.structures[player])
 			{
 				RESEARCH_FACILITY *res = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 				if (psStruct->pStructureType->type != REF_RESEARCH || res->psSubject == nullptr)

@@ -51,8 +51,11 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <iterator>
+#include <cstddef>
 
 #include "lib/netplay/sync_debug.h"
+#include "game_world.h"
 
 /// A coordinate.
 struct PathCoord
@@ -165,18 +168,18 @@ struct PathfindContext
 			return false;  // The path is actually blocked here by a structure, but ignore it since it's where we want to go (or where we came from).
 		}
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
-		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || blockingMap->map[x + y * mapWidth];
+		return x < 0 || y < 0 || x >= gameWorld.map.width || y >= gameWorld.map.height || blockingMap->map[x + y * gameWorld.map.width];
 	}
 	bool isDangerous(int x, int y) const
 	{
-		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * mapWidth];
+		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * gameWorld.map.width];
 	}
-	bool matches(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
+	bool matches(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
 		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
+	void assign(const std::shared_ptr<const PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
 		tileS = tileS_;
@@ -190,7 +193,7 @@ struct PathfindContext
 			map.clear();  // There are no values of iteration guaranteed not to exist in map, so clear the map.
 			iteration = 0;
 		}
-		map.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));  // Allocate space for map, if needed.
+		map.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));  // Allocate space for map, if needed.
 	}
 
 	PathCoord       tileS;                // Start tile for pathfinding. (May be either source or target tile.)
@@ -206,12 +209,9 @@ struct PathfindContext
 
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
-	std::shared_ptr<PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
+	std::shared_ptr<const PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
-
-/// Last recently used list of contexts.
-static std::list<PathfindContext> fpathContexts;
 
 /// Lists of blocking maps from current tick.
 static std::vector<std::shared_ptr<PathBlockingMap>> fpathBlockingMaps;
@@ -234,7 +234,6 @@ static const Vector2i aDirOffset[] =
 
 void fpathHardTableReset()
 {
-	fpathContexts.clear();
 	fpathBlockingMaps.clear();
 }
 
@@ -272,7 +271,7 @@ static inline unsigned WZ_DECL_PURE fpathGoodEstimate(PathCoord s, PathCoord f)
  */
 static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCoord pos, unsigned prevDist, PathCoord prevPos)
 {
-	ASSERT_OR_RETURN(, (unsigned)pos.x < (unsigned)mapWidth && (unsigned)pos.y < (unsigned)mapHeight, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
+	ASSERT_OR_RETURN(, (unsigned)pos.x < (unsigned)gameWorld.map.width && (unsigned)pos.y < (unsigned)gameWorld.map.height, "X (%d) or Y (%d) coordinate for path finding node is out of range!", pos.x, pos.y);
 
 	// Create the node.
 	PathNode node;
@@ -284,7 +283,7 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y) * 64;
 	bool isDiagonal = delta.x && delta.y;
 
-	PathExploredTile &expl = context.map[pos.x + pos.y * mapWidth];
+	PathExploredTile &expl = context.map[pos.x + pos.y * gameWorld.map.width];
 	if (expl.iteration == context.iteration)
 	{
 		if (expl.visited)
@@ -363,11 +362,11 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	while (!context.nodes.empty() && !foundIt)
 	{
 		PathNode node = fpathTakeNode(context.nodes);
-		if (context.map[node.p.x + node.p.y * mapWidth].visited)
+		if (context.map[node.p.x + node.p.y * gameWorld.map.width].visited)
 		{
 			continue;  // Already been here.
 		}
-		context.map[node.p.x + node.p.y * mapWidth].visited = true;
+		context.map[node.p.x + node.p.y * gameWorld.map.width].visited = true;
 
 		// note the nearest node to the target so far
 		if (node.est - node.dist < nearestDist)
@@ -432,7 +431,7 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, std::shared_ptr<PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, const std::shared_ptr<const PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
 {
 	context.assign(blockingMap, tileS, dstIgnore);
 
@@ -441,20 +440,161 @@ static void fpathInitContext(PathfindContext &context, std::shared_ptr<PathBlock
 	ASSERT(!context.nodes.empty(), "fpathNewNode failed to add node.");
 }
 
-ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
+class PathfindContextList
+{
+public:
+	struct Iterator
+	{
+		using iterator_category = std::random_access_iterator_tag;
+		using difference_type = std::ptrdiff_t;
+		using value_type = PathfindContext;
+		using pointer = value_type*;
+		using reference = value_type&;
+
+		Iterator(PathfindContextList& list, size_t idx) : m_list(list), m_idx(idx)
+		{}
+
+		Iterator(const Iterator& other)
+		: m_list(other.m_list)
+		, m_idx(other.m_idx)
+		{}
+
+		Iterator& operator=(const Iterator& other)
+		{
+			m_list = other.m_list;
+			m_idx = other.m_idx;
+			return *this;
+		}
+
+		reference operator*() const { return m_list.contexts[m_list.orderedIndexes[m_idx]]; }
+		pointer operator->() const { return &m_list.contexts[m_list.orderedIndexes[m_idx]]; }
+
+		Iterator& operator++() { ++m_idx; return *this; }
+		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
+
+		Iterator& operator--() { --m_idx; return *this; }
+		Iterator operator--(int) { Iterator tmp = *this; --(*this); return tmp; }
+
+		Iterator operator+(difference_type n) const { return Iterator(m_list, m_idx + n); }
+		Iterator operator-(difference_type n) const { return Iterator(m_list, m_idx - n); }
+		difference_type operator-(const Iterator& other) const { return m_idx - other.m_idx; }
+		Iterator& operator+=(difference_type n) { m_idx += n; return *this; }
+		Iterator& operator-=(difference_type n) { m_idx -= n; return *this; }
+
+		reference operator[](difference_type n) const { return m_list.contexts[m_list.orderedIndexes[n]]; }
+
+		bool operator== (const Iterator& other) const { return m_idx == other.m_idx; }
+		bool operator!= (const Iterator& other) const { return m_idx != other.m_idx; }
+		bool operator< (const Iterator& other) const { return m_idx < other.m_idx; }
+		bool operator> (const Iterator& other) const { return m_idx > other.m_idx; }
+		bool operator<= (const Iterator& other) const { return m_idx <= other.m_idx; }
+		bool operator>= (const Iterator& other) const { return m_idx >= other.m_idx; }
+
+	private:
+		friend class PathfindContextList;
+
+		PathfindContextList& m_list;
+		size_t m_idx;
+	};
+
+public:
+
+	Iterator push_back(PathfindContext& ctx);
+	Iterator push_back(PathfindContext&& ctx);
+
+	void moveToFront(Iterator it); // invalidates any iterators
+
+	Iterator begin() { return Iterator(*this, 0); }
+	Iterator end() { return Iterator(*this, orderedIndexes.size()); }
+
+	void clear();
+
+	bool empty() const { return contexts.empty(); }
+	PathfindContext& front() { return contexts[orderedIndexes.front()]; }
+
+	size_t size() const { return contexts.size(); }
+
+private:
+	std::vector<PathfindContext> contexts;
+	std::vector<size_t> orderedIndexes;
+};
+
+PathfindContextList::Iterator PathfindContextList::push_back(PathfindContext& ctx)
+{
+	contexts.push_back(ctx);
+	orderedIndexes.push_back(contexts.size() - 1);
+	return Iterator(*this, orderedIndexes.size() - 1);
+}
+
+PathfindContextList::Iterator PathfindContextList::push_back(PathfindContext&& ctx)
+{
+	contexts.push_back(std::move(ctx));
+	orderedIndexes.push_back(contexts.size() - 1);
+	return Iterator(*this, orderedIndexes.size() - 1);
+}
+
+void PathfindContextList::moveToFront(Iterator it)
+{
+	auto oIt = orderedIndexes.begin() + it.m_idx;
+	std::rotate(orderedIndexes.begin(), oIt, oIt + 1);
+}
+
+void PathfindContextList::clear()
+{
+	contexts.clear();
+	orderedIndexes.clear();
+}
+
+class FPathExecuteContextImpl : public FPathExecuteContext
+{
+public:
+	virtual ~FPathExecuteContextImpl();
+
+	void resetForNewGameTimeIfNeeded(const PATHJOB& job);
+public:
+	/// Last recently used list of contexts.
+	PathfindContextList fpathContexts;
+	/// Used to avoid extra allocations in fpathAStarRoute
+	std::vector<Vector2i> pathBuffer;
+};
+
+FPathExecuteContext::~FPathExecuteContext()
+{ }
+
+FPathExecuteContextImpl::~FPathExecuteContextImpl()
+{ }
+
+void FPathExecuteContextImpl::resetForNewGameTimeIfNeeded(const PATHJOB& job)
+{
+	if (!fpathContexts.empty() && job.blockingMap->type.gameTime != fpathContexts.front().myGameTime)
+	{
+		fpathContexts.clear();
+	}
+}
+
+std::shared_ptr<FPathExecuteContext> makeFPathExecuteContext()
+{
+	return std::make_shared<FPathExecuteContextImpl>();
+}
+
+ASR_RETVAL fpathAStarRoute(const std::shared_ptr<FPathExecuteContext>& ctx, MOVE_CONTROL *psMove, PATHJOB *psJob)
 {
 	ASR_RETVAL      retval = ASR_OK;
 
 	bool            mustReverse = true;
 
+	auto ctxImpl = std::static_pointer_cast<FPathExecuteContextImpl>(ctx);
+	ctxImpl->resetForNewGameTimeIfNeeded(*psJob);
+
+	auto& fpathContexts = ctxImpl->fpathContexts;
 	const PathCoord tileOrig(map_coord(psJob->origX), map_coord(psJob->origY));
 	const PathCoord tileDest(map_coord(psJob->destX), map_coord(psJob->destY));
 	const PathNonblockingArea dstIgnore(psJob->dstStructure);
 
 	PathCoord endCoord;  // Either nearest coord (mustReverse = true) or orig (mustReverse = false).
 
-	std::list<PathfindContext>::iterator contextIterator = fpathContexts.begin();
-	for (contextIterator = fpathContexts.begin(); contextIterator != fpathContexts.end(); ++contextIterator)
+	auto contextIterator = fpathContexts.begin();
+	for (; contextIterator != fpathContexts.end(); ++contextIterator)
 	{
 		if (!contextIterator->matches(psJob->blockingMap, tileDest, dstIgnore))
 		{
@@ -464,8 +604,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 		// We have tried going to tileDest before.
 
-		if (contextIterator->map[tileOrig.x + tileOrig.y * mapWidth].iteration == contextIterator->iteration
-		    && contextIterator->map[tileOrig.x + tileOrig.y * mapWidth].visited)
+		if (contextIterator->map[tileOrig.x + tileOrig.y * gameWorld.map.width].iteration == contextIterator->iteration
+		    && contextIterator->map[tileOrig.x + tileOrig.y * gameWorld.map.width].visited)
 		{
 			// Already know the path from orig to dest.
 			endCoord = tileOrig;
@@ -490,12 +630,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	if (contextIterator == fpathContexts.end())
 	{
 		// We did not find an appropriate context. Make one.
-
-		if (fpathContexts.size() < 30)
-		{
-			fpathContexts.push_back(PathfindContext());
-		}
-		--contextIterator;
+		contextIterator = fpathContexts.push_back(PathfindContext());
 
 		// Init a new context, overwriting the oldest one if we are caching too many.
 		// We will be searching from orig to dest, since we don't know where the nearest reachable tile to dest is.
@@ -513,18 +648,18 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	}
 
 	// Get route, in reverse order.
-	static std::vector<Vector2i> path;  // Declared static to save allocations.
+	std::vector<Vector2i>& path = ctxImpl->pathBuffer;
 	path.clear();
 
 	Vector2i newP(0, 0);
 	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS / 2, world_coord(endCoord.y) + TILE_UNITS / 2); true; p = newP)
 	{
-		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
-		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight)), "Pathfinding got in a loop.");
+		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(gameWorld.map, p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
+		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height)), "Pathfinding got in a loop.");
 
 		path.push_back(p);
 
-		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y) * mapWidth];
+		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y) * gameWorld.map.width];
 		newP = p - Vector2i(tile.dx, tile.dy) * (TILE_UNITS / 64);
 		Vector2i mapP = map_coord(newP);
 		int xSide = newP.x - world_coord(mapP.x) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on right-hand side of the tile, or -1 if newP is on the left-hand side of the tile.
@@ -590,7 +725,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	// Move context to beginning of last recently used list.
 	if (contextIterator != fpathContexts.begin())  // Not sure whether or not the splice is a safe noop, if equal.
 	{
-		fpathContexts.splice(fpathContexts.begin(), fpathContexts, contextIterator);
+		fpathContexts.moveToFront(contextIterator);
 	}
 
 	psMove->destination = psMove->asPath[path.size() - 1];
@@ -621,34 +756,34 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 	if (i == fpathBlockingMaps.end())
 	{
 		// Didn't find the map, so i does not point to a map.
-		PathBlockingMap *blockMap = new PathBlockingMap();
-		fpathBlockingMaps.emplace_back(blockMap);
+		auto blockMap = std::make_shared<PathBlockingMap>();
+		fpathBlockingMaps.push_back(blockMap);
 
 		// blockMap now points to an empty map with no data. Fill the map.
 		blockMap->type = type;
 		std::vector<bool> &map = blockMap->map;
-		map.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));
+		map.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));
 		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
-		for (int y = 0; y < mapHeight; ++y)
-			for (int x = 0; x < mapWidth; ++x)
+		for (int y = 0; y < gameWorld.map.height; ++y)
+			for (int x = 0; x < gameWorld.map.width; ++x)
 			{
-				map[x + y * mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
-				checksumMap ^= map[x + y * mapWidth] * (factor = 3 * factor + 1);
+				map[x + y * gameWorld.map.width] = fpathBaseBlockingTile(gameWorld.map, x, y, type.propulsion, type.owner, type.moveType);
+				checksumMap ^= map[x + y * gameWorld.map.width] * (factor = 3 * factor + 1);
 			}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
 			std::vector<bool> &dangerMap = blockMap->dangerMap;
-			dangerMap.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));
-			for (int y = 0; y < mapHeight; ++y)
-				for (int x = 0; x < mapWidth; ++x)
+			dangerMap.resize(static_cast<size_t>(gameWorld.map.width) * static_cast<size_t>(gameWorld.map.height));
+			for (int y = 0; y < gameWorld.map.height; ++y)
+				for (int x = 0; x < gameWorld.map.width; ++x)
 				{
-					dangerMap[x + y * mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
-					checksumDangerMap ^= dangerMap[x + y * mapWidth] * (factor = 3 * factor + 1);
+					dangerMap[x + y * gameWorld.map.width] = auxTile(gameWorld.map, x, y, type.owner) & AUXBITS_THREAT;
+					checksumDangerMap ^= dangerMap[x + y * gameWorld.map.width] * (factor = 3 * factor + 1);
 				}
 		}
 		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
 
-		psJob->blockingMap = fpathBlockingMaps.back();
+		psJob->blockingMap = blockMap;
 	}
 	else
 	{

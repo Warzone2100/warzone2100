@@ -66,15 +66,18 @@ These values are defined:
   * ```Weapon``` Weapon turrets
   * ```WeaponClass``` Defined weapon classes
   * ```Building``` Buildings
+  * ```Research``` Researches
 * ```playerData``` An array of information about the players in a game. Each item in the array is an object
 containing the following variables:
   * ```difficulty``` (see ```difficulty``` global constant)
+  * ```faction``` chosen faction in MP. 0 - normal, 1 - NEXUS, 2 - Collective (4.0.0+ only)
   * ```colour``` number describing the colour of the player
   * ```position``` number describing the position of the player in the game's setup screen
   * ```isAI``` whether the player is an AI (3.2+ only)
   * ```isHuman``` whether the player is human (3.2+ only)
   * ```name``` the name of the player (3.2+ only)
   * ```team``` the number of the team the player is part of
+  * ```scriptName``` File name of the AI's JS file. (4.6.2+ only)
 * ```MapTiles``` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
 containing the following variables:
   * ```terrainType``` (see ```terrainType(x, y)``` function)

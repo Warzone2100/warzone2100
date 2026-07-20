@@ -57,7 +57,7 @@
 
 static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID);
 static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID);
-static void sendGiftDroids(uint8_t from, uint8_t to);
+static void sendGiftDroids(const WorldObjectState& objState, uint8_t from, uint8_t to);
 static void giftResearch(uint8_t from, uint8_t to, bool send);
 static void giftAutoGame(uint8_t from, uint8_t to, bool send);
 
@@ -70,12 +70,12 @@ bool recvGift(NETQUEUE queue)
 	int		audioTrack;
 	uint32_t droidID;
 
-	NETbeginDecode(queue, GAME_GIFT);
-	NETuint8_t(&type);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint32_t(&droidID);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_GIFT);
+	NETuint8_t(r, type);
+	NETuint8_t(r, from);
+	NETuint8_t(r, to);
+	NETuint32_t(r, droidID);
+	NETend(r);
 
 	if (!canGiveOrdersFor(queue.index, from))
 	{
@@ -156,7 +156,7 @@ bool sendGift(uint8_t type, uint8_t to)
 		break;
 	case DROID_GIFT:
 		audioTrack = ID_UNITS_TRANSFER;
-		sendGiftDroids(selectedPlayer, to);
+		sendGiftDroids(gameWorld.objects, selectedPlayer, to);
 		break;
 	case RESEARCH_GIFT:
 		audioTrack = ID_TECHNOLOGY_TRANSFER;
@@ -192,12 +192,12 @@ static void giftAutoGame(uint8_t from, uint8_t to, bool send)
 	{
 		uint8_t subType = AUTOGAME_GIFT;
 
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-		NETuint8_t(&subType);
-		NETuint8_t(&from);
-		NETuint8_t(&to);
-		NETuint32_t(&dummy);
-		NETend();
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+		NETuint8_t(w, subType);
+		NETuint8_t(w, from);
+		NETuint8_t(w, to);
+		NETuint32_t(w, dummy);
+		NETend(w);
 		debug(LOG_SYNC, "We (%d) are telling %d we want to enable/disable a autogame", from, to);
 	}
 	// If we are receiving the "gift"
@@ -223,17 +223,17 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 	{
 		uint8_t subType = RADAR_GIFT;
 
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-		NETuint8_t(&subType);
-		NETuint8_t(&from);
-		NETuint8_t(&to);
-		NETuint32_t(&dummy);
-		NETend();
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+		NETuint8_t(w, subType);
+		NETuint8_t(w, from);
+		NETuint8_t(w, to);
+		NETuint32_t(w, dummy);
+		NETend(w);
 	}
 	// If we are receiving the gift
 	else
 	{
-		hqReward(from, to);
+		hqReward(gameWorld, from, to);
 		if (to == selectedPlayer && loopMissionState == LMS_NORMAL)
 		{
 			CONPRINTF(_("%s Gives You A Visibility Report"), getPlayerName(from));
@@ -269,14 +269,14 @@ static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
 // \param to    :player that should be getting the droid
 static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 {
-	DROID *psDroid = IdToDroid(droidID, from);
+	DROID *psDroid = IdToDroid(gameWorld.objects, droidID, from);
 
 	if (psDroid)
 	{
 		syncDebugDroid(psDroid, '<');
-		giftSingleDroid(psDroid, to, false);
+		bool successfulTransfer = giftSingleDroid(psDroid, to, false) != nullptr;
 		syncDebugDroid(psDroid, '>');
-		if (to == selectedPlayer)
+		if (successfulTransfer && (to == selectedPlayer))
 		{
 			CONPRINTF(_("%s Gives you a %s"), getPlayerName(from), psDroid->aName);
 		}
@@ -290,15 +290,16 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 // sendGiftDroids()
 // We give selected droid(s) as a gift to another player.
 //
+// \param objState : the object state to send the droids between `from` and `to`
 // \param from  :player that sent us the droid
 // \param to    :player that should be getting the droid
-static void sendGiftDroids(uint8_t from, uint8_t to)
+static void sendGiftDroids(const WorldObjectState& objState, uint8_t from, uint8_t to)
 {
 	DroidList::const_iterator psD;
 	uint8_t      giftType = DROID_GIFT;
-	uint8_t      totalToSend;
+	uint8_t      totalToSend = 0;
 
-	if (apsDroidLists[from].empty())
+	if (objState.droids[from].empty())
 	{
 		return;
 	}
@@ -309,12 +310,17 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * over their droid limit.
 	 */
 
-	for (totalToSend = 0, psD = apsDroidLists[from].begin();
-	     psD != apsDroidLists[from].end() && getNumDroids(to) + totalToSend < getMaxDroids(to) && totalToSend != UINT8_MAX;
+	for (psD = objState.droids[from].begin();
+	     psD != objState.droids[from].end() && (getNumDroids(to) + totalToSend < getMaxDroids(to)) && totalToSend != UINT8_MAX;
 	     ++psD)
 	{
 		if ((*psD)->selected)
 		{
+			if ((*psD)->isTransporter() && !transporterIsEmpty(*psD))
+			{
+				CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), (*psD)->aName);
+				continue;
+			}
 			++totalToSend;
 		}
 	}
@@ -323,23 +329,22 @@ static void sendGiftDroids(uint8_t from, uint8_t to)
 	 * does its own net calls.
 	 */
 
-	for (psD = apsDroidLists[from].begin(); psD != apsDroidLists[from].end() && totalToSend != 0; ++psD)
+	for (psD = objState.droids[from].begin(); psD != objState.droids[from].end() && totalToSend != 0; ++psD)
 	{
-		if ((*psD)->isTransporter()
-		    && !transporterIsEmpty(*psD))
-		{
-			CONPRINTF(_("Tried to give away a non-empty %s - but this is not allowed."), (*psD)->aName);
-			continue;
-		}
 		if ((*psD)->selected)
 		{
-			NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-			NETuint8_t(&giftType);
-			NETuint8_t(&from);
-			NETuint8_t(&to);
+			if ((*psD)->isTransporter() && !transporterIsEmpty(*psD))
+			{
+				continue;
+			}
+
+			auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+			NETuint8_t(w, giftType);
+			NETuint8_t(w, from);
+			NETuint8_t(w, to);
 			// Add the droid to the packet
-			NETuint32_t(&(*psD)->id);
-			NETend();
+			NETuint32_t(w, (*psD)->id);
+			NETend(w);
 
 			// Decrement the number of droids left to send
 			--totalToSend;
@@ -358,12 +363,12 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 	{
 		uint8_t giftType = RESEARCH_GIFT;
 
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-		NETuint8_t(&giftType);
-		NETuint8_t(&from);
-		NETuint8_t(&to);
-		NETuint32_t(&dummy);
-		NETend();
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+		NETuint8_t(w, giftType);
+		NETuint8_t(w, from);
+		NETuint8_t(w, to);
+		NETuint32_t(w, dummy);
+		NETend(w);
 	}
 	else if (alliancesCanGiveResearchAndRadar(game.alliance))
 	{
@@ -393,12 +398,12 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 	{
 		uint8_t giftType = POWER_GIFT;
 
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-		NETuint8_t(&giftType);
-		NETuint8_t(&from);
-		NETuint8_t(&to);
-		NETuint32_t(&amount);
-		NETend();
+		auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_GIFT);
+		NETuint8_t(w, giftType);
+		NETuint8_t(w, from);
+		NETuint8_t(w, to);
+		NETuint32_t(w, amount);
+		NETend(w);
 	}
 	else
 	{
@@ -500,7 +505,7 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 
 	// Make sure p1's structures are no longer considered "our buildings" to their former allies
 	// For unit pathing
-	for (const STRUCTURE* psStructure : apsStructLists[p1])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -508,13 +513,13 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		{
 			for (int j = 0; j < b.size.y; j++)
 			{
-				auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
-				auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			}
 		}
 	}
 	// Do the same for p2's stuff
-	for (const STRUCTURE* psStructure : apsStructLists[p2])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -522,8 +527,8 @@ void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio)
 		{
 			for (int j = 0; j < b.size.y; j++)
 			{
-				auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
-				auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+				auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_OUR_BUILDING);
+				auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 			}
 		}
 	}
@@ -569,7 +574,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Clear out any attacking orders
-	for (DROID* psDroid : apsDroidLists[p1])	// from -> to
+	for (DROID* psDroid : gameWorld.objects.droids[p1])	// from -> to
 	{
 		if (psDroid->order.type == DORDER_ATTACK
 		    && psDroid->order.psObj
@@ -578,7 +583,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
-	for (DROID* psDroid : apsDroidLists[p2])	// to -> from
+	for (DROID* psDroid : gameWorld.objects.droids[p2])	// to -> from
 	{
 		if (psDroid->order.type == DORDER_ATTACK
 		    && psDroid->order.psObj
@@ -589,7 +594,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Properly mark all of p1's structures as allied buildings for unit pathing
-	for (const STRUCTURE* psStructure : apsStructLists[p1])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p1])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -599,19 +604,19 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			{
 				if (!(psStructure->pStructureType->type == REF_GATE))
 				{
-					auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+					auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 				}
 				else
 				{
 					// Make sure gates aren't set as impassible to our new allies
-					auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
-					auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+					auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
 				}
 			}
 		}
 	}
 	// Do the same for p2's stuff
-	for (const STRUCTURE* psStructure : apsStructLists[p2])
+	for (const STRUCTURE* psStructure : gameWorld.objects.structures[p2])
 	{
 		StructureBounds b = getStructureBounds(psStructure);
 
@@ -621,12 +626,12 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 			{
 				if (!(psStructure->pStructureType->type == REF_GATE))
 				{
-					auxSetAllied(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
+					auxSetAllied(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_OUR_BUILDING);
 				}
 				else
 				{
-					auxClearAll(b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
-					auxSetEnemy(b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
+					auxClearAll(gameWorld.map, b.map.x + i, b.map.y + j, AUXBITS_NONPASSABLE);
+					auxSetEnemy(gameWorld.map, b.map.x + i, b.map.y + j, psStructure->player, AUXBITS_NONPASSABLE);
 				}
 			}
 		}
@@ -637,12 +642,12 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 
 void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_ALLIANCE);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint8_t(&state);
-	NETint32_t(&value);
-	NETend();
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_ALLIANCE);
+	NETuint8_t(w, from);
+	NETuint8_t(w, to);
+	NETuint8_t(w, state);
+	NETint32_t(w, value);
+	NETend(w);
 }
 
 bool recvAlliance(NETQUEUE queue, bool allowAudio)
@@ -650,12 +655,12 @@ bool recvAlliance(NETQUEUE queue, bool allowAudio)
 	uint8_t to, from, state;
 	int32_t value;
 
-	NETbeginDecode(queue, GAME_ALLIANCE);
-	NETuint8_t(&from);
-	NETuint8_t(&to);
-	NETuint8_t(&state);
-	NETint32_t(&value);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_ALLIANCE);
+	NETuint8_t(r, from);
+	NETuint8_t(r, to);
+	NETuint8_t(r, state);
+	NETint32_t(r, value);
+	NETend(r);
 
 	if (!canGiveOrdersFor(queue.index, from))
 	{
@@ -736,13 +741,13 @@ void  technologyGiveAway(const STRUCTURE *pS)
 	}
 
 	uint32_t x = map_coord(pS->pos.x), y = map_coord(pS->pos.y);
-	if (!pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
+	if (!pickATileGen(gameWorld, &x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
 	{
 		syncDebug("Did not find location for oil drum.");
 		debug(LOG_FEATURE, "Unable to find a free location.");
 		return;
 	}
-	FEATURE *pF = buildFeature(&asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
+	FEATURE *pF = buildFeature(gameWorld, &asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
 	if (pF)
 	{
 		pF->player = pS->player;
@@ -760,28 +765,28 @@ void  technologyGiveAway(const STRUCTURE *pS)
  */
 void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_FEATURE);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_FEATURE);
 	{
-		NETuint32_t(&ref);
-		NETuint32_t(&x);
-		NETuint32_t(&y);
-		NETuint32_t(&id);
+		NETuint32_t(w, ref);
+		NETuint32_t(w, x);
+		NETuint32_t(w, y);
+		NETuint32_t(w, id);
 	}
-	NETend();
+	NETend(w);
 }
 
 void recvMultiPlayerFeature(NETQUEUE queue)
 {
 	uint32_t ref = 0xff, x = 0, y = 0, id = 0;
 
-	NETbeginDecode(queue, GAME_DEBUG_ADD_FEATURE);
+	auto r = NETbeginDecode(queue, GAME_DEBUG_ADD_FEATURE);
 	{
-		NETuint32_t(&ref);
-		NETuint32_t(&x);
-		NETuint32_t(&y);
-		NETuint32_t(&id);
+		NETuint32_t(r, ref);
+		NETuint32_t(r, x);
+		NETuint32_t(r, y);
+		NETuint32_t(r, id);
 	}
-	NETend();
+	NETend(r);
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
@@ -797,7 +802,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 		if (asFeatureStats[i].ref == ref)
 		{
 			// Create a feature of the specified type at the given location
-			buildFeature(&asFeatureStats[i], x, y, false, id);
+			buildFeature(gameWorld, &asFeatureStats[i], x, y, false, id);
 			break;
 		}
 	}

@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 #include <locale>
+#include "wzglobal.h"
 
 // Stores a unicode codepoint
 // Internally, this stores the codepoint as UTF-32
@@ -66,6 +67,21 @@ public:
 	static WzString fromUtf16(const std::vector<uint16_t>& utf16);
 	static WzString fromUtf32(const std::vector<uint32_t>& utf32);
 	static WzString fromCodepoint(const WzUniCodepoint& codepoint);
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgcc-compat"
+#endif
+
+	template <typename... P>
+	static inline WzString format(char const *format, P &&... params) WZ_DECL_FORMAT_CXX(WZ_PRINTF_FORMAT, 1, 2)
+	{
+		return WzString::fromUtf8(astringf(format, std::forward<P>(params)...));
+	}
+
+#if defined(__clang__)
+#pragma clang diagnostic pop // "-Wgcc-compat"
+#endif
 
 	const std::string& toUtf8() const;
 

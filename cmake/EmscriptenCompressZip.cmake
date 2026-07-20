@@ -5,10 +5,10 @@
 # Copyright © 2018-2024 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2024-01-26a
+# Script Version: 2025-07-23a
 #
 
-cmake_minimum_required(VERSION 3.5...3.24)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 set(_THIS_MODULE_BASE_DIR "${CMAKE_CURRENT_LIST_DIR}")
 

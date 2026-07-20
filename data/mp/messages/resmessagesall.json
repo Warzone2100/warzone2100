@@ -252,6 +252,17 @@
 			"Defensive Strength: Medium"
 		]
 	},
+	"RES_EMP_PG": {
+		"id": "RES_EMP_PG",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_struttech.ogg",
+		"text": [
+			"New Defensive Structure Available",
+			"Armored strongpoint with Particle Gun",
+			"Automatically targets enemies in range",
+			"Defensive Strength: Medium"
+		]
+	},
 	"RES_EMP_IMP": {
 		"id": "RES_EMP_IMP",
 		"imdName": "MICAPSUL.pie",
@@ -799,6 +810,17 @@
 			"New Laser Weapon Available",
 			"Fires heavy pulses of laser light",
 			"Best Targets: Heavy cyborgs",
+			"Body Points: Medium"
+		]
+	},
+	"RES_W_PG": {
+		"id": "RES_W_PG",
+		"imdName": "MICAPSUL.PIE",
+		"sequenceName": "res_weapons.ogg",
+		"text": [
+			"New Weapon Turret Available",
+			"Fires beams of subatomic particle",
+			"Best Targets: Vehicles",
 			"Body Points: Medium"
 		]
 	},

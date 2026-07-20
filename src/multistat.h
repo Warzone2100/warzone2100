@@ -33,13 +33,6 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
-#define WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL "https://wz2100-autohost.net/rating/"
-
-enum RATING_SOURCE {
-	RATING_SOURCE_LOCAL,
-	RATING_SOURCE_HOST
-};
-
 struct PLAYERSTATS
 {
 	uint32_t played = 0;  /// propagated stats.
@@ -63,26 +56,6 @@ struct PLAYERSTATS
 	uint64_t recentPowerWon = 0;  // power that was destroyed in last game (i.e. from droids / structures being killed)
 	uint64_t recentResearchPotential = 0;  // how many labs were ticking
 	uint64_t recentResearchPerformance = 0;  // how many labs were ticking with objective (researching)
-
-	struct Autorating
-	{
-		Autorating() = default;
-		Autorating(nlohmann::json const &json);
-
-		bool valid = false;
-		bool dummy = false;
-		bool autohoster = false;
-		uint8_t star[3] = {0, 0, 0};
-		uint8_t medal = 0;
-		uint8_t level = 0;
-		uint8_t altNameTextColorOverride[3] = {255, 255, 255}; // rgb
-		uint8_t eloTextColorOverride[3] = {255, 255, 255}; // rgb
-		std::string elo;
-		std::string details;
-		std::string altName;
-	};
-	Autorating autorating;
-	RATING_SOURCE autoratingFrom = RATING_SOURCE_HOST;
 
 	EcKey identity;
 };
@@ -109,7 +82,6 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void updateMultiStatsBuilt(BASE_OBJECT *psBuilt);
 void updateMultiStatsResearchComplete(RESEARCH *psResearch, UDWORD player);
 bool recvMultiStats(NETQUEUE queue);
-void lookupRatingAsync(uint32_t playerIndex);
 
 void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Key &identity);
 void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity);

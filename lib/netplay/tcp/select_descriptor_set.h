@@ -98,10 +98,10 @@ public:
 		return ret;
 	}
 
-	virtual bool isSet(const IClientConnection* conn) const override
+	virtual ::tl::expected<bool, ErroredState> isSet(const IClientConnection* conn) const override
 	{
 		const TCPClientConnection* tcpConn = dynamic_cast<const TCPClientConnection*>(conn);
-		ASSERT_OR_RETURN(false, tcpConn, "Invalid connection type: expected TCPClientConnection");
+		ASSERT_OR_RETURN(tl::make_unexpected(ErroredState::InvalidConn), tcpConn, "Invalid connection type: expected TCPClientConnection");
 
 		// Force conversion to `fd_set*` since `FD_ISSET` expects a pointer to non-const `fd_set`.
 		return FD_ISSET(tcpConn->getRawSocketFd(), const_cast<fd_set*>(&fds_));

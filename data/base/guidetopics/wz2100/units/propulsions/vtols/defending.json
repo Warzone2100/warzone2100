@@ -1,0 +1,33 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::units::propulsions::vtols::defending",
+	"title": "Defending with VTOLs",
+	"sort": "04",
+	"visual": [
+		{
+			"stat": {
+				"id": "Sys-VstrikeTurret01",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"secondaryUnitOrderButtons": "PATROL"
+		},
+		{
+			"secondaryUnitOrderButtons": "CIRCLE"
+		}
+	],
+	"contents": [
+		"VTOL units may also be used to defend areas of the map.",
+		"",
+		"VTOLs can be assigned to a VTOL Strike Turret or VTOL Radar Tower, and will automatically attack anything targeted by the sensor (much like artillery assigned to a standard sensor).",
+		"",
+		"VTOLs can also be ordered to Patrol or Circle an area. When doing so, they will automatically attack any enemy encountered along their path."
+	],
+	"links": [
+		"wz2100::units::propulsions::vtols::attacking",
+		"wz2100::units::propulsions::vtols",
+		"wz2100::units::sensors",
+		"wz2100::unitorders::movement"
+	]
+}

@@ -24,6 +24,11 @@
 #include <sstream>
 #include <iomanip>
 #include <limits>
+#if defined(_MSC_VER) && !defined(__clang__)
+// Force-define UTF_CPP_CPLUSPLUS to C++17 for MSVC, because:
+// "By default, Visual Studio always returns the value 199711L for the __cplusplus preprocessor macro."
+#define UTF_CPP_CPLUSPLUS 201703L
+#endif
 #include <utfcpp/source/utf8.h>
 #include <utf8proc/utf8proc.h>
 
@@ -126,7 +131,7 @@ WzString WzString::fromUtf16(const std::vector<uint16_t>& utf16)
 		ASSERT(false, "Conversion from UTF16 failed with error: %s", e.what());
 		utf8str.clear();
 	}
-	return WzString(utf8str);
+	return WzString::fromUtf8(utf8str);
 }
 
 WzString WzString::fromUtf32(const std::vector<uint32_t>& utf32)
@@ -139,7 +144,7 @@ WzString WzString::fromUtf32(const std::vector<uint32_t>& utf32)
 		ASSERT(false, "Conversion from UTF32 failed with error: %s", e.what());
 		utf8str.clear();
 	}
-	return WzString(utf8str);
+	return WzString::fromUtf8(utf8str);
 }
 
 bool WzString::isValidUtf8(const char * str, size_t len)

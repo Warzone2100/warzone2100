@@ -1,7 +1,7 @@
 
 function chooseLandPersonality()
 {
-	var names = findPersonalityByType("land");
+	const names = findPersonalityByType("land");
 
 	if (names.length > 0)
 	{
@@ -15,7 +15,7 @@ function chooseLandPersonality()
 
 function chooseVtolPersonality()
 {
-	var names = findPersonalityByType("vtol");
+	const names = findPersonalityByType("vtol");
 
 	if (names.length > 0)
 	{
@@ -29,7 +29,7 @@ function chooseVtolPersonality()
 //Return all personalities named that match a certain play style type.
 function findPersonalityByType(type)
 {
-	var personalities = [];
+	const personalities = [];
 
 	if (!defined(type))
 	{

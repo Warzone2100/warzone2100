@@ -37,6 +37,8 @@
 #include "template.h"
 #include "difficulty.h"
 #include "activity.h"
+#include "multiint.h"
+#include "multiplay.h"
 
 struct CHEAT_ENTRY
 {
@@ -186,9 +188,9 @@ void sendProcessDebugMappings(bool val)
 	{
 		return;
 	}
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
-	NETbool(&val);
-	NETend();
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_MODE);
+	NETbool(w, val);
+	NETend(w);
 }
 
 #if !defined(__clang__) && defined(__GNUC__) && (12 <= __GNUC__)
@@ -219,9 +221,15 @@ static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInp
 void recvProcessDebugMappings(NETQUEUE queue)
 {
 	bool val = false;
-	NETbeginDecode(queue, GAME_DEBUG_MODE);
-	NETbool(&val);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_DEBUG_MODE);
+	NETbool(r, val);
+	NETend(r);
+
+	if (getLockedOptions().cheats && val)
+	{
+		addConsoleMessage(_("The host has disabled debug mode / cheats for this game."), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		return;
+	}
 
 	DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	bool oldDebugMode = dbgInputManager.debugMappingsAllowed();

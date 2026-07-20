@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2017-2020  Warzone 2100 Project
+	Copyright (C) 2017-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,9 +33,13 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzstring.h"
+#include "lib/framework/loading_task_fwd.h"
 #include "screen.h"
 #include "pietypes.h"
 #include "gfx_api_formats_def.h"
+#include "render_graph/pipeline_surfaces.h"
+#include "render_graph/render_pass.h"
+#include "render_graph/compile.h"
 
 #include <glm/glm.hpp>
 
@@ -42,6 +48,8 @@
 #include <nonstd/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
+
+class ResourceLoadingController;
 
 namespace gfx_api
 {
@@ -399,15 +407,69 @@ namespace gfx_api
 		static bool isInitialized();
 		virtual size_t numDepthPasses() { return 0; }
 		virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) { return false; }
-		virtual void beginDepthPass(size_t idx) { }
+		virtual void beginPass(const RenderPassDesc& pass, const CompiledPass* compiledPass = nullptr) = 0;
+		virtual void endPass(const CompiledPass* compiledPass = nullptr) = 0;
+
+		/// Screen-frame lifecycle (owned by piemode / main loop):
+		///
+		///   pie_ScreenFrameRenderBegin()
+		///     -> beginScreenFrame()           // per-frame flag reset; releaseAll() on FBO pool;
+		///                                     // Vulkan: open transfer (copy) command buffer
+		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
+		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
+		///   pie_ScreenFrameRenderEnd()
+		///     ... when !headlessOrSkipDrawing() ...
+		///     -> prepareSwapchainForDrawing() // late swapchain acquire (Vulkan; no-op elsewhere)
+		///     -> CachedRenderGraph::ensureBuilt(snapshot)
+		///     -> CachedRenderGraph::execute() // RECORD only (executeCompiledRenderGraph)
+		///     -> finishScreenFrame()          // ALWAYS when gfx initialized: seal/submit/present,
+		///                                     // ring advance, frameNum++, purge FBO pool
+		///
+		/// Upload paths record into the current frame's copy command buffer throughout the
+		/// screen frame. finishScreenFrame() must NOT be gated on graph execution or shouldDraw().
+		/// Must pair beginScreenFrame() with finishScreenFrame().
+		virtual void beginScreenFrame() = 0;
+		virtual void finishScreenFrame() = 0;
+		/// Acquire a swapchain image for draw recording when the drawable is in sync (Vulkan).
+		virtual void prepareSwapchainForDrawing() {}
+		/// Mark UI/backdrop geometry stale after a drawable resize (called from backends).
+		/// Consumed at pie_ScreenFrameRenderBegin(); do not call screen_updateGeometry() directly on resize.
+		void markScreenGeometryDirty() { _screenGeometryDirty = true; }
+		/// Returns true once per dirty signal; used to refresh backdrop VBOs without per-frame work.
+		bool consumeScreenGeometryDirty()
+		{
+			const bool dirty = _screenGeometryDirty;
+			_screenGeometryDirty = false;
+			return dirty;
+		}
+
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
-		virtual void endCurrentDepthPass() { }
-		virtual gfx_api::abstract_texture* getDepthTexture() { return nullptr; }
-		virtual void beginSceneRenderPass() { }
-		virtual void endSceneRenderPass() { }
-		virtual gfx_api::abstract_texture* getSceneTexture() { return nullptr; }
-		virtual void beginRenderPass() = 0;
-		virtual void endRenderPass() = 0;
+		virtual gfx_api::abstract_texture* getPipelineSurface(PipelineSurfaceId id) { return nullptr; }
+		virtual PipelineSurfaceMeta pipelineSurfaceMeta(PipelineSurfaceId id) const { return getPipelineSurfaceMeta(id); }
+		virtual nonstd::optional<PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const { return nonstd::nullopt; }
+		virtual bool isSceneMSAAEnabled() const { return false; }
+		virtual bool isSwapchainMSAAEnabled() const { return false; }
+		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
+		virtual pixel_format getDepthStencilFormat() const { return pixel_format::invalid; }
+
+		/// Purge unused pooled framebuffers/FBOs after the frame accumulation window.
+		/// Backends call releaseAll() at beginScreenFrame() and purgeFrameResources() at finish.
+		virtual void purgeFrameResources() {}
+
+		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }
+
+		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
+		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
+		/// afterward for GPU commit.
+		virtual void executeCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
+			const PassGraphCompileResult& compileResult);
+		/// Pre-warm backend pass resources after compile (e.g. Vulkan render-pass layout ids).
+		virtual void warmCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
+			PassGraphCompileResult& compileResult);
+		// Emit any out-of-graph pre-pass layout/sync barriers for a batch of passes (the passes
+		// sharing one render pass). Called once before beginPass, outside any active render pass.
+		virtual void emitPrePassBarriers(const ExecutionBatch& batch,
+			const std::vector<CompiledPass>& compiledPasses) {}
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
 		virtual void debugSceneEnd(const char *descr) = 0;
@@ -426,7 +488,8 @@ namespace gfx_api
 		virtual bool shouldDraw() = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;
-		virtual bool setSwapInterval(swap_interval_mode mode) = 0;
+		typedef std::function<void()> SetSwapIntervalCompletionHandler;
+		virtual bool setSwapInterval(swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler) = 0;
 		virtual swap_interval_mode getSwapInterval() const = 0;
 		virtual bool textureFormatIsSupported(pixel_format_target target, pixel_format format, pixel_format_usage::flags usage) = 0;
 		virtual bool supportsMipLodBias() const = 0;
@@ -435,6 +498,9 @@ namespace gfx_api
 		virtual size_t maxFramesInFlight() const = 0;
 		virtual lighting_constants getShadowConstants() = 0;
 		virtual bool setShadowConstants(lighting_constants values) = 0;
+
+		/// Monotonic counter bumped when render-graph topology inputs change (resize, depth passes, swapchain recreate, etc.).
+		uint64_t getRenderGraphEpoch() const { return _renderGraphEpoch; }
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -446,17 +512,26 @@ namespace gfx_api
 		gfx_api::texture* loadTextureFromFile(const char *filename, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, bool quiet = false);
 		gfx_api::texture* loadTextureFromUncompressedImage(iV_Image&& image, gfx_api::texture_type textureType, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 		typedef std::function<std::unique_ptr<iV_Image> (int width, int height, int channels)> GenerateDefaultTextureFunc;
-		gfx_api::texture_array* loadTextureArrayFromFiles(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::function<void ()>& progressCallback = nullptr, const std::string& debugName = "");
+		LoadingTask<gfx_api::texture_array*> loadTextureArrayFromFiles(ResourceLoadingController& controller, const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::string& debugName = "");
+		gfx_api::texture_array* loadTextureArrayFromFilesBlocking(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::string& debugName = "");
 
-		bool loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
-		bool loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, size_t mipmap_levels, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 		bool loadTextureArrayLayerFromBaseImages(gfx_api::texture_array& array, size_t layer, const std::vector<std::unique_ptr<iV_BaseImage>>& images, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 
 		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(pixel_format_target target, unsigned int channels);
 		gfx_api::pixel_format bestUncompressedPixelFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType);
 
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
+
+	protected:
+		// True while executeCompiledRenderGraph() is running. Draw/bind APIs must only be called from record callbacks.
+		bool renderGraphExecuting() const { return _renderGraphExecuting; }
+		void setRenderGraphExecuting(bool executing) { _renderGraphExecuting = executing; }
+		void bumpRenderGraphEpoch() { ++_renderGraphEpoch; }
+
 	private:
+		bool _renderGraphExecuting = false;
+		uint64_t _renderGraphEpoch = 1;
+		bool _screenGeometryDirty = true;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 
@@ -752,6 +827,7 @@ namespace gfx_api
 		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
 		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
+		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos;
 		glm::vec4 sceneColor;
 		glm::vec4 ambient;
@@ -781,6 +857,7 @@ namespace gfx_api
 		int normalMap;
 		int specularMap;
 		int hasTangents;
+		int shieldEffect;
 	};
 
 	// interleaved vertex data
@@ -925,17 +1002,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>
 	{
 		glm::mat4 transform_matrix;
-//		glm::vec4 paramX;
-//		glm::vec4 paramY;
-//		glm::vec4 paramXLight;
-//		glm::vec4 paramYLight;
-//		glm::mat4 unused;
-//		glm::mat4 texture_matrix;
-//		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-//		int texture0;
 	};
 
 	using TerrainDepthOnlyForDepthMap = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_OPAQUE, DEPTH_CMP_LEQ_WRT_ON, 0, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u32,
@@ -944,54 +1013,6 @@ namespace gfx_api
 		TerrainVertexVBODescription
 	>, std::tuple<texture_description<0, sampler_type::bilinear_repeat>>, SHADER_TERRAIN_DEPTHMAP>;
 
-	template<>
-	struct constant_buffer_type<SHADER_TERRAIN>
-	{
-		glm::mat4 transform_matrix;
-		glm::vec4 paramX;
-		glm::vec4 paramY;
-		glm::vec4 paramXLight;
-		glm::vec4 paramYLight;
-		glm::mat4 unused;
-		glm::mat4 texture_matrix;
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
-		int texture0;
-		int texture1;
-	};
-
-	using TerrainLayer = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ADDITIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
-	std::tuple<constant_buffer_type<SHADER_TERRAIN>>,
-	std::tuple<
-	TerrainVertexVBODescription,
-	vertex_buffer_description<4, gfx_api::vertex_attribute_input_rate::vertex, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic_repeat>, texture_description<1, sampler_type::bilinear>>, SHADER_TERRAIN>;
-
-	template<>
-	struct constant_buffer_type<SHADER_DECALS>
-	{
-		glm::mat4 transform_matrix;
-		glm::mat4 texture_matrix;
-		glm::vec4 param1;
-		glm::vec4 param2;
-		glm::vec4 fog_colour;
-		int fog_enabled;
-		float fog_begin;
-		float fog_end;
-		int texture0;
-		int texture1;
-	};
-
-	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
-	std::tuple<constant_buffer_type<SHADER_DECALS>>,
-	std::tuple<
-	vertex_buffer_description<sizeof(glm::vec3) + sizeof(glm::vec2), gfx_api::vertex_attribute_input_rate::vertex,
-	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
-	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>
-	>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic>, texture_description<1, sampler_type::bilinear>>, SHADER_DECALS>;
 
 	struct TerrainDecalVertex
 	{
@@ -1101,9 +1122,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_WATER_HIGH>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
-		glm::mat4 ModelUV1Matrix;
-		glm::mat4 ModelUV2Matrix;
+		glm::mat4 ShadowMapMVPMatrix[WZ_MAX_SHADOW_CASCADES];
 		glm::vec4 cameraPos; // in modelSpace
 		glm::vec4 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
@@ -1111,6 +1132,8 @@ namespace gfx_api
 		glm::vec4 diffuseLight;
 		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
+		glm::vec4 ShadowMapCascadeSplits; // Can't use float[4] (because of std140 layout alignment rules, which don't match C/C++ and waste a lot of space)
+		int ShadowMapSize;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
@@ -1125,7 +1148,8 @@ namespace gfx_api
 		texture_description<0, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // textures
 		texture_description<1, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // normal maps
 		texture_description<2, sampler_type::anisotropic_repeat, pixel_format_target::texture_2d_array>, // specular maps
-		texture_description<3, sampler_type::bilinear> // lightmap
+		texture_description<3, sampler_type::bilinear>, // lightmap
+		texture_description<4, sampler_type::bilinear_border, pixel_format_target::depth_map, border_color::opaque_white>  // depth / shadow map
 	>, SHADER_WATER_HIGH>;
 
 	template<>

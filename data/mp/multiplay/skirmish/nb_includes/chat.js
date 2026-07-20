@@ -10,11 +10,11 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-var prefix = '!nb';
+const prefix = '!nb';
 
 // key: name in chat, value: function that will be executed
 // function gets two params: sender and argument
-var commandMap = {
+const commandMap = {
 	set: chatSet,
 	res: chatRes,
 	truck: chatTruck,
@@ -23,9 +23,9 @@ var commandMap = {
 	help: chatHelp,
 	go: chatHelp, // alias for "help"
 	tx: chatUnhelp,
-}
+};
 
-var beaconInfo = [];
+const beaconInfo = [];
 
 _global.noticeBeacon = function(x, y, from) {
 	beaconInfo[from] = {
@@ -33,116 +33,182 @@ _global.noticeBeacon = function(x, y, from) {
 		y: y,
 		exists: 1,
 	};
-}
+};
 
 _global.unnoticeBeacon = function(from) {
 	beaconInfo[from].exists = 0;
-}
+};
 
 _global.findBeaconPlayer = function(x, y) {
 	for (let i = 0; i < beaconInfo.length; ++i)
+	{
 		if (defined(beaconInfo[i]) && beaconInfo[i].x === x && beaconInfo[i].y === y)
+		{
 			return i;
-}
+		}
+	}
+};
 
 _global.handleChatMessage = function(sender, receiver, message) {
 	// don't reply on any other message coming sender enemies
-	if (message ===  "!nb who") {
+	if (message ===  "!nb who")
+	{
 		chat(sender, chatWho(sender));
 		return;
 	}
-	if (!isAlly(sender))
-		return;
-	if (message === "help me!!") { // Try to understand Nexus AI's way of calling for help
-		chatHelp(sender);
-		return;
-	}
-	var result = message.split(/ +/);
-	if (result[0] !== prefix)
-		return;
-	var command = result[1];
-	var argument = result[2];
-	if (defined(commandMap[command]))
-		chat(sender, commandMap[command](sender, argument));
-}
 
-function chatWho(sender, argument) {
-	var str = "NullBot3 (" + scriptName + ") ";
-	switch (difficulty) {
-		case EASY: str += _("EASY"); break;
-		case MEDIUM: str=str + _("MEDIUM"); break;
-		case HARD: str=str + _("HARD"); break;
-		case INSANE: str=str + _("INSANE"); break;
+	if (!isAlly(sender))
+	{
+		return;
 	}
+
+	if (message.indexOf("help me") !== -1 &&
+		sender < playerData.length &&
+		playerData[sender].isAI &&
+		playerData[sender].scriptName.indexOf("nexus") !== -1) // Try to understand Nexus AI's way of calling for help
+	{
+		chat(sender, chatHelp(sender));
+		return;
+	}
+
+	const result = message.split(/ +/);
+
+	if (result[0] !== prefix)
+	{
+		return;
+	}
+
+	const command = result[1];
+	const argument = result[2];
+
+	if (defined(commandMap[command]))
+	{
+		chat(sender, commandMap[command](sender, argument));
+	}
+};
+
+function chatWho(sender, argument)
+{
+	let str = "NullBot3 (" + scriptName + ") ";
+
+	switch (difficulty)
+	{
+		case EASY: str += _("EASY"); break;
+		case MEDIUM: str = str + _("MEDIUM"); break;
+		case HARD: str = str + _("HARD"); break;
+		case INSANE: str = str + _("INSANE"); break;
+	}
+
 	if (isAlly(sender))
+	{
 		str += (" ~" + personality.chatalias + "~");
+	}
+
 	return str;
 }
 
 function chatSet(sender, argument) {
-	var str = "";
-	for (const i in subpersonalities) {
-		if (subpersonalities[i].chatalias === argument) {
+	let str = "";
+
+	for (const i in subpersonalities)
+	{
+		if (subpersonalities[i].chatalias === argument)
+		{
 			personality = subpersonalities[i];
 			return _("Personality change successful.");
 		}
+
 		str = str + " " + subpersonalities[i].chatalias;
 	}
+
 	return _("No such personality! Try one of these:") + str;
 }
 
-function chatRes(sender, argument) {
-	if (argument === "cl") {
+function chatRes(sender, argument)
+{
+	if (argument === "cl")
+	{
 		setForcedResearch(); // clear
 		return _("Forced research cleared, will research anything I want now.");
 	}
-	if (argument === "no") {
+
+	if (argument === "no")
+	{
 		setForcedResearch(null); // clear
 		return _("Research blocked, will research nothing now.");
 	}
-	if (argument === "fn") {
+
+	if (argument === "fn")
+	{
 		setForcedResearch(fundamentalResearch);
 		return _("Researching fundamental technology.");
 	}
-	var str = " cl no fn";
-	for (const i in weaponStats) {
-		if (weaponStats[i].chatalias === argument) {
+
+	let str = " cl no fn";
+
+	for (const i in weaponStats)
+	{
+		if (weaponStats[i].chatalias === argument)
+		{
 			setForcedResearch(weaponStatsToResList(weaponStats[i]));
 			return _("Researching ") + weaponStats[i].chatalias;
 		}
+
 		if (weaponStats[i].chatalias.indexOf("useless") < 0)
+		{
 			str = str + " " + weaponStats[i].chatalias;
+		}
 	}
+
 	return _("No such research path! Try one of these:") + str;
 }
 
-function chatTruck(sender, argument) {
-	var droid = enumTrucks().random();
+function chatTruck(sender, argument)
+{
+	const droid = enumTrucks().random();
+
 	if (!defined(droid))
+	{
 		return _("Sorry, I have no trucks.");
-	if (donateObject(droid, sender)) {
+	}
+
+	if (donateObject(droid, sender))
+	{
 		addBeacon(droid.x, droid.y, sender);
 		return _("You can use this one.");
 	}
+
 	return _("Sorry, droid transfer failed.");
 }
 
-function chatMoney(sender, argument) {
-	var power = Math.round(myPower()/3);
+function chatMoney(sender, argument)
+{
+	const power = Math.round(myPower() / 3);
+
 	donatePower(power, sender);
+
 	return _("Power transferred.");
 }
 
-function chatHelp(sender, argument) {
+function chatHelp(sender, argument)
+{
 	if (!defined(beaconInfo[sender]) || !beaconInfo[sender].exists)
+	{
 		return _("Please put a beacon!");
+	}
+
 	if (setTarget({ x: beaconInfo[sender].x, y: beaconInfo[sender].y, type: POSITION }))
+	{
 		return _("Coming!");
+	}
 	else
+	{
 		return _("Sorry, I don't have any free forces to send for help!");
+	}
 }
 
-function chatUnhelp(sender, argument) {
+function chatUnhelp(sender, argument)
+{
 	unsetTarget(sender);
 	return _("Any time, big boss!");
 }

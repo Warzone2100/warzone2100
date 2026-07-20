@@ -31,6 +31,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/pielight_convert.h"
 #include <glm/gtc/type_ptr.hpp>
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -110,10 +111,16 @@ void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 
 void pie_ViewingWindow_Shutdown()
 {
-	delete radarViewGfx[0];
-	radarViewGfx[0] = nullptr;
-	delete radarViewGfx[1];
-	radarViewGfx[1] = nullptr;
+	if (radarViewGfx[0])
+	{
+		delete radarViewGfx[0];
+		radarViewGfx[0] = nullptr;
+	}
+	if (radarViewGfx[1])
+	{
+		delete radarViewGfx[1];
+		radarViewGfx[1] = nullptr;
+	}
 }
 
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
@@ -267,12 +274,7 @@ void pie_DrawSkybox(float scale, const glm::mat4& projectionMatrix, const glm::m
 	const auto& modelViewProjectionMatrix = projectionMatrix * viewMatrix * glm::scale(glm::vec3(scale, scale / 2.f, scale));
 
 	const auto &renderState = getCurrentRenderState();
-	const glm::vec4 fogColor(
-		renderState.fogColour.vector[0] / 255.f,
-		renderState.fogColour.vector[1] / 255.f,
-		renderState.fogColour.vector[2] / 255.f,
-		renderState.fogColour.vector[3] / 255.f
-	);
+	const glm::vec4 fogColor = pielightToRGBAVec4(renderState.fogColour);
 
 	gfx_api::SkyboxPSO::get().bind();
 	gfx_api::SkyboxPSO::get().bind_constants({ modelViewProjectionMatrix, glm::vec4(1.f), fogColor, renderState.fogEnabled });

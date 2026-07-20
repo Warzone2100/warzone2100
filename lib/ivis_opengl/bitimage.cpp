@@ -294,6 +294,12 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		ssprintf(arbitraryName, "%s-%03u", fileName, p);
 		// Now we can set imageFile->pages[p].id. This free()s the ivImages[p].bmp array!
 		gfx_api::texture *pTexture = gfx_api::context::get().loadTextureFromUncompressedImage(std::move(ivImages[p]), gfx_api::texture_type::user_interface, arbitraryName);
+		if (!pTexture)
+		{
+			// Failed to load texture from image
+			debug(LOG_ERROR, "Failed to load texture from image page [%u] listed in \"%s\".", p, fileName);
+			return nullptr;
+		}
 		imageFile->pages[p].id = pie_AddTexPage(pTexture, arbitraryName, gfx_api::texture_type::user_interface);
 	}
 	ivImages.clear();

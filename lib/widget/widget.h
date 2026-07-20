@@ -109,10 +109,10 @@ typedef std::function<void* ()> WIDGET_INITIALIZE_PUSERDATA_FUNC;
 
 struct Padding
 {
-	uint32_t top;
-	uint32_t right;
-	uint32_t bottom;
-	uint32_t left;
+	uint32_t top = 0;
+	uint32_t right = 0;
+	uint32_t bottom = 0;
+	uint32_t left = 0;
 };
 
 /** The basic initialisation structure */
@@ -386,9 +386,6 @@ SWORD WidgGetClickedAudioID();
 
 // error ID
 SWORD WidgGetErrorAudioID();
-
-/** Enable or disable all sliders. */
-void sliderEnableDrag(bool Enable);
 
 void setWidgetsStatus(bool var);
 bool getWidgetsStatus();

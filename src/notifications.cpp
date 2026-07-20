@@ -46,6 +46,7 @@ using json = nlohmann::json;
 #include <physfs.h>
 #include "lib/framework/file.h"
 #include <sstream>
+#include <string_view>
 
 class WZ_Notification_Preferences
 {
@@ -211,9 +212,14 @@ bool WZ_Notification_Preferences::removeNotificationPreferencesIf(const std::fun
 
 bool WZ_Notification_Preferences::savePreferences()
 {
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString;
+	try {
+		jsonString = mRoot.dump(4);
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Failed to save JSON to %s with error: %s", mFilename.c_str(), e.what());
+		return false;
+	}
 	saveFile(mFilename.c_str(), jsonString.c_str(), jsonString.size());
 	return true;
 }
@@ -754,8 +760,9 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 
 	if (psActionButton != nullptr || request->notification.duration == 0)
 	{
+		static constexpr std::u8string_view DISMISS_LABEL_PREFIX = u8"▴ ";
 		// 2.) "Dismiss" button
-		dismissLabel = u8"▴ " + dismissLabel;
+		dismissLabel = std::string(DISMISS_LABEL_PREFIX.begin(), DISMISS_LABEL_PREFIX.end()) + dismissLabel;
 		sButInit.id = 3;
 		sButInit.FontID = font_regular;
 		sButInit.width = iV_GetTextWidth(dismissLabel.c_str(), font_regular) + 18;

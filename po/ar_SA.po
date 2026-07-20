@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2024-11-01 21:02+0000\n"
-"PO-Revision-Date: 2024-11-03 18:06\n"
+"POT-Creation-Date: 2026-04-04 02:03+0000\n"
+"PO-Revision-Date: 2026-04-04 03:52\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar_SA\n"
@@ -1775,6 +1775,9 @@ msgstr "قم ببناء ما لا يقل عن 7 مبانٍ (لا تدخل الج
 msgid "Locate and rescue your units from the shot down transporter"
 msgstr "اعثر على الوحدات التي كانت موجودةً في السفينة المُسقطة وأنقذهم"
 
+msgid "Destroy all enemy bases"
+msgstr ""
+
 msgid "Rescue the civilians from The Collective before too many are captured"
 msgstr "أنقذ المدنيين من «الرابطة» قبل أن يتم القبض على عددٍ كبيرٍ منهم"
 
@@ -1795,6 +1798,9 @@ msgstr "دمر كل منشآت إطلاق الصواريخ"
 
 msgid "Rescue Alpha team from Nexus"
 msgstr "أنقذ فريق «ألفا» من «نيكسوس»"
+
+msgid "Prevent any Nexus hover tanks from escaping the area"
+msgstr ""
 
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
 msgstr "دمر مقر «نيكسوس» لتعطيل «برنامج نيكسوس المقتحم»"
@@ -1817,7 +1823,7 @@ msgstr "اجمع جزءاً من فريق «بيتا» مع النقطة الت�
 msgid "Return to LZ"
 msgstr "عُد إلى منطقة الإنزال"
 
-msgid "Hard / Insane difficulty hint:"
+msgid "Insane difficulty hint:"
 msgstr ""
 
 msgid "Fortify a strong base across the map to protect yourself from the Collective"
@@ -2005,6 +2011,9 @@ msgstr "انتظر إلى أن ينتهي المصنع من بناء الوحد�
 
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "تهانينا أيها القائد - لقد صرت مستعداً لمهمّتك الأولى"
+
+msgid "Tutorial is over. Press Esc or the gear icon to quit to the main menu."
+msgstr ""
 
 msgid "CAMPAIGN ONE"
 msgstr "الفصل الأول"
@@ -2941,6 +2950,28 @@ msgstr "نحن في الخدمة دائماً!"
 msgid "System locale"
 msgstr "لغة النظام"
 
+msgid "This host has disallowed joins from certain hosting providers, VPNs, and/or proxies."
+msgstr ""
+
+msgid "Please try another room or disable any proxies / VPNs and try again."
+msgstr ""
+
+msgid "Game not found in lobby."
+msgstr ""
+
+msgid "The game may have already started, or the host may have disbanded the game lobby."
+msgstr ""
+
+msgid "Error hosting game in lobby server"
+msgstr ""
+
+#, c-format
+msgid "Make sure port %d can receive incoming connections."
+msgstr ""
+
+msgid "If you're using a router, configure it to enable UPnP/NAT-PMP/PCP or to forward the port to your system."
+msgstr ""
+
 msgid "Failed to create port mapping"
 msgstr ""
 
@@ -2949,7 +2980,7 @@ msgid "Manually configure your router/firewall to open port %d!"
 msgstr ""
 
 #, c-format
-msgid "Port mapping opened external port: %d"
+msgid "Port mapping opened external port: %u"
 msgstr ""
 
 #, c-format
@@ -2959,22 +2990,38 @@ msgstr ""
 msgid "Failed to create port mapping (timeout)"
 msgstr ""
 
+#, c-format
+msgid "Using %s network backend."
+msgstr ""
+
 msgid "Client failed to ack player index swap"
 msgstr ""
 
-#, c-format
-msgid "Could not resolve masterserver name (%s)!"
+msgid "Game is listed in the lobby"
 msgstr ""
 
-#, c-format
-msgid ""
-"Error connecting to the lobby server: %s.\n"
-"Make sure port %d can receive incoming connections.\n"
-"If you're using a router configure it to enable UPnP/NAT-PMP/PCP\n"
-" or to forward the port to your system."
+msgid "Lobby GameId"
 msgstr ""
 
-msgid "Failed to get a lobby response!"
+msgid "Game not listed in the lobby."
+msgstr ""
+
+msgid "Error connecting to the lobby server."
+msgstr ""
+
+msgid "Please check your internet connection, or wait a short while and try hosting again."
+msgstr ""
+
+msgid "Your game will only be accessible via direct connection (or local LAN)."
+msgstr ""
+
+msgid "Multiplayer lobby support unavailable. Please update your client."
+msgstr ""
+
+msgid "Game not listed in the lobby:"
+msgstr ""
+
+msgid "Failed to create game listing. Check WZ logs."
 msgstr ""
 
 msgid "The replay file format is newer than this version of Warzone 2100 can support."
@@ -2987,7 +3034,38 @@ msgstr ""
 msgid "Replay File Format Unsupported"
 msgstr ""
 
+msgid "The replay file format is older than this version of Warzone 2100 can support."
+msgstr ""
+
 msgid "Unable to load replay: The replay file is incomplete or corrupted."
+msgstr ""
+
+msgid "Warzone 2100: Failed to initialize graphics"
+msgstr ""
+
+msgid "Failed to initialize graphics for all backends."
+msgstr ""
+
+msgid "Error Details:"
+msgstr ""
+
+msgid "Please update and/or reinstall your graphics drivers, and check your system settings."
+msgstr ""
+
+msgid "OK"
+msgstr "موافق"
+
+msgid "Warzone 2100: Prior launch failed"
+msgstr ""
+
+msgid "The prior attempt to initialize the following graphics backend caused a crash:"
+msgstr ""
+
+#, c-format
+msgid "Graphics Backend: %s"
+msgstr ""
+
+msgid "Warzone 2100 will now attempt to launch using a different graphics backend."
 msgstr ""
 
 msgid "Menu"
@@ -3024,6 +3102,18 @@ msgid "Tab Scroll left"
 msgstr ""
 
 msgid "Tab Scroll right"
+msgstr ""
+
+msgid "Please enter the text below"
+msgstr ""
+
+msgid "Enter the text"
+msgstr ""
+
+msgid "Please drag the slider to verify"
+msgstr ""
+
+msgid "Please drag the tile to verify"
 msgstr ""
 
 msgid ".50-calibre heavy machinegun"
@@ -3209,6 +3299,9 @@ msgstr "تمّت ترقية كل مولّدات الطاقة بشكلٍ تلقا
 msgid "All rail guns upgraded automatically"
 msgstr "سيتم تحديث كل المدافع الكهرومغناطيسية تلقائياً"
 
+msgid "All Ripple Rockets upgraded automatically"
+msgstr ""
+
 msgid "All sensors upgraded automatically"
 msgstr "سيتم تحديث كل أجهزة الاستشعار تلقائياً"
 
@@ -3299,10 +3392,10 @@ msgstr "مسلحٌ بقاذف صواريخ الجلاد الخاص بالساي�
 msgid "Armed with Cyborg Tank Killer rocket"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite flamer"
+msgid "Armed with Cyborg Thermite Flamer"
 msgstr ""
 
-msgid "Armed with Cyborg Thermite Flamer"
+msgid "Armed with Cyborg Thermite flamer"
 msgstr ""
 
 msgid "Armed with Flashlight Laser"
@@ -3354,6 +3447,9 @@ msgstr "طلقاتٌ خارقة للدروع"
 
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
 msgstr "طلقاتٌ خارقةٌ للدروع، ومزودةٌ بأجنحة في قاعدتها كأجنحة السهم، مما يزيد من ثباتها في الجو"
+
+msgid "Armored bunker with Assault Gun"
+msgstr ""
 
 msgid "Armored bunker with Flamer"
 msgstr "ملجأٌ محصّن وبداخله قاذف لهب"
@@ -3441,6 +3537,9 @@ msgstr "نقطةٌ محصّنة وعليها مدفع غاوس"
 
 msgid "Armored strongpoint with Heavy Laser"
 msgstr "نقطةٌ محصّنة وعليها ليزرٌ كثيف"
+
+msgid "Armored strongpoint with Particle Gun"
+msgstr ""
 
 msgid "Armored strongpoint with Plasmite Flamer"
 msgstr "نقطةٌ محصنة وعليها قاذف بلازما حارقة"
@@ -3614,11 +3713,11 @@ msgstr "مثاليٌ ضد: المباني الرئيسية"
 msgid "Best Targets: Base structures, emplacements, cyborgs"
 msgstr "مثاليٌ ضد: المباني الرئيسية ومرابض المدفعية والسايبورغ"
 
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr "مثاليٌ ضد: الملاجئ والنقاط المحصنة"
-
 msgid "Best Targets: Bunkers and Hardpoints"
 msgstr "مثاليٌ ضد: الملاجئ والنقاط المحصّنة"
+
+msgid "Best Targets: Bunkers and hardpoints"
+msgstr "مثاليٌ ضد: الملاجئ والنقاط المحصنة"
 
 msgid "Best Targets: Bunkers, defenses, base structures"
 msgstr "مثاليٌ ضد: الملاجئ والدفاعات والمباني الرئيسية"
@@ -3670,6 +3769,9 @@ msgstr "زيادة ضرر القنبلة 10%"
 msgid "Bomb damage +25%"
 msgstr "زيادة ضرر القنبلة 25%"
 
+msgid "Bomb Damage"
+msgstr ""
+
 msgid "Bomb Upgrade"
 msgstr "تطويرٌ للقنابل"
 
@@ -3692,6 +3794,9 @@ msgid "Bug"
 msgstr "البقّة"
 
 msgid "Buggy"
+msgstr ""
+
+msgid "Buildings"
 msgstr ""
 
 msgid "Built-in diagnostic and repair systems"
@@ -3734,6 +3839,9 @@ msgstr "ستحرق المولّدات النفط بكفاءةٍ أكبر"
 msgid "Cannon accuracy +10%"
 msgstr "زيادة دقة المدفع 10%"
 
+msgid "Cannon Accuracy"
+msgstr ""
+
 msgid "Cannon Autoloader Mk2"
 msgstr "ملقمٌ آليٌ للمدفع (التصميم 2)"
 
@@ -3746,6 +3854,9 @@ msgstr "ملقمٌ آليٌ للمدفع"
 #, no-c-format
 msgid "Cannon damage +25%"
 msgstr "زيادة ضرر المدفع 25%"
+
+msgid "Cannon Damage"
+msgstr ""
 
 msgid "Cannon Fire Truck"
 msgstr "مدفع على سيارة إطفاء"
@@ -3771,6 +3882,9 @@ msgstr "ملقمٌ سريعٌ للمدفع"
 #, no-c-format
 msgid "Cannon reload time -10%"
 msgstr "تقليل وقت إعادة تعبئة الرشاش 10%"
+
+msgid "Cannon Reload"
+msgstr ""
 
 msgid "Cannon Tower"
 msgstr "برجٌ بمدفع"
@@ -3877,6 +3991,12 @@ msgstr "يقوم القائد بتوجيه مجموعةٍ من الوحدات، 
 msgid "Complete battlefield visibility"
 msgstr "رؤيةٌ كاملة لأرض المعركة"
 
+msgid "Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Composite Alloys Buff AI"
+msgstr ""
+
 msgid "Composite Alloys Mk2"
 msgstr "خليطٌ مركّب (التركيبة 2)"
 
@@ -3934,6 +4054,15 @@ msgid "Crane1"
 msgstr ""
 
 msgid "Crane2"
+msgstr ""
+
+msgid "Cyborg Alloys"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Composite Alloys Buff AI"
 msgstr ""
 
 msgid "Cyborg Composite Alloys Mk2"
@@ -4002,6 +4131,12 @@ msgstr "درعٌ حراريٌ فائق الكثافة للسايبورغ"
 msgid "Cyborg Tank Killer"
 msgstr ""
 
+msgid "Cyborg Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Cyborg Thermal Armor Buff AI"
+msgstr ""
+
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "درعٌ حراريٌ للسايبورغ (التصميم 2)"
 
@@ -4010,6 +4145,9 @@ msgstr "درعٌ حراريٌ للسايبورغ (التصميم 3)"
 
 msgid "Cyborg Thermal Armor"
 msgstr "درعٌ حراريٌ للسايبورغ"
+
+msgid "Cyborg Thermal"
+msgstr ""
 
 msgid "Cyborg Thermite"
 msgstr ""
@@ -4137,6 +4275,9 @@ msgstr "ستتمكن كل الوحدات والمباني من صيانة نفس
 msgid "Enemy"
 msgstr ""
 
+msgid "Engine"
+msgstr ""
+
 msgid "Engineering"
 msgstr "الهندسة"
 
@@ -4191,9 +4332,6 @@ msgstr "صواريخ مصغرة سريعة الإطلاق"
 msgid "Fast firing light anti-vehicle rockets"
 msgstr "صواريخ مضادةٌ للمركبات، وتمتاز بخفة الوزن وسرعة الإطلاق الكبيرة"
 
-msgid "Fast Loader"
-msgstr "ملقمٌ سريع"
-
 msgid "Faster than Cobra"
 msgstr "أسرع من الكوبرا"
 
@@ -4208,6 +4346,9 @@ msgstr "سيتم تثبيت أجنحةٍ بمؤخرة الصواريخ مما ي
 
 msgid "Fire Truck"
 msgstr "سيارة إطفاء"
+
+msgid "Fires beams of subatomic particle"
+msgstr ""
 
 msgid "Fires Electronic Magnetic Pulse Missiles"
 msgstr "يطلق صواريخ من نبضات الطاقة الكهرومغناطيسية"
@@ -4243,12 +4384,18 @@ msgstr "قاذف لهب كوبرا جنازير"
 msgid "Flamer damage +25%"
 msgstr "زيادة ضرر قاذف البلازم بنسبة 25%"
 
+msgid "Flamer Damage"
+msgstr ""
+
 msgid "Flamer Fast Loader"
 msgstr ""
 
 #, no-c-format
 msgid "Flamer reload time -15%"
 msgstr "تقليل وقت إعادة تعبئة قاذف اللهب بنسبة 15%"
+
+msgid "Flamer Reload"
+msgstr ""
 
 msgid "Flamer Viper Half-Tracks"
 msgstr "قاذف لهب أفعى جنازير نصفية"
@@ -4686,6 +4833,24 @@ msgstr "إعصار جهنم"
 msgid "Hero and Special rank units are protected"
 msgstr "إن الوحدات الاستثنائية والبطولية محمية"
 
+msgid "HESC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESC Mortar Shells"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk2"
+msgstr ""
+
+msgid "HESCHC Mortar Shells Mk3"
+msgstr ""
+
+msgid "HESCHC Mortar Shells"
+msgstr ""
+
 msgid "HESH Rocket Warhead Mk2"
 msgstr "رأسٌ حربي بمتفجراتٍ طرية (النموذج 2)"
 
@@ -4733,6 +4898,12 @@ msgstr "صاروخٌ مدفعيٌ ثقيل وشديد الانفجار"
 
 msgid "High explosive shaped charge missile"
 msgstr "صاروخٌ موجه شديد الانفجار، تمت قولبة حشوته بحيث تتركز طاقة الانفجار في نقطةٍ واحدة"
+
+msgid "High Explosive Soft Casing High Capacity Shells"
+msgstr ""
+
+msgid "High Explosive Soft Casing Shells"
+msgstr ""
 
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "درعٌ حراريٌ شديد القوة (التصميم 2)"
@@ -4799,6 +4970,15 @@ msgstr "ملقمٌ آلي للهاتوزر"
 msgid "Howitzer damage +25%"
 msgstr "زيادة ضرر الهاوتزر 25%"
 
+msgid "Howitzer Damage Buff AI Mk2"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI Mk3"
+msgstr ""
+
+msgid "Howitzer Damage Buff AI"
+msgstr ""
+
 msgid "Howitzer Fast Loader"
 msgstr "ملقمٌ سريعٌ للهاوتزر"
 
@@ -4808,6 +4988,15 @@ msgstr "تقليل وقت إ‘ادة تعبئة الهاوتزر 10%"
 
 msgid "Howitzer"
 msgstr "الهاوتزر"
+
+msgid "Howitzers Accuracy"
+msgstr ""
+
+msgid "Howitzers Damage"
+msgstr ""
+
+msgid "Howitzers Reload"
+msgstr ""
 
 msgid "Hurricane AA Site"
 msgstr "نقطة رشاش العاصفة المضاد للطائرات"
@@ -4872,6 +5061,9 @@ msgstr "هندسةٌ متطورة"
 msgid "Improved fire detection systems"
 msgstr "أنظمةٌ محسّنة لاكتشاف النيران المعادية"
 
+msgid "Improved Hardcrete Buff AI"
+msgstr ""
+
 msgid "Improved Hardcrete Mk2"
 msgstr "إسمنتٌ صلبٌ محسّن (التركيبة 2)"
 
@@ -4923,10 +5115,10 @@ msgstr "سيتم تحسين الصفات الضوئية لليزر مما يقل
 msgid "Incendiary Howitzer Emplacement 2"
 msgstr "مربض هاوتزر حارق 2"
 
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "مربض هاوتزر حارق"
 
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "مربض هاوتزر حارق"
 
 msgid "Incendiary Howitzer may be assigned to a sensor"
@@ -5006,6 +5198,9 @@ msgstr "زيادة ضرر المدفع الكهرومغناطيسي"
 
 msgid "Increases Rail Gun ROF"
 msgstr "زيادة معدل إطلاق المدفع الكهرومغناطيسي"
+
+msgid "Increases Ripple Rocket ROF"
+msgstr ""
 
 msgid "Increases Rocket accuracy"
 msgstr "يزيد من دقة الصاروخ"
@@ -5131,9 +5326,15 @@ msgstr "يمكنك الآن بناء ليزرٍ مضادٍ للطائرات"
 msgid "Laser accuracy +10%"
 msgstr "زيادة دقة الليزر 10%"
 
+msgid "Laser Accuracy"
+msgstr ""
+
 #, no-c-format
 msgid "Laser damage +25%"
 msgstr "زيادة ضرر الليزر 25%"
+
+msgid "Laser Damage"
+msgstr ""
 
 msgid "Laser designator paints and guides rounds to the target"
 msgstr "سيقوم الليزر المحدد للأهداف بتوجيه الطلقات نحو الهدف"
@@ -5141,6 +5342,9 @@ msgstr "سيقوم الليزر المحدد للأهداف بتوجيه الط�
 #, no-c-format
 msgid "Laser reload time -15%"
 msgstr "تقليل وقت إعادة شحن الليزر 15%"
+
+msgid "Laser Reload"
+msgstr ""
 
 msgid "Laser Satellite Command Post"
 msgstr ""
@@ -5318,6 +5522,12 @@ msgstr "مدفعٌ متوسط"
 msgid "Medium Super Heavy Body"
 msgstr "جسمٌ ثقيلٌ جداً متوسط الحجم"
 
+msgid "MG Damage"
+msgstr ""
+
+msgid "MG Reload"
+msgstr ""
+
 msgid "Mini-rocket armored strongpoint"
 msgstr "متراسٌ محصّن وعليه منصة صواريخ مصغرة"
 
@@ -5373,6 +5583,9 @@ msgstr "صواريخ مصغرة أفعى عجلات"
 msgid "Missile accuracy +10%"
 msgstr "زيادة دقة الصاروخ الموجه 10%"
 
+msgid "Missile Accuracy"
+msgstr ""
+
 msgid "Missile actively seeks and homes on targets"
 msgstr "سيقوم الصاروخ الموجه بتعقب الأهداف والتوجه نحوه مباشرةً"
 
@@ -5380,12 +5593,18 @@ msgstr "سيقوم الصاروخ الموجه بتعقب الأهداف وال�
 msgid "Missile damage +25%"
 msgstr "زيادة ضرر الصاروخ الموجه 25%"
 
+msgid "Missile Damage"
+msgstr ""
+
 msgid "Missile Fortress"
 msgstr "قلعةٌ بقاذف صواريخ موجهة"
 
 #, no-c-format
 msgid "Missile reload time -15%"
 msgstr "تقليل وقت إعادة تعبئة الصواريخ الموجهة 15%"
+
+msgid "Missile Reload"
+msgstr ""
 
 msgid "Missile Upgrade"
 msgstr "تطويرٌ للصاروخ الموجه"
@@ -5406,6 +5625,9 @@ msgstr "أكثر قوةً وتصفيحاً من جسم الثأر"
 msgid "Mortar accuracy +10%"
 msgstr "زيادة دقة الهاون 10%"
 
+msgid "Mortar Accuracy"
+msgstr ""
+
 msgid "Mortar Autoloader Mk2"
 msgstr "ملقمٌ آلي للهاون (التصميم 2)"
 
@@ -5422,6 +5644,15 @@ msgstr "هاون كوبرا جنازير نصفية"
 msgid "Mortar damage +25%"
 msgstr "زيادة ضرر الهاون 25%"
 
+msgid "Mortar Damage"
+msgstr ""
+
+msgid "Mortar Fast Loader Mk2"
+msgstr ""
+
+msgid "Mortar Fast Loader Mk3"
+msgstr ""
+
 msgid "Mortar Fast Loader"
 msgstr "ملقمٌ سريعٌ للهاون"
 
@@ -5431,6 +5662,9 @@ msgstr "خندق هاون"
 #, no-c-format
 msgid "Mortar reload time -10%"
 msgstr "تقليل وقت إعادة تعبئة الهاون 10%"
+
+msgid "Mortar Reload"
+msgstr ""
 
 msgid "Mortar Targeting Computer"
 msgstr "نظام استهدافٍ حاسوبي للهاون"
@@ -5564,10 +5798,10 @@ msgstr "هنالك بناءٌ وظيفيٌ جديدٌ متاحٌ لك"
 msgid "New Systems Tower Available"
 msgstr "هنالك برجٌ وظيفيٌ جديدٌ متاحٌ لك"
 
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr "يمكنك استخدام رأسٍ وظيفيٍ جديدٍ في تصاميمك"
 
-msgid "New Systems Turret Available for Design"
+msgid "New Systems Turret Available For Design"
 msgstr "يمكنك استخدام رأسٍ وظيفيٍ جديدٍ في تصاميمك"
 
 msgid "New Thermal Emissions detection"
@@ -5666,6 +5900,12 @@ msgstr ""
 msgid "Panther"
 msgstr "الجاكوار"
 
+msgid "Particle Gun Emplacement"
+msgstr ""
+
+msgid "Particle Gun"
+msgstr ""
+
 msgid "Pepperpot Pit"
 msgstr "خندق رشاشة الفلفل"
 
@@ -5755,6 +5995,9 @@ msgstr "زيادة إنتاج الطاقة 30%"
 msgid "Power Research Completed"
 msgstr "تم الانتهاء من البحث المتعلق بالطاقة"
 
+msgid "Power"
+msgstr "الطاقة"
+
 msgid "Powerful Electronic magnetic pulse weapon"
 msgstr "سلاحٌ شديد القوة يمكنه إطلاق نبضاتٍ من الطاقة الكهرومغناطيسية"
 
@@ -5763,6 +6006,9 @@ msgstr "مختبر الطاقة"
 
 msgid "Produces Cyborgs"
 msgstr "ينتج السايبورغ"
+
+msgid "Production"
+msgstr ""
 
 msgid "Professional and Regular rank units are protected"
 msgstr "إن الوحدات المحترفة والنظامية محمية"
@@ -5836,6 +6082,12 @@ msgstr "برج الرادار الكاشف"
 msgid "Radar Detector"
 msgstr "الرادار الكاشف"
 
+msgid "Rail Accuracy"
+msgstr ""
+
+msgid "Rail Damage"
+msgstr ""
+
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
 msgstr "زيادة دقة المدفع الكهرومغناطيسي 10%"
@@ -5878,6 +6130,9 @@ msgstr "تطويرٌ للمدفع الكهرومغناطيسي"
 msgid "Rail Gun"
 msgstr "المدفع الكهرومغناطيسي"
 
+msgid "Rail Reload"
+msgstr ""
+
 msgid "Rail Target Prediction Computer"
 msgstr "حاسوبٌ للتنبؤ بحركة الهدف للمدفع الكهرومغناطيسي"
 
@@ -5908,6 +6163,12 @@ msgstr "ستنخفض احتمالية أن يسيطر «نيكسوس» على أ
 
 msgid "Refuels, rearms and repairs VTOLs"
 msgstr "مسؤولةٌ عن صيانة الطائرات العمودية وإعادة تزويدها بالوقود والذخيرة"
+
+msgid "Reinforced Base Structure Materials Buff AI Mk2"
+msgstr ""
+
+msgid "Reinforced Base Structure Materials Buff AI"
+msgstr ""
 
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "مواد بناءٍ مسلحة للمباني الرئيسية (التركيبة 3)"
@@ -5987,6 +6248,9 @@ msgstr "زيادة سرعة الأبحاث 30%"
 msgid "Research speed +85%"
 msgstr "زيادة سرعة الأبحاث 85%"
 
+msgid "Research"
+msgstr "الأبحاث"
+
 msgid "Retaliation"
 msgstr "الانتقام"
 
@@ -6045,6 +6309,9 @@ msgstr "إعادة تسليحٍ ربوتية للطائرات"
 msgid "Rocket accuracy +10%"
 msgstr "زيادة دقة الصاروخ 10%"
 
+msgid "Rocket Accuracy"
+msgstr ""
+
 msgid "Rocket artillery; can be assigned to a sensor"
 msgstr "مدفعيةٌ صاروخية، ويمكن إسنادها إلى مستشعر"
 
@@ -6063,6 +6330,9 @@ msgstr ""
 #, no-c-format
 msgid "Rocket damage +25%"
 msgstr "زيادة ضرر الصاروخ 25%"
+
+msgid "Rocket Damage"
+msgstr ""
 
 msgid "Rocket detects and locks on to engine emissions"
 msgstr "سيبحث الصاروخ عن الانبعاثات المنبعثة من المحرك وسيقوم بالتثبيت عليها"
@@ -6085,6 +6355,9 @@ msgstr "ملقمٌ سريعٌ للصواريخ"
 #, no-c-format
 msgid "Rocket reload time -15%"
 msgstr "تقليل وقت إعادة تعبئة الصواريخ 15%"
+
+msgid "Rocket Reload"
+msgstr ""
 
 msgid "Rocket tracks the laser designator to the target"
 msgstr "سيتعقب الصاروخ الهدف الذي يحدده جهاز الليزر المخصص لتحديد الأهداف"
@@ -6241,6 +6514,9 @@ msgstr "تطويرٌ للمستشعرات (النسخة 3)"
 
 msgid "Sensor Upgrade"
 msgstr "تطويرٌ للمستشعرات"
+
+msgid "Sensor"
+msgstr ""
 
 msgid "Sensors Improved"
 msgstr "سيتم تطوير جميع أجهزة الاستشعار"
@@ -6407,10 +6683,10 @@ msgstr "تحليل بيانات وصلة المشبك العصبي (النسخة
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "تحليل بيانات وصلة المشبك العصبي (النسخة 3)"
 
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "تحليل بيانات وصلة المشبك العصبي"
 
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "تحليل بيانات وصلة المشبك العصبي"
 
 msgid "Synaptic Link Scrambler technology"
@@ -6423,6 +6699,9 @@ msgid "Synaptic Link"
 msgstr "وصلة المشبك العصبي"
 
 msgid "Systems Research Completed"
+msgstr ""
+
+msgid "Tank Alloys"
 msgstr ""
 
 msgid "Tank Killer Cyborg"
@@ -6452,6 +6731,9 @@ msgstr "قاتل الدبابات الثأر جنازير"
 msgid "Tank Killer"
 msgstr "قاتل الدبابات"
 
+msgid "Tank Thermal"
+msgstr ""
+
 msgid "Tank Traps"
 msgstr "فخ الدبابات"
 
@@ -6460,6 +6742,9 @@ msgstr "قذائف مدفعية قادرةٌ على تحديد الهدف (ال�
 
 msgid "Target Acquisition Artillery Shells"
 msgstr "قذائف مدفعية قادرةٌ على تحديد الهدف"
+
+msgid "Target Acquisition Mortar Shells Mk2"
+msgstr ""
 
 msgid "Target Acquisition Mortar Shells"
 msgstr "قذائف هاون قادرةٌ على تحديد الهدف"
@@ -6494,6 +6779,12 @@ msgstr "زيادة الدرع الحراري 40%"
 #, no-c-format
 msgid "Thermal Armor +45%"
 msgstr "زيادة الدرع الحراري 45%"
+
+msgid "Thermal Armor Buff AI Mk2"
+msgstr ""
+
+msgid "Thermal Armor Buff AI"
+msgstr ""
 
 msgid "Thermal Armor Mk2"
 msgstr "درعٌ حراري (التصميم 2)"
@@ -6539,6 +6830,9 @@ msgstr "إسمنتٌ مدعمٌ بالتيتانيوم"
 
 msgid "Tower wars AI, based on NullBot"
 msgstr "ذكاءٌ اصطناعي يركز على بناء الأبراج الدفاعية، ويستند إلى NullBot"
+
+msgid "Tower Wars Buff"
+msgstr ""
 
 msgid "Tracked Propulsion"
 msgstr "دفعٌ بالجنازير"
@@ -6862,6 +7156,9 @@ msgstr "صواريخ مصغرة للطائرات العمودية"
 msgid "VTOL Needle Gun"
 msgstr "مدفع الإبر للطائرات العمودية"
 
+msgid "VTOL Particle Gun"
+msgstr ""
+
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "حجرة قنبلة فوسفور للطائرات"
 
@@ -6885,6 +7182,9 @@ msgstr "منصة إعادة تسليح الطائرات العمودية"
 
 msgid "VTOL rearming pads required to keep VTOLs flying"
 msgstr "يجب أن تبني منصات إعادة تسليح الطائرات العمودية لكي تستمر هذه الطائرات بالتحليق"
+
+msgid "VTOL Rearming"
+msgstr ""
 
 msgid "VTOL Scourge Missile"
 msgstr "صاروخ الجلاد للطائرات العمودية"
@@ -7058,6 +7358,12 @@ msgstr ""
 msgid "Spectators"
 msgstr "المتفرجون"
 
+msgid "You have sent too many messages in the last few seconds. Please wait and try again."
+msgstr ""
+
+msgid "The host has disabled debug mode / cheats for this game."
+msgstr ""
+
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr ""
@@ -7181,6 +7487,15 @@ msgstr ""
 msgid "Connect directly to IP/hostname as a spectator"
 msgstr "اتصل فوراً بعنوان IP \\ اسم المضيف ولكن كمتفرج"
 
+msgid "Connect to lobby game"
+msgstr ""
+
+msgid "lobbyGameId"
+msgstr ""
+
+msgid "Connect to lobby game as a spectator"
+msgstr ""
+
 msgid "Go directly to host screen"
 msgstr "انتقل مباشرةً إلى شاشة الاستضافة"
 
@@ -7224,12 +7539,6 @@ msgid "Start host game with given settings file"
 msgstr ""
 
 msgid "autohost"
-msgstr ""
-
-msgid "Query ratings from given server url, when hosting"
-msgstr ""
-
-msgid "autorating"
 msgstr ""
 
 msgid "Attach or create a console window and display console output (Windows only)"
@@ -7307,10 +7616,16 @@ msgstr ""
 msgid "Enable async join approval (for connecting clients)"
 msgstr ""
 
+msgid "Starts the host (autohost) as not ready, even if it's a spectator host"
+msgstr ""
+
 msgid "Base URL for on-demand video downloads"
 msgstr ""
 
 msgid "Base video URL"
+msgstr ""
+
+msgid "Specify connection provider type to use when hosting game sessions"
 msgstr ""
 
 msgid "Commander needs a higher level to command more units"
@@ -7640,423 +7955,12 @@ msgstr ""
 msgid "Load Multiplayer Replay"
 msgstr "تحميل إعادةٍ لمباراةٍ جماعية"
 
-msgid "Game Options"
-msgstr "إعدادات اللعبة"
-
-msgid "Graphics Options"
-msgstr "إعدادات الرسوميات"
-
-msgid "Video Options"
-msgstr "إعدادات الفيديو"
-
-msgid "Audio / Zoom Options"
-msgstr "إعدادات الصوت والتقريب"
-
-msgid "Mouse Options"
-msgstr "إعدادات الفأرة"
-
-msgid "Key Mappings"
-msgstr "ارتباطات المفاتيح"
-
-msgid "Music Manager"
-msgstr "إدارة الموسيقا"
-
-msgid "Multiplay Options"
-msgstr "إعدادات اللعب الجماعي"
-
-msgid "OPTIONS"
-msgstr "الإعدادات"
-
-msgid "Open Configuration Directory"
-msgstr "فتح مجلد التكوين"
-
-msgid "Failed to open configuration directory in system default file browser."
-msgstr "لم نتمكن من فتح مجلد التكوين باستخدام مستعرض الملفات الافتراضي على هذا النظام."
-
-msgid "Configuration directory is reported as:"
-msgstr ""
-
-msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
-
-msgid "Please see the documentation for more information on how to locate it manually."
-msgstr "راجع مستندات اللعبة لكي تحصل على المزيد من المعلومات حول كيفية تحديد المجلد بشكلٍ يدوي."
-
-msgid "Failed to open configuration directory"
-msgstr "لم نتمكن من فتح مجلد التكوين"
-
-msgid "1×"
-msgstr "بالحجم الأصلي"
-
-msgid "2×"
-msgstr "ضعف الحجم الأصلي"
-
-msgid "Fullscreen"
-msgstr "ملء الشاشة"
-
-msgid "Unsupported"
-msgstr ""
-
-msgid "Off"
-msgstr ""
-
-msgid "50%"
-msgstr "50%"
-
-msgid "Black"
-msgstr "سوداء"
-
-msgid "On"
-msgstr ""
-
-msgid "Per Pixel"
-msgstr ""
-
-msgid "Lightmap"
-msgstr ""
-
-msgid "Rotating"
-msgstr "دوّار"
-
-msgid "Fixed"
-msgstr "ثابت"
-
-msgid "Instant"
-msgstr "فوري"
-
-msgid "Tracked"
-msgstr "بالتدريج"
-
-msgid "High"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "Terrain quality mode not available."
-msgstr ""
-
-msgid "Medium Quality"
-msgstr ""
-
-msgid "High Quality"
-msgstr ""
-
-msgid "Shadow mapping not available on this system."
-msgstr ""
-
-msgid "Low"
-msgstr ""
-
-msgid "Ultra"
-msgstr ""
-
-msgid "Shadow filtering not available on this system."
-msgstr ""
-
-msgid "Opacity: 50%"
-msgstr ""
-
-msgid "* Takes effect on game restart"
-msgstr "* ستأخذ التغييرات مفعولها بعد إعادة تشغيل اللعبة"
-
-msgid "Terrain Quality"
-msgstr ""
-
-msgid "Terrain Shading"
-msgstr ""
-
-msgid "Shadows"
-msgstr "الظلال"
-
-msgid "Shadow Resolution"
-msgstr ""
-
-msgid "Shadow Filtering"
-msgstr ""
-
-msgid "Per Pixel point lights"
-msgstr ""
-
-msgid "LOD Distance"
-msgstr ""
-
-msgid "Fog"
-msgstr "الضباب"
-
-msgid "Radar"
-msgstr "الرادار"
-
-msgid "Radar Jump"
-msgstr "القفز باستخدام الرادار"
-
-msgid "Video Playback"
-msgstr "حجم فيديوهات القصة"
-
-msgid "Scanlines"
-msgstr ""
-
-msgid "Screen Shake"
-msgstr "اهتزاز الشاشة"
-
-msgid "Groups Menu"
-msgstr ""
-
-msgid "Options Button"
-msgstr ""
-
-msgid "GRAPHICS OPTIONS"
-msgstr "إعدادات الرسوميات"
-
-msgid "Disabled"
-msgstr "معطّل"
-
-msgid "Enabled"
-msgstr "مفعّل"
-
-msgid "Auto"
-msgstr "تلقائي"
-
-msgid "Voice Volume"
-msgstr "مستوى صوت المتحدثين"
-
-msgid "FX Volume"
-msgstr "مستوى صوت المؤثرات"
-
-msgid "Music Volume"
-msgstr "مستوى صوت الموسيقى"
-
-msgid "Subtitles"
-msgstr "Subtitles"
-
-msgid "HRTF"
-msgstr "صوتٌ محيطي باستخدام HRTF"
-
-msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr "إن تقنية HRTF غير مدعومةٍ على جهازك \\ نظامك \\ مكتبة OpenAL المثبتة لديك"
-
-msgid "Map Zoom"
-msgstr "مستوى تقريب الخريطة"
-
-msgid "Map Zoom Rate"
-msgstr "معدل تقريب الخريطة"
-
-msgid "Radar Zoom"
-msgstr "مستوى تقريب الرادار"
-
-msgid "AUDIO / ZOOM OPTIONS"
-msgstr "إعدادات الصوت والتقريب"
-
-msgid ""
-"In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
-"(or what the window manager allows)."
-msgstr ""
-"عند تحديد خيار \"بدقة سطح المكتب\" ستصبح دقة اللعبة مماثلةً لدقة سطح مكتبك\n"
-"(أو تلك التي يسمح بها مدير النوافذ الخاص بالنظام)."
-
-msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr "يمكنك تغيير الدقة عن طريق تغيير حجم النافذة. (حاول أن تسحب إحدى الزوايا أو الحواف.)"
-
-msgid "Graphics Mode"
-msgstr "الوضع الرسومي"
-
-msgid "Resolution"
-msgstr "الدقة"
-
-msgid "Display Scale"
-msgstr "حجم العناصر المرئية"
-
-msgid "Adaptive"
-msgstr ""
-
-msgid "Windowed"
-msgstr "نافذة"
-
-msgid "Desktop Full"
-msgstr "بدقة سطح المكتب"
-
-msgid "On (Fullscreen)"
-msgstr ""
-
-msgid "Texture size"
-msgstr "دقة الخامات"
-
-msgid "Vertical sync"
-msgstr "المزامنة الرأسية"
-
-msgid "Antialiasing*"
-msgstr "تنعيم الحواف*"
-
-msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "تحذير: يمكن لتنعيم الحواف أن يسبب تعطل اللعبة، خصوصاً إذا كانت قيمته أكبر من 16"
-
-msgid "Graphics Backend*"
-msgstr "محرك الرسوميات"
-
-msgid "Min on Focus Loss"
-msgstr ""
-
-msgid "Whether the window should auto-minimize on focus loss"
-msgstr ""
-
-msgid "Alt+Enter Toggle"
-msgstr ""
-
-msgid "The fullscreen mode used when toggling with keys: Alt + Enter"
-msgstr ""
-
-msgid "VIDEO OPTIONS"
-msgstr "إعدادات الفيديو"
-
-msgid "Unable to change Vertical Sync"
-msgstr "لم نتمكن من تغيير المزامنة الرأسية"
-
-msgid ""
-"Warzone failed to change the Vertical Sync mode.\n"
-"Your system / drivers may not support other modes."
-msgstr ""
-"لم تتمكن Warzone من تغيير وضع المزامنة الرأسية.\n"
-"ربما يكون السبب هو أن نظامك أو برنامج التعريف لا يدعمان الأوضاع الأخرى."
-
-msgid "Middle Mouse"
-msgstr "زر الفأرة الأوسط"
-
-msgid "Right Mouse"
-msgstr "زر الفأرة الأيمن"
-
-msgid "Reverse Rotation"
-msgstr "دورانٌ عكسي"
-
-msgid "Trap Cursor"
-msgstr "تقييد المؤشر داخل النافذة"
-
-msgid "Switch Mouse Buttons"
-msgstr "بدّل بين أزرار الفأرة"
-
-msgid "Rotate Screen"
-msgstr "تدوير الشاشة"
-
-msgid "Colored Cursors"
-msgstr "مؤشراتٌ ملونة"
-
-msgid "Cursor Size"
-msgstr ""
-
-msgid "MOUSE OPTIONS"
-msgstr "إعدادات الفأرة"
-
-msgid "Super Easy"
-msgstr ""
-
-msgid "Easy"
-msgstr "سهلة"
-
-msgid "Hard"
-msgstr "صعبة"
-
-msgid "Insane"
-msgstr "جنونية"
-
 #, c-format
 msgid "Unable to load: %s."
 msgstr ""
 
 msgid "Please remove all incompatible mods."
 msgstr ""
-
-msgid "GAME OPTIONS"
-msgstr "إعدادات اللعبة"
-
-msgid "Language"
-msgstr "اللغة"
-
-msgid "Unit Colour:"
-msgstr "لون الوحدات:"
-
-msgid "Skirmish/Multiplayer"
-msgstr "مباراة أو لعبة جماعية"
-
-msgid "Campaign Difficulty"
-msgstr "الصعوبة في طور القصة"
-
-msgid "Camera Speed"
-msgstr "سرعة الكاميرا"
-
-#, c-format
-msgid "Help us improve translations of Warzone 2100: %s"
-msgstr "ساعدنا على تحسين ترجمات اللعبة: %s"
-
-msgid "Click to open webpage."
-msgstr "اضغط لفتح صفحة الويب."
-
-msgid "Insane Difficulty"
-msgstr "الصعوبة الجنونية"
-
-msgid "This difficulty is for very experienced players!"
-msgstr "إن مستوى الصعوبة هذا مخصصٌ للاعبين ذوي الخبرة الكبيرة!"
-
-#, c-format
-msgid "%u minutes"
-msgstr "%u من الدقائق"
-
-#, c-format
-msgid "%s hours"
-msgstr ""
-
-#, c-format
-msgid "%u seconds"
-msgstr "%u من الثواني"
-
-msgid "None"
-msgstr ""
-
-msgid "Distribute to Team"
-msgstr ""
-
-msgid "Destroy (Classic)"
-msgstr ""
-
-msgid "Allow All"
-msgstr ""
-
-msgid "Quick Chat Only"
-msgstr ""
-
-msgid "Hosting Options:"
-msgstr ""
-
-msgid "Game Port"
-msgstr ""
-
-msgid "Port Mapping"
-msgstr ""
-
-msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
-msgstr ""
-
-msgid "Chat"
-msgstr ""
-
-msgid "Inactivity Timeout"
-msgstr ""
-
-msgid "Lag Kick"
-msgstr ""
-
-msgid "Spectator Slots"
-msgstr "خانات المتفرجين"
-
-msgid "On Player Leave"
-msgstr ""
-
-msgid "Game Time Limit"
-msgstr ""
-
-msgid "Enable Rating"
-msgstr ""
-
-msgid "MULTIPLAY OPTIONS"
-msgstr "إعدادات اللعب الجماعي"
 
 msgid "Mod: "
 msgstr ""
@@ -8181,15 +8085,15 @@ msgid "Select / Assign Group Number: "
 msgstr ""
 
 #, c-format
-msgid "Group %u"
+msgid "Group %zu"
 msgstr ""
 
 #, c-format
-msgid "Select the Units in Group %u"
+msgid "Select the Units in Group %zu"
 msgstr ""
 
 #, c-format
-msgid "Assign Selected Units to Group %u"
+msgid "Assign Selected Units to Group %zu"
 msgstr ""
 
 msgid "Center Camera on this Group by clicking or tapping twice"
@@ -8300,6 +8204,26 @@ msgstr ""
 
 #, c-format
 msgid "%s (%s) changed faction of player (%s) to: %s"
+msgstr ""
+
+msgid "NOTICE: If you don't check Ready soon, you will be kicked from the room"
+msgstr ""
+
+#, c-format
+msgid "Player will be kicked if they don't check Ready soon: %s"
+msgstr ""
+
+#, c-format
+msgid "Auto-kicking player (%s) because they waited too long to check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready"
+msgstr ""
+
+msgid "NOTICE: Please check Ready so the game can begin"
+msgstr ""
+
+msgid "Players who don't check Ready in time will be kicked."
 msgstr ""
 
 msgid "Can someone please transfer me some units?"
@@ -8527,9 +8451,6 @@ msgstr ""
 msgid "Human Allies"
 msgstr ""
 
-msgid "You have sent too many messages in the last few seconds. Please wait and try again."
-msgstr ""
-
 msgid "Research Progress"
 msgstr ""
 
@@ -8563,15 +8484,6 @@ msgstr "تحذير: أنت المضيف، وستنتهي اللعبة عند ا�
 msgid "Host Quit"
 msgstr ""
 
-msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
-
-msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
-
-msgid "Go Back"
-msgstr "عُد للخلف"
-
 msgid "View Guide"
 msgstr ""
 
@@ -8603,15 +8515,6 @@ msgid "The game can't continue without the host."
 msgstr ""
 
 msgid "-->  QUIT  <--"
-msgstr ""
-
-msgid "Audio Options"
-msgstr "إعدادات الصوت"
-
-msgid "View Key Mappings"
-msgstr "عرض ارتباطات المفاتيح"
-
-msgid "Shake"
 msgstr ""
 
 msgid "Save Campaign Game"
@@ -8654,16 +8557,19 @@ msgstr ""
 msgid "Error Loading Game Data"
 msgstr ""
 
-msgid "Global Hotkeys"
+msgid "Global Keys"
 msgstr ""
 
-msgid "Other Hotkeys"
+msgid "Other Keys"
 msgstr ""
 
-msgid "Gameplay"
+msgid "Gameplay Keys"
 msgstr ""
 
-msgid "Debug"
+msgid "Radar Keys"
+msgstr ""
+
+msgid "Debug Keys"
 msgstr ""
 
 msgid "Debug (level editor)"
@@ -8674,9 +8580,6 @@ msgstr ""
 
 msgid "Manufacture"
 msgstr "التصنيع"
-
-msgid "Research"
-msgstr "الأبحاث"
 
 msgid "Build"
 msgstr "البناء"
@@ -9042,8 +8945,8 @@ msgid "Select all Heavily Damaged Units"
 msgstr "تحديد كل الوحدات المتأذية بشدة"
 
 #, no-c-format
-msgid "Select all Combat Land units with health >50% and no Groups."
-msgstr "تحديد كل الوحدات القتالية التي تزيد صحتها عن 50% ولا تنتمي لمجموعة."
+msgid "Select all Land Combat Units with >50% HP and no group"
+msgstr ""
 
 msgid "Select all Half-tracks"
 msgstr "تحديد كل المركبات بجنازير نصفية"
@@ -9213,14 +9116,11 @@ msgstr "الدخول في \\ الخروج من وضع ملء الشاشة"
 msgid "Waiting for Power"
 msgstr ""
 
-msgid "Power"
-msgstr "الطاقة"
-
 msgid "Power Per Second"
 msgstr "الطاقة المولّدة في الثانية"
 
 #, c-format
-msgid "%d derrick(s) inactive"
+msgid "%u derrick(s) inactive"
 msgstr ""
 
 msgid "Need more resources!"
@@ -9231,24 +9131,6 @@ msgstr ""
 
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
 msgstr "لا يمكنك الانضمام إلى مباراة أثناء تواجدك في مباراةٍ أخرى. احفظ أو اخرج من المباراة الحالية، ثم عُد إلى القائمة الرئيسية وحاول مجدداً."
-
-msgid "Discord: Finding & Connecting to Game"
-msgstr ""
-
-msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
-
-msgid "This may take a moment..."
-msgstr ""
-
-msgid "Failed to find game in the lobby server: "
-msgstr ""
-
-msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
-
-msgid "Failed to Find Game"
-msgstr ""
 
 msgid "Failed to join the game from the specified invite link, with error:"
 msgstr "فشلنا في الانضمام إلى لعبة باستخدام رابط الدعوة المحدد، والخطأ كان:"
@@ -9677,21 +9559,6 @@ msgstr ""
 msgid "QuickSave file does not exist yet"
 msgstr "لم تقم بعد بإنشاء ملف حفظٍ سريع"
 
-msgid "<not bound>"
-msgstr "<غير مرتبطٍ بزر>"
-
-msgid "<Fixed Key>"
-msgstr ""
-
-msgid "KEY MAPPING"
-msgstr ""
-
-msgid "Return To Previous Screen"
-msgstr "عُد إلى الشاشة السابقة"
-
-msgid "Select Default"
-msgstr "اختيار الإعدادات الافتراضية"
-
 msgid "Parent directory"
 msgstr ""
 
@@ -9712,7 +9579,13 @@ msgstr ""
 msgid "AutoSave %s failed"
 msgstr ""
 
+msgid "AutoSaving..."
+msgstr ""
+
 msgid "Could not save game!"
+msgstr ""
+
+msgid "Failed to load level data or map. Exiting to main menu."
 msgstr ""
 
 msgid "Load Transport"
@@ -9792,8 +9665,20 @@ msgstr ""
 msgid "You Discover Blueprints For %s"
 msgstr ""
 
+msgid "Super Easy"
+msgstr ""
+
+msgid "Easy"
+msgstr "سهلة"
+
 msgid "Medium"
 msgstr ""
+
+msgid "Hard"
+msgstr "صعبة"
+
+msgid "Insane"
+msgstr "جنونية"
 
 msgid "Commander"
 msgstr ""
@@ -9808,103 +9693,35 @@ msgstr ""
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-msgid "Tanks disabled!!"
-msgstr ""
-
-msgid "Cyborgs disabled."
-msgstr ""
-
-msgid "VTOLs disabled."
-msgstr ""
-
-msgid "Satellite Uplink disabled."
-msgstr "تم تعطيل مركز الاتصال بالقمر الصناعي."
-
-msgid "Laser Satellite disabled."
-msgstr "تم تعطيل أقمار الليزر الصناعية."
-
-msgid "Structure Limits Enforced."
-msgstr ""
-
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
-
-msgid "Select Game Name"
-msgstr "اختيار اسم المباراة"
-
-msgid "Game Name"
-msgstr ""
-
-msgid "One-Player Skirmish"
-msgstr ""
-
-msgid ""
-"Select Map\n"
-"Can be blocked by players' votes"
-msgstr ""
-"اختر الخريطة\n"
-"يمكن أن يرفض اللاعبون خيارك عبر التصويت"
-
-msgid "Map-Mod!"
-msgstr ""
-
-msgid "Random map!"
-msgstr ""
-
-msgid "Click to set Password"
-msgstr "اضغط لتحديد كلمة المرور"
-
-msgid "Enter password here"
-msgstr "أدخل كلمة المرور هنا"
 
 msgid "Select Player Name"
 msgstr "اختر اسم اللاعب"
 
-msgid "Alliances"
-msgstr "التحالفات"
-
-msgid "Base"
+msgid "Player Name changes are not allowed when you are muted"
 msgstr ""
 
-msgid "Map Preview"
-msgstr "معاينة الخريطة"
-
-msgid "Click to see Map"
+msgid "Player Name changes are not allowed by the host"
 msgstr ""
 
-msgid "Show Structure Limits"
+msgid "Blind Game:"
 msgstr ""
 
-msgid "Set Structure Limits"
+msgid "- Player names will not be visible to other players (until the game is over)"
 msgstr ""
 
-msgid "Random Game Options"
-msgstr "إعداداتٌ عشوائيةٌ للعبة"
-
-msgid ""
-"Random Game Options\n"
-"Can be blocked by players' votes"
-msgstr ""
-"إعداداتٌ عشوائيةٌ للعبة\n"
-"يمكن أن يرفض اللاعبون هذا عبر التصويت"
-
-msgid "Tech"
+msgid "Blind Lobby:"
 msgstr ""
 
-msgid "Technology Level 1"
+msgid "- Player names will not be visible to other players (until the game has started)"
 msgstr ""
 
-msgid "Technology Level 2"
-msgstr ""
+msgid "OPTIONS"
+msgstr "الإعدادات"
 
-msgid "Technology Level 3"
-msgstr ""
-
-msgid "Technology Level 4"
-msgstr ""
-
-msgid "Start Hosting Game"
-msgstr "بدء الاستضافة"
+msgid "Return To Previous Screen"
+msgstr "عُد إلى الشاشة السابقة"
 
 msgid "DIFFICULTY"
 msgstr ""
@@ -10046,80 +9863,11 @@ msgstr ""
 msgid "Yes, select Player slot"
 msgstr ""
 
-msgid "Joined:"
-msgstr ""
-
-msgid "Ready:"
-msgstr ""
-
-msgid "Players"
-msgstr ""
-
-msgid "Host Options"
-msgstr ""
-
-msgid "Enable Spectator Join"
-msgstr ""
-
-msgid "Lock Teams"
-msgstr ""
-
-msgid "Choose Team"
-msgstr ""
-
-msgid "Teams locked"
-msgstr "إن الفرق مقفلة"
-
-msgid "Click to change player colour"
-msgstr ""
-
-msgid "Click to change player position"
-msgstr ""
-
-msgid "Click to change AI, right click to distribute choice"
-msgstr ""
-
-msgid "Click to close spectator slot"
-msgstr ""
-
-msgid "Player ID: "
-msgstr ""
-
-msgid "(none)"
-msgstr ""
-
-msgid "Alt Name:"
-msgstr ""
-
-msgid "Player rating:"
-msgstr ""
-
-msgid "Host provided"
+msgid "BLIND LOBBY NOTICE:"
 msgstr ""
 
 #, c-format
-msgid "From: %s"
-msgstr ""
-
-msgid "Click to change difficulty"
-msgstr ""
-
-msgid "Waiting for player"
-msgstr ""
-
-msgid "Player is ready"
-msgstr ""
-
-msgid "Player is downloading"
-msgstr "يقوم اللاعب بتحميل بعض الملفات"
-
-msgid "Click when ready"
-msgstr ""
-
-msgid "Waiting for download"
-msgstr "بانتظار انتهاء التحميل"
-
-msgid "READY?"
+msgid "You have been assigned the codename: \"%s\""
 msgstr ""
 
 msgid "For Spectator:"
@@ -10184,22 +9932,6 @@ msgstr "المزيد من المعلومات"
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-msgid "Game Name Updated."
-msgstr ""
-
-#, c-format
-msgid "*** password [%s] is now required! ***"
-msgstr "*** لقد صارت كلمة السر [%s] ضروريةً الآن! ***"
-
-msgid "*** password is NOT required! ***"
-msgstr "*** كلمة السر غير ضرورية! ***"
-
-msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
-
-msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
-
 msgid "Host is Starting Game"
 msgstr ""
 
@@ -10220,6 +9952,15 @@ msgid "Asking %s to move to Players..."
 msgstr ""
 
 msgid "Disconnected from host:"
+msgstr ""
+
+msgid "Unable to handle host redirect"
+msgstr ""
+
+msgid "Unable to process redirect"
+msgstr ""
+
+msgid "Unable to process repeated or invalid redirects"
 msgstr ""
 
 msgid "Host supplied invalid options"
@@ -10265,6 +10006,21 @@ msgstr ""
 msgid "Port mapping disabled by user. Autoconfig of port %d will not happen."
 msgstr ""
 
+msgid "BLIND GAME NOTICE:"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game is over)"
+msgstr ""
+
+msgid "Player names will not be visible to other players (until the game has started)"
+msgstr ""
+
+msgid "IMPORTANT: The host is a player, and can see and configure other players (!)"
+msgstr ""
+
+msgid "The host is a spectator, and can see player identities and configure players / teams"
+msgstr ""
+
 msgid "Failed to load challenge:"
 msgstr ""
 
@@ -10282,20 +10038,6 @@ msgid "Closed"
 msgstr ""
 
 msgid "Open"
-msgstr ""
-
-#, c-format
-msgid "Sending Map: %u%% "
-msgstr ""
-
-#, c-format
-msgid "Map: %u%% downloaded"
-msgstr ""
-
-msgid "HOST"
-msgstr ""
-
-msgid "Ping"
 msgstr ""
 
 msgid "The version of Warzone 2100 used to save this replay file does not match the currently-running version."
@@ -10327,6 +10069,10 @@ msgid "%s joined the Game"
 msgstr ""
 
 #, c-format
+msgid "(codename: %s)"
+msgstr ""
+
+#, c-format
 msgid "File transfer has been aborted for %d."
 msgstr ""
 
@@ -10346,9 +10092,6 @@ msgstr "سينضم %s إلى اللعبة"
 
 msgid "Server message:"
 msgstr ""
-
-msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr "يوجدٌ تحديثٌ جديدٌ للعبة. قم من فضلك بزيارة https://wz2100.net لتحميل النسخة الجديدة."
 
 msgid "LIMITS"
 msgstr ""
@@ -10390,8 +10133,14 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
+msgid "Ping"
+msgstr ""
+
 msgid "Structs"
 msgstr ""
+
+msgid "Alliances"
+msgstr "التحالفات"
 
 msgid "Score"
 msgstr ""
@@ -10448,25 +10197,6 @@ msgid "Team Strategy"
 msgstr ""
 
 #, c-format
-msgid "Changed structure limits [%d]:"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: %u)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit [%s]: %u (default: no limit)"
-msgstr ""
-
-#, c-format
-msgid "[%d] Limit that is bigger than numStructureStats (%u): %u"
-msgstr ""
-
-msgid "Limits were reset to default."
-msgstr ""
-
-#, c-format
 msgid "Host initialized %u limits, unable to show them due to mods"
 msgstr ""
 
@@ -10493,7 +10223,34 @@ msgid "The host has enabled free chat for player: %s"
 msgstr ""
 
 #, c-format
+msgid "The host has enabled free chat for %d players"
+msgstr ""
+
+#, c-format
 msgid "The host has muted free chat for player: %s"
+msgstr ""
+
+#, c-format
+msgid "The host has muted free chat for %d players"
+msgstr ""
+
+msgid "Limits set to default."
+msgstr ""
+
+#, c-format
+msgid "Changed structure limits [%u]:"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: %u)"
+msgstr ""
+
+#, c-format
+msgid "[%d] Limit [%s]: %u (default: no limit)"
+msgstr ""
+
+#, c-format
+msgid "[%zu] Limit that is bigger than numStructureStats (%u): %u"
 msgstr ""
 
 #, c-format
@@ -10548,6 +10305,9 @@ msgstr "برتقالي"
 
 msgid "Grey"
 msgstr "رمادي"
+
+msgid "Black"
+msgstr "سوداء"
 
 msgid "Red"
 msgstr "أحمر"
@@ -10666,9 +10426,6 @@ msgstr ""
 
 msgid "Title"
 msgstr "عنوان المقطوعة"
-
-msgid "MUSIC MANAGER"
-msgstr "إدارة الموسيقا"
 
 msgid "Dismiss"
 msgstr "تجاهل"
@@ -10837,9 +10594,6 @@ msgstr ""
 msgid "Enter password"
 msgstr ""
 
-msgid "OK"
-msgstr "موافق"
-
 msgid "Connecting to Game"
 msgstr ""
 
@@ -10856,6 +10610,9 @@ msgid "Unable to Join Game"
 msgstr ""
 
 msgid "Error:"
+msgstr ""
+
+msgid "Message from Lobby:"
 msgstr ""
 
 msgid "Join Attempt Rejected"
@@ -10882,10 +10639,34 @@ msgstr ""
 msgid "Connection Error"
 msgstr "خطأٌ في الاتصال"
 
+msgid "Gathering connection details"
+msgstr ""
+
+msgid "Could Not Connect"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "The host has requested additional verification"
+msgstr ""
+
+msgid "No supported connection details"
+msgstr ""
+
 msgid "No connections available"
 msgstr ""
 
 msgid "Synchronizing data with host ..."
+msgstr ""
+
+msgid "Waiting for lobby error resolution"
+msgstr ""
+
+msgid "Waiting for join info"
 msgstr ""
 
 msgid "Waiting for correct join password"
@@ -10931,6 +10712,18 @@ msgid "Invalid host response"
 msgstr ""
 
 msgid "Requesting to join game"
+msgstr ""
+
+msgid "Invalid host establishing data"
+msgstr ""
+
+msgid "Invalid host identity"
+msgstr ""
+
+msgid "Failed to establish session keys with host"
+msgstr ""
+
+msgid "Failure to generate valid response"
 msgstr ""
 
 msgid "Kick Spectator"
@@ -11169,6 +10962,9 @@ msgstr ""
 msgid "Classic"
 msgstr ""
 
+msgid "Remastered (HQ)"
+msgstr ""
+
 msgid "Additional Campaigns"
 msgstr ""
 
@@ -11234,6 +11030,57 @@ msgstr ""
 msgid "Reduces the damage the enemy deals to a third of the current difficulty modifier."
 msgstr ""
 
+msgid "Infinite Time"
+msgstr ""
+
+msgid "Missions have no timer where possible (Timer Power Bonus replaced with a small power reward if enabled)."
+msgstr ""
+
+msgid "Victory Hints"
+msgstr ""
+
+msgid "Displays a console message every few minutes showing victory related information."
+msgstr ""
+
+msgid "Finale Fun"
+msgstr ""
+
+msgid "Activate Final Gamma mission bonus content."
+msgstr ""
+
+msgid "Gamma Bonus"
+msgstr ""
+
+msgid "Extra Gamma mission making use of a map created by the original developement team (map updated by: DARwins)."
+msgstr ""
+
+msgid "Additional Spawns (Insane difficulty)"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Insane difficulty (or higher)."
+msgstr ""
+
+msgid "Additional Spawns (Lower difficulties than Insane)"
+msgstr ""
+
+msgid "Enables additional enemy spawns and behavior for Hard difficulty or lower."
+msgstr ""
+
+msgid "Fast EXP gain"
+msgstr ""
+
+msgid "Increases unit experience point gain by 2x."
+msgstr ""
+
+msgid "Tower Wars"
+msgstr ""
+
+msgid "Player gets significantly stronger structures."
+msgstr ""
+
+msgid "Unsupported"
+msgstr ""
+
 msgid "A more relaxed playthrough - easier than easy"
 msgstr ""
 
@@ -11252,10 +11099,37 @@ msgstr ""
 msgid "\"Classic\" campaign balance"
 msgstr ""
 
-msgid "Remastered"
+msgid "Pumpkin"
+msgstr ""
+
+msgid "\"Pumpkin\" campaign balance"
+msgstr ""
+
+msgid "About Balance Options"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Warzone 2100 offers multiple balance options for the Original Campaign, reflecting different experiences over its long history."
 msgstr ""
 
 msgid "The remastered campaign experience"
+msgstr ""
+
+msgid "Increases the viability of weaponry and designs on a per mission basis."
+msgstr ""
+
+msgid "Stats of game versions ~2.x - 3.x."
+msgstr ""
+
+msgid "Unintentionally affected by game patches over the years."
+msgstr ""
+
+msgid "Matching game version 1.10, this is the closest representation of stats that the original developers (Pumpkin Studios) intended."
+msgstr ""
+
+msgid "Remastered"
 msgstr ""
 
 msgid "Difficulty:"
@@ -11276,102 +11150,1000 @@ msgstr "الفصول"
 msgid "GAMES"
 msgstr "المباريات"
 
-msgid "Refresh Games List"
-msgstr "تحديث قائمة المباريات"
+msgid "Continue"
+msgstr "متابعة"
 
-msgid "Filter Games List"
-msgstr "فلترة قائمة المباريات"
+msgid "MUSIC MANAGER"
+msgstr "إدارة الموسيقا"
 
-msgid "Refreshing..."
-msgstr "جارٍ التحديث..."
+msgid "HRTF is not supported on your device / system / OpenAL library"
+msgstr "إن تقنية HRTF غير مدعومةٍ على جهازك \\ نظامك \\ مكتبة OpenAL المثبتة لديك"
 
-msgid "Searching"
-msgstr "جارٍ البحث..."
+msgid "Volume"
+msgstr ""
 
-msgid "Connecting to the lobby server..."
-msgstr "جارٍ الاتصال بخادم قاعة الانتظار..."
+msgid "Voice Volume"
+msgstr "مستوى صوت المتحدثين"
 
-msgid "Map Name"
-msgstr "اسم الخريطة"
+msgid "FX Volume"
+msgstr "مستوى صوت المؤثرات"
 
-msgid "Status"
-msgstr "الحالة"
+msgid "Music Volume"
+msgstr "مستوى صوت الموسيقى"
 
-msgid "Can't connect to lobby server!"
-msgstr "لا يمكن الاتصال بخادم قاعة الانتظار!"
+msgid "Output"
+msgstr ""
+
+msgid "HRTF"
+msgstr "صوتٌ محيطي باستخدام HRTF"
+
+msgid "HRTF can enable enhanced spatialization when used with headphones or some stereo output."
+msgstr ""
+
+msgid "Disabled"
+msgstr "معطّل"
+
+msgid "Enabled"
+msgstr "مفعّل"
+
+msgid "Auto"
+msgstr "تلقائي"
+
+msgid "Subtitles"
+msgstr "Subtitles"
+
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Music"
+msgstr ""
+
+msgid "Music Manager"
+msgstr "إدارة الموسيقا"
+
+msgid "Open Music Manager"
+msgstr ""
+
+msgid "Audio Cues"
+msgstr ""
+
+msgid "Group Reporting"
+msgstr ""
+
+msgid "Mouse"
+msgstr ""
+
+msgid "Right-Click Orders"
+msgstr ""
+
+msgid "By default, Warzone 2100 uses left-click for both selection and ordering / targeting. If you prefer modern RTS mouse input, set this to On. If you are using a trackpad or touch input, you may want to set this to Off."
+msgstr ""
+
+msgid "Use left-click for both selection and ordering / targeting. (The classic Warzone 2100 default.)"
+msgstr ""
+
+msgid "Order units to move or target with right-click. Select units with left-click. (Matches other common RTS game defaults.)"
+msgstr ""
+
+msgid "Trap Cursor"
+msgstr "تقييد المؤشر داخل النافذة"
+
+msgid "Colored Cursors"
+msgstr "مؤشراتٌ ملونة"
+
+msgid "Cursor Size"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Camera Speed"
+msgstr "سرعة الكاميرا"
+
+msgid "Camera Starting Zoom"
+msgstr ""
+
+msgid "Camera Zoom Rate"
+msgstr ""
+
+msgid "Mouse Rotate"
+msgstr ""
+
+msgid "Reverse Rotation"
+msgstr "دورانٌ عكسي"
+
+msgid "Mouse Pan"
+msgstr ""
+
+msgid "Edge Scrolling"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Keys to:"
+msgstr ""
+
+msgid "(Select Profile)"
+msgstr ""
+
+msgid "Reset Keys to: Defaults"
+msgstr ""
+
+msgid "Only useful if Enable IPv6 is On."
+msgstr ""
 
 #, c-format
-msgid "Mods: %s"
-msgstr "التعديلات: %s"
-
-msgid "Mods: None!"
-msgstr "التعديلات: لا يوجد!"
+msgid "%u minutes"
+msgstr "%u من الدقائق"
 
 #, c-format
-msgid "Version: %s"
-msgstr "الإصدار: %s"
-
-msgid "Join as spectator"
-msgstr "انضم كمتفرج"
-
-msgid "Your version of Warzone is incompatible with this game."
-msgstr "إن الإصدار الذي تملكه من Warzone غير متوافقٍ مع هذه المباراة."
-
-msgid "[Password required]"
-msgstr "[تتطلب كلمة مرور]"
-
-msgid "[No Tanks]"
-msgstr "[بدون دبابات]"
-
-msgid "[No Cyborgs]"
-msgstr "[بدون سايبورغ]"
-
-msgid "[No VTOLs]"
-msgstr "[بدون طائراتٍ عمودية]"
+msgid "%u seconds"
+msgstr "%u من الثواني"
 
 #, c-format
-msgid "Hosted by %s"
-msgstr "يستضيفها %s"
+msgid "%s hours"
+msgstr ""
+
+msgid "Unit Color"
+msgstr ""
+
+msgid "Difficulty Level"
+msgstr ""
+
+msgid "Default AI"
+msgstr ""
+
+msgid "Lobby Options"
+msgstr ""
+
+msgid "Enable IPv6"
+msgstr ""
+
+msgid "Whether to list and try connecting via IPv6 (if available)."
+msgstr ""
+
+msgid "Disable connecting via IPv6, and listing IPv6-only games. Only recommended if your system has issues with IPv6 connectivity."
+msgstr ""
+
+msgid "Enable IPv6. If your system supports it, this is the recommended option."
+msgstr ""
+
+msgid "Prefer IPv6 over IPv4"
+msgstr ""
+
+msgid "Prefer connecting via IPv6 over IPv4 when a game is available via both."
+msgstr ""
+
+msgid "Hosting Options"
+msgstr ""
+
+msgid "Port Mapping"
+msgstr ""
+
+msgid "Use PCP, NAT-PMP, or UPnP to help configure your router / firewall to allow connections while hosting."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Quick Chat Only"
+msgstr ""
+
+msgid "Allow All"
+msgstr ""
+
+msgid "Inactivity Timeout"
+msgstr ""
+
+msgid "Lag Kick"
+msgstr ""
+
+msgid "Spectator Slots"
+msgstr "خانات المتفرجين"
+
+msgid "None"
+msgstr ""
+
+msgid "On Player Leave"
+msgstr ""
+
+msgid "Distribute to Team"
+msgstr ""
+
+msgid "Destroy (Classic)"
+msgstr ""
+
+msgid "Game Time Limit"
+msgstr ""
+
+msgid "Terrain Shading Quality only applies when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Shadows are not enabled."
+msgstr ""
+
+msgid "Shadow mapping not available on this system."
+msgstr ""
+
+msgid "Advanced lighting is only available when using terrain appearance: Remastered (HQ)"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Terrain Appearance"
+msgstr ""
+
+msgid "The classic terrain appearance from the initial release. Low-resolution, pixel-art textures."
+msgstr ""
+
+msgid "The normal terrain appearance used as the default for more than a decade. Higher-resolution, recreated textures."
+msgstr ""
+
+msgid "The remastered, high-quality terrain appearance. High-resolution, with modern bump + specular mapping. Requires more memory and a better GPU."
+msgstr ""
+
+msgid "Terrain Shading Quality"
+msgstr ""
+
+msgid "The quality of terrain shading (normal maps, specular highlights, etc). Higher settings improve terrain details at the expense of performance and memory usage."
+msgstr ""
+
+msgid "Medium Quality"
+msgstr ""
+
+msgid "High Quality"
+msgstr ""
+
+msgid "Shadows"
+msgstr "الظلال"
+
+msgid "Draw Shadows"
+msgstr ""
+
+msgid "Terrain Shadows"
+msgstr ""
+
+msgid "Whether terrain casts shadows."
+msgstr ""
+
+msgid "Shadow Resolution"
+msgstr ""
+
+msgid "The internal resolution used to render shadow maps. Higher values improve shadow appearance at the expense of performance and memory usage."
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "Shadow Filtering"
+msgstr ""
+
+msgid "How much filtering / smoothing is applied to shadow appearance. Higher settings smooth shadows more at the expense of performance."
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Ultra"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Point Lights"
+msgstr ""
+
+msgid "Lightmap"
+msgstr ""
+
+msgid "Use a classic lightmap to calculate point lights impacting objects and tiles. (Classic & Normal default. Fastest performance.)"
+msgstr ""
+
+msgid "Per-Pixel (HQ)"
+msgstr ""
+
+msgid "Use advanced per-pixel point-lighting to improve visuals. (May impact performance. Requires a more powerful GPU.)"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "Fog"
+msgstr "الضباب"
+
+msgid "Screen Shake"
+msgstr "اهتزاز الشاشة"
+
+msgid "Textures"
+msgstr ""
+
+msgid "Texture Size Limit"
+msgstr ""
+
+msgid "Textures larger than the configured limit will be downsampled. Unless running on a system with limited available memory, this should usually be set to the maximum value."
+msgstr ""
+
+msgid "LOD Distance"
+msgstr ""
+
+msgid "How level of detail (in textures) is preserved as distance increases."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "The system default (no supplied bias, may result in less sharp visuals)."
+msgstr ""
+
+msgid "Use LOD Distance bias to increase visual sharpness."
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Graphics Backend"
+msgstr ""
+
+msgid "Antialiasing"
+msgstr ""
+
+msgid "Vertical Sync"
+msgstr ""
+
+msgid "Adaptive"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Language"
+msgstr "اللغة"
+
+msgid "Display Scale"
+msgstr "حجم العناصر المرئية"
+
+msgid "Game UI"
+msgstr ""
+
+msgid "Show FPS"
+msgstr ""
+
+msgid "Show Unit Counts"
+msgstr ""
+
+msgid "Groups Menu"
+msgstr ""
+
+msgid "Options Button"
+msgstr ""
+
+msgid "Opacity: 50%"
+msgstr ""
+
+msgid "Radar"
+msgstr "الرادار"
+
+msgid "Radar Orientation"
+msgstr ""
+
+msgid "Fixed"
+msgstr "ثابت"
+
+msgid "Rotating"
+msgstr "دوّار"
+
+msgid "Radar Jump"
+msgstr "القفز باستخدام الرادار"
+
+msgid "Instant"
+msgstr "فوري"
+
+msgid "Tracked"
+msgstr "بالتدريج"
+
+msgid "Radar Zoom"
+msgstr "مستوى تقريب الرادار"
+
+msgid "Video Playback"
+msgstr "حجم فيديوهات القصة"
+
+msgid "Video Size"
+msgstr ""
+
+msgid "1×"
+msgstr "بالحجم الأصلي"
+
+msgid "2×"
+msgstr "ضعف الحجم الأصلي"
+
+msgid "Fullscreen"
+msgstr "ملء الشاشة"
+
+msgid "Scanlines"
+msgstr ""
+
+msgid "50%"
+msgstr "50%"
+
+msgid "Open Configuration Directory"
+msgstr "فتح مجلد التكوين"
+
+msgid "Failed to open configuration directory in system default file browser."
+msgstr "لم نتمكن من فتح مجلد التكوين باستخدام مستعرض الملفات الافتراضي على هذا النظام."
+
+msgid "Configuration directory is reported as:"
+msgstr ""
+
+msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
+msgstr ""
+
+msgid "Please see the documentation for more information on how to locate it manually."
+msgstr "راجع مستندات اللعبة لكي تحصل على المزيد من المعلومات حول كيفية تحديد المجلد بشكلٍ يدوي."
+
+msgid "Failed to open configuration directory"
+msgstr "لم نتمكن من فتح مجلد التكوين"
+
+msgid "Interface"
+msgstr ""
+
+msgid "Defaults"
+msgstr ""
+
+msgid "Graphics"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Window"
+msgstr ""
+
+msgid "Desktop Full"
+msgstr ""
+
+msgid "Window Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "نافذة"
+
+msgid "Fullscreen Mode"
+msgstr ""
+
+msgid "Behaviors"
+msgstr ""
+
+msgid "Minimize on Focus Loss"
+msgstr ""
+
+msgid "Whether the window should auto-minimize on focus loss"
+msgstr ""
+
+msgid "On (Fullscreen)"
+msgstr ""
+
+msgid "Host:"
+msgstr ""
+
+msgid "NOTE: Host is also a player."
+msgstr ""
+
+msgid "Player ID: "
+msgstr ""
+
+msgid "(none)"
+msgstr ""
+
+msgid "You:"
+msgstr ""
+
+msgid "Waiting for host to configure teams"
+msgstr ""
+
+msgid "Waiting for players"
+msgstr ""
+
+msgid "Downloading map / mods"
+msgstr ""
+
+msgid "Waiting for you to check ready"
+msgstr ""
+
+msgid "Waiting for host to start game"
+msgstr ""
+
+msgid "Waiting for spectators"
+msgstr ""
+
+msgid "Players ready & waiting for match:"
+msgstr ""
 
 #, c-format
-msgid "Hosted by %s —%s"
-msgstr "يستضيفها %s - %s"
+msgid "Players: (%zu ready, %zu not ready)"
+msgstr ""
 
-msgid "Can't find any games for your version."
-msgstr "لم نتمكن من العثور على أي مباراةٍ تلائم إصدارك من اللعبة."
+#, c-format
+msgid "AI Bots: %zu"
+msgstr ""
+
+#, c-format
+msgid "Spectators: (%zu ready, %zu not ready)"
+msgstr ""
+
+#, c-format
+msgid "Host: %s"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "not ready"
+msgstr ""
+
+msgid "Waiting Room"
+msgstr ""
+
+msgid "Reset Lobby Address to Default"
+msgstr ""
+
+#, c-format
+msgid "Host Name: %s"
+msgstr ""
+
+#, c-format
+msgid "ID: %s"
+msgstr ""
+
+msgid "FFA"
+msgstr ""
+
+msgid "Alliances Allowed"
+msgstr ""
+
+msgid "Teams"
+msgstr ""
+
+msgid "Teams (No Shared Res)"
+msgstr ""
+
+msgid "Matchmaking"
+msgstr ""
+
+msgid "Blind Lobby"
+msgstr ""
+
+msgid "Blind Game"
+msgstr ""
+
+msgid "No Tanks"
+msgstr ""
+
+msgid "No VTOL"
+msgstr ""
+
+msgid "No Cyborgs"
+msgstr ""
+
+msgid "Spectate Game"
+msgstr ""
+
+msgid "Join as Player"
+msgstr ""
+
+msgid "Join as Spectator"
+msgstr ""
+
+#, c-format
+msgid "Last IP: %s"
+msgstr ""
+
+msgid "Clear Last IP"
+msgstr ""
+
+msgid "GameID or IP:port"
+msgstr ""
+
+msgid "Join"
+msgstr ""
 
 msgid "There appears to be a game update available!"
 msgstr "يبدو أن هنالك تحديثٌ جديدٌ للعبة!"
 
-msgid "No games are available for your version"
-msgstr "لا يوجد مبارياتٌ ملائمةٌ للإصدار الذي تملكه"
+msgid "Error dispatching request"
+msgstr ""
 
-msgid "Wrong Game Version!"
-msgstr "إصدارٌ خاطئٌ من اللعبة!"
+msgid "Failed to connect to lobby server"
+msgstr ""
 
-msgid "You have an incompatible mod."
-msgstr "أنت تستعمل تعديلاً غير متوافق."
+msgid "This game is IPv6-only, and you have the \"Enable IPv6\" option disabled in Options > Defaults."
+msgstr ""
 
-msgid "Host couldn't send file?"
-msgstr "ألم يتمكن المضيف من إرسال الملف؟"
+msgid "Your version of Warzone is incompatible with this game."
+msgstr "إن الإصدار الذي تملكه من Warzone غير متوافقٍ مع هذه المباراة."
 
-msgid "Incorrect Password!"
-msgstr "كلمة المرور غير صحيحة!"
+#, c-format
+msgid "Host Version: %s"
+msgstr ""
 
-msgid "Continue"
-msgstr "متابعة"
+msgid "(50+ omitted)"
+msgstr ""
 
-msgid "CONNECTION"
-msgstr "الاتصال"
+#, c-format
+msgid "(%u omitted)"
+msgstr ""
 
-msgid "Lobby"
-msgstr "قاعة انتظار"
+msgid "No games for your version"
+msgstr ""
 
-msgid "IP"
-msgstr "عنوان IP"
+msgid "No games matching filters"
+msgstr ""
 
-msgid "IP Address or Machine Name"
-msgstr "عنوان IP أو اسم الجهاز"
+#, c-format
+msgid "%d players queued"
+msgstr ""
+
+msgid "Matchmaking Room: Open"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Mods"
+msgstr ""
+
+msgid "Hide Incompatible Games"
+msgstr ""
+
+msgid "Hide Empty Games"
+msgstr ""
+
+msgid "Hide Modded Games"
+msgstr ""
+
+msgid "Hide IPv6-Only"
+msgstr ""
+
+msgid "Host Lobby Options"
+msgstr ""
+
+msgid "Game must be listed in lobby to support this option."
+msgstr ""
+
+msgid "This option is not supported by the current lobby."
+msgstr ""
+
+msgid "Awaiting lobby information..."
+msgstr ""
+
+msgid "Slot Options"
+msgstr ""
+
+msgid "Spectator Join"
+msgstr ""
+
+msgid "Locked"
+msgstr ""
+
+msgid "Allow Change"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Game Options"
+msgstr ""
+
+msgid "Lobby Join Options"
+msgstr ""
+
+msgid "Bot Protection"
+msgstr ""
+
+msgid "Whether automated bots or tools can join or gather host connection info (including your IP address). If you are encountering undesirable joins, spammers, or other abuse, you may wish to enable this option."
+msgstr ""
+
+msgid "Block Known Bots"
+msgstr ""
+
+msgid "Block known bots or automated tools."
+msgstr ""
+
+msgid "Proxy / VPN Connections"
+msgstr ""
+
+msgid "Proxies / VPNs hide the true source of connections. May be used by players trying to evade bans or hide their identity."
+msgstr ""
+
+msgid "Block suspicious connections from proxies / VPNs."
+msgstr ""
+
+msgid "(Recommended)"
+msgstr ""
+
+msgid "Block All"
+msgstr ""
+
+msgid "Block all connections from proxies / VPNs."
+msgstr ""
+
+msgid "Block Suspicious"
+msgstr ""
+
+msgid "Hosting Provider IPs"
+msgstr ""
+
+msgid "Server hosting providers. May be used by automated tools, port scanners, or players trying to evade bans."
+msgstr ""
+
+msgid "Block all connections from hosting provider IPs."
+msgstr ""
+
+msgid "Block suspicious connections from hosting provider IPs."
+msgstr ""
+
+msgid "Lobby Join Bypass"
+msgstr ""
+
+msgid "Allow clients to bypass lobby join via direct port:ip connection. (May enable trolls to bypass lobby anti-abuse protections.)"
+msgstr ""
+
+msgid "Allow any IP to direct join. Bypasses lobby anti-abuse protections."
+msgstr ""
+
+msgid "(Not Recommended)"
+msgstr ""
+
+msgid "Do not allow direct joins. Require joining through the lobby."
+msgstr ""
+
+msgid "Allow local / LAN IPs to direct join. Require others to join through the lobby."
+msgstr ""
+
+msgid "Joined:"
+msgstr ""
+
+msgid "Ready:"
+msgstr ""
+
+msgid "Players"
+msgstr ""
+
+msgid "Host Options"
+msgstr ""
+
+#, c-format
+msgid "Sending Map: %u%% "
+msgstr ""
+
+#, c-format
+msgid "Map: %u%% downloaded"
+msgstr ""
+
+msgid "HOST"
+msgstr ""
+
+msgid "Choose Team"
+msgstr ""
+
+msgid "Teams locked"
+msgstr "إن الفرق مقفلة"
+
+msgid "Click to change player colour"
+msgstr ""
+
+msgid "Click to change player position"
+msgstr ""
+
+msgid "Click to change AI, right click to distribute choice"
+msgstr ""
+
+msgid "Click to close spectator slot"
+msgstr ""
+
+msgid "Click to change difficulty"
+msgstr ""
+
+msgid "Waiting for player"
+msgstr ""
+
+msgid "Player is ready"
+msgstr ""
+
+msgid "Player is downloading"
+msgstr "يقوم اللاعب بتحميل بعض الملفات"
+
+msgid "Click when ready"
+msgstr ""
+
+msgid "Waiting for download"
+msgstr "بانتظار انتهاء التحميل"
+
+msgid "READY?"
+msgstr ""
+
+msgid "Tanks disabled!!"
+msgstr ""
+
+msgid "Cyborgs disabled."
+msgstr ""
+
+msgid "VTOLs disabled."
+msgstr ""
+
+msgid "Satellite Uplink disabled."
+msgstr "تم تعطيل مركز الاتصال بالقمر الصناعي."
+
+msgid "Laser Satellite disabled."
+msgstr "تم تعطيل أقمار الليزر الصناعية."
+
+msgid "Structure Limits Enforced."
+msgstr ""
+
+msgid "Challenge:"
+msgstr ""
+
+msgid "Skirmish:"
+msgstr ""
+
+msgid "Local (Offline)"
+msgstr ""
+
+msgid "Hosting:"
+msgstr ""
+
+msgid "Password-Protected (Private)"
+msgstr ""
+
+msgid "Open (Public)"
+msgstr ""
+
+msgid "Connected to Host:"
+msgstr ""
+
+msgid "Set Password"
+msgstr ""
+
+msgid "Require Password to Join"
+msgstr ""
+
+#, c-format
+msgid "*** password [%s] is now required! ***"
+msgstr "*** لقد صارت كلمة السر [%s] ضروريةً الآن! ***"
+
+msgid "*** password is NOT required! ***"
+msgstr "*** كلمة السر غير ضرورية! ***"
+
+msgid "Game Name Updated."
+msgstr ""
+
+msgid "Set Game Name"
+msgstr ""
+
+msgid "One-Player Skirmish"
+msgstr ""
+
+msgid "Edit Game Name"
+msgstr ""
+
+msgid "Game Name"
+msgstr ""
+
+msgid "Click to see Map"
+msgstr ""
+
+msgid ""
+"Select Map\n"
+"Can be blocked by players' votes"
+msgstr ""
+"اختر الخريطة\n"
+"يمكن أن يرفض اللاعبون خيارك عبر التصويت"
+
+msgid "Match Options"
+msgstr ""
+
+msgid "Base"
+msgstr ""
+
+msgid "Tech"
+msgstr ""
+
+msgid "Technology Level 1"
+msgstr ""
+
+msgid "Technology Level 2"
+msgstr ""
+
+msgid "Technology Level 3"
+msgstr ""
+
+msgid "Technology Level 4"
+msgstr ""
+
+msgid "Limits"
+msgstr ""
+
+msgid "Randomize Options"
+msgstr ""
+
+msgid "Match Option Preferences:"
+msgstr ""
+
+msgid "Star All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Show Player Preferences"
+msgstr ""
+
+msgid "Hide Player Preferences"
+msgstr ""
+
+msgid "Not editable while in a game."
+msgstr ""
+
+msgid "Not editable while in a multiplayer game."
+msgstr ""
+
+msgid "Takes effect on game restart"
+msgstr ""
+
+msgid "Advanced Hosting Options:"
+msgstr ""
+
+msgid "Host Role"
+msgstr ""
+
+msgid "Player Host"
+msgstr ""
+
+msgid "Host is a player in the game (the default)."
+msgstr ""
+
+msgid "Spectator Host"
+msgstr ""
+
+msgid "Host is a spectator in the game."
+msgstr ""
+
+msgid "Blind Mode"
+msgstr ""
+
+msgid "Whether and when players are blinded to other players' identities."
+msgstr ""
+
+msgid "Blind modes are only available when host is a Spectator Host."
+msgstr ""
+
+msgid "Players' identities are visible, in lobby and in game (the default)."
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game starts."
+msgstr ""
+
+msgid "Players' identities are hidden from everyone (except the spectator host) until the game ends."
+msgstr ""
+
+msgid "Start Hosting"
+msgstr ""
+
+msgid "Configure Advanced Hosting Options"
+msgstr ""
 
 msgid "Launch Transport"
 msgstr ""

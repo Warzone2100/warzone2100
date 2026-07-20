@@ -27,7 +27,6 @@
 using nonstd::optional;
 using nonstd::nullopt;
 
-
 class WzInfoManager {
 public:
 	static void initialize();
@@ -75,5 +74,7 @@ typedef std::function<void (CompatCheckResults results)> CompatCheckResultsHandl
 // Get the compat check results
 // NOTE: resultClosure may be called on any thread at any time - use wzAsyncExecOnMainThread inside your closure if you need to perform tasks on the main thread
 void asyncGetCompatCheckResults(CompatCheckResultsHandlerFunc resultClosure);
+
+optional<bool> getVersionCheckNewVersionAvailable();
 
 #endif //_WZ_UPDATE_MANAGER_H_

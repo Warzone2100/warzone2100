@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,11 +26,11 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"	// multiplayer
@@ -37,15 +39,16 @@
 
 #include "clparse.h"
 #include "frontend.h"
-#include "keyedit.h"
 #include "mission.h"
 #include "multiint.h"
 #include "multilimit.h"
 #include "multistat.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "titleui/titleui.h"
 #include "stdinreader.h"
+#include "multijoin_helpers.h"
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
@@ -67,8 +70,8 @@ static HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are 
 static bool bHeadlessAutoGameModeCLIOption = false;
 static bool bActualHeadlessAutoGameMode = false;
 static bool bHostLaunchStartNotReady = false;
+static bool loadingScreenSessionActive = false;
 
-static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
 static STAR *stars = nullptr;
 
@@ -79,6 +82,31 @@ static STAR newStar()
 	s.speed = static_cast<int>((rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0);
 	s.colour = pal_SetBrightness(150 + rand() % 100);
 	return s;
+}
+
+static void renderLoadingScreenPass()
+{
+	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
+
+	pie_UniTransBoxFill(barLeftX - 2, barLeftY - 2, barRightX + 2, barRightY + 2, loadingbar_background);
+
+	for (unsigned int i = 1; i < static_cast<unsigned int>(starsNum); ++i)
+	{
+		stars[i].xPos = stars[i].xPos + stars[i].speed;
+		if (barLeftX + stars[i].xPos >= barRightX)
+		{
+			stars[i] = newStar();
+			stars[i].xPos = 1;
+		}
+		{
+			const int topX = barLeftX + stars[i].xPos;
+			const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
+			const int botX = MIN(topX + stars[i].speed, barRightX);
+			const int botY = topY + starHeight;
+
+			pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
+		}
+	}
 }
 
 static void setupLoadingScreen()
@@ -104,6 +132,11 @@ static void setupLoadingScreen()
 	if (!stars)
 	{
 		stars = (STAR *)malloc(sizeof(STAR) * starsNum);
+		if (!stars)
+		{
+			starsNum = 0;
+			return;
+		}
 	}
 
 	for (i = 0; i < starsNum; ++i)
@@ -183,11 +216,9 @@ TITLECODE titleLoop()
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetFogStatus(false);
-	if (screen_RestartBackDrop())
+	if (!headlessGameMode())
 	{
-		// changed value - draw the backdrop
-		// otherwise, pie_ScreenFrameRenderBegin handles drawing it
-		screen_Display();
+		screen_RestartBackDrop();
 	}
 	wzShowMouse(true);
 
@@ -225,7 +256,17 @@ TITLECODE titleLoop()
 			// Don't call `NETinit()` just yet.
 			// It will be automatically called by `joinGame()` upon connection attempt
 			// with the correct connection provider type corresponding to the connection string.
-			joinGame(iptoconnect, cliConnectToIpAsSpectator);
+			joinGameFromIPOrHostnameConnectionStr(iptoconnect, cliConnectAsSpectator);
+		}
+		else if (!cli_lobby_game_to_connect_str().empty())
+		{
+			NetPlay.bComms = true; // use network = true
+			// Ensure the joinGame has a place to return to
+			changeTitleMode(TITLE);
+			// Don't call `NETinit()` just yet.
+			// It will be automatically called upon connection attempt
+			// with the correct connection provider type corresponding to discovered connection info.
+			joinLobbyGame(NETgetLobbyserverAddress(), cli_lobby_game_to_connect_str(), cliConnectAsSpectator);
 		}
 		else
 		{
@@ -246,6 +287,7 @@ TITLECODE titleLoop()
 	{
 		return RetCode; // don't flip
 	}
+
 	NETflush();  // Send any pending network data.
 
 	audio_Update();
@@ -263,47 +305,14 @@ TITLECODE titleLoop()
 ////////////////////////////////////////////////////////////////////////////////
 // Loading Screen.
 
-//loadbar update
-void loadingScreenCallback()
+bool isLoadingScreenActive()
 {
-	const PIELIGHT loadingbar_background = WZCOL_LOADING_BAR_BACKGROUND;
-	const uint32_t currTick = wzGetTicks();
-	unsigned int i;
+	return loadingScreenSessionActive;
+}
 
-	if (currTick - lastTick < 50)
-	{
-		return;
-	}
-
-	lastTick = currTick;
-
-	/* Draw the black rectangle at the bottom, with a two pixel border */
-	pie_UniTransBoxFill(barLeftX - 2, barLeftY - 2, barRightX + 2, barRightY + 2, loadingbar_background);
-
-	for (i = 1; i < starsNum; ++i)
-	{
-		stars[i].xPos = stars[i].xPos + stars[i].speed;
-		if (barLeftX + stars[i].xPos >= barRightX)
-		{
-			stars[i] = newStar();
-			stars[i].xPos = 1;
-		}
-		{
-			const int topX = barLeftX + stars[i].xPos;
-			const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
-			const int botX = MIN(topX + stars[i].speed, barRightX);
-			const int botY = topY + starHeight;
-
-			pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
-		}
-	}
-
-	pie_ScreenFrameRenderEnd();
-	pie_ScreenFrameRenderBegin();
-
-	audio_Update();
-
-	wzPumpEventsWhileLoading();
+void wrappers_recordLoadingScreen(const gfx_api::RenderPassContext&)
+{
+	renderLoadingScreenPass();
 }
 
 #if defined(__EMSCRIPTEN__)
@@ -323,19 +332,16 @@ void wzemscripten_display_web_loading_indicator(int x)
 // fill buffers with the static screen
 void initLoadingScreen(bool drawbdrop)
 {
-	pie_ScreenFrameRenderBegin(); // start a frame *if one isn't yet started*
 	setupLoadingScreen();
 	wzShowMouse(false);
 	pie_SetFogStatus(false);
+	loadingScreenSessionActive = true;
 
-#if !defined(__EMSCRIPTEN__)
-	// setup the callback....
-	resSetLoadCallback(loadingScreenCallback);
-#else
+#if defined(__EMSCRIPTEN__)
 	wzemscripten_display_web_loading_indicator(1);
 #endif
 
-	if (drawbdrop)
+	if (drawbdrop && !headlessGameMode())
 	{
 		if (!screen_GetBackDrop())
 		{
@@ -352,14 +358,14 @@ void initLoadingScreen(bool drawbdrop)
 // shut down the loading screen
 void closeLoadingScreen()
 {
+	loadingScreenSessionActive = false;
+
 	if (stars)
 	{
 		free(stars);
 		stars = nullptr;
 	}
-#if !defined(__EMSCRIPTEN__)
-	resSetLoadCallback(nullptr);
-#else
+#if defined(__EMSCRIPTEN__)
 	wzemscripten_display_web_loading_indicator(0);
 #endif
 }
@@ -432,10 +438,8 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 
 	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
 	{
-		// Special message for spectators to inform them that the game is fully over
-		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-		// TODO: Display this in a form with a "Quit to Main Menu" button?, or adapt intAddMissionResult to have a separate display for spectators?
+		// Special screen for spectators to inform them that the game is fully over
+		showSpectatorGameOverScreen();
 	}
 	else
 	{

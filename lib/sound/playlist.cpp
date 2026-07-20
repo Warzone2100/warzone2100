@@ -236,9 +236,7 @@ void WZ_Playlist_Preferences::clearAllPreferences()
 
 bool WZ_Playlist_Preferences::savePreferences()
 {
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
+	std::string jsonString = mRoot.dump(4);
 #if SIZE_MAX >= UDWORD_MAX
 	ASSERT_OR_RETURN(false, jsonString.size() <= static_cast<size_t>(std::numeric_limits<UDWORD>::max()), "jsonString.size (%zu) exceeds UDWORD::max", jsonString.size());
 #endif

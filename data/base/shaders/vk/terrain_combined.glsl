@@ -34,20 +34,19 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int bucketDimensionUsed;
 };
 
-// interpolated data. location count = 11
+// interpolated data. location count = 10
 struct FragData {
 	vec2 uvLightmap;
 	vec2 uvGround;
 	vec2 uvDecal;
-	float vertexDistance;
 	vec4 groundWeights;
 	// In tangent space
 	vec3 groundLightDir;
 	vec3 groundHalfVec;
 	mat2 decal2groundMat2;
 	// for Shadows
-	vec3 fragPos;
-	vec3 fragNormal;
+	vec3 posModelSpace;
+	vec3 posViewSpace;
 };
 
 // non-interpolated data

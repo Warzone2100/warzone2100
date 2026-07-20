@@ -25,6 +25,10 @@
 #define __INCLUDED_SRC_COMBAT_H__
 
 #include "weapondef.h"
+#include "objectdef.h"
+
+// Checks if an object is below a HP percentage.
+bool objectBelowHealthLevel(BASE_OBJECT *psObj, const unsigned int percentage);
 
 /* Fire a weapon at something added int weapon_slot*/
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot);
@@ -33,7 +37,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 if any support a counter battery sensor*/
 void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget);
 
-int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
+int32_t objDamage(BASE_OBJECT *psObj, PROJECTILE *psProjectile, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage, bool empRadiusHit);
 
 unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget);
 

@@ -32,6 +32,12 @@ namespace tcp
 
 struct Socket;
 
+/// <summary>
+/// TCP-specific implementation of the `IClientConnection` interface, holding
+/// a reference to the raw TCP socket.
+///
+/// Intended to work with the TCP network backend.
+/// </summary>
 class TCPClientConnection : public IClientConnection
 {
 public:
@@ -50,6 +56,8 @@ public:
 
 	virtual bool isValid() const override;
 	virtual net::result<void> connectionStatus() const override;
+
+	virtual void setConnectedTimeout(std::chrono::milliseconds timeout) override;
 
 	SOCKET getRawSocketFd() const;
 

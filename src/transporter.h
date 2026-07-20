@@ -81,12 +81,6 @@ SDWORD	bobTransporterHeight();
 /*This is used to display the transporter button and capacity when at the home base ONLY*/
 bool intAddTransporterLaunch(DROID *psDroid);
 
-/* set current transporter (for script callbacks) */
-void transporterSetScriptCurrent(DROID *psTransporter);
-
-/* get current transporter (for script callbacks) */
-DROID *transporterGetScriptCurrent();
-
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
 void resetTransporter();
 

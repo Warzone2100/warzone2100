@@ -4117,34 +4117,6 @@
         ],
         "startpos": 4
     },
-    "structure_0453": {
-        "name": "A0HardcreteMk1Wall",
-        "position": [
-            1984,
-            10816,
-            256
-        ],
-        "rotation": [
-            0,
-            0,
-            0
-        ],
-        "startpos": 4
-    },
-    "structure_0454": {
-        "name": "A0HardcreteMk1Wall",
-        "position": [
-            1984,
-            10816,
-            256
-        ],
-        "rotation": [
-            0,
-            0,
-            0
-        ],
-        "startpos": 4
-    },
     "structure_0455": {
         "name": "A0HardcreteMk1Wall",
         "position": [

@@ -297,6 +297,11 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 	else if (strcmp(&message.text[startingCommandPosition], "hostexit") == 0)
 	{
 		ADMIN_REQUIRED_FOR_COMMAND("hostexit");
+		if (message.sender != NetPlay.hostPlayer && !lobby_slashcommands_hostexit_enabled())
+		{
+			sendRoomSystemMessageToSingleReceiver("Only host can use the \"hostexit\" command", static_cast<uint32_t>(message.sender), true);
+			return false;
+		}
 		cmdInterface.quitGame(5);
 	}
 	else if (strncmp(&message.text[startingCommandPosition], "kick ", 5) == 0 || strncmp(&message.text[startingCommandPosition], "ban ", 4) == 0)
@@ -440,7 +445,7 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 			}
 			if (!cmdInterface.changeAlliances(alliancesType))
 			{
-				std::string msg = astringf("Unable to set alliances to: %" PRIu8, alliancesType);
+				std::string msg = astringf("Unable to set alliances to: %u", static_cast<unsigned>(alliancesType));
 				sendRoomNotifyMessage(msg.c_str());
 				return false;
 			}
@@ -526,26 +531,6 @@ bool processChatLobbySlashCommands(const NetworkTextMessage& message, HostLobbyO
 		{
 			std::string msg = astringf("Failed to move player to spectators: %u", playerPos);
 			sendRoomSystemMessage(msg.c_str());
-			return false;
-		}
-	}
-	else if (strncmp(&message.text[startingCommandPosition], "autobalance", 11) == 0)
-	{
-		ADMIN_REQUIRED_FOR_COMMAND("autobalance");
-		if (!getAutoratingEnable())
-		{
-			sendRoomSystemMessage("Autobalance is only supported when autorating lookup is configured.");
-			return false;
-		}
-		int maxp = std::min<int>(game.maxPlayers, MAX_PLAYERS);
-		if (maxp % 2 != 0)
-		{
-			sendRoomSystemMessage("Autobalance is available only for even player count.");
-			return false;
-		}
-		if (!cmdInterface.autoBalancePlayers(message.sender))
-		{
-			// failure message logged by autoBalancePlayers()
 			return false;
 		}
 	}

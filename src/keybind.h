@@ -185,6 +185,8 @@ void kf_RevealMapAtPos();
 
 bool runningMultiplayer();
 
+bool shouldTrapCursor();
+
 void kf_ForceDesync();
 void kf_PowerInfo();
 void kf_BuildNextPage();
@@ -205,6 +207,8 @@ void enableGodMode();
 
 void keybindShutdown();
 
-void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor);
+struct WorldObjectState;
+
+void keybindInformResourceExtractorRemoved(const STRUCTURE* psResourceExtractor, const WorldObjectState& objState);
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

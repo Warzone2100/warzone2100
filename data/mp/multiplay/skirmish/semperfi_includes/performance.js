@@ -24,5 +24,6 @@ function ThrottleThis(throttleThis, time)
 	}
 
 	debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
+
 	return false;
 }

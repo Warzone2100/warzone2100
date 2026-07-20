@@ -33,7 +33,7 @@ namespace tcp
 TCPClientConnection::TCPClientConnection(WzConnectionProvider& connProvider, WzCompressionProvider& compressionProvider, PendingWritesManager& pwm, Socket* rawSocket)
 	: IClientConnection(connProvider, compressionProvider, pwm),
 	socket_(rawSocket),
-	connStatusDescriptorSet_(connProvider_->newDescriptorSet(PollEventType::READABLE))
+	connStatusDescriptorSet_(connProvider.newDescriptorSet(PollEventType::READABLE))
 {
 	ASSERT(socket_ != nullptr, "Null socket passed to TCPClientConnection ctor");
 }
@@ -152,6 +152,11 @@ net::result<void> TCPClientConnection::connectionStatus() const
 		}
 	}
 	return {};
+}
+
+void TCPClientConnection::setConnectedTimeout(std::chrono::milliseconds timeout)
+{
+	// NO-OP
 }
 
 SOCKET TCPClientConnection::getRawSocketFd() const

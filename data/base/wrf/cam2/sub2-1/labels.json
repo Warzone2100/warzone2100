@@ -76,5 +76,12 @@
 		"id": 751,
 		"player": 1,
 		"type": 1
+	},
+
+	"radius_0": {
+		"label": "vtolRemoveZone",
+		"subscriber": 2,
+		"pos": [1152, 256],
+		"radius": 300
 	}
 }

@@ -58,19 +58,19 @@
 
 // ////////////////////////////////////////////////////////////////////////////
 // INFORM others that a building has been completed.
-bool SendBuildFinished(STRUCTURE *psStruct)
+bool SendBuildFinished(const STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
-	NETuint32_t(&psStruct->id);		// ID of building
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
+	NETuint32_t(w, psStruct->id);		// ID of building
 
 	// Along with enough info to build it (if needed)
-	NETuint32_t(&psStruct->pStructureType->ref);
-	NETPosition(&psStruct->pos);
-	NETuint8_t(&player);
-	return NETend();
+	NETuint32_t(w, psStruct->pStructureType->ref);
+	NETPosition(w, psStruct->pos);
+	NETuint8_t(w, player);
+	return NETend(w);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -82,12 +82,12 @@ bool recvBuildFinished(NETQUEUE queue)
 	uint32_t	type, typeindex;
 	uint8_t		player;
 
-	NETbeginDecode(queue, GAME_DEBUG_ADD_STRUCTURE);
-	NETuint32_t(&structId);	// get the struct id.
-	NETuint32_t(&type); 	// Kind of building.
-	NETPosition(&pos);      // pos
-	NETuint8_t(&player);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_DEBUG_ADD_STRUCTURE);
+	NETuint32_t(r, structId);	// get the struct id.
+	NETuint32_t(r, type); 	// Kind of building.
+	NETPosition(r, pos);      // pos
+	NETuint8_t(r, player);
+	NETend(r);
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
@@ -109,7 +109,7 @@ bool recvBuildFinished(NETQUEUE queue)
 		{
 			debug(LOG_SYNC, "Synch error, structure %u was not complete, and should have been.", structId);
 			psStruct->status = SS_BUILT;
-			buildingComplete(psStruct);
+			buildingComplete(psStruct, gameWorld);
 		}
 		debug(LOG_SYNC, "Created normal building %u for player %u", psStruct->id, player);
 		return true;
@@ -121,11 +121,11 @@ bool recvBuildFinished(NETQUEUE queue)
 	for (typeindex = 0; typeindex < numStructureStats && asStructureStats[typeindex].ref != type; typeindex++) {}	// Find structure target
 
 	// Build the structure
-	psStruct = buildStructureDir(&(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId);
+	psStruct = buildStructureDir(gameWorld, &(asStructureStats[typeindex]), pos.x, pos.y, 0, player, true, structId, true);
 	if (psStruct)
 	{
 		psStruct->status	= SS_BUILT;
-		buildingComplete(psStruct);
+		buildingComplete(psStruct, gameWorld);
 		debug(LOG_SYNC, "Huge synch error, forced to create building %u for player %u", psStruct->id, player);
 #if defined (DEBUG)
 		NETlogEntry("had to plonk down a building", SYNC_FLAG, player);
@@ -145,14 +145,13 @@ bool recvBuildFinished(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Inform others that a structure has been destroyed
-bool SendDestroyStructure(STRUCTURE *s)
+bool SendDestroyStructure(const STRUCTURE *s)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
-
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_DEBUG_REMOVE_STRUCTURE);
 	// Struct to destroy
-	NETuint32_t(&s->id);
+	NETuint32_t(w, s->id);
 
-	return NETend();
+	return NETend(w);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -162,9 +161,9 @@ bool recvDestroyStructure(NETQUEUE queue)
 	uint32_t structID;
 	STRUCTURE *psStruct;
 
-	NETbeginDecode(queue, GAME_DEBUG_REMOVE_STRUCTURE);
-	NETuint32_t(&structID);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_DEBUG_REMOVE_STRUCTURE);
+	NETuint32_t(r, structID);
+	NETend(r);
 
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
@@ -180,7 +179,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	{
 		turnOffMultiMsg(true);
 		// Remove the struct from remote players machine
-		destroyStruct(psStruct, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
+		destroyStruct(psStruct, gameTime - deltaGameTime + 1, gameWorld);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 		turnOffMultiMsg(false);
 	}
 
@@ -190,16 +189,15 @@ bool recvDestroyStructure(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 //lassat is firing
 
-bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
+bool sendLasSat(UBYTE player, const STRUCTURE *psStruct, const BASE_OBJECT *psObj)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_LASSAT);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_LASSAT);
+	NETuint8_t(w, player);
+	NETuint32_t(w, psStruct->id);
+	NETuint32_t(w, psObj->id);	// Target
+	NETuint8_t(w, psObj->player);	// Target player
 
-	NETuint8_t(&player);
-	NETuint32_t(&psStruct->id);
-	NETuint32_t(&psObj->id);	// Target
-	NETuint8_t(&psObj->player);	// Target player
-
-	return NETend();
+	return NETend(w);
 }
 
 // recv lassat info on the receiving end.
@@ -210,12 +208,12 @@ bool recvLasSat(NETQUEUE queue)
 	STRUCTURE	*psStruct;
 	uint32_t	id, targetid;
 
-	NETbeginDecode(queue, GAME_LASSAT);
-	NETuint8_t(&player);
-	NETuint32_t(&id);
-	NETuint32_t(&targetid);
-	NETuint8_t(&targetplayer);
-	NETend();
+	auto r = NETbeginDecode(queue, GAME_LASSAT);
+	NETuint8_t(r, player);
+	NETuint32_t(r, id);
+	NETuint32_t(r, targetid);
+	NETuint8_t(r, targetplayer);
+	NETend(r);
 
 	psStruct = IdToStruct(id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
@@ -229,9 +227,8 @@ bool recvLasSat(NETQUEUE queue)
 	{
 		// Lassats have just one weapon
 		unsigned firePause = weaponFirePause(*psStruct->getWeaponStats(0), player);
-		unsigned damLevel = PERCENT(psStruct->body, psStruct->structureBody());
 
-		if (damLevel < HEAVY_DAMAGE_LEVEL)
+		if (objectBelowHealthLevel(psStruct, HEAVY_DAMAGE_LEVEL))
 		{
 			firePause += firePause;
 		}
@@ -254,37 +251,36 @@ bool recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID_TEMPLATE *pT)
+void sendStructureInfo(const STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, const DROID_TEMPLATE *pT)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
 	uint8_t  structureInfo = structureInfo_;
 
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
-	NETuint8_t(&player);
-	NETuint32_t(&structId);
-	NETuint8_t(&structureInfo);
+	auto w = NETbeginEncode(NETgameQueue(realSelectedPlayer), GAME_STRUCTUREINFO);
+	NETuint8_t(w, player);
+	NETuint32_t(w, structId);
+	NETuint8_t(w, structureInfo);
 	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 	{
 		int32_t droidType = pT->droidType;
-		WzString name = pT->name;
-		NETwzstring(name);
-		NETuint32_t(&pT->multiPlayerID);
-		NETint32_t(&droidType);
-		NETuint8_t(&pT->asParts[COMP_BODY]);
-		NETuint8_t(&pT->asParts[COMP_BRAIN]);
-		NETuint8_t(&pT->asParts[COMP_PROPULSION]);
-		NETuint8_t(&pT->asParts[COMP_REPAIRUNIT]);
-		NETuint8_t(&pT->asParts[COMP_ECM]);
-		NETuint8_t(&pT->asParts[COMP_SENSOR]);
-		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
-		NETint8_t(&pT->numWeaps);
+		NETwzstring(w, pT->name);
+		NETuint32_t(w, pT->multiPlayerID);
+		NETint32_t(w, droidType);
+		NETuint8_t(w, pT->asParts[COMP_BODY]);
+		NETuint8_t(w, pT->asParts[COMP_BRAIN]);
+		NETuint8_t(w, pT->asParts[COMP_PROPULSION]);
+		NETuint8_t(w, pT->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(w, pT->asParts[COMP_ECM]);
+		NETuint8_t(w, pT->asParts[COMP_SENSOR]);
+		NETuint8_t(w, pT->asParts[COMP_CONSTRUCT]);
+		NETint8_t(w, pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			NETuint32_t(&pT->asWeaps[i]);
+			NETuint32_t(w, pT->asWeaps[i]);
 		}
 	}
-	NETend();
+	NETend(w);
 }
 
 void recvStructureInfo(NETQUEUE queue)
@@ -296,34 +292,34 @@ void recvStructureInfo(NETQUEUE queue)
 	DROID_TEMPLATE t, *pT = &t;
 	int32_t droidType;
 
-	NETbeginDecode(queue, GAME_STRUCTUREINFO);
-	NETuint8_t(&player);
-	NETuint32_t(&structId);
-	NETuint8_t(&structureInfo);
+	auto r = NETbeginDecode(queue, GAME_STRUCTUREINFO);
+	NETuint8_t(r, player);
+	NETuint32_t(r, structId);
+	NETuint8_t(r, structureInfo);
 	if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 	{
 		WzString name;
-		NETwzstring(name);
+		NETwzstring(r, name);
 		pT->name = name;
-		NETuint32_t(&pT->multiPlayerID);
-		NETint32_t(&droidType);
-		NETuint8_t(&pT->asParts[COMP_BODY]);
-		NETuint8_t(&pT->asParts[COMP_BRAIN]);
-		NETuint8_t(&pT->asParts[COMP_PROPULSION]);
-		NETuint8_t(&pT->asParts[COMP_REPAIRUNIT]);
-		NETuint8_t(&pT->asParts[COMP_ECM]);
-		NETuint8_t(&pT->asParts[COMP_SENSOR]);
-		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
-		NETint8_t(&pT->numWeaps);
+		NETuint32_t(r, pT->multiPlayerID);
+		NETint32_t(r, droidType);
+		NETuint8_t(r, pT->asParts[COMP_BODY]);
+		NETuint8_t(r, pT->asParts[COMP_BRAIN]);
+		NETuint8_t(r, pT->asParts[COMP_PROPULSION]);
+		NETuint8_t(r, pT->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(r, pT->asParts[COMP_ECM]);
+		NETuint8_t(r, pT->asParts[COMP_SENSOR]);
+		NETuint8_t(r, pT->asParts[COMP_CONSTRUCT]);
+		NETint8_t(r, pT->numWeaps);
 		ASSERT_OR_RETURN(, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps), "Bad numWeaps %d", pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			NETuint32_t(&pT->asWeaps[i]);
+			NETuint32_t(r, pT->asWeaps[i]);
 		}
 		pT->droidType = (DROID_TYPE)droidType;
 		pT = copyTemplate(player, pT);
 	}
-	NETend();
+	NETend(r);
 
 	psStruct = IdToStruct(structId, player);
 

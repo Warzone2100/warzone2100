@@ -552,7 +552,11 @@ void Paragraph::geometryChanged()
 void Paragraph::displayRecursive(WidgetGraphicsContext const& context)
 {
 	updateLayout();
-	WIDGET::displayRecursive(context);
+
+	auto overrideContext = context
+		.setAllowChildDisplayRecursiveIfSelfClipped(true);
+
+	WIDGET::displayRecursive(overrideContext);
 }
 
 void Paragraph::display(int xOffset, int yOffset)

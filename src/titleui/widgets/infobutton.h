@@ -24,19 +24,12 @@
 
 #include "lib/widget/widget.h"
 #include "lib/widget/button.h"
+#include "frontendimagebutton.h"
 
-class WzInfoButton : public W_BUTTON
+class WzInfoButton : public WzFrontendImageButton
 {
 protected:
-	WzInfoButton() {}
+	WzInfoButton();
 public:
 	static std::shared_ptr<WzInfoButton> make();
-	void setImageDimensions(int imageSize);
-	int32_t idealHeight() override;
-protected:
-	void display(int xOffset, int yOffset) override;
-private:
-	int imageDimensions = 16;
-	PIELIGHT imageColor = WZCOL_TEXT_MEDIUM;
-	PIELIGHT imageColorHighlighted = pal_RGBA(255,255,255,255);
 };

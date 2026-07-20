@@ -11,8 +11,8 @@ layout(location = 6) in uvec4 grounds;		// ground types for splatting
 layout(location = 7) in vec4 groundWeights;	// ground weights for splatting
 
 layout(location = 0) out FragData frag;
-layout(location = 11) out flat FragFlatData fragf;
-layout(location = 14) out mat3 ModelTangentMatrix;
+layout(location = 10) out flat FragFlatData fragf;
+layout(location = 12) out mat3 ModelTangentMatrix;
 
 void main()
 {
@@ -34,10 +34,11 @@ void main()
 		vec3 vaxis = vec3(1,0,0); // v ~ vertex.x, see uv_ground
 		vec3 tangent = normalize(cross(vertexNormal, vaxis));
 		vec3 bitangent = cross(vertexNormal, tangent);
-		ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
+		//transpose tbn matrix to fit universal point lights shader
+		ModelTangentMatrix = transpose(mat3(tangent, bitangent, vertexNormal)); // aka TBN-matrix
 		// transform light to TangentSpace:
-		vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
-		frag.groundLightDir = sunPos.xyz * ModelTangentMatrix; // already normalized
+		vec3 eyeVec = ModelTangentMatrix * normalize(cameraPos.xyz - vertex.xyz);
+		frag.groundLightDir = ModelTangentMatrix * sunPos.xyz; // already normalized
 		frag.groundHalfVec = frag.groundLightDir + eyeVec;
 
 		vec3 bitangentDecal = -cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
@@ -48,11 +49,10 @@ void main()
 		);
 	}
 
-	frag.fragPos = vertex.xyz;
-	frag.fragNormal = vertexNormal;
+	frag.posModelSpace = vertex.xyz;
+	frag.posViewSpace = (ViewMatrix * vec4(vertex.xyz,1.0)).xyz;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;
-	frag.vertexDistance = position.z;
 	gl_Position = position;
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;

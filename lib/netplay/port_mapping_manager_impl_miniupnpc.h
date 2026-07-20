@@ -59,7 +59,7 @@ private:
 	struct MappingInfo
 	{
 		uint16_t port = 0;
-		PortMappingInternetProtocol protocol = PortMappingInternetProtocol::IPV4;
+		PortMappingInternetProtocol protocol = PortMappingInternetProtocol::TCP_IPV4;
 		WzMiniupnpc_State state = WzMiniupnpc_State::Destroyed;
 
 		void reset()

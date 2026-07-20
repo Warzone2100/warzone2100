@@ -28,12 +28,19 @@ echo "::group::appstreamcli --version"
 ${APPSTREAMCLI_CMD} --version
 echo "::endgroup::"
 
+BUNDLE_SOURCES_ARG=""
+if [ "${WZ_FLATPAK_BUNDLE_SOURCES}" == "true" ]; then
+  BUNDLE_SOURCES_ARG="--bundle-sources"
+fi
+
 echo "::group::flatpak-builder"
-${FLATPAK_BUILDER_CMD} --repo=${WZ_FLATPAK_LOCAL_REPO_NAME} --disable-rofiles-fuse --force-clean --default-branch=${WZ_FLATPAK_BRANCH} --mirror-screenshots-url=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL} "${WZ_FLATPAK_BUILD_DIR}" ${WZ_FLATPAK_MANIFEST_PATH}
+${FLATPAK_BUILDER_CMD} --repo=${WZ_FLATPAK_LOCAL_REPO_NAME} --disable-rofiles-fuse --force-clean --default-branch=${WZ_FLATPAK_BRANCH} --mirror-screenshots-url=${WZ_FLATPAK_MIRROR_SCREENSHOTS_URL} --compose-url-policy=full ${BUNDLE_SOURCES_ARG} "${WZ_FLATPAK_BUILD_DIR}" ${WZ_FLATPAK_MANIFEST_PATH}
 echo "::endgroup::"
 
 if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
   SRC_LOCAL_REPO_NAME="${WZ_FLATPAK_LOCAL_REPO_NAME}"
+
+  echo "::warn::Cross-compile support no longer included in flatpak yaml"
 
   # Create a new repository containing the commits for the cross target arch
   echo "::group::Creating new local repo for target arch: ${WZ_FLATPAK_LOCAL_REPO_NAME}"
@@ -43,7 +50,8 @@ if [[ "$WZ_FLATPAK_TARGET_ARCH" != "$WZ_FLATPAK_BUILD_ARCH" ]]; then
   
   echo "::group::Rename commits to new target arch repo"
   for i in app/${WZ_FLATPAK_APPID} \
-           runtime/${WZ_FLATPAK_APPID}.Debug
+           runtime/${WZ_FLATPAK_APPID}.Debug \
+           runtime/${WZ_FLATPAK_APPID}.Sources
   do
      # Rename the commits to target arch
      echo "Processing: --src-ref=${i}/${WZ_FLATPAK_BUILD_ARCH}/${WZ_FLATPAK_BRANCH}"

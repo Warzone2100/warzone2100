@@ -31,8 +31,9 @@ function getRealPower()
 
 function sortByDistToBase(obj1, obj2)
 {
-	var dist1 = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
-	var dist2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
+	const dist1 = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
+	const dist2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
+
 	return (dist1 - dist2);
 }
 
@@ -61,10 +62,12 @@ function isDerrick(obj)
 
 function setupTruckGroups()
 {
-	var cons = enumDroid(me, DROID_CONSTRUCT);
+	const cons = enumDroid(me, DROID_CONSTRUCT);
+
 	for (let i = 0, l = cons.length; i < l; ++i)
 	{
-		var droid = cons[i];
+		const droid = cons[i];
+
 		if (l < MIN_BASE_TRUCKS)
 		{
 			if (countStruct(FACTORY_STAT) === 0)

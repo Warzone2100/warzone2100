@@ -1,0 +1,55 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::allrounder",
+	"title": "All-Rounder",
+	"sort": "04",
+	"visual": [
+		{
+			"stat": {
+				"id": "Cannon1Mk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Cannon2A-TMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Cannon4AUTOMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Cannon5VulcanMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Cannon375mmMk1",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Cannon6TwinAslt",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"\"All-Rounder\" weapons are less effective than specialized weapons.",
+		"",
+		"However, All-Rounder weapons are moderately effective against all target types, unlike specialized weapons.",
+		"",
+		"All-Rounder weapons also give significant bonus hitpoints to the unit that it's equipped to, at the cost of having higher weight values."
+	],
+	"links": [
+		"wz2100::weapons",
+		"wz2100::units::propulsions::cyborg"
+	]
+}

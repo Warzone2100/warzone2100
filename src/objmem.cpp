@@ -44,6 +44,8 @@
 #include "qtscript.h"
 #include "order.h"
 #include "wzcrashhandlingproviders.h"
+#include "world_object_state.h"
+#include "game_world.h"
 
 #include <algorithm>
 
@@ -55,17 +57,6 @@
  */
 uint32_t                unsynchObjID;
 uint32_t                synchObjID;
-
-/* The lists of objects allocated */
-PerPlayerDroidLists apsDroidLists;
-PerPlayerStructureLists apsStructLists;
-PerPlayerFeatureLists apsFeatureLists;		///< Only player zero is valid for features. TODO: Reduce to single list.
-PerPlayerExtractorLists apsExtractorLists;
-GlobalOilList apsOilList;
-GlobalSensorList apsSensorList; ///< List of sensors in the game.
-
-/*The list of Flag Positions allocated */
-PerPlayerFlagPositionLists apsFlagPosLists;
 
 /* The list of destroyed objects */
 DestroyedObjectsList psDestroyedObj;
@@ -247,11 +238,11 @@ static bool checkReferences(BASE_OBJECT *psVictim)
 {
 	for (unsigned plr = 0; plr < MAX_PLAYERS; ++plr)
 	{
-		if (!checkPlrStructReferences(psVictim, apsStructLists)) { return false; }
-		if (!checkPlrStructReferences(psVictim, mission.apsStructLists)) { return false; }
+		if (!checkPlrStructReferences(psVictim, gameWorld.objects.structures)) { return false; }
+		if (!checkPlrStructReferences(psVictim, mission.gameWorld.objects.structures)) { return false; }
 
-		if (!checkPlrDroidReferences(psVictim, apsDroidLists)) { return false; }
-		if (!checkPlrDroidReferences(psVictim, mission.apsDroidLists)) { return false; }
+		if (!checkPlrDroidReferences(psVictim, gameWorld.objects.droids)) { return false; }
+		if (!checkPlrDroidReferences(psVictim, mission.gameWorld.objects.droids)) { return false; }
 		if (!checkPlrDroidReferences(psVictim, apsLimboDroids)) { return false; }
 	}
 	return true;
@@ -326,6 +317,13 @@ void objmemUpdate()
 	objListIntegCheck();
 #endif
 
+	// Remove tile visibility for objects killed this tick, each against its own world's map
+	//
+	// This is done here (rather than in the object destructor) so that the correct map is used
+	// even for the inactive (offworld / home-base) world
+	flushPendingVisRemoval(gameWorld);
+	flushPendingVisRemoval(mission.gameWorld);
+
 	/* Go through the destroyed objects list looking for objects that
 	   were destroyed before this turn */
 
@@ -363,10 +361,11 @@ uint32_t generateSynchronisedObjectId()
 /* Add the object to its list
  * \param list is a pointer to the object list
  */
-template <typename OBJECT>
-static inline void addObjectToList(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object, int player)
+template <typename OBJECT, size_t PlayerCount = MAX_PLAYERS>
+static inline void addObjectToList(PerPlayerObjectLists<OBJECT, PlayerCount>& list, OBJECT* object, int player)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+	ASSERT_OR_RETURN(, player < PlayerCount, "Invalid player index: %d", player);
 
 	// Prepend the object to the top of the list
 	list[player].emplace_front(object);
@@ -387,13 +386,20 @@ static inline void addObjectToFuncList(FunctionList& list, OBJECT *object, int p
 }
 
 /* Move an object from the active list to the destroyed list.
+ * \param objState is the world object state that owns the list (and the pending-vis-removal queue)
  * \param list is a pointer to the object list
- * \param del is a pointer to the object to remove
+ * \param object is a pointer to the object to remove
+ *
+ * Note: Tile visibility is NOT removed here. Instead the object is queued on
+ * objState.pendingVisRemoval and processed (against this world's own map) by
+ * flushPendingVisRemoval() at the end of the tick, so that the rest of this tick still sees
+ * the object's visibility and removal always targets the correct map
  */
-template <typename OBJECT>
-static inline void destroyObject(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list, OBJECT* object)
+template <typename OBJECT, size_t PlayerCount = MAX_PLAYERS>
+static inline void destroyObject(WorldObjectState& objState, PerPlayerObjectLists<OBJECT, PlayerCount>& list, OBJECT* object)
 {
 	ASSERT_OR_RETURN(, object != nullptr, "Invalid pointer");
+	ASSERT_OR_RETURN(, object->player < PlayerCount, "Invalid player index: %d", object->player);
 	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
 
 	auto it = std::find(list[object->player].begin(), list[object->player].end(), object);
@@ -406,10 +412,23 @@ static inline void destroyObject(PerPlayerObjectLists<OBJECT, MAX_PLAYERS>& list
 		// Prepend the object to the destruction list
 		psDestroyedObj.emplace_front((BASE_OBJECT*)object);
 
+		// Queue tile-visibility removal against this world's map (done at end of tick)
+		objState.pendingVisRemoval.emplace_back((BASE_OBJECT*)object);
+
 		// Set destruction time
 		object->died = gameTime;
 	}
 	scriptRemoveObject(object);
+}
+
+/* Remove tile visibility for objects killed this tick in the given world, against that world's own map */
+void flushPendingVisRemoval(GameWorld& world)
+{
+	for (BASE_OBJECT* psObj : world.objects.pendingVisRemoval)
+	{
+		visRemoveVisibility(psObj, world.map);
+	}
+	world.objects.pendingVisRemoval.clear();
 }
 
 /* Remove an object from the active list
@@ -480,12 +499,12 @@ void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList)
 	/* Whenever a droid gets added to a list other than the current list
 	 * its died flag is set to NOT_CURRENT_LIST so that anything targetting
 	 * it will cancel itself - HACK?! */
-	if (&pList[psDroidToAdd->player] == &apsDroidLists[psDroidToAdd->player])
+	if (&pList[psDroidToAdd->player] == &gameWorld.objects.droids[psDroidToAdd->player])
 	{
 		psDroidToAdd->died = false;
 		if (psDroidToAdd->droidType == DROID_SENSOR)
 		{
-			addObjectToFuncList(apsSensorList, (BASE_OBJECT *)psDroidToAdd, 0);
+			addObjectToFuncList(gameWorld.objects.sensors, (BASE_OBJECT *)psDroidToAdd, 0);
 		}
 
 		// commanders have to get their group back if not already loaded
@@ -495,17 +514,17 @@ void addDroid(DROID *psDroidToAdd, PerPlayerDroidLists& pList)
 			psGroup->add(psDroidToAdd);
 		}
 	}
-	else if (&pList[psDroidToAdd->player] == &mission.apsDroidLists[psDroidToAdd->player])
+	else if (&pList[psDroidToAdd->player] == &mission.gameWorld.objects.droids[psDroidToAdd->player])
 	{
 		if (psDroidToAdd->droidType == DROID_SENSOR)
 		{
-			addObjectToFuncList(mission.apsSensorList, (BASE_OBJECT *)psDroidToAdd, 0);
+			addObjectToFuncList(mission.gameWorld.objects.sensors, (BASE_OBJECT *)psDroidToAdd, 0);
 		}
 	}
 }
 
 /* Destroy a droid */
-void killDroid(DROID *psDel)
+void killDroid(DROID *psDel, WorldObjectState& objState)
 {
 	int i;
 
@@ -522,10 +541,10 @@ void killDroid(DROID *psDel)
 	setDroidBase(psDel, nullptr);
 	if (psDel->droidType == DROID_SENSOR)
 	{
-		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT *)psDel, 0);
+		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psDel, 0);
 	}
 
-	destroyObject(apsDroidLists, psDel);
+	destroyObject(objState, objState.droids, psDel);
 }
 
 template <typename EntityType>
@@ -579,8 +598,15 @@ struct GlobalEntityContainerTraits<FEATURE>
 	}
 };
 
+// Frees every object in entityLists directly (bypassing the kill*()/destroyObject() path)
+//
+// These objects are deleted immediately, so their tile visibility must be removed first or
+// the BASE_OBJECT destructor's "watchedTiles empty" assert would trip
+//
+// When map is non-null the removal updates that map's counters,
+// when map is null (e.g. limbo droids, with no associated map) visibility is just cleared
 template <typename Entity, unsigned PlayerCount>
-static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists)
+static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entityLists, WorldMapState* map)
 {
 	using Traits = GlobalEntityContainerTraits<Entity>;
 	auto& entityContainer = Traits::getContainer();
@@ -588,6 +614,14 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 	{
 		for (auto* ent : list)
 		{
+			if (map != nullptr)
+			{
+				visRemoveVisibility((BASE_OBJECT*)ent, *map);
+			}
+			else
+			{
+				visRemoveVisibilityOffWorld((BASE_OBJECT*)ent);
+			}
 			auto it = entityContainer.find(*ent);
 			if (it == entityContainer.end()) {
 				ASSERT(false, "%s not found in the global container!", Traits::entityName());
@@ -600,9 +634,11 @@ static void freeAllEntitiesImpl(PerPlayerObjectLists<Entity, PlayerCount>& entit
 }
 
 /* Remove all droids */
-void freeAllDroids()
+void freeAllDroids(GameWorld& world)
 {
-	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsDroidLists);
+	// objects killed but not yet vis-removed would be stranded by the world teardown - flush first
+	flushPendingVisRemoval(world);
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(world.objects.droids, &world.map);
 }
 
 /*Remove a single Droid from a list*/
@@ -615,54 +651,49 @@ void removeDroid(DROID* psDroidToRemove, PerPlayerDroidLists& pList)
 	/* Whenever a droid is removed from the current list its died
 	 * flag is set to NOT_CURRENT_LIST so that anything targetting
 	 * it will cancel itself, and we know it is not really on the map. */
-	if (&pList[psDroidToRemove->player] == &apsDroidLists[psDroidToRemove->player])
+	if (&pList[psDroidToRemove->player] == &gameWorld.objects.droids[psDroidToRemove->player])
 	{
 		if (psDroidToRemove->droidType == DROID_SENSOR)
 		{
-			removeObjectFromFuncList(apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
+			removeObjectFromFuncList(gameWorld.objects.sensors, (BASE_OBJECT*)psDroidToRemove, 0);
 		}
 		psDroidToRemove->died = NOT_CURRENT_LIST;
 	}
-	else if (&pList[psDroidToRemove->player] == &mission.apsDroidLists[psDroidToRemove->player])
+	else if (&pList[psDroidToRemove->player] == &mission.gameWorld.objects.droids[psDroidToRemove->player])
 	{
 		if (psDroidToRemove->droidType == DROID_SENSOR)
 		{
-			removeObjectFromFuncList(mission.apsSensorList, (BASE_OBJECT*)psDroidToRemove, 0);
+			removeObjectFromFuncList(mission.gameWorld.objects.sensors, (BASE_OBJECT*)psDroidToRemove, 0);
 		}
 	}
-}
-
-/*Removes all droids that may be stored in the mission lists*/
-void freeAllMissionDroids()
-{
-	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(mission.apsDroidLists);
 }
 
 /*Removes all droids that may be stored in the limbo lists*/
 void freeAllLimboDroids()
 {
-	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsLimboDroids);
+	// limbo droids have no associated map; their tile visibility was already removed off-world
+	freeAllEntitiesImpl<DROID, MAX_PLAYERS>(apsLimboDroids, nullptr);
 }
 
 /**************************  STRUCTURE  *******************************/
 
 /* add the structure to the Structure Lists */
-void addStructure(STRUCTURE *psStructToAdd)
+void addStructure(STRUCTURE *psStructToAdd, WorldObjectState& objState)
 {
-	addObjectToList(apsStructLists, psStructToAdd, psStructToAdd->player);
+	addObjectToList(objState.structures, psStructToAdd, psStructToAdd->player);
 	if (psStructToAdd->pStructureType->pSensor
 	    && psStructToAdd->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		addObjectToFuncList(apsSensorList, (BASE_OBJECT *)psStructToAdd, 0);
+		addObjectToFuncList(objState.sensors, (BASE_OBJECT *)psStructToAdd, 0);
 	}
 	else if (psStructToAdd->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		addObjectToFuncList(apsExtractorLists, psStructToAdd, psStructToAdd->player);
+		addObjectToFuncList(objState.extractors, psStructToAdd, psStructToAdd->player);
 	}
 }
 
 /* Destroy a structure */
-void killStruct(STRUCTURE *psBuilding)
+void killStruct(STRUCTURE *psBuilding, WorldObjectState& objState)
 {
 	int i;
 
@@ -674,11 +705,11 @@ void killStruct(STRUCTURE *psBuilding)
 	if (psBuilding->pStructureType->pSensor
 	    && psBuilding->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT *)psBuilding, 0);
+		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psBuilding, 0);
 	}
 	else if (psBuilding->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		removeObjectFromFuncList(apsExtractorLists, psBuilding, psBuilding->player);
+		removeObjectFromFuncList(objState.extractors, psBuilding, psBuilding->player);
 	}
 
 	for (i = 0; i < MAX_WEAPONS; i++)
@@ -718,66 +749,70 @@ void killStruct(STRUCTURE *psBuilding)
 		}
 	}
 
-	destroyObject(apsStructLists, psBuilding);
+	destroyObject(objState, objState.structures, psBuilding);
 }
 
 /* Remove heapall structures */
-void freeAllStructs()
+void freeAllStructs(GameWorld& world)
 {
-	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(apsStructLists);
+	// objects killed but not yet vis-removed would be stranded by the world teardown - flush first
+	flushPendingVisRemoval(world);
+	freeAllEntitiesImpl<STRUCTURE, MAX_PLAYERS>(world.objects.structures, &world.map);
 }
 
 /*Remove a single Structure from a list*/
-void removeStructureFromList(STRUCTURE *psStructToRemove, PerPlayerStructureLists& pList)
+void removeStructureFromList(STRUCTURE *psStructToRemove, WorldObjectState& objState)
 {
 	ASSERT(psStructToRemove->type == OBJ_STRUCTURE,
 	       "removeStructureFromList: pointer is not a structure");
 	ASSERT(psStructToRemove->player < MAX_PLAYERS,
 	       "removeStructureFromList: invalid player for structure");
-	removeObjectFromList(pList, psStructToRemove, psStructToRemove->player);
+	removeObjectFromList(objState.structures, psStructToRemove, psStructToRemove->player);
 	if (psStructToRemove->pStructureType->pSensor
 	    && psStructToRemove->pStructureType->pSensor->location == LOC_TURRET)
 	{
-		removeObjectFromFuncList(apsSensorList, (BASE_OBJECT *)psStructToRemove, 0);
+		removeObjectFromFuncList(objState.sensors, (BASE_OBJECT *)psStructToRemove, 0);
 	}
 	else if (psStructToRemove->pStructureType->type == REF_RESOURCE_EXTRACTOR)
 	{
-		removeObjectFromFuncList(apsExtractorLists, psStructToRemove, psStructToRemove->player);
+		removeObjectFromFuncList(objState.extractors, psStructToRemove, psStructToRemove->player);
 	}
 }
 
 /**************************  FEATURE  *********************************/
 
 /* add the feature to the Feature Lists */
-void addFeature(FEATURE *psFeatureToAdd)
+void addFeature(FEATURE *psFeatureToAdd, WorldObjectState& objState)
 {
-	addObjectToList(apsFeatureLists, psFeatureToAdd, 0);
+	addObjectToList(objState.features, psFeatureToAdd, 0);
 	if (psFeatureToAdd->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		addObjectToFuncList(apsOilList, psFeatureToAdd, 0);
+		addObjectToFuncList(objState.oils, psFeatureToAdd, 0);
 	}
 }
 
 /* Destroy a feature */
 // set the player to 0 since features have player = maxplayers+1. This screws up destroyObject
 // it's a bit of a hack, but hey, it works
-void killFeature(FEATURE *psDel)
+void killFeature(FEATURE *psDel, WorldObjectState& objState)
 {
 	ASSERT(psDel->type == OBJ_FEATURE,
 	       "killFeature: pointer is not a feature");
 	psDel->player = 0;
-	destroyObject(apsFeatureLists, psDel);
+	destroyObject(objState, objState.features, psDel);
 
 	if (psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
-		removeObjectFromFuncList(apsOilList, psDel, 0);
+		removeObjectFromFuncList(objState.oils, psDel, 0);
 	}
 }
 
 /* Remove all features */
-void freeAllFeatures()
+void freeAllFeatures(GameWorld& world)
 {
-	freeAllEntitiesImpl<FEATURE, MAX_PLAYERS>(apsFeatureLists);
+	// objects killed but not yet vis-removed would be stranded by the world teardown - flush first
+	flushPendingVisRemoval(world);
+	freeAllEntitiesImpl<FEATURE, 1>(world.objects.features, &world.map);
 }
 
 /**************************  FLAG_POSITION ********************************/
@@ -812,32 +847,26 @@ static bool isFlagPositionInList(FLAG_POSITION *psFlagPosToAdd, const PerPlayerF
 }
 
 /* add the Flag Position to the Flag Position Lists */
-void addFlagPositionToList(FLAG_POSITION *psFlagPosToAdd, PerPlayerFlagPositionLists& list)
+void addFlagPosition(FLAG_POSITION *psFlagPosToAdd, WorldObjectState& objState)
 {
 	ASSERT_OR_RETURN(, psFlagPosToAdd != nullptr, "Invalid FlagPosition pointer");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
 	ASSERT_OR_RETURN(, psFlagPosToAdd->player < MAX_PLAYERS, "Invalid FlagPosition player: %u", psFlagPosToAdd->player);
-	if (isFlagPositionInList(psFlagPosToAdd, list))
+	if (isFlagPositionInList(psFlagPosToAdd, objState.flags))
 	{
 		debug(LOG_INFO, "FlagPosition is already in the list - ignoring");
 		return;
 	}
-	list[psFlagPosToAdd->player].emplace_front(psFlagPosToAdd);
-}
-
-/* add the Flag Position to the Flag Position Lists */
-void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
-{
-	addFlagPositionToList(psFlagPosToAdd, apsFlagPosLists);
+	objState.flags[psFlagPosToAdd->player].emplace_front(psFlagPosToAdd);
 }
 
 // Remove it from the list, but don't delete it!
-static bool removeFlagPositionFromList(FLAG_POSITION *psRemove)
+static bool removeFlagPositionFromList(WorldObjectState& objState, FLAG_POSITION *psRemove)
 {
 	ASSERT_OR_RETURN(false, psRemove != nullptr, "Invalid Flag Position pointer");
 	ASSERT_OR_RETURN(false, psRemove->player < MAX_PLAYERS, "Invalid Flag Position player: %" PRIu32, psRemove->player);
 
-	auto& flagPosList = apsFlagPosLists[psRemove->player];
+	auto& flagPosList = objState.flags[psRemove->player];
 	auto it = std::find(flagPosList.begin(), flagPosList.end(), psRemove);
 	if (it != flagPosList.end())
 	{
@@ -853,7 +882,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 {
 	ASSERT_OR_RETURN(, psDel != nullptr, "Invalid Flag Position pointer");
 
-	if (removeFlagPositionFromList(psDel))
+	if (removeFlagPositionFromList(gameWorld.objects, psDel))
 	{
 		free(psDel);
 	}
@@ -864,26 +893,26 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 }
 
 /* Transfer a Flag Position to a new player */
-void transferFlagPositionToPlayer(FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer)
+void transferFlagPositionToPlayer(WorldObjectState& objState, FLAG_POSITION *psFlagPos, UDWORD originalPlayer, UDWORD newPlayer)
 {
 	ASSERT_OR_RETURN(, psFlagPos != nullptr, "Invalid Flag Position pointer");
 	ASSERT(originalPlayer == psFlagPos->player, "Unexpected originalPlayer (%" PRIu32 ") does not match current flagPos->player (%" PRIu32 ")", originalPlayer, psFlagPos->player);
-	ASSERT(removeFlagPositionFromList(psFlagPos), "Did not find flag position in expected list?");
+	ASSERT(removeFlagPositionFromList(objState, psFlagPos), "Did not find flag position in expected list?");
 	psFlagPos->player = newPlayer;
-	addFlagPosition(psFlagPos);
+	addFlagPosition(psFlagPos, objState);
 }
 
 // free all flag positions
-void freeAllFlagPositions()
+void freeAllFlagPositions(WorldObjectState& objState)
 {
 	for (uint32_t player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (const auto& flagPos : apsFlagPosLists[player])
+		for (const auto& flagPos : objState.flags[player])
 		{
 			ASSERT(player == flagPos->player, "Player mismatch? (flagPos->player == %" PRIu32 ", expecting: %d", flagPos->player, player);
 			free(flagPos);
 		}
-		apsFlagPosLists[player].clear();
+		objState.flags[player].clear();
 	}
 }
 
@@ -903,7 +932,7 @@ void checkFactoryFlags()
 			factoryDeliveryPointCheck[type].clear();
 		}
 
-		for (const auto& flagPos : apsFlagPosLists[player])
+		for (const auto& flagPos : gameWorld.objects.flags[player])
 		{
 			if ((flagPos->type == POS_DELIVERY) &&//check this is attached to a unique factory
 				(flagPos->factoryType != REPAIR_FLAG))
@@ -958,12 +987,12 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 	{
 	case OBJ_DROID:
 		{
-			auto pDroid = getBaseObjFromDroidId(apsDroidLists[player], id);
+			auto pDroid = getBaseObjFromDroidId(gameWorld.objects.droids[player], id);
 			if (pDroid)
 			{
 				return pDroid;
 			}
-			pDroid = getBaseObjFromDroidId(mission.apsDroidLists[player], id);
+			pDroid = getBaseObjFromDroidId(mission.gameWorld.objects.droids[player], id);
 			if (pDroid)
 			{
 				return pDroid;
@@ -980,12 +1009,12 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		}
 	case OBJ_STRUCTURE:
 		{
-			auto pStruct = getBaseObjFromId(apsStructLists[player], id);
+			auto pStruct = getBaseObjFromId(gameWorld.objects.structures[player], id);
 			if (pStruct)
 			{
 				return pStruct;
 			}
-			pStruct = getBaseObjFromId(mission.apsStructLists[player], id);
+			pStruct = getBaseObjFromId(mission.gameWorld.objects.structures[player], id);
 			if (pStruct)
 			{
 				return pStruct;
@@ -994,12 +1023,12 @@ BASE_OBJECT *getBaseObjFromData(unsigned id, unsigned player, OBJECT_TYPE type)
 		}
 	case OBJ_FEATURE:
 		{
-			auto pFeat = getBaseObjFromId(apsFeatureLists[0], id);
+			auto pFeat = getBaseObjFromId(gameWorld.objects.features[0], id);
 			if (pFeat)
 			{
 				return pFeat;
 			}
-			pFeat = getBaseObjFromId(mission.apsFeatureLists[0], id);
+			pFeat = getBaseObjFromId(mission.gameWorld.objects.features[0], id);
 			if (pFeat)
 			{
 				return pFeat;
@@ -1067,7 +1096,7 @@ UDWORD getRepairIdFromFlag(const FLAG_POSITION *psFlag)
 		{
 		case 0:
 		{
-			auto id = getRepairIdFromFlagSingleList(psFlag, player, apsStructLists[player]);
+			auto id = getRepairIdFromFlagSingleList(psFlag, player, gameWorld.objects.structures[player]);
 			if (id != UDWORD_MAX)
 			{
 				return id;
@@ -1076,7 +1105,7 @@ UDWORD getRepairIdFromFlag(const FLAG_POSITION *psFlag)
 		}
 		case 1:
 		{
-			auto id = getRepairIdFromFlagSingleList(psFlag, player, mission.apsStructLists[player]);
+			auto id = getRepairIdFromFlagSingleList(psFlag, player, mission.gameWorld.objects.structures[player]);
 			if (id != UDWORD_MAX)
 			{
 				return id;
@@ -1100,7 +1129,7 @@ static void objListIntegCheck()
 
 	for (player = 0; player < MAX_PLAYERS; player += 1)
 	{
-		for (const DROID* psCurr : apsDroidLists[player])
+		for (const DROID* psCurr : gameWorld.objects.droids[player])
 		{
 			ASSERT(psCurr->type == OBJ_DROID &&
 			       (SDWORD)psCurr->player == player,
@@ -1110,7 +1139,7 @@ static void objListIntegCheck()
 	}
 	for (player = 0; player < MAX_PLAYERS; player += 1)
 	{
-		for (const STRUCTURE* psStruct : apsStructLists[player])
+		for (const STRUCTURE* psStruct : gameWorld.objects.structures[player])
 		{
 			ASSERT(psStruct->type == OBJ_STRUCTURE &&
 			       (SDWORD)psStruct->player == player,
@@ -1118,7 +1147,7 @@ static void objListIntegCheck()
 			       objInfo(psStruct), (void*)psStruct, player, (int)psStruct->player);
 		}
 	}
-	for (const BASE_OBJECT* obj : apsFeatureLists[0])
+	for (const BASE_OBJECT* obj : gameWorld.objects.features[0])
 	{
 		ASSERT(obj->type == OBJ_FEATURE,
 		       "objListIntegCheck: misplaced object in the feature list");
@@ -1138,7 +1167,7 @@ void objCount(int *droids, int *structures, int *features)
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (const DROID *psDroid : apsDroidLists[i])
+		for (const DROID *psDroid : gameWorld.objects.droids[i])
 		{
 			(*droids)++;
 			if (psDroid->isTransporter() && psDroid->psGroup && !psDroid->psGroup->psList.empty())
@@ -1147,8 +1176,8 @@ void objCount(int *droids, int *structures, int *features)
 			}
 		}
 
-		*structures += apsStructLists[i].size();
+		*structures += gameWorld.objects.structures[i].size();
 	}
 
-	*features += apsFeatureLists[0].size();
+	*features += gameWorld.objects.features[0].size();
 }

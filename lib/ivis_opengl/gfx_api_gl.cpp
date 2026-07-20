@@ -21,9 +21,11 @@
 #include "lib/framework/wzapp.h"
 #include "screen.h"
 #include "gfx_api_gl.h"
+#include "render_graph/pass_resolve.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
+#include "lib/framework/stringsearch.h"
 #include "piemode.h"
 
 #include <vector>
@@ -473,6 +475,43 @@ void gl_gpurendered_texture::unbind()
 	glBindTexture((_isArray) ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_2D, 0);
 }
 
+// MARK: gl_gpurendered_renderbuffer
+
+gl_gpurendered_renderbuffer::~gl_gpurendered_renderbuffer()
+{
+	if (_id != 0)
+	{
+		glDeleteRenderbuffers(1, &_id);
+		_id = 0;
+	}
+}
+
+void gl_gpurendered_renderbuffer::bind()
+{
+	glBindRenderbuffer(GL_RENDERBUFFER, _id);
+}
+
+size_t gl_gpurendered_renderbuffer::backend_internal_value() const
+{
+	return 0;
+}
+
+// MARK: gl_pipeline_surface_proxy
+
+gl_pipeline_surface_proxy::gl_pipeline_surface_proxy(GLPipelineSurfaceKind surfaceKind)
+	: kind(surfaceKind)
+{
+}
+
+gl_pipeline_surface_proxy::~gl_pipeline_surface_proxy() = default;
+
+void gl_pipeline_surface_proxy::bind() { }
+
+size_t gl_pipeline_surface_proxy::backend_internal_value() const
+{
+	return static_cast<size_t>(kind);
+}
+
 // MARK: gl_texture
 
 gl_texture::gl_texture()
@@ -834,9 +873,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_COMPONENT_INSTANCED, program_data{ "Component program", "shaders/tcmask_instanced.vert", "shaders/tcmask_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents"
+			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4},
@@ -859,23 +898,17 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_NOLIGHT_INSTANCED, program_data{ "Plain program", "shaders/nolight_instanced.vert", "shaders/nolight_instanced.frag",
 		{
 			// per-frame global uniforms
-			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
+			"ProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "cameraPos", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled", "PointLightsPosition", "PointLightsColorAndEnergy", "bucketOffsetAndSize", "PointLightsIndex", "bucketDimensionUsed", "viewportWidth", "viewportHeight",
 			// per-mesh uniforms
-			"tcmask", "normalmap", "specularmap", "hasTangents",
+			"tcmask", "normalmap", "specularmap", "hasTangents", "shieldEffect",
 		},
 		{
 			{"shadowMap", 4}
 		} }),
-	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTHMAP, program_data{ "terrain_depthmap program", "shaders/terrain_depth_only.vert", "shaders/terrain_depth_only.frag",
 		{ "ModelViewProjectionMatrix", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
-		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_TERRAIN_COMBINED_CLASSIC, program_data{ "terrain decals program", "shaders/terrain_combined.vert", "shaders/terrain_combined_classic.frag",
 			{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "groundScale",
 				"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
@@ -904,11 +937,15 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
 			"tex1", "tex2", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER_HIGH, program_data{ "high water program", "shaders/terrain_water_high.vert", "shaders/terrain_water_high.frag",
-		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+		{ "ModelViewProjectionMatrix", "ViewMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
-			"tex", "tex_nm", "tex_sm", "lightmap_tex" } }),
+			"fogColor", "ShadowMapCascadeSplits", "ShadowMapSize", "fogEnabled", "fogEnd", "fogStart", "timeSec",
+			"tex", "tex_nm", "tex_sm", "lightmap_tex"
+		},
+		{
+			{"shadowMap", 4}
+		} }),
 	std::make_pair(SHADER_WATER_CLASSIC, program_data{ "classic water program", "shaders/terrain_water_classic.vert", "shaders/terrain_water_classic.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix", "ShadowMapMVPMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
@@ -1150,13 +1187,13 @@ typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_
 	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
+gl_pipeline_state_object::gl_pipeline_state_object(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, bool patchFragmentShaderMipLodBias, const gfx_api::pipeline_create_info& createInfo, optional<float> mipLodBias, const gfx_api::lighting_constants& shadowConstants) :
 desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_descriptions)
 {
 	std::string vertexShaderHeader;
 	std::string fragmentShaderHeader;
 
-	if (!gles)
+	if (!ctx.gles)
 	{
 		// Determine the shader version directive we should use by examining the current OpenGL context
 		// (The built-in shaders support (and have been tested with) VERSION_120, VERSION_150_CORE, VERSION_330_CORE)
@@ -1190,7 +1227,8 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		fragmentShaderHeader += "#if __VERSION__ >= 300\nprecision lowp sampler2DShadow;\nprecision lowp sampler2DArrayShadow;\n#endif\n";
 	}
 
-	build_program(fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
+	build_program(ctx,
+				  fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias,
 				  shader_to_file_table.at(createInfo.shader_mode).friendly_name,
 				  vertexShaderHeader.c_str(),
 				  shader_to_file_table.at(createInfo.shader_mode).vertex_file,
@@ -1208,10 +1246,8 @@ desc(createInfo.state_desc), vertex_buffer_desc(createInfo.attribute_description
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedGlobalUniforms>(),
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedPerMeshUniforms>(),
 		uniform_setting_func<gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms>(),
-		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTHMAP>(),
-		uniform_binding_entry<SHADER_DECALS>(),
 		uniform_setting_func<gfx_api::TerrainCombinedUniforms>(),
 		uniform_binding_entry<SHADER_WATER>(),
 		uniform_binding_entry<SHADER_WATER_HIGH>(),
@@ -1703,7 +1739,7 @@ static bool patchFragmentShaderShadowConstants(std::string& fragmentShaderStr, c
 	return foundAndReplaced_shadowMode || foundAndReplaced_shadowFilterSize || foundAndReplaced_shadowCascadesCount;
 }
 
-void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
+void gl_pipeline_state_object::build_program(gl_context& ctx, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable,
 											 bool patchFragmentShaderMipLodBias,
 											 const std::string& programName,
 											 const char * vertex_header, const std::string& vertexPath,
@@ -1780,10 +1816,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				success = true;
 			}
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
-			{
-				glObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
-			}
+			ctx.wzGLObjectLabel(GL_SHADER, shader, -1, vertexPath.c_str());
 #endif
 		}
 	}
@@ -1853,10 +1886,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 				success = true;
 			}
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-			if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
-			{
-				glObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
-			}
+			ctx.wzGLObjectLabel(GL_SHADER, shader, -1, fragmentPath.c_str());
 #endif
 		}
 	}
@@ -1878,10 +1908,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 			printProgramInfoLog(LOG_3D, program);
 		}
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-		if ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel)
-		{
-			glObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
-		}
+		ctx.wzGLObjectLabel(GL_PROGRAM, program, -1, programName.c_str());
 #endif
 	}
 	fetch_uniforms(uniformNames, duplicateFragmentUniformNames, programName);
@@ -2097,56 +2124,42 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstanced
 	setUniforms(1, cbuf.ViewMatrix);
 	setUniforms(2, cbuf.ModelUVLightmapMatrix);
 	setUniforms(3, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
-	setUniforms(4, cbuf.sunPos);
-	setUniforms(5, cbuf.sceneColor);
-	setUniforms(6, cbuf.ambient);
-	setUniforms(7, cbuf.diffuse);
-	setUniforms(8, cbuf.specular);
-	setUniforms(9, cbuf.fogColour);
-	setUniforms(10, cbuf.ShadowMapCascadeSplits);
-	setUniforms(11, cbuf.ShadowMapSize);
-	setUniforms(12, cbuf.fogEnd);
-	setUniforms(13, cbuf.fogBegin);
-	setUniforms(14, cbuf.timeState);
-	setUniforms(15, cbuf.fogEnabled);
-	setUniforms(16, cbuf.PointLightsPosition);
-	setUniforms(17, cbuf.PointLightsColorAndEnergy);
-	setUniforms(18, cbuf.bucketOffsetAndSize);
-	setUniforms(19, cbuf.indexed_lights);
-	setUniforms(20, cbuf.bucketDimensionUsed);
-	setUniforms(21, cbuf.viewportWidth);
-	setUniforms(22, cbuf.viewportheight);
+	setUniforms(4, cbuf.cameraPos);
+	setUniforms(5, cbuf.sunPos);
+	setUniforms(6, cbuf.sceneColor);
+	setUniforms(7, cbuf.ambient);
+	setUniforms(8, cbuf.diffuse);
+	setUniforms(9, cbuf.specular);
+	setUniforms(10, cbuf.fogColour);
+	setUniforms(11, cbuf.ShadowMapCascadeSplits);
+	setUniforms(12, cbuf.ShadowMapSize);
+	setUniforms(13, cbuf.fogEnd);
+	setUniforms(14, cbuf.fogBegin);
+	setUniforms(15, cbuf.timeState);
+	setUniforms(16, cbuf.fogEnabled);
+	setUniforms(17, cbuf.PointLightsPosition);
+	setUniforms(18, cbuf.PointLightsColorAndEnergy);
+	setUniforms(19, cbuf.bucketOffsetAndSize);
+	setUniforms(20, cbuf.indexed_lights);
+	setUniforms(21, cbuf.bucketDimensionUsed);
+	setUniforms(22, cbuf.viewportWidth);
+	setUniforms(23, cbuf.viewportheight);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedPerMeshUniforms& cbuf)
 {
-	setUniforms(23, cbuf.tcmask);
-	setUniforms(24, cbuf.normalMap);
-	setUniforms(25, cbuf.specularMap);
-	setUniforms(26, cbuf.hasTangents);
+	// IMPORTANT: uniformIdx continues incrementing from Draw3DShapeInstancedGlobalUniforms above
+	setUniforms(24, cbuf.tcmask);
+	setUniforms(25, cbuf.normalMap);
+	setUniforms(26, cbuf.specularMap);
+	setUniforms(27, cbuf.hasTangents);
+	setUniforms(28, cbuf.shieldEffect);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeInstancedDepthOnlyGlobalUniforms& cbuf)
 {
 	setUniforms(0, cbuf.ProjectionMatrix);
 	setUniforms(1, cbuf.ViewMatrix);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.paramX);
-	setUniforms(2, cbuf.paramY);
-	setUniforms(3, cbuf.paramXLight);
-	setUniforms(4, cbuf.paramYLight);
-	setUniforms(5, cbuf.texture0);
-	setUniforms(6, cbuf.texture1);
-	setUniforms(7, cbuf.unused);
-	setUniforms(8, cbuf.texture_matrix);
-	setUniforms(9, cbuf.fog_colour);
-	setUniforms(10, cbuf.fog_enabled);
-	setUniforms(11, cbuf.fog_begin);
-	setUniforms(12, cbuf.fog_end);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
@@ -2165,28 +2178,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTHMAP>& cbuf)
 {
 	setUniforms(0, cbuf.transform_matrix);
-//	setUniforms(1, cbuf.paramX);
-//	setUniforms(2, cbuf.paramY);
-//	setUniforms(3, cbuf.texture0);
-//	setUniforms(4, cbuf.paramXLight);
-//	setUniforms(5, cbuf.paramYLight);
 	setUniforms(1, cbuf.fog_enabled);
 	setUniforms(2, cbuf.fog_begin);
 	setUniforms(3, cbuf.fog_end);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
-{
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.texture_matrix);
-	setUniforms(2, cbuf.param1);
-	setUniforms(3, cbuf.param2);
-	setUniforms(4, cbuf.fog_colour);
-	setUniforms(5, cbuf.fog_enabled);
-	setUniforms(6, cbuf.fog_begin);
-	setUniforms(7, cbuf.fog_end);
-	setUniforms(8, cbuf.texture0);
-	setUniforms(9, cbuf.texture1);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::TerrainCombinedUniforms& cbuf)
@@ -2257,9 +2251,9 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ViewMatrix);
 	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.ShadowMapMVPMatrix, WZ_MAX_SHADOW_CASCADES);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
 	setUniforms(i++, cbuf.emissiveLight);
@@ -2267,6 +2261,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.diffuseLight);
 	setUniforms(i++, cbuf.specularLight);
 	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.ShadowMapCascadeSplits);
+	setUniforms(i++, cbuf.ShadowMapSize);
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
@@ -2462,9 +2458,9 @@ gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const s
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 	for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
@@ -2502,9 +2498,9 @@ gfx_api::texture_array* gl_context::create_texture_array(const size_t& mipmap_co
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 	// Allocate a client-side buffer
@@ -2526,6 +2522,8 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = false;
+	new_texture->tex_width = static_cast<uint32_t>(width);
+	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2533,9 +2531,9 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture(GLenum internalFo
 	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 
@@ -2552,6 +2550,8 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	auto* new_texture = new gl_gpurendered_texture();
 	new_texture->gles = gles;
 	new_texture->_isArray = true;
+	new_texture->tex_width = static_cast<uint32_t>(width);
+	new_texture->tex_height = static_cast<uint32_t>(height);
 #if defined(WZ_DEBUG_GFX_API_LEAKS)
 	new_texture->debugName = filename;
 #endif
@@ -2559,9 +2559,9 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 	glTexParameteri(new_texture->target(), GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(new_texture->target(), GL_TEXTURE_MAX_LEVEL, 0);
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
+	if (!filename.empty())
 	{
-		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
+		wzGLObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
 #endif
 
@@ -2574,6 +2574,38 @@ gl_gpurendered_texture* gl_context::create_gpurendered_texture_array(GLenum inte
 gl_gpurendered_texture* gl_context::create_framebuffer_color_texture(GLenum internalFormat, GLenum format, GLenum type, const size_t& width, const size_t& height, const std::string& filename)
 {
 	return create_gpurendered_texture(internalFormat, format, type, width, height, filename);
+}
+
+std::unique_ptr<gl_gpurendered_renderbuffer> gl_context::create_framebuffer_renderbuffer(GLenum internalFormat, GLsizei samples,
+	uint32_t width, uint32_t height, const std::string& filename)
+{
+	auto surface = std::make_unique<gl_gpurendered_renderbuffer>();
+	surface->_samples = samples;
+	surface->_width = width;
+	surface->_height = height;
+#if defined(WZ_DEBUG_GFX_API_LEAKS)
+	surface->debugName = filename;
+#endif
+	glGenRenderbuffers(1, &surface->_id);
+	glBindRenderbuffer(GL_RENDERBUFFER, surface->_id);
+	if (samples > 0)
+	{
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, internalFormat,
+			static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+	}
+	else
+	{
+		glRenderbufferStorage(GL_RENDERBUFFER, internalFormat,
+			static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+	}
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (!filename.empty())
+	{
+		wzGLObjectLabel(GL_RENDERBUFFER, surface->_id, -1, filename.c_str());
+	}
+#endif
+	return surface;
 }
 
 gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage &usage, const buffer_storage_hint& hint /*= buffer_storage_hint::static_draw*/, const std::string& debugName /*= ""*/)
@@ -2591,7 +2623,7 @@ gfx_api::pipeline_state_object* gl_context::build_pipeline(gfx_api::pipeline_sta
 	}
 
 	bool patchFragmentShaderMipLodBias = true; // provide the constant to the shader directly
-	auto pipeline = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
+	auto pipeline = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, createInfo, mipLodBias, shadowConstants);
 	if (!psoID.has_value())
 	{
 		createdPipelines.emplace_back(createInfo);
@@ -3065,9 +3097,9 @@ void gl_context::debugStringMarker(const char *str)
 void gl_context::debugSceneBegin(const char *descr)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPushDebugGroup)
+	if (khr_debug)
 	{
-		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
+		wzGLPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
 	}
 #else
 	// not supported
@@ -3077,9 +3109,9 @@ void gl_context::debugSceneBegin(const char *descr)
 void gl_context::debugSceneEnd(const char *descr)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPopDebugGroup)
+	if (khr_debug)
 	{
-		glPopDebugGroup();
+		wzGLPopDebugGroup();
 	}
 #else
 	// not supported
@@ -3101,7 +3133,7 @@ bool gl_context::debugPerfStart(size_t sample)
 	if (GLAD_GL_ARB_timer_query)
 	{
 		char text[80];
-		ssprintf(text, "Starting performance sample %02d", sample);
+		ssprintf(text, "Starting performance sample %02zu", sample);
 		debugStringMarker(text);
 		perfStarted = true;
 		return true;
@@ -3122,9 +3154,9 @@ void gl_context::debugPerfStop()
 void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPushDebugGroup)
+	if (khr_debug)
 	{
-		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
+		wzGLPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
 	}
 #endif
 #if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
@@ -3139,9 +3171,9 @@ void gl_context::debugPerfBegin(PERF_POINT pp, const char *descr)
 void gl_context::debugPerfEnd(PERF_POINT pp)
 {
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	if (khr_debug && glPopDebugGroup)
+	if (khr_debug)
 	{
-		glPopDebugGroup();
+		wzGLPopDebugGroup();
 	}
 #endif
 #if defined(WZ_GL_TIMER_QUERY_SUPPORTED)
@@ -3364,6 +3396,9 @@ bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> c
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 
+static const PreprocessedASCIISearchString OOM_GL_ERROR_SEARCH_STRING = PreprocessedASCIISearchString("GL_OUT_OF_MEMORY");
+static std::atomic<bool> khrCallbackOomDetected(false);
+
 static const char *cbsource(GLenum source)
 {
 	switch (source)
@@ -3414,6 +3449,12 @@ static void GLAPIENTRY khr_callback(GLenum source, GLenum type, GLuint id, GLenu
 		if (severity == GL_DEBUG_SEVERITY_HIGH)
 		{
 			log_level = LOG_ERROR;
+
+			// detect OUT_OF_MEMORY errors, set flag
+			if (message != nullptr && containsSubstringPreprocessed(message, std::min<size_t>(length, strnlen(message, length)), OOM_GL_ERROR_SEARCH_STRING))
+			{
+				khrCallbackOomDetected.store(true);
+			}
 		}
 	}
 	debugLogFromGfxCallback(log_level, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), (message != nullptr) ? message : "");
@@ -3482,6 +3523,10 @@ uint32_t gl_context::getSuggestedDefaultDepthBufferResolution() const
 
 bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> _mipLodBias, uint32_t _depthMapResolution)
 {
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	khrCallbackOomDetected.store(false);
+#endif
+
 	// obtain backend_OpenGL_Impl from impl
 	backend_impl = impl.createOpenGLBackendImpl();
 	if (!backend_impl)
@@ -3537,11 +3582,11 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		return false;
 	}
 
-	if (!setSwapInterval(mode))
+	if (!setSwapIntervalInternal(mode))
 	{
 		// default to vsync on
 		debug(LOG_3D, "Failed to set swap interval: %d; defaulting to vsync on", to_int(mode));
-		setSwapInterval(gfx_api::context::swap_interval_mode::vsync);
+		setSwapIntervalInternal(gfx_api::context::swap_interval_mode::vsync);
 	}
 
 	mipLodBias = _mipLodBias;
@@ -3558,10 +3603,17 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 		wzResetGfxSettingsOnFailure(); // reset certain settings (like MSAA) that could be contributing to OUT_OF_MEMORY (or other) errors
 		return false;
 	}
+	registerSwapchainPipelineSurfaces();
 	initDepthPasses(depthBufferResolution);
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 #if !defined(__EMSCRIPTEN__)
-	_beginRenderPassImpl();
+	if (!gles && GLAD_GL_VERSION_3_0)
+	{
+		glDisable(GL_FRAMEBUFFER_SRGB);
+		wzGLCheckErrors();
+	}
 #endif
 
 	return true;
@@ -3681,6 +3733,176 @@ bool gl_context::isBlocklistedGraphicsDriver() const
 	return false;
 }
 
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+
+bool gl_context::enableDebugMessageCallbacks()
+{
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glDebugMessageCallback && glDebugMessageControl)
+		{
+			glDebugMessageCallback(khr_callback, nullptr);
+			wzGLCheckErrors();
+			glEnable(GL_DEBUG_OUTPUT);
+			wzGLCheckErrors();
+			// Do not want to output notifications. Some drivers spam them too much.
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+			wzGLCheckErrors();
+			debug(LOG_3D, "Enabling KHR_debug message callback");
+			return true;
+		}
+		else
+		{
+			debug(LOG_3D, "Failed to enable KHR_debug message callback");
+		}
+	}
+	else
+	{
+		if (glDebugMessageCallbackKHR && glDebugMessageControlKHR)
+		{
+			glDebugMessageCallbackKHR(khr_callback, nullptr);
+			wzGLCheckErrors();
+			glEnable(GL_DEBUG_OUTPUT_KHR);
+			wzGLCheckErrors();
+			// Do not want to output notifications. Some drivers spam them too much.
+			glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION_KHR, 0, nullptr, GL_FALSE);
+			wzGLCheckErrors();
+			debug(LOG_3D, "Enabling KHR_debug message callback");
+			return true;
+		}
+		else
+		{
+			debug(LOG_3D, "Failed to enable KHR_debug message callback");
+		}
+	}
+
+	return false;
+}
+
+void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
+{
+	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	{
+		return;
+	}
+
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glObjectLabel)
+		{
+			glObjectLabel(identifier, name, length, label);
+		}
+	}
+	else
+	{
+		if (glObjectLabelKHR)
+		{
+			glObjectLabelKHR(identifier, name, length, label);
+		}
+	}
+}
+
+void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
+{
+	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	{
+		return;
+	}
+
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glPushDebugGroup)
+		{
+			glPushDebugGroup(source, id, length, message);
+		}
+	}
+	else
+	{
+		if (glPushDebugGroupKHR)
+		{
+			glPushDebugGroupKHR(source, id, length, message);
+		}
+	}
+}
+
+void gl_context::wzGLPopDebugGroup()
+{
+	if (!(/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug))
+	{
+		return;
+	}
+
+	if (!useKHRSuffixedDebugFuncs())
+	{
+		if (glPopDebugGroup)
+		{
+			glPopDebugGroup();
+		}
+	}
+	else
+	{
+		if (glPopDebugGroupKHR)
+		{
+			glPopDebugGroupKHR();
+		}
+	}
+}
+
+bool gl_context::useKHRSuffixedDebugFuncs()
+{
+	if (!gles)
+	{
+		// Desktop OpenGL does *not* use KHR-suffixed entrypoints
+		return false;
+	}
+
+	// OpenGL ES:
+	//
+	// OpenGL ES 3.2 makes this "core" (without the suffix)
+	if (GLAD_GL_ES_VERSION_3_2)
+	{
+		return false;
+	}
+	// When KHR_debug is implemented in an OpenGL ES context, all entry points defined must have a "KHR" suffix.
+	// Reference: https://registry.khronos.org/OpenGL/extensions/KHR/KHR_debug.txt
+	if (GLAD_GL_KHR_debug)
+	{
+		return true;
+	}
+	return false;
+}
+
+#else
+
+bool gl_context::enableDebugMessageCallbacks()
+{
+	return false;
+}
+
+void gl_context::wzGLObjectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
+{
+	// no-op
+}
+
+void gl_context::wzGLPushDebugGroup(GLenum source, GLuint id, GLsizei length, const GLchar *message)
+{
+	// no-op
+}
+
+void gl_context::wzGLPopDebugGroup()
+{
+	// no-op
+}
+
+bool gl_context::useKHRSuffixedDebugFuncs()
+{
+	return false;
+}
+
+#endif
+
+
+
 bool gl_context::initGLContext()
 {
 	frameNum = 1;
@@ -3732,7 +3954,7 @@ bool gl_context::initGLContext()
 	}
 
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
-	khr_debug = GLAD_GL_KHR_debug;
+	khr_debug = (/*GLAD_GL_VERSION_4_3 ||*/ GLAD_GL_ES_VERSION_3_2 || GLAD_GL_KHR_debug);
 #else
 	khr_debug = false;
 #endif
@@ -3922,21 +4144,7 @@ bool gl_context::initGLContext()
 #if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
 	if (khr_debug)
 	{
-		if (glDebugMessageCallback && glDebugMessageControl)
-		{
-			glDebugMessageCallback(khr_callback, nullptr);
-			wzGLCheckErrors();
-			glEnable(GL_DEBUG_OUTPUT);
-			wzGLCheckErrors();
-			// Do not want to output notifications. Some drivers spam them too much.
-			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-			wzGLCheckErrors();
-			debug(LOG_3D, "Enabling KHR_debug message callback");
-		}
-		else
-		{
-			debug(LOG_3D, "Failed to enable KHR_debug message callback");
-		}
+		enableDebugMessageCallbacks();
 	}
 #endif
 
@@ -3986,7 +4194,7 @@ bool gl_context::initGLContext()
 
 size_t gl_context::numDepthPasses()
 {
-	return depthFBO.size();
+	return depthPassCount;
 }
 
 bool gl_context::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBufferResolution)
@@ -4001,18 +4209,12 @@ bool gl_context::setDepthPassProperties(size_t _numDepthPasses, size_t _depthBuf
 	depthPassCount = _numDepthPasses;
 	depthBufferResolution = _depthBufferResolution;
 
+	bumpRenderGraphEpoch();
+
 	// reinitialize depth passes
 	initDepthPasses(depthBufferResolution);
 
 	return true;
-}
-
-void gl_context::beginDepthPass(size_t idx)
-{
-	ASSERT_OR_RETURN(, idx < depthFBO.size(), "Invalid depth pass #: %zu", idx);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthFBO[idx]);
-	glViewport(0, 0, static_cast<GLsizei>(depthBufferResolution), static_cast<GLsizei>(depthBufferResolution));
-	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 size_t gl_context::getDepthPassDimensions(size_t idx)
@@ -4020,46 +4222,433 @@ size_t gl_context::getDepthPassDimensions(size_t idx)
 	return depthBufferResolution;
 }
 
-void gl_context::endCurrentDepthPass()
+gfx_api::abstract_texture* gl_context::getPipelineSurface(gfx_api::PipelineSurfaceId id)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-//	glViewport(0, 0, viewportWidth, viewportHeight);
-//	glDepthMask(GL_TRUE);
+	return _pipelineSurfaces.get(id);
 }
 
-gfx_api::abstract_texture* gl_context::getDepthTexture()
+gfx_api::PipelineSurfaceMeta gl_context::pipelineSurfaceMeta(gfx_api::PipelineSurfaceId id) const
 {
-	return depthTexture;
+	return _pipelineSurfaces.meta(id);
 }
 
-void gl_context::_beginRenderPassImpl()
+nonstd::optional<gfx_api::PipelineSurfaceId> gl_context::findPipelineSurfaceId(gfx_api::abstract_texture* texture) const
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, viewportWidth, viewportHeight);
-	GLbitfield clearFlags = 0;
-	glDepthMask(GL_TRUE);
-	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
-	glClear(clearFlags);
+	return _pipelineSurfaces.findSurfaceId(texture);
 }
 
-void gl_context::beginRenderPass()
+bool gl_context::isSceneMSAAEnabled() const
 {
-#if defined(__EMSCRIPTEN__)
-	_beginRenderPassImpl();
-#else
-	// no-op everywhere else
-#endif
+	return multisamples > 0 && _sceneMsaaSurface != nullptr;
 }
 
-void gl_context::endRenderPass()
+bool gl_context::isSwapchainMSAAEnabled() const
 {
+	return false;
+}
+
+bool gl_context::isMultisampledColorAttachment(gfx_api::abstract_texture* texture) const
+{
+	if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(texture))
+	{
+		return renderbuffer->isMultisampled();
+	}
+	return false;
+}
+
+gfx_api::pixel_format gl_context::getDepthStencilFormat() const
+{
+	return gfx_api::pixel_format::FORMAT_D24_UNORM_S8;
+}
+
+[[noreturn]] static void glContextHandleOOMError()
+{
+	wzDisplayFatalGfxBackendFailure("GL_OUT_OF_MEMORY");
+	wzResetGfxSettingsOnFailure();
+	abort();
+}
+
+static const char *cbframebuffererror(GLenum err);
+
+namespace
+{
+
+gfx_api::DynamicFBOKey::Slot dynamicFBOKeySlotFromAttachment(const gfx_api::AttachmentDesc& attachment)
+{
+	gfx_api::DynamicFBOKey::Slot slot;
+	if (auto* pipelineSurface = dynamic_cast<gl_pipeline_surface_proxy*>(attachment.texture))
+	{
+		slot.isDefaultFramebuffer = true;
+		slot.objectId = static_cast<uint32_t>(pipelineSurface->kind);
+		return slot;
+	}
+	if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(attachment.texture))
+	{
+		slot.objectId = renderbuffer->id();
+		slot.isRenderbuffer = true;
+		return slot;
+	}
+
+	auto* gpuTexture = dynamic_cast<gl_gpurendered_texture*>(attachment.texture);
+	ASSERT_OR_RETURN(slot, gpuTexture != nullptr, "Dynamic pass attachment must be a GPU-rendered texture or renderbuffer");
+	slot.objectId = gpuTexture->id();
+	slot.arrayLayer = attachment.arrayLayer;
+	return slot;
+}
+
+gfx_api::DynamicFBOKey buildDynamicFBOKey(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight)
+{
+	gfx_api::DynamicFBOKey key;
+	key.width = passWidth;
+	key.height = passHeight;
+	key.colorSlots.reserve(pass.colorAttachments.size());
+	for (const auto& colorAttachment : pass.colorAttachments)
+	{
+		key.colorSlots.push_back(dynamicFBOKeySlotFromAttachment(colorAttachment));
+	}
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
+	{
+		key.depthSlot = dynamicFBOKeySlotFromAttachment(pass.depthAttachment.value());
+	}
+	return key;
+}
+
+void bindDynamicPassFramebufferAttachments(const gfx_api::RenderPassDesc& pass)
+{
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		const auto& attachment = pass.colorAttachments[i];
+		ASSERT_OR_RETURN(, attachment.texture != nullptr, "Unresolved color attachment in dynamic pass");
+		if (dynamic_cast<gl_pipeline_surface_proxy*>(attachment.texture) != nullptr)
+		{
+			continue;
+		}
+		const GLenum colorAttachment = GL_COLOR_ATTACHMENT0 + static_cast<GLenum>(i);
+		if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(attachment.texture))
+		{
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, colorAttachment, GL_RENDERBUFFER, renderbuffer->id());
+		}
+		else
+		{
+			auto* gpuTexture = dynamic_cast<gl_gpurendered_texture*>(attachment.texture);
+			ASSERT_OR_RETURN(, gpuTexture != nullptr, "Dynamic pass color attachment must be a GPU-rendered texture or renderbuffer");
+			if (gpuTexture->isArray())
+			{
+				glFramebufferTextureLayer(GL_FRAMEBUFFER, colorAttachment, gpuTexture->id(), 0,
+					static_cast<GLint>(attachment.arrayLayer));
+			}
+			else
+			{
+				glFramebufferTexture2D(GL_FRAMEBUFFER, colorAttachment, gpuTexture->target(), gpuTexture->id(), 0);
+			}
+		}
+	}
+
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr)
+	{
+		if (dynamic_cast<gl_pipeline_surface_proxy*>(pass.depthAttachment->texture) != nullptr)
+		{
+			return;
+		}
+		const GLenum depthAttachmentPoint = gfx_api::attachmentDepthHasStencil(pass.depthAttachment.value())
+			? GL_DEPTH_STENCIL_ATTACHMENT
+			: GL_DEPTH_ATTACHMENT;
+		if (auto* depthRenderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(pass.depthAttachment->texture))
+		{
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, depthAttachmentPoint, GL_RENDERBUFFER, depthRenderbuffer->id());
+		}
+		else
+		{
+			auto* depthTexture = dynamic_cast<gl_gpurendered_texture*>(pass.depthAttachment->texture);
+			ASSERT_OR_RETURN(, depthTexture != nullptr, "Dynamic pass depth attachment must be a GPU-rendered texture or renderbuffer");
+			if (depthTexture->isArray())
+			{
+				glFramebufferTextureLayer(GL_FRAMEBUFFER, depthAttachmentPoint, depthTexture->id(), 0,
+					static_cast<GLint>(pass.depthAttachment->arrayLayer));
+			}
+			else
+			{
+				glFramebufferTexture2D(GL_FRAMEBUFFER, depthAttachmentPoint, depthTexture->target(), depthTexture->id(), 0);
+			}
+		}
+	}
+}
+
+void configureDynamicPassDrawBuffers(const gfx_api::RenderPassDesc& pass)
+{
+	std::vector<GLenum> drawBuffers;
+	drawBuffers.reserve(pass.colorAttachments.size());
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		drawBuffers.push_back(GL_COLOR_ATTACHMENT0 + static_cast<GLenum>(i));
+	}
+
+	if (drawBuffers.size() > 1)
+	{
+		glDrawBuffers(static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+	}
+	else if (drawBuffers.empty())
+	{
+		const GLenum none = GL_NONE;
+		glDrawBuffers(1, &none);
+		glReadBuffer(GL_NONE);
+	}
+}
+
+} // anonymous namespace
+
+void gl_context::beginScreenFrame()
+{
+	frameHasDrawCommands = false;
+	_dynamicFBOCache.releaseAll();
+}
+
+void gl_context::finishScreenFrame()
+{
+	if (frameHasDrawCommands)
+	{
+		backend_impl->swapWindow();
+		glUseProgram(0);
+		current_program = nullptr;
+	}
+
+	frameHasDrawCommands = false;
 	frameNum = std::max<size_t>(frameNum + 1, 1);
-	backend_impl->swapWindow();
-	glUseProgram(0);
-	current_program = nullptr;
-#if !defined(__EMSCRIPTEN__)
-	_beginRenderPassImpl();
+	purgeFrameResources();
+
+#if defined(WZ_GL_KHR_DEBUG_SUPPORTED)
+	if (khrCallbackOomDetected.load())
+	{
+		glContextHandleOOMError();
+	}
 #endif
+}
+
+void gl_context::applyAttachmentClears(const gfx_api::RenderPassDesc& pass)
+{
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glDepthMask(GL_TRUE);
+
+	for (size_t i = 0; i < pass.colorAttachments.size(); ++i)
+	{
+		const auto& colorAttachment = pass.colorAttachments[i];
+		if (!colorAttachment.shouldClear())
+		{
+			continue;
+		}
+		glClearBufferfv(GL_COLOR, static_cast<GLint>(i),
+			colorAttachment.clearValue.color.data());
+	}
+
+	if (pass.depthAttachment.has_value() && pass.depthAttachment->shouldClear())
+	{
+		const gfx_api::ClearValue& clear = pass.depthAttachment->clearValue;
+		if (gfx_api::attachmentDepthHasStencil(pass.depthAttachment.value()))
+		{
+			glClearBufferfi(GL_DEPTH_STENCIL, 0, clear.depth, static_cast<GLint>(clear.stencil));
+		}
+		else
+		{
+			glClearBufferfv(GL_DEPTH, 0, &clear.depth);
+		}
+	}
+}
+
+void gl_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /*passes*/,
+	gfx_api::PassGraphCompileResult& /*compileResult*/)
+{
+}
+
+void gl_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
+{
+	ASSERT_OR_RETURN(, !hasActivePass, "beginPass called while another pass is active");
+	ASSERT_OR_RETURN(, !_dynamicPassFBO, "Stale pass framebuffer binding");
+	ASSERT_OR_RETURN(, pass.viewportSize.has_value(), "Pass requires resolved viewportSize");
+	ASSERT_OR_RETURN(, !pass.colorAttachments.empty()
+		|| (pass.depthAttachment.has_value() && pass.depthAttachment->texture != nullptr),
+		"Pass requires at least one color or depth attachment");
+
+	const uint32_t passWidth = pass.viewportSize->first;
+	const uint32_t passHeight = pass.viewportSize->second;
+
+	set_depth_range(0.f, 1.f);
+
+	const bool usesDefaultFb = gfx_api::passTargetsSwapchainColor(pass);
+	if (usesDefaultFb)
+	{
+		_dynamicPassFBO = 0;
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	else
+	{
+		const gfx_api::DynamicFBOKey fboKey = buildDynamicFBOKey(pass, passWidth, passHeight);
+		_dynamicPassFBO = _dynamicFBOCache.acquire(fboKey, [&]() -> uint32_t {
+			GLuint fbo = 0;
+			glGenFramebuffers(1, &fbo);
+			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+			bindDynamicPassFramebufferAttachments(pass);
+			const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+			ASSERT_OR_RETURN(0, fboStatus == GL_FRAMEBUFFER_COMPLETE,
+				"Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
+			return fbo;
+		});
+		ASSERT_OR_RETURN(, _dynamicPassFBO != 0, "Failed to acquire dynamic pass framebuffer");
+		glBindFramebuffer(GL_FRAMEBUFFER, _dynamicPassFBO);
+		configureDynamicPassDrawBuffers(pass);
+
+		const GLenum fboStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		ASSERT_OR_RETURN(, fboStatus == GL_FRAMEBUFFER_COMPLETE, "Dynamic pass framebuffer incomplete: %s", cbframebuffererror(fboStatus));
+	}
+
+	glViewport(0, 0, static_cast<GLsizei>(passWidth), static_cast<GLsizei>(passHeight));
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glDepthMask(GL_TRUE);
+	applyAttachmentClears(pass);
+	_activePassDesc = pass;
+	hasActivePass = true;
+	frameHasDrawCommands = true;
+}
+
+void gl_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
+{
+	ASSERT_OR_RETURN(, hasActivePass, "endPass called without an active pass");
+
+	const uint32_t passWidth = _activePassDesc.viewportSize.has_value()
+		? _activePassDesc.viewportSize->first
+		: sceneFramebufferWidth;
+	const uint32_t passHeight = _activePassDesc.viewportSize.has_value()
+		? _activePassDesc.viewportSize->second
+		: sceneFramebufferHeight;
+
+	applyAttachmentStoreOps(_activePassDesc, passWidth, passHeight);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	_dynamicPassFBO = 0;
+	glViewport(0, 0, static_cast<GLsizei>(viewportWidth), static_cast<GLsizei>(viewportHeight));
+	_activePassDesc = gfx_api::RenderPassDesc();
+	hasActivePass = false;
+}
+
+void gl_context::resolveMsaaColorAttachment(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight)
+{
+	if (!gfx_api::passNeedsMsaaResolve(pass))
+	{
+		return;
+	}
+	auto* resolveTexture = dynamic_cast<gl_gpurendered_texture*>(pass.resolveAttachment->texture);
+	ASSERT_OR_RETURN(, resolveTexture != nullptr, "MSAA resolve attachment must be a GPU-rendered texture");
+
+	// If MSAA is enabled, use glBlitFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
+	GLuint resolveFBO = 0;
+	glGenFramebuffers(1, &resolveFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolveFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, resolveTexture->target(), resolveTexture->id(), 0);
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, _dynamicPassFBO);
+	glBlitFramebuffer(0, 0, static_cast<GLint>(passWidth), static_cast<GLint>(passHeight),
+		0, 0, static_cast<GLint>(passWidth), static_cast<GLint>(passHeight),
+		GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glDeleteFramebuffers(1, &resolveFBO);
+}
+
+void gl_context::invalidateDepthStencilAttachment(const gfx_api::RenderPassDesc& pass)
+{
+	if (!pass.depthAttachment.has_value())
+	{
+		return;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, _dynamicPassFBO);
+	GLenum invalid_ap[2];
+	if (gles && GLAD_GL_ES_VERSION_3_0)
+	{
+		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
+		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
+	}
+#if !defined(__EMSCRIPTEN__)
+	else
+	{
+		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
+		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
+		if (!gles && GLAD_GL_ARB_invalidate_subdata)
+		{
+		#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (glInvalidateFramebuffer)
+		#endif
+			{
+				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
+			}
+		}
+		else if (gles && GLAD_GL_EXT_discard_framebuffer)
+		{
+		#if !defined(WZ_STATIC_GL_BINDINGS)
+			if (glDiscardFramebufferEXT)
+		#endif
+			{
+				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
+			}
+		}
+	}
+#endif
+}
+
+void gl_context::applyAttachmentStoreOps(const gfx_api::RenderPassDesc& pass, uint32_t passWidth, uint32_t passHeight)
+{
+	const auto storeOpOr = [](const gfx_api::AttachmentDesc& attachment, gfx_api::AttachmentStoreOp defaultOp) {
+		return attachment.storeOp.value_or(defaultOp);
+	};
+
+	// Performance optimization:
+	//
+	// Before switching the draw framebuffer, call glInvalidateFramebuffer on any parts of the scene framebuffer(s) that we can
+	// NOTE: The only one we need to keep around by the end is sceneTexture, which is bound as GL_COLOR_ATTACHMENT0 on one of the FBOs
+	// However: If using the sceneMsaaRBO, we have to keep that around initially, and only invalidate it after resolving with glBlitFramebuffer
+	//
+	// Support:
+	// - OpenGL:
+	//		- ARB_invalidate_subdata extension provides glInvalidateFramebuffer
+	//			- NOTE: ARB_invalidate_subdata's API does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
+	//		- core in OpenGL 4.3+
+	// - OpenGL ES:
+	//		- EXT_discard_framebuffer provides glDiscardFramebufferEXT
+	//			- NOTE: glDiscardFramebufferEXT does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
+	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
+	//		- core in OpenGL ES 3.0+
+
+	if (gfx_api::passNeedsMsaaResolve(pass)
+		&& pass.resolveAttachment.has_value()
+		&& storeOpOr(pass.resolveAttachment.value(), gfx_api::AttachmentStoreOp::Store) == gfx_api::AttachmentStoreOp::Store)
+	{
+		resolveMsaaColorAttachment(pass, passWidth, passHeight);
+
+		if (!pass.colorAttachments.empty()
+			&& storeOpOr(pass.colorAttachments[0], gfx_api::AttachmentStoreOp::Store) == gfx_api::AttachmentStoreOp::DontCare)
+		{
+			GLenum invalidMsaaColorAp[1];
+			invalidMsaaColorAp[0] = GL_COLOR_ATTACHMENT0;
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, _dynamicPassFBO);
+			if (gles && GLAD_GL_ES_VERSION_3_0)
+			{
+				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalidMsaaColorAp);
+			}
+			else
+			{
+#if defined(GL_ARB_invalidate_subdata)
+				if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
+				{
+					glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalidMsaaColorAp);
+				}
+#endif
+			}
+		}
+	}
+
+	if (pass.depthAttachment.has_value()
+		&& storeOpOr(pass.depthAttachment.value(), gfx_api::AttachmentStoreOp::Store) == gfx_api::AttachmentStoreOp::Invalidate)
+	{
+		invalidateDepthStencilAttachment(pass);
+	}
 }
 
 bool gl_context::supportsInstancedRendering()
@@ -4626,6 +5215,8 @@ bool gl_context::initCheckBorderClampSupport()
 
 void gl_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
+	markScreenGeometryDirty();
+
 	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
 	// if SDL's built-in high-DPI support is enabled and functioning).
 	int drawableWidth = 0, drawableHeight = 0;
@@ -4674,6 +5265,8 @@ bool gl_context::shouldDraw()
 
 void gl_context::shutdown()
 {
+	clearDynamicFBOCache();
+
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glClear)
 #endif
@@ -4682,17 +5275,7 @@ void gl_context::shutdown()
 	}
 
 	deleteSceneRenderpass();
-
-#if !defined(WZ_STATIC_GL_BINDINGS)
-	if (glDeleteFramebuffers)
-#endif
-	{
-		if (depthFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(depthFBO.size()), depthFBO.data());
-			depthFBO.clear();
-		}
-	}
+	destroySwapchainPipelineSurfaces();
 
 	if (depthTexture)
 	{
@@ -4780,9 +5363,19 @@ const size_t& gl_context::current_FrameNum() const
 	return frameNum;
 }
 
-bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode)
+bool gl_context::setSwapIntervalInternal(gfx_api::context::swap_interval_mode mode)
 {
 	return backend_impl->setSwapInterval(mode);
+}
+
+bool gl_context::setSwapInterval(gfx_api::context::swap_interval_mode mode, const SetSwapIntervalCompletionHandler& completionHandler)
+{
+	auto success = setSwapIntervalInternal(mode);
+	if (success && completionHandler)
+	{
+		completionHandler();
+	}
+	return success;
 }
 
 gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const
@@ -4865,7 +5458,7 @@ bool gl_context::setShadowConstants(gfx_api::lighting_constants newValues)
 			(pipelineInfo.pso->hasSpecializationConstant_ShadowConstants || pipelineInfo.pso->hasSpecializationConstants_PointLights))
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
 		}
 	}
 
@@ -4880,7 +5473,7 @@ bool gl_context::debugRecompileAllPipelines()
 		if (pipelineInfo.pso)
 		{
 			delete pipelineInfo.pso;
-			pipelineInfo.pso = new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
+			pipelineInfo.pso = new gl_pipeline_state_object(*this, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, patchFragmentShaderMipLodBias, pipelineInfo.createInfo, mipLodBias, shadowConstants);
 		}
 	}
 	return true;
@@ -4907,8 +5500,22 @@ static const char *cbframebuffererror(GLenum err)
 	}
 }
 
+void gl_context::clearDynamicFBOCache()
+{
+	_dynamicFBOCache.clear([](uint32_t fboHandle) {
+		if (fboHandle == 0)
+		{
+			return;
+		}
+		GLuint fbo = fboHandle;
+		glDeleteFramebuffers(1, &fbo);
+	});
+}
+
 size_t gl_context::initDepthPasses(size_t resolution)
 {
+	clearDynamicFBOCache();
+
 	depthPassCount = std::min<size_t>(depthPassCount, WZ_MAX_SHADOW_CASCADES);
 
 #if !defined(__EMSCRIPTEN__)
@@ -4922,19 +5529,10 @@ size_t gl_context::initDepthPasses(size_t resolution)
 	}
 #endif
 
-	// delete prior depth texture & FBOs (if present)
-#if !defined(WZ_STATIC_GL_BINDINGS)
-	if (glDeleteFramebuffers)
-#endif
-	{
-		if (depthFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(depthFBO.size()), depthFBO.data());
-			depthFBO.clear();
-		}
-	}
+	// delete prior depth texture (if present)
 	if (depthTexture)
 	{
+		_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::ShadowMap);
 		delete depthTexture;
 		depthTexture = nullptr;
 	}
@@ -4951,6 +5549,7 @@ size_t gl_context::initDepthPasses(size_t resolution)
 		return 0;
 	}
 	depthTexture = pNewDepthTexture;
+	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::ShadowMap, depthTexture);
 
 	GLenum target = depthTexture->target();
 	depthTexture->bind();
@@ -4958,73 +5557,50 @@ size_t gl_context::initDepthPasses(size_t resolution)
 	glTexParameteri(target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 	depthTexture->unbind();
 
-	for (auto i = 0; i < depthPassCount; ++i)
-	{
-		GLuint newFBO = 0;
-		glGenFramebuffers(1, &newFBO);
-		depthFBO.push_back(newFBO);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
-		if (depthTexture->isArray())
-		{
-#if !defined(WZ_STATIC_GL_BINDINGS)
-			ASSERT(glFramebufferTextureLayer != nullptr, "glFramebufferTextureLayer is not available?");
-#endif
-			glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture->id(), 0, static_cast<GLint>(i)); // OpenGL 3.0+ / ES 3.0+ only
-		}
-		else
-		{
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture->id(), 0);
-		}
-		GLenum buf = GL_NONE;
-		glDrawBuffers(1, &buf);
-		glReadBuffer(GL_NONE);
-
-		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (status != GL_FRAMEBUFFER_COMPLETE)
-		{
-			debug(LOG_ERROR, "Failed to create framebuffer with error: %s", cbframebuffererror(status));
-		}
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-
 	return depthPassCount;
 }
 
 void gl_context::deleteSceneRenderpass()
 {
+	clearDynamicFBOCache();
+
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneColor);
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneMSAAColor);
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneDepth);
+
 	// delete prior scene texture & FBOs (if present)
 #if !defined(WZ_STATIC_GL_BINDINGS)
 	if (glDeleteFramebuffers)
 #endif
 	{
-		if (sceneFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(sceneFBO.size()), sceneFBO.data());
-			sceneFBO.clear();
-		}
-		if (sceneResolveFBO.size() > 0)
-		{
-			glDeleteFramebuffers(static_cast<GLsizei>(sceneResolveFBO.size()), sceneResolveFBO.data());
-			sceneResolveFBO.clear();
-		}
 	}
-	if (sceneMsaaRBO)
-	{
-		glDeleteRenderbuffers(1, &sceneMsaaRBO);
-		sceneMsaaRBO = 0;
-	}
+	_sceneMsaaSurface.reset();
 	if (sceneTexture)
 	{
 		delete sceneTexture;
 		sceneTexture = nullptr;
 	}
-	if (sceneDepthStencilRBO)
-	{
-		glDeleteRenderbuffers(1, &sceneDepthStencilRBO);
-		sceneDepthStencilRBO = 0;
-	}
+	_sceneDepthStencilSurface.reset();
+}
+
+void gl_context::destroySwapchainPipelineSurfaces()
+{
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainColor);
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainMSAAColor);
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainDepth);
+	_swapchainColorSurface.reset();
+	_swapchainDepthSurface.reset();
+}
+
+void gl_context::registerSwapchainPipelineSurfaces()
+{
+	destroySwapchainPipelineSurfaces();
+
+	_swapchainColorSurface = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainColor);
+	_swapchainDepthSurface = std::make_unique<gl_pipeline_surface_proxy>(GLPipelineSurfaceKind::SwapchainDepth);
+	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SwapchainColor, _swapchainColorSurface.get());
+	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SwapchainDepth, _swapchainDepthSurface.get());
+	_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SwapchainMSAAColor);
 }
 
 bool gl_context::createSceneRenderpass()
@@ -5047,14 +5623,9 @@ bool gl_context::createSceneRenderpass()
 
 	if (samples > 0)
 	{
-		// If MSAA is enabled, use glRenderbufferStorageMultisample to create an intermediate buffer with MSAA enabled
-		glGenRenderbuffers(1, &sceneMsaaRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glBindRenderbuffer(GL_RENDERBUFFER, sceneMsaaRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, multiSampledBufferInternalFormat, sceneFramebufferWidth, sceneFramebufferHeight); // OpenGL 3.0+, OpenGL ES 3.0+
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		_sceneMsaaSurface = create_framebuffer_renderbuffer(multiSampledBufferInternalFormat, samples,
+			sceneFramebufferWidth, sceneFramebufferHeight, "<scene msaa color>");
+		ASSERT_OR_RETURN(false, _sceneMsaaSurface != nullptr, "Failed to create scene MSAA renderbuffer");
 		ASSERT_GL_NOERRORS_OR_RETURN(false);
 	}
 
@@ -5080,204 +5651,75 @@ bool gl_context::createSceneRenderpass()
 	sceneTexture->unbind();
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
-	// Create a matching depth/stencil texture
-	sceneDepthStencilRBO = 0;
-	glGenRenderbuffers(1, &sceneDepthStencilRBO);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glBindRenderbuffer(GL_RENDERBUFFER, sceneDepthStencilRBO);
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, sceneFramebufferWidth, sceneFramebufferHeight); // OpenGL 3.0+, OpenGL ES 3.0+
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	_sceneDepthStencilSurface = create_framebuffer_renderbuffer(GL_DEPTH24_STENCIL8, samples,
+		sceneFramebufferWidth, sceneFramebufferHeight, "<scene depth stencil>");
+	ASSERT_OR_RETURN(false, _sceneDepthStencilSurface != nullptr, "Failed to create scene depth/stencil renderbuffer");
 	ASSERT_GL_NOERRORS_OR_RETURN(false);
 
-	const size_t numSceneFBOs = 2;
-	for (auto i = 0; i < numSceneFBOs; ++i)
+	ASSERT_GL_NOERRORS_OR_RETURN(false);
+
+	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SceneColor, sceneTexture);
+	_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SceneDepth, _sceneDepthStencilSurface.get());
+	const uint32_t sceneSamples = (samples > 0) ? static_cast<uint32_t>(samples) : 1u;
+	_pipelineSurfaces.setSurfaceSamples(gfx_api::PipelineSurfaceId::SceneDepth, sceneSamples);
+	if (_sceneMsaaSurface != nullptr)
 	{
-		GLuint newFBO = 0;
-		glGenFramebuffers(1, &newFBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		sceneFBO.push_back(newFBO);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, newFBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-		if (samples > 0)
-		{
-			// use the MSAA renderbuffer as the color attachment
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sceneMsaaRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-		}
-		else
-		{
-			// just directly use the sceneTexture as the color attachment (since no MSAA resolving needs to occur)
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-		}
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, sceneDepthStencilRBO);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-		GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (status != GL_FRAMEBUFFER_COMPLETE)
-		{
-			debug(LOG_ERROR, "Failed to create scene framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, sceneFramebufferWidth, sceneFramebufferHeight, static_cast<int>(samples), cbframebuffererror(status));
-			encounteredError = true;
-		}
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-		if (samples > 0)
-		{
-			// Must also create a sceneResolveFBO for resolving MSAA
-			GLuint newResolveRBO = 0;
-			glGenFramebuffers(1, &newResolveRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			sceneResolveFBO.push_back(newResolveRBO);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, newResolveRBO);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneTexture->id(), 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-			// shouldn't need a depth/stencil buffer
-
-			status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-			if (status != GL_FRAMEBUFFER_COMPLETE)
-			{
-				debug(LOG_ERROR, "Failed to create scene resolve framebuffer[%d] (%" PRIu32 " x %" PRIu32 ", samples: %d) with error: %s", i, sceneFramebufferWidth, sceneFramebufferHeight, static_cast<int>(samples), cbframebuffererror(status));
-				encounteredError = true;
-			}
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			ASSERT_GL_NOERRORS_OR_RETURN(false);
-		}
+		_pipelineSurfaces.registerSurface(gfx_api::PipelineSurfaceId::SceneMSAAColor, _sceneMsaaSurface.get());
+		_pipelineSurfaces.setSurfaceSamples(gfx_api::PipelineSurfaceId::SceneMSAAColor, sceneSamples);
+	}
+	else
+	{
+		_pipelineSurfaces.invalidateSurface(gfx_api::PipelineSurfaceId::SceneMSAAColor);
 	}
 
-	ASSERT_GL_NOERRORS_OR_RETURN(false);
-
+	bumpRenderGraphEpoch();
 	return !encounteredError;
 }
 
-void gl_context::beginSceneRenderPass()
+void gl_context::purgeFrameResources()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
-	glViewport(0, 0, sceneFramebufferWidth, sceneFramebufferHeight);
-	GLbitfield clearFlags = 0;
-	glDepthMask(GL_TRUE);
-	clearFlags = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
-	glClear(clearFlags);
+	_dynamicFBOCache.purgeUnused([](uint32_t fboHandle) {
+		if (fboHandle == 0)
+		{
+			return;
+		}
+		GLuint fbo = fboHandle;
+		glDeleteFramebuffers(1, &fbo);
+	});
 }
 
-void gl_context::endSceneRenderPass()
+optional<std::pair<uint32_t, uint32_t>> gl_context::getRenderTargetDimensions(gfx_api::abstract_texture* texture)
 {
-	// Performance optimization:
-	//
-	// Before switching the draw framebuffer, call glInvalidateFramebuffer on any parts of the scene framebuffer(s) that we can
-	// NOTE: The only one we need to keep around by the end is sceneTexture, which is bound as GL_COLOR_ATTACHMENT0 on one of the FBOs
-	// However: If using the sceneMsaaRBO, we have to keep that around initially, and only invalidate it after resolving with glBlitFramebuffer
-	//
-	// Support:
-	// - OpenGL:
-	//		- ARB_invalidate_subdata extension provides glInvalidateFramebuffer
-	//			- NOTE: ARB_invalidate_subdata's API does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
-	//		- core in OpenGL 4.3+
-	// - OpenGL ES:
-	//		- EXT_discard_framebuffer provides glDiscardFramebufferEXT
-	//			- NOTE: glDiscardFramebufferEXT does *not* accept GL_DEPTH_STENCIL_ATTACHMENT
-	//			- NOTE: glDiscardFramebufferEXT *only* supports GL_FRAMEBUFFER as a target
-	//		- core in OpenGL ES 3.0+
-
-	// invalidate depth_stencil on sceneFBO[sceneFBOIdx]
-	GLenum invalid_ap[2];
-	if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
+	if (texture == nullptr)
 	{
-		invalid_ap[0] = GL_DEPTH_STENCIL_ATTACHMENT;
-		glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, invalid_ap);
+		return nullopt;
 	}
-#if !defined(__EMSCRIPTEN__)
-	else
+	if (auto* gpuTexture = dynamic_cast<gl_gpurendered_texture*>(texture))
 	{
-		invalid_ap[0] = GL_DEPTH_ATTACHMENT;
-		invalid_ap[1] = GL_STENCIL_ATTACHMENT;
-		if (!gles && GLAD_GL_ARB_invalidate_subdata)
+		if (gpuTexture->tex_width > 0 && gpuTexture->tex_height > 0)
 		{
-		#if !defined(WZ_STATIC_GL_BINDINGS)
-			if (glInvalidateFramebuffer)
-		#endif
-			{
-				glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, invalid_ap);
-			}
-		}
-		else if (gles && GLAD_GL_EXT_discard_framebuffer)
-		{
-		#if !defined(WZ_STATIC_GL_BINDINGS)
-			if (glDiscardFramebufferEXT)
-		#endif
-			{
-				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, invalid_ap);
-			}
+			return std::make_pair(gpuTexture->tex_width, gpuTexture->tex_height);
 		}
 	}
-#endif
-
-	// If MSAA is enabled, use glBiltFramebuffer from the intermediate MSAA-enabled renderbuffer storage to a standard texture (resolving MSAA)
-	bool usingMSAAIntermediate = (sceneMsaaRBO != 0);
-	if (usingMSAAIntermediate)
+	if (auto* renderbuffer = dynamic_cast<gl_gpurendered_renderbuffer*>(texture))
 	{
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, sceneFBO[sceneFBOIdx]);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, sceneResolveFBO[sceneFBOIdx]);
-		glBlitFramebuffer(0,0, sceneFramebufferWidth, sceneFramebufferHeight,
-						  0,0, sceneFramebufferWidth, sceneFramebufferHeight,
-						  GL_COLOR_BUFFER_BIT,
-						  GL_LINEAR);
-	}
-
-	// after this, sceneTexture should be the (msaa-resolved) color texture of the scene
-
-	if (usingMSAAIntermediate)
-	{
-		// invalidate color0 (sceneMsaaRBO) in sceneFBO[sceneFBOIdx] (which is GL_READ_FRAMEBUFFER at this point)
-		GLenum invalid_msaarbo_ap[1];
-		invalid_msaarbo_ap[0] = GL_COLOR_ATTACHMENT0;
-		if (/*(!gles && GLAD_GL_VERSION_4_3) || */ (gles && GLAD_GL_ES_VERSION_3_0))
+		if (renderbuffer->_width > 0 && renderbuffer->_height > 0)
 		{
-			glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
-		}
-		else
-		{
-#if defined(GL_ARB_invalidate_subdata)
-			if (!gles && GLAD_GL_ARB_invalidate_subdata && glInvalidateFramebuffer)
-			{
-				glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, invalid_msaarbo_ap);
-			}
-#endif
-//			else if (gles && GLAD_GL_EXT_discard_framebuffer && glDiscardFramebufferEXT)
-//			{
-//				// NOTE: glDiscardFramebufferEXT only supports GL_FRAMEBUFFER... but that doesn't work here
-//				glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, invalid_msaarbo_ap);
-//			}
+			return std::make_pair(renderbuffer->_width, renderbuffer->_height);
 		}
 	}
-
-	sceneFBOIdx++;
-	if (sceneFBOIdx >= sceneFBO.size())
+	if (dynamic_cast<gl_pipeline_surface_proxy*>(texture) != nullptr)
 	{
-		sceneFBOIdx = 0;
+		if (viewportWidth > 0 && viewportHeight > 0)
+		{
+			return std::make_pair(viewportWidth, viewportHeight);
+		}
 	}
-
-	// switch back to default framebuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// Because the scene uses the same viewport, a call to glViewport should not be needed (NOTE: viewport is *not* part of the framebuffer state)
-	if (sceneFramebufferWidth != viewportWidth || sceneFramebufferHeight != viewportHeight)
+	if (texture == sceneTexture && sceneFramebufferWidth > 0 && sceneFramebufferHeight > 0)
 	{
-		glViewport(0, 0, viewportWidth, viewportHeight);
+		return std::make_pair(sceneFramebufferWidth, sceneFramebufferHeight);
 	}
-}
-
-gfx_api::abstract_texture* gl_context::getSceneTexture()
-{
-	return sceneTexture;
+	return nullopt;
 }
 
 #if defined(__EMSCRIPTEN__)

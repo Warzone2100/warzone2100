@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +33,10 @@
 #include <list>
 #include <string>
 #include <array>
+#include <memory>
+#include <optional>
+
+class ResourceLoadingController;
 
 /// maximum number of data files
 #define LEVEL_MAXFILES	9
@@ -88,13 +94,24 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 
 bool levParse_JSON(const std::string& mountPoint, const std::string& filename, searchPathMode pathMode, char const *realFileName);
 
+
+namespace WzMap {
+struct LevelDetails; // forward-declare
+}
+bool levAddWzMap(const WzMap::LevelDetails& levelDetails, searchPathMode pathMode, char const *realFileName, bool frontOfList = false);
+
+
 // shutdown the level system
 void levShutDown();
 
 bool levInitialise();
 
-// load up the data for a level
-bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType);
+/// Cooperative level-load coroutine for nesting under another loading task on the same controller.
+LoadingTask<> makeLevLoadDataLoadingTask(ResourceLoadingController &controller,
+                                       std::string name,
+                                       std::optional<Sha256> hash,
+                                       char *pSaveName,
+                                       GAME_TYPE saveType);
 
 // find the level dataset
 LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash = nullptr);
@@ -108,7 +125,7 @@ bool levRemoveDataSetByRealFileName(char const *realFileName, Sha256 const *hash
 bool levSetFileHashByRealFileName(char const *realFileName, Sha256 const &hash);
 
 // free the currently loaded dataset
-bool levReleaseAll();
+bool levReleaseAll(bool forceOnError = false);
 
 // free the data for the current mission
 bool levReleaseMissionData();

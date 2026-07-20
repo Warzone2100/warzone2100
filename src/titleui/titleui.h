@@ -42,6 +42,7 @@ public:
 	virtual void start() = 0;
 	// NOTE! When porting, add screen_disableMapPreview(); if relevant!
 	virtual TITLECODE run() = 0;
+	virtual void render() = 0;
 	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 };
 
@@ -57,26 +58,10 @@ public:
 	WzOldTitleUI(tMode mode);
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	virtual void render() override;
 	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 private:
 	tMode mode;
-};
-
-// - protocol.cpp -
-class WzProtocolTitleUI: public WzTitleUI
-{
-public:
-	WzProtocolTitleUI();
-	virtual void start() override;
-	virtual TITLECODE run() override;
-	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
-private:
-	void openIPDialog();
-	void closeIPDialog();
-	// Not-null: the settings screen is up
-	std::shared_ptr<W_SCREEN> psSettingsScreen = nullptr;
-	// If true, there's an IP address waiting to be used.
-	bool hasWaitingIP = false;
 };
 
 // - multiint.cpp (defined in titleui/multiplayer.h) -
@@ -89,6 +74,7 @@ public:
 	WzMultiLimitTitleUI(std::shared_ptr<WzMultiplayerOptionsTitleUI> parent);
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	virtual void render() override;
 private:
 	// The parent WzMultiplayerOptionsTitleUI to return to.
 	std::shared_ptr<WzMultiplayerOptionsTitleUI> parent;
@@ -101,6 +87,7 @@ public:
 	WzMsgBoxTitleUI(WzString title, WzString text, std::shared_ptr<WzTitleUI> next);
 	virtual void start() override;
 	virtual TITLECODE run() override;
+	virtual void render() override;
 private:
 	WzString title;
 	WzString text;
@@ -108,25 +95,6 @@ private:
 	std::shared_ptr<WzTitleUI> next;
 };
 
-// - gamefind.cpp -
-class WzGameFindTitleUI: public WzTitleUI
-{
-public:
-	WzGameFindTitleUI();
-	~WzGameFindTitleUI();
-	virtual void start() override;
-	virtual TITLECODE run() override;
-private:
-	void addGames();
-	void addConsoleBox();
-	bool safeSearch = false; // allow auto game finding.
-	bool toggleFilter = true; // Used to show all games or only games that are of the same version
-	bool queuedRefreshOfGamesList = false;
-};
-
 #define WZ_MSGBOX_TUI_LEAVE 4597000
-
-void mpSetServerName(const std::string& hostname);
-const std::string& mpGetServerName();
 
 #endif

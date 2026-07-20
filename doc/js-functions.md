@@ -16,10 +16,13 @@ Includes another source code file at this point. You should generally only speci
 not try to specify its path, here.
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 
-## includeJSON(filePath)
+## includeJSON(filePath[, quiet])
 
 Reads a JSON file and returns an object. You should generally only specify the filename,
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+
+The optional ```quiet``` parameter (available in 4.6.3+) can be set to ```true``` to suppress logged errors
+when the supplied filePath does not exist (by default, it is ```false``` and errors are logged and displayed).
 
 ## setTimer(functionName, milliseconds[, object])
 
@@ -86,11 +89,6 @@ Return an array containing all the buildable templates for the given player. (3.
 ## removeReticuleButton(buttonId)
 
 Remove reticule button. DO NOT USE FOR ANYTHING.
-
-## removeBeacon(playerFilter)
-
-Remove a beacon message sent to target player. Target may also be ```ALLIES```.
-Returns a boolean that is true on success. (3.2+ only)
 
 ## resetLabel(labelName[, playerFilter])
 
@@ -483,6 +481,10 @@ Returns true if given structure can be built. It checks both research and unit l
 Pick a location for constructing a certain type of building near some given position.
 Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
 
+## structureCanFit(structureName, x, y[, direction])
+
+Return true if given building can be built at the position. (4.6+ only)
+
 ## droidCanReach(droid, x, y)
 
 Return whether or not the given droid could possibly drive to the given position. Does
@@ -644,6 +646,10 @@ Center the player's camera at the given position.
 ## playSound(sound[, x, y, z])
 
 Play a sound, optionally at a location.
+
+## emitSound(sound, x, y)
+
+Emit a sound from an in-game location.
 
 ## addGuideTopic(guideTopicID[, showFlags[, excludedTopicIDs]])
 
@@ -870,11 +876,15 @@ Set or unset an object flag on a given game object. Does not take care of networ
 needs wrapping in a syncRequest. (3.3+ only.)
 Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
 
-## fireWeaponAtLoc(weaponName, x, y[, player])
+## fireWeaponAtLoc(weaponName, x, y[, player[, center]])
 
 Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
+
 Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
 may have different friendly fire logic for a few weapons (like the lassat).
+
+The optional ```center``` parameter (4.6.2+ only) can be set to ```true```
+to target the center of the tile. (The default is ```false```.)
 
 ## fireWeaponAtObj(weaponName, gameObject[, player])
 

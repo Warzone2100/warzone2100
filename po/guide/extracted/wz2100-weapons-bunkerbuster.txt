@@ -1,0 +1,5 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Bunker Buster")
+_("The Bunker Buster is a unique weapon that is exceptionally effective against all structures.")
+_("However, the Bunker Buster is extremely weak against any non-structure target.")

@@ -32,6 +32,9 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/render_graph/cached_render_graph.h"
+#include "lib/ivis_opengl/render_graph/topology.h"
 #include "piematrix.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/tex.h"
@@ -92,7 +95,18 @@ void pie_ShutDown()
 
 /***************************************************************************/
 
-static bool renderingFrame = true; // starts off true
+static bool renderingFrame = false;
+static gfx_api::CachedRenderGraph g_cachedFrameRenderGraph;
+
+gfx_api::CachedRenderGraph& pie_GetCachedFrameRenderGraph()
+{
+	return g_cachedFrameRenderGraph;
+}
+
+bool pie_IsScreenFrameRendering()
+{
+	return renderingFrame;
+}
 
 void pie_ScreenFrameRenderBegin()
 {
@@ -102,10 +116,17 @@ void pie_ScreenFrameRenderBegin()
 		return;
 	}
 	renderingFrame = true;
-	gfx_api::context::get().beginRenderPass();
-	if (screen_GetBackDrop())
+
+	pie_ResetInGame3DFrameContextForFrame();
+
+	if (gfx_api::context::isInitialized())
 	{
-		screen_Display();
+		gfx_api::context::get().beginScreenFrame();
+	}
+
+	if (!gfx_api::context::isInitialized() || gfx_api::context::get().consumeScreenGeometryDirty())
+	{
+		screen_updateGeometry();
 	}
 }
 
@@ -116,9 +137,27 @@ void pie_ScreenFrameRenderEnd()
 		debug(LOG_WZ, "Call to pie_ScreenFrameRenderEnd without matching pie_ScreenFrameRenderBegin");
 		return;
 	}
+
+	const gfx_api::IRenderTopologyQuery& query = gfx_api::getGameRenderTopologyQuery();
+	if (!query.headlessOrSkipDrawing())
+	{
+		if (gfx_api::context::isInitialized())
+		{
+			gfx_api::context::get().prepareSwapchainForDrawing();
+		}
+		const gfx_api::RenderTopologySnapshot snapshot = gfx_api::render_topology::snapshot(query);
+		gfx_api::CachedRenderGraph& graph = pie_GetCachedFrameRenderGraph();
+		graph.ensureBuilt(snapshot);
+		graph.execute();
+		screenDoDumpToDiskIfRequired();
+	}
+
+	if (gfx_api::context::isInitialized())
+	{
+		gfx_api::context::get().finishScreenFrame();
+	}
+
 	renderingFrame = false;
-	screenDoDumpToDiskIfRequired();
-	gfx_api::context::get().endRenderPass();
 	wzPerfFrame();
 }
 

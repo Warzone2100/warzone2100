@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020  Warzone 2100 Project
+	Copyright (C) 2020-2025  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,6 +41,8 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/scrollablelist.h"
+#include "lib/widget/table.h"
+#include "lib/widget/margin.h"
 #include <chrono>
 #include <memory>
 
@@ -60,53 +64,21 @@
 #define TL_W				FRONTEND_BOTFORMW
 #define TL_H				400
 #define TL_X				FRONTEND_BOTFORMX
-#define TL_Y				(W_TRACK_HEADER_Y + W_TRACK_HEADER_HEIGHT)
 #define TL_SX				FRONTEND_SIDEX
 
 #define TL_ENTRYW			(FRONTEND_BOTFORMW - 80)
 #define TL_ENTRYH			(25)
 
 #define TL_PREVIEWBOX_Y_SPACING 45
-#define TL_PREVIEWBOX_H		80
+#define TL_PREVIEWBOX_H		84
 
-static int GetTrackListHeight()
-{
-	if (pie_GetVideoBufferHeight() > (BASE_COORDS_Y + TL_PREVIEWBOX_Y_SPACING + 20 + TL_PREVIEWBOX_H))
-	{
-		return TL_H;
-	}
-	return pie_GetVideoBufferHeight() - TL_Y - 20 - TL_PREVIEWBOX_Y_SPACING - TL_PREVIEWBOX_H;
-}
-
-static int GetNumVisibleTracks()
-{
-	int maxTracks = static_cast<int>(std::floor(float(GetTrackListHeight() - TL_Y - W_TRACK_HEADER_Y) / float(TL_ENTRYH)));
-	return maxTracks;
-}
-
-static int GetDetailsBoxStartYPos()
-{
-	return GetTrackListHeight() + TL_PREVIEWBOX_Y_SPACING;
-}
-
-static int GetTotalTrackAndDetailsBoxHeight()
-{
-	return GetTrackListHeight() + TL_PREVIEWBOX_Y_SPACING + TL_PREVIEWBOX_H;
-}
-
-static int GetTrackListStartXPos(int ingame)
-{
-	if (!ingame)
-	{
-		return TL_X;
-	}
-	return TL_X - 10;
-}
+class MusicManagerForm;
 
 // MARK: - MusicManager_CDAudioEventSink declaration
 class MusicManager_CDAudioEventSink : public CDAudioEventSink
 {
 public:
+	MusicManager_CDAudioEventSink(const std::shared_ptr<MusicManagerForm>& musicManagerForm);
 	virtual ~MusicManager_CDAudioEventSink() override {};
 	virtual void startedPlayingTrack(const std::shared_ptr<const WZ_TRACK>& track) override;
 	virtual void trackEnded(const std::shared_ptr<const WZ_TRACK>& track) override;
@@ -120,25 +92,12 @@ public:
 		shouldUnregisterEventSink = true;
 	}
 private:
+	void CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK>& track);
+private:
+	std::weak_ptr<MusicManagerForm> weakMusicManagerForm;
 	bool shouldUnregisterEventSink = false;
 };
 
-// MARK: - Globals
-
-struct TrackRowCache; // forward-declare
-class W_TrackRow; // foward-declare
-static std::unordered_map<W_TrackRow*, std::shared_ptr<TrackRowCache>> trackRowsCache;
-static std::vector<std::shared_ptr<const WZ_TRACK>> trackList;
-static std::shared_ptr<const WZ_TRACK> selectedTrack;
-static std::shared_ptr<MusicManager_CDAudioEventSink> musicManagerAudioEventSink;
-
-// now-playing widgets
-static std::shared_ptr<W_LABEL> psNowPlaying = nullptr;
-static std::shared_ptr<W_LABEL> psSelectedTrackName = nullptr;
-static std::shared_ptr<W_LABEL> psSelectedTrackAuthorName = nullptr;
-static std::shared_ptr<W_LABEL> psSelectedTrackAlbumName = nullptr;
-static std::shared_ptr<W_LABEL> psSelectedTrackAlbumDate = nullptr;
-static std::shared_ptr<W_LABEL> psSelectedTrackAlbumDescription = nullptr;
 
 // MARK: - W_MusicModeCheckboxButton
 
@@ -222,163 +181,6 @@ void W_MusicModeCheckboxButton::highlightLost()
 	W_BUTTON::highlightLost();
 }
 
-// MARK: - W_TrackRow
-
-struct TrackRowCache {
-	WzText wzText_Title;
-	WzText wzText_Album;
-	UDWORD lastUsedFrameNumber;
-};
-
-class W_TrackRow : public W_BUTTON
-{
-protected:
-	W_TrackRow(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> track): W_BUTTON(init), track(std::move(track)) {}
-	void initialize(bool ingame);
-
-public:
-	static std::shared_ptr<W_TrackRow> make(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> const &track, bool ingame)
-	{
-		class make_shared_enabler: public W_TrackRow
-		{
-		public:
-			make_shared_enabler(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> const &track): W_TrackRow(init, track) {}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(init, track);
-		widget->initialize(ingame);
-		return widget;
-	}
-
-	void display(int xOffset, int yOffset) override;
-
-	std::shared_ptr<const WZ_TRACK> getTrack() const {
-		return std::shared_ptr<const WZ_TRACK>(track);
-	};
-
-protected:
-	void geometryChanged() override;
-
-private:
-	std::shared_ptr<const WZ_TRACK> track;
-	std::string album_name;
-	std::vector<std::shared_ptr<W_MusicModeCheckboxButton>> musicModeCheckboxes;
-	MusicGameMode musicMode = MusicGameMode::MENUS;
-};
-
-void W_TrackRow::initialize(bool ingame)
-{
-	auto album = track->album.lock();
-	album_name = album->title;
-
-	// add music mode checkboxes
-	musicMode = MusicGameMode::MENUS;
-	if (ingame)
-	{
-		musicMode = PlayList_GetCurrentMusicMode();
-	}
-
-	for (int musicModeIdx = 0; musicModeIdx < NUM_MUSICGAMEMODES; musicModeIdx++)
-	{
-		auto pCheckBox = std::make_shared<W_MusicModeCheckboxButton>(static_cast<MusicGameMode>(musicModeIdx), PlayList_IsTrackEnabledForMusicMode(track, static_cast<MusicGameMode>(musicModeIdx)));
-		attach(pCheckBox);
-		auto captureTrack = track;
-		pCheckBox->addOnClickHandler([captureTrack](W_BUTTON& button) {
-			W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
-			PlayList_SetTrackMusicMode(captureTrack, self.getMusicMode(), self.getIsChecked());
-		});
-		pCheckBox->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * musicModeIdx), W_TRACK_ROW_PADDING, W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
-		pCheckBox->setCheckboxSize(W_TRACK_CHECKBOX_SIZE);
-		if (musicMode != MusicGameMode::MENUS)
-		{
-			if (musicModeIdx != static_cast<int>(musicMode))
-			{
-				pCheckBox->setState(WBUT_DISABLE);
-			}
-		}
-
-		musicModeCheckboxes.push_back(pCheckBox);
-	}
-}
-
-void W_TrackRow::geometryChanged()
-{
-	for (size_t i = 0; i < musicModeCheckboxes.size(); i++)
-	{
-		auto pCB = musicModeCheckboxes[i];
-		pCB->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * i), std::max(W_TRACK_ROW_PADDING, (height() - W_TRACK_CHECKBOX_SIZE) / 2), W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
-	}
-}
-
-static WzString truncateTextToMaxWidth(WzString str, iV_fonts fontID, int maxWidth)
-{
-	if ((int)iV_GetTextWidth(str, fontID) > maxWidth)
-	{
-		while (!str.isEmpty() && (int)iV_GetTextWidth((str + "..."), fontID) > maxWidth)
-		{
-			if (!str.pop_back())  // Clip name.
-			{
-				ASSERT(false, "WzString::pop_back() failed??");
-				break;
-			}
-		}
-		str += "...";
-	}
-	return str;
-}
-
-void W_TrackRow::display(int xOffset, int yOffset)
-{
-	bool isSelectedTrack = (track == selectedTrack);
-
-	// get track cache
-	std::shared_ptr<TrackRowCache> pCache = nullptr;
-	auto it = trackRowsCache.find(this);
-	if (it != trackRowsCache.end())
-	{
-		pCache = it->second;
-	}
-	if (!pCache)
-	{
-		pCache = std::make_shared<TrackRowCache>();
-		trackRowsCache[this] = pCache;
-
-		// calculate max displayable length for title and album
-		WzString title_truncated = truncateTextToMaxWidth(WzString::fromUtf8(track->title), font_regular, W_TRACK_COL_TITLE_W);
-		WzString album_truncated = truncateTextToMaxWidth(WzString::fromUtf8(album_name), font_regular, W_TRACK_COL_ALBUM_W);
-		pCache->wzText_Title.setText(title_truncated, font_regular);
-		pCache->wzText_Album.setText(album_truncated, font_regular);
-	}
-	pCache->lastUsedFrameNumber = frameGetFrameNumber();
-
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	int x1 = x0 + width();
-	int y1 = y0 + height();
-
-	if (isSelectedTrack)
-	{
-		// draw selected background
-		pie_UniTransBoxFill(x0, y0, x1, y1, WZCOL_KEYMAP_ACTIVE);
-	}
-
-	PIELIGHT textColor = WZCOL_TEXT_BRIGHT;
-	if ((musicMode != MusicGameMode::MENUS) && !PlayList_IsTrackEnabledForMusicMode(track, musicMode))
-	{
-		textColor.byte.a = uint8_t(float(textColor.byte.a) * 0.6f);
-	}
-
-	// draw track title
-	Vector2i textBoundingBoxOffset(0, 0);
-	textBoundingBoxOffset.y = yOffset + y() + (height() - pCache->wzText_Title.lineSize()) / 2;
-	float fy = float(textBoundingBoxOffset.y) /*+ float(W_TRACK_ROW_PADDING)*/ - float(pCache->wzText_Title.aboveBase());
-	pCache->wzText_Title.render(W_TRACK_COL_TITLE_X + x0, static_cast<int>(fy), textColor);
-
-	// draw album name
-	pCache->wzText_Album.render(W_TRACK_COL_ALBUM_X + x0, static_cast<int>(fy), textColor);
-
-	// Music mode checkboxes are child widgets
-}
-
 // MARK: - "Now Playing" Details Block
 
 static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
@@ -401,13 +203,19 @@ static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 	return pAlbumCoverTexture;
 }
 
-class TrackDetailsForm : public IntFormAnimated
+class TrackDetailsForm : public W_FORM
 {
-public:
+protected:
 	TrackDetailsForm()
-	: IntFormAnimated(true)
+	: W_FORM()
 	{ }
+	void initialize();
+public:
+	static std::shared_ptr<TrackDetailsForm> make();
+
 	virtual void display(int xOffset, int yOffset) override;
+	virtual void geometryChanged() override;
+
 	virtual ~TrackDetailsForm() override
 	{
 		if (pAlbumCoverTexture)
@@ -416,6 +224,8 @@ public:
 			pAlbumCoverTexture = nullptr;
 		}
 	}
+
+	void displayTrack(const std::shared_ptr<const WZ_TRACK>& track);
 
 	bool loadImage(const std::string& imagePath)
 	{
@@ -454,21 +264,42 @@ public:
 private:
 	gfx_api::texture* pAlbumCoverTexture = nullptr;
 	std::string album_cover_path;
+
+	std::shared_ptr<W_LABEL> psNowPlaying;
+	std::shared_ptr<W_LABEL> psSelectedTrackName;
+	std::shared_ptr<W_LABEL> psSelectedTrackAuthorName;
+	std::shared_ptr<W_LABEL> psSelectedTrackAlbumName;
+	std::shared_ptr<W_LABEL> psSelectedTrackAlbumDate;
+	std::shared_ptr<ScrollableListWidget> descriptionContainer;
+
+	int32_t outerHorizontalPadding = 20;
 };
 
-#define WZ_TRACKDETAILS_IMAGE_X	(20 + 210 + 10)
-#define WZ_TRACKDETAILS_IMAGE_Y 10
+#define WZ_TRACKDETAILS_IMAGE_Y 12
 #define WZ_TRACKDETAILS_IMAGE_SIZE 60
+
+std::shared_ptr<TrackDetailsForm> TrackDetailsForm::make()
+{
+	class make_shared_enabler: public TrackDetailsForm { };
+	auto widget = std::make_shared<make_shared_enabler>();
+	widget->initialize();
+	return widget;
+}
 
 void TrackDetailsForm::display(int xOffset, int yOffset)
 {
-	IntFormAnimated::display(xOffset, yOffset);
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int w = width();
+	int h = height();
+
+	pie_UniTransBoxFill(x0, y0, x0 + w, y0 + h, pal_RGBA(0,0,0,100));
 
 	if (disableChildren) { return; }
 
 	// now draw the album cover, if present
-	int imageLeft = x() + xOffset + WZ_TRACKDETAILS_IMAGE_X;
-	int imageTop = y() + yOffset + WZ_TRACKDETAILS_IMAGE_Y;
+	int imageLeft = x0 + outerHorizontalPadding + psNowPlaying->width() + 10;
+	int imageTop = y0 + WZ_TRACKDETAILS_IMAGE_Y;
 
 	if (pAlbumCoverTexture)
 	{
@@ -476,134 +307,105 @@ void TrackDetailsForm::display(int xOffset, int yOffset)
 	}
 }
 
-static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
+void TrackDetailsForm::geometryChanged()
 {
-	ASSERT_OR_RETURN(, pTrackDetailsBox, "pTrackDetailsBox is null");
+	int w = width();
+	int totalUsableTextWidth = w - (outerHorizontalPadding * 2) - 10 - WZ_TRACKDETAILS_IMAGE_SIZE - 10;
+	int leftSideWidth = (totalUsableTextWidth / 2) - 10;
 
-	// Add "Now Playing" label
-	if (!psNowPlaying)
-	{
-		pTrackDetailsBox->attach(psNowPlaying = std::make_shared<W_LABEL>());
-	}
-	psNowPlaying->setGeometry(20, 12, 210, 20);
+	psNowPlaying->setGeometry(outerHorizontalPadding, 14, leftSideWidth, 20);
+	psSelectedTrackName->setGeometry(outerHorizontalPadding, 14 + 20, leftSideWidth, 20);
+	psSelectedTrackAuthorName->setGeometry(outerHorizontalPadding, 14 + 20 + 17, leftSideWidth, 20);
+
+	int albumInfoXPosStart = psNowPlaying->x() + psNowPlaying->width() + 10 + WZ_TRACKDETAILS_IMAGE_SIZE + 10;
+	int maxWidthOfAlbumLabel = width() - albumInfoXPosStart - outerHorizontalPadding;
+
+	psSelectedTrackAlbumName->setGeometry(albumInfoXPosStart, 14, maxWidthOfAlbumLabel, 20);
+	psSelectedTrackAlbumDate->setGeometry(albumInfoXPosStart, 14 + 13, maxWidthOfAlbumLabel, 20);
+
+	int descriptionContainerY0 = 12 + 13 + 18;
+	int descriptionContainerHeight = height() - descriptionContainerY0 - 12;
+	descriptionContainer->setGeometry(albumInfoXPosStart, descriptionContainerY0, maxWidthOfAlbumLabel, descriptionContainerHeight);
+}
+
+void TrackDetailsForm::initialize()
+{
+	psNowPlaying = std::make_shared<W_LABEL>();
+	attach(psNowPlaying);
+	psNowPlaying->setGeometry(outerHorizontalPadding, 14, 210, 20);
 	psNowPlaying->setFont(font_regular, WZCOL_TEXT_MEDIUM);
-	psNowPlaying->setString((selectedTrack) ? (WzString::fromUtf8(_("NOW PLAYING")) + ":") : "");
 	psNowPlaying->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	psNowPlaying->setTransparentToMouse(true);
 
-	// Add Selected Track name
-	if (!psSelectedTrackName)
-	{
-		pTrackDetailsBox->attach(psSelectedTrackName = std::make_shared<W_LABEL>());
-	}
-	psSelectedTrackName->setGeometry(20, 12 + 20, 210, 20);
+	psSelectedTrackName = std::make_shared<W_LABEL>();
+	attach(psSelectedTrackName);
+	psSelectedTrackName->setGeometry(outerHorizontalPadding, 14 + 20, 210, 20);
 	psSelectedTrackName->setFont(font_regular_bold, WZCOL_TEXT_BRIGHT);
-	psSelectedTrackName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->title) : "");
 	psSelectedTrackName->setTextAlignment(WLAB_ALIGNTOPLEFT);
+	psSelectedTrackName->setCanTruncate(true);
 	psSelectedTrackName->setTransparentToMouse(true);
 
 	// Add Selected Track author details
-	if (!psSelectedTrackAuthorName)
-	{
-		pTrackDetailsBox->attach(psSelectedTrackAuthorName = std::make_shared<W_LABEL>());
-	}
-	psSelectedTrackAuthorName->setGeometry(20, 12 + 20 + 17, 210, 20);
+	psSelectedTrackAuthorName = std::make_shared<W_LABEL>();
+	attach(psSelectedTrackAuthorName);
+	psSelectedTrackAuthorName->setGeometry(outerHorizontalPadding, 14 + 20 + 17, 210, 20);
 	psSelectedTrackAuthorName->setFont(font_regular, WZCOL_TEXT_BRIGHT);
-	psSelectedTrackAuthorName->setString((selectedTrack) ? WzString::fromUtf8(selectedTrack->author) : "");
 	psSelectedTrackAuthorName->setTextAlignment(WLAB_ALIGNTOPLEFT);
+	psSelectedTrackAuthorName->setCanTruncate(true);
 	psSelectedTrackAuthorName->setTransparentToMouse(true);
 
 	// album info xPosStart
 	int albumInfoXPosStart = psNowPlaying->x() + psNowPlaying->width() + 10 + WZ_TRACKDETAILS_IMAGE_SIZE + 10;
-	int maxWidthOfAlbumLabel = TL_W - albumInfoXPosStart - 20;
-	std::shared_ptr<const WZ_ALBUM> pAlbum = (selectedTrack) ? selectedTrack->album.lock() : nullptr;
+	int maxWidthOfAlbumLabel = TL_W - albumInfoXPosStart - outerHorizontalPadding;
 
-	if (!psSelectedTrackAlbumName)
-	{
-		pTrackDetailsBox->attach(psSelectedTrackAlbumName = std::make_shared<W_LABEL>());
-	}
-	psSelectedTrackAlbumName->setGeometry(albumInfoXPosStart, 12, maxWidthOfAlbumLabel, 20);
+	psSelectedTrackAlbumName = std::make_shared<W_LABEL>();
+	attach(psSelectedTrackAlbumName);
+	psSelectedTrackAlbumName->setGeometry(albumInfoXPosStart, 14, maxWidthOfAlbumLabel, 20);
 	psSelectedTrackAlbumName->setFont(font_small, WZCOL_TEXT_BRIGHT);
-	psSelectedTrackAlbumName->setString((pAlbum) ? (WzString::fromUtf8(_("Album")) + ": " + WzString::fromUtf8(pAlbum->title)) : "");
 	psSelectedTrackAlbumName->setTextAlignment(WLAB_ALIGNTOPLEFT);
+	psSelectedTrackAlbumName->setCanTruncate(true);
 	psSelectedTrackAlbumName->setTransparentToMouse(true);
 
-	if (!psSelectedTrackAlbumDate)
-	{
-		pTrackDetailsBox->attach(psSelectedTrackAlbumDate = std::make_shared<W_LABEL>());
-	}
-	psSelectedTrackAlbumDate->setGeometry(albumInfoXPosStart, 12 + 13, maxWidthOfAlbumLabel, 20);
+	psSelectedTrackAlbumDate = std::make_shared<W_LABEL>();
+	attach(psSelectedTrackAlbumDate);
+	psSelectedTrackAlbumDate->setGeometry(albumInfoXPosStart, 14 + 13, maxWidthOfAlbumLabel, 20);
 	psSelectedTrackAlbumDate->setFont(font_small, WZCOL_TEXT_BRIGHT);
-	psSelectedTrackAlbumDate->setString((pAlbum) ? (WzString::fromUtf8(_("Date")) + ": " + WzString::fromUtf8(pAlbum->date)) : "");
 	psSelectedTrackAlbumDate->setTextAlignment(WLAB_ALIGNTOPLEFT);
+	psSelectedTrackAlbumDate->setCanTruncate(true);
 	psSelectedTrackAlbumDate->setTransparentToMouse(true);
 
-	if (!psSelectedTrackAlbumDescription)
-	{
-		pTrackDetailsBox->attach(psSelectedTrackAlbumDescription = std::make_shared<W_LABEL>());
-	}
-	psSelectedTrackAlbumDescription->setGeometry(albumInfoXPosStart, 12 + 13 + 15, maxWidthOfAlbumLabel, 20);
-	psSelectedTrackAlbumDescription->setFont(font_small, WZCOL_TEXT_BRIGHT);
-	int heightOfTitleLabel =  psSelectedTrackAlbumDescription->setFormattedString((pAlbum) ? WzString::fromUtf8(pAlbum->description) : "", maxWidthOfAlbumLabel, font_small);
-	psSelectedTrackAlbumDescription->setGeometry(albumInfoXPosStart, 12 + 13 + 15, maxWidthOfAlbumLabel, heightOfTitleLabel);
-	psSelectedTrackAlbumDescription->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	psSelectedTrackAlbumDescription->setTransparentToMouse(true);
-
-	pTrackDetailsBox->loadImage((pAlbum) ? pAlbum->album_cover_filename : "");
+	descriptionContainer = ScrollableListWidget::make();
+	attach(descriptionContainer);
+	descriptionContainer->setGeometry(albumInfoXPosStart, 14 + 13 + 18, maxWidthOfAlbumLabel, 20);
 }
 
-static void addTrackDetailsBox(WIDGET *parent, bool ingame)
+void TrackDetailsForm::displayTrack(const std::shared_ptr<const WZ_TRACK>& track)
 {
-	if (widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX))
+	psNowPlaying->setString((track) ? (WzString::fromUtf8(_("NOW PLAYING")) + ":") : "");
+	psSelectedTrackName->setString((track) ? WzString::fromUtf8(track->title) : "");
+	psSelectedTrackAuthorName->setString((track) ? WzString::fromUtf8(track->author) : "");
+
+	std::shared_ptr<const WZ_ALBUM> pAlbum = (track) ? track->album.lock() : nullptr;
+
+	psSelectedTrackAlbumName->setString((pAlbum) ? (WzString::fromUtf8(_("Album")) + ": " + WzString::fromUtf8(pAlbum->title)) : "");
+	psSelectedTrackAlbumDate->setString((pAlbum) ? (WzString::fromUtf8(_("Date")) + ": " + WzString::fromUtf8(pAlbum->date)) : "");
+
+	descriptionContainer->clear();
+	if (pAlbum)
 	{
-		return;
+		auto psSelectedTrackAlbumDescription = std::make_shared<Paragraph>();
+		psSelectedTrackAlbumDescription->setGeometry(0, 0, descriptionContainer->width(), 20);
+		psSelectedTrackAlbumDescription->setFont(font_small);
+		psSelectedTrackAlbumDescription->setFontColour(WZCOL_TEXT_MEDIUM);
+		psSelectedTrackAlbumDescription->setTransparentToMouse(true);
+		psSelectedTrackAlbumDescription->addText(WzString::fromUtf8(pAlbum->description));
+		descriptionContainer->addItem(psSelectedTrackAlbumDescription);
 	}
 
-	auto pTrackDetailsBox = std::make_shared<TrackDetailsForm>();
-	parent->attach(pTrackDetailsBox);
-	pTrackDetailsBox->id = MULTIOP_CONSOLEBOX;
-	if (!ingame)
-	{
-		pTrackDetailsBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(TL_X, GetDetailsBoxStartYPos(), TL_W, TL_PREVIEWBOX_H);
-		}));
-	}
-	else
-	{
-		pTrackDetailsBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(((300-(TL_W/2))+D_W), ((240-(GetTotalTrackAndDetailsBoxHeight()/2))+D_H) + GetDetailsBoxStartYPos(), TL_W, TL_PREVIEWBOX_H);
-		}));
-	}
-
-	UpdateTrackDetailsBox(pTrackDetailsBox.get());
+	loadImage((pAlbum) ? pAlbum->album_cover_filename : "");
 }
 
 // MARK: - Track List
-
-class MusicListHeader : public W_FORM
-{
-public:
-	MusicListHeader();
-	virtual void display(int xOffset, int yOffset);
-};
-
-MusicListHeader::MusicListHeader()
-	: W_FORM()
-{ }
-
-void MusicListHeader::display(int xOffset, int yOffset)
-{
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	int x1 = x0 + width();
-	int y1 = y0 + height() - 1;
-	iV_TransBoxFill(x0, y0, x1, y1);
-	iV_Line(x0, y1, x1, y1, WZCOL_MENU_SEPARATOR);
-
-	// column lines
-	iV_Line(x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y0 + 5, x0 + W_TRACK_COL_TITLE_X + W_TRACK_COL_TITLE_W, y1 - 5, WZCOL_MENU_SEPARATOR);
-	iV_Line(x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y0 + 5, x0 + W_TRACK_COL_ALBUM_X + W_TRACK_COL_ALBUM_W, y1 - 5, WZCOL_MENU_SEPARATOR);
-}
 
 class W_MusicListHeaderColImage : public W_BUTTON
 {
@@ -643,6 +445,11 @@ public:
 			iV_DrawImageAnisotropic(*pAlbumCoverTexture, Vector2i(imageLeft, imageTop), Vector2f(0,0), Vector2f(W_TRACK_HEADER_COL_IMAGE_SIZE, W_TRACK_HEADER_COL_IMAGE_SIZE), 0.f, WZCOL_WHITE);
 		}
 	}
+
+	int32_t idealWidth() override
+	{
+		return 16;
+	}
 private:
 	gfx_api::texture* pAlbumCoverTexture = nullptr;
 };
@@ -654,167 +461,35 @@ static const std::string music_mode_col_header_images[] = {
 	"images/frontend/image_music_multiplayer.png"
 };
 
-static void addTrackList(WIDGET *parent, bool ingame)
-{
-	auto pHeader = std::make_shared<MusicListHeader>();
-	parent->attach(pHeader);
-	pHeader->setGeometry(GetTrackListStartXPos(ingame), W_TRACK_HEADER_Y, TL_ENTRYW, W_TRACK_HEADER_HEIGHT);
+// MARK: - MusicManagerForm
 
-	const int headerColY = W_TRACK_ROW_PADDING + (W_TRACK_ROW_PADDING / 2);
-
-	auto title_header = std::make_shared<W_LABEL>();
-	pHeader->attach(title_header);
-	title_header->setGeometry(W_TRACK_COL_TITLE_X, headerColY, W_TRACK_COL_TITLE_W, W_TRACK_HEADER_HEIGHT);
-	title_header->setFontColour(WZCOL_TEXT_MEDIUM);
-	title_header->setString(_("Title"));
-	title_header->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	title_header->setTransparentToMouse(true);
-
-	auto album_header = std::make_shared<W_LABEL>();
-	pHeader->attach(album_header);
-	album_header->setGeometry(W_TRACK_COL_ALBUM_X, headerColY, W_TRACK_COL_ALBUM_W, W_TRACK_HEADER_HEIGHT);
-	album_header->setFontColour(WZCOL_TEXT_MEDIUM);
-	album_header->setString(_("Album"));
-	album_header->setTextAlignment(WLAB_ALIGNTOPLEFT);
-	album_header->setTransparentToMouse(true);
-
-	for (int musicModeIdx = 0; musicModeIdx < NUM_MUSICGAMEMODES; musicModeIdx++)
-	{
-		const std::string& headerImage = music_mode_col_header_images[musicModeIdx];
-		auto musicModeHeader = std::make_shared<W_MusicListHeaderColImage>();
-		pHeader->attach(musicModeHeader);
-		musicModeHeader->loadImage(headerImage);
-		musicModeHeader->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS - 2 + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * musicModeIdx), headerColY, W_TRACK_HEADER_COL_IMAGE_SIZE, W_TRACK_HEADER_HEIGHT);
-		std::string musicGameModeStr = to_string(static_cast<MusicGameMode>(musicModeIdx));
-		musicModeHeader->setTip(musicGameModeStr);
-	}
-
-	auto pTracksScrollableList = ScrollableListWidget::make();
-	parent->attach(pTracksScrollableList);
-	pTracksScrollableList->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
-	pTracksScrollableList->setCalcLayout([ingame](WIDGET *psWidget) {
-		psWidget->setGeometry(GetTrackListStartXPos(ingame), TL_Y, TL_ENTRYW, GetNumVisibleTracks() * TL_ENTRYH);
-	});
-
-	size_t tracksCount = trackList.size();
-	W_BUTINIT emptyInit;
-	for (size_t i = 0; i < tracksCount; i++)
-	{
-		auto pTrackRow = W_TrackRow::make(&emptyInit, trackList[i], ingame);
-		pTrackRow->setGeometry(0, 0, TL_ENTRYW, TL_ENTRYH);
-		pTrackRow->addOnClickHandler([](W_BUTTON& clickedButton) {
-			W_TrackRow& pTrackRow = dynamic_cast<W_TrackRow&>(clickedButton);
-			if (selectedTrack == pTrackRow.getTrack()) { return; }
-			cdAudio_PlaySpecificTrack(pTrackRow.getTrack());
-		});
-		pTracksScrollableList->addItem(pTrackRow);
-	}
-}
-
-// MARK: - "Now Playing" Details Block
-
-static void closeMusicManager(bool ingame)
-{
-	trackList.clear();
-	trackRowsCache.clear();
-	selectedTrack.reset();
-	if (musicManagerAudioEventSink)
-	{
-		musicManagerAudioEventSink->setUnregisterEventSink();
-		musicManagerAudioEventSink.reset();
-	}
-	if (!ingame)
-	{
-		cdAudio_PlayTrack(cdAudio_CurrentSongContext());
-	}
-
-	psNowPlaying = nullptr;
-	psSelectedTrackName = nullptr;
-	psSelectedTrackAuthorName = nullptr;
-	psSelectedTrackAlbumName = nullptr;
-	psSelectedTrackAlbumDate = nullptr;
-	psSelectedTrackAlbumDescription = nullptr;
-}
-
-class MusicManagerForm : public IntFormTransparent
+class MusicManagerForm : public W_FORM
 {
 protected:
 	explicit MusicManagerForm(bool ingame)
-	: IntFormTransparent()
+	: W_FORM()
 	, ingame(ingame) {}
 
 	void initialize()
 	{
-		this->id = MM_FORM;
-		this->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(0, 0, pie_GetVideoBufferWidth(), pie_GetVideoBufferHeight());
-		}));
-
-		// draws the background of the form
-		auto botForm = std::make_shared<IntFormAnimated>();
-		this->attach(botForm);
-		botForm->id = MM_FORM + 1;
-
-		if (!ingame)
-		{
-			botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-				psWidget->setGeometry(TL_X, 20, TL_W, GetTrackListHeight());
-			}));
-
-			// cancel
-			addMultiBut(*botForm, MM_RETURN, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"),
-					IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-		}
-		else
-		{
-			// Text versions for in-game where image resources are not available
-			botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-				psWidget->setGeometry(((300-(TL_W/2))+D_W), ((240-(GetTotalTrackAndDetailsBoxHeight()/2))+D_H), TL_W, GetTrackListHeight() + 20);
-			}));
-
-			addButton(botForm, _("Go Back"), MM_GO_BACK, GetTrackListHeight() - 20);
-			addButton(botForm, _("Resume Game"), MM_RETURN, GetTrackListHeight());
-		}
-
 		// get track list
 		trackList = PlayList_GetFullTrackList();
 		selectedTrack = cdAudio_GetCurrentTrack();
 
+		addTrackList(this);
+		addTrackDetailsBox();
+
+		updateActiveTrackImpl(selectedTrack);
+
 		// register for cd audio events
-		musicManagerAudioEventSink = std::make_shared<MusicManager_CDAudioEventSink>();
+		musicManagerAudioEventSink = std::make_shared<MusicManager_CDAudioEventSink>(std::static_pointer_cast<MusicManagerForm>(shared_from_this()));
 		cdAudio_RegisterForEvents(std::static_pointer_cast<CDAudioEventSink>(musicManagerAudioEventSink));
-
-		addTrackList(botForm.get(), ingame);
-		addTrackDetailsBox(this, ingame);
 	}
 
-	static void addButton(const std::shared_ptr<IntFormAnimated> &botForm, const char *text, int id, int y)
-	{
-		W_BUTINIT sButInit;
-
-		sButInit.formID		= botForm->id;
-		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
-		sButInit.width		= TL_W;
-		sButInit.FontID		= font_regular;
-		sButInit.x			= 0;
-		sButInit.height		= 10;
-		sButInit.pDisplay	= displayTextOption;
-		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
-		};
-
-		sButInit.id			= id;
-		sButInit.y			= y;
-		sButInit.pText		= text;
-		sButInit.calcLayout = [y] (WIDGET *psWidget) {
-			psWidget->move(0, y);
-		};
-
-		botForm->attach(std::make_shared<W_BUTTON>(&sButInit));
-	}
+	virtual int32_t idealWidth() override;
+	virtual int32_t idealHeight() override;
+	virtual void geometryChanged() override;
+	virtual void display(int xOffset, int yOffset) override;
 
 public:
 	static std::shared_ptr<MusicManagerForm> make(bool ingame)
@@ -829,110 +504,264 @@ public:
 		return widget;
 	}
 
-	~MusicManagerForm() override
-	{
-		closeMusicManager(ingame);
-	}
+	virtual ~MusicManagerForm();
+
+	void updateActiveTrack(const std::shared_ptr<const WZ_TRACK>& track);
+
 private:
+	void addTrackList(WIDGET* parent);
+	void addTrackDetailsBox();
+	void updateActiveTrackImpl(const std::shared_ptr<const WZ_TRACK>& track);
+	std::shared_ptr<WIDGET> createColumnHeaderLabel(const char* text, int minLeftPadding);
+	std::shared_ptr<TableRow> createTrackRow(const std::shared_ptr<const WZ_TRACK>& track);
+private:
+	std::vector<std::shared_ptr<const WZ_TRACK>> trackList;
+	std::shared_ptr<const WZ_TRACK> selectedTrack;
+	std::shared_ptr<ScrollableTableWidget> table;
+	std::shared_ptr<TrackDetailsForm> trackDetailsBox;
+	std::shared_ptr<MusicManager_CDAudioEventSink> musicManagerAudioEventSink;
+	int32_t minDesiredTableWidth = 0;
 	bool ingame;
+	const int32_t tablePaddingX = 6;
 };
 
-static bool musicManager(WIDGET *parent, bool ingame)
+MusicManagerForm::~MusicManagerForm()
 {
-	parent->attach(MusicManagerForm::make(ingame));
-	return true;
-}
-
-bool startInGameMusicManager(InputManager& inputManager)
-{
-	inputManager.contexts().pushState();
-	inputManager.contexts().makeAllInactive();
-	return musicManager(psWScreen->psForm.get(), true);
-}
-
-bool startMusicManager()
-{
-	addBackdrop();	//background image
-	addSideText(FRONTEND_SIDETEXT, TL_SX, 20, _("MUSIC MANAGER"));
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-	return musicManager(parent, false);
-}
-
-static void perFrameCleanup()
-{
-	UDWORD currentFrameNum = frameGetFrameNumber();
-	for (auto i = trackRowsCache.begin(), last = trackRowsCache.end(); i != last; )
+	if (musicManagerAudioEventSink)
 	{
-		if (currentFrameNum - i->second->lastUsedFrameNumber > 1)
+		musicManagerAudioEventSink->setUnregisterEventSink();
+		musicManagerAudioEventSink.reset();
+	}
+	if (!ingame)
+	{
+		cdAudio_PlayTrack(cdAudio_CurrentSongContext());
+	}
+}
+
+void MusicManagerForm::geometryChanged()
+{
+	int w = width();
+	int h = height();
+
+	if (w == 0 || h == 0)
+	{
+		return;
+	}
+
+	int trackDetailsBoxHeight = TL_PREVIEWBOX_H;
+	int trackDetailsBoxY0 = h - trackDetailsBoxHeight;
+	trackDetailsBox->setGeometry(0, trackDetailsBoxY0, w, trackDetailsBoxHeight);
+
+	int tracksTableX0 = tablePaddingX;
+	int tracksTableY0 = 0;
+	int tracksTableHeight = trackDetailsBoxY0 - tracksTableY0 - 5;
+	int tracksTableWidth = w - (tablePaddingX * 2);
+	table->setGeometry(tracksTableX0, tracksTableY0, tracksTableWidth, tracksTableHeight);
+
+	table->setMinimumColumnWidths(table->getMinimumColumnWidths());
+}
+
+int32_t MusicManagerForm::idealWidth()
+{
+	return std::max<int32_t>(table->idealWidth(), (minDesiredTableWidth + (tablePaddingX * 2) + 100));
+}
+
+int32_t MusicManagerForm::idealHeight()
+{
+	return trackDetailsBox->idealHeight() + 400;
+}
+
+void MusicManagerForm::display(int xOffset, int yOffset)
+{
+	// currently, no-op
+}
+
+void MusicManagerForm::updateActiveTrack(const std::shared_ptr<const WZ_TRACK>& track)
+{
+	if (track == selectedTrack)
+	{
+		return;
+	}
+	updateActiveTrackImpl(track);
+}
+
+void MusicManagerForm::updateActiveTrackImpl(const std::shared_ptr<const WZ_TRACK>& track)
+{
+	selectedTrack = track;
+
+	trackDetailsBox->displayTrack(track);
+
+	auto it = std::find(trackList.begin(), trackList.end(), track);
+	if (it == trackList.end())
+	{
+		return;
+	}
+	auto trackRowIndex = std::distance(trackList.begin(), it);
+	const auto& tableRows = table->getRows();
+	ASSERT(trackRowIndex < tableRows.size(), "Invalid row index: %zu", trackRowIndex);
+	for (size_t i = 0; i < tableRows.size(); ++i)
+	{
+		if (i == trackRowIndex)
 		{
-			i = trackRowsCache.erase(i);
+			tableRows[i]->setBackgroundColor(WZCOL_KEYMAP_ACTIVE);
+			tableRows[i]->setHighlightsOnMouseOver(false);
+			continue;
 		}
-		else
+		tableRows[i]->setBackgroundColor(nullopt);
+		tableRows[i]->setHighlightsOnMouseOver(true);
+	}
+}
+
+std::shared_ptr<WIDGET> MusicManagerForm::createColumnHeaderLabel(const char* text, int minLeftPadding)
+{
+	auto label = std::make_shared<W_LABEL>();
+	label->setTextAlignment(WLAB_ALIGNTOPLEFT);
+	label->setFontColour(WZCOL_TEXT_MEDIUM);
+	label->setString(text);
+	label->setGeometry(0, 0, label->getMaxLineWidth(), 0);
+	label->setCacheNeverExpires(true);
+	label->setCanTruncate(true);
+	return Margin(W_TRACK_ROW_PADDING + (W_TRACK_ROW_PADDING / 2), 0, 0, minLeftPadding).wrap(label);
+}
+
+void MusicManagerForm::addTrackList(WIDGET* parent)
+{
+	// Create column headers for tracks listing
+	std::vector<TableColumn> columns;
+	columns.push_back({createColumnHeaderLabel(_("Title"), 0), TableColumn::ResizeBehavior::RESIZABLE_AUTOEXPAND});
+	columns.push_back({createColumnHeaderLabel(_("Album"), 0), TableColumn::ResizeBehavior::RESIZABLE_AUTOEXPAND});
+
+	for (int musicModeIdx = 0; musicModeIdx < NUM_MUSICGAMEMODES; musicModeIdx++)
+	{
+		const std::string& headerImage = music_mode_col_header_images[musicModeIdx];
+		auto musicModeHeader = std::make_shared<W_MusicListHeaderColImage>();
+		musicModeHeader->loadImage(headerImage);
+		musicModeHeader->setGeometry(0, 0, W_TRACK_HEADER_COL_IMAGE_SIZE, W_TRACK_HEADER_HEIGHT);
+		std::string musicGameModeStr = to_string(static_cast<MusicGameMode>(musicModeIdx));
+		musicModeHeader->setTip(musicGameModeStr);
+		columns.push_back({Margin(W_TRACK_ROW_PADDING + (W_TRACK_ROW_PADDING / 2), 0, 0, 0).wrap(musicModeHeader), TableColumn::ResizeBehavior::FIXED_WIDTH});
+	}
+
+	int maxIdealColumnHeight = W_TRACK_HEADER_HEIGHT;
+	std::vector<size_t> minimumColumnWidths = { W_TRACK_COL_TITLE_W, W_TRACK_COL_ALBUM_W };
+	for (size_t i = 2; i < columns.size(); ++i)
+	{
+		minimumColumnWidths.push_back(static_cast<size_t>(std::max<int>(columns[i].columnWidget->idealWidth(), 0)));
+	}
+	minDesiredTableWidth = std::accumulate(minimumColumnWidths.begin(), minimumColumnWidths.end(), 0);
+	minDesiredTableWidth += (W_TRACK_COL_PADDING * 2) + (W_TRACK_COL_PADDING * 2 * (int)minimumColumnWidths.size());
+
+	// Create table
+	table = ScrollableTableWidget::make(columns, maxIdealColumnHeight);
+	table->setColumnPadding(Vector2i(W_TRACK_COL_PADDING, 0));
+	parent->attach(table);
+	table->setBackgroundColor(pal_RGBA(0,0,0,0));
+	table->setMinimumColumnWidths(minimumColumnWidths);
+	table->setDrawColumnLines(false);
+
+	// Add tracks
+	auto weakSelf = std::weak_ptr<MusicManagerForm>(std::static_pointer_cast<MusicManagerForm>(shared_from_this()));
+	size_t tracksCount = trackList.size();
+	W_BUTINIT emptyInit;
+	for (size_t trackIdx = 0; trackIdx < tracksCount; trackIdx++)
+	{
+		auto trackRow = createTrackRow(trackList[trackIdx]);
+		trackRow->setHighlightsOnMouseOver(true);
+		trackRow->setGeometry(0, 0, TL_ENTRYW, TL_ENTRYH);
+		trackRow->addOnClickHandler([weakSelf, trackIdx](W_BUTTON& clickedButton) {
+			auto strongSelf = weakSelf.lock();
+			ASSERT_OR_RETURN(, strongSelf != nullptr, "Widget gone?");
+			if (strongSelf->selectedTrack == strongSelf->trackList[trackIdx]) { return; }
+			cdAudio_PlaySpecificTrack(strongSelf->trackList[trackIdx]);
+		});
+		table->addRow(trackRow);
+	}
+}
+
+std::shared_ptr<TableRow> MusicManagerForm::createTrackRow(const std::shared_ptr<const WZ_TRACK>& track)
+{
+	std::vector<std::shared_ptr<WIDGET>> columnWidgets;
+
+	auto album = track->album.lock();
+	auto album_name = album->title;
+
+	// Track Title
+	auto trackTitleLabel = std::make_shared<W_LABEL>();
+	trackTitleLabel->setFont(font_regular, WZCOL_TEXT_BRIGHT);
+	trackTitleLabel->setString(WzString::fromUtf8(track->title));
+	trackTitleLabel->setGeometry(0, 0, trackTitleLabel->getMaxLineWidth(), trackTitleLabel->requiredHeight());
+	trackTitleLabel->setTransparentToMouse(true);
+	trackTitleLabel->setCanTruncate(true);
+	columnWidgets.push_back(trackTitleLabel);
+
+	// Album Title
+	auto albumTitleLabel = std::make_shared<W_LABEL>();
+	albumTitleLabel->setFont(font_regular, WZCOL_TEXT_BRIGHT);
+	albumTitleLabel->setString(WzString::fromUtf8(album_name));
+	albumTitleLabel->setGeometry(0, 0, albumTitleLabel->getMaxLineWidth(), albumTitleLabel->requiredHeight());
+	albumTitleLabel->setTransparentToMouse(true);
+	albumTitleLabel->setCanTruncate(true);
+	columnWidgets.push_back(albumTitleLabel);
+
+	// add music mode checkboxes
+	auto musicMode = MusicGameMode::MENUS;
+	if (ingame)
+	{
+		musicMode = PlayList_GetCurrentMusicMode();
+	}
+
+	for (int musicModeIdx = 0; musicModeIdx < NUM_MUSICGAMEMODES; musicModeIdx++)
+	{
+		auto pCheckBox = std::make_shared<W_MusicModeCheckboxButton>(static_cast<MusicGameMode>(musicModeIdx), PlayList_IsTrackEnabledForMusicMode(track, static_cast<MusicGameMode>(musicModeIdx)));
+		auto captureTrack = track;
+		pCheckBox->addOnClickHandler([captureTrack](W_BUTTON& button) {
+			W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
+			PlayList_SetTrackMusicMode(captureTrack, self.getMusicMode(), self.getIsChecked());
+		});
+		pCheckBox->setGeometry(0, 0, W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
+		pCheckBox->setCheckboxSize(W_TRACK_CHECKBOX_SIZE);
+		if (musicMode != MusicGameMode::MENUS)
 		{
-			++i;
+			if (musicModeIdx != static_cast<int>(musicMode))
+			{
+				pCheckBox->setState(WBUT_DISABLE);
+			}
 		}
+		columnWidgets.push_back(pCheckBox);
 	}
+
+	int rowHeight = TL_ENTRYH;
+
+	auto row = TableRow::make(columnWidgets, rowHeight);
+	row->setDisabledColor(WZCOL_FORM_DARK);
+	return row;
 }
 
-bool runInGameMusicManager(unsigned id, InputManager& inputManager)
+void MusicManagerForm::addTrackDetailsBox()
 {
-	if (id == MM_RETURN)			// return
-	{
-		inputManager.contexts().popState();
-		widgDelete(psWScreen, MM_FORM);
-		inputLoseFocus();
-		return true;
-	}
-	else if (id == MM_GO_BACK)
-	{
-		inputManager.contexts().popState();
-		widgDelete(psWScreen, MM_FORM);
-		intReopenMenuWithoutUnPausing();
-	}
-
-	perFrameCleanup();
-
-	return false;
+	trackDetailsBox = TrackDetailsForm::make();
+	attach(trackDetailsBox);
 }
 
-bool runMusicManager()
+std::shared_ptr<WIDGET> makeMusicManagerForm(bool ingame)
 {
-	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-
-	if (id == MM_RETURN)			// return
-	{
-		changeTitleMode(OPTIONS);
-	}
-
-	widgDisplayScreen(psWScreen);				// show the widgets currently running
-
-	perFrameCleanup();
-
-	if (CancelPressed())
-	{
-		changeTitleMode(OPTIONS);
-	}
-
-	return true;
+	return MusicManagerForm::make(ingame);
 }
 
 // MARK: - CD Audio Event Sink Implementation
 
-static void CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK>& track)
+void MusicManager_CDAudioEventSink::CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK>& track)
 {
-	if (selectedTrack == track)
+	auto psMusicManagerForm = weakMusicManagerForm.lock();
+	if (psMusicManagerForm)
 	{
-		return;
-	}
-	selectedTrack = track;
-	if (!psWScreen) { return; }
-	auto psTrackDetailsForm = dynamic_cast<TrackDetailsForm *>(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX));
-	if (psTrackDetailsForm)
-	{
-		UpdateTrackDetailsBox(psTrackDetailsForm);
+		psMusicManagerForm->updateActiveTrack(track);
 	}
 }
+
+MusicManager_CDAudioEventSink::MusicManager_CDAudioEventSink(const std::shared_ptr<MusicManagerForm>& musicManagerForm)
+: weakMusicManagerForm(musicManagerForm)
+{ }
 
 void MusicManager_CDAudioEventSink::startedPlayingTrack(const std::shared_ptr<const WZ_TRACK>& track)
 {

@@ -2,7 +2,7 @@
 	"type": "wz2100.guidetopic.v1",
 	"id": "wz2100::units::commanders",
 	"title": "Commanders",
-	"sort": "07",
+	"sort": "08",
 	"visual": {
 		"droidTemplate": {
 			"body": "Body8MBT",
@@ -20,7 +20,7 @@
 		"",
 		"Commanders provide an accuracy, armor, and movement speed bonus to all units assigned to them, which increases as the commander's rank increases.",
 		"",
-		"They are limited to having 6 non-artillery attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank, which can happen relatively quickly."
+		"They are limited to having 6 attacking units assigned to them at first, but this limit rises by 2 each time the commander gains a rank."
 	],
 	"links": [
 		"wz2100::units::sensors"

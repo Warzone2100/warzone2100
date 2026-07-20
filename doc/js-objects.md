@@ -39,6 +39,7 @@ number of module upgrades it has.
 * ```isRadarDetector``` True if the structure has radar detector ability. (3.2+ only)
 * ```range``` Maximum range of its weapons. (3.2+ only)
 * ```hasIndirect``` One or more of the structure's weapons are indirect. (3.2+ only)
+* ```health``` Percentage that this structure is damaged (where 100 means not damaged at all).
 
 ## Feature
 
@@ -47,6 +48,7 @@ In addition, the following properties are defined:
 * ```type``` It will always be ```FEATURE```.
 * ```stattype``` The type of feature. Defined types are ```OIL_RESOURCE```, ```OIL_DRUM``` and ```ARTIFACT```.
 * ```damageable``` Can this feature be damaged?
+* ```health``` Percentage that this feature is damaged (where 100 means not damaged at all).
 
 ## Droid
 
@@ -90,11 +92,11 @@ the action directly, but it may be interesting to look at what it currently is.
   * ```DROID_TRANSPORTER``` Cyborg transporter.
   * ```DROID_SUPERTRANSPORTER``` Droid transporter.
   * ```DROID_COMMAND``` Commanders.
-* ```group``` The group this droid is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
 * ```armed``` The percentage of weapon capability that is fully armed. Will be \emph{null} for droids other than VTOLs.
 * ```experience``` Amount of experience this droid has, based on damage it has dealt to enemies.
 * ```cost``` What it would cost to build the droid. (3.2+ only)
 * ```isVTOL``` True if the droid is VTOL. (3.2+ only)
+* ```isFlying``` True if the droid is currently flying. (4.6.0+ only)
 * ```canHitAir``` True if the droid has anti-air capabilities. (3.2+ only)
 * ```canHitGround``` True if the droid has anti-ground capabilities. (3.2+ only)
 * ```isSensor``` True if the droid has sensor ability. (3.2+ only)
@@ -109,6 +111,7 @@ the action directly, but it may be interesting to look at what it currently is.
 * ```cargoSpace``` Defined for transporters only: Cargo capacity left. (3.2+ only)
 * ```cargoCount``` Defined for transporters only: Number of individual \emph{items} in the cargo hold. (3.2+ only)
 * ```cargoSize``` The amount of cargo space the droid will take inside a transport. (3.2+ only)
+* ```health``` Percentage that this droid is damaged (where 100 means not damaged at all).
 
 ## Base Object
 
@@ -125,10 +128,10 @@ The following properties are defined:
 * ```player``` The player owning this object.
 * ```selected``` A boolean saying whether 'selectedPlayer' has selected this object.
 * ```name``` A user-friendly name for this object.
-* ```health``` Percentage that this object is damaged (where 100 means not damaged at all).
 * ```armour``` Amount of armour points that protect against kinetic weapons.
 * ```thermal``` Amount of thermal protection that protect against heat based weapons.
 * ```born``` The game time at which this object was produced or came into the world. (3.2+ only)
+* ```group``` The group this object is member of. This is a numerical ID. If not a member of any group, will be set to \emph{null}.
 
 ## Template
 

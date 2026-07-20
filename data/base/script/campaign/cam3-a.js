@@ -9,14 +9,10 @@ var truckLocCounter;
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (droid.player !== CAM_HUMAN_PLAYER)
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
 	{
-		if (isVTOL(droid))
-		{
-			camSafeRemoveObject(droid, false);
-		}
+		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
@@ -24,6 +20,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 camAreaEvent("northFactoryTrigger", function(droid)
 {
 	improveNexusAlloys();
+	camCallOnce("insaneSetupSpawns");
 	camEnableFactory("NXcybFac-b3");
 	camEnableFactory("NXcybFac-b4");
 
@@ -60,11 +57,22 @@ camAreaEvent ("middleTrigger", function(droid)
 {
 	improveNexusAlloys();
 	enableAllFactories();
+	camCallOnce("insaneSetupSpawns");
 });
+
+function insaneSetupSpawns()
+{
+	if (camAllowInsaneSpawns())
+	{
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));
+		setTimer("insaneReinforcementSpawn", camMinutesToMilliseconds(5.5));
+	}
+}
 
 function enableWestFactories()
 {
 	improveNexusAlloys();
+	camCallOnce("insaneSetupSpawns");
 	camEnableFactory("NXcybFac-b2-1");
 	camEnableFactory("NXcybFac-b2-2");
 	camEnableFactory("NXHvyFac-b2");
@@ -85,7 +93,7 @@ function setUnitRank(transport)
 		const droid = droids[i];
 		if (droid.droidType !== DROID_CONSTRUCT && droid.droidType !== DROID_REPAIR)
 		{
-			setDroidExperience(droid, droidExp[transporterIndex - 1]);
+			camSetDroidExperience(droid, droidExp[transporterIndex - 1]);
 		}
 	}
 }
@@ -105,6 +113,7 @@ function enableAllFactories()
 		"NXcybFac-b3", "NXcybFac-b2-1", "NXcybFac-b2-2", "NXHvyFac-b2", "NXcybFac-b4",
 	];
 
+	camCallOnce("insaneSetupSpawns");
 	for (let j = 0, i = factoryNames.length; j < i; ++j)
 	{
 		camEnableFactory(factoryNames[j]);
@@ -160,7 +169,7 @@ function sendPlayerTransporter()
 		tWeap.tank.inferno, tWeap.tank.assaultGun, tWeap.tank.assaultGun,
 		tWeap.tank.hyperVelocityCannon, tWeap.tank.tankKiller
 	];
-	const specialList = [tConstruct.truck, tConstruct.truck, tCommand.commander, tCommand.commander];
+	const specialList = (tweakOptions.noCommander) ? [tConstruct.truck, tConstruct.truck] : [tConstruct.truck, tConstruct.truck, tCommand.commander, tCommand.commander];
 	const BODY = bodyList[camRand(bodyList.length)];
 	const PROP = propulsionList[camRand(propulsionList.length)];
 
@@ -195,48 +204,35 @@ function sendPlayerTransporter()
 
 function wave2()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
-	const ext = {
-		limit: [2, 2], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+	const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 }
 
 function wave3()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 }
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? CAM_REINFORCE_CONDITION_ARTIFACTS : "NXCommandCenter");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlneedv, cTempl.nxlscouv];
-		const ext = {
-			limit: [2, 4, 2, 2], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+		const ext = {limit: [2, 4, 2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmtherv, cTempl.nxmtherv];
-		const ext = {
-			limit: [2, 2], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter", ext);
+		const ext = {limit: [2, 2], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(5)), CONDITION, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}
@@ -273,6 +269,22 @@ function groupPatrolNoTrigger()
 	});
 
 	camManageGroup(camMakeGroup("NAmbushCyborgs"), CAM_ORDER_ATTACK);
+}
+
+function insaneReinforcementSpawn()
+{
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxmscouh, cTempl.nxmrailh];
+	const limits = {minimum: 4, maxRandom: 2};
+	const location = ["northSpawnPos", "southSpawnPos"];
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
+}
+
+function insaneTransporterAttack()
+{
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxmscouh, cTempl.nxmrailh];
+	const limits = {minimum: 4, maxRandom: 2};
+	const location = camMakePos("NexusTransporterLandingPos");
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_ARTIFACTS, location, units, limits.minimum, limits.maxRandom);
 }
 
 //Gives starting tech and research.
@@ -313,6 +325,13 @@ function cam3Setup()
 		camCompleteRequiredResearch(mis_betaResearchNewClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResBetaClassic, CAM_HUMAN_PLAYER);
 		camCompleteRequiredResearch(mis_playerResGammaClassic, CAM_HUMAN_PLAYER);
+
+		if (tweakOptions.camPumpkin_identifier110)
+		{
+			const researchFix = ["CAM2RESEARCH-UNDO-Rockets", "CAM3-UNDO-v110"];
+			camCompleteRequiredResearch(researchFix, CAM_HUMAN_PLAYER);
+			camCompleteRequiredResearch(researchFix, CAM_NEXUS);
+		}
 
 		if (tweakOptions.camClassic_balance32)
 		{
@@ -374,7 +393,7 @@ function eventStartLevel()
 	const tExt = getObject("transporterExit");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, cam_levels.gamma2.pre);
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	camSetMissionTimer(camChangeOnDiff(camHoursToSeconds(2)));
 
 	centreView(startPos.x, startPos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -496,7 +515,7 @@ function eventStartLevel()
 	if (difficulty >= HARD)
 	{
 		addDroid(CAM_NEXUS, 8, 112, "Truck Retribution Hover", tBody.tank.retribution, tProp.tank.hover2, "", "", tConstruct.truck);
-		camManageTrucks(CAM_NEXUS);
+		camManageTrucks(CAM_NEXUS, false);
 		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
 	}
 

@@ -19,14 +19,9 @@
 
 #pragma once
 
-#include <stdint.h>
-
-#include <memory>
 #include <string>
 
 #include "lib/netplay/net_result.h"
-
-
 
 /// <summary>
 /// Opaque class representing abstract connection address to use with various
@@ -40,14 +35,16 @@
 ///
 /// NOTE: this class may or may not represent a chain of resolved network addresses
 /// instead of just a single one, much like a `addrinfo` structure.
-///
-/// Currently, only knows how to convert itself to `addrinfo` struct,
-/// which is used with the `TCP_DIRECT` network backend.
-///
-/// New conversion routines should be introduced for other network backends,
-/// if deemed necessary.
 /// </summary>
 struct IConnectionAddress
 {
 	virtual ~IConnectionAddress() = default;
+
+	/// <summary>
+	/// Converts the address to a string representation, which can be consumed
+	/// by various network backends.
+	/// </summary>
+	/// <returns>String representation of the address or an error code if the conversion
+	/// process ended with an error.</returns>
+	virtual net::result<std::string> toString() const = 0;
 };

@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,25 +37,60 @@
 #include <nlohmann/json_fwd.hpp>
 #include <nonstd/optional.hpp>
 #include <sstream>
+
+namespace WzMap {
+	class Map;
+	class MapPackage;
+	class LoggingProtocol;
+	struct GamInfo;
+}
+
 /***************************************************************************/
 /*
  *	Global ProtoTypes
  */
 /***************************************************************************/
 
-bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame);	// UserSaveGame is true when the save game is not a new level (User Save Game)
+struct GameLoadDetails
+{
+public:
+	enum class GameLoadType
+	{
+		UserSaveGame,
+		Level,
+		MapPackage
+	};
+protected:
+	GameLoadDetails(GameLoadType loadType, const std::string& filePath);
+public:
+	static GameLoadDetails makeUserSaveGameLoad(const std::string& saveGame);
+	static GameLoadDetails makeMapPackageLoad(const std::string& mapPackageFilePath);
+	static GameLoadDetails makeLevelFileLoad(const std::string& levelFileName);
+	GameLoadDetails& setLogger(const std::shared_ptr<WzMap::LoggingProtocol>& logger);
+public:
+	std::string getMapFolderPath() const;
+	std::shared_ptr<WzMap::Map> getMap(uint32_t mapSeed) const;
+	const WzMap::GamInfo* getGamInfoFromPackage() const;
+private:
+	std::shared_ptr<WzMap::MapPackage> getMapPackage() const;
+public:
+	GameLoadType loadType;
+	std::string filePath;
+private:
+	std::shared_ptr<WzMap::LoggingProtocol> m_logger;
+	mutable std::shared_ptr<WzMap::MapPackage> m_loadedPackage;
+};
+
+LoadingTask<> loadGame(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad, bool keepObjects, bool freeMem);
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-bool loadGameInit(const char *fileName);
+LoadingTask<> loadGameInit(ResourceLoadingController& controller, const GameLoadDetails& gameToLoad);
 
 bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType);
 
 // load the script state given a .gam name
 bool loadScriptState(char *pFileName);
-
-/// Load the terrain types
-bool loadTerrainTypeMap(const char *pFilePath);
 
 bool saveGame(const char *aFileName, GAME_TYPE saveType, bool isAutoSave = false);
 

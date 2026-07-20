@@ -1,0 +1,33 @@
+{
+	"type": "wz2100.guidetopic.v1",
+	"id": "wz2100::weapons::bombs::incendiary",
+	"title": "Incendiary Bombs",
+	"sort": "01",
+	"visual": [
+		{
+			"stat": {
+				"id": "Bomb3-VTOL-LtINC",
+				"onlyIfKnown": "campaign"
+			}
+		},
+		{
+			"stat": {
+				"id": "Bomb4-VTOL-HvyINC",
+				"onlyIfKnown": "campaign"
+			}
+		}
+	],
+	"contents": [
+		"Incendiary bombs act somewhat similarly to ground-based Flamer weapons.",
+		"",
+		"Incendiary bombs deal low damage on impact, but will instantly ignite a large area around the impact site.",
+		"",
+		"Enemy units and structures that linger within this area will take a large amount of damage over time.",
+		"",
+		"Like Flamer weapons, incendiary bombs are excellent againt all unit types and bunkers, but are weak against hardened structures."
+	],
+	"links": [
+		"wz2100::weapons::bombs",
+		"wz2100::weapons::flamer"
+	]
+}

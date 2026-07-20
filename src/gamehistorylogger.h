@@ -57,6 +57,14 @@ public:
 		inline bool anyEnabled() const { return cmdInterface || logFile; }
 	};
 
+	struct AIPlayerAttributes
+	{
+		AIPlayerAttributes();
+
+		std::string scriptName;
+		int8_t difficulty = -1;
+	};
+
 	struct FixedPlayerAttributes
 	{
 		std::string name;
@@ -65,6 +73,8 @@ public:
 		int32_t colour;
 		FactionID faction;
 		std::string publicKey;
+		bool slotWasOccupied = false;	///< whether the slot was filled (by a human player or an AI) at game start - false for open / closed slots
+		optional<AIPlayerAttributes> aiPlayerAttr = nullopt;
 	};
 
 	struct GameFrame
@@ -80,7 +90,7 @@ public:
 			uint32_t structs = 0;
 			uint32_t researchComplete = 0;
 			uint32_t power = 0;
-			uint32_t score = 0;
+			int32_t  score = 0;
 			uint32_t hp = 0;
 			uint32_t summExp = 0;
 			uint32_t oilRigs = 0;
@@ -91,6 +101,7 @@ public:
 			uint64_t recentResearchPotential = 0;
 			uint64_t recentResearchPerformance = 0;
 			std::string usertype; // from end_conditions.js
+			optional<uint32_t> playerLeftGameTime = nullopt;
 		};
 
 		std::vector<PlayerStats> playerData;
@@ -148,7 +159,7 @@ private:
 
 	GameFrame genCurrentFrame() const;
 	nlohmann::json genFrameReport(const GameFrame& frame, OutputKey key, OutputNaming naming);
-	nlohmann::json genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const;
+	nlohmann::ordered_json genEndOfGameReport(OutputKey key, OutputNaming naming, bool timeout) const;
 	std::string getLogOutputFilename() const;
 
 	void outputLine(std::string&& line);

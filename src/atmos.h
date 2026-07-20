@@ -41,8 +41,10 @@ enum WT_CLASS
 	WT_NONE
 };
 
+struct WorldMapState;
+
 void atmosInitSystem();
-void atmosUpdateSystem();
+void atmosUpdateSystem(WorldMapState& mapState);
 void renderParticle(ATPART *psPart, const glm::mat4 &perspectiveViewMatrix);
 void atmosDrawParticles(const glm::mat4 &viewMatrix, const glm::mat4 &perspectiveViewMatrix);
 void atmosSetWeatherType(WT_CLASS type);

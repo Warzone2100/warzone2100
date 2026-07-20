@@ -60,7 +60,7 @@ struct WARZONE_GLOBALS
 	int antialiasing = 0;
 	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
-	bool trapCursor = false;
+	TrapCursorMode trapCursor = TrapCursorMode::Automatic;
 	int vsync = 1;
 	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
@@ -75,7 +75,9 @@ struct WARZONE_GLOBALS
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
 	bool autoAdjustDisplayScale = true;
 	int autoLagKickSeconds = 60;
+	int autoLagKickAggressiveness = 3;
 	int autoDesyncKickSeconds = 10;
+	int autoNotReadyKickSeconds = 0;
 	bool disableReplayRecording = false;
 	int maxReplaysSaved = MAX_REPLAY_FILES;
 	int oldLogsLimit = MAX_OLD_LOGS;
@@ -83,6 +85,7 @@ struct WARZONE_GLOBALS
 	uint32_t MPgameTimeLimitMinutes = 0; // default to unlimited
 	uint8_t MPopenSpectatorSlots = 0;
 	PLAYER_LEAVE_MODE MPplayerLeaveMode = PLAYER_LEAVE_MODE_DEFAULT;
+	std::string lastIPConnectServerName;
 	int fogStart = 4000;
 	int fogEnd = 8000;
 	int lodDistanceBiasPercentage = WZ_LODDISTANCEPERCENTAGE_HIGH; // default to "High" to best match prior version behavior
@@ -91,6 +94,8 @@ struct WARZONE_GLOBALS
 	UDWORD fullscreenModeWidth = 0; // current display default
 	UDWORD fullscreenModeHeight = 0; // current display default
 	int fullscreenModeScreen = -1;
+	float fullscreenPixelDensity = 1.f;
+	float fullscreenRefreshRate = 0.f; // current display default
 	int toggleFullscreenMode = 0; // 0 = the backend default
 	unsigned int cursorScale = 100;
 	// shadow mapping settings
@@ -107,6 +112,13 @@ struct WARZONE_GLOBALS
 
 	// Connection provider used for hosting games
 	ConnectionProviderType hostProviderType = ConnectionProviderType::TCP_DIRECT;
+
+	// lobby
+	bool lobbyDisableIPv6 = false;
+	bool lobbyFilterIPv6Only = false;
+
+	// audio cues
+	bool playAudioCue_GroupReporting = true;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -199,13 +211,13 @@ int war_getAntialiasing()
 	return warGlobs.antialiasing;
 }
 
-void war_SetTrapCursor(bool b)
+void war_SetTrapCursor(TrapCursorMode v)
 {
-	warGlobs.trapCursor = b;
-	ActivityManager::instance().changedSetting("trapCursor", std::to_string(b));
+	warGlobs.trapCursor = v;
+	ActivityManager::instance().changedSetting("trapCursor", std::to_string(static_cast<int>(v)));
 }
 
-bool war_GetTrapCursor()
+TrapCursorMode war_GetTrapCursor()
 {
 	return warGlobs.trapCursor;
 }
@@ -487,9 +499,21 @@ void war_setAutoLagKickSeconds(int seconds)
 	seconds = std::max(seconds, 0);
 	if (seconds > 0)
 	{
-		seconds = std::max(seconds, 60);
+		seconds = std::max(seconds, 15);
 	}
 	warGlobs.autoLagKickSeconds = seconds;
+}
+
+int war_getAutoLagKickAggressiveness()
+{
+	return warGlobs.autoLagKickAggressiveness;
+}
+
+void war_setAutoLagKickAggressiveness(int aggressiveness)
+{
+	aggressiveness = std::max(aggressiveness, 1);
+	aggressiveness = std::min(aggressiveness, 10);
+	warGlobs.autoLagKickAggressiveness = aggressiveness;
 }
 
 int war_getAutoDesyncKickSeconds()
@@ -505,6 +529,21 @@ void war_setAutoDesyncKickSeconds(int seconds)
 		seconds = std::max(seconds, 10);
 	}
 	warGlobs.autoDesyncKickSeconds = seconds;
+}
+
+int war_getAutoNotReadyKickSeconds()
+{
+	return warGlobs.autoNotReadyKickSeconds;
+}
+
+void war_setAutoNotReadyKickSeconds(int seconds)
+{
+	seconds = std::max(seconds, 0);
+	if (seconds > 0)
+	{
+		seconds = std::max(seconds, 15);
+	}
+	warGlobs.autoNotReadyKickSeconds = seconds;
 }
 
 bool war_getDisableReplayRecording()
@@ -586,6 +625,16 @@ void war_setMPPlayerLeaveMode(PLAYER_LEAVE_MODE mode)
 	warGlobs.MPplayerLeaveMode = mode;
 }
 
+void war_setLastIpServerConnect(const std::string& serverName)
+{
+	warGlobs.lastIPConnectServerName = serverName;
+}
+
+const std::string& war_getLastIpServerConnect()
+{
+	return warGlobs.lastIPConnectServerName;
+}
+
 int war_getFogEnd()
 {
 	return warGlobs.fogEnd;
@@ -633,6 +682,26 @@ void war_SetFullscreenModeScreen(int screen)
 int war_GetFullscreenModeScreen()
 {
 	return warGlobs.fullscreenModeScreen;
+}
+
+float war_GetFullscreenModePixelDensity()
+{
+	return warGlobs.fullscreenPixelDensity;
+}
+
+void war_SetFullscreenModePixelDensity(float pixelDensity)
+{
+	warGlobs.fullscreenPixelDensity = pixelDensity;
+}
+
+float war_GetFullscreenModeRefreshRate()
+{
+	return warGlobs.fullscreenRefreshRate;
+}
+
+void war_SetFullscreenModeRefreshRate(float refreshRate)
+{
+	warGlobs.fullscreenRefreshRate = refreshRate;
 }
 
 void war_setToggleFullscreenMode(int mode)
@@ -740,6 +809,13 @@ bool net_backend_from_str(const char* str, ConnectionProviderType& pt)
 		pt = ConnectionProviderType::TCP_DIRECT;
 		return true;
 	}
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	if (strcasecmp(str, "gns") == 0)
+	{
+		pt = ConnectionProviderType::GNS_DIRECT;
+		return true;
+	}
+#endif
 	return false;
 }
 
@@ -749,7 +825,41 @@ std::string to_string(ConnectionProviderType pt)
 	{
 	case ConnectionProviderType::TCP_DIRECT:
 		return "tcp";
+#ifdef WZ_GNS_NETWORK_BACKEND_ENABLED
+	case ConnectionProviderType::GNS_DIRECT:
+		return "gns";
+#endif
 	}
 	ASSERT(false, "Invalid connection provider type enumeration value: %d", static_cast<int>(pt)); // silence GCC warning
 	return {};
+}
+
+bool war_getLobbyDisableIPv6()
+{
+	return warGlobs.lobbyDisableIPv6;
+}
+
+void war_setLobbyDisableIPv6(bool enabled)
+{
+	warGlobs.lobbyDisableIPv6 = enabled;
+}
+
+bool war_getLobbyFilterIPv6Only()
+{
+	return warGlobs.lobbyFilterIPv6Only;
+}
+
+void war_setLobbyFilterIPv6Only(bool enabled)
+{
+	warGlobs.lobbyFilterIPv6Only = enabled;
+}
+
+bool war_getPlayAudioCue_GroupReporting()
+{
+	return warGlobs.playAudioCue_GroupReporting;
+}
+
+void war_setPlayAudioCue_GroupReporting(bool val)
+{
+	warGlobs.playAudioCue_GroupReporting = val;
 }

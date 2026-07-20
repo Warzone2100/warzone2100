@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -83,7 +85,7 @@ struct ANIMFRAME
 
 struct iIMDPoly
 {
-	std::vector<Vector2f> texCoord;
+	std::array<Vector2f, 3> texCoord;
 	Vector2f texAnim = Vector2f(0.f, 0.f);
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
@@ -149,6 +151,7 @@ protected:
 	friend void modelReloadAllModelTextures();
 	friend bool debugReloadDisplayModelsForBaseModel(iIMDBaseShape& baseModel);
 	friend void debugReloadAllDisplayModels();
+	friend LoadingTask<> preloadAllModelTexturesTask(ResourceLoadingController& controller);
 
 	void replaceDisplayModel(std::unique_ptr<iIMDShape> newDisplayModel);
 	bool debugReloadDisplayModel(); // not to be called normally at runtime - intended for the script / graphics debugger panel
@@ -239,6 +242,7 @@ public:
 
 protected:
 	friend void modelUpdateTilesetIdx(size_t tilesetIdx);
+	friend LoadingTask<> preloadAllModelTexturesTask(ResourceLoadingController& controller);
 	void reloadTexturesIfLoaded();
 
 private:
@@ -286,6 +290,8 @@ struct IMAGEFILE
 
 	~IMAGEFILE(); // Defined in bitimage.cpp.
 	AtlasImageDef* find(WzString const &name);  // Defined in bitimage.cpp.
+
+	inline size_t numImages() const { return imageDefs.size(); }
 
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<AtlasImageDef> imageDefs;  /// Stored images.

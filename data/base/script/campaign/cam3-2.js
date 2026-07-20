@@ -4,7 +4,7 @@ include("script/campaign/transitionTech.js");
 
 const MIS_ALPHA_PLAYER = 1; //Team alpha units belong to player 1.
 const mis_nexusRes = [
-	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade10", "R-Struc-Materials09",
 	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage10", "R-Wpn-Mortar-ROF04",
@@ -33,14 +33,10 @@ var startExtraLoss;
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)
 {
-	if (droid.player !== CAM_HUMAN_PLAYER)
+	if (droid.player !== CAM_HUMAN_PLAYER && camVtolCanDisappear(droid))
 	{
-		if (isVTOL(droid))
-		{
-			camSafeRemoveObject(droid, false);
-		}
+		camSafeRemoveObject(droid, false);
 	}
-
 	resetLabel("vtolRemoveZone", CAM_NEXUS);
 });
 
@@ -72,6 +68,11 @@ camAreaEvent("phantomFacTrigger", function(droid)
 	camPlayVideos([cam_sounds.incoming.incomingIntelligenceReport, {video: "MB3_2_MSG3", type: CAMP_MSG}]); //Warn about VTOLs.
 	queue("enableReinforcements", camSecondsToMilliseconds(5));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(2)));
+	if (camAllowInsaneSpawns())
+	{
+		queue("insaneTransporterAttack", camSecondsToMilliseconds(20));
+		setTimer("insaneTransporterAttack", camMinutesToMilliseconds(4.5));
+	}
 });
 
 function setAlphaExp()
@@ -86,7 +87,7 @@ function setAlphaExp()
 		const dr = alphaDroids[i];
 		if (!camIsSystemDroid(dr))
 		{
-			setDroidExperience(dr, DROID_EXP);
+			camSetDroidExperience(dr, DROID_EXP);
 		}
 	}
 }
@@ -127,15 +128,17 @@ function phantomFactorySE()
 
 function sendEdgeMapDroids(droidCount, location, list)
 {
-	const droids = [];
-	for (let i = 0; i < droidCount; ++i)
-	{
-		droids.push(list[camRand(list.length)]);
-	}
+	camSendGenericSpawn(CAM_REINFORCE_GROUND, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, list, droidCount);
+}
 
-	camSendReinforcement(CAM_NEXUS, camMakePos(location), droids, CAM_REINFORCE_GROUND, {
-		data: {regroup: true, count: -1}
-	});
+function insaneTransporterAttack()
+{
+	const DISTANCE_FROM_POS = 30;
+	const OBJ_SCAN_RADIUS = 1;
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmscouh, cTempl.nxlflash, cTempl.nxmrailh];
+	const limits = {minimum: 8, maxRandom: 2};
+	const location = camGenerateRandomMapCoordinate(getObject("startPosition"), CAM_GENERIC_LAND_STAT, DISTANCE_FROM_POS, OBJ_SCAN_RADIUS, false);
+	camSendGenericSpawn(CAM_REINFORCE_TRANSPORT, CAM_NEXUS, CAM_REINFORCE_CONDITION_NONE, location, units, limits.minimum, limits.maxRandom);
 }
 
 function setupPatrolGroups()
@@ -209,48 +212,35 @@ function setupPatrolGroups()
 
 function wave2()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXvtolStrikeTower");
 	const list = [cTempl.nxlscouv, cTempl.nxlscouv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), CONDITION, ext);
 }
 
 function wave3()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXvtolStrikeTower");
 	const list = [cTempl.nxlneedv, cTempl.nxlneedv];
-	const ext = {
-		limit: [3, 3], //paired with list array
-		alternate: true,
-		altIdx: 0
-	};
-	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+	const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+	camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), CONDITION, ext);
 }
 
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
+	const CONDITION = ((camAllowInsaneSpawns()) ? undefined : "NXvtolStrikeTower");
 	if (camClassicMode())
 	{
 		const list = [cTempl.nxlscouv, cTempl.nxlscouv, cTempl.nxmtherv];
-		const ext = {
-			limit: [2, 2, 4], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+		const ext = {limit: [2, 2, 4], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), CONDITION, ext);
 	}
 	else
 	{
 		const list = [cTempl.nxmtherv, cTempl.nxmtherv];
-		const ext = {
-			limit: [3, 3], //paired with list array
-			alternate: true,
-			altIdx: 0
-		};
-		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "NXvtolStrikeTower", ext);
+		const ext = {limit: [3, 3], alternate: true, altIdx: 0};
+		camSetVtolData(CAM_NEXUS, "vtolAppearPos", "vtolRemoveZone", list, camChangeOnDiff(camMinutesToMilliseconds(3)), CONDITION, ext);
 		queue("wave2", camChangeOnDiff(camSecondsToMilliseconds(30)));
 		queue("wave3", camChangeOnDiff(camSecondsToMilliseconds(60)));
 	}

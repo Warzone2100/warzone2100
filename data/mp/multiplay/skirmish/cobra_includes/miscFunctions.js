@@ -7,6 +7,11 @@ function random(max)
 	return (max <= 0) ? 0 : Math.floor(Math.random() * max);
 }
 
+function chance(probability)
+{
+	return random(100) < probability;
+}
+
 // Returns true if something is defined
 function isDefined(data)
 {
@@ -63,9 +68,10 @@ function personalityIsRocketMain()
 //Distance between an object and the Cobra base.
 function distanceToBase(obj1, obj2)
 {
-	let dist1 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj1.x, obj1.y);
-	let dist2 = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj2.x, obj2.y);
-	return (dist1 - dist2);
+	const __dist1 = distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, obj1.x, obj1.y);
+	const __dist2 = distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, obj2.x, obj2.y);
+
+	return (__dist1 - __dist2);
 }
 
 function addDroidsToGroup(group, droids)
@@ -93,40 +99,36 @@ function rangeStep(player)
 			player = getMostHarmfulPlayer();
 		}
 
-		let highOil = highOilMap();
-		let targets = [];
-		let derr;
-		let struc = findNearestEnemyStructure(player);
-		let droid = findNearestEnemyDroid(player);
+		const __highOil = highOilMap();
+		const _targets = [];
+		const _derr = (!__highOil) ? findNearestEnemyDerrick(player) : undefined;
+		const _struc = findNearestEnemyStructure(player);
+		const _droid = findNearestEnemyDroid(player);
 
-		if (!highOil)
+		if (_derr)
 		{
-			derr = findNearestEnemyDerrick(player);
-		}
-
-		if (derr)
-		{
-			targets.push(getObject(derr.typeInfo, derr.playerInfo, derr.idInfo));
-		}
-		if (struc)
-		{
-			targets.push(getObject(struc.typeInfo, struc.playerInfo, struc.idInfo));
-		}
-		if (droid)
-		{
-			targets.push(getObject(droid.typeInfo, droid.playerInfo, droid.idInfo));
+			_targets.push(getObject(_derr.typeInfo, _derr.playerInfo, _derr.idInfo));
 		}
 
-		if (targets.length > 0)
+		if (_struc)
 		{
-			if (!highOil && derr && ((random(100) < 7) || (countStruct(structures.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
+			_targets.push(getObject(_struc.typeInfo, _struc.playerInfo, _struc.idInfo));
+		}
+
+		if (_droid)
+		{
+			_targets.push(getObject(_droid.typeInfo, _droid.playerInfo, _droid.idInfo));
+		}
+
+		if (_targets.length)
+		{
+			if (!__highOil && _derr && (chance(7) || (countStruct(_STRUCTURES.derrick, me) <= Math.floor(1.5 * averageOilPerPlayer()))))
 			{
-				return objectInformation(derr);
+				return objectInformation(_derr);
 			}
 			else
 			{
-				targets = targets.sort(distanceToBase);
-				return objectInformation(targets[0]);
+				return objectInformation(_targets.sort(distanceToBase)[0]);
 			}
 		}
 
@@ -144,7 +146,7 @@ function playerAlliance(ally)
 		ally = false;
 	}
 
-	let players = [];
+	const _players = [];
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -155,11 +157,11 @@ function playerAlliance(ally)
 
 		if ((!ally && !allianceExistsBetween(i, me)) || (ally && allianceExistsBetween(i, me)))
 		{
-			players.push(i);
+			_players.push(i);
 		}
 	}
 
-	return players;
+	return _players;
 }
 
 //return real power levels.
@@ -169,13 +171,15 @@ function getRealPower(player)
 	{
 		player = me;
 	}
-	const POWER = playerPower(player) - queuedPower(player);
-	if (!currently_dead && playerAlliance(true).length > 0 && player === me && POWER < -300)
+
+	const __power = playerPower(player) - queuedPower(player);
+
+	if (!currently_dead && playerAlliance(true).length && (player === me) && (__power < -300))
 	{
 		sendChatMessage("need power", ALLIES);
 	}
 
-	return POWER;
+	return __power;
 }
 
 //Find enemies that are still alive.
@@ -183,12 +187,13 @@ function findLivingEnemies()
 {
 	function uncached()
 	{
-		let alive = [];
+		const _alive = [];
+
 		for (let x = 0; x < maxPlayers; ++x)
 		{
-			if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
+			if ((x !== me) && !allianceExistsBetween(x, me) && (countDroid(DROID_ANY, x) || enumStruct(x).length))
 			{
-				alive.push(x);
+				_alive.push(x);
 			}
 			else
 			{
@@ -203,16 +208,16 @@ function findLivingEnemies()
 			}
 		}
 
-		return alive;
+		return _alive;
 	}
 
-	return cacheThis(uncached, [], "findLivingEnemies + me", 8000);
+	return cacheThis(uncached, [], "findLivingEnemies" + me, 8000);
 }
 
 //The enemy of which Cobra is focusing on.
 function getMostHarmfulPlayer()
 {
-	if (isDefined(scavengerPlayer) && (gameTime < lastAttackedByScavs + 25000))
+	if ((lastAttackedByScavs > 0) && (gameTime < lastAttackedByScavs + 25000))
 	{
 		return scavengerPlayer;
 	}
@@ -220,31 +225,32 @@ function getMostHarmfulPlayer()
 	function uncached()
 	{
 		let mostHarmful = 0;
-		let enemies = findLivingEnemies();
-		let allEnemies = playerAlliance(false);
+		const _enemies = findLivingEnemies();
 
-		if (enemies.length === 0)
+		if (!_enemies.length)
 		{
-			if (allEnemies.length > 0)
+			const _allEnemies = playerAlliance(false);
+
+			if (_allEnemies.length)
 			{
-				return allEnemies[0]; //just focus on a dead enemy then.
+				return _allEnemies[0]; //just focus on a dead enemy then.
 			}
 			// shouldn't really happen unless someone is doing something really strange.
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
-		for (let x = 0, c = enemies.length; x < c; ++x)
+		for (let x = 0, c = _enemies.length; x < c; ++x)
 		{
-			if ((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
+			if ((grudgeCount[_enemies[x]] >= 0) && (grudgeCount[_enemies[x]] > grudgeCount[mostHarmful]))
 			{
-				mostHarmful = enemies[x];
+				mostHarmful = _enemies[x];
 			}
 		}
 
 		// Don't have an enemy yet, so pick one randomly (likely start of the game or the counters are all the same).
-		if (((me === mostHarmful) || allianceExistsBetween(me, mostHarmful)) && enemies.length > 0)
+		if (((me === mostHarmful) || allianceExistsBetween(me, mostHarmful)) && _enemies.length)
 		{
-			mostHarmful = enemies[random(enemies.length)];
+			mostHarmful = _enemies[random(_enemies.length)];
 			grudgeCount[mostHarmful] += 1;
 		}
 
@@ -293,19 +299,20 @@ function donateFromGroup(from, group)
 			default: chosenGroup = enumGroup(attackGroup); break;
 		}
 
-		const CACHE_DROIDS = chosenGroup.length;
+		const __droidLen = chosenGroup.length;
 
-		if ((CACHE_DROIDS >= MIN_ATTACK_DROIDS) || (group === "TRUCK" && CACHE_DROIDS >= MIN_TRUCKS_PER_GROUP))
+		if ((__droidLen >= __MIN_ATTACK_DROIDS) || (group === "TRUCK" && __droidLen >= __MIN_TRUCKS_PER_GROUP))
 		{
 			let idx = 0;
 			let amount;
+
 			if (group !== "TRUCK")
 			{
-				amount = random(CACHE_DROIDS - (MIN_ATTACK_DROIDS - 2)) + 1;
+				amount = random(__droidLen - (__MIN_ATTACK_DROIDS - 2)) + 1;
 			}
 			else
 			{
-				amount = random(CACHE_DROIDS - (MIN_TRUCKS_PER_GROUP - 1)) + 1;
+				amount = random(__droidLen - (__MIN_TRUCKS_PER_GROUP - 1)) + 1;
 			}
 
 			while (idx < amount)
@@ -340,16 +347,16 @@ function removeThisTimer(timer)
 //Check if Cobra is "alive". If not, the script is put in a very low perf impact state.
 function checkIfDead()
 {
-	if (!(countDroid(DROID_ANY, me) || countStruct(structures.factory, me) || countStruct(structures.cyborgFactory, me)))
+	if (!(countDroid(DROID_ANY, me) || countStruct(_STRUCTURES.factory, me) || countStruct(_STRUCTURES.cyborgFactory, me)))
 	{
 		currently_dead = true;
 
 		// Remind players to help me... (other Cobra allies will respond)
-		if (playerAlliance(true).length > 0)
+		if (playerAlliance(true).length)
 		{
-			const GOOD_POWER_SUPPLY = 200;
+			const __goodPowerSupply = 200;
 
-			if (playerPower(me) < GOOD_POWER_SUPPLY)
+			if (playerPower(me) < __goodPowerSupply)
 			{
 				sendChatMessage("need power", ALLIES);
 			}
@@ -382,18 +389,19 @@ function initCobraGroups()
 	addDroidsToGroup(sensorGroup, enumDroid(me, DROID_SENSOR));
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter((obj) => (obj.isCB)));
 
-	let cons = enumDroid(me, DROID_CONSTRUCT);
-	for (let i = 0, l = cons.length; i < l; ++i)
-	{
-		let con = cons[i];
+	const _cons = enumDroid(me, DROID_CONSTRUCT);
 
-		eventDroidBuilt(con, null);
+	for (let i = 0, l = _cons.length; i < l; ++i)
+	{
+		const _con = _cons[i];
+
+		eventDroidBuilt(_con, null);
 	}
 }
 
 function initCobraVars()
 {
-	let isHoverMap = checkIfSeaMap();
+	const __isHoverMap = checkIfSeaMap();
 
 	initCobraGroups();
 	lastMsg = "eventStartLevel";
@@ -401,8 +409,8 @@ function initCobraVars()
 	currently_dead = false;
 	researchComplete = false;
 	initializeGrudgeCounter();
-	forceHover = isHoverMap;
-	turnOffCyborgs = isHoverMap;
+	forceHover = __isHoverMap;
+	turnOffCyborgs = __isHoverMap;
 	choosePersonality();
 	turnOffMG = false;
 	useArti = true;
@@ -420,8 +428,87 @@ function initCobraVars()
 	startAttacking = false;
 	lastShuffleTime = 0;
 	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
-	randomResearchLabStart = (random(100) < 20);
-	cyborgOnlyGame = (getStructureLimit(structures.factory, me) === 0 && getStructureLimit(structures.cyborgFactory) > 0);
+	randomResearchLabStart = chance(20);
+	cyborgOnlyGame = (!getStructureLimit(_STRUCTURES.factory, me) && getStructureLimit(_STRUCTURES.cyborgFactory) > 0);
+	resObj = {
+		lab: undefined,
+		cybCheck: false,
+		antiPersonnelChance: 0,
+		isHighOil: false,
+		hasAlly: false,
+		highOilResPrice: 0,
+		defensiveLimit: false,
+		forceLaser: false,
+		forceDefenseRes: false
+	};
+	// We can't just detect no bases cause some maps might just give an HQ on Bases/advanced bases.
+	const __lowStartingBaseStructCount = (enumStruct(me).length <= 3);
+	noBasesHighTechStart = ((getMultiTechLevel() > 1) && ((baseType === CAMP_CLEAN) || __lowStartingBaseStructCount));
+	weirdMapBaseDesign = ((baseType !== CAMP_CLEAN) && __lowStartingBaseStructCount);
+}
+
+// T2+ No Bases Low Power. The ultimate meta.
+function strangeStartSettingOver()
+{
+	return (!noBasesHighTechStart || (startAttacking || (countStruct(_STRUCTURES.derrick, me) > 6) || (gameTime > 360000)));
+}
+
+// Attempt to move one base builder to grab oil in cyborg only games after some kind of base progression goal.
+function swapTruckGroupInCyborgOnly()
+{
+	if (!cyborgOnlyGame)
+	{
+		removeThisTimer("swapTruckGroupInCyborgOnly");
+		return;
+	}
+
+	if ((countStruct(_STRUCTURES.gen, me) > 0) &&
+		(countStruct(_STRUCTURES.lab, me) > 2))
+	{
+		const _trucks = enumDroid(me, DROID_CONSTRUCT);
+
+		if (_trucks.length > 1)
+		{
+			const _truck = _trucks[0];
+			orderDroid(_truck, DORDER_HOLD); // Break them out of any build like order by force if necessary.
+			groupAdd(oilGrabberGroup, _truck);
+		}
+
+		removeThisTimer("swapTruckGroupInCyborgOnly");
+	}
+}
+
+// A simple way to make sure a set of xy coordinates are within the map. If the `off` parameter
+// is defined, it will offset away from the map. Defaults to 2 as that is roughly where the dark area ends.
+function clipToMapBounds(obj, off)
+{
+	if (!isDefined(obj) || (!isDefined(obj.x) || !isDefined(obj.y)))
+	{
+		return undefined;
+	}
+
+	const __offset = (isDefined(off) ? off : 2);
+	let tmp = obj;
+
+	if (tmp.x < __offset)
+	{
+		tmp.x = __offset;
+	}
+	else if (tmp.x > mapWidth - __offset)
+	{
+		tmp.x = mapWidth - __offset;
+	}
+
+	if (tmp.y < __offset)
+	{
+		tmp.y = __offset;
+	}
+	else if (tmp.y > mapHeight - __offset)
+	{
+		tmp.y = mapHeight - __offset;
+	}
+
+	return tmp;
 }
 
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations
@@ -430,30 +517,13 @@ function randomOffsetLocation(location)
 {
 	function uncached(location)
 	{
-		const MAP_EDGE = 2;
-		const TILE_OFFSET_MAX = 3;
-		let newValueX = (random(100) < 50) ? location.x + random(TILE_OFFSET_MAX) : location.x - random(TILE_OFFSET_MAX);
-		let newValueY = (random(100) < 50) ? location.y + random(TILE_OFFSET_MAX) : location.y - random(TILE_OFFSET_MAX);
+		const __mapEdge = 2;
+		const __tileOffsetMax = 3;
+		let newValueX = chance(50) ? location.x + random(__tileOffsetMax) : location.x - random(__tileOffsetMax);
+		let newValueY = chance(50) ? location.y + random(__tileOffsetMax) : location.y - random(__tileOffsetMax);
 
-		if (newValueX < MAP_EDGE)
-		{
-			newValueX = MAP_EDGE;
-		}
-		if (newValueY < MAP_EDGE)
-		{
-			newValueY = MAP_EDGE;
-		}
-		if (newValueX > mapWidth - MAP_EDGE)
-		{
-			newValueX = mapWidth - MAP_EDGE;
-		}
-		if (newValueY > mapHeight - MAP_EDGE)
-		{
-			newValueY = mapHeight - MAP_EDGE;
-		}
-
-		return {x: newValueX, y: newValueY};
+		return clipToMapBounds({x: newValueX, y: newValueY}, __mapEdge);
 	}
 
-	return cacheThis(uncached, [location], "randomOffsetLocation" + me, 2000);
+	return cacheThis(uncached, [location], "randomOffsetLocation" + me + location.x + location.y, 2000);
 }

@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.16...3.31)
+
 if(NOT ENABLE_NLS)
 	message(STATUS "Skipping translations generation / native language support")
 	return()
@@ -6,22 +8,6 @@ endif()
 find_package(Gettext 0.18)
 if(NOT GETTEXT_FOUND)
 	message( WARNING "Gettext is not found. Skipping language file generation. (Only the default language, English, will be available.)" )
-	if (CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
-		# Because of a Windows-related bugfix in FindGettext.cmake in CMake 3.10,
-		# CMake 3.10+ may be required (if compiling *on* Windows) to properly
-		# detect Gettext.
-		#
-		# However, Visual Studio 2017 currently bundles CMake < 3.10, so requiring
-		# CMake 3.10+ at the top of this file leads to an inability to compile via
-		# Visual Studio itself.
-		#
-		# Instead of using cmake_minimum_required(VERSION 3.10), detect the
-		# CMake version and emit a warning if it's below 3.10.
-		#
-		if(${CMAKE_VERSION} VERSION_LESS "3.10.0")
-			message ( WARNING "CMake is < 3.10. This *may* be the cause of not finding Gettext on Windows (if it's installed)." )
-		endif()
-	endif()
 	return()
 endif()
 MARK_AS_ADVANCED(GETTEXT_MSGFMT_EXECUTABLE GETTEXT_MSGMERGE_EXECUTABLE)
@@ -33,6 +19,22 @@ if(NOT XGETTEXT_CMD)
 	MESSAGE( WARNING "xgettext not found. Unable to generate Language translations without Gettext." )
 	return()
 endif()
+
+function (WZ_GETTEXT_GET_OUTPUT_LANG_NAME input_lang_name output_var_name)
+	set(output_lang_name "${input_lang_name}")
+
+	# Platform-specific fixups / transformations:
+	# - sr_CS -> sr_RS (on all OSes *except* Windows, which stays at sr_CS at this time)
+	if(input_lang_name STREQUAL "sr_CS" AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
+		set(output_lang_name "sr_RS")
+	endif()
+
+	if(NOT input_lang_name STREQUAL output_lang_name)
+		message(STATUS "Mapping language name ${input_lang_name} -> ${output_lang_name}")
+	endif()
+
+	set(${output_var_name} "${output_lang_name}" PARENT_SCOPE)
+endfunction()
 
 # GETTEXT_CREATE_TRANSLATIONS_WZ(potFile [ALL]
 #								 [INSTALL_DESTINATION <destdir>]
@@ -74,7 +76,9 @@ function(GETTEXT_CREATE_TRANSLATIONS_WZ _potFile)
       get_filename_component(_currentPoFileName "${_currentPoFile}" NAME)
       get_filename_component(_absFile "${_currentPoFile}" ABSOLUTE)
       get_filename_component(_abs_PATH "${_absFile}" PATH)
-      get_filename_component(_lang "${_absFile}" NAME_WE)
+      get_filename_component(_input_lang "${_absFile}" NAME_WE)
+
+      WZ_GETTEXT_GET_OUTPUT_LANG_NAME("${_input_lang}" _lang)
 
       file(RELATIVE_PATH _po_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}" "${_absFile}")
       get_filename_component(_po_file_subdir_path "${_po_file_relative_path}" DIRECTORY)

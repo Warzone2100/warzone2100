@@ -63,6 +63,22 @@
 		"label": "nearSensor",
 		"pos": [3456, 3328]
 	},
+	"position_16": {
+		"label": "insaneSpawnPos1",
+		"pos": [7808, 6144]
+	},
+	"position_17": {
+		"label": "insaneSpawnPos2",
+		"pos": [7608, 1664]
+	},
+	"position_18": {
+		"label": "insaneSpawnPos3",
+		"pos": [256, 3200]
+	},
+	"position_19": {
+		"label": "insaneSpawnPos4",
+		"pos": [2688, 256]
+	},
 
 
 	"area_0": {

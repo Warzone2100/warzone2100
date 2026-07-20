@@ -29,6 +29,7 @@
 #include <deque>
 #include <sstream>
 #include <physfs.h>
+#include <memory>
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
@@ -55,7 +56,7 @@ using std::string;
 static const std::size_t max_debug_messages = 20;
 
 static char *dbgHeader = nullptr;
-static WZ_MUTEX *dbgMessagesMutex = wzMutexCreate();  // Protects dbgMessages.
+static std::recursive_mutex dbgMessagesMutex;  // Protects dbgMessages.
 static std::deque<std::vector<char>> dbgMessages;
 
 // used to add custom info to the crash log
@@ -126,7 +127,7 @@ static void debug_exceptionhandler_data(void **, const char *const str, code_par
 		--last;
 	}
 
-	wzMutexLock(dbgMessagesMutex);
+	const std::unique_lock<std::recursive_mutex> G{ dbgMessagesMutex };
 
 	dbgMessages.push_back(std::vector<char>(str, last));
 
@@ -135,8 +136,6 @@ static void debug_exceptionhandler_data(void **, const char *const str, code_par
 	{
 		dbgMessages.pop_front();
 	}
-
-	wzMutexUnlock(dbgMessagesMutex);
 }
 
 void dbgDumpHeader(DumpFileHandle file)
@@ -160,14 +159,16 @@ void dbgDumpHeader(DumpFileHandle file)
 void dbgDumpLog(DumpFileHandle file)
 {
 	// Write all messages to the given file
-	wzMutexLock(dbgMessagesMutex);
+	std::unique_lock<std::recursive_mutex> G{ dbgMessagesMutex };
+
 	for (auto const &msg : dbgMessages)
 	{
 		dumpstr(file, "Log message: ");
 		dumpstr(file, msg.data(), msg.size());
 		dumpEOL(file);
 	}
-	wzMutexUnlock(dbgMessagesMutex);
+
+	G.unlock();
 
 	// Terminate with a separating newline
 	dumpEOL(file);

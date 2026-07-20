@@ -1482,6 +1482,61 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
+optional<iV_fonts> iV_FontModifyBold(iV_fonts fontID, bool bold)
+{
+	if (bold)
+	{
+		switch (fontID)
+		{
+			// bold fonts
+			case font_large: // is actually bold
+			case font_medium_bold:
+			case font_regular_bold:
+			case font_bar:	// small_bold
+				return fontID; // already bolded
+
+			// regular fonts
+			case font_medium:
+				return font_medium_bold;
+			case font_scaled: // treated the same as font_regular
+			case font_regular:
+				return font_regular_bold;
+			case font_small:
+				return font_bar;
+
+			case font_count:
+				return nullopt;
+		}
+	}
+	else
+	{
+		switch (fontID)
+		{
+			// bold fonts
+			case font_large: // is actually bold
+				return nullopt; // no non-bold option for this size
+			case font_medium_bold:
+				return font_medium;
+			case font_regular_bold:
+				return font_regular;
+			case font_bar:	// small_bold
+				return font_small;
+
+			// regular fonts
+			case font_medium:
+			case font_scaled: // treated the same as font_regular
+			case font_regular:
+			case font_small:
+				return fontID; // already non-bolded
+
+			case font_count:
+				return nullopt;
+		}
+	}
+
+	return nullopt; // silence compiler warning
+}
+
 optional<iV_fonts> iV_ShrinkFont(iV_fonts fontID)
 {
 	switch (fontID)
@@ -1706,10 +1761,10 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	}
 
 	PIELIGHT color;
-	color.vector[0] = static_cast<UBYTE>(font_colour[0] * 255.f);
-	color.vector[1] = static_cast<UBYTE>(font_colour[1] * 255.f);
-	color.vector[2] = static_cast<UBYTE>(font_colour[2] * 255.f);
-	color.vector[3] = static_cast<UBYTE>(font_colour[3] * 255.f);
+	color.byte.r = static_cast<UBYTE>(font_colour[0] * 255.f);
+	color.byte.g = static_cast<UBYTE>(font_colour[1] * 255.f);
+	color.byte.b = static_cast<UBYTE>(font_colour[2] * 255.f);
+	color.byte.a = static_cast<UBYTE>(font_colour[3] * 255.f);
 
 	DrawTextResult drawResult = getShaper().drawText(string, fontID);
 
@@ -1855,6 +1910,47 @@ inline void WzText::updateCacheIfNecessary()
 	}
 }
 
+void WzText::renderClipped(Vector2f position, PIELIGHT colour, WzRect screenClippingRect, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	updateCacheIfNecessary();
+
+	if (texture == nullptr)
+	{
+		// A texture will not always be created. (For example, if the rendered text is empty.)
+		// No need to render if there's nothing to render.
+		return;
+	}
+
+	Vector2f visualOrigin(position.x, position.y + mPtsAboveBase);
+	int logicalDisplayWidth = static_cast<int>(dimensions.x / mRenderingHorizScaleFactor);
+	int logicalDisplayHeight = static_cast<int>(dimensions.y / mRenderingVertScaleFactor);
+	if (maxWidth > 0)
+	{
+		logicalDisplayWidth = std::min<int>(logicalDisplayWidth, maxWidth);
+	}
+	WzRect screenDrawRect(static_cast<int>(visualOrigin.x), static_cast<int>(visualOrigin.y), logicalDisplayWidth, logicalDisplayHeight); // screen coordinates
+	WzRect clippingRect = screenDrawRect.intersectionWith(screenClippingRect.setWidth(screenClippingRect.width() - 1).setHeight(screenClippingRect.height() - 1));
+	if (clippingRect.width() <= 0 || clippingRect.height() <= 0)
+	{
+		return;
+	}
+	clippingRect.translateBy(static_cast<int>(-visualOrigin.x), static_cast<int>(-visualOrigin.y)); // translate to 0,0 origin
+
+	WzClippingRectF clippingRectInPixels(
+		clippingRect.left() * mRenderingHorizScaleFactor,
+		clippingRect.top() * mRenderingVertScaleFactor,
+		clippingRect.width() * mRenderingHorizScaleFactor,
+		clippingRect.height() * mRenderingVertScaleFactor
+	);
+
+	Vector2f logicalDrawSize(
+		std::min(logicalDisplayWidth, clippingRect.width()),
+		std::min(logicalDisplayHeight, clippingRect.height())
+	);
+
+	iV_DrawImageTextClipped(*texture, dimensions, position + Vector2f(clippingRect.x(), clippingRect.y()), Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), logicalDrawSize, 0.f, colour, clippingRectInPixels);
+}
+
 void WzText::render(Vector2f position, PIELIGHT colour, float rotation, int maxWidth, int maxHeight)
 {
 	updateCacheIfNecessary();
@@ -1877,9 +1973,11 @@ void WzText::render(Vector2f position, PIELIGHT colour, float rotation, int maxW
 	}
 	else
 	{
-		WzRect clippingRectInPixels;
-		clippingRectInPixels.setWidth((maxWidth > 0) ? static_cast<int>((float)maxWidth * mRenderingHorizScaleFactor) : dimensions.x);
-		clippingRectInPixels.setHeight((maxHeight > 0) ? static_cast<int>((float)maxHeight * mRenderingVertScaleFactor) : dimensions.y);
+		WzClippingRectF clippingRectInPixels(
+			0.f, 0.f,
+			(maxWidth > 0) ? ((float)maxWidth * mRenderingHorizScaleFactor) : dimensions.x,
+			(maxHeight > 0) ? ((float)maxHeight * mRenderingVertScaleFactor) : dimensions.y
+		);
 		iV_DrawImageTextClipped(*texture, dimensions, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f((maxWidth > 0) ? maxWidth : dimensions.x / mRenderingHorizScaleFactor, (maxHeight > 0) ? maxHeight : dimensions.y / mRenderingVertScaleFactor), rotation, colour, clippingRectInPixels);
 	}
 }

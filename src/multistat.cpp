@@ -134,147 +134,6 @@ const EcKey& getOutputPlayerIdentity(UDWORD player)
 	return getTruePlayerIdentity(player).identity;
 }
 
-static void NETauto(PLAYERSTATS::Autorating &ar)
-{
-	if (game.blindMode != BLIND_MODE::NONE)
-	{
-		bool tmp = false; // no valid autorating in blind mode
-		NETauto(tmp); // ar.valid
-		return;
-	}
-	NETauto(ar.valid);
-	if (ar.valid)
-	{
-		NETauto(ar.dummy);
-		NETauto(ar.star);
-		NETauto(ar.medal);
-		NETauto(ar.level);
-		NETauto(ar.elo);
-		NETauto(ar.autohoster);
-		NETauto(ar.details);
-		NETauto(ar.altName);
-		NETauto(ar.altNameTextColorOverride);
-		NETauto(ar.eloTextColorOverride);
-	}
-}
-
-PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
-{
-	try {
-		dummy = json["dummy"].get<bool>();
-		star[0] = json["star"][0].get<uint8_t>();
-		star[1] = json["star"][1].get<uint8_t>();
-		star[2] = json["star"][2].get<uint8_t>();
-		medal = json["medal"].get<uint8_t>();
-		level = json["level"].get<uint8_t>();
-		elo = json["elo"].get<std::string>();
-		autohoster = json["autohoster"].get<bool>();
-		details = json["details"].get<std::string>();
-		if (json.contains("name"))
-		{
-			altName = json["name"].get<std::string>();
-		}
-		if (json.contains("nameTextColorOverride"))
-		{
-			altNameTextColorOverride[0] = json["nameTextColorOverride"][0].get<uint8_t>();
-			altNameTextColorOverride[1] = json["nameTextColorOverride"][1].get<uint8_t>();
-			altNameTextColorOverride[2] = json["nameTextColorOverride"][2].get<uint8_t>();
-		}
-		if (json.contains("eloTextColorOverride"))
-		{
-			eloTextColorOverride[0] = json["eloTextColorOverride"][0].get<uint8_t>();
-			eloTextColorOverride[1] = json["eloTextColorOverride"][1].get<uint8_t>();
-			eloTextColorOverride[2] = json["eloTextColorOverride"][2].get<uint8_t>();
-		}
-		valid = true;
-	} catch (const std::exception &e) {
-		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
-	}
-}
-
-void lookupRatingAsync(uint32_t playerIndex)
-{
-	if (playerStats[playerIndex].identity.empty())
-	{
-		return;
-	}
-
-	if (!NetPlay.isHost && game.blindMode != BLIND_MODE::NONE)
-	{
-		return;
-	}
-
-	auto trueIdentity = getTruePlayerIdentity(playerIndex);
-	auto hash = trueIdentity.identity.publicHashString();
-	auto key = trueIdentity.identity.publicKeyHexString();
-	if (hash.empty() || key.empty())
-	{
-		return;
-	}
-
-	std::string url = getAutoratingUrl();
-	if (url.empty())
-	{
-		setAutoratingUrl(WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL);
-		url = WZ_DEFAULT_PUBLIC_RATING_LOOKUP_SERVICE_URL;
-	}
-
-	if (!getAutoratingEnable())
-	{
-		return;
-	}
-
-	URLDataRequest req;
-	req.url = url;
-	req.setRequestHeader("WZ-Player-Hash", hash);
-	req.setRequestHeader("WZ-Player-Key", key);
-	req.setRequestHeader("WZ-Locale", getLanguage());
-	debug(LOG_INFO, "Requesting \"%s\" for player %d (%.32s) (%s)", req.url.c_str(), playerIndex, getPlayerName(playerIndex), hash.c_str());
-	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
-		long httpStatusCode = response.httpStatusCode();
-		std::string urlCopy = url;
-		if (httpStatusCode != 200 || !data || data->size == 0)
-		{
-			wzAsyncExecOnMainThread([urlCopy, httpStatusCode] {
-				debug(LOG_WARNING, "Failed to retrieve data from \"%s\", got [%ld].", urlCopy.c_str(), httpStatusCode);
-			});
-			return;
-		}
-
-		std::shared_ptr<MemoryStruct> dataCopy = data;
-		wzAsyncExecOnMainThread([playerIndex, hash, urlCopy, dataCopy] {
-			if (playerStats[playerIndex].identity.publicHashString() != hash)
-			{
-				debug(LOG_WARNING, "Got data from \"%s\", but player is already gone.", urlCopy.c_str());
-				return;
-			}
-			try {
-				playerStats[playerIndex].autorating = nlohmann::json::parse(dataCopy->memory, dataCopy->memory + dataCopy->size);
-				playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
-				if (playerStats[playerIndex].autorating.valid)
-				{
-					setMultiStats(playerIndex, playerStats[playerIndex], !NetPlay.isHost);
-					netPlayersUpdated = true;
-				}
-			}
-			catch (const std::exception &e) {
-				debug(LOG_WARNING, "JSON document from \"%s\" is invalid: %s", urlCopy.c_str(), e.what());
-			}
-			catch (...) {
-				debug(LOG_FATAL, "Unexpected exception parsing JSON \"%s\"", urlCopy.c_str());
-			}
-		});
-	};
-	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED std::shared_ptr<HTTPResponseDetails> transferDetails) {
-		std::string urlCopy = url;
-		wzAsyncExecOnMainThread([urlCopy] {
-			debug(LOG_WARNING, "Failure fetching \"%s\".", urlCopy.c_str());
-		});
-	};
-	req.maxDownloadSizeLimit = 4096*4;
-	urlRequestData(req);
-}
-
 static bool generateSessionKeysWithPlayer(uint32_t playerIndex)
 {
 	if (playerStats[playerIndex].identity.empty())
@@ -341,11 +200,9 @@ static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> reci
 		queue = NETnetQueue(recipientPlayerIndex.value());
 	}
 	// Now send it to all other players
-	NETbeginEncode(queue, NET_PLAYER_STATS);
+	auto w = NETbeginEncode(queue, NET_PLAYER_STATS);
 	// Send the ID of the player's stats we're updating
-	NETuint32_t(&playerIndex);
-
-	NETauto(playerStats[playerIndex].autorating);
+	NETuint32_t(w, playerIndex);
 
 	PLAYERSTATS* pStatsToSend = &playerStats[playerIndex];
 	if (game.blindMode != BLIND_MODE::NONE)
@@ -354,11 +211,11 @@ static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> reci
 		pStatsToSend = &zeroStats;
 	}
 
-	NETuint32_t(&pStatsToSend->played);
-	NETuint32_t(&pStatsToSend->wins);
-	NETuint32_t(&pStatsToSend->losses);
-	NETuint32_t(&pStatsToSend->totalKills);
-	NETuint32_t(&pStatsToSend->totalScore);
+	NETuint32_t(w, pStatsToSend->played);
+	NETuint32_t(w, pStatsToSend->wins);
+	NETuint32_t(w, pStatsToSend->losses);
+	NETuint32_t(w, pStatsToSend->totalKills);
+	NETuint32_t(w, pStatsToSend->totalScore);
 
 	EcKey::Key identityPublicKey;
 	bool isHostVerifiedIdentity = false;
@@ -394,9 +251,9 @@ static bool sendMultiStatsInternal(uint32_t playerIndex, optional<uint32_t> reci
 		}
 	}
 
-	NETbool(&isHostVerifiedIdentity);
-	NETbytes(&identityPublicKey);
-	NETend();
+	NETbool(w, isHostVerifiedIdentity);
+	NETbytes(w, identityPublicKey);
+	NETend(w);
 
 	return true;
 }
@@ -617,14 +474,14 @@ bool recvMultiStats(NETQUEUE queue)
 {
 	uint32_t playerIndex;
 
-	NETbeginDecode(queue, NET_PLAYER_STATS);
+	auto r = NETbeginDecode(queue, NET_PLAYER_STATS);
 	// Retrieve the ID number of the player for which we need to
 	// update the stats
-	NETuint32_t(&playerIndex);
+	NETuint32_t(r, playerIndex);
 
 	if (playerIndex >= MAX_CONNECTED_PLAYERS)
 	{
-		NETend();
+		NETend(r);
 		return false;
 	}
 
@@ -632,37 +489,29 @@ bool recvMultiStats(NETQUEUE queue)
 	if (playerIndex != queue.index && queue.index != NetPlay.hostPlayer)
 	{
 		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
-		NETend();
+		NETend(r);
 		return false;
 	}
-
-	PLAYERSTATS::Autorating receivedAutorating;
-	NETauto(receivedAutorating);
-	bool processAutoratingData = false;
 
 	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 	if (!myResponsibility(playerIndex))
 	{
 		// Retrieve the actual stats
-		NETuint32_t(&playerStats[playerIndex].played);
-		NETuint32_t(&playerStats[playerIndex].wins);
-		NETuint32_t(&playerStats[playerIndex].losses);
-		NETuint32_t(&playerStats[playerIndex].totalKills);
-		NETuint32_t(&playerStats[playerIndex].totalScore);
+		NETuint32_t(r, playerStats[playerIndex].played);
+		NETuint32_t(r, playerStats[playerIndex].wins);
+		NETuint32_t(r, playerStats[playerIndex].losses);
+		NETuint32_t(r, playerStats[playerIndex].totalKills);
+		NETuint32_t(r, playerStats[playerIndex].totalScore);
 
 		EcKey::Key identity;
 		bool isHostVerifiedIdentity = false;
-		NETbool(&isHostVerifiedIdentity);
-		NETbytes(&identity);
-		NETend();
+		NETbool(r, isHostVerifiedIdentity);
+		NETbytes(r, identity);
+		NETend(r);
 
 		if (!isHostVerifiedIdentity)
 		{
-			if (multiStatsSetIdentity(playerIndex, identity, false))
-			{
-				// if identity changed, process autorating data
-				processAutoratingData = true;
-			}
+			multiStatsSetIdentity(playerIndex, identity, false);
 		}
 		else
 		{
@@ -678,23 +527,7 @@ bool recvMultiStats(NETQUEUE queue)
 	}
 	else
 	{
-		NETend();
-		processAutoratingData = true;
-	}
-
-	if (processAutoratingData)
-	{
-		if (getAutoratingEnable())
-		{
-			playerStats[playerIndex].autorating.valid = false;
-			playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
-			lookupRatingAsync(playerIndex);
-		}
-		else
-		{
-			playerStats[playerIndex].autorating = receivedAutorating;
-			playerStats[playerIndex].autoratingFrom = RATING_SOURCE_HOST;
-		}
+		NETend(r);
 	}
 
 	return true;
@@ -704,19 +537,7 @@ void multiStatsSetVerifiedIdentityFromJoin(uint32_t playerIndex, const EcKey::Ke
 {
 	ASSERT_HOST_ONLY(return);
 	ASSERT_OR_RETURN(, playerIndex != NetPlay.hostPlayer, "playerIndex is hostPlayer? (%" PRIu32 ")", NetPlay.hostPlayer);
-	if (multiStatsSetIdentity(playerIndex, identity, true))
-	{
-		if (!playerStats[playerIndex].identity.empty())
-		{
-			// might need to trigger autorating lookup (if enabled)
-			if (getAutoratingEnable())
-			{
-				playerStats[playerIndex].autorating.valid = false;
-				playerStats[playerIndex].autoratingFrom = RATING_SOURCE_LOCAL;
-				lookupRatingAsync(playerIndex);
-			}
-		}
-	}
+	multiStatsSetIdentity(playerIndex, identity, true);
 }
 
 void multiStatsSetVerifiedHostIdentityFromJoin(const EcKey::Key &identity)
@@ -1492,7 +1313,6 @@ void resetRecentScoreData()
 		playerStats[i].recentResearchPerformance = 0;
 		playerStats[i].recentResearchPotential = 0;
 		playerStats[i].identity.clear();
-		playerStats[i].autorating = PLAYERSTATS::Autorating();
 
 		hostVerifiedJoinIdentities[i].clear();
 	}

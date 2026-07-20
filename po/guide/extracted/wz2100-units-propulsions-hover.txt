@@ -1,0 +1,8 @@
+// TRANSLATORS:
+// The guide topic title - please maintain original capitalization
+_("Hover")
+_("Hover is a fast, amphibious propulsion for vehicles.")
+_("Hover propulsion provides very high maximum speeds and the ability to freely traverse water, which can be indispensable for finding unique attack routes.")
+_("However, they come at a higher production cost, provide little hitpoints, and are vulnerable to most types of damage.")
+_("Hover's high speeds and ability to traverse over water make it suited to hit-and-run tactics.")
+_("Similarly to Wheels, however, they are poorly-suited for prolonged fights on the front line.")

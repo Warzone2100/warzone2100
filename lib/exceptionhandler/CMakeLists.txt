@@ -35,7 +35,7 @@ target_link_libraries(exception-handler PRIVATE framework launchinfo)
 #  - WZ_BUILD_SENTRY (to build with sentry support)
 #  - SENTRY_IO_DSN (to supply the DSN configuration URL)
 
-if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY AND NOT CMAKE_VERSION VERSION_LESS "3.11.0")
+if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY)
 	include(FetchSentryNative) # uses FetchContent, so requires CMake 3.11+
 
 	# Piggy-back on the exception-handler target to get these libraries / defines over to the main target # TODO: Refactor later?
@@ -47,6 +47,17 @@ if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY AND NOT CMAKE_VERSION VERSION_LES
 		set(WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN "${SENTRY_IO_DSN}")
 	else()
 		unset(WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN)
+	endif()
+	set(WZ_CRASHPAD_HANDLER_OUTPUT_NAME "crashpad_handler")
+	if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+		# On Linux, give the crashpad_handler a unique, WZ-specific name
+		set(WZ_CRASHPAD_HANDLER_OUTPUT_NAME "crashpad_handler_warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
+	endif()
+	set(WZ_CRASHPAD_EXECUTABLE_NAME "${WZ_CRASHPAD_HANDLER_OUTPUT_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+	if(TARGET crashpad_handler)
+		set_target_properties(crashpad_handler PROPERTIES SUFFIX "${CMAKE_EXECUTABLE_SUFFIX}")
+		set_target_properties(crashpad_handler PROPERTIES OUTPUT_NAME "${WZ_CRASHPAD_HANDLER_OUTPUT_NAME}")
+		message(STATUS "WZ_CRASHPAD_EXECUTABLE_NAME=${WZ_CRASHPAD_EXECUTABLE_NAME}")
 	endif()
 	configure_file("3rdparty/sentry/wz-sentry-config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wz-sentry-config/wz-sentry-config.h" @ONLY)
 	target_include_directories(exception-handler INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/wz-sentry-config")

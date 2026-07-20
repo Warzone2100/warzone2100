@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2026  Warzone 2100 Project (https://github.com/Warzone2100)
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +26,8 @@
  */
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
+#include "lib/framework/resource_loading_controller.h"
+#include "resource_loading_dispatch.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/object_list_iteration.h"
 #include "lib/widget/slider.h"
@@ -54,6 +58,7 @@
 #include "challenge.h"
 #include "objmem.h"
 #include "titleui/titleui.h"
+#include "game_world.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -109,31 +114,22 @@ void WzMultiLimitTitleUI::start()
 	// load stats...
 	if (!bLimiterLoaded)
 	{
-		initLoadingScreen(true);
-
-		if (!resLoad("wrf/limiter_data.wrf", 503))
+		auto& controller = ResourceLoadingController::instance();
+		ResourceLoadingController::FramePolicy policy;
+		policy.showLoadingScreen = true;
+		if (!runBlockingResourceLoad(resLoad(controller, "wrf/limiter_data.wrf", 503), policy))
 		{
 			debug(LOG_INFO, "Unable to load limiter_data during WzMultiLimitTitleUI start; returning...");
 			changeTitleUI(parent);
-			closeLoadingScreen();
 			return;
 		}
 
 		bLimiterLoaded = true;
-
-		closeLoadingScreen();
 	}
 
 	if (challengeActive)
 	{
 		resetLimits();
-		// turn off the sliders
-		sliderEnableDrag(false);
-	}
-	else
-	{
-		//enable the sliders
-		sliderEnableDrag(true);
 	}
 
 	// TRANSLATORS: Sidetext of structure limits screen
@@ -180,6 +176,10 @@ void WzMultiLimitTitleUI::start()
 	            iV_GetImageWidth(FrontImages, IMAGE_NO),
 	            iV_GetImageHeight(FrontImages, IMAGE_NO),
 	            _("Apply Defaults and Return To Previous Screen"), IMAGE_NO, IMAGE_NO, true);
+	if (challengeActive)
+	{
+		widgSetButtonState(psWScreen, IDLIMITS_RETURN, WBUT_DISABLE);
+	}
 
 	// ok button
 	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_OK,
@@ -220,9 +220,13 @@ void WzMultiLimitTitleUI::start()
 			limitsList->addWidgetToLayout(button);
 			++limitsButtonId;
 
-			addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
+			auto slider = addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
 			            asStructureStats[i].maxLimit,
 			            asStructureStats[i].upgrade[0].limit);
+			if (challengeActive)
+			{
+				slider->disable();
+			}
 			++limitsButtonId;
 		}
 	}
@@ -238,10 +242,13 @@ TITLECODE WzMultiLimitTitleUI::run()
 	// sliders
 	if ((id > IDLIMITS_ENTRIES_START)  && (id < IDLIMITS_ENTRIES_END))
 	{
-		unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
-		if (statid)
+		if (!challengeActive)
 		{
-			asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
+			if (statid)
+			{
+				asStructureStats[statid].upgrade[0].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
+			}
 		}
 	}
 	else
@@ -258,6 +265,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 			widgSetButtonState(psWScreen, IDLIMITS_FORCEOFF, WBUT_DISABLE);
 			break;
 		case IDLIMITS_RETURN:
+			if (challengeActive)
+			{
+				changeTitleUI(parent);
+				break;
+			}
 			// reset the sliders..
 			resetLimits();
 			// free limiter structure
@@ -288,6 +300,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 
 			break;
 		case IDLIMITS_OK:
+			if (challengeActive)
+			{
+				changeTitleUI(parent);
+				break;
+			}
 			if (!challengeActive && widgGetButtonState(psWScreen, IDLIMITS_FORCE))
 			{
 				ingame.flags |= MPFLAGS_FORCELIMITS;
@@ -305,8 +322,12 @@ TITLECODE WzMultiLimitTitleUI::run()
 		}
 	}
 
-	widgDisplayScreen(psWScreen);						// show the widgets currently running
 	return TITLECODE_CONTINUE;
+}
+
+void WzMultiLimitTitleUI::render()
+{
+	widgDisplayScreen(psWScreen);						// show the widgets currently running
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -352,7 +373,10 @@ void createLimitSet()
 
 	if (NetPlay.isHost)
 	{
+		updateStructureDisabledFlags();
 		sendOptions();
+
+		NETsetLobbyLimitFlags(ingame.flags);
 	}
 }
 
@@ -381,11 +405,11 @@ bool applyLimitSet()
 				{
 					while (asStructureStats[id].curCount[player] > asStructureStats[id].upgrade[player].limit)
 					{
-						mutating_list_iterate(apsStructLists[player], [id](STRUCTURE* psStruct)
+						mutating_list_iterate(gameWorld.objects.structures[player], [id](STRUCTURE* psStruct)
 						{
 							if (psStruct->pStructureType->type == asStructureStats[id].type)
 							{
-								removeStruct(psStruct, true);
+								removeStruct(psStruct, true, gameWorld);
 								return IterationResult::BREAK_ITERATION;
 							}
 							return IterationResult::CONTINUE_ITERATION;
@@ -508,7 +532,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit
-	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
+	ssprintf(str, "%u", static_cast<unsigned>(((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos));
 	cache.wzLimitText.setText(str, font_regular);
 	cache.wzLimitText.render(x + 270, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 

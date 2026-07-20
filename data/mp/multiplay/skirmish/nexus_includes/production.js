@@ -3,16 +3,13 @@
 // represent how many of those droid types are in queued production.
 function getVirtualSystemCount()
 {
-	var counts = {constructs: 0, sensors: 0, repairs: 0,};
-	var factories = enumStruct(me, BASE_STRUCTURES.factories);
-	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
-	var i = 0;
-	var len = 0;
-	var virDroid;
+	const counts = {constructs: 0, sensors: 0, repairs: 0,};
+	const factories = enumStruct(me, BASE_STRUCTURES.factories);
+	const cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
-	for (i = 0, len = factories.length; i < len; ++i)
+	for (let i = 0, len = factories.length; i < len; ++i)
 	{
-		virDroid = getDroidProduction(factories[i]);
+		const virDroid = getDroidProduction(factories[i]);
 
 		if (virDroid !== null)
 		{
@@ -31,9 +28,9 @@ function getVirtualSystemCount()
 		}
 	}
 
-	for (i = 0, len = cybFactories.length; i < len; ++i)
+	for (let i = 0, len = cybFactories.length; i < len; ++i)
 	{
-		virDroid = getDroidProduction(cybFactories[i]);
+		const virDroid = getDroidProduction(cybFactories[i]);
 
 		if (virDroid !== null)
 		{
@@ -73,22 +70,22 @@ function produceConstructors()
 {
 	const CONSTRUCT_LIMIT = getDroidLimit(me, DROID_CONSTRUCT);
 	const MAX_TRUCK_FACTORIES = 3; //max factories to use for truck production
-	var truckLimit = (getRealPower(me) > LOW_POWER) ? TRUCK_INFO.max : TRUCK_INFO.min;
+	let truckLimit = (getRealPower(me) > LOW_POWER) ? TRUCK_INFO.max : TRUCK_INFO.min;
 
 	if (truckLimit > CONSTRUCT_LIMIT)
 	{
 		truckLimit = CONSTRUCT_LIMIT;
 	}
 
-	var totalTrucks = getVirtualSystemCount().constructs + enumDroid(me, DROID_CONSTRUCT).length;
-	var occupiedFactories = 0;
-	var success = false;
-	var factories = enumStruct(me, BASE_STRUCTURES.factories);
-	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
+	let success = false;
+	let occupiedFactories = 0;
+	let totalTrucks = getVirtualSystemCount().constructs + enumDroid(me, DROID_CONSTRUCT).length;
+	const factories = enumStruct(me, BASE_STRUCTURES.factories);
+	const cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
 	for (let i = 0, len = factories.length; i < len; ++i)
 	{
-		var factory = factories[i];
+		const factory = factories[i];
 
 		if (factory.status !== BUILT || !structureIdle(factory))
 		{
@@ -99,13 +96,14 @@ function produceConstructors()
 		{
 			for (let j = STANDARD_TRUCK_TEMPLATES.length - 1; j > -1; --j)
 			{
-				var tmp = STANDARD_TRUCK_TEMPLATES[j];
+				const tmp = STANDARD_TRUCK_TEMPLATES[j];
 
 				if (buildDroid(factory, "Truck", tmp.body, tmp.prop, "", "", tmp.weaps[0]))
 				{
 					success = true;
 					occupiedFactories += 1;
 					totalTrucks += 1;
+
 					break;
 				}
 			}
@@ -115,7 +113,7 @@ function produceConstructors()
 	// build cyborg engineers if needed, no building limit here
 	for (let i = 0, len = cybFactories.length; i < len; ++i)
 	{
-		var cybFactory = cybFactories[i];
+		const cybFactory = cybFactories[i];
 
 		if (cybFactory.status !== BUILT || !structureIdle(cybFactory))
 		{
@@ -126,12 +124,13 @@ function produceConstructors()
 		{
 			for (let j = STANDARD_CYBORG_ENGINEER_TEMPLATES.length - 1; j > -1; --j)
 			{
-				var tmp = STANDARD_CYBORG_ENGINEER_TEMPLATES[j];
+				const tmp = STANDARD_CYBORG_ENGINEER_TEMPLATES[j];
 
 				if (buildDroid(cybFactory, "Combat Engineer", tmp.body, tmp.prop, "", "", tmp.weaps[0]))
 				{
 					success = true;
 					totalTrucks += 1;
+
 					break;
 				}
 			}
@@ -147,7 +146,7 @@ function produceConstructors()
 
 function getBestRandomTemplate(type, offset)
 {
-	var what;
+	let what;
 
 	if (!defined(type))
 	{
@@ -176,9 +175,9 @@ function getBestRandomTemplate(type, offset)
 			return undefined;
 	}
 
-	var templates = [];
-	var count = what.length - 1;
-	var count2 = 0;
+	const templates = [];
+	let count = what.length - 1;
+	let count2 = 0;
 
 	if (offset > count)
 	{
@@ -188,11 +187,11 @@ function getBestRandomTemplate(type, offset)
 
 	while ((count2 < offset) && (count >= 0))
 	{
-		var tmp = what[count];
+		const tmp = what[count];
 
 		if (componentAvailable(tmp.body) && componentAvailable(tmp.prop))
 		{
-			var num = 0;
+			let num = 0;
 
 			for (let i = 0, len = tmp.weaps.length; i < len; ++i)
 			{
@@ -256,11 +255,11 @@ function needTank()
 //NOTE: multi-turret checks when that gets supported.
 function getBestRepairTemplate(cyborgFlag)
 {
-	var templates = defined(cyborgFlag) ? STANDARD_CYBORG_MECHANIC_TEMPLATES : STANDARD_TANK_REPAIRS;
+	const templates = defined(cyborgFlag) ? STANDARD_CYBORG_MECHANIC_TEMPLATES : STANDARD_TANK_REPAIRS;
 
 	for (let i = 0, len = templates.length; i < len; ++i)
 	{
-		var tmp = templates[i];
+		const tmp = templates[i];
 
 		if (componentAvailable(tmp.body) && componentAvailable(tmp.prop) && componentAvailable(tmp.weaps[0]))
 		{
@@ -274,20 +273,20 @@ function getBestRepairTemplate(cyborgFlag)
 // Sensors and repairs can go in here, too.
 function produceGroundUnits()
 {
-	var success = false;
-	var factories = enumStruct(me, BASE_STRUCTURES.factories);
-	var totalReps = (getVirtualSystemCount().repairs + enumDroid(me, DROID_REPAIR).length);
+	let success = false;
+	const factories = enumStruct(me, BASE_STRUCTURES.factories);
+	let totalReps = (getVirtualSystemCount().repairs + enumDroid(me, DROID_REPAIR).length);
 
 	for (let i = 0, len = factories.length; i < len; ++i)
 	{
-		var factory = factories[i];
+		const factory = factories[i];
 
 		if (factory.status !== BUILT || !structureIdle(factory) || getRealPower(me) < LOW_POWER)
 		{
 			return;
 		}
 
-		var tmp = getBestRepairTemplate();
+		let tmp = getBestRepairTemplate();
 
 		if (defined(tmp) && totalReps < 3)
 		{
@@ -303,12 +302,12 @@ function produceGroundUnits()
 
 			if (defined(tmp))
 			{
-				var t = bodyTurretCount(tmp.body);
+				const TURRET_COUNT = bodyTurretCount(tmp.body);
 
 				if (buildDroid(factory, "Nexus unit", tmp.body, tmp.prop, "", "",
 					tmp.weaps[0],
-					t > 1 ? tmp.weaps[1] : "",
-					t > 2 ? tmp.weaps[2] : ""))
+					(TURRET_COUNT > 1) ? tmp.weaps[1] : "",
+					(TURRET_COUNT > 2) ? tmp.weaps[2] : ""))
 				{
 					success = true;
 				}
@@ -326,19 +325,19 @@ function produceCyborgs()
 		return false;
 	}
 
-	var success = false;
-	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
+	let success = false;
+	const cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
 	for (let i = 0, len = cybFactories.length; i < len; ++i)
 	{
-		var cybFactory = cybFactories[i];
+		const cybFactory = cybFactories[i];
 
 		if (cybFactory.status !== BUILT || !structureIdle(cybFactory) || getRealPower(me) < LOW_POWER)
 		{
 			return;
 		}
 
-		var tmp = getBestRepairTemplate(true);
+		let tmp = getBestRepairTemplate(true);
 
 		//Build a mechanic randomly.
 		if (defined(tmp) && random(5) === 0)
@@ -374,28 +373,28 @@ function produceVtols()
 		return false; // Have too many of them.
 	}
 
-	var success = false;
-	var vtolFactories = enumStruct(me, BASE_STRUCTURES.vtolFactories);
+	let success = false;
+	const vtolFactories = enumStruct(me, BASE_STRUCTURES.vtolFactories);
 
 	for (let i = 0, len = vtolFactories.length; i < len; ++i)
 	{
-		var vtolFactory = vtolFactories[i];
+		const vtolFactory = vtolFactories[i];
 
 		if (vtolFactory.status !== BUILT || !structureIdle(vtolFactory) || getRealPower(me) < LOW_POWER)
 		{
 			return;
 		}
 
-		var tmp = getBestRandomTemplate("VTOL", 3);
+		const tmp = getBestRandomTemplate("VTOL", 3);
 
 		if (defined(tmp))
 		{
-			var t = bodyTurretCount(tmp.body);
+			const TURRET_COUNT = bodyTurretCount(tmp.body);
 
 			if (buildDroid(vtolFactory, "Nexus VTOL", tmp.body, tmp.prop, "", "",
 				tmp.weaps[0],
-				t > 1 ? tmp.weaps[1] : "",
-				t > 2 ? tmp.weaps[2] : ""))
+				(TURRET_COUNT > 1) ? tmp.weaps[1] : "",
+				(TURRET_COUNT > 2) ? tmp.weaps[2] : ""))
 			{
 				success = true;
 			}
@@ -408,7 +407,7 @@ function produceVtols()
 //Spread over three ticks (for the non-truck units).
 function productionMain()
 {
-	if (countDroid(me) >= MAX_DROID_LIMIT)
+	if (countDroid(DROID_ANY, me) >= MAX_DROID_LIMIT)
 	{
 		return;
 	}
@@ -426,17 +425,17 @@ function productionMain()
 	//NOTE: Manufacturing is queued from here on out. 1 tick per "type" of factory.
 	for (let i = 0, len = nexusBranch[branch].factoryPreference.length; i < len; ++i)
 	{
-		var pref = nexusBranch[branch].factoryPreference[i];
+		const PREF = nexusBranch[branch].factoryPreference[i];
 
-		if (pref === FACTORY)
+		if (PREF === FACTORY)
 		{
 			queue("produceGroundUnits", (i + 1) * TICK);
 		}
-		else if (pref === CYBORG_FACTORY)
+		else if (PREF === CYBORG_FACTORY)
 		{
 			queue("produceCyborgs", (i + 1) * TICK);
 		}
-		else if (pref === VTOL_FACTORY)
+		else if (PREF === VTOL_FACTORY)
 		{
 			queue("produceVtols", (i + 1) * TICK);
 		}

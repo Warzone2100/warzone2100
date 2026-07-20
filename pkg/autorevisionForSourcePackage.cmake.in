@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5...3.24)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 # Runs autorevision to copy autorevision.cache to the source package
 # (it should not be copied to binary package).

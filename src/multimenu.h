@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_MULTIMENU__
 
 #include "lib/widget/widgbase.h"
+#include "lib/widget/multibutform.h"
 #include "stringdef.h"
 
 // requester
@@ -44,6 +45,13 @@ bool intAddMultiMenu();
 
 class IntFormAnimated;
 std::shared_ptr<IntFormAnimated> intCreateMultiMenuForm(std::function<void ()> closeButtonHandler = nullptr);
+
+class WzMultiMenuTabs : public MultichoiceWidget
+{
+public:
+	WzMultiMenuTabs(int value = -1) : MultichoiceWidget(value) { }
+	virtual void display(int xOffset, int yOffset) override { }
+};
 
 void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 

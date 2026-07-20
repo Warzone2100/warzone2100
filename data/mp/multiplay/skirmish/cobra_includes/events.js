@@ -15,22 +15,23 @@ function eventStartLevel()
 
 	//That (me * 100) part is to help reduce multiple Cobra AI's from coinciding stuff on the same frame. Of course,
 	//higher "me"s may impact the bot in some, hopefully, minimal manner.
-	let delay = me * 100;
+	const __delay = (me * 100);
 	//Make Cobra think "slower" on easy difficulty for some of its basic functions
-	let easyTimeDelay = (difficulty === EASY) ? 5000 : 0;
+	const __easyTimeDelay = (difficulty === EASY) ? 5000 : 0;
 
-	setTimer("buildOrders", 300 + delay + (2 * easyTimeDelay));
-	setTimer("produce", 400 + delay + easyTimeDelay);
-	setTimer("retreatTactics", 500 + delay);
-	setTimer("checkAllForRepair", 600 + delay + (4 * easyTimeDelay));
-	setTimer("research", 800 + delay + (3 * easyTimeDelay));
-	setTimer("lookForOil", 1000 + delay);
-	setTimer("artilleryTactics", 1400 + delay);
-	setTimer("vtolTactics", 1600 + delay);
-	setTimer("groundTactics", 2000 + delay);
-	setTimer("switchOffMG", 5000 + delay);
-	setTimer("recycleForHover", 8000 + delay);
-	setTimer("checkIfDead", 9000 + delay);
+	setTimer("buildOrders", 300 + __delay + (2 * __easyTimeDelay));
+	setTimer("produce", 400 + __delay + __easyTimeDelay);
+	setTimer("retreatTactics", 500 + __delay);
+	setTimer("checkAllForRepair", 600 + __delay + (4 * __easyTimeDelay));
+	setTimer("cobraDoResearch", 800 + __delay + (3 * __easyTimeDelay));
+	setTimer("lookForOil", 1000 + __delay);
+	setTimer("swapTruckGroupInCyborgOnly", 1200 + __delay);
+	setTimer("artilleryTactics", 1400 + __delay);
+	setTimer("vtolTactics", 1600 + __delay);
+	setTimer("groundTactics", 2000 + __delay);
+	setTimer("switchOffMG", 5000 + __delay);
+	setTimer("recycleForHover", 8000 + __delay);
+	setTimer("checkIfDead", 9000 + __delay);
 }
 
 //This is meant to check for nearby oil resources next to the construct. also
@@ -42,21 +43,21 @@ function eventStructureBuilt(structure, droid)
 		return;
 	}
 
-	let nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter((obj) => (
+	const _nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter((obj) => (
 		obj.type === FEATURE && obj.stattype === OIL_RESOURCE
 	)).sort(distanceToBase);
 
-	if (nearbyOils.length > 0 && !skipOilGrabIfEasy())
+	if (_nearbyOils.length && !skipOilGrabIfEasy())
 	{
-		orderDroidBuild(droid, DORDER_BUILD, structures.derrick, nearbyOils[0].x, nearbyOils[0].y);
+		orderDroidBuild(droid, DORDER_BUILD, _STRUCTURES.derrick, _nearbyOils[0].x, _nearbyOils[0].y);
 		return;
 	}
 	else if (forceDerrickBuildDefense)
 	{
-		const MIN_DIST_FROM_BASE = 10;
-		let dist = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, structure.x, structure.y);
+		const __minDistFromBase = 10;
+		const __dist = distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, structure.x, structure.y);
 
-		if (dist >= MIN_DIST_FROM_BASE && (getRealPower() > (-3 * SUPER_LOW_POWER)))
+		if (__dist >= __minDistFromBase && (getRealPower() > (-3 * __SUPER_LOW_POWER)))
 		{
 			fastDefendSpot(structure, droid);
 			return;
@@ -69,22 +70,22 @@ function eventDroidIdle(droid)
 {
 	if (shouldCobraAttack() && (droid.droidType === DROID_WEAPON || droid.droidType === DROID_CYBORG || isVTOL(droid)))
 	{
-		let enemyObjects = enumRange(droid.x, droid.y, 6, ENEMIES, false);
-		if (enemyObjects.length > 0)
+		const _enemyObjects = enumRange(droid.x, droid.y, 6, ENEMIES, false).sort(distanceToBase);
+
+		if (_enemyObjects.length)
 		{
-			enemyObjects = enemyObjects.sort(distanceToBase);
-			attackThisObject(droid.id, objectInformation(enemyObjects[0]));
+			attackThisObject(droid.id, objectInformation(_enemyObjects[0]));
 		}
 	}
 	else if (forceDerrickBuildDefense && droid.droidType === DROID_CONSTRUCT && droid.group === oilGrabberGroup)
 	{
-		const SCAN_RANGE = 7;
-		let enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter((obj) => (
-			obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR
-		));
+		const __scanRange = 7;
+		const __enemyDerrsLen = enumRange(droid.x, droid.y, __scanRange, ENEMIES, false).filter((obj) => (
+			(obj.type === DROID && obj.droidType === DROID_CONSTRUCT) || (obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR)
+		)).length;
 
 		//most likely an enemy truck got the oil before us, so try to build a defense near it.
-		if (enemyDerrs.length > 0)
+		if (__enemyDerrsLen)
 		{
 			fastDefendSpot(undefined, droid);
 		}
@@ -96,25 +97,21 @@ function eventDroidBuilt(droid, struct)
 {
 	if (isConstruct(droid.id))
 	{
-		let isEngineer = droid.body === "CyborgLightBody";
+		const __isEngineer = (droid.body === "CyborgLightBody");
 
-		if ((!isEngineer || cyborgOnlyGame) && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
-		{
-			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
-		}
-		else if ((!isEngineer || cyborgOnlyGame) && enumGroup(constructGroup).length >= 2 && enumGroup(oilGrabberGroup).length < 1)
+		if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(constructGroup).length >= 2) && !enumGroup(oilGrabberGroup).length)
 		{
 			groupAdd(oilGrabberGroup, droid); //Get oil faster
 		}
-		else if (enumGroup(constructGroup).length < MIN_TRUCKS_PER_GROUP)
+		else if (enumGroup(constructGroup).length < __MIN_TRUCKS_PER_GROUP)
 		{
 			groupAdd(constructGroup, droid);
 		}
-		else if ((!isEngineer || cyborgOnlyGame) && (enumGroup(oilGrabberGroup).length < MIN_TRUCKS_PER_GROUP))
+		else if ((!__isEngineer || cyborgOnlyGame) && (enumGroup(oilGrabberGroup).length < __MIN_TRUCKS_PER_GROUP))
 		{
 			groupAdd(oilGrabberGroup, droid);
 		}
-		else if (highOilMap() && (enumGroup(constructGroupNTWExtra).length < MIN_TRUCKS_PER_GROUP))
+		else if (highOilMap() && (enumGroup(constructGroupNTWExtra).length < __MIN_TRUCKS_PER_GROUP))
 		{
 			groupAdd(constructGroupNTWExtra, droid);
 		}
@@ -152,10 +149,10 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	const SCAV_ATTACKER = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
-	const GROUP_SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
+	const __scavAttacker = (attacker.player === scavengerPlayer);
+	const __groupScanRadius = subPersonalities[personality].retreatScanRange;
 
-	let nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter((obj) => (
+	const _nearbyUnits = enumRange(victim.x, victim.y, __groupScanRadius, ALLIES, false).filter((obj) => (
 		obj.type === DROID
 	));
 
@@ -163,7 +160,8 @@ function eventAttacked(victim, attacker)
 	if (victim.type === DROID && victim.player === me)
 	{
 		let nearbyScavs = 0;
-		let nearbyEnemies = enumRange(victim.x, victim.y, SCAV_ATTACKER ? (GROUP_SCAN_RADIUS * 0.75) : GROUP_SCAN_RADIUS, ENEMIES, false);
+		const _nearbyEnemies = enumRange(victim.x, victim.y, __scavAttacker ? (__groupScanRadius * 0.75) : __groupScanRadius, ENEMIES, false);
+
 		if (isVTOL(victim))
 		{
 			droidReady(victim.id);
@@ -171,19 +169,19 @@ function eventAttacked(victim, attacker)
 		else if (victim.order !== DORDER_RTR &&
 			victim.order !== DORDER_RECYCLE &&
 			!repairDroid(victim.id) &&
-			nearbyUnits.length < nearbyEnemies.length &&
-			distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, victim.x, victim.y) >= 20)
+			_nearbyUnits.length < _nearbyEnemies.length &&
+			distBetweenTwoPoints(_MY_BASE.x, _MY_BASE.y, victim.x, victim.y) >= 20)
 		{
 			let run = true;
 
 			//Be more aggressive with scavenger stuff
-			if (SCAV_ATTACKER)
+			if (__scavAttacker)
 			{
-				nearbyEnemies.forEach((obj) => {
+				_nearbyEnemies.forEach((obj) => {
 					nearbyScavs += (obj.player === scavengerPlayer);
 				});
 
-				if (Math.floor(nearbyUnits.length * 2) > nearbyScavs)
+				if (Math.floor(_nearbyUnits.length * 2) > nearbyScavs)
 				{
 					run = false;
 				}
@@ -191,19 +189,19 @@ function eventAttacked(victim, attacker)
 
 			if (run)
 			{
-				orderDroidLoc(victim, DORDER_MOVE, MY_BASE.x, MY_BASE.y); //Move now
+				orderDroidLoc(victim, DORDER_MOVE, _MY_BASE.x, _MY_BASE.y); //Move now
 				groupAdd(retreatGroup, victim);
 			}
 		}
 	}
 
-	if (SCAV_ATTACKER)
+	if (__scavAttacker)
 	{
 		lastAttackedByScavs = gameTime;
 		return;
 	}
 
-	if (!startAttacking && (gameTime > 420000) || !highOilMap())
+	if (!startAttacking && ((gameTime > 420000) || !highOilMap()))
 	{
 		startAttacking = true; //well, they want to play so...
 	}
@@ -213,7 +211,7 @@ function eventAttacked(victim, attacker)
 		grudgeCount[attacker.player] += (victim.type === STRUCTURE) ? 20 : 5;
 
 		//Check if a droid needs repair.
-		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(structures.repair, me))
+		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(_STRUCTURES.repair, me))
 		{
 			repairDroid(victim.id);
 		}
@@ -223,7 +221,7 @@ function eventAttacked(victim, attacker)
 			return;
 		}
 
-		let units = nearbyUnits.filter((dr) => (
+		const _units = _nearbyUnits.filter((dr) => (
 			dr.id !== victim.id &&
 			dr.group !== retreatGroup &&
 			!isConstruct(dr.id, false) &&
@@ -231,22 +229,23 @@ function eventAttacked(victim, attacker)
 			(!repairDroid(dr.id)) && droidCanReach(dr, attacker.x, attacker.y))
 		));
 
-		const UNIT_LEN = units.length;
+		const __unitLen = _units.length;
 
-		if (UNIT_LEN >= MIN_ATTACK_DROIDS && shouldCobraAttack())
+		if (__unitLen >= __MIN_ATTACK_DROIDS && shouldCobraAttack())
 		{
-			for (let i = 0; i < UNIT_LEN; ++i)
+			for (let i = 0; i < __unitLen; ++i)
 			{
-				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
+				if ((subPersonalities[personality].resPath === "offensive") || chance(33))
 				{
-					let unit = units[i];
-					if (unit !== null && distBetweenTwoPoints(unit.x, unit.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
+					const _unit = _units[i];
+
+					if (_unit !== null && distBetweenTwoPoints(_unit.x, _unit.y, attacker.x, attacker.y) < (__groupScanRadius + 4))
 					{
-						orderDroidObj(unit, DORDER_ATTACK, attacker);
+						orderDroidObj(_unit, DORDER_ATTACK, attacker);
 					}
-					else if (unit !== null && isDefined(attacker.x) && isDefined(attacker.y))
+					else if (_unit !== null && isDefined(attacker.x) && isDefined(attacker.y))
 					{
-						orderDroidLoc(unit, DORDER_SCOUT, attacker.x, attacker.y);
+						orderDroidLoc(_unit, DORDER_SCOUT, attacker.x, attacker.y);
 					}
 				}
 			}
@@ -275,18 +274,19 @@ function eventObjectTransfer(obj, from)
 //Basic Laser Satellite support.
 function eventStructureReady(structure)
 {
-	const RETRY_TIME = 10000;
+	const __retryTime = 10000;
 
 	if (!structure)
 	{
-		const LASER = enumStruct(me, structures.lassat);
-		if (LASER.length > 0)
+		const __laser = enumStruct(me, _STRUCTURES.lassat);
+
+		if (__laser.length)
 		{
-			structure = LASER[0];
+			structure = __laser[0];
 		}
 		else
 		{
-			queue("eventStructureReady", RETRY_TIME);
+			queue("eventStructureReady", __retryTime);
 			return;
 		}
 	}
@@ -304,7 +304,7 @@ function eventStructureReady(structure)
 	}
 	else
 	{
-		queue("eventStructureReady", RETRY_TIME, structure);
+		queue("eventStructureReady", __retryTime, structure);
 	}
 }
 
@@ -314,6 +314,7 @@ function eventBeacon(x, y, from, to, message)
 	{
 		return;
 	}
+
 	if (!allianceExistsBetween(from, me))
 	{
 		return;
@@ -328,5 +329,5 @@ function eventBeacon(x, y, from, to, message)
 	beacon.y = y;
 	beacon.startTime = gameTime;
 	beacon.endTime = gameTime + 50000;
-	beacon.wasVtol = isDefined(message) && (message === BEACON_VTOL_ALARM);
+	beacon.wasVtol = isDefined(message) && (message === __BEACON_VTOL_ALARM);
 }

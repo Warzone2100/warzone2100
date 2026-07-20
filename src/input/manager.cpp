@@ -30,9 +30,7 @@
 #include "mapping.h"
 
 #include "../keybind.h"
-#include "../keyedit.h"
 #include "../display3d.h"   // For playerPos
-#include "../main.h"        // For KeyMapPath
 #include "lib/netplay/nettypes.h"	// For NETisReplay()
 
 
@@ -66,6 +64,15 @@ void InputManager::shutdown()
 	keyMappings.clear();
 }
 
+void InputManager::setKeyMapJsonPath(const std::string& path)
+{
+	if (path == currentKeyMapJsonPath)
+	{
+		return;
+	}
+	currentKeyMapJsonPath = path;
+}
+
 bool InputManager::mappingsSortRequired() const
 {
 	return bMappingsSortOrderDirty || contextManager.isDirty() || keyMappings.isDirty();
@@ -86,7 +93,7 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 	// load the mappings.
 	if (!bForceDefaults)
 	{
-		if (keyMappings.load(KeyMapPath, keyFuncConfig))
+		if (keyMappings.load(currentKeyMapJsonPath.c_str(), keyFuncConfig))
 		{
 			debug(LOG_WZ, "Loaded key map successfully");
 		}
@@ -112,7 +119,13 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 		}
 	}
 
-	keyMappings.save(KeyMapPath);
+	keyMappings.save(currentKeyMapJsonPath.c_str());
+}
+
+void InputManager::saveMappings()
+{
+	debug(LOG_WZ, "Saving: %s", currentKeyMapJsonPath.c_str());
+	keyMappings.save(currentKeyMapJsonPath.c_str());
 }
 
 bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
@@ -229,9 +242,9 @@ void InputManager::updateMapMarkers()
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in processMappings */
-static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
+static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping, bool bypassActiveContextCheck = false)
 {
-	if (!inputManager.contexts().isActive(mapping.info.context))
+	if (!bypassActiveContextCheck && !inputManager.contexts().isActive(mapping.info.context))
 	{
 		return true;
 	}
@@ -299,4 +312,37 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 			consumedInputs.insert(keyToProcess.keys.input);
 		}
 	}
+}
+
+nonstd::optional<std::reference_wrapper<const KeyMapping>> InputManager::findCurrentMapping(const bool bAllowMouseWheelEvents, bool filterHidden)
+{
+	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
+	if (mappingsSortRequired())
+	{
+		keyMappings.sort(contextManager);
+		contextManager.clearDirty();
+		bMappingsSortOrderDirty = false;
+	}
+
+	/* Run through all sorted mappings */
+	for (const KeyMapping& keyToProcess : keyMappings)
+	{
+		/* Skip inappropriate ones when necessary */
+		if (isIgnoredMapping(*this, bAllowMouseWheelEvents, keyToProcess, true))
+		{
+			continue;
+		}
+		if (filterHidden && keyToProcess.info.type == KeyMappingType::HIDDEN)
+		{
+			continue;
+		}
+
+		/* Execute the action if mapping was hit */
+		if (keyToProcess.isActivated())
+		{
+			return keyToProcess;
+		}
+	}
+
+	return nullopt;
 }
