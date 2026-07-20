@@ -197,6 +197,8 @@ void ScreenFrameCoordinator::acquireSwapchainForFrameDraw()
 				{
 					return;
 				}
+				// createSwapchain already synced the drawable, so next Begin needs no further recreate
+				_presentation.clearSwapchainRecreatePending();
 				_root.rebindOpenScreenFrameResources();
 				status = _root.tryAcquireSwapchainImage();
 				if (status == VkRoot::SwapchainAcquireStatus::Success)
@@ -466,7 +468,11 @@ void ScreenFrameCoordinator::presentAndAdvanceRing(ScreenFramePipelineState& sta
 		{
 		case SuboptimalPresentAction::RecreateInline:
 			debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
-			_root.recreateSwapchain(presentResult);
+			if (_root.recreateSwapchain(presentResult))
+			{
+				// createSwapchain already synced the drawable, so next Begin needs no further recreate
+				_presentation.clearSwapchainRecreatePending();
+			}
 			state.shouldPresent = false;
 			state.submittedQueueWork = false;
 			state.ringSwapped = true;
