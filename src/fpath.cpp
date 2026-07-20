@@ -29,6 +29,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/crc.h"
+#include "lib/framework/hash_combine.h"
 #include "lib/netplay/sync_debug.h"
 
 #include "lib/framework/wzapp.h"
@@ -227,19 +228,6 @@ static constexpr size_t fpathPropulsionDomain(PROPULSION_TYPE propulsion)
 	case PROPULSION_TYPE_HOVER:     return 3;  // Land and water
 	}
 	return 0; // silence compiler warning
-}
-
-inline void hash_combine(std::size_t& seed) { }
-
-template <typename T, typename... Rest>
-inline void hash_combine(std::size_t& seed, const T& v, Rest... rest) {
-	std::hash<T> hasher;
-#if SIZE_MAX >= UINT64_MAX
-	seed ^= hasher(v) + 0x9e3779b97f4a7c15L + (seed<<6) + (seed>>2);
-#else
-	seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-#endif
-	hash_combine(seed, rest...);
 }
 
 static inline size_t fpathJobDispatchThreadId(const PATHJOB& job, size_t numThreads)

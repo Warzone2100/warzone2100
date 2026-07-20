@@ -427,24 +427,48 @@ bool null_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_
 	return true;
 }
 
-void null_context::beginRenderPass()
+void null_context::warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& /*passes*/,
+	gfx_api::PassGraphCompileResult& /*compileResult*/)
 {
-	// no-op
 }
 
-void null_context::endRenderPass()
+void null_context::beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* /*compiledPass*/)
 {
+	(void)pass;
+	frameHasDrawCommands = true;
+}
+
+void null_context::endPass(const gfx_api::CompiledPass* /*compiledPass*/)
+{
+}
+
+void null_context::beginScreenFrame()
+{
+	frameHasDrawCommands = false;
+	purgeFrameResources();
+}
+
+void null_context::finishScreenFrame()
+{
+	if (frameHasDrawCommands)
+	{
+		// Backend is expected to handle throttling / sleeping
+		backend_impl->swapWindow();
+		current_program = nullptr;
+	}
+
+	frameHasDrawCommands = false;
 	frameNum = std::max<size_t>(frameNum + 1, 1);
+	purgeFrameResources();
+}
 
-	// Backend is expected to handle throttling / sleeping
-	backend_impl->swapWindow();
-
-	current_program = nullptr;
+void null_context::purgeFrameResources()
+{
 }
 
 void null_context::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
-	// no-op
+	markScreenGeometryDirty();
 }
 
 std::pair<uint32_t, uint32_t> null_context::getDrawableDimensions()

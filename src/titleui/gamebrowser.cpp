@@ -84,12 +84,15 @@ TITLECODE WzGameBrowserTitleUI::run()
 
 	widgRunScreen(screen);
 
-	widgDisplayScreen(screen); // show the widgets currently running
-
 	if (CancelPressed())
 	{
 		changeTitleUI(parent);
 	}
 
 	return TITLECODE_CONTINUE;
+}
+
+void WzGameBrowserTitleUI::render()
+{
+	widgDisplayScreen(screen); // show the widgets currently running
 }

@@ -82,6 +82,7 @@
 #include "display.h"
 #include "display3d.h"
 #include "frontend.h"
+#include "frame_render_init.h"
 #include "game.h"
 #include "init.h"
 #include "lib/framework/resource_loading_controller.h"
@@ -203,7 +204,7 @@ static FOCUS_STATE focusState = FOCUS_IN;
 static bool ignoredSIGPIPE = false;
 #endif
 
-static void stopGameLoop();
+static void stopGameLoop(bool onWzShutdown = false);
 static void startTitleLoop(bool onInitialStartup = false);
 static LoadingTask<> startTitleLoopTask(ResourceLoadingController& controller, bool onInitialStartup = false);
 
@@ -1058,7 +1059,7 @@ static bool saveGameLoadAfter()
  * Shutdown/cleanup after the game loop
  * Would stop the timer
  */
-static void stopGameLoop()
+static void stopGameLoop(bool onWzShutdown)
 {
 	clearInfoMessages(); // clear CONPRINTF messages before each new game/mission
 
@@ -1070,9 +1071,11 @@ static void stopGameLoop()
 	{
 		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
-		presentLoadingScreenForCurrentFrame();
-		pie_ScreenFrameRenderEnd();
-		pie_ScreenFrameRenderBegin();
+		if (!onWzShutdown)
+		{
+			pie_ScreenFrameRenderEnd();
+			pie_ScreenFrameRenderBegin();
+		}
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
 			game.modHashes.clear(); // must clear this before calling levReleaseAll so that when search paths are reloaded we don't reload mods downloaded for the last game (or loaded for the last replay)
@@ -1248,6 +1251,23 @@ static void runTitleLoop()
 	}
 }
 
+namespace
+{
+
+// Ensures every mainLoop Begin is paired with End when focus-loss or early-return paths skip explicit End calls.
+struct ScreenFrameScope
+{
+	~ScreenFrameScope()
+	{
+		if (pie_IsScreenFrameRendering())
+		{
+			pie_ScreenFrameRenderEnd();
+		}
+	}
+};
+
+} // namespace
+
 /*!
  * The mainloop.
  * Fetches events, executes appropriate code
@@ -1256,6 +1276,7 @@ void mainLoop()
 {
 	frameUpdate(); // General housekeeping
 
+	ScreenFrameScope frameScope;
 	pie_ScreenFrameRenderBegin();
 
 	// Screenshot key is now available globally
@@ -1277,7 +1298,6 @@ void mainLoop()
 		}
 		if (!frameEnded && loop_GetVideoStatus())
 		{
-			videoLoop(); // Display the video if necessary
 			pie_ScreenFrameRenderEnd();
 		}
 		else if (!frameEnded) switch (GetGameMode())
@@ -1829,7 +1849,7 @@ void mainShutdown()
 		case GS_NORMAL:
 			// if running a game while quitting, stop the game loop
 			// (currently required for some cleanup) (should modelShutdown() be added to systemShutdown?)
-			stopGameLoop();
+			stopGameLoop(true);
 			break;
 		case GS_TITLE_SCREEN:
 			// if showing the title / menus while quitting, stop the title loop
@@ -2151,14 +2171,20 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	if (!pie_LoadShaders(war_getShadowFilterSize(), war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING))
-	{
-		return EXIT_FAILURE;
-	}
 	if (!screenInitialise())
 	{
 		return EXIT_FAILURE;
 	}
+
+	pie_ScreenFrameRenderBegin();
+
+	// GPU uploads must happen inside an open screen frame, which pie_LoadShaders does.
+	if (!pie_LoadShaders(war_getShadowFilterSize(), war_getPointLightPerPixelLighting() && getTerrainShaderQuality() == TerrainShaderQuality::NORMAL_MAPPING))
+	{
+		return EXIT_FAILURE;
+	}
+
+	pie_InitRenderGraphs();
 
 	bool fogConfigOption = pie_GetFogEnabled();
 	pie_SetFogStatus(false);

@@ -37,6 +37,9 @@
 #include "screen.h"
 #include "pietypes.h"
 #include "gfx_api_formats_def.h"
+#include "render_graph/pipeline_surfaces.h"
+#include "render_graph/render_pass.h"
+#include "render_graph/compile.h"
 
 #include <glm/glm.hpp>
 
@@ -404,15 +407,69 @@ namespace gfx_api
 		static bool isInitialized();
 		virtual size_t numDepthPasses() { return 0; }
 		virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) { return false; }
-		virtual void beginDepthPass(size_t idx) { }
+		virtual void beginPass(const RenderPassDesc& pass, const CompiledPass* compiledPass = nullptr) = 0;
+		virtual void endPass(const CompiledPass* compiledPass = nullptr) = 0;
+
+		/// Screen-frame lifecycle (owned by piemode / main loop):
+		///
+		///   pie_ScreenFrameRenderBegin()
+		///     -> beginScreenFrame()           // per-frame flag reset; releaseAll() on FBO pool;
+		///                                     // Vulkan: open transfer (copy) command buffer
+		///     -> consumeScreenGeometryDirty() -> screen_updateGeometry() when drawable changed
+		///     ... game logic, uploads (TransferRecorder records copy work on Vulkan) ...
+		///   pie_ScreenFrameRenderEnd()
+		///     ... when !headlessOrSkipDrawing() ...
+		///     -> prepareSwapchainForDrawing() // late swapchain acquire (Vulkan; no-op elsewhere)
+		///     -> CachedRenderGraph::ensureBuilt(snapshot)
+		///     -> CachedRenderGraph::execute() // RECORD only (executeCompiledRenderGraph)
+		///     -> finishScreenFrame()          // ALWAYS when gfx initialized: seal/submit/present,
+		///                                     // ring advance, frameNum++, purge FBO pool
+		///
+		/// Upload paths record into the current frame's copy command buffer throughout the
+		/// screen frame. finishScreenFrame() must NOT be gated on graph execution or shouldDraw().
+		/// Must pair beginScreenFrame() with finishScreenFrame().
+		virtual void beginScreenFrame() = 0;
+		virtual void finishScreenFrame() = 0;
+		/// Acquire a swapchain image for draw recording when the drawable is in sync (Vulkan).
+		virtual void prepareSwapchainForDrawing() {}
+		/// Mark UI/backdrop geometry stale after a drawable resize (called from backends).
+		/// Consumed at pie_ScreenFrameRenderBegin(); do not call screen_updateGeometry() directly on resize.
+		void markScreenGeometryDirty() { _screenGeometryDirty = true; }
+		/// Returns true once per dirty signal; used to refresh backdrop VBOs without per-frame work.
+		bool consumeScreenGeometryDirty()
+		{
+			const bool dirty = _screenGeometryDirty;
+			_screenGeometryDirty = false;
+			return dirty;
+		}
+
 		virtual size_t getDepthPassDimensions(size_t idx) { return 0; }
-		virtual void endCurrentDepthPass() { }
-		virtual gfx_api::abstract_texture* getDepthTexture() { return nullptr; }
-		virtual void beginSceneRenderPass() { }
-		virtual void endSceneRenderPass() { }
-		virtual gfx_api::abstract_texture* getSceneTexture() { return nullptr; }
-		virtual void beginRenderPass() = 0;
-		virtual void endRenderPass() = 0;
+		virtual gfx_api::abstract_texture* getPipelineSurface(PipelineSurfaceId id) { return nullptr; }
+		virtual PipelineSurfaceMeta pipelineSurfaceMeta(PipelineSurfaceId id) const { return getPipelineSurfaceMeta(id); }
+		virtual nonstd::optional<PipelineSurfaceId> findPipelineSurfaceId(gfx_api::abstract_texture* texture) const { return nonstd::nullopt; }
+		virtual bool isSceneMSAAEnabled() const { return false; }
+		virtual bool isSwapchainMSAAEnabled() const { return false; }
+		virtual bool isMultisampledColorAttachment(abstract_texture* texture) const { return false; }
+		virtual pixel_format getDepthStencilFormat() const { return pixel_format::invalid; }
+
+		/// Purge unused pooled framebuffers/FBOs after the frame accumulation window.
+		/// Backends call releaseAll() at beginScreenFrame() and purgeFrameResources() at finish.
+		virtual void purgeFrameResources() {}
+
+		virtual optional<std::pair<uint32_t, uint32_t>> getRenderTargetDimensions(abstract_texture* texture) { return nullopt; }
+
+		/// Record draw commands for a compiled pass graph (beginPass / recordFunc / endPass).
+		/// Does not submit, present, or advance the frame ring; piemode calls finishScreenFrame()
+		/// afterward for GPU commit.
+		virtual void executeCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
+			const PassGraphCompileResult& compileResult);
+		/// Pre-warm backend pass resources after compile (e.g. Vulkan render-pass layout ids).
+		virtual void warmCompiledRenderGraph(std::vector<RenderPassDesc>& passes,
+			PassGraphCompileResult& compileResult);
+		// Emit any out-of-graph pre-pass layout/sync barriers for a batch of passes (the passes
+		// sharing one render pass). Called once before beginPass, outside any active render pass.
+		virtual void emitPrePassBarriers(const ExecutionBatch& batch,
+			const std::vector<CompiledPass>& compiledPasses) {}
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;
 		virtual void debugSceneEnd(const char *descr) = 0;
@@ -441,6 +498,9 @@ namespace gfx_api
 		virtual size_t maxFramesInFlight() const = 0;
 		virtual lighting_constants getShadowConstants() = 0;
 		virtual bool setShadowConstants(lighting_constants values) = 0;
+
+		/// Monotonic counter bumped when render-graph topology inputs change (resize, depth passes, swapchain recreate, etc.).
+		uint64_t getRenderGraphEpoch() const { return _renderGraphEpoch; }
 		// instanced rendering APIs
 		virtual bool supportsInstancedRendering() = 0;
 		virtual void draw_instanced(const std::size_t& offset, const std::size_t &count, const primitive_type &primitive, std::size_t instance_count) = 0;
@@ -455,15 +515,23 @@ namespace gfx_api
 		LoadingTask<gfx_api::texture_array*> loadTextureArrayFromFiles(ResourceLoadingController& controller, const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::string& debugName = "");
 		gfx_api::texture_array* loadTextureArrayFromFilesBlocking(const std::vector<WzString>& filenames, gfx_api::texture_type textureType, int maxWidth = -1, int maxHeight = -1, const GenerateDefaultTextureFunc& defaultTextureGenerator = nullptr, const std::string& debugName = "");
 
-		bool loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
-		bool loadTextureArrayLayerFromUncompressedImage(gfx_api::texture_array& array, size_t layer, const iV_Image& image, gfx_api::texture_type textureType, size_t mipmap_levels, gfx_api::pixel_format uploadFormat, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 		bool loadTextureArrayLayerFromBaseImages(gfx_api::texture_array& array, size_t layer, const std::vector<std::unique_ptr<iV_BaseImage>>& images, const std::string& filename, int maxWidth = -1, int maxHeight = -1);
 
 		optional<unsigned int> getClosestSupportedUncompressedImageFormatChannels(pixel_format_target target, unsigned int channels);
 		gfx_api::pixel_format bestUncompressedPixelFormat(gfx_api::pixel_format_target target, gfx_api::texture_type textureType);
 
 		gfx_api::texture* createTextureForCompatibleImageUploads(const size_t& mipmap_count, const iV_Image& bitmap, const std::string& filename);
+
+	protected:
+		// True while executeCompiledRenderGraph() is running. Draw/bind APIs must only be called from record callbacks.
+		bool renderGraphExecuting() const { return _renderGraphExecuting; }
+		void setRenderGraphExecuting(bool executing) { _renderGraphExecuting = executing; }
+		void bumpRenderGraphEpoch() { ++_renderGraphEpoch; }
+
 	private:
+		bool _renderGraphExecuting = false;
+		uint64_t _renderGraphEpoch = 1;
+		bool _screenGeometryDirty = true;
 		virtual bool _initialize(const backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, optional<float> mipLodBias, uint32_t depthMapResolution) = 0;
 	};
 

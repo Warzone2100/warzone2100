@@ -73,6 +73,7 @@ public:
 		int32_t colour;
 		FactionID faction;
 		std::string publicKey;
+		bool slotWasOccupied = false;	///< whether the slot was filled (by a human player or an AI) at game start - false for open / closed slots
 		optional<AIPlayerAttributes> aiPlayerAttr = nullopt;
 	};
 

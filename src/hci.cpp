@@ -84,6 +84,7 @@
 #include "hci/groups.h"
 #include "screens/chatscreen.h"
 #include "screens/guidescreen.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "hci/quickchat.h"
 #include "warzoneconfig.h"
 
@@ -132,6 +133,7 @@ static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states
 static UDWORD	keyButtonMapping = 0;
 static bool ReticuleUp = false;
 static bool Refreshing = false;
+static bool quitToMainMenuRequested = false;
 
 /***************************************************************************************/
 /*                  Widget ID numbers                                                  */
@@ -930,6 +932,8 @@ bool intInitialise()
 
 	psSelectedBuilder = nullptr;
 
+	quitToMainMenuRequested = false;
+
 	if (!intInitialiseGraphics())
 	{
 		debug(LOG_ERROR, "Failed to initialize interface graphics");
@@ -1031,6 +1035,7 @@ void interfaceShutDown()
 
 	shutdownChatScreen();
 	closeGuideScreen();
+	closeSpectatorGameOverScreen();
 	ChatDialogUp = false;
 
 	bAllowOtherKeyPresses = true;
@@ -1384,10 +1389,27 @@ static void reticuleCallback(int retbut)
 	}
 }
 
+void intRequestQuitToMainMenu()
+{
+	quitToMainMenuRequested = true;
+	if (gamePaused())
+	{
+		kf_TogglePauseMode(); // intRunWidgets() (which processes the request) isn't called while the game is paused
+	}
+}
+
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
+
+	if (quitToMainMenuRequested)
+	{
+		quitToMainMenuRequested = false;
+		intCloseInGameOptions(false, false);
+		intResetScreen(false);
+		quitting = true;
+	}
 
 	if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult) > 0)
 	{
@@ -1398,7 +1420,9 @@ INT_RETVAL intRunWidgets()
 		}
 		else
 		{
-			if (saveGame(sRequestResult, GTYPE_SAVE_START))
+			// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+			// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+			if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
 			{
 				char msg[256] = {'\0'};
 
@@ -1581,7 +1605,6 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		/* Catch the quit button here */
-		case INTINGAMEOP_POPUP_QUIT:
 		case IDMISSIONRES_QUIT:			// mission quit
 		case INTINGAMEOP_QUIT:			// esc quit confirm
 		case IDOPT_QUIT:						// options screen quit
@@ -1979,11 +2002,6 @@ void intDisplayWidgets()
 		// When will they ever learn!!!!
 		if (!bMultiPlayer)
 		{
-			if (!bInTutorial)
-			{
-				screen_RestartBackDrop();
-			}
-
 			// We need to add the console messages to the intelmap for the tutorial so that it can display messages
 			if ((intMode == INT_DESIGN) || (bInTutorial && intMode == INT_INTELMAP))
 			{

@@ -139,6 +139,7 @@ static unsigned numCommandDroids[MAX_PLAYERS];
 static unsigned numConstructorDroids[MAX_PLAYERS];
 
 static SDWORD videoMode = 0;
+static bool backdropWasActiveBeforeVideo = false;
 
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
@@ -157,10 +158,8 @@ static GAMECODE renderLoop()
 	WZ_PROFILE_SCOPE(renderLoop);
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)
 	{
-		intAddInGamePopup();
+		handleInGameHostQuit();
 	}
-
-	bool skipDrawing = !gfx_api::context::get().shouldDraw();
 
 	audio_Update();
 
@@ -242,12 +241,12 @@ static GAMECODE renderLoop()
 		{
 			WidgetTriggers const &triggers = widgRunScreen(psWScreen);		// always run the screen, so overlays can process input
 
-			if (InGameOpUp || isInGamePopupUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
+			if (InGameOpUp || intHelpOverlayIsUp())		// ingame options menu up, run it!
 			{
 				unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 				intProcessInGameOptions(widgval);
-				if (widgval == INTINGAMEOP_QUIT || widgval == INTINGAMEOP_POPUP_QUIT)
+				if (widgval == INTINGAMEOP_QUIT)
 				{
 					if (gamePaused())
 					{
@@ -271,7 +270,9 @@ static GAMECODE renderLoop()
 
 				if (saveInMissionRes())
 				{
-					if (saveGame(sRequestResult, GTYPE_SAVE_START))
+					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+					if (saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION))
 					{
 						sstrcpy(msgbuffer, _("GAME SAVED: "));
 						sstrcat(msgbuffer, savegameWithoutExtension(sRequestResult));
@@ -322,7 +323,7 @@ static GAMECODE renderLoop()
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode() && !skipDrawing)
+	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode())
 	{
 		if (!gameUpdatePaused())
 		{
@@ -331,23 +332,12 @@ static GAMECODE renderLoop()
 			processGestureInput();
 
 			//no key clicks or in Intelligence Screen
-			if (!isMouseOverRadar() && !isDraggingInGameNotification() && !isMouseClickDownOnScreenOverlayChild() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
+			if (!isMouseOverRadar() && !isDraggingInGameNotification() && !isMouseClickDownOnScreenOverlayChild() && intRetVal == INT_NONE && !InGameOpUp)
 			{
 				processMouseClickInput();
 			}
 			displayWorld();
 		}
-		wzPerfBegin(PERF_GUI, "User interface");
-		WZ_PROFILE_SCOPE(DrawUI);
-		/* Display the in game interface */
-		pie_SetFogStatus(false);
-
-		if (getWidgetsStatus())
-		{
-			intDisplayWidgets();
-		}
-		pie_SetFogStatus(true);
-		wzPerfEnd(PERF_GUI);
 	}
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount);
@@ -794,6 +784,7 @@ void videoLoop()
 
 void loop_SetVideoPlaybackMode()
 {
+	backdropWasActiveBeforeVideo = screen_GetBackDrop();
 	videoMode += 1;
 	paused = true;
 	video = true;
@@ -817,6 +808,11 @@ void loop_ClearVideoPlaybackMode()
 	cdAudio_Resume();
 	wzShowMouse(true);
 	ASSERT(videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync.");
+	if (backdropWasActiveBeforeVideo)
+	{
+		screen_RestartBackDrop();
+		backdropWasActiveBeforeVideo = false;
+	}
 }
 
 

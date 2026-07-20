@@ -37,8 +37,6 @@ void submitResourceLoadingTask(ResourceLoadingTaskFactory taskFactory,
                               ResourceLoadingController::FrameProcessingMode frameMode =
                                   ResourceLoadingController::FrameProcessingMode::ConsumeFrame);
 
-void presentResourceLoadingScreenIfNeeded();
-
 /// Per-quantum housekeeping during blocking loads (events, audio, optional loading UI).
 void pumpResourceLoadingHousekeeping(const ResourceLoadingController::FramePolicy& policy);
 

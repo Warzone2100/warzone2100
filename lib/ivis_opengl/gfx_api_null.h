@@ -128,9 +128,13 @@ public:
 	virtual void set_depth_range(const float& min, const float& max) override;
 	virtual int32_t get_context_value(const context_value property) override;
 	virtual uint64_t get_estimated_vram_mb(bool dedicatedOnly) override;
-
-	virtual void beginRenderPass() override;
-	virtual void endRenderPass() override;
+	virtual void beginPass(const gfx_api::RenderPassDesc& pass, const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void endPass(const gfx_api::CompiledPass* compiledPass = nullptr) override;
+	virtual void beginScreenFrame() override;
+	virtual void finishScreenFrame() override;
+	virtual void purgeFrameResources() override;
+	virtual void warmCompiledRenderGraph(std::vector<gfx_api::RenderPassDesc>& passes,
+		gfx_api::PassGraphCompileResult& compileResult) override;
 	virtual void debugStringMarker(const char *str) override;
 	virtual void debugSceneBegin(const char *descr) override;
 	virtual void debugSceneEnd(const char *descr) override;
@@ -170,4 +174,5 @@ private:
 private:
 
 	size_t frameNum = 0;
+	bool frameHasDrawCommands = false;
 };

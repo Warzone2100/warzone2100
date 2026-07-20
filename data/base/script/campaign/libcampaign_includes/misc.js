@@ -783,9 +783,34 @@ function camSetOnMapEnemyUnitExp()
 			obj.droidType !== DROID_CONSTRUCT &&
 			obj.droidType !== DROID_REPAIR)
 		{
-			camSetDroidExperience(obj);
+			camSetEnemyDroidExperience(obj);
 		}
 	});
+}
+
+function camSetEnemyDroidExperience(droid)
+{
+	if (droid.droidType === DROID_REPAIR || droid.droidType === DROID_CONSTRUCT || camIsTransporter(droid))
+	{
+		return;
+	}
+	if (droid.player === CAM_HUMAN_PLAYER)
+	{
+		return;
+	}
+	const __CMD_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
+	const expRange = __camGetExpRangeLevel(__CMD_RANK);
+	const __EXP = expRange[camRand(expRange.length)];
+	setDroidExperience(droid, __EXP);
+}
+
+function camSetDroidExperience(droid, exp)
+{
+	if (tweakOptions.noExp || droid.droidType === DROID_REPAIR || droid.droidType === DROID_CONSTRUCT || camIsTransporter(droid))
+	{
+		return;
+	}
+	setDroidExperience(droid, exp);
 }
 
 //////////// privates
@@ -939,22 +964,6 @@ function __camGetExpRangeLevel(useCommanderRanks)
 			exp = [ranks.rookie, ranks.rookie];
 	}
 	return exp;
-}
-
-function camSetDroidExperience(droid)
-{
-	if (droid.droidType === DROID_REPAIR || droid.droidType === DROID_CONSTRUCT || camIsTransporter(droid))
-	{
-		return;
-	}
-	if (droid.player === CAM_HUMAN_PLAYER)
-	{
-		return;
-	}
-	const __CMD_RANK = (droid.droidType === DROID_COMMAND || droid.droidType === DROID_SENSOR);
-	const expRange = __camGetExpRangeLevel(__CMD_RANK);
-	const __EXP = expRange[camRand(expRange.length)];
-	setDroidExperience(droid, __EXP);
 }
 
 // Only to prevent prebuilt units from team Gamma on Gamma 6 from having the NavGunSensor.

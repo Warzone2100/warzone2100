@@ -204,6 +204,11 @@ static bool bInActualHostedLobby = false;
 static bool bRequestedSelfMoveToPlayers = false;
 static std::vector<bool> bHostRequestedMoveToPlayers = std::vector<bool>(MAX_CONNECTED_PLAYERS, false);
 
+static inline bool isFullscreenMapPreviewActive()
+{
+	return hideTime != 0 && gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME;
+}
+
 static std::weak_ptr<WzMultiplayerOptionsTitleUI> currentMultiOptionsTitleUI;
 
 /// end of globals.
@@ -779,14 +784,10 @@ static void loadMapPreview(bool hideInterface, std::string mapName, const Sha256
 	}
 	if (psLevel->realFileName == nullptr)
 	{
-		builtInMap = true;
-		useTerrainOverrides = shouldLoadTerrainTypeOverrides(psLevel->pName);
-		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d override %d", psLevel->pName.c_str(), psLevel->dataDir, (int)useTerrainOverrides);
+		debug(LOG_WZ, "Loading map preview: \"%s\" builtin t%d", psLevel->pName.c_str(), psLevel->dataDir);
 	}
 	else
 	{
-		builtInMap = false;
-		useTerrainOverrides = false;
 		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName.c_str(), WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false);
@@ -6701,7 +6702,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		if (hideTime != 0)
 		{
 			// we abort the 'hidetime' on press of a mouse button.
-			if (gameTime - hideTime < MAP_PREVIEW_DISPLAY_TIME && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
+			if (isFullscreenMapPreviewActive() && !mousePressed(MOUSE_LMB) && !mousePressed(MOUSE_RMB))
 			{
 				return TITLECODE_CONTINUE;
 			}
@@ -6720,13 +6721,6 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		}
 	}
 
-	widgDisplayScreen(psWScreen);									// show the widgets currently running
-
-	if (multiRequestUp)
-	{
-		widgDisplayScreen(psRScreen);								// show the Requester running
-	}
-
 	if (CancelPressed())
 	{
 		processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
@@ -6743,6 +6737,21 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 
 	return TITLECODE_CONTINUE;
+}
+
+void WzMultiplayerOptionsTitleUI::render()
+{
+	if (isFullscreenMapPreviewActive())
+	{
+		return;
+	}
+
+	widgDisplayScreen(psWScreen);									// show the widgets currently running
+
+	if (multiRequestUp)
+	{
+		widgDisplayScreen(psRScreen);								// show the Requester running
+	}
 }
 
 WzMultiplayerOptionsTitleUI::WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitleUI> parent)
@@ -8118,10 +8127,6 @@ bool WZGameReplayOptionsHandler::restoreOptions(const nlohmann::json& object, Em
 		debug(LOG_POPUP, "Missing map used for replay: \"%s\" (hash: %s)", game.map, game.hash.toString().c_str());
 		return false;
 	}
-	// Must restore `useTerrainOverrides` (this matters for re-loading the map!) - see loadMapPreview() in multiint.cpp
-	builtInMap = (mapData->realFileName == nullptr);
-	useTerrainOverrides = builtInMap && shouldLoadTerrainTypeOverrides(mapData->pName);
-
 	for (Sha256 &hash : game.modHashes)
 	{
 		// TODO: Actually check the loaded mods??

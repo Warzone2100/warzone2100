@@ -854,11 +854,6 @@ bool wzChangeWindowMode(WINDOW_MODE mode, bool silent)
 		}
 	}
 
-#if defined(WZ_OS_MAC)
-	// Wait for window size changes to be processed
-	SDL_SyncWindow(WZwindow);
-#endif
-
 	return true;
 }
 
@@ -2163,8 +2158,7 @@ void processScreenSizeChangeNotificationIfNeeded()
 {
 	if (currentScreenResizingStatus != nullptr)
 	{
-		// WZ must process the screen size change
-		screen_updateGeometry(); // must come after gfx_api::context::handleWindowSizeChange
+		// Backdrop VBO GPU upload is deferred to pie_ScreenFrameRenderBegin() via markScreenGeometryDirty().
 		gameScreenSizeDidChange(currentScreenResizingStatus->oldWidth, currentScreenResizingStatus->oldHeight, currentScreenResizingStatus->newWidth, currentScreenResizingStatus->newHeight);
 		delete currentScreenResizingStatus;
 		currentScreenResizingStatus = nullptr;
@@ -3056,7 +3050,9 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 
 	WZ_SDL_setBackendProperty(props, backend);
 
+#if !defined(WZ_OS_MAC) // always make window resizable on macOS
 	if (fullscreen == WINDOW_MODE::windowed)
+#endif
 	{
 		// Allow the window to be manually resized, if not fullscreen
 		SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
@@ -3697,6 +3693,13 @@ void wzSetWindowIsResizable(bool resizable)
 		debug(LOG_WARNING, "wzSetWindowIsResizable called when window is not available");
 		return;
 	}
+
+#if defined(WZ_OS_MAC)
+	// Making the window non-resizable may interfere with maximizing / fullscreen-space
+	// and other window transitions on macOS + Vulkan, so skip
+	return;
+#else
+
 	SDL_SetWindowResizable(WZwindow, resizable);
 
 	if (resizable)
@@ -3706,6 +3709,8 @@ void wzSetWindowIsResizable(bool resizable)
 		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, current_displayScaleFactor);
 		SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
 	}
+
+#endif
 }
 
 bool wzIsWindowResizable()

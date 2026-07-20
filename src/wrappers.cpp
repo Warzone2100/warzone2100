@@ -30,6 +30,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/gfx_api.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/connection_provider_registry.h"
 #include "lib/netplay/netplay.h"	// multiplayer
@@ -42,6 +43,7 @@
 #include "multiint.h"
 #include "multilimit.h"
 #include "multistat.h"
+#include "screens/spectatorgameoverscreen.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "titleui/titleui.h"
@@ -214,11 +216,9 @@ TITLECODE titleLoop()
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
 	pie_SetFogStatus(false);
-	if (!headlessGameMode() && screen_RestartBackDrop())
+	if (!headlessGameMode())
 	{
-		// changed value - draw the backdrop
-		// otherwise, pie_ScreenFrameRenderBegin handles drawing it
-		screen_Display();
+		screen_RestartBackDrop();
 	}
 	wzShowMouse(true);
 
@@ -287,6 +287,7 @@ TITLECODE titleLoop()
 	{
 		return RetCode; // don't flip
 	}
+
 	NETflush();  // Send any pending network data.
 
 	audio_Update();
@@ -309,18 +310,8 @@ bool isLoadingScreenActive()
 	return loadingScreenSessionActive;
 }
 
-void presentLoadingScreenForCurrentFrame()
+void wrappers_recordLoadingScreen(const gfx_api::RenderPassContext&)
 {
-	if (!loadingScreenSessionActive || headlessGameMode())
-	{
-		return;
-	}
-
-	if (screen_GetBackDrop())
-	{
-		screen_Display();
-	}
-
 	renderLoadingScreenPass();
 }
 
@@ -447,10 +438,8 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 
 	if (bMultiPlayer && NetPlay.players[selectedPlayer].isSpectator)
 	{
-		// Special message for spectators to inform them that the game is fully over
-		addConsoleMessage(_("GAME OVER"), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-		addConsoleMessage(_("The battle is over - you can leave the room."), CENTRE_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
-		// TODO: Display this in a form with a "Quit to Main Menu" button?, or adapt intAddMissionResult to have a separate display for spectators?
+		// Special screen for spectators to inform them that the game is fully over
+		showSpectatorGameOverScreen();
 	}
 	else
 	{

@@ -55,14 +55,6 @@ void submitResourceLoadingTask(ResourceLoadingTaskFactory taskFactory,
 	controller.request(taskFactory(controller), policy);
 }
 
-void presentResourceLoadingScreenIfNeeded()
-{
-	if (ResourceLoadingController::instance().loadingScreenHandledByController())
-	{
-		presentLoadingScreenForCurrentFrame();
-	}
-}
-
 void pumpResourceLoadingHousekeeping(const ResourceLoadingController::FramePolicy& policy)
 {
 	wzPumpEventsWhileLoading();
@@ -80,7 +72,6 @@ void pumpResourceLoadingHousekeeping(const ResourceLoadingController::FramePolic
 	}
 	lastPresentTime = now;
 
-	presentLoadingScreenForCurrentFrame();
 	pie_ScreenFrameRenderEnd();
 	pie_ScreenFrameRenderBegin();
 }
@@ -94,6 +85,5 @@ bool tickResourceLoadingFrame()
 	}
 	const auto loadingFrameMode = loadingController.currentFrameProcessingMode();
 	loadingController.step();
-	presentResourceLoadingScreenIfNeeded();
 	return loadingFrameMode == ResourceLoadingController::FrameProcessingMode::ConsumeFrame;
 }

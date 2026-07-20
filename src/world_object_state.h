@@ -26,6 +26,8 @@
 
 #include "object_lists_types.h"
 
+#include <vector>
+
 /// <summary>
 /// A simple wrapper around various object lists (per-world).
 /// </summary>
@@ -38,4 +40,11 @@ struct WorldObjectState
 	PerPlayerExtractorLists extractors;
 	GlobalSensorList sensors; ///< List of sensors in the game.
 	GlobalOilList oils;
+
+	/// Objects killed in this world but whose tile visibility has not yet been removed.
+	/// Drained once per tick by flushPendingVisRemoval() against this world's map, so that
+	/// visibility is always removed against the correct map (even after world swaps). Lives
+	/// here (rather than alongside the global destroyed-object list) so it travels with the
+	/// world's map.
+	std::vector<BASE_OBJECT*> pendingVisRemoval;
 };

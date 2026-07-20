@@ -189,8 +189,8 @@ void clearMissionWidgets();
 /** Resets if return to game after an ESC. */
 void resetMissionWidgets();
 
-bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop);
-
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle = nullptr);
+void intMissionResultsUpdateButtons();
 
 /** This is called via a script function to place the Limbo droids once the mission has started. */
 void placeLimboDroids();
@@ -208,5 +208,12 @@ void setMissionCheatTime(bool bCheating);
 #define		MISSIONRES_TITLE_Y		20
 #define		MISSIONRES_TITLE_W		600
 #define		MISSIONRES_TITLE_H		40
+
+// pos & size of the multiplayer "Player Stats" graph box (between the title and the buttons form)
+#define		MISSIONRES_TABS_H		20
+#define		MISSIONRES_STATS_X		20
+#define		MISSIONRES_STATS_Y		64
+#define		MISSIONRES_STATS_W		600
+#define		MISSIONRES_STATS_H		300
 
 #endif // __INCLUDED_SRC_MISSION_H__

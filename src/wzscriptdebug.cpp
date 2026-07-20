@@ -2387,12 +2387,14 @@ public:
 		auto triggerLabel = createColHeaderLabel("Trigger");
 		auto ownerLabel = createColHeaderLabel("Owner");
 		auto subscriberLabel = createColHeaderLabel("Subscriber");
+		auto scopeLabel = createColHeaderLabel("Scope");
 		std::vector<TableColumn> columns {
 			{labelLabel, TableColumn::ResizeBehavior::RESIZABLE},
 			{typeLabel, TableColumn::ResizeBehavior::RESIZABLE},
 			{triggerLabel, TableColumn::ResizeBehavior::RESIZABLE},
 			{ownerLabel, TableColumn::ResizeBehavior::RESIZABLE},
-			{subscriberLabel, TableColumn::ResizeBehavior::RESIZABLE}
+			{subscriberLabel, TableColumn::ResizeBehavior::RESIZABLE},
+			{scopeLabel, TableColumn::ResizeBehavior::RESIZABLE}
 		};
 		std::vector<size_t> minimumColumnWidths;
 		for (auto& column : columns)
@@ -2511,11 +2513,11 @@ private:
 	}
 	RowDataModel fillLabelsModel(const std::vector<scripting_engine::LabelInfo>& labels)
 	{
-		RowDataModel result(5);
+		RowDataModel result(6);
 		std::weak_ptr<WzScriptLabelsPanel> psWeakParent = std::dynamic_pointer_cast<WzScriptLabelsPanel>(shared_from_this());
 		for (const auto &label : labels)
 		{
-			std::vector<WzString> columnTexts = {label.label, label.type, label.trigger, label.owner, label.subscriber};
+			std::vector<WzString> columnTexts = {label.label, label.type, label.trigger, label.owner, label.subscriber, label.scope};
 			auto row = result.newRow(columnTexts, SCRIPTDEBUG_ROW_HEIGHT);
 			std::string labelStringCopy = label.label.toStdString();
 			row->addOnClickHandler([labelStringCopy, psWeakParent](W_BUTTON& button) {

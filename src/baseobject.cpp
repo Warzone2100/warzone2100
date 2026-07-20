@@ -133,7 +133,14 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 BASE_OBJECT::~BASE_OBJECT()
 {
-	visRemoveVisibility(this, gameWorld.map);
+	// Tile visibility must already have been removed (against the object's own world map) by
+	// the time we get here.
+	//
+	// See flushPendingVisRemoval(), the killXXX + objmemUpdate path, and the freeAllXXX teardown path.
+	//
+	// The destructor cannot do it itself because it has no reliable way to know which world's map this
+	// object belonged to.
+	ASSERT(watchedTiles.empty(), "watchedTiles not removed before destruction (player %d)", (int)player);
 }
 
 

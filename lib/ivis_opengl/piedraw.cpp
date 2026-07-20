@@ -26,6 +26,7 @@
 
 #include "lib/ivis_opengl/piedraw.h"
 #include "lib/framework/frame.h"
+#include "lib/framework/hash_combine.h"
 #include "lib/framework/pool_allocator.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
@@ -333,19 +334,6 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 	polyCount += shape->polys.size();
 	gfx_api::Draw3DShapeOpaque::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().unbind_index_buffer(*shape->buffers[VBO_INDEX]);
-}
-
-inline void hash_combine(std::size_t& seed) { }
-
-template <typename T, typename... Rest>
-inline void hash_combine(std::size_t& seed, const T& v, Rest... rest) {
-	std::hash<T> hasher;
-#if SIZE_MAX >= UINT64_MAX
-	seed ^= hasher(v) + 0x9e3779b97f4a7c15L + (seed<<6) + (seed>>2);
-#else
-	seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-#endif
-	hash_combine(seed, rest...);
 }
 
 struct templatedState
@@ -1584,7 +1572,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 		std::make_tuple(shape->buffers[VBO_TEXCOORD], 0),
 		std::make_tuple(pTangentBuffer, 0),
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
-	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getDepthTexture(), lightmapTexture);
+	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getPipelineSurface(gfx_api::PipelineSurfaceId::ShadowMap), lightmapTexture);
 
 	Draw3DInstancedPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);

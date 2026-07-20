@@ -12,11 +12,37 @@ file(GLOB HEADERS
 	"culling.h"
 	"gfx_api.h"
 	"gfx_api_formats_def.h"
+	"gfx_api_frame_resource_cache.h"
 	"gfx_api_gl.h"
 	"gfx_api_image_basis_priv.h"
 	"gfx_api_image_compress_priv.h"
 	"gfx_api_null.h"
 	"gfx_api_vk.h"
+	"render_graph/attachment.h"
+	"render_graph/blueprint.h"
+	"render_graph/blueprint_materializer.h"
+	"render_graph/cached_render_graph.h"
+	"render_graph/compile.h"
+	"render_graph/layout_subresource.h"
+	"render_graph/layout_timeline.h"
+	"render_graph/read_scope.h"
+	"render_graph/pass_resolve.h"
+	"render_graph/pipeline_surfaces.h"
+	"render_graph/render_pass.h"
+	"render_graph/render_pass_id.h"
+	"render_graph/topology.h"
+	"vk/frame_layout_tracker.h"
+	"vk/layout_key_builder.h"
+	"vk/layout_sync.h"
+	"vk/layout_translation.h"
+	"vk/pass_layout_key.h"
+	"vk/pre_pass_barrier_emitter.h"
+	"vk/render_pass_layout_cache.h"
+	"vk/screen_frame_coordinator.h"
+	"vk/swapchain_presentation_state.h"
+	"vk/transfer_recorder.h"
+	"vk/transfer_recording_context.h"
+	"vk/warm_entry.h"
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
@@ -48,6 +74,17 @@ file(GLOB SRC
 	"gfx_api_image_basis_priv.cpp"
 	"gfx_api_image_compress_priv.cpp"
 	"gfx_api_null.cpp"
+	"render_graph/blueprint.cpp"
+	"render_graph/blueprint_materializer.cpp"
+	"render_graph/cached_render_graph.cpp"
+	"render_graph/compile.cpp"
+	"render_graph/layout_subresource.cpp"
+	"render_graph/layout_timeline.cpp"
+	"render_graph/read_scope.cpp"
+	"render_graph/frame_blueprint.cpp"
+	"render_graph/pass_resolve.cpp"
+	"render_graph/pipeline_surfaces.cpp"
+	"render_graph/topology.cpp"
 	"gfx_api_vk.cpp"
 	"imdload.cpp"
 	"jpeg_encoder.cpp"
@@ -88,6 +125,7 @@ include(CheckCXXCompilerFlag)
 
 add_library(ivis-opengl STATIC ${HEADERS} ${SRC})
 set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
+target_include_directories(ivis-opengl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 include(WZTargetConfiguration)
 WZ_TARGET_CONFIGURATION(ivis-opengl)
 
@@ -153,6 +191,17 @@ if(WZ_ENABLE_BACKEND_VULKAN)
 		target_sources(ivis-opengl PRIVATE "3rdparty/vkh_info.cpp" "3rdparty/vkh_info.hpp")
 
 		target_sources(ivis-opengl PRIVATE "3rdparty/vk_mem_alloc.cpp" "3rdparty/vk_mem_alloc.h")
+		target_sources(ivis-opengl PRIVATE
+			"vk/frame_layout_tracker.cpp"
+			"vk/layout_key_builder.cpp"
+			"vk/layout_sync.cpp"
+			"vk/layout_translation.cpp"
+			"vk/pass_layout_key.cpp"
+			"vk/pre_pass_barrier_emitter.cpp"
+			"vk/render_pass_layout_cache.cpp"
+			"vk/screen_frame_coordinator.cpp"
+			"vk/swapchain_presentation_state.cpp"
+			"vk/transfer_recorder.cpp")
 		CHECK_CXX_COMPILER_FLAG(-Wno-pedantic COMPILER_SUPPORTS_WNO_PEDANTIC)
 		if(COMPILER_SUPPORTS_WNO_PEDANTIC)
 			set_source_files_properties("3rdparty/vk_mem_alloc.cpp" PROPERTIES COMPILE_FLAGS -Wno-pedantic)
@@ -232,6 +281,20 @@ if (CMAKE_CXX_STANDARD GREATER_EQUAL 20)
 		"3rdparty/vkh_renderpasscompat.cpp"
 		"3rdparty/vkh_info.cpp"
 		"gfx_api_vk.cpp"
-		"gfx_api.cpp")
+		"gfx_api.cpp"
+		"render_graph/compile.cpp"
+		"render_graph/layout_subresource.cpp"
+		"render_graph/layout_timeline.cpp"
+		"render_graph/read_scope.cpp"
+		"vk/frame_layout_tracker.cpp"
+		"vk/layout_key_builder.cpp"
+		"vk/layout_sync.cpp"
+		"vk/layout_translation.cpp"
+		"vk/pass_layout_key.cpp"
+		"vk/pre_pass_barrier_emitter.cpp"
+		"vk/render_pass_layout_cache.cpp"
+		"vk/screen_frame_coordinator.cpp"
+		"vk/swapchain_presentation_state.cpp"
+		"vk/transfer_recorder.cpp")
 	set_source_files_properties(${cpp17_source_files} PROPERTIES COMPILE_FLAGS "-std=c++17")
 endif()

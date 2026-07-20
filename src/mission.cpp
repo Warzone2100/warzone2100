@@ -42,6 +42,8 @@
 #include "lib/sound/cdaudio.h"
 #include "lib/widget/label.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/paneltabbutton.h"
+#include "lib/netplay/netplay.h"
 
 #include "game.h"
 #include "challenge.h"
@@ -62,6 +64,9 @@
 #include "group.h"
 #include "frontend.h"		// for displaytextoption.
 #include "intdisplay.h"
+#include "multimenu.h"		// for WzMultiMenuTabs.
+#include "playerstatsgraph.h"
+#include "researchlogviewer.h"
 #include "main.h"
 #include "display.h"
 #include "loadsave.h"
@@ -95,6 +100,9 @@
 #define		IDMISSIONRES_CONTINUE		11008
 #define		IDMISSIONRES_BACKFORM		11013
 #define		IDMISSIONRES_TITLE		11014
+#define		IDMISSIONRES_TABS		11015
+#define		IDMISSIONRES_STATSFORM		11016
+#define		IDMISSIONRES_RESEARCHFORM	11017
 
 /* Mission timer label position */
 #define		TIMER_LABELX			15
@@ -341,6 +349,9 @@ bool missionShutDown()
 		releaseAllProxDisp();
 		gwShutDown(gameWorld.map);
 
+		// freeAll*() above flushed gameWorld's pending visibility removals
+		// nothing should be left to strand when this world is overwritten by the swap
+		ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
 		gameWorld = std::move(mission.gameWorld);
 		mission.gameWorld = {};
 	}
@@ -752,6 +763,11 @@ static void saveMissionData()
 	resetHomeStructureObjects(); //get rid of soon-to-be illegal references of droids in repair facilities and rearming pads.
 
 	//save the mission data
+	// NOTE:
+	// - gameWorld's queue is preserved by the move into mission.gameWorld, but the (stale)
+	//   mission.gameWorld being overwritten must have its own queue flushed first so nothing is
+	//   stranded
+	flushPendingVisRemoval(mission.gameWorld);
 	mission.gameWorld = std::move(gameWorld);
 	gameWorld = {};
 
@@ -802,6 +818,9 @@ void restoreMissionData()
 	}
 	//restore the game pointers.
 	//swap mission data over
+	// freeAllXXX above flushed gameWorld's pending visibility removals; nothing should be
+	// left to strand when this world is overwritten by the swap.
+	ASSERT(gameWorld.objects.pendingVisRemoval.empty(), "pending visibility removals lost on world swap");
 	gameWorld = std::move(mission.gameWorld);
 	mission.gameWorld = {};
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
@@ -2157,13 +2176,23 @@ void intRemoveTransporterTimer()
 
 
 
+// Inner padding of the research log viewer within its form
+constexpr int MISSIONRES_RESEARCH_PADDING = 10;
+
+// The currently-selected mission results screen tab (0 = "Summary", 1 = "Player Stats", 2 = "Research")
+// (any tab but "Summary" suppresses the score data painted onto the backdrop)
+static int missionResSelectedTab = 0;
+
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using intDisplayMissionBackDrop must have its pUserData initialized to a (ScoreDataToScreenCache*)
 	assert(psWidget->pUserData != nullptr);
 	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
 
-	scoreDataToScreen(psWidget, cache);
+	if (missionResSelectedTab == 0)
+	{
+		scoreDataToScreen(psWidget, cache);
+	}
 }
 
 static void missionResetInGameState()
@@ -2190,10 +2219,89 @@ static void intDestroyMissionResultWidgets()
 {
 	widgDelete(psWScreen, IDMISSIONRES_TITLE);
 	widgDelete(psWScreen, IDMISSIONRES_FORM);
+	widgDelete(psWScreen, IDMISSIONRES_TABS);
+	widgDelete(psWScreen, IDMISSIONRES_STATSFORM);
+	widgDelete(psWScreen, IDMISSIONRES_RESEARCHFORM);
 	widgDelete(psWScreen, IDMISSIONRES_BACKFORM);
+	missionResSelectedTab = 0;
 }
 
-static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
+// Add the "Summary" / "Player Stats" / "Research" tabs and the (initially hidden) stats / research forms
+static void intAddMissionResultStats(W_FORM *missionResBackForm)
+{
+	// player stats form, shown when the "Player Stats" tab is selected
+	auto statsForm = std::make_shared<IntFormAnimated>(false);
+	missionResBackForm->attach(statsForm);
+	statsForm->id = IDMISSIONRES_STATSFORM;
+	statsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_STATS_X, MISSIONRES_STATS_Y, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+	}));
+	statsForm->hide();
+
+	auto statsGraphForm = PlayerStatsGraphForm::make();
+	statsForm->attach(statsGraphForm);
+	statsGraphForm->setGeometry(0, 0, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+
+	// research log form, shown when the "Research" tab is selected
+	auto researchForm = std::make_shared<IntFormAnimated>(false);
+	missionResBackForm->attach(researchForm);
+	researchForm->id = IDMISSIONRES_RESEARCHFORM;
+	researchForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(MISSIONRES_STATS_X, MISSIONRES_STATS_Y, MISSIONRES_STATS_W, MISSIONRES_STATS_H);
+	}));
+	researchForm->hide();
+
+	auto researchLogViewer = GameResearchLogViewerWidget::make();
+	researchForm->attach(researchLogViewer);
+	researchLogViewer->setGeometry(MISSIONRES_RESEARCH_PADDING, MISSIONRES_RESEARCH_PADDING,
+	                               MISSIONRES_STATS_W - MISSIONRES_RESEARCH_PADDING * 2, MISSIONRES_STATS_H - MISSIONRES_RESEARCH_PADDING * 2);
+
+	// tabs, above the title form
+	auto tabs = std::make_shared<WzMultiMenuTabs>(0);
+	missionResBackForm->attach(tabs);
+	tabs->id = IDMISSIONRES_TABS;
+	tabs->setButtonAlignment(MultibuttonWidget::ButtonAlignment::CENTER_ALIGN);
+	tabs->addButton(0, WzPanelTabButton::make(_("Summary")));
+	tabs->addButton(1, WzPanelTabButton::make(_("Player Stats")));
+	tabs->addButton(2, WzPanelTabButton::make(_("Research")));
+	tabs->choose(0);
+	tabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue) {
+		// Switch actively-displayed tab
+		widgScheduleTask([newValue]() {
+			missionResSelectedTab = newValue;
+			WIDGET *statsForm = widgGetFromID(psWScreen, IDMISSIONRES_STATSFORM);
+			ASSERT_OR_RETURN(, statsForm != nullptr, "No stats form?");
+			statsForm->show(newValue == 1);
+			WIDGET *researchForm = widgGetFromID(psWScreen, IDMISSIONRES_RESEARCHFORM);
+			ASSERT_OR_RETURN(, researchForm != nullptr, "No research form?");
+			researchForm->show(newValue == 2);
+		});
+	});
+	tabs->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto psParent = psWidget->parent();
+		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+		int tabsWidth = psWidget->idealWidth();
+		psWidget->setGeometry((psParent->width() - tabsWidth) / 2, 0, tabsWidth, MISSIONRES_TABS_H);
+	}));
+}
+
+void intMissionResultsUpdateButtons()
+{
+	if (!MissionResUp)
+	{
+		return;
+	}
+
+	const bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+
+	if (multiplayerHostQuit)
+	{
+		// the game can't continue without the host
+		widgDeleteLater(psWScreen, IDMISSIONRES_CONTINUE);
+	}
+}
+
+static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	// ensure the guide screen is closed
 	closeGuideScreen();
@@ -2250,6 +2358,12 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 	}));
 
+	// for non-campaign games, add the "Summary" / "Player Stats" / "Research" tabs and the stats graph / research log view
+	if (bMultiPlayer)
+	{
+		intAddMissionResultStats(missionResBackForm);
+	}
+
 	// description of success/fail
 	W_LABINIT sLabInit;
 	sLabInit.formID = IDMISSIONRES_TITLE;
@@ -2259,7 +2373,11 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sLabInit.y = 12;
 	sLabInit.width = MISSIONRES_TITLE_W;
 	sLabInit.height = 16;
-	if (result)
+	if (customTitle)
+	{
+		sLabInit.pText = WzString::fromUtf8(customTitle);
+	}
+	else if (result)
 	{
 
 		//don't bother adding the text if haven't played the audio
@@ -2291,11 +2409,14 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
 		psWidget->pUserData = nullptr;
 	};
+	// the game can't continue without the host
+	bool multiplayerHostQuit = bMultiPlayer && NetPlay.bComms && !NetPlay.isHost && !NetPlay.isHostAlive;
+
 	//if won
 	if (result || bMultiPlayer)
 	{
 		// Finished the mission, so display "Continue Game"
-		if (!testPlayerHasWon() || bMultiPlayer)
+		if ((!testPlayerHasWon() || bMultiPlayer) && !multiplayerHostQuit)
 		{
 			sButInit.x			= MISSION_1_X;
 			sButInit.y			= MISSION_1_Y;
@@ -2314,25 +2435,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 			widgAddButton(psWScreen, &sButInit);
 		}
 
-		// FIXME, We got serious issues with savegames at the *END* of some missions, and while they
-		// will load, they don't have the correct state information or other settings.
-		// See transition from CAM2->CAM3 for a example.
-		/* Only add save option if in the game for real, ie, not fastplay.
-		* And the player hasn't just completed the whole game
-		* Don't add save option if just lost and in debug mode.
-		if (!bMultiPlayer && !testPlayerHasWon() && !(testPlayerHasLost() && getDebugMappingStatus()))
-		{
-			//save
-			sButInit.id			= IDMISSIONRES_SAVE;
-			sButInit.x			= MISSION_1_X;
-			sButInit.y			= MISSION_1_Y;
-			sButInit.pText		= _("Save Game");//"Save Game";
-			widgAddButton(psWScreen, &sButInit);
-
-			// automatically save the game to be able to restart a mission
-			saveGame((char *)"savegames/Autosave.gam", GTYPE_SAVE_START);
-		}
-		*/
+		// NOTE: There used to be a "Save Game" option here, but it was long disabled because of
+		// serious issues with savegames at the *END* of some missions (example: the CAM2->CAM3
+		// transition) that loaded but had incorrect state. It used the now-deprecated
+		// GTYPE_SAVE_START path and has been removed.
 	}
 	else
 	{
@@ -2363,10 +2469,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 }
 
 
-bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
+bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop, const char *customTitle)
 {
 	ActivityManager::instance().completedMission(result, collectEndGameStatsData(), Cheated);
-	return _intAddMissionResult(result, bPlaySuccess, showBackDrop);
+	return _intAddMissionResult(result, bPlaySuccess, showBackDrop, customTitle);
 }
 
 void intRemoveMissionResultNoAnim()
@@ -2404,7 +2510,10 @@ void intRunMissionResult()
 				{
 					char msg[256] = {'\0'};
 
-					saveGame(sRequestResult, GTYPE_SAVE_START);
+					// NOTE: this mission-results save path is currently unreachable (FUTURE TODO: remove)
+					// (the "Save Game" button is no longer added)
+					// GTYPE_SAVE_START is deprecated, so use MIDMISSION
+					saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION);
 					sstrcpy(msg, _("GAME SAVED :"));
 					sstrcat(msg, savegameWithoutExtension(sRequestResult));
 					addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
