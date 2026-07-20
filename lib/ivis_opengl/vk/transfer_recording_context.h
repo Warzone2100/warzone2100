@@ -32,7 +32,6 @@ namespace gfx_api::vk
 struct TransferRecordingContext
 {
 	const WZ_vk::DispatchLoaderDynamic& vkDynLoader;
-	bool screenFrameOpen = false;
 };
 
 } // namespace gfx_api::vk

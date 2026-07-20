@@ -40,9 +40,11 @@ namespace gfx_api::vk
 /// <summary>
 /// Typed wrapper around the per-frame transfer (copy) command buffer.
 ///
-/// Used by buffer/texture upload paths during the screen frame. Recording opens at
-/// `beginScreenFrame()`; `cmd()` sets `transferWorkRecorded` on the current ring slot;
-/// work is sealed and submitted in `finishScreenFrame()` via `VkRoot::sealAndSubmitTransferGraphics`.
+/// Used by buffer/texture upload paths, during the screen frame or between frames
+/// (uploads recorded after frame end ride the current ring slot's copy stream).
+/// `cmd()` opens recording if needed and sets `transferWorkRecorded` on the slot.
+/// Work is sealed and submitted by `VkRoot::sealAndSubmitTransferGraphics` at frame
+/// finish, or by `VkRoot::submitPendingTransferWork()` before buffering teardown.
 /// </summary>
 class TransferRecorder
 {
