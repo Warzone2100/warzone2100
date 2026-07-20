@@ -6427,7 +6427,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 
 	// the droid template being produced is different from the one we want to make,
 	// save new template into the old one
-	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate)
+	if (psFactory->psSubject && *psFactory->psSubject != *psTemplate && !psFactory->psSubject->next)
 	{
 		auto it = std::find_if(apsTemplateList.begin(), apsTemplateList.end(), [psFactory](const DROID_TEMPLATE *templ) {
 			return *templ == *psFactory->psSubject;
