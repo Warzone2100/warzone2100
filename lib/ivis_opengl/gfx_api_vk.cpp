@@ -3910,6 +3910,35 @@ void VkRoot::finalizeActiveRecording()
 	frameResources.uniformBufferAllocator.unmapAutomappedMemory();
 }
 
+// Texture and buffer uploads are recorded into the current ring slot's copy command
+// buffer, with pixel data in that slot's staging allocator. Both are destroyed by
+// buffering_mechanism::destroy(), and uploads are never re-recorded, so discarding
+// them leaves images permanently in VK_IMAGE_LAYOUT_UNDEFINED. Submit them first.
+// The subsequent waitForAllIdle() guarantees completion before teardown.
+void VkRoot::submitPendingTransferWork()
+{
+	if (!buffering_mechanism::isInitialized() || !graphicsQueue)
+	{
+		return;
+	}
+
+	auto& frameResources = buffering_mechanism::get_current_resources();
+	if (!frameResources.copyCmdBufferBegun)
+	{
+		return;
+	}
+
+	frameResources.sealTransferStream(vkDynLoader);
+
+	const auto cmdBuffers = std::array<vk::CommandBuffer, 1> { frameResources.copyCmdBuffer() };
+	auto submitInfo = vk::SubmitInfo()
+		.setCommandBufferCount(static_cast<uint32_t>(cmdBuffers.size()))
+		.setPCommandBuffers(cmdBuffers.data());
+	graphicsQueue.submit(submitInfo, frameResources.previousSubmission, vkDynLoader);
+	frameResources.copyCmdBufferSubmittedSincePoolReset = true;
+	frameResources.transferWorkRecorded = false;
+}
+
 void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 {
 	if (!dev)
@@ -3918,6 +3947,7 @@ void VkRoot::destroySwapchainAndSwapchainSpecificStuff(bool doDestroySwapchain)
 		return;
 	}
 
+	submitPendingTransferWork();
 	finalizeActiveRecording();
 	waitForAllIdle();
 	destroyDynamicRenderPasses();
