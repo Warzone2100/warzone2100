@@ -40,6 +40,7 @@
 #include "astar.h"
 
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "profiling.h"
 #include "game_world.h"
 
@@ -615,6 +616,45 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWO
 	}
 	return fpathRoute(mapState, &psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
 	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
+}
+
+
+/// The A* planner this file implements, behind the backend interface. The
+/// implementation stays in the free functions above and in astar.cpp, and these
+/// methods forward to it, so selecting this backend runs exactly the code that
+/// ran before there was an interface to select it through.
+class LegacyAStarBackend final : public IPathfindingBackend
+{
+public:
+	bool initialise() override { return fpathInitialise(); }
+	void shutdown() override { fpathShutdown(); }
+	void hardReset() override { fpathHardTableReset(); }
+	void updateTick(const WorldMapState&) override { fpathUpdate(); }
+
+	FPATH_RETVAL route(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
+	{
+		return fpathDroidRoute(psDroid, mapState, tX, tY, moveType);
+	}
+
+	FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
+	{
+		// The first call queues the job and the second collects it, since a
+		// queued job is resolved by the time the droid is polled again.
+		FPATH_RETVAL retval = route(psDroid, mapState, tX, tY, moveType);
+		if (retval == FPR_WAIT)
+		{
+			retval = route(psDroid, mapState, tX, tY, moveType);
+		}
+		return retval;
+	}
+
+	void removeDroidData(int droidID) override { fpathRemoveDroidData(droidID); }
+};
+
+IPathfindingBackend& fpathActiveBackend()
+{
+	static LegacyAStarBackend backend;
+	return backend;
 }
 
 // Run only from path thread
