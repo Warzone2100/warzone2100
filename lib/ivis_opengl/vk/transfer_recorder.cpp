@@ -43,9 +43,6 @@ bool TransferRecorder::hasWork() const
 
 void TransferRecorder::markWork()
 {
-#if defined(DEBUG)
-	ASSERT(_context.screenFrameOpen, "Transfer recording outside screen frame");
-#endif
 	_frame.ensureTransferRecordingBegun(_context.vkDynLoader);
 	_frame.transferWorkRecorded = true;
 }

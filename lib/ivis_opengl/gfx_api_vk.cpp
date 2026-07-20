@@ -1099,6 +1099,7 @@ void buffering_mechanism::swap(vk::Device dev, const WZ_vk::DispatchLoaderDynami
 	dev.resetCommandPool(buffering_mechanism::get_current_resources().pool, vk::CommandPoolResetFlagBits(), vkDynLoader);
 	buffering_mechanism::get_current_resources().drawCmdBufferBegun = false;
 	buffering_mechanism::get_current_resources().copyCmdBufferBegun = false;
+	buffering_mechanism::get_current_resources().transferWorkRecorded = false;
 	buffering_mechanism::get_current_resources().copyCmdBufferSubmittedSincePoolReset = false;
 	buffering_mechanism::get_current_resources().swapchainImageAcquired = false;
 
@@ -5861,7 +5862,6 @@ void VkRoot::rebindOpenScreenFrameResources()
 	ASSERT(buffering_mechanism::isInitialized(), "rebindOpenScreenFrameResources: buffering not initialized");
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
-	frameResources.transferWorkRecorded = false;
 	frameHasDrawCommands = false;
 	ASSERT(!hasActivePass, "Active pass at open-screen-frame rebind");
 
@@ -6325,7 +6325,7 @@ gfx_api::vk::TransferRecorder VkRoot::transferRecorder() const
 {
 	return gfx_api::vk::TransferRecorder(
 		const_cast<perFrameResources_t&>(buffering_mechanism::get_current_resources()),
-		gfx_api::vk::TransferRecordingContext{ vkDynLoader, _screenFrameOpen });
+		gfx_api::vk::TransferRecordingContext{ vkDynLoader });
 }
 
 // MARK: perFrameResources_t screen-frame commit
@@ -6408,6 +6408,7 @@ void perFrameResources_t::submitCommandBuffers(const FrameQueueSubmitParams& sub
 		submit.graphicsQueue.submit(submitInfo, previousSubmission, submit.vkDynLoader);
 		state.submittedQueueWork = true;
 		copyCmdBufferSubmittedSincePoolReset = true;
+		transferWorkRecorded = false;
 		if (state.submitDrawBuffer)
 		{
 			swapchainImageAcquired = false;
@@ -6515,7 +6516,6 @@ void VkRoot::beginScreenFrame()
 	_screenFrameOpen = true;
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
-	frameResources.transferWorkRecorded = false;
 	frameHasDrawCommands = false;
 	ASSERT(!hasActivePass, "Active pass at screen frame open");
 

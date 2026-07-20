@@ -535,7 +535,6 @@ void ScreenFrameCoordinator::advanceRingBufferAfterSubmit(ScreenFramePipelineSta
 void ScreenFrameCoordinator::completeScreenFrameFinishTail()
 {
 	_root.frameNum = std::max<size_t>(_root.frameNum + 1, 1);
-	buffering_mechanism::get_current_resources().transferWorkRecorded = false;
 	_root.purgeFrameResources();
 	_root._screenFrameOpen = false;
 }
