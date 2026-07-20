@@ -961,6 +961,8 @@ private:
 
 	void handleSurfaceLost(); // Throws on failure
 	void waitForAllIdle(); // Throws on failure
+	/// Submit recorded-but-unsubmitted copy work so pending uploads survive buffering teardown.
+	void submitPendingTransferWork(); // Throws on failure
 	/// Close any in-progress command buffer / render pass recording before GPU teardown.
 	/// Does not clear _screenFrameOpen (owned by beginScreenFrame / finish / shutdown).
 	void finalizeActiveRecording();
