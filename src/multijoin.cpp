@@ -206,19 +206,24 @@ static int64_t shareOf(int64_t total, size_t numShares, size_t idx)
 	ASSERT_OR_RETURN(0, total >= 0, "Tried to share a negative total of %" PRId64 "", total);
 
 	const int64_t n = static_cast<int64_t>(numShares);
-	const int64_t leftover = total % n;
-	const bool receivesRemainder = static_cast<int64_t>(idx) < leftover;
+	const int64_t remainder = total % n;
+	const bool receiveRemainder = static_cast<int64_t>(idx) < remainder;
 
-	return total / n + (receivesRemainder ? 1 : 0);
+	return total / n + (receiveRemainder ? 1 : 0);
 }
 
 // Should teammates inherit a structure (and its limit) when its owner leaves?
 static bool teamInherits(STRUCTURE_TYPE type, bool sharedResearch)
 {
-	if (!sharedResearch)
+	if (!sharedResearch && type == REF_RESEARCH)
 	{
-		// don't inherit research labs
-		return type != REF_RESEARCH;
+		return false;
+	}
+	if (type == REF_HQ)
+	{
+		// Inheriting HQ may cause potentially subtle issues due to the implicit
+		// assumptions all over that there's only 1 HQ per player on a map
+		return false;
 	}
 	return true;
 }
@@ -250,8 +255,8 @@ static void distributeStructuresAndLimits(UDWORD player, const std::vector<uint3
 	{
 		auto& upgrade = asStructureStats[stat].upgrade;
 
-		// The allowance follows the buildings, so what the team does not inherit it cannot build
-		// replacements for either
+		// If the structure is not inheritable, do not gift it and
+		// do not increase its limit for teammates
 		if (!teamInherits(asStructureStats[stat].type, sharedResearch))
 		{
 			continue;
