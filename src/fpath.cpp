@@ -573,56 +573,12 @@ queuePathfinding:
 }
 
 
-// Find a route for an DROID to a location in world coordinates
-FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
-{
-	bool acceptNearest;
-	PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
-
-	// override for AI to blast our way through stuff
-	if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
-	{
-		moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
-	}
-
-	ASSERT_OR_RETURN(FPR_FAILED, psPropStats != nullptr, "invalid propulsion stats pointer");
-	ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
-
-	// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
-	Position startPos = psDroid->pos;
-	Position endPos = Position(tX, tY, 0);
-	StructureBounds dstStructure = getStructureBounds(worldTile(mapState, endPos.xy())->psObject);
-	const auto droidPropulsionType = psDroid->getPropulsionStats()->propulsionType;
-	startPos = findNonblockingPosition(mapState, startPos, droidPropulsionType, psDroid->player, moveType);
-	if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
-	{
-		endPos   = findNonblockingPosition(mapState, endPos, droidPropulsionType, psDroid->player, moveType);
-	}
-	objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
-	switch (psDroid->order.type)
-	{
-	case DORDER_BUILD:
-	case DORDER_LINEBUILD:                       // build a number of structures in a row (walls + bridges)
-		dstStructure = getStructureBounds(psDroid->order.psStats, psDroid->order.pos, psDroid->order.direction);  // Just need to get close enough to build (can be diagonally), do not need to reach the destination tile.
-		// fallthrough
-	case DORDER_HELPBUILD:                       // help to build a structure
-	case DORDER_DEMOLISH:                        // demolish a structure
-	case DORDER_REPAIR:
-		acceptNearest = false;
-		break;
-	default:
-		acceptNearest = true;
-		break;
-	}
-	return fpathRoute(mapState, &psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
-	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
-}
-
-
-/// The A* planner this file implements, behind the backend interface. The
-/// implementation stays in the free functions above and in astar.cpp, and these
-/// methods forward to it, so selecting this backend runs exactly the code that
-/// ran before there was an interface to select it through.
+/// The A* planner this file implements, behind the backend interface.
+/// The search, the worker pool, the job queue and the context cache stay
+/// in the free functions above and in astar.cpp. This class owns the
+/// request-shaping that fpathDroidRoute used to do inline, so selecting
+/// this backend runs
+/// exactly the code that ran before there was an interface to select it through.
 class LegacyAStarBackend final : public IPathfindingBackend
 {
 public:
@@ -633,7 +589,46 @@ public:
 
 	FPATH_RETVAL route(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
 	{
-		return fpathDroidRoute(psDroid, mapState, tX, tY, moveType);
+		bool acceptNearest;
+		PROPULSION_STATS *psPropStats = psDroid->getPropulsionStats();
+
+		// override for AI to blast our way through stuff
+		if (!isHumanPlayer(psDroid->player) && moveType == FMT_MOVE)
+		{
+			moveType = (psDroid->asWeaps[0].nStat == 0) ? FMT_MOVE : FMT_ATTACK;
+		}
+
+		ASSERT_OR_RETURN(FPR_FAILED, psPropStats != nullptr, "invalid propulsion stats pointer");
+		ASSERT_OR_RETURN(FPR_FAILED, psDroid->type == OBJ_DROID, "We got passed an object that isn't a DROID!");
+
+		// Check whether the start and end points of the route are blocking tiles and find an alternative if they are.
+		Position startPos = psDroid->pos;
+		Position endPos = Position(tX, tY, 0);
+		StructureBounds dstStructure = getStructureBounds(worldTile(mapState, endPos.xy())->psObject);
+		const auto droidPropulsionType = psDroid->getPropulsionStats()->propulsionType;
+		startPos = findNonblockingPosition(mapState, startPos, droidPropulsionType, psDroid->player, moveType);
+		if (!dstStructure.valid())  // If there's a structure over the destination, ignore it, otherwise pathfind from somewhere around the obstruction.
+		{
+			endPos   = findNonblockingPosition(mapState, endPos, droidPropulsionType, psDroid->player, moveType);
+		}
+		objTrace(psDroid->id, "Want to go to (%d, %d) -> (%d, %d), going (%d, %d) -> (%d, %d)", map_coord(psDroid->pos.x), map_coord(psDroid->pos.y), map_coord(tX), map_coord(tY), map_coord(startPos.x), map_coord(startPos.y), map_coord(endPos.x), map_coord(endPos.y));
+		switch (psDroid->order.type)
+		{
+		case DORDER_BUILD:
+		case DORDER_LINEBUILD:                       // build a number of structures in a row (walls + bridges)
+			dstStructure = getStructureBounds(psDroid->order.psStats, psDroid->order.pos, psDroid->order.direction);  // Just need to get close enough to build (can be diagonally), do not need to reach the destination tile.
+			// fallthrough
+		case DORDER_HELPBUILD:                       // help to build a structure
+		case DORDER_DEMOLISH:                        // demolish a structure
+		case DORDER_REPAIR:
+			acceptNearest = false;
+			break;
+		default:
+			acceptNearest = true;
+			break;
+		}
+		return fpathRoute(mapState, &psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
+		                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
 	}
 
 	FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
@@ -655,6 +650,12 @@ IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend backend;
 	return backend;
+}
+
+// Find a route for an DROID to a location in world coordinates
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
+{
+	return fpathActiveBackend().route(psDroid, mapState, tX, tY, moveType);
 }
 
 // Run only from path thread
