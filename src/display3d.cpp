@@ -3750,7 +3750,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &perspectiveViewMatrix)
 	}
 
 	/* Deselect all the droids if we've released the drag box */
-	if (dragBox3D.status == DRAG_RELEASED)
+	if (dragBox3D.status == DRAG_RELEASED && wallDrag.status == DRAG_INACTIVE)
 	{
 		if (inQuad(&center, &dragQuad) && psDroid->player == selectedPlayer)
 		{
