@@ -29,6 +29,7 @@ bool initMiscImds();
 iIMDBaseShape *getImdFromIndex(UDWORD index);
 const iIMDShape *getDisplayImdFromIndex(UDWORD index);
 const iIMDBaseShape *getRandomDebrisImd();
+const iIMDBaseShape *getAssemblyPointIMD(unsigned flagType, unsigned factoryInc);
 
 #define	MAX_DEBRIS		5
 #define	MAX_WRECKAGE	5
@@ -50,7 +51,6 @@ extern iIMDShape	*droidDamageImd;
 extern iIMDShape	*smallSteamImd;
 extern iIMDShape	*plasmaImd;
 #define MAX_FACTORY_FLAG_IMDS 32
-extern iIMDBaseShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
 extern iIMDShape	*blipImd;
 extern iIMDShape	*shadowImd;
 extern iIMDShape	*transporterShadowImd;

@@ -145,7 +145,18 @@ const iIMDBaseShape	*getRandomDebrisImd()
 }
 // -------------------------------------------------------------------------------
 
-iIMDBaseShape	*pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
+static iIMDBaseShape *pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
+static iIMDBaseShape *pAssemblyPointBlankIMDs[NUM_FLAG_TYPES];
+
+const iIMDBaseShape *getAssemblyPointIMD(unsigned flagType, unsigned factoryInc)
+{
+	if (flagType >= NUM_FLAG_TYPES)
+	{
+		ASSERT(false, "Invalid flag type %u", flagType);
+		flagType = FACTORY_FLAG; // Fallback; Prevent consumers from dereferencing a nullptr
+	}
+	return factoryInc < MAX_FACTORY_FLAG_IMDS ? pAssemblyPointIMDs[flagType][factoryInc] : pAssemblyPointBlankIMDs[flagType];
+}
 
 static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
 {
