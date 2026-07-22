@@ -158,17 +158,22 @@ const iIMDBaseShape *getAssemblyPointIMD(unsigned flagType, unsigned factoryInc)
 	return factoryInc < MAX_FACTORY_FLAG_IMDS ? pAssemblyPointIMDs[flagType][factoryInc] : pAssemblyPointBlankIMDs[flagType];
 }
 
-static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
+static bool loadAssemblyPointIMD(iIMDBaseShape **ppIMD, const char *pieName)
 {
-	char pieName[100];
-	snprintf(pieName, sizeof(pieName), nameFormat, n);
-	pAssemblyPointIMDs[flagType][i] = modelGet(pieName);
-	if (!pAssemblyPointIMDs[flagType][i])
+	*ppIMD = modelGet(pieName);
+	if (!*ppIMD)
 	{
 		debug(LOG_ERROR, "Can't find assembly point graphic %s for factory", pieName);
 		return false;
 	}
 	return true;
+}
+
+static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned flagType)
+{
+	char pieName[100];
+	snprintf(pieName, sizeof(pieName), nameFormat, n);
+	return loadAssemblyPointIMD(&pAssemblyPointIMDs[flagType][i], pieName);
 }
 
 bool	initMiscImds()
@@ -191,5 +196,15 @@ bool	initMiscImds()
 			return false;
 		}
 	}
+
+	/* Load unnumbered assembly points */
+	if (!loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[FACTORY_FLAG], "minumblank.pie") ||
+	    !loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[CYBORG_FLAG],  "micnumblank.pie") ||
+	    !loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[VTOL_FLAG],    "mivnumblank.pie") ||
+	    !loadAssemblyPointIMD(&pAssemblyPointBlankIMDs[REPAIR_FLAG],  "mirnum1.pie"))
+	{
+		return false;
+	}
+
 	return (true);
 }
