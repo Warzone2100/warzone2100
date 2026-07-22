@@ -71,9 +71,11 @@ public:
 	virtual FPATH_RETVAL route(DROID *psDroid, const WorldMapState& mapState,
 	                           SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType) = 0;
 
-	/// As route(), but does not return until the route is resolved. Loading uses
-	/// this, because a droid saved partway through a route needs a path before
-	/// play resumes.
+	/// As route(), but does not return until the route is resolved. Loading an
+	/// old-format save uses this, because a droid saved partway through a route
+	/// needs a path before play resumes. Drives the droid's movement status as
+	/// needed to force the resolve; on return sMove holds the path and the
+	/// caller decides the droid's final status from the returned value.
 	virtual FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState,
 	                                      SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType) = 0;
 

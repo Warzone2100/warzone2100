@@ -633,14 +633,18 @@ public:
 
 	FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType) override
 	{
-		// The first call queues the job and the second collects it, since a
-		// queued job is resolved by the time the droid is polled again.
-		FPATH_RETVAL retval = route(psDroid, mapState, tX, tY, moveType);
-		if (retval == FPR_WAIT)
-		{
-			retval = route(psDroid, mapState, tX, tY, moveType);
-		}
-		return retval;
+		// Force a synchronous resolve out of the async planner by driving both
+		// halves of its request-then-poll protocol back to back. The first call
+		// must queue rather than poll, so the droid has to be out of
+		// MOVEWAITROUTE for it (a poll with no pending result asserts). The second
+		// must poll, so it has to be in MOVEWAITROUTE. The poll blocks on
+		// the worker's future, so by the time it returns the route is resolved
+		// and it has copied the path into sMove and set MOVENAVIGATE. The caller
+		// owns what happens to the droid from there.
+		psDroid->sMove.Status = MOVEINACTIVE;
+		route(psDroid, mapState, tX, tY, moveType);
+		psDroid->sMove.Status = MOVEWAITROUTE;
+		return route(psDroid, mapState, tX, tY, moveType);
 	}
 
 	void removeDroidData(int droidID) override { fpathRemoveDroidData(droidID); }

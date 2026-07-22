@@ -51,6 +51,7 @@
 #include "game.h"
 #include "qtscript.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "difficulty.h"
 #include "map.h"
 #include "move.h"
@@ -5996,15 +5997,11 @@ static bool loadSaveDroid(const char *pFileName, GameWorld& world, PerPlayerDroi
 			}
 		}
 
-		// Recreate path-finding jobs
+		// Recreate path-finding jobs. Droid might be on a mission, so finish
+		// pathfinding now, in case pointers swap and map size changes.
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
 		{
-			psDroid->sMove.Status = MOVEINACTIVE;
-			fpathDroidRoute(psDroid, world.map, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
-			psDroid->sMove.Status = MOVEWAITROUTE;
-
-			// Droid might be on a mission, so finish pathfinding now, in case pointers swap and map size changes.
-			FPATH_RETVAL dr = fpathDroidRoute(psDroid, world.map, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
+			FPATH_RETVAL dr = fpathActiveBackend().routeSynchronous(psDroid, world.map, psDroid->sMove.destination.x, psDroid->sMove.destination.y, FMT_MOVE);
 			if (dr == FPR_OK)
 			{
 				psDroid->sMove.Status = MOVENAVIGATE;
