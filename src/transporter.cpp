@@ -38,6 +38,7 @@
 #include "transporter.h"
 #include "group.h"
 #include "move.h"
+#include "pathfinding_backend.h"
 #include "display3d.h"
 #include "mission.h"
 #include "objects.h"
@@ -1101,7 +1102,7 @@ void transporterAddDroid(DROID *psTransporter, DROID *psDroidToAdd)
 	{
 		visRemoveVisibility((BASE_OBJECT *)psDroidToAdd, gameWorld.map);
 	}
-	fpathRemoveDroidData(psDroidToAdd->id);
+	fpathActiveBackend().removeDroidData(psDroidToAdd->id);
 
 	// This is called by droidRemove. But we still need to refresh after adding to the transporter group.
 	intRefreshScreen();

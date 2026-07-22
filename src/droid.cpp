@@ -64,6 +64,7 @@
 #include "text.h"
 #include "cmddroid.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "projectile.h"
 #include "mission.h"
 #include "levels.h"
@@ -475,7 +476,7 @@ DROID::~DROID()
 		}
 	}
 
-	fpathRemoveDroidData(psDroid->id);
+	fpathActiveBackend().removeDroidData(psDroid->id);
 
 	// leave the current formation if any
 	if (psDroid->sMove.psFormation)
