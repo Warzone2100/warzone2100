@@ -145,6 +145,7 @@ const iIMDBaseShape	*getRandomDebrisImd()
 }
 // -------------------------------------------------------------------------------
 
+#define MAX_FACTORY_FLAG_IMDS 32
 static iIMDBaseShape *pAssemblyPointIMDs[NUM_FLAG_TYPES][MAX_FACTORY_FLAG_IMDS];
 static iIMDBaseShape *pAssemblyPointBlankIMDs[NUM_FLAG_TYPES];
 

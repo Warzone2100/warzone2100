@@ -50,7 +50,6 @@ extern iIMDShape	*waterImd;
 extern iIMDShape	*droidDamageImd;
 extern iIMDShape	*smallSteamImd;
 extern iIMDShape	*plasmaImd;
-#define MAX_FACTORY_FLAG_IMDS 32
 extern iIMDShape	*blipImd;
 extern iIMDShape	*shadowImd;
 extern iIMDShape	*transporterShadowImd;
