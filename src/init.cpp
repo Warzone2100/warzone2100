@@ -67,6 +67,7 @@
 #include "effects.h"
 #include "formation.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "frend.h"
 #include "frontend.h"
 #include "game.h"
@@ -1188,7 +1189,7 @@ void systemShutdown()
 	closeGamepadLayoutScreen();
 	gamepadCursorShutdown();
 	widgShutDown();
-	fpathShutdown();
+	fpathActiveBackend().shutdown();
 	mapShutdown();
 	modelShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
@@ -1653,7 +1654,7 @@ bool stageTwoInitialise()
 	// - Loading savegames calls `fPathDroidRoute` (from `loadSaveDroid`) before `stageThreeInitialise`
 	//   is called, hence removing this call to `fpathInitialise` will currently break loading certain
 	//   savegames (if they interact with the fPath system).
-	if (!fpathInitialise())
+	if (!fpathActiveBackend().initialise())
 	{
 		return false;
 	}
@@ -1673,7 +1674,7 @@ bool stageTwoShutDown()
 
 	shutdown3DView_FullReset();
 
-	fpathShutdown();
+	fpathActiveBackend().shutdown();
 
 	cdAudio_Stop();
 
@@ -1806,7 +1807,7 @@ static bool stageThreeInitialiseSync()
 
 	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION);
 
-	if (!fpathInitialise())
+	if (!fpathActiveBackend().initialise())
 	{
 		return false;
 	}

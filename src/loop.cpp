@@ -81,6 +81,7 @@
 #include "mapgrid.h"
 #include "edit3d.h"
 #include "fpath.h"
+#include "pathfinding_backend.h"
 #include "cmddroid.h"
 #include "keybind.h"
 #include "wrappers.h"
@@ -555,7 +556,7 @@ static void gameStateUpdate()
 	mapUpdate(gameWorld);
 
 	//update the findpath system
-	fpathUpdate();
+	fpathActiveBackend().updateTick(gameWorld.map);
 
 	// update the command droids
 	cmdDroidUpdate();
