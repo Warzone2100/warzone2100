@@ -48,7 +48,18 @@
 
 #include "fpath.h"
 
+#include <cstdint>
+
 struct WorldMapState;
+
+/// Which planner a game runs. This is a synced game setting: every client, and
+/// every save and replay, records it, because different backends are different
+/// simulations and a game must agree on one. Values are serialized, so they are
+/// fixed - only append. Legacy is the integer-grid A* that has always shipped.
+enum class PathfindingBackendId : uint8_t
+{
+	Legacy = 0,
+};
 
 class IPathfindingBackend
 {
@@ -74,7 +85,7 @@ public:
 	/// As route(), but does not return until the route is resolved. Loading an
 	/// old-format save uses this, because a droid saved partway through a route
 	/// needs a path before play resumes. Drives the droid's movement status as
-	/// needed to force the resolve; on return sMove holds the path and the
+	/// needed to force the resolve. On return sMove holds the path and the
 	/// caller decides the droid's final status from the returned value.
 	virtual FPATH_RETVAL routeSynchronous(DROID *psDroid, const WorldMapState& mapState,
 	                                      SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType) = 0;

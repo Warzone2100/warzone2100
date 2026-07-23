@@ -652,8 +652,19 @@ public:
 
 IPathfindingBackend& fpathActiveBackend()
 {
-	static LegacyAStarBackend backend;
-	return backend;
+	static LegacyAStarBackend legacyBackend;
+
+	// The active planner follows the synced game setting, which is locked before
+	// the game starts and identical on every client, so this is stable for the
+	// whole match. Only the legacy backend exists today. An unknown id (a save
+	// or lobby from a build with a backend this one does not have) falls back to
+	// it rather than failing.
+	switch (static_cast<PathfindingBackendId>(game.pathfindingBackend))
+	{
+	case PathfindingBackendId::Legacy:
+	default:
+		return legacyBackend;
+	}
 }
 
 // Find a route for an DROID to a location in world coordinates

@@ -4801,6 +4801,8 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		game.blindMode = static_cast<BLIND_MODE>(save.value("blindMode").toInt());
 	}
+	// default to the legacy A* planner for saves written before this setting existed
+	game.pathfindingBackend = static_cast<uint8_t>(save.value("pathfindingBackend", 0).toUInt());
 	if (save.contains("multiplayer"))
 	{
 		bMultiPlayer = save.value("multiplayer").toBool();
@@ -5045,6 +5047,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("playerLeaveMode", game.playerLeaveMode);
 	save.setValue("playerReconnectWaitSeconds", game.playerReconnectWaitSeconds);
 	save.setValue("blindMode", game.blindMode);
+	save.setValue("pathfindingBackend", game.pathfindingBackend);
 	save.setValue("tweakOptions", getCamTweakOptions());
 
 	save.beginArray("scriptSetPlayerDataStrings");
