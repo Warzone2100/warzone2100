@@ -7626,6 +7626,7 @@ inline void to_json(nlohmann::json& j, const MULTIPLAYERGAME& p) {
 	j["playerLeaveMode"] = p.playerLeaveMode;
 	j["playerReconnectWaitSeconds"] = p.playerReconnectWaitSeconds;
 	j["blindMode"] = p.blindMode;
+	j["pathfindingBackend"] = p.pathfindingBackend;
 }
 
 inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
@@ -7690,6 +7691,8 @@ inline void from_json(const nlohmann::json& j, MULTIPLAYERGAME& p) {
 		// default to the old (pre-4.6.0) behavior (no blind mode)
 		p.blindMode = BLIND_MODE::NONE;
 	}
+	// default to the legacy A* planner for replays recorded before this setting existed
+	p.pathfindingBackend = j.value("pathfindingBackend", static_cast<uint8_t>(0));
 }
 
 inline void to_json(nlohmann::json& j, const MULTISTRUCTLIMITS& p) {

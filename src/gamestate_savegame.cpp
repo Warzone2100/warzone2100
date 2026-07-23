@@ -242,6 +242,7 @@ nlohmann::ordered_json writeSetupHeader(SaveType saveType)
 	jopt["inactivityMinutes"] = game.inactivityMinutes;
 	jopt["playerLeaveMode"] = static_cast<uint8_t>(game.playerLeaveMode);
 	jopt["playerReconnectWaitSeconds"] = game.playerReconnectWaitSeconds;
+	jopt["pathfindingBackend"] = game.pathfindingBackend;
 	j["options"] = std::move(jopt);
 
 	j["players"] = writePlayers();
@@ -348,6 +349,8 @@ SetupHeaderInfo readSetupHeader(const nlohmann::ordered_json &j)
 	game.inactivityMinutes = jopt.at("inactivityMinutes").get<uint32_t>();
 	game.playerLeaveMode = static_cast<PLAYER_LEAVE_MODE>(jopt.at("playerLeaveMode").get<uint8_t>());
 	game.playerReconnectWaitSeconds = clampPlayerReconnectWaitSeconds(jopt.at("playerReconnectWaitSeconds").get<uint32_t>());
+	// default to the legacy A* planner for snapshots written before this setting existed
+	game.pathfindingBackend = jopt.value("pathfindingBackend", static_cast<uint8_t>(0));
 
 	readPlayers(j.at("players"));
 	readStructureLimits(j.at("structureLimits"));
