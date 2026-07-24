@@ -658,6 +658,11 @@ class CongestionAStarBackend final : public LegacyAStarBackend
 {
 };
 
+bool pathfindingOverlayEnabled()
+{
+	return (game.pathfindingBackend & PF_DIRECTIONAL_BIAS) != 0;
+}
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
@@ -665,16 +670,10 @@ IPathfindingBackend& fpathActiveBackend()
 
 	// The active planner follows the synced game setting, which is locked before
 	// the game starts and identical on every client, so this is stable for the
-	// whole match. An unknown id (a save or lobby from a build with a backend
-	// this one does not have) falls back to legacy rather than failing.
-	switch (static_cast<PathfindingBackendId>(game.pathfindingBackend))
-	{
-	case PathfindingBackendId::Congestion:
-		return congestionBackend;
-	case PathfindingBackendId::Legacy:
-	default:
-		return legacyBackend;
-	}
+	// whole match. The congestion backend is used whenever an overlay feature is
+	// on, the legacy backend otherwise.
+	return pathfindingOverlayEnabled() ? static_cast<IPathfindingBackend&>(congestionBackend)
+	                                   : static_cast<IPathfindingBackend&>(legacyBackend);
 }
 
 // Find a route for an DROID to a location in world coordinates
