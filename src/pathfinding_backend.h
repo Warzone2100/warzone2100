@@ -59,6 +59,7 @@ struct WorldMapState;
 enum class PathfindingBackendId : uint8_t
 {
 	Legacy = 0,
+	Congestion = 1,
 };
 
 class IPathfindingBackend

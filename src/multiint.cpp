@@ -3843,6 +3843,14 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
  */
 static void SendFireUp()
 {
+	// A forced backend from the command line wins over the lobby and config, for
+	// testing a run under a specific planner. Applied here so it is in place
+	// before the first tick.
+	if (cli_pathfinding_backend() >= 0)
+	{
+		game.pathfindingBackend = static_cast<uint8_t>(cli_pathfinding_backend());
+	}
+
 	// Pick a random random seed for the synchronised random number generator.
 	// The movement benchmark pins it instead, so a scenario reproduces exactly.
 	uint32_t randomSeed = movementBenchActive() ? movementBenchSeed() : rand();
@@ -4954,6 +4962,7 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 			game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 			sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 			game.techLevel = ini.value("techLevel", game.techLevel).toInt();
+			game.pathfindingBackend = static_cast<uint8_t>(ini.value("pathfindingBackend", game.pathfindingBackend).toInt());
 
 			// Allow making the host a spectator (for MP games)
 			spectatorHost = ini.value("spectatorHost", false).toBool();

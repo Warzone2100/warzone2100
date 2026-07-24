@@ -579,7 +579,7 @@ queuePathfinding:
 /// request-shaping that fpathDroidRoute used to do inline, so selecting
 /// this backend runs
 /// exactly the code that ran before there was an interface to select it through.
-class LegacyAStarBackend final : public IPathfindingBackend
+class LegacyAStarBackend : public IPathfindingBackend
 {
 public:
 	bool initialise() override { return fpathInitialise(); }
@@ -650,17 +650,27 @@ public:
 	void removeDroidData(int droidID) override { fpathRemoveDroidData(droidID); }
 };
 
+/// Congestion-aware planner. It reuses the legacy A* and prices routing
+/// against a per-tick flow field, so friendly traffic swings around opposing
+/// columns. The field is not built yet, so for now it behaves exactly like
+/// the legacy backend.
+class CongestionAStarBackend final : public LegacyAStarBackend
+{
+};
+
 IPathfindingBackend& fpathActiveBackend()
 {
 	static LegacyAStarBackend legacyBackend;
+	static CongestionAStarBackend congestionBackend;
 
 	// The active planner follows the synced game setting, which is locked before
 	// the game starts and identical on every client, so this is stable for the
-	// whole match. Only the legacy backend exists today. An unknown id (a save
-	// or lobby from a build with a backend this one does not have) falls back to
-	// it rather than failing.
+	// whole match. An unknown id (a save or lobby from a build with a backend
+	// this one does not have) falls back to legacy rather than failing.
 	switch (static_cast<PathfindingBackendId>(game.pathfindingBackend))
 	{
+	case PathfindingBackendId::Congestion:
+		return congestionBackend;
 	case PathfindingBackendId::Legacy:
 	default:
 		return legacyBackend;
