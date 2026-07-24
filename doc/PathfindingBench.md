@@ -103,3 +103,45 @@ float in a position path, or a live read from a worker thread.
 Scenario data lives in data/mp/tests/ and only takes effect after a full
 `ninja -C build`. Building just the warzone2100 target leaves the packaged
 mp.wz stale, and a scenario edit silently appears to have no effect.
+
+## The pathfinding feature bitmask
+
+Congestion features live behind independent bits of the synced
+`game.pathfindingBackend` setting, declared in src/pathfinding_backend.h. Zero
+is the legacy planner with none of them, every client in a game runs the same
+value, and it travels with the game everywhere simulation-affecting options do.
+The bits are independent so mechanisms can be measured alone and in
+combination, and so a regression can be attributed to the bit that causes it.
+
+`--pathfindingbackend=` forces a feature set for a run. It takes a combined
+mask or a comma-separated list of values OR'd together, so a known stack plus
+the flag under test needs no arithmetic, ex. `--pathfindingbackend=7,8`.
+Values with bits no feature defines are rejected with the list of valid ones.
+
+## Adding a feature
+
+Append an enum value in src/pathfinding_backend.h with an accessor beside the
+existing ones, and add the new value to the valid list, help text and rejection
+message for `--pathfindingbackend` in clparse.cpp. The bit values are
+serialized, so they are fixed once released, only append. Put every behavior
+change behind the accessor: with the bit clear the simulation must be
+byte-identical, which crcs.sh proves, and with it set the run must reproduce,
+which --check proves.
+
+## Producing results for a pull request
+
+Score the synthetic suite and the acceptance tier, as markdown, against the
+plain baseline:
+
+    tests/movebench/run.sh --score --markdown --pathfindingbackend=<features>
+    tests/movebench/run.sh --acceptance --score --markdown --pathfindingbackend=<features>
+
+To show the marginal effect of one flag on top of an existing stack, score
+against that stack instead:
+
+    tests/movebench/run.sh --acceptance --score --markdown \
+        --pathfindingbackend=<stack>,<flag> --against='--pathfindingbackend=<stack>'
+
+Quote both tables. The synthetic cells respond to different mechanisms than the
+real maps do, and a change that helps one repeatedly turns out to tax the
+other.

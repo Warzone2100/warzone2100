@@ -52,15 +52,19 @@
 
 struct WorldMapState;
 
-/// Which planner a game runs. This is a synced game setting: every client, and
-/// every save and replay, records it, because different backends are different
-/// simulations and a game must agree on one. Values are serialized, so they are
-/// fixed - only append. Legacy is the integer-grid A* that has always shipped.
-enum class PathfindingBackendId : uint8_t
+/// Congestion features a game has turned on, held as a bitmask in the synced
+/// game.pathfindingBackend setting. Each is independent so a run can enable one
+/// or any combination, which is how they are compared. Zero is the legacy
+/// integer-grid A* with none of them. The values are serialized, so they are
+/// fixed, only append. A new feature also joins the --pathfindingbackend
+/// valid list in clparse.cpp.
+enum PathfindingFeature : uint8_t
 {
-	Legacy = 0,
-	Congestion = 1,
+	PF_DIRECTIONAL_BIAS  = 1 << 0,   ///< directional route shaping in the planner (not built yet)
 };
+
+/// True if any overlay feature is on, so the planner needs the congestion backend.
+bool pathfindingOverlayEnabled();
 
 class IPathfindingBackend
 {

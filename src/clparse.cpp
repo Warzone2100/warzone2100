@@ -45,6 +45,7 @@
 #include "modding.h"
 #include "movebench.h"
 #include "pathbench.h"
+#include "pathfinding_backend.h"
 #include "multiplay.h"
 #include "version.h"
 #include "warzoneconfig.h"
@@ -99,6 +100,34 @@ static bool wz_lobby_slashcommands_hostexit = false;
 static int wz_min_autostart_players = -1;
 static int wz_pathfinding_backend = -1;
 static std::string wz_lobby_game_to_connect_str;
+
+// Parse the --pathfindingbackend argument: a combined feature mask, or a
+// comma-separated list of feature values OR'd together, so a stack can be
+// named as a known mask plus the flags under test, ex. 7,8. A value with
+// bits no feature defines is rejected, so a mask from an older numbering
+// fails loudly instead of silently running a different stack.
+static int parsePathfindingBackendArg(const char *arg)
+{
+	constexpr unsigned validMask = PF_DIRECTIONAL_BIAS;
+	unsigned mask = 0;
+	const char *p = arg;
+	while (*p != '\0')
+	{
+		char *end = nullptr;
+		const long value = strtol(p, &end, 10);
+		if (end == p || (*end != '\0' && *end != ',') || value < 0 || value > 255)
+		{
+			qFatal("Bad pathfinding backend value \"%s\": expected a mask or comma-separated feature values 0-255", arg);
+		}
+		mask |= static_cast<unsigned>(value);
+		p = (*end == ',') ? end + 1 : end;
+	}
+	if ((mask & ~validMask) != 0)
+	{
+		qFatal("Unknown pathfinding feature bits in \"%s\": valid features are 1 directional bias", arg);
+	}
+	return static_cast<int>(mask);
+}
 
 #if defined(WZ_OS_WIN)
 
@@ -475,7 +504,7 @@ static const struct poptOption *getOptionsTable()
 		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
 		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
 		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
-		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding backend for this run (0 legacy, 1 congestion)"), N_("id") },
+		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding feature set for this run: a mask or comma-separated feature values (0 legacy, 1 directional bias)"), N_("features") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1311,9 +1340,9 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
-				qFatal("Bad pathfinding backend id");
+				qFatal("Bad pathfinding backend value");
 			}
-			wz_pathfinding_backend = atoi(token);
+			wz_pathfinding_backend = parsePathfindingBackendArg(token);
 			break;
 
 		case CLI_GAMEPORT:
