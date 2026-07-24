@@ -97,6 +97,7 @@ static bool wz_streamer_spectator_mode = false;
 static bool wz_lobby_slashcommands = false;
 static bool wz_lobby_slashcommands_hostexit = false;
 static int wz_min_autostart_players = -1;
+static int wz_pathfinding_backend = -1;
 static std::string wz_lobby_game_to_connect_str;
 
 #if defined(WZ_OS_WIN)
@@ -362,6 +363,7 @@ typedef enum
 	CLI_MOVEMENTWATCH,
 	CLI_PATHBENCH,
 	CLI_PATHBENCHREPEATS,
+	CLI_PATHFINDINGBACKEND,
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
@@ -473,6 +475,7 @@ static const struct poptOption *getOptionsTable()
 		{ "movementarrangement", POPT_ARG_STRING, CLI_MOVEMENTARRANGE,   N_("Which spawn arrangement of the scenario to run"), N_("index") },
 		{ "pathbench", POPT_ARG_STRING, CLI_PATHBENCH,   N_("Time canned pathfinding requests and quit"), N_("name") },
 		{ "pathbenchrepeats", POPT_ARG_STRING, CLI_PATHBENCHREPEATS,   N_("How many times to time each pathfinding case"), N_("count") },
+		{ "pathfindingbackend", POPT_ARG_STRING, CLI_PATHFINDINGBACKEND,   N_("Force the pathfinding backend for this run (0 legacy, 1 congestion)"), N_("id") },
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
@@ -1304,6 +1307,15 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			setHeadlessGameMode(true);
 			break;
 
+		case CLI_PATHFINDINGBACKEND:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad pathfinding backend id");
+			}
+			wz_pathfinding_backend = atoi(token);
+			break;
+
 		case CLI_GAMEPORT:
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
@@ -1626,6 +1638,11 @@ bool lobby_slashcommands_enabled()
 bool lobby_slashcommands_hostexit_enabled()
 {
 	return wz_lobby_slashcommands_hostexit;
+}
+
+int cli_pathfinding_backend()
+{
+	return wz_pathfinding_backend;
 }
 
 int min_autostart_player_count()

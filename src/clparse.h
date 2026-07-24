@@ -45,4 +45,8 @@ const std::string& cli_lobby_game_to_connect_str();
 
 int min_autostart_player_count();
 
+/// The --pathfindingbackend override, or -1 if not set. Test/dev hook to force a
+/// backend for a run instead of taking it from the lobby or config.
+int cli_pathfinding_backend();
+
 #endif // __INCLUDED_SRC_CLPARSE_H__
