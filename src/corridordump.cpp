@@ -181,6 +181,19 @@ void corridorDumpUpdate()
 			}
 		}
 		j["maxStepTiles"] = static_cast<double>(maxStep) / TILE_UNITS;
+		j["rightExtentTiles"] = { c.rightExtent.empty() ? 0.0 : *std::min_element(c.rightExtent.begin(), c.rightExtent.end()) / static_cast<double>(TILE_UNITS),
+		                          medianOf(c.rightExtent) / static_cast<double>(TILE_UNITS) };
+		j["leftExtentTiles"] = { c.leftExtent.empty() ? 0.0 : *std::min_element(c.leftExtent.begin(), c.leftExtent.end()) / static_cast<double>(TILE_UNITS),
+		                         medianOf(c.leftExtent) / static_cast<double>(TILE_UNITS) };
+		nlohmann::json rightProfile = nlohmann::json::array();
+		nlohmann::json leftProfile = nlohmann::json::array();
+		for (size_t k = 0; k < c.rightExtent.size(); ++k)
+		{
+			rightProfile.push_back(c.rightExtent[k] / static_cast<double>(TILE_UNITS));
+			leftProfile.push_back(c.leftExtent[k] / static_cast<double>(TILE_UNITS));
+		}
+		j["rightExtentProfileTiles"] = rightProfile;
+		j["leftExtentProfileTiles"] = leftProfile;
 		j["centerlineTiles"] = pts;
 		arr.push_back(j);
 	}

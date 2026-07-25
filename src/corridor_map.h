@@ -55,6 +55,8 @@ struct Corridor
 	int id = -1;
 	std::vector<Vector2i> centerline;   ///< world coordinates, one point per skeleton tile
 	std::vector<int32_t>  widthProfile; ///< physical passable width in world units, parallel to centerline
+	std::vector<int32_t>  rightExtent;  ///< passable distance right of the centerline (index-increasing direction), world units
+	std::vector<int32_t>  leftExtent;   ///< passable distance left of the centerline, world units
 	Vector2i mouthA = Vector2i(0, 0);   ///< world coordinates of one end
 	Vector2i mouthB = Vector2i(0, 0);   ///< world coordinates of the other end
 	int32_t  minWidth = 0;              ///< narrowest cross-section, world units, governs lane count
