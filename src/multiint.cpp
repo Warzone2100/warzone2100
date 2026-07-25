@@ -69,6 +69,7 @@
 #include "lib/widget/margin.h"
 
 #include "challenge.h"
+#include "corridordump.h"
 #include "main.h"
 #include "levels.h"
 #include "objects.h"
@@ -4921,6 +4922,10 @@ static bool loadMapChallengeSettings(WzConfig& ini)
 		{
 			char mapName[256] = {0};
 			sstrcpy(mapName, ini.value("map", game.map).toWzString().toUtf8().c_str());
+			if (corridorDumpActive())
+			{
+				sstrcpy(mapName, corridorDumpMapName());   // dump the map named on the command line, not the config placeholder
+			}
 			Sha256 mapHash = levGetMapNameHash(mapName);
 
 			LEVEL_DATASET* mapData = levFindDataSet(mapName, &mapHash);

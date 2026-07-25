@@ -37,6 +37,7 @@
 #include <wzmaplib/map.h>
 
 #include "map.h"
+#include "corridor_map.h"
 #include "terrain.h"
 #include "hci.h"
 #include "projectile.h"
@@ -1302,6 +1303,10 @@ static bool afterMapLoad(WorldMapState& mapState)
 
 	/* Set continents. This should ideally be done in advance by the map editor. */
 	mapFloodFillContinents(mapState);
+
+	// Detect corridors from the terrain, before any structures are placed, so the
+	// geometry is the map's own. Read by the dump and the debug overlay.
+	mapState.corridors = corridorMapBuild(mapState);
 
 	return true;
 }

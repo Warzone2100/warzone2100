@@ -192,6 +192,12 @@ void	kf_ToggleShowPath()
 	showPath = !showPath;
 }
 
+void	kf_ToggleShowCorridors()
+{
+	addConsoleMessage(_("Corridors toggled."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	showCorridors = !showCorridors;
+}
+
 void kf_PerformanceSample()
 {
 	wzPerfStart();
