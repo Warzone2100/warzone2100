@@ -2182,6 +2182,14 @@ int realmain(int argc, char *argv[])
 		}
 	}
 	display3d_setUpscalingSharpness(war_getUpscalingSharpness() / 100.f);
+	if (war_getSmaaMode() != SMAA_MODE::OFF)
+	{
+		if (!display3d_setSmaaMode(war_getSmaaMode()))
+		{
+			debug(LOG_ERROR, "Failed to apply SMAA");
+			war_setSmaaMode(SMAA_MODE::OFF);
+		}
+	}
 
 	initializeCrashHandlingContext(wzGetInitializedGfxBackend());
 

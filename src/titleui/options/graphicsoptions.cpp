@@ -596,6 +596,33 @@ std::shared_ptr<OptionsForm> makeGraphicsOptionsForm()
 		result->addOption(optionInfo, valueChanger, true);
 	}
 	{
+		auto optionInfo = OptionInfo("gfx.smaa", N_("SMAA"), N_("Post-process antialiasing over the 3D world. Works alongside Antialiasing and improves FSR 1.0 upscaling quality."));
+		auto valueChanger = OptionsDropdown<SMAA_MODE>::make(
+			[]() {
+				OptionChoices<SMAA_MODE> result;
+				result.choices = {
+					{ _("Off"), "", SMAA_MODE::OFF },
+					{ _("Low"), "", SMAA_MODE::LOW },
+					{ _("Medium"), "", SMAA_MODE::MEDIUM },
+					{ _("High"), "", SMAA_MODE::HIGH },
+					{ _("Ultra"), "", SMAA_MODE::ULTRA },
+				};
+				result.setCurrentIdxForValue(war_getSmaaMode());
+				return result;
+			},
+			[](const auto& newValue) -> bool {
+				if (!display3d_setSmaaMode(newValue))
+				{
+					debug(LOG_ERROR, "Failed to set SMAA mode");
+					return false;
+				}
+				war_setSmaaMode(newValue);
+				return true;
+			}, false
+		);
+		result->addOption(optionInfo, valueChanger, true);
+	}
+	{
 		auto optionInfo = OptionInfo("gfx.vsync", N_("Vertical Sync"), "");
 		auto valueChanger = OptionsDropdown<gfx_api::context::swap_interval_mode>::make(
 			[]() {

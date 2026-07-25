@@ -203,6 +203,17 @@ void war_setSceneUpscalingMode(SCENE_UPSCALING_MODE mode);
 int war_getUpscalingSharpness();
 void war_setUpscalingSharpness(int hundredthsOfStops);
 
+enum class SMAA_MODE : uint8_t
+{
+	OFF,
+	LOW,
+	MEDIUM,
+	HIGH,
+	ULTRA,
+};
+SMAA_MODE war_getSmaaMode();
+void war_setSmaaMode(SMAA_MODE mode);
+
 bool war_getPointLightPerPixelLighting();
 void war_setPointLightPerPixelLighting(bool perPixelEnabled);
 

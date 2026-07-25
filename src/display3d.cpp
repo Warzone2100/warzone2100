@@ -4557,6 +4557,31 @@ void display3d_setSmaaParameters(float threshold, float maxSearchSteps, float ma
 	smaaCornerRounding = glm::clamp(cornerRounding, 0.f, 1.f);
 }
 
+bool display3d_setSmaaMode(SMAA_MODE mode)
+{
+	// the reference quality presets, with diagonal and corner processing
+	// expressed through the same parameters (0 diagonal steps and a corner
+	// rounding of 1 disable them)
+	switch (mode)
+	{
+	case SMAA_MODE::OFF:
+		return gfx_api::context::get().setSmaaEnabled(false);
+	case SMAA_MODE::LOW:
+		display3d_setSmaaParameters(0.15f, 4.f, 0.f, 1.f);
+		break;
+	case SMAA_MODE::MEDIUM:
+		display3d_setSmaaParameters(0.1f, 8.f, 0.f, 1.f);
+		break;
+	case SMAA_MODE::HIGH:
+		display3d_setSmaaParameters(0.1f, 16.f, 8.f, 0.25f);
+		break;
+	case SMAA_MODE::ULTRA:
+		display3d_setSmaaParameters(0.05f, 32.f, 16.f, 0.25f);
+		break;
+	}
+	return gfx_api::context::get().setSmaaEnabled(true);
+}
+
 // rtMetrics carries the physical input size, uvScaleClamp maps viewport
 // spanning texcoords onto the rendered sub-rect and bounds every tap inside it
 static void smaaCommonConstants(gfx_api::abstract_texture* sourceTexture, glm::vec4& rtMetrics, glm::vec4& uvScaleClamp)
