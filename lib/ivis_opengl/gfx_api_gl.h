@@ -387,6 +387,7 @@ struct gl_context final : public gfx_api::context
 	virtual bool setDepthPassProperties(size_t numDepthPasses, size_t depthBufferResolution) override;
 	virtual bool setSceneRenderScale(uint32_t scalePercent) override;
 	virtual bool setSceneUpscalingMode(gfx_api::context::scene_upscaling_mode mode) override;
+	virtual bool setSmaaEnabled(bool enabled) override;
 	virtual bool setSceneDynamicResolution(bool enabled) override;
 	virtual bool supportsGpuFrameTiming() const override;
 	virtual bool setGpuFrameTimingEnabled(bool enabled) override;

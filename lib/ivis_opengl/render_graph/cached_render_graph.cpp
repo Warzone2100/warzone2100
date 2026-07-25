@@ -121,14 +121,30 @@ void CachedRenderGraph::execute()
 		return;
 	}
 	auto& ctx = gfx_api::context::get();
-	// Dynamic resolution: the scene pass viewport tracks the per frame render
-	// fraction here, at execute time, so fraction changes never rematerialize
-	// the graph (the value is idempotent at a fraction of 1).
+	// Dynamic resolution: the viewports of the scene pass and the scene-sized
+	// SMAA passes track the per frame render fraction here, at execute time,
+	// so fraction changes never rematerialize the graph (the value is
+	// idempotent at a fraction of 1).
 	const auto sceneDims = ctx.getSceneRenderTargetDimensions();
+	const bool smaaIntermediate = ctx.getPipelineSurface(PipelineSurfaceId::SmaaColor) != nullptr;
 	auto applySceneFractionViewport = [&](RenderPassDesc& pass) {
-		if (pass.passId == PassId::ScenePass)
+		switch (pass.passId)
 		{
+		case PassId::ScenePass:
+		case PassId::SmaaEdges:
+		case PassId::SmaaWeights:
 			pass.viewportSize = sceneDims;
+			break;
+		case PassId::SmaaBlend:
+			// only when the blend writes the scene-sized intermediate, the
+			// direct swapchain variant must keep covering the full drawable
+			if (smaaIntermediate)
+			{
+				pass.viewportSize = sceneDims;
+			}
+			break;
+		default:
+			break;
 		}
 	};
 	for (auto& pass : _passes)

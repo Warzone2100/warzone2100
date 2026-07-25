@@ -186,6 +186,36 @@ static void recordSceneUpscaleRCAS(const gfx_api::RenderPassContext& passCtx)
 	display3d_drawFsr1Rcas(passCtx.getRead(0));
 }
 
+static void recordSmaaEdges(const gfx_api::RenderPassContext& passCtx)
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	WZ_PROFILE_SCOPE(smaaEdges);
+	display3d_drawSmaaEdges(passCtx.getRead(0));
+}
+
+static void recordSmaaWeights(const gfx_api::RenderPassContext& passCtx)
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	WZ_PROFILE_SCOPE(smaaWeights);
+	display3d_drawSmaaWeights(passCtx.getRead(0));
+}
+
+static void recordSmaaBlend(const gfx_api::RenderPassContext& passCtx)
+{
+	if (!pie_IsInGame3DFrameContextReady())
+	{
+		return;
+	}
+	WZ_PROFILE_SCOPE(smaaBlend);
+	display3d_drawSmaaBlend(passCtx.getRead(0), passCtx.getRead(1));
+}
+
 static void recordTargettingEffects(const gfx_api::RenderPassContext&)
 {
 	if (!pie_IsInGame3DFrameContextReady())
@@ -202,6 +232,9 @@ void registerInGame3DRecordFuncs(gfx_api::RecordFuncTable& table)
 	table.set(gfx_api::PassId::SceneBlit, recordSceneBlit);
 	table.set(gfx_api::PassId::SceneUpscaleEASU, recordSceneUpscaleEASU);
 	table.set(gfx_api::PassId::SceneUpscaleRCAS, recordSceneUpscaleRCAS);
+	table.set(gfx_api::PassId::SmaaEdges, recordSmaaEdges);
+	table.set(gfx_api::PassId::SmaaWeights, recordSmaaWeights);
+	table.set(gfx_api::PassId::SmaaBlend, recordSmaaBlend);
 	table.set(gfx_api::PassId::TargettingEffects, recordTargettingEffects);
 	table.set(gfx_api::PassId::SceneOverlays, display3d_recordSceneOverlays);
 	table.set(gfx_api::PassId::SceneDebugOverlays, display3d_recordSceneDebugOverlays);

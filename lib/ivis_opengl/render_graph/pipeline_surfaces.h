@@ -65,6 +65,13 @@ enum class PipelineSurfaceId : uint8_t
 	SceneDepth,
 	/// Drawable-sized intermediate between the scene upscale and sharpen passes.
 	UpscaledColor,
+	/// Scene-sized SMAA edge detection output (RG edge flags).
+	SmaaEdges,
+	/// Scene-sized SMAA blending weights.
+	SmaaWeights,
+	/// Scene-sized SMAA neighborhood blend output, present only when a scaling
+	/// pass consumes it (otherwise the blend writes the swapchain directly).
+	SmaaColor,
 	ShadowMap,
 	SwapchainColor,
 	SwapchainMSAAColor,
@@ -116,6 +123,10 @@ enum class SurfaceFormatClass : uint8_t
 	DepthSampled,
 	PresentColor,
 	MatchCompanion,
+	/// Fixed two channel color (backends may widen where unsupported).
+	FixedRG8,
+	/// Fixed four channel color, independent of the negotiated scene format.
+	FixedRGBA8,
 };
 
 /// Abstract GPU usage flags the backend must honor when allocating.
@@ -158,6 +169,10 @@ enum class SurfaceEnablePolicy : uint8_t
 	ShadowCascadesNonZero,
 	/// FSR 1.0 upscaling selected and the scene renders below the drawable size.
 	FsrUpscaleActive,
+	/// SMAA post processing enabled.
+	SmaaActive,
+	/// SMAA enabled and its blend output feeds a scaling pass instead of the swapchain.
+	SmaaIntermediateActive,
 };
 
 /// How the backend materializes the surface (allocate vs WSI import).
@@ -233,6 +248,7 @@ struct PipelineSurfaceSyncInputs
 	bool fsr1SceneUpscale = false;
 	/// Dynamic resolution keeps scene-sized intermediates alive even at a 1:1 scene size.
 	bool sceneDynamicResolution = false;
+	bool smaa = false;
 };
 
 /// Backend HW-negotiated formats for each SurfaceFormatClass capability slot.
